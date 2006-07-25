@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osil xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/OSiL.xsd">
+	<instanceHeader>
+		<source>Anderson, Sweeney, and Williams Intro to MS</source>
+		<description>An Optimization Services modeling Language example</description>
+	</instanceHeader>
+	<instanceData>
+		<variables numberOfVariables="12">
+			<var name="X[cleveland,boston]"/>
+			<var name="X[cleveland,chicago]"/>
+			<var name="X[cleveland,stlouis]"/>
+			<var name="X[cleveland,lexington]"/>
+			<var name="X[bedford,boston]"/>
+			<var name="X[bedford,chicago]"/>
+			<var name="X[bedford,stlouis]"/>
+			<var name="X[bedford,lexington]"/>
+			<var name="X[york,boston]"/>
+			<var name="X[york,chicago]"/>
+			<var name="X[york,stlouis]"/>
+			<var name="X[york,lexington]"/>
+		</variables>
+		<objectives numberOfObjectives="1">
+			<obj maxOrMin="min" name="Min_Transportation_Cost" numberOfObjCoef="12">
+				<coef idx="0">3.0</coef>
+				<coef idx="1">2.0</coef>
+				<coef idx="2">7.0</coef>
+				<coef idx="3">6.0</coef>
+				<coef idx="4">7.0</coef>
+				<coef idx="5">5.0</coef>
+				<coef idx="6">2.0</coef>
+				<coef idx="7">3.0</coef>
+				<coef idx="8">2.0</coef>
+				<coef idx="9">5.0</coef>
+				<coef idx="10">4.0</coef>
+				<coef idx="11">5.0</coef>
+			</obj>
+		</objectives>
+		<constraints numberOfConstraints="7">
+			<con lb="0.0" name="demand_boston" ub="0.0"/>
+			<con lb="0.0" name="demand_chicago" ub="0.0"/>
+			<con lb="0.0" name="demand_stlouis" ub="0.0"/>
+			<con lb="0.0" name="demand_lexington" ub="0.0"/>
+			<con name="capacity_cleveland" ub="0.0"/>
+			<con name="capacity_bedford" ub="0.0"/>
+			<con name="capacity_york" ub="0.0"/>
+		</constraints>
+		<nonlinearExpressions numberOfNonlinearExpressions="7">
+			<nl idx="0">
+				<minus>
+					<sum>
+						<variable coef="1.0" idx="0"/>
+						<variable coef="1.0" idx="4"/>
+						<variable coef="1.0" idx="8"/>
+					</sum>
+					<number value="6000"/>
+				</minus>
+			</nl>
+			<nl idx="1">
+				<minus>
+					<sum>
+						<variable coef="1.0" idx="1"/>
+						<variable coef="1.0" idx="5"/>
+						<variable coef="1.0" idx="9"/>
+					</sum>
+					<number value="4000"/>
+				</minus>
+			</nl>
+			<nl idx="2">
+				<minus>
+					<sum>
+						<variable coef="1.0" idx="2"/>
+						<variable coef="1.0" idx="6"/>
+						<variable coef="1.0" idx="10"/>
+					</sum>
+					<number value="2000"/>
+				</minus>
+			</nl>
+			<nl idx="3">
+				<minus>
+					<sum>
+						<variable coef="1.0" idx="3"/>
+						<variable coef="1.0" idx="7"/>
+						<variable coef="1.0" idx="11"/>
+					</sum>
+					<number value="1500"/>
+				</minus>
+			</nl>
+			<nl idx="4">
+				<minus>
+					<sum>
+						<variable coef="1.0" idx="0"/>
+						<variable coef="1.0" idx="1"/>
+						<variable coef="1.0" idx="2"/>
+						<variable coef="1.0" idx="3"/>
+					</sum>
+					<number value="5000"/>
+				</minus>
+			</nl>
+			<nl idx="5">
+				<minus>
+					<sum>
+						<variable coef="1.0" idx="4"/>
+						<variable coef="1.0" idx="5"/>
+						<variable coef="1.0" idx="6"/>
+						<variable coef="1.0" idx="7"/>
+					</sum>
+					<number value="6000"/>
+				</minus>
+			</nl>
+			<nl idx="6">
+				<minus>
+					<sum>
+						<variable coef="1.0" idx="8"/>
+						<variable coef="1.0" idx="9"/>
+						<variable coef="1.0" idx="10"/>
+						<variable coef="1.0" idx="11"/>
+					</sum>
+					<number value="2500"/>
+				</minus>
+			</nl>
+		</nonlinearExpressions>
+	</instanceData>
+</osil>
