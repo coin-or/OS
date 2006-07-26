@@ -10,10 +10,11 @@ AUTOMAKE_OPTIONS = foreign
 
 SUBDIRS =
   SUBDIRS += instanceGenerator
-  SUBDIRS += amplClient
   SUBDIRS += osTestCode
 
 
 
 
-
+if COIN_HAS_ASL
+  SUBDIRS += amplClient
+endif

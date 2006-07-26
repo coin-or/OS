@@ -55,7 +55,7 @@ you should get x1 = 540, x2 = 252
 #include "nlp.h"
 #include "getstub.h"
 #include "r_opn.hd" /* for N_OPS */
-#include "opnames.hd"
+#include "opcode.hd"
 
 #define R_OPS ((ASL_fg*)asl)->I.r_ops_
 #define OBJ_DE ((ASL_fg*)asl)->I.obj_de_
@@ -230,14 +230,14 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 	opnum = Intcast op;
 	Printf ("op %d  optype %d  ", opnum, optype[opnum]);
 	switch(opnum) {
-		case PLUS_opno:
+		case OPPLUS:
 			cout << "FOUND  PLUS NODE"  << endl;
 			nlNodePoint = new OSnLNodePlus();
 			nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
 			nlNodePoint->m_mChildren[1] = walkTree (e->R.e);
 			return nlNodePoint;
 			
-		case SUMLIST_opno:
+		case OPSUMLIST:
 			i = 0;
 			cout << "INSIDE SUM OPERATOR" << endl;
 			nlNodePoint = new OSnLNodeSum();
@@ -247,7 +247,7 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 				nlNodePoint->m_mChildren[i++] = walkTree ( *ep);
 			return nlNodePoint;
 			
-		case MAXLIST_opno:
+		case MAXLIST:
 			i = 0;
 			cout << "INSIDE MAX OPERATOR" << endl;
 			nlNodePoint = new OSnLNodeMax();
@@ -257,38 +257,38 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 				nlNodePoint->m_mChildren[i++] = walkTree ( *ep);
 			return nlNodePoint;
 			
-		case MINUS_opno:
+		case OPMINUS:
 			nlNodePoint = new OSnLNodeMinus();
 			nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
 			nlNodePoint->m_mChildren[1] = walkTree (e->R.e);
 			return nlNodePoint;
 			
-		case UMINUS_opno:
+		case OPUMINUS:
 			nlNodePoint = new OSnLNodeNegate();
 			nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
 			return nlNodePoint;
 			
-		case MULT_opno:
+		case OPMULT:
 			cout << "FOUND MULT NODE"  << endl;
 			nlNodePoint = new OSnLNodeTimes();
 			nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
 			nlNodePoint->m_mChildren[1] = walkTree (e->R.e);
 			return nlNodePoint;
 			
-		case DIV_opno:
+		case OPDIV:
 			nlNodePoint = new OSnLNodeDivide(); 
 			nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
 			nlNodePoint->m_mChildren[1] = walkTree (e->R.e);
 			return nlNodePoint;
 			
-		case POW_opno:
+		case OPPOW:
 			nlNodePoint = new OSnLNodePower();
 			nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
 			nlNodePoint->m_mChildren[1] = walkTree (e->R.e); 
 			return nlNodePoint;
 			
 			
-		case POWBAS_opno:
+		case OP1POW:
 			nlNodePoint = new OSnLNodePower();
 			nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
 			nlNodeNumberPoint = new OSnLNodeNumber();
@@ -296,7 +296,7 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 			nlNodePoint->m_mChildren[1] = nlNodeNumberPoint;
 			return nlNodePoint;
 			
-		case POW2_opno:
+		case OP2POW:
 			nlNodePoint = new OSnLNodePower();
 			nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
 			nlNodeNumberPoint = new OSnLNodeNumber();
@@ -304,7 +304,7 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 			nlNodePoint->m_mChildren[1] = nlNodeNumberPoint;
 			return nlNodePoint;
 			
-		case POWEXP_opno:
+		case OPCPOW:
 			nlNodePoint = new OSnLNodePower();
 			nlNodeNumberPoint = new OSnLNodeNumber();
 			nlNodeNumberPoint->value = e->L.en->v;
@@ -312,29 +312,29 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 			nlNodePoint->m_mChildren[1] = walkTree (e->R.e);
 			return nlNodePoint;
 			
-		case log_opno:
+		case OP_log:
 			nlNodePoint = new OSnLNodeLn();
 			nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
 			return nlNodePoint;
 			
-		case exp_opno:
+		case OP_exp:
 			nlNodePoint = new OSnLNodeExp();
 			nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
 			return nlNodePoint;
 			
-		case ABS_opno:
+		case ABS:
 			nlNodePoint = new OSnLNodeAbs();
 			nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
 			return nlNodePoint;
 			
-		case NUM_opno:
+		case OPNUM:
 			cout << "found a number node" << endl;
 			nlNodeNumberPoint = new OSnLNodeNumber;
 			cout << "THE NUMBER" << (double) ((expr_n*)e)->v << endl;
 			nlNodeNumberPoint->value = (double) ((expr_n*)e)->v;
 			return nlNodeNumberPoint;
 			
-		case VARVAL_opno:
+		case OPVARVAL:
 			cout << "found a variable node" << endl;
 			nlNodeVariablePoint = new OSnLNodeVariable;
 			nlNodeVariablePoint->idx = e->a;
