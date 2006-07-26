@@ -126,7 +126,7 @@ int main(int argC, char* argV[])
 		cout << "START MPS TESTING" << endl << endl;
 		cout << "create a COIN Solver for MPS - OSInstance solution" << endl;
 		m_Solver = new CoinSolver();
-		m_Solver->m_sSolverName = "clp";
+		m_Solver->m_sSolverName = "cbc";
 		mps2osil = new OSmps2osil( mpsFileName);
 		mps2osil->createOSInstance() ;
 		m_Solver->osinstance = mps2osil->osinstance;
@@ -140,31 +140,14 @@ int main(int argC, char* argV[])
 		m_Solver = NULL;
 		delete mps2osil; 
 		mps2osil = NULL;
-#ifdef COIN_HAS_LINDO
-/*
-		cout << "create a LINDO Solver for MPS - OSInstance solution" << endl;
-		m_Solver = new LindoSolver();
-		mps2osil = new OSmps2osil( mpsFileName);
-		mps2osil->createOSInstance() ;
-		m_Solver->osinstance = mps2osil->osinstance;
-		m_Solver->osol = osol;
-		cout << "call LINDO Solve" << endl;
-		m_Solver->solve();
-		cout << "Here is the LINDO solver solution" << endl;
-		cout << m_Solver->osrl << endl;
-		m_Solver->osinstance = NULL;
-		delete m_Solver;	
-		m_Solver = NULL;
-		delete mps2osil;
-		mps2osil = NULL;
-*/
-#endif
-
 		cout << endl;
 		cout << "DONE WITH MPS TESTING" << endl;
 	}
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  m_Solver->osrl <<  endl;
+		cout << endl << endl << endl;
+		cout << "Sorry Unit Test Failed Testing the Lindo Solver" << endl;
+		return 0;
 	}
 	// now solve with an OSInstance created from an AMPL nl file
 	try{
@@ -215,6 +198,8 @@ int main(int argC, char* argV[])
 	}	
 		catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  m_Solver->osrl <<  endl;
+		cout << endl << endl << endl;
+		cout << "Sorry Unit Test Failed Testing with AMPL" << endl;
 		return 0;
 	}
 	//
@@ -252,7 +237,10 @@ int main(int argC, char* argV[])
 	catch(const ErrorClass& eclass){
 		cout << endl << endl;
 		cout << eclass.errormsg <<  endl << endl;
-		//cout << "OSrL =  " <<  m_Solver->osrl <<  endl;
+		cout << "OSrL =  " <<  m_Solver->osrl <<  endl;
+		cout << endl << endl << endl;
+		cout << "Sorry Unit Test Failed Testing Use of Base 64" << endl;
+		return 0;
 
 	}
 	// try parsing OSrL	  
@@ -260,18 +248,14 @@ int main(int argC, char* argV[])
 	// Now test OSiL parser on large problem
 	try{ 
 		cout << endl;
-		cout << endl;
-		cout << "TEST PARSING A LARGE LP" << endl;
-		cout << endl;
 		osil = fileUtil->getFileAsString( &parserTestOSiLFileName[0]);
 		OSiLReader *osilreader = NULL;
 		osilreader = new OSiLReader(); 
 		clock_t start, finish;
 		double duration;
 		start = clock();
-				cout << "TEST PARSING A LARGE LP" << endl;
-		//osilreader->readOSiL( osil);
-				cout << "TEST PARSING A LARGE LP 2" << endl;
+		cout << "TEST PARSING A LARGE LP" << endl;
+		osilreader->readOSiL( osil);
 		delete osilreader;
 		osilreader = 0;
 		finish = clock();
@@ -280,10 +264,10 @@ int main(int argC, char* argV[])
 
 	}	
 		catch(const ErrorClass& eclass){
-		cout << "OSrL =  " <<  m_Solver->osrl <<  endl;
+		cout << endl << endl << endl;
+		cout << "Sorry Unit Test Failed Testing An OSiL Parser" << endl;
+		return 0;
 	}	
-	cout << endl << endl << endl;
-	cout << "Congratulations: you passed the unit Test" << endl;	
 	// 
 	// now solve on a remote server
 	/*
@@ -326,4 +310,7 @@ int main(int argC, char* argV[])
 		cout <<  eclass.errormsg <<  endl;
 	}	
 	*/
+	cout << endl << endl << endl;
+	cout << "Congratulations: you passed the unit Test" << endl;
+	return 0;	
 }
