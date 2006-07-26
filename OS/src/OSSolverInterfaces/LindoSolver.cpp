@@ -903,7 +903,7 @@ void LindoSolver::dataEchoCheck(){
 	
 } // end dataEchoCheck
 
-void  LindoSolver::lindoAPIErrorCheck(char* errormsg) {
+void  LindoSolver::lindoAPIErrorCheck(string errormsg) {
 	try{
 		ostringstream outStr;
 		string error = errormsg;

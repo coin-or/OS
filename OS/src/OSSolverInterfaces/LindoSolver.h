@@ -124,7 +124,7 @@ private:
 	  * Lindo's generalized error Reporting function
 	  * 
 	  */
-	void lindoAPIErrorCheck(char *errormsg);
+	void lindoAPIErrorCheck( string errormsg);
 
 };
 
