@@ -36,7 +36,7 @@
 #include "LindoSolver.h"
 #endif  
  
- 
+#include "CoinHelperFunctions.hpp"
 #include <time.h>
 #include<sstream>
   
@@ -60,19 +60,24 @@ int main(int argC, char* argV[])
 	string mpsFileName;     
 	string parserTestOSiLFileName;
 	string osil;
-	string osol = "<OSoL><other name=\"Solver\" value=\"coin_solver_clp\"></other></OSoL>";
-		osilFileName =  "/Users/kmartin/Documents/files/code/cpp/Coin-OS/OS/data/lindoapiaddins.osil";
-		osilFileName =  "../data/lindoapiaddins.osil";
-		nlFileName = "/Users/kmartin/Documents/files/code/cpp/Coin-OS/OS/data/testfile2.nl";
-		mpsFileName = "/Users/kmartin/Documents/files/code/cpp/Coin-OS/OS/data/parinc.mps";
-		parserTestOSiLFileName = "/Users/kmartin/Documents/files/code/cpp/Coin-OS/OS/data/parincLinear.osil";
+	// get the input files
+	 const char dirsep =  CoinFindDirSeparator();
+  	// Set directory containing mps data files.
+  	std::string dataDir;
+    dataDir = dirsep == '/' ? "../data/" : "..\\data\\";
+	string osol = "<osol></osoL>";
+	osilFileName =  dataDir +"parincLinear.osil";
+	//osilFileName =  dataDir +"lindoapiaddins.osil";
+	nlFileName = dataDir +"hs71.nl";
+	mpsFileName =  dataDir + "parinc.mps";
+	parserTestOSiLFileName = dataDir + "parincLinear.osil";
 	fileUtil = new FileUtil();
 	osil = fileUtil->getFileAsString( &osilFileName[0]);
 	// solve using using the osil file
 	try{
 		cout << "Create a new COIN Solver" << endl;
 		m_Solver = new CoinSolver();
-		m_Solver->m_sSolverName = "clp";
+		m_Solver->m_sSolverName = "cbc";
 		m_Solver->osil = osil;
 		m_Solver->osol = osol; 
 		m_Solver->osinstance = NULL; 
@@ -87,9 +92,12 @@ int main(int argC, char* argV[])
 	}
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  m_Solver->osrl <<  endl;
+		cout << endl << endl << endl;
+		cout << "Sorry Unit Test Failed Testing the Cbc Solver" << endl;
+		return 0;
 	}
-	try{
 	#ifdef COIN_HAS_LINDO
+	try{
 		cout << "create a new LINDO Solver for OSiL string solution" << endl;
 		m_Solver = new LindoSolver();	
 		m_Solver->osil = osil;
@@ -102,13 +110,15 @@ int main(int argC, char* argV[])
 		m_Solver->osinstance = NULL;
 		delete m_Solver;
 		m_Solver = NULL;
-		//nl2osil = new OSnl2osil( nlFileName);
 		
-#endif
 	}
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  m_Solver->osrl <<  endl;
+		cout << endl << endl << endl;
+		cout << "Sorry Unit Test Failed Testing the Lindo Solver" << endl;
+		return 0;
 	}
+	#endif
 	// end solving using the osil file
 	// now solve with an OSInstance created from an MPS file
 	try{
@@ -271,7 +281,9 @@ int main(int argC, char* argV[])
 	}	
 		catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  m_Solver->osrl <<  endl;
-	}		
+	}	
+	cout << endl << endl << endl;
+	cout << "Congratulations: you passed the unit Test" << endl;	
 	// 
 	// now solve on a remote server
 	/*
@@ -314,28 +326,4 @@ int main(int argC, char* argV[])
 		cout <<  eclass.errormsg <<  endl;
 	}	
 	*/
-	try{
-		cout << "HERE I AM" << endl;
-		OSiLReader *osilreader = NULL;
-		osilreader = new OSiLReader();
-		OSInstance *osinstance;
-		osinstance = new OSInstance();
-		osinstance = osilreader->readOSiL( osil);
-		double *aColSparse = osinstance->instanceData->linearConstraintCoefficients->value->el;
-		int *rowIdx = osinstance->instanceData->linearConstraintCoefficients->rowIdx->el; 
-		int *start = osinstance->instanceData->linearConstraintCoefficients->start->el; 
-		int numConstraints = osinstance->instanceData->constraints->numberOfConstraints;
-		double *aColDense = new double[ numConstraints ];
-		for(int i = 0; i < numConstraints; i++){
-				//aColDense[i] = 0.0;
-		}
-		for(int i = start[0]; i < start[ 1]; i++){
-			aColDense[ rowIdx[ i] ] = aColSparse[ i];
-			cout << aColDense[  rowIdx[ i]] << endl;
-		}
-		return 0;
-	}
-		catch(const ErrorClass& eclass){
-		cout <<  eclass.errormsg <<  endl;
-	}
 }
