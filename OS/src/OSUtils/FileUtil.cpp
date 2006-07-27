@@ -29,6 +29,7 @@ FileUtil::~FileUtil(){
 
 string FileUtil::getFileAsString(  char* fname){
 	ostringstream outStr;
+	string soutString;
 	char ch;
 	ifstream inFile( fname);
 	if(!inFile){
@@ -38,7 +39,10 @@ string FileUtil::getFileAsString(  char* fname){
 	while((ch = inFile.get() ) != EOF){
 		outStr << ch;
 	}
-	return outStr.str();
+	soutString = outStr.str();
+	inFile.close();
+	return soutString;
+
 } // end getFileAsString
 
 

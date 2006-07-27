@@ -66,11 +66,11 @@ int main(int argC, char* argV[])
   	std::string dataDir;
     dataDir = dirsep == '/' ? "../data/" : "..\\data\\";
 	string osol = "<osol></osoL>";
+	//osilFileName =  dataDir +"parincLinear.osil";
 	osilFileName =  dataDir +"lindoapiaddins.osil";
-	//osilFileName =  dataDir +"lindoapiaddins.osil";
 	nlFileName = dataDir +"hs71.nl";
 	mpsFileName =  dataDir + "parinc.mps";
-	parserTestOSiLFileName = dataDir + "parincLinear.osil";
+	parserTestOSiLFileName = dataDir + "parincLinear.osil"; 
 	fileUtil = new FileUtil();
 	osil = fileUtil->getFileAsString( &osilFileName[0]);
 	// solve using using the osil file
@@ -245,16 +245,20 @@ int main(int argC, char* argV[])
 	}
 	// try parsing OSrL	  
 	//
-	// Now test OSiL parser on large problem
+	// Now just test the parser
 	try{ 
 		cout << endl;
-		osil = fileUtil->getFileAsString( &parserTestOSiLFileName[0]);
+		delete fileUtil;
+		fileUtil = NULL;
+		fileUtil = new FileUtil();
+		//string osil = fileUtil->getFileAsString( &parserTestOSiLFileName[0]);
+		cout << osil << endl;
 		OSiLReader *osilreader = NULL;
 		osilreader = new OSiLReader(); 
 		clock_t start, finish;
 		double duration;
 		start = clock();
-		cout << "TEST PARSING A LARGE LP" << endl;
+		cout << "TEST PARSING A MODEL" << endl;
 		osilreader->readOSiL( osil);
 		delete osilreader;
 		osilreader = 0;
@@ -265,6 +269,7 @@ int main(int argC, char* argV[])
 	}	
 		catch(const ErrorClass& eclass){
 		cout << endl << endl << endl;
+		cout << eclass.errormsg << endl;
 		cout << "Sorry Unit Test Failed Testing An OSiL Parser" << endl;
 		return 0;
 	}	
