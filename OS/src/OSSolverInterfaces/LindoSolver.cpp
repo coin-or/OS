@@ -290,10 +290,9 @@ bool LindoSolver::generateLindoModel(){
 	/* >>> Step 1 <<< Create a LINDO environment. Note: 
     MY_LICENSE_KEY must be defined in license.h to 
     be the license key shipped with your software. */
-	char MY_LICENSE_KEY[1024];
-	char LINDOAPI_LICENSE_FILE[1024];
+	char *MY_LICENSE_KEY = NULL;
+	MY_LICENSE_KEY = getenv( "LINDOAPI_LICENSE_FILE");
 	try{
-		m_iLindoErrorCode = LSloadLicenseString("/Users/kmartin/Documents/files/code/lindo/macosx/lndapi40.lic", MY_LICENSE_KEY);
 		lindoAPIErrorCheck("There was an Error When loading the LINDO license on a Darwin platform");
 		pEnv_ = LScreateEnv ( &m_iLindoErrorCode, MY_LICENSE_KEY);
 		lindoAPIErrorCheck("There was an Error Creating the LINDO environment");
