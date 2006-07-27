@@ -293,7 +293,6 @@ bool LindoSolver::generateLindoModel(){
 	char *MY_LICENSE_KEY = NULL;
 	MY_LICENSE_KEY = getenv( "LINDOAPI_LICENSE_FILE");
 	try{
-		lindoAPIErrorCheck("There was an Error When loading the LINDO license on a Darwin platform");
 		pEnv_ = LScreateEnv ( &m_iLindoErrorCode, MY_LICENSE_KEY);
 		lindoAPIErrorCheck("There was an Error Creating the LINDO environment");
 		/* >>> Step 2 <<< Create a model in the environment. */

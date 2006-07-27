@@ -66,7 +66,7 @@ int main(int argC, char* argV[])
   	std::string dataDir;
     dataDir = dirsep == '/' ? "../data/" : "..\\data\\";
 	string osol = "<osol></osoL>";
-	osilFileName =  dataDir +"parincLinear.osil";
+	osilFileName =  dataDir +"lindoapiaddins.osil";
 	//osilFileName =  dataDir +"lindoapiaddins.osil";
 	nlFileName = dataDir +"hs71.nl";
 	mpsFileName =  dataDir + "parinc.mps";
@@ -94,7 +94,7 @@ int main(int argC, char* argV[])
 		cout << "OSrL =  " <<  m_Solver->osrl <<  endl;
 		cout << endl << endl << endl;
 		cout << "Sorry Unit Test Failed Testing the Cbc Solver" << endl;
-		return 0;
+		//return 0;
 	}
 	#ifdef COIN_HAS_LINDO
 	try{
@@ -116,7 +116,7 @@ int main(int argC, char* argV[])
 		cout << "OSrL =  " <<  m_Solver->osrl <<  endl;
 		cout << endl << endl << endl;
 		cout << "Sorry Unit Test Failed Testing the Lindo Solver" << endl;
-		return 0;
+		//return 0;
 	}
 	#endif
 	// end solving using the osil file
