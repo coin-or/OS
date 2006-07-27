@@ -79,7 +79,7 @@ int main(int argC, char* argV[])
 		m_Solver = new CoinSolver();
 		m_Solver->m_sSolverName = "cbc";
 		m_Solver->osil = osil;
-		m_Solver->osol = osol; 
+		m_Solver->osol = osol;  
 		m_Solver->osinstance = NULL; 
 		cout << "call the COIN Solver" << endl;
 		m_Solver->solve();

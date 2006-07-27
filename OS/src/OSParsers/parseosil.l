@@ -23,18 +23,16 @@
 #include <ctype.h>
 #include <Base64.h>
 #include "ErrorClass.h"
-
-
-extern OSInstance* osinstance;
-YY_BUFFER_STATE current_buf;
 #include "parseosil.tab.hpp"
-
-
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", osiltext);
 #else     
 	#define YY_PRINT ;
 #endif
+
+extern OSInstance* osinstance;
+YY_BUFFER_STATE current_buf;
+
 //
 //
 // the global variables for parsing
@@ -136,17 +134,18 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]+))([eE][-+]?[0-9]+)?|INF))
 {xmlwhitespace}*\<\/description{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(DESCRIPTIONEND);}
 {xmlwhitespace}*\<instanceData{xmlwhitespace}*\>{xmlwhitespace}* {
 	//
-	int k = strlen(current_buf->yy_buf_pos);
-	ch = &current_buf->yy_ch_buf[k+ 1];
+	//int k = strlen(current_buf->yy_buf_pos);
+	//ch = &current_buf->yy_ch_buf[k+ 1];
+	ch = current_buf->yy_buf_pos;
 	osiltext = &ch[ 0];
 	//printf("starting INSTANCE DATA:\n %s\n", ch);
 	parseVariables();
-	parseObjectives();
+	parseObjectives(); 
 	parseConstraints(); 
 	parseLinearConstraintCoefficients();
 	//printf("testing \n %s\n", ch);
 	//osil_delete_buffer( yy_current_buffer);
-	osil_scan_buffer(ch , strlen(  ch) + 2);		
+	//osil_scan_buffer(ch , strlen(  ch) + 2);		
 	return(INSTANCEDATASTART);
 	//
 }

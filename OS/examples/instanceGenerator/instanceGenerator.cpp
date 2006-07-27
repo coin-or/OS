@@ -306,6 +306,7 @@ int  main(){
 		cout << osilwriter->writeOSiL( osinstance);
 		// done writing the model
 		cout << "Done writing the Model" << endl;
+		#ifdef COIN_HAS_LINDO
 		cout << "Now Solve with LINDO" << endl;
 		cout << "create a new LINDO Solver for OSiL string solution" << endl;
 		LindoSolver *lindo;
@@ -319,6 +320,7 @@ int  main(){
 		lindo->osinstance = NULL;
 		delete lindo;
 		lindo = NULL;
+		#endif
 		delete osinstance;
 		osinstance = NULL;
 		delete osilwriter;

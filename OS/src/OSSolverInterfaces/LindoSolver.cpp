@@ -98,6 +98,9 @@ LindoSolver::~LindoSolver() {
 	m_mdRhsValue = NULL;
 	delete osrlwriter;
 	osrlwriter = NULL;
+#ifdef DEBUG
+	cout << "Delete LSdelete" << endl;
+#endif
 	LSdeleteEnv(&pEnv_);
 }
 
@@ -232,12 +235,14 @@ bool LindoSolver::addSlackVars(){
 	if(!LSaddVariables(pModel_, m_iNumberNewSlacks, pachVartypes, paszVarnames, paiAcols,
 				pacAcols, padAcoef, paiArows, padC, padL, padU)){
 		delete[] pachVartypes;
-		for(i = 0; i < m_iNumberNewSlacks; i++) delete[] paszVarnames[i];
-		delete[] paiAcols;
-		delete[] padAcoef; 
-		delete[] paiArows;
-		delete[] padC;
-		delete[] padU;
+		if(m_iNumberNewSlacks > 0){
+			for(i = 0; i < m_iNumberNewSlacks; i++) delete[] paszVarnames[i];
+			delete[] paiAcols;
+			delete[] padAcoef; 
+			delete[] paiArows;
+			delete[] padC;
+			delete[] padU;
+		}
 		return true;
 	}
 	else{
