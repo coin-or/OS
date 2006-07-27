@@ -17,7 +17,7 @@
 #include "OSInstance.h"
 #include "OSiLWriter.h"
 #include "OSParameters.h"
-#include "OSNlNode.h"
+#include "OSnLNode.h"
 #include "ErrorClass.h"
 #include <vector>  
 
