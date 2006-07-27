@@ -55,7 +55,7 @@ run_parsers:
 	$(YACC) -ldv -p osrl -o ${abs_source_dir}/src/OSParsers/parseosrl.tab.cpp ${abs_source_dir}/src/OSParsers/parseosrl.y
 	flex -Posrl  -o${abs_source_dir}/src/OSParsers/parseosrl.cpp ${abs_source_dir}/src/OSParsers/parseosrl.l
 	$(YACC) -ldv -p osil  -o ${abs_source_dir}/src/OSParsers/parseosil.tab.cpp ${abs_source_dir}/src/OSParsers/parseosil.y
-	flex -Posil -o${abs_source_dir}/src/OSParsers/parseosil.cpp ${abs_source_dir}/src/OSParsers/parseosil.l
+	/Users/kmartin/temp/downloads/flex-2.5.33/flex -Posil -o${abs_source_dir}/src/OSParsers/parseosil.cpp ${abs_source_dir}/src/OSParsers/parseosil.l
 	make
 
 ########################################################################

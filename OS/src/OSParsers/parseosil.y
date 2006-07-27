@@ -441,7 +441,7 @@ OSInstance* yygetOSInstance( string osil){
 		int size = strlen( ch);
 		ch[ size - 1] = 0;
 		ch[ size - 2] = 0;
-		YY_BUFFER_STATE current_buf;
+		//current_buf is an external variable;
 		current_buf = osil_scan_buffer( ch, size );
 		//yy_scan_string( osil.c_str());
 		osinstance = NULL;

@@ -26,6 +26,7 @@
 
 
 extern OSInstance* osinstance;
+YY_BUFFER_STATE current_buf;
 #include "parseosil.tab.hpp"
 
 
@@ -135,8 +136,8 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]+))([eE][-+]?[0-9]+)?|INF))
 {xmlwhitespace}*\<\/description{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(DESCRIPTIONEND);}
 {xmlwhitespace}*\<instanceData{xmlwhitespace}*\>{xmlwhitespace}* {
 	//
-	int k = strlen(yy_current_buffer->yy_buf_pos);
-	ch = &yy_current_buffer->yy_ch_buf[k+ 1];
+	int k = strlen(current_buf->yy_buf_pos);
+	ch = &current_buf->yy_ch_buf[k+ 1];
 	osiltext = &ch[ 0];
 	//printf("starting INSTANCE DATA:\n %s\n", ch);
 	parseVariables();
@@ -144,7 +145,7 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]+))([eE][-+]?[0-9]+)?|INF))
 	parseConstraints(); 
 	parseLinearConstraintCoefficients();
 	//printf("testing \n %s\n", ch);
-	osil_delete_buffer( yy_current_buffer);
+	//osil_delete_buffer( yy_current_buffer);
 	osil_scan_buffer(ch , strlen(  ch) + 2);		
 	return(INSTANCEDATASTART);
 	//
