@@ -61,7 +61,7 @@ AM_CPPFLAGS =\
 
 # Here we add additional libraries
 # Kipp add the others here
-LIBS += $(ADDLIBS) `cat $(COINUTILSOBJDIR)/coinutils_addlibs.txt`
+#LIBS += $(ADDLIBS) `cat $(COINUTILSOBJDIR)/coinutils_addlibs.txt`
 LIBS  += `cat $(OSOBJDIR)/os_addlibs.txt`
 
 

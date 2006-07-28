@@ -100,6 +100,7 @@ int main(int argC, const char* argV[])
 	}
 		catch(const ErrorClass& eclass){
 		cout << eclass.errormsg <<  endl;
+		return 0;
 	} 
 		cout << "HERE ARE THE OPTION VALUES:" << endl;
 		if(osoptions->configFile != NULL) cout << "Config file = " << osoptions->configFile << endl;
@@ -127,6 +128,7 @@ int main(int argC, const char* argV[])
 		catch(const ErrorClass& eclass){
 			//cout << eclass.errormsg <<  endl;
 			cout << "could not open file properly" << endl;
+			return 0;
 		}	
 		// now call the correct serviceMethod
 		// solve is the default

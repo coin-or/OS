@@ -185,9 +185,8 @@ LIBOBJS = @LIBOBJS@
 
 # Here we add additional libraries
 # Kipp add the others here
-LIBS = @LIBS@ $(ADDLIBS) `cat \
-	$(COINUTILSOBJDIR)/coinutils_addlibs.txt` `cat \
-	$(OSOBJDIR)/os_addlibs.txt`
+#LIBS += $(ADDLIBS) `cat $(COINUTILSOBJDIR)/coinutils_addlibs.txt`
+LIBS = @LIBS@ `cat $(OSOBJDIR)/os_addlibs.txt`
 LIBTOOL = @LIBTOOL@
 LIBTOOLM4 = @LIBTOOLM4@
 LINDOINCDIR = @LINDOINCDIR@

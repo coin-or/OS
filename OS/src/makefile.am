@@ -131,7 +131,7 @@ endif
 
 
 
-
+OSSolverService_LDFLAGS = -rpath $(libdir)
 
 
 
