@@ -21,7 +21,7 @@
 
 
  
-using namespace std;
+
 #define RCVBUFSIZE 1024*8   /* Size of receive buffer */
 
 
@@ -66,7 +66,7 @@ public:
    	 * @return the reply from the Web service in a SOAP message.
 	 * </p> 
    	 */	
-	static string sendSOAPMessage(string theSOAP, string serviceIP, unsigned int servicePortNumber);
+	static std::string sendSOAPMessage(std::string theSOAP, std::string serviceIP, unsigned int servicePortNumber);
 	
 
    	/**
@@ -78,7 +78,7 @@ public:
    	 * @return the XML string that goes into the SOAP envelop.
 	 * </p> 
    	 */
-	static string SOAPify( string theXmlString);
+	static std::string SOAPify( std::string theXmlString);
 
    	/**
    	 * take the XML from a SOAP envelop and
@@ -89,7 +89,7 @@ public:
    	 * @return the resulting XML string.
 	 * </p> 
    	 */
-	static string deSOAPify( string theXmlString);
+	static std::string deSOAPify( std::string theXmlString);
 	
    	/**
    	 * create the SOAP message that is send to the solver Web Service
@@ -107,9 +107,9 @@ public:
    	 * @return the resulting XML string that is the SAOP message.
 	 * </p> 
    	 */	
-	static string createSOAPMessage(int numInputs, string solverAddress, 
-		string postURI, string smethod, string* msInputs, 
-		string* msInputNames, string sSoapAction);
+	static std::string createSOAPMessage(int numInputs, std::string solverAddress, 
+		std::string postURI, std::string smethod, std::string* msInputs, 
+		std::string* msInputNames, std::string sSoapAction);
 	
    	/**
    	 * extract the appropriate OSxL protocol from the SOAP envelop
@@ -119,7 +119,7 @@ public:
    	 * @return the resulting protocol.
 	 * </p> 
    	 */
-	static string getOSxL(string soapstring, string serviceMethod);
+	static std::string getOSxL(std::string soapstring, std::string serviceMethod);
 }; //class WSUtil
 #endif
 

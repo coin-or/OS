@@ -92,7 +92,7 @@ int main(int argC, char* argV[])
 		cout << "OSrL =  " <<  m_Solver->osrl <<  endl;
 		cout << endl << endl << endl;
 		cout << "Sorry Unit Test Failed Testing the Cbc Solver" << endl;
-		return 0;
+		//return 0;
 	}
 	#ifdef COIN_HAS_LINDO
 	try{

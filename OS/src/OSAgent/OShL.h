@@ -19,7 +19,7 @@
 #define OSHL_H
 
 #include <string>
-using namespace std;
+
 
 /*! \class OShL OShL.h "OShL.h"
  *  \brief An interface that specified virtual methods to be implemented by agents..
@@ -43,7 +43,7 @@ public:
 	 *
 	 * Class destructor. 
 	 */
-	~OShL();
+	virtual	~OShL() = 0;
 	
    	/**
    	 * submit an instance with its options for a synchronous solution
@@ -54,7 +54,7 @@ public:
    	 * @return a string which is the result in OSrL format.
 	 * </p> 
    	 */	
-	virtual string solve(string osil, string osol) = 0;
+	virtual std::string solve(std::string osil, std::string osol) = 0;
 	
    	/**
    	 * get a jobID for use in the send methos
@@ -64,7 +64,7 @@ public:
    	 * @return a string which is the jobID
 	 * </p> 
    	 */	
-	virtual string getJobID(string osol) = 0;
+	virtual std::string getJobID(std::string osol) = 0;
 	
    	/**
    	 * submit an instance with its options for an asynchronous solution
@@ -75,7 +75,7 @@ public:
    	 * @return a bool which is true if the job is successfuly submitted
 	 * </p> 
    	 */	
-	virtual bool send(string osil, string osol) = 0;
+	virtual bool send(std::string osil, std::string osol) = 0;
 	
    	/**
    	 * kill an instance that is running
@@ -85,7 +85,7 @@ public:
    	 * @return a string which is in OSpL format
 	 * </p> 
    	 */	
-	virtual string kill(string osol) = 0;
+	virtual std::string kill(std::string osol) = 0;
 	
    	/**
    	 *retrieve an instance result that is ran in asynchronous mode
@@ -95,7 +95,7 @@ public:
    	 * @return a string which is in the result of the optimization is OSrL fomrat
 	 * </p> 
    	 */	
-	virtual string retrieve(string osol) = 0;
+	virtual std::string retrieve(std::string osol) = 0;
 	
    	/**
    	 * knock to get information on the current status of a job
@@ -106,7 +106,7 @@ public:
    	 * @return a string which is the knock result in OSpL format.
 	 * </p> 
    	 */	
-	virtual string knock(string ospl, string osol) = 0;
+	virtual std::string knock(std::string ospl, std::string osol) = 0;
 };
 
 #endif

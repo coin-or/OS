@@ -47,7 +47,7 @@ public:
 	 * Default constructor. 
 	 * @param solverURI is the location of remote solver or scheduler
 	 */
-	OSSolverAgent(string solverURI) ;
+	OSSolverAgent(std::string solverURI) ;
 	
 	/**
 	 *
@@ -64,7 +64,7 @@ public:
    	 * @return osrl which is a string with the result.
 	 * </p> 
    	 */	
-	string solve(string osil, string osol);
+	std::string solve(std::string osil, std::string osol);
 	
    	/**
    	 * implement the getJobID() method which is a virtual function in OShL
@@ -74,7 +74,7 @@ public:
    	 * @return a string which is the jobID
 	 * </p> 
    	 */	
-	string getJobID(string osol);
+	std::string getJobID(std::string osol);
 	
    	/**
    	 * implement the send() method which is a virtual function in OShL
@@ -85,7 +85,7 @@ public:
    	 * @return a bool which is true if the job is successfuly submitted
 	 * </p> 
    	 */	
-	bool send(string osil, string osol);
+	bool send(std::string osil, std::string osol);
 	
    	/**
    	 * implement the kill() method which is a virtual function in OShL
@@ -95,7 +95,7 @@ public:
    	 * @return a string which is in OSpL format
 	 * </p> 
    	 */	
-	string kill(string osol);
+	std::string kill(std::string osol);
 	
    	/**
    	 * implement the retrieve() method which is a virtual function in OShL
@@ -105,7 +105,7 @@ public:
    	 * @return a string which is in the result of the optimization is OSrL fomrat
 	 * </p> 
    	 */	
-	string retrieve(string osol);
+	std::string retrieve(std::string osol);
 	
    	/**
    	 * implement the knock() method which is a virtual function in OShL
@@ -116,12 +116,12 @@ public:
    	 * @return a string which is the knock result in OSpL format.
 	 * </p> 
    	 */	
-	string knock(string ospl, string osol);
+	std::string knock(std::string ospl, std::string osol);
 	
 private:
 	
 	/** solverAddress is the URI for the solver*/
-	string solverAddress;
+	std::string solverAddress;
 	
 	/** solverPortNumber is the port number for the sovler */
 	unsigned short solverPortNumber;
@@ -129,7 +129,7 @@ private:
 	/** postURI is the path to the solver that follows the first
 	 * / in the solverAddress
 	 */
-	string postURI;
+	std::string postURI;
 	
 }; //class OSSolverAgent
 

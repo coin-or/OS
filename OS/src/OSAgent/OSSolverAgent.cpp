@@ -17,6 +17,8 @@
 #include "OSSolverAgent.h"
 #include "WSUtil.h"
 
+using namespace std;
+
 OSSolverAgent::OSSolverAgent(string solverURI) : OShL() {
 	int nstart = 0;
 	// parse the solverURI
