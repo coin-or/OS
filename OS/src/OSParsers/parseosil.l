@@ -134,18 +134,20 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]+))([eE][-+]?[0-9]+)?|INF))
 {xmlwhitespace}*\<\/description{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(DESCRIPTIONEND);}
 {xmlwhitespace}*\<instanceData{xmlwhitespace}*\>{xmlwhitespace}* {
 	//
-	//int k = strlen(current_buf->yy_buf_pos);
-	//ch = &current_buf->yy_ch_buf[k+ 1];
-	ch = current_buf->yy_buf_pos;
+	int k = strlen(current_buf->yy_buf_pos);
+	//printf("k is equal to   %d\n", k);
+	ch = &current_buf->yy_ch_buf[k+ 1];
+	//ch = current_buf->yy_buf_pos;
 	osiltext = &ch[ 0];
 	//printf("starting INSTANCE DATA:\n %s\n", ch);
 	parseVariables();
 	parseObjectives(); 
 	parseConstraints(); 
 	parseLinearConstraintCoefficients();
-	//printf("testing \n %s\n", ch);
-	//osil_delete_buffer( yy_current_buffer);
-	//osil_scan_buffer(ch , strlen(  ch) + 2);		
+	current_buf->yy_ch_buf = ch;
+	//printf("testing \n %s\n", current_buf->yy_ch_buf);
+	//osil_delete_buffer( current_buf);
+	osil_scan_buffer(ch , strlen(  ch) + 2);		
 	return(INSTANCEDATASTART);
 	//
 }
@@ -1010,7 +1012,7 @@ bool parseStart(){
 			number = &*ch;
 			// find the end of the number, it better be an </el>
 			// find </el
-			while( *ch != '<' && *ch  != '\0'){
+			while( *ch != '<' && *ch  != EOF){
 				ch++;
 			}
 			// we better have a <, or not valid
@@ -1108,11 +1110,11 @@ bool parseRowIdx(){
 			number = &*ch;
 			// find the end of the number, it better be an </el>
 			// find </el
-			while( *ch != '<' && *ch  != '\0'){
+			while( *ch != '<' && *ch  != EOF){
 				ch++;
 			}
 			// we better have a <, or not valid
-			if(*ch != '<') {osiltext = &ch[0]; osilerror("cannot find an </el>");}
+			if(*ch != '<') {osiltext = &ch[0];  ;osilerror("cannot find an </el>"); }
 			// terminate the number string
 			*ch++ = '\0';
 			osinstance->instanceData->linearConstraintCoefficients->rowIdx->el[ kount++] = 
@@ -1120,7 +1122,7 @@ bool parseRowIdx(){
 			//printf("number = %s\n", number);
 			// we are pointing to <, make sure there is /el
 			for(i = 1; endEl[ i] == *ch; i++, ch++);
-			if(i != 4 ) {osiltext = &ch[0]; osilerror("cannot fine an </el>");}
+			if(i != 4 ) {osiltext = &ch[0]; osilerror("cannot find an </el>");}
 			// start munging white space until an '>' is found for </el>,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );
 			if( *ch++ != '>') {osiltext = &ch[0]; osilerror("improperly formed </el> tag");}
@@ -1209,7 +1211,7 @@ bool parseColIdx(){
 			number = &*ch;
 			// find the end of the number, it better be an </el>
 			// find </el
-			while( *ch != '<' && *ch  != '\0'){
+			while( *ch != '<' && *ch  != EOF){
 				ch++;
 			}
 			// we better have a <, or not valid
@@ -1307,7 +1309,7 @@ bool parseValue(){
 			number = &*ch;
 			// find the end of the number, it better be an </el>
 			// find the < which begins the </el
-			while( *ch != '<' && *ch != '\0'){
+			while( *ch != '<' && *ch != EOF){
 				ch++;
 			}
 			// we better have a <, or not valid
@@ -1385,7 +1387,7 @@ bool parseObjCoef( int objcount){
 		// we should be pointing to first character after <coef>
 		number = &*ch;
 		// eat characters until we find <
-		for(; *ch != '<' && *ch != '\0'; ch++); 
+		for(; *ch != '<' && *ch != EOF; ch++); 
 		osinstance->instanceData->objectives->obj[objcount]->coef[ k]->idx  = atoimod( attText);
 		// we should be pointing to a < in the </coef> tag	
 		*ch = '\0';
@@ -1437,7 +1439,7 @@ char *parseBase64(int *dataSize ){
 	// we are now pointing start of the data
 	b64string = &*ch;
 	// eat characters until we get to the </base64BinaryData element
-	for(; *ch != '<' && *ch != '\0'; ch++);
+	for(; *ch != '<' && *ch != EOF; ch++);
 	// we should be pointing to </base64BinaryData>
 	for(i = 0; endBase64BinaryData[i]  == *ch; i++, ch++);
 	if(i != 18) {osiltext = &ch[0];osilerror(" problem with <base64BinaryData> element");}

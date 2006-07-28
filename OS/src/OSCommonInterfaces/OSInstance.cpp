@@ -160,7 +160,7 @@ Variable::Variable():
 	init(OSNAN),
 	lb(0.0),
 	ub(OSINFINITY), 
-	type('C'),
+	type('C'), 
 	initString("")
 {  
 	#ifdef DEBUG
@@ -237,14 +237,13 @@ Objective::~Objective(){
 	coef = NULL; 
 }  
 
-Objectives::Objectives():
-	numberOfObjectives(0),
-	obj(NULL)
+Objectives::Objectives()
 {  
 	#ifdef DEBUG
-	cout << "Inside the Objectives Constructor" << endl;
+	cout << "Inside the Objectives Constructor" << endl; 
 	#endif
-
+	numberOfObjectives = 0;
+	obj = NULL;
 } 
 
 Objectives::~Objectives(){ 
@@ -915,7 +914,7 @@ std::map<int, OSnLNode*> OSInstance::getAllNonlinearExpressionTrees(){
 	OSnLNodePlus *nlNodePlus;
 	m_iObjectiveNumberNonlinear = 0;
 	m_iConstraintNumberNonlinear = 0;
-	int i, j;
+	int i;
 	int index;
 	for(i = 0; i < instanceData->nonlinearExpressions->numberOfNonlinearExpressions; i++){
 		index = instanceData->nonlinearExpressions->nl[ i]->idx;

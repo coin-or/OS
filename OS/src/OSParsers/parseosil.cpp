@@ -962,18 +962,16 @@ char *osiltext;
 #include <ctype.h>
 #include <Base64.h>
 #include "ErrorClass.h"
-
-
-extern OSInstance* osinstance;
-YY_BUFFER_STATE current_buf;
 #include "parseosil.tab.hpp"
-
-
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", osiltext);
 #else     
 	#define YY_PRINT ;
 #endif
+
+extern OSInstance* osinstance;
+YY_BUFFER_STATE current_buf;
+
 //
 //
 // the global variables for parsing
@@ -1033,7 +1031,7 @@ char *parseBase64(int *dataSize );
 
 
 
-#line 1037 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.cpp"
+#line 1035 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.cpp"
 
 #define INITIAL 0
 #define attributetext 1
@@ -1192,10 +1190,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 111 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 109 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 
  
-#line 1199 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.cpp"
+#line 1197 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.cpp"
 
 	if ( !(yy_init) )
 		{
@@ -1291,136 +1289,139 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 113 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 111 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 115 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 113 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(QUOTE);}
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 116 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 114 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(GREATERTHAN);}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 117 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 115 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; osillval.ival = atoi(osiltext); return(INTEGER);}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 118 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 116 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; osillval.dval = atof(osiltext); return(DOUBLE);}
 	YY_BREAK
 case 6:
 /* rule 6 can match eol */
 YY_RULE_SETUP
-#line 119 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 117 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT;  return(ENDOFELEMENT);}
 	YY_BREAK
 case 7:
 /* rule 7 can match eol */
 YY_RULE_SETUP
-#line 123 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 121 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; BEGIN osilattributetext;  return(OSILSTART);}
 	YY_BREAK
 case 8:
 /* rule 8 can match eol */
 YY_RULE_SETUP
-#line 124 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 122 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(OSILEND);}
 	YY_BREAK
 case 9:
 /* rule 9 can match eol */
 YY_RULE_SETUP
-#line 125 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 123 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(INSTANCEHEADER);}
 	YY_BREAK
 case 10:
 /* rule 10 can match eol */
 YY_RULE_SETUP
-#line 126 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 124 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(INSTANCEHEADERSTART);}
 	YY_BREAK
 case 11:
 /* rule 11 can match eol */
 YY_RULE_SETUP
-#line 127 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 125 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(INSTANCEHEADEREND);}
 	YY_BREAK
 case 12:
 /* rule 12 can match eol */
 YY_RULE_SETUP
-#line 128 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 126 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; BEGIN elementtext; return(NAMESTART);}
 	YY_BREAK
 case 13:
 /* rule 13 can match eol */
 YY_RULE_SETUP
-#line 129 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 127 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; unput('<'); return(NAMESTART);}
 	YY_BREAK
 case 14:
 /* rule 14 can match eol */
 YY_RULE_SETUP
-#line 130 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 128 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT;  return(NAMEEND);}
 	YY_BREAK
 case 15:
 /* rule 15 can match eol */
 YY_RULE_SETUP
-#line 131 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 129 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; BEGIN elementtext;  return(SOURCESTART);}
 	YY_BREAK
 case 16:
 /* rule 16 can match eol */
 YY_RULE_SETUP
-#line 132 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 130 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; unput('<'); return(SOURCESTART);}
 	YY_BREAK
 case 17:
 /* rule 17 can match eol */
 YY_RULE_SETUP
-#line 133 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 131 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT;   return(SOURCEEND);}
 	YY_BREAK
 case 18:
 /* rule 18 can match eol */
 YY_RULE_SETUP
-#line 134 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 132 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; BEGIN elementtext; return(DESCRIPTIONSTART);} 
 	YY_BREAK
 case 19:
 /* rule 19 can match eol */
 YY_RULE_SETUP
-#line 135 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 133 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; unput('<'); return(DESCRIPTIONSTART);} 
 	YY_BREAK
 case 20:
 /* rule 20 can match eol */
 YY_RULE_SETUP
-#line 136 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 134 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT;  return(DESCRIPTIONEND);}
 	YY_BREAK
 case 21:
 /* rule 21 can match eol */
 YY_RULE_SETUP
-#line 137 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 135 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {
 	//
 	int k = strlen(current_buf->yy_buf_pos);
+	//printf("k is equal to   %d\n", k);
 	ch = &current_buf->yy_ch_buf[k+ 1];
+	//ch = current_buf->yy_buf_pos;
 	osiltext = &ch[ 0];
 	//printf("starting INSTANCE DATA:\n %s\n", ch);
 	parseVariables();
-	parseObjectives();
+	parseObjectives(); 
 	parseConstraints(); 
 	parseLinearConstraintCoefficients();
-	//printf("testing \n %s\n", ch);
-	//osil_delete_buffer( yy_current_buffer);
+	current_buf->yy_ch_buf = ch;
+	//printf("testing \n %s\n", current_buf->yy_ch_buf);
+	//osil_delete_buffer( current_buf);
 	osil_scan_buffer(ch , strlen(  ch) + 2);		
 	return(INSTANCEDATASTART);
 	//
@@ -1429,121 +1430,121 @@ YY_RULE_SETUP
 case 22:
 /* rule 22 can match eol */
 YY_RULE_SETUP
-#line 154 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 155 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(NUMBEROFNONLINEAREXPRESSIONS);}
 	YY_BREAK
 case 23:
 /* rule 23 can match eol */
 YY_RULE_SETUP
-#line 155 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 156 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(INSTANCEDATAEND);}
 	YY_BREAK
 case 24:
 /* rule 24 can match eol */
 YY_RULE_SETUP
-#line 156 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 157 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(QUADRATICCOEFFICIENTSSTART);}
 	YY_BREAK
 case 25:
 /* rule 25 can match eol */
 YY_RULE_SETUP
-#line 157 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 158 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(QUADRATICCOEFFICIENTSEND);}
 	YY_BREAK
 case 26:
 /* rule 26 can match eol */
 YY_RULE_SETUP
-#line 158 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 159 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(QTERMSTART);}
 	YY_BREAK
 case 27:
 /* rule 27 can match eol */
 YY_RULE_SETUP
-#line 159 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 160 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(QTERMEND);}
 	YY_BREAK
 case 28:
 /* rule 28 can match eol */
 YY_RULE_SETUP
-#line 160 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 161 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(NUMBEROFQTERMSATT);}
 	YY_BREAK
 case 29:
 /* rule 29 can match eol */
 YY_RULE_SETUP
-#line 161 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 162 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT;   return(IDXATT);}
 	YY_BREAK
 case 30:
 /* rule 30 can match eol */
 YY_RULE_SETUP
-#line 162 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 163 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT;   return(IDXONEATT);}
 	YY_BREAK
 case 31:
 /* rule 31 can match eol */
 YY_RULE_SETUP
-#line 163 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 164 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT;   return(IDXTWOATT);}
 	YY_BREAK
 case 32:
 /* rule 32 can match eol */
 YY_RULE_SETUP
-#line 164 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 165 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT;   return(COEFATT);}
 	YY_BREAK
 case 33:
 /* rule 33 can match eol */
 YY_RULE_SETUP
-#line 165 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 166 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT;  return(VALUEATT);}
 	YY_BREAK
 case 34:
 /* rule 34 can match eol */
 YY_RULE_SETUP
-#line 166 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 167 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; BEGIN attributetext; return(IDATT);}
 	YY_BREAK
 case 35:
 /* rule 35 can match eol */
 YY_RULE_SETUP
-#line 167 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 168 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; unput('\"'); return(IDATT);  }
 	YY_BREAK
 case 36:
 /* rule 36 can match eol */
 YY_RULE_SETUP
-#line 168 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 169 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; BEGIN attributetext; return(TYPEATT);}
 	YY_BREAK
 case 37:
 /* rule 37 can match eol */
 YY_RULE_SETUP
-#line 169 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 170 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; BEGIN attributetext; return(IDATT);}
 	YY_BREAK
 case 38:
 /* rule 38 can match eol */
 YY_RULE_SETUP
-#line 170 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 171 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT;   return(COEFATT);}
 	YY_BREAK
 case 39:
 /* rule 39 can match eol */
 YY_RULE_SETUP
-#line 171 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 172 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT;  return(NAMESTARTANDEND);}
 	YY_BREAK
 case 40:
 /* rule 40 can match eol */
 YY_RULE_SETUP
-#line 172 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 173 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT;  return(SOURCESTARTANDEND);}
 	YY_BREAK
 case 41:
 /* rule 41 can match eol */
 YY_RULE_SETUP
-#line 173 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 174 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT;  return(DESCRIPTIONSTARTANDEND);}
 	YY_BREAK
  
@@ -1552,272 +1553,272 @@ YY_RULE_SETUP
 case 42:
 /* rule 42 can match eol */
 YY_RULE_SETUP
-#line 180 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 181 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(NONLINEAREXPRESSIONSSTART);}
 	YY_BREAK
 case 43:
 /* rule 43 can match eol */
 YY_RULE_SETUP
-#line 181 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 182 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(NONLINEAREXPRESSIONSEND);}
 	YY_BREAK
 case 44:
 /* rule 44 can match eol */
 YY_RULE_SETUP
-#line 182 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 183 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(NLSTART);}
 	YY_BREAK
 case 45:
 /* rule 45 can match eol */
 YY_RULE_SETUP
-#line 183 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 184 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(NLEND);}
 	YY_BREAK
 case 46:
 /* rule 46 can match eol */
 YY_RULE_SETUP
-#line 184 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 185 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(TIMESSTART);}
 	YY_BREAK
 case 47:
 /* rule 47 can match eol */
 YY_RULE_SETUP
-#line 185 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 186 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(TIMESEND);}
 	YY_BREAK
 case 48:
 /* rule 48 can match eol */
 YY_RULE_SETUP
-#line 186 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 187 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(DIVIDESTART);}
 	YY_BREAK
 case 49:
 /* rule 49 can match eol */
 YY_RULE_SETUP
-#line 187 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 188 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(DIVIDEEND);}
 	YY_BREAK
 case 50:
 /* rule 50 can match eol */
 YY_RULE_SETUP
-#line 188 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 189 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(PLUSSTART);}
 	YY_BREAK
 case 51:
 /* rule 51 can match eol */
 YY_RULE_SETUP
-#line 189 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 190 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(PLUSEND);}
 	YY_BREAK
 case 52:
 /* rule 52 can match eol */
 YY_RULE_SETUP
-#line 190 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 191 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(MINUSSTART);}
 	YY_BREAK
 case 53:
 /* rule 53 can match eol */
 YY_RULE_SETUP
-#line 191 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 192 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(MINUSEND);}
 	YY_BREAK
 case 54:
 /* rule 54 can match eol */
 YY_RULE_SETUP
-#line 192 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 193 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(NEGATESTART);}
 	YY_BREAK
 case 55:
 /* rule 55 can match eol */
 YY_RULE_SETUP
-#line 193 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 194 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(NEGATEEND);}
 	YY_BREAK
 case 56:
 /* rule 56 can match eol */
 YY_RULE_SETUP
-#line 194 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 195 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(POWERSTART);}
 	YY_BREAK
 case 57:
 /* rule 57 can match eol */
 YY_RULE_SETUP
-#line 195 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 196 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(POWEREND);}
 	YY_BREAK
 case 58:
 /* rule 58 can match eol */
 YY_RULE_SETUP
-#line 196 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 197 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(LNSTART);}
 	YY_BREAK
 case 59:
 /* rule 59 can match eol */
 YY_RULE_SETUP
-#line 197 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 198 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(LNEND);}
 	YY_BREAK
 case 60:
 /* rule 60 can match eol */
 YY_RULE_SETUP
-#line 198 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 199 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(EXPSTART);}
 	YY_BREAK
 case 61:
 /* rule 61 can match eol */
 YY_RULE_SETUP
-#line 199 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 200 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(EXPEND);}
 	YY_BREAK
 case 62:
 /* rule 62 can match eol */
 YY_RULE_SETUP
-#line 200 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 201 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(ABSSTART);}
 	YY_BREAK
 case 63:
 /* rule 63 can match eol */
 YY_RULE_SETUP
-#line 201 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 202 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(ABSEND);}
 	YY_BREAK
 case 64:
 /* rule 64 can match eol */
 YY_RULE_SETUP
-#line 204 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 205 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(IFSTART);}
 	YY_BREAK
 case 65:
 /* rule 65 can match eol */
 YY_RULE_SETUP
-#line 205 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 206 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(IFEND);}
 	YY_BREAK
 case 66:
 /* rule 66 can match eol */
 YY_RULE_SETUP
-#line 207 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 208 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(MAXSTART);}
 	YY_BREAK
 case 67:
 /* rule 67 can match eol */
 YY_RULE_SETUP
-#line 208 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 209 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(MAXEND);}
 	YY_BREAK
 case 68:
 /* rule 68 can match eol */
 YY_RULE_SETUP
-#line 211 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 212 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(SUMSTART);}
 	YY_BREAK
 case 69:
 /* rule 69 can match eol */
 YY_RULE_SETUP
-#line 212 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 213 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(SUMEND);}
 	YY_BREAK
 case 70:
 /* rule 70 can match eol */
 YY_RULE_SETUP
-#line 213 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 214 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(PRODUCTSTART);}
 	YY_BREAK
 case 71:
 /* rule 71 can match eol */
 YY_RULE_SETUP
-#line 214 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 215 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(PRODUCTEND);}
 	YY_BREAK
 case 72:
 /* rule 72 can match eol */
 YY_RULE_SETUP
-#line 215 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 216 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(NUMBERSTART);}
 	YY_BREAK
 case 73:
 /* rule 73 can match eol */
 YY_RULE_SETUP
-#line 216 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 217 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(NUMBEREND);}
 	YY_BREAK
 case 74:
 /* rule 74 can match eol */
 YY_RULE_SETUP
-#line 217 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 218 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT;  return(VARIABLESTART);}
 	YY_BREAK
 case 75:
 /* rule 75 can match eol */
 YY_RULE_SETUP
-#line 218 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 219 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(VARIABLEEND);}
 	YY_BREAK
 case 76:
 YY_RULE_SETUP
-#line 220 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 221 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 BEGIN comment;
 	YY_BREAK
 case 77:
-#line 222 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 223 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 case 78:
 /* rule 78 can match eol */
 YY_RULE_SETUP
-#line 222 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 223 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 ;
 	YY_BREAK
 case 79:
 YY_RULE_SETUP
-#line 223 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 224 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 BEGIN 0;
 	YY_BREAK
 case 80:
 YY_RULE_SETUP
-#line 225 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 226 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 BEGIN xmldeclaration;
 	YY_BREAK
 case 81:
-#line 227 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 228 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 case 82:
 /* rule 82 can match eol */
 YY_RULE_SETUP
-#line 227 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 228 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 ;
 	YY_BREAK
 case 83:
 YY_RULE_SETUP
-#line 228 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 229 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 BEGIN 0;
 	YY_BREAK
 case 84:
 /* rule 84 can match eol */
 YY_RULE_SETUP
-#line 230 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 231 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT;  BEGIN 0; osillval.sval = strdup(osiltext);    return(ELEMENTTEXT);}
 	YY_BREAK
 case 85:
 /* rule 85 can match eol */
 YY_RULE_SETUP
-#line 231 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 232 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT;  BEGIN 0; osillval.sval = strdup(osiltext); return(ATTRIBUTETEXT);}
 	YY_BREAK
 case 86:
 /* rule 86 can match eol */
 YY_RULE_SETUP
-#line 232 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 233 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT;  BEGIN 0; osillval.sval = strdup(osiltext); return(OSILATTRIBUTETEXT);}
 	YY_BREAK
 case 87:
 YY_RULE_SETUP
-#line 234 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 235 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 {YY_PRINT;  osilerror( "ecountered a spurious character in the lexer");   }
 	YY_BREAK
 case 88:
 YY_RULE_SETUP
-#line 236 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 237 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 ECHO;
 	YY_BREAK
-#line 1821 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.cpp"
+#line 1822 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(attributetext):
 case YY_STATE_EOF(startelement):
@@ -2821,7 +2822,7 @@ void osilfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 236 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
+#line 237 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
 
 
 
@@ -3601,7 +3602,7 @@ bool parseStart(){
 			number = &*ch;
 			// find the end of the number, it better be an </el>
 			// find </el
-			while( *ch != '<' && *ch  != '\0'){
+			while( *ch != '<' && *ch  != EOF){
 				ch++;
 			}
 			// we better have a <, or not valid
@@ -3699,11 +3700,11 @@ bool parseRowIdx(){
 			number = &*ch;
 			// find the end of the number, it better be an </el>
 			// find </el
-			while( *ch != '<' && *ch  != '\0'){
+			while( *ch != '<' && *ch  != EOF){
 				ch++;
 			}
 			// we better have a <, or not valid
-			if(*ch != '<') {osiltext = &ch[0]; osilerror("cannot find an </el>");}
+			if(*ch != '<') {osiltext = &ch[0];  ;osilerror("cannot find an </el>"); }
 			// terminate the number string
 			*ch++ = '\0';
 			osinstance->instanceData->linearConstraintCoefficients->rowIdx->el[ kount++] = 
@@ -3711,7 +3712,7 @@ bool parseRowIdx(){
 			//printf("number = %s\n", number);
 			// we are pointing to <, make sure there is /el
 			for(i = 1; endEl[ i] == *ch; i++, ch++);
-			if(i != 4 ) {osiltext = &ch[0]; osilerror("cannot fine an </el>");}
+			if(i != 4 ) {osiltext = &ch[0]; osilerror("cannot find an </el>");}
 			// start munging white space until an '>' is found for </el>,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );
 			if( *ch++ != '>') {osiltext = &ch[0]; osilerror("improperly formed </el> tag");}
@@ -3800,7 +3801,7 @@ bool parseColIdx(){
 			number = &*ch;
 			// find the end of the number, it better be an </el>
 			// find </el
-			while( *ch != '<' && *ch  != '\0'){
+			while( *ch != '<' && *ch  != EOF){
 				ch++;
 			}
 			// we better have a <, or not valid
@@ -3898,7 +3899,7 @@ bool parseValue(){
 			number = &*ch;
 			// find the end of the number, it better be an </el>
 			// find the < which begins the </el
-			while( *ch != '<' && *ch != '\0'){
+			while( *ch != '<' && *ch != EOF){
 				ch++;
 			}
 			// we better have a <, or not valid
@@ -3976,7 +3977,7 @@ bool parseObjCoef( int objcount){
 		// we should be pointing to first character after <coef>
 		number = &*ch;
 		// eat characters until we find <
-		for(; *ch != '<' && *ch != '\0'; ch++); 
+		for(; *ch != '<' && *ch != EOF; ch++); 
 		osinstance->instanceData->objectives->obj[objcount]->coef[ k]->idx  = atoimod( attText);
 		// we should be pointing to a < in the </coef> tag	
 		*ch = '\0';
@@ -4028,7 +4029,7 @@ char *parseBase64(int *dataSize ){
 	// we are now pointing start of the data
 	b64string = &*ch;
 	// eat characters until we get to the </base64BinaryData element
-	for(; *ch != '<' && *ch != '\0'; ch++);
+	for(; *ch != '<' && *ch != EOF; ch++);
 	// we should be pointing to </base64BinaryData>
 	for(i = 0; endBase64BinaryData[i]  == *ch; i++, ch++);
 	if(i != 18) {osiltext = &ch[0];osilerror(" problem with <base64BinaryData> element");}

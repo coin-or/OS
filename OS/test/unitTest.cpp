@@ -7,7 +7,7 @@
  */ 
 #include <OsiSolverInterface.hpp>   
 #include <CoinMessageHandler.hpp> 
-#include <CoinPackedMatrix.hpp>
+#include <CoinPackedMatrix.hpp> 
  
   
 
@@ -94,7 +94,6 @@ int main(int argC, char* argV[])
 		cout << "OSrL =  " <<  m_Solver->osrl <<  endl;
 		cout << endl << endl << endl;
 		cout << "Sorry Unit Test Failed Testing the Cbc Solver" << endl;
-		//return 0;
 	}
 	#ifdef COIN_HAS_LINDO
 	try{
@@ -240,7 +239,7 @@ int main(int argC, char* argV[])
 		cout << "OSrL =  " <<  m_Solver->osrl <<  endl;
 		cout << endl << endl << endl;
 		cout << "Sorry Unit Test Failed Testing Use of Base 64" << endl;
-		return 0;
+		//return 0;
 
 	}  
 	//
@@ -250,7 +249,8 @@ int main(int argC, char* argV[])
 		//delete fileUtil;
 		//fileUtil = NULL;
 		//fileUtil = new FileUtil();
-		string osil = fileUtil->getFileAsString( &parserTestOSiLFileName[0]);
+		fileUtil->getFileAsString( &parserTestOSiLFileName[0]);
+		osil = fileUtil->getFileAsString( &parserTestOSiLFileName[0]);
 		cout << osil << endl;
 		OSiLReader *osilreader = NULL;
 		osilreader = new OSiLReader(); 
