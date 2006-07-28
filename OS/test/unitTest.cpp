@@ -9,7 +9,7 @@
 #include <CoinMessageHandler.hpp> 
 #include <CoinPackedMatrix.hpp> 
  
-  
+using std::cout;
 
 #include "OSResult.h"
 #include "OSiLReader.h"       
@@ -18,9 +18,7 @@
 #include "OSrLWriter.h"   
 #include "OSInstance.h"  
 #include "FileUtil.h"  
-
 #include "OSConfig.h" 
-
 #include "CoinSolver.h"
 #include "DefaultSolver.h"  
 #include "WSUtil.h" 
