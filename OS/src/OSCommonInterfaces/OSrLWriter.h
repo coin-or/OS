@@ -59,5 +59,15 @@ public:
 	 * </p> 
    	 */	
 	string writeOSrL( OSResult *theosresult);
+	
+   	/**
+   	 * create an osrl char* from an OSResult object
+   	 * necessary kludge since on Linux the catch doesn't like strings
+   	 * <p>
+   	 * @param theosresult is a pointer to an OSResult object 
+   	 * @return a string with the OSResult data that validates against the OSrL schema.
+	 * </p> 
+   	 */	
+	char* writeOSrLWrap( OSResult *theosresult);
 };
 #endif

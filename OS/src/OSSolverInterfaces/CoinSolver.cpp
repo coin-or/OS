@@ -42,10 +42,7 @@ CoinSolver::~CoinSolver() {
 	cout << "inside CoinSolver destructor" << endl;
 	delete m_CoinPackedMatrix;
 	m_CoinPackedMatrix = NULL;
-	// we get a crash in Linux when deleting m_OsiSolver -- kipp fix this
-#ifndef Linux
-	//delete m_OsiSolver;
-#endif
+	delete m_OsiSolver;
 	m_OsiSolver = NULL;
 	delete osrlwriter;
 	osrlwriter = NULL;
@@ -125,8 +122,8 @@ void CoinSolver::solve()  {
 	catch(const ErrorClass& eclass){
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
-		osrl = osrlwriter->writeOSrL( osresult);
-		throw ErrorClass( osrl);
+		osrl = osrlwriter->writeOSrLWrap( osresult);
+		throw ;
 	}				
 } // end solve
 
@@ -151,8 +148,8 @@ bool CoinSolver::setCoinPackedMatrix(){
 	catch(const ErrorClass& eclass){
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
-		osrl = osrlwriter->writeOSrL( osresult);
-		throw ErrorClass( osrl);
+		osrl = osrlwriter->writeOSrLWrap( osresult);
+		throw ;
 	}
 } // end setCoinPackedMatrix
 
@@ -281,8 +278,8 @@ bool CoinSolver::optimize()
 	catch(const ErrorClass& eclass){
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
-		osrl = osrlwriter->writeOSrL( osresult);
-		throw ErrorClass( osrl);
+		osrl = osrlwriter->writeOSrLWrap( osresult);
+		throw ;
 	}
 } // end optimize
 
@@ -312,8 +309,8 @@ string CoinSolver::getCoinSolverType(string osol){
 	catch(const ErrorClass& eclass){
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
-		osrl = osrlwriter->writeOSrL( osresult);
-		throw ErrorClass( osrl);
+		osrl = osrlwriter->writeOSrLWrap( osresult);
+		throw ;
 	}
 } // end getCoinSolverType
 

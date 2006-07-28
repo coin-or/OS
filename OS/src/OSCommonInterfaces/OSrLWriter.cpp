@@ -27,6 +27,15 @@ OSrLWriter::OSrLWriter( ) {
 
 OSrLWriter::~OSrLWriter(){
 }
+
+
+char* OSrLWriter::writeOSrLWrap( OSResult *theosresult){
+	string sTmp = writeOSrL( theosresult);
+	char *ch;
+    ch = new char[sTmp.size() + 1];
+    strcpy(ch, sTmp.c_str());
+	return ch;
+}
  
 string OSrLWriter::writeOSrL( OSResult *theosresult){
 	m_OSResult = theosresult;
