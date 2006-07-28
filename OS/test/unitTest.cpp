@@ -77,7 +77,7 @@ int main(int argC, char* argV[])
 	try{
 		cout << "Create a new COIN Solver" << endl;
 		m_Solver = new CoinSolver();
-		m_Solver->m_sSolverName = "cplex";
+		m_Solver->m_sSolverName = "cbc";
 		m_Solver->osil = osil;
 		m_Solver->osol = osol;  
 		m_Solver->osinstance = NULL; 
@@ -94,7 +94,7 @@ int main(int argC, char* argV[])
 		cout << "OSrL =  " <<  m_Solver->osrl <<  endl;
 		cout << endl << endl << endl;
 		cout << "Sorry Unit Test Failed Testing the Cbc Solver" << endl;
-		return 0;
+		//return 0;
 	}
 	#ifdef COIN_HAS_LINDO
 	try{
@@ -247,9 +247,9 @@ int main(int argC, char* argV[])
 	// Now just test the parser
 	try{ 
 		cout << endl;
-		delete fileUtil;
-		fileUtil = NULL;
-		fileUtil = new FileUtil();
+		//delete fileUtil;
+		//fileUtil = NULL;
+		//fileUtil = new FileUtil();
 		string osil = fileUtil->getFileAsString( &parserTestOSiLFileName[0]);
 		cout << osil << endl;
 		OSiLReader *osilreader = NULL;
