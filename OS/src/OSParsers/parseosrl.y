@@ -237,7 +237,7 @@ otherVariables:
 otherVariableResult:  OTHERSTART {  
     numberOfOtherVariableResult++;
 	otherVarStruct = new OtherVariableResultStruct(); 
-	otherVarStruct->rcost = new string[numberOfVariables];} anotherotherVarATT GREATERTHAN {if(otherNamePresent == false) osrlerror("other element requires name attribute"); 
+	otherVarStruct->rcost = new std::string[numberOfVariables];} anotherotherVarATT GREATERTHAN {if(otherNamePresent == false) osrlerror("other element requires name attribute"); 
 	otherNamePresent = false;  
 	}  othervar OTHEREND {otherVarVec.push_back( otherVarStruct);};
  
@@ -320,7 +320,7 @@ void osrlerror(char* errormsg)
 {
 	try{
 		ostringstream outStr;
-		string error = errormsg;
+		std::string error = errormsg;
 		error = "Input is either not valid or well formed: "  + error;
 		outStr << error << endl;
 		outStr << "Here is the last token read: " << osrltext << endl;
@@ -334,7 +334,7 @@ void osrlerror(char* errormsg)
 	}
 } // end osrlerror
 
-OSResult *yygetOSResult(string parsestring){
+OSResult *yygetOSResult(std::string parsestring){
 	void osrlinitialize();
 	bool createOSResult();
 	osrlinitialize();

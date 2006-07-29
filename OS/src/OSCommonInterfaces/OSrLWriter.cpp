@@ -17,10 +17,13 @@
 #include "OSrLWriter.h"
 #include "OSResult.h"
 #include "OSParameters.h"
-#include <iostream>
-#include <sstream>   
 #include "CommonUtil.h"
-using namespace std;
+#include <sstream>   
+#include <iostream>  
+
+using std::cout;
+using std::endl;
+using std::ostringstream;
 
 OSrLWriter::OSrLWriter( ) {	 
 }
@@ -30,16 +33,16 @@ OSrLWriter::~OSrLWriter(){
 
 
 char* OSrLWriter::writeOSrLWrap( OSResult *theosresult){
-	string sTmp = writeOSrL( theosresult);
+	std::string sTmp = writeOSrL( theosresult);
 	char *ch;
     ch = new char[sTmp.size() + 1];
     strcpy(ch, sTmp.c_str());
 	return ch;
 }
  
-string OSrLWriter::writeOSrL( OSResult *theosresult){
+std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 	m_OSResult = theosresult;
-	ostringstream outStr;
+	std::ostringstream outStr;
 	int i, j;
 	if(m_OSResult == NULL)  return outStr.str();
 	outStr << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" ; 

@@ -27,7 +27,8 @@
 #include <sstream>
 #include <fstream>
 #include <string>
-using namespace std;
+
+
 class FileUtil{
 public:
 	public:
@@ -37,12 +38,9 @@ public:
 	 */
 	FileUtil();
 	~FileUtil();
-	string getFileAsString(  char* fname);
+	std::string getFileAsString(  char* fname);
 	char* getFileAsChar(  char* fname);
-	bool writeFileFromString(char* fname, string thestring);
+	bool writeFileFromString(char* fname, std::string thestring);
 	bool writeFileFromChar(char* fname, char* ch);
-
-	
-	
 };//class MathUtil
 #endif

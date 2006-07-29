@@ -17,8 +17,6 @@
 #include "OSrLReader.h"
 #include "OSResult.h"
 #include "lexyaccparser.h"   
-//#include <iostream> 
-//#include <sstream>
 #include "ErrorClass.h" 
 
 
@@ -30,7 +28,7 @@ OSrLReader::~OSrLReader(){
 	osrlClearMemory();
 } 
 
-OSResult* OSrLReader::readOSrL(string osrl){   
+OSResult* OSrLReader::readOSrL(std::string osrl){   
 	try{
 		return yygetOSResult( osrl);
 	}

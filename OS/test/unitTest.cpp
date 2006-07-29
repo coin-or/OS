@@ -8,8 +8,11 @@
 #include <OsiSolverInterface.hpp>   
 #include <CoinMessageHandler.hpp> 
 #include <CoinPackedMatrix.hpp> 
+
+#include <string>
  
 using std::cout;
+using std::endl;
 
 #include "OSResult.h"
 #include "OSiLReader.h"       
@@ -36,7 +39,7 @@ using std::cout;
  
 #include "CoinHelperFunctions.hpp"
 #include <time.h>
-#include<sstream>
+#include <sstream>
   
 #include "OsiClpSolverInterface.hpp" 
 
@@ -53,17 +56,17 @@ int main(int argC, char* argV[])
 	OSmps2osil *mps2osil = NULL;
 	DefaultSolver *m_Solver  = NULL;
 	// end classes    
-	string osilFileName;
-	string nlFileName; 
-	string mpsFileName;     
-	string parserTestOSiLFileName;
-	string osil;
+	std::string osilFileName;
+	std::string nlFileName; 
+	std::string mpsFileName;     
+	std::string parserTestOSiLFileName;
+	std::string osil;
 	// get the input files
 	 const char dirsep =  CoinFindDirSeparator();
   	// Set directory containing mps data files.
   	std::string dataDir;
     dataDir = dirsep == '/' ? "../data/" : "..\\data\\";
-	string osol = "<osol></osoL>";
+	std::string osol = "<osol></osoL>";
 	//osilFileName =  dataDir +"parincLinear.osil";
 	osilFileName =  dataDir +"lindoapiaddins.osil";
 	nlFileName = dataDir +"hs71.nl";
@@ -218,7 +221,7 @@ int main(int argC, char* argV[])
 		mps2osil->createOSInstance() ;
 		m_Solver->osil = osilwriter.writeOSiL( mps2osil->osinstance) ;
 		// extra code
-		string outputfile = mpsFileName+"_osil";
+		std::string outputfile = mpsFileName+"_osil";
 		char* testfile = &outputfile[0];
 		fileUtil->writeFileFromString(testfile,  m_Solver->osil);		
 		// end extra code
@@ -250,7 +253,6 @@ int main(int argC, char* argV[])
 		//fileUtil = new FileUtil();
 		fileUtil->getFileAsString( &parserTestOSiLFileName[0]);
 		osil = fileUtil->getFileAsString( &parserTestOSiLFileName[0]);
-		cout << osil << endl;
 		OSiLReader *osilreader = NULL;
 		osilreader = new OSiLReader(); 
 		clock_t start, finish;

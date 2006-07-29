@@ -64,12 +64,15 @@ you should get x1 = 540, x2 = 252
 #include "OShL.h"
 #include "ErrorClass.h"
 #include <sstream>
-#include<string.h> 
+#include <string.h> 
+#include <string>
 
 //AMPL includes must be last.
 #include <asl.h>
 using std::cerr;
 using std::string;
+using std::cout;
+using std::endl;
 
 
 int main(int argc, char **argv)
@@ -93,7 +96,7 @@ int main(int argc, char **argv)
 	// send an osinstance object in memory
 	OSiLWriter *osilwriter = NULL;
 	osilwriter = new OSiLWriter();
-	string  osil = osilwriter->writeOSiL( osinstance);
+	std::string  osil = osilwriter->writeOSiL( osinstance);
 
 	/**  amplclient_option: 
 	 *   1. solver:
@@ -113,9 +116,9 @@ int main(int argc, char **argv)
 	osrlwriter = new OSrLWriter();
 	OSResult *osresult = NULL;
 	//
-	string osrl = "";
+	std::string osrl = "";
 	// note that default solver is coin and default subSolver is clp
-	string osol = "<osol></osol>";
+	std::string osol = "<osol></osol>";
 	// get the solver set by AMPLl
 	amplclient_options = getenv("amplClient_options");
 	cout << "HERE ARE THE AMPL CLIENT OPTIONS " <<   amplclient_options << endl;

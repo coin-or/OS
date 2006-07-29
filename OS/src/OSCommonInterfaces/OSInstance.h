@@ -36,10 +36,9 @@
 #include "OSDataStructures.h"
 #include "OSnLNode.h"
 #include "OSExpressionTree.h"
-#include <stdlib.h>
 #include <string>
 #include <map>
-using namespace std;
+
 
 
 
@@ -79,10 +78,10 @@ public:
 	/** name corresponds to the optional attribute that holds the variable name, the 
 	 * default value is empty 
 	 */ 
-	string name;
+	std::string name;
 	
-	/** initString corresponds to the optional attribute that holds the name string */
-	string initString;
+	/** initString corresponds to the optional attribute that holds the name std::string */
+	std::string initString;
 }; // class Variable
 
 class Variables{
@@ -108,7 +107,7 @@ class Constraint{
 public:
 	Constraint();
 	~Constraint();
-	string name;
+	std::string name;
 	double constant;
 	double lb;
 	double ub;
@@ -128,17 +127,17 @@ class InstanceHeader{
 public:
 	InstanceHeader();
 	~InstanceHeader();
-	string description;
-	string name;
-	string source;		
+	std::string description;
+	std::string name;
+	std::string source;		
 };//class InstanceHeader
 
 class Objective{
 public:
 	Objective();
 	~Objective();
-	string name;
-	string maxOrMin;
+	std::string name;
+	std::string maxOrMin;
 	double constant;
 	double weight;
 	int numberOfObjCoef;
@@ -169,7 +168,7 @@ class QuadraticTerm{
 	QuadraticTerm();
 	~QuadraticTerm();
 	int idx;
-    string id;
+    std::string id;
     int idxOne;
     int idxTwo;
     double coef;
@@ -260,15 +259,15 @@ private:
 	/**
 	 * m_sInstanceName holds the instance name. 
 	 */
-	string m_sInstanceName;
+	std::string m_sInstanceName;
 	/**
 	 * m_sInstanceSource holds the instance source. 
 	 */
-	string m_sInstanceSource;	
+	std::string m_sInstanceSource;	
 	/**
 	 * m_sInstanceDescription holds the instance description. 
 	 */
-	string m_sInstanceDescription;
+	std::string m_sInstanceDescription;
 	
 	/**
 	 * m_bProcessVariables holds whether the variables are processed. 
@@ -293,7 +292,7 @@ private:
 	/**
 	 * m_msVariableNames holds an array of variable names. 
 	 */
-	string* m_msVariableNames;
+	std::string* m_msVariableNames;
 	
 	/**
 	 * m_mdVariableInitialValues holds a double array of the initial variable values. 
@@ -301,9 +300,9 @@ private:
 	double* m_mdVariableInitialValues ;
 
 	/**
-	 * m_msVariableInitialStringValues holds a string array of the initial variable values. 
+	 * m_msVariableInitialStringValues holds a std::string array of the initial variable values. 
 	 */
-	string* m_msVariableInitialStringValues;
+	std::string* m_msVariableInitialStringValues;
 
 	/**
 	 * m_mcVariableTypes holds a char array of variable types (default = 'C').
@@ -339,12 +338,12 @@ private:
 	/**
 	 * m_msObjectiveNames holds an array of objective names. 
 	 */
-	string* m_msObjectiveNames;
+	std::string* m_msObjectiveNames;
 	
 	/**
-	 * m_msMaxOrMins holds a string array of objective maxOrMins ("max" or "min").  
+	 * m_msMaxOrMins holds a std::string array of objective maxOrMins ("max" or "min").  
 	 */
-	string* m_msMaxOrMins;
+	std::string* m_msMaxOrMins;
 	
 	/**
 	 * m_miNumberOfObjCoef holds an integer array of number of objective coefficients (default = 0.0). 
@@ -397,7 +396,7 @@ private:
 	/**
 	 * m_msConstraintNames holds an array of constraint names. 
 	 */
-	string* m_msConstraintNames;
+	std::string* m_msConstraintNames;
 	
 	/**
 	 * m_mdConstraintLowerBounds holds an array of constraint lower bounds (default = -INF). 
@@ -557,25 +556,25 @@ public:
 	/**
 	 * Get instance name. 
 	 * 
-	 * @return instance name. Null or empty string ("") if there is no instance name. 
+	 * @return instance name. Null or empty std::string ("") if there is no instance name. 
 	 */
-	string getInstanceName();
+	std::string getInstanceName();
 		
 
 	/**
 	 * Get instance source. 
 	 * 
-	 * @return instance source. Null or empty string ("") if there is no instance source. 
+	 * @return instance source. Null or empty std::string ("") if there is no instance source. 
 	 */
-	string getInstanceSource();
+	std::string getInstanceSource();
 	
 	
 	/**
 	 * Get instance description. 
 	 * 
-	 * @return instance description. Null or empty string ("") if there is no instance description. 
+	 * @return instance description. Null or empty std::string ("") if there is no instance description. 
 	 */
-	string getInstanceDescription();
+	std::string getInstanceDescription();
 	
 	/**
 	 * Get variable number. 
@@ -587,10 +586,10 @@ public:
 	/**
 	 * Get variable names. 
 	 * 
-	 * @return a string array of variable names, null if no variable names.
+	 * @return a std::string array of variable names, null if no variable names.
 	 * @throws Exception if the elements in variables are logically inconsistent. 
 	 */
-	string* getVariableNames();
+	std::string* getVariableNames();
 	
 	/**
 	 * Get variable initial values. 
@@ -601,12 +600,12 @@ public:
 	double* getVariableInitialValues();
 	
 	/**
-	 * Get variable initial string values. 
+	 * Get variable initial std::string values. 
 	 * 
-	 * @return a string array of variable initial values, null if no initial variable string values.
+	 * @return a std::string array of variable initial values, null if no initial variable std::string values.
 	 * @throws Exception if the elements in variables are logically inconsistent. 
 	 */
-	string* getVariableInitialStringValues();
+	std::string* getVariableInitialStringValues();
 	
 	/**
 	 * Get variable types. 
@@ -660,18 +659,18 @@ public:
 	/**
 	 * Get objective names. 
 	 * 
-	 * @return a string array of objective names. Null if no objective names.
+	 * @return a std::string array of objective names. Null if no objective names.
 	 * @throws Exception if the elements in objectives are logically inconsistent. 
 	 */
-	string* getObjectiveNames();
+	std::string* getObjectiveNames();
 
 	/**
 	 * Get objective maxOrMins. One maxOrMin for each objective.
 	 * 
-	 * @return a string array of objective maxOrMins ("max" or "min"), null if no objectives. 
+	 * @return a std::string array of objective maxOrMins ("max" or "min"), null if no objectives. 
 	 * @throws Exception if the elements in objectives are logically inconsistent. 
 	 */
-	string* getObjectiveMaxOrMins();
+	std::string* getObjectiveMaxOrMins();
 	
 	/**
 	 * Get objective coefficient number. One number for each objective.
@@ -727,10 +726,10 @@ public:
 	/**
 	 * Get constraint names. 
 	 * 
-	 * @return a string array of constraint names, null if no constraint names.
+	 * @return a std::string array of constraint names, null if no constraint names.
 	 * @throws Exception if the elements in constraints are logically inconsistent. 
 	 */
-	string* getConstraintNames();
+	std::string* getConstraintNames();
 	
 	/**
 	 * Get constraint lower bounds. 
@@ -859,7 +858,7 @@ public:
    	 * @param source holds the instance source. 
    	 * @return whether the instance source is set successfully. 
    	 */
-   	bool setInstanceSource(string source);
+   	bool setInstanceSource(std::string source);
 	
  	/**
    	 * set the instance description. 
@@ -867,7 +866,7 @@ public:
    	 * @param description holds the instance description. 
    	 * @return whether the instance description is set successfully. 
    	 */
-   	bool setInstanceDescription(string description);
+   	bool setInstanceDescription(std::string description);
 	
 					
    	/**
@@ -876,7 +875,7 @@ public:
    	 * @param name holds the instance name. 
    	 * @return whether the instance name is set successfully. 
    	 */
-   	bool setInstanceName(string name);
+   	bool setInstanceName(std::string name);
 	
    	/**
    	 * set the variable number. 
@@ -894,15 +893,15 @@ public:
    	 * <p>
    	 * 
    	 * @param index holds the variable index. It is required.  
-   	 * @param name holds the variable name; use null or empty string ("") if no variable name. 
+   	 * @param name holds the variable name; use null or empty std::string ("") if no variable name. 
    	 * @param lowerBound holds the variable lower bound; use Double.NEGATIVE_INFINITY if no lower bound. 
    	 * @param upperBound holds the variable upper bound; use Double.POSITIVE_INFINITY if no upper bound. 
    	 * @param type holds the variable type character, B for Binary, I for Integer, S for String, C or any other char for Continuous)
    	 * @param init holds the double variable initial value; use Double.NaN if no initial value. 
-   	 * @param initString holds the string variable initial value; use null or empty string ("") if no initial string value.  
+   	 * @param initString holds the std::string variable initial value; use null or empty std::string ("") if no initial std::string value.  
    	 * @return whether the variable is added successfully. 
    	 */
-   	bool addVariable(int index, string name, double lowerBound, double upperBound, char type, double init, string initString);
+   	bool addVariable(int index, std::string name, double lowerBound, double upperBound, char type, double init, std::string initString);
 	
    	/**
    	 * set all the variable related elements. All the previous variable-related elements will be deleted. 
@@ -910,17 +909,17 @@ public:
    	 * <p>
    	 * 
    	 * @param number holds the number of variables. It is required.  
-   	 * @param names holds a string array of variable names; use null if no variable names. 
+   	 * @param names holds a std::string array of variable names; use null if no variable names. 
    	 * @param lowerBounds holds a double array of variable lower bounds; use null all lower bounds are 0; use Double.NEGATIVE_INFINITY if no lower bound for a specific variable in the array. 
    	 * @param upperBounds holds a double array of variable upper bounds; use null if no upper bounds; use Double.POSITIVE_INFINITY if no upper bound for a specific variable in the array. 
    	 * @param types holds a char array of variable types; use null if all variables are continuous; 
    	 * for a specfic variable in the array use B for Binary, I for Integer, S for String, C or any other char for Continuous,)  
    	 * @param inits holds a double array of varible initial values; use null if no initial values. 
-   	 * @param initsString holds a string array of varible initial values; use null if no initial string values.  
+   	 * @param initsString holds a std::string array of varible initial values; use null if no initial std::string values.  
    	 * @return whether the variables are set successfully. 
    	 */
-   	bool setVariables(int number, string* names, double* lowerBounds, 
-		double* upperBounds, char* types, double* inits, string* initsString);
+   	bool setVariables(int number, std::string* names, double* lowerBounds, 
+		double* upperBounds, char* types, double* inits, std::string* initsString);
 
    	/**
    	 * set the objective number. 
@@ -939,7 +938,7 @@ public:
    	 * <p>
    	 * 
    	 * @param index holds the objective index. Remember the first objective index is -1, second -2, ...
-   	 * @param name holds the objective name; use null or empty string ("") if no objective name. 
+   	 * @param name holds the objective name; use null or empty std::string ("") if no objective name. 
    	 * @param maxOrMin holds the objective sense or direction; it can only take two values: "max" or "min". 
    	 * @param constant holds the objective constant; use 0.0 if no objective constant. 
    	 * @param weight holds the objective weight; use 1.0 if no objective weight.
@@ -947,7 +946,7 @@ public:
    	 * representation that holds two arrays: index array and a value array.  
    	 * @return whether the objective is added successfully. 
    	 */
-   	bool addObjective(int index, string name, string maxOrMin, double constant, double weight, SparseVector* objectiveCoefficients);
+   	bool addObjective(int index, std::string name, std::string maxOrMin, double constant, double weight, SparseVector* objectiveCoefficients);
 
    	/**
    	 * set all the objectives related elements. All the previous objective-related elements will be deleted. 
@@ -955,8 +954,8 @@ public:
    	 * <p>
    	 * 
    	 * @param number holds the number of objectives. It is required.  
-   	 * @param names holds a string array of objective names; use null if no objective names. 
-   	 * @param maxOrMins holds a string array of objective objective senses or directions: "max" or "min"; use null if all objectives are "min".   
+   	 * @param names holds a std::string array of objective names; use null if no objective names. 
+   	 * @param maxOrMins holds a std::string array of objective objective senses or directions: "max" or "min"; use null if all objectives are "min".   
    	 * @param constants holds a double array of objective constants; use null if all objective constants are 0.0. 
    	 * @param weights holds a double array of objective weights; use null if all objective weights are 1.0. 
      * @param objectitiveCoefficients holds an array of objective coefficients, (null if no objective have any coefficeints)
@@ -964,7 +963,7 @@ public:
      * If for a specific objective, there are no objecitve coefficients, use null for the corresponding array member. 
   	 * @return whether the objectives are set successfully. 
    	 */
-   	bool setObjectives(int number, string *names, string *maxOrMins, double *constants, double *weights, SparseVector **objectitiveCoefficients);
+   	bool setObjectives(int number, std::string *names, std::string *maxOrMins, double *constants, double *weights, SparseVector **objectitiveCoefficients);
 					
   	/**
    	 * set the constraint number. 
@@ -982,12 +981,12 @@ public:
  * <p>
  * 
  * @param index holds the constraint index. It is required.  
- * @param name holds the constraint name; use null or empty string ("") if no constraint name. 
+ * @param name holds the constraint name; use null or empty std::string ("") if no constraint name. 
  * @param lowerBound holds the constraint lower bound; use Double.NEGATIVE_INFINITY if no lower bound. 
  * @param upperBound holds the constraint upper bound; use Double.POSITIVE_INFINITY if no upper bound. 
  * @return whether the constraint is added successfully. 
  */
-bool addConstraint(int index, string name, double lowerBound, double upperBound, double constant);
+bool addConstraint(int index, std::string name, double lowerBound, double upperBound, double constant);
 
 /**
  * set all the constraint related elements. All the previous constraint-related elements will be deleted. 
@@ -995,12 +994,12 @@ bool addConstraint(int index, string name, double lowerBound, double upperBound,
  * <p>
  * 
  * @param number holds the number of constraints. It is required.  
- * @param names holds a string array of constraint names; use null if no constraint names. 
+ * @param names holds a std::string array of constraint names; use null if no constraint names. 
  * @param lowerBounds holds a double array of constraint lower bounds; use null if no lower bounds; use Double.NEGATIVE_INFINITY if no lower bound for a specific constraint in the array. 
  * @param upperBounds holds a double array of constraint upper bounds; use null if no upper bounds; use Double.POSITIVE_INFINITY if no upper bound for a specific constraint in the array. 
  * @return whether the constraints are set successfully. 
  */
-bool setConstraints(int number, string* names, double* lowerBounds, double* upperBounds, double* constants);
+bool setConstraints(int number, std::string* names, double* lowerBounds, double* upperBounds, double* constants);
 
 /**
  * set linear constraint coefficients

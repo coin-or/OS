@@ -17,12 +17,12 @@
 #define ERRORCLASS_H
 
 #include <string>
-using namespace std;
+
 
 class ErrorClass{
 	public:
-		ErrorClass( string errormsg_);
-		string errormsg;
+		ErrorClass( std::string errormsg_);
+		std::string errormsg;
 	
 };
 #endif

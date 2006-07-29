@@ -24,6 +24,8 @@
 #ifndef OSDATASTRUCTURES_H
 #define OSDATASTRUCTURES_H
 
+#include <stdlib.h>
+
 
 class SparseVector{
 	public:

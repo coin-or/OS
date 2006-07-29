@@ -17,11 +17,11 @@
 
 #include "OSDataStructures.h"
 
-#include<iostream>
-#include <stdlib.h>  
+
+
 
  
-using namespace std;
+
 
 SparseVector::SparseVector( int number_):
 number( number_)

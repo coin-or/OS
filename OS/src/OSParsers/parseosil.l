@@ -24,6 +24,7 @@
 #include <Base64.h>
 #include "ErrorClass.h"
 #include "parseosil.tab.hpp"
+#include <math.h>
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", osiltext);
 #else     
@@ -988,7 +989,7 @@ bool parseStart(){
 		int dataSize = 0;
 		char* b64string = parseBase64(&dataSize );
 		if( b64string == NULL) return false;
-		string base64decodeddata = Base64::decodeb64( b64string );
+		std::string base64decodeddata = Base64::decodeb64( b64string );
 		int base64decodeddatalength = base64decodeddata.length();
 		int *intvec = NULL;
 		osinstance->instanceData->linearConstraintCoefficients->start->el = new int[(base64decodeddatalength/dataSize) ];
@@ -1000,7 +1001,7 @@ bool parseStart(){
 	else{
 		foundEl = true;
 		osinstance->instanceData->linearConstraintCoefficients->start->el = 
-		new int[ max( osinstance->instanceData->constraints->numberOfConstraints,
+		new int[ std::max( osinstance->instanceData->constraints->numberOfConstraints,
 		osinstance->instanceData->variables->numberOfVariables) + 1];
 		while(foundEl){
 			// start eating white space until an '>' is found,
@@ -1085,7 +1086,7 @@ bool parseRowIdx(){
 		int dataSize = 0;
 		char* b64string = parseBase64(&dataSize );
 		if( b64string == NULL) return false;
-		string base64decodeddata = Base64::decodeb64( b64string );
+		std::string base64decodeddata = Base64::decodeb64( b64string );
 		int base64decodeddatalength = base64decodeddata.length();
 		int *intvec = NULL;
 		osinstance->instanceData->linearConstraintCoefficients->rowIdx->el = new int[(base64decodeddatalength/dataSize) ];
@@ -1186,7 +1187,7 @@ bool parseColIdx(){
 		int dataSize = 0;
 		char* b64string = parseBase64(&dataSize );
 		if( b64string == NULL) return false;
-		string base64decodeddata = Base64::decodeb64( b64string );
+		std::string base64decodeddata = Base64::decodeb64( b64string );
 		int base64decodeddatalength = base64decodeddata.length();
 		int *intvec = NULL;
 		osinstance->instanceData->linearConstraintCoefficients->colIdx->el = new int[(base64decodeddatalength/dataSize) ];
@@ -1286,7 +1287,7 @@ bool parseValue(){
 		int dataSize = 0;
 		char* b64string = parseBase64(&dataSize );
 		if( b64string == NULL) return false;
-		string base64decodeddata = Base64::decodeb64( b64string );
+		std::string base64decodeddata = Base64::decodeb64( b64string );
 		int base64decodeddatalength = base64decodeddata.length();
 		double *doublevec = NULL;
 		osinstance->instanceData->linearConstraintCoefficients->value->el = new double[(base64decodeddatalength/dataSize) ];

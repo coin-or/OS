@@ -18,7 +18,8 @@
 
 #include "FileUtil.h"
 
-using namespace std;
+using std::cout;
+using std::endl;
 
 FileUtil::FileUtil(){
 } // end constructor
@@ -27,11 +28,11 @@ FileUtil::FileUtil(){
 FileUtil::~FileUtil(){
 } // end destructor
 
-string FileUtil::getFileAsString(  char* fname){
-	ostringstream outStr;
-	string soutString;
+std::string FileUtil::getFileAsString(  char* fname){
+	std::ostringstream outStr;
+	std::string soutString;
 	char ch;
-	ifstream inFile( fname);
+	std::ifstream inFile( fname);
 	if(!inFile){
 		cout << "Could not open file" << endl; 
 		return "";
@@ -48,18 +49,18 @@ string FileUtil::getFileAsString(  char* fname){
 
 
 char* FileUtil::getFileAsChar(  char* fname){
-	filebuf *pbuf;
+	std::filebuf *pbuf;
 	long bufsize = 0;
 	char *xml;
 	char ch;
-	ifstream inFile;
+	std::ifstream inFile;
 	inFile.open( fname);
 	// get the input file stream into the buffer
 	pbuf = inFile.rdbuf();
 	// now get the size
-	bufsize = pbuf->pubseekoff(0,ios_base::end);
+	bufsize = pbuf->pubseekoff(0,std::ios_base::end);
 	// set back to zero
-	pbuf ->pubseekpos(0, ios::in);
+	pbuf ->pubseekpos(0, std::ios::in);
 	// allocate the character array
 	xml = new char[bufsize + 1];
 	xml[ bufsize] =  '\0';
@@ -75,8 +76,8 @@ char* FileUtil::getFileAsChar(  char* fname){
 
 
 
-bool FileUtil::writeFileFromString(char* fname, string sname){
-	ofstream outFile;
+bool FileUtil::writeFileFromString(char* fname, std::string sname){
+	std::ofstream outFile;
 	outFile.open( fname);
 	if(!outFile.is_open()){
 		return false;
@@ -87,7 +88,7 @@ bool FileUtil::writeFileFromString(char* fname, string sname){
 } // end writeFileFromString
 
 bool FileUtil::writeFileFromChar(char* fname, char* ch){
-	ofstream outFile;
+	std::ofstream outFile;
 	outFile.open( fname);
 	if(!outFile.is_open()){
 		return false;

@@ -33,6 +33,8 @@
 #include <OsiGlpkSolverInterface.hpp>
 #endif
 
+#include <string>
+
 
 /*! \class CoinSolver class.h "CoinSolver.h"
  *  \brief Implements a solve method for the Coin solvers.
@@ -78,7 +80,7 @@ public:
 	 *  \param  a string that is an instance of OSoL
 	 *  \return a string which contains the value of clp or glpk.
 	 */ 
-	string getCoinSolverType(string osol_);
+	std::string getCoinSolverType(std::string osol_);
 	
 	/*! \fn string CoinSolver::dataEchoCheck()
 	 *  \brief Print out problem parameters

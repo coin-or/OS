@@ -23,13 +23,14 @@
 #include "OSnLNode.h"
 #include "nlp.h"
 #include <asl.h>
+#include <string>
 
 
 
 class OSnl2osil
 {
 public:
-	OSnl2osil( string nlfilename);
+	OSnl2osil( std::string nlfilename);
 	~OSnl2osil();
 	bool createOSInstance();
 	OSnLNode* walkTree(expr *e);

@@ -19,12 +19,16 @@
 #include "OSInstance.h"
 #include "FileUtil.h"
 #include "ErrorClass.h"
+
+
 #include <time.h>
 #include <iostream>
 #include<vector>
 #include <map>  
 
-using namespace std;
+using std::cout;
+using std::endl;
+using std::ostringstream;
 
 
 #ifndef __LINDOI_H__
@@ -197,7 +201,7 @@ bool LindoSolver::addSlackVars(){
 	int i;
 	ostringstream varName;
 	char* p;
-	string tmpstring;
+	std::string tmpstring;
 	char* pachVartypes = new char[m_iNumberNewSlacks];
 	char** paszVarnames = new char*[m_iNumberNewSlacks];
 	int* paiAcols = new int[m_iNumberNewSlacks + 1];
@@ -379,11 +383,11 @@ bool LindoSolver::optimize(){
 	double *x,  *y, *z;
 	int solIdx = 0;
 	ostringstream outStr;
-	string *srcost;
+	std::string *srcost;
 	double *drcost;
 	int i = 0;
 	int nSolStatus;
-	string description = "";	
+	std::string description = "";	
 	// resultHeader infomration
 	if(osresult->setServiceName( "Solved using a LINDO service") != true)
 		throw ErrorClass("OSResult error: setServiceName");
@@ -436,7 +440,7 @@ bool LindoSolver::optimize(){
 	osresult->setGeneralStatusType("success");
 	osresult->setSolutionStatus(solIdx, "optimal", description);
 	x = new double[ osinstance->getVariableNumber() + m_iNumberNewSlacks];
-	srcost = new string[ osinstance->getVariableNumber() + m_iNumberNewSlacks];
+	srcost = new std::string[ osinstance->getVariableNumber() + m_iNumberNewSlacks];
 	drcost = new double[ osinstance->getVariableNumber() + m_iNumberNewSlacks];
 	y = new double[ osinstance->getConstraintNumber() ];
 	z = new double[1]; 
@@ -906,10 +910,10 @@ void LindoSolver::dataEchoCheck(){
 	
 } // end dataEchoCheck
 
-void  LindoSolver::lindoAPIErrorCheck(string errormsg) {
+void  LindoSolver::lindoAPIErrorCheck(std::string errormsg) {
 	try{
 		ostringstream outStr;
-		string error = errormsg;
+		std::string error = errormsg;
 		char *lindoerrormsg;
 		if(m_iLindoErrorCode != 0){
 			outStr << endl;

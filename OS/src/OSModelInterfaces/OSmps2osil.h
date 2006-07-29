@@ -21,13 +21,12 @@
 
 #include <CoinMpsIO.hpp>
 #include <CoinPackedMatrix.hpp>
-#include <stdlib.h>
+#include <string>
 #include "OSInstance.h"
-using namespace std;
 class OSmps2osil
 {
 public:
-	OSmps2osil( string mpsfilename);
+	OSmps2osil( std::string mpsfilename);
 	~OSmps2osil();
 	bool createOSInstance();
 	OSInstance *osinstance;

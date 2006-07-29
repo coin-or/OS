@@ -30,14 +30,18 @@
 #include <sstream>
 #include <ctype.h>
 #include <vector>
+#include <string>
+
+using std::cout;
+using std::endl;
 
 int main(int argC, char* argV[])
 {
 	FileUtil *fileUtil = NULL;
-	string osilFileName;
-	string osrlFileName;
-	string osil;
-	string osrl;
+	std::string osilFileName;
+	std::string osrlFileName;
+	std::string osil;
+	std::string osrl;
 		osilFileName =  "/Users/kmartin/Documents/files/code/cpp/Coin-OS/OS/data/testb64.osil";
 		osilFileName =  "/Users/kmartin/Documents/files/code/OSRepository/linear/continuous/osa-60.osil";
 		osilFileName =  "/Users/kmartin/Documents/files/code/cpp/Coin-OS/OS/data/osilrosenbrockmodsum.osil";
@@ -68,7 +72,7 @@ int main(int argC, char* argV[])
 			osil = osilwriter->writeOSiL( osinstance);
 			cout << osil << endl;
 		}
-		string sToken;
+		std::string sToken;
 		OSnLNode* nlnode1;
 		OSnLNode* nlnode;
 		cout << "START TEST "  << endl;

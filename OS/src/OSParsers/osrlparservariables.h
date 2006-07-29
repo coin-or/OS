@@ -13,7 +13,7 @@
  * 
  */
  
- 
+#include <string>
 #include <vector> 
 
 OSResult* osresult;
@@ -42,9 +42,9 @@ int *objectiveIdx;
 int kounter;
 int numberOfOtherVariableResult;
 struct OtherVariableResultStruct{
-	string name;
-	string description;
-	string *rcost;
+	std::string name;
+	std::string description;
+	std::string *rcost;
 };
 struct OtherVariableResultStruct *otherVarStruct;
 std::vector<OtherVariableResultStruct*> otherVarVec;

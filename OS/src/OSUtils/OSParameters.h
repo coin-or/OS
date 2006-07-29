@@ -16,8 +16,10 @@
  
 // CoinFinite includes <cmath> (I think) which causes a problem 
 //#include<CoinFinite.hpp>
-#include<iostream>
-using namespace std;
+
+//kipp fix up the infinity issue
+//kipp define OSINFINITY to COIN_DBL_MAX
+
 #ifndef OSPARAMETERS
 #define OSPARAMETERS
 

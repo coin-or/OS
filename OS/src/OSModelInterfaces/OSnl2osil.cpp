@@ -49,7 +49,7 @@ you should get x1 = 540, x2 = 252
 #include <iostream>
 #include "OSiLWriter.h"
 #include "OSnl2osil.h"
-#include <vector>
+
 
 
 #include "nlp.h"
@@ -66,13 +66,14 @@ efunc *r_ops_int[N_OPS];
 #include <asl.h>
 
 using std::cerr;
-using std::string;
+using std::cout;
+using std::endl;
 
 
 
 
 
-static string msnodeNames[] = {
+static std::string msnodeNames[] = {
 	/*1--*/"plus", "sum", "minus", "negate", "times", "divide",
 	"quotient", "rem", "power", "product",
 	/*2--*/"abs", "floor", "ceiling", "percent", "square", "squareRoot", "ln", "log", "log10", "exp",
@@ -175,7 +176,7 @@ static int m_miNodeTypes[] = {
 
    
 
-OSnl2osil::OSnl2osil(string nlfilename){	
+OSnl2osil::OSnl2osil(std::string nlfilename){	
 	//Initialize the AMPL library
 	asl = ASL_alloc(ASL_read_fg);
     	stub = &nlfilename[ 0];
@@ -359,8 +360,8 @@ bool OSnl2osil::createOSInstance(){
 	//
 	// get the variable information
 	//
-	string initString;
-	string colName;
+	std::string initString;
+	std::string colName;
 	double init = OSNAN;
 	char vartype = 'C';
 	osinstance->setVariableNumber( n_var);
@@ -378,7 +379,7 @@ bool OSnl2osil::createOSInstance(){
 	//	
 	double objWeight = 1.0;
 	//	char	*objtype;	/* object type array: 0 == min, 1 == max */
-	string objName="";
+	std::string objName="";
 	SparseVector* objectiveCoefficients = NULL;
 	objectiveCoefficients = new SparseVector( n_var);
 	for(i = 0; i < n_var; i++){
@@ -403,7 +404,7 @@ bool OSnl2osil::createOSInstance(){
 	//
 	osinstance->setConstraintNumber( n_con);
 	double constant = OSNAN;
-	string rowName;
+	std::string rowName;
 	for(i = 0; i < n_con; i++)
 	{
 		osinstance->addConstraint(i, con_name(i), 

@@ -17,7 +17,7 @@
 #ifndef OSRESULT_H
 #define OSRESULT_H
 #include <string>
-using std::string;
+
 
 
 /**
@@ -33,9 +33,9 @@ class GeneralStatus {
 
 public:
 		
-	string type;
+	std::string type;
 		
-	string description;
+	std::string description;
 	
 //public GeneralSubstatus[] substatus = null;
 
@@ -56,12 +56,12 @@ public:
 class ResultHeader{
 public:
 	GeneralStatus *generalStatus;
-	string serviceURI;
-	string serviceName;
-	string instanceName;
-	string jobID;
-	string time;
-	string message;
+	std::string serviceURI;
+	std::string serviceName;
+	std::string instanceName;
+	std::string jobID;
+	std::string time;
+	std::string message;
 	/**
 	 *
 	 * Default constructor. 
@@ -129,7 +129,7 @@ public:
 	
 	int idx;
 	
-	string value;
+	std::string value;
 	
 	/**
 	 *
@@ -158,7 +158,7 @@ public:
 	
 	int idx;
 	
-	string value;
+	std::string value;
 	
 	/**
 	 *
@@ -188,7 +188,7 @@ public:
 	
 	int idx;
 	
-	string value;
+	std::string value;
 	
 	/**
 	 *
@@ -327,9 +327,9 @@ public:
 class OtherVariableResult {
 public:
 
-	string name;
+	std::string name;
 	
-	string description;
+	std::string description;
 	
 	OtherVarResult **var;
 	
@@ -360,9 +360,9 @@ public:
 class OtherObjectiveResult {
 public:
 
-	string name;
+	std::string name;
 	
-	string description;
+	std::string description;
 	
 	
 	OtherObjResult **obj;
@@ -394,9 +394,9 @@ public:
 class OtherConstraintResult {
 public:
 
-	string name;
+	std::string name;
 	
-	string description;
+	std::string description;
 	
 	
 	OtherConResult **con;
@@ -608,9 +608,9 @@ public:
 class OptimizationSolutionStatus {
 public:
 	
-	string type;
+	std::string type;
 	
-	string description;
+	std::string description;
 	
 	//public OptimizationSolutionSubstatus[] substatus = null;
 	/**
@@ -642,7 +642,7 @@ public:
 	
 	OptimizationSolutionStatus *status;
 	
-	string message;
+	std::string message;
 	
 	VariableSolution *variables;
 	
@@ -788,49 +788,49 @@ public:
 	 * 
 	 * @return the general status type, null if none. 
 	 */
-	string getGeneralStatusType();
+	std::string getGeneralStatusType();
 	
    	/**
 	 * Get the general status description. 
 	 * 
-	 * @return the general status description, null or empty string if none. 
+	 * @return the general status description, null or empty std::string if none. 
 	 */
-	string getGeneralStatusDescription();
+	std::string getGeneralStatusDescription();
 
    	/**
 	 * Get service name.
 	 * 
 	 * @return the service name. 
 	 */
-	string getServiceName();
+	std::string getServiceName();
 	
   	/**
 	 * Get service uri.
 	 * 
 	 * @return the service uri. 
 	 */
-	string getServiceURI();
+	std::string getServiceURI();
 	
   	/**
 	 * Get instance name.
 	 * 
 	 * @return the instance name. 
 	 */
-	string getInstanceName();
+	std::string getInstanceName();
 	
   	/**
 	 * Get the job id.
 	 * 
 	 * @return the job id. 
 	 */
-	string getJobID();
+	std::string getJobID();
 	
    	/**
 	 * Get the general message. 
 	 * 
 	 * @return the general message. 
 	 */
-	string getGeneralMessage();
+	std::string getGeneralMessage();
 
 	/**
 	 * Get one solution of optimal primal variable values. 
@@ -867,17 +867,17 @@ public:
 	 * stoppedByLimit, unsure, error, other 
 	 * 
 	 * @param solIdx holds the solution index to get the solution status type. 
-	 * @return the optimization solution status type that corresponds to solIdx, null or empty string if none.
+	 * @return the optimization solution status type that corresponds to solIdx, null or empty std::string if none.
 	 */	
-	string getSolutionStatusType(int solIdx);
+	std::string getSolutionStatusType(int solIdx);
 
 	/**
 	 * Get the [i]th optimization solution status description, where i equals the given solution index.   
 	 * 
 	 * @param solIdx holds the solution index to get the solution status description. 
-	 * @return the optimization solution status description that corresponds to solIdx, null or empty string if none.
+	 * @return the optimization solution status description that corresponds to solIdx, null or empty std::string if none.
 	 */	
-	string getSolutionStatusDescription(int solIdx);
+	std::string getSolutionStatusDescription(int solIdx);
 	
 	/**
 	 * Get the [i]th optimization solution message, where i equals the given solution index.  
@@ -885,7 +885,7 @@ public:
 	 * @param solIdx holds the solution index to get the solution message. 
 	 * @return the optimization solution message that corresponds to solIdx, null or empty if none.
 	 */	
-	string getSolutionMessage(int solIdx);
+	std::string getSolutionMessage(int solIdx);
 	
 
 	
@@ -945,7 +945,7 @@ public:
 	 * @param type holds the general status type
 	 * @return whether the general status type is set successfully or not. 
 	 */
-	bool setGeneralStatusType(string type);	
+	bool setGeneralStatusType(std::string type);	
 	
    	/**
 	 * Set the general status description. 
@@ -953,7 +953,7 @@ public:
 	 * @param description holds the general status description.
 	 * @return whether the general status description is set successfully or not. 
 	 */
-	bool setGeneralStatusDescription(string description);
+	bool setGeneralStatusDescription(std::string description);
 	
    	/**
 	 * Set the general message. 
@@ -961,7 +961,7 @@ public:
 	 * @param message holds the general message. 
 	 * @return whether process message is set successfully. 
 	 */
-	bool setGeneralMessage(string message);
+	bool setGeneralMessage(std::string message);
 
    	/**
 	 * Set service name.
@@ -969,7 +969,7 @@ public:
 	 * @param serviceName holds the name of the service. 
 	 * @return whether the service name is set successfully. 
 	 */
-	bool setServiceName(string serviceName);
+	bool setServiceName(std::string serviceName);
 	
    	/**
 	 * Set service uri.
@@ -977,7 +977,7 @@ public:
 	 * @param serviceURI holds the uri of the service. 
 	 * @return whether the service uri is set successfully. 
 	 */
-	bool setServiceURI(string serviceURI);	
+	bool setServiceURI(std::string serviceURI);	
 	
    	/**
 	 * Set instance name.
@@ -985,7 +985,7 @@ public:
 	 * @param instanceName holds the name of the instance. 
 	 * @return whether the instance name is set successfully. 
 	 */
-	bool setInstanceName(string instanceName);
+	bool setInstanceName(std::string instanceName);
 		
    	/**
 	 * Set job id.
@@ -993,7 +993,7 @@ public:
 	 * @param jobID holds the job id. 
 	 * @return whether the job id is set successfully. 
 	 */
-	bool setJobID(string jobID);
+	bool setJobID(std::string jobID);
 		
 	
 	/**
@@ -1047,7 +1047,7 @@ public:
 	 * @see org.optimizationservices.oscommon.datastructure.osresult.OptimizationSolutionStatus
 	 * @see #setSolutionNumber(int)
 	 */
-	bool setSolutionStatus(int solIdx, string type, string description);
+	bool setSolutionStatus(int solIdx, std::string type, std::string description);
 
 	/**
 	 * Set the [i]th optimization solution's objective index, where i equals the given solution index.   
@@ -1081,9 +1081,9 @@ public:
 	 * This method then allocates the memory for the new OtherVariableResult objects
 	 * @param solIdx is the solution index 
 	 * @param numberOfOtherVariableResult holds the number of OtherVariableResult objects
-	 * Each other variable result contains the name (required), an optional description (string) and an optional
-	 * value (string). Each other variable result can also optionally contain an array OtherVarResult for each variable. 
-	 * The OtherVarResult contains a variable idx (required) and an optional string value.   
+	 * Each other variable result contains the name (required), an optional description (std::string) and an optional
+	 * value (std::string). Each other variable result can also optionally contain an array OtherVarResult for each variable. 
+	 * The OtherVarResult contains a variable idx (required) and an optional std::string value.   
 	 * 
 	 * @return whether the other variable results are set successfully or not. 
 	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVariableResult
@@ -1099,14 +1099,14 @@ public:
 	 * @param solIdx holds the solution index  
 	 * @param otherIdx holds the index of the new OtherVariableResult object
 	 * @name holds the name of the other element
-	 * @string a pointer to the values of the var element
+	 * @std::string a pointer to the values of the var element
 	 *
 	 * @return whether the other variable results are set successfully or not. 
 	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVariableResult
 	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult
 	 * @see #setSolutionNumber(int)
 	 */
-	bool setAnOtherVariableResult(int solIdx, int otherIdx, string name, string description, string *s);
+	bool setAnOtherVariableResult(int solIdx, int otherIdx, std::string name, std::string description, std::string *s);
 		
 	
 	/**

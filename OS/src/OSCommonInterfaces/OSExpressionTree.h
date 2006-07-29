@@ -17,11 +17,7 @@
 #ifndef EXPRESSIONTREE_H
 #define EXPRESSIONTREE_H
 #include "OSnLNode.h"
-#include <stdlib.h>
-#include <string>
-#include <vector>
 
-using namespace std;
 
 
 class OSExpressionTree{  

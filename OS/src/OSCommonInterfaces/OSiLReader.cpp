@@ -17,10 +17,7 @@
 #include "OSiLReader.h"
 #include "OSInstance.h"
 #include "lexyaccparser.h" 
-//#include <iostream>
-//#include <sstream>
 #include "ErrorClass.h"
-  
 
 
 OSiLReader::OSiLReader( ) {								
@@ -30,7 +27,7 @@ OSiLReader::~OSiLReader(){
 	osilClearMemory();
 } 
 
-OSInstance* OSiLReader::readOSiL(string osil){   
+OSInstance* OSiLReader::readOSiL(std::string osil){   
 	try{
 		return yygetOSInstance( osil);
 	}

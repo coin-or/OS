@@ -18,6 +18,9 @@
 #include "OSExpressionTree.h"
 #include<vector>
 
+using std::cout;
+using std::endl;
+
 OSExpressionTree::OSExpressionTree(){
 	m_treeRoot = NULL;
 }//end OSExpressionTree

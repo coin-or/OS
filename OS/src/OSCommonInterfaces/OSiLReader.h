@@ -22,12 +22,8 @@
 
 #include "OSInstance.h"
 #include "OSiLWriter.h"
-#include <iostream>
+#include <string>
 
-
-
-
-using std::ostream;
 
 
 class OSiLReader{  
@@ -38,6 +34,6 @@ private:
 public:
 	OSiLReader( );
 	~OSiLReader();
-	OSInstance* readOSiL(string osil);
+	OSInstance* readOSiL(std::string osil);
 };
 #endif

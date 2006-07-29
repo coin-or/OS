@@ -21,6 +21,12 @@
 #include "OSInstance.h"
 #include "OSResult.h"
 
+#include <string>
+
+using std::cout;
+using std::endl;
+using std::ostringstream;
+
 
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
 YY_BUFFER_STATE osrl_scan_string(const char* osil ); 
@@ -42,8 +48,8 @@ int osillex(void);
 int osollex(void);
 int ossslex(void);
 
-OSInstance *yygetOSInstance(string osil);
-OSResult *yygetOSResult(string osrl);
+OSInstance *yygetOSInstance(std::string osil);
+OSResult *yygetOSResult(std::string osrl);
 
 
 void osilClearMemory();

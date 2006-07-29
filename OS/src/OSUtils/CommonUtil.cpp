@@ -19,7 +19,7 @@
 
 #include "CommonUtil.h"
 
-using namespace std;
+
 CommonUtil::CommonUtil(){
 }
 

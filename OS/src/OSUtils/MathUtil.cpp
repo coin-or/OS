@@ -5,7 +5,7 @@
  * @since   OS1.0
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005, Robert Fourer, Jun Ma, Kipp Martin, and Wayne Sheng
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
@@ -17,10 +17,11 @@
  */
  
 #include "OSDataStructures.h" 
-//#include "OSInstance.h"
 #include "MathUtil.h"
-#include <iostream>
-using namespace std;
+
+
+
+
 MathUtil::MathUtil(){
 }
 

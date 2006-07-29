@@ -18,19 +18,15 @@
 #ifndef COMMONUTIL_H
 #define COMMONUTIL_H
 
+ #include "OSParameters.h"
+
 /**
  *
  * <p>The <code>CommonUtil</code> class contains methods for performing
  * common operations used by many classes in the
  * Optimization Services (OS) framework. </p>
  *
- * </p>
- *
- * @author  Robert Fourer, Jun Ma, Kipp Martin, Huanyuan Sheng
- * @version 1.0, 03/14/2004
- * @since   OS1.0
  */
- #include "OSParameters.h"
 class CommonUtil{
 	public:
 	/**

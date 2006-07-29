@@ -224,7 +224,7 @@ void ossserror(char* errormsg)
 {
 	try{
 		ostringstream outStr;
-		string error = errormsg;
+		std::string error = errormsg;
 		error = "Input is either not valid or well formed: "  + error;
 		outStr << error << endl;
 		outStr << "Here is the last token read: " << ossstext << endl;

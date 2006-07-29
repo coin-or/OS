@@ -14,11 +14,12 @@
  */
  
 
-
-#include "DefaultSolver.h"
-#include<iostream>
 #include "ErrorClass.h"
-using namespace std;
+#include "DefaultSolver.h"
+
+#include<iostream>
+using std::cout;
+using std::endl;
 
 DefaultSolver::DefaultSolver():
 	osinstance(NULL),

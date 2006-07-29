@@ -35,6 +35,7 @@
 #include "lexyaccparser.h"  
 #include "ErrorClass.h"
 #include "osssparservariables.h" 
+#include <string>
     
 
 #define MAXCHARS 5000 
@@ -93,7 +94,7 @@ int main(int argC, const char* argV[])
 		if(osoptions->configFile != NULL){
 			configFileName = osoptions->configFile;
 			cout << "configFileName = " << configFileName << endl;
-			string osolfileOptions = fileUtil->getFileAsString( configFileName);
+			std::string osolfileOptions = fileUtil->getFileAsString( configFileName);
 			osss_scan_string( &osolfileOptions[0]);
 			ossslex();		
 		}
@@ -255,8 +256,8 @@ void knock(){
 void send(){
 	OSSolverAgent* osagent = NULL;
 	// first get the jobID
-	string sjobID = "";
-	string sOSoL = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/OSoL.xsd\"><general> </general></osol>";
+	std::string sjobID = "";
+	std::string sOSoL = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/OSoL.xsd\"><general> </general></osol>";
 	int istringpos;
 	bool bsend;
 	try{
@@ -267,7 +268,7 @@ void send(){
 			// insert the jobID into the default osol
 			istringpos = sOSoL.find("</general");
 			cout << "startel ==  " << istringpos << endl;
-			if(istringpos != string::npos) sOSoL.insert(istringpos, "<jobID>" + sjobID+ "</jobID>");
+			if(istringpos != std::string::npos) sOSoL.insert(istringpos, "<jobID>" + sjobID+ "</jobID>");
 			cout << sOSoL << endl;
 			if(osagent->send(osoptions->osil, sOSoL) == true) cout << "send is true" << endl;
 			else cout << "send is false" << endl;
@@ -276,10 +277,10 @@ void send(){
 			// see if a jobID is present in the OSiL
 			sOSoL = osoptions->osol;
 			istringpos = sOSoL.find("<jobID");
-			if(istringpos != string::npos) bsend = osagent->send(osoptions->osil, osoptions->osol);
+			if(istringpos != std::string::npos) bsend = osagent->send(osoptions->osil, osoptions->osol);
 			else{
 				istringpos = sOSoL.find("</general");
-				if(istringpos != string::npos) sOSoL.insert(istringpos, "<jobID>" + sjobID+ "</jobID>");
+				if(istringpos != std::string::npos) sOSoL.insert(istringpos, "<jobID>" + sjobID+ "</jobID>");
 				cout << sOSoL << endl;
 				if(osagent->send(osoptions->osil, sOSoL) == true) cout << "send is true" << endl;
 				else cout << "send is false" << endl;
@@ -297,7 +298,7 @@ void retrieve(){
 	FileUtil *fileUtil = NULL;
 	fileUtil = new FileUtil();
 	osagent = new OSSolverAgent( osoptions->serviceLocation );
-	string sOSrL = osagent->retrieve( osoptions->osol);
+	std::string sOSrL = osagent->retrieve( osoptions->osol);
 	if(osoptions->osrlFile != NULL) fileUtil->writeFileFromString(osoptions->osrlFile, sOSrL);
 	else cout << sOSrL << endl;
 }//end retrieve
@@ -307,7 +308,7 @@ void kill(){
 	FileUtil *fileUtil = NULL;
 	fileUtil = new FileUtil();
 	osagent = new OSSolverAgent( osoptions->serviceLocation );
-	string sOSpL = osagent->kill( osoptions->osol);
+	std::string sOSpL = osagent->kill( osoptions->osol);
 	if(osoptions->osplOutputFile != NULL) fileUtil->writeFileFromString(osoptions->osplOutputFile, sOSpL);
 	else cout << sOSpL << endl;
 }//end kill

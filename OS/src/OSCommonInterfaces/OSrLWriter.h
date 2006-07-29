@@ -18,12 +18,8 @@
 #ifndef OSrLWRITER_H
 #define OSrLWRITER_H
 
-
-
-#include <iostream>
-using std::ostream;
 #include "OSResult.h"
-
+#include <string>
 
 /*! \class OSrLWriter OSrLWriter.h "OSrLWriter.h"
  *  \brief Take an OSResult object and write a string that validates against OSrL..
@@ -58,7 +54,7 @@ public:
    	 * @return a string with the OSResult data that validates against the OSrL schema.
 	 * </p> 
    	 */	
-	string writeOSrL( OSResult *theosresult);
+	std::string writeOSrL( OSResult *theosresult);
 	
    	/**
    	 * create an osrl char* from an OSResult object

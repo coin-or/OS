@@ -18,7 +18,6 @@
 #define BASE64_H
 
 #include<string>
-using namespace std;
 
 class Base64{
 public:
@@ -28,8 +27,8 @@ public:
 	 */
 	Base64();
 	~Base64();
-	static string encodeb64(char* bytes, int size);
-	static string decodeb64(char* b64bytes);
+	static std::string encodeb64(char* bytes, int size);
+	static std::string decodeb64(char* b64bytes);
 };//class Base64
 
 

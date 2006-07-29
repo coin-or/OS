@@ -23,10 +23,11 @@
 
 #include "LindoSolver.h"
 
-
+#include <string>
  
 
-using namespace std;
+using std::cout;
+using std::endl;
 int  main(){	
 /*
   The objective of this example is to illustrate how to build a problem instance

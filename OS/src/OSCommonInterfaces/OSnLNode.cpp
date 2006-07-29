@@ -21,6 +21,10 @@
 #include <iostream>
 #include <sstream>  
 #include <map> 
+
+using std::ostringstream;
+using std::cout;
+using std::endl;
   
 /**
  * we need a global postfixVector and prefixVector to efficiently
@@ -36,7 +40,7 @@ std::vector<OSnLNode*> prefixVector;
 
 
 
-static string msnodeNames[] = {
+static std::string msnodeNames[] = {
 	/*1--*/"plus", "sum", "minus", "negate", "times", "divide",
 	"quotient", "rem", "power", "product",
 	/*2--*/"abs", "floor", "ceiling", "percent", "square", "squareRoot", "ln", "log", "log10", "exp",
@@ -264,7 +268,7 @@ std::vector<OSnLNode*> OSnLNode::preOrderOSnLNodeTraversal(){
 }//end getPrefixFromExpressionTree
 
 
-string OSnLNode::getTokenNumberFromOSnLNode(){
+std::string OSnLNode::getTokenNumberFromOSnLNode(){
 	ostringstream outStr;
 	outStr << inodeInt;
 	// when I creat an OSnLNode from a token number, I need to know how many children there are
@@ -277,7 +281,7 @@ string OSnLNode::getTokenNumberFromOSnLNode(){
 }//getTokenNumberFromOSnLNode
 
 
-string OSnLNode::getTokenNameFromOSnLNode(){
+std::string OSnLNode::getTokenNameFromOSnLNode(){
 	ostringstream outStr;
 	outStr << this->snodeName;
 	if(inodeType == -1){
@@ -290,20 +294,20 @@ string OSnLNode::getTokenNameFromOSnLNode(){
 
 
 
-OSnLNode* OSnLNode::getOSnLNodeFromToken(string sToken){
+OSnLNode* OSnLNode::getOSnLNodeFromToken(std::string sToken){
 // kipp possibly make this a static method or put it somewhere else
 	OSnLNode *nlNodePoint;
 	int nodeID ;
 	int pos1, pos2;
-	string str1, str2;
-	// convert the string tokens into the appropriate objects
+	std::string str1, str2;
+	// convert the std::string tokens into the appropriate objects
 		// kipp -- put in error check -- make sure > 0 and < 10001
 	nodeID = atoi(  &sToken.substr(0, 4)[0]);
 	switch (nodeID){
 		case OS_SUM:  // the sum token
 			pos1 = sToken.find('[');
 			pos2 = sToken.find(']');
-			if((pos1 == string::npos) || (pos2 == string::npos)){
+			if((pos1 == std::string::npos) || (pos2 == std::string::npos)){
 				// throw error
 			}
 			OSnLNodeSum *nlNodePointSum;
@@ -315,7 +319,7 @@ OSnLNode* OSnLNode::getOSnLNodeFromToken(string sToken){
 		case OS_MAX:  // the max token
 			pos1 = sToken.find('[');
 			pos2 = sToken.find(']');
-			if((pos1 == string::npos) || (pos2 == string::npos)){
+			if((pos1 == std::string::npos) || (pos2 == std::string::npos)){
 				// throw error
 			}
 			OSnLNodeMax *nlNodePointMax;
@@ -327,7 +331,7 @@ OSnLNode* OSnLNode::getOSnLNodeFromToken(string sToken){
 		case OS_PRODUCT:  // the product token
 			pos1 = sToken.find('[');
 			pos2 = sToken.find(']');
-			if((pos1 == string::npos) || (pos2 == string::npos)){
+			if((pos1 == std::string::npos) || (pos2 == std::string::npos)){
 				// throw error
 			}
 			OSnLNodeProduct *nlNodePointProduct;
@@ -343,7 +347,7 @@ OSnLNode* OSnLNode::getOSnLNodeFromToken(string sToken){
 			}
 			// now get the second semicolon, the one that should be after value				
 			pos2 = sToken.find(':', pos1 + 1);
-			if(pos2 != string::npos) {
+			if(pos2 != std::string::npos) {
 			}
 			else{
 				//throw error
@@ -356,7 +360,7 @@ OSnLNode* OSnLNode::getOSnLNodeFromToken(string sToken){
 		case OS_VARIABLE:  // the variable token
 			pos1 = sToken.find('[');
 			pos2 = sToken.find(']');
-			if((pos1 == string::npos) || (pos2 == string::npos)){
+			if((pos1 == std::string::npos) || (pos2 == std::string::npos)){
 				// throw error
 			}
 			OSnLNodeVariable *nlNodePointVariable;
@@ -371,7 +375,7 @@ OSnLNode* OSnLNode::getOSnLNodeFromToken(string sToken){
 			}
 			// now get the second semicolon, the one that should be after idx				
 			pos2 = sToken.find(':', pos1 + 1);
-			if(pos2 == string::npos) {
+			if(pos2 == std::string::npos) {
 				//throw error
 			}
 			nlNodePointVariable->idx = atoi(  &sToken.substr(pos1 + 1, pos2 - pos1 - 1)[0]);
@@ -391,7 +395,7 @@ OSnLNode* OSnLNode::getOSnLNodeFromToken(string sToken){
 
 
 
-string OSnLNode::getNonlinearExpressionInXML(){
+std::string OSnLNode::getNonlinearExpressionInXML(){
 	ostringstream outStr;
 	outStr << "<" ;
 	outStr << snodeName;
@@ -957,7 +961,7 @@ OSnLNodeNumber::~OSnLNodeNumber(){
 }//end ~OSnLNodeNumber
 
 
-string OSnLNodeNumber::getTokenNumberFromOSnLNode(){
+std::string OSnLNodeNumber::getTokenNumberFromOSnLNode(){
 	ostringstream outStr;
 	outStr << inodeInt;
 	outStr << ":" ;
@@ -974,7 +978,7 @@ string OSnLNodeNumber::getTokenNumberFromOSnLNode(){
 }//getTokenNumberFromOSnLNode
 
 
-string OSnLNodeNumber::getTokenNameFromOSnLNode(){
+std::string OSnLNodeNumber::getTokenNameFromOSnLNode(){
 	ostringstream outStr;
 	outStr << snodeName;
 	outStr << ":" ;
@@ -991,7 +995,7 @@ string OSnLNodeNumber::getTokenNameFromOSnLNode(){
 }//getTokenNumberFromOSnLNode
 
 
-string OSnLNodeNumber::getNonlinearExpressionInXML(){
+std::string OSnLNodeNumber::getNonlinearExpressionInXML(){
 	ostringstream outStr;
 	outStr << "<" ;
 	outStr << snodeName;
@@ -1050,7 +1054,7 @@ OSnLNodeVariable::~OSnLNodeVariable(){
 }//end ~OSnLNodeVariable
 
 
-string OSnLNodeVariable::getTokenNumberFromOSnLNode(){
+std::string OSnLNodeVariable::getTokenNumberFromOSnLNode(){
 	ostringstream outStr;
 	// put in an error if inodeInt is not 6001
 	outStr << inodeInt;
@@ -1066,7 +1070,7 @@ string OSnLNodeVariable::getTokenNumberFromOSnLNode(){
 }//getTokenNumberFromOSnLNode
 
 
-string OSnLNodeVariable::getTokenNameFromOSnLNode(){
+std::string OSnLNodeVariable::getTokenNameFromOSnLNode(){
 	ostringstream outStr;
 	// put in an error if inodeInt is not 6001
 	outStr << snodeName;
@@ -1082,7 +1086,7 @@ string OSnLNodeVariable::getTokenNameFromOSnLNode(){
 }//getTokenNumberFromOSnLNode
 
 
-string OSnLNodeVariable::getNonlinearExpressionInXML(){
+std::string OSnLNodeVariable::getNonlinearExpressionInXML(){
 	ostringstream outStr;
 	outStr << "<" ;
 	outStr << snodeName;
@@ -1129,7 +1133,7 @@ OSnLNode* OSnLNodeVariable::cloneOSnLNode(){
 /**
  * m_sDelimiter holds the delimiter used in the expression postfix and prefix notation strings.
  */
-static const string m_sDelimiter = ",";
+static const std::string m_sDelimiter = ",";
 
 /**
  * m_mdX holds a double array of the current values of variables.

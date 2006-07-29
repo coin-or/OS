@@ -18,12 +18,11 @@
 #ifndef DEFAULTSOLVER
 #define DEFAULTSOLVER
 
-#include <string>
+
 #include "OSInstance.h"
 #include "OSResult.h"
 
-
-using namespace std;
+#include <string>
 
 /*! \class DefaultSolver DefaultSolver.h "DefaultSolver.h"
  *  \brief The Defalut Solver Class.
@@ -41,24 +40,24 @@ public:
 
 
 	
-	/** osil holds the problem instance as a string */
-	string osil;
+	/** osil holds the problem instance as a std::string */
+	std::string osil;
 	
 	/** osinstance holds the problem instance in-memory as an OSInstance object */
 	OSInstance *osinstance;
 	
 	/** osol holds the options for the solver */
-	string osol;
+	std::string osol;
 	
 	/** osoption holds the solver options in-memory as an OSOption object */
 	//OSOption  *osoption;
 	
 	/** osinsList holds the solution or result of the model */
-	string insList;
+	std::string insList;
 	
 	
 	/** osrl holds the solution or result of the model */
-	string osrl;
+	std::string osrl;
 	
 	/** osresult holds the solution or result of the model in-memory as an OSResult object */
 	OSResult  *osresult;
@@ -66,7 +65,7 @@ public:
 	/** 
 	 * m_sSolverName is the name of the Coin solver used, e.g. glpk, or clp 	 
 	 */
-	string m_sSolverName;
+	std::string m_sSolverName;
 	
 
 	/** solve is a virtual function -- the actual solvers will

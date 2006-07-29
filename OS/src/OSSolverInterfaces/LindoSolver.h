@@ -15,12 +15,13 @@
  
 #ifndef LINDOSOLVER_H
 #define LINDOSOLVER_H
+
 #include "DefaultSolver.h"
 #include "OSInstance.h"
 #include "lindo.h"
 #include "OSrLWriter.h"
-
 #include "OSConfig.h" 
+#include <string>
 
 class LindoSolver : public DefaultSolver{  
 
@@ -97,18 +98,18 @@ private:
 	 char** m_mmcVarName;
 	 
 	/**
-	 * m_msVarName holds an array of variable string names.
+	 * m_msVarName holds an array of variable std::string names.
 	 */
-	 string* m_msVarName;
+	 std::string* m_msVarName;
 	 
 	/**
-	 * m_msConName holds an array of constraint string names.
+	 * m_msConName holds an array of constraint std::string names.
 	 */
-	 string* m_msConName;
+	 std::string* m_msConName;
 	
 	/**
 	 * m_vcVarType holds an array of variable types (character), e.g. 'C' for continuous
-	 * type, 'I' for integer type, 'B' for binary type, 'S' for string type).
+	 * type, 'I' for integer type, 'B' for binary type, 'S' for std::string type).
 	 */
 	 char* m_mcVarType;
 	/**
@@ -124,7 +125,7 @@ private:
 	  * Lindo's generalized error Reporting function
 	  * 
 	  */
-	void lindoAPIErrorCheck( string errormsg);
+	void lindoAPIErrorCheck( std::string errormsg);
 
 };
 

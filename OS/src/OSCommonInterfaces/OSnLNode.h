@@ -24,12 +24,6 @@
 #include<vector>
 
 
-
-
-
-
-using namespace std;
-
 /*! \class OSnLNode OSnLNode.h "OSnLNode.h"
  *  \brief The OSnLNode Class.
  *
@@ -62,7 +56,7 @@ class OSnLNode{
 public:	
 	
 	/** nodeName holds the OSnLNode name */
-	string snodeName;
+	std::string snodeName;
 	
 	/**  numberOfChildren is the number of OSnLNode child elements*/
 	int inumberOfChildren;	
@@ -106,11 +100,11 @@ public:
 	 * idx is the variable index
 	 * coef is the coefficient on the variable, it is 1 by default
 	 */
-	virtual string getTokenNumberFromOSnLNode();
+	virtual std::string getTokenNumberFromOSnLNode();
 	
-	virtual string getTokenNameFromOSnLNode();
+	virtual std::string getTokenNameFromOSnLNode();
 	
-	virtual  string getNonlinearExpressionInXML();
+	virtual  std::string getNonlinearExpressionInXML();
 	
 	OSnLNode* createExpressionTreeFromPostfix(std::vector<OSnLNode*> nlNodeVec);
 	
@@ -143,11 +137,11 @@ public:
 	 * idx is the variable index
 	 * coef is the coefficient on the variable, it is 1 by default
 	 */	
-	string getTokenFromOSnLNode();
+	std::string getTokenFromOSnLNode();
 	
 	static void setnlNodeIdxMap();
 	
-	static OSnLNode* getOSnLNodeFromToken(string sOSnLNodeToken);
+	static OSnLNode* getOSnLNodeFromToken(std::string sOSnLNodeToken);
 	
 	/**
 	 * Calculate the function value given the current variable values.
@@ -556,8 +550,8 @@ class OSnLNodeNumber : public OSnLNode{
 public:
 
 	double value;
-	string type;
-	string id;
+	std::string type;
+	std::string id;
 	
 
 
@@ -575,20 +569,20 @@ public:
 	 *
 	 * @return a string token that corresponds to the OSnLNode.
 	 */
-	virtual string getTokenNumberFromOSnLNode();
+	virtual std::string getTokenNumberFromOSnLNode();
 	
 	
 	/**
 	 *
 	 * @return a string token that corresponds to the OSnLNode.
 	 */
-	virtual string getTokenNameFromOSnLNode();
+	virtual std::string getTokenNameFromOSnLNode();
 	
 	/**
 	 *
 	 * @return the OSiL XML for the number node.
 	 */
-	virtual string getNonlinearExpressionInXML();
+	virtual std::string getNonlinearExpressionInXML();
 	
 	/*! \fn double OSnLNodeNumber::double(double *x) 
 	 *  \brief The implementation of the virtual functions. 
@@ -625,20 +619,20 @@ public:
 	 *
 	 * @return a string token that corresponds to the OSnLNode.
 	 */
-	virtual string getTokenNumberFromOSnLNode();
+	virtual std::string getTokenNumberFromOSnLNode();
 	
 	
 	/**
 	 *
-	 * @return a string token that corresponds to the OSnLNode.
+	 * @return a std::string token that corresponds to the OSnLNode.
 	 */
-	virtual string getTokenNameFromOSnLNode();
+	virtual std::string getTokenNameFromOSnLNode();
 	
 	/**
 	 *
 	 * @return the OSiL XML for the variable node.
 	 */
-	virtual string getNonlinearExpressionInXML();
+	virtual std::string getNonlinearExpressionInXML();
 	
 	/*! \fn double OSnLNodeVariable::double(double *x) 
 	 *  \brief The implementation of the virtual functions. 

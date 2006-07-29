@@ -14,19 +14,17 @@
  */
 
 #include "Base64.h"
-#include<iostream>
-#include<sstream>
-using namespace std;
+#include <sstream>  
 
 
-static const string base64_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+static const std::string base64_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
              "abcdefghijklmnopqrstuvwxyz"
              "0123456789+/";
 
-string Base64::encodeb64(char* bytes, int string_size){
+std::string Base64::encodeb64(char* bytes, int string_size){
 	unsigned char out_byte1, out_byte2, out_byte3, out_byte4;
 	unsigned char in_byte1, in_byte2, in_byte3;
-	ostringstream outStr;
+	std::ostringstream outStr;
 	int remainder = string_size%3;
 	// get a number divisible by 3
 	int test = string_size - remainder;
@@ -69,10 +67,10 @@ string Base64::encodeb64(char* bytes, int string_size){
 
 }//encodeb64
 
-string Base64::decodeb64(char* b64bytes){
+std::string Base64::decodeb64(char* b64bytes){
 	unsigned char out_byte1, out_byte2, out_byte3;
 	unsigned char in_byte1, in_byte2, in_byte3, in_byte4;
-	ostringstream outStr;
+	std::ostringstream outStr;
 	// first take of the non-padded bytes
 	while(*b64bytes != '=' && *b64bytes != '\0'){
 		in_byte1 = base64_chars.find(*(b64bytes++));

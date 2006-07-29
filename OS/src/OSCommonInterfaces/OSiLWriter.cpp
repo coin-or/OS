@@ -16,11 +16,15 @@
 
 #include "OSiLWriter.h"
 #include "OSInstance.h"
-#include "OSParameters.h"
-#include <iostream>
-#include <sstream>   
+#include "OSParameters.h" 
 #include "CommonUtil.h"
 #include "Base64.h"
+
+#include <sstream>  
+
+using std::cout;
+using std::endl;
+using std::ostringstream; 
 
 OSiLWriter::OSiLWriter( ) {	
 	m_bWriteBase64 = false;
@@ -30,7 +34,7 @@ OSiLWriter::OSiLWriter( ) {
 OSiLWriter::~OSiLWriter(){
 }
 
-string OSiLWriter::writeOSiL( OSInstance *theosinstance){
+std::string OSiLWriter::writeOSiL( OSInstance *theosinstance){
 	m_OSInstance = theosinstance;
 	ostringstream outStr;
 	int i, j;

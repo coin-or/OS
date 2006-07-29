@@ -17,7 +17,9 @@
 #include "OSSolverAgent.h"
 #include "WSUtil.h"
 
-using namespace std;
+using std::string;
+using std::cout;
+using std::endl;
 
 OSSolverAgent::OSSolverAgent(string solverURI) : OShL() {
 	int nstart = 0;
@@ -41,7 +43,7 @@ OSSolverAgent::~OSSolverAgent() {
 
 string OSSolverAgent::solve(string osil, string osol){
 	string sOSrL; 
-	string theSOAP;
+	string theSOAP; 
 	string solveResult;
 	string getOSxL(string soapstring, string serviceMethod);
 	// CreateSOAPMessage inputs

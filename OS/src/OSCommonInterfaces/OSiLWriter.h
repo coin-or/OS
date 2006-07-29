@@ -17,11 +17,7 @@
 
 #ifndef OSiLWRITER_H
 #define OSiLWRITER_H
-
-
-
-#include <iostream>
-using std::ostream;
+#include <string>
 #include "OSInstance.h"
 
 /*! \class OSiLWriter OSiLWriter.h "OSiLWriter.h"
@@ -56,7 +52,7 @@ public:
    	 * @return a string with the OSInstance data that validates against the OSiL schema.
 	 * </p> 
    	 */		
-	string writeOSiL( OSInstance *theosinstance);
+	std::string writeOSiL( OSInstance *theosinstance);
 
 	/** m_bWriteBase64 is set to true if we encode the linear constraint coefficients
 	 * in base64 binary
@@ -70,6 +66,6 @@ public:
 	/** m_sB64encoded is a string of data (start, colIdx, rowIdx, or values) from
 	 * linear constraints coefficients encoded in base64 binary
 	 */	
-	string m_sB64encoded;
+	std::string m_sB64encoded;
 };
 #endif

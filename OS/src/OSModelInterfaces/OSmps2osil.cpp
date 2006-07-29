@@ -15,16 +15,17 @@
 
 
 #include "OSmps2osil.h"
-//#include "OSDataStructures.h"
+
 #include <CoinMpsIO.hpp>
 #include <CoinPackedMatrix.hpp>
 #include <iostream> 
 
 
 
-using namespace std;
+using std::cout;
+using std::endl;
 
-OSmps2osil::OSmps2osil( string mpsfilename)
+OSmps2osil::OSmps2osil( std::string mpsfilename)
 {
 	m_MpsData = new CoinMpsIO();
 	m_MpsData->readMps( &mpsfilename[ 0] );	
@@ -48,6 +49,7 @@ OSmps2osil::~OSmps2osil(){
 
 } // end destructor
 
+// Kipp-- put in integer programming
 bool OSmps2osil::createOSInstance( )
 {
 	osinstance = new OSInstance();
@@ -62,7 +64,7 @@ bool OSmps2osil::createOSInstance( )
 	//
 	// get the variable information
 	//
-	string initString;
+	std::string initString;
 	double init = OSNAN;
 	osinstance->setVariableNumber( numvar);
 	for(i = 0; i < numvar; i++)

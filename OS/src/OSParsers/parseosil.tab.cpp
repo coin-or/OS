@@ -2366,7 +2366,7 @@ yyreturn:
 void osilerror(char* errormsg) {
 	try{
 		ostringstream outStr;
-		string error = errormsg;
+		std::string error = errormsg;
 		error = "PARSER ERROR:  Input is either not valid or well formed: "  + error;
 		outStr << error << endl;
 		outStr << "Here are the last 5 and next 15 characters currently being pointed to in the input string: ";
@@ -2383,7 +2383,7 @@ void osilerror(char* errormsg) {
 	}
 } // end osilerror() 
 
-OSInstance* yygetOSInstance( string osil){
+OSInstance* yygetOSInstance( std::string osil){
 		void yyinitialize();
 		yyinitialize();
 		osil = osil+"00";

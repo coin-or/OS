@@ -25,9 +25,12 @@
 #include "FileUtil.h"
 #include "ErrorClass.h"   
 #include <iostream>
-#include <time.h> 
-  
-using std::ostream; 
+#include <time.h>  
+using std::cout; 
+using std::endl; 
+using std::ostringstream;
+
+
 CoinSolver::CoinSolver() : 
 m_OsiSolver(NULL),
 m_CoinPackedMatrix(NULL) 
@@ -69,7 +72,7 @@ void CoinSolver::solve()  {
 			cout << "Start Solve with a Coin Solver" << endl;
 		// get the type of solver requested from OSoL string
 		bool solverIsDefined = false;
-		if( m_sSolverName.find("clp") != string::npos){
+		if( m_sSolverName.find("clp") != std::string::npos){
 			if( (osinstance->getNumberOfNonlinearExpressions() > 0)
 				|| (osinstance->getNumberOfQuadraticTerms() > 0) 
 				|| (osinstance->getNumberOfIntegerVariables() > 0)
@@ -78,14 +81,14 @@ void CoinSolver::solve()  {
 			m_OsiSolver = new OsiClpSolverInterface();
 		}
 		else{
-			if( m_sSolverName.find("cbc") != string::npos){
+			if( m_sSolverName.find("cbc") != std::string::npos){
 				if( (osinstance->getNumberOfNonlinearExpressions() > 0)
 					|| (osinstance->getNumberOfQuadraticTerms() > 0) ) throw ErrorClass( "Cbc cannot do nonlinear or quadratic");
 				solverIsDefined = true;
 				m_OsiSolver = new OsiCbcSolverInterface();
 			}
 			else{
-				if( m_sSolverName.find( "cplex") != string::npos){
+				if( m_sSolverName.find( "cplex") != std::string::npos){
 					#ifdef COIN_HAS_CPX
 					if( (osinstance->getNumberOfNonlinearExpressions() > 0)
 						|| (osinstance->getNumberOfQuadraticTerms() > 0) ) throw ErrorClass( "Cplex cannot do nonlinear or quadratic");
@@ -94,7 +97,7 @@ void CoinSolver::solve()  {
 					#endif
 				}
 				else{
-					if(m_sSolverName.find( "glpk") != string::npos){
+					if(m_sSolverName.find( "glpk") != std::string::npos){
 						#ifdef COIN_HAS_GLPK
 						if( (osinstance->getNumberOfNonlinearExpressions() > 0)
 							|| (osinstance->getNumberOfQuadraticTerms() > 0) ) throw ErrorClass( "Glpk cannot do nonlinear or quadratic");
@@ -156,7 +159,7 @@ bool CoinSolver::setCoinPackedMatrix(){
 bool CoinSolver::optimize()
 {
 	double *x, *y, *z;
-	string *rcost;
+	std::string *rcost;
 	int solIdx = 0;
 	// resultHeader infomration
 	if(osresult->setServiceName("Solved with Coin Solver: " + m_sSolverName) != true)
@@ -218,7 +221,7 @@ bool CoinSolver::optimize()
 			cout << "DONE WITH INITIAL SOLVE" << endl;
 		}
 		int solIdx = 0;
-		string description = "";
+		std::string description = "";
 		osresult->setGeneralStatusType("success");
 		if (m_OsiSolver->isProvenOptimal() == true){
 			osresult->setSolutionStatus(solIdx, "optimal", description);
@@ -247,7 +250,7 @@ bool CoinSolver::optimize()
 			osresult->setNumberOfOtherVariableResult(solIdx, numberOfOtherVariableResult);
 			ostringstream outStr;
 			int numberOfVar =  osinstance->getVariableNumber();
-			rcost = new string[ numberOfVar];
+			rcost = new std::string[ numberOfVar];
 			for(i=0; i < numberOfVar; i++){
 				outStr << m_OsiSolver->getReducedCost()[ i]; 
 				rcost[ i] = outStr.str();
@@ -283,22 +286,22 @@ bool CoinSolver::optimize()
 	}
 } // end optimize
 
-string CoinSolver::getCoinSolverType(string osol){
+std::string CoinSolver::getCoinSolverType(std::string osol){
 // this is deprecated, but keep it around
 	try{
-		if( osol.find( "clp") != string::npos){
+		if( osol.find( "clp") != std::string::npos){
 			return "coin_solver_glpk";
 		}
 		else{
-			if( osol.find( "cbc") != string::npos){
+			if( osol.find( "cbc") != std::string::npos){
 				return "coin_solver_cpx";
 			}
 			else{
-				if( osol.find( "cpx") != string::npos){
+				if( osol.find( "cpx") != std::string::npos){
 					return "coin_solver_clp";
 				}
 				else{
-					if(osol.find( "glpk") != string::npos){
+					if(osol.find( "glpk") != std::string::npos){
 						return "";
 					}
 					else throw ErrorClass("a supported solver was not defined");

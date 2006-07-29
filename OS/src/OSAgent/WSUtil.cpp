@@ -15,7 +15,6 @@
  */ 
  
 #include "WSUtil.h"
-#include <stdio.h>      /* for printf() and fprintf() */
 #include <sys/socket.h> /* for socket(), connect(), send(), and recv() */
 #include <arpa/inet.h>  /* for sockaddr_in and inet_addr() */
 #include <stdlib.h>     /* for atoi() and exit() */
@@ -27,6 +26,11 @@
 #include "ErrorClass.h"
 #include "OSResult.h"
 #include "OSrLWriter.h"
+
+using std::string;
+using std::cout;
+using std::endl;
+using std::ostringstream;
 
 
 WSUtil::WSUtil(){
@@ -95,8 +99,7 @@ string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned int se
 			//ret_message << endl;
 			break;
 			}
-		} 
-		//printf("\n");    
+		}    
 		close(sock);
 		return ret_message.str();
 	}

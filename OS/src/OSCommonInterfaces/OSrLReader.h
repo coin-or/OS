@@ -21,12 +21,7 @@
 
 
 #include "OSResult.h"
-#include <iostream>
 
-
-
-
-using std::ostream;
 
 
 class OSrLReader{  
@@ -37,6 +32,6 @@ private:
 public:
 	OSrLReader( );
 	~OSrLReader();
-	OSResult *readOSrL(string osrl);
+	OSResult *readOSrL(std::string osrl);
 };
 #endif
