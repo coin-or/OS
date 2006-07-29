@@ -20,6 +20,7 @@
 
 #include "OSInstance.h"
 #include "OSResult.h"
+#include "ErrorClass.h"
 
 #include <string>
 
@@ -48,12 +49,12 @@ int osillex(void);
 int osollex(void);
 int ossslex(void);
 
-OSInstance *yygetOSInstance(std::string osil);
+OSInstance *yygetOSInstance(std::string osil) throw(ErrorClass);
 OSResult *yygetOSResult(std::string osrl);
 
 
 void osilClearMemory();
-void osilerror(char* errormsg);
+void osilerror(char* errormsg) throw(ErrorClass);
 void osrlClearMemory();
 void osrlerror(char* errormsg);
 void ossserror(char* errormsg);

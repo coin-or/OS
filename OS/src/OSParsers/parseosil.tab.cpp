@@ -2363,7 +2363,7 @@ yyreturn:
 // user defined functions
 
 
-void osilerror(char* errormsg) {
+void osilerror(char* errormsg) throw (ErrorClass) 
 	try{
 		ostringstream outStr;
 		std::string error = errormsg;
@@ -2377,13 +2377,13 @@ void osilerror(char* errormsg) {
 		outStr << "See line number: " << osillineno << endl;  
 		error = outStr.str();
 		throw ErrorClass( error);
-	}
+	}// end osilerror() 
 		catch(const ErrorClass& eclass){
 		throw ErrorClass(  eclass.errormsg); 
 	}
-} // end osilerror() 
 
-OSInstance* yygetOSInstance( std::string osil){
+OSInstance* yygetOSInstance( std::string osil) throw (ErrorClass)
+try {
 		void yyinitialize();
 		yyinitialize();
 		osil = osil+"00";
@@ -2401,6 +2401,9 @@ OSInstance* yygetOSInstance( std::string osil){
 		osil_delete_buffer( current_buf);
 		return osinstance;
 } // end yygetOSInstance
+		catch(const ErrorClass& eclass){
+		throw ErrorClass(  eclass.errormsg); 
+	}
 
 void osilClearMemory(){
 	delete osinstance;

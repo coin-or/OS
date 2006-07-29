@@ -22,6 +22,8 @@
 
 #include "OSInstance.h"
 #include "OSiLWriter.h"
+#include "ErrorClass.h"
+
 #include <string>
 
 
@@ -34,6 +36,6 @@ private:
 public:
 	OSiLReader( );
 	~OSiLReader();
-	OSInstance* readOSiL(std::string osil);
+	OSInstance* readOSiL(std::string osil) throw(ErrorClass);
 };
 #endif
