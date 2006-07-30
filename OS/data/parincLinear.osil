@@ -7,7 +7,7 @@
 		<description>A production scheduling problem </description>
 	</instanceHeader>
 	<instanceData>
-		<variables numberOfVariables="1">
+		<variables numberOfVariables="2">
 			<var name="x0"/>
 			<var name="x1"/>
 		</variables>

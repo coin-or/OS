@@ -21,6 +21,7 @@ extern char *osrltext;
 extern char *osoltext;
 extern int osollineno;
 extern int osilSize;
+extern char *ch;
 
 
 
