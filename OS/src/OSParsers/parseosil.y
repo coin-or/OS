@@ -101,7 +101,7 @@ description:
 | DESCRIPTIONSTART ELEMENTTEXT DESCRIPTIONEND  {osinstance->instanceHeader->description = $2;}
 | DESCRIPTIONSTART  DESCRIPTIONEND;
 
-instanceData: INSTANCEDATASTART quadraticcoefficients  nonlinearExpressions INSTANCEDATAEND;
+instanceData: INSTANCEDATASTART {YYABORT;} quadraticcoefficients  nonlinearExpressions INSTANCEDATAEND;
 
 
 quadraticcoefficients: 
@@ -414,16 +414,17 @@ quote: xmlWhiteSpace QUOTE;
 
 void osilerror(char* errormsg) {
 		ostringstream outStr;
-		std::string error = errormsg;
-		error = "PARSER ERROR:  Input is either not valid or well formed: "  + error;
-		outStr << error << endl;
+		sparseError = errormsg;
+		sparseError = "PARSER ERROR:  Input is either not valid or well formed: "  + sparseError;
+		outStr << sparseError << endl;
 		outStr << "Here are the last 5 and next 15 characters currently being pointed to in the input string: ";
 		for(int i = -5; i < 15; i++){ 
 			if(osiltext[ i] != '\0' ) outStr << osiltext[ i];
 		}
 		outStr << endl;
 		outStr << "See line number: " << osillineno << endl;  
-		error = outStr.str();
+		sparseError = outStr.str();
+		cout << sparseError << endl;
 	}//end osilerror() 
 
 OSInstance* yygetOSInstance( std::string osil) throw (ErrorClass)
@@ -441,7 +442,7 @@ try {
 		//yy_scan_string( osil.c_str());
 		osinstance = NULL;
 		osinstance = new OSInstance();
-		if( osilparse() != 0) throw ErrorClass("There is a parse error.");
+		if( osilparse() != 0) throw ErrorClass( sparseError);
 		osil_delete_buffer( current_buf);
 		return osinstance;
 }//end yygetOSInstance
@@ -472,6 +473,7 @@ void yyinitialize(){
 	variablecoefattON = false;
 	// kipp -- change later when nonlinear added to OSInstnace
 	tmpnlcount = 0;
+	sparseError = "";
 } // end yyInitialize()
 
 

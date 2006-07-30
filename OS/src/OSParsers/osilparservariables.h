@@ -15,7 +15,10 @@
  
 #include "OSnLNode.h"
 #include <vector> 
+#include <string>
 OSInstance* osinstance;
+
+std::string sparseError;
 
 int qtermcount;
 int nlnodecount;

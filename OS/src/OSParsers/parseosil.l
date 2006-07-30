@@ -54,6 +54,8 @@ bool parseColIdx();
 bool parseValue();
 char *parseBase64(int *dataSize );
 
+#define ERRORNUMBER 777777777
+
 
 #define GAIL printf("GAIL ANN HONDA\n")
 
@@ -64,10 +66,10 @@ char *parseBase64(int *dataSize );
 
 #define GETATTRIBUTETEXT  	\
 	for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ; \
-	if( *ch != '=') {osiltext = &ch[0]; osilerror("found an attribute not defined"); }  \
+	if( *ch != '=') {osiltext = &ch[0]; osilerror("found an attribute not defined"); return false;}  \
 	ch++; \
 	for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;	\
-	if(*ch != '\"'  && *ch != '\"') {osiltext = &ch[0]; osilerror("missing quote on attribute"); } \
+	if(*ch != '\"'  && *ch != '\"') {osiltext = &ch[0]; osilerror("missing quote on attribute"); return false;} \
 	ch++; \
 	for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ; \
 	attText = &*ch; \
@@ -135,16 +137,17 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]+))([eE][-+]?[0-9]+)?|INF))
 {xmlwhitespace}*\<\/description{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(DESCRIPTIONEND);}
 {xmlwhitespace}*\<instanceData{xmlwhitespace}*\>{xmlwhitespace}* {
 	//
+
 	int k = strlen(current_buf->yy_buf_pos);
 	//printf("k is equal to   %d\n", k);
 	ch = &current_buf->yy_ch_buf[k+ 1];
 	//ch = current_buf->yy_buf_pos;
 	osiltext = &ch[ 0];
 	//printf("starting INSTANCE DATA:\n %s\n", ch);
-	parseVariables();
-	parseObjectives(); 
-	parseConstraints(); 
-	parseLinearConstraintCoefficients();
+	if( parseVariables() != true) return( INSTANCEDATASTART);
+	if( parseObjectives() != true) return( INSTANCEDATASTART) ; 
+	if( parseConstraints() != true) return( INSTANCEDATASTART); 
+	if( parseLinearConstraintCoefficients() != true) return( INSTANCEDATASTART);
 	current_buf->yy_ch_buf = ch;
 	//printf("testing \n %s\n", current_buf->yy_ch_buf);
 	//osil_delete_buffer( current_buf);
@@ -233,7 +236,7 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]+))([eE][-+]?[0-9]+)?|INF))
 <attributetext>([^\"\'])* {YY_PRINT;  BEGIN 0; osillval.sval = strdup(osiltext); return(ATTRIBUTETEXT);}
 <osilattributetext>([^>])* {YY_PRINT;  BEGIN 0; osillval.sval = strdup(osiltext); return(OSILATTRIBUTETEXT);}
 
-. {YY_PRINT;  osilerror( "ecountered a spurious character in the lexer");   }
+. {YY_PRINT;  osilerror( "ecountered a spurious character in the lexer");  return(ERRORNUMBER); }
 
 %%
 
@@ -274,12 +277,12 @@ bool parseVariables(){
 	// start parsing
 	// the way flex works is that the ch should be pointing to variables
 	for(i = 0; startVariables[i]  == *ch; i++, ch++);
-	if(i != 9) {osiltext = &ch[0]; osilerror("incorrect <variables tag>");}
+	if(i != 9) {osiltext = &ch[0]; osilerror("incorrect <variables tag>"); return false;}
 	// find numberOfVariables attribute
 	// eat the white space
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
 	for(i = 0; c_numberOfVariables[i]  == *ch; i++, ch++);
-	if(i != 17) {osiltext = &ch[0]; osilerror("incorrect numberOfVariables attribute in <variables tag>");}	
+	if(i != 17) {osiltext = &ch[0]; osilerror("incorrect numberOfVariables attribute in <variables tag>"); return false;}	
 	// buf_index should be pointing to the first character after numberOfVariables
 	GETATTRIBUTETEXT;
 	ch++;
@@ -293,14 +296,14 @@ bool parseVariables(){
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ )
 	// since there must be at least one variable,  this element must end with > 
 	// better have an > sign or not valid
-	if(*ch != '>' ) {osiltext = &ch[0]; osilerror("variables element does not have a proper closing >");}
+	if(*ch != '>' ) {osiltext = &ch[0]; osilerror("variables element does not have a proper closing >"); return false;}
 	ch++;
 	// get rid of white space
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
 	// now loop over the var elements, there must be at least one var element
 	for(i = 0; startVar[i]  == *ch; i++, ch++);
 	if(i ==  4) foundVar = true;
-		else {osiltext = &ch[0]; osilerror("there must be at least one <var> element");}
+		else {osiltext = &ch[0]; osilerror("there must be at least one <var> element"); return false;}
 	while(foundVar){
 		varlbattON  = false;
 		varubattON = false ;
@@ -317,8 +320,8 @@ bool parseVariables(){
 			switch (*ch) {
 			case 'n':
 				for(i = 0; name[i]  == *ch; i++, ch++);
-				if( i != 4 ) {osiltext = &ch[0]; osilerror("error in variables name attribute");}
-				if(varnameattON == true) {osiltext = &ch[0]; osilerror("error too many variable name attributes");}
+				if( i != 4 ) {osiltext = &ch[0]; osilerror("error in variables name attribute"); return false;}
+				if(varnameattON == true) {osiltext = &ch[0]; osilerror("error too many variable name attributes"); return false;}
 				varnameattON == true;
 				GETATTRIBUTETEXT;
 				osinstance->instanceData->variables->var[varcount]->name=attText;
@@ -329,16 +332,16 @@ bool parseVariables(){
 				// if i < 4 there is an error
 				// if i = 4 we matched init
 				// if i = 10 we matched initString
-				if( (i != 4)  && (i != 10)) {osiltext = &ch[0]; osilerror("error in variables init or initString attribute");}
+				if( (i != 4)  && (i != 10)) {osiltext = &ch[0]; osilerror("error in variables init or initString attribute"); return false;}
 				if(i == 4){
-					if(varinitattON == true) {osiltext = &ch[0]; osilerror("error too many variable init attributes");}
+					if(varinitattON == true) {osiltext = &ch[0]; osilerror("error too many variable init attributes"); return false;}
 					varinitattON = true;
 					GETATTRIBUTETEXT;
 					//printf("ATTRIBUTE = %s\n", attText);
 					osinstance->instanceData->variables->var[varcount]->init=atofmod(attText);
 				}
 				else{
-					if(varinitStringattON == true) {osiltext = &ch[0]; osilerror("error too many variable initString attributes");}
+					if(varinitStringattON == true) {osiltext = &ch[0]; osilerror("error too many variable initString attributes"); return false;}
 					varinitStringattON = true;
 					GETATTRIBUTETEXT;
 					//printf("ATTRIBUTE = %s\n", attText);
@@ -347,17 +350,17 @@ bool parseVariables(){
 				break;
 			case 't':
 				for(i = 0; type[i]  == *ch; i++, ch++);
-				if(i != 4) {osiltext = &ch[0]; osilerror("error in variables type attribute");}
-				if(vartypeattON == true) {osiltext = &ch[0]; osilerror("error too many variable type attributes");}
+				if(i != 4) {osiltext = &ch[0]; osilerror("error in variables type attribute"); return false;}
+				if(vartypeattON == true) {osiltext = &ch[0]; osilerror("error too many variable type attributes"); return false;}
 				vartypeattON = true;
 				GETATTRIBUTETEXT;
-				if( strchr("CBIS", attText[0]) == NULL ) {osiltext = &ch[0]; osilerror("variable type not C,B,I, or S");}
+				if( strchr("CBIS", attText[0]) == NULL ) {osiltext = &ch[0]; osilerror("variable type not C,B,I, or S"); return false;}
 				osinstance->instanceData->variables->var[varcount]->type = attText[0];
 				break;
 			case 'l':
 				ch++;
-				if(*ch++ != 'b') {osiltext = &ch[0]; osilerror("error in variables lower bound attribute");}
-				if(varlbattON == true) {osiltext = &ch[0]; osilerror("error too many variable lb attributes");}
+				if(*ch++ != 'b') {osiltext = &ch[0]; osilerror("error in variables lower bound attribute"); return false;}
+				if(varlbattON == true) {osiltext = &ch[0]; osilerror("error too many variable lb attributes"); return false;}
 				varlbattON = true;
 				GETATTRIBUTETEXT;
 				osinstance->instanceData->variables->var[varcount]->lb = atofmod(attText);
@@ -365,8 +368,8 @@ bool parseVariables(){
 				break;
 			case 'u':
 				ch++;
-				if(*ch++ != 'b') {osiltext = &ch[0]; osilerror("error in variables upper bound attribute");}
-				if(varubattON == true) {osiltext = &ch[0]; osilerror("error too many variable ub attributes");}
+				if(*ch++ != 'b') {osiltext = &ch[0]; osilerror("error in variables upper bound attribute"); return false;}
+				if(varubattON == true) {osiltext = &ch[0]; osilerror("error too many variable ub attributes"); return false;}
 				varubattON = true;
 				GETATTRIBUTETEXT;
 				osinstance->instanceData->variables->var[varcount]->ub = atofmod(attText);
@@ -374,8 +377,8 @@ bool parseVariables(){
 				break;
 			case 'm':
 				for(i = 0; mult[i]  == *ch; i++, ch++);
-				if(i != 4) {osiltext = &ch[0]; osilerror("error in variables mult attribute");}
-				if(varmultattON == true) {osiltext = &ch[0]; osilerror("error too many variable mult attributes");}
+				if(i != 4) {osiltext = &ch[0]; osilerror("error in variables mult attribute"); return false;}
+				if(varmultattON == true) {osiltext = &ch[0]; osilerror("error too many variable mult attributes"); return false;}
 				varmultattON = true;
 				GETATTRIBUTETEXT;
 				//printf("ATTRIBUTE = %s\n", attText);
@@ -390,7 +393,7 @@ bool parseVariables(){
 			case '\r':
 				break;
 			default:
-				{osiltext = &ch[0]; osilerror("invalid attribute character");}
+				{osiltext = &ch[0]; osilerror("invalid attribute character"); return false;}
 				break;
 			}
 			ch++;
@@ -398,10 +401,10 @@ bool parseVariables(){
 		//
 		// assume all the attributes have been processed
 		// must have either /> or > and then whitespace and </var whitespace>
-		if( *ch != '/' && *ch != '>') {osiltext = &ch[0]; osilerror("incorrect end of <var> element");}
+		if( *ch != '/' && *ch != '>') {osiltext = &ch[0]; osilerror("incorrect end of <var> element"); return false;}
 		if(*ch == '/'){
 			ch++;
-			if(*ch != '>') {osiltext = &ch[0]; osilerror("incorrect end of <var> element");}
+			if(*ch != '>') {osiltext = &ch[0]; osilerror("incorrect end of <var> element"); return false;}
 			// get rid of whitespace
 			ch++;
 			for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );
@@ -417,18 +420,18 @@ bool parseVariables(){
 		else{
 			// the buf_index is the > at the end of the var element 
 			// double check to make sure it really is a >
-			if(*ch != '>') {osiltext = &ch[0]; osilerror("improper ending to a <var> element");}
+			if(*ch != '>') {osiltext = &ch[0]; osilerror("improper ending to a <var> element"); return false;}
 			// look for </var
 			// fist get rid of white space
 			ch++;
 			for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );
 			// we should be at </var or there is an error
 			for(i = 0; endVar[i]  == *ch; i++, ch++);
-			if(i != 5) {osiltext = &ch[0]; osilerror("</var> element missing");}
+			if(i != 5) {osiltext = &ch[0]; osilerror("</var> element missing"); return false;}
 			// burn off the whitespace
 			for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );
 			// better have an > to end </var
-			if(*ch++ != '>') {osiltext = &ch[0]; osilerror("</var> element missing >");}
+			if(*ch++ != '>') {osiltext = &ch[0]; osilerror("</var> element missing >"); return false;}
 			// look for a new <var> element
 			// get rid of whitespace
 			ch++;
@@ -443,16 +446,16 @@ bool parseVariables(){
 			}
 		}
 		varcount++;
+		if(varcount >= numberOfVariables) {osiltext = &ch[0];  osilerror("attribute numberOfVariables is less than actual number found");  return false;}
 	}
 	ch -= i;
-	if(varcount > numberOfVariables) {osiltext = &ch[0];  osilerror("attribute numberOfVariables is less than actual number found");}
-	if(varcount < numberOfVariables) {osiltext = &ch[0]; osilerror("attribute numberOfVariables is greater than actual number found");}
+	if(varcount < numberOfVariables) {osiltext = &ch[0]; osilerror("attribute numberOfVariables is greater than actual number found");   return false;}
 	// get the </variables> tag
 	for(i = 0; endVariables[i]  == *ch; i++, ch++);
-	if(i != 11) {osiltext = &ch[0];  osilerror("cannot find </varialbes> tag");}
+	if(i != 11) {osiltext = &ch[0];  osilerror("cannot find </varialbes> tag"); return false;}
 	for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );	
 	// better have >
-	if(*ch != '>') {osiltext = &ch[0];  osilerror("improperly formed </variables> tag");}
+	if(*ch != '>') {osiltext = &ch[0];  osilerror("improperly formed </variables> tag"); return false;}
 	ch++;
 	finish = clock();
 	duration = (double) (finish - start) / CLOCKS_PER_SEC; 
@@ -939,11 +942,10 @@ bool parseLinearConstraintCoefficients(){
 	if( *ch++ != '>') {osiltext = &ch[0]; osilerror("the <linearConstraintCoefficients> element does not have a proper closing"); }
 	// get rid of white space after the <linearConstraintCoefficients> element
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
-	parseStart();
-	parseColIdx();
-	parseRowIdx();
-	if( (parseColIdx() == true) && (parseRowIdx() == true) ){osiltext = &ch[0]; osilerror("cannot store by both row and column");}
-	parseValue();
+	if( parseStart() != true) return false;
+	if( (parseColIdx() != true) && ( parseRowIdx() != true)) return false;
+	if( (parseColIdx() != true) && (parseRowIdx() == true) ){osiltext = &ch[0]; osilerror("cannot store by both row and column"); return false;}
+	if( parseValue() != true) return false;
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;	
 	// get the </linearConstraintCoefficients> tag
 	for(i = 0; endlinearConstraintCoefficients[ i]  == *ch; i++, ch++);
