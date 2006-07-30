@@ -412,8 +412,7 @@ quote: xmlWhiteSpace QUOTE;
 // user defined functions
 
 
-void osilerror(char* errormsg) throw (ErrorClass) 
-	try{
+void osilerror(char* errormsg) {
 		ostringstream outStr;
 		std::string error = errormsg;
 		error = "PARSER ERROR:  Input is either not valid or well formed: "  + error;
@@ -425,11 +424,7 @@ void osilerror(char* errormsg) throw (ErrorClass)
 		outStr << endl;
 		outStr << "See line number: " << osillineno << endl;  
 		error = outStr.str();
-		throw ErrorClass( error);
-	}// end osilerror() 
-		catch(const ErrorClass& eclass){
-		throw ErrorClass(  eclass.errormsg); 
-	}
+	}//end osilerror() 
 
 OSInstance* yygetOSInstance( std::string osil) throw (ErrorClass)
 try {
@@ -446,10 +441,10 @@ try {
 		//yy_scan_string( osil.c_str());
 		osinstance = NULL;
 		osinstance = new OSInstance();
-		osilparse();
+		if( osilparse() != 0) throw ErrorClass("There is a parse error.");
 		osil_delete_buffer( current_buf);
 		return osinstance;
-} // end yygetOSInstance
+}//end yygetOSInstance
 		catch(const ErrorClass& eclass){
 		throw ErrorClass(  eclass.errormsg); 
 	}

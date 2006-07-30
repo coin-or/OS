@@ -19,7 +19,7 @@
 #include <CoinMessageHandler.hpp>
 #include "OSConfig.h" 
 
-
+   
  
 #ifdef COIN_HAS_LINDO
 #include "LindoSolver.h" 

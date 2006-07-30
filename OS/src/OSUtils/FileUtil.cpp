@@ -25,7 +25,7 @@ FileUtil::FileUtil(){
 } // end constructor
 
 
-FileUtil::~FileUtil(){
+FileUtil::~FileUtil(){  
 } // end destructor
 
 std::string FileUtil::getFileAsString(  char* fname){

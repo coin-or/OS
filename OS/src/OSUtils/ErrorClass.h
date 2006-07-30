@@ -12,12 +12,12 @@
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
-
+ 
 #ifndef ERRORCLASS_H
 #define ERRORCLASS_H
 
 #include <string>
-
+ 
 
 class ErrorClass{
 	public:
