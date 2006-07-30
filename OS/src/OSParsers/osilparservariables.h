@@ -52,6 +52,8 @@ OSnLNodeVariable *nlNodeVariablePoint;
 OSnLNodeNumber *nlNodeNumberPoint;
 
 
+
+
 // extra methods
 //OSnLNode *createExpressionTree(std::vector<OSnLNode*> nlNodeVec);
 

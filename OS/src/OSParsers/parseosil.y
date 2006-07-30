@@ -138,7 +138,7 @@ osilstart:	OSILSTART  GREATERTHAN
 
 
 
-instanceHeader: INSTANCEHEADERSTART name source description  INSTANCEHEADEREND  
+instanceHeader: INSTANCEHEADERSTART  name source description  INSTANCEHEADEREND  
 				| INSTANCEHEADER ;
    
 
@@ -159,10 +159,8 @@ description:
 
 instanceData: INSTANCEDATASTART {
 
-
-
+	cout << "GAIAL HONDA =  " << osiltext << endl;
 	osiltext = &ch[ 0];
-	//printf("starting INSTANCE DATA:\n %s\n", ch);
 	if( parseVariables() != true)  YYABORT;
 	if( parseObjectives() != true) YYABORT ; 
 	if( parseConstraints() != true) YYABORT; 
@@ -489,6 +487,8 @@ void osilerror(char* errormsg) {
 		outStr << "Here are the last 5 and next 15 characters currently being pointed to in the input string: ";
 		for(int i = -5; i < 15; i++){ 
 			if(osiltext[ i] != '\0' ) outStr << osiltext[ i];
+			if(osiltext[ i] == '\0' ) cout << "FOUND A NULL " << endl;
+			
 		}
 		outStr << endl;
 		outStr << "See line number: " << osillineno << endl;  
@@ -501,16 +501,20 @@ try {
 		void yyinitialize();
 		yyinitialize();
 		osil = osil+"00";
-		char *ch = NULL;
-		ch = &osil[ 0];
-		int size = strlen( ch);
-		ch[ size - 1] = 0;
-		ch[ size - 2] = 0;
+		char *chbuf = NULL;
+		chbuf = &osil[ 0];
+		int size = strlen( chbuf);
+		chbuf[ size - 1] = 0;
+		chbuf[ size - 2] = 0;
 		//current_buf is an external variable;
-		current_buf = osil_scan_buffer( ch, size );
+		current_buf = osil_scan_buffer( chbuf, size );
 		//yy_scan_string( osil.c_str());
 		osinstance = NULL;
 		osinstance = new OSInstance();
+		// get the first occurance of variables
+		int kj = osil.find("variables");
+		ch = &osil[ kj ];
+		cout << "Call osilparse() " << endl;
 		if( osilparse() != 0) throw ErrorClass( sparseError);
 		osil_delete_buffer( current_buf);
 		return osinstance;
@@ -753,8 +757,6 @@ bool parseVariables(){
 				foundVar = false;
 			}
 		}
-		printf("varcoutn = %d\n", varcount);
-		printf("numberOfVariable = %d\n", numberOfVariables);
 		if( (varcount == numberOfVariables - 1) && (foundVar == true) ) {osiltext = &ch[0];  osilerror("attribute numberOfVariables is less than actual number found");  return false;}
 		varcount++;
 	}
@@ -809,16 +811,18 @@ bool parseObjectives(){
 	if(i != 11) {
 		//reset ch
 		ch -= i;
-		return false;
+		// we return true because it is okay to not have objectives
+		return true;
 	}
-	// find numberOfObjectives attribute -- it is valid for this attribute to be missing. If so
-	// assume it is	1 in 
+	// find numberOfObjectives attribute -- it is valid for this attribute to be missing. 
+	// However if the  number attribute is missing assume it is	1 
 	// eat the white space
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
-	// we just ate the white space. If numberOfObjectives is missing we should have a  > char
+	// we just ate the white space. If numberOfObjectives is missing we assume it is 1
+	// we therefore must have > char
 	if(*ch == '>'){
 		numberOfObjectives = 1;
-		ch++;
+		//ch++;
 	}
 	else{
 		for(i = 0; c_numberOfObjectives[i]  == *ch; i++, ch++);
@@ -826,30 +830,29 @@ bool parseObjectives(){
 		GETATTRIBUTETEXT;
 		numberOfObjectives = atoimod( attText);
 		ch++;
+	}
+	if(numberOfObjectives > 0){
 		// get rid of white space after the numberOfObjectives attribute
 		for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
-		// we should have either an />  OR an >
-		if(*ch == '/'){
+		// we must have an >
+		/*if(*ch == '/'){
 			ch++;
 			if( *ch++ != '>') {osiltext = &ch[0]; osilerror("the objectives element does not have a proper closing"); return false; }
 			else{
 				if(numberOfObjectives > 0){osiltext = &ch[0];  osilerror("numberOfObjectives positive but there are no objectives"); return false;}
 				return false;
 			}
-		}
+		}*/
 		//  we better have an > 
 		if( *ch++ != '>') {osiltext = &ch[0]; osilerror("the objectives element does not have a proper closing"); return false;} 
-	}
-	if(numberOfObjectives > 0){
 		osinstance->instanceData->objectives->numberOfObjectives = numberOfObjectives;
 		osinstance->instanceData->objectives->obj = new Objective*[ numberOfObjectives];
 		for(i = 0; i < numberOfObjectives; i++){
 			osinstance->instanceData->objectives->obj[ i] = new Objective();
 		} 	
-	}
 	// get rid of white space after the <objectives> element
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
-	// now loop over the obj elements, there must be at least one con element
+	// now loop over the obj elements, there must be at least one obj element
 	for(i = 0; startObj[ i] == *ch; i++, ch++);
 	if( i == 4) foundObj = true;
 		else {osiltext = &ch[0]; osilerror("there must be at least one <obj> element"); return false;}
@@ -1009,6 +1012,34 @@ bool parseObjectives(){
 	// better have >
 	if(*ch != '>') {osiltext = &ch[0]; osilerror("improperly formed </objectives> tag"); return false;}	
 	ch++;
+	} // finish the (if numberOfObjectives > 0)
+	else{
+		// error if the number is negative
+		if(numberOfObjectives < 0) {osiltext = &ch[0]; osilerror("cannot have a negative number of objectives"); return false;}
+		// if we are here we have exactly 0 objectives 
+		// must close with /> or </objectives>
+		// get rid of white space
+		for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );
+		if( *ch == '/'){
+			// better have a >
+			ch++;
+			if( *ch  != '>') {osiltext = &ch[0]; osilerror("improperly closed objectives tag"); return false;}
+			ch++;
+		}
+		else{
+			// if we are here we must have an '>' and then  </objectives> tag
+			if( *ch  != '>') {osiltext = &ch[0]; osilerror("improperly closed objectives tag"); return false;}
+			ch++;
+			// burn white space
+			for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );
+			for(i = 0; endObjectives[i]  == *ch; i++, ch++);
+			if(i != 12) {osiltext = &ch[0]; osilerror( "cannot find </objectives> tag"); return false; }
+			for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );	
+			// better have >
+			if(*ch != '>') {osiltext = &ch[0]; osilerror("improperly formed </objectives> tag"); return false;}	
+			ch++;
+		}
+	}
 	finish = clock();
 	duration = (double) (finish - start) / CLOCKS_PER_SEC; 
 	printf("TIME TO PARSE OBJECTIVES = %f\n", duration);
@@ -1570,6 +1601,7 @@ bool parseColIdx(){
 
 
 bool parseValue(){
+cout << "PARSE VALUE " << ch << endl;
 	start = clock(); 
 	char* startValue = "<value";
 	char* endValue = "</value";
@@ -1579,7 +1611,7 @@ bool parseValue(){
 	char* number = NULL;
 	int i;
 	bool foundEl = false;
-	for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
+	for( ; ISWHITESPACE( *ch) || isnewline( *ch) || '\0'; ch++ ) ;
 	// if, present we should be pointing to <rowIdx element 
 	for(i = 0; startValue[i]  == *ch; i++, ch++);
 	if(i != 6) {
@@ -1588,12 +1620,12 @@ bool parseValue(){
 		return false;
 	}
 	// get rid of white space after <value
-	for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
+	for( ; ISWHITESPACE( *ch) || isnewline( *ch) || '\0'; ch++ ) ;
 	// we should have either an >
 	if(*ch =! '>') {osiltext = &ch[0]; osilerror("improperly formed <value> element"); return false;}
 	ch++;
 	// get rid of white space
-	for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
+	for( ; ISWHITESPACE( *ch) || isnewline( *ch) || '\0'; ch++ ) ;
 	// look for an <el> -- if none present must have b64 data
 	for(i = 0; startEl[i]  == *ch; i++, ch++);
 	if(i != 3) {
@@ -1619,10 +1651,10 @@ bool parseValue(){
 			new double[ osinstance->instanceData->linearConstraintCoefficients->numberOfValues];
 		while( foundEl){
 			// start eat white space until an '>' is found,
-			for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );
+			for(; ISWHITESPACE( *ch) || isnewline( *ch) || '\0'; ch++ );
 			if( *ch++ != '>') {osiltext = &ch[0]; osilerror("improperly formed <el> tag"); return false;}
 			// eat white space again,
-			for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
+			for(; ISWHITESPACE( *ch) || isnewline( *ch) || '\0'; ch++ ) ;
 			number = &*ch;
 			// find the end of the number, it better be an </el>
 			// find the < which begins the </el
@@ -1640,10 +1672,10 @@ bool parseValue(){
 			for(i = 1; endEl[ i] == *ch; i++, ch++);
 			if( i != 4 ) {osiltext = &ch[0]; osilerror("cannot fine an </el>"); return false;}
 			// start eating white space until an '>' is found for </el>,
-			for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );
+			for(; ISWHITESPACE( *ch) || isnewline( *ch) || '\0' ; ch++ );
 			if( *ch++ != '>') {osiltext = &ch[0]; osilerror("improperly formed </el> tag"); return false;}
 			// eat white space again,
-			for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );
+			for(; ISWHITESPACE( *ch) || isnewline( *ch) || '\0' ; ch++ );
 			// either have another <el> element or foundEl = false;
 			for(i = 0; startEl[i]  == *ch; i++, ch++);
 			if(i == 3) foundEl = true;
@@ -1653,8 +1685,8 @@ bool parseValue(){
 	}
 	// get the </value> tag
 	for(i = 0; endValue[i]  == *ch; i++, ch++);
-	if(i != 7) {osilerror( "cannot find </value> tag"); return false;}
-	for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );	
+	if(i != 7) {osiltext = &ch[0]; osilerror( "cannot find </value> tag"); return false;}
+	for(; ISWHITESPACE( *ch) || isnewline( *ch) || '\0'; ch++ );	
 	// better have >
 	if(*ch != '>') {osiltext = &ch[0]; osilerror("improperly formed </value> tag");	 return false;}
 	ch++;	

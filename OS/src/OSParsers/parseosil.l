@@ -84,10 +84,10 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]+))([eE][-+]?[0-9]+)?|INF))
 {xmlwhitespace}*\<\/description{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(DESCRIPTIONEND);}
 {xmlwhitespace}*\<instanceData{xmlwhitespace}*\>{xmlwhitespace}* {
 	//
-
-	int k = strlen(current_buf->yy_buf_pos);
+	//int k = strlen(current_buf->yy_buf_pos);
 	//printf("k is equal to   %d\n", k);
-	ch = &current_buf->yy_ch_buf[k+ 1];
+	//ch = &current_buf->yy_ch_buf[k+ 1];
+	//printf("testing \n %s\n", ch);
 	//ch = current_buf->yy_buf_pos;
 	//osiltext = &ch[ 0];
 	//printf("starting INSTANCE DATA:\n %s\n", ch);

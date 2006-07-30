@@ -11,12 +11,7 @@
 			<var name="x0"/>
 			<var name="x1"/>
 		</variables>
-		<objectives numberOfObjectives="1">
-			<obj maxOrMin="max" name="Par, Inc. Objective Function" numberOfObjCoef="2">
-				<coef idx="0">10</coef>
-				<coef idx="1">9</coef>
-			</obj>
-		</objectives>
+		<objectives numberOfObjectives="0"></objectives>
 		<constraints numberOfConstraints="4">
 			<con name="cutanddye" ub="630"/>
 			<con name="sewing" lb="10" ub="600"/>
@@ -36,19 +31,19 @@
 				<el>3</el>
 				<el>0</el>
 				<el>1</el>
-				<el>2    </el>
+				<el>2</el>
 				<el>3</el>
 			</rowIdx>
 			<value>
-				<el>0.7</el>
-				<el>0.5</el>
-				<el>1</el>
-				<el>0.1</el>
-				<el>1</el>
+			<el>.7</el>
+				<el>.5</el>
+				<el>1</el>				
+				<el>.1</el>
+				<el>1.0</el>
 				<el>0.8333</el>
 				<el>0.6667</el>
 				<el>0.25</el>
 			</value>
-		</linearConstraintCoefficients>
+	</linearConstraintCoefficients>
 	</instanceData>
 </osil>
