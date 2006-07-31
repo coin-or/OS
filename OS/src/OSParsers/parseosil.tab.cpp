@@ -248,7 +248,10 @@ clock_t start, finish;
 double duration;
 double atofmod(char *ch);
 int atoimod(char *ch);
+// we distinguish a newline from other whitespace
+// since we need to know when we hit a new line
 bool isnewline(char c);
+bool isnull(char c);
 char *ch = NULL;
 bool parseVariables();
 bool parseObjectives();
@@ -674,19 +677,19 @@ static const yytype_int16 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   134,   134,   136,   137,   141,   142,   145,   146,   147,
-     148,   150,   151,   152,   153,   155,   156,   157,   158,   160,
-     160,   174,   175,   179,   184,   185,   187,   187,   198,   199,
-     202,   203,   207,   210,   213,   216,   219,   225,   227,   228,
-     230,   232,   234,   236,   242,   243,   247,   252,   254,   253,
-     263,   277,   278,   279,   280,   281,   282,   283,   284,   285,
-     286,   287,   288,   289,   290,   291,   294,   294,   299,   299,
-     304,   304,   309,   309,   314,   314,   319,   319,   324,   324,
-     334,   335,   338,   338,   348,   349,   352,   352,   362,   363,
-     366,   366,   372,   372,   377,   377,   383,   383,   388,   388,
-     393,   393,   398,   399,   401,   402,   402,   412,   413,   415,
-     417,   419,   423,   427,   433,   436,   440,   441,   443,   445,
-     448,   451,   455,   460,   461,   462,   463,   465,   466,   468
+       0,   137,   137,   139,   140,   144,   145,   148,   149,   150,
+     151,   153,   154,   155,   156,   158,   159,   160,   161,   163,
+     163,   176,   177,   181,   186,   187,   189,   189,   200,   201,
+     204,   205,   209,   212,   215,   218,   221,   227,   229,   230,
+     232,   234,   236,   238,   244,   245,   249,   254,   256,   255,
+     265,   279,   280,   281,   282,   283,   284,   285,   286,   287,
+     288,   289,   290,   291,   292,   293,   296,   296,   301,   301,
+     306,   306,   311,   311,   316,   316,   321,   321,   326,   326,
+     336,   337,   340,   340,   350,   351,   354,   354,   364,   365,
+     368,   368,   374,   374,   379,   379,   385,   385,   390,   390,
+     395,   395,   400,   401,   403,   404,   404,   414,   415,   417,
+     419,   421,   425,   429,   435,   438,   442,   443,   445,   447,
+     450,   453,   457,   462,   463,   464,   465,   467,   468,   470
 };
 #endif
 
@@ -1784,8 +1787,7 @@ yyreduce:
 
     {
 
-	cout << "GAIAL HONDA =  " << osiltext << endl;
-	osiltext = &ch[ 0];
+	//osiltext = &ch[ 0];
 	if( parseVariables() != true)  YYABORT;
 	if( parseObjectives() != true) YYABORT ; 
 	if( parseConstraints() != true) YYABORT; 
@@ -2441,15 +2443,15 @@ void osilerror(char* errormsg) {
 		sparseError = "PARSER ERROR:  Input is either not valid or well formed: "  + sparseError;
 		outStr << sparseError << endl;
 		outStr << "Here are the last 5 and next 15 characters currently being pointed to in the input string: ";
-		for(int i = -5; i < 15; i++){ 
+		for(int i = -5; i < 20; i++){ 
 			if(osiltext[ i] != '\0' ) outStr << osiltext[ i];
-			if(osiltext[ i] == '\0' ) cout << "FOUND A NULL " << endl;
+			if(osiltext[ i] == '\0' ) outStr << "GNUNULL " << endl;
 			
 		}
 		outStr << endl;
 		outStr << "See line number: " << osillineno << endl;  
 		sparseError = outStr.str();
-		cout << sparseError << endl;
+		//cout << sparseError << endl;
 	}//end osilerror() 
 
 OSInstance* yygetOSInstance( std::string osil) throw (ErrorClass)
@@ -2457,22 +2459,20 @@ try {
 		void yyinitialize();
 		yyinitialize();
 		osil = osil+"00";
-		char *chbuf = NULL;
-		chbuf = &osil[ 0];
-		int size = strlen( chbuf);
-		chbuf[ size - 1] = 0;
-		chbuf[ size - 2] = 0;
+		ch = &osil[ 0];
+		int size = strlen( ch);
+		ch[ size - 1] = 0;
+		ch[ size - 2] = 0;
 		//current_buf is an external variable;
-		current_buf = osil_scan_buffer( chbuf, size );
-		//yy_scan_string( osil.c_str());
+		osil_scan_buffer( ch, size );
+		//osil_scan_string( osil.c_str());
 		osinstance = NULL;
 		osinstance = new OSInstance();
 		// get the first occurance of variables
 		int kj = osil.find("variables");
 		ch = &osil[ kj ];
-		cout << "Call osilparse() " << endl;
 		if( osilparse() != 0) throw ErrorClass( sparseError);
-		osil_delete_buffer( current_buf);
+		//osil_delete_buffer( current_buf);
 		return osinstance;
 }//end yygetOSInstance
 		catch(const ErrorClass& eclass){
@@ -2509,6 +2509,11 @@ void yyinitialize(){
 bool isnewline(char c){
 	if(c != '\n') return false;
 	osillineno++;
+	return true;
+}//end isnewline()
+
+bool isnull(char c){
+	if(c != '\0') return false;
 	return true;
 }//end isnewline()
 
@@ -3033,7 +3038,7 @@ bool parseConstraints(){
 	if(i != 12) {
 		//reset ch
 		ch -= i;
-		return false;
+		return true;
 	}
 	// find numberOfConstraints attribute
 	// eat the white space
@@ -3044,22 +3049,16 @@ bool parseConstraints(){
 	GETATTRIBUTETEXT;
 	ch++;
 	numberOfConstraints = atoimod( attText);
-	osinstance->instanceData->constraints->numberOfConstraints = numberOfConstraints;
-	osinstance->instanceData->constraints->con = new Constraint*[ numberOfConstraints];
-	for(i = 0; i < numberOfConstraints; i++){
-		osinstance->instanceData->constraints->con[ i] = new Constraint();
-	} 
+	// key if
+	//
+	if(numberOfConstraints > 0){
+		osinstance->instanceData->constraints->numberOfConstraints = numberOfConstraints;
+		osinstance->instanceData->constraints->con = new Constraint*[ numberOfConstraints];
+		for(i = 0; i < numberOfConstraints; i++){
+			osinstance->instanceData->constraints->con[ i] = new Constraint();
+		} 
 	// get rid of white space after the numberOfConstraints element
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
-	// we should have either an />  OR an >
-	if(*ch == '/'){
-		ch++;
-		if( *ch++ != '>') {osiltext = &ch[0]; osilerror("the constraints element does not have a proper closing"); return false;}
-		else{
-			if(numberOfConstraints > 0) {osiltext = &ch[0];  osilerror("numberOfConstraints positive, but there are no objectives"); return false;}
-			return false;
-		}		
-	}
 	//  we better have an > 
 	if( *ch++ != '>') {osiltext = &ch[0];  osilerror("the constraints element does not have a proper closing"); return false;} 
 	// get rid of white space after the <constraints> element
@@ -3179,9 +3178,9 @@ bool parseConstraints(){
 			if(i == 4) foundCon = true;
 				else foundCon = false;
 		}
+		if( (concount == numberOfConstraints - 1) && (foundCon == true) ) {osiltext = &ch[0]; osilerror("attribute numberOfConstraints is less than actual number found"); return false;}
 		concount++;
 	}
-	if(concount > numberOfConstraints) {osiltext = &ch[0]; osilerror("attribute numberOfConstraints is less than actual number found"); return false;}
 	if(concount < numberOfConstraints) {osiltext = &ch[0]; osilerror("attribute numberOfConstraints is greater than actual number found"); return false;}
 	ch -= i;
 	// get the </constraints> tag
@@ -3191,6 +3190,34 @@ bool parseConstraints(){
 	// better have >
 	if(*ch != '>') {osiltext = &ch[0]; osilerror("improperly formed </constraints> tag");	return false;}
 	ch++;
+	}// end if(numberOfConstraints > 0)
+	else{
+		// error if the number is negative
+		if(numberOfConstraints < 0) {osiltext = &ch[0]; osilerror("cannot have a negative number of constraints"); return false;}
+		// if we are here we have numberOfConstraints = 0
+		// must close with /> or </constraints>
+		// get rid of white space
+		for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );
+		if( *ch == '/'){
+			// better have a >
+			ch++;
+			if( *ch  != '>') {osiltext = &ch[0]; osilerror("improperly closed constraints tag"); return false;}
+			ch++;
+		}
+		else{
+			// if we are here we must have an '>' and then  </constraints> tag
+			if( *ch  != '>') {osiltext = &ch[0]; osilerror("improperly closed constraints tag"); return false;}
+			ch++;
+			// burn white space
+			for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );
+			for(i = 0; endConstraints[i]  == *ch; i++, ch++);
+			if(i != 13) {osiltext = &ch[0]; osilerror( "cannot find </constraints> tag"); return false; }
+			for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );	
+			// better have >
+			if(*ch != '>') {osiltext = &ch[0]; osilerror("improperly formed </constraints> tag"); return false;}	
+			ch++;
+		}
+	}
 	finish = clock();
 	duration = (double) (finish - start) / CLOCKS_PER_SEC; 
 	printf("TIME TO PARSE CONSTRAINTS = %f\n", duration);
@@ -3226,8 +3253,8 @@ bool parseLinearConstraintCoefficients(){
 	GETATTRIBUTETEXT;
 	ch++;
 	numberOfValues = atoimod( attText);
+	if(numberOfValues <= 0) {osiltext = &ch[0]; osilerror("the number of nonlinear nozeros must be positive"); return false;}
 	osinstance->instanceData->linearConstraintCoefficients->numberOfValues = numberOfValues;
-	
 	// get rid of white space after the numberOfConstraints element
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
 	// we should have either an />  OR an >
@@ -3291,7 +3318,7 @@ bool parseStart(){
 		// call base64 parse here
 		int dataSize = 0;
 		char* b64string = parseBase64(&dataSize );
-		if( b64string == NULL) return false;
+		if( b64string == NULL) {osiltext = &ch[0]; osilerror("<start> must have children or base64 data"); return false;}
 		std::string base64decodeddata = Base64::decodeb64( b64string );
 		int base64decodeddatalength = base64decodeddata.length();
 		int *intvec = NULL;
@@ -3388,7 +3415,7 @@ bool parseRowIdx(){
 		// call base64 parse here
 		int dataSize = 0;
 		char* b64string = parseBase64(&dataSize );
-		if( b64string == NULL) return false;
+		if( b64string == NULL)  {osiltext = &ch[0]; osilerror("<rowIdx> must have children or base64 data"); return false;}
 		std::string base64decodeddata = Base64::decodeb64( b64string );
 		int base64decodeddatalength = base64decodeddata.length();
 		int *intvec = NULL;
@@ -3489,7 +3516,7 @@ bool parseColIdx(){
 		// call base64 parse here
 		int dataSize = 0;
 		char* b64string = parseBase64(&dataSize );
-		if( b64string == NULL) return false;
+		if( b64string == NULL)  {osiltext = &ch[0]; osilerror("<colIdx> must have children or base64 data"); return false;}
 		std::string base64decodeddata = Base64::decodeb64( b64string );
 		int base64decodeddatalength = base64decodeddata.length();
 		int *intvec = NULL;
@@ -3546,7 +3573,8 @@ bool parseColIdx(){
 	for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );	
 	// better have >
 	if(*ch != '>') {osiltext = &ch[0]; osilerror("improperly formed </colIdx> tag"); return false;}	
-	ch++;	
+	//ch++;	
+	ch = '\0';
 	if(kount > osinstance->instanceData->linearConstraintCoefficients->numberOfValues) {osiltext = &ch[0]; osilerror("numberOfLinearCoefficients attribute less than number of column indices found"); return false;}
 	if(kount < osinstance->instanceData->linearConstraintCoefficients->numberOfValues) {osiltext = &ch[0]; osilerror("numberOfLinearCoefficients attribute greater than number of column indices found"); return false;}
 	finish = clock();
@@ -3557,7 +3585,6 @@ bool parseColIdx(){
 
 
 bool parseValue(){
-cout << "PARSE VALUE " << ch << endl;
 	start = clock(); 
 	char* startValue = "<value";
 	char* endValue = "</value";
@@ -3567,21 +3594,23 @@ cout << "PARSE VALUE " << ch << endl;
 	char* number = NULL;
 	int i;
 	bool foundEl = false;
-	for( ; ISWHITESPACE( *ch) || isnewline( *ch) || '\0'; ch++ ) ;
+	for( ; ISWHITESPACE( *ch) || isnewline( *ch) || isnull( *ch); ch++ ) ;
 	// if, present we should be pointing to <rowIdx element 
-	for(i = 0; startValue[i]  == *ch; i++, ch++);
+	for(i = 0; startValue[i]  == *ch; i++, ch++){
+		//cout << ch* ;
+	}
 	if(i != 6) {
 		//reset ch
 		ch -= i;
 		return false;
 	}
 	// get rid of white space after <value
-	for( ; ISWHITESPACE( *ch) || isnewline( *ch) || '\0'; ch++ ) ;
+	for( ; ISWHITESPACE( *ch) || isnewline( *ch) || isnull( *ch); ch++ ) ;
 	// we should have either an >
 	if(*ch =! '>') {osiltext = &ch[0]; osilerror("improperly formed <value> element"); return false;}
 	ch++;
 	// get rid of white space
-	for( ; ISWHITESPACE( *ch) || isnewline( *ch) || '\0'; ch++ ) ;
+	for( ; ISWHITESPACE( *ch) || isnewline( *ch) || isnull( *ch); ch++ ) ;
 	// look for an <el> -- if none present must have b64 data
 	for(i = 0; startEl[i]  == *ch; i++, ch++);
 	if(i != 3) {
@@ -3590,7 +3619,7 @@ cout << "PARSE VALUE " << ch << endl;
 		// call base64 parse here
 		int dataSize = 0;
 		char* b64string = parseBase64(&dataSize );
-		if( b64string == NULL) return false;
+		if( b64string == NULL)  {osiltext = &ch[0]; osilerror("<start> must have children or base64 data"); return false;};
 		std::string base64decodeddata = Base64::decodeb64( b64string );
 		int base64decodeddatalength = base64decodeddata.length();
 		double *doublevec = NULL;
@@ -3607,10 +3636,10 @@ cout << "PARSE VALUE " << ch << endl;
 			new double[ osinstance->instanceData->linearConstraintCoefficients->numberOfValues];
 		while( foundEl){
 			// start eat white space until an '>' is found,
-			for(; ISWHITESPACE( *ch) || isnewline( *ch) || '\0'; ch++ );
+			for(; ISWHITESPACE( *ch) || isnewline( *ch) || isnull( *ch); ch++ );
 			if( *ch++ != '>') {osiltext = &ch[0]; osilerror("improperly formed <el> tag"); return false;}
 			// eat white space again,
-			for(; ISWHITESPACE( *ch) || isnewline( *ch) || '\0'; ch++ ) ;
+			for(; ISWHITESPACE( *ch) || isnewline( *ch) || isnull( *ch); ch++ ) ;
 			number = &*ch;
 			// find the end of the number, it better be an </el>
 			// find the < which begins the </el
@@ -3628,10 +3657,10 @@ cout << "PARSE VALUE " << ch << endl;
 			for(i = 1; endEl[ i] == *ch; i++, ch++);
 			if( i != 4 ) {osiltext = &ch[0]; osilerror("cannot fine an </el>"); return false;}
 			// start eating white space until an '>' is found for </el>,
-			for(; ISWHITESPACE( *ch) || isnewline( *ch) || '\0' ; ch++ );
+			for(; ISWHITESPACE( *ch) || isnewline( *ch) || isnull( *ch) ; ch++ );
 			if( *ch++ != '>') {osiltext = &ch[0]; osilerror("improperly formed </el> tag"); return false;}
 			// eat white space again,
-			for(; ISWHITESPACE( *ch) || isnewline( *ch) || '\0' ; ch++ );
+			for(; ISWHITESPACE( *ch) || isnewline( *ch) || isnull( *ch) ; ch++ );
 			// either have another <el> element or foundEl = false;
 			for(i = 0; startEl[i]  == *ch; i++, ch++);
 			if(i == 3) foundEl = true;
@@ -3642,14 +3671,12 @@ cout << "PARSE VALUE " << ch << endl;
 	// get the </value> tag
 	for(i = 0; endValue[i]  == *ch; i++, ch++);
 	if(i != 7) {osiltext = &ch[0]; osilerror( "cannot find </value> tag"); return false;}
-	for(; ISWHITESPACE( *ch) || isnewline( *ch) || '\0'; ch++ );	
+	for(; ISWHITESPACE( *ch) || isnewline( *ch) || isnull( *ch); ch++ );	
 	// better have >
 	if(*ch != '>') {osiltext = &ch[0]; osilerror("improperly formed </value> tag");	 return false;}
 	ch++;	
-	
 	if(kount < osinstance->instanceData->linearConstraintCoefficients->numberOfValues){osiltext = &ch[0]; osilerror("numberOfLinearCoefficients greater than number of values found"); return false;}
 	if(kount > osinstance->instanceData->linearConstraintCoefficients->numberOfValues){osiltext = &ch[0]; osilerror("numberOfLinearCoefficients less than the number of values found"); return false;}
-	
 	finish = clock();
 	duration = (double) (finish - start) / CLOCKS_PER_SEC; 
 	printf("TIME TO PARSE VALUES = %f\n", duration);
@@ -3666,10 +3693,10 @@ bool parseObjCoef( int objcount){
 	int i, k;
 	int numberOfObjCoef = 0; 
 	bool foundCoef = false;
-	
+	cout << "NUMBER OF OBJECTIVE FUNCTIONS = " << osinstance->instanceData->objectives->numberOfObjectives << endl;
+	if( osinstance->instanceData->objectives->numberOfObjectives <= 0)  {osiltext = &ch[0]; osilerror("we can't have objective function coefficients without an objective function"); return false;}
 	numberOfObjCoef = osinstance->instanceData->objectives->obj[objcount]->numberOfObjCoef;
-	if(numberOfObjCoef == 0) return false;
-	
+	if(numberOfObjCoef > 0)	{
 	for(k = 0; k < numberOfObjCoef; k++){
 		for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
 		// if, present we should be pointing to <coef element 
@@ -3705,6 +3732,7 @@ bool parseObjCoef( int objcount){
 		// if we don't have a > there is an error
 		if(*ch++ != '>') {osiltext = &ch[0]; osilerror("incorrect </coef> element")	; return false;}
 	}
+	}// end if(numberOfObjCoef > 0)
 	return true;
 }//end parseObjCoef
 

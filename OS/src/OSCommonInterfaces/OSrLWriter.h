@@ -64,6 +64,6 @@ public:
    	 * @return a string with the OSResult data that validates against the OSrL schema.
 	 * </p> 
    	 */	
-	char* writeOSrLWrap( OSResult *theosresult);
+	//char* writeOSrLWrap( OSResult *theosresult);
 };
 #endif

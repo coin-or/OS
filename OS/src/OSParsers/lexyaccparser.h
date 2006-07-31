@@ -41,7 +41,7 @@ void osol_delete_buffer( YY_BUFFER_STATE buffer);
 
 YY_BUFFER_STATE osss_scan_string(const char* osss ); 
 
-extern YY_BUFFER_STATE current_buf;
+
 
 
 int osrllex(void); 

@@ -4,14 +4,20 @@
 	<instanceHeader>
 		<name>Par Inc. </name>
 		<source>Anderson, Sweeny, and Williams</source>
-		<description>A production scheduling problem </description>
+		<description> A production scheduling problem </description>
 	</instanceHeader>
 	<instanceData>
 		<variables numberOfVariables="2">
 			<var name="x0"/>
 			<var name="x1"/>
 		</variables>
-		<objectives numberOfObjectives="0"></objectives>
+		<objectives numberOfObjectives="1">
+			<obj name = "Par, Inc. Objective Function" maxOrMin="max" numberOfObjCoef="2">
+							<coef idx="0">10</coef>
+				<coef idx="1">9</coef>
+
+			</obj>
+		</objectives>
 		<constraints numberOfConstraints="4">
 			<con name="cutanddye" ub="630"/>
 			<con name="sewing" lb="10" ub="600"/>
@@ -22,7 +28,7 @@
 			<start>
 				<el>0</el>
 				<el>4</el>
-				<el>8</el>
+				<el>8</el>dfadsf
 			</start>
 			<rowIdx>
 				<el>0</el>

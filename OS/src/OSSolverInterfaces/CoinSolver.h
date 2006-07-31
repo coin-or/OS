@@ -23,6 +23,7 @@
 #include <OsiSolverInterface.hpp>
 #include <OsiClpSolverInterface.hpp> 
 #include <OsiCbcSolverInterface.hpp> 
+#include "ErrorClass.h"
 
 
 #ifdef COIN_HAS_CPX
@@ -61,7 +62,7 @@ public:
 	 *  \brief The implementation of the virtual functions. 
 	 *  \return void.
 	 */	
-	virtual void  solve();
+	virtual void  solve() throw(ErrorClass);
 	
 	/*! \fn string CoinSolver::optimize() 
 	 *  \brief This function calls solver->loadProblem. 

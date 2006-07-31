@@ -71,7 +71,7 @@ public:
 	/** solve is a virtual function -- the actual solvers will
 	 * implement their own solve method 
 	 */ 
-	virtual void solve() = 0;	
+	virtual void solve() = 0 ;	
 	
 	/**
 	 * default constructor.

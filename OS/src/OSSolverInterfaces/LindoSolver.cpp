@@ -141,7 +141,7 @@ void LindoSolver::solve()  {
 	catch(const ErrorClass& eclass){
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
-		osrl = osrlwriter->writeOSrLWrap( osresult);
+		osrl = osrlwriter->writeOSrL( osresult);
 		throw ;
 	}
 }// end solve
@@ -187,7 +187,7 @@ bool LindoSolver::processConstraints(){
 	catch(const ErrorClass& eclass){
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
-		osrl = osrlwriter->writeOSrLWrap( osresult);
+		osrl = osrlwriter->writeOSrL( osresult);
 		throw ;
 	}
 } // end processConstraints
@@ -280,7 +280,7 @@ bool LindoSolver::processVariables(){
 	catch(const ErrorClass& eclass){
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
-		osrl = osrlwriter->writeOSrLWrap( osresult);
+		osrl = osrlwriter->writeOSrL( osresult);
 		throw ;
 	}
 }  // end processVariables 
@@ -373,7 +373,7 @@ bool LindoSolver::generateLindoModel(){
 	catch( const ErrorClass& eclass){
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
-		osrl = osrlwriter->writeOSrLWrap( osresult);
+		osrl = osrlwriter->writeOSrL( osresult);
 		throw ;
 	}
 } // end generateLindoModel
@@ -531,7 +531,7 @@ bool LindoSolver::optimize(){
 	catch(const ErrorClass& eclass){
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
-		osrl = osrlwriter->writeOSrLWrap( osresult);
+		osrl = osrlwriter->writeOSrL( osresult);
 		throw ;
 	}
 } //end solve
@@ -553,7 +553,7 @@ bool LindoSolver::processQuadraticTerms(){
 	catch(const ErrorClass& eclass){
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
-		osrl = osrlwriter->writeOSrLWrap( osresult);
+		osrl = osrlwriter->writeOSrL( osresult);
 		throw ;
 	}
 }  // end processQuadraticTerms
@@ -843,7 +843,7 @@ bool LindoSolver::processNonlinearExpressions(){
 	catch(const ErrorClass& eclass){
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
-		osrl = osrlwriter->writeOSrLWrap( osresult);
+		osrl = osrlwriter->writeOSrL( osresult);
 		throw ;
 	}
 }//end processNonlinearExpressions

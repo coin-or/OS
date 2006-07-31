@@ -23,7 +23,7 @@
 #include "OSiLReader.h"
 #include "OSInstance.h"
 #include "FileUtil.h"
-#include "ErrorClass.h"   
+  
 #include <iostream>
 #include <time.h>  
 using std::cout; 
@@ -53,11 +53,11 @@ CoinSolver::~CoinSolver() {
 }
 
 
-void CoinSolver::solve()  {
-
+void CoinSolver::solve() throw (ErrorClass) 
+	try{
 	OSiLReader *osilreader = NULL;
 	osresult = new OSResult();
-	try{
+
 		if(osil.length() == 0 && osinstance == NULL) throw ErrorClass("there is no instance");
 		clock_t start, finish;
 		double duration;
@@ -121,14 +121,14 @@ void CoinSolver::solve()  {
 		if(optimize() != true) throw ErrorClass("there was an error trying to optimize the problem");
 		delete osilreader;
 		osilreader = NULL;
-	}
+	}// end solve
 	catch(const ErrorClass& eclass){
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
-		osrl = osrlwriter->writeOSrLWrap( osresult);
+		osrl = osrlwriter->writeOSrL( osresult);
 		throw ;
 	}				
-} // end solve
+ 
 
 
 
@@ -151,7 +151,7 @@ bool CoinSolver::setCoinPackedMatrix(){
 	catch(const ErrorClass& eclass){
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
-		osrl = osrlwriter->writeOSrLWrap( osresult);
+		osrl = osrlwriter->writeOSrL( osresult);
 		throw ;
 	}
 } // end setCoinPackedMatrix
@@ -281,7 +281,7 @@ bool CoinSolver::optimize()
 	catch(const ErrorClass& eclass){
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
-		osrl = osrlwriter->writeOSrLWrap( osresult);
+		osrl = osrlwriter->writeOSrL( osresult);
 		throw ;
 	}
 } // end optimize
@@ -312,7 +312,7 @@ std::string CoinSolver::getCoinSolverType(std::string osol){
 	catch(const ErrorClass& eclass){
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
-		osrl = osrlwriter->writeOSrLWrap( osresult);
+		osrl = osrlwriter->writeOSrL( osresult);
 		throw ;
 	}
 } // end getCoinSolverType

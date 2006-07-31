@@ -20,8 +20,6 @@
 #include "lexyaccparser.h"
 #include "externalvars.h"
 #include <time.h>
-#include <ctype.h>
-#include <Base64.h>
 #include "ErrorClass.h"
 #include "parseosil.tab.hpp"
 #include <math.h>
@@ -30,10 +28,6 @@
 #else     
 	#define YY_PRINT ;
 #endif
-
-
-YY_BUFFER_STATE current_buf;
-
 
 					 
 %}
@@ -82,27 +76,7 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]+))([eE][-+]?[0-9]+)?|INF))
 {xmlwhitespace}*\<description{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; BEGIN elementtext; return(DESCRIPTIONSTART);} 
 {xmlwhitespace}*\<description{xmlwhitespace}*\>\< {YY_PRINT; unput('<'); return(DESCRIPTIONSTART);} 
 {xmlwhitespace}*\<\/description{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(DESCRIPTIONEND);}
-{xmlwhitespace}*\<instanceData{xmlwhitespace}*\>{xmlwhitespace}* {
-	//
-	//int k = strlen(current_buf->yy_buf_pos);
-	//printf("k is equal to   %d\n", k);
-	//ch = &current_buf->yy_ch_buf[k+ 1];
-	//printf("testing \n %s\n", ch);
-	//ch = current_buf->yy_buf_pos;
-	//osiltext = &ch[ 0];
-	//printf("starting INSTANCE DATA:\n %s\n", ch);
-	//if( parseVariables() != true) return( INSTANCEDATASTART);
-	//if( parseObjectives() != true) return( INSTANCEDATASTART) ; 
-	//if( parseConstraints() != true) return( INSTANCEDATASTART); 
-	//if( parseLinearConstraintCoefficients() != true) return( INSTANCEDATASTART);
-	//current_buf->yy_ch_buf = ch;
-	//printf("testing \n %s\n", current_buf->yy_ch_buf);
-	//osil_delete_buffer( current_buf);
-	//osil_scan_buffer(ch , strlen(  ch) + 2);		
-	return(INSTANCEDATASTART);
-	//
-}
-
+{xmlwhitespace}*\<instanceData{xmlwhitespace}*\>{xmlwhitespace}* {	return(INSTANCEDATASTART);}
 ({xmlwhitespace}+numberOfNonlinearExpressions{equality}{quote}{xmlwhitespace}*) {YY_PRINT; return(NUMBEROFNONLINEAREXPRESSIONS);}
 {xmlwhitespace}*\<\/instanceData{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(INSTANCEDATAEND);}
 {xmlwhitespace}*\<quadraticCoefficients {YY_PRINT; return(QUADRATICCOEFFICIENTSSTART);}
@@ -179,11 +153,11 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]+))([eE][-+]?[0-9]+)?|INF))
  <xmldeclaration>\n ;
  <xmldeclaration>"?>" BEGIN 0;
  
-<elementtext>([^<])* {YY_PRINT;  BEGIN 0; osillval.sval = strdup(osiltext);    return(ELEMENTTEXT);}
+<elementtext>([^<])* {YY_PRINT;   BEGIN 0; osillval.sval = strdup(osiltext);    return(ELEMENTTEXT);}
 <attributetext>([^\"\'])* {YY_PRINT;  BEGIN 0; osillval.sval = strdup(osiltext); return(ATTRIBUTETEXT);}
 <osilattributetext>([^>])* {YY_PRINT;  BEGIN 0; osillval.sval = strdup(osiltext); return(OSILATTRIBUTETEXT);}
 
-. {YY_PRINT;  osilerror( "ecountered a spurious character in the lexer");   }
+. {YY_PRINT;  osilerror( "ecountered a spurious character in the lexer"); return(777777777);  }
 
 %%
 
