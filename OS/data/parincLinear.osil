@@ -28,7 +28,7 @@
 			<start>
 				<el>0</el>
 				<el>4</el>
-				<el>8</el>dfadsf
+				<el>8</el>
 			</start>
 			<rowIdx>
 				<el>0</el>
@@ -46,8 +46,7 @@
 				<el>1</el>				
 				<el>.1</el>
 				<el>1.0</el>
-				<el>0.8333</el>
-				<el>0.6667</el>
+				<el>0.8333</el><el>0.6667</el>
 				<el>0.25</el>
 			</value>
 	</linearConstraintCoefficients>

@@ -504,6 +504,7 @@ try {
 		yyinitialize();
 		osil = osil+"00";
 		ch = &osil[ 0];
+		cout << ch;
 		int size = strlen( ch);
 		ch[ size - 1] = 0;
 		ch[ size - 2] = 0;

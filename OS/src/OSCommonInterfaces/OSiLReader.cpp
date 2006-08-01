@@ -31,6 +31,16 @@ OSInstance* OSiLReader::readOSiL(std::string osil) throw(ErrorClass){
 	try{
 		OSInstance* p;
 		p = yygetOSInstance( osil);
+		std::string *pstring;
+		pstring = new std::string("Jun Ma");
+		const char *ch = pstring->c_str();
+		char *ch2;
+      	ch2 = new char[pstring->size() + 1];
+      	strcpy(ch2, pstring->c_str());
+		ch++;
+		ch2[2] = 'K';
+		std::cout << ch << std::endl;
+		std::cout << ch2 << std::endl;
 		return p;
 	}
 		catch(const ErrorClass& eclass){
