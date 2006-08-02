@@ -32,7 +32,7 @@ using std::ostringstream;
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
 YY_BUFFER_STATE osrl_scan_string(const char* osil ); 
 
-//YY_BUFFER_STATE yy_scan_string(const char* osil ); 
+YY_BUFFER_STATE osil_scan_string(const char* osil ); 
  YY_BUFFER_STATE osil_scan_buffer(char *base, unsigned int size);
 void osil_delete_buffer( YY_BUFFER_STATE buffer);
 
@@ -49,7 +49,7 @@ int osillex(void);
 int osollex(void);
 int ossslex(void);
 
-OSInstance *yygetOSInstance(std::string osil) throw(ErrorClass);
+OSInstance *yygetOSInstance(const char *osil) throw(ErrorClass);
 OSResult *yygetOSResult(std::string osrl);
 
 

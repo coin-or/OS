@@ -2454,11 +2454,24 @@ void osilerror(char* errormsg) {
 		//cout << sparseError << endl;
 	}//end osilerror() 
 
-OSInstance* yygetOSInstance( std::string osil) throw (ErrorClass)
+OSInstance* yygetOSInstance( const char *osil) throw (ErrorClass)
 try {
 		void yyinitialize();
 		yyinitialize();
-		osil = osil+"00";
+		ch = NULL;
+		osinstance = NULL;
+		osinstance = new OSInstance();
+		const char *varel = "<variables";
+		ch = strstr(osil, varel);
+		if(ch == NULL) throw ErrorClass("variables element required");
+		if( parseVariables() != true)  throw ErrorClass("error in parse variables");
+		if( parseObjectives() != true)  throw ErrorClass("error in parse objectives");
+		if( parseConstraints() != true) throw ErrorClass("error in parse Constraints");
+		if( parseLinearConstraintCoefficients() != true) throw ErrorClass("error in parse ConstraintCoefficients");	
+		// locate the start of variables
+		cout << "GAIL =" << ch << endl;
+		//throw ErrorClass( "Parsing out of commission");
+		/*osil = osil+"00";
 		ch = &osil[ 0];
 		int size = strlen( ch);
 		ch[ size - 1] = 0;
@@ -2466,13 +2479,12 @@ try {
 		//current_buf is an external variable;
 		osil_scan_buffer( ch, size );
 		//osil_scan_string( osil.c_str());
-		osinstance = NULL;
-		osinstance = new OSInstance();
 		// get the first occurance of variables
 		int kj = osil.find("variables");
 		ch = &osil[ kj ];
 		if( osilparse() != 0) throw ErrorClass( sparseError);
 		//osil_delete_buffer( current_buf);
+		*/
 		return osinstance;
 }//end yygetOSInstance
 		catch(const ErrorClass& eclass){
@@ -2520,7 +2532,7 @@ bool isnull(char c){
 bool parseVariables(){
 	start = clock(); 
 	char *c_numberOfVariables = "numberOfVariables";
-	char *startVariables = "variables";
+	char *startVariables = "<variables";
 	char *endVariables = "</variables";
 	char *startVar = "<var";
 	char *endVar = "</var";
@@ -2547,7 +2559,7 @@ bool parseVariables(){
 	// start parsing
 	// the way flex works is that the ch should be pointing to variables
 	for(i = 0; startVariables[i]  == *ch; i++, ch++);
-	if(i != 9) {osiltext = &ch[0]; osilerror("incorrect <variables tag>"); return false;}
+	if(i != 10) {osiltext = &ch[0]; osilerror("incorrect <variables tag>"); return false;}
 	// find numberOfVariables attribute
 	// eat the white space
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
@@ -3573,8 +3585,7 @@ bool parseColIdx(){
 	for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );	
 	// better have >
 	if(*ch != '>') {osiltext = &ch[0]; osilerror("improperly formed </colIdx> tag"); return false;}	
-	//ch++;	
-	ch = '\0';
+	ch++;	
 	if(kount > osinstance->instanceData->linearConstraintCoefficients->numberOfValues) {osiltext = &ch[0]; osilerror("numberOfLinearCoefficients attribute less than number of column indices found"); return false;}
 	if(kount < osinstance->instanceData->linearConstraintCoefficients->numberOfValues) {osiltext = &ch[0]; osilerror("numberOfLinearCoefficients attribute greater than number of column indices found"); return false;}
 	finish = clock();
