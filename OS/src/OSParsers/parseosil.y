@@ -469,8 +469,6 @@ OSInstance* yygetOSInstance( const char *osil) throw (ErrorClass)
 try {
 		void yyinitialize();
 		yyinitialize();
-		const char *test = "please work";
-		if(  osil_scan_string( test) != 0) throw ErrorClass(  sparseError);
 		ch = NULL;
 		osinstance = NULL;
 		osinstance = new OSInstance();
@@ -482,9 +480,8 @@ try {
 		if( parseConstraints() != true) throw ErrorClass("error in parse Constraints");
 		if( parseLinearConstraintCoefficients() != true) throw ErrorClass("error in parse ConstraintCoefficients");	
 		//cout << "GAIL HONDA ++ " << ch << endl;
-		const char *newch = ch;
-		osil_scan_string( newch);
-		//if(  osil_scan_string( newch) != 0) throw ErrorClass(  sparseError);
+		osil_scan_string( ch);
+		if(  osilparse( ) != 0) throw ErrorClass(  sparseError);
 		return osinstance;
 }//end yygetOSInstance
 		catch(const ErrorClass& eclass){

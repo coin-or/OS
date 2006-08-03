@@ -2499,7 +2499,6 @@ YY_BUFFER_STATE osil_scan_buffer  (char * base, yy_size_t  size )
  */
 YY_BUFFER_STATE osil_scan_string (yyconst char * yystr )
 {
-
     
 	return osil_scan_bytes(yystr,strlen(yystr) );
 }
@@ -2537,7 +2536,7 @@ YY_BUFFER_STATE osil_scan_bytes  (yyconst char * yybytes, int  _yybytes_len )
 	 * away when we're done.
 	 */
 	b->yy_is_our_buffer = 1;
-	printf("HERE IA AMMKDFKJLDF\n");
+
 	return b;
 }
 
