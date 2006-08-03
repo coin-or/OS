@@ -27,12 +27,12 @@ OSiLReader::~OSiLReader(){
 	osilClearMemory();
 } 
 
-OSInstance* OSiLReader::readOSiL(std::string osil) throw(ErrorClass){   
+OSInstance* OSiLReader::readOSiL(std::string *posil) throw(ErrorClass){   
 	try{
 		OSInstance* p;
-		std::string *pstring;
-		pstring = new std::string( osil);
-		const char *ch = pstring->c_str();
+		//std::string *pstring;
+		//pstring = new std::string( osil);
+		const char *ch = posil->c_str();
 		p = yygetOSInstance( ch);
 		//std::string *pstring;
 		//pstring = new std::string("Jun Ma");
@@ -44,7 +44,6 @@ OSInstance* OSiLReader::readOSiL(std::string osil) throw(ErrorClass){
 		//ch2[2] = 'K';
 		//std::cout << ch << std::endl;
 		//std::cout << ch2 << std::endl;
-		cout << "HONDA == " <<  ch << endl;
 		return p;
 	}
 		catch(const ErrorClass& eclass){

@@ -71,7 +71,7 @@ int main(int argC, char* argV[])
 	osilFileName =  dataDir +"lindoapiaddins.osil";
 	nlFileName = dataDir +"hs71.nl";
 	mpsFileName =  dataDir + "parinc.mps";
-	parserTestOSiLFileName = dataDir + "parincLinear.osil"; 
+	parserTestOSiLFileName = dataDir + "lindoapiaddins.osil"; 
 	fileUtil = new FileUtil();
 	osil = fileUtil->getFileAsString( &osilFileName[0]);
 	// solve using using the osil file
@@ -83,7 +83,7 @@ int main(int argC, char* argV[])
 		m_Solver->osol = osol;  
 		m_Solver->osinstance = NULL; 
 		cout << "call the COIN Solver" << endl;
-		m_Solver->solve();
+		//m_Solver->solve();
 		cout << "Here is the COIN solver solution" << endl;
 		cout << m_Solver->osrl << endl;
 		m_Solver->osinstance = NULL;
@@ -259,7 +259,10 @@ int main(int argC, char* argV[])
 		double duration;
 		start = clock();
 		cout << "TEST PARSING A MODEL" << endl;
-		osilreader->readOSiL( osil);
+		//osilreader->readOSiL( &osil);
+		OSiLWriter *osilwriter = NULL;
+		osilwriter = new OSiLWriter();
+		cout << osilwriter->writeOSiL( osilreader->readOSiL( &osil)) << endl;
 		delete osilreader;
 		osilreader = 0;
 		finish = clock();

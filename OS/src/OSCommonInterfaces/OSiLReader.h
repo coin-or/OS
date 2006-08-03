@@ -36,6 +36,6 @@ private:
 public:
 	OSiLReader( );
 	~OSiLReader();
-	OSInstance* readOSiL(std::string osil) throw(ErrorClass);
+	OSInstance* readOSiL(std::string *osil) throw(ErrorClass);
 };
 #endif

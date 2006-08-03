@@ -33,7 +33,7 @@ typedef struct yy_buffer_state *YY_BUFFER_STATE;
 YY_BUFFER_STATE osrl_scan_string(const char* osil ); 
 
 YY_BUFFER_STATE osil_scan_string(const char* osil ); 
- YY_BUFFER_STATE osil_scan_buffer(char *base, unsigned int size);
+ //YY_BUFFER_STATE osil_scan_buffer(char *base, unsigned int size);
 void osil_delete_buffer( YY_BUFFER_STATE buffer);
 
  YY_BUFFER_STATE osol_scan_buffer(char *base, unsigned int size);

@@ -134,43 +134,10 @@ this fails on in Mac OS X
 
 
 
-osildoc: osilstart instanceHeader instanceData  OSILEND;
-
-osilstart:	OSILSTART  GREATERTHAN 
-			| OSILSTART OSILATTRIBUTETEXT GREATERTHAN;
+osildoc: quadraticcoefficients  nonlinearExpressions INSTANCEDATAEND  OSILEND;
 
 
 
-instanceHeader: INSTANCEHEADERSTART  name source description  INSTANCEHEADEREND  
-				| INSTANCEHEADER ;
-   
-
-name: 
-| NAMESTARTANDEND
-| NAMESTART ELEMENTTEXT NAMEEND {osinstance->instanceHeader->name = $2;}
-| NAMESTART NAMEEND ;
-
-source: 
-| SOURCESTARTANDEND
-| SOURCESTART ELEMENTTEXT SOURCEEND  {osinstance->instanceHeader->source = $2; } 
-| SOURCESTART  SOURCEEND ;
-
-description: 
-| DESCRIPTIONSTARTANDEND
-| DESCRIPTIONSTART ELEMENTTEXT DESCRIPTIONEND  {osinstance->instanceHeader->description = $2;}
-| DESCRIPTIONSTART  DESCRIPTIONEND;
-
-instanceData: INSTANCEDATASTART {
-
-	//osiltext = &ch[ 0];
-	if( parseVariables() != true)  YYABORT;
-	if( parseObjectives() != true) YYABORT ; 
-	if( parseConstraints() != true) YYABORT; 
-	if( parseLinearConstraintCoefficients() != true) YYABORT;	
-	osil_scan_buffer(ch , strlen(  ch) + 2);
-
-} 
-quadraticcoefficients  nonlinearExpressions INSTANCEDATAEND;
 
 
 quadraticcoefficients: 
@@ -508,27 +475,12 @@ try {
 		const char *varel = "<variables";
 		ch = strstr(osil, varel);
 		if(ch == NULL) throw ErrorClass("variables element required");
-		if( parseVariables() != true)  throw ErrorClass("error in parse variables");
+		if( parseVariables() != true) {cout << "GAIL =" << ch << endl; throw ErrorClass("error in parse variables");}
 		if( parseObjectives() != true)  throw ErrorClass("error in parse objectives");
 		if( parseConstraints() != true) throw ErrorClass("error in parse Constraints");
 		if( parseLinearConstraintCoefficients() != true) throw ErrorClass("error in parse ConstraintCoefficients");	
-		// locate the start of variables
-		cout << "GAIL =" << ch << endl;
-		//throw ErrorClass( "Parsing out of commission");
-		/*osil = osil+"00";
-		ch = &osil[ 0];
-		int size = strlen( ch);
-		ch[ size - 1] = 0;
-		ch[ size - 2] = 0;
-		//current_buf is an external variable;
-		osil_scan_buffer( ch, size );
-		//osil_scan_string( osil.c_str());
-		// get the first occurance of variables
-		int kj = osil.find("variables");
-		ch = &osil[ kj ];
-		if( osilparse() != 0) throw ErrorClass( sparseError);
-		//osil_delete_buffer( current_buf);
-		*/
+		cout << "GAIL HONDA ++ " << ch << endl;
+		osil_scan_string( ch);
 		return osinstance;
 }//end yygetOSInstance
 		catch(const ErrorClass& eclass){

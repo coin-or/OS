@@ -59,7 +59,7 @@ int main(int argC, char* argV[])
 		double duration;
 		start = clock();
 		cout << "start parsing" << endl;
-		osinstance = osilreader->readOSiL( osil);
+		osinstance = osilreader->readOSiL( &osil);
 		finish = clock();
 		duration = (double) (finish - start) / CLOCKS_PER_SEC;
 		cout << "Parsing took (seconds): "<< duration << endl;
