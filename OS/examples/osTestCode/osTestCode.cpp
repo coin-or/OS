@@ -42,13 +42,12 @@ int main(int argC, char* argV[])
 	std::string osrlFileName;
 	std::string osil;
 	std::string osrl;
-		osilFileName =  "/Users/kmartin/Documents/files/code/cpp/Coin-OS/OS/data/testb64.osil";
-		osilFileName =  "/Users/kmartin/Documents/files/code/OSRepository/linear/continuous/osa-60.osil";
-		osilFileName =  "/Users/kmartin/Documents/files/code/cpp/Coin-OS/OS/data/osilrosenbrockmodsum.osil";
+		osilFileName =  "/Users/kmartin/OS-Test/OS/data/parincLinear.osil";
 		osrlFileName =  "/Users/kmartin/Documents/files/code/cpp/Coin-OS/OS/data/coinsolution.dat";
 	fileUtil = new FileUtil();
 	osil = fileUtil->getFileAsString( &osilFileName[0]);
-	osrl = fileUtil->getFileAsString( &osrlFileName[0]);
+	//osrl = fileUtil->getFileAsString( &osrlFileName[0]);
+	osrl = "HI";
 	try{
 		// check parsing of osil
 		OSiLReader *osilreader = NULL;
@@ -63,6 +62,7 @@ int main(int argC, char* argV[])
 		finish = clock();
 		duration = (double) (finish - start) / CLOCKS_PER_SEC;
 		cout << "Parsing took (seconds): "<< duration << endl;
+		return 0;
 		//
 	
 		OSiLWriter *osilwriter = NULL;

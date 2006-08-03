@@ -1737,7 +1737,7 @@ YY_RULE_SETUP
 case 87:
 YY_RULE_SETUP
 #line 160 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosil.l"
-{YY_PRINT;  osilerror( "ecountered a spurious character in the lexer"); return(777777777);  }
+{YY_PRINT;  printf("%s", osiltext); osilerror( "ecountered a spurious character in the lexer"); return(777777777);  }
 	YY_BREAK
 case 88:
 YY_RULE_SETUP
@@ -2499,6 +2499,7 @@ YY_BUFFER_STATE osil_scan_buffer  (char * base, yy_size_t  size )
  */
 YY_BUFFER_STATE osil_scan_string (yyconst char * yystr )
 {
+
     
 	return osil_scan_bytes(yystr,strlen(yystr) );
 }
@@ -2536,7 +2537,7 @@ YY_BUFFER_STATE osil_scan_bytes  (yyconst char * yybytes, int  _yybytes_len )
 	 * away when we're done.
 	 */
 	b->yy_is_our_buffer = 1;
-
+	printf("HERE IA AMMKDFKJLDF\n");
 	return b;
 }
 

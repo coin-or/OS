@@ -134,7 +134,7 @@ this fails on in Mac OS X
 
 
 
-osildoc: quadraticcoefficients  nonlinearExpressions INSTANCEDATAEND  OSILEND;
+osildoc: {std::cout << "HERE I ARE:" << std::endl;} quadraticcoefficients  nonlinearExpressions INSTANCEDATAEND  OSILEND;
 
 
 
@@ -209,7 +209,7 @@ osinstance->instanceData->quadraticCoefficients->qTerm[qtermcount]->idx = $2;} ;
 
 
 nonlinearExpressions:  
-				| NONLINEAREXPRESSIONSSTART nlnumberatt nlnodes NONLINEAREXPRESSIONSEND
+				| NONLINEAREXPRESSIONSSTART {std::cout << "I AM PARISING NONLINEAR STUFF" << std::endl;} nlnumberatt nlnodes NONLINEAREXPRESSIONSEND
 				{if(nlnodecount <  tmpnlcount)  osilerror("actual number of nl terms less than number attribute"); };
 				
 
@@ -449,6 +449,7 @@ quote: xmlWhiteSpace QUOTE;
 
 
 void osilerror(char* errormsg) {
+		std::cout << "INSIDE OSILERROR" << std::endl;		
 		ostringstream outStr;
 		sparseError = errormsg;
 		sparseError = "PARSER ERROR:  Input is either not valid or well formed: "  + sparseError;
@@ -456,19 +457,20 @@ void osilerror(char* errormsg) {
 		outStr << "Here are the last 5 and next 15 characters currently being pointed to in the input string: ";
 		for(int i = -5; i < 20; i++){ 
 			if(osiltext[ i] != '\0' ) outStr << osiltext[ i];
-			if(osiltext[ i] == '\0' ) outStr << "GNUNULL " << endl;
 			
 		}
 		outStr << endl;
 		outStr << "See line number: " << osillineno << endl;  
 		sparseError = outStr.str();
-		//cout << sparseError << endl;
+		std::cout << sparseError << std::endl;
 	}//end osilerror() 
 
 OSInstance* yygetOSInstance( const char *osil) throw (ErrorClass)
 try {
 		void yyinitialize();
 		yyinitialize();
+		const char *test = "please work";
+		if(  osil_scan_string( test) != 0) throw ErrorClass(  sparseError);
 		ch = NULL;
 		osinstance = NULL;
 		osinstance = new OSInstance();
@@ -479,8 +481,10 @@ try {
 		if( parseObjectives() != true)  throw ErrorClass("error in parse objectives");
 		if( parseConstraints() != true) throw ErrorClass("error in parse Constraints");
 		if( parseLinearConstraintCoefficients() != true) throw ErrorClass("error in parse ConstraintCoefficients");	
-		cout << "GAIL HONDA ++ " << ch << endl;
-		osil_scan_string( ch);
+		//cout << "GAIL HONDA ++ " << ch << endl;
+		const char *newch = ch;
+		osil_scan_string( newch);
+		//if(  osil_scan_string( newch) != 0) throw ErrorClass(  sparseError);
 		return osinstance;
 }//end yygetOSInstance
 		catch(const ErrorClass& eclass){

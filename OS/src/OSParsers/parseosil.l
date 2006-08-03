@@ -157,7 +157,7 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]+))([eE][-+]?[0-9]+)?|INF))
 <attributetext>([^\"\'])* {YY_PRINT;  BEGIN 0; osillval.sval = strdup(osiltext); return(ATTRIBUTETEXT);}
 <osilattributetext>([^>])* {YY_PRINT;  BEGIN 0; osillval.sval = strdup(osiltext); return(OSILATTRIBUTETEXT);}
 
-. {YY_PRINT;  osilerror( "ecountered a spurious character in the lexer"); return(777777777);  }
+. {YY_PRINT;  printf("%s", osiltext); osilerror( "ecountered a spurious character in the lexer"); return(777777777);  }
 
 %%
 
