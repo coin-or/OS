@@ -70,7 +70,7 @@ int main(int argC, char* argV[])
 	osilFileName =  dataDir +"lindoapiaddins.osil";
 	nlFileName = dataDir +"hs71.nl";
 	mpsFileName =  dataDir + "parinc.mps";
-	parserTestOSiLFileName = dataDir + "parincLinear.osil"; 
+	parserTestOSiLFileName = dataDir + "osa-60.osil"; 
 	fileUtil = new FileUtil();
 	osil = fileUtil->getFileAsString( &osilFileName[0]);
 	// solve using using the osil file

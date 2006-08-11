@@ -51,7 +51,7 @@ AC_COIN_PROG_CXX
 
 # Initialize automake and libtool
 AC_COIN_INIT_AUTO_TOOLS
-
+coin_opt_cxxflags="-O3"
 #############################################################################
 #                     Parser stuff                         #
 #############################################################################

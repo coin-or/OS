@@ -8,6 +8,10 @@
 
 AUTOMAKE_OPTIONS = foreign
 
+###########
+
+CXXFLAGS = -O3  -pipe -DNDEBUG -pedantic-errors -Wimplicit -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion
+
 ########################################################################
 #                          Subdirectories                              #
 ########################################################################
