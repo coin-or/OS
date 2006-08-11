@@ -21,7 +21,10 @@
 #include "ErrorClass.h"
 #include <vector>  
 
+#ifdef COIN_HAS_LINDO    
 #include "LindoSolver.h"
+#endif  
+ 
 
 #include <string>
  

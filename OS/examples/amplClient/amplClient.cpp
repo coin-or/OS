@@ -57,7 +57,9 @@ you should get x1 = 540, x2 = 252
 #include "OSrLWriter.h"
 #include "OSInstance.h"
 #include "OSResult.h"
+#ifdef COIN_HAS_LINDO    
 #include "LindoSolver.h"
+#endif  
 #include "CoinSolver.h"
 #include "DefaultSolver.h"
 #include "OSSolverAgent.h"
@@ -156,8 +158,6 @@ int main(int argc, char **argv)
 							}
 							else{
 								//throw ErrorClass( "a supported solver is not present");
-								cout << "Generating a default LINDO solver" << endl;
-								solverType = new LindoSolver();
 							}
 						}
 					}
