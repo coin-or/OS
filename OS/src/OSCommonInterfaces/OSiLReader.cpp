@@ -33,9 +33,10 @@ OSInstance* OSiLReader::readOSiL(std::string *posil) throw(ErrorClass){
 		//std::string *pstring;
 		//pstring = new std::string( osil);
 		const char *ch = posil->c_str();
+		//cout << "HERE IS THE PROBLEM TO PARSE: " << ch << endl;
 		p = yygetOSInstance( ch);
 		//std::string *pstring;
-		//pstring = new std::string("Jun Ma");
+		//pstring = new std::string("This is a test");
 		//const char *ch = pstring->c_str();
 		//char *ch2;
       	//ch2 = new char[pstring->size() + 1];

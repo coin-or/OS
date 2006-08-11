@@ -67,11 +67,10 @@ int main(int argC, char* argV[])
   	std::string dataDir;
     dataDir = dirsep == '/' ? "../data/" : "..\\data\\";
 	std::string osol = "<osol></osoL>";
-	//osilFileName =  dataDir +"parincLinear.osil";
 	osilFileName =  dataDir +"lindoapiaddins.osil";
 	nlFileName = dataDir +"hs71.nl";
 	mpsFileName =  dataDir + "parinc.mps";
-	parserTestOSiLFileName = dataDir + "lindoapiaddins.osil"; 
+	parserTestOSiLFileName = dataDir + "parincLinear.osil"; 
 	fileUtil = new FileUtil();
 	osil = fileUtil->getFileAsString( &osilFileName[0]);
 	// solve using using the osil file
@@ -83,7 +82,7 @@ int main(int argC, char* argV[])
 		m_Solver->osol = osol;  
 		m_Solver->osinstance = NULL; 
 		cout << "call the COIN Solver" << endl;
-		//m_Solver->solve();
+		m_Solver->solve();
 		cout << "Here is the COIN solver solution" << endl;
 		cout << m_Solver->osrl << endl;
 		m_Solver->osinstance = NULL;
@@ -95,7 +94,7 @@ int main(int argC, char* argV[])
 		cout << "OSrL =  " <<  m_Solver->osrl <<  endl;
 		cout << endl << endl << endl;
 		cout << "Sorry Unit Test Failed Testing the Cbc Solver" << endl;
-		return 0;
+		//return 0;
 	}
 	#ifdef COIN_HAS_LINDO
 	try{
@@ -248,21 +247,27 @@ int main(int argC, char* argV[])
 	// Now just test the parser
 	try{ 
 		cout << endl;
+		clock_t start, finish;
+		double duration;
+		OSiLWriter *osilwriter = NULL;
+		osilwriter = new OSiLWriter();
 		//delete fileUtil;
 		//fileUtil = NULL;
 		//fileUtil = new FileUtil();
-		fileUtil->getFileAsString( &parserTestOSiLFileName[0]);
+		cout << "TEST PARSING A MODEL" << endl;
+		cout << "FIST READ THE FILE INTO A STRING" << endl;
+		start = clock();
 		osil = fileUtil->getFileAsString( &parserTestOSiLFileName[0]);
+		finish = clock();
+		duration = (double) (finish - start) / CLOCKS_PER_SEC;
+		cout << "Reading the file into a string took (seconds): "<< duration << endl;
 		OSiLReader *osilreader = NULL;
 		osilreader = new OSiLReader(); 
-		clock_t start, finish;
-		double duration;
 		start = clock();
-		cout << "TEST PARSING A MODEL" << endl;
+		cout << "PARSE THE OSIL STRING INTO AN OSINSTNACE OBJECT" << endl;
 		//osilreader->readOSiL( &osil);
-		OSiLWriter *osilwriter = NULL;
-		osilwriter = new OSiLWriter();
-		cout << osilwriter->writeOSiL( osilreader->readOSiL( &osil)) << endl;
+		osilreader->readOSiL( &osil);
+		//cout << osilwriter->writeOSiL( osilreader->readOSiL( &osil)) << endl;
 		delete osilreader;
 		osilreader = 0;
 		finish = clock();

@@ -34,12 +34,11 @@
 // the global variables for parsing
 clock_t start, finish;
 double duration;
-double atofmod(char *ch);
-int atoimod(char *ch);
+double atofmod1(char *ch1, char *ch2);
+int atoimod1(char *ch1, char *ch2);
 // we distinguish a newline from other whitespace
 // since we need to know when we hit a new line
 bool isnewline(char c);
-bool isnull(char c);
 char *ch = NULL;
 bool parseVariables();
 bool parseObjectives();
@@ -70,10 +69,13 @@ char *parseBase64(int *dataSize );
 	if(*ch != '\"'  && *ch != '\"') {osiltext = &ch[0]; osilerror("missing quote on attribute"); return false;} \
 	ch++; \
 	for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ; \
-	attText = &*ch; \
+	attTextStart = ch; \
 	for( ; *ch != '\"' &&  *ch != '\''; ch++); \
-	*ch = '\0'; 
-	
+	numChar = ch - attTextStart; \
+	attText = new char[numChar + 1]; \
+	for(ki = 0; ki < numChar; ki++) attText[ki] = attTextStart[ ki]; \
+	attText[ki] = '\0'; \
+	attTextEnd = &attText[ki]; 
 #define ECHOCHECK \
 	GAIL; \
 	printf("%c", ch[-2]); \
@@ -134,7 +136,7 @@ this fails on in Mac OS X
 
 
 
-osildoc: {std::cout << "HERE I ARE:" << std::endl;} quadraticcoefficients  nonlinearExpressions INSTANCEDATAEND  OSILEND;
+osildoc: quadraticcoefficients  nonlinearExpressions INSTANCEDATAEND  OSILEND;
 
 
 
@@ -209,7 +211,7 @@ osinstance->instanceData->quadraticCoefficients->qTerm[qtermcount]->idx = $2;} ;
 
 
 nonlinearExpressions:  
-				| NONLINEAREXPRESSIONSSTART {std::cout << "I AM PARISING NONLINEAR STUFF" << std::endl;} nlnumberatt nlnodes NONLINEAREXPRESSIONSEND
+				| NONLINEAREXPRESSIONSSTART  nlnumberatt nlnodes NONLINEAREXPRESSIONSEND
 				{if(nlnodecount <  tmpnlcount)  osilerror("actual number of nl terms less than number attribute"); };
 				
 
@@ -233,7 +235,6 @@ nlIdxATT:  IDXATT INTEGER quote {
 osinstance->instanceData->nonlinearExpressions->nl[ nlnodecount] = new Nl();
 osinstance->instanceData->nonlinearExpressions->nl[ nlnodecount]->idx = $2;
 osinstance->instanceData->nonlinearExpressions->nl[ nlnodecount]->osExpressionTree = new OSExpressionTree();
-cout << "NLNODE INDEX =   " << osinstance->instanceData->nonlinearExpressions->nl[ nlnodecount]->idx << endl;
 if(nlnodecount > tmpnlcount) osilerror("actual number of nl terms greater than number attribute");
 // clear the vectors of pointers
 nlNodeVec.clear();
@@ -449,21 +450,24 @@ quote: xmlWhiteSpace QUOTE;
 
 
 void osilerror(char* errormsg) {
-		std::cout << "INSIDE OSILERROR" << std::endl;		
-		ostringstream outStr;
-		sparseError = errormsg;
-		sparseError = "PARSER ERROR:  Input is either not valid or well formed: "  + sparseError;
-		outStr << sparseError << endl;
+	try{
+		std::ostringstream outStr;
+		std::string error = errormsg;
+		error = "PARSER ERROR:  Input is either not valid or well formed: "  + error;
+		outStr << error << endl;
 		outStr << "Here are the last 5 and next 15 characters currently being pointed to in the input string: ";
-		for(int i = -5; i < 20; i++){ 
+		for(int i = -5; i < 15; i++){ 
 			if(osiltext[ i] != '\0' ) outStr << osiltext[ i];
-			
 		}
 		outStr << endl;
 		outStr << "See line number: " << osillineno << endl;  
-		sparseError = outStr.str();
-		std::cout << sparseError << std::endl;
-	}//end osilerror() 
+		error = outStr.str();
+		throw ErrorClass( error);
+	}
+		catch(const ErrorClass& eclass){
+		throw ErrorClass(  eclass.errormsg); 
+	}
+} // end osilerror() 
 
 OSInstance* yygetOSInstance( const char *osil) throw (ErrorClass)
 try {
@@ -475,13 +479,13 @@ try {
 		const char *varel = "<variables";
 		ch = strstr(osil, varel);
 		if(ch == NULL) throw ErrorClass("variables element required");
-		if( parseVariables() != true) {cout << "GAIL =" << ch << endl; throw ErrorClass("error in parse variables");}
+		if( parseVariables() != true) {throw ErrorClass("error in parse variables");}
 		if( parseObjectives() != true)  throw ErrorClass("error in parse objectives");
 		if( parseConstraints() != true) throw ErrorClass("error in parse Constraints");
 		if( parseLinearConstraintCoefficients() != true) throw ErrorClass("error in parse ConstraintCoefficients");	
-		//cout << "GAIL HONDA ++ " << ch << endl;
 		osil_scan_string( ch);
 		if(  osilparse( ) != 0) throw ErrorClass(  sparseError);
+		//cout << "HERE IS THE OSIL AFTER PARSING: " << osil << endl;
 		return osinstance;
 }//end yygetOSInstance
 		catch(const ErrorClass& eclass){
@@ -521,10 +525,6 @@ bool isnewline(char c){
 	return true;
 }//end isnewline()
 
-bool isnull(char c){
-	if(c != '\0') return false;
-	return true;
-}//end isnewline()
 
 bool parseVariables(){
 	start = clock(); 
@@ -554,7 +554,6 @@ bool parseVariables(){
 	bool foundVar = false;
 	//
 	// start parsing
-	// the way flex works is that the ch should be pointing to variables
 	for(i = 0; startVariables[i]  == *ch; i++, ch++);
 	if(i != 10) {osiltext = &ch[0]; osilerror("incorrect <variables tag>"); return false;}
 	// find numberOfVariables attribute
@@ -565,7 +564,7 @@ bool parseVariables(){
 	// buf_index should be pointing to the first character after numberOfVariables
 	GETATTRIBUTETEXT;
 	ch++;
-	numberOfVariables = atoimod( attText);
+	numberOfVariables = atoimod1( attText, attTextEnd);
 	if(numberOfVariables <= 0) {
 		osilerror("there must be at least one variable"); return false;
 	}
@@ -620,7 +619,7 @@ bool parseVariables(){
 					varinitattON = true;
 					GETATTRIBUTETEXT;
 					//printf("ATTRIBUTE = %s\n", attText);
-					osinstance->instanceData->variables->var[varcount]->init=atofmod(attText);
+					osinstance->instanceData->variables->var[varcount]->init=atofmod1(attText, attTextEnd);
 				}
 				else{
 					if(varinitStringattON == true) {osiltext = &ch[0]; osilerror("error too many variable initString attributes"); return false;}
@@ -645,7 +644,7 @@ bool parseVariables(){
 				if(varlbattON == true) {osiltext = &ch[0]; osilerror("error too many variable lb attributes"); return false;}
 				varlbattON = true;
 				GETATTRIBUTETEXT;
-				osinstance->instanceData->variables->var[varcount]->lb = atofmod(attText);
+				osinstance->instanceData->variables->var[varcount]->lb = atofmod1(attText, attTextEnd);
 				//printf("ATTRIBUTE = %s\n", attText);
 				break;
 			case 'u':
@@ -654,7 +653,7 @@ bool parseVariables(){
 				if(varubattON == true) {osiltext = &ch[0]; osilerror("error too many variable ub attributes"); return false;}
 				varubattON = true;
 				GETATTRIBUTETEXT;
-				osinstance->instanceData->variables->var[varcount]->ub = atofmod(attText);
+				osinstance->instanceData->variables->var[varcount]->ub = atofmod1(attText, attTextEnd);
 				//printf("ATTRIBUTE = %s\n", attText);
 				break;
 			case 'm':
@@ -798,7 +797,7 @@ bool parseObjectives(){
 		for(i = 0; c_numberOfObjectives[i]  == *ch; i++, ch++);
 		if(i != 18) {osiltext = &ch[0]; osilerror("incorrect numberOfObjectives attribute in <objectives> tag"); return false;}	
 		GETATTRIBUTETEXT;
-		numberOfObjectives = atoimod( attText);
+		numberOfObjectives = atoimod1( attText, attTextEnd);
 		ch++;
 	}
 	if(numberOfObjectives > 0){
@@ -848,7 +847,7 @@ bool parseObjectives(){
 						objnumberOfObjCoefattON = true;
 						GETATTRIBUTETEXT;
 						//printf("ATTRIBUTE = %s\n", attText);
-						osinstance->instanceData->objectives->obj[objcount]->numberOfObjCoef=atoimod(attText);
+						osinstance->instanceData->objectives->obj[objcount]->numberOfObjCoef=atoimod1(attText, attTextEnd);
 						osinstance->instanceData->objectives->obj[objcount]->coef = new ObjCoef*[osinstance->instanceData->objectives->obj[ objcount]->numberOfObjCoef];
 						for(int i = 0; i < osinstance->instanceData->objectives->obj[ objcount]->numberOfObjCoef; i++)osinstance->instanceData->objectives->obj[objcount]->coef[i] = new ObjCoef();
 					}
@@ -873,7 +872,7 @@ bool parseObjectives(){
 					objconstantattON = true;
 					GETATTRIBUTETEXT;
 					//printf("ATTRIBUTE = %s\n", attText);
-					osinstance->instanceData->objectives->obj[objcount]->constant=atofmod(attText);
+					osinstance->instanceData->objectives->obj[objcount]->constant=atofmod1(attText, attTextEnd);
 				}
 				break;
 			case 'w':
@@ -884,7 +883,7 @@ bool parseObjectives(){
 					objweightattON = true;
 					GETATTRIBUTETEXT;
 					//printf("ATTRIBUTE = %s\n", attText);
-					osinstance->instanceData->objectives->obj[objcount]->weight=atofmod(attText);
+					osinstance->instanceData->objectives->obj[objcount]->weight=atofmod1(attText, attTextEnd);
 				}
 				break;
 			case 'm':
@@ -1057,7 +1056,7 @@ bool parseConstraints(){
 	// ch should be pointing to the first character after numberOfObjectives
 	GETATTRIBUTETEXT;
 	ch++;
-	numberOfConstraints = atoimod( attText);
+	numberOfConstraints = atoimod1( attText, attTextEnd);
 	// key if
 	//
 	if(numberOfConstraints > 0){
@@ -1103,7 +1102,7 @@ bool parseConstraints(){
 				conconstantattON = true;
 				GETATTRIBUTETEXT;
 				//printf("ATTRIBUTE = %s\n", attText);
-				osinstance->instanceData->constraints->con[concount]->constant=atofmod(attText);
+				osinstance->instanceData->constraints->con[concount]->constant=atofmod1(attText, attTextEnd);
 				break;
 			case 'l':
 				ch++;
@@ -1111,7 +1110,7 @@ bool parseConstraints(){
 				if(conlbattON == true) {osiltext = &ch[0]; osilerror("error too many con lb attributes"); return false;}
 				conlbattON = true;
 				GETATTRIBUTETEXT;
-				osinstance->instanceData->constraints->con[concount]->lb = atofmod(attText);
+				osinstance->instanceData->constraints->con[concount]->lb = atofmod1(attText, attTextEnd);
 				//printf("ATTRIBUTE = %s\n", attText);
 				break;
 			case 'u':
@@ -1120,7 +1119,7 @@ bool parseConstraints(){
 				if(conubattON == true) {osiltext = &ch[0]; osilerror("error too many con ub attributes"); return false;}
 				conubattON = true;
 				GETATTRIBUTETEXT;
-				osinstance->instanceData->constraints->con[concount]->ub = atofmod(attText);
+				osinstance->instanceData->constraints->con[concount]->ub = atofmod1(attText, attTextEnd);
 				//printf("ATTRIBUTE = %s\n", attText);
 				break;
 			case 'm':
@@ -1261,7 +1260,7 @@ bool parseLinearConstraintCoefficients(){
 	// ch should be pointing to the first character after numberOfObjectives
 	GETATTRIBUTETEXT;
 	ch++;
-	numberOfValues = atoimod( attText);
+	numberOfValues = atoimod1( attText, attTextEnd);
 	if(numberOfValues <= 0) {osiltext = &ch[0]; osilerror("the number of nonlinear nozeros must be positive"); return false;}
 	osinstance->instanceData->linearConstraintCoefficients->numberOfValues = numberOfValues;
 	// get rid of white space after the numberOfConstraints element
@@ -1315,7 +1314,7 @@ bool parseStart(){
 	// get rid of white space after <start
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
 	// we should have either an >
-	if(*ch =! '>') {osiltext = &ch[0]; osilerror("improperly formed <start> element"); return false;}
+	if(*ch != '>') {osiltext = &ch[0]; osilerror("improperly formed <start> element"); return false;}
 	ch++;
 	// get rid of white space
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
@@ -1349,7 +1348,7 @@ bool parseStart(){
 			// eat white space again,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );
 			// okay we better have a number, we will check later
-			number = &*ch;
+			number = ch;
 			// find the end of the number, it better be an </el>
 			// find </el
 			while( *ch != '<' && *ch  != EOF){
@@ -1357,10 +1356,9 @@ bool parseStart(){
 			}
 			// we better have a <, or not valid
 			if(*ch != '<') {osiltext = &ch[0]; osilerror("cannot find an </el>"); return false;}
-			// terminate the number string
-			*ch++ = '\0';
 			osinstance->instanceData->linearConstraintCoefficients->start->el[ kount++] = 
-			atoimod( number);
+			atoimod1( number, ch);
+			ch++;
 			//printf("number = %s\n", number);
 			// we are pointing to <, make sure there is /el
 			for(i = 1; endEl[ i] == *ch; i++, ch++);
@@ -1412,7 +1410,7 @@ bool parseRowIdx(){
 	// get rid of white space after <rowIdx
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
 	// we should have either an >
-	if(*ch =! '>') {osiltext = &ch[0]; osilerror("improperly formed <rowIdx> element"); return false;}
+	if(*ch != '>') {osiltext = &ch[0]; osilerror("improperly formed <rowIdx> element"); return false;}
 	ch++;
 	// get rid of white space
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
@@ -1447,7 +1445,7 @@ bool parseRowIdx(){
 			// mung white space again,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
 			// okay we better have a number, we will check later
-			number = &*ch;
+			number = ch;
 			// find the end of the number, it better be an </el>
 			// find </el
 			while( *ch != '<' && *ch  != EOF){
@@ -1455,10 +1453,9 @@ bool parseRowIdx(){
 			}
 			// we better have a <, or not valid
 			if(*ch != '<') {osiltext = &ch[0];  osilerror("cannot find an </el>"); return false;}
-			// terminate the number string
-			*ch++ = '\0';
 			osinstance->instanceData->linearConstraintCoefficients->rowIdx->el[ kount++] = 
-			atoimod( number);
+			atoimod1( number, ch);
+			ch++;
 			//printf("number = %s\n", number);
 			// we are pointing to <, make sure there is /el
 			for(i = 1; endEl[ i] == *ch; i++, ch++);
@@ -1513,7 +1510,7 @@ bool parseColIdx(){
 	// get rid of white space after <colIdx
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
 	// we should have either an >
-	if(*ch =! '>') {osiltext = &ch[0]; osilerror("improperly formed <colIdx> element"); return false;}
+	if(*ch != '>') {osiltext = &ch[0]; osilerror("improperly formed <colIdx> element"); return false;}
 	ch++;
 	// get rid of white space
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
@@ -1548,7 +1545,7 @@ bool parseColIdx(){
 			// eat white space again,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
 			// okay we better have a number, we will check later
-			number = &*ch;
+			number = ch;
 			// find the end of the number, it better be an </el>
 			// find </el
 			while( *ch != '<' && *ch  != EOF){
@@ -1556,10 +1553,9 @@ bool parseColIdx(){
 			}
 			// we better have a <, or not valid
 			if(*ch != '<') {osiltext = &ch[0]; osilerror("cannot find an </el>"); return false;}
-			// terminate the number string
-			*ch++ = '\0';
 			osinstance->instanceData->linearConstraintCoefficients->colIdx->el[ kount++] = 
-			atoimod( number);
+			atoimod1( number, ch);
+			ch++;
 			//printf("number = %s\n", number);
 			// we are pointing to <, make sure there is /el
 			for(i = 1; endEl[ i] == *ch; i++, ch++);
@@ -1602,7 +1598,7 @@ bool parseValue(){
 	char* number = NULL;
 	int i;
 	bool foundEl = false;
-	for( ; ISWHITESPACE( *ch) || isnewline( *ch) || isnull( *ch); ch++ ) ;
+	for( ; ISWHITESPACE( *ch) || isnewline( *ch) ; ch++ ) ;
 	// if, present we should be pointing to <rowIdx element 
 	for(i = 0; startValue[i]  == *ch; i++, ch++){
 		//cout << ch* ;
@@ -1613,12 +1609,12 @@ bool parseValue(){
 		return false;
 	}
 	// get rid of white space after <value
-	for( ; ISWHITESPACE( *ch) || isnewline( *ch) || isnull( *ch); ch++ ) ;
+	for( ; ISWHITESPACE( *ch) || isnewline( *ch) ; ch++ ) ;
 	// we should have either an >
-	if(*ch =! '>') {osiltext = &ch[0]; osilerror("improperly formed <value> element"); return false;}
+	if(*ch != '>') {osiltext = &ch[0]; osilerror("improperly formed <value> element"); return false;}
 	ch++;
 	// get rid of white space
-	for( ; ISWHITESPACE( *ch) || isnewline( *ch) || isnull( *ch); ch++ ) ;
+	for( ; ISWHITESPACE( *ch) || isnewline( *ch) ; ch++ ) ;
 	// look for an <el> -- if none present must have b64 data
 	for(i = 0; startEl[i]  == *ch; i++, ch++);
 	if(i != 3) {
@@ -1644,11 +1640,11 @@ bool parseValue(){
 			new double[ osinstance->instanceData->linearConstraintCoefficients->numberOfValues];
 		while( foundEl){
 			// start eat white space until an '>' is found,
-			for(; ISWHITESPACE( *ch) || isnewline( *ch) || isnull( *ch); ch++ );
+			for(; ISWHITESPACE( *ch) || isnewline( *ch) ; ch++ );
 			if( *ch++ != '>') {osiltext = &ch[0]; osilerror("improperly formed <el> tag"); return false;}
 			// eat white space again,
-			for(; ISWHITESPACE( *ch) || isnewline( *ch) || isnull( *ch); ch++ ) ;
-			number = &*ch;
+			for(; ISWHITESPACE( *ch) || isnewline( *ch) ; ch++ ) ;
+			number = ch;
 			// find the end of the number, it better be an </el>
 			// find the < which begins the </el
 			while( *ch != '<' && *ch != EOF){
@@ -1656,19 +1652,18 @@ bool parseValue(){
 			}
 			// we better have a <, or not valid
 			if(*ch != '<') {osiltext = &ch[0]; osilerror("cannot find an </el>"); return false;}
-			// terminate the number string
-			*ch++ = '\0';
 			osinstance->instanceData->linearConstraintCoefficients->value->el[ kount++] = 
-			atofmod( number);
+			atofmod1( number, ch);
+			ch++;
 			//printf("number = %s\n", number);
 			// we are pointing to <, make sure there is /el
 			for(i = 1; endEl[ i] == *ch; i++, ch++);
 			if( i != 4 ) {osiltext = &ch[0]; osilerror("cannot fine an </el>"); return false;}
 			// start eating white space until an '>' is found for </el>,
-			for(; ISWHITESPACE( *ch) || isnewline( *ch) || isnull( *ch) ; ch++ );
+			for(; ISWHITESPACE( *ch) || isnewline( *ch) ; ch++ );
 			if( *ch++ != '>') {osiltext = &ch[0]; osilerror("improperly formed </el> tag"); return false;}
 			// eat white space again,
-			for(; ISWHITESPACE( *ch) || isnewline( *ch) || isnull( *ch) ; ch++ );
+			for(; ISWHITESPACE( *ch) || isnewline( *ch) ; ch++ );
 			// either have another <el> element or foundEl = false;
 			for(i = 0; startEl[i]  == *ch; i++, ch++);
 			if(i == 3) foundEl = true;
@@ -1679,7 +1674,7 @@ bool parseValue(){
 	// get the </value> tag
 	for(i = 0; endValue[i]  == *ch; i++, ch++);
 	if(i != 7) {osiltext = &ch[0]; osilerror( "cannot find </value> tag"); return false;}
-	for(; ISWHITESPACE( *ch) || isnewline( *ch) || isnull( *ch); ch++ );	
+	for(; ISWHITESPACE( *ch) || isnewline( *ch) ; ch++ );	
 	// better have >
 	if(*ch != '>') {osiltext = &ch[0]; osilerror("improperly formed </value> tag");	 return false;}
 	ch++;	
@@ -1697,7 +1692,7 @@ bool parseObjCoef( int objcount){
 	char* c_idx = "idx";
 	int kount = 0;
 	char* number = NULL;
-	char* attText = NULL;
+	char *attText = NULL;
 	int i, k;
 	int numberOfObjCoef = 0; 
 	bool foundCoef = false;
@@ -1725,14 +1720,13 @@ bool parseObjCoef( int objcount){
 		// if we don't have a > there is an error
 		if(*ch++ != '>') {osiltext = &ch[0]; osilerror("incorrect <coef> element")	; return false;}	
 		// we should be pointing to first character after <coef>
-		number = &*ch;
+		number = ch;
 		// eat characters until we find <
 		for(; *ch != '<' && *ch != EOF; ch++); 
-		osinstance->instanceData->objectives->obj[objcount]->coef[ k]->idx  = atoimod( attText);
+		osinstance->instanceData->objectives->obj[objcount]->coef[ k]->idx  = atoimod1( attText, attTextEnd);
 		// we should be pointing to a < in the </coef> tag	
-		*ch = '\0';
-		osinstance->instanceData->objectives->obj[objcount]->coef[ k]->value  = atofmod( number);
-		*ch = '<';
+		if(*ch != '<') {osiltext = &ch[0]; osilerror("improper </coef> tag"); return false;}
+		osinstance->instanceData->objectives->obj[objcount]->coef[ k]->value  = atofmod1( number, ch);
 		for(i = 0; endCoef[i]  == *ch; i++, ch++);	
 		if(i != 6)  {osiltext = &ch[0]; osilerror("improper </coef> element"); return false;}
 		// get rid of white space after </coef
@@ -1749,14 +1743,11 @@ char *parseBase64(int *dataSize ){
 	//char *numericType = "numericType";
 	char *startBase64BinaryData = "<base64BinaryData";
 	char *endBase64BinaryData = "</base64BinaryData";
-	char *attText;
+	char *attText = NULL;
 	char *b64string = NULL;
 	int i;
 	int endpoint;
-
-	//
 	// start parsing
-	// the way flex works is that the ch should be pointing to variables
 	for(i = 0; startBase64BinaryData[i]  == *ch; i++, ch++);
 	if(i != 17) {
 		ch -= i;
@@ -1770,7 +1761,7 @@ char *parseBase64(int *dataSize ){
 	// ch should be pointing to the first character after sizeOf
 	GETATTRIBUTETEXT;
 	ch++;
-	*dataSize = atoimod( attText);
+	*dataSize = atoimod1( attText, attTextEnd);
 	// since the element must contain b64 data,  this element must end with > 
 	// eat the white space
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
@@ -1778,13 +1769,19 @@ char *parseBase64(int *dataSize ){
 	if(*ch != '>' ) {osiltext = &ch[0]; osilerror("<base64BinaryData> element does not have a proper closing >"); return false;}
 	ch++;
 	// we are now pointing start of the data
-	b64string = &*ch;
+	char *b64textstart;
+	char *b64textend;
+	b64textstart = ch;
 	// eat characters until we get to the </base64BinaryData element
 	for(; *ch != '<' && *ch != EOF; ch++);
+	b64textend = ch;
 	// we should be pointing to </base64BinaryData>
 	for(i = 0; endBase64BinaryData[i]  == *ch; i++, ch++);
 	if(i != 18) {osiltext = &ch[0];osilerror(" problem with <base64BinaryData> element"); return false;}
-	ch[ -18] = '\0';
+	int b64len = b64textend - b64textstart;
+	b64string = new char[ b64len + 1]; 
+	for(ki = 0; ki < b64len; ki++) b64string[ki] = b64textstart[ ki]; 
+	b64string[ki] = '\0';	
 	// burn the white space
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
 	// better have an > sign or not valid
@@ -1799,7 +1796,8 @@ char parseErrorDouble[50]  =  "an invalid value for xsd:double  ";
 char parseErrorInteger[50] =  "an invalid value for xsd:int  ";
 
 
-double atofmod(char *number){
+
+double atofmod1(char *number, char *numberend){
 	double val, power;
 	int i;
 	int sign = 1;
@@ -1874,15 +1872,15 @@ double atofmod(char *number){
 	}
 	// if we are here we should having nothing but white space until the end of the number
 	for( ; ISWHITESPACE( number[ i]) || isnewline( number[ i]) ; i++);
-	if(number[i] == '\0'){
+	if(number[i] == *numberend){
 		return sign*val;
 	}
-	else {osiltext = &number[0]; osilerror( strcat(parseErrorDouble, number)); 	}
+	else {osiltext = &number[0]; osilerror( strcat(parseErrorDouble, number)); 	return OSNAN;}
 }//end atofmod
 
 
 
-int atoimod(char *number){
+int atoimod1(char *number, char *numberend){
 	// modidfied atoi from Kernighan and Ritchie
 	int ival, power;
 	int i, sign;
@@ -1897,13 +1895,10 @@ int atoimod(char *number){
 	if(i == endWhiteSpace) {osiltext = number; osilerror( strcat(parseErrorInteger, number)); 	}
 	// if we are here we should having nothing but white space until the end of the number
 	for( ; ISWHITESPACE( number[ i]) || isnewline( number[ i]) ; i++);
-	if(number[i] == '\0'){
+	if(number[i] == *numberend){
 		return sign*ival;
 	}
-	else {osiltext = number; osilerror(strcat(parseErrorInteger, number)); 	}
-}//end atoimod
-
-
-
+	else {osiltext = number; osilerror(strcat(parseErrorInteger, number)); return OSNAN;	}
+}//end atoimod1
 
 

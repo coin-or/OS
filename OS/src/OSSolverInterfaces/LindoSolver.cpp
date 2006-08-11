@@ -122,7 +122,7 @@ void LindoSolver::solve()  {
 			osinstance = osilreader->readOSiL( &osil);
 		}
 		OSiLWriter osilwriter;
-		cout << osilwriter.writeOSiL( osinstance) << endl;
+		//cout << osilwriter.writeOSiL( osinstance) << endl;
 		if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Lindo requires decision variables");
 		finish = clock();
 		duration = (double) (finish - start) / CLOCKS_PER_SEC;
