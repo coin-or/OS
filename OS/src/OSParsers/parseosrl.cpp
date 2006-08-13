@@ -1,6 +1,6 @@
-#line 2 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.cpp"
+#line 2 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.cpp"
 
-#line 4 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.cpp"
+#line 4 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.cpp"
 
 #define  YY_INT_ALIGNED short int
 
@@ -929,7 +929,7 @@ int osrl_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *osrltext;
-#line 1 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 1 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 /** @file parseosrl.l
  * 
  * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
@@ -944,7 +944,7 @@ char *osrltext;
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
-#line 16 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 16 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 
 #include <stdio.h>
 #include <string.h>
@@ -966,7 +966,7 @@ char *osrltext;
 
 
 
-#line 970 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.cpp"
+#line 970 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.cpp"
 
 #define INITIAL 0
 #define attributetext 1
@@ -1124,11 +1124,11 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 51 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 51 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 
 
 
-#line 1132 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.cpp"
+#line 1132 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.cpp"
 
 	if ( !(yy_init) )
 		{
@@ -1224,493 +1224,493 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 54 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 54 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 57 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 57 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(QUOTE);}
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 58 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 58 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; if(beginElementText == true){BEGIN elementtext; } return(GREATERTHAN);}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 59 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 59 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; osrllval.ival = atoi(osrltext); return(INTEGER);}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 60 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 60 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; osrllval.dval = atof(osrltext); return(DOUBLE);}
 	YY_BREAK
 case 6:
 /* rule 6 can match eol */
 YY_RULE_SETUP
-#line 61 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 61 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT;  return(ENDOFELEMENT);}
 	YY_BREAK
 case 7:
 /* rule 7 can match eol */
 YY_RULE_SETUP
-#line 64 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 64 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; BEGIN osrlattributetext;  return(OSRLSTART);}
 	YY_BREAK
 case 8:
 /* rule 8 can match eol */
 YY_RULE_SETUP
-#line 65 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 65 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(OSRLEND);}
 	YY_BREAK
 case 9:
 /* rule 9 can match eol */
 YY_RULE_SETUP
-#line 66 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 66 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(RESULTHEADERSTART);}
 	YY_BREAK
 case 10:
 /* rule 10 can match eol */
 YY_RULE_SETUP
-#line 67 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 67 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(RESULTHEADEREND);}
 	YY_BREAK
 case 11:
 /* rule 11 can match eol */
 YY_RULE_SETUP
-#line 68 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 68 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; BEGIN elementtext; return(SERVICEURISTART);}
 	YY_BREAK
 case 12:
 /* rule 12 can match eol */
 YY_RULE_SETUP
-#line 69 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 69 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; unput('<'); return(SERVICEURISTART);}
 	YY_BREAK
 case 13:
 /* rule 13 can match eol */
 YY_RULE_SETUP
-#line 70 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 70 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT;  return(SERVICEURIEND);}
 	YY_BREAK
 case 14:
 /* rule 14 can match eol */
 YY_RULE_SETUP
-#line 71 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 71 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; BEGIN elementtext; return(SERVICENAMESTART);}
 	YY_BREAK
 case 15:
 /* rule 15 can match eol */
 YY_RULE_SETUP
-#line 72 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 72 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; unput('<'); return(SERVICENAMESTART);}
 	YY_BREAK
 case 16:
 /* rule 16 can match eol */
 YY_RULE_SETUP
-#line 73 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 73 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT;  return(SERVICENAMEEND);}
 	YY_BREAK
 case 17:
 /* rule 17 can match eol */
 YY_RULE_SETUP
-#line 74 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 74 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; BEGIN elementtext; return(INSTANCENAMESTART);}
 	YY_BREAK
 case 18:
 /* rule 18 can match eol */
 YY_RULE_SETUP
-#line 75 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 75 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; unput('<'); return(INSTANCENAMESTART);}
 	YY_BREAK
 case 19:
 /* rule 19 can match eol */
 YY_RULE_SETUP
-#line 76 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 76 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT;  return(INSTANCENAMEEND);}
 	YY_BREAK
 case 20:
 /* rule 20 can match eol */
 YY_RULE_SETUP
-#line 77 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 77 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; BEGIN elementtext; return(JOBIDSTART);}
 	YY_BREAK
 case 21:
 /* rule 21 can match eol */
 YY_RULE_SETUP
-#line 78 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 78 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; unput('<'); return(JOBIDSTART);}
 	YY_BREAK
 case 22:
 /* rule 22 can match eol */
 YY_RULE_SETUP
-#line 79 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 79 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT;  return(JOBIDEND);}
 	YY_BREAK
 case 23:
 /* rule 23 can match eol */
 YY_RULE_SETUP
-#line 80 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 80 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; BEGIN elementtext; return(HEADERMESSAGESTART);}
 	YY_BREAK
 case 24:
 /* rule 24 can match eol */
 YY_RULE_SETUP
-#line 81 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 81 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; unput('<'); return(HEADERMESSAGESTART);}
 	YY_BREAK
 case 25:
 /* rule 25 can match eol */
 YY_RULE_SETUP
-#line 82 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 82 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT;  return(HEADERMESSAGEEND);}
 	YY_BREAK
 case 26:
 /* rule 26 can match eol */
 YY_RULE_SETUP
-#line 84 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 84 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(GENERALSTATUSSTART);}
 	YY_BREAK
 case 27:
 /* rule 27 can match eol */
 YY_RULE_SETUP
-#line 85 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 85 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(GENERALSTATUSEND);}
 	YY_BREAK
 case 28:
 /* rule 28 can match eol */
 YY_RULE_SETUP
-#line 87 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 87 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(RESULTDATASTART);}
 	YY_BREAK
 case 29:
 /* rule 29 can match eol */
 YY_RULE_SETUP
-#line 88 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 88 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(RESULTDATAEND);}
 	YY_BREAK
 case 30:
 /* rule 30 can match eol */
 YY_RULE_SETUP
-#line 90 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 90 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(OPTIMIZATIONSTART);}
 	YY_BREAK
 case 31:
 /* rule 31 can match eol */
 YY_RULE_SETUP
-#line 91 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 91 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(OPTIMIZATIONEND);}
 	YY_BREAK
 case 32:
 /* rule 32 can match eol */
 YY_RULE_SETUP
-#line 93 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 93 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(SOLUTIONSTART);}
 	YY_BREAK
 case 33:
 /* rule 33 can match eol */
 YY_RULE_SETUP
-#line 94 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 94 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(SOLUTIONEND);}
 	YY_BREAK
 case 34:
 /* rule 34 can match eol */
 YY_RULE_SETUP
-#line 96 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 96 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(STATUSSTART);}
 	YY_BREAK
 case 35:
 /* rule 35 can match eol */
 YY_RULE_SETUP
-#line 97 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 97 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(STATUSEND);}
 	YY_BREAK
 case 36:
 /* rule 36 can match eol */
 YY_RULE_SETUP
-#line 99 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 99 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(VALUESSTART);}
 	YY_BREAK
 case 37:
 /* rule 37 can match eol */
 YY_RULE_SETUP
-#line 100 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 100 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(VALUESEND);}
 	YY_BREAK
 case 38:
 /* rule 38 can match eol */
 YY_RULE_SETUP
-#line 102 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 102 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(DUALVALUESSTART);}
 	YY_BREAK
 case 39:
 /* rule 39 can match eol */
 YY_RULE_SETUP
-#line 103 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 103 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(DUALVALUESEND);}
 	YY_BREAK
 case 40:
 /* rule 40 can match eol */
 YY_RULE_SETUP
-#line 105 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 105 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(VARSTART);}
 	YY_BREAK
 case 41:
 /* rule 41 can match eol */
 YY_RULE_SETUP
-#line 106 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 106 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(VARIABLESSTART);}
 	YY_BREAK
 case 42:
 /* rule 42 can match eol */
 YY_RULE_SETUP
-#line 107 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 107 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(VAREND);}
 	YY_BREAK
 case 43:
 /* rule 43 can match eol */
 YY_RULE_SETUP
-#line 108 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 108 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(VARIABLESEND);}
 	YY_BREAK
 case 44:
 /* rule 44 can match eol */
 YY_RULE_SETUP
-#line 110 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 110 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(OBJSTART);}
 	YY_BREAK
 case 45:
 /* rule 45 can match eol */
 YY_RULE_SETUP
-#line 111 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 111 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(OBJECTIVESSTART);}
 	YY_BREAK
 case 46:
 /* rule 46 can match eol */
 YY_RULE_SETUP
-#line 112 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 112 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(OBJEND);}
 	YY_BREAK
 case 47:
 /* rule 47 can match eol */
 YY_RULE_SETUP
-#line 113 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 113 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(OBJECTIVESEND);}
 	YY_BREAK
 case 48:
 /* rule 48 can match eol */
 YY_RULE_SETUP
-#line 115 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 115 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(CONSTART);}
 	YY_BREAK
 case 49:
 /* rule 49 can match eol */
 YY_RULE_SETUP
-#line 116 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 116 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(CONSTRAINTSSTART);}
 	YY_BREAK
 case 50:
 /* rule 50 can match eol */
 YY_RULE_SETUP
-#line 117 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 117 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(CONEND);}
 	YY_BREAK
 case 51:
 /* rule 51 can match eol */
 YY_RULE_SETUP
-#line 118 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 118 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(CONSTRAINTSEND);}
 	YY_BREAK
 case 52:
 /* rule 52 can match eol */
 YY_RULE_SETUP
-#line 120 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 120 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT;  BEGIN elementtext; return(MESSAGESTART);}
 	YY_BREAK
 case 53:
 /* rule 53 can match eol */
 YY_RULE_SETUP
-#line 121 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 121 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; unput('<'); return(MESSAGESTART);}
 	YY_BREAK
 case 54:
 /* rule 54 can match eol */
 YY_RULE_SETUP
-#line 122 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 122 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT;  return(MESSAGEEND);}
 	YY_BREAK
 case 55:
 /* rule 55 can match eol */
 YY_RULE_SETUP
-#line 124 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 124 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(OTHERSTART);}
 	YY_BREAK
 case 56:
 /* rule 56 can match eol */
 YY_RULE_SETUP
-#line 125 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 125 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(OTHEREND);}
 	YY_BREAK
 case 57:
 /* rule 57 can match eol */
 YY_RULE_SETUP
-#line 127 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 127 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(NUMBEROFSOLUTIONSATT);}
 	YY_BREAK
 case 58:
 /* rule 58 can match eol */
 YY_RULE_SETUP
-#line 128 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 128 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(NUMBEROFVARIABLESATT);}
 	YY_BREAK
 case 59:
 /* rule 59 can match eol */
 YY_RULE_SETUP
-#line 129 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 129 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(NUMBEROFCONSTRAINTSATT);}
 	YY_BREAK
 case 60:
 /* rule 60 can match eol */
 YY_RULE_SETUP
-#line 130 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 130 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(NUMBEROFOBJECTIVESATT);}
 	YY_BREAK
 case 61:
 /* rule 61 can match eol */
 YY_RULE_SETUP
-#line 131 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 131 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(OBJECTIVEIDXATT);}
 	YY_BREAK
 case 62:
 /* rule 62 can match eol */
 YY_RULE_SETUP
-#line 132 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 132 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; return(IDXATT);}
 	YY_BREAK
 case 63:
 /* rule 63 can match eol */
 YY_RULE_SETUP
-#line 133 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 133 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; BEGIN attributetext; return(TYPEATT);}
 	YY_BREAK
 case 64:
 /* rule 64 can match eol */
 YY_RULE_SETUP
-#line 134 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 134 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; BEGIN attributetext; return(DESCRIPTIONATT);}
 	YY_BREAK
 case 65:
 /* rule 65 can match eol */
 YY_RULE_SETUP
-#line 135 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 135 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT; BEGIN attributetext; return(NAMEATT);}
 	YY_BREAK
 case 66:
 /* rule 66 can match eol */
 YY_RULE_SETUP
-#line 137 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 137 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT;  return(SERVICEURISTARTANDEND);}
 	YY_BREAK
 case 67:
 /* rule 67 can match eol */
 YY_RULE_SETUP
-#line 138 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 138 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT;  return(SERVICENAMESTARTANDEND);}
 	YY_BREAK
 case 68:
 /* rule 68 can match eol */
 YY_RULE_SETUP
-#line 139 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 139 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT;  return(INSTANCENAMESTARTANDEND);}
 	YY_BREAK
 case 69:
 /* rule 69 can match eol */
 YY_RULE_SETUP
-#line 140 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 140 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT;  return(JOBIDSTARTANDEND);}
 	YY_BREAK
 case 70:
 /* rule 70 can match eol */
 YY_RULE_SETUP
-#line 141 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 141 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT;  return(HEADERMESSAGESTARTANDEND);}
 	YY_BREAK
 case 71:
 /* rule 71 can match eol */
 YY_RULE_SETUP
-#line 142 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 142 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT;  return(RESULTDATASTARTANDEND);}
 	YY_BREAK
 case 72:
 YY_RULE_SETUP
-#line 149 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 149 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 BEGIN comment;
 	YY_BREAK
 case 73:
-#line 151 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 151 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 case 74:
 /* rule 74 can match eol */
 YY_RULE_SETUP
-#line 151 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 151 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 ;
 	YY_BREAK
 case 75:
 YY_RULE_SETUP
-#line 152 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 152 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 BEGIN 0;
 	YY_BREAK
 case 76:
 YY_RULE_SETUP
-#line 154 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 154 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 BEGIN xmldeclaration;
 	YY_BREAK
 case 77:
-#line 156 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 156 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 case 78:
 /* rule 78 can match eol */
 YY_RULE_SETUP
-#line 156 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 156 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 ;
 	YY_BREAK
 case 79:
 YY_RULE_SETUP
-#line 158 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 158 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 BEGIN 0;
 	YY_BREAK
 case 80:
 /* rule 80 can match eol */
 YY_RULE_SETUP
-#line 163 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 163 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 { YY_PRINT;  osrllval.charval = strdup(osrltext); BEGIN 0;  return(ELEMENTTEXT); }
 	YY_BREAK
 case 81:
 /* rule 81 can match eol */
 YY_RULE_SETUP
-#line 164 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 164 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT;    osrllval.charval = strdup(osrltext);
 							BEGIN 0;  return(ATTRIBUTETEXT);}
 	YY_BREAK
 case 82:
 /* rule 82 can match eol */
 YY_RULE_SETUP
-#line 167 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 167 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 {YY_PRINT;  BEGIN 0; osrllval.charval = strdup(osrltext); return(OSRLATTRIBUTETEXT);}
 	YY_BREAK
 case 83:
 /* rule 83 can match eol */
 YY_RULE_SETUP
-#line 170 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 170 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 { osrlerror( "ecountered a spurious character in the lexer");}
 	YY_BREAK
 case 84:
 YY_RULE_SETUP
-#line 175 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 175 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 ECHO;
 	YY_BREAK
-#line 1714 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.cpp"
+#line 1714 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(attributetext):
 case YY_STATE_EOF(elementtext):
@@ -2713,7 +2713,7 @@ void osrlfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 175 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosrl.l"
+#line 175 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 
 
 

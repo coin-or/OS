@@ -49,6 +49,7 @@ bool parseStart();
 bool parseRowIdx();
 bool parseColIdx();
 bool parseValue();
+bool parseInstanceHeader(const char *pchar);
 char *parseBase64(int *dataSize );
 
 
@@ -476,6 +477,9 @@ try {
 		ch = NULL;
 		osinstance = NULL;
 		osinstance = new OSInstance();
+		const char *pchar = osil;
+		parseInstanceHeader( pchar);
+		//
 		const char *varel = "<variables";
 		ch = strstr(osil, varel);
 		if(ch == NULL) throw ErrorClass("variables element required");
@@ -525,6 +529,206 @@ bool isnewline(char c){
 	return true;
 }//end isnewline()
 
+bool parseInstanceHeader(const char *pchar){
+	//
+	// create a char array that holds the instance header information
+	char startInstanceHeader[] = "<instanceHeader";
+	char endInstanceHeader[] = "</instanceHeader";
+	char startName[] = "<name";
+	char endName[] = "</name";
+	char startSource[] = "<source";
+	char endSource[] = "</source";
+	char startDescription[] = "<description";
+	char endDescription[] = "</description";
+	const char *pinstanceHeadStart = strstr(pchar, startInstanceHeader);
+	char *pelementText = NULL;
+	char *ptemp = NULL;
+	int i, elementSize;
+	if(pinstanceHeadStart == NULL) {osiltext = (char*)&pchar[0]; osilerror("<instanceHeader> element missing"); return false;}
+	// increment the line number counter if there are any newlines between the start of
+	// the osil string and pinstanceHeadStart
+	int	kount = pinstanceHeadStart - pchar;
+	while( kount-- > 0) if(*(pchar++) == '\n') 	osillineno++;
+	// important! pchar now points to the '<' in <instanceHeader
+	// that is both pinstanceHeadStart and pchar point to the same thing
+ 	// 
+ 	// move to the end of <instanceHeader
+ 	pchar+=15;
+ 	//
+	// burn any whitespace
+	for( ; ISWHITESPACE( *pchar) || isnewline( *pchar); pchar++ ) ;
+	// pchar better be pointing to the '>' in the <instanceHeader> element
+	// or to /> if we have <instanceHeader />
+	if( *pchar == '/'){
+		pchar++;
+		// better point to a '>'
+		if(*pchar != '>') {osiltext = (char*)&pchar[0]; osilerror("improperly formed <instanceHeader> element"); return false;}
+		// there is no instanceHeader data
+		pchar++;
+		return true;
+	}
+	else{
+		// pchar better be '>' or there is an error
+		if(*pchar != '>') {osiltext = (char*)&pchar[0]; osilerror("improperly formed <instanceHeader> element"); return false;}
+	}
+	pchar++;
+	// we are pointing to the character after <instanceHeader>
+	//
+	//
+	//
+	// process the <name> element which is optional
+	//
+	// first burn any whitespace
+	for( ; ISWHITESPACE( *pchar) || isnewline( *pchar); pchar++ ) ;
+	// if, present we should be pointing to <name element if there -- it is not required
+	for(i = 0; startName[i]  == *pchar; i++, pchar++);
+	if(i != 5) {
+		//reset pchar
+		pchar -= i;
+	}
+	else{
+	// we have a name element, process the text
+	// burn the whitespace
+		for( ; ISWHITESPACE( *pchar) || isnewline( *pchar); pchar++ ) ;	
+		if( *pchar == '/'){
+			pchar++;
+			// better point to a '>'
+			if(*pchar != '>') {osiltext = (char*)&pchar[0]; osilerror("improperly formed <name> element"); return false;}
+		}
+		else{
+			// pchar better be '>' or there is an error
+			if(*pchar != '>') {osiltext = (char*)&pchar[0]; osilerror("improperly formed <name> element"); return false;}
+			pchar++;
+			// proces <name> element text
+			// there better be a </name
+			ptemp = strstr( pchar, endName);
+			if( ptemp == NULL) {osiltext = (char*)&pchar[0]; osilerror("improperly formed </name> element"); return false;}
+			elementSize = ptemp - pchar;
+			pelementText = new char[ elementSize + 1];
+			strncpy(pelementText, pchar, elementSize);
+			pelementText[ elementSize] = '\0';
+			osinstance->instanceHeader->name = pelementText;
+			//garbage collection
+			delete [] pelementText;
+			// move pchar up to the end of </name
+			while(elementSize-- > 0){
+				if(*pchar++ == '\n') osillineno++;
+			}
+			// pchar should now be pointing to the start of </name
+			// move to first char after </name
+			pchar += 6;
+			// get rid of the whitespace
+			for( ; ISWHITESPACE( *pchar) || isnewline( *pchar); pchar++ ) ;	
+			// we better have the '>' for the end of name
+			if(*pchar++ != '>'){osiltext = (char*)&pchar[0]; osilerror("improperly formed </name> element"); return false;}
+		}
+	}// end of else after discovering a name element
+	//done processing name element
+	//
+	//
+	// process the <source> element which is optional
+	//
+	// first burn any whitespace
+	for( ; ISWHITESPACE( *pchar) || isnewline( *pchar); pchar++ ) ;
+	// if, present we should be pointing to <source element if there -- it is not required
+	for(i = 0; startSource[i]  == *pchar; i++, pchar++);
+	if(i != 7) {
+		//reset pchar
+		pchar -= i;
+	}
+	else{
+	// we have a source element, process the text
+	// burn the whitespace
+		for( ; ISWHITESPACE( *pchar) || isnewline( *pchar); pchar++ ) ;	
+		if( *pchar == '/'){
+			pchar++;
+			// better point to a '>'
+			if(*pchar != '>') {osiltext = (char*)&pchar[0]; osilerror("improperly formed <source> element"); return false;}
+		}
+		else{
+			// pchar better be '>' or there is an error
+			if(*pchar != '>') {osiltext = (char*)&pchar[0]; osilerror("improperly formed <source> element"); return false;}
+			pchar++;
+			// proces <source> element text
+			// there better be a </source
+			ptemp = strstr( pchar, endSource);
+			if( ptemp == NULL) {osiltext = (char*)&pchar[0]; osilerror("improperly formed </source> element"); return false;}
+			elementSize = ptemp - pchar;
+			pelementText = new char[ elementSize + 1];
+			strncpy(pelementText, pchar, elementSize);
+			pelementText[ elementSize] = '\0';
+			osinstance->instanceHeader->source = pelementText;
+			//garbage collection
+			delete [] pelementText;
+			// move pchar up to the end of </source
+			while(elementSize-- > 0){
+				if(*pchar++ == '\n') osillineno++;
+			}
+			// pchar should now be pointing to the start of </source
+			// move to first char after </source
+			pchar += 8;
+			// get rid of the whitespace
+			for( ; ISWHITESPACE( *pchar) || isnewline( *pchar); pchar++ ) ;	
+			// we better have the '>' for the end of source
+			if(*pchar++ != '>'){osiltext = (char*)&pchar[0]; osilerror("improperly formed </source> element"); return false;}
+		}
+	}// end of else after discovering a source element
+	//done processing <source> element
+	//
+	//
+	//process the <description> element
+	//
+	// first burn any whitespace
+	for( ; ISWHITESPACE( *pchar) || isnewline( *pchar); pchar++ ) ;
+	// if, present we should be pointing to <description element if there -- it is not required
+	for(i = 0; startDescription[i]  == *pchar; i++, pchar++);
+	if(i != 12) {
+		//reset pchar
+		pchar -= i;
+	}
+	else{
+	// we have a description element, process the text
+	// burn the whitespace
+		for( ; ISWHITESPACE( *pchar) || isnewline( *pchar); pchar++ ) ;	
+		if( *pchar == '/'){
+			pchar++;
+			// better point to a '>'
+			if(*pchar != '>') {osiltext = (char*)&pchar[0]; osilerror("improperly formed <description> element"); return false;}
+		}
+		else{
+			// pchar better be '>' or there is an error
+			if(*pchar != '>') {osiltext = (char*)&pchar[0]; osilerror("improperly formed <description> element"); return false;}
+			pchar++;
+			// proces <source> element text
+			// there better be a </description
+			ptemp = strstr( pchar, endDescription);
+			if( ptemp == NULL) {osiltext = (char*)&pchar[0]; osilerror("improperly formed </description> element"); return false;}
+			elementSize = ptemp - pchar;
+			pelementText = new char[ elementSize + 1];
+			strncpy(pelementText, pchar, elementSize);
+			pelementText[ elementSize] = '\0';
+			osinstance->instanceHeader->description = pelementText;
+			//garbage collection
+			delete [] pelementText;
+			// move pchar up to the end of </description
+			while(elementSize-- > 0){
+				if(*pchar++ == '\n') osillineno++;
+			}
+			// pchar should now be pointing to the start of </description
+			// move to first char after </description
+			pchar += 13;
+			// get rid of the whitespace
+			for( ; ISWHITESPACE( *pchar) || isnewline( *pchar); pchar++ ) ;	
+			// we better have the '>' for the end of </description>
+			if(*pchar++ != '>'){osiltext = (char*)&pchar[0]; osilerror("improperly formed </description> element"); return false;}
+		}
+	}// end of else after discovering a description element
+	//done processing <description> element
+	//
+	// if we are here there must be an </instanceHeader > element
+	return true;
+}//end parseInstanceHeader
+
 
 bool parseVariables(){
 	start = clock(); 
@@ -565,6 +769,7 @@ bool parseVariables(){
 	GETATTRIBUTETEXT;
 	ch++;
 	numberOfVariables = atoimod1( attText, attTextEnd);
+	delete [] attText;
 	if(numberOfVariables <= 0) {
 		osilerror("there must be at least one variable"); return false;
 	}
@@ -606,6 +811,7 @@ bool parseVariables(){
 				varnameattON == true;
 				GETATTRIBUTETEXT;
 				osinstance->instanceData->variables->var[varcount]->name=attText;
+				delete [] attText;
 				//printf("ATTRIBUTE = %s\n", attText);
 				break;
 			case 'i':

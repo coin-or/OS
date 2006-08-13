@@ -70,7 +70,7 @@ int main(int argC, char* argV[])
 	osilFileName =  dataDir +"lindoapiaddins.osil";
 	nlFileName = dataDir +"hs71.nl";
 	mpsFileName =  dataDir + "parinc.mps";
-	parserTestOSiLFileName = dataDir + "osa-60.osil"; 
+	parserTestOSiLFileName = dataDir + "parincLinear.osil"; 
 	fileUtil = new FileUtil();
 	osil = fileUtil->getFileAsString( &osilFileName[0]);
 	// solve using using the osil file
@@ -266,8 +266,8 @@ int main(int argC, char* argV[])
 		start = clock();
 		cout << "PARSE THE OSIL STRING INTO AN OSINSTNACE OBJECT" << endl;
 		//osilreader->readOSiL( &osil);
-		osilreader->readOSiL( &osil);
-		//cout << osilwriter->writeOSiL( osilreader->readOSiL( &osil)) << endl;
+		//osilreader->readOSiL( &osil);
+		cout << osilwriter->writeOSiL( osilreader->readOSiL( &osil)) << endl;
 		delete osilreader;
 		osilreader = 0;
 		finish = clock();

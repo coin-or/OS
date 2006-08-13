@@ -3,7 +3,7 @@
 	xsi:schemaLocation="os.optimizationservices.org ../schemas/OSiL.xsd">
 	<instanceHeader>
 		<name>Par Inc. </name>
-		<source>Anderson, Sweeny, and Williams</source>
+		<source>Anderson, Sweeny, and Williams</sourceee>
 		<description> A production scheduling problem </description>
 	</instanceHeader>
 	<instanceData>
@@ -18,7 +18,7 @@
 
 			</obj>
 		</objectives>
-		<constraints numberOfConstraints="4"> dfadf
+		<constraints numberOfConstraints="4"> 
 			<con name="cutanddye" ub="630" />
 			<con name="sewing" lb="10" ub="600"/>
 			<con name="finishing" lb="10" ub="708"/>

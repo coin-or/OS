@@ -1,6 +1,6 @@
-#line 2 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosol.cpp"
+#line 2 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.cpp"
 
-#line 4 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosol.cpp"
+#line 4 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.cpp"
 
 #define  YY_INT_ALIGNED short int
 
@@ -459,7 +459,7 @@ int osol_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *osoltext;
-#line 1 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosol.l"
+#line 1 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.l"
 /** @file parseosol.l
  * 
  * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
@@ -474,7 +474,7 @@ char *osoltext;
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
-#line 16 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosol.l"
+#line 16 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.l"
 
 #include <stdio.h> 
 #include "lexyaccparser.h"
@@ -490,7 +490,7 @@ char *osoltext;
 #endif
 
      
-#line 494 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosol.cpp"
+#line 494 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.cpp"
 
 #define INITIAL 0
 
@@ -643,10 +643,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 39 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosol.l"
+#line 39 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.l"
 
 
-#line 650 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosol.cpp"
+#line 650 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.cpp"
 
 	if ( !(yy_init) )
 		{
@@ -732,20 +732,20 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 41 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosol.l"
+#line 41 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.l"
 
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 43 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosol.l"
+#line 43 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.l"
 
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 45 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosol.l"
+#line 45 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.l"
 ECHO;
 	YY_BREAK
-#line 749 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosol.cpp"
+#line 749 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1731,7 +1731,7 @@ void osolfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 45 "/Users/kmartin/OS-Test/OS/src/OSParsers/parseosol.l"
+#line 45 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.l"
 
 
 
