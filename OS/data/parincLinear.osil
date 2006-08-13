@@ -3,7 +3,7 @@
 	xsi:schemaLocation="os.optimizationservices.org ../schemas/OSiL.xsd">
 	<instanceHeader>
 		<name>Par Inc. </name>
-		<source>Anderson, Sweeny, and Williams</sourceee>
+		<source>Anderson, Sweeny, and Williams</source>
 		<description> A production scheduling problem </description>
 	</instanceHeader>
 	<instanceData>

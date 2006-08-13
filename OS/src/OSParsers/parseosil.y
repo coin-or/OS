@@ -479,6 +479,7 @@ try {
 		osinstance = new OSInstance();
 		const char *pchar = osil;
 		parseInstanceHeader( pchar);
+		cout << "GAIL HONDA = " << pchar << endl;
 		//
 		const char *varel = "<variables";
 		ch = strstr(osil, varel);
@@ -489,7 +490,6 @@ try {
 		if( parseLinearConstraintCoefficients() != true) throw ErrorClass("error in parse ConstraintCoefficients");	
 		osil_scan_string( ch);
 		if(  osilparse( ) != 0) throw ErrorClass(  sparseError);
-		//cout << "HERE IS THE OSIL AFTER PARSING: " << osil << endl;
 		return osinstance;
 }//end yygetOSInstance
 		catch(const ErrorClass& eclass){
@@ -581,7 +581,7 @@ bool parseInstanceHeader(const char *pchar){
 	// first burn any whitespace
 	for( ; ISWHITESPACE( *pchar) || isnewline( *pchar); pchar++ ) ;
 	// if, present we should be pointing to <name element if there -- it is not required
-	for(i = 0; startName[i]  == *pchar; i++, pchar++);
+	for(i = 0; *(startName + i)  == *pchar; i++, pchar++);
 	if(i != 5) {
 		//reset pchar
 		pchar -= i;
@@ -631,7 +631,7 @@ bool parseInstanceHeader(const char *pchar){
 	// first burn any whitespace
 	for( ; ISWHITESPACE( *pchar) || isnewline( *pchar); pchar++ ) ;
 	// if, present we should be pointing to <source element if there -- it is not required
-	for(i = 0; startSource[i]  == *pchar; i++, pchar++);
+	for(i = 0; *(startSource + i)  == *pchar; i++, pchar++);
 	if(i != 7) {
 		//reset pchar
 		pchar -= i;
@@ -681,7 +681,7 @@ bool parseInstanceHeader(const char *pchar){
 	// first burn any whitespace
 	for( ; ISWHITESPACE( *pchar) || isnewline( *pchar); pchar++ ) ;
 	// if, present we should be pointing to <description element if there -- it is not required
-	for(i = 0; startDescription[i]  == *pchar; i++, pchar++);
+	for(i = 0; *(startDescription + i)  == *pchar; i++, pchar++);
 	if(i != 12) {
 		//reset pchar
 		pchar -= i;
@@ -726,6 +726,16 @@ bool parseInstanceHeader(const char *pchar){
 	//done processing <description> element
 	//
 	// if we are here there must be an </instanceHeader > element
+	// burn the whitespace
+	for( ; ISWHITESPACE( *pchar) || isnewline( *pchar); pchar++ ) ;	
+	// we should be pointing to </instanceHeader
+	for(i = 0; *(endInstanceHeader + i)  == *pchar; i++, pchar++);
+	if(i != 16) {osiltext = (char*)&pchar[0]; osilerror("improperly formed </instanceHeader> element"); return false;}	
+	// pchar now points to the first character after </instanceHeader
+	// get rid of white space
+	for( ; ISWHITESPACE( *pchar) || isnewline( *pchar); pchar++ ) ;	
+	// pchar must point to '>' or there is an error
+	if(*pchar != '>'){osiltext = (char*)&pchar[0]; osilerror("improperly formed </instanceHeader> element"); return false;}		
 	return true;
 }//end parseInstanceHeader
 
