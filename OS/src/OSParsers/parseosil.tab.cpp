@@ -2384,7 +2384,7 @@ yyreturn:
 // user defined functions
 
 
-void osilerror(char* errormsg) {
+void osilerror(const char* errormsg) {
 	try{
 		std::ostringstream outStr;
 		std::string error = errormsg;
@@ -2413,7 +2413,7 @@ try {
 		osinstance = new OSInstance();
 		const char *pchar = osil;
 		parseInstanceHeader( pchar);
-		cout << "GAIL HONDA = " << pchar << endl;
+		cout << "TEST parseInstanceHeader = " << pchar << endl;
 		//
 		const char *varel = "<variables";
 		ch = strstr(osil, varel);
@@ -2424,7 +2424,6 @@ try {
 		if( parseLinearConstraintCoefficients() != true) throw ErrorClass("error in parse ConstraintCoefficients");	
 		osil_scan_string( ch);
 		if(  osilparse( ) != 0) throw ErrorClass(  sparseError);
-		//cout << "HERE IS THE OSIL AFTER PARSING: " << osil << endl;
 		return osinstance;
 }//end yygetOSInstance
 		catch(const ErrorClass& eclass){
@@ -2467,14 +2466,14 @@ bool isnewline(char c){
 bool parseInstanceHeader(const char *pchar){
 	//
 	// create a char array that holds the instance header information
-	char startInstanceHeader[] = "<instanceHeader";
-	char endInstanceHeader[] = "</instanceHeader";
-	char startName[] = "<name";
-	char endName[] = "</name";
-	char startSource[] = "<source";
-	char endSource[] = "</source";
-	char startDescription[] = "<description";
-	char endDescription[] = "</description";
+	const char *startInstanceHeader = "<instanceHeader";
+	const char *endInstanceHeader = "</instanceHeader";
+	const char *startName = "<name";
+	const char *endName = "</name";
+	const char *startSource = "<source";
+	const char *endSource = "</source";
+	const char *startDescription = "<description";
+	const char *endDescription = "</description";
 	const char *pinstanceHeadStart = strstr(pchar, startInstanceHeader);
 	char *pelementText = NULL;
 	char *ptemp = NULL;
@@ -2677,17 +2676,17 @@ bool parseInstanceHeader(const char *pchar){
 
 bool parseVariables(){
 	start = clock(); 
-	char *c_numberOfVariables = "numberOfVariables";
-	char *startVariables = "<variables";
-	char *endVariables = "</variables";
-	char *startVar = "<var";
-	char *endVar = "</var";
+	const char *c_numberOfVariables = "numberOfVariables";
+	const char *startVariables = "<variables";
+	const char *endVariables = "</variables";
+	const char *startVar = "<var";
+	const char *endVar = "</var";
 	// the attributes
 	char *attText = NULL;
-	char *name = "name";
-	char *initString = "initString";
-	char *type = "type";
-	char *mult = "mult";
+	const char *name = "name";
+	const char *initString = "initString";
+	const char *type = "type";
+	const char *mult = "mult";
 	// others
 	int i;
 	int varcount = 0;
@@ -2771,11 +2770,13 @@ bool parseVariables(){
 					GETATTRIBUTETEXT;
 					//printf("ATTRIBUTE = %s\n", attText);
 					osinstance->instanceData->variables->var[varcount]->init=atofmod1(attText, attTextEnd);
+					delete [] attText;
 				}
 				else{
 					if(varinitStringattON == true) {osiltext = &ch[0]; osilerror("error too many variable initString attributes"); return false;}
 					varinitStringattON = true;
 					GETATTRIBUTETEXT;
+					delete [] attText;
 					//printf("ATTRIBUTE = %s\n", attText);
 					osinstance->instanceData->variables->var[varcount]->initString=attText;
 				}
@@ -2788,6 +2789,7 @@ bool parseVariables(){
 				GETATTRIBUTETEXT;
 				if( strchr("CBIS", attText[0]) == NULL ) {osiltext = &ch[0]; osilerror("variable type not C,B,I, or S"); return false;}
 				osinstance->instanceData->variables->var[varcount]->type = attText[0];
+				delete [] attText;
 				break;
 			case 'l':
 				ch++;
@@ -2796,6 +2798,7 @@ bool parseVariables(){
 				varlbattON = true;
 				GETATTRIBUTETEXT;
 				osinstance->instanceData->variables->var[varcount]->lb = atofmod1(attText, attTextEnd);
+				delete [] attText;
 				//printf("ATTRIBUTE = %s\n", attText);
 				break;
 			case 'u':
@@ -2805,6 +2808,7 @@ bool parseVariables(){
 				varubattON = true;
 				GETATTRIBUTETEXT;
 				osinstance->instanceData->variables->var[varcount]->ub = atofmod1(attText, attTextEnd);
+				delete [] attText;
 				//printf("ATTRIBUTE = %s\n", attText);
 				break;
 			case 'm':
@@ -2813,6 +2817,7 @@ bool parseVariables(){
 				if(varmultattON == true) {osiltext = &ch[0]; osilerror("error too many variable mult attributes"); return false;}
 				varmultattON = true;
 				GETATTRIBUTETEXT;
+				delete [] attText;
 				//printf("ATTRIBUTE = %s\n", attText);
 				break;
 			case ' ':
@@ -2898,19 +2903,19 @@ bool parseVariables(){
 
 bool parseObjectives(){
 	start = clock();
-	char *c_numberOfObjectives = "numberOfObjectives";
-	char *startObjectives = "<objectives";
-	char *endObjectives = "</objectives";
-	char *startObj = "<obj";
-	char *endObj = "</obj";
+	const char *c_numberOfObjectives = "numberOfObjectives";
+	const char *startObjectives = "<objectives";
+	const char *endObjectives = "</objectives";
+	const char *startObj = "<obj";
+	const char *endObj = "</obj";
 	// attributes
 	char *attText = NULL;
-	char *constant = "constant";
-	char *maxOrMin = "maxOrMin";
-	char *numberOfObjCoef = "numberOfObjCoeff";
-	char *weight = "weight";
-	char *name = "name";
-	char *mult = "mult";
+	const char *constant = "constant";
+	const char *maxOrMin = "maxOrMin";
+	const char *numberOfObjCoef = "numberOfObjCoeff";
+	const char *weight = "weight";
+	const char *name = "name";
+	const char *mult = "mult";
 	// others
 	int i;
 	// objective function attribute boolean variables
@@ -2949,6 +2954,7 @@ bool parseObjectives(){
 		if(i != 18) {osiltext = &ch[0]; osilerror("incorrect numberOfObjectives attribute in <objectives> tag"); return false;}	
 		GETATTRIBUTETEXT;
 		numberOfObjectives = atoimod1( attText, attTextEnd);
+		delete [] attText;
 		ch++;
 	}
 	if(numberOfObjectives > 0){
@@ -3001,6 +3007,7 @@ bool parseObjectives(){
 						osinstance->instanceData->objectives->obj[objcount]->numberOfObjCoef=atoimod1(attText, attTextEnd);
 						osinstance->instanceData->objectives->obj[objcount]->coef = new ObjCoef*[osinstance->instanceData->objectives->obj[ objcount]->numberOfObjCoef];
 						for(int i = 0; i < osinstance->instanceData->objectives->obj[ objcount]->numberOfObjCoef; i++)osinstance->instanceData->objectives->obj[objcount]->coef[i] = new ObjCoef();
+						delete [] attText;
 					}
 				}
 				else{
@@ -3012,6 +3019,7 @@ bool parseObjectives(){
 						GETATTRIBUTETEXT;
 						//printf("ATTRIBUTE = %s\n", attText);
 						osinstance->instanceData->objectives->obj[objcount]->name=attText;
+						delete [] attText;
 					}
 				}
 				break;
@@ -3024,6 +3032,7 @@ bool parseObjectives(){
 					GETATTRIBUTETEXT;
 					//printf("ATTRIBUTE = %s\n", attText);
 					osinstance->instanceData->objectives->obj[objcount]->constant=atofmod1(attText, attTextEnd);
+					delete [] attText;
 				}
 				break;
 			case 'w':
@@ -3035,6 +3044,7 @@ bool parseObjectives(){
 					GETATTRIBUTETEXT;
 					//printf("ATTRIBUTE = %s\n", attText);
 					osinstance->instanceData->objectives->obj[objcount]->weight=atofmod1(attText, attTextEnd);
+					delete [] attText;
 				}
 				break;
 			case 'm':
@@ -3048,6 +3058,7 @@ bool parseObjectives(){
 						//printf("ATTRIBUTE = %s\n", attText);
 						if( (strcmp("max", attText) != 0 ) && (strcmp("min", attText) != 0 ) ){osilerror("maxOrMin attribute in objective must be a max or min"); return false;}
 						osinstance->instanceData->objectives->obj[objcount]->maxOrMin = attText;
+						delete [] attText;
 					}
 				}
 				else{
@@ -3059,6 +3070,7 @@ bool parseObjectives(){
 						GETATTRIBUTETEXT;
 						//printf("ATTRIBUTE = %s\n", attText);
 						//osinstance->instanceData->objectives->obj[objcount]->name=attText;
+						delete [] attText;
 					}
 				}
 				break;
@@ -3168,18 +3180,18 @@ bool parseObjectives(){
 
 bool parseConstraints(){
 	start = clock();	
-	char *c_numberOfConstraints = "numberOfConstraints";
-	char *startConstraints = "<constraints";
-	char *endConstraints = "</constraints";
-	char *startCon = "<con";
-	char *endCon = "</con";
+	const char *c_numberOfConstraints = "numberOfConstraints";
+	const char *startConstraints = "<constraints";
+	const char *endConstraints = "</constraints";
+	const char *startCon = "<con";
+	const char *endCon = "</con";
 	// attributes
 	char *attText = NULL;
-	char *name = "name";
-	char *constant = "constant";
-	char *mult = "mult";
+	const char *name = "name";
+	const char *constant = "constant";
+	const char *mult = "mult";
 	// others
-	int i;
+	int i; 
 	int concount = 0;
 	int numberOfConstraints = 0;
 	// constraint attribute boolean variables
@@ -3208,6 +3220,7 @@ bool parseConstraints(){
 	GETATTRIBUTETEXT;
 	ch++;
 	numberOfConstraints = atoimod1( attText, attTextEnd);
+	delete [] attText;
 	// key if
 	//
 	if(numberOfConstraints > 0){
@@ -3244,6 +3257,7 @@ bool parseConstraints(){
 				connameattON = true;
 				GETATTRIBUTETEXT;
 				osinstance->instanceData->constraints->con[concount]->name=attText;
+				delete [] attText;
 				//printf("ATTRIBUTE = %s\n", attText);
 				break;
 			case 'c':
@@ -3254,6 +3268,7 @@ bool parseConstraints(){
 				GETATTRIBUTETEXT;
 				//printf("ATTRIBUTE = %s\n", attText);
 				osinstance->instanceData->constraints->con[concount]->constant=atofmod1(attText, attTextEnd);
+				delete [] attText;
 				break;
 			case 'l':
 				ch++;
@@ -3262,6 +3277,7 @@ bool parseConstraints(){
 				conlbattON = true;
 				GETATTRIBUTETEXT;
 				osinstance->instanceData->constraints->con[concount]->lb = atofmod1(attText, attTextEnd);
+				delete [] attText;
 				//printf("ATTRIBUTE = %s\n", attText);
 				break;
 			case 'u':
@@ -3271,6 +3287,7 @@ bool parseConstraints(){
 				conubattON = true;
 				GETATTRIBUTETEXT;
 				osinstance->instanceData->constraints->con[concount]->ub = atofmod1(attText, attTextEnd);
+				delete [] attText;
 				//printf("ATTRIBUTE = %s\n", attText);
 				break;
 			case 'm':
@@ -3279,6 +3296,7 @@ bool parseConstraints(){
 				if(conmultattON == true) {osiltext = &ch[0]; osilerror("error too many con mult attributes"); return false;}
 				conmultattON = true;
 				GETATTRIBUTETEXT;
+				delete [] attText;
 				//printf("ATTRIBUTE = %s\n", attText);
 				break;
 			case ' ':
@@ -3385,9 +3403,9 @@ bool parseConstraints(){
 
 bool parseLinearConstraintCoefficients(){
 	start = clock();	
-	char *c_numberOfValues = "numberOfValues";
-	char *startlinearConstraintCoefficients = "<linearConstraintCoefficients";
-	char *endlinearConstraintCoefficients = "</linearConstraintCoefficients";
+	const char *c_numberOfValues = "numberOfValues";
+	const char *startlinearConstraintCoefficients = "<linearConstraintCoefficients";
+	const char *endlinearConstraintCoefficients = "</linearConstraintCoefficients";
 	// attributes
 	char *attText = NULL;
 	// others
@@ -3412,6 +3430,7 @@ bool parseLinearConstraintCoefficients(){
 	GETATTRIBUTETEXT;
 	ch++;
 	numberOfValues = atoimod1( attText, attTextEnd);
+	delete [] attText;
 	if(numberOfValues <= 0) {osiltext = &ch[0]; osilerror("the number of nonlinear nozeros must be positive"); return false;}
 	osinstance->instanceData->linearConstraintCoefficients->numberOfValues = numberOfValues;
 	// get rid of white space after the numberOfConstraints element
@@ -3446,10 +3465,10 @@ bool parseLinearConstraintCoefficients(){
 
 bool parseStart(){
 	start = clock(); 
-	char* startStart = "<start";
-	char* endStart = "</start";
-	char* startEl = "<el";
-	char* endEl = "</el";
+	const char* startStart = "<start";
+	const char* endStart = "</start";
+	const char* startEl = "<el";
+	const char* endEl = "</el";
 	int kount = 0;
 	char* number = NULL;
 	int i;
@@ -3486,6 +3505,7 @@ bool parseStart(){
 		for(i = 0; i < (base64decodeddatalength/dataSize); i++){
 			osinstance->instanceData->linearConstraintCoefficients->start->el[ i] = *(intvec++);
 		}
+		delete [] b64string;
 	}
 	else{
 		foundEl = true;
@@ -3542,10 +3562,10 @@ bool parseStart(){
 
 bool parseRowIdx(){
 	start = clock(); 
-	char* startRowIdx = "<rowIdx";
-	char* endRowIdx = "</rowIdx";
-	char* startEl = "<el";
-	char* endEl = "</el";
+	const char* startRowIdx = "<rowIdx";
+	const char* endRowIdx = "</rowIdx";
+	const char* startEl = "<el";
+	const char* endEl = "</el";
 	int kount = 0;
 	char* number = NULL;
 	int i;
@@ -3584,6 +3604,7 @@ bool parseRowIdx(){
 			osinstance->instanceData->linearConstraintCoefficients->rowIdx->el[ i] = *(intvec++);
 			kount++;
 		}
+		delete [] b64string;
 	}
 	else{
 		foundEl = true;
@@ -3642,10 +3663,10 @@ bool parseRowIdx(){
 
 bool parseColIdx(){
 	start = clock(); 
-	char* startColIdx = "<colIdx";
-	char* endColIdx = "</colIdx";
-	char* startEl = "<el";
-	char* endEl = "</el";
+	const char* startColIdx = "<colIdx";
+	const char* endColIdx = "</colIdx";
+	const char* startEl = "<el";
+	const char* endEl = "</el";
 	int kount = 0;
 	char* number = NULL;
 	int i;
@@ -3684,6 +3705,7 @@ bool parseColIdx(){
 			osinstance->instanceData->linearConstraintCoefficients->colIdx->el[ i] = *(intvec++);
 			kount++;
 		}
+		delete [] b64string;
 	}
 	else{
 		foundEl = true;
@@ -3741,10 +3763,10 @@ bool parseColIdx(){
 
 bool parseValue(){
 	start = clock(); 
-	char* startValue = "<value";
-	char* endValue = "</value";
-	char* startEl = "<el";
-	char* endEl = "</el";
+	const char* startValue = "<value";
+	const char* endValue = "</value";
+	const char* startEl = "<el";
+	const char* endEl = "</el";
 	int kount = 0;
 	char* number = NULL;
 	int i;
@@ -3784,6 +3806,7 @@ bool parseValue(){
 			osinstance->instanceData->linearConstraintCoefficients->value->el[ i] = *(doublevec++);
 			kount++;
 		}
+		delete [] b64string;
 	}
 	else{
 		foundEl = true;
@@ -3838,9 +3861,9 @@ bool parseValue(){
 }//end parseValue
 
 bool parseObjCoef( int objcount){
-	char* startCoef = "<coef";
-	char* endCoef = "</coef";
-	char* c_idx = "idx";
+	const char* startCoef = "<coef";
+	const char* endCoef = "</coef";
+	const char* c_idx = "idx";
 	int kount = 0;
 	char* number = NULL;
 	char *attText = NULL;
@@ -3865,6 +3888,8 @@ bool parseObjCoef( int objcount){
 		if(i != 3) {osiltext = &ch[0]; osilerror("incorrect idx attribute in objective function <idx> tag"); return false;}	
 		// ch should be pointing to the first character after numberOfObjectives
 		GETATTRIBUTETEXT;
+		//kipp fix this -- we need to get the number of objectives
+		delete [] attText;
 		ch++;	
 		// eat white space
 		for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
@@ -3890,10 +3915,10 @@ bool parseObjCoef( int objcount){
 }//end parseObjCoef
 
 char *parseBase64(int *dataSize ){
-	char *sizeOf = "sizeOf";
+	const char *sizeOf = "sizeOf";
 	//char *numericType = "numericType";
-	char *startBase64BinaryData = "<base64BinaryData";
-	char *endBase64BinaryData = "</base64BinaryData";
+	const char *startBase64BinaryData = "<base64BinaryData";
+	const char *endBase64BinaryData = "</base64BinaryData";
 	char *attText = NULL;
 	char *b64string = NULL;
 	int i;
@@ -3913,6 +3938,7 @@ char *parseBase64(int *dataSize ){
 	GETATTRIBUTETEXT;
 	ch++;
 	*dataSize = atoimod1( attText, attTextEnd);
+	delete [] attText;
 	// since the element must contain b64 data,  this element must end with > 
 	// eat the white space
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
