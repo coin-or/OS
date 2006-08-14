@@ -89,3 +89,6 @@
 
 /* Version number of package */
 #undef VERSION
+
+/* use for windos */
+#undef WIN_SOCK

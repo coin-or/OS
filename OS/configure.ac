@@ -37,6 +37,25 @@ AC_PREFIX_DEFAULT([`pwd`])
 # Get the system type
 AC_CANONICAL_BUILD
 
+  case $build in
+     *-mingw*)
+         AC_DEFINE([WIN_SOCK],[1],[use for windos]);; 
+      *-cygwin*)
+         AC_DEFINE([WIN_SOCK],[1],[use for windos]);; 
+       *-win*)
+         AC_DEFINE([WIN_SOCK],[1],[use for windos]);; 
+    *-linux-*)
+		 ;;
+    *-darwin*)
+         ;;
+    *-ibm-*)
+         ;;
+    *-hp-*)
+         ;;
+    *-sun-*)
+    ;;
+  esac
+
 # If this project depends on external projects, the Externals file in
 # the source root directory contains definition of where to find those
 # externals.  The following macro ensures that those externals are
