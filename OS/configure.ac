@@ -39,11 +39,11 @@ AC_CANONICAL_BUILD
 
   case $build in
      *-mingw*)
-         AC_DEFINE([WIN_SOCK],[1],[use for windos]);; 
+         AC_DEFINE([WIN_SOCK],[1],[use for windows]);; 
       *-cygwin*)
-         AC_DEFINE([WIN_SOCK],[1],[use for windos]);; 
+         AC_DEFINE([WIN_SOCK],[1],[use for windows]);; 
        *-win*)
-         AC_DEFINE([WIN_SOCK],[1],[use for windos]);; 
+         AC_DEFINE([WIN_SOCK],[1],[use for windows]);; 
     *-linux-*)
 		 ;;
     *-darwin*)

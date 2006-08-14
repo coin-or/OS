@@ -17,10 +17,13 @@
 #include "WSUtil.h"
 
 
+#ifdef WIN_SOCK
+#include <winsock.h>
+#else
 #include <sys/socket.h> /* for socket(), connect(), send(), and recv() */
 #include <arpa/inet.h>  /* for sockaddr_in and inet_addr() */
 #include <unistd.h>     /* for close() */
-
+#endif
 
 #include <stdlib.h>     /* for atoi() and exit() */
 #include <string.h>     /* for memset() */
@@ -60,6 +63,10 @@ string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned int se
 		unsigned int httpStringLen;      /* Length of string to http */
 		int bytesRcvd, totalBytesRcvd;   /* Bytes read in single recv() and total bytes read */
 		char* message = &theSOAP[0];         /* Second arg: string to http */
+		#ifdef WIN_SOCK
+		WSADATA wsaData;
+		if( WSAStartup(MAKEWORD(2, 0), &wsaData) != 0 ) throw ErrorClass( "WSAStartup failed");
+		#endif
 		/* Create a reliable, stream socket using TCP */
 		if ((sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0) throw ErrorClass( "failure creating socket");
 		/* Construct the server address structure */
@@ -100,12 +107,24 @@ string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned int se
 			ret_message << httpBuffer;
 			if(recvMsgSize == 0 ) {
 			//if(recvMsgSize == 0 || recvMsgSize < RCVBUFSIZE - 1) {
+			#ifdef WIN_SOCK
+			closesocket( sock);
+			WSACleanup();
+			#else
 			close( sock);
+			#endif
 			//ret_message << endl;
 			break;
 			}
-		}    
-		close(sock);
+		}
+
+		#ifdef WIN_SOCK
+		closesocket( sock);
+		WSACleanup();
+		#else
+		close( sock);
+		#endif
+		
 		return ret_message.str();
 	}
 	catch(const ErrorClass& eclass){
