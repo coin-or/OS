@@ -33,6 +33,7 @@ bool osOption;
 #endif
 #ifdef WIN_SOCK
 #define YY_NO_UNISTD_H
+#include <io.h>
 #endif
 
 /*

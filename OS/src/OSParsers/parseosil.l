@@ -30,6 +30,7 @@
 	#define YY_PRINT ;
 #endif
 #ifdef WIN_SOCK
+#include <io.h>
 #define YY_NO_UNISTD_H
 #endif
 
