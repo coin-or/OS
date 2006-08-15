@@ -30,6 +30,9 @@ bool osOption;
 #else     
 	#define YY_PRINT  ;
 #endif
+#ifdef WIN_SOCK
+#define YY_NO_UNISTD_H
+#endif
 
 /*
  * INPUTS:

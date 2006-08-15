@@ -15,18 +15,18 @@
  */ 
  
 #include "WSUtil.h"
-
+#include "OSConfig.h"
 
 #ifdef WIN_SOCK
 #include <winsock.h>
 #else
-#include <sys/socket.h> /* for socket(), connect(), send(), and recv() */
-#include <arpa/inet.h>  /* for sockaddr_in and inet_addr() */
-#include <unistd.h>     /* for close() */
+#include <sys/socket.h>
+#include <arpa/inet.h>  
+#include <unistd.h>    
 #endif
 
-#include <stdlib.h>     /* for atoi() and exit() */
-#include <string.h>     /* for memset() */
+#include <stdlib.h>    
+#include <string.h>    
 
 #include <netdb.h>
 #include <iostream>

@@ -53,7 +53,7 @@ CoinSolver::~CoinSolver() {
 }
 
 
-void CoinSolver::solve() throw (ErrorClass) 
+void CoinSolver::solve() throw (ErrorClass) {
 	try{
 	OSiLReader *osilreader = NULL;
 	osresult = new OSResult();
@@ -128,7 +128,7 @@ void CoinSolver::solve() throw (ErrorClass)
 		osrl = osrlwriter->writeOSrL( osresult);
 		throw ;
 	}				
- 
+}//end solve()
 
 
 
