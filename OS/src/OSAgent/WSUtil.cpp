@@ -22,13 +22,14 @@
 #else
 #include <sys/socket.h>
 #include <arpa/inet.h>  
-#include <unistd.h>    
+#include <unistd.h>  
+#include <netdb.h>  
 #endif
 
 #include <stdlib.h>    
 #include <string.h>    
 
-#include <netdb.h>
+
 #include <iostream>
 #include <sstream> 
 #include "ErrorClass.h"

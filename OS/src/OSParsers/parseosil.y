@@ -17,7 +17,8 @@
 
  
 #include <iostream>
-#include <sstream>     
+#include <sstream>  
+#include <time.h>   
 #include "lexyaccparser.h"
 #include "externalvars.h"
 #include "OSInstance.h" 

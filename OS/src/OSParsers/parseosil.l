@@ -23,6 +23,7 @@
 #include "ErrorClass.h"
 #include "parseosil.tab.hpp"
 #include <math.h>
+#include "OSConfig.h"
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", osiltext);
 #else     

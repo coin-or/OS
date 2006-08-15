@@ -18,7 +18,7 @@
 #include "lexyaccparser.h"
 #include "externalvars.h"
 #include <time.h>
-
+#include "OSConfig.h"
 
 
 #ifdef PARSERDEBUG

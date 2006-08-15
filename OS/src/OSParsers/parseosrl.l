@@ -16,6 +16,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include "OSConfig.h"
 #include "lexyaccparser.h"
 #include "externalvars.h"
 

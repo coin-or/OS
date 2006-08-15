@@ -21,7 +21,8 @@
 #include "ErrorClass.h"
 #include <iostream>
 #include <sstream>   
-#include "osssparservariables.h"  
+#include "osssparservariables.h" 
+#include "OSConfig.h" 
 
 bool osOption;  
 
