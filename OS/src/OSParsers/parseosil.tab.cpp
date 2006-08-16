@@ -2954,7 +2954,6 @@ bool parseObjectives(){
 		for(i = 0; c_numberOfObjectives[i]  == *ch; i++, ch++);
 		if(i != 18) {osiltext = &ch[0]; osilerror("incorrect numberOfObjectives attribute in <objectives> tag"); return false;}	
 		GETATTRIBUTETEXT;
-		cout << "GAIL HOND " << attText << endl;
 		numberOfObjectives = atoimod1( attText, attTextEnd);
 		delete [] attText;
 		ch++;
@@ -3005,7 +3004,6 @@ bool parseObjectives(){
 						if(objnumberOfObjCoefattON == true) {osiltext = &ch[0]; osilerror("error too many obj numberOfObjCoefatt attributes"); return false;}
 						objnumberOfObjCoefattON = true;
 						GETATTRIBUTETEXT;
-								cout << "GAIL HOND " << attText << endl;
 						//printf("ATTRIBUTE = %s\n", attText);
 						osinstance->instanceData->objectives->obj[objcount]->numberOfObjCoef=atoimod1(attText, attTextEnd);
 						osinstance->instanceData->objectives->obj[objcount]->coef = new ObjCoef*[osinstance->instanceData->objectives->obj[ objcount]->numberOfObjCoef];
@@ -3058,7 +3056,6 @@ bool parseObjectives(){
 						if(objmaxOrMinattON == true) {osiltext = &ch[0]; osilerror("error too many obj maxOrMin attributes"); return false;}
 						objmaxOrMinattON = true;
 						GETATTRIBUTETEXT;
-								cout << "GAIL HOND " << attText << endl;
 						//printf("ATTRIBUTE = %s\n", attText);
 						if( (strcmp("max", attText) != 0 ) && (strcmp("min", attText) != 0 ) ){osilerror("maxOrMin attribute in objective must be a max or min"); return false;}
 						osinstance->instanceData->objectives->obj[objcount]->maxOrMin = attText;
