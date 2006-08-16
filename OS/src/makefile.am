@@ -78,6 +78,8 @@ LIBS += $(ADDLIBS) `cat $(COINUTILSOBJDIR)/coinutils_addlibs.txt`
 LIBS  += `cat $(OSOBJDIR)/os_addlibs.txt`
 
 
+
+
 ########################################################################
 #                            Additional flags                          #
 ########################################################################
@@ -129,6 +131,10 @@ if COIN_HAS_ASL
 endif
 
 
+
+if USEWSOCKLIB
+  OSSolverService_LDADD += wsock32.lib
+endif
 
 
 OSSolverService_LDFLAGS = -rpath $(libdir)

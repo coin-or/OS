@@ -39,11 +39,14 @@ AC_CANONICAL_BUILD
 
   case $build in
      *-mingw*)
-         AC_DEFINE([WIN_SOCK],[1],[use for windows]);; 
+         AC_DEFINE([WIN_SOCK],[1],[use for windows])
+         win_sock=yes;; 
       *-cygwin*)
-         AC_DEFINE([WIN_SOCK],[1],[use for windows]);; 
+         AC_DEFINE([WIN_SOCK],[1],[use for windows])
+         win_sock=yes;; 
        *-win*)
-         AC_DEFINE([WIN_SOCK],[1],[use for windows]);; 
+         AC_DEFINE([WIN_SOCK],[1],[use for windows])
+         win_sock=yes;; 
     *-linux-*)
 		 ;;
     *-darwin*)
@@ -55,6 +58,8 @@ AC_CANONICAL_BUILD
     *-sun-*)
     ;;
   esac
+  
+ AM_CONDITIONAL(USEWSOCKLIB, test $win_sock = yes)
 
 # If this project depends on external projects, the Externals file in
 # the source root directory contains definition of where to find those
