@@ -490,9 +490,10 @@ char *osoltext;
 #endif
 #ifdef WIN_SOCK
 #define YY_NO_UNISTD_H
+#include <io.h>
 #endif
      
-#line 496 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.cpp"
+#line 497 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.cpp"
 
 #define INITIAL 0
 
@@ -645,10 +646,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 41 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.l"
+#line 42 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.l"
 
 
-#line 652 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.cpp"
+#line 653 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.cpp"
 
 	if ( !(yy_init) )
 		{
@@ -734,20 +735,20 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 43 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.l"
+#line 44 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.l"
 
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 45 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.l"
+#line 46 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.l"
 
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 47 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.l"
+#line 48 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.l"
 ECHO;
 	YY_BREAK
-#line 751 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.cpp"
+#line 752 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1733,7 +1734,7 @@ void osolfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 47 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.l"
+#line 48 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.l"
 
 
 
