@@ -1950,15 +1950,13 @@ bool parseObjCoef( int objcount){
 		for(i = 0; startCoef[i]  == *ch; i++, ch++);
 		if(i != 5) {osiltext = &ch[0]; osilerror("improper <coef> element"); return false;}
 		// get the idx attribute
-		
-		// find numberOfConstraints attribute
 		// eat the white space after <coef
 		for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
 		for(i = 0; c_idx[i]  == *ch; i++, ch++);
 		if(i != 3) {osiltext = &ch[0]; osilerror("incorrect idx attribute in objective function <idx> tag"); return false;}	
-		// ch should be pointing to the first character after numberOfObjectives
+		// ch should be pointing to the first character after idx attribute
 		GETATTRIBUTETEXT;
-		//kipp fix this -- we need to get the number of objectives
+		osinstance->instanceData->objectives->obj[objcount]->coef[ k]->idx  = atoimod1( attText, attTextEnd);
 		delete [] attText;
 		ch++;	
 		// eat white space
@@ -1969,7 +1967,8 @@ bool parseObjCoef( int objcount){
 		number = ch;
 		// eat characters until we find <
 		for(; *ch != '<' && *ch != EOF; ch++); 
-		osinstance->instanceData->objectives->obj[objcount]->coef[ k]->idx  = atoimod1( attText, attTextEnd);
+		// put back here
+
 		// we should be pointing to a < in the </coef> tag	
 		if(*ch != '<') {osiltext = &ch[0]; osilerror("improper </coef> tag"); return false;}
 		osinstance->instanceData->objectives->obj[objcount]->coef[ k]->value  = atofmod1( number, ch);
