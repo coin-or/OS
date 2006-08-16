@@ -133,7 +133,7 @@ endif
 
 
 if USEWSOCKLIB
-  OSSolverService_LDADD += wsock32.lib
+  LIBS += wsock32.lib
 endif
 
 
