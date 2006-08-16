@@ -133,7 +133,7 @@ endif
 
 
 if USEWSOCKLIB
-  LIBS += wsock32.lib
+  ADDLIBS += wsock32.lib
 endif
 
 
