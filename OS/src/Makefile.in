@@ -58,7 +58,7 @@ bin_PROGRAMS = OSSolverService$(EXEEXT)
 @COIN_HAS_LINDO_TRUE@am__append_5 = $(LINDOLIB)
 @COIN_HAS_ASL_TRUE@am__append_6 = $(ASL_CPPFLAGS) 
 @COIN_HAS_ASL_TRUE@am__append_7 = $(ASLLIB)
-@USEWSOCKLIB_TRUE@am__append_8 = wsock32
+@USEWSOCKLIB_TRUE@am__append_8 = $(WINSOCKLIB)
 subdir = src
 DIST_COMMON = $(include_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -257,6 +257,7 @@ USEWSOCKLIB_FALSE = @USEWSOCKLIB_FALSE@
 USEWSOCKLIB_TRUE = @USEWSOCKLIB_TRUE@
 VERSION = @VERSION@
 VPATH_DISTCLEANFILES = @VPATH_DISTCLEANFILES@
+WINSOCKLIB = @WINSOCKLIB@
 YACC = @YACC@
 abs_bin_dir = @abs_bin_dir@
 abs_include_dir = @abs_include_dir@

@@ -71,6 +71,10 @@ case "$CXX" in
 esac
   
  AM_CONDITIONAL(USEWSOCKLIB, test $win_sock = yes)
+ 
+ AC_SUBST(WINSOCKLIB)
+ 
+ WINSOCKLIB=$wsock32
 
 # If this project depends on external projects, the Externals file in
 # the source root directory contains definition of where to find those
