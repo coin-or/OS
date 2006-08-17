@@ -62,6 +62,21 @@ AC_CANONICAL_BUILD
     ;;
   esac
   
+
+
+# If this project depends on external projects, the Externals file in
+# the source root directory contains definition of where to find those
+# externals.  The following macro ensures that those externals are
+# retrieved by svn if they are not there yet.
+AC_COIN_PROJECTDIR_INIT
+
+# Check if user wants to produce debugging code
+AC_COIN_DEBUG_COMPILE
+
+# Get the name of the C++ compiler and appropriate compiler options
+AC_COIN_PROG_CXX
+
+
   # Determine the name of the winsock library
 case "$CXX" in
   cl* | */cl*)
@@ -75,18 +90,6 @@ esac
  AC_SUBST(WINSOCKLIB)
  
  WINSOCKLIB=$wsock32
-
-# If this project depends on external projects, the Externals file in
-# the source root directory contains definition of where to find those
-# externals.  The following macro ensures that those externals are
-# retrieved by svn if they are not there yet.
-AC_COIN_PROJECTDIR_INIT
-
-# Check if user wants to produce debugging code
-AC_COIN_DEBUG_COMPILE
-
-# Get the name of the C++ compiler and appropriate compiler options
-AC_COIN_PROG_CXX
 
 # Initialize automake and libtool
 AC_COIN_INIT_AUTO_TOOLS
