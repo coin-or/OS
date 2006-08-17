@@ -90,5 +90,8 @@
 /* Version number of package */
 #undef VERSION
 
-/* use for windows */
+/* use if OS is Windows */
+#undef WIN_
+
+/* use if Windows sockets required */
 #undef WIN_SOCK
