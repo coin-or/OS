@@ -17,7 +17,7 @@
 #include "WSUtil.h"
 #include "OSConfig.h"
 
-#ifdef WIN_SOCK
+#ifdef WIN_
 #include <winsock.h>
 #else
 #include <sys/socket.h>
@@ -65,7 +65,7 @@ string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned int se
 		unsigned int httpStringLen;      /* Length of string to http */
 		int bytesRcvd, totalBytesRcvd;   /* Bytes read in single recv() and total bytes read */
 		char* message = &theSOAP[0];         /* Second arg: string to http */
-		#ifdef WIN_SOCK
+		#ifdef WIN_
 		WSADATA wsaData;
 		if( WSAStartup(MAKEWORD(2, 0), &wsaData) != 0 ) throw ErrorClass( "WSAStartup failed");
 		#endif
@@ -109,7 +109,7 @@ string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned int se
 			ret_message << httpBuffer;
 			if(recvMsgSize == 0 ) {
 			//if(recvMsgSize == 0 || recvMsgSize < RCVBUFSIZE - 1) {
-			#ifdef WIN_SOCK
+			#ifdef WIN_
 			closesocket( sock);
 			WSACleanup();
 			#else
@@ -120,7 +120,7 @@ string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned int se
 			}
 		}
 
-		#ifdef WIN_SOCK
+		#ifdef WIN_
 		closesocket( sock);
 		WSACleanup();
 		#else

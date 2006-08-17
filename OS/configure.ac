@@ -40,15 +40,12 @@ AC_CANONICAL_BUILD
   case $build in
      *-mingw*)
          AC_DEFINE([WIN_],[1],[use if OS is Windows])
-         AC_DEFINE([WIN_SOCK],[1],[use if Windows sockets required])
          win_sock=yes;; 
       *-cygwin*)
          AC_DEFINE([WIN_],[1],[use if OS is Windows])
-         AC_DEFINE([WIN_SOCK],[1],[use if Windows sockets required])
          win_sock=yes;; 
        *-win*)
          AC_DEFINE([WIN_],[1],[use if OS is Windows])
-         AC_DEFINE([WIN_SOCK],[1],[use if Windows sockets required])
          win_sock=yes;; 
     *-linux-*)
 		 ;;
@@ -59,6 +56,8 @@ AC_CANONICAL_BUILD
     *-hp-*)
          ;;
     *-sun-*)
+    ;;
+    *)
     ;;
   esac
   
@@ -82,7 +81,7 @@ case "$CXX" in
   cl* | */cl*)
     wsock32=wsock32.lib ;;
   *)
-    wsock32=libwsock32.a ;;
+    wsock32=-L/lib -L/mingw/lib -lwsock32 ;;
 esac
   
  AM_CONDITIONAL(USEWSOCKLIB, test $win_sock = yes)

@@ -56,6 +56,8 @@ AM_CPPFLAGS =\
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSSolverInterfaces` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSModelInterfaces` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSCommonInterfaces` 
+	
+	
 
 
 # Here we add additional libraries

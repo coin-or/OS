@@ -958,7 +958,7 @@ char *osrltext;
 #else     
 	#define YY_PRINT ;
 #endif
-#ifdef WIN_SOCK
+#ifdef WIN_
 #define YY_NO_UNISTD_H
 #include <io.h>
 #endif

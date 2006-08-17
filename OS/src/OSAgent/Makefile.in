@@ -43,6 +43,12 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+@USEWSOCKLIB_TRUE@am__append_1 = -I`$(CYGPATH_W) /usr/include/w32api` \
+@USEWSOCKLIB_TRUE@  				  -I`$(CYGPATH_W) /include` \
+@USEWSOCKLIB_TRUE@  				  -I`$(CYGPATH_W) /mingw/include` \
+@USEWSOCKLIB_TRUE@  				  -I ../include \
+@USEWSOCKLIB_TRUE@  				  -I ../PlatformSDK/include
+
 subdir = src/OSAgent
 DIST_COMMON = $(include_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -285,12 +291,10 @@ libOSAgent_la_LDFLAGS = $(LT_LDFLAGS)
 # "cygpath" stuff is necessary to compile with native compilers on Windows.
 # "top_srcdir" refers to the basic directory for the main package that is
 # being compiled.
-AM_CPPFLAGS = \
-	-I`$(CYGPATH_W) $(srcdir)/..` \
-	-I`$(CYGPATH_W) $(CLPSRCDIR)/src` \
-	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSCommonInterfaces` \
-	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSUtils` 
-
+AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/..` -I`$(CYGPATH_W) \
+	$(CLPSRCDIR)/src` -I`$(CYGPATH_W) \
+	$(OSSRCDIR)/src/OSCommonInterfaces` -I`$(CYGPATH_W) \
+	$(OSSRCDIR)/src/OSUtils` $(am__append_1)
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
