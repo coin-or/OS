@@ -2489,6 +2489,8 @@ bool parseInstanceHeader(const char *pchar){
  	// 
  	// move to the end of <instanceHeader
  	pchar+=15;
+ 	char *test = (char*) pchar;
+ 	pchar - test;
  	//
 	// burn any whitespace
 	for( ; ISWHITESPACE( *pchar) || isnewline( *pchar); pchar++ ) ;

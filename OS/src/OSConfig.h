@@ -19,8 +19,11 @@
 
 #ifndef __OSCONFIG_H__
 
+
+
 #ifdef HAVE_CONFIG_H
 #include "config_os.h"
+
 
 /* undefine macros that could conflict with those in other config.h
    files */
