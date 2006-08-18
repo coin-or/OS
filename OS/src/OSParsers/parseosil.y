@@ -50,7 +50,7 @@ bool parseStart();
 bool parseRowIdx();
 bool parseColIdx();
 bool parseValue();
-bool parseInstanceHeader(const char *pchar);
+bool parseInstanceHeader(const char **pchar);
 char *parseBase64(int *dataSize );
 
 
@@ -478,10 +478,7 @@ try {
 		ch = NULL;
 		osinstance = NULL;
 		osinstance = new OSInstance();
-		const char *pchar = osil;
-		parseInstanceHeader( pchar);
-		cout << "TEST parseInstanceHeader = " << pchar << endl;
-		//
+		parseInstanceHeader( &osil);
 		const char *varel = "<variables";
 		ch = strstr(osil, varel);
 		if(ch == NULL) throw ErrorClass("variables element required");
@@ -530,8 +527,9 @@ bool isnewline(char c){
 	return true;
 }//end isnewline()
 
-bool parseInstanceHeader(const char *pchar){
+bool parseInstanceHeader( const char **p){
 	//
+	const char *pchar = *p;
 	// create a char array that holds the instance header information
 	const char *startInstanceHeader = "<instanceHeader";
 	const char *endInstanceHeader = "</instanceHeader";
@@ -545,7 +543,7 @@ bool parseInstanceHeader(const char *pchar){
 	char *pelementText = NULL;
 	char *ptemp = NULL;
 	int i, elementSize;
-	if(pinstanceHeadStart == NULL) {osiltext = (char*)&pchar[0]; osilerror("<instanceHeader> element missing"); return false;}
+	if(pinstanceHeadStart == NULL) {osiltext = (char*)*p; osilerror("<instanceHeader> element missing"); return false;}
 	// increment the line number counter if there are any newlines between the start of
 	// the osil string and pinstanceHeadStart
 	int	kount = pinstanceHeadStart - pchar;
@@ -555,6 +553,8 @@ bool parseInstanceHeader(const char *pchar){
  	// 
  	// move to the end of <instanceHeader
  	pchar+=15;
+ 	// remember where we are
+ 	
  	//
 	// burn any whitespace
 	for( ; ISWHITESPACE( *pchar) || isnewline( *pchar); pchar++ ) ;
@@ -563,14 +563,14 @@ bool parseInstanceHeader(const char *pchar){
 	if( *pchar == '/'){
 		pchar++;
 		// better point to a '>'
-		if(*pchar != '>') {osiltext = (char*)&pchar[0]; osilerror("improperly formed <instanceHeader> element"); return false;}
+		if(*pchar != '>') {osiltext = (char*)*p; osilerror("improperly formed <instanceHeader> element"); return false;}
 		// there is no instanceHeader data
 		pchar++;
 		return true;
 	}
 	else{
 		// pchar better be '>' or there is an error
-		if(*pchar != '>') {osiltext = (char*)&pchar[0]; osilerror("improperly formed <instanceHeader> element"); return false;}
+		if(*pchar != '>') {osiltext = (char*)*p; osilerror("improperly formed <instanceHeader> element"); return false;}
 	}
 	pchar++;
 	// we are pointing to the character after <instanceHeader>
@@ -582,10 +582,13 @@ bool parseInstanceHeader(const char *pchar){
 	// first burn any whitespace
 	for( ; ISWHITESPACE( *pchar) || isnewline( *pchar); pchar++ ) ;
 	// if, present we should be pointing to <name element if there -- it is not required
-	for(i = 0; *(startName + i)  == *pchar; i++, pchar++);
-	if(i != 5) {
+	//remember where we are
+	*p = pchar;
+	//for(i = 0; *(startName + i)  == *pchar; i++, pchar++);
+	while(*startName++  == *pchar) pchar++;
+	if( (pchar - *p)  != 5) {
 		//reset pchar
-		pchar -= i;
+		pchar = *p;
 	}
 	else{
 	// we have a name element, process the text
@@ -594,16 +597,16 @@ bool parseInstanceHeader(const char *pchar){
 		if( *pchar == '/'){
 			pchar++;
 			// better point to a '>'
-			if(*pchar != '>') {osiltext = (char*)&pchar[0]; osilerror("improperly formed <name> element"); return false;}
+			if(*pchar != '>') {osiltext = (char*)*p; osilerror("improperly formed <name> element"); return false;}
 		}
 		else{
 			// pchar better be '>' or there is an error
-			if(*pchar != '>') {osiltext = (char*)&pchar[0]; osilerror("improperly formed <name> element"); return false;}
+			if(*pchar != '>') {osiltext = (char*)*p; osilerror("improperly formed <name> element"); return false;}
 			pchar++;
 			// proces <name> element text
 			// there better be a </name
 			ptemp = strstr( pchar, endName);
-			if( ptemp == NULL) {osiltext = (char*)&pchar[0]; osilerror("improperly formed </name> element"); return false;}
+			if( ptemp == NULL) {osiltext = (char*)*p; osilerror("improperly formed </name> element"); return false;}
 			elementSize = ptemp - pchar;
 			pelementText = new char[ elementSize + 1];
 			strncpy(pelementText, pchar, elementSize);
@@ -621,7 +624,7 @@ bool parseInstanceHeader(const char *pchar){
 			// get rid of the whitespace
 			for( ; ISWHITESPACE( *pchar) || isnewline( *pchar); pchar++ ) ;	
 			// we better have the '>' for the end of name
-			if(*pchar++ != '>'){osiltext = (char*)&pchar[0]; osilerror("improperly formed </name> element"); return false;}
+			if(*pchar++ != '>'){osiltext = (char*)*p; osilerror("improperly formed </name> element"); return false;}
 		}
 	}// end of else after discovering a name element
 	//done processing name element
@@ -644,16 +647,16 @@ bool parseInstanceHeader(const char *pchar){
 		if( *pchar == '/'){
 			pchar++;
 			// better point to a '>'
-			if(*pchar != '>') {osiltext = (char*)&pchar[0]; osilerror("improperly formed <source> element"); return false;}
+			if(*pchar != '>') {osiltext = (char*)*p; osilerror("improperly formed <source> element"); return false;}
 		}
 		else{
 			// pchar better be '>' or there is an error
-			if(*pchar != '>') {osiltext = (char*)&pchar[0]; osilerror("improperly formed <source> element"); return false;}
+			if(*pchar != '>') {osiltext = (char*)*p; osilerror("improperly formed <source> element"); return false;}
 			pchar++;
 			// proces <source> element text
 			// there better be a </source
 			ptemp = strstr( pchar, endSource);
-			if( ptemp == NULL) {osiltext = (char*)&pchar[0]; osilerror("improperly formed </source> element"); return false;}
+			if( ptemp == NULL) {osiltext = (char*)*p; osilerror("improperly formed </source> element"); return false;}
 			elementSize = ptemp - pchar;
 			pelementText = new char[ elementSize + 1];
 			strncpy(pelementText, pchar, elementSize);
@@ -671,7 +674,7 @@ bool parseInstanceHeader(const char *pchar){
 			// get rid of the whitespace
 			for( ; ISWHITESPACE( *pchar) || isnewline( *pchar); pchar++ ) ;	
 			// we better have the '>' for the end of source
-			if(*pchar++ != '>'){osiltext = (char*)&pchar[0]; osilerror("improperly formed </source> element"); return false;}
+			if(*pchar++ != '>'){osiltext = (char*)*p; osilerror("improperly formed </source> element"); return false;}
 		}
 	}// end of else after discovering a source element
 	//done processing <source> element
@@ -694,16 +697,16 @@ bool parseInstanceHeader(const char *pchar){
 		if( *pchar == '/'){
 			pchar++;
 			// better point to a '>'
-			if(*pchar != '>') {osiltext = (char*)&pchar[0]; osilerror("improperly formed <description> element"); return false;}
+			if(*pchar != '>') {osiltext = (char*)*p; osilerror("improperly formed <description> element"); return false;}
 		}
 		else{
 			// pchar better be '>' or there is an error
-			if(*pchar != '>') {osiltext = (char*)&pchar[0]; osilerror("improperly formed <description> element"); return false;}
+			if(*pchar != '>') {osiltext = (char*)*p; osilerror("improperly formed <description> element"); return false;}
 			pchar++;
 			// proces <source> element text
 			// there better be a </description
 			ptemp = strstr( pchar, endDescription);
-			if( ptemp == NULL) {osiltext = (char*)&pchar[0]; osilerror("improperly formed </description> element"); return false;}
+			if( ptemp == NULL) {osiltext = (char*)*p; osilerror("improperly formed </description> element"); return false;}
 			elementSize = ptemp - pchar;
 			pelementText = new char[ elementSize + 1];
 			strncpy(pelementText, pchar, elementSize);
@@ -721,7 +724,7 @@ bool parseInstanceHeader(const char *pchar){
 			// get rid of the whitespace
 			for( ; ISWHITESPACE( *pchar) || isnewline( *pchar); pchar++ ) ;	
 			// we better have the '>' for the end of </description>
-			if(*pchar++ != '>'){osiltext = (char*)&pchar[0]; osilerror("improperly formed </description> element"); return false;}
+			if(*pchar++ != '>'){osiltext = (char*)*p; osilerror("improperly formed </description> element"); return false;}
 		}
 	}// end of else after discovering a description element
 	//done processing <description> element
@@ -731,12 +734,14 @@ bool parseInstanceHeader(const char *pchar){
 	for( ; ISWHITESPACE( *pchar) || isnewline( *pchar); pchar++ ) ;	
 	// we should be pointing to </instanceHeader
 	for(i = 0; *(endInstanceHeader + i)  == *pchar; i++, pchar++);
-	if(i != 16) {osiltext = (char*)&pchar[0]; osilerror("improperly formed </instanceHeader> element"); return false;}	
+	if(i != 16) {osiltext = (char*)*p; osilerror("improperly formed </instanceHeader> element"); return false;}	
 	// pchar now points to the first character after </instanceHeader
 	// get rid of white space
 	for( ; ISWHITESPACE( *pchar) || isnewline( *pchar); pchar++ ) ;	
 	// pchar must point to '>' or there is an error
-	if(*pchar != '>'){osiltext = (char*)&pchar[0]; osilerror("improperly formed </instanceHeader> element"); return false;}		
+	if(*pchar != '>'){osiltext = (char*)*p; osilerror("improperly formed </instanceHeader> element"); return false;}	
+	pchar++;
+	*p = pchar;
 	return true;
 }//end parseInstanceHeader
 
