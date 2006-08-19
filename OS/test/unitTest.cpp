@@ -265,9 +265,8 @@ int main(int argC, char* argV[])
 		osilreader = new OSiLReader(); 
 		start = clock();
 		cout << "PARSE THE OSIL STRING INTO AN OSINSTNACE OBJECT" << endl;
-		//osilreader->readOSiL( &osil);
-		//osilreader->readOSiL( &osil);
-		cout << osilwriter->writeOSiL( osilreader->readOSiL( &osil)) << endl;
+		osilreader->readOSiL( &osil);
+		//cout << osilwriter->writeOSiL( osilreader->readOSiL( &osil)) << endl;
 		delete osilreader;
 		osilreader = 0;
 		finish = clock();

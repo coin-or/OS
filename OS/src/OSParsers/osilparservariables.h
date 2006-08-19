@@ -53,7 +53,6 @@ OSnLNodeNumber *nlNodeNumberPoint;
 
 
 int numChar;
-char *attTextStart;
 char *attTextEnd;
 int ki;
 
