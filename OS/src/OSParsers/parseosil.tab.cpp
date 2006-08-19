@@ -2758,8 +2758,10 @@ bool parseVariables( const char **p){
 		while(*ch != '/' && *ch != '>'){
 			switch (*ch) {
 			case 'n':
-				for(i = 0; name[i]  == *ch; i++, ch++);
-				if( i != 4 ) {osiltext = (char* )&ch[0]; osilerror("error in variables name attribute"); return false;}
+				*p = ch;
+				while(*name++  == *ch) ch++;
+				if( (ch - *p) != 4 ) {osiltext = (char* )&ch[0]; osilerror("error in variables name attribute"); return false;}
+				name -= 5;
 				if(varnameattON == true) {osiltext = (char* )&ch[0]; osilerror("error too many variable name attributes"); return false;}
 				varnameattON == true;
 				GETATTRIBUTETEXT;
