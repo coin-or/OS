@@ -50,6 +50,7 @@ bool parseRowIdx( const char **pchar);
 bool parseColIdx( const char **pchar);
 bool parseValue( const char **pchar);
 bool parseInstanceHeader(const char **pchar);
+bool parseInstanceData(const char **pchar);
 char *parseBase64(const char **p, int *dataSize );
 
 
@@ -109,14 +110,12 @@ this fails on in Mac OS X
 %token <sval> ATTRIBUTETEXT 
 %token <ival> INTEGER  
 %token  <dval> DOUBLE 
-%token <sval> ELEMENTTEXT
 
 
 
 
-%token OSILSTART OSILEND NAMESTART NAMEEND DESCRIPTIONSTART DESCRIPTIONEND
-%token SOURCESTART SOURCEEND INSTANCEHEADER INSTANCEHEADERSTART INSTANCEHEADEREND
-%token INSTANCEDATASTART INSTANCEDATAEND 
+
+%token OSILEND INSTANCEDATAEND 
 %token VALUEATT NUMBEROFNONLINEAREXPRESSIONS
 %token IDXONEATT IDXTWOATT COEFATT IDATT 
 %token TIMESSTART TIMESEND NUMBERSTART  NUMBEREND
@@ -126,8 +125,7 @@ this fails on in Mac OS X
 %token TIMESSTART TIMESEND POWERSTART POWEREND PLUSSTART PLUSEND MINUSSTART MINUSEND
 %token DIVIDESTART DIVIDEEND LNSTART LNEND SUMSTART SUMEND PRODUCTSTART PRODUCTEND ENDOFELEMENT
 %token EXPSTART EXPEND NEGATESTART NEGATEEND IFSTART IFEND
-%token GREATERTHAN  OSILATTRIBUTETEXT
-%token NAMESTARTANDEND SOURCESTARTANDEND DESCRIPTIONSTARTANDEND
+%token GREATERTHAN 
 %token VARIABLESTART VARIABLEEND ABSSTART ABSEND MAXSTART MAXEND
 
 
@@ -470,29 +468,24 @@ void osilerror(const char* errormsg) {
 	}
 } // end osilerror() 
 
-OSInstance* yygetOSInstance( const char *osil) throw (ErrorClass)
-try {
+OSInstance* yygetOSInstance( const char *osil) throw (ErrorClass) {
+	try {
 		void yyinitialize();
 		yyinitialize();
-		const char *ch = NULL;
 		osinstance = NULL;
 		osinstance = new OSInstance();
 		parseInstanceHeader( &osil);
-		const char *varel = "<variables";
-		ch = strstr(osil, varel);
-		osil = ch;
-		if(ch == NULL) throw ErrorClass("variables element required");
-		if( parseVariables( &osil) != true) {throw ErrorClass("error in parse variables");}
-		if( parseObjectives( &osil) != true)  throw ErrorClass("error in parse objectives");
-		if( parseConstraints( &osil) != true) throw ErrorClass("error in parse Constraints");
-		if( parseLinearConstraintCoefficients( &osil) != true) throw ErrorClass("error in parse ConstraintCoefficients");	
+		parseInstanceData( &osil);
+		// call the flex scanner
 		osil_scan_string( osil);
+		// call the Bison parser
 		if(  osilparse(  ) != 0) throw ErrorClass(  sparseError);
 		return osinstance;
-}//end yygetOSInstance
-		catch(const ErrorClass& eclass){
+	}
+	catch(const ErrorClass& eclass){
 		throw ErrorClass(  eclass.errormsg); 
 	}
+}//end yygetOSInstance
 
 void osilClearMemory(){
 	delete osinstance;
@@ -542,7 +535,7 @@ bool parseInstanceHeader( const char **p){
 	const char *pinstanceHeadStart = strstr(pchar, startInstanceHeader);
 	char *pelementText = NULL;
 	char *ptemp = NULL;
-	int i, elementSize;
+	int elementSize;
 	if(pinstanceHeadStart == NULL) {osiltext = (char*)*p; osilerror("<instanceHeader> element missing"); return false;}
 	// increment the line number counter if there are any newlines between the start of
 	// the osil string and pinstanceHeadStart
@@ -745,6 +738,37 @@ bool parseInstanceHeader( const char **p){
 }//end parseInstanceHeader
 
 
+bool parseInstanceData( const char **p){
+	//
+	const char *pchar = *p;
+	const char *startInstanceData = "<instanceData";
+	// at his point *pchar should be pointing to the first char after the > in </instanceHeader>
+	// burn the white space
+	for( ; ISWHITESPACE( *pchar) || isnewline( *pchar); pchar++ ) ;	
+	// pchar should be point to a '<', if not there is an error
+	if(*pchar != '<'){osiltext = (char*)*p; osilerror("improperly formed <instanceData element"); return false;}
+	// make sure the element is <instanceData	
+	*p = pchar;
+	while(*startInstanceData++  == *pchar) pchar++;
+	if( (pchar - *p) != 13) {osiltext = (char*)*p; osilerror("improperly formed <instanceData> element"); return false;}	
+	// now burn whitespace
+	// pchar must point to '>' or there is an error
+	if(*pchar != '>'){osiltext = (char*)*p; osilerror("improperly formed <instanceData> element"); return false;}	
+	pchar++;
+	// we are now pointing to the first char after <instanceData>
+	// burn any whitespace
+	for( ; ISWHITESPACE( *pchar) || isnewline( *pchar); pchar++ ) ;	
+	// we should be pointing to the '<' char in <varaibles>
+	*p = pchar;
+	if( parseVariables( p) != true) {throw ErrorClass("error in parse variables");}
+	if( parseObjectives( p) != true)  throw ErrorClass("error in parse objectives");
+	if( parseConstraints( p) != true) throw ErrorClass("error in parse Constraints");
+	if( parseLinearConstraintCoefficients( p) != true) throw ErrorClass("error in parse ConstraintCoefficients");	
+	//
+	return true;
+}// end parseInstanceData
+
+
 bool parseVariables( const char **p){
 	const char *ch = *p;
 	start = clock(); 
@@ -830,7 +854,7 @@ bool parseVariables( const char **p){
 				if( (ch - *p) != 4 ) {osiltext = (char* )&ch[0]; osilerror("error in variables name attribute"); return false;}
 				name -= 5;
 				if(varnameattON == true) {osiltext = (char* )&ch[0]; osilerror("error too many variable name attributes"); return false;}
-				varnameattON == true;
+				varnameattON = true;
 				GETATTRIBUTETEXT;
 				osinstance->instanceData->variables->var[varcount]->name=attText;
 				delete [] attText;
@@ -951,8 +975,10 @@ bool parseVariables( const char **p){
 			ch++;
 			for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );
 			// we should be at </var or there is an error
-			for(i = 0; endVar[i]  == *ch; i++, ch++);
-			if(i != 5) {osiltext = (char* )&ch[0]; osilerror("</var> element missing"); return false;}
+			*p = ch;
+			while(*endVar++  == *ch) ch++;
+			endVar -= 6;
+			if( (ch - *p) != 5) {osiltext = (char* )&ch[0]; osilerror("</var> element missing"); return false;}
 			// burn off the whitespace
 			for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );
 			// better have an > to end </var
@@ -1094,7 +1120,7 @@ bool parseObjectives( const char **p){
 				if( *(ch+1) == 'u'){
 					*p = ch;
 					while( *numberOfObjCoef++  == *ch) ch++;
-					numberOfObjCoef -+ 16;
+					numberOfObjCoef -= 16;
 					if( ( (ch - *p) != 15)  ) {osiltext = (char* )&ch[0]; osilerror("error in objective numberOfObjCoef attribute"); return false;}
 					else{
 						if(objnumberOfObjCoefattON == true) {osiltext = (char* )&ch[0]; osilerror("error too many obj numberOfObjCoefatt attributes"); return false;}
@@ -1521,7 +1547,6 @@ bool parseLinearConstraintCoefficients( const char **p){
 	// attributes
 	char *attText = NULL;
 	// others
-	int i;
 	int numberOfValues;
 	// start parsing
 	// burn white space
@@ -1606,10 +1631,12 @@ bool parseStart(const char **p){
 	// get rid of white space
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
 	// look for an <el> -- if none present must have b64 data
-	for(i = 0; startEl[i]  == *ch; i++, ch++);
-	if(i != 3) {
+	*p = ch;
+	while( *startEl++  == *ch) ch++;
+	startEl -= 4;
+	if( (ch - *p) != 3) {
 		//reset ch
-		ch -= i;
+		ch = *p;
 		// call base64 parse here
 		int dataSize = 0;
 		char* b64string = parseBase64(&ch, &dataSize );
@@ -1646,26 +1673,34 @@ bool parseStart(const char **p){
 			if(*ch != '<') {osiltext = (char* )&ch[0]; osilerror("cannot find an </el>"); return false;}
 			osinstance->instanceData->linearConstraintCoefficients->start->el[ kount++] = 
 			atoimod1( *p, ch);
-			ch++;
 			//printf("number = %s\n", *p);
 			// we are pointing to <, make sure there is /el
-			for(i = 1; endEl[ i] == *ch; i++, ch++);
-			if(i != 4 ) {osiltext = (char* )&ch[0]; osilerror("cannot fine an </el>"); return false;}
+			*p = ch;
+			while( *endEl++  == *ch) ch++;
+			endEl -= 5;
+			if( (ch - *p) != 4 ) {osiltext = (char* )&ch[0]; osilerror("cannot fine an </el>"); return false;}
 			// start eating white space until an '>' is found for </el>,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
 			if( *ch++ != '>') {osiltext = (char* )&ch[0]; osilerror("improperly formed </el> tag"); return false;}
 			// eat white space again,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );
 			// either have another <el> element or foundEl = false;
-			for(i = 0; startEl[i]  == *ch; i++, ch++);
-			if(i == 3) foundEl = true;
-			else foundEl = false;
-		}
-		ch -= i;			
+			*p = ch;
+			while( *startEl++  == *ch) ch++;
+			if( (ch - *p)  == 3){
+				 foundEl = true;
+				 startEl -= 4;
+			}
+			else{
+			 	foundEl = false;
+			 	ch = *p;
+			}
+		}		
 	}
 	// get the </start> tag
-	for(i = 0; endStart[i]  == *ch; i++, ch++);
-	if(i != 7) {osiltext = (char* )&ch[0]; osilerror( "cannot find </start> tag"); return false;}
+	*p = ch;
+	while( *endStart++  == *ch) ch++;
+	if( (ch - *p) != 7) {osiltext = (char* )&ch[0]; osilerror( "cannot find </start> tag"); return false;}
 	for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );	
 	// better have >
 	if(*ch != '>') {osiltext = (char* )&ch[0]; osilerror("improperly formed </start> tag");	return false;}
@@ -1802,10 +1837,11 @@ bool parseColIdx( const char **p){
 	bool foundEl = false;
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
 	// if, present we should be pointing to <colIdx element 
-	for(i = 0; startColIdx[i]  == *ch; i++, ch++);
-	if(i != 7) {
+	*p = ch;
+	while( *startColIdx++  == *ch) ch++;
+	if( (ch - *p) != 7) {
 		//reset ch
-		ch -= i;
+		ch = *p;
 		return false;
 	}
 	// get rid of white space after <colIdx
@@ -1816,10 +1852,12 @@ bool parseColIdx( const char **p){
 	// get rid of white space
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
 	// look for an <el> -- if none present must have b64 data
-	for(i = 0; startEl[i]  == *ch; i++, ch++);
-	if(i != 3) {
+	*p = ch;
+	while( *startEl++  == *ch) ch++;
+	startEl -= 4;
+	if( (ch - *p) != 3) {
 		//reset ch
-		ch -= i;
+		ch = *p;
 		// call base64 parse here
 		int dataSize = 0;
 		char* b64string = parseBase64(&ch, &dataSize );
@@ -1857,26 +1895,34 @@ bool parseColIdx( const char **p){
 			if(*ch != '<') {osiltext = (char* )&ch[0]; osilerror("cannot find an </el>"); return false;}
 			osinstance->instanceData->linearConstraintCoefficients->colIdx->el[ kount++] = 
 			atoimod1( *p, ch);
-			ch++;
 			//printf("number = %s\n", *p);
 			// we are pointing to <, make sure there is /el
-			for(i = 1; endEl[ i] == *ch; i++, ch++);
-			if( i != 4 ) {osiltext = (char* )&ch[0]; osilerror("cannot fine an </el>"); return false;}
+			*p = ch;
+			while( *endEl++  == *ch) ch++;
+			endEl -= 5;
+			if( (ch - *p) != 4 ) {osiltext = (char* )&ch[0]; osilerror("cannot fine an </el>"); return false;}
 			// start eating white space until an '>' is found for </el>,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );
 			if( *ch++ != '>') {osiltext = (char* )&ch[0]; osilerror("improperly formed </el> tag"); return false;}
 			// eat white space again,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );
 			// either have another <el> element or foundEl = false;
-			for(i = 0; startEl[i]  == *ch; i++, ch++);
-			if(i == 3) foundEl = true;
-			else foundEl = false;
+			*p = ch;
+			while( *startEl++  == *ch) ch++;
+			if( (ch - *p) == 3){
+			 	foundEl = true;
+			 	startEl -= 4;
+			}
+			else{
+			 	foundEl = false;
+			 	ch = *p;
+			}
 		}
-		ch -= i;
 	}
 	// get the </colIdx> tag
-	for(i = 0; endColIdx[i]  == *ch; i++, ch++);
-	if(i != 8) {osiltext = (char* )&ch[0]; osilerror( "cannot find </rowIdx> tag"); return false;}
+	*p = ch;
+	while( *endColIdx++  == *ch) ch++;		
+	if( (ch - *p) != 8) {osiltext = (char* )&ch[0]; osilerror( "cannot find </colIdx> tag"); return false;}
 	for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );	
 	// better have >
 	if(*ch != '>') {osiltext = (char* )&ch[0]; osilerror("improperly formed </colIdx> tag"); return false;}	
@@ -2005,11 +2051,9 @@ bool parseObjCoef( const char **p, int objcount){
 	const char* startCoef = "<coef";
 	const char* endCoef = "</coef";
 	const char* c_idx = "idx";
-	int kount = 0;
 	char *attText = NULL;
 	int i, k;
 	int numberOfObjCoef = 0; 
-	bool foundCoef = false;
 	cout << "NUMBER OF OBJECTIVE FUNCTIONS = " << osinstance->instanceData->objectives->numberOfObjectives << endl;
 	if( osinstance->instanceData->objectives->numberOfObjectives <= 0)  {osiltext = (char* )&ch[0]; osilerror("we can't have objective function coefficients without an objective function"); return false;}
 	numberOfObjCoef = osinstance->instanceData->objectives->obj[objcount]->numberOfObjCoef;
@@ -2063,7 +2107,6 @@ char *parseBase64(const char **p, int *dataSize ){
 	char *attText = NULL;
 	char *b64string = NULL;
 	int i;
-	int endpoint;
 	// start parsing
 	for(i = 0; startBase64BinaryData[i]  == *ch; i++, ch++);
 	if(i != 17) {
@@ -2200,7 +2243,7 @@ double atofmod1(const char *number, const char *numberend){
 
 int atoimod1(const char *number, const char *numberend){
 	// modidfied atoi from Kernighan and Ritchie
-	int ival, power;
+	int ival;
 	int i, sign;
 	int endWhiteSpace;
 	for(i = 0; ISWHITESPACE( number[ i]) || isnewline( number[ i]) ; i++);
@@ -2216,7 +2259,7 @@ int atoimod1(const char *number, const char *numberend){
 	if(number[i] == *numberend){
 		return sign*ival;
 	}
-	else {osiltext = (char* )number; osilerror(strcat(parseErrorInteger, number)); return OSNAN;	}
+	else {osiltext = (char* )number; osilerror(strcat(parseErrorInteger, number)); return OSINT_MAX;	}
 }//end atoimod1
 
 

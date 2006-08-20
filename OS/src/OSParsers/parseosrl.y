@@ -316,7 +316,7 @@ xmlWhiteSpace:
 
 %%
 
-void osrlerror(char* errormsg)
+void osrlerror(const char* errormsg)
 {
 	try{
 		ostringstream outStr;
@@ -340,7 +340,7 @@ OSResult *yygetOSResult(std::string parsestring){
 	osrlinitialize();
 	osrl_scan_string( parsestring.c_str());
 	std::cout << std::endl << std::endl;
-	std::cout << "start parising now" << std::endl;
+	std::cout << "start parsing now" << std::endl;
 	osrlparse();
 	std::cout << "Parse a success" << std::endl;
 	if( createOSResult() == false) osrlerror("Could not create OSResult");

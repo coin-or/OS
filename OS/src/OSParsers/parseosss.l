@@ -226,7 +226,7 @@ browserState (on|off)
 . {ossserror( "ecountered a spurious character in the lexer");   }
 %%
 
-void ossserror(char* errormsg)
+void ossserror(const char* errormsg)
 {
 	try{
 		ostringstream outStr;

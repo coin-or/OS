@@ -68,21 +68,8 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]+))([eE][-+]?[0-9]+)?|INF))
 
 
 
-{xmlwhitespace}*\<osil{xmlwhitespace}+ {YY_PRINT; BEGIN osilattributetext;  return(OSILSTART);}
+
 {xmlwhitespace}*\<\/osil{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OSILEND);}
-{xmlwhitespace}*\<instanceHeader{xmlwhitespace}*\/\>{xmlwhitespace}* {YY_PRINT; return(INSTANCEHEADER);}
-{xmlwhitespace}*\<instanceHeader{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(INSTANCEHEADERSTART);}
-{xmlwhitespace}*\<\/instanceHeader{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(INSTANCEHEADEREND);}
-{xmlwhitespace}*\<name{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; BEGIN elementtext; return(NAMESTART);}
-{xmlwhitespace}*\<name{xmlwhitespace}*\>\< {YY_PRINT; unput('<'); return(NAMESTART);}
-{xmlwhitespace}*\<\/name{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(NAMEEND);}
-{xmlwhitespace}*\<source{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; BEGIN elementtext;  return(SOURCESTART);}
-{xmlwhitespace}*\<source{xmlwhitespace}*\>\< {YY_PRINT; unput('<'); return(SOURCESTART);}
-{xmlwhitespace}*\<\/source{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;   return(SOURCEEND);}
-{xmlwhitespace}*\<description{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; BEGIN elementtext; return(DESCRIPTIONSTART);} 
-{xmlwhitespace}*\<description{xmlwhitespace}*\>\< {YY_PRINT; unput('<'); return(DESCRIPTIONSTART);} 
-{xmlwhitespace}*\<\/description{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(DESCRIPTIONEND);}
-{xmlwhitespace}*\<instanceData{xmlwhitespace}*\>{xmlwhitespace}* {	return(INSTANCEDATASTART);}
 ({xmlwhitespace}+numberOfNonlinearExpressions{equality}{quote}{xmlwhitespace}*) {YY_PRINT; return(NUMBEROFNONLINEAREXPRESSIONS);}
 {xmlwhitespace}*\<\/instanceData{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(INSTANCEDATAEND);}
 {xmlwhitespace}*\<quadraticCoefficients {YY_PRINT; return(QUADRATICCOEFFICIENTSSTART);}
@@ -100,9 +87,7 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]+))([eE][-+]?[0-9]+)?|INF))
 ({xmlwhitespace}+type{equality}{quote}{xmlwhitespace}*) {YY_PRINT; BEGIN attributetext; return(TYPEATT);}
 ({xmlwhitespace}+id{equality}{quote}{xmlwhitespace}*) {YY_PRINT; BEGIN attributetext; return(IDATT);}
 ({xmlwhitespace}+coef{equality}{quote}{xmlwhitespace}*) {YY_PRINT;   return(COEFATT);}
-(\<name{xmlwhitespace}*\/>) {YY_PRINT;  return(NAMESTARTANDEND);}
-(\<source{xmlwhitespace}*\/\>) {YY_PRINT;  return(SOURCESTARTANDEND);}
-(\<description{xmlwhitespace}*\/\>) {YY_PRINT;  return(DESCRIPTIONSTARTANDEND);}
+
 
 
 %{ 
@@ -159,11 +144,11 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]+))([eE][-+]?[0-9]+)?|INF))
  <xmldeclaration>\n ;
  <xmldeclaration>"?>" BEGIN 0;
  
-<elementtext>([^<])* {YY_PRINT;   BEGIN 0; osillval.sval = strdup(osiltext);    return(ELEMENTTEXT);}
-<attributetext>([^\"\'])* {YY_PRINT;  BEGIN 0; osillval.sval = strdup(osiltext); return(ATTRIBUTETEXT);}
-<osilattributetext>([^>])* {YY_PRINT;  BEGIN 0; osillval.sval = strdup(osiltext); return(OSILATTRIBUTETEXT);}
 
-. {YY_PRINT;  printf("%s", osiltext); osilerror( "ecountered a spurious character in the lexer"); return(777777777);  }
+<attributetext>([^\"\'])* {YY_PRINT;  BEGIN 0; osillval.sval = strdup(osiltext); return(ATTRIBUTETEXT);}
+
+
+. {YY_PRINT;  printf("%s", osiltext); osilerror( "ecountered a spurious character in the lexer");   }
 
 %%
 

@@ -2133,7 +2133,7 @@ void osssfree (void * ptr )
 
 
 
-void ossserror(char* errormsg)
+void ossserror(const char* errormsg)
 {
 	try{
 		ostringstream outStr;

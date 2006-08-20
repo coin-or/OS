@@ -25,6 +25,7 @@
 
 #include <math.h>
 #include <float.h>
+#include <limits.h>
 //#ifdef INFINITY //This is the definition in the ISO C99 standard.
 //	#define OSINFINITY INFINITY
 //#else
@@ -47,6 +48,12 @@
 	#define OSDBL_MAX DBL_MAX
 #else
 	#define OSDBL_MAX OSINFINITY
+#endif
+
+#ifdef INT_MAX
+	#define OSINT_MAX INT_MAX
+#else
+	#define OSINT_MAX 2147483647
 #endif
 
 #ifndef XSLT_LOCATION

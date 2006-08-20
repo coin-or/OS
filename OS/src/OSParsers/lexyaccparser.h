@@ -55,6 +55,6 @@ OSResult *yygetOSResult(std::string osrl);
 void osilClearMemory();
 void osilerror(const char* errormsg) ;
 void osrlClearMemory();
-void osrlerror(char* errormsg);
-void ossserror(char* errormsg);
+void osrlerror(const char* errormsg);
+void ossserror(const char* errormsg);
 #endif 

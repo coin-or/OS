@@ -15,26 +15,27 @@
  
 #include <string>
 #include <vector> 
+using std::string ;
 
 OSResult* osresult;
 int numberOfSolutions;
 int numberOfVariables;
 int numberOfConstraints;
 int numberOfObjectives;
-char *statusType;
-char *statusDescription;
-char *generalStatusType;
-char *generalStatusDescription;
+string  statusType;
+string statusDescription;
+string generalStatusType;
+string generalStatusDescription;
 bool statusTypePresent;
 bool generalStatusTypePresent;
 bool otherNamePresent;
 bool beginElementText;
 int solutionIdx;
-char *serviceURI;
-char *serviceName;
-char *instanceName;
-char *jobID;
-char *headerMessage;
+string serviceURI;
+string serviceName;
+string instanceName;
+string jobID;
+string headerMessage;
 double **objectiveValues;
 double **primalSolution;
 double **dualSolution;

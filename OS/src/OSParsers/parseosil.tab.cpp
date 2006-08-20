@@ -78,73 +78,57 @@
      ATTRIBUTETEXT = 259,
      INTEGER = 260,
      DOUBLE = 261,
-     ELEMENTTEXT = 262,
-     OSILSTART = 263,
-     OSILEND = 264,
-     NAMESTART = 265,
-     NAMEEND = 266,
-     DESCRIPTIONSTART = 267,
-     DESCRIPTIONEND = 268,
-     SOURCESTART = 269,
-     SOURCEEND = 270,
-     INSTANCEHEADER = 271,
-     INSTANCEHEADERSTART = 272,
-     INSTANCEHEADEREND = 273,
-     INSTANCEDATASTART = 274,
-     INSTANCEDATAEND = 275,
-     VALUEATT = 276,
-     NUMBEROFNONLINEAREXPRESSIONS = 277,
-     IDXONEATT = 278,
-     IDXTWOATT = 279,
-     COEFATT = 280,
-     IDATT = 281,
-     TIMESSTART = 282,
-     TIMESEND = 283,
-     NUMBERSTART = 284,
-     NUMBEREND = 285,
-     NUMBEROFQTERMSATT = 286,
-     IDXATT = 287,
-     TYPEATT = 288,
-     QTERMSTART = 289,
-     QTERMEND = 290,
-     QUADRATICCOEFFICIENTSSTART = 291,
-     QUADRATICCOEFFICIENTSEND = 292,
-     NONLINEAREXPRESSIONSSTART = 293,
-     NONLINEAREXPRESSIONSEND = 294,
-     NLSTART = 295,
-     NLEND = 296,
-     POWERSTART = 297,
-     POWEREND = 298,
-     PLUSSTART = 299,
-     PLUSEND = 300,
-     MINUSSTART = 301,
-     MINUSEND = 302,
-     DIVIDESTART = 303,
-     DIVIDEEND = 304,
-     LNSTART = 305,
-     LNEND = 306,
-     SUMSTART = 307,
-     SUMEND = 308,
-     PRODUCTSTART = 309,
-     PRODUCTEND = 310,
-     ENDOFELEMENT = 311,
-     EXPSTART = 312,
-     EXPEND = 313,
-     NEGATESTART = 314,
-     NEGATEEND = 315,
-     IFSTART = 316,
-     IFEND = 317,
-     GREATERTHAN = 318,
-     OSILATTRIBUTETEXT = 319,
-     NAMESTARTANDEND = 320,
-     SOURCESTARTANDEND = 321,
-     DESCRIPTIONSTARTANDEND = 322,
-     VARIABLESTART = 323,
-     VARIABLEEND = 324,
-     ABSSTART = 325,
-     ABSEND = 326,
-     MAXSTART = 327,
-     MAXEND = 328
+     OSILEND = 262,
+     INSTANCEDATAEND = 263,
+     VALUEATT = 264,
+     NUMBEROFNONLINEAREXPRESSIONS = 265,
+     IDXONEATT = 266,
+     IDXTWOATT = 267,
+     COEFATT = 268,
+     IDATT = 269,
+     TIMESSTART = 270,
+     TIMESEND = 271,
+     NUMBERSTART = 272,
+     NUMBEREND = 273,
+     NUMBEROFQTERMSATT = 274,
+     IDXATT = 275,
+     TYPEATT = 276,
+     QTERMSTART = 277,
+     QTERMEND = 278,
+     QUADRATICCOEFFICIENTSSTART = 279,
+     QUADRATICCOEFFICIENTSEND = 280,
+     NONLINEAREXPRESSIONSSTART = 281,
+     NONLINEAREXPRESSIONSEND = 282,
+     NLSTART = 283,
+     NLEND = 284,
+     POWERSTART = 285,
+     POWEREND = 286,
+     PLUSSTART = 287,
+     PLUSEND = 288,
+     MINUSSTART = 289,
+     MINUSEND = 290,
+     DIVIDESTART = 291,
+     DIVIDEEND = 292,
+     LNSTART = 293,
+     LNEND = 294,
+     SUMSTART = 295,
+     SUMEND = 296,
+     PRODUCTSTART = 297,
+     PRODUCTEND = 298,
+     ENDOFELEMENT = 299,
+     EXPSTART = 300,
+     EXPEND = 301,
+     NEGATESTART = 302,
+     NEGATEEND = 303,
+     IFSTART = 304,
+     IFEND = 305,
+     GREATERTHAN = 306,
+     VARIABLESTART = 307,
+     VARIABLEEND = 308,
+     ABSSTART = 309,
+     ABSEND = 310,
+     MAXSTART = 311,
+     MAXEND = 312
    };
 #endif
 /* Tokens.  */
@@ -152,73 +136,57 @@
 #define ATTRIBUTETEXT 259
 #define INTEGER 260
 #define DOUBLE 261
-#define ELEMENTTEXT 262
-#define OSILSTART 263
-#define OSILEND 264
-#define NAMESTART 265
-#define NAMEEND 266
-#define DESCRIPTIONSTART 267
-#define DESCRIPTIONEND 268
-#define SOURCESTART 269
-#define SOURCEEND 270
-#define INSTANCEHEADER 271
-#define INSTANCEHEADERSTART 272
-#define INSTANCEHEADEREND 273
-#define INSTANCEDATASTART 274
-#define INSTANCEDATAEND 275
-#define VALUEATT 276
-#define NUMBEROFNONLINEAREXPRESSIONS 277
-#define IDXONEATT 278
-#define IDXTWOATT 279
-#define COEFATT 280
-#define IDATT 281
-#define TIMESSTART 282
-#define TIMESEND 283
-#define NUMBERSTART 284
-#define NUMBEREND 285
-#define NUMBEROFQTERMSATT 286
-#define IDXATT 287
-#define TYPEATT 288
-#define QTERMSTART 289
-#define QTERMEND 290
-#define QUADRATICCOEFFICIENTSSTART 291
-#define QUADRATICCOEFFICIENTSEND 292
-#define NONLINEAREXPRESSIONSSTART 293
-#define NONLINEAREXPRESSIONSEND 294
-#define NLSTART 295
-#define NLEND 296
-#define POWERSTART 297
-#define POWEREND 298
-#define PLUSSTART 299
-#define PLUSEND 300
-#define MINUSSTART 301
-#define MINUSEND 302
-#define DIVIDESTART 303
-#define DIVIDEEND 304
-#define LNSTART 305
-#define LNEND 306
-#define SUMSTART 307
-#define SUMEND 308
-#define PRODUCTSTART 309
-#define PRODUCTEND 310
-#define ENDOFELEMENT 311
-#define EXPSTART 312
-#define EXPEND 313
-#define NEGATESTART 314
-#define NEGATEEND 315
-#define IFSTART 316
-#define IFEND 317
-#define GREATERTHAN 318
-#define OSILATTRIBUTETEXT 319
-#define NAMESTARTANDEND 320
-#define SOURCESTARTANDEND 321
-#define DESCRIPTIONSTARTANDEND 322
-#define VARIABLESTART 323
-#define VARIABLEEND 324
-#define ABSSTART 325
-#define ABSEND 326
-#define MAXSTART 327
-#define MAXEND 328
+#define OSILEND 262
+#define INSTANCEDATAEND 263
+#define VALUEATT 264
+#define NUMBEROFNONLINEAREXPRESSIONS 265
+#define IDXONEATT 266
+#define IDXTWOATT 267
+#define COEFATT 268
+#define IDATT 269
+#define TIMESSTART 270
+#define TIMESEND 271
+#define NUMBERSTART 272
+#define NUMBEREND 273
+#define NUMBEROFQTERMSATT 274
+#define IDXATT 275
+#define TYPEATT 276
+#define QTERMSTART 277
+#define QTERMEND 278
+#define QUADRATICCOEFFICIENTSSTART 279
+#define QUADRATICCOEFFICIENTSEND 280
+#define NONLINEAREXPRESSIONSSTART 281
+#define NONLINEAREXPRESSIONSEND 282
+#define NLSTART 283
+#define NLEND 284
+#define POWERSTART 285
+#define POWEREND 286
+#define PLUSSTART 287
+#define PLUSEND 288
+#define MINUSSTART 289
+#define MINUSEND 290
+#define DIVIDESTART 291
+#define DIVIDEEND 292
+#define LNSTART 293
+#define LNEND 294
+#define SUMSTART 295
+#define SUMEND 296
+#define PRODUCTSTART 297
+#define PRODUCTEND 298
+#define ENDOFELEMENT 299
+#define EXPSTART 300
+#define EXPEND 301
+#define NEGATESTART 302
+#define NEGATEEND 303
+#define IFSTART 304
+#define IFEND 305
+#define GREATERTHAN 306
+#define VARIABLESTART 307
+#define VARIABLEEND 308
+#define ABSSTART 309
+#define ABSEND 310
+#define MAXSTART 311
+#define MAXEND 312
 
 
 
@@ -262,6 +230,7 @@ bool parseRowIdx( const char **pchar);
 bool parseColIdx( const char **pchar);
 bool parseValue( const char **pchar);
 bool parseInstanceHeader(const char **pchar);
+bool parseInstanceData(const char **pchar);
 char *parseBase64(const char **p, int *dataSize );
 
 
@@ -559,10 +528,10 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  6
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   219
+#define YYLAST   215
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  78
+#define YYNTOKENS  62
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  69
 /* YYNRULES -- Number of rules.  */
@@ -572,7 +541,7 @@ union yyalloc
 
 /* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   328
+#define YYMAXUTOK   312
 
 #define YYTRANSLATE(YYX)						\
   ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
@@ -580,10 +549,10 @@ union yyalloc
 /* YYTRANSLATE[YYLEX] -- Bison symbol number corresponding to YYLEX.  */
 static const yytype_uint8 yytranslate[] =
 {
-       0,     2,     2,     2,     2,     2,     2,     2,     2,    75,
-      77,     2,     2,    76,     2,     2,     2,     2,     2,     2,
+       0,     2,     2,     2,     2,     2,     2,     2,     2,    59,
+      61,     2,     2,    60,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,    74,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,    58,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -611,8 +580,7 @@ static const yytype_uint8 yytranslate[] =
       25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
       35,    36,    37,    38,    39,    40,    41,    42,    43,    44,
       45,    46,    47,    48,    49,    50,    51,    52,    53,    54,
-      55,    56,    57,    58,    59,    60,    61,    62,    63,    64,
-      65,    66,    67,    68,    69,    70,    71,    72,    73
+      55,    56,    57
 };
 
 #if YYDEBUG
@@ -637,55 +605,55 @@ static const yytype_uint16 yyprhs[] =
 /* YYRHS -- A `-1'-separated list of the rules' RHS.  */
 static const yytype_int16 yyrhs[] =
 {
-      79,     0,    -1,    80,    93,    20,     9,    -1,    -1,    36,
-      81,    82,    37,    -1,    31,     5,   146,    63,    -1,    -1,
-      82,    83,    -1,    -1,    84,    34,    86,    85,    -1,    56,
-      -1,    63,    35,    -1,    -1,    86,    87,    -1,    88,   146,
-      -1,    89,   146,    -1,    90,   146,    -1,    91,   146,    -1,
-      92,   146,    -1,    26,     4,    -1,    26,    -1,    23,     5,
-      -1,    24,     5,    -1,    25,     6,    -1,    25,     5,    -1,
-      32,     5,    -1,    -1,    38,    94,    95,    39,    -1,    22,
-       5,   146,    63,    -1,    -1,    -1,    95,    40,    97,    63,
-      98,    96,    41,    -1,    32,     5,   146,    -1,   128,    -1,
-     130,    -1,    99,    -1,   101,    -1,   111,    -1,   103,    -1,
-     105,    -1,   107,    -1,   109,    -1,   117,    -1,   120,    -1,
-     122,    -1,   126,    -1,   124,    -1,   114,    -1,    -1,    27,
-     100,    98,    98,    28,    -1,    -1,    44,   102,    98,    98,
-      45,    -1,    -1,    46,   104,    98,    98,    47,    -1,    -1,
-      59,   106,    98,    60,    -1,    -1,    48,   108,    98,    98,
-      49,    -1,    -1,    42,   110,    98,    98,    43,    -1,    -1,
-      52,   112,   113,    53,    -1,    98,    -1,   113,    98,    -1,
-      -1,    72,   115,   116,    73,    -1,    98,    -1,   116,    98,
-      -1,    -1,    54,   118,   119,    55,    -1,    98,    -1,   119,
-      98,    -1,    -1,    50,   121,    98,    51,    -1,    -1,    57,
-     123,    98,    58,    -1,    -1,    70,   125,    98,    71,    -1,
-      -1,    61,   127,    98,    98,    98,    62,    -1,    -1,    29,
-     129,   135,   132,    -1,    -1,    68,   131,   140,   133,    -1,
-      56,    -1,    30,    -1,    56,    -1,    -1,    63,    98,   134,
-      69,    -1,    -1,   135,   136,    -1,   137,   146,    -1,   139,
-     146,    -1,   138,   146,    -1,    33,     4,    -1,    26,     4,
-      -1,    21,     6,    -1,    21,     5,    -1,    -1,   140,   141,
-      -1,   142,   146,    -1,   143,   146,    -1,    25,     6,    -1,
-      25,     5,    -1,    32,     5,    -1,    74,    -1,    75,    -1,
-      76,    -1,    77,    -1,    -1,   145,   144,    -1,   145,     3,
+      63,     0,    -1,    64,    77,     8,     7,    -1,    -1,    24,
+      65,    66,    25,    -1,    19,     5,   130,    51,    -1,    -1,
+      66,    67,    -1,    -1,    68,    22,    70,    69,    -1,    44,
+      -1,    51,    23,    -1,    -1,    70,    71,    -1,    72,   130,
+      -1,    73,   130,    -1,    74,   130,    -1,    75,   130,    -1,
+      76,   130,    -1,    14,     4,    -1,    14,    -1,    11,     5,
+      -1,    12,     5,    -1,    13,     6,    -1,    13,     5,    -1,
+      20,     5,    -1,    -1,    26,    78,    79,    27,    -1,    10,
+       5,   130,    51,    -1,    -1,    -1,    79,    28,    81,    51,
+      82,    80,    29,    -1,    20,     5,   130,    -1,   112,    -1,
+     114,    -1,    83,    -1,    85,    -1,    95,    -1,    87,    -1,
+      89,    -1,    91,    -1,    93,    -1,   101,    -1,   104,    -1,
+     106,    -1,   110,    -1,   108,    -1,    98,    -1,    -1,    15,
+      84,    82,    82,    16,    -1,    -1,    32,    86,    82,    82,
+      33,    -1,    -1,    34,    88,    82,    82,    35,    -1,    -1,
+      47,    90,    82,    48,    -1,    -1,    36,    92,    82,    82,
+      37,    -1,    -1,    30,    94,    82,    82,    31,    -1,    -1,
+      40,    96,    97,    41,    -1,    82,    -1,    97,    82,    -1,
+      -1,    56,    99,   100,    57,    -1,    82,    -1,   100,    82,
+      -1,    -1,    42,   102,   103,    43,    -1,    82,    -1,   103,
+      82,    -1,    -1,    38,   105,    82,    39,    -1,    -1,    45,
+     107,    82,    46,    -1,    -1,    54,   109,    82,    55,    -1,
+      -1,    49,   111,    82,    82,    82,    50,    -1,    -1,    17,
+     113,   119,   116,    -1,    -1,    52,   115,   124,   117,    -1,
+      44,    -1,    18,    -1,    44,    -1,    -1,    51,    82,   118,
+      53,    -1,    -1,   119,   120,    -1,   121,   130,    -1,   123,
+     130,    -1,   122,   130,    -1,    21,     4,    -1,    14,     4,
+      -1,     9,     6,    -1,     9,     5,    -1,    -1,   124,   125,
+      -1,   126,   130,    -1,   127,   130,    -1,    13,     6,    -1,
+      13,     5,    -1,    20,     5,    -1,    58,    -1,    59,    -1,
+      60,    -1,    61,    -1,    -1,   129,   128,    -1,   129,     3,
       -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   140,   140,   146,   147,   151,   156,   157,   159,   159,
-     170,   171,   174,   175,   179,   182,   185,   188,   191,   197,
-     199,   200,   202,   204,   206,   208,   214,   215,   219,   224,
-     226,   225,   235,   248,   249,   250,   251,   252,   253,   254,
-     255,   256,   257,   258,   259,   260,   261,   262,   265,   265,
-     270,   270,   275,   275,   280,   280,   285,   285,   290,   290,
-     295,   295,   305,   306,   309,   309,   319,   320,   323,   323,
-     333,   334,   337,   337,   343,   343,   348,   348,   354,   354,
-     359,   359,   364,   364,   369,   370,   372,   373,   373,   383,
-     384,   386,   388,   390,   394,   398,   404,   407,   411,   412,
-     414,   416,   419,   422,   426,   431,   432,   433,   434,   436,
-     437,   439
+       0,   138,   138,   144,   145,   149,   154,   155,   157,   157,
+     168,   169,   172,   173,   177,   180,   183,   186,   189,   195,
+     197,   198,   200,   202,   204,   206,   212,   213,   217,   222,
+     224,   223,   233,   246,   247,   248,   249,   250,   251,   252,
+     253,   254,   255,   256,   257,   258,   259,   260,   263,   263,
+     268,   268,   273,   273,   278,   278,   283,   283,   288,   288,
+     293,   293,   303,   304,   307,   307,   317,   318,   321,   321,
+     331,   332,   335,   335,   341,   341,   346,   346,   352,   352,
+     357,   357,   362,   362,   367,   368,   370,   371,   371,   381,
+     382,   384,   386,   388,   392,   396,   402,   405,   409,   410,
+     412,   414,   417,   420,   424,   429,   430,   431,   432,   434,
+     435,   437
 };
 #endif
 
@@ -695,10 +663,7 @@ static const yytype_uint16 yyrline[] =
 static const char *const yytname[] =
 {
   "$end", "error", "$undefined", "QUOTE", "ATTRIBUTETEXT", "INTEGER",
-  "DOUBLE", "ELEMENTTEXT", "OSILSTART", "OSILEND", "NAMESTART", "NAMEEND",
-  "DESCRIPTIONSTART", "DESCRIPTIONEND", "SOURCESTART", "SOURCEEND",
-  "INSTANCEHEADER", "INSTANCEHEADERSTART", "INSTANCEHEADEREND",
-  "INSTANCEDATASTART", "INSTANCEDATAEND", "VALUEATT",
+  "DOUBLE", "OSILEND", "INSTANCEDATAEND", "VALUEATT",
   "NUMBEROFNONLINEAREXPRESSIONS", "IDXONEATT", "IDXTWOATT", "COEFATT",
   "IDATT", "TIMESSTART", "TIMESEND", "NUMBERSTART", "NUMBEREND",
   "NUMBEROFQTERMSATT", "IDXATT", "TYPEATT", "QTERMSTART", "QTERMEND",
@@ -708,21 +673,20 @@ static const char *const yytname[] =
   "MINUSEND", "DIVIDESTART", "DIVIDEEND", "LNSTART", "LNEND", "SUMSTART",
   "SUMEND", "PRODUCTSTART", "PRODUCTEND", "ENDOFELEMENT", "EXPSTART",
   "EXPEND", "NEGATESTART", "NEGATEEND", "IFSTART", "IFEND", "GREATERTHAN",
-  "OSILATTRIBUTETEXT", "NAMESTARTANDEND", "SOURCESTARTANDEND",
-  "DESCRIPTIONSTARTANDEND", "VARIABLESTART", "VARIABLEEND", "ABSSTART",
-  "ABSEND", "MAXSTART", "MAXEND", "' '", "'\\t'", "'\\r'", "'\\n'",
-  "$accept", "osildoc", "quadraticcoefficients", "quadnumberatt",
-  "qTermlist", "qterm", "@1", "qtermend", "anotherqTermATT", "qtermatt",
-  "qtermidatt", "qtermidxOneatt", "qtermidxTwoatt", "qtermcoefatt",
-  "qtermidxatt", "nonlinearExpressions", "nlnumberatt", "nlnodes", "@2",
-  "nlIdxATT", "nlnode", "times", "@3", "plus", "@4", "minus", "@5",
-  "negate", "@6", "divide", "@7", "power", "@8", "sum", "@9",
-  "anothersumnlnode", "max", "@10", "anothermaxnlnode", "product", "@11",
-  "anotherproductnlnode", "ln", "@12", "exp", "@13", "abs", "@14", "if",
-  "@15", "number", "@16", "variable", "@17", "numberend", "variableend",
-  "@18", "anotherNumberATT", "numberATT", "numbertypeATT", "numberidATT",
-  "numbervalueATT", "anotherVariableATT", "variableATT", "variablecoefATT",
-  "variableidxATT", "xmlWhiteSpaceChar", "xmlWhiteSpace", "quote", 0
+  "VARIABLESTART", "VARIABLEEND", "ABSSTART", "ABSEND", "MAXSTART",
+  "MAXEND", "' '", "'\\t'", "'\\r'", "'\\n'", "$accept", "osildoc",
+  "quadraticcoefficients", "quadnumberatt", "qTermlist", "qterm", "@1",
+  "qtermend", "anotherqTermATT", "qtermatt", "qtermidatt",
+  "qtermidxOneatt", "qtermidxTwoatt", "qtermcoefatt", "qtermidxatt",
+  "nonlinearExpressions", "nlnumberatt", "nlnodes", "@2", "nlIdxATT",
+  "nlnode", "times", "@3", "plus", "@4", "minus", "@5", "negate", "@6",
+  "divide", "@7", "power", "@8", "sum", "@9", "anothersumnlnode", "max",
+  "@10", "anothermaxnlnode", "product", "@11", "anotherproductnlnode",
+  "ln", "@12", "exp", "@13", "abs", "@14", "if", "@15", "number", "@16",
+  "variable", "@17", "numberend", "variableend", "@18", "anotherNumberATT",
+  "numberATT", "numbertypeATT", "numberidATT", "numbervalueATT",
+  "anotherVariableATT", "variableATT", "variablecoefATT", "variableidxATT",
+  "xmlWhiteSpaceChar", "xmlWhiteSpace", "quote", 0
 };
 #endif
 
@@ -736,27 +700,26 @@ static const yytype_uint16 yytoknum[] =
      275,   276,   277,   278,   279,   280,   281,   282,   283,   284,
      285,   286,   287,   288,   289,   290,   291,   292,   293,   294,
      295,   296,   297,   298,   299,   300,   301,   302,   303,   304,
-     305,   306,   307,   308,   309,   310,   311,   312,   313,   314,
-     315,   316,   317,   318,   319,   320,   321,   322,   323,   324,
-     325,   326,   327,   328,    32,     9,    13,    10
+     305,   306,   307,   308,   309,   310,   311,   312,    32,     9,
+      13,    10
 };
 # endif
 
 /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
-       0,    78,    79,    80,    80,    81,    82,    82,    84,    83,
-      85,    85,    86,    86,    87,    87,    87,    87,    87,    88,
-      88,    89,    90,    91,    91,    92,    93,    93,    94,    95,
-      96,    95,    97,    98,    98,    98,    98,    98,    98,    98,
-      98,    98,    98,    98,    98,    98,    98,    98,   100,    99,
-     102,   101,   104,   103,   106,   105,   108,   107,   110,   109,
-     112,   111,   113,   113,   115,   114,   116,   116,   118,   117,
-     119,   119,   121,   120,   123,   122,   125,   124,   127,   126,
-     129,   128,   131,   130,   132,   132,   133,   134,   133,   135,
-     135,   136,   136,   136,   137,   138,   139,   139,   140,   140,
-     141,   141,   142,   142,   143,   144,   144,   144,   144,   145,
-     145,   146
+       0,    62,    63,    64,    64,    65,    66,    66,    68,    67,
+      69,    69,    70,    70,    71,    71,    71,    71,    71,    72,
+      72,    73,    74,    75,    75,    76,    77,    77,    78,    79,
+      80,    79,    81,    82,    82,    82,    82,    82,    82,    82,
+      82,    82,    82,    82,    82,    82,    82,    82,    84,    83,
+      86,    85,    88,    87,    90,    89,    92,    91,    94,    93,
+      96,    95,    97,    97,    99,    98,   100,   100,   102,   101,
+     103,   103,   105,   104,   107,   106,   109,   108,   111,   110,
+     113,   112,   115,   114,   116,   116,   117,   118,   117,   119,
+     119,   120,   120,   120,   121,   122,   123,   123,   124,   124,
+     125,   125,   126,   126,   127,   128,   128,   128,   128,   129,
+     129,   130
 };
 
 /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
@@ -819,25 +782,25 @@ static const yytype_int16 yydefgoto[] =
 #define YYPACT_NINF -65
 static const yytype_int16 yypact[] =
 {
-     -26,   -20,    12,   -25,     9,   -65,   -65,    -3,     0,   -65,
-     -16,    17,   -65,    14,    -2,   -38,   -65,   -65,    11,   -65,
-     -37,   -65,   -65,   -65,   -65,   -65,   -65,   -65,   -65,   -65,
-     -29,   -65,    -6,    -8,   -65,    45,    -7,    55,    59,    -1,
-      63,    64,   -65,    35,   -65,   -65,   -65,   -65,   -65,   -65,
-     -65,   -65,   147,   -65,   -65,   -65,   -65,   -65,   -65,   -65,
+     -15,    -9,    11,   -13,    14,   -65,   -65,    10,     6,   -65,
+      -4,    17,   -65,    16,     9,   -25,   -65,   -65,     3,   -65,
+     -26,   -65,   -65,   -65,   -65,   -65,   -65,   -65,   -65,   -65,
+     -17,   -65,    25,     4,   -65,    51,    -1,    55,    59,    -2,
+      67,    68,   -65,    49,   -65,   -65,   -65,   -65,   -65,   -65,
+     -65,   -65,   159,   -65,   -65,   -65,   -65,   -65,   -65,   -65,
      -65,   -65,   -65,   -65,   -65,   -65,   -65,   -65,   -65,   -65,
      -65,   -65,   -65,   -65,   -65,   -65,   -65,   -65,   -65,   -65,
      -65,   -65,   -65,   -65,   -65,   -65,   -65,   -65,   -65,   -65,
-     -65,   -65,   -65,   -65,   -65,   -65,   -65,   147,   -65,   147,
-     147,   147,   147,   147,   147,   147,   147,   147,   147,   -65,
-     147,   147,    27,   147,    82,   147,   147,   147,   147,    20,
-     -65,    87,   -65,   118,    19,    21,   147,    33,     8,   -65,
-      34,   -65,    57,     1,    79,   -65,    83,   -65,   -65,   -65,
-     -65,   -65,   -65,    49,    52,    51,    50,   -65,   -65,   -65,
-     -65,   -65,   -65,   -65,   147,     3,    95,   -65,   147,   -65,
+     -65,   -65,   -65,   -65,   -65,   -65,   -65,   159,   -65,   159,
+     159,   159,   159,   159,   159,   159,   159,   159,   159,   -65,
+     159,   159,    48,   159,    83,   159,   159,   159,   159,    35,
+     -65,    99,   -65,   130,    29,    31,   159,    45,    26,   -65,
+      46,   -65,    69,     0,    79,   -65,    95,   -65,   -65,   -65,
+     -65,   -65,   -65,    56,    72,    71,    70,   -65,   -65,   -65,
+     -65,   -65,   -65,   -65,   159,     2,   103,   -65,   159,   -65,
      -65,   -65,   -65,   -65,   -65,   -65,   -65,   -65,   -65,   -65,
-     -65,   -65,   -65,   -65,   -65,   -65,   -65,   -65,    39,   -65,
-     -65,   -65,   -65,   -65,   -65,   -65,    36,   -65
+     -65,   -65,   -65,   -65,   -65,   -65,   -65,   -65,    60,   -65,
+     -65,   -65,   -65,   -65,   -65,   -65,    58,   -65
 };
 
 /* YYPGOTO[NTERM-NUM].  */
@@ -859,79 +822,79 @@ static const yytype_int8 yypgoto[] =
 #define YYTABLE_NINF -1
 static const yytype_uint8 yytable[] =
 {
-      30,    22,    31,    32,    55,    56,   167,   168,   179,   180,
-       1,     4,     6,     7,     9,    37,    38,    39,    40,    11,
-      13,    16,    19,    21,    41,    28,    35,    60,    61,    62,
+      30,    31,    32,    55,    56,   167,   168,   179,   180,     1,
+       4,     6,    22,     7,    13,    37,    38,    39,    40,     9,
+      11,    16,    19,    21,    41,    29,    28,    60,    61,    62,
       63,    64,    65,   113,    34,   115,   116,   117,   118,   119,
-     120,   122,   124,   125,   126,    29,   128,   129,    42,   132,
-      51,   143,   144,   145,   146,    43,    52,   149,   155,   151,
-      53,    66,   154,    67,    54,   156,   165,    57,   131,    58,
-      59,   147,    23,    24,    25,    26,    68,   152,    69,   163,
-      70,   153,    71,   169,    72,   166,    73,   170,    74,   157,
-     178,    75,   174,    76,   182,    77,   158,   175,   176,   177,
-     181,   185,    78,   133,    79,   187,    80,   164,   134,     0,
-       0,     0,   135,     0,    66,   136,    67,     0,     0,     0,
-       0,   171,   172,   173,     0,     0,     0,     0,     0,    68,
-       0,    69,     0,    70,     0,    71,     0,    72,   137,    73,
+     120,   122,   124,   125,   126,    35,   128,   129,    42,   132,
+      52,   143,   144,   145,   146,    43,    51,   149,   155,   151,
+      53,    66,   154,    67,    54,   156,   165,    23,    24,    25,
+      26,    57,    59,    58,   147,   152,    68,   131,    69,   153,
+      70,   163,    71,   169,    72,   166,    73,   174,    74,   157,
+     178,    75,   133,    76,   182,    77,   158,   134,    78,   170,
+      79,   135,    80,   164,   136,   175,   176,   177,   181,     0,
+     185,   187,     0,     0,    66,     0,    67,     0,     0,     0,
+       0,   171,   172,   173,     0,     0,     0,   137,     0,    68,
+       0,    69,     0,    70,     0,    71,     0,    72,     0,    73,
      148,    74,   183,   184,    75,    66,    76,    67,    77,     0,
-       0,     0,     0,     0,     0,    78,     0,    79,     0,    80,
+       0,    78,     0,    79,     0,    80,     0,     0,     0,     0,
       68,     0,    69,     0,    70,     0,    71,     0,    72,     0,
       73,     0,    74,   150,    66,    75,    67,    76,     0,    77,
-       0,     0,     0,     0,     0,     0,    78,     0,    79,    68,
-      80,    69,     0,    70,     0,    71,     0,    72,     0,    73,
+       0,     0,    78,     0,    79,     0,    80,     0,     0,    68,
+       0,    69,     0,    70,     0,    71,     0,    72,     0,    73,
        0,    74,     0,     0,    75,     0,    76,     0,    77,     0,
-       0,     0,     0,     0,     0,    78,     0,    79,     0,    80
+       0,    78,     0,    79,     0,    80
 };
 
 static const yytype_int16 yycheck[] =
 {
-      19,     3,    39,    40,     5,     6,     5,     6,     5,     6,
-      36,    31,     0,    38,     5,    23,    24,    25,    26,    22,
-      20,    37,     5,     9,    32,    63,    32,    46,    47,    48,
-      49,    50,    51,    97,    63,    99,   100,   101,   102,   103,
-     104,   105,   106,   107,   108,    34,   110,   111,    56,   113,
-       5,   115,   116,   117,   118,    63,    63,   121,    25,   123,
-       5,    27,   126,    29,     5,    32,   130,     4,    41,     5,
-      35,    51,    74,    75,    76,    77,    42,    58,    44,    71,
-      46,    60,    48,     4,    50,    28,    52,     4,    54,    56,
-     154,    57,    43,    59,   158,    61,    63,    45,    47,    49,
-       5,    62,    68,    21,    70,    69,    72,    73,    26,    -1,
-      -1,    -1,    30,    -1,    27,    33,    29,    -1,    -1,    -1,
-      -1,   140,   141,   142,    -1,    -1,    -1,    -1,    -1,    42,
-      -1,    44,    -1,    46,    -1,    48,    -1,    50,    56,    52,
-      53,    54,   161,   162,    57,    27,    59,    29,    61,    -1,
-      -1,    -1,    -1,    -1,    -1,    68,    -1,    70,    -1,    72,
-      42,    -1,    44,    -1,    46,    -1,    48,    -1,    50,    -1,
-      52,    -1,    54,    55,    27,    57,    29,    59,    -1,    61,
-      -1,    -1,    -1,    -1,    -1,    -1,    68,    -1,    70,    42,
-      72,    44,    -1,    46,    -1,    48,    -1,    50,    -1,    52,
-      -1,    54,    -1,    -1,    57,    -1,    59,    -1,    61,    -1,
-      -1,    -1,    -1,    -1,    -1,    68,    -1,    70,    -1,    72
+      19,    27,    28,     5,     6,     5,     6,     5,     6,    24,
+      19,     0,     3,    26,     8,    11,    12,    13,    14,     5,
+      10,    25,     5,     7,    20,    22,    51,    46,    47,    48,
+      49,    50,    51,    97,    51,    99,   100,   101,   102,   103,
+     104,   105,   106,   107,   108,    20,   110,   111,    44,   113,
+      51,   115,   116,   117,   118,    51,     5,   121,    13,   123,
+       5,    15,   126,    17,     5,    20,   130,    58,    59,    60,
+      61,     4,    23,     5,    39,    46,    30,    29,    32,    48,
+      34,    55,    36,     4,    38,    16,    40,    31,    42,    44,
+     154,    45,     9,    47,   158,    49,    51,    14,    52,     4,
+      54,    18,    56,    57,    21,    33,    35,    37,     5,    -1,
+      50,    53,    -1,    -1,    15,    -1,    17,    -1,    -1,    -1,
+      -1,   140,   141,   142,    -1,    -1,    -1,    44,    -1,    30,
+      -1,    32,    -1,    34,    -1,    36,    -1,    38,    -1,    40,
+      41,    42,   161,   162,    45,    15,    47,    17,    49,    -1,
+      -1,    52,    -1,    54,    -1,    56,    -1,    -1,    -1,    -1,
+      30,    -1,    32,    -1,    34,    -1,    36,    -1,    38,    -1,
+      40,    -1,    42,    43,    15,    45,    17,    47,    -1,    49,
+      -1,    -1,    52,    -1,    54,    -1,    56,    -1,    -1,    30,
+      -1,    32,    -1,    34,    -1,    36,    -1,    38,    -1,    40,
+      -1,    42,    -1,    -1,    45,    -1,    47,    -1,    49,    -1,
+      -1,    52,    -1,    54,    -1,    56
 };
 
 /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
    symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,    36,    79,    80,    31,    81,     0,    38,    93,     5,
-      82,    22,    94,    20,   145,   146,    37,    83,    84,     5,
-      95,     9,     3,    74,    75,    76,    77,   144,    63,    34,
-     146,    39,    40,    86,    63,    32,    97,    23,    24,    25,
-      26,    32,    56,    63,    85,    87,    88,    89,    90,    91,
-      92,     5,    63,     5,     5,     5,     6,     4,     5,    35,
-     146,   146,   146,   146,   146,   146,    27,    29,    42,    44,
-      46,    48,    50,    52,    54,    57,    59,    61,    68,    70,
-      72,    98,    99,   101,   103,   105,   107,   109,   111,   114,
-     117,   120,   122,   124,   126,   128,   130,   100,   129,   110,
-     102,   104,   108,   121,   112,   118,   123,   106,   127,   131,
-     125,   115,    96,    98,   135,    98,    98,    98,    98,    98,
-      98,   113,    98,   119,    98,    98,    98,   140,    98,    98,
-     116,    41,    98,    21,    26,    30,    33,    56,   132,   136,
-     137,   138,   139,    98,    98,    98,    98,    51,    53,    98,
-      55,    98,    58,    60,    98,    25,    32,    56,    63,   133,
-     141,   142,   143,    71,    73,    98,    28,     5,     6,     4,
-       4,   146,   146,   146,    43,    45,    47,    49,    98,     5,
-       6,     5,    98,   146,   146,    62,   134,    69
+       0,    24,    63,    64,    19,    65,     0,    26,    77,     5,
+      66,    10,    78,     8,   129,   130,    25,    67,    68,     5,
+      79,     7,     3,    58,    59,    60,    61,   128,    51,    22,
+     130,    27,    28,    70,    51,    20,    81,    11,    12,    13,
+      14,    20,    44,    51,    69,    71,    72,    73,    74,    75,
+      76,     5,    51,     5,     5,     5,     6,     4,     5,    23,
+     130,   130,   130,   130,   130,   130,    15,    17,    30,    32,
+      34,    36,    38,    40,    42,    45,    47,    49,    52,    54,
+      56,    82,    83,    85,    87,    89,    91,    93,    95,    98,
+     101,   104,   106,   108,   110,   112,   114,    84,   113,    94,
+      86,    88,    92,   105,    96,   102,   107,    90,   111,   115,
+     109,    99,    80,    82,   119,    82,    82,    82,    82,    82,
+      82,    97,    82,   103,    82,    82,    82,   124,    82,    82,
+     100,    29,    82,     9,    14,    18,    21,    44,   116,   120,
+     121,   122,   123,    82,    82,    82,    82,    39,    41,    82,
+      43,    82,    46,    48,    82,    13,    20,    44,    51,   117,
+     125,   126,   127,    55,    57,    82,    16,     5,     6,     4,
+       4,   130,   130,   130,    31,    33,    35,    37,    82,     5,
+       6,     5,    82,   130,   130,    50,   118,    53
 };
 
 #define yyerrok		(yyerrstatus = 0)
@@ -2404,29 +2367,24 @@ void osilerror(const char* errormsg) {
 	}
 } // end osilerror() 
 
-OSInstance* yygetOSInstance( const char *osil) throw (ErrorClass)
-try {
+OSInstance* yygetOSInstance( const char *osil) throw (ErrorClass) {
+	try {
 		void yyinitialize();
 		yyinitialize();
-		const char *ch = NULL;
 		osinstance = NULL;
 		osinstance = new OSInstance();
 		parseInstanceHeader( &osil);
-		const char *varel = "<variables";
-		ch = strstr(osil, varel);
-		osil = ch;
-		if(ch == NULL) throw ErrorClass("variables element required");
-		if( parseVariables( &osil) != true) {throw ErrorClass("error in parse variables");}
-		if( parseObjectives( &osil) != true)  throw ErrorClass("error in parse objectives");
-		if( parseConstraints( &osil) != true) throw ErrorClass("error in parse Constraints");
-		if( parseLinearConstraintCoefficients( &osil) != true) throw ErrorClass("error in parse ConstraintCoefficients");	
+		parseInstanceData( &osil);
+		// call the flex scanner
 		osil_scan_string( osil);
+		// call the Bison parser
 		if(  osilparse(  ) != 0) throw ErrorClass(  sparseError);
 		return osinstance;
-}//end yygetOSInstance
-		catch(const ErrorClass& eclass){
+	}
+	catch(const ErrorClass& eclass){
 		throw ErrorClass(  eclass.errormsg); 
 	}
+}//end yygetOSInstance
 
 void osilClearMemory(){
 	delete osinstance;
@@ -2476,7 +2434,7 @@ bool parseInstanceHeader( const char **p){
 	const char *pinstanceHeadStart = strstr(pchar, startInstanceHeader);
 	char *pelementText = NULL;
 	char *ptemp = NULL;
-	int i, elementSize;
+	int elementSize;
 	if(pinstanceHeadStart == NULL) {osiltext = (char*)*p; osilerror("<instanceHeader> element missing"); return false;}
 	// increment the line number counter if there are any newlines between the start of
 	// the osil string and pinstanceHeadStart
@@ -2679,6 +2637,37 @@ bool parseInstanceHeader( const char **p){
 }//end parseInstanceHeader
 
 
+bool parseInstanceData( const char **p){
+	//
+	const char *pchar = *p;
+	const char *startInstanceData = "<instanceData";
+	// at his point *pchar should be pointing to the first char after the > in </instanceHeader>
+	// burn the white space
+	for( ; ISWHITESPACE( *pchar) || isnewline( *pchar); pchar++ ) ;	
+	// pchar should be point to a '<', if not there is an error
+	if(*pchar != '<'){osiltext = (char*)*p; osilerror("improperly formed <instanceData element"); return false;}
+	// make sure the element is <instanceData	
+	*p = pchar;
+	while(*startInstanceData++  == *pchar) pchar++;
+	if( (pchar - *p) != 13) {osiltext = (char*)*p; osilerror("improperly formed <instanceData> element"); return false;}	
+	// now burn whitespace
+	// pchar must point to '>' or there is an error
+	if(*pchar != '>'){osiltext = (char*)*p; osilerror("improperly formed <instanceData> element"); return false;}	
+	pchar++;
+	// we are now pointing to the first char after <instanceData>
+	// burn any whitespace
+	for( ; ISWHITESPACE( *pchar) || isnewline( *pchar); pchar++ ) ;	
+	// we should be pointing to the '<' char in <varaibles>
+	*p = pchar;
+	if( parseVariables( p) != true) {throw ErrorClass("error in parse variables");}
+	if( parseObjectives( p) != true)  throw ErrorClass("error in parse objectives");
+	if( parseConstraints( p) != true) throw ErrorClass("error in parse Constraints");
+	if( parseLinearConstraintCoefficients( p) != true) throw ErrorClass("error in parse ConstraintCoefficients");	
+	//
+	return true;
+}// end parseInstanceData
+
+
 bool parseVariables( const char **p){
 	const char *ch = *p;
 	start = clock(); 
@@ -2764,7 +2753,7 @@ bool parseVariables( const char **p){
 				if( (ch - *p) != 4 ) {osiltext = (char* )&ch[0]; osilerror("error in variables name attribute"); return false;}
 				name -= 5;
 				if(varnameattON == true) {osiltext = (char* )&ch[0]; osilerror("error too many variable name attributes"); return false;}
-				varnameattON == true;
+				varnameattON = true;
 				GETATTRIBUTETEXT;
 				osinstance->instanceData->variables->var[varcount]->name=attText;
 				delete [] attText;
@@ -2885,8 +2874,10 @@ bool parseVariables( const char **p){
 			ch++;
 			for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );
 			// we should be at </var or there is an error
-			for(i = 0; endVar[i]  == *ch; i++, ch++);
-			if(i != 5) {osiltext = (char* )&ch[0]; osilerror("</var> element missing"); return false;}
+			*p = ch;
+			while(*endVar++  == *ch) ch++;
+			endVar -= 6;
+			if( (ch - *p) != 5) {osiltext = (char* )&ch[0]; osilerror("</var> element missing"); return false;}
 			// burn off the whitespace
 			for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );
 			// better have an > to end </var
@@ -3028,7 +3019,7 @@ bool parseObjectives( const char **p){
 				if( *(ch+1) == 'u'){
 					*p = ch;
 					while( *numberOfObjCoef++  == *ch) ch++;
-					numberOfObjCoef -+ 16;
+					numberOfObjCoef -= 16;
 					if( ( (ch - *p) != 15)  ) {osiltext = (char* )&ch[0]; osilerror("error in objective numberOfObjCoef attribute"); return false;}
 					else{
 						if(objnumberOfObjCoefattON == true) {osiltext = (char* )&ch[0]; osilerror("error too many obj numberOfObjCoefatt attributes"); return false;}
@@ -3455,7 +3446,6 @@ bool parseLinearConstraintCoefficients( const char **p){
 	// attributes
 	char *attText = NULL;
 	// others
-	int i;
 	int numberOfValues;
 	// start parsing
 	// burn white space
@@ -3540,10 +3530,12 @@ bool parseStart(const char **p){
 	// get rid of white space
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
 	// look for an <el> -- if none present must have b64 data
-	for(i = 0; startEl[i]  == *ch; i++, ch++);
-	if(i != 3) {
+	*p = ch;
+	while( *startEl++  == *ch) ch++;
+	startEl -= 4;
+	if( (ch - *p) != 3) {
 		//reset ch
-		ch -= i;
+		ch = *p;
 		// call base64 parse here
 		int dataSize = 0;
 		char* b64string = parseBase64(&ch, &dataSize );
@@ -3580,26 +3572,34 @@ bool parseStart(const char **p){
 			if(*ch != '<') {osiltext = (char* )&ch[0]; osilerror("cannot find an </el>"); return false;}
 			osinstance->instanceData->linearConstraintCoefficients->start->el[ kount++] = 
 			atoimod1( *p, ch);
-			ch++;
 			//printf("number = %s\n", *p);
 			// we are pointing to <, make sure there is /el
-			for(i = 1; endEl[ i] == *ch; i++, ch++);
-			if(i != 4 ) {osiltext = (char* )&ch[0]; osilerror("cannot fine an </el>"); return false;}
+			*p = ch;
+			while( *endEl++  == *ch) ch++;
+			endEl -= 5;
+			if( (ch - *p) != 4 ) {osiltext = (char* )&ch[0]; osilerror("cannot fine an </el>"); return false;}
 			// start eating white space until an '>' is found for </el>,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
 			if( *ch++ != '>') {osiltext = (char* )&ch[0]; osilerror("improperly formed </el> tag"); return false;}
 			// eat white space again,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );
 			// either have another <el> element or foundEl = false;
-			for(i = 0; startEl[i]  == *ch; i++, ch++);
-			if(i == 3) foundEl = true;
-			else foundEl = false;
-		}
-		ch -= i;			
+			*p = ch;
+			while( *startEl++  == *ch) ch++;
+			if( (ch - *p)  == 3){
+				 foundEl = true;
+				 startEl -= 4;
+			}
+			else{
+			 	foundEl = false;
+			 	ch = *p;
+			}
+		}		
 	}
 	// get the </start> tag
-	for(i = 0; endStart[i]  == *ch; i++, ch++);
-	if(i != 7) {osiltext = (char* )&ch[0]; osilerror( "cannot find </start> tag"); return false;}
+	*p = ch;
+	while( *endStart++  == *ch) ch++;
+	if( (ch - *p) != 7) {osiltext = (char* )&ch[0]; osilerror( "cannot find </start> tag"); return false;}
 	for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );	
 	// better have >
 	if(*ch != '>') {osiltext = (char* )&ch[0]; osilerror("improperly formed </start> tag");	return false;}
@@ -3736,10 +3736,11 @@ bool parseColIdx( const char **p){
 	bool foundEl = false;
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
 	// if, present we should be pointing to <colIdx element 
-	for(i = 0; startColIdx[i]  == *ch; i++, ch++);
-	if(i != 7) {
+	*p = ch;
+	while( *startColIdx++  == *ch) ch++;
+	if( (ch - *p) != 7) {
 		//reset ch
-		ch -= i;
+		ch = *p;
 		return false;
 	}
 	// get rid of white space after <colIdx
@@ -3750,10 +3751,12 @@ bool parseColIdx( const char **p){
 	// get rid of white space
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
 	// look for an <el> -- if none present must have b64 data
-	for(i = 0; startEl[i]  == *ch; i++, ch++);
-	if(i != 3) {
+	*p = ch;
+	while( *startEl++  == *ch) ch++;
+	startEl -= 4;
+	if( (ch - *p) != 3) {
 		//reset ch
-		ch -= i;
+		ch = *p;
 		// call base64 parse here
 		int dataSize = 0;
 		char* b64string = parseBase64(&ch, &dataSize );
@@ -3791,26 +3794,34 @@ bool parseColIdx( const char **p){
 			if(*ch != '<') {osiltext = (char* )&ch[0]; osilerror("cannot find an </el>"); return false;}
 			osinstance->instanceData->linearConstraintCoefficients->colIdx->el[ kount++] = 
 			atoimod1( *p, ch);
-			ch++;
 			//printf("number = %s\n", *p);
 			// we are pointing to <, make sure there is /el
-			for(i = 1; endEl[ i] == *ch; i++, ch++);
-			if( i != 4 ) {osiltext = (char* )&ch[0]; osilerror("cannot fine an </el>"); return false;}
+			*p = ch;
+			while( *endEl++  == *ch) ch++;
+			endEl -= 5;
+			if( (ch - *p) != 4 ) {osiltext = (char* )&ch[0]; osilerror("cannot fine an </el>"); return false;}
 			// start eating white space until an '>' is found for </el>,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );
 			if( *ch++ != '>') {osiltext = (char* )&ch[0]; osilerror("improperly formed </el> tag"); return false;}
 			// eat white space again,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );
 			// either have another <el> element or foundEl = false;
-			for(i = 0; startEl[i]  == *ch; i++, ch++);
-			if(i == 3) foundEl = true;
-			else foundEl = false;
+			*p = ch;
+			while( *startEl++  == *ch) ch++;
+			if( (ch - *p) == 3){
+			 	foundEl = true;
+			 	startEl -= 4;
+			}
+			else{
+			 	foundEl = false;
+			 	ch = *p;
+			}
 		}
-		ch -= i;
 	}
 	// get the </colIdx> tag
-	for(i = 0; endColIdx[i]  == *ch; i++, ch++);
-	if(i != 8) {osiltext = (char* )&ch[0]; osilerror( "cannot find </rowIdx> tag"); return false;}
+	*p = ch;
+	while( *endColIdx++  == *ch) ch++;		
+	if( (ch - *p) != 8) {osiltext = (char* )&ch[0]; osilerror( "cannot find </colIdx> tag"); return false;}
 	for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );	
 	// better have >
 	if(*ch != '>') {osiltext = (char* )&ch[0]; osilerror("improperly formed </colIdx> tag"); return false;}	
@@ -3939,11 +3950,9 @@ bool parseObjCoef( const char **p, int objcount){
 	const char* startCoef = "<coef";
 	const char* endCoef = "</coef";
 	const char* c_idx = "idx";
-	int kount = 0;
 	char *attText = NULL;
 	int i, k;
 	int numberOfObjCoef = 0; 
-	bool foundCoef = false;
 	cout << "NUMBER OF OBJECTIVE FUNCTIONS = " << osinstance->instanceData->objectives->numberOfObjectives << endl;
 	if( osinstance->instanceData->objectives->numberOfObjectives <= 0)  {osiltext = (char* )&ch[0]; osilerror("we can't have objective function coefficients without an objective function"); return false;}
 	numberOfObjCoef = osinstance->instanceData->objectives->obj[objcount]->numberOfObjCoef;
@@ -3997,7 +4006,6 @@ char *parseBase64(const char **p, int *dataSize ){
 	char *attText = NULL;
 	char *b64string = NULL;
 	int i;
-	int endpoint;
 	// start parsing
 	for(i = 0; startBase64BinaryData[i]  == *ch; i++, ch++);
 	if(i != 17) {
@@ -4134,7 +4142,7 @@ double atofmod1(const char *number, const char *numberend){
 
 int atoimod1(const char *number, const char *numberend){
 	// modidfied atoi from Kernighan and Ritchie
-	int ival, power;
+	int ival;
 	int i, sign;
 	int endWhiteSpace;
 	for(i = 0; ISWHITESPACE( number[ i]) || isnewline( number[ i]) ; i++);
@@ -4150,7 +4158,7 @@ int atoimod1(const char *number, const char *numberend){
 	if(number[i] == *numberend){
 		return sign*ival;
 	}
-	else {osiltext = (char* )number; osilerror(strcat(parseErrorInteger, number)); return OSNAN;	}
+	else {osiltext = (char* )number; osilerror(strcat(parseErrorInteger, number)); return OSINT_MAX;	}
 }//end atoimod1
 
 
