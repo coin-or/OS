@@ -119,10 +119,10 @@ this fails on in Mac OS X
 %token VALUEATT NUMBEROFNONLINEAREXPRESSIONS
 %token IDXONEATT IDXTWOATT COEFATT IDATT 
 %token TIMESSTART TIMESEND NUMBERSTART  NUMBEREND
-%token NUMBEROFQTERMSATT IDXATT TYPEATT IDATT
+%token NUMBEROFQTERMSATT IDXATT TYPEATT 
 %token QTERMSTART QTERMEND QUADRATICCOEFFICIENTSSTART QUADRATICCOEFFICIENTSEND
 %token NONLINEAREXPRESSIONSSTART NONLINEAREXPRESSIONSEND NLSTART NLEND
-%token TIMESSTART TIMESEND POWERSTART POWEREND PLUSSTART PLUSEND MINUSSTART MINUSEND
+%token POWERSTART POWEREND PLUSSTART PLUSEND MINUSSTART MINUSEND
 %token DIVIDESTART DIVIDEEND LNSTART LNEND SUMSTART SUMEND PRODUCTSTART PRODUCTEND ENDOFELEMENT
 %token EXPSTART EXPEND NEGATESTART NEGATEEND IFSTART IFEND
 %token GREATERTHAN 
@@ -1340,18 +1340,19 @@ bool parseConstraints( const char **p){
 	// burn white space
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
 	// if, present we should be pointing to <constraints element if there -- it is not required
+	*p = ch;
 	for(i = 0; startConstraints[i]  == *ch; i++, ch++);
-	if(i != 12) {
-		//reset ch
-		ch -= i;
-		*p = ch;
+	while( *startConstraints++  == *ch) ch++;
+	if( (ch - *p) != 12) {
+		//  *p is the correct value for the pointer
 		return true;
 	}
 	// find numberOfConstraints attribute
 	// eat the white space
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
-	for(i = 0; c_numberOfConstraints[i]  == *ch; i++, ch++);
-	if(i != 19) {osiltext = (char* )&ch[0]; osilerror("incorrect numberOfConstraints attribute in <constraints> tag"); return false;}	
+	*p = ch;
+	while( *c_numberOfConstraints++  == *ch) ch++;
+	if( (ch - *p) != 19) {osiltext = (char* )&ch[0]; osilerror("incorrect numberOfConstraints attribute in <constraints> tag"); return false;}	
 	// ch should be pointing to the first character after numberOfObjectives
 	GETATTRIBUTETEXT;
 	ch++;
@@ -1372,9 +1373,11 @@ bool parseConstraints( const char **p){
 	// get rid of white space after the <constraints> element
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
 	// now loop over the con elements, there must be at least one con element
-	for(i = 0; startCon[i]  == *ch; i++, ch++);
-	if( i == 4) foundCon = true;
+	*p = ch;
+	while( *startCon++  == *ch) ch++;
+	if( (ch - *p) == 4) foundCon = true;
 		else {osiltext = (char* )&ch[0]; osilerror("there must be at least one <con> element"); return false;}
+	startCon -= 5;
 	while(foundCon){
 		conlbattON = false ;
 		conubattON  = false;
@@ -1387,9 +1390,11 @@ bool parseConstraints( const char **p){
 		while(*ch != '/' && *ch != '>'){
 			switch (*ch) {
 			case 'n':
-				for(i = 0; name[i]  == *ch; i++, ch++);
-				if(i != 4) {osiltext = (char* )&ch[0]; osilerror("error in constraints name attribute"); return false;}
+				*p = ch;
+				while( *name++  == *ch) ch++;
+				if( (ch - *p) != 4) {osiltext = (char* )&ch[0]; osilerror("error in constraints name attribute"); return false;}
 				if(connameattON == true) {osiltext = (char* )&ch[0]; osilerror("error too many con name attributes"); return false;}
+				name -= 5;
 				connameattON = true;
 				GETATTRIBUTETEXT;
 				osinstance->instanceData->constraints->con[concount]->name=attText;
@@ -1397,9 +1402,11 @@ bool parseConstraints( const char **p){
 				//printf("ATTRIBUTE = %s\n", attText);
 				break;
 			case 'c':
-				for(i = 0; constant[i]  == *ch; i++, ch++);
-				if( (i != 7)  ) {osiltext = (char* )&ch[0]; osilerror("error in constraint constant attribute"); return false;}
+				*p = ch;
+				while( *constant++  == *ch) ch++;
+				if( ((ch - *p)  != 7)  ) {osiltext = (char* )&ch[0]; osilerror("error in constraint constant attribute"); return false;}
 				if(conconstantattON == true) {osiltext = (char* )&ch[0]; osilerror("error too many con constant attributes"); return false;}
+				constant -= 8;
 				conconstantattON = true;
 				GETATTRIBUTETEXT;
 				//printf("ATTRIBUTE = %s\n", attText);
@@ -1427,9 +1434,11 @@ bool parseConstraints( const char **p){
 				//printf("ATTRIBUTE = %s\n", attText);
 				break;
 			case 'm':
-				for(i = 0; mult[i]  == *ch; i++, ch++);
-				if(i != 4) {osiltext = (char* )&ch[0]; osilerror("error in constraints mult attribute"); return false;}
+				*p = ch;
+				while( *mult++  == *ch) ch++;
+				if( (ch - *p) != 4) {osiltext = (char* )&ch[0]; osilerror("error in constraints mult attribute"); return false;}
 				if(conmultattON == true) {osiltext = (char* )&ch[0]; osilerror("error too many con mult attributes"); return false;}
+				mult -= 5;
 				conmultattON = true;
 				GETATTRIBUTETEXT;
 				delete [] attText;
@@ -1463,9 +1472,16 @@ bool parseConstraints( const char **p){
 			ch++;
 			for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );
 			// either have another <con> element or foundCon = false;
-			for( i = 0; startCon[i]  == *ch; i++, ch++);
-			if( i == 4) foundCon = true;
-				else foundCon = false;
+			*p = ch;
+			while( *startCon++  == *ch) ch++;
+			if( (ch - *p) == 4){
+			 	foundCon = true;
+			 	startCon -= 5;
+			}
+			else{
+				foundCon = false;
+				ch = *p;
+			}
 		}
 		else{
 			// the ch is the > at the end of the con element 
@@ -1476,8 +1492,10 @@ bool parseConstraints( const char **p){
 			ch++;
 			for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );
 			// we should be at </con or there is an error
-			for(i = 0; endCon[i]  == *ch; i++, ch++);
-			if(i != 5) {osiltext = (char* )&ch[0]; osilerror("</con> element missing"); return false;}
+			*p = ch;
+			while( *endCon++  == *ch) ch++;
+			if( (ch - *p) != 5) {osiltext = (char* )&ch[0]; osilerror("</con> element missing"); return false;}
+			endCon -= 6;
 			// burn off the whitespace
 			for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );
 			// better have an > to end </con
@@ -1487,18 +1505,25 @@ bool parseConstraints( const char **p){
 			ch++;
 			for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );
 			// either have another <con> element or foundVar = false;
-			for(i = 0; startCon[i]  == *ch; i++, ch++);
-			if(i == 4) foundCon = true;
-				else foundCon = false;
+			*p = ch;
+			while( *startCon++  == *ch) ch++;
+			if( (ch - *p) == 4){
+			 	foundCon = true;
+			 	startCon -= 5;
+			}
+			else{
+			 	foundCon = false;
+			 	ch = *p;
+			}
 		}
 		if( (concount == numberOfConstraints - 1) && (foundCon == true) ) {osiltext = (char* )&ch[0]; osilerror("attribute numberOfConstraints is less than actual number found"); return false;}
 		concount++;
 	}
 	if(concount < numberOfConstraints) {osiltext = (char* )&ch[0]; osilerror("attribute numberOfConstraints is greater than actual number found"); return false;}
-	ch -= i;
 	// get the </constraints> tag
-	for(i = 0; endConstraints[i]  == *ch; i++, ch++);
-	if(i != 13) {osiltext = (char* )&ch[0]; osilerror( "cannot find </constraints> tag"); return false;}
+	*p = ch;
+	while( *endConstraints++  == *ch) ch++;
+	if( (ch - *p) != 13) {osiltext = (char* )&ch[0]; osilerror( "cannot find </constraints> tag"); return false;}
 	for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );	
 	// better have >
 	if(*ch != '>') {osiltext = (char* )&ch[0]; osilerror("improperly formed </constraints> tag");	return false;}
@@ -1523,8 +1548,9 @@ bool parseConstraints( const char **p){
 			ch++;
 			// burn white space
 			for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );
-			for(i = 0; endConstraints[i]  == *ch; i++, ch++);
-			if(i != 13) {osiltext = (char* )&ch[0]; osilerror( "cannot find </constraints> tag"); return false; }
+			*p = ch;
+			while( *endConstraints++  == *ch) ch++;
+			if( (ch - *p) != 13) {osiltext = (char* )&ch[0]; osilerror( "cannot find </constraints> tag"); return false; }
 			for(; ISWHITESPACE( *ch) || isnewline( *ch); ch++ );	
 			// better have >
 			if(*ch != '>') {osiltext = (char* )&ch[0]; osilerror("improperly formed </constraints> tag"); return false;}	
@@ -2052,22 +2078,25 @@ bool parseObjCoef( const char **p, int objcount){
 	const char* endCoef = "</coef";
 	const char* c_idx = "idx";
 	char *attText = NULL;
-	int i, k;
+	int k;
 	int numberOfObjCoef = 0; 
-	cout << "NUMBER OF OBJECTIVE FUNCTIONS = " << osinstance->instanceData->objectives->numberOfObjectives << endl;
 	if( osinstance->instanceData->objectives->numberOfObjectives <= 0)  {osiltext = (char* )&ch[0]; osilerror("we can't have objective function coefficients without an objective function"); return false;}
 	numberOfObjCoef = osinstance->instanceData->objectives->obj[objcount]->numberOfObjCoef;
 	if(numberOfObjCoef > 0)	{
 	for(k = 0; k < numberOfObjCoef; k++){
 		for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
 		// if, present we should be pointing to <coef element 
-		for(i = 0; startCoef[i]  == *ch; i++, ch++);
-		if(i != 5) {osiltext = (char* )&ch[0]; osilerror("improper <coef> element"); return false;}
+		*p = ch;
+		while( *startCoef++  == *ch) ch++;
+		if( (ch - *p) != 5) {osiltext = (char* )&ch[0]; osilerror("improper <coef> element"); return false;}
+		startCoef -= 6;
 		// get the idx attribute
 		// eat the white space after <coef
 		for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
-		for(i = 0; c_idx[i]  == *ch; i++, ch++);
-		if(i != 3) {osiltext = (char* )&ch[0]; osilerror("incorrect idx attribute in objective function <idx> tag"); return false;}	
+		*p = ch;
+		while( *c_idx++  == *ch) ch++;
+		if( (ch - *p) != 3) {osiltext = (char* )&ch[0]; osilerror("incorrect idx attribute in objective function <idx> tag"); return false;}	
+		c_idx -= 4;
 		// ch should be pointing to the first character after idx attribute
 		GETATTRIBUTETEXT;
 		osinstance->instanceData->objectives->obj[objcount]->coef[ k]->idx  = atoimod1( attText, attTextEnd);
@@ -2086,8 +2115,10 @@ bool parseObjCoef( const char **p, int objcount){
 		// we should be pointing to a < in the </coef> tag	
 		if(*ch != '<') {osiltext = (char* )&ch[0]; osilerror("improper </coef> tag"); return false;}
 		osinstance->instanceData->objectives->obj[objcount]->coef[ k]->value  = atofmod1( *p, ch);
-		for(i = 0; endCoef[i]  == *ch; i++, ch++);	
-		if(i != 6)  {osiltext = (char* )&ch[0]; osilerror("improper </coef> element"); return false;}
+		*p = ch;
+		while( *endCoef++  == *ch) ch++;
+		if( (ch - *p) != 6)  {osiltext = (char* )&ch[0]; osilerror("improper </coef> element"); return false;}
+		endCoef -= 7;
 		// get rid of white space after </coef
 		for( ; ISWHITESPACE( *ch) || isnewline( *ch); ch++ ) ;
 		// if we don't have a > there is an error

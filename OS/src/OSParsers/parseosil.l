@@ -85,7 +85,7 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]+))([eE][-+]?[0-9]+)?|INF))
 ({xmlwhitespace}+id{equality}{quote}{xmlwhitespace}*) {YY_PRINT; BEGIN attributetext; return(IDATT);}
 ({xmlwhitespace}+id{equality}{quote}{quote}) {YY_PRINT; unput('\"'); return(IDATT);  }
 ({xmlwhitespace}+type{equality}{quote}{xmlwhitespace}*) {YY_PRINT; BEGIN attributetext; return(TYPEATT);}
-({xmlwhitespace}+id{equality}{quote}{xmlwhitespace}*) {YY_PRINT; BEGIN attributetext; return(IDATT);}
+
 ({xmlwhitespace}+coef{equality}{quote}{xmlwhitespace}*) {YY_PRINT;   return(COEFATT);}
 
 

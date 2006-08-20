@@ -380,8 +380,8 @@ static void yy_fatal_error (yyconst char msg[]  );
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
 
-#define YY_NUM_RULES 69
-#define YY_END_OF_BUFFER 70
+#define YY_NUM_RULES 68
+#define YY_END_OF_BUFFER 69
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -391,49 +391,49 @@ struct yy_trans_info
 	};
 static yyconst flex_int16_t yy_accept[497] =
     {   0,
-        0,    0,   67,   67,    0,    0,    0,    0,    0,    0,
-        0,    0,    0,    0,   70,   68,    1,    1,    2,   68,
-       68,   68,    4,   68,    3,   68,   67,   69,   60,   61,
-       60,   64,   65,   64,    0,    0,    0,    3,    0,    0,
+        0,    0,   66,   66,    0,    0,    0,    0,    0,    0,
+        0,    0,    0,    0,   69,   67,    1,    1,    2,   67,
+       67,   67,    4,   67,    3,   67,   66,   68,   59,   60,
+       59,   63,   64,   63,    0,    0,    0,    3,    0,    0,
         0,    0,    0,    0,    4,    0,    5,    6,    0,    0,
-        0,   63,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,    0,    0,    0,    0,   67,    0,   66,    0,    0,
+        0,   62,    0,    0,    0,    0,    0,    0,    0,    0,
+        0,    0,    0,    0,    0,   66,    0,   65,    0,    0,
         0,    0,    0,    0,    5,    0,    0,    0,    0,    0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,    0,    0,    0,    0,    0,    0,   27,    0,    0,
+        0,    0,    0,    0,    0,    0,    0,   26,    0,    0,
 
-        0,    0,    0,    0,    0,    0,    0,    0,    5,   62,
-        0,    0,    0,    0,    0,    0,    0,   59,    0,    0,
+        0,    0,    0,    0,    0,    0,    0,    0,    5,   61,
+        0,    0,    0,    0,    0,    0,    0,   58,    0,    0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,    0,    0,   47,    0,   41,    0,    0,    0,    0,
+        0,    0,    0,   46,    0,   40,    0,    0,    0,    0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
         0,   20,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,    0,    0,   48,    0,    0,   42,    0,    0,    0,
-       28,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,    0,    0,   45,    0,    0,   43,   47,   41,    0,
+        0,    0,    0,   47,    0,    0,   41,    0,    0,    0,
+       27,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+        0,    0,    0,   44,    0,    0,   42,   46,   40,    0,
 
-       49,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,   51,    0,    0,    0,    0,   20,   21,    0,   15,
-        0,    0,    0,    0,    0,    0,    0,   46,    0,    0,
-       44,   48,    0,   42,    0,   50,    0,    0,   28,    0,
-        0,    0,    0,    0,    0,    0,    0,    0,   52,    0,
-        0,   45,    0,   43,   49,    0,    0,    0,    0,    0,
-       33,    0,    0,   12,    0,   51,    0,    0,    0,   18,
-       15,    0,    0,    0,    0,   22,    0,    0,   46,    0,
-       44,    0,   50,    0,    0,    0,    0,    0,    7,    0,
-       34,    0,    0,    0,    0,   52,    0,    0,    0,    0,
+       48,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+        0,   50,    0,    0,    0,    0,   20,   21,    0,   15,
+        0,    0,    0,    0,    0,    0,    0,   45,    0,    0,
+       43,   47,    0,   41,    0,   49,    0,    0,   27,    0,
+        0,    0,    0,    0,    0,    0,    0,    0,   51,    0,
+        0,   44,    0,   42,   48,    0,    0,    0,    0,    0,
+       32,    0,    0,   12,    0,   50,    0,    0,    0,   18,
+       15,    0,    0,    0,    0,   22,    0,    0,   45,    0,
+       43,    0,   49,    0,    0,    0,    0,    0,    7,    0,
+       33,    0,    0,    0,    0,   51,    0,    0,    0,    0,
 
-       35,    0,    0,   55,   33,    0,   39,    0,    0,    0,
-       29,    0,   18,    0,    0,    0,    0,    0,   22,    0,
-       19,    0,    0,    0,   36,    0,    0,    0,    7,   34,
-        0,   40,    0,   13,    0,    0,   30,    0,    0,   31,
-       35,    0,   37,    0,   39,    0,    0,   29,    0,    0,
-       16,    0,   17,    0,   19,    0,   32,    0,   36,    0,
-       38,    0,    0,   56,   40,    0,    0,   30,    0,   31,
-       37,    0,    0,   53,    0,   57,   16,   17,    0,    0,
-       32,    0,   38,    0,    0,   54,    0,    0,    0,   53,
-        0,    0,    0,    0,    0,   54,    0,    0,   58,    0,
+       34,    0,    0,   54,   32,    0,   38,    0,    0,    0,
+       28,    0,   18,    0,    0,    0,    0,    0,   22,    0,
+       19,    0,    0,    0,   35,    0,    0,    0,    7,   33,
+        0,   39,    0,   13,    0,    0,   29,    0,    0,   30,
+       34,    0,   36,    0,   38,    0,    0,   28,    0,    0,
+       16,    0,   17,    0,   19,    0,   31,    0,   35,    0,
+       37,    0,    0,   55,   39,    0,    0,   29,    0,   30,
+       36,    0,    0,   52,    0,   56,   16,   17,    0,    0,
+       31,    0,   37,    0,    0,   53,    0,    0,    0,   52,
+        0,    0,    0,    0,    0,   53,    0,    0,   57,    0,
 
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
@@ -441,8 +441,8 @@ static yyconst flex_int16_t yy_accept[497] =
         0,    0,    9,    0,    0,    0,    0,    0,    0,    0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,    0,    0,    0,    0,   25,    0,    0,    0,    0,
-        0,   10,    0,    0,   26,    0,    0,    0,    0,   26,
+        0,    0,    0,    0,    0,   24,    0,    0,    0,    0,
+        0,   10,    0,    0,   25,    0,    0,    0,    0,   25,
        11,    0,    0,   14,   11,    0,   14,    0,    0,    0,
         0,    0,    0,    8,    8,    0
 
@@ -818,12 +818,12 @@ static yyconst flex_int16_t yy_chk[907] =
     } ;
 
 /* Table of booleans, true if rule could match eol. */
-static yyconst flex_int32_t yy_rule_can_match_eol[70] =
+static yyconst flex_int32_t yy_rule_can_match_eol[69] =
     {   0,
 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 
-    0, 1, 0, 0, 0, 1, 0, 1, 0, 0,     };
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 
+    1, 0, 0, 0, 1, 0, 1, 0, 0,     };
 
 static yy_state_type yy_last_accepting_state;
 static char *yy_last_accepting_cpos;
@@ -1271,275 +1271,269 @@ YY_RULE_SETUP
 case 23:
 /* rule 23 can match eol */
 YY_RULE_SETUP
-#line 88 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
-{YY_PRINT; BEGIN attributetext; return(IDATT);}
-	YY_BREAK
-case 24:
-/* rule 24 can match eol */
-YY_RULE_SETUP
 #line 89 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT;   return(COEFATT);}
 	YY_BREAK
  
 // the nonlinear element tokens
 
-case 25:
-/* rule 25 can match eol */
+case 24:
+/* rule 24 can match eol */
 YY_RULE_SETUP
 #line 97 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(NONLINEAREXPRESSIONSSTART);}
 	YY_BREAK
-case 26:
-/* rule 26 can match eol */
+case 25:
+/* rule 25 can match eol */
 YY_RULE_SETUP
 #line 98 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(NONLINEAREXPRESSIONSEND);}
 	YY_BREAK
-case 27:
-/* rule 27 can match eol */
+case 26:
+/* rule 26 can match eol */
 YY_RULE_SETUP
 #line 99 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(NLSTART);}
 	YY_BREAK
-case 28:
-/* rule 28 can match eol */
+case 27:
+/* rule 27 can match eol */
 YY_RULE_SETUP
 #line 100 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(NLEND);}
 	YY_BREAK
-case 29:
-/* rule 29 can match eol */
+case 28:
+/* rule 28 can match eol */
 YY_RULE_SETUP
 #line 101 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(TIMESSTART);}
 	YY_BREAK
-case 30:
-/* rule 30 can match eol */
+case 29:
+/* rule 29 can match eol */
 YY_RULE_SETUP
 #line 102 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(TIMESEND);}
 	YY_BREAK
-case 31:
-/* rule 31 can match eol */
+case 30:
+/* rule 30 can match eol */
 YY_RULE_SETUP
 #line 103 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(DIVIDESTART);}
 	YY_BREAK
-case 32:
-/* rule 32 can match eol */
+case 31:
+/* rule 31 can match eol */
 YY_RULE_SETUP
 #line 104 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(DIVIDEEND);}
 	YY_BREAK
-case 33:
-/* rule 33 can match eol */
+case 32:
+/* rule 32 can match eol */
 YY_RULE_SETUP
 #line 105 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(PLUSSTART);}
 	YY_BREAK
-case 34:
-/* rule 34 can match eol */
+case 33:
+/* rule 33 can match eol */
 YY_RULE_SETUP
 #line 106 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(PLUSEND);}
 	YY_BREAK
-case 35:
-/* rule 35 can match eol */
+case 34:
+/* rule 34 can match eol */
 YY_RULE_SETUP
 #line 107 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(MINUSSTART);}
 	YY_BREAK
-case 36:
-/* rule 36 can match eol */
+case 35:
+/* rule 35 can match eol */
 YY_RULE_SETUP
 #line 108 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(MINUSEND);}
 	YY_BREAK
-case 37:
-/* rule 37 can match eol */
+case 36:
+/* rule 36 can match eol */
 YY_RULE_SETUP
 #line 109 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(NEGATESTART);}
 	YY_BREAK
-case 38:
-/* rule 38 can match eol */
+case 37:
+/* rule 37 can match eol */
 YY_RULE_SETUP
 #line 110 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(NEGATEEND);}
 	YY_BREAK
-case 39:
-/* rule 39 can match eol */
+case 38:
+/* rule 38 can match eol */
 YY_RULE_SETUP
 #line 111 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(POWERSTART);}
 	YY_BREAK
-case 40:
-/* rule 40 can match eol */
+case 39:
+/* rule 39 can match eol */
 YY_RULE_SETUP
 #line 112 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(POWEREND);}
 	YY_BREAK
-case 41:
-/* rule 41 can match eol */
+case 40:
+/* rule 40 can match eol */
 YY_RULE_SETUP
 #line 113 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(LNSTART);}
 	YY_BREAK
-case 42:
-/* rule 42 can match eol */
+case 41:
+/* rule 41 can match eol */
 YY_RULE_SETUP
 #line 114 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(LNEND);}
 	YY_BREAK
-case 43:
-/* rule 43 can match eol */
+case 42:
+/* rule 42 can match eol */
 YY_RULE_SETUP
 #line 115 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(EXPSTART);}
 	YY_BREAK
-case 44:
-/* rule 44 can match eol */
+case 43:
+/* rule 43 can match eol */
 YY_RULE_SETUP
 #line 116 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(EXPEND);}
 	YY_BREAK
-case 45:
-/* rule 45 can match eol */
+case 44:
+/* rule 44 can match eol */
 YY_RULE_SETUP
 #line 117 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(ABSSTART);}
 	YY_BREAK
-case 46:
-/* rule 46 can match eol */
+case 45:
+/* rule 45 can match eol */
 YY_RULE_SETUP
 #line 118 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(ABSEND);}
 	YY_BREAK
-case 47:
-/* rule 47 can match eol */
+case 46:
+/* rule 46 can match eol */
 YY_RULE_SETUP
 #line 121 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(IFSTART);}
 	YY_BREAK
-case 48:
-/* rule 48 can match eol */
+case 47:
+/* rule 47 can match eol */
 YY_RULE_SETUP
 #line 122 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(IFEND);}
 	YY_BREAK
-case 49:
-/* rule 49 can match eol */
+case 48:
+/* rule 48 can match eol */
 YY_RULE_SETUP
 #line 124 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(MAXSTART);}
 	YY_BREAK
-case 50:
-/* rule 50 can match eol */
+case 49:
+/* rule 49 can match eol */
 YY_RULE_SETUP
 #line 125 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(MAXEND);}
 	YY_BREAK
-case 51:
-/* rule 51 can match eol */
+case 50:
+/* rule 50 can match eol */
 YY_RULE_SETUP
 #line 128 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(SUMSTART);}
 	YY_BREAK
-case 52:
-/* rule 52 can match eol */
+case 51:
+/* rule 51 can match eol */
 YY_RULE_SETUP
 #line 129 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(SUMEND);}
 	YY_BREAK
-case 53:
-/* rule 53 can match eol */
+case 52:
+/* rule 52 can match eol */
 YY_RULE_SETUP
 #line 130 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(PRODUCTSTART);}
 	YY_BREAK
-case 54:
-/* rule 54 can match eol */
+case 53:
+/* rule 53 can match eol */
 YY_RULE_SETUP
 #line 131 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(PRODUCTEND);}
 	YY_BREAK
-case 55:
-/* rule 55 can match eol */
+case 54:
+/* rule 54 can match eol */
 YY_RULE_SETUP
 #line 132 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(NUMBERSTART);}
 	YY_BREAK
-case 56:
-/* rule 56 can match eol */
+case 55:
+/* rule 55 can match eol */
 YY_RULE_SETUP
 #line 133 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(NUMBEREND);}
 	YY_BREAK
-case 57:
-/* rule 57 can match eol */
+case 56:
+/* rule 56 can match eol */
 YY_RULE_SETUP
 #line 134 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT;  return(VARIABLESTART);}
 	YY_BREAK
-case 58:
-/* rule 58 can match eol */
+case 57:
+/* rule 57 can match eol */
 YY_RULE_SETUP
 #line 135 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT; return(VARIABLEEND);}
 	YY_BREAK
-case 59:
+case 58:
 YY_RULE_SETUP
 #line 137 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 BEGIN comment;
 	YY_BREAK
-case 60:
+case 59:
 #line 139 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
-case 61:
-/* rule 61 can match eol */
+case 60:
+/* rule 60 can match eol */
 YY_RULE_SETUP
 #line 139 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 ;
 	YY_BREAK
-case 62:
+case 61:
 YY_RULE_SETUP
 #line 140 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 BEGIN 0;
 	YY_BREAK
-case 63:
+case 62:
 YY_RULE_SETUP
 #line 142 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 BEGIN xmldeclaration;
 	YY_BREAK
-case 64:
+case 63:
 #line 144 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
-case 65:
-/* rule 65 can match eol */
+case 64:
+/* rule 64 can match eol */
 YY_RULE_SETUP
 #line 144 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 ;
 	YY_BREAK
-case 66:
+case 65:
 YY_RULE_SETUP
 #line 145 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 BEGIN 0;
 	YY_BREAK
-case 67:
-/* rule 67 can match eol */
+case 66:
+/* rule 66 can match eol */
 YY_RULE_SETUP
 #line 148 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT;  BEGIN 0; osillval.sval = strdup(osiltext); return(ATTRIBUTETEXT);}
 	YY_BREAK
-case 68:
+case 67:
 YY_RULE_SETUP
 #line 151 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 {YY_PRINT;  printf("%s", osiltext); osilerror( "ecountered a spurious character in the lexer");   }
 	YY_BREAK
-case 69:
+case 68:
 YY_RULE_SETUP
 #line 153 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.l"
 ECHO;
 	YY_BREAK
-#line 1543 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.cpp"
+#line 1537 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosil.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(attributetext):
 case YY_STATE_EOF(startelement):
