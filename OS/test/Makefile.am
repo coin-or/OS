@@ -22,15 +22,16 @@ unitTest_SOURCES = unitTest.cpp
 
 # List all additionally required COIN libraries
 unitTest_LDADD =  \
-	$(COINUTILSOBJDIR)/src/libCoinUtils.la \
-	$(OSIOBJDIR)/src/libOsi.la \
-	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
+	$(OSOBJDIR)/src/libOS.la \
+	$(OSOBJDIR)/src/OSModelInterfaces/libOSModelInterfaces.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
-	$(CLPOBJDIR)/src/libClp.la \
+	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
 	$(CBCOBJDIR)/src/libCbc.la \
 	$(CGLOBJDIR)/src/libCgl.la \
-	$(OSOBJDIR)/src/libOS.la \
-	$(OSOBJDIR)/src/OSModelInterfaces/libOSModelInterfaces.la 
+	$(OSIOBJDIR)/src/libOsi.la \
+	$(CLPOBJDIR)/src/libClp.la \
+	$(COINUTILSOBJDIR)/src/libCoinUtils.la 
+
 
 
 

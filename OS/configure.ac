@@ -81,7 +81,7 @@ case "$CXX" in
   cl* | */cl*)
     wsock32=wsock32.lib ;;
   *)
-    wsock32=-L/lib -L/mingw/lib -lwsock32 ;;
+    wsock32="-L/lib -L/mingw/lib -lwsock32" ;;
 esac
   
  AM_CONDITIONAL(USEWSOCKLIB, test $win_sock = yes)
