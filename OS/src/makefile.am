@@ -68,7 +68,7 @@ OSSolverService_LDADD =  \
 	$(CGLOBJDIR)/src/libCgl.la \
 	$(OSIOBJDIR)/src/libOsi.la \
 	$(CLPOBJDIR)/src/libClp.la \
-	$(COINUTILSOBJDIR)/src/libCoinUtils.la \
+	$(COINUTILSOBJDIR)/src/libCoinUtils.la 
 
 
 
