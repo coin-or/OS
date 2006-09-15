@@ -71,7 +71,7 @@ int  main(){
 	using CppAD::AD;
 	using CppAD::NearEqual;
 	using CppAD::vector;
-	using kipp::StackMachine;
+	using OSAD::StackMachine;
 
 	// The users program in that stack machine language
 	char *program[] = {

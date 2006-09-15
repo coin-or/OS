@@ -35,7 +35,7 @@ $end
 
 # include <CppAD/CppAD.h>
  
-namespace kipp{ 
+namespace OSAD{ 
 // Begin empty namespace ------------------------------------------------
 
 bool is_number( const std::string &s )
@@ -55,17 +55,17 @@ bool is_variable( const std::string &s )
 }
 
 void StackMachine( 
-	std::stack< std::string >          &token_stack  ,
-	CppAD::vector< CppAD::AD<double> > &variable     )
+	std::stack< std::string >  &token_stack  ,
+	CppAD::vector< CppAD::AD<double> > &variable )
 {	using std::string;
 	using std::stack;
 
 	using CppAD::AD;
 
 	stack< AD<double> > value_stack;
-	string              token;
-	AD<double>          value_one;
-	AD<double>          value_two;
+	string   token;
+	AD<double>  value_one;
+	AD<double>  value_two;
 
 	while( ! token_stack.empty() )
 	{	string s = token_stack.top();
@@ -126,7 +126,7 @@ void StackMachine(
 	return;
 }
 
-// End empty namespace -------------------------------------------------------
+// End OSAD namespace ---------------------------------------------
 }
 
 // END PROGRAM
