@@ -22,7 +22,7 @@
 
 
 #ifdef HAVE_CONFIG_H
-
+// undefine the following in case already defined in CppAD package
 #undef PACKAGE
 #undef PACKAGE_BUGREPORT
 #undef PACKAGE_NAME

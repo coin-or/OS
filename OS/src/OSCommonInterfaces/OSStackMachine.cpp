@@ -34,8 +34,8 @@ $end
 # include <stack>
 
 # include <CppAD/CppAD.h>
-
-namespace { 
+ 
+namespace kipp{ 
 // Begin empty namespace ------------------------------------------------
 
 bool is_number( const std::string &s )
@@ -129,88 +129,4 @@ void StackMachine(
 // End empty namespace -------------------------------------------------------
 }
 
-bool StackMachine(void)
-{	bool ok = true;
-
-	using std::string;
-	using std::stack;
-
-	using CppAD::AD;
-	using CppAD::NearEqual;
-	using CppAD::vector;
-
-	// The users program in that stack machine language
-	char *program[] = {
-		"1.0", "a", "+", "=", "b",  // b = a + 1
-		"2.0", "b", "*", "=", "c",  // c = b * 2
-		"3.0", "c", "-", "=", "d",  // d = c - 3
-		"4.0", "d", "/", "=", "e"   // e = d / 4
-	};
-	size_t n_program = sizeof( program ) / sizeof( program[0] );
-
-	// put the program in the token stack
-	stack< string > token_stack;
-	size_t i = n_program;
-	while(i--)
-		token_stack.push( program[i] );
-
-	// domain space vector
-	size_t n = 1;
-	vector< AD<double> > X(n);
-	X[0] = 0.;
-
-	// declare independent variables and start tape recording
-	CppAD::Independent(X);
-		
-	// x[0] corresponds to a in the stack machine
-	vector< AD<double> > variable(26);
-	variable[0] = X[0];
-
-	// calculate the resutls of the program
-	StackMachine( token_stack , variable);
-
-	// range space vector
-	size_t m = 4;
-	vector< AD<double> > Y(m);
-	Y[0] = variable[1];   // b = a + 1
-	Y[1] = variable[2];   // c = (a + 1) * 2
-	Y[2] = variable[3];   // d = (a + 1) * 2 - 3
-	Y[3] = variable[4];   // e = ( (a + 1) * 2 - 3 ) / 4 
-	
-	// create f : X -> Y and stop tape recording
-	CppAD::ADFun<double> f(X, Y);
-
-	// use forward mode to evaluate function at different argument value
-	size_t p = 0;
-	vector<double> x(n);
-	vector<double> y(m);
-	x[0] = 1.;
-	y    = f.Forward(p, x);
-
-	// check function values
-	ok &= (y[0] == x[0] + 1.);
-	ok &= (y[1] == (x[0] + 1.) * 2.);
-	ok &= (y[2] == (x[0] + 1.) * 2. - 3.);
-	ok &= (y[3] == ( (x[0] + 1.) * 2. - 3.) / 4.);
-
-	// Use forward mode (because x is shorter than y) to calculate Jacobian
-	p = 1;
-	vector<double> dx(n);
-	vector<double> dy(m);
-	dx[0] = 1.;
-	dy    = f.Forward(p, dx);
-	ok   &= NearEqual(dy[0], 1., 1e-10, 1e-10);
-	ok   &= NearEqual(dy[1], 2., 1e-10, 1e-10);
-	ok   &= NearEqual(dy[2], 2., 1e-10, 1e-10);
-	ok   &= NearEqual(dy[3], .5, 1e-10, 1e-10);
-
-	// Use Jacobian routine (which automatically decides which mode to use)
-	dy = f.Jacobian(x);
-	ok   &= NearEqual(dy[0], 1., 1e-10, 1e-10);
-	ok   &= NearEqual(dy[1], 2., 1e-10, 1e-10);
-	ok   &= NearEqual(dy[2], 2., 1e-10, 1e-10);
-	ok   &= NearEqual(dy[3], .5, 1e-10, 1e-10);
-
-	return ok;
-}
 // END PROGRAM

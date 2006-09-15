@@ -156,6 +156,7 @@ AC_CONFIG_FILES([Makefile
           examples/instanceGenerator/Makefile
           examples/amplClient/Makefile
           examples/osTestCode/Makefile
+          examples/CppAD/Makefile
           os_addlibs.txt])
 
 # Here put the location and name of the configuration header file

@@ -34,7 +34,7 @@ libOSCommonInterfaces_la_SOURCES = \
 	OSrLReader.h \
 	OSrLWriter.cpp \
 	OSrLWriter.h \
-	OSStackMachine.cpp
+	OSStackMachine.h
 
 # This is for libtool (on Windows)
 libOSCommonInterfaces_la_LDFLAGS = $(LT_LDFLAGS)

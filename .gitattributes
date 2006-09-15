@@ -72,6 +72,8 @@ OS/data/testfile2.nl -text
 OS/data/testlocal.config -text
 OS/data/testremote.config -text
 OS/data/transportation.osil -text
+OS/examples/CppAD/CppADTest.cpp -text
+OS/examples/CppAD/Makefile.am -text
 OS/examples/Makefile.in -text
 OS/examples/amplClient/Makefile.am -text
 OS/examples/amplClient/Makefile.in -text
