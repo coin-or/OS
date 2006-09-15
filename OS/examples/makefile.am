@@ -11,6 +11,7 @@ AUTOMAKE_OPTIONS = foreign
 SUBDIRS =
   SUBDIRS += instanceGenerator
   SUBDIRS += osTestCode
+  SUBDIRS += CppAD
 
 
 

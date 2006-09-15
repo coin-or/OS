@@ -58,7 +58,7 @@ LTLIBRARIES = $(noinst_LTLIBRARIES)
 libOSCommonInterfaces_la_LIBADD =
 am_libOSCommonInterfaces_la_OBJECTS = OSExpressionTree.lo \
 	OSInstance.lo OSResult.lo OSiLReader.lo OSiLWriter.lo \
-	OSnLNode.lo OSrLReader.lo OSrLWriter.lo
+	OSnLNode.lo OSrLReader.lo OSrLWriter.lo OSStackMachine.lo
 libOSCommonInterfaces_la_OBJECTS =  \
 	$(am_libOSCommonInterfaces_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
@@ -293,7 +293,8 @@ libOSCommonInterfaces_la_SOURCES = \
 	OSrLReader.cpp \
 	OSrLReader.h \
 	OSrLWriter.cpp \
-	OSrLWriter.h
+	OSrLWriter.h \
+	OSStackMachine.cpp
 
 
 # This is for libtool (on Windows)
@@ -380,6 +381,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSExpressionTree.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSInstance.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSResult.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSStackMachine.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSiLReader.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSiLWriter.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSnLNode.Plo@am__quote@
