@@ -12,6 +12,7 @@ OS/Makefile.in -text
 OS/README -text
 OS/configure -text
 OS/configure.ac -text
+OS/data/CppADTest.osil -text
 OS/data/afiro.mps -text
 OS/data/afiro.osil -text
 OS/data/afiro_modified.osil -text
