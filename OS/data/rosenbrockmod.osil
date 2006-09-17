@@ -47,22 +47,22 @@
 					<power>
 						<minus>
 							<number type="real" value="1.0"/>
-							<variable coef="1.0" idx="1"/>
+							<variable coef="1.0" idx="0"/>
 						</minus>
 						<number type="real" value="2.0"/>
 					</power>
 					<times>
+						<number type="real" value="100"/>
 						<power>
 							<minus>
-								<variable coef="1.0" idx="0"/>
+								<variable coef="1.0" idx="1"/>
 								<power>
-									<variable  coef="1.0" idx="1"/>
+									<variable  coef="1.0" idx="0"/>
 									<number type="real" value="2.0"/>
 								</power>
 							</minus>
 							<number type="real" value="2.0"/>
 						</power>
-						<number type="real" value="100"/>
 					</times>
 				</plus>
 			</nl>

@@ -228,7 +228,8 @@ std::vector<OSnLNode*> OSnLNode::getPostfixFromExpressionTree(){
 
 std::vector<OSnLNode*> OSnLNode::postOrderOSnLNodeTraversal(){
 	if(inumberOfChildren > 0){
-		for(int i = 0; i < inumberOfChildren; i++) 
+		int i;
+		for(i = 0; i < inumberOfChildren; i++) 
 			m_mChildren[i]->postOrderOSnLNodeTraversal();
 	}
 	postfixVector.push_back( this);
@@ -265,7 +266,7 @@ std::vector<OSnLNode*> OSnLNode::preOrderOSnLNodeTraversal(){
 			m_mChildren[i]->preOrderOSnLNodeTraversal( );
 	}
 	return prefixVector;
-}//end getPrefixFromExpressionTree
+}//end preOrderOSnLNodeTraversal
 
 
 std::string OSnLNode::getTokenNumberFromOSnLNode(){
