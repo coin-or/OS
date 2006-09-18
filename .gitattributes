@@ -6,3 +6,4 @@
 /configure -text
 /configure.ac -text
 /depcomp -text
+/install-sh -text
