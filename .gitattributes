@@ -4,6 +4,7 @@
 /LICENSE -text
 /Makefile.am -text
 /Makefile.in -text
+/README -text
 /config.guess -text
 /config.sub -text
 /configure -text
