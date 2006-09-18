@@ -1,3 +1,4 @@
 * text=auto !eol
 /Externals -text
 /config.guess -text
+/config.sub -text
