@@ -1,6 +1,7 @@
 * text=auto !eol
 /Externals -text
 /INSTALL -text
+/LICENSE -text
 /config.guess -text
 /config.sub -text
 /configure -text
