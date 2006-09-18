@@ -8,3 +8,4 @@
 /configure.ac -text
 /depcomp -text
 /install-sh -text
+/ltmain.sh -text
