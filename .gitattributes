@@ -2,6 +2,7 @@
 /Externals -text
 /INSTALL -text
 /LICENSE -text
+/Makefile.am -text
 /config.guess -text
 /config.sub -text
 /configure -text
