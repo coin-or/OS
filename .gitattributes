@@ -3,3 +3,4 @@
 /config.guess -text
 /config.sub -text
 /configure -text
+/configure.ac -text
