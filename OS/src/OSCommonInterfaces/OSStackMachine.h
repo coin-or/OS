@@ -165,19 +165,19 @@ CppAD::AD<double> StackMachine(
 				std::cout << "value_one = " << value_one <<  std::endl;
 				std::cout << "value_two = " << value_two <<  std::endl;
 				switch (iNodeID){
-					case OS_PLUS:  // the sum token
+					case OS_PLUS:  // the plus token
 						value_stack.push(value_one + value_two);
 						break;
-					case OS_MINUS:  // the sum token
+					case OS_MINUS:  // the minus token
 						value_stack.push(value_one - value_two);
 						break;
-					case OS_TIMES:  // the sum token
+					case OS_TIMES:  // the times token
 						value_stack.push(value_one * value_two);
 						break;
-					case OS_DIVIDE:  // the product token
+					case OS_DIVIDE:  // the divide token
 						value_stack.push(value_one / value_two);
 						break;
-					case OS_POWER:  // the product token
+					case OS_POWER:  // the power token
 						value_stack.push(CppAD::pow(value_one, value_two));						
 						break;
 					default:
@@ -205,11 +205,12 @@ CppAD::AD<double> StackMachine(
 			else if(postFixVec[i]->inumberOfChildren == 0){
 				switch (iNodeID){
 					case OS_SUM:  // the sum token
+						// kipp - implement this
 						//insList.push_back( nlNodeIdxLindo[ OS_SUM] );
 						//insList.push_back( postFixVec[i]->inumberOfChildren);
 						//cout <<  "PUSH BACK A SUM" << endl;
 						break;
-					case OS_MAX:  // the sum token
+					case OS_MAX:  // the max token
 						//insList.push_back( nlNodeIdxLindo[ OS_MAX] );
 						//insList.push_back( postFixVec[i]->inumberOfChildren);
 						//cout <<  "PUSH BACK A MAX" << endl;
