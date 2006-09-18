@@ -4,3 +4,4 @@
 /config.sub -text
 /configure -text
 /configure.ac -text
+/depcomp -text
