@@ -81,10 +81,10 @@ int main(int argC, char* argV[])
 		OSnLNode::setnlNodeIdxMap();
 		test = osinstance->getNonlinearExpressionTree( -1)->getPostfixFromExpressionTree();
 		for(int kl = 0; kl < test.size(); kl++){
-			sToken = test[ kl]->getTokenNumberFromOSnLNode() ;
+			sToken = test[ kl]->getTokenNumber() ;
 			cout << "Untranslated Token " << sToken << endl;
 			nlnode = OSnLNode::getOSnLNodeFromToken( sToken );
-			cout << "Translated Token  " << nlnode->getTokenNameFromOSnLNode()   << endl;
+			cout << "Translated Token  " << nlnode->getTokenName()   << endl;
 			test[ kl] = nlnode;
 		}
 		cout << endl << endl;
@@ -92,7 +92,7 @@ int main(int argC, char* argV[])
 		nlnode1 = nlnode->createExpressionTreeFromPostfix( test);
 		test = nlnode1->getPostfixFromExpressionTree();
 		for(int kl = 0; kl < test.size(); kl++){
-			 cout << test[ kl]->getTokenNameFromOSnLNode() << endl ;
+			 cout << test[ kl]->getTokenName() << endl ;
 		}
 		cout << endl << endl << endl << endl;
 		cout << "DONE WITH TEST" << endl << endl;

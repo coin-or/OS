@@ -22,6 +22,7 @@
 #define OSNLNODE_H
 #include<iostream>
 #include<vector>
+#include<CppAD/CppAD.h>
 
 
 /*! \class OSnLNode OSnLNode.h "OSnLNode.h"
@@ -32,6 +33,7 @@
  * @since   OS1.0
  * 
  */
+
 
 enum OP_CODES{
 	OS_PLUS = 1001,
@@ -51,9 +53,15 @@ enum OP_CODES{
 	OS_MAX = 3024
 };
 
+using CppAD::AD;
+using CppAD::vector;
+
+
 class OSnLNode{  
 
 public:	
+
+	AD<double> rootNode;
 	
 	/** nodeName holds the OSnLNode name */
 	std::string snodeName;
@@ -78,7 +86,14 @@ public:
 	double m_dFunctionValue;
 	
 
+	/**
+	 * m_CppADTree stores the espression tree for the this OSnLNode as an AD<double>.
+	 */
+	AD<double> m_CppADTree;
 	
+	static CppAD::vector< AD<double> > XAD;
+	
+
 	/**
 	 *
 	 * @return the child nodes of this nlNode.
@@ -100,9 +115,9 @@ public:
 	 * idx is the variable index
 	 * coef is the coefficient on the variable, it is 1 by default
 	 */
-	virtual std::string getTokenNumberFromOSnLNode();
+	virtual std::string getTokenNumber();
 	
-	virtual std::string getTokenNameFromOSnLNode();
+	virtual std::string getTokenName();
 	
 	virtual  std::string getNonlinearExpressionInXML();
 	
@@ -137,7 +152,7 @@ public:
 	 * idx is the variable index
 	 * coef is the coefficient on the variable, it is 1 by default
 	 */	
-	std::string getTokenFromOSnLNode();
+	std::string getToken();
 	
 	static void setnlNodeIdxMap();
 	
@@ -153,8 +168,20 @@ public:
 	 * @param x holds the values of the variables in a double array.
 	 * @return the function value given the current variable values.
 	 */
-	virtual double calculateFunction(double *x) = 0;	
+	virtual double calculateFunction(double *x) = 0;
 	
+		
+	/**
+	 * Create the expression tree to be evaluated by CppAD.
+	 * This is an abstract method which is required to be implemented by the concrete
+	 * operator nodes that derive or extend from this OSnLNode class.
+	 *
+	 * </p>
+	 *
+	 * @return the expression tree.
+	 */	
+	virtual AD<double> constructCppADTree() = 0;
+
 	/**
 	 * Create or clone a node of this type.
 	 * This is an abstract method which is required to be implemented by the concrete
@@ -199,6 +226,12 @@ public:
 	 */	
 	virtual double calculateFunction( double *x);
 	
+	/*! \fn double OSnLNodePlus::constructCppADTree() 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return a AD<double>.
+	 */	
+	virtual AD<double> constructCppADTree();
+	
 	/*! \fn OSnLNode *cloneOSnLNode(double *x) 
 	 *  \brief The implementation of the virtual functions. 
 	 *  \return a point to a new OSnLNode of the proper type.
@@ -231,6 +264,12 @@ public:
 	 *  \brief The implementation of the virtual functions. 
 	 *  \return a point to a new OSnLNode of the proper type.
 	 */	
+	 
+	/*! \fn double OSnLNodeSum::constructCppADTree() 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return a AD<double>.
+	 */	
+	virtual AD<double> constructCppADTree();
 	
 	virtual OSnLNode *cloneOSnLNode() ;
 
@@ -258,6 +297,12 @@ public:
 	 *  \brief The implementation of the virtual functions. 
 	 *  \return a point to a new OSnLNode of the proper type.
 	 */	
+
+	/*! \fn double OSnLNodeMax::constructCppADTree() 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return a AD<double>.
+	 */	
+	virtual AD<double> constructCppADTree();
 	
 	virtual OSnLNode *cloneOSnLNode() ;
 
@@ -285,6 +330,12 @@ public:
 	 *  \brief The implementation of the virtual functions. 
 	 *  \return a point to a new OSnLNode of the proper type.
 	 */	
+	 
+	/*! \fn double OSnLNodeMinus::constructCppADTree() 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return a AD<double>.
+	 */	
+	virtual AD<double> constructCppADTree();
 	
 	virtual OSnLNode *cloneOSnLNode() ;
 
@@ -313,6 +364,12 @@ public:
 	 *  \brief The implementation of the virtual functions. 
 	 *  \return a point to a new OSnLNode of the proper type.
 	 */	
+	 
+	/*! \fn double OSnLNodeNegate::constructCppADTree() 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return a AD<double>.
+	 */	
+	virtual AD<double> constructCppADTree();
 	
 	virtual OSnLNode *cloneOSnLNode() ;
 
@@ -342,6 +399,12 @@ public:
 	 *  \brief The implementation of the virtual functions. 
 	 *  \return a point to a new OSnLNode of the proper type.
 	 */	
+	 
+	/*! \fn double OSnLNodeNegate::constructCppADTree() 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return a AD<double>.
+	 */	
+	virtual AD<double> constructCppADTree();
 	
 	virtual OSnLNode *cloneOSnLNode() ;
 
@@ -371,6 +434,12 @@ public:
 	 *  \brief The implementation of the virtual functions. 
 	 *  \return a point to a new OSnLNode of the proper type.
 	 */	
+	 
+	/*! \fn double OSnLNodeDivide::constructCppADTree() 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return a AD<double>.
+	 */	
+	virtual AD<double> constructCppADTree();
 	
 	virtual OSnLNode *cloneOSnLNode() ;
 	
@@ -401,6 +470,12 @@ public:
 	 *  \brief The implementation of the virtual functions. 
 	 *  \return a point to a new OSnLNode of the proper type.
 	 */	
+	 
+	/*! \fn double OSnLNodePower::constructCppADTree() 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return a AD<double>.
+	 */	
+	virtual AD<double> constructCppADTree();
 	
 	virtual OSnLNode *cloneOSnLNode() ;
 
@@ -429,6 +504,12 @@ public:
 	 *  \brief The implementation of the virtual functions. 
 	 *  \return a point to a new OSnLNode of the proper type.
 	 */	
+	 
+	/*! \fn double OSnLNodeProduct::constructCppADTree() 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return a AD<double>.
+	 */	
+	virtual AD<double> constructCppADTree();
 	
 	virtual OSnLNode *cloneOSnLNode() ;
 
@@ -457,6 +538,12 @@ public:
 	 *  \brief The implementation of the virtual functions. 
 	 *  \return a point to a new OSnLNode of the proper type.
 	 */	
+	 
+	/*! \fn double OSnLNodeLn::constructCppADTree() 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return a AD<double>.
+	 */	
+	virtual AD<double> constructCppADTree();
 	
 	virtual OSnLNode *cloneOSnLNode() ;
 	
@@ -481,6 +568,12 @@ public:
 	 *  \return a double.
 	 */	
 	virtual double calculateFunction( double *x);
+	
+	/*! \fn double OSnLNodeExp::constructCppADTree() 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return a AD<double>.
+	 */	
+	virtual AD<double> constructCppADTree();
 	
 	/*! \fn OSnLNode *cloneOSnLNode(double *x) 
 	 *  \brief The implementation of the virtual functions. 
@@ -513,6 +606,12 @@ public:
 	 *  \brief The implementation of the virtual functions. 
 	 *  \return a point to a new OSnLNode of the proper type.
 	 */	
+	 
+	/*! \fn double OSnLNodeAbs::constructCppADTree() 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return a AD<double>.
+	 */	
+	virtual AD<double> constructCppADTree();
 	
 	virtual OSnLNode *cloneOSnLNode() ;
 
@@ -540,7 +639,13 @@ public:
 	/*! \fn OSnLNode *cloneOSnLNode(double *x) 
 	 *  \brief The implementation of the virtual functions. 
 	 *  \return a point to a new OSnLNode of the proper type.
+	 */
+	 
+	/*! \fn double OSnLNodeIf::constructCppADTree() 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return a AD<double>.
 	 */	
+	virtual AD<double> constructCppADTree();	
 	
 	virtual OSnLNode *cloneOSnLNode() ;
 
@@ -569,14 +674,14 @@ public:
 	 *
 	 * @return a string token that corresponds to the OSnLNode.
 	 */
-	virtual std::string getTokenNumberFromOSnLNode();
+	virtual std::string getTokenNumber();
 	
 	
 	/**
 	 *
 	 * @return a string token that corresponds to the OSnLNode.
 	 */
-	virtual std::string getTokenNameFromOSnLNode();
+	virtual std::string getTokenName();
 	
 	/**
 	 *
@@ -594,6 +699,12 @@ public:
 	 *  \brief The implementation of the virtual functions. 
 	 *  \return a point to a new OSnLNode of the proper type.
 	 */	
+	 
+	/*! \fn double OSnLNodeNumber::constructCppADTree() 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return a AD<double>.
+	 */	
+	virtual AD<double> constructCppADTree();
 	
 	virtual OSnLNode *cloneOSnLNode() ;
 
@@ -619,14 +730,14 @@ public:
 	 *
 	 * @return a string token that corresponds to the OSnLNode.
 	 */
-	virtual std::string getTokenNumberFromOSnLNode();
+	virtual std::string getTokenNumber();
 	
 	
 	/**
 	 *
 	 * @return a std::string token that corresponds to the OSnLNode.
 	 */
-	virtual std::string getTokenNameFromOSnLNode();
+	virtual std::string getTokenName();
 	
 	/**
 	 *
@@ -643,7 +754,13 @@ public:
 	/*! \fn OSnLNode *cloneOSnLNode(double *x) 
 	 *  \brief The implementation of the virtual functions. 
 	 *  \return a point to a new OSnLNode of the proper type.
+	 */
+	 
+	/*! \fn double OSnLNodeVariable::constructCppADTree() 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return a AD<double>.
 	 */	
+	virtual AD<double> constructCppADTree();	
 	
 	virtual OSnLNode *cloneOSnLNode() ;
 

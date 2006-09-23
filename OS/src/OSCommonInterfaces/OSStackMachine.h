@@ -61,7 +61,6 @@ bool is_variable( const std::string &s )
 }
 
 CppAD::AD<double> StackMachine( 
-	std::stack< std::string >  &token_stack,
 	CppAD::vector< CppAD::AD<double> > &variable, std::vector<OSnLNode*> postFixVec)
 {	using std::string;
 	using std::stack;
@@ -70,54 +69,6 @@ CppAD::AD<double> StackMachine(
 	string   token;
 	AD<double>  value_one;
 	AD<double>  value_two;
-	// comment out Brad's code
-	/*while( ! token_stack.empty() )
-	{	string s = token_stack.top();
-		token_stack.pop();
-
-		if( is_number(s) ){
-			value_one = std::atof( s.c_str() );
-			value_stack.push( value_one );
-		}
-		else if( is_variable(s) ){
-			value_one = variable[ size_t(s[0]) - size_t('a') ];
-			value_stack.push( value_one );
-		}
-		else if( is_binary(s) ) {
-			assert( value_stack.size() >= 2 );
-			value_one = value_stack.top();
-			value_stack.pop();
-			value_two = value_stack.top();
-			value_stack.pop();
-			switch( s[0] )
-			{
-				case '+':
-				value_stack.push(value_one + value_two);
-				break;
-
-				case '-':
-				value_stack.push(value_one - value_two);
-				break;
-
-				case '*':
-				value_stack.push(value_one * value_two);
-				break;
-
-				case '/':
-				value_stack.push(value_one / value_two);
-				break;
-
-				default:
-				assert(0);
-			}
-		}//end if(is_binary)
-	}// end while
-	// now get the top of the stack
-	assert( value_stack.size() >= 1 ); 	
-	value_one = value_stack.top();
-	value_stack.pop();
-	return value_one;
-	*/
 	// put in the OS code -- Brad's code modified by Kipp and Jun
 	int iVecSize = postFixVec.size();
 	int iNodeID;

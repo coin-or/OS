@@ -39,6 +39,7 @@ public:
 	 */	
 	~OSExpressionTree();
 	
+	//OSnLNode* setExpressionTreeFromPostfix(std::vector<OSnLNode*> nlNodeVec);
 	
 
 

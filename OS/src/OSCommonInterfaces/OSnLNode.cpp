@@ -37,8 +37,7 @@ std::vector<OSnLNode*> postfixVector;
 std::vector<OSnLNode*> prefixVector;
 
 
-
-
+CppAD::vector< AD<double> > OSnLNode::XAD;
 
 static std::string msnodeNames[] = {
 	/*1--*/"plus", "sum", "minus", "negate", "times", "divide",
@@ -269,7 +268,7 @@ std::vector<OSnLNode*> OSnLNode::preOrderOSnLNodeTraversal(){
 }//end preOrderOSnLNodeTraversal
 
 
-std::string OSnLNode::getTokenNumberFromOSnLNode(){
+std::string OSnLNode::getTokenNumber(){
 	ostringstream outStr;
 	outStr << inodeInt;
 	// when I creat an OSnLNode from a token number, I need to know how many children there are
@@ -279,10 +278,10 @@ std::string OSnLNode::getTokenNumberFromOSnLNode(){
 		outStr << "]";
 	}
 	return outStr.str();
-}//getTokenNumberFromOSnLNode
+}//getTokenNumber
 
 
-std::string OSnLNode::getTokenNameFromOSnLNode(){
+std::string OSnLNode::getTokenName(){
 	ostringstream outStr;
 	outStr << this->snodeName;
 	if(inodeType == -1){
@@ -291,7 +290,7 @@ std::string OSnLNode::getTokenNameFromOSnLNode(){
 		outStr << "]";
 	}
 	return outStr.str();
-}//getTokenNumberFromOSnLNode
+}//getTokenNumber
 
 
 
@@ -451,6 +450,12 @@ double OSnLNodePlus::calculateFunction(double *x){
 }// end OSnLNodePlus::calculate
 
 
+AD<double> OSnLNodePlus::constructCppADTree(){
+	m_CppADTree = m_mChildren[0]->constructCppADTree() + m_mChildren[1]->constructCppADTree();
+	return m_CppADTree;
+}// end OSnLNodePlus::constructCppADTree
+
+
 OSnLNode* OSnLNodePlus::cloneOSnLNode(){
 	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodePlus();
@@ -482,13 +487,22 @@ OSnLNodeSum::~OSnLNodeSum(){
 
 double OSnLNodeSum::calculateFunction(double *x){
 	m_dFunctionValue = 0.0;
-	for(int i = 0; i < inumberOfChildren; i++){
+	int i;
+	for(i = 0; i < inumberOfChildren; i++){
 		m_dFunctionValue = m_dFunctionValue + m_mChildren[i]->calculateFunction(x);
 	}
 	return m_dFunctionValue;
 }// end OSnLNodeSum::calculate
 
 
+AD<double> OSnLNodeSum::constructCppADTree(){
+	m_CppADTree = 0.0;
+	int i;
+	for(i = 0; i < inumberOfChildren; i++){
+			m_CppADTree = m_CppADTree + m_mChildren[i]->constructCppADTree();
+	}
+	return m_CppADTree;
+}// end OSnLNodeSum::constructCppADTree
 
 OSnLNode* OSnLNodeSum::cloneOSnLNode(){
 	OSnLNode *nlNodePoint;
@@ -523,13 +537,19 @@ OSnLNodeMax::~OSnLNodeMax(){
 }//end ~OSnLNodeMax
 
 double OSnLNodeMax::calculateFunction(double *x){
-	m_dFunctionValue = 0.0;
-	for(int i = 0; i < inumberOfChildren; i++){
-		m_dFunctionValue = m_dFunctionValue + m_mChildren[i]->calculateFunction(x);
-	}
+	//m_dFunctionValue = 0.0;
+	//for(int i = 0; i < inumberOfChildren; i++){
+	//	m_dFunctionValue = m_dFunctionValue + m_mChildren[i]->calculateFunction(x);
+	//}
+	// kipp correct this
 	return m_dFunctionValue;
 }// end OSnLNodeMax::calculate
 
+
+AD<double> OSnLNodeMax::constructCppADTree(){
+	//kipp throw error here
+	return m_CppADTree;
+}// end OSnLNodeMax::constructCppADTree
 
 
 OSnLNode* OSnLNodeMax::cloneOSnLNode(){
@@ -574,6 +594,12 @@ double OSnLNodeMinus::calculateFunction(double *x){
 }// end OSnLNodeMinus::calculate
 
 
+AD<double> OSnLNodeMinus::constructCppADTree(){
+	m_CppADTree = m_mChildren[0]->constructCppADTree() - m_mChildren[1]->constructCppADTree();
+	return m_CppADTree;
+}// end OSnLNodeMinus::constructCppADTree
+
+
 OSnLNode* OSnLNodeMinus::cloneOSnLNode(){
 	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeMinus();
@@ -613,6 +639,11 @@ double OSnLNodeNegate::calculateFunction(double *x){
 	return m_dFunctionValue;
 }// end OSnLNodeMinus::calculate
 
+AD<double> OSnLNodeNegate::constructCppADTree(){
+	m_CppADTree = -m_mChildren[0]->constructCppADTree();
+	return m_CppADTree;
+}// end OSnLNodeNegate::constructCppADTree
+
 
 OSnLNode* OSnLNodeNegate::cloneOSnLNode(){
 	OSnLNode *nlNodePoint;
@@ -651,6 +682,12 @@ double OSnLNodeTimes::calculateFunction(double *x){
 	return m_dFunctionValue;
 }// end OSnLNodeTimes::calculate
 
+
+AD<double> OSnLNodeTimes::constructCppADTree(){
+	m_CppADTree = m_mChildren[0]->constructCppADTree() * m_mChildren[1]->constructCppADTree();
+	return m_CppADTree;
+}// end OSnLNodeTimes::constructCppADTree
+
 OSnLNode* OSnLNodeTimes::cloneOSnLNode(){
 	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeTimes();
@@ -688,6 +725,12 @@ double OSnLNodeDivide::calculateFunction(double *x){
 	m_dFunctionValue = m_mChildren[0]->calculateFunction( x)/m_mChildren[1]->calculateFunction( x);
 	return m_dFunctionValue;
 }// end OSnLNodeDivide::calculate
+
+
+AD<double> OSnLNodeDivide::constructCppADTree(){
+	m_CppADTree = m_mChildren[0]->constructCppADTree() / m_mChildren[1]->constructCppADTree();
+	return m_CppADTree;
+}// end OSnLNodeDivide::constructCppADTree
 
 
 OSnLNode* OSnLNodeDivide::cloneOSnLNode(){
@@ -729,6 +772,12 @@ double OSnLNodePower::calculateFunction(double *x){
 }// end OSnLNodePower::calculate
 
 
+AD<double> OSnLNodePower::constructCppADTree(){
+	m_CppADTree = CppAD::pow(m_mChildren[0]->constructCppADTree() , m_mChildren[1]->constructCppADTree() );
+	return m_CppADTree;
+}// end OSnLNodePower::constructCppADTree
+
+
 OSnLNode* OSnLNodePower::cloneOSnLNode(){
 	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodePower();
@@ -764,12 +813,23 @@ OSnLNodeProduct::~OSnLNodeProduct(){
 
 double OSnLNodeProduct::calculateFunction(double *x){
 	// kipp throw error if operation not defined
-	m_dFunctionValue = 0.0;
-	for(int i = 0; i < inumberOfChildren; i++){
+	m_dFunctionValue = 1.0;
+	int i;
+	for(i = 0; i < inumberOfChildren; i++){
 		m_dFunctionValue = m_dFunctionValue*m_mChildren[i]->calculateFunction(x);
 	}
 	return m_dFunctionValue;
 }// end OSnLNodeProduct::calculate
+
+
+AD<double> OSnLNodeProduct::constructCppADTree(){
+	m_CppADTree = 1.0;
+	int i;
+	for(i = 0; i < inumberOfChildren; i++){
+		m_CppADTree = m_CppADTree*m_mChildren[i]->constructCppADTree();
+	}
+	return m_CppADTree;
+}// end OSnLNodeProduct::constructCppADTree
 
 
 OSnLNode* OSnLNodeProduct::cloneOSnLNode(){
@@ -809,6 +869,12 @@ double OSnLNodeLn::calculateFunction(double *x){
 	m_dFunctionValue = log(m_mChildren[0]->calculateFunction( x) );
 	return m_dFunctionValue;
 }// end OSnLNodeLn::calculate
+
+
+AD<double> OSnLNodeLn::constructCppADTree(){
+	m_CppADTree = CppAD::log( m_mChildren[0]->constructCppADTree() );
+	return m_CppADTree;
+}// end OSnLNodeLn::constructCppADTree
 
 OSnLNode* OSnLNodeLn::cloneOSnLNode(){
 	OSnLNode *nlNodePoint;
@@ -851,6 +917,12 @@ double OSnLNodeExp::calculateFunction(double *x){
 	return m_dFunctionValue;
 }// end OSnLNodeExp::calculate
 
+
+AD<double> OSnLNodeExp::constructCppADTree(){
+	m_CppADTree = CppAD::exp( m_mChildren[0]->constructCppADTree() );
+	return m_CppADTree;
+}// end OSnLNodeExp::constructCppADTree
+
 OSnLNode* OSnLNodeExp::cloneOSnLNode(){
 	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeExp();
@@ -889,6 +961,12 @@ double OSnLNodeAbs::calculateFunction(double *x){
 	m_dFunctionValue = fabs(m_mChildren[0]->calculateFunction( x) );
 	return m_dFunctionValue;
 }// end OSnLNodeAbs::calculate
+
+
+AD<double> OSnLNodeAbs::constructCppADTree(){
+	// kipp throw an exception;
+	return m_CppADTree;
+}// end OSnLNodeAbs::constructCppADTree
 
 OSnLNode* OSnLNodeAbs::cloneOSnLNode(){
 	OSnLNode *nlNodePoint;
@@ -931,6 +1009,11 @@ double OSnLNodeIf::calculateFunction(double *x){
 	return m_dFunctionValue;
 }// end OSnLNodeIf::calculate
 
+AD<double> OSnLNodeIf::constructCppADTree(){
+	//kipp throw an exception here;
+	return m_CppADTree;
+}// end OSnLNodeIf::constructCppADTree
+
 OSnLNode* OSnLNodeIf::cloneOSnLNode(){
 	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeIf();
@@ -962,7 +1045,7 @@ OSnLNodeNumber::~OSnLNodeNumber(){
 }//end ~OSnLNodeNumber
 
 
-std::string OSnLNodeNumber::getTokenNumberFromOSnLNode(){
+std::string OSnLNodeNumber::getTokenNumber(){
 	ostringstream outStr;
 	outStr << inodeInt;
 	outStr << ":" ;
@@ -976,10 +1059,10 @@ std::string OSnLNodeNumber::getTokenNumberFromOSnLNode(){
 		outStr << id;
 	//}
 	return outStr.str();
-}//getTokenNumberFromOSnLNode
+}//getTokenNumber
 
 
-std::string OSnLNodeNumber::getTokenNameFromOSnLNode(){
+std::string OSnLNodeNumber::getTokenName(){
 	ostringstream outStr;
 	outStr << snodeName;
 	outStr << ":" ;
@@ -993,7 +1076,7 @@ std::string OSnLNodeNumber::getTokenNameFromOSnLNode(){
 		outStr << id;
 	//}
 	return outStr.str();
-}//getTokenNumberFromOSnLNode
+}//getTokenNumber
 
 
 std::string OSnLNodeNumber::getNonlinearExpressionInXML(){
@@ -1017,9 +1100,14 @@ std::string OSnLNodeNumber::getNonlinearExpressionInXML(){
 
 
 double OSnLNodeNumber::calculateFunction(double *x){
-	m_dFunctionValue = value;
+	m_dFunctionValue = this->value;
 	return m_dFunctionValue;
 }// end OSnLNodeNumber::calculate
+
+AD<double> OSnLNodeNumber::constructCppADTree(){
+	m_CppADTree =  this->value;
+	return m_CppADTree;
+}// end OSnLNodeNumber::constructCppADTree
 
 OSnLNode* OSnLNodeNumber::cloneOSnLNode(){
 	OSnLNode *nlNodePoint;
@@ -1055,7 +1143,7 @@ OSnLNodeVariable::~OSnLNodeVariable(){
 }//end ~OSnLNodeVariable
 
 
-std::string OSnLNodeVariable::getTokenNumberFromOSnLNode(){
+std::string OSnLNodeVariable::getTokenNumber(){
 	ostringstream outStr;
 	// put in an error if inodeInt is not 6001
 	outStr << inodeInt;
@@ -1068,10 +1156,10 @@ std::string OSnLNodeVariable::getTokenNumberFromOSnLNode(){
 	outStr << coef;
 	outStr << ":real:" ;
 	return outStr.str();
-}//getTokenNumberFromOSnLNode
+}//getTokenNumber
 
 
-std::string OSnLNodeVariable::getTokenNameFromOSnLNode(){
+std::string OSnLNodeVariable::getTokenName(){
 	ostringstream outStr;
 	// put in an error if inodeInt is not 6001
 	outStr << snodeName;
@@ -1084,7 +1172,7 @@ std::string OSnLNodeVariable::getTokenNameFromOSnLNode(){
 	outStr << coef;
 	outStr << ":real:" ;
 	return outStr.str();
-}//getTokenNumberFromOSnLNode
+}//getTokenNumber
 
 
 std::string OSnLNodeVariable::getNonlinearExpressionInXML(){
@@ -1120,6 +1208,15 @@ double OSnLNodeVariable::calculateFunction(double *x){
 	m_dFunctionValue = coef*x[idx];
 	return m_dFunctionValue;
 }// end OSnLNodeVariable::calculate
+
+AD<double> OSnLNodeVariable::constructCppADTree(){
+	m_CppADTree = coef;
+	std::cout << "Inside OSnLNodeVariable " << std::endl;
+	std::cout << "Value of index = " << idx << std::endl;
+	std::cout << "Value of variable = " << OSnLNode::XAD[ idx] << std::endl;
+	m_CppADTree = m_CppADTree*OSnLNode::XAD[ idx];
+	return m_CppADTree;
+}// end OSnLNodeVariable::constructCppADTree
 
 
 OSnLNode* OSnLNodeVariable::cloneOSnLNode(){

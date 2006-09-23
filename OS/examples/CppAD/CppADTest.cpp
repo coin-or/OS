@@ -70,7 +70,6 @@ $end
 //using std::cout;
 //using std::endl;
 int  main(){	
-	bool ok = true;
 	using std::string;
 	using std::stack;
 	using std::cout;
@@ -98,7 +97,7 @@ int  main(){
 	// parse the file and create an OSInstance object
 	OSiLReader *osilreader = NULL;
 	OSInstance *osinstance = NULL;
-	OSnLNode *nlNode = NULL;
+	OSnLNode *nlNode = NULL; 
 	// create reader and generate the OSInstance object
 	osilreader = new OSiLReader();
 	osinstance = osilreader->readOSiL( &osil);
@@ -107,46 +106,64 @@ int  main(){
 	// get the nodes for an expression tree in postfix format
 	// in this case we get the nonlinear objective function term
 	nlNode = osinstance->getNonlinearExpressionTree( -1);
-	// do an echo check
-	std::cout << nlNode->getNonlinearExpressionInXML() << std::endl;
+	std::cout << "Size = " <<  nlNode->XAD.size() << std::endl;
+	OSnLNode::XAD.push_back(0.5);
+	OSnLNode::XAD.push_back(1.0);
+	std::cout << "Size = " <<  nlNode->XAD.size() << std::endl;
+	CppAD::Independent(OSnLNode::XAD);
+	// std::cout << "Result = " <<  nlNode->constructCppADTree() << std::endl;
+	// range space vector
+	size_t m = 1;
+	vector< AD<double> > Z(m);
+	Z[0] = nlNode->constructCppADTree();
+	// domain space vector
+	// create f : X -> Y and stop tape recording
+	CppAD::ADFun<double> f(OSnLNode::XAD, Z);
+	// use forward mode to evaluate function at different argument value
+	size_t p = 0;
+	size_t n = 2;
+	vector<double> x(n);
+	vector<double> y(m);
+	// if x[0] = .5 and x[1] = 1 you should get the following results:
+	// partial with respect to x0 is -151
+	// partial with respect to x1 is 150
+	// the function value is 56.5
+	x[0] = .5;
+	x[1] = 1.;
+	y    = f.Forward(p, x);
+	cout << "VALUE =  " << y[0] << endl;
+	// compute derivative using operation sequence stored in f
+  	vector<double> jac(m * n); // Jacobian of f (m by n matrix)
+   	jac  = f.Jacobian(x);      // Jacobian for operation sequence
+	// print the results
+   	std::cout << "Partial with respect to x0 computed by CppAD = " << jac[0] << std::endl;
+	std::cout << "Partial with respect to x1 computed by CppAD = " << jac[1] << std::endl;
+	return 0;
+	
+	
+	// now do it Brad's way
+	/*std::cout << nlNode->getNonlinearExpressionInXML() << std::endl;
 	postFixVec = nlNode->getPostfixFromExpressionTree();
-	//
-	// The users program in that stack machine language
-	const char *program[] = {
-		"a", "a", "*", "a", "+", "b", "+"  // (a^2 + a)/7
-	};
-	size_t n_program = sizeof( program ) / sizeof( program[0] );
-	// put the program in the token stack
-	stack< string > token_stack;
-	size_t i = n_program;
-	while(i--)
-		token_stack.push( program[i] );
-
 	// domain space vector
 	size_t n = 2;
 	vector< AD<double> > X(n);
 	AD<double> rootNode;
 	X[0] = 1.0;
 	X[1] = 1.0;
-
 	// declare independent variables and start tape recording
 	CppAD::Independent(X);
-		
 	// X[0] corresponds to a in the stack machine
 	vector< AD<double> > variable(26);
 	variable[0] = X[0];
 	variable[1] = X[1];
-
 	// calculate the resutls of the program
-	rootNode = StackMachine( token_stack, variable, postFixVec);
-
+	rootNode = StackMachine( variable, postFixVec);
+	std::cout << "HERE I AM" << std::endl;
 	// range space vector
-	size_t m = 1;
 	vector< AD<double> > Y(m);
 	Y[0] = rootNode;   // b = a + 1
 	// create f : X -> Y and stop tape recording
 	CppAD::ADFun<double> f(X, Y);
-
 	// use forward mode to evaluate function at different argument value
 	size_t p = 0;
 	vector<double> x(n);
@@ -161,6 +178,8 @@ int  main(){
 	// print the results
    	std::cout << "Partial with respect to x0 computed by CppAD = " << jac[0] << std::endl;
 	std::cout << "Partial with respect to x1 computed by CppAD = " << jac[1] << std::endl;
+	return 0;
+	*/
 	// Use forward mode (because x is shorter than y) to calculate Jacobian
 	/*p = 1;
 	CppADvector<double> dx(n);
@@ -181,9 +200,11 @@ int  main(){
 	ok   &= NearEqual(dy[1], 2., 1e-10, 1e-10);
 	//ok   &= NearEqual(dy[2], 2., 1e-10, 1e-10);
 	//ok   &= NearEqual(dy[3], .5, 1e-10, 1e-10);
-	*/
 
-	if( ok) return 0 ; 
-	else return 1;
+	//if( ok) return 0 ; 
+	//else return 1;
+*/
+
+
 }//end main
 
