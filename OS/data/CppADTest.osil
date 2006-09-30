@@ -96,11 +96,12 @@
 					</times>	
 				</ln>
 			</nl>
-			<nl idx="1">
-					<plus>
+			<nl idx="-1">
+					<sum>
 						<number type="real" value="105"/>
 						<variable coef="1.37" idx="0"/>
-					</plus>	
+						<variable coef="2" idx="1"/>
+					</sum>	
 			</nl>
 		</nonlinearExpressions>
 	</instanceData>

@@ -32,10 +32,32 @@ OSExpressionTree::~OSExpressionTree(){
 	//#endif
 	delete m_treeRoot;
 	m_treeRoot = NULL;
-}//end ~OSExpressionTree
+}//end ~OSExpressionTree 
 
 
-//std::vector<OSnLNode*> OSExpressionTree::getPostfix(){
-//	return m_treeRoot->getPostfixFromExpressionTree();
-//}//end getPostfix
+double OSExpressionTree::calculateFunction(double *x, bool functionEvaluated){
+	if( functionEvaluated == true) return m_dfunctionValue;
+	else{
+		// convert the double x vector to an AD vector
+		int numVars = sizeof x/sizeof x[0];
+		numVars = 2;
+		std::cout << "NUMBER OF VARIABLES = " << numVars << endl;
+		int i;
+		for(i = 0; i < numVars; i++){
+			XAD.push_back( x[i] );
+		}
+		CppAD::Independent( XAD);
+		m_CppADTree = m_treeRoot->constructCppADTree(&cppADIdx, &XAD);
+		Z.push_back( m_CppADTree);
+	}
+	CppAD::ADFun<double> f(XAD, Z);
+	vector<double> Y( 1);
+	vector<double> X( 2);
+	X[0] = .5;
+	X[1] = 1.; 
+	Y    = f.Forward(0, X);
+	std::cout << "VALUE =  " << Y[0] << std::endl;
+	return m_dfunctionValue;
+
+}//calculateFunction
 

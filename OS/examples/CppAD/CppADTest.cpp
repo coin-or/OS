@@ -64,6 +64,7 @@ $end
 #include "OSnLNode.h"
 //#include "CoinHelperFunctions.hpp"
 #include <vector>  
+#include <map> 
 #include <string>
  
 
@@ -97,37 +98,52 @@ int  main(){
 	// parse the file and create an OSInstance object
 	OSiLReader *osilreader = NULL;
 	OSInstance *osinstance = NULL;
+	OSExpressionTree *expTree = NULL;
 	OSnLNode *nlNode = NULL; 
 	// create reader and generate the OSInstance object
 	osilreader = new OSiLReader();
 	osinstance = osilreader->readOSiL( &osil);
-	// the OSnL nodes for a nonlinear expression	
-	std::vector<OSnLNode*> postFixVec;
 	// get the nodes for an expression tree in postfix format
 	// in this case we get the nonlinear objective function term
 	nlNode = osinstance->getNonlinearExpressionTree( -1);
-	std::cout << "Size = " <<  nlNode->XAD.size() << std::endl;
-	OSnLNode::XAD.push_back(0.5);
-	OSnLNode::XAD.push_back(1.0);
-	std::cout << "Size = " <<  nlNode->XAD.size() << std::endl;
-	CppAD::Independent(OSnLNode::XAD);
+	expTree = osinstance->instanceData->nonlinearExpressions->nl[ 0]->osExpressionTree;
+	double *zz;
+	zz = new double[2];
+	zz[ 0] = 0.5;
+	zz[1] = 1;
+		int numVars = sizeof zz/sizeof zz[0];
+		std::cout << "NUMBER OF VARIABLES = " << numVars << endl;
+	expTree->calculateFunction(&zz[0], false);
+	return 0;
+	CppAD::vector< AD<double> > XAD;
+	std::map<int, int> cppADIdx; 
+	XAD.push_back(0.5);
+	XAD.push_back(1.0);
+	std::cout << "Size = " <<  XAD.size() << std::endl;
+	CppAD::Independent( XAD);
 	// std::cout << "Result = " <<  nlNode->constructCppADTree() << std::endl;
 	// range space vector
 	size_t m = 1;
 	vector< AD<double> > Z(m);
-	Z[0] = nlNode->constructCppADTree();
+	Z[ 0] = nlNode->constructCppADTree(&cppADIdx, &XAD);
 	// domain space vector
 	// create f : X -> Y and stop tape recording
-	CppAD::ADFun<double> f(OSnLNode::XAD, Z);
+	CppAD::ADFun<double> f(XAD, Z);
 	// use forward mode to evaluate function at different argument value
 	size_t p = 0;
 	size_t n = 2;
 	vector<double> x(n);
 	vector<double> y(m);
-	// if x[0] = .5 and x[1] = 1 you should get the following results:
+	// if x[0] = .5 and x[1] = 1 you should get 
+	//the following results (without sum node):
 	// partial with respect to x0 is -151
 	// partial with respect to x1 is 150
 	// the function value is 56.5
+	// with the sum node you should get
+	// partial with respect to x0 is -149.63
+	// partial with respect to x1 is 152
+	// the function value is 164.185
+	// in both cases the Hessian is -98, -200, -200, 200
 	x[0] = .5;
 	x[1] = 1.;
 	y    = f.Forward(p, x);
@@ -138,6 +154,16 @@ int  main(){
 	// print the results
    	std::cout << "Partial with respect to x0 computed by CppAD = " << jac[0] << std::endl;
 	std::cout << "Partial with respect to x1 computed by CppAD = " << jac[1] << std::endl;
+	// now go for second derivative
+	vector<double> hess(n * n);
+	hess = f.Hessian(x, 0);
+	std::cout << "second derivative " << hess[0] << std::endl;
+	std::cout << "second derivative " << hess[1] << std::endl;
+	std::cout << "second derivative " << hess[2] << std::endl;
+	std::cout << "second derivative " << hess[3] << std::endl;
+	std::cout << std::endl;
+	std::cout << "Index 0 " << cppADIdx[ 0] << std::endl;
+	std::cout << "Index 1 " << cppADIdx[ 1] << std::endl;            
 	return 0;
 	
 	

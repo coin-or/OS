@@ -20,7 +20,7 @@
 #include "OSParameters.h"
 #include <iostream>
 #include <sstream>  
-#include <map> 
+
 
 using std::ostringstream;
 using std::cout;
@@ -37,7 +37,6 @@ std::vector<OSnLNode*> postfixVector;
 std::vector<OSnLNode*> prefixVector;
 
 
-CppAD::vector< AD<double> > OSnLNode::XAD;
 
 static std::string msnodeNames[] = {
 	/*1--*/"plus", "sum", "minus", "negate", "times", "divide",
@@ -450,8 +449,8 @@ double OSnLNodePlus::calculateFunction(double *x){
 }// end OSnLNodePlus::calculate
 
 
-AD<double> OSnLNodePlus::constructCppADTree(){
-	m_CppADTree = m_mChildren[0]->constructCppADTree() + m_mChildren[1]->constructCppADTree();
+AD<double> OSnLNodePlus::constructCppADTree(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
+	m_CppADTree = m_mChildren[0]->constructCppADTree( cppADIdx,  XAD) + m_mChildren[1]->constructCppADTree( cppADIdx,  XAD);
 	return m_CppADTree;
 }// end OSnLNodePlus::constructCppADTree
 
@@ -495,11 +494,11 @@ double OSnLNodeSum::calculateFunction(double *x){
 }// end OSnLNodeSum::calculate
 
 
-AD<double> OSnLNodeSum::constructCppADTree(){
+AD<double> OSnLNodeSum::constructCppADTree(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
 	m_CppADTree = 0.0;
 	int i;
 	for(i = 0; i < inumberOfChildren; i++){
-			m_CppADTree = m_CppADTree + m_mChildren[i]->constructCppADTree();
+			m_CppADTree = m_CppADTree + m_mChildren[i]->constructCppADTree( cppADIdx, XAD);
 	}
 	return m_CppADTree;
 }// end OSnLNodeSum::constructCppADTree
@@ -546,7 +545,7 @@ double OSnLNodeMax::calculateFunction(double *x){
 }// end OSnLNodeMax::calculate
 
 
-AD<double> OSnLNodeMax::constructCppADTree(){
+AD<double> OSnLNodeMax::constructCppADTree(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
 	//kipp throw error here
 	return m_CppADTree;
 }// end OSnLNodeMax::constructCppADTree
@@ -594,8 +593,8 @@ double OSnLNodeMinus::calculateFunction(double *x){
 }// end OSnLNodeMinus::calculate
 
 
-AD<double> OSnLNodeMinus::constructCppADTree(){
-	m_CppADTree = m_mChildren[0]->constructCppADTree() - m_mChildren[1]->constructCppADTree();
+AD<double> OSnLNodeMinus::constructCppADTree(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
+	m_CppADTree = m_mChildren[0]->constructCppADTree( cppADIdx, XAD) - m_mChildren[1]->constructCppADTree( cppADIdx, XAD);
 	return m_CppADTree;
 }// end OSnLNodeMinus::constructCppADTree
 
@@ -639,8 +638,8 @@ double OSnLNodeNegate::calculateFunction(double *x){
 	return m_dFunctionValue;
 }// end OSnLNodeMinus::calculate
 
-AD<double> OSnLNodeNegate::constructCppADTree(){
-	m_CppADTree = -m_mChildren[0]->constructCppADTree();
+AD<double> OSnLNodeNegate::constructCppADTree(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
+	m_CppADTree = -m_mChildren[0]->constructCppADTree( cppADIdx, XAD);
 	return m_CppADTree;
 }// end OSnLNodeNegate::constructCppADTree
 
@@ -683,8 +682,8 @@ double OSnLNodeTimes::calculateFunction(double *x){
 }// end OSnLNodeTimes::calculate
 
 
-AD<double> OSnLNodeTimes::constructCppADTree(){
-	m_CppADTree = m_mChildren[0]->constructCppADTree() * m_mChildren[1]->constructCppADTree();
+AD<double> OSnLNodeTimes::constructCppADTree(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
+	m_CppADTree = m_mChildren[0]->constructCppADTree( cppADIdx, XAD) * m_mChildren[1]->constructCppADTree( cppADIdx, XAD);
 	return m_CppADTree;
 }// end OSnLNodeTimes::constructCppADTree
 
@@ -727,8 +726,8 @@ double OSnLNodeDivide::calculateFunction(double *x){
 }// end OSnLNodeDivide::calculate
 
 
-AD<double> OSnLNodeDivide::constructCppADTree(){
-	m_CppADTree = m_mChildren[0]->constructCppADTree() / m_mChildren[1]->constructCppADTree();
+AD<double> OSnLNodeDivide::constructCppADTree(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
+	m_CppADTree = m_mChildren[0]->constructCppADTree( cppADIdx, XAD) / m_mChildren[1]->constructCppADTree( cppADIdx, XAD);
 	return m_CppADTree;
 }// end OSnLNodeDivide::constructCppADTree
 
@@ -772,8 +771,8 @@ double OSnLNodePower::calculateFunction(double *x){
 }// end OSnLNodePower::calculate
 
 
-AD<double> OSnLNodePower::constructCppADTree(){
-	m_CppADTree = CppAD::pow(m_mChildren[0]->constructCppADTree() , m_mChildren[1]->constructCppADTree() );
+AD<double> OSnLNodePower::constructCppADTree(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
+	m_CppADTree = CppAD::pow(m_mChildren[0]->constructCppADTree( cppADIdx, XAD) , m_mChildren[1]->constructCppADTree( cppADIdx, XAD) );
 	return m_CppADTree;
 }// end OSnLNodePower::constructCppADTree
 
@@ -822,11 +821,11 @@ double OSnLNodeProduct::calculateFunction(double *x){
 }// end OSnLNodeProduct::calculate
 
 
-AD<double> OSnLNodeProduct::constructCppADTree(){
+AD<double> OSnLNodeProduct::constructCppADTree(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
 	m_CppADTree = 1.0;
 	int i;
 	for(i = 0; i < inumberOfChildren; i++){
-		m_CppADTree = m_CppADTree*m_mChildren[i]->constructCppADTree();
+		m_CppADTree = m_CppADTree*m_mChildren[i]->constructCppADTree( cppADIdx, XAD);
 	}
 	return m_CppADTree;
 }// end OSnLNodeProduct::constructCppADTree
@@ -871,8 +870,8 @@ double OSnLNodeLn::calculateFunction(double *x){
 }// end OSnLNodeLn::calculate
 
 
-AD<double> OSnLNodeLn::constructCppADTree(){
-	m_CppADTree = CppAD::log( m_mChildren[0]->constructCppADTree() );
+AD<double> OSnLNodeLn::constructCppADTree(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
+	m_CppADTree = CppAD::log( m_mChildren[0]->constructCppADTree( cppADIdx, XAD) );
 	return m_CppADTree;
 }// end OSnLNodeLn::constructCppADTree
 
@@ -918,8 +917,8 @@ double OSnLNodeExp::calculateFunction(double *x){
 }// end OSnLNodeExp::calculate
 
 
-AD<double> OSnLNodeExp::constructCppADTree(){
-	m_CppADTree = CppAD::exp( m_mChildren[0]->constructCppADTree() );
+AD<double> OSnLNodeExp::constructCppADTree(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
+	m_CppADTree = CppAD::exp( m_mChildren[0]->constructCppADTree( cppADIdx, XAD) );
 	return m_CppADTree;
 }// end OSnLNodeExp::constructCppADTree
 
@@ -963,7 +962,7 @@ double OSnLNodeAbs::calculateFunction(double *x){
 }// end OSnLNodeAbs::calculate
 
 
-AD<double> OSnLNodeAbs::constructCppADTree(){
+AD<double> OSnLNodeAbs::constructCppADTree(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
 	// kipp throw an exception;
 	return m_CppADTree;
 }// end OSnLNodeAbs::constructCppADTree
@@ -1009,7 +1008,7 @@ double OSnLNodeIf::calculateFunction(double *x){
 	return m_dFunctionValue;
 }// end OSnLNodeIf::calculate
 
-AD<double> OSnLNodeIf::constructCppADTree(){
+AD<double> OSnLNodeIf::constructCppADTree(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
 	//kipp throw an exception here;
 	return m_CppADTree;
 }// end OSnLNodeIf::constructCppADTree
@@ -1104,7 +1103,7 @@ double OSnLNodeNumber::calculateFunction(double *x){
 	return m_dFunctionValue;
 }// end OSnLNodeNumber::calculate
 
-AD<double> OSnLNodeNumber::constructCppADTree(){
+AD<double> OSnLNodeNumber::constructCppADTree(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
 	m_CppADTree =  this->value;
 	return m_CppADTree;
 }// end OSnLNodeNumber::constructCppADTree
@@ -1209,12 +1208,23 @@ double OSnLNodeVariable::calculateFunction(double *x){
 	return m_dFunctionValue;
 }// end OSnLNodeVariable::calculate
 
-AD<double> OSnLNodeVariable::constructCppADTree(){
+AD<double> OSnLNodeVariable::constructCppADTree(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
 	m_CppADTree = coef;
+	int numVars;
 	std::cout << "Inside OSnLNodeVariable " << std::endl;
-	std::cout << "Value of index = " << idx << std::endl;
-	std::cout << "Value of variable = " << OSnLNode::XAD[ idx] << std::endl;
-	m_CppADTree = m_CppADTree*OSnLNode::XAD[ idx];
+	// if idx is new -- then push the value
+	if( (*cppADIdx)[ idx] > 0){ 
+		std::cout  << "This index already in the map " << idx <<  std::endl;
+	}
+	else{
+		std::cout << "Found a new index to add to the map " << idx << std::endl;
+		numVars = (*cppADIdx).size();
+		std::cout << "numVars =  " << numVars << std::endl;
+		(*cppADIdx)[ idx] = numVars ;
+	}
+	std::cout << "Value of index = " << (*cppADIdx)[ idx] << std::endl;
+	std::cout << "Value of variable = " << (*XAD)[ idx] << std::endl;
+	m_CppADTree = coef*(*XAD)[ (*cppADIdx)[ idx] - 1];
 	return m_CppADTree;
 }// end OSnLNodeVariable::constructCppADTree
 
