@@ -591,7 +591,7 @@ bool LindoSolver::processNonlinearExpressions(){
 	 * that points to an expression tree for that row or objective function that contains
 	 * at least one nonlinear term.
 	 */
-	std::map<int, OSnLNode*> allExpTrees;
+	std::map<int, OSExpressionTree*> allExpTrees;
 	
 	/** 
 	 * The map allExpTrees indexes by row and objective function all of the expression
@@ -601,7 +601,7 @@ bool LindoSolver::processNonlinearExpressions(){
 	std::vector<OSnLNode*> postFixVec;
 	
 	/** define an iterator for the expression trees map allExpTrees */
-	std::map<int, OSnLNode*>::iterator posTree;
+	std::map<int, OSExpressionTree*>::iterator posTree;
 	
 	/** 
 	 * KEY ASSUMPTION: We have already defined the model including all variables,
@@ -702,7 +702,7 @@ bool LindoSolver::processNonlinearExpressions(){
 		for(posTree = allExpTrees.begin(); posTree != allExpTrees.end(); ++posTree){
 			cout << "HERE IS EXPRESSION TREE " << posTree->first << endl;
 			// get the expression tree and put it into a postfix vector of OSnLNodes
-			postFixVec = posTree->second->getPostfixFromExpressionTree();
+			postFixVec = posTree->second->m_treeRoot->getPostfixFromExpressionTree();
 			int iVecSize = postFixVec.size();
 			int iNodeID;
 			if(iVecSize > 0){

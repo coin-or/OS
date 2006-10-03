@@ -105,27 +105,29 @@ int  main(){
 	osinstance = osilreader->readOSiL( &osil);
 	// get the nodes for an expression tree in postfix format
 	// in this case we get the nonlinear objective function term
-	nlNode = osinstance->getNonlinearExpressionTree( -1);
-	expTree = osinstance->instanceData->nonlinearExpressions->nl[ 0]->osExpressionTree;
+	//expTree = osinstance->getNonlinearExpressionTree( -1);
+	expTree = osinstance->getNonlinearExpressionTree( -1);
+	nlNode = expTree->m_treeRoot;
 	double *zz;
 	zz = new double[2];
 	zz[ 0] = 0.5;
 	zz[1] = 1;
-		int numVars = sizeof zz/sizeof zz[0];
-		std::cout << "NUMBER OF VARIABLES = " << numVars << endl;
-	expTree->calculateFunction(&zz[0], false);
+	expTree->calculateFunction(&zz[0],  false);
+	expTree->calculateFunction(&zz[0],  true);
+	std::cout << " NOW END" << std::endl;
 	return 0;
 	CppAD::vector< AD<double> > XAD;
-	std::map<int, int> cppADIdx; 
-	XAD.push_back(0.5);
-	XAD.push_back(1.0);
+	std::map<int, int> varIdx; 
+	nlNode->getVariableIndexMap( &varIdx);
 	std::cout << "Size = " <<  XAD.size() << std::endl;
-	CppAD::Independent( XAD);
 	// std::cout << "Result = " <<  nlNode->constructCppADTree() << std::endl;
 	// range space vector
 	size_t m = 1;
 	vector< AD<double> > Z(m);
-	Z[ 0] = nlNode->constructCppADTree(&cppADIdx, &XAD);
+	XAD.push_back(0.5);
+	XAD.push_back(1.0);
+	CppAD::Independent( XAD);
+	Z[ 0] = nlNode->constructCppADTree(&varIdx, &XAD);
 	// domain space vector
 	// create f : X -> Y and stop tape recording
 	CppAD::ADFun<double> f(XAD, Z);
@@ -162,8 +164,9 @@ int  main(){
 	std::cout << "second derivative " << hess[2] << std::endl;
 	std::cout << "second derivative " << hess[3] << std::endl;
 	std::cout << std::endl;
-	std::cout << "Index 0 " << cppADIdx[ 0] << std::endl;
-	std::cout << "Index 1 " << cppADIdx[ 1] << std::endl;            
+	std::cout << "Index 0 " << varIdx[ 0] << std::endl;
+	std::cout << "Index 1 " << varIdx[ 1] << std::endl;   
+      
 	return 0;
 	
 	

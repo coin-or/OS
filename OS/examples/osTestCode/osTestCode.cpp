@@ -79,7 +79,7 @@ int main(int argC, char* argV[])
 		std::vector<OSnLNode*> test;
 		std::vector<OSnLNode*> test1;
 		OSnLNode::setnlNodeIdxMap();
-		test = osinstance->getNonlinearExpressionTree( -1)->getPostfixFromExpressionTree();
+		test = osinstance->getNonlinearExpressionTree( -1)->m_treeRoot->getPostfixFromExpressionTree();
 		for(int kl = 0; kl < test.size(); kl++){
 			sToken = test[ kl]->getTokenNumber() ;
 			cout << "Untranslated Token " << sToken << endl;

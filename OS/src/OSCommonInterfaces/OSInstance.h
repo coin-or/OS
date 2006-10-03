@@ -502,7 +502,7 @@ private:
 	 * m_mapExpressionTrees holds a hash map of expression trees, with the key being the row index
 	 * and value being the expression tree representing the nonlinear expression of that row.
 	 */
-	std::map<int, OSnLNode*> m_mapExpressionTrees ;
+	std::map<int, OSExpressionTree*> m_mapExpressionTrees ;
 	
 	/**
 	 * m_mapExpressionTrees holds a hash map of expression trees in postfix format, with the key being the row index
@@ -832,7 +832,7 @@ public:
 	 * 
 	 * @return an expression tree
 	 */
-	OSnLNode* getNonlinearExpressionTree(int rowIdx);
+	OSExpressionTree* getNonlinearExpressionTree(int rowIdx);
 	
 	/**
 	 * @return the number of Objectives with a nonlinear term
@@ -847,7 +847,7 @@ public:
 	/**
 	 * @return a map: the key is the row index and the value is the corresponding expression tree
 	 */		
-	std::map<int, OSnLNode* > getAllNonlinearExpressionTrees();
+	std::map<int, OSExpressionTree* > getAllNonlinearExpressionTrees();
 	
 	// the set() methods
 	

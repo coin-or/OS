@@ -48,10 +48,11 @@ public:
 	 * </p>
 	 * 
 	 * @param x holds the values of the variables in a double array.
+	 * @param x holds the values of the variables in a double array.
 	 * @param functionEvaluated holds whether the function has been evaluated.
 	 * @return the expression function value given the current variable values.
 	 */
-	double calculateFunction(double *x, bool functionEvaluated);
+	double calculateFunction(double *x,   bool functionEvaluated);
 	
 private:
 
@@ -61,16 +62,22 @@ private:
 	 * to generate the infix expression for CPPAD -- it will hold the vector of doubles from 
 	 * the solver
 	 */	
-	CppAD::vector< AD<double> > XAD;
+	CppAD::vector< AD<double> > m_vXAD;
 	
 	/**
-	 * cppADIdx is a map used by
-	 * constructCppADTree(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD)
+	 * varIdx is a map used by
+	 * constructCppADTree(std::map<int, int> *varIdx, CppAD::vector< AD<double> > *XAD)
 	 * to generate the infix expression for CPPAD -- the key is idx a variable number, the  
 	 * value of the map is the corresponding count in terms of nonzero elements
 	 * we need to preserve the sparsity of the calculation
 	 */	
-	std::map<int, int> cppADIdx; 
+	std::map<int, int> m_mVarIdx;
+	
+	
+	/**
+	 * posVarIdx is an iterator used by the map varIdx
+	 */	
+	std::map<int, int>::iterator m_mPosVarIdx; 
 	
 	/**
 	 * m_CppADTree stores the espression tree for m_treeRoot as an AD<double>.
@@ -81,7 +88,7 @@ private:
 	 *  CppAD requires a vector for the independent variable, store the expression tree
 	 * in Z
 	 */
-	vector< AD<double> > Z;
+	vector< AD<double> > m_vZ;
 	
 	/**
 	 * functionValue stores the value of m_treeRoot as a double.
@@ -89,8 +96,9 @@ private:
 	double m_dfunctionValue;
 	
 	
+	CppAD::ADFun<double> *f;
 
-
+	//CppAD::ADFun<double> f(CppAD::vector< AD<double> > m_vXAD, vector< AD<double> >  m_vZ);
 
 };//end OSExpressionTree
 

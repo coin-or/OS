@@ -134,6 +134,8 @@ public:
 	
 	std::vector<OSnLNode*> postOrderOSnLNodeTraversal();
 	
+	virtual void getVariableIndexMap(std::map<int, int> *varIdx);
+	
 	/**
 	 *
 	 * @return the the current node as a string token.
@@ -726,6 +728,8 @@ public:
 	 * default destructor.
 	 */	
 	~OSnLNodeVariable();
+	
+	virtual void getVariableIndexMap(std::map<int, int> *varIdx);
 	
 	/**
 	 *

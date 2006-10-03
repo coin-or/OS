@@ -418,6 +418,16 @@ std::string OSnLNode::getNonlinearExpressionInXML(){
 }//getPrefix
 //
 //
+
+
+void OSnLNode::getVariableIndexMap(std::map<int, int> *varIdx){
+	int i;
+	if(inodeInt != OS_VARIABLE){
+		for(i = 0; i < inumberOfChildren; i++){
+			m_mChildren[ i]->getVariableIndexMap( varIdx);
+		}
+	}
+}//getVariableIndexMap
 	
 // OSnLNodePlus Methods	
 OSnLNodePlus::OSnLNodePlus()
@@ -1208,25 +1218,30 @@ double OSnLNodeVariable::calculateFunction(double *x){
 	return m_dFunctionValue;
 }// end OSnLNodeVariable::calculate
 
-AD<double> OSnLNodeVariable::constructCppADTree(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
+AD<double> OSnLNodeVariable::constructCppADTree(std::map<int, int> *varIdx, CppAD::vector< AD<double> > *XAD){
 	m_CppADTree = coef;
 	int numVars;
-	std::cout << "Inside OSnLNodeVariable " << std::endl;
-	// if idx is new -- then push the value
-	if( (*cppADIdx)[ idx] > 0){ 
-		std::cout  << "This index already in the map " << idx <<  std::endl;
-	}
-	else{
-		std::cout << "Found a new index to add to the map " << idx << std::endl;
-		numVars = (*cppADIdx).size();
-		std::cout << "numVars =  " << numVars << std::endl;
-		(*cppADIdx)[ idx] = numVars ;
-	}
-	std::cout << "Value of index = " << (*cppADIdx)[ idx] << std::endl;
+	std::cout << "Inside OSnLNodeVariable "<<  std::endl;
+	std::cout << "Value of index = " << (*varIdx)[ idx] << std::endl;
 	std::cout << "Value of variable = " << (*XAD)[ idx] << std::endl;
-	m_CppADTree = coef*(*XAD)[ (*cppADIdx)[ idx] - 1];
+	m_CppADTree = coef*(*XAD)[ (*varIdx)[ idx] ];
 	return m_CppADTree;
 }// end OSnLNodeVariable::constructCppADTree
+
+
+void OSnLNodeVariable::getVariableIndexMap(std::map<int, int> *varIdx){
+	int numVars;
+	if( (*varIdx).find( idx) != (*varIdx).end() ){
+		std::cout  << "This index already in the map " << idx <<  std::endl;
+	}
+	else{ // variable to map with variable index as the key
+		std::cout << "Found a new index to add to the map " << idx << std::endl;
+		numVars = (*varIdx).size();
+		std::cout << "numVars =  " << numVars << std::endl;
+		(*varIdx)[ idx] = numVars ;
+	}
+	std::cout << "Value of index = " << (*varIdx)[ idx] << std::endl;
+}//getVariableIndexMap
 
 
 OSnLNode* OSnLNodeVariable::cloneOSnLNode(){
@@ -1234,9 +1249,7 @@ OSnLNode* OSnLNodeVariable::cloneOSnLNode(){
 	nlNodePoint = new OSnLNodeVariable();
 	return  nlNodePoint;
 }//end OSnLNodeVariable::cloneOSnLNode
-
-
-
+           
 
 /**
  * m_sDelimiter holds the delimiter used in the expression postfix and prefix notation strings.

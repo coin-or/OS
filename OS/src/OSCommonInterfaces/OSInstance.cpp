@@ -889,7 +889,7 @@ int OSInstance::getNumberOfNonlinearObjectives(){
 }//getNumberOfNonlinearObjectivess
 
 
-OSnLNode* OSInstance::getNonlinearExpressionTree(int rowIdx){
+OSExpressionTree* OSInstance::getNonlinearExpressionTree(int rowIdx){
 	if( m_bProcessExpressionTrees == false ){
 		getAllNonlinearExpressionTrees();
 		return m_mapExpressionTrees[ rowIdx];
@@ -897,21 +897,22 @@ OSnLNode* OSInstance::getNonlinearExpressionTree(int rowIdx){
 	else{
 		// check to make sure rowIdx has a nonlinear term and is in the map
 		/** define an iterator for the expression trees map allExpTrees */
-		std::map<int, OSnLNode*>::iterator pos;
+		std::map<int, OSExpressionTree*>::iterator pos;
 		for(pos = m_mapExpressionTrees.begin(); pos != m_mapExpressionTrees.end(); ++pos){
 			if(pos->first == rowIdx)return m_mapExpressionTrees[ rowIdx];
 		}
 		// if we are rowIdx has no nonlinar terms so return a null
 		return NULL;
 	}  
-}// getNonlinearExpresssionTree
+}// getNonlinearExpresssionTree for a specific index
 
 
-std::map<int, OSnLNode*> OSInstance::getAllNonlinearExpressionTrees(){
+std::map<int, OSExpressionTree*> OSInstance::getAllNonlinearExpressionTrees(){
 	if(m_bProcessExpressionTrees == true) return m_mapExpressionTrees;
 	std::map<int, int> foundIdx;
 	std::map<int, int>::iterator pos;
 	OSnLNodePlus *nlNodePlus;
+	OSExpressionTree *expTree;
 	m_iObjectiveNumberNonlinear = 0;
 	m_iConstraintNumberNonlinear = 0;
 	int i;
@@ -920,12 +921,17 @@ std::map<int, OSnLNode*> OSInstance::getAllNonlinearExpressionTrees(){
 		index = instanceData->nonlinearExpressions->nl[ i]->idx;
 		if(foundIdx[ index] > 0){ 
 			nlNodePlus = new OSnLNodePlus();
+			expTree = new OSExpressionTree();
 			// set left child to old index and right child to new one
-			nlNodePlus->m_mChildren[ 0] = m_mapExpressionTrees[ index];
+			nlNodePlus->m_mChildren[ 0] = m_mapExpressionTrees[ index]->m_treeRoot;
 			nlNodePlus->m_mChildren[ 1] = instanceData->nonlinearExpressions->nl[ i]->osExpressionTree->m_treeRoot;
-			m_mapExpressionTrees[ index] = nlNodePlus ;
+			m_mapExpressionTrees[ index] = expTree;
+			m_mapExpressionTrees[ index]->m_treeRoot = nlNodePlus ;
 		}
-		else m_mapExpressionTrees[ index] = instanceData->nonlinearExpressions->nl[ i]->osExpressionTree->m_treeRoot;
+		else{
+			m_mapExpressionTrees[ index] = instanceData->nonlinearExpressions->nl[ i]->osExpressionTree;
+			m_mapExpressionTrees[ index]->m_treeRoot = instanceData->nonlinearExpressions->nl[ i]->osExpressionTree->m_treeRoot;
+		}
 		foundIdx[ index]++;	
 	}
 	// count the number of constraints and objective functions with nonlinear terms.

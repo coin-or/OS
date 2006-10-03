@@ -18,7 +18,7 @@
 #include "OSExpressionTree.h"
 #include<vector>
 
-using std::cout;
+using std::cout; 
 using std::endl;
 
 OSExpressionTree::OSExpressionTree(){
@@ -35,29 +35,45 @@ OSExpressionTree::~OSExpressionTree(){
 }//end ~OSExpressionTree 
 
 
-double OSExpressionTree::calculateFunction(double *x, bool functionEvaluated){
-	if( functionEvaluated == true) return m_dfunctionValue;
-	else{
+double OSExpressionTree::calculateFunction(double *x,  bool functionEvaluated){
+	if( functionEvaluated == false){
+		// map the variables
+		m_treeRoot->getVariableIndexMap( &m_mVarIdx);		
 		// convert the double x vector to an AD vector
-		int numVars = sizeof x/sizeof x[0];
-		numVars = 2;
-		std::cout << "NUMBER OF VARIABLES = " << numVars << endl;
-		int i;
-		for(i = 0; i < numVars; i++){
-			XAD.push_back( x[i] );
+		for(m_mPosVarIdx = m_mVarIdx.begin(); m_mPosVarIdx != m_mVarIdx.end(); ++m_mPosVarIdx){
+			m_vXAD.push_back( x[ m_mPosVarIdx->first] );
 		}
-		CppAD::Independent( XAD);
-		m_CppADTree = m_treeRoot->constructCppADTree(&cppADIdx, &XAD);
-		Z.push_back( m_CppADTree);
+		CppAD::Independent( m_vXAD);
+		m_CppADTree = m_treeRoot->constructCppADTree(&m_mVarIdx, &m_vXAD);
+		std::cout << "VALUE =  " << m_CppADTree << std::endl;
+		m_vZ.push_back( m_CppADTree) ;
+		f(m_vXAD, m_vZ);
 	}
-	CppAD::ADFun<double> f(XAD, Z);
 	vector<double> Y( 1);
-	vector<double> X( 2);
-	X[0] = .5;
-	X[1] = 1.; 
-	Y    = f.Forward(0, X);
+	vector<double> X;
+	for(m_mPosVarIdx = m_mVarIdx.begin(); m_mPosVarIdx != m_mVarIdx.end(); ++m_mPosVarIdx){
+		X.push_back( x[ m_mPosVarIdx->first] );
+	}
+	Y = f.Forward(0, X);
 	std::cout << "VALUE =  " << Y[0] << std::endl;
+	//
+	//
+	size_t m = 1;
+	size_t n = 2;
+ 	vector<double> jac(m * n); // Jacobian of f (m by n matrix)
+   	jac  = f.Jacobian(X);      // Jacobian for operation sequence
+	// print the results
+   	std::cout << "Partial with respect to x0 computed by CppAD = " << jac[0] << std::endl;
+	std::cout << "Partial with respect to x1 computed by CppAD = " << jac[1] << std::endl;
+	// now go for second derivative
+	vector<double> hess(n * n);
+	hess = f.Hessian(X, 0);
+	std::cout << "second derivative " << hess[0] << std::endl;
+	std::cout << "second derivative " << hess[1] << std::endl;
+	std::cout << "second derivative " << hess[2] << std::endl;
+	std::cout << "second derivative " << hess[3] << std::endl;
+	//
+	//
 	return m_dfunctionValue;
-
 }//calculateFunction
 
