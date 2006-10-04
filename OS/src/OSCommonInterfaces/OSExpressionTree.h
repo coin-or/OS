@@ -22,7 +22,15 @@
 #include<CppAD/CppAD.h>
 
 
+struct SecondPartialStruct{
+	int index_i;
+	int index_j;
+	double secondPartial_ij;
+};
+
+
 class OSExpressionTree{  
+
 public:	
 	
 	/**
@@ -42,17 +50,66 @@ public:
 	
 	/**
 	 * Calculate the expression tree function value given the current variable
-	 * values. If the function has been evaluated over the current x values, the
+	 * values. If the CppAD expression has been calculated, the
 	 * method will retrieve it.
 	 * 
 	 * </p>
 	 * 
 	 * @param x holds the values of the variables in a double array.
-	 * @param x holds the values of the variables in a double array.
-	 * @param functionEvaluated holds whether the function has been evaluated.
-	 * @return the expression function value given the current variable values.
+	 * @param treeBuilt holds whether the expression tree has been built for CppAD.
+	 * @return the expression tree function value given the current variable values.
 	 */
-	double calculateFunction(double *x,   bool functionEvaluated);
+	double calculateFunction(double *x, bool treeBuilt);
+	
+	
+	/**
+	 * Calculate the gradient of the expression tree function given the current variable
+	 * values. If the CppAD expression tree has been calculated, the
+	 * method will retrieve it.
+	 * 
+	 * </p>
+	 * 
+	 * @param x holds the values of the variables in a double array.
+	 * @param numVar holds the number of variables in the dense variable vector.
+	 * @param treeBuilt holds whether the expression tree has been built for CppAD.
+	 * @return the expression tree gradient given the current variable values.
+	 */
+	double *calculateGradient(double *x, int numVar, bool treeBuilt);
+	
+	
+	/**
+	 * Calculate the Hessian of the expression tree function given the current variable
+	 * values. If the CppAD expression tree has been calculated, the
+	 * method will retrieve it.
+	 * 
+	 * </p>
+	 * 
+	 * @param x holds the values of the variables in a double array.
+	 * @param treeBuilt holds whether the expression tree has been built for CppAD.
+	 * @return the expression tree gradient given the current variable values.
+	 */
+	std::vector<SecondPartialStruct*> calculateHessian(double *x, bool treeBuilt);
+	
+
+	/**
+	 * Get a vector of pointers to OSnLNodes that correspond to
+	 * the OSExpressionTree in prefix format
+	 * 
+	 * </p>
+	 * 
+	 * @return the expression tree as a vector of OSnLNodes in prefix.
+	 */
+	std::vector<OSnLNode*> getPrefixFromExpressionTree();
+	
+	/**
+	 * Get a vector of pointers to OSnLNodes that correspond to
+	 * the OSExpressionTree in postfix format
+	 * 
+	 * </p>
+	 * 
+	 * @return the expression tree as a vector of OSnLNodes in postfix.
+	 */
+	std::vector<OSnLNode*> getPostfixFromExpressionTree();
 	
 private:
 
@@ -82,23 +139,34 @@ private:
 	/**
 	 * m_CppADTree stores the espression tree for m_treeRoot as an AD<double>.
 	 */
-	AD<double> m_CppADTree;
+	CppAD::AD<double> m_CppADTree;
 	
 	/**
 	 *  CppAD requires a vector for the independent variable, store the expression tree
 	 * in Z
 	 */
-	vector< AD<double> > m_vZ;
+	CppAD::vector< AD<double> > m_vZ;
 	
 	/**
 	 * functionValue stores the value of m_treeRoot as a double.
 	 */
 	double m_dfunctionValue;
 	
-	
+	/**
+	 * f is a function of X the independent variables and Y the dependent variable. 
+	 */	
 	CppAD::ADFun<double> *f;
 
-	//CppAD::ADFun<double> f(CppAD::vector< AD<double> > m_vXAD, vector< AD<double> >  m_vZ);
+	/**  
+	 * m_vY is a one-dimensional vector that holds the value of the f function evalued by CppAD. 
+	 */	
+	std::vector<double> m_vY;
+	
+	/**
+	 * m_vX is a vector that holds the independent values of the f function evalued by CppAD. 
+	 */		
+	std::vector<double> m_vX;
+	
 
 };//end OSExpressionTree
 

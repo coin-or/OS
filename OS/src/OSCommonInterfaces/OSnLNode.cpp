@@ -1220,10 +1220,10 @@ double OSnLNodeVariable::calculateFunction(double *x){
 
 AD<double> OSnLNodeVariable::constructCppADTree(std::map<int, int> *varIdx, CppAD::vector< AD<double> > *XAD){
 	m_CppADTree = coef;
-	int numVars;
 	std::cout << "Inside OSnLNodeVariable "<<  std::endl;
-	std::cout << "Value of index = " << (*varIdx)[ idx] << std::endl;
-	std::cout << "Value of variable = " << (*XAD)[ idx] << std::endl;
+	std::cout << "Value of dense index = " << idx << std::endl;
+	std::cout << "Value of sparse index = " << (*varIdx)[ idx] << std::endl;
+	std::cout << "Value of variable = " << (*XAD)[ (*varIdx)[ idx] ] << std::endl;
 	m_CppADTree = coef*(*XAD)[ (*varIdx)[ idx] ];
 	return m_CppADTree;
 }// end OSnLNodeVariable::constructCppADTree
@@ -1235,9 +1235,9 @@ void OSnLNodeVariable::getVariableIndexMap(std::map<int, int> *varIdx){
 		std::cout  << "This index already in the map " << idx <<  std::endl;
 	}
 	else{ // variable to map with variable index as the key
-		std::cout << "Found a new index to add to the map " << idx << std::endl;
+		//std::cout << "Found a new index to add to the map " << idx << std::endl;
 		numVars = (*varIdx).size();
-		std::cout << "numVars =  " << numVars << std::endl;
+		//std::cout << "numVars =  " << numVars << std::endl;
 		(*varIdx)[ idx] = numVars ;
 	}
 	std::cout << "Value of index = " << (*varIdx)[ idx] << std::endl;

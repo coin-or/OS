@@ -109,12 +109,30 @@ int  main(){
 	expTree = osinstance->getNonlinearExpressionTree( -1);
 	nlNode = expTree->m_treeRoot;
 	double *zz;
-	zz = new double[2];
+	double functionValue;
+	zz = new double[3];
 	zz[ 0] = 0.5;
-	zz[1] = 1;
-	expTree->calculateFunction(&zz[0],  false);
-	expTree->calculateFunction(&zz[0],  true);
-	std::cout << " NOW END" << std::endl;
+	zz[ 1] = 10000;
+	zz[2] = 1;
+	functionValue = expTree->calculateFunction(&zz[0],  false);
+	std::cout << "FUNCTION VALUE = " << functionValue << std::endl ;
+	expTree->calculateGradient(&zz[0], 3,  true);
+	// now get Hessian information
+	std::vector<SecondPartialStruct*> secondPartialVector;
+	struct SecondPartialStruct *secondPartial;
+	secondPartialVector = expTree->calculateHessian(&zz[0], true);
+	int kj;
+	int numSparseVars = secondPartialVector.size();
+	for(kj = 0; kj < numSparseVars; kj++){
+		secondPartial = secondPartialVector[kj];
+		std::cout << "First index = " << secondPartial->index_i << std::endl;
+		std::cout << "Second index = " << secondPartial->index_j << std::endl;
+		std::cout << "Second partial  = " << secondPartial->secondPartial_ij << std::endl;
+	}
+	zz[ 0] = 0.25;
+	functionValue  = expTree->calculateFunction(&zz[0],  true);
+	std::cout << "FUNCTION VALUE = " << functionValue << std::endl ;
+	expTree->calculateGradient(&zz[0], 3,  true);
 	return 0;
 	CppAD::vector< AD<double> > XAD;
 	std::map<int, int> varIdx; 

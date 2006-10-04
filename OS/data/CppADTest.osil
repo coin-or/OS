@@ -7,8 +7,9 @@
 			= .798848 for an optimal value of 7.235243</description>
 	</instanceHeader>
 	<instanceData>
-		<variables numberOfVariables="2">
+		<variables numberOfVariables="3">
 			<var lb="0" name="x0" type="C"/>
+			<var lb="0" name="x1" type="C"/>
 			<var lb="0" name="x1" type="C"/>
 		</variables>
 		<objectives numberOfObjectives=" 1">
@@ -56,7 +57,7 @@
 						<number type="real" value="100"/>
 						<power>
 							<minus>
-								<variable coef="1.0" idx="1"/>
+								<variable coef="1.0" idx="2"/>
 								<power>
 									<variable coef="1.0" idx="0"/>
 									<number type="real" value="2.0"/>
@@ -100,7 +101,7 @@
 					<sum>
 						<number type="real" value="105"/>
 						<variable coef="1.37" idx="0"/>
-						<variable coef="2" idx="1"/>
+						<variable coef="2" idx="2"/>
 					</sum>	
 			</nl>
 		</nonlinearExpressions>

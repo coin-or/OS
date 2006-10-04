@@ -126,11 +126,29 @@ public:
 	
 	OSnLNode* createExpressionTreeFromPrefix(std::vector<OSnLNode*> nlNodeVec);
 	
+	/**
+	 * Get a vector of pointers to OSnLNodes that correspond to
+	 * the OSExpressionTree in prefix format
+	 * 
+	 * </p>
+	 * 
+	 * @return the expression tree as a vector of OSnLNodes in prefix.
+	 */
 	std::vector<OSnLNode*> getPrefixFromExpressionTree();
+	
 
 	std::vector<OSnLNode*> preOrderOSnLNodeTraversal();
 	
+		/**
+	 * Get a vector of pointers to OSnLNodes that correspond to
+	 * the OSExpressionTree in postfix format
+	 * 
+	 * </p>
+	 * 
+	 * @return the expression tree as a vector of OSnLNodes in postfix.
+	 */
 	std::vector<OSnLNode*> getPostfixFromExpressionTree();
+
 	
 	std::vector<OSnLNode*> postOrderOSnLNodeTraversal();
 	
