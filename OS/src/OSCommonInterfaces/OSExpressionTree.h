@@ -132,7 +132,7 @@ private:
 	
 	
 	/**
-	 * posVarIdx is an iterator used by the map varIdx
+	 * posVarIdx is a map iterator used by the map varIdx
 	 */	
 	std::map<int, int>::iterator m_mPosVarIdx; 
 	

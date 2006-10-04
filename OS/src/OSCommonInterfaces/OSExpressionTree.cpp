@@ -59,8 +59,10 @@ double OSExpressionTree::calculateFunction(double *x,  bool treeBuilt){
 		f = new CppAD::ADFun<double>(m_vXAD, m_vZ);
 		m_vY.push_back(0.0); 
 	}
-	for(m_mPosVarIdx = m_mVarIdx.begin(); m_mPosVarIdx != m_mVarIdx.end(); ++m_mPosVarIdx){
-		m_vX.push_back( x[ m_mPosVarIdx->first] );
+	else{
+		for(m_mPosVarIdx = m_mVarIdx.begin(); m_mPosVarIdx != m_mVarIdx.end(); ++m_mPosVarIdx){
+			m_vX.push_back( x[ m_mPosVarIdx->first] );
+		}
 	} 
 	m_vY = (*f).Forward(0, m_vX) ;
 	m_vX.clear();
