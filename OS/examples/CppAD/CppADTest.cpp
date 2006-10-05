@@ -114,9 +114,9 @@ int  main(){
 	zz[ 0] = 0.5;
 	zz[ 1] = 10000;
 	zz[2] = 1;
-	functionValue = expTree->calculateFunction(&zz[0],  false);
+	functionValue = expTree->calculateFunction(&zz[0], false);
 	std::cout << "FUNCTION VALUE = " << functionValue << std::endl ;
-	expTree->calculateGradient(&zz[0], 3,  true);
+	expTree->calculateGradient(&zz[0], true );
 	// now get Hessian information
 	std::vector<SecondPartialStruct*> secondPartialVector;
 	struct SecondPartialStruct *secondPartial;
@@ -130,9 +130,15 @@ int  main(){
 		std::cout << "Second partial  = " << secondPartial->secondPartial_ij << std::endl;
 	}
 	zz[ 0] = 0.25;
-	functionValue  = expTree->calculateFunction(&zz[0],  true);
+	functionValue  = expTree->calculateFunction(&zz[0], false);
 	std::cout << "FUNCTION VALUE = " << functionValue << std::endl ;
-	expTree->calculateGradient(&zz[0], 3,  true);
+	expTree->calculateGradient( &zz[0], true );
+	// test getVariableIndicies
+	std::vector<int> testgetVariableIndicies = expTree->getVariableIndicies();
+	numSparseVars = testgetVariableIndicies.size();
+	for(kj = 0; kj < numSparseVars; kj++){
+		std::cout <<  testgetVariableIndicies[ kj] << std::endl;
+	}
 	return 0;
 	CppAD::vector< AD<double> > XAD;
 	std::map<int, int> varIdx; 

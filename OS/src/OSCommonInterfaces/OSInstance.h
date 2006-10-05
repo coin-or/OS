@@ -510,6 +510,16 @@ private:
 	 */
 	std::map<int, std::vector<OSnLNode*> > m_mapExpressionTreesInPostfix ;
 	
+	/*
+	 *m_mdConstraintFunctionValues holds a double array of constraint function values -- the size of the array is equal to getConstraintNumber().  
+    */
+    double *m_mdConstraintFunctionValues;
+    
+    /*
+	 *m_mdObjectiveFunctionValues holds a double array of objective function values -- the size of the array is equal to getObjectiveNumber().  
+    */
+    double *m_mdObjectiveFunctionValues;
+	
 	/**
 	 * process variables. 
 	 * 
@@ -825,7 +835,7 @@ public:
 	 * @return a vector of pointers to OSnLNodes in postfix, if rowIdx
 	 * does not index a row with a nonlinear term NULL is returned
 	 */
-	//std::vector<OSnLNode*> getNonlinearExpressionTreeInPostfix(int rowIdx);
+	//std::vector<OSnLNode*> getNonlinearExpressionTreeInPostfix(int rowIdx);  //kippster implement
 	
 	/**
 	 * Get the expression tree for a given row index  
@@ -848,6 +858,16 @@ public:
 	 * @return a map: the key is the row index and the value is the corresponding expression tree
 	 */		
 	std::map<int, OSExpressionTree* > getAllNonlinearExpressionTrees();
+	
+	
+	 /**
+   	 * Get all the nonlinear expression tree indexes, i.e. indexes of rows (objetives or constraints) that contain nonlinear expressions. 
+   	 * 
+   	 * @return an integer array of nonlinear expression tree indexes. 
+	 * @throws Exception if the elements in nonlinear expressions are logically inconsistent. 
+   	 */
+	std::vector<int> getNonlinearExpressionTreeIndexes(); //kippster implement this
+	
 	
 	// the set() methods
 	
@@ -1024,24 +1044,91 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	int* indexes, int indexesBegin, int indexesEnd,   			
 	int* starts, int startsBegin, int startsEnd);
 	
-  	/**
-   	 * set quadratic terms
-   	 * 
-   	 * <p>
-   	 * 
-   	 * @param number holds the number of quadratic terms. 
-   	 * @param rowIndexes holds an integer array of row indexes of all the quadratic terms. 
-	 * A negative integer corresponds to an objective row, e.g. -1 for 1st objective and -2 for 2nd.
-   	 * @param varOneIndexes holds an integer array of the first varialbe indexes of all the quadratic terms.
-   	 * @param varTwoIndexes holds an integer array of the second varialbe indexes of all the quadratic terms.
-   	 * @param coefficients holds a double array all the quadratic term coefficients.
-   	 * @param begin holds the begin index of all the arrays to copy from (usually = 0). 
-   	 * @param end holds the end index of all the arrays to copy till (usually = array length -1).
-   	 * @return whether the quadratic terms are set successfully.  
-   	 */
+/**
+ * set quadratic terms
+ * 
+ * <p>
+ * 
+ * @param number holds the number of quadratic terms. 
+ * @param rowIndexes holds an integer array of row indexes of all the quadratic terms. 
+ * A negative integer corresponds to an objective row, e.g. -1 for 1st objective and -2 for 2nd.
+ * @param varOneIndexes holds an integer array of the first varialbe indexes of all the quadratic terms.
+ * @param varTwoIndexes holds an integer array of the second varialbe indexes of all the quadratic terms.
+ * @param coefficients holds a double array all the quadratic term coefficients.
+ * @param begin holds the begin index of all the arrays to copy from (usually = 0). 
+ * @param end holds the end index of all the arrays to copy till (usually = array length -1).
+ * @return whether the quadratic terms are set successfully.  
+ */
 bool setQuadraticTerms(int number, 
 	int* rowIndexes, int* varOneIndexes, int* varTwoIndexes, double* coefficients,
 	int begin, int end);
+	
+	
+// calculate methods
+
+
+/**
+ * Calculate the function value for function (constraint or objective) 
+ * indexed by idx
+ * 
+ * <p>
+ * 
+ * @param idx is the index on the constraint (0, 1, 2, 3, ...) or objective function (-1, -2, -3, ...). 
+ * @param x is a pointer (double array) to the current variable values
+ * @param functionEvalued is true if the function has been evaluated for the current iterate x for function idx.
+ * use a value of false if not sure
+ * @return the function value as a double.  
+ */
+double calculateFunctionValue(int idx, double* x, bool functionEvaluated);
+
+
+
+/**
+ * Calculate all of the constraint function values
+ * 
+ * <p>
+ * 
+ * @param x is a pointer (double array) to the current variable values
+ * @param functionsEvalued is true every constraint function has been evaluated for the current iterate x.
+ * use a value of false if not sure
+ * @return a double array of constraint function values -- the size of the array is equal to getConstraintNumber().  
+ */
+double *calculateAllConstraintFunctionValues( double* x, bool functionsEvaluated);
+
+/**
+ * Calculate all of the objective function values
+ * 
+ * <p>
+ * 
+ * @param x is a pointer (double array) to the current variable values
+ * @param functionsEvalued is true every objective function has been evaluated for the current iterate x.
+ * use a value of false if not sure
+ * @return a double array of objective function values -- the size of the array is equal to getObjectiveNumber().  
+ */
+double *calculateAllObjectiveFunctionValues( double* x, bool functionsEvaluated);
+
+
+/**
+ * Calculate all of the linear constraint function values
+ * 
+ * <p>
+ * 
+ * @param x is a pointer (double array) to the current variable values
+ * @return a double array of linear constraint function values -- the size of the array is equal to getConstraintNumber().  
+ */
+double *calculateLinearConstraintFunctionValues( double* x);
+
+
+/**
+ * Calculate the quadratic part of every constraint function 
+ * 
+ * <p>
+ * 
+ * @param x is a pointer (double array) to the current variable values
+ * @return a double array of quadratic constraint function values -- the size of the array is equal to getConstraintNumber().  
+ */
+double *calculateQuadraticConstraintFunctionValues( double* x);
+
 
 																																																								
 }; //class OSInstance

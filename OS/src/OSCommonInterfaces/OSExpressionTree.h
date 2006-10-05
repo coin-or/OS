@@ -22,11 +22,17 @@
 #include<CppAD/CppAD.h>
 
 
+struct FirstPartialStruct{
+	int index_i;
+	double firstPartial_i;
+};
+
 struct SecondPartialStruct{
 	int index_i;
 	int index_j;
 	double secondPartial_ij;
 };
+
 
 
 class OSExpressionTree{  
@@ -56,10 +62,10 @@ public:
 	 * </p>
 	 * 
 	 * @param x holds the values of the variables in a double array.
-	 * @param treeBuilt holds whether the expression tree has been built for CppAD.
+	 * @param functionEvaluated is set to true if the function has already been evaluated.
 	 * @return the expression tree function value given the current variable values.
 	 */
-	double calculateFunction(double *x, bool treeBuilt);
+	double calculateFunction( double *x, bool functionEvaluated);
 	
 	
 	/**
@@ -70,11 +76,10 @@ public:
 	 * </p>
 	 * 
 	 * @param x holds the values of the variables in a double array.
-	 * @param numVar holds the number of variables in the dense variable vector.
-	 * @param treeBuilt holds whether the expression tree has been built for CppAD.
+	 * @param functionEvaluated is set to true if the function has already been evaluated.
 	 * @return the expression tree gradient given the current variable values.
 	 */
-	double *calculateGradient(double *x, int numVar, bool treeBuilt);
+	std::vector<FirstPartialStruct*> calculateGradient( double *x, bool functionEvaluated);
 	
 	
 	/**
@@ -85,10 +90,10 @@ public:
 	 * </p>
 	 * 
 	 * @param x holds the values of the variables in a double array.
-	 * @param treeBuilt holds whether the expression tree has been built for CppAD.
+	 * @param functionEvaluated is set to true if the function has already been evaluated.
 	 * @return the expression tree gradient given the current variable values.
 	 */
-	std::vector<SecondPartialStruct*> calculateHessian(double *x, bool treeBuilt);
+	std::vector<SecondPartialStruct*> calculateHessian( double *x, bool functionEvaluated);
 	
 
 	/**
@@ -111,6 +116,16 @@ public:
 	 */
 	std::vector<OSnLNode*> getPostfixFromExpressionTree();
 	
+	/**
+	 * Retrieve an integer vector of the indicies of the variables
+	 * that are in the expression tree
+	 * 
+	 * </p>
+	 * 
+	 * @return the indicies of the variables in the current expression tree.
+	 */
+	std::vector<int> getVariableIndicies();
+	
 private:
 
 	/**
@@ -130,11 +145,15 @@ private:
 	 */	
 	std::map<int, int> m_mVarIdx;
 	
-	
 	/**
 	 * posVarIdx is a map iterator used by the map varIdx
 	 */	
 	std::map<int, int>::iterator m_mPosVarIdx; 
+	
+	/**
+	 * posVarIdx2 is a second map iterator used by the map varIdx for Hessian calculation
+	 */	
+	std::map<int, int>::iterator m_mPosVarIdx2;
 	
 	/**
 	 * m_CppADTree stores the espression tree for m_treeRoot as an AD<double>.
@@ -147,10 +166,6 @@ private:
 	 */
 	CppAD::vector< AD<double> > m_vZ;
 	
-	/**
-	 * functionValue stores the value of m_treeRoot as a double.
-	 */
-	double m_dfunctionValue;
 	
 	/**
 	 * f is a function of X the independent variables and Y the dependent variable. 
@@ -167,6 +182,14 @@ private:
 	 */		
 	std::vector<double> m_vX;
 	
+	/**
+	 * m_bCppADTreeBuilt is a boolean that holds whether or not the CppAD expression tree has been built. 
+	 */		
+	bool m_bCppADTreeBuilt;
+	
+	
+	
+
 
 };//end OSExpressionTree
 

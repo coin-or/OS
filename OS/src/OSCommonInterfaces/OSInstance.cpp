@@ -895,14 +895,16 @@ OSExpressionTree* OSInstance::getNonlinearExpressionTree(int rowIdx){
 		return m_mapExpressionTrees[ rowIdx];
 	}
 	else{
+		if( m_mapExpressionTrees.find( rowIdx) != m_mapExpressionTrees.end()) return NULL;
+		else return m_mapExpressionTrees[ rowIdx];
 		// check to make sure rowIdx has a nonlinear term and is in the map
 		/** define an iterator for the expression trees map allExpTrees */
-		std::map<int, OSExpressionTree*>::iterator pos;
-		for(pos = m_mapExpressionTrees.begin(); pos != m_mapExpressionTrees.end(); ++pos){
-			if(pos->first == rowIdx)return m_mapExpressionTrees[ rowIdx];
-		}
+		//std::map<int, OSExpressionTree*>::iterator pos;
+		///for(pos = m_mapExpressionTrees.begin(); pos != m_mapExpressionTrees.end(); ++pos){
+		//	if(pos->first == rowIdx)return m_mapExpressionTrees[ rowIdx];
+		//}
 		// if we are rowIdx has no nonlinar terms so return a null
-		return NULL;
+		//return NULL;
 	}  
 }// getNonlinearExpresssionTree for a specific index
 

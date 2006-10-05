@@ -23,6 +23,7 @@ using std::endl;
 
 OSExpressionTree::OSExpressionTree(){
 	m_treeRoot = NULL;
+	m_bCppADTreeBuilt = false;
 }//end OSExpressionTree
 
  
@@ -36,17 +37,17 @@ OSExpressionTree::~OSExpressionTree(){
 
 
 std::vector<OSnLNode*> OSExpressionTree::getPostfixFromExpressionTree(){
-	m_treeRoot->getPostfixFromExpressionTree();
+	return m_treeRoot->getPostfixFromExpressionTree();
 }//getPostfixFromExpressionTree
 
 
 std::vector<OSnLNode*> OSExpressionTree::getPrefixFromExpressionTree(){
-	m_treeRoot->getPrefixFromExpressionTree();
+	return m_treeRoot->getPrefixFromExpressionTree();
 }//getPrefixFromExpressionTree
 
 
-double OSExpressionTree::calculateFunction(double *x,  bool treeBuilt){
-	if( treeBuilt == false){
+double OSExpressionTree::calculateFunction( double *x, bool functionEvaluated){
+	if( m_bCppADTreeBuilt == false){
 		// map the variables
 		m_treeRoot->getVariableIndexMap( &m_mVarIdx);		
 		// convert the double x vector to an AD vector
@@ -58,19 +59,19 @@ double OSExpressionTree::calculateFunction(double *x,  bool treeBuilt){
 		m_vZ.push_back( m_CppADTree) ;
 		f = new CppAD::ADFun<double>(m_vXAD, m_vZ);
 		m_vY.push_back(0.0); 
+		m_bCppADTreeBuilt = true;
 	}
-	else{
-		for(m_mPosVarIdx = m_mVarIdx.begin(); m_mPosVarIdx != m_mVarIdx.end(); ++m_mPosVarIdx){
-			m_vX.push_back( x[ m_mPosVarIdx->first] );
-		}
-	} 
-	m_vY = (*f).Forward(0, m_vX) ;
+	if(functionEvaluated == true) return m_vY[ 0];
 	m_vX.clear();
+	for(m_mPosVarIdx = m_mVarIdx.begin(); m_mPosVarIdx != m_mVarIdx.end(); ++m_mPosVarIdx){
+		m_vX.push_back( x[ m_mPosVarIdx->first] );
+	}
+	m_vY = (*f).Forward(0, m_vX) ;
 	return m_vY[ 0];
 }//calculateFunction
 
-double *OSExpressionTree::calculateGradient(double *x, int numVar,  bool treeBuilt){
-	if( treeBuilt == false){
+std::vector<FirstPartialStruct*> OSExpressionTree::calculateGradient( double *x, bool functionEvaluated){
+	if( m_bCppADTreeBuilt == false){
 		// map the variables
 		m_treeRoot->getVariableIndexMap( &m_mVarIdx);		
 		// convert the double x vector to an AD vector
@@ -81,30 +82,31 @@ double *OSExpressionTree::calculateGradient(double *x, int numVar,  bool treeBui
 		m_CppADTree = m_treeRoot->constructCppADTree(&m_mVarIdx, &m_vXAD);
 		m_vZ.push_back( m_CppADTree) ;
 		f = new CppAD::ADFun<double>(m_vXAD, m_vZ);
+		m_bCppADTreeBuilt = true;
 	}
-	for(m_mPosVarIdx = m_mVarIdx.begin(); m_mPosVarIdx != m_mVarIdx.end(); ++m_mPosVarIdx){
-		m_vX.push_back( x[ m_mPosVarIdx->first] );
+	if( functionEvaluated == false){
+		m_vX.clear();
+		for(m_mPosVarIdx = m_mVarIdx.begin(); m_mPosVarIdx != m_mVarIdx.end(); ++m_mPosVarIdx){
+			m_vX.push_back( x[ m_mPosVarIdx->first] );
+		}
 	}
  	std::vector<double> jac( m_mVarIdx.size() ); 	// Jacobian of f 
    	jac  = (*f).Jacobian( m_vX);	// Jacobian for operation sequence
 	// print the results
-	int i;
-	double *returnVec;
-	returnVec = new double[ numVar];
-	for(i = 0; i < numVar; i++){
-		// kipp -- don't zero this out here every time -- maybe make global
-		returnVec[ i] = 0.0;
-	}
+	std::vector<FirstPartialStruct*> firstPartialVector;
+	struct FirstPartialStruct *firstPartial;
 	for(m_mPosVarIdx = m_mVarIdx.begin(); m_mPosVarIdx != m_mVarIdx.end(); ++m_mPosVarIdx){
-			returnVec[ m_mPosVarIdx->first]  = jac[ m_mPosVarIdx->second];
-			std::cout << "Partial with respect to " <<  m_mPosVarIdx->first << "  computed by CppAD = " << returnVec[ m_mPosVarIdx->first] << std::endl;
+		firstPartial = new FirstPartialStruct();
+		firstPartial->index_i = m_mPosVarIdx->first;
+		firstPartial->firstPartial_i  = jac[ m_mPosVarIdx->second];
+		firstPartialVector.push_back( firstPartial);
+		std::cout << "Partial with respect to " <<  m_mPosVarIdx->first << "  computed by CppAD = " << jac[ m_mPosVarIdx->second] << std::endl;
 	}
-	m_vX.clear();
-	return returnVec;
+	return firstPartialVector;
 }//calculateGradient
 
-std::vector<SecondPartialStruct*>  OSExpressionTree::calculateHessian(double *x,  bool treeBuilt){
-	if( treeBuilt == false){
+std::vector<SecondPartialStruct*>  OSExpressionTree::calculateHessian( double *x, bool functionEvaluated){
+	if( m_bCppADTreeBuilt == false){
 		// map the variables
 		m_treeRoot->getVariableIndexMap( &m_mVarIdx);		
 		// convert the double x vector to an AD vector
@@ -115,15 +117,14 @@ std::vector<SecondPartialStruct*>  OSExpressionTree::calculateHessian(double *x,
 		m_CppADTree = m_treeRoot->constructCppADTree(&m_mVarIdx, &m_vXAD);
 		m_vZ.push_back( m_CppADTree) ;
 		f = new CppAD::ADFun<double>(m_vXAD, m_vZ);
+		m_bCppADTreeBuilt = true;
 	}
-	// declare an array to hold the indicies
-	int *hessianIdx;
 	int numSparseVars = m_mVarIdx.size();
-	hessianIdx = new int[ numSparseVars];
-	int kount = 0;
-	for(m_mPosVarIdx = m_mVarIdx.begin(); m_mPosVarIdx != m_mVarIdx.end(); ++m_mPosVarIdx){
-		m_vX.push_back( x[ m_mPosVarIdx->first] );
-		hessianIdx[ kount++] = m_mPosVarIdx->first;
+	if( functionEvaluated == false){
+		m_vX.clear();
+		for(m_mPosVarIdx = m_mVarIdx.begin(); m_mPosVarIdx != m_mVarIdx.end(); ++m_mPosVarIdx){
+			m_vX.push_back( x[ m_mPosVarIdx->first] );
+		}
 	}
 	// now go for second derivative
 	std::vector<double> hess( numSparseVars * numSparseVars);
@@ -131,17 +132,24 @@ std::vector<SecondPartialStruct*>  OSExpressionTree::calculateHessian(double *x,
 	// now get values
 	std::vector<SecondPartialStruct*> secondPartialVector;
 	struct SecondPartialStruct *secondPartial;
-	int index_i, index_j;
-	for(index_i = 0; index_i < numSparseVars; index_i++){
-		for(index_j = 0; index_j < numSparseVars; index_j++){
+	for(m_mPosVarIdx = m_mVarIdx.begin(); m_mPosVarIdx != m_mVarIdx.end(); ++m_mPosVarIdx){
+		for(m_mPosVarIdx2 = m_mVarIdx.begin(); m_mPosVarIdx2 != m_mVarIdx.end(); ++m_mPosVarIdx2){
 			secondPartial = new SecondPartialStruct();
-			secondPartial->index_i = hessianIdx[ index_i];
-			secondPartial->index_j = hessianIdx[ index_j];
-			secondPartial->secondPartial_ij = hess[ numSparseVars*index_i + index_j];
+			secondPartial->index_i = m_mPosVarIdx->first;
+			secondPartial->index_j = m_mPosVarIdx2->first;
+			secondPartial->secondPartial_ij  = hess[ numSparseVars*m_mPosVarIdx->second + m_mPosVarIdx2->second];
 			secondPartialVector.push_back( secondPartial);
 		}
 	}
-	m_vX.clear();
 	return secondPartialVector;
 }//calculateGradient
+
+std::vector<int> OSExpressionTree::getVariableIndicies(){
+	m_treeRoot->getVariableIndexMap( &m_mVarIdx);
+	std::vector<int> variableIndicies;
+	for(m_mPosVarIdx = m_mVarIdx.begin(); m_mPosVarIdx != m_mVarIdx.end(); ++m_mPosVarIdx){
+		variableIndicies.push_back(m_mPosVarIdx->first);
+	}
+	return variableIndicies;
+}//getVariableIndicies
 
