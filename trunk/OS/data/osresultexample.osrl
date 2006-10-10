@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osrl xmlns="os.optimizationservices.org"   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org ../schemas/OSiL.xsd" >
+<resultHeader><message>solved using COIN solver</message></resultHeader>
+    
+ <resultData>
+<optimization numberOfSolutions="1" numberOfVariables="2" numberOfConstraints="4" numberOfObjectives="1">
+<solution objectiveIdx="-1">
+<status type="optimal"/>
+<variables>
+<values>
+<var idx="0" value="539.984"/>
+<var idx="1" value="252.011"></var>
+</values>
+</variables>
+<objectives>
+<values>
+<obj idx="-1" value="7667.94"/>
+</values>
+</objectives>
+<constraints>
+<dualValues>
+<con idx="0" value="4.37457"/>
+<con idx="1" value="-0"/>
+<con idx="2" value="6.9378"/>
+<con idx="3" value="-0"/>
+</dualValues>
+</constraints>
+</solution>
+</optimization>
+</resultData>
+</osrl>
