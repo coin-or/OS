@@ -15,14 +15,14 @@
  */
  
 #ifndef EXPRESSIONTREE_H
-#define EXPRESSIONTREE_H
+#define EXPRESSIONTREE_H 
 #include "OSnLNode.h"
 #include <vector>
 #include <map>
 #include<CppAD/CppAD.h>
 
 
-struct FirstPartialStruct{
+struct FirstPartialStruct{  
 	int index_i;
 	double firstPartial_i;
 };

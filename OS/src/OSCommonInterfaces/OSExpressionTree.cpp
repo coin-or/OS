@@ -71,6 +71,7 @@ double OSExpressionTree::calculateFunction( double *x, bool functionEvaluated){
 }//calculateFunction
 
 std::vector<FirstPartialStruct*> OSExpressionTree::calculateGradient( double *x, bool functionEvaluated){
+	// note x is a dense vector
 	if( m_bCppADTreeBuilt == false){
 		// map the variables
 		m_treeRoot->getVariableIndexMap( &m_mVarIdx);		

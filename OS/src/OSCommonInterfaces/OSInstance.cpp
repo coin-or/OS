@@ -1335,3 +1335,107 @@ bool OSInstance::setQuadraticTerms(int number,
 	}
 	return true;
 }//setQuadraticTerms
+
+double OSInstance::calculateFunctionValue(int idx, double* x, bool functionEvaluated){
+	//
+	// put in check on value of idx and make sure it is in the correct range
+	// when true, if idx >=0  we return m_mdConstraintFunctionValues[ idx]
+	// when true, if idx < 0 we return m_mdObjectiveFunctionValues[abs( idx) - 1]
+	// if false we call calculateAllConstraintFunctionValues() and calculateAllObjectiveFunctionValues()
+	// and then retrieve as if true
+	//
+}//calculateFunctionValue
+
+
+	
+double *OSInstance::calculateAllConstraintFunctionValues( double* x, bool functionEvaluated){
+	// if true return m_mdConstraintFunctionValues
+	// else initialize m_mdConstraintFunctionValues to zero
+	// call calculateLinearConstraintFunctionValues( double* x) and if not NULL
+	// add resulting vector to m_mdConstraintFunctionValues
+	// call calculateQuadraticConstraintFunctionValues( double* x) and if not NULL,  
+	// add resulting vector to m_mdConstraintFunctionValues
+	// for nonlinear part call getNonlinearExpressionTreeIndexes()
+	// for each nonnegative row call call expTree = osinstance->getNonlinearExpressionTree( idx)
+	// then expTree->calculateFunction(x, false) and add to correxponding index in m_mdConstraintFunctionValues
+}//calculateAllConstraintFunctionValues
+
+
+double *OSInstance::calculateAllObjectiveFunctionValues( double* x, bool functionEvaluated){
+	// if true return m_mdObjectiveFunctionValues
+	// else initialize m_mdObjectiveFunctionValues to zero
+	// loop over all the objective functions
+	// if not NULL first get linear values
+	// if not NULL then get quadratic values
+	// if not NULL then get nonlinear vaues
+}//calculateAllConstraintFunctionValues
+
+double *OSInstance::calculateLinearConstraintFunctionValues( double* x){
+	// Jun's implementation plus row -- see his calculateLinearConstraintFunctionValues( double *x);
+}//calculateConstraintFunctionValues
+
+
+
+double *OSInstance::calculateQuadraticConstraintFunctionValues( double* x){
+	// see Jun's code method by the same name.
+}//calculateQuadraticConstraintFunctionValues
+
+std::vector<FirstPartialStruct*> OSInstance::calculateFunctionGradient(int idx, double* x, bool functionEvaluated, bool gradientEvaluated){
+	//
+	// put in check on value of idx and make sure it is in the correct range
+	// when true, if idx >=0  we return m_mvConstraintFunctionGradients[ idx]
+	// when true, if idx < 0 we return m_mvObjectiveFunctionGradients[abs( idx) - 1]
+	// if false we call calculateAllConstraintFunctionGradients() and calculateAllObjectiveFunctionGradients()
+	// and then retrieve as if true
+	//
+	
+}//calculateFunctionGradient
+
+std::vector<FirstPartialStruct*> * OSInstance::calculateAllConstraintFunctionGradients(int idx, double* x, bool functionEvaluated, bool gradientEvaluated){
+/*
+1. getAllConstraintFunctionGradientsBase and make a copy of m_mvAllConstraintFunctionGradientsBase
+2. calculate two partials for each qpterm and add (according to m_mVarIdxVectorPosMap) the two values to the copy of m_mvAllConstraintFunctionGradientsBase. 
+3. get the gradient for each expTree and add (according to m_mVarIdxVectorPosMap) the firstPartial for each variableIdx 
+ */
+}//calculateAllConstraintFunctionGradients					
+
+std::vector<FirstPartialStruct*> * OSInstance::calculateAllObjectiveFunctionGradients(int idx, double* x, bool functionEvaluated, bool gradientEvaluated){
+//similar logic to calculateAllConstraintFunctionGradients
+}//calculateAllObjectiveFunctionGradients
+
+std::vector<FirstPartialStruct*> *OSInstance::getAllConstraintFunctionGradientsBase(){
+/* be careful that this method returns a reference of the base as it returns an array pointer of vectors. So it needs to be
+ * copied -- make a new array and do element-wise copy of vector members. 
+
+if(m_bGetAllConstraintFunctionGradientsBase == true) retrurn m_mvAllConstraintFunctionGradientsBase;
+
+1. convert 3 list storage linear coef matrix into m_mvAllConstraintFunctionGradientsBase
+two cases -- row major and column major
+This is going to be a similar and simpler logic as the calculateLinearConstraintFunctionValues
+Only that the value calculation line becomes something like: 
+m_mvAllConstraintFunctionGradientsBase[i][j] = {indexes[j], values[j]} for row major
+2. append extra qterms if quadratic coefficients is not NULL
+loop through all qterms with qTerm idx >= 0
+for each qterm, find wether there is a varIdxOne and varIdxTwo in the vector of idx row of m_mvAllConstraintFunctionGradientsBase
+if{ not there append one or two firstPartil at the end of the vector, with firstPartil->index_i = varIdxOne/varIdxTwo, firstPartil->value = 0}
+end if
+update m_mVarIdxVectorPosMap  -- array of varIdxVectorPosMaps -- qTerm idx is arrary index, varIdxOne/varIdxTwo is map key, vector pos is map value
+
+3.  append extra nonlinear varIdx if nonlinearExpressions is not null
+loop through all nl expression trees with idx >= 0
+for each expTree (row = idx), find wether each nonlinear varIdx is in the vector of idx row of m_mvAllConstraintFunctionGradientsBase
+if{ not there append one firstPartil at the end of the vector, with firstPartil->index_i = variableIdx, firstPartil->value = 0}
+end if
+update m_mVarIdxVectorPosMap  -- array of varIdxVectorPosMaps -- nl idx is arrary index, variableIdx is map key, vector pos is map value
+
+m_mvAllConstraintFunctionGradientsBase = true;
+
+ */
+}//getAllConstraintFunctionGradientsBase
+
+std::vector<FirstPartialStruct*> *OSInstance::getAllObjectiveFunctionGradientsBase(){
+//similar logic to getAllConstraintFunctionGradientsBase
+ 
+}//getAllObjectiveFunctionGradientsBase
+
+

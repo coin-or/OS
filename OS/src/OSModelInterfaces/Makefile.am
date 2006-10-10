@@ -36,6 +36,7 @@ AM_CPPFLAGS =\
 	-I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` \
 	-I`$(CYGPATH_W) $(COINUTILSSRCDIR)/inc` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src` \
+	-I`$(CYGPATH_W) $(CPPADSRCDIR)/..` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSCommonInterfaces` 
 
 
