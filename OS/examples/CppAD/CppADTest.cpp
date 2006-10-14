@@ -133,12 +133,8 @@ int  main(){
 	functionValue  = expTree->calculateFunction(&zz[0], false);
 	std::cout << "FUNCTION VALUE = " << functionValue << std::endl ;
 	expTree->calculateGradient( &zz[0], true );
-	// test getVariableIndicies
-	std::vector<int> testgetVariableIndicies = expTree->getVariableIndicies();
-	numSparseVars = testgetVariableIndicies.size();
-	for(kj = 0; kj < numSparseVars; kj++){
-		std::cout <<  testgetVariableIndicies[ kj] << std::endl;
-	}
+	std::cout << "GET SPARSE JACOBIAN RESULT"   << std::endl;
+	osinstance->getSparseJacobianFromColumnMajor( );
 	return 0;
 	CppAD::vector< AD<double> > XAD;
 	std::map<int, int> varIdx; 
@@ -190,7 +186,8 @@ int  main(){
 	std::cout << std::endl;
 	std::cout << "Index 0 " << varIdx[ 0] << std::endl;
 	std::cout << "Index 1 " << varIdx[ 1] << std::endl;   
-      
+
+   
 	return 0;
 	
 	

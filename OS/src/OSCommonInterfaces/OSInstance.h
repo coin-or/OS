@@ -510,15 +510,26 @@ private:
 	 */
 	std::map<int, std::vector<OSnLNode*> > m_mapExpressionTreesInPostfix ;
 	
-	/*
-	 *m_mdConstraintFunctionValues holds a double array of constraint function values -- the size of the array is equal to getConstraintNumber().  
-    */
+	/**
+	 * m_mdConstraintFunctionValues holds a double array of constraint function values -- the size of the array is equal to getConstraintNumber().  
+     */
     double *m_mdConstraintFunctionValues;
     
-    /*
-	 *m_mdObjectiveFunctionValues holds a double array of objective function values -- the size of the array is equal to getObjectiveNumber().  
-    */
+    /**
+	 * m_mdObjectiveFunctionValues holds a double array of objective function values -- the size of the array is equal to getObjectiveNumber().  
+     */
     double *m_mdObjectiveFunctionValues;
+    
+    /**
+	 *m_miJacStart holds a int array of starts for the Jacobian matrix in sparse form (row major).  
+     */    
+ 	int *m_miJacStart;
+ 	
+ 	/**
+	 * m_miNumJacConTerms holds a int array of the number of constant
+	 * terms (gradient does not change) for the Jacobian matrix in sparse form (row major).  
+     */    
+ 	int *m_miNumJacConTerms;
 	
 	/**
 	 * process variables. 
@@ -1206,8 +1217,22 @@ std::vector<FirstPartialStruct*> *calculateAllObjectiveFunctionGradients(int idx
 
 std::vector<FirstPartialStruct*> *getAllObjectiveFunctionGradientsBase();			
 
-
-
+	/**
+	 * 
+	 * @param isColumnMajor holds whether the coefMatrix (AMatrix) holding linear program
+	 * data is stored by column. If false, the matrix is stored by row.
+	 * @param start holds an integer array of start elements in coefMatrix (AMatrix),
+	 * which points to the start of a column (row) of nonzero elements in coefMatrix (AMatrix).
+	 * @param index holds an integer array of rowIdx (or colIdx) elements in coefMatrix (AMatrix).
+	 * If the matrix is stored by column (row), rowIdx (colIdx) is the array of row (column) indices.
+	 * @param value holds a double array of value elements in coefMatrix (AMatrix),
+	 * which contains nonzero elements.
+	 * @param dimension holds the column count if the input matrix is row major (row count = start.length-1)
+	 * or the row number if the input matrix is column major (columnh count = start.length -1)
+	 * @return Linear constraint coefficient matrix in the other major of the input matrix. Return null if input matrix not valid.
+	 */
+	 
+bool getSparseJacobianFromColumnMajor();
 
 
 																																																			

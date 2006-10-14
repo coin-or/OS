@@ -1344,6 +1344,7 @@ double OSInstance::calculateFunctionValue(int idx, double* x, bool functionEvalu
 	// if false we call calculateAllConstraintFunctionValues() and calculateAllObjectiveFunctionValues()
 	// and then retrieve as if true
 	//
+	return NULL;
 }//calculateFunctionValue
 
 
@@ -1358,6 +1359,7 @@ double *OSInstance::calculateAllConstraintFunctionValues( double* x, bool functi
 	// for nonlinear part call getNonlinearExpressionTreeIndexes()
 	// for each nonnegative row call call expTree = osinstance->getNonlinearExpressionTree( idx)
 	// then expTree->calculateFunction(x, false) and add to correxponding index in m_mdConstraintFunctionValues
+	return NULL;
 }//calculateAllConstraintFunctionValues
 
 
@@ -1368,15 +1370,18 @@ double *OSInstance::calculateAllObjectiveFunctionValues( double* x, bool functio
 	// if not NULL first get linear values
 	// if not NULL then get quadratic values
 	// if not NULL then get nonlinear vaues
+	return NULL;
 }//calculateAllConstraintFunctionValues
 
 double *OSInstance::calculateLinearConstraintFunctionValues( double* x){
 	// Jun's implementation plus row -- see his calculateLinearConstraintFunctionValues( double *x);
+	return NULL;
 }//calculateConstraintFunctionValues
 
 
 
 double *OSInstance::calculateQuadraticConstraintFunctionValues( double* x){
+	return NULL;
 	// see Jun's code method by the same name.
 }//calculateQuadraticConstraintFunctionValues
 
@@ -1388,7 +1393,6 @@ std::vector<FirstPartialStruct*> OSInstance::calculateFunctionGradient(int idx, 
 	// if false we call calculateAllConstraintFunctionGradients() and calculateAllObjectiveFunctionGradients()
 	// and then retrieve as if true
 	//
-	
 }//calculateFunctionGradient
 
 std::vector<FirstPartialStruct*> * OSInstance::calculateAllConstraintFunctionGradients(int idx, double* x, bool functionEvaluated, bool gradientEvaluated){
@@ -1397,10 +1401,12 @@ std::vector<FirstPartialStruct*> * OSInstance::calculateAllConstraintFunctionGra
 2. calculate two partials for each qpterm and add (according to m_mVarIdxVectorPosMap) the two values to the copy of m_mvAllConstraintFunctionGradientsBase. 
 3. get the gradient for each expTree and add (according to m_mVarIdxVectorPosMap) the firstPartial for each variableIdx 
  */
+  return NULL;
 }//calculateAllConstraintFunctionGradients					
 
 std::vector<FirstPartialStruct*> * OSInstance::calculateAllObjectiveFunctionGradients(int idx, double* x, bool functionEvaluated, bool gradientEvaluated){
 //similar logic to calculateAllConstraintFunctionGradients
+	return NULL;
 }//calculateAllObjectiveFunctionGradients
 
 std::vector<FirstPartialStruct*> *OSInstance::getAllConstraintFunctionGradientsBase(){
@@ -1431,11 +1437,96 @@ update m_mVarIdxVectorPosMap  -- array of varIdxVectorPosMaps -- nl idx is arrar
 m_mvAllConstraintFunctionGradientsBase = true;
 
  */
+ return NULL;
 }//getAllConstraintFunctionGradientsBase
 
 std::vector<FirstPartialStruct*> *OSInstance::getAllObjectiveFunctionGradientsBase(){
 //similar logic to getAllConstraintFunctionGradientsBase
- 
+	return NULL;
 }//getAllObjectiveFunctionGradientsBase
 
+bool OSInstance::getSparseJacobianFromColumnMajor( ){
+	if( m_bColumnMajor == false) return false;
+	//if(!start || startSize <= 1 ) return NULL;
+	//if(!value  || !index  ) return NULL;	
+
+	int iNumRowStarts = getConstraintNumber() + 1;	
+	int i,j, iTemp;
+	int iNumVariableStarts = getVariableNumber() - 1;
+	int *start = this->instanceData->linearConstraintCoefficients->start->el;
+	int *index = this->instanceData->linearConstraintCoefficients->rowIdx->el;
+	m_miJacStart = new int( iNumRowStarts);
+	m_miNumJacConTerms = new int( getConstraintNumber());
+	//int* miIndex = matrix->indexes;
+	//double* mdValue = matrix->values;
+	for ( i = 0; i < iNumRowStarts; i++){			
+		m_miJacStart [ i ] = 0;
+		// map the variables  in the nonlinear rows
+		if( m_mapExpressionTrees.find( i) != m_mapExpressionTrees.end() ){
+			//m_treeRoot->getVariableIndexMap( i);
+			m_mapExpressionTrees[ i]->getVariableIndiciesMap();
+			
+		}
+	}
+	
+	// i is indexing columns (variables) and j is indexing row numbers 
+	for (i = 0; i < iNumVariableStarts; i++){	
+		for (j = start[i]; j < start[ i + 1 ]; j++){
+			// index[ j] is a row index, we have just found an occurance of row index[j]
+			// therefore we increase by 1 (or push back) the start of the row indexed by index[j] + 1, 
+			// i.e. the start of the next row
+			// check to see if variable i is linear in the row index[ j] 
+			// if so do not increment m_miJacStart[ index[j] + 1]
+			//
+			if( (m_mapExpressionTrees.find( index[ j]) != m_mapExpressionTrees.end() ) &&
+				(m_mapExpressionTrees[ index[ j]]->mapVarIdx.find( i) != m_mapExpressionTrees[ index[ j]]->mapVarIdx.end()) ){
+					std::cout << "HERE I AM" << std::endl;	
+					// add variable i to the expression tree for row index[ j]
+			}
+			else{ 
+				m_miJacStart[ index[j] + 1] ++;
+			}				
+		}
+		
+	}
+	// at this point, m_miJacStart[ i] holds the number of columns with a linear nonzero in row i - 1
+	// we are not done with the start indicies, if we are here, and we
+	// knew the correct starting point of row i -1, the correct starting point
+	// for row i is m_miJacStart[i] + m_miJacStart [i - 1]
+	m_miJacStart[0] = 0;
+	for (i = 1; i < iNumRowStarts; i++ ){
+		m_miNumJacConTerms[ i - 1] = m_miJacStart[i];
+		if( m_mapExpressionTrees.find( i) != m_mapExpressionTrees.end() ){
+			m_miJacStart[i] += (m_miJacStart [i - 1] + m_mapExpressionTrees[ i]->mapVarIdx.size() );
+		}
+		else{
+			m_miJacStart[i] += m_miJacStart [i - 1];
+		}	
+		std::cout <<  "Jacobian row start " << m_miJacStart[i]<< std::endl;	
+		std::cout <<  "Number of constant terms " << m_miNumJacConTerms[ i - 1] << std::endl;	
+	}
+	
+	// dimension miIndex and mdValue here
+	
+	// now get the correct values
+	// again assume we are converting column major to row major
+	// loop over bariables		
+	/*for (i = 0; i < iNumSource; i++){
+		// get row indices and values of the A matrix
+		for (j = start[i]; j < start[ i + 1 ]; j++){
+			iTemp = m_miJacStart[ index[j]];
+			miIndex [ iTemp] = i;
+			mdValue [ iTemp] = value[j];
+			m_miJacStart[ index[j]] ++;				
+		}			
+	} 
+		
+	// m_miJacStart[ i] is now equal to m_miJacStart[ i + 1], so readjust
+	for (i = iStartSize - 1; i >= 1; i-- ){
+		m_miJacStart[i] = m_miJacStart [i - 1] ;		
+	}
+	*/
+	m_miJacStart[0] = 0;
+	return true;
+}//getSparseJacobianFromColumnMajor
 

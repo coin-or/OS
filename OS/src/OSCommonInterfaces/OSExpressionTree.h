@@ -116,15 +116,25 @@ public:
 	 */
 	std::vector<OSnLNode*> getPostfixFromExpressionTree();
 	
+
+	
 	/**
-	 * Retrieve an integer vector of the indicies of the variables
+	 * m_mvarIdx is a map used by
+	 * constructCppADTree(std::map<int, int> *varIdx, CppAD::vector< AD<double> > *XAD)
+	 * to generate the infix expression for CPPAD -- the key is idx a variable number, the  
+	 * value of the map is the corresponding variable count in sparse representation
+	 */	
+	std::map<int, int> mapVarIdx;
+	
+	/**
+	 * Retrieve a map of the indicies of the variables
 	 * that are in the expression tree
 	 * 
 	 * </p>
 	 * 
-	 * @return the indicies of the variables in the current expression tree.
+	 * @return a map of the variables in the current expression tree.
 	 */
-	std::vector<int> getVariableIndicies();
+	std::map<int, int> getVariableIndiciesMap();
 	
 private:
 
@@ -136,14 +146,7 @@ private:
 	 */	
 	CppAD::vector< AD<double> > m_vXAD;
 	
-	/**
-	 * varIdx is a map used by
-	 * constructCppADTree(std::map<int, int> *varIdx, CppAD::vector< AD<double> > *XAD)
-	 * to generate the infix expression for CPPAD -- the key is idx a variable number, the  
-	 * value of the map is the corresponding count in terms of nonzero elements
-	 * we need to preserve the sparsity of the calculation
-	 */	
-	std::map<int, int> m_mVarIdx;
+
 	
 	/**
 	 * posVarIdx is a map iterator used by the map varIdx
