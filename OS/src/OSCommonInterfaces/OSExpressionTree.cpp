@@ -21,9 +21,12 @@
 using std::cout; 
 using std::endl;
 
-OSExpressionTree::OSExpressionTree(){
-	m_treeRoot = NULL;
-	m_bCppADTreeBuilt = false;
+OSExpressionTree::OSExpressionTree():
+	m_treeRoot( NULL),
+	m_bCppADTreeBuilt( false),
+	m_bIndexMapGenerated( false),
+	mapVarIdx( NULL)
+	{
 }//end OSExpressionTree
 
  
@@ -33,6 +36,8 @@ OSExpressionTree::~OSExpressionTree(){
 	//#endif
 	delete m_treeRoot;
 	m_treeRoot = NULL;
+	if(mapVarIdx != NULL) delete mapVarIdx;
+	mapVarIdx = NULL;
 }//end ~OSExpressionTree 
 
 
@@ -49,13 +54,14 @@ std::vector<OSnLNode*> OSExpressionTree::getPrefixFromExpressionTree(){
 double OSExpressionTree::calculateFunction( double *x, bool functionEvaluated){
 	if( m_bCppADTreeBuilt == false){
 		// map the variables
-		m_treeRoot->getVariableIndexMap( &mapVarIdx);		
+		if( m_bIndexMapGenerated == false) getVariableIndiciesMap();
+		m_treeRoot->getVariableIndexMap( mapVarIdx);		
 		// convert the double x vector to an AD vector
-		for(m_mPosVarIdx = mapVarIdx.begin(); m_mPosVarIdx != mapVarIdx.end(); ++m_mPosVarIdx){
+		for(m_mPosVarIdx = (*mapVarIdx).begin(); m_mPosVarIdx != (*mapVarIdx).end(); ++m_mPosVarIdx){
 			m_vXAD.push_back( x[ m_mPosVarIdx->first] );
 		}
 		CppAD::Independent( m_vXAD);
-		m_CppADTree = m_treeRoot->constructCppADTree(&mapVarIdx, &m_vXAD);
+		m_CppADTree = m_treeRoot->constructCppADTree(mapVarIdx, &m_vXAD);
 		m_vZ.push_back( m_CppADTree) ;
 		f = new CppAD::ADFun<double>(m_vXAD, m_vZ);
 		m_vY.push_back(0.0); 
@@ -63,7 +69,7 @@ double OSExpressionTree::calculateFunction( double *x, bool functionEvaluated){
 	}
 	if(functionEvaluated == true) return m_vY[ 0];
 	m_vX.clear();
-	for(m_mPosVarIdx = mapVarIdx.begin(); m_mPosVarIdx != mapVarIdx.end(); ++m_mPosVarIdx){
+	for(m_mPosVarIdx = (*mapVarIdx).begin(); m_mPosVarIdx != (*mapVarIdx).end(); ++m_mPosVarIdx){
 		m_vX.push_back( x[ m_mPosVarIdx->first] );
 	}
 	m_vY = (*f).Forward(0, m_vX) ;
@@ -74,29 +80,30 @@ std::vector<FirstPartialStruct*> OSExpressionTree::calculateGradient( double *x,
 	// note x is a dense vector
 	if( m_bCppADTreeBuilt == false){
 		// map the variables
-		m_treeRoot->getVariableIndexMap( &mapVarIdx);		
+		if( m_bIndexMapGenerated == false) getVariableIndiciesMap();
+		m_treeRoot->getVariableIndexMap( mapVarIdx);		
 		// convert the double x vector to an AD vector
-		for(m_mPosVarIdx = mapVarIdx.begin(); m_mPosVarIdx != mapVarIdx.end(); ++m_mPosVarIdx){
+		for(m_mPosVarIdx = (*mapVarIdx).begin(); m_mPosVarIdx != (*mapVarIdx).end(); ++m_mPosVarIdx){
 			m_vXAD.push_back( x[ m_mPosVarIdx->first] );
 		}
 		CppAD::Independent( m_vXAD);
-		m_CppADTree = m_treeRoot->constructCppADTree(&mapVarIdx, &m_vXAD);
+		m_CppADTree = m_treeRoot->constructCppADTree(mapVarIdx, &m_vXAD);
 		m_vZ.push_back( m_CppADTree) ;
 		f = new CppAD::ADFun<double>(m_vXAD, m_vZ);
 		m_bCppADTreeBuilt = true;
 	}
 	if( functionEvaluated == false){
 		m_vX.clear();
-		for(m_mPosVarIdx = mapVarIdx.begin(); m_mPosVarIdx != mapVarIdx.end(); ++m_mPosVarIdx){
+		for(m_mPosVarIdx = (*mapVarIdx).begin(); m_mPosVarIdx != (*mapVarIdx).end(); ++m_mPosVarIdx){
 			m_vX.push_back( x[ m_mPosVarIdx->first] );
 		}
 	}
- 	std::vector<double> jac( mapVarIdx.size() ); 	// Jacobian of f 
+ 	std::vector<double> jac( (*mapVarIdx).size() ); 	// Jacobian of f 
    	jac  = (*f).Jacobian( m_vX);	// Jacobian for operation sequence
 	// print the results
 	std::vector<FirstPartialStruct*> firstPartialVector;
 	struct FirstPartialStruct *firstPartial;
-	for(m_mPosVarIdx = mapVarIdx.begin(); m_mPosVarIdx != mapVarIdx.end(); ++m_mPosVarIdx){
+	for(m_mPosVarIdx = (*mapVarIdx).begin(); m_mPosVarIdx != (*mapVarIdx).end(); ++m_mPosVarIdx){
 		firstPartial = new FirstPartialStruct();
 		firstPartial->index_i = m_mPosVarIdx->first;
 		firstPartial->firstPartial_i  = jac[ m_mPosVarIdx->second];
@@ -109,21 +116,22 @@ std::vector<FirstPartialStruct*> OSExpressionTree::calculateGradient( double *x,
 std::vector<SecondPartialStruct*>  OSExpressionTree::calculateHessian( double *x, bool functionEvaluated){
 	if( m_bCppADTreeBuilt == false){
 		// map the variables
-		m_treeRoot->getVariableIndexMap( &mapVarIdx);		
+		if( m_bIndexMapGenerated == false) getVariableIndiciesMap();
+		m_treeRoot->getVariableIndexMap( mapVarIdx);		
 		// convert the double x vector to an AD vector
-		for(m_mPosVarIdx = mapVarIdx.begin(); m_mPosVarIdx != mapVarIdx.end(); ++m_mPosVarIdx){
+		for(m_mPosVarIdx = (*mapVarIdx).begin(); m_mPosVarIdx != (*mapVarIdx).end(); ++m_mPosVarIdx){
 			m_vXAD.push_back( x[ m_mPosVarIdx->first] );
 		}
 		CppAD::Independent( m_vXAD);
-		m_CppADTree = m_treeRoot->constructCppADTree(&mapVarIdx, &m_vXAD);
+		m_CppADTree = m_treeRoot->constructCppADTree(mapVarIdx, &m_vXAD);
 		m_vZ.push_back( m_CppADTree) ;
 		f = new CppAD::ADFun<double>(m_vXAD, m_vZ);
 		m_bCppADTreeBuilt = true;
 	}
-	int numSparseVars = mapVarIdx.size();
+	int numSparseVars = (*mapVarIdx).size();
 	if( functionEvaluated == false){
 		m_vX.clear();
-		for(m_mPosVarIdx = mapVarIdx.begin(); m_mPosVarIdx != mapVarIdx.end(); ++m_mPosVarIdx){
+		for(m_mPosVarIdx = (*mapVarIdx).begin(); m_mPosVarIdx != (*mapVarIdx).end(); ++m_mPosVarIdx){
 			m_vX.push_back( x[ m_mPosVarIdx->first] );
 		}
 	}
@@ -133,8 +141,8 @@ std::vector<SecondPartialStruct*>  OSExpressionTree::calculateHessian( double *x
 	// now get values
 	std::vector<SecondPartialStruct*> secondPartialVector;
 	struct SecondPartialStruct *secondPartial;
-	for(m_mPosVarIdx = mapVarIdx.begin(); m_mPosVarIdx != mapVarIdx.end(); ++m_mPosVarIdx){
-		for(m_mPosVarIdx2 = mapVarIdx.begin(); m_mPosVarIdx2 != mapVarIdx.end(); ++m_mPosVarIdx2){
+	for(m_mPosVarIdx = (*mapVarIdx).begin(); m_mPosVarIdx != (*mapVarIdx).end(); ++m_mPosVarIdx){
+		for(m_mPosVarIdx2 = (*mapVarIdx).begin(); m_mPosVarIdx2 != (*mapVarIdx).end(); ++m_mPosVarIdx2){
 			secondPartial = new SecondPartialStruct();
 			secondPartial->index_i = m_mPosVarIdx->first;
 			secondPartial->index_j = m_mPosVarIdx2->first;
@@ -145,8 +153,11 @@ std::vector<SecondPartialStruct*>  OSExpressionTree::calculateHessian( double *x
 	return secondPartialVector;
 }//calculateGradient
 
-std::map<int, int> OSExpressionTree::getVariableIndiciesMap(){
-	m_treeRoot->getVariableIndexMap( &mapVarIdx);
+std::map<int, int> *OSExpressionTree::getVariableIndiciesMap(){
+	if( m_bIndexMapGenerated == true) return mapVarIdx;
+	mapVarIdx = new std::map<int, int>();
+	m_treeRoot->getVariableIndexMap( mapVarIdx);
+	m_bIndexMapGenerated = true;
 	return mapVarIdx;
 }//getVariableIndicies
 

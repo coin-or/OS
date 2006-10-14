@@ -521,9 +521,20 @@ private:
     double *m_mdObjectiveFunctionValues;
     
     /**
-	 *m_miJacStart holds a int array of starts for the Jacobian matrix in sparse form (row major).  
+	 * m_miJacStart holds a int array of starts for the Jacobian matrix in sparse form (row major).  
      */    
  	int *m_miJacStart;
+ 	
+     /**
+	 * m_miJacIndexes holds a int array of variable indicies for the Jacobian matrix in sparse form (row major).  
+     */    
+ 	int *m_miJacIndexes;
+ 	
+     /**
+	 * m_miJacValues holds a double array of partial derivatives for the Jacobian matrix in sparse form (row major).  
+     */    
+ 	int *m_mdJacValues;
+ 	
  	
  	/**
 	 * m_miNumJacConTerms holds a int array of the number of constant

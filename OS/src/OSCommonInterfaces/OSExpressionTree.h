@@ -124,7 +124,7 @@ public:
 	 * to generate the infix expression for CPPAD -- the key is idx a variable number, the  
 	 * value of the map is the corresponding variable count in sparse representation
 	 */	
-	std::map<int, int> mapVarIdx;
+	std::map<int, int> *mapVarIdx;
 	
 	/**
 	 * Retrieve a map of the indicies of the variables
@@ -134,9 +134,14 @@ public:
 	 * 
 	 * @return a map of the variables in the current expression tree.
 	 */
-	std::map<int, int> getVariableIndiciesMap();
+	std::map<int, int> *getVariableIndiciesMap();
 	
 private:
+
+	/**
+	 * m_bIndexMapGenerated is set to true if getVariableIndiciesMap() has been called
+	 */	
+	bool  m_bIndexMapGenerated;
 
 	/**
 	 * XAD is a vector of AD doubles used by

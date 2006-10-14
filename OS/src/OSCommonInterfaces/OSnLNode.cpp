@@ -1232,7 +1232,7 @@ AD<double> OSnLNodeVariable::constructCppADTree(std::map<int, int> *varIdx, CppA
 void OSnLNodeVariable::getVariableIndexMap(std::map<int, int> *varIdx){
 	int numVars;
 	if( (*varIdx).find( idx) != (*varIdx).end() ){
-		std::cout  << "This index already in the map " << idx <<  std::endl;
+		//std::cout  << "This index already in the map " << idx <<  std::endl;
 	}
 	else{ // variable to map with variable index as the key
 		//std::cout << "Found a new index to add to the map " << idx << std::endl;
@@ -1240,7 +1240,7 @@ void OSnLNodeVariable::getVariableIndexMap(std::map<int, int> *varIdx){
 		//std::cout << "numVars =  " << numVars << std::endl;
 		(*varIdx)[ idx] = numVars ;
 	}
-	std::cout << "Value of index = " << (*varIdx)[ idx] << std::endl;
+	//std::cout << "Value of index = " << (*varIdx)[ idx] << std::endl;
 }//getVariableIndexMap
 
 

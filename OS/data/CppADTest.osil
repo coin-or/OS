@@ -43,7 +43,7 @@
 			<qTerm idx="0" idxOne="1" idxTwo="1" coef="11"/>
 			<qTerm idx="0" idxOne="0" idxTwo="1" coef="3"/>
 		</quadraticCoefficients>
-		<nonlinearExpressions numberOfNonlinearExpressions="4">
+		<nonlinearExpressions numberOfNonlinearExpressions="3">
 			<nl idx="-1">
 				<plus>
 					<power>
@@ -69,30 +69,9 @@
 				</plus>
 			</nl>
 			<nl idx="1">
-				<plus>
-						<minus>
-							<number type="real" value="1.0"/>
-							<variable coef="1.0" idx="0"/>
-						</minus>			
-					<times>
-						<number type="real" value="100"/>
-						<power>
-							<minus>
-								<variable coef="1.0" idx="1"/>
-								<power>
-									<variable coef="1.0" idx="0"/>
-									<number type="real" value="2.0"/>
-								</power>
-							</minus>
-							<number type="real" value="2.0"/>
-						</power>
-					</times>
-				</plus>
-			</nl>
-			<nl idx="1">
 				<ln>
 					<times>
-						<variable coef="1.0" idx="0"/>
+						<variable coef="1.0" idx="1"/>
 						<variable coef="1.0" idx="1"/>
 					</times>	
 				</ln>
