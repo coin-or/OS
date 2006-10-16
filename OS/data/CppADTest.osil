@@ -10,7 +10,7 @@
 		<variables numberOfVariables="3">
 			<var lb="0" name="x0" type="C"/>
 			<var lb="0" name="x1" type="C"/>
-			<var lb="0" name="x1" type="C"/>
+			<var lb="0" name="x2" type="C"/>
 		</variables>
 		<objectives numberOfObjectives=" 1">
 			<obj maxOrMin="min" name="minCost" numberOfObjCoef="1">
@@ -71,8 +71,8 @@
 			<nl idx="1">
 				<ln>
 					<times>
-						<variable coef="1.0" idx="1"/>
-						<variable coef="1.0" idx="1"/>
+						<variable coef="1.0" idx="0"/>
+						<variable coef="1.0" idx="2"/>
 					</times>	
 				</ln>
 			</nl>

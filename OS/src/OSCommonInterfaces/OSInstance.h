@@ -526,21 +526,21 @@ private:
  	int *m_miJacStart;
  	
      /**
-	 * m_miJacIndexes holds a int array of variable indicies for the Jacobian matrix in sparse form (row major).  
+	 * m_miJacIndex holds a int array of variable indicies for the Jacobian matrix in sparse form (row major).  
      */    
- 	int *m_miJacIndexes;
+ 	int *m_miJacIndex;
  	
      /**
-	 * m_miJacValues holds a double array of partial derivatives for the Jacobian matrix in sparse form (row major).  
+	 * m_mdJacValue holds a double array of partial derivatives for the Jacobian matrix in sparse form (row major).  
      */    
- 	int *m_mdJacValues;
+ 	double *m_mdJacValue;
  	
  	
  	/**
-	 * m_miNumJacConTerms holds a int array of the number of constant
+	 * m_miJacNumConTerms holds a int array of the number of constant
 	 * terms (gradient does not change) for the Jacobian matrix in sparse form (row major).  
      */    
- 	int *m_miNumJacConTerms;
+ 	int *m_miJacNumConTerms;
 	
 	/**
 	 * process variables. 
@@ -707,7 +707,9 @@ public:
 	/**
 	 * Get objective coefficient number. One number for each objective.
 	 * 
-	 * @return an integer array of objective coefficient numbers, null if no objectives. 
+	 * @return an integer array of size of which is equal to number of objectives, 
+	 * each element of the array is the number of nonzero coefficients in that
+	 * objective function, null if no objectives. 
 	 * @throws Exception if the elements in objectives are logically inconsistent. 
 	 */
 	int* getObjectiveCoefficientNumbers();
@@ -1066,184 +1068,181 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	int* indexes, int indexesBegin, int indexesEnd,   			
 	int* starts, int startsBegin, int startsEnd);
 	
-/**
- * set quadratic terms
- * 
- * <p>
- * 
- * @param number holds the number of quadratic terms. 
- * @param rowIndexes holds an integer array of row indexes of all the quadratic terms. 
- * A negative integer corresponds to an objective row, e.g. -1 for 1st objective and -2 for 2nd.
- * @param varOneIndexes holds an integer array of the first varialbe indexes of all the quadratic terms.
- * @param varTwoIndexes holds an integer array of the second varialbe indexes of all the quadratic terms.
- * @param coefficients holds a double array all the quadratic term coefficients.
- * @param begin holds the begin index of all the arrays to copy from (usually = 0). 
- * @param end holds the end index of all the arrays to copy till (usually = array length -1).
- * @return whether the quadratic terms are set successfully.  
- */
-bool setQuadraticTerms(int number, 
-	int* rowIndexes, int* varOneIndexes, int* varTwoIndexes, double* coefficients,
-	int begin, int end);
+	/**
+	 * set quadratic terms
+	 * 
+	 * <p>
+	 * 
+	 * @param number holds the number of quadratic terms. 
+	 * @param rowIndexes holds an integer array of row indexes of all the quadratic terms. 
+	 * A negative integer corresponds to an objective row, e.g. -1 for 1st objective and -2 for 2nd.
+	 * @param varOneIndexes holds an integer array of the first varialbe indexes of all the quadratic terms.
+	 * @param varTwoIndexes holds an integer array of the second varialbe indexes of all the quadratic terms.
+	 * @param coefficients holds a double array all the quadratic term coefficients.
+	 * @param begin holds the begin index of all the arrays to copy from (usually = 0). 
+	 * @param end holds the end index of all the arrays to copy till (usually = array length -1).
+	 * @return whether the quadratic terms are set successfully.  
+	 */
+	bool setQuadraticTerms(int number, 
+		int* rowIndexes, int* varOneIndexes, int* varTwoIndexes, double* coefficients,
+		int begin, int end);
+		
+		
+	// calculate methods
 	
 	
-// calculate methods
-
-
-/**
- * Calculate the function value for function (constraint or objective) 
- * indexed by idx
- * 
- * <p>
- * 
- * @param idx is the index on the constraint (0, 1, 2, 3, ...) or objective function (-1, -2, -3, ...). 
- * @param x is a pointer (double array) to the current variable values
- * @param functionEvaluated is true if any (not just idx) function (constraint or objective) 
- * has been evaluated for the current iterate x
- * use a value of false if not sure
- * @return the function value as a double.  
- */
-double calculateFunctionValue(int idx, double* x, bool functionEvaluated);
-
-
-
-/**
- * Calculate all of the constraint function values
- * 
- * <p>
- * 
- * @param x is a pointer (double array) to the current variable values
- * @param functionEvaluated is true if any constraint function has been evaluated for the current iterate x.
- * use a value of false if not sure
- * @return a double array of constraint function values -- the size of the array is equal to getConstraintNumber().  
- */
-double *calculateAllConstraintFunctionValues( double* x, bool functionEvaluated);
-
-/**
- * Calculate all of the objective function values
- * 
- * <p>
- * 
- * @param x is a pointer (double array) to the current variable values
- * @param functionEvaluated is true if any objective function has been evaluated for the current iterate x.
- * use a value of false if not sure
- * @return a double array of objective function values -- the size of the array is equal to getObjectiveNumber().  
- */
-double *calculateAllObjectiveFunctionValues( double* x, bool functionEvaluated);
-
-
-/**
- * Calculate all of the linear constraint function values
- * 
- * <p>
- * 
- * @param x is a pointer (double array) to the current variable values
- * @return a double array of linear constraint function values -- the size of the array is equal to getConstraintNumber().  
- */
-double *calculateLinearConstraintFunctionValues( double* x);
-
-/**
- * Calculate the quadratic part of every constraint function 
- * 
- * <p>
- * 
- * @param x is a pointer (double array) to the current variable values
- * @return a double array of quadratic constraint function values -- the size of the array is equal to getConstraintNumber().  
- */
-double *calculateQuadraticConstraintFunctionValues( double* x);
-
-/**
- * Calculate the gradient of function (constraint or objective) 
- * indexed by idx
- * 
- * <p>
- * 
- * @param idx is the index on the constraint (0, 1, 2, 3, ...) or objective function (-1, -2, -3, ...). 
- * @param x is a pointer (double array) to the current variable values
- * @param functionEvaluated is true if any (not just idx) function (constraint or objective) 
- * has been evaluated for the current iterate x
- * use a value of false if not sure
- * @param gradientEvaluated is true if any (not just idx) function gradient (constraint or objective) 
- * has been evaluated for the current iterate x
- * use a value of false if not sure
- * @return a vector of FirstPartialStructs (first member is the variable idx, second memeber is
- * the partial with respect to that variable) that represent a sparse implementaton.  
- */
-std::vector<FirstPartialStruct*> calculateFunctionGradient(int idx, double* x, bool functionEvaluated, bool gradientEvaluated);																																																								
-
-
-
-/**
- * Calculate the gradient of all constraint functions  
- * 
- * <p>
- * 
- * @param x is a pointer (double array) to the current variable values
- * @param functionEvaluated is true if any constraint function gradient
- * has been evaluated for the current iterate x
- * use a value of false if not sure
- * @param gradientEvaluated is true if any constraint function gradient
- * has been evaluated for the current iterate x
- * use a value of false if not sure
- * @return a pointer to an array of FirstPartialStruct (first member is the variable idx, second memeber is
- * the partial with respect to that variable) vectors that represent a sparse implementaton. 
- * Each array member corresponds to one constraint gradient.
- */
-std::vector<FirstPartialStruct*> *calculateAllConstraintFunctionGradients(int idx, double* x, bool functionEvaluated, bool gradientEvaluated);				
-
-/**
- * Get the base data structure of all the constraint function gradients. 
- * 
- * @return a pointer to an array of FirstPartialStruct (first member is the variable idx, second memeber is
- * the partial with respect to that variable) vectors that represent a sparse implementaton. 
- * Each array member corresponds to one constraint gradient.
- */
-std::vector<FirstPartialStruct*> *getAllConstraintFunctionGradientsBase();				
-
-
-/**
- * Calculate the gradient of all objective functions  
- * 
- * <p>
- * 
- * @param x is a pointer (double array) to the current variable values
- * @param functionEvaluated is true if any objective function gradient
- * has been evaluated for the current iterate x
- * use a value of false if not sure
- * @param gradientEvaluated is true if any objective function gradient
- * has been evaluated for the current iterate x
- * use a value of false if not sure
- * @return a pointer to an array of FirstPartialStruct (first member is the variable idx, second memeber is
- * the partial with respect to that variable) vectors that represent a sparse implementaton. 
- * Each array member corresponds to one objective gradient.
- */
-std::vector<FirstPartialStruct*> *calculateAllObjectiveFunctionGradients(int idx, double* x, bool functionEvaluated, bool gradientEvaluated);			
-
-/**
- * Get the base data structure of all the objective function gradients. 
- * 
- * @return a pointer to an array of FirstPartialStruct (first member is the variable idx, second memeber is
- * the partial with respect to that variable) vectors that represent a sparse implementaton. 
- * Each array member corresponds to one objective gradient.
- */
-
-std::vector<FirstPartialStruct*> *getAllObjectiveFunctionGradientsBase();			
-
+	/**
+	 * Calculate the function value for function (constraint or objective) 
+	 * indexed by idx
+	 * 
+	 * <p>
+	 * 
+	 * @param idx is the index on the constraint (0, 1, 2, 3, ...) or objective function (-1, -2, -3, ...). 
+	 * @param x is a pointer (double array) to the current variable values
+	 * @param functionEvaluated is true if any (not just idx) function (constraint or objective) 
+	 * has been evaluated for the current iterate x
+	 * use a value of false if not sure
+	 * @return the function value as a double.  
+	 */
+	double calculateFunctionValue(int idx, double* x, bool functionEvaluated);
+	
+	
+	
+	/**
+	 * Calculate all of the constraint function values
+	 * 
+	 * <p>
+	 * 
+	 * @param x is a pointer (double array) to the current variable values
+	 * @param functionEvaluated is true if any constraint function has been evaluated for the current iterate x.
+	 * use a value of false if not sure
+	 * @return a double array of constraint function values -- the size of the array is equal to getConstraintNumber().  
+	 */
+	double *calculateAllConstraintFunctionValues( double* x, bool functionEvaluated);
+	
+	/**
+	 * Calculate all of the objective function values
+	 * 
+	 * <p>
+	 * 
+	 * @param x is a pointer (double array) to the current variable values
+	 * @param functionEvaluated is true if any objective function has been evaluated for the current iterate x.
+	 * use a value of false if not sure
+	 * @return a double array of objective function values -- the size of the array is equal to getObjectiveNumber().  
+	 */
+	double *calculateAllObjectiveFunctionValues( double* x, bool functionEvaluated);
+	
+	
+	/**
+	 * Calculate all of the linear constraint function values
+	 * 
+	 * <p>
+	 * 
+	 * @param x is a pointer (double array) to the current variable values
+	 * @return a double array of linear constraint function values -- the size of the array is equal to getConstraintNumber().  
+	 */
+	double *calculateLinearConstraintFunctionValues( double* x);
+	
+	/**
+	 * Calculate the quadratic part of every constraint function 
+	 * 
+	 * <p>
+	 * 
+	 * @param x is a pointer (double array) to the current variable values
+	 * @return a double array of quadratic constraint function values -- the size of the array is equal to getConstraintNumber().  
+	 */
+	double *calculateQuadraticConstraintFunctionValues( double* x);
+	
+	/**
+	 * Calculate the gradient of function (constraint or objective) 
+	 * indexed by idx
+	 * 
+	 * <p>
+	 * 
+	 * @param idx is the index on the constraint (0, 1, 2, 3, ...) or objective function (-1, -2, -3, ...). 
+	 * @param x is a pointer (double array) to the current variable values
+	 * @param functionEvaluated is true if any (not just idx) function (constraint or objective) 
+	 * has been evaluated for the current iterate x
+	 * use a value of false if not sure
+	 * @param gradientEvaluated is true if any (not just idx) function gradient (constraint or objective) 
+	 * has been evaluated for the current iterate x
+	 * use a value of false if not sure
+	 * @return a vector of FirstPartialStructs (first member is the variable idx, second memeber is
+	 * the partial with respect to that variable) that represent a sparse implementaton.  
+	 */
+	std::vector<FirstPartialStruct*> calculateFunctionGradient(int idx, double* x, bool functionEvaluated, bool gradientEvaluated);																																																								
+	
+	
+	
+	/**
+	 * Calculate the gradient of all constraint functions  
+	 * 
+	 * <p>
+	 * 
+	 * @param x is a pointer (double array) to the current variable values
+	 * @param functionEvaluated is true if any constraint function gradient
+	 * has been evaluated for the current iterate x
+	 * use a value of false if not sure
+	 * @param gradientEvaluated is true if any constraint function gradient
+	 * has been evaluated for the current iterate x
+	 * use a value of false if not sure
+	 * @return a pointer to an array of FirstPartialStruct (first member is the variable idx, second memeber is
+	 * the partial with respect to that variable) vectors that represent a sparse implementaton. 
+	 * Each array member corresponds to one constraint gradient.
+	 */
+	std::vector<FirstPartialStruct*> *calculateAllConstraintFunctionGradients(int idx, double* x, bool functionEvaluated, bool gradientEvaluated);				
+	
+	/**
+	 * Get the base data structure of all the constraint function gradients. 
+	 * 
+	 * @return a pointer to an array of FirstPartialStruct (first member is the variable idx, second memeber is
+	 * the partial with respect to that variable) vectors that represent a sparse implementaton. 
+	 * Each array member corresponds to one constraint gradient.
+	 */
+	std::vector<FirstPartialStruct*> *getAllConstraintFunctionGradientsBase();				
+	
+	
+	/**
+	 * Calculate the gradient of all objective functions  
+	 * 
+	 * <p>
+	 * 
+	 * @param x is a pointer (double array) to the current variable values
+	 * @param functionEvaluated is true if any objective function gradient
+	 * has been evaluated for the current iterate x
+	 * use a value of false if not sure
+	 * @param gradientEvaluated is true if any objective function gradient
+	 * has been evaluated for the current iterate x
+	 * use a value of false if not sure
+	 * @return a pointer to an array of FirstPartialStruct (first member is the variable idx, second memeber is
+	 * the partial with respect to that variable) vectors that represent a sparse implementaton. 
+	 * Each array member corresponds to one objective gradient.
+	 */
+	std::vector<FirstPartialStruct*> *calculateAllObjectiveFunctionGradients(int idx, double* x, bool functionEvaluated, bool gradientEvaluated);			
+	
+	/**
+	 * Get the base data structure of all the objective function gradients. 
+	 * 
+	 * @return a pointer to an array of FirstPartialStruct (first member is the variable idx, second memeber is
+	 * the partial with respect to that variable) vectors that represent a sparse implementaton. 
+	 * Each array member corresponds to one objective gradient.
+	 */
+	
+	std::vector<FirstPartialStruct*> *getAllObjectiveFunctionGradientsBase();			
+	
 	/**
 	 * 
-	 * @param isColumnMajor holds whether the coefMatrix (AMatrix) holding linear program
-	 * data is stored by column. If false, the matrix is stored by row.
-	 * @param start holds an integer array of start elements in coefMatrix (AMatrix),
-	 * which points to the start of a column (row) of nonzero elements in coefMatrix (AMatrix).
-	 * @param index holds an integer array of rowIdx (or colIdx) elements in coefMatrix (AMatrix).
-	 * If the matrix is stored by column (row), rowIdx (colIdx) is the array of row (column) indices.
-	 * @param value holds a double array of value elements in coefMatrix (AMatrix),
-	 * which contains nonzero elements.
-	 * @param dimension holds the column count if the input matrix is row major (row count = start.length-1)
-	 * or the row number if the input matrix is column major (columnh count = start.length -1)
-	 * @return Linear constraint coefficient matrix in the other major of the input matrix. Return null if input matrix not valid.
+	 * @return true if successful in generating the constraints gradient.
 	 */
-	 
-bool getSparseJacobianFromColumnMajor();
+		 
+	bool getSparseJacobianFromColumnMajor();
+	
+	/**
+	 * 
+	 * @return true if successful in generating the constraints gradient.
+	 */
+		 
+	double getSparseJacobianFromColumnMajor();
 
 
 																																																			

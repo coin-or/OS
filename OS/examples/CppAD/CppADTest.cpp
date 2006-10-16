@@ -135,6 +135,11 @@ int  main(){
 	expTree->calculateGradient( &zz[0], true );
 	std::cout << "GET SPARSE JACOBIAN RESULT"   << std::endl;
 	osinstance->getSparseJacobianFromColumnMajor( );
+	delete[] zz;
+	zz = NULL;
+	delete osilreader;
+	osilreader = NULL;
+	std::cout << "RETURN FROM GETTING SPARSE JACOBIAN RESULT"   << std::endl;	
 	return 0;
 	CppAD::vector< AD<double> > XAD;
 	std::map<int, int> varIdx; 

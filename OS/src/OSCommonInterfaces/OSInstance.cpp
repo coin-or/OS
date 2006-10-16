@@ -57,6 +57,10 @@ OSInstance::OSInstance():
 	m_mdConstraintLowerBounds(NULL),
 	m_mdConstraintUpperBounds(NULL),
 	m_mcConstraintTypes(NULL),
+	m_miJacStart( NULL),
+	m_miJacIndex( NULL),
+	m_mdJacValue( NULL),
+	m_miJacNumConTerms( NULL),
 	m_bProcessLinearConstraintCoefficients(false),
 	m_iLinearConstraintCoefficientNumber(-1),
 	m_bColumnMajor(true),
@@ -128,22 +132,24 @@ OSInstance::~OSInstance(){
 	m_mdVariableLowerBounds = NULL;
 	delete[] m_mdVariableUpperBounds;
 	m_mdVariableUpperBounds = NULL;
+	std::cout << "Do garbage collection for the gradient" << std::endl;
+	// garbage collection for the gradient
+	delete[] m_miJacStart;
+	m_miJacStart = NULL;
+	delete[] m_miJacIndex;
+	m_miJacIndex = NULL;
+	delete[] m_mdJacValue;
+	m_mdJacValue = NULL;
+	delete[] m_miJacNumConTerms;
+	m_miJacNumConTerms = NULL;
 	// delete the two children of OSInstance
-	// delete instanceHeader object
+	//delete instanceHeader object
 	delete instanceHeader;
 	instanceHeader = NULL;
 	//delete instanceData object
 	delete instanceData;
 	instanceData = NULL;
-	// garbage collection for the gradient
-	delete[] m_miJacStart;
-	m_miJacStart = NULL;
-	delete[] m_miJacIndexes;
-	m_miJacIndexes = NULL;
-	delete[] m_mdJacValues;
-	m_mdJacValues = NULL;
-	
-}
+}//OSInstance Destructor
 
 InstanceHeader::InstanceHeader():
 	description(""),
@@ -242,7 +248,7 @@ Objective::~Objective(){
 			coef[i] = NULL;
 		}
 	}
-	coef = NULL; 
+	coef = NULL;
 }  
 
 Objectives::Objectives()
@@ -916,7 +922,6 @@ OSExpressionTree* OSInstance::getNonlinearExpressionTree(int rowIdx){
 	}  
 }// getNonlinearExpresssionTree for a specific index
 
-
 std::map<int, OSExpressionTree*> OSInstance::getAllNonlinearExpressionTrees(){
 	if(m_bProcessExpressionTrees == true) return m_mapExpressionTrees;
 	std::map<int, int> foundIdx;
@@ -929,16 +934,18 @@ std::map<int, OSExpressionTree*> OSInstance::getAllNonlinearExpressionTrees(){
 	int index;
 	for(i = 0; i < instanceData->nonlinearExpressions->numberOfNonlinearExpressions; i++){
 		index = instanceData->nonlinearExpressions->nl[ i]->idx;
-		if(foundIdx[ index] > 0){ 
+		//if(foundIdx.find( index) != foundIdx.end() ){ 
+		if(foundIdx[ index] > 0 ){ 
 			nlNodePlus = new OSnLNodePlus();
 			expTree = new OSExpressionTree();
 			// set left child to old index and right child to new one
 			nlNodePlus->m_mChildren[ 0] = m_mapExpressionTrees[ index]->m_treeRoot;
 			nlNodePlus->m_mChildren[ 1] = instanceData->nonlinearExpressions->nl[ i]->osExpressionTree->m_treeRoot;
 			m_mapExpressionTrees[ index] = expTree;
-			m_mapExpressionTrees[ index]->m_treeRoot = nlNodePlus ;
+			m_mapExpressionTrees[ index]->m_treeRoot = nlNodePlus;
 		}
 		else{
+			// we have a new index
 			m_mapExpressionTrees[ index] = instanceData->nonlinearExpressions->nl[ i]->osExpressionTree;
 			m_mapExpressionTrees[ index]->m_treeRoot = instanceData->nonlinearExpressions->nl[ i]->osExpressionTree->m_treeRoot;
 		}
@@ -1428,6 +1435,9 @@ two cases -- row major and column major
 This is going to be a similar and simpler logic as the calculateLinearConstraintFunctionValues
 Only that the value calculation line becomes something like: 
 m_mvAllConstraintFunctionGradientsBase[i][j] = {indexes[j], values[j]} for row major
+
+
+
 2. append extra qterms if quadratic coefficients is not NULL
 loop through all qterms with qTerm idx >= 0
 for each qterm, find wether there is a varIdxOne and varIdxTwo in the vector of idx row of m_mvAllConstraintFunctionGradientsBase
@@ -1454,6 +1464,7 @@ std::vector<FirstPartialStruct*> *OSInstance::getAllObjectiveFunctionGradientsBa
 }//getAllObjectiveFunctionGradientsBase
 
 bool OSInstance::getSparseJacobianFromColumnMajor( ){
+	// we assume column major matrix
 	if( m_bColumnMajor == false) return false;
 	int iNumRowStarts = getConstraintNumber() + 1;	
 	int i,j, iTemp;
@@ -1461,8 +1472,8 @@ bool OSInstance::getSparseJacobianFromColumnMajor( ){
 	int *start = this->instanceData->linearConstraintCoefficients->start->el;
 	int *index = this->instanceData->linearConstraintCoefficients->rowIdx->el;
 	double *value = this->instanceData->linearConstraintCoefficients->value->el;
-	m_miJacStart = new int( iNumRowStarts);
-	m_miNumJacConTerms = new int( getConstraintNumber());
+	m_miJacStart = new int[ iNumRowStarts];
+	m_miJacNumConTerms = new int[ getConstraintNumber()];
 	OSnLNodePlus *nlNodePlus;
 	OSnLNodeVariable *nlNodeVariable;
 	OSExpressionTree *expTree = NULL;
@@ -1472,7 +1483,7 @@ bool OSInstance::getSparseJacobianFromColumnMajor( ){
 		m_miJacStart [ i ] = 0;
 		// map the variables  in the nonlinear rows
 		if( m_mapExpressionTrees.find( i) != m_mapExpressionTrees.end() ){
-			//m_treeRoot->getVariableIndexMap( i);
+			// the following is equivalent to  m_treeRoot->getVariableIndexMap( i);
 			m_mapExpressionTrees[ i]->getVariableIndiciesMap();
 			
 		}
@@ -1508,44 +1519,78 @@ bool OSInstance::getSparseJacobianFromColumnMajor( ){
 			}				
 		}
 	}
+
 	// at this point, m_miJacStart[ i] holds the number of columns with a linear nonzero in row i - 1
 	// we are not done with the start indicies, if we are here, and we
 	// knew the correct starting point of row i -1, the correct starting point
 	// for row i is m_miJacStart[i] + m_miJacStart [i - 1]
 	m_miJacStart[0] = 0;
 	for (i = 1; i < iNumRowStarts; i++ ){
-		m_miNumJacConTerms[ i - 1] = m_miJacStart[i];
-		if( m_mapExpressionTrees.find( i) != m_mapExpressionTrees.end() ){
-			m_miJacStart[i] += (m_miJacStart[i - 1] + (*m_mapExpressionTrees[ i]->mapVarIdx).size() );
+		m_miJacNumConTerms[ i - 1] = m_miJacStart[i];
+		if( m_mapExpressionTrees.find( i - 1) != m_mapExpressionTrees.end() ){
+			m_miJacStart[i] += (m_miJacStart[i - 1] + (*m_mapExpressionTrees[ i - 1]->mapVarIdx).size() );
 		}
 		else{
-			m_miJacStart[i] += m_miJacStart [i - 1];
+			m_miJacStart[i] += m_miJacStart[i - 1];
 		}	
-		std::cout <<  "Jacobian row start " << m_miJacStart[i]<< std::endl;	
-		std::cout <<  "Number of constant terms " << m_miNumJacConTerms[ i - 1] << std::endl;	
 	}
-	
-	// dimension miIndex and mdValue here
-	
-	// now get the correct values
-	// again assume we are converting column major to row major
-	// loop over bariables		
-	/*for (i = 0; i < iNumSource; i++){
+	// dimension miIndex and mdValue here	
+	m_miJacIndex = new int[ m_miJacStart[ iNumRowStarts - 1] ];
+	m_mdJacValue = new double[ m_miJacStart[ iNumRowStarts - 1] ];
+	// now get the values of the constant terms
+	// loop over variables	
+	for (i = 0; i < iNumVariableStarts; i++){
 		// get row indices and values of the A matrix
+		// kipp -- should we have a check to see if start[i+1] > start[i]
 		for (j = start[i]; j < start[ i + 1 ]; j++){
-			iTemp = m_miJacStart[ index[j]];
-			miIndex [ iTemp] = i;
-			mdValue [ iTemp] = value[j];
-			m_miJacStart[ index[j]] ++;				
+			// store this variable index in every row where the variable appears
+			// however, don't store this as constant term if it appears in mapVarIdx
+			if( (m_mapExpressionTrees.find( index[ j]) == m_mapExpressionTrees.end() ) ||
+				( (*m_mapExpressionTrees[ index[ j]]->mapVarIdx).find( i) == (*m_mapExpressionTrees[ index[ j]]->mapVarIdx).end()) ){
+				iTemp = m_miJacStart[ index[j]];
+				m_miJacIndex[ iTemp] = i;
+				m_mdJacValue[ iTemp] = value[j];
+				m_miJacStart[ index[j]]++;	
+			}		
 		}			
 	} 
-		
-	// m_miJacStart[ i] is now equal to m_miJacStart[ i + 1], so readjust
-	for (i = iStartSize - 1; i >= 1; i-- ){
-		m_miJacStart[i] = m_miJacStart [i - 1] ;		
+	//
+	std::map<int, int>::iterator posVarIdx;
+	// m_miJacStart[ i] is now equal to m_miJacStart[ i] + m_miJacNumConTerms[ i], so readjust
+	for (i = 0; i < iNumRowStarts - 1; i++ ){
+		m_miJacStart[ i] = m_miJacStart [ i] - m_miJacNumConTerms[ i] ;	
+		iTemp = m_miJacStart[ i] + m_miJacNumConTerms[ i];
+		// if the row is in the list of expression trees read in idicies and values
+		if( m_mapExpressionTrees.find( i) != m_mapExpressionTrees.end() ){
+			for(posVarIdx = (*m_mapExpressionTrees[ i]->mapVarIdx).begin(); posVarIdx 
+			!= (*m_mapExpressionTrees[ i]->mapVarIdx).end(); ++posVarIdx){
+				m_miJacIndex[ iTemp] = posVarIdx->first;
+				m_mdJacValue[ iTemp] = 0;
+				iTemp++;
+			}
+		}
 	}
-	*/
-	m_miJacStart[0] = 0;
+	std::cout << "HERE ARE ROW STARTS:" << std::endl;
+	for (i = 0; i < iNumRowStarts; i++ ){
+		std::cout <<  m_miJacStart[ i] << "  ";	
+	}
+	std::cout << std::endl << std::endl;
+	std::cout << "HERE ARE VARIABLE INDICIES:" << std::endl;
+	for (i = 0; i < m_miJacStart[ iNumRowStarts - 1]; i++ ){
+		std::cout <<  m_miJacIndex[ i] << "  ";	
+	}
+	std::cout << std::endl << std::endl;
+	std::cout << "HERE ARE VALUES:" << std::endl;
+	for (i = 0; i < m_miJacStart[ iNumRowStarts - 1]; i++ ){
+		std::cout <<  m_mdJacValue[ i] << "  ";	
+	}
+	std::cout << std::endl << std::endl;
+
+	std::cout << "HERE ARE NUMBER OF CONSTANT TERMS:" << std::endl;
+	for (i = 0; i < iNumRowStarts - 1; i++ ){
+		std::cout <<  m_miJacNumConTerms[ i ] << "  ";	
+	}
+	std::cout << std::endl << std::endl;
 	return true;
 }//getSparseJacobianFromColumnMajor
 
