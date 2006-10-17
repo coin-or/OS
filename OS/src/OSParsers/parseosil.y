@@ -174,27 +174,21 @@ anotherqTermATT:
 	
 
 
-qtermatt:  qtermidatt  quote
-			{ if(qtermidattON) osilerror("too many qTerm id attributes"); 
-			qtermidattON = true;  }
-		| qtermidxOneatt   quote
-			{ if(qtermidxOneattON) osilerror("too many qTerm id attributes"); 
+qtermatt: qtermidxOneatt   quote
+			{ if(qtermidxOneattON) osilerror("too many qTerm idxOne attributes"); 
 			qtermidxOneattON = true;  }
 		| qtermidxTwoatt  quote    
-			{ if(qtermidxTwoattON) osilerror("too many qTerm id attributes"); 
+			{ if(qtermidxTwoattON) osilerror("too many qTerm idxTwo attributes"); 
 			qtermidxTwoattON = true;  }
 		| qtermcoefatt quote
-			{ if(qtermcoefattON) osilerror("too many qTerm id attributes"); 
+			{ if(qtermcoefattON) osilerror("too many qTerm coef attributes"); 
 			qtermcoefattON = true;  }
 		| qtermidxatt quote
-			{ if(qtermidxattON) osilerror("too many qTerm id attributes"); 
+			{ if(qtermidxattON) osilerror("too many qTerm idx attributes"); 
 			qtermidxattON = true;  }
 		;
 
 
-qtermidatt: IDATT ATTRIBUTETEXT   {  
-osinstance->instanceData->quadraticCoefficients->qTerm[qtermcount]->id = $2;} 
-| IDATT;
 qtermidxOneatt: IDXONEATT INTEGER   {  
 osinstance->instanceData->quadraticCoefficients->qTerm[qtermcount]->idxOne = $2;} ;
 qtermidxTwoatt: IDXTWOATT INTEGER   { 

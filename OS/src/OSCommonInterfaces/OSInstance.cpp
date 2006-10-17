@@ -344,8 +344,7 @@ LinearConstraintCoefficients::~LinearConstraintCoefficients(){
 
 QuadraticTerm::QuadraticTerm():
 
-	idx(0),
-	id(""),   
+	idx(0),   
 	idxOne(-1),
 	idxTwo(-1),
 	coef(0.0)
@@ -1362,22 +1361,6 @@ double OSInstance::calculateFunctionValue(int idx, double* x, bool functionEvalu
 	return NULL;
 }//calculateFunctionValue
 
-
-	
-double *OSInstance::calculateAllConstraintFunctionValues( double* x, bool functionEvaluated){
-	// if true return m_mdConstraintFunctionValues
-	// else initialize m_mdConstraintFunctionValues to zero
-	// call calculateLinearConstraintFunctionValues( double* x) and if not NULL
-	// add resulting vector to m_mdConstraintFunctionValues
-	// call calculateQuadraticConstraintFunctionValues( double* x) and if not NULL,  
-	// add resulting vector to m_mdConstraintFunctionValues
-	// for nonlinear part call getNonlinearExpressionTreeIndexes()
-	// for each nonnegative row call call expTree = osinstance->getNonlinearExpressionTree( idx)
-	// then expTree->calculateFunction(x, false) and add to correxponding index in m_mdConstraintFunctionValues
-	return NULL;
-}//calculateAllConstraintFunctionValues
-
-
 double *OSInstance::calculateAllObjectiveFunctionValues( double* x, bool functionEvaluated){
 	// if true return m_mdObjectiveFunctionValues
 	// else initialize m_mdObjectiveFunctionValues to zero
@@ -1388,17 +1371,6 @@ double *OSInstance::calculateAllObjectiveFunctionValues( double* x, bool functio
 	return NULL;
 }//calculateAllConstraintFunctionValues
 
-double *OSInstance::calculateLinearConstraintFunctionValues( double* x){
-	// Jun's implementation plus row -- see his calculateLinearConstraintFunctionValues( double *x);
-	return NULL;
-}//calculateConstraintFunctionValues
-
-
-
-double *OSInstance::calculateQuadraticConstraintFunctionValues( double* x){
-	return NULL;
-	// see Jun's code method by the same name.
-}//calculateQuadraticConstraintFunctionValues
 
 std::vector<FirstPartialStruct*> OSInstance::calculateFunctionGradient(int idx, double* x, bool functionEvaluated, bool gradientEvaluated){
 	//
@@ -1494,8 +1466,8 @@ bool OSInstance::getSparseJacobianFromColumnMajor( ){
 			// index[ j] is a row index, we have just found an occurance of row index[j]
 			// therefore we increase by 1 (or push back) the start of the row indexed by index[j] + 1, 
 			// i.e. the start of the next row
-			// check to see if variable i is linear in the row index[ j] 
-			// if so do not increment m_miJacStart[ index[j] + 1]
+			// check to see if variable i is linear/constant in the row index[ j] 
+			// if so, increment m_miJacStart[ index[j] + 1]
 			//
 			if( (m_mapExpressionTrees.find( index[ j]) != m_mapExpressionTrees.end() ) &&
 				( (*m_mapExpressionTrees[ index[ j]]->mapVarIdx).find( i) != (*m_mapExpressionTrees[ index[ j]]->mapVarIdx).end()) ){
@@ -1520,7 +1492,7 @@ bool OSInstance::getSparseJacobianFromColumnMajor( ){
 		}
 	}
 
-	// at this point, m_miJacStart[ i] holds the number of columns with a linear nonzero in row i - 1
+	// at this point, m_miJacStart[ i] holds the number of columns with a linear/constant nonzero in row i - 1
 	// we are not done with the start indicies, if we are here, and we
 	// knew the correct starting point of row i -1, the correct starting point
 	// for row i is m_miJacStart[i] + m_miJacStart [i - 1]
@@ -1556,7 +1528,7 @@ bool OSInstance::getSparseJacobianFromColumnMajor( ){
 	} 
 	//
 	std::map<int, int>::iterator posVarIdx;
-	// m_miJacStart[ i] is now equal to m_miJacStart[ i] + m_miJacNumConTerms[ i], so readjust
+	// m_miJacStart[ i] is now equal to the correct m_miJacStart[ i] + m_miJacNumConTerms[ i], so readjust
 	for (i = 0; i < iNumRowStarts - 1; i++ ){
 		m_miJacStart[ i] = m_miJacStart [ i] - m_miJacNumConTerms[ i] ;	
 		iTemp = m_miJacStart[ i] + m_miJacNumConTerms[ i];

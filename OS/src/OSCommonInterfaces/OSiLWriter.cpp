@@ -328,11 +328,6 @@ std::string OSiLWriter::writeOSiL( OSInstance *theosinstance){
 					outStr << "  idxTwo=\"";
 					outStr << m_OSInstance->instanceData->quadraticCoefficients->qTerm[i]->idxTwo;
 					outStr << "\"";
-					if(m_OSInstance->instanceData->quadraticCoefficients->qTerm[i]->id.length() > 0){
-						outStr << "  id=\"";
-						outStr << m_OSInstance->instanceData->quadraticCoefficients->qTerm[i]->id;
-						outStr << "\"";
-					}
 					if(m_OSInstance->instanceData->quadraticCoefficients->qTerm[i]->coef != 0){
 						outStr << "  coef=\"";
 						outStr << m_OSInstance->instanceData->quadraticCoefficients->qTerm[i]->coef;

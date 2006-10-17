@@ -168,7 +168,6 @@ class QuadraticTerm{
 	QuadraticTerm();
 	~QuadraticTerm();
 	int idx;
-    std::string id;
     int idxOne;
     int idxTwo;
     double coef;
@@ -1134,26 +1133,6 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	
 	
 	/**
-	 * Calculate all of the linear constraint function values
-	 * 
-	 * <p>
-	 * 
-	 * @param x is a pointer (double array) to the current variable values
-	 * @return a double array of linear constraint function values -- the size of the array is equal to getConstraintNumber().  
-	 */
-	double *calculateLinearConstraintFunctionValues( double* x);
-	
-	/**
-	 * Calculate the quadratic part of every constraint function 
-	 * 
-	 * <p>
-	 * 
-	 * @param x is a pointer (double array) to the current variable values
-	 * @return a double array of quadratic constraint function values -- the size of the array is equal to getConstraintNumber().  
-	 */
-	double *calculateQuadraticConstraintFunctionValues( double* x);
-	
-	/**
 	 * Calculate the gradient of function (constraint or objective) 
 	 * indexed by idx
 	 * 
@@ -1171,8 +1150,6 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * the partial with respect to that variable) that represent a sparse implementaton.  
 	 */
 	std::vector<FirstPartialStruct*> calculateFunctionGradient(int idx, double* x, bool functionEvaluated, bool gradientEvaluated);																																																								
-	
-	
 	
 	/**
 	 * Calculate the gradient of all constraint functions  
@@ -1242,7 +1219,7 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * @return true if successful in generating the constraints gradient.
 	 */
 		 
-	double getSparseJacobianFromColumnMajor();
+	//double getSparseJacobianFromColumnMajor();
 
 
 																																																			
