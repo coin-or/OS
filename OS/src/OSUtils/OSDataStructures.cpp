@@ -118,6 +118,44 @@ bool SparseMatrix::display(int secondaryDim){
 		
 	}//display
 	
+SparseJacobianMatrix::SparseJacobianMatrix():
+	starts(NULL),
+	indexes(NULL),
+	values(NULL),
+	conVals(NULL),
+	startSize(0),
+	valueSize(0)
+
+{
+}// end SparseMatrix Constructor
+
+
+
+SparseJacobianMatrix::SparseJacobianMatrix(int startSize_, int valueSize_):
+	startSize(startSize_),
+	valueSize(valueSize_)
+{
+	starts = new int[startSize];
+	conVals = new int[startSize];
+	indexes = new int[valueSize];
+	values = new double[valueSize];		
+}//end SparseJacobianMatrix constructor
+
+
+SparseJacobianMatrix::~SparseJacobianMatrix(){
+	#ifdef DEBUG
+	cout << "inside SparseJacobianMatrix destructor" << endl;
+	#endif
+	delete[] starts;
+	starts = NULL;
+	delete[] conVals;
+	conVals = NULL;
+	delete[] indexes;
+	indexes = NULL;
+	delete[] values;
+	values = NULL;
+}// end SparseJacobianMatrix Destructor
+	
 QuadraticTerms::QuadraticTerms():
 	rowIndexes(NULL),
 	varOneIndexes(NULL),

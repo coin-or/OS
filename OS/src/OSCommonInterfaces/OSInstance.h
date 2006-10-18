@@ -1217,25 +1217,32 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * the partial with respect to that variable) vectors that represent a sparse implementaton. 
 	 * Each array member corresponds to one objective gradient.
 	 */
-	
-	std::vector<FirstPartialStruct*> *getAllObjectiveFunctionGradientsBase();			
-	
+	std::vector<FirstPartialStruct*> *getAllObjectiveFunctionGradientsBase();	
+			
 	/**
 	 * 
 	 * @return true if successful in generating the constraints gradient.
 	 */
-		 
 	bool getSparseJacobianFromColumnMajor();
 	
 	/**
 	 * 
+	 * @return true if successful in generating the constraints gradient.
+	 */ 
+	bool getSparseJacobianFromRowMajor();
+	
+	/**
+	 * 
+	 * @return pointer to a SparseJacobianMatrix.
+	 */ 
+	SparseJacobianMatrix *getSparseJacobian();
+	
+	/**
+	 * 
 	 *  duplicate the map of expression trees.
-	 */
-		 
+	 */	 
 	void duplicateExpressionTreesMap();
-
-
-																																																			
+																																																		
 }; //class OSInstance
 
 #endif

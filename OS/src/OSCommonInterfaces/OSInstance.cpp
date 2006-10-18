@@ -1,7 +1,7 @@
 /** @file OSInstance.cpp
  * \brief This file defines the OSInstance class along with its supporting classes..
  *
- * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
+ * @author  Robert Fourer,  Jun Ma, Kipp Martin, m_mdConstraintFunctionValues
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  *
@@ -1351,16 +1351,50 @@ bool OSInstance::setQuadraticTerms(int number,
 	return true;
 }//setQuadraticTerms
 
-double OSInstance::calculateFunctionValue(int idx, double* x, bool functionEvaluated){
+
+
+SparseJacobianMatrix *OSInstance::getSparseJacobian( ){
+	// before proceeding get a copy of the map of the Expression Trees
+	duplicateExpressionTreesMap();
+	if( m_bColumnMajor == true) getSparseJacobianFromColumnMajor( );
+	else getSparseJacobianFromRowMajor( );
+	// now fill in the arrays of the sparseJacMatrix
+	SparseJacobianMatrix *sparseJacMatrix;
+	sparseJacMatrix = new SparseJacobianMatrix();
+	sparseJacMatrix->starts = m_miJacStart;
+	sparseJacMatrix->conVals = m_miJacNumConTerms;
+	sparseJacMatrix->indexes = m_miJacIndex;
+	return sparseJacMatrix;
+}//getSparseJacobian
+
+double OSInstance::calculateFunctionValue(int idx, double *x, bool functionEvaluated){
 	//
 	// put in check on value of idx and make sure it is in the correct range
+	// Kipp -- put in this check
+	//
+	// Kipp we probably want to change this variable
+	double functionVal = 0;
+	if(functionEvaluated == false) getSparseJacobian();
+	if(idx >= 0){
+		if( m_mapExpressionTreesMod.find( idx) != m_mapExpressionTreesMod.end() ){
+			functionVal = m_mapExpressionTreesMod[ idx]->calculateFunction( x,  false);
+		}
+		return functionVal;
+	}
+	else{
+	}
 	// when true, if idx >=0  we return m_mdConstraintFunctionValues[ idx]
 	// when true, if idx < 0 we return m_mdObjectiveFunctionValues[abs( idx) - 1]
 	// if false we call calculateAllConstraintFunctionValues() and calculateAllObjectiveFunctionValues()
 	// and then retrieve as if true
 	//
-	return NULL;
+	return functionVal;
 }//calculateFunctionValue
+
+
+double *OSInstance::calculateAllConstraintFunctionValues( double* x, bool functionEvaluated){
+	return NULL;
+}
 
 double *OSInstance::calculateAllObjectiveFunctionValues( double* x, bool functionEvaluated){
 	// if true return m_mdObjectiveFunctionValues
@@ -1436,6 +1470,11 @@ std::vector<FirstPartialStruct*> *OSInstance::getAllObjectiveFunctionGradientsBa
 	return NULL;
 }//getAllObjectiveFunctionGradientsBase
 
+bool OSInstance::getSparseJacobianFromRowMajor( ){
+	// Kipp -- todo
+	return true;
+}//getSparseJacobianFromRowMajor
+
 bool OSInstance::getSparseJacobianFromColumnMajor( ){
 	// we assume column major matrix
 	if( m_bColumnMajor == false) return false;
@@ -1450,8 +1489,6 @@ bool OSInstance::getSparseJacobianFromColumnMajor( ){
 	OSnLNodePlus *nlNodePlus;
 	OSnLNodeVariable *nlNodeVariable;
 	OSExpressionTree *expTree = NULL;
-	// before proceeding get a copy of the map of the Expression Trees
-	duplicateExpressionTreesMap();
 	// now initialize starts and variable index maps 
 	for ( i = 0; i < iNumRowStarts; i++){			
 		m_miJacStart [ i ] = 0;
@@ -1487,6 +1524,7 @@ bool OSInstance::getSparseJacobianFromColumnMajor( ){
 				expTree->mapVarIdx = m_mapExpressionTreesMod[ index[ j]]->mapVarIdx;
 				m_mapExpressionTreesMod[ index[ j] ]  = expTree;	
 				std::cout << m_mapExpressionTreesMod[ index[ j] ]->m_treeRoot->getNonlinearExpressionInXML() << std::endl;	
+				std::cout << m_mapExpressionTrees[ index[ j] ]->m_treeRoot->getNonlinearExpressionInXML() << std::endl;
 			}
 			else{ 
 				m_miJacStart[ index[j] + 1] ++;

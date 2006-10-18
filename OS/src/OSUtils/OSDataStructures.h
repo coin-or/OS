@@ -118,6 +118,65 @@ class SparseMatrix {
 
 }; //SparseMatrix
 
+
+class SparseJacobianMatrix {
+	public:
+	/**
+	 * startSize is the dimension of the starts array
+	 */
+	int startSize;
+	
+	/**
+	 * valueSize is the dimension of the starts array
+	 */
+	int valueSize;
+	
+	/**
+	 * starts holds an integer array of start elements in coefMatrix (AMatrix),
+	 * which points to the start of a column (row) of nonzero elements in coefMatrix (AMatrix).
+	 */
+	int* starts; 
+	
+	/**
+	 * conVals holds an integer array of integers, conVals[i] is the number of constant terms
+	 * in the gradient for row i.
+	 */
+	int* conVals; 
+	
+	/**
+	 * indexes holds an integer array of rowIdx (or colIdx) elements in coefMatrix (AMatrix).
+	 * If the matrix is stored by column (row), rowIdx (colIdx) is the array of row (column) indices.
+	 */
+	int* indexes;
+
+	/**
+	 * values holds a double array of value elements in coefMatrix (AMatrix),
+	 * which contains nonzero elements.
+	 */
+	double* values;
+	
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	SparseJacobianMatrix();
+	
+	/**
+	 * Constructor.
+	 * 
+	 * @param startSize holds the size of the start array.
+	 * @param valueSize holds the size of the value and index arrays.
+	 */
+	SparseJacobianMatrix(int startSize, int valueSize);
+
+	/**
+	 *
+	 * Default destructor. 
+	 */	
+	~SparseJacobianMatrix();
+
+}; //SparseJacobianMatrix
+
 class QuadraticTerms {
 
 	public:
