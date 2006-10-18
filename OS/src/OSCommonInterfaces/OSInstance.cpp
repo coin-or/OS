@@ -57,6 +57,7 @@ OSInstance::OSInstance():
 	m_mdConstraintLowerBounds(NULL),
 	m_mdConstraintUpperBounds(NULL),
 	m_mcConstraintTypes(NULL),
+	m_bDuplicateExpressionTreesMap( false),
 	m_miJacStart( NULL),
 	m_miJacIndex( NULL),
 	m_mdJacValue( NULL),
@@ -1449,14 +1450,15 @@ bool OSInstance::getSparseJacobianFromColumnMajor( ){
 	OSnLNodePlus *nlNodePlus;
 	OSnLNodeVariable *nlNodeVariable;
 	OSExpressionTree *expTree = NULL;
-	//int* miIndex = matrix->indexes;
-	//double* mdValue = matrix->values;
+	// before proceeding get a copy of the map of the Expression Trees
+	duplicateExpressionTreesMap();
+	// now initialize starts and variable index maps 
 	for ( i = 0; i < iNumRowStarts; i++){			
 		m_miJacStart [ i ] = 0;
 		// map the variables  in the nonlinear rows
-		if( m_mapExpressionTrees.find( i) != m_mapExpressionTrees.end() ){
+		if( m_mapExpressionTreesMod.find( i) != m_mapExpressionTreesMod.end() ){
 			// the following is equivalent to  m_treeRoot->getVariableIndexMap( i);
-			m_mapExpressionTrees[ i]->getVariableIndiciesMap();
+			m_mapExpressionTreesMod[ i]->getVariableIndiciesMap();
 			
 		}
 	}
@@ -1469,8 +1471,8 @@ bool OSInstance::getSparseJacobianFromColumnMajor( ){
 			// check to see if variable i is linear/constant in the row index[ j] 
 			// if so, increment m_miJacStart[ index[j] + 1]
 			//
-			if( (m_mapExpressionTrees.find( index[ j]) != m_mapExpressionTrees.end() ) &&
-				( (*m_mapExpressionTrees[ index[ j]]->mapVarIdx).find( i) != (*m_mapExpressionTrees[ index[ j]]->mapVarIdx).end()) ){
+			if( (m_mapExpressionTreesMod.find( index[ j]) != m_mapExpressionTreesMod.end() ) &&
+				( (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).find( i) != (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).end()) ){
 				// variable i is appears in the expression tree for row index[ j]
 				// add the coefficient corresponding to variable i in row index[ j] to the expression tree	
 				// define a new OSnLVariable and OSnLnodePlus 
@@ -1478,13 +1480,13 @@ bool OSInstance::getSparseJacobianFromColumnMajor( ){
 				nlNodeVariable->coef = value[ j];
 				nlNodeVariable->idx = i;
 				nlNodePlus = new OSnLNodePlus();
-				nlNodePlus->m_mChildren[ 0] = m_mapExpressionTrees[ index[ j] ]->m_treeRoot;
+				nlNodePlus->m_mChildren[ 0] = m_mapExpressionTreesMod[ index[ j] ]->m_treeRoot;
 				nlNodePlus->m_mChildren[ 1] = nlNodeVariable;
 				expTree = new OSExpressionTree();
 				expTree->m_treeRoot = nlNodePlus ;
-				expTree->mapVarIdx = m_mapExpressionTrees[ index[ j]]->mapVarIdx;
-				m_mapExpressionTrees[ index[ j] ]  = expTree;	
-				std::cout << m_mapExpressionTrees[ index[ j] ]->m_treeRoot->getNonlinearExpressionInXML() << std::endl;	
+				expTree->mapVarIdx = m_mapExpressionTreesMod[ index[ j]]->mapVarIdx;
+				m_mapExpressionTreesMod[ index[ j] ]  = expTree;	
+				std::cout << m_mapExpressionTreesMod[ index[ j] ]->m_treeRoot->getNonlinearExpressionInXML() << std::endl;	
 			}
 			else{ 
 				m_miJacStart[ index[j] + 1] ++;
@@ -1499,8 +1501,8 @@ bool OSInstance::getSparseJacobianFromColumnMajor( ){
 	m_miJacStart[0] = 0;
 	for (i = 1; i < iNumRowStarts; i++ ){
 		m_miJacNumConTerms[ i - 1] = m_miJacStart[i];
-		if( m_mapExpressionTrees.find( i - 1) != m_mapExpressionTrees.end() ){
-			m_miJacStart[i] += (m_miJacStart[i - 1] + (*m_mapExpressionTrees[ i - 1]->mapVarIdx).size() );
+		if( m_mapExpressionTreesMod.find( i - 1) != m_mapExpressionTreesMod.end() ){
+			m_miJacStart[i] += (m_miJacStart[i - 1] + (*m_mapExpressionTreesMod[ i - 1]->mapVarIdx).size() );
 		}
 		else{
 			m_miJacStart[i] += m_miJacStart[i - 1];
@@ -1517,8 +1519,8 @@ bool OSInstance::getSparseJacobianFromColumnMajor( ){
 		for (j = start[i]; j < start[ i + 1 ]; j++){
 			// store this variable index in every row where the variable appears
 			// however, don't store this as constant term if it appears in mapVarIdx
-			if( (m_mapExpressionTrees.find( index[ j]) == m_mapExpressionTrees.end() ) ||
-				( (*m_mapExpressionTrees[ index[ j]]->mapVarIdx).find( i) == (*m_mapExpressionTrees[ index[ j]]->mapVarIdx).end()) ){
+			if( (m_mapExpressionTreesMod.find( index[ j]) == m_mapExpressionTreesMod.end() ) ||
+				( (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).find( i) == (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).end()) ){
 				iTemp = m_miJacStart[ index[j]];
 				m_miJacIndex[ iTemp] = i;
 				m_mdJacValue[ iTemp] = value[j];
@@ -1533,9 +1535,9 @@ bool OSInstance::getSparseJacobianFromColumnMajor( ){
 		m_miJacStart[ i] = m_miJacStart [ i] - m_miJacNumConTerms[ i] ;	
 		iTemp = m_miJacStart[ i] + m_miJacNumConTerms[ i];
 		// if the row is in the list of expression trees read in idicies and values
-		if( m_mapExpressionTrees.find( i) != m_mapExpressionTrees.end() ){
-			for(posVarIdx = (*m_mapExpressionTrees[ i]->mapVarIdx).begin(); posVarIdx 
-			!= (*m_mapExpressionTrees[ i]->mapVarIdx).end(); ++posVarIdx){
+		if( m_mapExpressionTreesMod.find( i) != m_mapExpressionTreesMod.end() ){
+			for(posVarIdx = (*m_mapExpressionTreesMod[ i]->mapVarIdx).begin(); posVarIdx 
+			!= (*m_mapExpressionTreesMod[ i]->mapVarIdx).end(); ++posVarIdx){
 				m_miJacIndex[ iTemp] = posVarIdx->first;
 				m_mdJacValue[ iTemp] = 0;
 				iTemp++;
@@ -1565,4 +1567,15 @@ bool OSInstance::getSparseJacobianFromColumnMajor( ){
 	std::cout << std::endl << std::endl;
 	return true;
 }//getSparseJacobianFromColumnMajor
+
+void OSInstance::duplicateExpressionTreesMap(){
+	if(m_bDuplicateExpressionTreesMap == false){ 
+		m_mapExpressionTreesMod = m_mapExpressionTrees;
+		m_bDuplicateExpressionTreesMap = true;
+		return;
+	}
+	else{
+		return;
+	}
+}
 

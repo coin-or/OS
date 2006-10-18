@@ -504,6 +504,19 @@ private:
 	std::map<int, OSExpressionTree*> m_mapExpressionTrees ;
 	
 	/**
+	 * m_mapExpressionTreesMod holds a hash map of expression trees, with the key being the row index
+	 * and value being the expression tree representing a modification of the nonlinear expression of that row.
+	 * We incorporate the linear and quadratic term for a variable into the corresponding expression tree before
+	 * gradient and Hessian calculations
+	 */
+	std::map<int, OSExpressionTree*> m_mapExpressionTreesMod ;
+	
+	/**
+	 * m_bDuplicateExpressionTreeMap is true if m_mapExpressionTrees was duplicated. 
+	 */
+	bool m_bDuplicateExpressionTreesMap;
+	
+	/**
 	 * m_mapExpressionTrees holds a hash map of expression trees in postfix format, with the key being the row index
 	 * and value being the expression tree representing the nonlinear expression of that row.
 	 */
@@ -1216,10 +1229,10 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	
 	/**
 	 * 
-	 * @return true if successful in generating the constraints gradient.
+	 *  duplicate the map of expression trees.
 	 */
 		 
-	//double getSparseJacobianFromColumnMajor();
+	void duplicateExpressionTreesMap();
 
 
 																																																			

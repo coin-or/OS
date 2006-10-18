@@ -140,6 +140,23 @@ int  main(){
 	delete osilreader;
 	osilreader = NULL;
 	std::cout << "RETURN FROM GETTING SPARSE JACOBIAN RESULT"   << std::endl;	
+	
+	std::map<int, double*> test1;
+	double val1, val2, val3;
+	val1 = 27.;
+	val2 = 37;
+	val3 = 47;
+	test1[0] = &val1;
+	test1[1] = &val2;
+	std::map<int, double*> test2;
+	test2 = test1;
+	std::cout << *test1[0] << std::endl;
+	std::cout << *test1[1] << std::endl;
+	std::cout << *test2[0] << std::endl;
+	std::cout << *test2[1] << std::endl;
+	test2[ 1] = &val3;
+	std::cout << *test1[1] << std::endl;
+	std::cout << *test2[1] << std::endl;
 	return 0;
 	CppAD::vector< AD<double> > XAD;
 	std::map<int, int> varIdx; 
@@ -191,7 +208,10 @@ int  main(){
 	std::cout << std::endl;
 	std::cout << "Index 0 " << varIdx[ 0] << std::endl;
 	std::cout << "Index 1 " << varIdx[ 1] << std::endl;   
+//
 
+
+//
    
 	return 0;
 	
