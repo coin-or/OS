@@ -174,7 +174,6 @@ OS/src/OSUtils/MathUtil.h -text
 OS/src/OSUtils/OSDataStructures.cpp -text
 OS/src/OSUtils/OSDataStructures.h -text
 OS/src/OSUtils/OSParameters.h -text
-OS/src/makefile.am -text
 OS/test/Makefile.am -text
 OS/test/Makefile.in -text
 OS/test/unitTest.cpp -text
