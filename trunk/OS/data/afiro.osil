@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osil xmlns="os.optimizationservices.org"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <instanceHeader/>
+    <instanceData>
+        <variables numberOfVariables="32">
+            <var name="X01"/>
+            <var name="X02"/>
+            <var name="X03"/>
+            <var name="X04"/>
+            <var name="X06"/>
+            <var name="X07"/>
+            <var name="X08"/>
+            <var name="X09"/>
+            <var name="X10"/>
+            <var name="X11"/>
+            <var name="X12"/>
+            <var name="X13"/>
+            <var name="X14"/>
+            <var name="X15"/>
+            <var name="X16"/>
+            <var name="X22"/>
+            <var name="X23"/>
+            <var name="X24"/>
+            <var name="X25"/>
+            <var name="X26"/>
+            <var name="X28"/>
+            <var name="X29"/>
+            <var name="X30"/>
+            <var name="X31"/>
+            <var name="X32"/>
+            <var name="X33"/>
+            <var name="X34"/>
+            <var name="X35"/>
+            <var name="X36"/>
+            <var name="X37"/>
+            <var name="X38"/>
+            <var name="X39"/>
+        </variables>
+        <objectives numberOfObjectives="1">
+            <obj maxOrMin="min" numberOfObjCoef="5">
+                <coef idx="1">-0.4</coef>
+                <coef idx="12">-0.32</coef>
+                <coef idx="16">-0.6</coef>
+                <coef idx="28">-0.48</coef>
+                <coef idx="31">10.0</coef>
+            </obj>
+        </objectives>
+        <constraints numberOfConstraints="27">
+            <con lb="0.0" name="R09" ub="0.0"/>
+            <con lb="0.0" name="R10" ub="0.0"/>
+            <con name="X05" ub="80.0"/>
+            <con name="X21" ub="0.0"/>
+            <con lb="0.0" name="R12" ub="0.0"/>
+            <con lb="0.0" name="R13" ub="0.0"/>
+            <con name="X17" ub="80.0"/>
+            <con name="X18" ub="0.0"/>
+            <con name="X19" ub="0.0"/>
+            <con name="X20" ub="0.0"/>
+            <con lb="0.0" name="R19" ub="0.0"/>
+            <con lb="0.0" name="R20" ub="0.0"/>
+            <con name="X27" ub="500.0"/>
+            <con name="X44" ub="0.0"/>
+            <con lb="0.0" name="R22" ub="0.0"/>
+            <con lb="44.0" name="R23" ub="44.0"/>
+            <con name="X40" ub="500.0"/>
+            <con name="X41" ub="0.0"/>
+            <con name="X42" ub="0.0"/>
+            <con name="X43" ub="0.0"/>
+            <con name="X45" ub="0.0"/>
+            <con name="X46" ub="0.0"/>
+            <con name="X47" ub="0.0"/>
+            <con name="X48" ub="0.0"/>
+            <con name="X49" ub="0.0"/>
+            <con name="X50" ub="310.0"/>
+            <con name="X51" ub="300.0"/>
+        </constraints>
+        <linearConstraintCoefficients numberOfValues="83">
+            <start>
+                <el>0</el>
+                <el>4</el>
+                <el>6</el>
+                <el>8</el>
+                <el>10</el>
+                <el>14</el>
+                <el>18</el>
+                <el>22</el>
+                <el>26</el>
+                <el>28</el>
+                <el>30</el>
+                <el>32</el>
+                <el>34</el>
+                <el>36</el>
+                <el>38</el>
+                <el>40</el>
+                <el>44</el>
+                <el>46</el>
+                <el>48</el>
+                <el>50</el>
+                <el>52</el>
+                <el>56</el>
+                <el>60</el>
+                <el>64</el>
+                <el>68</el>
+                <el>70</el>
+                <el>72</el>
+                <el>74</el>
+                <el>76</el>
+                <el>78</el>
+                <el>80</el>
+                <el>82</el>
+                <el>83</el>
+            </start>
+            <rowIdx>
+                <el>2</el>
+                <el>1</el>
+                <el>0</el>
+                <el>23</el>
+                <el>0</el>
+                <el>3</el>
+                <el>0</el>
+                <el>21</el>
+                <el>1</el>
+                <el>25</el>
+                <el>6</el>
+                <el>5</el>
+                <el>4</el>
+                <el>24</el>
+                <el>7</el>
+                <el>5</el>
+                <el>4</el>
+                <el>24</el>
+                <el>8</el>
+                <el>5</el>
+                <el>4</el>
+                <el>24</el>
+                <el>9</el>
+                <el>5</el>
+                <el>4</el>
+                <el>24</el>
+                <el>6</el>
+                <el>20</el>
+                <el>7</el>
+                <el>20</el>
+                <el>8</el>
+                <el>20</el>
+                <el>9</el>
+                <el>20</el>
+                <el>4</el>
+                <el>3</el>
+                <el>4</el>
+                <el>22</el>
+                <el>5</el>
+                <el>26</el>
+                <el>12</el>
+                <el>11</el>
+                <el>10</el>
+                <el>21</el>
+                <el>10</el>
+                <el>13</el>
+                <el>10</el>
+                <el>23</el>
+                <el>10</el>
+                <el>20</el>
+                <el>11</el>
+                <el>25</el>
+                <el>16</el>
+                <el>15</el>
+                <el>14</el>
+                <el>22</el>
+                <el>17</el>
+                <el>15</el>
+                <el>14</el>
+                <el>22</el>
+                <el>18</el>
+                <el>15</el>
+                <el>14</el>
+                <el>22</el>
+                <el>19</el>
+                <el>15</el>
+                <el>14</el>
+                <el>22</el>
+                <el>16</el>
+                <el>20</el>
+                <el>17</el>
+                <el>20</el>
+                <el>18</el>
+                <el>20</el>
+                <el>19</el>
+                <el>20</el>
+                <el>15</el>
+                <el>13</el>
+                <el>15</el>
+                <el>24</el>
+                <el>14</el>
+                <el>26</el>
+                <el>15</el>
+            </rowIdx>
+            <value>
+                <el>1.0</el>
+                <el>-1.06</el>
+                <el>-1.0</el>
+                <el>0.301</el>
+                <el>1.0</el>
+                <el>-1.0</el>
+                <el>1.0</el>
+                <el>-1.0</el>
+                <el>1.0</el>
+                <el>1.0</el>
+                <el>1.0</el>
+                <el>-1.06</el>
+                <el>-1.0</el>
+                <el>0.301</el>
+                <el>1.0</el>
+                <el>-1.06</el>
+                <el>-1.0</el>
+                <el>0.313</el>
+                <el>1.0</el>
+                <el>-0.96</el>
+                <el>-1.0</el>
+                <el>0.313</el>
+                <el>1.0</el>
+                <el>-0.86</el>
+                <el>-1.0</el>
+                <el>0.326</el>
+                <el>-1.0</el>
+                <el>2.364</el>
+                <el>-1.0</el>
+                <el>2.386</el>
+                <el>-1.0</el>
+                <el>2.408</el>
+                <el>-1.0</el>
+                <el>2.429</el>
+                <el>1.0</el>
+                <el>1.4</el>
+                <el>1.0</el>
+                <el>-1.0</el>
+                <el>1.0</el>
+                <el>1.0</el>
+                <el>1.0</el>
+                <el>-0.43</el>
+                <el>-1.0</el>
+                <el>0.109</el>
+                <el>1.0</el>
+                <el>-1.0</el>
+                <el>1.0</el>
+                <el>-1.0</el>
+                <el>1.0</el>
+                <el>-1.0</el>
+                <el>1.0</el>
+                <el>1.0</el>
+                <el>1.0</el>
+                <el>1.0</el>
+                <el>-0.43</el>
+                <el>0.109</el>
+                <el>1.0</el>
+                <el>1.0</el>
+                <el>-0.43</el>
+                <el>0.108</el>
+                <el>1.0</el>
+                <el>1.0</el>
+                <el>-0.39</el>
+                <el>0.108</el>
+                <el>1.0</el>
+                <el>1.0</el>
+                <el>-0.37</el>
+                <el>0.107</el>
+                <el>-1.0</el>
+                <el>2.191</el>
+                <el>-1.0</el>
+                <el>2.219</el>
+                <el>-1.0</el>
+                <el>2.249</el>
+                <el>-1.0</el>
+                <el>2.279</el>
+                <el>-1.0</el>
+                <el>1.4</el>
+                <el>1.0</el>
+                <el>-1.0</el>
+                <el>1.0</el>
+                <el>1.0</el>
+                <el>1.0</el>
+            </value>
+        </linearConstraintCoefficients>
+    </instanceData>
+</osil>

@@ -1,0 +1,12 @@
+BuildTools    https://projects.coin-or.org/svn/BuildTools/releases/0.5.1
+ThirdParty/ASL https://projects.coin-or.org/svn/BuildTools/ThirdParty/ASL/releases/1.0.0
+Data/Netlib   https://projects.coin-or.org/svn/Data/releases/1.0.0/Netlib
+Data/Sample   https://projects.coin-or.org/svn/Data/releases/1.0.0/Sample
+Data/miplib3  https://projects.coin-or.org/svn/Data/releases/1.0.0/miplib3
+CoinUtils     https://projects.coin-or.org/svn/CoinUtils/releases/1.0.0/CoinUtils
+Cgl           https://projects.coin-or.org/svn/Cgl/releases/0.5.0/Cgl
+Clp           https://projects.coin-or.org/svn/Clp/releases/1.3.3/Clp
+Osi           https://projects.coin-or.org/svn/Osi/releases/0.95.0/Osi
+Cbc           https://projects.coin-or.org/svn/Cbc/releases/1.1.0/Cbc
+CppAD         https://projects.coin-or.org/svn/CppAD/trunk/CppAD
+

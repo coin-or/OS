@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><osil xmlns="os.optimizationservices.org"   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org ../schemas/OSiL.xsd" ><instanceHeader>
+    <description>Generated from AMPL nl file</description></instanceHeader>
+    <instanceData>
+        <variables numberOfVariables="2">
+            <var name="_svar[1]"/>
+            <var name="_svar[2]"/>
+        </variables>
+        <objectives numberOfObjectives="1">
+            <obj maxOrMin="max" name="" numberOfObjCoef="2">
+                <coef idx="0">10</coef>
+                <coef idx="1">9</coef>
+            </obj>
+        </objectives>
+        <constraints numberOfConstraints="4">
+            <con name="_scon[1]" ub="630"/>
+            <con name="_scon[2]" ub="600"/>
+            <con name="_scon[3]" ub="708"/>
+            <con name="_scon[4]" ub="135"/>
+        </constraints>
+        <linearConstraintCoefficients numberOfValues="8">
+            <start>
+                <el>0</el>
+                <el>4</el>
+                <el>8</el>
+            </start>
+            <rowIdx>
+                <el>0</el>
+                <el>1</el>
+                <el>2</el>
+                <el>3</el>
+                <el>0</el>
+                <el>1</el>
+                <el>2</el>
+                <el>3</el>
+            </rowIdx>
+            <value>
+                <el>0.7</el>
+                <el>0.5</el>
+                <el>1</el>
+                <el>0.1</el>
+                <el>1</el>
+                <el>0.8333</el>
+                <el>0.6667</el>
+                <el>0.25</el>
+            </value>
+        </linearConstraintCoefficients>
+    </instanceData>
+</osil>
+
