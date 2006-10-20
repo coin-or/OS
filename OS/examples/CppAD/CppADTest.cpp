@@ -79,6 +79,7 @@ int  main(){
 	using CppAD::NearEqual;
 	using CppAD::vector;
 	using OSAD::StackMachine;
+	std::cout.precision(12);
 	//
 	// get the problem data
 	//
@@ -112,7 +113,7 @@ int  main(){
 	double functionValue;
 	zz = new double[3];
 	zz[ 0] = 0.5;
-	zz[ 1] = 10000;
+	zz[ 1] = 1000;
 	zz[2] = 1;
 	functionValue = expTree->calculateFunction(&zz[0], false);
 	std::cout << "FUNCTION VALUE = " << functionValue << std::endl ;
@@ -136,7 +137,7 @@ int  main(){
 	std::cout << "GET SPARSE JACOBIAN RESULT"   << std::endl;
 		zz[ 0] = 0.5;
 	osinstance->getSparseJacobian( );
-	std::cout << "FUNCTION VALUE WITH TERM= " << osinstance->calculateFunctionValue(1, zz, true) << std::endl;
+	std::cout << "FUNCTION VALUE WITH TERM= " << osinstance->calculateFunctionValue(-1, zz, false) << std::endl;
 	delete[] zz;
 	zz = NULL;
 	delete osilreader;

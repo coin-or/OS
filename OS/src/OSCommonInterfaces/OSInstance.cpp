@@ -58,10 +58,12 @@ OSInstance::OSInstance():
 	m_mdConstraintUpperBounds(NULL),
 	m_mcConstraintTypes(NULL),
 	m_bDuplicateExpressionTreesMap( false),
+	m_bSparseJacobianCalculated( false),
 	m_miJacStart( NULL),
 	m_miJacIndex( NULL),
 	m_mdJacValue( NULL),
 	m_miJacNumConTerms( NULL),
+	m_sparseJacMatrix( NULL),
 	m_bProcessLinearConstraintCoefficients(false),
 	m_iLinearConstraintCoefficientNumber(-1),
 	m_bColumnMajor(true),
@@ -143,6 +145,8 @@ OSInstance::~OSInstance(){
 	m_mdJacValue = NULL;
 	delete[] m_miJacNumConTerms;
 	m_miJacNumConTerms = NULL;
+	//delete m_sparseJacMatrix;
+	m_sparseJacMatrix = NULL;
 	// delete the two children of OSInstance
 	//delete instanceHeader object
 	delete instanceHeader;
@@ -1354,45 +1358,67 @@ bool OSInstance::setQuadraticTerms(int number,
 
 
 SparseJacobianMatrix *OSInstance::getSparseJacobian( ){
+	//
+	if( m_bSparseJacobianCalculated == true) return m_sparseJacMatrix;
+	m_mdConstraintFunctionValues = new double[ getConstraintNumber()];
+	m_mdObjectiveFunctionValues = new double[ getObjectiveNumber()];
 	// before proceeding get a copy of the map of the Expression Trees
 	duplicateExpressionTreesMap();
 	if( m_bColumnMajor == true) getSparseJacobianFromColumnMajor( );
 	else getSparseJacobianFromRowMajor( );
 	// now fill in the arrays of the sparseJacMatrix
-	SparseJacobianMatrix *sparseJacMatrix;
-	sparseJacMatrix = new SparseJacobianMatrix();
-	sparseJacMatrix->starts = m_miJacStart;
-	sparseJacMatrix->conVals = m_miJacNumConTerms;
-	sparseJacMatrix->indexes = m_miJacIndex;
-	return sparseJacMatrix;
+	m_sparseJacMatrix = new SparseJacobianMatrix();
+	m_sparseJacMatrix->starts = m_miJacStart;
+	m_sparseJacMatrix->conVals = m_miJacNumConTerms;
+	m_sparseJacMatrix->indexes = m_miJacIndex;
+	m_sparseJacMatrix->values = m_mdJacValue;
+	m_bSparseJacobianCalculated = true;
+	return m_sparseJacMatrix;
 }//getSparseJacobian
 
 double OSInstance::calculateFunctionValue(int idx, double *x, bool functionEvaluated){
 	//
 	// put in check on value of idx and make sure it is in the correct range
 	// Kipp -- put in this check
+	int i, j;
+	// if we have not filled in the Sparse Jacobian matrix do so now
+	if( m_bSparseJacobianCalculated == false) getSparseJacobian();
 	//
-	// Kipp we probably want to change this variable
-	double functionVal = 0;
-	if(functionEvaluated == false) getSparseJacobian();
-	if(idx >= 0){
+	if(idx >= 0){ // we have a constraint
+		// get the nonlinear part
 		if( m_mapExpressionTreesMod.find( idx) != m_mapExpressionTreesMod.end() ){
-			functionVal = m_mapExpressionTreesMod[ idx]->calculateFunction( x,  false);
+			*(m_mdConstraintFunctionValues + idx) = m_mapExpressionTreesMod[ idx]->calculateFunction( x,  functionEvaluated);
 		}
-		return functionVal;
+		// now the linear part
+		// be careful, loop over only the constant terms in sparseJacMatrix
+		i = m_sparseJacMatrix->starts[ idx];
+		j = m_sparseJacMatrix->starts[ idx + 1 ];
+		while ( i <  j &&  (i - m_sparseJacMatrix->starts[ idx])  < m_sparseJacMatrix->conVals[ idx] ){
+			*(m_mdConstraintFunctionValues + idx) += m_sparseJacMatrix->values[ i]*x[ m_sparseJacMatrix->indexes[ i] ];
+			std::cout << "HERE IS THE INDEX " <<  m_sparseJacMatrix->indexes[ i]  << std::endl;
+			std::cout << "HERE IS THE X VALUE " <<  x[ m_sparseJacMatrix->indexes[ i] ] << std::endl;
+			std::cout << "HERE IS THE COEFFICIENT VALUE " << m_sparseJacMatrix->values[ i] << std::endl;
+			std::cout << "HERE IS A COMPONENT VALUE " << (m_sparseJacMatrix->values[ i])*x[ m_sparseJacMatrix->indexes[ i] ] << std::endl;
+			i++;
+		}	
+		return *(m_mdConstraintFunctionValues + idx);
 	}
-	else{
+	else{ // we have an objective function
+		// get the nonlinear part
+		if( m_mapExpressionTreesMod.find( idx) != m_mapExpressionTreesMod.end() ){
+			*(m_mdConstraintFunctionValues + idx) = m_mapExpressionTreesMod[ idx]->calculateFunction( x,  functionEvaluated);
+		}
 	}
 	// when true, if idx >=0  we return m_mdConstraintFunctionValues[ idx]
 	// when true, if idx < 0 we return m_mdObjectiveFunctionValues[abs( idx) - 1]
 	// if false we call calculateAllConstraintFunctionValues() and calculateAllObjectiveFunctionValues()
 	// and then retrieve as if true
 	//
-	return functionVal;
+	return *(m_mdConstraintFunctionValues + idx);
 }//calculateFunctionValue
 
 
-double *OSInstance::calculateAllConstraintFunctionValues( double* x, bool functionEvaluated){
+double *OSInstance::calculateAllConstraintFunctionValues( double* x, bool allFunctionsEvaluated){
 	return NULL;
 }
 
@@ -1431,44 +1457,6 @@ std::vector<FirstPartialStruct*> * OSInstance::calculateAllObjectiveFunctionGrad
 	return NULL;
 }//calculateAllObjectiveFunctionGradients
 
-std::vector<FirstPartialStruct*> *OSInstance::getAllConstraintFunctionGradientsBase(){
-/* be careful that this method returns a reference of the base as it returns an array pointer of vectors. So it needs to be
- * copied -- make a new array and do element-wise copy of vector members. 
-
-if(m_bGetAllConstraintFunctionGradientsBase == true) retrurn m_mvAllConstraintFunctionGradientsBase;
-
-1. convert 3 list storage linear coef matrix into m_mvAllConstraintFunctionGradientsBase
-two cases -- row major and column major
-This is going to be a similar and simpler logic as the calculateLinearConstraintFunctionValues
-Only that the value calculation line becomes something like: 
-m_mvAllConstraintFunctionGradientsBase[i][j] = {indexes[j], values[j]} for row major
-
-
-
-2. append extra qterms if quadratic coefficients is not NULL
-loop through all qterms with qTerm idx >= 0
-for each qterm, find wether there is a varIdxOne and varIdxTwo in the vector of idx row of m_mvAllConstraintFunctionGradientsBase
-if{ not there append one or two firstPartil at the end of the vector, with firstPartil->index_i = varIdxOne/varIdxTwo, firstPartil->value = 0}
-end if
-update m_mVarIdxVectorPosMap  -- array of varIdxVectorPosMaps -- qTerm idx is arrary index, varIdxOne/varIdxTwo is map key, vector pos is map value
-
-3.  append extra nonlinear varIdx if nonlinearExpressions is not null
-loop through all nl expression trees with idx >= 0
-for each expTree (row = idx), find wether each nonlinear varIdx is in the vector of idx row of m_mvAllConstraintFunctionGradientsBase
-if{ not there append one firstPartil at the end of the vector, with firstPartil->index_i = variableIdx, firstPartil->value = 0}
-end if
-update m_mVarIdxVectorPosMap  -- array of varIdxVectorPosMaps -- nl idx is arrary index, variableIdx is map key, vector pos is map value
-
-m_mvAllConstraintFunctionGradientsBase = true;
-
- */
- return NULL;
-}//getAllConstraintFunctionGradientsBase
-
-std::vector<FirstPartialStruct*> *OSInstance::getAllObjectiveFunctionGradientsBase(){
-//similar logic to getAllConstraintFunctionGradientsBase
-	return NULL;
-}//getAllObjectiveFunctionGradientsBase
 
 bool OSInstance::getSparseJacobianFromRowMajor( ){
 	// Kipp -- todo

@@ -515,6 +515,11 @@ private:
 	 * m_bDuplicateExpressionTreeMap is true if m_mapExpressionTrees was duplicated. 
 	 */
 	bool m_bDuplicateExpressionTreesMap;
+
+	/**
+	 * m_bSparseJacobianCalculated is true if getSparseJacobian() had been called. 
+	 */
+	bool m_bSparseJacobianCalculated;
 	
 	/**
 	 * m_mapExpressionTrees holds a hash map of expression trees in postfix format, with the key being the row index
@@ -553,6 +558,11 @@ private:
 	 * terms (gradient does not change) for the Jacobian matrix in sparse form (row major).  
      */    
  	int *m_miJacNumConTerms;
+ 
+  	/**
+	 * m_sparseJacMatrix is the Jacobian matrix stored in sparse matrix format
+     */  	
+ 	SparseJacobianMatrix *m_sparseJacMatrix;
 	
 	/**
 	 * process variables. 
@@ -1111,14 +1121,12 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * 
 	 * @param idx is the index on the constraint (0, 1, 2, 3, ...) or objective function (-1, -2, -3, ...). 
 	 * @param x is a pointer (double array) to the current variable values
-	 * @param functionEvaluated is true if any (not just idx) function (constraint or objective) 
+	 * @param functionEvaluated is true if the function indexed by idx
 	 * has been evaluated for the current iterate x
 	 * use a value of false if not sure
 	 * @return the function value as a double.  
 	 */
 	double calculateFunctionValue(int idx, double* x, bool functionEvaluated);
-	
-	
 	
 	/**
 	 * Calculate all of the constraint function values
@@ -1126,11 +1134,11 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * <p>
 	 * 
 	 * @param x is a pointer (double array) to the current variable values
-	 * @param functionEvaluated is true if any constraint function has been evaluated for the current iterate x.
+	 * @param allFunctionsEvaluated is true if all constraint functions have been evaluated for the current iterate x.
 	 * use a value of false if not sure
 	 * @return a double array of constraint function values -- the size of the array is equal to getConstraintNumber().  
 	 */
-	double *calculateAllConstraintFunctionValues( double* x, bool functionEvaluated);
+	double *calculateAllConstraintFunctionValues( double* x, bool allFunctionsEvaluated);
 	
 	/**
 	 * Calculate all of the objective function values
@@ -1138,11 +1146,11 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * <p>
 	 * 
 	 * @param x is a pointer (double array) to the current variable values
-	 * @param functionEvaluated is true if any objective function has been evaluated for the current iterate x.
+	 * @param allFunctionsEvaluated is true if all objective functions have been evaluated for the current iterate x.
 	 * use a value of false if not sure
 	 * @return a double array of objective function values -- the size of the array is equal to getObjectiveNumber().  
 	 */
-	double *calculateAllObjectiveFunctionValues( double* x, bool functionEvaluated);
+	double *calculateAllObjectiveFunctionValues( double* x, bool allFunctionsEvaluated);
 	
 	
 	/**
@@ -1156,7 +1164,7 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * @param functionEvaluated is true if any (not just idx) function (constraint or objective) 
 	 * has been evaluated for the current iterate x
 	 * use a value of false if not sure
-	 * @param gradientEvaluated is true if any (not just idx) function gradient (constraint or objective) 
+	 * @param gradientEvaluated is true if the function gradient (constraint or objective) indexed by idx
 	 * has been evaluated for the current iterate x
 	 * use a value of false if not sure
 	 * @return a vector of FirstPartialStructs (first member is the variable idx, second memeber is
@@ -1183,16 +1191,6 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	std::vector<FirstPartialStruct*> *calculateAllConstraintFunctionGradients(int idx, double* x, bool functionEvaluated, bool gradientEvaluated);				
 	
 	/**
-	 * Get the base data structure of all the constraint function gradients. 
-	 * 
-	 * @return a pointer to an array of FirstPartialStruct (first member is the variable idx, second memeber is
-	 * the partial with respect to that variable) vectors that represent a sparse implementaton. 
-	 * Each array member corresponds to one constraint gradient.
-	 */
-	std::vector<FirstPartialStruct*> *getAllConstraintFunctionGradientsBase();				
-	
-	
-	/**
 	 * Calculate the gradient of all objective functions  
 	 * 
 	 * <p>
@@ -1209,15 +1207,7 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * Each array member corresponds to one objective gradient.
 	 */
 	std::vector<FirstPartialStruct*> *calculateAllObjectiveFunctionGradients(int idx, double* x, bool functionEvaluated, bool gradientEvaluated);			
-	
-	/**
-	 * Get the base data structure of all the objective function gradients. 
-	 * 
-	 * @return a pointer to an array of FirstPartialStruct (first member is the variable idx, second memeber is
-	 * the partial with respect to that variable) vectors that represent a sparse implementaton. 
-	 * Each array member corresponds to one objective gradient.
-	 */
-	std::vector<FirstPartialStruct*> *getAllObjectiveFunctionGradientsBase();	
+		
 			
 	/**
 	 * 

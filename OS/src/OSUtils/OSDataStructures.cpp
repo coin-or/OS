@@ -146,14 +146,22 @@ SparseJacobianMatrix::~SparseJacobianMatrix(){
 	#ifdef DEBUG
 	cout << "inside SparseJacobianMatrix destructor" << endl;
 	#endif
-	delete[] starts;
-	starts = NULL;
-	delete[] conVals;
-	conVals = NULL;
-	delete[] indexes;
-	indexes = NULL;
-	delete[] values;
-	values = NULL;
+	if(starts != NULL){
+		delete[] starts;
+		starts = NULL;
+	}
+	if(conVals != NULL){
+		delete[] conVals;
+		conVals = NULL;
+	}
+	if(indexes != NULL){
+		delete[] indexes;
+		indexes = NULL;
+	}
+	if(values != NULL){
+		delete[] values;
+		values = NULL;
+	}
 }// end SparseJacobianMatrix Destructor
 	
 QuadraticTerms::QuadraticTerms():
