@@ -1408,6 +1408,14 @@ double OSInstance::calculateFunctionValue(int idx, double *x, bool functionEvalu
 		if( m_mapExpressionTreesMod.find( idx) != m_mapExpressionTreesMod.end() ){
 			*(m_mdConstraintFunctionValues + idx) = m_mapExpressionTreesMod[ idx]->calculateFunction( x,  functionEvaluated);
 		}
+		// get linear part
+		SparseVector **objCoef = getObjectiveCoefficients();
+		SparseVector *obj = objCoef[ abs( idx) - 1];
+		std::cout << "OBJ SIZE = " << obj->number << std::endl;
+		for(i = 0; i < obj->number; i++){
+			*(m_mdConstraintFunctionValues + idx) += x[ obj->indexes[i]]*obj->values[ i];
+		}
+		// get the coefficients for objective function idx
 	}
 	// when true, if idx >=0  we return m_mdConstraintFunctionValues[ idx]
 	// when true, if idx < 0 we return m_mdObjectiveFunctionValues[abs( idx) - 1]
