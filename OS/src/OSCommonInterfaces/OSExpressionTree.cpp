@@ -104,10 +104,10 @@ std::vector<double> OSExpressionTree::calculateGradient( double *x, bool functio
 	//std::vector<FirstPartialStruct*> firstPartialVector;
 	struct FirstPartialStruct *firstPartial;
 	for(m_mPosVarIdx = (*mapVarIdx).begin(); m_mPosVarIdx != (*mapVarIdx).end(); ++m_mPosVarIdx){
-		firstPartial = new FirstPartialStruct();
-		firstPartial->index_i = m_mPosVarIdx->first;
-		firstPartial->firstPartial_i  = jac[ m_mPosVarIdx->second];
-		firstPartialVector.push_back( firstPartial);
+		//firstPartial = new FirstPartialStruct();
+		//firstPartial->index_i = m_mPosVarIdx->first;
+		//firstPartial->firstPartial_i  = jac[ m_mPosVarIdx->second];
+		//firstPartialVector.push_back( firstPartial);
 		std::cout << "Partial with respect to " <<  m_mPosVarIdx->first << "  computed by CppAD = " << jac[ m_mPosVarIdx->second] << std::endl;
 	}
 	return jac;

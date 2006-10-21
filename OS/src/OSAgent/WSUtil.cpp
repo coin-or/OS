@@ -25,7 +25,7 @@
 #include <unistd.h>  
 #include <netdb.h>  
 #endif
-#define DEBUG
+
 
 #include <stdlib.h>    
 #include <string.h>    
