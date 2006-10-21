@@ -1145,8 +1145,8 @@ bool parseObjectives( const char **p){
 			case 'c':
 				*p = ch;
 				while( *constant++  == *ch) ch++;
-				constant -= 8;	
-				if( ( (ch - *p) != 7)  ) {strncpy(errorArray, ch, numErrorChar); osilerror("error in objective constant attribute"); return false;}
+				constant -= 9;	
+				if( ( (ch - *p) != 8)  ) {strncpy(errorArray, ch, numErrorChar); osilerror("error in objective constant attribute"); return false;}
 				else{
 					if(objconstantattON == true) {strncpy(errorArray, ch, numErrorChar); osilerror("error too many obj constant attributes"); return false;}
 					objconstantattON = true;
@@ -1398,9 +1398,9 @@ bool parseConstraints( const char **p){
 			case 'c':
 				*p = ch;
 				while( *constant++  == *ch) ch++;
-				if( ((ch - *p)  != 7)  ) {strncpy(errorArray, ch, numErrorChar); osilerror("error in constraint constant attribute"); return false;}
+				if( ((ch - *p)  != 8)  ) {strncpy(errorArray, ch, numErrorChar); osilerror("error in constraint constant attribute"); return false;}
 				if(conconstantattON == true) {strncpy(errorArray, ch, numErrorChar); osilerror("error too many con constant attributes"); return false;}
-				constant -= 8;
+				constant -= 9;
 				conconstantattON = true;
 				GETATTRIBUTETEXT;
 				//printf("ATTRIBUTE = %s\n", attText);

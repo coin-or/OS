@@ -406,6 +406,14 @@ private:
 	 * m_mdConstraintUpperBounds holds an array of constraint upper bounds (default = INF). 
 	 */
 	double* m_mdConstraintUpperBounds;
+	
+	/**
+
+	 * m_mdConstraintConstants holds an array of constraint constants (default = 0.0). 
+
+	 */
+
+	double* m_mdConstraintConstants;
 
 	/**
 	 * m_mcConstraintTypes holds a char array of constraint types
@@ -1167,10 +1175,9 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * @param gradientEvaluated is true if the function gradient (constraint or objective) indexed by idx
 	 * has been evaluated for the current iterate x
 	 * use a value of false if not sure
-	 * @return a vector of FirstPartialStructs (first member is the variable idx, second memeber is
-	 * the partial with respect to that variable) that represent a sparse implementaton.  
+	 * @return a pointer to a SparseJacobianVector.  
 	 */
-	std::vector<FirstPartialStruct*> calculateFunctionGradient(int idx, double* x, bool functionEvaluated, bool gradientEvaluated);																																																								
+	SparseJacobianVector *calculateConstraintFunctionGradient(int idx, double* x, bool functionEvaluated, bool gradientEvaluated);																																																								
 	
 	/**
 	 * Calculate the gradient of all constraint functions  

@@ -102,8 +102,13 @@ int  main(){
 	OSExpressionTree *expTree = NULL;
 	OSnLNode *nlNode = NULL; 
 	// create reader and generate the OSInstance object
-	osilreader = new OSiLReader();
-	osinstance = osilreader->readOSiL( &osil);
+	try{
+		osilreader = new OSiLReader();
+		osinstance = osilreader->readOSiL( &osil);
+	}
+	catch(const ErrorClass& eclass){
+		std::cout << eclass.errormsg << std::endl;
+	} 
 	// get the nodes for an expression tree in postfix format
 	// in this case we get the nonlinear objective function term
 	//expTree = osinstance->getNonlinearExpressionTree( -1);

@@ -57,6 +57,7 @@ OSInstance::OSInstance():
 	m_mdConstraintLowerBounds(NULL),
 	m_mdConstraintUpperBounds(NULL),
 	m_mcConstraintTypes(NULL),
+ 	m_mdConstraintConstants( NULL),
 	m_bDuplicateExpressionTreesMap( false),
 	m_bSparseJacobianCalculated( false),
 	m_miJacStart( NULL),
@@ -127,6 +128,8 @@ OSInstance::~OSInstance(){
 	m_msConstraintNames = NULL;
 	delete[] m_mcConstraintTypes;
 	m_mcConstraintTypes = NULL;
+	delete[]  m_mdConstraintConstants;
+	 m_mdConstraintConstants = NULL;
 	delete[] m_mdConstraintLowerBounds;
 	m_mdConstraintLowerBounds = NULL;
 	delete[] m_mdConstraintUpperBounds;
@@ -708,10 +711,12 @@ bool OSInstance::processConstraints() {
 		}
 		m_mdConstraintLowerBounds = new double[n];
 		m_mdConstraintUpperBounds = new double[n];
+		m_mdConstraintConstants = new double[n];
 		m_mcConstraintTypes = new char[n];
 		for(i = 0; i < n; i++){
 			m_mdConstraintLowerBounds[i] = instanceData->constraints->con[i]->lb;
 			m_mdConstraintUpperBounds[i] = instanceData->constraints->con[i]->ub;
+			m_mdConstraintConstants[i] = instanceData->constraints->con[i]->constant;
 			if(m_mdConstraintLowerBounds[i] == OSINFINITY || m_mdConstraintUpperBounds[i] == -OSINFINITY) {
 				throw ErrorClass( outStr.str() );
 			}
@@ -1360,6 +1365,8 @@ bool OSInstance::setQuadraticTerms(int number,
 SparseJacobianMatrix *OSInstance::getSparseJacobian( ){
 	//
 	if( m_bSparseJacobianCalculated == true) return m_sparseJacMatrix;
+	processObjectives();
+	processConstraints();
 	m_mdConstraintFunctionValues = new double[ getConstraintNumber()];
 	m_mdObjectiveFunctionValues = new double[ getObjectiveNumber()];
 	// before proceeding get a copy of the map of the Expression Trees
@@ -1377,10 +1384,8 @@ SparseJacobianMatrix *OSInstance::getSparseJacobian( ){
 }//getSparseJacobian
 
 double OSInstance::calculateFunctionValue(int idx, double *x, bool functionEvaluated){
-	//
-	// put in check on value of idx and make sure it is in the correct range
-	// Kipp -- put in this check
 	try{
+		// make sure the index idx is valid
 		if( getConstraintNumber() <= idx || getObjectiveNumber() <= ( abs( idx) - 1) ) throw 
 			ErrorClass("row index not value in OSInstance::calculateFunctionValue");
 		int i, j;
@@ -1402,6 +1407,8 @@ double OSInstance::calculateFunctionValue(int idx, double *x, bool functionEvalu
 				dvalue += m_sparseJacMatrix->values[ i]*x[ m_sparseJacMatrix->indexes[ i] ];
 				i++;
 			}	
+			// add in the constraint function constant
+			dvalue += m_mdConstraintConstants[ idx ];
 			*(m_mdConstraintFunctionValues + idx) = dvalue;
 			return *(m_mdConstraintFunctionValues + idx);
 		}
@@ -1417,6 +1424,8 @@ double OSInstance::calculateFunctionValue(int idx, double *x, bool functionEvalu
 			for(i = 0; i < obj->number; i++){
 				dvalue += x[ obj->indexes[i]]*obj->values[ i];
 			}
+			// add in the objective function constant
+			dvalue += m_mdObjectiveConstants[ abs( idx) - 1 ];
 			// get the coefficients for objective function idx
 			*(m_mdObjectiveFunctionValues + ( abs( idx) - 1)) = dvalue;
 			return *(m_mdObjectiveFunctionValues + ( abs( idx) - 1));
@@ -1453,7 +1462,7 @@ double *OSInstance::calculateAllObjectiveFunctionValues( double* x, bool allFunc
 }//calculateAllObjectiveFunctionValues
 
 
-std::vector<FirstPartialStruct*> OSInstance::calculateFunctionGradient(int idx, double* x, bool functionEvaluated, bool gradientEvaluated){
+SparseJacobianVector *OSInstance::calculateConstraintFunctionGradient(int idx, double* x, bool functionEvaluated, bool gradientEvaluated){
 	//
 	// put in check on value of idx and make sure it is in the correct range
 	// when true, if idx >=0  we return m_mvConstraintFunctionGradients[ idx]
@@ -1461,6 +1470,38 @@ std::vector<FirstPartialStruct*> OSInstance::calculateFunctionGradient(int idx, 
 	// if false we call calculateAllConstraintFunctionGradients() and calculateAllObjectiveFunctionGradients()
 	// and then retrieve as if true
 	//
+	try{
+		// make sure the index idx is valid
+		if( getConstraintNumber() <= idx  ) throw 
+			ErrorClass("row index not value in OSInstance::calculateFunctionValue");
+		int i, j;
+		double dvalue = 0;
+		/*SparseJacobianVector *jac;
+		// if we have not filled in the Sparse Jacobian matrix do so now
+		if( m_bSparseJacobianCalculated == false) getSparseJacobian();
+		if( functionEvaluated == true) return *(m_mdConstraintFunctionValues + idx);
+		// get the nonlinear part
+		if( m_mapExpressionTreesMod.find( idx) != m_mapExpressionTreesMod.end() ){
+			dvalue = m_mapExpressionTreesMod[ idx]->calculateFunction( x,  functionEvaluated);
+		}
+		// now the linear part
+		// be careful, loop over only the constant terms in sparseJacMatrix
+		i = m_sparseJacMatrix->starts[ idx];
+		j = m_sparseJacMatrix->starts[ idx + 1 ];
+		while ( i <  j &&  (i - m_sparseJacMatrix->starts[ idx])  < m_sparseJacMatrix->conVals[ idx] ){
+			dvalue += m_sparseJacMatrix->values[ i]*x[ m_sparseJacMatrix->indexes[ i] ];
+			i++;
+		}	
+		// add in the constraint function constant
+		dvalue += m_mdConstraintConstants[ idx ];
+		*(m_mdConstraintFunctionValues + idx) = dvalue;
+		return *(m_mdConstraintFunctionValues + idx);
+		*/
+	}
+	catch(const ErrorClass& eclass){
+		throw ErrorClass( eclass.errormsg);
+	} 
+	return NULL;
 }//calculateFunctionGradient
 
 std::vector<FirstPartialStruct*> * OSInstance::calculateAllConstraintFunctionGradients(int idx, double* x, bool functionEvaluated, bool gradientEvaluated){

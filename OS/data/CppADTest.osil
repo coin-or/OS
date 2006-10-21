@@ -18,7 +18,7 @@
 			</obj>
 		</objectives>
 		<constraints numberOfConstraints="2">
-			<con ub="10.0"/>
+			<con ub="10.0" constant="33"/>
 			<con lb="10.0"/>
 		</constraints>
 		<linearConstraintCoefficients numberOfValues=" 3">

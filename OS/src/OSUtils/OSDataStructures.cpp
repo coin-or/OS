@@ -32,6 +32,12 @@ number( number_)
 }// end SparseVector constructor
 
 
+SparseVector::SparseVector( ):
+	indexes( NULL),
+	values( NULL)
+{
+}// end SparseVector constructor
+
 SparseVector::~SparseVector(){
 	#ifdef DEBUG
 	cout << "inside sparseVector destructor" << endl;
@@ -129,7 +135,30 @@ SparseJacobianMatrix::SparseJacobianMatrix():
 {
 }// end SparseMatrix Constructor
 
+SparseJacobianVector::SparseJacobianVector( int number_):
+number( number_)
+{
+	indexes = new int[ number];
+	values = new double[ number];
+}// end SparseJacobianVector constructor
 
+
+SparseJacobianVector::SparseJacobianVector( ):
+	indexes( NULL),
+	values( NULL)
+{
+}// end SparseJacobianVector constructor
+
+
+SparseJacobianVector::~SparseJacobianVector(){
+	#ifdef DEBUG
+	cout << "inside sparseVector destructor" << endl;
+	#endif
+	delete[] indexes;
+	indexes = NULL;
+	delete[] values;
+	values = NULL;
+}// end SparseJacobianVector constructor
 
 SparseJacobianMatrix::SparseJacobianMatrix(int startSize_, int valueSize_):
 	startSize(startSize_),

@@ -1220,10 +1220,10 @@ double OSnLNodeVariable::calculateFunction(double *x){
 
 AD<double> OSnLNodeVariable::constructCppADTree(std::map<int, int> *varIdx, CppAD::vector< AD<double> > *XAD){
 	m_CppADTree = coef;
-	std::cout << "Inside OSnLNodeVariable "<<  std::endl;
-	std::cout << "Value of dense index = " << idx << std::endl;
-	std::cout << "Value of sparse index = " << (*varIdx)[ idx] << std::endl;
-	std::cout << "Value of variable = " << (*XAD)[ (*varIdx)[ idx] ] << std::endl;
+	//std::cout << "Inside OSnLNodeVariable "<<  std::endl;
+	//std::cout << "Value of dense index = " << idx << std::endl;
+	//std::cout << "Value of sparse index = " << (*varIdx)[ idx] << std::endl;
+	//std::cout << "Value of variable = " << (*XAD)[ (*varIdx)[ idx] ] << std::endl;
 	m_CppADTree = coef*(*XAD)[ (*varIdx)[ idx] ];
 	return m_CppADTree;
 }// end OSnLNodeVariable::constructCppADTree

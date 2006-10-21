@@ -30,9 +30,25 @@
 class SparseVector{
 	public:
 	
-	SparseVector(int number);
-	~SparseVector();
+	/**
+	 * Constructor.
+	 * 
+	 * @param number holds the size of the vector.
+	 */
 	
+	SparseVector(int number);
+	
+	/**
+	 *
+	 * Default Constructor. 
+	 */	
+	SparseVector();
+	
+	/**
+	 *
+	 * Default destructor. 
+	 */	
+	~SparseVector();
 	
 	/**
 	 * number is the number of elements in the indexes and values arrays.
@@ -176,6 +192,54 @@ class SparseJacobianMatrix {
 	~SparseJacobianMatrix();
 
 }; //SparseJacobianMatrix
+
+
+class SparseJacobianVector{
+	public:
+	
+	/**
+	 * Constructor.
+	 * 
+	 * @param number holds the size of the vector.
+	 */
+	
+	SparseJacobianVector(int number);
+	
+	/**
+	 *
+	 * Default Constructor. 
+	 */	
+	SparseJacobianVector();
+	
+	/**
+	 *
+	 * Default destructor. 
+	 */	
+	~SparseJacobianVector();
+	
+	
+	/**
+	 * number is the number of elements in the indexes and values arrays.
+	 */
+	int number;
+	
+	/**
+	 * numConstant is the number partials that do not change at each iteration
+	 * the first numConstant components are constant.
+	 */
+	int numConstant;
+	
+	/**
+	 * indexes holds an integer array of indexes, which corresponding values are nonzero.
+	 */
+	int* indexes;
+
+	/**
+	 * values holds a double array of nonzero values.
+	 */
+	double* values;
+
+}; //SparseVector
 
 class QuadraticTerms {
 
