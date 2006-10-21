@@ -79,7 +79,7 @@ public:
 	 * @param functionEvaluated is set to true if the function has already been evaluated.
 	 * @return the expression tree gradient given the current variable values.
 	 */
-	std::vector<FirstPartialStruct*> calculateGradient( double *x, bool functionEvaluated);
+	std::vector<double> calculateGradient( double *x, bool functionEvaluated);
 	
 	
 	/**

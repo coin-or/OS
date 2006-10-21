@@ -76,7 +76,7 @@ double OSExpressionTree::calculateFunction( double *x, bool functionEvaluated){
 	return m_vY[ 0];
 }//calculateFunction
 
-std::vector<FirstPartialStruct*> OSExpressionTree::calculateGradient( double *x, bool functionEvaluated){
+std::vector<double> OSExpressionTree::calculateGradient( double *x, bool functionEvaluated){
 	// note x is a dense vector
 	if( m_bCppADTreeBuilt == false){
 		// map the variables
@@ -101,7 +101,7 @@ std::vector<FirstPartialStruct*> OSExpressionTree::calculateGradient( double *x,
  	std::vector<double> jac( (*mapVarIdx).size() ); 	// Jacobian of f 
    	jac  = (*f).Jacobian( m_vX);	// Jacobian for operation sequence
 	// print the results
-	std::vector<FirstPartialStruct*> firstPartialVector;
+	//std::vector<FirstPartialStruct*> firstPartialVector;
 	struct FirstPartialStruct *firstPartial;
 	for(m_mPosVarIdx = (*mapVarIdx).begin(); m_mPosVarIdx != (*mapVarIdx).end(); ++m_mPosVarIdx){
 		firstPartial = new FirstPartialStruct();
@@ -110,7 +110,7 @@ std::vector<FirstPartialStruct*> OSExpressionTree::calculateGradient( double *x,
 		firstPartialVector.push_back( firstPartial);
 		std::cout << "Partial with respect to " <<  m_mPosVarIdx->first << "  computed by CppAD = " << jac[ m_mPosVarIdx->second] << std::endl;
 	}
-	return firstPartialVector;
+	return jac;
 }//calculateGradient
 
 std::vector<SecondPartialStruct*>  OSExpressionTree::calculateHessian( double *x, bool functionEvaluated){
