@@ -117,6 +117,7 @@ int  main(){
 	zz[2] = 1;
 	functionValue = expTree->calculateFunction(&zz[0], false);
 	std::cout << "FUNCTION VALUE = " << functionValue << std::endl ;
+	std::cout << "GET SPARSE JACOBIAN RESULT"   << std::endl;
 	expTree->calculateGradient(&zz[0], true );
 	// now get Hessian information
 	std::vector<SecondPartialStruct*> secondPartialVector;
@@ -130,14 +131,18 @@ int  main(){
 		std::cout << "Second index = " << secondPartial->index_j << std::endl;
 		std::cout << "Second partial  = " << secondPartial->secondPartial_ij << std::endl;
 	}
-	zz[ 0] = 0.25;
-	functionValue  = expTree->calculateFunction(&zz[0], false);
-	std::cout << "FUNCTION VALUE = " << functionValue << std::endl ;
-	expTree->calculateGradient( &zz[0], true );
-	std::cout << "GET SPARSE JACOBIAN RESULT"   << std::endl;
-		zz[ 0] = 0.5;
-	osinstance->getSparseJacobian( );
-	std::cout << "FUNCTION VALUE WITH TERM= " << osinstance->calculateFunctionValue(-1, zz, false) << std::endl;
+	//
+	double *conVals = osinstance->calculateAllConstraintFunctionValues( zz, false);
+	double *objVals = osinstance->calculateAllObjectiveFunctionValues( zz, false);
+	int idx;
+	for( idx = 0; idx < osinstance->getConstraintNumber(); idx++){
+		//std::cout << "CONSTRAINT FUNCTION VALUE WITH TERM= " << osinstance->calculateFunctionValue(idx, zz, false) << std::endl;
+		std::cout << "CONSTRAINT FUNCTION VALUE WITH TERM= " << *(conVals + idx) << std::endl;
+	}
+	for( idx = 0; idx < osinstance->getObjectiveNumber(); idx++){
+		//std::cout << "OBJECTIVE FUNCTION VALUE WITH TERM= " << osinstance->calculateFunctionValue(idx, zz, false) << std::endl;
+		std::cout << "OBJECTIVE FUNCTION VALUE WITH TERM= " << *(objVals + idx) << std::endl;
+	}
 	delete[] zz;
 	zz = NULL;
 	delete osilreader;

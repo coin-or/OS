@@ -1380,65 +1380,77 @@ double OSInstance::calculateFunctionValue(int idx, double *x, bool functionEvalu
 	//
 	// put in check on value of idx and make sure it is in the correct range
 	// Kipp -- put in this check
-	int i, j;
-	// if we have not filled in the Sparse Jacobian matrix do so now
-	if( m_bSparseJacobianCalculated == false) getSparseJacobian();
-	//
-	if(idx >= 0){ // we have a constraint
-		// get the nonlinear part
-		if( m_mapExpressionTreesMod.find( idx) != m_mapExpressionTreesMod.end() ){
-			*(m_mdConstraintFunctionValues + idx) = m_mapExpressionTreesMod[ idx]->calculateFunction( x,  functionEvaluated);
+	try{
+		if( getConstraintNumber() <= idx || getObjectiveNumber() <= ( abs( idx) - 1) ) throw 
+			ErrorClass("row index not value in OSInstance::calculateFunctionValue");
+		int i, j;
+		double dvalue = 0;
+		// if we have not filled in the Sparse Jacobian matrix do so now
+		if( m_bSparseJacobianCalculated == false) getSparseJacobian();
+		//
+		if(idx >= 0){ // we have a constraint
+			if( functionEvaluated == true) return *(m_mdConstraintFunctionValues + idx);
+			// get the nonlinear part
+			if( m_mapExpressionTreesMod.find( idx) != m_mapExpressionTreesMod.end() ){
+				dvalue = m_mapExpressionTreesMod[ idx]->calculateFunction( x,  functionEvaluated);
+			}
+			// now the linear part
+			// be careful, loop over only the constant terms in sparseJacMatrix
+			i = m_sparseJacMatrix->starts[ idx];
+			j = m_sparseJacMatrix->starts[ idx + 1 ];
+			while ( i <  j &&  (i - m_sparseJacMatrix->starts[ idx])  < m_sparseJacMatrix->conVals[ idx] ){
+				dvalue += m_sparseJacMatrix->values[ i]*x[ m_sparseJacMatrix->indexes[ i] ];
+				i++;
+			}	
+			*(m_mdConstraintFunctionValues + idx) = dvalue;
+			return *(m_mdConstraintFunctionValues + idx);
 		}
-		// now the linear part
-		// be careful, loop over only the constant terms in sparseJacMatrix
-		i = m_sparseJacMatrix->starts[ idx];
-		j = m_sparseJacMatrix->starts[ idx + 1 ];
-		while ( i <  j &&  (i - m_sparseJacMatrix->starts[ idx])  < m_sparseJacMatrix->conVals[ idx] ){
-			*(m_mdConstraintFunctionValues + idx) += m_sparseJacMatrix->values[ i]*x[ m_sparseJacMatrix->indexes[ i] ];
-			std::cout << "HERE IS THE INDEX " <<  m_sparseJacMatrix->indexes[ i]  << std::endl;
-			std::cout << "HERE IS THE X VALUE " <<  x[ m_sparseJacMatrix->indexes[ i] ] << std::endl;
-			std::cout << "HERE IS THE COEFFICIENT VALUE " << m_sparseJacMatrix->values[ i] << std::endl;
-			std::cout << "HERE IS A COMPONENT VALUE " << (m_sparseJacMatrix->values[ i])*x[ m_sparseJacMatrix->indexes[ i] ] << std::endl;
-			i++;
-		}	
-		return *(m_mdConstraintFunctionValues + idx);
+		else{ // we have an objective function
+			if( functionEvaluated == true) return *(m_mdObjectiveFunctionValues + ( abs( idx) - 1));
+			// get the nonlinear part
+			if( m_mapExpressionTreesMod.find( idx) != m_mapExpressionTreesMod.end() ){
+				dvalue = m_mapExpressionTreesMod[ idx]->calculateFunction( x,  functionEvaluated);
+			}
+			// get linear part
+			SparseVector **objCoef = getObjectiveCoefficients();
+			SparseVector *obj = objCoef[ abs( idx) - 1];
+			for(i = 0; i < obj->number; i++){
+				dvalue += x[ obj->indexes[i]]*obj->values[ i];
+			}
+			// get the coefficients for objective function idx
+			*(m_mdObjectiveFunctionValues + ( abs( idx) - 1)) = dvalue;
+			return *(m_mdObjectiveFunctionValues + ( abs( idx) - 1));
+		}
 	}
-	else{ // we have an objective function
-		// get the nonlinear part
-		if( m_mapExpressionTreesMod.find( idx) != m_mapExpressionTreesMod.end() ){
-			*(m_mdConstraintFunctionValues + idx) = m_mapExpressionTreesMod[ idx]->calculateFunction( x,  functionEvaluated);
-		}
-		// get linear part
-		SparseVector **objCoef = getObjectiveCoefficients();
-		SparseVector *obj = objCoef[ abs( idx) - 1];
-		std::cout << "OBJ SIZE = " << obj->number << std::endl;
-		for(i = 0; i < obj->number; i++){
-			*(m_mdConstraintFunctionValues + idx) += x[ obj->indexes[i]]*obj->values[ i];
-		}
-		// get the coefficients for objective function idx
-	}
-	// when true, if idx >=0  we return m_mdConstraintFunctionValues[ idx]
-	// when true, if idx < 0 we return m_mdObjectiveFunctionValues[abs( idx) - 1]
-	// if false we call calculateAllConstraintFunctionValues() and calculateAllObjectiveFunctionValues()
-	// and then retrieve as if true
-	//
-	return *(m_mdConstraintFunctionValues + idx);
+	catch(const ErrorClass& eclass){
+		throw ErrorClass( eclass.errormsg);
+	} 
 }//calculateFunctionValue
 
 
 double *OSInstance::calculateAllConstraintFunctionValues( double* x, bool allFunctionsEvaluated){
-	return NULL;
-}
-
-double *OSInstance::calculateAllObjectiveFunctionValues( double* x, bool functionEvaluated){
-	// if true return m_mdObjectiveFunctionValues
-	// else initialize m_mdObjectiveFunctionValues to zero
-	// loop over all the objective functions
-	// if not NULL first get linear values
-	// if not NULL then get quadratic values
-	// if not NULL then get nonlinear vaues
-	return NULL;
+	if(allFunctionsEvaluated == true) return m_mdConstraintFunctionValues;
+	int idx, numConstraints;
+	numConstraints = getConstraintNumber();
+	// loop over all constraints
+	for(idx = 0; idx < numConstraints; idx++){
+		// calculateFunctionValue will define *(m_mdConstraintFunctionValues + idx)
+		calculateFunctionValue(idx, x, false);	
+	}
+	return m_mdConstraintFunctionValues;
 }//calculateAllConstraintFunctionValues
+
+double *OSInstance::calculateAllObjectiveFunctionValues( double* x, bool allFunctionsEvaluated){
+	if(allFunctionsEvaluated == true) return m_mdObjectiveFunctionValues;
+	int idx, numObjectives;
+	numObjectives = getObjectiveNumber();
+	// loop over all objectives
+	for(idx = 0; idx < numObjectives; idx++){
+		// calculateFunctionValue will define *(m_mdObjectiveFunctionValues + ( abs( idx) - 1))
+		calculateFunctionValue(-idx - 1, x, false);	
+	}
+	return m_mdObjectiveFunctionValues;
+}//calculateAllObjectiveFunctionValues
 
 
 std::vector<FirstPartialStruct*> OSInstance::calculateFunctionGradient(int idx, double* x, bool functionEvaluated, bool gradientEvaluated){
