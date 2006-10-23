@@ -239,7 +239,63 @@ class SparseJacobianVector{
 	 */
 	double* values;
 
-}; //SparseVector
+}; //SparseJacobianVector
+
+
+/*! \class SparseHessianMatrix SparseHessianMatrix.h "SparseHessianMatrix.h"
+ *  \brief The in-memory representation of a SparseHessianMatrix..
+ *
+ * \remarks 
+<p>  Store and uppertriangular Hessian Matrix in sparse format </p>
+<p>  Assume there are n variables in what follows </p>
+
+ *
+ * 
+ */
+class SparseHessianMatrix {
+	public:
+
+	/**
+	 * hessDimension is the number of nonzeros in each array.
+	 */
+	int hessDimension;
+	
+	/**
+	 * hessRowIdx is an integer array of row indicies in the range 0, ..., n - 1.
+	 */
+	int* hessRowIdx; 
+	
+	/**
+	 * hessColIdx is an integer array of column indicies in the range 0, ..., n - 1.
+	 */
+	int* hessColIdx; 
+	
+	/**
+	 * hessValues is a double array of the Hessian values.
+	 */
+	int* hessValues;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	SparseHessianMatrix();
+	
+	/**
+	 * An Alternative Constructor.
+	 * 
+	 * @param startSize holds the size of the start array.
+	 * @param valueSize holds the size of the value and index arrays.
+	 */
+	SparseHessianMatrix(int startSize, int valueSize);
+
+	/**
+	 *
+	 * Default destructor. 
+	 */	
+	~SparseHessianMatrix();
+
+}; //SparseHessianMatrix
 
 class QuadraticTerms {
 

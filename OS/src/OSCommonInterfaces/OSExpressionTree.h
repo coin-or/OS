@@ -91,9 +91,9 @@ public:
 	 * 
 	 * @param x holds the values of the variables in a double array.
 	 * @param functionEvaluated is set to true if the function has already been evaluated.
-	 * @return the expression tree gradient given the current variable values.
+	 * @return the expression tree Hessian given the current variable values.
 	 */
-	std::vector<SecondPartialStruct*> calculateHessian( double *x, bool functionEvaluated);
+	 std::vector<double> calculateHessian( double *x, bool functionEvaluated);
 	
 
 	/**

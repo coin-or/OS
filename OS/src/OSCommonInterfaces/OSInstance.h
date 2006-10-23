@@ -512,22 +512,20 @@ private:
 	std::map<int, OSExpressionTree*> m_mapExpressionTrees ;
 	
 	/**
-	 * m_vdGradient is a vector that holds the partials in a gradient 
-	 * usually for each row or column.
-	 */
-	std::vector<double> m_vdGradient ;
-	
-	/**
 	 * m_LagHession is an OSExpressionTree object that is the expression tree
 	 * for the Lagrangian function.
 	 */
-	OSExpressionTree *m_LagHessian ;
+	OSExpressionTree *m_HessianLag ;
 	
 	/**
 	 * m_bLagHessionCreated is true if a Lagragian function for the Hessian has been created
 	 */ 
+	bool m_bHessianLagCreated ;
 	
-	bool m_bLagHessianCreated ;
+	/**
+	 * m_mSparseHessianLag is the Hessian Matrix of the Lagrangian function in sparse format
+	 */ 	
+	SparseHessianMatrix* m_mSparseHessianLag;
 	
 	/**
 	 * m_mapExpressionTreesMod holds a hash map of expression trees, with the key being the row index
@@ -1178,27 +1176,6 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 */
 	double *calculateAllObjectiveFunctionValues( double* x, bool allFunctionsEvaluated);
 	
-	
-	/**
-	 * Calculate the gradient of function (constraint or objective) 
-	 * indexed by idx
-	 * 
-	 * <p>
-	 * 
-	 * @param idx is the index on the constraint (0, 1, 2, 3, ...) or objective function (-1, -2, -3, ...). 
-	 * @param x is a pointer (double array) to the current variable values
-	 * @param functionEvaluated is true if any (not just idx) function (constraint or objective) 
-	 * has been evaluated for the current iterate x
-	 * use a value of false if not sure
-	 * @param gradientEvaluated is true if the function gradient (constraint or objective) indexed by idx
-	 * has been evaluated for the current iterate x
-	 * use a value of false if not sure
-	 * @return a pointer to a SparseJacobianVector.  
-	 */
-	SparseJacobianVector *calculateConstraintFunctionGradient(int idx, double* x, bool functionEvaluated, bool gradientEvaluated);	
-	
-																																																								
-	
 	/**
 	 * Calculate the gradient of all constraint functions  
 	 * 
@@ -1232,24 +1209,6 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 */
 	double *calculateObjectiveFunctionGradient(int idx, double* x, bool functionEvaluated, bool allGradientsEvaluated);
 	
-	/**
-	 * Calculate the gradient of all objective functions  
-	 * 
-	 * <p>
-	 * 
-	 * @param x is a pointer (double array) to the current variable values
-	 * @param functionEvaluated is true if any objective function gradient
-	 * has been evaluated for the current iterate x
-	 * use a value of false if not sure
-	 * @param gradientEvaluated is true if any objective function gradient
-	 * has been evaluated for the current iterate x
-	 * use a value of false if not sure
-	 * @return a pointer to an array of FirstPartialStruct (first member is the variable idx, second memeber is
-	 * the partial with respect to that variable) vectors that represent a sparse implementaton. 
-	 * Each array member corresponds to one objective gradient.
-	 */
-	std::vector<FirstPartialStruct*> *calculateAllObjectiveFunctionGradients(int idx, double* x, bool functionEvaluated, bool gradientEvaluated);			
-		
 			
 	/**
 	 * 
@@ -1258,9 +1217,15 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	bool getSparseJacobianFromColumnMajor();
 	
 	/**
-	 * @return a pointer to the ExpressionTree for the Lagrangian of Hessian 
+	 * @return a pointer to the ExpressionTree for the Hession of the Lagrangian functioni 
 	 */
-	OSExpressionTree* getLagrangianOfHessian( );
+	OSExpressionTree* getHessianOfLagrangainExpTree( );
+	
+	/**
+	 * @param a pointer to an OSExpressian Tree
+	 * @return a pointer to SparseHessianMatrix with the nonzero structure 
+	 */
+	SparseHessianMatrix* getHessianOfLagrangianNonz( OSExpressionTree* expTree);
 	
 	/**
 	 * 

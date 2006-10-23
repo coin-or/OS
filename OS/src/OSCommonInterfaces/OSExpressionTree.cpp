@@ -107,7 +107,7 @@ std::vector<double> OSExpressionTree::calculateGradient( double *x, bool functio
 	return jac;
 }//calculateGradient
 
-std::vector<SecondPartialStruct*>  OSExpressionTree::calculateHessian( double *x, bool functionEvaluated){
+std::vector<double>  OSExpressionTree::calculateHessian( double *x, bool functionEvaluated){
 	if( m_bCppADTreeBuilt == false){
 		// map the variables
 		if( m_bIndexMapGenerated == false) getVariableIndiciesMap();
@@ -144,13 +144,14 @@ std::vector<SecondPartialStruct*>  OSExpressionTree::calculateHessian( double *x
 			secondPartialVector.push_back( secondPartial);
 		}
 	}
-	return secondPartialVector;
-}//calculateGradient
+	return hess;
+}//calculateHessian
 
 std::map<int, int> *OSExpressionTree::getVariableIndiciesMap(){
 	if( m_bIndexMapGenerated == true) return mapVarIdx;
 	mapVarIdx = new std::map<int, int>();
 	m_treeRoot->getVariableIndexMap( mapVarIdx);
+	std::cout << "SIZE OF MAP =  "  << (*mapVarIdx).size() << std::endl;
 	m_bIndexMapGenerated = true;
 	return mapVarIdx;
 }//getVariableIndicies

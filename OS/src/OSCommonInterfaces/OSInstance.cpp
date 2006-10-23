@@ -49,8 +49,9 @@ OSInstance::OSInstance():
 	m_mdObjectiveConstants(NULL),
 	m_mdObjectiveWeights(NULL),
 	m_mdObjGradient(NULL),
-	m_LagHessian(NULL),
-	m_bLagHessianCreated( false),
+	m_HessianLag(NULL),
+	m_bHessianLagCreated( false),
+	m_mSparseHessianLag( NULL),
 	m_mObjectiveCoefficients(NULL),
 	m_bGetDenseObjectives(false),
 	m_mmdDenseObjectiveCoefficients(NULL),
@@ -155,16 +156,19 @@ OSInstance::~OSInstance(){
 	m_miJacNumConTerms = NULL;
 	delete[] m_mdObjGradient;
 	m_mdObjGradient = NULL;
-	if( m_bLagHessianCreated == true){
-		delete m_LagHessian;
-		m_LagHessian = NULL;
+	if( m_bHessianLagCreated == true){
+		delete m_HessianLag;
+		m_HessianLag = NULL;
+		delete m_mSparseHessianLag;
+		m_mSparseHessianLag = NULL;
 	}
+
 	//delete m_sparseJacMatrix;
 	m_sparseJacMatrix = NULL;
 	//
 	// delete the expression trees that got created
 	// however they already got deleted if we have a lagrangian Hessian
-	if( m_bLagHessianCreated == false){
+	if( m_bHessianLagCreated == false){
 		if( (m_bProcessExpressionTrees == true) && (m_bDuplicateExpressionTreesMap == false)  ) {
 			for(posMapExpTree = m_mapExpressionTrees.begin(); posMapExpTree != m_mapExpressionTrees.end(); ++posMapExpTree){
 				std::cout << "Deleting an expression tree from the map" << std::endl;
@@ -1402,8 +1406,6 @@ bool OSInstance::setQuadraticTerms(int number,
 	return true;
 }//setQuadraticTerms
 
-
-
 SparseJacobianMatrix *OSInstance::getSparseJacobian( ){
 	if( m_bSparseJacobianCalculated == true) return m_sparseJacMatrix;
 	if( m_bProcessObjectives == false) processObjectives();
@@ -1793,8 +1795,8 @@ bool OSInstance::getSparseJacobianFromColumnMajor( ){
 	return true;
 }//getSparseJacobianFromColumnMajor
 
-OSExpressionTree* OSInstance::getLagrangianOfHessian( ){
-	if( m_bLagHessianCreated == true) return m_LagHessian;
+OSExpressionTree* OSInstance::getHessianOfLagrangainExpTree( ){
+	if( m_bHessianLagCreated == true) return m_HessianLag;
 	// we calculate the Lagrangian for all the objectives and constraints
 	// with nonlinear terms
 	// first initialize everything for nonlinear work
@@ -1811,8 +1813,8 @@ OSExpressionTree* OSInstance::getLagrangianOfHessian( ){
 	std::cout << "NUMBER OF KIDS = " << m_mapExpressionTreesMod.size()<< std::endl;
 	nlNodeSum->m_mChildren = new OSnLNode*[ nlNodeSum->inumberOfChildren];
 	// create and expression tree for the sum node
-	m_LagHessian = new OSExpressionTree();
-	m_LagHessian->m_treeRoot = nlNodeSum;
+	m_HessianLag = new OSExpressionTree();
+	m_HessianLag->m_treeRoot = nlNodeSum;
 	// now create the children of the sum node
 	for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
 		nlNodeVariable = new OSnLNodeVariable();
@@ -1841,13 +1843,22 @@ OSExpressionTree* OSInstance::getLagrangianOfHessian( ){
 		numChildren++;
 	}	
 	// get a variable index map for the expression tree
-	m_LagHessian->getVariableIndiciesMap();
+	*m_HessianLag->getVariableIndiciesMap();
 	// print out the XML for this puppy
-	std::cout << m_LagHessian->m_treeRoot->getNonlinearExpressionInXML() << std::endl;
+	std::cout << m_HessianLag->m_treeRoot->getNonlinearExpressionInXML() << std::endl;
 	//
-	m_bLagHessianCreated = true;
-	return m_LagHessian;
-}//getLagrangianOfHessian
+	m_bHessianLagCreated = true;
+	return m_HessianLag;
+}//getHessianOfLagrangainExpTree
+
+SparseHessianMatrix* OSInstance::getHessianOfLagrangianNonz( OSExpressionTree* expTree){
+	// get the number of variables in the expression tree
+	// do this by getting the size of the mapVarIsx
+	m_mSparseHessianLag = new SparseHessianMatrix();
+	m_mSparseHessianLag->hessDimension = (*expTree->mapVarIdx).size();
+	std::cout << "HESSIAN DIMENSION = " << m_mSparseHessianLag->hessDimension << std::endl;
+	return m_mSparseHessianLag;
+}
 
 void OSInstance::duplicateExpressionTreesMap(){
 	if(m_bDuplicateExpressionTreesMap == false){ 

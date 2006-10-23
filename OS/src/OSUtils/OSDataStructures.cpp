@@ -133,32 +133,8 @@ SparseJacobianMatrix::SparseJacobianMatrix():
 	valueSize(0)
 
 {
-}// end SparseMatrix Constructor
+}// end SparseJaccobianMatrix Constructor
 
-SparseJacobianVector::SparseJacobianVector( int number_):
-number( number_)
-{
-	indexes = new int[ number];
-	values = new double[ number];
-}// end SparseJacobianVector constructor
-
-
-SparseJacobianVector::SparseJacobianVector( ):
-	indexes( NULL),
-	values( NULL)
-{
-}// end SparseJacobianVector constructor
-
-
-SparseJacobianVector::~SparseJacobianVector(){
-	#ifdef DEBUG
-	cout << "inside sparseVector destructor" << endl;
-	#endif
-	delete[] indexes;
-	indexes = NULL;
-	delete[] values;
-	values = NULL;
-}// end SparseJacobianVector constructor
 
 SparseJacobianMatrix::SparseJacobianMatrix(int startSize_, int valueSize_):
 	startSize(startSize_),
@@ -192,6 +168,51 @@ SparseJacobianMatrix::~SparseJacobianMatrix(){
 		values = NULL;
 	}
 }// end SparseJacobianMatrix Destructor
+
+SparseJacobianVector::SparseJacobianVector( int number_):
+number( number_)
+{
+	indexes = new int[ number];
+	values = new double[ number];
+}// end SparseJacobianVector constructor
+
+
+SparseJacobianVector::SparseJacobianVector( ):
+	indexes( NULL),
+	values( NULL)
+{
+}// end SparseJacobianVector constructor
+
+
+SparseJacobianVector::~SparseJacobianVector(){
+	#ifdef DEBUG
+	cout << "inside sparseVector destructor" << endl;
+	#endif
+	delete[] indexes;
+	indexes = NULL;
+	delete[] values;
+	values = NULL;
+}// end SparseJacobianVector constructor
+
+
+	
+SparseHessianMatrix::SparseHessianMatrix():
+	hessRowIdx( NULL),
+	hessColIdx( NULL),
+	hessValues( NULL),
+	hessDimension(0)
+{
+}// end SparseHessianMatrix Constructor
+
+
+
+SparseHessianMatrix::~SparseHessianMatrix(){
+	#ifdef DEBUG
+	cout << "inside SparseJacobianMatrix destructor" << endl;
+	#endif
+}// end SparseHessianMatrix Destructor
+
+
 	
 QuadraticTerms::QuadraticTerms():
 	rowIndexes(NULL),
