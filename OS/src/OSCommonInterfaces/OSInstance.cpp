@@ -155,8 +155,10 @@ OSInstance::~OSInstance(){
 	m_miJacNumConTerms = NULL;
 	delete[] m_mdObjGradient;
 	m_mdObjGradient = NULL;
-	delete m_LagHessian;
-	m_LagHessian = NULL;
+	if( m_bLagHessianCreated == true){
+		delete m_LagHessian;
+		m_LagHessian = NULL;
+	}
 	//delete m_sparseJacMatrix;
 	m_sparseJacMatrix = NULL;
 	//
