@@ -512,6 +512,12 @@ private:
 	std::map<int, OSExpressionTree*> m_mapExpressionTrees ;
 	
 	/**
+	 * m_vdGradient is a vector that holds the partials in a gradient 
+	 * usually for each row or column.
+	 */
+	std::vector<double> m_vdGradient ;
+	
+	/**
 	 * m_LagHession is an OSExpressionTree object that is the expression tree
 	 * for the Lagrangian function.
 	 */
