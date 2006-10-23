@@ -101,7 +101,6 @@ std::vector<double> OSExpressionTree::calculateGradient( double *x, bool functio
  	std::vector<double> jac( (*mapVarIdx).size() ); 	// Jacobian of f 
    	jac  = (*f).Jacobian( m_vX);	// Jacobian for operation sequence
 	// print the results
-	struct FirstPartialStruct *firstPartial;
 	for(m_mPosVarIdx = (*mapVarIdx).begin(); m_mPosVarIdx != (*mapVarIdx).end(); ++m_mPosVarIdx){
 		std::cout << "Partial with respect to " <<  m_mPosVarIdx->first << "  computed by CppAD = " << jac[ m_mPosVarIdx->second] << std::endl;
 	}

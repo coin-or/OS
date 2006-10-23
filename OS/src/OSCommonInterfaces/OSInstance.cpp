@@ -1635,7 +1635,7 @@ double *OSInstance::calculateObjectiveFunctionGradient(int idx, double* x, bool 
 		std::map<int, int>::iterator posVarIdx;
 		std::vector<double> jac;
 		// get the constant terms
-		for(i = 0; i <= numVar; i++){
+		for(i = 0; i < numVar; i++){
 			*(m_mdObjGradient + i) = m_mmdDenseObjectiveCoefficients[ (abs( idx) - 1)][i];
 		}
 		// get the gradient
@@ -1656,7 +1656,6 @@ double *OSInstance::calculateObjectiveFunctionGradient(int idx, double* x, bool 
 	} 
 	return m_mdObjGradient;
 }				
-
 
 bool OSInstance::getSparseJacobianFromRowMajor( ){
 	// Kipp -- todo
