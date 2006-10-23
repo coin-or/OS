@@ -48,6 +48,9 @@ OSInstance::OSInstance():
 	m_miNumberOfObjCoef(NULL),
 	m_mdObjectiveConstants(NULL),
 	m_mdObjectiveWeights(NULL),
+	m_mdObjGradient(NULL),
+	m_LagHessian(NULL),
+	m_bLagHessianCreated( false),
 	m_mObjectiveCoefficients(NULL),
 	m_bGetDenseObjectives(false),
 	m_mmdDenseObjectiveCoefficients(NULL),
@@ -89,6 +92,7 @@ OSInstance::~OSInstance(){
 	#ifdef DEBUG
 	cout << "OSInstance Destructor Called" << endl;
 	#endif
+	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
 	// delete  the temporary arrays
 	delete[] m_msVariableNames;
 	m_msVariableNames = NULL;
@@ -110,15 +114,16 @@ OSInstance::~OSInstance(){
 	m_mdObjectiveWeights = NULL;
 	delete[] m_mObjectiveCoefficients;
 	m_mObjectiveCoefficients = NULL;
+	int i;
 	if(instanceData->objectives->numberOfObjectives > 0 && m_mObjectiveCoefficients != NULL){
-		for(int i = 0; i < instanceData->objectives->numberOfObjectives; i++){
+		for(i = 0; i < instanceData->objectives->numberOfObjectives; i++){
 			delete m_mObjectiveCoefficients[i];
 			m_mObjectiveCoefficients[i] = NULL;
 		}
 		m_mObjectiveCoefficients = NULL;
 	}
 	if(instanceData->objectives->numberOfObjectives > 0 && m_mmdDenseObjectiveCoefficients != NULL){
-		for(int i = 0; i < instanceData->objectives->numberOfObjectives; i++){
+		for(i = 0; i < instanceData->objectives->numberOfObjectives; i++){
 			delete[] m_mmdDenseObjectiveCoefficients[i];
 			m_mmdDenseObjectiveCoefficients[i] = NULL;
 		}
@@ -148,8 +153,20 @@ OSInstance::~OSInstance(){
 	m_mdJacValue = NULL;
 	delete[] m_miJacNumConTerms;
 	m_miJacNumConTerms = NULL;
+	delete[] m_mdObjGradient;
+	m_mdObjGradient = NULL;
+	delete m_LagHessian;
+	m_LagHessian = NULL;
 	//delete m_sparseJacMatrix;
 	m_sparseJacMatrix = NULL;
+	//
+	// delete the expression trees that got created
+	if(m_bProcessExpressionTrees == true){
+		for(posMapExpTree = m_mapExpressionTrees.begin(); posMapExpTree != m_mapExpressionTrees.end(); ++posMapExpTree){
+			delete m_mapExpressionTrees[ posMapExpTree->first ];
+		}
+	}
+	//
 	// delete the two children of OSInstance
 	//delete instanceHeader object
 	delete instanceHeader;
@@ -406,7 +423,9 @@ Nl::~Nl(){
 	#ifdef DEBUG  
 	cout << "Inside the Nl Destructor" << endl;
 	#endif
-	delete osExpressionTree;
+	// don't delete the expression tree if we created a map of the expression
+	// trees, otherwise we would destroy twice
+	//if( m_bProcessExpressionTrees == false) delete osExpressionTree;
 	osExpressionTree = NULL;
 }//end ~Nl
 
@@ -611,6 +630,10 @@ bool OSInstance::processObjectives() {
 		m_mdObjectiveWeights = new double[n];
 		m_mObjectiveCoefficients = new SparseVector*[n];
 		for(i = 0; i < n; i++) m_mObjectiveCoefficients[i] = new SparseVector(instanceData->objectives->obj[ j]->numberOfObjCoef);
+		//for(i = 0; i < n; i++){
+		//	m_mObjectiveCoefficients[i] = new SparseVector();
+		//	m_mObjectiveCoefficients[i]->number = instanceData->objectives->obj[ j]->numberOfObjCoef;
+		//}
 		for(i = 0; i < n; i++){
 			if((instanceData->objectives->obj[i]->maxOrMin.compare("max") != 0) && (instanceData->objectives->obj[i]->maxOrMin.compare("min") != 0 )) throw ErrorClass("wrong objective maxOrMin");
 			m_msMaxOrMins[i] = instanceData->objectives->obj[i]->maxOrMin;
@@ -1363,14 +1386,18 @@ bool OSInstance::setQuadraticTerms(int number,
 
 
 SparseJacobianMatrix *OSInstance::getSparseJacobian( ){
-	//
 	if( m_bSparseJacobianCalculated == true) return m_sparseJacMatrix;
-	processObjectives();
-	processConstraints();
-	m_mdConstraintFunctionValues = new double[ getConstraintNumber()];
-	m_mdObjectiveFunctionValues = new double[ getObjectiveNumber()];
+	if( m_bProcessObjectives == false) processObjectives();
+	if( m_bProcessConstraints == false) processConstraints();
+	// get all of the expression trees
+	if( m_bProcessExpressionTrees == false) getAllNonlinearExpressionTrees();
 	// before proceeding get a copy of the map of the Expression Trees
-	duplicateExpressionTreesMap();
+	if( m_bDuplicateExpressionTreesMap == false) duplicateExpressionTreesMap();
+	getDenseObjectiveCoefficients();
+	addQTermsToExressionTree();
+	m_mdConstraintFunctionValues = new double[ this->instanceData->constraints->numberOfConstraints];
+	m_mdObjectiveFunctionValues = new double[ this->instanceData->objectives->numberOfObjectives];
+	m_mdObjGradient = new double[ this->instanceData->variables->numberOfVariables];
 	if( m_bColumnMajor == true) getSparseJacobianFromColumnMajor( );
 	else getSparseJacobianFromRowMajor( );
 	// now fill in the arrays of the sparseJacMatrix
@@ -1383,11 +1410,89 @@ SparseJacobianMatrix *OSInstance::getSparseJacobian( ){
 	return m_sparseJacMatrix;
 }//getSparseJacobian
 
+bool OSInstance::addQTermsToExressionTree(){
+	int i, k, idx;
+	// get the number of qTerms
+	int numQTerms = instanceData->quadraticCoefficients->numberOfQuadraticTerms;	
+	if(numQTerms <= 0) return true;
+	OSnLNodeVariable* nlNodeVariableOne;
+	OSnLNodeVariable* nlNodeVariableTwo;
+	OSnLNodeTimes* nlNodeTimes;
+	OSnLNodePlus* nlNodePlus;
+	OSExpressionTree* expTree;
+	getQuadraticTerms();	
+	std::cout << "PROCESSING QUADRATIC TERMS" << std::endl;
+	for(i = 0; i < numQTerms; i++){
+		idx = m_quadraticTerms->rowIndexes[ i];
+		std::cout << "PROCESSING QTERM  = "  << i <<std::endl;
+		// see if row idx is in the expression tree
+		if( m_mapExpressionTreesMod.find( idx) != m_mapExpressionTreesMod.end() ) {
+			// row idx is in the expression tree
+			// add the qTerm in row idx  to the expression tree	
+			// define two new OSnLVariable nodes, an OSnLnodeTimes, and OSnLnodePlus 
+			nlNodeVariableOne = new OSnLNodeVariable();
+			nlNodeVariableOne->idx = m_quadraticTerms->varOneIndexes[ i];
+			// see if the variable indexed by nlNodeVariableOne->idx is in the expression tree for row idx
+			// if not, add to mapVarIdx
+			if( (*m_mapExpressionTreesMod[ idx]->mapVarIdx).find( nlNodeVariableOne->idx) == (*m_mapExpressionTreesMod[ idx]->mapVarIdx).end()  ){
+				// add to map
+				k = (*m_mapExpressionTreesMod[ idx]->mapVarIdx).size();
+				(*m_mapExpressionTreesMod[ idx]->mapVarIdx)[ nlNodeVariableOne->idx] =  k + 1;
+				std::cout << "ADDED THE FOLLOWING VAIRABLE TO THE MAP" <<  nlNodeVariableOne->idx << std::endl;
+			}
+			nlNodeVariableOne->coef = m_quadraticTerms->coefficients[ i];
+			nlNodeVariableTwo = new OSnLNodeVariable();
+			nlNodeVariableTwo->idx = m_quadraticTerms->varTwoIndexes[ i];
+			// see if the variable indexed by nlNodeVariableTwo->idx is in the expression tree for row idx
+			// if not, add to mapVarIdx
+			if( (*m_mapExpressionTreesMod[ idx]->mapVarIdx).find( nlNodeVariableTwo->idx) == (*m_mapExpressionTreesMod[ idx]->mapVarIdx).end()  ){
+				// add to map
+				k = (*m_mapExpressionTreesMod[ idx]->mapVarIdx).size();
+				(*m_mapExpressionTreesMod[ idx]->mapVarIdx)[ nlNodeVariableTwo->idx] =  k + 1;
+				std::cout << "ADDED THE FOLLOWING VAIRABLE TO THE MAP" <<  nlNodeVariableTwo->idx << std::endl;
+			}
+			nlNodeVariableTwo->coef = 1.;
+			// now multiply the two new variable nodes together
+			nlNodeTimes = new OSnLNodeTimes();
+			nlNodeTimes->m_mChildren[ 0] = nlNodeVariableOne;
+			nlNodeTimes->m_mChildren[ 1] = nlNodeVariableTwo;		
+			// now add the result to the expression tree
+			nlNodePlus = new OSnLNodePlus();
+			nlNodePlus->m_mChildren[ 0] = m_mapExpressionTreesMod[ idx ]->m_treeRoot;
+			nlNodePlus->m_mChildren[ 1] = nlNodeTimes;
+			expTree = new OSExpressionTree();
+			expTree->m_treeRoot = nlNodePlus ;
+			expTree->mapVarIdx = m_mapExpressionTreesMod[ idx]->mapVarIdx;
+			m_mapExpressionTreesMod[ idx ]  = expTree;	
+		}
+		else{
+			// create the quadratic expression to add to the expression tree
+			nlNodeVariableOne = new OSnLNodeVariable();
+			nlNodeVariableOne->idx = m_quadraticTerms->varOneIndexes[ i];
+			nlNodeVariableOne->coef = m_quadraticTerms->coefficients[ i];
+			nlNodeVariableTwo = new OSnLNodeVariable();
+			nlNodeVariableTwo->idx = m_quadraticTerms->varTwoIndexes[ i];
+			nlNodeVariableTwo->coef = 1.;
+			// now multiply the two new variable nodes together
+			nlNodeTimes = new OSnLNodeTimes();
+			nlNodeTimes->m_mChildren[ 0] = nlNodeVariableOne;
+			nlNodeTimes->m_mChildren[ 1] = nlNodeVariableTwo;
+			// create a new expression tree corresponding to row idx.
+			expTree = new OSExpressionTree();						
+			expTree->m_treeRoot = nlNodeTimes ;
+			expTree->mapVarIdx = expTree->getVariableIndiciesMap();		
+			m_mapExpressionTreesMod[ idx ]  = expTree;
+			std::cout << "NUMBER OF EXPRESSION TREES = "  << m_mapExpressionTreesMod.size() <<std::endl;
+		} 
+	}
+	return true;
+}
+
 double OSInstance::calculateFunctionValue(int idx, double *x, bool functionEvaluated){
 	try{
 		// make sure the index idx is valid
 		if( getConstraintNumber() <= idx || getObjectiveNumber() <= ( abs( idx) - 1) ) throw 
-			ErrorClass("row index not value in OSInstance::calculateFunctionValue");
+			ErrorClass("row or column index not valid in OSInstance::calculateFunctionValue");
 		int i, j;
 		double dvalue = 0;
 		// if we have not filled in the Sparse Jacobian matrix do so now
@@ -1461,62 +1566,77 @@ double *OSInstance::calculateAllObjectiveFunctionValues( double* x, bool allFunc
 	return m_mdObjectiveFunctionValues;
 }//calculateAllObjectiveFunctionValues
 
-
-SparseJacobianVector *OSInstance::calculateConstraintFunctionGradient(int idx, double* x, bool functionEvaluated, bool gradientEvaluated){
-	//
-	// put in check on value of idx and make sure it is in the correct range
-	// when true, if idx >=0  we return m_mvConstraintFunctionGradients[ idx]
-	// when true, if idx < 0 we return m_mvObjectiveFunctionGradients[abs( idx) - 1]
-	// if false we call calculateAllConstraintFunctionGradients() and calculateAllObjectiveFunctionGradients()
-	// and then retrieve as if true
-	//
+SparseJacobianMatrix *OSInstance::calculateAllConstraintFunctionGradients(double* x, bool functionEvaluated, bool allGradientsEvaluated){
 	try{
 		// make sure the index idx is valid
-		if( getConstraintNumber() <= idx  ) throw 
-			ErrorClass("row index not value in OSInstance::calculateFunctionValue");
-		int i, j;
-		double dvalue = 0;
-		/*SparseJacobianVector *jac;
-		// if we have not filled in the Sparse Jacobian matrix do so now
-		if( m_bSparseJacobianCalculated == false) getSparseJacobian();
-		if( functionEvaluated == true) return *(m_mdConstraintFunctionValues + idx);
-		// get the nonlinear part
-		if( m_mapExpressionTreesMod.find( idx) != m_mapExpressionTreesMod.end() ){
-			dvalue = m_mapExpressionTreesMod[ idx]->calculateFunction( x,  functionEvaluated);
+		if( allGradientsEvaluated == true  ) return m_sparseJacMatrix;
+		int idx, j;
+		int jstart, jend;
+		std::map<int, int>::iterator posVarIdx;
+		std::map<int, OSExpressionTree*>::iterator posMapExpTree;
+		std::vector<double> jac;
+		// loop over the constraints that have a nonlinear term and get their gradients
+		for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
+			idx = posMapExpTree->first;
+			// we are considering only constraints, not objective function
+			if(idx >= 0){
+				std::cout << "Getting the gradient for the row indexed by " <<  idx << std::endl;
+				jac = m_mapExpressionTreesMod[ idx]->calculateGradient(x, functionEvaluated);
+				// check size
+				jstart = m_miJacStart[ idx] + m_miJacNumConTerms[ idx];
+				jend = m_miJacStart[ idx + 1 ];
+				if( jac.size() != (jend - jstart)) throw 
+				ErrorClass("number of partials not consistent");
+				j = 0;
+				for(posVarIdx = (*m_mapExpressionTreesMod[ idx]->mapVarIdx).begin(); posVarIdx 
+					!= (*m_mapExpressionTreesMod[ idx]->mapVarIdx).end(); ++posVarIdx){
+					if(m_miJacIndex[ jstart] != posVarIdx->first) throw ErrorClass("error calculating Jacobian matrix");
+					m_mdJacValue[ jstart] = jac[ j];
+					//std::cout << "Constraint  Partial = " <<  jac[ j] << std::endl;
+					jstart++;
+					j++;
+				}
+			}
 		}
-		// now the linear part
-		// be careful, loop over only the constant terms in sparseJacMatrix
-		i = m_sparseJacMatrix->starts[ idx];
-		j = m_sparseJacMatrix->starts[ idx + 1 ];
-		while ( i <  j &&  (i - m_sparseJacMatrix->starts[ idx])  < m_sparseJacMatrix->conVals[ idx] ){
-			dvalue += m_sparseJacMatrix->values[ i]*x[ m_sparseJacMatrix->indexes[ i] ];
-			i++;
-		}	
-		// add in the constraint function constant
-		dvalue += m_mdConstraintConstants[ idx ];
-		*(m_mdConstraintFunctionValues + idx) = dvalue;
-		return *(m_mdConstraintFunctionValues + idx);
-		*/
 	}
 	catch(const ErrorClass& eclass){
 		throw ErrorClass( eclass.errormsg);
 	} 
-	return NULL;
-}//calculateFunctionGradient
+	return m_sparseJacMatrix;
+}//calculateAllConstraintFunctionGradients	
 
-std::vector<FirstPartialStruct*> * OSInstance::calculateAllConstraintFunctionGradients(int idx, double* x, bool functionEvaluated, bool gradientEvaluated){
-/*
-1. getAllConstraintFunctionGradientsBase and make a copy of m_mvAllConstraintFunctionGradientsBase
-2. calculate two partials for each qpterm and add (according to m_mVarIdxVectorPosMap) the two values to the copy of m_mvAllConstraintFunctionGradientsBase. 
-3. get the gradient for each expTree and add (according to m_mVarIdxVectorPosMap) the firstPartial for each variableIdx 
- */
-  return NULL;
-}//calculateAllConstraintFunctionGradients					
-
-std::vector<FirstPartialStruct*> * OSInstance::calculateAllObjectiveFunctionGradients(int idx, double* x, bool functionEvaluated, bool gradientEvaluated){
-//similar logic to calculateAllConstraintFunctionGradients
-	return NULL;
-}//calculateAllObjectiveFunctionGradients
+double *OSInstance::calculateObjectiveFunctionGradient(int idx, double* x, bool functionEvaluated, bool gradientEvaluated){
+	try{
+		// make sure the index idx is valid
+		if(idx >0 && getObjectiveNumber() <= ( abs( idx) - 1)  ) throw 
+			ErrorClass("obj index not valid in OSInstance::calculateObjectiveFunctionGradient");
+		if( gradientEvaluated == true) return m_mdObjGradient;
+		int i;
+		int numVar = getVariableNumber();
+		std::map<int, int>::iterator posVarIdx;
+		std::vector<double> jac;
+		// get the constant terms
+		for(i = 0; i <= numVar; i++){
+			*(m_mdObjGradient + i) = m_mmdDenseObjectiveCoefficients[ (abs( idx) - 1)][i];
+		}
+		// get the gradient
+		if( m_mapExpressionTreesMod.find( idx) != m_mapExpressionTreesMod.end() ){
+			jac = m_mapExpressionTreesMod[ idx]->calculateGradient(x, functionEvaluated);
+			// check size
+			i = 0;
+			for(posVarIdx = (*m_mapExpressionTreesMod[ idx]->mapVarIdx).begin(); posVarIdx 
+			!= (*m_mapExpressionTreesMod[ idx]->mapVarIdx).end(); ++posVarIdx){
+				*(m_mdObjGradient + posVarIdx->first) += jac[ i];	
+				std::cout << "Objective  Partial = " <<  jac[ i] << std::endl;
+				i++;
+			}
+		}
+	}
+	catch(const ErrorClass& eclass){
+		throw ErrorClass( eclass.errormsg);
+	} 
+	return m_mdObjGradient;
+}				
 
 
 bool OSInstance::getSparseJacobianFromRowMajor( ){
@@ -1573,7 +1693,7 @@ bool OSInstance::getSparseJacobianFromColumnMajor( ){
 				expTree->mapVarIdx = m_mapExpressionTreesMod[ index[ j]]->mapVarIdx;
 				m_mapExpressionTreesMod[ index[ j] ]  = expTree;	
 				std::cout << m_mapExpressionTreesMod[ index[ j] ]->m_treeRoot->getNonlinearExpressionInXML() << std::endl;	
-				std::cout << m_mapExpressionTrees[ index[ j] ]->m_treeRoot->getNonlinearExpressionInXML() << std::endl;
+				//std::cout << m_mapExpressionTrees[ index[ j] ]->m_treeRoot->getNonlinearExpressionInXML() << std::endl;
 			}
 			else{ 
 				m_miJacStart[ index[j] + 1] ++;
@@ -1655,6 +1775,63 @@ bool OSInstance::getSparseJacobianFromColumnMajor( ){
 	return true;
 }//getSparseJacobianFromColumnMajor
 
+OSExpressionTree* OSInstance::getLagrangianOfHessian( ){
+	if( m_bLagHessianCreated == true) return m_LagHessian;
+	// we calculate the Lagrangian for all the objectives and constraints
+	// with nonlinear terms
+	// first initialize everything for nonlinear work
+	getSparseJacobian( );	
+	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
+	OSnLNodeTimes* nlNodeTimes = NULL;
+	OSnLNodeVariable* nlNodeVariable = NULL;
+	OSnLNodeSum* nlNodeSum = NULL;
+	OSExpressionTree* expTree = NULL;
+	int rowIdx;
+	int numChildren = 0;
+	// create the sum node
+	nlNodeSum = new OSnLNodeSum();
+	nlNodeSum->inumberOfChildren = m_mapExpressionTreesMod.size();
+	std::cout << "NUMBER OF KIDS = " << m_mapExpressionTreesMod.size()<< std::endl;
+	nlNodeSum->m_mChildren = new OSnLNode*[ nlNodeSum->inumberOfChildren];
+	// create and expression tree for the sum node
+	expTree = new OSExpressionTree();
+	expTree->m_treeRoot = nlNodeSum;
+	// now create the children of the sum node
+	for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
+		nlNodeVariable = new OSnLNodeVariable();
+		nlNodeVariable->coef = 1.;
+		/**
+		 * the variable we just created is a Lagrange multplier and needs the appropriate index
+		 * if the Expression tree row index is constraint k then the variable index is
+		 * number of variables + row index
+		 * if the expression tree corresponds to an objective function then the variable index
+		 * is number of variables + number of rows + (abs(row idx) - 1) 
+		 */
+		 rowIdx = posMapExpTree->first;
+		 if( rowIdx >= 0){
+		 	nlNodeVariable->idx = this->instanceData->variables->numberOfVariables + rowIdx;
+		 }
+		 else{
+		 	nlNodeVariable->idx = this->instanceData->variables->numberOfVariables 
+		 		+ this->instanceData->constraints->numberOfConstraints + (abs(rowIdx) - 1);
+		 } 
+		// now create a times multiply the new variable times the root of the expression tree
+		nlNodeTimes = new OSnLNodeTimes();
+		nlNodeTimes->m_mChildren[ 0] = nlNodeVariable;
+		nlNodeTimes->m_mChildren[ 1] = m_mapExpressionTreesMod[ rowIdx ]->m_treeRoot;	
+		// the times node is the new child
+		nlNodeSum->m_mChildren[ numChildren] = nlNodeTimes;
+		numChildren++;
+	}	
+	// get a variable index map for the expression tree
+	expTree->getVariableIndiciesMap();
+	// print out the XML for this puppy
+	std::cout << expTree->m_treeRoot->getNonlinearExpressionInXML() << std::endl;
+	//
+	m_bLagHessianCreated = true;
+	return NULL;
+}//getLagrangianOfHessian
+
 void OSInstance::duplicateExpressionTreesMap(){
 	if(m_bDuplicateExpressionTreesMap == false){ 
 		m_mapExpressionTreesMod = m_mapExpressionTrees;
@@ -1664,5 +1841,5 @@ void OSInstance::duplicateExpressionTreesMap(){
 	else{
 		return;
 	}
-}
+}//duplicateExpressionTreesMap
 

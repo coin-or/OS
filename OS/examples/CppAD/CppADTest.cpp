@@ -105,54 +105,59 @@ int  main(){
 	try{
 		osilreader = new OSiLReader();
 		osinstance = osilreader->readOSiL( &osil);
+		// get the nodes for an expression tree in postfix format
+		// in this case we get the nonlinear objective function term
+		//expTree = osinstance->getNonlinearExpressionTree( -1);
+		expTree = osinstance->getNonlinearExpressionTree( -1);
+		nlNode = expTree->m_treeRoot;
+		double *zz;
+		double functionValue;
+		zz = new double[3];
+		zz[ 0] = 0.5;
+		zz[ 1] = 1000;
+		zz[2] = 1;
+		/*functionValue = expTree->calculateFunction(&zz[0], false);
+		std::cout << "FUNCTION VALUE = " << functionValue << std::endl ;
+		std::cout << "GET SPARSE JACOBIAN RESULT"   << std::endl;
+		expTree->calculateGradient(&zz[0], true );
+		// now get Hessian information
+		std::vector<SecondPartialStruct*> secondPartialVector;
+		struct SecondPartialStruct *secondPartial;
+		secondPartialVector = expTree->calculateHessian(&zz[0], true);
+		int kj;
+		int numSparseVars = secondPartialVector.size();
+		for(kj = 0; kj < numSparseVars; kj++){
+			secondPartial = secondPartialVector[kj];
+			std::cout << "First index = " << secondPartial->index_i << std::endl;
+			std::cout << "Second index = " << secondPartial->index_j << std::endl;
+			std::cout << "Second partial  = " << secondPartial->secondPartial_ij << std::endl;
+		}
+		//
+		 * */
+		double *conVals = osinstance->calculateAllConstraintFunctionValues( &zz[0], false);
+		double *objVals = osinstance->calculateAllObjectiveFunctionValues( &zz[0], false);
+		int idx;
+		for( idx = 0; idx < osinstance->getConstraintNumber(); idx++){
+			//std::cout << "CONSTRAINT FUNCTION VALUE WITH TERM= " << osinstance->calculateFunctionValue(idx, zz, false) << std::endl;
+			std::cout << "CONSTRAINT FUNCTION VALUE WITH TERM= " << *(conVals + idx) << std::endl;
+		}
+		for( idx = 0; idx < osinstance->getObjectiveNumber(); idx++){
+			//std::cout << "OBJECTIVE FUNCTION VALUE WITH TERM= " << osinstance->calculateFunctionValue(idx, zz, false) << std::endl;
+			std::cout << "OBJECTIVE FUNCTION VALUE WITH TERM= " << *(objVals + idx) << std::endl;
+		}
+		osinstance->calculateObjectiveFunctionGradient(-1, &zz[0], false, false);
+		osinstance->calculateAllConstraintFunctionGradients(&zz[0], false, false);
+		std::cout << "RETURN FROM GETTING SPARSE JACOBIAN RESULT"   << std::endl;
+		std::cout << "NOW GET LAGRANGIAN HESSIAN"   << std::endl;
+		osinstance->getLagrangianOfHessian( );
+		delete[] zz;
+		zz = NULL;
+		delete osilreader;
+		osilreader = NULL;
 	}
 	catch(const ErrorClass& eclass){
-		std::cout << eclass.errormsg << std::endl;
-	} 
-	// get the nodes for an expression tree in postfix format
-	// in this case we get the nonlinear objective function term
-	//expTree = osinstance->getNonlinearExpressionTree( -1);
-	expTree = osinstance->getNonlinearExpressionTree( -1);
-	nlNode = expTree->m_treeRoot;
-	double *zz;
-	double functionValue;
-	zz = new double[3];
-	zz[ 0] = 0.5;
-	zz[ 1] = 1000;
-	zz[2] = 1;
-	functionValue = expTree->calculateFunction(&zz[0], false);
-	std::cout << "FUNCTION VALUE = " << functionValue << std::endl ;
-	std::cout << "GET SPARSE JACOBIAN RESULT"   << std::endl;
-	expTree->calculateGradient(&zz[0], true );
-	// now get Hessian information
-	std::vector<SecondPartialStruct*> secondPartialVector;
-	struct SecondPartialStruct *secondPartial;
-	secondPartialVector = expTree->calculateHessian(&zz[0], true);
-	int kj;
-	int numSparseVars = secondPartialVector.size();
-	for(kj = 0; kj < numSparseVars; kj++){
-		secondPartial = secondPartialVector[kj];
-		std::cout << "First index = " << secondPartial->index_i << std::endl;
-		std::cout << "Second index = " << secondPartial->index_j << std::endl;
-		std::cout << "Second partial  = " << secondPartial->secondPartial_ij << std::endl;
-	}
-	//
-	double *conVals = osinstance->calculateAllConstraintFunctionValues( zz, false);
-	double *objVals = osinstance->calculateAllObjectiveFunctionValues( zz, false);
-	int idx;
-	for( idx = 0; idx < osinstance->getConstraintNumber(); idx++){
-		//std::cout << "CONSTRAINT FUNCTION VALUE WITH TERM= " << osinstance->calculateFunctionValue(idx, zz, false) << std::endl;
-		std::cout << "CONSTRAINT FUNCTION VALUE WITH TERM= " << *(conVals + idx) << std::endl;
-	}
-	for( idx = 0; idx < osinstance->getObjectiveNumber(); idx++){
-		//std::cout << "OBJECTIVE FUNCTION VALUE WITH TERM= " << osinstance->calculateFunctionValue(idx, zz, false) << std::endl;
-		std::cout << "OBJECTIVE FUNCTION VALUE WITH TERM= " << *(objVals + idx) << std::endl;
-	}
-	delete[] zz;
-	zz = NULL;
-	delete osilreader;
-	osilreader = NULL;
-	std::cout << "RETURN FROM GETTING SPARSE JACOBIAN RESULT"   << std::endl;	
+	std::cout << eclass.errormsg << std::endl;
+	} 	
 	return 0;
 	CppAD::vector< AD<double> > XAD;
 	std::map<int, int> varIdx; 

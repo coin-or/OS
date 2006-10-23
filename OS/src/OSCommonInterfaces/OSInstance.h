@@ -370,6 +370,10 @@ private:
 	 */
 	bool m_bGetDenseObjectives;
 	
+	/**
+	 * m_mdObjGradient holds a dense vector of an objective function gradient. 
+	 */
+	double* m_mdObjGradient;	
 	
 	/**
 	 * m_mmdDenseObjectiveCoefficients holds an array of pointers, each pointer points 
@@ -493,23 +497,24 @@ private:
 	 */
 	bool m_bProcessExpressionTrees;
 	
-	/**
-	 * m_bProcessExpressionTreesInPostfix is true if the expression trees have been processed in postfix. 
-	 */
-	//bool m_bProcessExpressionTreesInPostfix;
-	
-	/**
-	 * m_mNonlinearExpressionTrees holds an array of nonlinear expression trees, each tree is of the standard
-	 * type OSExpressionTree. 
-	 */
-	//OSExpressionTree* m_mNonlinearExpressionTrees ;
-
 
 	/**
-	 * m_mapExpressionTrees holds a hash map of expression trees, with the key being the row index
+	 * m_mapExpressionTrees holds a hash map of expression tree pointers, with the key being the row index
 	 * and value being the expression tree representing the nonlinear expression of that row.
 	 */
 	std::map<int, OSExpressionTree*> m_mapExpressionTrees ;
+	
+	/**
+	 * m_LagHession is an OSExpressionTree object that is the expression tree
+	 * for the Lagrangian function.
+	 */
+	OSExpressionTree *m_LagHessian ;
+	
+	/**
+	 * m_bLagHessionCreated is true if a Lagragian function for the Hessian has been created
+	 */ 
+	
+	bool m_bLagHessianCreated ;
 	
 	/**
 	 * m_mapExpressionTreesMod holds a hash map of expression trees, with the key being the row index
@@ -1177,7 +1182,9 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * use a value of false if not sure
 	 * @return a pointer to a SparseJacobianVector.  
 	 */
-	SparseJacobianVector *calculateConstraintFunctionGradient(int idx, double* x, bool functionEvaluated, bool gradientEvaluated);																																																								
+	SparseJacobianVector *calculateConstraintFunctionGradient(int idx, double* x, bool functionEvaluated, bool gradientEvaluated);	
+	
+																																																								
 	
 	/**
 	 * Calculate the gradient of all constraint functions  
@@ -1191,11 +1198,26 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * @param gradientEvaluated is true if any constraint function gradient
 	 * has been evaluated for the current iterate x
 	 * use a value of false if not sure
-	 * @return a pointer to an array of FirstPartialStruct (first member is the variable idx, second memeber is
-	 * the partial with respect to that variable) vectors that represent a sparse implementaton. 
+	 * @return a pointer a SparseJacobianMatrix. 
 	 * Each array member corresponds to one constraint gradient.
 	 */
-	std::vector<FirstPartialStruct*> *calculateAllConstraintFunctionGradients(int idx, double* x, bool functionEvaluated, bool gradientEvaluated);				
+	SparseJacobianMatrix *calculateAllConstraintFunctionGradients(double* x, bool functionEvaluated, bool gradientEvaluated);				
+
+	/**
+	 * Calculate the gradient of the function indexed by idx
+	 * 
+	 * <p>
+	 * 
+	 * @param x is a pointer (double array) to the current variable values
+	 * @param functionEvaluated is true if any (not just idx) function (constraint or objective) 
+	 * has been evaluated for the current iterate x
+	 * use a value of false if not sure
+	 * @param gradientEvaluated is true if the function gradient (constraint or objective) indexed by idx
+	 * has been evaluated for the current iterate x
+	 * use a value of false if not sure
+	 * @return a pointer to a dense vector of doubles.  
+	 */
+	double *calculateObjectiveFunctionGradient(int idx, double* x, bool functionEvaluated, bool allGradientsEvaluated);
 	
 	/**
 	 * Calculate the gradient of all objective functions  
@@ -1223,10 +1245,21 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	bool getSparseJacobianFromColumnMajor();
 	
 	/**
+	 * @return a pointer to the ExpressionTree for the Lagrangian of Hessian 
+	 */
+	OSExpressionTree* getLagrangianOfHessian( );
+	
+	/**
 	 * 
 	 * @return true if successful in generating the constraints gradient.
 	 */ 
 	bool getSparseJacobianFromRowMajor();
+	
+	/**
+	 * 
+	 * @return true if successful in adding the qTerms to the ExpressionTree.
+	 */ 
+	bool addQTermsToExressionTree();
 	
 	/**
 	 * 

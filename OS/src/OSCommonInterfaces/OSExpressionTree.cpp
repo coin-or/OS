@@ -34,7 +34,7 @@ OSExpressionTree::~OSExpressionTree(){
 	//#ifdef DEBUG  
 	cout << "Inside the OSExpressionTree Destructor" << endl;
 	//#endif
-	delete m_treeRoot;
+	if(m_treeRoot != NULL) delete m_treeRoot;
 	m_treeRoot = NULL;
 	if(mapVarIdx != NULL) delete mapVarIdx;
 	mapVarIdx = NULL;
