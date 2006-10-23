@@ -149,7 +149,7 @@ int  main(){
 		osinstance->calculateAllConstraintFunctionGradients(&zz[0], false, false);
 		std::cout << "RETURN FROM GETTING SPARSE JACOBIAN RESULT"   << std::endl;
 		std::cout << "NOW GET LAGRANGIAN HESSIAN"   << std::endl;
-		osinstance->getLagrangianOfHessian( );
+		//osinstance->getLagrangianOfHessian( );
 		delete[] zz;
 		zz = NULL;
 		delete osilreader;

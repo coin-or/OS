@@ -189,6 +189,13 @@ class Nl{
 public:	
 	/** idx holds the row index of the nonlinear expression */
 	int idx;
+
+	/** m_bDeleteExpressionTree is true, if in garbage collection, we
+	 * should delete the osExpression tree object, if the OSInstance class
+	 * created a map of the expression trees this should be false since the
+	 * osExpressionTree is deleted by the OSInstance object 
+	 */	
+	bool m_bDeleteExpressionTree;
 	
 	/** osExpressionTree contains the root of the OSExpressionTree */
 	OSExpressionTree *osExpressionTree;

@@ -143,7 +143,7 @@ OSInstance::~OSInstance(){
 	m_mdVariableLowerBounds = NULL;
 	delete[] m_mdVariableUpperBounds;
 	m_mdVariableUpperBounds = NULL;
-	std::cout << "Do garbage collection for the gradient" << std::endl;
+	std::cout << "Do garbagee collection for the gradient" << std::endl;
 	// garbage collection for the gradient
 	delete[] m_miJacStart;
 	m_miJacStart = NULL;
@@ -161,9 +161,19 @@ OSInstance::~OSInstance(){
 	m_sparseJacMatrix = NULL;
 	//
 	// delete the expression trees that got created
-	if(m_bProcessExpressionTrees == true){
-		for(posMapExpTree = m_mapExpressionTrees.begin(); posMapExpTree != m_mapExpressionTrees.end(); ++posMapExpTree){
-			delete m_mapExpressionTrees[ posMapExpTree->first ];
+	// however they already got deleted if we have a lagrangian Hessian
+	if( m_bLagHessianCreated == false){
+		if( (m_bProcessExpressionTrees == true) && (m_bDuplicateExpressionTreesMap == false)  ) {
+			for(posMapExpTree = m_mapExpressionTrees.begin(); posMapExpTree != m_mapExpressionTrees.end(); ++posMapExpTree){
+				std::cout << "Deleting an expression tree from the map" << std::endl;
+				delete m_mapExpressionTrees[ posMapExpTree->first ];
+			}
+		}
+		if( m_bDuplicateExpressionTreesMap == true)   {
+			for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
+				std::cout << "Deleting an expression tree from the map" << std::endl;
+				delete m_mapExpressionTreesMod[ posMapExpTree->first ];
+			}
 		}
 	}
 	//
@@ -416,6 +426,7 @@ QuadraticCoefficients::~QuadraticCoefficients(){
 Nl::Nl(){
 	idx = 0;
 	osExpressionTree = NULL;
+	m_bDeleteExpressionTree = true;
 }//end Nl
 
  
@@ -425,7 +436,7 @@ Nl::~Nl(){
 	#endif
 	// don't delete the expression tree if we created a map of the expression
 	// trees, otherwise we would destroy twice
-	//if( m_bProcessExpressionTrees == false) delete osExpressionTree;
+	if( m_bDeleteExpressionTree == true) delete osExpressionTree;
 	osExpressionTree = NULL;
 }//end ~Nl
 
@@ -992,6 +1003,12 @@ std::map<int, OSExpressionTree*> OSInstance::getAllNonlinearExpressionTrees(){
 	}
 	foundIdx.clear();
 	m_bProcessExpressionTrees = true;
+	// important -- tell the nl nodes not to destroy the OSExpression Objects
+	if( instanceData->nonlinearExpressions->numberOfNonlinearExpressions > 0 && instanceData->nonlinearExpressions->nl != NULL){
+		for(int i = 0; i < instanceData->nonlinearExpressions->numberOfNonlinearExpressions; i++){
+			instanceData->nonlinearExpressions->nl[i]->m_bDeleteExpressionTree = false;
+		}
+	}
 	return m_mapExpressionTrees;
 }// getAllNonlinearExpresssionTrees
 
@@ -1785,7 +1802,6 @@ OSExpressionTree* OSInstance::getLagrangianOfHessian( ){
 	OSnLNodeTimes* nlNodeTimes = NULL;
 	OSnLNodeVariable* nlNodeVariable = NULL;
 	OSnLNodeSum* nlNodeSum = NULL;
-	OSExpressionTree* expTree = NULL;
 	int rowIdx;
 	int numChildren = 0;
 	// create the sum node
@@ -1794,8 +1810,8 @@ OSExpressionTree* OSInstance::getLagrangianOfHessian( ){
 	std::cout << "NUMBER OF KIDS = " << m_mapExpressionTreesMod.size()<< std::endl;
 	nlNodeSum->m_mChildren = new OSnLNode*[ nlNodeSum->inumberOfChildren];
 	// create and expression tree for the sum node
-	expTree = new OSExpressionTree();
-	expTree->m_treeRoot = nlNodeSum;
+	m_LagHessian = new OSExpressionTree();
+	m_LagHessian->m_treeRoot = nlNodeSum;
 	// now create the children of the sum node
 	for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
 		nlNodeVariable = new OSnLNodeVariable();
@@ -1824,16 +1840,18 @@ OSExpressionTree* OSInstance::getLagrangianOfHessian( ){
 		numChildren++;
 	}	
 	// get a variable index map for the expression tree
-	expTree->getVariableIndiciesMap();
+	m_LagHessian->getVariableIndiciesMap();
 	// print out the XML for this puppy
-	std::cout << expTree->m_treeRoot->getNonlinearExpressionInXML() << std::endl;
+	std::cout << m_LagHessian->m_treeRoot->getNonlinearExpressionInXML() << std::endl;
 	//
 	m_bLagHessianCreated = true;
-	return NULL;
+	return m_LagHessian;
 }//getLagrangianOfHessian
 
 void OSInstance::duplicateExpressionTreesMap(){
 	if(m_bDuplicateExpressionTreesMap == false){ 
+		// first make sure the map was created
+		if( m_bProcessExpressionTrees == false) getAllNonlinearExpressionTrees();
 		m_mapExpressionTreesMod = m_mapExpressionTrees;
 		m_bDuplicateExpressionTreesMap = true;
 		return;
