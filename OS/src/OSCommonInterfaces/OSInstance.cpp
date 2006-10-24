@@ -1529,7 +1529,8 @@ double OSInstance::calculateFunctionValue(int idx, double *x, bool functionEvalu
 			// be careful, loop over only the constant terms in sparseJacMatrix
 			i = m_sparseJacMatrix->starts[ idx];
 			j = m_sparseJacMatrix->starts[ idx + 1 ];
-			while ( i <  j &&  (i - m_sparseJacMatrix->starts[ idx])  < m_sparseJacMatrix->conVals[ idx] ){
+			//while ( i <  j &&  (i - m_sparseJacMatrix->starts[ idx])  < m_sparseJacMatrix->conVals[ idx] ){
+			while ( (i - m_sparseJacMatrix->starts[ idx])  < m_sparseJacMatrix->conVals[ idx] ){
 				dvalue += m_sparseJacMatrix->values[ i]*x[ m_sparseJacMatrix->indexes[ i] ];
 				i++;
 			}	
@@ -1587,7 +1588,7 @@ double *OSInstance::calculateAllObjectiveFunctionValues( double* x, bool allFunc
 	return m_mdObjectiveFunctionValues;
 }//calculateAllObjectiveFunctionValues
 
-SparseJacobianMatrix *OSInstance::calculateAllConstraintFunctionGradients(double* x, bool functionEvaluated, bool allGradientsEvaluated){
+SparseJacobianMatrix *OSInstance::calculateAllConstraintFunctionGradients(double* x, bool allFunctionsEvaluated, bool allGradientsEvaluated){
 	try{
 		// make sure the index idx is valid
 		if( allGradientsEvaluated == true  ) return m_sparseJacMatrix;
@@ -1602,7 +1603,7 @@ SparseJacobianMatrix *OSInstance::calculateAllConstraintFunctionGradients(double
 			// we are considering only constraints, not objective function
 			if(idx >= 0){
 				std::cout << "Getting the gradient for the row indexed by " <<  idx << std::endl;
-				jac = m_mapExpressionTreesMod[ idx]->calculateGradient(x, functionEvaluated);
+				jac = m_mapExpressionTreesMod[ idx]->calculateGradient(x, allFunctionsEvaluated);
 				// check size
 				jstart = m_miJacStart[ idx] + m_miJacNumConTerms[ idx];
 				jend = m_miJacStart[ idx + 1 ];
@@ -1611,7 +1612,7 @@ SparseJacobianMatrix *OSInstance::calculateAllConstraintFunctionGradients(double
 				j = 0;
 				for(posVarIdx = (*m_mapExpressionTreesMod[ idx]->mapVarIdx).begin(); posVarIdx 
 					!= (*m_mapExpressionTreesMod[ idx]->mapVarIdx).end(); ++posVarIdx){
-					if(m_miJacIndex[ jstart] != posVarIdx->first) throw ErrorClass("error calculating Jacobian matrix");
+					//if(m_miJacIndex[ jstart] != posVarIdx->first) throw ErrorClass("error calculating Jacobian matrix");
 					m_mdJacValue[ jstart] = jac[ j];
 					//std::cout << "Constraint  Partial = " <<  jac[ j] << std::endl;
 					jstart++;
@@ -1629,21 +1630,21 @@ SparseJacobianMatrix *OSInstance::calculateAllConstraintFunctionGradients(double
 double *OSInstance::calculateObjectiveFunctionGradient(int idx, double* x, bool functionEvaluated, bool gradientEvaluated){
 	try{
 		// make sure the index idx is valid
-		if(idx >0 && getObjectiveNumber() <= ( abs( idx) - 1)  ) throw 
+		if(idx >= 0 || getObjectiveNumber() <= ( abs( idx) - 1)  ) throw 
 			ErrorClass("obj index not valid in OSInstance::calculateObjectiveFunctionGradient");
 		if( gradientEvaluated == true) return m_mdObjGradient;
 		int i;
 		int numVar = getVariableNumber();
 		std::map<int, int>::iterator posVarIdx;
 		std::vector<double> jac;
-		// get the constant terms
+		// get the values from the ObjCoef object
+		int objIdx = (abs( idx) - 1);
 		for(i = 0; i < numVar; i++){
-			*(m_mdObjGradient + i) = m_mmdDenseObjectiveCoefficients[ (abs( idx) - 1)][i];
+			*(m_mdObjGradient + i) = m_mmdDenseObjectiveCoefficients[ objIdx][i];
 		}
 		// get the gradient
 		if( m_mapExpressionTreesMod.find( idx) != m_mapExpressionTreesMod.end() ){
 			jac = m_mapExpressionTreesMod[ idx]->calculateGradient(x, functionEvaluated);
-			// check size
 			i = 0;
 			for(posVarIdx = (*m_mapExpressionTreesMod[ idx]->mapVarIdx).begin(); posVarIdx 
 			!= (*m_mapExpressionTreesMod[ idx]->mapVarIdx).end(); ++posVarIdx){
@@ -1795,7 +1796,7 @@ bool OSInstance::getSparseJacobianFromColumnMajor( ){
 	return true;
 }//getSparseJacobianFromColumnMajor
 
-OSExpressionTree* OSInstance::getHessianOfLagrangainExpTree( ){
+OSExpressionTree* OSInstance::getHessianOfLagrangianExpTree( ){
 	if( m_bHessianLagCreated == true) return m_HessianLag;
 	// we calculate the Lagrangian for all the objectives and constraints
 	// with nonlinear terms
@@ -1803,9 +1804,8 @@ OSExpressionTree* OSInstance::getHessianOfLagrangainExpTree( ){
 	getSparseJacobian( );	
 	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
 	OSnLNodeTimes* nlNodeTimes = NULL;
-	OSnLNodeVariable* nlNodeVariable = NULL;
+	OSnLNodeNumber* nlNodeNumber = NULL;
 	OSnLNodeSum* nlNodeSum = NULL;
-	int rowIdx;
 	int numChildren = 0;
 	// create the sum node
 	nlNodeSum = new OSnLNodeSum();
@@ -1817,46 +1817,50 @@ OSExpressionTree* OSInstance::getHessianOfLagrangainExpTree( ){
 	m_HessianLag->m_treeRoot = nlNodeSum;
 	// now create the children of the sum node
 	for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
-		nlNodeVariable = new OSnLNodeVariable();
-		nlNodeVariable->coef = 1.;
-		/**
-		 * the variable we just created is a Lagrange multplier and needs the appropriate index
-		 * if the Expression tree row index is constraint k then the variable index is
-		 * number of variables + row index
-		 * if the expression tree corresponds to an objective function then the variable index
-		 * is number of variables + number of rows + (abs(row idx) - 1) 
-		 */
-		 rowIdx = posMapExpTree->first;
-		 if( rowIdx >= 0){
-		 	nlNodeVariable->idx = this->instanceData->variables->numberOfVariables + rowIdx;
-		 }
-		 else{
-		 	nlNodeVariable->idx = this->instanceData->variables->numberOfVariables 
-		 		+ this->instanceData->constraints->numberOfConstraints + (abs(rowIdx) - 1);
-		 } 
+		nlNodeNumber = new OSnLNodeNumber();
+		nlNodeNumber->value = 1.;
 		// now create a times multiply the new variable times the root of the expression tree
 		nlNodeTimes = new OSnLNodeTimes();
-		nlNodeTimes->m_mChildren[ 0] = nlNodeVariable;
-		nlNodeTimes->m_mChildren[ 1] = m_mapExpressionTreesMod[ rowIdx ]->m_treeRoot;	
+		nlNodeTimes->m_mChildren[ 0] = nlNodeNumber;
+		nlNodeTimes->m_mChildren[ 1] = m_mapExpressionTreesMod[ -1 ]->m_treeRoot;	
+		std::cout << "GAIL INDEX VALUE = " << posMapExpTree->first << std::endl;
 		// the times node is the new child
 		nlNodeSum->m_mChildren[ numChildren] = nlNodeTimes;
 		numChildren++;
 	}	
 	// get a variable index map for the expression tree
-	*m_HessianLag->getVariableIndiciesMap();
+	m_HessianLag->getVariableIndiciesMap();
 	// print out the XML for this puppy
 	std::cout << m_HessianLag->m_treeRoot->getNonlinearExpressionInXML() << std::endl;
 	//
 	m_bHessianLagCreated = true;
+		double* x;
+	x = new double[ 3];
+	x[0] = .5;
+	x[1] = 1000;
+	x[2] = 1;
+	std::cout << "TEST VALUE = " << m_HessianLag->calculateFunction( &x[ 0], false) << std::endl;
+	m_HessianLag->calculateGradient( &x[ 0], false);
 	return m_HessianLag;
 }//getHessianOfLagrangainExpTree
 
 SparseHessianMatrix* OSInstance::getHessianOfLagrangianNonz( OSExpressionTree* expTree){
 	// get the number of variables in the expression tree
 	// do this by getting the size of the mapVarIsx
+	int i, j;
+	int numVars = (*expTree->mapVarIdx).size();
+	int kount = 0;
 	m_mSparseHessianLag = new SparseHessianMatrix();
-	m_mSparseHessianLag->hessDimension = (*expTree->mapVarIdx).size();
+	m_mSparseHessianLag->hessDimension = numVars*(numVars + 1)/2;
+	m_mSparseHessianLag->hessRowIdx = new int[ m_mSparseHessianLag->hessDimension];
+	m_mSparseHessianLag->hessColIdx = new int[ m_mSparseHessianLag->hessDimension];
+	m_mSparseHessianLag->hessValues = new double[ m_mSparseHessianLag->hessDimension];
 	std::cout << "HESSIAN DIMENSION = " << m_mSparseHessianLag->hessDimension << std::endl;
+	for(i = 0; i < numVars; i++){
+		for( j = i; j < numVars; j++){
+				*(m_mSparseHessianLag->hessRowIdx + kount) = i ;
+		}
+	}
 	return m_mSparseHessianLag;
 }
 
@@ -1872,4 +1876,17 @@ void OSInstance::duplicateExpressionTreesMap(){
 		return;
 	}
 }//duplicateExpressionTreesMap
+
+void OSInstance::testChangeNumber(){
+	//m_HessianLag->m_treeRoot
+	double* x;
+	x = new double[ 6];
+	x[0] = .5;
+	x[1] = 1000;
+	x[2] = 1;
+	x[3] = 0;
+	x[4] = 0;
+	x[5] = 1;
+	std::cout << "TEST VALUE = " << m_HessianLag->calculateFunction( &x[ 0], false) << std::endl;
+}
 

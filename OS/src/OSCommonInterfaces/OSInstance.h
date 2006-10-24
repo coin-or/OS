@@ -1191,7 +1191,7 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * @return a pointer a SparseJacobianMatrix. 
 	 * Each array member corresponds to one constraint gradient.
 	 */
-	SparseJacobianMatrix *calculateAllConstraintFunctionGradients(double* x, bool functionEvaluated, bool gradientEvaluated);				
+	SparseJacobianMatrix *calculateAllConstraintFunctionGradients(double* x, bool allFunctionsEvaluated, bool gradientEvaluated);				
 
 	/**
 	 * Calculate the gradient of the function indexed by idx
@@ -1199,7 +1199,7 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * <p>
 	 * 
 	 * @param x is a pointer (double array) to the current variable values
-	 * @param functionEvaluated is true if any (not just idx) function (constraint or objective) 
+	 * @param allFunctionEvaluated is true if all functions have been evaluated
 	 * has been evaluated for the current iterate x
 	 * use a value of false if not sure
 	 * @param gradientEvaluated is true if the function gradient (constraint or objective) indexed by idx
@@ -1219,7 +1219,7 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	/**
 	 * @return a pointer to the ExpressionTree for the Hession of the Lagrangian functioni 
 	 */
-	OSExpressionTree* getHessianOfLagrangainExpTree( );
+	OSExpressionTree* getHessianOfLagrangianExpTree( );
 	
 	/**
 	 * @param a pointer to an OSExpressian Tree
@@ -1250,6 +1250,8 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 *  duplicate the map of expression trees.
 	 */	 
 	void duplicateExpressionTreesMap();
+	
+	void testChangeNumber();
 																																																		
 }; //class OSInstance
 

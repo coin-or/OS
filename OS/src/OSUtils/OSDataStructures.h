@@ -273,7 +273,7 @@ class SparseHessianMatrix {
 	/**
 	 * hessValues is a double array of the Hessian values.
 	 */
-	int* hessValues;
+	double* hessValues;
 
 	/**
 	 *

@@ -150,8 +150,9 @@ int  main(){
 		std::cout << "RETURN FROM GETTING SPARSE JACOBIAN RESULT"   << std::endl;
 		std::cout << "NOW GET LAGRANGIAN HESSIAN"   << std::endl;
 		OSExpressionTree* expTree;
-		expTree = osinstance->getHessianOfLagrangainExpTree( );
-		osinstance->getHessianOfLagrangianNonz( expTree);
+		expTree = osinstance->getHessianOfLagrangianExpTree( );
+		//osinstance->getHessianOfLagrangianNonz( expTree);
+		//osinstance->testChangeNumber();
 		delete[] zz;
 		zz = NULL;
 		delete osilreader;
