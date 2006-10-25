@@ -1251,7 +1251,7 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 */	 
 	void duplicateExpressionTreesMap();
 	
-	void testChangeNumber();
+
 																																																		
 }; //class OSInstance
 

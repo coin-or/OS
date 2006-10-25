@@ -3465,7 +3465,7 @@ bool parseLinearConstraintCoefficients( const char **p){
 	if( (ch - *p) != 29) {
 		//reset ch
 		ch = *p;
-		return false;
+		return true;
 	}
 	// find numberOfValues attribute
 	// eat the white space

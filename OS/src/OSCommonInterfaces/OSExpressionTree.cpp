@@ -38,6 +38,8 @@ OSExpressionTree::~OSExpressionTree(){
 	m_treeRoot = NULL;
 	if(mapVarIdx != NULL) delete mapVarIdx;
 	mapVarIdx = NULL;
+	delete f;
+	f = NULL;
 }//end ~OSExpressionTree 
 
 
@@ -92,7 +94,7 @@ std::vector<double> OSExpressionTree::calculateGradient( double *x, bool functio
 		f = new CppAD::ADFun<double>(m_vXAD, m_vZ);
 		m_bCppADTreeBuilt = true;
 	}
-	if( functionEvaluated == false){
+	if( functionEvaluated == false){ 
 		m_vX.clear();
 		for(m_mPosVarIdx = (*mapVarIdx).begin(); m_mPosVarIdx != (*mapVarIdx).end(); ++m_mPosVarIdx){
 			m_vX.push_back( x[ m_mPosVarIdx->first] );
@@ -135,23 +137,145 @@ std::vector<double>  OSExpressionTree::calculateHessian( double *x, bool functio
 	// now get values
 	std::vector<SecondPartialStruct*> secondPartialVector;
 	struct SecondPartialStruct *secondPartial;
+		std::cout << "HERE IS THE RESULT OF HESSIAN" << std::endl;
 	for(m_mPosVarIdx = (*mapVarIdx).begin(); m_mPosVarIdx != (*mapVarIdx).end(); ++m_mPosVarIdx){
 		for(m_mPosVarIdx2 = (*mapVarIdx).begin(); m_mPosVarIdx2 != (*mapVarIdx).end(); ++m_mPosVarIdx2){
 			secondPartial = new SecondPartialStruct();
 			secondPartial->index_i = m_mPosVarIdx->first;
 			secondPartial->index_j = m_mPosVarIdx2->first;
 			secondPartial->secondPartial_ij  = hess[ numSparseVars*m_mPosVarIdx->second + m_mPosVarIdx2->second];
+			std::cout << secondPartial->secondPartial_ij << std::endl;
 			secondPartialVector.push_back( secondPartial);
 		}
 	}
 	return hess;
 }//calculateHessian
 
+
+std::vector<double>  OSExpressionTree::calculateHessianLag( double* x, int xdim, double* y, int ydim,
+	double* z, int zdim, bool functionEvaluated){
+	int i, hessdim;
+	if( m_bCppADTreeBuilt == false){
+		// map the variables
+		if( m_bIndexMapGenerated == false) getVariableIndiciesMap();
+		// x is a pointer to primal variables
+		// y is a pointer to Lagrange multiplier on the constraints
+		// z is a pointer to Lagrange multipliers on the objectives
+		m_treeRoot->getVariableIndexMap( mapVarIdx);		
+		// put the primal vector into m_vXAD
+		for(i = 0; i < xdim; i++){
+			m_vXAD.push_back( *(x + i) );
+		}
+		// declare the primal vectors as the independent vectors
+		CppAD::Independent( m_vXAD);
+		// now add in the Lagrangian variable before going to the OSExpression Tree
+		for(i = 0; i < ydim; i++){
+			m_vXAD.push_back( *(y + i) );	
+		}
+		for(i = 0; i < zdim; i++){
+			m_vXAD.push_back( *(z + i) );	
+		}
+		m_CppADTree = m_treeRoot->constructCppADTree(mapVarIdx, &m_vXAD);
+		m_vZ.push_back( m_CppADTree) ;
+		f = new CppAD::ADFun<double>(m_vXAD, m_vZ);
+		m_bCppADTreeBuilt = true;
+	}
+	if( functionEvaluated == false){
+		m_vX.clear();
+		for(i = 0; i < xdim; i++){
+			m_vXAD.push_back( *(x + i) );	
+		}
+		for(i = 0; i < ydim; i++){
+			m_vXAD.push_back( *(y + i) );	
+		}
+		for(i = 0; i < zdim; i++){
+			m_vXAD.push_back( *(z + i) );	
+		}
+	}
+	// now go for second derivative
+	hessdim = xdim * xdim;
+	std::vector<double> hess( hessdim);
+	hess = (*f).Hessian(m_vX, 0);
+	std::cout << "HERE IS THE RESULT OF HESSIANLAG"  << std::endl;
+	for(i = 0; i < hessdim; i++){
+		std::cout << hess[ i] << std::endl;
+	}
+	return hess;
+}//calculateHessianLag
+
+
+std::vector<double>  OSExpressionTree::calculateHessianLagCase2( double* x, int xdim, double* y, int ydim,
+	double* z, int zdim, bool functionEvaluated){
+	int i, hessdim;
+	if( m_bCppADTreeBuilt == false){
+		// map the variables
+		if( m_bIndexMapGenerated == false) getVariableIndiciesMap();
+		// x is a pointer to primal variables
+		// y is a pointer to Lagrange multiplier on the constraints
+		// z is a pointer to Lagrange multipliers on the objectives
+		m_treeRoot->getVariableIndexMap( mapVarIdx);		
+		// put the primal vector into m_vXAD
+		for(i = 0; i < xdim; i++){
+			m_vXAD.push_back( *(x + i) );
+		}
+
+		// now add in the Lagrangian variable before going to the OSExpression Tree
+		for(i = 0; i < ydim; i++){
+			m_vXAD.push_back( *(y + i) );	
+		}
+		for(i = 0; i < zdim; i++){
+			m_vXAD.push_back( *(z + i) );	
+		}
+		// all variables independent
+		CppAD::Independent( m_vXAD);
+		m_CppADTree = m_treeRoot->constructCppADTree(mapVarIdx, &m_vXAD);
+		m_vZ.push_back( m_CppADTree) ;
+		f = new CppAD::ADFun<double>(m_vXAD, m_vZ);
+		m_bCppADTreeBuilt = true;
+	}
+	if( functionEvaluated == false){
+		m_vX.clear();
+		for(i = 0; i < xdim; i++){
+			m_vX.push_back( *(x + i) );	
+		}
+
+	}
+	 std::vector<double> jac( xdim );
+
+	// take partial with respect to just x
+	jac = (*f).Forward(1, m_vX);
+	
+	std::cout << "HERE IS THE RESULT OF HESSIANLAG CASE 2 JACOBIAN CALCULATION"  << std::endl;
+	for(i = 0; i < xdim; i++){
+		std::cout << jac[ i] << std::endl;
+	}
+
+	// now go for second derivative
+	hessdim = xdim * xdim;
+	std::vector<double> hess( hessdim);
+	hess = (*f).Reverse(1, jac);
+
+	//std::vector<double> hess( hessdim);
+	//hess = (*f).Hessian(m_vX, 0);
+	std::cout << "HERE IS THE RESULT OF HESSIANLAG CASE 2"  << std::endl;
+	for(i = 0; i < hessdim; i++){
+		std::cout << hess[ i] << std::endl;
+	}
+
+	return hess;
+}//calculateHessianLagCase2
+
 std::map<int, int> *OSExpressionTree::getVariableIndiciesMap(){
 	if( m_bIndexMapGenerated == true) return mapVarIdx;
 	mapVarIdx = new std::map<int, int>();
 	m_treeRoot->getVariableIndexMap( mapVarIdx);
 	std::cout << "SIZE OF MAP =  "  << (*mapVarIdx).size() << std::endl;
+	int kount = 0;
+	for(m_mPosVarIdx = (*mapVarIdx).begin(); m_mPosVarIdx != (*mapVarIdx).end(); ++m_mPosVarIdx){
+		m_mPosVarIdx->second = kount++;
+		std::cout <<  "POSITION FIRST =  "  << m_mPosVarIdx->first ;
+		std::cout <<  "    POSITION SECOND = "  << m_mPosVarIdx->second << std::endl;
+	}
 	m_bIndexMapGenerated = true;
 	return mapVarIdx;
 }//getVariableIndicies

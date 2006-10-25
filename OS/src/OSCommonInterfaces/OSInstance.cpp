@@ -1804,9 +1804,10 @@ OSExpressionTree* OSInstance::getHessianOfLagrangianExpTree( ){
 	getSparseJacobian( );	
 	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
 	OSnLNodeTimes* nlNodeTimes = NULL;
-	OSnLNodeNumber* nlNodeNumber = NULL;
+	OSnLNodeVariable* nlNodeVariable = NULL;
 	OSnLNodeSum* nlNodeSum = NULL;
 	int numChildren = 0;
+	int rowIdx;
 	// create the sum node
 	nlNodeSum = new OSnLNodeSum();
 	nlNodeSum->inumberOfChildren = m_mapExpressionTreesMod.size();
@@ -1817,13 +1818,23 @@ OSExpressionTree* OSInstance::getHessianOfLagrangianExpTree( ){
 	m_HessianLag->m_treeRoot = nlNodeSum;
 	// now create the children of the sum node
 	for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
-		nlNodeNumber = new OSnLNodeNumber();
-		nlNodeNumber->value = 1.;
+		// this variable is the Lagrange multiplier
+		nlNodeVariable = new OSnLNodeVariable();
+		nlNodeVariable->coef = 1.;
+		// get the correct index --
+		// for rowIdx = 0, ..., m - 1 set idx = numVar + rowIdx
+		rowIdx = posMapExpTree->first;
+		if(rowIdx >= 0){
+			nlNodeVariable->idx = instanceData->variables->numberOfVariables + rowIdx;
+		}
+		else{
+			nlNodeVariable->idx = instanceData->variables->numberOfVariables + 
+			instanceData->constraints->numberOfConstraints + (abs(rowIdx) - 1);
+		}
 		// now create a times multiply the new variable times the root of the expression tree
 		nlNodeTimes = new OSnLNodeTimes();
-		nlNodeTimes->m_mChildren[ 0] = nlNodeNumber;
-		nlNodeTimes->m_mChildren[ 1] = m_mapExpressionTreesMod[ -1 ]->m_treeRoot;	
-		std::cout << "GAIL INDEX VALUE = " << posMapExpTree->first << std::endl;
+		nlNodeTimes->m_mChildren[ 0] = nlNodeVariable;
+		nlNodeTimes->m_mChildren[ 1] = m_mapExpressionTreesMod[ posMapExpTree->first ]->m_treeRoot;	
 		// the times node is the new child
 		nlNodeSum->m_mChildren[ numChildren] = nlNodeTimes;
 		numChildren++;
@@ -1834,13 +1845,30 @@ OSExpressionTree* OSInstance::getHessianOfLagrangianExpTree( ){
 	std::cout << m_HessianLag->m_treeRoot->getNonlinearExpressionInXML() << std::endl;
 	//
 	m_bHessianLagCreated = true;
-		double* x;
-	x = new double[ 3];
+	double* w;
+	w = new double[ 6];
+	w[0] = .5;
+	w[1] = 1000;
+	w[2] = 1;
+	w[3] = 1.;
+	w[4] = 1.;
+	w[5] = 1.;
+	std::cout << "TEST VALUE = " << m_HessianLag->calculateFunction( &w[ 0], false) << std::endl;
+	m_HessianLag->calculateHessian( &w[ 0], false) ;
+	// now test another way
+	double *x, *y, *z;
+	x = new double[3];
+	y = new double[2];
+	z = new double[1];
+	
 	x[0] = .5;
 	x[1] = 1000;
 	x[2] = 1;
-	std::cout << "TEST VALUE = " << m_HessianLag->calculateFunction( &x[ 0], false) << std::endl;
-	m_HessianLag->calculateGradient( &x[ 0], false);
+	y[0] = 1.;
+	y[1] = 1.;
+	z[0] = 1.;
+	m_HessianLag->calculateHessianLag( &x[ 0], 3, &y[0], 2, &z[0], 1, false) ;
+	m_HessianLag->calculateHessianLagCase2( &x[ 0], 3, &y[0], 2, &z[0], 1, false) ;	
 	return m_HessianLag;
 }//getHessianOfLagrangainExpTree
 
@@ -1877,16 +1905,5 @@ void OSInstance::duplicateExpressionTreesMap(){
 	}
 }//duplicateExpressionTreesMap
 
-void OSInstance::testChangeNumber(){
-	//m_HessianLag->m_treeRoot
-	double* x;
-	x = new double[ 6];
-	x[0] = .5;
-	x[1] = 1000;
-	x[2] = 1;
-	x[3] = 0;
-	x[4] = 0;
-	x[5] = 1;
-	std::cout << "TEST VALUE = " << m_HessianLag->calculateFunction( &x[ 0], false) << std::endl;
-}
+
 

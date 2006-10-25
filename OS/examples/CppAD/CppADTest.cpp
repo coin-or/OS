@@ -92,7 +92,7 @@ int  main(){
   	// Set directory containing mps data files.
   	std::string dataDir;
     dataDir = "../../data/" ;
-	osilFileName =  dataDir + "CppADTest.osil";
+	osilFileName =  dataDir + "CppADTestLag.osil";
 	fileUtil = new FileUtil();
 	osil = fileUtil->getFileAsString( &osilFileName[0]);	
 	//
@@ -133,8 +133,10 @@ int  main(){
 			std::cout << "Second partial  = " << secondPartial->secondPartial_ij << std::endl;
 		}
 		//
+		 * 
 		 * */
 		double *conVals = osinstance->calculateAllConstraintFunctionValues( &zz[0], false);
+
 		double *objVals = osinstance->calculateAllObjectiveFunctionValues( &zz[0], false);
 		int idx;
 		for( idx = 0; idx < osinstance->getConstraintNumber(); idx++){
@@ -151,37 +153,37 @@ int  main(){
 		std::cout << "NOW GET LAGRANGIAN HESSIAN"   << std::endl;
 		OSExpressionTree* expTree;
 		expTree = osinstance->getHessianOfLagrangianExpTree( );
-		//osinstance->getHessianOfLagrangianNonz( expTree);
-		//osinstance->testChangeNumber();
+		osinstance->getHessianOfLagrangianNonz( expTree);
 		delete[] zz;
 		zz = NULL;
 		delete osilreader;
 		osilreader = NULL;
+		std::cout << "OSILREADER DELETED" << std::endl;
 	}
 	catch(const ErrorClass& eclass){
 	std::cout << eclass.errormsg << std::endl;
 	} 	
-	return 0;
+	//return 0;
 	CppAD::vector< AD<double> > XAD;
-	std::map<int, int> varIdx; 
-	nlNode->getVariableIndexMap( &varIdx);
-	std::cout << "Size = " <<  XAD.size() << std::endl;
-	// std::cout << "Result = " <<  nlNode->constructCppADTree() << std::endl;
-	// range space vector
+	size_t p = 0;
+	size_t n = 2;
 	size_t m = 1;
-	vector< AD<double> > Z(m);
-	XAD.push_back(0.5);
-	XAD.push_back(1.0);
+	vector<double> x;
+	CppAD::vector<double> y(m);
+	CppAD::vector< AD<double> > Z(m);
+	x.push_back(.5);
+	x.push_back(1);
+	XAD.push_back( x[ 0]);
+	XAD.push_back( x[1]);
 	CppAD::Independent( XAD);
-	Z[ 0] = nlNode->constructCppADTree(&varIdx, &XAD);
+	x.push_back(7);
+	XAD.push_back( x[2]);
+	Z[ 0] = XAD[0]*XAD[0] + XAD[1]*XAD[2];
 	// domain space vector
 	// create f : X -> Y and stop tape recording
 	CppAD::ADFun<double> f(XAD, Z);
 	// use forward mode to evaluate function at different argument value
-	size_t p = 0;
-	size_t n = 2;
-	vector<double> x(n);
-	vector<double> y(m);
+
 	// if x[0] = .5 and x[1] = 1 you should get 
 	//the following results (without sum node):
 	// partial with respect to x0 is -151
@@ -192,8 +194,7 @@ int  main(){
 	// partial with respect to x1 is 152
 	// the function value is 164.185
 	// in both cases the Hessian is -98, -200, -200, 200
-	x[0] = .5;
-	x[1] = 1.;
+
 	y    = f.Forward(p, x);
 	cout << "VALUE =  " << y[0] << endl;
 	// compute derivative using operation sequence stored in f
@@ -210,12 +211,6 @@ int  main(){
 	std::cout << "second derivative " << hess[2] << std::endl;
 	std::cout << "second derivative " << hess[3] << std::endl;
 	std::cout << std::endl;
-	std::cout << "Index 0 " << varIdx[ 0] << std::endl;
-	std::cout << "Index 1 " << varIdx[ 1] << std::endl;   
-//
-
-
-//
    
 	return 0;
 	

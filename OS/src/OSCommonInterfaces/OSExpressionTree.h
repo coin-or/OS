@@ -20,6 +20,7 @@
 #include <vector>
 #include <map>
 #include<CppAD/CppAD.h>
+using CppAD::Parameter;
 
 
 struct FirstPartialStruct{  
@@ -93,7 +94,13 @@ public:
 	 * @param functionEvaluated is set to true if the function has already been evaluated.
 	 * @return the expression tree Hessian given the current variable values.
 	 */
-	 std::vector<double> calculateHessian( double *x, bool functionEvaluated);
+	std::vector<double> calculateHessian( double *x, bool functionEvaluated);
+	 
+	std::vector<double> calculateHessianLag( double* x, int xdim, double* y, int ydim,
+		double* z, int zdim, bool functionEvaluated);
+		
+	std::vector<double> calculateHessianLagCase2( double* x, int xdim, double* y, int ydim,
+		double* z, int zdim, bool functionEvaluated);
 	
 
 	/**
