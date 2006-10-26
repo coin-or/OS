@@ -1861,15 +1861,18 @@ OSExpressionTree* OSInstance::getLagrangianExpTree( ){
 
 std::map<int, int> OSInstance::getLagrangianVariableIndexMap( ){
 	if(m_bLagrangianVariableIndex == true) return m_mapLagrangianVariableIndex;
-	//loop over the map of expression tree and get the variables
+	//loop over the map of expression tree and get a unique listing of all variables
+	// put these in the map m_mapLagrangianVariableIndex
 	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
 	std::map<int, int>::iterator posVarIdx;
 	OSExpressionTree *expTree;
 	for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
 		// get the index map for the expression tree
 		expTree = posMapExpTree->second;
+		std::cout << "GETTING VARIABLES FOR ROW  " << posMapExpTree->first << std::endl;
+		std::cout << "NUMBER OF VARS IN THIS ROW  " <<  (*expTree->mapVarIdx).size()<< std::endl;
 		for(posVarIdx = (*expTree->mapVarIdx).begin(); posVarIdx != (*expTree->mapVarIdx).end(); ++posVarIdx){
-			if( m_mapLagrangianVariableIndex.find( posVarIdx->first) != m_mapLagrangianVariableIndex.end() ){
+			if( m_mapLagrangianVariableIndex.find( posVarIdx->first) == m_mapLagrangianVariableIndex.end() ){
 			// add the variable to the Lagragian map
 			m_mapLagrangianVariableIndex[ posVarIdx->first] = 1;
 			}
@@ -1877,7 +1880,7 @@ std::map<int, int> OSInstance::getLagrangianVariableIndexMap( ){
 	}
 	// now order appropriately
 	int kount = 0;
-	std::cout << "HERE IS THE LAGRANGIAN VARIABLE MAPPING" << std::endl;
+	std::cout << "HERE IS THE LAGRANGIANN VARIABLE MAPPING" << std::endl;
 	for(posVarIdx = m_mapLagrangianVariableIndex.begin(); posVarIdx !=m_mapLagrangianVariableIndex.end(); ++posVarIdx){
 		posVarIdx->second = kount++;
 		std::cout <<  "POSITION FIRST =  "  << posVarIdx->first ;
@@ -1888,6 +1891,7 @@ std::map<int, int> OSInstance::getLagrangianVariableIndexMap( ){
 }//getLagrangianVariableIndexMap 	
 
 SparseHessianMatrix* OSInstance::getLagrangianExpTreeSparseHessian( ){
+	// fill in the nonzeros in the sparse Hessian
 	if( m_bLagrangianSparseHessianCreated == true) return m_LagrangianSparseHessian;
 	// get the number of primal variables in the expression tree
 	// the number of lagrangian variables is equal to m_mapExpressionTreesMod.size()
@@ -1927,9 +1931,9 @@ SparseHessianMatrix *OSInstance::calculateLagrangianExpTreeHessian( double* x, d
 	// initialize everything
 	// if we have not filled in the Sparse Jacobian matrix do so now
 	if( m_bSparseJacobianCalculated == false) getSparseJacobian();
-	// Create the Lagrangian Expression Tree if necessary
-	if( m_bLagrangianVariableIndex == false) getLagrangianVariableIndexMap( );
 	// get a map of the sparsity structure of the Hessian of the  Lagrangian
+	if( m_bLagrangianVariableIndex == false) getLagrangianVariableIndexMap( );
+	// fill in the nonzeros in the sparse Hessian
 	if( m_bLagrangianSparseHessianCreated == false)	getLagrangianExpTreeSparseHessian();
 	return m_LagrangianSparseHessian;
 }//calculateLagrangianExpTreeHessian

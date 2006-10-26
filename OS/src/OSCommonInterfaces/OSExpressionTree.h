@@ -99,9 +99,7 @@ public:
 	std::vector<double> calculateHessianLag( double* x, int xdim, double* y, int ydim,
 		double* z, int zdim, bool functionEvaluated);
 		
-	std::vector<double> calculateHessianLagCase2( double* x, int xdim, double* y, int ydim,
-		double* z, int zdim, bool functionEvaluated);
-	
+
 
 	/**
 	 * Get a vector of pointers to OSnLNodes that correspond to

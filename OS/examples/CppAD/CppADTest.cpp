@@ -162,121 +162,86 @@ int  main(){
 	catch(const ErrorClass& eclass){
 	std::cout << eclass.errormsg << std::endl;
 	} 	
-	//return 0;
-	CppAD::vector< AD<double> > XAD;
-	size_t p = 0;
-	size_t n = 2;
-	size_t m = 1;
-	vector<double> x;
-	CppAD::vector<double> y(m);
-	CppAD::vector< AD<double> > Z(m);
-	x.push_back(.5);
-	x.push_back(1);
-	XAD.push_back( x[ 0]);
-	XAD.push_back( x[1]);
-	CppAD::Independent( XAD);
-	x.push_back(7);
-	XAD.push_back( x[2]);
-	Z[ 0] = XAD[0]*XAD[0] + XAD[1]*XAD[2];
+	
+	std::cout << "BRAD's EXAMPLE" << std::endl;
+	CppAD::AD<double> Lagragian( const CppADvector< CppAD::AD<double> > &xyz );
+	
+	// double values corresponding to XYZ vector
+	double x0, x1, x2, y0, y1, z;
+	y0 = 1.;
+	y1 = 1;
+	z = 1.;
 	// domain space vector
-	// create f : X -> Y and stop tape recording
-	CppAD::ADFun<double> f(XAD, Z);
-	// use forward mode to evaluate function at different argument value
+	size_t n = 3;
+	CppADvector< AD<double> >  XYZ(n);
+	XYZ[0] = x0 = 0.5;
+	XYZ[1] = x1 = 1000.;
+	XYZ[2] = x2 = 1.0;
 
-	// if x[0] = .5 and x[1] = 1 you should get 
-	//the following results (without sum node):
-	// partial with respect to x0 is -151
-	// partial with respect to x1 is 150
-	// the function value is 56.5
-	// with the sum node you should get
-	// partial with respect to x0 is -149.63
-	// partial with respect to x1 is 152
-	// the function value is 164.185
-	// in both cases the Hessian is -98, -200, -200, 200
+	// declare X as independent variable vector and start recording
+	CppAD::Independent(XYZ);
 
-	y    = f.Forward(p, x);
-	cout << "VALUE =  " << y[0] << endl;
-	// compute derivative using operation sequence stored in f
-  	vector<double> jac(m * n); // Jacobian of f (m by n matrix)
-   	jac  = f.Jacobian(x);      // Jacobian for operation sequence
-	// print the results
-   	std::cout << "Partial with respect to x0 computed by CppAD = " << jac[0] << std::endl;
-	std::cout << "Partial with respect to x1 computed by CppAD = " << jac[1] << std::endl;
-	// now go for second derivative
-	vector<double> hess(n * n);
-	hess = f.Hessian(x, 0);
+	// Add the Lagragian multipliers to XYZ
+	XYZ.push_back(y0);
+	XYZ.push_back(y1);
+	XYZ.push_back(z);
+
+	// range space vector
+	size_t m = 1;
+	CppADvector< AD<double> >  L(m);
+	L[0] = Lagragian(XYZ);
+
+	// create F: X -> L and stop tape recording
+	CppAD::ADFun<double> F;
+	F.Dependent(L);
+
+	// independent variable vector
+	CppADvector<double> x(n);
+	x[0] = x0;
+	x[1] = x1;
+	x[2] = x2;
+	std::cout << "L[0] = " << L[0] << std::endl;
+	// second derivative of L[0] 
+	CppADvector<double> hess( n * n );
+	hess = F.Hessian(x, 0);
 	std::cout << "second derivative " << hess[0] << std::endl;
 	std::cout << "second derivative " << hess[1] << std::endl;
 	std::cout << "second derivative " << hess[2] << std::endl;
 	std::cout << "second derivative " << hess[3] << std::endl;
+	std::cout << "second derivative " << hess[4] << std::endl;
+	std::cout << "second derivative " << hess[5] << std::endl;
+	std::cout << "second derivative " << hess[6] << std::endl;
+	std::cout << "second derivative " << hess[7] << std::endl;
+	std::cout << "second derivative " << hess[8] << std::endl;
+				
 	std::cout << std::endl;
 	return 0;
-	
-	
-	// now do it Brad's way
-	/*std::cout << nlNode->getNonlinearExpressionInXML() << std::endl;
-	postFixVec = nlNode->getPostfixFromExpressionTree();
-	// domain space vector
-	size_t n = 2;
-	vector< AD<double> > X(n);
-	AD<double> rootNode;
-	X[0] = 1.0;
-	X[1] = 1.0;
-	// declare independent variables and start tape recording
-	CppAD::Independent(X);
-	// X[0] corresponds to a in the stack machine
-	vector< AD<double> > variable(26);
-	variable[0] = X[0];
-	variable[1] = X[1];
-	// calculate the resutls of the program
-	rootNode = StackMachine( variable, postFixVec);
-	std::cout << "HERE I AM" << std::endl;
-	// range space vector
-	vector< AD<double> > Y(m);
-	Y[0] = rootNode;   // b = a + 1
-	// create f : X -> Y and stop tape recording
-	CppAD::ADFun<double> f(X, Y);
-	// use forward mode to evaluate function at different argument value
-	size_t p = 0;
-	vector<double> x(n);
-	vector<double> y(m);
-	x[0] = 1.;
-	x[1] = 107.;
-	y    = f.Forward(p, x);
-	cout << "VALUE =  " << y[0] << endl;
-	// compute derivative using operation sequence stored in f
-  	vector<double> jac(m * n); // Jacobian of f (m by n matrix)
-   	jac  = f.Jacobian(x);      // Jacobian for operation sequence
-	// print the results
-   	std::cout << "Partial with respect to x0 computed by CppAD = " << jac[0] << std::endl;
-	std::cout << "Partial with respect to x1 computed by CppAD = " << jac[1] << std::endl;
-	return 0;
-	*/
-	// Use forward mode (because x is shorter than y) to calculate Jacobian
-	/*p = 1;
-	CppADvector<double> dx(n);
-	CppADvector<double> dy(m);
-	dx[0] = .5;
-	dx[1] = 107.;
-	dy    = f.Forward(p, dx);
-	cout << "Derivative with respect to x0 " <<  dy[ 1] << endl;
-	ok   &= NearEqual(dy[0], 1., 1e-10, 1e-10);
-	ok   &= NearEqual(dy[1], 2., 1e-10, 1e-10);
-	//ok   &= NearEqual(dy[2], 2., 1e-10, 1e-10);
-	//ok   &= NearEqual(dy[3], .5, 1e-10, 1e-10);
-
-	// Use Jacobian routine (which automatically decides which mode to use)
-	dy = f.Jacobian(x);
-	cout << "Derivative with respect to x0 " <<  dy[ 1] << endl;
-	ok   &= NearEqual(dy[0], 1., 1e-10, 1e-10);
-	ok   &= NearEqual(dy[1], 2., 1e-10, 1e-10);
-	//ok   &= NearEqual(dy[2], 2., 1e-10, 1e-10);
-	//ok   &= NearEqual(dy[3], .5, 1e-10, 1e-10);
-
-	//if( ok) return 0 ; 
-	//else return 1;
-*/
-
-
 }//end main
+
+CppAD::AD<double> Lagragian(
+	const CppADvector< CppAD::AD<double> > &xyz )
+{	using CppAD::AD;
+
+	assert( xyz.size() == 6 );
+	AD<double> x0 = xyz[0];
+	AD<double> x1 = xyz[1];
+	AD<double> x2 = xyz[2];
+	AD<double> y0 = xyz[3];
+	AD<double> y1 = xyz[4];
+	AD<double> z  = xyz[5];
+
+	// compute objective function
+	AD<double> f = x0 * x0;
+
+	// compute constraint functions
+	AD<double> h0 = 1. + 2.*x1 + 3.*x2;
+	AD<double> h1 = log( x0 * x2 );
+
+	// compute the Lagragian
+	AD<double> L = y0 * h0 + y1 * h1 + z * f;
+	std::cout << "Lagrangian in subroutine = " << xyz[ 1] << std::endl;
+	std::cout << "Lagrangian in subroutine = " << x0 << std::endl;
+	return L;
+
+}
 
