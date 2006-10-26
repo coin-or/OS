@@ -49,9 +49,11 @@ OSInstance::OSInstance():
 	m_mdObjectiveConstants(NULL),
 	m_mdObjectiveWeights(NULL),
 	m_mdObjGradient(NULL),
-	m_HessianLag(NULL),
-	m_bHessianLagCreated( false),
-	m_mSparseHessianLag( NULL),
+	m_LagrangianExpTree(NULL),
+	m_bLagrangianExpTreeCreated( false),
+	m_LagrangianSparseHessian( NULL),
+	m_bLagrangianSparseHessianCreated( false),
+	m_bLagrangianVariableIndex( false),
 	m_mObjectiveCoefficients(NULL),
 	m_bGetDenseObjectives(false),
 	m_mmdDenseObjectiveCoefficients(NULL),
@@ -156,11 +158,11 @@ OSInstance::~OSInstance(){
 	m_miJacNumConTerms = NULL;
 	delete[] m_mdObjGradient;
 	m_mdObjGradient = NULL;
-	if( m_bHessianLagCreated == true){
-		delete m_HessianLag;
-		m_HessianLag = NULL;
-		delete m_mSparseHessianLag;
-		m_mSparseHessianLag = NULL;
+	if( m_bLagrangianExpTreeCreated == true){
+		delete m_LagrangianExpTree;
+		m_LagrangianExpTree = NULL;
+		delete m_LagrangianSparseHessian;
+		m_LagrangianSparseHessian = NULL;
 	}
 
 	//delete m_sparseJacMatrix;
@@ -168,7 +170,7 @@ OSInstance::~OSInstance(){
 	//
 	// delete the expression trees that got created
 	// however they already got deleted if we have a lagrangian Hessian
-	if( m_bHessianLagCreated == false){
+	if( m_bLagrangianExpTreeCreated == false){
 		if( (m_bProcessExpressionTrees == true) && (m_bDuplicateExpressionTreesMap == false)  ) {
 			for(posMapExpTree = m_mapExpressionTrees.begin(); posMapExpTree != m_mapExpressionTrees.end(); ++posMapExpTree){
 				std::cout << "Deleting an expression tree from the map" << std::endl;
@@ -1671,9 +1673,14 @@ bool OSInstance::getSparseJacobianFromColumnMajor( ){
 	int iNumRowStarts = getConstraintNumber() + 1;	
 	int i,j, iTemp;
 	int iNumVariableStarts = getVariableNumber() - 1;
-	int *start = this->instanceData->linearConstraintCoefficients->start->el;
-	int *index = this->instanceData->linearConstraintCoefficients->rowIdx->el;
-	double *value = this->instanceData->linearConstraintCoefficients->value->el;
+	int *start;
+	int *index;
+	double *value;
+	if(this->instanceData->linearConstraintCoefficients->numberOfValues > 0){
+		start = this->instanceData->linearConstraintCoefficients->start->el;
+		index = this->instanceData->linearConstraintCoefficients->rowIdx->el;
+		value = this->instanceData->linearConstraintCoefficients->value->el;
+	}
 	m_miJacStart = new int[ iNumRowStarts];
 	m_miJacNumConTerms = new int[ getConstraintNumber()];
 	OSnLNodePlus *nlNodePlus;
@@ -1689,39 +1696,41 @@ bool OSInstance::getSparseJacobianFromColumnMajor( ){
 			
 		}
 	}
-	// i is indexing columns (variables) and j is indexing row numbers 
-	for (i = 0; i < iNumVariableStarts; i++){	
-		for (j = start[i]; j < start[ i + 1 ]; j++){
-			// index[ j] is a row index, we have just found an occurance of row index[j]
-			// therefore we increase by 1 (or push back) the start of the row indexed by index[j] + 1, 
-			// i.e. the start of the next row
-			// check to see if variable i is linear/constant in the row index[ j] 
-			// if so, increment m_miJacStart[ index[j] + 1]
-			//
-			if( (m_mapExpressionTreesMod.find( index[ j]) != m_mapExpressionTreesMod.end() ) &&
-				( (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).find( i) != (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).end()) ){
-				// variable i is appears in the expression tree for row index[ j]
-				// add the coefficient corresponding to variable i in row index[ j] to the expression tree	
-				// define a new OSnLVariable and OSnLnodePlus 
-				nlNodeVariable = new OSnLNodeVariable();
-				nlNodeVariable->coef = value[ j];
-				nlNodeVariable->idx = i;
-				nlNodePlus = new OSnLNodePlus();
-				nlNodePlus->m_mChildren[ 0] = m_mapExpressionTreesMod[ index[ j] ]->m_treeRoot;
-				nlNodePlus->m_mChildren[ 1] = nlNodeVariable;
-				expTree = new OSExpressionTree();
-				expTree->m_treeRoot = nlNodePlus ;
-				expTree->mapVarIdx = m_mapExpressionTreesMod[ index[ j]]->mapVarIdx;
-				m_mapExpressionTreesMod[ index[ j] ]  = expTree;	
-				std::cout << m_mapExpressionTreesMod[ index[ j] ]->m_treeRoot->getNonlinearExpressionInXML() << std::endl;	
-				//std::cout << m_mapExpressionTrees[ index[ j] ]->m_treeRoot->getNonlinearExpressionInXML() << std::endl;
+	// only execute the following code if there are linear constraint coefficients
+	if(this->instanceData->linearConstraintCoefficients->numberOfValues > 0){
+		// i is indexing columns (variables) and j is indexing row numbers 
+		for (i = 0; i < iNumVariableStarts; i++){	
+			for (j = start[i]; j < start[ i + 1 ]; j++){
+				// index[ j] is a row index, we have just found an occurance of row index[j]
+				// therefore we increase by 1 (or push back) the start of the row indexed by index[j] + 1, 
+				// i.e. the start of the next row
+				// check to see if variable i is linear/constant in the row index[ j] 
+				// if so, increment m_miJacStart[ index[j] + 1]
+				//
+				if( (m_mapExpressionTreesMod.find( index[ j]) != m_mapExpressionTreesMod.end() ) &&
+					( (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).find( i) != (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).end()) ){
+					// variable i is appears in the expression tree for row index[ j]
+					// add the coefficient corresponding to variable i in row index[ j] to the expression tree	
+					// define a new OSnLVariable and OSnLnodePlus 
+					nlNodeVariable = new OSnLNodeVariable();
+					nlNodeVariable->coef = value[ j];
+					nlNodeVariable->idx = i;
+					nlNodePlus = new OSnLNodePlus();
+					nlNodePlus->m_mChildren[ 0] = m_mapExpressionTreesMod[ index[ j] ]->m_treeRoot;
+					nlNodePlus->m_mChildren[ 1] = nlNodeVariable;
+					expTree = new OSExpressionTree();
+					expTree->m_treeRoot = nlNodePlus ;
+					expTree->mapVarIdx = m_mapExpressionTreesMod[ index[ j]]->mapVarIdx;
+					m_mapExpressionTreesMod[ index[ j] ]  = expTree;	
+					std::cout << m_mapExpressionTreesMod[ index[ j] ]->m_treeRoot->getNonlinearExpressionInXML() << std::endl;	
+					//std::cout << m_mapExpressionTrees[ index[ j] ]->m_treeRoot->getNonlinearExpressionInXML() << std::endl;
+				}
+				else{ 
+					m_miJacStart[ index[j] + 1] ++;
+				}				
 			}
-			else{ 
-				m_miJacStart[ index[j] + 1] ++;
-			}				
 		}
 	}
-
 	// at this point, m_miJacStart[ i] holds the number of columns with a linear/constant nonzero in row i - 1
 	// we are not done with the start indicies, if we are here, and we
 	// knew the correct starting point of row i -1, the correct starting point
@@ -1739,23 +1748,25 @@ bool OSInstance::getSparseJacobianFromColumnMajor( ){
 	// dimension miIndex and mdValue here	
 	m_miJacIndex = new int[ m_miJacStart[ iNumRowStarts - 1] ];
 	m_mdJacValue = new double[ m_miJacStart[ iNumRowStarts - 1] ];
-	// now get the values of the constant terms
-	// loop over variables	
-	for (i = 0; i < iNumVariableStarts; i++){
-		// get row indices and values of the A matrix
-		// kipp -- should we have a check to see if start[i+1] > start[i]
-		for (j = start[i]; j < start[ i + 1 ]; j++){
-			// store this variable index in every row where the variable appears
-			// however, don't store this as constant term if it appears in mapVarIdx
-			if( (m_mapExpressionTreesMod.find( index[ j]) == m_mapExpressionTreesMod.end() ) ||
-				( (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).find( i) == (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).end()) ){
-				iTemp = m_miJacStart[ index[j]];
-				m_miJacIndex[ iTemp] = i;
-				m_mdJacValue[ iTemp] = value[j];
-				m_miJacStart[ index[j]]++;	
-			}		
-		}			
-	} 
+	// now get the values of the constant terms if there are any
+	if(this->instanceData->linearConstraintCoefficients->numberOfValues > 0){
+		// loop over variables	
+		for (i = 0; i < iNumVariableStarts; i++){
+			// get row indices and values of the A matrix
+			// kipp -- should we have a check to see if start[i+1] > start[i]
+			for (j = start[i]; j < start[ i + 1 ]; j++){
+				// store this variable index in every row where the variable appears
+				// however, don't store this as constant term if it appears in mapVarIdx
+				if( (m_mapExpressionTreesMod.find( index[ j]) == m_mapExpressionTreesMod.end() ) ||
+					( (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).find( i) == (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).end()) ){
+					iTemp = m_miJacStart[ index[j]];
+					m_miJacIndex[ iTemp] = i;
+					m_mdJacValue[ iTemp] = value[j];
+					m_miJacStart[ index[j]]++;	
+				}		
+			}			
+		} 
+	}
 	//
 	std::map<int, int>::iterator posVarIdx;
 	// m_miJacStart[ i] is now equal to the correct m_miJacStart[ i] + m_miJacNumConTerms[ i], so readjust
@@ -1796,8 +1807,8 @@ bool OSInstance::getSparseJacobianFromColumnMajor( ){
 	return true;
 }//getSparseJacobianFromColumnMajor
 
-OSExpressionTree* OSInstance::getHessianOfLagrangianExpTree( ){
-	if( m_bHessianLagCreated == true) return m_HessianLag;
+OSExpressionTree* OSInstance::getLagrangianExpTree( ){
+	if( m_bLagrangianExpTreeCreated == true) return m_LagrangianExpTree;
 	// we calculate the Lagrangian for all the objectives and constraints
 	// with nonlinear terms
 	// first initialize everything for nonlinear work
@@ -1814,8 +1825,8 @@ OSExpressionTree* OSInstance::getHessianOfLagrangianExpTree( ){
 	std::cout << "NUMBER OF KIDS = " << m_mapExpressionTreesMod.size()<< std::endl;
 	nlNodeSum->m_mChildren = new OSnLNode*[ nlNodeSum->inumberOfChildren];
 	// create and expression tree for the sum node
-	m_HessianLag = new OSExpressionTree();
-	m_HessianLag->m_treeRoot = nlNodeSum;
+	m_LagrangianExpTree = new OSExpressionTree();
+	m_LagrangianExpTree->m_treeRoot = nlNodeSum;
 	// now create the children of the sum node
 	for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
 		// this variable is the Lagrange multiplier
@@ -1840,57 +1851,88 @@ OSExpressionTree* OSInstance::getHessianOfLagrangianExpTree( ){
 		numChildren++;
 	}	
 	// get a variable index map for the expression tree
-	m_HessianLag->getVariableIndiciesMap();
+	m_LagrangianExpTree->getVariableIndiciesMap();
 	// print out the XML for this puppy
-	std::cout << m_HessianLag->m_treeRoot->getNonlinearExpressionInXML() << std::endl;
+	std::cout << m_LagrangianExpTree->m_treeRoot->getNonlinearExpressionInXML() << std::endl;
 	//
-	m_bHessianLagCreated = true;
-	double* w;
-	w = new double[ 6];
-	w[0] = .5;
-	w[1] = 1000;
-	w[2] = 1;
-	w[3] = 1.;
-	w[4] = 1.;
-	w[5] = 1.;
-	std::cout << "TEST VALUE = " << m_HessianLag->calculateFunction( &w[ 0], false) << std::endl;
-	m_HessianLag->calculateHessian( &w[ 0], false) ;
-	// now test another way
-	double *x, *y, *z;
-	x = new double[3];
-	y = new double[2];
-	z = new double[1];
-	
-	x[0] = .5;
-	x[1] = 1000;
-	x[2] = 1;
-	y[0] = 1.;
-	y[1] = 1.;
-	z[0] = 1.;
-	m_HessianLag->calculateHessianLag( &x[ 0], 3, &y[0], 2, &z[0], 1, false) ;
-	m_HessianLag->calculateHessianLagCase2( &x[ 0], 3, &y[0], 2, &z[0], 1, false) ;	
-	return m_HessianLag;
-}//getHessianOfLagrangainExpTree
+	m_bLagrangianExpTreeCreated = true;
+	return m_LagrangianExpTree;
+}//getLagrangianExpTree
 
-SparseHessianMatrix* OSInstance::getHessianOfLagrangianNonz( OSExpressionTree* expTree){
-	// get the number of variables in the expression tree
-	// do this by getting the size of the mapVarIsx
-	int i, j;
-	int numVars = (*expTree->mapVarIdx).size();
-	int kount = 0;
-	m_mSparseHessianLag = new SparseHessianMatrix();
-	m_mSparseHessianLag->hessDimension = numVars*(numVars + 1)/2;
-	m_mSparseHessianLag->hessRowIdx = new int[ m_mSparseHessianLag->hessDimension];
-	m_mSparseHessianLag->hessColIdx = new int[ m_mSparseHessianLag->hessDimension];
-	m_mSparseHessianLag->hessValues = new double[ m_mSparseHessianLag->hessDimension];
-	std::cout << "HESSIAN DIMENSION = " << m_mSparseHessianLag->hessDimension << std::endl;
-	for(i = 0; i < numVars; i++){
-		for( j = i; j < numVars; j++){
-				*(m_mSparseHessianLag->hessRowIdx + kount) = i ;
+std::map<int, int> OSInstance::getLagrangianVariableIndexMap( ){
+	if(m_bLagrangianVariableIndex == true) return m_mapLagrangianVariableIndex;
+	//loop over the map of expression tree and get the variables
+	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
+	std::map<int, int>::iterator posVarIdx;
+	OSExpressionTree *expTree;
+	for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
+		// get the index map for the expression tree
+		expTree = posMapExpTree->second;
+		for(posVarIdx = (*expTree->mapVarIdx).begin(); posVarIdx != (*expTree->mapVarIdx).end(); ++posVarIdx){
+			if( m_mapLagrangianVariableIndex.find( posVarIdx->first) != m_mapLagrangianVariableIndex.end() ){
+			// add the variable to the Lagragian map
+			m_mapLagrangianVariableIndex[ posVarIdx->first] = 1;
+			}
 		}
 	}
-	return m_mSparseHessianLag;
-}
+	// now order appropriately
+	int kount = 0;
+	std::cout << "HERE IS THE LAGRANGIAN VARIABLE MAPPING" << std::endl;
+	for(posVarIdx = m_mapLagrangianVariableIndex.begin(); posVarIdx !=m_mapLagrangianVariableIndex.end(); ++posVarIdx){
+		posVarIdx->second = kount++;
+		std::cout <<  "POSITION FIRST =  "  << posVarIdx->first ;
+		std::cout <<  "    POSITION SECOND = "  << posVarIdx->second << std::endl;
+	}
+	m_bLagrangianVariableIndex == true;
+	return m_mapLagrangianVariableIndex;
+}//getLagrangianVariableIndexMap 	
+
+SparseHessianMatrix* OSInstance::getLagrangianExpTreeSparseHessian( ){
+	if( m_bLagrangianSparseHessianCreated == true) return m_LagrangianSparseHessian;
+	// get the number of primal variables in the expression tree
+	// the number of lagrangian variables is equal to m_mapExpressionTreesMod.size()
+	int numVars =  m_mapLagrangianVariableIndex.size() - m_mapExpressionTreesMod.size();
+	std::map<int, int>::iterator posMap1, posMap2;
+	// now that we have the dimension create SparseHessianMatrix (upper triangular)
+	m_LagrangianSparseHessian = new SparseHessianMatrix();
+	m_LagrangianSparseHessian->hessDimension = numVars*(numVars + 1)/2;
+	m_LagrangianSparseHessian->hessRowIdx = new int[m_LagrangianSparseHessian->hessDimension];
+	m_LagrangianSparseHessian->hessColIdx = new int[m_LagrangianSparseHessian->hessDimension];
+	m_LagrangianSparseHessian->hessValues = new double[m_LagrangianSparseHessian->hessDimension];
+	std::cout << "HESSIAN DIMENSION = " << m_LagrangianSparseHessian->hessDimension << std::endl;
+	int i = 0;
+	for(posMap1 = m_mapLagrangianVariableIndex.begin(); posMap1 != m_mapLagrangianVariableIndex.end(); ++posMap1){
+		if(posMap1->first > numVars) break;
+		for(posMap2 = posMap1; posMap2 != m_mapLagrangianVariableIndex.end(); ++posMap2){
+			if(posMap2->first < numVars){
+				*(m_LagrangianSparseHessian->hessRowIdx + i) = posMap1->first;
+				*(m_LagrangianSparseHessian->hessColIdx + i) = posMap2->first;
+				i++;
+			}
+			else{
+				break;
+			}
+		}	
+	}
+	std::cout << "HESSIAN SPARSITY PATTERN" << std::endl;
+	for(i = 0; i < m_LagrangianSparseHessian->hessDimension; i++){
+		std::cout <<  "Row Index = " << *(m_LagrangianSparseHessian->hessRowIdx + i) << std::endl;
+		std::cout <<  "Column Index = " << *(m_LagrangianSparseHessian->hessColIdx + i) << std::endl;
+	}
+	m_bLagrangianSparseHessianCreated = true;
+	return m_LagrangianSparseHessian;
+}//getLagrangianExpTreeSparseHessian
+
+SparseHessianMatrix *OSInstance::calculateLagrangianExpTreeHessian( double* x, double* y, bool functionEvaluated){
+	// initialize everything
+	// if we have not filled in the Sparse Jacobian matrix do so now
+	if( m_bSparseJacobianCalculated == false) getSparseJacobian();
+	// Create the Lagrangian Expression Tree if necessary
+	if( m_bLagrangianVariableIndex == false) getLagrangianVariableIndexMap( );
+	// get a map of the sparsity structure of the Hessian of the  Lagrangian
+	if( m_bLagrangianSparseHessianCreated == false)	getLagrangianExpTreeSparseHessian();
+	return m_LagrangianSparseHessian;
+}//calculateLagrangianExpTreeHessian
 
 void OSInstance::duplicateExpressionTreesMap(){
 	if(m_bDuplicateExpressionTreesMap == false){ 

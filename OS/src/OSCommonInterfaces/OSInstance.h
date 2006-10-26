@@ -42,6 +42,7 @@
 
 
 
+
 /*! \class Variable
  * \brief The in-memory representation of the <b>variable</b> element..
  */
@@ -504,7 +505,6 @@ private:
 	 */
 	bool m_bProcessExpressionTrees;
 	
-
 	/**
 	 * m_mapExpressionTrees holds a hash map of expression tree pointers, with the key being the row index
 	 * and value being the expression tree representing the nonlinear expression of that row.
@@ -512,20 +512,37 @@ private:
 	std::map<int, OSExpressionTree*> m_mapExpressionTrees ;
 	
 	/**
-	 * m_LagHession is an OSExpressionTree object that is the expression tree
+	 * m_LagrangianExpTree is an OSExpressionTree object that is the expression tree
 	 * for the Lagrangian function.
 	 */
-	OSExpressionTree *m_HessianLag ;
+	OSExpressionTree *m_LagrangianExpTree ;
 	
 	/**
-	 * m_bLagHessionCreated is true if a Lagragian function for the Hessian has been created
+	 * m_bLagrangianHessionCreated is true if a Lagragian function for the Hessian has been created
 	 */ 
-	bool m_bHessianLagCreated ;
+	bool m_bLagrangianExpTreeCreated ;
 	
 	/**
-	 * m_mSparseHessianLag is the Hessian Matrix of the Lagrangian function in sparse format
+	 *m_LagrangianSparseHessian is the Hessian Matrix of the Lagrangian function in sparse format
 	 */ 	
-	SparseHessianMatrix* m_mSparseHessianLag;
+	SparseHessianMatrix* m_LagrangianSparseHessian;
+	
+	/**
+	 * m_bLagrangianSparseHessianCreated is true if the sparse Hessian Matrix for the 
+	 * Lagrangian was created
+	 */ 
+	bool m_bLagrangianSparseHessianCreated;
+	
+	/**
+	 * m_mapLagrangianVariableIndexMap is a map of the variables in the Lagrangian function
+	 */ 	
+	 std::map<int, int> m_mapLagrangianVariableIndex;
+	 
+	/**
+	 * m_bLagrangianVariableIndexMap is true if the map of the variables in the 
+	 * Lagrangian function has been constructed
+	 */ 	
+	 bool m_bLagrangianVariableIndex;
 	
 	/**
 	 * m_mapExpressionTreesMod holds a hash map of expression trees, with the key being the row index
@@ -1191,7 +1208,7 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * @return a pointer a SparseJacobianMatrix. 
 	 * Each array member corresponds to one constraint gradient.
 	 */
-	SparseJacobianMatrix *calculateAllConstraintFunctionGradients(double* x, bool allFunctionsEvaluated, bool gradientEvaluated);				
+	SparseJacobianMatrix *calculateAllConstraintFunctionGradients(double* x, bool allFunctionsEvaluated, bool allGradientsEvaluated);				
 
 	/**
 	 * Calculate the gradient of the function indexed by idx
@@ -1207,7 +1224,27 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * use a value of false if not sure
 	 * @return a pointer to a dense vector of doubles.  
 	 */
-	double *calculateObjectiveFunctionGradient(int idx, double* x, bool functionEvaluated, bool allGradientsEvaluated);
+	double *calculateObjectiveFunctionGradient(int idx, double* x, bool functionEvaluated, bool gradientEvaluated);
+
+	/**
+	 * Calculate the Hessian of the Lagrangian Expression Tree  
+	 * 
+	 * <p>
+	 * 
+	 * @param x is a pointer (double) to the current primal variable values
+	 * the size of x should equal the number of variables in the instance
+	 * @param y is a point (double) to the dual multipliers for the nonlinear 
+	 * rows, it should equal m_mapExpressionTreesMod.size()
+	 * @param functionEvaluated is true if any constraint function gradient
+	 * has been evaluated for the current iterate x
+	 * use a value of false if not sure
+	 * @param gradientEvaluated is true if any constraint function gradient
+	 * has been evaluated for the current iterate x
+	 * use a value of false if not sure
+	 * @return a pointer a SparseHessianMatrix. 
+	 * Each array member corresponds to one constraint gradient.
+	 */
+	SparseHessianMatrix *calculateLagrangianExpTreeHessian( double* x, double* y, bool functionEvaluated);
 	
 			
 	/**
@@ -1217,15 +1254,23 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	bool getSparseJacobianFromColumnMajor();
 	
 	/**
-	 * @return a pointer to the ExpressionTree for the Hession of the Lagrangian functioni 
+	 * @return a pointer to the ExpressionTree for the Lagrangian function of current instance
+	 * we only take the Lagrangian of the rows with nonlinear terms 
 	 */
-	OSExpressionTree* getHessianOfLagrangianExpTree( );
+	OSExpressionTree* getLagrangianExpTree( );
+
+	/**
+	 * @return a pointer to a map of the indicies of all of the variables
+	 * that appear in the Lagrangian function 
+	 */
+	std::map<int, int> getLagrangianVariableIndexMap( );	
+	
 	
 	/**
-	 * @param a pointer to an OSExpressian Tree
-	 * @return a pointer to SparseHessianMatrix with the nonzero structure 
+	 * @return a pointer to a SparseHessianMatrix with the nonzero structure 
+	 * of the Lagrangian Expression Tree
 	 */
-	SparseHessianMatrix* getHessianOfLagrangianNonz( OSExpressionTree* expTree);
+	SparseHessianMatrix* getLagrangianExpTreeSparseHessian();
 	
 	/**
 	 * 
