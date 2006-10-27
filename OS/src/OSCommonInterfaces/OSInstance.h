@@ -534,15 +534,15 @@ private:
 	bool m_bLagrangianSparseHessianCreated;
 	
 	/**
-	 * m_mapLagrangianVariableIndexMap is a map of the variables in the Lagrangian function
+	 * m_mapAllNonlinearVariablesIndexMap is a map of the variables in the Lagrangian function
 	 */ 	
-	 std::map<int, int> m_mapLagrangianVariableIndex;
+	 std::map<int, int> m_mapAllNonlinearVariablesIndex;
 	 
 	/**
-	 * m_bLagrangianVariableIndexMap is true if the map of the variables in the 
+	 * m_bAllNonlinearVariablesIndexMap is true if the map of the variables in the 
 	 * Lagrangian function has been constructed
 	 */ 	
-	 bool m_bLagrangianVariableIndex;
+	 bool m_bAllNonlinearVariablesIndex;
 	
 	/**
 	 * m_mapExpressionTreesMod holds a hash map of expression trees, with the key being the row index
@@ -1232,21 +1232,23 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * <p>
 	 * 
 	 * @param x is a pointer (double) to the current primal variable values
-	 * the size of x should equal the number of variables in the instance
-	 * @param y is a point (double) to the dual multipliers for the nonlinear 
-	 * rows, it should equal m_mapExpressionTreesMod.size()
-	 * @param functionEvaluated is true if any constraint function gradient
-	 * has been evaluated for the current iterate x
+	 * the size of x should equal instanceData->variables->numberOfVariables
+	 * @param conMultipliers is a pointer (double) to the dual multipliers for the nonlinear 
+	 * rows, it should equal instanceData->constraints->numberOfConstraints
+	 * @param objMultipliers is a pointer (double) to the dual multipliers for the objective
+	 * rows, it should equal instanceData->objectives->numberOfObjectives
+	 * @param allFunctionsEvaluated is true if all constraint and objective functions
+	 * have been evaluated for the current iterate x
 	 * use a value of false if not sure
-	 * @param gradientEvaluated is true if any constraint function gradient
-	 * has been evaluated for the current iterate x
+	 * @param LagrangianEvaluated is true if the Hessian of the Lagrangian
+	 * has been evaluated for the current iterate x, conMultipliers, objMultipliers
 	 * use a value of false if not sure
 	 * @return a pointer a SparseHessianMatrix. 
 	 * Each array member corresponds to one constraint gradient.
 	 */
-	SparseHessianMatrix *calculateLagrangianExpTreeHessian( double* x, double* y, bool functionEvaluated);
-	
-			
+	SparseHessianMatrix *calculateLagrangianHessian( double* x, double* conMultipliers, 
+	double* objMultipliers, bool allFunctionsEvaluated, bool LagrangianHessianEvaluated)
+				
 	/**
 	 * 
 	 * @return true if successful in generating the constraints gradient.
@@ -1263,14 +1265,14 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * @return a pointer to a map of the indicies of all of the variables
 	 * that appear in the Lagrangian function 
 	 */
-	std::map<int, int> getLagrangianVariableIndexMap( );	
+	std::map<int, int> getAllNonlinearVariablesIndexMap( );	
 	
 	
 	/**
 	 * @return a pointer to a SparseHessianMatrix with the nonzero structure 
 	 * of the Lagrangian Expression Tree
 	 */
-	SparseHessianMatrix* getLagrangianExpTreeSparseHessian();
+	SparseHessianMatrix* getLagrangianHessianSparsityPattern();
 	
 	/**
 	 * 

@@ -53,7 +53,7 @@ OSInstance::OSInstance():
 	m_bLagrangianExpTreeCreated( false),
 	m_LagrangianSparseHessian( NULL),
 	m_bLagrangianSparseHessianCreated( false),
-	m_bLagrangianVariableIndex( false),
+	m_bAllNonlinearVariablesIndex( false),
 	m_mObjectiveCoefficients(NULL),
 	m_bGetDenseObjectives(false),
 	m_mmdDenseObjectiveCoefficients(NULL),
@@ -1409,6 +1409,9 @@ bool OSInstance::setQuadraticTerms(int number,
 }//setQuadraticTerms
 
 SparseJacobianMatrix *OSInstance::getSparseJacobian( ){
+	// Kipp - break this method up into two separate methods
+	// initializeNonLinearStructures() which is private and
+	// getJacobianSparsityPattern() which is public
 	if( m_bSparseJacobianCalculated == true) return m_sparseJacMatrix;
 	if( m_bProcessObjectives == false) processObjectives();
 	if( m_bProcessConstraints == false) processConstraints();
@@ -1859,10 +1862,10 @@ OSExpressionTree* OSInstance::getLagrangianExpTree( ){
 	return m_LagrangianExpTree;
 }//getLagrangianExpTree
 
-std::map<int, int> OSInstance::getLagrangianVariableIndexMap( ){
-	if(m_bLagrangianVariableIndex == true) return m_mapLagrangianVariableIndex;
+std::map<int, int> OSInstance::getAllNonlinearVariablesIndexMap( ){
+	if(m_bAllNonlinearVariablesIndex == true) return m_mapAllNonlinearVariablesIndex;
 	//loop over the map of expression tree and get a unique listing of all variables
-	// put these in the map m_mapLagrangianVariableIndex
+	// put these in the map m_mapAllNonlinearVariablesIndex
 	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
 	std::map<int, int>::iterator posVarIdx;
 	OSExpressionTree *expTree;
@@ -1872,30 +1875,30 @@ std::map<int, int> OSInstance::getLagrangianVariableIndexMap( ){
 		std::cout << "GETTING VARIABLES FOR ROW  " << posMapExpTree->first << std::endl;
 		std::cout << "NUMBER OF VARS IN THIS ROW  " <<  (*expTree->mapVarIdx).size()<< std::endl;
 		for(posVarIdx = (*expTree->mapVarIdx).begin(); posVarIdx != (*expTree->mapVarIdx).end(); ++posVarIdx){
-			if( m_mapLagrangianVariableIndex.find( posVarIdx->first) == m_mapLagrangianVariableIndex.end() ){
+			if( m_mapAllNonlinearVariablesIndex.find( posVarIdx->first) == m_mapAllNonlinearVariablesIndex.end() ){
 			// add the variable to the Lagragian map
-			m_mapLagrangianVariableIndex[ posVarIdx->first] = 1;
+			m_mapAllNonlinearVariablesIndex[ posVarIdx->first] = 1;
 			}
 		}
 	}
 	// now order appropriately
 	int kount = 0;
 	std::cout << "HERE IS THE LAGRANGIANN VARIABLE MAPPING" << std::endl;
-	for(posVarIdx = m_mapLagrangianVariableIndex.begin(); posVarIdx !=m_mapLagrangianVariableIndex.end(); ++posVarIdx){
+	for(posVarIdx = m_mapAllNonlinearVariablesIndex.begin(); posVarIdx !=m_mapAllNonlinearVariablesIndex.end(); ++posVarIdx){
 		posVarIdx->second = kount++;
 		std::cout <<  "POSITION FIRST =  "  << posVarIdx->first ;
 		std::cout <<  "    POSITION SECOND = "  << posVarIdx->second << std::endl;
 	}
-	m_bLagrangianVariableIndex == true;
-	return m_mapLagrangianVariableIndex;
-}//getLagrangianVariableIndexMap 	
+	m_bAllNonlinearVariablesIndex == true;
+	return m_mapAllNonlinearVariablesIndex;
+}//getAllNonlinearVariablesIndexMap 	
 
-SparseHessianMatrix* OSInstance::getLagrangianExpTreeSparseHessian( ){
+SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( ){
 	// fill in the nonzeros in the sparse Hessian
 	if( m_bLagrangianSparseHessianCreated == true) return m_LagrangianSparseHessian;
 	// get the number of primal variables in the expression tree
 	// the number of lagrangian variables is equal to m_mapExpressionTreesMod.size()
-	int numVars =  m_mapLagrangianVariableIndex.size() - m_mapExpressionTreesMod.size();
+	int numVars =  m_mapAllNonlinearVariablesIndex.size() - m_mapExpressionTreesMod.size();
 	std::map<int, int>::iterator posMap1, posMap2;
 	// now that we have the dimension create SparseHessianMatrix (upper triangular)
 	m_LagrangianSparseHessian = new SparseHessianMatrix();
@@ -1905,9 +1908,9 @@ SparseHessianMatrix* OSInstance::getLagrangianExpTreeSparseHessian( ){
 	m_LagrangianSparseHessian->hessValues = new double[m_LagrangianSparseHessian->hessDimension];
 	std::cout << "HESSIAN DIMENSION = " << m_LagrangianSparseHessian->hessDimension << std::endl;
 	int i = 0;
-	for(posMap1 = m_mapLagrangianVariableIndex.begin(); posMap1 != m_mapLagrangianVariableIndex.end(); ++posMap1){
+	for(posMap1 = m_mapAllNonlinearVariablesIndex.begin(); posMap1 != m_mapAllNonlinearVariablesIndex.end(); ++posMap1){
 		if(posMap1->first > numVars) break;
-		for(posMap2 = posMap1; posMap2 != m_mapLagrangianVariableIndex.end(); ++posMap2){
+		for(posMap2 = posMap1; posMap2 != m_mapAllNonlinearVariablesIndex.end(); ++posMap2){
 			if(posMap2->first < numVars){
 				*(m_LagrangianSparseHessian->hessRowIdx + i) = posMap1->first;
 				*(m_LagrangianSparseHessian->hessColIdx + i) = posMap2->first;
@@ -1925,18 +1928,21 @@ SparseHessianMatrix* OSInstance::getLagrangianExpTreeSparseHessian( ){
 	}
 	m_bLagrangianSparseHessianCreated = true;
 	return m_LagrangianSparseHessian;
-}//getLagrangianExpTreeSparseHessian
+}//getLagrangianHessianSparsityPattern
 
-SparseHessianMatrix *OSInstance::calculateLagrangianExpTreeHessian( double* x, double* y, bool functionEvaluated){
+SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double* conMultipliers, 
+	double* objMultipliers, bool allFunctionsEvaluated, bool LagrangianHessianEvaluated){
 	// initialize everything
 	// if we have not filled in the Sparse Jacobian matrix do so now
 	if( m_bSparseJacobianCalculated == false) getSparseJacobian();
 	// get a map of the sparsity structure of the Hessian of the  Lagrangian
-	if( m_bLagrangianVariableIndex == false) getLagrangianVariableIndexMap( );
+	if( m_bAllNonlinearVariablesIndex == false) getAllNonlinearVariablesIndexMap( );
 	// fill in the nonzeros in the sparse Hessian
-	if( m_bLagrangianSparseHessianCreated == false)	getLagrangianExpTreeSparseHessian();
+	if( m_bLagrangianSparseHessianCreated == false)	getLagrangianHessianSparsityPattern();
+	// put in code to call CppAD and get the Hessian
 	return m_LagrangianSparseHessian;
-}//calculateLagrangianExpTreeHessian
+}//calculateLagrangianHessian
+
 
 void OSInstance::duplicateExpressionTreesMap(){
 	if(m_bDuplicateExpressionTreesMap == false){ 
