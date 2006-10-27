@@ -151,7 +151,7 @@ int  main(){
 		osinstance->calculateAllConstraintFunctionGradients(&zz[0], false, false);
 		std::cout << "RETURN FROM GETTING SPARSE JACOBIAN RESULT"   << std::endl;
 		std::cout << "NOW GET LAGRANGIAN HESSIAN"   << std::endl;
-		osinstance->calculateLagrangianExpTreeHessian( &zz[0], &zz[0], false);
+		osinstance->calculateLagrangianHessian( &zz[0], &zz[0], &zz[0], false, false);
 		//osinstance->getHessianOfLagrangianNonz( expTree);
 		delete[] zz;
 		zz = NULL;

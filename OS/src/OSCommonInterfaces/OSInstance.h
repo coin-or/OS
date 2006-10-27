@@ -1247,7 +1247,7 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * Each array member corresponds to one constraint gradient.
 	 */
 	SparseHessianMatrix *calculateLagrangianHessian( double* x, double* conMultipliers, 
-	double* objMultipliers, bool allFunctionsEvaluated, bool LagrangianHessianEvaluated)
+	double* objMultipliers, bool allFunctionsEvaluated, bool LagrangianHessianEvaluated);
 				
 	/**
 	 * 
