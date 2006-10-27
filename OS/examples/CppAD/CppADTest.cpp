@@ -151,8 +151,24 @@ int  main(){
 		osinstance->calculateAllConstraintFunctionGradients(&zz[0], false, false);
 		std::cout << "RETURN FROM GETTING SPARSE JACOBIAN RESULT"   << std::endl;
 		std::cout << "NOW GET LAGRANGIAN HESSIAN"   << std::endl;
-		osinstance->calculateLagrangianHessian( &zz[0], &zz[0], &zz[0], false, false);
-		//osinstance->getHessianOfLagrangianNonz( expTree);
+		
+		double* xx = new double[3];
+		double* y = new double[2];
+		double* w = new double[1];
+		xx[ 0] = 0.5;
+		xx[ 1] = 1000;
+		xx[2] = 1;
+		y[ 0] = 1;
+		y[ 1] = 1;
+		w[ 0] = 1;
+	//first iteration
+		osinstance->calculateLagrangianHessian( xx, y, w, false, false);
+	//second iteration
+	w[ 0] = 3;
+	xx[ 0] = 1.0;
+	y[ 0] = 10;
+	osinstance->calculateLagrangianHessian( xx, y, w, false, false);
+	//osinstance->calculateAllConstraintFunctionGradients(&zz[0], false, false);
 		delete[] zz;
 		zz = NULL;
 		delete osilreader;
@@ -162,7 +178,7 @@ int  main(){
 	catch(const ErrorClass& eclass){
 	std::cout << eclass.errormsg << std::endl;
 	} 	
-	
+	return 0;
 	std::cout << "BRAD's EXAMPLE" << std::endl;
 	CppAD::AD<double> Lagragian( const CppADvector< CppAD::AD<double> > &xyz );
 	

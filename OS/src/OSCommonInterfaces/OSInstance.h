@@ -38,6 +38,7 @@
 #include "OSExpressionTree.h"
 #include <string>
 #include <map>
+#include<CppAD/CppAD.h>
 
 
 
@@ -545,12 +546,48 @@ private:
 	 bool m_bAllNonlinearVariablesIndex;
 	
 	/**
-	 * m_mapExpressionTreesMod holds a hash map of expression trees, with the key being the row index
+	 * m_mapExpressionTreesMod holds a map of expression trees, with the key being the row index
 	 * and value being the expression tree representing a modification of the nonlinear expression of that row.
 	 * We incorporate the linear and quadratic term for a variable into the corresponding expression tree before
 	 * gradient and Hessian calculations
 	 */
 	std::map<int, OSExpressionTree*> m_mapExpressionTreesMod ;
+	
+	
+	/**
+	 * m_mapCppADTrees holds a map of expression trees,  with the key being the row index
+	 * and value being a CppAD::AD<double> representation of the row.
+	 */
+	std::map<int, CppAD::AD<double> > m_mapCppADTrees ;
+	
+	/**
+	 * is true if the map m_mapCppADTrees of the CppADTrees has been built.
+	 */
+	bool m_bmapCppADTreesBuilt ;
+	
+	CppAD::vector< AD<double> > Lagrangian;
+	
+	CppAD::ADFun<double> *F;
+	
+	/**
+	 *  X is a vector of CppAD indpendent variables.
+	 */
+	CppAD::vector< AD<double> > m_vX;	
+	
+	/**
+	 * m_vX is a vector that holds the independent values of the f function evalued by CppAD at each iteration. 
+	 */		
+	std::vector<double> m_vXITER;
+	
+	/**
+	 *  Y is a vector of CppAD indpendent variables -- used to store Lagrange Multipliers.
+	 */
+	CppAD::vector< AD<double> > m_vY;	
+	
+	/**
+	 *  W is a vector of CppAD of objective function multipliers.
+	 */
+	CppAD::vector< AD<double> > m_vZ;	
 	
 	/**
 	 * m_bDuplicateExpressionTreeMap is true if m_mapExpressionTrees was duplicated. 
