@@ -21,12 +21,23 @@ libOSSolverInterfaces_la_SOURCES = \
 	DefaultSolver.cpp \
 	DefaultSolver.h \
 	CoinSolver.cpp \
-	CoinSolver.h 
+	CoinSolver.h  
 
 
 if COIN_HAS_LINDO
 libOSSolverInterfaces_la_SOURCES += 	LindoSolver.cpp \
 	LindoSolver.h
+endif
+
+if COIN_HAS_IPOPT
+libOSSolverInterfaces_la_SOURCES += 	IpoptSolver.cpp \
+	IpoptSolver.h
+endif
+
+
+if COIN_HAS_KNITRO
+libOSSolverInterfaces_la_SOURCES += 	Knitro.cpp \
+	KnitroSolver.h
 endif
 
 # This is for libtool (on Windows)
@@ -68,6 +79,14 @@ if COIN_HAS_LINDO
   AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(LINDOINCDIR)` 
 endif
 
+if COIN_HAS_KNITRO
+  AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(KNITROINCDIR)` 
+endif
+
+if COIN_HAS_IPOPT
+  AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(IPOPTINCDIR)` 
+endif
+
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
@@ -85,6 +104,14 @@ include_HEADERS = \
 
 if COIN_HAS_LINDO
 include_HEADERS += LindoSolver.h
+endif
+
+if COIN_HAS_KNITRO
+include_HEADERS += KnitroSolver.h
+endif
+
+if COIN_HAS_IPOPT
+include_HEADERS += IpoptSolver.h
 endif
 
 

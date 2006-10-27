@@ -155,6 +155,10 @@ OS/src/OSSolverInterfaces/CoinSolver.cpp -text
 OS/src/OSSolverInterfaces/CoinSolver.h -text
 OS/src/OSSolverInterfaces/DefaultSolver.cpp -text
 OS/src/OSSolverInterfaces/DefaultSolver.h -text
+OS/src/OSSolverInterfaces/IpoptSolver.cpp -text
+OS/src/OSSolverInterfaces/IpoptSolver.h -text
+OS/src/OSSolverInterfaces/KnitroSolver.cpp -text
+OS/src/OSSolverInterfaces/KnitroSolver.h -text
 OS/src/OSSolverInterfaces/LindoSolver.cpp -text
 OS/src/OSSolverInterfaces/LindoSolver.h -text
 OS/src/OSSolverInterfaces/Makefile.am -text
