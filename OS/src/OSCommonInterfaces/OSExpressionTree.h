@@ -23,16 +23,6 @@
 using CppAD::Parameter;
 
 
-struct FirstPartialStruct{  
-	int index_i;
-	double firstPartial_i;
-};
-
-struct SecondPartialStruct{
-	int index_i;
-	int index_j;
-	double secondPartial_ij;
-};
 
 
 

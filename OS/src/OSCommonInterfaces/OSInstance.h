@@ -553,41 +553,39 @@ private:
 	 */
 	std::map<int, OSExpressionTree*> m_mapExpressionTreesMod ;
 	
+	/**
+	 * is true if a CppAD Expresion Tree has been built for each row and objective 
+	 * with a nonlinear expression.
+	 */
+	bool m_bCppADTreesBuilt;
 	
 	/**
-	 * m_mapCppADTrees holds a map of expression trees,  with the key being the row index
-	 * and value being a CppAD::AD<double> representation of the row.
+	 * m_iNumberOfNonlinearVariables is the number of variables that appear 
+	 * in a nonlinear expression.
 	 */
-	std::map<int, CppAD::AD<double> > m_mapCppADTrees ;
+	int m_iNumberOfNonlinearVariables ;
 	
-	/**
-	 * is true if the map m_mapCppADTrees of the CppADTrees has been built.
-	 */
-	bool m_bmapCppADTreesBuilt ;
-	
-	CppAD::vector< AD<double> > Lagrangian;
 	
 	CppAD::ADFun<double> *F;
 	
 	/**
-	 *  X is a vector of CppAD indpendent variables.
+	 *  m_vX is a vector of CppAD indpendent variables.
 	 */
 	CppAD::vector< AD<double> > m_vX;	
 	
 	/**
-	 * m_vX is a vector that holds the independent values of the f function evalued by CppAD at each iteration. 
+	 * m_vITER is a vector that holds the independent values of the f function evalued by CppAD at each iteration. 
 	 */		
 	std::vector<double> m_vXITER;
 	
 	/**
-	 *  Y is a vector of CppAD indpendent variables -- used to store Lagrange Multipliers.
+	 *  m_vFG is a vector of CppAD  objective and constraint functions.
 	 */
-	CppAD::vector< AD<double> > m_vY;	
+	CppAD::vector< AD<double> > m_vFG;	
 	
-	/**
-	 *  W is a vector of CppAD of objective function multipliers.
-	 */
-	CppAD::vector< AD<double> > m_vZ;	
+	std::vector<double> m_vdx;	
+	std::vector<double> m_vw;
+	std::vector<double> m_vdw;		
 	
 	/**
 	 * m_bDuplicateExpressionTreeMap is true if m_mapExpressionTrees was duplicated. 

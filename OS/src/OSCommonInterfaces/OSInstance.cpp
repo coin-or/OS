@@ -35,6 +35,7 @@ OSInstance::OSInstance():
 	m_iVariableNumber(-1),
 	m_iNumberOfBinaryVariables( 0),
 	m_iNumberOfIntegerVariables( 0),
+	m_iNumberOfNonlinearVariables( 0),
 	m_msVariableNames(NULL),
 	m_mdVariableInitialValues(NULL),
 	m_msVariableInitialStringValues(NULL),
@@ -53,7 +54,7 @@ OSInstance::OSInstance():
 	m_bLagrangianExpTreeCreated( false),
 	m_LagrangianSparseHessian( NULL),
 	m_bLagrangianSparseHessianCreated( false),
-	m_bmapCppADTreesBuilt( false),
+	m_bCppADTreesBuilt( false),
 	m_bAllNonlinearVariablesIndex( false),
 	m_mObjectiveCoefficients(NULL),
 	m_bGetDenseObjectives(false),
@@ -1893,7 +1894,9 @@ std::map<int, int> OSInstance::getAllNonlinearVariablesIndexMap( ){
 		std::cout <<  "POSITION FIRST =  "  << posVarIdx->first ;
 		std::cout <<  "    POSITION SECOND = "  << posVarIdx->second << std::endl;
 	}
-	m_bAllNonlinearVariablesIndex == true;
+	m_iNumberOfNonlinearVariables = kount;
+	std::cout <<  "NUMBER OF NONLINEAR VARIABLES =  "  << kount ;
+	m_bAllNonlinearVariablesIndex = true;
 	return m_mapAllNonlinearVariablesIndex;
 }//getAllNonlinearVariablesIndexMap 	
 
@@ -1936,15 +1939,17 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( ){
 
 SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double* conMultipliers, 
 	double* objMultipliers, bool allFunctionsEvaluated, bool LagrangianHessianEvaluated){
+	if( LagrangianHessianEvaluated == true) return m_LagrangianSparseHessian;
+	// kipp -- why do we need bool allFunctionsEvaluated -- how is it used???
 	// initialize everything
-	int i;
+	int i, j;
 	std::map<int, int>::iterator posVarIndexMap;
 	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
-	std::map<int, CppAD::AD<double> >::iterator posMapCppADTree;
-	if( m_bmapCppADTreesBuilt == false){
+	if( m_bCppADTreesBuilt == false){
 		// if we have not filled in the Sparse Jacobian matrix do so now
 		if( m_bSparseJacobianCalculated == false) getSparseJacobian();
-		// get a map of the sparsity structure of the Hessian of the  Lagrangian
+		// get an index map of all of the nonlinear variables in the Hessian of the  Lagrangian
+		// this method call will define m_iNumberOfNonlinearVariables
 		if( m_bAllNonlinearVariablesIndex == false) getAllNonlinearVariablesIndexMap( );
 		// fill in the nonzeros in the sparse Hessian
 		if( m_bLagrangianSparseHessianCreated == false)	getLagrangianHessianSparsityPattern();
@@ -1959,64 +1964,52 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double* 
 		CppAD::Independent( m_vX);
 		// For expression tree, record the operations for CppAD
 		for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){	
-			m_mapCppADTrees[ posMapExpTree->first] = (posMapExpTree->second)->m_treeRoot->constructCppADTree(&m_mapAllNonlinearVariablesIndex, &m_vX);
+			m_vFG.push_back( (posMapExpTree->second)->m_treeRoot->constructCppADTree(&m_mapAllNonlinearVariablesIndex, &m_vX) );
 		}	
 		//create the function and stop recording
-		// now compute the Lagrangian
-		// push the multipliers
-		for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){	
-			if( posMapExpTree->first >= 0){
-				m_vY.push_back( conMultipliers[ posMapExpTree->first] );
-			}
-			else{
-				m_vZ.push_back( objMultipliers[ abs(posMapExpTree->first) - 1] );
-			}
-		}
-		Lagrangian.push_back( 0);
-		Lagrangian[0] = 0;
-		for(posMapCppADTree = m_mapCppADTrees.begin(); posMapCppADTree != m_mapCppADTrees.end(); ++posMapCppADTree){	
-			Lagrangian[0] = Lagrangian[ 0] + m_mapCppADTrees[ posMapCppADTree->first]*m_vZ[ 0]  ;
-		}
-		F = new CppAD::ADFun<double>(m_vX, Lagrangian);
-		m_bmapCppADTreesBuilt = true;
+		F = new CppAD::ADFun<double>();
+		(*F).Dependent( m_vFG);
+
+		// allocate necessary vector memory
+		m_vdx.reserve( m_iNumberOfNonlinearVariables );
+		m_vw.reserve( m_mapExpressionTreesMod.size() );
+		m_vdw.reserve( 2*m_iNumberOfNonlinearVariables );
+		m_vXITER.reserve( m_iNumberOfNonlinearVariables);
+		m_bCppADTreesBuilt = true;
 	}
-	// now compute the Lagrangian
-	// push the multipliers
-	
-	//
-	//
-	//create the function and stop recording
-	// now compute the Lagrangian
-	// push the multipliers
+	// kipp don't declare this vector at each iteration, make global and allocate
+	std::vector<double> H( m_iNumberOfNonlinearVariables * m_iNumberOfNonlinearVariables );
+	// get the current iterate
+	i = 0;
+	for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
+		m_vXITER[ i++] = x[ posVarIndexMap->first] ;
+	}
+
+	(*F).Forward(0, m_vXITER);
+	//  get the Lagrange multipliers
+	i = 0;
 	for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){	
 		if( posMapExpTree->first >= 0){
-			m_vY.push_back( conMultipliers[ posMapExpTree->first] );
+			m_vw[ i++] = conMultipliers[ posMapExpTree->first] ;
 		}
 		else{
-			m_vZ.push_back( objMultipliers[ abs(posMapExpTree->first) - 1] );
+			m_vw[ i++] = objMultipliers[ abs(posMapExpTree->first) - 1] ;
 		}
 	}
-	Lagrangian[0] = 0;
-	for(posMapCppADTree = m_mapCppADTrees.begin(); posMapCppADTree != m_mapCppADTrees.end(); ++posMapCppADTree){	
-		Lagrangian[0] = Lagrangian[ 0] +  m_mapCppADTrees[ posMapCppADTree->first]*m_vZ[ 0]  ;
-	}
-
-	//
-	
-	//
-
-	std::cout <<  "LAGRANGIAN VALUE = " << Lagrangian[ 0]  << std::endl;	
-	std::cout <<  "HESSIAN SIZE = " << m_vX.size() * m_vX.size() << std::endl;
-	std::vector<double> hess( m_vX.size() * m_vX.size() );
-	// get the current iterate
-	m_vXITER.clear();
-	for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
-		m_vXITER.push_back( x[ posVarIndexMap->first] );
-	}
-	hess = (*F).Hessian(m_vXITER, 0);
-	int kount = hess.size();
+	for(i = 0; i < m_iNumberOfNonlinearVariables; i++)
+		m_vdx[i] = 0.;
+	// loop over components of x
+	for(i = 0; i < m_iNumberOfNonlinearVariables; i++)
+	{	m_vdx[i] = 1.;             // dx is i-th elementary vector
+		(*F).Forward(1, m_vdx);       // partial w.r.t dx
+		m_vdw = (*F).Reverse(2, m_vw);   // deritavtive of partial
+		for(j = 0; j < m_iNumberOfNonlinearVariables; j++)
+			H[ i * m_iNumberOfNonlinearVariables + j ] = m_vdw[ j * 2 + 1 ];
+		m_vdx[i] = 0.;             // dx is zero vector
+	}	
+	int kount = H.size();
 	for(i = 0; i < kount; i++){
-		std::cout << "HESSIAN VALUES   " << hess[ i] << std::endl;
+		std::cout << "HESSIAN VALUES   " << H[ i] << std::endl;
 	}
 	return m_LagrangianSparseHessian;
 }//calculateLagrangianHessian

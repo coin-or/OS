@@ -134,20 +134,6 @@ std::vector<double>  OSExpressionTree::calculateHessian( double *x, bool functio
 	// now go for second derivative
 	std::vector<double> hess( numSparseVars * numSparseVars);
 	hess = (*f).Hessian(m_vX, 0);
-	// now get values
-	std::vector<SecondPartialStruct*> secondPartialVector;
-	struct SecondPartialStruct *secondPartial;
-		std::cout << "HERE IS THE RESULT OF HESSIAN" << std::endl;
-	for(m_mPosVarIdx = (*mapVarIdx).begin(); m_mPosVarIdx != (*mapVarIdx).end(); ++m_mPosVarIdx){
-		for(m_mPosVarIdx2 = (*mapVarIdx).begin(); m_mPosVarIdx2 != (*mapVarIdx).end(); ++m_mPosVarIdx2){
-			secondPartial = new SecondPartialStruct();
-			secondPartial->index_i = m_mPosVarIdx->first;
-			secondPartial->index_j = m_mPosVarIdx2->first;
-			secondPartial->secondPartial_ij  = hess[ numSparseVars*m_mPosVarIdx->second + m_mPosVarIdx2->second];
-			std::cout << secondPartial->secondPartial_ij << std::endl;
-			secondPartialVector.push_back( secondPartial);
-		}
-	}
 	return hess;
 }//calculateHessian
 
