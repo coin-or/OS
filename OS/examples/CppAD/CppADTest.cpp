@@ -134,9 +134,8 @@ int  main(){
 		}
 		//
 		 * 
-		 * */
+		 */
 		double *conVals = osinstance->calculateAllConstraintFunctionValues( &zz[0], false);
-
 		double *objVals = osinstance->calculateAllObjectiveFunctionValues( &zz[0], false);
 		int idx;
 		for( idx = 0; idx < osinstance->getConstraintNumber(); idx++){
@@ -147,27 +146,28 @@ int  main(){
 			//std::cout << "OBJECTIVE FUNCTION VALUE WITH TERM= " << osinstance->calculateFunctionValue(idx, zz, false) << std::endl;
 			std::cout << "OBJECTIVE FUNCTION VALUE WITH TERM= " << *(objVals + idx) << std::endl;
 		}
+	
 		osinstance->calculateObjectiveFunctionGradient(-1, &zz[0], false, false);
 		osinstance->calculateAllConstraintFunctionGradients(&zz[0], false, false);
 		std::cout << "RETURN FROM GETTING SPARSE JACOBIAN RESULT"   << std::endl;
 		std::cout << "NOW GET LAGRANGIAN HESSIAN"   << std::endl;
-		
 		double* xx = new double[3];
-		double* y = new double[2];
-		double* w = new double[1];
+		double* yy = new double[2];
+		double* ww = new double[1];
 		xx[ 0] = 0.5;
 		xx[ 1] = 1000;
 		xx[2] = 1;
-		y[ 0] = 1;
-		y[ 1] = 1;
-		w[ 0] = 1;
+		yy[ 0] = 1;
+		yy[ 1] = 1;
+		ww[ 0] = 1;
 	//first iteration
-		osinstance->calculateLagrangianHessian( xx, y, w, false, false);
+		osinstance->calculateLagrangianHessian( xx, yy, ww, false, false);
 	//second iteration
-	w[ 0] = 3;
+	ww[ 0] = 3;
 	xx[ 0] = 1.0;
-	y[ 0] = 10;
-	osinstance->calculateLagrangianHessian( xx, y, w, false, false);
+	//yy[ 0] = 10;
+		std::cout << "NOW GET LAGRANGIAN HESSIAN SECOND TIME"   << std::endl;
+	osinstance->calculateLagrangianHessian( xx, yy, ww, false, false);
 	//osinstance->calculateAllConstraintFunctionGradients(&zz[0], false, false);
 		delete[] zz;
 		zz = NULL;
@@ -179,9 +179,10 @@ int  main(){
 	std::cout << eclass.errormsg << std::endl;
 	} 	
 	return 0;
-	std::cout << "BRAD's EXAMPLE" << std::endl;
-	CppAD::AD<double> Lagragian( const CppADvector< CppAD::AD<double> > &xyz );
 	
+	/*
+	std::cout << "BRAD'S EXAMPLE NUMBER ONE" << std::endl;
+	CppAD::AD<double> Lagragian( const CppADvector< CppAD::AD<double> > &xyz );
 	// double values corresponding to XYZ vector
 	double x0, x1, x2, y0, y1, z;
 	y0 = 1.;
@@ -231,6 +232,107 @@ int  main(){
 	std::cout << "second derivative " << hess[8] << std::endl;
 				
 	std::cout << std::endl;
+	*/
+	std::cout << "BRAD'S EXAMPLE NUMBER TWO" << std::endl;	
+	//
+	using CppAD::AD;
+	using CppAD::vector;
+	bool CheckHessian(
+	CppAD::vector<double> H , 
+	double x0, double x1, double x2, double y0, double y1, double z );
+	CppAD::vector< CppAD::AD<double> > fg(
+		const CppAD::vector< CppAD::AD<double> > &x );
+	// parameters defining problem
+	double x0(.5), x1(1e3), x2(1), y0(1.), y1(1.), z(1.);
+
+	// domain space vector
+	size_t n = 3;
+	vector< AD<double> >  X(n);
+	X[0] = x0;
+	X[1] = x1;
+	X[2] = x2;
+
+	// declare X as independent variable vector and start recording
+	CppAD::Independent(X);
+
+	// range space vector
+	size_t m = 3;
+	vector< AD<double> >  FG(m);
+	FG = fg(X);
+	
+	// create K: X -> FG and stop tape recording
+	CppAD::ADFun<double> K;
+	K.Dependent(FG);
+
+	// independent variable vector
+	vector<double> x(n);
+	x[0] = x0;
+	x[1] = x1;
+	x[2] = x2;
+
+	// compute Hessian at this value of x
+	K.Forward(0, x);
+
+	// Place to store the Hessian of the Lagragian 
+	vector<double> H( n * n );
+
+	// forward and reverse mode arguments and results 
+	vector<double>  dx(n);
+	vector<double>   w(m);
+	vector<double>  dw(2*n);
+	// set weights to Lagrange multiplier values
+	w[0] = z;
+	w[1] = y0;
+	w[2] = y1;
+	// initialize dx as zero
+	size_t i, j;
+	for(i = 0; i < n; i++)
+		dx[i] = 0.;
+	// loop over components of x
+	for(i = 0; i < n; i++)
+	{	dx[i] = 1.;             // dx is i-th elementary vector
+		K.Forward(1, dx);       // partial w.r.t dx
+		dw = K.Reverse(2, w);   // deritavtive of partial
+		for(j = 0; j < n; j++)
+			H[ i * n + j ] = dw[ j * 2 + 1 ];
+		dx[i] = 0.;             // dx is zero vector
+	}
+	// check this Hessian calculation
+	int hessDim = n*n;
+	for(i = 0; i < hessDim; i++){
+		std::cout << H[ i] << std::endl;
+		
+	}
+	
+		std::cout << "SECOND ITERATION OF HESSIAN CALCULATION" << std::endl;	
+	
+		// compute Hessian at this value of x
+		//
+		w[ 0] = 2;
+		x[ 0] = 10;
+	K.Forward(0, x);
+	
+			dx[i] = 0.;
+	// loop over components of x
+	for(i = 0; i < n; i++)
+	{	dx[i] = 1.;             // dx is i-th elementary vector
+		K.Forward(1, dx);       // partial w.r.t dx
+		dw = K.Reverse(2, w);   // deritavtive of partial
+		for(j = 0; j < n; j++)
+			H[ i * n + j ] = dw[ j * 2 + 1 ];
+		dx[i] = 0.;             // dx is zero vector
+	}
+
+	for(i = 0; i < hessDim; i++){
+		std::cout << H[ i] << std::endl;
+		
+	}
+	
+	
+	
+	
+	
+	std::cout << "OK == "   <<  CheckHessian(H, x0, x1, x2, y0, y1, z) << std::endl;
 	return 0;
 }//end main
 
@@ -258,6 +360,54 @@ CppAD::AD<double> Lagragian(
 	std::cout << "Lagrangian in subroutine = " << xyz[ 1] << std::endl;
 	std::cout << "Lagrangian in subroutine = " << x0 << std::endl;
 	return L;
-
 }
 
+	bool CheckHessian(
+	CppAD::vector<double> H , 
+	double x0, double x1, double x2, double y0, double y1, double z )
+	{	using CppAD::NearEqual;
+		bool ok  = true;
+		std::cout << "OK == " << ok << std::endl;
+		size_t n = 3;
+		assert( H.size() == n * n );
+		/*
+		L   =    z*x0*x0 + y0*(1 + 2*x1 + 3*x2) + y1*log(x0*x2)
+
+		L_0 = 2 * z * x0 + y1 / x0
+		L_1 = y0 * 2 
+		L_2 = y0 * 3 + y1 / x2 
+		*/
+		// L_00 = 2 * z - y1 / ( x0 * x0 )
+		double check = 2. * z - y1 / (x0 * x0);
+		ok &= NearEqual(H[0 * n + 0], check, 1e-10, 1e-10); 
+		// L_01 = L_10 = 0
+		ok &= NearEqual(H[0 * n + 1], 0., 1e-10, 1e-10);
+		ok &= NearEqual(H[1 * n + 0], 0., 1e-10, 1e-10);
+		// L_02 = L_20 = 0
+		ok &= NearEqual(H[0 * n + 2], 0., 1e-10, 1e-10);
+		ok &= NearEqual(H[2 * n + 0], 0., 1e-10, 1e-10);
+		// L_11 = 0
+		ok &= NearEqual(H[1 * n + 1], 0., 1e-10, 1e-10);
+		// L_12 = L_21 = 0
+		ok &= NearEqual(H[1 * n + 2], 0., 1e-10, 1e-10);
+		ok &= NearEqual(H[2 * n + 1], 0., 1e-10, 1e-10);
+		// L_22 = - y1 / (x2 * x2)
+		check = - y1 / (x2 * x2);
+		ok &= NearEqual(H[2 * n + 2], check, 1e-10, 1e-10);
+
+		return ok;
+	}
+	
+	CppAD::vector< CppAD::AD<double> > fg(
+		const CppAD::vector< CppAD::AD<double> > &x )
+	{	using CppAD::AD;
+		using CppAD::vector;
+		assert( x.size() == 3 );
+
+		vector< AD<double> > fg(3);
+		fg[0] = x[0] * x[0];
+		fg[1] = 1. + 2. * x[1] + 3. * x[2];
+		fg[2] = log( x[0] * x[2] );
+
+		return fg;
+	}
