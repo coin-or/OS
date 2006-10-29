@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osil xmlns="os.optimizationservices.org">
+	<instanceHeader>
+		<name>Modified Rosenbrock</name>
+		<source>Computing Journal 3:175-184, 1960</source>
+		<description>Rosenbrock problem with constraints. Global optimal solution is x0 = .904404 x1
+			= .798848 for an optimal value of 7.235243</description>
+	</instanceHeader>
+	<instanceData>
+		<variables numberOfVariables="3">
+			<var lb="0" name="x0" type="C"/>
+			<var lb="0" name="x1" type="C"/>
+			<var lb="0" name="x2" type="C"/>
+		</variables>
+		<objectives numberOfObjectives=" 1">
+			<obj maxOrMin="min" name="minCost" numberOfObjCoef="1">
+				<coef idx="1">9.0</coef>
+			</obj>
+		</objectives>
+		<constraints numberOfConstraints="2">
+			<con ub="10.0" constant="33"/>
+			<con lb="10.0"/>
+		</constraints>
+		<nonlinearExpressions numberOfNonlinearExpressions="3">
+			<nl idx="-1">
+					<power>
+						<variable coef="1.0" idx="0"/>
+						<number type="real" value="2.0"/>
+					</power>
+			</nl>
+			<nl idx="1">
+				<ln>
+					<times>
+						<variable coef="1.0" idx="0"/>
+						<variable coef="1.0" idx="2"/>
+					</times>	
+				</ln>
+			</nl>
+			<nl idx="0">
+					<sum>
+						<number type="real" value="105"/>
+						<variable coef="1.37" idx="1"/>
+						<variable coef="2" idx="2"/>
+					</sum>	
+			</nl>
+		</nonlinearExpressions>
+	</instanceData>
+</osil>
