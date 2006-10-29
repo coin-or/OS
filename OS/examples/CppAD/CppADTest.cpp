@@ -62,6 +62,7 @@ $end
 #include "OSInstance.h"
 #include "OSExpressionTree.h"
 #include "OSnLNode.h"
+#include "OSDataStructures.h"
 //#include "CoinHelperFunctions.hpp"
 #include <vector>  
 #include <map> 
@@ -111,46 +112,10 @@ int  main(){
 		expTree = osinstance->getNonlinearExpressionTree( -1);
 		nlNode = expTree->m_treeRoot;
 		double *zz;
-		double functionValue;
 		zz = new double[3];
 		zz[ 0] = 0.5;
 		zz[ 1] = 1000;
 		zz[2] = 1;
-		/*functionValue = expTree->calculateFunction(&zz[0], false);
-		std::cout << "FUNCTION VALUE = " << functionValue << std::endl ;
-		std::cout << "GET SPARSE JACOBIAN RESULT"   << std::endl;
-		expTree->calculateGradient(&zz[0], true );
-		// now get Hessian information
-		std::vector<SecondPartialStruct*> secondPartialVector;
-		struct SecondPartialStruct *secondPartial;
-		secondPartialVector = expTree->calculateHessian(&zz[0], true);
-		int kj;
-		int numSparseVars = secondPartialVector.size();
-		for(kj = 0; kj < numSparseVars; kj++){
-			secondPartial = secondPartialVector[kj];
-			std::cout << "First index = " << secondPartial->index_i << std::endl;
-			std::cout << "Second index = " << secondPartial->index_j << std::endl;
-			std::cout << "Second partial  = " << secondPartial->secondPartial_ij << std::endl;
-		}
-		//
-		 * 
-		 */
-		double *conVals = osinstance->calculateAllConstraintFunctionValues( &zz[0], false);
-		double *objVals = osinstance->calculateAllObjectiveFunctionValues( &zz[0], false);
-		int idx;
-		for( idx = 0; idx < osinstance->getConstraintNumber(); idx++){
-			//std::cout << "CONSTRAINT FUNCTION VALUE WITH TERM= " << osinstance->calculateFunctionValue(idx, zz, false) << std::endl;
-			std::cout << "CONSTRAINT FUNCTION VALUE WITH TERM= " << *(conVals + idx) << std::endl;
-		}
-		for( idx = 0; idx < osinstance->getObjectiveNumber(); idx++){
-			//std::cout << "OBJECTIVE FUNCTION VALUE WITH TERM= " << osinstance->calculateFunctionValue(idx, zz, false) << std::endl;
-			std::cout << "OBJECTIVE FUNCTION VALUE WITH TERM= " << *(objVals + idx) << std::endl;
-		}
-	
-		osinstance->calculateObjectiveFunctionGradient(-1, &zz[0], false, false);
-		osinstance->calculateAllConstraintFunctionGradients(&zz[0], false, false);
-		std::cout << "RETURN FROM GETTING SPARSE JACOBIAN RESULT"   << std::endl;
-		std::cout << "NOW GET LAGRANGIAN HESSIAN"   << std::endl;
 		double* xx = new double[3];
 		double* yy = new double[2];
 		double* ww = new double[1];
@@ -160,15 +125,39 @@ int  main(){
 		yy[ 0] = 1;
 		yy[ 1] = 1;
 		ww[ 0] = 1;
-	//first iteration
-		osinstance->calculateLagrangianHessian( xx, yy, ww, false, false);
-	//second iteration
-	ww[ 0] = 3;
-	xx[ 0] = 1.0;
-	//yy[ 0] = 10;
+		double *conVals = osinstance->calculateAllConstraintFunctionValues( &zz[0], false);
+		double *objVals = osinstance->calculateAllObjectiveFunctionValues( &zz[0], false);
+		int idx;
+		for( idx = 0; idx < osinstance->getConstraintNumber(); idx++){
+			std::cout << "CONSTRAINT FUNCTION VALUE WITH TERM= " << *(conVals + idx) << std::endl;
+		}
+		for( idx = 0; idx < osinstance->getObjectiveNumber(); idx++){
+	
+			std::cout << "OBJECTIVE FUNCTION VALUE WITH TERM= " << *(objVals + idx) << std::endl;
+		}
+		osinstance->calculateObjectiveFunctionGradient(-1, &zz[0], false, false);
+		osinstance->calculateAllConstraintFunctionGradients(&zz[0], false, false);
+		std::cout << "RETURN FROM GETTING SPARSE JACOBIAN RESULT"   << std::endl;
+		std::cout << "NOW GET LAGRANGIAN HESSIAN"   << std::endl;
+		SparseHessianMatrix *sparseHessian;
+		//first iteration 
+		std::cout << "GET LAGRANGIAN HESSIAN FIRST TIME"   << std::endl;
+		sparseHessian = osinstance->calculateLagrangianHessian( xx, yy, ww, false, false);
+		for(idx = 0; idx < sparseHessian->hessDimension; idx++){
+			std::cout << "row idx = " << *(sparseHessian->hessRowIdx + idx) <<  "  col idx = "<< *(sparseHessian->hessColIdx + idx)
+			<< " value = " << *(sparseHessian->hessValues + idx) << std::endl;
+		}
+		//second iteration
+		ww[ 0] = 3;
+		xx[ 0] = 1.0;
+		yy[ 0] = 10;
 		std::cout << "NOW GET LAGRANGIAN HESSIAN SECOND TIME"   << std::endl;
-	osinstance->calculateLagrangianHessian( xx, yy, ww, false, false);
-	//osinstance->calculateAllConstraintFunctionGradients(&zz[0], false, false);
+		sparseHessian = osinstance->calculateLagrangianHessian( xx, yy, ww, false, false);
+		for(idx = 0; idx < sparseHessian->hessDimension; idx++){
+			std::cout << "row idx = " << *(sparseHessian->hessRowIdx + idx) <<  "  col idx = "<< *(sparseHessian->hessColIdx + idx)
+			<< " value = " << *(sparseHessian->hessValues + idx) << std::endl;
+		}
+		//osinstance->calculateAllConstraintFunctionGradients(&zz[0], false, false);
 		delete[] zz;
 		zz = NULL;
 		delete osilreader;

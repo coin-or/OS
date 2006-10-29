@@ -568,6 +568,8 @@ private:
 	
 	CppAD::ADFun<double> *F;
 	
+	CppAD::vector< AD<double> >m_vL;
+	
 	/**
 	 *  m_vX is a vector of CppAD indpendent variables.
 	 */
@@ -585,7 +587,12 @@ private:
 	
 	std::vector<double> m_vdx;	
 	std::vector<double> m_vw;
-	std::vector<double> m_vdw;		
+	std::vector<double> m_vdw;	
+	
+	/**
+	 *  m_vH is an std::vector used to store the Hessian matrix of the Lagrangian function.
+	 */
+	std::vector<double> m_vH ;		
 	
 	/**
 	 * m_bDuplicateExpressionTreeMap is true if m_mapExpressionTrees was duplicated. 
@@ -1262,7 +1269,9 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	double *calculateObjectiveFunctionGradient(int idx, double* x, bool functionEvaluated, bool gradientEvaluated);
 
 	/**
-	 * Calculate the Hessian of the Lagrangian Expression Tree  
+	 * Calculate the Hessian of the Lagrangian Expression Tree
+	 * This method will build the CppAD expression tree for only the first iteration
+	 * Use this method on if the value of x does not affect the operations sequence.  
 	 * 
 	 * <p>
 	 * 
@@ -1282,6 +1291,31 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * Each array member corresponds to one constraint gradient.
 	 */
 	SparseHessianMatrix *calculateLagrangianHessian( double* x, double* conMultipliers, 
+	double* objMultipliers, bool allFunctionsEvaluated, bool LagrangianHessianEvaluated);
+	
+	/**
+	 * Calculate the Hessian of the Lagrangian Expression Tree  
+	 * This method will build the CppAD expression tree for each nonlinear
+	 * constraint and objective function at each iteration. Use this method if the value
+	 * of x does not affect the operations sequence.
+	 * <p>
+	 * 
+	 * @param x is a pointer (double) to the current primal variable values
+	 * the size of x should equal instanceData->variables->numberOfVariables
+	 * @param conMultipliers is a pointer (double) to the dual multipliers for the nonlinear 
+	 * rows, it should equal instanceData->constraints->numberOfConstraints
+	 * @param objMultipliers is a pointer (double) to the dual multipliers for the objective
+	 * rows, it should equal instanceData->objectives->numberOfObjectives
+	 * @param allFunctionsEvaluated is true if all constraint and objective functions
+	 * have been evaluated for the current iterate x
+	 * use a value of false if not sure
+	 * @param LagrangianEvaluated is true if the Hessian of the Lagrangian
+	 * has been evaluated for the current iterate x, conMultipliers, objMultipliers
+	 * use a value of false if not sure
+	 * @return a pointer a SparseHessianMatrix. 
+	 * Each array member corresponds to one constraint gradient.
+	 */
+	SparseHessianMatrix *calculateLagrangianHessianReTape( double* x, double* conMultipliers, 
 	double* objMultipliers, bool allFunctionsEvaluated, bool LagrangianHessianEvaluated);
 				
 	/**

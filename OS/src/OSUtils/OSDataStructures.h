@@ -284,7 +284,7 @@ class SparseHessianMatrix {
 	/**
 	 * An Alternative Constructor.
 	 * 
-	 * @param startSize holds the size of the start array.
+	 * @param startSize holds the size of the arrays.
 	 * @param valueSize holds the size of the value and index arrays.
 	 */
 	SparseHessianMatrix(int startSize, int valueSize);
