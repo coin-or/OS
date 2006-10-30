@@ -120,8 +120,8 @@ AC_COIN_HAS_ASL
 AC_COIN_HAS_USER_LIBRARY([Cplex],[CPX],[cplex.h],[CPXgetstat])
 AC_COIN_HAS_USER_LIBRARY([Glpk],[GLPK],[glpk.h],[glp_lpx_simplex])
 AC_COIN_HAS_USER_LIBRARY([Lindo],[LINDO],[lindo.h],[LScreateEnv])
-AC_COIN_HAS_USER_IPOPT([Ipopt],[IPOPT],[ipopt.h],[])
-AC_COIN_HAS_USER_KNITRO([Knitro],[KNITRO],[knitro.h],[])
+AC_COIN_HAS_USER_LIBRARY([Ipopt],[IPOPT],[ipopt.h],[])
+AC_COIN_HAS_USER_LIBRARY([Knitro],[KNITRO],[knitro.h],[])
 
 
 
@@ -139,6 +139,10 @@ AC_COIN_CHECK_GNU_READLINE
 
 #AC_COIN_VPATH_LINK(examples/hello.mps)
 #AC_COIN_VPATH_LINK(examples/input.130)
+AC_COIN_VPATH_LINK(data/parincLinear.osil)
+AC_COIN_VPATH_LINK(data/hs71.nl)
+AC_COIN_VPATH_LINK(data/parinc.mps)
+AC_COIN_VPATH_LINK(data/CppADTestLag.osil)
 
 ##############################################################################
 #                   Finishing up by writing all the output                   #

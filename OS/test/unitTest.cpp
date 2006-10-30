@@ -68,7 +68,7 @@ int main(int argC, char* argV[])
   	std::string dataDir;
     dataDir = dirsep == '/' ? "../data/" : "..\\data\\";
 	std::string osol = "<osol></osoL>";
-	osilFileName =  dataDir +"lindoapiaddins.osil";
+	osilFileName =  dataDir +"parincLinear.osil";
 	nlFileName = dataDir +"hs71.nl";
 	mpsFileName =  dataDir + "parinc.mps";
 	parserTestOSiLFileName = dataDir + "parincLinear.osil"; 
