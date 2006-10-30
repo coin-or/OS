@@ -1,7 +1,7 @@
 /** @file OSInstance.cpp
  * \brief This file defines the OSInstance class along with its supporting classes..
  *
- * @author  Robert Fourer,  Jun Ma, Kipp Martin, m_mdConstraintFunctionValues
+ * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  *
@@ -67,6 +67,7 @@ OSInstance::OSInstance():
 	m_mcConstraintTypes(NULL),
  	m_mdConstraintConstants( NULL),
 	m_bDuplicateExpressionTreesMap( false),
+	m_bNonLinearStructuresInitialized( false),
 	m_bSparseJacobianCalculated( false),
 	m_miJacStart( NULL),
 	m_miJacIndex( NULL),
@@ -1410,11 +1411,8 @@ bool OSInstance::setQuadraticTerms(int number,
 	return true;
 }//setQuadraticTerms
 
-SparseJacobianMatrix *OSInstance::getSparseJacobian( ){
-	// Kipp - break this method up into two separate methods
-	// initializeNonLinearStructures() which is private and
-	// getJacobianSparsityPattern() which is public
-	if( m_bSparseJacobianCalculated == true) return m_sparseJacMatrix;
+bool OSInstance::initializeNonLinearStructures( ){
+	if( m_bNonLinearStructuresInitialized == true) return true;
 	if( m_bProcessObjectives == false) processObjectives();
 	if( m_bProcessConstraints == false) processConstraints();
 	m_iVariableNumber = instanceData->variables->numberOfVariables;
@@ -1429,6 +1427,15 @@ SparseJacobianMatrix *OSInstance::getSparseJacobian( ){
 	m_mdConstraintFunctionValues = new double[ this->instanceData->constraints->numberOfConstraints];
 	m_mdObjectiveFunctionValues = new double[ this->instanceData->objectives->numberOfObjectives];
 	m_mdObjGradient = new double[ this->instanceData->variables->numberOfVariables];
+	m_bNonLinearStructuresInitialized = true;
+	return true;
+}
+
+SparseJacobianMatrix *OSInstance::getJacobianSparsityPattern( ){
+	// if already called return the sparse Jacobian
+	if( m_bSparseJacobianCalculated == true) return m_sparseJacMatrix;
+	// make sure the data structures have been inialized
+	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
 	if( m_bColumnMajor == true) getSparseJacobianFromColumnMajor( );
 	else getSparseJacobianFromRowMajor( );
 	// now fill in the arrays of the sparseJacMatrix
@@ -1439,7 +1446,7 @@ SparseJacobianMatrix *OSInstance::getSparseJacobian( ){
 	m_sparseJacMatrix->values = m_mdJacValue;
 	m_bSparseJacobianCalculated = true;
 	return m_sparseJacMatrix;
-}//getSparseJacobian
+}//getJacobianSparsityPatter
 
 bool OSInstance::addQTermsToExressionTree(){
 	int i, k, idx;
@@ -1527,7 +1534,7 @@ double OSInstance::calculateFunctionValue(int idx, double *x, bool functionEvalu
 		int i, j;
 		double dvalue = 0;
 		// if we have not filled in the Sparse Jacobian matrix do so now
-		if( m_bSparseJacobianCalculated == false) getSparseJacobian();
+		if( m_bSparseJacobianCalculated == false) getJacobianSparsityPattern();
 		//
 		if(idx >= 0){ // we have a constraint
 			if( functionEvaluated == true) return *(m_mdConstraintFunctionValues + idx);
@@ -1612,7 +1619,7 @@ SparseJacobianMatrix *OSInstance::calculateAllConstraintFunctionGradients(double
 			idx = posMapExpTree->first;
 			// we are considering only constraints, not objective function
 			if(idx >= 0){
-				std::cout << "Getting the gradient for the row indexed by " <<  idx << std::endl;
+				//std::cout << "Getting the gradient for the row indexed by " <<  idx << std::endl;
 				jac = m_mapExpressionTreesMod[ idx]->calculateGradient(x, allFunctionsEvaluated);
 				// check size
 				jstart = m_miJacStart[ idx] + m_miJacNumConTerms[ idx];
@@ -1659,7 +1666,7 @@ double *OSInstance::calculateObjectiveFunctionGradient(int idx, double* x, bool 
 			for(posVarIdx = (*m_mapExpressionTreesMod[ idx]->mapVarIdx).begin(); posVarIdx 
 			!= (*m_mapExpressionTreesMod[ idx]->mapVarIdx).end(); ++posVarIdx){
 				*(m_mdObjGradient + posVarIdx->first) += jac[ i];	
-				std::cout << "Objective  Partial = " <<  jac[ i] << std::endl;
+				//std::cout << "Objective  Partial = " <<  jac[ i] << std::endl;
 				i++;
 			}
 		}
@@ -1791,6 +1798,7 @@ bool OSInstance::getSparseJacobianFromColumnMajor( ){
 			}
 		}
 	}
+	/*
 	std::cout << "HERE ARE ROW STARTS:" << std::endl;
 	for (i = 0; i < iNumRowStarts; i++ ){
 		std::cout <<  m_miJacStart[ i] << "  ";	
@@ -1812,6 +1820,7 @@ bool OSInstance::getSparseJacobianFromColumnMajor( ){
 		std::cout <<  m_miJacNumConTerms[ i ] << "  ";	
 	}
 	std::cout << std::endl << std::endl;
+	*/
 	return true;
 }//getSparseJacobianFromColumnMajor
 
@@ -1820,7 +1829,7 @@ OSExpressionTree* OSInstance::getLagrangianExpTree( ){
 	// we calculate the Lagrangian for all the objectives and constraints
 	// with nonlinear terms
 	// first initialize everything for nonlinear work
-	getSparseJacobian( );	
+	getJacobianSparsityPattern( );	
 	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
 	OSnLNodeTimes* nlNodeTimes = NULL;
 	OSnLNodeVariable* nlNodeVariable = NULL;
@@ -1830,7 +1839,6 @@ OSExpressionTree* OSInstance::getLagrangianExpTree( ){
 	// create the sum node
 	nlNodeSum = new OSnLNodeSum();
 	nlNodeSum->inumberOfChildren = m_mapExpressionTreesMod.size();
-	std::cout << "NUMBER OF KIDS = " << m_mapExpressionTreesMod.size()<< std::endl;
 	nlNodeSum->m_mChildren = new OSnLNode*[ nlNodeSum->inumberOfChildren];
 	// create and expression tree for the sum node
 	m_LagrangianExpTree = new OSExpressionTree();
@@ -1877,8 +1885,6 @@ std::map<int, int> OSInstance::getAllNonlinearVariablesIndexMap( ){
 	for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
 		// get the index map for the expression tree
 		expTree = posMapExpTree->second;
-		std::cout << "GETTING VARIABLES FOR ROW  " << posMapExpTree->first << std::endl;
-		std::cout << "NUMBER OF VARS IN THIS ROW  " <<  (*expTree->mapVarIdx).size()<< std::endl;
 		for(posVarIdx = (*expTree->mapVarIdx).begin(); posVarIdx != (*expTree->mapVarIdx).end(); ++posVarIdx){
 			if( m_mapAllNonlinearVariablesIndex.find( posVarIdx->first) == m_mapAllNonlinearVariablesIndex.end() ){
 			// add the variable to the Lagragian map
@@ -1888,14 +1894,14 @@ std::map<int, int> OSInstance::getAllNonlinearVariablesIndexMap( ){
 	}
 	// now order appropriately
 	int kount = 0;
-	std::cout << "HERE IS THE LAGRANGIANN VARIABLE MAPPING" << std::endl;
+	//std::cout << "HERE IS THE LAGRANGIANN VARIABLE MAPPING" << std::endl;
 	for(posVarIdx = m_mapAllNonlinearVariablesIndex.begin(); posVarIdx !=m_mapAllNonlinearVariablesIndex.end(); ++posVarIdx){
 		posVarIdx->second = kount++;
-		std::cout <<  "POSITION FIRST =  "  << posVarIdx->first ;
-		std::cout <<  "    POSITION SECOND = "  << posVarIdx->second << std::endl;
+		//std::cout <<  "POSITION FIRST =  "  << posVarIdx->first ;
+		//std::cout <<  "    POSITION SECOND = "  << posVarIdx->second << std::endl;
 	}
 	m_iNumberOfNonlinearVariables = kount;
-	std::cout <<  "NUMBER OF NONLINEAR VARIABLES =  "  << kount ;
+	//std::cout <<  "NUMBER OF NONLINEAR VARIABLES =  "  << kount ;
 	m_bAllNonlinearVariablesIndex = true;
 	return m_mapAllNonlinearVariablesIndex;
 }//getAllNonlinearVariablesIndexMap 	
@@ -1905,6 +1911,7 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( ){
 	if( m_bLagrangianSparseHessianCreated == true) return m_LagrangianSparseHessian;
 	// get the number of primal variables in the expression tree
 	// the number of lagrangian variables is equal to m_mapExpressionTreesMod.size()s
+	if( m_bAllNonlinearVariablesIndex == false) getAllNonlinearVariablesIndexMap( );
 	int numVars =  m_mapAllNonlinearVariablesIndex.size();
 	std::map<int, int>::iterator posMap1, posMap2;
 	// now that we have the dimension create SparseHessianMatrix (upper triangular)
@@ -1913,7 +1920,7 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( ){
 	m_LagrangianSparseHessian->hessRowIdx = new int[m_LagrangianSparseHessian->hessDimension];
 	m_LagrangianSparseHessian->hessColIdx = new int[m_LagrangianSparseHessian->hessDimension];
 	m_LagrangianSparseHessian->hessValues = new double[m_LagrangianSparseHessian->hessDimension];
-	std::cout << "HESSIAN DIMENSION = " << m_LagrangianSparseHessian->hessDimension << std::endl;
+	//std::cout << "HESSIAN DIMENSION = " << m_LagrangianSparseHessian->hessDimension << std::endl;
 	int i = 0;
 	for(posMap1 = m_mapAllNonlinearVariablesIndex.begin(); posMap1 != m_mapAllNonlinearVariablesIndex.end(); ++posMap1){
 		if(posMap1->first > numVars) break;
@@ -1928,10 +1935,10 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( ){
 			}
 		}	
 	}
-	std::cout << "HESSIAN SPARSITY PATTERN" << std::endl;
+	//std::cout << "HESSIAN SPARSITY PATTERN" << std::endl;
 	for(i = 0; i < m_LagrangianSparseHessian->hessDimension; i++){
-		std::cout <<  "Row Index = " << *(m_LagrangianSparseHessian->hessRowIdx + i) << std::endl;
-		std::cout <<  "Column Index = " << *(m_LagrangianSparseHessian->hessColIdx + i) << std::endl;
+		//std::cout <<  "Row Index = " << *(m_LagrangianSparseHessian->hessRowIdx + i) << std::endl;
+		//std::cout <<  "Column Index = " << *(m_LagrangianSparseHessian->hessColIdx + i) << std::endl;
 	}
 	m_bLagrangianSparseHessianCreated = true;
 	return m_LagrangianSparseHessian;
@@ -1947,7 +1954,7 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double* 
 	if( m_bCppADTreesBuilt == false){
 		// this loop is only done once
 		// if we have not filled in the Sparse Jacobian matrix do so now
-		if( m_bSparseJacobianCalculated == false) getSparseJacobian();
+		if( m_bSparseJacobianCalculated == false) getJacobianSparsityPattern();
 		// get an index map of all of the nonlinear variables in the Hessian of the  Lagrangian
 		// this method call will define m_iNumberOfNonlinearVariables
 		if( m_bAllNonlinearVariablesIndex == false) getAllNonlinearVariablesIndexMap( );
@@ -2029,7 +2036,7 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessianReTape( double* x, do
 	std::map<int, int>::iterator posVarIndexMap;
 	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
 	// if we have not filled in the Sparse Jacobian matrix do so now
-	if( m_bSparseJacobianCalculated == false) getSparseJacobian();
+	if( m_bSparseJacobianCalculated == false) getJacobianSparsityPattern();
 	// get an index map of all of the nonlinear variables in the Hessian of the  Lagrangian
 	// this method call will define m_iNumberOfNonlinearVariables
 	if( m_bAllNonlinearVariablesIndex == false) getAllNonlinearVariablesIndexMap( );

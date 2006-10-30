@@ -138,18 +138,18 @@ class SparseMatrix {
 class SparseJacobianMatrix {
 	public:
 	/**
-	 * startSize is the dimension of the starts array
+	 * startSize is the dimension of the starts array -- should equal number of rows + 1
 	 */
 	int startSize;
 	
 	/**
-	 * valueSize is the dimension of the starts array
+	 * valueSize is the dimension of the values array
 	 */
 	int valueSize;
 	
 	/**
-	 * starts holds an integer array of start elements in coefMatrix (AMatrix),
-	 * which points to the start of a column (row) of nonzero elements in coefMatrix (AMatrix).
+	 * starts holds an integer array of start elements, each start element
+	 * pints to the start of partials for that row
 	 */
 	int* starts; 
 	
@@ -160,14 +160,12 @@ class SparseJacobianMatrix {
 	int* conVals; 
 	
 	/**
-	 * indexes holds an integer array of rowIdx (or colIdx) elements in coefMatrix (AMatrix).
-	 * If the matrix is stored by column (row), rowIdx (colIdx) is the array of row (column) indices.
+	 * indexes holds an integer array of variable indicies.
 	 */
 	int* indexes;
 
 	/**
-	 * values holds a double array of value elements in coefMatrix (AMatrix),
-	 * which contains nonzero elements.
+	 * values holds a double array of nonzero partial derivatives
 	 */
 	double* values;
 	

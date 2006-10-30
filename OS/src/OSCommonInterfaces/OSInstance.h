@@ -598,9 +598,14 @@ private:
 	 * m_bDuplicateExpressionTreeMap is true if m_mapExpressionTrees was duplicated. 
 	 */
 	bool m_bDuplicateExpressionTreesMap;
+	
+	/**
+	 * m_bNonLinearStructuresInitialized is true if initializeNonLinearStructures( ) has been called. 
+	 */
+	bool m_bNonLinearStructuresInitialized;
 
 	/**
-	 * m_bSparseJacobianCalculated is true if getSparseJacobian() had been called. 
+	 * m_bSparseJacobianCalculated is true if getJacobianSparsityPattern() has been called. 
 	 */
 	bool m_bSparseJacobianCalculated;
 	
@@ -1193,7 +1198,16 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 		int begin, int end);
 		
 		
-	// calculate methods
+	// nonlinear API methods
+	
+	
+	/**
+	 * Initialize the data structures for the nonlinear API
+	 * 
+	 * @return true if we have initialized the nonlinear data strucutres.  
+	 */
+	bool initializeNonLinearStructures( );
+	
 	
 	
 	/**
@@ -1359,7 +1373,7 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * 
 	 * @return pointer to a SparseJacobianMatrix.
 	 */ 
-	SparseJacobianMatrix *getSparseJacobian();
+	SparseJacobianMatrix *getJacobianSparsityPattern();
 	
 	/**
 	 * 
