@@ -49,6 +49,8 @@ OSInstance::OSInstance():
 	m_miNumberOfObjCoef(NULL),
 	m_mdObjectiveConstants(NULL),
 	m_mdObjectiveWeights(NULL),
+	m_mdConstraintFunctionValues( NULL),
+	m_mdObjectiveFunctionValues( NULL),
 	m_mdObjGradient(NULL),
 	m_LagrangianExpTree(NULL),
 	m_bLagrangianExpTreeCreated( false),
@@ -149,29 +151,40 @@ OSInstance::~OSInstance(){
 	m_mdVariableLowerBounds = NULL;
 	delete[] m_mdVariableUpperBounds;
 	m_mdVariableUpperBounds = NULL;
-	std::cout << "Do garbagee collection for the gradient" << std::endl;
+	std::cout << "Do garbage collection for the nonlinear API" << std::endl;
 	// garbage collection for the gradient
-	delete[] m_miJacStart;
-	m_miJacStart = NULL;
-	delete[] m_miJacIndex;
-	m_miJacIndex = NULL;
-	delete[] m_mdJacValue;
-	m_mdJacValue = NULL;
-	delete[] m_miJacNumConTerms;
-	m_miJacNumConTerms = NULL;
-	delete[] m_mdObjGradient;
-	m_mdObjGradient = NULL;
+	if(m_bNonLinearStructuresInitialized == true ){
+		delete[] m_mdObjectiveFunctionValues;
+		m_mdObjectiveFunctionValues = NULL;	
+		delete[] m_mdConstraintFunctionValues;
+		m_mdConstraintFunctionValues = NULL;
+		delete[] m_mdObjGradient;
+		m_mdObjGradient = NULL;	
+	}
+	if(m_bSparseJacobianCalculated == true){
+		delete[] m_miJacStart;
+		m_miJacStart = NULL;
+		delete[] m_miJacIndex;
+		m_miJacIndex = NULL;
+		delete[] m_mdJacValue;
+		m_mdJacValue = NULL;
+		delete[] m_miJacNumConTerms;
+		m_miJacNumConTerms = NULL;
+	}
 	if( m_bLagrangianExpTreeCreated == true){
 		delete m_LagrangianExpTree;
 		m_LagrangianExpTree = NULL;
+	}
+	if( m_bLagrangianSparseHessianCreated == true){
 		delete m_LagrangianSparseHessian;
 		m_LagrangianSparseHessian = NULL;
 	}
-
-	//delete m_sparseJacMatrix;
-	m_sparseJacMatrix = NULL;
+	if( m_bSparseJacobianCalculated == true){
+		delete m_sparseJacMatrix;
+		m_sparseJacMatrix = NULL;
+	}
 	//
-	// delete the expression trees that got created
+	// delete the new expression trees that got created
 	// however they already got deleted if we have a lagrangian Hessian
 	if( m_bLagrangianExpTreeCreated == false){
 		if( (m_bProcessExpressionTrees == true) && (m_bDuplicateExpressionTreesMap == false)  ) {
@@ -182,7 +195,7 @@ OSInstance::~OSInstance(){
 		}
 		if( m_bDuplicateExpressionTreesMap == true)   {
 			for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
-				std::cout << "Deleting an expression tree from the map" << std::endl;
+				std::cout << "Deleting an expression tree from m_mapExpressionTreesMod" << std::endl;
 				delete m_mapExpressionTreesMod[ posMapExpTree->first ];
 			}
 		}
@@ -1440,6 +1453,9 @@ SparseJacobianMatrix *OSInstance::getJacobianSparsityPattern( ){
 	else getSparseJacobianFromRowMajor( );
 	// now fill in the arrays of the sparseJacMatrix
 	m_sparseJacMatrix = new SparseJacobianMatrix();
+	// we point to memory already created so don't 
+	// destroy during garbage collection
+	m_sparseJacMatrix->bDeleteArrays = false;	
 	m_sparseJacMatrix->starts = m_miJacStart;
 	m_sparseJacMatrix->conVals = m_miJacNumConTerms;
 	m_sparseJacMatrix->indexes = m_miJacIndex;
@@ -1687,7 +1703,7 @@ bool OSInstance::getSparseJacobianFromColumnMajor( ){
 	if( m_bColumnMajor == false) return false;
 	int iNumRowStarts = getConstraintNumber() + 1;	
 	int i,j, iTemp;
-	int iNumVariableStarts = getVariableNumber() - 1;
+	int iNumVariableStarts = getVariableNumber() ;
 	int *start;
 	int *index;
 	double *value;
@@ -1916,6 +1932,7 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( ){
 	std::map<int, int>::iterator posMap1, posMap2;
 	// now that we have the dimension create SparseHessianMatrix (upper triangular)
 	m_LagrangianSparseHessian = new SparseHessianMatrix();
+	m_LagrangianSparseHessian->bDeleteArrays = true;
 	m_LagrangianSparseHessian->hessDimension = numVars*(numVars + 1)/2;
 	m_LagrangianSparseHessian->hessRowIdx = new int[m_LagrangianSparseHessian->hessDimension];
 	m_LagrangianSparseHessian->hessColIdx = new int[m_LagrangianSparseHessian->hessDimension];
@@ -1923,9 +1940,11 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( ){
 	//std::cout << "HESSIAN DIMENSION = " << m_LagrangianSparseHessian->hessDimension << std::endl;
 	int i = 0;
 	for(posMap1 = m_mapAllNonlinearVariablesIndex.begin(); posMap1 != m_mapAllNonlinearVariablesIndex.end(); ++posMap1){
+		//std::cout << "posMap1->first  " << posMap1->first << std::endl;
 		if(posMap1->first > numVars) break;
 		for(posMap2 = posMap1; posMap2 != m_mapAllNonlinearVariablesIndex.end(); ++posMap2){
-			if(posMap2->first < numVars){
+			//std::cout << "posMap2->first  " << posMap2->first << std::endl;
+			if(posMap2->first <= numVars){
 				*(m_LagrangianSparseHessian->hessRowIdx + i) = posMap1->first;
 				*(m_LagrangianSparseHessian->hessColIdx + i) = posMap2->first;
 				i++;

@@ -20,21 +20,19 @@
 using std::cout;
 using std::endl;
 
-
- 
-
-
 SparseVector::SparseVector( int number_):
 number( number_)
 {
 	indexes = new int[ number];
 	values = new double[ number];
+	bDeleteArrays = true;
 }// end SparseVector constructor
 
 
 SparseVector::SparseVector( ):
 	indexes( NULL),
-	values( NULL)
+	values( NULL),
+	bDeleteArrays(true)
 {
 }// end SparseVector constructor
 
@@ -42,13 +40,16 @@ SparseVector::~SparseVector(){
 	#ifdef DEBUG
 	cout << "inside sparseVector destructor" << endl;
 	#endif
-	delete[] indexes;
-	indexes = NULL;
-	delete[] values;
+	if(	bDeleteArrays == true){
+		delete[] indexes;
+		delete[] values;
+	}
 	values = NULL;
+	indexes = NULL;
 }// end SparseVector constructor
 
 SparseMatrix::SparseMatrix():
+	bDeleteArrays( true),
 	isColumnMajor(true),
 	starts(NULL),
 	indexes(NULL),
@@ -68,7 +69,8 @@ SparseMatrix::SparseMatrix(bool isColumnMajor_, int startSize_, int valueSize_):
 {
 	starts = new int[startSize];
 	indexes = new int[valueSize];
-	values = new double[valueSize];		
+	values = new double[valueSize];
+	bDeleteArrays = true;		
 }//end SparseMatrix constructor
 
 
@@ -76,11 +78,14 @@ SparseMatrix::~SparseMatrix(){
 	#ifdef DEBUG
 	cout << "inside SparseMatrix destructor" << endl;
 	#endif
-	delete[] starts;
+	if( bDeleteArrays == true){
+		delete[] starts;
+		delete[] indexes;
+		delete[] values;
+
+	}
 	starts = NULL;
-	delete[] indexes;
 	indexes = NULL;
-	delete[] values;
 	values = NULL;
 }// end SparseMatrix Destructor
 
@@ -129,6 +134,7 @@ SparseJacobianMatrix::SparseJacobianMatrix():
 	indexes(NULL),
 	values(NULL),
 	conVals(NULL),
+	bDeleteArrays( true),
 	startSize(0),
 	valueSize(0)
 
@@ -138,7 +144,8 @@ SparseJacobianMatrix::SparseJacobianMatrix():
 
 SparseJacobianMatrix::SparseJacobianMatrix(int startSize_, int valueSize_):
 	startSize(startSize_),
-	valueSize(valueSize_)
+	valueSize(valueSize_),
+	bDeleteArrays( true)
 {
 	starts = new int[startSize];
 	conVals = new int[startSize];
@@ -151,22 +158,19 @@ SparseJacobianMatrix::~SparseJacobianMatrix(){
 	#ifdef DEBUG
 	cout << "inside SparseJacobianMatrix destructor" << endl;
 	#endif
-	if(starts != NULL){
+	if(bDeleteArrays == true){
+		#ifdef DEBUG
+		cout << "delete SparseJacobianArrays" << endl;
+		#endif
 		delete[] starts;
-		starts = NULL;
-	}
-	if(conVals != NULL){
 		delete[] conVals;
-		conVals = NULL;
-	}
-	if(indexes != NULL){
 		delete[] indexes;
-		indexes = NULL;
-	}
-	if(values != NULL){
 		delete[] values;
-		values = NULL;
 	}
+		starts = NULL;
+		conVals = NULL;
+		indexes = NULL;
+		values = NULL;
 }// end SparseJacobianMatrix Destructor
 
 SparseJacobianVector::SparseJacobianVector( int number_):
@@ -174,12 +178,14 @@ number( number_)
 {
 	indexes = new int[ number];
 	values = new double[ number];
+	bDeleteArrays = true;
 }// end SparseJacobianVector constructor
 
 
 SparseJacobianVector::SparseJacobianVector( ):
 	indexes( NULL),
-	values( NULL)
+	values( NULL),
+	bDeleteArrays( true)
 {
 }// end SparseJacobianVector constructor
 
@@ -188,18 +194,19 @@ SparseJacobianVector::~SparseJacobianVector(){
 	#ifdef DEBUG
 	cout << "inside sparseVector destructor" << endl;
 	#endif
-	delete[] indexes;
+	if( bDeleteArrays == true){
+		delete[] indexes;
+		delete[] values;
+	}
 	indexes = NULL;
-	delete[] values;
 	values = NULL;
 }// end SparseJacobianVector constructor
-
-
 	
 SparseHessianMatrix::SparseHessianMatrix():
 	hessRowIdx( NULL),
 	hessColIdx( NULL),
 	hessValues( NULL),
+	bDeleteArrays( true),
 	hessDimension(0)
 {
 }// end SparseHessianMatrix Constructor
@@ -210,6 +217,14 @@ SparseHessianMatrix::~SparseHessianMatrix(){
 	#ifdef DEBUG
 	cout << "inside SparseJacobianMatrix destructor" << endl;
 	#endif
+	if(bDeleteArrays == true){
+		delete[] hessRowIdx;
+		delete[] hessColIdx;
+		delete[] hessValues;
+	}
+	hessRowIdx = NULL;
+	hessColIdx = NULL;
+	hessValues = NULL;
 }// end SparseHessianMatrix Destructor
 
 
