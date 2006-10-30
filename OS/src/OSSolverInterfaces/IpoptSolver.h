@@ -1,4 +1,4 @@
-/** @file CoinSolver.h
+/** @file IpoptSolver.h
  * 
  * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
  * @version 1.0, 10/05/2005
@@ -19,97 +19,112 @@
 #include "OSConfig.h" 
 #include "DefaultSolver.h"
 #include "OSrLWriter.h"
-#include <CoinPackedMatrix.hpp>
-#include <OsiSolverInterface.hpp>
-#include <OsiClpSolverInterface.hpp> 
-#include <OsiCbcSolverInterface.hpp> 
+#include "OSInstance.h"
+#include "OSParameters.h"
+#include "OSnLNode.h"
+#include "OSiLReader.h"
+#include "OSInstance.h"
+#include "OSExpressionTree.h"
+#include "OSnLNode.h"
+#include "OSDataStructures.h"
+#include "FileUtil.h"  
 #include "ErrorClass.h"
 
-
-#ifdef COIN_HAS_CPX
-#include <OsiCpxSolverInterface.hpp>
-#endif
-
-#ifdef COIN_HAS_GLPK
-#include <OsiGlpkSolverInterface.hpp>
-#endif
-
+# include <cstddef>
+# include <cstdlib>
+# include <cctype>
+# include <cassert>
+# include <stack>
 #include <string>
+# include <CppAD/CppAD.h>
+#include<iostream>
+#include <time.h>  
+#include<math.h>
+#include<vector>
+#include <map>  
 
+#include "IpTNLP.hpp"
 
-/*! \class CoinSolver class.h "CoinSolver.h"
- *  \brief Implements a solve method for the Coin solvers.
- *
- * This class implements a solve method for the Coin solvers
- * It reads an OSInstance object and puts into the Coin OSI format
- */
+using namespace Ipopt;
 
-class CoinSolver : public DefaultSolver{  
+class IpoptSolver : public DefaultSolver, public TNLP{  
 	
 public:
 
-	/*! \fn  CoinSolver::CoinSolver() 
-	 *  \brief The class contructor.
-	 */ 
-	CoinSolver();
-	
-	/*! \fn  CoinSolver::~CoinSolver() 
-	 *  \brief The class destructor.
-	 */ 
-	~CoinSolver();
-	
-	/*! \fn void CoinSolver::solve() 
-	 *  \brief The implementation of the virtual functions. 
-	 *  \return void.
-	 */	
+	IpoptSolver();
+	~IpoptSolver();
 	virtual void  solve() throw(ErrorClass);
-	
-	/*! \fn string CoinSolver::optimize() 
-	 *  \brief This function calls solver->loadProblem. 
-	 *  \return true if there was not an optimization error.
-	 */ 
-	bool optimize();
-	
-	/*! \fn bool CoinSolver::setCoinPackedMatrix() 
-	 *  \brief  Create a CoinPackedMatrix
-	 *  \return true if a CoinPackedMatrix successfully created.
-	 */ 
-	bool setCoinPackedMatrix();
-	
-	/*! \fn string CoinSolver::getCoinSolverType(string osol_)
-	 *  \brief  Get the solver type, e.g. clp or glpk
-	 *  \param  a string that is an instance of OSoL
-	 *  \return a string which contains the value of clp or glpk.
-	 */ 
-	std::string getCoinSolverType(std::string osol_);
-	
-	/*! \fn string CoinSolver::dataEchoCheck()
-	 *  \brief Print out problem parameters
-	 *  \return void
-	 */ 
 	void dataEchoCheck();
-	
- 
-	
+
+	/** IPOpt specific methods for defining the nlp problem */
+	virtual bool get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
+                            Index& nnz_h_lag, IndexStyleEnum& index_style);
+
+	/** Method to return the bounds for my problem */
+	virtual bool get_bounds_info(Index n, Number* x_l, Number* x_u,
+								Index m, Number* g_l, Number* g_u);
+
+	/** Method to return the starting point for the algorithm */
+	virtual bool get_starting_point(Index n, bool init_x, Number* x,
+									bool init_z, Number* z_L, Number* z_U,
+									Index m, bool init_lambda,
+									Number* lambda);
+
+	/** Method to return the objective value */
+	virtual bool eval_f(Index n, const Number* x, bool new_x, Number& obj_value);
+
+	/** Method to return the gradient of the objective */
+	virtual bool eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f);
+
+	/** Method to return the constraint residuals */
+	virtual bool eval_g(Index n, const Number* x, bool new_x, Index m, Number* g);
+
+	/** Method to return:
+	*   1) The structure of the jacobian (if "values" is NULL)
+	*   2) The values of the jacobian (if "values" is not NULL)
+	*/
+	virtual bool eval_jac_g(Index n, const Number* x, bool new_x,
+							Index m, Index nele_jac, Index* iRow, Index *jCol,
+							Number* values);
+
+	/** Method to return:
+	*   1) The structure of the hessian of the lagrangian (if "values" is NULL)
+	*   2) The values of the hessian of the lagrangian (if "values" is not NULL)
+	*/
+	virtual bool eval_h(Index n, const Number* x, bool new_x,
+						Number obj_factor, Index m, const Number* lambda,
+						bool new_lambda, Index nele_hess, Index* iRow,
+						Index* jCol, Number* values);
+
+	//@}
+
+	/** @name Solution Methods */
+	//@{
+	/** This method is called when the algorithm is complete so the TNLP can store/write the solution */
+	virtual void finalize_solution(SolverReturn status,
+									Index n, const Number* x, const Number* z_L, const Number* z_U,
+									Index m, const Number* g, const Number* lambda,
+									Number obj_value);
+	//@}
+		
 private:
-
-
-
-	/** 
-	 * m_OsiSolver is the osi solver object -- in this case clp, glpk, cbc, or cplex	 
-	 */	
- 	OsiSolverInterface *m_OsiSolver;
-	
-	/** 
-	 * m_CoinPackedMatrix is a Coin Packed Matrix ojbect
-	 */
-	CoinPackedMatrix *m_CoinPackedMatrix ;
-	
-	/** osrlwriter object used to write osrl from and OSResult object */
 	OSrLWriter  *osrlwriter;
 
+	/**@name Methods to block default compiler methods.
+	* The compiler automatically generates the following three methods.
+	*  Since the default compiler implementation is generally not what
+	*  you want (for all but the most simple classes), we usually 
+	*  put the declarations of these methods in the private section
+	*  and never implement them. This prevents the compiler from
+	*  implementing an incorrect "default" behavior without us
+	*  knowing. (See Scott Meyers book, "Effective C++")
+	*  
+	*/
+	//@{
+	//  IpoptSolver();
+	IpoptSolver(const IpoptSolver&);
+	IpoptSolver& operator=(const IpoptSolver&);
+	//@}
 };
-#endif#ifndef IPOPTSOLVER_H_
-#define IPOPTSOLVER_H_
 
-#endif /*IPOPTSOLVER_H_*/
+#endif /*IPOPTSOLVER_H*/

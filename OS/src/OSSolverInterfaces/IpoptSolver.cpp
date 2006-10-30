@@ -1,7 +1,7 @@
-/** @file CoinSolver.cpp
+/** @file IpoptSolver.cpp
  * 
- * \brief This file defines the CoinSolver class.
- * \detail Read an OSInstance object and convert in COIN data structures
+ * \brief This file defines the IpoptSolver class.
+ * \detail Read an OSInstance object and convert in Ipopt data structures
  *
  * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
  * @version 1.0, 10/05/2005
@@ -17,159 +17,241 @@
  */
 
 
-      
-
-#include "CoinSolver.h"
-#include "OSiLReader.h"
-#include "OSInstance.h"
-#include "FileUtil.h"
+#include "IpoptSolver.h"
   
-#include <iostream>
-#include <time.h>  
 using std::cout; 
 using std::endl; 
 using std::ostringstream;
+using namespace Ipopt;
 
 
-CoinSolver::CoinSolver() : 
-m_OsiSolver(NULL),
-m_CoinPackedMatrix(NULL) 
-{
-osrlwriter = new OSrLWriter();
+IpoptSolver::IpoptSolver() {
+	osrlwriter = new OSrLWriter();
 }
 
-CoinSolver::~CoinSolver() {
+IpoptSolver::~IpoptSolver() {
 	#ifdef DEBUG
-	cout << "inside CoinSolver destructor" << endl;
+	cout << "inside IpoptSolver destructor" << endl;
 	#endif
-	cout << "inside CoinSolver destructor" << endl;
-	delete m_CoinPackedMatrix;
-	m_CoinPackedMatrix = NULL;
-	delete m_OsiSolver;
-	m_OsiSolver = NULL;
 	delete osrlwriter;
 	osrlwriter = NULL;
-	cout << "leaving CoinSolver destructor" << endl;
+	#ifdef DEBUG
+	cout << "leaving IpoptSolver destructor" << endl;
+	#endif
 }
 
+// returns the size of the problem
+bool IpoptSolver::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
+                             Index& nnz_h_lag, IndexStyleEnum& index_style){
+	// number of variables
+	n = osinstance->getVariableNumber();
 
-void CoinSolver::solve() throw (ErrorClass) {
-	try{
-	OSiLReader *osilreader = NULL;
-	osresult = new OSResult();
+	// number of constraints
+	m = osinstance->getConstraintNumber();
 
-		if(osil.length() == 0 && osinstance == NULL) throw ErrorClass("there is no instance");
-		clock_t start, finish;
-		double duration;
-		start = clock();
-		if(osinstance == NULL){
-			osilreader = new OSiLReader();
-			osinstance = osilreader->readOSiL( &osil);
-		}
-				finish = clock();
-		duration = (double) (finish - start) / CLOCKS_PER_SEC;
-		cout << "Parsing took (seconds): "<< duration << endl;
-			cout << "Start Solve with a Coin Solver" << endl;
-		// get the type of solver requested from OSoL string
-		bool solverIsDefined = false;
-		if( m_sSolverName.find("clp") != std::string::npos){
-			if( (osinstance->getNumberOfNonlinearExpressions() > 0)
-				|| (osinstance->getNumberOfQuadraticTerms() > 0) 
-				|| (osinstance->getNumberOfIntegerVariables() > 0)
-				|| (osinstance->getNumberOfBinaryVariables() > 0) ) throw ErrorClass( "Clp cannot do nonlinear or quadratic or integer");
-			solverIsDefined = true;
-			m_OsiSolver = new OsiClpSolverInterface();
-		}
-		else{
-			if( m_sSolverName.find("cbc") != std::string::npos){
-				if( (osinstance->getNumberOfNonlinearExpressions() > 0)
-					|| (osinstance->getNumberOfQuadraticTerms() > 0) ) throw ErrorClass( "Cbc cannot do nonlinear or quadratic");
-				solverIsDefined = true;
-				m_OsiSolver = new OsiCbcSolverInterface();
-			}
-			else{
-				if( m_sSolverName.find( "cplex") != std::string::npos){
-					#ifdef COIN_HAS_CPX
-					if( (osinstance->getNumberOfNonlinearExpressions() > 0)
-						|| (osinstance->getNumberOfQuadraticTerms() > 0) ) throw ErrorClass( "Cplex cannot do nonlinear or quadratic");
-					solverIsDefined = true;
-					m_OsiSolver = new OsiCpxSolverInterface();
-					#endif
-				}
-				else{
-					if(m_sSolverName.find( "glpk") != std::string::npos){
-						#ifdef COIN_HAS_GLPK
-						if( (osinstance->getNumberOfNonlinearExpressions() > 0)
-							|| (osinstance->getNumberOfQuadraticTerms() > 0) ) throw ErrorClass( "Glpk cannot do nonlinear or quadratic");
-						solverIsDefined = true;
-						m_OsiSolver = new OsiGlpkSolverInterface();
-						#endif
-					}
-					else{
-						solverIsDefined = false;
-					}
-				}
-			}
-		}
-		if(solverIsDefined == false) throw ErrorClass("a supported solver was not defined");
-		if(osinstance->getConstraintNumber() <= 0)throw ErrorClass("Coin solver Needs Constraints");
-		if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Coin solver requires decision variables");
-		if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Coin solver needs an objective function");
-		if(osinstance->getLinearConstraintCoefficientNumber() <= 0) throw ErrorClass("Coin solver needs linear constraints");
-		if(!setCoinPackedMatrix() ) throw ErrorClass("Problem generating coin packed matrix");
-		//dataEchoCheck();
-		if(optimize() != true) throw ErrorClass("there was an error trying to optimize the problem");
-		delete osilreader;
-		osilreader = NULL;
-	}// end solve
-	catch(const ErrorClass& eclass){
-		osresult->setGeneralMessage( eclass.errormsg);
-		osresult->setGeneralStatusType( "error");
-		osrl = osrlwriter->writeOSrL( osresult);
-		throw ;
-	}				
-}//end solve()
+	// nonzeros in jacobian
+	SparseJacobianMatrix *sparseJacobian = osinstance->getJacobianSparsityPattern();
+	nnz_jac_g = sparseJacobian->valueSize;
 
+	// nonzeros in upper hessian
+	SparseHessianMatrix *sparseHessian = osinstance->getLagrangianHessianSparsityPattern();
+	nnz_h_lag = sparseHessian->hessDimension;
 
+	// use the C style indexing (0-based)
+	index_style = TNLP::C_STYLE;
 
-bool CoinSolver::setCoinPackedMatrix(){
-	bool columnMajor = osinstance->getLinearConstraintCoefficientMajor();
-	try{
-		int maxGap = 0;
-		m_CoinPackedMatrix = new CoinPackedMatrix(
-			columnMajor, //Column or Row Major
-			columnMajor? osinstance->getConstraintNumber() : osinstance->getVariableNumber(), //Minor Dimension
-			columnMajor? osinstance->getVariableNumber() : osinstance->getConstraintNumber(), //Major Dimension
-			osinstance->getLinearConstraintCoefficientNumber(), //Number of nonzeroes
-			columnMajor? osinstance->getLinearConstraintCoefficientsInColumnMajor()->values : osinstance->getLinearConstraintCoefficientsInRowMajor()->values, //Pointer to matrix nonzeroes
-			columnMajor? osinstance->getLinearConstraintCoefficientsInColumnMajor()->indexes : osinstance->getLinearConstraintCoefficientsInRowMajor()->indexes, //Pointer to start of minor dimension indexes -- change to allow for row storage
-			columnMajor? osinstance->getLinearConstraintCoefficientsInColumnMajor()->starts : osinstance->getLinearConstraintCoefficientsInRowMajor()->starts, //Pointers to start of columns.
-			0,   0, maxGap ); 
+	return true;
+}//get_nlp_info
 
-		return true;
+// returns the variable bounds
+bool IpoptSolver::get_bounds_info(Index n, Number* x_l, Number* x_u,
+                                Index m, Number* g_l, Number* g_u){
+	//variables lower bounds
+	double * mdVarLB = osinstance->getVariableLowerBounds();
+	x_l = mdVarLB;
+	/*
+	for (Index i=0; i<n; i++) {
+		x_l[i] = mdVarLB[i];
 	}
-	catch(const ErrorClass& eclass){
-		osresult->setGeneralMessage( eclass.errormsg);
-		osresult->setGeneralStatusType( "error");
-		osrl = osrlwriter->writeOSrL( osresult);
-		throw ;
-	}
-} // end setCoinPackedMatrix
+	*/
 
-bool CoinSolver::optimize()
-{
-	double *x, *y, *z;
-	std::string *rcost;
-	int solIdx = 0;
+	// variables upper bounds
+	double * mdVarUB = osinstance->getVariableUpperBounds();
+	x_u = mdVarUB;
+	/*
+	for (Index i=0; i<n; i++) {
+		x_u[i] = mdVarUB[i];
+	}
+	*/
+
+	// the first constraint g1 has NO upper bound, here we set it to 2e19.
+	// Ipopt interprets any number greater than nlp_upper_bound_inf as
+	// infinity. The default value of nlp_upper_bound_inf and nlp_lower_bound_inf
+	// is 1e19 and can be changed through ipopt options.
+	// e.g. g_u[0] = 2e19;
+
+	//constraint lower bounds
+	double * mdConLB = osinstance->getConstraintLowerBounds();
+	g_l = mdConLB;
+	/*
+	for (Index j=0; j<m; j++) {
+		g_l[j] = mdConLB[j];
+	}
+	*/
+
+	//constraint lower bounds
+	double * mdConUB = osinstance->getConstraintUpperBounds();
+	g_u = mdConUB;
+	/*
+	for (Index j=0; j<m; j++) {
+		g_u[j] = mdConUB[j];
+	}
+	*/
+
+	return true;
+}//get_bounds_info
+
+
+// returns the initial point for the problem
+bool IpoptSolver::get_starting_point(Index n, bool init_x, Number* x,
+                                   bool init_z, Number* z_L, Number* z_U,
+                                   Index m, bool init_lambda,
+                                   Number* lambda){
+	// Here, we assume we only have starting values for x, if you code
+	// your own NLP, you can provide starting values for the dual variables
+	// if you wish
+	//assert(init_x == true);
+	//assert(init_z == false);
+	//assert(init_lambda == false);
+
+    double * mdXInit = osinstance->getVariableInitialValues();
+	x = mdXInit;
+
+	return true;
+}//get_starting_point
+
+// returns the value of the objective function
+bool IpoptSolver::eval_f(Index n, const Number* x, bool new_x, Number& obj_value){
+	
+	obj_value = osinstance->calculateFunctionValue(-1, (double*)x, !new_x);
+	return true;
+}//eval_f
+
+// return the gradient of the objective function grad_{x} f(x)
+bool IpoptSolver::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f){
+  
+	grad_f = osinstance->calculateObjectiveFunctionGradient(-1, (double*)x, !new_x, false);
+	return true;
+}//eval_grad_f
+
+// return the value of the constraints: g(x)
+bool IpoptSolver::eval_g(Index n, const Number* x, bool new_x, Index m, Number* g){
+
+	g = osinstance->calculateAllConstraintFunctionValues((double*)x, !new_x);
+	return true;
+}//eval_g
+
+// return the structure or values of the jacobian
+bool IpoptSolver::eval_jac_g(Index n, const Number* x, bool new_x,
+                           Index m, Index nele_jac, Index* iRow, Index *jCol,
+                           Number* values){
+	SparseJacobianMatrix *sparseJacobian;
+	if (values == NULL) {
+		// return the structure of the jacobian
+		sparseJacobian = osinstance->getJacobianSparsityPattern();
+
+		int i = 0;
+		int k, idx;
+		for(idx = 0; idx < m; idx++){
+			for(k = *(sparseJacobian->starts + idx); k < *(sparseJacobian->starts + idx + 1); k++){
+				iRow[i] = idx;
+				jCol[i] = *(sparseJacobian->indexes + k);
+				i++;
+			}
+		}	
+	}
+	else {
+		// return the values of the jacobian of the constraints
+		sparseJacobian = osinstance->calculateAllConstraintFunctionGradients((double*)x, !new_x, false);
+		values = sparseJacobian->values;
+	}
+
+	return true;
+}//eval_jac_g
+
+
+//return the structure or values of the hessian
+bool IpoptSolver::eval_h(Index n, const Number* x, bool new_x,
+                       Number obj_factor, Index m, const Number* lambda,
+                       bool new_lambda, Index nele_hess, Index* iRow,
+                       Index* jCol, Number* values){
+	SparseHessianMatrix *sparseHessian;
+	if (values == NULL) {
+		// return the structure. This is a symmetric matrix, fill the lower left triangle only.
+
+		sparseHessian = osinstance->getLagrangianHessianSparsityPattern( );
+
+		int i, j;
+		for(i = 0; i < nele_hess; i++){
+			iRow[i] = *(sparseHessian->hessColIdx + i);
+			jCol[i] = *(sparseHessian->hessRowIdx + i);
+		}
+	}
+	else {
+		// return the values. This is a symmetric matrix, fill the lower left triangle only
+		double* objMultipliers = new double[0];
+		objMultipliers[0] = obj_factor;
+		sparseHessian = osinstance->calculateLagrangianHessian((double*)x, (double*)lambda, objMultipliers, !new_x, false);
+		values = sparseHessian->hessValues;
+	}
+	return true;
+}//eval_h
+
+void IpoptSolver::finalize_solution(SolverReturn status,
+            Index n, const Number* x, const Number* z_L, const Number* z_U,
+            Index m, const Number* g, const Number* lambda,
+            Number obj_value){
+  // here is where we would store the solution to variables, or write to a file, etc
+  // so we could use the solution.
+
+  // For this example, we write the solution to the console
+  printf("\n\nSolution of the primal variables, x\n");
+  for (Index i=0; i<n; i++) {
+    printf("x[%d] = %e\n", i, x[i]);
+  }
+
+  printf("\n\nSolution of the bound multipliers, z_L and z_U\n");
+  for (Index i=0; i<n; i++) {
+    printf("z_L[%d] = %e\n", i, z_L[i]);
+  }
+  for (Index i=0; i<n; i++) {
+    printf("z_U[%d] = %e\n", i, z_U[i]);
+  }
+
+  printf("\n\nObjective value\n");
+  printf("f(x*) = %e\n", obj_value);
+
+  ///////////////////////////////////////
+  	int solIdx = 0;
+	ostringstream outStr;
+	int i = 0;
+	int nSolStatus;
+	std::string description = "";	
+	std::string message = "";
+
 	// resultHeader infomration
-	if(osresult->setServiceName("Solved with Coin Solver: " + m_sSolverName) != true)
+	if(osresult->setServiceName( "Solved using a Ipopt solver service") != true)
 		throw ErrorClass("OSResult error: setServiceName");
 	if(osresult->setInstanceName(  osinstance->getInstanceName()) != true)
 		throw ErrorClass("OSResult error: setInstanceName");
-	//if(osresult->setJobID( osresultdata->jobID) != true)
+
+
+	//if(osresult->setJobID( osoption->jobID) != true)
 	//	throw ErrorClass("OSResult error: setJobID");
-	//if(osresult->setGeneralMessage( osresultdata->message) != true)
-	//	throw ErrorClass("OSResult error: setGeneralMessage");
+	if(osresult->setGeneralMessage( message) != true)
+		throw ErrorClass("OSResult error: setGeneralMessage");
+
+
 	// set basic problem parameters
 	if(osresult->setVariableNumber( osinstance->getVariableNumber()) != true)
 		throw ErrorClass("OSResult error: setVariableNumer");
@@ -179,104 +261,21 @@ bool CoinSolver::optimize()
 		throw ErrorClass("OSResult error: setConstraintNumber");
 	if(osresult->setSolutionNumber(  1) != true)
 		throw ErrorClass("OSResult error: setSolutionNumer");	
-	//
-	int i = 0;
+
 	try{
-		m_OsiSolver->loadProblem(*m_CoinPackedMatrix, osinstance->getVariableLowerBounds(), 
-					osinstance->getVariableUpperBounds(),  
-					osinstance->getDenseObjectiveCoefficients()[0], 
-					osinstance->getConstraintLowerBounds(), osinstance->getConstraintUpperBounds());
-		
-		// the code below causes a memory problem because it does not create a new copy in memory
-		//m_OsiSolver->assignProblem(m_CoinPackedMatrix, osinstance->getVariableLowerBounds(), 
-		//			osinstance->getVariableUpperBounds(),  
-		//			osinstance->getDenseObjectiveCoefficients()[0], 
-		//			osinstance->getConstraintLowerBounds(), osinstance->getConstraintUpperBounds());
+		if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Ipopt NEEDS AN OBJECTIVE FUNCTION");
 
-		if(osinstance->getObjectiveNumber() == 0) throw ErrorClass("there is no objective function");
 
-		//		
-		if( osinstance->getObjectiveMaxOrMins()[0] == "min") m_OsiSolver->setObjSense(1.0);
-		else m_OsiSolver->setObjSense(-1.0);
-		m_OsiSolver->setDblParam(OsiObjOffset, osinstance->getObjectiveConstants()[0]);
-		//
-		// set the integer variables
-		int *intIndex;
-		int k = 0;
-		char *varType;
-		int numOfIntVars = osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables();
-		intIndex = new int[ numOfIntVars];
-		varType = osinstance->getVariableTypes();
-		for(i = 0; i < osinstance->getVariableNumber(); i++){
-			if( (varType[i] == 'B') || (varType[i]) == 'I' ) {
-				intIndex[k++] = i;
-			}
-		}
-		m_OsiSolver->setInteger( intIndex,  numOfIntVars);
-		if(numOfIntVars > 0){
-			m_OsiSolver->branchAndBound();
-		}
-		else{
-			m_OsiSolver->initialSolve();
-			cout << "DONE WITH INITIAL SOLVE" << endl;
-		}
-		int solIdx = 0;
-		std::string description = "";
-		osresult->setGeneralStatusType("success");
-		if (m_OsiSolver->isProvenOptimal() == true){
-			osresult->setSolutionStatus(solIdx, "optimal", description);
-			/* Retrieve the solution */
-			x = new double[osinstance->getVariableNumber() ];
-			y = new double[osinstance->getConstraintNumber() ];
-			z = new double[1];
-			//
-			*(z + 0)  =  m_OsiSolver->getObjValue();
-			osresult->setObjectiveValues(solIdx, z);
-			for(i=0; i < osinstance->getVariableNumber(); i++){
-				*(x + i) = m_OsiSolver->getColSolution()[i];
 
-			}
-			osresult->setPrimalVariableValues(solIdx, x);
-			for(i=0; i <  osinstance->getConstraintNumber(); i++){
-				*(y + i) = m_OsiSolver->getRowPrice()[ i];
-			}
-			osresult->setDualVariableValues(solIdx, y);
-			//
-			//
-			// now put the reduced costs into the osrl
-			int numberOfOtherVariableResult = 1;
-			int otherIdx = 0;
-			// first set the number of Other Variable Results
-			osresult->setNumberOfOtherVariableResult(solIdx, numberOfOtherVariableResult);
-			ostringstream outStr;
-			int numberOfVar =  osinstance->getVariableNumber();
-			rcost = new std::string[ numberOfVar];
-			for(i=0; i < numberOfVar; i++){
-				outStr << m_OsiSolver->getReducedCost()[ i]; 
-				rcost[ i] = outStr.str();
-				outStr.str("");
-			}
-			osresult->setAnOtherVariableResult(solIdx, otherIdx, "reduced costs", "the variable reduced costs", rcost);			
-			// end of settiing reduced costs
-		}
-		else{ 
-			if(m_OsiSolver->isProvenPrimalInfeasible() == true) 
-				osresult->setSolutionStatus(solIdx, "infeasible", description);
-			else
-				if(m_OsiSolver->isProvenDualInfeasible() == true) 
-					osresult->setSolutionStatus(solIdx, "dualinfeasible", description);
-				else
-					osresult->setSolutionStatus(solIdx, "other", description);
-		}
+
+
+
+
+
+
+
 		osrl = osrlwriter->writeOSrL( osresult);
-		if(osinstance->getVariableNumber() > 0) delete[] x;
-		x = NULL;
-		if(osinstance->getConstraintNumber()) delete[] y;
-		y = NULL;
-		delete[] z;	
-		z = NULL;
-		if(osinstance->getVariableNumber() > 0) delete[] rcost;
-		return true;
+
 	}
 	catch(const ErrorClass& eclass){
 		osresult->setGeneralMessage( eclass.errormsg);
@@ -284,30 +283,34 @@ bool CoinSolver::optimize()
 		osrl = osrlwriter->writeOSrL( osresult);
 		throw ;
 	}
-} // end optimize
 
-std::string CoinSolver::getCoinSolverType(std::string osol){
-// this is deprecated, but keep it around
+}//finalize_solution
+
+void IpoptSolver::solve() throw (ErrorClass) {
+	OSiLReader* osilreader = NULL; 
+	osresult = new OSResult();
 	try{
-		if( osol.find( "clp") != std::string::npos){
-			return "coin_solver_glpk";
+		if(osil.length() == 0 && osinstance == NULL) throw ErrorClass("there is no instance");
+		clock_t start, finish;
+		double duration;
+		start = clock();
+		if(osinstance == NULL){
+			osilreader = new OSiLReader();
+			osinstance = osilreader->readOSiL( &osil);
 		}
-		else{
-			if( osol.find( "cbc") != std::string::npos){
-				return "coin_solver_cpx";
-			}
-			else{
-				if( osol.find( "cpx") != std::string::npos){
-					return "coin_solver_clp";
-				}
-				else{
-					if(osol.find( "glpk") != std::string::npos){
-						return "";
-					}
-					else throw ErrorClass("a supported solver was not defined");
-				}
-			}
-		}
+		OSiLWriter osilwriter;
+		//cout << osilwriter.writeOSiL( osinstance) << endl;
+		if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Ipopt requires decision variables");
+		finish = clock();
+		duration = (double) (finish - start) / CLOCKS_PER_SEC;
+		cout << "Parsing took (seconds): "<< duration << endl;
+		//dataEchoCheck();
+
+		/***************now the ipopt invokation*********************/
+
+
+		delete osilreader;
+		osilreader = NULL;
 	}
 	catch(const ErrorClass& eclass){
 		osresult->setGeneralMessage( eclass.errormsg);
@@ -315,10 +318,13 @@ std::string CoinSolver::getCoinSolverType(std::string osol){
 		osrl = osrlwriter->writeOSrL( osresult);
 		throw ;
 	}
-} // end getCoinSolverType
+}//solve
 
-void CoinSolver::dataEchoCheck(){
+
+void IpoptSolver::dataEchoCheck(){
+	
 	int i;
+	
 	// print out problem parameters
 	cout << "This is problem:  " << osinstance->getInstanceName() << endl;
 	cout << "The problem source is:  " << osinstance->getInstanceSource() << endl;
@@ -354,7 +360,25 @@ void CoinSolver::dataEchoCheck(){
 	}
 	
 	// print out linear constraint data
-	if(m_CoinPackedMatrix != NULL) m_CoinPackedMatrix->dumpMatrix();
+	cout << endl;
+	cout << "number of nonzeros =  " << osinstance->getLinearConstraintCoefficientNumber() << endl;
+	for(i = 0; i <= osinstance->getVariableNumber(); i++){
+		cout << "Start Value =  " << osinstance->getLinearConstraintCoefficientsInColumnMajor()->starts[ i] << endl;
+	}
+	cout << endl;
+	for(i = 0; i < osinstance->getLinearConstraintCoefficientNumber(); i++){
+		cout << "Index Value =  " << osinstance->getLinearConstraintCoefficientsInColumnMajor()->indexes[i] << endl;
+		cout << "Nonzero Value =  " << osinstance->getLinearConstraintCoefficientsInColumnMajor()->values[i] << endl;
+	}
+
+	// print out quadratic data
+	cout << "number of qterms =  " <<  osinstance->getNumberOfQuadraticTerms() << endl;
+	for(int i = 0; i <  osinstance->getNumberOfQuadraticTerms(); i++){
+		cout << "Row Index = " <<  osinstance->getQuadraticTerms()->rowIndexes[i] << endl;
+		cout << "Var Index 1 = " << osinstance->getQuadraticTerms()->varOneIndexes[ i] << endl;
+		cout << "Var Index 2 = " << osinstance->getQuadraticTerms()->varTwoIndexes[ i] << endl;
+		cout << "Coefficient = " << osinstance->getQuadraticTerms()->coefficients[ i] << endl;
+	}
 } // end dataEchoCheck
 
 
