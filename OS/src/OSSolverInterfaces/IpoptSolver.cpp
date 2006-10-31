@@ -18,7 +18,8 @@
 
 
 #include "IpoptSolver.h"
-  
+#include "IpIpoptApplication.hpp"
+
 using std::cout; 
 using std::endl; 
 using std::ostringstream;
@@ -27,6 +28,7 @@ using namespace Ipopt;
 
 IpoptSolver::IpoptSolver() {
 	osrlwriter = new OSrLWriter();
+	if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Ipopt NEEDS AN OBJECTIVE FUNCTION");
 }
 
 IpoptSolver::~IpoptSolver() {
@@ -211,69 +213,120 @@ void IpoptSolver::finalize_solution(SolverReturn status,
             Index n, const Number* x, const Number* z_L, const Number* z_U,
             Index m, const Number* g, const Number* lambda,
             Number obj_value){
-  // here is where we would store the solution to variables, or write to a file, etc
-  // so we could use the solution.
+	// here is where we would store the solution to variables, or write to a file, etc so we could use the solution.
 
-  // For this example, we write the solution to the console
-  printf("\n\nSolution of the primal variables, x\n");
-  for (Index i=0; i<n; i++) {
-    printf("x[%d] = %e\n", i, x[i]);
-  }
+	// For test, we write the solution to the console
+	/*
+	printf("\n\nSolution of the primal variables, x\n");
+	for (Index i=0; i<n; i++) {
+		printf("x[%d] = %e\n", i, x[i]);
+	}
 
-  printf("\n\nSolution of the bound multipliers, z_L and z_U\n");
-  for (Index i=0; i<n; i++) {
-    printf("z_L[%d] = %e\n", i, z_L[i]);
-  }
-  for (Index i=0; i<n; i++) {
-    printf("z_U[%d] = %e\n", i, z_U[i]);
-  }
+	printf("\n\nSolution of the bound multipliers, z_L and z_U\n");
+	for (Index i=0; i<n; i++) {
+		printf("z_L[%d] = %e\n", i, z_L[i]);
+	}
+	for (Index i=0; i<n; i++) {
+		printf("z_U[%d] = %e\n", i, z_U[i]);
+	}
 
-  printf("\n\nObjective value\n");
-  printf("f(x*) = %e\n", obj_value);
-
-  ///////////////////////////////////////
+	printf("\n\nObjective value\n");
+	printf("f(x*) = %e\n", obj_value);
+	*/
+	///////////////////////////////////////
   	int solIdx = 0;
 	ostringstream outStr;
-	int i = 0;
-	int nSolStatus;
-	std::string description = "";	
-	std::string message = "";
-
-	// resultHeader infomration
-	if(osresult->setServiceName( "Solved using a Ipopt solver service") != true)
-		throw ErrorClass("OSResult error: setServiceName");
-	if(osresult->setInstanceName(  osinstance->getInstanceName()) != true)
-		throw ErrorClass("OSResult error: setInstanceName");
-
-
-	//if(osresult->setJobID( osoption->jobID) != true)
-	//	throw ErrorClass("OSResult error: setJobID");
-	if(osresult->setGeneralMessage( message) != true)
-		throw ErrorClass("OSResult error: setGeneralMessage");
-
-
-	// set basic problem parameters
-	if(osresult->setVariableNumber( osinstance->getVariableNumber()) != true)
-		throw ErrorClass("OSResult error: setVariableNumer");
-	if(osresult->setObjectiveNumber( 1) != true)
-		throw ErrorClass("OSResult error: setObjectiveNumber");
-	if(osresult->setConstraintNumber( osinstance->getConstraintNumber()) != true)
-		throw ErrorClass("OSResult error: setConstraintNumber");
-	if(osresult->setSolutionNumber(  1) != true)
-		throw ErrorClass("OSResult error: setSolutionNumer");	
+	double* mdObjValues = new double[0];
+	std::string message = "Ipopt solver finishes to the end.";
+	std::string solutionDescription = "";	
 
 	try{
-		if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Ipopt NEEDS AN OBJECTIVE FUNCTION");
+		// resultHeader infomration
+		if(osresult->setServiceName( "Ipopt solver service") != true)
+			throw ErrorClass("OSResult error: setServiceName");
+		if(osresult->setInstanceName(  osinstance->getInstanceName()) != true)
+			throw ErrorClass("OSResult error: setInstanceName");
+
+		//if(osresult->setJobID( osoption->jobID) != true)
+		//	throw ErrorClass("OSResult error: setJobID");
+
+		// set basic problem parameters
+		if(osresult->setVariableNumber( osinstance->getVariableNumber()) != true)
+			throw ErrorClass("OSResult error: setVariableNumer");
+		if(osresult->setObjectiveNumber( 1) != true)
+			throw ErrorClass("OSResult error: setObjectiveNumber");
+		if(osresult->setConstraintNumber( osinstance->getConstraintNumber()) != true)
+			throw ErrorClass("OSResult error: setConstraintNumber");
+		if(osresult->setSolutionNumber(  1) != true)
+			throw ErrorClass("OSResult error: setSolutionNumer");	
 
 
+		if(osresult->setGeneralMessage( message) != true)
+			throw ErrorClass("OSResult error: setGeneralMessage");
 
+		switch( status){
+			case SUCCESS:
+				solutionDescription = "SUCCESS[IPOPT]: Algorithm terminated successfully at a locally optimal point, satisfying the convergence tolerances.";
+				osresult->setSolutionStatus(solIdx,  "locallyOptimal", solutionDescription);
+				osresult->setPrimalVariableValues(solIdx, (double*)x);
+				mdObjValues[0] = obj_value;
+				osresult->setObjectiveValues(solIdx, mdObjValues);
+			break;
+			case MAXITER_EXCEEDED:
+				solutionDescription = "MAXITER_EXCEEDED[IPOPT]: Maximum number of iterations exceeded.";
+				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);
+				osresult->setPrimalVariableValues(solIdx, (double*)x);
+				mdObjValues[0] = obj_value;
+				osresult->setObjectiveValues(solIdx, mdObjValues);
+			break;
+			case STOP_AT_TINY_STEP:
+				solutionDescription = "STOP_AT_TINY_STEP[IPOPT]: Algorithm proceeds with very little progress.";
+				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);
+				osresult->setPrimalVariableValues(solIdx, (double*)x);
+				mdObjValues[0] = obj_value;
+				osresult->setObjectiveValues(solIdx, mdObjValues);
+			break;
+			case STOP_AT_ACCEPTABLE_POINT:
+				solutionDescription = "STOP_AT_ACCEPTABLE_POINT[IPOPT]: Algorithm stopped at a point that was converged, not to _desired_ tolerances, but to _acceptable_ tolerances";
+				osresult->setSolutionStatus(solIdx,  "locallyOptimal", solutionDescription);
+				osresult->setPrimalVariableValues(solIdx, (double*)x);
+				mdObjValues[0] = obj_value;
+				osresult->setObjectiveValues(solIdx, mdObjValues);
+			break;
+			case LOCAL_INFEASIBILITY:
+				solutionDescription = "LOCAL_INFEASIBILITY[IPOPT]: Algorithm converged to a point of local infeasibility. Problem may be infeasible.";
+				osresult->setSolutionStatus(solIdx,  "infeasible", solutionDescription);
+			break;
+			case USER_REQUESTED_STOP:
+				solutionDescription = "USER_REQUESTED_STOP[IPOPT]: The user call-back function  intermediate_callback returned false, i.e., the user code requested a premature termination of the optimization.";
+				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
+			break;
+			case DIVERGING_ITERATES:
+				solutionDescription = "DIVERGING_ITERATES[IPOPT]: It seems that the iterates diverge.";
+				osresult->setSolutionStatus(solIdx,  "unbounded", solutionDescription);
+			break;
+			case RESTORATION_FAILURE:
+				solutionDescription = "RESTORATION_FAILURE[IPOPT]: Restoration phase failed, algorithm doesn't know how to proceed.";
+				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
+			break;
+			case ERROR_IN_STEP_COMPUTATION:
+				solutionDescription = "ERROR_IN_STEP_COMPUTATION[IPOPT]: An unrecoverable error occurred while IPOPT tried to compute the search direction.";
+				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
+			break;
+			case INVALID_NUMBER_DETECTED:
+				solutionDescription = "INVALID_NUMBER_DETECTED[IPOPT]: Algorithm received an invalid number (such as NaN or Inf) from the NLP; see also option check_derivatives_for_naninf.";
+				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
+			break;
+			case INTERNAL_ERROR:
+				solutionDescription = "INTERNAL_ERROR[IPOPT]: An unknown internal error occurred. Please contact the IPOPT authors through the mailing list.";
+				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
+			break;
+			default:
+				solutionDescription = "OTHER[IPOPT]: other unknown solution status from Ipopt solver";
+				osresult->setSolutionStatus(solIdx,  "other", solutionDescription);
+		}
 
-
-
-
-
-
-
+		osresult->setGeneralStatusType("success");
 		osrl = osrlwriter->writeOSrL( osresult);
 
 	}
@@ -307,7 +360,30 @@ void IpoptSolver::solve() throw (ErrorClass) {
 		//dataEchoCheck();
 
 		/***************now the ipopt invokation*********************/
+		// Create a new instance of your nlp 
+		SmartPtr<TNLP> nlp = this;
 
+		// Create a new instance of IpoptApplication
+		//  (use a SmartPtr, not raw)
+		SmartPtr<IpoptApplication> app = new IpoptApplication();
+
+		// Change some options
+		// Note: The following choices are only examples, they might not be
+		//       suitable for your optimization problem.
+		app->Options()->SetNumericValue("tol", 1e-9);
+		app->Options()->SetStringValue("mu_strategy", "adaptive");
+		app->Options()->SetStringValue("output_file", "ipopt.out");
+
+		// Intialize the IpoptApplication and process the options
+		app->Initialize();
+
+		// Ask Ipopt to solve the problem
+		ApplicationReturnStatus status = app->OptimizeTNLP(nlp);
+
+
+		if (status != Solve_Succeeded) {
+			throw ErrorClass("Ipopt FAILED TO SOLVE THE PROBLEM");
+		}
 
 		delete osilreader;
 		osilreader = NULL;
