@@ -59,8 +59,8 @@ AC_COIN_MAIN_SUBDIRS(Cgl)
 AC_COIN_MAIN_SUBDIRS(Cbc)
 AC_COIN_MAIN_SUBDIRS(Cgl)
 AC_COIN_MAIN_SUBDIRS(CppAD)
-AC_COIN_MAIN_SUBDIRS(OS/data)
 AC_COIN_MAIN_SUBDIRS(OS)
+AC_COIN_MAIN_SUBDIRS(OS/data)
 
 ##############################################################################
 #                   Finishing up by writing all the output                   #

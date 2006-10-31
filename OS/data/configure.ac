@@ -12,7 +12,7 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([OSdata],[0.1],[])
+AC_INIT([data],[0.1],[])
 
 AC_COPYRIGHT([
 Copyright 2006 International Business Machines and others.
@@ -24,7 +24,12 @@ under the Common Public License.])
 # whether the package is actually there
 AC_CONFIG_SRCDIR(configure.ac)
 
+#############################################################################
+#     We only need automake to generate Makefiles for the distribution      #
+#############################################################################
 
+# Initialize automake
+AC_COIN_INIT_AUTOMAKE
 
 #############################################################################
 #Find out what the data files are and create links if this is a VPATH config#
@@ -38,7 +43,7 @@ AC_COIN_EXAMPLE_FILES([*.*])
 
 # Here list all the files that configure should create (except for the
 # configuration header file)
-
+AC_CONFIG_FILES([Makefile])
 
 # Finally, we let configure write all the output...
 AC_COIN_FINALIZE
