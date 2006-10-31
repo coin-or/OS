@@ -76,9 +76,11 @@ OSSolverService_LDADD =  \
 # Kipp add the others here
 LIBS += $(ADDLIBS) `cat $(COINUTILSOBJDIR)/coinutils_addlibs.txt`
 LIBS  += `cat $(OSOBJDIR)/os_addlibs.txt`
+
 if COIN_HAS_IPOPT
 LIBS  += `cat $(IPOPTLIB)/ipopt_addlibs_cpp.txt`
 endif
+
 if COIN_HAS_IPOPT
 LIBS  += `cat $(IPOPTLIB)/ipopt_addlibs_f.txt`
 endif

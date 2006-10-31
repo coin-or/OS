@@ -18,6 +18,7 @@ OS/data/afiro.mps -text
 OS/data/afiro.osil -text
 OS/data/afiro_modified.osil -text
 OS/data/ampl.xml -text
+OS/data/configure.ac -text
 OS/data/demo.osol -text
 OS/data/demo.ospl -text
 OS/data/demopassword.osol -text
