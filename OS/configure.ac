@@ -120,8 +120,8 @@ AC_COIN_HAS_ASL
 AC_COIN_HAS_USER_LIBRARY([Cplex],[CPX],[cplex.h],[CPXgetstat])
 AC_COIN_HAS_USER_LIBRARY([Glpk],[GLPK],[glpk.h],[glp_lpx_simplex])
 AC_COIN_HAS_USER_LIBRARY([Lindo],[LINDO],[lindo.h],[LScreateEnv])
-AC_COIN_HAS_USER_LIBRARY([Ipopt],[IPOPT],[IpOptConfig.h],[])
-AC_COIN_HAS_USER_LIBRARY([Knitro],[KNITRO],[knitro.h],[OptimizeTNLP])
+AC_COIN_HAS_USER_LIBRARY([Ipopt],[IPOPT],[IpOptConfig.h],[OptimizeTNLP])
+AC_COIN_HAS_USER_LIBRARY([Knitro],[KNITRO],[knitro.h],[])
 
 0
 .......

@@ -21248,9 +21248,9 @@ echo "$as_me: error: You need to specify both --with-ipopt-incdir and --with-ipo
   echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
   # Check if the given header file is there
-  as_ac_File=`echo "ac_cv_file_$IPOPTINCDIR/ipopt.h" | $as_tr_sh`
-echo "$as_me:$LINENO: checking for $IPOPTINCDIR/ipopt.h" >&5
-echo $ECHO_N "checking for $IPOPTINCDIR/ipopt.h... $ECHO_C" >&6
+  as_ac_File=`echo "ac_cv_file_$IPOPTINCDIR/IpOptConfig.h" | $as_tr_sh`
+echo "$as_me:$LINENO: checking for $IPOPTINCDIR/IpOptConfig.h" >&5
+echo $ECHO_N "checking for $IPOPTINCDIR/IpOptConfig.h... $ECHO_C" >&6
 if eval "test \"\${$as_ac_File+set}\" = set"; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
@@ -21258,7 +21258,7 @@ else
   { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
 echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
    { (exit 1); exit 1; }; }
-if test -r "$IPOPTINCDIR/ipopt.h"; then
+if test -r "$IPOPTINCDIR/IpOptConfig.h"; then
   eval "$as_ac_File=yes"
 else
   eval "$as_ac_File=no"
@@ -21269,14 +21269,74 @@ echo "${ECHO_T}`eval echo '${'$as_ac_File'}'`" >&6
 if test `eval echo '${'$as_ac_File'}'` = yes; then
   :
 else
-  { { echo "$as_me:$LINENO: error: Cannot find file ipopt.h in $IPOPTINCDIR" >&5
-echo "$as_me: error: Cannot find file ipopt.h in $IPOPTINCDIR" >&2;}
+  { { echo "$as_me:$LINENO: error: Cannot find file IpOptConfig.h in $IPOPTINCDIR" >&5
+echo "$as_me: error: Cannot find file IpOptConfig.h in $IPOPTINCDIR" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
 
   # Check if the symbol is provided in the library
   # ToDo: FOR NOW WE ASSUME THAT WE ARE USING THE C++ COMPILER
+  if test x"$ipopt_libcheck" != xno; then
+                    coin_save_LIBS="$LIBS"
+                    LIBS="$IPOPTLIB $ADDLIBS"
+		    echo "$as_me:$LINENO: checking whether symbol OptimizeTNLP is available with IPOPT" >&5
+echo $ECHO_N "checking whether symbol OptimizeTNLP is available with IPOPT... $ECHO_C" >&6
+# ToDo find out what to do about extern "C"
+#                    AC_TRY_LINK([extern "C" {void OptimizeTNLP();}],[OptimizeTNLP()],
+                    cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+void OptimizeTNLP();
+int
+main ()
+{
+OptimizeTNLP()
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+                                 { { echo "$as_me:$LINENO: error: Cannot find symbol OptimizeTNLP with IPOPT" >&5
+echo "$as_me: error: Cannot find symbol OptimizeTNLP with IPOPT" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+                    LIBS="$coin_save_LIBS"
+                  fi
 
   ADDLIBS="$IPOPTLIB $ADDLIBS"
 
@@ -21400,7 +21460,8 @@ fi
 
 
 
-
+0
+.......
 
 
 #############################################################################
@@ -21716,8 +21777,6 @@ fi
 # In case this is a VPATH configuration we need to make sure that the
 # input files for the examples are available in the VPATH directory.
 
-#AC_COIN_VPATH_LINK(examples/hello.mps)
-#AC_COIN_VPATH_LINK(examples/input.130)
 echo "$as_me:$LINENO: checking whether this is a VPATH configuration" >&5
 echo $ECHO_N "checking whether this is a VPATH configuration... $ECHO_C" >&6
 if test `cd $srcdir; pwd` != `pwd`; then
