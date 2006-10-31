@@ -71,20 +71,11 @@ bool IpoptSolver::get_bounds_info(Index n, Number* x_l, Number* x_u,
 	//variables lower bounds
 	double * mdVarLB = osinstance->getVariableLowerBounds();
 	x_l = mdVarLB;
-	/*
-	for (Index i=0; i<n; i++) {
-		x_l[i] = mdVarLB[i];
-	}
-	*/
 
 	// variables upper bounds
 	double * mdVarUB = osinstance->getVariableUpperBounds();
 	x_u = mdVarUB;
-	/*
-	for (Index i=0; i<n; i++) {
-		x_u[i] = mdVarUB[i];
-	}
-	*/
+
 
 	// the first constraint g1 has NO upper bound, here we set it to 2e19.
 	// Ipopt interprets any number greater than nlp_upper_bound_inf as
@@ -95,20 +86,12 @@ bool IpoptSolver::get_bounds_info(Index n, Number* x_l, Number* x_u,
 	//constraint lower bounds
 	double * mdConLB = osinstance->getConstraintLowerBounds();
 	g_l = mdConLB;
-	/*
-	for (Index j=0; j<m; j++) {
-		g_l[j] = mdConLB[j];
-	}
-	*/
+
 
 	//constraint lower bounds
 	double * mdConUB = osinstance->getConstraintUpperBounds();
 	g_u = mdConUB;
-	/*
-	for (Index j=0; j<m; j++) {
-		g_u[j] = mdConUB[j];
-	}
-	*/
+
 
 	return true;
 }//get_bounds_info
@@ -201,7 +184,7 @@ bool IpoptSolver::eval_h(Index n, const Number* x, bool new_x,
 	}
 	else {
 		// return the values. This is a symmetric matrix, fill the lower left triangle only
-		double* objMultipliers = new double[0];
+		double* objMultipliers = new double[1];
 		objMultipliers[0] = obj_factor;
 		sparseHessian = osinstance->calculateLagrangianHessian((double*)x, (double*)lambda, objMultipliers, !new_x, false);
 		values = sparseHessian->hessValues;
@@ -228,7 +211,12 @@ void IpoptSolver::finalize_solution(SolverReturn status,
 	}
 	for (Index i=0; i<n; i++) {
 		printf("z_U[%d] = %e\n", i, z_U[i]);
-	}
+	} IpoptSolver::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
+                             Index& nnz_h_lag, IndexStyleEnum& index_style){
+	// number of variables
+	n = osinstance->getVariableNumber();
+
+	// number of constraints
 
 	printf("\n\nObjective value\n");
 	printf("f(x*) = %e\n", obj_value);
@@ -236,7 +224,7 @@ void IpoptSolver::finalize_solution(SolverReturn status,
 	///////////////////////////////////////
   	int solIdx = 0;
 	ostringstream outStr;
-	double* mdObjValues = new double[0];
+	double* mdObjValues = new double[1];
 	std::string message = "Ipopt solver finishes to the end.";
 	std::string solutionDescription = "";	
 
