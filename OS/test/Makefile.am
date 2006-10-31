@@ -94,6 +94,11 @@ if COIN_HAS_LINDO
   unitTest_LDADD += $(LINDOLIB)
 endif
 
+if COIN_HAS_IPOPT
+  AM_CPPFLAGS += -I`$(CYGPATH_W) $(IPOPTINCDIR)` 
+  unitTest_LDADD += $(IPOPTLIB)
+endif
+
 
 if COIN_HAS_ASL
   AM_CPPFLAGS += $(ASL_CPPFLAGS) 

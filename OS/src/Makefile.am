@@ -132,6 +132,11 @@ if COIN_HAS_LINDO
   OSSolverService_LDADD += $(LINDOLIB)
 endif
 
+if COIN_HAS_IPOPT
+  AM_CPPFLAGS += -I`$(CYGPATH_W) $(IPOPTINCDIR)` 
+  OSSolverService_LDADD += $(IPOPTLIB)
+endif
+
 
 if COIN_HAS_ASL
   AM_CPPFLAGS += $(ASL_CPPFLAGS) 

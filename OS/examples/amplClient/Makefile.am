@@ -94,6 +94,11 @@ if COIN_HAS_LINDO
   amplClient_LDADD += $(LINDOLIB)
 endif
 
+if COIN_HAS_IPOPT
+  AM_CPPFLAGS += -I`$(CYGPATH_W) $(IPOPTINCDIR)` 
+  amplClient_LDADD += $(IPOPTLIB)
+endif
+
 
 if COIN_HAS_ASL
   AM_CPPFLAGS += $(ASL_CPPFLAGS) 

@@ -88,7 +88,10 @@ if COIN_HAS_LINDO
   CppADTest_LDADD += $(LINDOLIB)
 endif
 
-
+if COIN_HAS_IPOPT
+  AM_CPPFLAGS += -I`$(CYGPATH_W) $(IPOPTINCDIR)` 
+  CppADTest_LDADD += $(IPOPTLIB)
+endif
 
 
 # This line is necessary to allow VPATH compilation with MS compilers

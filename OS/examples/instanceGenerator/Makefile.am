@@ -82,6 +82,11 @@ if COIN_HAS_GLPK
   instanceGenerator_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
 endif
 
+if COIN_HAS_IPOPT
+  AM_CPPFLAGS += -I`$(CYGPATH_W) $(IPOPTINCDIR)` 
+  instanceGenerator_LDADD += $(IPOPTLIB)
+endif
+
 if COIN_HAS_LINDO
   AM_CPPFLAGS += -I`$(CYGPATH_W) $(LINDOINCDIR)` 
   instanceGenerator_LDADD += $(LINDOLIB)
