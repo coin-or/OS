@@ -14,6 +14,7 @@ OS/configure -text
 OS/configure.ac -text
 OS/data/CppADTest.osil -text
 OS/data/CppADTestLag.osil -text
+OS/data/HS071_NLP.osil -text
 OS/data/Makefile.am -text
 OS/data/afiro.mps -text
 OS/data/afiro.osil -text
