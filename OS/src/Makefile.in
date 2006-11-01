@@ -45,8 +45,9 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 bin_PROGRAMS = OSSolverService$(EXEEXT)
-@COIN_HAS_IPOPT_TRUE@am__append_1 = `cat \
-@COIN_HAS_IPOPT_TRUE@	$(IPOPTLIB)/ipopt_addlibs_cpp.txt` `cat \
+@COIN_HAS_IPOPT_TRUE@am__append_1 = $(ADDLIBS) `cat \
+@COIN_HAS_IPOPT_TRUE@	$(IPOPTLIB)/ipopt_addlibs_cpp.txt` \
+@COIN_HAS_IPOPT_TRUE@	$(ADDLIBS) `cat \
 @COIN_HAS_IPOPT_TRUE@	$(IPOPTLIB)/ipopt_addlibs_f.txt`
 @COIN_HAS_CPX_TRUE@am__append_2 = \
 @COIN_HAS_CPX_TRUE@	-I`$(CYGPATH_W) $(CPXINCDIR)` \
@@ -237,7 +238,7 @@ LIBOBJS = @LIBOBJS@
 # Here we add additional libraries
 # Kipp add the others here
 LIBS = @LIBS@ $(ADDLIBS) `cat \
-	$(COINUTILSOBJDIR)/coinutils_addlibs.txt` `cat \
+	$(COINUTILSOBJDIR)/coinutils_addlibs.txt` $(ADDLIBS) `cat \
 	$(OSOBJDIR)/os_addlibs.txt` $(am__append_1)
 LIBTOOL = @LIBTOOL@
 LIBTOOLM4 = @LIBTOOLM4@

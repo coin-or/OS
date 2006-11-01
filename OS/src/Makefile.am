@@ -75,14 +75,15 @@ OSSolverService_LDADD =  \
 # Here we add additional libraries
 # Kipp add the others here
 LIBS += $(ADDLIBS) `cat $(COINUTILSOBJDIR)/coinutils_addlibs.txt`
-LIBS  += `cat $(OSOBJDIR)/os_addlibs.txt`
+
+LIBS  += $(ADDLIBS) `cat $(OSOBJDIR)/os_addlibs.txt`
 
 if COIN_HAS_IPOPT
-LIBS  += `cat $(IPOPTLIB)/ipopt_addlibs_cpp.txt`
+LIBS  += $(ADDLIBS) `cat $(IPOPTLIB)/ipopt_addlibs_cpp.txt`
 endif
 
 if COIN_HAS_IPOPT
-LIBS  += `cat $(IPOPTLIB)/ipopt_addlibs_f.txt`
+LIBS  += $(ADDLIBS) `cat $(IPOPTLIB)/ipopt_addlibs_f.txt`
 endif
 
 
