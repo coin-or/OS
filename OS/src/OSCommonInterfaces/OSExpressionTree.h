@@ -130,13 +130,14 @@ public:
 	 * @return a map of the variables in the current expression tree.
 	 */
 	std::map<int, int> *getVariableIndiciesMap();
-	
-private:
-
 	/**
 	 * m_bIndexMapGenerated is set to true if getVariableIndiciesMap() has been called
 	 */	
 	bool  m_bIndexMapGenerated;
+
+	
+private:
+
 
 	/**
 	 * XAD is a vector of AD doubles used by

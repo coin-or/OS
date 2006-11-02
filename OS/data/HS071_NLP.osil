@@ -8,9 +8,9 @@
 	<instanceData>
 		<variables numberOfVariables="4">
 			<var name="x1" init="1" lb="1" ub="5"/>
-			<var name="x2" init="4.74299963" lb="1" ub="5"/>
-			<var name="x3" init="3.82114998" lb="1" ub="5"/>
-			<var name="x4" init="1.37940829" lb="1" ub="5"/>
+			<var name="x2" init="5" lb="1" ub="5"/>
+			<var name="x3" init="5" lb="1" ub="5"/>
+			<var name="x4" init="1" lb="1" ub="5"/>
 		</variables>
 		<objectives numberOfObjectives="1">
 			<obj maxOrMin="min" name="Objective Function" numberOfObjCoef="1">

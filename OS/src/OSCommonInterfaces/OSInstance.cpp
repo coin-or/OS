@@ -71,6 +71,7 @@ OSInstance::OSInstance():
 	m_bDuplicateExpressionTreesMap( false),
 	m_bNonLinearStructuresInitialized( false),
 	m_bSparseJacobianCalculated( false),
+	m_iJacValueSize( 0),
 	m_miJacStart( NULL),
 	m_miJacIndex( NULL),
 	m_mdJacValue( NULL),
@@ -1455,7 +1456,8 @@ SparseJacobianMatrix *OSInstance::getJacobianSparsityPattern( ){
 	m_sparseJacMatrix = new SparseJacobianMatrix();
 	// we point to memory already created so don't 
 	// destroy during garbage collection
-	m_sparseJacMatrix->bDeleteArrays = false;	
+	m_sparseJacMatrix->bDeleteArrays = false;
+	m_sparseJacMatrix->valueSize = 	m_iJacValueSize;
 	m_sparseJacMatrix->starts = m_miJacStart;
 	m_sparseJacMatrix->conVals = m_miJacNumConTerms;
 	m_sparseJacMatrix->indexes = m_miJacIndex;
@@ -1635,8 +1637,9 @@ SparseJacobianMatrix *OSInstance::calculateAllConstraintFunctionGradients(double
 			idx = posMapExpTree->first;
 			// we are considering only constraints, not objective function
 			if(idx >= 0){
-				//std::cout << "Getting the gradient for the row indexed by " <<  idx << std::endl;
+				std::cout << "Getting the gradient for the row indexed by !!!!!" <<  idx << std::endl;
 				jac = m_mapExpressionTreesMod[ idx]->calculateGradient(x, allFunctionsEvaluated);
+				std::cout << "Gradient for the row indexed by  calculated !!!!!" <<  idx << std::endl;
 				// check size
 				jstart = m_miJacStart[ idx] + m_miJacNumConTerms[ idx];
 				jend = m_miJacStart[ idx + 1 ];
@@ -1776,9 +1779,10 @@ bool OSInstance::getSparseJacobianFromColumnMajor( ){
 			m_miJacStart[i] += m_miJacStart[i - 1];
 		}	
 	}
-	// dimension miIndex and mdValue here	
-	m_miJacIndex = new int[ m_miJacStart[ iNumRowStarts - 1] ];
-	m_mdJacValue = new double[ m_miJacStart[ iNumRowStarts - 1] ];
+	// dimension miIndex and mdValue here
+	m_iJacValueSize = 	m_miJacStart[ iNumRowStarts - 1];
+	m_miJacIndex = new int[  m_iJacValueSize];
+	m_mdJacValue = new double[ m_iJacValueSize ];
 	// now get the values of the constant terms if there are any
 	if(this->instanceData->linearConstraintCoefficients->numberOfValues > 0){
 		// loop over variables	
@@ -1901,6 +1905,7 @@ std::map<int, int> OSInstance::getAllNonlinearVariablesIndexMap( ){
 	for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
 		// get the index map for the expression tree
 		expTree = posMapExpTree->second;
+		if(expTree->m_bIndexMapGenerated == false)expTree->getVariableIndiciesMap();
 		for(posVarIdx = (*expTree->mapVarIdx).begin(); posVarIdx != (*expTree->mapVarIdx).end(); ++posVarIdx){
 			if( m_mapAllNonlinearVariablesIndex.find( posVarIdx->first) == m_mapAllNonlinearVariablesIndex.end() ){
 			// add the variable to the Lagragian map
@@ -1925,11 +1930,14 @@ std::map<int, int> OSInstance::getAllNonlinearVariablesIndexMap( ){
 SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( ){
 	// fill in the nonzeros in the sparse Hessian
 	if( m_bLagrangianSparseHessianCreated == true) return m_LagrangianSparseHessian;
+	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
 	// get the number of primal variables in the expression tree
 	// the number of lagrangian variables is equal to m_mapExpressionTreesMod.size()s
 	if( m_bAllNonlinearVariablesIndex == false) getAllNonlinearVariablesIndexMap( );
+	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
 	int numVars =  m_mapAllNonlinearVariablesIndex.size();
-	std::map<int, int>::iterator posMap1, posMap2;
+	std::map<int, int>::iterator posMap1, posMap2;	
+
 	// now that we have the dimension create SparseHessianMatrix (upper triangular)
 	m_LagrangianSparseHessian = new SparseHessianMatrix();
 	m_LagrangianSparseHessian->bDeleteArrays = true;
@@ -1966,6 +1974,8 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( ){
 SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double* conMultipliers, 
 	double* objMultipliers, bool allFunctionsEvaluated, bool LagrangianHessianEvaluated){
 	if( LagrangianHessianEvaluated == true) return m_LagrangianSparseHessian;
+	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
+	
 	// initialize everything
 	int i, j;
 	std::map<int, int>::iterator posVarIndexMap;
@@ -2001,7 +2011,8 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double* 
 		// initialize to zero
 		for(i = 0; i < m_iNumberOfNonlinearVariables; i++) m_vdx[i] = 0.;
 		m_vw.reserve( m_mapExpressionTreesMod.size() );
-		m_vdw.reserve( 2*m_iNumberOfNonlinearVariables );
+		m_vdw.reserve( 2*m_iNumberOfNonlinearVariables );	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
+		
 		m_vXITER.reserve( m_iNumberOfNonlinearVariables);
 		m_vH.reserve( m_iNumberOfNonlinearVariables * m_iNumberOfNonlinearVariables );
 		m_bCppADTreesBuilt = true;
@@ -2049,6 +2060,7 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double* 
 SparseHessianMatrix *OSInstance::calculateLagrangianHessianReTape( double* x, double* conMultipliers, 
 	double* objMultipliers, bool allFunctionsEvaluated, bool LagrangianHessianEvaluated){
 	if( LagrangianHessianEvaluated == true) return m_LagrangianSparseHessian;
+	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
 	// initialize everything
 	int i, j;
 	CppAD::AD<double> tmpVal;

@@ -624,6 +624,11 @@ private:
 	 * m_mdObjectiveFunctionValues holds a double array of objective function values -- the size of the array is equal to getObjectiveNumber().  
      */
     double *m_mdObjectiveFunctionValues;
+
+    /**
+	 * m_iJacValueSize is the number of nonzero partial derivates in the Jacobian.  
+     */    
+ 	int m_iJacValueSize;
     
     /**
 	 * m_miJacStart holds a int array of starts for the Jacobian matrix in sparse form (row major).  

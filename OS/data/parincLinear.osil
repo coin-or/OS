@@ -8,8 +8,8 @@
 	</instanceHeader>
 	<instanceData>
 		<variables numberOfVariables="2">
-			<var name="x0"/>
-			<var name="x1"/>
+			<var name="x0" ub = "1000"/>
+			<var name="x1" ub = "1000"/>
 		</variables>
 		<objectives numberOfObjectives="1">
 			<obj name = "Par, Inc. Objective Function" maxOrMin="max" numberOfObjCoef="2">
@@ -19,7 +19,7 @@
 			</obj>
 		</objectives>
 		<constraints numberOfConstraints="4"> 
-			<con name="cutanddye" ub="630" />
+			<con name="cutanddye" lb = "10" ub="630" />
 			<con name="sewing" lb="10" ub="600"/>
 			<con name="finishing" lb="10" ub="708"/>
 			<con lb="10" ub="135"/>

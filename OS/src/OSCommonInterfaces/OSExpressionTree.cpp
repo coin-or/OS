@@ -82,20 +82,27 @@ std::vector<double> OSExpressionTree::calculateGradient( double *x, bool functio
 	// note x is a dense vector
 	if( m_bCppADTreeBuilt == false){
 		// map the variables
+		std::cout << "HERE AM 1 !!!!!!!!!!!!!!" << std::endl;
 		if( m_bIndexMapGenerated == false) getVariableIndiciesMap();
 		m_treeRoot->getVariableIndexMap( mapVarIdx);		
 		// convert the double x vector to an AD vector
 		for(m_mPosVarIdx = (*mapVarIdx).begin(); m_mPosVarIdx != (*mapVarIdx).end(); ++m_mPosVarIdx){
 			m_vXAD.push_back( x[ m_mPosVarIdx->first] );
 		}
+		std::cout << "HERE AM 2 !!!!!!!!!!!!!!" << std::endl;
 		CppAD::Independent( m_vXAD);
 		m_CppADTree = m_treeRoot->constructCppADTree(mapVarIdx, &m_vXAD);
+		std::cout << "HERE AM 3 !!!!!!!!!!!!!!" << std::endl;
 		m_vZ.push_back( m_CppADTree) ;
+		std::cout << "HERE AM 4 !!!!!!!!!!!!!!" << std::endl;
 		f = new CppAD::ADFun<double>(m_vXAD, m_vZ);
+		std::cout << "HERE AM 5 !!!!!!!!!!!!!!" << std::endl;
 		m_bCppADTreeBuilt = true;
 	}
 	if( functionEvaluated == false){ 
+		std::cout << "HERE AM 6 !!!!!!!!!!!!!!" << std::endl;
 		m_vX.clear();
+		std::cout << "HERE AM 7 !!!!!!!!!!!!!!" << std::endl;
 		for(m_mPosVarIdx = (*mapVarIdx).begin(); m_mPosVarIdx != (*mapVarIdx).end(); ++m_mPosVarIdx){
 			m_vX.push_back( x[ m_mPosVarIdx->first] );
 		}
@@ -103,8 +110,11 @@ std::vector<double> OSExpressionTree::calculateGradient( double *x, bool functio
  	std::vector<double> jac( (*mapVarIdx).size() ); 	// Jacobian of f 
    	jac  = (*f).Jacobian( m_vX);	// Jacobian for operation sequence
 	// print the results
+			std::cout << "HERE AM 8 !!!!!!!!!!!!!!" << std::endl;
 	for(m_mPosVarIdx = (*mapVarIdx).begin(); m_mPosVarIdx != (*mapVarIdx).end(); ++m_mPosVarIdx){
-		//std::cout << "Partial with respect to " <<  m_mPosVarIdx->first << "  computed by CppAD = " << jac[ m_mPosVarIdx->second] << std::endl;
+		std::cout << "INDEX OF JACOBIANN !!!!  " <<  m_mPosVarIdx->second << endl;
+		std::cout << "Partial with respect to !!!!!! " <<  
+		m_mPosVarIdx->first << "  computed by CppAD = " << jac[ m_mPosVarIdx->second] << std::endl;
 	}
 	return jac;
 }//calculateGradient
