@@ -80,40 +80,48 @@ double OSExpressionTree::calculateFunction( double *x, bool functionEvaluated){
 
 std::vector<double> OSExpressionTree::calculateGradient( double *x, bool functionEvaluated){
 	// note x is a dense vector
+	m_bCppADTreeBuilt = false;
+	CppAD::vector< AD<double> > XAD;
+	CppAD::vector< AD<double> > vZ;
+	CppAD::AD<double> CppADTree;
 	if( m_bCppADTreeBuilt == false){
 		// map the variables
-		std::cout << "HERE AM 1 !!!!!!!!!!!!!!" << std::endl;
 		if( m_bIndexMapGenerated == false) getVariableIndiciesMap();
 		m_treeRoot->getVariableIndexMap( mapVarIdx);		
 		// convert the double x vector to an AD vector
 		for(m_mPosVarIdx = (*mapVarIdx).begin(); m_mPosVarIdx != (*mapVarIdx).end(); ++m_mPosVarIdx){
-			m_vXAD.push_back( x[ m_mPosVarIdx->first] );
+			//m_vXAD.push_back( x[ m_mPosVarIdx->first] );
+			XAD.push_back( x[ m_mPosVarIdx->first] );
 		}
-		std::cout << "HERE AM 2 !!!!!!!!!!!!!!" << std::endl;
-		CppAD::Independent( m_vXAD);
-		m_CppADTree = m_treeRoot->constructCppADTree(mapVarIdx, &m_vXAD);
-		std::cout << "HERE AM 3 !!!!!!!!!!!!!!" << std::endl;
-		m_vZ.push_back( m_CppADTree) ;
-		std::cout << "HERE AM 4 !!!!!!!!!!!!!!" << std::endl;
-		f = new CppAD::ADFun<double>(m_vXAD, m_vZ);
-		std::cout << "HERE AM 5 !!!!!!!!!!!!!!" << std::endl;
+		//CppAD::Independent( m_vXAD);
+		CppAD::Independent( XAD);
+		//m_CppADTree = m_treeRoot->constructCppADTree(mapVarIdx, &m_vXAD);
+		CppADTree = m_treeRoot->constructCppADTree(mapVarIdx, &XAD);
+		//CppADTree = XAD[0]*XAD[0] +  3*XAD[1]*XAD[1] + XAD[2]*XAD[2] +  XAD[3]*XAD[3];
+		std::cout << "CppADTree VALUE =  " <<  CppADTree  << std::endl;
+		//m_vZ.push_back( m_CppADTree) ;
+		vZ.push_back(CppADTree) ;
+		//f = new CppAD::ADFun<double>(m_vXAD, m_vZ);
+		f = new CppAD::ADFun<double>(XAD, vZ);
 		m_bCppADTreeBuilt = true;
 	}
+	std::vector<double> X;
 	if( functionEvaluated == false){ 
-		std::cout << "HERE AM 6 !!!!!!!!!!!!!!" << std::endl;
-		m_vX.clear();
-		std::cout << "HERE AM 7 !!!!!!!!!!!!!!" << std::endl;
+		//m_vX.clear();
 		for(m_mPosVarIdx = (*mapVarIdx).begin(); m_mPosVarIdx != (*mapVarIdx).end(); ++m_mPosVarIdx){
-			m_vX.push_back( x[ m_mPosVarIdx->first] );
+		std::cout << "I AM PUSHING BACK " <<  x[ m_mPosVarIdx->first]   << std::endl;
+			X.push_back( x[ m_mPosVarIdx->first] );
 		}
 	}
  	std::vector<double> jac( (*mapVarIdx).size() ); 	// Jacobian of f 
-   	jac  = (*f).Jacobian( m_vX);	// Jacobian for operation sequence
+ 	m_vY = (*f).Forward(0, X);
+   	jac  = (*f).Jacobian( X);	// Jacobian for operation sequence
 	// print the results
-			std::cout << "HERE AM 8 !!!!!!!!!!!!!!" << std::endl;
+			std::cout << "FUNCTION VALUE  =  " <<  m_vY[ 0]  << std::endl;
+
 	for(m_mPosVarIdx = (*mapVarIdx).begin(); m_mPosVarIdx != (*mapVarIdx).end(); ++m_mPosVarIdx){
-		std::cout << "INDEX OF JACOBIANN !!!!  " <<  m_mPosVarIdx->second << endl;
-		std::cout << "Partial with respect to !!!!!! " <<  
+		std::cout << "INDEX OF JACOBIANN   " <<  m_mPosVarIdx->second << endl;
+		std::cout << "Partial with respect to  " <<  
 		m_mPosVarIdx->first << "  computed by CppAD = " << jac[ m_mPosVarIdx->second] << std::endl;
 	}
 	return jac;

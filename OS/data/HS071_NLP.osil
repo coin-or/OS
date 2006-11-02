@@ -49,22 +49,22 @@
 			</nl>
 			<nl idx="1">
 				<sum>
-					<power>
+					<times>
 						<variable idx="0"/>
-						<number value="2"/>
-					</power>
-					<power>
+						<variable idx="0"/>
+					</times>
+					<times>
 						<variable idx="1"/>
-						<number value="2"/>
-					</power>
-					<power>
 						<variable idx="2"/>
-						<number value="2"/>
-					</power>
-					<power>
+					</times>
+					<times>
+						<variable idx="2"/>
+						<variable idx="2"/>
+					</times>
+					<times>
 						<variable idx="3"/>
-						<number value="2"/>
-					</power>
+						<variable idx="3"/>
+					</times>
 				</sum>
 			</nl>
 		</nonlinearExpressions>

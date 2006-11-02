@@ -1637,9 +1637,8 @@ SparseJacobianMatrix *OSInstance::calculateAllConstraintFunctionGradients(double
 			idx = posMapExpTree->first;
 			// we are considering only constraints, not objective function
 			if(idx >= 0){
-				std::cout << "Getting the gradient for the row indexed by !!!!!" <<  idx << std::endl;
+				m_mapExpressionTreesMod[ idx]->getVariableIndiciesMap(); 
 				jac = m_mapExpressionTreesMod[ idx]->calculateGradient(x, allFunctionsEvaluated);
-				std::cout << "Gradient for the row indexed by  calculated !!!!!" <<  idx << std::endl;
 				// check size
 				jstart = m_miJacStart[ idx] + m_miJacNumConTerms[ idx];
 				jend = m_miJacStart[ idx + 1 ];
