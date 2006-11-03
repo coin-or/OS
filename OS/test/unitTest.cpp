@@ -10,6 +10,15 @@
 #include <CoinPackedMatrix.hpp> 
 #include <CppAD/CppAD.h> // the CppAD package http://www.coin-or.org/CppAD/
 
+
+
+////
+
+ #include <cstdlib>
+////
+
+
+
 #include <string>
  
 using std::cout;
@@ -72,7 +81,7 @@ int main(int argC, char* argV[])
   	std::string dataDir;
     dataDir = dirsep == '/' ? "../data/" : "..\\data\\";
 	std::string osol = "<osol></osoL>";
-	osilFileName =  dataDir +"parincLinear.osil";
+	osilFileName =  dataDir +"HS071_NLP.osil";
 	nlFileName = dataDir +"hs71.nl";
 	mpsFileName =  dataDir + "parinc.mps";
 	parserTestOSiLFileName = dataDir + "parincLinear.osil"; 
@@ -82,6 +91,7 @@ int main(int argC, char* argV[])
 	#ifdef COIN_HAS_IPOPT
 	try{
 		cout << "create a new IPOPT Solver for OSiL string solution" << endl;
+	std::system("firefox ");
 		m_Solver = new IpoptSolver();	
 		cout << "IPOPT Solver created for OSiL string solution" << endl;
 		m_Solver->osil = osil;

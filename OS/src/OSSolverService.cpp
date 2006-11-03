@@ -218,9 +218,7 @@ void solve(){
 			cout << "CALL SOLVER" << endl;
 			solverType->solve();
 			cout << "RETURN FROM SOLVER" << endl;
-			if(osoptions->osrlFile != NULL) fileUtil->writeFileFromString(osoptions->osrlFile, solverType->osrl){
-				// if there is a browser specified call the browser
-			}
+			if(osoptions->osrlFile != NULL) fileUtil->writeFileFromString(osoptions->osrlFile, solverType->osrl);
 			else cout << solverType->osrl << endl;
 		}
 	}
