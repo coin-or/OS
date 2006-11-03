@@ -1000,6 +1000,7 @@ std::map<int, OSExpressionTree*> OSInstance::getAllNonlinearExpressionTrees(){
 	m_iConstraintNumberNonlinear = 0;
 	int i;
 	int index;
+	// kipp -- what should we return if instanceData->nonlinearExpressions->numberOfNonlinearExpressions is zero
 	for(i = 0; i < instanceData->nonlinearExpressions->numberOfNonlinearExpressions; i++){
 		index = instanceData->nonlinearExpressions->nl[ i]->idx;
 		//if(foundIdx.find( index) != foundIdx.end() ){ 
@@ -1571,8 +1572,7 @@ double OSInstance::calculateFunctionValue(int idx, double *x, bool functionEvalu
 			}	
 			// add in the constraint function constant
 			dvalue += m_mdConstraintConstants[ idx ];
-			*(m_mdConstraintFunctionValues + idx) = dvalue;
-			return *(m_mdConstraintFunctionValues + idx);
+			return dvalue;
 		}
 		else{ // we have an objective function
 			if( functionEvaluated == true) return *(m_mdObjectiveFunctionValues + ( abs( idx) - 1));
@@ -1606,7 +1606,8 @@ double *OSInstance::calculateAllConstraintFunctionValues( double* x, bool allFun
 	// loop over all constraints
 	for(idx = 0; idx < numConstraints; idx++){
 		// calculateFunctionValue will define *(m_mdConstraintFunctionValues + idx)
-		calculateFunctionValue(idx, x, false);	
+		m_mdConstraintFunctionValues[ idx]  = calculateFunctionValue(idx, x, false);	
+		std::cout << "m_mdConstraintFunctionValues[ idx]  !!!!!!!"  << m_mdConstraintFunctionValues[ idx] << std::endl;
 	}
 	return m_mdConstraintFunctionValues;
 }//calculateAllConstraintFunctionValues

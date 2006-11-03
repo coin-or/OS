@@ -43,9 +43,11 @@ IpoptSolver::~IpoptSolver() {
 
 // returns the size of the problem
 bool IpoptSolver::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
-                             Index& nnz_h_lag, IndexStyleEnum& index_style){
-		cout << "GOT TO CALLBACK 1 !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << endl;
-	// number of objectives
+                             Index& nnz_h_lag, IndexStyleEnum& index_style)
+{
+  ////
+  
+  	// number of objectives
 	if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Ipopt NEEDS AN OBJECTIVE FUNCTION");
                              	
 	// number of variables
@@ -67,29 +69,27 @@ bool IpoptSolver::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 	cout << "nnz_h_lag  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_h_lag << endl;	
 	// use the C style indexing (0-based)
 	index_style = TNLP::C_STYLE;
+  
+  /////
 
-	return true;	if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Ipopt NEEDS AN OBJECTIVE FUNCTION");
-	
+  return true;
 }//get_nlp_info
 
-// returns the variable bounds
+
 bool IpoptSolver::get_bounds_info(Index n, Number* x_l, Number* x_u,
                                 Index m, Number* g_l, Number* g_u){
-		cout << "CALL BACK 2 !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << endl;
-	//variables lower bounds
+ 	int i; 
 	double * mdVarLB = osinstance->getVariableLowerBounds();
-		cout << "CALL BACK 2.1 !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << endl;
-	x_l = mdVarLB;
-	cout << "CALL BACK 2.2 !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << endl;
+
 	// variables upper bounds
 	double * mdVarUB = osinstance->getVariableUpperBounds();
-	x_u = mdVarUB;
-	for(int i = 0; i < n; i++){
+
+	for(i = 0; i < n; i++){
+		x_l[ i] = mdVarLB[ i];
+		x_u[ i] = mdVarUB[ i];
 		cout << "x_l !!!!!!!!!!!!!!!!!!!!!!!!!!!" << x_l[i] << endl;
 		cout << "x_u !!!!!!!!!!!!!!!!!!!!!!!!!!!" << x_u[i] << endl;
 	}
-
-	cout << "CALL BACK 2.3 !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << endl;
 	// Ipopt interprets any number greater than nlp_upper_bound_inf as
 	// infinity. The default value of nlp_upper_bound_inf and nlp_lower_bound_inf
 	// is 1e19 and can be changed through ipopt options.
@@ -97,58 +97,67 @@ bool IpoptSolver::get_bounds_info(Index n, Number* x_l, Number* x_u,
 
 	//constraint lower bounds
 	double * mdConLB = osinstance->getConstraintLowerBounds();
-	g_l = mdConLB;
-
-
 	//constraint upper bounds
 	double * mdConUB = osinstance->getConstraintUpperBounds();
-	g_u = mdConUB;
+	
 	for(int i = 0; i < m; i++){
+		g_l[ i] = mdConLB[ i];
+		g_u[ i] = mdConUB[ i];
 		cout << "lower !!!!!!!!!!!!!!!!!!!!!!!!!!!" << g_l[i] << endl;
 		cout << "upper !!!!!!!!!!!!!!!!!!!!!!!!!!!" << g_u[i] << endl;
-	}
-
-	cout << "FINISHED CALL BACK 2 !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << endl;
-	return true;
+	}  
+  	return true;
 }//get_bounds_info
 
 
 // returns the initial point for the problem
 bool IpoptSolver::get_starting_point(Index n, bool init_x, Number* x,
-                                   bool init_z, Number* z_L, Number* z_U,
-                                   Index m, bool init_lambda,
-                                   Number* lambda){
-		cout << "CALL BACK 3 !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << endl;
-	// Here, we assume we only have starting values for x, if you code
-	// your own NLP, you can provide starting values for the dual variables
-	// if you wish
-	//assert(init_x == true);
-	//assert(init_z == false);
-	//assert(init_lambda == false);
-
-    double * mdXInit = osinstance->getVariableInitialValues();
-	x = mdXInit;
-	return true;
+     bool init_z, Number* z_L, Number* z_U, Index m, bool init_lambda,
+     Number* lambda) {
+  	// Here, we assume we only have starting values for x, if you code
+  	// your own NLP, you can provide starting values for the dual variables
+  	// if you wish
+  	assert(init_x == true);
+  	assert(init_z == false);
+  	assert(init_lambda == false);
+  	int i;
+ 	double *mdXInit = osinstance->getVariableInitialValues(); 
+ 	if( mdXInit == NULL) {
+ 		for(i = 0; i < n; i++){
+ 			x[ i] = mdXInit[ i];	
+ 		}	
+ 	}
+ 	else{
+ 		for(i = 0; i < n; i++){
+ 			x[ i] = 1.7171;
+ 		}
+ 	}
+  	return true;
 }//get_starting_point
 
 // returns the value of the objective function
 bool IpoptSolver::eval_f(Index n, const Number* x, bool new_x, Number& obj_value){
-	cout << "CALL BACK 4 !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << endl;
-	obj_value = osinstance->calculateFunctionValue(-1, (double*)x, !new_x);
-	return true;
-}//eval_f
 
-// return the gradient of the objective function grad_{x} f(x)
+	obj_value = osinstance->calculateFunctionValue(-1, (double*)x, !new_x);
+  	return true;
+}
+
 bool IpoptSolver::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f){
-  	cout << "CALL BACK 5 !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << endl;
-	grad_f = osinstance->calculateObjectiveFunctionGradient(-1, (double*)x, !new_x, false);
-	return true;
-}//eval_grad_fcout 
+ 	int i;
+  	double *objGrad = osinstance->calculateObjectiveFunctionGradient(-1, (double*)x, false, false);
+  	for(i = 0; i < n; i++){
+  		grad_f[ i]  = objGrad[ i];
+  	}
+  	return true;
+}//eval_grad_f
 
 // return the value of the constraints: g(x)
-bool IpoptSolver::eval_g(Index n, const Number* x, bool new_x, Index m, Number* g){
-	cout << "CALL BACK 6 !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << endl;
-	g = osinstance->calculateAllConstraintFunctionValues((double*)x, !new_x);
+bool IpoptSolver::eval_g(Index n, const Number* x, bool new_x, Index m, Number* g) {
+ 	double *conVals = osinstance->calculateAllConstraintFunctionValues((double*)x, false);
+ 	int i;
+ 	for(i = 0; i < m; i++){
+ 		g[i] = conVals[ i]  ;
+ 	} 
 	return true;
 }//eval_g
 
@@ -156,10 +165,9 @@ bool IpoptSolver::eval_g(Index n, const Number* x, bool new_x, Index m, Number* 
 bool IpoptSolver::eval_jac_g(Index n, const Number* x, bool new_x,
                            Index m, Index nele_jac, Index* iRow, Index *jCol,
                            Number* values){
-	SparseJacobianMatrix *sparseJacobian;
-	cout << "CALL BACK 6 !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << endl;
+  SparseJacobianMatrix *sparseJacobian;
+
 	if (values == NULL) {
-		cout << "CALL BACK 6.1 !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << endl;
 		// return the structure of the jacobian
 		sparseJacobian = osinstance->getJacobianSparsityPattern();
 		int i = 0;
@@ -175,41 +183,33 @@ bool IpoptSolver::eval_jac_g(Index n, const Number* x, bool new_x,
 		}	
 	}
 	else {
-		cout << "CALL BACK 6.2 !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << endl;
 		// return the values of the jacobian of the constraints
-		double *y = new double[ n];
-		for(int i = 0; i < n; i++){
-			cout << "x" << i <<": " << x[i] <<endl;
-		y[ i] = i + 1;
-		}
 		cout << "new x: " << new_x << endl;
 		cout << "n: " << n << endl;
 		cout << "m: " << m << endl;
 		cout << "nele_jac: " <<  nele_jac << endl;
-		//sparseJacobian = osinstance->calculateAllConstraintFunctionGradients((double*)x, false, false);
-		sparseJacobian = osinstance->calculateAllConstraintFunctionGradients(y, false, false);
-		cout << "CALL BACK 6.3 !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << endl;
-		values = sparseJacobian->values;
-		cout << "CALL BACK 6.4 !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << endl;
+		sparseJacobian = osinstance->calculateAllConstraintFunctionGradients((double*)x, false, false);
+		//values = sparseJacobian->values;
+		for(int i = 0; i < nele_jac; i++){
+			values[ i] = sparseJacobian->values[i];
+			cout << "values[i]:!!!!!!!!!!!!  " <<  values[ i] << endl;		
+		}
 	}
-
-	return true;
+  return true;
 }//eval_jac_g
-
 
 //return the structure or values of the hessian
 bool IpoptSolver::eval_h(Index n, const Number* x, bool new_x,
                        Number obj_factor, Index m, const Number* lambda,
                        bool new_lambda, Index nele_hess, Index* iRow,
                        Index* jCol, Number* values){
+
+//////
 	SparseHessianMatrix *sparseHessian;
-cout << "CALL HESS  7 !!!!!!!!!!!!!!!!!!!!!!!!!!!"   << endl;
+	int i, j;
 	if (values == NULL) {
 		// return the structure. This is a symmetric matrix, fill the lower left triangle only.
-cout << "CALL HESS  7.1 !!!!!!!!!!!!!!!!!!!!!!!!!!!"   << endl;
 		sparseHessian = osinstance->getLagrangianHessianSparsityPattern( );
-
-		int i, j;
 		for(i = 0; i < nele_hess; i++){
 			iRow[i] = *(sparseHessian->hessColIdx + i);
 			jCol[i] = *(sparseHessian->hessRowIdx + i);
@@ -221,44 +221,41 @@ cout << "CALL HESS  7.1 !!!!!!!!!!!!!!!!!!!!!!!!!!!"   << endl;
 		// return the values. This is a symmetric matrix, fill the lower left triangle only
 		double* objMultipliers = new double[1];
 		objMultipliers[0] = obj_factor;
-		cout << "CALL HESS  7.2 !!!!!!!!!!!!!!!!!!!!!!!!!!!"   << endl;
 		sparseHessian = osinstance->calculateLagrangianHessian((double*)x, (double*)lambda, objMultipliers, false, false);
-		cout << "CALL HESS  7.3 !!!!!!!!!!!!!!!!!!!!!!!!!!!"   << endl;
-		values = sparseHessian->hessValues;
+		for(i = 0; i < nele_hess; i++){
+			values[ i]  = *(sparseHessian->hessValues + i);
+		}
 	}
-	return true;
+///////
+  return true;
 }//eval_h
 
 void IpoptSolver::finalize_solution(SolverReturn status,
-            Index n, const Number* x, const Number* z_L, const Number* z_U,
-            Index m, const Number* g, const Number* lambda,
-            Number obj_value){
-	// here is where we would store the solution to variables, or write to a file, etc so we could use the solution.
+                                  Index n, const Number* x, const Number* z_L, const Number* z_U,
+                                  Index m, const Number* g, const Number* lambda,
+                                  Number obj_value)
+{
+  // here is where we would store the solution to variables, or write to a file, etc
+  // so we could use the solution.
 
-	// For test, we write the solution to the console
-	/*
-	printf("\n\nSolution of the primal variables, x\n");
-	for (Index i=0; i<n; i++) {
-		printf("x[%d] = %e\n", i, x[i]);
-	}
+  // For this example, we write the solution to the console
+  printf("\n\nSolution of the primal variables, x\n");
+  for (Index i=0; i<n; i++) {
+    printf("x[%d] = %e\n", i, x[i]);
+  }
 
-	printf("\n\nSolution of the bound multipliers, z_L and z_U\n");
-	for (Index i=0; i<n; i++) {
-		printf("z_L[%d] = %e\n", i, z_L[i]);
-	}
-	for (Index i=0; i<n; i++) {
-		printf("z_U[%d] = %e\n", i, z_U[i]);
-	} IpoptSolver::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
-                             Index& nnz_h_lag, IndexStyleEnum& index_style){
-	// number of variables
-	n = osinstance->getVariableNumber();
+  printf("\n\nSolution of the bound multipliers, z_L and z_U\n");
+  for (Index i=0; i<n; i++) {
+    printf("z_L[%d] = %e\n", i, z_L[i]);
+  }
+  for (Index i=0; i<n; i++) {
+    printf("z_U[%d] = %e\n", i, z_U[i]);
+  }
 
-	// number of constraints
-
-	printf("\n\nObjective value\n");
-	printf("f(x*) = %e\n", obj_value);
-	*/
-	///////////////////////////////////////
+  printf("\n\nObjective value\n");
+  printf("f(x*) = %e\n", obj_value);
+  
+///////////
   	int solIdx = 0;
 	ostringstream outStr;
 	double* mdObjValues = new double[1];
@@ -361,8 +358,9 @@ void IpoptSolver::finalize_solution(SolverReturn status,
 		osrl = osrlwriter->writeOSrL( osresult);
 		throw ;
 	}
+//////////
+}
 
-}//finalize_solution
 
 void IpoptSolver::solve() throw (ErrorClass) {
 	OSiLReader* osilreader = NULL; 

@@ -78,13 +78,7 @@ LIBS += $(ADDLIBS) `cat $(COINUTILSOBJDIR)/coinutils_addlibs.txt`
 
 LIBS  += $(ADDLIBS) `cat $(OSOBJDIR)/os_addlibs.txt`
 
-if COIN_HAS_IPOPT
-LIBS  += $(ADDLIBS) `cat $(IPOPTLIB)/ipopt_addlibs_cpp.txt`
-endif
 
-if COIN_HAS_IPOPT
-LIBS  += $(ADDLIBS) `cat $(IPOPTLIB)/ipopt_addlibs_f.txt`
-endif
 
 
 ########################################################################

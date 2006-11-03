@@ -72,7 +72,9 @@ AM_CPPFLAGS =\
 #LIBS += $(ADDLIBS) `cat $(COINUTILSOBJDIR)/coinutils_addlibs.txt`
 LIBS  += `cat $(OSOBJDIR)/os_addlibs.txt`
 
-
+if COIN_HAS_IPOPT
+LIBS += -l$(F77)
+endif
 
 if COIN_HAS_CPX
   AM_CPPFLAGS += \

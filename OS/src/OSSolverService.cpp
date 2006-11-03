@@ -25,7 +25,9 @@
 #include "LindoSolver.h" 
 #endif 
 
-  
+#ifdef COIN_HAS_IPOPT    
+#include "IpoptSolver.h"
+#endif   
   
 #include "FileUtil.h"  
 #include "CoinSolver.h"
@@ -172,6 +174,7 @@ void solve(){
 		}
 		else{
 			// solve locally
+			// add IPOPT
 			if(osoptions->solverName == NULL ) throw ErrorClass( "a local solver was not specified");
 			if( strstr(osoptions->solverName, "lindo") != NULL) {
 				// we are requesting the Lindo solver
@@ -215,7 +218,9 @@ void solve(){
 			cout << "CALL SOLVER" << endl;
 			solverType->solve();
 			cout << "RETURN FROM SOLVER" << endl;
-			if(osoptions->osrlFile != NULL) fileUtil->writeFileFromString(osoptions->osrlFile, solverType->osrl);
+			if(osoptions->osrlFile != NULL) fileUtil->writeFileFromString(osoptions->osrlFile, solverType->osrl){
+				// if there is a browser specified call the browser
+			}
 			else cout << solverType->osrl << endl;
 		}
 	}

@@ -72,7 +72,7 @@ int main(int argC, char* argV[])
   	std::string dataDir;
     dataDir = dirsep == '/' ? "../data/" : "..\\data\\";
 	std::string osol = "<osol></osoL>";
-	osilFileName =  dataDir +"HS071_NLP_old.osil";
+	osilFileName =  dataDir +"parincLinear.osil";
 	nlFileName = dataDir +"hs71.nl";
 	mpsFileName =  dataDir + "parinc.mps";
 	parserTestOSiLFileName = dataDir + "parincLinear.osil"; 
@@ -92,9 +92,9 @@ int main(int argC, char* argV[])
 		cout << "Here is the IPOPT solver solution" << endl;
 		cout << m_Solver->osrl << endl;
 		m_Solver->osinstance = NULL;
-		delete m_Solver;
+		//delete m_Solver;
 		m_Solver = NULL;
-		return 0;
+		//return 0;
 		
 	}
 	catch(const ErrorClass& eclass){
@@ -124,7 +124,7 @@ int main(int argC, char* argV[])
 		cout << "OSrL =  " <<  m_Solver->osrl <<  endl;
 		cout << endl << endl << endl;
 		cout << "Sorry Unit Test Failed Testing the Cbc Solver" << endl;
-		//return 0;
+		return 0;
 	}
 	#ifdef COIN_HAS_LINDO
 	try{
