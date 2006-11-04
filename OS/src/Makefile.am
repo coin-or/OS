@@ -147,7 +147,7 @@ endif
 
 
 if USEWSOCKLIB
-  ADDLIBS += $(WINSOCKLIB)
+# ADDLIBS += $(WINSOCKLIB)
 endif
 
 
