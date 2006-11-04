@@ -41,7 +41,7 @@
 #elif defined nan
 	#define OSNAN nan
 #else	
-	#define OSNAN -88384983094280
+	#define OSNAN -883849830
 #endif
 
 #ifdef DBL_MAX
