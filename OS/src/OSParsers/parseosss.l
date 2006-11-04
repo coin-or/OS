@@ -212,7 +212,7 @@ browserState (on|off)
 	} 
 }
 
-(-browser{xmlwhitespace}+{browserState}) {
+(-browser{xmlwhitespace}+{optionValue}) {
 	if(osoptions->browser == NULL){
 		printf("Found option:  %s\n", ossstext);  
 		char *ch = strdup(ossstext);

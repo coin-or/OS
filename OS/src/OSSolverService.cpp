@@ -18,11 +18,6 @@
 #include <OsiClpSolverInterface.hpp> 
 #include <CoinMessageHandler.hpp>
 #include "OSConfig.h" 
-
-/////
-
-#include <cstdlib>
-////   
  
 #ifdef COIN_HAS_LINDO
 #include "LindoSolver.h" 
@@ -209,7 +204,7 @@ void solve(){
 								solverType->m_sSolverName = "glpk";
 							}
 							else{
-								throw ErrorClass( "a supported solver is not present");;
+								throw ErrorClass( "a supported solver is not present");
 							}
 						}
 					}
@@ -223,7 +218,20 @@ void solve(){
 			cout << "RETURN FROM SOLVER" << endl;
 			if(osoptions->osrlFile != NULL){
 				fileUtil->writeFileFromString(osoptions->osrlFile, solverType->osrl);
-				std::system("/Applications/Firefox.app/Contents/MacOS/firefox" );
+				//char *ch1 = "/Applications/Firefox.app/Contents/MacOS/firefox  ";
+				//const char *ch2 ="aadfafadfaf";
+      			//std::cout << strcat(ch1, ch2) << std::endl;
+		
+	
+				//const char *ch1 = "/Applications/Firefox.app/Contents/MacOS/firefox  ";
+				const char *ch1 = osoptions->browser;
+				char *ch2;
+      			ch2 = new char[strlen( ch1) + strlen(osoptions->osrlFile) + 2];
+      			ch2 = strcpy(ch2, ch1);	
+      			char const *ch3  = " ";
+      			ch2 = strcat(ch2, ch3);
+      			ch2 = strcat(ch2, osoptions->osrlFile);
+				std::system(ch2  );
 			}
 			else cout << solverType->osrl << endl;
 		}
