@@ -19,7 +19,10 @@
 #include <CoinMessageHandler.hpp>
 #include "OSConfig.h" 
 
-   
+/////
+
+#include <cstdlib>
+////   
  
 #ifdef COIN_HAS_LINDO
 #include "LindoSolver.h" 
@@ -218,7 +221,10 @@ void solve(){
 			cout << "CALL SOLVER" << endl;
 			solverType->solve();
 			cout << "RETURN FROM SOLVER" << endl;
-			if(osoptions->osrlFile != NULL) fileUtil->writeFileFromString(osoptions->osrlFile, solverType->osrl);
+			if(osoptions->osrlFile != NULL){
+				fileUtil->writeFileFromString(osoptions->osrlFile, solverType->osrl);
+				std::system("/Applications/Firefox.app/Contents/MacOS/firefox" );
+			}
 			else cout << solverType->osrl << endl;
 		}
 	}
@@ -302,7 +308,9 @@ void retrieve(){
 	fileUtil = new FileUtil();
 	osagent = new OSSolverAgent( osoptions->serviceLocation );
 	std::string sOSrL = osagent->retrieve( osoptions->osol);
-	if(osoptions->osrlFile != NULL) fileUtil->writeFileFromString(osoptions->osrlFile, sOSrL);
+	if(osoptions->osrlFile != NULL) {
+		fileUtil->writeFileFromString(osoptions->osrlFile, sOSrL); 
+	}
 	else cout << sOSrL << endl;
 }//end retrieve
 

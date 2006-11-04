@@ -14,7 +14,7 @@
 
 ////
 
- #include <cstdlib>
+
 ////
 
 
@@ -59,7 +59,7 @@ using std::endl;
 
 int main(int argC, char* argV[])
 {
-	cout << "START UNIT TEST" << endl; 
+	cout << "START UNIT TEST" << endl;
 	//char *xmlFile; 
 	//xmlFile = argV[ 1];
 	// define the classes
@@ -91,7 +91,6 @@ int main(int argC, char* argV[])
 	#ifdef COIN_HAS_IPOPT
 	try{
 		cout << "create a new IPOPT Solver for OSiL string solution" << endl;
-	std::system("firefox ");
 		m_Solver = new IpoptSolver();	
 		cout << "IPOPT Solver created for OSiL string solution" << endl;
 		m_Solver->osil = osil;
