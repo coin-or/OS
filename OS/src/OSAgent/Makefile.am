@@ -41,6 +41,8 @@ if USEWSOCKLIB
   				  -I ../include \
   				  -I ../PlatformSDK/include
   				  
+  ADDLIBS += $(WINSOCKLIB)
+  				  
 endif
 
 # This line is necessary to allow VPATH compilation with MS compilers
