@@ -49,7 +49,7 @@ host_triplet = @host@
 @USEWSOCKLIB_TRUE@  				  -I ../include \
 @USEWSOCKLIB_TRUE@  				  -I ../PlatformSDK/include
 
-@USEWSOCKLIB_TRUE@am__append_2 = $(WINSOCKLIB)
+@USEWSOCKLIB_TRUE@am__append_2 = $(WINSOCKLIB)			  
 subdir = src/OSAgent
 DIST_COMMON = $(include_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in

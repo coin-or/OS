@@ -3769,7 +3769,7 @@ fi
 
 
 
- WINSOCKLIB=$wsock32
+ WINSOCKLIB="$wsock32"
 
 # Initialize automake and libtool
 

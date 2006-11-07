@@ -73,7 +73,7 @@ AM_CPPFLAGS =\
 LIBS  += `cat $(OSOBJDIR)/os_addlibs.txt`
 
 if COIN_HAS_IPOPT
-LIBS += -l$(F77)
+#LIBS += -l$(F77)
 endif
 
 if COIN_HAS_CPX
@@ -98,7 +98,7 @@ endif
 
 if COIN_HAS_IPOPT
   AM_CPPFLAGS += -I`$(CYGPATH_W) $(IPOPTINCDIR)` 
-  unitTest_LDADD += $(IPOPTLIB)
+  unitTest_LDADD += $(IPOPTLIB) 
 endif
 
 

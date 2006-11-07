@@ -88,7 +88,7 @@ esac
  
  AC_SUBST(WINSOCKLIB)
  
- WINSOCKLIB=$wsock32
+ WINSOCKLIB="$wsock32"
 
 # Initialize automake and libtool
 AC_COIN_INIT_AUTO_TOOLS

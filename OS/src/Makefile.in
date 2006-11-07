@@ -60,7 +60,6 @@ bin_PROGRAMS = OSSolverService$(EXEEXT)
 @COIN_HAS_IPOPT_TRUE@am__append_7 = $(IPOPTLIB)
 @COIN_HAS_ASL_TRUE@am__append_8 = $(ASL_CPPFLAGS) 
 @COIN_HAS_ASL_TRUE@am__append_9 = $(ASLLIB)
-@USEWSOCKLIB_TRUE@am__append_10 = $(WINSOCKLIB)
 subdir = src
 DIST_COMMON = $(include_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -94,14 +93,29 @@ am__DEPENDENCIES_2 =
 @COIN_HAS_LINDO_TRUE@am__DEPENDENCIES_3 = $(am__DEPENDENCIES_2)
 @COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_4 = $(am__DEPENDENCIES_2)
 @COIN_HAS_ASL_TRUE@am__DEPENDENCIES_5 = $(am__DEPENDENCIES_2)
-OSSolverService_DEPENDENCIES = $(OSOBJDIR)/src/libOS.la \
-	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
-	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
-	$(CBCOBJDIR)/src/libCbc.la $(CGLOBJDIR)/src/libCgl.la \
-	$(OSIOBJDIR)/src/libOsi.la $(CLPOBJDIR)/src/libClp.la \
-	$(COINUTILSOBJDIR)/src/libCoinUtils.la $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_3) $(am__DEPENDENCIES_4) \
-	$(am__DEPENDENCIES_5)
+@USEWSOCKLIB_FALSE@OSSolverService_DEPENDENCIES =  \
+@USEWSOCKLIB_FALSE@	$(OSOBJDIR)/src/libOS.la \
+@USEWSOCKLIB_FALSE@	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
+@USEWSOCKLIB_FALSE@	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
+@USEWSOCKLIB_FALSE@	$(CBCOBJDIR)/src/libCbc.la \
+@USEWSOCKLIB_FALSE@	$(CGLOBJDIR)/src/libCgl.la \
+@USEWSOCKLIB_FALSE@	$(OSIOBJDIR)/src/libOsi.la \
+@USEWSOCKLIB_FALSE@	$(CLPOBJDIR)/src/libClp.la \
+@USEWSOCKLIB_FALSE@	$(COINUTILSOBJDIR)/src/libCoinUtils.la \
+@USEWSOCKLIB_FALSE@	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_3) \
+@USEWSOCKLIB_FALSE@	$(am__DEPENDENCIES_4) $(am__DEPENDENCIES_5)
+@USEWSOCKLIB_TRUE@OSSolverService_DEPENDENCIES =  \
+@USEWSOCKLIB_TRUE@	$(OSOBJDIR)/src/libOS.la \
+@USEWSOCKLIB_TRUE@	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
+@USEWSOCKLIB_TRUE@	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
+@USEWSOCKLIB_TRUE@	$(CBCOBJDIR)/src/libCbc.la \
+@USEWSOCKLIB_TRUE@	$(CGLOBJDIR)/src/libCgl.la \
+@USEWSOCKLIB_TRUE@	$(OSIOBJDIR)/src/libOsi.la \
+@USEWSOCKLIB_TRUE@	$(CLPOBJDIR)/src/libClp.la \
+@USEWSOCKLIB_TRUE@	$(COINUTILSOBJDIR)/src/libCoinUtils.la \
+@USEWSOCKLIB_TRUE@	$(am__DEPENDENCIES_2) $(am__DEPENDENCIES_1) \
+@USEWSOCKLIB_TRUE@	$(am__DEPENDENCIES_3) $(am__DEPENDENCIES_4) \
+@USEWSOCKLIB_TRUE@	$(am__DEPENDENCIES_5)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
@@ -135,7 +149,7 @@ CTAGS = ctags
 DIST_SUBDIRS = $(SUBDIRS)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
-ADDLIBS = @ADDLIBS@ $(am__append_10)
+ADDLIBS = @ADDLIBS@
 ADD_CFLAGS = @ADD_CFLAGS@
 ADD_CXXFLAGS = @ADD_CXXFLAGS@
 ALWAYS_FALSE_FALSE = @ALWAYS_FALSE_FALSE@
@@ -358,15 +372,29 @@ SUBDIRS = OSUtils OSAgent OSCommonInterfaces OSModelInterfaces \
 
 # List all source files for this executable, including headers
 OSSolverService_SOURCES = OSSolverService.cpp 
+@USEWSOCKLIB_FALSE@OSSolverService_LDADD = $(OSOBJDIR)/src/libOS.la \
+@USEWSOCKLIB_FALSE@	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
+@USEWSOCKLIB_FALSE@	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
+@USEWSOCKLIB_FALSE@	$(CBCOBJDIR)/src/libCbc.la \
+@USEWSOCKLIB_FALSE@	$(CGLOBJDIR)/src/libCgl.la \
+@USEWSOCKLIB_FALSE@	$(OSIOBJDIR)/src/libOsi.la \
+@USEWSOCKLIB_FALSE@	$(CLPOBJDIR)/src/libClp.la \
+@USEWSOCKLIB_FALSE@	$(COINUTILSOBJDIR)/src/libCoinUtils.la \
+@USEWSOCKLIB_FALSE@	$(am__append_3) $(am__append_5) \
+@USEWSOCKLIB_FALSE@	$(am__append_7) $(am__append_9)
 
 # List all additionally required COIN libraries
-OSSolverService_LDADD = $(OSOBJDIR)/src/libOS.la \
-	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
-	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
-	$(CBCOBJDIR)/src/libCbc.la $(CGLOBJDIR)/src/libCgl.la \
-	$(OSIOBJDIR)/src/libOsi.la $(CLPOBJDIR)/src/libClp.la \
-	$(COINUTILSOBJDIR)/src/libCoinUtils.la $(am__append_3) \
-	$(am__append_5) $(am__append_7) $(am__append_9)
+@USEWSOCKLIB_TRUE@OSSolverService_LDADD = $(OSOBJDIR)/src/libOS.la \
+@USEWSOCKLIB_TRUE@	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
+@USEWSOCKLIB_TRUE@	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
+@USEWSOCKLIB_TRUE@	$(CBCOBJDIR)/src/libCbc.la \
+@USEWSOCKLIB_TRUE@	$(CGLOBJDIR)/src/libCgl.la \
+@USEWSOCKLIB_TRUE@	$(OSIOBJDIR)/src/libOsi.la \
+@USEWSOCKLIB_TRUE@	$(CLPOBJDIR)/src/libClp.la \
+@USEWSOCKLIB_TRUE@	$(COINUTILSOBJDIR)/src/libCoinUtils.la \
+@USEWSOCKLIB_TRUE@	$(WINSOCKLIB) $(am__append_3) \
+@USEWSOCKLIB_TRUE@	$(am__append_5) $(am__append_7) \
+@USEWSOCKLIB_TRUE@	$(am__append_9)
 
 ########################################################################
 #                            Additional flags                          #
@@ -393,6 +421,8 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` -I`$(CYGPATH_W) \
 	$(OSSRCDIR)/src/OSCommonInterfaces` $(am__append_1) \
 	$(am__append_2) $(am__append_4) $(am__append_6) \
 	$(am__append_8)
+
+# ADDLIBS += $(WINSOCKLIB)
 OSSolverService_LDFLAGS = -rpath $(libdir)
 
 # This line is necessary to allow VPATH compilation with MS compilers

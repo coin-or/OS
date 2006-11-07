@@ -43,22 +43,23 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 noinst_PROGRAMS = unitTest$(EXEEXT)
-@COIN_HAS_IPOPT_TRUE@am__append_1 = -l$(F77)
-@COIN_HAS_CPX_TRUE@am__append_2 = \
+
+#LIBS += -l$(F77)
+@COIN_HAS_CPX_TRUE@am__append_1 = \
 @COIN_HAS_CPX_TRUE@	-I`$(CYGPATH_W) $(CPXINCDIR)` \
 @COIN_HAS_CPX_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
 
-@COIN_HAS_GLPK_TRUE@am__append_3 = \
+@COIN_HAS_GLPK_TRUE@am__append_2 = \
 @COIN_HAS_GLPK_TRUE@	-I`$(CYGPATH_W) $(GLPKINCDIR)` \
 @COIN_HAS_GLPK_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
 
-@COIN_HAS_GLPK_TRUE@am__append_4 = $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
-@COIN_HAS_LINDO_TRUE@am__append_5 = -I`$(CYGPATH_W) $(LINDOINCDIR)` 
-@COIN_HAS_LINDO_TRUE@am__append_6 = $(LINDOLIB)
-@COIN_HAS_IPOPT_TRUE@am__append_7 = -I`$(CYGPATH_W) $(IPOPTINCDIR)` 
-@COIN_HAS_IPOPT_TRUE@am__append_8 = $(IPOPTLIB)
-@COIN_HAS_ASL_TRUE@am__append_9 = $(ASL_CPPFLAGS) 
-@COIN_HAS_ASL_TRUE@am__append_10 = $(ASLLIB)
+@COIN_HAS_GLPK_TRUE@am__append_3 = $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
+@COIN_HAS_LINDO_TRUE@am__append_4 = -I`$(CYGPATH_W) $(LINDOINCDIR)` 
+@COIN_HAS_LINDO_TRUE@am__append_5 = $(LINDOLIB)
+@COIN_HAS_IPOPT_TRUE@am__append_6 = -I`$(CYGPATH_W) $(IPOPTINCDIR)` 
+@COIN_HAS_IPOPT_TRUE@am__append_7 = $(IPOPTLIB) 
+@COIN_HAS_ASL_TRUE@am__append_8 = $(ASL_CPPFLAGS) 
+@COIN_HAS_ASL_TRUE@am__append_9 = $(ASLLIB)
 subdir = test
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -202,7 +203,7 @@ LIBOBJS = @LIBOBJS@
 # Here we add additional libraries
 # Kipp add the others here
 #LIBS += $(ADDLIBS) `cat $(COINUTILSOBJDIR)/coinutils_addlibs.txt`
-LIBS = @LIBS@ `cat $(OSOBJDIR)/os_addlibs.txt` $(am__append_1)
+LIBS = @LIBS@ `cat $(OSOBJDIR)/os_addlibs.txt`
 LIBTOOL = @LIBTOOL@
 LIBTOOLM4 = @LIBTOOLM4@
 LINDOINCDIR = @LINDOINCDIR@
@@ -303,8 +304,8 @@ unitTest_LDADD = $(OSOBJDIR)/src/libOS.la \
 	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
 	$(CBCOBJDIR)/src/libCbc.la $(CGLOBJDIR)/src/libCgl.la \
 	$(OSIOBJDIR)/src/libOsi.la $(CLPOBJDIR)/src/libClp.la \
-	$(COINUTILSOBJDIR)/src/libCoinUtils.la $(am__append_4) \
-	$(am__append_6) $(am__append_8) $(am__append_10)
+	$(COINUTILSOBJDIR)/src/libCoinUtils.la $(am__append_3) \
+	$(am__append_5) $(am__append_7) $(am__append_9)
 
 # Now add the include paths for compilation
 
@@ -326,9 +327,9 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` -I`$(CYGPATH_W) \
 	$(OSSRCDIR)/src/OSSolverInterfaces` -I`$(CYGPATH_W) \
 	$(OSSRCDIR)/src/OSModelInterfaces` -I`$(CYGPATH_W) \
 	$(CPPADSRCDIR)/..` -I`$(CYGPATH_W) \
-	$(OSSRCDIR)/src/OSCommonInterfaces` $(am__append_2) \
-	$(am__append_3) $(am__append_5) $(am__append_7) \
-	$(am__append_9)
+	$(OSSRCDIR)/src/OSCommonInterfaces` $(am__append_1) \
+	$(am__append_2) $(am__append_4) $(am__append_6) \
+	$(am__append_8)
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin

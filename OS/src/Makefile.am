@@ -59,7 +59,23 @@ bin_PROGRAMS = OSSolverService
 # List all source files for this executable, including headers
 OSSolverService_SOURCES = OSSolverService.cpp 
 
+
+
+
+	
 # List all additionally required COIN libraries
+if USEWSOCKLIB
+OSSolverService_LDADD =  \
+	$(OSOBJDIR)/src/libOS.la \
+	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
+	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
+	$(CBCOBJDIR)/src/libCbc.la \
+	$(CGLOBJDIR)/src/libCgl.la \
+	$(OSIOBJDIR)/src/libOsi.la \
+	$(CLPOBJDIR)/src/libClp.la \
+	$(COINUTILSOBJDIR)/src/libCoinUtils.la \
+	$(WINSOCKLIB)
+else
 OSSolverService_LDADD =  \
 	$(OSOBJDIR)/src/libOS.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
@@ -69,7 +85,7 @@ OSSolverService_LDADD =  \
 	$(OSIOBJDIR)/src/libOsi.la \
 	$(CLPOBJDIR)/src/libClp.la \
 	$(COINUTILSOBJDIR)/src/libCoinUtils.la 
-
+endif
 
 
 # Here we add additional libraries
