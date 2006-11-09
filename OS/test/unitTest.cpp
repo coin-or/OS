@@ -10,15 +10,6 @@
 #include <CoinPackedMatrix.hpp> 
 #include <CppAD/CppAD.h> // the CppAD package http://www.coin-or.org/CppAD/
 
-
-
-////
-
-
-////
-
-
-
 #include <string>
  
 using std::cout;
