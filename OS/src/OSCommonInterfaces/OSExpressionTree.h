@@ -47,7 +47,8 @@ public:
 	
 	/**
 	 * Calculate the expression tree function value given the current variable
-	 * values. If the CppAD expression has been calculated, the
+	 * values using the calculateFunciton method of OSnLNode. 
+	 * If the function has been calculated, the
 	 * method will retrieve it.
 	 * 
 	 * </p>
@@ -57,6 +58,19 @@ public:
 	 * @return the expression tree function value given the current variable values.
 	 */
 	double calculateFunction( double *x, bool functionEvaluated);
+	
+	/**
+	 * Calculate the expression tree function value given the current variable
+	 * values using CppAD. If the function has been calculated, the
+	 * method will retrieve it.
+	 * 
+	 * </p>
+	 * 
+	 * @param x holds the values of the variables in a double array.
+	 * @param functionEvaluated is set to true if the function has already been evaluated.
+	 * @return the expression tree function value given the current variable values.
+	 */
+	double calculateFunctionCppAD( double *x, bool functionEvaluated);
 	
 	
 	/**
@@ -85,11 +99,6 @@ public:
 	 * @return the expression tree Hessian given the current variable values.
 	 */
 	std::vector<double> calculateHessian( double *x, bool functionEvaluated);
-	 
-	std::vector<double> calculateHessianLag( double* x, int xdim, double* y, int ydim,
-		double* z, int zdim, bool functionEvaluated);
-		
-
 
 	/**
 	 * Get a vector of pointers to OSnLNodes that correspond to
