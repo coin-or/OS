@@ -35,10 +35,10 @@ DefaultSolver::DefaultSolver():
 }
 
 DefaultSolver::~DefaultSolver(){
-	#ifdef DEBUG
+	//#ifdef DEBUG
 	cout << "Default Solver destructor called" << endl;
-	#endif
-	cout << "Start Default Solver Destructor" << endl;
+	//#endif
+	//cout << "Start Default Solver Destructor" << endl;
 	/* we do not delete osinstance since it is not newed in any
 	 * of the solvers, it is newed elesewhere and deleted elsewhere
 	 */

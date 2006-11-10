@@ -60,6 +60,7 @@ int main(int argC, char* argV[])
 	#endif 
 	OSmps2osil *mps2osil = NULL;
 	DefaultSolver *m_Solver  = NULL;
+
 	// end classes    
 	std::string osilFileName;
 	std::string nlFileName; 
@@ -73,6 +74,7 @@ int main(int argC, char* argV[])
     dataDir = dirsep == '/' ? "../data/" : "..\\data\\";
 	std::string osol = "<osol></osoL>";
 	osilFileName =  dataDir +"HS071_NLP.osil";
+	//osilFileName =  dataDir +"parincLinear.osil";
 	nlFileName = dataDir +"hs71.nl";
 	mpsFileName =  dataDir + "parinc.mps";
 	parserTestOSiLFileName = dataDir + "parincLinear.osil"; 
@@ -80,33 +82,33 @@ int main(int argC, char* argV[])
 	osil = fileUtil->getFileAsString( &osilFileName[0]);
 	// solve using using the osil file
 	#ifdef COIN_HAS_IPOPT
+	cout << "create a new IPOPT Solver for OSiL string solution" << endl;
+	SmartPtr<IpoptSolver> ipoptSolver  = new IpoptSolver();	
 	try{
-		cout << "create a new IPOPT Solver for OSiL string solution" << endl;
-		m_Solver = new IpoptSolver();	
+
 		cout << "IPOPT Solver created for OSiL string solution" << endl;
-		m_Solver->osil = osil;
-		m_Solver->osol = osol;
-		m_Solver->osinstance = NULL;
+		ipoptSolver->osil = osil;
+		ipoptSolver->osol = osol;
+		ipoptSolver->osinstance = NULL;
 		cout << "call the IPOPT Solver" << endl;
-		m_Solver->solve();
+		ipoptSolver->solve();
 		cout << "Here is the IPOPT solver solution" << endl;
-		cout << m_Solver->osrl << endl;
-		m_Solver->osinstance = NULL;
+		cout << ipoptSolver->osrl << endl;
+		ipoptSolver->osinstance = NULL;
+		// not we do not delete ipoptSolver -- this is a smart pointer
 		//delete m_Solver;
-		m_Solver = NULL;
-		//return 0;
-		
+		//m_Solver = NULL;	
 	}
 	catch(const ErrorClass& eclass){
-		cout << "OSrL =  " <<  m_Solver->osrl <<  endl;
+		cout << "OSrL =  " <<  ipoptSolver->osrl <<  endl;
 		cout << endl << endl << endl;
-		cout << "Sorry Unit Test Failed Testing the Lindo Solver" << endl;
+		cout << "Sorry Unit Test Failed Testing the Ipopt Solver" << endl;
 		return 0;
 	}
 	#endif
-	try{
 		cout << "Create a new COIN Solver" << endl;
 		m_Solver = new CoinSolver();
+	try{
 		m_Solver->m_sSolverName = "cbc";
 		m_Solver->osil = osil;
 		m_Solver->osol = osol;  
@@ -189,8 +191,7 @@ int main(int argC, char* argV[])
 		m_Solver = new LindoSolver();
 		nl2osil = new OSnl2osil( nlFileName);
 		nl2osil->createOSInstance() ;
-		m_Solver->osinstance = nl2osil->osinstance;
-	
+		m_Solver->osinstance = nl2osil->osinstance;	
 		m_Solver->osol = osol;
 		cout << "call LINDO Solve" << endl;
 	  
@@ -201,9 +202,8 @@ int main(int argC, char* argV[])
 		delete m_Solver;
 		m_Solver = NULL;
 		cout << "call delete nl2osil" << endl;
-		//delete nl2osil;
+		delete nl2osil;
 		nl2osil = NULL;	 
-		//return 0;
 #endif
 		cout << "create a COIN Solver for AMPL nl - OSInstance solution" << endl;
 		/*m_Solver = new CoinSolver();

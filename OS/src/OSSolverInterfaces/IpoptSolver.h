@@ -38,12 +38,13 @@
 #include <string>
 # include <CppAD/CppAD.h>
 #include<iostream>
-#include <time.h>  
+#include <time.h>   
 #include<math.h>
 #include<vector>
 #include <map>  
 
 #include "IpTNLP.hpp"
+
 
 using namespace Ipopt;
 
@@ -53,7 +54,8 @@ public:
 
 	IpoptSolver();
 	~IpoptSolver();
-	virtual void  solve() throw(ErrorClass);
+	//virtual void  solve() throw(ErrorClass);
+	virtual void  solve() ;
 	void dataEchoCheck();
 
 	/** IPOpt specific methods for defining the nlp problem */

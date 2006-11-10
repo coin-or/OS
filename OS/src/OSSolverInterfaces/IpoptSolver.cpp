@@ -31,14 +31,14 @@ IpoptSolver::IpoptSolver() {
 }
 
 IpoptSolver::~IpoptSolver() {
-	#ifdef DEBUG
+	//#ifdef DEBUG
 	cout << "inside IpoptSolver destructor" << endl;
-	#endif
+	//#endif
 	delete osrlwriter;
 	osrlwriter = NULL;
-	#ifdef DEBUG
+	//#ifdef DEBUG
 	cout << "leaving IpoptSolver destructor" << endl;
-	#endif
+	//#endif
 }
 
 // returns the size of the problem
@@ -221,7 +221,7 @@ bool IpoptSolver::eval_h(Index n, const Number* x, bool new_x,
 		// return the values. This is a symmetric matrix, fill the lower left triangle only
 		double* objMultipliers = new double[1];
 		objMultipliers[0] = obj_factor;
-		sparseHessian = osinstance->calculateLagrangianHessian((double*)x, (double*)lambda, objMultipliers, false, false);
+		sparseHessian = osinstance->calculateLagrangianHessianReTape((double*)x, (double*)lambda, objMultipliers, false, false);
 		for(i = 0; i < nele_hess; i++){
 			values[ i]  = *(sparseHessian->hessValues + i);
 		}
@@ -362,7 +362,8 @@ void IpoptSolver::finalize_solution(SolverReturn status,
 }
 
 
-void IpoptSolver::solve() throw (ErrorClass) {
+//void IpoptSolver::solve() throw (ErrorClass) {
+void IpoptSolver::solve()  {
 	OSiLReader* osilreader = NULL; 
 	osresult = new OSResult();
 	try{
@@ -390,26 +391,21 @@ void IpoptSolver::solve() throw (ErrorClass) {
 
 		// Create a new instance of IpoptApplication
 		//  (use a SmartPtr, not raw)
-		cout << "GOT TO 1 !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << endl;
 		SmartPtr<IpoptApplication> app = new IpoptApplication();
-		cout << "GOT TO 2 !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << endl;
-
 		// Change some options
 		// Note: The following choices are only examples, they might not be
 		//       suitable for your optimization problem.
 		app->Options()->SetNumericValue("tol", 1e-9);
 		app->Options()->SetStringValue("mu_strategy", "adaptive");
 		app->Options()->SetStringValue("output_file", "ipopt.out");
-		cout << "GOT TO 3 !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << endl;
 		// Intialize the IpoptApplication and process the options
 		app->Initialize();
-		cout << "GOT TO 4 !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << endl;
 		// Ask Ipopt to solve the problem
 		ApplicationReturnStatus status = app->OptimizeTNLP(nlp);
 		if (status != Solve_Succeeded) {
 			throw ErrorClass("Ipopt FAILED TO SOLVE THE PROBLEM");
 		}		
-
+		cout << "GOT TO 4 !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << endl;
 		delete osilreader;
 		osilreader = NULL;
 	}

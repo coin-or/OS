@@ -452,7 +452,7 @@ bool OSnl2osil::createOSInstance(){
 				osinstance->instanceData->nonlinearExpressions->nl[ iNLidx]->osExpressionTree = new OSExpressionTree();
 				osinstance->instanceData->nonlinearExpressions->nl[ iNLidx]->osExpressionTree->m_treeRoot = m_treeRoot;
 				iNLidx++;
-				//cout << m_treeRoot->getNonlinearExpressionInXML() << endl;
+				//std::cout << m_treeRoot->getNonlinearExpressionInXML() << std::endl;
 			}
 		}
 		if(nlo > 0){
@@ -463,7 +463,7 @@ bool OSnl2osil::createOSInstance(){
 				osinstance->instanceData->nonlinearExpressions->nl[ iNLidx]->osExpressionTree = new OSExpressionTree();
 				osinstance->instanceData->nonlinearExpressions->nl[ iNLidx]->osExpressionTree->m_treeRoot = m_treeRoot;
 				iNLidx++;
-				//cout << m_treeRoot->getNonlinearExpressionInXML() << endl;
+				//std::cout << m_treeRoot->getNonlinearExpressionInXML() << std::endl;
 			}
 		}
 
@@ -472,7 +472,6 @@ bool OSnl2osil::createOSInstance(){
 	// end loop of nonlinear rows
 	//    
 	OSiLWriter osilwriter;
-	cout << osilwriter.writeOSiL( osinstance);
-	cout << "DONE WITH OSIL2NL" << endl;
+	//std::cout << osilwriter.writeOSiL( osinstance) << std::endl;
 	return true;
 }

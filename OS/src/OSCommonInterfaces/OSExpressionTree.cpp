@@ -25,20 +25,21 @@ OSExpressionTree::OSExpressionTree():
 	m_treeRoot( NULL),
 	m_bCppADTreeBuilt( false),
 	m_bIndexMapGenerated( false),
-	mapVarIdx( NULL)
+	mapVarIdx( NULL),
+	f(NULL)
 	{
 }//end OSExpressionTree
 
  
 OSExpressionTree::~OSExpressionTree(){
-	//#ifdef DEBUG  
+	#ifdef DEBUG  
 	cout << "Inside the OSExpressionTree Destructor" << endl;
-	//#endif
+	#endif
 	if(m_treeRoot != NULL) delete m_treeRoot;
 	m_treeRoot = NULL;
 	if(mapVarIdx != NULL) delete mapVarIdx;
 	mapVarIdx = NULL;
-	delete f;
+	if(f != NULL) delete f;
 	f = NULL;
 }//end ~OSExpressionTree 
 

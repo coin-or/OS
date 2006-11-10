@@ -190,7 +190,7 @@ OSInstance::~OSInstance(){
 	if( m_bLagrangianExpTreeCreated == false){
 		if( (m_bProcessExpressionTrees == true) && (m_bDuplicateExpressionTreesMap == false)  ) {
 			for(posMapExpTree = m_mapExpressionTrees.begin(); posMapExpTree != m_mapExpressionTrees.end(); ++posMapExpTree){
-				std::cout << "Deleting an expression tree from the map" << std::endl;
+				std::cout << "Deleting an expression tree from the map for row  " << posMapExpTree->first  << std::endl;
 				delete m_mapExpressionTrees[ posMapExpTree->first ];
 			}
 		}
@@ -453,7 +453,7 @@ Nl::Nl(){
 	osExpressionTree = NULL;
 	m_bDeleteExpressionTree = true;
 }//end Nl
-
+ 
  
 Nl::~Nl(){
 	#ifdef DEBUG  
@@ -479,9 +479,11 @@ NonlinearExpressions::NonlinearExpressions():
 NonlinearExpressions::~NonlinearExpressions(){
 	#ifdef DEBUG  
 	cout << "Inside the NonlinearExpressions Destructor" << endl;
+	cout << "NUMBER OF NONLINEAR EXPRESSIONS = " << numberOfNonlinearExpressions << endl;
 	#endif
 	if(numberOfNonlinearExpressions > 0 && nl != NULL){
 		for(int i = 0; i < numberOfNonlinearExpressions; i++){
+			cout << "DESTROYING EXPRESSION " << nl[ i]->idx << endl;
 			delete nl[i];
 			nl[i] = NULL;
 		}
@@ -2063,6 +2065,7 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessianReTape( double* x, do
 	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
 	// initialize everything
 	int i, j;
+	std::cout << "START calculateLagrangianHessianReTape" << std::endl;
 	CppAD::AD<double> tmpVal;
 	std::map<int, int>::iterator posVarIndexMap;
 	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
@@ -2084,8 +2087,7 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessianReTape( double* x, do
 	// declare the independent variables and start recording
 	CppAD::Independent( X);
 	// For expression tree, record the operations for CppAD
-	CppAD::vector< AD<double> > L;
-	L.push_back( 0);
+	CppAD::vector< AD<double> > L( 1);
 	L[ 0] = 0;
 	for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){	
 		tmpVal = (posMapExpTree->second)->m_treeRoot->constructCppADTree(&m_mapAllNonlinearVariablesIndex, &X);
@@ -2104,10 +2106,9 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessianReTape( double* x, do
 	G.Dependent( L);
 	m_vXITER.clear();
 	// get the current iterate data
-	std::cout <<  "LAGRANGIAN VALUE = " << L[ 0]  << std::endl;	
+	//std::cout <<  "LAGRANGIAN VALUE = " << L[ 0]  << std::endl;	
 	std::vector<double> hess( m_iNumberOfNonlinearVariables * m_iNumberOfNonlinearVariables );
 	// get the current iterate
-	m_vXITER.clear();
 	for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
 		m_vXITER.push_back( x[ posVarIndexMap->first] );
 	}
