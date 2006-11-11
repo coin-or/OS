@@ -64,8 +64,14 @@ bool IpoptSolver::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 	cout << "nnz_jac_g  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_jac_g << endl;	
 	// nonzeros in upper hessian
 	
-	SparseHessianMatrix *sparseHessian = osinstance->getLagrangianHessianSparsityPattern();
-	nnz_h_lag = sparseHessian->hessDimension;
+	if(osinstance->getNumberOfNonlinearExpressions() == 0 ) {
+		cout << "This is a linear program"  << endl;
+		nnz_h_lag = 0;
+	}
+	else{
+		SparseHessianMatrix *sparseHessian = osinstance->getLagrangianHessianSparsityPattern();
+		nnz_h_lag = sparseHessian->hessDimension;
+	}
 	cout << "nnz_h_lag  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_h_lag << endl;	
 	// use the C style indexing (0-based)
 	index_style = TNLP::C_STYLE;
@@ -121,8 +127,9 @@ bool IpoptSolver::get_starting_point(Index n, bool init_x, Number* x,
   	assert(init_z == false);
   	assert(init_lambda == false);
   	int i;
+  	cout << "get initial values !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
  	double *mdXInit = osinstance->getVariableInitialValues(); 
- 	if( mdXInit == NULL) {
+ 	if( mdXInit != NULL) {
  		for(i = 0; i < n; i++){
  			x[ i] = mdXInit[ i];	
  		}	
@@ -132,28 +139,39 @@ bool IpoptSolver::get_starting_point(Index n, bool init_x, Number* x,
  			x[ i] = 1.7171;
  		}
  	}
+  	cout << "got initial values !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
   	return true;
 }//get_starting_point
 
 // returns the value of the objective function
 bool IpoptSolver::eval_f(Index n, const Number* x, bool new_x, Number& obj_value){
-
-	obj_value = osinstance->calculateFunctionValue(-1, (double*)x, !new_x);
+ 	//cout << "calculate function value !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  " INDEX = " << n << endl;
+	obj_value = osinstance->calculateFunctionValue(-1, (double*)x, false);
+	//for(int i = 0; i < n; i++) cout << "x[ i] =  !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  x[ i]  << endl;
+	//cout << "calculated function value !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  obj_value  << endl;
   	return true;
 }
 
 bool IpoptSolver::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f){
  	int i;
+ 	//cout << "calculate gradient function !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  " INDEX = " << n << endl;
   	double *objGrad = osinstance->calculateObjectiveFunctionGradient(-1, (double*)x, false, false);
   	for(i = 0; i < n; i++){
-  		grad_f[ i]  = objGrad[ i];
+  		if( osinstance->instanceData->objectives->obj[ 0]->maxOrMin.compare("min") == 0){
+  			grad_f[ i]  = objGrad[ i];
+  		}
+  		else{
+  			grad_f[ i]  = -objGrad[ i];
+  		}
   	}
   	return true;
 }//eval_grad_f
 
 // return the value of the constraints: g(x)
 bool IpoptSolver::eval_g(Index n, const Number* x, bool new_x, Index m, Number* g) {
+	// cout << "get value of constraint !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  " INDEX = " << n << endl;
  	double *conVals = osinstance->calculateAllConstraintFunctionValues((double*)x, false);
+ 	//cout << "got value of constraints !!!!!!!!!!!!!!!!!!!!!!!!!! " <<   endl;
  	int i;
  	for(i = 0; i < m; i++){
  		g[i] = conVals[ i]  ;
@@ -168,6 +186,11 @@ bool IpoptSolver::eval_jac_g(Index n, const Number* x, bool new_x,
   SparseJacobianMatrix *sparseJacobian;
 
 	if (values == NULL) {
+		cout << "get structure of Jacobian !!!!!!!!!!!!!!!!!!!!!!!!!! "  << endl;
+		// return the values of the jacobian of the constraints
+		cout << "n: " << n << endl;
+		cout << "m: " << m << endl;
+		cout << "nele_jac: " <<  nele_jac << endl;
 		// return the structure of the jacobian
 		sparseJacobian = osinstance->getJacobianSparsityPattern();
 		int i = 0;
@@ -183,16 +206,11 @@ bool IpoptSolver::eval_jac_g(Index n, const Number* x, bool new_x,
 		}	
 	}
 	else {
-		// return the values of the jacobian of the constraints
-		cout << "new x: " << new_x << endl;
-		cout << "n: " << n << endl;
-		cout << "m: " << m << endl;
-		cout << "nele_jac: " <<  nele_jac << endl;
 		sparseJacobian = osinstance->calculateAllConstraintFunctionGradients((double*)x, false, false);
 		//values = sparseJacobian->values;
 		for(int i = 0; i < nele_jac; i++){
 			values[ i] = sparseJacobian->values[i];
-			cout << "values[i]:!!!!!!!!!!!!  " <<  values[ i] << endl;		
+			//cout << "values[i]:!!!!!!!!!!!!  " <<  values[ i] << endl;		
 		}
 	}
   return true;
@@ -209,7 +227,9 @@ bool IpoptSolver::eval_h(Index n, const Number* x, bool new_x,
 	int i, j;
 	if (values == NULL) {
 		// return the structure. This is a symmetric matrix, fill the lower left triangle only.
+		cout << "get structure of HESSIAN !!!!!!!!!!!!!!!!!!!!!!!!!! "  << endl;
 		sparseHessian = osinstance->getLagrangianHessianSparsityPattern( );
+		cout << "got structure of HESSIAN !!!!!!!!!!!!!!!!!!!!!!!!!! "  << endl;
 		for(i = 0; i < nele_hess; i++){
 			iRow[i] = *(sparseHessian->hessColIdx + i);
 			jCol[i] = *(sparseHessian->hessRowIdx + i);
@@ -398,6 +418,8 @@ void IpoptSolver::solve()  {
 		app->Options()->SetNumericValue("tol", 1e-9);
 		app->Options()->SetStringValue("mu_strategy", "adaptive");
 		app->Options()->SetStringValue("output_file", "ipopt.out");
+		// see if we have a linear program
+		if(osinstance->getNumberOfNonlinearExpressions() == 0 ) app->Options()->SetStringValue("hessian_approximation", "limited-memory");
 		// Intialize the IpoptApplication and process the options
 		app->Initialize();
 		// Ask Ipopt to solve the problem
@@ -405,7 +427,6 @@ void IpoptSolver::solve()  {
 		if (status != Solve_Succeeded) {
 			throw ErrorClass("Ipopt FAILED TO SOLVE THE PROBLEM");
 		}		
-		cout << "GOT TO 4 !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << endl;
 		delete osilreader;
 		osilreader = NULL;
 	}

@@ -1549,15 +1549,16 @@ bool OSInstance::addQTermsToExressionTree(){
 
 double OSInstance::calculateFunctionValue(int idx, double *x, bool functionEvaluated){
 	try{
-		// make sure the index idx is valid
-		if( getConstraintNumber() <= idx || getObjectiveNumber() <= ( abs( idx) - 1) ) throw 
-			ErrorClass("row or column index not valid in OSInstance::calculateFunctionValue");
+
 		int i, j;
 		double dvalue = 0;
 		// if we have not filled in the Sparse Jacobian matrix do so now
 		if( m_bSparseJacobianCalculated == false) getJacobianSparsityPattern();
 		//
 		if(idx >= 0){ // we have a constraint
+			// make sure the index idx is valid
+			if( getConstraintNumber() <= idx  ) throw 
+			ErrorClass("constraint index not valid in OSInstance::calculateFunctionValue");
 			if( functionEvaluated == true) return *(m_mdConstraintFunctionValues + idx);
 			// get the nonlinear part
 			if( m_mapExpressionTreesMod.find( idx) != m_mapExpressionTreesMod.end() ){
@@ -1569,6 +1570,8 @@ double OSInstance::calculateFunctionValue(int idx, double *x, bool functionEvalu
 			j = m_sparseJacMatrix->starts[ idx + 1 ];
 			//while ( i <  j &&  (i - m_sparseJacMatrix->starts[ idx])  < m_sparseJacMatrix->conVals[ idx] ){
 			while ( (i - m_sparseJacMatrix->starts[ idx])  < m_sparseJacMatrix->conVals[ idx] ){
+				//std::cout << "m_sparseJacMatrix->values[ i] " << m_sparseJacMatrix->values[ i] << std::endl;
+				//std::cout << "m_sparseJacMatrix->indexes[ i] " << m_sparseJacMatrix->indexes[ i] << std::endl;
 				dvalue += m_sparseJacMatrix->values[ i]*x[ m_sparseJacMatrix->indexes[ i] ];
 				i++;
 			}	
@@ -1577,6 +1580,9 @@ double OSInstance::calculateFunctionValue(int idx, double *x, bool functionEvalu
 			return dvalue;
 		}
 		else{ // we have an objective function
+			// make sure the index idx is valid
+			if( getObjectiveNumber() <= ( abs( idx) - 1) ) throw 
+			ErrorClass("objective function index not valid in OSInstance::calculateFunctionValue");
 			if( functionEvaluated == true) return *(m_mdObjectiveFunctionValues + ( abs( idx) - 1));
 			// get the nonlinear part
 			if( m_mapExpressionTreesMod.find( idx) != m_mapExpressionTreesMod.end() ){
@@ -1586,7 +1592,7 @@ double OSInstance::calculateFunctionValue(int idx, double *x, bool functionEvalu
 			SparseVector **objCoef = getObjectiveCoefficients();
 			SparseVector *obj = objCoef[ abs( idx) - 1];
 			for(i = 0; i < obj->number; i++){
-				dvalue += x[ obj->indexes[i]]*obj->values[ i];
+				dvalue += x[ obj->indexes[i]]*(obj->values[ i]);
 			}
 			// add in the objective function constant
 			dvalue += m_mdObjectiveConstants[ abs( idx) - 1 ];
@@ -1608,8 +1614,9 @@ double *OSInstance::calculateAllConstraintFunctionValues( double* x, bool allFun
 	// loop over all constraints
 	for(idx = 0; idx < numConstraints; idx++){
 		// calculateFunctionValue will define *(m_mdConstraintFunctionValues + idx)
+		//std::cout << "Index =  "  << idx  << std::endl;
 		m_mdConstraintFunctionValues[ idx]  = calculateFunctionValue(idx, x, false);	
-		std::cout << "m_mdConstraintFunctionValues[ idx]  !!!!!!!"  << m_mdConstraintFunctionValues[ idx] << std::endl;
+		//std::cout << "m_mdConstraintFunctionValues[ idx]  !!!!!!!"  << m_mdConstraintFunctionValues[ idx] << std::endl;
 	}
 	return m_mdConstraintFunctionValues;
 }//calculateAllConstraintFunctionValues
