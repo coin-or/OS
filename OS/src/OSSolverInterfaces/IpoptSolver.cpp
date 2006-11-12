@@ -64,7 +64,7 @@ bool IpoptSolver::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 	cout << "nnz_jac_g  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_jac_g << endl;	
 	// nonzeros in upper hessian
 	
-	if(osinstance->getNumberOfNonlinearExpressions() == 0 ) {
+	if( (osinstance->getNumberOfNonlinearExpressions() == 0) && (osinstance->getNumberOfQuadraticTerms() == 0) ) {
 		cout << "This is a linear program"  << endl;
 		nnz_h_lag = 0;
 	}
@@ -157,12 +157,7 @@ bool IpoptSolver::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad
  	//cout << "calculate gradient function !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  " INDEX = " << n << endl;
   	double *objGrad = osinstance->calculateObjectiveFunctionGradient(-1, (double*)x, false, false);
   	for(i = 0; i < n; i++){
-  		if( osinstance->instanceData->objectives->obj[ 0]->maxOrMin.compare("min") == 0){
-  			grad_f[ i]  = objGrad[ i];
-  		}
-  		else{
-  			grad_f[ i]  = -objGrad[ i];
-  		}
+  		grad_f[ i]  = objGrad[ i];
   	}
   	return true;
 }//eval_grad_f
@@ -224,7 +219,7 @@ bool IpoptSolver::eval_h(Index n, const Number* x, bool new_x,
 
 //////
 	SparseHessianMatrix *sparseHessian;
-	int i, j;
+	int i;
 	if (values == NULL) {
 		// return the structure. This is a symmetric matrix, fill the lower left triangle only.
 		cout << "get structure of HESSIAN !!!!!!!!!!!!!!!!!!!!!!!!!! "  << endl;
@@ -247,8 +242,22 @@ bool IpoptSolver::eval_h(Index n, const Number* x, bool new_x,
 		}
 	}
 ///////
-  return true;
+  	return true;
 }//eval_h
+
+bool IpoptSolver::get_scaling_parameters(Number& obj_scaling,
+                 	bool& use_x_scaling, Index n,
+                   	Number* x_scaling,
+                    bool& use_g_scaling, Index m,
+                    Number* g_scaling){
+	if( osinstance->instanceData->objectives->obj[ 0]->maxOrMin.compare("min") != 0){
+  		obj_scaling = -1;
+  	}
+    else obj_scaling = 1;
+    use_x_scaling = false;
+    use_g_scaling = false;
+	return true;
+}//get_scaling_parameters
 
 void IpoptSolver::finalize_solution(SolverReturn status,
                                   Index n, const Number* x, const Number* z_L, const Number* z_U,
@@ -419,7 +428,12 @@ void IpoptSolver::solve()  {
 		app->Options()->SetStringValue("mu_strategy", "adaptive");
 		app->Options()->SetStringValue("output_file", "ipopt.out");
 		// see if we have a linear program
-		if(osinstance->getNumberOfNonlinearExpressions() == 0 ) app->Options()->SetStringValue("hessian_approximation", "limited-memory");
+		if( (osinstance->getNumberOfNonlinearExpressions() == 0) && (osinstance->getNumberOfQuadraticTerms() == 0) ) 
+			app->Options()->SetStringValue("hessian_approximation", "limited-memory");
+		// if it is a max problem call scaling and set to -1
+		if( osinstance->instanceData->objectives->obj[ 0]->maxOrMin.compare("min") != 0){
+  			app->Options()->SetStringValue("nlp_scaling_method", "user-scaling");
+  		}
 		// Intialize the IpoptApplication and process the options
 		app->Initialize();
 		// Ask Ipopt to solve the problem
