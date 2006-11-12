@@ -12,6 +12,7 @@ SUBDIRS =
   SUBDIRS += instanceGenerator
   SUBDIRS += osTestCode
   SUBDIRS += CppAD
+  SUBDIRS += osi
 
 
 
