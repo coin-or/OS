@@ -18,10 +18,10 @@ AUTOMAKE_OPTIONS = foreign
 noinst_PROGRAMS = osiTest
 
 # List all source files for this executable, including headers
-osTestCode_SOURCES = osiTest.cpp 
+osiTest_SOURCES = osiTest.cpp 
 
 # List all additionally required COIN libraries
-osTestCode_LDADD =  \
+osiTest_LDADD =  \
 	$(COINUTILSOBJDIR)/src/libCoinUtils.la \
 	$(OSIOBJDIR)/src/libOsi.la \
 	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
@@ -71,7 +71,7 @@ if COIN_HAS_CPX
   AM_CPPFLAGS += \
 	-I`$(CYGPATH_W) $(CPXINCDIR)` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
-  	osTestCode_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+  	osiTest_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 endif
 
 
@@ -79,17 +79,17 @@ if COIN_HAS_GLPK
   AM_CPPFLAGS += \
 	-I`$(CYGPATH_W) $(GLPKINCDIR)` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
-  osTestCode_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
+  osiTest_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
 endif
 
 if COIN_HAS_IPOPT
   AM_CPPFLAGS += -I`$(CYGPATH_W) $(IPOPTINCDIR)` 
-  osTestCode_LDADD += $(IPOPTLIB)
+  osiTest_LDADD += $(IPOPTLIB)
 endif
 
 if COIN_HAS_LINDO
   AM_CPPFLAGS += -I`$(CYGPATH_W) $(LINDOINCDIR)` 
-  osTestCode_LDADD += $(LINDOLIB)
+  osiTest_LDADD += $(LINDOLIB)
 endif
 
 
@@ -100,7 +100,7 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 # Finally, the -rpath flag is used by libtool to make sure that the shared
 # library is found (in the lib install directory) when we are using dynamic
 # libraries.
-osTestCode_LDFLAGS = -rpath $(libdir)
+osiTest_LDFLAGS = -rpath $(libdir)
 
 
 

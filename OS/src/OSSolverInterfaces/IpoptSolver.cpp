@@ -260,7 +260,7 @@ bool IpoptSolver::get_scaling_parameters(Number& obj_scaling,
 }//get_scaling_parameters
 
 void IpoptSolver::finalize_solution(SolverReturn status,
-                                  Index n, const Number* x, const Number* z_L, const Number* z_U,
+                               Index n, const Number* x, const Number* z_L, const Number* z_U,
                                   Index m, const Number* g, const Number* lambda,
                                   Number obj_value)
 {

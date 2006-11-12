@@ -8,8 +8,8 @@
 	</instanceHeader>
 	<instanceData>
 		<variables numberOfVariables="2">
-			<var name="x0" ub = "1000" init="540" />
-			<var name="x1" ub = "1000" init="252"/>
+			<var name="x0" ub = "1000"  />
+			<var name="x1" ub = "1000" />
 		</variables>
 		<objectives numberOfObjectives="1">
 			<obj name = "Par, Inc. Objective Function" maxOrMin="max" numberOfObjCoef="2">
