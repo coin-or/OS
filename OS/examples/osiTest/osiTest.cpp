@@ -1,44 +1,36 @@
-/** @file OSSolverService.cpp
- * 
- * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005
- * @since   OS1.0
- *
- * \remarks
- * Copyright (C) 2005, Robert Fourer, Jun Ma, Kipp Martin,
- * Northwestern University, and the University of Chicago.
- * All Rights Reserved.
- * This software is licensed under the Common Public License. 
- * Please see the accompanying LICENSE file in root directory for terms.
- * 
- */
- 
- // this is test code, e.g. test the parser or a solver, etc. 
- // this is just for playing around, do not confuse it with the unitTest
- 
- 
+// code for modifying an OSInstance
 
-#include <time.h>
+
 #include <iostream>
-#include <ctype.h>
 #include <vector>
 #include <string>
+#include <map>
 
 using std::cout;
 using std::endl;
 
+
+// this is the virtual class that all command classes inherite from
 class ModOSInstance {
 	public:
+	// build a queue of operations to perform
 	virtual void accumulate() = 0;
+	// this method will execute the operations that have been accumulated in the queue
 	virtual void modify() = 0;
+	// opid is an integer that identifies each kind of operation, e.g. delete a constraint,
+	// add a variable etc.
+	int opid;
+	// the constructor and destructor
+	 ModOSInstance(){}
+	virtual	~ModOSInstance(){}
 }; //class ModOSInstance
 
-std::vector<int> conNums;
+// an example command class, delete a bunch of constraints
 class DeleteConstraints : public ModOSInstance{
-	public:
+	private:
 	int conNumber;
-
-	//
+	// this vector holds the list of constraints to delete
+	static std::vector<int> conNums;
 	public:
 	void accumulate( ){
 		conNums.push_back( conNumber);
@@ -54,34 +46,92 @@ class DeleteConstraints : public ModOSInstance{
 	}
 	DeleteConstraints(int conNumber_){
 		conNumber = conNumber_;
+		opid = 1;
 	}
 	DeleteConstraints(){
+	opid = 1;
+	}
+	~DeleteConstraints(){
 	}
 }; //class DeleteConstraints
+// initialize static member conNums
+std::vector<int> DeleteConstraints::conNums;
+
+// an example class, add a bunch of variables
+class AddVariables : public ModOSInstance{
+	private:
+	int varNumber;
+	// a vector that holds the indicies of variables to add
+	static std::vector<int> varNums;
+	//
+	public:
+	void accumulate( ){
+		varNums.push_back( varNumber);
+		cout << "Accumulating a Variable with Index =  " << varNumber << endl;
+	}
+	void modify(){
+		// for now just print out, later we actually do something and add a varible
+		int i;
+		int N = varNums.size();
+		for(i = 0; i < N; i++){
+			cout << "Delete Constraint with Index =  " << varNums[ i] << endl;
+		}
+	}
+	// for now this constructor only takes a variable number. Later
+	// we would take other information such as coeficients of the variable to add.
+	AddVariables(int varNumber_){
+		varNumber = varNumber_;
+		opid = 2;
+	}
+	AddVariables(){
+		opid = 2;
+	}
+	~AddVariables(){
+	}
+}; //class AddVariales
+// initialize static member conNums
+std::vector<int> AddVariables::varNums;
 
 class RunAccumulate {
+	// the vector accum stores operations used to modify the instance
 	std::vector<ModOSInstance*> accum;
 	public:
+	std::map<int, ModOSInstance*> modObjectsMap;
+	// add an object modifier
 	void add( ModOSInstance* osmod){
 		accum.push_back( osmod);
 	}//add
+	//run the accumulate method in each operation
 	void runaccumulate(){
 		std::vector<ModOSInstance*>::iterator iter =  accum.begin();
-		while(iter != accum.end()) (*iter++)->accumulate();
+		while(iter != accum.end()){
+			(*iter)->accumulate();
+			// build a map of object operations that being performed
+			// if the object is not in the map, add ii
+			if( modObjectsMap.find( (*iter)->opid) == modObjectsMap.end() ){
+				modObjectsMap[ (*iter)->opid] = *iter;
+			}
+			iter++;			
+		}
 	}
 };// class RunAccumlate
 
 int main(int argC, char* argV[])
 {
+	std::map<int, ModOSInstance*>::iterator objectPos;
 	RunAccumulate accumulate;
+	// delete some constraints and add some variables
 	accumulate.add( new DeleteConstraints( 11) );
 	accumulate.add( new DeleteConstraints( 19) );
+	accumulate.add( new AddVariables( 1010) );
 	accumulate.add( new DeleteConstraints( 37) );
+	accumulate.add( new AddVariables( 20019) );
 	accumulate.runaccumulate();
-	cout << "HELLO GAIL" << endl;   
-	ModOSInstance *delcon;
-	delcon = new DeleteConstraints();
-	delcon->modify();
+  
+	
+for(objectPos = accumulate.modObjectsMap.begin(); objectPos != accumulate.modObjectsMap.end(); ++objectPos){
+		(objectPos->second)->modify();
+	}
 	return 0;
 }
 
