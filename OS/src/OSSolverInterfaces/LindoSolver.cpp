@@ -831,9 +831,9 @@ bool LindoSolver::processNonlinearExpressions(){
 		if( iNumNonlinearNonz > 0) delete[] padNonlinearNonz; 
 		if(  iInstListLength > 0) delete[] paiInsList; 
 		mapNewNumber.clear();
-		mapNewNumber.~map();
+		//mapNewNumber.~map();
 		allExpTrees.clear();
-		allExpTrees.~map();
+		//allExpTrees.~map();
 		insList.clear();
 		//insList.~vector<int>();
 		postFixVec.clear();

@@ -122,10 +122,12 @@ int  main(){
 	
 		// Now start using the nonlinear API
 		// check function values, both objectives and constraints
+		std::cout << "Call  = calculateAllConstraintFunctionValues"  << std::endl;			
 		double *conVals = osinstance->calculateAllConstraintFunctionValues( &x[0], false);
 		// note: if you just want the value for constraint function indexed by
 		// idx call the method:
 		//calculateFunctionValue(int idx, double *x, bool functionEvaluated)
+		std::cout << "Call  = calculateAllObjectiveFunctionValues"  << std::endl;	
 		double *objVals = osinstance->calculateAllObjectiveFunctionValues( &x[0], false);
 		// note: if you just want the value for the objective function indexed by
 		// idx call the method:

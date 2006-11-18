@@ -75,7 +75,7 @@ int main(int argC, char* argV[])
 	std::string osol = "<osol></osoL>";
 	osilFileName =  dataDir + "parincLinear.osil";
 	//osilFileName =  dataDir + "objOnly.osil";
-	//osilFileName =  dataDir + "HS071_NLP.osil";
+	osilFileName =  dataDir + "HS071_NLP.osil";
 	nlFileName = dataDir + "hs71.nl";
 	mpsFileName =  dataDir + "parinc.mps";
 	parserTestOSiLFileName = dataDir + "parincLinear.osil"; 
@@ -141,7 +141,7 @@ int main(int argC, char* argV[])
 		cout << "Here is the LINDO solver solution" << endl;
 		cout << m_Solver->osrl << endl;
 		m_Solver->osinstance = NULL;
-		delete m_Solver;
+		//delete m_Solver;
 		m_Solver = NULL;
 		
 	}
