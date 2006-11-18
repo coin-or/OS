@@ -81,11 +81,12 @@ double OSExpressionTree::calculateFunctionCppAD( double *x, bool functionEvaluat
 
 double OSExpressionTree::calculateFunction( double *x, bool functionEvaluated){
 	if(functionEvaluated == true){
-		return m_vY[ 0]; 
+		return m_dTreeRootValue; 
 	}
 	else{
-		m_vY[ 0] =  m_treeRoot->calculateFunction( x);
-		return m_vY[ 0];
+		m_dTreeRootValue = m_treeRoot->calculateFunction( x);
+
+		return  m_dTreeRootValue;
 	}
 }//calculateFunction
 

@@ -200,6 +200,11 @@ private:
 	 */		
 	bool m_bCppADTreeBuilt;
 	
+	/**
+	 * m_dTreeRootValue is the function value of the root node
+	 */		
+	double m_dTreeRootValue;
+	
 	
 	
 

@@ -1552,8 +1552,10 @@ double OSInstance::calculateFunctionValue(int idx, double *x, bool functionEvalu
 
 		int i, j;
 		double dvalue = 0;
+		if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
 		// if we have not filled in the Sparse Jacobian matrix do so now
 		if( m_bSparseJacobianCalculated == false) getJacobianSparsityPattern();
+		
 		//
 		if(idx >= 0){ // we have a constraint
 			// make sure the index idx is valid
@@ -1609,6 +1611,7 @@ double OSInstance::calculateFunctionValue(int idx, double *x, bool functionEvalu
 
 double *OSInstance::calculateAllConstraintFunctionValues( double* x, bool allFunctionsEvaluated){
 	if(allFunctionsEvaluated == true) return m_mdConstraintFunctionValues;
+	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
 	int idx, numConstraints;
 	numConstraints = getConstraintNumber();
 	// loop over all constraints
@@ -1623,6 +1626,7 @@ double *OSInstance::calculateAllConstraintFunctionValues( double* x, bool allFun
 
 double *OSInstance::calculateAllObjectiveFunctionValues( double* x, bool allFunctionsEvaluated){
 	if(allFunctionsEvaluated == true) return m_mdObjectiveFunctionValues;
+	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
 	int idx, numObjectives;
 	numObjectives = getObjectiveNumber();
 	// loop over all objectives
