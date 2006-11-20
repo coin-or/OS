@@ -86,7 +86,7 @@ bool IpoptSolver::get_bounds_info(Index n, Number* x_l, Number* x_u,
                                 Index m, Number* g_l, Number* g_u){
  	int i; 
 	double * mdVarLB = osinstance->getVariableLowerBounds();
-
+	std::cout << "GET BOUNDS INFORMATION FOR IPOPT !!!!!!!!!!!!!!!!!" << std::endl;
 	// variables upper bounds
 	double * mdVarUB = osinstance->getVariableUpperBounds();
 
@@ -147,17 +147,20 @@ bool IpoptSolver::get_starting_point(Index n, bool init_x, Number* x,
 bool IpoptSolver::eval_f(Index n, const Number* x, bool new_x, Number& obj_value){
  	//cout << "calculate function value !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  " INDEX = " << n << endl;
 	obj_value = osinstance->calculateFunctionValue(-1, (double*)x, false);
+	if( (obj_value > 10000000) || (obj_value < -1000000)) return false;
 	//for(int i = 0; i < n; i++) cout << "x[ i] =  !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  x[ i]  << endl;
-	//cout << "calculated function value !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  obj_value  << endl;
+	cout << "calculated function value !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  obj_value  << endl;
   	return true;
 }
 
 bool IpoptSolver::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f){
  	int i;
- 	//cout << "calculate gradient function !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  " INDEX = " << n << endl;
+ 	cout << "calculate gradient function !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
   	double *objGrad = osinstance->calculateObjectiveFunctionGradient(-1, (double*)x, false, false);
   	for(i = 0; i < n; i++){
-  		grad_f[ i]  = objGrad[ i];
+  		cout << " gradient function !!!!!!!!!!!!!!!!!!!!!!!!!! = "  <<  objGrad[ i] << endl;
+  		if( (objGrad[ i] <= 10000000) && (objGrad[ i] >= -1000000)) grad_f[ i]  = objGrad[ i];
+  		else return false;
   	}
   	return true;
 }//eval_grad_f
@@ -427,6 +430,7 @@ void IpoptSolver::solve()  {
 		app->Options()->SetNumericValue("tol", 1e-9);
 		app->Options()->SetStringValue("mu_strategy", "adaptive");
 		app->Options()->SetStringValue("output_file", "ipopt.out");
+		app->Options()->SetStringValue("check_derivatives_for_naninf", "yes");
 		// see if we have a linear program
 		if( (osinstance->getNumberOfNonlinearExpressions() == 0) && (osinstance->getNumberOfQuadraticTerms() == 0) ) 
 			app->Options()->SetStringValue("hessian_approximation", "limited-memory");

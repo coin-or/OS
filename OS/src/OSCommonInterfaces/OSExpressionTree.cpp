@@ -80,6 +80,7 @@ double OSExpressionTree::calculateFunctionCppAD( double *x, bool functionEvaluat
 }//calculateFunctionCppAD
 
 double OSExpressionTree::calculateFunction( double *x, bool functionEvaluated){
+	//calculateFunctionCppAD( x, functionEvaluated);
 	if(functionEvaluated == true){
 		return m_dTreeRootValue; 
 	}
@@ -123,11 +124,9 @@ std::vector<double> OSExpressionTree::calculateGradient( double *x, bool functio
 		}
 	}
  	std::vector<double> jac( (*mapVarIdx).size() ); 	// Jacobian of f 
- 	m_vY = (*f).Forward(0, m_vX);
-   	jac  = (*f).Jacobian( m_vX);	// Jacobian for operation sequence
-	// print the resultsm_v
-			std::cout << "FUNCTION VALUE  =  " <<  m_vY[ 0]  << std::endl;
-
+ 	//m_vY = (*f).Forward(0, m_vX);
+   	jac  = (*f).Jacobian( m_vX);	
+   	// Jacobian for operation sequence
 	//for(m_mPosVarIdx = (*mapVarIdx).begin(); m_mPosVarIdx != (*mapVarIdx).end(); ++m_mPosVarIdx){
 	//	std::cout << "INDEX OF JACOBIANN   " <<  m_mPosVarIdx->second << endl;
 	//	std::cout << "Partial with respect to  " <<  

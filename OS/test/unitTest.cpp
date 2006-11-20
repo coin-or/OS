@@ -63,6 +63,7 @@ int main(int argC, char* argV[])
 
 	// end classes    
 	std::string osilFileName;
+	std::string ipOptFileName;
 	std::string nlFileName; 
 	std::string mpsFileName;     
 	std::string parserTestOSiLFileName;
@@ -75,18 +76,19 @@ int main(int argC, char* argV[])
 	std::string osol = "<osol></osoL>";
 	osilFileName =  dataDir + "parincLinear.osil";
 	//osilFileName =  dataDir + "objOnly.osil";
-	//osilFileName =  dataDir + "HS071_NLP.osil";
+	//ipOptFileName =  dataDir + "HS071_NLP.osil";
+	ipOptFileName =  dataDir + "rosenbrock.osil";
 	nlFileName = dataDir + "hs71.nl";
 	mpsFileName =  dataDir + "parinc.mps";
 	parserTestOSiLFileName = dataDir + "parincLinear.osil"; 
 	fileUtil = new FileUtil();
-	osil = fileUtil->getFileAsString( &osilFileName[0]);
+	
 	// solve using using the osil file
 	#ifdef COIN_HAS_IPOPT
 	cout << "create a new IPOPT Solver for OSiL string solution" << endl;
 	SmartPtr<IpoptSolver> ipoptSolver  = new IpoptSolver();	
 	try{
-
+		osil = fileUtil->getFileAsString( &ipOptFileName[0]);
 		cout << "IPOPT Solver created for OSiL string solution" << endl;
 		ipoptSolver->osil = osil;
 		ipoptSolver->osol = osol;
@@ -110,6 +112,7 @@ int main(int argC, char* argV[])
 		cout << "Create a new COIN Solver" << endl;
 		m_Solver = new CoinSolver();
 	try{
+		osil = fileUtil->getFileAsString( &osilFileName[0]);
 		m_Solver->m_sSolverName = "cbc";
 		m_Solver->osil = osil;
 		m_Solver->osol = osol;  
@@ -131,6 +134,7 @@ int main(int argC, char* argV[])
 	}
 	#ifdef COIN_HAS_LINDO
 	try{
+		osil = fileUtil->getFileAsString( &osilFileName[0]);
 		cout << "create a new LINDO Solver for OSiL string solution" << endl;
 		m_Solver = new LindoSolver();	
 		m_Solver->osil = osil;
