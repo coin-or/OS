@@ -472,6 +472,6 @@ bool OSnl2osil::createOSInstance(){
 	// end loop of nonlinear rows
 	//    
 	OSiLWriter osilwriter;
-	//std::cout << osilwriter.writeOSiL( osinstance) << std::endl;
+	std::cout << osilwriter.writeOSiL( osinstance) << std::endl;
 	return true;
 }
