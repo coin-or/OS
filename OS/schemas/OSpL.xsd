@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" elementFormDefault="qualified">
+	<xs:include schemaLocation="OSrL.xsd"/>
+	<xs:include schemaLocation="OSgL.xsd"/>
+	<xs:element name="ospl" type="OSpL"/>
+	<xs:complexType name="OSpL">
+		<xs:sequence>
+			<xs:element name="processHeader" type="ProcessHeader"/>
+			<xs:element name="processData" type="ProcessData"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ProcessHeader">
+		<xs:sequence>
+			<xs:choice minOccurs="0">
+				<xs:element name="request" type="ProcessRequest"/>
+				<xs:element name="response" type="ProcessResponse"/>
+			</xs:choice>
+			<xs:element name="serviceURI" type="xs:anyURI" minOccurs="0"/>
+			<xs:element name="serviceName" type="xs:string" minOccurs="0"/>
+			<xs:element name="time" type="xs:dateTime" minOccurs="0"/>
+			<xs:element name="message" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ProcessData">
+		<xs:sequence>
+			<xs:element name="statistics" type="ProcessStatistics" minOccurs="0"/>
+			<xs:element name="optimization" type="OptimizationProcess" minOccurs="0"/>
+			<xs:element name="other" type="OtherProcess" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ProcessRequest">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="action" use="required">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="ping"/>
+							<xs:enumeration value="notifyJobCompletion"/>
+							<xs:enumeration value="requestJob"/>
+							<xs:enumeration value="getServiceStatistics"/>
+							<xs:enumeration value="setServiceStatistics"/>
+							<xs:enumeration value="getJobStatistics"/>
+							<xs:enumeration value="setJobStatistics"/>
+							<xs:enumeration value="getOptimization"/>
+							<xs:enumeration value="setOptimization"/>
+							<xs:enumeration value="getAll"/>
+							<xs:enumeration value="setAll"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="ProcessResponse">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="status" use="required">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="success"/>
+							<xs:enumeration value="error"/>
+							<xs:enumeration value="warning"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="ProcessStatistics">
+		<xs:all>
+			<xs:element name="currentState" default="noResponse" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="busy"/>
+						<xs:enumeration value="busyButAccepting"/>
+						<xs:enumeration value="idle"/>
+						<xs:enumeration value="idleButNotAccepting"/>
+						<xs:enumeration value="noResponse"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="availableDiskSpace" type="xs:double" default="INF" minOccurs="0"/>
+			<xs:element name="availableMemory" type="xs:double" default="INF" minOccurs="0"/>
+			<xs:element name="currentJobCount" type="xs:int" default="-1" minOccurs="0"/>
+			<xs:element name="totalJobsSoFar" type="xs:int" default="-1" minOccurs="0"/>
+			<xs:element name="timeLastJobEnded" type="xs:dateTime" default="1970-01-01T00:00:00-00:00" minOccurs="0"/>
+			<xs:element name="timeLastJobTook" default="-1.0" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:double"/>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="timeServiceStarted" type="xs:dateTime" default="1970-01-01T00:00:00-00:00" minOccurs="0"/>
+			<xs:element name="serviceUtilization" default="-1.0" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:double"/>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="jobs" type="Jobs" minOccurs="0"/>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="StandardOptimizationProcessInformation">
+		<xs:sequence>
+			<xs:element name="update" type="OptimizationUpdate" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OptimizationUpdate">
+		<xs:all>
+			<xs:element name="updatedObjectiveValue" type="xs:double" minOccurs="0"/>
+			<xs:element name="updatedObjectiveLowerBound" type="xs:double" minOccurs="0"/>
+			<xs:element name="updatedObjectiveUpperBound" type="xs:double" minOccurs="0"/>
+			<xs:element name="updatedVariableValues" type="UpdatedVariableValues" minOccurs="0"/>
+			<xs:element name="updatedVariableValuesString" type="UpdatedVariableValuesString" minOccurs="0"/>
+			<xs:element name="updatedVariableReducedCosts" type="UpdatedVariableReducedCosts" minOccurs="0"/>
+			<xs:element name="updatedConstraintValues" type="UpdatedConstraintValues" minOccurs="0"/>
+			<xs:element name="updatedDualValues" type="UpdatedDualValues" minOccurs="0"/>
+		</xs:all>
+		<xs:attribute name="objectiveIdx" type="xs:negativeInteger" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="OptimizationProcess">
+		<xs:sequence>
+			<xs:element name="job" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="JobOptimization"/>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Jobs">
+		<xs:sequence>
+			<xs:element name="job" type="JobStatistics" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="JobStatistics">
+		<xs:all>
+			<xs:element name="state" default="unknown" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="waiting"/>
+						<xs:enumeration value="running"/>
+						<xs:enumeration value="killed"/>
+						<xs:enumeration value="finished"/>
+						<xs:enumeration value="unknown"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="serviceURI" type="xs:string" minOccurs="0"/>
+			<xs:element name="userName" type="xs:string" minOccurs="0"/>
+			<xs:element name="submitTime" type="xs:dateTime" default="1970-01-01T00:00:00-00:00" minOccurs="0"/>
+			<xs:element name="startTime" type="xs:dateTime" default="1970-01-01T00:00:00-00:00" minOccurs="0"/>
+			<xs:element name="endTime" type="xs:dateTime" default="1970-01-01T00:00:00-00:00" minOccurs="0"/>
+			<xs:element name="duration" type="xs:double" default="-1" minOccurs="0"/>
+			<xs:element name="scheduledStartTime" type="xs:dateTime" default="1970-01-01T00:00:00-00:00" minOccurs="0"/>
+			<xs:element name="dependencies" type="JobDependencies" minOccurs="0"/>
+			<xs:element name="requiredDirectoriesAndFiles" type="DirectoriesAndFiles" minOccurs="0"/>
+		</xs:all>
+		<xs:attribute name="jobID" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="JobOptimization">
+		<xs:sequence>
+			<xs:element name="standard" type="StandardOptimizationProcessInformation" minOccurs="0"/>
+			<xs:element name="osrl" type="OSrL" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="jobID" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="OtherProcess">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="name" type="xs:string" use="required"/>
+				<xs:attribute name="description" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="UpdatedVariableValuesString">
+		<xs:sequence>
+			<xs:element name="var" type="xs:string" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="UpdatedVariableValues">
+		<xs:sequence>
+			<xs:element name="var" type="xs:double" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="UpdatedVariableReducedCosts">
+		<xs:sequence>
+			<xs:element name="var" type="xs:double" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="UpdatedConstraintValues">
+		<xs:sequence>
+			<xs:element name="con" type="xs:double" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="UpdatedDualValues">
+		<xs:sequence>
+			<xs:element name="con" type="xs:double" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

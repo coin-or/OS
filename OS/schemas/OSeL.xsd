@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" elementFormDefault="qualified">
+	<xs:include schemaLocation="OSoL.xsd"/>
+	<xs:include schemaLocation="OSsL.xsd"/>
+	<xs:element name="osel" type="OSeL"/>
+	<xs:complexType name="OSeL">
+		<xs:sequence>
+			<xs:element name="entityHeader">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="EntityHeader"/>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="entityData" type="EntityData"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="EntityHeader">
+		<xs:sequence>
+			<xs:element name="serviceURI" type="xs:anyURI"/>
+			<xs:element name="serviceName" type="xs:string" minOccurs="0"/>
+			<xs:element name="registrationDate" type="xs:dateTime" minOccurs="0"/>
+			<xs:element name="message" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="EntityData">
+		<xs:sequence>
+			<xs:element name="general" type="GeneralInfo" minOccurs="0"/>
+			<xs:element name="system" type="SystemInfo" minOccurs="0"/>
+			<xs:element name="service" type="ServiceInfo" minOccurs="0"/>
+			<xs:element name="job" type="JobInfo" minOccurs="0"/>
+			<xs:element name="optimization" type="OptimizationInfo" minOccurs="0"/>
+			<xs:element name="other" type="OtherEntityInfo" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="GeneralInfo">
+		<xs:all>
+			<xs:element name="access" type="Access" minOccurs="0"/>
+			<xs:element name="owner" type="Owner" minOccurs="0"/>
+			<xs:element name="keyWords" type="KeyWords" minOccurs="0"/>
+			<xs:element name="links" type="Links" minOccurs="0"/>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="SystemInfo">
+		<xs:all>
+			<xs:element name="description" type="xs:string" minOccurs="0"/>
+			<xs:element name="dedication" type="xs:double" minOccurs="0"/>
+			<xs:element name="hardware" type="HardwareInfo" minOccurs="0"/>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="ServiceInfo">
+		<xs:all>
+			<xs:element name="description" type="xs:string" minOccurs="0"/>
+			<xs:element name="type" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="solver"/>
+						<xs:enumeration value="analyzer"/>
+						<xs:enumeration value="scheduler"/>
+						<xs:enumeration value="simulation"/>
+						<xs:enumeration value="registry"/>
+						<xs:enumeration value="modeler"/>
+						<xs:enumeration value="agent"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="category" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="education"/>
+						<xs:enumeration value="government"/>
+						<xs:enumeration value="organization"/>
+						<xs:enumeration value="company"/>
+						<xs:enumeration value="military"/>
+						<xs:enumeration value="personal"/>
+						<xs:enumeration value="other"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="software" type="xs:string" minOccurs="0"/>
+			<xs:element name="algorithm" type="xs:string" minOccurs="0"/>
+			<xs:element name="webPage" type="xs:anyURI" minOccurs="0"/>
+			<xs:element name="wsdlLocation" type="xs:anyURI" minOccurs="0"/>
+			<xs:element name="logoImageLink" type="xs:anyURI" minOccurs="0"/>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="HardwareInfo">
+		<xs:all>
+			<xs:element name="cpuNumber" type="xs:positiveInteger" default="1" minOccurs="0"/>
+			<xs:element name="cpuSpeed" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:double">
+						<xs:minExclusive value="0.0"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="memorySize" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:double">
+						<xs:minExclusive value="0.0"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="busSpeed" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:double">
+						<xs:minExclusive value="0.0"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="diskSpace" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:double">
+						<xs:minExclusive value="0.0"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="nicSpeed" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:double">
+						<xs:minExclusive value="0.0"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="downloadSpeed" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:double">
+						<xs:minExclusive value="0.0"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="uploadSpeed" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:double">
+						<xs:minExclusive value="0.0"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="JobInfo">
+		<xs:all>
+			<xs:element name="osol" type="OSoL" minOccurs="0"/>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="KeyWords">
+		<xs:sequence>
+			<xs:element name="key" type="xs:string" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Owner">
+		<xs:all>
+			<xs:element name="names" type="xs:string" minOccurs="0"/>
+			<xs:element name="description" type="xs:string" minOccurs="0"/>
+			<xs:element name="category" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="education"/>
+						<xs:enumeration value="government"/>
+						<xs:enumeration value="organization"/>
+						<xs:enumeration value="company"/>
+						<xs:enumeration value="military"/>
+						<xs:enumeration value="personal"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="mainWebPage" type="xs:anyURI" minOccurs="0"/>
+			<xs:element name="logoImageLink" minOccurs="0">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:anyURI">
+							<xs:attribute name="uri" type="xs:anyURI" use="required"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="contact" type="Contact" minOccurs="0"/>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="Access">
+		<xs:sequence>
+			<xs:element name="type" type="AccessType" default="open" minOccurs="0"/>
+			<xs:element name="limits" type="AccessLimits" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="commercial" type="xs:boolean" use="optional" default="false"/>
+	</xs:complexType>
+	<xs:complexType name="AccessLimits">
+		<xs:all>
+			<xs:element name="maxDiskSpace" type="xs:double" default="INF" minOccurs="0"/>
+			<xs:element name="maxMemory" type="xs:double" default="INF" minOccurs="0"/>
+			<xs:element name="maxJobs" type="xs:int" default="-1" minOccurs="0"/>
+			<xs:element name="maxVariables" type="xs:int" default="-1" minOccurs="0"/>
+			<xs:element name="maxBinaryVariables" type="xs:int" default="-1" minOccurs="0"/>
+			<xs:element name="maxIntegerVariables" type="xs:int" default="-1" minOccurs="0"/>
+			<xs:element name="maxObjectives" type="xs:int" default="-1" minOccurs="0"/>
+			<xs:element name="maxConstraints" type="xs:int" default="-1" minOccurs="0"/>
+			<xs:element name="maxNonzeroLinearConstraintCoefficients" type="xs:int" default="-1" minOccurs="0"/>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="AccessType">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="licenseRequired" type="xs:boolean" use="optional" default="false"/>
+				<xs:attribute name="userNameRequired" type="xs:boolean" use="optional" default="false"/>
+				<xs:attribute name="passwordRequired" type="xs:boolean" use="optional" default="false"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="Links">
+		<xs:sequence>
+			<xs:element name="link" type="Link" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Link">
+		<xs:simpleContent>
+			<xs:extension base="xs:anyURI">
+				<xs:attribute name="type" use="optional">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="service"/>
+							<xs:enumeration value="person"/>
+							<xs:enumeration value="reference"/>
+							<xs:enumeration value="other"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="description" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="Contact">
+		<xs:all>
+			<xs:element name="name" type="xs:string" minOccurs="0"/>
+			<xs:element name="title" type="xs:string" minOccurs="0"/>
+			<xs:element name="address" type="xs:string" minOccurs="0"/>
+			<xs:element name="phone" type="xs:string" minOccurs="0"/>
+			<xs:element name="fax" type="xs:string" minOccurs="0"/>
+			<xs:element name="email" minOccurs="0">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string"/>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="webPage" minOccurs="0">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="uri" type="xs:anyURI" use="required"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="OptimizationInfo">
+		<xs:all>
+			<xs:element name="description" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string"/>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="variableType" default="continuous" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="continuous"/>
+						<xs:enumeration value="pureBinary"/>
+						<xs:enumeration value="mixedBinary"/>
+						<xs:enumeration value="pureInteger"/>
+						<xs:enumeration value="mixedInteger"/>
+						<xs:enumeration value="discrete"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="objectiveType" default="singleObjective" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="none"/>
+						<xs:enumeration value="singleObjective"/>
+						<xs:enumeration value="multiObjectives"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="constraintType" default="generalRange" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="generalRange"/>
+						<xs:enumeration value="pureEquality"/>
+						<xs:enumeration value="pureBound"/>
+						<xs:enumeration value="pureLinearComplementarity"/>
+						<xs:enumeration value="pureNonlinearComplementarity"/>
+						<xs:enumeration value="linearMixedComplementarity"/>
+						<xs:enumeration value="nonlinearMixedComplementarity"/>
+						<xs:enumeration value="generalMixedComplementarity"/>
+						<xs:enumeration value="pureCone"/>
+						<xs:enumeration value="mixedCone"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="objectiveLinearity" default="linear" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="none"/>
+						<xs:enumeration value="linearNetwork"/>
+						<xs:enumeration value="linear"/>
+						<xs:enumeration value="sumOfSquares"/>
+						<xs:enumeration value="convexQuadratic"/>
+						<xs:enumeration value="convexNonlinear"/>
+						<xs:enumeration value="generalQuadratic"/>
+						<xs:enumeration value="generalNonlinear"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="constraintLinearity" default="linear" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="none"/>
+						<xs:enumeration value="bound"/>
+						<xs:enumeration value="linearNetwork"/>
+						<xs:enumeration value="linear"/>
+						<xs:enumeration value="convexQuadratic"/>
+						<xs:enumeration value="convexNonlinear"/>
+						<xs:enumeration value="generalQuadratic"/>
+						<xs:enumeration value="generalNonlinear"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="objectiveDifferentiability" default="twiceDifferentiable" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="generallyDifferentiable"/>
+						<xs:enumeration value="twiceDifferentiable"/>
+						<xs:enumeration value="firstDifferentiable"/>
+						<xs:enumeration value="nonDifferentiableContinous"/>
+						<xs:enumeration value="nonContinuous"/>
+						<xs:enumeration value="simulation"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="constraintDifferentiability" default="twiceDifferentiable" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="generallyDifferentiable"/>
+						<xs:enumeration value="twiceDifferentiable"/>
+						<xs:enumeration value="firstDifferentiable"/>
+						<xs:enumeration value="nonDifferentiableContinous"/>
+						<xs:enumeration value="nonContinuous"/>
+						<xs:enumeration value="simulation"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="parameterType" default="number" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="number"/>
+						<xs:enumeration value="string"/>
+						<xs:enumeration value="both"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="stochasticity" default="deterministic" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="deterministic"/>
+						<xs:enumeration value="stochastic"/>
+						<xs:enumeration value="both"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="realTime" type="xs:boolean" default="false" minOccurs="0"/>
+			<xs:element name="functionType" type="FunctionType" minOccurs="0"/>
+			<xs:element name="specialStructure" type="SpecialStructure" minOccurs="0"/>
+			<xs:element name="specialAlgorithm" type="SpecialAlgorithm" minOccurs="0"/>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="FunctionType">
+		<xs:all>
+			<xs:element name="general" type="xs:boolean" default="false" minOccurs="0"/>
+			<xs:element name="basic" type="xs:boolean" default="true" minOccurs="0"/>
+			<xs:element name="arithmetic" type="xs:boolean" default="true" minOccurs="0"/>
+			<xs:element name="trigonometric" type="xs:boolean" default="false" minOccurs="0"/>
+			<xs:element name="statistics" type="xs:boolean" default="false" minOccurs="0"/>
+			<xs:element name="probability" type="xs:boolean" default="false" minOccurs="0"/>
+			<xs:element name="relationalAndLogic" type="xs:boolean" default="false" minOccurs="0"/>
+			<xs:element name="userFunction" type="xs:boolean" default="false" minOccurs="0"/>
+			<xs:element name="simulation" type="xs:boolean" default="false" minOccurs="0"/>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="SpecialStructure">
+		<xs:all>
+			<xs:element name="semidefiniteProgram" type="xs:boolean" default="false" minOccurs="0"/>
+			<xs:element name="coneProgram" type="xs:boolean" default="false" minOccurs="0"/>
+			<xs:element name="disjunctiveProgram" type="xs:boolean" default="false" minOccurs="0"/>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="SpecialAlgorithm">
+		<xs:all>
+			<xs:element name="decomposition" type="xs:boolean" default="false" minOccurs="0"/>
+			<xs:element name="globalOptimization" type="xs:boolean" default="false" minOccurs="0"/>
+			<xs:element name="dynamicProgramming" type="xs:boolean" default="false" minOccurs="0"/>
+			<xs:element name="heuristic" type="xs:boolean" default="false" minOccurs="0"/>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="OtherEntityInfo">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="name" type="xs:string" use="required"/>
+				<xs:attribute name="description" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="SimulationInfo">
+		<xs:sequence>
+			<xs:element name="description" type="xs:string" minOccurs="0"/>
+			<xs:element name="inputSize" type="xs:nonNegativeInteger" minOccurs="0"/>
+			<xs:element name="outputSize" type="xs:nonNegativeInteger" minOccurs="0"/>
+			<xs:element name="stochasticity" default="deterministic" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="deterministic"/>
+						<xs:enumeration value="stochastic"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="OSsL" type="OSsL" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

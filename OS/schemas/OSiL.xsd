@@ -1,0 +1,1500 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSpy v2005 sp1 U (http://www.xmlspy.com) by oig_trade (oig) -->
+<!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" elementFormDefault="qualified">
+	<xs:include schemaLocation="OSgL.xsd"/>
+	<xs:include schemaLocation="OSnL.xsd"/>
+	<xs:include schemaLocation="OSsL.xsd"/>
+	<!--xs:import namespace="http://www.w3.org/1998/Math/MathML" schemaLocation="http://www.w3.org/Math/XMLSchema/mathml2/mathml2.xsd"/-->
+	<xs:element name="osil" type="OSiL"/>
+	<xs:complexType name="OSiL">
+		<xs:sequence>
+			<xs:element name="instanceHeader" type="InstanceHeader"/>
+			<xs:element name="instanceData" type="InstanceData"/>
+			<!--xs:element name="math" type="mathML:math.type" minOccurs="0"/-->
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="InstanceHeader">
+		<xs:sequence>
+			<xs:element name="name" type="xs:string" minOccurs="0"/>
+			<xs:element name="source" type="xs:string" minOccurs="0"/>
+			<xs:element name="description" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="InstanceData">
+		<xs:sequence>
+			<xs:element name="variables" type="Variables" minOccurs="0"/>
+			<xs:element name="objectives" type="Objectives" minOccurs="0"/>
+			<xs:element name="constraints" type="Constraints" minOccurs="0"/>
+			<xs:element name="linearConstraintCoefficients" type="LinearConstraintCoefficients" minOccurs="0"/>
+			<xs:element name="quadraticCoefficients" type="QuadraticCoefficients" minOccurs="0"/>
+			<xs:element name="nonlinearExpressions" type="NonlinearExpressions" minOccurs="0"/>
+			<xs:element name="semidefiniteBlocks" type="SemidefiniteBlocks" minOccurs="0"/>
+			<xs:element name="cones" type="Cones" minOccurs="0"/>
+			<xs:element name="parameterSets" type="ParameterSets" minOccurs="0"/>
+			<xs:element name="modifications" type="Modifcations" minOccurs="0"/>
+			<xs:element name="disjunctiveInformation" type="DisjunctiveInformation" minOccurs="0"/>
+			<xs:element name="stages" type="Stages" minOccurs="0"/>
+			<xs:element name="stochasticInformation" type="StochasticInformation" minOccurs="0"/>
+			<xs:element name="userFunctions" type="UserFunctions" minOccurs="0"/>
+			<xs:element name="simulations" type="Simulations" minOccurs="0"/>
+			<xs:element name="realTimeData" type="RealTimeData" minOccurs="0"/>
+			<xs:element name="xmlData" type="XMLData" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Variables">
+		<xs:sequence>
+			<xs:element name="var" type="Variable" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfVariables" type="xs:positiveInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="Variable">
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="init" type="xs:double" use="optional"/>
+		<xs:attribute name="initString" type="xs:string" use="optional"/>
+		<xs:attribute name="type" use="optional" default="C">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="C"/>
+					<xs:enumeration value="B"/>
+					<xs:enumeration value="I"/>
+					<xs:enumeration value="S"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="lb" type="xs:double" use="optional" default="0"/>
+		<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
+		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+	</xs:complexType>
+	<xs:complexType name="Objectives">
+		<xs:sequence>
+			<xs:element name="obj" type="Objective" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="optional" default="1"/>
+	</xs:complexType>
+	<xs:complexType name="Objective">
+		<xs:sequence>
+			<xs:element name="coef" type="ObjCoef" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="maxOrMin" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="min"/>
+					<xs:enumeration value="max"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="numberOfObjCoef" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="constant" type="xs:double" use="optional" default="0.0"/>
+		<xs:attribute name="weight" type="xs:double" use="optional" default="1.0"/>
+		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+	</xs:complexType>
+	<xs:complexType name="ObjCoef">
+		<xs:simpleContent>
+			<xs:extension base="xs:double">
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="Constraints">
+		<xs:sequence>
+			<xs:element name="con" type="Constraint" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="Constraint">
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="constant" type="xs:double" use="optional" default="0.0"/>
+		<xs:attribute name="lb" type="xs:double" use="optional" default="-INF"/>
+		<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
+		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+	</xs:complexType>
+	<xs:complexType name="LinearConstraintCoefficients">
+		<xs:sequence minOccurs="0">
+			<xs:element name="start" type="IntVector"/>
+			<xs:choice>
+				<xs:element name="rowIdx" type="IntVector"/>
+				<xs:element name="colIdx" type="IntVector"/>
+			</xs:choice>
+			<xs:element name="value" type="DoubleVector"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="QuadraticCoefficients">
+		<xs:sequence>
+			<xs:element name="qTerm" type="QuadraticTerm" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfQuadraticTerms" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="QuadraticTerm">
+		<xs:attribute name="idx" type="xs:int" use="required"/>
+		<xs:attribute name="idxOne" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idxTwo" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="coef" type="xs:double" use="optional" default="1"/>
+	</xs:complexType>
+	<xs:complexType name="NonlinearExpressions">
+		<xs:sequence>
+			<xs:element name="nl" type="Nl" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfNonlinearExpressions" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="Nl">
+		<xs:attribute name="idx" type="xs:int" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="Cones">
+		<xs:sequence maxOccurs="unbounded">
+			<xs:element name="nonnegativeCone" type="NonnegativeCone" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="quadraticCone" type="QuadraticCone" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="rotatedQuadraticCone" type="RotatedQuadraticCone" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="ModificationType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="update"/>
+			<xs:enumeration value="add"/>
+			<xs:enumeration value="insert"/>
+			<xs:enumeration value="delete"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="Modifcations">
+		<xs:sequence>
+			<xs:element name="base" default="this">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="uri" type="xs:string" use="optional" default="."/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="parameters" minOccurs="0">
+				<xs:complexType>
+					<xs:attribute name="numberOfParameters" type="xs:nonNegativeInteger" use="required"/>
+					<xs:attribute name="modificationType" type="ModificationType" use="optional"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="variables" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="var"/>
+					</xs:sequence>
+					<xs:attribute name="numberOfVariables" type="xs:nonNegativeInteger" use="required"/>
+					<xs:attribute name="modificationType" type="ModificationType" use="optional"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="objectives" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="obj"/>
+					</xs:sequence>
+					<xs:attribute name="numberOfVariables" type="xs:nonNegativeInteger" use="required"/>
+					<xs:attribute name="modificationType" type="ModificationType" use="optional"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="constraints" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="con"/>
+					</xs:sequence>
+					<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="required"/>
+					<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="linearConstraintCoefficients" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="el"/>
+					</xs:sequence>
+					<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
+					<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="quadraticCoefficients" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="qTerm"/>
+					</xs:sequence>
+					<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="required"/>
+					<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="nonlinearExpressions" minOccurs="0">
+				<xs:complexType>
+					<xs:choice maxOccurs="unbounded">
+						<xs:element name="number" type="xs:string"/>
+						<xs:element name="string" type="xs:string"/>
+						<xs:element name="nl">
+							<xs:complexType>
+								<xs:choice maxOccurs="unbounded">
+									<xs:element ref="OSnLNode"/>
+								</xs:choice>
+								<xs:attribute name="idx" type="xs:int" use="required"/>
+								<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
+							</xs:complexType>
+						</xs:element>
+					</xs:choice>
+					<xs:attribute name="numberOfNonlinearExpressions" type="xs:nonNegativeInteger" use="required"/>
+					<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="NonnegativeCone">
+		<xs:sequence minOccurs="0">
+			<xs:element name="el" type="ConeElement" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="startIndex" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="endIndex" type="xs:nonNegativeInteger" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="QuadraticCone">
+		<xs:sequence minOccurs="0">
+			<xs:element name="el" type="ConeElement" minOccurs="2" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="startIndex" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="endIndex" type="xs:nonNegativeInteger" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="RotatedQuadraticCone">
+		<xs:sequence minOccurs="0">
+			<xs:element name="el" type="ConeElement" minOccurs="3" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="startIndex" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="endIndex" type="xs:nonNegativeInteger" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="ConeElement">
+		<xs:simpleContent>
+			<xs:extension base="xs:nonNegativeInteger">
+				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+				<xs:attribute name="incr" type="xs:int" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="DisjunctionVar">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="init" type="xs:double" use="optional"/>
+		<xs:attribute name="initString" type="xs:string" use="optional"/>
+		<xs:attribute name="lb" type="xs:double" use="optional" default="0"/>
+		<xs:attribute name="lbInclusive" type="xs:boolean" use="optional" default="true"/>
+		<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
+		<xs:attribute name="ubInclusive" type="xs:boolean" use="optional" default="true"/>
+	</xs:complexType>
+	<xs:complexType name="DisjunctionVariables">
+		<xs:sequence>
+			<xs:element name="var" type="DisjunctionVar" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfVariables" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="DisjunctionObj">
+		<xs:sequence>
+			<xs:element name="coef" type="ObjCoef" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
+		<xs:attribute name="constant" type="xs:double" use="optional" default="0.0"/>
+		<xs:attribute name="weight" type="xs:double" use="optional" default="1.0"/>
+		<xs:attribute name="numberOfObjCoef" type="xs:nonNegativeInteger" use="optional" default="0"/>
+	</xs:complexType>
+	<xs:complexType name="DisjunctionObjectives">
+		<xs:sequence>
+			<xs:element name="obj" type="DisjunctionObj" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="DisjunctionCon">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="constant" type="xs:double" use="optional" default="0.0"/>
+		<xs:attribute name="lb" type="xs:double" use="optional" default="-INF"/>
+		<xs:attribute name="lbInclusive" type="xs:boolean" use="optional" default="true"/>
+		<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
+		<xs:attribute name="ubInclusive" type="xs:boolean" use="optional" default="true"/>
+	</xs:complexType>
+	<xs:complexType name="DisjunctionConstraints">
+		<xs:sequence>
+			<xs:element name="con" type="DisjunctionCon" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="DisjunctionLinearConstraintCoefficientElement">
+		<xs:simpleContent>
+			<xs:extension base="xs:double">
+				<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="colIdx" type="xs:nonNegativeInteger" use="required"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="DisjunctionLinearConstraintCoefficients">
+		<xs:sequence>
+			<xs:element name="el" type="DisjunctionLinearConstraintCoefficientElement" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="DisjunctionQuadraticCoefficients">
+		<xs:sequence>
+			<xs:element name="qTerm" type="DisjunctionQuadraticTerm" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfQuadraticTerms" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="DisjunctionQuadraticTerm">
+		<xs:attribute name="idx" type="xs:int" use="required"/>
+		<xs:attribute name="idxOne" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idxTwo" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="coef" type="xs:double" use="optional" default="1"/>
+	</xs:complexType>
+	<xs:complexType name="DisjunctionNonlinearExpressions">
+		<xs:sequence>
+			<xs:element name="nl" type="DisjunctionNl" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfNonlinearExpressions" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="DisjunctionNl">
+		<xs:choice>
+			<xs:element ref="OSnLNode"/>
+		</xs:choice>
+		<xs:attribute name="idx" type="xs:int" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="Disjunction">
+		<xs:sequence minOccurs="0">
+			<xs:element name="variables" type="DisjunctionVariables" minOccurs="0"/>
+			<xs:element name="objectives" type="DisjunctionObjectives" minOccurs="0"/>
+			<xs:element name="constraints" type="DisjunctionConstraints" minOccurs="0"/>
+			<xs:element name="linearConstraintCoefficients" type="DisjunctionLinearConstraintCoefficients" minOccurs="0"/>
+			<xs:element name="quadraticCoefficients" type="DisjunctionQuadraticCoefficients" minOccurs="0"/>
+			<xs:element name="nonlinearExpressions" type="NonlinearExpressions" minOccurs="0"/>
+			<xs:element name="realTimeData" type="RealTimeData" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="base" use="optional" default="coreProgram">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="none"/>
+					<xs:enumeration value="coreProgram"/>
+					<xs:enumeration value="firstDisjunction"/>
+					<xs:enumeration value="lastDisjunction"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="Disjunctions">
+		<xs:sequence>
+			<xs:element name="disjunction" type="Disjunction" minOccurs="2" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfDisjunctions" type="xs:nonNegativeInteger" use="optional" default="2"/>
+	</xs:complexType>
+	<xs:complexType name="DisjunctiveInformation">
+		<xs:sequence>
+			<xs:element name="disjunctions" type="Disjunctions" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfDisjunctiveSets" type="xs:nonNegativeInteger" use="optional" default="1"/>
+	</xs:complexType>
+	<xs:complexType name="Parameters">
+		<xs:sequence>
+			<xs:element name="param" type="Param" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfParameters" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="Param">
+		<xs:choice>
+			<xs:element name="var" type="StochasticNumberVar"/>
+			<xs:element name="obj" type="StochasticNumberObj"/>
+			<xs:element name="con" type="StochasticNumberCon"/>
+			<xs:element name="el" type="StochasticNumberLinearConstraintCoefficientsEl"/>
+			<xs:element name="qTerm" type="StochasticNumberQuadraticCoefficientsQTerm"/>
+			<xs:element name="number" type="StochasticNumberNonlinearExpressionsNumber"/>
+		</xs:choice>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="init" type="xs:double" use="optional"/>
+		<xs:attribute name="initString" type="xs:string" use="optional"/>
+		<xs:attribute name="type" use="optional" default="C">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="C"/>
+					<xs:enumeration value="B"/>
+					<xs:enumeration value="I"/>
+					<xs:enumeration value="S"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="lb" type="xs:double" use="optional"/>
+		<xs:attribute name="ub" type="xs:double" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="ParamSetRowInCore">
+		<xs:attribute name="idx" type="xs:int" use="required"/>
+		<xs:attribute name="modifier" use="optional" default="all">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="all"/>
+					<xs:enumeration value="any"/>
+					<xs:enumeration value="avg"/>
+					<xs:enumeration value="min"/>
+					<xs:enumeration value="max"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ParamSetRowsInCore">
+		<xs:sequence>
+			<xs:element name="row" type="ParamSetRowInCore" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ParamDisjunctionParam">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="init" type="xs:double" use="optional"/>
+		<xs:attribute name="initString" type="xs:string" use="optional"/>
+		<xs:attribute name="lb" type="xs:double" use="optional" default="0"/>
+		<xs:attribute name="lbInclusive" type="xs:boolean" use="optional" default="true"/>
+		<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
+		<xs:attribute name="ubInclusive" type="xs:boolean" use="optional" default="true"/>
+	</xs:complexType>
+	<xs:complexType name="ParamDisjunctionParameters">
+		<xs:sequence>
+			<xs:element name="param" type="ParamDisjunctionParam" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfParameters" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ParamDisjunction">
+		<xs:sequence minOccurs="0">
+			<xs:element name="parameters" type="ParamDisjunctionParameters" minOccurs="0"/>
+			<xs:element name="constraints" type="DisjunctionConstraints" minOccurs="0"/>
+			<xs:element name="linearConstraintCoefficients" type="DisjunctionLinearConstraintCoefficients" minOccurs="0"/>
+			<xs:element name="quadraticCoefficients" type="DisjunctionQuadraticCoefficients" minOccurs="0"/>
+			<xs:element name="nonlinearExpressions" type="DisjunctionNonlinearExpressions" minOccurs="0"/>
+			<xs:element name="realTimeData" type="RealTimeData" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="base" use="optional" default="coreProgram">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="none"/>
+					<xs:enumeration value="coreProgram"/>
+					<xs:enumeration value="firstDisjunction"/>
+					<xs:enumeration value="lastDisjunction"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ParamDisjunctions">
+		<xs:sequence>
+			<xs:element name="disjunction" type="ParamDisjunction" minOccurs="2" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfDisjunction" type="xs:nonNegativeInteger" use="optional" default="2"/>
+	</xs:complexType>
+	<xs:complexType name="ParameterSets">
+		<xs:sequence>
+			<xs:element name="parameters" type="Parameters"/>
+			<xs:element name="rowsInCore" type="ParamSetRowsInCore"/>
+			<xs:element name="constraints" type="Constraints" minOccurs="0"/>
+			<xs:element name="linearConstraintCoefficients" type="LinearConstraintCoefficients" minOccurs="0"/>
+			<xs:element name="quadraticCoefficients" type="QuadraticCoefficients" minOccurs="0"/>
+			<xs:element name="nonlinearExpressions" type="NonlinearExpressions" minOccurs="0"/>
+			<xs:element name="disjunctions" type="ParamDisjunctions" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfDisjunctions" type="xs:nonNegativeInteger" use="optional" default="0"/>
+	</xs:complexType>
+	<xs:complexType name="RealTimeDataURI">
+		<xs:simpleContent>
+			<xs:extension base="xs:anyURI">
+				<xs:attribute name="alias" type="xs:string" use="required"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="RealTimeDataURIAliases">
+		<xs:sequence>
+			<xs:element name="uri" type="RealTimeDataURI" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfURIAliases" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="RealTimeDataParam">
+		<xs:complexContent>
+			<xs:extension base="RealTimeAccess">
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="type" use="required">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="init"/>
+							<xs:enumeration value="initString"/>
+							<xs:enumeration value="lb"/>
+							<xs:enumeration value="ub"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="RealTimeDataParameters">
+		<xs:sequence>
+			<xs:element name="param" type="RealTimeDataParam" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfParameters" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="RealTimeDataVar">
+		<xs:complexContent>
+			<xs:extension base="RealTimeAccess">
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="type" use="required">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="init"/>
+							<xs:enumeration value="initString"/>
+							<xs:enumeration value="lb"/>
+							<xs:enumeration value="ub"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="RealTimeDataVariables">
+		<xs:sequence>
+			<xs:element name="var" type="RealTimeDataVar" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfVariables" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="RealTimeDataCon">
+		<xs:complexContent>
+			<xs:extension base="RealTimeAccess">
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="type" use="required">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="lb"/>
+							<xs:enumeration value="ub"/>
+							<xs:enumeration value="constant"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="RealTimeDataConstraints">
+		<xs:sequence>
+			<xs:element name="con" type="RealTimeDataCon" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="RealTimeDataObj">
+		<xs:complexContent>
+			<xs:extension base="RealTimeAccess">
+				<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
+				<xs:attribute name="type" use="required">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="constant"/>
+							<xs:enumeration value="weight"/>
+							<xs:enumeration value="coef"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="varIdx" type="xs:nonNegativeInteger" use="optional"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="RealTimdDataObjectives">
+		<xs:sequence>
+			<xs:element name="obj" type="RealTimeDataObj" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="RealTimeDataLinearConstraintCoefficientElement">
+		<xs:complexContent>
+			<xs:extension base="RealTimeAccess">
+				<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="colIdx" type="xs:nonNegativeInteger" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="RealTimeDataLinearConstraintCoefficients">
+		<xs:sequence>
+			<xs:element name="el" type="RealTimeDataLinearConstraintCoefficientElement" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="RealTimeDataQuadraticCoefficients">
+		<xs:sequence>
+			<xs:element name="qTerm" type="RealTimeDataQuadraticTerm" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfQuadraticTerms" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="RealTimeDataQuadraticTerm">
+		<xs:complexContent>
+			<xs:extension base="RealTimeAccess">
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="idxOne" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="idxTwo" type="xs:nonNegativeInteger" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="RealTimeDataNonlinearExpressionNumber">
+		<xs:complexContent>
+			<xs:extension base="RealTimeAccess">
+				<xs:attribute name="id" type="xs:string" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="RealTimeDataNonlinearExpressionString">
+		<xs:complexContent>
+			<xs:extension base="RealTimeAccess">
+				<xs:attribute name="id" type="xs:string" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="RealTimeDataNonlinearExpressions">
+		<xs:choice maxOccurs="unbounded">
+			<xs:element name="number" type="RealTimeDataNonlinearExpressionNumber"/>
+			<xs:element name="string" type="RealTimeDataNonlinearExpressionString"/>
+		</xs:choice>
+		<xs:attribute name="numberOfNonlinearExpressionNumbersAndStrings" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="RealTimeAccessXPath">
+		<xs:attribute name="uri" type="xs:anyURI" use="optional" default="."/>
+		<xs:attribute name="uriAlias" type="xs:string" use="optional"/>
+		<xs:attribute name="path" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="RealTimeAccess">
+		<xs:sequence>
+			<xs:element name="xPath" type="RealTimeAccessXPath"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RealTimeData">
+		<xs:sequence>
+			<xs:element name="defaultURI" type="xs:anyURI" default="." minOccurs="0"/>
+			<xs:element name="uriAliases" type="RealTimeDataURIAliases" minOccurs="0"/>
+			<xs:element name="parameters" type="RealTimeDataParameters" minOccurs="0"/>
+			<xs:element name="variables" type="RealTimeDataVariables" minOccurs="0"/>
+			<xs:element name="objectives" type="RealTimdDataObjectives" minOccurs="0"/>
+			<xs:element name="constraints" type="RealTimeDataConstraints" minOccurs="0"/>
+			<xs:element name="linearConstraintCoefficients" type="RealTimeDataLinearConstraintCoefficients" minOccurs="0"/>
+			<xs:element name="quadraticCoefficients" type="RealTimeDataQuadraticCoefficients" minOccurs="0"/>
+			<xs:element name="nonlinearExpressions" type="RealTimeDataNonlinearExpressions" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Stages">
+		<xs:sequence>
+			<xs:element name="stage" type="Stage" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfStages" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="Stage">
+		<xs:sequence>
+			<xs:element name="variables" type="StageVariables"/>
+			<xs:element name="constraints" type="StageConstraints" minOccurs="0"/>
+			<xs:element name="objectives" type="StageObjectives" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="StageVariables">
+		<xs:sequence minOccurs="0">
+			<xs:element name="var" type="StageVar" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfVariables" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="startIdx" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="endIdx" type="xs:nonNegativeInteger" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="StageVar">
+		<xs:attribute name="idx" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:int"/>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="StageConstraints">
+		<xs:sequence minOccurs="0">
+			<xs:element name="con" type="StageCon" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="startIdx" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="endIdx" type="xs:nonNegativeInteger" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="StageCon">
+		<xs:attribute name="idx" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:int"/>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="StageObjectives">
+		<xs:sequence minOccurs="0">
+			<xs:element name="obj" type="StageObj" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="startIdx" type="xs:negativeInteger" use="optional"/>
+		<xs:attribute name="endIdx" type="xs:negativeInteger" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="StageObj">
+		<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticInformation">
+		<xs:sequence>
+			<xs:element name="eventTree" type="StochasticEventTree" minOccurs="0"/>
+			<xs:element name="softConstraints" type="StochasticSoftConstraints" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="decisionEventSequence" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="decisionBeforeEvent"/>
+					<xs:enumeration value="decisionAfterEvent"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="StochasticEventTree">
+		<xs:choice>
+			<xs:element name="scenarioTree" type="StochasticScenarioTree"/>
+			<xs:element name="nodalTree" type="StochasticNodalTree"/>
+			<xs:element name="implicitTree" type="StochasticImplicitTree"/>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="StochasticScenarioTree">
+		<xs:sequence>
+			<xs:element name="rootScenario" type="StochasticScenarioTreeRootScenario"/>
+			<xs:element name="scenario" type="StochasticScenarioTreeScenario" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfScenarios" type="xs:positiveInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticScenarioTreeRootScenario">
+		<xs:complexContent>
+			<xs:extension base="StochasticNumbers">
+				<xs:attribute name="name" type="xs:string" use="optional"/>
+				<xs:attribute name="prob" use="required">
+					<xs:simpleType>
+						<xs:restriction base="xs:double">
+							<xs:minInclusive value="0.0"/>
+							<xs:maxInclusive value="1.0"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="base" use="optional" default="coreProgram">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="coreProgram"/>
+							<xs:enumeration value="none"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="stage" type="xs:nonNegativeInteger" use="optional" default="0"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="StochasticScenarioTreeScenario">
+		<xs:complexContent>
+			<xs:extension base="StochasticNumbers">
+				<xs:attribute name="name" type="xs:string" use="optional"/>
+				<xs:attribute name="prob" use="required">
+					<xs:simpleType>
+						<xs:restriction base="xs:double">
+							<xs:minInclusive value="0.0"/>
+							<xs:maxInclusive value="1.0"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="parent" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="stage" type="xs:nonNegativeInteger" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="StochasticNodalTree">
+		<xs:sequence>
+			<xs:element ref="sNode"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="StochasticImplicitTree">
+		<xs:sequence>
+			<xs:element name="randomVariables" type="StochasticRandomVariables"/>
+			<xs:element name="stochasticElements" type="StochasticElements"/>
+			<xs:element name="rowModifiers" type="StochasticRowModifers" minOccurs="0"/>
+			<xs:element name="linearTransformation" type="StochasticLinearTransformation" minOccurs="0"/>
+			<xs:element name="NonlinearTransformations" type="StochasticNonlinearTransformations" minOccurs="0"/>
+			<xs:element name="randomFunctions" type="StochasticRandomFunctions" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="StochasticRowModifers">
+		<xs:sequence>
+			<xs:element name="row" type="StochasticRowModifier" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticRowModifier">
+		<xs:attribute name="idx" type="xs:int" use="required"/>
+		<xs:attribute name="modifier" use="optional" default="all">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="all"/>
+					<xs:enumeration value="any"/>
+					<xs:enumeration value="avg"/>
+					<xs:enumeration value="min"/>
+					<xs:enumeration value="max"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="StochasticRandomFunctions">
+		<xs:sequence>
+			<xs:element name="randomFunction" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="StochasticRandomFunction">
+							<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfRandomFunctions" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticRandomVariables">
+		<xs:sequence>
+			<xs:element name="distr" type="StochasticDistribution" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfDistributions" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticDistribution">
+		<xs:choice>
+			<xs:element name="univariate" type="StochasticUnivariateDistribution"/>
+			<xs:element name="multivariate" type="StochasticMultivariateDistribution"/>
+		</xs:choice>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="stage" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticUnivariateDistribution">
+		<xs:choice>
+			<xs:group ref="DistributionGroup"/>
+			<xs:element ref="generalDistribution"/>
+			<xs:element name="userF" type="StochasticUnivariateDistributionUserFunction"/>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="StochasticUnivariateDistributionUserFunction">
+		<xs:choice>
+			<xs:element name="cdf" type="StochasticUnivariateDistributionUserFunctionTree" minOccurs="0"/>
+			<xs:element name="pdf" type="StochasticUnivariateDistributionUserFunctionTree" minOccurs="0"/>
+			<xs:element name="rng" type="StochasticUnivariateDistributionUserFunctionTree" minOccurs="0"/>
+		</xs:choice>
+		<xs:attribute name="name" type="xs:IDREF" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticUnivariateDistributionUserFunctionTree">
+		<xs:sequence>
+			<xs:element ref="OSnLNode" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="StochasticMultivariateDistribution">
+		<xs:choice>
+			<xs:group ref="MultiDimensionalDistributionGroup"/>
+			<xs:element ref="generalDistribution"/>
+			<xs:element name="userF" type="StochasticMultivariateDistributionUserFunction"/>
+		</xs:choice>
+		<xs:attribute name="numberOfRandomVariables" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticMultivariateDistributionUserFunction">
+		<xs:choice>
+			<xs:element name="cdf" type="StochasticMultivariateDistributionUserFunctionTree"/>
+			<xs:element name="pdf" type="StochasticMultivariateDistributionUserFunctionTree"/>
+			<xs:element name="rng" type="StochasticMultivariateDistributionUserFunctionTree"/>
+		</xs:choice>
+		<xs:attribute name="name" type="xs:IDREF" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticMultivariateDistributionUserFunctionTree">
+		<xs:sequence>
+			<xs:element ref="OSnLNode"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="StochasticNonlinearTransformations">
+		<xs:sequence>
+			<xs:element name="nonlinearTransformation" type="StochasticNonlinearTransformation" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfNonlinearTransformations" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticNonlinearTransformation">
+		<xs:sequence>
+			<xs:element ref="OSnLNode" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticLinearTransformation">
+		<xs:sequence>
+			<xs:element name="matrixCoefficients" type="StochasticLinearTransformationMatrixCoefficients"/>
+			<xs:element name="autoregressiveTerms" type="StochasticLinearTransformationAutoregressiveTerms" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="StochasticElements">
+		<xs:choice maxOccurs="unbounded">
+			<xs:element name="param" type="StochasticElementParam"/>
+			<xs:element name="var" type="StochasticElementVar"/>
+			<xs:element name="obj" type="StochasticElementObj"/>
+			<xs:element name="con" type="StochasticElementCon"/>
+			<xs:element name="el" type="StochasticElementEl"/>
+			<xs:element name="qTerm" type="StochasticElementQTerm"/>
+			<xs:element name="number" type="StochasticElementNumber"/>
+		</xs:choice>
+		<xs:attribute name="numberOfElements" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticElementParam">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="type" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="value"/>
+					<xs:enumeration value="lb"/>
+					<xs:enumeration value="ub"/>
+					<xs:enumeration value="init"/>
+					<xs:enumeration value="initString"/>
+					<xs:enumeration value="type"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="baseValue" type="xs:double" use="optional" default="0.0"/>
+		<xs:attribute name="distrIdx" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="distrVarIdx" type="xs:nonNegativeInteger" use="optional" default="0"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticElementVar">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="type" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="lb"/>
+					<xs:enumeration value="ub"/>
+					<xs:enumeration value="init"/>
+					<xs:enumeration value="initString"/>
+					<xs:enumeration value="type"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="baseValue" type="xs:double" use="optional" default="0.0"/>
+		<xs:attribute name="distrIdx" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="distrVarIdx" type="xs:nonNegativeInteger" use="optional" default="0"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticElementObj">
+		<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
+		<xs:attribute name="type" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="constant"/>
+					<xs:enumeration value="weight"/>
+					<xs:enumeration value="coef"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="varIdx" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="baseValue" type="xs:double" use="optional" default="0.0"/>
+		<xs:attribute name="distrIdx" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="distrVarIdx" type="xs:nonNegativeInteger" use="optional" default="0"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticElementCon">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="type" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="lb"/>
+					<xs:enumeration value="ub"/>
+					<xs:enumeration value="constant"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="baseValue" type="xs:double" use="optional" default="0.0"/>
+		<xs:attribute name="distrIdx" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="distrVarIdx" type="xs:nonNegativeInteger" use="optional" default="0"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticElementEl">
+		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="colIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="baseValue" type="xs:double" use="optional" default="0.0"/>
+		<xs:attribute name="distrIdx" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="distrVarIdx" type="xs:nonNegativeInteger" use="optional" default="0"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticElementQTerm">
+		<xs:attribute name="idx" type="xs:integer" use="required"/>
+		<xs:attribute name="idxOne" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="idxTwo" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="baseValue" type="xs:double" use="optional" default="0.0"/>
+		<xs:attribute name="distrIdx" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="distrVarIdx" type="xs:nonNegativeInteger" use="optional" default="0"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticElementNumber">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="id" type="xs:string" use="required"/>
+				<xs:attribute name="baseValue" type="xs:double" use="optional" default="0.0"/>
+				<xs:attribute name="distrIdx" type="xs:nonNegativeInteger" use="optional"/>
+				<xs:attribute name="distrVarIdx" type="xs:nonNegativeInteger" use="optional" default="0"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="StochasticLinearTransformationMatrixCoefficients">
+		<xs:complexContent>
+			<xs:extension base="LinearConstraintCoefficients"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="StochasticLinearTransformationAutoregressiveTerms">
+		<xs:sequence>
+			<xs:element name="historyParameters" type="StochasticLinearTransformationHistoryParameters"/>
+			<xs:element name="matrixCoefficients" type="StochasticLinearTransformationMatrixCoefficients"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="StochasticLinearTransformationHistoryParameters">
+		<xs:sequence>
+			<xs:element name="el" type="StochasticLinearTransformationHistoryParametersEl" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfParameters" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticLinearTransformationHistoryParametersEl">
+		<xs:complexContent>
+			<xs:extension base="StochasticNumber"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="StochasticRandomFunction">
+		<xs:sequence>
+			<xs:element ref="OSnLNode"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="StochasticRandomFunctionRows">
+		<xs:sequence>
+			<xs:element name="row" type="xs:int" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticSoftConstraints">
+		<xs:all>
+			<xs:element name="penalties" type="StochasticPenalties" minOccurs="0"/>
+			<xs:element name="probabilisticObjectives" type="StochasticProbabilisticObjectives" minOccurs="0"/>
+			<xs:element name="chanceConstraints" type="StochasticChanceConstraints" minOccurs="0"/>
+			<xs:element name="integratedChanceConstraints" type="StochasticIntegratedChanceConstraints" minOccurs="0"/>
+			<xs:element name="userDefinedRiskMeasures" type="StochasticUserDefinedRiskMeasures" minOccurs="0"/>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="StochasticPenalties">
+		<xs:sequence>
+			<xs:element name="row" type="StochasticPenaltiesRow" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="StochasticPenaltiesRow">
+		<xs:choice>
+			<xs:element name="simpleRecourse" type="StochasticSimpleRecourse" minOccurs="0"/>
+			<xs:element name="robustOptimization" type="StochasticRobustOptimization" minOccurs="0"/>
+			<xs:element name="piecewiseLinearQuadratic" type="StochasticPiecewiseLinearQuadraticPenalty" minOccurs="0"/>
+			<xs:element name="userDefinedPenalty" type="StochasticUserDefinedPenalty" minOccurs="0"/>
+		</xs:choice>
+		<xs:attribute name="idx" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:int">
+					<xs:minInclusive value="0"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="StochasticSimpleRecourse">
+		<xs:attribute name="shortagePenalty" type="xs:double" use="optional" default="0"/>
+		<xs:attribute name="surplusPenalty" type="xs:double" use="optional" default="0"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticRobustOptimization">
+		<xs:attribute name="quadraticShortagePenalty" type="xs:double" use="optional" default="0"/>
+		<xs:attribute name="quadraticSurplusPenalty" type="xs:double" use="optional" default="0"/>
+		<xs:attribute name="quadraticFactor" use="optional" default="2.0">
+			<xs:simpleType>
+				<xs:restriction base="xs:double">
+					<xs:minInclusive value="0.0"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="StochasticPiecewiseLinearQuadraticPenalty">
+		<xs:attribute name="linearShortageParam" type="xs:double" default="0"/>
+		<xs:attribute name="linearSurplusParam" type="xs:double" use="optional" default="0"/>
+		<xs:attribute name="quadraticShortageParam" type="xs:double" use="optional" default="0"/>
+		<xs:attribute name="quadraticSurplusParam" type="xs:double" use="optional" default="0"/>
+		<xs:attribute name="quadraticFactor" use="optional" default="2.0">
+			<xs:simpleType>
+				<xs:restriction base="xs:double">
+					<xs:minInclusive value="0.0"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="StochasticUserDefinedPenalty">
+		<xs:sequence>
+			<xs:element name="surplusPenalty" type="StochasticUserDefinedSurplusPenalty" minOccurs="0"/>
+			<xs:element name="shortagePenalty" type="StochasticUserDefinedShortagePenalty" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:ID" use="required"/>
+		<xs:attribute name="default" type="xs:string" use="optional"/>
+		<xs:attribute name="isVariable" type="xs:boolean" use="optional" default="false"/>
+		<xs:attribute name="variableType" use="optional" default="C">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="C"/>
+					<xs:enumeration value="B"/>
+					<xs:enumeration value="I"/>
+					<xs:enumeration value="S"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="StochasticUserDefinedSurplusPenalty">
+		<xs:sequence minOccurs="0">
+			<xs:element ref="OSnLNode" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="StochasticUserDefinedShortagePenalty">
+		<xs:sequence minOccurs="0">
+			<xs:element ref="OSnLNode" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="StochasticProbabilisticObjectives">
+		<xs:sequence>
+			<xs:element name="simpleProbabilisticObjective" type="StochasticSimpleProbabilisticObjective" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="jointProbabilisticObjective" type="StochasticJointProbabilisticObjective" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="StochasticSimpleProbabilisticObjective">
+		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="maxOrMin" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="min"/>
+					<xs:enumeration value="max"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="StochasticJointProbabilisticObjective">
+		<xs:sequence>
+			<xs:element name="row" type="xs:nonNegativeInteger"/>
+		</xs:sequence>
+		<xs:attribute name="maxOrMin" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="min"/>
+					<xs:enumeration value="max"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="aggregatingFunction" use="optional" default="and">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="min"/>
+					<xs:enumeration value="max"/>
+					<xs:enumeration value="sum"/>
+					<xs:enumeration value="and"/>
+					<xs:enumeration value="or"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="StochasticChanceConstraints">
+		<xs:sequence>
+			<xs:element name="simpleChanceConstraint" type="StochasticSimpleChanceConstraint" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="jointChanceConstraint" type="StochasticJointChanceConstraint" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="StochasticSimpleChanceConstraint">
+		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="lb" use="optional" default="0.0">
+			<xs:simpleType>
+				<xs:restriction base="xs:double">
+					<xs:minInclusive value="0.0"/>
+					<xs:maxInclusive value="1.0"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="ub" use="optional" default="1.0">
+			<xs:simpleType>
+				<xs:restriction base="xs:double">
+					<xs:minInclusive value="0.0"/>
+					<xs:maxInclusive value="1.0"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="StochasticJointChanceConstraint">
+		<xs:sequence>
+			<xs:element name="row" type="xs:nonNegativeInteger" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="lb" use="optional" default="0.0">
+			<xs:simpleType>
+				<xs:restriction base="xs:double">
+					<xs:minInclusive value="0.0"/>
+					<xs:maxInclusive value="1.0"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="ub" use="optional" default="1.0">
+			<xs:simpleType>
+				<xs:restriction base="xs:double">
+					<xs:minInclusive value="0.0"/>
+					<xs:maxInclusive value="1.0"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="aggregatingFunction" use="optional" default="and">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="min"/>
+					<xs:enumeration value="max"/>
+					<xs:enumeration value="sum"/>
+					<xs:enumeration value="and"/>
+					<xs:enumeration value="or"/>
+					<xs:enumeration value=""/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="StochasticIntegratedChanceConstraints">
+		<xs:sequence>
+			<xs:element name="simpleIntegratedChanceConstraint" type="StochasticSimpleIntegratedChanceConstraint" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="jointIntegratedChanceConstraint" type="StochasticJointIntegratedChanceConstraint" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="StochasticSimpleIntegratedChanceConstraint">
+		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="lb" type="xs:double" use="optional" default="0"/>
+		<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticJointIntegratedChanceConstraint">
+		<xs:sequence>
+			<xs:element name="row" type="xs:nonNegativeInteger" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="lb" type="xs:double" use="optional" default="0"/>
+		<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
+		<xs:attribute name="aggregatingFunction" use="optional" default="and">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="min"/>
+					<xs:enumeration value="max"/>
+					<xs:enumeration value="sum"/>
+					<xs:enumeration value="and"/>
+					<xs:enumeration value="or"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="StochasticUserDefinedRiskMeasures">
+		<xs:sequence>
+			<xs:element name="simpleUserDefinedRiskMeasure" type="StochasticSimpleUserDefinedRiskMeasure" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="jointUserDefinedRiskMeasure" type="StochasticJointUserDefinedRiskMeasure" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="StochasticSimpleUserDefinedRiskMeasure">
+		<xs:sequence>
+			<xs:element ref="OSnLNode" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="lb" type="xs:double" use="optional" default="0"/>
+		<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticJointUserDefinedRiskMeasure">
+		<xs:sequence>
+			<xs:element name="row" type="StochasticJointUserDefinedRiskMeasureRow" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="lb" type="xs:double" use="optional" default="0"/>
+		<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
+		<xs:attribute name="aggregatingFunction" use="optional" default="and">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="min"/>
+					<xs:enumeration value="max"/>
+					<xs:enumeration value="sum"/>
+					<xs:enumeration value="and"/>
+					<xs:enumeration value="or"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="StochasticJointUserDefinedRiskMeasureRow">
+		<xs:sequence>
+			<xs:element ref="OSnLNode" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticNumber">
+		<xs:choice>
+			<xs:element name="param" type="StochasticNumberParam"/>
+			<xs:element name="var" type="StochasticNumberVar"/>
+			<xs:element name="obj" type="StochasticNumberObj"/>
+			<xs:element name="con" type="StochasticNumberCon"/>
+			<xs:element name="el" type="StochasticNumberLinearConstraintCoefficientsEl"/>
+			<xs:element name="qTerm" type="StochasticNumberQuadraticCoefficientsQTerm"/>
+			<xs:element name="number" type="StochasticNumberNonlinearExpressionsNumber"/>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="StochasticNumbers">
+		<xs:all>
+			<xs:element name="parameters" type="StochasticNumbersParameters" minOccurs="0"/>
+			<xs:element name="variables" type="StochasticNumbersVariables" minOccurs="0"/>
+			<xs:element name="objectives" type="StochasticNumbersObjectives" minOccurs="0"/>
+			<xs:element name="constraints" type="StochasticNumbersConstraints" minOccurs="0"/>
+			<xs:element name="linearConstraintCoefficients" type="StochasticNumbersLinearConstraintCoefficients" minOccurs="0"/>
+			<xs:element name="quadraticCoefficients" type="StochasticNumbersQuadraticCoefficients" minOccurs="0"/>
+			<xs:element name="nonlinearExpressions" type="StochasticNumbersNonlinearExpressions" minOccurs="0"/>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="StochasticNumbersParameters">
+		<xs:sequence>
+			<xs:element name="param" type="StochasticNumberParam" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfVariables" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticNumbersVariables">
+		<xs:sequence>
+			<xs:element name="var" type="StochasticNumberVar" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfVariables" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticNumberParam">
+		<xs:simpleContent>
+			<xs:extension base="xs:double">
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="type" use="required">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="value"/>
+							<xs:enumeration value="lb"/>
+							<xs:enumeration value="ub"/>
+							<xs:enumeration value="init"/>
+							<xs:enumeration value="initString"/>
+							<xs:enumeration value="type"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="StochasticNumberVar">
+		<xs:simpleContent>
+			<xs:extension base="xs:double">
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="type" use="required">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="lb"/>
+							<xs:enumeration value="ub"/>
+							<xs:enumeration value="init"/>
+							<xs:enumeration value="initString"/>
+							<xs:enumeration value="type"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="StochasticNumbersObjectives">
+		<xs:sequence>
+			<xs:element name="obj" type="StochasticNumberObj" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticNumberObj">
+		<xs:simpleContent>
+			<xs:extension base="xs:double">
+				<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
+				<xs:attribute name="type" use="required">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="constant"/>
+							<xs:enumeration value="weight"/>
+							<xs:enumeration value="coef"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="varIdx" type="xs:nonNegativeInteger" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="StochasticNumbersConstraints">
+		<xs:sequence>
+			<xs:element name="con" type="StochasticNumberCon" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticNumberCon">
+		<xs:simpleContent>
+			<xs:extension base="xs:double">
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="type" use="required">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="lb"/>
+							<xs:enumeration value="ub"/>
+							<xs:enumeration value="lbAndUb"/>
+							<xs:enumeration value="constant"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="StochasticNumbersLinearConstraintCoefficients">
+		<xs:sequence>
+			<xs:element name="el" type="StochasticNumberLinearConstraintCoefficientsEl" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticNumberLinearConstraintCoefficientsEl">
+		<xs:simpleContent>
+			<xs:extension base="xs:double">
+				<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="colIdx" type="xs:nonNegativeInteger" use="required"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="StochasticNumbersQuadraticCoefficients">
+		<xs:sequence>
+			<xs:element name="qTerm" type="StochasticNumberQuadraticCoefficientsQTerm" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfQuadraticTerms" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticNumberQuadraticCoefficientsQTerm">
+		<xs:simpleContent>
+			<xs:extension base="xs:double">
+				<xs:attribute name="idx" type="xs:integer" use="required"/>
+				<xs:attribute name="idxOne" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="idxTwo" type="xs:nonNegativeInteger" use="required"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="StochasticNumbersNonlinearExpressions">
+		<xs:sequence>
+			<xs:element name="number" type="StochasticNumberNonlinearExpressionsNumber" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfNonlinearExpressions" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticNumberNonlinearExpressionsNumber">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="id" type="xs:string" use="required"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="StochasticScenarioNode" mixed="false">
+		<xs:annotation>
+			<xs:documentation>This is a generic node from which we derive sNode</xs:documentation>
+		</xs:annotation>
+	</xs:complexType>
+	<xs:element name="scenarioNode" type="StochasticScenarioNode" abstract="true"/>
+	<xs:element name="sNode" type="StochasticNode" substitutionGroup="scenarioNode"/>
+	<xs:complexType name="StochasticNode">
+		<xs:complexContent>
+			<xs:extension base="StochasticScenarioNode">
+				<xs:sequence minOccurs="0" maxOccurs="unbounded">
+					<xs:choice minOccurs="0">
+						<xs:element ref="osil"/>
+						<xs:element name="changes" type="StochasticNumbers"/>
+					</xs:choice>
+					<xs:element ref="scenarioNode" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+				<xs:attribute name="prob" use="required">
+					<xs:simpleType>
+						<xs:restriction base="xs:double">
+							<xs:minInclusive value="0.0"/>
+							<xs:maxInclusive value="1.0"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="base" use="optional" default="coreProgram">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="none"/>
+							<xs:enumeration value="coreProgram"/>
+							<xs:enumeration value="firstSibling"/>
+							<xs:enumeration value="lastSibling"/>
+							<xs:enumeration value="parent"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

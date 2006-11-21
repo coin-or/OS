@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+	<xs:element name="osul" type="OSuL"/>
+	<xs:complexType name="OSuL">
+		<xs:sequence>
+			<xs:element name="uri" type="URI" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="URI">
+		<xs:simpleContent>
+			<xs:extension base="xs:anyURI">
+				<xs:attribute name="serviceName" type="xs:string" use="optional"/>
+				<xs:attribute name="matchType" use="optional" default="exact">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="exact"/>
+							<xs:enumeration value="moreGeneral"/>
+							<xs:enumeration value="moreRestricted"/>
+							<xs:enumeration value="approximate"/>
+							<xs:enumeration value="guess"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="licenseRequired" type="xs:boolean" use="optional" default="false"/>
+				<xs:attribute name="userNameRequired" type="xs:boolean" use="optional" default="false"/>
+				<xs:attribute name="passwordRequired" type="xs:boolean" use="optional" default="false"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+</xs:schema>

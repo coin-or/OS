@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="OSgL.xsd"/>
+	<xs:element name="osRepository" type="OSRepositoty"/>
+	<xs:complexType name="OSRepositoty">
+		<xs:sequence>
+			<xs:element name="description"/>
+			<xs:element name="news" type="News"/>
+			<xs:element name="instance" type="RepositotyInstance" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RepositotyInstance">
+		<xs:sequence>
+			<xs:element name="name" type="xs:string"/>
+			<xs:element name="source" type="xs:string"/>
+			<xs:element name="description" type="xs:string"/>
+			<xs:element name="originalFileName" type="xs:string"/>
+			<xs:element name="osDirectoty" type="xs:string"/>
+			<xs:element name="osFileName" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>
