@@ -220,6 +220,3 @@ doxydoc/doxygen.conf -text
 /install-sh -text
 /ltmain.sh -text
 /missing -text
-wsdl/OScL.wsdl -text
-wsdl/OSdL.wsdl -text
-wsdl/OShL.wsdl -text
