@@ -140,6 +140,9 @@
 		<xs:attribute name="numberOfNonlinearExpressions" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="Nl">
+		<xs:sequence>
+			<xs:element ref="OSnLNode"/>
+		</xs:sequence>
 		<xs:attribute name="idx" type="xs:int" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="Cones">
