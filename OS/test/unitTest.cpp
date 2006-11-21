@@ -65,6 +65,7 @@ int main(int argC, char* argV[])
 	std::string osilFileName;
 	std::string ipOptFileName;
 	std::string nlFileName; 
+	std::string lindoFileName;
 	std::string mpsFileName;     
 	std::string parserTestOSiLFileName;
 	std::string osil;
@@ -77,7 +78,11 @@ int main(int argC, char* argV[])
 	osilFileName =  dataDir + "parincLinear.osil";
 	//osilFileName =  dataDir + "objOnly.osil";
 	//ipOptFileName =  dataDir + "HS071_NLP.osil";
-	ipOptFileName =  dataDir + "rosenbrock.osil";
+	ipOptFileName =  dataDir + "aircraft.osil";
+	//ipOptFileName =  dataDir + "rosenbrock.osil";
+	ipOptFileName =  dataDir + "blockqp1.osil";
+	lindoFileName = dataDir + "lindoapiaddins.osil";
+	lindoFileName = dataDir + "blockqp1.osil";
 	nlFileName = dataDir + "hs71.nl";
 	mpsFileName =  dataDir + "parinc.mps";
 	parserTestOSiLFileName = dataDir + "parincLinear.osil"; 
@@ -134,7 +139,7 @@ int main(int argC, char* argV[])
 	}
 	#ifdef COIN_HAS_LINDO
 	try{
-		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		osil = fileUtil->getFileAsString( &lindoFileName[0]);
 		cout << "create a new LINDO Solver for OSiL string solution" << endl;
 		m_Solver = new LindoSolver();	
 		m_Solver->osil = osil;

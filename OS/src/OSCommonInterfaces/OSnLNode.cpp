@@ -782,7 +782,13 @@ double OSnLNodePower::calculateFunction(double *x){
 
 
 AD<double> OSnLNodePower::constructCppADTree(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
-	m_CppADTree = CppAD::pow(m_mChildren[0]->constructCppADTree( cppADIdx, XAD) , m_mChildren[1]->constructCppADTree( cppADIdx, XAD) );
+	if(typeid( *m_mChildren[1]) != typeid( OSnLNodeNumber)){
+		m_CppADTree = CppAD::pow(m_mChildren[0]->constructCppADTree( cppADIdx, XAD) , m_mChildren[1]->constructCppADTree( cppADIdx, XAD) );
+	}
+	else{
+		OSnLNodeNumber *numNode =  (OSnLNodeNumber*)m_mChildren[1];
+		m_CppADTree = CppAD::pow(m_mChildren[0]->constructCppADTree( cppADIdx, XAD) ,  numNode->value);
+	}
 	return m_CppADTree;
 }// end OSnLNodePower::constructCppADTree
 

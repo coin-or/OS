@@ -421,7 +421,8 @@ bool LindoSolver::optimize(){
 	//  
 
 	if(osinstance->getNumberOfNonlinearExpressions() > 0){ 
-		m_iLindoErrorCode = LSsolveGOP(pModel_, NULL) ;
+		LSoptimize( pModel_, LS_METHOD_FREE, &nSolStatus);
+		//m_iLindoErrorCode = LSsolveGOP(pModel_, NULL) ;
 		lindoAPIErrorCheck("There was an ERROR in the call to the GOP solver");
 		LSgetInfo (pModel_, LS_IINFO_GOP_STATUS, &nSolStatus);
 	}
