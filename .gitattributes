@@ -210,6 +210,9 @@ OS/src/OSUtils/OSParameters.h -text
 OS/test/Makefile.am -text
 OS/test/Makefile.in -text
 OS/test/unitTest.cpp -text
+OS/wsdl/OScL.wsdl -text
+OS/wsdl/OSdL.wsdl -text
+OS/wsdl/OShL.wsdl -text
 /README -text
 /config.guess -text
 /config.sub -text
