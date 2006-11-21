@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- build.xml 1.0, 1.0 03/14/2004 -->
+<!-- Copyright (c) 2004 -->
+<!-- A generic ant file to build Optimization Services components-->
+<!-- Customize in "build.properties" file except for project name-->
+
+<project name="OSCommon" default="main" basedir=".">
+	<echo>Welcome to Optimization Services!</echo>
+	<!-- main -->
+	<target name="main" depends="compile"/>
+	
+	<!-- init -->
+	<target name="init">
+		<property name="author" value="Jun Ma"/>
+		<property name="version" value="1.0, 03/14/2004"/>
+		<property name="since" value="OS1.0"/>
+		<property file="build.properties"/>
+		<path id="classpath">
+			<pathelement path="${class.path}"/>
+			<fileset dir="${lib.dir}">
+				<patternset refid="jar.patterns"/>
+			</fileset>
+		</path>
+		<echo>Optimization Services build.xml</echo>
+		<echo>@author=${author}</echo>
+		<echo>@version=${version}</echo>
+		<echo>@since=${since}</echo>
+		<echo>@property file=build.properties</echo>
+		<echo>@classpath=${class.path}</echo>
+	</target>
+	
+	<!-- prepare -->
+	<target name="prepare" depends="init">
+		<mkdir dir="${bin.dir}"/>
+		<mkdir dir="${bin.dir}/META-INF"/>
+		
+	</target>
+	
+	<!-- compile -->
+	<target name="compile" depends="prepare">
+		<echo message="Now compiling..."/>
+		<javac srcdir="${src.dir}" 
+			   destdir="${bin.dir}"
+			   deprecation="on"
+			   debug="off"
+			   optimize="on"
+			   includes="**/*.java"
+			   classpathref="classpath"/>
+		<echo message="End compiling."/>
+	</target>
+
+	<!-- build jar -->
+	<target name="build.jar" depends="prepare, compile" if="build.jar">
+		<echo message="Now building jar..."/>
+		<jar basedir="${bin.dir}" destfile="${project.name}.jar" 
+			 includes="**/*.class" 
+			 manifest="${meta.dir}/${manifest}">
+			<metainf dir="${meta.dir}"/>			 
+		</jar>
+		<echo message="End building jar."/>
+	</target>
+
+	<!-- build war -->
+	<target name="build.war" depends="prepare, compile" if="build.war">
+		<echo message="Now building war..."/>
+		<war basedir="." destfile="${project.name}.war" webxml="${web.dir}/${webxml}">
+	  		<fileset dir="."/>
+	  		<classes dir="${web.dir}/classes"/>
+	  		<classes dir="${bin.dir}"/>
+	  		<lib dir="${web.dir}/lib"/>
+	  		<lib dir="${lib.dir}"/>
+	  		<webinf dir="${web.dir}"/>
+	  		<metainf dir="${meta.dir}"/> 
+	  		<zipfileset dir="${jsp.dir}" prefix="${jsp.dir}"/>
+	  		<zipfileset dir="${js.dir}" prefix="${js.dir}"/>
+	  		<zipfileset dir="${css.dir}" prefix="${css.dir}"/>
+	  		<zipfileset dir="${img.dir}" prefix="${img.dir}"/>
+	  		<zipfileset dir="${file.dir}" prefix="$file.dir"/>
+	  	</war>
+		<echo message="End building war."/>
+	</target>
+
+	<!-- build ear -->
+	<target name="build.ear" depends="prepare, compile" if="build.ear">
+		<echo message="Now building ear..."/>
+		<ear basedir="." destfile="${project.name}.ear" appxml="${meta.dir}/application.xml">
+	  		<fileset dir="." includes="*.war, *.jar"/>
+	  		<fileset dir="${bin.dir}" includes="*.war, *.jar"/>
+	  	</ear>
+		<echo message="End building ear."/>
+	</target>
+
+	<!-- clean -->
+	<target name="clean" depends="init">
+		<delete dir="${bin.dir}"/>
+		<delete file="${project.name}.jar"/>
+	</target>
+	
+	<!--pattern, file, directory sets -->
+	<patternset id="xml.patterns" includes="**/*.xml" excludes="**/build.xml"/>
+	<patternset id="java.patterns" includes="**/*.java"/>
+	<patternset id="jar.patterns" includes="**/*.jar"/>
+
+	<!-- cvs anoymously to sourceforge's osxl for update, commented out for reference-->
+	<!--cvs cvsroot=":pserver:anonymous@cvs-pserver.sf.net:80/cvsroot/osxl/" 
+		 package="${project.name}"
+		 dest="${OSHome.dir}/${project.name}"
+		 command="update">
+	</cvs-->	
+</project>

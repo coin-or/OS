@@ -1,0 +1,558 @@
+  
+/*    
+ * Copyright © 2002 Sun Microsystems, Inc., 4150 Network Circle, Santa Clara,
+ * California 95054, U.S.A. All rights reserved.  Sun Microsystems, Inc. has
+ * intellectual property rights relating to technology embodied in the product 
+ * that is described in this document. In particular, and without limitation,
+ * these intellectual property rights may include one or more of the U.S.
+ * patents listed at http://www.sun.com/patents and one or more additional
+ * patents or pending patent applications in the U.S. and in other countries.
+ * U.S. Government Rights - Commercial software. Government users are subject
+ * to the Sun Microsystems, Inc. standard license agreement and applicable
+ * provisions of the FAR and its supplements.  Use is subject to license terms.
+ * Sun,  Sun Microsystems,  the Sun logo and  Java are trademarks or registered
+ * trademarks of Sun Microsystems, Inc. in the U.S. and other countries.  This
+ * product is covered and controlled by U.S. Export Control laws and may be
+ * subject to the export or import laws in other countries.  Nuclear, missile,
+ * chemical biological weapons or nuclear maritime end uses or end users,
+ * whether direct or indirect, are strictly prohibited.  Export or reexport
+ * to countries subject to U.S. embargo or to entities identified on U.S.
+ * export exclusion lists, including, but not limited to, the denied persons
+ * and specially designated nationals lists is strictly prohibited.
+ */   
+    
+options {    
+  LOOKAHEAD = 1;
+  CHOICE_AMBIGUITY_CHECK = 2;
+  OTHER_AMBIGUITY_CHECK = 1;
+  STATIC = false;
+  DEBUG_PARSER = false;
+  DEBUG_LOOKAHEAD = false;
+  DEBUG_TOKEN_MANAGER = false;
+  ERROR_REPORTING = true;
+  JAVA_UNICODE_ESCAPE = false;
+  UNICODE_INPUT = false;
+  IGNORE_CASE = false;
+  USER_TOKEN_MANAGER = false;
+  USER_CHAR_STREAM = false;
+  BUILD_PARSER = true;
+  BUILD_TOKEN_MANAGER = true;
+  SANITY_CHECK = true;
+  FORCE_LA_CHECK = false;
+}
+
+PARSER_BEGIN(InfixParser)
+public class InfixParser {
+	static java.util.HashMap variableHash = new java.util.HashMap(2741);
+	/** variableNames holds the names of the variables that are not declared 
+	by the user to in the <variables> elements 
+	*/
+	static java.util.Vector variableNames = new java.util.Vector() ;
+	public java.util.Vector tokenVector = new java.util.Vector();
+	public int[] rel_op_array = new int[2] ;
+	public int rel_op_array_idx = 0;
+	public int testidx = -1;
+	public String newXpathString ="";
+	public String variableName;
+	/**
+	* m_iKountTerms holds the number of terms in a function with 
+	* more than one argument
+	*/
+	private int m_iKountTerms;
+	/**
+	* m_iMarkIndex holds the index in the tokenVector of
+	* function with more than one argument
+	*/
+	private int m_iMarkIndex;
+}
+
+PARSER_END(InfixParser)
+/*  Define all the tokens and white space */
+SKIP :
+{
+  " "
+| "\t"
+| "\n"
+| "\r"
+}
+/* The functions */ 
+TOKEN:
+{
+<elem_fun: ("ln") | ("log") |("log10") | ("exp") | ("abs")> |
+<trig_fun: ("sin") | ("cos") | ("tan") > |
+<if_function: ("if")> |
+<userF_function: ("userF:" (( ["a"-"z","A"-"Z","0"-"9","[","]"] )+)?)> |
+<sum_function: ("sum")>  |
+<max_function: ("max")>
+}
+/* User Function Argument */  
+TOKEN:
+{
+<userFunctionarg: "arg:" ( ["0"-"9"] )*> 
+}
+/* an XPathIndex Node */   
+TOKEN:
+{
+<xPathIndex: "xPathIndex:" (( ["a"-"z","A"-"Z","0"-"9","[","]"] )+)?  ":" (( ["a"-"z","A"-"Z","0"-"9","[","]"] )+)?> 
+}
+
+/* unary operators */
+TOKEN:
+{
+<plus:"+"> |
+<minus:"-"> |
+<times:"*"> |
+<power:"^"> |
+<divide:"divide">
+}
+/* relational operators */
+
+TOKEN:
+{
+<eq:"="> |
+<geq:">="> |
+<leq:"<="> |
+<gt:">"> |
+<lt:"<">
+}
+/* an identifier token */
+TOKEN: 
+{
+// an id is a non-subscripted variable
+  < #id: ["a"-"z","A"-"Z"] ( ["a"-"z","A"-"Z","0"-"9"] )* >
+}
+TOKEN:
+{
+<#digit:["0"-"9"]>
+}
+TOKEN:
+{
+<#posinteger:(<digit>)+ >
+}
+
+TOKEN:
+{
+<string: "\""<id>"\"">
+}
+TOKEN:
+{
+// all for subscripts, e.g. x[4,5,77]
+< variable: <id>("[" (" ")*((<posinteger> | <id> )(",")(" ")*)*(<posinteger>|<id>)"]")? >
+}
+
+
+ 
+TOKEN:
+{
+<number:   ( (<digit>)+ ("." (<digit>)*)? ) | ( (<digit>)* "." (<digit>)+)  >
+}
+
+TOKEN:
+{
+<leftparen: "("> 
+}
+TOKEN:
+{
+<rightparen: ")"> 
+}
+
+/* an XPath Node */ 
+TOKEN:
+{
+<xpathNode: "xPath:" (( ["a"-"z","A"-"Z","0"-"9","/","[","]",":","@","$","=",">","<",";","&","'","."] )+)? ":" ( ["a"-"z","A"-"Z","0"-"9","/","[","]",":",".","@","*","$","=",">","<",";","&","{","}","'"])+  >  
+}
+/* We use the following method if we just want to get the tokens
+and don't care about parsing */
+java.util.Vector gettokenVector() : 
+{
+Token t;    
+
+} 
+{
+(
+t=<variable> {tokenVector.add(t.image); } | 
+t=<plus> {tokenVector.add(t.image); } |
+t=<minus> {tokenVector.add(t.image); } |
+t=<times> {tokenVector.add(t.image); } |
+t=<power> {tokenVector.add(t.image); } |
+t=<divide> {tokenVector.add(t.image); } |
+t=<number> {tokenVector.add(t.image); }  |
+t=<elem_fun> {tokenVector.add(t.image); } |
+t=<trig_fun> {tokenVector.add(t.image); } |
+t=<leftparen> {tokenVector.add(t.image); } |
+t=<rightparen> {tokenVector.add(t.image); } 
+)* 
+<EOF>
+ {return tokenVector;}
+} // end of gettokenVector()
+
+//objective or no relational op
+java.util.Vector start():
+{java.util.Vector returnVec;}
+{returnVec=infixNode()   <EOF> {return returnVec;}}
+//
+java.util.Vector terminalNode() : 
+{
+Token t;
+} 
+{
+(
+variableNode() | 
+numberNode()
+)
+{return tokenVector;}
+} // end of terminalNode()
+
+java.util.Vector numberNodeMod() : 
+{
+Token t;
+} 
+{
+(
+
+(t=<number> {tokenVector.add(t.image); })
+|
+(t=<minus> {tokenVector.add("negate"); }  t=<number> {tokenVector.add(t.image); })
+|
+(t=<plus>   t=<number> {tokenVector.add(t.image); })
+)
+{return tokenVector;}
+} // end of numberNodeMod()
+ 
+java.util.Vector stringNode() : 
+{
+Token t;
+String s;
+} 
+{
+(
+t=<string> {s = (String)t.image;  tokenVector.add("number:"+s.substring(1, s.length() - 1)+":string:"); }
+)
+{return tokenVector;}
+} // end of stringNode()
+ 
+ 
+ 
+java.util.Vector variableNode():
+{Token t;
+}
+{
+t=<variable> {
+// in this case variable has a coefficient of one
+// has this variable been defined yet -- see if it got hashed
+variableName = ( String)variableHash.get( t.image);
+if(variableName == null){
+	// we are using 0 based indexing on our variable index
+	variableName = "variable:" + Integer.toString( variableHash.size() );
+	// hash the variable
+	variableNames.add( t.image);
+	variableHash.put( t.image, variableName);
+	tokenVector.add( variableName+":1[0]");
+}
+else tokenVector.add( variableName+":1[0]");}
+{return tokenVector;}
+}
+
+java.util.Vector operatorNode() : 
+{
+//System.out.println("operator node called");
+Token t;
+} 
+{
+(
+t=<plus> {tokenVector.add("plus"); } | 
+t=<minus> {tokenVector.add("minus"); } |
+t=<times> {tokenVector.add("times"); } |
+t=<power> {tokenVector.add("power"); } |
+t=<divide> {tokenVector.add("divide");} 
+)
+{return tokenVector;}
+} // end of OperatorNode()
+
+java.util.Vector relationalOperatorNode() : 
+{
+//System.out.println("operator node called");
+Token t;
+} 
+{
+(
+t=<eq> {tokenVector.add("eq"); } | 
+t=<lt> {tokenVector.add("lt"); } |
+t=<gt> {tokenVector.add("gt"); } |
+t=<leq> {tokenVector.add("leq"); } |
+t=<geq> {tokenVector.add("geq");} 
+)
+{  return tokenVector;}
+} // end of relationalOperatorNode()
+
+
+java.util.Vector xPathIndexNode() : 
+{
+Token t;
+}
+{
+t=<xPathIndex> {tokenVector.add(t.image);} 
+t=<leftparen> {tokenVector.add(t.image); }
+/*t=<userFunctionarg> {tokenVector.add(t.image); } */
+infixNode()  
+t=<rightparen> {tokenVector.add(t.image); }  
+{return tokenVector;}
+} // end xPathIndexNode()
+
+java.util.Vector xpathNode() : 
+{
+Token t;
+}
+{
+t=<xpathNode> {
+newXpathString  = t.image.replaceAll("(leftParen)", "(");
+newXpathString  = newXpathString.replaceAll("(rightParen)", ")");
+tokenVector.add(newXpathString);
+}
+( 
+t=<leftparen> {tokenVector.add(t.image); } 
+xPathIndexNode() 
+("," xPathIndexNode() )*
+t=<rightparen> {tokenVector.add(t.image); }  
+)?
+{return tokenVector;}
+} // end xpathNode()
+
+java.util.Vector userF_functionNode() :  
+{
+Token t;
+}
+{
+t=<userF_function> {tokenVector.add(t.image); }
+( 
+t=<leftparen> {tokenVector.add(t.image); } 
+(infixNode() |   stringNode()  )
+("," (infixNode() |  stringNode()  ) )*
+t=<rightparen> {tokenVector.add(t.image); }  
+)?
+{return tokenVector;}
+} // end userF_functionNode()
+
+/* Parse the functions */
+java.util.Vector functionNode() : 
+{
+Token t;
+} 
+{
+(
+(t=<elem_fun> {tokenVector.add(t.image); }  |  t=<trig_fun> {tokenVector.add(t.image); })
+t=<leftparen> {tokenVector.add(t.image); } 
+infixNode()
+t=<rightparen> 
+{
+tokenVector.add(t.image); 
+}
+) 
+{return tokenVector;}
+}  // end functionNode()
+java.util.Vector sumfunctionNode() : 
+{
+Token t;
+m_iKountTerms = 1;
+} 
+{ 
+(
+(t=<sum_function> {tokenVector.add(t.image); m_iMarkIndex = tokenVector.size();}  )
+t=<leftparen> {tokenVector.add(t.image); } 
+(infixNode() )
+(
+{++m_iKountTerms;}  
+"," infixNode() 
+)* 
+t=<rightparen> {tokenVector.add(t.image); tokenVector.set(m_iMarkIndex - 1, "sum[" + m_iKountTerms + "]");}
+) 
+{return tokenVector;}
+}  // end sumfunctionNode()
+
+
+java.util.Vector maxfunctionNode() : 
+{
+Token t;
+m_iKountTerms = 1;
+} 
+{ 
+(
+(t=<max_function> {tokenVector.add(t.image); m_iMarkIndex = tokenVector.size();}  )
+t=<leftparen> {tokenVector.add(t.image); } 
+(infixNode() )
+(
+{++m_iKountTerms;}
+"," infixNode() 
+)* 
+t=<rightparen> {tokenVector.add(t.image); tokenVector.set(m_iMarkIndex - 1, "max[" + m_iKountTerms + "]");}
+) 
+{return tokenVector;}
+}  // end maxfunctionNode()
+
+
+/* Parse the logic if function */
+java.util.Vector if_functionNode() : 
+{
+Token t;
+} 
+{
+(
+t=<if_function> {tokenVector.add(t.image); } 
+t=<leftparen> {tokenVector.add(t.image); } 
+infixNode() if_functionNodeComponent() "," infixNode() "," infixNode()
+t=<rightparen> {tokenVector.add(t.image); }
+) 
+{return tokenVector;}
+}  // end if_functionNode()
+ 
+
+
+/* The followin is used so we can LL(1) parse the if_function */
+java.util.Vector if_functionNodeComponent() : 
+{
+Token t;
+} 
+{
+(
+(relationalOperatorNode() infixNode())
+|
+emptyProduction()
+) 
+{return tokenVector;}
+}  // end if_functionNodeComponent()
+ 
+
+
+
+
+java.util.Vector parseConstraint():
+{}
+{ 
+(infixNode()  relationalOperatorNode() infixNode() <EOF> )
+
+{ return tokenVector;} } /* end parseConstraint() */
+
+
+java.util.Vector lookAhead():
+{}
+{
+( numberNodeMod()  relationalOperatorNode() 
+{rel_op_array[rel_op_array_idx] = tokenVector.size() -1; rel_op_array_idx += 1;} )
+{ return tokenVector;} } /* end lookAhead() */
+
+java.util.Vector parseConstraint1():
+{}
+{
+ 
+(
+( infixNode()  X()) 
+ 
+)
+<EOF>
+{ return tokenVector;} } /* end parseConstraint1() */
+
+
+
+java.util.Vector parseConstraint2():
+{}
+{ 
+infixNode()  relationalOperatorNode() 
+{rel_op_array[rel_op_array_idx] = tokenVector.size() -1; rel_op_array_idx += 1;}
+  infixNode() <EOF>
+{ return tokenVector;} } /* end parseConstraint2() */
+
+ 
+/* the emptyProduction */
+void emptyProduction():
+{}
+{{}} // end emptyProduction()
+
+java.util.Vector X():
+{}
+{ 
+( 
+(relationalOperatorNode() {rel_op_array[rel_op_array_idx] = tokenVector.size() -1; rel_op_array_idx += 1;}  numberNodeMod()) |
+emptyProduction()
+) <EOF>
+{ return tokenVector;} } /* end X() */
+
+
+java.util.Vector infixNode() : {
+Token t; 
+} 
+{
+
+(nlNode() | 
+(t=<minus> {tokenVector.add("negate"); } nlNode() ) |
+(t=<plus>  nlNode() ))
+(
+operatorNode()  nlNode() 
+)* 
+{return tokenVector;}
+} // end infixNode() 
+
+
+void nlNode():
+/* otherNodes should be all possible nl nodes except number and variable  */
+{Token t;}
+{ numberNode()   | variableNode() | otherNodes()
+} //end nlNode
+
+
+java.util.Vector numberNode() : 
+{
+Token t = new Token();
+} 
+{
+( 
+ (t=<number>)  (multTermNode( t.image))
+)
+{return tokenVector;}
+} // end of numberNode()
+
+java.util.Vector multTermNode(String s) : {
+Token t;  
+} 
+{
+(
+(<times> (t=<variable> {
+// has this variable been defined yet -- see if it got hashed
+variableName = ( String)variableHash.get( t.image);
+if(variableName == null){
+	// we are using 0 based indexing on our variable index
+	variableName = "variable:" + Integer.toString( variableHash.size() );
+	// hash the variable 
+	variableNames.add( t.image); 
+	variableHash.put( t.image, variableName); 
+	tokenVector.add( variableName+":"+s+"[0]");
+}
+else tokenVector.add( variableName+":"+s+"[0]");
+} 
+|
+{tokenVector.add(s); tokenVector.add("times");}
+(
+t=<number> {tokenVector.add(t.image); }
+)
+|
+{tokenVector.add(s); tokenVector.add("times");}
+otherNodes() )
+ )
+|
+emptyProduction() {tokenVector.add( s);}
+)
+{return tokenVector;}
+} // end multTermNode() 
+java.util.Vector otherNodes() : 
+{
+Token t = new Token();
+} 
+{
+(
+functionNode() | maxfunctionNode() | sumfunctionNode() | if_functionNode() | userF_functionNode()| xpathNode() 
+|
+t=<userFunctionarg> {tokenVector.add(t.image); }
+|
+t=<leftparen> {tokenVector.add(t.image); }  infixNode() t=<rightparen> {tokenVector.add(t.image); } 
+)
+{return tokenVector;}
+} // end of otherNodes()

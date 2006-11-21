@@ -1,0 +1,396 @@
+  
+/*   
+ * Copyright © 2002 Sun Microsystems, Inc., 4150 Network Circle, Santa Clara,
+ * California 95054, U.S.A. All rights reserved.  Sun Microsystems, Inc. has
+ * intellectual property rights relating to technology embodied in the product
+ * that is described in this document. In particular, and without limitation,
+ * these intellectual property rights may include one or more of the U.S.
+ * patents listed at http://www.sun.com/patents and one or more additional
+ * patents or pending patent applications in the U.S. and in other countries.
+ * U.S. Government Rights - Commercial software. Government users are subject
+ * to the Sun Microsystems, Inc. standard license agreement and applicable
+ * provisions of the FAR and its supplements.  Use is subject to license terms.
+ * Sun,  Sun Microsystems,  the Sun logo and  Java are trademarks or registered
+ * trademarks of Sun Microsystems, Inc. in the U.S. and other countries.  This
+ * product is covered and controlled by U.S. Export Control laws and may be
+ * subject to the export or import laws in other countries.  Nuclear, missile,
+ * chemical biological weapons or nuclear maritime end uses or end users,
+ * whether direct or indirect, are strictly prohibited.  Export or reexport
+ * to countries subject to U.S. embargo or to entities identified on U.S.
+ * export exclusion lists, including, but not limited to, the denied persons
+ * and specially designated nationals lists is strictly prohibited.
+ */    
+    
+options {   
+  LOOKAHEAD = 1;
+  CHOICE_AMBIGUITY_CHECK = 2;
+  OTHER_AMBIGUITY_CHECK = 1;
+  STATIC = false;
+  DEBUG_PARSER = false;
+  DEBUG_LOOKAHEAD = false;
+  DEBUG_TOKEN_MANAGER = false;
+  ERROR_REPORTING = true;
+  JAVA_UNICODE_ESCAPE = false;
+  UNICODE_INPUT = false;
+  IGNORE_CASE = false;
+  USER_TOKEN_MANAGER = false;
+  USER_CHAR_STREAM = false;
+  BUILD_PARSER = true;
+  BUILD_TOKEN_MANAGER = true;
+  SANITY_CHECK = true;
+  FORCE_LA_CHECK = false;
+}
+ 
+PARSER_BEGIN(OSmLPreParser)
+//package org.optimizationservices.osmodeler.parser.osml;
+import java.io.FileInputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.*;
+import java.util.Vector; 
+import java.util.Stack;
+public class OSmLPreParser {
+        java.util.Vector tokenVector = new java.util.Vector();
+        static boolean insideCon = false;
+        static boolean insideUserF = false;
+        static boolean numgt = false;
+        static int testidx = -1;
+        static String firstPart;
+        public OSmLPreParser(){
+        }
+        static public void main(String[] args){
+                String fileName = "./xml/markowitzmod2.xq";
+                FileInputStream fis = null;
+                OSmLPreParser parser;
+        try{
+            String sOSmL = null;
+            File file = new File(fileName);
+            if( file.exists() && file.canRead()){
+                fis = new FileInputStream(file);
+                byte theBytes[] = new byte[(int)file.length()];
+                if( ((long)fis.read(theBytes, 0, (int) file.length())) == file.length()){
+                	sOSmL = new String(theBytes );
+                }
+            }
+            fis.close();
+            OSmLPreParser.initOSmL( sOSmL);
+
+        }
+        catch(Exception e){
+            e.printStackTrace();
+
+        }
+        }
+        static public void initOSmL(String sOSmL){
+        	/* convert from string to InputStream */
+        	InputStream is = new ByteArrayInputStream( sOSmL.getBytes());
+            OSmLPreParser parser = new OSmLPreParser(is);
+            String newXQ = parser.preParse();
+            System.out.println( newXQ );
+        }
+        public String preParse() {
+                Vector tokenVector = new Vector();
+                try {
+                        tokenVector = this.gettokenVector();
+                }
+                catch (ParseException pe) {
+                	pe.printStackTrace();
+                }
+                this.addTerms(tokenVector);
+                String preparsedModel = "";
+                for(int i = 0; i < tokenVector.size(); i++)
+                {
+                	preparsedModel = preparsedModel  +(String)tokenVector.get( i);
+                }
+                return preparsedModel;
+        }
+	private Vector addTerms(Vector tokenVector){
+		/* take care of Saxon Quirk */
+		String sFirstTok = (String)tokenVector.firstElement();
+		if(sFirstTok.indexOf("return") > -1) tokenVector.add(0, "let $JMRKM127 := 1\n");
+		Stack parenStack = new Stack();
+		int position = -1;
+		String sum = "<sum>";
+		String ret = "return";
+		int retposition = 0;
+		String rightparen = ")";
+		String leftparen = "(";
+		String test="";
+		while(++position < tokenVector.size()){
+			position = tokenVector.indexOf(sum, position);
+			if(position < 0){
+				break;
+			}
+			/* replace ( with { */
+			//System.out.println("Sum Position = " + position);
+			tokenVector.set(position + 1, "{" );
+			/* find the last parenthesis in the sum term */
+			/* push a ( to the stack */
+			parenStack.push(leftparen);
+			while(parenStack.size() > 0){
+				position += 1;
+				test = (String)tokenVector.get( position);
+				if(test.equals(leftparen)) parenStack.push( leftparen);
+				if(test.equals(rightparen)) parenStack.pop();
+				if(test.equals(ret)) retposition = position;
+			}
+			/* position should be the last ) in the sum function */ 
+			tokenVector.set(position, "</term>}</sum>" );
+			/* retposition should be the position of the last return */
+			tokenVector.insertElementAt(" <term>", retposition+1);
+		}	
+		return tokenVector;
+	}
+	
+}
+
+PARSER_END(OSmLPreParser)
+/*  Define all the tokens and white space */
+/*
+SKIP :
+{
+ "\t"
+| "\n"
+| "\r"
+}
+*/
+TOKEN:
+{
+<space: " "> |
+<slasht: "\t"> |
+<slashn: "\n"> |
+<slashr: "\r"> 
+}
+
+/* relational operators */
+TOKEN:
+{
+<gt:">"> |
+<lt:"<"> |
+<geq:">="> |
+<leq:"<="> 
+
+}
+
+
+
+TOKEN:
+{
+<operator: "+" | "-" | "*" | "/" | "^"> 
+}
+
+TOKEN:
+{
+<leftparen: "("> 
+}
+TOKEN:
+{
+<rightparen: ")"> 
+
+}
+
+
+/* The tags */  
+TOKEN:
+{
+<startCon: "<con" > |
+<endCon: "</con>" >  |
+<startConstraints: "<constraints>" > |
+<endConstraints: "</constraints>" > |
+<startvar: "<var>" > |
+<endvar: "</var>" >  |
+<startvariables: "<variables>" > |
+<endvariables: "</variables>" > |
+<startUserfunction: "<userfunction" > |
+<endUserfunction: "</userfunction>" >  |
+<startUserfunctions: "<userfunctions>" > |
+<endUserfunctions: "</userfunctions>" > |
+<startmathProgram: "<mathProgram " > |
+<endmathProgram: "</mathProgram>" > |
+<startobj: "<obj>" > |
+<endobj: "</obj>" >
+}
+
+TOKEN:
+{
+<sum: "SUM">
+}
+ /*  */
+ 
+
+
+
+TOKEN:
+{
+<xpathNode: "xPath(" ( ["a"-"z","A"-"Z","0"-"9","/","[","]",":","@","$","=",">","<",";","&","."] )+ "," ( ["a"-"z","A"-"Z","0"-"9","/","[","]",":",".","@","*","$","=",">","<",";","&","{","}","'","(",")"])+  > 
+}
+
+TOKEN:
+{
+<atoken: (["a"-"z","A"-"Z","0"-"9","[","]",":",".","@","$","=","\"",",","{","}","!","_","#",";"])+>
+}
+
+/* We use the following method if we just want to get the tokens
+and don't care about parsing */
+java.util.Vector gettokenVector() : 
+{
+Token t;   
+}  
+{
+{/*tokenVector.add("let $JMRKM127 := 1\n");*/} 
+(
+t=<atoken> {tokenVector.add(t.image); }  |
+
+t=<startCon> 
+{
+insideCon = true;
+numgt = false;
+tokenVector.add(t.image); 
+} |
+t=<endCon> 
+{
+insideCon = false;
+numgt = false;
+tokenVector.add(t.image); 
+} |
+
+t=<startUserfunction> 
+{
+insideUserF = true;
+numgt = false;
+tokenVector.add(t.image); 
+} |
+t=<endUserfunction> 
+{ 
+insideUserF = false;
+numgt = false;
+tokenVector.add(t.image); 
+} |
+
+
+t=<leftparen> {tokenVector.add(t.image); } |
+t=<rightparen> {tokenVector.add(t.image); } |
+t=<gt> 
+{
+/* we are inside the token <con> but there could be attributes
+so we will still have a > token we don't want to count */
+if(numgt  & (insideCon || insideUserF )){
+tokenVector.add("&gt;");
+}
+else{
+tokenVector.add(t.image);
+numgt = true; 
+}
+} |
+t=<geq>
+{
+if(insideCon || insideUserF){
+tokenVector.add("&gt;=");
+}
+else{
+tokenVector.add(t.image);
+}
+} | 
+t=<lt> 
+{
+if(insideCon || insideUserF){
+tokenVector.add("&lt;");
+}
+else{
+tokenVector.add(t.image);
+} 
+} |
+t=<leq> 
+{
+if(insideCon || insideUserF){
+tokenVector.add("&lt;=");
+}
+else{
+tokenVector.add(t.image);
+} 
+} | 
+t=<xpathNode> {
+System.out.println(t.image);
+			int position = -1;
+			int endofXPath = 0;
+        	Stack parenStack = new Stack();
+			String rightparen = ")";
+			String leftparen = "(";
+			while(++position < t.image.length()){
+				position = t.image.indexOf(leftparen, position);
+				if(position < 0){
+					break;
+				}
+				parenStack.push(leftparen);
+				System.out.println("position =  " + position);
+			}
+			position = 0;
+			while(parenStack.size() > 0){
+				position = t.image.indexOf(rightparen, position);
+				endofXPath = position;
+				if(position < 0){
+					break;
+				}
+				++position;
+				parenStack.pop();
+				System.out.println("position =  " + position);
+			} 
+			System.out.println("size =  " + parenStack.size() );
+			/* Now break up the string */
+			String sXPath = t.image.substring(0, endofXPath);
+			/* replace the first ( it is in position 5 */
+			sXPath = sXPath.replaceFirst("[(]", ":");
+			sXPath = sXPath + " ";
+			/* now get rid of the comma  */
+			sXPath = sXPath.replaceFirst("[,]", ":");
+			System.out.println("sXPath =  " + sXPath);
+			
+
+/* replace all ( and ) before xPathIndex*/
+testidx = sXPath.indexOf("(xPathIndex:");
+if (testidx > -1){
+	firstPart = sXPath.substring(0, testidx);
+	firstPart = firstPart.replaceAll("[(]", "leftParen");
+	firstPart = firstPart.replaceAll("[)]", "rightParen");
+	String secondPart =  sXPath.substring(testidx );
+	System.out.println("First Part = " +  firstPart);
+	System.out.println("Second Part = " + secondPart);
+	tokenVector.add(firstPart + secondPart);
+}
+else{
+	tokenVector.add( sXPath);
+} 
+	if(t.image.length() > endofXPath + 1){
+		char[] textArray = t.image.substring(endofXPath + 1, t.image.length()).toCharArray();
+		for(int i = 0; i < textArray.length; i++){
+			tokenVector.add( String.valueOf( textArray[i] ));
+		}
+	} 
+} |
+t=<startConstraints> {tokenVector.add(t.image); } |
+t=<endConstraints> {tokenVector.add(t.image); } |
+t=<startUserfunctions> {tokenVector.add(t.image); } |
+t=<endUserfunctions> {tokenVector.add(t.image); } |
+t=<sum> {tokenVector.add("<sum>"); } |
+t=<startmathProgram> {tokenVector.add("<mathProgram "); } |
+t=<endmathProgram> {tokenVector.add("</mathProgram>"); } |
+t=<startobj> {tokenVector.add("<obj>"); } |
+t=<endobj> {tokenVector.add("</obj>"); } |
+t=<startvar> {tokenVector.add("<var>"); } |
+t=<endvar> {tokenVector.add("</var>"); } |
+t=<startvariables> {tokenVector.add("<variables>"); } |
+t=<endvariables> {tokenVector.add("</variables>"); } |
+t=<operator> {tokenVector.add(t.image); }|
+t=<space> {tokenVector.add(t.image); }|
+t=<slasht> {tokenVector.add(t.image);} |
+t=<slashn> {tokenVector.add(t.image); }|
+t=<slashr> {tokenVector.add(t.image); }
+)* 
+<EOF>
+ {return tokenVector;}
+} // end of gettokenVector()
+
+
+
+
+

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="lib/mail.jar"/>
+	<classpathentry exported="true" sourcepath="C:/eclipse/workspace/XPathExample/saxon8/source.zip" kind="lib" path="lib/saxon8.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/saxon8-jdom.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/saxon8-sql.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/swt_win32.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/swt_linux.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/swt_mac.jar"/>
+	<classpathentry exported="true" sourcepath="C:/eclipse/workspace/XPathExample/Xerces-J-src.2.5.0.zip" kind="lib" path="lib/xerces.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/xml-apis.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/xmlsec.jar"/>
+	<classpathentry kind="lib" path="lib/mtj.jar"/>
+	<classpathentry kind="lib" path="lib/mtj1_4.jar"/>
+	<classpathentry kind="lib" path="lib/activation.jar"/>
+	<classpathentry sourcepath="C:/eclipse/workspace/FastUtil/fastutil-4.4.1/java" kind="lib" path="lib/fastutil-4.4.1.jar"/>
+	<classpathentry kind="lib" path="lib/or124.jar"/>
+	<classpathentry kind="lib" path="lib/axis-ant.jar"/>
+	<classpathentry kind="lib" path="lib/commons-discovery.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging.jar"/>
+	<classpathentry kind="lib" path="lib/jaxrpc.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.8.jar"/>
+	<classpathentry kind="lib" path="lib/saaj.jar"/>
+	<classpathentry kind="lib" path="lib/wsdl4j.jar"/>
+	<classpathentry kind="lib" path="lib/axis.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="/OSCommon"/>
+	<classpathentry sourcepath="C:/eclipse/workspace/OR124/doc124.zip" kind="lib" path="lib/junmaoptimization.jar"/>
+	<classpathentry sourcepath="C:/eclipse/workspace/FastUtil/fastutil-4.4.1/java" kind="lib" path="/OSCommon/lib/fastutil-4.4.1.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
