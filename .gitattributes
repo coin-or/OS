@@ -4,6 +4,7 @@
 /LICENSE -text
 /Makefile.am -text
 /Makefile.in -text
+/OS.spp -text
 OS/.cdtproject -text
 OS/.project -text
 OS/AUTHORS -text
