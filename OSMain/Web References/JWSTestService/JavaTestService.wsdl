@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://localhost:8080/os/ostest/JavaTestService.jws" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" targetNamespace="http://localhost:8080/os/ostest/JavaTestService.jws" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types />
+  <wsdl:message name="helloJavaRequest">
+    <wsdl:part name="input" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="helloJavaResponse">
+    <wsdl:part name="helloJavaReturn" type="s:string" />
+  </wsdl:message>
+  <wsdl:portType name="JavaTestService">
+    <wsdl:operation name="helloJava" parameterOrder="input">
+      <wsdl:input name="helloJavaRequest" message="tns:helloJavaRequest" />
+      <wsdl:output name="helloJavaResponse" message="tns:helloJavaResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="JavaTestServiceSoapBinding" type="tns:JavaTestService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc" />
+    <wsdl:operation name="helloJava">
+      <soap:operation soapAction="" />
+      <wsdl:input name="helloJavaRequest">
+        <soap:body use="encoded" namespace="http://DefaultNamespace" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output name="helloJavaResponse">
+        <soap:body use="encoded" namespace="http://localhost:8080/os/ostest/JavaTestService.jws" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="JavaTestServiceService">
+    <wsdl:port name="JavaTestService" binding="tns:JavaTestServiceSoapBinding">
+      <soap:address location="http://localhost:8080/os/ostest/JavaTestService.jws" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

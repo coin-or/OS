@@ -1,0 +1,386 @@
+using System;
+using System.Xml.Serialization;
+using System.Web.Services.Protocols;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Web;
+using System.Web.Services;
+using System.Collections;
+using System.Data;
+using System.Threading;
+using System.IO;
+
+using org.optimizationservices.ossolver.solver;
+using org.optimizationservices.oscommon.util;
+using org.optimizationservices.oscommon.communicationinterface;
+
+/// <summary>
+/// <c>CGSolverService</c> is the CG Solver's Web Service facade. 
+/// @author Jun Ma	
+/// @version 1.0, 09/01/2005
+/// @since OS 1.0
+/// @copyright (c) 2005
+/// </summary>
+[System.Web.Services.WebServiceBindingAttribute(
+	 Name="OptimizationSolverServiceSoapBinding", 
+	 Namespace="http://www.optimizationservices.org")]
+public class CGSolverService : WebService, OShL{
+	/// <summary>
+	/// m_bWait holds whether the main service thread should wait for solve to finish or not. 
+	/// </summary>
+	internal static bool m_bWait = false;
+
+	/// <summary>
+	/// m_solverThreadHashTable holds the solverThread instance that will 
+	/// be launched by a separate thread. 
+	/// </summary>
+	internal static Hashtable m_solverThreadHashTable = new Hashtable();
+
+	/// <summary>
+	/// m_threadHashTable holds a hashtable of all the threads that started the solve() 
+	/// methods launched by this service. 
+	/// The hashtable names are the thread names (same as the jobIDs) and 
+	/// the hashtable objects are the threads
+	/// </summary>
+	internal static Hashtable m_threadHashTable = new Hashtable();
+
+	/// <summary>
+	/// m_processsHashTable holds a hashtable of all the process launched by this service. 
+	/// The hashtable names are the thread names (same as the jobIDs) and 
+	/// the hashtable objects are the an arraylist of process IDs launched by the thread. 
+	/// </summary>
+	internal static Hashtable m_processsHashTable = new Hashtable();
+	
+	/// <summary>
+	/// m_vJobIDs holds a sequence of jobIDs according to the time the jobs are 
+	/// submitted, with the first one being the earliest. 
+	/// </summary>
+	internal static ArrayList m_vJobIDs = new ArrayList();
+
+	/// <summary>
+	/// m_iJobCount holds the number of jobs so far submitted. 
+	/// </summary>
+	internal static int m_iJobCount = 0;
+
+	/// <summary>
+	/// default constructor.
+	/// </summary>
+	public CGSolverService(){
+		//CODEGEN: This call is required by the ASP.NET Web Services Designer
+		InitializeComponent();
+	}//constructor
+
+
+	#region Component Designer generated code
+	
+	//Required by the Web Services Designer 
+	private IContainer components = null;
+			
+	/// <summary>
+	/// Required method for Designer support - do not modify
+	/// the contents of this method with the code editor.
+	/// </summary>
+	private void InitializeComponent() {
+	}
+
+	/// <summary>
+	/// Clean up any resources being used.
+	/// </summary>
+	protected override void Dispose( bool disposing ) {
+		if(disposing && components != null) {
+			components.Dispose();
+		}
+		base.Dispose(disposing);		
+	}
+	
+	#endregion
+	
+	/// <summary>
+	/// get a job id 
+	/// </summary>
+	/// <param name="option">option for job id retrieval</param>
+	/// <returns>a jobID string</returns>
+	[WebMethod(Description = "get a job id")]
+	public string getJobID(string option){
+		return CommonUtil.getJobID(option);
+	}//getJobID
+	
+	/// <summary>
+	/// a synchronous solve method with instance and option for CG
+	/// </summary>
+	/// <param name="instance">input instance</param>
+	/// <param name="option">input option</param>
+	/// <returns>result, null if any error.</returns>
+	[WebMethod(MessageName="solve(instance, option)",  
+		 Description = "synchronous solve(instance) that returns a result")]
+	public string solve(string instance, string option){
+		m_iJobCount++;
+		string sJobID = option;
+		if(instance == null || instance.Length <= 0 ) return null;
+		if(sJobID == null || sJobID.Length <= 0 ){
+			sJobID = "AUTOJOBID_" + CommonUtil.getJobID(null);
+		}
+		string sInstanceFile = OSConstant.TEMPFILEFOLDER+sJobID+".instance";
+		string sOptionFile = OSConstant.TEMPFILEFOLDER+sJobID+".option";
+		string sResultFile = OSConstant.TEMPFILEFOLDER+sJobID+".result";
+		bool bWrite;
+		bWrite = IOUtil.writeStringToFile(instance, sInstanceFile);
+		if(!bWrite){
+			return null;
+		}
+		bWrite = IOUtil.writeStringToFile(option, sOptionFile);
+		if(!bWrite){
+			return null;
+		}
+		try{
+
+			SolverThread solverThread = new SolverThread();
+			solverThread.m_sInstance = instance;
+			solverThread.m_sOption = option;
+			solverThread.m_sJobID = sJobID;
+			
+			Thread thread = new Thread(new ThreadStart(solverThread.solve));
+			thread.Name = sJobID;						
+			thread.Start();
+
+			//alternative 1: use thread join
+			//TimeSpan timeSpan = new TimeSpan(OSConstant.JOB_MAX_HOURS, OSConstant.JOB_MAX_MINUTES, OSConstant.JOB_MAX_SECONDS);
+			//thread.Join(timeSpan);
+		
+			//alternative 2: use while
+			m_bWait = true;
+			while(m_bWait){
+				Thread.Sleep(1);
+			}
+
+			return solverThread.m_sResult;		
+		}
+		catch(Exception e){
+			IOUtil.log(e.ToString(), null);
+			m_threadHashTable.Remove(sJobID);
+			m_solverThreadHashTable.Remove(sJobID);
+			m_vJobIDs.Remove(sJobID);
+			try{
+				File.Delete(sInstanceFile);
+				File.Delete(sOptionFile);
+				File.Delete(sResultFile);
+			}
+			catch(Exception){
+			}
+			return null;
+		}
+	}//solve2
+
+	/// <summary>
+	/// An asynchronous send method with instance and option for CG. 
+	/// The option must contain a job id so that the job result can be retrieved later. 
+	/// </summary>
+	/// <param name="instance">input instance</param>
+	/// <param name="option">input option</param>
+	/// <returns>whether the instance and option are sent and received by this method successfully</returns>
+	[WebMethod(Description = "asynchronous send that returns a acknowledgement boolean")]
+	public bool send(string instance, string option){
+		m_iJobCount++;
+		string sJobID = option;
+		if(instance == null || instance.Length <= 0 ) return false;
+		if(sJobID == null || sJobID.Length <= 0 ) return false;
+
+		string sInstanceFile = OSConstant.TEMPFILEFOLDER+sJobID+".instance";
+		string sOptionFile = OSConstant.TEMPFILEFOLDER+sJobID+".option";
+		string sResultFile = OSConstant.TEMPFILEFOLDER+sJobID+".result";
+		bool bWrite;
+		bWrite = IOUtil.writeStringToFile(instance, sInstanceFile);
+		if(!bWrite){
+			return false;
+		}
+		bWrite = IOUtil.writeStringToFile(option, sOptionFile);
+		if(!bWrite){
+			return false;
+		}
+		try{
+			SolverThread solverThread = new SolverThread();
+			solverThread.m_sInstance = instance;
+			solverThread.m_sOption = option;
+			solverThread.m_sJobID = sJobID;
+			Thread thread = new Thread(new ThreadStart(solverThread.solve));
+			thread.Name = sJobID;	
+			thread.Start();
+			return true;	
+		}
+		catch(Exception e){
+			IOUtil.log(e.ToString(), null);
+			try{
+				File.Delete(sInstanceFile);
+				File.Delete(sOptionFile);
+				File.Delete(sResultFile);
+			}
+			catch(Exception){
+			}
+			return false;
+		}
+	}//send
+
+	/// <summary>
+	/// Retrieve a previously sent job's result with a job id. If the job result is not ready, an empty string 
+	/// will be returned.  
+	/// </summary>
+	/// <param name="option">input option, that contains the job id</param>
+	/// <returns>Retrieved result in a string, null or empty if result not ready.</returns>
+	[WebMethod(Description = "asynchronous retrieve that returns the result of the previously sent job ")]
+	public string retrieve(string option){
+		string sJobID = option;
+		string sOut = IOUtil.readStringFromFile(OSConstant.TEMPFILEFOLDER+sJobID+".result");
+		if(sOut == null || sOut.Length <= 0) return null;
+		else return sOut;
+	}//retrieve
+
+	/// <summary>
+	/// Kill a previously sent job.
+	/// </summary>
+	/// <param name="option">input option, that contains the job id</param>
+	/// <returns>whether the job is kill successfully.</returns>
+	[WebMethod(Description = "asynchronous kill of a previously sent job")]
+	public bool kill(string option){
+		m_bWait = false;
+		string sJobID = option;
+		ArrayList vProcess = (ArrayList)CGSolverService.m_processsHashTable[sJobID];
+		if(vProcess != null && vProcess.Count > 0){
+			try{
+				for(int i = 0; i < vProcess.Count; i++){
+					Process process = Process.GetProcessById((int)vProcess[i]);
+					process.Kill();
+				}
+			}
+			catch(Exception e){
+				IOUtil.log(e.ToString(), null);
+			}
+		}
+		try{
+			m_processsHashTable.Remove(sJobID);
+		}
+		catch(Exception e){
+			IOUtil.log(e.ToString(), null);
+		}
+
+		SolverThread solverThread = (SolverThread)m_solverThreadHashTable[sJobID];
+		Thread thread = (Thread)m_threadHashTable[sJobID];
+		if(thread != null){
+			try{
+				thread.Abort();
+			}
+			catch(Exception e){
+				IOUtil.log(e.ToString(), null);
+			}
+		}
+		try{
+			m_threadHashTable.Remove(sJobID);
+			m_solverThreadHashTable.Remove(sJobID);
+			m_vJobIDs.Remove(sJobID);
+		}
+		catch(Exception e){
+			IOUtil.log(e.ToString(), null);
+		}
+		return true;
+	}//kill
+
+	/// <summary>
+	/// knock to pull information from the CG solver service.  
+	/// </summary>
+	/// <returns>the dynamic information of the CG solver service information in a string.</returns>
+	[WebMethod(Description = "asynchronous kill of a previously sent job")]
+	public string knock(){
+		string sOut = "";
+		sOut += "job solved so far: " + m_iJobCount + "\n";
+		sOut += "current job count: " + m_threadHashTable.Count.ToString() + "\n";
+		try{
+			IDictionaryEnumerator dictionaryEnumerator = m_processsHashTable.GetEnumerator();
+			while(dictionaryEnumerator.MoveNext()){
+				ArrayList vProcess = (ArrayList)dictionaryEnumerator.Value;
+				Process process;
+				for(int i = 0; i < vProcess.Count; i++){
+					process = Process.GetProcessById((int)vProcess[i]);
+					sOut += ("process" + i + ":" +process.ProcessName + ":id->" +  process.Id + "\n");				
+				}
+			}
+		}
+		catch(Exception e){
+			IOUtil.log(e.ToString(), null);
+		}
+		return sOut;
+	}//knock pull
+
+}//CGSolverService
+
+/// <summary>
+/// <c>SolverThread</c> is an internal thread controlled by <c>CGSolverService</c>.
+/// </summary>
+internal class SolverThread{
+	
+	/// <summary>
+	/// m_sInstance holds the instance input of the solve method
+	/// </summary>
+	internal string m_sInstance = null;
+	
+	/// <summary>
+	/// m_sOption holds the option input of the solve method
+	/// </summary>
+	internal string m_sOption = null;
+
+	/// <summary>
+	/// m_sJobID holds job id 
+	/// </summary>
+	internal string m_sJobID = null;
+
+	/// <summary>
+	/// m_sResult holds the result of the solve method
+	/// </summary>
+	internal string m_sResult = null;
+
+	/// <summary>
+	/// default constructor.
+	/// </summary>
+	internal SolverThread(){
+
+	}//constructor
+
+	/// <summary>
+	/// a synchronous solve method with instance and option for CG
+	/// </summary>
+	internal void solve(){
+		Monitor.Enter(this);
+		
+		Thread thread = Thread.CurrentThread;
+		CGSolverService.m_solverThreadHashTable.Add(m_sJobID, this);
+		CGSolverService.m_threadHashTable.Add(m_sJobID, thread);
+		CGSolverService.m_vJobIDs.Add(m_sJobID);		
+
+		IOUtil.log("thread name:"+thread.Name+":"+thread.ThreadState+":"+DateTime.Now, null);
+		try{
+			CGSolver cgSolver = new CGSolver();
+			string sBatchFile = m_sInstance;
+			cgSolver.m_sJobID = m_sJobID;
+			cgSolver.m_sResultFileName = OSConstant.TEMPFILEFOLDER+m_sJobID+".result";
+			if(m_sOption == null || m_sOption.Length <= 0){
+				m_sResult =  "runCG (instance): ";
+			}
+			else{
+				m_sResult =  "runCG (instance, option): ";
+			}
+			bool bRunCG = cgSolver.runCG(sBatchFile);
+			m_sResult += bRunCG.ToString() + "\n\r";
+			if(bRunCG){
+				m_sResult += IOUtil.readStringFromFile(cgSolver.m_sResultFileName);
+			}
+		}
+		catch(Exception e){
+			IOUtil.log(e.ToString(), null);
+		}
+		CGSolverService.m_threadHashTable.Remove(m_sJobID);
+		CGSolverService.m_solverThreadHashTable.Remove(m_sJobID);
+		CGSolverService.m_vJobIDs.Remove(m_sJobID);
+		CGSolverService.m_bWait = false;
+		Monitor.Pulse(this);
+		Monitor.Exit(this);
+	}//solve2
+
+}//solverThread

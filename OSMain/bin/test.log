@@ -1,0 +1,44 @@
+1                                        The SAS System         15:28 Wednesday, October 12, 2005
+
+NOTE: Copyright (c) 1999-2001 by SAS Institute Inc., Cary, NC, USA. 
+NOTE: SAS (r) Proprietary Software Release 8.2 (TS2M0)
+      Licensed to MARKETING ANALYTICS, Site 0027088002.
+NOTE: This session is executing on the WIN_PRO  platform.
+
+
+
+NOTE: This installation is running Base SAS hot fix bundle 82BX09.
+
+NOTE: SAS initialization used:
+      real time           18.62 seconds
+      cpu time            0.15 seconds
+      
+1          proc setinit; run;
+
+NOTE: PROCEDURE SETINIT used:
+      real time           0.01 seconds
+      cpu time            0.01 seconds
+      
+Original site validation data
+Site name:    'MARKETING ANALYTICS'.
+Site number:  27088002.
+Expiration:   14NOV2005.
+Grace Period:  45 days (ending 29DEC2005).
+Warning Period: 45 days (ending 12FEB2006).
+System birthday:   23NOV1992.
+Operating System:   WIN     .
+Product expiration dates:
+---Base Product                                            14NOV2005  
+---SAS/STAT                                                14NOV2005  
+---SAS/GRAPH                                               14NOV2005  
+---SAS/ETS                                                 14NOV2005  
+---SAS/AF                                                  14NOV2005  
+---SAS/IML                                                 14NOV2005  
+---SAS/ACC-PC File Formats                                 14NOV2005  
+---SAS/ACC-OLE DB                                          30NOV2005  
+
+NOTE: SAS Institute Inc., SAS Campus Drive, Cary, NC USA 27513-2414
+NOTE: The SAS System used:
+      real time           18.70 seconds
+      cpu time            0.17 seconds
+      

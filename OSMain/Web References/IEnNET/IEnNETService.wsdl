@@ -1,0 +1,1196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:s0="Gridlogix.EnNET.Types" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://www.gridlogix.com/WebServices/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" targetNamespace="http://www.gridlogix.com/WebServices/" name="IEnNETService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema xmlns="Gridlogix.EnNET.Types" targetNamespace="Gridlogix.EnNET.Types">
+      <s:complexType name="GlxRem">
+        <s:sequence />
+      </s:complexType>
+      <s:complexType name="GlxNode">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:GlxRem">
+            <s:sequence>
+              <s:element name="Identifier" type="s0:GlxIdentifier" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="GlxVersionInfo">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:GlxNode">
+            <s:sequence>
+              <s:element name="Major" type="s:int" />
+              <s:element name="Minor" type="s:int" />
+              <s:element name="Release" type="s:int" />
+              <s:element name="BuildNumber" type="s:int" />
+              <s:element name="BuildVer" type="s:string" />
+              <s:element name="VerDate" type="s:string" />
+              <s:element name="Encoding" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="GlxIdentifier">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:GlxRem">
+            <s:sequence>
+              <s:element name="ID" type="s:string" />
+              <s:element name="Name" type="s:string" />
+              <s:element name="DisplayName" type="s:string" />
+              <s:element name="Index" type="s:int" />
+              <s:element name="Scope" type="s0:GlxMemberScope" />
+              <s:element name="ClassID" type="s:string" />
+              <s:element name="TypeID" type="s:int" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:simpleType name="GlxMemberScope">
+        <s:restriction base="s:string">
+          <s:enumeration value="msPrivate" />
+          <s:enumeration value="msProtected" />
+          <s:enumeration value="msPublished" />
+          <s:enumeration value="msPublic" />
+          <s:enumeration value="msPointer" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="GlxSessionOptions">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:GlxRem">
+            <s:sequence>
+              <s:element name="LocaleID" type="s:int" />
+              <s:element name="Strings" type="s:boolean" />
+              <s:element name="StringArrays" type="s:boolean" />
+              <s:element name="Advanced" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="GlxObject">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:GlxNode">
+            <s:sequence>
+              <s:element name="ObjectCount" type="s:int" />
+              <s:element name="PropertyCount" type="s:int" />
+              <s:element name="MethodCount" type="s:int" />
+              <s:element name="DefaultProperty" type="s:string" />
+              <s:element name="Interfaces" type="s:string" />
+              <s:element name="ListClass" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="GlxObjectArray">
+        <s:complexContent mixed="false">
+          <s:restriction base="soapenc:Array">
+            <s:sequence />
+            <s:attribute xmlns:n1="http://schemas.xmlsoap.org/wsdl/" n1:arrayType="s0:GlxObject[]" ref="soapenc:arrayType" />
+          </s:restriction>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="GlxProperty">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:GlxNode">
+            <s:sequence>
+              <s:element name="AccessRight" type="s:string" />
+              <s:element name="TypeInfo" type="s0:GlxTypeInfo" />
+              <s:element name="Indexed" type="s:boolean" />
+              <s:element name="Indices" type="s0:GlxRange" />
+              <s:element name="Units" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="GlxTypeInfo">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:GlxObject">
+            <s:sequence>
+              <s:element name="VarType" type="s:unsignedShort" />
+              <s:element name="Low" type="s:int" />
+              <s:element name="High" type="s:int" />
+              <s:element name="Names" type="s:anyType" />
+              <s:element name="ElementType" type="s0:GlxTypeInfo" />
+              <s:element name="MimeType" type="s:string" />
+              <s:element name="XSType" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="GlxRange">
+        <s:sequence>
+          <s:element name="Low" type="s:int" />
+          <s:element name="High" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="GlxPropertyArray">
+        <s:complexContent mixed="false">
+          <s:restriction base="soapenc:Array">
+            <s:sequence />
+            <s:attribute xmlns:n1="http://schemas.xmlsoap.org/wsdl/" n1:arrayType="s0:GlxProperty[]" ref="soapenc:arrayType" />
+          </s:restriction>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="GlxMethod">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:GlxNode">
+            <s:sequence>
+              <s:element name="Parameters" type="s0:GlxParameterArray" />
+              <s:element name="ReturnType" type="s0:GlxTypeInfo" />
+              <s:element name="IFace" type="s:string" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="GlxParameterArray">
+        <s:complexContent mixed="false">
+          <s:restriction base="soapenc:Array">
+            <s:sequence />
+            <s:attribute xmlns:n1="http://schemas.xmlsoap.org/wsdl/" n1:arrayType="s0:GlxParameter[]" ref="soapenc:arrayType" />
+          </s:restriction>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="GlxParameter">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:GlxNode">
+            <s:sequence>
+              <s:element name="IsOptional" type="s:boolean" />
+              <s:element name="DefaultValue" type="s:anyType" />
+              <s:element name="TypeInfo" type="s0:GlxTypeInfo" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="GlxMethodArray">
+        <s:complexContent mixed="false">
+          <s:restriction base="soapenc:Array">
+            <s:sequence />
+            <s:attribute xmlns:n1="http://schemas.xmlsoap.org/wsdl/" n1:arrayType="s0:GlxMethod[]" ref="soapenc:arrayType" />
+          </s:restriction>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="VariantArray">
+        <s:complexContent mixed="false">
+          <s:restriction base="soapenc:Array">
+            <s:sequence />
+            <s:attribute xmlns:n1="http://schemas.xmlsoap.org/wsdl/" n1:arrayType="s:anyType[]" ref="soapenc:arrayType" />
+          </s:restriction>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="GlxValue">
+        <s:complexContent mixed="false">
+          <s:extension base="s0:GlxRem">
+            <s:sequence>
+              <s:element name="DataType" type="s:unsignedShort" />
+              <s:element name="ErrorID" type="s:int" />
+              <s:element name="QualityID" type="s:int" />
+              <s:element name="Reference" type="s:string" />
+              <s:element name="Source" type="s0:GlxDataSource" />
+              <s:element name="State" type="s0:GlxItemState" />
+              <s:element name="Timestamp" type="s:dateTime" />
+              <s:element name="Value" type="s:anyType" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:simpleType name="GlxDataSource">
+        <s:restriction base="s:string">
+          <s:enumeration value="dsDeviceRead" />
+          <s:enumeration value="dsRemoteCache" />
+          <s:enumeration value="dsLocalCache" />
+          <s:enumeration value="dsLocalProperty" />
+          <s:enumeration value="dsTrap" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="GlxItemState">
+        <s:restriction base="s:string">
+          <s:enumeration value="Undefined" />
+          <s:enumeration value="Disabled" />
+          <s:enumeration value="Null" />
+          <s:enumeration value="Error" />
+          <s:enumeration value="Normal" />
+          <s:enumeration value="Warning" />
+          <s:enumeration value="Critical" />
+          <s:enumeration value="BackToNormal" />
+          <s:enumeration value="BackToWarning" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="StringArray">
+        <s:complexContent mixed="false">
+          <s:restriction base="soapenc:Array">
+            <s:sequence />
+            <s:attribute xmlns:n1="http://schemas.xmlsoap.org/wsdl/" n1:arrayType="s:string[]" ref="soapenc:arrayType" />
+          </s:restriction>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="GlxValueArray">
+        <s:complexContent mixed="false">
+          <s:restriction base="soapenc:Array">
+            <s:sequence />
+            <s:attribute xmlns:n1="http://schemas.xmlsoap.org/wsdl/" n1:arrayType="s0:GlxValue[]" ref="soapenc:arrayType" />
+          </s:restriction>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="Variant2DArray">
+        <s:complexContent mixed="false">
+          <s:restriction base="soapenc:Array">
+            <s:sequence />
+            <s:attribute xmlns:n1="http://schemas.xmlsoap.org/wsdl/" n1:arrayType="s0:VariantArray[]" ref="soapenc:arrayType" />
+          </s:restriction>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="GlxValue2DArray">
+        <s:complexContent mixed="false">
+          <s:restriction base="soapenc:Array">
+            <s:sequence />
+            <s:attribute xmlns:n1="http://schemas.xmlsoap.org/wsdl/" n1:arrayType="s0:GlxValueArray[]" ref="soapenc:arrayType" />
+          </s:restriction>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="BooleanArray">
+        <s:complexContent mixed="false">
+          <s:restriction base="soapenc:Array">
+            <s:sequence />
+            <s:attribute xmlns:n1="http://schemas.xmlsoap.org/wsdl/" n1:arrayType="s:boolean[]" ref="soapenc:arrayType" />
+          </s:restriction>
+        </s:complexContent>
+      </s:complexType>
+      <s:simpleType name="GlxAccessRight">
+        <s:restriction base="s:string">
+          <s:enumeration value="arRead" />
+          <s:enumeration value="arWrite" />
+          <s:enumeration value="arConfig" />
+          <s:enumeration value="arStream" />
+        </s:restriction>
+      </s:simpleType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="Login0Request">
+    <wsdl:part name="UserName" type="s:string" />
+    <wsdl:part name="Password" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="Login0Response">
+    <wsdl:part name="return" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="Logout1Request">
+    <wsdl:part name="Token" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="Logout1Response">
+    <wsdl:part name="return" type="s:boolean" />
+  </wsdl:message>
+  <wsdl:message name="Ping2Request" />
+  <wsdl:message name="Ping2Response">
+    <wsdl:part name="return" type="s:boolean" />
+  </wsdl:message>
+  <wsdl:message name="Version3Request" />
+  <wsdl:message name="Version3Response">
+    <wsdl:part name="return" type="s0:GlxVersionInfo" />
+  </wsdl:message>
+  <wsdl:message name="SetOptions4Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="Options" type="s0:GlxSessionOptions" />
+  </wsdl:message>
+  <wsdl:message name="SetOptions4Response" />
+  <wsdl:message name="AssignDisplayName5Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="ID" type="s:string" />
+    <wsdl:part name="DisplayName" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AssignDisplayName5Response">
+    <wsdl:part name="return" type="s:boolean" />
+  </wsdl:message>
+  <wsdl:message name="GetErrorInfo6Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="ID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetErrorInfo6Response">
+    <wsdl:part name="return" type="s:anyType" />
+  </wsdl:message>
+  <wsdl:message name="GetObject7Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="ObjectID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetObject7Response">
+    <wsdl:part name="return" type="s0:GlxObject" />
+  </wsdl:message>
+  <wsdl:message name="GetObjects8Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="ObjectID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetObjects8Response">
+    <wsdl:part name="return" type="s0:GlxObjectArray" />
+  </wsdl:message>
+  <wsdl:message name="GetProperty9Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="PropertyID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetProperty9Response">
+    <wsdl:part name="return" type="s0:GlxProperty" />
+  </wsdl:message>
+  <wsdl:message name="GetProperties10Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="ObjectID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetProperties10Response">
+    <wsdl:part name="return" type="s0:GlxPropertyArray" />
+  </wsdl:message>
+  <wsdl:message name="GetMethod11Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="MethodID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetMethod11Response">
+    <wsdl:part name="return" type="s0:GlxMethod" />
+  </wsdl:message>
+  <wsdl:message name="GetMethods12Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="ObjectID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetMethods12Response">
+    <wsdl:part name="return" type="s0:GlxMethodArray" />
+  </wsdl:message>
+  <wsdl:message name="InvokeMethod13Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="MethodID" type="s:string" />
+    <wsdl:part name="Args" type="s0:VariantArray" />
+  </wsdl:message>
+  <wsdl:message name="InvokeMethod13Response">
+    <wsdl:part name="return" type="s:anyType" />
+  </wsdl:message>
+  <wsdl:message name="GetValue14Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="PropertyID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetValue14Response">
+    <wsdl:part name="return" type="s0:GlxValue" />
+  </wsdl:message>
+  <wsdl:message name="GetValues15Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="PropertyIDs" type="s0:StringArray" />
+  </wsdl:message>
+  <wsdl:message name="GetValues15Response">
+    <wsdl:part name="return" type="s0:GlxValueArray" />
+  </wsdl:message>
+  <wsdl:message name="GetValue216Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="PropertyID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetValue216Response">
+    <wsdl:part name="return" type="s:anyType" />
+  </wsdl:message>
+  <wsdl:message name="GetValues217Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="PropertyIDs" type="s0:StringArray" />
+  </wsdl:message>
+  <wsdl:message name="GetValues217Response">
+    <wsdl:part name="return" type="s0:VariantArray" />
+  </wsdl:message>
+  <wsdl:message name="GetValues318Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="ObjectID" type="s:string" />
+    <wsdl:part name="PropertyIDs" type="s0:StringArray" />
+  </wsdl:message>
+  <wsdl:message name="GetValues318Response">
+    <wsdl:part name="return" type="s0:VariantArray" />
+  </wsdl:message>
+  <wsdl:message name="GetValues419Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="ObjectID" type="s:string" />
+    <wsdl:part name="PropertyIDs" type="s0:StringArray" />
+  </wsdl:message>
+  <wsdl:message name="GetValues419Response">
+    <wsdl:part name="return" type="s0:GlxValueArray" />
+  </wsdl:message>
+  <wsdl:message name="GetValues520Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="ObjectIDs" type="s0:StringArray" />
+    <wsdl:part name="PropertyIDs" type="s0:StringArray" />
+  </wsdl:message>
+  <wsdl:message name="GetValues520Response">
+    <wsdl:part name="return" type="s0:Variant2DArray" />
+  </wsdl:message>
+  <wsdl:message name="GetValues621Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="ObjectIDs" type="s0:StringArray" />
+    <wsdl:part name="PropertyIDs" type="s0:StringArray" />
+  </wsdl:message>
+  <wsdl:message name="GetValues621Response">
+    <wsdl:part name="return" type="s0:GlxValue2DArray" />
+  </wsdl:message>
+  <wsdl:message name="GetIndexedValues22Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="PropertyID" type="s:string" />
+    <wsdl:part name="Low" type="s:int" />
+    <wsdl:part name="High" type="s:int" />
+  </wsdl:message>
+  <wsdl:message name="GetIndexedValues22Response">
+    <wsdl:part name="return" type="s0:VariantArray" />
+  </wsdl:message>
+  <wsdl:message name="GetDefaultValue23Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="ObjectID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetDefaultValue23Response">
+    <wsdl:part name="return" type="s0:GlxValue" />
+  </wsdl:message>
+  <wsdl:message name="GetDefaultValues24Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="ObjectID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetDefaultValues24Response">
+    <wsdl:part name="return" type="s0:GlxValueArray" />
+  </wsdl:message>
+  <wsdl:message name="GetDefaultValue225Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="ObjectID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetDefaultValue225Response">
+    <wsdl:part name="return" type="s:anyType" />
+  </wsdl:message>
+  <wsdl:message name="GetDefaultValues226Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="ObjectIDs" type="s0:StringArray" />
+  </wsdl:message>
+  <wsdl:message name="GetDefaultValues226Response">
+    <wsdl:part name="return" type="s0:VariantArray" />
+  </wsdl:message>
+  <wsdl:message name="GetDefaultValues327Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="ObjectIDs" type="s0:StringArray" />
+  </wsdl:message>
+  <wsdl:message name="GetDefaultValues327Response">
+    <wsdl:part name="return" type="s0:GlxValueArray" />
+  </wsdl:message>
+  <wsdl:message name="GetPropertyValues28Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="ObjectID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPropertyValues28Response">
+    <wsdl:part name="return" type="s0:GlxValueArray" />
+  </wsdl:message>
+  <wsdl:message name="GetPropertyValues229Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="ObjectID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetPropertyValues229Response">
+    <wsdl:part name="return" type="s0:VariantArray" />
+  </wsdl:message>
+  <wsdl:message name="SetValue30Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="PropertyID" type="s:string" />
+    <wsdl:part name="Value" type="s:anyType" />
+  </wsdl:message>
+  <wsdl:message name="SetValue30Response" />
+  <wsdl:message name="SetValues31Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="PropertyIDs" type="s0:StringArray" />
+    <wsdl:part name="Values" type="s0:VariantArray" />
+  </wsdl:message>
+  <wsdl:message name="SetValues31Response">
+    <wsdl:part name="return" type="s0:StringArray" />
+  </wsdl:message>
+  <wsdl:message name="SetIndexedValues32Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="PropertyID" type="s:string" />
+    <wsdl:part name="Low" type="s:int" />
+    <wsdl:part name="Values" type="s0:VariantArray" />
+  </wsdl:message>
+  <wsdl:message name="SetIndexedValues32Response" />
+  <wsdl:message name="SetDefaultValue33Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="ObjectID" type="s:string" />
+    <wsdl:part name="Value" type="s:anyType" />
+  </wsdl:message>
+  <wsdl:message name="SetDefaultValue33Response" />
+  <wsdl:message name="AddGroup34Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="ParentID" type="s:string" />
+    <wsdl:part name="NewGroup" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddGroup34Response">
+    <wsdl:part name="return" type="s0:GlxObject" />
+  </wsdl:message>
+  <wsdl:message name="AddGroupItem35Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="GroupID" type="s:string" />
+    <wsdl:part name="ID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="AddGroupItem35Response">
+    <wsdl:part name="return" type="s:boolean" />
+  </wsdl:message>
+  <wsdl:message name="AddGroupItems36Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="GroupID" type="s:string" />
+    <wsdl:part name="IDs" type="s0:StringArray" />
+  </wsdl:message>
+  <wsdl:message name="AddGroupItems36Response">
+    <wsdl:part name="return" type="s0:BooleanArray" />
+  </wsdl:message>
+  <wsdl:message name="GetGroupValues37Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="GroupID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetGroupValues37Response">
+    <wsdl:part name="return" type="s0:GlxValueArray" />
+  </wsdl:message>
+  <wsdl:message name="GetGroupValues238Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="GroupID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetGroupValues238Response">
+    <wsdl:part name="return" type="s0:VariantArray" />
+  </wsdl:message>
+  <wsdl:message name="RemoveGroup39Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="GroupID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RemoveGroup39Response">
+    <wsdl:part name="return" type="s:boolean" />
+  </wsdl:message>
+  <wsdl:message name="BeginUpdate40Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="ObjectID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="BeginUpdate40Response" />
+  <wsdl:message name="EndUpdate41Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="ObjectID" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="EndUpdate41Response" />
+  <wsdl:message name="AddObject42Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="ParentID" type="s:string" />
+    <wsdl:part name="ID" type="s0:GlxIdentifier" />
+    <wsdl:part name="PropertyIDs" type="s0:StringArray" />
+    <wsdl:part name="Values" type="s0:VariantArray" />
+  </wsdl:message>
+  <wsdl:message name="AddObject42Response">
+    <wsdl:part name="return" type="s0:GlxObject" />
+  </wsdl:message>
+  <wsdl:message name="RemoveObject43Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="ParentID" type="s:string" />
+    <wsdl:part name="ObjectName" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="RemoveObject43Response">
+    <wsdl:part name="return" type="s:boolean" />
+  </wsdl:message>
+  <wsdl:message name="GetClassProperties44Request">
+    <wsdl:part name="Token" type="s:string" />
+    <wsdl:part name="ClassName" type="s:string" />
+    <wsdl:part name="AccessRights" type="s:string" />
+    <wsdl:part name="Scopes" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetClassProperties44Response">
+    <wsdl:part name="return" type="s0:GlxPropertyArray" />
+  </wsdl:message>
+  <wsdl:message name="Reserved445Request" />
+  <wsdl:message name="Reserved445Response">
+    <wsdl:part name="return" type="s0:GlxAccessRight" />
+  </wsdl:message>
+  <wsdl:portType name="IEnNET">
+    <wsdl:operation name="Login">
+      <wsdl:input message="tns:Login0Request" />
+      <wsdl:output message="tns:Login0Response" />
+    </wsdl:operation>
+    <wsdl:operation name="Logout">
+      <wsdl:input message="tns:Logout1Request" />
+      <wsdl:output message="tns:Logout1Response" />
+    </wsdl:operation>
+    <wsdl:operation name="Ping">
+      <wsdl:input message="tns:Ping2Request" />
+      <wsdl:output message="tns:Ping2Response" />
+    </wsdl:operation>
+    <wsdl:operation name="Version">
+      <wsdl:input message="tns:Version3Request" />
+      <wsdl:output message="tns:Version3Response" />
+    </wsdl:operation>
+    <wsdl:operation name="SetOptions">
+      <wsdl:input message="tns:SetOptions4Request" />
+      <wsdl:output message="tns:SetOptions4Response" />
+    </wsdl:operation>
+    <wsdl:operation name="AssignDisplayName">
+      <wsdl:input message="tns:AssignDisplayName5Request" />
+      <wsdl:output message="tns:AssignDisplayName5Response" />
+    </wsdl:operation>
+    <wsdl:operation name="GetErrorInfo">
+      <wsdl:input message="tns:GetErrorInfo6Request" />
+      <wsdl:output message="tns:GetErrorInfo6Response" />
+    </wsdl:operation>
+    <wsdl:operation name="GetObject">
+      <wsdl:input message="tns:GetObject7Request" />
+      <wsdl:output message="tns:GetObject7Response" />
+    </wsdl:operation>
+    <wsdl:operation name="GetObjects">
+      <wsdl:input message="tns:GetObjects8Request" />
+      <wsdl:output message="tns:GetObjects8Response" />
+    </wsdl:operation>
+    <wsdl:operation name="GetProperty">
+      <wsdl:input message="tns:GetProperty9Request" />
+      <wsdl:output message="tns:GetProperty9Response" />
+    </wsdl:operation>
+    <wsdl:operation name="GetProperties">
+      <wsdl:input message="tns:GetProperties10Request" />
+      <wsdl:output message="tns:GetProperties10Response" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMethod">
+      <wsdl:input message="tns:GetMethod11Request" />
+      <wsdl:output message="tns:GetMethod11Response" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMethods">
+      <wsdl:input message="tns:GetMethods12Request" />
+      <wsdl:output message="tns:GetMethods12Response" />
+    </wsdl:operation>
+    <wsdl:operation name="InvokeMethod">
+      <wsdl:input message="tns:InvokeMethod13Request" />
+      <wsdl:output message="tns:InvokeMethod13Response" />
+    </wsdl:operation>
+    <wsdl:operation name="GetValue">
+      <wsdl:input message="tns:GetValue14Request" />
+      <wsdl:output message="tns:GetValue14Response" />
+    </wsdl:operation>
+    <wsdl:operation name="GetValues">
+      <wsdl:input message="tns:GetValues15Request" />
+      <wsdl:output message="tns:GetValues15Response" />
+    </wsdl:operation>
+    <wsdl:operation name="GetValue2">
+      <wsdl:input message="tns:GetValue216Request" />
+      <wsdl:output message="tns:GetValue216Response" />
+    </wsdl:operation>
+    <wsdl:operation name="GetValues2">
+      <wsdl:input message="tns:GetValues217Request" />
+      <wsdl:output message="tns:GetValues217Response" />
+    </wsdl:operation>
+    <wsdl:operation name="GetValues3">
+      <wsdl:input message="tns:GetValues318Request" />
+      <wsdl:output message="tns:GetValues318Response" />
+    </wsdl:operation>
+    <wsdl:operation name="GetValues4">
+      <wsdl:input message="tns:GetValues419Request" />
+      <wsdl:output message="tns:GetValues419Response" />
+    </wsdl:operation>
+    <wsdl:operation name="GetValues5">
+      <wsdl:input message="tns:GetValues520Request" />
+      <wsdl:output message="tns:GetValues520Response" />
+    </wsdl:operation>
+    <wsdl:operation name="GetValues6">
+      <wsdl:input message="tns:GetValues621Request" />
+      <wsdl:output message="tns:GetValues621Response" />
+    </wsdl:operation>
+    <wsdl:operation name="GetIndexedValues">
+      <wsdl:input message="tns:GetIndexedValues22Request" />
+      <wsdl:output message="tns:GetIndexedValues22Response" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDefaultValue">
+      <wsdl:input message="tns:GetDefaultValue23Request" />
+      <wsdl:output message="tns:GetDefaultValue23Response" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDefaultValues">
+      <wsdl:input message="tns:GetDefaultValues24Request" />
+      <wsdl:output message="tns:GetDefaultValues24Response" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDefaultValue2">
+      <wsdl:input message="tns:GetDefaultValue225Request" />
+      <wsdl:output message="tns:GetDefaultValue225Response" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDefaultValues2">
+      <wsdl:input message="tns:GetDefaultValues226Request" />
+      <wsdl:output message="tns:GetDefaultValues226Response" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDefaultValues3">
+      <wsdl:input message="tns:GetDefaultValues327Request" />
+      <wsdl:output message="tns:GetDefaultValues327Response" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPropertyValues">
+      <wsdl:input message="tns:GetPropertyValues28Request" />
+      <wsdl:output message="tns:GetPropertyValues28Response" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPropertyValues2">
+      <wsdl:input message="tns:GetPropertyValues229Request" />
+      <wsdl:output message="tns:GetPropertyValues229Response" />
+    </wsdl:operation>
+    <wsdl:operation name="SetValue">
+      <wsdl:input message="tns:SetValue30Request" />
+      <wsdl:output message="tns:SetValue30Response" />
+    </wsdl:operation>
+    <wsdl:operation name="SetValues">
+      <wsdl:input message="tns:SetValues31Request" />
+      <wsdl:output message="tns:SetValues31Response" />
+    </wsdl:operation>
+    <wsdl:operation name="SetIndexedValues">
+      <wsdl:input message="tns:SetIndexedValues32Request" />
+      <wsdl:output message="tns:SetIndexedValues32Response" />
+    </wsdl:operation>
+    <wsdl:operation name="SetDefaultValue">
+      <wsdl:input message="tns:SetDefaultValue33Request" />
+      <wsdl:output message="tns:SetDefaultValue33Response" />
+    </wsdl:operation>
+    <wsdl:operation name="AddGroup">
+      <wsdl:input message="tns:AddGroup34Request" />
+      <wsdl:output message="tns:AddGroup34Response" />
+    </wsdl:operation>
+    <wsdl:operation name="AddGroupItem">
+      <wsdl:input message="tns:AddGroupItem35Request" />
+      <wsdl:output message="tns:AddGroupItem35Response" />
+    </wsdl:operation>
+    <wsdl:operation name="AddGroupItems">
+      <wsdl:input message="tns:AddGroupItems36Request" />
+      <wsdl:output message="tns:AddGroupItems36Response" />
+    </wsdl:operation>
+    <wsdl:operation name="GetGroupValues">
+      <wsdl:input message="tns:GetGroupValues37Request" />
+      <wsdl:output message="tns:GetGroupValues37Response" />
+    </wsdl:operation>
+    <wsdl:operation name="GetGroupValues2">
+      <wsdl:input message="tns:GetGroupValues238Request" />
+      <wsdl:output message="tns:GetGroupValues238Response" />
+    </wsdl:operation>
+    <wsdl:operation name="RemoveGroup">
+      <wsdl:input message="tns:RemoveGroup39Request" />
+      <wsdl:output message="tns:RemoveGroup39Response" />
+    </wsdl:operation>
+    <wsdl:operation name="BeginUpdate">
+      <wsdl:input message="tns:BeginUpdate40Request" />
+      <wsdl:output message="tns:BeginUpdate40Response" />
+    </wsdl:operation>
+    <wsdl:operation name="EndUpdate">
+      <wsdl:input message="tns:EndUpdate41Request" />
+      <wsdl:output message="tns:EndUpdate41Response" />
+    </wsdl:operation>
+    <wsdl:operation name="AddObject">
+      <wsdl:input message="tns:AddObject42Request" />
+      <wsdl:output message="tns:AddObject42Response" />
+    </wsdl:operation>
+    <wsdl:operation name="RemoveObject">
+      <wsdl:input message="tns:RemoveObject43Request" />
+      <wsdl:output message="tns:RemoveObject43Response" />
+    </wsdl:operation>
+    <wsdl:operation name="GetClassProperties">
+      <wsdl:input message="tns:GetClassProperties44Request" />
+      <wsdl:output message="tns:GetClassProperties44Response" />
+    </wsdl:operation>
+    <wsdl:operation name="Reserved4">
+      <wsdl:input message="tns:Reserved445Request" />
+      <wsdl:output message="tns:Reserved445Response" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="IEnNETBinding" type="tns:IEnNET">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc" />
+    <wsdl:operation name="Login">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#Login" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Logout">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#Logout" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Ping">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#Ping" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Version">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#Version" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetOptions">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#SetOptions" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AssignDisplayName">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#AssignDisplayName" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetErrorInfo">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#GetErrorInfo" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetObject">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#GetObject" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetObjects">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#GetObjects" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetProperty">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#GetProperty" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetProperties">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#GetProperties" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMethod">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#GetMethod" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMethods">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#GetMethods" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="InvokeMethod">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#InvokeMethod" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetValue">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#GetValue" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetValues">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#GetValues" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetValue2">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#GetValue2" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetValues2">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#GetValues2" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetValues3">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#GetValues3" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetValues4">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#GetValues4" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetValues5">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#GetValues5" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetValues6">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#GetValues6" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetIndexedValues">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#GetIndexedValues" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDefaultValue">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#GetDefaultValue" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDefaultValues">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#GetDefaultValues" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDefaultValue2">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#GetDefaultValue2" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDefaultValues2">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#GetDefaultValues2" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetDefaultValues3">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#GetDefaultValues3" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPropertyValues">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#GetPropertyValues" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetPropertyValues2">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#GetPropertyValues2" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetValue">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#SetValue" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetValues">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#SetValues" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetIndexedValues">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#SetIndexedValues" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetDefaultValue">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#SetDefaultValue" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddGroup">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#AddGroup" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddGroupItem">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#AddGroupItem" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddGroupItems">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#AddGroupItems" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetGroupValues">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#GetGroupValues" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetGroupValues2">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#GetGroupValues2" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveGroup">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#RemoveGroup" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BeginUpdate">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#BeginUpdate" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EndUpdate">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#EndUpdate" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddObject">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#AddObject" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveObject">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#RemoveObject" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetClassProperties">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#GetClassProperties" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Reserved4">
+      <soap:operation soapAction="Gridlogix.EnNET.Types.IEnNET#Reserved4" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="Gridlogix.EnNET.Types.IEnNET" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="IEnNETService">
+    <wsdl:port name="IEnNETPort" binding="tns:IEnNETBinding">
+      <soap:address location="http://192.168.0.182:8090/soap/IEnNET" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

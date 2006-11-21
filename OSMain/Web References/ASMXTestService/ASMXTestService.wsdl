@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="org.optimizationservices.ossolver" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" targetNamespace="org.optimizationservices.ossolver" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="org.optimizationservices.ossolver">
+      <s:element name="helloCSharp">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="input" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="helloCSharpResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="helloCSharpResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="helloCSharpSoapIn">
+    <wsdl:part name="parameters" element="tns:helloCSharp" />
+  </wsdl:message>
+  <wsdl:message name="helloCSharpSoapOut">
+    <wsdl:part name="parameters" element="tns:helloCSharpResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ASMXTestServiceSoap">
+    <wsdl:operation name="helloCSharp">
+      <wsdl:input message="tns:helloCSharpSoapIn" />
+      <wsdl:output message="tns:helloCSharpSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ASMXTestServiceSoap" type="tns:ASMXTestServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+    <wsdl:operation name="helloCSharp">
+      <soap:operation soapAction="org.optimizationservices.ossolver/helloCSharp" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ASMXTestService">
+    <documentation xmlns="http://schemas.xmlsoap.org/wsdl/" />
+    <wsdl:port name="ASMXTestServiceSoap" binding="tns:ASMXTestServiceSoap">
+      <soap:address location="http://localhost/OSSolver/ASMXTestService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

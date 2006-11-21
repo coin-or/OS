@@ -1,0 +1,1190 @@
+<VisualStudioProject>
+    <CSHARP
+        ProjectType = "Local"
+        ProductVersion = "7.10.3077"
+        SchemaVersion = "2.0"
+        ProjectGuid = "{E3697E31-5054-4B9E-B3F1-80DE7DAB26C2}"
+    >
+        <Build>
+            <Settings
+                ApplicationIcon = ""
+                AssemblyKeyContainerName = ""
+                AssemblyName = "OSCommon"
+                AssemblyOriginatorKeyFile = ""
+                DefaultClientScript = "JScript"
+                DefaultHTMLPageLayout = "Grid"
+                DefaultTargetSchema = "IE50"
+                DelaySign = "false"
+                OutputType = "Library"
+                PreBuildEvent = ""
+                PostBuildEvent = ""
+                RootNamespace = ""
+                RunPostBuildEvent = "OnBuildSuccess"
+                StartupObject = ""
+            >
+                <Config
+                    Name = "Debug"
+                    AllowUnsafeBlocks = "false"
+                    BaseAddress = "285212672"
+                    CheckForOverflowUnderflow = "false"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = "DEBUG;TRACE"
+                    DocumentationFile = ""
+                    DebugSymbols = "true"
+                    FileAlignment = "4096"
+                    IncrementalBuild = "false"
+                    NoStdLib = "false"
+                    NoWarn = ""
+                    Optimize = "false"
+                    OutputPath = "bin\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "4"
+                />
+                <Config
+                    Name = "Release"
+                    AllowUnsafeBlocks = "false"
+                    BaseAddress = "285212672"
+                    CheckForOverflowUnderflow = "false"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = "TRACE"
+                    DocumentationFile = ""
+                    DebugSymbols = "false"
+                    FileAlignment = "4096"
+                    IncrementalBuild = "false"
+                    NoStdLib = "false"
+                    NoWarn = ""
+                    Optimize = "true"
+                    OutputPath = "bin\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "4"
+                />
+            </Settings>
+            <References>
+                <Reference
+                    Name = "System"
+                    AssemblyName = "System"
+                    HintPath = "..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
+                />
+                <Reference
+                    Name = "System.Data"
+                    AssemblyName = "System.Data"
+                    HintPath = "..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
+                />
+                <Reference
+                    Name = "System.XML"
+                    AssemblyName = "System.Xml"
+                    HintPath = "..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
+                />
+                <Reference
+                    Name = "System.Web"
+                    AssemblyName = "System.Web"
+                    HintPath = "..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
+                />
+                <Reference
+                    Name = "System.Web.Services"
+                    AssemblyName = "System.Web.Services"
+                    HintPath = "..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.Services.dll"
+                />
+                <Reference
+                    Name = "System.Drawing"
+                    AssemblyName = "System.Drawing"
+                    HintPath = "..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
+                />
+                <Reference
+                    Name = "System.Windows.Forms"
+                    AssemblyName = "System.Windows.Forms"
+                    HintPath = "..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Windows.Forms.dll"
+                />
+                <Reference
+                    Name = "System.Management"
+                    AssemblyName = "System.Management"
+                    HintPath = "..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Management.dll"
+                />
+            </References>
+        </Build>
+        <Files>
+            <Include>
+                <File
+                    RelPath = "AssemblyInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <Folder RelPath = "bak\" />
+                <File
+                    RelPath = "lib\Iesi.Collections.dll"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "obj\bin\OSCommon.pdb"
+                    BuildAction = "Content"
+                />
+                <Folder RelPath = "obj\Debug\" />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\communicationagent\OSRegistryAgent.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\communicationagent\OSSimulationAgent.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\communicationagent\OSSolverAgent.cs"
+                    SubType = "code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\communicationinterface\OScL.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\communicationinterface\OSdL.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\communicationinterface\OShL.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osanalysis\AnalysisData.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osanalysis\AnalysisHeader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osanalysis\AnalysisStatus.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osanalysis\AnslysisSubstatus.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osanalysis\ConeAnalysis.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osanalysis\ConstraintAnalysis.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osanalysis\DisjunctiveInformationAnalysis.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osanalysis\InstanceAnalysis.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osanalysis\LinearConstraintCoefficientAnalysis.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osanalysis\NonlinearExpressionAnalysis.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osanalysis\ObjectiveAnalysis.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osanalysis\OtherAnalysis.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osanalysis\QuadraticCoefficientAnalysis.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osanalysis\RealTimeDataAnalysis.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osanalysis\SemidefiniteBlockAnalysis.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osanalysis\SimulationAnalysis.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osanalysis\StageAnalysis.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osanalysis\StochasticInformationAnalysis.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osanalysis\UserFunctionAnalysis.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osanalysis\VariableAnalysis.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osanalysis\XMLDataAnalysis.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osbenchmark\BenchmarkData.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osbenchmark\BenchmarkHeader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osbenchmark\BenchmarkScores.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osbenchmark\BenchmarkStatistics.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osbenchmark\OptimizationBenchmark.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osbenchmark\OtherBenchmark.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osentity\Access.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osentity\AccessLimits.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osentity\AccessType.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osentity\Contact.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osentity\EntityData.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osentity\EntityHeader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osentity\FunctionType.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osentity\GeneralInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osentity\HardwareInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osentity\JobInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osentity\KeyWords.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osentity\Link.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osentity\Links.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osentity\OptimizationInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osentity\OtherEntityInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osentity\Owner.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osentity\ServiceInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osentity\SpecialAlgorithm.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osentity\SpecialStructure.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osentity\SystemInfo.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osgeneral\DirectoriesAndFiles.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osgeneral\DoubleVector.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osgeneral\IntVector.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osgeneral\JobDependencies.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osgeneral\MatrixMarket.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osgeneral\News.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osgeneral\NewsElement.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osgeneral\Processes.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osgeneral\QuadraticTerms.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osgeneral\SparseMatrix.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osgeneral\SparseVector.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osinstance\Constraint.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osinstance\Constraints.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osinstance\InstanceData.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osinstance\InstanceHeader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osinstance\LinearConstraintCoefficients.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osinstance\Nl.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osinstance\NonlinearExpressions.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osinstance\ObjCoef.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osinstance\Objective.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osinstance\Objectives.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osinstance\QuadraticCoefficients.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osinstance\QuadraticTerm.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osinstance\Variable.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osinstance\Variables.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osinstance\XMLData.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osoption\ConstraintOption.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osoption\ContactOption.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osoption\GeneralOption.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osoption\InitialVariableValues.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osoption\InitVarValue.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osoption\InstanceLocationOption.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osoption\JobOption.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osoption\ObjectiveOption.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osoption\OptimizationOption.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osoption\OtherOption.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osoption\ServiceOption.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osoption\SystemOption.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osoption\VariableOption.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osprocess\JobOptimization.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osprocess\Jobs.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osprocess\JobStatistics.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osprocess\OptimizationProcess.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osprocess\OptimizationUpdate.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osprocess\OtherProcess.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osprocess\ProcessData.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osprocess\ProcessHeader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osprocess\ProcessRequest.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osprocess\ProcessResponse.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osprocess\ProcessStatistics.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osprocess\StandardOptimizationProcessInformation.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osprocess\UpdatedConstraintValues.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osprocess\UpdatedDualValues.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osprocess\UpdatedVariableReducedCosts.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osprocess\UpdatedVariableValues.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osprocess\UpdatedVariableValuesString.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osquery\OtherQuery.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osquery\StandardQuery.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osregistry\ServiceEntry.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osrepository\RepositoryInstance.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osresult\ConstraintSolution.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osresult\DualVariableValues.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osresult\DualVarValue.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osresult\GeneralStatus.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osresult\GeneralSubstatus.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osresult\ObjectiveSolution.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osresult\ObjectiveValues.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osresult\ObjValue.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osresult\OptimizationResult.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osresult\OptimizationSolution.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osresult\OptimizationSolutionStatus.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osresult\OptimizationSolutionSubstatus.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osresult\OtherConResult.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osresult\OtherConstraintResult.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osresult\OtherObjectiveResult.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osresult\OtherObjResult.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osresult\OtherOptimizationResult.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osresult\OtherResult.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osresult\OtherVariableResult.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osresult\OtherVarResult.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osresult\ResultData.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osresult\ResultHeader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osresult\VariableSolution.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osresult\VariableStringValues.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osresult\VariableValues.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osresult\VarStringValue.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osresult\VarValue.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\ossimulation\SimulationElement.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\ossimulation\SimulationInput.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\ossimulation\SimulationOutput.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\datastructure\osuri\URI.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\exception\OSException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\exception\OSilReadingException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\localinterface\DefaultSimulation.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\localinterface\DefaultSolver.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\localinterface\OSAnalysis.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\localinterface\OSBenchmark.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\localinterface\OSEntity.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\localinterface\OSInstance.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\localinterface\OSOption.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\localinterface\OSProcess.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\localinterface\OSQuery.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\localinterface\OSRegistry.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\localinterface\OSRepository.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\localinterface\OSResult.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\localinterface\OSSimulation.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\localinterface\OSURI.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\nonlinear\OSExpresionTree.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\nonlinear\OSnLNode.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\nonlinear\OSnLNodeNumber.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\nonlinear\OSnLNodeQpTerm.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\nonlinear\OSnLNodeVariable.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\representationparser\OSaLReader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\representationparser\OSaLWriter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\representationparser\OSbLReader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\representationparser\OSbLWriter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\representationparser\OSeLReader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\representationparser\OSeLWriter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\representationparser\OSgLReader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\representationparser\OSgLWriter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\representationparser\OSiLReader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\representationparser\OSiLWriter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\representationparser\OSoLReader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\representationparser\OSoLWriter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\representationparser\OSParameterReader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\representationparser\OSParameterWriter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\representationparser\OSpLReader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\representationparser\OSpLWriter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\representationparser\OSqLReader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\representationparser\OSqLWriter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\representationparser\OSRegistryReader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\representationparser\OSRegistryWriter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\representationparser\OSRepositoryReader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\representationparser\OSRepositoryWriter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\representationparser\OSrLReader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\representationparser\OSrLWriter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\representationparser\OSsLReader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\representationparser\OSsLWriter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\representationparser\OSuLReader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\representationparser\OSuLWriter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\util\CommonUtil.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\util\DBUtil.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\util\DefaultRegistry.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\util\IOUtil.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\util\MailUtil.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\util\MathUtil.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\util\OSConstant.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\util\OSParameter.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\util\OSParameterFile.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\util\OSServiceUtil.cs"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\util\OSServiceUtil.resx"
+                    DependentUpon = "OSServiceUtil.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\util\ProcessUtil.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\util\SecurityUtil.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\util\WSUtil.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\util\XMLUtil.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\util\XPathUtil.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\util\XQueryUtil.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\util\XSLTUtil.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "org\optimizationservices\oscommon\util\misc\Tokenizer.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+            </Include>
+        </Files>
+    </CSHARP>
+</VisualStudioProject>
+
