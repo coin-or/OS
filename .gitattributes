@@ -38,14 +38,6 @@ OSCommon/.classpath -text
 OSCommon/.project -text
 OSCommon/META-INF/MANIFEST.MF -text
 OSCommon/OSCommon.jar -text
-OSCommon/bak/axis1/axis-ant.jar -text
-OSCommon/bak/axis1/axis.jar -text
-OSCommon/bak/axis1/commons-discovery.jar -text
-OSCommon/bak/axis1/commons-logging.jar -text
-OSCommon/bak/axis1/jaxrpc.jar -text
-OSCommon/bak/axis1/log4j-1.2.8.jar -text
-OSCommon/bak/axis1/saaj.jar -text
-OSCommon/bak/axis1/wsdl4j.jar -text
 OSCommon/bak/osresult_complex/ConAllowableDecrease.java -text
 OSCommon/bak/osresult_complex/ConAllowableIncrease.java -text
 OSCommon/bak/osresult_complex/ConIrreducibleInconsistentSystem.java -text
