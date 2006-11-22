@@ -15,10 +15,9 @@ minimize cost:
                 x1 * x2 * x3 * x4 >= 25;
                 
  subject to inequality2:
-               39 <= x1^2 + x2^2 + x3^2 +x4^2 <= 40;
+               40 <= x1^2 + x2^2 + x3^2 +x4^2 <= 40;
                 
-#  subject to inequality3:
-#			   x1^2 + x2^2 + x3^2 +x4^2 >= 39;
+
                 
 
                 

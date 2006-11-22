@@ -126,10 +126,16 @@ void LindoSolver::solve()  {
 		if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Lindo requires decision variables");
 		finish = clock();
 		duration = (double) (finish - start) / CLOCKS_PER_SEC;
-		cout << "Parsing took (seconds): "<< duration << endl;
+		std::cout << "Parsing took (seconds): "<< duration << std::endl;
+		std::cout << "Start process variables !!!!!!!!!" << std::endl;
 		if( !processVariables() ) throw ErrorClass("failed processing variables");
+		std::cout << "Finish process variables!!!!!!" << std::endl;
+		std::cout << "Start process constraints" << std::endl;
 		if( !processConstraints() ) throw ErrorClass("failed processing constraints");
+		std::cout << "Finish process constraints !!!!!!!!!" << std::endl;
+		std::cout << "Start generateLindoModel()  !!!!!!!!!" << std::endl;
 		if( !generateLindoModel()) throw ErrorClass("failed generating Lindo model");
+		std::cout << "Finish generateLindoModel()  !!!!!!!!!" << std::endl;
 		if(m_iNumberNewSlacks > 0 && !addSlackVars()) throw ErrorClass("failed adding slack variables");
 		//if(osinstance->getNumberOfQuadraticTerms() > 0 && !processQuadraticTerms()) throw ErrorClass("failed adding quadratic terms");
 		if(osinstance->getNumberOfNonlinearExpressions() > 0 && !processNonlinearExpressions()) throw ErrorClass("failed adding nonlinear terms");
@@ -288,7 +294,6 @@ bool LindoSolver::processVariables(){
 
  
 bool LindoSolver::generateLindoModel(){ 
-	int i, k;
 	// Generate the LINDO model   
 	/* declare an instance of the LINDO environment object */
 	/* >>> Step 1 <<< Create a LINDO environment. Note: 
@@ -397,139 +402,140 @@ bool LindoSolver::optimize(){
 	//	throw ErrorClass("OSResult error: setJobID");
 	//if(osresult->setGeneralMessage( osresultdata->message) != true)
 	//	throw ErrorClass("OSResult error: setGeneralMessage");
-	// set basic problem parameters
-	if(osresult->setVariableNumber( osinstance->getVariableNumber()) != true)
-		throw ErrorClass("OSResult error: setVariableNumer");
-	if(osresult->setObjectiveNumber( 1) != true)
-		throw ErrorClass("OSResult error: setObjectiveNumber");
-	if(osresult->setConstraintNumber( osinstance->getConstraintNumber()) != true)
-		throw ErrorClass("OSResult error: setConstraintNumber");
-	if(osresult->setSolutionNumber(  1) != true)
-		throw ErrorClass("OSResult error: setSolutionNumer");	
 	try{
-	if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("LINDO NEEDS AN OBJECTIVE FUNCTION");
-	//
-	//if(LSoptimize( pModel_, LS_METHOD_FREE, &nSolStatus) != 0)throw ErrorClass("Problem in optimize routine");
-	//if(LSsolveMIP( pModel_,  &nSolStatus) != 0)throw ErrorClass("Problem in optimize routine");
-	//LSwriteMPIFile(pModel_, "/Users/kmartin/temp/hs71.mpi"); 
-	// some testing // 
-	//cout << "NUMBER OF NEW SLACKS = " <<  m_iNumberNewSlacks << endl;
-	//for(int kj = 0; kj < osinstance->getConstraintNumber(); kj++){
-	//	cout << "Constraint Type: " << m_mcRowType[ kj] << endl;
-	//	cout << "RHS VALUE: " << m_mdRhsValue[ kj] << endl;
-	//}
-	//  
-
-	if(osinstance->getNumberOfNonlinearExpressions() > 0){ 
-		LSoptimize( pModel_, LS_METHOD_FREE, &nSolStatus);
-		//m_iLindoErrorCode = LSsolveGOP(pModel_, NULL) ;
-		lindoAPIErrorCheck("There was an ERROR in the call to the GOP solver");
-		LSgetInfo (pModel_, LS_IINFO_GOP_STATUS, &nSolStatus);
-	}
-	else{
-		m_iLindoErrorCode = LSsolveMIP( pModel_,  &nSolStatus);
-		lindoAPIErrorCheck("There was an ERROR in the call to the MIP solver");
-	}
-      /* Report the status of solution */
-     // if (nSolStatus==LS_STATUS_OPTIMAL || nSolStatus==LS_STATUS_BASIC_OPTIMAL)
-     // printf("\nSolution Status: Globally Optimal\n");
-     // else if (nSolStatus==LS_STATUS_LOCAL_OPTIMAL)
-     // printf("\nSolution Status: Locally Optimal\n\n");
-    // else if (nSolStatus==LS_STATUS_INFEASIBLE)
-    //  printf("\nSolution Status: Infeasible\n\n");
-	cout << "Solution Status  = " <<  nSolStatus << endl;
-	osresult->setGeneralStatusType("success");
-	osresult->setSolutionStatus(solIdx, "optimal", description);
-	x = new double[ osinstance->getVariableNumber() + m_iNumberNewSlacks];
-	srcost = new std::string[ osinstance->getVariableNumber() + m_iNumberNewSlacks];
-	drcost = new double[ osinstance->getVariableNumber() + m_iNumberNewSlacks];
-	y = new double[ osinstance->getConstraintNumber() ];
-	z = new double[1]; 
-	switch( nSolStatus){
-		case 1:
-			// an optimal solution is found
-			cout << "case 1" << endl; 
-		case 8:
-			// a local optimal solution is found
-			cout << "case 8" << endl;
-		case 2: 
-			cout << "case 2" << endl;
-			// an optimal basic  solution is also found
-			// get the primal result
-			if( (osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0 ) 
-				|| (osinstance->getNumberOfNonlinearExpressions() <= 0) ){
-				m_iLindoErrorCode = LSgetMIPPrimalSolution( pModel_, x);  
-				lindoAPIErrorCheck("Error trying to obtain primal solution with integer variables present");
-			}
-			else{
-				m_iLindoErrorCode = LSgetPrimalSolution( pModel_, x);  
-				lindoAPIErrorCheck("Error trying to obtain primal solution with NO integer variables present");
-			}
-			osresult->setPrimalVariableValues(solIdx, x);
-			// Get the dual values result
-			if( (osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0)
-				|| (osinstance->getNumberOfNonlinearExpressions() <= 0 ) ){
-				m_iLindoErrorCode = LSgetMIPDualSolution( pModel_, y);
-				lindoAPIErrorCheck("Error trying to obtain dual solution with integer variables present");
-			}
-			else{
-				m_iLindoErrorCode = LSgetDualSolution( pModel_, y);
-				lindoAPIErrorCheck("Error trying to obtain dual solution with NO integer variables present");
-			}
-			osresult->setDualVariableValues(solIdx, y);
-			// get the reduced cost result
-			if( ( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0)
-				|| (osinstance->getNumberOfNonlinearExpressions() <= 0 ) ) {
-				m_iLindoErrorCode = LSgetMIPReducedCosts( pModel_, drcost); 
-				lindoAPIErrorCheck("Error trying to obtain the reduced costs with integer variables present");
-			}
-			else{
-				m_iLindoErrorCode = LSgetReducedCosts( pModel_, drcost);
-				lindoAPIErrorCheck("Error trying to obtain the reduced costs with NO integer variables present");;
-			}
-			// now put the reduced costs into the osrl
-			{
-				int numberOfOtherVariableResult = 1;
-				int otherIdx = 0;
-				// first set the number of Other Variable Results
-				osresult->setNumberOfOtherVariableResult(solIdx, numberOfOtherVariableResult);
-				for(int i = 0; i <  osinstance->getVariableNumber() + m_iNumberNewSlacks; i++){
-					outStr << drcost[i];
-					srcost[ i] = outStr.str();
-					outStr.str("");
-				}
-				osresult->setAnOtherVariableResult(solIdx, otherIdx, "reduced costs", "the variable reduced costs", srcost);
-				/* Get the value of the objective */
-				if( ( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0)
-					|| (osinstance->getNumberOfNonlinearExpressions() <= 0 ) ) {
-					m_iLindoErrorCode = LSgetInfo( pModel_, LS_DINFO_MIP_OBJ, &z[0]);
-					lindoAPIErrorCheck("Error trying to obtain optimal objective value with integer variables present");
+		if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("LINDO NEEDS AN OBJECTIVE FUNCTION");
+		//
+		//if(LSoptimize( pModel_, LS_METHOD_FREE, &nSolStatus) != 0)throw ErrorClass("Problem in optimize routine");
+		//if(LSsolveMIP( pModel_,  &nSolStatus) != 0)throw ErrorClass("Problem in optimize routine");
+		//LSwriteMPIFile(pModel_, "/Users/kmartin/temp/hs71.mpi"); 
+		// some testing // 
+		//cout << "NUMBER OF NEW SLACKS = " <<  m_iNumberNewSlacks << endl;
+		//for(int kj = 0; kj < osinstance->getConstraintNumber(); kj++){
+		//	cout << "Constraint Type: " << m_mcRowType[ kj] << endl;
+		//	cout << "RHS VALUE: " << m_mdRhsValue[ kj] << endl;
+		//}
+		//  
+	
+		if(osinstance->getNumberOfNonlinearExpressions() > 0){ 
+			//LSoptimize( pModel_, LS_METHOD_FREE, &nSolStatus);
+			m_iLindoErrorCode = LSsolveGOP(pModel_, NULL) ;
+			lindoAPIErrorCheck("There was an ERROR in the call to the GOP solver");
+			LSgetInfo (pModel_, LS_IINFO_GOP_STATUS, &nSolStatus);
+		}
+		else{
+			m_iLindoErrorCode = LSsolveMIP( pModel_,  &nSolStatus);
+			lindoAPIErrorCheck("There was an ERROR in the call to the MIP solver");
+		}
+	      /* Report the status of solution */
+	     // if (nSolStatus==LS_STATUS_OPTIMAL || nSolStatus==LS_STATUS_BASIC_OPTIMAL)
+	     // printf("\nSolution Status: Globally Optimal\n");
+	     // else if (nSolStatus==LS_STATUS_LOCAL_OPTIMAL)
+	     // printf("\nSolution Status: Locally Optimal\n\n");
+	    // else if (nSolStatus==LS_STATUS_INFEASIBLE)
+	    //  printf("\nSolution Status: Infeasible\n\n");
+			// set basic problem parameters
+		if(osresult->setVariableNumber( osinstance->getVariableNumber()) != true)
+			throw ErrorClass("OSResult error: setVariableNumer");
+		if(osresult->setObjectiveNumber( 1) != true)
+			throw ErrorClass("OSResult error: setObjectiveNumber");
+		if(osresult->setConstraintNumber( osinstance->getConstraintNumber()) != true)
+			throw ErrorClass("OSResult error: setConstraintNumber");
+		if(osresult->setSolutionNumber(  1) != true)
+			throw ErrorClass("OSResult error: setSolutionNumer");
+		cout << "Solution Status  = " <<  nSolStatus << endl;
+		osresult->setGeneralStatusType("success");
+		osresult->setSolutionStatus(solIdx, "optimal", description);	
+		x = new double[ osinstance->getVariableNumber() + m_iNumberNewSlacks];
+		srcost = new std::string[ osinstance->getVariableNumber() + m_iNumberNewSlacks];
+		drcost = new double[ osinstance->getVariableNumber() + m_iNumberNewSlacks];
+		y = new double[ osinstance->getConstraintNumber() ];
+		z = new double[1]; 
+		switch( nSolStatus){
+			case 1:
+				// an optimal solution is found
+				cout << "case 1" << endl; 
+			case 8:
+				// a local optimal solution is found
+				cout << "case 8" << endl;
+			case 2: 
+				cout << "case 2" << endl;
+				// an optimal basic  solution is also found
+				// get the primal result
+				if( (osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0 ) 
+					|| (osinstance->getNumberOfNonlinearExpressions() <= 0) ){
+					m_iLindoErrorCode = LSgetMIPPrimalSolution( pModel_, x);  
+					lindoAPIErrorCheck("Error trying to obtain primal solution with integer variables present");
 				}
 				else{
-					LSgetInfo( pModel_, LS_DINFO_GOP_OBJ, &z[0]);
-					lindoAPIErrorCheck("Error trying to obtain optimal objective value with NO integer variables present");	
-				}	
-				osresult->setObjectiveValues(solIdx, z);
-			}
-			break;
-		case 3:
-			osresult->setSolutionStatus(solIdx,  "infeasible", description);
-			break;
-		case 4:
-			osresult->setSolutionStatus(solIdx,  "unbounded", description);
-			break;
-		default:
-			osresult->setSolutionStatus(solIdx,  "other", description);
-	}
-	osrl = osrlwriter->writeOSrL( osresult);
-	delete[] x;
-	delete[] y;
-	delete[] z;
-	delete[] srcost;
-	delete[] drcost;
-	return true;
+					m_iLindoErrorCode = LSgetPrimalSolution( pModel_, x);  
+					lindoAPIErrorCheck("Error trying to obtain primal solution with NO integer variables present");
+				}
+				osresult->setPrimalVariableValues(solIdx, x);
+				// Get the dual values result
+				if( (osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0)
+					|| (osinstance->getNumberOfNonlinearExpressions() <= 0 ) ){
+					m_iLindoErrorCode = LSgetMIPDualSolution( pModel_, y);
+					lindoAPIErrorCheck("Error trying to obtain dual solution with integer variables present");
+				}
+				else{
+					m_iLindoErrorCode = LSgetDualSolution( pModel_, y);
+					lindoAPIErrorCheck("Error trying to obtain dual solution with NO integer variables present");
+				}
+				osresult->setDualVariableValues(solIdx, y);
+				// get the reduced cost result
+				if( ( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0)
+					|| (osinstance->getNumberOfNonlinearExpressions() <= 0 ) ) {
+					m_iLindoErrorCode = LSgetMIPReducedCosts( pModel_, drcost); 
+					lindoAPIErrorCheck("Error trying to obtain the reduced costs with integer variables present");
+				}
+				else{
+					m_iLindoErrorCode = LSgetReducedCosts( pModel_, drcost);
+					lindoAPIErrorCheck("Error trying to obtain the reduced costs with NO integer variables present");;
+				}
+				// now put the reduced costs into the osrl
+				{
+					int numberOfOtherVariableResult = 1;
+					int otherIdx = 0;
+					// first set the number of Other Variable Results
+					osresult->setNumberOfOtherVariableResult(solIdx, numberOfOtherVariableResult);
+					for(int i = 0; i <  osinstance->getVariableNumber() + m_iNumberNewSlacks; i++){
+						outStr << drcost[i];
+						srcost[ i] = outStr.str();
+						outStr.str("");
+					}
+					osresult->setAnOtherVariableResult(solIdx, otherIdx, "reduced costs", "the variable reduced costs", srcost);
+					/* Get the value of the objective */
+					if( ( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0)
+						|| (osinstance->getNumberOfNonlinearExpressions() <= 0 ) ) {
+						m_iLindoErrorCode = LSgetInfo( pModel_, LS_DINFO_MIP_OBJ, &z[0]);
+						lindoAPIErrorCheck("Error trying to obtain optimal objective value with integer variables present");
+					}
+					else{
+						LSgetInfo( pModel_, LS_DINFO_GOP_OBJ, &z[0]);
+						lindoAPIErrorCheck("Error trying to obtain optimal objective value with NO integer variables present");	
+					}	
+					osresult->setObjectiveValues(solIdx, z);
+				}
+				break;
+			case 3:
+				osresult->setSolutionStatus(solIdx,  "infeasible", description);
+				break;
+			case 4:
+				osresult->setSolutionStatus(solIdx,  "unbounded", description);
+				break;
+			default:
+				osresult->setSolutionStatus(solIdx,  "other", description);
+		}
+		osrl = osrlwriter->writeOSrL( osresult);
+		delete[] x;
+		delete[] y;
+		delete[] z;
+		delete[] srcost;
+		delete[] drcost;
+		return true;
 	}
 	catch(const ErrorClass& eclass){
+		
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
 		osrl = osrlwriter->writeOSrL( osresult);
@@ -930,7 +936,7 @@ void  LindoSolver::lindoAPIErrorCheck(std::string errormsg) {
 		}
 	}
 		catch(const ErrorClass& eclass){
-		throw ErrorClass(  eclass.errormsg); 
+		throw ErrorClass( eclass.errormsg);
 	}
 }// end lindoAPIErrorCheck
 

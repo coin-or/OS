@@ -250,33 +250,29 @@ int  main(){
 	} 	
 	{
 		size_t n  = 2;
-     	double x0 = -1;
-     	double x1 = 2.;
+     	double x0 = 4;
+     	double x1 = .5;
 	   	CppADvector< AD<double> > x(n);
 	    x[0]      = x0;
 	    x[1]      = x1;
 	     // declare independent variables and start tape recording
 	     CppAD::Independent(x);
-	
 	     // range space vector 
 	     size_t m = 1;
 	     CppADvector< AD<double> > y(m);
-	     y[0] = CppAD::pow(x[0], 2.0);
-	
+	     y[0] = CppAD::pow(x[0], x[1]);
 	     // create f: x -> y and stop tape recording
 	     CppAD::ADFun<double> f(x, y); 
-	
 	     // check value 
 	     double check = std::pow(x0, x1);
 	     check = CppAD::pow(x0, x1);
 	     std::cout << "check " <<  y[ 0] << std::endl;
 	     ok &= NearEqual(y[0] , check,  1e-10 , 1e-10);
-	
 	     // forward computation of first partial w.r.t. x[0]
 	     std::vector<double> dx(n);
 	     std::vector<double> dy(m);
-	     dx[0] = 1.;
-	     dx[1] = 0.;
+	     dx[0] = 4.;
+	     dx[1] = 1/2.;
 	     dy    = f.Forward(1, dx);
 	     std::cout << "dy =  " <<  dy[ 0] << std::endl;
 	     check = x1 * std::pow(x0, x1-1.);
@@ -341,7 +337,6 @@ Please visit http://www.coin-or.org/CppAD/ for information on other licenses.
 -------------------------------------------------------------------------- */
 	using CppAD::NearEqual;
 	bool ok  = true;
-	size_t n = 3;
 	int hessValuesIdx = 0;
 	//assert( sparseHessian->hessDimension = n * (n + 1) /2);
 	//H[0 * n + 0]

@@ -331,7 +331,6 @@ int  main(){
 		
 	}	
 	std::cout << "OK == "   <<  CheckHessian(H, x0, x1, x2, y0, y1, z) << std::endl;
-	std::cout << "pow() =  " << pow(-2, 2) << std::endl;
 	return 0;
 }//end main
  

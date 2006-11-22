@@ -76,13 +76,14 @@ int main(int argC, char* argV[])
     dataDir = dirsep == '/' ? "../data/" : "..\\data\\";
 	std::string osol = "<osol></osoL>";
 	osilFileName =  dataDir + "parincLinear.osil";
-	//osilFileName =  dataDir + "objOnly.osil";
-	//ipOptFileName =  dataDir + "HS071_NLP.osil";
-	ipOptFileName =  dataDir + "aircraft.osil";
+	ipOptFileName =  dataDir + "weird.osil";
+	//ipOptFileName =  dataDir + "aircrafta.osil";
 	//ipOptFileName =  dataDir + "rosenbrock.osil";
-	ipOptFileName =  dataDir + "blockqp1.osil";
-	lindoFileName = dataDir + "lindoapiaddins.osil";
-	lindoFileName = dataDir + "blockqp1.osil";
+	//ipOptFileName =  dataDir + "blockqp1.osil";
+	//lindoFileName = dataDir + "lindoapiaddins.osil";
+	//lindoFileName = dataDir + "blockqp1.osil";
+	lindoFileName = dataDir + "aircrafta.osil";
+	
 	nlFileName = dataDir + "hs71.nl";
 	mpsFileName =  dataDir + "parinc.mps";
 	parserTestOSiLFileName = dataDir + "parincLinear.osil"; 

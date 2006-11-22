@@ -693,10 +693,10 @@ string OSResult::getSolutionStatusDescription(int solIdx){
 }//getSolutionStatusDescription
 
 string OSResult::getSolutionMessage(int solIdx){
-	if(resultData->optimization == NULL) return NULL;
+	if(resultData->optimization == NULL) return "there is no solution";
 	if(resultData->optimization->solution == NULL || 
-	   solIdx < 0 || solIdx >=  resultData->optimization->numberOfSolutions) return NULL;
-	if(resultData->optimization->solution[solIdx] == NULL) return NULL;
+	   solIdx < 0 || solIdx >=  resultData->optimization->numberOfSolutions) return "there is no solution";
+	if(resultData->optimization->solution[solIdx] == NULL) return "there is no solution";
 	return resultData->optimization->solution[solIdx]->message;
 }//getSolutionMessage
 

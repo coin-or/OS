@@ -59,6 +59,9 @@ you should get x1 = 540, x2 = 252
 #include "OSResult.h"
 #ifdef COIN_HAS_LINDO    
 #include "LindoSolver.h"
+#endif 
+#ifdef COIN_HAS_IPOPT    
+#include "IpoptSolver.h"
 #endif  
 #include "CoinSolver.h"
 #include "DefaultSolver.h"
@@ -91,7 +94,9 @@ int main(int argc, char **argv)
 	nl2osil = new OSnl2osil( stub);
 	// create an osinstance object
 	OSInstance *osinstance;
+	std::cout << " call nl2osil" << std::endl;
 	nl2osil->createOSInstance() ;
+	std::cout << " return from  nl2osil" << std::endl;
 	osinstance = nl2osil->osinstance;
 	// turn the osinstance into osil 
 	// not needed for a local solve
@@ -99,6 +104,7 @@ int main(int argc, char **argv)
 	OSiLWriter *osilwriter = NULL;
 	osilwriter = new OSiLWriter();
 	std::string  osil = osilwriter->writeOSiL( osinstance);
+	
 
 	/**  amplclient_option: 
 	 *   1. solver:
@@ -157,7 +163,23 @@ int main(int argc, char **argv)
 								solverType->m_sSolverName = "glpk";
 							}
 							else{
-								//throw ErrorClass( "a supported solver is not present");
+								if( strstr(amplclient_options, "ipopt") != NULL){
+									// have to act differently since Ipopt uses smart pointers
+									// we are requesting the Lindo solver
+									bool bIpoptIsPresent = false;
+									#ifdef COIN_HAS_IPOPT
+									bIpoptIsPresent = true;
+									SmartPtr<IpoptSolver> ipoptSolver  = new IpoptSolver();	
+									ipoptSolver->osol = osol;
+									ipoptSolver->osinstance = osinstance;
+									ipoptSolver->solve();
+									osrl = solverType->osrl ;
+									#endif
+									if(bIpoptIsPresent == false) throw ErrorClass( "the Ipopt solver requested is not present");
+								}
+								else{
+									throw ErrorClass( "a supported solver is not present");
+								}
 							}
 						}
 					}
@@ -165,31 +187,34 @@ int main(int argc, char **argv)
 			}
 		}
 		// do a local solve
-		solverType->osil = osil;
-		solverType->osol = osol;
-		solverType->osinstance = NULL;
-		solverType->solve();
-		osrl = solverType->osrl ;
+		if( strstr(amplclient_options, "ipopt") == NULL){
+			solverType->osol = osol;
+			solverType->osinstance = osinstance;
+			solverType->solve();
+			osrl = solverType->osrl ;
+		}
 	}
 	catch(const ErrorClass& eclass){
-		osresult->setGeneralMessage( eclass.errormsg);
-		osresult->setGeneralStatusType( "error");
-		osrl = osrlwriter->writeOSrL( osresult);
+		osrl = solverType->osrl;
 	}
 	// do the following for a remote solve
 	//OSSolverAgent* osagent = NULL;
+	//solverType->osil = osil;
 	//osagent = new OSSolverAgent("127.0.0.1:8080/os/ossolver/CoinSolverService.jws");
 	//cout << "Place remote synchronous call" << endl;
 	//osrl = osagent->solve(osil, osol);
 	// okay start to test osrl parser 
-	cout << "THE OSRL" << endl;
-	cout << osrl << endl << endl <<endl;	
-	osresult = osrlreader->readOSrL( osrl);
-	cout << "Message = " << osresult->getSolutionMessage( 0) << endl;
-	write_sol((char*)osresult->getSolutionMessage( 0).c_str(), 
-		osresult->getOptimalPrimalVariableValues( -1), 
-		osresult->getOptimalDualVariableValues( -1), 
-		NULL);
+	try{
+		cout << osrl << endl << endl <<endl;	
+		osresult = osrlreader->readOSrL( osrl);
+		if( osresult->getSolutionNumber( ) > 1)
+		write_sol((char*)osresult->getSolutionMessage( 0).c_str(), 
+			osresult->getOptimalPrimalVariableValues( -1), 
+			osresult->getOptimalDualVariableValues( -1), NULL);
+	}
+	catch(const ErrorClass& eclass){
+		cout << "There was an error parsing the OSrL" << endl << eclass.errormsg << endl << endl;
+	}
 	delete osrlreader;
 	osrlreader = NULL;
 	delete solverType;

@@ -123,8 +123,9 @@ headerMessage:
 | HEADERMESSAGESTART ELEMENTTEXT HEADERMESSAGEEND {headerMessage = $2;}
 | HEADERMESSAGESTART HEADERMESSAGEEND ;
 
-resultData: RESULTDATASTART statistics optimization otherResultData RESULTDATAEND
-|  RESULTDATASTARTANDEND
+resultData: RESULTDATASTARTANDEND 
+|  RESULTDATASTART statistics optimization otherResultData RESULTDATAEND
+| RESULTDATASTART RESULTDATAEND
 
 otherResultData:
 | DUMMY;
@@ -338,10 +339,10 @@ OSResult *yygetOSResult(std::string parsestring){
 	osrlinitialize();
 	osrl_scan_string( parsestring.c_str());
 	std::cout << std::endl << std::endl;
-	std::cout << "start parsing now" << std::endl;
+	//std::cout << "start parsing now" << std::endl;
 	osrlparse();
-	std::cout << "Parse a success" << std::endl;
 	if( createOSResult() == false) osrlerror("Could not create OSResult");
+	//std::cout << "Parse a success" << std::endl;
 	return osresult;
 } // end yygetOSResult
 
@@ -410,6 +411,7 @@ bool createOSResult(){
 	if(jobID != "") osresult->setJobID( jobID);
 	if(headerMessage != "") osresult->setGeneralMessage( headerMessage);
 	// set basic problem parameters
+	/*
 	if(osresult->setVariableNumber( numberOfVariables) != true)
 		osrlerror("OSResult error: setVariableNumber");
 	if(osresult->setObjectiveNumber( numberOfObjectives) != true)
@@ -418,14 +420,19 @@ bool createOSResult(){
 		osrlerror("OSResult error: setConstraintNumber");
 	if(osresult->setSolutionNumber( numberOfSolutions) != true)
 		osrlerror("OSResult error: setSolutionNumer");
+		*/
+	if( numberOfVariables > 0 ) osresult->setVariableNumber( numberOfVariables);
+	if( numberOfObjectives > 0) osresult->setObjectiveNumber( numberOfObjectives);
+	if( numberOfConstraints > 0 ) osresult->setConstraintNumber( numberOfConstraints);
+	if( numberOfSolutions > 0 ) osresult->setSolutionNumber( numberOfSolutions);
 	//
 	// now loop over the solutions
-	std::cout << "Number of Soutions = " << numberOfSolutions << std::endl;
-	std::cout << "Number of Variables = " << numberOfVariables << std::endl;
-	std::cout << "Number of Constraints = " << numberOfConstraints << std::endl;
-	std::cout << "Number of Objectives = " << numberOfObjectives << std::endl;
-	std::cout << "Status Type = " <<  statusType << std::endl;
-	std::cout << std::endl << std::endl;
+	//std::cout << "Number of Soutions = " << numberOfSolutions << std::endl;
+	//std::cout << "Number of Variables = " << numberOfVariables << std::endl;
+	//std::cout << "Number of Constraints = " << numberOfConstraints << std::endl;
+	//std::cout << "Number of Objectives = " << numberOfObjectives << std::endl;
+	//std::cout << "Status Type = " <<  statusType << std::endl;
+	//std::cout << std::endl << std::endl;
 	//
 
 	if(numberOfSolutions > 0){
