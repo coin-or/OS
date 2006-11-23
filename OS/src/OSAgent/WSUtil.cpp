@@ -13,11 +13,11 @@
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */ 
- 
 #include "WSUtil.h"
 #include "OSConfig.h"
 
 #ifdef WIN_
+//#define NOMINMAX
 #include <winsock.h>
 #else
 #include <sys/socket.h>
