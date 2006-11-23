@@ -86,7 +86,6 @@ double OSExpressionTree::calculateFunction( double *x, bool functionEvaluated){
 	}
 	else{
 		m_dTreeRootValue = m_treeRoot->calculateFunction( x);
-
 		return  m_dTreeRootValue;
 	}
 }//calculateFunction

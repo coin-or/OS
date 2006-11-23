@@ -49,6 +49,7 @@ you should get x1 = 540, x2 = 252
 #include <OsiCbcSolverInterface.hpp> 
 //#include <OsiGlpkSolverInterface.hpp>
 
+
 #include "OSConfig.h"
 #include "OSnl2osil.h"
 #include "OSiLReader.h"
@@ -82,7 +83,6 @@ using std::endl;
 
 int main(int argc, char **argv)
 {
-
 	char *stub;
 	// set AMPL structures
 	ASL *asl;
@@ -94,18 +94,15 @@ int main(int argc, char **argv)
 	nl2osil = new OSnl2osil( stub);
 	// create an osinstance object
 	OSInstance *osinstance;
+	osinstance = new OSInstance();
 	std::cout << " call nl2osil" << std::endl;
 	nl2osil->createOSInstance() ;
 	std::cout << " return from  nl2osil" << std::endl;
 	osinstance = nl2osil->osinstance;
+	std::cout << " osinstance created" << std::endl;
 	// turn the osinstance into osil 
 	// not needed for a local solve
 	// send an osinstance object in memory
-	OSiLWriter *osilwriter = NULL;
-	osilwriter = new OSiLWriter();
-	std::string  osil = osilwriter->writeOSiL( osinstance);
-	
-
 	/**  amplclient_option: 
 	 *   1. solver:
 	 *		possible values - clp, glpk, cplex, cplex, lindo
@@ -113,8 +110,6 @@ int main(int argc, char **argv)
 	 *      possible values - NULL (empty) or url of the solver service
 	 *      
 	 */
-	
-
 	char *amplclient_options = NULL;
 	// set solver type default to clp
 	DefaultSolver *solverType  = NULL;	
@@ -123,7 +118,6 @@ int main(int argc, char **argv)
 	OSrLWriter *osrlwriter;
 	osrlwriter = new OSrLWriter();
 	OSResult *osresult = NULL;
-	//
 	std::string osrl = "";
 	// note that default solver is coin and default subSolver is clp
 	std::string osol = "<osol></osol>";
@@ -169,11 +163,14 @@ int main(int argc, char **argv)
 									bool bIpoptIsPresent = false;
 									#ifdef COIN_HAS_IPOPT
 									bIpoptIsPresent = true;
+									//std::cout << "Create an Ipopt solver and optimize"<< std::endl;
 									SmartPtr<IpoptSolver> ipoptSolver  = new IpoptSolver();	
 									ipoptSolver->osol = osol;
 									ipoptSolver->osinstance = osinstance;
 									ipoptSolver->solve();
-									osrl = solverType->osrl ;
+									//std::cout << "Done optimizing with Ipopt"<< std::endl;
+									osrl = ipoptSolver->osrl ;
+									//std::cout << "Have Ipopt writ out osrl"<< std::endl;
 									#endif
 									if(bIpoptIsPresent == false) throw ErrorClass( "the Ipopt solver requested is not present");
 								}
@@ -199,6 +196,9 @@ int main(int argc, char **argv)
 	}
 	// do the following for a remote solve
 	//OSSolverAgent* osagent = NULL;
+	//OSiLWriter *osilwriter = NULL;
+	//osilwriter = new OSiLWriter();
+	//std::string  osil = osilwriter->writeOSiL( osinstance);
 	//solverType->osil = osil;
 	//osagent = new OSSolverAgent("127.0.0.1:8080/os/ossolver/CoinSolverService.jws");
 	//cout << "Place remote synchronous call" << endl;
@@ -217,8 +217,10 @@ int main(int argc, char **argv)
 	}
 	delete osrlreader;
 	osrlreader = NULL;
-	delete solverType;
-	solverType = NULL;
+	if( strstr(amplclient_options, "ipopt") == NULL){
+		delete solverType;
+		solverType = NULL;
+	}
 	delete osrlwriter;
 	osrlwriter = NULL;
 	return 0;

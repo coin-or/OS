@@ -93,7 +93,7 @@ bool OSmps2osil::createOSInstance( )
 	// now fill in row information
 	//
 	osinstance->setConstraintNumber( numrows);
-	double constant = OSNAN;
+	double constant = 0.0;
 	for(i = 0; i < numrows; i++){
 		osinstance->addConstraint(i, m_MpsData->rowName( i), m_MpsData->getRowLower()[i], 
 		m_MpsData->getRowUpper()[i], constant);

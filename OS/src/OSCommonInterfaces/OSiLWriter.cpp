@@ -177,10 +177,14 @@ std::string OSiLWriter::writeOSiL( OSInstance *theosinstance){
 			for (i = 0; i < m_OSInstance->instanceData->constraints->numberOfConstraints; i++){
 				if(m_OSInstance->instanceData->constraints->con[i] != NULL){
 					outStr << "<con" ; 
-					// kipp -- still need to get initial value
 					if(m_OSInstance->instanceData->constraints->con[i]->name.length()){
 						outStr << " name=\"" ;
 						outStr << m_OSInstance->instanceData->constraints->con[i]->name ;
+						outStr <<  "\"";
+					}
+					if(m_OSInstance->instanceData->constraints->con[i]->constant != 0){
+						outStr << " constant=\"" ;
+						outStr << m_OSInstance->instanceData->constraints->con[i]->constant ;
 						outStr <<  "\"";
 					}
 					if(m_OSInstance->instanceData->constraints->con[i]->lb != -OSDBL_MAX

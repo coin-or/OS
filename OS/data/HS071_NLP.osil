@@ -1,72 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/OSiL.xsd">
-	<instanceHeader>
-		<name>HS071_NLP</name>
-		<source>IPOPT example</source>
-		<description>Generated from AMPL nl file</description>
-	</instanceHeader>
-	<instanceData>
-		<variables numberOfVariables="4">
-			<var name="x1"  lb="1" ub="5"/>
-			<var name="x2"  lb="1" ub="5"/>
-			<var name="x3"  lb="1" ub="5"/>
-			<var name="x4"  lb="1" ub="5"/>
-		</variables>
-		<objectives numberOfObjectives="1">
-			<obj maxOrMin="min" name="Objective Function" numberOfObjCoef="1">
-				<coef idx="2">1</coef>
-			</obj>
-		</objectives>
-		<constraints numberOfConstraints="2">
-			<con lb="25"/>
-			<con lb="40" ub="40"/>
-		</constraints>
-		<nonlinearExpressions numberOfNonlinearExpressions="3">
-			<nl idx="-1">
-				<times>
-					<variable idx="0"/>
-					<times>
-						<variable idx="3"/>
-						<sum>
-							<variable idx="0"/>
-							<variable idx="1"/>
-							<variable idx="2"/>							
-						</sum>
-					</times>
-				</times>
-			</nl>
-			<nl idx="0">
-				<times>
-					<variable idx="0"/>
-					<times>
-						<variable idx="1"/>
-						<times>
-						<variable idx="2"/>
-						<variable idx="3"/>
-						</times>
-					</times>
-				</times>
-			</nl>
-			<nl idx="1">
-				<sum>
-					<times>
-						<variable idx="0"/>
-						<variable idx="0"/>
-					</times>
-					<times>
-						<variable idx="1"/>
-						<variable idx="1"/>
-					</times>
-					<times>
-						<variable idx="2"/>
-						<variable idx="2"/>
-					</times>
-					<times>
-						<variable idx="3"/>
-						<variable idx="3"/>
-					</times>
-				</sum>
-			</nl>
-		</nonlinearExpressions>
-	</instanceData>
+<osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="os.optimizationservices.org ../schemas/OSiL.xsd">
+    <instanceHeader>
+        <description>Generated from AMPL nl file</description>
+    </instanceHeader>
+    <instanceData>
+        <variables numberOfVariables="4">
+            <var name="_svar[1]" lb="1" ub="5"/>
+            <var name="_svar[2]" lb="1" ub="5"/>
+            <var name="_svar[3]" lb="1" ub="5"/>
+            <var name="_svar[4]" lb="1" ub="5"/>
+        </variables>
+        <objectives numberOfObjectives="1">
+            <obj maxOrMin="min" numberOfObjCoef="4">
+                <coef idx="0">0</coef>
+                <coef idx="1">0</coef>
+                <coef idx="2">1</coef>
+                <coef idx="3">0</coef>
+            </obj>
+        </objectives>
+        <constraints numberOfConstraints="2">
+            <con name="_scon[1]" lb="25"/>
+            <con name="_scon[2]" lb="40" ub="40"/>
+        </constraints>
+        <nonlinearExpressions numberOfNonlinearExpressions="3">
+            <nl idx="0">
+                <times>
+                    <times>
+                        <times>
+                            <variable idx="0" coef="1"/>
+                            <variable idx="1" coef="1"/>
+                        </times>
+                        <variable idx="2" coef="1"/>
+                    </times>
+                    <variable idx="3" coef="1"/>
+                </times>
+            </nl>
+            <nl idx="1">
+                <sum>
+                    <power>
+                        <variable idx="0" coef="1"/>
+                        <number value="2" type="real"/>
+                    </power>
+                    <power>
+                        <variable idx="1" coef="1"/>
+                        <number value="2" type="real"/>
+                    </power>
+                    <power>
+                        <variable idx="2" coef="1"/>
+                        <number value="2" type="real"/>
+                    </power>
+                    <power>
+                        <variable idx="3" coef="1"/>
+                        <number value="2" type="real"/>
+                    </power>
+                </sum>
+            </nl>
+            <nl idx="-1">
+                <times>
+                    <times>
+                        <variable idx="0" coef="1"/>
+                        <variable idx="3" coef="1"/>
+                    </times>
+                    <sum>
+                        <variable idx="0" coef="1"/>
+                        <variable idx="1" coef="1"/>
+                        <variable idx="2" coef="1"/>
+                    </sum>
+                </times>
+            </nl>
+        </nonlinearExpressions>
+    </instanceData>
 </osil>

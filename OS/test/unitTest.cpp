@@ -60,7 +60,6 @@ int main(int argC, char* argV[])
 	#endif 
 	OSmps2osil *mps2osil = NULL;
 	DefaultSolver *m_Solver  = NULL;
-
 	// end classes    
 	std::string osilFileName;
 	std::string ipOptFileName;
@@ -76,14 +75,13 @@ int main(int argC, char* argV[])
     dataDir = dirsep == '/' ? "../data/" : "..\\data\\";
 	std::string osol = "<osol></osoL>";
 	osilFileName =  dataDir + "parincLinear.osil";
-	ipOptFileName =  dataDir + "weird.osil";
-	//ipOptFileName =  dataDir + "aircrafta.osil";
+	//ipOptFileName =  dataDir +   "HS071_NLP.osil";
+	ipOptFileName =  dataDir + "aircrafta.osil";
 	//ipOptFileName =  dataDir + "rosenbrock.osil";
 	//ipOptFileName =  dataDir + "blockqp1.osil";
-	//lindoFileName = dataDir + "lindoapiaddins.osil";
+	lindoFileName = dataDir + "lindoapiaddins.osil";
 	//lindoFileName = dataDir + "blockqp1.osil";
-	lindoFileName = dataDir + "aircrafta.osil";
-	
+	//lindoFileName = dataDir + "aircrafta.osil";
 	nlFileName = dataDir + "hs71.nl";
 	mpsFileName =  dataDir + "parinc.mps";
 	parserTestOSiLFileName = dataDir + "parincLinear.osil"; 
@@ -96,14 +94,15 @@ int main(int argC, char* argV[])
 	try{
 		osil = fileUtil->getFileAsString( &ipOptFileName[0]);
 		cout << "IPOPT Solver created for OSiL string solution" << endl;
-		ipoptSolver->osil = osil;
+		//ipoptSolver->osil = osil;
 		ipoptSolver->osol = osol;
-		ipoptSolver->osinstance = NULL;
+		OSiLReader *osilreader = NULL;
+		osilreader = new OSiLReader(); 
+		ipoptSolver->osinstance = osilreader->readOSiL( &osil);
 		cout << "call the IPOPT Solver" << endl;
 		ipoptSolver->solve();
 		cout << "Here is the IPOPT solver solution" << endl;
 		cout << ipoptSolver->osrl << endl;
-		ipoptSolver->osinstance = NULL;
 		// not we do not delete ipoptSolver -- this is a smart pointer
 		//delete m_Solver;
 		//m_Solver = NULL;	
@@ -260,6 +259,7 @@ int main(int argC, char* argV[])
 		m_Solver->osol = osol;
 		mps2osil->createOSInstance() ;
 		m_Solver->osil = osilwriter.writeOSiL( mps2osil->osinstance) ;
+		//std::cout << m_Solver->osil << std::endl;
 		// extra code
 		std::string outputfile = mpsFileName+"_osil";
 		char* testfile = &outputfile[0];

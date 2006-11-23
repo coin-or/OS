@@ -19,6 +19,7 @@
 
 #include "IpoptSolver.h"
 #include "IpIpoptApplication.hpp"
+#include "CommonUtil.h"
 
 using std::cout; 
 using std::endl; 
@@ -145,34 +146,35 @@ bool IpoptSolver::get_starting_point(Index n, bool init_x, Number* x,
 
 // returns the value of the objective function
 bool IpoptSolver::eval_f(Index n, const Number* x, bool new_x, Number& obj_value){
- 	//cout << "calculate function value !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  " INDEX = " << n << endl;
+ 	cout << "calculate function value !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  " INDEX = " << n << endl;
 	obj_value = osinstance->calculateFunctionValue(-1, (double*)x, false);
-	if( (obj_value > 10000000) || (obj_value < -1000000)) return false;
-	//for(int i = 0; i < n; i++) cout << "x[ i] =  !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  x[ i]  << endl;
+	if( CommonUtil::ISOSNAN( (double)obj_value) ) return false;
+	for(int i = 0; i < n; i++) cout << "x[ i] =  !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  x[ i]  << endl;
 	cout << "calculated function value !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  obj_value  << endl;
   	return true;
 }
 
 bool IpoptSolver::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f){
  	int i;
- 	cout << "calculate gradient function !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
+ 	cout << "calculate objective function gradient function !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
   	double *objGrad = osinstance->calculateObjectiveFunctionGradient(-1, (double*)x, false, false);
   	for(i = 0; i < n; i++){
   		cout << " gradient function !!!!!!!!!!!!!!!!!!!!!!!!!! = "  <<  objGrad[ i] << endl;
-  		if( (objGrad[ i] <= 10000000) && (objGrad[ i] >= -1000000)) grad_f[ i]  = objGrad[ i];
-  		else return false;
+  		grad_f[ i]  = objGrad[ i];
   	}
   	return true;
 }//eval_grad_f
 
 // return the value of the constraints: g(x)
 bool IpoptSolver::eval_g(Index n, const Number* x, bool new_x, Index m, Number* g) {
-	// cout << "get value of constraint !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  " INDEX = " << n << endl;
+	//cout << "get value of constraint !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  " INDEX = " << n << endl;
  	double *conVals = osinstance->calculateAllConstraintFunctionValues((double*)x, false);
  	//cout << "got value of constraints !!!!!!!!!!!!!!!!!!!!!!!!!! " <<   endl;
  	int i;
  	for(i = 0; i < m; i++){
- 		g[i] = conVals[ i]  ;
+ 		if( CommonUtil::ISOSNAN( (double)conVals[ i] ) ) return false;
+ 		g[i] = conVals[ i]  ;		
+ 		cout << "constraint indx !!!!!!!!!!!!!!! " <<  i <<  "  Value =  " <<   g[ i] <<  endl;
  	} 
 	return true;
 }//eval_g
@@ -208,7 +210,7 @@ bool IpoptSolver::eval_jac_g(Index n, const Number* x, bool new_x,
 		//values = sparseJacobian->values;
 		for(int i = 0; i < nele_jac; i++){
 			values[ i] = sparseJacobian->values[i];
-			//cout << "values[i]:!!!!!!!!!!!!  " <<  values[ i] << endl;		
+			cout << "values[i]:!!!!!!!!!!!!  " <<  values[ i] << endl;		
 		}
 	}
   return true;

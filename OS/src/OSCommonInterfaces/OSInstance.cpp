@@ -1617,9 +1617,9 @@ double *OSInstance::calculateAllConstraintFunctionValues( double* x, bool allFun
 	// loop over all constraints
 	for(idx = 0; idx < numConstraints; idx++){
 		// calculateFunctionValue will define *(m_mdConstraintFunctionValues + idx)
-		//std::cout << "Index =  "  << idx  << std::endl;
+		std::cout << "Index =  "  << idx  << std::endl;
 		m_mdConstraintFunctionValues[ idx]  = calculateFunctionValue(idx, x, false);	
-		//std::cout << "m_mdConstraintFunctionValues[ idx]  !!!!!!!"  << m_mdConstraintFunctionValues[ idx] << std::endl;
+		std::cout << "m_mdConstraintFunctionValues[ idx]  !!!!!!!"  << m_mdConstraintFunctionValues[ idx] << std::endl;
 	}
 	return m_mdConstraintFunctionValues;
 }//calculateAllConstraintFunctionValues

@@ -30,7 +30,7 @@ CommonUtil::~CommonUtil(){
  
 
 	
- bool CommonUtil::ISOSNAN( double number)
+bool CommonUtil::ISOSNAN( double number)
 {
 
 #ifdef NAN 

@@ -781,11 +781,14 @@ double OSnLNodePower::calculateFunction(double *x){
 }// end OSnLNodePower::calculate
 
 
-AD<double> OSnLNodePower::constructCppADTree(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
-	OSnLNodeNumber *numNode =  (OSnLNodeNumber*)m_mChildren[1];
-	if( (typeid( *numNode) == typeid( OSnLNodeNumber) ) && (numNode->value == floor( numNode->value) ) ){
-		//use CppAD::powint
-		m_CppADTree = CppAD::pow(m_mChildren[0]->constructCppADTree( cppADIdx, XAD) ,  floor( numNode->value));	
+AD<double> OSnLNodePower::constructCppADTree(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){	
+	if( typeid( *m_mChildren[1]) == typeid( OSnLNodeNumber) ) {
+		OSnLNodeNumber *numberNode  =  (OSnLNodeNumber*)m_mChildren[1];
+		// we have a number node see if interger
+		if( numberNode->value = floor( numberNode->value)){
+			m_CppADTree = CppAD::pow(m_mChildren[0]->constructCppADTree( cppADIdx, XAD) ,  floor( numberNode->value));
+		}	
+		else m_CppADTree = CppAD::pow(m_mChildren[0]->constructCppADTree( cppADIdx, XAD) , m_mChildren[1]->constructCppADTree( cppADIdx, XAD) );	
 	}
 	else{
 		m_CppADTree = CppAD::pow(m_mChildren[0]->constructCppADTree( cppADIdx, XAD) , m_mChildren[1]->constructCppADTree( cppADIdx, XAD) );	

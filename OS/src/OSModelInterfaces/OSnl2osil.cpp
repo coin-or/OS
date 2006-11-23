@@ -397,13 +397,14 @@ bool OSnl2osil::createOSInstance(){
 		(objtype[i] == 1)?"max":"min", 
 		objconst( i),  objWeight, objectiveCoefficients) ;
 	}
-	delete objectiveCoefficients; // delete the temporary sparse vector
-	objectiveCoefficients = NULL;
+	//delete objectiveCoefficients; // delete the temporary sparse vector
+	//objectiveCoefficients = NULL;
 	//
 	// now fill in row information
 	//
 	osinstance->setConstraintNumber( n_con);
-	double constant = OSNAN;
+	// kipp -- important  -- figure out where the nl file stores a rhs constant
+	double constant = 0.0;
 	std::string rowName;
 	for(i = 0; i < n_con; i++)
 	{

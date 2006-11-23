@@ -1,5 +1,5 @@
 g3 0 1 0	# problem testfile
- 4 2 1 1 0	# vars, constraints, objectives, ranges, eqns
+ 4 2 1 0 1	# vars, constraints, objectives, ranges, eqns
  2 1	# nonlinear constraints, objectives
  0 0	# network constraints: nonlinear, linear
  4 4 4	# nonlinear vars in constraints, objectives, both
@@ -43,7 +43,7 @@ v1
 v2
 r
 2 25
-0 39 40
+4 40
 b
 0 1 5
 0 1 5
