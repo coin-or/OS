@@ -1484,6 +1484,7 @@ OSSolver/.cdtproject -text
 OSSolver/.classpath -text
 OSSolver/.project -text
 OSSolver/META-INF/MANIFEST.MF -text
+OSSolver/OSSolver.jar -text
 OSSolver/bak/LindoOSiLReader.java -text
 OSSolver/bak/LindoOldSolver.java -text
 OSSolver/bak/LindoOldSolverService.java -text
