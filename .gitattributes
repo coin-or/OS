@@ -20,7 +20,10 @@ OS/data/Makefile.am -text
 OS/data/afiro.mps -text
 OS/data/afiro.osil -text
 OS/data/afiro_modified.osil -text
+OS/data/aircrafta.osil -text
+OS/data/aircrfta.mod -text
 OS/data/ampl.xml -text
+OS/data/blockqp1.osil -text
 OS/data/configure.ac -text
 OS/data/demo.osol -text
 OS/data/demo.ospl -text
@@ -67,6 +70,7 @@ OS/data/pilot87.osil -text
 OS/data/reducedcost.osrl -text
 OS/data/remotegsbkip.osol -text
 OS/data/remoteosil.osol -text
+OS/data/rosenbrock.osil -text
 OS/data/rosenbrockmod.osil -text
 OS/data/rosenbrockmod.osrl -text
 OS/data/showtree -text
