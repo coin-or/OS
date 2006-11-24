@@ -11,6 +11,9 @@
 	
 	<!-- init -->
 	<target name="init">
+		<tstamp>
+			<format property="timestamp.today" pattern="yyyyMMdd-hhmmss" locale="en"/>
+		</tstamp>
 		<property name="author" value="Jun Ma"/>
 		<property name="version" value="1.0, 03/14/2004"/>
 		<property name="since" value="OS 1.0"/>
