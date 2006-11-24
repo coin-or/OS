@@ -29,7 +29,6 @@
 			<xs:element name="linearConstraintCoefficients" type="LinearConstraintCoefficients" minOccurs="0"/>
 			<xs:element name="quadraticCoefficients" type="QuadraticCoefficients" minOccurs="0"/>
 			<xs:element name="nonlinearExpressions" type="NonlinearExpressions" minOccurs="0"/>
-			<xs:element name="semidefiniteBlocks" type="SemidefiniteBlocks" minOccurs="0"/>
 			<xs:element name="cones" type="Cones" minOccurs="0"/>
 			<xs:element name="parameterSets" type="ParameterSets" minOccurs="0"/>
 			<xs:element name="modifications" type="Modifcations" minOccurs="0"/>
@@ -146,20 +145,61 @@
 		<xs:attribute name="idx" type="xs:int" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="Cones">
-		<xs:sequence maxOccurs="unbounded">
-			<xs:element name="nonnegativeCone" type="NonnegativeCone" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="quadraticCone" type="QuadraticCone" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="rotatedQuadraticCone" type="RotatedQuadraticCone" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
+		<xs:choice maxOccurs="unbounded">
+			<xs:element name="nonnegativeCone" type="NonnegativeCone" maxOccurs="unbounded"/>
+			<xs:element name="quadraticCone" type="QuadraticCone" maxOccurs="unbounded"/>
+			<xs:element name="rotatedQuadraticCone" type="RotatedQuadraticCone" maxOccurs="unbounded"/>
+			<xs:element name="semidefinite" type="SemidefiniteCone"/>
+		</xs:choice>
 	</xs:complexType>
-	<xs:simpleType name="ModificationType">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="update"/>
-			<xs:enumeration value="add"/>
-			<xs:enumeration value="insert"/>
-			<xs:enumeration value="delete"/>
-		</xs:restriction>
-	</xs:simpleType>
+	<xs:complexType name="SemidefiniteCone">
+		<xs:sequence minOccurs="0">
+			<xs:element name="var" type="ConeElement" minOccurs="3" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="positive" type="xs:boolean" use="optional" default="true"/>
+		<xs:attribute name="type" use="optional" default="upperTriangular">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="upperTriangular"/>
+					<xs:enumeration value="lowerTriangular"/>
+					<xs:enumeration value="fullMatrix"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="NonnegativeCone">
+		<xs:sequence minOccurs="0">
+			<xs:element name="var" type="ConeElement" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="startIndex" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="endIndex" type="xs:nonNegativeInteger" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="QuadraticCone">
+		<xs:sequence minOccurs="0">
+			<xs:element name="var" type="ConeElement" minOccurs="2" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="startIndex" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="endIndex" type="xs:nonNegativeInteger" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="RotatedQuadraticCone">
+		<xs:sequence minOccurs="0">
+			<xs:element name="var" type="ConeElement" minOccurs="3" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="startIndex" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="endIndex" type="xs:nonNegativeInteger" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="ConeElement">
+		<xs:simpleContent>
+			<xs:extension base="xs:nonNegativeInteger">
+				<xs:attribute name="start" type="xs:int" use="optional"/>
+				<xs:attribute name="end" type="xs:int" use="optional"/>
+				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+				<xs:attribute name="incr" type="xs:int" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
 	<xs:complexType name="Modifcations">
 		<xs:sequence>
 			<xs:element name="base" default="this">
@@ -243,35 +283,14 @@
 			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
-	<xs:complexType name="NonnegativeCone">
-		<xs:sequence minOccurs="0">
-			<xs:element name="el" type="ConeElement" maxOccurs="unbounded"/>
-		</xs:sequence>
-		<xs:attribute name="startIndex" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="endIndex" type="xs:nonNegativeInteger" use="optional"/>
-	</xs:complexType>
-	<xs:complexType name="QuadraticCone">
-		<xs:sequence minOccurs="0">
-			<xs:element name="el" type="ConeElement" minOccurs="2" maxOccurs="unbounded"/>
-		</xs:sequence>
-		<xs:attribute name="startIndex" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="endIndex" type="xs:nonNegativeInteger" use="optional"/>
-	</xs:complexType>
-	<xs:complexType name="RotatedQuadraticCone">
-		<xs:sequence minOccurs="0">
-			<xs:element name="el" type="ConeElement" minOccurs="3" maxOccurs="unbounded"/>
-		</xs:sequence>
-		<xs:attribute name="startIndex" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="endIndex" type="xs:nonNegativeInteger" use="optional"/>
-	</xs:complexType>
-	<xs:complexType name="ConeElement">
-		<xs:simpleContent>
-			<xs:extension base="xs:nonNegativeInteger">
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional"/>
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType>
+	<xs:simpleType name="ModificationType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="update"/>
+			<xs:enumeration value="add"/>
+			<xs:enumeration value="insert"/>
+			<xs:enumeration value="delete"/>
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:complexType name="DisjunctionVar">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="init" type="xs:double" use="optional"/>
