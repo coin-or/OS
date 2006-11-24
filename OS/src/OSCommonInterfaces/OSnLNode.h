@@ -45,6 +45,7 @@ enum OP_CODES{
 	OS_DIVIDE = 1006,
 	OS_POWER = 1009,
 	OS_PRODUCT = 1010,
+	OS_SQRT = 2006,
 	OS_LN = 2007,
 	OS_EXP = 2010,
 	OS_NUMBER = 5001,
@@ -570,6 +571,41 @@ public:
 	
 
 };//end OSnLNodeLn
+
+
+class OSnLNodeSqrt : public OSnLNode{  
+public:
+	/**
+	 * default constructor.
+	 */
+	OSnLNodeSqrt();
+
+	/**
+	 * default destructor.
+	 */	
+	~OSnLNodeSqrt();
+	
+	/*! \fn double OSnLNodeLn::double(double *x) 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return a double.
+	 */	
+	virtual double calculateFunction( double *x);
+	
+	/*! \fn OSnLNode *cloneOSnLNode(double *x) 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return a point to a new OSnLNode of the proper type.
+	 */	
+	 
+	/*! \fn double OSnLNodeLn::constructCppADTree(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD) 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return a AD<double>.
+	 */	
+	virtual AD<double> constructCppADTree(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD);
+	
+	virtual OSnLNode *cloneOSnLNode() ;
+	
+
+};//end OSnLNodeSqrt
 
 
 class OSnLNodeExp : public OSnLNode{  

@@ -146,20 +146,20 @@ bool IpoptSolver::get_starting_point(Index n, bool init_x, Number* x,
 
 // returns the value of the objective function
 bool IpoptSolver::eval_f(Index n, const Number* x, bool new_x, Number& obj_value){
- 	cout << "calculate function value !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  " INDEX = " << n << endl;
+ 	//cout << "calculate function value !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  " INDEX = " << n << endl;
 	obj_value = osinstance->calculateFunctionValue(-1, (double*)x, false);
 	if( CommonUtil::ISOSNAN( (double)obj_value) ) return false;
-	for(int i = 0; i < n; i++) cout << "x[ i] =  !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  x[ i]  << endl;
-	cout << "calculated function value !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  obj_value  << endl;
+	//for(int i = 0; i < n; i++) cout << "x[ i] =  !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  x[ i]  << endl;
+	//cout << "calculated function value !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  obj_value  << endl;
   	return true;
 }
 
 bool IpoptSolver::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f){
  	int i;
- 	cout << "calculate objective function gradient function !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
+ 	//cout << "calculate objective function gradient function !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
   	double *objGrad = osinstance->calculateObjectiveFunctionGradient(-1, (double*)x, false, false);
   	for(i = 0; i < n; i++){
-  		cout << " gradient function !!!!!!!!!!!!!!!!!!!!!!!!!! = "  <<  objGrad[ i] << endl;
+  		//cout << " gradient function !!!!!!!!!!!!!!!!!!!!!!!!!! = "  <<  objGrad[ i] << endl;
   		grad_f[ i]  = objGrad[ i];
   	}
   	return true;
@@ -174,7 +174,7 @@ bool IpoptSolver::eval_g(Index n, const Number* x, bool new_x, Index m, Number* 
  	for(i = 0; i < m; i++){
  		if( CommonUtil::ISOSNAN( (double)conVals[ i] ) ) return false;
  		g[i] = conVals[ i]  ;		
- 		cout << "constraint indx !!!!!!!!!!!!!!! " <<  i <<  "  Value =  " <<   g[ i] <<  endl;
+ 		//cout << "constraint indx !!!!!!!!!!!!!!! " <<  i <<  "  Value =  " <<   g[ i] <<  endl;
  	} 
 	return true;
 }//eval_g
@@ -199,8 +199,8 @@ bool IpoptSolver::eval_jac_g(Index n, const Number* x, bool new_x,
 			for(k = *(sparseJacobian->starts + idx); k < *(sparseJacobian->starts + idx + 1); k++){
 				iRow[i] = idx;
 				jCol[i] = *(sparseJacobian->indexes + k);
-				cout << "ROW IDX  !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << iRow[i] << endl;
-				cout << "COL IDX  !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << jCol[i] << endl;
+				//cout << "ROW IDX  !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << iRow[i] << endl;
+				//cout << "COL IDX  !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << jCol[i] << endl;
 				i++;
 			}
 		}	
@@ -210,7 +210,7 @@ bool IpoptSolver::eval_jac_g(Index n, const Number* x, bool new_x,
 		//values = sparseJacobian->values;
 		for(int i = 0; i < nele_jac; i++){
 			values[ i] = sparseJacobian->values[i];
-			cout << "values[i]:!!!!!!!!!!!!  " <<  values[ i] << endl;		
+			//cout << "values[i]:!!!!!!!!!!!!  " <<  values[ i] << endl;		
 		}
 	}
   return true;
@@ -227,14 +227,14 @@ bool IpoptSolver::eval_h(Index n, const Number* x, bool new_x,
 	int i;
 	if (values == NULL) {
 		// return the structure. This is a symmetric matrix, fill the lower left triangle only.
-		cout << "get structure of HESSIAN !!!!!!!!!!!!!!!!!!!!!!!!!! "  << endl;
+		//cout << "get structure of HESSIAN !!!!!!!!!!!!!!!!!!!!!!!!!! "  << endl;
 		sparseHessian = osinstance->getLagrangianHessianSparsityPattern( );
 		cout << "got structure of HESSIAN !!!!!!!!!!!!!!!!!!!!!!!!!! "  << endl;
 		for(i = 0; i < nele_hess; i++){
 			iRow[i] = *(sparseHessian->hessColIdx + i);
 			jCol[i] = *(sparseHessian->hessRowIdx + i);
-				cout << "ROW HESS IDX  !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << iRow[i] << endl;
-				cout << "COL HESS IDX  !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << jCol[i] << endl;
+				//cout << "ROW HESS IDX  !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << iRow[i] << endl;
+				//cout << "COL HESS IDX  !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << jCol[i] << endl;
 		}
 	}
 	else {

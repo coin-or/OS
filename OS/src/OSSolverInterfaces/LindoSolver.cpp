@@ -55,6 +55,7 @@ int CALLTYPE LSwriteMPIFile(pLSmodel pModel, char *pszFname);
 	nlNodeIdxLindo[OS_TIMES] = EP_MULTIPLY; \
 	nlNodeIdxLindo[OS_DIVIDE] = EP_DIVIDE; \
 	nlNodeIdxLindo[OS_POWER] = EP_POWER; \
+	nlNodeIdxLindo[OS_SQRT] = EP_SQRT; \
 	nlNodeIdxLindo[OS_LN] = EP_LN; \
 	nlNodeIdxLindo[OS_EXP] = EP_EXP; \
 	nlNodeIdxLindo[OS_NUMBER] = EP_PUSH_NUM; \

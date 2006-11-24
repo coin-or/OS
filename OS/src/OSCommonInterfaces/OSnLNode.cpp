@@ -146,10 +146,11 @@ static OSnLNodePlus n1001;
 static OSnLNodeSum n1002;
 static OSnLNodeMinus n1003;
 static OSnLNodeNegate n1004;
-static  OSnLNodeTimes n1005;
+static OSnLNodeTimes n1005;
 static OSnLNodeDivide n1006;
 static OSnLNodePower n1009;
 static OSnLNodeProduct n1010;
+static OSnLNodeSqrt n2006;
 static OSnLNodeLn n2007;
 static OSnLNodeExp n2010;
 static OSnLNodeNumber n5001;
@@ -176,10 +177,11 @@ void OSnLNode::setnlNodeIdxMap(){
 	nlNodeIdxMap[OS_IF] = 12;
 	nlNodeIdxMap[OS_ABS] = 13;
 	nlNodeIdxMap[OS_MAX] = 14;
+	nlNodeIdxMap[OS_SQRT] = 15;
 }
 
 static OSnLNode *nlNodeArray[] = { &n1001, &n1002, &n1003, &n1004, &n1005, &n1006,
-	&n1009, &n1010, &n2007, &n2010, &n5001, &n6001, &n7001, &n2001, &n3024
+	&n1009, &n1010, &n2007, &n2010, &n5001, &n6001, &n7001, &n2001, &n3024, &n2006
 };
  
 //
@@ -903,6 +905,51 @@ OSnLNode* OSnLNodeLn::cloneOSnLNode(){
 
 
 
+
+
+//
+// OSnLNodeSqrt Methods	
+OSnLNodeSqrt::OSnLNodeSqrt()
+{
+	inumberOfChildren = 1;
+	m_mChildren = new OSnLNode*[1];
+	m_mChildren[ 0] = NULL;
+	snodeName = "sqrt";
+	inodeInt = 2006;
+	inodeType = 1;
+}//end OSnLNodeSqrt
+
+ 
+OSnLNodeSqrt::~OSnLNodeSqrt(){
+	#ifdef DEBUGOSNLNODE
+	cout << "inside OSnLNodeSqrt destructor" << endl;
+	#endif
+	for(int i = 0; i < inumberOfChildren; i++){
+		delete m_mChildren[ i];
+		m_mChildren[i] = NULL;
+	}
+	m_mChildren = NULL;
+}//end ~OSnLNodeSqrt
+
+double OSnLNodeSqrt::calculateFunction(double *x){
+	m_dFunctionValue = sqrt(m_mChildren[0]->calculateFunction( x) );
+	return m_dFunctionValue;
+}// end OSnLNodeSqrt::calculate
+
+
+AD<double> OSnLNodeSqrt::constructCppADTree(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
+	m_CppADTree = CppAD::sqrt( m_mChildren[0]->constructCppADTree( cppADIdx, XAD) );
+	return m_CppADTree;
+}// end OSnLNodeSqrt::constructCppADTree
+
+OSnLNode* OSnLNodeSqrt::cloneOSnLNode(){
+	OSnLNode *nlNodePoint;
+	nlNodePoint = new OSnLNodeSqrt();
+	return  nlNodePoint;
+}//end OSnLNodeSqrt::cloneOSnLNode
+
+
+
 //
 //
 
@@ -917,7 +964,7 @@ OSnLNodeExp::OSnLNodeExp()
 	snodeName = "exp";
 	inodeInt = 2010;
 	inodeType = 1;
-}//end OSnLNodeLn
+}//end OSnLNodeExp
 
  
 OSnLNodeExp::~OSnLNodeExp(){
@@ -1115,7 +1162,7 @@ std::string OSnLNodeNumber::getNonlinearExpressionInXML(){
 		}
 		outStr << "/>";
 	return outStr.str();
-}//getPrefix
+}//getNonlinearExpressionInXML()
 
 
 double OSnLNodeNumber::calculateFunction(double *x){

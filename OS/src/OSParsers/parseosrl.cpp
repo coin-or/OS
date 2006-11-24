@@ -956,7 +956,7 @@ char *osrltext;
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", osrltext);
 #else     
-	#define YY_PRINT printf("%s", osrltext);
+	#define YY_PRINT ;
 #endif
 #ifdef WIN_
 #define YY_NO_UNISTD_H

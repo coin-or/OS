@@ -283,6 +283,7 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 			return nlNodePoint;
 			
 		case OPPOW:
+			cout << "FOUND OPPOW NODE"  << endl;
 			nlNodePoint = new OSnLNodePower();
 			nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
 			nlNodePoint->m_mChildren[1] = walkTree (e->R.e); 
@@ -290,6 +291,8 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 			
 			
 		case OP1POW:
+			cout << "FOUND OP1POW NODE"  << endl;
+			cout << "OP1POW EXPONENT =  "  << e->R.en->v<<  endl;
 			nlNodePoint = new OSnLNodePower();
 			nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
 			nlNodeNumberPoint = new OSnLNodeNumber();
@@ -298,6 +301,7 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 			return nlNodePoint;
 			
 		case OP2POW:
+			cout << "FOUND OP2POW NODE"  << endl;
 			nlNodePoint = new OSnLNodePower();
 			nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
 			nlNodeNumberPoint = new OSnLNodeNumber();
@@ -306,6 +310,8 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 			return nlNodePoint;
 			
 		case OPCPOW:
+			cout << "FOUND OPCPOW NODE"  << endl;
+			cout << "OPCPOW EXPONENT =  "  << e->R.en->v<<  endl;
 			nlNodePoint = new OSnLNodePower();
 			nlNodeNumberPoint = new OSnLNodeNumber();
 			nlNodeNumberPoint->value = e->L.en->v;
@@ -315,6 +321,11 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 			
 		case OP_log:
 			nlNodePoint = new OSnLNodeLn();
+			nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
+			return nlNodePoint;
+			
+		case OP_sqrt:
+			nlNodePoint = new OSnLNodeSqrt();
 			nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
 			return nlNodePoint;
 			
@@ -344,7 +355,7 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 			
 		default:
 			cout << "operator number not implemented  " <<  opnum  << endl;
-			// exit(1);
+			exit(1);
 	}
 }
 
@@ -445,6 +456,7 @@ bool OSnl2osil::createOSInstance(){
 		osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions = nlc + nlo;
 		osinstance->instanceData->nonlinearExpressions->nl = new Nl*[ nlc + nlo ];
 		int iNLidx = 0;
+		//std::cout << "WALK THE TREE FOR NONLINEAR CONSTRAINT TERMS" << std::endl;
 		if(nlc > 0){
 			while (iNLidx < nlc) {
 				m_treeRoot = walkTree ((CON_DE + iNLidx)->e);
@@ -456,9 +468,11 @@ bool OSnl2osil::createOSInstance(){
 				//std::cout << m_treeRoot->getNonlinearExpressionInXML() << std::endl;
 			}
 		}
+		//std::cout << "WALK THE TREE FOR NONLINEAR OBJECTIVE TERMS" << std::endl;
 		if(nlo > 0){
 			while ( iNLidx < nlc + nlo){
 				m_treeRoot = walkTree ((OBJ_DE + iNLidx - nlc)->e);
+				std::cout << "CREATING A NEW NONLINEAR TERM IN THE OBJECTIVE" << std::endl;
 				osinstance->instanceData->nonlinearExpressions->nl[ iNLidx] = new Nl();
 				osinstance->instanceData->nonlinearExpressions->nl[ iNLidx]->idx = -1 - (iNLidx - nlc);
 				osinstance->instanceData->nonlinearExpressions->nl[ iNLidx]->osExpressionTree = new OSExpressionTree();
@@ -467,12 +481,15 @@ bool OSnl2osil::createOSInstance(){
 				//std::cout << m_treeRoot->getNonlinearExpressionInXML() << std::endl;
 			}
 		}
+		//std::cout << "DONE WALKING THE TREE FOR NONLINEAR OBJECTIVE TERMS" << std::endl;
 
 	}
 	//
 	// end loop of nonlinear rows
 	//    
 	OSiLWriter osilwriter;
+	std::cout << "WRITE THE INSTANCE" << std::endl;
 	std::cout << osilwriter.writeOSiL( osinstance) << std::endl;
+	std::cout << "DONE WRITE THE INSTANCE" << std::endl;
 	return true;
 }

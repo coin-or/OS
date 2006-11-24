@@ -94,7 +94,6 @@ int main(int argc, char **argv)
 	nl2osil = new OSnl2osil( stub);
 	// create an osinstance object
 	OSInstance *osinstance;
-	osinstance = new OSInstance();
 	std::cout << " call nl2osil" << std::endl;
 	nl2osil->createOSInstance() ;
 	std::cout << " return from  nl2osil" << std::endl;

@@ -1617,9 +1617,9 @@ double *OSInstance::calculateAllConstraintFunctionValues( double* x, bool allFun
 	// loop over all constraints
 	for(idx = 0; idx < numConstraints; idx++){
 		// calculateFunctionValue will define *(m_mdConstraintFunctionValues + idx)
-		std::cout << "Index =  "  << idx  << std::endl;
+		//std::cout << "Index =  "  << idx  << std::endl;
 		m_mdConstraintFunctionValues[ idx]  = calculateFunctionValue(idx, x, false);	
-		std::cout << "m_mdConstraintFunctionValues[ idx]  !!!!!!!"  << m_mdConstraintFunctionValues[ idx] << std::endl;
+		//std::cout << "m_mdConstraintFunctionValues[ idx]  !!!!!!!"  << m_mdConstraintFunctionValues[ idx] << std::endl;
 	}
 	return m_mdConstraintFunctionValues;
 }//calculateAllConstraintFunctionValues
@@ -2076,7 +2076,7 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessianReTape( double* x, do
 	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
 	// initialize everything
 	int i, j;
-	std::cout << "START calculateLagrangianHessianReTape" << std::endl;
+	//std::cout << "START calculateLagrangianHessianReTape" << std::endl;
 	CppAD::AD<double> tmpVal;
 	std::map<int, int>::iterator posVarIndexMap;
 	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
@@ -2102,7 +2102,7 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessianReTape( double* x, do
 	L[ 0] = 0;
 	for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){	
 		tmpVal = (posMapExpTree->second)->m_treeRoot->constructCppADTree(&m_mapAllNonlinearVariablesIndex, &X);
-		std::cout << "VALUE OF FUNCTION == " << tmpVal << std::endl;
+		//std::cout << "VALUE OF FUNCTION == " << tmpVal << std::endl;
 		if( posMapExpTree->first >= 0){
 			X.push_back( conMultipliers[ posMapExpTree->first] );
 			L[ 0] = L[ 0] + conMultipliers[ posMapExpTree->first]*tmpVal;
