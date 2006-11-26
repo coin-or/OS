@@ -95,7 +95,13 @@ int main(int argc, char **argv)
 	// create an osinstance object
 	OSInstance *osinstance;
 	std::cout << " call nl2osil" << std::endl;
-	nl2osil->createOSInstance() ;
+	try{
+		nl2osil->createOSInstance() ;
+	}
+	catch(const ErrorClass& eclass){
+		std::cout << eclass.errormsg << std::endl;
+		return 0;
+	}
 	std::cout << " return from  nl2osil" << std::endl;
 	osinstance = nl2osil->osinstance;
 	std::cout << " osinstance created" << std::endl;

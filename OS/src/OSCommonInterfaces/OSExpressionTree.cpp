@@ -23,7 +23,7 @@ using std::endl;
 
 OSExpressionTree::OSExpressionTree():
 	m_treeRoot( NULL),
-	m_bCppADTreeBuilt( false),
+	m_bCppADTapeBuilt( false),
 	m_bIndexMapGenerated( false),
 	mapVarIdx( NULL),
 	f(NULL)
@@ -55,7 +55,7 @@ std::vector<OSnLNode*> OSExpressionTree::getPrefixFromExpressionTree(){
 
 
 double OSExpressionTree::calculateFunctionCppAD( double *x, bool functionEvaluated){
-	if( m_bCppADTreeBuilt == false){
+	if( m_bCppADTapeBuilt == false){
 		// map the variables
 		if( m_bIndexMapGenerated == false) getVariableIndiciesMap();
 		m_treeRoot->getVariableIndexMap( mapVarIdx);		
@@ -64,11 +64,11 @@ double OSExpressionTree::calculateFunctionCppAD( double *x, bool functionEvaluat
 			m_vXAD.push_back( x[ m_mPosVarIdx->first] );
 		}
 		CppAD::Independent( m_vXAD);
-		m_CppADTree = m_treeRoot->constructCppADTree(mapVarIdx, &m_vXAD);
-		m_vZ.push_back( m_CppADTree) ;
+		m_CppADTape = m_treeRoot->constructCppADTape(mapVarIdx, &m_vXAD);
+		m_vZ.push_back( m_CppADTape) ;
 		f = new CppAD::ADFun<double>(m_vXAD, m_vZ);
 		m_vY.push_back(0.0); 
-		m_bCppADTreeBuilt = true;
+		m_bCppADTapeBuilt = true;
 	}
 	if(functionEvaluated == true) return m_vY[ 0];
 	m_vX.clear();
@@ -95,8 +95,8 @@ std::vector<double> OSExpressionTree::calculateGradient( double *x, bool functio
 	// = false;
 	//CppAD::vector< AD<double> > XAD;
 	//CppAD::vector< AD<double> > vZ;
-	//CppAD::AD<double> CppADTree;
-	if( m_bCppADTreeBuilt == false){
+	//CppAD::AD<double> CppADTape;
+	if( m_bCppADTapeBuilt == false){
 		// map the variables
 		if( m_bIndexMapGenerated == false) getVariableIndiciesMap();
 		m_treeRoot->getVariableIndexMap( mapVarIdx);		
@@ -107,13 +107,13 @@ std::vector<double> OSExpressionTree::calculateGradient( double *x, bool functio
 		}
 		CppAD::Independent( m_vXAD);
 		//CppAD::Independent( XAD);
-		m_CppADTree = m_treeRoot->constructCppADTree(mapVarIdx, &m_vXAD);
-		//CppADTree = m_treeRoot->constructCppADTree(mapVarIdx, &XAD);
-		m_vZ.push_back( m_CppADTree) ;
-		//vZ.push_back(CppADTree) ;
+		m_CppADTape = m_treeRoot->constructCppADTape(mapVarIdx, &m_vXAD);
+		//CppADTape = m_treeRoot->constructCppADTape(mapVarIdx, &XAD);
+		m_vZ.push_back( m_CppADTape) ;
+		//vZ.push_back(CppADTape) ;
 		f = new CppAD::ADFun<double>(m_vXAD, m_vZ);
 		//f = new CppAD::ADFun<double>(XAD, vZ);
-		m_bCppADTreeBuilt = true;
+		m_bCppADTapeBuilt = true;
 	}
 	//std::vector<double> X;
 	if( functionEvaluated == false){ 
@@ -123,7 +123,7 @@ std::vector<double> OSExpressionTree::calculateGradient( double *x, bool functio
 		}
 	}
  	std::vector<double> jac( (*mapVarIdx).size() ); 	// Jacobian of f 
- 	//m_vY = (*f).Forward(0, m_vX);
+ 	//jac = (*f).Forward(1, m_vX);
    	jac  = (*f).Jacobian( m_vX);	
    	// Jacobian for operation sequence
 	//for(m_mPosVarIdx = (*mapVarIdx).begin(); m_mPosVarIdx != (*mapVarIdx).end(); ++m_mPosVarIdx){
@@ -135,7 +135,7 @@ std::vector<double> OSExpressionTree::calculateGradient( double *x, bool functio
 }//calculateGradient
 
 std::vector<double>  OSExpressionTree::calculateHessian( double *x, bool functionEvaluated){
-	if( m_bCppADTreeBuilt == false){
+	if( m_bCppADTapeBuilt == false){
 		// map the variables
 		if( m_bIndexMapGenerated == false) getVariableIndiciesMap();
 		m_treeRoot->getVariableIndexMap( mapVarIdx);		
@@ -144,10 +144,10 @@ std::vector<double>  OSExpressionTree::calculateHessian( double *x, bool functio
 			m_vXAD.push_back( x[ m_mPosVarIdx->first] );
 		}
 		CppAD::Independent( m_vXAD);
-		m_CppADTree = m_treeRoot->constructCppADTree(mapVarIdx, &m_vXAD);
-		m_vZ.push_back( m_CppADTree) ;
+		m_CppADTape = m_treeRoot->constructCppADTape(mapVarIdx, &m_vXAD);
+		m_vZ.push_back( m_CppADTape) ;
 		f = new CppAD::ADFun<double>(m_vXAD, m_vZ);
-		m_bCppADTreeBuilt = true;
+		m_bCppADTapeBuilt = true;
 	}
 	int numSparseVars = (*mapVarIdx).size();
 	if( functionEvaluated == false){

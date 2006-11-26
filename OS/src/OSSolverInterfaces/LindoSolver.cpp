@@ -415,13 +415,13 @@ bool LindoSolver::optimize(){
 		//	cout << "Constraint Type: " << m_mcRowType[ kj] << endl;
 		//	cout << "RHS VALUE: " << m_mdRhsValue[ kj] << endl;
 		//}
-		//  
+		//   
 	
 		if(osinstance->getNumberOfNonlinearExpressions() > 0){ 
-			//LSoptimize( pModel_, LS_METHOD_FREE, &nSolStatus);
-			m_iLindoErrorCode = LSsolveGOP(pModel_, NULL) ;
-			lindoAPIErrorCheck("There was an ERROR in the call to the GOP solver");
-			LSgetInfo (pModel_, LS_IINFO_GOP_STATUS, &nSolStatus);
+			m_iLindoErrorCode = LSoptimize( pModel_, LS_METHOD_FREE, &nSolStatus);
+			//m_iLindoErrorCode = LSsolveGOP(pModel_, NULL) ;
+			lindoAPIErrorCheck("There was an ERROR in the call to the Optimizer solver");
+			//LSgetInfo (pModel_, LS_IINFO_GOP_STATUS, &nSolStatus);
 		}
 		else{
 			m_iLindoErrorCode = LSsolveMIP( pModel_,  &nSolStatus);
@@ -512,7 +512,7 @@ bool LindoSolver::optimize(){
 						lindoAPIErrorCheck("Error trying to obtain optimal objective value with integer variables present");
 					}
 					else{
-						LSgetInfo( pModel_, LS_DINFO_GOP_OBJ, &z[0]);
+						//LSgetInfo( pModel_, LS_DINFO_GOP_OBJ, &z[0]);
 						lindoAPIErrorCheck("Error trying to obtain optimal objective value with NO integer variables present");	
 					}	
 					osresult->setObjectiveValues(solIdx, z);

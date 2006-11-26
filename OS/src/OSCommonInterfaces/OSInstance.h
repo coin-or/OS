@@ -557,7 +557,7 @@ private:
 	 * is true if a CppAD Expresion Tree has been built for each row and objective 
 	 * with a nonlinear expression.
 	 */
-	bool m_bCppADTreesBuilt;
+	bool m_bCppADTapesBuilt;
 	
 	/**
 	 * m_iNumberOfNonlinearVariables is the number of variables that appear 

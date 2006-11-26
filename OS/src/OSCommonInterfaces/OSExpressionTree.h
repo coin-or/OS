@@ -124,7 +124,7 @@ public:
 	
 	/**
 	 * m_mvarIdx is a map used by
-	 * constructCppADTree(std::map<int, int> *varIdx, CppAD::vector< AD<double> > *XAD)
+	 * constructCppADTape(std::map<int, int> *varIdx, CppAD::vector< AD<double> > *XAD)
 	 * to generate the infix expression for CPPAD -- the key is idx a variable number, the  
 	 * value of the map is the corresponding variable count in sparse representation
 	 */	
@@ -150,7 +150,7 @@ private:
 
 	/**
 	 * XAD is a vector of AD doubles used by
-	 * constructCppADTree(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD)
+	 * constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD)
 	 * to generate the infix expression for CPPAD -- it will hold the vector of doubles from 
 	 * the solver
 	 */	
@@ -169,9 +169,9 @@ private:
 	std::map<int, int>::iterator m_mPosVarIdx2;
 	
 	/**
-	 * m_CppADTree stores the espression tree for m_treeRoot as an AD<double>.
+	 * m_CppADTape stores the espression tree for m_treeRoot as an AD<double>.
 	 */
-	CppAD::AD<double> m_CppADTree;
+	CppAD::AD<double> m_CppADTape;
 	
 	/**
 	 *  CppAD requires a vector for the independent variable, store the expression tree
@@ -196,9 +196,9 @@ private:
 	std::vector<double> m_vX;
 	
 	/**
-	 * m_bCppADTreeBuilt is a boolean that holds whether or not the CppAD expression tree has been built. 
+	 * m_bCppADTapeBuilt is a boolean that holds whether or not the CppAD expression tree has been built. 
 	 */		
-	bool m_bCppADTreeBuilt;
+	bool m_bCppADTapeBuilt;
 	
 	/**
 	 * m_dTreeRootValue is the function value of the root node

@@ -132,7 +132,8 @@ bool IpoptSolver::get_starting_point(Index n, bool init_x, Number* x,
  	double *mdXInit = osinstance->getVariableInitialValues(); 
  	if( mdXInit != NULL) {
  		for(i = 0; i < n; i++){
- 			x[ i] = mdXInit[ i];	
+ 			x[ i] = mdXInit[ i];
+ 			std::cout << "INITIAL VALUE !!!!!!!!!!!!!!!!!!!!  " << x[ i] << std::endl;	
  		}	
  	}
  	else{

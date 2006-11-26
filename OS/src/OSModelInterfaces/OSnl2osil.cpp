@@ -49,7 +49,7 @@ you should get x1 = 540, x2 = 252
 #include <iostream>
 #include "OSiLWriter.h"
 #include "OSnl2osil.h"
-
+#include "ErrorClass.h"
 
 
 #include "nlp.h"
@@ -200,7 +200,7 @@ OSnl2osil::OSnl2osil(std::string nlfilename){
 	#endif
 
 	//fg_read(nl, 0);
-	
+	X0 = (real *)Malloc( n_var*sizeof(real));
 	cout <<  "N_OPS =  " <<  N_OPS << endl;
 	if(N_OPS > 0){
 		for(int i = 0; i < N_OPS; i++){
@@ -230,134 +230,147 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 	op = e->op;
 	opnum = Intcast op;
 	Printf ("op %d  optype %d  ", opnum, optype[opnum]);
-	switch(opnum) {
-		case OPPLUS:
-			cout << "FOUND  PLUS NODE"  << endl;
-			nlNodePoint = new OSnLNodePlus();
-			nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
-			nlNodePoint->m_mChildren[1] = walkTree (e->R.e);
-			return nlNodePoint;
-			
-		case OPSUMLIST:
-			i = 0;
-			cout << "INSIDE SUM OPERATOR" << endl;
-			nlNodePoint = new OSnLNodeSum();
-			nlNodePoint->inumberOfChildren = e->R.ep - e->L.ep;
-			nlNodePoint->m_mChildren = new OSnLNode*[ e->R.ep - e->L.ep];
-			for (ep = e->L.ep; ep < e->R.ep; *ep++) 
-				nlNodePoint->m_mChildren[i++] = walkTree ( *ep);
-			return nlNodePoint;
-			
-		case MAXLIST:
-			i = 0;
-			cout << "INSIDE MAX OPERATOR" << endl;
-			nlNodePoint = new OSnLNodeMax();
-			nlNodePoint->inumberOfChildren = e->R.ep - e->L.ep;
-			nlNodePoint->m_mChildren = new OSnLNode*[ e->R.ep - e->L.ep];
-			for (ep = e->L.ep; ep < e->R.ep; *ep++) 
-				nlNodePoint->m_mChildren[i++] = walkTree ( *ep);
-			return nlNodePoint;
-			
-		case OPMINUS:
-			nlNodePoint = new OSnLNodeMinus();
-			nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
-			nlNodePoint->m_mChildren[1] = walkTree (e->R.e);
-			return nlNodePoint;
-			
-		case OPUMINUS:
-			nlNodePoint = new OSnLNodeNegate();
-			nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
-			return nlNodePoint;
-			
-		case OPMULT:
-			cout << "FOUND MULT NODE"  << endl;
-			nlNodePoint = new OSnLNodeTimes();
-			nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
-			nlNodePoint->m_mChildren[1] = walkTree (e->R.e);
-			return nlNodePoint;
-			
-		case OPDIV:
-			nlNodePoint = new OSnLNodeDivide(); 
-			nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
-			nlNodePoint->m_mChildren[1] = walkTree (e->R.e);
-			return nlNodePoint;
-			
-		case OPPOW:
-			cout << "FOUND OPPOW NODE"  << endl;
-			nlNodePoint = new OSnLNodePower();
-			nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
-			nlNodePoint->m_mChildren[1] = walkTree (e->R.e); 
-			return nlNodePoint;
-			
-			
-		case OP1POW:
-			cout << "FOUND OP1POW NODE"  << endl;
-			cout << "OP1POW EXPONENT =  "  << e->R.en->v<<  endl;
-			nlNodePoint = new OSnLNodePower();
-			nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
-			nlNodeNumberPoint = new OSnLNodeNumber();
-			nlNodeNumberPoint->value = e->R.en->v;
-			nlNodePoint->m_mChildren[1] = nlNodeNumberPoint;
-			return nlNodePoint;
-			
-		case OP2POW:
-			cout << "FOUND OP2POW NODE"  << endl;
-			nlNodePoint = new OSnLNodePower();
-			nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
-			nlNodeNumberPoint = new OSnLNodeNumber();
-			nlNodeNumberPoint->value = 2;
-			nlNodePoint->m_mChildren[1] = nlNodeNumberPoint;
-			return nlNodePoint;
-			
-		case OPCPOW:
-			cout << "FOUND OPCPOW NODE"  << endl;
-			cout << "OPCPOW EXPONENT =  "  << e->R.en->v<<  endl;
-			nlNodePoint = new OSnLNodePower();
-			nlNodeNumberPoint = new OSnLNodeNumber();
-			nlNodeNumberPoint->value = e->L.en->v;
-			nlNodePoint->m_mChildren[0] = nlNodeNumberPoint;
-			nlNodePoint->m_mChildren[1] = walkTree (e->R.e);
-			return nlNodePoint;
-			
-		case OP_log:
-			nlNodePoint = new OSnLNodeLn();
-			nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
-			return nlNodePoint;
-			
-		case OP_sqrt:
-			nlNodePoint = new OSnLNodeSqrt();
-			nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
-			return nlNodePoint;
-			
-		case OP_exp:
-			nlNodePoint = new OSnLNodeExp();
-			nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
-			return nlNodePoint;
-			
-		case ABS:
-			nlNodePoint = new OSnLNodeAbs();
-			nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
-			return nlNodePoint;
-			
-		case OPNUM:
-			cout << "found a number node" << endl;
-			nlNodeNumberPoint = new OSnLNodeNumber;
-			cout << "THE NUMBER" << (double) ((expr_n*)e)->v << endl;
-			nlNodeNumberPoint->value = (double) ((expr_n*)e)->v;
-			return nlNodeNumberPoint;
-			
-		case OPVARVAL:
-			cout << "found a variable node" << endl;
-			nlNodeVariablePoint = new OSnLNodeVariable;
-			nlNodeVariablePoint->idx = e->a;
-			nlNodeVariablePoint->coef = 1.0; 
-			return nlNodeVariablePoint;
-			
-		default:
-			cout << "operator number not implemented  " <<  opnum  << endl;
-			exit(1);
+	try{
+		switch( opnum) {
+			case OPPLUS:
+				cout << "FOUND  PLUS NODE"  << endl;
+				nlNodePoint = new OSnLNodePlus();
+				nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
+				nlNodePoint->m_mChildren[1] = walkTree (e->R.e);
+				return nlNodePoint;
+				
+			case OPSUMLIST:
+				i = 0;
+				cout << "INSIDE SUM OPERATOR" << endl;
+				nlNodePoint = new OSnLNodeSum();
+				nlNodePoint->inumberOfChildren = e->R.ep - e->L.ep;
+				nlNodePoint->m_mChildren = new OSnLNode*[ e->R.ep - e->L.ep];
+				for (ep = e->L.ep; ep < e->R.ep; *ep++) 
+					nlNodePoint->m_mChildren[i++] = walkTree ( *ep);
+				return nlNodePoint;
+				
+			case MAXLIST:
+				i = 0;
+				cout << "INSIDE MAX OPERATOR" << endl;
+				nlNodePoint = new OSnLNodeMax();
+				nlNodePoint->inumberOfChildren = e->R.ep - e->L.ep;
+				nlNodePoint->m_mChildren = new OSnLNode*[ e->R.ep - e->L.ep];
+				for (ep = e->L.ep; ep < e->R.ep; *ep++) 
+					nlNodePoint->m_mChildren[i++] = walkTree ( *ep);
+				return nlNodePoint;
+				
+			case OPMINUS:
+				nlNodePoint = new OSnLNodeMinus();
+				nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
+				nlNodePoint->m_mChildren[1] = walkTree (e->R.e);
+				return nlNodePoint;
+				
+			case OPUMINUS:
+				nlNodePoint = new OSnLNodeNegate();
+				nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
+				return nlNodePoint;
+				
+			case OPMULT:
+				cout << "FOUND MULT NODE"  << endl;
+				nlNodePoint = new OSnLNodeTimes();
+				nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
+				nlNodePoint->m_mChildren[1] = walkTree (e->R.e);
+				return nlNodePoint;
+				
+			case OPDIV:
+				nlNodePoint = new OSnLNodeDivide(); 
+				nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
+				nlNodePoint->m_mChildren[1] = walkTree (e->R.e);
+				return nlNodePoint;
+				
+			case OPPOW:
+				cout << "FOUND OPPOW NODE"  << endl;
+				nlNodePoint = new OSnLNodePower();
+				nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
+				nlNodePoint->m_mChildren[1] = walkTree (e->R.e); 
+				return nlNodePoint;
+				
+				
+			case OP1POW:
+				cout << "FOUND OP1POW NODE"  << endl;
+				cout << "OP1POW EXPONENT =  "  << e->R.en->v<<  endl;
+				nlNodePoint = new OSnLNodePower();
+				nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
+				nlNodeNumberPoint = new OSnLNodeNumber();
+				nlNodeNumberPoint->value = e->R.en->v;
+				nlNodePoint->m_mChildren[1] = nlNodeNumberPoint;
+				return nlNodePoint;
+				
+			case OP2POW:
+				cout << "FOUND OP2POW NODE"  << endl;
+				nlNodePoint = new OSnLNodePower();
+				nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
+				nlNodeNumberPoint = new OSnLNodeNumber();
+				nlNodeNumberPoint->value = 2;
+				nlNodePoint->m_mChildren[1] = nlNodeNumberPoint;
+				return nlNodePoint;
+				
+			case OPCPOW:
+				cout << "FOUND OPCPOW NODE"  << endl;
+				cout << "OPCPOW EXPONENT =  "  << e->R.en->v<<  endl;
+				nlNodePoint = new OSnLNodePower();
+				nlNodeNumberPoint = new OSnLNodeNumber();
+				nlNodeNumberPoint->value = e->L.en->v;
+				nlNodePoint->m_mChildren[0] = nlNodeNumberPoint;
+				nlNodePoint->m_mChildren[1] = walkTree (e->R.e);
+				return nlNodePoint;
+				
+			case OP_log:
+				nlNodePoint = new OSnLNodeLn();
+				nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
+				return nlNodePoint;
+				
+			case OP_sqrt:
+				nlNodePoint = new OSnLNodeSqrt();
+				nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
+				return nlNodePoint;
+				
+			case OP_exp:
+				nlNodePoint = new OSnLNodeExp();
+				nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
+				return nlNodePoint;
+				
+			case ABS:
+				nlNodePoint = new OSnLNodeAbs();
+				nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
+				return nlNodePoint;
+				
+			case OPNUM:
+				cout << "found a number node" << endl;
+				nlNodeNumberPoint = new OSnLNodeNumber;
+				cout << "THE NUMBER" << (double) ((expr_n*)e)->v << endl;
+				nlNodeNumberPoint->value = (double) ((expr_n*)e)->v;
+				return nlNodeNumberPoint;
+				
+			case OPVARVAL:
+				cout << "found a variable node" << endl;
+				nlNodeVariablePoint = new OSnLNodeVariable;
+				nlNodeVariablePoint->idx = e->a;
+				nlNodeVariablePoint->coef = 1.0; 
+				return nlNodeVariablePoint;
+				
+			default:
+			std::ostringstream outStr;
+			std::string error;
+			outStr  << endl;
+			outStr  << endl;
+			error = "ERROR:  An unsupported operator found, AMPL operator number =  "  ;
+			outStr << error;
+			outStr << opnum;
+			outStr << endl;
+			error = outStr.str();
+			throw ErrorClass( error );
+		}//end switch	
+	}//end try
+	catch(const ErrorClass& eclass){
+		throw;
 	}
-}
+}//walkTree
 
 
 bool OSnl2osil::createOSInstance(){
@@ -381,6 +394,7 @@ bool OSnl2osil::createOSInstance(){
 	for(i = 0; i < n_var; i++){
 		if(i >= firstBinaryVar) vartype = 'B';
 		if(i >= firstIntegerVar) vartype = 'I';
+		if(X0 != NULL) init = X0[ i];
 		osinstance->addVariable(i, var_name(i), 
 			LUv[2*i] > -OSINFINITY  ? LUv[2*i] : -OSINFINITY, 
 			LUv[2*i+1] < OSINFINITY ? LUv[2*i+1] : OSINFINITY, 

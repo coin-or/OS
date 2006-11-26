@@ -56,7 +56,7 @@ OSInstance::OSInstance():
 	m_bLagrangianExpTreeCreated( false),
 	m_LagrangianSparseHessian( NULL),
 	m_bLagrangianSparseHessianCreated( false),
-	m_bCppADTreesBuilt( false),
+	m_bCppADTapesBuilt( false),
 	m_bAllNonlinearVariablesIndex( false),
 	m_mObjectiveCoefficients(NULL),
 	m_bGetDenseObjectives(false),
@@ -1993,7 +1993,7 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double* 
 	int i, j;
 	std::map<int, int>::iterator posVarIndexMap;
 	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
-	if( m_bCppADTreesBuilt == false){
+	if( m_bCppADTapesBuilt == false){
 		// this loop is only done once
 		// if we have not filled in the Sparse Jacobian matrix do so now
 		if( m_bSparseJacobianCalculated == false) getJacobianSparsityPattern();
@@ -2013,7 +2013,7 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double* 
 		CppAD::Independent( m_vX);
 		// For expression tree, record the operations for CppAD
 		for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){	
-			m_vFG.push_back( (posMapExpTree->second)->m_treeRoot->constructCppADTree(&m_mapAllNonlinearVariablesIndex, &m_vX) );
+			m_vFG.push_back( (posMapExpTree->second)->m_treeRoot->constructCppADTape(&m_mapAllNonlinearVariablesIndex, &m_vX) );
 		}	
 		//create the function and stop recording
 		F = new CppAD::ADFun<double>();
@@ -2028,7 +2028,7 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double* 
 		
 		m_vXITER.reserve( m_iNumberOfNonlinearVariables);
 		m_vH.reserve( m_iNumberOfNonlinearVariables * m_iNumberOfNonlinearVariables );
-		m_bCppADTreesBuilt = true;
+		m_bCppADTapesBuilt = true;
 	}
 	// get the current iterate data
 	i = 0;
@@ -2101,7 +2101,7 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessianReTape( double* x, do
 	CppAD::vector< AD<double> > L( 1);
 	L[ 0] = 0;
 	for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){	
-		tmpVal = (posMapExpTree->second)->m_treeRoot->constructCppADTree(&m_mapAllNonlinearVariablesIndex, &X);
+		tmpVal = (posMapExpTree->second)->m_treeRoot->constructCppADTape(&m_mapAllNonlinearVariablesIndex, &X);
 		//std::cout << "VALUE OF FUNCTION == " << tmpVal << std::endl;
 		if( posMapExpTree->first >= 0){
 			X.push_back( conMultipliers[ posMapExpTree->first] );

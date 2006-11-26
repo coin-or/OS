@@ -77,9 +77,10 @@ int main(int argC, char* argV[])
 	osilFileName =  dataDir + "parincLinear.osil";
 	//ipOptFileName =  dataDir +   "HS071_NLP.osil";
 	//ipOptFileName =  dataDir + "aircrafta.osil";
-	ipOptFileName =  dataDir + "markowitz.osil";
+	//ipOptFileName =  dataDir + "markowitz.osil";
 	//ipOptFileName =  dataDir + "rosenbrock.osil";
 	//ipOptFileName =  dataDir + "blockqp1.osil";
+	ipOptFileName =  dataDir + "avion2.osil";
 	//lindoFileName = dataDir + "lindoapiaddins.osil";
 	lindoFileName = dataDir + "markowitz.osil";
 	//lindoFileName = dataDir + "blockqp1.osil";
