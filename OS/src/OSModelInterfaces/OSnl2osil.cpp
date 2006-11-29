@@ -303,11 +303,13 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 				
 			case OP2POW:
 				cout << "FOUND OP2POW NODE"  << endl;
-				nlNodePoint = new OSnLNodePower();
+				//nlNodePoint = new OSnLNodePower();
+				//nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
+				//nlNodeNumberPoint = new OSnLNodeNumber();
+				//nlNodeNumberPoint->value = 2;
+				//nlNodePoint->m_mChildren[1] = nlNodeNumberPoint;
+				nlNodePoint = new OSnLNodeSquare();
 				nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
-				nlNodeNumberPoint = new OSnLNodeNumber();
-				nlNodeNumberPoint->value = 2;
-				nlNodePoint->m_mChildren[1] = nlNodeNumberPoint;
 				return nlNodePoint;
 				
 			case OPCPOW:
@@ -327,6 +329,16 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 				
 			case OP_sqrt:
 				nlNodePoint = new OSnLNodeSqrt();
+				nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
+				return nlNodePoint;
+				
+			case OP_cos:
+				nlNodePoint = new OSnLNodeCos();
+				nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
+				return nlNodePoint;
+				
+			case OP_sin:
+				nlNodePoint = new OSnLNodeSin();
 				nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
 				return nlNodePoint;
 				

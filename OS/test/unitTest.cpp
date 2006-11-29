@@ -82,7 +82,7 @@ int main(int argC, char* argV[])
 	//ipOptFileName =  dataDir + "blockqp1.osil";
 	ipOptFileName =  dataDir + "avion2.osil";
 	//lindoFileName = dataDir + "lindoapiaddins.osil";
-	lindoFileName = dataDir + "markowitz.osil";
+	lindoFileName = dataDir + "HS071_NLP.osil";
 	//lindoFileName = dataDir + "blockqp1.osil";
 	//lindoFileName = dataDir + "aircrafta.osil";
 	nlFileName = dataDir + "hs71.nl";

@@ -44,6 +44,11 @@ build_triplet = @build@
 host_triplet = @host@
 noinst_PROGRAMS = unitTest$(EXEEXT)
 
+# Here we add additional libraries
+# Kipp add the others here
+#LIBS += $(ADDLIBS) `cat $(COINUTILSOBJDIR)/coinutils_addlibs.txt`
+#LIBS  += `cat $(OSOBJDIR)/os_addlibs.txt`
+
 #LIBS += -l$(F77)
 @COIN_HAS_CPX_TRUE@am__append_1 = \
 @COIN_HAS_CPX_TRUE@	-I`$(CYGPATH_W) $(CPXINCDIR)` \
@@ -59,7 +64,8 @@ noinst_PROGRAMS = unitTest$(EXEEXT)
 @COIN_HAS_IPOPT_TRUE@am__append_6 = -I`$(CYGPATH_W) $(IPOPTINCDIR)` 
 @COIN_HAS_IPOPT_TRUE@am__append_7 = $(IPOPTLIB) 
 @COIN_HAS_ASL_TRUE@am__append_8 = $(ASL_CPPFLAGS) 
-@COIN_HAS_ASL_TRUE@am__append_9 = $(ASLLIB)
+@COIN_HAS_ASL_TRUE@am__append_9 = $(ASLLIB) \
+@COIN_HAS_ASL_TRUE@	$(OSOBJDIR)/src/OSModelInterfaces/libOSModelInterfaces.la
 subdir = test
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -78,9 +84,9 @@ unitTest_OBJECTS = $(am_unitTest_OBJECTS)
 am__DEPENDENCIES_2 =
 @COIN_HAS_LINDO_TRUE@am__DEPENDENCIES_3 = $(am__DEPENDENCIES_2)
 @COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_4 = $(am__DEPENDENCIES_2)
-@COIN_HAS_ASL_TRUE@am__DEPENDENCIES_5 = $(am__DEPENDENCIES_2)
+@COIN_HAS_ASL_TRUE@am__DEPENDENCIES_5 = $(am__DEPENDENCIES_2) \
+@COIN_HAS_ASL_TRUE@	$(OSOBJDIR)/src/OSModelInterfaces/libOSModelInterfaces.la
 unitTest_DEPENDENCIES = $(OSOBJDIR)/src/libOS.la \
-	$(OSOBJDIR)/src/OSModelInterfaces/libOSModelInterfaces.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
 	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
 	$(CBCOBJDIR)/src/libCbc.la $(CGLOBJDIR)/src/libCgl.la \
@@ -199,11 +205,7 @@ KNITROLIB = @KNITROLIB@
 LDFLAGS = @LDFLAGS@
 LIBEXT = @LIBEXT@
 LIBOBJS = @LIBOBJS@
-
-# Here we add additional libraries
-# Kipp add the others here
-#LIBS += $(ADDLIBS) `cat $(COINUTILSOBJDIR)/coinutils_addlibs.txt`
-LIBS = @LIBS@ `cat $(OSOBJDIR)/os_addlibs.txt`
+LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
 LIBTOOLM4 = @LIBTOOLM4@
 LINDOINCDIR = @LINDOINCDIR@
@@ -299,7 +301,6 @@ unitTest_SOURCES = unitTest.cpp
 
 # List all additionally required COIN libraries
 unitTest_LDADD = $(OSOBJDIR)/src/libOS.la \
-	$(OSOBJDIR)/src/OSModelInterfaces/libOSModelInterfaces.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
 	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
 	$(CBCOBJDIR)/src/libCbc.la $(CGLOBJDIR)/src/libCgl.la \

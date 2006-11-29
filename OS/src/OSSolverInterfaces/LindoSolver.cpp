@@ -421,10 +421,10 @@ bool LindoSolver::optimize(){
 		//   
 	
 		if(osinstance->getNumberOfNonlinearExpressions() > 0){ 
-			m_iLindoErrorCode = LSoptimize( pModel_, LS_METHOD_FREE, &nSolStatus);
-			//m_iLindoErrorCode = LSsolveGOP(pModel_, NULL) ;
+			//m_iLindoErrorCode = LSoptimize( pModel_, LS_METHOD_FREE, &nSolStatus);
+			m_iLindoErrorCode = LSsolveGOP(pModel_, NULL) ;
 			lindoAPIErrorCheck("There was an ERROR in the call to the Optimizer solver");
-			//LSgetInfo (pModel_, LS_IINFO_GOP_STATUS, &nSolStatus);
+			LSgetInfo (pModel_, LS_IINFO_GOP_STATUS, &nSolStatus);
 		}
 		else{
 			m_iLindoErrorCode = LSsolveMIP( pModel_,  &nSolStatus);
@@ -515,7 +515,7 @@ bool LindoSolver::optimize(){
 						lindoAPIErrorCheck("Error trying to obtain optimal objective value with integer variables present");
 					}
 					else{
-						//LSgetInfo( pModel_, LS_DINFO_GOP_OBJ, &z[0]);
+						LSgetInfo( pModel_, LS_DINFO_GOP_OBJ, &z[0]);
 						lindoAPIErrorCheck("Error trying to obtain optimal objective value with NO integer variables present");	
 					}	
 					osresult->setObjectiveValues(solIdx, z);
