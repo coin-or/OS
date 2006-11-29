@@ -89,13 +89,19 @@
      NEGATEEND = 305,
      IFSTART = 306,
      IFEND = 307,
-     GREATERTHAN = 308,
-     VARIABLESTART = 309,
-     VARIABLEEND = 310,
-     ABSSTART = 311,
-     ABSEND = 312,
-     MAXSTART = 313,
-     MAXEND = 314
+     SQUARESTART = 308,
+     SQUAREEND = 309,
+     COSSTART = 310,
+     COSEND = 311,
+     SINSTART = 312,
+     SINEND = 313,
+     GREATERTHAN = 314,
+     VARIABLESTART = 315,
+     VARIABLEEND = 316,
+     ABSSTART = 317,
+     ABSEND = 318,
+     MAXSTART = 319,
+     MAXEND = 320
    };
 #endif
 /* Tokens.  */
@@ -149,13 +155,19 @@
 #define NEGATEEND 305
 #define IFSTART 306
 #define IFEND 307
-#define GREATERTHAN 308
-#define VARIABLESTART 309
-#define VARIABLEEND 310
-#define ABSSTART 311
-#define ABSEND 312
-#define MAXSTART 313
-#define MAXEND 314
+#define SQUARESTART 308
+#define SQUAREEND 309
+#define COSSTART 310
+#define COSEND 311
+#define SINSTART 312
+#define SINEND 313
+#define GREATERTHAN 314
+#define VARIABLESTART 315
+#define VARIABLEEND 316
+#define ABSSTART 317
+#define ABSEND 318
+#define MAXSTART 319
+#define MAXEND 320
 
 
 

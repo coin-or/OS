@@ -87,12 +87,12 @@ binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
 am_OSSolverService_OBJECTS = OSSolverService.$(OBJEXT)
 OSSolverService_OBJECTS = $(am_OSSolverService_OBJECTS)
-@COIN_HAS_GLPK_TRUE@am__DEPENDENCIES_1 =  \
+am__DEPENDENCIES_1 =
+@COIN_HAS_GLPK_TRUE@am__DEPENDENCIES_2 =  \
 @COIN_HAS_GLPK_TRUE@	$(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
-am__DEPENDENCIES_2 =
-@COIN_HAS_LINDO_TRUE@am__DEPENDENCIES_3 = $(am__DEPENDENCIES_2)
-@COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_4 = $(am__DEPENDENCIES_2)
-@COIN_HAS_ASL_TRUE@am__DEPENDENCIES_5 = $(am__DEPENDENCIES_2)
+@COIN_HAS_LINDO_TRUE@am__DEPENDENCIES_3 = $(am__DEPENDENCIES_1)
+@COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_4 = $(am__DEPENDENCIES_1)
+@COIN_HAS_ASL_TRUE@am__DEPENDENCIES_5 = $(am__DEPENDENCIES_1)
 @USEWSOCKLIB_FALSE@OSSolverService_DEPENDENCIES =  \
 @USEWSOCKLIB_FALSE@	$(OSOBJDIR)/src/libOS.la \
 @USEWSOCKLIB_FALSE@	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
@@ -102,8 +102,9 @@ am__DEPENDENCIES_2 =
 @USEWSOCKLIB_FALSE@	$(OSIOBJDIR)/src/libOsi.la \
 @USEWSOCKLIB_FALSE@	$(CLPOBJDIR)/src/libClp.la \
 @USEWSOCKLIB_FALSE@	$(COINUTILSOBJDIR)/src/libCoinUtils.la \
-@USEWSOCKLIB_FALSE@	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_3) \
-@USEWSOCKLIB_FALSE@	$(am__DEPENDENCIES_4) $(am__DEPENDENCIES_5)
+@USEWSOCKLIB_FALSE@	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_2) \
+@USEWSOCKLIB_FALSE@	$(am__DEPENDENCIES_3) $(am__DEPENDENCIES_4) \
+@USEWSOCKLIB_FALSE@	$(am__DEPENDENCIES_5)
 @USEWSOCKLIB_TRUE@OSSolverService_DEPENDENCIES =  \
 @USEWSOCKLIB_TRUE@	$(OSOBJDIR)/src/libOS.la \
 @USEWSOCKLIB_TRUE@	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
@@ -113,9 +114,9 @@ am__DEPENDENCIES_2 =
 @USEWSOCKLIB_TRUE@	$(OSIOBJDIR)/src/libOsi.la \
 @USEWSOCKLIB_TRUE@	$(CLPOBJDIR)/src/libClp.la \
 @USEWSOCKLIB_TRUE@	$(COINUTILSOBJDIR)/src/libCoinUtils.la \
-@USEWSOCKLIB_TRUE@	$(am__DEPENDENCIES_2) $(am__DEPENDENCIES_1) \
-@USEWSOCKLIB_TRUE@	$(am__DEPENDENCIES_3) $(am__DEPENDENCIES_4) \
-@USEWSOCKLIB_TRUE@	$(am__DEPENDENCIES_5)
+@USEWSOCKLIB_TRUE@	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+@USEWSOCKLIB_TRUE@	$(am__DEPENDENCIES_2) $(am__DEPENDENCIES_3) \
+@USEWSOCKLIB_TRUE@	$(am__DEPENDENCIES_4) $(am__DEPENDENCIES_5)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
@@ -244,12 +245,7 @@ KNITROLIB = @KNITROLIB@
 LDFLAGS = @LDFLAGS@
 LIBEXT = @LIBEXT@
 LIBOBJS = @LIBOBJS@
-
-# Here we add additional libraries
-# Kipp add the others here
-LIBS = @LIBS@ $(ADDLIBS) `cat \
-	$(COINUTILSOBJDIR)/coinutils_addlibs.txt` $(ADDLIBS) `cat \
-	$(OSOBJDIR)/os_addlibs.txt`
+LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
 LIBTOOLM4 = @LIBTOOLM4@
 LINDOINCDIR = @LINDOINCDIR@
@@ -380,7 +376,7 @@ OSSolverService_SOURCES = OSSolverService.cpp
 @USEWSOCKLIB_FALSE@	$(OSIOBJDIR)/src/libOsi.la \
 @USEWSOCKLIB_FALSE@	$(CLPOBJDIR)/src/libClp.la \
 @USEWSOCKLIB_FALSE@	$(COINUTILSOBJDIR)/src/libCoinUtils.la \
-@USEWSOCKLIB_FALSE@	$(am__append_3) $(am__append_5) \
+@USEWSOCKLIB_FALSE@	$(ADDLIBS) $(am__append_3) $(am__append_5) \
 @USEWSOCKLIB_FALSE@	$(am__append_7) $(am__append_9)
 
 # List all additionally required COIN libraries
@@ -392,9 +388,15 @@ OSSolverService_SOURCES = OSSolverService.cpp
 @USEWSOCKLIB_TRUE@	$(OSIOBJDIR)/src/libOsi.la \
 @USEWSOCKLIB_TRUE@	$(CLPOBJDIR)/src/libClp.la \
 @USEWSOCKLIB_TRUE@	$(COINUTILSOBJDIR)/src/libCoinUtils.la \
-@USEWSOCKLIB_TRUE@	$(WINSOCKLIB) $(am__append_3) \
+@USEWSOCKLIB_TRUE@	$(ADDLIBS) $(WINSOCKLIB) $(am__append_3) \
 @USEWSOCKLIB_TRUE@	$(am__append_5) $(am__append_7) \
 @USEWSOCKLIB_TRUE@	$(am__append_9)
+
+# Here we add additional libraries
+# Kipp add the others here
+#LIBS += $(ADDLIBS) `cat $(COINUTILSOBJDIR)/coinutils_addlibs.txt`
+
+#LIBS  += $(ADDLIBS) `cat $(OSOBJDIR)/os_addlibs.txt`
 
 ########################################################################
 #                            Additional flags                          #

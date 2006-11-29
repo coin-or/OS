@@ -125,6 +125,7 @@ this fails on in Mac OS X
 %token POWERSTART POWEREND PLUSSTART PLUSEND MINUSSTART MINUSEND
 %token DIVIDESTART DIVIDEEND LNSTART LNEND SQRTSTART SQRTEND SUMSTART SUMEND PRODUCTSTART PRODUCTEND ENDOFELEMENT
 %token EXPSTART EXPEND NEGATESTART NEGATEEND IFSTART IFEND
+%token SQUARESTART SQUAREEND COSSTART COSEND SINSTART SINEND
 %token GREATERTHAN 
 %token VARIABLESTART VARIABLEEND ABSSTART ABSEND MAXSTART MAXEND
 
@@ -249,6 +250,9 @@ nlnode: number
 		| product
 		| ln 
 		| sqrt 
+		| square
+		| sin
+		| cos
 		| exp
 		| if
 		| abs
@@ -336,6 +340,21 @@ sqrt: SQRTSTART {
 	nlNodePoint = new OSnLNodeSqrt();
 	nlNodeVec.push_back( nlNodePoint);
 } nlnode SQRTEND;
+
+square: SQUARESTART {
+	nlNodePoint = new OSnLNodeSquare();
+	nlNodeVec.push_back( nlNodePoint);
+} nlnode SQUAREEND;
+
+cos: COSSTART {
+	nlNodePoint = new OSnLNodeCos();
+	nlNodeVec.push_back( nlNodePoint);
+} nlnode COSEND;
+
+sin: SINSTART {
+	nlNodePoint = new OSnLNodeSin();
+	nlNodeVec.push_back( nlNodePoint);
+} nlnode SINEND;
 
 
 

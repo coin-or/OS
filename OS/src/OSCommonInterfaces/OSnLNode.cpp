@@ -150,9 +150,12 @@ static OSnLNodeTimes n1005;
 static OSnLNodeDivide n1006;
 static OSnLNodePower n1009;
 static OSnLNodeProduct n1010;
+static OSnLNodeSquare n2005;
 static OSnLNodeSqrt n2006;
 static OSnLNodeLn n2007;
 static OSnLNodeExp n2010;
+static OSnLNodeSin n3001;
+static OSnLNodeCos n3002;
 static OSnLNodeNumber n5001;
 static OSnLNodeVariable n6001;
 static OSnLNodeIf n7001;
@@ -178,10 +181,14 @@ void OSnLNode::setnlNodeIdxMap(){
 	nlNodeIdxMap[OS_ABS] = 13;
 	nlNodeIdxMap[OS_MAX] = 14;
 	nlNodeIdxMap[OS_SQRT] = 15;
+	nlNodeIdxMap[OS_SQUARE] = 16;
+	nlNodeIdxMap[OS_SIN] = 17;
+	nlNodeIdxMap[OS_COS] = 18;
 }
 
 static OSnLNode *nlNodeArray[] = { &n1001, &n1002, &n1003, &n1004, &n1005, &n1006,
-	&n1009, &n1010, &n2007, &n2010, &n5001, &n6001, &n7001, &n2001, &n3024, &n2006
+	&n1009, &n1010, &n2007, &n2010, &n5001, &n6001, &n7001, &n2001, &n3024, &n2006,
+	&n2005, &n3001, &n3002
 };
  
 //
@@ -952,8 +959,135 @@ OSnLNode* OSnLNodeSqrt::cloneOSnLNode(){
 
 //
 //
+// OSnLNodeSquare Methods	
+OSnLNodeSquare::OSnLNodeSquare()
+{
+	inumberOfChildren = 1;
+	m_mChildren = new OSnLNode*[1];
+	m_mChildren[ 0] = NULL;
+	snodeName = "square";
+	inodeInt = 2005;
+	inodeType = 1;
+}//end OSnLNodeSquare
+
+ 
+OSnLNodeSquare::~OSnLNodeSquare(){
+	#ifdef DEBUGOSNLNODE
+	cout << "inside OSnLNodeSquare destructor" << endl;
+	#endif
+	for(int i = 0; i < inumberOfChildren; i++){
+		delete m_mChildren[ i];
+		m_mChildren[i] = NULL;
+	}
+	m_mChildren = NULL;
+}//end ~OSnLNodeSquare
+
+double OSnLNodeSquare::calculateFunction(double *x){
+	m_dFunctionValue = pow( (m_mChildren[0]->calculateFunction( x) ), 2);
+	return m_dFunctionValue;
+}// end OSnLNodeSquare::calculate
 
 
+AD<double> OSnLNodeSquare::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
+	m_CppADTape = CppAD::pow( ( m_mChildren[0]->constructCppADTape( cppADIdx, XAD) ), 2);
+	return m_CppADTape;
+}// end OSnLNodeSquare::constructCppADTape
+
+OSnLNode* OSnLNodeSquare::cloneOSnLNode(){
+	OSnLNode *nlNodePoint;
+	nlNodePoint = new OSnLNodeSquare();
+	return  nlNodePoint;
+}//end OSnLNodeSquare::cloneOSnLNode
+
+//
+//
+// OSnLNodeSin Methods	
+OSnLNodeSin::OSnLNodeSin()
+{
+	inumberOfChildren = 1;
+	m_mChildren = new OSnLNode*[1];
+	m_mChildren[ 0] = NULL;
+	snodeName = "sin";
+	inodeInt = 3001;
+	inodeType = 1;
+}//end OSnLNodeSin
+
+ 
+OSnLNodeSin::~OSnLNodeSin(){
+	#ifdef DEBUGOSNLNODE
+	cout << "inside OSnLNodeSin destructor" << endl;
+	#endif
+	for(int i = 0; i < inumberOfChildren; i++){
+		delete m_mChildren[ i];
+		m_mChildren[i] = NULL;
+	}
+	m_mChildren = NULL;
+}//end ~OSnLNodeSin
+
+double OSnLNodeSin::calculateFunction(double *x){
+	m_dFunctionValue = sin(m_mChildren[0]->calculateFunction( x) );
+	return m_dFunctionValue;
+}// end OSnLNodeSin::calculate
+
+
+AD<double> OSnLNodeSin::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
+	m_CppADTape = CppAD::sin( m_mChildren[0]->constructCppADTape( cppADIdx, XAD) );
+	return m_CppADTape;
+}// end OSnLNodeSin::constructCppADTape
+
+OSnLNode* OSnLNodeSin::cloneOSnLNode(){
+	OSnLNode *nlNodePoint;
+	nlNodePoint = new OSnLNodeSin();
+	return  nlNodePoint;
+}//end OSnLNodeSin::cloneOSnLNode
+
+
+//
+//
+// OSnLNodeCos Methods	
+OSnLNodeCos::OSnLNodeCos()
+{
+	inumberOfChildren = 1;
+	m_mChildren = new OSnLNode*[1];
+	m_mChildren[ 0] = NULL;
+	snodeName = "cos";
+	inodeInt = 3002;
+	inodeType = 1;
+}//end OSnLNodeCos
+
+ 
+OSnLNodeCos::~OSnLNodeCos(){
+	#ifdef DEBUGOSNLNODE
+	cout << "inside OSnLNodeCos destructor" << endl;
+	#endif
+	for(int i = 0; i < inumberOfChildren; i++){
+		delete m_mChildren[ i];
+		m_mChildren[i] = NULL;
+	}
+	m_mChildren = NULL;
+}//end ~OSnLNodeCos
+
+double OSnLNodeCos::calculateFunction(double *x){
+	m_dFunctionValue = cos(m_mChildren[0]->calculateFunction( x) );
+	return m_dFunctionValue;
+}// end OSnLNodeCos::calculate
+
+
+AD<double> OSnLNodeCos::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
+	m_CppADTape = CppAD::cos( m_mChildren[0]->constructCppADTape( cppADIdx, XAD) );
+	return m_CppADTape;
+}// end OSnLNodeCos::constructCppADTape
+
+OSnLNode* OSnLNodeCos::cloneOSnLNode(){
+	OSnLNode *nlNodePoint;
+	nlNodePoint = new OSnLNodeCos();
+	return  nlNodePoint;
+}//end OSnLNodeCos::cloneOSnLNode
+
+
+
+
+//
 //
 // OSnLNodeExp Methods	
 OSnLNodeExp::OSnLNodeExp()

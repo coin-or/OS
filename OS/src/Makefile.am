@@ -74,6 +74,7 @@ OSSolverService_LDADD =  \
 	$(OSIOBJDIR)/src/libOsi.la \
 	$(CLPOBJDIR)/src/libClp.la \
 	$(COINUTILSOBJDIR)/src/libCoinUtils.la \
+	$(ADDLIBS) \
 	$(WINSOCKLIB)
 else
 OSSolverService_LDADD =  \
@@ -84,15 +85,16 @@ OSSolverService_LDADD =  \
 	$(CGLOBJDIR)/src/libCgl.la \
 	$(OSIOBJDIR)/src/libOsi.la \
 	$(CLPOBJDIR)/src/libClp.la \
-	$(COINUTILSOBJDIR)/src/libCoinUtils.la 
+	$(COINUTILSOBJDIR)/src/libCoinUtils.la \
+	$(ADDLIBS) 
 endif
 
 
 # Here we add additional libraries
 # Kipp add the others here
-LIBS += $(ADDLIBS) `cat $(COINUTILSOBJDIR)/coinutils_addlibs.txt`
+#LIBS += $(ADDLIBS) `cat $(COINUTILSOBJDIR)/coinutils_addlibs.txt`
 
-LIBS  += $(ADDLIBS) `cat $(OSOBJDIR)/os_addlibs.txt`
+#LIBS  += $(ADDLIBS) `cat $(OSOBJDIR)/os_addlibs.txt`
 
 
 
