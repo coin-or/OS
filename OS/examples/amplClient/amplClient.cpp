@@ -228,5 +228,7 @@ int main(int argc, char **argv)
 	}
 	delete osrlwriter;
 	osrlwriter = NULL;
+	delete nl2osil;
+	nl2osil = NULL;
 	return 0;
 } // end main

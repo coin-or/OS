@@ -1652,7 +1652,7 @@ SparseJacobianMatrix *OSInstance::calculateAllConstraintFunctionGradients(double
 			// we are considering only constraints, not objective function
 			if(idx >= 0){
 				m_mapExpressionTreesMod[ idx]->getVariableIndiciesMap(); 
-				jac = m_mapExpressionTreesMod[ idx]->calculateGradient(x, allFunctionsEvaluated);
+				jac = m_mapExpressionTreesMod[ idx]->calculateGradientReTape(x, allFunctionsEvaluated);
 				// check size
 				jstart = m_miJacStart[ idx] + m_miJacNumConTerms[ idx];
 				jend = m_miJacStart[ idx + 1 ];
@@ -1693,7 +1693,7 @@ double *OSInstance::calculateObjectiveFunctionGradient(int idx, double* x, bool 
 		}
 		// get the gradient
 		if( m_mapExpressionTreesMod.find( idx) != m_mapExpressionTreesMod.end() ){
-			jac = m_mapExpressionTreesMod[ idx]->calculateGradient(x, functionEvaluated);
+			jac = m_mapExpressionTreesMod[ idx]->calculateGradientReTape(x, functionEvaluated);
 			i = 0;
 			for(posVarIdx = (*m_mapExpressionTreesMod[ idx]->mapVarIdx).begin(); posVarIdx 
 			!= (*m_mapExpressionTreesMod[ idx]->mapVarIdx).end(); ++posVarIdx){

@@ -794,8 +794,8 @@ AD<double> OSnLNodePower::constructCppADTape(std::map<int, int> *cppADIdx, CppAD
 	if( typeid( *m_mChildren[1]) == typeid( OSnLNodeNumber) ) {
 		OSnLNodeNumber *numberNode  =  (OSnLNodeNumber*)m_mChildren[1];
 		// we have a number node see if interger
-		if( (numberNode->value) = floor( numberNode->value)){
-			m_CppADTape =  CppAD::pow(m_mChildren[0]->constructCppADTape( cppADIdx, XAD) ,  floor( numberNode->value));
+		if( (numberNode->value) = int( numberNode->value)){
+			m_CppADTape =  CppAD::pow(m_mChildren[0]->constructCppADTape( cppADIdx, XAD) ,  int( numberNode->value));
 		}	
 		else m_CppADTape = CppAD::pow(m_mChildren[0]->constructCppADTape( cppADIdx, XAD) , m_mChildren[1]->constructCppADTape( cppADIdx, XAD) );	
 	}

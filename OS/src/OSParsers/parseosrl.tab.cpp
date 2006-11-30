@@ -2167,8 +2167,10 @@ void osrlClearMemory(){
 				otherVarVec[ k] = NULL;				
 			}
 			otherVarVec.clear();
-			delete[] dualSolution[ i];
-			dualSolution[ i] = NULL;
+			if( numberOfConstraints > 0){
+				delete[] dualSolution[ i];
+				dualSolution[ i] = NULL;
+			}
 			delete[] objectiveValues[i];
 			objectiveValues = NULL;
 		}

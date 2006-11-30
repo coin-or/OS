@@ -75,6 +75,19 @@ public:
 	
 	/**
 	 * Calculate the gradient of the expression tree function given the current variable
+	 * values. In this case we always retape the CppAD expression tree
+	 * 
+	 * </p>
+	 * 
+	 * @param x holds the values of the variables in a double array.
+	 * @param functionEvaluated is set to true if the function has already been evaluated.
+	 * @return the expression tree gradient given the current variable values.
+	 */
+	std::vector<double> calculateGradientReTape( double *x, bool functionEvaluated);
+	
+	
+	/**
+	 * Calculate the gradient of the expression tree function given the current variable
 	 * values. If the CppAD expression tree has been calculated, the
 	 * method will retrieve it.
 	 * 

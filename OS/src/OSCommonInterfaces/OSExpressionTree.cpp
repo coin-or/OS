@@ -92,7 +92,6 @@ double OSExpressionTree::calculateFunction( double *x, bool functionEvaluated){
 
 std::vector<double> OSExpressionTree::calculateGradient( double *x, bool functionEvaluated){
 	// note x is a dense vector
-	// = false;
 	//CppAD::vector< AD<double> > XAD;
 	//CppAD::vector< AD<double> > vZ;
 	//CppAD::AD<double> CppADTape;
@@ -133,6 +132,39 @@ std::vector<double> OSExpressionTree::calculateGradient( double *x, bool functio
 	//}
 	return jac;
 }//calculateGradient
+
+
+std::vector<double> OSExpressionTree::calculateGradientReTape( double *x, bool functionEvaluated){
+	// note x is a dense vector
+	CppAD::vector< AD<double> > vXAD;
+	CppAD::vector< AD<double> > vZ;
+	CppAD::AD<double> CppADTape;
+	CppAD::ADFun<double> *fun;
+	// map the variables
+	if( m_bIndexMapGenerated == false) getVariableIndiciesMap();
+	m_treeRoot->getVariableIndexMap( mapVarIdx);		
+	// convert the double x vector to an AD vector
+	for(m_mPosVarIdx = (*mapVarIdx).begin(); m_mPosVarIdx != (*mapVarIdx).end(); ++m_mPosVarIdx){;
+		vXAD.push_back( x[ m_mPosVarIdx->first] );
+	}
+	CppAD::Independent( vXAD);
+	CppADTape = m_treeRoot->constructCppADTape(mapVarIdx, &vXAD);
+	vZ.push_back( CppADTape) ;
+	fun = new CppAD::ADFun<double>( vXAD, vZ);
+	if( functionEvaluated == false){ 
+		m_vX.clear();
+		for(m_mPosVarIdx = (*mapVarIdx).begin(); m_mPosVarIdx != (*mapVarIdx).end(); ++m_mPosVarIdx){
+			m_vX.push_back( x[ m_mPosVarIdx->first] );
+		}
+	}
+ 	std::vector<double> jac( (*mapVarIdx).size() ); 	// Jacobian of f
+ 	//(*fun).capacity_taylor(3);
+ 	//(*fun).size_taylor();
+ 	//(*fun).Forward(0, m_vX); 
+ 	//jac = (*fun).Forward(1, m_vX);
+   	jac = (*fun).Jacobian( m_vX);	
+	return jac;
+}//calculateGradientReTape
 
 std::vector<double>  OSExpressionTree::calculateHessian( double *x, bool functionEvaluated){
 	if( m_bCppADTapeBuilt == false){
