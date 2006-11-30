@@ -23,6 +23,7 @@ unitTest_SOURCES = unitTest.cpp
 # List all additionally required COIN libraries
 unitTest_LDADD =  \
 	$(OSOBJDIR)/src/libOS.la \
+    $(OSOBJDIR)/src/OSModelInterfaces/libOSModelInterfaces.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
 	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
 	$(CBCOBJDIR)/src/libCbc.la \
@@ -103,8 +104,7 @@ endif
 
 if COIN_HAS_ASL
   AM_CPPFLAGS += $(ASL_CPPFLAGS) 
-  unitTest_LDADD += $(ASLLIB)
-  unitTest_LDADD += $(OSOBJDIR)/src/OSModelInterfaces/libOSModelInterfaces.la 
+  unitTest_LDADD += $(ASLLIB) 
 endif
 
 

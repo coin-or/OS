@@ -64,8 +64,7 @@ noinst_PROGRAMS = unitTest$(EXEEXT)
 @COIN_HAS_IPOPT_TRUE@am__append_6 = -I`$(CYGPATH_W) $(IPOPTINCDIR)` 
 @COIN_HAS_IPOPT_TRUE@am__append_7 = $(IPOPTLIB) 
 @COIN_HAS_ASL_TRUE@am__append_8 = $(ASL_CPPFLAGS) 
-@COIN_HAS_ASL_TRUE@am__append_9 = $(ASLLIB) \
-@COIN_HAS_ASL_TRUE@	$(OSOBJDIR)/src/OSModelInterfaces/libOSModelInterfaces.la
+@COIN_HAS_ASL_TRUE@am__append_9 = $(ASLLIB) 
 subdir = test
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -84,9 +83,9 @@ unitTest_OBJECTS = $(am_unitTest_OBJECTS)
 am__DEPENDENCIES_2 =
 @COIN_HAS_LINDO_TRUE@am__DEPENDENCIES_3 = $(am__DEPENDENCIES_2)
 @COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_4 = $(am__DEPENDENCIES_2)
-@COIN_HAS_ASL_TRUE@am__DEPENDENCIES_5 = $(am__DEPENDENCIES_2) \
-@COIN_HAS_ASL_TRUE@	$(OSOBJDIR)/src/OSModelInterfaces/libOSModelInterfaces.la
+@COIN_HAS_ASL_TRUE@am__DEPENDENCIES_5 = $(am__DEPENDENCIES_2)
 unitTest_DEPENDENCIES = $(OSOBJDIR)/src/libOS.la \
+	$(OSOBJDIR)/src/OSModelInterfaces/libOSModelInterfaces.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
 	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
 	$(CBCOBJDIR)/src/libCbc.la $(CGLOBJDIR)/src/libCgl.la \
@@ -301,6 +300,7 @@ unitTest_SOURCES = unitTest.cpp
 
 # List all additionally required COIN libraries
 unitTest_LDADD = $(OSOBJDIR)/src/libOS.la \
+	$(OSOBJDIR)/src/OSModelInterfaces/libOSModelInterfaces.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
 	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
 	$(CBCOBJDIR)/src/libCbc.la $(CGLOBJDIR)/src/libCgl.la \
