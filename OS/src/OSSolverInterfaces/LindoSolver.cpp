@@ -5,7 +5,7 @@
  * @since   OS1.0
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005, Robert Fourer, Jun Ma, Kipp Martin,Huanyuan Sheng
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
@@ -553,10 +553,67 @@ bool LindoSolver::processQuadraticTerms(){
 	cout << "WE ARE PROCESSING QUADRATIC TERMS" << endl;
 	try{
 		if(nQCnnz  <= 0)return false;
+		std::map<string, double> mapQuadraticAdjustMap;
+		std::map<string, double>::iterator mapPointer;		
+
+
+		int iVarOneIndex, iVarTwoIndex;
+		int iRowIndex;
+		String sKey;
+		double dValue;
+		Set keySet;
+		int iStringPostionOne, iStringPostionTwo;			
+
 		int* paiQCrows = osinstance->getQuadraticTerms()->rowIndexes;
 		int* paiQCcols1 = osinstance->getQuadraticTerms()->varOneIndexes;
 		int* paiQCcols2 = osinstance->getQuadraticTerms()->varTwoIndexes;
 		double* padQCcoef = osinstance->getQuadraticTerms()->coefficients;
+			
+		for ( i = 0; i < nQCnnz; i++){
+		 iRowIndex = paiQCrows[i];
+				
+		   if (iRowIndex >= -1){					
+			iVarOneIndex = (paiQCcols1[i] >= paiQCcols2[i])(?paiQCcols2[i]:paiQCcols1[i]);
+			iVarTwoIndex = (paiQCcols1[i] <= paiQCcols2[i])(?paiQCcols2[i]:paiQCcols1[i]);
+			sKey = iRowIndex + "," + iVarOneIndex + "," + iVarTwoIndex;
+				
+			mapPointer = mapQuadraticAdjustMap.find(sKey);	
+			if (pos != mapQuadraticAdjustMap.end()){
+			   dValue = pos->second;
+			   dValue += padQCcoef[i];
+			   mapQuadraticAdjustMap[sKey] = dValue;
+			}
+			else {						
+               		mapQuadraticAdjustMap[sKey] = padQCcoef[i];
+			}								
+		  }					
+		}
+			
+		keySet = mapQuadraticAdjustMap.keySet();
+			
+		iNumberOfQuadraticTerms = 0;
+		for (mapPointer = mapQuadraticAdjustMap.begin();  mapPointer != mapQuadraticAdjustMap.begin(); 			++mapPointer;){
+		  sKey = mapPointer->first;
+		  dValue = mapPointer->second;
+		  iStringPostionOne = sKey.find_first_of(','); 
+		  iStringPostionTwo = sKey.find_last_of(',');
+				
+		  iRowIndex = atoi(sKey.substr(0, iStringPostionOne));
+		  iVarOneIndex = atoi(sKey.substr(iStringPostionOne + 1, iStringPostionTwo));
+		  iVarTwoIndex = atoi(sKey.substr(iStringPostionTwo + 1));
+				
+		  if ( iVarOneIndex == iVarTwoIndex){					
+			dValue *= 2;
+     		  }
+		 		
+		  paiQCrows[iNumberOfQuadraticTerms] = iRowIndex;
+		  paiQCcols1[iNumberOfQuadraticTerms] = iVarOneIndex;
+		  paiQCcols2[iNumberOfQuadraticTerms] = iVarTwoIndex;
+				
+		  padQCcoef[iNumberOfQuadraticTerms] = dValue ;//lindo' AD assumes that there is a 0.5 in front of quadratic matrix.
+		  iNumberOfQuadraticTerms ++;
+		}
+				
 		if(!LSloadQCData(pModel_, nQCnnz, paiQCrows, paiQCcols1, 
 			paiQCcols2, padQCcoef)) return true;
 		else return false;
