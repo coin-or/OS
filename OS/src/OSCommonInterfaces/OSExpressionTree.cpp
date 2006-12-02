@@ -26,8 +26,7 @@ OSExpressionTree::OSExpressionTree():
 	m_bCppADTapeBuilt( false),
 	m_bIndexMapGenerated( false),
 	mapVarIdx( NULL),
-	f(NULL)
-	{
+	f(NULL){
 }//end OSExpressionTree
 
  

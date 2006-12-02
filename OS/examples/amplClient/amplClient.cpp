@@ -116,6 +116,7 @@ int main(int argc, char **argv)
 	 *      
 	 */
 	char *amplclient_options = NULL;
+	char *lindo_options = NULL;
 	// set solver type default to clp
 	DefaultSolver *solverType  = NULL;	
 	OSrLReader *osrlreader = NULL;
@@ -128,7 +129,9 @@ int main(int argc, char **argv)
 	std::string osol = "<osol></osol>";
 	// get the solver set by AMPLl
 	amplclient_options = getenv("amplClient_options");
-	cout << "HERE ARE THE AMPL CLIENT OPTIONS " <<   amplclient_options << endl;
+	if(amplclient_options != NULL) cout << "HERE ARE THE AMPL CLIENT OPTIONS " <<   amplclient_options << endl;
+	lindo_options = getenv("lindo_options");
+	if(lindo_options != NULL) cout << "HERE ARE THE LINDO OPTIONS " <<   lindo_options << endl;
 	try{
 		if(amplclient_options == NULL ) throw ErrorClass( "a local solver was not specified in AMPL option");
 		else{
@@ -200,14 +203,15 @@ int main(int argc, char **argv)
 		osrl = solverType->osrl;
 	}
 	// do the following for a remote solve
-	//OSSolverAgent* osagent = NULL;
-	//OSiLWriter *osilwriter = NULL;
-	//osilwriter = new OSiLWriter();
-	//std::string  osil = osilwriter->writeOSiL( osinstance);
-	//solverType->osil = osil;
-	//osagent = new OSSolverAgent("127.0.0.1:8080/os/ossolver/CoinSolverService.jws");
-	//cout << "Place remote synchronous call" << endl;
-	//osrl = osagent->solve(osil, osol);
+	if(lindo_options != NULL){
+		OSSolverAgent* osagent = NULL;
+		OSiLWriter *osilwriter = NULL;
+		osilwriter = new OSiLWriter();
+		std::string  osil = osilwriter->writeOSiL( osinstance);
+		osagent = new OSSolverAgent("http://128.135.130.17:8080/lindo/LindoSolverService.jws");
+		cout << "Place remote synchronous call" << endl;
+		osrl = osagent->solve(osil, osol);
+	}
 	// okay start to test osrl parser 
 	try{
 		cout << osrl << endl << endl <<endl;	

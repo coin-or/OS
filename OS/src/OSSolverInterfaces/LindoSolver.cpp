@@ -552,7 +552,7 @@ bool LindoSolver::processQuadraticTerms(){
 	int nQCnnz = osinstance->getNumberOfQuadraticTerms();
 	cout << "WE ARE PROCESSING QUADRATIC TERMS" << endl;
 	try{
-		if(nQCnnz  <= 0)return false;
+		/*if(nQCnnz  <= 0)return false;
 		std::map<string, double> mapQuadraticAdjustMap;
 		std::map<string, double>::iterator mapPointer;		
 
@@ -617,6 +617,7 @@ bool LindoSolver::processQuadraticTerms(){
 		if(!LSloadQCData(pModel_, nQCnnz, paiQCrows, paiQCcols1, 
 			paiQCcols2, padQCcoef)) return true;
 		else return false;
+		*/
 	}
 	catch(const ErrorClass& eclass){
 		osresult->setGeneralMessage( eclass.errormsg);
