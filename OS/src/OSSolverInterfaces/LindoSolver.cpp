@@ -23,6 +23,7 @@
 
 #include <time.h>
 #include <iostream>
+#include <sstream>
 #include<vector>
 #include <map>  
 
@@ -552,34 +553,41 @@ bool LindoSolver::processQuadraticTerms(){
 	int nQCnnz = osinstance->getNumberOfQuadraticTerms();
 	cout << "WE ARE PROCESSING QUADRATIC TERMS" << endl;
 	try{
-		/*if(nQCnnz  <= 0)return false;
-		std::map<string, double> mapQuadraticAdjustMap;
-		std::map<string, double>::iterator mapPointer;		
+		if(nQCnnz  <= 0)return false;
+		std::map<std::string, double> mapQuadraticAdjustMap;
+		std::map<std::string, double>::iterator mapPointer;		
 
-
+		int i;
 		int iVarOneIndex, iVarTwoIndex;
 		int iRowIndex;
-		String sKey;
+		std::string sKey;
 		double dValue;
-		Set keySet;
+		
 		int iStringPostionOne, iStringPostionTwo;			
 
 		int* paiQCrows = osinstance->getQuadraticTerms()->rowIndexes;
 		int* paiQCcols1 = osinstance->getQuadraticTerms()->varOneIndexes;
 		int* paiQCcols2 = osinstance->getQuadraticTerms()->varTwoIndexes;
 		double* padQCcoef = osinstance->getQuadraticTerms()->coefficients;
-			
+		std::ostringstream ostrRow, ostr1, ostr2; 
+		std::string sIndexRow, sIndex1, sIndex2;
+
 		for ( i = 0; i < nQCnnz; i++){
 		 iRowIndex = paiQCrows[i];
 				
 		   if (iRowIndex >= -1){					
-			iVarOneIndex = (paiQCcols1[i] >= paiQCcols2[i])(?paiQCcols2[i]:paiQCcols1[i]);
-			iVarTwoIndex = (paiQCcols1[i] <= paiQCcols2[i])(?paiQCcols2[i]:paiQCcols1[i]);
-			sKey = iRowIndex + "," + iVarOneIndex + "," + iVarTwoIndex;
+			iVarOneIndex = (paiQCcols1[i] >= paiQCcols2[i])?paiQCcols2[i]:paiQCcols1[i];
+			iVarTwoIndex = (paiQCcols1[i] <= paiQCcols2[i])?paiQCcols2[i]:paiQCcols1[i];
+			ostrRow << iRowIndex; ostr2<<iVarTwoIndex; ostr1<<iVarOneIndex;
+			sIndexRow = ostrRow.str();sIndex2 = ostr2.str(); sIndex1 = ostr1.str();
+
+			ostrRow.str("");ostr2.str("");ostr1.str("");
+			
+			sKey = sIndexRow + "," + sIndex1 + "," + sIndex2;
 				
 			mapPointer = mapQuadraticAdjustMap.find(sKey);	
-			if (pos != mapQuadraticAdjustMap.end()){
-			   dValue = pos->second;
+			if (mapPointer != mapQuadraticAdjustMap.end()){
+			   dValue = mapPointer->second;
 			   dValue += padQCcoef[i];
 			   mapQuadraticAdjustMap[sKey] = dValue;
 			}
@@ -588,19 +596,17 @@ bool LindoSolver::processQuadraticTerms(){
 			}								
 		  }					
 		}
-			
-		keySet = mapQuadraticAdjustMap.keySet();
-			
-		iNumberOfQuadraticTerms = 0;
-		for (mapPointer = mapQuadraticAdjustMap.begin();  mapPointer != mapQuadraticAdjustMap.begin(); 			++mapPointer;){
+						
+		int iNumberOfQuadraticTerms = 0;
+		for (mapPointer = mapQuadraticAdjustMap.begin();  mapPointer != mapQuadraticAdjustMap.end(); 			++mapPointer){
 		  sKey = mapPointer->first;
 		  dValue = mapPointer->second;
-		  iStringPostionOne = sKey.find_first_of(','); 
+		  iStringPostionOne = sKey.find_first_of(',');       
 		  iStringPostionTwo = sKey.find_last_of(',');
 				
-		  iRowIndex = atoi(sKey.substr(0, iStringPostionOne));
-		  iVarOneIndex = atoi(sKey.substr(iStringPostionOne + 1, iStringPostionTwo));
-		  iVarTwoIndex = atoi(sKey.substr(iStringPostionTwo + 1));
+		  iRowIndex = atoi(sKey.substr(0, iStringPostionOne).c_str());
+		  iVarOneIndex = atoi(sKey.substr(iStringPostionOne + 1, iStringPostionTwo).c_str());
+		  iVarTwoIndex = atoi(sKey.substr(iStringPostionTwo + 1).c_str());
 				
 		  if ( iVarOneIndex == iVarTwoIndex){					
 			dValue *= 2;
@@ -617,7 +623,6 @@ bool LindoSolver::processQuadraticTerms(){
 		if(!LSloadQCData(pModel_, nQCnnz, paiQCrows, paiQCcols1, 
 			paiQCcols2, padQCcoef)) return true;
 		else return false;
-		*/
 	}
 	catch(const ErrorClass& eclass){
 		osresult->setGeneralMessage( eclass.errormsg);
