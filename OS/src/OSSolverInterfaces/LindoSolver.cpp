@@ -127,6 +127,11 @@ void LindoSolver::solve()  {
 			osinstance = osilreader->readOSiL( &osil);
 		}
 		OSiLWriter osilwriter;
+
+		if (osinstance->instanceData->constraints->numberOfConstraints <= 0){
+			osinstance->addConstraint(0, "dummyConstraint", 0, 0, 0);
+		}		
+
 		//cout << osilwriter.writeOSiL( osinstance) << endl;
 		if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Lindo requires decision variables");
 		finish = clock();
@@ -162,12 +167,18 @@ bool LindoSolver::processConstraints(){
 	int i;
 	m_iNumberNewSlacks = 0;
 	try{
+		
+			
 		m_mdConLB = osinstance->getConstraintLowerBounds();
 		m_mdConUB = osinstance->getConstraintUpperBounds();
 		m_msConName = osinstance->getConstraintNames();
 		m_mdRhsValue = new double[ osinstance->getConstraintNumber()];
 		m_miSlackIdx = new int[ osinstance->getConstraintNumber()];
 		m_mcRowType = osinstance->getConstraintTypes();
+		
+
+		
+
 		for(i = 0; i < osinstance->getConstraintNumber(); i++){
 			switch( m_mcRowType[ i] ){
 				case 'E':
