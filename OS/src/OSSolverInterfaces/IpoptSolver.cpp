@@ -62,7 +62,7 @@ bool IpoptSolver::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 	// nonzeros in jacobian
 	SparseJacobianMatrix *sparseJacobian = osinstance->getJacobianSparsityPattern();
 	nnz_jac_g = sparseJacobian->valueSize;
-	cout << "nnz_jac_g  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_jac_g << endl;	
+	//cout << "nnz_jac_g  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_jac_g << endl;	
 	// nonzeros in upper hessian
 	
 	if( (osinstance->getNumberOfNonlinearExpressions() == 0) && (osinstance->getNumberOfQuadraticTerms() == 0) ) {
@@ -73,7 +73,7 @@ bool IpoptSolver::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 		SparseHessianMatrix *sparseHessian = osinstance->getLagrangianHessianSparsityPattern();
 		nnz_h_lag = sparseHessian->hessDimension;
 	}
-	cout << "nnz_h_lag  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_h_lag << endl;	
+	//cout << "nnz_h_lag  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_h_lag << endl;	
 	// use the C style indexing (0-based)
 	index_style = TNLP::C_STYLE;
   
@@ -94,8 +94,8 @@ bool IpoptSolver::get_bounds_info(Index n, Number* x_l, Number* x_u,
 	for(i = 0; i < n; i++){
 		x_l[ i] = mdVarLB[ i];
 		x_u[ i] = mdVarUB[ i];
-		cout << "x_l !!!!!!!!!!!!!!!!!!!!!!!!!!!" << x_l[i] << endl;
-		cout << "x_u !!!!!!!!!!!!!!!!!!!!!!!!!!!" << x_u[i] << endl;
+		//cout << "x_l !!!!!!!!!!!!!!!!!!!!!!!!!!!" << x_l[i] << endl;
+		//cout << "x_u !!!!!!!!!!!!!!!!!!!!!!!!!!!" << x_u[i] << endl;
 	}
 	// Ipopt interprets any number greater than nlp_upper_bound_inf as
 	// infinity. The default value of nlp_upper_bound_inf and nlp_lower_bound_inf
@@ -110,8 +110,8 @@ bool IpoptSolver::get_bounds_info(Index n, Number* x_l, Number* x_u,
 	for(int i = 0; i < m; i++){
 		g_l[ i] = mdConLB[ i];
 		g_u[ i] = mdConUB[ i];
-		cout << "lower !!!!!!!!!!!!!!!!!!!!!!!!!!!" << g_l[i] << endl;
-		cout << "upper !!!!!!!!!!!!!!!!!!!!!!!!!!!" << g_u[i] << endl;
+		//cout << "lower !!!!!!!!!!!!!!!!!!!!!!!!!!!" << g_l[i] << endl;
+		//cout << "upper !!!!!!!!!!!!!!!!!!!!!!!!!!!" << g_u[i] << endl;
 	}  
   	return true;
 }//get_bounds_info
@@ -128,12 +128,12 @@ bool IpoptSolver::get_starting_point(Index n, bool init_x, Number* x,
   	assert(init_z == false);
   	assert(init_lambda == false);
   	int i;
-  	cout << "get initial values !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
+  	//cout << "get initial values !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
  	double *mdXInit = osinstance->getVariableInitialValues(); 
  	if( mdXInit != NULL) {
  		for(i = 0; i < n; i++){
  			x[ i] = mdXInit[ i];
- 			std::cout << "INITIAL VALUE !!!!!!!!!!!!!!!!!!!!  " << x[ i] << std::endl;	
+ 			//std::cout << "INITIAL VALUE !!!!!!!!!!!!!!!!!!!!  " << x[ i] << std::endl;	
  		}	
  	}
  	else{
@@ -141,7 +141,7 @@ bool IpoptSolver::get_starting_point(Index n, bool init_x, Number* x,
  			x[ i] = 1.7171;
  		}
  	}
-  	cout << "got initial values !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
+  	//cout << "got initial values !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
   	return true;
 }//get_starting_point
 
@@ -151,7 +151,8 @@ bool IpoptSolver::eval_f(Index n, const Number* x, bool new_x, Number& obj_value
 	obj_value = osinstance->calculateFunctionValue(-1, (double*)x, false);
 	if( CommonUtil::ISOSNAN( (double)obj_value) ) return false;
 	//for(int i = 0; i < n; i++) cout << "x[ i] =  !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  x[ i]  << endl;
-	//cout << "calculated function value !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  obj_value  << endl;
+	cout << "calculated function value !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  obj_value  << endl;
+	cout << "calculated function value !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  osinstance->calculateFunctionValue(-1, (double*)x, false)  << endl;
   	return true;
 }
 
@@ -187,7 +188,7 @@ bool IpoptSolver::eval_jac_g(Index n, const Number* x, bool new_x,
   SparseJacobianMatrix *sparseJacobian;
 
 	if (values == NULL) {
-		cout << "get structure of Jacobian !!!!!!!!!!!!!!!!!!!!!!!!!! "  << endl;
+		//cout << "get structure of Jacobian !!!!!!!!!!!!!!!!!!!!!!!!!! "  << endl;
 		// return the values of the jacobian of the constraints
 		cout << "n: " << n << endl;
 		cout << "m: " << m << endl;

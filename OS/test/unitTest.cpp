@@ -5,6 +5,9 @@
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  */ 
+ 
+ 
+#include<stdlib.h>
 #include <OsiSolverInterface.hpp>   
 #include <CoinMessageHandler.hpp> 
 #include <CoinPackedMatrix.hpp> 
@@ -15,6 +18,7 @@
 using std::cout;
 using std::endl;
 
+#include <CppAD/CppAD.h>
 #include "OSResult.h" 
 #include "OSiLReader.h"       
 #include "OSiLWriter.h" 
@@ -45,14 +49,17 @@ using std::endl;
 #include "CoinHelperFunctions.hpp"
 #include <time.h>
 #include <sstream>
+
+double getObjVal(std::string osrl);
   
 #include "OsiClpSolverInterface.hpp" 
 
 int main(int argC, char* argV[])
 {
+	using CppAD::NearEqual;
+	bool ok;
+	double check;
 	cout << "START UNIT TEST" << endl;
-	//char *xmlFile; 
-	//xmlFile = argV[ 1];
 	// define the classes
 	FileUtil *fileUtil = NULL;  
 	#ifdef COIN_HAS_ASL
@@ -65,6 +72,7 @@ int main(int argC, char* argV[])
 	std::string ipOptFileName;
 	std::string nlFileName; 
 	std::string lindoFileName;
+	std::string cbcFileName;
 	std::string mpsFileName;     
 	std::string parserTestOSiLFileName;
 	std::string osil;
@@ -81,8 +89,7 @@ int main(int argC, char* argV[])
 	//ipOptFileName =  dataDir + "rosenbrock.osil";
 	//ipOptFileName =  dataDir + "blockqp1.osil";
 	ipOptFileName =  dataDir + "avion2.osil";
-	//lindoFileName = dataDir + "lindoapiaddins.osil";
-	lindoFileName = dataDir + "HS071_NLP.osil";
+	lindoFileName = dataDir + "lindoapiaddins.osil";
 	//lindoFileName = dataDir + "blockqp1.osil";
 	//lindoFileName = dataDir + "aircrafta.osil";
 	nlFileName = dataDir + "hs71.nl";
@@ -95,47 +102,125 @@ int main(int argC, char* argV[])
 	cout << "create a new IPOPT Solver for OSiL string solution" << endl;
 	SmartPtr<IpoptSolver> ipoptSolver  = new IpoptSolver();	
 	try{
+		ok = true;
+		OSiLReader *osilreader = NULL;
+		ipOptFileName =  dataDir + "avion2.osil";
+		// this problem has both nl terms and a linearConstraintsCoefficient section 
 		osil = fileUtil->getFileAsString( &ipOptFileName[0]);
 		cout << "IPOPT Solver created for OSiL string solution" << endl;
-		//ipoptSolver->osil = osil;
 		ipoptSolver->osol = osol;
-		OSiLReader *osilreader = NULL;
 		osilreader = new OSiLReader(); 
 		ipoptSolver->osinstance = osilreader->readOSiL( &osil);
 		cout << "call the IPOPT Solver" << endl;
 		ipoptSolver->solve();
-		cout << "Here is the IPOPT solver solution" << endl;
-		cout << ipoptSolver->osrl << endl;
+		cout << "Here is the IPOPT solver solution for avion2" << endl;
+		check = 9.46801e+07;
+		ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-10 , 1e-10);
+		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on avion2");
+		delete osilreader;
+		osilreader = NULL;
+		// solve another problem
+		// a problem with all nonlinear terms no linear terms
+		ipOptFileName =  dataDir + "HS071_NLP.osil";
+		osil = fileUtil->getFileAsString( &ipOptFileName[0]);
+		cout << "IPOPT Solver created for OSiL string solution" << endl;
+		ipoptSolver->osol = osol;
+		osilreader = new OSiLReader(); 
+		ipoptSolver->osinstance = osilreader->readOSiL( &osil);
+		cout << "call the IPOPT Solver" << endl;
+		ipoptSolver->solve();
+		cout << "Here is the IPOPT solver solution for HS071_NLP" << endl;
+		check = 17.014;
+		ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-10 , 1e-10);
+		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on HS071_NLP");
+		delete osilreader;
+		osilreader = NULL;		
+		// solve another problem
+		// a problem with just an objective function
+		ipOptFileName =  dataDir + "rosenbrock.osil";
+		osil = fileUtil->getFileAsString( &ipOptFileName[0]);
+		cout << "IPOPT Solver created for OSiL string solution" << endl;
+		ipoptSolver->osol = osol;
+		osilreader = new OSiLReader(); 
+		ipoptSolver->osinstance = osilreader->readOSiL( &osil);
+		cout << "call the IPOPT Solver" << endl;
+		ipoptSolver->solve();
+		cout << "Here is the IPOPT solver solution for rosenbrock" << endl;
+		check = 0.0;
+		ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-10 , 1e-10);
+		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on rosenbrock");
+		delete osilreader;
+		osilreader = NULL;	
+		// solve another problem
+		// try a pure linear program
+		ipOptFileName =  dataDir + "parincLinear.osil";
+		osil = fileUtil->getFileAsString( &ipOptFileName[0]);
+		cout << "IPOPT Solver created for OSiL string solution" << endl;
+		ipoptSolver->osol = osol;
+		osilreader = new OSiLReader(); 
+		ipoptSolver->osinstance = osilreader->readOSiL( &osil);
+		cout << "call the IPOPT Solver" << endl;
+		ipoptSolver->solve();
+		cout << "Here is the IPOPT solver solution for parincLinear" << endl;
+		check = 7668;
+		ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-1 , 1e-1);
+		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on parincLinear");
+		delete osilreader;
+		osilreader = NULL;			
+		// not we do not delete ipoptSolver -- this is a smart pointer
+		//delete m_Solver;
+		//m_Solver = NULL;			
 		// not we do not delete ipoptSolver -- this is a smart pointer
 		//delete m_Solver;
 		//m_Solver = NULL;	
 	}
 	catch(const ErrorClass& eclass){
-		cout << "OSrL =  " <<  ipoptSolver->osrl <<  endl;
 		cout << endl << endl << endl;
-		cout << "Sorry Unit Test Failed Testing the Ipopt Solver" << endl;
+		cout << "Sorry Unit Test Failed Testing the Ipopt Solver:"  + eclass.errormsg<< endl;
+		//cout << "OSrL =  " <<  ipoptSolver->osrl <<  endl;
 		return 0;
 	}
 	#endif
-		cout << "Create a new COIN Solver" << endl;
-		m_Solver = new CoinSolver();
 	try{
-		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		ok = true;
+		cbcFileName = dataDir + "parincLinear.osil";
+		osil = fileUtil->getFileAsString( &cbcFileName[0]);
+		m_Solver = new CoinSolver();
 		m_Solver->m_sSolverName = "cbc";
 		m_Solver->osil = osil;
 		m_Solver->osol = osol;  
 		m_Solver->osinstance = NULL; 
-		cout << "call the COIN Solver" << endl;
+		cout << "call the COIN - Cbc Solver for parincLinear" << endl;
 		m_Solver->solve();
-		cout << "Here is the COIN solver solution" << endl;
-		cout << m_Solver->osrl << endl;
-		m_Solver->osinstance = NULL;
+		cout << "Here is the COIN Cbc solver solution for parincLinear" << endl;
+		//cout << m_Solver->osrl << endl;
+		check = 7668;
+		ok &= NearEqual(getObjVal( m_Solver->osrl) , check,  1e-1 , 1e-1);
+		if(ok == false) throw ErrorClass(" Fail unit test with Cbc on parincLinear");
 		delete m_Solver;
 		m_Solver = NULL;
 		cout << "solution using an OSiL string a success" << endl;
+		// now solve another problem -- try an integer program
+		// this problem is also stored in base64 binary
+		cbcFileName = dataDir + "p0033.mps_osil";
+		osil = fileUtil->getFileAsString( &cbcFileName[0]);
+		m_Solver = new CoinSolver();
+		m_Solver->m_sSolverName = "cbc";
+		m_Solver->osil = osil;
+		m_Solver->osol = osol;  
+		m_Solver->osinstance = NULL; 
+		cout << "call the COIN - Cbc Solver for p0033" << endl;
+		m_Solver->solve();
+		cout << "Here is the COIN Cbc solver solution for p0033" << endl;
+		//cout << m_Solver->osrl << endl;
+		check = 3089;
+		ok &= NearEqual(getObjVal( m_Solver->osrl) , check,  1e-1 , 1e-1);
+		if(ok == false) throw ErrorClass(" Fail unit test with Cbc on p0033");
+		delete m_Solver;
+		m_Solver = NULL;
 	}
 	catch(const ErrorClass& eclass){
-		cout << "OSrL =  " <<  m_Solver->osrl <<  endl;
+		//cout << "OSrL =  " <<  m_Solver->osrl <<  endl;
 		cout << endl << endl << endl;
 		cout << "Sorry Unit Test Failed Testing the Cbc Solver" << endl;
 		return 0;
@@ -158,7 +243,7 @@ int main(int argC, char* argV[])
 		
 	}
 	catch(const ErrorClass& eclass){
-		cout << "OSrL =  " <<  m_Solver->osrl <<  endl;
+		//cout << "OSrL =  " <<  m_Solver->osrl <<  endl;
 		cout << endl << endl << endl;
 		cout << "Sorry Unit Test Failed Testing the Lindo Solver" << endl;
 		//return 0;
@@ -369,4 +454,28 @@ int main(int argC, char* argV[])
 	cout << endl << endl << endl;
 	cout << "Congratulations: you passed the unit Test" << endl;
 	return 0;	
+}
+
+double getObjVal( std::string osrl){
+	std::string sObjVal;
+	double dObjVal;
+	int pos2;
+	int pos1 = osrl.find( "<obj ");
+	if(pos1 != std::string::npos){
+		// get the end of the obj start tag
+		pos1 = osrl.find(">", pos1 + 1);
+		if(pos1 != std::string::npos){
+			// get the start of obj end tag
+			pos2 = osrl.find( "</obj", pos1 + 1);
+			if( pos2 != std::string::npos){
+				// get the substrind
+				sObjVal = osrl.substr( pos1 + 1, pos2 - pos1 - 1);
+				//std::cout << "HERE IS THE OBJECTIVE FUNCTION VALUE SUBSTRING  " << sObjVal<< std::endl; 
+				return dObjVal = atof( sObjVal.c_str() ); 
+			}
+			else return OSNAN;
+		}
+		else return OSNAN;
+	}
+	else return OSNAN;
 }
