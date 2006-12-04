@@ -61,9 +61,9 @@ int main(int argC, const char* argV[])
 	osoptions = new osOptionsStruc();
 	osoptions->configFile = NULL; 
 	osoptions->osilFile = NULL; 
-	osoptions->osil = NULL; 
+	osoptions->osil = ""; 
 	osoptions->osolFile = NULL; 
-	osoptions->osol = NULL; 
+	osoptions->osol = ""; 
 	osoptions->osrlFile = NULL; 
 	osoptions->osrl = NULL; 
 	osoptions->insListFile = NULL; 
@@ -168,7 +168,7 @@ void solve(){
 			// place a remote call
 			osagent = new OSSolverAgent( osoptions->serviceLocation );
 			if(osoptions->osrlFile != NULL) fileUtil->writeFileFromString(osoptions->osrlFile, osagent->solve(osoptions->osil  , osoptions->osol));
-			else cout << osagent->solve(osoptions->osil, osoptions->osol) << endl;
+			else cout << osagent->solve( osoptions->osil, osoptions->osol) << endl;
 		}
 		else{
 			// solve locally

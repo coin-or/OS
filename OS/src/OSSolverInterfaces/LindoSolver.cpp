@@ -129,7 +129,10 @@ void LindoSolver::solve()  {
 		OSiLWriter osilwriter;
 
 		if (osinstance->instanceData->constraints->numberOfConstraints <= 0){
+			std::cout << "HERE I AM 1 !!!!!!!!!!!!!!!!!!!" << std::endl;
+			osinstance->setConstraintNumber(1);
 			osinstance->addConstraint(0, "dummyConstraint", 0, 0, 0);
+			std::cout << "HERE I AM 2 !!!!!!!!!!!!!!!!!!!" << std::endl;
 		}		
 
 		//cout << osilwriter.writeOSiL( osinstance) << endl;

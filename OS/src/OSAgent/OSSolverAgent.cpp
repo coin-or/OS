@@ -31,7 +31,10 @@ OSSolverAgent::OSSolverAgent(string solverURI) : OShL() {
 	postURI = solverURI.substr(nstart, solverURI.size() - 1);
 	// Do we have a port number
 	int colonlocation = solverURI.find(":");
-	if(colonlocation == string::npos) solverAddress = solverURI.substr(0, nstart);
+	if(colonlocation == string::npos) {
+		solverAddress = solverURI.substr(0, nstart);
+		solverPortNumber = 80;
+	}
 	else{
 		solverPortNumber = atoi( &solverURI.substr(colonlocation + 1, nstart - colonlocation - 1)[0] ) ;
 		solverAddress = solverURI.substr(0, colonlocation);
@@ -60,7 +63,9 @@ string OSSolverAgent::solve(string osil, string osol){
 	theSOAP = WSUtil::createSOAPMessage(numInputs, solverAddress, postURI, 
 				smethod, msInputs, msInputNames, sSoapAction);
 	// send the soap to the HTTP server
+	std::cout << "SEND THE SOAP " << std::endl;
 	solveResult = WSUtil::sendSOAPMessage( theSOAP, solverAddress, solverPortNumber);
+	std::cout << "DONE SENDING THE SOAP " << std::endl;
 	// desoapify the result -- i.e. replace &lt; with <  etc.
 	solveResult = WSUtil::deSOAPify( solveResult);
 	// strip out the OSxL that we want from the SOAP envelope

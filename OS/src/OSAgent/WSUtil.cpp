@@ -15,7 +15,7 @@
  */ 
 #include "WSUtil.h"
 #include "OSConfig.h"
-
+#define DEBUG
 #ifdef WIN_
 //#define NOMINMAX
 #include <winsock.h>
@@ -87,7 +87,7 @@ string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned int se
 		#endif
 		httpStringLen = strlen( message);   
 		#ifdef DEBUG
-		cout << message << endl;
+		//cout << message << endl;
 		#endif
 		/* Send the string to the server */	
 		if (send(sock, message, httpStringLen, 0) != httpStringLen)
@@ -104,6 +104,7 @@ string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned int se
 				throw ErrorClass( "socket error receiving data");
 			#ifdef DEBUG
 			cout << "Message size =  " << recvMsgSize << endl;
+			cout << "Message = " << httpBuffer << endl;
 			#endif
 			httpBuffer[ recvMsgSize ] = '\0';
 			ret_message << httpBuffer;
