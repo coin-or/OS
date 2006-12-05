@@ -167,7 +167,7 @@ int main(int argc, char **argv)
 							else{
 								if( strstr(amplclient_options, "ipopt") != NULL){
 									// have to act differently since Ipopt uses smart pointers
-									// we are requesting the Lindo solver
+									// we are requesting the Ipopt solver
 									bool bIpoptIsPresent = false;
 									#ifdef COIN_HAS_IPOPT
 									bIpoptIsPresent = true;

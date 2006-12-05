@@ -183,7 +183,7 @@ int main(int argC, char* argV[])
 	#endif
 	try{
 		ok = true;
-		cbcFileName = dataDir + "osa-60_unindented.osil";
+		cbcFileName = dataDir + "parincLinear.osil";
 		osil = fileUtil->getFileAsString( &cbcFileName[0]);
 		m_Solver = new CoinSolver();
 		m_Solver->m_sSolverName = "cbc";
@@ -191,27 +191,12 @@ int main(int argC, char* argV[])
 		m_Solver->osol = osol;  
 		m_Solver->osinstance = NULL; 
 		cout << "call the COIN - Cbc Solver for parincLinear" << endl;
-		//m_Solver->solve();
+		m_Solver->solve();
 		cout << "Here is the COIN Cbc solver solution for parincLinear" << endl;
-		//cout << m_Solver->osrl << endl;
-		//check = 7668;
-		//ok &= NearEqual(getObjVal( m_Solver->osrl) , check,  1e-1 , 1e-1);
-		//if(ok == false) throw ErrorClass(" Fail unit test with Cbc on parincLinear");
-		//
-		//
-		OSiLReader *osilreader = NULL;
-		osilreader = new OSiLReader();	
-		std::string tmp = m_Solver->osil;
-		OSiLWriter osilwriter;
-		osilwriter.m_bWriteBase64 = true;
-		m_Solver->osinstance = NULL;
-		m_Solver->osinstance = osilreader->readOSiL( &tmp );
-		m_Solver->osil = osilwriter.writeOSiL( m_Solver->osinstance) ;		
-		std::string outputfile = "/Users/kmartin/temp/osa60b64.osil";
-		char* testfile = &outputfile[0];
-		fileUtil->writeFileFromString(testfile,  m_Solver->osil);	
-		//
-		//
+		cout << m_Solver->osrl << endl;
+		check = 7668;
+		ok &= NearEqual(getObjVal( m_Solver->osrl) , check,  1e-1 , 1e-1);
+		if(ok == false) throw ErrorClass(" Fail unit test with Cbc on parincLinear");
 		delete m_Solver;
 		m_Solver = NULL;
 		cout << "solution using an OSiL string a success" << endl;

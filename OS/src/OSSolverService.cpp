@@ -172,52 +172,74 @@ void solve(){
 		}
 		else{
 			// solve locally
+			std::string osrl;
 			// add IPOPT
 			if(osoptions->solverName == NULL ) throw ErrorClass( "a local solver was not specified");
-			if( strstr(osoptions->solverName, "lindo") != NULL) {
+			if( strstr(osoptions->solverName, "ipopt") != NULL) {
 				// we are requesting the Lindo solver
-				bool bLindoIsPresent = false;
-				#ifdef COIN_HAS_LINDO
-				bLindoIsPresent = true;
-				solverType = new LindoSolver();
+				bool bIpoptIsPresent = false;
+				#ifdef COIN_HAS_IPOPT
+				bIpoptIsPresent = true;
+				SmartPtr<IpoptSolver> ipoptSolver  = new IpoptSolver();	
+				ipoptSolver->osol = osoptions->osol;
+				ipoptSolver->osil = osoptions->osil;
+				ipoptSolver->osinstance = NULL;
+				ipoptSolver->solve();
+				//std::cout << "Done optimizing with Ipopt"<< std::endl;
+				osrl = ipoptSolver->osrl ;
+				//std::cout << "Have Ipopt write out osrl"<< std::endl;
 				#endif
-				if(bLindoIsPresent == false) throw ErrorClass( "the Lindo solver requested is not present");
+				if(bIpoptIsPresent == false) throw ErrorClass( "the Ipopt solver requested is not present");
 			}
-			else{ 
-				if( strstr(osoptions->solverName, "clp") != NULL){
-					solverType = new CoinSolver();
-					solverType->m_sSolverName = "clp";
+			else{
+				if( strstr(osoptions->solverName, "lindo") != NULL) {
+					// we are requesting the Lindo solver
+					bool bLindoIsPresent = false;
+					#ifdef COIN_HAS_LINDO
+					bLindoIsPresent = true;
+					solverType = new LindoSolver();
+					#endif
+					if(bLindoIsPresent == false) throw ErrorClass( "the Lindo solver requested is not present");
 				}
-				else{
-					if( strstr(osoptions->solverName, "cbc") != NULL){
+				else{ 
+					if( strstr(osoptions->solverName, "clp") != NULL){
 						solverType = new CoinSolver();
-						solverType->m_sSolverName = "cbc";
+						solverType->m_sSolverName = "clp";
 					}
 					else{
-						if( strstr(osoptions->solverName, "cplex") != NULL){
+						if( strstr(osoptions->solverName, "cbc") != NULL){
 							solverType = new CoinSolver();
-							solverType->m_sSolverName = "cplex";
+							solverType->m_sSolverName = "cbc";
 						}
 						else{
-							if( strstr(osoptions->solverName, "glpk") != NULL){
+							if( strstr(osoptions->solverName, "cplex") != NULL){
 								solverType = new CoinSolver();
-								solverType->m_sSolverName = "glpk";
+								solverType->m_sSolverName = "cplex";
 							}
 							else{
-								throw ErrorClass( "a supported solver is not present");
+								if( strstr(osoptions->solverName, "glpk") != NULL){
+									solverType = new CoinSolver();
+									solverType->m_sSolverName = "glpk";
+								}
+								else{
+									throw ErrorClass( "a supported solver is not present");
+								}
 							}
 						}
 					}
 				}
 			}
-			solverType->osil = osoptions->osil;
-			solverType->osol = osoptions->osol;
-			solverType->osinstance = NULL;
-			cout << "CALL SOLVER" << endl;
-			solverType->solve();
-			cout << "RETURN FROM SOLVER" << endl;
+			if( strstr(osoptions->solverName, "ipopt") == NULL){
+				solverType->osil = osoptions->osil;
+				solverType->osol = osoptions->osol;
+				solverType->osinstance = NULL;
+				cout << "CALL SOLVER" << endl;
+				solverType->solve();
+				osrl = solverType->osrl;
+				cout << "RETURN FROM SOLVER" << endl;
+			}
 			if(osoptions->osrlFile != NULL){
-				fileUtil->writeFileFromString(osoptions->osrlFile, solverType->osrl);
+				fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
 				//char *ch1 = "/Applications/Firefox.app/Contents/MacOS/firefox  ";
 				//const char *ch2 ="aadfafadfaf";
       			//std::cout << strcat(ch1, ch2) << std::endl;
@@ -233,7 +255,7 @@ void solve(){
       			ch2 = strcat(ch2, osoptions->osrlFile);
 				std::system(ch2  );
 			}
-			else cout << solverType->osrl << endl;
+			else cout << osrl << endl;
 		}
 	}
 	catch(const ErrorClass& eclass){
