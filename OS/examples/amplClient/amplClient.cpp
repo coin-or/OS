@@ -208,7 +208,7 @@ int main(int argc, char **argv)
 		OSiLWriter *osilwriter = NULL;
 		osilwriter = new OSiLWriter();
 		std::string  osil = osilwriter->writeOSiL( osinstance);
-		osagent = new OSSolverAgent("http://128.135.130.17:8080/lindo/LindoSolverService.jws");
+		osagent = new OSSolverAgent( lindo_options);
 		cout << "Place remote synchronous call" << endl;
 		osrl = osagent->solve(osil, osol);
 	}
