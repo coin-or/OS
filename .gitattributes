@@ -1068,7 +1068,6 @@ OSMain/.settings/org.eclipse.jdt.core.prefs -text
 OSMain/.settings/org.eclipse.jdt.ui.prefs -text
 OSMain/.umlproject -text
 OSMain/META-INF/MANIFEST.MF -text
-OSMain/bin/Test.class -text
 OSMain/src/Test.java -text
 OSModeler/.classpath -text
 OSModeler/.project -text
