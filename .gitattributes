@@ -1108,8 +1108,6 @@ OSRegistry/.umlproject -text
 OSRegistry/META-INF/MANIFEST.MF -text
 OSRegistry/OSRegistry.jpx -text
 OSRegistry/OSRegistry.jpx.local -text
-OSRegistry/bin/org/optimizationservices/osregistry/api/CGRegistryService.class -text
-OSRegistry/bin/org/optimizationservices/osregistry/api/NEOSRegistryService.class -text
 OSRegistry/src/org/optimizationservices/osregistry/api/CGRegistryService.java -text
 OSRegistry/src/org/optimizationservices/osregistry/api/NEOSRegistryService.java -text
 OSScheduler/.classpath -text
