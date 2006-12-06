@@ -32,7 +32,6 @@
 /LICENSE.txt -text
 OSAnalyzer/.classpath -text
 OSAnalyzer/.project -text
-OSAnalyzer/bin/org/optimizationservices/osanalyzer/api/DrAMPLAnalyzerService.class -text
 OSAnalyzer/src/org/optimizationservices/osanalyzer/api/DrAMPLAnalyzerService.java -text
 OSCommon/.classpath -text
 OSCommon/.project -text
