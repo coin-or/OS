@@ -30,9 +30,10 @@ amplClient_LDADD =  \
 	$(CBCOBJDIR)/src/libCbc.la \
 	$(CGLOBJDIR)/src/libCgl.la \
 	$(OSOBJDIR)/src/libOS.la \
-	$(OSOBJDIR)/src/OSModelInterfaces/libOSModelInterfaces.la 
-
-
+	$(OSOBJDIR)/src/OSModelInterfaces/libOSModelInterfaces.la \
+	$(WINSOCKLIB)
+	
+	
 
 
 
