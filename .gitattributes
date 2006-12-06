@@ -1114,7 +1114,6 @@ OSScheduler/.classpath -text
 OSScheduler/.project -text
 OSScheduler/.umlproject -text
 OSScheduler/META-INF/MANIFEST.MF -text
-OSScheduler/bin/org/optimizationservices/osscheduler/api/CGSchedulerService.class -text
 OSScheduler/src/org/optimizationservices/osscheduler/api/CGSchedulerService.java -text
 OSSimulation/.classpath -text
 OSSimulation/.project -text
