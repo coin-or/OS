@@ -202,7 +202,7 @@ int main(int argC, char* argV[])
 		cout << "solution using an OSiL string a success" << endl;
 		// now solve another problem -- try an integer program
 		// this problem is also stored in base64 binary
-		cbcFileName = dataDir + "p0033.mps_osil";
+		cbcFileName = dataDir + "p0033.osil";
 		osil = fileUtil->getFileAsString( &cbcFileName[0]);
 		m_Solver = new CoinSolver();
 		m_Solver->m_sSolverName = "cbc";
