@@ -26,7 +26,7 @@ generate file name, do the following:
    model hs71.mod;
    option solver amplClient;
    option amplClient_options "solver lindo";
-   option lindo_options "<<any options for the lindo solver>>";
+   option lindo_options "http://128.135.130.17:8080/lindo/LindoSolverService.jws";
    write gtestfile;
    solve;
 	
@@ -116,7 +116,7 @@ int main(int argc, char **argv)
 	 *      
 	 */
 	char *amplclient_options = NULL;
-	char *lindo_options = NULL;
+	char *agent_address = NULL;
 	// set solver type default to clp
 	DefaultSolver *solverType  = NULL;	
 	OSrLReader *osrlreader = NULL;
@@ -130,8 +130,8 @@ int main(int argc, char **argv)
 	// get the solver set by AMPLl
 	amplclient_options = getenv("amplClient_options");
 	if(amplclient_options != NULL) cout << "HERE ARE THE AMPL CLIENT OPTIONS " <<   amplclient_options << endl;
-	lindo_options = getenv("lindo_options");
-	if(lindo_options != NULL) cout << "HERE ARE THE LINDO OPTIONS " <<   lindo_options << endl;
+	agent_address = getenv("lindo_options");
+	if( agent_address != NULL) cout << "HERE ARE THE LINDO OPTIONS " <<   agent_address << endl;
 	try{
 		if(amplclient_options == NULL ) throw ErrorClass( "a local solver was not specified in AMPL option");
 		else{
@@ -203,12 +203,12 @@ int main(int argc, char **argv)
 		osrl = solverType->osrl;
 	}
 	// do the following for a remote solve
-	if(lindo_options != NULL){
+	if(agent_address != NULL){
 		OSSolverAgent* osagent = NULL;
 		OSiLWriter *osilwriter = NULL;
 		osilwriter = new OSiLWriter();
 		std::string  osil = osilwriter->writeOSiL( osinstance);
-		osagent = new OSSolverAgent( lindo_options);
+		osagent = new OSSolverAgent( agent_address);
 		cout << "Place remote synchronous call" << endl;
 		osrl = osagent->solve(osil, osol);
 	}
