@@ -1119,8 +1119,6 @@ OSSimulation/.classpath -text
 OSSimulation/.project -text
 OSSimulation/META-INF/MANIFEST.MF -text
 OSSimulation/OSSimulation.jpx -text
-OSSimulation/bin/org/optimizationservices/ossimulation/api/RosenbrockSimulationService.class -text
-OSSimulation/bin/org/optimizationservices/ossimulation/simulation/RosenbrockSimulation.class -text
 OSSimulation/src/org/optimizationservices/ossimulation/api/RosenbrockSimulationService.java -text
 OSSimulation/src/org/optimizationservices/ossimulation/simulation/RosenbrockSimulation.java -text
 OSSolver/.cdtproject -text
