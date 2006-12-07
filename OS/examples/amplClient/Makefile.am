@@ -21,6 +21,10 @@ noinst_PROGRAMS = amplClient
 amplClient_SOURCES = amplClient.cpp 
 
 # List all additionally required COIN libraries
+
+	
+	
+if USEWSOCKLIB
 amplClient_LDADD =  \
 	$(COINUTILSOBJDIR)/src/libCoinUtils.la \
 	$(OSIOBJDIR)/src/libOsi.la \
@@ -32,9 +36,18 @@ amplClient_LDADD =  \
 	$(OSOBJDIR)/src/libOS.la \
 	$(OSOBJDIR)/src/OSModelInterfaces/libOSModelInterfaces.la \
 	$(WINSOCKLIB)
-	
-	
-
+else
+amplClient_LDADD =  \
+	$(COINUTILSOBJDIR)/src/libCoinUtils.la \
+	$(OSIOBJDIR)/src/libOsi.la \
+	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
+	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
+	$(CLPOBJDIR)/src/libClp.la \
+	$(CBCOBJDIR)/src/libCbc.la \
+	$(CGLOBJDIR)/src/libCgl.la \
+	$(OSOBJDIR)/src/libOS.la \
+	$(OSOBJDIR)/src/OSModelInterfaces/libOSModelInterfaces.la 
+endif
 
 
 
