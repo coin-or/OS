@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- edited with XMLSpy v2005 sp1 U (http://www.xmlspy.com) by oig_trade (oig) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" elementFormDefault="qualified">
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:include schemaLocation="OSnL.xsd"/>
 	<xs:include schemaLocation="OSsL.xsd"/>
@@ -110,7 +110,7 @@
 		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="LinearConstraintCoefficients">
-		<xs:sequence minOccurs="0">
+		<xs:sequence>
 			<xs:element name="start" type="IntVector"/>
 			<xs:choice>
 				<xs:element name="rowIdx" type="IntVector"/>
@@ -134,7 +134,7 @@
 	</xs:complexType>
 	<xs:complexType name="NonlinearExpressions">
 		<xs:sequence>
-			<xs:element name="nl" type="Nl" maxOccurs="unbounded"/>
+			<xs:element name="nl" type="Nl" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfNonlinearExpressions" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -527,7 +527,7 @@
 		<xs:complexContent>
 			<xs:extension base="RealTimeAccess">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-				<xs:attribute name="type" use="required">
+				<xs:attribute name="part" use="required">
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
 							<xs:enumeration value="init"/>
@@ -550,7 +550,7 @@
 		<xs:complexContent>
 			<xs:extension base="RealTimeAccess">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-				<xs:attribute name="type" use="required">
+				<xs:attribute name="part" use="required">
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
 							<xs:enumeration value="init"/>
@@ -573,7 +573,7 @@
 		<xs:complexContent>
 			<xs:extension base="RealTimeAccess">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-				<xs:attribute name="type" use="required">
+				<xs:attribute name="part" use="required">
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
 							<xs:enumeration value="lb"/>
@@ -595,7 +595,7 @@
 		<xs:complexContent>
 			<xs:extension base="RealTimeAccess">
 				<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
-				<xs:attribute name="type" use="required">
+				<xs:attribute name="part" use="required">
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
 							<xs:enumeration value="constant"/>
@@ -695,7 +695,7 @@
 	</xs:complexType>
 	<xs:complexType name="Stage">
 		<xs:sequence>
-			<xs:element name="variables" type="StageVariables"/>
+			<xs:element name="variables" type="StageVariables" minOccurs="0"/>
 			<xs:element name="constraints" type="StageConstraints" minOccurs="0"/>
 			<xs:element name="objectives" type="StageObjectives" minOccurs="0"/>
 		</xs:sequence>
@@ -947,7 +947,7 @@
 	</xs:complexType>
 	<xs:complexType name="StochasticElementParam">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="type" use="required">
+		<xs:attribute name="part" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="value"/>
@@ -965,7 +965,7 @@
 	</xs:complexType>
 	<xs:complexType name="StochasticElementVar">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="type" use="required">
+		<xs:attribute name="part" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="lb"/>
@@ -982,7 +982,7 @@
 	</xs:complexType>
 	<xs:complexType name="StochasticElementObj">
 		<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
-		<xs:attribute name="type" use="required">
+		<xs:attribute name="part" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="constant"/>
@@ -998,7 +998,7 @@
 	</xs:complexType>
 	<xs:complexType name="StochasticElementCon">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="type" use="required">
+		<xs:attribute name="part" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="lb"/>
@@ -1359,7 +1359,7 @@
 		<xs:simpleContent>
 			<xs:extension base="xs:double">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-				<xs:attribute name="type" use="required">
+				<xs:attribute name="part" use="required">
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
 							<xs:enumeration value="value"/>
@@ -1378,7 +1378,7 @@
 		<xs:simpleContent>
 			<xs:extension base="xs:double">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-				<xs:attribute name="type" use="required">
+				<xs:attribute name="part" use="required">
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
 							<xs:enumeration value="lb"/>
@@ -1402,7 +1402,7 @@
 		<xs:simpleContent>
 			<xs:extension base="xs:double">
 				<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
-				<xs:attribute name="type" use="required">
+				<xs:attribute name="part" use="required">
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
 							<xs:enumeration value="constant"/>
@@ -1425,7 +1425,7 @@
 		<xs:simpleContent>
 			<xs:extension base="xs:double">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-				<xs:attribute name="type" use="required">
+				<xs:attribute name="part" use="required">
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
 							<xs:enumeration value="lb"/>
