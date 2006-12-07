@@ -246,14 +246,16 @@ void solve(){
 		
 	
 				//const char *ch1 = "/Applications/Firefox.app/Contents/MacOS/firefox  ";
-				const char *ch1 = osoptions->browser;
-				char *ch2;
-      			ch2 = new char[strlen( ch1) + strlen(osoptions->osrlFile) + 2];
-      			ch2 = strcpy(ch2, ch1);	
-      			char const *ch3  = " ";
-      			ch2 = strcat(ch2, ch3);
-      			ch2 = strcat(ch2, osoptions->osrlFile);
-				std::system(ch2  );
+				if(osoptions->browser != NULL){
+					const char *ch1 = osoptions->browser;
+					char *ch2;
+	      			ch2 = new char[strlen( ch1) + strlen(osoptions->osrlFile) + 2];
+	      			ch2 = strcpy(ch2, ch1);	
+	      			char const *ch3  = " ";
+	      			ch2 = strcat(ch2, ch3);
+	      			ch2 = strcat(ch2, osoptions->osrlFile);
+					std::system(ch2  );
+				}
 			}
 			else cout << osrl << endl;
 		}
