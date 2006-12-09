@@ -177,7 +177,7 @@ int main(int argC, char* argV[])
 	catch(const ErrorClass& eclass){
 		cout << endl << endl << endl;
 		cout << "Sorry Unit Test Failed Testing the Ipopt Solver:"  + eclass.errormsg<< endl;
-		//cout << "OSrL =  " <<  ipoptSolver->osrl <<  endl;
+		cout << "OSrL =  " <<  ipoptSolver->osrl <<  endl;
 		return 0;
 	}
 	#endif
@@ -220,7 +220,7 @@ int main(int argC, char* argV[])
 		m_Solver = NULL;
 	}
 	catch(const ErrorClass& eclass){
-		//cout << "OSrL =  " <<  m_Solver->osrl <<  endl;
+		cout << "OSrL =  " <<  m_Solver->osrl <<  endl;
 		cout << endl << endl << endl;
 		cout << "Sorry Unit Test Failed Testing the Cbc Solver" << endl;
 		return 0;

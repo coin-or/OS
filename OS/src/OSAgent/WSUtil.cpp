@@ -15,7 +15,6 @@
  */ 
 #include "WSUtil.h"
 #include "OSConfig.h"
-#define DEBUG
 #ifdef WIN_
 //#define NOMINMAX
 #include <winsock.h>

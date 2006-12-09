@@ -21,6 +21,7 @@
 #include "ErrorClass.h"
 
 
+
 #include <time.h>
 #include <iostream>
 #include <sstream>
@@ -92,6 +93,7 @@ LindoSolver::~LindoSolver() {
 #ifdef DEBUG
 	cout << "Lindo destructor called" << endl;
 #endif
+cout << "Lindo destructor called" << endl;
 	m_mdRhsValue = NULL;
 	m_mdVarLB = NULL;
 	m_mdVarUB = NULL;
@@ -115,10 +117,10 @@ LindoSolver::~LindoSolver() {
 
  
 void LindoSolver::solve()  {
-	OSiLReader* osilreader = NULL; 
-	osresult = new OSResult();
 	try{
+		osresult = new OSResult();
 		if(osil.length() == 0 && osinstance == NULL) throw ErrorClass("there is no instance");
+		OSiLReader* osilreader = NULL;
 		clock_t start, finish;
 		double duration;
 		start = clock();
@@ -156,12 +158,14 @@ void LindoSolver::solve()  {
 		if( optimize() != true) throw ErrorClass("problem optimizing model");
 		delete osilreader;
 		osilreader = NULL;
+		delete osresult;
+		osresult = NULL;
 	}
 	catch(const ErrorClass& eclass){
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
 		osrl = osrlwriter->writeOSrL( osresult);
-		throw ;
+		throw ErrorClass( osrl);
 	}
 }// end solve
 

@@ -57,7 +57,6 @@ void CoinSolver::solve() throw (ErrorClass) {
 	try{
 	OSiLReader *osilreader = NULL;
 	osresult = new OSResult();
-
 		if(osil.length() == 0 && osinstance == NULL) throw ErrorClass("there is no instance");
 		clock_t start, finish;
 		double duration;

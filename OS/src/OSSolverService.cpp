@@ -165,14 +165,14 @@ void solve(){
 	try{
 		// solve either remotely of locally
 		if(osoptions->serviceLocation != NULL){
-			// place a remote call
+			// place a remote cal
 			osagent = new OSSolverAgent( osoptions->serviceLocation );
 			if(osoptions->osrlFile != NULL) fileUtil->writeFileFromString(osoptions->osrlFile, osagent->solve(osoptions->osil  , osoptions->osol));
 			else cout << osagent->solve( osoptions->osil, osoptions->osol) << endl;
 		}
 		else{
 			// solve locally
-			std::string osrl;
+			std::string osrl = "kipp";
 			// add IPOPT
 			if(osoptions->solverName == NULL ) throw ErrorClass( "a local solver was not specified");
 			if( strstr(osoptions->solverName, "ipopt") != NULL) {
@@ -240,11 +240,6 @@ void solve(){
 			}
 			if(osoptions->osrlFile != NULL){
 				fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
-				//char *ch1 = "/Applications/Firefox.app/Contents/MacOS/firefox  ";
-				//const char *ch2 ="aadfafadfaf";
-      			//std::cout << strcat(ch1, ch2) << std::endl;
-		
-	
 				//const char *ch1 = "/Applications/Firefox.app/Contents/MacOS/firefox  ";
 				if(osoptions->browser != NULL){
 					const char *ch1 = osoptions->browser;
@@ -261,9 +256,13 @@ void solve(){
 		}
 	}
 	catch(const ErrorClass& eclass){
-		cout << eclass.errormsg <<  endl;
-		solverType->osrl = eclass.errormsg;
-		if(osoptions->osrlFile != NULL) fileUtil->writeFileFromString(osoptions->osrlFile, solverType->osrl);
+		cout << "Hi Kipp" <<  endl;
+		// kipp -- put in code to handle the case of ipopt
+		if(solverType != NULL) {
+			solverType->osrl = eclass.errormsg;
+			std::cout << solverType->osrl << std::endl;
+			if(osoptions->osrlFile != NULL) fileUtil->writeFileFromString(osoptions->osrlFile, solverType->osrl);
+		}
 	}	
 }//end solve
 
