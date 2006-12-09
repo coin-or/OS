@@ -172,11 +172,11 @@ void solve(){
 		}
 		else{
 			// solve locally
-			std::string osrl = "kipp";
+			std::string osrl;
 			// add IPOPT
 			if(osoptions->solverName == NULL ) throw ErrorClass( "a local solver was not specified");
 			if( strstr(osoptions->solverName, "ipopt") != NULL) {
-				// we are requesting the Lindo solver
+				// we are requesting the Ipopt solver
 				bool bIpoptIsPresent = false;
 				#ifdef COIN_HAS_IPOPT
 				bIpoptIsPresent = true;
@@ -256,7 +256,6 @@ void solve(){
 		}
 	}
 	catch(const ErrorClass& eclass){
-		cout << "Hi Kipp" <<  endl;
 		// kipp -- put in code to handle the case of ipopt
 		if(solverType != NULL) {
 			solverType->osrl = eclass.errormsg;

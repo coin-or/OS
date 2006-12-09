@@ -165,7 +165,7 @@ void LindoSolver::solve()  {
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
 		osrl = osrlwriter->writeOSrL( osresult);
-		throw ErrorClass( osrl);
+		throw ;
 	}
 }// end solve
 
