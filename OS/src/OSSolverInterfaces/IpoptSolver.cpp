@@ -400,9 +400,9 @@ void IpoptSolver::finalize_solution(SolverReturn status,
 
 //void IpoptSolver::solve() throw (ErrorClass) {
 void IpoptSolver::solve()  {
-	OSiLReader* osilreader = NULL; 
-	osresult = new OSResult();
 	try{
+		OSiLReader* osilreader = NULL; 
+		osresult = new OSResult();
 		if(osil.length() == 0 && osinstance == NULL) throw ErrorClass("there is no instance");
 		clock_t start, finish;
 		double duration;
@@ -456,7 +456,7 @@ void IpoptSolver::solve()  {
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
 		osrl = osrlwriter->writeOSrL( osresult);
-		throw ;
+		throw ErrorClass( osrl) ;
 	}
 }//solve
 

@@ -162,6 +162,7 @@ void solve(){
 	DefaultSolver *solverType  = NULL;
 	FileUtil *fileUtil = NULL;
 	fileUtil = new FileUtil();
+	std::string osrl = "";
 	try{
 		// solve either remotely of locally
 		if(osoptions->serviceLocation != NULL){
@@ -172,7 +173,6 @@ void solve(){
 		}
 		else{
 			// solve locally
-			std::string osrl;
 			// add IPOPT
 			if(osoptions->solverName == NULL ) throw ErrorClass( "a local solver was not specified");
 			if( strstr(osoptions->solverName, "ipopt") != NULL) {
@@ -185,9 +185,7 @@ void solve(){
 				ipoptSolver->osil = osoptions->osil;
 				ipoptSolver->osinstance = NULL;
 				ipoptSolver->solve();
-				//std::cout << "Done optimizing with Ipopt"<< std::endl;
 				osrl = ipoptSolver->osrl ;
-				//std::cout << "Have Ipopt write out osrl"<< std::endl;
 				#endif
 				if(bIpoptIsPresent == false) throw ErrorClass( "the Ipopt solver requested is not present");
 			}
@@ -256,12 +254,8 @@ void solve(){
 		}
 	}
 	catch(const ErrorClass& eclass){
-		// kipp -- put in code to handle the case of ipopt
-		if(solverType != NULL) {
-			solverType->osrl = eclass.errormsg;
-			std::cout << solverType->osrl << std::endl;
-			if(osoptions->osrlFile != NULL) fileUtil->writeFileFromString(osoptions->osrlFile, solverType->osrl);
-		}
+		std::cout <<  eclass.errormsg << std::endl;
+		if(osoptions->osrlFile != NULL) fileUtil->writeFileFromString(osoptions->osrlFile,  eclass.errormsg);
 	}	
 }//end solve
 

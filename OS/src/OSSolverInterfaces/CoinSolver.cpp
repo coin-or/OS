@@ -125,7 +125,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
 		osrl = osrlwriter->writeOSrL( osresult);
-		throw ;
+		throw ErrorClass( osrl) ;
 	}				
 }//end solve()
 

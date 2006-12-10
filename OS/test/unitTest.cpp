@@ -1,11 +1,11 @@
-/**
+/**    
  *
  *
  * @author  Robert Fourer, Jun Ma, Kipp Martin, 
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  */ 
- 
+  
  
 #include<stdlib.h>
 #include <OsiSolverInterface.hpp>   
@@ -15,7 +15,7 @@
 
 #include <string>
  
-using std::cout;
+using std::cout;   
 using std::endl;
 
 #include <CppAD/CppAD.h>

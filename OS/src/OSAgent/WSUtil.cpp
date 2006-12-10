@@ -20,7 +20,7 @@
 #include <winsock.h>
 #else
 #include <sys/socket.h>
-#include <arpa/inet.h>  
+#include <arpa/inet.h>   
 #include <unistd.h>  
 #include <netdb.h>  
 #endif
