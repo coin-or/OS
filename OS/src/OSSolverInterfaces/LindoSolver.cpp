@@ -1013,7 +1013,7 @@ void  LindoSolver::lindoAPIErrorCheck(std::string errormsg) {
 			error = "LINDO ERROR: "+ error;
 			outStr << error << endl;
 			outStr << "LINDO ERROR NUMBER: " << m_iLindoErrorCode << endl;  
-			LSgetErrorMessage(pEnv_, m_iLindoErrorCode, lindoerrormsg);	
+			if( pEnv_ != NULL) LSgetErrorMessage(pEnv_, m_iLindoErrorCode, lindoerrormsg);	
 			error = lindoerrormsg;
 			outStr << "LINDO ERROR MESSAGE: "  <<  error;
 			outStr << endl;
