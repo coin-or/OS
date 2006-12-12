@@ -130,8 +130,6 @@ int main(int argc, char **argv)
 	// get the solver set by AMPLl
 	amplclient_options = getenv("amplClient_options");
 	if(amplclient_options != NULL) cout << "HERE ARE THE AMPL CLIENT OPTIONS " <<   amplclient_options << endl;
-	agent_address = getenv("lindo_options");
-	if( agent_address != NULL) cout << "HERE ARE THE LINDO OPTIONS " <<   agent_address << endl;
 	try{
 		if(amplclient_options == NULL ) throw ErrorClass( "a local solver was not specified in AMPL option");
 		else{
@@ -141,6 +139,8 @@ int main(int argc, char **argv)
 				#ifdef COIN_HAS_LINDO
 				bLindoIsPresent = true;
 				solverType = new LindoSolver();
+				agent_address = getenv("lindo_options");
+				if( agent_address != NULL) cout << "HERE ARE THE LINDO OPTIONS " <<   agent_address << endl;
 				#endif
 				if(bLindoIsPresent == false) throw ErrorClass( "the Lindo solver requested is not present");
 			}
@@ -153,34 +153,44 @@ int main(int argc, char **argv)
 					if( strstr(amplclient_options, "cbc") != NULL){
 						solverType = new CoinSolver();
 						solverType->m_sSolverName = "cbc";
+						agent_address = getenv("cbc_options");
+						if( agent_address != NULL) cout << "HERE ARE THE CBC OPTIONS " <<   agent_address << endl;
 					}
 					else{
 						if( strstr(amplclient_options, "cplex") != NULL){
 							solverType = new CoinSolver();
 							solverType->m_sSolverName = "cplex";
+							agent_address = getenv("cplex_options");
+							if( agent_address != NULL) cout << "HERE ARE THE CPLEX OPTIONS " <<   agent_address << endl;
 						}
 						else{
 							if( strstr(amplclient_options, "glpk") != NULL){
 								solverType = new CoinSolver();
 								solverType->m_sSolverName = "glpk";
+								agent_address = getenv("glpk_options");
+								if( agent_address != NULL) cout << "HERE ARE THE GLPK OPTIONS " <<   agent_address << endl;
 							}
 							else{
 								if( strstr(amplclient_options, "ipopt") != NULL){
 									// have to act differently since Ipopt uses smart pointers
 									// we are requesting the Ipopt solver
+									agent_address = getenv("lindo_options");
+									if( agent_address != NULL) cout << "HERE ARE THE IPOPT OPTIONS " <<   agent_address << endl;
 									bool bIpoptIsPresent = false;
-									#ifdef COIN_HAS_IPOPT
-									bIpoptIsPresent = true;
-									//std::cout << "Create an Ipopt solver and optimize"<< std::endl;
-									SmartPtr<IpoptSolver> ipoptSolver  = new IpoptSolver();	
-									ipoptSolver->osol = osol;
-									ipoptSolver->osinstance = osinstance;
-									ipoptSolver->solve();
-									//std::cout << "Done optimizing with Ipopt"<< std::endl;
-									osrl = ipoptSolver->osrl ;
-									//std::cout << "Have Ipopt writ out osrl"<< std::endl;
-									#endif
-									if(bIpoptIsPresent == false) throw ErrorClass( "the Ipopt solver requested is not present");
+									if(agent_address == NULL ){
+										#ifdef COIN_HAS_IPOPT
+										bIpoptIsPresent = true;
+										//std::cout << "Create an Ipopt solver and optimize"<< std::endl;
+										SmartPtr<IpoptSolver> ipoptSolver  = new IpoptSolver();	
+										ipoptSolver->osol = osol;
+										ipoptSolver->osinstance = osinstance;
+										ipoptSolver->solve();
+										//std::cout << "Done optimizing with Ipopt"<< std::endl;
+										osrl = ipoptSolver->osrl ;
+										//std::cout << "Have Ipopt writ out osrl"<< std::endl;
+										#endif
+										if(bIpoptIsPresent == false) throw ErrorClass( "the Ipopt solver requested is not present");
+									}
 								}
 								else{
 									throw ErrorClass( "a supported solver is not present");
@@ -192,7 +202,7 @@ int main(int argc, char **argv)
 			}
 		}
 		// do a local solve
-		if( strstr(amplclient_options, "ipopt") == NULL){
+		if( (strstr(amplclient_options, "ipopt") == NULL) && (agent_address == NULL)){
 			solverType->osol = osol;
 			solverType->osinstance = osinstance;
 			solverType->solve();

@@ -177,7 +177,6 @@ int main(int argC, char* argV[])
 	catch(const ErrorClass& eclass){
 		cout << endl << endl << endl;
 		cout << "Sorry Unit Test Failed Testing the Ipopt Solver:"  + eclass.errormsg<< endl;
-		cout << "OSrL =  " <<  ipoptSolver->osrl <<  endl;
 		return 0;
 	}
 	#endif
