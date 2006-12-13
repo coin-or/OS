@@ -151,8 +151,8 @@ bool IpoptSolver::eval_f(Index n, const Number* x, bool new_x, Number& obj_value
 	obj_value = osinstance->calculateFunctionValue(-1, (double*)x, false);
 	if( CommonUtil::ISOSNAN( (double)obj_value) ) return false;
 	//for(int i = 0; i < n; i++) cout << "x[ i] =  !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  x[ i]  << endl;
-	cout << "calculated function value !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  obj_value  << endl;
-	cout << "calculated function value !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  osinstance->calculateFunctionValue(-1, (double*)x, false)  << endl;
+	//cout << "calculated function value !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  obj_value  << endl;
+	//cout << "calculated function value !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  osinstance->calculateFunctionValue(-1, (double*)x, false)  << endl;
   	return true;
 }
 

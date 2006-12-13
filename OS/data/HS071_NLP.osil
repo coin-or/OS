@@ -6,10 +6,10 @@
     </instanceHeader>
     <instanceData>
         <variables numberOfVariables="4">
-            <var name="_svar[1]" lb="1" ub="5"/>
-            <var name="_svar[2]" lb="1" ub="5"/>
-            <var name="_svar[3]" lb="1" ub="5"/>
-            <var name="_svar[4]" lb="1" ub="5"/>
+            <var name="_svar[1]" lb="1" ub="5" init="0"/>
+            <var name="_svar[2]" lb="1" ub="5" init="0"/>
+            <var name="_svar[3]" lb="1" ub="5" init="0"/>
+            <var name="_svar[4]" lb="1" ub="5" init="0"/>
         </variables>
         <objectives numberOfObjectives="1">
             <obj maxOrMin="min" numberOfObjCoef="4">
@@ -38,22 +38,18 @@
             </nl>
             <nl idx="1">
                 <sum>
-                    <power>
+                    <square>
                         <variable idx="0" coef="1"/>
-                        <number value="2" type="real"/>
-                    </power>
-                    <power>
+                    </square>
+                    <square>
                         <variable idx="1" coef="1"/>
-                        <number value="2" type="real"/>
-                    </power>
-                    <power>
+                    </square>
+                    <square>
                         <variable idx="2" coef="1"/>
-                        <number value="2" type="real"/>
-                    </power>
-                    <power>
+                    </square>
+                    <square>
                         <variable idx="3" coef="1"/>
-                        <number value="2" type="real"/>
-                    </power>
+                    </square>
                 </sum>
             </nl>
             <nl idx="-1">

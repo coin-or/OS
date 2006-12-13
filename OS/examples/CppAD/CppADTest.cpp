@@ -205,7 +205,7 @@ int  main(){
 		}
 		//first iteration 
 		std::cout << "GET LAGRANGIAN HESSIAN FIRST TIME"   << std::endl;
-		sparseHessian = osinstance->calculateLagrangianHessian( x, y, w, false, false);
+		sparseHessian = osinstance->calculateLagrangianHessianReTape( x, y, w, false, false);
 		for(idx = 0; idx < sparseHessian->hessDimension; idx++){
 			std::cout << "row idx = " << *(sparseHessian->hessRowIdx + idx) <<  
 			"  col idx = "<< *(sparseHessian->hessColIdx + idx)
@@ -214,7 +214,7 @@ int  main(){
 		ok = CheckHessianUpper( sparseHessian, x[0],  x[1], x[2], y[0], y[1], w[0]);
 		if( ok == 0){
 			std::cout << "FAILED THE FIRST HESSIAN TEST" << std::endl;
-			return 0;
+			return 0; 
 		}
 		else{
 			std::cout << "PASSED THE FIRST HESSIAN TEST" << std::endl;
@@ -223,7 +223,7 @@ int  main(){
 		//second iteration
 		x[0] = 5;
 		std::cout << "NOW GET LAGRANGIAN HESSIAN SECOND TIME"   << std::endl;
-		sparseHessian = osinstance->calculateLagrangianHessian( x, y, w, false, false);
+		sparseHessian = osinstance->calculateLagrangianHessianReTape( x, y, w, false, false);
 		for(idx = 0; idx < sparseHessian->hessDimension; idx++){
 			std::cout << "row idx = " << *(sparseHessian->hessRowIdx + idx) <<  
 			"  col idx = "<< *(sparseHessian->hessColIdx + idx)
