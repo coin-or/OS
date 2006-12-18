@@ -162,6 +162,8 @@ OS/src/OSCommonInterfaces/OSrLWriter.h -text
 OS/src/OSConfig.h -text
 OS/src/OSModelInterfaces/Makefile.am -text
 OS/src/OSModelInterfaces/Makefile.in -text
+OS/src/OSModelInterfaces/OSMatlab.cpp -text
+OS/src/OSModelInterfaces/OSMatlab.h -text
 OS/src/OSModelInterfaces/OSmps2osil.cpp -text
 OS/src/OSModelInterfaces/OSmps2osil.h -text
 OS/src/OSModelInterfaces/OSnl2osil.cpp -text

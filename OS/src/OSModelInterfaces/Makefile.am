@@ -18,8 +18,10 @@ lib_LTLIBRARIES = libOSModelInterfaces.la
 
 # List all source files for this library, including headers
 libOSModelInterfaces_la_SOURCES = \
+	OSMatlab.cpp \
+	OSMatlab.h \
 	OSmps2osil.cpp \
-	OSmps2osil.h
+	OSmps2osil.h 
 
 if COIN_HAS_ASL
 libOSModelInterfaces_la_SOURCES += OSnl2osil.cpp \
@@ -36,13 +38,29 @@ AM_CPPFLAGS =\
 	-I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` \
 	-I`$(CYGPATH_W) $(COINUTILSSRCDIR)/inc` \
 	-I`$(CYGPATH_W) $(COINUTILSOBJDIR)/inc` \
+	-I`$(CYGPATH_W) $(CBCSRCDIR)/src` \
+	-I`$(CYGPATH_W) $(CBCSRCDIR)/inc` \
+	-I`$(CYGPATH_W) $(CBCOBJDIR)/inc` \
+	-I`$(CYGPATH_W) $(CLPSRCDIR)/src` \
+	-I`$(CYGPATH_W) $(CLPSRCDIR)/inc` \
+	-I`$(CYGPATH_W) $(CLPOBJDIR)/inc` \
+	-I`$(CYGPATH_W) $(OSISRCDIR)/src` \
+	-I`$(CYGPATH_W) $(OSISRCDIR)/inc` \
+	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCbc` \
+	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiClp` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src` \
 	-I`$(CYGPATH_W) $(CPPADSRCDIR)/..` \
-	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSCommonInterfaces` 
+	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSCommonInterfaces`  \
+	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSSolverInterfaces`	\
+	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSUtils` 
 
 
 if COIN_HAS_ASL
 AM_CPPFLAGS += 	$(ASL_CPPFLAGS)
+endif
+
+if COIN_HAS_LINDO
+  AM_CPPFLAGS += -I`$(CYGPATH_W) $(LINDOINCDIR)` 
 endif
 
 # This line is necessary to allow VPATH compilation with MS compilers
@@ -57,7 +75,8 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 # and that therefore should be installed in 'install'
 include_HEADERS = \
 	../../inc/config_os.h \
-	 OSmps2osil.h
+	 OSmps2osil.h \
+	 OSMatlab.h
 
 if COIN_HAS_ASL
 include_HEADERS += OSnl2osil.h 
