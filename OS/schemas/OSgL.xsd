@@ -728,7 +728,7 @@
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="rho">
+		<xs:attribute name="covariance" use="optional" default="0">
 			<xs:simpleType>
 				<xs:restriction base="xs:double">
 					<xs:minInclusive value="-1.0"/>
@@ -741,7 +741,7 @@
 	<xs:complexType name="MultivariateNormal">
 		<xs:sequence>
 			<xs:element name="mu" type="xs:double" minOccurs="3" maxOccurs="unbounded"/>
-			<xs:element name="correlation" type="MatrixMarket"/>
+			<xs:element name="covariance" type="MatrixMarket"/>
 		</xs:sequence>
 		<xs:attribute name="cdf" type="xs:boolean" use="optional" default="false"/>
 	</xs:complexType>
