@@ -16,7 +16,7 @@
 #include "WSUtil.h"
 #include "OSConfig.h"
 #ifdef WIN_
-//#define NOMINMAX
+#define NOMINMAX
 #include <winsock.h>
 #else
 #include <sys/socket.h>
