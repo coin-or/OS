@@ -32,7 +32,10 @@
 //#include "OSSolverAgent.h"   
 //#include "OShL.h"     
 #include "ErrorClass.h" 
+
+#ifdef COIN_HAS_LINDO    
 #include "LindoSolver.h"
+#endif  
 //end OS headers
 
 #include <string>
