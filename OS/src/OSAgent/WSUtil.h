@@ -110,6 +110,25 @@ public:
 	static std::string createSOAPMessage(int numInputs, std::string solverAddress, 
 		std::string postURI, std::string smethod, std::string* msInputs, 
 		std::string* msInputNames, std::string sSoapAction);
+		
+   	/**
+   	 * create the SOAP message that is send to the solver Web Service
+	 *
+   	 * <p>
+   	 * @param numInputs is the number of OSxL protocols (e.g. osil, osol) in the SOAP message
+	 * @param solverAddress is the address of the scheduler or solver used
+	 * @param postURI is the path to the solver that follows the first
+	 * / in the solverAddress
+	 * @param smethod is the method invoked, e.g. solve, kill, send, etc.
+	 * @param msInputs is string pointer to an array of strings are the OSxL protocols
+	 * protocols that go into the message, e.g. osil, osol
+	 * @param msInputNames is string pointer to an array of string names of the OSxL protocols
+	 * @param sSoapAction is the name of the solver service plus the method, e.g. OSSolverService#solve
+   	 * @return the resulting XML string that is the SAOP message.
+	 * </p> 
+   	 */	
+	static std::string createFormDataUpload(int numInputs, std::string solverAddress, 
+		std::string postURI, std::string* formNames,  std::string* formInputs,  std::string theFile, std::string boundaryName);
 	
    	/**
    	 * extract the appropriate OSxL protocol from the SOAP envelop

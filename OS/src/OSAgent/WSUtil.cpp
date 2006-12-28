@@ -140,7 +140,7 @@ string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned int se
 	}
 }
 
-string WSUtil::createSOAPMessage(int numInputs,  string solverAddress, string postURI, string smethod, 
+std::string WSUtil::createSOAPMessage(int numInputs,  string solverAddress, string postURI, string smethod, 
 	string* msInputs, string* msInputNames, string sSoapAction){
 	ostringstream request, body, msg;
 	int i;
@@ -178,6 +178,73 @@ string WSUtil::createSOAPMessage(int numInputs,  string solverAddress, string po
 	request << body.str();
 	return request.str();
 }// end createSOAPMessage
+
+std::string WSUtil::createFormDataUpload(int numInputs, std::string solverAddress, 
+		std::string postURI, std::string* formNames,  std::string* formInputs,  std::string theFile, std::string boundaryName){
+	ostringstream request, body;
+	int i;
+	request << "POST "  <<  postURI << " HTTP/1.0" <<  "\r";
+	request << "Host: " ;
+	request << solverAddress << endl;
+	request << "Content-Type: multipart/form-data; boundary=" ;
+	request << boundaryName << endl;
+	request << "Connection: keep-alive" << endl;
+	request << "Referer: /servlets-examples/fileupload.html" << endl;
+
+	// read in the form data other than file file
+	for(i = 0; i < numInputs; i++){
+		body << "--" ;
+		body << boundaryName << endl ;
+		body << "Content-Disposition: form-data; name=\"";
+		body << formNames[ i] ;
+		body << "\"" << endl << endl;
+		body << formInputs[ i]  << endl;
+	}
+	body << "Content-Type: text/plain" << endl;
+	body << theFile ;
+	body << "--" ;
+	body << boundaryName;
+	body << "--" ;;
+	body << "\n";
+	request << "Content-Length: " << body.str().length();
+	request << endl << endl;
+	request << body.str();
+	return request.str();
+}// end createFromDataUpload
+
+/*
+   Content-Type: multipart/form-data; boundary=AaB03x
+
+   --AaB03x
+   Content-Disposition: form-data; name="submit-name"
+
+   Larry
+   --AaB03x
+   Content-Disposition: form-data; name="files"; filename="file1.txt"
+   Content-Type: text/plain
+
+   ... contents of file1.txt ...
+   --AaB03x--
+
+
+Referer: http://localhost:8181/servlets-examples/fileupload.html
+Content-Type: multipart/form-data; boundary=---------------------------10102754414578508781458777923
+Content-Length: 1787
+
+-----------------------------10102754414578508781458777923
+Content-Disposition: form-data; name="myfile"; filename="parincLinear.osil"
+Content-Type: application/octet-stream
+
+<?xml version="1.0" encoding="UTF-8"?>
+   <osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"	xsi:schemaLocation="os.optimizationservices.org ../schemas/OSiL.xsd">	
+			
+            </value>	
+         </linearConstraintCoefficients>	
+      </instanceData>
+   </osil>-----------------------------10102754414578508781458777923Content-Disposition: form-data; name="Submit"Submit your files-----------------------------10102754414578508781458777923--
+   
+   
+ */
 
 string WSUtil::SOAPify(string inputstring){
 	/* replace all occurances of "<" with "&lt;"  all 

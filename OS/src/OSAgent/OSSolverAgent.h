@@ -118,6 +118,15 @@ public:
    	 */	
 	std::string knock(std::string ospl, std::string osol);
 	
+   	/**
+   	 * implement the fileUpload() method which is a virtual function in OShL
+	 *
+   	 * <p>
+   	 * @param fileName is the string of the file to be uploaded
+	 * </p> 
+   	 */	
+	std::string fileUpload(std::string fileName);
+	
 private:
 	
 	/** solverAddress is the URI for the solver*/
