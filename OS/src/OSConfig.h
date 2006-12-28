@@ -31,8 +31,9 @@
 #undef PACKAGE_VERSION
 #undef VERSION
 
+#ifndef MSVISUALSTUDIO 
 #include "config_os.h"
-
+#endif
 
 /* undefine macros that could conflict with those in other config.h
    files */

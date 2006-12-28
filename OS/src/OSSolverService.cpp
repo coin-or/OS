@@ -11,7 +11,7 @@
  * This software is licensed under the Common Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
- */
+ */ 
 
 #include <string> 
 #include <OsiSolverInterface.hpp>
@@ -23,7 +23,7 @@
 #include "LindoSolver.h" 
 #endif 
 
-#ifdef COIN_HAS_IPOPT    
+#ifdef COIN_HAS_IPOPT     
 #include "IpoptSolver.h"
 #endif   
   
