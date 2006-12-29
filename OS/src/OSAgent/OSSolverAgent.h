@@ -125,7 +125,7 @@ public:
    	 * @param fileName is the string of the file to be uploaded
 	 * </p> 
    	 */	
-	std::string fileUpload(std::string fileName);
+	std::string fileUpload(std::string fileName, std::string theOSiLFile);
 	
 private:
 	

@@ -26,6 +26,9 @@
 #include "OSnLNode.h"
 #include "FileUtil.h"
 #include "ErrorClass.h"
+#include "WSUtil.h" 
+#include "OSSolverAgent.h" 
+#include "CoinHelperFunctions.hpp"  
 #include <time.h>
 #include <sstream>
 #include <ctype.h>
@@ -37,12 +40,21 @@ using std::endl;
 
 int main(int argC, char* argV[])
 {
-	FileUtil *fileUtil = NULL;
+	FileUtil *fileUtil = NULL;  
+	fileUtil = new FileUtil(); 
 	std::string osilFileName;
-	std::string osrlFileName;
 	std::string osil;
-	std::string osrl;
-	std::cout << "Dummy test program " << std::endl;	
+	std::string uploadResult;
+  	std::string dataDir;
+  	const char dirsep =  CoinFindDirSeparator();
+    dataDir = dirsep == '/' ? "../../data/" : ".\\..\\data\\";
+	osilFileName =  dataDir + "test.osil";
+	osil = fileUtil->getFileAsString( &osilFileName[0]);
+	OSSolverAgent* osagent = NULL;
+	osagent = new OSSolverAgent("http://127.0.0.1:8080/fileupload/servlet/B36104FileUpload");
+	std::cout << "Place remote synchronous call" << std::endl;
+	uploadResult = osagent->fileUpload("parincLinear.osil", osil);
+	//std::cout << uploadResult << std::endl;
 	return 0;
 }
 

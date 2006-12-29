@@ -73,6 +73,20 @@ string OSSolverAgent::solve(string osil, string osol){
 	return sOSrL;
 }//end solve
 
+string OSSolverAgent::fileUpload( string osilFileName, string theOSiLFile){ 
+	string theHTTPPOST=""; 
+	string uploadResult="";
+	string boundaryName = "AaB03x";
+	theHTTPPOST = WSUtil::createFormDataUpload(solverAddress, postURI, 
+		osilFileName,  theOSiLFile, boundaryName);
+	// send the soap to the HTTP server
+	std::cout << "SEND THE FILE " << std::endl;
+	//std::cout << theHTTPPOST << std::endl;
+	uploadResult = WSUtil::sendSOAPMessage( theHTTPPOST, solverAddress, solverPortNumber);
+	std::cout << "DONE UPLOADING THE FILE" << std::endl;
+	return uploadResult;
+}//end solve
+
 
 bool OSSolverAgent::send(string osil, string osol){
 	string theSOAP;

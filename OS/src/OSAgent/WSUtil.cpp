@@ -24,7 +24,7 @@
 #include <unistd.h>  
 #include <netdb.h>  
 #endif
-
+#define DEBUG
 
 #include <stdlib.h>    
 #include <string.h>    
@@ -86,7 +86,8 @@ string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned int se
 		#endif
 		httpStringLen = strlen( message);   
 		#ifdef DEBUG
-		//cout << message << endl;
+		cout << "HERE IS WHAT WE SEND" << endl;
+		cout << message << endl;
 		#endif
 		/* Send the string to the server */	
 		if (send(sock, message, httpStringLen, 0) != httpStringLen)
@@ -179,46 +180,50 @@ std::string WSUtil::createSOAPMessage(int numInputs,  string solverAddress, stri
 	return request.str();
 }// end createSOAPMessage
 
-std::string WSUtil::createFormDataUpload(int numInputs, std::string solverAddress, 
-		std::string postURI, std::string* formNames,  std::string* formInputs,  std::string theFile, std::string boundaryName){
+std::string WSUtil::createFormDataUpload(std::string solverAddress, std::string postURI, 
+		std::string fileName,  std::string theFile, std::string boundaryName){
 	ostringstream request, body;
-	int i;
-	request << "POST "  <<  postURI << " HTTP/1.0" <<  "\r";
+	std::cout << "Solver address = " <<  solverAddress << std::endl;
+	std::cout << "postURI = " <<  postURI << std::endl;
+	//request << "POST "  <<  postURI << " HTTP/1.0" <<  "\r";
+	request << "POST "  <<  postURI << " HTTP/1.0" <<  std::endl;
 	request << "Host: " ;
-	request << solverAddress << endl;
+	request << solverAddress << std::endl;
 	request << "Content-Type: multipart/form-data; boundary=" ;
-	request << boundaryName << endl;
-	request << "Connection: keep-alive" << endl;
-	request << "Referer: /servlets-examples/fileupload.html" << endl;
+	request << boundaryName << std::endl;
+	request << "Connection: keep-alive" << std::endl;
+	//request << "Referer: /servlets-examples/fileupload.html" << endl;
 
-	// read in the form data other than file file
-	for(i = 0; i < numInputs; i++){
-		body << "--" ;
-		body << boundaryName << endl ;
-		body << "Content-Disposition: form-data; name=\"";
-		body << formNames[ i] ;
-		body << "\"" << endl << endl;
-		body << formInputs[ i]  << endl;
-	}
-	body << "Content-Type: text/plain" << endl;
+
+	body << "--" ;
+	body << boundaryName << std::endl ;
+	body << "Content-Disposition: form-data; name=\"";
+	body << "myfile";
+	body << "\"";
+	body << ";";
+	body << "filename=\"";
+	body << fileName;
+	body << "\"" << endl;
+	
+	body << "Content-Type: text/plain" << std::endl << std::endl;
 	body << theFile ;
 	body << "--" ;
 	body << boundaryName;
 	body << "--" ;;
 	body << "\n";
+	
+	
 	request << "Content-Length: " << body.str().length();
 	request << endl << endl;
 	request << body.str();
-	return request.str();
+	//return request.str();
+	return theFile;
 }// end createFromDataUpload
 
 /*
    Content-Type: multipart/form-data; boundary=AaB03x
 
-   --AaB03x
-   Content-Disposition: form-data; name="submit-name"
 
-   Larry
    --AaB03x
    Content-Disposition: form-data; name="files"; filename="file1.txt"
    Content-Type: text/plain

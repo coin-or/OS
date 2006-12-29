@@ -127,8 +127,8 @@ public:
    	 * @return the resulting XML string that is the SAOP message.
 	 * </p> 
    	 */	
-	static std::string createFormDataUpload(int numInputs, std::string solverAddress, 
-		std::string postURI, std::string* formNames,  std::string* formInputs,  std::string theFile, std::string boundaryName);
+	static std::string createFormDataUpload(std::string solverAddress, std::string postURI, 
+		std::string fileName,  std::string theFile, std::string boundaryName);
 	
    	/**
    	 * extract the appropriate OSxL protocol from the SOAP envelop
