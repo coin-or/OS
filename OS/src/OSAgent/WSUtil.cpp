@@ -185,8 +185,7 @@ std::string WSUtil::createFormDataUpload(std::string solverAddress, std::string 
 	ostringstream request, body;
 	std::cout << "Solver address = " <<  solverAddress << std::endl;
 	std::cout << "postURI = " <<  postURI << std::endl;
-	//request << "POST "  <<  postURI << " HTTP/1.0" <<  "\r";
-	request << "POST "  <<  postURI << " HTTP/1.0" <<  std::endl;
+	request << "POST "  <<  postURI << " HTTP/1.0" <<  "\r";
 	request << "Host: " ;
 	request << solverAddress << std::endl;
 	request << "Content-Type: multipart/form-data; boundary=" ;
