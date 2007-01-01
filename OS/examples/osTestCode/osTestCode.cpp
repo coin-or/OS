@@ -51,7 +51,7 @@ int main(int argC, char* argV[])
 	osilFileName =  dataDir + "parincLinear.osil";
 	osil = fileUtil->getFileAsString( &osilFileName[0]);
 	OSSolverAgent* osagent = NULL;
-	osagent = new OSSolverAgent("http://127.0.0.1:8181/fileupload/servlet/B36104FileUpload");
+	osagent = new OSSolverAgent("http://127.0.0.1:8080/fileupload/servlet/B36104FileUpload");
 	std::cout << "Place remote synchronous call" << std::endl;
 	uploadResult = osagent->fileUpload("parincLinear.osil", osil);
 	std::cout << uploadResult << std::endl;

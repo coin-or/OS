@@ -103,7 +103,7 @@ string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned int se
 			if ((recvMsgSize = recv(sock, httpBuffer, RCVBUFSIZE-1, 0)) < 0)
 				throw ErrorClass( "socket error receiving data");
 			#ifdef DEBUG
-			//cout << "Message size =  " << recvMsgSize << endl;
+			cout << "Message size =  " << recvMsgSize << endl;
 			#endif
 			httpBuffer[ recvMsgSize ] = '\0';
 			ret_message << httpBuffer;
