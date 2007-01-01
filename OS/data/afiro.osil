@@ -2,7 +2,8 @@
 <osil xmlns="os.optimizationservices.org"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <instanceHeader/>
+    <instanceHeader>
+    </instanceHeader>
     <instanceData>
         <variables numberOfVariables="32">
             <var name="X01"/>

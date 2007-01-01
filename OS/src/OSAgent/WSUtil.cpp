@@ -103,13 +103,12 @@ string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned int se
 			if ((recvMsgSize = recv(sock, httpBuffer, RCVBUFSIZE-1, 0)) < 0)
 				throw ErrorClass( "socket error receiving data");
 			#ifdef DEBUG
-			cout << "Message size =  " << recvMsgSize << endl;
-			cout << "Message = " << httpBuffer << endl;
+			//cout << "Message size =  " << recvMsgSize << endl;
 			#endif
 			httpBuffer[ recvMsgSize ] = '\0';
 			ret_message << httpBuffer;
-			if(recvMsgSize == 0 ) {
-			//if(recvMsgSize == 0 || recvMsgSize < RCVBUFSIZE - 1) {
+			//if(recvMsgSize == 0 ) {
+			if(recvMsgSize == 0 || recvMsgSize < RCVBUFSIZE - 1) {
 			#ifdef WIN_
 			closesocket( sock);
 			WSACleanup();
@@ -185,70 +184,43 @@ std::string WSUtil::createFormDataUpload(std::string solverAddress, std::string 
 	ostringstream request, body;
 	std::cout << "Solver address = " <<  solverAddress << std::endl;
 	std::cout << "postURI = " <<  postURI << std::endl;
-	request << "POST "  <<  postURI << " HTTP/1.0" <<  "\r";
+	request << "POST "  <<  postURI << " HTTP/1.0" <<  "\r\n";
 	request << "Host: " ;
-	request << solverAddress << std::endl;
+	request << solverAddress << "\r\n";
 	request << "Content-Type: multipart/form-data; boundary=" ;
-	request << boundaryName << std::endl;
-	request << "Connection: keep-alive" << std::endl;
+	request << boundaryName << "\r\n";
+	request << "Connection: keep-alive" << "\r\n";
 	//request << "Referer: /servlets-examples/fileupload.html" << endl;
-
-
 	body << "--" ;
-	body << boundaryName << std::endl ;
+	body << boundaryName  ;
+	body << "\r\n";
 	body << "Content-Disposition: form-data; name=\"";
 	body << "myfile";
 	body << "\"";
 	body << ";";
-	body << "filename=\"";
+	body << " filename=\"";
 	body << fileName;
-	body << "\"" << endl;
+	body << "\"" << "\r\n";
 	
-	body << "Content-Type: text/plain" << std::endl << std::endl;
+	body << "Content-Type: text/plain" ;
+	body << "\r\n" ;
+	body << "\r\n";
 	body << theFile ;
+	body << "\r\n";
 	body << "--" ;
 	body << boundaryName;
-	body << "--" ;;
-	body << "\n";
+	body << "--" ;
+	body << "\r\n" ;
 	
 	
 	request << "Content-Length: " << body.str().length();
-	request << endl << endl;
+	request << "\r\n";
+	request << "\r\n";
 	request << body.str();
-	//return request.str();
-	return theFile;
+	return request.str();
+	//return theFile;
 }// end createFromDataUpload
 
-/*
-   Content-Type: multipart/form-data; boundary=AaB03x
-
-
-   --AaB03x
-   Content-Disposition: form-data; name="files"; filename="file1.txt"
-   Content-Type: text/plain
-
-   ... contents of file1.txt ...
-   --AaB03x--
-
-
-Referer: http://localhost:8181/servlets-examples/fileupload.html
-Content-Type: multipart/form-data; boundary=---------------------------10102754414578508781458777923
-Content-Length: 1787
-
------------------------------10102754414578508781458777923
-Content-Disposition: form-data; name="myfile"; filename="parincLinear.osil"
-Content-Type: application/octet-stream
-
-<?xml version="1.0" encoding="UTF-8"?>
-   <osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"	xsi:schemaLocation="os.optimizationservices.org ../schemas/OSiL.xsd">	
-			
-            </value>	
-         </linearConstraintCoefficients>	
-      </instanceData>
-   </osil>-----------------------------10102754414578508781458777923Content-Disposition: form-data; name="Submit"Submit your files-----------------------------10102754414578508781458777923--
-   
-   
- */
 
 string WSUtil::SOAPify(string inputstring){
 	/* replace all occurances of "<" with "&lt;"  all 

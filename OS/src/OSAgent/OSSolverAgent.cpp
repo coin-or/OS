@@ -45,7 +45,7 @@ OSSolverAgent::~OSSolverAgent() {
 }
 
 string OSSolverAgent::solve(string osil, string osol){
-	string sOSrL; 
+	string sOSrL ; 
 	string theSOAP; 
 	string solveResult;
 	string getOSxL(string soapstring, string serviceMethod);
@@ -65,11 +65,14 @@ string OSSolverAgent::solve(string osil, string osol){
 	// send the soap to the HTTP server
 	std::cout << "SEND THE SOAP " << std::endl;
 	solveResult = WSUtil::sendSOAPMessage( theSOAP, solverAddress, solverPortNumber);
-	std::cout << "DONE SENDING THE SOAP " << std::endl;
 	// desoapify the result -- i.e. replace &lt; with <  etc.
 	solveResult = WSUtil::deSOAPify( solveResult);
 	// strip out the OSxL that we want from the SOAP envelope
+	std::cout << "DONE WITH DESOAP " << std::endl;
+	std::cout << solveResult << std::endl;
 	sOSrL = WSUtil::getOSxL(solveResult, "solve");
+	std::cout << "RETURN THE OSRL " << std::endl;
+	std::cout << sOSrL << std::endl;
 	return sOSrL;
 }//end solve
 
@@ -83,7 +86,6 @@ string OSSolverAgent::fileUpload( string osilFileName, string theOSiLFile){
 	std::cout << "SEND THE FILE " << std::endl;
 	//std::cout << theHTTPPOST << std::endl;
 	uploadResult = WSUtil::sendSOAPMessage( theHTTPPOST, solverAddress, solverPortNumber);
-	std::cout << "DONE UPLOADING THE FILE" << std::endl;
 	return uploadResult;
 }//end solve
 
