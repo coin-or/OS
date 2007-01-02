@@ -128,6 +128,10 @@ void LindoSolver::solve()  {
 			osilreader = new OSiLReader();
 			osinstance = osilreader->readOSiL( &osil);
 		}
+		
+		finish = clock();
+		duration = (double) (finish - start) / CLOCKS_PER_SEC;
+		std::cout << "Parsing took (seconds): "<< duration << std::endl;
 		OSiLWriter osilwriter;
 
 		if (osinstance->instanceData->constraints->numberOfConstraints <= 0){
@@ -139,9 +143,6 @@ void LindoSolver::solve()  {
 
 		//cout << osilwriter.writeOSiL( osinstance) << endl;
 		if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Lindo requires decision variables");
-		finish = clock();
-		duration = (double) (finish - start) / CLOCKS_PER_SEC;
-		std::cout << "Parsing took (seconds): "<< duration << std::endl;
 		std::cout << "Start process variables !!!!!!!!!" << std::endl;
 		if( !processVariables() ) throw ErrorClass("failed processing variables");
 		std::cout << "Finish process variables!!!!!!" << std::endl;
