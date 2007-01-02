@@ -42,6 +42,8 @@ int main(int argC, char* argV[])
 {
 	FileUtil *fileUtil = NULL;  
 	fileUtil = new FileUtil(); 
+	clock_t start, finish;
+	double duration;
 	std::string osilFileName;
 	std::string osil;
 	std::string uploadResult;
@@ -49,11 +51,16 @@ int main(int argC, char* argV[])
   	const char dirsep =  CoinFindDirSeparator();
     dataDir = dirsep == '/' ? "../../data/" : ".\\..\\data\\";
 	osilFileName =  dataDir + "parincLinear.osil";
+	osilFileName =  "/Users/kmartin/Documents/files/code/OSRepository/linear/continuous/osa-60.osil";
 	osil = fileUtil->getFileAsString( &osilFileName[0]);
 	OSSolverAgent* osagent = NULL;
-	osagent = new OSSolverAgent("http://127.0.0.1:8080/fileupload/servlet/B36104FileUpload");
+	osagent = new OSSolverAgent("http://128.135.130.17:8080/fileupload/servlet/B36104FileUpload");
 	std::cout << "Place remote synchronous call" << std::endl;
-	uploadResult = osagent->fileUpload("parincLinear.osil", osil);
+	start = clock();
+	uploadResult = osagent->fileUpload("os-60.osil", osil);
+	finish = clock();
+	duration = (double) (finish - start) / CLOCKS_PER_SEC;
+	std::cout << "File Upload took (seconds): "<< duration << std::endl;
 	std::cout << uploadResult << std::endl;
 	return 0;
 }
