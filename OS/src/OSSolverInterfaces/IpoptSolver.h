@@ -36,7 +36,7 @@
 # include <cassert>
 # include <stack>
 #include <string>
-# include <CppAD/CppAD.h>
+# include <CPPAD/CppAD.h>
 #include<iostream>
 #include <time.h>   
 #include<math.h>
