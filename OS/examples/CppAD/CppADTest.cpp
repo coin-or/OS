@@ -47,7 +47,7 @@ $end
 # include <cctype>
 # include <cassert>
 # include <stack>
-# include <CppAD/CppAD.h>
+# include <cppad/cppad.hpp>
 #include<iostream>
 #include<math.h>
 #include "OSInstance.h"

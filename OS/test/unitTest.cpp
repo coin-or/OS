@@ -55,7 +55,7 @@ double getObjVal(std::string osrl);
 
 int main(int argC, char* argV[])
 {
-	using cppad::NearEqual;
+	using CppAD::NearEqual;
 	bool ok;
 	double check;
 	cout << "START UNIT TEST" << endl;

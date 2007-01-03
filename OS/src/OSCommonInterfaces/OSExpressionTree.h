@@ -20,7 +20,7 @@
 #include <vector>
 #include <map>
 #include<cppad/cppad.hpp>
-using cppad::Parameter;
+using CppAD::Parameter;
 
 
 
