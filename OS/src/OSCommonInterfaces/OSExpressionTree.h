@@ -19,8 +19,8 @@
 #include "OSnLNode.h"
 #include <vector>
 #include <map>
-#include<CppAD/CppAD.h>
-using CppAD::Parameter;
+#include<cppad/cppad.hpp>
+using cppad::Parameter;
 
 
 

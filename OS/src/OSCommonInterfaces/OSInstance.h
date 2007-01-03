@@ -38,7 +38,7 @@
 #include "OSExpressionTree.h"
 #include <string>
 #include <map>
-#include<CppAD/CppAD.h>
+#include<cppad/cppad.hpp>
 
 
 

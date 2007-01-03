@@ -23,7 +23,7 @@
 #include<iostream>
 #include<vector>
 #include <map> 
-#include<CppAD/CppAD.h>
+#include<cppad/cppad.hpp>
 
 
 /*! \class OSnLNode OSnLNode.h "OSnLNode.h"

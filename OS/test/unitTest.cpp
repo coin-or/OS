@@ -11,13 +11,13 @@
 #include <OsiSolverInterface.hpp>   
 #include <CoinMessageHandler.hpp> 
 #include <CoinPackedMatrix.hpp> 
-#include <CppAD/CppAD.h> // the CppAD package http://www.coin-or.org/CppAD/
+#include <cppad/cppad.hpp> // the CppAD package http://www.coin-or.org/CppAD/
 #include <string>
   
 using std::cout;   
 using std::endl;
 
-#include <CppAD/CppAD.h>
+
 #include "OSResult.h" 
 #include "OSiLReader.h"       
 #include "OSiLWriter.h" 
@@ -55,7 +55,7 @@ double getObjVal(std::string osrl);
 
 int main(int argC, char* argV[])
 {
-	using CppAD::NearEqual;
+	using cppad::NearEqual;
 	bool ok;
 	double check;
 	cout << "START UNIT TEST" << endl;

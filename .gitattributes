@@ -148,7 +148,6 @@ OS/src/OSCommonInterfaces/OSInstance.cpp -text
 OS/src/OSCommonInterfaces/OSInstance.h -text
 OS/src/OSCommonInterfaces/OSResult.cpp -text
 OS/src/OSCommonInterfaces/OSResult.h -text
-OS/src/OSCommonInterfaces/OSStackMachine.h -text
 OS/src/OSCommonInterfaces/OSiLReader.cpp -text
 OS/src/OSCommonInterfaces/OSiLReader.h -text
 OS/src/OSCommonInterfaces/OSiLWriter.cpp -text
