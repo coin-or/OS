@@ -15,7 +15,7 @@
 /* Define to 1 if the CoinUtils package is used */
 #undef COIN_HAS_COINUTILS
 
-/* Define to 1 if the CppAD package is used */
+/* Define to 1 if the cppad package is used */
 #undef COIN_HAS_CPPAD
 
 /* Define to 1 if the Cplex package is used */

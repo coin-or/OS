@@ -20454,8 +20454,8 @@ fi
 echo "$as_me:$LINENO: result: $coin_has_cgl" >&5
 echo "${ECHO_T}$coin_has_cgl" >&6
 
-echo "$as_me:$LINENO: checking for COIN project CppAD" >&5
-echo $ECHO_N "checking for COIN project CppAD... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking for COIN project cppad" >&5
+echo $ECHO_N "checking for COIN project cppad... $ECHO_C" >&6
 
 # First check, if the sub-project is actually available (ToDo: allow
 # other locations)
@@ -20463,7 +20463,7 @@ echo $ECHO_N "checking for COIN project CppAD... $ECHO_C" >&6
 coin_has_cppad=unavailable
 if test x"$COIN_SKIP_PROJECTS" != x; then
   for dir in $COIN_SKIP_PROJECTS; do
-    if test $dir = CppAD; then
+    if test $dir = cppad; then
       coin_has_cppad=skipping
     fi
   done
@@ -20473,8 +20473,8 @@ if test $coin_has_cppad != skipping; then
   if test $PACKAGE_TARNAME = cppad; then
     coin_has_cppad=.
   else
-    if test -d $srcdir/../CppAD; then
-      coin_has_cppad=../CppAD
+    if test -d $srcdir/../cppad; then
+      coin_has_cppad=../cppad
     fi
   fi
 fi
