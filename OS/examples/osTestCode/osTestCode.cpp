@@ -51,7 +51,7 @@ int main(int argC, char* argV[])
   	const char dirsep =  CoinFindDirSeparator();
     dataDir = dirsep == '/' ? "../../data/" : ".\\..\\data\\";
 	osilFileName =  dataDir + "parincLinear.osil";
-	osilFileName =  "/Users/kmartin/Documents/files/code/OSRepository/linear/continuous/osa-60.osil";
+	osilFileName =  "/home/kmartin/files/code/OSRepository/linear/continuous/osa-60.osil";
 	std::cout << "Read the file into a string" << std::endl;
 	osil = fileUtil->getFileAsString( &osilFileName[0]);
 	OSSolverAgent* osagent = NULL;
