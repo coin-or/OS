@@ -47,7 +47,7 @@ std::string OSMatlab::display() {
 	std::string osil;
     std::string dataDir;
   	std::string osol = "<osol></osoL>";
-    double check;
+    double check; 
   	// get the input files
      const char dirsep =  CoinFindDirSeparator();
   	// Set directory containing mps data files.
@@ -67,7 +67,7 @@ std::string OSMatlab::display() {
 		check = 7668;
 		//ok &= NearEqual(getObjVal( m_Solver->osrl) , check,  1e-1 , 1e-1);
 		//if(ok == false) throw ErrorClass(" Fail unit test with Cbc on parincLinear");
-		delete m_Solver;
+		//delete m_Solver;
 		m_Solver = NULL;
 		return m_Solver->osrl;
 	}

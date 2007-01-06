@@ -229,7 +229,7 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 	int i;
 	op = e->op;
 	opnum = Intcast op;
-	Printf ("op %d  optype %d  ", opnum, optype[opnum]);
+	//Printf ("op %d  optype %d  ", opnum, optype[opnum]);
 	try{
 		switch( opnum) {
 			case OPPLUS:
@@ -421,7 +421,7 @@ bool OSnl2osil::createOSInstance(){
 	objectiveCoefficients = new SparseVector( n_var);
 	for(i = 0; i < n_var; i++){
 		objectiveCoefficients->indexes[i] = i;
-	}
+	} 
 	osinstance->setObjectiveNumber( n_obj) ;
 	for(i = 0; i < n_obj; i++){
 		for(j = 0; j < n_var; j++){

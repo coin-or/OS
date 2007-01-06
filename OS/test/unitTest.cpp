@@ -95,7 +95,6 @@ int main(int argC, char* argV[])
 	mpsFileName =  dataDir + "parinc.mps";
 	parserTestOSiLFileName = dataDir + "parincLinear.osil"; 
 	fileUtil = new FileUtil();
-	
 	// solve using using the osil file
 	#ifdef COIN_HAS_IPOPT
 	cout << "create a new IPOPT Solver for OSiL string solution" << endl;
@@ -180,7 +179,7 @@ int main(int argC, char* argV[])
 	}
 	#endif
 	try{
-		ok = true;
+		ok = true; 
 		cbcFileName = dataDir + "parincLinear.osil";
 		osil = fileUtil->getFileAsString( &cbcFileName[0]);
 		m_Solver = new CoinSolver();
@@ -285,7 +284,7 @@ int main(int argC, char* argV[])
 #ifdef COIN_HAS_LINDO
 		cout << "create a LINDO Solver for AMPL nl - OSInstance solution" << endl;
 		m_Solver = new LindoSolver();
-		nl2osil = new OSnl2osil( nlFileName);
+		nl2osil = new OSnl2osil( nlFileName); 
 		nl2osil->createOSInstance() ;
 		m_Solver->osinstance = nl2osil->osinstance;	
 		m_Solver->osol = osol;
