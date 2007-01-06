@@ -43,7 +43,12 @@
 #include<vector>
 #include <map>  
 
+#ifdef COIN_HAS_ASL
 #include "IpTNLP.hpp"
+#else
+#include "IpTNLP.hpp"
+#undef COIN_HAS_ASL
+#endif
 
 
 using namespace Ipopt;
