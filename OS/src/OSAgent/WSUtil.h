@@ -22,7 +22,7 @@
 
  
 
-#define RCVBUFSIZE 32   /* Size of receive buffer */
+#define RCVBUFSIZE 1024   /* Size of receive buffer */
 
 
 /*! \class WSUtil WSUtil.h "WSUtil.h"

@@ -60,7 +60,7 @@ string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned int se
 		struct sockaddr_in httpServAddr; /* Echo server address */
 		unsigned short httpServPort = servicePortNumber;     /* Echo server port */
 		char *servIP = &serviceIP[0];      /* Server IP address (dotted quad) */
-		char httpBuffer[RCVBUFSIZE];     /* Buffer for http string */
+		char httpBuffer[RCVBUFSIZE] = "";     /* Buffer for http string */
 		unsigned int httpStringLen;      /* Length of string to http */
 		int bytesRcvd, totalBytesRcvd;   /* Bytes read in single recv() and total bytes read */
 		char* message = &theSOAP[0];         /* Second arg: string to http */
@@ -96,6 +96,8 @@ string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned int se
 		cout << "OSiL sent to server" << endl;
 		#endif
 		int recvMsgSize = 1;
+		int n;
+		int char_val;
 		httpBuffer[ RCVBUFSIZE - 1] = '\0';
 		while (recvMsgSize > 0) {
 			#ifdef DEBUG
@@ -104,13 +106,21 @@ string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned int se
 			if ((recvMsgSize = recv(sock, httpBuffer, RCVBUFSIZE-1, 0)) < 0)
 				throw ErrorClass( "socket error receiving data");
 			#ifdef DEBUG
-			cout << "Message size =  " << recvMsgSize << endl;
+				cout << "Message size =  " << recvMsgSize << endl;
+				printf("%s\n", httpBuffer);
+				if(recvMsgSize < (RCVBUFSIZE - 1) ){
+					for(n = 0; n < recvMsgSize; n++){
+						char_val = httpBuffer[ n];
+						cout << "char_val = " << char_val << endl;
+					}
+				}
 			#endif
-			//cout << "Message size =  " << recvMsgSize << endl;
 			//httpBuffer[ recvMsgSize ] = '\0';
 			ret_message << httpBuffer;
-			if( recvMsgSize < RCVBUFSIZE - 1  ) cout << "Message size =  " << recvMsgSize << endl ;
-			if( recvMsgSize < RCVBUFSIZE - 1  ) break;
+			// clear the buffer
+			for(n = 0; n < RCVBUFSIZE; n++){
+				httpBuffer[ n] = 0;
+			}
 		}
 		#ifdef WIN_
 		closesocket( sock);
