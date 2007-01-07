@@ -37,24 +37,16 @@ std::string OSMatlab::display() {
   //using CppAD::NearEqual;
   FileUtil *fileUtil = NULL;  
 	DefaultSolver *m_Solver  = NULL;
- 	std::string osilFileName;
-	std::string ipOptFileName; 
-	std::string nlFileName; 
-	std::string lindoFileName;
 	std::string cbcFileName;
-	std::string mpsFileName;     
-	std::string parserTestOSiLFileName;
 	std::string osil;
     std::string dataDir;
   	std::string osol = "<osol></osoL>";
-    double check; 
   	// get the input files
      const char dirsep =  CoinFindDirSeparator();
   	// Set directory containing mps data files.
     dataDir = dirsep == '/' ? "../data/" : "..\\data\\";
-  bool ok;
   	try{
-        ok = true;
+        std::string test = "";
 		cbcFileName = dataDir + "parincLinear.osil";
 		osil = fileUtil->getFileAsString( &cbcFileName[0]);
 		m_Solver = new CoinSolver();
@@ -63,13 +55,10 @@ std::string OSMatlab::display() {
 		m_Solver->osol = osol;  
 		m_Solver->osinstance = NULL;
 		m_Solver->solve();
-        std::string test = m_Solver->osrl;
-		check = 7668;
-		//ok &= NearEqual(getObjVal( m_Solver->osrl) , check,  1e-1 , 1e-1);
-		//if(ok == false) throw ErrorClass(" Fail unit test with Cbc on parincLinear");
-		//delete m_Solver;
+        test = m_Solver->osrl;
+       // delete m_Solver;
 		m_Solver = NULL;
-		return m_Solver->osrl;
+		return test;
 	}
 	catch(const ErrorClass& eclass){
 		//cout << "OSrL =  " <<  m_Solver->osrl <<  endl;

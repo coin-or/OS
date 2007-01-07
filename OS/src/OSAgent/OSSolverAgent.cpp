@@ -63,16 +63,18 @@ string OSSolverAgent::solve(string osil, string osol){
 	theSOAP = WSUtil::createSOAPMessage(numInputs, solverAddress, postURI, 
 				smethod, msInputs, msInputNames, sSoapAction);
 	// send the soap to the HTTP server
-	std::cout << "SEND THE SOAP " << std::endl;
+	//std::cout << "SEND THE SOAP " << std::endl;
 	solveResult = WSUtil::sendSOAPMessage( theSOAP, solverAddress, solverPortNumber);
 	// desoapify the result -- i.e. replace &lt; with <  etc.
+	std::cout << "CALL DESOAP WITH THE FOLLOWING " << std::endl;
+	std::cout << solveResult << std::endl;
 	solveResult = WSUtil::deSOAPify( solveResult);
 	// strip out the OSxL that we want from the SOAP envelope
-	std::cout << "DONE WITH DESOAP " << std::endl;
-	std::cout << solveResult << std::endl;
+	//std::cout << "DONE WITH DESOAP " << std::endl;
+	//std::cout << solveResult << std::endl;
 	sOSrL = WSUtil::getOSxL(solveResult, "solve");
-	std::cout << "RETURN THE OSRL " << std::endl;
-	std::cout << sOSrL << std::endl;
+	//std::cout << "RETURN THE OSRL " << std::endl;
+	//std::cout << sOSrL << std::endl;
 	return sOSrL;
 }//end solve
 

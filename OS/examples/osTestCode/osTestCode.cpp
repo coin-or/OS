@@ -29,6 +29,7 @@
 #include "WSUtil.h" 
 #include "OSSolverAgent.h" 
 #include "CoinHelperFunctions.hpp"  
+//
 #include <time.h>
 #include <sstream>
 #include <ctype.h>
@@ -50,7 +51,7 @@ int main(int argC, char* argV[])
   	const char dirsep =  CoinFindDirSeparator();
     dataDir = dirsep == '/' ? "../../data/" : ".\\..\\data\\";
 	osilFileName =  dataDir + "parincLinear.osil";
-	osilFileName =  "/Users/kmartin/Documents/files/code/OSRepository/linear/continuous/osa-60.osil";
+	//osilFileName =  "/Users/kmartin/Documents/files/code/OSRepository/linear/continuous/osa-60.osil";
 	std::cout << "Read the file into a string" << std::endl;
 	osil = fileUtil->getFileAsString( &osilFileName[0]);
 	OSSolverAgent* osagent = NULL;
@@ -61,7 +62,14 @@ int main(int argC, char* argV[])
 	uploadResult = osagent->fileUpload("osa-60.osil", osil);
 	finish = time( &tmp);
 	std::cout << "File Upload took (seconds): "<< difftime(finish, start) << std::endl;
-	//std::cout << uploadResult << std::endl;
+	std::cout << uploadResult << std::endl;
+	// now tell solve the problem remotely with cbc
+	osagent = new OSSolverAgent("http://128.135.130.17:8080/cbc/CBCSolverService.jws");
+	return 0;
+	//osil = "";
+	std::string osol = "<osol> </osol>";
+	std::string osrl = osagent->solve(osil, osol);
+	std::cout << osrl << std::endl;
 	return 0;
 }
 
