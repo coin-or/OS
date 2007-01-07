@@ -24,7 +24,7 @@
 #include <unistd.h>  
 #include <netdb.h>  
 #endif
-#define DEBUG
+//#define DEBUG
 
 #include <stdlib.h>    
 #include <string.h>    
@@ -82,12 +82,12 @@ string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned int se
 			throw ErrorClass( errormsg );
 		}
 		#ifdef DEBUG
-		//cout << "Connection Established"  << endl;
+		cout << "Connection Established"  << endl;
 		#endif
 		httpStringLen = strlen( message);   
 		#ifdef DEBUG
-		//cout << "HERE IS WHAT WE SEND" << endl;
-		//cout << message << endl;
+		cout << "HERE IS WHAT WE SEND" << endl;
+		cout << message << endl;
 		#endif
 		/* Send the string to the server */	
 		if (send(sock, message, httpStringLen, 0) != httpStringLen)
@@ -96,36 +96,28 @@ string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned int se
 		cout << "OSiL sent to server" << endl;
 		#endif
 		int recvMsgSize = 1;
+		httpBuffer[ RCVBUFSIZE - 1] = '\0';
 		while (recvMsgSize > 0) {
 			#ifdef DEBUG
-			//cout << "start to receive" << endl;
+			cout << "start to receive" << endl;
 			#endif
 			if ((recvMsgSize = recv(sock, httpBuffer, RCVBUFSIZE-1, 0)) < 0)
 				throw ErrorClass( "socket error receiving data");
 			#ifdef DEBUG
 			cout << "Message size =  " << recvMsgSize << endl;
 			#endif
-			httpBuffer[ recvMsgSize ] = '\0';
+			//cout << "Message size =  " << recvMsgSize << endl;
+			//httpBuffer[ recvMsgSize ] = '\0';
 			ret_message << httpBuffer;
-			if(recvMsgSize == 0 ) {
-			//if(recvMsgSize == 0 || recvMsgSize < RCVBUFSIZE - 1) {
-			#ifdef WIN_
-			closesocket( sock);
-			WSACleanup();
-			#else
-			close( sock);
-			#endif
-			break;
-			}
+			if( recvMsgSize < RCVBUFSIZE - 1  ) cout << "Message size =  " << recvMsgSize << endl ;
+			if( recvMsgSize < RCVBUFSIZE - 1  ) break;
 		}
-
 		#ifdef WIN_
 		closesocket( sock);
 		WSACleanup();
 		#else
 		close( sock);
-		#endif
-		
+		#endif	
 		return ret_message.str();
 	}
 	catch(const ErrorClass& eclass){
