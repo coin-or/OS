@@ -36,40 +36,52 @@
 #include <vector>
 #include <string>
 
-using std::cout;
-using std::endl;
+//using std::cout;
+//using std::endl;
 
 int main(int argC, char* argV[])
 {
-	FileUtil *fileUtil = NULL;  
-	fileUtil = new FileUtil(); 
-	time_t start, finish, tmp;
-	std::string osilFileName;
-	std::string osil;
-	std::string uploadResult;
-  	std::string dataDir;
-  	const char dirsep =  CoinFindDirSeparator();
-    dataDir = dirsep == '/' ? "../../data/" : ".\\..\\data\\";
-	osilFileName =  dataDir + "parincLinear.osil";
-	//osilFileName =  "/Users/kmartin/Documents/files/code/OSRepository/linear/continuous/osa-60.osil";
-	std::cout << "Read the file into a string" << std::endl;
-	osil = fileUtil->getFileAsString( &osilFileName[0]);
-	OSSolverAgent* osagent = NULL;
-	osagent = new OSSolverAgent("http://128.135.130.17:8080/fileupload/servlet/B36104FileUpload");
-	std::cout << std::endl << std::endl;
-	std::cout << "Place remote synchronous call" << std::endl;
-	start = time( &tmp);
-	uploadResult = osagent->fileUpload("osa-60.osil", osil);
-	finish = time( &tmp);
-	std::cout << "File Upload took (seconds): "<< difftime(finish, start) << std::endl;
-	std::cout << uploadResult << std::endl;
-	return 0;
-	// now tell solve the problem remotely with cbc
-	osagent = new OSSolverAgent("http://128.135.130.17:8080/cbc/CBCSolverService.jws");
-	//osil = "";
-	std::string osol = "<osol> </osol>";
-	std::string osrl = osagent->solve(osil, osol);
-	std::cout << osrl << std::endl;
-	return 0;
+	try{
+		if( argC != 2) throw ErrorClass( "there must be exactly one command line argument which should be the file name");
+		FileUtil *fileUtil = NULL;  
+		fileUtil = new FileUtil(); 
+		time_t start, finish, tmp;
+		std::string osilFileNameWithPath;
+		std::string osilFileName;
+		std::string remoteFileLocation = "/home/kmartin/temp/";
+		std::string osil;
+		std::string uploadResult;
+	  	const char dirsep =  CoinFindDirSeparator();
+		osilFileNameWithPath = argV[ 1];
+		std::cout << "FILE NAME = " << argV[1];
+		std::cout << "Read the file into a string" << std::endl;
+		osil = fileUtil->getFileAsString( &osilFileNameWithPath[ 0]);
+		OSSolverAgent* osagent = NULL;
+		osagent = new OSSolverAgent("http://128.135.130.17:8080/fileupload/servlet/B36104FileUpload");
+		// strip off just the file name
+		// modify to into a file C:filename
+		int index = osilFileNameWithPath.find_last_of( dirsep);
+		int slength = osilFileNameWithPath.size();
+		osilFileName = osilFileNameWithPath.substr( index + 1, slength - 1) ;
+		std::cout << std::endl << std::endl;
+		std::cout << "Place remote synchronous call" << std::endl;
+		start = time( &tmp);
+		uploadResult = osagent->fileUpload(osilFileName, osil);
+		finish = time( &tmp);
+		std::cout << "File Upload took (seconds): "<< difftime(finish, start) << std::endl;
+		std::cout << uploadResult << std::endl;
+		// now tell solve the problem remotely with cbc
+		osagent = new OSSolverAgent("http://128.135.130.17:8080/cbc/CBCSolverService.jws");
+		// the osil comes from the remote location
+		osil = "";
+		std::string osol = "<osol><general><instanceLocation locationType=\"local\">" + remoteFileLocation + osilFileName + "</instanceLocation></general> </osol>";
+		std::string osrl = osagent->solve(osil, osol);
+		std::cout << osrl << std::endl;
+		return 0;
+	}
+	catch( const ErrorClass& eclass){
+		std::cout << eclass.errormsg <<  std::endl;
+		return 0;
+	}
 }
 
