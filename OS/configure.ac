@@ -164,6 +164,7 @@ AC_CONFIG_FILES([Makefile
           examples/osTestCode/Makefile
           examples/CppAD/Makefile
           examples/osiTest/Makefile
+          examples/fileUpload/Makefile
           os_addlibs.txt])
 
 # Here put the location and name of the configuration header file

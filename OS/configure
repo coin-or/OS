@@ -21713,7 +21713,7 @@ fi
 
 # Here list all the files that configure should create (except for the
 # configuration header file)
-                                                                                                                                                                ac_config_files="$ac_config_files Makefile src/Makefile src/OSAgent/Makefile src/OSUtils/Makefile src/OSCommonInterfaces/Makefile src/OSSolverInterfaces/Makefile src/OSModelInterfaces/Makefile src/OSParsers/Makefile test/Makefile examples/Makefile examples/instanceGenerator/Makefile examples/amplClient/Makefile examples/osTestCode/Makefile examples/CppAD/Makefile examples/osiTest/Makefile os_addlibs.txt"
+                                                                                                                                                                          ac_config_files="$ac_config_files Makefile src/Makefile src/OSAgent/Makefile src/OSUtils/Makefile src/OSCommonInterfaces/Makefile src/OSSolverInterfaces/Makefile src/OSModelInterfaces/Makefile src/OSParsers/Makefile test/Makefile examples/Makefile examples/instanceGenerator/Makefile examples/amplClient/Makefile examples/osTestCode/Makefile examples/CppAD/Makefile examples/osiTest/Makefile examples/fileUpload/Makefile os_addlibs.txt"
 
 
 # Here put the location and name of the configuration header file
@@ -22429,6 +22429,7 @@ do
   "examples/osTestCode/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/osTestCode/Makefile" ;;
   "examples/CppAD/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/CppAD/Makefile" ;;
   "examples/osiTest/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/osiTest/Makefile" ;;
+  "examples/fileUpload/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/fileUpload/Makefile" ;;
   "os_addlibs.txt" ) CONFIG_FILES="$CONFIG_FILES os_addlibs.txt" ;;
   "depfiles" ) CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
   "inc/config_os.h" ) CONFIG_HEADERS="$CONFIG_HEADERS inc/config_os.h" ;;

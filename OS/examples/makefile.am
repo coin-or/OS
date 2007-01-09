@@ -13,6 +13,7 @@ SUBDIRS =
   SUBDIRS += osTestCode
   SUBDIRS += CppAD
   SUBDIRS += osiTest
+  SUBDIRS += fileUpload
 
 
 
