@@ -56,12 +56,25 @@ CONFIG_CLEAN_FILES =
 PROGRAMS = $(noinst_PROGRAMS)
 am_fileUpload_OBJECTS = fileUpload.$(OBJEXT)
 fileUpload_OBJECTS = $(am_fileUpload_OBJECTS)
-fileUpload_DEPENDENCIES = $(COINUTILSOBJDIR)/src/libCoinUtils.la \
-	$(OSIOBJDIR)/src/libOsi.la \
-	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
+am__DEPENDENCIES_1 =
+fileUpload_DEPENDENCIES = $(OSOBJDIR)/src/libOS.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
-	$(CLPOBJDIR)/src/libClp.la $(CBCOBJDIR)/src/libCbc.la \
-	$(CGLOBJDIR)/src/libCgl.la $(OSOBJDIR)/src/libOS.la
+	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
+	$(CBCOBJDIR)/src/libCbc.la \
+	$(CGLOBJDIR)/src/libCgl.la \
+	$(OSIOBJDIR)/src/libOsi.la \
+	$(CLPOBJDIR)/src/libClp.la \
+	$(COINUTILSOBJDIR)/src/libCoinUtils.la \
+	$(am__DEPENDENCIES_1)
+#fileUpload_DEPENDENCIES = $(OSOBJDIR)/src/libOS.la \
+#	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
+#	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
+#	$(CBCOBJDIR)/src/libCbc.la \
+#	$(CGLOBJDIR)/src/libCgl.la \
+#	$(OSIOBJDIR)/src/libOsi.la \
+#	$(CLPOBJDIR)/src/libClp.la \
+#	$(COINUTILSOBJDIR)/src/libCoinUtils.la \
+#	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
@@ -271,17 +284,30 @@ AUTOMAKE_OPTIONS = foreign
 
 # List all source files for this executable, including headers
 fileUpload_SOURCES = fileUpload.cpp 
-
-# List all additionally required COIN libraries
 fileUpload_LDADD = \
-	$(COINUTILSOBJDIR)/src/libCoinUtils.la \
-	$(OSIOBJDIR)/src/libOsi.la \
-	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
+	$(OSOBJDIR)/src/libOS.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
-	$(CLPOBJDIR)/src/libClp.la \
+	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
 	$(CBCOBJDIR)/src/libCbc.la \
 	$(CGLOBJDIR)/src/libCgl.la \
-	$(OSOBJDIR)/src/libOS.la 
+	$(OSIOBJDIR)/src/libOsi.la \
+	$(CLPOBJDIR)/src/libClp.la \
+	$(COINUTILSOBJDIR)/src/libCoinUtils.la \
+	$(ADDLIBS) 
+
+
+# List all additionally required COIN libraries
+#fileUpload_LDADD = \
+#	$(OSOBJDIR)/src/libOS.la \
+#	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
+#	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
+#	$(CBCOBJDIR)/src/libCbc.la \
+#	$(CGLOBJDIR)/src/libCgl.la \
+#	$(OSIOBJDIR)/src/libOsi.la \
+#	$(CLPOBJDIR)/src/libClp.la \
+#	$(COINUTILSOBJDIR)/src/libCoinUtils.la \
+#	$(ADDLIBS) \
+#	$(WINSOCKLIB)
 
 
 # Now add the include paths for compilation
