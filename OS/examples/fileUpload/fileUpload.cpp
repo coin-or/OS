@@ -54,8 +54,8 @@ int main(int argC, char* argV[])
 	  	const char dirsep =  CoinFindDirSeparator();
 		osilFileNameWithPath = argV[ 1];
 		std::cout << "FILE NAME = " << argV[1];
-		std::cout << "Read the file into a string" << std::endl;
-		osil = fileUtil->getFileAsString( &osilFileNameWithPath[ 0]);
+		std::cout << "Read the file into a string" << std::endl; 
+		osil = fileUtil->getFileAsString( &osilFileNameWithPath[ 0]); 
 		OSSolverAgent* osagent = NULL;
 		osagent = new OSSolverAgent("http://128.135.130.17:8080/fileupload/servlet/OSFileUpload");
 		// strip off just the file name
@@ -70,6 +70,7 @@ int main(int argC, char* argV[])
 		finish = time( &tmp);
 		std::cout << "File Upload took (seconds): "<< difftime(finish, start) << std::endl;
 		std::cout << uploadResult << std::endl;
+		return 0;
 		// now tell solve the problem remotely with cbc
 		osagent = new OSSolverAgent("http://128.135.130.17:8080/cbc/CBCSolverService.jws");
 		// the osil comes from the remote location

@@ -15,26 +15,42 @@
 
 
 #include <iostream>
+#include <sstream>
 #include <string>
 #include<stdlib.h>
 #include "OSMatlab.h"
-using namespace std;
-using std::cout;   
+
+  
+
+using std::cout;
 using std::endl;
+using std::ostringstream; 
+
 
  
 
 OSMatlab::OSMatlab() {
-  val1 = 0;
-  val2 = 0;
+	sparseMat = NULL;
 }//end OSMatlab
 
 
 OSMatlab::~OSMatlab() {
-}//end OSMatlab
+	
+}//end ~OSMatlab
 
 std::string OSMatlab::display() {
+	ostringstream outStr;
+	int i;
+	outStr << "Start input of Sparse Matrix" << endl;
+	if(sparseMat != NULL){
+		for(i = 0 ; i < sparseMat->valueSize; i++){
+			outStr << sparseMat->values[ i] << endl;	
+		}
+	}
+	outStr << "Finish input of Sparse Matrix" << endl;
+	return outStr.str();
   //using CppAD::NearEqual;
+  /*
   FileUtil *fileUtil = NULL;  
 	DefaultSolver *m_Solver  = NULL;
 	std::string cbcFileName;
@@ -63,7 +79,7 @@ std::string OSMatlab::display() {
 	catch(const ErrorClass& eclass){
 		//cout << "OSrL =  " <<  m_Solver->osrl <<  endl;
 		return  m_Solver->osrl;
-	}
+		*/
 	/*
     	try{
        lindoFileName = dataDir + "parincLinear.osil"; 
@@ -89,4 +105,6 @@ std::string OSMatlab::display() {
   //end OS stuff
 }//end display
 
-void OSMatlab::set_data(double v1, double v2) { val1 = v1; val2 = v2; }
+std::string OSMatlab::wierdtest() {
+	return "this is weird";
+}

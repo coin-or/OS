@@ -4,7 +4,7 @@
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  *
- * \remarks
+ * \remarks 
  * Copyright (C) 2005, Robert Fourer, Jun Ma, Kipp Martin, Huanyuan Sheng
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
@@ -28,6 +28,7 @@
 #include "OSConfig.h" 
 #include "CoinSolver.h"
 #include "DefaultSolver.h"  
+#include "OSDataStructures.h"
 //#include "WSUtil.h" 
 //#include "OSSolverAgent.h"   
 //#include "OShL.h"     
@@ -35,23 +36,21 @@
 
 #ifdef COIN_HAS_LINDO    
 #include "LindoSolver.h"
-#endif  
+#endif   
 //end OS headers
 
 #include <string>
 
 
-class OSMatlab {
+class OSMatlab { 
 
 public:
 
   OSMatlab();
   ~OSMatlab() ;
+  SparseMatrix *sparseMat;
   std::string display();
-  void set_data(double v1, double v2);
-  
-private:
-  double val1,  val2;
+  std::string wierdtest();
 };
 
 #endif

@@ -13,6 +13,7 @@
 #include <CoinPackedMatrix.hpp> 
 #include <cppad/cppad.hpp> // the CppAD package http://www.coin-or.org/CppAD/
 #include <string>
+#include "OSMatlab.h"
   
 using std::cout;   
 using std::endl;
