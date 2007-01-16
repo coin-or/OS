@@ -740,7 +740,15 @@
 	<xs:element name="bivariateNormal" type="BivariateNormal"/>
 	<xs:complexType name="MultivariateNormal">
 		<xs:sequence>
-			<xs:element name="mu" type="xs:double" minOccurs="3" maxOccurs="unbounded"/>
+			<xs:element name="mu" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:double">
+							<xs:attribute name="idx" type="xs:nonNegativeInteger" use="optional"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
 			<xs:element name="covariance" type="MatrixMarket"/>
 		</xs:sequence>
 		<xs:attribute name="cdf" type="xs:boolean" use="optional" default="false"/>

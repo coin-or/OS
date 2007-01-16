@@ -970,6 +970,7 @@
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="lb"/>
 					<xs:enumeration value="ub"/>
+					<xs:enumeration value="lbAndUb"/>
 					<xs:enumeration value="init"/>
 					<xs:enumeration value="initString"/>
 					<xs:enumeration value="type"/>
@@ -1003,6 +1004,7 @@
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="lb"/>
 					<xs:enumeration value="ub"/>
+					<xs:enumeration value="lbAndUb"/>
 					<xs:enumeration value="constant"/>
 				</xs:restriction>
 			</xs:simpleType>
@@ -1071,9 +1073,21 @@
 	</xs:complexType>
 	<xs:complexType name="StochasticSoftConstraints">
 		<xs:all>
-			<xs:element name="penalties" type="StochasticPenalties" minOccurs="0"/>
+			<xs:element name="penalties" minOccurs="0">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="StochasticPenalties"/>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
 			<xs:element name="probabilisticObjectives" type="StochasticProbabilisticObjectives" minOccurs="0"/>
-			<xs:element name="chanceConstraints" type="StochasticChanceConstraints" minOccurs="0"/>
+			<xs:element name="chanceConstraints" minOccurs="0">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="StochasticChanceConstraints"/>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
 			<xs:element name="integratedChanceConstraints" type="StochasticIntegratedChanceConstraints" minOccurs="0"/>
 			<xs:element name="userDefinedRiskMeasures" type="StochasticUserDefinedRiskMeasures" minOccurs="0"/>
 		</xs:all>
@@ -1082,6 +1096,7 @@
 		<xs:sequence>
 			<xs:element name="row" type="StochasticPenaltiesRow" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute name="numberOfPenalties" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="StochasticPenaltiesRow">
 		<xs:choice>
@@ -1156,10 +1171,11 @@
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="StochasticProbabilisticObjectives">
-		<xs:sequence>
-			<xs:element name="simpleProbabilisticObjective" type="StochasticSimpleProbabilisticObjective" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="jointProbabilisticObjective" type="StochasticJointProbabilisticObjective" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
+		<xs:choice maxOccurs="unbounded">
+			<xs:element name="simpleProbabilisticObjective" type="StochasticSimpleProbabilisticObjective" minOccurs="0"/>
+			<xs:element name="jointProbabilisticObjective" type="StochasticJointProbabilisticObjective" minOccurs="0"/>
+		</xs:choice>
+		<xs:attribute name="numberOfProbabilisticObjectives" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="StochasticSimpleProbabilisticObjective">
 		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
@@ -1176,6 +1192,7 @@
 		<xs:sequence>
 			<xs:element name="row" type="xs:nonNegativeInteger"/>
 		</xs:sequence>
+		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="maxOrMin" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -1197,10 +1214,11 @@
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="StochasticChanceConstraints">
-		<xs:sequence>
-			<xs:element name="simpleChanceConstraint" type="StochasticSimpleChanceConstraint" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="jointChanceConstraint" type="StochasticJointChanceConstraint" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
+		<xs:choice maxOccurs="unbounded">
+			<xs:element name="simpleChanceConstraint" type="StochasticSimpleChanceConstraint" minOccurs="0"/>
+			<xs:element name="jointChanceConstraint" type="StochasticJointChanceConstraint" minOccurs="0"/>
+		</xs:choice>
+		<xs:attribute name="numberOfStochasticChanceConstraints" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="StochasticSimpleChanceConstraint">
 		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
@@ -1225,6 +1243,7 @@
 		<xs:sequence>
 			<xs:element name="row" type="xs:nonNegativeInteger" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="lb" use="optional" default="0.0">
 			<xs:simpleType>
 				<xs:restriction base="xs:double">
@@ -1255,10 +1274,11 @@
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="StochasticIntegratedChanceConstraints">
-		<xs:sequence>
-			<xs:element name="simpleIntegratedChanceConstraint" type="StochasticSimpleIntegratedChanceConstraint" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="jointIntegratedChanceConstraint" type="StochasticJointIntegratedChanceConstraint" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
+		<xs:choice maxOccurs="unbounded">
+			<xs:element name="simpleIntegratedChanceConstraint" type="StochasticSimpleIntegratedChanceConstraint" minOccurs="0"/>
+			<xs:element name="jointIntegratedChanceConstraint" type="StochasticJointIntegratedChanceConstraint" minOccurs="0"/>
+		</xs:choice>
+		<xs:attribute name="numberOfIntegratedChanceConstraints" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="StochasticSimpleIntegratedChanceConstraint">
 		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
@@ -1269,6 +1289,7 @@
 		<xs:sequence>
 			<xs:element name="row" type="xs:nonNegativeInteger" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="lb" type="xs:double" use="optional" default="0"/>
 		<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
 		<xs:attribute name="aggregatingFunction" use="optional" default="and">
@@ -1284,10 +1305,11 @@
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="StochasticUserDefinedRiskMeasures">
-		<xs:sequence>
-			<xs:element name="simpleUserDefinedRiskMeasure" type="StochasticSimpleUserDefinedRiskMeasure" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="jointUserDefinedRiskMeasure" type="StochasticJointUserDefinedRiskMeasure" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
+		<xs:choice maxOccurs="unbounded">
+			<xs:element name="simpleUserDefinedRiskMeasure" type="StochasticSimpleUserDefinedRiskMeasure" minOccurs="0"/>
+			<xs:element name="jointUserDefinedRiskMeasure" type="StochasticJointUserDefinedRiskMeasure" minOccurs="0"/>
+		</xs:choice>
+		<xs:attribute name="numberOfUserDefinedRiskMeasures" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="StochasticSimpleUserDefinedRiskMeasure">
 		<xs:sequence>
@@ -1301,6 +1323,7 @@
 		<xs:sequence>
 			<xs:element name="row" type="StochasticJointUserDefinedRiskMeasureRow" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="lb" type="xs:double" use="optional" default="0"/>
 		<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
 		<xs:attribute name="aggregatingFunction" use="optional" default="and">
@@ -1347,7 +1370,7 @@
 		<xs:sequence>
 			<xs:element name="param" type="StochasticNumberParam" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfVariables" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfParameters" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="StochasticNumbersVariables">
 		<xs:sequence>
@@ -1359,18 +1382,6 @@
 		<xs:simpleContent>
 			<xs:extension base="xs:double">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-				<xs:attribute name="attr" use="required">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="value"/>
-							<xs:enumeration value="lb"/>
-							<xs:enumeration value="ub"/>
-							<xs:enumeration value="init"/>
-							<xs:enumeration value="initString"/>
-							<xs:enumeration value="type"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:attribute>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -1383,6 +1394,7 @@
 						<xs:restriction base="xs:string">
 							<xs:enumeration value="lb"/>
 							<xs:enumeration value="ub"/>
+							<xs:enumeration value="lbAndUb"/>
 							<xs:enumeration value="init"/>
 							<xs:enumeration value="initString"/>
 							<xs:enumeration value="type"/>
