@@ -38,6 +38,7 @@
 </linearConstraintCoefficients>
 		<quadraticCoefficients numberOfQuadraticTerms="3">
 			<qTerm idx="0"  idxOne="0" idxTwo="0"  coef="10"/>
+			<
 			<qTerm idx="0"  idxOne="1" idxTwo="1"  coef="11"/>
 			<qTerm idx="0"  idxOne="0" idxTwo="1"  coef="3"/>
 		</quadraticCoefficients>

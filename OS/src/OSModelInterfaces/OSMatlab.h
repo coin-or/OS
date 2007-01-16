@@ -49,8 +49,17 @@ public:
   OSMatlab();
   ~OSMatlab() ;
   SparseMatrix *sparseMat;
+  double *bl;
+  double *bu;
+  double *obj;
+  double *vl;
+  double *vu;
+  int numVar;
+  int numCon;
+  bool objType;
   std::string display();
-  std::string wierdtest();
+  void createOSInstance();
+ 	OSInstance *osinstance;
 };
 
 #endif
