@@ -56,7 +56,7 @@ std::string OSMatlab::display() {
 		osilwriter = new OSiLWriter();
 		return  osilwriter->writeOSiL( osinstance);
 	}else
-	return "there was no instance"
+	return "there was no instance";
 
   //using CppAD::NearEqual;
   /*
