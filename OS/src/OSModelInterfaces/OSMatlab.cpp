@@ -54,7 +54,26 @@ std::string OSMatlab::display() {
 	if(osinstance != NULL){
 		OSiLWriter *osilwriter;
 		osilwriter = new OSiLWriter();
-		return  osilwriter->writeOSiL( osinstance);
+		//for(i = 0; i < (sparseMat->valueSize) - 1 ; i++){
+		//	outStr << sparseMat->values[ i] << endl;
+		//}
+		outStr << osilwriter->writeOSiL( osinstance);
+		outStr << endl;
+		outStr << "Now Solve with LINDO" << endl;
+		outStr << "create a new LINDO Solver for OSiL string solution" << endl;
+		CoinSolver *m_Solver;	
+		m_Solver = new CoinSolver();
+		m_Solver->m_sSolverName = "cbc";
+		m_Solver->osinstance = osinstance;
+		outStr << "call the LINDO Solver" << endl;
+		m_Solver->solve();
+		outStr << "Here is the LINDO solver solution" << endl;
+		outStr << m_Solver->osrl << endl;
+		// do the garbage collection 
+		//lindo->osinstance = NULL;
+		//delete lindo;
+		return outStr.str();
+		//return  osilwriter->writeOSiL( osinstance);
 	}else
 	return "there was no instance";
 
@@ -116,6 +135,8 @@ std::string OSMatlab::display() {
 
 void OSMatlab::createOSInstance(){
 	int i;
+	std::string varname = "";
+	std::string conname = "";
 	osinstance = new OSInstance();
 	//
 	// put in some of the OSInstance <instanceHeader> information
@@ -129,7 +150,8 @@ void OSMatlab::createOSInstance(){
 	//addVariable(int index, string name, double lowerBound, double upperBound, char type, double init, string initString);
 	// we could use setVariables() and add all the variable with one method call -- below is easier
 	for(i = 0; i < numVar; i++){
-		osinstance->addVariable(i, " ", vl[ i], vu[ i], 'C', OSNAN, "");
+		varname = "x" ;
+		osinstance->addVariable(i, "" , vl[ i], vu[ i], 'C', OSNAN, "");
 	}
 	//
 	// now add the objective function
@@ -145,19 +167,22 @@ void OSMatlab::createOSInstance(){
 	}
 	//bool addObjective(int index, string name, string maxOrMin, double constant, double weight, SparseVector* objectiveCoefficients);
 	osinstance->addObjective(-1, "objfunction", "max", 0.0, 1.0, objcoeff);
-	/*
 	//
 	// now the constraints
 	osinstance->setConstraintNumber( numCon); 
 	//bool addConstraint(int index, string name, double lowerBound, double upperBound, double constant);
 	// note: we could use setConstraints() and add all the constraints with one method call -- below is easier
-	osinstance->addConstraint(0, "row0", -OSINFINITY, 4, 0);
-	osinstance->addConstraint(1, "row1", -OSINFINITY, 6, 0);
-	osinstance->addConstraint(2, "row2", -OSINFINITY, 0, 0);
-	osinstance->addConstraint(3, "row3", 0 , OSINFINITY, 0); 
-	osinstance->addConstraint(4, "row4", -OSINFINITY, 0, 0);
-	osinstance->addConstraint(5, "row5", -OSINFINITY, 0, 0);
-	*/
+	for(i = 0; i < numCon; i++){
+		osinstance->addConstraint(i, "", bl[ i], bu[ i], 0);
+	}
+	//
+	// now add the <linearConstraintCoefficients>
+	//bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor, 
+	//double* values, int valuesBegin, int valuesEnd, 
+	//int* indexes, int indexesBegin, int indexesEnd,   			
+	//int* starts, int startsBegin, int startsEnd);	
+	osinstance->setLinearConstraintCoefficients(sparseMat->valueSize, true, sparseMat->values, 0, sparseMat->valueSize - 1, 
+		sparseMat->indexes, 0, sparseMat->valueSize - 1, sparseMat->starts, 0, sparseMat->startSize - 1);	
 	display();
 	return;
 }// end createOSInstance

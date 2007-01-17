@@ -370,5 +370,6 @@ std::string OSiLWriter::writeOSiL( OSInstance *theosinstance){
 	} // end instanceData if
 	outStr << "</osil>" ;
 	if( m_bWhiteSpace == true) outStr << endl;
+	outStr << endl;
 	return outStr.str();
 } // end writeOSiL
