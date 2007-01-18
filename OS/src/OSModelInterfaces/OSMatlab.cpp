@@ -39,6 +39,7 @@ OSMatlab::OSMatlab() {
   	vu = NULL;
   	objType = 0;
   	osinstance = NULL;
+  	varType = NULL;
   	numVar = 0;
   	numCon = 0;
 }//end OSMatlab
@@ -151,7 +152,7 @@ void OSMatlab::createOSInstance(){
 	// we could use setVariables() and add all the variable with one method call -- below is easier
 	for(i = 0; i < numVar; i++){
 		varname = "x" ;
-		osinstance->addVariable(i, "" , vl[ i], vu[ i], 'C', OSNAN, "");
+		osinstance->addVariable(i, "" , vl[ i], vu[ i], varType[ i], OSNAN, "");
 	}
 	//
 	// now add the objective function

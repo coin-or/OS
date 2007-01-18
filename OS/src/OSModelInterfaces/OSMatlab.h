@@ -56,6 +56,7 @@ public:
   double *vu;
   int numVar;
   int numCon;
+  char *varType;
   bool objType;
   std::string display();
   void createOSInstance();
