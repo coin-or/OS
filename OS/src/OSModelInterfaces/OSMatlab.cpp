@@ -62,9 +62,11 @@ std::string OSMatlab::display() {
 		outStr << endl;
 		outStr << "Now Solve with LINDO" << endl;
 		outStr << "create a new LINDO Solver for OSiL string solution" << endl;
-		CoinSolver *m_Solver;	
-		m_Solver = new CoinSolver();
-		m_Solver->m_sSolverName = "cbc";
+		//CoinSolver *m_Solver;	
+		//m_Solver = new CoinSolver();
+		//m_Solver->m_sSolverName = "cbc";
+		LindoSolver *m_Solver;
+		m_Solver = new LindoSolver();
 		m_Solver->osinstance = osinstance;
 		outStr << "call the LINDO Solver" << endl;
 		m_Solver->solve();
@@ -135,9 +137,8 @@ std::string OSMatlab::display() {
 }//end display
 
 void OSMatlab::createOSInstance(){
+	ostringstream outStr;
 	int i;
-	std::string varname = "";
-	std::string conname = "";
 	osinstance = new OSInstance();
 	//
 	// put in some of the OSInstance <instanceHeader> information
@@ -151,8 +152,10 @@ void OSMatlab::createOSInstance(){
 	//addVariable(int index, string name, double lowerBound, double upperBound, char type, double init, string initString);
 	// we could use setVariables() and add all the variable with one method call -- below is easier
 	for(i = 0; i < numVar; i++){
-		varname = "x" ;
-		osinstance->addVariable(i, "" , vl[ i], vu[ i], varType[ i], OSNAN, "");
+		outStr << "x";
+		outStr << i ;
+		osinstance->addVariable(i, outStr.str() , vl[ i], vu[ i], varType[ i], OSNAN, "");
+		outStr.str("");
 	}
 	//
 	// now add the objective function
@@ -173,8 +176,12 @@ void OSMatlab::createOSInstance(){
 	osinstance->setConstraintNumber( numCon); 
 	//bool addConstraint(int index, string name, double lowerBound, double upperBound, double constant);
 	// note: we could use setConstraints() and add all the constraints with one method call -- below is easier
+	outStr.str("");
 	for(i = 0; i < numCon; i++){
-		osinstance->addConstraint(i, "", bl[ i], bu[ i], 0);
+		outStr << "r";
+		outStr << i;
+		osinstance->addConstraint(i, outStr.str() , bl[ i], bu[ i], 0);
+		outStr.str("");
 	}
 	//
 	// now add the <linearConstraintCoefficients>
