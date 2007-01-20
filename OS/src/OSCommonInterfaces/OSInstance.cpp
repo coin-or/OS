@@ -1429,6 +1429,44 @@ bool OSInstance::setQuadraticTerms(int number,
 	return true;
 }//setQuadraticTerms
 
+bool OSInstance::setQuadraticTermsInNonlinearExpressions(int numQPTerms, int* rowIndexes, int* varOneIndexes, int* varTwoIndexes, double* coefficients){
+		instanceData->nonlinearExpressions->numberOfNonlinearExpressions = numQPTerms;
+		instanceData->nonlinearExpressions->nl = new Nl*[ numQPTerms ];
+		// define the vectors
+		OSnLNode *nlNodePoint;
+		OSnLNodeVariable *nlNodeVariablePoint;
+		OSnLNodeNumber *nlNodeNumberPoint;
+		OSnLNodeMax *nlNodeMaxPoint;
+		std::vector<OSnLNode*> nlNodeVec;
+		//
+		//
+		int i;
+		for(i = 0; i < numQPTerms; i++){
+			instanceData->nonlinearExpressions->nl[ i] = new Nl();
+			instanceData->nonlinearExpressions->nl[ i]->idx = rowIndexes[ i];
+			instanceData->nonlinearExpressions->nl[ i]->osExpressionTree = new OSExpressionTree();
+		// create a variable nl node for x0
+		nlNodeVariablePoint = new OSnLNodeVariable();
+		nlNodeVariablePoint->idx = varOneIndexes[ i];
+		// give this variable the coefficient
+		nlNodeVariablePoint->coef = coefficients[ i];
+		nlNodeVec.push_back( nlNodeVariablePoint);
+		// create the nl node for x1
+		nlNodeVariablePoint = new OSnLNodeVariable();
+		nlNodeVariablePoint->idx = varTwoIndexes[ i];
+		nlNodeVec.push_back( nlNodeVariablePoint);
+		// create the nl node for *
+		nlNodePoint = new OSnLNodeTimes();
+		nlNodeVec.push_back( nlNodePoint);
+		// the vectors are in postfix format
+		// now the expression tree
+		instanceData->nonlinearExpressions->nl[ i]->osExpressionTree->m_treeRoot =
+			nlNodeVec[ 0]->createExpressionTreeFromPostfix( nlNodeVec);
+		nlNodeVec.clear();
+		}
+	return true;
+}//setQuadraticTermsInNonlinearExpressions
+
 bool OSInstance::initializeNonLinearStructures( ){
 	if( m_bNonLinearStructuresInitialized == true) return true;
 	if( m_bProcessObjectives == false) processObjectives();

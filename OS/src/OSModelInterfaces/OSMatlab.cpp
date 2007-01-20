@@ -40,6 +40,11 @@ OSMatlab::OSMatlab() {
   	objType = 0;
   	osinstance = NULL;
   	varType = NULL;
+  	numQTerms = 0;
+  	qRows = NULL;
+  	qIndex1 = NULL;
+  	qIndex2 = NULL;
+  	qVal = NULL;
   	numVar = 0;
   	numCon = 0;
 }//end OSMatlab
@@ -79,61 +84,6 @@ std::string OSMatlab::display() {
 		//return  osilwriter->writeOSiL( osinstance);
 	}else
 	return "there was no instance";
-
-  //using CppAD::NearEqual;
-  /*
-  FileUtil *fileUtil = NULL;  
-	DefaultSolver *m_Solver  = NULL;
-	std::string cbcFileName;
-	std::string osil;
-    std::string dataDir;
-  	std::string osol = "<osol></osoL>";
-  	// get the input files
-     const char dirsep =  CoinFindDirSeparator();
-  	// Set directory containing mps data files.
-    dataDir = dirsep == '/' ? "../data/" : "..\\data\\";
-  	try{
-        std::string test = "";
-		cbcFileName = dataDir + "parincLinear.osil";
-		osil = fileUtil->getFileAsString( &cbcFileName[0]);
-		m_Solver = new CoinSolver();
-		m_Solver->m_sSolverName = "cbc";
-		m_Solver->osil = osil;
-		m_Solver->osol = osol;  
-		m_Solver->osinstance = NULL;
-		m_Solver->solve();
-        test = m_Solver->osrl;
-       // delete m_Solver;
-		m_Solver = NULL;
-		return test;
-	}
-	catch(const ErrorClass& eclass){
-		//cout << "OSrL =  " <<  m_Solver->osrl <<  endl;
-		return  m_Solver->osrl;
-		*/
-	/*
-    	try{
-       lindoFileName = dataDir + "parincLinear.osil"; 
-		osil = fileUtil->getFileAsString( &lindoFileName[0]);
-		mexPrintf("Got file lindoapiaddins:\n");
-		m_Solver = new LindoSolver();	
-		m_Solver->osil = osil;
-		m_Solver->osol = osol;
-		m_Solver->osinstance = NULL;
-		mexPrintf("Call the Lindo Solver:\n");
-		m_Solver->solve();
-        mexPrintf("Done solving in LIndo\n");
-        std::string test = m_Solver->osrl;
-        mexPrintf( &test[0]);
-		m_Solver->osinstance = NULL;
-		//delete m_Solver;
-		m_Solver = NULL;
-  
-	}
-	catch(const ErrorClass& eclass){
-	}
-	*/
-  //end OS stuff
 }//end display
 
 void OSMatlab::createOSInstance(){
@@ -190,7 +140,10 @@ void OSMatlab::createOSInstance(){
 	//int* indexes, int indexesBegin, int indexesEnd,   			
 	//int* starts, int startsBegin, int startsEnd);	
 	osinstance->setLinearConstraintCoefficients(sparseMat->valueSize, true, sparseMat->values, 0, sparseMat->valueSize - 1, 
-		sparseMat->indexes, 0, sparseMat->valueSize - 1, sparseMat->starts, 0, sparseMat->startSize - 1);	
+		sparseMat->indexes, 0, sparseMat->valueSize - 1, sparseMat->starts, 0, sparseMat->startSize - 1);
+	if(numQTerms > 0){
+		//osinstance->setQuadraticTermsInNonlinearExpressions(numQTerms, qRows, qIndex1, qIndex2, qVal);	
+	}
 	display();
 	return;
 }// end createOSInstance

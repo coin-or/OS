@@ -163,7 +163,7 @@ int  main(){
 		nlNodeVariablePoint = new OSnLNodeVariable();
 		nlNodeVariablePoint->idx=0;
 		nlNodeVec.push_back( nlNodeVariablePoint);
-		// create the nl node for x0
+		// create the nl node for x1
 		nlNodeVariablePoint = new OSnLNodeVariable();
 		nlNodeVariablePoint->idx=1;
 		nlNodeVec.push_back( nlNodeVariablePoint);

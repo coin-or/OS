@@ -58,6 +58,12 @@ public:
   int numCon;
   char *varType;
   bool objType;
+  // quadratic terms
+  int numQTerms;
+  int *qRows;
+  int *qIndex1;
+  int *qIndex2;
+  double *qVal;
   std::string display();
   void createOSInstance();
  	OSInstance *osinstance;

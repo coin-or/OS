@@ -154,6 +154,7 @@ void LindoSolver::solve()  {
 		std::cout << "Finish generateLindoModel()  !!!!!!!!!" << std::endl;
 		if(m_iNumberNewSlacks > 0 && !addSlackVars()) throw ErrorClass("failed adding slack variables");
 		//if(osinstance->getNumberOfQuadraticTerms() > 0 && !processQuadraticTerms()) throw ErrorClass("failed adding quadratic terms");
+		//osinstance->initializeNonLinearStructures( );
 		if(osinstance->getNumberOfNonlinearExpressions() > 0 && !processNonlinearExpressions()) throw ErrorClass("failed adding nonlinear terms");
 		//dataEchoCheck();
 		if( optimize() != true) throw ErrorClass("problem optimizing model");
