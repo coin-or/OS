@@ -50,6 +50,8 @@ AM_CPPFLAGS =\
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiClp` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src` \
 	-I`$(CYGPATH_W) $(CPPADSRCDIR)/..` \
+	-I`$(CYGPATH_W) $(CPPADSRCDIR)/..` \
+	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSAgent`  \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSCommonInterfaces`  \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSSolverInterfaces`	\
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSUtils` 

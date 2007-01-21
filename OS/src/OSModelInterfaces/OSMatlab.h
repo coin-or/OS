@@ -17,7 +17,6 @@
 #define OSMATLAB_H
 //
 //OS headers
-#include <OsiSolverInterface.hpp>   
 #include "OSResult.h" 
 #include "OSiLReader.h"       
 #include "OSiLWriter.h" 
@@ -29,14 +28,12 @@
 #include "CoinSolver.h"
 #include "DefaultSolver.h"  
 #include "OSDataStructures.h"
-//#include "WSUtil.h" 
-//#include "OSSolverAgent.h"   
-//#include "OShL.h"     
+#include "OSSolverAgent.h" 
 #include "ErrorClass.h" 
 
-#ifdef COIN_HAS_LINDO    
-#include "LindoSolver.h"
-#endif   
+//#ifdef COIN_HAS_LINDO    
+//#include "LindoSolver.h"
+//#endif   
 //end OS headers
 
 #include <string>
@@ -64,6 +61,7 @@ public:
   int *qIndex1;
   int *qIndex2;
   double *qVal;
+  std::string instanceName;
   std::string display();
   void createOSInstance();
  	OSInstance *osinstance;
