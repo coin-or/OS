@@ -40,15 +40,14 @@ void mexFunction( int  nlhs, mxArray   *plhs[], int  nrhs, const mxArray *prhs[]
     * ObjType -- 1 for max, 0 for min
     */
      int i;
-     double testinf;
      double *pr;
      OSMatlab *d = new OSMatlab();
-     string sTest;
+     string sTest = "";
      char *buf;
      SparseMatrix* getConstraintMatrix( const mxArray *prhs);
      //
      // Check for proper number of input and output arguments
-     printf("NRHS = %d\n", nrhs);
+     mexPrintf("BEGIN PROCESSING DATA\n");
      if (nrhs != 12) {
           mexErrMsgTxt("Twelve input arguments are required.");
      }
@@ -72,23 +71,28 @@ void mexFunction( int  nlhs, mxArray   *plhs[], int  nrhs, const mxArray *prhs[]
      // get the rest of the model
      //
      // both bl and bu should equal the number of rows
-     if (mxGetN(prhs[3]) != d->numCon ){
-          mexErrMsgTxt(" Vector BL size must equal the number of rows\n");
-     }
-     d->bl =  mxGetPr( prhs[ 3]);
-     // convert Matlab -infinity to OS -infinity
-     for(i = 0;  i < d->numCon;  i++){
-          if(  mxIsInf(  -(d->bl[i]) ) ) d->bl[ i] = -OSINFINITY;
+     //
+     if(  !mxIsEmpty( prhs[ 3]) ){
+          if (mxGetN(prhs[3]) != d->numCon ){
+               mexErrMsgTxt(" Vector BL size must equal the number of rows\n");
+          }
+          d->bl =  mxGetPr( prhs[ 3]);
+          // convert Matlab -infinity to OS -infinity
+          for(i = 0;  i < d->numCon;  i++){
+               if(  mxIsInf(  -(d->bl[i]) ) ) d->bl[ i] = -OSINFINITY;
+          }
      }
      //
      //
-     if (mxGetN(prhs[4]) != d->numCon ){
-          mexErrMsgTxt(" Vector BU size must equal the number of rows\n");
-     }
-     d->bu =  mxGetPr( prhs[ 4]);
-     // convert Matlab infinity to OS infinity
-     for(i = 0;  i < d->numCon;  i++){
-          if(  mxIsInf( d->bu[i]) ) d->bu[ i] = OSINFINITY;
+     if(  !mxIsEmpty( prhs[ 4]) ){
+          if (mxGetN(prhs[4]) != d->numCon ){
+               mexErrMsgTxt(" Vector BU size must equal the number of rows\n");
+          }
+          d->bu =  mxGetPr( prhs[ 4]);
+          // convert Matlab infinity to OS infinity
+          for(i = 0;  i < d->numCon;  i++){
+               if(  mxIsInf( d->bu[i]) ) d->bu[ i] = OSINFINITY;
+          }
      }
      //
      //
@@ -98,31 +102,35 @@ void mexFunction( int  nlhs, mxArray   *plhs[], int  nrhs, const mxArray *prhs[]
      d->obj =  mxGetPr( prhs[ 5]);
      //
      //
-     if (mxGetN(prhs[6]) != d->numVar ){
-          mexErrMsgTxt(" Vector VL size must equal the number of variables\n");
-     }
-     d->vl =  mxGetPr( prhs[ 6]);
-     // convert Matlab -infinity to OS -infinity
-     for(i = 0;  i < d->numVar;  i++){
-          if(  mxIsInf(  -(d->vl[i]) ) ) d->vl[ i] = -OSINFINITY;
+     if(  !mxIsEmpty( prhs[ 6]) ){
+          if (mxGetN(prhs[6]) != d->numVar ){
+               mexErrMsgTxt(" Vector VL size must equal the number of variables\n");
+          }
+          d->vl =  mxGetPr( prhs[ 6]);
+          // convert Matlab -infinity to OS -infinity
+          for(i = 0;  i < d->numVar;  i++){
+               if(  mxIsInf(  -(d->vl[i]) ) ) d->vl[ i] = -OSINFINITY;
+          }
      }
      //
      //
-     if (mxGetN(prhs[7]) != d->numVar ){
-          mexErrMsgTxt(" Vector VU size must equal the number of variables\n");
-     }
-     d->vu =  mxGetPr( prhs[ 7]);
-     // convert Matlab infinity to OS infinity
-     for(i = 0;  i < d->numVar;  i++){
-          if(  mxIsInf( d->vu[i]) ) d->vu[ i] = OSINFINITY;
+     if(  !mxIsEmpty( prhs[ 7]) ){
+          if (mxGetN(prhs[7]) != d->numVar ){
+               mexErrMsgTxt(" Vector VU size must equal the number of variables\n");
+          }
+          d->vu =  mxGetPr( prhs[ 7]);
+          // convert Matlab infinity to OS infinity
+          for(i = 0;  i < d->numVar;  i++){
+               if(  mxIsInf( d->vu[i]) ) d->vu[ i] = OSINFINITY;
+          }
      }
      //
      //
      if ( (mxGetScalar( prhs[ 8]) != 0) && (mxGetScalar( prhs[ 8]) != 1)){
           mexErrMsgTxt(" The objective type must be either 1 (max) or 0 (min)\n");
      }
-     d->objType = mxGetScalar( prhs[ 8]);
-     printf("Objective Function Type = %d\n", d->objType);
+     mxGetScalar( prhs[ 8]) > 0 ?  d->objType = 1 : d->objType = 0; 
+     //printf("Objective Function Type = %d\n", d->objType);
      //
      // get the variable types, this is character data
      if(!mxIsChar( prhs[ 9])){
@@ -142,7 +150,7 @@ void mexFunction( int  nlhs, mxArray   *plhs[], int  nrhs, const mxArray *prhs[]
      if(  !mxIsEmpty( prhs[ 10]) ){
           if( mxGetM( prhs[ 10])  != 4) mexErrMsgTxt(" Vector Q Must have 4 rows\n");
           int numQTerms = mxGetN( prhs[ 10]);
-          printf("NUMBER OF Q TERMS =  %d \n", numQTerms);
+          //printf("NUMBER OF Q TERMS =  %d \n", numQTerms);
           d->numQTerms = numQTerms;
           d->qRows = new int[ numQTerms];
           d->qIndex1 = new int[ numQTerms];
@@ -151,7 +159,7 @@ void mexFunction( int  nlhs, mxArray   *plhs[], int  nrhs, const mxArray *prhs[]
           pr= mxGetPr( prhs[ 10]);
           for(i = 0; i < numQTerms; i++){
                for(j = 0; j <= 3; j++){
-                    printf(" Q COMP = %f\n", pr[ k]) ;
+                    //printf(" Q COMP = %f\n", pr[ k]) ;
                     switch( j){
                          case 0:
                               d->qRows[ i] = (int) pr[ k];
@@ -174,8 +182,11 @@ void mexFunction( int  nlhs, mxArray   *plhs[], int  nrhs, const mxArray *prhs[]
            d->instanceName = mxArrayToString( prhs[ 11]);
      }
      // create the OSInstance
+     mexPrintf("CREATE THE INSTANCE \n");
      d->createOSInstance();
-     sTest = d->display();
+     mexPrintf("CALL THE REMOTE SERVER \n");
+    sTest = d->display();
+     mexPrintf("DONE WITH THE REMOTE CALL \n");
     // mexPrintf(&sTest[0] );
     //char *str[100];
      //plhs[0]= mxCreateCharMatrixFromStrings(  1,    (const char **)str); 

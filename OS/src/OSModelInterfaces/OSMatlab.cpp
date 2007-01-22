@@ -93,15 +93,17 @@ void OSMatlab::createOSInstance(){
 	// now put in the OSInstance <instanceData> information
 	// 
 	// first the variables
-	osinstance->setVariableNumber( numVar);   
-	//addVariable(int index, string name, double lowerBound, double upperBound, char type, double init, string initString);
-	// we could use setVariables() and add all the variable with one method call -- below is easier
+	std::string *varNames;
+	varNames = new std::string[ numVar];
 	for(i = 0; i < numVar; i++){
 		outStr << "x";
 		outStr << i ;
-		osinstance->addVariable(i, outStr.str() , vl[ i], vu[ i], varType[ i], OSNAN, "");
+		varNames[ i] = outStr.str();
+		//osinstance->addVariable(i, varNames[ i] , vl[ i], vu[ i], varType[ i], OSNAN, "");
 		outStr.str("");
 	}
+	//
+	osinstance->setVariables(numVar, varNames, vl, vu, varType, NULL, NULL);
 	//
 	// now add the objective function
 	osinstance->setObjectiveNumber( 1);
@@ -120,16 +122,19 @@ void OSMatlab::createOSInstance(){
 	osinstance->addObjective(-1, "objfunction", maxOrMin, 0.0, 1.0, objcoeff);
 	//
 	// now the constraints
-	osinstance->setConstraintNumber( numCon); 
-	//bool addConstraint(int index, string name, double lowerBound, double upperBound, double constant);
-	// note: we could use setConstraints() and add all the constraints with one method call -- below is easier
+	
+	std::string *conNames;
+	conNames = new std::string[ numCon];
 	outStr.str("");
 	for(i = 0; i < numCon; i++){
 		outStr << "r";
 		outStr << i;
-		osinstance->addConstraint(i, outStr.str() , bl[ i], bu[ i], 0);
+		conNames[ i] = outStr.str();
+		//osinstance->addConstraint(i, outStr.str() , bl[ i], bu[ i], 0);
 		outStr.str("");
 	}
+	
+	osinstance->setConstraints( numCon, conNames, bl, bu, NULL);
 	//
 	// now add the <linearConstraintCoefficients>
 	//bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor, 
