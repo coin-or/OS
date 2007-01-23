@@ -41,22 +41,22 @@ void mexFunction( int  nlhs, mxArray   *plhs[], int  nrhs, const mxArray *prhs[]
     */
      int i;
      double *pr;
-     OSMatlab *d = new OSMatlab();
+     OSMatlab *matlabModel = new OSMatlab();
      string sTest = "";
      char *buf;
      SparseMatrix* getConstraintMatrix( const mxArray *prhs);
      //
      // Check for proper number of input and output arguments
      mexPrintf("BEGIN PROCESSING DATA\n");
-     if (nrhs != 12) {
-          mexErrMsgTxt("Twelve input arguments are required.");
+     if (nrhs != 13) {
+          mexErrMsgTxt("Thirteen input arguments are required.");
      }
      
      
      //
      // get number of variables and number of constraints
-     d->numVar =  (int) mxGetScalar( prhs[ 0]) ;
-     d->numCon = (int) mxGetScalar( prhs[ 1]);
+     matlabModel->numVar =  (int) mxGetScalar( prhs[ 0]) ;
+     matlabModel->numCon = (int) mxGetScalar( prhs[ 1]);
      //
      // get the constraint matrix
      // check the data type
@@ -64,64 +64,64 @@ void mexFunction( int  nlhs, mxArray   *plhs[], int  nrhs, const mxArray *prhs[]
           mexErrMsgTxt("Constraint matrix A must be of type double.");
      }
      // check the dimension
-     if ( (mxGetN(prhs[ 2]) != d->numVar) ||  (mxGetM(prhs[2]) != d->numCon) ){
+     if ( (mxGetN(prhs[ 2]) != matlabModel->numVar) ||  (mxGetM(prhs[2]) != matlabModel->numCon) ){
           mexErrMsgTxt(" Constraint matrix A must have number of rows equal to number of constraints and columns equal number of variables \n");
      }
-     d->sparseMat = getConstraintMatrix( prhs[2])   ;
+     matlabModel->sparseMat = getConstraintMatrix( prhs[2])   ;
      // get the rest of the model
      //
      // both bl and bu should equal the number of rows
      //
      if(  !mxIsEmpty( prhs[ 3]) ){
-          if (mxGetN(prhs[3]) != d->numCon ){
+          if (mxGetN(prhs[3]) != matlabModel->numCon ){
                mexErrMsgTxt(" Vector BL size must equal the number of rows\n");
           }
-          d->bl =  mxGetPr( prhs[ 3]);
+          matlabModel->bl =  mxGetPr( prhs[ 3]);
           // convert Matlab -infinity to OS -infinity
-          for(i = 0;  i < d->numCon;  i++){
-               if(  mxIsInf(  -(d->bl[i]) ) ) d->bl[ i] = -OSINFINITY;
+          for(i = 0;  i < matlabModel->numCon;  i++){
+               if(  mxIsInf(  -(matlabModel->bl[i]) ) ) matlabModel->bl[ i] = -OSINFINITY;
           }
      }
      //
      //
      if(  !mxIsEmpty( prhs[ 4]) ){
-          if (mxGetN(prhs[4]) != d->numCon ){
+          if (mxGetN(prhs[4]) != matlabModel->numCon ){
                mexErrMsgTxt(" Vector BU size must equal the number of rows\n");
           }
-          d->bu =  mxGetPr( prhs[ 4]);
+          matlabModel->bu =  mxGetPr( prhs[ 4]);
           // convert Matlab infinity to OS infinity
-          for(i = 0;  i < d->numCon;  i++){
-               if(  mxIsInf( d->bu[i]) ) d->bu[ i] = OSINFINITY;
+          for(i = 0;  i < matlabModel->numCon;  i++){
+               if(  mxIsInf( matlabModel->bu[i]) ) matlabModel->bu[ i] = OSINFINITY;
           }
      }
      //
      //
-     if (mxGetN(prhs[5]) != d->numVar ){
+     if (mxGetN(prhs[5]) != matlabModel->numVar ){
           mexErrMsgTxt(" Vector OBJ size must equal the number of variables\n");
      }
-     d->obj =  mxGetPr( prhs[ 5]);
+     matlabModel->obj =  mxGetPr( prhs[ 5]);
      //
      //
      if(  !mxIsEmpty( prhs[ 6]) ){
-          if (mxGetN(prhs[6]) != d->numVar ){
+          if (mxGetN(prhs[6]) != matlabModel->numVar ){
                mexErrMsgTxt(" Vector VL size must equal the number of variables\n");
           }
-          d->vl =  mxGetPr( prhs[ 6]);
+          matlabModel->vl =  mxGetPr( prhs[ 6]);
           // convert Matlab -infinity to OS -infinity
-          for(i = 0;  i < d->numVar;  i++){
-               if(  mxIsInf(  -(d->vl[i]) ) ) d->vl[ i] = -OSINFINITY;
+          for(i = 0;  i < matlabModel->numVar;  i++){
+               if(  mxIsInf(  -(matlabModel->vl[i]) ) ) matlabModel->vl[ i] = -OSINFINITY;
           }
      }
      //
      //
      if(  !mxIsEmpty( prhs[ 7]) ){
-          if (mxGetN(prhs[7]) != d->numVar ){
+          if (mxGetN(prhs[7]) != matlabModel->numVar ){
                mexErrMsgTxt(" Vector VU size must equal the number of variables\n");
           }
-          d->vu =  mxGetPr( prhs[ 7]);
+          matlabModel->vu =  mxGetPr( prhs[ 7]);
           // convert Matlab infinity to OS infinity
-          for(i = 0;  i < d->numVar;  i++){
-               if(  mxIsInf( d->vu[i]) ) d->vu[ i] = OSINFINITY;
+          for(i = 0;  i < matlabModel->numVar;  i++){
+               if(  mxIsInf( matlabModel->vu[i]) ) matlabModel->vu[ i] = OSINFINITY;
           }
      }
      //
@@ -129,18 +129,18 @@ void mexFunction( int  nlhs, mxArray   *plhs[], int  nrhs, const mxArray *prhs[]
      if ( (mxGetScalar( prhs[ 8]) != 0) && (mxGetScalar( prhs[ 8]) != 1)){
           mexErrMsgTxt(" The objective type must be either 1 (max) or 0 (min)\n");
      }
-     mxGetScalar( prhs[ 8]) > 0 ?  d->objType = 1 : d->objType = 0; 
-     //printf("Objective Function Type = %d\n", d->objType);
+     mxGetScalar( prhs[ 8]) > 0 ?  matlabModel->objType = 1 : matlabModel->objType = 0; 
+     //printf("Objective Function Type = %d\n", matlabModel->objType);
      //
      // get the variable types, this is character data
      if(!mxIsChar( prhs[ 9])){
           mexErrMsgTxt(" Vector VarType  must be a character array\n");
      }
-     if (mxGetN(prhs[ 9]) != d->numVar ){
+     if (mxGetN(prhs[ 9]) != matlabModel->numVar ){
           mexErrMsgTxt(" Vector VarType size must equal the number of variables\n");
      }
      buf = mxArrayToString( prhs[ 9]);
-     d->varType = buf;
+     matlabModel->varType = buf;
      
      //
      // get the quadratic terms
@@ -151,27 +151,27 @@ void mexFunction( int  nlhs, mxArray   *plhs[], int  nrhs, const mxArray *prhs[]
           if( mxGetM( prhs[ 10])  != 4) mexErrMsgTxt(" Vector Q Must have 4 rows\n");
           int numQTerms = mxGetN( prhs[ 10]);
           //printf("NUMBER OF Q TERMS =  %d \n", numQTerms);
-          d->numQTerms = numQTerms;
-          d->qRows = new int[ numQTerms];
-          d->qIndex1 = new int[ numQTerms];
-          d->qIndex2 = new int[ numQTerms];
-          d->qVal = new double[ numQTerms];
+          matlabModel->numQTerms = numQTerms;
+          matlabModel->qRows = new int[ numQTerms];
+          matlabModel->qIndex1 = new int[ numQTerms];
+          matlabModel->qIndex2 = new int[ numQTerms];
+          matlabModel->qVal = new double[ numQTerms];
           pr= mxGetPr( prhs[ 10]);
           for(i = 0; i < numQTerms; i++){
                for(j = 0; j <= 3; j++){
                     //printf(" Q COMP = %f\n", pr[ k]) ;
                     switch( j){
                          case 0:
-                              d->qRows[ i] = (int) pr[ k];
+                              matlabModel->qRows[ i] = (int) pr[ k];
                               break;
                          case 1:
-                              d->qIndex1[ i] = (int) pr[ k];
+                              matlabModel->qIndex1[ i] = (int) pr[ k];
                               break;
                          case 2:
-                              d->qIndex2[ i] = (int) pr[ k];
+                              matlabModel->qIndex2[ i] = (int) pr[ k];
                               break;
                          case 3:
-                              d->qVal[ i] =  pr[ k];
+                              matlabModel->qVal[ i] =  pr[ k];
                               break;
                     }
                     k++;
@@ -179,13 +179,16 @@ void mexFunction( int  nlhs, mxArray   *plhs[], int  nrhs, const mxArray *prhs[]
           }
      }
      if(  !mxIsEmpty( prhs[ 11]) ){
-           d->instanceName = mxArrayToString( prhs[ 11]);
+           matlabModel->instanceName = mxArrayToString( prhs[ 11]);
      }
+     buf = mxArrayToString( prhs[ 12]);
+     const char *password = "chicagoesmuyFRIO";
+     if( strcmp(buf,  password) != 0) mexErrMsgTxt(" Incorrect Password\n");
      // create the OSInstance
      mexPrintf("CREATE THE INSTANCE \n");
-     d->createOSInstance();
+     matlabModel->createOSInstance();
      mexPrintf("CALL THE REMOTE SERVER \n");
-    sTest = d->display();
+    sTest = matlabModel->solve();
      mexPrintf("DONE WITH THE REMOTE CALL \n");
     // mexPrintf(&sTest[0] );
     //char *str[100];
@@ -196,7 +199,7 @@ void mexFunction( int  nlhs, mxArray   *plhs[], int  nrhs, const mxArray *prhs[]
       //str[ 0] = mxArrayToString( prhs[ 9]);
       str[ 0] = &sTest[0] ;
       plhs[0]= mxCreateCharMatrixFromStrings( 1, (const char **)str); 
-     delete d;
+     delete matlabModel;
      return;
 }
 SparseMatrix* getConstraintMatrix( const mxArray *prhs){

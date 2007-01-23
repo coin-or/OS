@@ -44,6 +44,7 @@ OS/data/lotsize.config -text
 OS/data/lotsize.osil -text
 OS/data/lotsize.osrl -text
 OS/data/markowitz.config -text
+OS/data/markowitz.m -text
 OS/data/markowitz.osil -text
 OS/data/mytoy.nl -text
 OS/data/nltrans.dat -text
@@ -59,6 +60,7 @@ OS/data/parinc.mod -text
 OS/data/parinc.mps -text
 OS/data/parinc.mps_osil -text
 OS/data/parincLinear.config -text
+OS/data/parincLinear.m -text
 OS/data/parincLinear.osil -text
 OS/data/parincLinearInteger.osil -text
 OS/data/parincLinearJun.osil -text
@@ -171,6 +173,7 @@ OS/src/OSModelInterfaces/OSmps2osil.cpp -text
 OS/src/OSModelInterfaces/OSmps2osil.h -text
 OS/src/OSModelInterfaces/OSnl2osil.cpp -text
 OS/src/OSModelInterfaces/OSnl2osil.h -text
+OS/src/OSModelInterfaces/callMatlabSolver.m -text
 OS/src/OSModelInterfaces/matlabSolver.cpp -text
 OS/src/OSParsers/Makefile.am -text
 OS/src/OSParsers/Makefile.in -text

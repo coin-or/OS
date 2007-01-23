@@ -55,7 +55,7 @@ OSMatlab::~OSMatlab() {
 	delete osinstance;
 }//end ~OSMatlab
 
-std::string OSMatlab::display() {
+std::string OSMatlab::solve() {
 	ostringstream outStr;
 	std::string osol = "";
 	std::string osil = "";
@@ -78,7 +78,7 @@ std::string OSMatlab::display() {
 		return outStr.str();
 	}else
 	return "there was no instance";
-}//end display
+}//end solve
 
 void OSMatlab::createOSInstance(){
 	ostringstream outStr;
@@ -146,6 +146,5 @@ void OSMatlab::createOSInstance(){
 	if(numQTerms > 0){
 		osinstance->setQuadraticTermsInNonlinearExpressions(numQTerms, qRows, qIndex1, qIndex2, qVal);	
 	}
-	display();
 	return;
 }// end createOSInstance

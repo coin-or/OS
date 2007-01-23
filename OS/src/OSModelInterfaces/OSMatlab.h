@@ -62,7 +62,7 @@ public:
   int *qIndex2;
   double *qVal;
   std::string instanceName;
-  std::string display();
+  std::string solve();
   void createOSInstance();
  	OSInstance *osinstance;
 };
