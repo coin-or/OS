@@ -16,7 +16,7 @@ ObjType = 1;
 % leave Q empty if there are no quadratic terms
 Q = [];
 prob_name = 'ParInc Example'
-password = 'chicagoesmuyFRIO';
+password = '*****';
 %
 %
 callMatLabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, VarType, Q, prob_name, password)
