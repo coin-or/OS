@@ -979,8 +979,10 @@ OSExpressionTree* OSInstance::getNonlinearExpressionTree(int rowIdx){
 		return m_mapExpressionTrees[ rowIdx];
 	}
 	else{
-		if( m_mapExpressionTrees.find( rowIdx) != m_mapExpressionTrees.end()) return NULL;
-		else return m_mapExpressionTrees[ rowIdx];
+		//if( m_mapExpressionTrees.find( rowIdx) != m_mapExpressionTrees.end()) return NULL;
+		//else return m_mapExpressionTrees[ rowIdx];
+		if( m_mapExpressionTrees.find( rowIdx) != m_mapExpressionTrees.end()) return m_mapExpressionTrees[ rowIdx];
+		else return NULL ;
 		// check to make sure rowIdx has a nonlinear term and is in the map
 		/** define an iterator for the expression trees map allExpTrees */
 		//std::map<int, OSExpressionTree*>::iterator pos;
