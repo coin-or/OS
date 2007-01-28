@@ -65,6 +65,7 @@ public:
   std::string solve();
   void createOSInstance();
  	OSInstance *osinstance;
+ 	std::string osil;
 };
 
 #endif

@@ -58,7 +58,7 @@ OSMatlab::~OSMatlab() {
 std::string OSMatlab::solve() {
 	ostringstream outStr;
 	std::string osol = "";
-	std::string osil = "";
+	osil = "";
 	int i;
 	if(osinstance != NULL){
 		OSiLWriter *osilwriter;
@@ -73,7 +73,7 @@ std::string OSMatlab::solve() {
 		osagent = new OSSolverAgent( "http://128.135.130.17:8080/lindo/LindoSolverService.jws" );
 		outStr << osagent->solve(osil, osol);
 		// do the garbage collection 
-		delete osilwriter;
+		//delete osilwriter;
 		delete osagent;
 		return outStr.str();
 	}else

@@ -23,5 +23,5 @@ Q = [ -1 -1 -1 -1 -1 -1 -1 -1 -1 ;
 .01080754 .01240721 .01307513    .01240721 .05839170 .05542639    .01307513 .05542639 .09422681];
 %Q = [];
 prob_name = 'Makowitz Example'
-password = '*****';
+password = 'chicagoesmuyFRIO';
 callMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, VarType, Q, prob_name, password);

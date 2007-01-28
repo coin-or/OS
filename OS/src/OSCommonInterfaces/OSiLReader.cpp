@@ -24,17 +24,19 @@ OSiLReader::OSiLReader( ) {
 }
 
 OSiLReader::~OSiLReader(){
-	osilClearMemory();
+	delete osinstance;
+	osinstance = NULL;
 } 
 
 OSInstance* OSiLReader::readOSiL(std::string *posil) throw(ErrorClass){   
 	try{
-		OSInstance* p;
+		//OSInstance* p;
 		//std::string *pstring;
 		//pstring = new std::string( osil);
 		const char *ch = posil->c_str();
 		//cout << "HERE IS THE PROBLEM TO PARSE: " << ch << endl;
-		p = yygetOSInstance( ch);
+		osinstance = yygetOSInstance( ch);
+		//p = yygetOSInstance( ch);
 		//std::string *pstring;
 		//pstring = new std::string("This is a test");
 		//const char *ch = pstring->c_str();
@@ -45,7 +47,7 @@ OSInstance* OSiLReader::readOSiL(std::string *posil) throw(ErrorClass){
 		//ch2[2] = 'K';
 		//std::cout << ch << std::endl;
 		//std::cout << ch2 << std::endl;
-		return p;
+		return osinstance;
 	}
 		catch(const ErrorClass& eclass){
 		throw ErrorClass( eclass.errormsg);

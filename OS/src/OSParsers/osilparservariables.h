@@ -16,7 +16,7 @@
 #include "OSnLNode.h"
 #include <vector> 
 #include <string>
-OSInstance* osinstance;
+
 
 std::string sparseError;
 
@@ -45,7 +45,6 @@ std::vector<OSnLNode*> nlNodeVec;
 std::vector<OSnLNode*> sumVec;
 std::vector<OSnLNode*> productVec;
 std::vector<OSnLNode*> maxVec;
-
 
 OSnLNode *nlNodePoint;
 OSnLNodeVariable *nlNodeVariablePoint;

@@ -15,17 +15,16 @@
 %{
 
 
-
 #include <stdio.h> 
 #include "lexyaccparser.h"
-#include "externalvars.h"
 #include <time.h>
 #include "ErrorClass.h"
 #include "parseosil.tab.hpp"
+#include "OSInstance.h"
 #include <math.h>
 #include "OSConfig.h"
 #ifdef PARSERDEBUG
-	#define YY_PRINT  printf("%s", osiltext);
+	#define YY_PRINT  printf("%s", yytext);
 #else     
 	#define YY_PRINT ;
 #endif
@@ -34,9 +33,14 @@
 #include <io.h>
 #include <process.h>
 #endif
-
-					 
+void osilerror_wrapper_l(const char* errormsg) ;	
+//void osilerror( YYLTYPE* type,  OSInstance *osin, const char* errormsg) ;				 
 %}
+
+%option reentrant
+%option bison-bridge
+%option bison-locations
+
 
 %option prefix="osil"
 %option yylineno
@@ -62,8 +66,8 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]+))([eE][-+]?[0-9]+)?|INF))
 
 {quote} {YY_PRINT; return(QUOTE);}
 ({xmlwhitespace}*{greater_than}) {YY_PRINT; return(GREATERTHAN);}
-{aninteger}  {YY_PRINT; osillval.ival = atoi(osiltext); return(INTEGER);}
-{adouble} {YY_PRINT; osillval.dval = atof(osiltext); return(DOUBLE);}
+{aninteger}  {YY_PRINT; yylval->ival = atoi(yytext); return(INTEGER);}
+{adouble} {YY_PRINT; yylval->dval = atof(yytext); return(DOUBLE);}
 ({xmlwhitespace}*\/>) {YY_PRINT;  return(ENDOFELEMENT);}
 
 
@@ -153,10 +157,19 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]+))([eE][-+]?[0-9]+)?|INF))
  <xmldeclaration>"?>" BEGIN 0;
  
 
-<attributetext>([^\"\'])* {YY_PRINT;  BEGIN 0; osillval.sval = strdup(osiltext); return(ATTRIBUTETEXT);}
+<attributetext>([^\"\'])* {YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext); return(ATTRIBUTETEXT);}
 
 
-. {YY_PRINT;  printf("%s", osiltext); osilerror( "ecountered a spurious character in the lexer");   }
+. {YY_PRINT;  printf("%s", yytext); osilerror_wrapper_l( "ecountered a spurious character in the lexer");   }
 
 %%
 
+void osilerror_wrapper_l( const char* errormsg ) {
+	try{
+		std::string error = errormsg;
+		throw ErrorClass( error);
+	}
+		catch(const ErrorClass& eclass){
+		throw ErrorClass(  eclass.errormsg); 
+	}
+} // end osilerror_wrapper_l() 

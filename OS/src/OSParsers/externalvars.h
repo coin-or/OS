@@ -15,12 +15,10 @@
 
 extern bool beginElementText;
 extern int osrllineno;
-extern char *osiltext;
-extern int osillineno;
 extern char *osrltext;
 extern char *osoltext;
 extern int osollineno;
-extern int osilSize;
+//extern int osilSize;
 
 
 

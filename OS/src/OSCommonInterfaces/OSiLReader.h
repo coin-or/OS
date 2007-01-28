@@ -32,6 +32,7 @@ class OSiLReader{
 
 private:
 	FILE *file;
+	OSInstance *osinstance;
 
 public:
 	OSiLReader( );
