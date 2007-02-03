@@ -13,8 +13,7 @@
 			<var lb="0" name="x1" type="C"/>
 		</variables>
 		<objectives numberOfObjectives=" 1">
-			<obj maxOrMin="min" name="minCost" >
-				
+			<obj maxOrMin="min" name="minCost" >		
 			</obj>
 		</objectives>
 		<nonlinearExpressions numberOfNonlinearExpressions="1">

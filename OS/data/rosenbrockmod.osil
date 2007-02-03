@@ -4,8 +4,8 @@
 		<name>Modified Rosenbrock</name>
 		<source>Computing Journal 3:175-184, 1960</source>
 		<description>Rosenbrock problem with constraints. 
-			Global optimal solution is x0 = .904404
-		x1 = .798848 for an optimal value of 7.235243</description>
+			 local optimum at x0 = 0.87243, x1 = 0.741417, with objective
+			value 6.72791 </description>
 	</instanceHeader>
 	<instanceData>
 		<variables numberOfVariables="2">
@@ -32,13 +32,13 @@
 			</rowIdx>
 			<value>
 				<el>1.0</el>
-				<el>7.0</el>
-				<el>5.0</el>
+				<el>7.5</el>
+				<el>5.25</el>
 			</value>
 </linearConstraintCoefficients>
 		<quadraticCoefficients numberOfQuadraticTerms="3">
-			<qTerm idx="0"  idxOne="0" idxTwo="0"  coef="10"/>
-			<qTerm idx="0"  idxOne="1" idxTwo="1"  coef="11"/>
+			<qTerm idx="0"  idxOne="0" idxTwo="0"  coef="10.5"/>
+			<qTerm idx="0"  idxOne="1" idxTwo="1"  coef="11.7"/>
 			<qTerm idx="0"  idxOne="0" idxTwo="1"  coef="3"/>
 		</quadraticCoefficients>
 		<nonlinearExpressions numberOfNonlinearExpressions="2">
