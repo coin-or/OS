@@ -1,0 +1,187 @@
+
+Log Entry: 
+Mon Oct 02 09:29:33 CDT 2006
+
+  :
+
+  :job ID: a204:2006-10-02T09:29:33.241-05:00
+
+---------------------------------
+
+Log Entry: 
+Mon Oct 02 09:29:33 CDT 2006
+
+  :
+
+  :thread name: a204::2006-10-02T09:29:33.617-05:00
+
+---------------------------------
+
+Log Entry: 
+Mon Oct 02 09:29:51 CDT 2006
+
+  :
+
+  :javax.mail.SendFailedException: Sending failed;
+  nested exception is:
+	class javax.mail.MessagingException: Could not connect to SMTP host: smtp.comcast.net, port: 25;
+  nested exception is:
+	java.net.ConnectException: Connection timed out: connect
+	at javax.mail.Transport.send0(Transport.java:218)
+	at javax.mail.Transport.send(Transport.java:80)
+	at org.optimizationservices.oscommon.util.MailUtil.send(MailUtil.java:120)
+	at org.optimizationservices.oscommon.util.MailUtil$SendThread.run(MailUtil.java:212)
+	at java.lang.Thread.run(Unknown Source)
+
+
+---------------------------------
+
+Log Entry: 
+Mon Oct 02 09:29:54 CDT 2006
+
+  :
+
+  :javax.mail.SendFailedException: Sending failed;
+  nested exception is:
+	class javax.mail.MessagingException: Could not connect to SMTP host: smtp.comcast.net, port: 25;
+  nested exception is:
+	java.net.ConnectException: Connection timed out: connect
+	at javax.mail.Transport.send0(Transport.java:218)
+	at javax.mail.Transport.send(Transport.java:80)
+	at org.optimizationservices.oscommon.util.MailUtil.send(MailUtil.java:120)
+	at org.optimizationservices.oscommon.util.MailUtil$SendThread.run(MailUtil.java:212)
+	at java.lang.Thread.run(Unknown Source)
+
+
+---------------------------------
+
+Log Entry: 
+Mon Oct 02 09:29:57 CDT 2006
+
+  :
+
+  :javax.mail.SendFailedException: Sending failed;
+  nested exception is:
+	class javax.mail.MessagingException: Could not connect to SMTP host: smtp.comcast.net, port: 25;
+  nested exception is:
+	java.net.ConnectException: Connection timed out: connect
+	at javax.mail.Transport.send0(Transport.java:218)
+	at javax.mail.Transport.send(Transport.java:80)
+	at org.optimizationservices.oscommon.util.MailUtil.send(MailUtil.java:120)
+	at org.optimizationservices.oscommon.util.MailUtil$SendThread.run(MailUtil.java:212)
+	at java.lang.Thread.run(Unknown Source)
+
+
+---------------------------------
+
+Log Entry: 
+Mon Oct 02 09:30:18 CDT 2006
+
+  :
+
+  :javax.mail.SendFailedException: Sending failed;
+  nested exception is:
+	class javax.mail.MessagingException: Could not connect to SMTP host: smtp.comcast.net, port: 25;
+  nested exception is:
+	java.net.ConnectException: Connection timed out: connect
+	at javax.mail.Transport.send0(Transport.java:218)
+	at javax.mail.Transport.send(Transport.java:80)
+	at org.optimizationservices.oscommon.util.MailUtil.send(MailUtil.java:120)
+	at org.optimizationservices.oscommon.util.MailUtil$SendThread.run(MailUtil.java:212)
+	at java.lang.Thread.run(Unknown Source)
+
+
+---------------------------------
+
+Log Entry: 
+Mon Oct 02 09:30:18 CDT 2006
+
+  :
+
+  :javax.mail.SendFailedException: Sending failed;
+  nested exception is:
+	class javax.mail.MessagingException: Could not connect to SMTP host: smtp.comcast.net, port: 25;
+  nested exception is:
+	java.net.ConnectException: Connection timed out: connect
+	at javax.mail.Transport.send0(Transport.java:218)
+	at javax.mail.Transport.send(Transport.java:80)
+	at org.optimizationservices.oscommon.util.MailUtil.send(MailUtil.java:120)
+	at org.optimizationservices.oscommon.util.MailUtil$SendThread.run(MailUtil.java:212)
+	at java.lang.Thread.run(Unknown Source)
+
+
+---------------------------------
+
+Log Entry: 
+Mon Oct 02 09:30:18 CDT 2006
+
+  :
+
+  :javax.mail.SendFailedException: Sending failed;
+  nested exception is:
+	class javax.mail.MessagingException: Could not connect to SMTP host: smtp.comcast.net, port: 25;
+  nested exception is:
+	java.net.ConnectException: Connection timed out: connect
+	at javax.mail.Transport.send0(Transport.java:218)
+	at javax.mail.Transport.send(Transport.java:80)
+	at org.optimizationservices.oscommon.util.MailUtil.send(MailUtil.java:120)
+	at org.optimizationservices.oscommon.util.MailUtil$SendThread.run(MailUtil.java:212)
+	at java.lang.Thread.run(Unknown Source)
+
+
+---------------------------------
+
+Log Entry: 
+Thu Feb 22 13:14:56 CST 2007
+
+  :
+
+  :parameter string not valid
+
+---------------------------------
+
+Log Entry: 
+Thu Feb 22 13:18:31 CST 2007
+
+  :
+
+  :parameter string not valid
+
+---------------------------------
+
+Log Entry: 
+Thu Feb 22 13:20:08 CST 2007
+
+  :
+
+  :parameter string not valid
+
+---------------------------------
+
+Log Entry: 
+Thu Feb 22 13:21:20 CST 2007
+
+  :
+
+  :parameter string not valid
+
+---------------------------------
+
+Log Entry: 
+Thu Feb 22 13:21:55 CST 2007
+
+  :
+
+  :parameter string not valid
+
+---------------------------------
+
+Log Entry: 
+Thu Feb 22 13:23:11 CST 2007
+
+  :
+
+  :parameter string not valid
+
+---------------------------------
+
