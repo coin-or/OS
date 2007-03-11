@@ -15,21 +15,26 @@
  
 %{
 
- 
+
+#include <string>
 #include <iostream>
 #include <sstream>  
 #include <time.h>   
-#include "lexyaccparser.h"
-//#include "externalvars.h"
 #include "OSInstance.h" 
 #include "OSnLNode.h"
 #include "ErrorClass.h"
 #include "OSParameters.h"
 #include "osilparservariables.h"
 #include "Base64.h"
+using std::cout;
+using std::endl;
+using std::ostringstream;
 int osillineno = 0;
-
-
+typedef struct yy_buffer_state *YY_BUFFER_STATE;
+YY_BUFFER_STATE osil_scan_string (const char *yy_str , void* yyscanner  );
+int osillex_init(void** ptr_yy_globals);
+int osillex_destroy (void* yyscanner );
+OSInstance *yygetOSInstance(const char *osil) throw(ErrorClass);
 //
 //
 // the global variables for parsing
@@ -90,7 +95,7 @@ char errorArray[100] = "there was an error";
 	printf("%c", ch[5]); \
 	printf("%c \n", ch[6]); \
 	GAIL;
-	yyscan_t scanner;
+	//void* scanner;
 %}
 
 %pure-parser
@@ -113,8 +118,9 @@ this fails on in Mac OS X
 	
 }
 %{
-int osillex(YYSTYPE* lvalp,  YYLTYPE* llocp, yyscan_t scanner );
+int osillex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner );
 void osilerror(YYLTYPE* type, OSInstance *osintance, const char* errormsg );
+#define scanner osinstance->scanner
 %}
 
 %token QUOTE
@@ -154,7 +160,7 @@ osildoc: quadraticcoefficients  nonlinearExpressions INSTANCEDATAEND  OSILEND;
 
 
 quadraticcoefficients: 
-	| QUADRATICCOEFFICIENTSSTART quadnumberatt qTermlist  QUADRATICCOEFFICIENTSEND
+	| {int gster;} QUADRATICCOEFFICIENTSSTART {int kster;} quadnumberatt qTermlist  QUADRATICCOEFFICIENTSEND
 {if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms > qtermcount ) osilerror_wrapper("actual number of qterms less than numberOfQuadraticTerms");};
    
 
@@ -501,6 +507,7 @@ void osilerror(YYLTYPE* type, OSInstance *osintance, const char* errormsg ) {
 
 OSInstance* yygetOSInstance( const char *osil) throw (ErrorClass) {
 	try {
+		
 		void yyinitialize();
 		yyinitialize();
 		OSInstance* osinstance = NULL;
@@ -508,11 +515,11 @@ OSInstance* yygetOSInstance( const char *osil) throw (ErrorClass) {
 		parseInstanceHeader( &osil, osinstance);
 		parseInstanceData( &osil, osinstance);
 		// call the flex scanner
-        osillex_init(&scanner);
+        osillex_init( &scanner);
 		osil_scan_string( osil, scanner );
 		// call the Bison parser
 		if(  osilparse( osinstance ) != 0) throw ErrorClass(  sparseError);
-		//osillex_destroy(scanner);
+		osillex_destroy(scanner);
 		return osinstance;
 	}
 	catch(const ErrorClass& eclass){

@@ -262,6 +262,7 @@ public:
 	~OSInstance();
 	InstanceHeader *instanceHeader;
 	InstanceData *instanceData;
+	void* scanner;
 
 private:
 	/**

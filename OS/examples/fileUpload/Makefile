@@ -113,7 +113,7 @@ CBCSRCDIR = /Users/kmartin/Documents/files/code/cpp/OScpp/COIN/Cbc
 CC = cc
 CCDEPMODE = depmode=gcc3
 CDEFS = 
-CFLAGS = -O3  
+CFLAGS = -g -pipe -pedantic-errors -Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Wall  
 CGLOBJDIR = /Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/../Cgl
 CGLSRCDIR = /Users/kmartin/Documents/files/code/cpp/OScpp/COIN/Cgl
 CLPOBJDIR = /Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/../Clp
@@ -156,7 +156,7 @@ CXX = g++
 CXXCPP = g++ -E
 CXXDEFS = 
 CXXDEPMODE = depmode=gcc3
-CXXFLAGS = -O3  
+CXXFLAGS = -g -pipe -pedantic-errors -Wimplicit -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion  
 CYGPATH_W = echo
 DBG_CFLAGS = -g -pipe -pedantic-errors -Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Wall  
 DBG_CXXFLAGS = -g -pipe -pedantic-errors -Wimplicit -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion  
