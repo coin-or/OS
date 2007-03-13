@@ -24,12 +24,12 @@
 #include "OSnLNode.h"
 #include "ErrorClass.h"
 #include "OSParameters.h"
-#include "osilparservariables.h"
+#include "OSiLParserData.h"
 #include "Base64.h"
 using std::cout;
 using std::endl;
 using std::ostringstream;
-int osillineno = 0;
+
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
 YY_BUFFER_STATE osil_scan_string (const char *yy_str , void* yyscanner  );
 int osillex_init(void** ptr_yy_globals);
@@ -40,6 +40,7 @@ OSInstance *yygetOSInstance(const char *osil) throw(ErrorClass);
 // the global variables for parsing
 clock_t start, finish;
 double duration;
+int osillineno = 0;
 double atofmod1(const char *ch1, const char *ch2);
 int atoimod1(const char *ch1, const char *ch2);
 // we distinguish a newline from other whitespace
@@ -102,7 +103,12 @@ char errorArray[100] = "there was an error";
 %locations
 %defines
 %parse-param{OSInstance *osinstance}
+%parse-param{OSiLParserData *parserData}
 %lex-param {void* scanner}
+
+
+
+
 %error-verbose
 
 
@@ -119,7 +125,9 @@ this fails on in Mac OS X
 }
 %{
 int osillex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner );
-void osilerror(YYLTYPE* type, OSInstance *osintance, const char* errormsg );
+void osilerror(YYLTYPE* type, OSInstance *osintance,  OSiLParserData *parserData ,const char* errormsg );
+
+ 
 #define scanner osinstance->scanner
 %}
 
@@ -147,7 +155,8 @@ void osilerror(YYLTYPE* type, OSInstance *osintance, const char* errormsg );
 %token VARIABLESTART VARIABLEEND ABSSTART ABSEND MAXSTART MAXEND
 
 
-      
+
+
  
 %%
 
@@ -160,8 +169,7 @@ osildoc: quadraticcoefficients  nonlinearExpressions INSTANCEDATAEND  OSILEND;
 
 
 quadraticcoefficients: 
-	| {int gster;} QUADRATICCOEFFICIENTSSTART {int kster;} quadnumberatt qTermlist  QUADRATICCOEFFICIENTSEND
-{if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms > qtermcount ) osilerror_wrapper("actual number of qterms less than numberOfQuadraticTerms");};
+	|  QUADRATICCOEFFICIENTSSTART  quadnumberatt qTermlist  QUADRATICCOEFFICIENTSEND {if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms > parserData->qtermcount ) osilerror_wrapper("actual number of qterms less than numberOfQuadraticTerms");};
    
 
 quadnumberatt: NUMBEROFQTERMSATT INTEGER quote GREATERTHAN  {
@@ -172,16 +180,16 @@ for(int i = 0; i < $2; i++) osinstance->instanceData->quadraticCoefficients->qTe
 qTermlist:  
 		| qTermlist qterm ;
 		   
-qterm: {if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms <= qtermcount ) osilerror_wrapper("too many QuadraticTerms");} 
-QTERMSTART  anotherqTermATT  qtermend {qtermcount++; 
-if(!qtermidxattON)  osilerror_wrapper("the qTerm attribute idx is required"); 
-if(!qtermidxOneattON)  osilerror_wrapper("the qTerm attribute idxOne is required"); 
-if(!qtermidxTwoattON)  osilerror_wrapper("the qTerm attribute idxTwo is required"); 
-qtermidattON = false; 
-qtermidxattON = false; 
-qtermidxOneattON = false; 
-qtermidxTwoattON = false;
-qtermcoefattON = false;} ;
+qterm: {if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms <= parserData->qtermcount ) osilerror_wrapper("too many QuadraticTerms");} 
+QTERMSTART  anotherqTermATT  qtermend {parserData->qtermcount++; 
+if(!parserData->qtermidxattON)  osilerror_wrapper("the qTerm attribute idx is required"); 
+if(!parserData->qtermidxOneattON)  osilerror_wrapper("the qTerm attribute idxOne is required"); 
+if(!parserData->qtermidxTwoattON)  osilerror_wrapper("the qTerm attribute idxTwo is required"); 
+parserData->qtermidattON = false; 
+parserData->qtermidxattON = false; 
+parserData->qtermidxOneattON = false; 
+parserData->qtermidxTwoattON = false;
+parserData->qtermcoefattON = false;} ;
 				
 qtermend:  ENDOFELEMENT
 		| GREATERTHAN  QTERMEND;    
@@ -193,40 +201,40 @@ anotherqTermATT:
 
 
 qtermatt: qtermidxOneatt   quote
-			{ if(qtermidxOneattON) osilerror_wrapper("too many qTerm idxOne attributes"); 
-			qtermidxOneattON = true;  }
+			{ if(parserData->qtermidxOneattON) osilerror_wrapper("too many qTerm idxOne attributes"); 
+			parserData->qtermidxOneattON = true;  }
 		| qtermidxTwoatt  quote    
-			{ if(qtermidxTwoattON) osilerror_wrapper("too many qTerm idxTwo attributes"); 
-			qtermidxTwoattON = true;  }
+			{ if(parserData->qtermidxTwoattON) osilerror_wrapper("too many qTerm idxTwo attributes"); 
+			parserData->qtermidxTwoattON = true;  }
 		| qtermcoefatt quote
-			{ if(qtermcoefattON) osilerror_wrapper("too many qTerm coef attributes"); 
-			qtermcoefattON = true;  }
+			{ if(parserData->qtermcoefattON) osilerror_wrapper("too many qTerm coef attributes"); 
+			parserData->qtermcoefattON = true;  }
 		| qtermidxatt quote
-			{ if(qtermidxattON) osilerror_wrapper("too many qTerm idx attributes"); 
-			qtermidxattON = true;  }
+			{ if(parserData->qtermidxattON) osilerror_wrapper("too many qTerm idx attributes"); 
+			parserData->qtermidxattON = true;  }
 		;
 
 
 qtermidxOneatt: IDXONEATT INTEGER   {  
-osinstance->instanceData->quadraticCoefficients->qTerm[qtermcount]->idxOne = $2;} ;
+osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->idxOne = $2;} ;
 qtermidxTwoatt: IDXTWOATT INTEGER   { 
-osinstance->instanceData->quadraticCoefficients->qTerm[qtermcount]->idxTwo = $2;} ;
+osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->idxTwo = $2;} ;
 qtermcoefatt: COEFATT DOUBLE   {
-osinstance->instanceData->quadraticCoefficients->qTerm[qtermcount]->coef = $2;} 
+osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->coef = $2;} 
 | COEFATT INTEGER   { 
-osinstance->instanceData->quadraticCoefficients->qTerm[qtermcount]->coef = $2;}  ;
+osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->coef = $2;}  ;
 qtermidxatt: IDXATT INTEGER   {  
-osinstance->instanceData->quadraticCoefficients->qTerm[qtermcount]->idx = $2;} ;
+osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->idx = $2;} ;
 
 
 
 
 nonlinearExpressions:  
 				| NONLINEAREXPRESSIONSSTART  nlnumberatt nlnodes NONLINEAREXPRESSIONSEND
-				{if(nlnodecount <  tmpnlcount)  osilerror_wrapper("actual number of nl terms less than number attribute"); };
+				{if(parserData->nlnodecount <  parserData->tmpnlcount)  osilerror_wrapper("actual number of nl terms less than number attribute"); };
 				
 
-nlnumberatt: NUMBEROFNONLINEAREXPRESSIONS INTEGER quote  GREATERTHAN {tmpnlcount = $2;
+nlnumberatt: NUMBEROFNONLINEAREXPRESSIONS INTEGER quote  GREATERTHAN {parserData->tmpnlcount = $2;
 osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions = $2;  
 if(osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions > 0 ) osinstance->instanceData->nonlinearExpressions->nl = new Nl*[ $2 ];
 };
@@ -235,23 +243,19 @@ nlnodes:
 		| nlnodes NLSTART 
 		nlIdxATT  GREATERTHAN nlnode {
 	// IMPORTANT -- HERE IS WHERE WE DEFINE THE EXPRESSION TREE
-	osinstance->instanceData->nonlinearExpressions->nl[ nlnodecount]->osExpressionTree->m_treeRoot = 
-	//osinstance->instanceData->nonlinearExpressions->nl[ nlnodecount]->osExpressionTree->createExpressionTreeFromPrefix( nlNodeVec);
-	//createExpressionTreeFromPrefix( nlNodeVec);
-	nlNodeVec[ 0]->createExpressionTreeFromPrefix( nlNodeVec);
-	nlnodecount++;
+	osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->m_treeRoot = 
+	//osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->createExpressionTreeFromPrefix( parserData->nlNodeVec);
+	//createExpressionTreeFromPrefix( parserData->nlNodeVec);
+	parserData->nlNodeVec[ 0]->createExpressionTreeFromPrefix( parserData->nlNodeVec);
+	parserData->nlnodecount++;
 }  NLEND;
 
 nlIdxATT:  IDXATT INTEGER quote {
-osinstance->instanceData->nonlinearExpressions->nl[ nlnodecount] = new Nl();
-osinstance->instanceData->nonlinearExpressions->nl[ nlnodecount]->idx = $2;
-osinstance->instanceData->nonlinearExpressions->nl[ nlnodecount]->osExpressionTree = new OSExpressionTree();
-if(nlnodecount > tmpnlcount) osilerror_wrapper("actual number of nl terms greater than number attribute");
-// clear the vectors of pointers
-nlNodeVec.clear();
-sumVec.clear();
-maxVec.clear();
-productVec.clear();
+osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount] = new Nl();
+osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->idx = $2;
+osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree = new OSExpressionTree();
+if(parserData->nlnodecount > parserData->tmpnlcount) osilerror_wrapper("actual number of nl terms greater than number attribute");
+
 };
 		
 		
@@ -277,140 +281,157 @@ nlnode: number
 
 
 times: TIMESSTART {
+	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeTimes();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 } nlnode nlnode TIMESEND;
 
 plus: PLUSSTART {
+	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodePlus();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 } nlnode nlnode PLUSEND;
 
 minus: MINUSSTART {
+	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeMinus();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 } nlnode nlnode MINUSEND;
 
 negate: NEGATESTART {
+	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeNegate();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 } nlnode  NEGATEEND;
 
 divide: DIVIDESTART { 
+	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeDivide();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 } nlnode nlnode DIVIDEEND;
 
 power: POWERSTART {
+	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodePower();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 } nlnode nlnode POWEREND;
 
 sum: SUMSTART {
+	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeSum();
-	nlNodeVec.push_back( nlNodePoint);
-	sumVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
+	parserData->sumVec.push_back( nlNodePoint);
 }
 anothersumnlnode SUMEND {
-	sumVec.back()->m_mChildren = new OSnLNode*[ sumVec.back()->inumberOfChildren];
-	sumVec.pop_back();
+	parserData->sumVec.back()->m_mChildren = new OSnLNode*[ parserData->sumVec.back()->inumberOfChildren];
+	parserData->sumVec.pop_back();
 };
 
-anothersumnlnode: nlnode {	sumVec.back()->inumberOfChildren++; }
-			| anothersumnlnode nlnode {	sumVec.back()->inumberOfChildren++; };
+anothersumnlnode: nlnode {	parserData->sumVec.back()->inumberOfChildren++; }
+			| anothersumnlnode nlnode {	parserData->sumVec.back()->inumberOfChildren++; };
 			
 			
 max: MAXSTART {
+	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeMax();
-	nlNodeVec.push_back( nlNodePoint);
-	maxVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
+	parserData->maxVec.push_back( nlNodePoint);
 }
 anothermaxnlnode MAXEND {
-	maxVec.back()->m_mChildren = new OSnLNode*[ maxVec.back()->inumberOfChildren];
-	maxVec.pop_back();
+	parserData->maxVec.back()->m_mChildren = new OSnLNode*[ parserData->maxVec.back()->inumberOfChildren];
+	parserData->maxVec.pop_back();
 };
 
-anothermaxnlnode: nlnode {	maxVec.back()->inumberOfChildren++; }
-			| anothermaxnlnode nlnode {	maxVec.back()->inumberOfChildren++; };
+anothermaxnlnode: nlnode {	parserData->maxVec.back()->inumberOfChildren++; }
+			| anothermaxnlnode nlnode {	parserData->maxVec.back()->inumberOfChildren++; };
 			
 			
 product: PRODUCTSTART {
+	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeProduct();
-	nlNodeVec.push_back( nlNodePoint);
-	productVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
+	parserData->productVec.push_back( nlNodePoint);
 }
 anotherproductnlnode PRODUCTEND {
-	productVec.back()->m_mChildren = new OSnLNode*[ productVec.back()->inumberOfChildren];
-	productVec.pop_back();
+	parserData->productVec.back()->m_mChildren = new OSnLNode*[ parserData->productVec.back()->inumberOfChildren];
+	parserData->productVec.pop_back();
 };
 
-anotherproductnlnode: nlnode {	productVec.back()->inumberOfChildren++; }
-			| anotherproductnlnode nlnode {	productVec.back()->inumberOfChildren++; };
+anotherproductnlnode: nlnode {	parserData->productVec.back()->inumberOfChildren++; }
+			| anotherproductnlnode nlnode {	parserData->productVec.back()->inumberOfChildren++; };
 
 
 ln: LNSTART {
+	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeLn();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 } nlnode LNEND;
 
 sqrt: SQRTSTART {
+	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeSqrt();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 } nlnode SQRTEND;
 
 square: SQUARESTART {
+	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeSquare();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 } nlnode SQUAREEND;
 
 cos: COSSTART {
+	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeCos();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 } nlnode COSEND;
 
 sin: SINSTART {
+	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeSin();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 } nlnode SINEND;
 
 
 
 exp: EXPSTART {
+	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeExp();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 } nlnode EXPEND;
 
 abs: ABSSTART {
+	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeAbs();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 } nlnode ABSEND;
 
 
 if: IFSTART {
+	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeIf();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 } nlnode nlnode nlnode IFEND;
 
 number: NUMBERSTART {
-	nlNodeNumberPoint = new OSnLNodeNumber();
-	nlNodeVec.push_back( nlNodeNumberPoint);
-} anotherNumberATT  numberend {numbervalueattON = false; numbertypeattON = false; numberidattON = false;};
+	parserData->nlNodeNumberPoint = new OSnLNodeNumber();
+	parserData->nlNodeVec.push_back( parserData->nlNodeNumberPoint);
+} anotherNumberATT  numberend {parserData->numbervalueattON = false; parserData->numbertypeattON = false; parserData->numberidattON = false;};
 
 variable: VARIABLESTART {
-	nlNodeVariablePoint = new OSnLNodeVariable();
-	nlNodeVec.push_back( nlNodeVariablePoint);
-} anotherVariableATT  variableend {variablecoefattON = false; variableidxattON = false;} ;
+	parserData->nlNodeVariablePoint = new OSnLNodeVariable();
+	parserData->nlNodeVec.push_back( parserData->nlNodeVariablePoint);
+} anotherVariableATT  variableend {parserData->variablecoefattON = false; parserData->variableidxattON = false;} ;
 		      
 numberend: ENDOFELEMENT
 			| NUMBEREND;
 			
 variableend: ENDOFELEMENT
 			| GREATERTHAN nlnode {
-	//sumVec.back()->inumberOfChildren = 1;
-	//sumVec.back()->m_mChildren = new OSnLNode*[ 1];
+	//parserData->sumVec.back()->inumberOfChildren = 1;
+	//parserData->sumVec.back()->m_mChildren = new OSnLNode*[ 1];
 	// kipp -- fix the above doesnt seem right
-	nlNodeVariablePoint->inumberOfChildren = 1;
-	nlNodeVariablePoint->m_mChildren = new OSnLNode*[ 1];
+	parserData->nlNodeVariablePoint->inumberOfChildren = 1;
+	parserData->nlNodeVariablePoint->m_mChildren = new OSnLNode*[ 1];
 }
 VARIABLEEND;
 			
@@ -418,48 +439,48 @@ VARIABLEEND;
 anotherNumberATT:
 			|anotherNumberATT numberATT ;
 			
-numberATT: numbertypeATT quote {if(numbertypeattON) osilerror_wrapper("too many number type attributes"); 
-			numbertypeattON = true; }
-		| numbervalueATT quote {if(numbervalueattON) osilerror_wrapper("too many number value attributes"); 
-			numbervalueattON = true; }
-		| numberidATT quote {if(numberidattON) osilerror_wrapper("too many number id attributes"); 
-			numberidattON = true; }			
+numberATT: numbertypeATT quote {if(parserData->numbertypeattON) osilerror_wrapper("too many number type attributes"); 
+			parserData->numbertypeattON = true; }
+		| numbervalueATT quote {if(parserData->numbervalueattON) osilerror_wrapper("too many number value attributes"); 
+			parserData->numbervalueattON = true; }
+		| numberidATT quote {if(parserData->numberidattON) osilerror_wrapper("too many number id attributes"); 
+			parserData->numberidattON = true; }			
 			;
 			
 numbertypeATT: TYPEATT  ATTRIBUTETEXT {
-	nlNodeNumberPoint->type = $2;
+	parserData->nlNodeNumberPoint->type = $2;
 } ;
 
 numberidATT: IDATT  ATTRIBUTETEXT {
-	nlNodeNumberPoint->id = $2;
+	parserData->nlNodeNumberPoint->id = $2;
 } ;
 
 
 
 numbervalueATT: VALUEATT  DOUBLE {
-	nlNodeNumberPoint->value = $2;
+	parserData->nlNodeNumberPoint->value = $2;
 }
 		| VALUEATT INTEGER{
-	nlNodeNumberPoint->value = $2;
+	parserData->nlNodeNumberPoint->value = $2;
 };
 
 anotherVariableATT:
 			|anotherVariableATT variableATT ;
 			
-variableATT: variablecoefATT quote {if(variablecoefattON) osilerror_wrapper("too many variable coef attributes"); 
-			variablecoefattON = true; }
-		| variableidxATT quote {if(variableidxattON) osilerror_wrapper("too many variable idx attributes"); 
-			variableidxattON = true; };
+variableATT: variablecoefATT quote {if(parserData->variablecoefattON) osilerror_wrapper("too many variable coef attributes"); 
+			parserData->variablecoefattON = true; }
+		| variableidxATT quote {if(parserData->variableidxattON) osilerror_wrapper("too many variable idx attributes"); 
+			parserData->variableidxattON = true; };
 			
 variablecoefATT: COEFATT  DOUBLE {
-	nlNodeVariablePoint->coef = $2;
+	parserData->nlNodeVariablePoint->coef = $2;
 }
 				| COEFATT  INTEGER {
-	nlNodeVariablePoint->coef = $2;		
+	parserData->nlNodeVariablePoint->coef = $2;		
 };
 				
 variableidxATT: IDXATT  INTEGER {
-	nlNodeVariablePoint->idx = $2;
+	parserData->nlNodeVariablePoint->idx = $2;
 } ; 
 
 
@@ -480,11 +501,9 @@ quote: xmlWhiteSpace QUOTE;
 %%
 
 
-
-
 // user defined functions
 
-void osilerror(YYLTYPE* type, OSInstance *osintance, const char* errormsg ) {
+void osilerror(YYLTYPE* type, OSInstance *osintance, OSiLParserData* parserData, const char* errormsg ) {
 	try{
 		std::ostringstream outStr;
 		std::string error = errormsg;
@@ -511,15 +530,23 @@ OSInstance* yygetOSInstance( const char *osil) throw (ErrorClass) {
 		void yyinitialize();
 		yyinitialize();
 		OSInstance* osinstance = NULL;
+		OSiLParserData *parserData = NULL;
 		osinstance = new OSInstance();
+		parserData = new OSiLParserData();
 		parseInstanceHeader( &osil, osinstance);
 		parseInstanceData( &osil, osinstance);
 		// call the flex scanner
         osillex_init( &scanner);
 		osil_scan_string( osil, scanner );
 		// call the Bison parser
-		if(  osilparse( osinstance ) != 0) throw ErrorClass(  sparseError);
+		//
+		//
+		if(  osilparse( osinstance,  parserData) != 0) {
+		  delete parserData;
+		  throw ErrorClass(  "Error parsing the OSiL");
+		 }
 		osillex_destroy(scanner);
+		delete parserData;
 		return osinstance;
 	}
 	catch(const ErrorClass& eclass){
@@ -530,23 +557,6 @@ OSInstance* yygetOSInstance( const char *osil) throw (ErrorClass) {
 
 void yyinitialize(){
 	osillineno = 1; 
-	qtermcount = 0;
-	nlnodecount = 0;
-	// qterm attribute boolean variables
-	qtermidxOneattON = false;
-	qtermidxTwoattON = false;
-	qtermidxattON = false;
-	qtermidattON = false;
-	qtermcoefattON = false;
-	// number attribute boolean variables 
-	numbertypeattON = false;
-	numbervalueattON = false;
-	// variable attribute boolean variables
-	variableidxattON = false;
-	variablecoefattON = false;
-	// kipp -- change later when nonlinear added to OSInstnace
-	tmpnlcount = 0;
-	sparseError = "";
 } // end yyInitialize()
 
 
@@ -806,6 +816,8 @@ bool parseInstanceData( const char **p, OSInstance *osinstance){
 
 
 bool parseVariables( const char **p,  OSInstance *osinstance){
+	int ki, numChar;
+	char *attTextEnd;
 	const char *ch = *p;
 	start = clock(); 
 	const char *c_numberOfVariables = "numberOfVariables";
@@ -1056,6 +1068,8 @@ bool parseVariables( const char **p,  OSInstance *osinstance){
 
 
 bool parseObjectives( const char **p, OSInstance *osinstance){
+	int ki, numChar;
+	char *attTextEnd;
 	const char *ch = *p;
 	start = clock();
 	const char *c_numberOfObjectives = "numberOfObjectives";
@@ -1349,6 +1363,8 @@ bool parseObjectives( const char **p, OSInstance *osinstance){
 }//end parseObjectives
 
 bool parseConstraints( const char **p, OSInstance *osinstance){
+	int ki, numChar;
+	char *attTextEnd;
 	const char *ch = *p;
 	start = clock();	
 	const char *c_numberOfConstraints = "numberOfConstraints";
@@ -1601,6 +1617,8 @@ bool parseConstraints( const char **p, OSInstance *osinstance){
 }//end parseConstraints
 
 bool parseLinearConstraintCoefficients( const char **p, OSInstance *osinstance){
+	int ki, numChar;
+	char *attTextEnd;
 	const char *ch = *p;
 	start = clock();	
 	const char *c_numberOfValues = "numberOfValues";
@@ -2109,6 +2127,8 @@ bool parseValue( const char **p, OSInstance *osinstance){
 }//end parseValue
 
 bool parseObjCoef( const char **p, int objcount, OSInstance *osinstance){
+	int ki, numChar;
+	char *attTextEnd;
 	const char *ch = *p;
 	const char* startCoef = "<coef";
 	const char* endCoef = "</coef";
@@ -2166,6 +2186,8 @@ bool parseObjCoef( const char **p, int objcount, OSInstance *osinstance){
 }//end parseObjCoef
 
 char *parseBase64(const char **p, int *dataSize ){
+	int ki, numChar;
+	char *attTextEnd;
 	const char *ch = *p;
 	const char *sizeOf = "sizeOf";
 	//char *numericType = "numericType";
@@ -2328,5 +2350,7 @@ int atoimod1(const char *number, const char *numberend){
 }//end atoimod1
 
 void osilerror_wrapper(const char* errormsg){
-	osilerror( NULL, NULL, errormsg);
+	osilerror( NULL, NULL, NULL, errormsg);
 }//end osilerror_wrapper
+
+

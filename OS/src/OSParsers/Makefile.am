@@ -20,7 +20,6 @@ noinst_LTLIBRARIES = libOSParsers.la
 libOSParsers_la_SOURCES = \
 		externalvars.h \
 		lexyaccparser.h \
-		osilparservariables.h \
 		osrlparservariables.h \
 		osssparservariables.h \
 		parseosil.cpp \
@@ -30,7 +29,9 @@ libOSParsers_la_SOURCES = \
 		parseosrl.cpp \
 		parseosrl.tab.cpp \
 		parseosrl.tab.cpp.h \
-		parseosss.cpp			
+		parseosss.cpp	\
+		OSiLParserData.h \
+		OSiLParserData.cpp	
 
 # This is for libtool (on Windows)
 libOSParsers_la_LDFLAGS = $(LT_LDFLAGS)
@@ -58,10 +59,10 @@ include_HEADERS = \
 	../../inc/config_os.h \
 	externalvars.h \
 	lexyaccparser.h \
-	osilparservariables.h \
 	osrlparservariables.h \
 	osssparservariables.h \
 	parseosil.tab.hpp \
-	parseosrl.tab.hpp 
+	parseosrl.tab.hpp \
+	OSiLParserData.h
 
 
