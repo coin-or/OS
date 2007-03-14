@@ -23,6 +23,7 @@ class OSiLParserData{
 public:
 	OSiLParserData( );
 	~OSiLParserData() ;
+	OSnLNode *nlNodePoint;
 	OSnLNodeVariable *nlNodeVariablePoint;
 	OSnLNodeNumber *nlNodeNumberPoint;
 	int qtermcount;

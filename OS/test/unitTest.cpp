@@ -104,12 +104,13 @@ int main(int argC, char* argV[])
 		ok = true;
 		OSiLReader *osilreader = NULL;
 		ipOptFileName =  dataDir + "avion2.osil";
-		// this problem has both nl terms and a linearConstraintsCoefficient section 
 		osil = fileUtil->getFileAsString( &ipOptFileName[0]);
 		cout << "IPOPT Solver created for OSiL string solution" << endl;
 		ipoptSolver->osol = osol;
 		osilreader = new OSiLReader(); 
 		ipoptSolver->osinstance = osilreader->readOSiL( &osil);
+		OSiLWriter osilwriter;
+		cout << osilwriter.writeOSiL( ipoptSolver->osinstance) << endl;
 		cout << "call the IPOPT Solver" << endl;
 		ipoptSolver->solve();
 		cout << "Here is the IPOPT solver solution for avion2" << endl;

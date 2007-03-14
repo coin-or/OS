@@ -211,7 +211,7 @@
 
 
 
-
+#include "osilparservariables.h"
 #include <string>
 #include <iostream>
 #include <sstream>  
@@ -225,7 +225,7 @@
 using std::cout;
 using std::endl;
 using std::ostringstream;
-int osillineno = 0;
+
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
 YY_BUFFER_STATE osil_scan_string (const char *yy_str , void* yyscanner  );
 int osillex_init(void** ptr_yy_globals);
@@ -234,8 +234,9 @@ OSInstance *yygetOSInstance(const char *osil) throw(ErrorClass);
 //
 //
 // the global variables for parsing
-clock_t start, finish;
-double duration;
+int osillineno = 0;
+//
+//
 double atofmod1(const char *ch1, const char *ch2);
 int atoimod1(const char *ch1, const char *ch2);
 // we distinguish a newline from other whitespace
@@ -254,10 +255,6 @@ bool parseValue( const char **pchar, OSInstance *osinstance);
 bool parseInstanceHeader(const char **pchar, OSInstance *osinstance);
 bool parseInstanceData(const char **pchar, OSInstance *osinstance);
 char *parseBase64(const char **p, int *dataSize );
-const int numErrorChar = 20;
-char errorArray[100] = "there was an error";
-
-#define GAIL printf("GAIL ANN HONDA\n")
 
 #define	ISWHITESPACE( char_) ((char_) == ' ' || \
                      (char_) == '\t' ||  (char_) == '\r')
@@ -279,6 +276,9 @@ char errorArray[100] = "there was an error";
 	for(ki = 0; ki < numChar; ki++) attText[ki] = *((*p)++); \
 	attText[ki] = '\0'; \
 	attTextEnd = &attText[ki]; 
+	
+#define GAIL printf("GAIL ANN HONDA\n")
+	
 #define ECHOCHECK \
 	GAIL; \
 	printf("%c", ch[-2]); \
@@ -347,7 +347,7 @@ typedef struct YYLTYPE
 
 
 int osillex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner );
-void osilerror(YYLTYPE* type, OSInstance *osintance,   int qtermcount, bool var1, bool var2, bool var3, bool  var4, bool var5, OSiLParserData *parserData ,const char* errormsg );
+void osilerror(YYLTYPE* type, OSInstance *osintance,  OSiLParserData *parserData ,const char* errormsg );
 
  
 #define scanner osinstance->scanner
@@ -689,19 +689,19 @@ static const yytype_int16 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   170,   170,   176,   177,   180,   185,   186,   188,   188,
-     199,   200,   203,   204,   208,   211,   214,   217,   223,   225,
-     227,   229,   231,   237,   238,   242,   247,   249,   248,   258,
-     267,   268,   269,   270,   271,   272,   273,   274,   275,   276,
-     277,   278,   279,   280,   281,   282,   283,   284,   285,   288,
-     288,   294,   294,   300,   300,   306,   306,   312,   312,   318,
-     318,   324,   324,   335,   336,   339,   339,   350,   351,   354,
-     354,   365,   366,   369,   369,   375,   375,   381,   381,   387,
-     387,   393,   393,   401,   401,   407,   407,   414,   414,   420,
-     420,   425,   425,   430,   431,   433,   434,   434,   444,   445,
-     447,   449,   451,   455,   459,   465,   468,   472,   473,   475,
-     477,   480,   483,   487,   492,   493,   494,   495,   497,   498,
-     500
+       0,   164,   164,   170,   171,   174,   179,   180,   182,   182,
+     193,   194,   197,   198,   202,   205,   208,   211,   217,   219,
+     221,   223,   225,   228,   229,   233,   238,   240,   239,   249,
+     262,   263,   264,   265,   266,   267,   268,   269,   270,   271,
+     272,   273,   274,   275,   276,   277,   278,   279,   280,   283,
+     283,   288,   288,   293,   293,   298,   298,   303,   303,   308,
+     308,   313,   313,   323,   324,   327,   327,   337,   338,   341,
+     341,   351,   352,   355,   355,   360,   360,   365,   365,   370,
+     370,   375,   375,   382,   382,   387,   387,   393,   393,   398,
+     398,   403,   403,   408,   409,   411,   412,   412,   422,   423,
+     425,   427,   429,   433,   437,   443,   446,   450,   451,   453,
+     455,   458,   461,   465,   475,   476,   477,   478,   480,   481,
+     483
 };
 #endif
 
@@ -993,7 +993,7 @@ do								\
     }								\
   else								\
     {								\
-      yyerror (&yylloc, osinstance, qtermcount, qtermidxOneattON, qtermidxTwoattON, qtermidxattON, qtermidattON, qtermcoefattON, parserData, YY_("syntax error: cannot back up")); \
+      yyerror (&yylloc, osinstance, parserData, YY_("syntax error: cannot back up")); \
       YYERROR;							\
     }								\
 while (YYID (0))
@@ -1073,7 +1073,7 @@ do {									  \
     {									  \
       YYFPRINTF (stderr, "%s ", Title);					  \
       yy_symbol_print (stderr,						  \
-		  Type, Value, Location, osinstance, qtermcount, qtermidxOneattON, qtermidxTwoattON, qtermidxattON, qtermidattON, qtermcoefattON, parserData); \
+		  Type, Value, Location, osinstance, parserData); \
       YYFPRINTF (stderr, "\n");						  \
     }									  \
 } while (YYID (0))
@@ -1087,21 +1087,15 @@ do {									  \
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, OSInstance *osinstance, int qtermcount, bool qtermidxOneattON, bool qtermidxTwoattON, bool qtermidxattON, bool qtermidattON, bool qtermcoefattON, OSiLParserData *parserData)
+yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, OSInstance *osinstance, OSiLParserData *parserData)
 #else
 static void
-yy_symbol_value_print (yyoutput, yytype, yyvaluep, yylocationp, osinstance, qtermcount, qtermidxOneattON, qtermidxTwoattON, qtermidxattON, qtermidattON, qtermcoefattON, parserData)
+yy_symbol_value_print (yyoutput, yytype, yyvaluep, yylocationp, osinstance, parserData)
     FILE *yyoutput;
     int yytype;
     YYSTYPE const * const yyvaluep;
     YYLTYPE const * const yylocationp;
     OSInstance *osinstance;
-    int qtermcount;
-    bool qtermidxOneattON;
-    bool qtermidxTwoattON;
-    bool qtermidxattON;
-    bool qtermidattON;
-    bool qtermcoefattON;
     OSiLParserData *parserData;
 #endif
 {
@@ -1109,12 +1103,6 @@ yy_symbol_value_print (yyoutput, yytype, yyvaluep, yylocationp, osinstance, qter
     return;
   YYUSE (yylocationp);
   YYUSE (osinstance);
-  YYUSE (qtermcount);
-  YYUSE (qtermidxOneattON);
-  YYUSE (qtermidxTwoattON);
-  YYUSE (qtermidxattON);
-  YYUSE (qtermidattON);
-  YYUSE (qtermcoefattON);
   YYUSE (parserData);
 # ifdef YYPRINT
   if (yytype < YYNTOKENS)
@@ -1137,21 +1125,15 @@ yy_symbol_value_print (yyoutput, yytype, yyvaluep, yylocationp, osinstance, qter
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, OSInstance *osinstance, int qtermcount, bool qtermidxOneattON, bool qtermidxTwoattON, bool qtermidxattON, bool qtermidattON, bool qtermcoefattON, OSiLParserData *parserData)
+yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, OSInstance *osinstance, OSiLParserData *parserData)
 #else
 static void
-yy_symbol_print (yyoutput, yytype, yyvaluep, yylocationp, osinstance, qtermcount, qtermidxOneattON, qtermidxTwoattON, qtermidxattON, qtermidattON, qtermcoefattON, parserData)
+yy_symbol_print (yyoutput, yytype, yyvaluep, yylocationp, osinstance, parserData)
     FILE *yyoutput;
     int yytype;
     YYSTYPE const * const yyvaluep;
     YYLTYPE const * const yylocationp;
     OSInstance *osinstance;
-    int qtermcount;
-    bool qtermidxOneattON;
-    bool qtermidxTwoattON;
-    bool qtermidxattON;
-    bool qtermidattON;
-    bool qtermcoefattON;
     OSiLParserData *parserData;
 #endif
 {
@@ -1162,7 +1144,7 @@ yy_symbol_print (yyoutput, yytype, yyvaluep, yylocationp, osinstance, qtermcount
 
   YY_LOCATION_PRINT (yyoutput, *yylocationp);
   YYFPRINTF (yyoutput, ": ");
-  yy_symbol_value_print (yyoutput, yytype, yyvaluep, yylocationp, osinstance, qtermcount, qtermidxOneattON, qtermidxTwoattON, qtermidxattON, qtermidattON, qtermcoefattON, parserData);
+  yy_symbol_value_print (yyoutput, yytype, yyvaluep, yylocationp, osinstance, parserData);
   YYFPRINTF (yyoutput, ")");
 }
 
@@ -1202,20 +1184,14 @@ do {								\
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_reduce_print (YYSTYPE *yyvsp, YYLTYPE *yylsp, int yyrule, OSInstance *osinstance, int qtermcount, bool qtermidxOneattON, bool qtermidxTwoattON, bool qtermidxattON, bool qtermidattON, bool qtermcoefattON, OSiLParserData *parserData)
+yy_reduce_print (YYSTYPE *yyvsp, YYLTYPE *yylsp, int yyrule, OSInstance *osinstance, OSiLParserData *parserData)
 #else
 static void
-yy_reduce_print (yyvsp, yylsp, yyrule, osinstance, qtermcount, qtermidxOneattON, qtermidxTwoattON, qtermidxattON, qtermidattON, qtermcoefattON, parserData)
+yy_reduce_print (yyvsp, yylsp, yyrule, osinstance, parserData)
     YYSTYPE *yyvsp;
     YYLTYPE *yylsp;
     int yyrule;
     OSInstance *osinstance;
-    int qtermcount;
-    bool qtermidxOneattON;
-    bool qtermidxTwoattON;
-    bool qtermidxattON;
-    bool qtermidattON;
-    bool qtermcoefattON;
     OSiLParserData *parserData;
 #endif
 {
@@ -1230,7 +1206,7 @@ yy_reduce_print (yyvsp, yylsp, yyrule, osinstance, qtermcount, qtermidxOneattON,
       fprintf (stderr, "   $%d = ", yyi + 1);
       yy_symbol_print (stderr, yyrhs[yyprhs[yyrule] + yyi],
 		       &(yyvsp[(yyi + 1) - (yynrhs)])
-		       , &(yylsp[(yyi + 1) - (yynrhs)])		       , osinstance, qtermcount, qtermidxOneattON, qtermidxTwoattON, qtermidxattON, qtermidattON, qtermcoefattON, parserData);
+		       , &(yylsp[(yyi + 1) - (yynrhs)])		       , osinstance, parserData);
       fprintf (stderr, "\n");
     }
 }
@@ -1238,7 +1214,7 @@ yy_reduce_print (yyvsp, yylsp, yyrule, osinstance, qtermcount, qtermidxOneattON,
 # define YY_REDUCE_PRINT(Rule)		\
 do {					\
   if (yydebug)				\
-    yy_reduce_print (yyvsp, yylsp, Rule, osinstance, qtermcount, qtermidxOneattON, qtermidxTwoattON, qtermidxattON, qtermidattON, qtermcoefattON, parserData); \
+    yy_reduce_print (yyvsp, yylsp, Rule, osinstance, parserData); \
 } while (YYID (0))
 
 /* Nonzero means print parse trace.  It is left uninitialized so that
@@ -1489,33 +1465,21 @@ yysyntax_error (char *yyresult, int yystate, int yychar)
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep, YYLTYPE *yylocationp, OSInstance *osinstance, int qtermcount, bool qtermidxOneattON, bool qtermidxTwoattON, bool qtermidxattON, bool qtermidattON, bool qtermcoefattON, OSiLParserData *parserData)
+yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep, YYLTYPE *yylocationp, OSInstance *osinstance, OSiLParserData *parserData)
 #else
 static void
-yydestruct (yymsg, yytype, yyvaluep, yylocationp, osinstance, qtermcount, qtermidxOneattON, qtermidxTwoattON, qtermidxattON, qtermidattON, qtermcoefattON, parserData)
+yydestruct (yymsg, yytype, yyvaluep, yylocationp, osinstance, parserData)
     const char *yymsg;
     int yytype;
     YYSTYPE *yyvaluep;
     YYLTYPE *yylocationp;
     OSInstance *osinstance;
-    int qtermcount;
-    bool qtermidxOneattON;
-    bool qtermidxTwoattON;
-    bool qtermidxattON;
-    bool qtermidattON;
-    bool qtermcoefattON;
     OSiLParserData *parserData;
 #endif
 {
   YYUSE (yyvaluep);
   YYUSE (yylocationp);
   YYUSE (osinstance);
-  YYUSE (qtermcount);
-  YYUSE (qtermidxOneattON);
-  YYUSE (qtermidxTwoattON);
-  YYUSE (qtermidxattON);
-  YYUSE (qtermidattON);
-  YYUSE (qtermcoefattON);
   YYUSE (parserData);
 
   if (!yymsg)
@@ -1541,7 +1505,7 @@ int yyparse ();
 #endif
 #else /* ! YYPARSE_PARAM */
 #if defined __STDC__ || defined __cplusplus
-int yyparse (OSInstance *osinstance, int qtermcount, bool qtermidxOneattON, bool qtermidxTwoattON, bool qtermidxattON, bool qtermidattON, bool qtermcoefattON, OSiLParserData *parserData);
+int yyparse (OSInstance *osinstance, OSiLParserData *parserData);
 #else
 int yyparse ();
 #endif
@@ -1570,17 +1534,11 @@ yyparse (YYPARSE_PARAM)
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 int
-yyparse (OSInstance *osinstance, int qtermcount, bool qtermidxOneattON, bool qtermidxTwoattON, bool qtermidxattON, bool qtermidattON, bool qtermcoefattON, OSiLParserData *parserData)
+yyparse (OSInstance *osinstance, OSiLParserData *parserData)
 #else
 int
-yyparse (osinstance, qtermcount, qtermidxOneattON, qtermidxTwoattON, qtermidxattON, qtermidattON, qtermcoefattON, parserData)
+yyparse (osinstance, parserData)
     OSInstance *osinstance;
-    int qtermcount;
-    bool qtermidxOneattON;
-    bool qtermidxTwoattON;
-    bool qtermidxattON;
-    bool qtermidattON;
-    bool qtermcoefattON;
     OSiLParserData *parserData;
 #endif
 #endif
@@ -1853,7 +1811,7 @@ yyreduce:
     {
         case 4:
 
-    {if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms > qtermcount ) osilerror_wrapper("actual number of qterms less than numberOfQuadraticTerms");}
+    {if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms > parserData->qtermcount ) osilerror_wrapper("actual number of qterms less than numberOfQuadraticTerms");}
     break;
 
   case 5:
@@ -1866,74 +1824,74 @@ for(int i = 0; i < (yyvsp[(2) - (4)].ival); i++) osinstance->instanceData->quadr
 
   case 8:
 
-    {if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms <= qtermcount ) osilerror_wrapper("too many QuadraticTerms");}
+    {if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms <= parserData->qtermcount ) osilerror_wrapper("too many QuadraticTerms");}
     break;
 
   case 9:
 
-    {qtermcount++; 
-if(!qtermidxattON)  osilerror_wrapper("the qTerm attribute idx is required"); 
-if(!qtermidxOneattON)  osilerror_wrapper("the qTerm attribute idxOne is required"); 
-if(!qtermidxTwoattON)  osilerror_wrapper("the qTerm attribute idxTwo is required"); 
-qtermidattON = false; 
-qtermidxattON = false; 
-qtermidxOneattON = false; 
-qtermidxTwoattON = false;
-qtermcoefattON = false;}
+    {parserData->qtermcount++; 
+if(!parserData->qtermidxattON)  osilerror_wrapper("the qTerm attribute idx is required"); 
+if(!parserData->qtermidxOneattON)  osilerror_wrapper("the qTerm attribute idxOne is required"); 
+if(!parserData->qtermidxTwoattON)  osilerror_wrapper("the qTerm attribute idxTwo is required"); 
+parserData->qtermidattON = false; 
+parserData->qtermidxattON = false; 
+parserData->qtermidxOneattON = false; 
+parserData->qtermidxTwoattON = false;
+parserData->qtermcoefattON = false;}
     break;
 
   case 14:
 
-    { if(qtermidxOneattON) osilerror_wrapper("too many qTerm idxOne attributes"); 
-			qtermidxOneattON = true;  }
+    { if(parserData->qtermidxOneattON) osilerror_wrapper("too many qTerm idxOne attributes"); 
+			parserData->qtermidxOneattON = true;  }
     break;
 
   case 15:
 
-    { if(qtermidxTwoattON) osilerror_wrapper("too many qTerm idxTwo attributes"); 
-			qtermidxTwoattON = true;  }
+    { if(parserData->qtermidxTwoattON) osilerror_wrapper("too many qTerm idxTwo attributes"); 
+			parserData->qtermidxTwoattON = true;  }
     break;
 
   case 16:
 
-    { if(qtermcoefattON) osilerror_wrapper("too many qTerm coef attributes"); 
-			qtermcoefattON = true;  }
+    { if(parserData->qtermcoefattON) osilerror_wrapper("too many qTerm coef attributes"); 
+			parserData->qtermcoefattON = true;  }
     break;
 
   case 17:
 
-    { if(qtermidxattON) osilerror_wrapper("too many qTerm idx attributes"); 
-			qtermidxattON = true;  }
+    { if(parserData->qtermidxattON) osilerror_wrapper("too many qTerm idx attributes"); 
+			parserData->qtermidxattON = true;  }
     break;
 
   case 18:
 
     {  
-osinstance->instanceData->quadraticCoefficients->qTerm[qtermcount]->idxOne = (yyvsp[(2) - (2)].ival);}
+osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->idxOne = (yyvsp[(2) - (2)].ival);}
     break;
 
   case 19:
 
     { 
-osinstance->instanceData->quadraticCoefficients->qTerm[qtermcount]->idxTwo = (yyvsp[(2) - (2)].ival);}
+osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->idxTwo = (yyvsp[(2) - (2)].ival);}
     break;
 
   case 20:
 
     {
-osinstance->instanceData->quadraticCoefficients->qTerm[qtermcount]->coef = (yyvsp[(2) - (2)].dval);}
+osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->coef = (yyvsp[(2) - (2)].dval);}
     break;
 
   case 21:
 
     { 
-osinstance->instanceData->quadraticCoefficients->qTerm[qtermcount]->coef = (yyvsp[(2) - (2)].ival);}
+osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->coef = (yyvsp[(2) - (2)].ival);}
     break;
 
   case 22:
 
     {  
-osinstance->instanceData->quadraticCoefficients->qTerm[qtermcount]->idx = (yyvsp[(2) - (2)].ival);}
+osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->idx = (yyvsp[(2) - (2)].ival);}
     break;
 
   case 24:
@@ -1954,9 +1912,9 @@ if(osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions 
     {
 	// IMPORTANT -- HERE IS WHERE WE DEFINE THE EXPRESSION TREE
 	osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->m_treeRoot = 
-	//osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->createExpressionTreeFromPrefix( parserData->nlNodeVec);
-	//createExpressionTreeFromPrefix( parserData->nlNodeVec);
-	parserData->nlNodeVec[ 0]->createExpressionTreeFromPrefix( parserData->nlNodeVec);
+	//osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->createExpressionTreeFromPrefix( nlNodeVec);
+	//createExpressionTreeFromPrefix( nlNodeVec);
+	nlNodeVec[ 0]->createExpressionTreeFromPrefix( nlNodeVec);
 	parserData->nlnodecount++;
 }
     break;
@@ -1968,70 +1926,67 @@ osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount] = n
 osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->idx = (yyvsp[(2) - (3)].ival);
 osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree = new OSExpressionTree();
 if(parserData->nlnodecount > parserData->tmpnlcount) osilerror_wrapper("actual number of nl terms greater than number attribute");
-
+// clear the vectors of pointers
+nlNodeVec.clear();
+//parserData->sumVec.clear();
+maxVec.clear();
+productVec.clear();
 }
     break;
 
   case 49:
 
     {
-	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeTimes();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	nlNodeVec.push_back( nlNodePoint);
 }
     break;
 
   case 51:
 
     {
-	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodePlus();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	nlNodeVec.push_back( nlNodePoint);
 }
     break;
 
   case 53:
 
     {
-	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeMinus();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	nlNodeVec.push_back( nlNodePoint);
 }
     break;
 
   case 55:
 
     {
-	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeNegate();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	nlNodeVec.push_back( nlNodePoint);
 }
     break;
 
   case 57:
 
     { 
-	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeDivide();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	nlNodeVec.push_back( nlNodePoint);
 }
     break;
 
   case 59:
 
     {
-	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodePower();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	nlNodeVec.push_back( nlNodePoint);
 }
     break;
 
   case 61:
 
     {
-	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeSum();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	nlNodeVec.push_back( nlNodePoint);
 	parserData->sumVec.push_back( nlNodePoint);
 }
     break;
@@ -2057,155 +2012,145 @@ if(parserData->nlnodecount > parserData->tmpnlcount) osilerror_wrapper("actual n
   case 65:
 
     {
-	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeMax();
-	parserData->nlNodeVec.push_back( nlNodePoint);
-	parserData->maxVec.push_back( nlNodePoint);
+	nlNodeVec.push_back( nlNodePoint);
+	maxVec.push_back( nlNodePoint);
 }
     break;
 
   case 66:
 
     {
-	parserData->maxVec.back()->m_mChildren = new OSnLNode*[ parserData->maxVec.back()->inumberOfChildren];
-	parserData->maxVec.pop_back();
+	maxVec.back()->m_mChildren = new OSnLNode*[ maxVec.back()->inumberOfChildren];
+	maxVec.pop_back();
 }
     break;
 
   case 67:
 
-    {	parserData->maxVec.back()->inumberOfChildren++; }
+    {	maxVec.back()->inumberOfChildren++; }
     break;
 
   case 68:
 
-    {	parserData->maxVec.back()->inumberOfChildren++; }
+    {	maxVec.back()->inumberOfChildren++; }
     break;
 
   case 69:
 
     {
-	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeProduct();
-	parserData->nlNodeVec.push_back( nlNodePoint);
-	parserData->productVec.push_back( nlNodePoint);
+	nlNodeVec.push_back( nlNodePoint);
+	productVec.push_back( nlNodePoint);
 }
     break;
 
   case 70:
 
     {
-	parserData->productVec.back()->m_mChildren = new OSnLNode*[ parserData->productVec.back()->inumberOfChildren];
-	parserData->productVec.pop_back();
+	productVec.back()->m_mChildren = new OSnLNode*[ productVec.back()->inumberOfChildren];
+	productVec.pop_back();
 }
     break;
 
   case 71:
 
-    {	parserData->productVec.back()->inumberOfChildren++; }
+    {	productVec.back()->inumberOfChildren++; }
     break;
 
   case 72:
 
-    {	parserData->productVec.back()->inumberOfChildren++; }
+    {	productVec.back()->inumberOfChildren++; }
     break;
 
   case 73:
 
     {
-	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeLn();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	nlNodeVec.push_back( nlNodePoint);
 }
     break;
 
   case 75:
 
     {
-	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeSqrt();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	nlNodeVec.push_back( nlNodePoint);
 }
     break;
 
   case 77:
 
     {
-	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeSquare();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	nlNodeVec.push_back( nlNodePoint);
 }
     break;
 
   case 79:
 
     {
-	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeCos();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	nlNodeVec.push_back( nlNodePoint);
 }
     break;
 
   case 81:
 
     {
-	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeSin();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	nlNodeVec.push_back( nlNodePoint);
 }
     break;
 
   case 83:
 
     {
-	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeExp();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	nlNodeVec.push_back( nlNodePoint);
 }
     break;
 
   case 85:
 
     {
-	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeAbs();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	nlNodeVec.push_back( nlNodePoint);
 }
     break;
 
   case 87:
 
     {
-	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeIf();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	nlNodeVec.push_back( nlNodePoint);
 }
     break;
 
   case 89:
 
     {
-	parserData->nlNodeNumberPoint = new OSnLNodeNumber();
-	parserData->nlNodeVec.push_back( parserData->nlNodeNumberPoint);
+	nlNodeNumberPoint = new OSnLNodeNumber();
+	nlNodeVec.push_back( nlNodeNumberPoint);
 }
     break;
 
   case 90:
 
-    {parserData->numbervalueattON = false; parserData->numbertypeattON = false; parserData->numberidattON = false;}
+    {parserData->numbervalueattON = false; parserData->numbertypeattON = false; numberidattON = false;}
     break;
 
   case 91:
 
     {
-	parserData->nlNodeVariablePoint = new OSnLNodeVariable();
-	parserData->nlNodeVec.push_back( parserData->nlNodeVariablePoint);
+	nlNodeVariablePoint = new OSnLNodeVariable();
+	nlNodeVec.push_back( nlNodeVariablePoint);
 }
     break;
 
   case 92:
 
-    {parserData->variablecoefattON = false; parserData->variableidxattON = false;}
+    {variablecoefattON = false; variableidxattON = false;}
     break;
 
   case 96:
@@ -2214,8 +2159,8 @@ if(parserData->nlnodecount > parserData->tmpnlcount) osilerror_wrapper("actual n
 	//parserData->sumVec.back()->inumberOfChildren = 1;
 	//parserData->sumVec.back()->m_mChildren = new OSnLNode*[ 1];
 	// kipp -- fix the above doesnt seem right
-	parserData->nlNodeVariablePoint->inumberOfChildren = 1;
-	parserData->nlNodeVariablePoint->m_mChildren = new OSnLNode*[ 1];
+	nlNodeVariablePoint->inumberOfChildren = 1;
+	nlNodeVariablePoint->m_mChildren = new OSnLNode*[ 1];
 }
     break;
 
@@ -2233,68 +2178,68 @@ if(parserData->nlnodecount > parserData->tmpnlcount) osilerror_wrapper("actual n
 
   case 102:
 
-    {if(parserData->numberidattON) osilerror_wrapper("too many number id attributes"); 
-			parserData->numberidattON = true; }
+    {if(numberidattON) osilerror_wrapper("too many number id attributes"); 
+			numberidattON = true; }
     break;
 
   case 103:
 
     {
-	parserData->nlNodeNumberPoint->type = (yyvsp[(2) - (2)].sval);
+	nlNodeNumberPoint->type = (yyvsp[(2) - (2)].sval);
 }
     break;
 
   case 104:
 
     {
-	parserData->nlNodeNumberPoint->id = (yyvsp[(2) - (2)].sval);
+	nlNodeNumberPoint->id = (yyvsp[(2) - (2)].sval);
 }
     break;
 
   case 105:
 
     {
-	parserData->nlNodeNumberPoint->value = (yyvsp[(2) - (2)].dval);
+	nlNodeNumberPoint->value = (yyvsp[(2) - (2)].dval);
 }
     break;
 
   case 106:
 
     {
-	parserData->nlNodeNumberPoint->value = (yyvsp[(2) - (2)].ival);
+	nlNodeNumberPoint->value = (yyvsp[(2) - (2)].ival);
 }
     break;
 
   case 109:
 
-    {if(parserData->variablecoefattON) osilerror_wrapper("too many variable coef attributes"); 
-			parserData->variablecoefattON = true; }
+    {if(variablecoefattON) osilerror_wrapper("too many variable coef attributes"); 
+			variablecoefattON = true; }
     break;
 
   case 110:
 
-    {if(parserData->variableidxattON) osilerror_wrapper("too many variable idx attributes"); 
-			parserData->variableidxattON = true; }
+    {if(variableidxattON) osilerror_wrapper("too many variable idx attributes"); 
+			variableidxattON = true; }
     break;
 
   case 111:
 
     {
-	parserData->nlNodeVariablePoint->coef = (yyvsp[(2) - (2)].dval);
+	nlNodeVariablePoint->coef = (yyvsp[(2) - (2)].dval);
 }
     break;
 
   case 112:
 
     {
-	parserData->nlNodeVariablePoint->coef = (yyvsp[(2) - (2)].ival);		
+	nlNodeVariablePoint->coef = (yyvsp[(2) - (2)].ival);		
 }
     break;
 
   case 113:
 
     {
-	parserData->nlNodeVariablePoint->idx = (yyvsp[(2) - (2)].ival);
+	nlNodeVariablePoint->idx = (yyvsp[(2) - (2)].ival);
 }
     break;
 
@@ -2336,7 +2281,7 @@ yyerrlab:
     {
       ++yynerrs;
 #if ! YYERROR_VERBOSE
-      yyerror (&yylloc, osinstance, qtermcount, qtermidxOneattON, qtermidxTwoattON, qtermidxattON, qtermidattON, qtermcoefattON, parserData, YY_("syntax error"));
+      yyerror (&yylloc, osinstance, parserData, YY_("syntax error"));
 #else
       {
 	YYSIZE_T yysize = yysyntax_error (0, yystate, yychar);
@@ -2360,11 +2305,11 @@ yyerrlab:
 	if (0 < yysize && yysize <= yymsg_alloc)
 	  {
 	    (void) yysyntax_error (yymsg, yystate, yychar);
-	    yyerror (&yylloc, osinstance, qtermcount, qtermidxOneattON, qtermidxTwoattON, qtermidxattON, qtermidattON, qtermcoefattON, parserData, yymsg);
+	    yyerror (&yylloc, osinstance, parserData, yymsg);
 	  }
 	else
 	  {
-	    yyerror (&yylloc, osinstance, qtermcount, qtermidxOneattON, qtermidxTwoattON, qtermidxattON, qtermidattON, qtermcoefattON, parserData, YY_("syntax error"));
+	    yyerror (&yylloc, osinstance, parserData, YY_("syntax error"));
 	    if (yysize != 0)
 	      goto yyexhaustedlab;
 	  }
@@ -2388,7 +2333,7 @@ yyerrlab:
       else
 	{
 	  yydestruct ("Error: discarding",
-		      yytoken, &yylval, &yylloc, osinstance, qtermcount, qtermidxOneattON, qtermidxTwoattON, qtermidxattON, qtermidattON, qtermcoefattON, parserData);
+		      yytoken, &yylval, &yylloc, osinstance, parserData);
 	  yychar = YYEMPTY;
 	}
     }
@@ -2445,7 +2390,7 @@ yyerrlab1:
 
       yyerror_range[0] = *yylsp;
       yydestruct ("Error: popping",
-		  yystos[yystate], yyvsp, yylsp, osinstance, qtermcount, qtermidxOneattON, qtermidxTwoattON, qtermidxattON, qtermidattON, qtermcoefattON, parserData);
+		  yystos[yystate], yyvsp, yylsp, osinstance, parserData);
       YYPOPSTACK (1);
       yystate = *yyssp;
       YY_STACK_PRINT (yyss, yyssp);
@@ -2488,7 +2433,7 @@ yyabortlab:
 | yyexhaustedlab -- memory exhaustion comes here.  |
 `-------------------------------------------------*/
 yyexhaustedlab:
-  yyerror (&yylloc, osinstance, qtermcount, qtermidxOneattON, qtermidxTwoattON, qtermidxattON, qtermidattON, qtermcoefattON, parserData, YY_("memory exhausted"));
+  yyerror (&yylloc, osinstance, parserData, YY_("memory exhausted"));
   yyresult = 2;
   /* Fall through.  */
 #endif
@@ -2496,7 +2441,7 @@ yyexhaustedlab:
 yyreturn:
   if (yychar != YYEOF && yychar != YYEMPTY)
      yydestruct ("Cleanup: discarding lookahead",
-		 yytoken, &yylval, &yylloc, osinstance, qtermcount, qtermidxOneattON, qtermidxTwoattON, qtermidxattON, qtermidattON, qtermcoefattON, parserData);
+		 yytoken, &yylval, &yylloc, osinstance, parserData);
   /* Do not reclaim the symbols of the rule which action triggered
      this YYABORT or YYACCEPT.  */
   YYPOPSTACK (yylen);
@@ -2504,7 +2449,7 @@ yyreturn:
   while (yyssp != yyss)
     {
       yydestruct ("Cleanup: popping",
-		  yystos[*yyssp], yyvsp, yylsp, osinstance, qtermcount, qtermidxOneattON, qtermidxTwoattON, qtermidxattON, qtermidattON, qtermcoefattON, parserData);
+		  yystos[*yyssp], yyvsp, yylsp, osinstance, parserData);
       YYPOPSTACK (1);
     }
 #ifndef yyoverflow
@@ -2524,12 +2469,12 @@ yyreturn:
 
 
 
-
-
 // user defined functions
 
-void osilerror(YYLTYPE* type, OSInstance *osintance, int qtermcount, bool var1, bool var2, bool var3, bool  var4, bool var5, OSiLParserData* parserData, const char* errormsg ) {
+void osilerror(YYLTYPE* type, OSInstance *osintance, OSiLParserData* parserData, const char* errormsg ) {
 	try{
+		const int numErrorChar = 20;
+		char errorArray[100] = "there was an error";
 		std::ostringstream outStr;
 		std::string error = errormsg;
 		error = "PARSER ERROR:  Input is either not valid or well formed: "  + error;
@@ -2565,22 +2510,8 @@ OSInstance* yygetOSInstance( const char *osil) throw (ErrorClass) {
 		osil_scan_string( osil, scanner );
 		// call the Bison parser
 		//
-		int qtermcount;
-		bool qtermidxOneattON ;
-		bool qtermidxTwoattON ;
-		bool qtermidxattON ;
-		bool qtermidattON ;
-		bool qtermcoefattON ;
-		qtermcount = 0;
-		qtermidxOneattON = false;
-		qtermidxTwoattON = false;
-		qtermidxattON = false;
-		qtermidattON = false;
-		qtermcoefattON = false;
 		//
-		//
-		if(  osilparse( osinstance, qtermcount, qtermidxOneattON, qtermidxTwoattON,
-		  qtermidxattON, qtermidattON, qtermcoefattON, parserData) != 0) {
+		if(  osilparse( osinstance,  parserData) != 0) {
 		  delete parserData;
 		  throw ErrorClass(  "Error parsing the OSiL");
 		 }
@@ -2596,6 +2527,14 @@ OSInstance* yygetOSInstance( const char *osil) throw (ErrorClass) {
 
 void yyinitialize(){
 	osillineno = 1; 
+
+	// number attribute boolean variables 
+	//numbertypeattON = false;
+	//numbervalueattON = false;
+	// variable attribute boolean variables
+	variableidxattON = false;
+	variablecoefattON = false;
+	sparseError = "";
 } // end yyInitialize()
 
 
@@ -2607,6 +2546,8 @@ bool isnewline(char c){
 
 bool parseInstanceHeader( const char **p, OSInstance *osinstance){
 	//
+	const int numErrorChar = 20;
+	char errorArray[100] = "there was an error";
 	const char *pchar = *p;
 	// create a char array that holds the instance header information
 	const char *startInstanceHeader = "<instanceHeader";
@@ -2824,6 +2765,8 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance){
 
 
 bool parseInstanceData( const char **p, OSInstance *osinstance){
+	const int numErrorChar = 20;
+	char errorArray[100] = "there was an error";
 	//
 	const char *pchar = *p;
 	const char *startInstanceData = "<instanceData";
@@ -2855,6 +2798,10 @@ bool parseInstanceData( const char **p, OSInstance *osinstance){
 
 
 bool parseVariables( const char **p,  OSInstance *osinstance){
+	clock_t start, finish;
+	double duration;
+	const int numErrorChar = 20;
+	char errorArray[100] = "there was an error";
 	int ki, numChar;
 	char *attTextEnd;
 	const char *ch = *p;
@@ -3099,14 +3046,18 @@ bool parseVariables( const char **p,  OSInstance *osinstance){
 	if(*ch != '>') {strncpy(errorArray, ch, numErrorChar);  osilerror_wrapper("improperly formed </variables> tag"); return false;}
 	ch++;
 	finish = clock();
-	duration = (double) (finish - start) / CLOCKS_PER_SEC; 
-	printf("TIME TO PARSE VARIABLES = %f\n", duration);
+	//duration = (double) (finish - start) / CLOCKS_PER_SEC; 
+	//printf("TIME TO PARSE VARIABLES = %f\n", duration);
 	*p = ch;
 	return true;
 }//end parseVariables
 
 
 bool parseObjectives( const char **p, OSInstance *osinstance){
+	clock_t start, finish;
+	double duration;
+	const int numErrorChar = 20;
+	char errorArray[100] = "there was an error";
 	int ki, numChar;
 	char *attTextEnd;
 	const char *ch = *p;
@@ -3395,13 +3346,17 @@ bool parseObjectives( const char **p, OSInstance *osinstance){
 		}
 	}
 	finish = clock();
-	duration = (double) (finish - start) / CLOCKS_PER_SEC; 
-	printf("TIME TO PARSE OBJECTIVES = %f\n", duration);
+	//duration = (double) (finish - start) / CLOCKS_PER_SEC; 
+	//printf("TIME TO PARSE OBJECTIVES = %f\n", duration);
 	*p = ch;
 	return true;
 }//end parseObjectives
 
 bool parseConstraints( const char **p, OSInstance *osinstance){
+	clock_t start, finish;
+	double duration;
+	const int numErrorChar = 20;
+	char errorArray[100] = "there was an error";
 	int ki, numChar;
 	char *attTextEnd;
 	const char *ch = *p;
@@ -3649,17 +3604,18 @@ bool parseConstraints( const char **p, OSInstance *osinstance){
 		}
 	}
 	finish = clock();
-	duration = (double) (finish - start) / CLOCKS_PER_SEC; 
-	printf("TIME TO PARSE CONSTRAINTS = %f\n", duration);
+	//duration = (double) (finish - start) / CLOCKS_PER_SEC; 
+	//printf("TIME TO PARSE CONSTRAINTS = %f\n", duration);
 	*p = ch;
 	return true;
 }//end parseConstraints
 
 bool parseLinearConstraintCoefficients( const char **p, OSInstance *osinstance){
+	const int numErrorChar = 20;
+	char errorArray[100] = "there was an error";
 	int ki, numChar;
 	char *attTextEnd;
-	const char *ch = *p;
-	start = clock();	
+	const char *ch = *p;	
 	const char *c_numberOfValues = "numberOfValues";
 	const char *startlinearConstraintCoefficients = "<linearConstraintCoefficients";
 	const char *endlinearConstraintCoefficients = "</linearConstraintCoefficients";
@@ -3724,6 +3680,10 @@ bool parseLinearConstraintCoefficients( const char **p, OSInstance *osinstance){
 }//end parseLinearConstraintCoefficients
 
 bool parseStart(const char **p, OSInstance *osinstance){
+	clock_t start, finish;
+	double duration;
+	const int numErrorChar = 20;
+	char errorArray[100] = "there was an error";
 	const char *ch = *p;
 	start = clock(); 
 	const char* startStart = "<start";
@@ -3826,13 +3786,17 @@ bool parseStart(const char **p, OSInstance *osinstance){
 	ch++;	
 	// get the end element
 	finish = clock();
-	duration = (double) (finish - start) / CLOCKS_PER_SEC; 
-	printf("TIME TO PARSE STARTS  = %f\n", duration);
+	//duration = (double) (finish - start) / CLOCKS_PER_SEC; 
+	//printf("TIME TO PARSE STARTS  = %f\n", duration);
 	*p = ch;
 	return true;
 }//end parseSart
 
 bool parseRowIdx( const char **p, OSInstance *osinstance){
+	clock_t start, finish;
+	double duration;
+	const int numErrorChar = 20;
+	char errorArray[100] = "there was an error";
 	const char *ch = *p;
 	start = clock(); 
 	const char* startRowIdx = "<rowIdx";
@@ -3937,14 +3901,18 @@ bool parseRowIdx( const char **p, OSInstance *osinstance){
 	if(kount > osinstance->instanceData->linearConstraintCoefficients->numberOfValues) { osilerror_wrapper("numberOfLinearCoefficients attribute less than number of row indices found"); return false;}
 	if(kount < osinstance->instanceData->linearConstraintCoefficients->numberOfValues) { osilerror_wrapper("numberOfLinearCoefficients attribute greater than number of row indices found"); return false;}
 	finish = clock();
-	duration = (double) (finish - start) / CLOCKS_PER_SEC; 
-	printf("TIME TO PARSE ROW INDEXES = %f\n", duration);
+	//duration = (double) (finish - start) / CLOCKS_PER_SEC; 
+	//printf("TIME TO PARSE ROW INDEXES = %f\n", duration);
 	*p = ch;
  	return true;
 }//end parseRowIdx
 
 
 bool parseColIdx( const char **p, OSInstance *osinstance){
+	clock_t start, finish;
+	double duration;
+	const int numErrorChar = 20;
+	char errorArray[100] = "there was an error";
 	const char *ch = *p;
 	start = clock(); 
 	const char* startColIdx = "<colIdx";
@@ -4049,14 +4017,18 @@ bool parseColIdx( const char **p, OSInstance *osinstance){
 	if(kount > osinstance->instanceData->linearConstraintCoefficients->numberOfValues) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper("numberOfLinearCoefficients attribute less than number of column indices found"); return false;}
 	if(kount < osinstance->instanceData->linearConstraintCoefficients->numberOfValues) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper("numberOfLinearCoefficients attribute greater than number of column indices found"); return false;}
 	finish = clock();
-	duration = (double) (finish - start) / CLOCKS_PER_SEC; 
-	printf("TIME TO PARSE COLUMN INDEXES = %f\n", duration);
+	//duration = (double) (finish - start) / CLOCKS_PER_SEC; 
+	//printf("TIME TO PARSE COLUMN INDEXES = %f\n", duration);
 	*p = ch;
  	return true;
 }//end parseColIdx
 
 
 bool parseValue( const char **p, OSInstance *osinstance){
+	clock_t start, finish;
+	double duration;
+	const int numErrorChar = 20;
+	char errorArray[100] = "there was an error";
 	const char *ch = *p;
 	start = clock(); 
 	const char* startValue = "<value";
@@ -4159,13 +4131,15 @@ bool parseValue( const char **p, OSInstance *osinstance){
 	if(kount < osinstance->instanceData->linearConstraintCoefficients->numberOfValues){strncpy(errorArray, ch, numErrorChar); osilerror_wrapper("numberOfLinearCoefficients greater than number of values found"); return false;}
 	if(kount > osinstance->instanceData->linearConstraintCoefficients->numberOfValues){strncpy(errorArray, ch, numErrorChar); osilerror_wrapper("numberOfLinearCoefficients less than the number of values found"); return false;}
 	finish = clock();
-	duration = (double) (finish - start) / CLOCKS_PER_SEC; 
-	printf("TIME TO PARSE VALUES = %f\n", duration);
+	//duration = (double) (finish - start) / CLOCKS_PER_SEC; 
+	//printf("TIME TO PARSE VALUES = %f\n", duration);
 	*p = ch;
 	return true;
 }//end parseValue
 
 bool parseObjCoef( const char **p, int objcount, OSInstance *osinstance){
+	const int numErrorChar = 20;
+	char errorArray[100] = "there was an error";
 	int ki, numChar;
 	char *attTextEnd;
 	const char *ch = *p;
@@ -4225,6 +4199,8 @@ bool parseObjCoef( const char **p, int objcount, OSInstance *osinstance){
 }//end parseObjCoef
 
 char *parseBase64(const char **p, int *dataSize ){
+	const int numErrorChar = 20;
+	char errorArray[100] = "there was an error";
 	int ki, numChar;
 	char *attTextEnd;
 	const char *ch = *p;
@@ -4285,6 +4261,8 @@ char *parseBase64(const char **p, int *dataSize ){
 
 
 double atofmod1(const char *number, const char *numberend){
+	const int numErrorChar = 20;
+	char errorArray[100] = "there was an error";
 	double val, power;
 	int i;
 	int sign = 1;
@@ -4369,6 +4347,9 @@ double atofmod1(const char *number, const char *numberend){
 
 int atoimod1(const char *number, const char *numberend){
 	// modidfied atoi from Kernighan and Ritchie
+
+	const int numErrorChar = 20;
+	char errorArray[100] = "there was an error";
 	int ival;
 	int i, sign;
 	int endWhiteSpace;
@@ -4389,7 +4370,7 @@ int atoimod1(const char *number, const char *numberend){
 }//end atoimod1
 
 void osilerror_wrapper(const char* errormsg){
-	osilerror( NULL, NULL, 0, false, false, false, false, false, NULL, errormsg);
+	osilerror( NULL, NULL, NULL, errormsg);
 }//end osilerror_wrapper
 
 

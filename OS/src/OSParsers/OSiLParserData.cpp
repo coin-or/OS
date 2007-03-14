@@ -33,7 +33,9 @@
 	qtermidxattON(false),
 	qtermidattON(false),
 	qtermcoefattON(false),
-	qtermcount(0)
+	qtermcount(0),
+	tmpnlcount(0),
+	nlnodecount(0)
  {
 
  }//OSiLParserData

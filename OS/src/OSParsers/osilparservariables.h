@@ -13,6 +13,47 @@
  * 
  */
  
+ #include "OSnLNode.h"
+#include <vector> 
+#include <string>
+ 
+std::string sparseError;
+
+int qtermcount;
+int nlnodecount;
+
+// qterm attribute boolean variables
+bool qtermidxOneattON ;
+bool qtermidxTwoattON ;
+bool qtermidxattON ;
+bool qtermidattON ;
+bool qtermcoefattON ;
+// number attribute boolean variables
+bool numbertypeattON ;
+bool numbervalueattON;
+bool numberidattON;
+// variable attribute boolean variables
+bool variableidxattON ;
+bool variablecoefattON ;
+// kipp -- change later when nonlinear added to OSInstnace
+int tmpnlcount;
+/*  end header file */ 
+
+
+std::vector<OSnLNode*> nlNodeVec;
+std::vector<OSnLNode*> sumVec;
+std::vector<OSnLNode*> productVec;
+std::vector<OSnLNode*> maxVec;
+
+
+OSnLNode *nlNodePoint;
+OSnLNodeVariable *nlNodeVariablePoint;
+OSnLNodeNumber *nlNodeNumberPoint;
+
+
+int numChar;
+char *attTextEnd;
+int ki;
 
 
 

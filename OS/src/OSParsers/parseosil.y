@@ -15,7 +15,7 @@
  
 %{
 
-
+#include "osilparservariables.h"
 #include <string>
 #include <iostream>
 #include <sstream>  
@@ -38,9 +38,9 @@ OSInstance *yygetOSInstance(const char *osil) throw(ErrorClass);
 //
 //
 // the global variables for parsing
-clock_t start, finish;
-double duration;
 int osillineno = 0;
+//
+//
 double atofmod1(const char *ch1, const char *ch2);
 int atoimod1(const char *ch1, const char *ch2);
 // we distinguish a newline from other whitespace
@@ -59,10 +59,6 @@ bool parseValue( const char **pchar, OSInstance *osinstance);
 bool parseInstanceHeader(const char **pchar, OSInstance *osinstance);
 bool parseInstanceData(const char **pchar, OSInstance *osinstance);
 char *parseBase64(const char **p, int *dataSize );
-const int numErrorChar = 20;
-char errorArray[100] = "there was an error";
-
-#define GAIL printf("GAIL ANN HONDA\n")
 
 #define	ISWHITESPACE( char_) ((char_) == ' ' || \
                      (char_) == '\t' ||  (char_) == '\r')
@@ -84,6 +80,9 @@ char errorArray[100] = "there was an error";
 	for(ki = 0; ki < numChar; ki++) attText[ki] = *((*p)++); \
 	attText[ki] = '\0'; \
 	attTextEnd = &attText[ki]; 
+	
+#define GAIL printf("GAIL ANN HONDA\n")
+	
 #define ECHOCHECK \
 	GAIL; \
 	printf("%c", ch[-2]); \
@@ -226,9 +225,6 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
 qtermidxatt: IDXATT INTEGER   {  
 osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->idx = $2;} ;
 
-
-
-
 nonlinearExpressions:  
 				| NONLINEAREXPRESSIONSSTART  nlnumberatt nlnodes NONLINEAREXPRESSIONSEND
 				{if(parserData->nlnodecount <  parserData->tmpnlcount)  osilerror_wrapper("actual number of nl terms less than number attribute"); };
@@ -244,9 +240,9 @@ nlnodes:
 		nlIdxATT  GREATERTHAN nlnode {
 	// IMPORTANT -- HERE IS WHERE WE DEFINE THE EXPRESSION TREE
 	osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->m_treeRoot = 
-	//osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->createExpressionTreeFromPrefix( parserData->nlNodeVec);
-	//createExpressionTreeFromPrefix( parserData->nlNodeVec);
-	parserData->nlNodeVec[ 0]->createExpressionTreeFromPrefix( parserData->nlNodeVec);
+	//osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->createExpressionTreeFromPrefix( nlNodeVec);
+	//createExpressionTreeFromPrefix( nlNodeVec);
+	nlNodeVec[ 0]->createExpressionTreeFromPrefix( nlNodeVec);
 	parserData->nlnodecount++;
 }  NLEND;
 
@@ -255,7 +251,11 @@ osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount] = n
 osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->idx = $2;
 osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree = new OSExpressionTree();
 if(parserData->nlnodecount > parserData->tmpnlcount) osilerror_wrapper("actual number of nl terms greater than number attribute");
-
+// clear the vectors of pointers
+nlNodeVec.clear();
+//parserData->sumVec.clear();
+maxVec.clear();
+productVec.clear();
 };
 		
 		
@@ -281,45 +281,38 @@ nlnode: number
 
 
 times: TIMESSTART {
-	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeTimes();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	nlNodeVec.push_back( nlNodePoint);
 } nlnode nlnode TIMESEND;
 
 plus: PLUSSTART {
-	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodePlus();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	nlNodeVec.push_back( nlNodePoint);
 } nlnode nlnode PLUSEND;
 
 minus: MINUSSTART {
-	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeMinus();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	nlNodeVec.push_back( nlNodePoint);
 } nlnode nlnode MINUSEND;
 
 negate: NEGATESTART {
-	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeNegate();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	nlNodeVec.push_back( nlNodePoint);
 } nlnode  NEGATEEND;
 
 divide: DIVIDESTART { 
-	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeDivide();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	nlNodeVec.push_back( nlNodePoint);
 } nlnode nlnode DIVIDEEND;
 
 power: POWERSTART {
-	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodePower();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	nlNodeVec.push_back( nlNodePoint);
 } nlnode nlnode POWEREND;
 
 sum: SUMSTART {
-	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeSum();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	nlNodeVec.push_back( nlNodePoint);
 	parserData->sumVec.push_back( nlNodePoint);
 }
 anothersumnlnode SUMEND {
@@ -332,95 +325,85 @@ anothersumnlnode: nlnode {	parserData->sumVec.back()->inumberOfChildren++; }
 			
 			
 max: MAXSTART {
-	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeMax();
-	parserData->nlNodeVec.push_back( nlNodePoint);
-	parserData->maxVec.push_back( nlNodePoint);
+	nlNodeVec.push_back( nlNodePoint);
+	maxVec.push_back( nlNodePoint);
 }
 anothermaxnlnode MAXEND {
-	parserData->maxVec.back()->m_mChildren = new OSnLNode*[ parserData->maxVec.back()->inumberOfChildren];
-	parserData->maxVec.pop_back();
+	maxVec.back()->m_mChildren = new OSnLNode*[ maxVec.back()->inumberOfChildren];
+	maxVec.pop_back();
 };
 
-anothermaxnlnode: nlnode {	parserData->maxVec.back()->inumberOfChildren++; }
-			| anothermaxnlnode nlnode {	parserData->maxVec.back()->inumberOfChildren++; };
+anothermaxnlnode: nlnode {	maxVec.back()->inumberOfChildren++; }
+			| anothermaxnlnode nlnode {	maxVec.back()->inumberOfChildren++; };
 			
 			
 product: PRODUCTSTART {
-	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeProduct();
-	parserData->nlNodeVec.push_back( nlNodePoint);
-	parserData->productVec.push_back( nlNodePoint);
+	nlNodeVec.push_back( nlNodePoint);
+	productVec.push_back( nlNodePoint);
 }
 anotherproductnlnode PRODUCTEND {
-	parserData->productVec.back()->m_mChildren = new OSnLNode*[ parserData->productVec.back()->inumberOfChildren];
-	parserData->productVec.pop_back();
+	productVec.back()->m_mChildren = new OSnLNode*[ productVec.back()->inumberOfChildren];
+	productVec.pop_back();
 };
 
-anotherproductnlnode: nlnode {	parserData->productVec.back()->inumberOfChildren++; }
-			| anotherproductnlnode nlnode {	parserData->productVec.back()->inumberOfChildren++; };
+anotherproductnlnode: nlnode {	productVec.back()->inumberOfChildren++; }
+			| anotherproductnlnode nlnode {	productVec.back()->inumberOfChildren++; };
 
 
 ln: LNSTART {
-	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeLn();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	nlNodeVec.push_back( nlNodePoint);
 } nlnode LNEND;
 
 sqrt: SQRTSTART {
-	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeSqrt();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	nlNodeVec.push_back( nlNodePoint);
 } nlnode SQRTEND;
 
 square: SQUARESTART {
-	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeSquare();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	nlNodeVec.push_back( nlNodePoint);
 } nlnode SQUAREEND;
 
 cos: COSSTART {
-	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeCos();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	nlNodeVec.push_back( nlNodePoint);
 } nlnode COSEND;
 
 sin: SINSTART {
-	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeSin();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	nlNodeVec.push_back( nlNodePoint);
 } nlnode SINEND;
 
 
 
 exp: EXPSTART {
-	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeExp();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	nlNodeVec.push_back( nlNodePoint);
 } nlnode EXPEND;
 
 abs: ABSSTART {
-	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeAbs();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	nlNodeVec.push_back( nlNodePoint);
 } nlnode ABSEND;
 
 
 if: IFSTART {
-	OSnLNode *nlNodePoint;
 	nlNodePoint = new OSnLNodeIf();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	nlNodeVec.push_back( nlNodePoint);
 } nlnode nlnode nlnode IFEND;
 
 number: NUMBERSTART {
-	parserData->nlNodeNumberPoint = new OSnLNodeNumber();
-	parserData->nlNodeVec.push_back( parserData->nlNodeNumberPoint);
-} anotherNumberATT  numberend {parserData->numbervalueattON = false; parserData->numbertypeattON = false; parserData->numberidattON = false;};
+	nlNodeNumberPoint = new OSnLNodeNumber();
+	nlNodeVec.push_back( nlNodeNumberPoint);
+} anotherNumberATT  numberend {parserData->numbervalueattON = false; parserData->numbertypeattON = false; numberidattON = false;};
 
 variable: VARIABLESTART {
-	parserData->nlNodeVariablePoint = new OSnLNodeVariable();
-	parserData->nlNodeVec.push_back( parserData->nlNodeVariablePoint);
-} anotherVariableATT  variableend {parserData->variablecoefattON = false; parserData->variableidxattON = false;} ;
+	nlNodeVariablePoint = new OSnLNodeVariable();
+	nlNodeVec.push_back( nlNodeVariablePoint);
+} anotherVariableATT  variableend {variablecoefattON = false; variableidxattON = false;} ;
 		      
 numberend: ENDOFELEMENT
 			| NUMBEREND;
@@ -430,8 +413,8 @@ variableend: ENDOFELEMENT
 	//parserData->sumVec.back()->inumberOfChildren = 1;
 	//parserData->sumVec.back()->m_mChildren = new OSnLNode*[ 1];
 	// kipp -- fix the above doesnt seem right
-	parserData->nlNodeVariablePoint->inumberOfChildren = 1;
-	parserData->nlNodeVariablePoint->m_mChildren = new OSnLNode*[ 1];
+	nlNodeVariablePoint->inumberOfChildren = 1;
+	nlNodeVariablePoint->m_mChildren = new OSnLNode*[ 1];
 }
 VARIABLEEND;
 			
@@ -443,45 +426,50 @@ numberATT: numbertypeATT quote {if(parserData->numbertypeattON) osilerror_wrappe
 			parserData->numbertypeattON = true; }
 		| numbervalueATT quote {if(parserData->numbervalueattON) osilerror_wrapper("too many number value attributes"); 
 			parserData->numbervalueattON = true; }
-		| numberidATT quote {if(parserData->numberidattON) osilerror_wrapper("too many number id attributes"); 
-			parserData->numberidattON = true; }			
+		| numberidATT quote {if(numberidattON) osilerror_wrapper("too many number id attributes"); 
+			numberidattON = true; }			
 			;
 			
 numbertypeATT: TYPEATT  ATTRIBUTETEXT {
-	parserData->nlNodeNumberPoint->type = $2;
+	nlNodeNumberPoint->type = $2;
 } ;
 
 numberidATT: IDATT  ATTRIBUTETEXT {
-	parserData->nlNodeNumberPoint->id = $2;
+	nlNodeNumberPoint->id = $2;
 } ;
 
 
 
 numbervalueATT: VALUEATT  DOUBLE {
-	parserData->nlNodeNumberPoint->value = $2;
+	nlNodeNumberPoint->value = $2;
 }
 		| VALUEATT INTEGER{
-	parserData->nlNodeNumberPoint->value = $2;
+	nlNodeNumberPoint->value = $2;
 };
 
 anotherVariableATT:
 			|anotherVariableATT variableATT ;
 			
-variableATT: variablecoefATT quote {if(parserData->variablecoefattON) osilerror_wrapper("too many variable coef attributes"); 
-			parserData->variablecoefattON = true; }
-		| variableidxATT quote {if(parserData->variableidxattON) osilerror_wrapper("too many variable idx attributes"); 
-			parserData->variableidxattON = true; };
+variableATT: variablecoefATT quote {if(variablecoefattON) osilerror_wrapper("too many variable coef attributes"); 
+			variablecoefattON = true; }
+		| variableidxATT quote {if(variableidxattON) osilerror_wrapper("too many variable idx attributes"); 
+			variableidxattON = true; };
 			
 variablecoefATT: COEFATT  DOUBLE {
-	parserData->nlNodeVariablePoint->coef = $2;
+	nlNodeVariablePoint->coef = $2;
 }
 				| COEFATT  INTEGER {
-	parserData->nlNodeVariablePoint->coef = $2;		
+	nlNodeVariablePoint->coef = $2;		
 };
 				
 variableidxATT: IDXATT  INTEGER {
-	parserData->nlNodeVariablePoint->idx = $2;
+	nlNodeVariablePoint->idx = $2;
 } ; 
+
+
+
+
+
 
 
 xmlWhiteSpaceChar: ' '
@@ -505,6 +493,8 @@ quote: xmlWhiteSpace QUOTE;
 
 void osilerror(YYLTYPE* type, OSInstance *osintance, OSiLParserData* parserData, const char* errormsg ) {
 	try{
+		const int numErrorChar = 20;
+		char errorArray[100] = "there was an error";
 		std::ostringstream outStr;
 		std::string error = errormsg;
 		error = "PARSER ERROR:  Input is either not valid or well formed: "  + error;
@@ -557,6 +547,14 @@ OSInstance* yygetOSInstance( const char *osil) throw (ErrorClass) {
 
 void yyinitialize(){
 	osillineno = 1; 
+
+	// number attribute boolean variables 
+	//numbertypeattON = false;
+	//numbervalueattON = false;
+	// variable attribute boolean variables
+	variableidxattON = false;
+	variablecoefattON = false;
+	sparseError = "";
 } // end yyInitialize()
 
 
@@ -568,6 +566,8 @@ bool isnewline(char c){
 
 bool parseInstanceHeader( const char **p, OSInstance *osinstance){
 	//
+	const int numErrorChar = 20;
+	char errorArray[100] = "there was an error";
 	const char *pchar = *p;
 	// create a char array that holds the instance header information
 	const char *startInstanceHeader = "<instanceHeader";
@@ -785,6 +785,8 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance){
 
 
 bool parseInstanceData( const char **p, OSInstance *osinstance){
+	const int numErrorChar = 20;
+	char errorArray[100] = "there was an error";
 	//
 	const char *pchar = *p;
 	const char *startInstanceData = "<instanceData";
@@ -816,6 +818,10 @@ bool parseInstanceData( const char **p, OSInstance *osinstance){
 
 
 bool parseVariables( const char **p,  OSInstance *osinstance){
+	clock_t start, finish;
+	double duration;
+	const int numErrorChar = 20;
+	char errorArray[100] = "there was an error";
 	int ki, numChar;
 	char *attTextEnd;
 	const char *ch = *p;
@@ -1060,14 +1066,18 @@ bool parseVariables( const char **p,  OSInstance *osinstance){
 	if(*ch != '>') {strncpy(errorArray, ch, numErrorChar);  osilerror_wrapper("improperly formed </variables> tag"); return false;}
 	ch++;
 	finish = clock();
-	duration = (double) (finish - start) / CLOCKS_PER_SEC; 
-	printf("TIME TO PARSE VARIABLES = %f\n", duration);
+	//duration = (double) (finish - start) / CLOCKS_PER_SEC; 
+	//printf("TIME TO PARSE VARIABLES = %f\n", duration);
 	*p = ch;
 	return true;
 }//end parseVariables
 
 
 bool parseObjectives( const char **p, OSInstance *osinstance){
+	clock_t start, finish;
+	double duration;
+	const int numErrorChar = 20;
+	char errorArray[100] = "there was an error";
 	int ki, numChar;
 	char *attTextEnd;
 	const char *ch = *p;
@@ -1356,13 +1366,17 @@ bool parseObjectives( const char **p, OSInstance *osinstance){
 		}
 	}
 	finish = clock();
-	duration = (double) (finish - start) / CLOCKS_PER_SEC; 
-	printf("TIME TO PARSE OBJECTIVES = %f\n", duration);
+	//duration = (double) (finish - start) / CLOCKS_PER_SEC; 
+	//printf("TIME TO PARSE OBJECTIVES = %f\n", duration);
 	*p = ch;
 	return true;
 }//end parseObjectives
 
 bool parseConstraints( const char **p, OSInstance *osinstance){
+	clock_t start, finish;
+	double duration;
+	const int numErrorChar = 20;
+	char errorArray[100] = "there was an error";
 	int ki, numChar;
 	char *attTextEnd;
 	const char *ch = *p;
@@ -1610,17 +1624,18 @@ bool parseConstraints( const char **p, OSInstance *osinstance){
 		}
 	}
 	finish = clock();
-	duration = (double) (finish - start) / CLOCKS_PER_SEC; 
-	printf("TIME TO PARSE CONSTRAINTS = %f\n", duration);
+	//duration = (double) (finish - start) / CLOCKS_PER_SEC; 
+	//printf("TIME TO PARSE CONSTRAINTS = %f\n", duration);
 	*p = ch;
 	return true;
 }//end parseConstraints
 
 bool parseLinearConstraintCoefficients( const char **p, OSInstance *osinstance){
+	const int numErrorChar = 20;
+	char errorArray[100] = "there was an error";
 	int ki, numChar;
 	char *attTextEnd;
-	const char *ch = *p;
-	start = clock();	
+	const char *ch = *p;	
 	const char *c_numberOfValues = "numberOfValues";
 	const char *startlinearConstraintCoefficients = "<linearConstraintCoefficients";
 	const char *endlinearConstraintCoefficients = "</linearConstraintCoefficients";
@@ -1685,6 +1700,10 @@ bool parseLinearConstraintCoefficients( const char **p, OSInstance *osinstance){
 }//end parseLinearConstraintCoefficients
 
 bool parseStart(const char **p, OSInstance *osinstance){
+	clock_t start, finish;
+	double duration;
+	const int numErrorChar = 20;
+	char errorArray[100] = "there was an error";
 	const char *ch = *p;
 	start = clock(); 
 	const char* startStart = "<start";
@@ -1787,13 +1806,17 @@ bool parseStart(const char **p, OSInstance *osinstance){
 	ch++;	
 	// get the end element
 	finish = clock();
-	duration = (double) (finish - start) / CLOCKS_PER_SEC; 
-	printf("TIME TO PARSE STARTS  = %f\n", duration);
+	//duration = (double) (finish - start) / CLOCKS_PER_SEC; 
+	//printf("TIME TO PARSE STARTS  = %f\n", duration);
 	*p = ch;
 	return true;
 }//end parseSart
 
 bool parseRowIdx( const char **p, OSInstance *osinstance){
+	clock_t start, finish;
+	double duration;
+	const int numErrorChar = 20;
+	char errorArray[100] = "there was an error";
 	const char *ch = *p;
 	start = clock(); 
 	const char* startRowIdx = "<rowIdx";
@@ -1898,14 +1921,18 @@ bool parseRowIdx( const char **p, OSInstance *osinstance){
 	if(kount > osinstance->instanceData->linearConstraintCoefficients->numberOfValues) { osilerror_wrapper("numberOfLinearCoefficients attribute less than number of row indices found"); return false;}
 	if(kount < osinstance->instanceData->linearConstraintCoefficients->numberOfValues) { osilerror_wrapper("numberOfLinearCoefficients attribute greater than number of row indices found"); return false;}
 	finish = clock();
-	duration = (double) (finish - start) / CLOCKS_PER_SEC; 
-	printf("TIME TO PARSE ROW INDEXES = %f\n", duration);
+	//duration = (double) (finish - start) / CLOCKS_PER_SEC; 
+	//printf("TIME TO PARSE ROW INDEXES = %f\n", duration);
 	*p = ch;
  	return true;
 }//end parseRowIdx
 
 
 bool parseColIdx( const char **p, OSInstance *osinstance){
+	clock_t start, finish;
+	double duration;
+	const int numErrorChar = 20;
+	char errorArray[100] = "there was an error";
 	const char *ch = *p;
 	start = clock(); 
 	const char* startColIdx = "<colIdx";
@@ -2010,14 +2037,18 @@ bool parseColIdx( const char **p, OSInstance *osinstance){
 	if(kount > osinstance->instanceData->linearConstraintCoefficients->numberOfValues) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper("numberOfLinearCoefficients attribute less than number of column indices found"); return false;}
 	if(kount < osinstance->instanceData->linearConstraintCoefficients->numberOfValues) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper("numberOfLinearCoefficients attribute greater than number of column indices found"); return false;}
 	finish = clock();
-	duration = (double) (finish - start) / CLOCKS_PER_SEC; 
-	printf("TIME TO PARSE COLUMN INDEXES = %f\n", duration);
+	//duration = (double) (finish - start) / CLOCKS_PER_SEC; 
+	//printf("TIME TO PARSE COLUMN INDEXES = %f\n", duration);
 	*p = ch;
  	return true;
 }//end parseColIdx
 
 
 bool parseValue( const char **p, OSInstance *osinstance){
+	clock_t start, finish;
+	double duration;
+	const int numErrorChar = 20;
+	char errorArray[100] = "there was an error";
 	const char *ch = *p;
 	start = clock(); 
 	const char* startValue = "<value";
@@ -2120,13 +2151,15 @@ bool parseValue( const char **p, OSInstance *osinstance){
 	if(kount < osinstance->instanceData->linearConstraintCoefficients->numberOfValues){strncpy(errorArray, ch, numErrorChar); osilerror_wrapper("numberOfLinearCoefficients greater than number of values found"); return false;}
 	if(kount > osinstance->instanceData->linearConstraintCoefficients->numberOfValues){strncpy(errorArray, ch, numErrorChar); osilerror_wrapper("numberOfLinearCoefficients less than the number of values found"); return false;}
 	finish = clock();
-	duration = (double) (finish - start) / CLOCKS_PER_SEC; 
-	printf("TIME TO PARSE VALUES = %f\n", duration);
+	//duration = (double) (finish - start) / CLOCKS_PER_SEC; 
+	//printf("TIME TO PARSE VALUES = %f\n", duration);
 	*p = ch;
 	return true;
 }//end parseValue
 
 bool parseObjCoef( const char **p, int objcount, OSInstance *osinstance){
+	const int numErrorChar = 20;
+	char errorArray[100] = "there was an error";
 	int ki, numChar;
 	char *attTextEnd;
 	const char *ch = *p;
@@ -2186,6 +2219,8 @@ bool parseObjCoef( const char **p, int objcount, OSInstance *osinstance){
 }//end parseObjCoef
 
 char *parseBase64(const char **p, int *dataSize ){
+	const int numErrorChar = 20;
+	char errorArray[100] = "there was an error";
 	int ki, numChar;
 	char *attTextEnd;
 	const char *ch = *p;
@@ -2246,6 +2281,8 @@ char *parseBase64(const char **p, int *dataSize ){
 
 
 double atofmod1(const char *number, const char *numberend){
+	const int numErrorChar = 20;
+	char errorArray[100] = "there was an error";
 	double val, power;
 	int i;
 	int sign = 1;
@@ -2330,6 +2367,9 @@ double atofmod1(const char *number, const char *numberend){
 
 int atoimod1(const char *number, const char *numberend){
 	// modidfied atoi from Kernighan and Ritchie
+
+	const int numErrorChar = 20;
+	char errorArray[100] = "there was an error";
 	int ival;
 	int i, sign;
 	int endWhiteSpace;

@@ -31,10 +31,10 @@ using std::ostringstream;
 
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
 //typedef void* yyscan_t;
-YY_BUFFER_STATE osil_scan_string (const char *yy_str , void* yyscanner  );
-int osillex_init(void** ptr_yy_globals);
-int osillex_destroy (void* yyscanner );
-OSInstance *yygetOSInstance(const char *osil) throw(ErrorClass);
+//YY_BUFFER_STATE osil_scan_string (const char *yy_str , void* yyscanner  );
+//int osillex_init(void** ptr_yy_globals);
+//int osillex_destroy (void* yyscanner );
+//OSInstance *yygetOSInstance(const char *osil) throw(ErrorClass);
 char *osilget_text (void* yyscanner );
 YY_BUFFER_STATE osrl_scan_string(const char* osrl ); 
 //YY_BUFFER_STATE osil_scan_string( const char* osil ); 
@@ -45,9 +45,6 @@ YY_BUFFER_STATE osrl_scan_string(const char* osrl );
 void osol_delete_buffer( YY_BUFFER_STATE buffer);
 
 YY_BUFFER_STATE osss_scan_string(const char* osss ); 
-
-
-
 
 int osrllex(void); 
 //int osillex(void);
