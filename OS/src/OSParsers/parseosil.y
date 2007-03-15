@@ -254,8 +254,8 @@ if(parserData->nlnodecount > parserData->tmpnlcount) osilerror_wrapper("actual n
 // clear the vectors of pointers
 nlNodeVec.clear();
 //parserData->sumVec.clear();
-maxVec.clear();
-productVec.clear();
+//maxVec.clear();
+//productVec.clear();
 };
 		
 		
@@ -327,29 +327,29 @@ anothersumnlnode: nlnode {	parserData->sumVec.back()->inumberOfChildren++; }
 max: MAXSTART {
 	nlNodePoint = new OSnLNodeMax();
 	nlNodeVec.push_back( nlNodePoint);
-	maxVec.push_back( nlNodePoint);
+	parserData->maxVec.push_back( nlNodePoint);
 }
 anothermaxnlnode MAXEND {
-	maxVec.back()->m_mChildren = new OSnLNode*[ maxVec.back()->inumberOfChildren];
-	maxVec.pop_back();
+	parserData->maxVec.back()->m_mChildren = new OSnLNode*[ parserData->maxVec.back()->inumberOfChildren];
+	parserData->maxVec.pop_back();
 };
 
-anothermaxnlnode: nlnode {	maxVec.back()->inumberOfChildren++; }
-			| anothermaxnlnode nlnode {	maxVec.back()->inumberOfChildren++; };
+anothermaxnlnode: nlnode {	parserData->maxVec.back()->inumberOfChildren++; }
+			| anothermaxnlnode nlnode {	parserData->maxVec.back()->inumberOfChildren++; };
 			
 			
 product: PRODUCTSTART {
 	nlNodePoint = new OSnLNodeProduct();
 	nlNodeVec.push_back( nlNodePoint);
-	productVec.push_back( nlNodePoint);
+	parserData->productVec.push_back( nlNodePoint);
 }
 anotherproductnlnode PRODUCTEND {
-	productVec.back()->m_mChildren = new OSnLNode*[ productVec.back()->inumberOfChildren];
-	productVec.pop_back();
+	parserData->productVec.back()->m_mChildren = new OSnLNode*[ parserData->productVec.back()->inumberOfChildren];
+	parserData->productVec.pop_back();
 };
 
-anotherproductnlnode: nlnode {	productVec.back()->inumberOfChildren++; }
-			| anotherproductnlnode nlnode {	productVec.back()->inumberOfChildren++; };
+anotherproductnlnode: nlnode {	parserData->productVec.back()->inumberOfChildren++; }
+			| anotherproductnlnode nlnode {	parserData->productVec.back()->inumberOfChildren++; };
 
 
 ln: LNSTART {
