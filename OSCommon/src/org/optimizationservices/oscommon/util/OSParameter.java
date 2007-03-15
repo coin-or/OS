@@ -155,7 +155,7 @@ public final class OSParameter{
 	/**
 	 * MAX_JOBIDS_TO_KEEP holds the maximum number of job ids to keep before deleting them.
 	 */
-	public static int MAX_JOBIDS_TO_KEEP = 100; //change?
+	public static int MAX_JOBIDS_TO_KEEP = 1000; //change?
 
 	/*---------------------------------------------
 	Time related parameters
