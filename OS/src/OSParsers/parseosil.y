@@ -15,7 +15,7 @@
  
 %{
 
-#include "osilparservariables.h"
+
 #include <string>
 #include <iostream>
 #include <sstream>  
@@ -281,39 +281,39 @@ nlnode: number
 
 
 times: TIMESSTART {
-	nlNodePoint = new OSnLNodeTimes();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodePoint = new OSnLNodeTimes();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
 } nlnode nlnode TIMESEND;
 
 plus: PLUSSTART {
-	nlNodePoint = new OSnLNodePlus();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodePoint = new OSnLNodePlus();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
 } nlnode nlnode PLUSEND;
 
 minus: MINUSSTART {
-	nlNodePoint = new OSnLNodeMinus();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodePoint = new OSnLNodeMinus();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
 } nlnode nlnode MINUSEND;
 
 negate: NEGATESTART {
-	nlNodePoint = new OSnLNodeNegate();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodePoint = new OSnLNodeNegate();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
 } nlnode  NEGATEEND;
 
 divide: DIVIDESTART { 
-	nlNodePoint = new OSnLNodeDivide();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodePoint = new OSnLNodeDivide();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
 } nlnode nlnode DIVIDEEND;
 
 power: POWERSTART {
-	nlNodePoint = new OSnLNodePower();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodePoint = new OSnLNodePower();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
 } nlnode nlnode POWEREND;
 
 sum: SUMSTART {
-	nlNodePoint = new OSnLNodeSum();
-	parserData->nlNodeVec.push_back( nlNodePoint);
-	parserData->sumVec.push_back( nlNodePoint);
+	parserData->nlNodePoint = new OSnLNodeSum();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+	parserData->sumVec.push_back( parserData->nlNodePoint);
 }
 anothersumnlnode SUMEND {
 	parserData->sumVec.back()->m_mChildren = new OSnLNode*[ parserData->sumVec.back()->inumberOfChildren];
@@ -325,9 +325,9 @@ anothersumnlnode: nlnode {	parserData->sumVec.back()->inumberOfChildren++; }
 			
 			
 max: MAXSTART {
-	nlNodePoint = new OSnLNodeMax();
-	parserData->nlNodeVec.push_back( nlNodePoint);
-	parserData->maxVec.push_back( nlNodePoint);
+	parserData->nlNodePoint = new OSnLNodeMax();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+	parserData->maxVec.push_back( parserData->nlNodePoint);
 }
 anothermaxnlnode MAXEND {
 	parserData->maxVec.back()->m_mChildren = new OSnLNode*[ parserData->maxVec.back()->inumberOfChildren];
@@ -339,9 +339,9 @@ anothermaxnlnode: nlnode {	parserData->maxVec.back()->inumberOfChildren++; }
 			
 			
 product: PRODUCTSTART {
-	nlNodePoint = new OSnLNodeProduct();
-	parserData->nlNodeVec.push_back( nlNodePoint);
-	parserData->productVec.push_back( nlNodePoint);
+	parserData->nlNodePoint = new OSnLNodeProduct();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+	parserData->productVec.push_back( parserData->nlNodePoint);
 }
 anotherproductnlnode PRODUCTEND {
 	parserData->productVec.back()->m_mChildren = new OSnLNode*[ parserData->productVec.back()->inumberOfChildren];
@@ -353,57 +353,57 @@ anotherproductnlnode: nlnode {	parserData->productVec.back()->inumberOfChildren+
 
 
 ln: LNSTART {
-	nlNodePoint = new OSnLNodeLn();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodePoint = new OSnLNodeLn();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
 } nlnode LNEND;
 
 sqrt: SQRTSTART {
-	nlNodePoint = new OSnLNodeSqrt();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodePoint = new OSnLNodeSqrt();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
 } nlnode SQRTEND;
 
 square: SQUARESTART {
-	nlNodePoint = new OSnLNodeSquare();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodePoint = new OSnLNodeSquare();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
 } nlnode SQUAREEND;
 
 cos: COSSTART {
-	nlNodePoint = new OSnLNodeCos();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodePoint = new OSnLNodeCos();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
 } nlnode COSEND;
 
 sin: SINSTART {
-	nlNodePoint = new OSnLNodeSin();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodePoint = new OSnLNodeSin();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
 } nlnode SINEND;
 
 
 
 exp: EXPSTART {
-	nlNodePoint = new OSnLNodeExp();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodePoint = new OSnLNodeExp();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
 } nlnode EXPEND;
 
 abs: ABSSTART {
-	nlNodePoint = new OSnLNodeAbs();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodePoint = new OSnLNodeAbs();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
 } nlnode ABSEND;
 
 
 if: IFSTART {
-	nlNodePoint = new OSnLNodeIf();
-	parserData->nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodePoint = new OSnLNodeIf();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
 } nlnode nlnode nlnode IFEND;
 
 number: NUMBERSTART {
-	nlNodeNumberPoint = new OSnLNodeNumber();
-	parserData->nlNodeVec.push_back( nlNodeNumberPoint);
-} anotherNumberATT  numberend {parserData->numbervalueattON = false; parserData->numbertypeattON = false; numberidattON = false;};
+	parserData->nlNodeNumberPoint = new OSnLNodeNumber();
+	parserData->nlNodeVec.push_back( parserData->nlNodeNumberPoint);
+} anotherNumberATT  numberend {parserData->numbervalueattON = false; parserData->numbertypeattON = false; parserData->numberidattON = false;};
 
 variable: VARIABLESTART {
-	nlNodeVariablePoint = new OSnLNodeVariable();
-	parserData->nlNodeVec.push_back( nlNodeVariablePoint);
-} anotherVariableATT  variableend {variablecoefattON = false; variableidxattON = false;} ;
+	parserData->nlNodeVariablePoint = new OSnLNodeVariable();
+	parserData->nlNodeVec.push_back( parserData->nlNodeVariablePoint);
+} anotherVariableATT  variableend {parserData->variablecoefattON = false; parserData->variableidxattON = false;} ;
 		      
 numberend: ENDOFELEMENT
 			| NUMBEREND;
@@ -413,8 +413,8 @@ variableend: ENDOFELEMENT
 	//parserData->sumVec.back()->inumberOfChildren = 1;
 	//parserData->sumVec.back()->m_mChildren = new OSnLNode*[ 1];
 	// kipp -- fix the above doesnt seem right
-	nlNodeVariablePoint->inumberOfChildren = 1;
-	nlNodeVariablePoint->m_mChildren = new OSnLNode*[ 1];
+	parserData->nlNodeVariablePoint->inumberOfChildren = 1;
+	parserData->nlNodeVariablePoint->m_mChildren = new OSnLNode*[ 1];
 }
 VARIABLEEND;
 			
@@ -426,44 +426,44 @@ numberATT: numbertypeATT quote {if(parserData->numbertypeattON) osilerror_wrappe
 			parserData->numbertypeattON = true; }
 		| numbervalueATT quote {if(parserData->numbervalueattON) osilerror_wrapper("too many number value attributes"); 
 			parserData->numbervalueattON = true; }
-		| numberidATT quote {if(numberidattON) osilerror_wrapper("too many number id attributes"); 
-			numberidattON = true; }			
+		| numberidATT quote {if(parserData->numberidattON) osilerror_wrapper("too many number id attributes"); 
+			parserData->numberidattON = true; }			
 			;
 			
 numbertypeATT: TYPEATT  ATTRIBUTETEXT {
-	nlNodeNumberPoint->type = $2;
+	parserData->nlNodeNumberPoint->type = $2;
 } ;
 
 numberidATT: IDATT  ATTRIBUTETEXT {
-	nlNodeNumberPoint->id = $2;
+	parserData->nlNodeNumberPoint->id = $2;
 } ;
 
 
 
 numbervalueATT: VALUEATT  DOUBLE {
-	nlNodeNumberPoint->value = $2;
+	parserData->nlNodeNumberPoint->value = $2;
 }
 		| VALUEATT INTEGER{
-	nlNodeNumberPoint->value = $2;
+	parserData->nlNodeNumberPoint->value = $2;
 };
 
 anotherVariableATT:
 			|anotherVariableATT variableATT ;
 			
-variableATT: variablecoefATT quote {if(variablecoefattON) osilerror_wrapper("too many variable coef attributes"); 
-			variablecoefattON = true; }
-		| variableidxATT quote {if(variableidxattON) osilerror_wrapper("too many variable idx attributes"); 
-			variableidxattON = true; };
+variableATT: variablecoefATT quote {if(parserData->variablecoefattON) osilerror_wrapper("too many variable coef attributes"); 
+			parserData->variablecoefattON = true; }
+		| variableidxATT quote {if(parserData->variableidxattON) osilerror_wrapper("too many variable idx attributes"); 
+			parserData->variableidxattON = true; };
 			
 variablecoefATT: COEFATT  DOUBLE {
-	nlNodeVariablePoint->coef = $2;
+	parserData->nlNodeVariablePoint->coef = $2;
 }
 				| COEFATT  INTEGER {
-	nlNodeVariablePoint->coef = $2;		
+	parserData->nlNodeVariablePoint->coef = $2;		
 };
 				
 variableidxATT: IDXATT  INTEGER {
-	nlNodeVariablePoint->idx = $2;
+	parserData->nlNodeVariablePoint->idx = $2;
 } ; 
 
 
@@ -547,14 +547,6 @@ OSInstance* yygetOSInstance( const char *osil) throw (ErrorClass) {
 
 void yyinitialize(){
 	osillineno = 1; 
-
-	// number attribute boolean variables 
-	//numbertypeattON = false;
-	//numbervalueattON = false;
-	// variable attribute boolean variables
-	variableidxattON = false;
-	variablecoefattON = false;
-	sparseError = "";
 } // end yyInitialize()
 
 
