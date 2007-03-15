@@ -1912,9 +1912,9 @@ if(osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions 
     {
 	// IMPORTANT -- HERE IS WHERE WE DEFINE THE EXPRESSION TREE
 	osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->m_treeRoot = 
-	//osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->createExpressionTreeFromPrefix( nlNodeVec);
-	//createExpressionTreeFromPrefix( nlNodeVec);
-	nlNodeVec[ 0]->createExpressionTreeFromPrefix( nlNodeVec);
+	//osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->createExpressionTreeFromPrefix( parserData->nlNodeVec);
+	//createExpressionTreeFromPrefix( parserData->nlNodeVec);
+	parserData->nlNodeVec[ 0]->createExpressionTreeFromPrefix( parserData->nlNodeVec);
 	parserData->nlnodecount++;
 }
     break;
@@ -1927,10 +1927,10 @@ osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->id
 osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree = new OSExpressionTree();
 if(parserData->nlnodecount > parserData->tmpnlcount) osilerror_wrapper("actual number of nl terms greater than number attribute");
 // clear the vectors of pointers
-nlNodeVec.clear();
-//parserData->sumVec.clear();
-//maxVec.clear();
-//productVec.clear();
+parserData->nlNodeVec.clear();
+parserData->sumVec.clear();
+parserData->maxVec.clear();
+parserData->productVec.clear();
 }
     break;
 
@@ -1938,7 +1938,7 @@ nlNodeVec.clear();
 
     {
 	nlNodePoint = new OSnLNodeTimes();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 }
     break;
 
@@ -1946,7 +1946,7 @@ nlNodeVec.clear();
 
     {
 	nlNodePoint = new OSnLNodePlus();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 }
     break;
 
@@ -1954,7 +1954,7 @@ nlNodeVec.clear();
 
     {
 	nlNodePoint = new OSnLNodeMinus();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 }
     break;
 
@@ -1962,7 +1962,7 @@ nlNodeVec.clear();
 
     {
 	nlNodePoint = new OSnLNodeNegate();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 }
     break;
 
@@ -1970,7 +1970,7 @@ nlNodeVec.clear();
 
     { 
 	nlNodePoint = new OSnLNodeDivide();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 }
     break;
 
@@ -1978,7 +1978,7 @@ nlNodeVec.clear();
 
     {
 	nlNodePoint = new OSnLNodePower();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 }
     break;
 
@@ -1986,7 +1986,7 @@ nlNodeVec.clear();
 
     {
 	nlNodePoint = new OSnLNodeSum();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 	parserData->sumVec.push_back( nlNodePoint);
 }
     break;
@@ -2013,7 +2013,7 @@ nlNodeVec.clear();
 
     {
 	nlNodePoint = new OSnLNodeMax();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 	parserData->maxVec.push_back( nlNodePoint);
 }
     break;
@@ -2040,7 +2040,7 @@ nlNodeVec.clear();
 
     {
 	nlNodePoint = new OSnLNodeProduct();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 	parserData->productVec.push_back( nlNodePoint);
 }
     break;
@@ -2067,7 +2067,7 @@ nlNodeVec.clear();
 
     {
 	nlNodePoint = new OSnLNodeLn();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 }
     break;
 
@@ -2075,7 +2075,7 @@ nlNodeVec.clear();
 
     {
 	nlNodePoint = new OSnLNodeSqrt();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 }
     break;
 
@@ -2083,7 +2083,7 @@ nlNodeVec.clear();
 
     {
 	nlNodePoint = new OSnLNodeSquare();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 }
     break;
 
@@ -2091,7 +2091,7 @@ nlNodeVec.clear();
 
     {
 	nlNodePoint = new OSnLNodeCos();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 }
     break;
 
@@ -2099,7 +2099,7 @@ nlNodeVec.clear();
 
     {
 	nlNodePoint = new OSnLNodeSin();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 }
     break;
 
@@ -2107,7 +2107,7 @@ nlNodeVec.clear();
 
     {
 	nlNodePoint = new OSnLNodeExp();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 }
     break;
 
@@ -2115,7 +2115,7 @@ nlNodeVec.clear();
 
     {
 	nlNodePoint = new OSnLNodeAbs();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 }
     break;
 
@@ -2123,7 +2123,7 @@ nlNodeVec.clear();
 
     {
 	nlNodePoint = new OSnLNodeIf();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 }
     break;
 
@@ -2131,7 +2131,7 @@ nlNodeVec.clear();
 
     {
 	nlNodeNumberPoint = new OSnLNodeNumber();
-	nlNodeVec.push_back( nlNodeNumberPoint);
+	parserData->nlNodeVec.push_back( nlNodeNumberPoint);
 }
     break;
 
@@ -2144,7 +2144,7 @@ nlNodeVec.clear();
 
     {
 	nlNodeVariablePoint = new OSnLNodeVariable();
-	nlNodeVec.push_back( nlNodeVariablePoint);
+	parserData->nlNodeVec.push_back( nlNodeVariablePoint);
 }
     break;
 

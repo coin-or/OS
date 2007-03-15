@@ -240,9 +240,9 @@ nlnodes:
 		nlIdxATT  GREATERTHAN nlnode {
 	// IMPORTANT -- HERE IS WHERE WE DEFINE THE EXPRESSION TREE
 	osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->m_treeRoot = 
-	//osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->createExpressionTreeFromPrefix( nlNodeVec);
-	//createExpressionTreeFromPrefix( nlNodeVec);
-	nlNodeVec[ 0]->createExpressionTreeFromPrefix( nlNodeVec);
+	//osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->createExpressionTreeFromPrefix( parserData->nlNodeVec);
+	//createExpressionTreeFromPrefix( parserData->nlNodeVec);
+	parserData->nlNodeVec[ 0]->createExpressionTreeFromPrefix( parserData->nlNodeVec);
 	parserData->nlnodecount++;
 }  NLEND;
 
@@ -252,10 +252,10 @@ osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->id
 osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree = new OSExpressionTree();
 if(parserData->nlnodecount > parserData->tmpnlcount) osilerror_wrapper("actual number of nl terms greater than number attribute");
 // clear the vectors of pointers
-nlNodeVec.clear();
-//parserData->sumVec.clear();
-//maxVec.clear();
-//productVec.clear();
+parserData->nlNodeVec.clear();
+parserData->sumVec.clear();
+parserData->maxVec.clear();
+parserData->productVec.clear();
 };
 		
 		
@@ -282,37 +282,37 @@ nlnode: number
 
 times: TIMESSTART {
 	nlNodePoint = new OSnLNodeTimes();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 } nlnode nlnode TIMESEND;
 
 plus: PLUSSTART {
 	nlNodePoint = new OSnLNodePlus();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 } nlnode nlnode PLUSEND;
 
 minus: MINUSSTART {
 	nlNodePoint = new OSnLNodeMinus();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 } nlnode nlnode MINUSEND;
 
 negate: NEGATESTART {
 	nlNodePoint = new OSnLNodeNegate();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 } nlnode  NEGATEEND;
 
 divide: DIVIDESTART { 
 	nlNodePoint = new OSnLNodeDivide();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 } nlnode nlnode DIVIDEEND;
 
 power: POWERSTART {
 	nlNodePoint = new OSnLNodePower();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 } nlnode nlnode POWEREND;
 
 sum: SUMSTART {
 	nlNodePoint = new OSnLNodeSum();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 	parserData->sumVec.push_back( nlNodePoint);
 }
 anothersumnlnode SUMEND {
@@ -326,7 +326,7 @@ anothersumnlnode: nlnode {	parserData->sumVec.back()->inumberOfChildren++; }
 			
 max: MAXSTART {
 	nlNodePoint = new OSnLNodeMax();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 	parserData->maxVec.push_back( nlNodePoint);
 }
 anothermaxnlnode MAXEND {
@@ -340,7 +340,7 @@ anothermaxnlnode: nlnode {	parserData->maxVec.back()->inumberOfChildren++; }
 			
 product: PRODUCTSTART {
 	nlNodePoint = new OSnLNodeProduct();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 	parserData->productVec.push_back( nlNodePoint);
 }
 anotherproductnlnode PRODUCTEND {
@@ -354,55 +354,55 @@ anotherproductnlnode: nlnode {	parserData->productVec.back()->inumberOfChildren+
 
 ln: LNSTART {
 	nlNodePoint = new OSnLNodeLn();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 } nlnode LNEND;
 
 sqrt: SQRTSTART {
 	nlNodePoint = new OSnLNodeSqrt();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 } nlnode SQRTEND;
 
 square: SQUARESTART {
 	nlNodePoint = new OSnLNodeSquare();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 } nlnode SQUAREEND;
 
 cos: COSSTART {
 	nlNodePoint = new OSnLNodeCos();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 } nlnode COSEND;
 
 sin: SINSTART {
 	nlNodePoint = new OSnLNodeSin();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 } nlnode SINEND;
 
 
 
 exp: EXPSTART {
 	nlNodePoint = new OSnLNodeExp();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 } nlnode EXPEND;
 
 abs: ABSSTART {
 	nlNodePoint = new OSnLNodeAbs();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 } nlnode ABSEND;
 
 
 if: IFSTART {
 	nlNodePoint = new OSnLNodeIf();
-	nlNodeVec.push_back( nlNodePoint);
+	parserData->nlNodeVec.push_back( nlNodePoint);
 } nlnode nlnode nlnode IFEND;
 
 number: NUMBERSTART {
 	nlNodeNumberPoint = new OSnLNodeNumber();
-	nlNodeVec.push_back( nlNodeNumberPoint);
+	parserData->nlNodeVec.push_back( nlNodeNumberPoint);
 } anotherNumberATT  numberend {parserData->numbervalueattON = false; parserData->numbertypeattON = false; numberidattON = false;};
 
 variable: VARIABLESTART {
 	nlNodeVariablePoint = new OSnLNodeVariable();
-	nlNodeVec.push_back( nlNodeVariablePoint);
+	parserData->nlNodeVec.push_back( nlNodeVariablePoint);
 } anotherVariableATT  variableend {variablecoefattON = false; variableidxattON = false;} ;
 		      
 numberend: ENDOFELEMENT
