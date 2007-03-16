@@ -35,14 +35,11 @@ YY_BUFFER_STATE osil_scan_string (const char *yy_str , void* yyscanner  );
 int osillex_init(void** ptr_yy_globals);
 int osillex_destroy (void* yyscanner );
 int osilget_lineno( void* yyscanner);
+char *osilget_text (void* yyscanner );
 void osilset_lineno (int line_number , void* yyscanner );
 OSInstance *yygetOSInstance(const char *osil) throw(ErrorClass);
 //
-//
-// the global variables for parsing
-//int* osillineno = 0;
-//
-//
+
 double atofmod1(int* osillineno, const char *ch1, const char *ch2 );
 int atoimod1(int* osillineno, const char *ch1, const char *ch2);
 // we distinguish a newline from other whitespace
@@ -494,20 +491,16 @@ quote: xmlWhiteSpace QUOTE;
 // user defined functions
 
 void osilerror(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData* parserData, const char* errormsg ) {
-	try{
-		std::ostringstream outStr;
-		std::string error = errormsg;
-		error = "PARSER ERROR:  Input is either not valid or well formed: "  + error;
-		outStr << error << endl;
-		outStr << endl;
-		outStr << "See line number: " << mytype->first_line << endl;  
-		error = outStr.str();
-		throw ErrorClass( error);
-	}
-		catch(const ErrorClass& eclass){
-		throw ErrorClass(  eclass.errormsg); 
-	}
-} // end osilerror() 
+	std::ostringstream outStr;
+	std::string error = errormsg;
+	error = "PARSER ERROR:  Input is either not valid or well formed: "  + error;
+	outStr << error << endl;
+	outStr << endl; 
+	outStr << "See line number: " << osilget_lineno( scanner) << endl; 
+	outStr << "The offending text is: " << *osilget_text ( scanner ) << endl; 
+	error = outStr.str();
+	throw ErrorClass( error);
+}//end osilerror() 
 
 
 OSInstance* yygetOSInstance( const char *osil) throw (ErrorClass) {

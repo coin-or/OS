@@ -13,6 +13,7 @@
  * 
  */
  #include "OSiLParserData.h"
+ int osilget_lineno( void* yyscanner);
  OSiLParserData::~OSiLParserData(){
  	// clear the vectors of pointers
 	nlNodeVec.clear();
@@ -42,8 +43,7 @@
  }//OSiLParserData
  
  int OSiLParserData::get_lineno ( void* scanner){
- 	//return osilget_lineno ( void* scanner);
- 	return 0;
+ 	return osilget_lineno ( scanner);
  }
 
  

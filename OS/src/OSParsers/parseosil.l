@@ -18,7 +18,6 @@
 #include <stdio.h> 
 #include <iostream>
 #include <sstream>  
-//#include "lexyaccparser.h"
 #include "OSiLParserData.h"
 #include <time.h>
 #include "ErrorClass.h"
@@ -39,7 +38,7 @@
 using std::cout;
 using std::endl;
 using std::ostringstream;
-void osilerror_wrapper_l(const char* errormsg) ;
+//void osilerror_wrapper_l(const char* errormsg) ;
 %}
 
 %option reentrant
@@ -57,12 +56,6 @@ void osilerror_wrapper_l(const char* errormsg) ;
 %x comment
 %x xmldeclaration
  
-%{
-#define YY_USER_ACTION yylloc->first_line = yylineno;
-
-%}  
-  
-
 xmlwhitespace ([ \t\n\r])
 equality ([ \t\n\r])*=([ \t\n\r])*
 quote (\"|\') 
@@ -175,16 +168,7 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]+))([eE][-+]?[0-9]+)?|INF))
 	outStr << "See line number: " << yylineno << endl;  
 	error = outStr.str();
 	throw ErrorClass( error);
-	try{
-		throw ErrorClass( error);
-	}
-		catch(const ErrorClass& eclass){
-		throw ErrorClass(  eclass.errormsg); 
-	}
- }
+}
 
 %%
 
-void osilerror_wrapper_l( const char* errormsg ) {
-
-} // end osilerror_wrapper_l() 

@@ -231,14 +231,11 @@ YY_BUFFER_STATE osil_scan_string (const char *yy_str , void* yyscanner  );
 int osillex_init(void** ptr_yy_globals);
 int osillex_destroy (void* yyscanner );
 int osilget_lineno( void* yyscanner);
+char *osilget_text (void* yyscanner );
 void osilset_lineno (int line_number , void* yyscanner );
 OSInstance *yygetOSInstance(const char *osil) throw(ErrorClass);
 //
-//
-// the global variables for parsing
-//int* osillineno = 0;
-//
-//
+
 double atofmod1(int* osillineno, const char *ch1, const char *ch2 );
 int atoimod1(int* osillineno, const char *ch1, const char *ch2);
 // we distinguish a newline from other whitespace
@@ -691,19 +688,19 @@ static const yytype_int16 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   166,   166,   172,   173,   176,   181,   182,   184,   184,
-     195,   196,   199,   200,   204,   207,   210,   213,   219,   221,
-     223,   225,   227,   230,   231,   235,   240,   242,   241,   251,
-     264,   265,   266,   267,   268,   269,   270,   271,   272,   273,
-     274,   275,   276,   277,   278,   279,   280,   281,   282,   285,
-     285,   290,   290,   295,   295,   300,   300,   305,   305,   310,
-     310,   315,   315,   325,   326,   329,   329,   339,   340,   343,
-     343,   353,   354,   357,   357,   362,   362,   367,   367,   372,
-     372,   377,   377,   384,   384,   389,   389,   395,   395,   400,
-     400,   405,   405,   410,   411,   413,   414,   414,   424,   425,
-     427,   429,   431,   435,   439,   445,   448,   452,   453,   455,
-     457,   460,   463,   467,   477,   478,   479,   480,   482,   483,
-     485
+       0,   163,   163,   169,   170,   173,   178,   179,   181,   181,
+     192,   193,   196,   197,   201,   204,   207,   210,   216,   218,
+     220,   222,   224,   227,   228,   232,   237,   239,   238,   248,
+     261,   262,   263,   264,   265,   266,   267,   268,   269,   270,
+     271,   272,   273,   274,   275,   276,   277,   278,   279,   282,
+     282,   287,   287,   292,   292,   297,   297,   302,   302,   307,
+     307,   312,   312,   322,   323,   326,   326,   336,   337,   340,
+     340,   350,   351,   354,   354,   359,   359,   364,   364,   369,
+     369,   374,   374,   381,   381,   386,   386,   392,   392,   397,
+     397,   402,   402,   407,   408,   410,   411,   411,   421,   422,
+     424,   426,   428,   432,   436,   442,   445,   449,   450,   452,
+     454,   457,   460,   464,   474,   475,   476,   477,   479,   480,
+     482
 };
 #endif
 
@@ -2474,20 +2471,16 @@ yyreturn:
 // user defined functions
 
 void osilerror(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData* parserData, const char* errormsg ) {
-	try{
-		std::ostringstream outStr;
-		std::string error = errormsg;
-		error = "PARSER ERROR:  Input is either not valid or well formed: "  + error;
-		outStr << error << endl;
-		outStr << endl;
-		outStr << "See line number: " << mytype->first_line << endl;  
-		error = outStr.str();
-		throw ErrorClass( error);
-	}
-		catch(const ErrorClass& eclass){
-		throw ErrorClass(  eclass.errormsg); 
-	}
-} // end osilerror() 
+	std::ostringstream outStr;
+	std::string error = errormsg;
+	error = "PARSER ERROR:  Input is either not valid or well formed: "  + error;
+	outStr << error << endl;
+	outStr << endl; 
+	outStr << "See line number: " << osilget_lineno( scanner) << endl; 
+	outStr << "The offending text is: " << *osilget_text ( scanner ) << endl; 
+	error = outStr.str();
+	throw ErrorClass( error);
+}//end osilerror() 
 
 
 OSInstance* yygetOSInstance( const char *osil) throw (ErrorClass) {
