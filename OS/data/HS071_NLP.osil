@@ -7,7 +7,7 @@
     <instanceData>
         <variables numberOfVariables="4">
             <var name="_svar[1]" lb="1" ub="5" init="0"/>
-            <var name="_svar[2]" lb="1" ub="5" init="0"/>
+         <var name="_svar[2]" lb="1" ub="5" init="0"/>
             <var name="_svar[3]" lb="1" ub="5" init="0"/>
             <var name="_svar[4]" lb="1" ub="5" init="0"/>
         </variables>

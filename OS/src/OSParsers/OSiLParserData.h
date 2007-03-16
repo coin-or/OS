@@ -21,8 +21,11 @@
 
 class OSiLParserData{
 public:
+	//methods
 	OSiLParserData( );
 	~OSiLParserData() ;
+	int get_lineno ( void* scanner);
+	//properties
 	OSnLNode *nlNodePoint;
 	OSnLNodeVariable *nlNodeVariablePoint;
 	OSnLNodeNumber *nlNodeNumberPoint;
@@ -42,6 +45,8 @@ public:
 	// variable attribute boolean variables
 	bool variableidxattON ;
 	bool variablecoefattON ;
+	
+	int osillineno;
 	
 	std::vector<OSnLNode*> nlNodeVec;
 	std::vector<OSnLNode*> sumVec;

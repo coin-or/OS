@@ -35,9 +35,15 @@
 	qtermcoefattON(false),
 	qtermcount(0),
 	tmpnlcount(0),
-	nlnodecount(0)
+	nlnodecount(0),
+	osillineno(0)
  {
 
  }//OSiLParserData
+ 
+ int OSiLParserData::get_lineno ( void* scanner){
+ 	//return osilget_lineno ( void* scanner);
+ 	return 0;
+ }
 
  

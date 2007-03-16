@@ -109,7 +109,7 @@ int main(int argC, char* argV[])
 		ipoptSolver->osol = osol;
 		osilreader = new OSiLReader(); 
 		ipoptSolver->osinstance = osilreader->readOSiL( &osil);
-		cout << "call the IPOPT Solver" << endl;
+		cout << "call the IPOPT Solver" << endl;	
 		ipoptSolver->solve();
 		cout << "Here is the IPOPT solver solution for avion2" << endl;
 		check = 9.46801e+07;
@@ -125,6 +125,7 @@ int main(int argC, char* argV[])
 		ipoptSolver->osol = osol;
 		osilreader = new OSiLReader(); 
 		ipoptSolver->osinstance = osilreader->readOSiL( &osil);
+		return 0;
 		OSiLWriter osilwriter;
 		cout << osilwriter.writeOSiL( ipoptSolver->osinstance) << endl;
 		cout << "call the IPOPT Solver" << endl;
@@ -134,7 +135,7 @@ int main(int argC, char* argV[])
 		ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-10 , 1e-10);
 		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on HS071_NLP");
 		delete osilreader;
-		osilreader = NULL;		
+		osilreader = NULL;
 		// solve another problem
 		// a problem with just an objective function
 		ipOptFileName =  dataDir + "rosenbrock.osil";

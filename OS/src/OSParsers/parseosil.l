@@ -14,9 +14,12 @@
  */
 %{
 
-
+#include <string>
 #include <stdio.h> 
-#include "lexyaccparser.h"
+#include <iostream>
+#include <sstream>  
+//#include "lexyaccparser.h"
+#include "OSiLParserData.h"
 #include <time.h>
 #include "ErrorClass.h"
 #include "parseosil.tab.hpp"
@@ -33,8 +36,10 @@
 #include <io.h>
 #include <process.h>
 #endif
-void osilerror_wrapper_l(const char* errormsg) ;	
-//void osilerror( YYLTYPE* type,  OSInstance *osin, const char* errormsg) ;				 
+using std::cout;
+using std::endl;
+using std::ostringstream;
+void osilerror_wrapper_l(const char* errormsg) ;
 %}
 
 %option reentrant
@@ -51,7 +56,11 @@ void osilerror_wrapper_l(const char* errormsg) ;
 %x elementtext
 %x comment
 %x xmldeclaration
-   
+ 
+%{
+#define YY_USER_ACTION yylloc->first_line = yylineno;
+
+%}  
   
 
 xmlwhitespace ([ \t\n\r])
@@ -94,11 +103,7 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]+))([eE][-+]?[0-9]+)?|INF))
 
 
 
-%{ 
-// the nonlinear element tokens
-%}
-
-{xmlwhitespace}*\<nonlinearExpressions {YY_PRINT; return(NONLINEAREXPRESSIONSSTART);}
+{xmlwhitespace}*\<nonlinearExpressions {YY_PRINT;  return(NONLINEAREXPRESSIONSSTART);}
 {xmlwhitespace}*\<\/nonlinearExpressions\>{xmlwhitespace}* {YY_PRINT; return(NONLINEAREXPRESSIONSEND);}
 {xmlwhitespace}*\<nl {YY_PRINT; return(NLSTART);}
 {xmlwhitespace}*\<\/nl\>{xmlwhitespace}* {YY_PRINT; return(NLEND);}
@@ -160,16 +165,26 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]+))([eE][-+]?[0-9]+)?|INF))
 <attributetext>([^\"\'])* {YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext); return(ATTRIBUTETEXT);}
 
 
-. {YY_PRINT;  printf("%s", yytext); osilerror_wrapper_l( "ecountered a spurious character in the lexer");   }
-
-%%
-
-void osilerror_wrapper_l( const char* errormsg ) {
+. {  
+	std::string error;
+	std::ostringstream outStr;
+	outStr << "ecountered a spurious character in the lexer" << endl;
+	outStr << "The first character is: ";
+	outStr <<  yytext;
+	outStr << endl;
+	outStr << "See line number: " << yylineno << endl;  
+	error = outStr.str();
+	throw ErrorClass( error);
 	try{
-		std::string error = errormsg;
 		throw ErrorClass( error);
 	}
 		catch(const ErrorClass& eclass){
 		throw ErrorClass(  eclass.errormsg); 
 	}
+ }
+
+%%
+
+void osilerror_wrapper_l( const char* errormsg ) {
+
 } // end osilerror_wrapper_l() 
