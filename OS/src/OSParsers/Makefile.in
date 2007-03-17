@@ -58,7 +58,7 @@ LTLIBRARIES = $(noinst_LTLIBRARIES)
 libOSParsers_la_LIBADD =
 am_libOSParsers_la_OBJECTS = parseosil.lo parseosil.tab.lo \
 	parseosol.lo parseosrl.lo parseosrl.tab.lo parseosss.lo \
-	OSiLParserData.lo
+	OSiLParserData.lo OSrLParserData.lo
 libOSParsers_la_OBJECTS = $(am_libOSParsers_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
@@ -302,7 +302,9 @@ libOSParsers_la_SOURCES = \
 		parseosrl.tab.cpp.h \
 		parseosss.cpp	\
 		OSiLParserData.h \
-		OSiLParserData.cpp	
+		OSiLParserData.cpp \
+		OSrLParserData.h \
+		OSrLParserData.cpp		
 
 
 # This is for libtool (on Windows)
@@ -336,7 +338,8 @@ include_HEADERS = \
 	osssparservariables.h \
 	parseosil.tab.hpp \
 	parseosrl.tab.hpp \
-	OSiLParserData.h
+	OSiLParserData.h \
+	OSrLParserData.h
 
 all: all-am
 
@@ -390,6 +393,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSiLParserData.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSrLParserData.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parseosil.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parseosil.tab.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parseosol.Plo@am__quote@

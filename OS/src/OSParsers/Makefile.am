@@ -31,7 +31,9 @@ libOSParsers_la_SOURCES = \
 		parseosrl.tab.cpp.h \
 		parseosss.cpp	\
 		OSiLParserData.h \
-		OSiLParserData.cpp	
+		OSiLParserData.cpp \
+		OSrLParserData.h \
+		OSrLParserData.cpp		
 
 # This is for libtool (on Windows)
 libOSParsers_la_LDFLAGS = $(LT_LDFLAGS)
@@ -63,6 +65,7 @@ include_HEADERS = \
 	osssparservariables.h \
 	parseosil.tab.hpp \
 	parseosrl.tab.hpp \
-	OSiLParserData.h
+	OSiLParserData.h \
+	OSrLParserData.h
 
 

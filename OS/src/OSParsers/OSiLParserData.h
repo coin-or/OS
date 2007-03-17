@@ -24,8 +24,8 @@ public:
 	//methods
 	OSiLParserData( );
 	~OSiLParserData() ;
-	int get_lineno ( void* scanner);
 	//properties
+	void* scanner;
 	OSnLNode *nlNodePoint;
 	OSnLNodeVariable *nlNodeVariablePoint;
 	OSnLNodeNumber *nlNodeNumberPoint;

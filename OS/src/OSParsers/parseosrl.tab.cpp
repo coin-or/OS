@@ -53,10 +53,10 @@
 #define YYSKELETON_NAME "yacc.c"
 
 /* Pure parsers.  */
-#define YYPURE 0
+#define YYPURE 1
 
 /* Using locations.  */
-#define YYLSP_NEEDED 0
+#define YYLSP_NEEDED 1
 
 /* Substitute the variable and function names.  */
 #define yyparse osrlparse
@@ -66,7 +66,7 @@
 #define yychar  osrlchar
 #define yydebug osrldebug
 #define yynerrs osrlnerrs
-
+#define yylloc osrllloc
 
 /* Tokens.  */
 #ifndef YYTOKENTYPE
@@ -223,18 +223,27 @@
 
  
   
-#include "lexyaccparser.h"
-#include "externalvars.h"
+//#include "lexyaccparser.h"
+//#include "externalvars.h"
 #include "ErrorClass.h"
 #include "OSResult.h"
 #include "osrlparservariables.h"
+
+
+#include "OSrLParserData.h"
 #include <iostream>
 #include <sstream> 
 
  
-
-
-
+typedef struct yy_buffer_state *YY_BUFFER_STATE;
+YY_BUFFER_STATE osrl_scan_string (const char *yy_str , void* yyscanner  );
+int osrllex_init(void** ptr_yy_globals);
+int osrllex_destroy (void* yyscanner );
+int osrlget_lineno( void* yyscanner);
+char *osrlget_text (void* yyscanner );
+void osrlset_lineno (int line_number , void* yyscanner );
+OSResult *yygetOSResult( std::string parsestring) ;
+void osrlClearMemory();
 
 
 
@@ -272,9 +281,28 @@ typedef union YYSTYPE
 # define YYSTYPE_IS_TRIVIAL 1
 #endif
 
+#if ! defined YYLTYPE && ! defined YYLTYPE_IS_DECLARED
+typedef struct YYLTYPE
+{
+  int first_line;
+  int first_column;
+  int last_line;
+  int last_column;
+} YYLTYPE;
+# define yyltype YYLTYPE /* obsolescent; will be withdrawn */
+# define YYLTYPE_IS_DECLARED 1
+# define YYLTYPE_IS_TRIVIAL 1
+#endif
 
 
 /* Copy the second part of user declarations.  */
+
+
+int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner );
+void osrlerror(YYLTYPE* type, OSResult *osresult,  OSrLParserData *parserData ,const char* errormsg );
+
+ 
+#define scanner parserData->scanner
 
 
 /* Line 216 of yacc.c.  */
@@ -436,14 +464,16 @@ void free (void *); /* INFRINGES ON USER NAME SPACE */
 
 #if (! defined yyoverflow \
      && (! defined __cplusplus \
-	 || (defined YYSTYPE_IS_TRIVIAL && YYSTYPE_IS_TRIVIAL)))
+	 || (defined YYLTYPE_IS_TRIVIAL && YYLTYPE_IS_TRIVIAL \
+	     && defined YYSTYPE_IS_TRIVIAL && YYSTYPE_IS_TRIVIAL)))
 
 /* A type that is properly aligned for any stack member.  */
 union yyalloc
 {
   yytype_int16 yyss;
   YYSTYPE yyvs;
-  };
+    YYLTYPE yyls;
+};
 
 /* The size of the maximum gap between one aligned stack and the next.  */
 # define YYSTACK_GAP_MAXIMUM (sizeof (union yyalloc) - 1)
@@ -451,8 +481,8 @@ union yyalloc
 /* The size of an array large to enough to hold all stacks, each with
    N elements.  */
 # define YYSTACK_BYTES(N) \
-     ((N) * (sizeof (yytype_int16) + sizeof (YYSTYPE)) \
-      + YYSTACK_GAP_MAXIMUM)
+     ((N) * (sizeof (yytype_int16) + sizeof (YYSTYPE) + sizeof (YYLTYPE)) \
+      + 2 * YYSTACK_GAP_MAXIMUM)
 
 /* Copy COUNT objects from FROM to TO.  The source and destination do
    not overlap.  */
@@ -612,18 +642,18 @@ static const yytype_int16 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    81,    81,    83,    84,    88,    90,    91,    93,    94,
-      96,    97,   100,   101,   102,   103,   106,   107,   108,   109,
-     111,   112,   113,   114,   116,   117,   118,   119,   121,   122,
-     123,   124,   126,   127,   128,   130,   131,   133,   134,   137,
-     136,   164,   165,   167,   168,   170,   171,   172,   173,   177,
-     179,   181,   184,   188,   189,   190,   192,   198,   199,   202,
-     203,   206,   207,   209,   210,   212,   213,   214,   216,   217,
-     219,   220,   222,   226,   233,   234,   236,   239,   236,   243,
-     244,   246,   246,   246,   252,   253,   255,   256,   259,   260,
-     262,   263,   265,   267,   270,   271,   273,   274,   276,   279,
-     286,   292,   293,   295,   296,   298,   299,   305,   307,   308,
-     309,   310,   312,   313
+       0,   107,   107,   109,   110,   114,   116,   117,   119,   120,
+     122,   123,   126,   127,   128,   129,   132,   133,   134,   135,
+     137,   138,   139,   140,   142,   143,   144,   145,   147,   148,
+     149,   150,   152,   153,   154,   156,   157,   159,   160,   163,
+     162,   190,   191,   193,   194,   196,   197,   198,   199,   203,
+     205,   207,   210,   214,   215,   216,   218,   224,   225,   228,
+     229,   232,   233,   235,   236,   238,   239,   240,   242,   243,
+     245,   246,   248,   252,   259,   260,   262,   265,   262,   269,
+     270,   272,   272,   272,   278,   279,   281,   282,   285,   286,
+     288,   289,   291,   293,   296,   297,   299,   300,   302,   305,
+     312,   318,   319,   321,   322,   324,   325,   331,   333,   334,
+     335,   336,   338,   339
 };
 #endif
 
@@ -903,7 +933,7 @@ do								\
     }								\
   else								\
     {								\
-      yyerror (YY_("syntax error: cannot back up")); \
+      yyerror (&yylloc, osresult, parserData, YY_("syntax error: cannot back up")); \
       YYERROR;							\
     }								\
 while (YYID (0))
@@ -958,9 +988,9 @@ while (YYID (0))
 /* YYLEX -- calling `yylex' with the right arguments.  */
 
 #ifdef YYLEX_PARAM
-# define YYLEX yylex (YYLEX_PARAM)
+# define YYLEX yylex (&yylval, &yylloc, YYLEX_PARAM)
 #else
-# define YYLEX yylex ()
+# define YYLEX yylex (&yylval, &yylloc, scanner)
 #endif
 
 /* Enable debugging if requested.  */
@@ -983,7 +1013,7 @@ do {									  \
     {									  \
       YYFPRINTF (stderr, "%s ", Title);					  \
       yy_symbol_print (stderr,						  \
-		  Type, Value); \
+		  Type, Value, Location, osresult, parserData); \
       YYFPRINTF (stderr, "\n");						  \
     }									  \
 } while (YYID (0))
@@ -997,17 +1027,23 @@ do {									  \
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep)
+yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, OSResult *osresult, OSrLParserData *parserData)
 #else
 static void
-yy_symbol_value_print (yyoutput, yytype, yyvaluep)
+yy_symbol_value_print (yyoutput, yytype, yyvaluep, yylocationp, osresult, parserData)
     FILE *yyoutput;
     int yytype;
     YYSTYPE const * const yyvaluep;
+    YYLTYPE const * const yylocationp;
+    OSResult *osresult;
+    OSrLParserData *parserData;
 #endif
 {
   if (!yyvaluep)
     return;
+  YYUSE (yylocationp);
+  YYUSE (osresult);
+  YYUSE (parserData);
 # ifdef YYPRINT
   if (yytype < YYNTOKENS)
     YYPRINT (yyoutput, yytoknum[yytype], *yyvaluep);
@@ -1029,13 +1065,16 @@ yy_symbol_value_print (yyoutput, yytype, yyvaluep)
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep)
+yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, OSResult *osresult, OSrLParserData *parserData)
 #else
 static void
-yy_symbol_print (yyoutput, yytype, yyvaluep)
+yy_symbol_print (yyoutput, yytype, yyvaluep, yylocationp, osresult, parserData)
     FILE *yyoutput;
     int yytype;
     YYSTYPE const * const yyvaluep;
+    YYLTYPE const * const yylocationp;
+    OSResult *osresult;
+    OSrLParserData *parserData;
 #endif
 {
   if (yytype < YYNTOKENS)
@@ -1043,7 +1082,9 @@ yy_symbol_print (yyoutput, yytype, yyvaluep)
   else
     YYFPRINTF (yyoutput, "nterm %s (", yytname[yytype]);
 
-  yy_symbol_value_print (yyoutput, yytype, yyvaluep);
+  YY_LOCATION_PRINT (yyoutput, *yylocationp);
+  YYFPRINTF (yyoutput, ": ");
+  yy_symbol_value_print (yyoutput, yytype, yyvaluep, yylocationp, osresult, parserData);
   YYFPRINTF (yyoutput, ")");
 }
 
@@ -1083,12 +1124,15 @@ do {								\
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_reduce_print (YYSTYPE *yyvsp, int yyrule)
+yy_reduce_print (YYSTYPE *yyvsp, YYLTYPE *yylsp, int yyrule, OSResult *osresult, OSrLParserData *parserData)
 #else
 static void
-yy_reduce_print (yyvsp, yyrule)
+yy_reduce_print (yyvsp, yylsp, yyrule, osresult, parserData)
     YYSTYPE *yyvsp;
+    YYLTYPE *yylsp;
     int yyrule;
+    OSResult *osresult;
+    OSrLParserData *parserData;
 #endif
 {
   int yynrhs = yyr2[yyrule];
@@ -1102,7 +1146,7 @@ yy_reduce_print (yyvsp, yyrule)
       fprintf (stderr, "   $%d = ", yyi + 1);
       yy_symbol_print (stderr, yyrhs[yyprhs[yyrule] + yyi],
 		       &(yyvsp[(yyi + 1) - (yynrhs)])
-		       		       );
+		       , &(yylsp[(yyi + 1) - (yynrhs)])		       , osresult, parserData);
       fprintf (stderr, "\n");
     }
 }
@@ -1110,7 +1154,7 @@ yy_reduce_print (yyvsp, yyrule)
 # define YY_REDUCE_PRINT(Rule)		\
 do {					\
   if (yydebug)				\
-    yy_reduce_print (yyvsp, Rule); \
+    yy_reduce_print (yyvsp, yylsp, Rule, osresult, parserData); \
 } while (YYID (0))
 
 /* Nonzero means print parse trace.  It is left uninitialized so that
@@ -1361,16 +1405,22 @@ yysyntax_error (char *yyresult, int yystate, int yychar)
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep)
+yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep, YYLTYPE *yylocationp, OSResult *osresult, OSrLParserData *parserData)
 #else
 static void
-yydestruct (yymsg, yytype, yyvaluep)
+yydestruct (yymsg, yytype, yyvaluep, yylocationp, osresult, parserData)
     const char *yymsg;
     int yytype;
     YYSTYPE *yyvaluep;
+    YYLTYPE *yylocationp;
+    OSResult *osresult;
+    OSrLParserData *parserData;
 #endif
 {
   YYUSE (yyvaluep);
+  YYUSE (yylocationp);
+  YYUSE (osresult);
+  YYUSE (parserData);
 
   if (!yymsg)
     yymsg = "Deleting";
@@ -1395,7 +1445,7 @@ int yyparse ();
 #endif
 #else /* ! YYPARSE_PARAM */
 #if defined __STDC__ || defined __cplusplus
-int yyparse (void);
+int yyparse (OSResult *osresult, OSrLParserData *parserData);
 #else
 int yyparse ();
 #endif
@@ -1403,14 +1453,6 @@ int yyparse ();
 
 
 
-/* The look-ahead symbol.  */
-int yychar;
-
-/* The semantic value of the look-ahead symbol.  */
-YYSTYPE yylval;
-
-/* Number of syntax errors so far.  */
-int yynerrs;
 
 
 
@@ -1432,15 +1474,26 @@ yyparse (YYPARSE_PARAM)
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 int
-yyparse (void)
+yyparse (OSResult *osresult, OSrLParserData *parserData)
 #else
 int
-yyparse ()
-
+yyparse (osresult, parserData)
+    OSResult *osresult;
+    OSrLParserData *parserData;
 #endif
 #endif
 {
-  
+  /* The look-ahead symbol.  */
+int yychar;
+
+/* The semantic value of the look-ahead symbol.  */
+YYSTYPE yylval;
+
+/* Number of syntax errors so far.  */
+int yynerrs;
+/* Location data for the look-ahead symbol.  */
+YYLTYPE yylloc;
+
   int yystate;
   int yyn;
   int yyresult;
@@ -1473,16 +1526,21 @@ yyparse ()
   YYSTYPE *yyvs = yyvsa;
   YYSTYPE *yyvsp;
 
+  /* The location stack.  */
+  YYLTYPE yylsa[YYINITDEPTH];
+  YYLTYPE *yyls = yylsa;
+  YYLTYPE *yylsp;
+  /* The locations where the error started and ended.  */
+  YYLTYPE yyerror_range[2];
 
-
-#define YYPOPSTACK(N)   (yyvsp -= (N), yyssp -= (N))
+#define YYPOPSTACK(N)   (yyvsp -= (N), yyssp -= (N), yylsp -= (N))
 
   YYSIZE_T yystacksize = YYINITDEPTH;
 
   /* The variables used to return semantic value and location from the
      action routines.  */
   YYSTYPE yyval;
-
+  YYLTYPE yyloc;
 
   /* The number of symbols on the RHS of the reduced rule.
      Keep to zero when no symbol should be popped.  */
@@ -1502,6 +1560,12 @@ yyparse ()
 
   yyssp = yyss;
   yyvsp = yyvs;
+  yylsp = yyls;
+#if YYLTYPE_IS_TRIVIAL
+  /* Initialize the default location before parsing starts.  */
+  yylloc.first_line   = yylloc.last_line   = 1;
+  yylloc.first_column = yylloc.last_column = 0;
+#endif
 
   goto yysetstate;
 
@@ -1528,7 +1592,7 @@ yyparse ()
 	   memory.  */
 	YYSTYPE *yyvs1 = yyvs;
 	yytype_int16 *yyss1 = yyss;
-
+	YYLTYPE *yyls1 = yyls;
 
 	/* Each stack pointer address is followed by the size of the
 	   data in use in that stack, in bytes.  This used to be a
@@ -1537,9 +1601,9 @@ yyparse ()
 	yyoverflow (YY_("memory exhausted"),
 		    &yyss1, yysize * sizeof (*yyssp),
 		    &yyvs1, yysize * sizeof (*yyvsp),
-
+		    &yyls1, yysize * sizeof (*yylsp),
 		    &yystacksize);
-
+	yyls = yyls1;
 	yyss = yyss1;
 	yyvs = yyvs1;
       }
@@ -1562,7 +1626,7 @@ yyparse ()
 	  goto yyexhaustedlab;
 	YYSTACK_RELOCATE (yyss);
 	YYSTACK_RELOCATE (yyvs);
-
+	YYSTACK_RELOCATE (yyls);
 #  undef YYSTACK_RELOCATE
 	if (yyss1 != yyssa)
 	  YYSTACK_FREE (yyss1);
@@ -1572,7 +1636,7 @@ yyparse ()
 
       yyssp = yyss + yysize - 1;
       yyvsp = yyvs + yysize - 1;
-
+      yylsp = yyls + yysize - 1;
 
       YYDPRINTF ((stderr, "Stack size increased to %lu\n",
 		  (unsigned long int) yystacksize));
@@ -1649,7 +1713,7 @@ yybackup:
 
   yystate = yyn;
   *++yyvsp = yylval;
-
+  *++yylsp = yylloc;
   goto yynewstate;
 
 
@@ -1680,18 +1744,19 @@ yyreduce:
      GCC warning that YYVAL may be used uninitialized.  */
   yyval = yyvsp[1-yylen];
 
-
+  /* Default location.  */
+  YYLLOC_DEFAULT (yyloc, (yylsp - yylen), yylen);
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
         case 6:
 
-    {if(generalStatusTypePresent == false) osrlerror("a type attribute required for generalStatus element");}
+    {if(generalStatusTypePresent == false) osrlerror(NULL, NULL, NULL, "a type attribute required for generalStatus element");}
     break;
 
   case 7:
 
-    {if(generalStatusTypePresent == false) osrlerror("a type attribute required for generalStatus element"); generalStatusTypePresent = false;}
+    {if(generalStatusTypePresent == false) osrlerror(NULL, NULL, NULL, "a type attribute required for generalStatus element"); generalStatusTypePresent = false;}
     break;
 
   case 10:
@@ -1784,18 +1849,18 @@ yyreduce:
 
   case 58:
 
-    {if((yyvsp[(2) - (3)].ival) >= 0) osrlerror("objective index must be nonpositive");
+    {if((yyvsp[(2) - (3)].ival) >= 0) osrlerror(NULL, NULL, NULL, "objective index must be nonpositive");
 *(objectiveIdx + solutionIdx) = (yyvsp[(2) - (3)].ival);}
     break;
 
   case 59:
 
-    {if(statusTypePresent == false) osrlerror("a type attribute required for status element");}
+    {if(statusTypePresent == false) osrlerror(NULL, NULL, NULL, "a type attribute required for status element");}
     break;
 
   case 60:
 
-    {if(statusTypePresent == false) osrlerror("a type attribute required for status element"); statusTypePresent = false;}
+    {if(statusTypePresent == false) osrlerror(NULL, NULL, NULL, "a type attribute required for status element"); statusTypePresent = false;}
     break;
 
   case 63:
@@ -1811,7 +1876,7 @@ yyreduce:
   case 72:
 
     { 
-	if(kounter < 0 || kounter > numberOfVariables - 1) osrlerror("index must be greater than 0 and less than the number of variables");
+	if(kounter < 0 || kounter > numberOfVariables - 1) osrlerror(NULL, NULL, NULL, "index must be greater than 0 and less than the number of variables");
 	*(primalSolution[solutionIdx] + kounter ) = (yyvsp[(4) - (5)].dval);
 	}
     break;
@@ -1819,7 +1884,7 @@ yyreduce:
   case 73:
 
     { 
-	if(kounter < 0 || kounter > numberOfVariables - 1) osrlerror("index must be greater than 0 and less than the number of variables");
+	if(kounter < 0 || kounter > numberOfVariables - 1) osrlerror(NULL, NULL, NULL, "index must be greater than 0 and less than the number of variables");
 	*(primalSolution[solutionIdx] + kounter) = (yyvsp[(4) - (5)].ival);
 }
     break;
@@ -1834,7 +1899,7 @@ yyreduce:
 
   case 77:
 
-    {if(otherNamePresent == false) osrlerror("other element requires name attribute"); 
+    {if(otherNamePresent == false) osrlerror(NULL, NULL, NULL, "other element requires name attribute"); 
 	otherNamePresent = false;  
 	}
     break;
@@ -1846,18 +1911,18 @@ yyreduce:
 
   case 81:
 
-    {beginElementText = true;  }
+    {parserData->beginElementText = true;  }
     break;
 
   case 82:
 
-    {beginElementText = false; }
+    {parserData->beginElementText = false; }
     break;
 
   case 83:
 
     { 
-if(kounter < 0 || kounter > numberOfVariables - 1) osrlerror("index must be greater than 0 and less than the number of variables");
+if(kounter < 0 || kounter > numberOfVariables - 1) osrlerror(NULL, NULL, NULL, "index must be greater than 0 and less than the number of variables");
 otherVarStruct->rcost[kounter] = (yyvsp[(5) - (7)].charval);
 }
     break;
@@ -1886,14 +1951,14 @@ otherVarStruct->rcost[kounter] = (yyvsp[(5) - (7)].charval);
   case 98:
 
     { 
-	if(kounter < 0 || kounter > numberOfConstraints - 1) osrlerror("index must be greater than 0 and less than the number of constraints");
+	if(kounter < 0 || kounter > numberOfConstraints - 1) osrlerror(NULL, NULL, NULL, "index must be greater than 0 and less than the number of constraints");
 	*(dualSolution[solutionIdx] + kounter) = (yyvsp[(4) - (5)].dval);}
     break;
 
   case 99:
 
     { 
-	if(kounter < 0 || kounter > numberOfConstraints - 1) osrlerror("index must be greater than 0 and less than the number of constraints");
+	if(kounter < 0 || kounter > numberOfConstraints - 1) osrlerror(NULL, NULL, NULL, "index must be greater than 0 and less than the number of constraints");
 	*(dualSolution[solutionIdx] + kounter) = (yyvsp[(4) - (5)].ival);}
     break;
 
@@ -1914,7 +1979,7 @@ otherVarStruct->rcost[kounter] = (yyvsp[(5) - (7)].charval);
   YY_STACK_PRINT (yyss, yyssp);
 
   *++yyvsp = yyval;
-
+  *++yylsp = yyloc;
 
   /* Now `shift' the result of the reduction.  Determine what state
      that goes to, based on the state we popped back to and the rule
@@ -1940,7 +2005,7 @@ yyerrlab:
     {
       ++yynerrs;
 #if ! YYERROR_VERBOSE
-      yyerror (YY_("syntax error"));
+      yyerror (&yylloc, osresult, parserData, YY_("syntax error"));
 #else
       {
 	YYSIZE_T yysize = yysyntax_error (0, yystate, yychar);
@@ -1964,11 +2029,11 @@ yyerrlab:
 	if (0 < yysize && yysize <= yymsg_alloc)
 	  {
 	    (void) yysyntax_error (yymsg, yystate, yychar);
-	    yyerror (yymsg);
+	    yyerror (&yylloc, osresult, parserData, yymsg);
 	  }
 	else
 	  {
-	    yyerror (YY_("syntax error"));
+	    yyerror (&yylloc, osresult, parserData, YY_("syntax error"));
 	    if (yysize != 0)
 	      goto yyexhaustedlab;
 	  }
@@ -1976,7 +2041,7 @@ yyerrlab:
 #endif
     }
 
-
+  yyerror_range[0] = yylloc;
 
   if (yyerrstatus == 3)
     {
@@ -1992,7 +2057,7 @@ yyerrlab:
       else
 	{
 	  yydestruct ("Error: discarding",
-		      yytoken, &yylval);
+		      yytoken, &yylval, &yylloc, osresult, parserData);
 	  yychar = YYEMPTY;
 	}
     }
@@ -2013,6 +2078,7 @@ yyerrorlab:
   if (/*CONSTCOND*/ 0)
      goto yyerrorlab;
 
+  yyerror_range[0] = yylsp[1-yylen];
   /* Do not reclaim the symbols of the rule which action triggered
      this YYERROR.  */
   YYPOPSTACK (yylen);
@@ -2046,9 +2112,9 @@ yyerrlab1:
       if (yyssp == yyss)
 	YYABORT;
 
-
+      yyerror_range[0] = *yylsp;
       yydestruct ("Error: popping",
-		  yystos[yystate], yyvsp);
+		  yystos[yystate], yyvsp, yylsp, osresult, parserData);
       YYPOPSTACK (1);
       yystate = *yyssp;
       YY_STACK_PRINT (yyss, yyssp);
@@ -2059,6 +2125,11 @@ yyerrlab1:
 
   *++yyvsp = yylval;
 
+  yyerror_range[1] = yylloc;
+  /* Using YYLLOC is tempting, but would change the location of
+     the look-ahead.  YYLOC is available though.  */
+  YYLLOC_DEFAULT (yyloc, (yyerror_range - 1), 2);
+  *++yylsp = yyloc;
 
   /* Shift the error token.  */
   YY_SYMBOL_PRINT ("Shifting", yystos[yyn], yyvsp, yylsp);
@@ -2086,7 +2157,7 @@ yyabortlab:
 | yyexhaustedlab -- memory exhaustion comes here.  |
 `-------------------------------------------------*/
 yyexhaustedlab:
-  yyerror (YY_("memory exhausted"));
+  yyerror (&yylloc, osresult, parserData, YY_("memory exhausted"));
   yyresult = 2;
   /* Fall through.  */
 #endif
@@ -2094,7 +2165,7 @@ yyexhaustedlab:
 yyreturn:
   if (yychar != YYEOF && yychar != YYEMPTY)
      yydestruct ("Cleanup: discarding lookahead",
-		 yytoken, &yylval);
+		 yytoken, &yylval, &yylloc, osresult, parserData);
   /* Do not reclaim the symbols of the rule which action triggered
      this YYABORT or YYACCEPT.  */
   YYPOPSTACK (yylen);
@@ -2102,7 +2173,7 @@ yyreturn:
   while (yyssp != yyss)
     {
       yydestruct ("Cleanup: popping",
-		  yystos[*yyssp], yyvsp);
+		  yystos[*yyssp], yyvsp, yylsp, osresult, parserData);
       YYPOPSTACK (1);
     }
 #ifndef yyoverflow
@@ -2121,9 +2192,9 @@ yyreturn:
 
 
 
-void osrlerror(const char* errormsg)
+void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, const char* errormsg )
 {
-	try{
+	/*try{
 		ostringstream outStr;
 		std::string error = errormsg;
 		error = "Input is either not valid or well formed: "  + error;
@@ -2137,19 +2208,31 @@ void osrlerror(const char* errormsg)
 		catch(const ErrorClass& eclass){
 		throw ErrorClass(  eclass.errormsg);
 	}
+	*/
 } // end osrlerror
 
 OSResult *yygetOSResult(std::string parsestring){
 	void osrlinitialize();
 	bool createOSResult();
 	osrlinitialize();
-	osrl_scan_string( parsestring.c_str());
+	
+	
+	//OSInstance* osinstance = NULL;
+	OSrLParserData *parserData = NULL;
+	//osinstance = new OSInstance();
+	parserData = new OSrLParserData();
+	
+	// call the flex scanner
+    osrllex_init( &scanner);
+	osrl_scan_string( parsestring.c_str(), scanner);
 	std::cout << std::endl << std::endl;
 	//std::cout << "start parsing now" << std::endl;
-	osrlparse();
-	if( createOSResult() == false) osrlerror("Could not create OSResult");
+	osrlparse( osresult,  parserData);
+	if( createOSResult() == false) osrlerror(NULL, NULL, NULL, "Could not create OSResult");
 	//std::cout << "Parse a success" << std::endl;
 	return osresult;
+	
+	
 } // end yygetOSResult
 
 void osrlClearMemory(){
@@ -2190,7 +2273,7 @@ void osrlinitialize(){
 	statusDescription = "";
 	generalStatusType = "";
 	generalStatusDescription = "";
-	beginElementText = false;
+	//beginElementText = false;
 	statusTypePresent = false;
 	generalStatusTypePresent = false;
 	otherNamePresent = false;
@@ -2221,13 +2304,13 @@ bool createOSResult(){
 	// set basic problem parameters
 	/*
 	if(osresult->setVariableNumber( numberOfVariables) != true)
-		osrlerror("OSResult error: setVariableNumber");
+		osrlerror(NULL, NULL, NULL, "OSResult error: setVariableNumber");
 	if(osresult->setObjectiveNumber( numberOfObjectives) != true)
-		osrlerror("OSResult error: setObjectiveNumber");
+		osrlerror(NULL, NULL, NULL, "OSResult error: setObjectiveNumber");
 	if(osresult->setConstraintNumber( numberOfConstraints) != true)
-		osrlerror("OSResult error: setConstraintNumber");
+		osrlerror(NULL, NULL, NULL, "OSResult error: setConstraintNumber");
 	if(osresult->setSolutionNumber( numberOfSolutions) != true)
-		osrlerror("OSResult error: setSolutionNumer");
+		osrlerror(NULL, NULL, NULL, "OSResult error: setSolutionNumer");
 		*/
 	if( numberOfVariables > 0 ) osresult->setVariableNumber( numberOfVariables);
 	if( numberOfObjectives > 0) osresult->setObjectiveNumber( numberOfObjectives);

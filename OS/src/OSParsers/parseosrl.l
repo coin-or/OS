@@ -18,11 +18,11 @@
 #include <string.h>
 #include "OSConfig.h"
 #include "lexyaccparser.h"
-#include "externalvars.h"
+//#include "externalvars.h"
 
 
 #ifdef PARSERDEBUG
-	#define YY_PRINT  printf("%s", osrltext);
+	#define YY_PRINT  printf("%s", yytext);
 #else     
 	#define YY_PRINT ;
 #endif
@@ -34,8 +34,15 @@
 
 #include "parseosrl.tab.hpp"
 
+
      
 %}
+
+%option reentrant
+%option bison-bridge
+%option bison-locations
+
+
 %option prefix="osrl"
 %option yylineno   
 %option noyywrap  
@@ -61,9 +68,9 @@ endelementname (<\/[a-zA-Z][a-zA-Z0-9.:_]+)
 
 
  {quote} {YY_PRINT; return(QUOTE);}
-({xmlwhitespace}*{greater_than}) {YY_PRINT; if(beginElementText == true){BEGIN elementtext; } return(GREATERTHAN);}
--?[0-9]+  {YY_PRINT; osrllval.ival = atoi(osrltext); return(INTEGER);}
--?((([0-9]+)|([0-9]*\.[0-9]+))([eE][-+]?[0-9]+)?|INF) {YY_PRINT; osrllval.dval = atof(osrltext); return(DOUBLE);}
+({xmlwhitespace}*{greater_than}) {YY_PRINT; /*if(beginElementText == true){BEGIN elementtext; }*/ return(GREATERTHAN);}
+-?[0-9]+  {YY_PRINT; yylval->ival = atoi( yytext); return(INTEGER);}
+-?((([0-9]+)|([0-9]*\.[0-9]+))([eE][-+]?[0-9]+)?|INF) {YY_PRINT; yylval->dval = atof( yytext); return(DOUBLE);}
 ({xmlwhitespace}*\/>) {YY_PRINT;  return(ENDOFELEMENT);}
 
 
@@ -166,14 +173,14 @@ endelementname (<\/[a-zA-Z][a-zA-Z0-9.:_]+)
 
 
 
-<elementtext>([^\<])+ { YY_PRINT;  osrllval.charval = strdup(osrltext); BEGIN 0;  return(ELEMENTTEXT); }
-<attributetext>([^\"\'])+ {YY_PRINT;    osrllval.charval = strdup(osrltext);
+<elementtext>([^\<])+ { YY_PRINT;  yylval->charval = strdup(yytext); BEGIN 0;  return(ELEMENTTEXT); }
+<attributetext>([^\"\'])+ {YY_PRINT;    yylval->charval = strdup(yytext);
 							BEGIN 0;  return(ATTRIBUTETEXT);}
 							
-<osrlattributetext>([^>])* {YY_PRINT;  BEGIN 0; osrllval.charval = strdup(osrltext); return(OSRLATTRIBUTETEXT);}
+<osrlattributetext>([^>])* {YY_PRINT;  BEGIN 0; yylval->charval = strdup(yytext); return(OSRLATTRIBUTETEXT);}
 
 
-.|\n { osrlerror( "ecountered a spurious character in the lexer");}
+.|\n { /*osrlerror(NULL, NULL, NULL,  "ecountered a spurious character in the lexer");*/}
 
 
 

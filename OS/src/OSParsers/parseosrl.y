@@ -17,20 +17,38 @@
 
  
   
-#include "lexyaccparser.h"
-#include "externalvars.h"
+//#include "lexyaccparser.h"
+//#include "externalvars.h"
 #include "ErrorClass.h"
 #include "OSResult.h"
 #include "osrlparservariables.h"
+
+
+#include "OSrLParserData.h"
 #include <iostream>
 #include <sstream> 
 
  
-
-
-
+typedef struct yy_buffer_state *YY_BUFFER_STATE;
+YY_BUFFER_STATE osrl_scan_string (const char *yy_str , void* yyscanner  );
+int osrllex_init(void** ptr_yy_globals);
+int osrllex_destroy (void* yyscanner );
+int osrlget_lineno( void* yyscanner);
+char *osrlget_text (void* yyscanner );
+void osrlset_lineno (int line_number , void* yyscanner );
+OSResult *yygetOSResult( std::string parsestring) ;
+void osrlClearMemory();
 
 %}
+
+
+%pure-parser
+%locations
+%defines
+%parse-param{OSResult *osresult}
+%parse-param{OSrLParserData *parserData}
+%lex-param {void* scanner}
+
 
 %union {
 	double dval;
@@ -41,6 +59,14 @@
 /* %name-prefix="osrl" 
 this fails on in Mac OS X
 */
+
+%{
+int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner );
+void osrlerror(YYLTYPE* type, OSResult *osresult,  OSrLParserData *parserData ,const char* errormsg );
+
+ 
+#define scanner parserData->scanner
+%}
 
 %token <charval> ATTRIBUTETEXT
 %token <charval> ELEMENTTEXT
@@ -87,8 +113,8 @@ osrlstart:	OSRLSTART  GREATERTHAN
 
 resultHeader: RESULTHEADERSTART generalStatus serviceURI serviceName instanceName jobID headerMessage RESULTHEADEREND  ; 
    
-generalStatus: GENERALSTATUSSTART anotherGeneralStatusATT GREATERTHAN GENERALSTATUSEND {if(generalStatusTypePresent == false) osrlerror("a type attribute required for generalStatus element");}
-| GENERALSTATUSSTART anotherGeneralStatusATT ENDOFELEMENT {if(generalStatusTypePresent == false) osrlerror("a type attribute required for generalStatus element"); generalStatusTypePresent = false;};
+generalStatus: GENERALSTATUSSTART anotherGeneralStatusATT GREATERTHAN GENERALSTATUSEND {if(generalStatusTypePresent == false) osrlerror(NULL, NULL, NULL, "a type attribute required for generalStatus element");}
+| GENERALSTATUSSTART anotherGeneralStatusATT ENDOFELEMENT {if(generalStatusTypePresent == false) osrlerror(NULL, NULL, NULL, "a type attribute required for generalStatus element"); generalStatusTypePresent = false;};
 
 anotherGeneralStatusATT: generalstatusatt
 	| anotherGeneralStatusATT generalstatusatt  ;
@@ -196,11 +222,11 @@ anothersolution: SOLUTIONSTART objectiveIDXATT GREATERTHAN status message variab
 
 
 objectiveIDXATT: 
-| OBJECTIVEIDXATT INTEGER quote {if($2 >= 0) osrlerror("objective index must be nonpositive");
+| OBJECTIVEIDXATT INTEGER quote {if($2 >= 0) osrlerror(NULL, NULL, NULL, "objective index must be nonpositive");
 *(objectiveIdx + solutionIdx) = $2;};
 
-status: STATUSSTART anotherStatusATT GREATERTHAN  STATUSEND {if(statusTypePresent == false) osrlerror("a type attribute required for status element");}
-| STATUSSTART anotherStatusATT ENDOFELEMENT {if(statusTypePresent == false) osrlerror("a type attribute required for status element"); statusTypePresent = false;};
+status: STATUSSTART anotherStatusATT GREATERTHAN  STATUSEND {if(statusTypePresent == false) osrlerror(NULL, NULL, NULL, "a type attribute required for status element");}
+| STATUSSTART anotherStatusATT ENDOFELEMENT {if(statusTypePresent == false) osrlerror(NULL, NULL, NULL, "a type attribute required for status element"); statusTypePresent = false;};
 
 
 anotherStatusATT: statusatt
@@ -220,11 +246,11 @@ var: anothervar
 | var anothervar;
 
 anothervar: VARSTART anIDXATT GREATERTHAN DOUBLE VAREND { 
-	if(kounter < 0 || kounter > numberOfVariables - 1) osrlerror("index must be greater than 0 and less than the number of variables");
+	if(kounter < 0 || kounter > numberOfVariables - 1) osrlerror(NULL, NULL, NULL, "index must be greater than 0 and less than the number of variables");
 	*(primalSolution[solutionIdx] + kounter ) = $4;
 	}
 |  VARSTART anIDXATT GREATERTHAN INTEGER VAREND { 
-	if(kounter < 0 || kounter > numberOfVariables - 1) osrlerror("index must be greater than 0 and less than the number of variables");
+	if(kounter < 0 || kounter > numberOfVariables - 1) osrlerror(NULL, NULL, NULL, "index must be greater than 0 and less than the number of variables");
 	*(primalSolution[solutionIdx] + kounter) = $4;
 }; 
 
@@ -236,15 +262,15 @@ otherVariables:
 otherVariableResult:  OTHERSTART {  
     numberOfOtherVariableResult++;
 	otherVarStruct = new OtherVariableResultStruct(); 
-	otherVarStruct->rcost = new std::string[numberOfVariables];} anotherotherVarATT GREATERTHAN {if(otherNamePresent == false) osrlerror("other element requires name attribute"); 
+	otherVarStruct->rcost = new std::string[numberOfVariables];} anotherotherVarATT GREATERTHAN {if(otherNamePresent == false) osrlerror(NULL, NULL, NULL, "other element requires name attribute"); 
 	otherNamePresent = false;  
 	}  othervar OTHEREND {otherVarVec.push_back( otherVarStruct);};
  
 othervar: anotherothervar
 | othervar anotherothervar;
 
-anotherothervar: VARSTART anIDXATT {beginElementText = true;  }  GREATERTHAN ELEMENTTEXT  {beginElementText = false; } VAREND { 
-if(kounter < 0 || kounter > numberOfVariables - 1) osrlerror("index must be greater than 0 and less than the number of variables");
+anotherothervar: VARSTART anIDXATT {parserData->beginElementText = true;  }  GREATERTHAN ELEMENTTEXT  {parserData->beginElementText = false; } VAREND { 
+if(kounter < 0 || kounter > numberOfVariables - 1) osrlerror(NULL, NULL, NULL, "index must be greater than 0 and less than the number of variables");
 otherVarStruct->rcost[kounter] = $5;
 };
 
@@ -274,10 +300,10 @@ con: anothercon
 | con anothercon;
 
 anothercon: CONSTART anIDXATT GREATERTHAN DOUBLE CONEND { 
-	if(kounter < 0 || kounter > numberOfConstraints - 1) osrlerror("index must be greater than 0 and less than the number of constraints");
+	if(kounter < 0 || kounter > numberOfConstraints - 1) osrlerror(NULL, NULL, NULL, "index must be greater than 0 and less than the number of constraints");
 	*(dualSolution[solutionIdx] + kounter) = $4;}
 |  CONSTART anIDXATT GREATERTHAN INTEGER CONEND { 
-	if(kounter < 0 || kounter > numberOfConstraints - 1) osrlerror("index must be greater than 0 and less than the number of constraints");
+	if(kounter < 0 || kounter > numberOfConstraints - 1) osrlerror(NULL, NULL, NULL, "index must be greater than 0 and less than the number of constraints");
 	*(dualSolution[solutionIdx] + kounter) = $4;} ;
 
 
@@ -315,9 +341,9 @@ xmlWhiteSpace:
 
 %%
 
-void osrlerror(const char* errormsg)
+void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, const char* errormsg )
 {
-	try{
+	/*try{
 		ostringstream outStr;
 		std::string error = errormsg;
 		error = "Input is either not valid or well formed: "  + error;
@@ -331,19 +357,31 @@ void osrlerror(const char* errormsg)
 		catch(const ErrorClass& eclass){
 		throw ErrorClass(  eclass.errormsg);
 	}
+	*/
 } // end osrlerror
 
 OSResult *yygetOSResult(std::string parsestring){
 	void osrlinitialize();
 	bool createOSResult();
 	osrlinitialize();
-	osrl_scan_string( parsestring.c_str());
+	
+	
+	//OSInstance* osinstance = NULL;
+	OSrLParserData *parserData = NULL;
+	//osinstance = new OSInstance();
+	parserData = new OSrLParserData();
+	
+	// call the flex scanner
+    osrllex_init( &scanner);
+	osrl_scan_string( parsestring.c_str(), scanner);
 	std::cout << std::endl << std::endl;
 	//std::cout << "start parsing now" << std::endl;
-	osrlparse();
-	if( createOSResult() == false) osrlerror("Could not create OSResult");
+	osrlparse( osresult,  parserData);
+	if( createOSResult() == false) osrlerror(NULL, NULL, NULL, "Could not create OSResult");
 	//std::cout << "Parse a success" << std::endl;
 	return osresult;
+	
+	
 } // end yygetOSResult
 
 void osrlClearMemory(){
@@ -384,7 +422,7 @@ void osrlinitialize(){
 	statusDescription = "";
 	generalStatusType = "";
 	generalStatusDescription = "";
-	beginElementText = false;
+	//beginElementText = false;
 	statusTypePresent = false;
 	generalStatusTypePresent = false;
 	otherNamePresent = false;
@@ -415,13 +453,13 @@ bool createOSResult(){
 	// set basic problem parameters
 	/*
 	if(osresult->setVariableNumber( numberOfVariables) != true)
-		osrlerror("OSResult error: setVariableNumber");
+		osrlerror(NULL, NULL, NULL, "OSResult error: setVariableNumber");
 	if(osresult->setObjectiveNumber( numberOfObjectives) != true)
-		osrlerror("OSResult error: setObjectiveNumber");
+		osrlerror(NULL, NULL, NULL, "OSResult error: setObjectiveNumber");
 	if(osresult->setConstraintNumber( numberOfConstraints) != true)
-		osrlerror("OSResult error: setConstraintNumber");
+		osrlerror(NULL, NULL, NULL, "OSResult error: setConstraintNumber");
 	if(osresult->setSolutionNumber( numberOfSolutions) != true)
-		osrlerror("OSResult error: setSolutionNumer");
+		osrlerror(NULL, NULL, NULL, "OSResult error: setSolutionNumer");
 		*/
 	if( numberOfVariables > 0 ) osresult->setVariableNumber( numberOfVariables);
 	if( numberOfObjectives > 0) osresult->setObjectiveNumber( numberOfObjectives);

@@ -32,6 +32,7 @@
 class GeneralStatus {
 
 public:
+
 		
 	std::string type;
 		

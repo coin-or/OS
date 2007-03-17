@@ -346,7 +346,7 @@ int main(int argC, char* argV[])
 		m_Solver->osol = osol;
 		mps2osil->createOSInstance() ;
 		m_Solver->osil = osilwriter.writeOSiL( mps2osil->osinstance) ;
-		//std::cout << m_Solver->osil << std::endl;
+		std::cout << m_Solver->osil << std::endl;
 		// extra code
 		std::string outputfile = mpsFileName+"_osil";
 		char* testfile = &outputfile[0];
@@ -358,7 +358,7 @@ int main(int argC, char* argV[])
 		m_Solver->solve();
 		cout << endl << endl;
 		cout << "COIN solution of a OSiL string in b64 format" << endl;
-		//cout << m_Solver->osrl;
+		cout << m_Solver->osrl;
 		m_Solver->osinstance = NULL;
 		delete m_Solver;
 		m_Solver = NULL;

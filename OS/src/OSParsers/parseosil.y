@@ -126,7 +126,7 @@ int osillex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner );
 void osilerror(YYLTYPE* type, OSInstance *osintance,  OSiLParserData *parserData ,const char* errormsg );
 
  
-#define scanner osinstance->scanner
+#define scanner parserData->scanner
 %}
 
 %token QUOTE

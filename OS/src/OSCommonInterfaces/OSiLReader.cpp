@@ -16,10 +16,8 @@
 
 #include "OSiLReader.h"
 #include "OSInstance.h"
-//#include "lexyaccparser.h" 
+
 OSInstance *yygetOSInstance(const char *osil) throw(ErrorClass);
-
-
 OSiLReader::OSiLReader( ) {								
 }
 

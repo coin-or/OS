@@ -15,10 +15,12 @@
  */ 
 
 #include "OSrLReader.h"
-#include "OSResult.h"
-#include "lexyaccparser.h"   
+#include "OSResult.h" 
 #include "ErrorClass.h" 
 
+
+void osrlClearMemory();
+OSResult *yygetOSResult( std::string parsestring) ;
 
 
 OSrLReader::OSrLReader( ) {								

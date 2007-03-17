@@ -23,7 +23,6 @@
 #include "OSResult.h"
 
 
-
 class OSrLReader{  
 
 private:
