@@ -44,10 +44,11 @@ void osrlClearMemory();
 
 %pure-parser
 %locations
-%defines
+%lex-param {void* scanner}
+%lex-param {OSrLParserData *parserData}
 %parse-param{OSResult *osresult}
 %parse-param{OSrLParserData *parserData}
-%lex-param {void* scanner}
+
 
 
 %union {
@@ -61,7 +62,7 @@ this fails on in Mac OS X
 */
 
 %{
-int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner );
+int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner, OSrLParserData *parserData);
 void osrlerror(YYLTYPE* type, OSResult *osresult,  OSrLParserData *parserData ,const char* errormsg );
 
  
@@ -343,13 +344,13 @@ xmlWhiteSpace:
 
 void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, const char* errormsg )
 {
-	/*try{
-		ostringstream outStr;
+	try{
+		std::ostringstream outStr;
 		std::string error = errormsg;
 		error = "Input is either not valid or well formed: "  + error;
-		outStr << error << endl;
-		outStr << "Here is the last token read: " << osrltext << endl;
-		outStr << "See line number: " << osrllineno << endl;
+		outStr << error << std::endl;
+		//outStr << "Here is the last token read: " << osrltext << endl;
+		//outStr << "See line number: " << osrllineno << endl;
 		error = outStr.str();
 		throw ErrorClass( error);
 		throw error;
@@ -357,20 +358,16 @@ void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, 
 		catch(const ErrorClass& eclass){
 		throw ErrorClass(  eclass.errormsg);
 	}
-	*/
-} // end osrlerror
+} //end osrlerror
 
 OSResult *yygetOSResult(std::string parsestring){
 	void osrlinitialize();
 	bool createOSResult();
 	osrlinitialize();
-	
-	
 	//OSInstance* osinstance = NULL;
 	OSrLParserData *parserData = NULL;
 	//osinstance = new OSInstance();
 	parserData = new OSrLParserData();
-	
 	// call the flex scanner
     osrllex_init( &scanner);
 	osrl_scan_string( parsestring.c_str(), scanner);
@@ -380,9 +377,7 @@ OSResult *yygetOSResult(std::string parsestring){
 	if( createOSResult() == false) osrlerror(NULL, NULL, NULL, "Could not create OSResult");
 	//std::cout << "Parse a success" << std::endl;
 	return osresult;
-	
-	
-} // end yygetOSResult
+} //end yygetOSResult
 
 void osrlClearMemory(){
 	delete osresult;

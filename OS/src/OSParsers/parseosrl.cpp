@@ -930,9 +930,9 @@ static yyconst flex_int32_t yy_rule_can_match_eol[85] =
 #include <stdio.h>
 #include <string.h>
 #include "OSConfig.h"
-#include "lexyaccparser.h"
+//#include "lexyaccparser.h"
 //#include "externalvars.h"
-
+#include "OSrLParserData.h"
 
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", yytext);

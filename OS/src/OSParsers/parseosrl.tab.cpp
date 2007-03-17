@@ -298,7 +298,7 @@ typedef struct YYLTYPE
 /* Copy the second part of user declarations.  */
 
 
-int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner );
+int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner, OSrLParserData *parserData);
 void osrlerror(YYLTYPE* type, OSResult *osresult,  OSrLParserData *parserData ,const char* errormsg );
 
  
@@ -642,18 +642,18 @@ static const yytype_int16 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   107,   107,   109,   110,   114,   116,   117,   119,   120,
-     122,   123,   126,   127,   128,   129,   132,   133,   134,   135,
-     137,   138,   139,   140,   142,   143,   144,   145,   147,   148,
-     149,   150,   152,   153,   154,   156,   157,   159,   160,   163,
-     162,   190,   191,   193,   194,   196,   197,   198,   199,   203,
-     205,   207,   210,   214,   215,   216,   218,   224,   225,   228,
-     229,   232,   233,   235,   236,   238,   239,   240,   242,   243,
-     245,   246,   248,   252,   259,   260,   262,   265,   262,   269,
-     270,   272,   272,   272,   278,   279,   281,   282,   285,   286,
-     288,   289,   291,   293,   296,   297,   299,   300,   302,   305,
-     312,   318,   319,   321,   322,   324,   325,   331,   333,   334,
-     335,   336,   338,   339
+       0,   108,   108,   110,   111,   115,   117,   118,   120,   121,
+     123,   124,   127,   128,   129,   130,   133,   134,   135,   136,
+     138,   139,   140,   141,   143,   144,   145,   146,   148,   149,
+     150,   151,   153,   154,   155,   157,   158,   160,   161,   164,
+     163,   191,   192,   194,   195,   197,   198,   199,   200,   204,
+     206,   208,   211,   215,   216,   217,   219,   225,   226,   229,
+     230,   233,   234,   236,   237,   239,   240,   241,   243,   244,
+     246,   247,   249,   253,   260,   261,   263,   266,   263,   270,
+     271,   273,   273,   273,   279,   280,   282,   283,   286,   287,
+     289,   290,   292,   294,   297,   298,   300,   301,   303,   306,
+     313,   319,   320,   322,   323,   325,   326,   332,   334,   335,
+     336,   337,   339,   340
 };
 #endif
 
@@ -990,7 +990,7 @@ while (YYID (0))
 #ifdef YYLEX_PARAM
 # define YYLEX yylex (&yylval, &yylloc, YYLEX_PARAM)
 #else
-# define YYLEX yylex (&yylval, &yylloc, scanner)
+# define YYLEX yylex (&yylval, &yylloc, scanner, parserData)
 #endif
 
 /* Enable debugging if requested.  */
@@ -2194,13 +2194,13 @@ yyreturn:
 
 void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, const char* errormsg )
 {
-	/*try{
-		ostringstream outStr;
+	try{
+		std::ostringstream outStr;
 		std::string error = errormsg;
 		error = "Input is either not valid or well formed: "  + error;
-		outStr << error << endl;
-		outStr << "Here is the last token read: " << osrltext << endl;
-		outStr << "See line number: " << osrllineno << endl;
+		outStr << error << std::endl;
+		//outStr << "Here is the last token read: " << osrltext << endl;
+		//outStr << "See line number: " << osrllineno << endl;
 		error = outStr.str();
 		throw ErrorClass( error);
 		throw error;
@@ -2208,20 +2208,16 @@ void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, 
 		catch(const ErrorClass& eclass){
 		throw ErrorClass(  eclass.errormsg);
 	}
-	*/
-} // end osrlerror
+} //end osrlerror
 
 OSResult *yygetOSResult(std::string parsestring){
 	void osrlinitialize();
 	bool createOSResult();
 	osrlinitialize();
-	
-	
 	//OSInstance* osinstance = NULL;
 	OSrLParserData *parserData = NULL;
 	//osinstance = new OSInstance();
 	parserData = new OSrLParserData();
-	
 	// call the flex scanner
     osrllex_init( &scanner);
 	osrl_scan_string( parsestring.c_str(), scanner);
@@ -2231,9 +2227,7 @@ OSResult *yygetOSResult(std::string parsestring){
 	if( createOSResult() == false) osrlerror(NULL, NULL, NULL, "Could not create OSResult");
 	//std::cout << "Parse a success" << std::endl;
 	return osresult;
-	
-	
-} // end yygetOSResult
+} //end yygetOSResult
 
 void osrlClearMemory(){
 	delete osresult;
