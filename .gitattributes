@@ -62,6 +62,7 @@ OS/data/parinc.mps_osil -text
 OS/data/parincLinear.config -text
 OS/data/parincLinear.m -text
 OS/data/parincLinear.osil -text
+OS/data/parincLinear.osrl -text
 OS/data/parincLinearInteger.osil -text
 OS/data/parincLinearJun.osil -text
 OS/data/parincLinearRemote.config -text
