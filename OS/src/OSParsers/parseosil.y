@@ -44,7 +44,7 @@ double atofmod1(int* osillineno, const char *ch1, const char *ch2 );
 int atoimod1(int* osillineno, const char *ch1, const char *ch2);
 // we distinguish a newline from other whitespace
 // since we need to know when we hit a new line
-void osilerror_wrapper(int* osillineno, const char* errormsg);
+void osilerror_wrapper( const char* ch, int* osillineno, const char* errormsg);
 bool isnewline(char c, int* osillineno);
 bool parseVariables(const char **pchar, OSInstance *osinstance ,int* osillineno);
 bool parseObjectives(const char **pchar, OSInstance *osinstance ,int* osillineno);
@@ -66,10 +66,10 @@ char *parseBase64( const char **p, int *dataSize ,int* osillineno);
 
 #define GETATTRIBUTETEXT  	\
 	for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ; \
-	if( *ch != '=') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"found an attribute not defined"); return false;}  \
+	if( *ch != '=') {  osilerror_wrapper( ch, osillineno, "found an attribute not defined"); return false;}  \
 	ch++; \
 	for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;	\
-	if(*ch != '\"'  && *ch != '\"') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"missing quote on attribute"); return false;} \
+	if(*ch != '\"'  && *ch != '\"') {  osilerror_wrapper( ch, osillineno,"missing quote on attribute"); return false;} \
 	ch++; \
 	for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ; \
 	*p = ch; \
@@ -167,7 +167,7 @@ osildoc: quadraticcoefficients  nonlinearExpressions INSTANCEDATAEND  OSILEND;
 
 
 quadraticcoefficients: 
-	|  QUADRATICCOEFFICIENTSSTART  quadnumberatt qTermlist  QUADRATICCOEFFICIENTSEND {if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms > parserData->qtermcount ) osilerror_wrapper(&parserData->osillineno,"actual number of qterms less than numberOfQuadraticTerms");};
+	|  QUADRATICCOEFFICIENTSSTART  quadnumberatt qTermlist  QUADRATICCOEFFICIENTSEND {if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms > parserData->qtermcount ) osilerror( NULL, NULL, NULL,"actual number of qterms less than numberOfQuadraticTerms");};
    
 
 quadnumberatt: NUMBEROFQTERMSATT INTEGER quote GREATERTHAN  {
@@ -178,11 +178,11 @@ for(int i = 0; i < $2; i++) osinstance->instanceData->quadraticCoefficients->qTe
 qTermlist:  
 		| qTermlist qterm ;
 		   
-qterm: {if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms <= parserData->qtermcount ) osilerror_wrapper(&parserData->osillineno,"too many QuadraticTerms");} 
+qterm: {if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms <= parserData->qtermcount ) osilerror( NULL, NULL, NULL, "too many QuadraticTerms");} 
 QTERMSTART  anotherqTermATT  qtermend {parserData->qtermcount++; 
-if(!parserData->qtermidxattON)  osilerror_wrapper(&parserData->osillineno,"the qTerm attribute idx is required"); 
-if(!parserData->qtermidxOneattON)  osilerror_wrapper(&parserData->osillineno,"the qTerm attribute idxOne is required"); 
-if(!parserData->qtermidxTwoattON)  osilerror_wrapper(&parserData->osillineno,"the qTerm attribute idxTwo is required"); 
+if(!parserData->qtermidxattON)  osilerror( NULL, NULL, NULL,  "the qTerm attribute idx is required"); 
+if(!parserData->qtermidxOneattON)  osilerror( NULL, NULL, NULL, "the qTerm attribute idxOne is required"); 
+if(!parserData->qtermidxTwoattON)  osilerror( NULL, NULL, NULL, "the qTerm attribute idxTwo is required"); 
 parserData->qtermidattON = false; 
 parserData->qtermidxattON = false; 
 parserData->qtermidxOneattON = false; 
@@ -199,16 +199,16 @@ anotherqTermATT:
 
 
 qtermatt: qtermidxOneatt   quote
-			{ if(parserData->qtermidxOneattON) osilerror_wrapper(&parserData->osillineno,"too many qTerm idxOne attributes"); 
+			{ if(parserData->qtermidxOneattON) osilerror( NULL, NULL, NULL, "too many qTerm idxOne attributes"); 
 			parserData->qtermidxOneattON = true;  }
 		| qtermidxTwoatt  quote    
-			{ if(parserData->qtermidxTwoattON) osilerror_wrapper(&parserData->osillineno,"too many qTerm idxTwo attributes"); 
+			{ if(parserData->qtermidxTwoattON) osilerror( NULL, NULL, NULL, "too many qTerm idxTwo attributes"); 
 			parserData->qtermidxTwoattON = true;  }
 		| qtermcoefatt quote
-			{ if(parserData->qtermcoefattON) osilerror_wrapper(&parserData->osillineno,"too many qTerm coef attributes"); 
+			{ if(parserData->qtermcoefattON) osilerror( NULL, NULL, NULL, "too many qTerm coef attributes"); 
 			parserData->qtermcoefattON = true;  }
 		| qtermidxatt quote
-			{ if(parserData->qtermidxattON) osilerror_wrapper(&parserData->osillineno,"too many qTerm idx attributes"); 
+			{ if(parserData->qtermidxattON) osilerror( NULL, NULL, NULL, "too many qTerm idx attributes"); 
 			parserData->qtermidxattON = true;  }
 		;
 
@@ -226,7 +226,7 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
 
 nonlinearExpressions:  
 				| NONLINEAREXPRESSIONSSTART  nlnumberatt nlnodes NONLINEAREXPRESSIONSEND
-				{if(parserData->nlnodecount <  parserData->tmpnlcount)  osilerror_wrapper(&parserData->osillineno,"actual number of nl terms less than number attribute"); };
+				{if(parserData->nlnodecount <  parserData->tmpnlcount)  osilerror( NULL, NULL, NULL, "actual number of nl terms less than number attribute"); };
 				
 
 nlnumberatt: NUMBEROFNONLINEAREXPRESSIONS INTEGER quote  GREATERTHAN {parserData->tmpnlcount = $2;
@@ -249,7 +249,7 @@ nlIdxATT:  IDXATT INTEGER quote {
 osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount] = new Nl();
 osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->idx = $2;
 osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree = new OSExpressionTree();
-if(parserData->nlnodecount > parserData->tmpnlcount) osilerror_wrapper(&parserData->osillineno,"actual number of nl terms greater than number attribute");
+if(parserData->nlnodecount > parserData->tmpnlcount) osilerror( NULL, NULL, NULL, "actual number of nl terms greater than number attribute");
 // clear the vectors of pointers
 parserData->nlNodeVec.clear();
 parserData->sumVec.clear();
@@ -421,11 +421,11 @@ VARIABLEEND;
 anotherNumberATT:
 			|anotherNumberATT numberATT ;
 			
-numberATT: numbertypeATT quote {if(parserData->numbertypeattON) osilerror_wrapper(&parserData->osillineno,"too many number type attributes"); 
+numberATT: numbertypeATT quote {if(parserData->numbertypeattON) osilerror( NULL, NULL, NULL, "too many number type attributes"); 
 			parserData->numbertypeattON = true; }
-		| numbervalueATT quote {if(parserData->numbervalueattON) osilerror_wrapper(&parserData->osillineno,"too many number value attributes"); 
+		| numbervalueATT quote {if(parserData->numbervalueattON) osilerror( NULL, NULL, NULL, "too many number value attributes"); 
 			parserData->numbervalueattON = true; }
-		| numberidATT quote {if(parserData->numberidattON) osilerror_wrapper(&parserData->osillineno,"too many number id attributes"); 
+		| numberidATT quote {if(parserData->numberidattON) osilerror( NULL, NULL, NULL,"too many number id attributes"); 
 			parserData->numberidattON = true; }			
 			;
 			
@@ -449,9 +449,9 @@ numbervalueATT: VALUEATT  DOUBLE {
 anotherVariableATT:
 			|anotherVariableATT variableATT ;
 			
-variableATT: variablecoefATT quote {if(parserData->variablecoefattON) osilerror_wrapper(&parserData->osillineno,"too many variable coef attributes"); 
+variableATT: variablecoefATT quote {if(parserData->variablecoefattON) osilerror( NULL, NULL, NULL, "too many variable coef attributes"); 
 			parserData->variablecoefattON = true; }
-		| variableidxATT quote {if(parserData->variableidxattON) osilerror_wrapper(&parserData->osillineno,"too many variable idx attributes"); 
+		| variableidxATT quote {if(parserData->variableidxattON) osilerror( NULL, NULL, NULL, "too many variable idx attributes"); 
 			parserData->variableidxattON = true; };
 			
 variablecoefATT: COEFATT  DOUBLE {
@@ -540,8 +540,6 @@ bool isnewline(char c, int* osillineno){
 bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillineno){
 	//
 	*osillineno = 1;
-	const int numErrorChar = 20;
-	char errorArray[100] = "there was an error";
 	const char *pchar = *p;
 	// create a char array that holds the instance header information
 	const char *startInstanceHeader = "<instanceHeader";
@@ -556,7 +554,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 	char *pelementText = NULL;
 	char *ptemp = NULL;
 	int elementSize;
-	if(pinstanceHeadStart == NULL) {strncpy(errorArray, pchar, numErrorChar); osilerror_wrapper(osillineno,"<instanceHeader> element missing"); return false;}
+	if(pinstanceHeadStart == NULL) {  osilerror_wrapper( pchar,osillineno,"<instanceHeader> element missing"); return false;}
 	// increment the line number counter if there are any newlines between the start of
 	// the osil string and pinstanceHeadStart
 	int	kount = pinstanceHeadStart - pchar;
@@ -573,14 +571,14 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 	if( *pchar == '/'){
 		pchar++;
 		// better point to a '>'
-		if(*pchar != '>') {strncpy(errorArray, pchar, numErrorChar); osilerror_wrapper(osillineno,"improperly formed <instanceHeader> element"); return false;}
+		if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <instanceHeader> element"); return false;}
 		// there is no instanceHeader data
 		pchar++;
 		return true;
 	}
 	else{
 		// pchar better be '>' or there is an error
-		if(*pchar != '>') {strncpy(errorArray, pchar, numErrorChar); osilerror_wrapper(osillineno,"improperly formed <instanceHeader> element"); return false;}
+		if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <instanceHeader> element"); return false;}
 	}
 	pchar++;
 	// we are pointing to the character after <instanceHeader>
@@ -606,16 +604,16 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 		if( *pchar == '/'){
 			pchar++;
 			// better point to a '>'
-			if(*pchar != '>') {strncpy(errorArray, pchar, numErrorChar); osilerror_wrapper(osillineno,"improperly formed <name> element"); return false;}
+			if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <name> element"); return false;}
 		}
 		else{
 			// pchar better be '>' or there is an error
-			if(*pchar != '>') {strncpy(errorArray, pchar, numErrorChar); osilerror_wrapper(osillineno,"improperly formed <name> element"); return false;}
+			if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <name> element"); return false;}
 			pchar++;
 			// proces <name> element text
 			// there better be a </name
 			ptemp = strstr( pchar, endName);
-			if( ptemp == NULL) {strncpy(errorArray, pchar, numErrorChar); osilerror_wrapper(osillineno,"improperly formed </name> element"); return false;}
+			if( ptemp == NULL) {  osilerror_wrapper( pchar,osillineno,"improperly formed </name> element"); return false;}
 			elementSize = ptemp - pchar;
 			pelementText = new char[ elementSize + 1];
 			strncpy(pelementText, pchar, elementSize);
@@ -633,7 +631,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 			// get rid of the whitespace
 			for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;	
 			// we better have the '>' for the end of name
-			if(*pchar++ != '>'){strncpy(errorArray, pchar, numErrorChar); osilerror_wrapper(osillineno,"improperly formed </name> element"); return false;}
+			if(*pchar++ != '>'){  osilerror_wrapper( pchar,osillineno,"improperly formed </name> element"); return false;}
 		}
 	}// end of else after discovering a name element
 	//done processing name element
@@ -657,16 +655,16 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 		if( *pchar == '/'){
 			pchar++;
 			// better point to a '>'
-			if(*pchar != '>') {strncpy(errorArray, pchar, numErrorChar); osilerror_wrapper(osillineno,"improperly formed <source> element"); return false;}
+			if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <source> element"); return false;}
 		}
 		else{
 			// pchar better be '>' or there is an error
-			if(*pchar != '>') {strncpy(errorArray, pchar, numErrorChar); osilerror_wrapper(osillineno,"improperly formed <source> element"); return false;}
+			if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <source> element"); return false;}
 			pchar++;
 			// proces <source> element text
 			// there better be a </source
 			ptemp = strstr( pchar, endSource);
-			if( ptemp == NULL) {strncpy(errorArray, pchar, numErrorChar); osilerror_wrapper(osillineno,"improperly formed </source> element"); return false;}
+			if( ptemp == NULL) {  osilerror_wrapper( pchar,osillineno,"improperly formed </source> element"); return false;}
 			elementSize = ptemp - pchar;
 			pelementText = new char[ elementSize + 1];
 			strncpy(pelementText, pchar, elementSize);
@@ -684,7 +682,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 			// get rid of the whitespace
 			for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;	
 			// we better have the '>' for the end of source
-			if(*pchar++ != '>'){strncpy(errorArray, pchar, numErrorChar); osilerror_wrapper(osillineno,"improperly formed </source> element"); return false;}
+			if(*pchar++ != '>'){  osilerror_wrapper( pchar,osillineno,"improperly formed </source> element"); return false;}
 		}
 	}// end of else after discovering a source element
 	//done processing <source> element
@@ -708,16 +706,16 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 		if( *pchar == '/'){
 			pchar++;
 			// better point to a '>'
-			if(*pchar != '>') {strncpy(errorArray, pchar, numErrorChar); osilerror_wrapper(osillineno,"improperly formed <description> element"); return false;}
+			if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <description> element"); return false;}
 		}
 		else{
 			// pchar better be '>' or there is an error
-			if(*pchar != '>') {strncpy(errorArray, pchar, numErrorChar); osilerror_wrapper(osillineno,"improperly formed <description> element"); return false;}
+			if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <description> element"); return false;}
 			pchar++;
 			// proces <source> element text
 			// there better be a </description
 			ptemp = strstr( pchar, endDescription);
-			if( ptemp == NULL) {strncpy(errorArray, pchar, numErrorChar); osilerror_wrapper(osillineno,"improperly formed </description> element"); return false;}
+			if( ptemp == NULL) {  osilerror_wrapper( pchar,osillineno,"improperly formed </description> element"); return false;}
 			elementSize = ptemp - pchar;
 			pelementText = new char[ elementSize + 1];
 			strncpy(pelementText, pchar, elementSize);
@@ -735,7 +733,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 			// get rid of the whitespace
 			for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;	
 			// we better have the '>' for the end of </description>
-			if(*pchar++ != '>'){strncpy(errorArray, pchar, numErrorChar); osilerror_wrapper(osillineno,"improperly formed </description> element"); return false;}
+			if(*pchar++ != '>'){  osilerror_wrapper( pchar,osillineno,"improperly formed </description> element"); return false;}
 		}
 	}// end of else after discovering a description element
 	//done processing <description> element
@@ -746,12 +744,12 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 	// we should be pointing to </instanceHeader
 	*p = pchar;
 	while(*endInstanceHeader++  == *pchar) pchar++;
-	if( (pchar - *p) != 16) {strncpy(errorArray, pchar, numErrorChar); osilerror_wrapper(osillineno,"improperly formed </instanceHeader> element"); return false;}	
+	if( (pchar - *p) != 16) {  osilerror_wrapper( pchar,osillineno,"improperly formed </instanceHeader> element"); return false;}	
 	// pchar now points to the first character after </instanceHeader
 	// get rid of white space
 	for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;	
 	// pchar must point to '>' or there is an error
-	if(*pchar != '>'){strncpy(errorArray, pchar, numErrorChar); osilerror_wrapper(osillineno,"improperly formed </instanceHeader> element"); return false;}	
+	if(*pchar != '>'){  osilerror_wrapper( pchar,osillineno,"improperly formed </instanceHeader> element"); return false;}	
 	pchar++;
 	*p = pchar;
 	return true;
@@ -759,8 +757,6 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 
 
 bool parseInstanceData( const char **p, OSInstance *osinstance, int* osillineno){
-	const int numErrorChar = 20;
-	char errorArray[100] = "there was an error";
 	//
 	const char *pchar = *p;
 	const char *startInstanceData = "<instanceData";
@@ -768,14 +764,14 @@ bool parseInstanceData( const char **p, OSInstance *osinstance, int* osillineno)
 	// burn the white space
 	for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;	
 	// pchar should be point to a '<', if not there is an error
-	if(*pchar != '<'){strncpy(errorArray, pchar, numErrorChar); osilerror_wrapper(osillineno,"improperly formed <instanceData element"); return false;}
+	if(*pchar != '<'){  osilerror_wrapper( pchar,osillineno,"improperly formed <instanceData element"); return false;}
 	// make sure the element is <instanceData	
 	*p = pchar;
 	while(*startInstanceData++  == *pchar) pchar++;
-	if( (pchar - *p) != 13) {strncpy(errorArray, pchar, numErrorChar); osilerror_wrapper(osillineno,"improperly formed <instanceData> element"); return false;}	
+	if( (pchar - *p) != 13) {  osilerror_wrapper( pchar,osillineno,"improperly formed <instanceData> element"); return false;}	
 	// now burn whitespace
 	// pchar must point to '>' or there is an error
-	if(*pchar != '>'){strncpy(errorArray, pchar, numErrorChar); osilerror_wrapper(osillineno,"improperly formed <instanceData> element"); return false;}	
+	if(*pchar != '>'){  osilerror_wrapper( pchar,osillineno,"improperly formed <instanceData> element"); return false;}	
 	pchar++;
 	// we are now pointing to the first char after <instanceData>
 	// burn any whitespace
@@ -794,8 +790,6 @@ bool parseInstanceData( const char **p, OSInstance *osinstance, int* osillineno)
 bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 	clock_t start, finish;
 	double duration;
-	const int numErrorChar = 20;
-	char errorArray[100] = "there was an error";
 	int ki, numChar;
 	char *attTextEnd;
 	const char *ch = *p;
@@ -828,20 +822,20 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 	// start parsing
 	*p = ch;
 	while(*startVariables++  == *ch) ch++;
-	if( (ch - *p) != 10) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"incorrect <variables tag>"); return false;}
+	if( (ch - *p) != 10) {  osilerror_wrapper( ch,osillineno,"incorrect <variables tag>"); return false;}
 	// find numberOfVariables attribute
 	// eat the white space
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
 	*p = ch;
 	while(*c_numberOfVariables++  == *ch) ch++;
-	if( (ch - *p) != 17) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"incorrect numberOfVariables attribute in <variables tag>"); return false;}	
+	if( (ch - *p) != 17) {  osilerror_wrapper( ch,osillineno,"incorrect numberOfVariables attribute in <variables tag>"); return false;}	
 	// buf_index should be pointing to the first character after numberOfVariables
 	GETATTRIBUTETEXT;
 	ch++;
 	numberOfVariables = atoimod1( osillineno, attText, attTextEnd);
 	delete [] attText;
 	if(numberOfVariables <= 0) {
-		osilerror_wrapper(osillineno,"there must be at least one variable"); return false;
+		osilerror_wrapper( ch,osillineno,"there must be at least one variable"); return false;
 	}
 	osinstance->instanceData->variables->numberOfVariables = numberOfVariables;
 	osinstance->instanceData->variables->var = new Variable*[ numberOfVariables];
@@ -852,7 +846,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ )                     
 	// since there must be at least one variable,  this element must end with > 
 	// better have an > sign or not valid
-	if(*ch != '>' ) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"variables element does not have a proper closing >"); return false;}
+	if(*ch != '>' ) {  osilerror_wrapper( ch,osillineno,"variables element does not have a proper closing >"); return false;}
 	ch++;
 	// get rid of white space
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
@@ -860,7 +854,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 	*p = ch;                                            
 	while(*startVar++  == *ch) ch++;
 	if( (ch - *p) ==  4) foundVar = true;
-		else {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"there must be at least one <var> element"); return false;}
+		else {  osilerror_wrapper( ch,osillineno,"there must be at least one <var> element"); return false;}
 	startVar -= 5;
 	while(foundVar){
 		varlbattON  = false;
@@ -879,9 +873,9 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 			case 'n':
 				*p = ch;
 				while(*name++  == *ch) ch++;
-				if( (ch - *p) != 4 ) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"error in variables name attribute"); return false;}
+				if( (ch - *p) != 4 ) {  osilerror_wrapper( ch,osillineno,"error in variables name attribute"); return false;}
 				name -= 5;
-				if(varnameattON == true) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"error too many variable name attributes"); return false;}
+				if(varnameattON == true) {  osilerror_wrapper( ch,osillineno,"error too many variable name attributes"); return false;}
 				varnameattON = true;
 				GETATTRIBUTETEXT;
 				osinstance->instanceData->variables->var[varcount]->name=attText;
@@ -894,9 +888,9 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 				// if i < 4 there is an error
 				// if i = 4 we matched init
 				// if i = 10 we matched initString
-				if( ( (ch - *p) != 4)  && (i != 10)) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"error in variables init or initString attribute"); return false;}
+				if( ( (ch - *p) != 4)  && (i != 10)) {  osilerror_wrapper( ch,osillineno,"error in variables init or initString attribute"); return false;}
 				if((ch - *p) == 4){
-					if(varinitattON == true) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"error too many variable init attributes"); return false;}
+					if(varinitattON == true) {  osilerror_wrapper( ch,osillineno,"error too many variable init attributes"); return false;}
 					varinitattON = true;
 					GETATTRIBUTETEXT;
 					//printf("ATTRIBUTE = %s\n", attText);
@@ -905,7 +899,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 					initString -= 5;
 				}
 				else{
-					if(varinitStringattON == true) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"error too many variable initString attributes"); return false;}
+					if(varinitStringattON == true) {  osilerror_wrapper( ch,osillineno,"error too many variable initString attributes"); return false;}
 					varinitStringattON = true;
 					GETATTRIBUTETEXT;
 					delete [] attText;
@@ -917,19 +911,19 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 			case 't':
 				*p = ch;
 				while(*type++  == *ch) ch++;
-				if( (ch - *p) != 4) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"error in variables type attribute"); return false;}
+				if( (ch - *p) != 4) {  osilerror_wrapper( ch,osillineno,"error in variables type attribute"); return false;}
 				type -= 5;
-				if(vartypeattON == true) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"error too many variable type attributes"); return false;}
+				if(vartypeattON == true) {  osilerror_wrapper( ch,osillineno,"error too many variable type attributes"); return false;}
 				vartypeattON = true;
 				GETATTRIBUTETEXT;
-				if( strchr("CBIS", attText[0]) == NULL ) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"variable type not C,B,I, or S"); return false;}
+				if( strchr("CBIS", attText[0]) == NULL ) {  osilerror_wrapper( ch,osillineno,"variable type not C,B,I, or S"); return false;}
 				osinstance->instanceData->variables->var[varcount]->type = attText[0];
 				delete [] attText;
 				break;
 			case 'l':
 				ch++;
-				if(*ch++ != 'b') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"error in variables lower bound attribute"); return false;}
-				if(varlbattON == true) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"error too many variable lb attributes"); return false;}
+				if(*ch++ != 'b') {  osilerror_wrapper( ch,osillineno,"error in variables lower bound attribute"); return false;}
+				if(varlbattON == true) {  osilerror_wrapper( ch,osillineno,"error too many variable lb attributes"); return false;}
 				varlbattON = true;
 				GETATTRIBUTETEXT;
 				osinstance->instanceData->variables->var[varcount]->lb = atofmod1( osillineno,attText, attTextEnd);
@@ -938,8 +932,8 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 				break;
 			case 'u':
 				ch++;
-				if(*ch++ != 'b') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"error in variables upper bound attribute"); return false;}
-				if(varubattON == true) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"error too many variable ub attributes"); return false;}
+				if(*ch++ != 'b') {  osilerror_wrapper( ch,osillineno,"error in variables upper bound attribute"); return false;}
+				if(varubattON == true) {  osilerror_wrapper( ch,osillineno,"error too many variable ub attributes"); return false;}
 				varubattON = true;
 				GETATTRIBUTETEXT;
 				osinstance->instanceData->variables->var[varcount]->ub = atofmod1( osillineno,attText, attTextEnd);
@@ -949,9 +943,9 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 			case 'm':
 				*p = ch;
 				while(*mult++  == *ch) ch++;
-				if( (ch - *p) != 4) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"error in variables mult attribute"); return false;}
+				if( (ch - *p) != 4) {  osilerror_wrapper( ch,osillineno,"error in variables mult attribute"); return false;}
 				mult -= 5;
-				if(varmultattON == true) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"error too many variable mult attributes"); return false;}
+				if(varmultattON == true) {  osilerror_wrapper( ch,osillineno,"error too many variable mult attributes"); return false;}
 				varmultattON = true;
 				GETATTRIBUTETEXT;
 				delete [] attText;
@@ -967,7 +961,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 			case '\r':
 				break;
 			default:
-				{strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"invalid attribute character"); return false;}
+				{  osilerror_wrapper( ch,osillineno,"invalid attribute character"); return false;}
 				break;
 			}
 			ch++;
@@ -975,10 +969,10 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 		//
 		// assume all the attributes have been processed
 		// must have either /> or > and then whitespace and </var whitespace>
-		if( *ch != '/' && *ch != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"incorrect end of <var> element"); return false;}
+		if( *ch != '/' && *ch != '>') {  osilerror_wrapper( ch,osillineno,"incorrect end of <var> element"); return false;}
 		if(*ch == '/'){
 			ch++;
-			if(*ch != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"incorrect end of <var> element"); return false;}
+			if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"incorrect end of <var> element"); return false;}
 			// get rid of whitespace
 			ch++;
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
@@ -997,7 +991,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 		else{
 			// the buf_index is the > at the end of the var element 
 			// double check to make sure it really is a >
-			if(*ch != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"improper ending to a <var> element"); return false;}
+			if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improper ending to a <var> element"); return false;}
 			// look for </var
 			// fist get rid of white space
 			ch++;
@@ -1006,11 +1000,11 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 			*p = ch;
 			while(*endVar++  == *ch) ch++;
 			endVar -= 6;
-			if( (ch - *p) != 5) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"</var> element missing"); return false;}
+			if( (ch - *p) != 5) {  osilerror_wrapper( ch,osillineno,"</var> element missing"); return false;}
 			// burn off the whitespace
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
 			// better have an > to end </var
-			if(*ch++ != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"</var> element missing >"); return false;}
+			if(*ch++ != '>') {  osilerror_wrapper( ch,osillineno,"</var> element missing >"); return false;}
 			// look for a new <var> element
 			// get rid of whitespace
 			ch++;
@@ -1027,17 +1021,17 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 				ch = *p;
 			}
 		}
-		if( (varcount == numberOfVariables - 1) && (foundVar == true) ) {strncpy(errorArray, ch, numErrorChar);  osilerror_wrapper(osillineno,"attribute numberOfVariables is less than actual number found");  return false;}
+		if( (varcount == numberOfVariables - 1) && (foundVar == true) ) {   osilerror_wrapper( ch,osillineno,"attribute numberOfVariables is less than actual number found");  return false;}
 		varcount++;
 	}
-	if(varcount < numberOfVariables) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"attribute numberOfVariables is greater than actual number found");   return false;}
+	if(varcount < numberOfVariables) {  osilerror_wrapper( ch,osillineno,"attribute numberOfVariables is greater than actual number found");   return false;}
 	// get the </variables> tag
 	*p = ch;
 	while(*endVariables++  == *ch) ch++;
-	if( (ch - *p) != 11) {strncpy(errorArray, ch, numErrorChar);  osilerror_wrapper(osillineno,"cannot find </varialbes> tag"); return false;}
+	if( (ch - *p) != 11) {   osilerror_wrapper( ch,osillineno,"cannot find </varialbes> tag"); return false;}
 	for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );	
 	// better have >
-	if(*ch != '>') {strncpy(errorArray, ch, numErrorChar);  osilerror_wrapper(osillineno,"improperly formed </variables> tag"); return false;}
+	if(*ch != '>') {   osilerror_wrapper( ch,osillineno,"improperly formed </variables> tag"); return false;}
 	ch++;
 	finish = clock();
 	//duration = (double) (finish - start) / CLOCKS_PER_SEC; 
@@ -1050,8 +1044,6 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 	clock_t start, finish;
 	double duration;
-	const int numErrorChar = 20;
-	char errorArray[100] = "there was an error";
 	int ki, numChar;
 	char *attTextEnd;
 	const char *ch = *p;
@@ -1104,7 +1096,7 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 	else{
 		*p = ch;
 		while( *c_numberOfObjectives++  == *ch) ch++;
-		if( (ch - *p) != 18) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"incorrect numberOfObjectives attribute in <objectives> tag"); return false;}	
+		if( (ch - *p) != 18) {  osilerror_wrapper( ch,osillineno,"incorrect numberOfObjectives attribute in <objectives> tag"); return false;}	
 		GETATTRIBUTETEXT;
 		numberOfObjectives = atoimod1( osillineno, attText, attTextEnd);
 		delete [] attText;
@@ -1116,14 +1108,14 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 		// we must have an >
 		/*if(*ch == '/'){
 			ch++;
-			if( *ch++ != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"the objectives element does not have a proper closing"); return false; }
+			if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"the objectives element does not have a proper closing"); return false; }
 			else{
-				if(numberOfObjectives > 0){strncpy(errorArray, ch, numErrorChar);  osilerror_wrapper(osillineno,"numberOfObjectives positive but there are no objectives"); return false;}
+				if(numberOfObjectives > 0){   osilerror_wrapper( ch,osillineno,"numberOfObjectives positive but there are no objectives"); return false;}
 				return false;
 			}
 		}*/
 		//  we better have an > 
-		if( *ch++ != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"the objectives element does not have a proper closing"); return false;} 
+		if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"the objectives element does not have a proper closing"); return false;} 
 		osinstance->instanceData->objectives->numberOfObjectives = numberOfObjectives;
 		osinstance->instanceData->objectives->obj = new Objective*[ numberOfObjectives];
 		for(i = 0; i < numberOfObjectives; i++){
@@ -1135,7 +1127,7 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 	*p = ch;
 	while( *startObj++  == *ch) ch++;
 	if( (ch - *p) == 4) foundObj = true;
-		else {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"there must be at least one <obj> element"); return false;}
+		else {  osilerror_wrapper( ch,osillineno,"there must be at least one <obj> element"); return false;}
 	startObj -= 5;
 	start = clock();	
 	while(foundObj){
@@ -1155,9 +1147,9 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 					*p = ch;
 					while( *numberOfObjCoef++  == *ch) ch++;
 					numberOfObjCoef -= 16;
-					if( ( (ch - *p) != 15)  ) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"error in objective numberOfObjCoef attribute"); return false;}
+					if( ( (ch - *p) != 15)  ) {  osilerror_wrapper( ch,osillineno,"error in objective numberOfObjCoef attribute"); return false;}
 					else{
-						if(objnumberOfObjCoefattON == true) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"error too many obj numberOfObjCoefatt attributes"); return false;}
+						if(objnumberOfObjCoefattON == true) {  osilerror_wrapper( ch,osillineno,"error too many obj numberOfObjCoefatt attributes"); return false;}
 						objnumberOfObjCoefattON = true;
 						GETATTRIBUTETEXT;
 						//printf("ATTRIBUTE = %s\n", attText);
@@ -1171,9 +1163,9 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 					*p = ch;
 					while( *name++  == *ch) ch++;
 					name -= 5;
-					if( ( (ch - *p) != 4)  ) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"error in objective name attribute"); return false;}
+					if( ( (ch - *p) != 4)  ) {  osilerror_wrapper( ch,osillineno,"error in objective name attribute"); return false;}
 					else{
-						if(objnameattON == true) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"error too many obj name attributes"); return false;}
+						if(objnameattON == true) {  osilerror_wrapper( ch,osillineno,"error too many obj name attributes"); return false;}
 						objnameattON = true;
 						GETATTRIBUTETEXT;
 						//printf("ATTRIBUTE = %s\n", attText);
@@ -1186,9 +1178,9 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 				*p = ch;
 				while( *constant++  == *ch) ch++;
 				constant -= 9;	
-				if( ( (ch - *p) != 8)  ) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"error in objective constant attribute"); return false;}
+				if( ( (ch - *p) != 8)  ) {  osilerror_wrapper( ch,osillineno,"error in objective constant attribute"); return false;}
 				else{
-					if(objconstantattON == true) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"error too many obj constant attributes"); return false;}
+					if(objconstantattON == true) {  osilerror_wrapper( ch,osillineno,"error too many obj constant attributes"); return false;}
 					objconstantattON = true;
 					GETATTRIBUTETEXT;
 					//printf("ATTRIBUTE = %s\n", attText);
@@ -1200,9 +1192,9 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 				*p = ch;
 				while( *weight++  == *ch) ch++;
 				weight -= 7;
-				if( ( (ch - *p) != 6)  ) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"error in objective weight attribute"); return false;}
+				if( ( (ch - *p) != 6)  ) {  osilerror_wrapper( ch,osillineno,"error in objective weight attribute"); return false;}
 				else{
-					if(objweightattON == true) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"error too many obj weight attributes"); return false;}
+					if(objweightattON == true) {  osilerror_wrapper( ch,osillineno,"error too many obj weight attributes"); return false;}
 					objweightattON = true;
 					GETATTRIBUTETEXT;
 					//printf("ATTRIBUTE = %s\n", attText);
@@ -1215,13 +1207,13 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 					*p = ch;
 					while( *maxOrMin++  == *ch) ch++;
 					maxOrMin -= 9;
-					if( ( ( ch - *p)  != 8)  ) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"error in objective maxOrMin attribute"); return false;}
+					if( ( ( ch - *p)  != 8)  ) {  osilerror_wrapper( ch,osillineno,"error in objective maxOrMin attribute"); return false;}
 					else{
-						if(objmaxOrMinattON == true) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"error too many obj maxOrMin attributes"); return false;}
+						if(objmaxOrMinattON == true) {  osilerror_wrapper( ch,osillineno,"error too many obj maxOrMin attributes"); return false;}
 						objmaxOrMinattON = true;
 						GETATTRIBUTETEXT;
 						//printf("ATTRIBUTE = %s\n", attText);
-						if( (strcmp("max", attText) != 0 ) && (strcmp("min", attText) != 0 ) ){osilerror_wrapper(osillineno,"maxOrMin attribute in objective must be a max or min"); return false;}
+						if( (strcmp("max", attText) != 0 ) && (strcmp("min", attText) != 0 ) ){osilerror_wrapper( ch,osillineno,"maxOrMin attribute in objective must be a max or min"); return false;}
 						osinstance->instanceData->objectives->obj[objcount]->maxOrMin = attText;
 						delete [] attText;
 					}
@@ -1230,9 +1222,9 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 					*p = ch;
 					while( *mult++  == *ch) ch++;
 					mult -= 5;
-					if( ( (ch - *p) != 4)  ) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"error in objective mult attribute"); return false;}
+					if( ( (ch - *p) != 4)  ) {  osilerror_wrapper( ch,osillineno,"error in objective mult attribute"); return false;}
 					else{
-						if(objmultattON == true) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"error too many obj mult attributes"); return false;}
+						if(objmultattON == true) {  osilerror_wrapper( ch,osillineno,"error too many obj mult attributes"); return false;}
 						objmultattON = true;
 						GETATTRIBUTETEXT;
 						//printf("ATTRIBUTE = %s\n", attText);
@@ -1252,8 +1244,8 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 			case '\r':
 				break;
 			default:
-				strncpy(errorArray, ch, numErrorChar);
-				osilerror_wrapper(osillineno,"invalid attribute character");
+				 
+				osilerror_wrapper( ch,osillineno,"invalid attribute character");
 				return false;
 				break;
 			}
@@ -1262,10 +1254,10 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 		//
 		// assume all the attributes have been processed
 		// must have either /> or > and then whitespace and </obj whitespace>
-		if( *ch != '/' && *ch != '>') {strncpy(errorArray, ch, numErrorChar);  osilerror_wrapper(osillineno,"incorrect end of <obj> element"); return false;}
+		if( *ch != '/' && *ch != '>') {   osilerror_wrapper( ch,osillineno,"incorrect end of <obj> element"); return false;}
 		if(*ch == '/'){
 			ch++;
-			if(*ch != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"incorrect end of <obj> element"); return false;}
+			if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"incorrect end of <obj> element"); return false;}
 			// get rid of whitespace
 			ch++;
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
@@ -1277,7 +1269,7 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 		else{
 			// the ch is the > at the end of the obj element
 			// double check to make sure it really is a >
-			if(*ch != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"improper ending to a <obj> element"); return false;}
+			if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improper ending to a <obj> element"); return false;}
 			// look for </obj
 			// fist get rid of white space
 			ch++;
@@ -1286,11 +1278,11 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
 			// we should be at </obj or there is an error
 			for(i = 0; endObj[i]  == *ch; i++, ch++);
-			if(i != 5) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"</obj> element missing"); return false;}
+			if(i != 5) {  osilerror_wrapper( ch,osillineno,"</obj> element missing"); return false;}
 			// burn off the whitespace
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
 			// better have an > to end </obj
-			if(*ch++ != '>'){strncpy(errorArray, ch, numErrorChar);  osilerror_wrapper(osillineno,"</obj> element missing >"); return false;}
+			if(*ch++ != '>'){   osilerror_wrapper( ch,osillineno,"</obj> element missing >"); return false;}
 			// look for a new <obj> element
 			// get rid of whitespace
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
@@ -1299,22 +1291,22 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 			if(i == 4) foundObj = true;
 				else foundObj = false;
 		}
-		if( (objcount == numberOfObjectives - 1) && (foundObj == true)) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"attribute numberOfObjectives is less than actual number found"); return false;}
+		if( (objcount == numberOfObjectives - 1) && (foundObj == true)) {  osilerror_wrapper( ch,osillineno,"attribute numberOfObjectives is less than actual number found"); return false;}
 		objcount++;
 	}
-	if(objcount < numberOfObjectives) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"attribute numberOfObjectives is greater than actual number found"); return false;}
+	if(objcount < numberOfObjectives) {  osilerror_wrapper( ch,osillineno,"attribute numberOfObjectives is greater than actual number found"); return false;}
 	ch -= i;
 	// get the </objectives> tag
 	for(i = 0; endObjectives[i]  == *ch; i++, ch++);
-	if(i != 12) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno, "cannot find </objectives> tag"); return false; }
+	if(i != 12) {  osilerror_wrapper( ch,osillineno, "cannot find </objectives> tag"); return false; }
 	for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );	
 	// better have >
-	if(*ch != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"improperly formed </objectives> tag"); return false;}	
+	if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </objectives> tag"); return false;}	
 	ch++;
 	} // finish the (if numberOfObjectives > 0)
 	else{
 		// error if the number is negative
-		if(numberOfObjectives < 0) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"cannot have a negative number of objectives"); return false;}
+		if(numberOfObjectives < 0) {  osilerror_wrapper( ch,osillineno,"cannot have a negative number of objectives"); return false;}
 		// if we are here we have exactly 0 objectives 
 		// must close with /> or </objectives>
 		// get rid of white space
@@ -1322,20 +1314,20 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 		if( *ch == '/'){
 			// better have a >
 			ch++;
-			if( *ch  != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"improperly closed objectives tag"); return false;}
+			if( *ch  != '>') {  osilerror_wrapper( ch,osillineno,"improperly closed objectives tag"); return false;}
 			ch++;
 		}
 		else{
 			// if we are here we must have an '>' and then  </objectives> tag
-			if( *ch  != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"improperly closed objectives tag"); return false;}
+			if( *ch  != '>') {  osilerror_wrapper( ch,osillineno,"improperly closed objectives tag"); return false;}
 			ch++;
 			// burn white space
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
 			for(i = 0; endObjectives[i]  == *ch; i++, ch++);
-			if(i != 12) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno, "cannot find </objectives> tag"); return false; }
+			if(i != 12) {  osilerror_wrapper( ch,osillineno, "cannot find </objectives> tag"); return false; }
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );	
 			// better have >
-			if(*ch != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"improperly formed </objectives> tag"); return false;}	
+			if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </objectives> tag"); return false;}	
 			ch++;
 		}
 	}
@@ -1349,8 +1341,6 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
 	clock_t start, finish;
 	double duration;
-	const int numErrorChar = 20;
-	char errorArray[100] = "there was an error";
 	int ki, numChar;
 	char *attTextEnd;
 	const char *ch = *p;
@@ -1392,7 +1382,7 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
 	*p = ch;
 	while( *c_numberOfConstraints++  == *ch) ch++;
-	if( (ch - *p) != 19) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"incorrect numberOfConstraints attribute in <constraints> tag"); return false;}	
+	if( (ch - *p) != 19) {  osilerror_wrapper( ch,osillineno,"incorrect numberOfConstraints attribute in <constraints> tag"); return false;}	
 	// ch should be pointing to the first character after numberOfObjectives
 	GETATTRIBUTETEXT;
 	ch++;
@@ -1409,14 +1399,14 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
 	// get rid of white space after the numberOfConstraints element
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
 	//  we better have an > 
-	if( *ch++ != '>') {strncpy(errorArray, ch, numErrorChar);  osilerror_wrapper(osillineno,"the constraints element does not have a proper closing"); return false;} 
+	if( *ch++ != '>') {   osilerror_wrapper( ch,osillineno,"the constraints element does not have a proper closing"); return false;} 
 	// get rid of white space after the <constraints> element
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
 	// now loop over the con elements, there must be at least one con element
 	*p = ch;
 	while( *startCon++  == *ch) ch++;
 	if( (ch - *p) == 4) foundCon = true;
-		else {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"there must be at least one <con> element"); return false;}
+		else {  osilerror_wrapper( ch,osillineno,"there must be at least one <con> element"); return false;}
 	startCon -= 5;
 	while(foundCon){
 		conlbattON = false ;
@@ -1432,8 +1422,8 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
 			case 'n':
 				*p = ch;
 				while( *name++  == *ch) ch++;
-				if( (ch - *p) != 4) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"error in constraints name attribute"); return false;}
-				if(connameattON == true) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"error too many con name attributes"); return false;}
+				if( (ch - *p) != 4) {  osilerror_wrapper( ch,osillineno,"error in constraints name attribute"); return false;}
+				if(connameattON == true) {  osilerror_wrapper( ch,osillineno,"error too many con name attributes"); return false;}
 				name -= 5;
 				connameattON = true;
 				GETATTRIBUTETEXT;
@@ -1444,8 +1434,8 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
 			case 'c':
 				*p = ch;
 				while( *constant++  == *ch) ch++;
-				if( ((ch - *p)  != 8)  ) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"error in constraint constant attribute"); return false;}
-				if(conconstantattON == true) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"error too many con constant attributes"); return false;}
+				if( ((ch - *p)  != 8)  ) {  osilerror_wrapper( ch,osillineno,"error in constraint constant attribute"); return false;}
+				if(conconstantattON == true) {  osilerror_wrapper( ch,osillineno,"error too many con constant attributes"); return false;}
 				constant -= 9;
 				conconstantattON = true;
 				GETATTRIBUTETEXT;
@@ -1455,8 +1445,8 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
 				break;
 			case 'l':
 				ch++;
-				if(*ch++ != 'b') { strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"error in constraint lb attribute"); return false;}
-				if(conlbattON == true) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"error too many con lb attributes"); return false;}
+				if(*ch++ != 'b') {   osilerror_wrapper( ch,osillineno,"error in constraint lb attribute"); return false;}
+				if(conlbattON == true) {  osilerror_wrapper( ch,osillineno,"error too many con lb attributes"); return false;}
 				conlbattON = true;
 				GETATTRIBUTETEXT;
 				osinstance->instanceData->constraints->con[concount]->lb = atofmod1( osillineno,attText, attTextEnd);
@@ -1465,8 +1455,8 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
 				break;
 			case 'u':
 				ch++;
-				if(*ch++ != 'b') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"error in constraint ub attribute"); return false;}
-				if(conubattON == true) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"error too many con ub attributes"); return false;}
+				if(*ch++ != 'b') {  osilerror_wrapper( ch,osillineno,"error in constraint ub attribute"); return false;}
+				if(conubattON == true) {  osilerror_wrapper( ch,osillineno,"error too many con ub attributes"); return false;}
 				conubattON = true;
 				GETATTRIBUTETEXT;
 				osinstance->instanceData->constraints->con[concount]->ub = atofmod1( osillineno,attText, attTextEnd);
@@ -1476,8 +1466,8 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
 			case 'm':
 				*p = ch;
 				while( *mult++  == *ch) ch++;
-				if( (ch - *p) != 4) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"error in constraints mult attribute"); return false;}
-				if(conmultattON == true) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"error too many con mult attributes"); return false;}
+				if( (ch - *p) != 4) {  osilerror_wrapper( ch,osillineno,"error in constraints mult attribute"); return false;}
+				if(conmultattON == true) {  osilerror_wrapper( ch,osillineno,"error too many con mult attributes"); return false;}
 				mult -= 5;
 				conmultattON = true;
 				GETATTRIBUTETEXT;
@@ -1494,8 +1484,8 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
 			case '\r':
 				break;
 			default:
-				strncpy(errorArray, ch, numErrorChar);
-				osilerror_wrapper(osillineno,"invalid attribute character");
+				 
+				osilerror_wrapper( ch,osillineno,"invalid attribute character");
 				return false;
 				break;
 			}
@@ -1504,10 +1494,10 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
 		//
 		// assume all the attributes have been processed
 		// must have either /> or > and then whitespace and </con whitespace>
-		if( *ch != '/' && *ch != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"incorrect end of <con> element"); return false;}
+		if( *ch != '/' && *ch != '>') {  osilerror_wrapper( ch,osillineno,"incorrect end of <con> element"); return false;}
 		if(*ch == '/'){
 			ch++;
-			if(*ch != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"incorrect end of <con> element"); return false;}
+			if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"incorrect end of <con> element"); return false;}
 			// get rid of whitespace
 			ch++;
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
@@ -1526,7 +1516,7 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
 		else{
 			// the ch is the > at the end of the con element 
 			// double check to make sure it really is a >
-			if(*ch != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"improper ending to a <obj> element"); return false;}
+			if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improper ending to a <obj> element"); return false;}
 			// look for </con
 			// fist get rid of white space
 			ch++;
@@ -1534,12 +1524,12 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
 			// we should be at </con or there is an error
 			*p = ch;
 			while( *endCon++  == *ch) ch++;
-			if( (ch - *p) != 5) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"</con> element missing"); return false;}
+			if( (ch - *p) != 5) {  osilerror_wrapper( ch,osillineno,"</con> element missing"); return false;}
 			endCon -= 6;
 			// burn off the whitespace
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
 			// better have an > to end </con
-			if(*ch++ != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"</con> element missing >"); return false;}
+			if(*ch++ != '>') {  osilerror_wrapper( ch,osillineno,"</con> element missing >"); return false;}
 			// look for a new <con> element
 			// get rid of whitespace
 			ch++;
@@ -1556,22 +1546,22 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
 			 	ch = *p;
 			}
 		}
-		if( (concount == numberOfConstraints - 1) && (foundCon == true) ) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"attribute numberOfConstraints is less than actual number found"); return false;}
+		if( (concount == numberOfConstraints - 1) && (foundCon == true) ) {  osilerror_wrapper( ch,osillineno,"attribute numberOfConstraints is less than actual number found"); return false;}
 		concount++;
 	}
-	if(concount < numberOfConstraints) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"attribute numberOfConstraints is greater than actual number found"); return false;}
+	if(concount < numberOfConstraints) {  osilerror_wrapper( ch,osillineno,"attribute numberOfConstraints is greater than actual number found"); return false;}
 	// get the </constraints> tag
 	*p = ch;
 	while( *endConstraints++  == *ch) ch++;
-	if( (ch - *p) != 13) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno, "cannot find </constraints> tag"); return false;}
+	if( (ch - *p) != 13) {  osilerror_wrapper( ch,osillineno, "cannot find </constraints> tag"); return false;}
 	for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );	
 	// better have >
-	if(*ch != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"improperly formed </constraints> tag");	return false;}
+	if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </constraints> tag");	return false;}
 	ch++;
 	}// end if(numberOfConstraints > 0)
 	else{
 		// error if the number is negative
-		if(numberOfConstraints < 0) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"cannot have a negative number of constraints"); return false;}
+		if(numberOfConstraints < 0) {  osilerror_wrapper( ch,osillineno,"cannot have a negative number of constraints"); return false;}
 		// if we are here we have numberOfConstraints = 0
 		// must close with /> or </constraints>
 		// get rid of white space
@@ -1579,21 +1569,21 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
 		if( *ch == '/'){
 			// better have a >
 			ch++;
-			if( *ch  != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"improperly closed constraints tag"); return false;}
+			if( *ch  != '>') {  osilerror_wrapper( ch,osillineno,"improperly closed constraints tag"); return false;}
 			ch++;
 		}
 		else{
 			// if we are here we must have an '>' and then  </constraints> tag
-			if( *ch  != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"improperly closed constraints tag"); return false;}
+			if( *ch  != '>') {  osilerror_wrapper( ch,osillineno,"improperly closed constraints tag"); return false;}
 			ch++;
 			// burn white space
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
 			*p = ch;
 			while( *endConstraints++  == *ch) ch++;
-			if( (ch - *p) != 13) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno, "cannot find </constraints> tag"); return false; }
+			if( (ch - *p) != 13) {  osilerror_wrapper( ch,osillineno, "cannot find </constraints> tag"); return false; }
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );	
 			// better have >
-			if(*ch != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"improperly formed </constraints> tag"); return false;}	
+			if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </constraints> tag"); return false;}	
 			ch++;
 		}
 	}
@@ -1604,9 +1594,7 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
 	return true;
 }//end parseConstraints
 
-bool parseLinearConstraintCoefficients( const char **p, OSInstance *osinstance, int* osillineno){
-	const int numErrorChar = 20;
-	char errorArray[100] = "there was an error";
+bool parseLinearConstraintCoefficients( const char **p, OSInstance *osinstance, int* osillineno){;
 	int ki, numChar;
 	char *attTextEnd;
 	const char *ch = *p;	
@@ -1633,41 +1621,41 @@ bool parseLinearConstraintCoefficients( const char **p, OSInstance *osinstance, 
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
 	*p = ch;
 	while( *c_numberOfValues++  == *ch) ch++;
-	if( (ch - *p) != 14) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"incorrect numberOfValues attribute in <linearConstraintCoefficients> tag"); return false;}
+	if( (ch - *p) != 14) {  osilerror_wrapper( ch,osillineno,"incorrect numberOfValues attribute in <linearConstraintCoefficients> tag"); return false;}
 	// ch should be pointing to the first character after numberOfObjectives
 	GETATTRIBUTETEXT;
 	ch++;
 	numberOfValues = atoimod1( osillineno, attText, attTextEnd);
 	delete [] attText;
-	if(numberOfValues <= 0) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"the number of nonlinear nozeros must be positive"); return false;}
+	if(numberOfValues <= 0) {  osilerror_wrapper( ch,osillineno,"the number of nonlinear nozeros must be positive"); return false;}
 	osinstance->instanceData->linearConstraintCoefficients->numberOfValues = numberOfValues;
 	// get rid of white space after the numberOfConstraints element
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
 	// we should have either an />  OR an >
 	if(*ch == '/'){
 		ch++;
-		if( *ch++ != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"the linearConstraintCoefficients element does not have a proper closing"); return false;} 
+		if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"the linearConstraintCoefficients element does not have a proper closing"); return false;} 
 		else{
-			if(numberOfValues > 0) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"numberOfValues positive, but there are no objectives"); return false;}
+			if(numberOfValues > 0) {  osilerror_wrapper( ch,osillineno,"numberOfValues positive, but there are no objectives"); return false;}
 			return false;
 		}		
 	}
 	//  we better have an > 
-	if( *ch++ != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"the <linearConstraintCoefficients> element does not have a proper closing"); return false;}
+	if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"the <linearConstraintCoefficients> element does not have a proper closing"); return false;}
 	// get rid of white space after the <linearConstraintCoefficients> element
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
 	if( parseStart( &ch, osinstance, osillineno) != true) return false;
 	if( (parseColIdx( &ch, osinstance, osillineno) != true) && ( parseRowIdx( &ch, osinstance, osillineno) != true)) return false;
-	if( (parseColIdx( &ch, osinstance, osillineno) != true) && (parseRowIdx( &ch, osinstance, osillineno) == true) ){strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"cannot store by both row and column"); return false;}
+	if( (parseColIdx( &ch, osinstance, osillineno) != true) && (parseRowIdx( &ch, osinstance, osillineno) == true) ){  osilerror_wrapper( ch,osillineno,"cannot store by both row and column"); return false;}
 	if( parseValue( &ch, osinstance, osillineno) != true) return false;
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
 	// get the </linearConstraintCoefficients> tag
 	*p = ch;
 	while( *endlinearConstraintCoefficients++  == *ch) ch++;
-	if( (ch - *p) != 30) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno, "cannot find </linearConstraintCoefficients> tag"); return false;}
+	if( (ch - *p) != 30) {  osilerror_wrapper( ch,osillineno, "cannot find </linearConstraintCoefficients> tag"); return false;}
 	for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );	
 	// better have >
-	if(*ch != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"improperly formed </linearConstraintCoefficients> tag"); return false;}
+	if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </linearConstraintCoefficients> tag"); return false;}
 	ch++;	
 	*p = ch;
 	return true;
@@ -1676,8 +1664,6 @@ bool parseLinearConstraintCoefficients( const char **p, OSInstance *osinstance, 
 bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
 	clock_t start, finish;
 	double duration;
-	const int numErrorChar = 20;
-	char errorArray[100] = "there was an error";
 	const char *ch = *p;
 	start = clock(); 
 	const char* startStart = "<start";
@@ -1699,7 +1685,7 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
 	// get rid of white space after <start
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
 	// we should have either an >
-	if(*ch != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"improperly formed <start> element"); return false;}
+	if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed <start> element"); return false;}
 	ch++;
 	// get rid of white space
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
@@ -1713,7 +1699,7 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
 		// call base64 parse here
 		int dataSize = 0;
 		char* b64string = parseBase64(&ch, &dataSize, osillineno );
-		if( b64string == NULL) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"<start> must have children or base64 data"); return false;}
+		if( b64string == NULL) {  osilerror_wrapper( ch,osillineno,"<start> must have children or base64 data"); return false;}
 		std::string base64decodeddata = Base64::decodeb64( b64string );
 		int base64decodeddatalength = base64decodeddata.length();
 		int *intvec = NULL;
@@ -1732,7 +1718,7 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
 		while(foundEl){
 			// start eating white space until an '>' is found,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
-			if( *ch++ != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"improperly formed <el> tag"); return false;}
+			if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed <el> tag"); return false;}
 			// eat white space again,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
 			// okay we better have a number, we will check later
@@ -1743,7 +1729,7 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
 				ch++;
 			}
 			// we better have a <, or not valid
-			if(*ch != '<') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"cannot find an </el>"); return false;}
+			if(*ch != '<') {  osilerror_wrapper( ch,osillineno,"cannot find an </el>"); return false;}
 			osinstance->instanceData->linearConstraintCoefficients->start->el[ kount++] = 
 			atoimod1( osillineno, *p, ch);
 			//printf("number = %s\n", *p);
@@ -1751,10 +1737,10 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
 			*p = ch;
 			while( *endEl++  == *ch) ch++;
 			endEl -= 5;
-			if( (ch - *p) != 4 ) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"cannot fine an </el>"); return false;}
+			if( (ch - *p) != 4 ) {  osilerror_wrapper( ch,osillineno,"cannot fine an </el>"); return false;}
 			// start eating white space until an '>' is found for </el>,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
-			if( *ch++ != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"improperly formed </el> tag"); return false;}
+			if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </el> tag"); return false;}
 			// eat white space again,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
 			// either have another <el> element or foundEl = false;
@@ -1773,10 +1759,10 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
 	// get the </start> tag
 	*p = ch;
 	while( *endStart++  == *ch) ch++;
-	if( (ch - *p) != 7) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno, "cannot find </start> tag"); return false;}
+	if( (ch - *p) != 7) {  osilerror_wrapper( ch,osillineno, "cannot find </start> tag"); return false;}
 	for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );	
 	// better have >
-	if(*ch != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"improperly formed </start> tag");	return false;}
+	if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </start> tag");	return false;}
 	ch++;	
 	// get the end element
 	finish = clock();
@@ -1789,8 +1775,6 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
 bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
 	clock_t start, finish;
 	double duration;
-	const int numErrorChar = 20;
-	char errorArray[100] = "there was an error";
 	const char *ch = *p;
 	start = clock(); 
 	const char* startRowIdx = "<rowIdx";
@@ -1812,7 +1796,7 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
 	// get rid of white space after <rowIdx
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
 	// we should have either an >
-	if(*ch != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"improperly formed <rowIdx> element"); return false;}
+	if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed <rowIdx> element"); return false;}
 	ch++;
 	// get rid of white space
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
@@ -1826,7 +1810,7 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
 		// call base64 parse here
 		int dataSize = 0;
 		char* b64string = parseBase64(&ch, &dataSize, osillineno );
-		if( b64string == NULL)  {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"<rowIdx> must have children or base64 data"); return false;}
+		if( b64string == NULL)  {  osilerror_wrapper( ch,osillineno,"<rowIdx> must have children or base64 data"); return false;}
 		std::string base64decodeddata = Base64::decodeb64( b64string );
 		int base64decodeddatalength = base64decodeddata.length();
 		int *intvec = NULL;
@@ -1846,7 +1830,7 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
 		while(foundEl){
 			// start munging white space until an '>' is found,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
-			if( *ch++ != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"improperly formed <el> tag"); return false;}
+			if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed <el> tag"); return false;}
 			// mung white space again,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
 			// okay we better have a number, we will check later
@@ -1857,7 +1841,7 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
 				ch++;
 			}
 			// we better have a <, or not valid
-			if(*ch != '<') {strncpy(errorArray, ch, numErrorChar);  osilerror_wrapper(osillineno,"cannot find an </el>"); return false;}
+			if(*ch != '<') {   osilerror_wrapper( ch,osillineno,"cannot find an </el>"); return false;}
 			osinstance->instanceData->linearConstraintCoefficients->rowIdx->el[ kount++] = 
 			atoimod1( osillineno, *p, ch);
 			//printf("number = %s\n", *p);
@@ -1865,10 +1849,10 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
 			*p = ch;
 			while( *endEl++  == *ch) ch++;
 			endEl -= 5;
-			if( (ch - *p)  != 4 ) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"cannot find an </el>"); return false;}
+			if( (ch - *p)  != 4 ) {  osilerror_wrapper( ch,osillineno,"cannot find an </el>"); return false;}
 			// start munging white space until an '>' is found for </el>,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
-			if( *ch++ != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"improperly formed </el> tag"); return false;}
+			if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </el> tag"); return false;}
 			// eat white space again,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
 			// either have another <el> element or foundEl = false;
@@ -1887,13 +1871,13 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
 	// get the </rowIdx> tag
 	*p = ch;
 	while( *endRowIdx++  == *ch) ch++;
-	if( (ch - *p) != 8) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno, "cannot find </rowIdx> tag"); return false;}
+	if( (ch - *p) != 8) {  osilerror_wrapper( ch,osillineno, "cannot find </rowIdx> tag"); return false;}
 	for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );	
 	// better have >
-	if(*ch != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"improperly formed </rowIdx> tag");}	
+	if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </rowIdx> tag");}	
 	ch++;	
-	if(kount > osinstance->instanceData->linearConstraintCoefficients->numberOfValues) { osilerror_wrapper(osillineno,"numberOfLinearCoefficients attribute less than number of row indices found"); return false;}
-	if(kount < osinstance->instanceData->linearConstraintCoefficients->numberOfValues) { osilerror_wrapper(osillineno,"numberOfLinearCoefficients attribute greater than number of row indices found"); return false;}
+	if(kount > osinstance->instanceData->linearConstraintCoefficients->numberOfValues) { osilerror_wrapper( ch,osillineno,"numberOfLinearCoefficients attribute less than number of row indices found"); return false;}
+	if(kount < osinstance->instanceData->linearConstraintCoefficients->numberOfValues) { osilerror_wrapper( ch,osillineno,"numberOfLinearCoefficients attribute greater than number of row indices found"); return false;}
 	finish = clock();
 	//duration = (double) (finish - start) / CLOCKS_PER_SEC; 
 	//printf("TIME TO PARSE ROW INDEXES = %f\n", duration);
@@ -1905,8 +1889,6 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
 bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
 	clock_t start, finish;
 	double duration;
-	const int numErrorChar = 20;
-	char errorArray[100] = "there was an error";
 	const char *ch = *p;
 	start = clock(); 
 	const char* startColIdx = "<colIdx";
@@ -1928,7 +1910,7 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
 	// get rid of white space after <colIdx
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
 	// we should have either an >
-	if(*ch != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"improperly formed <colIdx> element"); return false;}
+	if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed <colIdx> element"); return false;}
 	ch++;
 	// get rid of white space
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
@@ -1942,7 +1924,7 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
 		// call base64 parse here
 		int dataSize = 0;
 		char* b64string = parseBase64(&ch, &dataSize, osillineno );
-		if( b64string == NULL)  {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"<colIdx> must have children or base64 data"); return false;}
+		if( b64string == NULL)  {  osilerror_wrapper( ch,osillineno,"<colIdx> must have children or base64 data"); return false;}
 		std::string base64decodeddata = Base64::decodeb64( b64string );
 		int base64decodeddatalength = base64decodeddata.length();
 		int *intvec = NULL;
@@ -1962,7 +1944,7 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
 		while(foundEl){
 			// start eating white space until an '>' is found,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
-			if( *ch++ != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"improperly formed <el> tag"); return false;}
+			if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed <el> tag"); return false;}
 			// eat white space again,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
 			// okay we better have a number, we will check later
@@ -1973,7 +1955,7 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
 				ch++;
 			}
 			// we better have a <, or not valid
-			if(*ch != '<') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"cannot find an </el>"); return false;}
+			if(*ch != '<') {  osilerror_wrapper( ch,osillineno,"cannot find an </el>"); return false;}
 			osinstance->instanceData->linearConstraintCoefficients->colIdx->el[ kount++] = 
 			atoimod1( osillineno, *p, ch);
 			//printf("number = %s\n", *p);
@@ -1981,10 +1963,10 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
 			*p = ch;
 			while( *endEl++  == *ch) ch++;
 			endEl -= 5;
-			if( (ch - *p) != 4 ) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"cannot fine an </el>"); return false;}
+			if( (ch - *p) != 4 ) {  osilerror_wrapper( ch,osillineno,"cannot fine an </el>"); return false;}
 			// start eating white space until an '>' is found for </el>,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
-			if( *ch++ != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"improperly formed </el> tag"); return false;}
+			if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </el> tag"); return false;}
 			// eat white space again,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
 			// either have another <el> element or foundEl = false;
@@ -2003,13 +1985,13 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
 	// get the </colIdx> tag
 	*p = ch;
 	while( *endColIdx++  == *ch) ch++;		
-	if( (ch - *p) != 8) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno, "cannot find </colIdx> tag"); return false;}
+	if( (ch - *p) != 8) {  osilerror_wrapper( ch,osillineno, "cannot find </colIdx> tag"); return false;}
 	for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );	
 	// better have >
-	if(*ch != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"improperly formed </colIdx> tag"); return false;}	
+	if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </colIdx> tag"); return false;}	
 	ch++;	
-	if(kount > osinstance->instanceData->linearConstraintCoefficients->numberOfValues) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"numberOfLinearCoefficients attribute less than number of column indices found"); return false;}
-	if(kount < osinstance->instanceData->linearConstraintCoefficients->numberOfValues) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"numberOfLinearCoefficients attribute greater than number of column indices found"); return false;}
+	if(kount > osinstance->instanceData->linearConstraintCoefficients->numberOfValues) {  osilerror_wrapper( ch,osillineno,"numberOfLinearCoefficients attribute less than number of column indices found"); return false;}
+	if(kount < osinstance->instanceData->linearConstraintCoefficients->numberOfValues) {  osilerror_wrapper( ch,osillineno,"numberOfLinearCoefficients attribute greater than number of column indices found"); return false;}
 	finish = clock();
 	//duration = (double) (finish - start) / CLOCKS_PER_SEC; 
 	//printf("TIME TO PARSE COLUMN INDEXES = %f\n", duration);
@@ -2021,8 +2003,6 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
 bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
 	clock_t start, finish;
 	double duration;
-	const int numErrorChar = 20;
-	char errorArray[100] = "there was an error";
 	const char *ch = *p;
 	start = clock(); 
 	const char* startValue = "<value";
@@ -2044,7 +2024,7 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
 	// get rid of white space after <value
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno) ; ch++ ) ;
 	// we should have either an >
-	if(*ch != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"improperly formed <value> element"); return false;}
+	if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed <value> element"); return false;}
 	ch++;
 	// get rid of white space
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno) ; ch++ ) ;
@@ -2058,7 +2038,7 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
 		// call base64 parse here
 		int dataSize = 0;
 		char* b64string = parseBase64(&ch, &dataSize, osillineno );
-		if( b64string == NULL)  {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"<start> must have children or base64 data"); return false;};
+		if( b64string == NULL)  {  osilerror_wrapper( ch,osillineno,"<start> must have children or base64 data"); return false;};
 		std::string base64decodeddata = Base64::decodeb64( b64string );
 		int base64decodeddatalength = base64decodeddata.length();
 		double *doublevec = NULL;
@@ -2077,7 +2057,7 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
 		while( foundEl){
 			// start eat white space until an '>' is found,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno) ; ch++ );
-			if( *ch++ != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"improperly formed <el> tag"); return false;}
+			if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed <el> tag"); return false;}
 			// eat white space again,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno) ; ch++ ) ;
 			*p = ch;
@@ -2087,7 +2067,7 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
 				ch++;
 			}
 			// we better have a <, or not valid
-			if(*ch != '<') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"cannot find an </el>"); return false;}
+			if(*ch != '<') {  osilerror_wrapper( ch,osillineno,"cannot find an </el>"); return false;}
 			osinstance->instanceData->linearConstraintCoefficients->value->el[ kount++] = 
 			atofmod1( osillineno, *p, ch);
 			//printf("number = %s\n", *p);
@@ -2095,10 +2075,10 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
 			*p = ch;
 			while( *endEl++  == *ch) ch++;
 			endEl -= 5;
-			if( (ch - *p) != 4 ) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"cannot fine an </el>"); return false;}
+			if( (ch - *p) != 4 ) {  osilerror_wrapper( ch,osillineno,"cannot fine an </el>"); return false;}
 			// start eating white space until an '>' is found for </el>,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno) ; ch++ );
-			if( *ch++ != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"improperly formed </el> tag"); return false;}
+			if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </el> tag"); return false;}
 			// eat white space again,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno) ; ch++ );
 			// either have another <el> element or foundEl = false;
@@ -2117,13 +2097,13 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
 	// get the </value> tag
 	*p = ch;
 	while( *endValue++  == *ch) ch++;
-	if( (ch - *p) != 7) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno, "cannot find </value> tag"); return false;}
+	if( (ch - *p) != 7) {  osilerror_wrapper( ch,osillineno, "cannot find </value> tag"); return false;}
 	for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno) ; ch++ );	
 	// better have >
-	if(*ch != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"improperly formed </value> tag");	 return false;}
+	if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </value> tag");	 return false;}
 	ch++;	
-	if(kount < osinstance->instanceData->linearConstraintCoefficients->numberOfValues){strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"numberOfLinearCoefficients greater than number of values found"); return false;}
-	if(kount > osinstance->instanceData->linearConstraintCoefficients->numberOfValues){strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"numberOfLinearCoefficients less than the number of values found"); return false;}
+	if(kount < osinstance->instanceData->linearConstraintCoefficients->numberOfValues){  osilerror_wrapper( ch,osillineno,"numberOfLinearCoefficients greater than number of values found"); return false;}
+	if(kount > osinstance->instanceData->linearConstraintCoefficients->numberOfValues){  osilerror_wrapper( ch,osillineno,"numberOfLinearCoefficients less than the number of values found"); return false;}
 	finish = clock();
 	//duration = (double) (finish - start) / CLOCKS_PER_SEC; 
 	//printf("TIME TO PARSE VALUES = %f\n", duration);
@@ -2132,8 +2112,6 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
 }//end parseValue
 
 bool parseObjCoef( const char **p, int objcount, OSInstance *osinstance, int* osillineno){
-	const int numErrorChar = 20;
-	char errorArray[100] = "there was an error";
 	int ki, numChar;
 	char *attTextEnd;
 	const char *ch = *p;
@@ -2143,7 +2121,7 @@ bool parseObjCoef( const char **p, int objcount, OSInstance *osinstance, int* os
 	char *attText = NULL;
 	int k;
 	int numberOfObjCoef = 0; 
-	if( osinstance->instanceData->objectives->numberOfObjectives <= 0)  {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"we can't have objective function coefficients without an objective function"); return false;}
+	if( osinstance->instanceData->objectives->numberOfObjectives <= 0)  {  osilerror_wrapper( ch,osillineno,"we can't have objective function coefficients without an objective function"); return false;}
 	numberOfObjCoef = osinstance->instanceData->objectives->obj[objcount]->numberOfObjCoef;
 	if(numberOfObjCoef > 0)	{
 	for(k = 0; k < numberOfObjCoef; k++){
@@ -2151,14 +2129,14 @@ bool parseObjCoef( const char **p, int objcount, OSInstance *osinstance, int* os
 		// if, present we should be pointing to <coef element 
 		*p = ch;
 		while( *startCoef++  == *ch) ch++;
-		if( (ch - *p) != 5) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"improper <coef> element"); return false;}
+		if( (ch - *p) != 5) {  osilerror_wrapper( ch,osillineno,"improper <coef> element"); return false;}
 		startCoef -= 6;
 		// get the idx attribute
 		// eat the white space after <coef
 		for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
 		*p = ch;
 		while( *c_idx++  == *ch) ch++;
-		if( (ch - *p) != 3) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"incorrect idx attribute in objective function <idx> tag"); return false;}	
+		if( (ch - *p) != 3) {  osilerror_wrapper( ch,osillineno,"incorrect idx attribute in objective function <idx> tag"); return false;}	
 		c_idx -= 4;
 		// ch should be pointing to the first character after idx attribute
 		GETATTRIBUTETEXT;
@@ -2168,7 +2146,7 @@ bool parseObjCoef( const char **p, int objcount, OSInstance *osinstance, int* os
 		// eat white space
 		for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
 		// if we don't have a > there is an error
-		if(*ch++ != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"incorrect <coef> element")	; return false;}	
+		if(*ch++ != '>') {  osilerror_wrapper( ch,osillineno,"incorrect <coef> element")	; return false;}	
 		// we should be pointing to first character after <coef>
 		*p = ch;
 		// eat characters until we find <
@@ -2176,16 +2154,16 @@ bool parseObjCoef( const char **p, int objcount, OSInstance *osinstance, int* os
 		// put back here
 
 		// we should be pointing to a < in the </coef> tag	
-		if(*ch != '<') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"improper </coef> tag"); return false;}
+		if(*ch != '<') {  osilerror_wrapper( ch,osillineno,"improper </coef> tag"); return false;}
 		osinstance->instanceData->objectives->obj[objcount]->coef[ k]->value  = atofmod1( osillineno, *p, ch);
 		*p = ch;
 		while( *endCoef++  == *ch) ch++;
-		if( (ch - *p) != 6)  {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"improper </coef> element"); return false;}
+		if( (ch - *p) != 6)  {  osilerror_wrapper( ch,osillineno,"improper </coef> element"); return false;}
 		endCoef -= 7;
 		// get rid of white space after </coef
 		for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
 		// if we don't have a > there is an error
-		if(*ch++ != '>') {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"incorrect </coef> element")	; return false;}
+		if(*ch++ != '>') {  osilerror_wrapper( ch,osillineno,"incorrect </coef> element")	; return false;}
 	}
 	}// end if(numberOfObjCoef > 0)
 	*p = ch;
@@ -2193,8 +2171,6 @@ bool parseObjCoef( const char **p, int objcount, OSInstance *osinstance, int* os
 }//end parseObjCoef
 
 char *parseBase64(const char **p, int *dataSize, int* osillineno ){
-	const int numErrorChar = 20;
-	char errorArray[100] = "there was an error";
 	int ki, numChar;
 	char *attTextEnd;
 	const char *ch = *p;
@@ -2216,7 +2192,7 @@ char *parseBase64(const char **p, int *dataSize, int* osillineno ){
 	// eat the white space
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
 	for(i = 0; sizeOf[i]  == *ch; i++, ch++);
-	if(i != 6) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"incorrect sizeOf attribute in <base64BinaryData> element"); return false;}	
+	if(i != 6) {  osilerror_wrapper( ch,osillineno,"incorrect sizeOf attribute in <base64BinaryData> element"); return false;}	
 	// ch should be pointing to the first character after sizeOf
 	GETATTRIBUTETEXT;
 	ch++;
@@ -2226,7 +2202,7 @@ char *parseBase64(const char **p, int *dataSize, int* osillineno ){
 	// eat the white space
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
 	// better have an > sign or not valid
-	if(*ch != '>' ) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"<base64BinaryData> element does not have a proper closing >"); return false;}
+	if(*ch != '>' ) {  osilerror_wrapper( ch,osillineno,"<base64BinaryData> element does not have a proper closing >"); return false;}
 	ch++;
 	// we are now pointing start of the data
 	const char *b64textstart = ch;
@@ -2235,7 +2211,7 @@ char *parseBase64(const char **p, int *dataSize, int* osillineno ){
 	const char *b64textend = ch;
 	// we should be pointing to </base64BinaryData>
 	for(i = 0; endBase64BinaryData[i]  == *ch; i++, ch++);
-	if(i != 18) {strncpy(errorArray, ch, numErrorChar);osilerror_wrapper(osillineno," problem with <base64BinaryData> element"); return false;}
+	if(i != 18) { osilerror_wrapper( ch,osillineno," problem with <base64BinaryData> element"); return false;}
 	int b64len = b64textend - b64textstart;
 	b64string = new char[ b64len + 1]; 
 	for(ki = 0; ki < b64len; ki++) b64string[ki] = b64textstart[ ki]; 
@@ -2243,7 +2219,7 @@ char *parseBase64(const char **p, int *dataSize, int* osillineno ){
 	// burn the white space
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
 	// better have an > sign or not valid
-	if(*ch != '>' ) {strncpy(errorArray, ch, numErrorChar); osilerror_wrapper(osillineno,"</base64BinaryData> element does not have a proper closing >"); return false;}
+	if(*ch != '>' ) {  osilerror_wrapper( ch,osillineno,"</base64BinaryData> element does not have a proper closing >"); return false;}
 	ch++;
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
 	*p = ch;
@@ -2255,8 +2231,6 @@ char *parseBase64(const char **p, int *dataSize, int* osillineno ){
 
 
 double atofmod1(int* osillineno, const char *number, const char *numberend){
-	const int numErrorChar = 20;
-	char errorArray[100] = "there was an error";
 	double val, power;
 	int i;
 	int sign = 1;
@@ -2288,8 +2262,8 @@ double atofmod1(int* osillineno, const char *number, const char *numberend){
 				break;
 			}
 			else{
-				strncpy(errorArray, number, numErrorChar); 
-				osilerror_wrapper(osillineno, "error in parsing an XSD:double");
+				  
+				osilerror_wrapper( number,osillineno, "error in parsing an XSD:double");
 			}
 		case 'N':
 			i++;
@@ -2298,14 +2272,14 @@ double atofmod1(int* osillineno, const char *number, const char *numberend){
 				break;
 			}
 			else{
-				strncpy(errorArray, number, numErrorChar); 
-				osilerror_wrapper(osillineno, "error in parsing an XSD:double");
+				  
+				osilerror_wrapper( number,osillineno, "error in parsing an XSD:double");
 				
 			}
 
 		default:
-			strncpy(errorArray, number, numErrorChar); 
-			osilerror_wrapper(osillineno, "error in parsing an XSD:double");
+			  
+			osilerror_wrapper( number,osillineno, "error in parsing an XSD:double");
 			
 			break;
 		}
@@ -2324,7 +2298,7 @@ double atofmod1(int* osillineno, const char *number, const char *numberend){
 			for(exppower = 0 ; ISDIGIT( number[ i]); i++){
 				exppower = 10 *exppower + (number[ i] - '0') ;
 			}
-			if(i == exptest) {strncpy(errorArray, number, numErrorChar); osilerror_wrapper(osillineno, "error in parsing an XSD:double"); 	}
+			if(i == exptest) {  osilerror_wrapper( number,osillineno, "error in parsing an XSD:double"); 	}
 			val = val*pow(10, expsign*exppower);
 			//printf("number = %f\n", val);
 		}
@@ -2334,16 +2308,13 @@ double atofmod1(int* osillineno, const char *number, const char *numberend){
 	if(number[i] == *numberend){
 		return sign*val;
 	}
-	else {strncpy(errorArray, number, numErrorChar); osilerror_wrapper(osillineno,"error in parsing an XSD:double"); 	return OSNAN;}
+	else {  osilerror_wrapper( number,osillineno,"error in parsing an XSD:double"); 	return OSNAN;}
 }//end atofmod
 
 
 
 int atoimod1(int* osillineno, const char *number, const char *numberend){
 	// modidfied atoi from Kernighan and Ritchie
-
-	const int numErrorChar = 20;
-	char errorArray[100] = "there was an error";
 	int ival;
 	int i, sign;
 	int endWhiteSpace;
@@ -2354,26 +2325,28 @@ int atoimod1(int* osillineno, const char *number, const char *numberend){
 	for(ival = 0; ISDIGIT( number[ i]); i++){
 		ival = 10*ival + (number[ i] - '0') ;
 	}
-	if(i == endWhiteSpace) {strncpy(errorArray, number, numErrorChar); osilerror_wrapper(osillineno, "error in parsing an XSD:int" ); 	}
+	if(i == endWhiteSpace) {  osilerror_wrapper( number,osillineno, "error in parsing an XSD:int" ); 	}
 	// if we are here we should having nothing but white space until the end of the number
 	for( ; ISWHITESPACE( number[ i]) || isnewline( number[ i], osillineno) ; i++);
 	if(number[i] == *numberend){
 		return sign*ival;
 	}
-	else {strncpy(errorArray, number, numErrorChar); osilerror_wrapper(osillineno, "error in parsing an XSD:int"); return OSINT_MAX;	}
+	else {  osilerror_wrapper( number,osillineno, "error in parsing an XSD:int"); return OSINT_MAX;	}
 }//end atoimod1
 
-void osilerror_wrapper(int* osillineno, const char* errormsg){
+void osilerror_wrapper( const char* ch, int* osillineno, const char* errormsg){
 	try{
-		//osilerror( NULL, NULL, NULL, errormsg);
+		const int numErrorChar = 20;
+		char errorArray[100] = "";
+		strncpy(errorArray, ch, numErrorChar);
 		std::ostringstream outStr;
 		std::string error = errormsg;
 		error = "PARSER ERROR:  Input is either not valid or well formed: "  + error;
 		outStr << error << endl;
 		outStr << "Here are " ;
-		//outStr << numErrorChar ;
+		outStr << numErrorChar ;
 		outStr << " characters currently being pointed to in the input string: ";
-		//outStr << errorArray;
+		outStr << errorArray;
 		outStr << endl;
 		outStr << "See line number: " << *osillineno << endl;  
 		error = outStr.str();

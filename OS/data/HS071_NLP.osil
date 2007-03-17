@@ -38,7 +38,7 @@
             </nl>
             <nl idx="1">
                 <sum>
-                    <square>>
+                    <square>
                         <variable idx="0" coef="1"/>
                     </square>
                     <square>
@@ -51,7 +51,7 @@
                         <variable idx="3" coef="1"/>
                     </square>
                 </sum>
-            </nl>
+            </nl> 
             <nl idx="-1">
                 <times>
                     <times>

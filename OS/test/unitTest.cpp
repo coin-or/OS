@@ -125,7 +125,6 @@ int main(int argC, char* argV[])
 		ipoptSolver->osol = osol;
 		osilreader = new OSiLReader(); 
 		ipoptSolver->osinstance = osilreader->readOSiL( &osil);
-		return 0;
 		OSiLWriter osilwriter;
 		cout << osilwriter.writeOSiL( ipoptSolver->osinstance) << endl;
 		cout << "call the IPOPT Solver" << endl;
