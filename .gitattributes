@@ -180,6 +180,8 @@ OS/src/OSParsers/Makefile.am -text
 OS/src/OSParsers/Makefile.in -text
 OS/src/OSParsers/OSiLParserData.cpp -text
 OS/src/OSParsers/OSiLParserData.h -text
+OS/src/OSParsers/OSrLParserData.cpp -text
+OS/src/OSParsers/OSrLParserData.h -text
 OS/src/OSParsers/externalvars.h -text
 OS/src/OSParsers/lexyaccparser.h -text
 OS/src/OSParsers/osilparservariables.h -text
