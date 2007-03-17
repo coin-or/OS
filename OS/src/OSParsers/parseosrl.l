@@ -26,6 +26,7 @@
 #else     
 	#define YY_PRINT ;
 #endif
+#define YY_PRINT  printf("%s", yytext);
 #ifdef WIN_
 #define YY_NO_UNISTD_H
 #include <io.h>

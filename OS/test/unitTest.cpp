@@ -375,7 +375,7 @@ int main(int argC, char* argV[])
 
 	}  
 	//
-	// Now just test the parser
+	// Now just test the OSiL parser
 	try{ 
 		cout << endl;
 		clock_t start, finish;
@@ -386,7 +386,7 @@ int main(int argC, char* argV[])
 		//fileUtil = NULL;
 		//fileUtil = new FileUtil();
 		cout << "TEST PARSING A MODEL" << endl;
-		cout << "FIST READ THE FILE INTO A STRING" << endl;
+		cout << "FIRST READ THE FILE INTO A STRING" << endl;
 		start = clock();
 		osil = fileUtil->getFileAsString( &parserTestOSiLFileName[0]);
 		finish = clock();
@@ -411,6 +411,51 @@ int main(int argC, char* argV[])
 		cout << "Sorry Unit Test Failed Testing An OSiL Parser" << endl;
 		return 0;
 	}	
+	
+	//
+	// Now just test the OSrL parser
+	try{ 
+		cout << endl;
+		clock_t start, finish;
+		double duration;
+		OSrLWriter *osrlwriter = NULL;
+		osrlwriter = new OSrLWriter();
+		OSrLReader *osrlreader = NULL;
+		osrlreader = new OSrLReader();
+		OSResult *osresult = NULL;
+		osresult = new OSResult(); 
+		//delete fileUtil;
+		//fileUtil = NULL;
+		//fileUtil = new FileUtil();
+		cout << "TEST PARSING AN OSrL FILE" << endl;
+		cout << "FIRST READ THE OSrL FILE INTO A STRING" << endl;
+		parserTestOSiLFileName = dataDir + "parincLinear.osrl"; 
+		start = clock();
+		std::string osrl = fileUtil->getFileAsString( &parserTestOSiLFileName[0]);
+		finish = clock();
+		duration = (double) (finish - start) / CLOCKS_PER_SEC;
+		cout << "Reading the file into a string took (seconds): "<< duration << endl;
+		start = clock();
+		cout << "PARSE THE OSRL STRING INTO AN OSRESULT OBJECT" << endl;
+		osresult = osrlreader->readOSrL( osrl);
+		cout << osrlwriter->writeOSrL( osresult) << endl;
+		//delete osrlwriter;
+		osrlwriter = NULL;
+		//delete osrlreader;
+		osrlreader = NULL;
+		//delete osresult;
+		osresult = NULL;
+		finish = clock();
+		duration = (double) (finish - start) / CLOCKS_PER_SEC;
+		cout << "Parsing took (seconds): "<< duration << endl;
+
+	}	
+		catch(const ErrorClass& eclass){
+		cout << endl << endl << endl;
+		cout << eclass.errormsg << endl;
+		cout << "Sorry Unit Test Failed Testing An OSrL Parser" << endl;
+		return 0;
+	}
 	// 
 	// now solve on a remote server
 	/*
