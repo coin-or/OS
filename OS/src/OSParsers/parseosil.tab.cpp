@@ -4315,27 +4315,21 @@ int atoimod1(int* osillineno, const char *number, const char *numberend){
 }//end atoimod1
 
 void osilerror_wrapper( const char* ch, int* osillineno, const char* errormsg){
-	try{
-		const int numErrorChar = 20;
-		char errorArray[100] = "";
-		strncpy(errorArray, ch, numErrorChar);
-		std::ostringstream outStr;
-		std::string error = errormsg;
-		error = "PARSER ERROR:  Input is either not valid or well formed: "  + error;
-		outStr << error << endl;
-		outStr << "Here are " ;
-		outStr << numErrorChar ;
-		outStr << " characters currently being pointed to in the input string: ";
-		outStr << errorArray;
-		outStr << endl;
-		outStr << "See line number: " << *osillineno << endl;  
-		error = outStr.str();
-		throw ErrorClass( error);
-	}
-		catch(const ErrorClass& eclass){
-		throw ErrorClass(  eclass.errormsg); 
-	}
-	//osilerror( NULL, NULL, NULL, errormsg);
+	const int numErrorChar = 20;
+	char errorArray[100] = "";
+	strncpy(errorArray, ch, numErrorChar);
+	std::ostringstream outStr;
+	std::string error = errormsg;
+	error = "PARSER ERROR:  Input is either not valid or well formed: "  + error;
+	outStr << error << endl;
+	outStr << "Here are " ;
+	outStr << numErrorChar ;
+	outStr << " characters currently being pointed to in the input string: ";
+	outStr << errorArray;
+	outStr << endl;
+	outStr << "See line number: " << *osillineno << endl;  
+	error = outStr.str();
+	throw ErrorClass( error);
 }//end osilerror_wrapper
 
 
