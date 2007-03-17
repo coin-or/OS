@@ -350,12 +350,12 @@ int main(int argC, char* argV[])
 		// extra code
 		std::string outputfile = mpsFileName+"_osil";
 		char* testfile = &outputfile[0];
-		fileUtil->writeFileFromString(testfile,  m_Solver->osil);		
+		fileUtil->writeFileFromString(testfile,  m_Solver->osil);	
 		// end extra code
 		m_Solver->solve();
 		cout << endl << endl;
 		cout << "COIN solution of a OSiL string in b64 format" << endl;
-		cout << m_Solver->osrl;
+		//cout << m_Solver->osrl;
 		m_Solver->osinstance = NULL;
 		delete m_Solver;
 		m_Solver = NULL;

@@ -38,7 +38,6 @@
 using std::cout;
 using std::endl;
 using std::ostringstream;
-//void osilerror_wrapper_l(const char* errormsg) ;
 %}
 
 %option reentrant
