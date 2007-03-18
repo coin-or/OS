@@ -2503,6 +2503,7 @@ OSInstance* yygetOSInstance( const char *osil) throw (ErrorClass) {
 		 	delete parserData;
 		  	throw ErrorClass(  "Error parsing the OSiL");
 		 }
+		osillex_destroy(scanner);
 		delete parserData;
 		return osinstance;
 	}

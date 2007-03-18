@@ -22,12 +22,18 @@
  
 
  OSrLParserData::OSrLParserData() :
+ 	statusType(""),
+	statusDescription(""),
 	numberOfSolutions(0),
 	numberOfVariables(0),
 	numberOfConstraints(0),
 	numberOfObjectives(0),
+	kounter( 0),
+	numberOfOtherVariableResult( 0),
+	solutionIdx( 0),
 	statusTypePresent(false),
 	generalStatusTypePresent(false)
  {
 
  }//OSrLParserData
+ 

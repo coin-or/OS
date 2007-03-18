@@ -839,7 +839,6 @@ bool OSResult::setSolutionNumber(int number){
 }//setSolutionNumber
 
 bool OSResult::setSolutionStatus(int solIdx, string type, string description){
-	std::cout << "GAIL iS   " << description << std::endl;
  	int nSols = this->getSolutionNumber();
 	if(resultData->optimization == NULL) return false;
 	if(nSols <= 0) return false;

@@ -25,31 +25,40 @@ public:
 	//methods
 	OSrLParserData( );
 	~OSrLParserData() ;
+	
+	
 	//properties
+	std::string statusType;
+	std::string statusDescription;
+	
 	void* scanner;
 	int numberOfSolutions;
 	int numberOfVariables;
 	int numberOfConstraints;
 	int numberOfObjectives;
+	
+	int kounter;
+	int numberOfOtherVariableResult;
+	int solutionIdx;
+	
+	// here i am 
+	int *objectiveIdx;
 
 
 	bool statusTypePresent;
 	bool generalStatusTypePresent;
 	
 	
-	
-	int solutionIdx;
+
 
 	double **objectiveValues;
 	double **primalSolution;
 	double **dualSolution;
-	int *objectiveIdx;
-	int kounter;
-	int numberOfOtherVariableResult;
+
 	struct OtherVariableResultStruct{
 		std::string name;
 		std::string description;
-		std::string *rcost;
+		std::string *otherVarText;
 	};
 	struct OtherVariableResultStruct *otherVarStruct;
 	std::vector<OtherVariableResultStruct*> otherVarVec;
