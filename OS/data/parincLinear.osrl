@@ -17,8 +17,9 @@
                         <var idx="1">252.011</var>
                     </values>
                     <other name="reduced costs" description="the variable reduced costs">
-                        <var idx="0" >0</var>
-                        <var idx="1">0</var>
+                        <var idx="0" >Adfd</var>
+                        <var idx="1">Af  
+                            adf</var>
                     </other>
                     <other name="name" description="the variable name">
                         <var idx="0">x0</var>

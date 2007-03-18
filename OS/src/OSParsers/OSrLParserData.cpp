@@ -22,11 +22,12 @@
  
 
  OSrLParserData::OSrLParserData() :
- beginElementText(false)
+	numberOfSolutions(0),
+	numberOfVariables(0),
+	numberOfConstraints(0),
+	numberOfObjectives(0),
+	statusTypePresent(false),
+	generalStatusTypePresent(false)
  {
 
  }//OSrLParserData
- 
-
-
- 

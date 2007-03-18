@@ -13,7 +13,7 @@
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
- 
+#define DEBUG
 #ifndef OSRESULT_H
 #define OSRESULT_H
 #include <string>

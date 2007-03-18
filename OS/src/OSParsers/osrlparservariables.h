@@ -17,7 +17,7 @@
 #include <vector> 
 using std::string ;
 
-OSResult* osresult;
+//OSResult* osresult;
 int numberOfSolutions;
 int numberOfVariables;
 int numberOfConstraints;

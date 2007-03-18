@@ -28,7 +28,7 @@
 #include <iostream>
 #include <sstream> 
 
- 
+
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
 YY_BUFFER_STATE osrl_scan_string (const char *yy_str , void* yyscanner  );
 int osrllex_init(void** ptr_yy_globals);
@@ -45,7 +45,6 @@ void osrlClearMemory();
 %pure-parser
 %locations
 %lex-param {void* scanner}
-%lex-param {OSrLParserData *parserData}
 %parse-param{OSResult *osresult}
 %parse-param{OSrLParserData *parserData}
 
@@ -62,9 +61,9 @@ this fails on in Mac OS X
 */
 
 %{
-int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner, OSrLParserData *parserData);
-void osrlerror(YYLTYPE* type, OSResult *osresult,  OSrLParserData *parserData ,const char* errormsg );
 
+void osrlerror(YYLTYPE* type, OSResult *osresult,  OSrLParserData *parserData ,const char* errormsg );
+int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
  
 #define scanner parserData->scanner
 %}
@@ -270,9 +269,9 @@ otherVariableResult:  OTHERSTART {
 othervar: anotherothervar
 | othervar anotherothervar;
 
-anotherothervar: VARSTART anIDXATT {parserData->beginElementText = true;  }  GREATERTHAN ELEMENTTEXT  {parserData->beginElementText = false; } VAREND { 
+anotherothervar: VARSTART anIDXATT  GREATERTHAN ELEMENTTEXT  VAREND { 
 if(kounter < 0 || kounter > numberOfVariables - 1) osrlerror(NULL, NULL, NULL, "index must be greater than 0 and less than the number of variables");
-otherVarStruct->rcost[kounter] = $5;
+otherVarStruct->rcost[kounter] = $4;
 };
 
  
@@ -362,11 +361,11 @@ void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, 
 
 OSResult *yygetOSResult(std::string parsestring){
 	void osrlinitialize();
-	bool createOSResult();
+	bool createOSResult(OSResult* osresult);
 	osrlinitialize();
-	//OSInstance* osinstance = NULL;
+	OSResult* osresult = NULL;
 	OSrLParserData *parserData = NULL;
-	//osinstance = new OSInstance();
+	osresult = new OSResult();
 	parserData = new OSrLParserData();
 	// call the flex scanner
     osrllex_init( &scanner);
@@ -374,14 +373,14 @@ OSResult *yygetOSResult(std::string parsestring){
 	std::cout << std::endl << std::endl;
 	//std::cout << "start parsing now" << std::endl;
 	osrlparse( osresult,  parserData);
-	if( createOSResult() == false) osrlerror(NULL, NULL, NULL, "Could not create OSResult");
+	//if( createOSResult( osresult) == false) osrlerror(NULL, NULL, NULL, "Could not create OSResult");
 	//std::cout << "Parse a success" << std::endl;
 	return osresult;
 } //end yygetOSResult
 
 void osrlClearMemory(){
-	delete osresult;
-	osresult = NULL;
+	//delete osresult;
+	//osresult = NULL;
 	if(numberOfSolutions > 0){
 		delete[] objectiveIdx;
 		objectiveIdx = NULL;
@@ -435,8 +434,8 @@ void osrlinitialize(){
 	otherVarVec.reserve(20);
 }// end osrlinitialize
 
-bool createOSResult(){
-	osresult = new OSResult();
+bool createOSResult(OSResult* osresult){
+	//osresult = new OSResult();
 	// set resultHeader parameters
 	if(generalStatusType != "") osresult->setGeneralStatusType( generalStatusType);
 	if(generalStatusDescription != "") osresult->setGeneralStatusType( generalStatusDescription);
@@ -486,10 +485,3 @@ bool createOSResult(){
 	}
 	return true;
 }
-
-
-
-
-
-
-

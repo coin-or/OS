@@ -19,6 +19,7 @@
 #include <vector> 
 
 
+
 class OSrLParserData{
 public:
 	//methods
@@ -26,7 +27,31 @@ public:
 	~OSrLParserData() ;
 	//properties
 	void* scanner;
-	bool beginElementText;
-};
+	int numberOfSolutions;
+	int numberOfVariables;
+	int numberOfConstraints;
+	int numberOfObjectives;
+
+
+	bool statusTypePresent;
+	bool generalStatusTypePresent;
+	
+	
+	int solutionIdx;
+
+	double **objectiveValues;
+	double **primalSolution;
+	double **dualSolution;
+	int *objectiveIdx;
+	int kounter;
+	int numberOfOtherVariableResult;
+	struct OtherVariableResultStruct{
+		std::string name;
+		std::string description;
+		std::string *rcost;
+	};
+	struct OtherVariableResultStruct *otherVarStruct;
+	std::vector<OtherVariableResultStruct*> otherVarVec;
+	};
 
 #endif /*OSRLPARSERDATA_H_*/

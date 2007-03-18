@@ -20,13 +20,13 @@
 //#include "lexyaccparser.h"
 //#include "externalvars.h"
 #include "OSrLParserData.h"
-
+#define PARSERDEBUG
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", yytext);
 #else     
 	#define YY_PRINT ;
 #endif
-#define YY_PRINT  printf("%s", yytext);
+
 #ifdef WIN_
 #define YY_NO_UNISTD_H
 #include <io.h>
@@ -53,7 +53,9 @@
 %x comment
 %x xmldeclaration
    
-  
+%{
+#define YY_EXTRA_TYPE OSrLParserData*
+%}  
 
 xmlwhitespace ([ \t\r\n])
 equality ([ \t\r\n])*=([ \t\r\n])*
@@ -65,11 +67,11 @@ endelementname (<\/[a-zA-Z][a-zA-Z0-9.:_]+)
 %% 
 
 
-{xmlwhitespace} 
+{xmlwhitespace}* {printf("HERE IS WHITESPACE\n");}
 
 
  {quote} {YY_PRINT; return(QUOTE);}
-({xmlwhitespace}*{greater_than}) {YY_PRINT; /*if(beginElementText == true){BEGIN elementtext; }*/ return(GREATERTHAN);}
+({xmlwhitespace}*{greater_than}) {YY_PRINT; printf("HELLO GAIL 1 \n");    return(GREATERTHAN);}
 -?[0-9]+  {YY_PRINT; yylval->ival = atoi( yytext); return(INTEGER);}
 -?((([0-9]+)|([0-9]*\.[0-9]+))([eE][-+]?[0-9]+)?|INF) {YY_PRINT; yylval->dval = atof( yytext); return(DOUBLE);}
 ({xmlwhitespace}*\/>) {YY_PRINT;  return(ENDOFELEMENT);}
@@ -158,7 +160,7 @@ endelementname (<\/[a-zA-Z][a-zA-Z0-9.:_]+)
 
 
 
-
+[a-zA-X0-9.:_ \n]+ { YY_PRINT;  printf("Here I am\n"); yylval->charval = strdup(yytext);   return(ELEMENTTEXT); }
 
 "<!--" BEGIN comment;
  <comment>. |
