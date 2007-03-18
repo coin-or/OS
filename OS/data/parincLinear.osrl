@@ -17,9 +17,8 @@
                         <var idx="1">252.011</var>
                     </values>
                     <other name="reduced costs" description="the variable reduced costs">
-                        <var idx="0" >Adfd</var>
-                        <var idx="1">Af  
-                            adf</var>
+                        <var idx="0" >0.0</var>
+                        <var idx="1">0.0</var>
                     </other>
                     <other name="name" description="the variable name">
                         <var idx="0">x0</var>
@@ -28,14 +27,14 @@
                 </variables>
                 <objectives>
                     <values>
-                        <obj idx="-1">-7667.94</obj>
+                        <obj idx="-1">7667.94</obj>
                     </values>
                 </objectives>
                 <constraints>
                     <dualValues>
-                        <con idx="0">-4.37457</con>
+                        <con idx="0">4.37457</con>
                         <con idx="1">0</con>
-                        <con idx="2">-6.9378</con>
+                        <con idx="2">6.9378</con>
                         <con idx="3">0</con>
                     </dualValues>
                 </constraints>

@@ -104,7 +104,23 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %%
 
 
-osrldoc: osrlstart resultHeader resultData  OSRLEND;
+osrldoc: osrlstart resultHeader resultData 
+{
+ 	if(numberOfSolutions > 0){
+		for(int solIdx = 0; solIdx < numberOfSolutions; solIdx++){
+			osresult->setSolutionStatus(solIdx, statusType, statusDescription);
+			osresult->setPrimalVariableValues(solIdx, primalSolution[ solIdx]);
+			osresult->setNumberOfOtherVariableResult(solIdx, numberOfOtherVariableResult);
+			for(int k = 0; k < numberOfOtherVariableResult; k++){
+				osresult->setAnOtherVariableResult(solIdx, k, otherVarVec[ k]->name, otherVarVec[ k]->description, otherVarVec[ k]->rcost);				
+			}
+			osresult->setDualVariableValues(solIdx, dualSolution[ solIdx]);
+			osresult->setObjectiveValues(solIdx, objectiveValues[ solIdx]);
+			osresult->setSolutionObjectiveIndex(solIdx,  *(objectiveIdx + solIdx));
+		}
+	}
+}
+OSRLEND;
 
 osrlstart:	OSRLSTART  GREATERTHAN 
 			| OSRLSTART OSRLATTRIBUTETEXT GREATERTHAN ;
@@ -202,18 +218,18 @@ optatt:  optnumsolatt  quote
 
 optnumsolatt: NUMBEROFSOLUTIONSATT INTEGER   {numberOfSolutions = $2; osresult->setSolutionNumber($2);}  ;
 	
-optnumvaratt: NUMBEROFVARIABLESATT INTEGER  {numberOfVariables = $2;} ;
+optnumvaratt: NUMBEROFVARIABLESATT INTEGER  {numberOfVariables = $2; osresult->setVariableNumber($2); } ;
 	
-optnumconatt: NUMBEROFCONSTRAINTSATT INTEGER   {numberOfConstraints = $2;}  ;
+optnumconatt: NUMBEROFCONSTRAINTSATT INTEGER   {numberOfConstraints = $2; osresult->setConstraintNumber($2);}  ;
 
-
-optnumobjatt: NUMBEROFOBJECTIVESATT INTEGER   {numberOfObjectives = $2;}  ;
+optnumobjatt: NUMBEROFOBJECTIVESATT INTEGER   {numberOfObjectives = $2; osresult->setObjectiveNumber($2);}  ;
 	
 
 
 solution:  OPTIMIZATIONEND
 | anothersolution  OPTIMIZATIONEND
 | solution anothersolution  OPTIMIZATIONEND;
+
 
 anothersolution: SOLUTIONSTART objectiveIDXATT GREATERTHAN status message variables objectives constraints otherSolution   {solutionIdx++;};
 
@@ -225,8 +241,8 @@ objectiveIDXATT:
 | OBJECTIVEIDXATT INTEGER quote {if($2 >= 0) osrlerror(NULL, NULL, NULL, "objective index must be nonpositive");
 *(objectiveIdx + solutionIdx) = $2;};
 
-status: STATUSSTART anotherStatusATT GREATERTHAN  STATUSEND {if(statusTypePresent == false) osrlerror(NULL, NULL, NULL, "a type attribute required for status element");}
-| STATUSSTART anotherStatusATT ENDOFELEMENT {if(statusTypePresent == false) osrlerror(NULL, NULL, NULL, "a type attribute required for status element"); statusTypePresent = false;};
+status: STATUSSTART anotherStatusATT GREATERTHAN  STATUSEND {if(statusTypePresent == false) osrlerror(NULL, NULL, NULL, "a type attribute required for status element");  osresult->setSolutionStatus(solutionIdx, statusType, statusDescription);}
+| STATUSSTART anotherStatusATT ENDOFELEMENT {if(statusTypePresent == false) osrlerror(NULL, NULL, NULL, "a type attribute required for status element"); statusTypePresent = false; osresult->setSolutionStatus(solutionIdx, statusType, statusDescription);};
 
 
 anotherStatusATT: statusatt
@@ -240,7 +256,8 @@ message:
 | MESSAGESTART MESSAGEEND;
 
 variables:
-| VARIABLESSTART GREATERTHAN VALUESSTART GREATERTHAN var VALUESEND otherVariables VARIABLESEND;
+| VARIABLESSTART GREATERTHAN VALUESSTART GREATERTHAN var VALUESEND 
+ otherVariables VARIABLESEND;
 
 var: anothervar
 | var anothervar;
@@ -272,6 +289,21 @@ othervar: anotherothervar
 anotherothervar: VARSTART anIDXATT  GREATERTHAN ELEMENTTEXT  VAREND { 
 if(kounter < 0 || kounter > numberOfVariables - 1) osrlerror(NULL, NULL, NULL, "index must be greater than 0 and less than the number of variables");
 otherVarStruct->rcost[kounter] = $4;
+}
+|
+VARSTART anIDXATT  GREATERTHAN DOUBLE  VAREND { 
+std::cout <<   "I AM IN DOUBLE" << std::endl;
+if(kounter < 0 || kounter > numberOfVariables - 1) osrlerror(NULL, NULL, NULL, "index must be greater than 0 and less than the number of variables");
+std::ostringstream outStr;
+outStr << $4;
+otherVarStruct->rcost[kounter] =  outStr.str();
+}
+|VARSTART anIDXATT  GREATERTHAN INTEGER  VAREND { 
+std::cout <<  "I AM IN INTEGER" << std::endl;
+if(kounter < 0 || kounter > numberOfVariables - 1) osrlerror(NULL, NULL, NULL, "index must be greater than 0 and less than the number of variables");
+std::ostringstream outStr;
+outStr << $4;
+otherVarStruct->rcost[kounter] =  outStr.str();
 };
 
  

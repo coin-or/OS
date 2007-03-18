@@ -71,7 +71,7 @@ endelementname (<\/[a-zA-Z][a-zA-Z0-9.:_]+)
 
 
  {quote} {YY_PRINT; return(QUOTE);}
-({xmlwhitespace}*{greater_than}) {YY_PRINT; printf("HELLO GAIL 1 \n");    return(GREATERTHAN);}
+({xmlwhitespace}*{greater_than}) {YY_PRINT;     return(GREATERTHAN);}
 -?[0-9]+  {YY_PRINT; yylval->ival = atoi( yytext); return(INTEGER);}
 -?((([0-9]+)|([0-9]*\.[0-9]+))([eE][-+]?[0-9]+)?|INF) {YY_PRINT; yylval->dval = atof( yytext); return(DOUBLE);}
 ({xmlwhitespace}*\/>) {YY_PRINT;  return(ENDOFELEMENT);}
@@ -160,7 +160,7 @@ endelementname (<\/[a-zA-Z][a-zA-Z0-9.:_]+)
 
 
 
-[a-zA-X0-9.:_ \n]+ { YY_PRINT;  printf("Here I am\n"); yylval->charval = strdup(yytext);   return(ELEMENTTEXT); }
+[a-zA-X0-9.:_ \n]+ { YY_PRINT;  yylval->charval = strdup(yytext);   return(ELEMENTTEXT); }
 
 "<!--" BEGIN comment;
  <comment>. |

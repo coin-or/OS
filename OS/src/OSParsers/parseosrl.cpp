@@ -1513,7 +1513,7 @@ case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
 #line 74 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
-{YY_PRINT; printf("HELLO GAIL 1 \n");    return(GREATERTHAN);}
+{YY_PRINT;     return(GREATERTHAN);}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
@@ -1925,7 +1925,7 @@ case 72:
 /* rule 72 can match eol */
 YY_RULE_SETUP
 #line 163 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
-{ YY_PRINT;  printf("Here I am\n"); yylval->charval = strdup(yytext);   return(ELEMENTTEXT); }
+{ YY_PRINT;  yylval->charval = strdup(yytext);   return(ELEMENTTEXT); }
 	YY_BREAK
 case 73:
 YY_RULE_SETUP
