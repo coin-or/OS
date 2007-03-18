@@ -1751,47 +1751,47 @@ yyreduce:
     {
         case 6:
 
-    {if(generalStatusTypePresent == false) osrlerror(NULL, NULL, NULL, "a type attribute required for generalStatus element");}
+    {if(parserData->generalStatusTypePresent == false) osrlerror(NULL, NULL, NULL, "a type attribute required for generalStatus element");}
     break;
 
   case 7:
 
-    {if(generalStatusTypePresent == false) osrlerror(NULL, NULL, NULL, "a type attribute required for generalStatus element"); generalStatusTypePresent = false;}
+    {if(parserData->generalStatusTypePresent == false) osrlerror(NULL, NULL, NULL, "a type attribute required for generalStatus element"); parserData->generalStatusTypePresent = false;}
     break;
 
   case 10:
 
-    {generalStatusType = (yyvsp[(2) - (3)].charval); osresult->setGeneralStatusType((yyvsp[(2) - (3)].charval));  generalStatusTypePresent = true;}
+    { osresult->setGeneralStatusType((yyvsp[(2) - (3)].charval));  parserData->generalStatusTypePresent = true;}
     break;
 
   case 11:
 
-    {generalStatusDescription = (yyvsp[(2) - (3)].charval);  osresult->setGeneralStatusDescription((yyvsp[(2) - (3)].charval)); }
+    {  osresult->setGeneralStatusDescription((yyvsp[(2) - (3)].charval)); }
     break;
 
   case 14:
 
-    {serviceURI = (yyvsp[(2) - (3)].charval);}
+    {osresult->setServiceURI( (yyvsp[(2) - (3)].charval));}
     break;
 
   case 18:
 
-    {serviceName = (yyvsp[(2) - (3)].charval);}
+    {osresult->setServiceName( (yyvsp[(2) - (3)].charval));}
     break;
 
   case 22:
 
-    {instanceName = (yyvsp[(2) - (3)].charval);}
+    {osresult->setInstanceName( (yyvsp[(2) - (3)].charval)) ;}
     break;
 
   case 26:
 
-    {jobID = (yyvsp[(2) - (3)].charval);}
+    {osresult->setJobID( (yyvsp[(2) - (3)].charval));}
     break;
 
   case 30:
 
-    {headerMessage = (yyvsp[(2) - (3)].charval);}
+    {osresult->setGeneralMessage( (yyvsp[(2) - (3)].charval));}
     break;
 
   case 39:
@@ -1824,7 +1824,7 @@ yyreduce:
 
   case 49:
 
-    {numberOfSolutions = (yyvsp[(2) - (2)].ival);}
+    {numberOfSolutions = (yyvsp[(2) - (2)].ival); osresult->setSolutionNumber((yyvsp[(2) - (2)].ival));}
     break;
 
   case 50:
@@ -2214,7 +2214,7 @@ OSResult *yygetOSResult(std::string parsestring){
 	std::cout << std::endl << std::endl;
 	//std::cout << "start parsing now" << std::endl;
 	osrlparse( osresult,  parserData);
-	if( createOSResult( osresult) == false) osrlerror(NULL, NULL, NULL, "Could not create OSResult");
+	//if( createOSResult( osresult) == false) osrlerror(NULL, NULL, NULL, "Could not create OSResult");
 	//std::cout << "Parse a success" << std::endl;
 	return osresult;
 } //end yygetOSResult

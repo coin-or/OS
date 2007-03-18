@@ -37,6 +37,7 @@ public:
 	bool generalStatusTypePresent;
 	
 	
+	
 	int solutionIdx;
 
 	double **objectiveValues;

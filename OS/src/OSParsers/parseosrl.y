@@ -113,40 +113,40 @@ osrlstart:	OSRLSTART  GREATERTHAN
 
 resultHeader: RESULTHEADERSTART generalStatus serviceURI serviceName instanceName jobID headerMessage RESULTHEADEREND  ; 
    
-generalStatus: GENERALSTATUSSTART anotherGeneralStatusATT GREATERTHAN GENERALSTATUSEND {if(generalStatusTypePresent == false) osrlerror(NULL, NULL, NULL, "a type attribute required for generalStatus element");}
-| GENERALSTATUSSTART anotherGeneralStatusATT ENDOFELEMENT {if(generalStatusTypePresent == false) osrlerror(NULL, NULL, NULL, "a type attribute required for generalStatus element"); generalStatusTypePresent = false;};
+generalStatus: GENERALSTATUSSTART anotherGeneralStatusATT GREATERTHAN GENERALSTATUSEND {if(parserData->generalStatusTypePresent == false) osrlerror(NULL, NULL, NULL, "a type attribute required for generalStatus element");}
+| GENERALSTATUSSTART anotherGeneralStatusATT ENDOFELEMENT {if(parserData->generalStatusTypePresent == false) osrlerror(NULL, NULL, NULL, "a type attribute required for generalStatus element"); parserData->generalStatusTypePresent = false;};
 
 anotherGeneralStatusATT: generalstatusatt
 	| anotherGeneralStatusATT generalstatusatt  ;
 
-generalstatusatt: TYPEATT ATTRIBUTETEXT quote  {generalStatusType = $2; osresult->setGeneralStatusType($2);  generalStatusTypePresent = true;}   
-		|  DESCRIPTIONATT ATTRIBUTETEXT  quote {generalStatusDescription = $2;  osresult->setGeneralStatusDescription($2); }    
+generalstatusatt: TYPEATT ATTRIBUTETEXT quote  { osresult->setGeneralStatusType($2);  parserData->generalStatusTypePresent = true;}   
+		|  DESCRIPTIONATT ATTRIBUTETEXT  quote {  osresult->setGeneralStatusDescription($2); }    
 
 
 serviceURI: 
 | SERVICEURISTARTANDEND
-| SERVICEURISTART ELEMENTTEXT SERVICEURIEND {serviceURI = $2;}
+| SERVICEURISTART ELEMENTTEXT SERVICEURIEND {osresult->setServiceURI( $2);}
 | SERVICEURISTART SERVICEURIEND ;
 
 
 serviceName: 
 | SERVICENAMESTARTANDEND
-| SERVICENAMESTART ELEMENTTEXT SERVICENAMEEND {serviceName = $2;}
+| SERVICENAMESTART ELEMENTTEXT SERVICENAMEEND {osresult->setServiceName( $2);}
 | SERVICENAMESTART SERVICENAMEEND ;
 
 instanceName: 
 | INSTANCENAMESTARTANDEND
-| INSTANCENAMESTART ELEMENTTEXT INSTANCENAMEEND {instanceName = $2;}
+| INSTANCENAMESTART ELEMENTTEXT INSTANCENAMEEND {osresult->setInstanceName( $2) ;}
 | INSTANCENAMESTART INSTANCENAMEEND ;
 
 jobID: 
 | JOBIDSTARTANDEND
-| JOBIDSTART ELEMENTTEXT JOBIDEND {jobID = $2;}
+| JOBIDSTART ELEMENTTEXT JOBIDEND {osresult->setJobID( $2);}
 | JOBIDSTART JOBIDEND ;
 
 headerMessage: 
 | HEADERMESSAGESTARTANDEND
-| HEADERMESSAGESTART ELEMENTTEXT HEADERMESSAGEEND {headerMessage = $2;}
+| HEADERMESSAGESTART ELEMENTTEXT HEADERMESSAGEEND {osresult->setGeneralMessage( $2);}
 | HEADERMESSAGESTART HEADERMESSAGEEND ;
 
 resultData: RESULTDATASTARTANDEND 
@@ -200,7 +200,7 @@ optatt:  optnumsolatt  quote
 		;
 
 
-optnumsolatt: NUMBEROFSOLUTIONSATT INTEGER   {numberOfSolutions = $2; osinstance->setSolutionNumer($2);}  ;
+optnumsolatt: NUMBEROFSOLUTIONSATT INTEGER   {numberOfSolutions = $2; osresult->setSolutionNumber($2);}  ;
 	
 optnumvaratt: NUMBEROFVARIABLESATT INTEGER  {numberOfVariables = $2;} ;
 	
@@ -373,7 +373,7 @@ OSResult *yygetOSResult(std::string parsestring){
 	std::cout << std::endl << std::endl;
 	//std::cout << "start parsing now" << std::endl;
 	osrlparse( osresult,  parserData);
-	if( createOSResult( osresult) == false) osrlerror(NULL, NULL, NULL, "Could not create OSResult");
+	//if( createOSResult( osresult) == false) osrlerror(NULL, NULL, NULL, "Could not create OSResult");
 	//std::cout << "Parse a success" << std::endl;
 	return osresult;
 } //end yygetOSResult
