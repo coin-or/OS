@@ -200,7 +200,7 @@ optatt:  optnumsolatt  quote
 		;
 
 
-optnumsolatt: NUMBEROFSOLUTIONSATT INTEGER   {numberOfSolutions = $2;}  ;
+optnumsolatt: NUMBEROFSOLUTIONSATT INTEGER   {numberOfSolutions = $2; osinstance->setSolutionNumer($2);}  ;
 	
 optnumvaratt: NUMBEROFVARIABLESATT INTEGER  {numberOfVariables = $2;} ;
 	
