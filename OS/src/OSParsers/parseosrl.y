@@ -119,8 +119,8 @@ generalStatus: GENERALSTATUSSTART anotherGeneralStatusATT GREATERTHAN GENERALSTA
 anotherGeneralStatusATT: generalstatusatt
 	| anotherGeneralStatusATT generalstatusatt  ;
 
-generalstatusatt: TYPEATT ATTRIBUTETEXT quote  {generalStatusType = $2; generalStatusTypePresent = true;}   
-		|  DESCRIPTIONATT ATTRIBUTETEXT  quote {generalStatusDescription = $2;}    
+generalstatusatt: TYPEATT ATTRIBUTETEXT quote  {generalStatusType = $2; osresult->setGeneralStatusType($2);  generalStatusTypePresent = true;}   
+		|  DESCRIPTIONATT ATTRIBUTETEXT  quote {generalStatusDescription = $2;  osresult->setGeneralStatusDescription($2); }    
 
 
 serviceURI: 
@@ -373,7 +373,7 @@ OSResult *yygetOSResult(std::string parsestring){
 	std::cout << std::endl << std::endl;
 	//std::cout << "start parsing now" << std::endl;
 	osrlparse( osresult,  parserData);
-	//if( createOSResult( osresult) == false) osrlerror(NULL, NULL, NULL, "Could not create OSResult");
+	if( createOSResult( osresult) == false) osrlerror(NULL, NULL, NULL, "Could not create OSResult");
 	//std::cout << "Parse a success" << std::endl;
 	return osresult;
 } //end yygetOSResult

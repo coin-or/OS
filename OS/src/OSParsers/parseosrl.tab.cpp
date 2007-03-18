@@ -1761,12 +1761,12 @@ yyreduce:
 
   case 10:
 
-    {generalStatusType = (yyvsp[(2) - (3)].charval); generalStatusTypePresent = true;}
+    {generalStatusType = (yyvsp[(2) - (3)].charval); osresult->setGeneralStatusType((yyvsp[(2) - (3)].charval));  generalStatusTypePresent = true;}
     break;
 
   case 11:
 
-    {generalStatusDescription = (yyvsp[(2) - (3)].charval);}
+    {generalStatusDescription = (yyvsp[(2) - (3)].charval);  osresult->setGeneralStatusDescription((yyvsp[(2) - (3)].charval)); }
     break;
 
   case 14:
@@ -2214,7 +2214,7 @@ OSResult *yygetOSResult(std::string parsestring){
 	std::cout << std::endl << std::endl;
 	//std::cout << "start parsing now" << std::endl;
 	osrlparse( osresult,  parserData);
-	//if( createOSResult( osresult) == false) osrlerror(NULL, NULL, NULL, "Could not create OSResult");
+	if( createOSResult( osresult) == false) osrlerror(NULL, NULL, NULL, "Could not create OSResult");
 	//std::cout << "Parse a success" << std::endl;
 	return osresult;
 } //end yygetOSResult

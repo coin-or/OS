@@ -823,15 +823,16 @@ bool OSResult::setConstraintNumber(int constraintNumber){
 }//setConstraintNumber
 
 bool OSResult::setSolutionNumber(int number){
-	if(getVariableNumber() <= 0) return false;
+	//if(getVariableNumber() <= 0) return false;
 	//if(getObjectiveNumber() < 0) return false;
-	if(getConstraintNumber() < 0) return false;
+	//if(getConstraintNumber() < 0) return false;
 	if(number < 0) return false; 
 	if(number == 0) return true;
-	resultData->optimization->numberOfSolutions = number;
 	if(resultData->optimization == NULL) resultData->optimization = new OptimizationResult();
+	resultData->optimization->numberOfSolutions = number;
 	resultData->optimization->solution = new OptimizationSolution*[number];
 	for(int i = 0; i < number; i++){
+		std::cout << "CREATING A NEW OPTIMIZATION SOLUTION" << std::endl;
 		resultData->optimization->solution[i] = new OptimizationSolution();
 	}
 	return true;
