@@ -74,7 +74,7 @@ class AddVariables : public OsiXForm{
 		int i;
 		int N = varNums.size();
 		for(i = 0; i < N; i++){
-			cout << "Delete Constraint with Index =  " << varNums[ i] << endl;
+			cout << "Delete Variable with Index =  " << varNums[ i] << endl;
 		}
 	}
 	// for now this constructor only takes a variable number. Later
@@ -89,7 +89,7 @@ class AddVariables : public OsiXForm{
 	~AddVariables(){
 	}
 }; //class AddVariales
-// initialize static member conNums
+// initialize static member varNums
 std::vector<int> AddVariables::varNums;
 
 class OsiXFormRec {
