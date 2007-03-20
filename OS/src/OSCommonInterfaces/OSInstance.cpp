@@ -1297,6 +1297,8 @@ bool OSInstance::addConstraint(int index, string name, double lowerBound, double
 
 bool OSInstance::setConstraints(int number, string* names, double* lowerBounds, double* upperBounds, double* constants){
 	if(number < 0) return false;
+	m_bProcessConstraints = false;
+	m_bProcessConstraints = false;
 	if(number == 0){
 		instanceData->constraints = new Constraints();
 		instanceData->constraints->numberOfConstraints = 0;
