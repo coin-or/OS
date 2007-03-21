@@ -36,7 +36,7 @@
  */
 
 
-enum OP_CODES{
+ enum OP_CODES{
 	OS_PLUS = 1001,
 	OS_SUM = 1002,
 	OS_MINUS = 1003,
@@ -179,9 +179,9 @@ public:
 	 */	
 	std::string getToken();
 	
-	static void setnlNodeIdxMap();
+	//static void setnlNodeIdxMap();
 	
-	static OSnLNode* getOSnLNodeFromToken(std::string sOSnLNodeToken);
+	//static OSnLNode* getOSnLNodeFromToken(std::string sOSnLNodeToken);
 	
 	/**
 	 * Calculate the function value given the current variable values.

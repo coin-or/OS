@@ -35,10 +35,11 @@ using std::endl;
  
 std::vector<OSnLNode*> postfixVector;
 std::vector<OSnLNode*> prefixVector;
+//std::map<int, int> nlNodeIdxMap;
 
 
 
-static std::string msnodeNames[] = {
+const std::string msnodeNames[] = {
 	/*1--*/"plus", "sum", "minus", "negate", "times", "divide",
 	"quotient", "rem", "power", "product",
 	/*2--*/"abs", "floor", "ceiling", "percent", "square", "squareRoot", "ln", "log", "log10", "exp",
@@ -107,7 +108,7 @@ const int m_miNodeIndexes[] = {
 	9010, 9011, 9012, /*9013,*/
 };
 
-static int m_miNodeTypes[] = {
+const int m_miNodeTypes[] = {
 	/*1--*/2, -1, 2, 1, 2, 2,
 	2, 2, 2, -1,
 	/*2--*/1, 1, 1, 1, 1, 1, 1, 2, 1, 1,
@@ -141,7 +142,7 @@ static int m_miNodeTypes[] = {
 };
 
 
-
+/*
 static OSnLNodePlus n1001;
 static OSnLNodeSum n1002;
 static OSnLNodeMinus n1003;
@@ -161,9 +162,10 @@ static OSnLNodeVariable n6001;
 static OSnLNodeIf n7001;
 static OSnLNodeAbs n2001;
 static OSnLNodeMax n3024;
+*/
 
-std::map<int, int> nlNodeIdxMap;
 
+/*
 void OSnLNode::setnlNodeIdxMap(){
 	nlNodeIdxMap[OS_PLUS] = 0;
 	nlNodeIdxMap[OS_SUM] = 1;
@@ -185,11 +187,14 @@ void OSnLNode::setnlNodeIdxMap(){
 	nlNodeIdxMap[OS_SIN] = 17;
 	nlNodeIdxMap[OS_COS] = 18;
 }
+*/
 
+/*
 static OSnLNode *nlNodeArray[] = { &n1001, &n1002, &n1003, &n1004, &n1005, &n1006,
 	&n1009, &n1010, &n2007, &n2010, &n5001, &n6001, &n7001, &n2001, &n3024, &n2006,
 	&n2005, &n3001, &n3002
 };
+*/
  
 //
 //OSnLNode methods
@@ -301,7 +306,7 @@ std::string OSnLNode::getTokenName(){
 }//getTokenNumber
 
 
-
+/*
 OSnLNode* OSnLNode::getOSnLNodeFromToken(std::string sToken){
 // kipp possibly make this a static method or put it somewhere else
 	OSnLNode *nlNodePoint;
@@ -400,6 +405,7 @@ OSnLNode* OSnLNode::getOSnLNodeFromToken(std::string sToken){
 	}
 	return nlNodePoint;
 }//end getOSnLNodeFromToken
+*/
 
 
 
