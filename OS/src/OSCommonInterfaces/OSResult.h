@@ -300,6 +300,7 @@ class VariableValues{
 public:
 
 	VarValue **var;
+
 	
 	/**
 	 *
