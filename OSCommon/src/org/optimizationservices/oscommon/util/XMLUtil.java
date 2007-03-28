@@ -424,6 +424,9 @@ public class XMLUtil {
 	 * @return the first child node if found, otherwise null.
 	 */
 	public static Node findChildNode(Node parentNode, String childNodeName){
+		if(parentNode == null){
+			return null;
+		}
 		NodeList childNodes = parentNode.getChildNodes();
 		if(childNodes == null) return null;
 		for(int i = 0; i < childNodes.getLength(); i++){
@@ -445,6 +448,9 @@ public class XMLUtil {
 	 */
 	public static Vector<Element> getChildElementsByTagName(Node parentNode, String childNodeName){
 		Vector<Element> vElement = new Vector<Element>();
+		if(parentNode == null){
+			return vElement;
+		}
 		NodeList childNodes = parentNode.getChildNodes();
 		for(int i = 0; i < childNodes.getLength(); i++){
 			if(childNodes.item(i).getNodeName().equals(childNodeName)){
@@ -462,6 +468,9 @@ public class XMLUtil {
 	 */
 	public static int removeAllChildren(Node parentNode){
 		int iChildren = 0;
+		if(parentNode == null){
+			return iChildren;
+		}
 		if(parentNode.getChildNodes() != null){
 			iChildren = parentNode.getChildNodes().getLength();
 			for(int i = 0; i < iChildren; i++){
@@ -498,6 +507,9 @@ public class XMLUtil {
 	public static int removeChildrenByName(Node parentNode, String childName){
 		int iChild = 0;
 		int iChildrenRemoved = 0;
+		if(parentNode == null){
+			return iChildrenRemoved;
+		}
 		while(iChild < parentNode.getChildNodes().getLength()){
 			Node sNode = parentNode.getChildNodes().item(iChild);
 			String sNodeName = sNode.getNodeName();
