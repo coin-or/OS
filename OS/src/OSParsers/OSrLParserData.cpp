@@ -13,10 +13,38 @@
  * 
  */
  #include "OSrLParserData.h"
- OSrLParserData::~OSrLParserData() 
-
- 	
- {
+ OSrLParserData::~OSrLParserData() {
+ 	if(numberOfSolutions > 0){
+		delete objectiveIdx;
+		objectiveIdx = NULL;
+		for(int i = 0; i < numberOfSolutions; i++){
+			delete[] primalSolution[ i];
+			delete primalSolution[ i];
+			primalSolution[ i] = NULL;
+			// now delete other var
+			for(int k = 0; k < numberOfOtherVariableResult; k++){
+				delete[] otherVarVec[ k]->otherVarText;
+				delete otherVarVec[i];
+				otherVarVec[ k] = NULL;				
+			}
+			otherVarVec.clear();
+			if( numberOfConstraints > 0){
+				delete[] dualSolution[ i];
+				delete dualSolution[ i];
+				dualSolution[ i] = NULL;
+			}
+			delete[] objectiveValues[i];
+			delete objectiveValues[i];
+			objectiveValues[i] = NULL;
+		}
+	}
+	delete primalSolution;
+	primalSolution = NULL;
+	delete dualSolution;
+	dualSolution = NULL;
+	delete objectiveValues;
+	objectiveValues = NULL;
+	
 
  }//~OSrLParserData
  
@@ -31,8 +59,11 @@
 	kounter( 0),
 	numberOfOtherVariableResult( 0),
 	solutionIdx( 0),
-	statusTypePresent(false),
-	generalStatusTypePresent(false)
+	statusTypePresent( false),
+	generalStatusTypePresent( false),
+	otherNamePresent( false),
+	objectiveIdx( NULL),
+	otherVarStruct( NULL)
  {
 
  }//OSrLParserData

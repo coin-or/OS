@@ -18,8 +18,11 @@
 #include "OSnLNode.h"
 #include <vector> 
 
-
-
+struct OtherVariableResultStruct{
+	std::string name;
+	std::string description;
+	std::string *otherVarText;
+};
 class OSrLParserData{
 public:
 	//methods
@@ -36,32 +39,21 @@ public:
 	int numberOfVariables;
 	int numberOfConstraints;
 	int numberOfObjectives;
-	
 	int kounter;
 	int numberOfOtherVariableResult;
 	int solutionIdx;
-	
-	// here i am 
-	int *objectiveIdx;
-
 
 	bool statusTypePresent;
 	bool generalStatusTypePresent;
+	bool otherNamePresent;
 	
-	
-
-
+	int *objectiveIdx;
 	double **objectiveValues;
 	double **primalSolution;
 	double **dualSolution;
 
-	struct OtherVariableResultStruct{
-		std::string name;
-		std::string description;
-		std::string *otherVarText;
-	};
 	struct OtherVariableResultStruct *otherVarStruct;
 	std::vector<OtherVariableResultStruct*> otherVarVec;
-	};
+};
 
 #endif /*OSRLPARSERDATA_H_*/

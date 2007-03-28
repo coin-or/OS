@@ -42,14 +42,14 @@ typedef struct yy_buffer_state *YY_BUFFER_STATE;
 //void osil_delete_buffer( YY_BUFFER_STATE buffer);
 
 // YY_BUFFER_STATE osol_scan_buffer(char *base, unsigned int size);
-void osol_delete_buffer( YY_BUFFER_STATE buffer);
+//void osol_delete_buffer( YY_BUFFER_STATE buffer);
 
 YY_BUFFER_STATE osss_scan_string(const char* osss ); 
 
 //int osrllex(void); 
 //int osillex(void);
 //int osillex(YYSTYPE* lvalp, YYLTYPE* llocp, void* scanner);
-int osollex(void);
+//int osollex(void);
 int ossslex(void);
 //OSResult *yygetOSResult(std::string osrl);
 

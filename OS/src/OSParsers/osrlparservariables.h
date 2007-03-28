@@ -26,29 +26,34 @@ using std::string ;
 //string statusDescription;
 //string generalStatusType;
 //string generalStatusDescription;
-bool statusTypePresent;
-bool generalStatusTypePresent;
-bool otherNamePresent;
-bool beginElementText;
-int solutionIdx;
+//bool statusTypePresent;
+//bool generalStatusTypePresent;
+//bool otherNamePresent;
+//bool beginElementText;
+//int solutionIdx;
 //string serviceURI;
 //string serviceName;
 //string instanceName;
 //string jobID;
 //string headerMessage;
-double **objectiveValues;
-double **primalSolution;
-double **dualSolution;
-int *objectiveIdx;
+
+//int *objectiveIdx;
+//double **objectiveValues;
+//double **primalSolution;
+//double **dualSolution;
+
 //int kounter;
-int numberOfOtherVariableResult;
-struct OtherVariableResultStruct{
-	std::string name;
-	std::string description;
-	std::string *otherVarText;
-};
-struct OtherVariableResultStruct *otherVarStruct;
-std::vector<OtherVariableResultStruct*> otherVarVec;
+//int numberOfOtherVariableResult;
+
+
+
+//struct OtherVariableResultStruct{
+//	std::string name;
+//	std::string description;
+//	std::string *otherVarText;
+//};
+//struct OtherVariableResultStruct *otherVarStruct;
+//std::vector<OtherVariableResultStruct*> otherVarVec;
 
 
 /*  end header file */ 

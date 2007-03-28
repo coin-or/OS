@@ -19,7 +19,7 @@
 #include "ErrorClass.h" 
 
 
-void osrlClearMemory();
+
 OSResult *yygetOSResult( std::string parsestring) ;
 
 
@@ -27,7 +27,7 @@ OSrLReader::OSrLReader( ) {
 }
 
 OSrLReader::~OSrLReader(){
-	osrlClearMemory();
+	
 } 
 
 OSResult* OSrLReader::readOSrL(std::string osrl){   

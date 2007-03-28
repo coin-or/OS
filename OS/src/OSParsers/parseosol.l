@@ -15,10 +15,10 @@
 %{
 
 #include <stdio.h> 
-#include "lexyaccparser.h"
-#include "externalvars.h"
-#include <time.h>
-#include "OSConfig.h"
+//#include "lexyaccparser.h"
+//#include "externalvars.h"
+
+
 
 
 #ifdef PARSERDEBUG
@@ -35,7 +35,12 @@
 %}
 
 %option prefix="osol"
-%option noyywrap   
+%option noyywrap
+%option reentrant
+%option yylineno   
+
+
+  
 
 
 xmlwhitespace ([ \t\r\n])

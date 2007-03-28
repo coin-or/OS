@@ -424,9 +424,6 @@ int main(int argC, char* argV[])
 		osrlreader = new OSrLReader();
 		OSResult *osresult = NULL;
 		osresult = new OSResult(); 
-		//delete fileUtil;
-		//fileUtil = NULL;
-		//fileUtil = new FileUtil();
 		cout << "TEST PARSING AN OSrL FILE" << endl;
 		cout << "FIRST READ THE OSrL FILE INTO A STRING" << endl;
 		parserTestOSiLFileName = dataDir + "parincLinear.osrl"; 
@@ -439,11 +436,11 @@ int main(int argC, char* argV[])
 		cout << "PARSE THE OSRL STRING INTO AN OSRESULT OBJECT" << endl;
 		osresult = osrlreader->readOSrL( osrl);
 		cout << osrlwriter->writeOSrL( osresult) << endl;
-		//delete osrlwriter;
+		delete osrlwriter;
 		osrlwriter = NULL;
-		//delete osrlreader;
+		delete osrlreader;
 		osrlreader = NULL;
-		//delete osresult;
+		delete osresult;
 		osresult = NULL;
 		finish = clock();
 		duration = (double) (finish - start) / CLOCKS_PER_SEC;
