@@ -101,26 +101,31 @@ int main(int argC, char* argV[])
 	x[0]      = x0;
 
 	// declare independent variables and start tape recording
+	std::cout << "Start Taping" << std::endl;
 	CppAD::Independent(x);
 
 	// range space vector 
 	size_t m = 1;
 	CppADvector< AD<double> > y(m);
-	y[0] = CppAD::sqrt(x[0]);
+	//y[0] = CppAD::sqrt(x[0]);
+	y[ 0] = 1.7 + x[0] + x[0]*x[0]/2.3;
 
 	// create f: x -> y and stop tape recording
 	CppAD::ADFun<double> f(x, y); 
+	std::cout << "Stop Taping" << std::endl;
 
 	// check value 
-	double check = std::sqrt(x0);
-	ok &= NearEqual(y[0] , check,  1e-10 , 1e-10);
+	//double check = std::sqrt(x0);
+	//ok &= NearEqual(y[0] , check,  1e-10 , 1e-10);
 
 	// forward computation of first partial w.r.t. x[0]
+	std::cout << "Reverse Derivative Calculation" << std::endl;
 	CppADvector<double> dx(n);
 	CppADvector<double> dy(m);
 	dx[0] = 1.;
-	dy    = f.Forward(1, dx);
-	std::cout << "squarte root derivative  " << dy << std::endl;
+	dy    = f.Reverse(1, dx);
+	std::cout << "the derivative is:  " << dy << std::endl;
+	/*
 	check = 1. / (2. * std::sqrt(x0) );
 	ok   &= NearEqual(dy[0], check, 1e-10, 1e-10);
 
@@ -138,6 +143,7 @@ int main(int argC, char* argV[])
 	AD<double> result = CppAD::sqrt(v[zero]);
 	check = std::sqrt(x0);
 	ok   &= NearEqual(result, check, 1e-10, 1e-10);	
+	*/
 	return 0;
 }// end main
 	///	
