@@ -2031,11 +2031,13 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double* 
 	double* objMultipliers, bool allFunctionsEvaluated, bool LagrangianHessianEvaluated){
 	if( LagrangianHessianEvaluated == true) return m_LagrangianSparseHessian;
 	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
-	
 	// initialize everything
 	int i, j;
 	std::map<int, int>::iterator posVarIndexMap;
 	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
+	std::vector<double> m_vdx( m_iNumberOfNonlinearVariables);	
+	std::vector<double> m_vw( m_mapExpressionTreesMod.size());
+	std::vector<double> m_vdw( 2*m_iNumberOfNonlinearVariables);	
 	if( m_bCppADTapesBuilt == false){
 		// this loop is only done once
 		// if we have not filled in the Sparse Jacobian matrix do so now
@@ -2049,6 +2051,7 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double* 
 		// for each row with a nonlinear term, build a CppAD representation of the  Expression tree
 		// get the data
 		// push the primal variables
+		
 		for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
 			m_vX.push_back( x[ posVarIndexMap->first] );
 		}
@@ -2063,12 +2066,11 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double* 
 		(*F).Dependent( m_vFG);
 
 		// allocate necessary vector memory
-		m_vdx.reserve( m_iNumberOfNonlinearVariables );
+		//m_vdx.reserve( m_iNumberOfNonlinearVariables );
 		// initialize to zero
 		for(i = 0; i < m_iNumberOfNonlinearVariables; i++) m_vdx[i] = 0.;
-		m_vw.reserve( m_mapExpressionTreesMod.size() );
-		m_vdw.reserve( 2*m_iNumberOfNonlinearVariables );	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
-		
+		//m_vw.reserve( m_mapExpressionTreesMod.size() );
+		//m_vdw.reserve( 2*m_iNumberOfNonlinearVariables );	
 		m_vXITER.reserve( m_iNumberOfNonlinearVariables);
 		m_vH.reserve( m_iNumberOfNonlinearVariables * m_iNumberOfNonlinearVariables );
 		m_bCppADTapesBuilt = true;
@@ -2076,8 +2078,10 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double* 
 	// get the current iterate data
 	i = 0;
 	if(allFunctionsEvaluated == false){
+		//std::cout << "SIZE OF MAP " << m_mapAllNonlinearVariablesIndex.size() <<  std::endl;
 		for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
-			m_vXITER[ i++] = x[ posVarIndexMap->first] ;
+			//m_vXITER[ i++] = x[ posVarIndexMap->first] ;
+			m_vXITER.push_back( x[ posVarIndexMap->first]);
 		}
 		(*F).Forward(0, m_vXITER);
 	}
@@ -2085,21 +2089,25 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double* 
 	i = 0;
 	for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){	
 		if( posMapExpTree->first >= 0){
-			m_vw[ i++] = conMultipliers[ posMapExpTree->first] ;
+			m_vw[i++] = conMultipliers[ posMapExpTree->first];
 		}
 		else{
-			m_vw[ i++] = objMultipliers[ abs(posMapExpTree->first) - 1] ;
+			m_vw[ i++] =  objMultipliers[ abs(posMapExpTree->first) - 1] ;
 		}
 	}
 	// loop over components of x
 	for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
-		m_vdx[i] = 1.;                   // dx is i-th elementary vector
+		m_vdx[i] = 1.;                   // m_vdx is i-th elementary vector
+		//std::cout << "do a forward calcuation for variable " << i << std::endl;
+		//std::cout << "size is  " << m_vdx.size() << std::endl;
 		(*F).Forward(1, m_vdx);          // partial w.r.t dx
+		//(*F).Forward(1, dx);          // partial w.r.t dx
+		//std::cout << "do a reverse calcuation for variable " << i << std::endl;
 		m_vdw = (*F).Reverse(2, m_vw);   // deritavtive of partial
 		for(j = 0; j < m_iNumberOfNonlinearVariables; j++){
 			m_vH[ i * m_iNumberOfNonlinearVariables + j ] = m_vdw[ j * 2 + 1 ]; // fill in the Hessian
 		}
-		m_vdx[i] = 0.;   // dx is zero vector
+		m_vdx[i] = 0.;   // m_vdx is zero vector
 	}
 	int hessValuesIdx = 0;	
 	for(i = 0; i <  m_iNumberOfNonlinearVariables; i++){
@@ -2108,6 +2116,8 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double* 
 			m_LagrangianSparseHessian->hessValues[ hessValuesIdx++] =  m_vH[ i*m_iNumberOfNonlinearVariables + j];
 		}
 	}	
+	m_vXITER.clear();
+	//m_vw.clear();
 	return m_LagrangianSparseHessian;
 }//calculateLagrangianHessian
 

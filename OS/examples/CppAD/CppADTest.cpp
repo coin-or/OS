@@ -205,7 +205,7 @@ int  main(){
 		}
 		//first iteration 
 		std::cout << "GET LAGRANGIAN HESSIAN FIRST TIME"   << std::endl;
-		sparseHessian = osinstance->calculateLagrangianHessianReTape( x, y, w, false, false);
+		sparseHessian = osinstance->calculateLagrangianHessian( x, y, w, false, false);
 		for(idx = 0; idx < sparseHessian->hessDimension; idx++){
 			std::cout << "row idx = " << *(sparseHessian->hessRowIdx + idx) <<  
 			"  col idx = "<< *(sparseHessian->hessColIdx + idx)
@@ -223,7 +223,7 @@ int  main(){
 		//second iteration
 		x[0] = 5;
 		std::cout << "NOW GET LAGRANGIAN HESSIAN SECOND TIME"   << std::endl;
-		sparseHessian = osinstance->calculateLagrangianHessianReTape( x, y, w, false, false);
+		sparseHessian = osinstance->calculateLagrangianHessian( x, y, w, false, false);
 		for(idx = 0; idx < sparseHessian->hessDimension; idx++){
 			std::cout << "row idx = " << *(sparseHessian->hessRowIdx + idx) <<  
 			"  col idx = "<< *(sparseHessian->hessColIdx + idx)
@@ -341,7 +341,7 @@ Please visit http://www.coin-or.org/CppAD/ for information on other licenses.
 	//assert( sparseHessian->hessDimension = n * (n + 1) /2);
 	//H[0 * n + 0]
 	/*
-	L  =  z*x0*x0 + y0*(1 + 2*x1 + 3*x2) + y1*log(x0*x2)
+	L  =  z*x0*x0 + y0*(1 + 1.37*x1 + 3*x2) + y1*log(x0*x2)
 
 	L_0 = 2 * z * x0 + y1 / x0
 	L_1 = y0 * 2 
@@ -349,13 +349,21 @@ Please visit http://www.coin-or.org/CppAD/ for information on other licenses.
 	*/
 	// L_00 = 2 * z - y1 / ( x0 * x0 )
 	double check = 2. * z - y1 / (x0 * x0);
+	std::cout << check << std::endl;
+	std::cout << *(sparseHessian->hessValues + hessValuesIdx) << std::endl;
 	ok &= NearEqual(*(sparseHessian->hessValues + hessValuesIdx++), check, 1e-10, 1e-10); 
+
 	ok &= NearEqual(*(sparseHessian->hessValues + hessValuesIdx++), 0., 1e-10, 1e-10);
+	if(ok == false) std::cout << "FAILED TWO" << std::endl;
 	ok &= NearEqual(*(sparseHessian->hessValues + hessValuesIdx++), 0., 1e-10, 1e-10);
+	if(ok == false) std::cout << "FAILED THREE" << std::endl;
 	ok &= NearEqual(*(sparseHessian->hessValues + hessValuesIdx++), 0., 1e-10, 1e-10);
+	if(ok == false) std::cout << "FAILED FOUR" << std::endl;
 	ok &= NearEqual(*(sparseHessian->hessValues + hessValuesIdx++), 0., 1e-10, 1e-10);
+	if(ok == false) std::cout << "FAILED FIVE" << std::endl;
 	// L_22 = - y1 / (x2 * x2)
 	check = - y1 / (x2 * x2);
 	ok &= NearEqual(*(sparseHessian->hessValues + hessValuesIdx++), check, 1e-10, 1e-1);
+	if(ok == false) std::cout << "FAILED SIX" << std::endl;
 	return ok;
 }//CheckHessianUpper

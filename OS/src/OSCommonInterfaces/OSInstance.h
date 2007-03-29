@@ -585,9 +585,9 @@ private:
 	 */
 	CppAD::vector< AD<double> > m_vFG;	
 	
-	std::vector<double> m_vdx;	
-	std::vector<double> m_vw;
-	std::vector<double> m_vdw;	
+	//std::vector<double> m_vdx;	
+	//std::vector<double> m_vw;
+	//std::vector<double> m_vdw;	
 	
 	/**
 	 *  m_vH is an std::vector used to store the Hessian matrix of the Lagrangian function.
