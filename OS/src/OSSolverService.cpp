@@ -31,14 +31,19 @@
 #include "CoinSolver.h"
 #include "WSUtil.h" 
 #include "OSSolverAgent.h"
-#include "OShL.h" 
-#include "lexyaccparser.h"  
+#include "OShL.h"  
 #include "ErrorClass.h"
 #include "osssparservariables.h" 
 #include <string>
     
 
 #define MAXCHARS 5000 
+typedef struct yy_buffer_state *YY_BUFFER_STATE;
+YY_BUFFER_STATE osss_scan_string(const char* osss ); 
+
+using std::cout;
+using std::endl;
+using std::ostringstream;
  
 // the serviceMethods  
 void solve();  
@@ -48,6 +53,7 @@ void kill();
 void retrieve(); 
 void knock();
 
+int ossslex(void);
 int main(int argC, const char* argV[])
 {   
 	FileUtil *fileUtil = NULL;

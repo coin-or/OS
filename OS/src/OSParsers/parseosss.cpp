@@ -622,16 +622,20 @@ char *ossstext;
 #line 17 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
 
 #include <stdio.h> 
-#include "lexyaccparser.h"
-#include "externalvars.h"
+//#include "externalvars.h"
 #include "ErrorClass.h"
 #include <iostream>
 #include <sstream>   
 #include "osssparservariables.h" 
-#include "OSConfig.h" 
+
+
+using std::cout;
+using std::endl;
+using std::ostringstream;
 
 bool osOption;  
 
+void ossserror(const char* errormsg);
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", ossstext);
 #else     
@@ -661,7 +665,7 @@ bool osOption;
 */
 	osOptionsStruc *osoptions;
 
-#line 665 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.cpp"
+#line 669 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.cpp"
 
 #define INITIAL 0
 
@@ -814,10 +818,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 68 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
+#line 72 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
 
 
-#line 821 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.cpp"
+#line 825 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.cpp"
 
 	if ( !(yy_init) )
 		{
@@ -913,12 +917,12 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 70 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
+#line 74 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
 
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 73 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
+#line 77 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
 {
 	if(osOption == false){
 		printf("Found option:  %s\n", ossstext);   
@@ -930,7 +934,7 @@ YY_RULE_SETUP
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 81 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
+#line 85 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
 {
 	printf("Found option:  %s\n", ossstext);  
 	char *ch = strdup(ossstext);
@@ -943,7 +947,7 @@ YY_RULE_SETUP
 case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
-#line 91 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
+#line 95 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
 {
 	if(osoptions->osilFile == NULL){
 		printf("Found option:  %s\n", ossstext);  
@@ -958,7 +962,7 @@ YY_RULE_SETUP
 case 5:
 /* rule 5 can match eol */
 YY_RULE_SETUP
-#line 102 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
+#line 106 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
 {
 	if(osoptions->osrlFile == NULL){
 		printf("Found option:  %s\n", ossstext); 
@@ -973,7 +977,7 @@ YY_RULE_SETUP
 case 6:
 /* rule 6 can match eol */
 YY_RULE_SETUP
-#line 113 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
+#line 117 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
 {
 	if(osoptions->insListFile == NULL){
 		printf("Found option:  %s\n", ossstext); 
@@ -988,7 +992,7 @@ YY_RULE_SETUP
 case 7:
 /* rule 7 can match eol */
 YY_RULE_SETUP
-#line 124 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
+#line 128 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
 {
 	if(osoptions->osolFile == NULL){
 		printf("Found option:  %s\n", ossstext); 
@@ -1003,7 +1007,7 @@ YY_RULE_SETUP
 case 8:
 /* rule 8 can match eol */
 YY_RULE_SETUP
-#line 137 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
+#line 141 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
 {
 	if(osoptions->osplInputFile == NULL){
 		printf("Found option:  %s\n", ossstext); 
@@ -1018,7 +1022,7 @@ YY_RULE_SETUP
 case 9:
 /* rule 9 can match eol */
 YY_RULE_SETUP
-#line 148 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
+#line 152 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
 {
 	if(osoptions->osplOutputFile == NULL){
 		printf("Found option:  %s\n", ossstext); 
@@ -1033,7 +1037,7 @@ YY_RULE_SETUP
 case 10:
 /* rule 10 can match eol */
 YY_RULE_SETUP
-#line 159 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
+#line 163 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
 {
 	if(osoptions->serviceMethod == NULL){
 		printf("Found option:  %s\n", ossstext); 
@@ -1048,7 +1052,7 @@ YY_RULE_SETUP
 case 11:
 /* rule 11 can match eol */
 YY_RULE_SETUP
-#line 170 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
+#line 174 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
 {
 	if(osoptions->serviceLocation == NULL){
 		printf("Found option:  %s\n", ossstext); 
@@ -1064,7 +1068,7 @@ YY_RULE_SETUP
 case 12:
 /* rule 12 can match eol */
 YY_RULE_SETUP
-#line 182 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
+#line 186 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
 {
 	if(osoptions->mpsFile == NULL){
 		printf("Found option:  %s\n", ossstext); 
@@ -1079,7 +1083,7 @@ YY_RULE_SETUP
 case 13:
 /* rule 13 can match eol */
 YY_RULE_SETUP
-#line 193 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
+#line 197 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
 {
 	if(osoptions->nlFile == NULL){
 		printf("Found option:  %s\n", ossstext);
@@ -1094,7 +1098,7 @@ YY_RULE_SETUP
 case 14:
 /* rule 14 can match eol */
 YY_RULE_SETUP
-#line 204 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
+#line 208 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
 {
 	if(osoptions->solverName == NULL){
 		printf("Found option:  %s\n", ossstext); 
@@ -1109,7 +1113,7 @@ YY_RULE_SETUP
 case 15:
 /* rule 15 can match eol */
 YY_RULE_SETUP
-#line 215 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
+#line 219 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
 {
 	if(osoptions->browser == NULL){
 		printf("Found option:  %s\n", ossstext);  
@@ -1123,15 +1127,15 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 226 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
+#line 230 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
 {ossserror( "ecountered a spurious character in the lexer");   }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 227 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
+#line 231 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
 ECHO;
 	YY_BREAK
-#line 1135 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.cpp"
+#line 1139 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2129,7 +2133,7 @@ void osssfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 227 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
+#line 231 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosss.l"
 
 
 

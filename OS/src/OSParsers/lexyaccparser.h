@@ -50,9 +50,9 @@ YY_BUFFER_STATE osss_scan_string(const char* osss );
 //int osillex(void);
 //int osillex(YYSTYPE* lvalp, YYLTYPE* llocp, void* scanner);
 //int osollex(void);
-int ossslex(void);
+//int ossslex(void);
 //OSResult *yygetOSResult(std::string osrl);
 
 //void osrlerror(const char* errormsg);
-void ossserror(const char* errormsg);
+
 #endif 

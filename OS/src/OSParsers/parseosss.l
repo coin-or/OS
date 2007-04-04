@@ -16,16 +16,20 @@
 %{
 
 #include <stdio.h> 
-#include "lexyaccparser.h"
-#include "externalvars.h"
+//#include "externalvars.h"
 #include "ErrorClass.h"
 #include <iostream>
 #include <sstream>   
 #include "osssparservariables.h" 
-#include "OSConfig.h" 
+
+
+using std::cout;
+using std::endl;
+using std::ostringstream;
 
 bool osOption;  
 
+void ossserror(const char* errormsg);
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", ossstext);
 #else     

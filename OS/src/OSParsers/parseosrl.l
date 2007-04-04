@@ -44,7 +44,6 @@
 %option yylineno   
 %option noyywrap  
 %x attributetext
-%x elementtext 
 %x osrlattributetext
 %x comment
 %x xmldeclaration
@@ -77,19 +76,19 @@ endelementname (<\/[a-zA-Z][a-zA-Z0-9.:_]+)
 {xmlwhitespace}*\<\/osrl{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OSRLEND);}
 {xmlwhitespace}*\<resultHeader{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(RESULTHEADERSTART);}
 {xmlwhitespace}*\<\/resultHeader{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(RESULTHEADEREND);}
-{xmlwhitespace}*\<serviceURI{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; BEGIN elementtext; return(SERVICEURISTART);}
+{xmlwhitespace}*\<serviceURI{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(SERVICEURISTART);}
 {xmlwhitespace}*\<serviceURI{xmlwhitespace}*\>\< {YY_PRINT; unput('<'); return(SERVICEURISTART);}
 {xmlwhitespace}*\<\/serviceURI{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(SERVICEURIEND);}
-{xmlwhitespace}*\<serviceName{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; BEGIN elementtext; return(SERVICENAMESTART);}
+{xmlwhitespace}*\<serviceName{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(SERVICENAMESTART);}
 {xmlwhitespace}*\<serviceName{xmlwhitespace}*\>\< {YY_PRINT; unput('<'); return(SERVICENAMESTART);}
 {xmlwhitespace}*\<\/serviceName{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(SERVICENAMEEND);}
-{xmlwhitespace}*\<instanceName{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; BEGIN elementtext; return(INSTANCENAMESTART);}
+{xmlwhitespace}*\<instanceName{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(INSTANCENAMESTART);}
 {xmlwhitespace}*\<instanceName{xmlwhitespace}*\>\< {YY_PRINT; unput('<'); return(INSTANCENAMESTART);}
 {xmlwhitespace}*\<\/instanceName{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(INSTANCENAMEEND);}
-{xmlwhitespace}*\<jobID{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; BEGIN elementtext; return(JOBIDSTART);}
+{xmlwhitespace}*\<jobID{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(JOBIDSTART);}
 {xmlwhitespace}*\<jobID{xmlwhitespace}*\>\< {YY_PRINT; unput('<'); return(JOBIDSTART);}
 {xmlwhitespace}*\<\/jobID{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(JOBIDEND);}
-{xmlwhitespace}*\<message{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; BEGIN elementtext; return(HEADERMESSAGESTART);}
+{xmlwhitespace}*\<message{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(HEADERMESSAGESTART);}
 {xmlwhitespace}*\<message{xmlwhitespace}*\>\< {YY_PRINT; unput('<'); return(HEADERMESSAGESTART);}
 {xmlwhitespace}*\<\/message{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(HEADERMESSAGEEND);}
 
@@ -129,7 +128,7 @@ endelementname (<\/[a-zA-Z][a-zA-Z0-9.:_]+)
 {xmlwhitespace}*\<\/con{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(CONEND);}
 {xmlwhitespace}*\<\/constraints{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(CONSTRAINTSEND);}
 
-{xmlwhitespace}*\<message{xmlwhitespace}*\> {YY_PRINT;  BEGIN elementtext; return(MESSAGESTART);}
+{xmlwhitespace}*\<message{xmlwhitespace}*\> {YY_PRINT;   return(MESSAGESTART);}
 {xmlwhitespace}*\<message{xmlwhitespace}*\>\< {YY_PRINT; unput('<'); return(MESSAGESTART);}
 (\<\/message{xmlwhitespace}*\>) {YY_PRINT;  return(MESSAGEEND);}
 
@@ -156,7 +155,7 @@ endelementname (<\/[a-zA-Z][a-zA-Z0-9.:_]+)
 
 
 
-[a-zA-X0-9.:_ \n]+ { YY_PRINT;  yylval->charval = strdup(yytext);   return(ELEMENTTEXT); }
+[a-zA-X0-9.:_*#$@ \n]+ { YY_PRINT;  yylval->charval = strdup(yytext);   return(ELEMENTTEXT); }
 
 "<!--" BEGIN comment;
  <comment>. |
@@ -172,7 +171,7 @@ endelementname (<\/[a-zA-Z][a-zA-Z0-9.:_]+)
 
 
 
-<elementtext>([^\<])+ { YY_PRINT;  yylval->charval = strdup(yytext); BEGIN 0;  return(ELEMENTTEXT); }
+
 <attributetext>([^\"\'])+ {YY_PRINT;    yylval->charval = strdup(yytext);
 							BEGIN 0;  return(ATTRIBUTETEXT);}
 							
