@@ -16,9 +16,7 @@
 
 #include <stdio.h>
 #include <string.h>
-//#include "OSConfig.h"
 #include "OSrLParserData.h"
-#define PARSERDEBUG
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", yytext);
 #else     

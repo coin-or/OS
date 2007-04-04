@@ -266,6 +266,7 @@ Variables::~Variables(){
 			var[i] = NULL;
 		}
 	}
+	delete[] var;
 	var = NULL; 
 }  
 
@@ -308,6 +309,7 @@ Objective::~Objective(){
 			coef[i] = NULL;
 		}
 	}
+	delete[] coef;
 	coef = NULL;
 }  
 
@@ -330,6 +332,7 @@ Objectives::~Objectives(){
 			obj[i] = NULL;
 		}
 	}
+	delete[] obj;
 	obj = NULL;
 }
 
@@ -370,6 +373,7 @@ Constraints::~Constraints(){
 			con[i] = NULL;
 		}
 	}
+	delete[] con;
 	con = NULL;
 } 
 
@@ -444,6 +448,7 @@ QuadraticCoefficients::~QuadraticCoefficients(){
 			qTerm[i] = NULL;
 		}
 	}
+	delete[] qTerm;
 	qTerm = NULL;  
 }//end ~QuadraticCoefficients()  
 
@@ -488,6 +493,7 @@ NonlinearExpressions::~NonlinearExpressions(){
 			nl[i] = NULL;
 		}
 	}
+	delete[] nl;
 	nl = NULL;  
 }//end ~NonlinearExpressions()  
 
@@ -2054,6 +2060,8 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double* 
 		
 		for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
 			m_vX.push_back( x[ posVarIndexMap->first] );
+			// also initialize the m_vIter
+			m_vXITER.push_back(0.0);
 		}
 		// declare the independent variables and start recording
 		CppAD::Independent( m_vX);
@@ -2071,7 +2079,7 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double* 
 		for(i = 0; i < m_iNumberOfNonlinearVariables; i++) m_vdx[i] = 0.;
 		//m_vw.reserve( m_mapExpressionTreesMod.size() );
 		//m_vdw.reserve( 2*m_iNumberOfNonlinearVariables );	
-		m_vXITER.reserve( m_iNumberOfNonlinearVariables);
+		//m_vXITER.reserve( m_iNumberOfNonlinearVariables);
 		m_vH.reserve( m_iNumberOfNonlinearVariables * m_iNumberOfNonlinearVariables );
 		m_bCppADTapesBuilt = true;
 	}
@@ -2080,10 +2088,11 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double* 
 	if(allFunctionsEvaluated == false){
 		//std::cout << "SIZE OF MAP " << m_mapAllNonlinearVariablesIndex.size() <<  std::endl;
 		for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
-			//m_vXITER[ i++] = x[ posVarIndexMap->first] ;
-			m_vXITER.push_back( x[ posVarIndexMap->first]);
+			m_vXITER[ i++] = x[ posVarIndexMap->first] ;
+			//m_vXITER.push_back( x[ posVarIndexMap->first]);
 		}
 		(*F).Forward(0, m_vXITER);
+		
 	}
 	//  get the Lagrange multipliers
 	i = 0;
@@ -2116,7 +2125,7 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double* 
 			m_LagrangianSparseHessian->hessValues[ hessValuesIdx++] =  m_vH[ i*m_iNumberOfNonlinearVariables + j];
 		}
 	}	
-	m_vXITER.clear();
+	//m_vXITER.clear();
 	//m_vw.clear();
 	return m_LagrangianSparseHessian;
 }//calculateLagrangianHessian

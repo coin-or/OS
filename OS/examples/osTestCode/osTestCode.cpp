@@ -84,7 +84,7 @@ int main(int argC, char* argV[])
 		std::cout << eclass.errormsg <<  std::endl;
 		return 0;
 	}
-	
+	{  //start a CppAD test module
 	// work with Brad's code
 	
 	//bool Usefg();
@@ -125,25 +125,59 @@ int main(int argC, char* argV[])
 	dx[0] = 1.;
 	dy    = f.Reverse(1, dx);
 	std::cout << "the derivative is:  " << dy << std::endl;
-	/*
-	check = 1. / (2. * std::sqrt(x0) );
-	ok   &= NearEqual(dy[0], check, 1e-10, 1e-10);
-
-	// reverse computation of derivative of y[0]
-	CppADvector<double>  w(m);
-	CppADvector<double> dw(n);
-	w[0]  = 1.;
-	dw    = f.Reverse(1, w);
-	ok   &= NearEqual(dw[0], check, 1e-10, 1e-10);
-
-	// use a VecAD<Base>::reference object with sqrt
-	CppAD::VecAD<double> v(1);
-	AD<double> zero(0);
-	v[zero]           = x0;
-	AD<double> result = CppAD::sqrt(v[zero]);
-	check = std::sqrt(x0);
-	ok   &= NearEqual(result, check, 1e-10, 1e-10);	
-	*/
+	} // end first test module
+	{ // second test module
+  // domain space vector
+  	using CppAD::AD;
+	using CppAD::NearEqual;
+     size_t n = 2;
+     CppADvector< AD<double> >  X(n);
+     X[0] = 1.;
+     X[1] = 2.;
+     //X[2] = 5;
+     // declare independent variables and starting recording
+     CppAD::Independent(X);
+     // a calculation between the domain and range values
+     // range space vector
+     size_t m = 1;
+     CppADvector< AD<double> >  Y(m);
+     Y[0] = CppAD::pow(X[0], 2) + X[0]*X[1] + CppAD::pow(X[1],3);
+     // create f: X -> Y and stop tape recording
+     CppAD::ADFun<double> f(X, Y);
+     std::vector<double> w(1);
+     w[ 0] = 1.0;
+     // new value for the independent variable vector
+     std::vector<double> x_0(n);
+     std::vector<double> x_1(n);
+  	 std::vector<double> x_2(n);
+     x_0[0] = 1.;
+     x_0[1] = 2.;
+     x_1[0] = 0;
+     x_1[1] = 1;
+   	 x_2[0] = 0;
+   	 x_2[1] = 0;
+     //x[2] = 5;
+     // second derivative of y[1] 
+     std::vector<double> hes( n * n );
+     //
+     std::cout << std::endl << std::endl << std::endl << std::endl;
+     std::cout << "START HESSIAN CALCULATION BY COMPOSITION" << std::endl;
+    // hes = f.Hessian(x_0, 0);
+   	f.Forward(0, x_0);
+    f.Forward(1, x_1);
+    f.Reverse(2, w);
+    //f.Forward(0, x_0);
+    //f.Forward(1, x_1);
+    //f.Reverse(2, w);
+   	std::cout << std::endl << std::endl << std::endl << std::endl;
+   	std::cout << "NOW USE CPPAD HESSIAN COMMAND" << std::endl;
+    //hes = f.Hessian(x_0, 0);
+    
+   	std::cout << "START HESSIAN CALCULATION BY FORWARD 2" << std::endl;
+   	f.Forward(0, x_0);
+    f.Forward(1, x_1);
+   	f.Forward(2, x_2);
+	}// end second test module
 	return 0;
 }// end main
 	///	
