@@ -558,7 +558,7 @@ OptimizationResult::~OptimizationResult(){
 	cout << "Inside the OptimzationResult Destructor" << endl;
 	cout << "Number of solutions = " << resultParameters.numberOfSolutions << endl;
 	#endif
-	if( solution != NULL){
+	/*if( solution != NULL){
 		int i = 0;
 		while(solution[i] != NULL){
 		//for(int i = 0; i < resultParameters.numberOfSolutions; i++){
@@ -571,6 +571,7 @@ OptimizationResult::~OptimizationResult(){
 		}
 	}
 	delete[] solution;
+	*/
 	solution = NULL; 
 }// end OptimizationResult destructor 
  
