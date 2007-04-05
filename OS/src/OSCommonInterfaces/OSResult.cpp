@@ -388,7 +388,7 @@ DualVariableValues::~DualVariableValues(){
 		int i = 0;
 		while(con[ i] != NULL){
 		//for(int i = 0; i < resultParameters.numberOfConstraints; i++){
-			delete con[i];
+			//delete con[i];
 			con[i] = NULL;
 			i++;
 		}
@@ -562,7 +562,7 @@ OptimizationResult::~OptimizationResult(){
 		int i = 0;
 		while(solution[i] != NULL){
 		//for(int i = 0; i < resultParameters.numberOfSolutions; i++){
-			delete solution[i];
+			//delete solution[i];
 			solution[i] = NULL;
 			#ifdef DEBUG  
 			cout << "Delelting Solution: " << i << endl;
