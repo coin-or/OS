@@ -16,22 +16,19 @@
 %{
 
 #include <stdio.h> 
-//#include "externalvars.h"
 #include "ErrorClass.h"
 #include <iostream>
 #include <sstream>   
-#include "osssparservariables.h" 
-
+#include "osOptionsStruc.h" 
 
 using std::cout;
 using std::endl;
 using std::ostringstream;
 
-bool osOption;  
-
-void ossserror(const char* errormsg);
+  
+#define PARSERDEBUG
 #ifdef PARSERDEBUG
-	#define YY_PRINT  printf("%s", ossstext);
+	#define YY_PRINT  printf("%s", yytext);
 #else     
 	#define YY_PRINT  ;
 #endif
@@ -40,6 +37,9 @@ void ossserror(const char* errormsg);
 #include <io.h>
 #include <process.h>
 #endif
+#define YY_EXTRA_TYPE struct osOptionsStruc*
+
+void setyyextra( osOptionsStruc *osoptions, void* scanner);
 
 /*
  * INPUTS:
@@ -57,12 +57,15 @@ void ossserror(const char* errormsg);
  * -solver solver_name (this is also going to be in osol)
  * -browser on/off (default is off)
 */
-	osOptionsStruc *osoptions;
+	int ossslex_init(void** ptr_yy_globals);
 
 %}
+
+%option reentrant
 %option yylineno
 %option prefix="osss"
 %option noyywrap   
+
 
 
 xmlwhitespace ([ \t\r\n])
@@ -75,175 +78,174 @@ browserState (on|off)
   
 
 -os {
-	if(osOption == false){
-		printf("Found option:  %s\n", ossstext);   
-		osoptions->os = true;
-		osOption = true;
+	if(yyextra->osOption == false){
+		printf("Found option:  %s\n", yytext);   
+		yyextra->os = true;
+		yyextra->osOption = true;
 	}
 }
 
 (-config{xmlwhitespace}+{optionValue}) {
-	printf("Found option:  %s\n", ossstext);  
-	char *ch = strdup(ossstext);
+	printf("Found option:  %s\n", yytext);  
+	char *ch = strdup(yytext);
 	// move past -config
 	ch+=7;
 	for(; isspace(*ch); ch++);
-	osoptions->configFile = &ch[0];
+	yyextra->configFile = &ch[0];
+	//printf("gsgersdf= %d\n", gster);
 }
 
 
 (-osil{xmlwhitespace}+{optionValue}) {
-	if(osoptions->osilFile == NULL){
-		printf("Found option:  %s\n", ossstext);  
-		char *ch = strdup(ossstext);
+	if(yyextra->osilFile == NULL){
+		printf("Found option:  %s\n", yytext);  
+		char *ch = strdup(yytext);
 		// move past -osil
 		ch+=5;
 		for(; isspace(*ch); ch++);
-		osoptions->osilFile = &ch[0];
+		yyextra->osilFile = &ch[0];
 	} 
 }
 
 (-osrl{xmlwhitespace}+{optionValue}) {
-	if(osoptions->osrlFile == NULL){
-		printf("Found option:  %s\n", ossstext); 
-		char *ch = strdup(ossstext);
+	if(yyextra->osrlFile == NULL){
+		printf("Found option:  %s\n", yytext); 
+		char *ch = strdup(yytext);
 		// move past -osrl
 		ch+=5;
 		for(; isspace(*ch); ch++);
-		osoptions->osrlFile = &ch[0];
+		yyextra->osrlFile = &ch[0];
 	}  
 }  
 
 (-insList{xmlwhitespace}+{optionValue}) {
-	if(osoptions->insListFile == NULL){
-		printf("Found option:  %s\n", ossstext); 
-		char *ch = strdup(ossstext);
+	if(yyextra->insListFile == NULL){
+		printf("Found option:  %s\n", yytext); 
+		char *ch = strdup(yytext);
 		// move past -insList
 		ch+=8;
 		for(; isspace(*ch); ch++);
-		osoptions->insListFile = &ch[0];
+		yyextra->insListFile = &ch[0];
 	}  
 }  
 
 (-osol{xmlwhitespace}+{optionValue}) {
-	if(osoptions->osolFile == NULL){
-		printf("Found option:  %s\n", ossstext); 
-		char *ch = strdup(ossstext);
+	if(yyextra->osolFile == NULL){
+		printf("Found option:  %s\n", yytext); 
+		char *ch = strdup(yytext);
 		// move past -osol
 		ch+=5;
 		for(; isspace(*ch); ch++);
-		osoptions->osolFile = &ch[0];  
+		yyextra->osolFile = &ch[0];  
 	}
 }
 
 
 
 (-osplInput{xmlwhitespace}+{optionValue}) {
-	if(osoptions->osplInputFile == NULL){
-		printf("Found option:  %s\n", ossstext); 
-		char *ch = strdup(ossstext);
+	if(yyextra->osplInputFile == NULL){
+		printf("Found option:  %s\n", yytext); 
+		char *ch = strdup(yytext);
 		// move past -osplInput
 		ch+=10;
 		for(; isspace(*ch); ch++);
-		osoptions->osplInputFile = &ch[0];  
+		yyextra->osplInputFile = &ch[0];  
 	}
 }
 
 (-osplOutput{xmlwhitespace}+{optionValue}) {
-	if(osoptions->osplOutputFile == NULL){
-		printf("Found option:  %s\n", ossstext); 
-		char *ch = strdup(ossstext);
+	if(yyextra->osplOutputFile == NULL){
+		printf("Found option:  %s\n", yytext); 
+		char *ch = strdup(yytext);
 		// move past -osplInput
 		ch+=11;
 		for(; isspace(*ch); ch++);
-		osoptions->osplOutputFile = &ch[0];  
+		yyextra->osplOutputFile = &ch[0];  
 	}
 }
 
 (-serviceMethod{xmlwhitespace}+{serviceMethod}) {
-	if(osoptions->serviceMethod == NULL){
-		printf("Found option:  %s\n", ossstext); 
-		char *ch = strdup(ossstext);
+	if(yyextra->serviceMethod == NULL){
+		printf("Found option:  %s\n", yytext); 
+		char *ch = strdup(yytext);
 		// move past -serviceMethod
 		ch+=14;
 		for(; isspace(*ch); ch++);
-		osoptions->serviceMethod = &ch[0]; 
+		yyextra->serviceMethod = &ch[0]; 
 	}
 }
 
 (-serviceLocation{xmlwhitespace}+{optionValue}) {
-	if(osoptions->serviceLocation == NULL){
-		printf("Found option:  %s\n", ossstext); 
-		osoptions->serviceLocation = strdup(ossstext);
-		char *ch = strdup(ossstext);
+	if(yyextra->serviceLocation == NULL){
+		printf("Found option:  %s\n", yytext); 
+		yyextra->serviceLocation = strdup(yytext);
+		char *ch = strdup(yytext);
 		// move past -serviceLocation
 		ch+=16;
 		for(; isspace(*ch); ch++);
-		osoptions->serviceLocation = &ch[0]; 
+		yyextra->serviceLocation = &ch[0]; 
 	}
 }
 
 (-mps{xmlwhitespace}+{optionValue}) {
-	if(osoptions->mpsFile == NULL){
-		printf("Found option:  %s\n", ossstext); 
-		char *ch = strdup(ossstext);
+	if(yyextra->mpsFile == NULL){
+		printf("Found option:  %s\n", yytext); 
+		char *ch = strdup(yytext);
 		// move past -mpsFile
 		ch+=8;
 		for(; isspace(*ch); ch++);
-		osoptions->mpsFile = &ch[0]; 
+		yyextra->mpsFile = &ch[0]; 
 	}
 }
 
 (-nl{xmlwhitespace}+{optionValue}) {
-	if(osoptions->nlFile == NULL){
-		printf("Found option:  %s\n", ossstext);
-		char *ch = strdup(ossstext);
+	if(yyextra->nlFile == NULL){
+		printf("Found option:  %s\n", yytext);
+		char *ch = strdup(yytext);
 		// move past -nlFile
 		ch+=7;
 		for(; isspace(*ch); ch++);
-		osoptions->nlFile = &ch[0];
+		yyextra->nlFile = &ch[0];
 	} 
 }
 
 (-solver{xmlwhitespace}+{optionValue}) {
-	if(osoptions->solverName == NULL){
-		printf("Found option:  %s\n", ossstext); 
-		char *ch = strdup(ossstext);
+	if(yyextra->solverName == NULL){
+		printf("Found option:  %s\n", yytext); 
+		char *ch = strdup(yytext);
 		// move past -solver
 		ch+=7;
 		for(; isspace(*ch); ch++);
-		osoptions->solverName = &ch[0];
+		yyextra->solverName = &ch[0];
 	} 
 }
-
+ 
 (-browser{xmlwhitespace}+{optionValue}) {
-	if(osoptions->browser == NULL){
-		printf("Found option:  %s\n", ossstext);  
-		char *ch = strdup(ossstext);
+	if(yyextra->browser == NULL){
+		printf("Found option:  %s\n", yytext);  
+		char *ch = strdup(yytext);
 		// move past -browser
 		ch+=8;
 		for(; isspace(*ch); ch++);
-		osoptions->browser = &ch[0]; 
+		yyextra->browser = &ch[0]; 
 	}
 }
 
-. {ossserror( "ecountered a spurious character in the lexer");   }
+. {
+	std::string error;
+	std::ostringstream outStr;
+	outStr << "ecountered a spurious character in the lexer" << endl;
+	outStr << "The first character is: ";
+	outStr <<  yytext;
+	outStr << endl;
+	outStr << "See line number: " << yylineno << endl;  
+	error = outStr.str();
+	throw ErrorClass( error);  
+}
 %%
 
-void ossserror(const char* errormsg)
-{
-	try{
-		ostringstream outStr;
-		std::string error = errormsg;
-		error = "Input is either not valid or well formed: "  + error;
-		outStr << error << endl;
-		outStr << "Here is the last token read: " << ossstext << endl;
-		outStr << "See line number: " << ossslineno << endl;
-		error = outStr.str();
-		throw ErrorClass( error);
-		throw error;
-	}
-		catch(const ErrorClass& eclass){
-		throw ErrorClass(  eclass.errormsg);
-	}
-} // end ossserror
+void setyyextra(osOptionsStruc *osoptions, void* scanner){
+	osssset_extra(osoptions, scanner);
+}
+
+

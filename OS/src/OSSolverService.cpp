@@ -33,17 +33,18 @@
 #include "OSSolverAgent.h"
 #include "OShL.h"  
 #include "ErrorClass.h"
-#include "osssparservariables.h" 
+#include "osOptionsStruc.h" 
 #include <string>
     
 
 #define MAXCHARS 5000 
-typedef struct yy_buffer_state *YY_BUFFER_STATE;
-YY_BUFFER_STATE osss_scan_string(const char* osss ); 
 
-using std::cout;
-using std::endl;
-using std::ostringstream;
+typedef struct yy_buffer_state *YY_BUFFER_STATE;
+YY_BUFFER_STATE osss_scan_string(const char* osss, void* scanner ); 
+//void osssset_extra (YY_EXTRA_TYPE user_defined ,yyscan_t yyscanner );
+void setyyextra(osOptionsStruc *osoptions, void* scanner);
+int ossslex(void* scanner );
+int ossslex_init(void** ptr);
  
 // the serviceMethods  
 void solve();  
@@ -53,17 +54,31 @@ void kill();
 void retrieve(); 
 void knock();
 
-int ossslex(void);
+//options structure
+// this is the only global variable but 
+// this is not a problem since this is a main routine
+osOptionsStruc *osoptions;
+
+
+
+
+using std::cout;
+using std::endl;
+using std::ostringstream;
+
 int main(int argC, const char* argV[])
 {   
+	
+	void* scanner;
 	FileUtil *fileUtil = NULL;
 	char osss[MAXCHARS] = " ";
 	const char *space = " "; 
 	char *config = "-config";
 	char *configFileName = NULL;
 	int i, k;
-	osOption = false;
+
 	// initialize the OS options structure
+
 	osoptions = new osOptionsStruc();
 	osoptions->configFile = NULL; 
 	osoptions->osilFile = NULL; 
@@ -83,6 +98,7 @@ int main(int argC, const char* argV[])
 	osoptions->solverName = NULL; 
 	osoptions->os = false; 
 	osoptions->browser = NULL; 
+	osoptions->osOption = false;
 	try{
 		if(argC < 2) throw ErrorClass( "there must be at least one command line argument");
 		// see if the first argument is a file name
@@ -94,15 +110,25 @@ int main(int argC, const char* argV[])
 			i++;
 		}
 		cout << "Input String = "  << osss << endl;
-		osss_scan_string( osss); 
-		ossslex();
+		ossslex_init( &scanner);
+		std::cout << "Call Text Extra" << std::endl;
+		setyyextra( osoptions, scanner);
+		std::cout << "Call scan string " << std::endl;
+		osss_scan_string( osss, scanner); 
+		std::cout << "call ossslex" << std::endl;
+		ossslex( scanner);
+		std::cout << "done with call to ossslex" << std::endl;
 		// if there is a config file, get those options
 		if(osoptions->configFile != NULL){
 			configFileName = osoptions->configFile;
 			cout << "configFileName = " << configFileName << endl;
 			std::string osolfileOptions = fileUtil->getFileAsString( configFileName);
-			osss_scan_string( &osolfileOptions[0]);
-			ossslex();		
+			ossslex_init( &scanner);
+			std::cout << "Call Text Extra" << std::endl;
+			setyyextra( osoptions, scanner);
+			std::cout << "Done with call Text Extra" << std::endl;
+			osss_scan_string( &osolfileOptions[0], scanner);
+			ossslex(scanner );		
 		}
 	}
 		catch(const ErrorClass& eclass){

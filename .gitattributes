@@ -182,10 +182,7 @@ OS/src/OSParsers/OSiLParserData.cpp -text
 OS/src/OSParsers/OSiLParserData.h -text
 OS/src/OSParsers/OSrLParserData.cpp -text
 OS/src/OSParsers/OSrLParserData.h -text
-OS/src/OSParsers/lexyaccparser.h -text
-OS/src/OSParsers/osilparservariables.h -text
-OS/src/OSParsers/osrlparservariables.h -text
-OS/src/OSParsers/osssparservariables.h -text
+OS/src/OSParsers/osOptionsStruc.h -text
 OS/src/OSParsers/parseosil.cpp -text
 OS/src/OSParsers/parseosil.l -text
 OS/src/OSParsers/parseosil.tab.cpp -text

@@ -42,9 +42,10 @@ DefaultSolver::~DefaultSolver(){
 	/* we do not delete osinstance since it is not newed in any
 	 * of the solvers, it is newed elesewhere and deleted elsewhere
 	 */
-	osinstance = NULL;
-	delete osresult;
-	osresult = NULL;
+	//if(osinstance != NULL) delete osinstance;
+	//osinstance = NULL;
+	//if(osresult != NULL) delete osresult;
+	//osresult = NULL;
 	cout << "Finish Default Solver Destructor" << endl;
 }
 

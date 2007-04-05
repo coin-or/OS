@@ -40,9 +40,11 @@ OSResult *yygetOSResult( std::string parsestring) ;
 
 %pure-parser
 %locations
-%lex-param {void* scanner}
+%defines
 %parse-param{OSResult *osresult}
 %parse-param{OSrLParserData *parserData}
+%lex-param {void* scanner}
+
 
 
 
@@ -79,7 +81,6 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token SERVICENAMESTARTANDEND SERVICENAMESTART SERVICENAMEEND
 %token INSTANCENAMESTARTANDEND INSTANCENAMESTART INSTANCENAMEEND
 %token JOBIDSTARTANDEND JOBIDSTART JOBIDEND
-%token HEADERMESSAGESTARTANDEND HEADERMESSAGESTART HEADERMESSAGEEND
 %token RESULTDATASTART RESULTDATAEND RESULTDATASTARTANDEND
 %token OPTIMIZATIONSTART OPTIMIZATIONEND
 %token SOLUTIONSTART SOLUTIONEND  VALUESSTART VALUESEND 
@@ -88,7 +89,7 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token OBJECTIVESSTART OBJECTIVESEND OBJSTART OBJEND 
 %token CONSTRAINTSSTART CONSTRAINTSEND CONSTART CONEND
 %token STATUSSTART STATUSEND GENERALSTATUSSTART GENERALSTATUSEND 
-%token MESSAGESTART MESSAGEEND OTHERSTART OTHEREND
+%token MESSAGESTART MESSAGEEND MESSAGESTARTANDEND OTHERSTART OTHEREND
 
 
 
@@ -157,9 +158,9 @@ jobID:
 | JOBIDSTART JOBIDEND ;
 
 headerMessage: 
-| HEADERMESSAGESTARTANDEND
-| HEADERMESSAGESTART ELEMENTTEXT HEADERMESSAGEEND {osresult->setGeneralMessage( $2);}
-| HEADERMESSAGESTART HEADERMESSAGEEND ;
+| MESSAGESTARTANDEND
+| MESSAGESTART ELEMENTTEXT MESSAGEEND {osresult->setGeneralMessage( $2);}
+| MESSAGESTART MESSAGEEND ;
 
 resultData: RESULTDATASTARTANDEND 
 |  RESULTDATASTART statistics optimization otherResultData RESULTDATAEND
@@ -374,7 +375,7 @@ void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, 
 	error = "Input is either not valid or well formed: "  + error;
 	outStr << error << std::endl;
 	outStr << "See line number: " << osrlget_lineno( scanner) << std::endl; 
-	outStr << "The offending text is: " << *osrlget_text ( scanner ) << std::endl; 
+	outStr << "The offending text is: " << osrlget_text ( scanner ) << std::endl; 
 	error = outStr.str();
 	throw ErrorClass( error);
 } //end osrlerror
@@ -388,7 +389,7 @@ OSResult *yygetOSResult(std::string parsestring){
 		// call the flex scanner
 		osrllex_init( &scanner);
 		osrl_scan_string( parsestring.c_str(), scanner);
-
+		osrlset_lineno (1 , scanner );
 		//
 		// call the Bison parser
 		//

@@ -16,6 +16,9 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <iostream>
+#include <sstream>  
+#include "ErrorClass.h"
 #include "OSrLParserData.h"
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", yytext);
@@ -88,9 +91,9 @@ endelementname (<\/[a-zA-Z][a-zA-Z0-9.:_]+)
 {xmlwhitespace}*\<jobID{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(JOBIDSTART);}
 {xmlwhitespace}*\<jobID{xmlwhitespace}*\>\< {YY_PRINT; unput('<'); return(JOBIDSTART);}
 {xmlwhitespace}*\<\/jobID{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(JOBIDEND);}
-{xmlwhitespace}*\<message{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(HEADERMESSAGESTART);}
-{xmlwhitespace}*\<message{xmlwhitespace}*\>\< {YY_PRINT; unput('<'); return(HEADERMESSAGESTART);}
-{xmlwhitespace}*\<\/message{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(HEADERMESSAGEEND);}
+{xmlwhitespace}*\<message{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MESSAGESTART);}
+{xmlwhitespace}*\<message{xmlwhitespace}*\>\< {YY_PRINT; unput('<'); return(MESSAGESTART);}
+{xmlwhitespace}*\<\/message{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MESSAGEEND);}
 
 {xmlwhitespace}*\<generalStatus {YY_PRINT; return(GENERALSTATUSSTART);}
 {xmlwhitespace}*\<\/generalStatus{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(GENERALSTATUSEND);}
@@ -128,9 +131,6 @@ endelementname (<\/[a-zA-Z][a-zA-Z0-9.:_]+)
 {xmlwhitespace}*\<\/con{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(CONEND);}
 {xmlwhitespace}*\<\/constraints{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(CONSTRAINTSEND);}
 
-{xmlwhitespace}*\<message{xmlwhitespace}*\> {YY_PRINT;   return(MESSAGESTART);}
-{xmlwhitespace}*\<message{xmlwhitespace}*\>\< {YY_PRINT; unput('<'); return(MESSAGESTART);}
-(\<\/message{xmlwhitespace}*\>) {YY_PRINT;  return(MESSAGEEND);}
 
 {xmlwhitespace}*\<other {YY_PRINT; return(OTHERSTART);}
 {xmlwhitespace}*\<\/other{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OTHEREND);}
@@ -149,7 +149,7 @@ endelementname (<\/[a-zA-Z][a-zA-Z0-9.:_]+)
 (\<serviceName{xmlwhitespace}*\/>) {YY_PRINT;  return(SERVICENAMESTARTANDEND);}
 (\<instanceName{xmlwhitespace}*\/>) {YY_PRINT;  return(INSTANCENAMESTARTANDEND);}
 (\<jobID{xmlwhitespace}*\/>) {YY_PRINT;  return(JOBIDSTARTANDEND);}
-(\<message{xmlwhitespace}*\/>) {YY_PRINT;  return(HEADERMESSAGESTARTANDEND);}
+(\<message{xmlwhitespace}*\/>) {YY_PRINT;  return(MESSAGESTARTANDEND);}
 (\<resultData{xmlwhitespace}*\/>) {YY_PRINT;  return(RESULTDATASTARTANDEND);}
 
 
@@ -178,7 +178,17 @@ endelementname (<\/[a-zA-Z][a-zA-Z0-9.:_]+)
 <osrlattributetext>([^>])* {YY_PRINT;  BEGIN 0; yylval->charval = strdup(yytext); return(OSRLATTRIBUTETEXT);}
 
 
-.|\n { /*osrlerror(NULL, NULL, NULL,  "ecountered a spurious character in the lexer");*/}
+.|\n { 
+	std::string error;
+	std::ostringstream outStr;
+	outStr << "ecountered a spurious character in the lexer" << std::endl;
+	outStr << "The first character is: ";
+	outStr <<  yytext;
+	outStr << std::endl;
+	outStr << "See line number: " << yylineno << std::endl;  
+	error = outStr.str();
+	throw ErrorClass( error);
+}
 
 
 

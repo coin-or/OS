@@ -15,10 +15,9 @@
 
 
  
-//#ifndef OSSSPARSERVARIABLES_H
-//#define OSSSPARSERVARIABLES_H
+#ifndef OSOPTIONSSTRUC_H
+#define OSOPTIONSSTRUC_H
 
-extern bool osOption;
 
 struct osOptionsStruc{
 	char *configFile;
@@ -41,10 +40,11 @@ struct osOptionsStruc{
 	char *nlFile;
 	char *solverName;
 	char *browser;
+	bool osOption;
 	
 };
 
-extern struct osOptionsStruc *osoptions;
-//#endif
+
+#endif
 
 /*  end header file */ 

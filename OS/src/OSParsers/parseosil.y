@@ -94,7 +94,6 @@ char *parseBase64( const char **p, int *dataSize ,int* osillineno);
 	printf("%c", ch[5]); \
 	printf("%c \n", ch[6]); \
 	GAIL;
-	//void* scanner;
 %}
 
 %pure-parser
@@ -497,7 +496,7 @@ void osilerror(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData* parserDa
 	outStr << error << endl;
 	outStr << endl; 
 	outStr << "See line number: " << osilget_lineno( scanner) << endl; 
-	outStr << "The offending text is: " << *osilget_text ( scanner ) << endl; 
+	outStr << "The offending text is: " << osilget_text ( scanner ) << endl; 
 	error = outStr.str();
 	throw ErrorClass( error);
 }//end osilerror() 

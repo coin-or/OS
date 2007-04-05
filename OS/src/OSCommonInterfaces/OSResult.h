@@ -16,6 +16,7 @@
 
 #ifndef OSRESULT_H
 #define OSRESULT_H
+#define DEBUG
 #include <string>
 
 
@@ -670,8 +671,6 @@ public:
 
 class OptimizationResult{
 public:
-
-
 	
 	int numberOfVariables;
 	

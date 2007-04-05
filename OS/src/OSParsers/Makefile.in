@@ -289,10 +289,7 @@ noinst_LTLIBRARIES = libOSParsers.la
 
 # List all source files for this library, including headers
 libOSParsers_la_SOURCES = \
-		externalvars.h \
-		lexyaccparser.h \
-		osrlparservariables.h \
-		osssparservariables.h \
+		osOptionsStruc.h \
 		parseosil.cpp \
 		parseosil.tab.cpp \
 		parseosil.tab.cpp.h \
@@ -332,10 +329,7 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 # and that therefore should be installed in 'install'
 include_HEADERS = \
 	../../inc/config_os.h \
-	externalvars.h \
-	lexyaccparser.h \
-	osrlparservariables.h \
-	osssparservariables.h \
+	osOptionsStruc.h \
 	parseosil.tab.hpp \
 	parseosrl.tab.hpp \
 	OSiLParserData.h \

@@ -385,9 +385,12 @@ DualVariableValues::~DualVariableValues(){
 	cout << "Inside the DualVariableValues Destructor" << endl;
 	#endif
 	if(resultParameters.numberOfConstraints > 0 && con != NULL){
-		for(int i = 0; i < resultParameters.numberOfConstraints; i++){
+		int i = 0;
+		while(con[ i] != NULL){
+		//for(int i = 0; i < resultParameters.numberOfConstraints; i++){
 			delete con[i];
 			con[i] = NULL;
+			i++;
 		}
 	}
 	con = NULL; 
@@ -553,13 +556,21 @@ OptimizationResult::OptimizationResult():
 OptimizationResult::~OptimizationResult(){
 	#ifdef DEBUG  
 	cout << "Inside the OptimzationResult Destructor" << endl;
+	cout << "Number of solutions = " << resultParameters.numberOfSolutions << endl;
 	#endif
-	if(resultParameters.numberOfSolutions > 0 && solution != NULL){
-		for(int i = 0; i < resultParameters.numberOfSolutions; i++){
+	if( solution != NULL){
+		int i = 0;
+		while(solution[i] != NULL){
+		//for(int i = 0; i < resultParameters.numberOfSolutions; i++){
 			delete solution[i];
 			solution[i] = NULL;
+			#ifdef DEBUG  
+			cout << "Delelting Solution: " << i << endl;
+			#endif
+			i++;
 		}
 	}
+	delete[] solution;
 	solution = NULL; 
 }// end OptimizationResult destructor 
  
