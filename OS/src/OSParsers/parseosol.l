@@ -15,11 +15,7 @@
 %{
 
 #include <stdio.h> 
-//#include "lexyaccparser.h"
-//#include "externalvars.h"
-
-
-
+#include "OSConfig.h"
 
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", osoltext);
