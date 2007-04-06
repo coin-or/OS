@@ -20,6 +20,7 @@
 #include <sstream>  
 #include "ErrorClass.h"
 #include "OSrLParserData.h"
+#include "OSConfig.h"
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", yytext);
 #else     
