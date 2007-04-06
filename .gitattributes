@@ -101,7 +101,6 @@ OS/examples/amplClient/nltrans.dat -text
 OS/examples/amplClient/nltrans.mod -text
 OS/examples/amplClient/nltrans.nl -text
 OS/examples/amplClient/testfile.nl -text
-OS/examples/fileUpload/Makefile -text
 OS/examples/fileUpload/Makefile.am -text
 OS/examples/fileUpload/Makefile.in -text
 OS/examples/fileUpload/fileUpload.cpp -text
