@@ -19,6 +19,7 @@
 #include "ErrorClass.h"
 #include <iostream>
 #include <sstream>   
+#include "OSConfig.h"
 #include "osOptionsStruc.h" 
 
 using std::cout;
