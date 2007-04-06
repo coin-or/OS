@@ -20,6 +20,7 @@
 #include <iostream>
 #include <sstream>   
 #include "osOptionsStruc.h" 
+#include "OSConfig.h"
 
 using std::cout;
 using std::endl;
