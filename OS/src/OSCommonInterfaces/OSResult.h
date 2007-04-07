@@ -16,7 +16,7 @@
 
 #ifndef OSRESULT_H
 #define OSRESULT_H
-#define DEBUG
+//#define DEBUG
 #include <string>
 #include <vector> 
 
@@ -75,16 +75,6 @@ public:
 	 */
 	~ResultHeader();
 };//class ResultHeader
-
-struct ResultParameters
-{
-	int numberOfVariables;
-	int numberOfObjectives;
-}; 
-
-
-
-
 
 /**
 *
@@ -298,7 +288,7 @@ public:
 class VariableValues{
 public:
 
-	VarValue **var;
+	std::vector<VarValue*> var;
 
 	
 	/**
@@ -332,8 +322,7 @@ public:
 	
 	std::string description;
 	
-	OtherVarResult **var;
-	
+	std::vector<OtherVarResult*> var;	
 	/**
 	 *
 	 * Default constructor. 
@@ -365,8 +354,7 @@ public:
 	
 	std::string description;
 	
-	
-	OtherObjResult **obj;
+	std::vector<OtherObjResult*> obj;
 	
 	/**
 	 *
@@ -426,7 +414,7 @@ public:
 class ObjectiveValues {
 public:
 	
-	ObjValue **obj;
+	std::vector<ObjValue*> obj;
 	
 	/**
 	 *

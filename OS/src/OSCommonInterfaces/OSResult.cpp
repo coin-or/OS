@@ -22,9 +22,6 @@
 
 using namespace std;
 
-ResultParameters resultParameters;
-
-
 GeneralStatus::GeneralStatus():
 	type( ""),
 	description( "")
@@ -218,9 +215,7 @@ DualVarValue::~DualVarValue(){
 
 
 
-VariableValues::VariableValues():
-	var(NULL)
-{ 
+VariableValues::VariableValues() { 
 	#ifdef DEBUG
 	cout << "Inside the VariableValues Constructor" << endl;
 	#endif
@@ -232,19 +227,19 @@ VariableValues::~VariableValues(){
 	#ifdef DEBUG  
 	cout << "Inside the VariableValues Destructor" << endl;
 	#endif
-	if(resultParameters.numberOfVariables > 0 && var != NULL){
-		for(int i = 0; i < resultParameters.numberOfVariables; i++){
+	int n = var.size();
+	if(n > 0 ){
+		for(int i = 0; i < n; i++){
 			delete var[i];
 			var[i] = NULL;
 		}
 	}
-	var = NULL; 
+	var.clear(); 
 
 }// end VariableValues destructor 
 
 
 OtherVariableResult::OtherVariableResult():
-	var(NULL),
 	name(""),
 	description("")
 { 
@@ -259,18 +254,18 @@ OtherVariableResult::~OtherVariableResult(){
 	#ifdef DEBUG  
 	cout << "Inside the OtherVariableResult Destructor" << endl;
 	#endif
-	if(resultParameters.numberOfVariables > 0 && var != NULL){
-		for(int i = 0; i < resultParameters.numberOfVariables; i++){
+	int n = var.size();
+	if(n  > 0) {
+		for(int i = 0; i < n; i++){
 			delete var[i];
 			var[i] = NULL;
 		}
 	}
-	var = NULL; 
+	var.clear(); 
 }// end OtherVariableResult destructor 
 
 
 OtherObjectiveResult::OtherObjectiveResult():
-	obj(NULL),
 	name(""),
 	description("")
 { 
@@ -284,13 +279,14 @@ OtherObjectiveResult::~OtherObjectiveResult(){
 	#ifdef DEBUG  
 	cout << "Inside the OtherObjectiveResult Destructor" << endl;
 	#endif
-	if(resultParameters.numberOfObjectives > 0 && obj != NULL){
-		for(int i = 0; i < resultParameters.numberOfObjectives; i++){
+	int n = obj.size();
+	if(n > 0) {
+		for(int i = 0; i < n; i++){
 			delete obj[i];
 			obj[i] = NULL;
 		}
 	}
-	obj = NULL; 
+	obj.clear(); 
 }// end OtherObjectiveResult destructor
 
 
@@ -319,9 +315,7 @@ OtherConstraintResult::~OtherConstraintResult(){
 }// end OtherObjectiveResult destructor
 
 
-ObjectiveValues::ObjectiveValues():
-	obj(NULL)
-{ 
+ObjectiveValues::ObjectiveValues() { 
 	#ifdef DEBUG
 	cout << "Inside the ObjectiveValues Constructor" << endl;
 	#endif
@@ -333,13 +327,14 @@ ObjectiveValues::~ObjectiveValues(){
 	#ifdef DEBUG  
 	cout << "Inside the ObjectiveValues Destructor" << endl;
 	#endif
-	if(resultParameters.numberOfObjectives > 0 && obj != NULL){
-		for(int i = 0; i < resultParameters.numberOfObjectives; i++){
+	int n = obj.size();
+	if(n > 0 ){
+		for(int i = 0; i < n; i++){
 			delete obj[i];
 			obj[i] = NULL;
 		}
 	}
-	obj = NULL; 
+	obj.clear(); 
 
 }// end ObjectiveValues destructor
 
@@ -365,9 +360,7 @@ ConstraintValues::~ConstraintValues(){
 	con.clear(); 
 }// end ConstraintValues destructor 
 
-DualVariableValues::DualVariableValues():
-	con(NULL)
-{ 
+DualVariableValues::DualVariableValues() { 
 	#ifdef DEBUG
 	cout << "Inside the DualVariableValues Constructor" << endl;
 	#endif
@@ -415,6 +408,7 @@ VariableSolution::~VariableSolution(){
 			other[i] = NULL;
 		}
 	}
+	delete[] other;
 	other = NULL; 
 }// end VariableSolution destructor 
 
@@ -442,6 +436,7 @@ ObjectiveSolution::~ObjectiveSolution(){
 			other[i] = NULL;
 		}
 	}
+	delete[] other;
 	other = NULL; 
 }// end ObjectiveSolution destructor 
 
@@ -474,6 +469,7 @@ ConstraintSolution::~ConstraintSolution(){
 			other[i] = NULL;
 		}
 	}
+	delete[] other;
 	other = NULL; 
 }// end ConstraintSolution destructor
 
@@ -538,8 +534,6 @@ OptimizationResult::OptimizationResult():
 	#ifdef DEBUG
 	cout << "Inside the OptimizationResult Constructor" << endl;
 	#endif
-	resultParameters.numberOfVariables = this->numberOfVariables;
-	resultParameters.numberOfObjectives = this->numberOfObjectives;
 }//end OptimizationResult constructor
 
 
@@ -889,12 +883,11 @@ bool OSResult::setPrimalVariableValues(int solIdx, double *x){
 		resultData->optimization->solution[solIdx]->variables->values = new VariableValues();
 	}
 	if(x == NULL){
-		resultData->optimization->solution[solIdx]->variables->values->var = NULL;
+		//resultData->optimization->solution[solIdx]->variables->values->var = NULL;
 		return true;
 	}
-	resultData->optimization->solution[solIdx]->variables->values->var = new VarValue*[iNumberOfVariables];
 	for(int i = 0; i < iNumberOfVariables; i++){
-		resultData->optimization->solution[solIdx]->variables->values->var[i] = new VarValue();
+		resultData->optimization->solution[solIdx]->variables->values->var.push_back(new VarValue());
 		resultData->optimization->solution[solIdx]->variables->values->var[i]->idx = i;
 		resultData->optimization->solution[solIdx]->variables->values->var[i]->value = x[i];
 	}
@@ -942,9 +935,8 @@ bool OSResult::setAnOtherVariableResult(int solIdx, int otherIdx, string name, s
 	if(resultData->optimization->solution[solIdx]->variables->other[ otherIdx] == NULL) return false;
 	resultData->optimization->solution[solIdx]->variables->other[ otherIdx]->name = name;
 	resultData->optimization->solution[solIdx]->variables->other[ otherIdx]->description = description;
-	resultData->optimization->solution[solIdx]->variables->other[ otherIdx]->var = new OtherVarResult*[iNumberOfVariables];
 	for(int i = 0; i < iNumberOfVariables; i++){
-		resultData->optimization->solution[solIdx]->variables->other[ otherIdx]->var[i] = new OtherVarResult();
+		resultData->optimization->solution[solIdx]->variables->other[ otherIdx]->var.push_back(new OtherVarResult());
 		resultData->optimization->solution[solIdx]->variables->other[ otherIdx]->var[i]->idx = i;
 		resultData->optimization->solution[solIdx]->variables->other[ otherIdx]->var[i]->value = s[i];
 	}
@@ -973,9 +965,8 @@ bool OSResult::setObjectiveValues(int solIdx, double *objectiveValues){
 	if(resultData->optimization->solution[solIdx]->objectives->values == NULL){
 		resultData->optimization->solution[solIdx]->objectives->values = new ObjectiveValues();
 	}
-	resultData->optimization->solution[solIdx]->objectives->values->obj = new ObjValue*[iNumberOfObjectives];
 	for(int i = 0; i < iNumberOfObjectives; i++){
-		resultData->optimization->solution[solIdx]->objectives->values->obj[i] = new ObjValue();
+		resultData->optimization->solution[solIdx]->objectives->values->obj.push_back( new ObjValue());
 		resultData->optimization->solution[solIdx]->objectives->values->obj[i]->idx = -(i+1);
 		resultData->optimization->solution[solIdx]->objectives->values->obj[i]->value = objectiveValues[i];
 	}

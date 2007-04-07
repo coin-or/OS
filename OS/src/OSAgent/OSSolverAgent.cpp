@@ -18,7 +18,7 @@
 #include "WSUtil.h"
 
 using std::string;
-using std::cout;
+using std::cout; 
 using std::endl;
 
 OSSolverAgent::OSSolverAgent(string solverURI) : OShL() {

@@ -161,9 +161,9 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 									outStr << m_OSResult->resultData->optimization->solution[i]->variables->other[k]->description;
 									outStr << "\"" ;
 									outStr <<  ">" << endl;
-									if(m_OSResult->resultData->optimization->solution[i]->variables->other[k]->var != NULL){
+									if(m_OSResult->resultData->optimization->solution[i]->variables->other[k]->var.size() > 0){
 										for(j = 0; j < m_OSResult->resultData->optimization->numberOfVariables; j++){
-											if(m_OSResult->resultData->optimization->solution[i]->variables->other[k]->var[j] != NULL){
+											if(m_OSResult->resultData->optimization->solution[i]->variables->other[k]->var.size() > 0){
 												outStr << "<var";
 												outStr << " idx=\"";
 												outStr << j ;
@@ -209,9 +209,9 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 									outStr << m_OSResult->resultData->optimization->solution[i]->objectives->other[k]->description;
 									outStr << "\"" ;
 									outStr <<  ">" << endl;
-									if(m_OSResult->resultData->optimization->solution[i]->objectives->other[k]->obj != NULL){
+									if(m_OSResult->resultData->optimization->solution[i]->objectives->other[k]->obj.size() > 0){
 										for(j = 0; j < m_OSResult->resultData->optimization->numberOfObjectives; j++){
-											if(m_OSResult->resultData->optimization->solution[i]->objectives->other[k]->obj[j] != NULL){
+											if(m_OSResult->resultData->optimization->solution[i]->objectives->other[k]->obj.size() > 0){
 												outStr << "<obj";
 												outStr << " idx=\"";
 												outStr << j ;
