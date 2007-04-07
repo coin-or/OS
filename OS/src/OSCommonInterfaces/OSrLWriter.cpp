@@ -268,9 +268,9 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 									outStr << m_OSResult->resultData->optimization->solution[i]->constraints->other[k]->description;
 									outStr << "\"" ;
 									outStr <<  ">" << endl;
-									if(m_OSResult->resultData->optimization->solution[i]->constraints->other[k]->con != NULL){
+									if(m_OSResult->resultData->optimization->solution[i]->constraints->other[k]->con.size() > 0){
 										for(j = 0; j < m_OSResult->resultData->optimization->numberOfConstraints; j++){
-											if(m_OSResult->resultData->optimization->solution[i]->constraints->other[k]->con[j] != NULL){
+											if(m_OSResult->resultData->optimization->solution[i]->constraints->other[k]->con.size() > 0){
 												outStr << "<con";
 												outStr << " idx=\"";
 												outStr << j ;

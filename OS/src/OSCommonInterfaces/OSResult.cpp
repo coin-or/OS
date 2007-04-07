@@ -295,7 +295,6 @@ OtherObjectiveResult::~OtherObjectiveResult(){
 
 
 OtherConstraintResult::OtherConstraintResult():
-	con(NULL),
 	name(""),
 	description("")
 { 
@@ -309,13 +308,14 @@ OtherConstraintResult::~OtherConstraintResult(){
 	#ifdef DEBUG  
 	cout << "Inside the OtherConstraintResult Destructor" << endl;
 	#endif
-	if(resultParameters.numberOfConstraints > 0 && con != NULL){
-		for(int i = 0; i < resultParameters.numberOfConstraints; i++){
+	int n = con.size();
+	if(n > 0){
+		for(int i = 0; i < n; i++){
 			delete con[i];
 			con[i] = NULL;
 		}
 	}
-	con = NULL; 
+	con.clear(); 
 }// end OtherObjectiveResult destructor
 
 
@@ -344,31 +344,26 @@ ObjectiveValues::~ObjectiveValues(){
 }// end ObjectiveValues destructor
 
 
-ConstraintValues::ConstraintValues():
-	con(NULL)
-{ 
+ConstraintValues::ConstraintValues(){ 
 	#ifdef DEBUG
 	cout << "Inside the ConstraintValues Constructor" << endl;
 	#endif
-}//end DualVariableValues constructor
+}//end ConstraintValues constructor
 
 
 ConstraintValues::~ConstraintValues(){
 	#ifdef DEBUG  
 	cout << "Inside the ConstraintValues Destructor" << endl;
 	#endif
-	if(resultParameters.numberOfConstraints > 0 && con != NULL){
-		for(int i = 0; i < resultParameters.numberOfConstraints; i++){
+	int n = con.size();
+	if(n > 0){
+		for(int i = 0; i < n; i++){
 			delete con[i];
 			con[i] = NULL;
 		}
 	}
-	con = NULL; 
+	con.clear(); 
 }// end ConstraintValues destructor 
-
-
-//
-
 
 DualVariableValues::DualVariableValues():
 	con(NULL)
@@ -384,17 +379,14 @@ DualVariableValues::~DualVariableValues(){
 	#ifdef DEBUG  
 	cout << "Inside the DualVariableValues Destructor" << endl;
 	#endif
-	if(resultParameters.numberOfConstraints > 0 && con != NULL){
-		int i = 0;
-		while(con[ i] != NULL){
-		//for(int i = 0; i < resultParameters.numberOfConstraints; i++){
-			//delete con[i];
+	int n = con.size();
+	if(n > 0){
+		for(int i = 0; i < n; i++){
+			delete con[i];
 			con[i] = NULL;
-			i++;
 		}
-	}
-	con = NULL; 
-
+	}	
+	con.clear(); 
 }// end DualVariableValues destructor 
 
 
@@ -548,21 +540,17 @@ OptimizationResult::OptimizationResult():
 	#endif
 	resultParameters.numberOfVariables = this->numberOfVariables;
 	resultParameters.numberOfObjectives = this->numberOfObjectives;
-	resultParameters.numberOfSolutions = this->numberOfSolutions;
-	resultParameters.numberOfConstraints = this->numberOfConstraints;
 }//end OptimizationResult constructor
 
 
 OptimizationResult::~OptimizationResult(){
 	#ifdef DEBUG  
 	cout << "Inside the OptimzationResult Destructor" << endl;
-	cout << "Number of solutions = " << resultParameters.numberOfSolutions << endl;
+	cout << "Number of solutions = " << this->numberOfSolutions << endl;
 	#endif
-	/*if( solution != NULL){
-		int i = 0;
-		while(solution[i] != NULL){
-		//for(int i = 0; i < resultParameters.numberOfSolutions; i++){
-			//delete solution[i];
+	if( solution != NULL){
+		for(int i = 0; i < this->numberOfSolutions; i++){
+			delete solution[i];
 			solution[i] = NULL;
 			#ifdef DEBUG  
 			cout << "Delelting Solution: " << i << endl;
@@ -571,7 +559,6 @@ OptimizationResult::~OptimizationResult(){
 		}
 	}
 	delete[] solution;
-	*/
 	solution = NULL; 
 }// end OptimizationResult destructor 
  
@@ -1015,7 +1002,7 @@ bool OSResult::setDualVariableValues(int solIdx, double *lbValues, double *ubVal
 		resultData->optimization->solution[solIdx]->constraints->dualValues = new DualVariableValues();
 	}
 	if(lbValues == NULL && ubValues == NULL){
-		resultData->optimization->solution[solIdx]->constraints->dualValues->con = NULL;
+		//resultData->optimization->solution[solIdx]->constraints->dualValues->con = NULL;
 		return true;
 	}
 	int iCons = 0;
@@ -1035,8 +1022,8 @@ bool OSResult::setDualVariableValues(int solIdx, double *lbValues, double *ubVal
 		}
 	}
 	
-	resultData->optimization->solution[solIdx]->constraints->dualValues->con = new DualVarValue*[iCons];
-	for(int i = 0; i < iCons; i++) resultData->optimization->solution[solIdx]->constraints->dualValues->con[i] = new DualVarValue();
+	//resultData->optimization->solution[solIdx]->constraints->dualValues->con = new DualVarValue*[iCons];
+	for(int i = 0; i < iCons; i++) resultData->optimization->solution[solIdx]->constraints->dualValues->con.push_back( new DualVarValue());
 	int j = 0;
 	if(lbValues == NULL){
 		for(int i = 0; i < iNumberOfConstraints; i++){
@@ -1093,10 +1080,9 @@ bool OSResult::setDualVariableValues(int solIdx, double *y){
 	if(y == NULL){
 		resultData->optimization->solution[solIdx]->constraints->dualValues = NULL;
 		return true;
-	}
-	resultData->optimization->solution[solIdx]->constraints->dualValues->con = new DualVarValue*[iNumberOfConstraints]; 
+	} 
 	for(int i = 0; i < iNumberOfConstraints; i++){
-		resultData->optimization->solution[solIdx]->constraints->dualValues->con[i] = new DualVarValue();
+		resultData->optimization->solution[solIdx]->constraints->dualValues->con.push_back( new DualVarValue());
 		resultData->optimization->solution[solIdx]->constraints->dualValues->con[i]->idx = i;
 		resultData->optimization->solution[solIdx]->constraints->dualValues->con[i]->value = y[i];
 	}
@@ -1125,9 +1111,11 @@ bool OSResult::setConstraintValues(int solIdx, double *constraintValues){
 		resultData->optimization->solution[solIdx]->constraints->values = NULL;
 		return true;
 	}
-	resultData->optimization->solution[solIdx]->constraints->values->con = new ConValue*[ iNumberOfConstraints];
+	//resultData->optimization->solution[solIdx]->constraints->values->con = new ConValue*[ iNumberOfConstraints];
+	
 	for(int i = 0; i < iNumberOfConstraints; i++){
-		resultData->optimization->solution[solIdx]->constraints->values->con[i] = new ConValue();
+		resultData->optimization->solution[solIdx]->constraints->values->con.push_back( new ConValue());
+		//resultData->optimization->solution[solIdx]->constraints->values->con[i] = new ConValue();
 		resultData->optimization->solution[solIdx]->constraints->values->con[i]->idx = i;
 		resultData->optimization->solution[solIdx]->constraints->values->con[i]->value = constraintValues[i];
 	}

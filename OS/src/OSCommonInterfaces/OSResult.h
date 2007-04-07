@@ -18,7 +18,7 @@
 #define OSRESULT_H
 #define DEBUG
 #include <string>
-
+#include <vector> 
 
 
 /**
@@ -80,8 +80,6 @@ struct ResultParameters
 {
 	int numberOfVariables;
 	int numberOfObjectives;
-	int numberOfConstraints;
-	int numberOfSolutions;
 }; 
 
 
@@ -401,9 +399,7 @@ public:
 	
 	std::string description;
 	
-	
-	OtherConResult **con;
-	
+	std::vector<OtherConResult*> con;	
 	/**
 	 *
 	 * Default constructor. 
@@ -458,7 +454,7 @@ public:
 */
 class ConstraintValues{
 public:
-	ConValue **con;
+	std::vector<ConValue*> con;
 	
 	/**
 	 *
@@ -486,8 +482,7 @@ public:
 */
 class DualVariableValues {
 public:
-	
-	DualVarValue **con;
+	std::vector<DualVarValue*> con;
 	
 	/**
 	 *
