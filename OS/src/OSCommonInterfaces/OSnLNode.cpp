@@ -33,9 +33,7 @@ using std::endl;
  * getPrefixFromExpressionTree()	
  */
  
-std::vector<OSnLNode*> postfixVector;
-std::vector<OSnLNode*> prefixVector;
-//std::map<int, int> nlNodeIdxMap;
+
 
 
 
@@ -233,19 +231,19 @@ OSnLNode* OSnLNode::createExpressionTreeFromPostfix(std::vector<OSnLNode*> nlNod
 	return nlNodeVec[ kount - 1];
 }//end createExpressionTreeFromPostfix
 
-std::vector<OSnLNode*> OSnLNode::getPostfixFromExpressionTree(){
-	postfixVector.clear();
-	return postOrderOSnLNodeTraversal();
+std::vector<OSnLNode*> OSnLNode::getPostfixFromExpressionTree( ){
+	std::vector<OSnLNode*> postfixVector;
+	return postOrderOSnLNodeTraversal( &postfixVector);
 }//getPostfixFromExpressionTree
 
-std::vector<OSnLNode*> OSnLNode::postOrderOSnLNodeTraversal(){
+std::vector<OSnLNode*> OSnLNode::postOrderOSnLNodeTraversal( std::vector<OSnLNode*> *postfixVector){
 	if(inumberOfChildren > 0){
 		int i;
 		for(i = 0; i < inumberOfChildren; i++) 
-			m_mChildren[i]->postOrderOSnLNodeTraversal();
+			m_mChildren[i]->postOrderOSnLNodeTraversal( postfixVector);
 	}
-	postfixVector.push_back( this);
-	return postfixVector;
+	(*postfixVector).push_back( this);
+	return *postfixVector;
 }//end postOrderOSnLNodeTraversal()
 
 OSnLNode* OSnLNode::createExpressionTreeFromPrefix(std::vector<OSnLNode*> nlNodeVec){
@@ -267,17 +265,17 @@ OSnLNode* OSnLNode::createExpressionTreeFromPrefix(std::vector<OSnLNode*> nlNode
 }//end createExpressionTreeFromPrefix
 
 std::vector<OSnLNode*> OSnLNode::getPrefixFromExpressionTree(){
-	prefixVector.clear();
-	return preOrderOSnLNodeTraversal();
+	std::vector<OSnLNode*> prefixVector;
+	return preOrderOSnLNodeTraversal( &prefixVector);
 }//getPrefixFromExpressionTree
 
-std::vector<OSnLNode*> OSnLNode::preOrderOSnLNodeTraversal(){
-	prefixVector.push_back( this);
+std::vector<OSnLNode*> OSnLNode::preOrderOSnLNodeTraversal( std::vector<OSnLNode*> *prefixVector){
+	(*prefixVector).push_back( this);
 	if(inumberOfChildren > 0){
 		for(int i = 0; i < inumberOfChildren; i++)
-			m_mChildren[i]->preOrderOSnLNodeTraversal( );
+			m_mChildren[i]->preOrderOSnLNodeTraversal( prefixVector);
 	}
-	return prefixVector;
+	return *prefixVector;
 }//end preOrderOSnLNodeTraversal
 
 

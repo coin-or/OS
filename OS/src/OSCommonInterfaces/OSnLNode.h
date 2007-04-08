@@ -141,7 +141,7 @@ public:
 	std::vector<OSnLNode*> getPrefixFromExpressionTree();
 	
 
-	std::vector<OSnLNode*> preOrderOSnLNodeTraversal();
+	std::vector<OSnLNode*> preOrderOSnLNodeTraversal( std::vector<OSnLNode*> *prefixVector);
 	
 		/**
 	 * Get a vector of pointers to OSnLNodes that correspond to
@@ -154,7 +154,7 @@ public:
 	std::vector<OSnLNode*> getPostfixFromExpressionTree();
 
 	
-	std::vector<OSnLNode*> postOrderOSnLNodeTraversal();
+	std::vector<OSnLNode*> postOrderOSnLNodeTraversal( std::vector<OSnLNode*> *postfixVector);
 	
 	virtual void getVariableIndexMap(std::map<int, int> *varIdx);
 	

@@ -453,6 +453,35 @@ int main(int argC, char* argV[])
 		cout << "Sorry Unit Test Failed Testing An OSrL Parser" << endl;
 		return 0;
 	}
+	// now test postfix and prefix routines
+	try{
+		std::string expTreeTest =  dataDir + "rosenbrockmod.osil";
+		osil = fileUtil->getFileAsString( &expTreeTest[0]);
+		OSInstance *osinstance = NULL;
+		osinstance = new OSInstance();
+		OSiLReader *osilreader = NULL;
+		osilreader = new OSiLReader();
+		//create an osinstance
+		osinstance = osilreader->readOSiL( &osil);
+		OSExpressionTree* expTree = osinstance->getNonlinearExpressionTree( -1);
+		std::vector<OSnLNode*> postfixVec;
+		postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();
+		int n = postfixVec.size();
+		for (int i = 0 ; i < n; i++){
+			std::cout << postfixVec[i]->snodeName << std::endl;
+		}
+		//delete osinstance;
+		osinstance = NULL;
+		delete osilreader;
+		osilreader = NULL;
+		
+	}
+	catch(const ErrorClass& eclass){
+		cout << endl << endl << endl;
+		cout << eclass.errormsg << endl;
+		cout << "Sorry Unit Test Failed Testing Prefix and Postfix routines" << endl;
+		return 0;
+	}
 	// 
 	// now solve on a remote server
 	/*
