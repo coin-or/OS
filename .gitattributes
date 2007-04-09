@@ -81,6 +81,7 @@ OS/data/rosenbrockmod.osil -text
 OS/data/rosenbrockmod.osrl -text
 OS/data/showtree -text
 OS/data/test.config -text
+OS/data/testOperators.osil -text
 OS/data/testampl.xml -text
 OS/data/testamplrow.xml -text
 OS/data/testb64.osil -text

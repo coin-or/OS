@@ -26,16 +26,8 @@ using std::ostringstream;
 using std::cout;
 using std::endl;
   
-/**
- * we need a global postfixVector and prefixVector to efficiently
- * pre and post-order tree transversals
- * these are key in the methods getPostfixFromExpressionTree() and
- * getPrefixFromExpressionTree()	
- */
+
  
-
-
-
 
 const std::string msnodeNames[] = {
 	/*1--*/"plus", "sum", "minus", "negate", "times", "divide",
@@ -140,60 +132,8 @@ const int m_miNodeTypes[] = {
 };
 
 
-/*
-static OSnLNodePlus n1001;
-static OSnLNodeSum n1002;
-static OSnLNodeMinus n1003;
-static OSnLNodeNegate n1004;
-static OSnLNodeTimes n1005;
-static OSnLNodeDivide n1006;
-static OSnLNodePower n1009;
-static OSnLNodeProduct n1010;
-static OSnLNodeSquare n2005;
-static OSnLNodeSqrt n2006;
-static OSnLNodeLn n2007;
-static OSnLNodeExp n2010;
-static OSnLNodeSin n3001;
-static OSnLNodeCos n3002;
-static OSnLNodeNumber n5001;
-static OSnLNodeVariable n6001;
-static OSnLNodeIf n7001;
-static OSnLNodeAbs n2001;
-static OSnLNodeMax n3024;
-*/
 
 
-/*
-void OSnLNode::setnlNodeIdxMap(){
-	nlNodeIdxMap[OS_PLUS] = 0;
-	nlNodeIdxMap[OS_SUM] = 1;
-	nlNodeIdxMap[OS_MINUS] = 2;
-	nlNodeIdxMap[OS_NEGATE] = 3;
-	nlNodeIdxMap[OS_TIMES] = 4;
-	nlNodeIdxMap[OS_DIVIDE] = 5;
-	nlNodeIdxMap[OS_POWER] = 6;
-	nlNodeIdxMap[OS_PRODUCT] = 7;
-	nlNodeIdxMap[OS_LN] = 8;
-	nlNodeIdxMap[OS_EXP] = 9;
-	nlNodeIdxMap[OS_NUMBER] = 10;
-	nlNodeIdxMap[OS_VARIABLE] = 11;
-	nlNodeIdxMap[OS_IF] = 12;
-	nlNodeIdxMap[OS_ABS] = 13;
-	nlNodeIdxMap[OS_MAX] = 14;
-	nlNodeIdxMap[OS_SQRT] = 15;
-	nlNodeIdxMap[OS_SQUARE] = 16;
-	nlNodeIdxMap[OS_SIN] = 17;
-	nlNodeIdxMap[OS_COS] = 18;
-}
-*/
-
-/*
-static OSnLNode *nlNodeArray[] = { &n1001, &n1002, &n1003, &n1004, &n1005, &n1006,
-	&n1009, &n1010, &n2007, &n2010, &n5001, &n6001, &n7001, &n2001, &n3024, &n2006,
-	&n2005, &n3001, &n3002
-};
-*/
- 
 //
 //OSnLNode methods
 //
@@ -531,7 +471,64 @@ OSnLNode* OSnLNodeSum::cloneOSnLNode(){
 	nlNodePoint = new OSnLNodeSum();
 	return  nlNodePoint;
 }//end OSnLNodeSum::cloneOSnLNode
+//end OSnLNodeSum methods
+
+
 //
+// OSnLNodeAllDiff Methods	
+OSnLNodeAllDiff::OSnLNodeAllDiff()
+{
+	inumberOfChildren = 0;
+	snodeName = "allDiff";
+	inodeInt = 7016;
+	inodeType = -1;
+}//end OSnLNodeAllDiff
+
+OSnLNodeAllDiff::~OSnLNodeAllDiff(){
+	#ifdef DEBUGOSNLNODE
+	cout << "inside OSnLNodeAllDiff destructor" << endl;
+	#endif
+	if(inumberOfChildren > 0){
+		for(int i = 0; i < inumberOfChildren; i++){
+			delete m_mChildren[ i];
+			m_mChildren[i] = NULL;
+		}
+	}
+	m_mChildren = NULL;
+}//end ~OSnLNodeAllDiff
+
+double OSnLNodeAllDiff::calculateFunction(double *x){
+	m_dFunctionValue = 1;
+	// return a false if not all all different
+	int i, k;
+	if(inumberOfChildren > 1){
+		for(i = 0; i < inumberOfChildren - 1; i++){
+			for(k = i + 1; k < inumberOfChildren; k++){
+				if(m_mChildren[i]->calculateFunction(x) ==  
+				  	m_mChildren[k]->calculateFunction(x)) return 0 ;
+			}
+		}
+	}
+	return m_dFunctionValue;
+}// end OSnLNodeAllDiff::calculate
+
+
+AD<double> OSnLNodeAllDiff::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
+	m_CppADTape = 0.0;
+	int i;
+	//for(i = 0; i < inumberOfChildren; i++){
+	//		m_CppADTape = m_CppADTape + m_mChildren[i]->constructCppADTape( cppADIdx, XAD);
+	//}
+	// kipp throw error if operation not defined
+	return m_CppADTape;
+}// end OSnLNodeAllDiff::constructCppADTape
+
+OSnLNode* OSnLNodeAllDiff::cloneOSnLNode(){
+	OSnLNode *nlNodePoint;
+	nlNodePoint = new OSnLNodeAllDiff();
+	return  nlNodePoint;
+}//end OSnLNodeAllDiff::cloneOSnLNode
+//end OSnLNodeAllDiff methods
 
 
 

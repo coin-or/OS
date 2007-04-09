@@ -55,7 +55,8 @@
 	OS_VARIABLE = 6001,
 	OS_ABS = 2001,
 	OS_MAX = 3024,
-	OS_IF = 7001
+	OS_IF = 7001,
+	OS_ALLDIF = 7016
 };
 
 using CppAD::AD;
@@ -941,6 +942,41 @@ public:
 
 
 };//end OSnLNodeVariable
+
+
+class OSnLNodeAllDiff : public OSnLNode{  
+public:
+	/**
+	 * default constructor.
+	 */
+	OSnLNodeAllDiff();
+
+	/**
+	 * default destructor.
+	 */	
+	~OSnLNodeAllDiff();
+	
+	/*! \fn double OSnLNodeAllDiff::double(double *x) 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return a double.
+	 */	
+	virtual double calculateFunction( double *x);
+	
+	/*! \fn OSnLNode *cloneOSnLNode(double *x) 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return a point to a new OSnLNode of the proper type.
+	 */	
+	virtual OSnLNode *cloneOSnLNode() ;
+		 
+	/*! \fn double OSnLNodeAllDiff::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD) 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return a AD<double>.
+	 */	
+	virtual AD<double> constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD);
+	
+
+
+};//end OSnLNodeAllDiff
 
 /* 
 TO DO:

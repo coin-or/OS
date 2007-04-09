@@ -50,6 +50,7 @@ public:
 	
 	std::vector<OSnLNode*> nlNodeVec;
 	std::vector<OSnLNode*> sumVec;
+	std::vector<OSnLNode*> allDiffVec;
 	std::vector<OSnLNode*> productVec;
 	std::vector<OSnLNode*> maxVec;
 };

@@ -101,7 +101,9 @@
      ABSSTART = 317,
      ABSEND = 318,
      MAXSTART = 319,
-     MAXEND = 320
+     MAXEND = 320,
+     ALLDIFFSTART = 321,
+     ALLDIFFEND = 322
    };
 #endif
 /* Tokens.  */
@@ -168,6 +170,8 @@
 #define ABSEND 318
 #define MAXSTART 319
 #define MAXEND 320
+#define ALLDIFFSTART 321
+#define ALLDIFFEND 322
 
 
 

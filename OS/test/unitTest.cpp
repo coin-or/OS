@@ -17,7 +17,7 @@
   
 using std::cout;   
 using std::endl;
-
+ 
 
 #include "OSResult.h" 
 #include "OSiLReader.h"        
@@ -499,6 +499,35 @@ int main(int argC, char* argV[])
 		cout << endl << endl << endl;
 		cout << eclass.errormsg << endl;
 		cout << "Sorry Unit Test Failed Testing Prefix and Postfix routines" << endl;
+		return 0;
+	}
+	// now test the nonlinear operators
+	
+	try{
+		std::cout << "Test nonlinear operators" << std::endl;
+		std::string operatorTest =  dataDir + "testOperators.osil";
+		osil = fileUtil->getFileAsString( &operatorTest[0]);
+		OSInstance *osinstance = NULL;
+		osinstance = new OSInstance();
+		OSiLReader *osilreader = NULL;
+		osilreader = new OSiLReader();
+		OSiLWriter *osilwriter = NULL;
+		osilwriter = new OSiLWriter();
+		osinstance = osilreader->readOSiL( &osil);
+		std::cout << osilwriter->writeOSiL(osinstance) << std::endl;
+		//delete osinstance;
+		//osinstance = NULL;
+		//delete osilreader;
+		//osilreader = NULL;
+		//delete osilwriter;
+		//osilwriter = NULL;
+		//create an osinstance
+		osinstance = osilreader->readOSiL( &osil);
+	}
+	catch(const ErrorClass& eclass){
+		cout << endl << endl << endl;
+		cout << eclass.errormsg << endl;
+		cout << "Sorry Unit Test Failed Nonlinear Operator Tests" << endl;
 		return 0;
 	}
 	// 

@@ -150,6 +150,7 @@ void osilerror(YYLTYPE* type, OSInstance *osintance,  OSiLParserData *parserData
 %token SQUARESTART SQUAREEND COSSTART COSEND SINSTART SINEND
 %token GREATERTHAN 
 %token VARIABLESTART VARIABLEEND ABSSTART ABSEND MAXSTART MAXEND
+%token ALLDIFFSTART ALLDIFFEND
 
 
 
@@ -159,7 +160,7 @@ void osilerror(YYLTYPE* type, OSInstance *osintance,  OSiLParserData *parserData
 
 
 
-osildoc: quadraticcoefficients  nonlinearExpressions INSTANCEDATAEND  OSILEND;
+osildoc: quadraticcoefficients  nonlinearExpressions {std::cout << "GAIL 1" <<std::endl;} INSTANCEDATAEND {std::cout << "GAIL 1" <<std::endl;} OSILEND;
 
 
 
@@ -224,8 +225,8 @@ qtermidxatt: IDXATT INTEGER   {
 osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->idx = $2;} ;
 
 nonlinearExpressions:  
-				| NONLINEAREXPRESSIONSSTART  nlnumberatt nlnodes NONLINEAREXPRESSIONSEND
-				{if(parserData->nlnodecount <  parserData->tmpnlcount)  osilerror( NULL, NULL, NULL, "actual number of nl terms less than number attribute"); };
+				| NONLINEAREXPRESSIONSSTART  nlnumberatt nlnodes  NONLINEAREXPRESSIONSEND
+				{ {std::cout << "GAIL -1" << std::endl;} /*if(parserData->nlnodecount <  parserData->tmpnlcount)  osilerror( NULL, NULL, NULL, "actual number of nl terms less than number attribute");*/ std::cout << "GAIL 0000" << std::endl; };
 				
 
 nlnumberatt: NUMBEROFNONLINEAREXPRESSIONS INTEGER quote  GREATERTHAN {parserData->tmpnlcount = $2;
@@ -236,13 +237,11 @@ if(osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions 
 nlnodes: 
 		| nlnodes NLSTART 
 		nlIdxATT  GREATERTHAN nlnode {
-	// IMPORTANT -- HERE IS WHERE WE DEFINE THE EXPRESSION TREE
+	// IMPORTANT -- HERE IS WHERE WE CREATE THE EXPRESSION TREE
 	osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->m_treeRoot = 
-	//osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->createExpressionTreeFromPrefix( parserData->nlNodeVec);
-	//createExpressionTreeFromPrefix( parserData->nlNodeVec);
 	parserData->nlNodeVec[ 0]->createExpressionTreeFromPrefix( parserData->nlNodeVec);
 	parserData->nlnodecount++;
-}  NLEND;
+}  NLEND ;
 
 nlIdxATT:  IDXATT INTEGER quote {
 osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount] = new Nl();
@@ -252,6 +251,7 @@ if(parserData->nlnodecount > parserData->tmpnlcount) osilerror( NULL, NULL, NULL
 // clear the vectors of pointers
 parserData->nlNodeVec.clear();
 parserData->sumVec.clear();
+//parserData->allDiffVec.clear();
 parserData->maxVec.clear();
 parserData->productVec.clear();
 };
@@ -275,7 +275,8 @@ nlnode: number
 		| exp
 		| if
 		| abs
-		| max;
+		| max
+		| allDiff ;
 
 
 times: TIMESSTART {
@@ -320,6 +321,22 @@ anothersumnlnode SUMEND {
 
 anothersumnlnode: nlnode {	parserData->sumVec.back()->inumberOfChildren++; }
 			| anothersumnlnode nlnode {	parserData->sumVec.back()->inumberOfChildren++; };
+			
+			
+			
+
+allDiff: ALLDIFFSTART {
+	parserData->nlNodePoint = new OSnLNodeAllDiff();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+	parserData->allDiffVec.push_back( parserData->nlNodePoint);
+}
+anotherallDiffnlnode ALLDIFFEND {
+	parserData->allDiffVec.back()->m_mChildren = new OSnLNode*[ parserData->allDiffVec.back()->inumberOfChildren];
+	parserData->allDiffVec.pop_back();
+};
+
+anotherallDiffnlnode: nlnode {	parserData->allDiffVec.back()->inumberOfChildren++; }
+			| anotherallDiffnlnode nlnode {	parserData->allDiffVec.back()->inumberOfChildren++; };
 			
 			
 max: MAXSTART {
@@ -408,9 +425,6 @@ numberend: ENDOFELEMENT
 			
 variableend: ENDOFELEMENT
 			| GREATERTHAN nlnode {
-	//parserData->sumVec.back()->inumberOfChildren = 1;
-	//parserData->sumVec.back()->m_mChildren = new OSnLNode*[ 1];
-	// kipp -- fix the above doesnt seem right
 	parserData->nlNodeVariablePoint->inumberOfChildren = 1;
 	parserData->nlNodeVariablePoint->m_mChildren = new OSnLNode*[ 1];
 }
