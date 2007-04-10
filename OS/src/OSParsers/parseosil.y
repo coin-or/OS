@@ -160,7 +160,7 @@ void osilerror(YYLTYPE* type, OSInstance *osintance,  OSiLParserData *parserData
 
 
 
-osildoc: quadraticcoefficients  nonlinearExpressions {std::cout << "GAIL 1" <<std::endl;} INSTANCEDATAEND {std::cout << "GAIL 1" <<std::endl;} OSILEND;
+osildoc: quadraticcoefficients  nonlinearExpressions  INSTANCEDATAEND  OSILEND;
 
 
 
@@ -178,11 +178,11 @@ for(int i = 0; i < $2; i++) osinstance->instanceData->quadraticCoefficients->qTe
 qTermlist:  
 		| qTermlist qterm ;
 		   
-qterm: {if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms <= parserData->qtermcount ) osilerror( NULL, NULL, NULL, "too many QuadraticTerms");} 
+qterm: {if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms <= parserData->qtermcount ) osilerror( NULL, osinstance, parserData, "too many QuadraticTerms");} 
 QTERMSTART  anotherqTermATT  qtermend {parserData->qtermcount++; 
-if(!parserData->qtermidxattON)  osilerror( NULL, NULL, NULL,  "the qTerm attribute idx is required"); 
-if(!parserData->qtermidxOneattON)  osilerror( NULL, NULL, NULL, "the qTerm attribute idxOne is required"); 
-if(!parserData->qtermidxTwoattON)  osilerror( NULL, NULL, NULL, "the qTerm attribute idxTwo is required"); 
+if(!parserData->qtermidxattON)  osilerror( NULL, osinstance, parserData, "the qTerm attribute idx is required"); 
+if(!parserData->qtermidxOneattON)  osilerror( NULL, osinstance, parserData, "the qTerm attribute idxOne is required"); 
+if(!parserData->qtermidxTwoattON)  osilerror( NULL, osinstance, parserData, "the qTerm attribute idxTwo is required"); 
 parserData->qtermidattON = false; 
 parserData->qtermidxattON = false; 
 parserData->qtermidxOneattON = false; 
@@ -199,16 +199,16 @@ anotherqTermATT:
 
 
 qtermatt: qtermidxOneatt   quote
-			{ if(parserData->qtermidxOneattON) osilerror( NULL, NULL, NULL, "too many qTerm idxOne attributes"); 
+			{ if(parserData->qtermidxOneattON) osilerror( NULL, osinstance, parserData, "too many qTerm idxOne attributes"); 
 			parserData->qtermidxOneattON = true;  }
 		| qtermidxTwoatt  quote    
-			{ if(parserData->qtermidxTwoattON) osilerror( NULL, NULL, NULL, "too many qTerm idxTwo attributes"); 
+			{ if(parserData->qtermidxTwoattON) osilerror( NULL, osinstance, parserData, "too many qTerm idxTwo attributes"); 
 			parserData->qtermidxTwoattON = true;  }
 		| qtermcoefatt quote
-			{ if(parserData->qtermcoefattON) osilerror( NULL, NULL, NULL, "too many qTerm coef attributes"); 
+			{ if(parserData->qtermcoefattON) osilerror( NULL, osinstance, parserData, "too many qTerm coef attributes"); 
 			parserData->qtermcoefattON = true;  }
 		| qtermidxatt quote
-			{ if(parserData->qtermidxattON) osilerror( NULL, NULL, NULL, "too many qTerm idx attributes"); 
+			{ if(parserData->qtermidxattON) osilerror( NULL, osinstance, parserData, "too many qTerm idx attributes"); 
 			parserData->qtermidxattON = true;  }
 		;
 
@@ -226,7 +226,7 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
 
 nonlinearExpressions:  
 				| NONLINEAREXPRESSIONSSTART  nlnumberatt nlnodes  NONLINEAREXPRESSIONSEND
-				{ {std::cout << "GAIL -1" << std::endl;} /*if(parserData->nlnodecount <  parserData->tmpnlcount)  osilerror( NULL, NULL, NULL, "actual number of nl terms less than number attribute");*/ std::cout << "GAIL 0000" << std::endl; };
+				{  if(parserData->nlnodecount <  parserData->tmpnlcount)  osilerror( NULL, osinstance, parserData, "actual number of nl terms less than number attribute");   };
 				
 
 nlnumberatt: NUMBEROFNONLINEAREXPRESSIONS INTEGER quote  GREATERTHAN {parserData->tmpnlcount = $2;

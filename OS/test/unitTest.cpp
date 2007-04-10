@@ -506,6 +506,8 @@ int main(int argC, char* argV[])
 	try{
 		std::cout << "Test nonlinear operators" << std::endl;
 		std::string operatorTest =  dataDir + "testOperators.osil";
+		//std::string operatorTest =  dataDir + "parincLinear.osil";
+		//std::string operatorTest =  dataDir + "osilrosenbrockmodsum.osil";
 		osil = fileUtil->getFileAsString( &operatorTest[0]);
 		OSInstance *osinstance = NULL;
 		osinstance = new OSInstance();
@@ -514,7 +516,18 @@ int main(int argC, char* argV[])
 		OSiLWriter *osilwriter = NULL;
 		osilwriter = new OSiLWriter();
 		osinstance = osilreader->readOSiL( &osil);
-		std::cout << osilwriter->writeOSiL(osinstance) << std::endl;
+		OSExpressionTree* expTree = osinstance->getNonlinearExpressionTree( -1);
+		std::vector<OSnLNode*> postfixVec;
+		postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();
+		int n = postfixVec.size();
+		std::string *nodeNames1 = new std::string[ n];
+		std::string *nodeNames2 = new std::string[ n];
+		for (int i = 0 ; i < n; i++){
+			std::cout << postfixVec[i]->snodeName << std::endl;
+			nodeNames1[i] = postfixVec[i]->snodeName;
+		}
+		std::cout << std::endl << std::endl;
+		std::cout << osilwriter->writeOSiL( osinstance) << std::endl;
 		//delete osinstance;
 		//osinstance = NULL;
 		//delete osilreader;
@@ -522,7 +535,6 @@ int main(int argC, char* argV[])
 		//delete osilwriter;
 		//osilwriter = NULL;
 		//create an osinstance
-		osinstance = osilreader->readOSiL( &osil);
 	}
 	catch(const ErrorClass& eclass){
 		cout << endl << endl << endl;
