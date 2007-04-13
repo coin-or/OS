@@ -42,27 +42,61 @@
 		</quadraticCoefficients>
 		<nonlinearExpressions numberOfNonlinearExpressions="1">
 			<nl idx="-1">
-				<plus>
+				<sum>
 					<power>
 						<minus>
-							<number type="real" value="1.0"/>
+							<number type="real" value="5.0"/>
 							<variable coef="1.0" idx="0"/>
 						</minus>
 						<number type="real" value="2.0"/>
 					</power>
 					<allDiff>
-						<variable coef="1.0" idx="0"/>
-						<number type="real" value="1.0"/>
+						<variable coef="1.37" idx="0"/>
+						<number type="real" value="1.1"/>
 						<minus>
 							<number type="real" value="1.0"/>
-
 							<allDiff>
-								<number type="real" value="1.0"/>
+								<number type="real" value="1"/>
 								<variable coef="1.0" idx="0"/>
 							</allDiff>
 						</minus>
 					</allDiff>
-				</plus>
+					<minus>
+						<min>
+							<number type="real" value="1.0"/>
+							<variable coef="1.0" idx="1"/>
+						</min>
+						<sum>
+							<number type="real" value="1.0"/>
+							<variable coef="1.0" idx="1"/>
+							<max>
+								<number type="real" value="7.0"/>
+								<variable coef="1.0" idx="0"/>
+								<min>
+									<number type="real" value="1.0"/>
+									<variable coef="1.0" idx="0"/>
+								</min>
+							</max>
+						</sum>
+					</minus>
+					<exp>
+						<ln>
+							<number type="real" value="2.0"/>
+						</ln>
+					</exp>
+					<ln>
+						<E></E>
+					</ln>
+					<sum>
+						<number type="real" value="1.0"/>
+						<cos>
+							<PI />
+						</cos>
+						<sin>
+							<PI/>
+						</sin>
+					</sum>
+				</sum>
 			</nl>
 		</nonlinearExpressions>
 	</instanceData>

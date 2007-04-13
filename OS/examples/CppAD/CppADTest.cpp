@@ -278,6 +278,81 @@ int  main(){
 	     check = x1 * std::pow(x0, x1-1.);
 	     ok   &= NearEqual(dy[0], check, 1e-10, 1e-10);
 	}
+	{// begin AD forward test
+		int j, k;
+		size_t p = 3;
+    	std::vector<double> x0(p);
+     	std::vector<double> x1(p);
+     	x0[0] = 2.;
+     	x0[1] = 1;
+     	x0[2] = 0;
+     	x1[0] = 4.;
+     	x1[1] = 0;
+     	x1[2] = 0;		
+   	 	double t;
+   	 	double *v1;
+   	 	v1 = new double[ p];
+    	double *v2;
+   	 	v2 = new double[ p];
+   	 	double *v3;
+   	 	v3 = new double[ p];
+   	 	double *v4;
+   	 	v4 = new double[ p];
+   	 	double *v5;
+   	 	v5 = new double[ p];
+   	 	double *v6;
+   	 	v6 = new double[ p];
+   	 	double *v7;
+   	 	v7 = new double[ p];
+   	 	t = 1;
+   	 	// calculate v1 and v2
+   	 	for(j = 0; j < p; j++){
+   	 		v1[j] = x0[j];
+   	 		std::cout << "v1[" << j<< "] = " << v1[j] << endl;
+   	 		v2[j] = x1[j];
+   	 		std::cout << "v2[" << j<< "] = " << v2[j] << endl;
+   	 	}
+   	 	// calculate v3 = 7/v1
+   	 	v3[0] = 7./v1[0];
+   	 	std::cout << "v3[0] = " << v3[0] << std::endl;
+   	 	if(p > 0){
+   	 		for(j = 1; j < p; j++ ){
+   	 			v3[j] = 0;
+   	 			for(k = 1; k <=j; k++){
+   	 				v3[j] += v3[j - k]*v1[k];
+   	 			}
+   	 			v3[j] = -v3[j]/v1[0];
+   	 			std::cout << "v3[" << j<< "] = " << v3[j] << endl;
+   	 		}
+   	 	}
+ 		for(j = 0; j < p; j++ ){
+ 			v4[j] = 0;
+ 			for(k = 0; k <=j; k++){
+ 				v4[j] += v1[j - k]*v2[k];
+ 			}
+ 			std::cout << "v4[" << j<< "] = " << v4[j] << endl;
+ 		}
+  		for(j = 0; j < p; j++ ){
+ 			v5[j] = v3[j] + v4[j];
+ 			std::cout << "v5[" << j<< "] = " << v5[j] << endl;
+ 		}  
+ 		if(p > 0){
+ 			v6[0] = sqrt(v2[0]);
+ 			std::cout << "v6[0] = " << v6[0] << endl;
+	  		for(j = 1; j < p; j++ ){
+	 			v6[j] = v2[j];
+	 			for(k = 1; k <=j - 1; k++){
+	 				v6[j] -= v6[j - k]*v6[k];
+	 			}
+	 			v6[j] = v6[j]/(2*v6[0]);
+	 			std::cout << "v6[" << j<< "] = " << v6[j] << endl;
+	 		}    	 	
+ 		}
+   		for(j = 0; j < p; j++ ){
+ 			v7[j] = v5[j] + v6[j];
+ 			std::cout << "v7[" << j<< "] = " << v7[j] << endl;
+ 		} 
+	}//end AD forward test
 	return 0;
 }// end main program
 

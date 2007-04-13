@@ -65,6 +65,7 @@ int CALLTYPE LSwriteMPIFile(pLSmodel pModel, char *pszFname);
 	nlNodeIdxLindo[OS_IF] = EP_IF; \
 	nlNodeIdxLindo[OS_ABS] = EP_ABS; \
 	nlNodeIdxLindo[OS_MAX] = EP_MAX; \
+	nlNodeIdxLindo[OS_MIN] = EP_MIN; \
 	nlNodeIdxLindo[OS_SQUARE] = EP_SQR; \
 	nlNodeIdxLindo[OS_SIN] = EP_SIN; \
 	nlNodeIdxLindo[OS_COS] = EP_COS; 

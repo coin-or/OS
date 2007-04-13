@@ -130,6 +130,8 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]+))([eE][-+]?[0-9]+)?|INF))
 {xmlwhitespace}*\<max{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MAXSTART);}
 {xmlwhitespace}*\<\/max{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MAXEND);}
 
+{xmlwhitespace}*\<min{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MINSTART);}
+{xmlwhitespace}*\<\/min{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MINEND);}
 
 {xmlwhitespace}*\<sum{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(SUMSTART);}
 {xmlwhitespace}*\<\/sum{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(SUMEND);}
@@ -139,6 +141,10 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]+))([eE][-+]?[0-9]+)?|INF))
 {xmlwhitespace}*\<\/product{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(PRODUCTEND);}
 {xmlwhitespace}*\<number {YY_PRINT; return(NUMBERSTART);}
 {xmlwhitespace}*\<\/number{xmlwhitespace}*\> {YY_PRINT; return(NUMBEREND);}
+{xmlwhitespace}*\<E {YY_PRINT; return(ESTART);}
+{xmlwhitespace}*\<\/E{xmlwhitespace}*\> {YY_PRINT; return(EEND);}
+{xmlwhitespace}*\<PI {YY_PRINT; return(PISTART);}
+{xmlwhitespace}*\<\/PI{xmlwhitespace}*\> {YY_PRINT; return(PIEND);}
 {xmlwhitespace}*\<variable {YY_PRINT;  return(VARIABLESTART);}
 {xmlwhitespace}*\<\/variable{xmlwhitespace}*\> {YY_PRINT; return(VARIABLEEND);}
 

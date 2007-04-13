@@ -103,7 +103,13 @@
      MAXSTART = 319,
      MAXEND = 320,
      ALLDIFFSTART = 321,
-     ALLDIFFEND = 322
+     ALLDIFFEND = 322,
+     MINSTART = 323,
+     MINEND = 324,
+     ESTART = 325,
+     EEND = 326,
+     PISTART = 327,
+     PIEND = 328
    };
 #endif
 /* Tokens.  */
@@ -172,6 +178,12 @@
 #define MAXEND 320
 #define ALLDIFFSTART 321
 #define ALLDIFFEND 322
+#define MINSTART 323
+#define MINEND 324
+#define ESTART 325
+#define EEND 326
+#define PISTART 327
+#define PIEND 328
 
 
 

@@ -538,7 +538,7 @@ OSnLNodeMax::OSnLNodeMax()
 {
 	inumberOfChildren = 0;
 	snodeName = "max";
-	inodeInt = 3024;
+	inodeInt = 4011;
 	inodeType = -1;
 }//end OSnLNodeMax
 
@@ -556,11 +556,14 @@ OSnLNodeMax::~OSnLNodeMax(){
 }//end ~OSnLNodeMax
 
 double OSnLNodeMax::calculateFunction(double *x){
-	//m_dFunctionValue = 0.0;
-	//for(int i = 0; i < inumberOfChildren; i++){
-	//	m_dFunctionValue = m_dFunctionValue + m_mChildren[i]->calculateFunction(x);
-	//}
-	// kipp correct this
+	m_dFunctionValue = m_mChildren[0]->calculateFunction(x);
+	if(inumberOfChildren > 1){
+		for(int i = 1; i < inumberOfChildren; i++){
+			if(m_mChildren[i]->calculateFunction(x) > m_dFunctionValue){
+				m_dFunctionValue = 	m_mChildren[i]->calculateFunction(x);
+			}
+		}
+	}
 	return m_dFunctionValue;
 }// end OSnLNodeMax::calculate
 
@@ -579,6 +582,55 @@ OSnLNode* OSnLNodeMax::cloneOSnLNode(){
 //
 
 
+
+//
+// OSnLNodeMin Methods	
+OSnLNodeMin::OSnLNodeMin()
+{
+	inumberOfChildren = 0;
+	snodeName = "min";
+	inodeInt = 4010;
+	inodeType = -1;
+}//end OSnLNodeMin
+
+OSnLNodeMin::~OSnLNodeMin(){
+	#ifdef DEBUGOSNLNODE
+	cout << "inside OSnLNodeMin destructor" << endl;
+	#endif
+	if(inumberOfChildren > 0){
+		for(int i = 0; i < inumberOfChildren; i++){
+			delete m_mChildren[ i];
+			m_mChildren[i] = NULL;
+		}
+	}
+	m_mChildren = NULL;
+}//end ~OSnLNodeMin
+
+double OSnLNodeMin::calculateFunction(double *x){
+	m_dFunctionValue = m_mChildren[0]->calculateFunction(x);
+	if(inumberOfChildren > 1){
+		for(int i = 1; i < inumberOfChildren; i++){
+			if(m_mChildren[i]->calculateFunction(x) < m_dFunctionValue){
+				m_dFunctionValue = 	m_mChildren[i]->calculateFunction(x);
+			}
+		}
+	}
+	return m_dFunctionValue;
+}// end OSnLNodeMin::calculate
+
+
+AD<double> OSnLNodeMin::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
+	//kipp throw error here
+	return m_CppADTape;
+}// end OSnLNodeMin::constructCppADTape
+
+
+OSnLNode* OSnLNodeMin::cloneOSnLNode(){
+	OSnLNode *nlNodePoint;
+	nlNodePoint = new OSnLNodeMin();
+	return  nlNodePoint;
+}//end OSnLNodeMin::cloneOSnLNode
+//
 
 
 //
@@ -1326,7 +1378,198 @@ OSnLNode* OSnLNodeNumber::cloneOSnLNode(){
 	nlNodePoint = new OSnLNodeNumber();
 	return  nlNodePoint;
 }//end OSnLNodeNumber::cloneOSnLNode
+// edn OSnLNodeNumber methods
 
+
+// OSnLNodeE Methods	
+OSnLNodeE::OSnLNodeE()
+{
+	inodeInt = 5004;
+	inumberOfChildren = 0;
+	m_mChildren = NULL;
+	snodeName = "E";
+	inodeType = 0;  
+	value = 0.0;
+	type = "real";
+	id = "";
+
+}//end OSnLNodeE
+
+OSnLNodeE::~OSnLNodeE(){
+	#ifdef DEBUGOSNLNODE
+	cout << "inside OSnLNodeE destructor" << endl;
+	#endif
+	m_mChildren = NULL;
+}//end ~OSnLNodeE
+
+
+std::string OSnLNodeE::getTokenNumber(){
+	ostringstream outStr;
+	outStr << inodeInt;
+	outStr << ":" ;
+	outStr << value ;
+	//if(type.length() > 0){
+		outStr << ":" ;
+		outStr << type ;
+	//}
+	//if(id.length() > 0){
+		outStr << ":" ;
+		outStr << id;
+	//}
+	return outStr.str();
+}//getTokenNumber
+
+
+std::string OSnLNodeE::getTokenName(){
+	ostringstream outStr;
+	outStr << snodeName;
+	outStr << ":" ;
+	outStr << value ;
+	//if(type.length() > 0){
+		outStr << ":" ;
+		outStr << type ;
+	//}
+	//if(id.length() > 0){
+		outStr << ":" ;
+		outStr << id;
+	//}
+	return outStr.str();
+}//getTokenName
+
+
+std::string OSnLNodeE::getNonlinearExpressionInXML(){
+	ostringstream outStr;
+	outStr << "<" ;
+	outStr << snodeName;
+		outStr << "  value=\"";
+		outStr << value ;
+		outStr << "\"";
+		outStr << " type=\"";
+		outStr << type ;
+		outStr << "\"";
+		if(id.length() > 0){
+			outStr << "  id=\"";
+			outStr << id ;
+			outStr << "\"";
+		}
+		outStr << "/>";
+	return outStr.str();
+}//getNonlinearExpressionInXML()
+
+
+double OSnLNodeE::calculateFunction(double *x){
+	m_dFunctionValue = OS_E_VALUE;
+	return m_dFunctionValue;
+}// end OSnLNodeE::calculate
+
+AD<double> OSnLNodeE::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
+	m_CppADTape =  OS_E_VALUE;
+	return m_CppADTape;
+}// end OSnLE::constructCppADTape
+
+OSnLNode* OSnLNodeE::cloneOSnLNode(){
+	OSnLNode *nlNodePoint;
+	nlNodePoint = new OSnLNodeE();
+	return  nlNodePoint;
+}//end OSnLNodeE::cloneOSnLNode
+
+//end OSnLNodeE
+
+
+// OSnLNodePI Methods	
+OSnLNodePI::OSnLNodePI()
+{
+	inodeInt = 5003;
+	inumberOfChildren = 0;
+	m_mChildren = NULL;
+	snodeName = "PI";
+	inodeType = 0;  
+	value = 0.0;
+	type = "real";
+	id = "";
+
+}//end OSnLNodePI
+
+
+OSnLNodePI::~OSnLNodePI(){
+	#ifdef DEBUGOSNLNODE
+	cout << "inside OSnLNodePI destructor" << endl;
+	#endif
+	m_mChildren = NULL;
+}//end ~OSnLNodePI
+
+
+std::string OSnLNodePI::getTokenNumber(){
+	ostringstream outStr;
+	outStr << inodeInt;
+	outStr << ":" ;
+	outStr << value ;
+	//if(type.length() > 0){
+		outStr << ":" ;
+		outStr << type ;
+	//}
+	//if(id.length() > 0){
+		outStr << ":" ;
+		outStr << id;
+	//}
+	return outStr.str();
+}//getTokenNumber
+
+
+std::string OSnLNodePI::getTokenName(){
+	ostringstream outStr;
+	outStr << snodeName;
+	outStr << ":" ;
+	outStr << value ;
+	//if(type.length() > 0){
+		outStr << ":" ;
+		outStr << type ;
+	//}
+	//if(id.length() > 0){
+		outStr << ":" ;
+		outStr << id;
+	//}
+	return outStr.str();
+}//getTokenName
+
+
+std::string OSnLNodePI::getNonlinearExpressionInXML(){
+	ostringstream outStr;
+	outStr << "<" ;
+	outStr << snodeName;
+		outStr << "  value=\"";
+		outStr << value ;
+		outStr << "\"";
+		outStr << " type=\"";
+		outStr << type ;
+		outStr << "\"";
+		if(id.length() > 0){
+			outStr << "  id=\"";
+			outStr << id ;
+			outStr << "\"";
+		}
+		outStr << "/>";
+	return outStr.str();
+}//getNonlinearExpressionInXML()
+
+
+double OSnLNodePI::calculateFunction(double *x){
+	m_dFunctionValue = OS_PI_VALUE;
+	return m_dFunctionValue;
+}// end OSnLNodePI::calculate
+
+AD<double> OSnLNodePI::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
+	m_CppADTape =  OS_PI_VALUE;
+	return m_CppADTape;
+}// end OSnLE::constructCppADTape
+
+OSnLNode* OSnLNodePI::cloneOSnLNode(){
+	OSnLNode *nlNodePoint;
+	nlNodePoint = new OSnLNodePI();
+	return  nlNodePoint;
+}//end OSnLNodePI::cloneOSnLNode
+
+//end OSnLNodePI methods
 
 // OSnLNodeVariable Methods	
 OSnLNodeVariable::OSnLNodeVariable()

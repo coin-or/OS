@@ -33,6 +33,9 @@
 //#endif
 
 #define OSINFINITY 1e20
+#define OS_E_VALUE exp(1)
+#define OS_PI_VALUE 2*asin(1)
+
 
 #ifdef NAN 
 	#define OSNAN NAN

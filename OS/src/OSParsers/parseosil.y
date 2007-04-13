@@ -150,7 +150,7 @@ void osilerror(YYLTYPE* type, OSInstance *osintance,  OSiLParserData *parserData
 %token SQUARESTART SQUAREEND COSSTART COSEND SINSTART SINEND
 %token GREATERTHAN 
 %token VARIABLESTART VARIABLEEND ABSSTART ABSEND MAXSTART MAXEND
-%token ALLDIFFSTART ALLDIFFEND
+%token ALLDIFFSTART ALLDIFFEND MINSTART MINEND ESTART EEND PISTART PIEND
 
 
 
@@ -253,6 +253,7 @@ parserData->nlNodeVec.clear();
 parserData->sumVec.clear();
 //parserData->allDiffVec.clear();
 parserData->maxVec.clear();
+parserData->minVec.clear();
 parserData->productVec.clear();
 };
 		
@@ -276,6 +277,9 @@ nlnode: number
 		| if
 		| abs
 		| max
+		| min
+		| E
+		| PI
 		| allDiff ;
 
 
@@ -352,6 +356,19 @@ anothermaxnlnode MAXEND {
 anothermaxnlnode: nlnode {	parserData->maxVec.back()->inumberOfChildren++; }
 			| anothermaxnlnode nlnode {	parserData->maxVec.back()->inumberOfChildren++; };
 			
+min: MINSTART {
+	parserData->nlNodePoint = new OSnLNodeMin();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+	parserData->minVec.push_back( parserData->nlNodePoint);
+}
+anotherminnlnode MINEND {
+	parserData->minVec.back()->m_mChildren = new OSnLNode*[ parserData->minVec.back()->inumberOfChildren];
+	parserData->minVec.pop_back();
+};
+
+anotherminnlnode: nlnode {	parserData->minVec.back()->inumberOfChildren++; }
+			| anotherminnlnode nlnode {	parserData->minVec.back()->inumberOfChildren++; };
+			
 			
 product: PRODUCTSTART {
 	parserData->nlNodePoint = new OSnLNodeProduct();
@@ -422,6 +439,18 @@ variable: VARIABLESTART {
 		      
 numberend: ENDOFELEMENT
 			| NUMBEREND;
+			
+E: ESTART {	parserData->nlNodePoint = new OSnLNodeE();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);} eend;
+	
+eend: ENDOFELEMENT
+			| GREATERTHAN EEND;
+			
+PI: PISTART {	parserData->nlNodePoint = new OSnLNodePI();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);} piend;
+	
+piend: ENDOFELEMENT
+			| GREATERTHAN PIEND;
 			
 variableend: ENDOFELEMENT
 			| GREATERTHAN nlnode {

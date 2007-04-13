@@ -504,6 +504,7 @@ int main(int argC, char* argV[])
 	// now test the nonlinear operators
 	
 	try{
+		ok = true;
 		std::cout << "Test nonlinear operators" << std::endl;
 		std::string operatorTest =  dataDir + "testOperators.osil";
 		//std::string operatorTest =  dataDir + "parincLinear.osil";
@@ -528,12 +529,22 @@ int main(int argC, char* argV[])
 		}
 		std::cout << std::endl << std::endl;
 		std::cout << osilwriter->writeOSiL( osinstance) << std::endl;
-		//delete osinstance;
-		//osinstance = NULL;
-		//delete osilreader;
-		//osilreader = NULL;
-		//delete osilwriter;
-		//osilwriter = NULL;
+		// now test value
+		double *x = NULL;
+		x = new double[2];
+		x[0] = 1;
+		x[1] = 2;
+		double parserTestVal = expTree->m_treeRoot->calculateFunction( x);
+		std::cout << "ParserTest Val = " << parserTestVal << std::endl;
+		std::cout << "PI = " << OS_PI_VALUE << std::endl;
+		check = 11;
+		ok &= NearEqual(expTree->m_treeRoot->calculateFunction( x) , check,  1e-10 , 1e-10);
+		if(ok == false) throw ErrorClass(" Problem evaluating expression tree");
+		osinstance = NULL;
+		delete osilreader;
+		osilreader = NULL;
+		delete osilwriter;
+		osilwriter = NULL;
 		//create an osinstance
 	}
 	catch(const ErrorClass& eclass){

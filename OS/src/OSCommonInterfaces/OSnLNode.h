@@ -26,6 +26,7 @@
 #include<cppad/cppad.hpp>
 
 
+
 /*! \class OSnLNode OSnLNode.h "OSnLNode.h"
  *  \brief The OSnLNode Class.
  *
@@ -45,16 +46,19 @@
 	OS_DIVIDE = 1006,
 	OS_POWER = 1009,
 	OS_PRODUCT = 1010,
+	OS_ABS = 2001,
 	OS_SQUARE = 2005,
 	OS_SQRT = 2006,
 	OS_LN = 2007,
 	OS_EXP = 2010,
 	OS_SIN = 3001,
 	OS_COS = 3002,
+	OS_MIN = 4010,
+	OS_MAX = 4011,
 	OS_NUMBER = 5001,
+	OS_PI = 5003,
+	OS_E = 5004,
 	OS_VARIABLE = 6001,
-	OS_ABS = 2001,
-	OS_MAX = 3024,
 	OS_IF = 7001,
 	OS_ALLDIF = 7016
 };
@@ -335,6 +339,41 @@ public:
 
 
 };//end OSnLNodeMax
+
+
+class OSnLNodeMin : public OSnLNode{  
+public:
+	/**
+	 * default constructor.
+	 */
+	OSnLNodeMin();
+
+	/**
+	 * default destructor.
+	 */	
+	~OSnLNodeMin();
+	
+	/*! \fn double OSnLNodeMin::double(double *x) 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return a double.
+	 */	
+	virtual double calculateFunction( double *x);
+	
+	/*! \fn OSnLNode *cloneOSnLNode(double *x) 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return a point to a new OSnLNode of the proper type.
+	 */	
+	virtual OSnLNode *cloneOSnLNode() ;
+	
+	/*! \fn double OSnLNodeMax::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD) 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return a AD<double>.
+	 */	
+	virtual AD<double> constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD);
+	
+
+
+};//end OSnLNodeMin
 
 class OSnLNodeMinus : public OSnLNode{  
 public:
@@ -883,6 +922,131 @@ public:
 
 
 };//end OSnLNodeNumber
+
+
+
+class OSnLNodeE : public OSnLNode{  
+public:
+
+	double value;
+	std::string type;
+	std::string id;
+	
+
+
+	/**
+	 * default constructor.
+	 */
+	OSnLNodeE();
+
+	/**
+	 * default destructor.
+	 */	
+	~OSnLNodeE();
+	
+	/**
+	 *
+	 * @return a string token that corresponds to the OSnLNode.
+	 */
+	virtual std::string getTokenNumber();
+	
+	
+	/**
+	 *
+	 * @return a string token that corresponds to the OSnLNode.
+	 */
+	virtual std::string getTokenName();
+	
+	/**
+	 *
+	 * @return the OSiL XML for the number node.
+	 */
+	virtual std::string getNonlinearExpressionInXML();
+	
+	/*! \fn double OSnLNodeE::double(double *x) 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return a double.
+	 */	
+	virtual double calculateFunction( double *x);
+	
+	/*! \fn OSnLNode *cloneOSnLNode(double *x) 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return a point to a new OSnLNode of the proper type.
+	 */	
+	virtual OSnLNode *cloneOSnLNode() ;
+	
+		 
+	/*! \fn double OSnLNodeE::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD) 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return a AD<double>.
+	 */	
+	virtual AD<double> constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD);
+	
+
+
+};//end OSnLNodeE
+
+
+class OSnLNodePI : public OSnLNode{  
+public:
+
+	double value;
+	std::string type;
+	std::string id;
+	
+
+
+	/**
+	 * default constructor.
+	 */
+	OSnLNodePI();
+
+	/**
+	 * default destructor.
+	 */	
+	~OSnLNodePI();
+	
+	/**
+	 *
+	 * @return a string token that corresponds to the OSnLNode.
+	 */
+	virtual std::string getTokenNumber();
+	
+	
+	/**
+	 *
+	 * @return a string token that corresponds to the OSnLNode.
+	 */
+	virtual std::string getTokenName();
+	
+	/**
+	 *
+	 * @return the OSiL XML for the number node.
+	 */
+	virtual std::string getNonlinearExpressionInXML();
+	
+	/*! \fn double OSnLNodePI::double(double *x) 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return a double.
+	 */	
+	virtual double calculateFunction( double *x);
+	
+	/*! \fn OSnLNode *cloneOSnLNode(double *x) 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return a point to a new OSnLNode of the proper type.
+	 */	
+	virtual OSnLNode *cloneOSnLNode() ;
+	
+		 
+	/*! \fn double OSnLNodePI::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD) 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return a AD<double>.
+	 */	
+	virtual AD<double> constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD);
+	
+
+
+};//end OSnLNodePI
 
 class OSnLNodeVariable : public OSnLNode{  
 public:

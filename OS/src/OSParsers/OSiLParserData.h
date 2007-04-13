@@ -53,6 +53,7 @@ public:
 	std::vector<OSnLNode*> allDiffVec;
 	std::vector<OSnLNode*> productVec;
 	std::vector<OSnLNode*> maxVec;
+	std::vector<OSnLNode*> minVec;
 };
 
 #endif /*OSILPARSERDATA_H_*/

@@ -31,7 +31,7 @@
 #include "CoinHelperFunctions.hpp"  
 # include <cppad/cppad.hpp>
 # include <cassert>
-
+#include <math.h>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -132,16 +132,18 @@ int main(int argC, char* argV[])
 	using CppAD::NearEqual;
      size_t n = 2;
      CppADvector< AD<double> >  X(n);
-     X[0] = 1.;
-     X[1] = 2.;
+     X[0] = 2.;
+     X[1] = 4.;
      //X[2] = 5;
      // declare independent variables and starting recording
      CppAD::Independent(X);
      // a calculation between the domain and range values
      // range space vector
      size_t m = 1;
+     sqrt(10);
      CppADvector< AD<double> >  Y(m);
-     Y[0] = CppAD::pow(X[0], 2) + X[0]*X[1] + CppAD::pow(X[1],3);
+     //Y[0] = CppAD::pow(X[0], 2) + X[0]*X[1] + CppAD::pow(X[1],3);
+     Y[0] = 7./X[0] + X[0]*X[1] + sqrt(X[1]);
      // create f: X -> Y and stop tape recording
      CppAD::ADFun<double> f(X, Y);
      std::vector<double> w(1);
@@ -150,10 +152,10 @@ int main(int argC, char* argV[])
      std::vector<double> x_0(n);
      std::vector<double> x_1(n);
   	 std::vector<double> x_2(n);
-     x_0[0] = 1.;
-     x_0[1] = 2.;
-     x_1[0] = 0;
-     x_1[1] = 1;
+     x_0[0] = 2.;
+     x_0[1] = 4.;
+     x_1[0] = 1;
+     x_1[1] = 0;
    	 x_2[0] = 0;
    	 x_2[1] = 0;
      //x[2] = 5;
@@ -166,9 +168,6 @@ int main(int argC, char* argV[])
    	f.Forward(0, x_0);
     f.Forward(1, x_1);
     f.Reverse(2, w);
-    //f.Forward(0, x_0);
-    //f.Forward(1, x_1);
-    //f.Reverse(2, w);
    	std::cout << std::endl << std::endl << std::endl << std::endl;
    	std::cout << "NOW USE CPPAD HESSIAN COMMAND" << std::endl;
     //hes = f.Hessian(x_0, 0);
