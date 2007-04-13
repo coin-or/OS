@@ -140,7 +140,6 @@ int main(int argC, char* argV[])
      // a calculation between the domain and range values
      // range space vector
      size_t m = 1;
-     sqrt(10);
      CppADvector< AD<double> >  Y(m);
      //Y[0] = CppAD::pow(X[0], 2) + X[0]*X[1] + CppAD::pow(X[1],3);
      Y[0] = 7./X[0] + X[0]*X[1] + sqrt(X[1]);
