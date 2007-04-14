@@ -13,7 +13,7 @@
  * 
  */
 
-
+   
 #include "LindoSolver.h"
 #include "OSiLReader.h"
 #include "OSInstance.h"

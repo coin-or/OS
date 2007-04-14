@@ -1269,7 +1269,7 @@ OSnLNodeIf::~OSnLNodeIf(){
 
 double OSnLNodeIf::calculateFunction(double *x){
 	if(m_mChildren[0]->calculateFunction( x)  >= 0) m_dFunctionValue = m_mChildren[ 1]->calculateFunction( x);
-		else m_dFunctionValue = m_mChildren[ 1]->calculateFunction( x);
+		else m_dFunctionValue = m_mChildren[ 2]->calculateFunction( x);
 	return m_dFunctionValue;
 }// end OSnLNodeIf::calculate
 

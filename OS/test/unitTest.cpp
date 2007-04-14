@@ -536,7 +536,6 @@ int main(int argC, char* argV[])
 		x[1] = 2;
 		double parserTestVal = expTree->m_treeRoot->calculateFunction( x);
 		std::cout << "ParserTest Val = " << parserTestVal << std::endl;
-		std::cout << "PI = " << OS_PI_VALUE << std::endl;
 		check = 11;
 		ok &= NearEqual(expTree->m_treeRoot->calculateFunction( x) , check,  1e-10 , 1e-10);
 		if(ok == false) throw ErrorClass(" Problem evaluating expression tree");
