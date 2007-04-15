@@ -376,16 +376,23 @@ void send(){
 }//end send
 
 void retrieve(){
+	std::string osrl = "";
 	OSSolverAgent* osagent = NULL;
 	FileUtil *fileUtil = NULL;
 	fileUtil = new FileUtil();
 	try{
-		osagent = new OSSolverAgent( osoptions->serviceLocation );
-		std::string sOSrL = osagent->retrieve( osoptions->osol);
-		if(osoptions->osrlFile != NULL) {
-			fileUtil->writeFileFromString(osoptions->osrlFile, sOSrL); 
+		if(osoptions->serviceLocation != NULL){
+			osagent = new OSSolverAgent( osoptions->serviceLocation );
+			osrl = osagent->retrieve( osoptions->osol);
+			if(osoptions->osrlFile != NULL) {
+				fileUtil->writeFileFromString(osoptions->osrlFile, osrl); 
+			}
+			else cout << osrl << endl;
 		}
-		else cout << sOSrL << endl;
+		else{
+			cout << "please specify service location (url)" << endl;
+		}
+
 	}
 	catch(const ErrorClass& eclass){
 		std::cout << eclass.errormsg <<  std::endl;
