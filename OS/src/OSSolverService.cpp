@@ -190,11 +190,11 @@ int main(int argC, const char* argV[])
 }
 
 void solve(){
+	std::string osrl = "";
 	OSSolverAgent* osagent = NULL;
 	DefaultSolver *solverType  = NULL;
 	FileUtil *fileUtil = NULL;
 	fileUtil = new FileUtil();
-	std::string osrl = "";
 	try{
 		// solve either remotely of locally
 		if(osoptions->serviceLocation != NULL){
@@ -293,10 +293,19 @@ void solve(){
 }//end solve
 
 void getJobID(){
+	std::string jobID = "";
 	OSSolverAgent* osagent = NULL;
+	FileUtil *fileUtil = NULL;
+	fileUtil = new FileUtil();
 	try{
-		osagent = new OSSolverAgent( osoptions->serviceLocation );
-		cout << osagent->getJobID( osoptions->osol) << endl;
+		if(osoptions->serviceLocation != NULL){
+			osagent = new OSSolverAgent( osoptions->serviceLocation );
+			jobID = osagent->getJobID( osoptions->osol);
+			cout << jobID << endl;
+		}
+		else{
+			cout << "please specify service location (url)" << endl;
+		}
 	}
 	catch(const ErrorClass& eclass){
 		std::cout << eclass.errormsg <<  std::endl;
