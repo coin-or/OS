@@ -200,8 +200,9 @@ void solve(){
 		if(osoptions->serviceLocation != NULL){
 			// place a remote cal
 			osagent = new OSSolverAgent( osoptions->serviceLocation );
-			if(osoptions->osrlFile != NULL) fileUtil->writeFileFromString(osoptions->osrlFile, osagent->solve(osoptions->osil  , osoptions->osol));
-			else cout << osagent->solve( osoptions->osil, osoptions->osol) << endl;
+			osrl = osagent->solve(osoptions->osil  , osoptions->osol);
+			if(osoptions->osrlFile != NULL) fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
+			else cout << osrl << endl;
 		}
 		else{
 			// solve locally
@@ -298,7 +299,7 @@ void getJobID(){
 		cout << osagent->getJobID( osoptions->osol) << endl;
 	}
 	catch(const ErrorClass& eclass){
-		cout << eclass.errormsg <<  endl;
+		std::cout << eclass.errormsg <<  std::endl;
 	}	
 }//end getJobID
  
@@ -313,7 +314,7 @@ void knock(){
 		else cout << osagent->knock(osoptions->osplInput,  osoptions->osol) << endl;
 	}
 	catch(const ErrorClass& eclass){
-		cout << eclass.errormsg <<  endl;
+		std::cout << eclass.errormsg <<  std::endl;
 	}	
 }//end knock
 
@@ -354,7 +355,7 @@ void send(){
 		}
 	}
 	catch(const ErrorClass& eclass){
-		cout << eclass.errormsg <<  endl;
+		std::cout << eclass.errormsg <<  std::endl;
 	}	
 }//end send
 
@@ -362,22 +363,32 @@ void retrieve(){
 	OSSolverAgent* osagent = NULL;
 	FileUtil *fileUtil = NULL;
 	fileUtil = new FileUtil();
-	osagent = new OSSolverAgent( osoptions->serviceLocation );
-	std::string sOSrL = osagent->retrieve( osoptions->osol);
-	if(osoptions->osrlFile != NULL) {
-		fileUtil->writeFileFromString(osoptions->osrlFile, sOSrL); 
+	try{
+		osagent = new OSSolverAgent( osoptions->serviceLocation );
+		std::string sOSrL = osagent->retrieve( osoptions->osol);
+		if(osoptions->osrlFile != NULL) {
+			fileUtil->writeFileFromString(osoptions->osrlFile, sOSrL); 
+		}
+		else cout << sOSrL << endl;
 	}
-	else cout << sOSrL << endl;
+	catch(const ErrorClass& eclass){
+		std::cout << eclass.errormsg <<  std::endl;
+	}	
 }//end retrieve
 
 void kill(){
 	OSSolverAgent* osagent = NULL;
 	FileUtil *fileUtil = NULL;
 	fileUtil = new FileUtil();
-	osagent = new OSSolverAgent( osoptions->serviceLocation );
-	std::string sOSpL = osagent->kill( osoptions->osol);
-	if(osoptions->osplOutputFile != NULL) fileUtil->writeFileFromString(osoptions->osplOutputFile, sOSpL);
-	else cout << sOSpL << endl;
+	try{
+		osagent = new OSSolverAgent( osoptions->serviceLocation );
+		std::string sOSpL = osagent->kill( osoptions->osol);
+		if(osoptions->osplOutputFile != NULL) fileUtil->writeFileFromString(osoptions->osplOutputFile, sOSpL);
+		else cout << sOSpL << endl;
+	}
+	catch(const ErrorClass& eclass){
+		std::cout << eclass.errormsg <<  std::endl;
+	}	
 }//end kill
 
 /*
