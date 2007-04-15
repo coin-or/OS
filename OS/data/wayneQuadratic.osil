@@ -3,7 +3,7 @@
 	<instanceHeader>
 		<name>WayneQP</name>
 		<source>Wayne Sheng</source>
-		<description>A QP Problem that uses qp terms instead of nl nodes.</description>
+		<description>A QP Problem that uses qp terms instead of nl nodes. Optimal value is 2.925.</description>
 	</instanceHeader>
 	<instanceData>
 		<variables numberOfVariables="8">

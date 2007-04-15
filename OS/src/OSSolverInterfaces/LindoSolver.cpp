@@ -446,13 +446,15 @@ bool LindoSolver::optimize(){
 		//}
 		//   
 	
-		if(osinstance->getNumberOfNonlinearExpressions() > 0){ 
+		if( osinstance->getNumberOfNonlinearObjectives() > 0 ||  osinstance->getNumberOfNonlinearConstraints() > 0 ){ 
 			//m_iLindoErrorCode = LSoptimize( pModel_, LS_METHOD_FREE, &nSolStatus);
+			std::cout << "We are using the LINDO Global Optimizer" << std::endl;
 			m_iLindoErrorCode = LSsolveGOP(pModel_, NULL) ;
 			lindoAPIErrorCheck("There was an ERROR in the call to the Optimizer solver");
 			LSgetInfo (pModel_, LS_IINFO_GOP_STATUS, &nSolStatus);
 		}
 		else{
+			std::cout << "We are using the LINDO LSsolveMIP Optimizer" << std::endl;
 			m_iLindoErrorCode = LSsolveMIP( pModel_,  &nSolStatus);
 			lindoAPIErrorCheck("There was an ERROR in the call to the MIP solver");
 		}
