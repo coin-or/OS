@@ -419,6 +419,7 @@ bool LindoSolver::optimize(){
 	int solIdx = 0;
 	ostringstream outStr;
 	std::string *srcost;
+	bool isNonlinear = false;
 	double *drcost;
 	int i = 0;
 	int nSolStatus;
@@ -432,6 +433,7 @@ bool LindoSolver::optimize(){
 	//	throw ErrorClass("OSResult error: setJobID");
 	//if(osresult->setGeneralMessage( osresultdata->message) != true)
 	//	throw ErrorClass("OSResult error: setGeneralMessage");
+	if(osinstance->getNumberOfNonlinearObjectives() > 0 ||  osinstance->getNumberOfNonlinearConstraints() > 0) isNonlinear = true;
 	try{
 		if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("LINDO NEEDS AN OBJECTIVE FUNCTION");
 		//
@@ -446,7 +448,7 @@ bool LindoSolver::optimize(){
 		//}
 		//   
 	
-		if( osinstance->getNumberOfNonlinearObjectives() > 0 ||  osinstance->getNumberOfNonlinearConstraints() > 0 ){ 
+		if( isNonlinear == true ){ 
 			//m_iLindoErrorCode = LSoptimize( pModel_, LS_METHOD_FREE, &nSolStatus);
 			std::cout << "We are using the LINDO Global Optimizer" << std::endl;
 			m_iLindoErrorCode = LSsolveGOP(pModel_, NULL) ;
@@ -494,7 +496,7 @@ bool LindoSolver::optimize(){
 				// an optimal basic  solution is also found
 				// get the primal result
 				if( (osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0 ) 
-					|| (osinstance->getNumberOfNonlinearExpressions() <= 0) ){
+					|| (isNonlinear == false) ){
 					m_iLindoErrorCode = LSgetMIPPrimalSolution( pModel_, x);  
 					lindoAPIErrorCheck("Error trying to obtain primal solution with integer variables present");
 				}
@@ -505,7 +507,7 @@ bool LindoSolver::optimize(){
 				osresult->setPrimalVariableValues(solIdx, x);
 				// Get the dual values result
 				if( (osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0)
-					|| (osinstance->getNumberOfNonlinearExpressions() <= 0 ) ){
+					|| (isNonlinear == false) ){
 					m_iLindoErrorCode = LSgetMIPDualSolution( pModel_, y);
 					lindoAPIErrorCheck("Error trying to obtain dual solution with integer variables present");
 				}
@@ -516,7 +518,7 @@ bool LindoSolver::optimize(){
 				osresult->setDualVariableValues(solIdx, y);
 				// get the reduced cost result
 				if( ( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0)
-					|| (osinstance->getNumberOfNonlinearExpressions() <= 0 ) ) {
+					|| (isNonlinear == false ) ) {
 					m_iLindoErrorCode = LSgetMIPReducedCosts( pModel_, drcost); 
 					lindoAPIErrorCheck("Error trying to obtain the reduced costs with integer variables present");
 				}
@@ -538,7 +540,7 @@ bool LindoSolver::optimize(){
 					osresult->setAnOtherVariableResult(solIdx, otherIdx, "reduced costs", "the variable reduced costs", srcost);
 					/* Get the value of the objective */
 					if( ( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0)
-						|| (osinstance->getNumberOfNonlinearExpressions() <= 0 ) ) {
+						|| (isNonlinear == false ) ) {
 						m_iLindoErrorCode = LSgetInfo( pModel_, LS_DINFO_MIP_OBJ, &z[0]);
 						lindoAPIErrorCheck("Error trying to obtain optimal objective value with integer variables present");
 					}
