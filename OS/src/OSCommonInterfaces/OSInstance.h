@@ -696,7 +696,11 @@ private:
 	 * m_quadraticTerms the data structure for all the quadratic terms in the instance. 
 	 * (rowIdx, varOneIdx, varTwoIdx, coef)
 	 */
-	QuadraticTerms* m_quadraticTerms;
+	 QuadraticTerms* m_quadraticTerms;
+	 
+	/** m_bQTermsAdded is true if we add the quadratic terms to the expression tree
+	 */
+	 bool m_bQTermsAdded;
 	
 public:
 
@@ -997,6 +1001,8 @@ public:
 	 * @return a map: the key is the row index and the value is the corresponding expression tree
 	 */		
 	std::map<int, OSExpressionTree* > getAllNonlinearExpressionTrees();
+	
+
 	
 	
 	 /**

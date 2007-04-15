@@ -70,6 +70,7 @@ OSInstance::OSInstance():
  	m_mdConstraintConstants( NULL),
 	m_bDuplicateExpressionTreesMap( false),
 	m_bNonLinearStructuresInitialized( false),
+	m_bQTermsAdded( false),
 	m_bSparseJacobianCalculated( false),
 	m_iJacValueSize( 0),
 	m_miJacStart( NULL),
@@ -1501,9 +1502,14 @@ SparseJacobianMatrix *OSInstance::getJacobianSparsityPattern( ){
 	// if already called return the sparse Jacobian
 	if( m_bSparseJacobianCalculated == true) return m_sparseJacMatrix;
 	// make sure the data structures have been inialized
+	getLinearConstraintCoefficientMajor();
 	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
 	if( m_bColumnMajor == true) getSparseJacobianFromColumnMajor( );
-	else getSparseJacobianFromRowMajor( );
+	else {
+		throw ErrorClass("cannot handle row major linear + nonlinear");
+		//getSparseJacobianFromRowMajor( );
+		//kipp -- implement getSparseJacobianFromRowMajor
+	}
 	// now fill in the arrays of the sparseJacMatrix
 	m_sparseJacMatrix = new SparseJacobianMatrix();
 	// we point to memory already created so don't 
@@ -1522,7 +1528,7 @@ bool OSInstance::addQTermsToExressionTree(){
 	int i, k, idx;
 	// get the number of qTerms
 	int numQTerms = instanceData->quadraticCoefficients->numberOfQuadraticTerms;	
-	if(numQTerms <= 0) return true;
+	if(numQTerms <= 0 || m_bQTermsAdded == true) return true;
 	OSnLNodeVariable* nlNodeVariableOne;
 	OSnLNodeVariable* nlNodeVariableTwo;
 	OSnLNodeTimes* nlNodeTimes;
@@ -1590,8 +1596,20 @@ bool OSInstance::addQTermsToExressionTree(){
 			expTree->m_treeRoot = nlNodeTimes ;
 			expTree->mapVarIdx = expTree->getVariableIndiciesMap();		
 			m_mapExpressionTreesMod[ idx ]  = expTree;
+			if(idx < 0){
+				m_iObjectiveNumberNonlinear++;
+				m_bProcessExpressionTrees = true;
+			}
+			else{
+				m_iConstraintNumberNonlinear++;
+				m_bProcessExpressionTrees = true;
+			}
 			std::cout << "NUMBER OF EXPRESSION TREES = "  << m_mapExpressionTreesMod.size() <<std::endl;
+			std::cout << "NUMBER OF NONLINEAR OBJECTIVES = "  << getNumberOfNonlinearObjectives() <<std::endl;
 		} 
+		// if there were no nonlinear terms make this the expression tree
+		if(m_iNonlinearExpressionNumber <= 0) m_mapExpressionTrees = m_mapExpressionTreesMod;
+		m_bQTermsAdded =true;
 	}
 	return true;
 }
@@ -2210,6 +2228,8 @@ void OSInstance::duplicateExpressionTreesMap(){
 		return;
 	}
 }//duplicateExpressionTreesMap
+
+
 
 
 

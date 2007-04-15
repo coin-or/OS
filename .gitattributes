@@ -68,6 +68,7 @@ OS/data/parincLinearJun.osil -text
 OS/data/parincLinearRemote.config -text
 OS/data/parincNonlinear.osil -text
 OS/data/parincNonlinear2.osil -text
+OS/data/parincQuadratic.osil -text
 OS/data/parinclinear.nl -text
 OS/data/parincnonlinear.mod -text
 OS/data/parincnonlinear.nl -text

@@ -60,7 +60,12 @@ bool IpoptSolver::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 	cout << "number constraints  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << m << endl;
 
 	// nonzeros in jacobian
+	if( osinstance->getNumberOfNonlinearExpressions() <= 0 && osinstance->getNumberOfQuadraticTerms() > 0){  
+			osinstance->addQTermsToExressionTree();
+	}
+	std::cout << "Call sparse jacobian" << std::endl;
 	SparseJacobianMatrix *sparseJacobian = osinstance->getJacobianSparsityPattern();
+	std::cout << "Done calling sparse jacobian" << std::endl;
 	nnz_jac_g = sparseJacobian->valueSize;
 	//cout << "nnz_jac_g  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_jac_g << endl;	
 	// nonzeros in upper hessian
@@ -70,7 +75,9 @@ bool IpoptSolver::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 		nnz_h_lag = 0;
 	}
 	else{
+		std::cout << "Get Lagrangain Hessian Sparsity Pattern " << std::endl;
 		SparseHessianMatrix *sparseHessian = osinstance->getLagrangianHessianSparsityPattern();
+		std::cout << "Done Getting Lagrangain Hessian Sparsity Pattern " << std::endl;
 		nnz_h_lag = sparseHessian->hessDimension;
 	}
 	//cout << "nnz_h_lag  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_h_lag << endl;	
@@ -195,6 +202,7 @@ bool IpoptSolver::eval_jac_g(Index n, const Number* x, bool new_x,
 		cout << "nele_jac: " <<  nele_jac << endl;
 		// return the structure of the jacobian
 		sparseJacobian = osinstance->getJacobianSparsityPattern();
+		std::cout << "Gail 1" << std::endl;
 		int i = 0;
 		int k, idx;
 		for(idx = 0; idx < m; idx++){
@@ -205,10 +213,13 @@ bool IpoptSolver::eval_jac_g(Index n, const Number* x, bool new_x,
 				//cout << "COL IDX  !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << jCol[i] << endl;
 				i++;
 			}
-		}	
+		}
+		std::cout << "Gail 2" << std::endl;	
 	}
 	else {
+		std::cout << "Gail 3" << std::endl;
 		sparseJacobian = osinstance->calculateAllConstraintFunctionGradients((double*)x, false, false);
+		std::cout << "Gail 4" << std::endl;
 		//values = sparseJacobian->values;
 		for(int i = 0; i < nele_jac; i++){
 			values[ i] = sparseJacobian->values[i];
