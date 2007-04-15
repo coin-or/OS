@@ -314,13 +314,20 @@ void getJobID(){
  
 
 void knock(){
+	std::string osplOutput = "";
 	OSSolverAgent* osagent = NULL;
 	FileUtil *fileUtil = NULL;
 	fileUtil = new FileUtil();
 	try{
-		osagent = new OSSolverAgent( osoptions->serviceLocation );
-		if(osoptions->osplOutputFile != NULL) fileUtil->writeFileFromString(osoptions->osplOutputFile, osagent->knock(osoptions->osplInput,  osoptions->osol));
-		else cout << osagent->knock(osoptions->osplInput,  osoptions->osol) << endl;
+		if(osoptions->serviceLocation != NULL){
+			osagent = new OSSolverAgent( osoptions->serviceLocation );
+			osplOutput = osagent->knock(osoptions->osplInput,  osoptions->osol);
+			if(osoptions->osplOutputFile != NULL) fileUtil->writeFileFromString(osoptions->osplOutputFile, osplOutput);
+			else cout << osplOutput << endl;
+		}
+		else{
+			cout << "please specify service location (url)" << endl;
+		}
 	}
 	catch(const ErrorClass& eclass){
 		std::cout << eclass.errormsg <<  std::endl;
