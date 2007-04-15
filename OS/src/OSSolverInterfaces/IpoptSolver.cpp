@@ -29,6 +29,7 @@ using namespace Ipopt;
 
 IpoptSolver::IpoptSolver() {
 	osrlwriter = new OSrLWriter();
+	ipoptErrorMsg = "";
 }
 
 IpoptSolver::~IpoptSolver() {
@@ -49,8 +50,9 @@ bool IpoptSolver::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
   ////
   
   	// number of objectives
+
 	if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Ipopt NEEDS AN OBJECTIVE FUNCTION");
-                             	
+                      	
 	// number of variables
 	n = osinstance->getVariableNumber();
 
@@ -64,7 +66,14 @@ bool IpoptSolver::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 			osinstance->addQTermsToExressionTree();
 	}
 	std::cout << "Call sparse jacobian" << std::endl;
-	SparseJacobianMatrix *sparseJacobian = osinstance->getJacobianSparsityPattern();
+	SparseJacobianMatrix *sparseJacobian = NULL;
+	try{
+		sparseJacobian = osinstance->getJacobianSparsityPattern();
+	}
+	catch(const ErrorClass& eclass){
+		ipoptErrorMsg = eclass.errormsg;
+		throw;  
+	}
 	std::cout << "Done calling sparse jacobian" << std::endl;
 	nnz_jac_g = sparseJacobian->valueSize;
 	//cout << "nnz_jac_g  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_jac_g << endl;	
@@ -188,6 +197,8 @@ bool IpoptSolver::eval_g(Index n, const Number* x, bool new_x, Index m, Number* 
 	return true;
 }//eval_g
 
+
+
 // return the structure or values of the jacobian
 bool IpoptSolver::eval_jac_g(Index n, const Number* x, bool new_x,
                            Index m, Index nele_jac, Index* iRow, Index *jCol,
@@ -201,8 +212,13 @@ bool IpoptSolver::eval_jac_g(Index n, const Number* x, bool new_x,
 		cout << "m: " << m << endl;
 		cout << "nele_jac: " <<  nele_jac << endl;
 		// return the structure of the jacobian
-		sparseJacobian = osinstance->getJacobianSparsityPattern();
-		std::cout << "Gail 1" << std::endl;
+		try{
+			sparseJacobian = osinstance->getJacobianSparsityPattern();
+		}
+		catch(const ErrorClass& eclass){
+			ipoptErrorMsg =  eclass.errormsg; 
+			throw; 
+		}
 		int i = 0;
 		int k, idx;
 		for(idx = 0; idx < m; idx++){
@@ -214,12 +230,9 @@ bool IpoptSolver::eval_jac_g(Index n, const Number* x, bool new_x,
 				i++;
 			}
 		}
-		std::cout << "Gail 2" << std::endl;	
 	}
 	else {
-		std::cout << "Gail 3" << std::endl;
 		sparseJacobian = osinstance->calculateAllConstraintFunctionGradients((double*)x, false, false);
-		std::cout << "Gail 4" << std::endl;
 		//values = sparseJacobian->values;
 		for(int i = 0; i < nele_jac; i++){
 			values[ i] = sparseJacobian->values[i];
@@ -411,7 +424,7 @@ void IpoptSolver::finalize_solution(SolverReturn status,
 
 
 //void IpoptSolver::solve() throw (ErrorClass) {
-void IpoptSolver::solve()  {
+void IpoptSolver::solve() throw (ErrorClass) {
 	try{
 		OSiLReader* osilreader = NULL; 
 		osresult = new OSResult();
@@ -448,6 +461,7 @@ void IpoptSolver::solve()  {
 		app->Options()->SetStringValue("output_file", "ipopt.out");
 		app->Options()->SetStringValue("check_derivatives_for_naninf", "yes");
 		// see if we have a linear program
+		if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Ipopt NEEDS AN OBJECTIVE FUNCTION");
 		if( (osinstance->getNumberOfNonlinearExpressions() == 0) && (osinstance->getNumberOfQuadraticTerms() == 0) ) 
 			app->Options()->SetStringValue("hessian_approximation", "limited-memory");
 		// if it is a max problem call scaling and set to -1
@@ -455,11 +469,15 @@ void IpoptSolver::solve()  {
   			app->Options()->SetStringValue("nlp_scaling_method", "user-scaling");
   		}
 		// Intialize the IpoptApplication and process the options
+		std::cout << "Call Ipopt Initialize" << std::endl;
 		app->Initialize();
+		std::cout << "Finished Ipopt Initialize" << std::endl;
 		// Ask Ipopt to solve the problem
+		std::cout << "Call Ipopt Optimize" << std::endl;
 		ApplicationReturnStatus status = app->OptimizeTNLP(nlp);
+		std::cout << "Finish Ipopt Optimize" << std::endl;
 		if (status != Solve_Succeeded) {
-			throw ErrorClass("Ipopt FAILED TO SOLVE THE PROBLEM");
+			throw ErrorClass("Ipopt FAILED TO SOLVE THE PROBLEM: " + ipoptErrorMsg);
 		}		
 		delete osilreader;
 		osilreader = NULL;

@@ -1504,11 +1504,18 @@ SparseJacobianMatrix *OSInstance::getJacobianSparsityPattern( ){
 	// make sure the data structures have been inialized
 	getLinearConstraintCoefficientMajor();
 	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
-	if( m_bColumnMajor == true) getSparseJacobianFromColumnMajor( );
-	else {
-		throw ErrorClass("cannot handle row major linear + nonlinear");
-		//getSparseJacobianFromRowMajor( );
-		//kipp -- implement getSparseJacobianFromRowMajor
+	try{
+		if( m_bColumnMajor == true){
+			 getSparseJacobianFromColumnMajor( );
+		}
+		else {
+			throw ErrorClass("cannot handle row major linear + nonlinear");
+			//getSparseJacobianFromRowMajor( );
+			//kipp -- implement getSparseJacobianFromRowMajor
+		}
+	}
+	catch(const ErrorClass& eclass){
+		throw ErrorClass(  eclass.errormsg); 
 	}
 	// now fill in the arrays of the sparseJacMatrix
 	m_sparseJacMatrix = new SparseJacobianMatrix();

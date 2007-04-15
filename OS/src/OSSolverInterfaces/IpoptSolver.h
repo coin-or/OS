@@ -60,7 +60,7 @@ public:
 	IpoptSolver();
 	~IpoptSolver();
 	//virtual void  solve() throw(ErrorClass);
-	virtual void  solve() ;
+	virtual void  solve() throw (ErrorClass) ;
 	void dataEchoCheck();
 
 	/** IPOpt specific methods for defining the nlp problem */
@@ -120,7 +120,7 @@ public:
 									Index m, const Number* g, const Number* lambda,
 									Number obj_value);
 	//@}
-		
+
 private:
 	OSrLWriter  *osrlwriter;
 
@@ -139,6 +139,7 @@ private:
 	IpoptSolver(const IpoptSolver&);
 	IpoptSolver& operator=(const IpoptSolver&);
 	//@}
+	std::string ipoptErrorMsg;
 };
 
 #endif /*IPOPTSOLVER_H*/
