@@ -90,6 +90,7 @@ OS/data/testfile2.nl -text
 OS/data/testlocal.config -text
 OS/data/testremote.config -text
 OS/data/transportation.osil -text
+OS/data/wayneQuadratic.osil -text
 OS/examples/CppAD/CppADTest.cpp -text
 OS/examples/CppAD/CppADTestOld.cpp -text
 OS/examples/CppAD/Makefile.am -text

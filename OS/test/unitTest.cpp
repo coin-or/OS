@@ -136,8 +136,8 @@ int main(int argC, char* argV[])
 		delete osilreader;
 		osilreader = NULL;
 		// solve another problem
-		// a problem with just an objective function
-		ipOptFileName =  dataDir + "rosenbrock.osil";
+		// a problem with both quadratic terms and general nonlinear terms
+		ipOptFileName =  dataDir + "rosenbrockmod.osil";
 		osil = fileUtil->getFileAsString( &ipOptFileName[0]);
 		cout << "IPOPT Solver created for OSiL string solution" << endl;
 		ipoptSolver->osol = osol;
@@ -145,10 +145,26 @@ int main(int argC, char* argV[])
 		ipoptSolver->osinstance = osilreader->readOSiL( &osil);
 		cout << "call the IPOPT Solver" << endl;
 		ipoptSolver->solve();
-		cout << "Here is the IPOPT solver solution for rosenbrock" << endl;
-		check = 0.0;
+		cout << "Here is the IPOPT solver solution for rosenbrockmod" << endl;
+		check = 6.7279;
 		ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-10 , 1e-10);
 		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on rosenbrock");
+		delete osilreader;
+		osilreader = NULL;
+		// solve another problem
+		// a problem that is a pure quadratic
+		ipOptFileName =  dataDir + "parincQuadratic.osil";
+		osil = fileUtil->getFileAsString( &ipOptFileName[0]);
+		cout << "IPOPT Solver created for OSiL string solution" << endl;
+		ipoptSolver->osol = osol;
+		osilreader = new OSiLReader(); 
+		ipoptSolver->osinstance = osilreader->readOSiL( &osil);
+		cout << "call the IPOPT Solver" << endl;
+		ipoptSolver->solve();
+		cout << "Here is the IPOPT solver solution for rosenbrockmod" << endl;
+		check = 49920.5;
+		ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-10 , 1e-10);
+		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on parincQuadradic");
 		delete osilreader;
 		osilreader = NULL;	
 		// solve another problem
@@ -236,8 +252,28 @@ int main(int argC, char* argV[])
 		m_Solver->solve();
 		cout << "Here is the LINDO solver solution" << endl;
 		cout << m_Solver->osrl << endl;
+		check = 99;
+		ok &= NearEqual(getObjVal( m_Solver->osrl) , check,  1e-10 , 1e-10);
+		if(ok == false) throw ErrorClass(" Fail unit test with LINDO on lindoapiaddins");
 		m_Solver->osinstance = NULL;
-		//delete m_Solver;
+		delete m_Solver;
+		m_Solver = NULL;
+		// now solve a pure quadratic
+		lindoFileName = dataDir + "parincQuadratic.osil";
+		osil = fileUtil->getFileAsString( &lindoFileName[0]);
+		m_Solver = new LindoSolver();	
+		m_Solver->osil = osil;
+		m_Solver->osol = osol;
+		m_Solver->osinstance = NULL;
+		cout << "call the LINDO Solver" << endl;
+		m_Solver->solve();
+		cout << "Here is the LINDO solver solution" << endl;
+		cout << m_Solver->osrl << endl;
+		check = 49920.5;
+		ok &= NearEqual(getObjVal( m_Solver->osrl) , check,  1e-10 , 1e-10);
+		if(ok == false) throw ErrorClass(" Fail unit test with LINDO on parincQuadratic");
+		m_Solver->osinstance = NULL;
+		delete m_Solver;
 		m_Solver = NULL;
 		
 	}
@@ -245,7 +281,7 @@ int main(int argC, char* argV[])
 		//cout << "OSrL =  " <<  m_Solver->osrl <<  endl;
 		cout << endl << endl << endl;
 		cout << "Sorry Unit Test Failed Testing the Lindo Solver" << endl;
-		//return 0;
+		return 0;
 	}
 	#endif
 	// end solving using the osil file
@@ -371,7 +407,7 @@ int main(int argC, char* argV[])
 		cout << "OSrL =  " <<  m_Solver->osrl <<  endl;
 		cout << endl << endl << endl;
 		cout << "Sorry Unit Test Failed Testing Use of Base 64" << endl;
-		//return 0;
+		return 0;
 
 	}  
 	//
