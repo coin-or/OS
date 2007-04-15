@@ -400,14 +400,20 @@ void retrieve(){
 }//end retrieve
 
 void kill(){
+	std::string osplOutput = "";
 	OSSolverAgent* osagent = NULL;
 	FileUtil *fileUtil = NULL;
 	fileUtil = new FileUtil();
 	try{
-		osagent = new OSSolverAgent( osoptions->serviceLocation );
-		std::string sOSpL = osagent->kill( osoptions->osol);
-		if(osoptions->osplOutputFile != NULL) fileUtil->writeFileFromString(osoptions->osplOutputFile, sOSpL);
-		else cout << sOSpL << endl;
+		if(osoptions->serviceLocation != NULL){
+			osagent = new OSSolverAgent( osoptions->serviceLocation );
+			osplOutput = osagent->kill( osoptions->osol);
+			if(osoptions->osplOutputFile != NULL) fileUtil->writeFileFromString(osoptions->osplOutputFile, osplOutput);
+			else cout << osplOutput << endl;
+		}
+		else{
+			cout << "please specify service location (url)" << endl;
+		}
 	}
 	catch(const ErrorClass& eclass){
 		std::cout << eclass.errormsg <<  std::endl;
