@@ -336,38 +336,41 @@ void knock(){
 
 
 void send(){
+	bool bSend = false;
+	std::string jobID = "";
 	OSSolverAgent* osagent = NULL;
 	// first get the jobID
-	std::string sjobID = "";
 	std::string sOSoL = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/OSoL.xsd\"><general> </general></osol>";
-	int istringpos;
-	bool bsend;
+	int iStringpos;
 	try{
-		osagent = new OSSolverAgent( osoptions->serviceLocation );
-		sjobID =  osagent->getJobID( osoptions->osol) ;
-		// check to see if there is an osol 
-		if(osoptions->osolFile == NULL){
-			// insert the jobID into the default osol
-			istringpos = sOSoL.find("</general");
-			cout << "startel ==  " << istringpos << endl;
-			if(istringpos != std::string::npos) sOSoL.insert(istringpos, "<jobID>" + sjobID+ "</jobID>");
+		if(osoptions->serviceLocation != NULL){
+			osagent = new OSSolverAgent( osoptions->serviceLocation );
+			jobID =  osagent->getJobID( osoptions->osol) ;
+			// check to see if there is an osol 
+			if(osoptions->osolFile == NULL){
+				// insert the jobID into the default osol
+				iStringpos = sOSoL.find("</general");
+				cout << "startel ==  " << iStringpos << endl;
+				if(iStringpos != std::string::npos) sOSoL.insert(iStringpos, "<jobID>" + jobID+ "</jobID>");
+			}
+			else{
+				// see if a jobID is present in the OSiL
+				sOSoL = osoptions->osol;
+				iStringpos = sOSoL.find("<jobID");
+				if(iStringpos != std::string::npos) bSend = osagent->send(osoptions->osil, osoptions->osol);
+				else{
+					iStringpos = sOSoL.find("</general");
+					if(iStringpos != std::string::npos) sOSoL.insert(iStringpos, "<jobID>" + jobID+ "</jobID>");
+				}
+			}
 			cout << sOSoL << endl;
-			if(osagent->send(osoptions->osil, sOSoL) == true) cout << "send is true" << endl;
+			bSend = osagent->send(osoptions->osil, sOSoL);
+			if(bSend == true) cout << "send is true" << endl;
 			else cout << "send is false" << endl;
+			//cout << osagent->solve(osoptions->osil, sOSoL) << endl;
 		}
 		else{
-			// see if a jobID is present in the OSiL
-			sOSoL = osoptions->osol;
-			istringpos = sOSoL.find("<jobID");
-			if(istringpos != std::string::npos) bsend = osagent->send(osoptions->osil, osoptions->osol);
-			else{
-				istringpos = sOSoL.find("</general");
-				if(istringpos != std::string::npos) sOSoL.insert(istringpos, "<jobID>" + sjobID+ "</jobID>");
-				cout << sOSoL << endl;
-				if(osagent->send(osoptions->osil, sOSoL) == true) cout << "send is true" << endl;
-				else cout << "send is false" << endl;
-				//cout << osagent->solve(osoptions->osil, sOSoL) << endl;
-			}
+			cout << "please specify service location (url)" << endl;
 		}
 	}
 	catch(const ErrorClass& eclass){
