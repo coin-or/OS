@@ -32,7 +32,7 @@ using std::cout;
 using std::endl;
 using std::ostringstream;
 
-
+#define DEBUG
 #ifndef __LINDOI_H__
 #define __LINDOI_H__
 
@@ -439,7 +439,7 @@ bool LindoSolver::optimize(){
 		//
 		//if(LSoptimize( pModel_, LS_METHOD_FREE, &nSolStatus) != 0)throw ErrorClass("Problem in optimize routine");
 		//if(LSsolveMIP( pModel_,  &nSolStatus) != 0)throw ErrorClass("Problem in optimize routine");
-		//LSwriteMPIFile(pModel_, "/Users/kmartin/temp/hs71.mpi"); 
+		LSwriteMPIFile(pModel_, "/Users/kmartin/temp/hs71.mpi"); 
 		// some testing // 
 		//cout << "NUMBER OF NEW SLACKS = " <<  m_iNumberNewSlacks << endl;
 		//for(int kj = 0; kj < osinstance->getConstraintNumber(); kj++){
@@ -893,9 +893,7 @@ bool LindoSolver::processNonlinearExpressions(){
 		paiInsList = new int[ iInstListLength];
 		copy(insList.begin(), insList.end(), paiInsList);
 		//
-		for(int kl = 0; kl < iInstListLength; kl++){
-			cout <<  paiInsList[ kl] << endl;		
-		}
+
 		//
 		for(int kl = 0; kl < iNumberOfNonlinearConstraints; kl++){
 			cout << "con idx  " << paiNonlinearConIndex[ kl] << endl;
@@ -918,6 +916,44 @@ bool LindoSolver::processNonlinearExpressions(){
 		m_iLindoErrorCode = LSsetModelIntParameter (pModel_,
 			LS_IPARAM_NLP_AUTODERIV, nAutoDeriv);
 		lindoAPIErrorCheck("Error trying to set the LS_IPARAM_NLP_AUTODERIV parameter");
+		#ifdef DEBUG
+			std::cout << "iNumberOfNonlinearConstraints=  " << iNumberOfNonlinearConstraints << std::endl;
+			std::cout << "iNumberOfNonlinearObjectives=  " << iNumberOfNonlinearObjectives << std::endl;
+			std::cout << "iNumberOfNewVariables = " << iNumberOfNewVariables << std::endl;
+			std::cout << "iNumNonlinearNonz =  " << iNumNonlinearNonz << std::endl;
+			std::cout << "piObjSense =  " << "NULL" << std::endl ;
+			std::cout << "pachConType =  " << "NULL" << std::endl ;
+			std::cout << "pachVarType =  " << "NULL" << std::endl ;
+			int kl;
+			std::cout << "Here is the instruction list" << std::endl;
+			for(kl = 0; kl < iInstListLength; kl++){
+				cout << "instruction list num  " << paiInsList[ kl] << endl;		
+			}
+			std::cout << "Number of terms in instruction list " << iInstListLength << std::endl;
+			std::cout << "Here are the constraint indices " << std::endl;
+			for(kl = 0; kl < iNumberOfNonlinearConstraints; kl++){
+				cout << "con idx  " << paiNonlinearConIndex[ kl] << endl;
+			}
+			std::cout << "Here come the nonlinear nonzeros " <<  std::endl;
+			for(kl = 0; kl < iNumNonlinearNonz; kl++){
+				cout << "nonz value  =   " << padNonlinearNonz[ kl] << endl;
+			}
+			std::cout << "padVarval =  " << "NULL" << std::endl ;
+			for(kl = 0; kl < iNumberOfNonlinearObjectives; kl++){
+				cout << "obj inst begin  =   " << paiObjsBegin[ kl] << endl;
+			}
+			for(kl = 0; kl < iNumberOfNonlinearObjectives; kl++){
+				cout << "obj inst list length  =   " << paiObjsLength[ kl] << endl;
+			}
+			for(kl = 0; kl < iNumberOfNonlinearConstraints; kl++){
+				cout << "constraint inst begin  =   " << paiConsBegin[ kl] << endl;
+			}
+			for(kl = 0; kl < iNumberOfNonlinearConstraints; kl++){
+				cout << "constraints inst list length  =   " << paiConsLength[ kl] << endl;
+			}
+			std::cout << "padVarLowerBounds =  " << "NULL" << std::endl ;
+			std::cout << "padUpperBounds =  " << "NULL" << std::endl ;
+		#endif
 		m_iLindoErrorCode = LSaddInstruct (pModel_, iNumberOfNonlinearConstraints, 
 			iNumberOfNonlinearObjectives, iNumberOfNewVariables, iNumNonlinearNonz,
 			piObjSense, pachConType,  pachVarType, paiInsList, iInstListLength, paiNonlinearConIndex,
@@ -994,15 +1030,16 @@ void LindoSolver::dataEchoCheck(){
 	// print out linear constraint data
 	cout << endl;
 	cout << "number of nonzeros =  " << osinstance->getLinearConstraintCoefficientNumber() << endl;
-	for(i = 0; i <= osinstance->getVariableNumber(); i++){
-		cout << "Start Value =  " << osinstance->getLinearConstraintCoefficientsInColumnMajor()->starts[ i] << endl;
+	if(osinstance->getLinearConstraintCoefficientNumber() > 0){
+		for(i = 0; i <= osinstance->getVariableNumber(); i++){
+			cout << "Start Value =  " << osinstance->getLinearConstraintCoefficientsInColumnMajor()->starts[ i] << endl;
+		}
+		cout << endl;
+		for(i = 0; i < osinstance->getLinearConstraintCoefficientNumber(); i++){
+			cout << "Index Value =  " << osinstance->getLinearConstraintCoefficientsInColumnMajor()->indexes[i] << endl;
+			cout << "Nonzero Value =  " << osinstance->getLinearConstraintCoefficientsInColumnMajor()->values[i] << endl;
+		}
 	}
-	cout << endl;
-	for(i = 0; i < osinstance->getLinearConstraintCoefficientNumber(); i++){
-		cout << "Index Value =  " << osinstance->getLinearConstraintCoefficientsInColumnMajor()->indexes[i] << endl;
-		cout << "Nonzero Value =  " << osinstance->getLinearConstraintCoefficientsInColumnMajor()->values[i] << endl;
-	}
-
 	// print out quadratic data
 	cout << "number of qterms =  " <<  osinstance->getNumberOfQuadraticTerms() << endl;
 	for(int i = 0; i <  osinstance->getNumberOfQuadraticTerms(); i++){
@@ -1018,7 +1055,7 @@ void  LindoSolver::lindoAPIErrorCheck(std::string errormsg) {
 	try{
 		ostringstream outStr;
 		std::string error = errormsg;
-		char *lindoerrormsg;
+		char lindoerrormsg[LS_MAX_ERROR_MESSAGE_LENGTH];
 		if(m_iLindoErrorCode != 0){
 			outStr << endl;
 			error = "LINDO ERROR: "+ error;
