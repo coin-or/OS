@@ -706,7 +706,7 @@ YY_DECL
 	register int yy_act;
     struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
 
-#line 44 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.l"
+#line 45 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.l"
 
 
 #line 713 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.cpp"
@@ -807,17 +807,17 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 46 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.l"
+#line 47 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.l"
 
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 48 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.l"
+#line 49 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.l"
 
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 50 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.l"
+#line 51 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.l"
 ECHO;
 	YY_BREAK
 #line 824 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.cpp"
@@ -1938,7 +1938,7 @@ void osolfree (void * ptr , yyscan_t yyscanner)
 
 #define YYTABLES_NAME "yytables"
 
-#line 50 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.l"
+#line 51 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.l"
 
 
 

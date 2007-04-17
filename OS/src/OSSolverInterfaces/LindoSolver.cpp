@@ -141,8 +141,6 @@ void LindoSolver::solve()  {
 			osinstance->addConstraint(0, "dummyConstraint", 0, 0, 0);
 			std::cout << "HERE I AM 2 !!!!!!!!!!!!!!!!!!!" << std::endl;
 		}		
-		std::cout << "number of constraints " <<  osinstance->getConstraintNumber() << std::endl;
-		exit(1);
 		//cout << osilwriter.writeOSiL( osinstance) << endl;
 		if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Lindo requires decision variables");
 		std::cout << "Start process variables !!!!!!!!!" << std::endl;

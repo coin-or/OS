@@ -33,6 +33,7 @@
 %option prefix="osol"
 %option noyywrap
 %option reentrant
+
 %option yylineno   
 
 
