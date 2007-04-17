@@ -43,6 +43,7 @@ AC_CANONICAL_BUILD
          win_sock=yes;; 
       *-cygwin*)
          AC_DEFINE([WIN_],[1],[use if OS is Windows])
+         AC_DEFINE([_WINSOCK_H],[1],[use if OS is Cygwin])
          win_sock=yes;; 
        *-win*)
          AC_DEFINE([WIN_],[1],[use if OS is Windows])

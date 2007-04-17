@@ -141,7 +141,8 @@ void LindoSolver::solve()  {
 			osinstance->addConstraint(0, "dummyConstraint", 0, 0, 0);
 			std::cout << "HERE I AM 2 !!!!!!!!!!!!!!!!!!!" << std::endl;
 		}		
-
+		std::cout << "number of constraints " <<  osinstance->getConstraintNumber() << std::endl;
+		exit(1);
 		//cout << osilwriter.writeOSiL( osinstance) << endl;
 		if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Lindo requires decision variables");
 		std::cout << "Start process variables !!!!!!!!!" << std::endl;
@@ -892,12 +893,6 @@ bool LindoSolver::processNonlinearExpressions(){
 		// read instructions into a Lindo pointer
 		paiInsList = new int[ iInstListLength];
 		copy(insList.begin(), insList.end(), paiInsList);
-		//
-
-		//
-		for(int kl = 0; kl < iNumberOfNonlinearConstraints; kl++){
-			cout << "con idx  " << paiNonlinearConIndex[ kl] << endl;
-		}
 
 		//
 		// Lindo Solver variables
@@ -954,6 +949,7 @@ bool LindoSolver::processNonlinearExpressions(){
 			std::cout << "padVarLowerBounds =  " << "NULL" << std::endl ;
 			std::cout << "padUpperBounds =  " << "NULL" << std::endl ;
 		#endif
+		LSwriteMPSFile(pModel_, "/Users/kmartin/temp/parincQuadratic.mps", LS_FORMATTED_MPS);
 		m_iLindoErrorCode = LSaddInstruct (pModel_, iNumberOfNonlinearConstraints, 
 			iNumberOfNonlinearObjectives, iNumberOfNewVariables, iNumNonlinearNonz,
 			piObjSense, pachConType,  pachVarType, paiInsList, iInstListLength, paiNonlinearConIndex,
