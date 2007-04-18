@@ -259,7 +259,7 @@ int main(int argC, char* argV[])
 		delete m_Solver;
 		m_Solver = NULL;
 		// now solve a pure quadratic
-		lindoFileName = dataDir + "parincQuadratic.osil";
+		lindoFileName = dataDir + "rosenbrockmod.osil";
 		osil = fileUtil->getFileAsString( &lindoFileName[0]);
 		m_Solver = new LindoSolver();	
 		m_Solver->osil = osil;
@@ -269,8 +269,8 @@ int main(int argC, char* argV[])
 		m_Solver->solve();
 		cout << "Here is the LINDO solver solution" << endl;
 		cout << m_Solver->osrl << endl;
-		check = 49920.5;
-		ok &= NearEqual(getObjVal( m_Solver->osrl) , check,  1e-10 , 1e-10);
+		check = 6.7279;
+		ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-10 , 1e-10);
 		if(ok == false) throw ErrorClass(" Fail unit test with LINDO on parincQuadratic");
 		m_Solver->osinstance = NULL;
 		delete m_Solver;
