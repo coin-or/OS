@@ -18,10 +18,10 @@
 			</obj>
 		</objectives>
 		<constraints numberOfConstraints="4"> 
-			<con name="cutanddye" ub="630" />
-			<con name="sewing"  ub="600"/>
-			<con name="finishing"  ub="708"/>
-			<con  ub="135"/>
+			<con name="cutanddye" lb = "10" ub="630" />
+			<con name="sewing" lb = "10" ub="600"/>
+			<con name="finishing" lb = "10" ub="708"/>
+			<con lb = "10" ub="135"/>
 		</constraints>
 		<linearConstraintCoefficients numberOfValues="8">
 			<start>
