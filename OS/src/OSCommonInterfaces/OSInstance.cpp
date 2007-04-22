@@ -2138,7 +2138,7 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double* 
 		//std::cout << "size is  " << m_vdx.size() << std::endl;
 		(*F).Forward(1, m_vdx);          // partial w.r.t dx
 		//(*F).Forward(1, dx);          // partial w.r.t dx
-		//std::cout << "do a reverse calcuation for variable " << i << std::endl;
+		//std::cout << "do a reverse calculation for variable " << i << std::endl;
 		m_vdw = (*F).Reverse(2, m_vw);   // deritavtive of partial
 		for(j = 0; j < m_iNumberOfNonlinearVariables; j++){
 			m_vH[ i * m_iNumberOfNonlinearVariables + j ] = m_vdw[ j * 2 + 1 ]; // fill in the Hessian

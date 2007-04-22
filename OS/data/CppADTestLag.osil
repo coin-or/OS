@@ -35,7 +35,7 @@
 			</nl>
 			<nl idx="0">
 				<sum>
-					<number type="real" value="105"/>
+					<number type="real" value="-105"/>
 					<variable coef="1.37" idx="1"/>
 					<variable coef="2" idx="2"/>
 				</sum>	

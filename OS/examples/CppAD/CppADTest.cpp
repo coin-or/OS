@@ -97,6 +97,14 @@ int  main(){
     dataDir = "../../data/" ;
 	//osilFileName =  dataDir + "HS071_NLP.osil";
 	osilFileName =  dataDir + "CppADTestLag.osil";
+	/*
+	min x0^2 + 9*x1   -- w[0]
+	s.t. 
+	33 + 105 + 1.37*x1 + 2*x2 <= 10  -- y[0]
+	ln(x0*x2) >= 10  -- y[1]
+	Note: in the first constraint 33 is a constant term and 105 
+	is part of the nl node
+	*/
 	fileUtil = new FileUtil();
 	osil = fileUtil->getFileAsString( &osilFileName[0]);	
 	//
@@ -108,26 +116,100 @@ int  main(){
 		osilreader = new OSiLReader();
 		osinstance = osilreader->readOSiL( &osil);
 		// here the values of the primal and Lagrange multipliers that we use
-		double* x = new double[3];
-		double* y = new double[2];
-		double* w = new double[1];
-		x[ 0] = 1.;
-		x[ 1] = 5;
-		x[ 2] = 5;
-		y[ 0] = 0; // Lagrange multiplier on constraint 0
-		y[ 1] = 1; // Lagrange multiplier on constraint 1
-		w[ 0] = 0; // Lagrange multiplier on the objective function
+		double* x = new double[3]; //primal variables
+		double* z = new double[2]; //Lagrange multipliers on constraints
+		double* w = new double[1]; //Lagrange multiplier on objective
+		x[ 0] = 1; // primal variable 0
+		x[ 1] = 5;  // primal variable 1
+		x[ 2] = 5;  // primal variable 2
+		z[ 0] = 2;  // Lagrange multiplier on constraint 0
+		z[ 1] = 1;  // Lagrange multiplier on constraint 1
+		w[ 0] = 1;  // Lagrange multiplier on the objective function
+		std::vector<double> funVals(3);
+		double *conVals = NULL;
+		conVals = new double[ 2];
+		double *objVals = NULL;
+		objVals = new double[ 1];
+		SparseJacobianMatrix *sparseJac;
 		//
-	
+		//
+		// first we show how to do this with CppAD
+		// then we do this with OS routines -- right now the OS routines
+		// do a lot of extra work
+		//
+		// domain space vector
+		size_t n  = 3; // three variables
+		// range space vector
+		size_t m = 3; // Lagrangian has an objective and two constraints
+		CppADvector< AD<double> > X(n);
+		CppADvector< AD<double> > Y(m);
+		// declare independent variables and start tape recording
+		std::cout << "Start Taping" << std::endl;
+		CppAD::Independent( X);
+		// range space vector 
+		Y[ 0] =  CppAD::pow(X[0], 2) + 9*X[1];
+		Y[ 1] =  33 - 105 + 1.37*X[1] + 2*X[2] ;
+		Y[ 2] =  log(X[0]*X[2]) ;
+		// create f: x -> y and stop tape recording
+		CppAD::ADFun<double> f(X, Y); 
+		std::cout << "Stop Taping" << std::endl;
+		// get function values
+		std::vector<double> xx;
+		xx.push_back( x[0]);
+		xx.push_back( x[1]);
+		xx.push_back( x[2]);
+		funVals = f.Forward(0, xx);
+		conVals[ 0] = funVals[ 1];
+		conVals[ 1] = funVals[ 2];
+		objVals[ 0] = funVals[ 0];
+		ok = CheckFunctionValues( conVals, *objVals, x[ 0], x[1], x[2], z[0], z[1], w[0] );
+		if( ok == 0){
+			std::cout << "FAILED CHECKING FUNCTION VALUES TEST" << std::endl;
+			return 0;
+		}
+		else{
+			std::cout << "PASSED CHECKING FUNCTION VALUES TEST" << std::endl;
+		}
+		// now get gradient and Hessian
+		// first define and initialze unit vector vector
+		sparseJac = osinstance->getJacobianSparsityPattern();
+		std::vector<double> unit_col_vec( n);
+		std::vector<double> lagMultipliers( m);	
+		std::vector<double> gradVals( m);
+		gradVals[ 0] = w[ 0];
+		gradVals[ 1] = z[ 0];
+		gradVals[ 2] = z[ 1];	
+		for(idx = 0; idx < n; idx++){
+			unit_col_vec[ idx] = 0;
+		}	
+		for(idx = 0; idx < n; idx++){
+			unit_col_vec[ idx] = 1;
+			// calculate column i of the Jacobian matrix
+			gradVals = f.Forward(1, unit_col_vec);
+			unit_col_vec[ idx] = 0;
+			// get the nonzero gradient values in constraint k
+			for(k = 0; k < m; k++){
+				std::cout << "variable " << idx << "  row " << k << "  gradient value" << std::endl;
+				std::cout << "gradient value = " << gradVals[ k] << std::endl;	
+				// if variable i is in (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).find( i) put into the gradient vector
+			}
+			// get row i of the Lagrangian function!!!
+			f.Reverse(2, gradVals);
+		}
+		// done with CppAD test
+		//
+		return 0;
+		//
+		//
 		// Now start using the nonlinear API
 		// check function values, both objectives and constraints
 		std::cout << "Call  = calculateAllConstraintFunctionValues"  << std::endl;			
-		double *conVals = osinstance->calculateAllConstraintFunctionValues( x, false);
+		conVals = osinstance->calculateAllConstraintFunctionValues( x, false);
 		// note: if you just want the value for constraint function indexed by
 		// idx call the method:
 		//calculateFunctionValue(int idx, double *x, bool functionEvaluated)
 		std::cout << "Call  = calculateAllObjectiveFunctionValues"  << std::endl;	
-		double *objVals = osinstance->calculateAllObjectiveFunctionValues( &x[0], false);
+		objVals = osinstance->calculateAllObjectiveFunctionValues( &x[0], false);
 		// note: if you just want the value for the objective function indexed by
 		// idx call the method:
 		//calculateFunctionValue(int idx, double *x, bool functionEvaluated)
@@ -137,7 +219,7 @@ int  main(){
 		for( idx = 0; idx < osinstance->getObjectiveNumber(); idx++){
 			std::cout << "OBJECTIVE FUNCTION  INDEX = " << idx <<  " FUNCTION VALUE = "  << *(objVals + idx) << std::endl;
 		}
-		ok = CheckFunctionValues( conVals, *objVals, x[ 0], x[1], x[2], y[0], y[1], w[0] );
+		ok = CheckFunctionValues( conVals, *objVals, x[ 0], x[1], x[2], z[0], z[1], w[0] );
 		if( ok == 0){
 			std::cout << "FAILED CHECKING FUNCTION VALUES TEST" << std::endl;
 			return 0;
@@ -150,7 +232,7 @@ int  main(){
 		// now check gradients of constraints and objective function
 		//
 		std::cout << "PERFORM THE GRADIENT TESTS"   << std::endl;
-		SparseJacobianMatrix *sparseJac;
+		
 		double *objGrad;
 		std::cout << "OBJECTIVE FUNCTION GRADIENT"   << std::endl;
 		// in our implementation the objective function is a dense gradient
@@ -184,7 +266,7 @@ int  main(){
 				<< " value = " << *(sparseJac->values + k) << std::endl;
 			}
 		}
-		ok = CheckGradientValues( sparseJac, objGrad, x[ 0], x[1], x[2], y[0], y[1], w[0] );
+		ok = CheckGradientValues( sparseJac, objGrad, x[ 0], x[1], x[2], z[0], z[1], w[0] );
 		if( ok == 0){
 			std::cout << "FAILED THE GRADIENT TEST" << std::endl;
 			return 0;
@@ -192,6 +274,7 @@ int  main(){
 		else{
 			std::cout << "PASSED THE GRADIENT TEST" << std::endl;
 		}
+		return 0;
 		// done with gradient checks, now check on the Hessian
 		//
 		SparseHessianMatrix *sparseHessian;
@@ -205,13 +288,13 @@ int  main(){
 		}
 		//first iteration 
 		std::cout << "GET LAGRANGIAN HESSIAN FIRST TIME"   << std::endl;
-		sparseHessian = osinstance->calculateLagrangianHessian( x, y, w, false, false);
+		sparseHessian = osinstance->calculateLagrangianHessian( x, z, w, false, false);
 		for(idx = 0; idx < sparseHessian->hessDimension; idx++){
 			std::cout << "row idx = " << *(sparseHessian->hessRowIdx + idx) <<  
 			"  col idx = "<< *(sparseHessian->hessColIdx + idx)
 			<< " value = " << *(sparseHessian->hessValues + idx) << std::endl;
 		}
-		ok = CheckHessianUpper( sparseHessian, x[0],  x[1], x[2], y[0], y[1], w[0]);
+		ok = CheckHessianUpper( sparseHessian, x[0],  x[1], x[2], z[0], z[1], w[0]);
 		if( ok == 0){
 			std::cout << "FAILED THE FIRST HESSIAN TEST" << std::endl;
 			return 0; 
@@ -223,13 +306,13 @@ int  main(){
 		//second iteration
 		x[0] = 5;
 		std::cout << "NOW GET LAGRANGIAN HESSIAN SECOND TIME"   << std::endl;
-		sparseHessian = osinstance->calculateLagrangianHessian( x, y, w, false, false);
+		sparseHessian = osinstance->calculateLagrangianHessian( x, z, w, false, false);
 		for(idx = 0; idx < sparseHessian->hessDimension; idx++){
 			std::cout << "row idx = " << *(sparseHessian->hessRowIdx + idx) <<  
 			"  col idx = "<< *(sparseHessian->hessColIdx + idx)
 			<< " value = " << *(sparseHessian->hessValues + idx) << std::endl;
 		}
-		ok = CheckHessianUpper( sparseHessian , x[0],  x[1], x[2], y[0], y[1], w[0] );
+		ok = CheckHessianUpper( sparseHessian , x[0],  x[1], x[2], z[0], z[1], w[0] );
 		if( ok == 0){
 			std::cout << "FAILED THE SECOND HESSIAN TEST" << std::endl;
 			return 0;
@@ -249,6 +332,7 @@ int  main(){
 	std::cout << eclass.errormsg << std::endl;
 	} 	
 	{
+		// checking CppAD power
 		size_t n  = 2;
      	double x0 = 4;
      	double x1 = .5;
@@ -278,91 +362,16 @@ int  main(){
 	     check = x1 * std::pow(x0, x1-1.);
 	     ok   &= NearEqual(dy[0], check, 1e-10, 1e-10);
 	}
-	{// begin AD forward test
-		int j, k;
-		size_t p = 3;
-    	std::vector<double> x0(p);
-     	std::vector<double> x1(p);
-     	x0[0] = 2.;
-     	x0[1] = 1;
-     	x0[2] = 0;
-     	x1[0] = 4.;
-     	x1[1] = 0;
-     	x1[2] = 0;		
-   	 	double t;
-   	 	double *v1;
-   	 	v1 = new double[ p];
-    	double *v2;
-   	 	v2 = new double[ p];
-   	 	double *v3;
-   	 	v3 = new double[ p];
-   	 	double *v4;
-   	 	v4 = new double[ p];
-   	 	double *v5;
-   	 	v5 = new double[ p];
-   	 	double *v6;
-   	 	v6 = new double[ p];
-   	 	double *v7;
-   	 	v7 = new double[ p];
-   	 	t = 1;
-   	 	// calculate v1 and v2
-   	 	for(j = 0; j < p; j++){
-   	 		v1[j] = x0[j];
-   	 		std::cout << "v1[" << j<< "] = " << v1[j] << endl;
-   	 		v2[j] = x1[j];
-   	 		std::cout << "v2[" << j<< "] = " << v2[j] << endl;
-   	 	}
-   	 	// calculate v3 = 7/v1
-   	 	v3[0] = 7./v1[0];
-   	 	std::cout << "v3[0] = " << v3[0] << std::endl;
-   	 	if(p > 0){
-   	 		for(j = 1; j < p; j++ ){
-   	 			v3[j] = 0;
-   	 			for(k = 1; k <=j; k++){
-   	 				v3[j] += v3[j - k]*v1[k];
-   	 			}
-   	 			v3[j] = -v3[j]/v1[0];
-   	 			std::cout << "v3[" << j<< "] = " << v3[j] << endl;
-   	 		}
-   	 	}
- 		for(j = 0; j < p; j++ ){
- 			v4[j] = 0;
- 			for(k = 0; k <=j; k++){
- 				v4[j] += v1[j - k]*v2[k];
- 			}
- 			std::cout << "v4[" << j<< "] = " << v4[j] << endl;
- 		}
-  		for(j = 0; j < p; j++ ){
- 			v5[j] = v3[j] + v4[j];
- 			std::cout << "v5[" << j<< "] = " << v5[j] << endl;
- 		}  
- 		if(p > 0){
- 			v6[0] = sqrt(v2[0]);
- 			std::cout << "v6[0] = " << v6[0] << endl;
-	  		for(j = 1; j < p; j++ ){
-	 			v6[j] = v2[j];
-	 			for(k = 1; k <=j - 1; k++){
-	 				v6[j] -= v6[j - k]*v6[k];
-	 			}
-	 			v6[j] = v6[j]/(2*v6[0]);
-	 			std::cout << "v6[" << j<< "] = " << v6[j] << endl;
-	 		}    	 	
- 		}
-   		for(j = 0; j < p; j++ ){
- 			v7[j] = v5[j] + v6[j];
- 			std::cout << "v7[" << j<< "] = " << v7[j] << endl;
- 		} 
-	}//end AD forward test
 	return 0;
 }// end main program
 
 bool CheckFunctionValues( double *conVals, double objValue,
-	double x0, double x1, double x2, double y0, double y1, double z ){
+	double x0, double x1, double x2, double z0, double z1, double w ){
 	using CppAD::NearEqual;
 	bool ok  = true;
 	double checkObj = x0*x0 + 9*x1;
 	ok &= NearEqual(objValue, checkObj, 1e-10, 1e-10); 
-	double checkCon0 = 33. + 105. + 1.37*x1 + 2*x2;
+	double checkCon0 = 33. - 105. + 1.37*x1 + 2*x2;
 	ok &= NearEqual(*(conVals + 0), checkCon0, 1e-10, 1e-10);
 	double checkCon1 = log(x0*x2);
 	ok &= NearEqual( *(conVals + 1), checkCon1, 1e-10, 1e-10);
@@ -371,7 +380,7 @@ bool CheckFunctionValues( double *conVals, double objValue,
 //
 //
 bool CheckGradientValues( SparseJacobianMatrix *sparseJac, double *objGrad,
-	double x0, double x1, double x2, double y0, double y1, double z ){
+	double x0, double x1, double x2, double y0, double y1, double w ){
 	using CppAD::NearEqual;
 	bool ok  = true;
 	// first the objective function gradient
@@ -399,7 +408,7 @@ bool CheckGradientValues( SparseJacobianMatrix *sparseJac, double *objGrad,
 //
 bool CheckHessianUpper(
 SparseHessianMatrix *sparseHessian , 
-double x0, double x1, double x2, double y0, double y1, double z ){
+double x0, double x1, double x2, double z0, double z1, double w ){
 /* --------------------------------------------------------------------------
 CppAD: C++ Algorithmic Differentiation: Copyright (C) 2003-06 Bradley M. Bell
 
@@ -413,21 +422,21 @@ Please visit http://www.coin-or.org/CppAD/ for information on other licenses.
 	using CppAD::NearEqual;
 	bool ok  = true;
 	int hessValuesIdx = 0;
-	//assert( sparseHessian->hessDimension = n * (n + 1) /2);
-	//H[0 * n + 0]
+	//assert( sparseHessian->hessDimension = n * (n + 1) /2)
 	/*
-	L  =  z*x0*x0 + y0*(1 + 1.37*x1 + 3*x2) + y1*log(x0*x2)
-
-	L_0 = 2 * z * x0 + y1 / x0
-	L_1 = y0 * 2 
-	L_2 = y0 * 3 + y1 / x2 
+	L  =  w*x0*x0 + z0*(1 + 1.37*x1 + 3*x2) + z1*log(x0*x2)
+	the partial with respect x0
+	L_0 = 2 * w * x0 + 9 + z1 / x0
+	the partial with respect x1
+	L_1 = w0 * 1.37 
+	the partial with respect x2
+	L_2 = w0 * 3 + z1 / x2 
 	*/
-	// L_00 = 2 * z - y1 / ( x0 * x0 )
-	double check = 2. * z - y1 / (x0 * x0);
+	// L_00 = 2 * z - z1 / ( x0 * x0 )
+	double check = 2. * w - z1 / (x0 * x0);
 	std::cout << check << std::endl;
 	std::cout << *(sparseHessian->hessValues + hessValuesIdx) << std::endl;
 	ok &= NearEqual(*(sparseHessian->hessValues + hessValuesIdx++), check, 1e-10, 1e-10); 
-
 	ok &= NearEqual(*(sparseHessian->hessValues + hessValuesIdx++), 0., 1e-10, 1e-10);
 	if(ok == false) std::cout << "FAILED TWO" << std::endl;
 	ok &= NearEqual(*(sparseHessian->hessValues + hessValuesIdx++), 0., 1e-10, 1e-10);
@@ -436,9 +445,13 @@ Please visit http://www.coin-or.org/CppAD/ for information on other licenses.
 	if(ok == false) std::cout << "FAILED FOUR" << std::endl;
 	ok &= NearEqual(*(sparseHessian->hessValues + hessValuesIdx++), 0., 1e-10, 1e-10);
 	if(ok == false) std::cout << "FAILED FIVE" << std::endl;
-	// L_22 = - y1 / (x2 * x2)
-	check = - y1 / (x2 * x2);
+	// L_22 = - z1 / (x2 * x2)
+	check = - z1 / (x2 * x2);
 	ok &= NearEqual(*(sparseHessian->hessValues + hessValuesIdx++), check, 1e-10, 1e-1);
 	if(ok == false) std::cout << "FAILED SIX" << std::endl;
 	return ok;
 }//CheckHessianUpper
+				//if( (m_mapExpressionTreesMod.find( index[ j]) != m_mapExpressionTreesMod.end() ) &&
+				//	( (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).find( i) != (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).end()) ){
+					// variable i is appears in the expression tree for row index[ j]
+					// add the coefficient corresponding to variable i in row index[ j] to the expression tree	
