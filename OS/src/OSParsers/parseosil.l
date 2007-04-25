@@ -25,7 +25,6 @@
 #include "OSInstance.h"
 #include <math.h>
 #include "OSConfig.h"
-#define PARSERDEBUG
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", yytext);
 #else     

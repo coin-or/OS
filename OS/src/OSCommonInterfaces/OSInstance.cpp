@@ -1845,7 +1845,7 @@ bool OSInstance::getSparseJacobianFromColumnMajor( ){
 					expTree->m_treeRoot = nlNodePlus ;
 					expTree->mapVarIdx = m_mapExpressionTreesMod[ index[ j]]->mapVarIdx;
 					m_mapExpressionTreesMod[ index[ j] ]  = expTree;	
-					std::cout << m_mapExpressionTreesMod[ index[ j] ]->m_treeRoot->getNonlinearExpressionInXML() << std::endl;	
+					//std::cout << m_mapExpressionTreesMod[ index[ j] ]->m_treeRoot->getNonlinearExpressionInXML() << std::endl;	
 					//std::cout << m_mapExpressionTrees[ index[ j] ]->m_treeRoot->getNonlinearExpressionInXML() << std::endl;
 				}
 				else{ 
@@ -1978,7 +1978,8 @@ OSExpressionTree* OSInstance::getLagrangianExpTree( ){
 	// get a variable index map for the expression tree
 	m_LagrangianExpTree->getVariableIndiciesMap();
 	// print out the XML for this puppy
-	std::cout << m_LagrangianExpTree->m_treeRoot->getNonlinearExpressionInXML() << std::endl;
+	//std::cout << "Here comes the Lagrangian Tree" << std::endl;
+	//std::cout << m_LagrangianExpTree->m_treeRoot->getNonlinearExpressionInXML() << std::endl;
 	//
 	m_bLagrangianExpTreeCreated = true;
 	return m_LagrangianExpTree;
@@ -2088,7 +2089,7 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double* 
 		for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
 			m_vX.push_back( x[ posVarIndexMap->first] );
 			// also initialize the m_vIter
-			m_vXITER.push_back(0.0);
+			m_vXITER.push_back(0.0); 
 		}
 		// declare the independent variables and start recording
 		CppAD::Independent( m_vX);
@@ -2097,9 +2098,8 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double* 
 			m_vFG.push_back( (posMapExpTree->second)->m_treeRoot->constructCppADTape(&m_mapAllNonlinearVariablesIndex, &m_vX) );
 		}	
 		//create the function and stop recording
-		F = new CppAD::ADFun<double>();
-		(*F).Dependent( m_vFG);
-
+		F = new CppAD::ADFun<double>(m_vX, m_vFG);
+		//(*F).Dependent( m_vFG);
 		// allocate necessary vector memory
 		//m_vdx.reserve( m_iNumberOfNonlinearVariables );
 		// initialize to zero

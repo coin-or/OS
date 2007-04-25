@@ -203,8 +203,7 @@ bool IpoptSolver::eval_g(Index n, const Number* x, bool new_x, Index m, Number* 
 bool IpoptSolver::eval_jac_g(Index n, const Number* x, bool new_x,
                            Index m, Index nele_jac, Index* iRow, Index *jCol,
                            Number* values){
-  SparseJacobianMatrix *sparseJacobian;
-
+  	SparseJacobianMatrix *sparseJacobian;
 	if (values == NULL) {
 		//cout << "get structure of Jacobian !!!!!!!!!!!!!!!!!!!!!!!!!! "  << endl;
 		// return the values of the jacobian of the constraints
@@ -232,6 +231,7 @@ bool IpoptSolver::eval_jac_g(Index n, const Number* x, bool new_x,
 		}
 	}
 	else {
+		std::cout << "EVALUATING JACOBIAN" << std::endl; 
 		sparseJacobian = osinstance->calculateAllConstraintFunctionGradients((double*)x, false, false);
 		//values = sparseJacobian->values;
 		for(int i = 0; i < nele_jac; i++){
@@ -250,6 +250,7 @@ bool IpoptSolver::eval_h(Index n, const Number* x, bool new_x,
 
 //////
 	SparseHessianMatrix *sparseHessian;
+	
 	int i;
 	if (values == NULL) {
 		// return the structure. This is a symmetric matrix, fill the lower left triangle only.
@@ -264,6 +265,7 @@ bool IpoptSolver::eval_h(Index n, const Number* x, bool new_x,
 		}
 	}
 	else {
+		std::cout << "EVALUATING HESSIAN" << std::endl; 
 		// return the values. This is a symmetric matrix, fill the lower left triangle only
 		double* objMultipliers = new double[1];
 		objMultipliers[0] = obj_factor;

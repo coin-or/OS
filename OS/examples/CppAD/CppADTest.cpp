@@ -42,12 +42,12 @@ $end
 */
 // BEGIN PROGRAM
 
-# include <cstddef>
-# include <cstdlib>
-# include <cctype>
-# include <cassert>
-# include <stack>
-# include <cppad/cppad.hpp>
+#include <cstddef>
+#include <cstdlib>
+#include <cctype>
+#include <cassert>
+#include <stack>
+#include <cppad/cppad.hpp>
 #include<iostream>
 #include<math.h>
 #include "OSInstance.h"
@@ -176,9 +176,9 @@ int  main(){
 		std::vector<double> unit_col_vec( n);
 		std::vector<double> lagMultipliers( m);	
 		std::vector<double> gradVals( m);
-		gradVals[ 0] = w[ 0];
-		gradVals[ 1] = z[ 0];
-		gradVals[ 2] = z[ 1];	
+		lagMultipliers[ 0] = w[ 0];
+		lagMultipliers[ 1] = z[ 0];
+		lagMultipliers[ 2] = z[ 1];	
 		for(idx = 0; idx < n; idx++){
 			unit_col_vec[ idx] = 0;
 		}	
@@ -191,14 +191,13 @@ int  main(){
 			for(k = 0; k < m; k++){
 				std::cout << "variable " << idx << "  row " << k << "  gradient value" << std::endl;
 				std::cout << "gradient value = " << gradVals[ k] << std::endl;	
-				// if variable i is in (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).find( i) put into the gradient vector
+				// if variable i is in (*m_mapExpressionTreesMod[ index[ k]]->mapVarIdx).find( i) put into the gradient vector
 			}
 			// get row i of the Lagrangian function!!!
-			f.Reverse(2, gradVals);
+			f.Reverse(2, lagMultipliers);
 		}
 		// done with CppAD test
 		//
-		return 0;
 		//
 		//
 		// Now start using the nonlinear API
