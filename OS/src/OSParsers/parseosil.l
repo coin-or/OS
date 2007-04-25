@@ -14,9 +14,10 @@
  */
 %{
 
+#include <iostream>
+#include "OSConfig.h"
 #include <string>
 #include <stdio.h> 
-#include <iostream>
 #include <sstream>  
 #include "OSiLParserData.h"
 #include <time.h>
@@ -24,7 +25,7 @@
 #include "parseosil.tab.hpp"
 #include "OSInstance.h"
 #include <math.h>
-#include "OSConfig.h"
+
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", yytext);
 #else     

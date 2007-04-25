@@ -16,15 +16,15 @@
 #ifndef COINSOLVER_H 
 #define COINSOLVER_H
 
-#include "OSConfig.h" 
-#include "DefaultSolver.h"
-#include "OSrLWriter.h"
 #include <CoinPackedMatrix.hpp>
 #include <OsiSolverInterface.hpp>
 #include <OsiClpSolverInterface.hpp> 
 #include <OsiCbcSolverInterface.hpp> 
-#include "ErrorClass.h"
 
+#include "OSConfig.h" 
+#include "DefaultSolver.h"
+#include "OSrLWriter.h"
+#include "ErrorClass.h"
 
 #ifdef COIN_HAS_CPX
 #include <OsiCpxSolverInterface.hpp>

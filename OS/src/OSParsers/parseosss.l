@@ -15,12 +15,14 @@
 
 %{
 
+
+#include "OSConfig.h"
+#include <iostream>
 #include <stdio.h> 
 #include "ErrorClass.h"
-#include <iostream>
 #include <sstream>   
 #include "osOptionsStruc.h" 
-#include "OSConfig.h"
+
 
 using std::cout;
 using std::endl;

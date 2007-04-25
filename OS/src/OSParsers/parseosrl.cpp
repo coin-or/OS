@@ -1111,13 +1111,13 @@ static yyconst flex_int32_t yy_rule_can_match_eol[82] =
  */
 #line 16 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosrl.l"
 
+#include <iostream>
+#include "OSConfig.h"
 #include <stdio.h>
 #include <string.h>
-#include <iostream>
 #include <sstream>  
 #include "ErrorClass.h"
 #include "OSrLParserData.h"
-#include "OSConfig.h"
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", yytext);
 #else     

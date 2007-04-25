@@ -475,9 +475,9 @@ static yyconst flex_int32_t yy_rule_can_match_eol[4] =
  */
 #line 16 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN/OS/src/OSParsers/parseosol.l"
 
-#include <stdio.h> 
-#include "OSConfig.h"
 #include <iostream>
+#include "OSConfig.h"
+#include <stdio.h> 
 
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", osoltext);

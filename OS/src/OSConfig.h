@@ -77,6 +77,12 @@
 /* Define to 1 if the Vol package is used */
 #define COIN_HAS_VOL 1
 
+#ifdef WIN_
+	#ifndef _SYS_UNISTD_H
+	#define _SYS_UNISTD_H
+	#endif
+#endif
+
 
 #endif /* HAVE_CONFIG_H */
 #endif /*__HAVE_COINUTILS_CONFIG_H__*/

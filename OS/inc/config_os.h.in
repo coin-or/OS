@@ -104,6 +104,3 @@
 
 /* use if OS is Windows */
 #undef WIN_
-
-/* use if OS is Windows */
-#undef _SYS_UNISTD_H

@@ -14,9 +14,9 @@
  */
 %{
 
-#include <stdio.h> 
-#include "OSConfig.h"
 #include <iostream>
+#include "OSConfig.h"
+#include <stdio.h> 
 
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", osoltext);

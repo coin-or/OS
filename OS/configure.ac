@@ -39,17 +39,14 @@ AC_CANONICAL_BUILD
 
   case $build in
      *-mingw*)
-         AC_DEFINE([WIN_],[1],[use if OS is Windows])
-         AC_DEFINE([_SYS_UNISTD_H],[1],[use if OS is Windows])
+         AC_DEFINE([WIN_],[1],[use if OS is Windows])      
          win_sock=yes;; 
       *-cygwin*)
          AC_DEFINE([WIN_],[1],[use if OS is Windows])
          AC_DEFINE([NOMINMAX],[1],[use if OS is Cygwin])
-         AC_DEFINE([_SYS_UNISTD_H],[1],[use if OS is Windows])
          win_sock=yes;; 
        *-win*)
          AC_DEFINE([WIN_],[1],[use if OS is Windows])
-         AC_DEFINE([_SYS_UNISTD_H],[1],[use if OS is Windows])
          win_sock=yes;; 
     *-linux-*)
 		 ;;
