@@ -13,8 +13,8 @@
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */ 
-#include "WSUtil.h"
 #include "OSConfig.h"
+#include "WSUtil.h"
 #ifdef WIN_
 //#define NOMINMAX
 #include <winsock.h>
