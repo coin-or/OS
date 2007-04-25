@@ -16,8 +16,9 @@
 %{
 
 
-#include "OSConfig.h"
 #include <iostream>
+#include "OSConfig.h"
+
 #include <stdio.h> 
 #include "ErrorClass.h"
 #include <sstream>   
