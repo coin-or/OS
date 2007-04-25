@@ -75,6 +75,9 @@
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
 
+/* use if OS is Cygwin */
+#undef NOMINMAX
+
 /* Name of package */
 #undef PACKAGE
 
@@ -102,5 +105,5 @@
 /* use if OS is Windows */
 #undef WIN_
 
-/* use if OS is Cygwin */
-#undef _WINSOCK_H
+/* use if OS is Windows */
+#undef _SYS_UNISTD_H
