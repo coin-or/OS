@@ -141,7 +141,7 @@ int  main(){
 			std::cout << dfunVals[ kjl] << std::endl;
 		}
 		//
-		osinstance->getLagrangianHessianSparsityPattern( );
+		//osinstance->getLagrangianHessianSparsityPattern( );
 		osinstance->calculateLagrangianHessian( x, z, w, false, false);
 		//
 		//

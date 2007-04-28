@@ -566,7 +566,7 @@ private:
 	int m_iNumberOfNonlinearVariables ;
 	
 	
-	CppAD::ADFun<double> *F;
+
 
 	
 	CppAD::vector< AD<double> >m_vL;
@@ -586,14 +586,7 @@ private:
 	 */
 	CppAD::vector< AD<double> > m_vFG;	
 	
-	//std::vector<double> m_vdx;	
-	//std::vector<double> m_vw;
-	//std::vector<double> m_vdw;	
 	
-	/**
-	 *  m_vH is an std::vector used to store the Hessian matrix of the Lagrangian function.
-	 */
-	std::vector<double> m_vH ;		
 	
 	/**
 	 * m_bDuplicateExpressionTreeMap is true if m_mapExpressionTrees was duplicated. 

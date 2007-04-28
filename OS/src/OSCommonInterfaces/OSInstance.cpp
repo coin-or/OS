@@ -2068,13 +2068,17 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double* 
 	double* objMultipliers, bool allFunctionsEvaluated, bool LagrangianHessianEvaluated){
 	if( LagrangianHessianEvaluated == true) return m_LagrangianSparseHessian;
 	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
+	if( m_bLagrangianSparseHessianCreated == false)	getLagrangianHessianSparsityPattern();
 	// initialize everything
 	int i, j;
 	std::map<int, int>::iterator posVarIndexMap;
 	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
+	// vdX -- vector of primal variables
 	std::vector<double> vdX( m_iNumberOfNonlinearVariables);	
-	std::vector<double> m_vw( m_mapExpressionTreesMod.size());
-	std::vector<double> m_vdw( 2*m_iNumberOfNonlinearVariables);
+	// vdLamda -- vector of Lagrange multiplies
+	std::vector<double> vdLambda( m_mapExpressionTreesMod.size());
+	// vdw is the first and second derivative vector
+	std::vector<double> vdw( 2*m_iNumberOfNonlinearVariables);
 	if(m_bCppADFunIsCreated == false) {
 		createCppADFun( x);
 	}
@@ -2083,15 +2087,16 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double* 
 	for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
 			vdX[ i++] = x[ posVarIndexMap->first] ;
 	}
+	//Kipp -- come back and put check in see if m_iHighestTaylorCoeffOrder >= 0
 	this->forwardAD(0, vdX);	
 	//  get the Lagrange multipliers
 	i = 0;
 	for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){	
 		if( posMapExpTree->first >= 0){
-			m_vw[i++] = conMultipliers[ posMapExpTree->first];
+			vdLambda[i++] = conMultipliers[ posMapExpTree->first];
 		}
 		else{
-			m_vw[ i++] =  objMultipliers[ abs(posMapExpTree->first) - 1] ;
+			vdLambda[ i++] =  objMultipliers[ abs(posMapExpTree->first) - 1] ;
 		}
 	}
 	int hessValuesIdx = 0;
@@ -2103,9 +2108,9 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double* 
 	for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
 		vdX[i] = 1.;                
 		this->forwardAD(1, vdX);     
-		m_vdw = reverseAD(2, m_vw);   // derivtative of partial
+		vdw = this->reverseAD(2, vdLambda);   // derivtative of partial
 		for(j = i; j < m_iNumberOfNonlinearVariables; j++){
-			m_LagrangianSparseHessian->hessValues[ hessValuesIdx++] =  m_vdw[  j*2 + 1];
+			m_LagrangianSparseHessian->hessValues[ hessValuesIdx++] =  vdw[  j*2 + 1];
 		}
 		vdX[i] = 0.;
 	}
