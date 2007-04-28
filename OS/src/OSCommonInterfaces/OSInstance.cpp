@@ -1633,6 +1633,25 @@ double OSInstance::calculateFunctionValue(int idx, double *x, bool functionEvalu
 		if( m_bSparseJacobianCalculated == false) getJacobianSparsityPattern();
 		
 		//
+		//
+		// test code	
+		getLagrangianHessianSparsityPattern();
+		std::vector<double> vdFunVals( m_mapExpressionTreesMod.size());
+		std::vector<double> vdX( m_iNumberOfNonlinearVariables);
+		if( m_iNumberOfNonlinearVariables > 0){
+	        if( m_bCppADFunIsCreated == false)  createCppADFun( x);
+			std::map<int, int>::iterator posVarIndexMap;
+			std::map<int, OSExpressionTree*>::iterator posMapExpTree;
+			// get the current iterate data
+			i = 0;
+			for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
+				vdX[ i++] = x[ posVarIndexMap->first] ;
+			}		
+			vdFunVals = forwardAD(0, vdX);
+		}
+		//
+		// end test code
+		//
 		if(idx >= 0){ // we have a constraint
 			// make sure the index idx is valid
 			if( getConstraintNumber() <= idx  ) throw 
@@ -1640,7 +1659,8 @@ double OSInstance::calculateFunctionValue(int idx, double *x, bool functionEvalu
 			if( functionEvaluated == true) return *(m_mdConstraintFunctionValues + idx);
 			// get the nonlinear part
 			if( m_mapExpressionTreesMod.find( idx) != m_mapExpressionTreesMod.end() ){
-				dvalue = m_mapExpressionTreesMod[ idx]->calculateFunction( x,  functionEvaluated);
+				//dvalue = m_mapExpressionTreesMod[ idx]->calculateFunction( x,  functionEvaluated);
+				dvalue = vdFunVals[ idx + 1];
 			}
 			// now the linear part
 			// be careful, loop over only the constant terms in sparseJacMatrix
@@ -2087,7 +2107,7 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double* 
 	for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
 			vdX[ i++] = x[ posVarIndexMap->first] ;
 	}
-	//Kipp -- come back and put check in see if m_iHighestTaylorCoeffOrder >= 0
+	//Kipp -- come back and put check in see if m_iHighestTaylorCoeffOrder >= 0, if so, don't execute
 	this->forwardAD(0, vdX);	
 	//  get the Lagrange multipliers
 	i = 0;
@@ -2300,8 +2320,8 @@ bool OSInstance::createCppADFun(double *x){
 	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
 	// get the number of primal variables in the expression tree
 	// the number of lagrangian variables is equal to m_mapExpressionTreesMod.size()s
-	if( m_bAllNonlinearVariablesIndex == false) getAllNonlinearVariablesIndexMap( );
 	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
+	if( m_bAllNonlinearVariablesIndex == false) getAllNonlinearVariablesIndexMap( );
 	std::map<int, int>::iterator posVarIndexMap;
 	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
 	CppAD::vector< AD<double> > vadX;

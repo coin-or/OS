@@ -143,6 +143,7 @@ int  main(){
 		//
 		//osinstance->getLagrangianHessianSparsityPattern( );
 		osinstance->calculateLagrangianHessian( x, z, w, false, false);
+		return 0;
 		//
 		//
 		// 
