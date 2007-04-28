@@ -567,6 +567,7 @@ private:
 	
 	
 	CppAD::ADFun<double> *F;
+
 	
 	CppAD::vector< AD<double> >m_vL;
 	
@@ -1409,7 +1410,70 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 */	 
 	void duplicateExpressionTreesMap();
 	
+public:
+	/**
+	 * revised AD test code
+	 */
+	 
+	 /**
+	  * F is a CppAD function the range space is the objective +
+	  * constraints functions, x is the domeain space
+	  */
+	CppAD::ADFun<double> *Fad;
 
+	/**
+	 * Create the a CppAD Function object 
+	 * 
+	 * <p>
+	 * 
+	 * @param x is a pointer (double) to the current primal variable values
+	 * the size of x should equal instanceData->variables->numberOfVariables
+	 * @return if successfully created
+	 */	
+	bool createCppADFun(double *x);
+	
+	/**
+	 * Perform an AD forward sweep  
+	 * 
+	 * <p>
+	 * @param p is the highest order Taylor coefficient 
+	 * @param vdX is a vector of doubles of the current primal variable values
+	 * the size of vdX m_iNumberOfNonlinearVariables
+	 * @return a double vector equal to the dimension of the range space
+	 * the result of the forward p sweep 
+	 */
+	std::vector<double> forwardAD(size_t p, std::vector<double> vdX);
+
+	/**
+	 * Perform an AD reverse sweep  
+	 * 
+	 * <p>
+	 * 
+	 * @param p is the order of the sweep
+	 * @param vdlambda is a vector of doubles of the current dual (lagrange) variable values
+	 * the size of lambda should equal number of objective functions plus number of constraints
+	 * @return a double vector equal to the n*p 
+	 */	
+	std::vector<double> reverseAD(size_t p, std::vector<double> vdlambda);
+
+
+	/**
+	 * m_iHighestTaylorCoeffOrder is the order of highest calculated
+	 * Taylor coefficient  
+	 */	 
+	 int m_iHighestTaylorCoeffOrder;
+	 
+	/**
+	 * 
+	 * m_bCppADFunIsCreated is true if we have created the OSInstanc
+	 * CppAD Function
+	 */	  
+	 bool m_bCppADFunIsCreated;
+	 
+	 /**
+	  * end revised AD code
+	  */
+	
 																																																		
 }; //class OSInstance
 

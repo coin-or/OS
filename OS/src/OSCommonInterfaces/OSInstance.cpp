@@ -52,6 +52,8 @@ OSInstance::OSInstance():
 	m_mdConstraintFunctionValues( NULL),
 	m_mdObjectiveFunctionValues( NULL),
 	m_mdObjGradient(NULL),
+	m_iHighestTaylorCoeffOrder(-1),
+	m_bCppADFunIsCreated( false),
 	m_LagrangianExpTree(NULL),
 	m_bLagrangianExpTreeCreated( false),
 	m_LagrangianSparseHessian( NULL),
@@ -2061,6 +2063,7 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( ){
 	return m_LagrangianSparseHessian;
 }//getLagrangianHessianSparsityPattern
 
+
 SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double* conMultipliers, 
 	double* objMultipliers, bool allFunctionsEvaluated, bool LagrangianHessianEvaluated){
 	if( LagrangianHessianEvaluated == true) return m_LagrangianSparseHessian;
@@ -2069,58 +2072,18 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double* 
 	int i, j;
 	std::map<int, int>::iterator posVarIndexMap;
 	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
-	std::vector<double> m_vdx( m_iNumberOfNonlinearVariables);	
+	std::vector<double> vdX( m_iNumberOfNonlinearVariables);	
 	std::vector<double> m_vw( m_mapExpressionTreesMod.size());
-	std::vector<double> m_vdw( 2*m_iNumberOfNonlinearVariables);	
-	if( m_bCppADTapesBuilt == false){
-		// this loop is only done once
-		// if we have not filled in the Sparse Jacobian matrix do so now
-		if( m_bSparseJacobianCalculated == false) getJacobianSparsityPattern();
-		// get an index map of all of the nonlinear variables in the Hessian of the  Lagrangian
-		// this method call will define m_iNumberOfNonlinearVariables
-		if( m_bAllNonlinearVariablesIndex == false) getAllNonlinearVariablesIndexMap( );
-		// fill in the nonzeros in the sparse Hessian
-		if( m_bLagrangianSparseHessianCreated == false)	getLagrangianHessianSparsityPattern();
-		// put in code to call CppAD and get the Hessian
-		// for each row with a nonlinear term, build a CppAD representation of the  Expression tree
-		// get the data
-		// push the primal variables
-		
-		for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
-			m_vX.push_back( x[ posVarIndexMap->first] );
-			// also initialize the m_vIter
-			m_vXITER.push_back(0.0); 
-		}
-		// declare the independent variables and start recording
-		CppAD::Independent( m_vX);
-		// For expression tree, record the operations for CppAD
-		for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){	
-			m_vFG.push_back( (posMapExpTree->second)->m_treeRoot->constructCppADTape(&m_mapAllNonlinearVariablesIndex, &m_vX) );
-		}	
-		//create the function and stop recording
-		F = new CppAD::ADFun<double>(m_vX, m_vFG);
-		//(*F).Dependent( m_vFG);
-		// allocate necessary vector memory
-		//m_vdx.reserve( m_iNumberOfNonlinearVariables );
-		// initialize to zero
-		for(i = 0; i < m_iNumberOfNonlinearVariables; i++) m_vdx[i] = 0.;
-		//m_vw.reserve( m_mapExpressionTreesMod.size() );
-		//m_vdw.reserve( 2*m_iNumberOfNonlinearVariables );	
-		//m_vXITER.reserve( m_iNumberOfNonlinearVariables);
-		m_vH.reserve( m_iNumberOfNonlinearVariables * m_iNumberOfNonlinearVariables );
-		m_bCppADTapesBuilt = true;
+	std::vector<double> m_vdw( 2*m_iNumberOfNonlinearVariables);
+	if(m_bCppADFunIsCreated == false) {
+		createCppADFun( x);
 	}
-	// get the current iterate data
 	i = 0;
-	if(allFunctionsEvaluated == false){
-		//std::cout << "SIZE OF MAP " << m_mapAllNonlinearVariablesIndex.size() <<  std::endl;
-		for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
-			m_vXITER[ i++] = x[ posVarIndexMap->first] ;
-			//m_vXITER.push_back( x[ posVarIndexMap->first]);
-		}
-		(*F).Forward(0, m_vXITER);
-		
+	// get the current iterate data
+	for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
+			vdX[ i++] = x[ posVarIndexMap->first] ;
 	}
+	this->forwardAD(0, vdX);	
 	//  get the Lagrange multipliers
 	i = 0;
 	for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){	
@@ -2131,33 +2094,119 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double* 
 			m_vw[ i++] =  objMultipliers[ abs(posMapExpTree->first) - 1] ;
 		}
 	}
+	int hessValuesIdx = 0;
 	// loop over components of x
+	// initialize to 0
 	for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
-		m_vdx[i] = 1.;                   // m_vdx is i-th elementary vector
-		//std::cout << "do a forward calcuation for variable " << i << std::endl;
-		//std::cout << "size is  " << m_vdx.size() << std::endl;
-		(*F).Forward(1, m_vdx);          // partial w.r.t dx
-		//(*F).Forward(1, dx);          // partial w.r.t dx
-		//std::cout << "do a reverse calculation for variable " << i << std::endl;
-		m_vdw = (*F).Reverse(2, m_vw);   // deritavtive of partial
-		for(j = 0; j < m_iNumberOfNonlinearVariables; j++){
-			m_vH[ i * m_iNumberOfNonlinearVariables + j ] = m_vdw[ j * 2 + 1 ]; // fill in the Hessian
-		}
-		m_vdx[i] = 0.;   // m_vdx is zero vector
+		vdX[ i] = 0;
 	}
-	int hessValuesIdx = 0;	
-	for(i = 0; i <  m_iNumberOfNonlinearVariables; i++){
-		for (j  = i; j <  m_iNumberOfNonlinearVariables; j++ ){
-			//std::cout << "UPPER TRIANGULAR HESSIAN VALUES   " << m_vH[ i*m_iNumberOfNonlinearVariables + j] << std::endl;
-			m_LagrangianSparseHessian->hessValues[ hessValuesIdx++] =  m_vH[ i*m_iNumberOfNonlinearVariables + j];
+	for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
+		vdX[i] = 1.;                
+		this->forwardAD(1, vdX);     
+		m_vdw = reverseAD(2, m_vw);   // derivtative of partial
+		for(j = i; j < m_iNumberOfNonlinearVariables; j++){
+			m_LagrangianSparseHessian->hessValues[ hessValuesIdx++] =  m_vdw[  j*2 + 1];
 		}
-	}	
-	//m_vXITER.clear();
-	//m_vw.clear();
+		vdX[i] = 0.;
+	}
 	return m_LagrangianSparseHessian;
 }//calculateLagrangianHessian
 
-
+//SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double* conMultipliers, 
+//	double* objMultipliers, bool allFunctionsEvaluated, bool LagrangianHessianEvaluated){
+//	if( LagrangianHessianEvaluated == true) return m_LagrangianSparseHessian;
+//	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
+//	// initialize everything
+//	int i, j;
+//	std::map<int, int>::iterator posVarIndexMap;
+//	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
+//	std::vector<double> m_vdx( m_iNumberOfNonlinearVariables);	
+//	std::vector<double> m_vw( m_mapExpressionTreesMod.size());
+//	std::vector<double> m_vdw( 2*m_iNumberOfNonlinearVariables);	
+//	if( m_bCppADTapesBuilt == false){
+//		// this loop is only done once
+//		// if we have not filled in the Sparse Jacobian matrix do so now
+//		if( m_bSparseJacobianCalculated == false) getJacobianSparsityPattern();
+//		// get an index map of all of the nonlinear variables in the Hessian of the  Lagrangian
+//		// this method call will define m_iNumberOfNonlinearVariables
+//		if( m_bAllNonlinearVariablesIndex == false) getAllNonlinearVariablesIndexMap( );
+//		// fill in the nonzeros in the sparse Hessian
+//		if( m_bLagrangianSparseHessianCreated == false)	getLagrangianHessianSparsityPattern();
+//		// put in code to call CppAD and get the Hessian
+//		// for each row with a nonlinear term, build a CppAD representation of the  Expression tree
+//		// get the data
+//		// push the primal variables
+//		
+//		for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
+//			m_vX.push_back( x[ posVarIndexMap->first] );
+//			// also initialize the m_vIter
+//			m_vXITER.push_back(0.0); 
+//		}
+//		// declare the independent variables and start recording
+//		CppAD::Independent( m_vX);
+//		// For expression tree, record the operations for CppAD
+//		for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){	
+//			m_vFG.push_back( (posMapExpTree->second)->m_treeRoot->constructCppADTape(&m_mapAllNonlinearVariablesIndex, &m_vX) );
+//		}	
+//		//create the function and stop recording
+//		F = new CppAD::ADFun<double>(m_vX, m_vFG);
+//		//(*F).Dependent( m_vFG);
+//		// allocate necessary vector memory
+//		//m_vdx.reserve( m_iNumberOfNonlinearVariables );
+//		// initialize to zero
+//		for(i = 0; i < m_iNumberOfNonlinearVariables; i++) m_vdx[i] = 0.;
+//		//m_vw.reserve( m_mapExpressionTreesMod.size() );
+//		//m_vdw.reserve( 2*m_iNumberOfNonlinearVariables );	
+//		//m_vXITER.reserve( m_iNumberOfNonlinearVariables);
+//		m_vH.reserve( m_iNumberOfNonlinearVariables * m_iNumberOfNonlinearVariables );
+//		m_bCppADTapesBuilt = true;
+//	}
+//	// get the current iterate data
+//	i = 0;
+//	if(allFunctionsEvaluated == false){
+//		//std::cout << "SIZE OF MAP " << m_mapAllNonlinearVariablesIndex.size() <<  std::endl;
+//		for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
+//			m_vXITER[ i++] = x[ posVarIndexMap->first] ;
+//			//m_vXITER.push_back( x[ posVarIndexMap->first]);
+//		}
+//		(*F).Forward(0, m_vXITER);
+//		
+//	}
+//	//  get the Lagrange multipliers
+//	i = 0;
+//	for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){	
+//		if( posMapExpTree->first >= 0){
+//			m_vw[i++] = conMultipliers[ posMapExpTree->first];
+//		}
+//		else{
+//			m_vw[ i++] =  objMultipliers[ abs(posMapExpTree->first) - 1] ;
+//		}
+//	}
+//	// loop over components of x
+//	for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
+//		m_vdx[i] = 1.;                   // m_vdx is i-th elementary vector
+//		//std::cout << "do a forward calcuation for variable " << i << std::endl;
+//		//std::cout << "size is  " << m_vdx.size() << std::endl;
+//		(*F).Forward(1, m_vdx);          // partial w.r.t dx
+//		//(*F).Forward(1, dx);          // partial w.r.t dx
+//		//std::cout << "do a reverse calculation for variable " << i << std::endl;
+//		m_vdw = (*F).Reverse(2, m_vw);   // deritavtive of partial
+//		for(j = 0; j < m_iNumberOfNonlinearVariables; j++){
+//			m_vH[ i * m_iNumberOfNonlinearVariables + j ] = m_vdw[ j * 2 + 1 ]; // fill in the Hessian
+//		}
+//		m_vdx[i] = 0.;   // m_vdx is zero vector
+//	}
+//	int hessValuesIdx = 0;	
+//	for(i = 0; i <  m_iNumberOfNonlinearVariables; i++){
+//		for (j  = i; j <  m_iNumberOfNonlinearVariables; j++ ){
+//			std::cout << "UPPER TRIANGULAR HESSIAN VALUES   " << m_vH[ i*m_iNumberOfNonlinearVariables + j] << std::endl;
+//			m_LagrangianSparseHessian->hessValues[ hessValuesIdx++] =  m_vH[ i*m_iNumberOfNonlinearVariables + j];
+//		}
+//	}	
+//	//m_vXITER.clear();
+//	//m_vw.clear();
+//	return m_LagrangianSparseHessian;
+//}//calculateLagrangianHessianOLDWAY
 
 SparseHessianMatrix *OSInstance::calculateLagrangianHessianReTape( double* x, double* conMultipliers, 
 	double* objMultipliers, bool allFunctionsEvaluated, bool LagrangianHessianEvaluated){
@@ -2239,6 +2288,70 @@ void OSInstance::duplicateExpressionTreesMap(){
 }//duplicateExpressionTreesMap
 
 
+	/**
+	 * revised AD test code
+	 */
+bool OSInstance::createCppADFun(double *x){
+	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
+	// get the number of primal variables in the expression tree
+	// the number of lagrangian variables is equal to m_mapExpressionTreesMod.size()s
+	if( m_bAllNonlinearVariablesIndex == false) getAllNonlinearVariablesIndexMap( );
+	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
+	std::map<int, int>::iterator posVarIndexMap;
+	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
+	CppAD::vector< AD<double> > vadX;
+	//first create a map of nonlinear variables	
+	for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
+		vadX.push_back( x[ posVarIndexMap->first] ); 
+	}
+	// declare the independent variables and start recording
+	CppAD::Independent( vadX);
+	// For expression tree, record the operations for CppAD and put into
+	// the range vector m_vFG
+	for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){	
+		m_vFG.push_back( (posMapExpTree->second)->m_treeRoot->constructCppADTape(&m_mapAllNonlinearVariablesIndex, &vadX) );
+		std::cout << "PUSHING BACK NUMBER " << posMapExpTree->first << std::endl;
+	}	
+	//create the function and stop recording
+	Fad = new CppAD::ADFun<double>(vadX, m_vFG);
+	// no forward sweeps done yet
+	m_iHighestTaylorCoeffOrder = -1;
+	m_bCppADFunIsCreated = true;
+	return true;
+}//end createCppADFun
 
+std::vector<double> OSInstance::forwardAD(size_t p, std::vector<double> vdX){
+	try{
+		if(p > (m_iHighestTaylorCoeffOrder + 1) ) throw 
+			ErrorClass( "trying to calculate a p order forward when p-1 Taylor coefficient not available");
+		// adjust the order of the Taylor coefficient
+		m_iHighestTaylorCoeffOrder = p;	
+		//for(int i  = 0; i < vdX.size(); i++){
+			//std::cout << "ForwardAD Primal Variables " << i   << " " << vdX[ i] << std::endl;
+		//}
+		return (*Fad).Forward(p, vdX);
+	}
+	catch(const ErrorClass& eclass){
+		throw ErrorClass( eclass.errormsg);
+	}  
+}//end forwardAD
+
+
+std::vector<double> OSInstance::reverseAD(size_t p, std::vector<double> vdlambda){
+	try{
+		if(p != (m_iHighestTaylorCoeffOrder + 1) ) throw 
+			ErrorClass( "trying to calculate a p order reverse when p-1 Taylor coefficient not available");
+		//for(int i  = 0; i < vdlambda.size(); i++){
+		//	std::cout << "ReverseAD Multiplier " << i   << " " << vdlambda[ i] << std::endl;
+		//}
+		return (*Fad).Reverse(p, vdlambda);
+	}
+	catch(const ErrorClass& eclass){
+		throw ErrorClass( eclass.errormsg);
+	}  
+}//end forwardAD
+/**
+ * end revised AD test code
+ */
 
 

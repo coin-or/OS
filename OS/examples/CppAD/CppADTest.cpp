@@ -12,35 +12,6 @@
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
- 
- /* --------------------------------------------------------------------------
-CppAD: C++ Algorithmic Differentiation: Copyright (C) 2003-06 Bradley M. Bell
-
-CppAD is distributed under multiple licenses. This distribution is under
-the terms of the 
-                    Common Public License Version 1.0.
-
-A copy of this license is included in the COPYING file of this distribution.
-Please visit http://www.coin-or.org/CppAD/ for information on other licenses.
--------------------------------------------------------------------------- */
-/*
-$begin StackMachine.cpp$$
-$spell
-$$
-
-$section Example Differentiating a Stack Machine Interpreter$$
-
-$index interpreter, example$$
-$index example, interpreter$$
-$index test, interpreter$$
-
-$code
-$verbatim%Example/StackMachine.cpp%0%// BEGIN PROGRAM%// END PROGRAM%1%$$
-$$
-
-$end
-*/
-// BEGIN PROGRAM
 
 #include <cstddef>
 #include <cstdlib>
@@ -48,8 +19,8 @@ $end
 #include <cassert>
 #include <stack>
 #include <cppad/cppad.hpp>
-#include<iostream>
-#include<math.h>
+#include <iostream>
+#include <math.h>
 #include "OSInstance.h"
 #include "OSiLWriter.h"
 #include "OSParameters.h"
@@ -100,7 +71,7 @@ int  main(){
 	/*
 	min x0^2 + 9*x1   -- w[0]
 	s.t. 
-	33 + 105 + 1.37*x1 + 2*x2 <= 10  -- y[0]
+	33 - 105 + 1.37*x1 + 2*x2 <= 10  -- y[0]
 	ln(x0*x2) >= 10  -- y[1]
 	Note: in the first constraint 33 is a constant term and 105 
 	is part of the nl node
@@ -113,6 +84,10 @@ int  main(){
 	OSInstance *osinstance = NULL;
 	// create reader, pare the OSiL,  and generate the OSInstance object
 	try{
+		// domain space vector
+		size_t n  = 3; // three variables
+		// range space vector
+		size_t m = 3; // Lagrangian has an objective and two constraints
 		osilreader = new OSiLReader();
 		osinstance = osilreader->readOSiL( &osil);
 		// here the values of the primal and Lagrange multipliers that we use
@@ -126,23 +101,66 @@ int  main(){
 		z[ 1] = 1;  // Lagrange multiplier on constraint 1
 		w[ 0] = 1;  // Lagrange multiplier on the objective function
 		std::vector<double> funVals(3);
+		std::vector<double> dfunVals(6);
 		double *conVals = NULL;
 		conVals = new double[ 2];
 		double *objVals = NULL;
 		objVals = new double[ 1];
 		SparseJacobianMatrix *sparseJac;
+		std::vector<double> xx(3);
+		//
+		//
+		//testing 
+		xx[0] = 1;
+		xx[1] = 5;
+		xx[2] = 5;
+		std::cout << "CALL CppADFun" << std::endl;
+		osinstance->createCppADFun( x);
+		std::cout << "DONE CALL CppADFun" << std::endl;
+		std::cout << "CALL forward" << std::endl;
+		funVals = osinstance->forwardAD(0, xx);
+		std::cout << "Done CALL CppADFun" << std::endl;
+		for(int kjl = 0; kjl < 3; kjl++){
+			std::cout << "forward 0 " << funVals[ kjl] << std::endl;
+		}
+		xx[0] = 1;
+		xx[1] = 0; 
+		xx[2] = 0;
+		std::cout << "NOW THE GRADIENT"  << std::endl;
+		funVals = osinstance->forwardAD(1, xx);
+		for(int kjl = 0; kjl < 3; kjl++){
+			std::cout << "forward 0 " << funVals[ kjl] << std::endl;
+		}
+		
+		std::vector<double> lambda(3);
+		lambda[0] = 1;
+		lambda[1]= 2;
+		lambda[2] = 1;
+		dfunVals = osinstance->reverseAD(2, lambda);
+		for(int kjl = 0; kjl < 6; kjl++){
+			std::cout << dfunVals[ kjl] << std::endl;
+		}
+		//
+		osinstance->getLagrangianHessianSparsityPattern( );
+		osinstance->calculateLagrangianHessian( x, z, w, false, false);
+		//
+		//
+		// 
+		x[0] = 1;
+		x[1] = 5;
+		x[2] = 5;
 		//
 		//
 		// first we show how to do this with CppAD
 		// then we do this with OS routines -- right now the OS routines
 		// do a lot of extra work
-		//
-		// domain space vector
-		size_t n  = 3; // three variables
-		// range space vector
-		size_t m = 3; // Lagrangian has an objective and two constraints
+
 		CppADvector< AD<double> > X(n);
 		CppADvector< AD<double> > Y(m);
+				//
+		X[1] = 5;
+		X[2] = 5;
+		X[0] = 0;
 		// declare independent variables and start tape recording
 		std::cout << "Start Taping" << std::endl;
 		CppAD::Independent( X);
@@ -154,14 +172,17 @@ int  main(){
 		CppAD::ADFun<double> f(X, Y); 
 		std::cout << "Stop Taping" << std::endl;
 		// get function values
-		std::vector<double> xx;
+		xx.clear();
 		xx.push_back( x[0]);
 		xx.push_back( x[1]);
 		xx.push_back( x[2]);
 		funVals = f.Forward(0, xx);
 		conVals[ 0] = funVals[ 1];
+		std::cout << "conVals[ 0] = " << conVals[ 0] << std::endl;
 		conVals[ 1] = funVals[ 2];
+		std::cout << "conVals[ 1] = " << conVals[ 1] << std::endl;
 		objVals[ 0] = funVals[ 0];
+		std::cout << "objVals[ 0] = " << objVals[ 0] << std::endl;
 		ok = CheckFunctionValues( conVals, *objVals, x[ 0], x[1], x[2], z[0], z[1], w[0] );
 		if( ok == 0){
 			std::cout << "FAILED CHECKING FUNCTION VALUES TEST" << std::endl;
@@ -273,7 +294,7 @@ int  main(){
 		else{
 			std::cout << "PASSED THE GRADIENT TEST" << std::endl;
 		}
-		return 0;
+		//return 0;
 		// done with gradient checks, now check on the Hessian
 		//
 		SparseHessianMatrix *sparseHessian;
