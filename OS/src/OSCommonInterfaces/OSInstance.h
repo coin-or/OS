@@ -1419,11 +1419,11 @@ public:
 	 * 
 	 * <p>
 	 * 
-	 * @param x is a pointer (double) to the current primal variable values
+	 * @param vdX is a vector of doubles holding the current primal variable values
 	 * the size of x should equal instanceData->variables->numberOfVariables
 	 * @return if successfully created
 	 */	
-	bool createCppADFun(double *x);
+	bool createCppADFun(std::vector<double> vdX );
 	
 	/**
 	 * Perform an AD forward sweep  
@@ -1467,7 +1467,19 @@ public:
 	  * end revised AD code
 	  */
 	
-																																																		
+	/**
+	 * Get the information for each iteration. Get the functions values, Jacobian
+	 * and Hessian of the Lagrangian   
+	 * 
+	 * <p>
+	 * 
+	 * @param vdX is a vector of primal values for the current iteration
+	 * @param vdLambda is a vector of doubles of the current dual (lagrange) variable values
+	 * the size of Lambda should equal number of objective functions plus number of constraints
+	 * if vdLambda.size() = 0 we do not calculate the Hessian of the Lagrangian
+	 * @return true if successful 
+	 */		 
+	bool getIterateResults(std::vector<double> vdX, std::vector<double> vdLambda);																																																		
 }; //class OSInstance
 
 #endif

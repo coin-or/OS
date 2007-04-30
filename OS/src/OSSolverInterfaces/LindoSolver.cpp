@@ -663,6 +663,7 @@ bool LindoSolver::processQuadraticTerms(){
 
 
 bool LindoSolver::processNonlinearExpressions(){
+	osinstance->addQTermsToExressionTree();
 	cout <<  "PROCESS NONLINEAR TERMS" << endl;
 	cout << "The number of objectives with nonlinear terms is:  " << osinstance->getNumberOfNonlinearObjectives() << endl;
 	cout << "The number of constraints with nonlinear terms is:  " << osinstance->getNumberOfNonlinearConstraints() << endl << endl << endl;

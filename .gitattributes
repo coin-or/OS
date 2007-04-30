@@ -26,6 +26,7 @@ OS/data/ampl.xml -text
 OS/data/avion2.mod -text
 OS/data/avion2.osil -text
 OS/data/blockqp1.osil -text
+OS/data/callBackTest.osil -text
 OS/data/configure.ac -text
 OS/data/demo.osol -text
 OS/data/demo.ospl -text

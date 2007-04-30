@@ -115,7 +115,7 @@ int  main(){
 		xx[1] = 5;
 		xx[2] = 5;
 		std::cout << "CALL CppADFun" << std::endl;
-		osinstance->createCppADFun( x);
+		osinstance->createCppADFun( xx);
 		std::cout << "DONE CALL CppADFun" << std::endl;
 		std::cout << "CALL forward" << std::endl;
 		funVals = osinstance->forwardAD(0, xx);
@@ -142,14 +142,17 @@ int  main(){
 		}
 		//
 		//osinstance->getLagrangianHessianSparsityPattern( );
-		osinstance->calculateLagrangianHessian( x, z, w, false, false);
-		return 0;
+		//osinstance->calculateLagrangianHessian( x, z, w, false, false);
+		xx[0] = 1;
+		xx[1] = 5;
+		xx[2] = 5;
+		//osinstance->getIterateResults(xx, lambda);
+		//for(int kjl = 0; kjl < k; kjl++){
+		//	std::cout << "forward 0 " << funVals[ kjl] << std::endl;
+		//}
+		//return 0;
 		//
-		//
-		// 
-		x[0] = 1;
-		x[1] = 5;
-		x[2] = 5;
+
 		//
 		//
 		// first we show how to do this with CppAD
