@@ -645,6 +645,34 @@ private:
 	 * terms (gradient does not change) for the Jacobian matrix in sparse form (row major).  
      */    
  	int *m_miJacNumConTerms;
+ 	
+ 	//
+ 	//
+ 	/**
+	 * m_viJacVarIndex holds an integer vector of variable indicies for the Jacobian matrix in sparse form.  
+     */    
+ 	std::vector<int> m_viJacVarIndex;	
+ 	
+  	/**
+	 * m_viJacConIndex holds an integer vector of constraint indicies for the Jacobian matrix in sparse form.  
+     */    
+ 	std::vector<int> m_viJacConIndex;	
+ 	
+   	/**
+	 * m_vdJacValIndex holds a double vector of Jacobian matrix values in sparse form.  
+     */    
+ 	std::vector<double> m_vdJacValIndex;
+ 	
+    /**
+	 * The first m_iJacNumConTerms terms in the Jacobian vectors are constant and do not
+	 * change at each iteration.  
+     */    
+ 	int  m_iJacNumConTerms;
+ 	
+ 	
+ 	//
+ 	//
+ 	//
  
   	/**
 	 * m_sparseJacMatrix is the Jacobian matrix stored in sparse matrix format
@@ -1485,7 +1513,13 @@ public:
 	 * if vdLambda.size() = 0 we do not calculate the Hessian of the Lagrangian
 	 * @return true if successful 
 	 */		 
-	bool getIterateResults(std::vector<double> vdX, std::vector<double> vdLambda);																																																		
+	bool getIterateResults(std::vector<double> vdX, std::vector<double> vdLambda);	
+	
+	/**
+	 * 
+	 * @return true if successful in generating the Jacobian of the constraints.
+	 */
+	bool getSparseJacobian();																																																	
 }; //class OSInstance
 
 #endif

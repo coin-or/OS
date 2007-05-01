@@ -32,7 +32,7 @@ using std::cout;
 using std::endl;
 using std::ostringstream;
 
-#define DEBUG
+//#define DEBUG
 #ifndef __LINDOI_H__
 #define __LINDOI_H__
 
@@ -153,11 +153,6 @@ void LindoSolver::solve()  {
 		if( !generateLindoModel()) throw ErrorClass("failed generating Lindo model");
 		std::cout << "Finish generateLindoModel()  !!!!!!!!!" << std::endl;
 		if(m_iNumberNewSlacks > 0 && !addSlackVars()) throw ErrorClass("failed adding slack variables");
-		//if(osinstance->getNumberOfQuadraticTerms() > 0 && !processQuadraticTerms()) throw ErrorClass("failed adding quadratic terms");
-		//if( osinstance->getNumberOfNonlinearExpressions() <= 0 && osinstance->getNumberOfQuadraticTerms() > 0){  
-		//	osinstance->addQTermsToExressionTree();
-		//	if( processNonlinearExpressions() != true) throw ErrorClass("failed adding nonlinear terms");
-		//}
 		if( (osinstance->getNumberOfNonlinearExpressions() > 0 || osinstance->getNumberOfQuadraticTerms() > 0)
 			&& !processNonlinearExpressions()) throw ErrorClass("failed adding nonlinear terms");
 		//dataEchoCheck();

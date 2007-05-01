@@ -91,7 +91,8 @@ OSInstance::OSInstance():
 	m_iNonlinearExpressionNumber( -1),
 	m_bProcessExpressionTrees( false),
 	m_iConstraintNumberNonlinear( 0),
-	m_iObjectiveNumberNonlinear( 0)
+	m_iObjectiveNumberNonlinear( 0),
+	m_iJacNumConTerms( 0)
 {    
 	#ifdef DEBUG
 	cout << "Inside OSInstance Constructor" << endl;
@@ -126,6 +127,9 @@ OSInstance::~OSInstance(){
 	m_mdObjectiveWeights = NULL;
 	delete[] m_mObjectiveCoefficients;
 	m_mObjectiveCoefficients = NULL;
+	m_viJacVarIndex.clear();
+	m_viJacConIndex.clear();
+	m_vdJacValIndex.clear();
 	int i;
 	if(instanceData->objectives->numberOfObjectives > 0 && m_mObjectiveCoefficients != NULL){
 		for(i = 0; i < instanceData->objectives->numberOfObjectives; i++){
@@ -1485,6 +1489,7 @@ bool OSInstance::setQuadraticTermsInNonlinearExpressions(int numQPTerms, int* ro
 }//setQuadraticTermsInNonlinearExpressions
 
 bool OSInstance::initializeNonLinearStructures( ){
+	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
 	if( m_bNonLinearStructuresInitialized == true) return true;
 	if( m_bProcessObjectives == false) processObjectives();
 	if( m_bProcessConstraints == false) processConstraints();
@@ -1495,6 +1500,14 @@ bool OSInstance::initializeNonLinearStructures( ){
 	if( m_bProcessExpressionTrees == false) getAllNonlinearExpressionTrees();
 	// before proceeding get a copy of the map of the Expression Trees
 	if( m_bDuplicateExpressionTreesMap == false) duplicateExpressionTreesMap();
+	// now create all of the variable maps for each expression tree
+	for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){	
+		(posMapExpTree->second)->getVariableIndiciesMap() ;
+	}
+	// add the quadratic terms if necessary
+	if(getNumberOfQuadraticTerms() > 0) addQTermsToExressionTree();
+	// now get the map of all nonlinear variables
+	getAllNonlinearVariablesIndexMap( );
 	getDenseObjectiveCoefficients();
 	addQTermsToExressionTree();
 	m_mdConstraintFunctionValues = new double[ this->instanceData->constraints->numberOfConstraints];
@@ -2320,13 +2333,13 @@ void OSInstance::duplicateExpressionTreesMap(){
 }//duplicateExpressionTreesMap
 
 
-	/**
-	 * revised AD test code
-	 */
+/**
+ * 
+ *revised AD test code
+ */
 bool OSInstance::createCppADFun(std::vector<double> vdX){
 	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
-	if( m_bAllNonlinearVariablesIndex == false) getAllNonlinearVariablesIndexMap( );
-	std::map<int, int>::iterator posVarIndexMap;
+	//if( m_bAllNonlinearVariablesIndex == false) getAllNonlinearVariablesIndexMap( );
 	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
 	int i;
 	size_t n = vdX.size();
@@ -2475,6 +2488,102 @@ bool OSInstance::getIterateResults(std::vector<double> vdX, std::vector<double> 
 		throw ErrorClass( eclass.errormsg);
 	}  
 }//end getIterateResults
+
+bool OSInstance::getSparseJacobian(){
+	/** get the constant terms from the linearConstraintCoefficients
+	 * first we get the variables that appear in linearConstraintCoefficients
+	 * but NOT in the nonlinearExpressions section
+	 */
+	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
+	int i,j;
+	int iNumVariableStarts = getVariableNumber() ;
+	int *start;
+	int *index;
+	double *value;
+	OSnLNodePlus *nlNodePlus;
+	OSnLNodeVariable *nlNodeVariable;
+	OSExpressionTree *expTree = NULL;
+	//
+	if(this->instanceData->linearConstraintCoefficients->numberOfValues > 0){
+		start = this->instanceData->linearConstraintCoefficients->start->el;	
+		// check to see if the linear coefficients are stored by column or by row
+		// if neither, there is an error
+		if( (instanceData->linearConstraintCoefficients->colIdx == NULL) && 
+			(instanceData->linearConstraintCoefficients->rowIdx == NULL) ) return false;
+		if( instanceData->linearConstraintCoefficients->colIdx == NULL ){
+			index = this->instanceData->linearConstraintCoefficients->rowIdx->el;
+		}
+		else{
+			index = this->instanceData->linearConstraintCoefficients->colIdx->el;
+		}
+		value = this->instanceData->linearConstraintCoefficients->value->el;
+		// i is indexing columns (variables) and j is indexing row numbers 
+		for (i = 0; i < iNumVariableStarts; i++){	
+			for (j = start[i]; j < start[ i + 1 ]; j++){
+				// index[ j] is a row index, we have just found an occurance of row index[j]
+				// therefore we increase by 1 (or push back) the start of the row indexed by index[j] + 1, 
+				// i.e. the start of the next row
+				// check to see if variable i is linear/constant in the row index[ j] 
+				// if so, increment m_miJacStart[ index[j] + 1]
+				//
+				if( (m_mapExpressionTreesMod.find( index[ j]) != m_mapExpressionTreesMod.end() ) &&
+					( (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).find( i) != (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).end()) ){
+					// variable i is appears in the expression tree for row index[ j] -- do nothing
+				}
+				else{ 
+					m_viJacConIndex.push_back( index[j]);
+					m_viJacVarIndex.push_back( i);
+					m_vdJacValIndex.push_back( value[ j]);
+					m_iJacNumConTerms++;
+				}				
+			}
+		} 
+	}
+	// now go back and get the non-constant gradient terms
+	// execute same logic, except now put the non-constant linear terms into the expression tree
+	if(this->instanceData->linearConstraintCoefficients->numberOfValues > 0){
+		// i is indexing columns (variables) and j is indexing row numbers 
+		for (i = 0; i < iNumVariableStarts; i++){	
+			for (j = start[i]; j < start[ i + 1 ]; j++){
+				// index[ j] is a row index, we have just found an occurance of row index[j]
+				// therefore we increase by 1 (or push back) the start of the row indexed by index[j] + 1, 
+				// i.e. the start of the next row
+				// check to see if variable i is linear/constant in the row index[ j] 
+				// if so, increment m_miJacStart[ index[j] + 1]
+				//
+				if( (m_mapExpressionTreesMod.find( index[ j]) != m_mapExpressionTreesMod.end() ) &&
+					( (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).find( i) != (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).end()) ){
+					// variable i is appears in the expression tree for row index[ j]
+					// add the coefficient corresponding to variable i in row index[ j] to the expression tree	
+					// define a new OSnLVariable and OSnLnodePlus 
+					nlNodeVariable = new OSnLNodeVariable();
+					nlNodeVariable->coef = value[ j];
+					nlNodeVariable->idx = i;
+					nlNodePlus = new OSnLNodePlus();
+					nlNodePlus->m_mChildren[ 0] = m_mapExpressionTreesMod[ index[ j] ]->m_treeRoot;
+					nlNodePlus->m_mChildren[ 1] = nlNodeVariable;
+					expTree = new OSExpressionTree();
+					expTree->m_treeRoot = nlNodePlus ;
+					expTree->mapVarIdx = m_mapExpressionTreesMod[ index[ j]]->mapVarIdx;
+					m_mapExpressionTreesMod[ index[ j] ]  = expTree;	
+					std::cout << m_mapExpressionTreesMod[ index[ j] ]->m_treeRoot->getNonlinearExpressionInXML() << std::endl;
+					m_viJacConIndex.push_back( index[j]);
+					m_viJacVarIndex.push_back( i);
+					m_vdJacValIndex.push_back( value[ j]);	
+				}			
+			}
+		}
+	}
+	#ifdef DEBUG
+	std::cout << "Here are the constant parts of the Jacobian" << std::endl
+	for(i = 0; i < m_iJacNumConTerms; i++){
+		std::cout << "variable index " << i << " = " << m_viJacVarIndex[ i] << std::endl;
+		std::cout << "constraint index " << i << " = " << m_viJacConIndex[ i] << std::endl;
+		std::cout << "Jacobian value " << i << " = " << m_viJacValIndex[ i] << std::endl;
+	}
+	#endif	
+	return true;
+}
 
 /**
  * end revised AD test code

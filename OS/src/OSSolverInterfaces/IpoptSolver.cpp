@@ -60,11 +60,14 @@ bool IpoptSolver::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 	m = osinstance->getConstraintNumber();
 	cout << "number variables  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << n << endl;
 	cout << "number constraints  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << m << endl;
-
+	
+	//osinstance->addQTermsToExressionTree();
+ 	osinstance->initializeNonLinearStructures( );
 	// nonzeros in jacobian
-	if( osinstance->getNumberOfNonlinearExpressions() <= 0 && osinstance->getNumberOfQuadraticTerms() > 0){  
-			osinstance->addQTermsToExressionTree();
-	}
+	//if( osinstance->getNumberOfNonlinearExpressions() <= 0 && osinstance->getNumberOfQuadraticTerms() > 0){  
+	//		osinstance->addQTermsToExressionTree();
+	//}
+	
 	std::cout << "Call sparse jacobian" << std::endl;
 	SparseJacobianMatrix *sparseJacobian = NULL;
 	try{
