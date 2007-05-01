@@ -154,11 +154,12 @@ void LindoSolver::solve()  {
 		std::cout << "Finish generateLindoModel()  !!!!!!!!!" << std::endl;
 		if(m_iNumberNewSlacks > 0 && !addSlackVars()) throw ErrorClass("failed adding slack variables");
 		//if(osinstance->getNumberOfQuadraticTerms() > 0 && !processQuadraticTerms()) throw ErrorClass("failed adding quadratic terms");
-		if( osinstance->getNumberOfNonlinearExpressions() <= 0 && osinstance->getNumberOfQuadraticTerms() > 0){  
-			osinstance->addQTermsToExressionTree();
-			if( processNonlinearExpressions() != true) throw ErrorClass("failed adding nonlinear terms");
-		}
-		if(osinstance->getNumberOfNonlinearExpressions() > 0 && !processNonlinearExpressions()) throw ErrorClass("failed adding nonlinear terms");
+		//if( osinstance->getNumberOfNonlinearExpressions() <= 0 && osinstance->getNumberOfQuadraticTerms() > 0){  
+		//	osinstance->addQTermsToExressionTree();
+		//	if( processNonlinearExpressions() != true) throw ErrorClass("failed adding nonlinear terms");
+		//}
+		if( (osinstance->getNumberOfNonlinearExpressions() > 0 || osinstance->getNumberOfQuadraticTerms() > 0)
+			&& !processNonlinearExpressions()) throw ErrorClass("failed adding nonlinear terms");
 		//dataEchoCheck();
 		if( optimize() != true) throw ErrorClass("problem optimizing model");
 		delete osilreader;
@@ -663,10 +664,12 @@ bool LindoSolver::processQuadraticTerms(){
 
 
 bool LindoSolver::processNonlinearExpressions(){
-	osinstance->addQTermsToExressionTree();
+
 	cout <<  "PROCESS NONLINEAR TERMS" << endl;
+	
 	cout << "The number of objectives with nonlinear terms is:  " << osinstance->getNumberOfNonlinearObjectives() << endl;
 	cout << "The number of constraints with nonlinear terms is:  " << osinstance->getNumberOfNonlinearConstraints() << endl << endl << endl;
+	osinstance->initializeNonLinearStructures( );
 	// first convert OS numbering of operators to Lindo numbering of operators. 
 	// this is done by the method setnlNodeIdxLindo()
 	// execute the Macro that does the conversion between LINDO and OS op codes
@@ -800,7 +803,7 @@ bool LindoSolver::processNonlinearExpressions(){
 		int iCountObjs = 0;
 		int iCountCons = 0;
 		// get all of the expression trees for each constraint and objective
-		allExpTrees = osinstance->getAllNonlinearExpressionTrees();
+		allExpTrees = osinstance->getAllNonlinearExpressionTreesMod();
 		// now use an iterator to loop over all the expression trees
 		for(posTree = allExpTrees.begin(); posTree != allExpTrees.end(); ++posTree){
 			cout << "HERE IS EXPRESSION TREE " << posTree->first << endl;

@@ -996,6 +996,12 @@ public:
 	 */		
 	std::map<int, OSExpressionTree* > getAllNonlinearExpressionTrees();
 	
+	
+	/**
+	 * @return a map: the key is the row index and the value is the corresponding expression tree
+	 */		
+	std::map<int, OSExpressionTree* > getAllNonlinearExpressionTreesMod();
+	
 
 	
 	

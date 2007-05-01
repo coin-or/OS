@@ -1051,6 +1051,10 @@ std::map<int, OSExpressionTree*> OSInstance::getAllNonlinearExpressionTrees(){
 	return m_mapExpressionTrees;
 }// getAllNonlinearExpresssionTrees
 
+std::map<int, OSExpressionTree*> OSInstance::getAllNonlinearExpressionTreesMod(){
+	return m_mapExpressionTreesMod;
+}// getAllNonlinearExpresssionTrees
+
 /*
 std::map<int, std::vector<OSnLNode*> > OSInstance::getAllNonlinearExpressionTreesInPostfix(){
 	std::map<int, int> foundIdx;
@@ -1557,10 +1561,12 @@ bool OSInstance::addQTermsToExressionTree(){
 			nlNodeVariableOne->idx = m_quadraticTerms->varOneIndexes[ i];
 			// see if the variable indexed by nlNodeVariableOne->idx is in the expression tree for row idx
 			// if not, add to mapVarIdx
-			if( (*m_mapExpressionTreesMod[ idx]->mapVarIdx).find( nlNodeVariableOne->idx) == (*m_mapExpressionTreesMod[ idx]->mapVarIdx).end()  ){
+			expTree = m_mapExpressionTreesMod[ idx];
+			if(  expTree->m_bIndexMapGenerated == false) expTree->getVariableIndiciesMap();
+			if( (*expTree->mapVarIdx).find( nlNodeVariableOne->idx) == (*expTree->mapVarIdx).end()  ){
 				// add to map
-				k = (*m_mapExpressionTreesMod[ idx]->mapVarIdx).size();
-				(*m_mapExpressionTreesMod[ idx]->mapVarIdx)[ nlNodeVariableOne->idx] =  k + 1;
+				k = (*expTree->mapVarIdx).size();
+				(*expTree->mapVarIdx)[ nlNodeVariableOne->idx] =  k + 1;
 				std::cout << "ADDED THE FOLLOWING VAIRABLE TO THE MAP" <<  nlNodeVariableOne->idx << std::endl;
 			}
 			nlNodeVariableOne->coef = m_quadraticTerms->coefficients[ i];
@@ -1568,10 +1574,10 @@ bool OSInstance::addQTermsToExressionTree(){
 			nlNodeVariableTwo->idx = m_quadraticTerms->varTwoIndexes[ i];
 			// see if the variable indexed by nlNodeVariableTwo->idx is in the expression tree for row idx
 			// if not, add to mapVarIdx
-			if( (*m_mapExpressionTreesMod[ idx]->mapVarIdx).find( nlNodeVariableTwo->idx) == (*m_mapExpressionTreesMod[ idx]->mapVarIdx).end()  ){
+			if( (*expTree->mapVarIdx).find( nlNodeVariableTwo->idx) == (*expTree->mapVarIdx).end()  ){
 				// add to map
-				k = (*m_mapExpressionTreesMod[ idx]->mapVarIdx).size();
-				(*m_mapExpressionTreesMod[ idx]->mapVarIdx)[ nlNodeVariableTwo->idx] =  k + 1;
+				k = (*expTree->mapVarIdx).size();
+				(*expTree->mapVarIdx)[ nlNodeVariableTwo->idx] =  k + 1;
 				std::cout << "ADDED THE FOLLOWING VAIRABLE TO THE MAP" <<  nlNodeVariableTwo->idx << std::endl;
 			}
 			nlNodeVariableTwo->coef = 1.;
@@ -2300,6 +2306,7 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessianReTape( double* x, do
 
 
 void OSInstance::duplicateExpressionTreesMap(){
+	//std::cout << "I AM IN DUPLICATE EXPRSSION TREES MAP" << std::endl;
 	if(m_bDuplicateExpressionTreesMap == false){ 
 		// first make sure the map was created
 		if( m_bProcessExpressionTrees == false) getAllNonlinearExpressionTrees();
