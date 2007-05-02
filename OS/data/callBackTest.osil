@@ -33,7 +33,7 @@
 		</constraints>
 		<linearConstraintCoefficients numberOfValues=" 11">
 			<start>
-				<el>0</el><el>0</el><el>0</el>
+				<el>0</el><el>1</el><el>1</el>
 				<el>1</el><el>5</el><el>8</el>
 				<el>9</el><el>10</el><el>11</el>
 			</start>

@@ -147,11 +147,7 @@ int  main(){
 		xx[1] = 5;
 		xx[2] = 5;
 		sparseJac = osinstance->getJacobianSparsityPattern();
-		double *lambda = new double[3];
-		lambda[0] = 1;
-		lambda[1]= 2;
-		lambda[2] = 1;
-		osinstance->getIterateResults(x, lambda);
+		osinstance->getIterateResults(x, z, w);
 		for(idx = 0; idx < osinstance->getConstraintNumber(); idx++){
 			for(k = *(sparseJac->starts + idx); k < *(sparseJac->starts + idx + 1); k++){
 				std::cout << "row idx = " << idx <<  "  col idx = "<< *(sparseJac->indexes + k)

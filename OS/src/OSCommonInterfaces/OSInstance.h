@@ -642,7 +642,7 @@ private:
      /**
 	 * m_mdJacValue holds a double array of partial derivatives for the Jacobian matrix in sparse form (row major).  
      */    
- 	double *m_mdJacValue;
+ 	//double *m_mdJacValue;
  	
  	
  	/**
@@ -1485,12 +1485,20 @@ public:
 	 * <p>
 	 * 
 	 * @param x is a pointer of doubles of primal values  for the current iteration
-	 * @param lambda is a pointer of doubles of the current dual (lagrange) variable values
-	 * the size of Lambda should equal number of objective functions plus number of constraints
-	 * if lambda == NULL we do not calculate the Hessian of the Lagrangian
+	 * @param conVals is a pointer of doubles of the current dual (lagrange) multipliers on the constraitns
+	 * @param conVals is a pointer of doubles of the current dual (lagrange) multipliers on the objectives
+	 * if conVals and ojbVals == NULL we do not calculate the Hessian of the Lagrangian
 	 * @return true if successful 
 	 */		 
-	bool getIterateResults(double *x, double *lambda);	
+	bool getIterateResults(double *x, double *conVals, double *objVals);
+	
+	
+	//
+	//
+     /**
+	 * m_mdJacValue holds a double array of partial derivatives for the Jacobian matrix in sparse form (row major).  
+     */    
+ 	double *m_mdJacValue;	
 	
 																																																	
 }; //class OSInstance

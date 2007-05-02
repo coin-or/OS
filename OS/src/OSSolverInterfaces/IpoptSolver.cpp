@@ -238,11 +238,12 @@ bool IpoptSolver::eval_jac_g(Index n, const Number* x, bool new_x,
 		sparseJacobian = osinstance->calculateAllConstraintFunctionGradients((double*)x, false, false);
 		//values = sparseJacobian->values;
 		for(int i = 0; i < nele_jac; i++){
-			values[ i] = sparseJacobian->values[i];
-			cout << "values[i]:!!!!!!!!!!!!  " <<  values[ i] << endl;		
+			//values[ i] = sparseJacobian->values[i];
+			values[ i] = osinstance->m_mdJacValue[ i];
+			//cout << "values[i]:!!!!!!!!!!!!  " <<  values[ i] << endl;
+			//cout << "m_mdJacValue[ i]:!!!!!!!!!!!!  " <<  osinstance->m_mdJacValue[ i] << endl;
 		}
-		double *lambda = NULL;
-		osinstance->getIterateResults( (double*)x, lambda);
+		osinstance->getIterateResults( (double*)x, NULL, NULL);
 	}
   return true;
 }//eval_jac_g

@@ -2401,32 +2401,42 @@ std::vector<double> OSInstance::reverseAD(size_t p, std::vector<double> vdlambda
 	}  
 }//end forwardAD
 
-bool OSInstance::getIterateResults( double *x, double *lambda){
-	/** Assume the function is Fad(vdX, vdY)
-	 */
+bool OSInstance::getIterateResults( double *x, double* conMultipliers, 
+	double* objMultipliers){
+	// Assume the function is Fad(vdX, vdLambda)
 	try{
 		if( m_iNumberOfNonlinearVariables <= 0) return true;
 		if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
 		if( m_bLagrangianSparseHessianCreated == false)  getLagrangianHessianSparsityPattern( );
 		// initialize everything
-		int i, j;
+		bool bCalcHessian = false;
+		int i, j, rowNum, jacIndex;
 		int jstart, jend, idx;
 		std::vector<double> vdX;
-		std::vector<double> vdLambda;
-
+		std::vector<double> vdLambda( m_mapExpressionTreesMod.size());
+		OSExpressionTree *expTree = NULL;
 		std::map<int, OSExpressionTree*>::iterator posMapExpTree;
-		
-		for(i = 0; i < this->instanceData->variables->numberOfVariables; i++){
+		// for sure we must have values for our primal variables	
+		for(i = 0; i < m_iVariableNumber; i++){
 			if( m_mapAllNonlinearVariablesIndex.find( i) != m_mapAllNonlinearVariablesIndex.end()){
 				vdX.push_back( x[ i]);
 			}
 		}
-		size_t m = vdLambda.size();
-		bool bCalcHessian = false;
+		// if the dual varaiables are not null we also calculate Hessian
+		if( (conMultipliers != NULL) && (objMultipliers != NULL)){
+		i = 0;
+		// we have Lagrange multipliers -- calculate the Hessian
+		bCalcHessian = true;
+			for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){	
+				if( posMapExpTree->first >= 0){
+					vdLambda[i++] = conMultipliers[ posMapExpTree->first];
+				}
+				else{
+					vdLambda[ i++] =  objMultipliers[ abs(posMapExpTree->first) - 1] ;
+				}
+			}
+		}
 		//kipp -- put in checks on sizes of things. 
-		// if we have Lagrange multipliers, then calculate Hessian of the Lagrangian
-		if(vdLambda.size() > 0)bCalcHessian = true;
-
 		// vdY -- vector of range space
 		std::vector<double> vdYval( m_mapExpressionTreesMod.size());
 		std::vector<double> vdYjacval( m_mapExpressionTreesMod.size());	
@@ -2436,40 +2446,41 @@ bool OSInstance::getIterateResults( double *x, double *lambda){
 		}
 		// get the current iterate data
 		// first get the function values
-		std::cout << "DOMAIN DIMENSION =  " << vdX.size() << std::endl;
-		vdYval = this->forwardAD(0, vdX);
-		for(i = 0; i < m; i++){
-			std::cout << "vdY[] = " << vdYval[ i] << std::endl;
-		}	
+		vdYval = this->forwardAD(0, vdX);	
 		// now get the Jacobian and Hessian (if vdLambda.size() > 0)
 		int hessValuesIdx = 0;
 		// loop over components of x
 		// initialize to 0
+		// kipp -- make more efficient -- make class variable intiailly zero -- do this in initialize nonlinear -- and then just change one component at a time
 		for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
 			vdX[ i] = 0;
 		}
 		for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
-			vdX[i] = 1.;                
+			vdX[i] = 1.;     
+			rowNum = 0;           
 			vdYjacval = this->forwardAD(1, vdX); 
 			// fill in Jacobian here, we have column i 
-			//start Jacobian calculation
+			// start Jacobian calculation
 			for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
 				idx = posMapExpTree->first;
 				// we are considering only constraints, not objective function
 				if(idx >= 0){
-					//std::cout << "We are working with row  " << idx << std::endl;
+					//std::cout << "We are working with row  " << idx << " and variable "<< m_miNonLinearVarsReverseMap[ i] << std::endl;
 					//std::cout << "m_miJacStart =   " << m_miJacStart[ idx] << std::endl;
 					//std::cout << "We are working with nonlinear variable  " << i << std::endl;
 					//std::cout << "This is the following variable in the orginal variable space  " << m_miNonLinearVarsReverseMap[ i] << std::endl;
-					// figure out original variable this corresponds to
-					// then use (*m_mapExpressionTreesMod[ idx]->mapVarIdx) to figure out which variable it is within row idx
+					//figure out original variable this corresponds to
+					//then use (*m_mapExpressionTreesMod[ idx]->mapVarIdx) to figure out which variable it is within row idx
 					//m_mapAllNonlinearVariablesIndex
-					//std::cout << "This is the following variable in the expression tree  " <<  (*m_mapExpressionTreesMod[ idx]->mapVarIdx)[ m_miNonLinearVarsReverseMap[ i]]<< std::endl; 
-					int jacIndex = (*m_mapExpressionTreesMod[ idx]->mapVarIdx)[ m_miNonLinearVarsReverseMap[ i]];
-					jstart = m_miJacStart[ idx] + m_miJacNumConTerms[ idx];
-					// change 1 to number of objective functions
-					m_mdJacValue[ jstart + jacIndex] = vdYjacval[1 + idx];
-					//std::cout << "GAIL HONDA =  "  << m_mdJacValue[ jstart + jacIndex] << std::endl;
+					//std::cout << "This is the following variable in the expression tree  " <<  (*m_mapExpressionTreesMod[ idx]->mapVarIdx)[ m_miNonLinearVarsReverseMap[ i]]<< std::endl; 			
+					expTree = m_mapExpressionTreesMod[ idx];		
+					if( (*expTree->mapVarIdx).find( m_miNonLinearVarsReverseMap[ i]) != (*expTree->mapVarIdx).end()  ){		
+						jacIndex = (*m_mapExpressionTreesMod[ idx]->mapVarIdx)[ m_miNonLinearVarsReverseMap[ i]];
+						jstart = m_miJacStart[ idx] + m_miJacNumConTerms[ idx];
+						// kipp change 1 to number of objective functions
+						m_mdJacValue[ jstart + jacIndex] = vdYjacval[1 + rowNum];
+					}
+					rowNum++;
 				}
 			}	
 	
@@ -2480,14 +2491,10 @@ bool OSInstance::getIterateResults( double *x, double *lambda){
 				for(j = i; j < m_iNumberOfNonlinearVariables; j++){
 					m_LagrangianSparseHessian->hessValues[ hessValuesIdx++] =  vdw[  j*2 + 1];
 				}
-			}// done with Hessian
+			}//done with Hessian
 			//
 			//
 			vdX[i] = 0.;
-		}
-		std::cout  << "m_iJacValueSize =  " << m_iJacValueSize << std::endl;
-		for(i = 0; i < m_iJacValueSize; i++){
-			std::cout << "GAIL HONDA =  "  << m_mdJacValue[ i] << std::endl;	
 		}
 		if(bCalcHessian == true){
 			std::cout << "HERE IS HESSIAN OF THE LAGRANGIAN" << std::endl;
