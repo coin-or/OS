@@ -661,10 +661,9 @@ bool LindoSolver::processQuadraticTerms(){
 bool LindoSolver::processNonlinearExpressions(){
 
 	cout <<  "PROCESS NONLINEAR TERMS" << endl;
-	
+	osinstance->initializeNonLinearStructures( );
 	cout << "The number of objectives with nonlinear terms is:  " << osinstance->getNumberOfNonlinearObjectives() << endl;
 	cout << "The number of constraints with nonlinear terms is:  " << osinstance->getNumberOfNonlinearConstraints() << endl << endl << endl;
-	osinstance->initializeNonLinearStructures( );
 	// first convert OS numbering of operators to Lindo numbering of operators. 
 	// this is done by the method setnlNodeIdxLindo()
 	// execute the Macro that does the conversion between LINDO and OS op codes

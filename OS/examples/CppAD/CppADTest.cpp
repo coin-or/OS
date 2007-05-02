@@ -132,11 +132,11 @@ int  main(){
 			std::cout << "forward 0 " << funVals[ kjl] << std::endl;
 		}
 		
-		std::vector<double> lambda(3);
-		lambda[0] = 1;
-		lambda[1]= 2;
-		lambda[2] = 1;
-		dfunVals = osinstance->reverseAD(2, lambda);
+		std::vector<double> vlambda(3);
+		vlambda[0] = 1;
+		vlambda[1]= 2;
+		vlambda[2] = 1;
+		dfunVals = osinstance->reverseAD(2, vlambda);
 		for(int kjl = 0; kjl < 6; kjl++){
 			std::cout << dfunVals[ kjl] << std::endl;
 		}
@@ -146,11 +146,22 @@ int  main(){
 		xx[0] = 1;
 		xx[1] = 5;
 		xx[2] = 5;
-		//osinstance->getIterateResults(xx, lambda);
+		sparseJac = osinstance->getJacobianSparsityPattern();
+		double *lambda = new double[3];
+		lambda[0] = 1;
+		lambda[1]= 2;
+		lambda[2] = 1;
+		osinstance->getIterateResults(x, lambda);
+		for(idx = 0; idx < osinstance->getConstraintNumber(); idx++){
+			for(k = *(sparseJac->starts + idx); k < *(sparseJac->starts + idx + 1); k++){
+				std::cout << "row idx = " << idx <<  "  col idx = "<< *(sparseJac->indexes + k)
+				<< " value = " << *(sparseJac->values + k) << std::endl;
+			}
+		}
 		//for(int kjl = 0; kjl < k; kjl++){
 		//	std::cout << "forward 0 " << funVals[ kjl] << std::endl;
 		//}
-		//return 0;
+		return 0;
 		//
 
 		//

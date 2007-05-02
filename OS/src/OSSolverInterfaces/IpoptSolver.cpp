@@ -239,8 +239,10 @@ bool IpoptSolver::eval_jac_g(Index n, const Number* x, bool new_x,
 		//values = sparseJacobian->values;
 		for(int i = 0; i < nele_jac; i++){
 			values[ i] = sparseJacobian->values[i];
-			//cout << "values[i]:!!!!!!!!!!!!  " <<  values[ i] << endl;		
+			cout << "values[i]:!!!!!!!!!!!!  " <<  values[ i] << endl;		
 		}
+		double *lambda = NULL;
+		osinstance->getIterateResults( (double*)x, lambda);
 	}
   return true;
 }//eval_jac_g

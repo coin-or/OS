@@ -23,7 +23,7 @@
 #include<iostream> 
 #include<sstream>
 
-
+#define DEBUG
  
 using namespace std;
 
@@ -47,6 +47,7 @@ OSInstance::OSInstance():
 	m_msObjectiveNames(NULL),
 	m_msMaxOrMins(NULL),
 	m_miNumberOfObjCoef(NULL),
+	m_miNonLinearVarsReverseMap( NULL),
 	m_mdObjectiveConstants(NULL),
 	m_mdObjectiveWeights(NULL),
 	m_mdConstraintFunctionValues( NULL),
@@ -91,8 +92,7 @@ OSInstance::OSInstance():
 	m_iNonlinearExpressionNumber( -1),
 	m_bProcessExpressionTrees( false),
 	m_iConstraintNumberNonlinear( 0),
-	m_iObjectiveNumberNonlinear( 0),
-	m_iJacNumConTerms( 0)
+	m_iObjectiveNumberNonlinear( 0)
 {    
 	#ifdef DEBUG
 	cout << "Inside OSInstance Constructor" << endl;
@@ -127,9 +127,8 @@ OSInstance::~OSInstance(){
 	m_mdObjectiveWeights = NULL;
 	delete[] m_mObjectiveCoefficients;
 	m_mObjectiveCoefficients = NULL;
-	m_viJacVarIndex.clear();
-	m_viJacConIndex.clear();
-	m_vdJacValIndex.clear();
+	delete[] m_miNonLinearVarsReverseMap;
+	m_miNonLinearVarsReverseMap = NULL;
 	int i;
 	if(instanceData->objectives->numberOfObjectives > 0 && m_mObjectiveCoefficients != NULL){
 		for(i = 0; i < instanceData->objectives->numberOfObjectives; i++){
@@ -1948,7 +1947,7 @@ bool OSInstance::getSparseJacobianFromColumnMajor( ){
 			}
 		}
 	}
-	/*
+	#ifdef DEBUG
 	std::cout << "HERE ARE ROW STARTS:" << std::endl;
 	for (i = 0; i < iNumRowStarts; i++ ){
 		std::cout <<  m_miJacStart[ i] << "  ";	
@@ -1970,7 +1969,7 @@ bool OSInstance::getSparseJacobianFromColumnMajor( ){
 		std::cout <<  m_miJacNumConTerms[ i ] << "  ";	
 	}
 	std::cout << std::endl << std::endl;
-	*/
+	#endif
 	return true;
 }//getSparseJacobianFromColumnMajor
 
@@ -2044,13 +2043,18 @@ std::map<int, int> OSInstance::getAllNonlinearVariablesIndexMap( ){
 			}
 		}
 	}
+	m_miNonLinearVarsReverseMap = new int[m_mapAllNonlinearVariablesIndex.size()];
 	// now order appropriately
 	int kount = 0;
 	//std::cout << "HERE IS THE LAGRANGIANN VARIABLE MAPPING" << std::endl;
 	for(posVarIdx = m_mapAllNonlinearVariablesIndex.begin(); posVarIdx !=m_mapAllNonlinearVariablesIndex.end(); ++posVarIdx){
-		posVarIdx->second = kount++;
+		posVarIdx->second = kount;
+		m_miNonLinearVarsReverseMap[ kount] = posVarIdx->first;
+		kount++;
+		#ifdef DEBUG
 		std::cout <<  "POSITION FIRST =  "  << posVarIdx->first ;
-		std::cout <<  "    POSITION SECOND = "  << posVarIdx->second << std::endl;
+		std::cout <<  "   POSITION SECOND = "  << posVarIdx->second << std::endl;
+		#endif
 	}
 	m_iNumberOfNonlinearVariables = kount;
 	//std::cout <<  "NUMBER OF NONLINEAR VARIABLES =  "  << kount ;
@@ -2397,25 +2401,32 @@ std::vector<double> OSInstance::reverseAD(size_t p, std::vector<double> vdlambda
 	}  
 }//end forwardAD
 
-bool OSInstance::getIterateResults(std::vector<double> vdX, std::vector<double> vdLambda){
+bool OSInstance::getIterateResults( double *x, double *lambda){
 	/** Assume the function is Fad(vdX, vdY)
 	 */
 	try{
+		if( m_iNumberOfNonlinearVariables <= 0) return true;
 		if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
-		getLagrangianHessianSparsityPattern( );
+		if( m_bLagrangianSparseHessianCreated == false)  getLagrangianHessianSparsityPattern( );
 		// initialize everything
 		int i, j;
 		int jstart, jend, idx;
-		size_t n = vdX.size();
+		std::vector<double> vdX;
+		std::vector<double> vdLambda;
+
+		std::map<int, OSExpressionTree*>::iterator posMapExpTree;
+		
+		for(i = 0; i < this->instanceData->variables->numberOfVariables; i++){
+			if( m_mapAllNonlinearVariablesIndex.find( i) != m_mapAllNonlinearVariablesIndex.end()){
+				vdX.push_back( x[ i]);
+			}
+		}
 		size_t m = vdLambda.size();
 		bool bCalcHessian = false;
-		//int *iJacPnt ;
-		//iJacPnt = new int[m_mapExpressionTreesMod.size() ];
 		//kipp -- put in checks on sizes of things. 
 		// if we have Lagrange multipliers, then calculate Hessian of the Lagrangian
 		if(vdLambda.size() > 0)bCalcHessian = true;
-		std::map<int, int>::iterator posVarIdx;
-		std::map<int, OSExpressionTree*>::iterator posMapExpTree;
+
 		// vdY -- vector of range space
 		std::vector<double> vdYval( m_mapExpressionTreesMod.size());
 		std::vector<double> vdYjacval( m_mapExpressionTreesMod.size());	
@@ -2425,6 +2436,7 @@ bool OSInstance::getIterateResults(std::vector<double> vdX, std::vector<double> 
 		}
 		// get the current iterate data
 		// first get the function values
+		std::cout << "DOMAIN DIMENSION =  " << vdX.size() << std::endl;
 		vdYval = this->forwardAD(0, vdX);
 		for(i = 0; i < m; i++){
 			std::cout << "vdY[] = " << vdYval[ i] << std::endl;
@@ -2441,30 +2453,26 @@ bool OSInstance::getIterateResults(std::vector<double> vdX, std::vector<double> 
 			vdYjacval = this->forwardAD(1, vdX); 
 			// fill in Jacobian here, we have column i 
 			//start Jacobian calculation
-//			for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
-//				idx = posMapExpTree->first;
-//				// we are considering only constraints, not objective function
-//				if(idx >= 0){
-//					std::cout << "We are working with row  " << idx << std::endl;
-//					std::cout << "m_miJacStart =   " << m_miJacStart[ idx] << std::endl;
-//					//std::cout << "iJacPnt =   " << iJacPnt[ idx] << std::endl;
-//					m_mapExpressionTreesMod[ idx]->getVariableIndiciesMap(); 
-//					//jac = m_mapExpressionTreesMod[ idx]->calculateGradientReTape(x, allFunctionsEvaluated);
-//					//jac = m_mapExpressionTreesMod[ idx]->calculateGradient(x, allFunctionsEvaluated);
-//					// check size
-//					jstart = m_miJacStart[ idx] + m_miJacNumConTerms[ idx];
-//					jend = m_miJacStart[ idx + 1 ];
-//					j = 0;
-//					for(posVarIdx = (*m_mapExpressionTreesMod[ idx]->mapVarIdx).begin(); posVarIdx 
-//						!= (*m_mapExpressionTreesMod[ idx]->mapVarIdx).end(); ++posVarIdx){
-//						//if(m_miJacIndex[ jstart] != posVarIdx->first) throw ErrorClass("error calculating Jacobian matrix");
-//						//m_mdJacValue[ jstart] = jac[ j];
-//						//std::cout << "Constraint  Partial = " <<  jac[ j] << std::endl;
-//						jstart++;
-//						j++;
-//					}
-//				}
-//			}		
+			for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
+				idx = posMapExpTree->first;
+				// we are considering only constraints, not objective function
+				if(idx >= 0){
+					//std::cout << "We are working with row  " << idx << std::endl;
+					//std::cout << "m_miJacStart =   " << m_miJacStart[ idx] << std::endl;
+					//std::cout << "We are working with nonlinear variable  " << i << std::endl;
+					//std::cout << "This is the following variable in the orginal variable space  " << m_miNonLinearVarsReverseMap[ i] << std::endl;
+					// figure out original variable this corresponds to
+					// then use (*m_mapExpressionTreesMod[ idx]->mapVarIdx) to figure out which variable it is within row idx
+					//m_mapAllNonlinearVariablesIndex
+					//std::cout << "This is the following variable in the expression tree  " <<  (*m_mapExpressionTreesMod[ idx]->mapVarIdx)[ m_miNonLinearVarsReverseMap[ i]]<< std::endl; 
+					int jacIndex = (*m_mapExpressionTreesMod[ idx]->mapVarIdx)[ m_miNonLinearVarsReverseMap[ i]];
+					jstart = m_miJacStart[ idx] + m_miJacNumConTerms[ idx];
+					// change 1 to number of objective functions
+					m_mdJacValue[ jstart + jacIndex] = vdYjacval[1 + idx];
+					//std::cout << "GAIL HONDA =  "  << m_mdJacValue[ jstart + jacIndex] << std::endl;
+				}
+			}	
+	
 			//end Jacobian calculation 
 			// now calculate the Hessian if necessary
 			if( bCalcHessian == true){  
@@ -2476,6 +2484,10 @@ bool OSInstance::getIterateResults(std::vector<double> vdX, std::vector<double> 
 			//
 			//
 			vdX[i] = 0.;
+		}
+		std::cout  << "m_iJacValueSize =  " << m_iJacValueSize << std::endl;
+		for(i = 0; i < m_iJacValueSize; i++){
+			std::cout << "GAIL HONDA =  "  << m_mdJacValue[ i] << std::endl;	
 		}
 		if(bCalcHessian == true){
 			std::cout << "HERE IS HESSIAN OF THE LAGRANGIAN" << std::endl;
@@ -2489,101 +2501,6 @@ bool OSInstance::getIterateResults(std::vector<double> vdX, std::vector<double> 
 	}  
 }//end getIterateResults
 
-bool OSInstance::getSparseJacobian(){
-	/** get the constant terms from the linearConstraintCoefficients
-	 * first we get the variables that appear in linearConstraintCoefficients
-	 * but NOT in the nonlinearExpressions section
-	 */
-	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
-	int i,j;
-	int iNumVariableStarts = getVariableNumber() ;
-	int *start;
-	int *index;
-	double *value;
-	OSnLNodePlus *nlNodePlus;
-	OSnLNodeVariable *nlNodeVariable;
-	OSExpressionTree *expTree = NULL;
-	//
-	if(this->instanceData->linearConstraintCoefficients->numberOfValues > 0){
-		start = this->instanceData->linearConstraintCoefficients->start->el;	
-		// check to see if the linear coefficients are stored by column or by row
-		// if neither, there is an error
-		if( (instanceData->linearConstraintCoefficients->colIdx == NULL) && 
-			(instanceData->linearConstraintCoefficients->rowIdx == NULL) ) return false;
-		if( instanceData->linearConstraintCoefficients->colIdx == NULL ){
-			index = this->instanceData->linearConstraintCoefficients->rowIdx->el;
-		}
-		else{
-			index = this->instanceData->linearConstraintCoefficients->colIdx->el;
-		}
-		value = this->instanceData->linearConstraintCoefficients->value->el;
-		// i is indexing columns (variables) and j is indexing row numbers 
-		for (i = 0; i < iNumVariableStarts; i++){	
-			for (j = start[i]; j < start[ i + 1 ]; j++){
-				// index[ j] is a row index, we have just found an occurance of row index[j]
-				// therefore we increase by 1 (or push back) the start of the row indexed by index[j] + 1, 
-				// i.e. the start of the next row
-				// check to see if variable i is linear/constant in the row index[ j] 
-				// if so, increment m_miJacStart[ index[j] + 1]
-				//
-				if( (m_mapExpressionTreesMod.find( index[ j]) != m_mapExpressionTreesMod.end() ) &&
-					( (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).find( i) != (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).end()) ){
-					// variable i is appears in the expression tree for row index[ j] -- do nothing
-				}
-				else{ 
-					m_viJacConIndex.push_back( index[j]);
-					m_viJacVarIndex.push_back( i);
-					m_vdJacValIndex.push_back( value[ j]);
-					m_iJacNumConTerms++;
-				}				
-			}
-		} 
-	}
-	// now go back and get the non-constant gradient terms
-	// execute same logic, except now put the non-constant linear terms into the expression tree
-	if(this->instanceData->linearConstraintCoefficients->numberOfValues > 0){
-		// i is indexing columns (variables) and j is indexing row numbers 
-		for (i = 0; i < iNumVariableStarts; i++){	
-			for (j = start[i]; j < start[ i + 1 ]; j++){
-				// index[ j] is a row index, we have just found an occurance of row index[j]
-				// therefore we increase by 1 (or push back) the start of the row indexed by index[j] + 1, 
-				// i.e. the start of the next row
-				// check to see if variable i is linear/constant in the row index[ j] 
-				// if so, increment m_miJacStart[ index[j] + 1]
-				//
-				if( (m_mapExpressionTreesMod.find( index[ j]) != m_mapExpressionTreesMod.end() ) &&
-					( (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).find( i) != (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).end()) ){
-					// variable i is appears in the expression tree for row index[ j]
-					// add the coefficient corresponding to variable i in row index[ j] to the expression tree	
-					// define a new OSnLVariable and OSnLnodePlus 
-					nlNodeVariable = new OSnLNodeVariable();
-					nlNodeVariable->coef = value[ j];
-					nlNodeVariable->idx = i;
-					nlNodePlus = new OSnLNodePlus();
-					nlNodePlus->m_mChildren[ 0] = m_mapExpressionTreesMod[ index[ j] ]->m_treeRoot;
-					nlNodePlus->m_mChildren[ 1] = nlNodeVariable;
-					expTree = new OSExpressionTree();
-					expTree->m_treeRoot = nlNodePlus ;
-					expTree->mapVarIdx = m_mapExpressionTreesMod[ index[ j]]->mapVarIdx;
-					m_mapExpressionTreesMod[ index[ j] ]  = expTree;	
-					std::cout << m_mapExpressionTreesMod[ index[ j] ]->m_treeRoot->getNonlinearExpressionInXML() << std::endl;
-					m_viJacConIndex.push_back( index[j]);
-					m_viJacVarIndex.push_back( i);
-					m_vdJacValIndex.push_back( value[ j]);	
-				}			
-			}
-		}
-	}
-	#ifdef DEBUG
-	std::cout << "Here are the constant parts of the Jacobian" << std::endl
-	for(i = 0; i < m_iJacNumConTerms; i++){
-		std::cout << "variable index " << i << " = " << m_viJacVarIndex[ i] << std::endl;
-		std::cout << "constraint index " << i << " = " << m_viJacConIndex[ i] << std::endl;
-		std::cout << "Jacobian value " << i << " = " << m_viJacValIndex[ i] << std::endl;
-	}
-	#endif	
-	return true;
-}
 
 /**
  * end revised AD test code
