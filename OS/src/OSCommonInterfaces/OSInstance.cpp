@@ -2402,7 +2402,7 @@ std::vector<double> OSInstance::reverseAD(size_t p, std::vector<double> vdlambda
 }//end forwardAD
 
 bool OSInstance::getIterateResults( double *x, double* conMultipliers, 
-	double* objMultipliers){
+	double* objMultipliers, int objIdx){
 	// Assume the function is Fad(vdX, vdLambda)
 	try{
 		if( m_mapExpressionTreesMod.size() <= 0) return true;
@@ -2470,10 +2470,10 @@ bool OSInstance::getIterateResults( double *x, double* conMultipliers,
 		for(objNum = 0; objNum < m_iObjectiveNumber; objNum++){
 			m_mdObjectiveFunctionValues[ objNum] = 0.0;
 			if( m_mapExpressionTreesMod.find( -objNum -1) != m_mapExpressionTreesMod.end() ){
-				m_mdConstraintFunctionValues[ objNum] = vdYval[ objNum];
+				m_mdObjectiveFunctionValues[ objNum] = vdYval[ objNum];
 			}
 			for(i = 0; i < m_iVariableNumber; i++){
-				//*(m_mdObjGradient + i) = m_mmdDenseObjectiveCoefficients[ objIdx][i];
+				m_mdObjectiveFunctionValues[ objNum] += m_mmdDenseObjectiveCoefficients[ objNum][i]*x[ i];
 			}
 			std::cout << "Objective " << objNum << " function value =  " << m_mdObjectiveFunctionValues[ objNum] << std::endl;
 		}		
@@ -2488,7 +2488,8 @@ bool OSInstance::getIterateResults( double *x, double* conMultipliers,
 		}
 		for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
 			vdX[i] = 1.;     
-			rowNum = 0;           
+			rowNum = 0;    
+			*(m_mdObjGradient + i) = m_mmdDenseObjectiveCoefficients[ abs( objIdx) - 1][i];       
 			vdYjacval = this->forwardAD(1, vdX); 
 			// fill in Jacobian here, we have column i 
 			// start Jacobian calculation
@@ -2510,11 +2511,14 @@ bool OSInstance::getIterateResults( double *x, double* conMultipliers,
 					rowNum++;
 				}//end Jacobian calculation
 				else{
-					// kipp -- we are assuming only one objective function here
-					*(m_mdObjGradient + m_miNonLinearVarsReverseMap[ i]) = vdYjacval[ (abs( idx) - 1)] + 
-						m_mmdDenseObjectiveCoefficients[  (abs( idx) - 1)][ m_miNonLinearVarsReverseMap[ i]];					
+					// see if we have the objective function of interest
+					if( objIdx == idx){
+						*(m_mdObjGradient + m_miNonLinearVarsReverseMap[ i]) = vdYjacval[ (abs( idx) - 1)] + 
+							m_mmdDenseObjectiveCoefficients[  (abs( idx) - 1)][ m_miNonLinearVarsReverseMap[ i]];
+					}					
 				}//end Obj gradient calculation 
 			}	
+
 			
 			// now calculate the Hessian if necessary
 			if( bCalcHessian == true){  
@@ -2542,20 +2546,9 @@ bool OSInstance::getIterateResults( double *x, double* conMultipliers,
 }//end getIterateResults
 
 
-bool OSInstance::initObjGrad(){
-	int i, objIdx;
-	// get the values from the ObjCoef object
-	for(objIdx = 0; objIdx < m_iObjectiveNumber; objIdx++){
-		for(i = 0; i < m_iVariableNumber; i++){
-			*(m_mdObjGradient + i) = m_mmdDenseObjectiveCoefficients[ objIdx][i];
-		}
-	}
-}//initObjGrad
-
 
 bool OSInstance::initForCallBack(){
 	initializeNonLinearStructures( );
-	initObjGrad();
 	getJacobianSparsityPattern();
 	getLagrangianHessianSparsityPattern();
 	return true;

@@ -1487,23 +1487,13 @@ public:
 	 * @param x is a pointer of doubles of primal values  for the current iteration
 	 * @param conVals is a pointer of doubles of the current dual (lagrange) multipliers on the constraitns
 	 * @param conVals is a pointer of doubles of the current dual (lagrange) multipliers on the objectives
+	 * @param objIdx is the index of the object function of interest, -1, -2, ...
 	 * if conVals and ojbVals == NULL we do not calculate the Hessian of the Lagrangian
 	 * @return true if successful 
 	 */		 
-	bool getIterateResults(double *x, double *conVals, double *objVals);
+	bool getIterateResults(double *x, double *conVals, double *objVals, int objIdx);
 	
-	
-	/**
-	 * Get the information for each iteration. Get the functions values, Jacobian
-	 * and Hessian of the Lagrangian   
-	 * 
-	 * <p>
-	 * 
-	 * initObjGrad will initialize the objective function gradients to be equal to the coef terms.
-	 * @return true if successful 
-	 */		 
-	bool initObjGrad();
-	
+
 	
 	/**
 	 * This should be called by nonlinear solvers using callback functions  
