@@ -382,7 +382,7 @@ private:
 	/**
 	 * m_mdObjGradient holds a dense vector of an objective function gradient. 
 	 */
-	double* m_mdObjGradient;	
+	//double* m_mdObjGradient;	
 	
 	/**
 	 * m_mmdDenseObjectiveCoefficients holds an array of pointers, each pointer points 
@@ -1493,12 +1493,29 @@ public:
 	bool getIterateResults(double *x, double *conVals, double *objVals);
 	
 	
+	/**
+	 * Get the information for each iteration. Get the functions values, Jacobian
+	 * and Hessian of the Lagrangian   
+	 * 
+	 * <p>
+	 * 
+	 * initObjGrad will initialize the objective function gradients to be equal to the coef terms.
+	 * @return true if successful 
+	 */		 
+	bool initObjGrad();
+	
+	
 	//
 	//
      /**
 	 * m_mdJacValue holds a double array of partial derivatives for the Jacobian matrix in sparse form (row major).  
      */    
  	double *m_mdJacValue;	
+ 	
+ 	/**
+	 * m_mdObjGradient holds a dense vector of an objective function gradient. 
+	 */
+	double* m_mdObjGradient;
 	
 																																																	
 }; //class OSInstance

@@ -63,6 +63,7 @@ bool IpoptSolver::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 	
 	//osinstance->addQTermsToExressionTree();
  	osinstance->initializeNonLinearStructures( );
+ 	osinstance->initObjGrad();
 	// nonzeros in jacobian
 	//if( osinstance->getNumberOfNonlinearExpressions() <= 0 && osinstance->getNumberOfQuadraticTerms() > 0){  
 	//		osinstance->addQTermsToExressionTree();
@@ -178,10 +179,13 @@ bool IpoptSolver::eval_f(Index n, const Number* x, bool new_x, Number& obj_value
 bool IpoptSolver::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f){
  	int i;
  	//cout << "calculate objective function gradient function !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
-  	double *objGrad = osinstance->calculateObjectiveFunctionGradient(-1, (double*)x, false, false);
+  	//double *objGrad = osinstance->calculateObjectiveFunctionGradient(-1, (double*)x, false, false);
+ 	osinstance->getIterateResults( (double*)x, NULL, NULL);
   	for(i = 0; i < n; i++){
   		//cout << " gradient function !!!!!!!!!!!!!!!!!!!!!!!!!! = "  <<  objGrad[ i] << endl;
-  		grad_f[ i]  = objGrad[ i];
+  		//cout << " gradient function !!!!!!!!!!!!!!!!!!!!!!!!!! = "  <<  osinstance->m_mdObjGradient[ i] << endl;
+  		// has the Jacobian already been called?
+  		grad_f[ i]  = osinstance->m_mdObjGradient[ i];
   	}
   	return true;
 }//eval_grad_f
@@ -235,15 +239,15 @@ bool IpoptSolver::eval_jac_g(Index n, const Number* x, bool new_x,
 	}
 	else {
 		//std::cout << "EVALUATING JACOBIAN" << std::endl; 
-		sparseJacobian = osinstance->calculateAllConstraintFunctionGradients((double*)x, false, false);
+		//sparseJacobian = osinstance->calculateAllConstraintFunctionGradients((double*)x, false, false);
 		//values = sparseJacobian->values;
+		osinstance->getIterateResults( (double*)x, NULL, NULL);
 		for(int i = 0; i < nele_jac; i++){
 			//values[ i] = sparseJacobian->values[i];
 			values[ i] = osinstance->m_mdJacValue[ i];
 			//cout << "values[i]:!!!!!!!!!!!!  " <<  values[ i] << endl;
 			//cout << "m_mdJacValue[ i]:!!!!!!!!!!!!  " <<  osinstance->m_mdJacValue[ i] << endl;
 		}
-		osinstance->getIterateResults( (double*)x, NULL, NULL);
 	}
   return true;
 }//eval_jac_g

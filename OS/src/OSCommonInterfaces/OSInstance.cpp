@@ -2412,6 +2412,7 @@ bool OSInstance::getIterateResults( double *x, double* conMultipliers,
 		bool bCalcHessian = false;
 		int i, j, rowNum, jacIndex;
 		int jstart, jend, idx;
+		double dvalue;
 		std::vector<double> vdX;
 		std::vector<double> vdLambda( m_mapExpressionTreesMod.size());
 		OSExpressionTree *expTree = NULL;
@@ -2447,6 +2448,25 @@ bool OSInstance::getIterateResults( double *x, double* conMultipliers,
 		// get the current iterate data
 		// first get the function values
 		vdYval = this->forwardAD(0, vdX);	
+		///
+		// now get all function and constraint values
+		for(rowNum = 0; rowNum < m_iConstraintNumber; rowNum++){
+			m_mdConstraintFunctionValues[ rowNum] = 0.0;
+			if( m_mapExpressionTreesMod.find( rowNum) != m_mapExpressionTreesMod.end() ){
+				dvalue = vdYjacval[m_iObjectiveNumber + rowNum];
+			}
+			// now the linear part
+			// be careful, loop over only the constant terms in sparseJacMatrix
+			i = m_sparseJacMatrix->starts[ rowNum];
+			j = m_sparseJacMatrix->starts[ rowNum + 1 ];
+			while ( (i - m_sparseJacMatrix->starts[ rowNum])  < m_sparseJacMatrix->conVals[ rowNum] ){
+				m_mdConstraintFunctionValues[ rowNum] += m_sparseJacMatrix->values[ i]*x[ m_sparseJacMatrix->indexes[ i] ];
+				i++;
+			}	
+			// add in the constraint function constant
+			m_mdConstraintFunctionValues[ rowNum] += m_mdConstraintConstants[ rowNum ];
+		}
+		///
 		// now get the Jacobian and Hessian (if vdLambda.size() > 0)
 		int hessValuesIdx = 0;
 		// loop over components of x
@@ -2465,10 +2485,6 @@ bool OSInstance::getIterateResults( double *x, double* conMultipliers,
 				idx = posMapExpTree->first;
 				// we are considering only constraints, not objective function
 				if(idx >= 0){
-					//std::cout << "We are working with row  " << idx << " and variable "<< m_miNonLinearVarsReverseMap[ i] << std::endl;
-					//std::cout << "m_miJacStart =   " << m_miJacStart[ idx] << std::endl;
-					//std::cout << "We are working with nonlinear variable  " << i << std::endl;
-					//std::cout << "This is the following variable in the orginal variable space  " << m_miNonLinearVarsReverseMap[ i] << std::endl;
 					//figure out original variable this corresponds to
 					//then use (*m_mapExpressionTreesMod[ idx]->mapVarIdx) to figure out which variable it is within row idx
 					//m_mapAllNonlinearVariablesIndex
@@ -2478,13 +2494,17 @@ bool OSInstance::getIterateResults( double *x, double* conMultipliers,
 						jacIndex = (*m_mapExpressionTreesMod[ idx]->mapVarIdx)[ m_miNonLinearVarsReverseMap[ i]];
 						jstart = m_miJacStart[ idx] + m_miJacNumConTerms[ idx];
 						// kipp change 1 to number of objective functions
-						m_mdJacValue[ jstart + jacIndex] = vdYjacval[1 + rowNum];
+						m_mdJacValue[ jstart + jacIndex] = vdYjacval[m_iObjectiveNumber + rowNum];
 					}
 					rowNum++;
-				}
+				}//end Jacobian calculation
+				else{
+					// kipp -- we are assuming only one objective function here
+					*(m_mdObjGradient + m_miNonLinearVarsReverseMap[ i]) = vdYjacval[ (abs( idx) - 1)] + 
+						m_mmdDenseObjectiveCoefficients[  (abs( idx) - 1)][ m_miNonLinearVarsReverseMap[ i]];					
+				}//end Obj gradient calculation 
 			}	
-	
-			//end Jacobian calculation 
+			
 			// now calculate the Hessian if necessary
 			if( bCalcHessian == true){  
 				vdw = reverseAD(2, vdLambda);   // derivtative of partial
@@ -2496,17 +2516,30 @@ bool OSInstance::getIterateResults( double *x, double* conMultipliers,
 			//
 			vdX[i] = 0.;
 		}
+		#ifdef DEBUG
 		if(bCalcHessian == true){
 			std::cout << "HERE IS HESSIAN OF THE LAGRANGIAN" << std::endl;
 			for(i = 0; i < hessValuesIdx; i++){
 				std::cout << "reverse 2 " << m_LagrangianSparseHessian->hessValues[ i] << std::endl;
 			}
 		}
+		#endif
 	}
 	catch(const ErrorClass& eclass){
 		throw ErrorClass( eclass.errormsg);
 	}  
 }//end getIterateResults
+
+
+bool OSInstance::initObjGrad(){
+	int i, objIdx;
+	// get the values from the ObjCoef object
+	for(objIdx = 0; objIdx < m_iObjectiveNumber; objIdx++){
+		for(i = 0; i < m_iVariableNumber; i++){
+			*(m_mdObjGradient + i) = m_mmdDenseObjectiveCoefficients[ objIdx][i];
+		}
+	}
+}//initObjGrad
 
 
 /**
