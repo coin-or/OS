@@ -1490,6 +1490,7 @@ bool OSInstance::setQuadraticTermsInNonlinearExpressions(int numQPTerms, int* ro
 bool OSInstance::initializeNonLinearStructures( ){
 	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
 	if( m_bNonLinearStructuresInitialized == true) return true;
+	if( m_bProcessVariables == false) processVariables();
 	if( m_bProcessObjectives == false) processObjectives();
 	if( m_bProcessConstraints == false) processConstraints();
 	m_iVariableNumber = instanceData->variables->numberOfVariables;
@@ -1508,7 +1509,6 @@ bool OSInstance::initializeNonLinearStructures( ){
 	// now get the map of all nonlinear variables
 	getAllNonlinearVariablesIndexMap( );
 	getDenseObjectiveCoefficients();
-	addQTermsToExressionTree();
 	m_mdConstraintFunctionValues = new double[ this->instanceData->constraints->numberOfConstraints];
 	m_mdObjectiveFunctionValues = new double[ this->instanceData->objectives->numberOfObjectives];
 	m_mdObjGradient = new double[ this->instanceData->variables->numberOfVariables];
@@ -2551,6 +2551,15 @@ bool OSInstance::initObjGrad(){
 		}
 	}
 }//initObjGrad
+
+
+bool OSInstance::initForCallBack(){
+	initializeNonLinearStructures( );
+	initObjGrad();
+	getJacobianSparsityPattern();
+	getLagrangianHessianSparsityPattern();
+	return true;
+}
 
 
 /**

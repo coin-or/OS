@@ -61,9 +61,9 @@ bool IpoptSolver::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 	cout << "number variables  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << n << endl;
 	cout << "number constraints  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << m << endl;
 	
-	//osinstance->addQTermsToExressionTree();
- 	osinstance->initializeNonLinearStructures( );
- 	osinstance->initObjGrad();
+	osinstance->initForCallBack( );
+ 	//osinstance->initializeNonLinearStructures( );
+ 	//osinstance->initObjGrad();
 	// nonzeros in jacobian
 	//if( osinstance->getNumberOfNonlinearExpressions() <= 0 && osinstance->getNumberOfQuadraticTerms() > 0){  
 	//		osinstance->addQTermsToExressionTree();

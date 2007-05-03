@@ -148,12 +148,12 @@ int  main(){
 		xx[2] = 5;
 		sparseJac = osinstance->getJacobianSparsityPattern();
 		osinstance->getIterateResults(x, z, w);
-		for(idx = 0; idx < osinstance->getConstraintNumber(); idx++){
-			for(k = *(sparseJac->starts + idx); k < *(sparseJac->starts + idx + 1); k++){
-				std::cout << "row idx = " << idx <<  "  col idx = "<< *(sparseJac->indexes + k)
-				<< " value = " << *(sparseJac->values + k) << std::endl;
-			}
-		}
+		//for(idx = 0; idx < osinstance->getConstraintNumber(); idx++){
+		//	for(k = *(sparseJac->starts + idx); k < *(sparseJac->starts + idx + 1); k++){
+		//		std::cout << "row idx = " << idx <<  "  col idx = "<< *(sparseJac->indexes + k)
+		///		<< " value = " << *(sparseJac->values + k) << std::endl;
+		//	}
+		//}
 		//for(int kjl = 0; kjl < k; kjl++){
 		//	std::cout << "forward 0 " << funVals[ kjl] << std::endl;
 		//}

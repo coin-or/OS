@@ -1505,6 +1505,17 @@ public:
 	bool initObjGrad();
 	
 	
+	/**
+	 * This should be called by nonlinear solvers using callback functions  
+	 * 
+	 * <p>
+	 * 
+	 * initForCallBack will initialize the correct nonlinear structures for solver callback functions.
+	 * @return true if successful 
+	 */		 
+	bool initForCallBack();
+	
+	
 	//
 	//
      /**
