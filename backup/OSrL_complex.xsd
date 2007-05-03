@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2005 sp1 U (http://www.xmlspy.com) by oig_trade (oig) -->
+<!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="OSgL.xsd"/>
+	<xs:include schemaLocation="OSaL.xsd"/>
+	<xs:include schemaLocation="OSpL.xsd"/>
+	<xs:element name="osrl" type="OSrL"/>
+	<xs:complexType name="OSrL">
+		<xs:sequence>
+			<xs:element name="resultHeader" type="ResultHeader"/>
+			<xs:element name="resultData" type="ResultData"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ResultHeader">
+		<xs:sequence>
+			<xs:element name="generalStatus" type="GeneralStatus"/>
+			<xs:element name="serviceURI" minOccurs="0"/>
+			<xs:element name="serviceName" minOccurs="0"/>
+			<xs:element name="instanceName" type="xs:string" minOccurs="0"/>
+			<xs:element name="jobID" type="xs:string" minOccurs="0"/>
+			<xs:element name="time" type="xs:dateTime" minOccurs="0"/>
+			<xs:element name="message" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ResultData">
+		<xs:sequence>
+			<xs:element name="statistics" type="ProcessStatistics" minOccurs="0"/>
+			<xs:element name="optimization" type="OptimizationResult" minOccurs="0"/>
+			<xs:element name="other" type="OtherResult" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="GeneralSubstatus">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="name" type="xs:string" use="required"/>
+				<xs:attribute name="description" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="GeneralStatus">
+		<xs:sequence>
+			<xs:element name="substatus" type="GeneralSubstatus" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="type" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="error"/>
+					<xs:enumeration value="warning"/>
+					<xs:enumeration value="success"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="OptimizationResult">
+		<xs:sequence>
+			<xs:element name="solution" type="OptimizationSolution" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="osal" type="OSaL" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfSolutions" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfVariables" type="xs:positiveInteger" use="required"/>
+		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="OtherResult">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="name" type="xs:string" use="required"/>
+				<xs:attribute name="description" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="OptimizationSolution">
+		<xs:sequence>
+			<xs:element name="status" type="OptimizationSolutionStatus"/>
+			<xs:element name="message" type="xs:string" minOccurs="0"/>
+			<xs:element name="variables" type="VariableSolution" minOccurs="0"/>
+			<xs:element name="objectives" type="ObjectiveSolution" minOccurs="0"/>
+			<xs:element name="constraints" type="ConstraintSolution" minOccurs="0"/>
+			<xs:element name="other" type="OtherOptimizationResult" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="objectiveIdx" type="xs:negativeInteger" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="OptimizationSolutionStatus">
+		<xs:sequence>
+			<xs:element name="substatus" type="OptimizationSolutionSubstatus" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="type" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="unbounded"/>
+					<xs:enumeration value="globallyOptimal"/>
+					<xs:enumeration value="locallyOptimal"/>
+					<xs:enumeration value="optimal"/>
+					<xs:enumeration value="bestSoFar"/>
+					<xs:enumeration value="feasible"/>
+					<xs:enumeration value="infeasible"/>
+					<xs:enumeration value="stoppedByLimit"/>
+					<xs:enumeration value="unsure"/>
+					<xs:enumeration value="error"/>
+					<xs:enumeration value="other"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="OptimizationSolutionSubstatus">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="name" type="xs:string" use="required"/>
+				<xs:attribute name="description" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="ObjectiveSolution">
+		<xs:sequence>
+			<xs:element name="values" type="ObjectiveValues" minOccurs="0"/>
+			<xs:element name="ovFunctions" type="ObjectiveOVFunctions" minOccurs="0"/>
+			<xs:element name="other" type="OtherObjectiveResult" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ObjValue">
+		<xs:attribute name="idx" type="xs:negativeInteger" use="optional" default="-1"/>
+		<xs:attribute name="value" type="xs:double" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ObjectiveValues">
+		<xs:sequence>
+			<xs:element name="obj" type="ObjValue" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ObjectiveOVFunctions">
+		<xs:sequence>
+			<xs:element name="varCoef" type="OVFunction" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OtherObjResult">
+		<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="OtherObjectiveResult">
+		<xs:sequence>
+			<xs:element name="obj" type="OtherObjResult" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="VariableSolution">
+		<xs:sequence>
+			<xs:element name="values" type="VariableValues" minOccurs="0"/>
+			<xs:element name="valuesString" type="VariableStringValues" minOccurs="0"/>
+			<xs:element name="primalUnboundedDirections" type="PrimalVariableUnboundedDirections" minOccurs="0"/>
+			<xs:element name="irreducibleInconsistentSystem" type="VariableIrreducibleInconsistentSystem" minOccurs="0"/>
+			<xs:element name="reducedCosts" type="ReducedCosts" minOccurs="0"/>
+			<xs:element name="slacks" type="VariableSlacks" minOccurs="0"/>
+			<xs:element name="allowableIncreases" type="VariableAllowableIncreases" minOccurs="0"/>
+			<xs:element name="allowableDecreases" type="VariableAllowableDecreases" minOccurs="0"/>
+			<xs:element name="ovFunctions" type="VariableOVFunctions" minOccurs="0"/>
+			<xs:element name="other" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="OtherVariableResult"/>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="VarValue">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="value" type="xs:double" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="VariableValues">
+		<xs:sequence>
+			<xs:element name="var" type="VarValue" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="VarStringValue">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="value" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="VariableStringValues">
+		<xs:sequence>
+			<xs:element name="var" type="VarStringValue" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PrimalVarUnboundedDirection">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="value" type="xs:double" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="PrimalVariableUnboundedDirections">
+		<xs:sequence>
+			<xs:element name="var" type="PrimalVarUnboundedDirection" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="VarIrreducibleInconsistentSystem">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="type" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="lb"/>
+					<xs:enumeration value="ub"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="VariableIrreducibleInconsistentSystem">
+		<xs:sequence>
+			<xs:element name="var" type="VarIrreducibleInconsistentSystem" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="VarReducedCost">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="lbValue" use="optional" default="0.0">
+			<xs:simpleType>
+				<xs:restriction base="xs:double"/>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="ubValue" use="optional" default="0.0">
+			<xs:simpleType>
+				<xs:restriction base="xs:double"/>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ReducedCosts">
+		<xs:sequence>
+			<xs:element name="var" type="VarReducedCost" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="VarSlack">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="lbValue" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:double"/>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="ubValue" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:double">
+					<xs:minInclusive value="0.0"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="VariableSlacks">
+		<xs:sequence>
+			<xs:element name="var" type="VarSlack" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="VarAllowableIncrease">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="lbValue" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:double">
+					<xs:minInclusive value="0.0"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="ubValue" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:double">
+					<xs:minInclusive value="0.0"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="VariableAllowableIncreases">
+		<xs:sequence>
+			<xs:element name="var" type="VarAllowableIncrease" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="VarAllowableDecrease">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="lbValue" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:double">
+					<xs:minInclusive value="0.0"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="ubValue" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:double">
+					<xs:minInclusive value="0.0"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="VariableAllowableDecreases">
+		<xs:sequence>
+			<xs:element name="var" type="VarAllowableDecrease" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="VariableOVFunctions">
+		<xs:sequence>
+			<xs:element name="varBound" type="OVFunction" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OtherVarResult">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="lbValue" type="xs:string" use="optional"/>
+		<xs:attribute name="ubValue" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="OtherVariableResult">
+		<xs:sequence>
+			<xs:element name="var" type="OtherVarResult" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="ConstraintSolution">
+		<xs:sequence>
+			<xs:element name="values" type="ConstraintValues" minOccurs="0"/>
+			<xs:element name="dualUnboundedDirections" type="DualVariableUnboundedDirections" minOccurs="0"/>
+			<xs:element name="irreducibleInconsistentSystem" type="ConstraintIrreducibleInconsistentSystem" minOccurs="0"/>
+			<xs:element name="dualValues" type="DualVariableValues" minOccurs="0"/>
+			<xs:element name="slacks" type="ConstraintSlacks" minOccurs="0"/>
+			<xs:element name="allowableIncreases" type="ConstraintAllowableIncreases" minOccurs="0"/>
+			<xs:element name="allowableDecreases" type="ConstraintAllowableDecreases" minOccurs="0"/>
+			<xs:element name="ovFunctions" type="ConstraintOVFunctions" minOccurs="0"/>
+			<xs:element name="other" type="OtherConstraintResult" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ConstraintValues">
+		<xs:sequence>
+			<xs:element name="con" type="ConValue" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ConValue">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="value" type="xs:double" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="DualVarUnboundedDirection">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="lbValue" type="xs:double" use="optional" default="0.0"/>
+		<xs:attribute name="ubValue" type="xs:double" use="optional" default="0.0"/>
+	</xs:complexType>
+	<xs:complexType name="DualVariableUnboundedDirections">
+		<xs:sequence>
+			<xs:element name="con" type="DualVarUnboundedDirection" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ConIrreducibleInconsistentSystem">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="type" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="lb"/>
+					<xs:enumeration value="ub"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ConstraintIrreducibleInconsistentSystem">
+		<xs:sequence>
+			<xs:element name="con" type="ConIrreducibleInconsistentSystem" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="DualVarValue">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="lbValue" use="optional" default="0.0">
+			<xs:simpleType>
+				<xs:restriction base="xs:double"/>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="ubValue" use="optional" default="0.0">
+			<xs:simpleType>
+				<xs:restriction base="xs:double"/>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="DualVariableValues">
+		<xs:sequence>
+			<xs:element name="con" type="DualVarValue" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ConSlack">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="lbValue" use="optional" default="0.0">
+			<xs:simpleType>
+				<xs:restriction base="xs:double"/>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="ubValue" use="optional" default="0.0">
+			<xs:simpleType>
+				<xs:restriction base="xs:double"/>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ConstraintSlacks">
+		<xs:sequence>
+			<xs:element name="con" type="ConSlack" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ConAllowableIncrease">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="lbValue" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:double">
+					<xs:minInclusive value="0.0"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="ubValue" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:double">
+					<xs:minInclusive value="0.0"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ConstraintAllowableIncreases">
+		<xs:sequence>
+			<xs:element name="con" type="ConAllowableIncrease" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ConAllowableDecrease">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="lbValue" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:double">
+					<xs:minInclusive value="0.0"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="ubValue" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:double">
+					<xs:minInclusive value="0.0"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ConstraintAllowableDecreases">
+		<xs:sequence>
+			<xs:element name="con" type="ConAllowableDecrease" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ConstraintOVFunctions">
+		<xs:sequence>
+			<xs:element name="conBound" type="OVFunction" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OVFunction">
+		<xs:sequence>
+			<xs:element name="interval" type="OVFunctionInterval" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="type" use="optional" default="eq">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="eq"/>
+					<xs:enumeration value="lb"/>
+					<xs:enumeration value="ub"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="idx" type="xs:int" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="OVFunctionInterval">
+		<xs:attribute name="start" type="xs:double" use="optional"/>
+		<xs:attribute name="end" type="xs:double" use="required"/>
+		<xs:attribute name="slope" type="xs:double" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="OtherConResult">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="lbValue" type="xs:string" use="optional"/>
+		<xs:attribute name="ubValue" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="OtherConstraintResult">
+		<xs:sequence>
+			<xs:element name="con" type="OtherConResult" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="OtherOptimizationResult">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="name" type="xs:string" use="required"/>
+				<xs:attribute name="description" type="xs:string" use="optional"/>
+				<xs:attribute name="value" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+</xs:schema>

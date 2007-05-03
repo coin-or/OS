@@ -236,7 +236,10 @@ OS/test/unitTest.cpp -text
 OS/wsdl/OScL.wsdl -text
 OS/wsdl/OSdL.wsdl -text
 OS/wsdl/OShL.wsdl -text
+/OSRepository.xml -text
 /README -text
+backup/OSiL_NaG.xsd -text
+backup/OSrL_complex.xsd -text
 /config.guess -text
 /config.sub -text
 /configure -text
