@@ -2405,14 +2405,13 @@ bool OSInstance::getIterateResults( double *x, double* conMultipliers,
 	double* objMultipliers){
 	// Assume the function is Fad(vdX, vdLambda)
 	try{
-		if( m_iNumberOfNonlinearVariables <= 0) return true;
+		if( m_mapExpressionTreesMod.size() <= 0) return true;
 		if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
 		if( m_bLagrangianSparseHessianCreated == false)  getLagrangianHessianSparsityPattern( );
 		// initialize everything
 		bool bCalcHessian = false;
-		int i, j, rowNum, jacIndex;
+		int i, j, rowNum, objNum, jacIndex;
 		int jstart, jend, idx;
-		double dvalue;
 		std::vector<double> vdX;
 		std::vector<double> vdLambda( m_mapExpressionTreesMod.size());
 		OSExpressionTree *expTree = NULL;
@@ -2449,11 +2448,11 @@ bool OSInstance::getIterateResults( double *x, double* conMultipliers,
 		// first get the function values
 		vdYval = this->forwardAD(0, vdX);	
 		///
-		// now get all function and constraint values
+		// now get all function and constraint values using forward result
 		for(rowNum = 0; rowNum < m_iConstraintNumber; rowNum++){
 			m_mdConstraintFunctionValues[ rowNum] = 0.0;
 			if( m_mapExpressionTreesMod.find( rowNum) != m_mapExpressionTreesMod.end() ){
-				dvalue = vdYjacval[m_iObjectiveNumber + rowNum];
+				m_mdConstraintFunctionValues[ rowNum] = vdYval[m_iObjectiveNumber + rowNum];
 			}
 			// now the linear part
 			// be careful, loop over only the constant terms in sparseJacMatrix
@@ -2465,7 +2464,19 @@ bool OSInstance::getIterateResults( double *x, double* conMultipliers,
 			}	
 			// add in the constraint function constant
 			m_mdConstraintFunctionValues[ rowNum] += m_mdConstraintConstants[ rowNum ];
+			std::cout << "Constraint " << rowNum << " function value =  " << m_mdConstraintFunctionValues[ rowNum] << std::endl;
 		}
+		// now get the objective function values from the forward result
+		for(objNum = 0; objNum < m_iObjectiveNumber; objNum++){
+			m_mdObjectiveFunctionValues[ objNum] = 0.0;
+			if( m_mapExpressionTreesMod.find( -objNum -1) != m_mapExpressionTreesMod.end() ){
+				m_mdConstraintFunctionValues[ objNum] = vdYval[ objNum];
+			}
+			for(i = 0; i < m_iVariableNumber; i++){
+				//*(m_mdObjGradient + i) = m_mmdDenseObjectiveCoefficients[ objIdx][i];
+			}
+			std::cout << "Objective " << objNum << " function value =  " << m_mdObjectiveFunctionValues[ objNum] << std::endl;
+		}		
 		///
 		// now get the Jacobian and Hessian (if vdLambda.size() > 0)
 		int hessValuesIdx = 0;
