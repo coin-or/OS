@@ -179,14 +179,14 @@ bool IpoptSolver::eval_f(Index n, const Number* x, bool new_x, Number& obj_value
 bool IpoptSolver::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f){
  	int i;
  	//cout << "calculate objective function gradient function !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
-  	//double *objGrad = osinstance->calculateObjectiveFunctionGradient((double*)x, 0.0, NULL, -1, new_x, 1);
- 	osinstance->getIterateResults(  (double*)x, 0.0, NULL, -1, 1);
+  	double *objGrad = osinstance->calculateObjectiveFunctionGradient((double*)x, 0.0, NULL, -1, new_x, 1);
+ 	//osinstance->getIterateResults(  (double*)x, 0.0, NULL, -1, 1);
   	for(i = 0; i < n; i++){
   		//cout << " gradient function !!!!!!!!!!!!!!!!!!!!!!!!!! = "  <<  objGrad[ i] << endl;
   		//cout << " gradient function !!!!!!!!!!!!!!!!!!!!!!!!!! = "  <<  osinstance->m_mdObjGradient[ i] << endl;
   		// has the Jacobian already been called?
-  		grad_f[ i]  = osinstance->m_mdObjGradient[ i];
-  		//grad_f[ i]  = objGrad[ i];
+  		//grad_f[ i]  = osinstance->m_mdObjGradient[ i];
+  		grad_f[ i]  = objGrad[ i];
   	}
   	return true;
 }//eval_grad_f

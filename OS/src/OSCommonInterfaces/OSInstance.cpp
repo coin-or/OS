@@ -1813,40 +1813,48 @@ SparseJacobianMatrix *OSInstance::calculateAllConstraintFunctionGradients(double
 double *OSInstance::calculateObjectiveFunctionGradient(double* x, double objLambda, double *conLambda,
 		int objIdx, bool new_x, int highestOrder){
 	try{
-		// kipp -- put in check to make sure objIdx is valid
-		//if( new_x == false && (highestOrder <= m_iHighestOrderEvaluated)  ) {
-		//	return m_mdObjGradient;
-		//}
-		// if here, we need to do an evaluation
-		//getIterateResults(x, objLambda, conLambda, objIdx,  highestOrder);
-		
-		int idx = objIdx;
-		m_iHighestOrderEvaluated = -1;
-		// make sure the index idx is valid
-		if(idx >= 0 || getObjectiveNumber() <= ( abs( idx) - 1)  ) throw 
-			ErrorClass("obj index not valid in OSInstance::calculateObjectiveFunctionGradient");
-		//if( gradientEvaluated == true) return m_mdObjGradient;
 		int i;
-		int numVar = getVariableNumber();
-		std::map<int, int>::iterator posVarIdx;
-		std::vector<double> jac;
-		// get the values from the ObjCoef object
-		int objIdx = (abs( idx) - 1);
-		for(i = 0; i < numVar; i++){
-			*(m_mdObjGradient + i) = m_mmdDenseObjectiveCoefficients[ objIdx][i];
+		// kipp -- put in check to make sure objIdx is valid
+		
+		// kipp don't don't do this at every iteration --  make more efficient
+		
+		for(i = 0; i < m_iVariableNumber; i++){
+			*(m_mdObjGradient + i) = m_mmdDenseObjectiveCoefficients[ abs( objIdx) - 1][i]; 
 		}
-		// get the gradient
-		if( m_mapExpressionTreesMod.find( idx) != m_mapExpressionTreesMod.end() ){
-			//jac = m_mapExpressionTreesMod[ idx]->calculateGradientReTape(x, functionEvaluated);
-			jac = m_mapExpressionTreesMod[ idx]->calculateGradientReTape(x, false);
-			i = 0;
-			for(posVarIdx = (*m_mapExpressionTreesMod[ idx]->mapVarIdx).begin(); posVarIdx 
-			!= (*m_mapExpressionTreesMod[ idx]->mapVarIdx).end(); ++posVarIdx){
-				*(m_mdObjGradient + posVarIdx->first) += jac[ i];	
-				//std::cout << "Objective  Partial = " <<  jac[ i] << std::endl;
-				i++;
-			}
+		// fix above
+		if( new_x == false && (highestOrder <= m_iHighestOrderEvaluated)  ) {
+			return m_mdObjGradient;
 		}
+		// if here, we need to do an evaluation
+		getIterateResults(x, objLambda, conLambda, objIdx,  highestOrder);
+		
+//		int idx = objIdx;
+//		m_iHighestOrderEvaluated = -1;
+//		// make sure the index idx is valid
+//		if(idx >= 0 || getObjectiveNumber() <= ( abs( idx) - 1)  ) throw 
+//			ErrorClass("obj index not valid in OSInstance::calculateObjectiveFunctionGradient");
+//		//if( gradientEvaluated == true) return m_mdObjGradient;
+//		int i;
+//		int numVar = getVariableNumber();
+//		std::map<int, int>::iterator posVarIdx;
+//		std::vector<double> jac;
+//		// get the values from the ObjCoef object
+//		int objIdx = (abs( idx) - 1);
+//		for(i = 0; i < numVar; i++){
+//			*(m_mdObjGradient + i) = m_mmdDenseObjectiveCoefficients[ objIdx][i];
+//		}
+//		// get the gradient
+//		if( m_mapExpressionTreesMod.find( idx) != m_mapExpressionTreesMod.end() ){
+//			//jac = m_mapExpressionTreesMod[ idx]->calculateGradientReTape(x, functionEvaluated);
+//			jac = m_mapExpressionTreesMod[ idx]->calculateGradientReTape(x, false);
+//			i = 0;
+//			for(posVarIdx = (*m_mapExpressionTreesMod[ idx]->mapVarIdx).begin(); posVarIdx 
+//			!= (*m_mapExpressionTreesMod[ idx]->mapVarIdx).end(); ++posVarIdx){
+//				*(m_mdObjGradient + posVarIdx->first) += jac[ i];	
+//				//std::cout << "Objective  Partial = " <<  jac[ i] << std::endl;
+//				i++;
+//			}
+//		}
 	}
 	catch(const ErrorClass& eclass){
 		throw ErrorClass( eclass.errormsg);
@@ -2517,8 +2525,7 @@ bool OSInstance::getIterateResults( double *x, double objMultiplier, double* con
 		}
 		for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
 			vdX[i] = 1.;     
-			rowNum = 0;    
-			*(m_mdObjGradient + i) = m_mmdDenseObjectiveCoefficients[ abs( objIdx) - 1][i];       
+			rowNum = 0;          
 			vdYjacval = this->forwardAD(1, vdX); 
 			// fill in Jacobian here, we have column i 
 			// start Jacobian calculation
