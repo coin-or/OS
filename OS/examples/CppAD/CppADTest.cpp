@@ -235,7 +235,7 @@ int  main(){
 		// Now start using the nonlinear API
 		// check function values, both objectives and constraints
 		std::cout << "Call  = calculateAllConstraintFunctionValues"  << std::endl;			
-		conVals = osinstance->calculateAllConstraintFunctionValues( x, false);
+		conVals = osinstance->calculateAllConstraintFunctionValues( x, 0.0, NULL, -1, true, 1);
 		// note: if you just want the value for constraint function indexed by
 		// idx call the method:
 		//calculateFunctionValue(int idx, double *x, bool functionEvaluated)

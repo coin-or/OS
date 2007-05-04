@@ -168,7 +168,7 @@ bool IpoptSolver::get_starting_point(Index n, bool init_x, Number* x,
 // returns the value of the objective function
 bool IpoptSolver::eval_f(Index n, const Number* x, bool new_x, Number& obj_value){
  	//cout << "calculate function value !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  " INDEX = " << n << endl;
-	obj_value = osinstance->calculateFunctionValue(-1, (double*)x, false);
+	obj_value = osinstance->calculateObjectiveFunctionValue( (double*)x, 0.0, NULL, -1, new_x, 0);
 	if( CommonUtil::ISOSNAN( (double)obj_value) ) return false;
 	//for(int i = 0; i < n; i++) cout << "x[ i] =  !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  x[ i]  << endl;
 	//cout << "calculated function value !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  obj_value  << endl;
@@ -194,7 +194,7 @@ bool IpoptSolver::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad
 // return the value of the constraints: g(x)
 bool IpoptSolver::eval_g(Index n, const Number* x, bool new_x, Index m, Number* g) {
 	//cout << "get value of constraint !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  " INDEX = " << n << endl;
- 	double *conVals = osinstance->calculateAllConstraintFunctionValues((double*)x, false);
+ 	double *conVals = osinstance->calculateAllConstraintFunctionValues((double*)x, 0.0, NULL, -1, new_x, 0 );
  	//cout << "got value of constraints !!!!!!!!!!!!!!!!!!!!!!!!!! " <<   endl;
  	int i;
  	for(i = 0; i < m; i++){

@@ -1264,11 +1264,36 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * <p>
 	 * 
 	 * @param x is a pointer (double array) to the current variable values
-	 * @param allFunctionsEvaluated is true if all constraint functions have been evaluated for the current iterate x.
-	 * use a value of false if not sure
+	 * @param objLambda is the Lagrange multiplier on the objective function
+	 * @param conLambda is pointer (double array) of Lagrange multipliers on
+	 * the constratins
+	 * @parma objIdx is the index of the objective function being optimized
+	 * @param new_x is false if any evaluation method was previously called
+	 * for the current iterate
+	 * @param highestOrder is the highest order of the derivative being calculated
 	 * @return a double array of constraint function values -- the size of the array is equal to getConstraintNumber().  
 	 */
-	double *calculateAllConstraintFunctionValues( double* x, bool allFunctionsEvaluated);
+	double *calculateAllConstraintFunctionValues(double* x, double objLambda, double *conLambda,
+		int objIdx, bool new_x, int highestOrder);
+		
+		
+	/**
+	 * Calculate an objective function value
+	 * 
+	 * <p>
+	 * 
+	 * @param x is a pointer (double array) to the current variable values
+	 * @param objLambda is the Lagrange multiplier on the objective function
+	 * @param conLambda is pointer (double array) of Lagrange multipliers on
+	 * the constratins
+	 * @parma objIdx is the index of the objective function being optimized
+	 * @param new_x is false if any evaluation method was previously called
+	 * for the current iterate
+	 * @param highestOrder is the highest order of the derivative being calculated
+	 * @return an objective function value as a double.  
+	 */
+	double calculateObjectiveFunctionValue(double* x, double objLambda, double *conLambda,
+		int objIdx, bool new_x, int highestOrder);
 	
 	/**
 	 * Calculate all of the objective function values
