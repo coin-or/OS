@@ -642,7 +642,7 @@ private:
      /**
 	 * m_mdJacValue holds a double array of partial derivatives for the Jacobian matrix in sparse form (row major).  
      */    
- 	//double *m_mdJacValue;
+ 	double *m_mdJacValue;
  	
  	
  	/**
@@ -1288,16 +1288,17 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * <p>
 	 * 
 	 * @param x is a pointer (double array) to the current variable values
-	 * @param functionEvaluated is true if any constraint function gradient
-	 * has been evaluated for the current iterate x
-	 * use a value of false if not sure
-	 * @param gradientEvaluated is true if any constraint function gradient
-	 * has been evaluated for the current iterate x
-	 * use a value of false if not sure
+	 * @param objLambda is the Lagrange multiplier on the objective function
+	 * @param conLambda is pointer (double array) of Lagrange multipliers on
+	 * the constratins
+	 * @parma objIdx is the index of the objective function being optimized
+	 * @param new_x is false if any evaluation method was previously called
+	 * for the current iterate
+	 * @param highestOrder is the highest order of the derivative being calculated
 	 * @return a pointer a SparseJacobianMatrix. 
-	 * Each array member corresponds to one constraint gradient.
 	 */
-	SparseJacobianMatrix *calculateAllConstraintFunctionGradients(double* x, bool allFunctionsEvaluated, bool allGradientsEvaluated);				
+	SparseJacobianMatrix *calculateAllConstraintFunctionGradients(double* x, double objLambda, double *conLambda,
+		int objIdx, bool new_x, int highestOrder);				
 
 	/**
 	 * Calculate the gradient of the function indexed by idx
@@ -1305,15 +1306,17 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * <p>
 	 * 
 	 * @param x is a pointer (double array) to the current variable values
-	 * @param allFunctionEvaluated is true if all functions have been evaluated
-	 * has been evaluated for the current iterate x
-	 * use a value of false if not sure
-	 * @param gradientEvaluated is true if the function gradient (constraint or objective) indexed by idx
-	 * has been evaluated for the current iterate x
-	 * use a value of false if not sure
+	 * @param objLambda is the Lagrange multiplier on the objective function
+	 * @param conLambda is pointer (double array) of Lagrange multipliers on
+	 * the constratins
+	 * @parma objIdx is the index of the objective function being optimized
+	 * @param new_x is false if any evaluation method was previously called
+	 * for the current iterate
+	 * @param highestOrder is the highest order of the derivative being calculated
 	 * @return a pointer to a dense vector of doubles.  
 	 */
-	double *calculateObjectiveFunctionGradient(int idx, double* x, bool functionEvaluated, bool gradientEvaluated);
+	double *calculateObjectiveFunctionGradient(double* x, double objLambda, double *conLambda,
+		int objIdx, bool new_x, int highestOrder);
 
 	/**
 	 * Calculate the Hessian of the Lagrangian Expression Tree
@@ -1485,13 +1488,14 @@ public:
 	 * <p>
 	 * 
 	 * @param x is a pointer of doubles of primal values  for the current iteration
-	 * @param conVals is a pointer of doubles of the current dual (lagrange) multipliers on the constraitns
-	 * @param conVals is a pointer of doubles of the current dual (lagrange) multipliers on the objectives
+	 * @param objMultiplier is the Lagrange multiplier on objIdx
+	 * @param conMultipliers is a pointer of doubles of the current dual (lagrange) multipliers on the constraitns
 	 * @param objIdx is the index of the object function of interest, -1, -2, ...
+	 * @param highestOrder is the highest order derivative to be calculated
 	 * if conVals and ojbVals == NULL we do not calculate the Hessian of the Lagrangian
 	 * @return true if successful 
 	 */		 
-	bool getIterateResults(double *x, double *conVals, double *objVals, int objIdx);
+	bool getIterateResults(double *x, double objMultiplier, double *conMultipliers, int objIdx, int highestOrder);
 	
 
 	
@@ -1506,19 +1510,19 @@ public:
 	bool initForCallBack();
 	
 	
-	//
-	//
-     /**
-	 * m_mdJacValue holds a double array of partial derivatives for the Jacobian matrix in sparse form (row major).  
-     */    
- 	double *m_mdJacValue;	
- 	
- 	/**
+	/**
+	 * m_iHighestOrderEvaluated is the highest order derivative
+	 * of the current iterate
+	 */	 
+	 int m_iHighestOrderEvaluated;
+	
+	
+	/**
 	 * m_mdObjGradient holds a dense vector of an objective function gradient. 
 	 */
 	double* m_mdObjGradient;
 	
-																																																	
+																																																			
 }; //class OSInstance
 
 #endif

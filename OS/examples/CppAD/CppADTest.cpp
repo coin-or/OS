@@ -147,7 +147,7 @@ int  main(){
 		xx[1] = 5;
 		xx[2] = 5;
 		sparseJac = osinstance->getJacobianSparsityPattern();
-		osinstance->getIterateResults(x, z, w, -1);
+		osinstance->getIterateResults(x, 1.0, z, -1, 2);
 		//for(idx = 0; idx < osinstance->getConstraintNumber(); idx++){
 		//	for(k = *(sparseJac->starts + idx); k < *(sparseJac->starts + idx + 1); k++){
 		//		std::cout << "row idx = " << idx <<  "  col idx = "<< *(sparseJac->indexes + k)
@@ -157,7 +157,7 @@ int  main(){
 		//for(int kjl = 0; kjl < k; kjl++){
 		//	std::cout << "forward 0 " << funVals[ kjl] << std::endl;
 		//}
-		return 0;
+		//return 0;
 		//
 
 		//
@@ -267,7 +267,7 @@ int  main(){
 		double *objGrad;
 		std::cout << "OBJECTIVE FUNCTION GRADIENT"   << std::endl;
 		// in our implementation the objective function is a dense gradient
-		objGrad = osinstance->calculateObjectiveFunctionGradient( -1, &x[0], false, false);
+		objGrad = osinstance->calculateObjectiveFunctionGradient( &x[0], 0.0, NULL,  -1, false, 1);
 		for(idx = 0; idx < osinstance->getVariableNumber(); idx++){
 			std::cout << "col idxx = " << idx << "  value =  " << *(objGrad + idx)  << std::endl;
 		}
@@ -290,7 +290,7 @@ int  main(){
 		}	
 		std::cout << "JACOBIAN MATRIX"   << std::endl;
 		// now make the gradient calculations and fill in the sparse Jacobian matrix
-		sparseJac = osinstance->calculateAllConstraintFunctionGradients( &x[0], false, false);
+		sparseJac = osinstance->calculateAllConstraintFunctionGradients( &x[0], 0.0, NULL,  -1, false, 1);
 		for(idx = 0; idx < osinstance->getConstraintNumber(); idx++){
 			for(k = *(sparseJac->starts + idx); k < *(sparseJac->starts + idx + 1); k++){
 				std::cout << "row idx = " << idx <<  "  col idx = "<< *(sparseJac->indexes + k)
