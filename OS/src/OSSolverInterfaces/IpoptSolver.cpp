@@ -180,7 +180,7 @@ bool IpoptSolver::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad
  	int i;
  	//cout << "calculate objective function gradient function !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
   	double *objGrad = osinstance->calculateObjectiveFunctionGradient((double*)x, 0.0, NULL, -1, new_x, 1);
- 	//osinstance->getIterateResults(  (double*)x, 0.0, NULL, -1, 1);
+ 	//osinstance->getIterateResults(  (double*)x, 0.0, NULL, -1, new_x,  1);
   	for(i = 0; i < n; i++){
   		//cout << " gradient function !!!!!!!!!!!!!!!!!!!!!!!!!! = "  <<  objGrad[ i] << endl;
   		//cout << " gradient function !!!!!!!!!!!!!!!!!!!!!!!!!! = "  <<  osinstance->m_mdObjGradient[ i] << endl;
@@ -241,7 +241,7 @@ bool IpoptSolver::eval_jac_g(Index n, const Number* x, bool new_x,
 		//std::cout << "EVALUATING JACOBIAN" << std::endl; 
 		sparseJacobian = osinstance->calculateAllConstraintFunctionGradients((double*)x, 0.0, NULL, -1, new_x, 1);
 		//values = sparseJacobian->values;
-		//osinstance->getIterateResults( (double*)x, 0.0, NULL, -1, 1);
+		//osinstance->getIterateResults( (double*)x, 0.0, NULL, -1, new_x,  1);
 		for(int i = 0; i < nele_jac; i++){
 			values[ i] = sparseJacobian->values[i];
 			//values[ i] = osinstance->m_mdJacValue[ i];

@@ -1512,12 +1512,31 @@ public:
 	 * @param objMultiplier is the Lagrange multiplier on objIdx
 	 * @param conMultipliers is a pointer of doubles of the current dual (lagrange) multipliers on the constraitns
 	 * @param objIdx is the index of the object function of interest, -1, -2, ...
+	 * @param new_x is false if any evaluation method was previously called
 	 * @param highestOrder is the highest order derivative to be calculated
-	 * if conVals and ojbVals == NULL we do not calculate the Hessian of the Lagrangian
 	 * @return true if successful 
 	 */		 
-	bool getIterateResults(double *x, double objMultiplier, double *conMultipliers, int objIdx, int highestOrder);
-	
+	bool getIterateResults(double *x, double objMultiplier, double *conMultipliers, int objIdx, 
+			bool new_x, int highestOrder);
+			
+			
+			
+	/**
+	 * Get the information for each iteration. Get the functions values, Jacobian
+	 * and Hessian of the Lagrangian   
+	 * 
+	 * <p>
+	 * 
+	 * @param x is a pointer of doubles of primal values  for the current iteration
+	 * @param objMultiplier is the Lagrange multiplier on objIdx
+	 * @param conMultipliers is a pointer of doubles of the current dual (lagrange) multipliers on the constraitns
+	 * @param objIdx is the index of the object function of interest, -1, -2, ...
+	 * @param new_x is false if any evaluation method was previously called
+	 * @return true if successful 
+	 */		 
+	bool getZeroOrderResults(double *x, double objMultiplier, double *conMultipliers, int objIdx, 
+			bool new_x);
+			
 
 	
 	/**
@@ -1538,7 +1557,50 @@ public:
 	 int m_iHighestOrderEvaluated;
 	
 	
+	//define the vectors
+
+	/**
+	 * m_vdX is a vector of primal variables at each iteration
+	 *   
+	 */		
+	std::vector<double> m_vdX;
 	
+	/**
+	 * m_vdYval is a vector function values
+	 *   
+	 */	
+	std::vector<double> m_vdYval;
+	
+	/**
+	 * m_vdYval is a vector equal to a column or row of the Jacobian
+	 *   
+	 */	
+	std::vector<double> m_vdYjacval;
+
+	/**
+	 * m_vdYval is a vector of derivatives -- output  from a reverse sweep
+	 *   
+	 */		
+	std::vector<double> m_vdw;
+	
+	/**
+	 * m_vdYval is a vector of Lagrange multipliers
+	 *   
+	 */		
+	std::vector<double> m_vdLambda;
+	
+	
+	/**
+	 * m_vdDomainUnitVec is a unit vector in the domain space
+	 *   
+	 */		
+	std::vector<double> m_vdDomainUnitVec;
+	
+	/**
+	 * m_vdRangeUnitVec is a unit vector in the range space
+	 *   
+	 */		
+	std::vector<double> m_vdRangeUnitVec;
 																																																			
 }; //class OSInstance
 
