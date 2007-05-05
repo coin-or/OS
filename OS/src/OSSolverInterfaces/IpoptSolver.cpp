@@ -277,10 +277,10 @@ bool IpoptSolver::eval_h(Index n, const Number* x, bool new_x,
 	else {
 		//std::cout << "EVALUATING HESSIAN" << std::endl; 
 		// return the values. This is a symmetric matrix, fill the lower left triangle only
-		double* objMultipliers = new double[1];
-		objMultipliers[0] = obj_factor;
+		//double* objMultipliers = new double[1];
+		//objMultipliers[0] = obj_factor;
 		//sparseHessian = osinstance->calculateLagrangianHessianReTape((double*)x, (double*)lambda, objMultipliers, false, false);
-		sparseHessian = osinstance->calculateLagrangianHessian((double*)x, (double*)lambda, objMultipliers, false, false);
+		sparseHessian = osinstance->calculateLagrangianHessian((double*)x, obj_factor, (double*)lambda , -1, new_x, 2);
 		for(i = 0; i < nele_hess; i++){
 			values[ i]  = *(sparseHessian->hessValues + i);
 		}

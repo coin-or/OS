@@ -319,7 +319,7 @@ int  main(){
 		}
 		//first iteration 
 		std::cout << "GET LAGRANGIAN HESSIAN FIRST TIME"   << std::endl;
-		sparseHessian = osinstance->calculateLagrangianHessian( x, z, w, false, false);
+		sparseHessian = osinstance->calculateLagrangianHessian( x, w[0],  z,  -1, true, 2);
 		for(idx = 0; idx < sparseHessian->hessDimension; idx++){
 			std::cout << "row idx = " << *(sparseHessian->hessRowIdx + idx) <<  
 			"  col idx = "<< *(sparseHessian->hessColIdx + idx)
@@ -337,7 +337,7 @@ int  main(){
 		//second iteration
 		x[0] = 5;
 		std::cout << "NOW GET LAGRANGIAN HESSIAN SECOND TIME"   << std::endl;
-		sparseHessian = osinstance->calculateLagrangianHessian( x, z, w, false, false);
+		sparseHessian = osinstance->calculateLagrangianHessian(  x, w[0],  z,  -1, true, 2);
 		for(idx = 0; idx < sparseHessian->hessDimension; idx++){
 			std::cout << "row idx = " << *(sparseHessian->hessRowIdx + idx) <<  
 			"  col idx = "<< *(sparseHessian->hessColIdx + idx)

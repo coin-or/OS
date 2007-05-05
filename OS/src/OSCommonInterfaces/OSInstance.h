@@ -1350,23 +1350,19 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * 
 	 * <p>
 	 * 
-	 * @param x is a pointer (double) to the current primal variable values
-	 * the size of x should equal instanceData->variables->numberOfVariables
-	 * @param conMultipliers is a pointer (double) to the dual multipliers for the nonlinear 
-	 * rows, it should equal instanceData->constraints->numberOfConstraints
-	 * @param objMultipliers is a pointer (double) to the dual multipliers for the objective
-	 * rows, it should equal instanceData->objectives->numberOfObjectives
-	 * @param allFunctionsEvaluated is true if all constraint and objective functions
-	 * have been evaluated for the current iterate x
-	 * use a value of false if not sure
-	 * @param LagrangianEvaluated is true if the Hessian of the Lagrangian
-	 * has been evaluated for the current iterate x, conMultipliers, objMultipliers
-	 * use a value of false if not sure
+	 * @param x is a pointer (double array) to the current variable values
+	 * @param objLambda is the Lagrange multiplier on the objective function
+	 * @param conLambda is pointer (double array) of Lagrange multipliers on
+	 * the constratins
+	 * @parma objIdx is the index of the objective function being optimized
+	 * @param new_x is false if any evaluation method was previously called
+	 * for the current iterate
+	 * @param highestOrder is the highest order of the derivative being calculated
 	 * @return a pointer a SparseHessianMatrix. 
 	 * Each array member corresponds to one constraint gradient.
 	 */
-	SparseHessianMatrix *calculateLagrangianHessian( double* x, double* conMultipliers, 
-	double* objMultipliers, bool allFunctionsEvaluated, bool LagrangianHessianEvaluated);
+	SparseHessianMatrix *calculateLagrangianHessian( double* x, double objLambda, double *conLambda,
+		int objIdx, bool new_x, int highestOrder);
 	
 	/**
 	 * Calculate the Hessian of the Lagrangian Expression Tree  

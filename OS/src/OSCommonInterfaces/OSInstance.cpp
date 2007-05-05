@@ -1731,8 +1731,6 @@ double *OSInstance::calculateAllConstraintFunctionValues( double* x, double objL
 	if( new_x == false && (highestOrder <= m_iHighestOrderEvaluated)  ) {
 		return  m_mdConstraintFunctionValues;
 	}
-	std::cout << "HIGHEST ORDER EVALUATED =  " <<  m_iHighestOrderEvaluated <<  std::endl;
-	std::cout << "new_x =  " <<  new_x <<  std::endl;
 	// if here, we need to do an evaluation
 	getIterateResults(x, objLambda, conLambda, objIdx,  highestOrder);
  	return m_mdConstraintFunctionValues;
@@ -1758,8 +1756,6 @@ double OSInstance::calculateObjectiveFunctionValue(double* x, double objLambda, 
 		if( new_x == false && (highestOrder <= m_iHighestOrderEvaluated)  ) {
 			return m_mdObjectiveFunctionValues[ abs( objIdx) - 1];
 		}
-		std::cout << "HIGHEST ORDER EVALUATED =  " <<  m_iHighestOrderEvaluated <<  std::endl;
-		std::cout << "new_x =  " <<  new_x <<  std::endl;
 		// if here, we need to do an evaluation
 		getIterateResults(x, objLambda, conLambda, objIdx,  highestOrder);
 		return m_mdObjectiveFunctionValues[ abs( objIdx) - 1];
@@ -1786,17 +1782,6 @@ double *OSInstance::calculateAllObjectiveFunctionValues( double* x, bool allFunc
 SparseJacobianMatrix *OSInstance::calculateAllConstraintFunctionGradients(double* x, double objLambda, double *conLambda,
 		int objIdx, bool new_x, int highestOrder){
 	try{
-		std::cout << std::endl;
-		std::cout << std::endl;
-		std::cout << "INSIDE CALCULATEALLCONSTRAINTFUNCTIONGRADIENT" << std::endl;
-		for(int i = 0; i < m_sparseJacMatrix->valueSize; i++){
-			std::cout << "x[ i] =  " << x[i] << std::endl;
-		}
-		std::cout << "new_x =  " <<  new_x  << std::endl;
-		std::cout << "highestOrder =  " <<  highestOrder  << std::endl;
-		std::cout << "highestOrderEvaluated =  " <<  m_iHighestOrderEvaluated << std::endl;
-		std::cout << std::endl;
-		std::cout << std::endl;
 		// kipp -- put in check to make sure objIdx is valid
 		if( new_x == false && (highestOrder <= m_iHighestOrderEvaluated)  ) {
 			return m_sparseJacMatrix;
@@ -2173,154 +2158,65 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( ){
 }//getLagrangianHessianSparsityPattern
 
 
-SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double* conMultipliers, 
-	double* objMultipliers, bool allFunctionsEvaluated, bool LagrangianHessianEvaluated){
-	if( LagrangianHessianEvaluated == true) return m_LagrangianSparseHessian;
-	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
-	if( m_bLagrangianSparseHessianCreated == false)	getLagrangianHessianSparsityPattern();
-	// initialize everything
-	int i, j;
-	std::map<int, int>::iterator posVarIndexMap;
-	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
-	// vdX -- vector of primal variables
-	std::vector<double> vdX( m_iNumberOfNonlinearVariables);	
-	// vdLamda -- vector of Lagrange multiplies
-	std::vector<double> vdLambda( m_mapExpressionTreesMod.size());
-	// vdw is the first and second derivative vector
-	std::vector<double> vdw( 2*m_iNumberOfNonlinearVariables);
-	i = 0;
-	// get the current iterate data
-	for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
-			vdX[ i++] = x[ posVarIndexMap->first] ;
-	}
-	if(m_bCppADFunIsCreated == false) {
-		createCppADFun( vdX);
-	}
-	//Kipp -- come back and put check in see if m_iHighestTaylorCoeffOrder >= 0, if so, don't execute
-	this->forwardAD(0, vdX);	
-	//  get the Lagrange multipliers
-	i = 0;
-	for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){	
-		if( posMapExpTree->first >= 0){
-			vdLambda[i++] = conMultipliers[ posMapExpTree->first];
-		}
-		else{
-			vdLambda[ i++] =  objMultipliers[ abs(posMapExpTree->first) - 1] ;
-		}
-	}
-	int hessValuesIdx = 0;
-	// loop over components of x
-	// initialize to 0
-	for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
-		vdX[ i] = 0;
-	}
-	for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
-		vdX[i] = 1.;                
-		this->forwardAD(1, vdX);     
-		vdw = this->reverseAD(2, vdLambda);   // derivtative of partial
-		for(j = i; j < m_iNumberOfNonlinearVariables; j++){
-			m_LagrangianSparseHessian->hessValues[ hessValuesIdx++] =  vdw[  j*2 + 1];
-		}
-		vdX[i] = 0.;
-	}
-	return m_LagrangianSparseHessian;
-}//calculateLagrangianHessian
+SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double objLambda, double *conLambda,
+		int objIdx, bool new_x, int highestOrder){
 
-//SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double* conMultipliers, 
-//	double* objMultipliers, bool allFunctionsEvaluated, bool LagrangianHessianEvaluated){
+		if( new_x == false && (highestOrder <= m_iHighestOrderEvaluated)  ) {
+			return m_LagrangianSparseHessian;
+		}
+		// if here, we need to do an evaluation
+		getIterateResults(x, objLambda, conLambda, objIdx,  highestOrder);
+		return m_LagrangianSparseHessian;
 //	if( LagrangianHessianEvaluated == true) return m_LagrangianSparseHessian;
 //	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
+//	if( m_bLagrangianSparseHessianCreated == false)	getLagrangianHessianSparsityPattern();
 //	// initialize everything
 //	int i, j;
 //	std::map<int, int>::iterator posVarIndexMap;
 //	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
-//	std::vector<double> m_vdx( m_iNumberOfNonlinearVariables);	
-//	std::vector<double> m_vw( m_mapExpressionTreesMod.size());
-//	std::vector<double> m_vdw( 2*m_iNumberOfNonlinearVariables);	
-//	if( m_bCppADTapesBuilt == false){
-//		// this loop is only done once
-//		// if we have not filled in the Sparse Jacobian matrix do so now
-//		if( m_bSparseJacobianCalculated == false) getJacobianSparsityPattern();
-//		// get an index map of all of the nonlinear variables in the Hessian of the  Lagrangian
-//		// this method call will define m_iNumberOfNonlinearVariables
-//		if( m_bAllNonlinearVariablesIndex == false) getAllNonlinearVariablesIndexMap( );
-//		// fill in the nonzeros in the sparse Hessian
-//		if( m_bLagrangianSparseHessianCreated == false)	getLagrangianHessianSparsityPattern();
-//		// put in code to call CppAD and get the Hessian
-//		// for each row with a nonlinear term, build a CppAD representation of the  Expression tree
-//		// get the data
-//		// push the primal variables
-//		
-//		for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
-//			m_vX.push_back( x[ posVarIndexMap->first] );
-//			// also initialize the m_vIter
-//			m_vXITER.push_back(0.0); 
-//		}
-//		// declare the independent variables and start recording
-//		CppAD::Independent( m_vX);
-//		// For expression tree, record the operations for CppAD
-//		for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){	
-//			m_vFG.push_back( (posMapExpTree->second)->m_treeRoot->constructCppADTape(&m_mapAllNonlinearVariablesIndex, &m_vX) );
-//		}	
-//		//create the function and stop recording
-//		F = new CppAD::ADFun<double>(m_vX, m_vFG);
-//		//(*F).Dependent( m_vFG);
-//		// allocate necessary vector memory
-//		//m_vdx.reserve( m_iNumberOfNonlinearVariables );
-//		// initialize to zero
-//		for(i = 0; i < m_iNumberOfNonlinearVariables; i++) m_vdx[i] = 0.;
-//		//m_vw.reserve( m_mapExpressionTreesMod.size() );
-//		//m_vdw.reserve( 2*m_iNumberOfNonlinearVariables );	
-//		//m_vXITER.reserve( m_iNumberOfNonlinearVariables);
-//		m_vH.reserve( m_iNumberOfNonlinearVariables * m_iNumberOfNonlinearVariables );
-//		m_bCppADTapesBuilt = true;
-//	}
-//	// get the current iterate data
+//	// vdX -- vector of primal variables
+//	std::vector<double> vdX( m_iNumberOfNonlinearVariables);	
+//	// vdLamda -- vector of Lagrange multiplies
+//	std::vector<double> vdLambda( m_mapExpressionTreesMod.size());
+//	// vdw is the first and second derivative vector
+//	std::vector<double> vdw( 2*m_iNumberOfNonlinearVariables);
 //	i = 0;
-//	if(allFunctionsEvaluated == false){
-//		//std::cout << "SIZE OF MAP " << m_mapAllNonlinearVariablesIndex.size() <<  std::endl;
-//		for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
-//			m_vXITER[ i++] = x[ posVarIndexMap->first] ;
-//			//m_vXITER.push_back( x[ posVarIndexMap->first]);
-//		}
-//		(*F).Forward(0, m_vXITER);
-//		
+//	// get the current iterate data
+//	for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
+//			vdX[ i++] = x[ posVarIndexMap->first] ;
 //	}
+//	if(m_bCppADFunIsCreated == false) {
+//		createCppADFun( vdX);
+//	}
+//	//Kipp -- come back and put check in see if m_iHighestTaylorCoeffOrder >= 0, if so, don't execute
+//	this->forwardAD(0, vdX);	
 //	//  get the Lagrange multipliers
 //	i = 0;
 //	for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){	
 //		if( posMapExpTree->first >= 0){
-//			m_vw[i++] = conMultipliers[ posMapExpTree->first];
+//			vdLambda[i++] = conMultipliers[ posMapExpTree->first];
 //		}
 //		else{
-//			m_vw[ i++] =  objMultipliers[ abs(posMapExpTree->first) - 1] ;
+//			vdLambda[ i++] =  objMultipliers[ abs(posMapExpTree->first) - 1] ;
 //		}
 //	}
+//	int hessValuesIdx = 0;
 //	// loop over components of x
+//	// initialize to 0
 //	for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
-//		m_vdx[i] = 1.;                   // m_vdx is i-th elementary vector
-//		//std::cout << "do a forward calcuation for variable " << i << std::endl;
-//		//std::cout << "size is  " << m_vdx.size() << std::endl;
-//		(*F).Forward(1, m_vdx);          // partial w.r.t dx
-//		//(*F).Forward(1, dx);          // partial w.r.t dx
-//		//std::cout << "do a reverse calculation for variable " << i << std::endl;
-//		m_vdw = (*F).Reverse(2, m_vw);   // deritavtive of partial
-//		for(j = 0; j < m_iNumberOfNonlinearVariables; j++){
-//			m_vH[ i * m_iNumberOfNonlinearVariables + j ] = m_vdw[ j * 2 + 1 ]; // fill in the Hessian
-//		}
-//		m_vdx[i] = 0.;   // m_vdx is zero vector
+//		vdX[ i] = 0;
 //	}
-//	int hessValuesIdx = 0;	
-//	for(i = 0; i <  m_iNumberOfNonlinearVariables; i++){
-//		for (j  = i; j <  m_iNumberOfNonlinearVariables; j++ ){
-//			std::cout << "UPPER TRIANGULAR HESSIAN VALUES   " << m_vH[ i*m_iNumberOfNonlinearVariables + j] << std::endl;
-//			m_LagrangianSparseHessian->hessValues[ hessValuesIdx++] =  m_vH[ i*m_iNumberOfNonlinearVariables + j];
+//	for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
+//		vdX[i] = 1.;                
+//		this->forwardAD(1, vdX);     
+//		vdw = this->reverseAD(2, vdLambda);   // derivtative of partial
+//		for(j = i; j < m_iNumberOfNonlinearVariables; j++){
+//			m_LagrangianSparseHessian->hessValues[ hessValuesIdx++] =  vdw[  j*2 + 1];
 //		}
-//	}	
-//	//m_vXITER.clear();
-//	//m_vw.clear();
-//	return m_LagrangianSparseHessian;
-//}//calculateLagrangianHessianOLDWAY
+//		vdX[i] = 0.;
+//	}
+	return m_LagrangianSparseHessian;
+}//calculateLagrangianHessian
 
 SparseHessianMatrix *OSInstance::calculateLagrangianHessianReTape( double* x, double* conMultipliers, 
 	double* objMultipliers, bool allFunctionsEvaluated, bool LagrangianHessianEvaluated){
@@ -2442,6 +2338,7 @@ std::vector<double> OSInstance::forwardAD(size_t p, std::vector<double> vdX){
 			ErrorClass( "trying to calculate a p order forward when p-1 Taylor coefficient not available");
 		// adjust the order of the Taylor coefficient
 		m_iHighestTaylorCoeffOrder = p;	
+		m_iHighestOrderEvaluated = p;
 		//for(int i  = 0; i < vdX.size(); i++){
 			//std::cout << "ForwardAD Primal Variables " << i   << " " << vdX[ i] << std::endl;
 		//}
@@ -2460,6 +2357,7 @@ std::vector<double> OSInstance::reverseAD(size_t p, std::vector<double> vdlambda
 		//for(int i  = 0; i < vdlambda.size(); i++){
 		//	std::cout << "ReverseAD Multiplier " << i   << " " << vdlambda[ i] << std::endl;
 		//}
+		m_iHighestOrderEvaluated = p;
 		return (*Fad).Reverse(p, vdlambda);
 	}
 	catch(const ErrorClass& eclass){
@@ -2511,7 +2409,6 @@ bool OSInstance::getIterateResults( double *x, double objMultiplier, double* con
 		// first get the function values
 		if( m_mapExpressionTreesMod.size() > 0){
 			vdYval = this->forwardAD(0, vdX);	
-			m_iHighestOrderEvaluated = 0;
 		}
 		// now get all function and constraint values using forward result
 		for(rowNum = 0; rowNum < m_iConstraintNumber; rowNum++){
@@ -2558,7 +2455,6 @@ bool OSInstance::getIterateResults( double *x, double objMultiplier, double* con
 			rowNum = 0;
 			if( m_mapExpressionTreesMod.size() > 0){          
 				vdYjacval = this->forwardAD(1, vdX);
-				m_iHighestOrderEvaluated = 1;
 			} 
 			// fill in Jacobian here, we have column i 
 			// start Jacobian calculation
@@ -2591,7 +2487,6 @@ bool OSInstance::getIterateResults( double *x, double objMultiplier, double* con
 			if( highestOrder == 2){ 
 				if( m_mapExpressionTreesMod.size() > 0){   
 					vdw = reverseAD(2, vdLambda);   // derivtative of partial
-					m_iHighestOrderEvaluated = 2;
 				}
 				for(j = i; j < m_iNumberOfNonlinearVariables; j++){
 					m_LagrangianSparseHessian->hessValues[ hessValuesIdx++] =  vdw[  j*2 + 1];
@@ -2602,7 +2497,7 @@ bool OSInstance::getIterateResults( double *x, double objMultiplier, double* con
 			vdX[i] = 0.;
 		}
 		#ifdef DEBUG
-		if(highestOrder == true){
+		if(highestOrder == 2){
 			std::cout << "HERE IS HESSIAN OF THE LAGRANGIAN" << std::endl;
 			for(i = 0; i < hessValuesIdx; i++){
 				std::cout << "reverse 2 " << m_LagrangianSparseHessian->hessValues[ i] << std::endl;

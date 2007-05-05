@@ -3,20 +3,20 @@
 	<instanceHeader>
 		<name>callBackTest.osil</name>
 		<description> 
-			A problem designed to test callback features. Model is linear
+			A problem designed to test callback features. The constraints are linear
 			in x0 x4 and x7
 		</description>
 	</instanceHeader>
 	<instanceData>
 		<variables numberOfVariables="8">
-			<var name = "x0" lb="0" ub="10000"  type="C"/>
-			<var name = "x1" lb="0" ub="10000"  type="C"/>
-			<var name = "x2" lb="0" ub="10000"  type="C"/>
-			<var name = "x3" lb="10" ub="1000"  type="C"/>
-			<var name = "x4" lb="10" ub="1000"  type="C"/>
-			<var name = "x5" lb="10" ub="1000"  type="C"/>
-			<var name = "x6" lb="10" ub="1000"  type="C"/>
-			<var name = "x7" lb="10" ub="1000"  type="C"/>
+			<var name = "x0" lb="1" ub="10"  type="C"/>
+			<var name = "x1" lb="1" ub="10"  type="C"/>
+			<var name = "x2" lb="0" ub="10"  type="C"/>
+			<var name = "x3" lb="0" ub="10"  type="C"/>
+			<var name = "x4" lb="0" ub="10"  type="C"/>
+			<var name = "x5" lb="0" ub="10"  type="C"/>
+			<var name = "x6" lb="0" ub="10"  type="C"/>
+			<var name = "x7" lb="0" ub="10"  type="C"/>
 		</variables>
 		<objectives numberOfObjectives=" 1">
 			<obj maxOrMin="min" name="minCost" numberOfObjCoef="2">
@@ -67,6 +67,12 @@
 					<variable coef="-1.0" idx="2"/>
 					<variable coef="1.0" idx="6"/>
 				</times>
+			</nl>
+			<nl idx="-1">
+					<times>
+						<variable coef="1.0" idx="2"/>
+						<variable coef="1.0" idx="2"/>
+					</times>
 			</nl>
 		</nonlinearExpressions>
 	</instanceData>
