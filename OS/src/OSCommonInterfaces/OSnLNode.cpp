@@ -842,9 +842,8 @@ double OSnLNodePower::calculateFunction(double *x){
 	return  m_dFunctionValue;
 }// end OSnLNodePower::calculate
 
-
+//
 AD<double> OSnLNodePower::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
-	// old way of doing this	
 	if( typeid( *m_mChildren[1]) == typeid( OSnLNodeNumber) ) {
 		OSnLNodeNumber *numberNode  =  (OSnLNodeNumber*)m_mChildren[1];
 		// we have a number node see if interger

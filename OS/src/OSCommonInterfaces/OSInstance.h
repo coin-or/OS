@@ -449,6 +449,11 @@ private:
 	 * m_bColumnMajor holds whether the linear constraint coefficients are stored in column major. 
 	 */
 	bool m_bColumnMajor;
+	
+	/**
+	 * m_binitForCallBack  is true if initForCallBack() has been called.
+	 */	
+	bool m_binitForCallBack;
 
 
 	/**

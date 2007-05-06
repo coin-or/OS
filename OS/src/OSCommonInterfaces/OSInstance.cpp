@@ -94,7 +94,8 @@ OSInstance::OSInstance():
 	m_bProcessExpressionTrees( false),
 	m_iConstraintNumberNonlinear( 0),
 	m_iObjectiveNumberNonlinear( 0),
-	m_iHighestOrderEvaluated( -1)
+	m_iHighestOrderEvaluated( -1),
+	m_binitForCallBack( false)
 {    
 	#ifdef DEBUG
 	cout << "Inside OSInstance Constructor" << endl;
@@ -2347,11 +2348,8 @@ std::vector<double> OSInstance::reverseAD(size_t p, std::vector<double> vdlambda
 
 bool OSInstance::getIterateResults( double *x, double objMultiplier, double* conMultipliers, 
 		int objIdx, bool new_x, int highestOrder){
-	// Assume the function is Fad(vdX, vdLambda)
 	try{ 
-		//kipp -- change this to put in an if for initCallBack
-		if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
-		if( m_bLagrangianSparseHessianCreated == false)  getLagrangianHessianSparsityPattern( );
+		if( m_binitForCallBack == false) initForCallBack();
 		std::map<int, int>::iterator posVarIndexMap;
 		
 		if(new_x == true){
@@ -2444,20 +2442,15 @@ bool OSInstance::getFirstOrderResults(double *x, double objMultiplier, double *c
 		int i, j, rowNum, objNum, jacIndex;
 		int jstart, jend, idx;
 		OSExpressionTree *expTree = NULL;
-		int hessValuesIdx = 0;	
+		int domainIdx = 0;	
 		std::map<int, OSExpressionTree*>::iterator posMapExpTree;
 		std::map<int, int>::iterator posVarIdx;
-		
+			
 		/** if the number of columns exceeds the number of rows we will get the 
 		 * Jacobian by row, however, if the number of rows exceeds the number of 
 		 * columns we get the Jacobian by columnd
 		 */		
-		 
-
-			
-		int jacIdx;
-		int domainIdx = 0;
-		std::vector<double> tmpGrad;
+		
 		if(m_iNumberOfNonlinearVariables >= m_mapExpressionTreesMod.size() ){
 			// calculate the gradient by doing a reverse sweep over each row
 			// loop over the constraints that have a nonlinear term and get their gradients
@@ -2467,48 +2460,41 @@ bool OSInstance::getFirstOrderResults(double *x, double objMultiplier, double *c
 				if(idx >= 0){
 					m_vdRangeUnitVec[ domainIdx] = 1.;
 					m_mapExpressionTreesMod[ idx]->getVariableIndiciesMap(); 
-					tmpGrad = this->reverseAD(1, m_vdRangeUnitVec);
+					m_vdYjacval = this->reverseAD(1, m_vdRangeUnitVec);
 					// check size
 					jstart = m_miJacStart[ idx] + m_miJacNumConTerms[ idx];
 					jend = m_miJacStart[ idx + 1 ];
 					if( (*m_mapExpressionTreesMod[ idx]->mapVarIdx).size() != (jend - jstart)) throw 
 					ErrorClass("number of partials not consistent");
 					j = 0;
-					jacIdx = 0;
+					jacIndex = 0;
 					for(posVarIdx = m_mapAllNonlinearVariablesIndex.begin(); posVarIdx 
 						!= m_mapAllNonlinearVariablesIndex.end(); ++posVarIdx){
 						std::cout << "Constraint Function Jacobian Values" << "For Constraint  " << idx  << std::endl;
-						std::cout << "Jac Val for index " << posVarIdx->first  << " = " << tmpGrad[ jacIdx] << std::endl;
+						std::cout << "Jac Val for index " << posVarIdx->first  << " = " << m_vdYjacval[ jacIndex] << std::endl;
 						//if(m_miJacIndex[ jstart] != posVarIdx->first) throw ErrorClass("error calculating Jacobian matrix");
 						// we are working with variable posVarIdx->first in the original variable space
 						// we need to see which variable this is in the individual constraint map
 						if( (*m_mapExpressionTreesMod[ idx]->mapVarIdx).find( posVarIdx->first) != (*m_mapExpressionTreesMod[ idx]->mapVarIdx).end()){
-							m_mdJacValue[ jstart] = tmpGrad[ jacIdx];
+							m_mdJacValue[ jstart] = m_vdYjacval[ jacIndex];
 							jstart++;
 							j++;
 						}
-						jacIdx++;
+						jacIndex++;
 					}
 					
 					m_vdRangeUnitVec[ domainIdx] = 0.;
 					domainIdx++;
 				}
 				else{    // we have an objective function
-					std::cout << "Objective Function Jacobian Values" << std::endl;
 					m_vdRangeUnitVec[ domainIdx] = 1.;
-					tmpGrad = this->reverseAD(1, m_vdRangeUnitVec);
-					j = 0;
-					for(posVarIdx = m_mapAllNonlinearVariablesIndex.begin(); posVarIdx 
-						!= m_mapAllNonlinearVariablesIndex.end(); ++posVarIdx){
+					m_vdYjacval = this->reverseAD(1, m_vdRangeUnitVec);
+					for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
 						if( objIdx == idx){
-							*(m_mdObjGradient + posVarIdx->first) = tmpGrad[ j] + 
-								m_mmdDenseObjectiveCoefficients[  (abs( idx) - 1)][ posVarIdx->first];
+							*(m_mdObjGradient +  m_miNonLinearVarsReverseMap[ i]) = m_vdYjacval[ i] + 
+								m_mmdDenseObjectiveCoefficients[  (abs( idx) - 1)][ m_miNonLinearVarsReverseMap[ i]];
 						}
-						std::cout << "Jac Val for index " << posVarIdx->first  << " = " <<tmpGrad[ j] << std::endl;
-						std::cout << "Dense obj coefficient for index " << posVarIdx->first  << " = " << m_mmdDenseObjectiveCoefficients[ 0][ posVarIdx->first] << std::endl;
-						j++;
-					}					
-					
+					}									
 					m_vdRangeUnitVec[ domainIdx] = 0.;
 					domainIdx++;
 				}
@@ -2553,32 +2539,13 @@ bool OSInstance::getFirstOrderResults(double *x, double objMultiplier, double *c
 			m_vdDomainUnitVec[i] = 0.;
 			}
 		}
-		//
-		
-//		//
-//		//
-//		std::vector<double> tmpVec;
-//		bool ok = true;
-//		double check;
-//		m_vdRangeUnitVec[ 0] = 1.;
-//		this->forwardAD(0, m_vdX);
-//		tmpVec  = this->reverseAD(1, m_vdRangeUnitVec);
-//		for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
-//			check = *(m_mdObjGradient + m_miNonLinearVarsReverseMap[ i]);
-//			check = tmpVec[ i];
-//			*(m_mdObjGradient + m_miNonLinearVarsReverseMap[ i]) = tmpVec[ i] + 
-//				m_mmdDenseObjectiveCoefficients[  0][ m_miNonLinearVarsReverseMap[ i]];
-//		}
-//		m_vdRangeUnitVec[ 0] = 0.;
-//		//
-//		//
 
 		#ifdef DEBUG
 		std::cout  << "JACOBIAN DATA " << std::endl;
 		for(idx = 0; idx < m_iConstraintNumber; idx++){
 			for(int k = *(m_sparseJacMatrix->starts + idx); k < *(m_sparseJacMatrix->starts + idx + 1); k++){
-				//std::cout << "row idx = " << idx <<  "  col idx = "<< *(m_sparseJacMatrix->indexes + k)
-				//<< " value = " << *(m_sparseJacMatrix->values + k) << std::endl;
+				std::cout << "row idx = " << idx <<  "  col idx = "<< *(m_sparseJacMatrix->indexes + k)
+				<< " value = " << *(m_sparseJacMatrix->values + k) << std::endl;
 			}
 		}
 		std::cout  << "OBJECTIVE FUNCTION DATA " << std::endl;
@@ -2682,6 +2649,7 @@ bool OSInstance::getSecondOrderResults(double *x, double objMultiplier, double *
 }// end getSecondOrderResults
 
 bool OSInstance::initForCallBack(){
+	if( m_binitForCallBack == true ) return true;
 	initializeNonLinearStructures( );
 	getJacobianSparsityPattern();
 	getLagrangianHessianSparsityPattern();
@@ -2692,6 +2660,7 @@ bool OSInstance::initForCallBack(){
 	for(i = 0; i < m_mapExpressionTreesMod.size(); i++){
 		m_vdRangeUnitVec.push_back( 0.0 );
 	}
+	m_binitForCallBack = true;
 	return true;
 }//end initForCallBack
 
