@@ -2458,8 +2458,7 @@ bool OSInstance::getFirstOrderResults(double *x, double objMultiplier, double *c
 		int jacIdx;
 		int domainIdx = 0;
 		std::vector<double> tmpGrad;
-		//if(m_iNumberOfNonlinearVariables >= m_mapExpressionTreesMod.size() ){
-		if(m_iNumberOfNonlinearVariables >= 100 ){
+		if(m_iNumberOfNonlinearVariables >= m_mapExpressionTreesMod.size() ){
 			// calculate the gradient by doing a reverse sweep over each row
 			// loop over the constraints that have a nonlinear term and get their gradients
 			for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
@@ -2495,20 +2494,20 @@ bool OSInstance::getFirstOrderResults(double *x, double objMultiplier, double *c
 					domainIdx++;
 				}
 				else{    // we have an objective function
-//					std::cout << "Objective Function Jacobian Values" << std::endl;
-//					m_vdRangeUnitVec[ domainIdx] = 1.;
-//					tmpGrad = this->reverseAD(1, m_vdRangeUnitVec);
-//					j = 0;
-//					for(posVarIdx = m_mapAllNonlinearVariablesIndex.begin(); posVarIdx 
-//						!= m_mapAllNonlinearVariablesIndex.end(); ++posVarIdx){
-//						if( objIdx == idx){
-//							*(m_mdObjGradient + posVarIdx->first) = tmpGrad[ j] + 
-//								m_mmdDenseObjectiveCoefficients[  (abs( idx) - 1)][ posVarIdx->first];
-//						}
-//						std::cout << "Jac Val for index " << posVarIdx->first  << " = " <<tmpGrad[ j] << std::endl;
-//						std::cout << "Dense obj coefficient for index " << posVarIdx->first  << " = " << m_mmdDenseObjectiveCoefficients[ 0][ posVarIdx->first] << std::endl;
-//						j++;
-//					}					
+					std::cout << "Objective Function Jacobian Values" << std::endl;
+					m_vdRangeUnitVec[ domainIdx] = 1.;
+					tmpGrad = this->reverseAD(1, m_vdRangeUnitVec);
+					j = 0;
+					for(posVarIdx = m_mapAllNonlinearVariablesIndex.begin(); posVarIdx 
+						!= m_mapAllNonlinearVariablesIndex.end(); ++posVarIdx){
+						if( objIdx == idx){
+							*(m_mdObjGradient + posVarIdx->first) = tmpGrad[ j] + 
+								m_mmdDenseObjectiveCoefficients[  (abs( idx) - 1)][ posVarIdx->first];
+						}
+						std::cout << "Jac Val for index " << posVarIdx->first  << " = " <<tmpGrad[ j] << std::endl;
+						std::cout << "Dense obj coefficient for index " << posVarIdx->first  << " = " << m_mmdDenseObjectiveCoefficients[ 0][ posVarIdx->first] << std::endl;
+						j++;
+					}					
 					
 					m_vdRangeUnitVec[ domainIdx] = 0.;
 					domainIdx++;
@@ -2556,23 +2555,23 @@ bool OSInstance::getFirstOrderResults(double *x, double objMultiplier, double *c
 		}
 		//
 		
-		//
-		//
-		std::vector<double> tmpVec;
-		bool ok = true;
-		double check;
-		m_vdRangeUnitVec[ 0] = 1.;
-		this->forwardAD(0, m_vdX);
-		tmpVec  = this->reverseAD(1, m_vdRangeUnitVec);
-		for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
-			check = *(m_mdObjGradient + m_miNonLinearVarsReverseMap[ i]);
-			check = tmpVec[ i];
-			*(m_mdObjGradient + m_miNonLinearVarsReverseMap[ i]) = tmpVec[ i] + 
-				m_mmdDenseObjectiveCoefficients[  0][ m_miNonLinearVarsReverseMap[ i]];
-		}
-		m_vdRangeUnitVec[ 0] = 0.;
-		//
-		//
+//		//
+//		//
+//		std::vector<double> tmpVec;
+//		bool ok = true;
+//		double check;
+//		m_vdRangeUnitVec[ 0] = 1.;
+//		this->forwardAD(0, m_vdX);
+//		tmpVec  = this->reverseAD(1, m_vdRangeUnitVec);
+//		for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
+//			check = *(m_mdObjGradient + m_miNonLinearVarsReverseMap[ i]);
+//			check = tmpVec[ i];
+//			*(m_mdObjGradient + m_miNonLinearVarsReverseMap[ i]) = tmpVec[ i] + 
+//				m_mmdDenseObjectiveCoefficients[  0][ m_miNonLinearVarsReverseMap[ i]];
+//		}
+//		m_vdRangeUnitVec[ 0] = 0.;
+//		//
+//		//
 
 		#ifdef DEBUG
 		std::cout  << "JACOBIAN DATA " << std::endl;

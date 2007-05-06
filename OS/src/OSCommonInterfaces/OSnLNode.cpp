@@ -842,7 +842,7 @@ double OSnLNodePower::calculateFunction(double *x){
 	return  m_dFunctionValue;
 }// end OSnLNodePower::calculate
 
-/*
+
 AD<double> OSnLNodePower::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
 	// old way of doing this	
 	if( typeid( *m_mChildren[1]) == typeid( OSnLNodeNumber) ) {
@@ -858,13 +858,13 @@ AD<double> OSnLNodePower::constructCppADTape(std::map<int, int> *cppADIdx, CppAD
 	}
 	return m_CppADTape;
 }// end OSnLNodePower::constructCppADTape
-*/
 
 
-AD<double> OSnLNodePower::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){	
-		m_CppADTape = CppAD::pow(m_mChildren[0]->constructCppADTape( cppADIdx, XAD) , m_mChildren[1]->constructCppADTape( cppADIdx, XAD) );	
-	return m_CppADTape;
-}// end OSnLNodePower::constructCppADTape
+
+//AD<double> OSnLNodePower::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){	
+//		m_CppADTape = CppAD::pow(m_mChildren[0]->constructCppADTape( cppADIdx, XAD) , m_mChildren[1]->constructCppADTape( cppADIdx, XAD) );	
+//	return m_CppADTape;
+//}// end OSnLNodePower::constructCppADTape
 
 
 
