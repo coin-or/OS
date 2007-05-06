@@ -1269,16 +1269,17 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * <p>
 	 * 
 	 * @param x is a pointer (double array) to the current variable values
-	 * @param objLambda is the Lagrange multiplier on the objective function
+	 * @param objLambda is pointer (double array) of Lagrange multipliers on
+	 * the objective functions
 	 * @param conLambda is pointer (double array) of Lagrange multipliers on
-	 * the constratins
+	 * the constraints
 	 * @parma objIdx is the index of the objective function being optimized
 	 * @param new_x is false if any evaluation method was previously called
 	 * for the current iterate
 	 * @param highestOrder is the highest order of the derivative being calculated
 	 * @return a double array of constraint function values -- the size of the array is equal to getConstraintNumber().  
 	 */
-	double *calculateAllConstraintFunctionValues(double* x, double objLambda, double *conLambda,
+	double *calculateAllConstraintFunctionValues(double* x, double *objLambda, double *conLambda,
 		int objIdx, bool new_x, int highestOrder);
 		
 		
@@ -1288,7 +1289,8 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * <p>
 	 * 
 	 * @param x is a pointer (double array) to the current variable values
-	 * @param objLambda is the Lagrange multiplier on the objective function
+	 * @param objLambda is pointer (double array) of Lagrange multipliers on
+	 * the objective functions
 	 * @param conLambda is pointer (double array) of Lagrange multipliers on
 	 * the constratins
 	 * @parma objIdx is the index of the objective function being optimized
@@ -1297,7 +1299,7 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * @param highestOrder is the highest order of the derivative being calculated
 	 * @return an objective function value as a double.  
 	 */
-	double calculateObjectiveFunctionValue(double* x, double objLambda, double *conLambda,
+	double calculateObjectiveFunctionValue(double *x, double *objLambda, double *conLambda,
 		int objIdx, bool new_x, int highestOrder);
 	
 	/**
@@ -1306,11 +1308,17 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * <p>
 	 * 
 	 * @param x is a pointer (double array) to the current variable values
-	 * @param allFunctionsEvaluated is true if all objective functions have been evaluated for the current iterate x.
-	 * use a value of false if not sure
+	 * @param objLambda is pointer (double array) of Lagrange multipliers on
+	 * the objective functions
+	 * @param conLambda is pointer (double array) of Lagrange multipliers on
+	 * the constratins
+	 * @param new_x is false if any evaluation method was previously called
+	 * for the current iterate
+	 * @param highestOrder is the highest order of the derivative being calculated
 	 * @return a double array of objective function values -- the size of the array is equal to getObjectiveNumber().  
 	 */
-	double *calculateAllObjectiveFunctionValues( double* x, bool allFunctionsEvaluated);
+	double *calculateAllObjectiveFunctionValues( double *x, double *objLambda, double *conLambda,
+		bool new_x, int highestOrder);
 	
 	/**
 	 * Calculate the gradient of all constraint functions  
@@ -1318,7 +1326,8 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * <p>
 	 * 
 	 * @param x is a pointer (double array) to the current variable values
-	 * @param objLambda is the Lagrange multiplier on the objective function
+	 * @param objLambda is pointer (double array) of Lagrange multipliers on
+	 * the objective functions
 	 * @param conLambda is pointer (double array) of Lagrange multipliers on
 	 * the constratins
 	 * @parma objIdx is the index of the objective function being optimized
@@ -1327,7 +1336,7 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * @param highestOrder is the highest order of the derivative being calculated
 	 * @return a pointer a SparseJacobianMatrix. 
 	 */
-	SparseJacobianMatrix *calculateAllConstraintFunctionGradients(double* x, double objLambda, double *conLambda,
+	SparseJacobianMatrix *calculateAllConstraintFunctionGradients(double* x, double *objLambda, double *conLambda,
 		int objIdx, bool new_x, int highestOrder);				
 
 	/**
@@ -1336,17 +1345,36 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * <p>
 	 * 
 	 * @param x is a pointer (double array) to the current variable values
-	 * @param objLambda is the Lagrange multiplier on the objective function
+	 * @param objLambda is pointer (double array) of Lagrange multipliers on
+	 * the objective functions
 	 * @param conLambda is pointer (double array) of Lagrange multipliers on
-	 * the constratins
+	 * the constraints
 	 * @parma objIdx is the index of the objective function being optimized
 	 * @param new_x is false if any evaluation method was previously called
 	 * for the current iterate
 	 * @param highestOrder is the highest order of the derivative being calculated
 	 * @return a pointer to a dense vector of doubles.  
 	 */
-	double *calculateObjectiveFunctionGradient(double* x, double objLambda, double *conLambda,
+	double *calculateObjectiveFunctionGradient(double* x, double *objLambda, double *conLambda,
 		int objIdx, bool new_x, int highestOrder);
+		
+	/**
+	 * Calculate the gradient of the function indexed by idx
+	 * 
+	 * <p>
+	 * 
+	 * @param x is a pointer (double array) to the current variable values
+	 * @param objLambda is pointer (double array) of Lagrange multipliers on
+	 * the objective functions
+	 * @param conLambda is pointer (double array) of Lagrange multipliers on
+	 * the constraints
+	 * @param new_x is false if any evaluation method was previously called
+	 * for the current iterate
+	 * @param highestOrder is the highest order of the derivative being calculated
+	 * @return a pointer to a dense vector of doubles.  
+	 */
+	double *calculateAllObjectiveFunctionGradients(double* x, double *objLambda, double *conLambda,
+		bool new_x, int highestOrder);
 
 	/**
 	 * Calculate the Hessian of the Lagrangian Expression Tree
@@ -1356,7 +1384,8 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * <p>
 	 * 
 	 * @param x is a pointer (double array) to the current variable values
-	 * @param objLambda is the Lagrange multiplier on the objective function
+	 * @param objLambda is pointer (double array) of Lagrange multipliers on
+	 * the objective functions
 	 * @param conLambda is pointer (double array) of Lagrange multipliers on
 	 * the constratins
 	 * @parma objIdx is the index of the objective function being optimized
@@ -1366,7 +1395,7 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * @return a pointer a SparseHessianMatrix. 
 	 * Each array member corresponds to one constraint gradient.
 	 */
-	SparseHessianMatrix *calculateLagrangianHessian( double* x, double objLambda, double *conLambda,
+	SparseHessianMatrix *calculateLagrangianHessian( double* x, double *objLambda, double *conLambda,
 		int objIdx, bool new_x, int highestOrder);
 	
 	/**
@@ -1378,21 +1407,21 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * 
 	 * @param x is a pointer (double) to the current primal variable values
 	 * the size of x should equal instanceData->variables->numberOfVariables
-	 * @param conMultipliers is a pointer (double) to the dual multipliers for the nonlinear 
+	 * @param conLambda is a pointer (double) to the dual multipliers for the nonlinear 
 	 * rows, it should equal instanceData->constraints->numberOfConstraints
-	 * @param objMultipliers is a pointer (double) to the dual multipliers for the objective
+	 * @param objLambda is a pointer (double) to the dual multipliers for the objective
 	 * rows, it should equal instanceData->objectives->numberOfObjectives
 	 * @param allFunctionsEvaluated is true if all constraint and objective functions
 	 * have been evaluated for the current iterate x
 	 * use a value of false if not sure
 	 * @param LagrangianEvaluated is true if the Hessian of the Lagrangian
-	 * has been evaluated for the current iterate x, conMultipliers, objMultipliers
+	 * has been evaluated for the current iterate x, conLambda, objLambda
 	 * use a value of false if not sure
 	 * @return a pointer a SparseHessianMatrix. 
 	 * Each array member corresponds to one constraint gradient.
 	 */
-	SparseHessianMatrix *calculateLagrangianHessianReTape( double* x, double* conMultipliers, 
-	double* objMultipliers, bool allFunctionsEvaluated, bool LagrangianHessianEvaluated);
+	SparseHessianMatrix *calculateLagrangianHessianReTape( double* x, double* conLambda, 
+	double* objLambda, bool allFunctionsEvaluated, bool LagrangianHessianEvaluated);
 				
 	/**
 	 * 
@@ -1514,14 +1543,13 @@ public:
 	 * <p>
 	 * 
 	 * @param x is a pointer of doubles of primal values  for the current iteration
-	 * @param objMultiplier is the Lagrange multiplier on objIdx
-	 * @param conMultipliers is a pointer of doubles of the current dual (lagrange) multipliers on the constraitns
-	 * @param objIdx is the index of the object function of interest, -1, -2, ...
+	 * @param objLambda is a pointer of doubles of the current dual (lagrange) multipliers on the constraints
+	 * @param conLambda is a pointer of doubles of the current dual (lagrange) multipliers on the constraitns
 	 * @param new_x is false if any evaluation method was previously called
 	 * @param highestOrder is the highest order derivative to be calculated
 	 * @return true if successful 
 	 */		 
-	bool getIterateResults(double *x, double objMultiplier, double *conMultipliers, int objIdx, 
+	bool getIterateResults(double *x, double *objLambda, double *conLambda,  
 			bool new_x, int highestOrder);
 			
 			
@@ -1532,13 +1560,12 @@ public:
 	 * <p>
 	 * 
 	 * @param x is a pointer of doubles of primal values  for the current iteration
-	 * @param objMultiplier is the Lagrange multiplier on objIdx
-	 * @param conMultipliers is a pointer of doubles of the current dual (lagrange) multipliers on the constraitns
-	 * @param objIdx is the index of the object function of interest, -1, -2, ...
+	 * @param objLambda is a pointer of doubles of the current dual (lagrange) multipliers on the constraints
+	 * @param conLambda is a pointer of doubles of the current dual (lagrange) multipliers on the constraitns
 	 * @param new_x is false if any evaluation method was previously called
 	 * @return true if successful 
 	 */		 
-	bool getZeroOrderResults(double *x, double objMultiplier, double *conMultipliers, int objIdx, 
+	bool getZeroOrderResults(double *x, double *objLambda, double *conLambda, 
 			bool new_x);
 			
 	/**
@@ -1547,13 +1574,12 @@ public:
 	 * <p>
 	 * 
 	 * @param x is a pointer of doubles of primal values  for the current iteration
-	 * @param objMultiplier is the Lagrange multiplier on objIdx
-	 * @param conMultipliers is a pointer of doubles of the current dual (lagrange) multipliers on the constraitns
-	 * @param objIdx is the index of the object function of interest, -1, -2, ...
+	 * @param objLambda is a pointer of doubles of the current dual (lagrange) multipliers on the constraints
+	 * @param conLambda is a pointer of doubles of the current dual (lagrange) multipliers on the constraitns
 	 * @param new_x is false if any evaluation method was previously called
 	 * @return true if successful 
 	 */		 
-	bool getFirstOrderResults(double *x, double objMultiplier, double *conMultipliers, int objIdx, 
+	bool getFirstOrderResults(double *x, double *objLambda, double *conLambda, 
 			bool new_x);
 			
 	/**
@@ -1562,13 +1588,12 @@ public:
 	 * <p>
 	 * 
 	 * @param x is a pointer of doubles of primal values  for the current iteration
-	 * @param objMultiplier is the Lagrange multiplier on objIdx
-	 * @param conMultipliers is a pointer of doubles of the current dual (lagrange) multipliers on the constraitns
-	 * @param objIdx is the index of the object function of interest, -1, -2, ...
+	 * @param objLambda is a pointer of doubles of the current dual (lagrange) multipliers on the constraints
+	 * @param conLambda is a pointer of doubles of the current dual (lagrange) multipliers on the constraints
 	 * @param new_x is false if any evaluation method was previously called
 	 * @return true if successful 
 	 */		 
-	bool getSecondOrderResults(double *x, double objMultiplier, double *conMultipliers, int objIdx, 
+	bool getSecondOrderResults(double *x, double *objLambda, double *conLambda, 
 			bool new_x);
 			
 

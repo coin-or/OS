@@ -168,7 +168,7 @@ bool IpoptSolver::get_starting_point(Index n, bool init_x, Number* x,
 // returns the value of the objective function
 bool IpoptSolver::eval_f(Index n, const Number* x, bool new_x, Number& obj_value){
  	//cout << "calculate function value !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  " INDEX = " << n << endl;
-	obj_value = osinstance->calculateObjectiveFunctionValue( (double*)x, 0.0, NULL, -1, new_x, 0);
+	obj_value = osinstance->calculateAllObjectiveFunctionValues( (double*)x, NULL, NULL,  new_x, 0)[ 0];
 	if( CommonUtil::ISOSNAN( (double)obj_value) ) return false;
 	//for(int i = 0; i < n; i++) cout << "x[ i] =  !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  x[ i]  << endl;
 	//cout << "calculated function value !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  obj_value  << endl;
@@ -179,7 +179,7 @@ bool IpoptSolver::eval_f(Index n, const Number* x, bool new_x, Number& obj_value
 bool IpoptSolver::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f){
  	int i;
  	//cout << "calculate objective function gradient function !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
-  	double *objGrad = osinstance->calculateObjectiveFunctionGradient((double*)x, 0.0, NULL, -1, new_x, 1);
+  	double *objGrad = osinstance->calculateObjectiveFunctionGradient((double*)x, NULL, NULL, -1, new_x, 1);
  	//osinstance->getIterateResults(  (double*)x, 0.0, NULL, -1, new_x,  1);
   	for(i = 0; i < n; i++){
   		//cout << " gradient function !!!!!!!!!!!!!!!!!!!!!!!!!! = "  <<  objGrad[ i] << endl;
@@ -194,7 +194,7 @@ bool IpoptSolver::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad
 // return the value of the constraints: g(x)
 bool IpoptSolver::eval_g(Index n, const Number* x, bool new_x, Index m, Number* g) {
 	//cout << "get value of constraint !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  " INDEX = " << n << endl;
- 	double *conVals = osinstance->calculateAllConstraintFunctionValues((double*)x, 0.0, NULL, -1, new_x, 0 );
+ 	double *conVals = osinstance->calculateAllConstraintFunctionValues((double*)x, NULL, NULL, -1, new_x, 0 );
  	//cout << "got value of constraints !!!!!!!!!!!!!!!!!!!!!!!!!! " <<   endl;
  	int i;
  	for(i = 0; i < m; i++){
@@ -239,7 +239,7 @@ bool IpoptSolver::eval_jac_g(Index n, const Number* x, bool new_x,
 	}
 	else {
 		//std::cout << "EVALUATING JACOBIAN" << std::endl; 
-		sparseJacobian = osinstance->calculateAllConstraintFunctionGradients((double*)x, 0.0, NULL, -1, new_x, 1);
+		sparseJacobian = osinstance->calculateAllConstraintFunctionGradients((double*)x, NULL, NULL, -1, new_x, 1);
 		//values = sparseJacobian->values;
 		//osinstance->getIterateResults( (double*)x, 0.0, NULL, -1, new_x,  1);
 		for(int i = 0; i < nele_jac; i++){
@@ -277,10 +277,10 @@ bool IpoptSolver::eval_h(Index n, const Number* x, bool new_x,
 	else {
 		//std::cout << "EVALUATING HESSIAN" << std::endl; 
 		// return the values. This is a symmetric matrix, fill the lower left triangle only
-		//double* objMultipliers = new double[1];
-		//objMultipliers[0] = obj_factor;
+		double* objLambda = new double[1];
+		objLambda[0] = obj_factor;
 		//sparseHessian = osinstance->calculateLagrangianHessianReTape((double*)x, (double*)lambda, objMultipliers, false, false);
-		sparseHessian = osinstance->calculateLagrangianHessian((double*)x, obj_factor, (double*)lambda , -1, new_x, 2);
+		sparseHessian = osinstance->calculateLagrangianHessian((double*)x, objLambda, (double*)lambda , -1, new_x, 2);
 		for(i = 0; i < nele_hess; i++){
 			values[ i]  = *(sparseHessian->hessValues + i);
 		}
