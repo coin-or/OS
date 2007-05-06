@@ -2452,6 +2452,8 @@ bool OSInstance::getFirstOrderResults(double *x, double objMultiplier, double *c
 		 * Jacobian by row, however, if the number of rows exceeds the number of 
 		 * columns we get the Jacobian by columnd
 		 */		
+		 
+
 			
 		int jacIdx;
 		int domainIdx = 0;
@@ -2553,33 +2555,25 @@ bool OSInstance::getFirstOrderResults(double *x, double objMultiplier, double *c
 			}
 		}
 		//
+		
 		//
 		//
-		std::cout  << "OBJECTIVE FUNCTION DATA " << std::endl;
-		for(idx = 0; idx < m_iVariableNumber; idx++){
-				std::cout << "var idx = " << idx <<  "  value = "<< *(m_mdObjGradient + idx) << std::endl;
-		}
-		std::vector<double> tmpVec(37);
+		std::vector<double> tmpVec;
 		bool ok = true;
 		double check;
 		m_vdRangeUnitVec[ 0] = 1.;
 		this->forwardAD(0, m_vdX);
 		tmpVec  = this->reverseAD(1, m_vdRangeUnitVec);
-		std::cout << "value of new_x =  " << new_x << std::endl;
-		std::cout << "number of nonlinear variables =  " << m_iNumberOfNonlinearVariables << std::endl;
-		std::cout << "tmpVec size =  " << tmpVec.size() << std::endl;
 		for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
-			//*(m_mdObjGradient + m_miNonLinearVarsReverseMap[ i]) = tmpVec[ i] + 
-			//		m_mmdDenseObjectiveCoefficients[  0][ m_miNonLinearVarsReverseMap[ i]];
-			std::cout << "var idx = " << i <<  "  value = "<< tmpVec[i] << std::endl;
-			check = tmpVec[i];
-			ok &= NearEqual(*(m_mdObjGradient + i) , check,  1e-10 , 1e-10);
-			*(m_mdObjGradient + i) = check;
-			if(ok == false)throw ErrorClass("Failed");
+			check = *(m_mdObjGradient + m_miNonLinearVarsReverseMap[ i]);
+			check = tmpVec[ i];
+			*(m_mdObjGradient + m_miNonLinearVarsReverseMap[ i]) = tmpVec[ i] + 
+				m_mmdDenseObjectiveCoefficients[  0][ m_miNonLinearVarsReverseMap[ i]];
 		}
 		m_vdRangeUnitVec[ 0] = 0.;
 		//
 		//
+
 		#ifdef DEBUG
 		std::cout  << "JACOBIAN DATA " << std::endl;
 		for(idx = 0; idx < m_iConstraintNumber; idx++){

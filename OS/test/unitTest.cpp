@@ -59,6 +59,9 @@ int main(int argC, char* argV[])
 	using CppAD::NearEqual;
 	bool ok;
 	double check;
+	sqrt(4);
+	std::cout << "HELLO WORLD  " << sqrt(-5.21405e-08) << std::endl;
+	return 0;
 	cout << "START UNIT TEST" << endl;
 	// define the classes
 	FileUtil *fileUtil = NULL;  
