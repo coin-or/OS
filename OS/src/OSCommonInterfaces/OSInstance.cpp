@@ -26,6 +26,7 @@
 #define DEBUG
  
 using namespace std;
+using CppAD::NearEqual;
 
 OSInstance::OSInstance(): 
 	m_sInstanceName(""),
@@ -2454,7 +2455,10 @@ bool OSInstance::getFirstOrderResults(double *x, double objMultiplier, double *c
 			
 		int jacIdx;
 		int domainIdx = 0;
-		if(m_iNumberOfNonlinearVariables >= m_mapExpressionTreesMod.size() ){
+		std::vector<double> tmpGrad;
+		//if(m_iNumberOfNonlinearVariables >= m_mapExpressionTreesMod.size() ){
+		if(m_iNumberOfNonlinearVariables >= 100 ){
+			// calculate the gradient by doing a reverse sweep over each row
 			// loop over the constraints that have a nonlinear term and get their gradients
 			for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
 				idx = posMapExpTree->first;
@@ -2462,7 +2466,7 @@ bool OSInstance::getFirstOrderResults(double *x, double objMultiplier, double *c
 				if(idx >= 0){
 					m_vdRangeUnitVec[ domainIdx] = 1.;
 					m_mapExpressionTreesMod[ idx]->getVariableIndiciesMap(); 
-					m_vdYjacval = this->reverseAD(1, m_vdRangeUnitVec);
+					tmpGrad = this->reverseAD(1, m_vdRangeUnitVec);
 					// check size
 					jstart = m_miJacStart[ idx] + m_miJacNumConTerms[ idx];
 					jend = m_miJacStart[ idx + 1 ];
@@ -2473,12 +2477,12 @@ bool OSInstance::getFirstOrderResults(double *x, double objMultiplier, double *c
 					for(posVarIdx = m_mapAllNonlinearVariablesIndex.begin(); posVarIdx 
 						!= m_mapAllNonlinearVariablesIndex.end(); ++posVarIdx){
 						std::cout << "Constraint Function Jacobian Values" << "For Constraint  " << idx  << std::endl;
-						std::cout << "Jac Val for index " << posVarIdx->first  << " = " << m_vdYjacval[ jacIdx] << std::endl;
+						std::cout << "Jac Val for index " << posVarIdx->first  << " = " << tmpGrad[ jacIdx] << std::endl;
 						//if(m_miJacIndex[ jstart] != posVarIdx->first) throw ErrorClass("error calculating Jacobian matrix");
 						// we are working with variable posVarIdx->first in the original variable space
 						// we need to see which variable this is in the individual constraint map
 						if( (*m_mapExpressionTreesMod[ idx]->mapVarIdx).find( posVarIdx->first) != (*m_mapExpressionTreesMod[ idx]->mapVarIdx).end()){
-							m_mdJacValue[ jstart] = m_vdYjacval[ jacIdx];
+							m_mdJacValue[ jstart] = tmpGrad[ jacIdx];
 							jstart++;
 							j++;
 						}
@@ -2489,49 +2493,28 @@ bool OSInstance::getFirstOrderResults(double *x, double objMultiplier, double *c
 					domainIdx++;
 				}
 				else{    // we have an objective function
-					std::cout << "Objective Function Jacobian Values" << std::endl;
-					m_vdRangeUnitVec[ domainIdx] = 1.;
-					m_vdYjacval = this->reverseAD(1, m_vdRangeUnitVec);
-					j = 0;
-					for(posVarIdx = m_mapAllNonlinearVariablesIndex.begin(); posVarIdx 
-						!= m_mapAllNonlinearVariablesIndex.end(); ++posVarIdx){
-						if( objIdx == idx){
-							*(m_mdObjGradient + posVarIdx->first) = m_vdYjacval[ j] + 
-								m_mmdDenseObjectiveCoefficients[  (abs( idx) - 1)][ posVarIdx->first];
-						}
-						std::cout << "Jac Val for index " << posVarIdx->first  << " = " << m_vdYjacval[ j] << std::endl;
-						//std::cout << "Dense obj coefficient for index " << posVarIdx->first  << " = " << m_mmdDenseObjectiveCoefficients[ 0][ posVarIdx->first] << std::endl;
-						if( isnan( m_vdYjacval[ j]) ){
-							std::cout << "FOUND A NAN FOUND A NAN " << std::endl;
-							// we have index posVarIdx->first
-							m_vdDomainUnitVec[ posVarIdx->first] = 1;
-							std::vector<double> tmpVec;
-							tmpVec = this->forwardAD(1, m_vdDomainUnitVec);
-							m_vdDomainUnitVec[ posVarIdx->first] = 0;
-							std::cout << "HERE IS NAN ANOTHER WY " << tmpVec[ 0] << std::endl;
-							
-						}
-						j++;
-						
-						//kippster -- testing only
-						//
-						
-						
-						//
-						//
-						//
-
-					}					
-					
+//					std::cout << "Objective Function Jacobian Values" << std::endl;
+//					m_vdRangeUnitVec[ domainIdx] = 1.;
+//					tmpGrad = this->reverseAD(1, m_vdRangeUnitVec);
+//					j = 0;
+//					for(posVarIdx = m_mapAllNonlinearVariablesIndex.begin(); posVarIdx 
+//						!= m_mapAllNonlinearVariablesIndex.end(); ++posVarIdx){
+//						if( objIdx == idx){
+//							*(m_mdObjGradient + posVarIdx->first) = tmpGrad[ j] + 
+//								m_mmdDenseObjectiveCoefficients[  (abs( idx) - 1)][ posVarIdx->first];
+//						}
+//						std::cout << "Jac Val for index " << posVarIdx->first  << " = " <<tmpGrad[ j] << std::endl;
+//						std::cout << "Dense obj coefficient for index " << posVarIdx->first  << " = " << m_mmdDenseObjectiveCoefficients[ 0][ posVarIdx->first] << std::endl;
+//						j++;
+//					}					
 					
 					m_vdRangeUnitVec[ domainIdx] = 0.;
 					domainIdx++;
 				}
 			}
 		}
-		else{		
-		
-
+		else{  
+			// calculate the gradients using a forward sweep over all the variables. 		
 			for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
 				m_vdDomainUnitVec[i] = 1.;     
 				rowNum = 0;
@@ -2567,24 +2550,50 @@ bool OSInstance::getFirstOrderResults(double *x, double objMultiplier, double *c
 			}			
 			//
 			m_vdDomainUnitVec[i] = 0.;
+			}
 		}
-	}
-	
-	
-	#ifdef DEBUG
-	std::cout  << "JACOBIAN DATA " << std::endl;
-	for(idx = 0; idx < m_iConstraintNumber; idx++){
-		for(int k = *(m_sparseJacMatrix->starts + idx); k < *(m_sparseJacMatrix->starts + idx + 1); k++){
-			std::cout << "row idx = " << idx <<  "  col idx = "<< *(m_sparseJacMatrix->indexes + k)
-			<< " value = " << *(m_sparseJacMatrix->values + k) << std::endl;
+		//
+		//
+		//
+		std::cout  << "OBJECTIVE FUNCTION DATA " << std::endl;
+		for(idx = 0; idx < m_iVariableNumber; idx++){
+				std::cout << "var idx = " << idx <<  "  value = "<< *(m_mdObjGradient + idx) << std::endl;
 		}
-	}
-	std::cout  << "OBJECTIVE FUNCTION DATA " << std::endl;
-	for(idx = 0; idx < m_iVariableNumber; idx++){
-			std::cout << "var idx = " << idx <<  "  value = "<< *(m_mdObjGradient + idx) << std::endl;
-	}
-	#endif
-	return true;
+		std::vector<double> tmpVec(37);
+		bool ok = true;
+		double check;
+		m_vdRangeUnitVec[ 0] = 1.;
+		this->forwardAD(0, m_vdX);
+		tmpVec  = this->reverseAD(1, m_vdRangeUnitVec);
+		std::cout << "value of new_x =  " << new_x << std::endl;
+		std::cout << "number of nonlinear variables =  " << m_iNumberOfNonlinearVariables << std::endl;
+		std::cout << "tmpVec size =  " << tmpVec.size() << std::endl;
+		for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
+			//*(m_mdObjGradient + m_miNonLinearVarsReverseMap[ i]) = tmpVec[ i] + 
+			//		m_mmdDenseObjectiveCoefficients[  0][ m_miNonLinearVarsReverseMap[ i]];
+			std::cout << "var idx = " << i <<  "  value = "<< tmpVec[i] << std::endl;
+			check = tmpVec[i];
+			ok &= NearEqual(*(m_mdObjGradient + i) , check,  1e-10 , 1e-10);
+			*(m_mdObjGradient + i) = check;
+			if(ok == false)throw ErrorClass("Failed");
+		}
+		m_vdRangeUnitVec[ 0] = 0.;
+		//
+		//
+		#ifdef DEBUG
+		std::cout  << "JACOBIAN DATA " << std::endl;
+		for(idx = 0; idx < m_iConstraintNumber; idx++){
+			for(int k = *(m_sparseJacMatrix->starts + idx); k < *(m_sparseJacMatrix->starts + idx + 1); k++){
+				//std::cout << "row idx = " << idx <<  "  col idx = "<< *(m_sparseJacMatrix->indexes + k)
+				//<< " value = " << *(m_sparseJacMatrix->values + k) << std::endl;
+			}
+		}
+		std::cout  << "OBJECTIVE FUNCTION DATA " << std::endl;
+		for(idx = 0; idx < m_iVariableNumber; idx++){
+				std::cout << "var idx = " << idx <<  "  value = "<< *(m_mdObjGradient + idx) << std::endl;
+		}
+		#endif
+		return true;
 	}//end try
 	catch(const ErrorClass& eclass){
 		throw ErrorClass( eclass.errormsg);
@@ -2660,15 +2669,15 @@ bool OSInstance::getSecondOrderResults(double *x, double objMultiplier, double *
 	#ifdef DEBUG
 	std::cout << "HERE IS HESSIAN OF THE LAGRANGIAN" << std::endl;
 	for(i = 0; i < hessValuesIdx; i++){
-		std::cout << "reverse 2 " << m_LagrangianSparseHessian->hessValues[ i] << std::endl;
+		//std::cout << "reverse 2 " << m_LagrangianSparseHessian->hessValues[ i] << std::endl;
 	}
 	#endif
 	#ifdef DEBUG
 	std::cout  << "JACOBIAN DATA " << std::endl;
 	for(idx = 0; idx < m_iConstraintNumber; idx++){
 		for(int k = *(m_sparseJacMatrix->starts + idx); k < *(m_sparseJacMatrix->starts + idx + 1); k++){
-			std::cout << "row idx = " << idx <<  "  col idx = "<< *(m_sparseJacMatrix->indexes + k)
-			<< " value = " << *(m_sparseJacMatrix->values + k) << std::endl;
+			//std::cout << "row idx = " << idx <<  "  col idx = "<< *(m_sparseJacMatrix->indexes + k)
+			//<< " value = " << *(m_sparseJacMatrix->values + k) << std::endl;
 		}
 	}
 	#endif
