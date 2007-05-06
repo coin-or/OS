@@ -1650,27 +1650,6 @@ double OSInstance::calculateFunctionValue(int idx, double *x, bool functionEvalu
 		if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
 		// if we have not filled in the Sparse Jacobian matrix do so now
 		if( m_bSparseJacobianCalculated == false) getJacobianSparsityPattern();
-		
-		//
-		//
-//		// test code	
-//		getLagrangianHessianSparsityPattern();
-//		std::vector<double> vdFunVals( m_mapExpressionTreesMod.size());
-//		std::vector<double> vdX( m_iNumberOfNonlinearVariables);
-//		if( m_iNumberOfNonlinearVariables > 0){
-//	        if( m_bCppADFunIsCreated == false)  createCppADFun( x);
-//			std::map<int, int>::iterator posVarIndexMap;
-//			std::map<int, OSExpressionTree*>::iterator posMapExpTree;
-//			// get the current iterate data
-//			i = 0;
-//			for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
-//				vdX[ i++] = x[ posVarIndexMap->first] ;
-//			}		
-//			vdFunVals = forwardAD(0, vdX);
-//		}
-//		//
-//		// end test code
-		//
 		if(idx >= 0){ // we have a constraint
 			// make sure the index idx is valid
 			if( getConstraintNumber() <= idx  ) throw 
@@ -1817,7 +1796,7 @@ SparseJacobianMatrix *OSInstance::calculateAllConstraintFunctionGradients(double
 //				}
 //			}
 //		}
-	}
+	}//end try
 	catch(const ErrorClass& eclass){
 		throw ErrorClass( eclass.errormsg);
 	} 
@@ -2372,167 +2351,38 @@ bool OSInstance::getIterateResults( double *x, double objMultiplier, double* con
 		//kipp -- change this to put in an if for initCallBack
 		if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
 		if( m_bLagrangianSparseHessianCreated == false)  getLagrangianHessianSparsityPattern( );
-		// initialize everything
-		int i, j, rowNum, objNum, jacIndex;
-		int jstart, jend, idx;
-		OSExpressionTree *expTree = NULL;
-		std::map<int, OSExpressionTree*>::iterator posMapExpTree;
 		std::map<int, int>::iterator posVarIndexMap;
-		if( m_vdX.size() > 0) m_vdX.clear();
-		for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
-			m_vdX.push_back( x[ posVarIndexMap->first]) ;
+		
+		if(new_x == true){
+			if( m_vdX.size() > 0) m_vdX.clear();
+			for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
+				m_vdX.push_back( x[ posVarIndexMap->first]) ;
+			}
+			if( (m_bCppADFunIsCreated == false)  && (m_mapExpressionTreesMod.size() > 0) ) {
+				createCppADFun( m_vdX);
+			}	
 		}	
-		if( (m_bCppADFunIsCreated == false)  && (m_mapExpressionTreesMod.size() > 0) ) {
-			createCppADFun( m_vdX);
-		}
-		std::cout << "CALL getZeroOrderResults" << std::endl;
-		getZeroOrderResults(x, objMultiplier, conMultipliers, objIdx, new_x);
-		std::cout << "RETURN getZeroOrderResults" << std::endl;
-
-
-
-
-
-
-
-//		// get the current iterate data
-//		// first get the function values
-//		if( m_mapExpressionTreesMod.size() > 0){
-//			m_vdYval = this->forwardAD(0, m_vdX);	
-//		}
-//		// now get all function and constraint values using forward result
-//		for(rowNum = 0; rowNum < m_iConstraintNumber; rowNum++){
-//			m_mdConstraintFunctionValues[ rowNum] = 0.0;
-//			if( m_mapExpressionTreesMod.find( rowNum) != m_mapExpressionTreesMod.end() ){
-//				m_mdConstraintFunctionValues[ rowNum] = m_vdYval[m_iObjectiveNumber + rowNum];
-//			}
-//			// now the linear part
-//			// be careful, loop over only the constant terms in sparseJacMatrix
-//			i = m_sparseJacMatrix->starts[ rowNum];
-//			j = m_sparseJacMatrix->starts[ rowNum + 1 ];
-//			while ( (i - m_sparseJacMatrix->starts[ rowNum])  < m_sparseJacMatrix->conVals[ rowNum] ){
-//				m_mdConstraintFunctionValues[ rowNum] += m_sparseJacMatrix->values[ i]*x[ m_sparseJacMatrix->indexes[ i] ];
-//				i++;
-//			}	
-//			// add in the constraint function constant
-//			m_mdConstraintFunctionValues[ rowNum] += m_mdConstraintConstants[ rowNum ];
-//			std::cout << "Constraint " << rowNum << " function value =  " << m_mdConstraintFunctionValues[ rowNum] << std::endl;
-//		}
-//		// now get the objective function values from the forward result
-//		for(objNum = 0; objNum < m_iObjectiveNumber; objNum++){
-//			m_mdObjectiveFunctionValues[ objNum] = 0.0;
-//			if( m_mapExpressionTreesMod.find( -objNum -1) != m_mapExpressionTreesMod.end() ){
-//				m_mdObjectiveFunctionValues[ objNum] = m_vdYval[ objNum];
-//			}
-//			for(i = 0; i < m_iVariableNumber; i++){
-//				m_mdObjectiveFunctionValues[ objNum] += m_mmdDenseObjectiveCoefficients[ objNum][i]*x[ i];
-//			}
-//			std::cout << "Objective " << objNum << " function value =  " << m_mdObjectiveFunctionValues[ objNum] << std::endl;
-//		}		
-//		/// done calculating function values
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		if(highestOrder == 0) return true;
-		
-
-
-		
-		
-		
-		
-		
-		
-		
-		
-		/// highestOrder is now either 1 or 2
-		// now get the Jacobian and Hessian (if m_vdLambda.size() > 0)
-		// if the dual varaiables are not null we also calculate Hessian
-		if( highestOrder == 2){
-			if( conMultipliers == NULL) throw ErrorClass("cannot have a null vector of lagrange multipliers when calculating Hessian of Lagrangian");
-			if( m_vdLambda.size() > 0) m_vdLambda.clear();
-			for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){	
-				if( posMapExpTree->first >= 0){
-					m_vdLambda.push_back( conMultipliers[ posMapExpTree->first]);
-				}
-				else{
-					if(objIdx == posMapExpTree->first) m_vdLambda.push_back( objMultiplier);
-					else m_vdLambda.push_back(  0.0);
-				}
-			}
-		}
-		int hessValuesIdx = 0;
-		for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
-			m_vdDomainUnitVec[i] = 1.;     
-			rowNum = 0;
-			if( m_mapExpressionTreesMod.size() > 0){          
-				m_vdYjacval = this->forwardAD(1, m_vdDomainUnitVec);
-			} 
-			// fill in Jacobian here, we have column i 
-			// start Jacobian calculation
-			for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
-				idx = posMapExpTree->first;
-				// we are considering only constraints, not objective function
-				if(idx >= 0){
-					//figure out original variable this corresponds to
-					//then use (*m_mapExpressionTreesMod[ idx]->mapVarIdx) to figure out which variable it is within row idx
-					//m_mapAllNonlinearVariablesIndex
-					//std::cout << "This is the following variable in the expression tree  " <<  (*m_mapExpressionTreesMod[ idx]->mapVarIdx)[ m_miNonLinearVarsReverseMap[ i]]<< std::endl; 			
-					expTree = m_mapExpressionTreesMod[ idx];		
-					if( (*expTree->mapVarIdx).find( m_miNonLinearVarsReverseMap[ i]) != (*expTree->mapVarIdx).end()  ){		
-						jacIndex = (*m_mapExpressionTreesMod[ idx]->mapVarIdx)[ m_miNonLinearVarsReverseMap[ i]];
-						jstart = m_miJacStart[ idx] + m_miJacNumConTerms[ idx];
-						// kipp change 1 to number of objective functions
-						m_mdJacValue[ jstart + jacIndex] = m_vdYjacval[m_iObjectiveNumber + rowNum];
-					}
-					rowNum++;
-				}//end Jacobian calculation
-				else{
-					// see if we have the objective function of interest
-					if( objIdx == idx){
-						*(m_mdObjGradient + m_miNonLinearVarsReverseMap[ i]) = m_vdYjacval[ (abs( idx) - 1)] + 
-							m_mmdDenseObjectiveCoefficients[  (abs( idx) - 1)][ m_miNonLinearVarsReverseMap[ i]];
-					}					
-				}//end Obj gradient calculation 
-			}			
-			// now calculate the Hessian if necessary
-			if( highestOrder == 2){ 
-				if( m_mapExpressionTreesMod.size() > 0){   
-					m_vdw = reverseAD(2, m_vdLambda);   // derivtative of partial
-				}
-				for(j = i; j < m_iNumberOfNonlinearVariables; j++){
-					m_LagrangianSparseHessian->hessValues[ hessValuesIdx++] =  m_vdw[  j*2 + 1];
-				}
-			}//done with Hessian
-			//
-			//
-			m_vdDomainUnitVec[i] = 0.;
-		}
-		#ifdef DEBUG
-		if(highestOrder == 2){
-			std::cout << "HERE IS HESSIAN OF THE LAGRANGIAN" << std::endl;
-			for(i = 0; i < hessValuesIdx; i++){
-				std::cout << "reverse 2 " << m_LagrangianSparseHessian->hessValues[ i] << std::endl;
-			}
-		}
-		#endif
-		#ifdef DEBUG
-		std::cout  << "JACOBIAN DATA " << std::endl;
-		for(idx = 0; idx < m_iConstraintNumber; idx++){
-			for(int k = *(m_sparseJacMatrix->starts + idx); k < *(m_sparseJacMatrix->starts + idx + 1); k++){
-				std::cout << "row idx = " << idx <<  "  col idx = "<< *(m_sparseJacMatrix->indexes + k)
-				<< " value = " << *(m_sparseJacMatrix->values + k) << std::endl;
-			}
-		}
-		#endif
+		switch( highestOrder){		
+			case 0:	
+				if(new_x == true || m_iHighestOrderEvaluated < 0)	
+					getZeroOrderResults(x, objMultiplier, conMultipliers, objIdx, new_x);
+				break;	
+			case 1:
+				if(new_x == true || m_iHighestOrderEvaluated < 0)	
+					getZeroOrderResults(x, objMultiplier, conMultipliers, objIdx, new_x);
+				if(new_x == true || m_iHighestOrderEvaluated < 1)	
+					getFirstOrderResults(x, objMultiplier, conMultipliers, objIdx, new_x);
+				break;
+			case 2:	
+				if(new_x == true || m_iHighestOrderEvaluated < 0)	
+					getZeroOrderResults(x, objMultiplier, conMultipliers, objIdx, new_x);
+				if(new_x == true || m_iHighestOrderEvaluated < 2)	
+					getSecondOrderResults(x, objMultiplier, conMultipliers, objIdx, new_x);
+				break;
+			default:
+				throw ErrorClass("Derivative should be order 0, 1, or 2");	
+		}//end switch
+		return true;
 	}
 	catch(const ErrorClass& eclass){
 		throw ErrorClass( eclass.errormsg);
@@ -2577,15 +2427,257 @@ bool OSInstance::getZeroOrderResults(double *x, double objMultiplier, double *co
 			}
 			std::cout << "Objective " << objNum << " function value =  " << m_mdObjectiveFunctionValues[ objNum] << std::endl;
 		}
-		return true;
-	}
+	return true;
+	}//end try
 	catch(const ErrorClass& eclass){
 		throw ErrorClass( eclass.errormsg);
 	}  
 }//end getZeroOrderResults
+
+
+
+bool OSInstance::getFirstOrderResults(double *x, double objMultiplier, double *conMultipliers, int objIdx, 
+			bool new_x){
+	try{
+		// initialize everything
+		int i, j, rowNum, objNum, jacIndex;
+		int jstart, jend, idx;
+		OSExpressionTree *expTree = NULL;
+		int hessValuesIdx = 0;	
+		std::map<int, OSExpressionTree*>::iterator posMapExpTree;
+		std::map<int, int>::iterator posVarIdx;
+		
+		/** if the number of columns exceeds the number of rows we will get the 
+		 * Jacobian by row, however, if the number of rows exceeds the number of 
+		 * columns we get the Jacobian by columnd
+		 */		
+			
+		int jacIdx;
+		int domainIdx = 0;
+		if(m_iNumberOfNonlinearVariables >= m_mapExpressionTreesMod.size() ){
+			// loop over the constraints that have a nonlinear term and get their gradients
+			for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
+				idx = posMapExpTree->first;
+				// we are considering only constraints, not objective function
+				if(idx >= 0){
+					m_vdRangeUnitVec[ domainIdx] = 1.;
+					m_mapExpressionTreesMod[ idx]->getVariableIndiciesMap(); 
+					m_vdYjacval = this->reverseAD(1, m_vdRangeUnitVec);
+					// check size
+					jstart = m_miJacStart[ idx] + m_miJacNumConTerms[ idx];
+					jend = m_miJacStart[ idx + 1 ];
+					if( (*m_mapExpressionTreesMod[ idx]->mapVarIdx).size() != (jend - jstart)) throw 
+					ErrorClass("number of partials not consistent");
+					j = 0;
+					jacIdx = 0;
+					for(posVarIdx = m_mapAllNonlinearVariablesIndex.begin(); posVarIdx 
+						!= m_mapAllNonlinearVariablesIndex.end(); ++posVarIdx){
+						std::cout << "Constraint Function Jacobian Values" << "For Constraint  " << idx  << std::endl;
+						std::cout << "Jac Val for index " << posVarIdx->first  << " = " << m_vdYjacval[ jacIdx] << std::endl;
+						//if(m_miJacIndex[ jstart] != posVarIdx->first) throw ErrorClass("error calculating Jacobian matrix");
+						// we are working with variable posVarIdx->first in the original variable space
+						// we need to see which variable this is in the individual constraint map
+						if( (*m_mapExpressionTreesMod[ idx]->mapVarIdx).find( posVarIdx->first) != (*m_mapExpressionTreesMod[ idx]->mapVarIdx).end()){
+							m_mdJacValue[ jstart] = m_vdYjacval[ jacIdx];
+							jstart++;
+							j++;
+						}
+						jacIdx++;
+					}
+					
+					m_vdRangeUnitVec[ domainIdx] = 0.;
+					domainIdx++;
+				}
+				else{    // we have an objective function
+					std::cout << "Objective Function Jacobian Values" << std::endl;
+					m_vdRangeUnitVec[ domainIdx] = 1.;
+					m_vdYjacval = this->reverseAD(1, m_vdRangeUnitVec);
+					j = 0;
+					for(posVarIdx = m_mapAllNonlinearVariablesIndex.begin(); posVarIdx 
+						!= m_mapAllNonlinearVariablesIndex.end(); ++posVarIdx){
+						if( objIdx == idx){
+							*(m_mdObjGradient + posVarIdx->first) = m_vdYjacval[ j] + 
+								m_mmdDenseObjectiveCoefficients[  (abs( idx) - 1)][ posVarIdx->first];
+						}
+						std::cout << "Jac Val for index " << posVarIdx->first  << " = " << m_vdYjacval[ j] << std::endl;
+						//std::cout << "Dense obj coefficient for index " << posVarIdx->first  << " = " << m_mmdDenseObjectiveCoefficients[ 0][ posVarIdx->first] << std::endl;
+						if( isnan( m_vdYjacval[ j]) ){
+							std::cout << "FOUND A NAN FOUND A NAN " << std::endl;
+							// we have index posVarIdx->first
+							m_vdDomainUnitVec[ posVarIdx->first] = 1;
+							std::vector<double> tmpVec;
+							tmpVec = this->forwardAD(1, m_vdDomainUnitVec);
+							m_vdDomainUnitVec[ posVarIdx->first] = 0;
+							std::cout << "HERE IS NAN ANOTHER WY " << tmpVec[ 0] << std::endl;
+							
+						}
+						j++;
+						
+						//kippster -- testing only
+						//
+						
+						
+						//
+						//
+						//
+
+					}					
+					
+					
+					m_vdRangeUnitVec[ domainIdx] = 0.;
+					domainIdx++;
+				}
+			}
+		}
+		else{		
+		
+
+			for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
+				m_vdDomainUnitVec[i] = 1.;     
+				rowNum = 0;
+				if( m_mapExpressionTreesMod.size() > 0){          
+					m_vdYjacval = this->forwardAD(1, m_vdDomainUnitVec);
+				} 
+				// fill in Jacobian here, we have column i 
+				// start Jacobian calculation
+				for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
+					idx = posMapExpTree->first;
+					// we are considering only constraints, not objective function
+					if(idx >= 0){
+						//figure out original variable this corresponds to
+						//then use (*m_mapExpressionTreesMod[ idx]->mapVarIdx) to figure out which variable it is within row idx
+						//m_mapAllNonlinearVariablesIndex
+						//std::cout << "This is the following variable in the expression tree  " <<  (*m_mapExpressionTreesMod[ idx]->mapVarIdx)[ m_miNonLinearVarsReverseMap[ i]]<< std::endl; 			
+						expTree = m_mapExpressionTreesMod[ idx];		
+						if( (*expTree->mapVarIdx).find( m_miNonLinearVarsReverseMap[ i]) != (*expTree->mapVarIdx).end()  ){		
+							jacIndex = (*m_mapExpressionTreesMod[ idx]->mapVarIdx)[ m_miNonLinearVarsReverseMap[ i]];
+							jstart = m_miJacStart[ idx] + m_miJacNumConTerms[ idx];
+							// kipp change 1 to number of objective functions
+							m_mdJacValue[ jstart + jacIndex] = m_vdYjacval[m_iObjectiveNumber + rowNum];
+						}
+						rowNum++;
+					}//end Jacobian calculation
+					else{
+						// see if we have the objective function of interest
+						if( objIdx == idx){
+							*(m_mdObjGradient + m_miNonLinearVarsReverseMap[ i]) = m_vdYjacval[ (abs( idx) - 1)] + 
+							m_mmdDenseObjectiveCoefficients[  (abs( idx) - 1)][ m_miNonLinearVarsReverseMap[ i]];
+					}					
+				}//end Obj gradient calculation 
+			}			
+			//
+			m_vdDomainUnitVec[i] = 0.;
+		}
+	}
+	
+	
+	#ifdef DEBUG
+	std::cout  << "JACOBIAN DATA " << std::endl;
+	for(idx = 0; idx < m_iConstraintNumber; idx++){
+		for(int k = *(m_sparseJacMatrix->starts + idx); k < *(m_sparseJacMatrix->starts + idx + 1); k++){
+			std::cout << "row idx = " << idx <<  "  col idx = "<< *(m_sparseJacMatrix->indexes + k)
+			<< " value = " << *(m_sparseJacMatrix->values + k) << std::endl;
+		}
+	}
+	std::cout  << "OBJECTIVE FUNCTION DATA " << std::endl;
+	for(idx = 0; idx < m_iVariableNumber; idx++){
+			std::cout << "var idx = " << idx <<  "  value = "<< *(m_mdObjGradient + idx) << std::endl;
+	}
+	#endif
+	return true;
+	}//end try
+	catch(const ErrorClass& eclass){
+		throw ErrorClass( eclass.errormsg);
+	} 
+}// end getFirstOrderResults
 			
 
-
+bool OSInstance::getSecondOrderResults(double *x, double objMultiplier, double *conMultipliers, int objIdx, 
+			bool new_x){
+	try{
+		// initialize everything
+		int i, j, rowNum, objNum, jacIndex;
+		int jstart, jend, idx;
+		OSExpressionTree *expTree = NULL;
+		int hessValuesIdx = 0;	
+		std::map<int, OSExpressionTree*>::iterator posMapExpTree;
+		std::map<int, int>::iterator posVarIndexMap;
+		if( conMultipliers == NULL) throw ErrorClass("cannot have a null vector of lagrange multipliers when calculating Hessian of Lagrangian");
+		if( m_vdLambda.size() > 0) m_vdLambda.clear();
+		for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){	
+			if( posMapExpTree->first >= 0){
+				m_vdLambda.push_back( conMultipliers[ posMapExpTree->first]);
+			}
+			else{
+				if(objIdx == posMapExpTree->first) m_vdLambda.push_back( objMultiplier);
+				else m_vdLambda.push_back(  0.0);
+			}
+		}
+		for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
+			m_vdDomainUnitVec[i] = 1.;     
+			rowNum = 0;
+			if( m_mapExpressionTreesMod.size() > 0){          
+				m_vdYjacval = this->forwardAD(1, m_vdDomainUnitVec);
+			} 
+			// fill in Jacobian here, we have column i 
+			// start Jacobian calculation
+			for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
+				idx = posMapExpTree->first;
+				// we are considering only constraints, not objective function
+				if(idx >= 0){
+					//figure out original variable this corresponds to
+					//then use (*m_mapExpressionTreesMod[ idx]->mapVarIdx) to figure out which variable it is within row idx
+					//m_mapAllNonlinearVariablesIndex
+					//std::cout << "This is the following variable in the expression tree  " <<  (*m_mapExpressionTreesMod[ idx]->mapVarIdx)[ m_miNonLinearVarsReverseMap[ i]]<< std::endl; 			
+					expTree = m_mapExpressionTreesMod[ idx];		
+					if( (*expTree->mapVarIdx).find( m_miNonLinearVarsReverseMap[ i]) != (*expTree->mapVarIdx).end()  ){		
+						jacIndex = (*m_mapExpressionTreesMod[ idx]->mapVarIdx)[ m_miNonLinearVarsReverseMap[ i]];
+						jstart = m_miJacStart[ idx] + m_miJacNumConTerms[ idx];
+						// kipp change 1 to number of objective functions
+						m_mdJacValue[ jstart + jacIndex] = m_vdYjacval[m_iObjectiveNumber + rowNum];
+					}
+					rowNum++;
+				}//end Jacobian calculation
+				else{
+					// see if we have the objective function of interest
+					if( objIdx == idx){
+						*(m_mdObjGradient + m_miNonLinearVarsReverseMap[ i]) = m_vdYjacval[ (abs( idx) - 1)] + 
+						m_mmdDenseObjectiveCoefficients[  (abs( idx) - 1)][ m_miNonLinearVarsReverseMap[ i]];
+				}					
+			}//end Obj gradient calculation 
+		}			
+		// now calculate the Hessian
+		if( m_mapExpressionTreesMod.size() > 0){   
+			m_vdw = reverseAD(2, m_vdLambda);   // derivtative of partial
+		}
+		for(j = i; j < m_iNumberOfNonlinearVariables; j++){
+			m_LagrangianSparseHessian->hessValues[ hessValuesIdx++] =  m_vdw[  j*2 + 1];
+		}
+		//
+		//
+		m_vdDomainUnitVec[i] = 0.;
+	}
+	#ifdef DEBUG
+	std::cout << "HERE IS HESSIAN OF THE LAGRANGIAN" << std::endl;
+	for(i = 0; i < hessValuesIdx; i++){
+		std::cout << "reverse 2 " << m_LagrangianSparseHessian->hessValues[ i] << std::endl;
+	}
+	#endif
+	#ifdef DEBUG
+	std::cout  << "JACOBIAN DATA " << std::endl;
+	for(idx = 0; idx < m_iConstraintNumber; idx++){
+		for(int k = *(m_sparseJacMatrix->starts + idx); k < *(m_sparseJacMatrix->starts + idx + 1); k++){
+			std::cout << "row idx = " << idx <<  "  col idx = "<< *(m_sparseJacMatrix->indexes + k)
+			<< " value = " << *(m_sparseJacMatrix->values + k) << std::endl;
+		}
+	}
+	#endif
+	return true;
+	}//end try
+	catch(const ErrorClass& eclass){
+		throw ErrorClass( eclass.errormsg);
+	} 
+}// end getSecondOrderResults
 
 bool OSInstance::initForCallBack(){
 	initializeNonLinearStructures( );

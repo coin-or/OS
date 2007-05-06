@@ -1522,8 +1522,7 @@ public:
 			
 			
 	/**
-	 * Get the information for each iteration. Get the functions values, Jacobian
-	 * and Hessian of the Lagrangian   
+	 * Calculate function values
 	 * 
 	 * <p>
 	 * 
@@ -1535,6 +1534,36 @@ public:
 	 * @return true if successful 
 	 */		 
 	bool getZeroOrderResults(double *x, double objMultiplier, double *conMultipliers, int objIdx, 
+			bool new_x);
+			
+	/**
+	 * Calculate first derivatives
+	 * 
+	 * <p>
+	 * 
+	 * @param x is a pointer of doubles of primal values  for the current iteration
+	 * @param objMultiplier is the Lagrange multiplier on objIdx
+	 * @param conMultipliers is a pointer of doubles of the current dual (lagrange) multipliers on the constraitns
+	 * @param objIdx is the index of the object function of interest, -1, -2, ...
+	 * @param new_x is false if any evaluation method was previously called
+	 * @return true if successful 
+	 */		 
+	bool getFirstOrderResults(double *x, double objMultiplier, double *conMultipliers, int objIdx, 
+			bool new_x);
+			
+	/**
+	 * Calculate second derivatives
+	 * 
+	 * <p>
+	 * 
+	 * @param x is a pointer of doubles of primal values  for the current iteration
+	 * @param objMultiplier is the Lagrange multiplier on objIdx
+	 * @param conMultipliers is a pointer of doubles of the current dual (lagrange) multipliers on the constraitns
+	 * @param objIdx is the index of the object function of interest, -1, -2, ...
+	 * @param new_x is false if any evaluation method was previously called
+	 * @return true if successful 
+	 */		 
+	bool getSecondOrderResults(double *x, double objMultiplier, double *conMultipliers, int objIdx, 
 			bool new_x);
 			
 

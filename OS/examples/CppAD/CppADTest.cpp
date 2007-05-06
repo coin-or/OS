@@ -146,8 +146,10 @@ int  main(){
 		xx[0] = 1;
 		xx[1] = 5;
 		xx[2] = 5;
+		osinstance->initForCallBack();
 		sparseJac = osinstance->getJacobianSparsityPattern();
-		osinstance->getIterateResults(x, 1.0, z, -1, true,  2);
+		osinstance->getIterateResults(x, 1.0, z, -1, true,  1);
+		return 0;
 		//for(idx = 0; idx < osinstance->getConstraintNumber(); idx++){
 		//	for(k = *(sparseJac->starts + idx); k < *(sparseJac->starts + idx + 1); k++){
 		//		std::cout << "row idx = " << idx <<  "  col idx = "<< *(sparseJac->indexes + k)
