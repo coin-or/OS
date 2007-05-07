@@ -135,15 +135,15 @@ OSInstance::~OSInstance(){
 	int i;
 	if(instanceData->objectives->numberOfObjectives > 0 && m_mObjectiveCoefficients != NULL){
 		for(i = 0; i < instanceData->objectives->numberOfObjectives; i++){
-			//delete m_mObjectiveCoefficients[i];
-			//m_mObjectiveCoefficients[i] = NULL;
+			delete m_mObjectiveCoefficients[i];
+			m_mObjectiveCoefficients[i] = NULL;
 		}
-		//delete[] m_mObjectiveCoefficients;
+		delete[] m_mObjectiveCoefficients;
 		m_mObjectiveCoefficients = NULL;
 	}
 	if(instanceData->objectives->numberOfObjectives > 0 && m_mmdDenseObjectiveCoefficients != NULL){
 		for(i = 0; i < instanceData->objectives->numberOfObjectives; i++){
-			//delete m_mmdDenseObjectiveCoefficients[i];
+			delete m_mmdDenseObjectiveCoefficients[i];
 			m_mmdDenseObjectiveCoefficients[i] = NULL;
 		}
 		delete[] m_mmdDenseObjectiveCoefficients;
@@ -152,10 +152,10 @@ OSInstance::~OSInstance(){
 	
 	if(instanceData->objectives->numberOfObjectives > 0 && m_mmdObjGradient != NULL){
 		for(i = 0; i < instanceData->objectives->numberOfObjectives; i++){
-			//delete m_mmdObjGradient[i];
-			//m_mmdObjGradient[i] = NULL;
+			delete m_mmdObjGradient[i];
+			m_mmdObjGradient[i] = NULL;
 		}
-		//delete[] m_mmdObjGradient;
+		delete[] m_mmdObjGradient;
 		m_mmdObjGradient = NULL;
 	}	
 	
@@ -511,6 +511,7 @@ NonlinearExpressions::~NonlinearExpressions(){
 			cout << "DESTROYING EXPRESSION " << nl[ i]->idx << endl;
 			delete nl[i];
 			nl[i] = NULL;
+			cout << "FINISHED DESTROYING EXPRESSION " << nl[ i]->idx << endl;
 		}
 	}
 	delete[] nl;
