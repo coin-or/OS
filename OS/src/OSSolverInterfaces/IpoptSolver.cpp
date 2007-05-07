@@ -194,7 +194,7 @@ bool IpoptSolver::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad
 // return the value of the constraints: g(x)
 bool IpoptSolver::eval_g(Index n, const Number* x, bool new_x, Index m, Number* g) {
 	//cout << "get value of constraint !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  " INDEX = " << n << endl;
- 	double *conVals = osinstance->calculateAllConstraintFunctionValues((double*)x, 0.0, NULL, -1, new_x, 0 );
+ 	double *conVals = osinstance->calculateAllConstraintFunctionValues((double*)x, 0.0, NULL, new_x, 0 );
  	//cout << "got value of constraints !!!!!!!!!!!!!!!!!!!!!!!!!! " <<   endl;
  	int i;
  	for(i = 0; i < m; i++){

@@ -1279,7 +1279,7 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * @return a double array of constraint function values -- the size of the array is equal to getConstraintNumber().  
 	 */
 	double *calculateAllConstraintFunctionValues(double* x, double objLambda, double *conLambda,
-		int objIdx, bool new_x, int highestOrder);
+		bool new_x, int highestOrder);
 		
 		
 	/**

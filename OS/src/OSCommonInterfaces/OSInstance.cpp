@@ -1706,7 +1706,7 @@ double OSInstance::calculateFunctionValue(int idx, double *x, bool functionEvalu
 
 
 double *OSInstance::calculateAllConstraintFunctionValues( double* x, double objLambda, double *conLambda,
-	int objIdx, bool new_x, int highestOrder){
+	bool new_x, int highestOrder){
 			
 	// kipp -- put in check to make sure objIdx is valid
 	if( new_x == false && (highestOrder <= m_iHighestOrderEvaluated)  ) {
@@ -1717,18 +1717,18 @@ double *OSInstance::calculateAllConstraintFunctionValues( double* x, double objL
  	return m_mdConstraintFunctionValues;
 	// kipp put some code in to execute the code below if we don't want AD to do the
 	// function evaluations	
-	m_iHighestOrderEvaluated = -1;
-	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
-	int idx, numConstraints;
-	numConstraints = getConstraintNumber();
-	// loop over all constraints
-	for(idx = 0; idx < numConstraints; idx++){
-		// calculateFunctionValue will define *(m_mdConstraintFunctionValues + idx)
-		//std::cout << "Index =  "  << idx  << std::endl;
-		m_mdConstraintFunctionValues[ idx]  = calculateFunctionValue(idx, x, false);	
-		//std::cout << "m_mdConstraintFunctionValues[ idx]  !!!!!!!"  << m_mdConstraintFunctionValues[ idx] << std::endl;
-	}
-	return m_mdConstraintFunctionValues;
+//	m_iHighestOrderEvaluated = -1;
+//	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
+//	int idx, numConstraints;
+//	numConstraints = getConstraintNumber();
+//	// loop over all constraints
+//	for(idx = 0; idx < numConstraints; idx++){
+//		// calculateFunctionValue will define *(m_mdConstraintFunctionValues + idx)
+//		//std::cout << "Index =  "  << idx  << std::endl;
+//		m_mdConstraintFunctionValues[ idx]  = calculateFunctionValue(idx, x, false);	
+//		//std::cout << "m_mdConstraintFunctionValues[ idx]  !!!!!!!"  << m_mdConstraintFunctionValues[ idx] << std::endl;
+//	}
+//	return m_mdConstraintFunctionValues;
 }//calculateAllConstraintFunctionValues
 
 double OSInstance::calculateObjectiveFunctionValue(double* x, double objLambda, double *conLambda,
