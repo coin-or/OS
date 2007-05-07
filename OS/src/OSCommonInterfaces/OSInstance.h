@@ -1516,12 +1516,11 @@ public:
 	 * @param x is a pointer of doubles of primal values  for the current iteration
 	 * @param objMultiplier is the Lagrange multiplier on objIdx
 	 * @param conMultipliers is a pointer of doubles of the current dual (lagrange) multipliers on the constraitns
-	 * @param objIdx is the index of the object function of interest, -1, -2, ...
 	 * @param new_x is false if any evaluation method was previously called
 	 * @param highestOrder is the highest order derivative to be calculated
 	 * @return true if successful 
 	 */		 
-	bool getIterateResults(double *x, double objMultiplier, double *conMultipliers, int objIdx, 
+	bool getIterateResults(double *x, double objMultiplier, double *conMultipliers,  
 			bool new_x, int highestOrder);
 			
 			
@@ -1534,11 +1533,10 @@ public:
 	 * @param x is a pointer of doubles of primal values  for the current iteration
 	 * @param objMultiplier is the Lagrange multiplier on objIdx
 	 * @param conMultipliers is a pointer of doubles of the current dual (lagrange) multipliers on the constraitns
-	 * @param objIdx is the index of the object function of interest, -1, -2, ...
 	 * @param new_x is false if any evaluation method was previously called
 	 * @return true if successful 
 	 */		 
-	bool getZeroOrderResults(double *x, double objMultiplier, double *conMultipliers, int objIdx, 
+	bool getZeroOrderResults(double *x, double objMultiplier, double *conMultipliers, 
 			bool new_x);
 			
 	/**
@@ -1549,11 +1547,10 @@ public:
 	 * @param x is a pointer of doubles of primal values  for the current iteration
 	 * @param objMultiplier is the Lagrange multiplier on objIdx
 	 * @param conMultipliers is a pointer of doubles of the current dual (lagrange) multipliers on the constraitns
-	 * @param objIdx is the index of the object function of interest, -1, -2, ...
 	 * @param new_x is false if any evaluation method was previously called
 	 * @return true if successful 
 	 */		 
-	bool getFirstOrderResults(double *x, double objMultiplier, double *conMultipliers, int objIdx, 
+	bool getFirstOrderResults(double *x, double objMultiplier, double *conMultipliers,  
 			bool new_x);
 			
 	/**
@@ -1564,11 +1561,10 @@ public:
 	 * @param x is a pointer of doubles of primal values  for the current iteration
 	 * @param objMultiplier is the Lagrange multiplier on objIdx
 	 * @param conMultipliers is a pointer of doubles of the current dual (lagrange) multipliers on the constraitns
-	 * @param objIdx is the index of the object function of interest, -1, -2, ...
 	 * @param new_x is false if any evaluation method was previously called
 	 * @return true if successful 
 	 */		 
-	bool getSecondOrderResults(double *x, double objMultiplier, double *conMultipliers, int objIdx, 
+	bool getSecondOrderResults(double *x, double objMultiplier, double *conMultipliers, 
 			bool new_x);
 			
 
