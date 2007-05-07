@@ -194,7 +194,7 @@ bool IpoptSolver::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad
 // return the value of the constraints: g(x)
 bool IpoptSolver::eval_g(Index n, const Number* x, bool new_x, Index m, Number* g) {
 	//cout << "get value of constraint !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  " INDEX = " << n << endl;
- 	double *conVals = osinstance->calculateAllConstraintFunctionValues((double*)x, NULL, NULL, -1, new_x, 0 );
+ 	double *conVals = osinstance->calculateAllConstraintFunctionValues((double*)x, NULL, NULL,  new_x, 0 );
  	//cout << "got value of constraints !!!!!!!!!!!!!!!!!!!!!!!!!! " <<   endl;
  	int i;
  	for(i = 0; i < m; i++){
@@ -239,7 +239,7 @@ bool IpoptSolver::eval_jac_g(Index n, const Number* x, bool new_x,
 	}
 	else {
 		//std::cout << "EVALUATING JACOBIAN" << std::endl; 
-		sparseJacobian = osinstance->calculateAllConstraintFunctionGradients((double*)x, NULL, NULL, -1, new_x, 1);
+		sparseJacobian = osinstance->calculateAllConstraintFunctionGradients((double*)x, NULL, NULL, new_x, 1);
 		//values = sparseJacobian->values;
 		//osinstance->getIterateResults( (double*)x, 0.0, NULL, -1, new_x,  1);
 		for(int i = 0; i < nele_jac; i++){
@@ -280,7 +280,7 @@ bool IpoptSolver::eval_h(Index n, const Number* x, bool new_x,
 		double* objLambda = new double[1];
 		objLambda[0] = obj_factor;
 		//sparseHessian = osinstance->calculateLagrangianHessianReTape((double*)x, (double*)lambda, objMultipliers, false, false);
-		sparseHessian = osinstance->calculateLagrangianHessian((double*)x, objLambda, (double*)lambda , -1, new_x, 2);
+		sparseHessian = osinstance->calculateLagrangianHessian((double*)x, objLambda, (double*)lambda ,  new_x, 2);
 		for(i = 0; i < nele_hess; i++){
 			values[ i]  = *(sparseHessian->hessValues + i);
 		}

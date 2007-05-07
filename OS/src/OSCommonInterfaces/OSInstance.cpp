@@ -1706,7 +1706,7 @@ double OSInstance::calculateFunctionValue(int idx, double *x, bool functionEvalu
 
 
 double *OSInstance::calculateAllConstraintFunctionValues( double* x, double *objLambda, double *conLambda,
-	int objIdx, bool new_x, int highestOrder){
+	 bool new_x, int highestOrder){
 			
 	if( new_x == false && (highestOrder <= m_iHighestOrderEvaluated)  ) {
 		return  m_mdConstraintFunctionValues;
@@ -1772,7 +1772,7 @@ double *OSInstance::calculateAllObjectiveFunctionValues( double* x, double *objL
 }//calculateAllObjectiveFunctionValues
 
 SparseJacobianMatrix *OSInstance::calculateAllConstraintFunctionGradients(double* x, double *objLambda, double *conLambda,
-		int objIdx, bool new_x, int highestOrder){
+	 bool new_x, int highestOrder){
 	try{
 		if( new_x == false && (highestOrder <= m_iHighestOrderEvaluated)  ) {
 			return m_sparseJacMatrix;
@@ -2172,7 +2172,7 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( ){
 
 
 SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double *objLambda, double *conLambda,
-		int objIdx, bool new_x, int highestOrder){
+		bool new_x, int highestOrder){
 
 		if( new_x == false && (highestOrder <= m_iHighestOrderEvaluated)  ) {
 			return m_LagrangianSparseHessian;
@@ -2488,9 +2488,9 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conL
 			// loop over the constraints that have a nonlinear term and get their gradients
 			for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
 				idx = posMapExpTree->first;
+				m_vdRangeUnitVec[ domainIdx] = 1.;
 				// we are considering only constraints, not objective function
 				if(idx >= 0){
-					m_vdRangeUnitVec[ domainIdx] = 1.;
 					m_mapExpressionTreesMod[ idx]->getVariableIndiciesMap(); 
 					m_vdYjacval = this->reverseAD(1, m_vdRangeUnitVec);
 					// check size
@@ -2519,7 +2519,6 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conL
 					domainIdx++;
 				}
 				else{    // we have an objective function
-					m_vdRangeUnitVec[ domainIdx] = 1.;
 					m_vdYjacval = this->reverseAD(1, m_vdRangeUnitVec);
 					for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
 						//kipp fix for multiple objective functions

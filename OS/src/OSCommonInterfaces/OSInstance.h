@@ -1273,14 +1273,13 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * the objective functions
 	 * @param conLambda is pointer (double array) of Lagrange multipliers on
 	 * the constraints
-	 * @parma objIdx is the index of the objective function being optimized
 	 * @param new_x is false if any evaluation method was previously called
 	 * for the current iterate
 	 * @param highestOrder is the highest order of the derivative being calculated
 	 * @return a double array of constraint function values -- the size of the array is equal to getConstraintNumber().  
 	 */
 	double *calculateAllConstraintFunctionValues(double* x, double *objLambda, double *conLambda,
-		int objIdx, bool new_x, int highestOrder);
+		bool new_x, int highestOrder);
 		
 		
 	/**
@@ -1330,14 +1329,13 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * the objective functions
 	 * @param conLambda is pointer (double array) of Lagrange multipliers on
 	 * the constratins
-	 * @parma objIdx is the index of the objective function being optimized
 	 * @param new_x is false if any evaluation method was previously called
 	 * for the current iterate
 	 * @param highestOrder is the highest order of the derivative being calculated
 	 * @return a pointer a SparseJacobianMatrix. 
 	 */
 	SparseJacobianMatrix *calculateAllConstraintFunctionGradients(double* x, double *objLambda, double *conLambda,
-		int objIdx, bool new_x, int highestOrder);				
+		bool new_x, int highestOrder);				
 
 	/**
 	 * Calculate the gradient of the function indexed by idx
@@ -1388,7 +1386,6 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * the objective functions
 	 * @param conLambda is pointer (double array) of Lagrange multipliers on
 	 * the constratins
-	 * @parma objIdx is the index of the objective function being optimized
 	 * @param new_x is false if any evaluation method was previously called
 	 * for the current iterate
 	 * @param highestOrder is the highest order of the derivative being calculated
@@ -1396,7 +1393,7 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * Each array member corresponds to one constraint gradient.
 	 */
 	SparseHessianMatrix *calculateLagrangianHessian( double* x, double *objLambda, double *conLambda,
-		int objIdx, bool new_x, int highestOrder);
+		 bool new_x, int highestOrder);
 	
 	/**
 	 * Calculate the Hessian of the Lagrangian Expression Tree  

@@ -237,7 +237,7 @@ int  main(){
 		// Now start using the nonlinear API
 		// check function values, both objectives and constraints
 		std::cout << "Call  = calculateAllConstraintFunctionValues"  << std::endl;			
-		conVals = osinstance->calculateAllConstraintFunctionValues( x, NULL, NULL, -1, true, 1);
+		conVals = osinstance->calculateAllConstraintFunctionValues( x, NULL, NULL,  true, 1);
 		// note: if you just want the value for constraint function indexed by
 		// idx call the method:
 		//calculateFunctionValue(int idx, double *x, bool functionEvaluated)
@@ -292,7 +292,7 @@ int  main(){
 		}	
 		std::cout << "JACOBIAN MATRIX"   << std::endl;
 		// now make the gradient calculations and fill in the sparse Jacobian matrix
-		sparseJac = osinstance->calculateAllConstraintFunctionGradients( &x[0], NULL, NULL,  -1, false, 1);
+		sparseJac = osinstance->calculateAllConstraintFunctionGradients( &x[0], NULL, NULL, false, 1);
 		for(idx = 0; idx < osinstance->getConstraintNumber(); idx++){
 			for(k = *(sparseJac->starts + idx); k < *(sparseJac->starts + idx + 1); k++){
 				std::cout << "row idx = " << idx <<  "  col idx = "<< *(sparseJac->indexes + k)
@@ -321,7 +321,7 @@ int  main(){
 		}
 		//first iteration 
 		std::cout << "GET LAGRANGIAN HESSIAN FIRST TIME"   << std::endl;
-		sparseHessian = osinstance->calculateLagrangianHessian( x, w,  z,  -1, true, 2);
+		sparseHessian = osinstance->calculateLagrangianHessian( x, w,  z,  true, 2);
 		for(idx = 0; idx < sparseHessian->hessDimension; idx++){
 			std::cout << "row idx = " << *(sparseHessian->hessRowIdx + idx) <<  
 			"  col idx = "<< *(sparseHessian->hessColIdx + idx)
@@ -339,7 +339,7 @@ int  main(){
 		//second iteration
 		x[0] = 5;
 		std::cout << "NOW GET LAGRANGIAN HESSIAN SECOND TIME"   << std::endl;
-		sparseHessian = osinstance->calculateLagrangianHessian(  x, w,  z,  -1, true, 2);
+		sparseHessian = osinstance->calculateLagrangianHessian(  x, w,  z, true, 2);
 		for(idx = 0; idx < sparseHessian->hessDimension; idx++){
 			std::cout << "row idx = " << *(sparseHessian->hessRowIdx + idx) <<  
 			"  col idx = "<< *(sparseHessian->hessColIdx + idx)
