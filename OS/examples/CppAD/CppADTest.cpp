@@ -148,7 +148,7 @@ int  main(){
 		xx[2] = 5;
 		osinstance->initForCallBack();
 		sparseJac = osinstance->getJacobianSparsityPattern();
-		osinstance->getIterateResults(x, 1.0, z,  true,  1);
+		osinstance->getIterateResults(x, 1.0, z, -1, true,  1);
 		return 0;
 		//for(idx = 0; idx < osinstance->getConstraintNumber(); idx++){
 		//	for(k = *(sparseJac->starts + idx); k < *(sparseJac->starts + idx + 1); k++){
@@ -230,134 +230,134 @@ int  main(){
 			// get row i of the Lagrangian function!!!
 			f.Reverse(2, lagMultipliers);
 		}
-//		// done with CppAD test
-//		//
-//		//
-//		//
-//		// Now start using the nonlinear API
-//		// check function values, both objectives and constraints
-//		std::cout << "Call  = calculateAllConstraintFunctionValues"  << std::endl;			
-//		conVals = osinstance->calculateAllConstraintFunctionValues( x, 0.0, NULL, true, 1);
-//		// note: if you just want the value for constraint function indexed by
-//		// idx call the method:
-//		//calculateFunctionValue(int idx, double *x, bool functionEvaluated)
-//		std::cout << "Call  = calculateAllObjectiveFunctionValues"  << std::endl;	
-//		objVals = osinstance->calculateAllObjectiveFunctionValues( x,  0.0, NULL, false, 0);
-//		// note: if you just want the value for the objective function indexed by
-//		// idx call the method:
-//		//calculateFunctionValue(int idx, double *x, bool functionEvaluated)
-//		for( idx = 0; idx < osinstance->getConstraintNumber(); idx++){
-//			std::cout << "CONSTRAINT FUNCTION INDEX = " <<  idx << " FUNCTION VALUE =  "  << *(conVals + idx) << std::endl;
-//		}
-//		for( idx = 0; idx < osinstance->getObjectiveNumber(); idx++){
-//			std::cout << "OBJECTIVE FUNCTION  INDEX = " << idx <<  " FUNCTION VALUE = "  << *(objVals + idx) << std::endl;
-//		}
-//		ok = CheckFunctionValues( conVals, *objVals, x[ 0], x[1], x[2], z[0], z[1], w[0] );
-//		if( ok == 0){
-//			std::cout << "FAILED CHECKING FUNCTION VALUES TEST" << std::endl;
-//			return 0;
-//		}
-//		else{
-//			std::cout << "PASSED CHECKING FUNCTION VALUES TEST" << std::endl;
-//		}
-//	
-//		//
-//		// now check gradients of constraints and objective function
-//		//
-//		std::cout << "PERFORM THE GRADIENT TESTS"   << std::endl;
-//		
-//		double *objGrad;
-//		std::cout << "OBJECTIVE FUNCTION GRADIENT"   << std::endl;
-//		// in our implementation the objective function is a dense gradient
-//		objGrad = osinstance->calculateObjectiveFunctionGradient( &x[0], 0.0, NULL,  -1, false, 1);
-//		for(idx = 0; idx < osinstance->getVariableNumber(); idx++){
-//			std::cout << "col idxx = " << idx << "  value =  " << *(objGrad + idx)  << std::endl;
-//		}
-//		std::cout << "CONSTRAINT JACOBIAN"   << std::endl;
-//		// the constraint gradients are sparse
-//		// some solvers have an initial method that require the sparsity structure
-//		// get the sparsity structure
-//		sparseJac = osinstance->getJacobianSparsityPattern();
-//		// print out just the sparsity pattern
-//		std::cout << "JACOBIAN SPARSITY PATTERN"   << std::endl;
-//		for(idx = 0; idx < osinstance->getConstraintNumber(); idx++){
-//			// some solvers (e.g. reduced gradient solvers) may want to know which values of the
-//			// Jacobian matrix are constant, i.e. linear, sparseJac->conVals is the number of constant
-//			// terms in the gradient for each rowt, the first conVals terms are constant, when getting
-//			std::cout << "number constant terms in constraint "   <<  idx << " is " 
-//			<< *(sparseJac->conVals + idx)  << std::endl;
-//			for(k = *(sparseJac->starts + idx); k < *(sparseJac->starts + idx + 1); k++){
-//				std::cout << "row idx = " << idx <<  "  col idx = "<< *(sparseJac->indexes + k) << std::endl;
-//			}
-//		}	
-//		std::cout << "JACOBIAN MATRIX"   << std::endl;
-//		// now make the gradient calculations and fill in the sparse Jacobian matrix
-//		sparseJac = osinstance->calculateAllConstraintFunctionGradients( &x[0], 0.0, NULL, false, 1);
-//		for(idx = 0; idx < osinstance->getConstraintNumber(); idx++){
-//			for(k = *(sparseJac->starts + idx); k < *(sparseJac->starts + idx + 1); k++){
-//				std::cout << "row idx = " << idx <<  "  col idx = "<< *(sparseJac->indexes + k)
-//				<< " value = " << *(sparseJac->values + k) << std::endl;
-//			}
-//		}
-//		ok = CheckGradientValues( sparseJac, objGrad, x[ 0], x[1], x[2], z[0], z[1], w[0] );
-//		if( ok == 0){
-//			std::cout << "FAILED THE GRADIENT TEST" << std::endl;
-//			return 0;
-//		}
-//		else{
-//			std::cout << "PASSED THE GRADIENT TEST" << std::endl;
-//		}
-//		//return 0;
-//		// done with gradient checks, now check on the Hessian
-//		//
-//		SparseHessianMatrix *sparseHessian;
-//		// the Hessian test
-//		// get the sparsity pattern -- many solvers want to initialize with just the sparsity
-//		std::cout << "GET LAGRANGIAN HESSIAN SPARSITY PATTERN"   << std::endl;
-//		sparseHessian = osinstance->getLagrangianHessianSparsityPattern( );
-//		for(idx = 0; idx < sparseHessian->hessDimension; idx++){
-//			std::cout <<  "Row Index = " << *(sparseHessian->hessRowIdx + idx) ;
-//			std::cout <<  "  Column Index = " << *(sparseHessian->hessColIdx + idx) << std::endl;
-//		}
-//		//first iteration 
-//		std::cout << "GET LAGRANGIAN HESSIAN FIRST TIME"   << std::endl;
-//		sparseHessian = osinstance->calculateLagrangianHessian( x, w[0],  z,  true, 2);
-//		for(idx = 0; idx < sparseHessian->hessDimension; idx++){
-//			std::cout << "row idx = " << *(sparseHessian->hessRowIdx + idx) <<  
-//			"  col idx = "<< *(sparseHessian->hessColIdx + idx)
-//			<< " value = " << *(sparseHessian->hessValues + idx) << std::endl;
-//		}
-//		ok = CheckHessianUpper( sparseHessian, x[0],  x[1], x[2], z[0], z[1], w[0]);
-//		if( ok == 0){
-//			std::cout << "FAILED THE FIRST HESSIAN TEST" << std::endl;
-//			return 0; 
-//		}
-//		else{
-//			std::cout << "PASSED THE FIRST HESSIAN TEST" << std::endl;
-//		}
-//		//return 0;
-//		//second iteration
-//		x[0] = 5;
-//		std::cout << "NOW GET LAGRANGIAN HESSIAN SECOND TIME"   << std::endl;
-//		sparseHessian = osinstance->calculateLagrangianHessian(  x, w[0],  z, true, 2);
-//		for(idx = 0; idx < sparseHessian->hessDimension; idx++){
-//			std::cout << "row idx = " << *(sparseHessian->hessRowIdx + idx) <<  
-//			"  col idx = "<< *(sparseHessian->hessColIdx + idx)
-//			<< " value = " << *(sparseHessian->hessValues + idx) << std::endl;
-//		}
-//		ok = CheckHessianUpper( sparseHessian , x[0],  x[1], x[2], z[0], z[1], w[0] );
-//		if( ok == 0){
-//			std::cout << "FAILED THE SECOND HESSIAN TEST" << std::endl;
-//			return 0;
-//		}
-//		else{
-//			std::cout << "PASSED THE SECOND HESSIAN TEST" << std::endl;
-//		}
-//		// do garbage collection
-//
-//		delete osilreader;
-//		osilreader = NULL;
-//		std::cout << "OSILREADER DELETED" << std::endl;
+		// done with CppAD test
+		//
+		//
+		//
+		// Now start using the nonlinear API
+		// check function values, both objectives and constraints
+		std::cout << "Call  = calculateAllConstraintFunctionValues"  << std::endl;			
+		conVals = osinstance->calculateAllConstraintFunctionValues( x, 0.0, NULL, -1, true, 1);
+		// note: if you just want the value for constraint function indexed by
+		// idx call the method:
+		//calculateFunctionValue(int idx, double *x, bool functionEvaluated)
+		std::cout << "Call  = calculateAllObjectiveFunctionValues"  << std::endl;	
+		objVals = osinstance->calculateAllObjectiveFunctionValues( &x[0], false);
+		// note: if you just want the value for the objective function indexed by
+		// idx call the method:
+		//calculateFunctionValue(int idx, double *x, bool functionEvaluated)
+		for( idx = 0; idx < osinstance->getConstraintNumber(); idx++){
+			std::cout << "CONSTRAINT FUNCTION INDEX = " <<  idx << " FUNCTION VALUE =  "  << *(conVals + idx) << std::endl;
+		}
+		for( idx = 0; idx < osinstance->getObjectiveNumber(); idx++){
+			std::cout << "OBJECTIVE FUNCTION  INDEX = " << idx <<  " FUNCTION VALUE = "  << *(objVals + idx) << std::endl;
+		}
+		ok = CheckFunctionValues( conVals, *objVals, x[ 0], x[1], x[2], z[0], z[1], w[0] );
+		if( ok == 0){
+			std::cout << "FAILED CHECKING FUNCTION VALUES TEST" << std::endl;
+			return 0;
+		}
+		else{
+			std::cout << "PASSED CHECKING FUNCTION VALUES TEST" << std::endl;
+		}
+	
+		//
+		// now check gradients of constraints and objective function
+		//
+		std::cout << "PERFORM THE GRADIENT TESTS"   << std::endl;
+		
+		double *objGrad;
+		std::cout << "OBJECTIVE FUNCTION GRADIENT"   << std::endl;
+		// in our implementation the objective function is a dense gradient
+		objGrad = osinstance->calculateObjectiveFunctionGradient( &x[0], 0.0, NULL,  -1, false, 1);
+		for(idx = 0; idx < osinstance->getVariableNumber(); idx++){
+			std::cout << "col idxx = " << idx << "  value =  " << *(objGrad + idx)  << std::endl;
+		}
+		std::cout << "CONSTRAINT JACOBIAN"   << std::endl;
+		// the constraint gradients are sparse
+		// some solvers have an initial method that require the sparsity structure
+		// get the sparsity structure
+		sparseJac = osinstance->getJacobianSparsityPattern();
+		// print out just the sparsity pattern
+		std::cout << "JACOBIAN SPARSITY PATTERN"   << std::endl;
+		for(idx = 0; idx < osinstance->getConstraintNumber(); idx++){
+			// some solvers (e.g. reduced gradient solvers) may want to know which values of the
+			// Jacobian matrix are constant, i.e. linear, sparseJac->conVals is the number of constant
+			// terms in the gradient for each rowt, the first conVals terms are constant, when getting
+			std::cout << "number constant terms in constraint "   <<  idx << " is " 
+			<< *(sparseJac->conVals + idx)  << std::endl;
+			for(k = *(sparseJac->starts + idx); k < *(sparseJac->starts + idx + 1); k++){
+				std::cout << "row idx = " << idx <<  "  col idx = "<< *(sparseJac->indexes + k) << std::endl;
+			}
+		}	
+		std::cout << "JACOBIAN MATRIX"   << std::endl;
+		// now make the gradient calculations and fill in the sparse Jacobian matrix
+		sparseJac = osinstance->calculateAllConstraintFunctionGradients( &x[0], 0.0, NULL,  -1, false, 1);
+		for(idx = 0; idx < osinstance->getConstraintNumber(); idx++){
+			for(k = *(sparseJac->starts + idx); k < *(sparseJac->starts + idx + 1); k++){
+				std::cout << "row idx = " << idx <<  "  col idx = "<< *(sparseJac->indexes + k)
+				<< " value = " << *(sparseJac->values + k) << std::endl;
+			}
+		}
+		ok = CheckGradientValues( sparseJac, objGrad, x[ 0], x[1], x[2], z[0], z[1], w[0] );
+		if( ok == 0){
+			std::cout << "FAILED THE GRADIENT TEST" << std::endl;
+			return 0;
+		}
+		else{
+			std::cout << "PASSED THE GRADIENT TEST" << std::endl;
+		}
+		//return 0;
+		// done with gradient checks, now check on the Hessian
+		//
+		SparseHessianMatrix *sparseHessian;
+		// the Hessian test
+		// get the sparsity pattern -- many solvers want to initialize with just the sparsity
+		std::cout << "GET LAGRANGIAN HESSIAN SPARSITY PATTERN"   << std::endl;
+		sparseHessian = osinstance->getLagrangianHessianSparsityPattern( );
+		for(idx = 0; idx < sparseHessian->hessDimension; idx++){
+			std::cout <<  "Row Index = " << *(sparseHessian->hessRowIdx + idx) ;
+			std::cout <<  "  Column Index = " << *(sparseHessian->hessColIdx + idx) << std::endl;
+		}
+		//first iteration 
+		std::cout << "GET LAGRANGIAN HESSIAN FIRST TIME"   << std::endl;
+		sparseHessian = osinstance->calculateLagrangianHessian( x, w[0],  z,  -1, true, 2);
+		for(idx = 0; idx < sparseHessian->hessDimension; idx++){
+			std::cout << "row idx = " << *(sparseHessian->hessRowIdx + idx) <<  
+			"  col idx = "<< *(sparseHessian->hessColIdx + idx)
+			<< " value = " << *(sparseHessian->hessValues + idx) << std::endl;
+		}
+		ok = CheckHessianUpper( sparseHessian, x[0],  x[1], x[2], z[0], z[1], w[0]);
+		if( ok == 0){
+			std::cout << "FAILED THE FIRST HESSIAN TEST" << std::endl;
+			return 0; 
+		}
+		else{
+			std::cout << "PASSED THE FIRST HESSIAN TEST" << std::endl;
+		}
+		//return 0;
+		//second iteration
+		x[0] = 5;
+		std::cout << "NOW GET LAGRANGIAN HESSIAN SECOND TIME"   << std::endl;
+		sparseHessian = osinstance->calculateLagrangianHessian(  x, w[0],  z,  -1, true, 2);
+		for(idx = 0; idx < sparseHessian->hessDimension; idx++){
+			std::cout << "row idx = " << *(sparseHessian->hessRowIdx + idx) <<  
+			"  col idx = "<< *(sparseHessian->hessColIdx + idx)
+			<< " value = " << *(sparseHessian->hessValues + idx) << std::endl;
+		}
+		ok = CheckHessianUpper( sparseHessian , x[0],  x[1], x[2], z[0], z[1], w[0] );
+		if( ok == 0){
+			std::cout << "FAILED THE SECOND HESSIAN TEST" << std::endl;
+			return 0;
+		}
+		else{
+			std::cout << "PASSED THE SECOND HESSIAN TEST" << std::endl;
+		}
+		// do garbage collection
+
+		delete osilreader;
+		osilreader = NULL;
+		std::cout << "OSILREADER DELETED" << std::endl;
 		
 			
 	}
