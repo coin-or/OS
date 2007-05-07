@@ -168,11 +168,13 @@ bool IpoptSolver::get_starting_point(Index n, bool init_x, Number* x,
 // returns the value of the objective function
 bool IpoptSolver::eval_f(Index n, const Number* x, bool new_x, Number& obj_value){
  	//cout << "calculate function value !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  " INDEX = " << n << endl;
-	obj_value = osinstance->calculateObjectiveFunctionValue( (double*)x, 0.0, NULL, -1, new_x, 0);
+	//obj_value = osinstance->calculateObjectiveFunctionValue( (double*)x, 0.0, NULL, -1, new_x, 0);
+	// first element is obj of interest
+	obj_value = osinstance->calculateAllObjectiveFunctionValues((double*)x, 0.0, NULL, false, 0 )[ 0];
 	if( CommonUtil::ISOSNAN( (double)obj_value) ) return false;
 	//for(int i = 0; i < n; i++) cout << "x[ i] =  !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  x[ i]  << endl;
-	//cout << "calculated function value !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  obj_value  << endl;
-	//cout << "calculated function value !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  osinstance->calculateFunctionValue(-1, (double*)x, false)  << endl;
+	//std::cout << "calculated function value !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  obj_value  << std::endl;
+	//std::cout << "calculated function value !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  osinstance->calculateAllObjectiveFunctionValues((double*)x, 0.0, NULL, false, 0 )[ 0]  << std::endl;
   	return true;
 }
 
