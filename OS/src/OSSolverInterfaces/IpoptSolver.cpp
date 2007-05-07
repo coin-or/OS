@@ -239,7 +239,7 @@ bool IpoptSolver::eval_jac_g(Index n, const Number* x, bool new_x,
 	}
 	else {
 		//std::cout << "EVALUATING JACOBIAN" << std::endl; 
-		sparseJacobian = osinstance->calculateAllConstraintFunctionGradients((double*)x, 0.0, NULL, -1, new_x, 1);
+		sparseJacobian = osinstance->calculateAllConstraintFunctionGradients((double*)x, 0.0, NULL,  new_x, 1);
 		//values = sparseJacobian->values;
 		//osinstance->getIterateResults( (double*)x, 0.0, NULL, -1, new_x,  1);
 		for(int i = 0; i < nele_jac; i++){

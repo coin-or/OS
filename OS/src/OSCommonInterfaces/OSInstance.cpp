@@ -1761,7 +1761,7 @@ double *OSInstance::calculateAllObjectiveFunctionValues( double* x, bool allFunc
 }//calculateAllObjectiveFunctionValues
 
 SparseJacobianMatrix *OSInstance::calculateAllConstraintFunctionGradients(double* x, double objLambda, double *conLambda,
-		int objIdx, bool new_x, int highestOrder){
+		bool new_x, int highestOrder){
 	try{
 		// kipp -- put in check to make sure objIdx is valid
 		if( new_x == false && (highestOrder <= m_iHighestOrderEvaluated)  ) {

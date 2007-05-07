@@ -292,7 +292,7 @@ int  main(){
 		}	
 		std::cout << "JACOBIAN MATRIX"   << std::endl;
 		// now make the gradient calculations and fill in the sparse Jacobian matrix
-		sparseJac = osinstance->calculateAllConstraintFunctionGradients( &x[0], 0.0, NULL,  -1, false, 1);
+		sparseJac = osinstance->calculateAllConstraintFunctionGradients( &x[0], 0.0, NULL,  false, 1);
 		for(idx = 0; idx < osinstance->getConstraintNumber(); idx++){
 			for(k = *(sparseJac->starts + idx); k < *(sparseJac->starts + idx + 1); k++){
 				std::cout << "row idx = " << idx <<  "  col idx = "<< *(sparseJac->indexes + k)
