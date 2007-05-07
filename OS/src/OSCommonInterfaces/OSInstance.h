@@ -380,15 +380,16 @@ private:
 	bool m_bGetDenseObjectives;
 	
 	/**
-	 * m_mdObjGradient holds a dense vector of an objective function gradient. 
+	 * m_mdObjGradient holds an array of pointers, each pointer points 
+	 * to gradient of each objective function
 	 */
-	double* m_mdObjGradient;	
+	double **m_mmdObjGradient;	
 	
 	/**
 	 * m_mmdDenseObjectiveCoefficients holds an array of pointers, each pointer points 
 	 * to a vector of dense objective function coefficients 
 	 */
-	double** m_mmdDenseObjectiveCoefficients;
+	double **m_mmdDenseObjectiveCoefficients;
 
 	/**
 	 * m_bProcessConstraints holds whether the constraints are processed. 
@@ -1371,7 +1372,7 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * @param highestOrder is the highest order of the derivative being calculated
 	 * @return a pointer to a dense vector of doubles.  
 	 */
-	double *calculateAllObjectiveFunctionGradients(double* x, double *objLambda, double *conLambda,
+	double **calculateAllObjectiveFunctionGradients(double* x, double *objLambda, double *conLambda,
 		bool new_x, int highestOrder);
 
 	/**
@@ -1604,6 +1605,18 @@ public:
 	 * @return true if successful 
 	 */		 
 	bool initForCallBack();
+	
+	
+	/**
+	 * This should be called by initForCallBack()
+	 * 
+	 * <p>
+	 * 
+	 * initObjGradients will initialize the objective function gradients to be equal to the 
+	 * coefficients given in the <coef> section of the OSiL instance
+	 * @return true if successful 
+	 */		 
+	bool initObjGradients();
 	
 	
 	/**

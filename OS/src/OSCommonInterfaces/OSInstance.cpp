@@ -53,7 +53,7 @@ OSInstance::OSInstance():
 	m_mdObjectiveWeights(NULL),
 	m_mdConstraintFunctionValues( NULL),
 	m_mdObjectiveFunctionValues( NULL),
-	m_mdObjGradient(NULL),
+	m_mmdObjGradient(NULL),
 	m_iHighestTaylorCoeffOrder(-1),
 	m_bCppADFunIsCreated( false),
 	m_LagrangianExpTree(NULL),
@@ -135,18 +135,30 @@ OSInstance::~OSInstance(){
 	int i;
 	if(instanceData->objectives->numberOfObjectives > 0 && m_mObjectiveCoefficients != NULL){
 		for(i = 0; i < instanceData->objectives->numberOfObjectives; i++){
-			delete m_mObjectiveCoefficients[i];
-			m_mObjectiveCoefficients[i] = NULL;
+			//delete m_mObjectiveCoefficients[i];
+			//m_mObjectiveCoefficients[i] = NULL;
 		}
+		//delete[] m_mObjectiveCoefficients;
 		m_mObjectiveCoefficients = NULL;
 	}
 	if(instanceData->objectives->numberOfObjectives > 0 && m_mmdDenseObjectiveCoefficients != NULL){
 		for(i = 0; i < instanceData->objectives->numberOfObjectives; i++){
-			delete[] m_mmdDenseObjectiveCoefficients[i];
+			//delete m_mmdDenseObjectiveCoefficients[i];
 			m_mmdDenseObjectiveCoefficients[i] = NULL;
 		}
+		delete[] m_mmdDenseObjectiveCoefficients;
 		m_mmdDenseObjectiveCoefficients = NULL;
 	}
+	
+	if(instanceData->objectives->numberOfObjectives > 0 && m_mmdObjGradient != NULL){
+		for(i = 0; i < instanceData->objectives->numberOfObjectives; i++){
+			//delete m_mmdObjGradient[i];
+			//m_mmdObjGradient[i] = NULL;
+		}
+		//delete[] m_mmdObjGradient;
+		m_mmdObjGradient = NULL;
+	}	
+	
 	delete[] m_msConstraintNames;
 	m_msConstraintNames = NULL;
 	delete[] m_mcConstraintTypes;
@@ -168,8 +180,7 @@ OSInstance::~OSInstance(){
 		m_mdObjectiveFunctionValues = NULL;	
 		delete[] m_mdConstraintFunctionValues;
 		m_mdConstraintFunctionValues = NULL;
-		delete[] m_mdObjGradient;
-		m_mdObjGradient = NULL;	
+
 	}
 	if(m_bSparseJacobianCalculated == true){
 		delete[] m_miJacStart;
@@ -1514,7 +1525,6 @@ bool OSInstance::initializeNonLinearStructures( ){
 	getDenseObjectiveCoefficients();
 	m_mdConstraintFunctionValues = new double[ this->instanceData->constraints->numberOfConstraints];
 	m_mdObjectiveFunctionValues = new double[ this->instanceData->objectives->numberOfObjectives];
-	m_mdObjGradient = new double[ this->instanceData->variables->numberOfVariables];
 	m_bNonLinearStructuresInitialized = true;
 	return true;
 }
@@ -1818,17 +1828,8 @@ SparseJacobianMatrix *OSInstance::calculateAllConstraintFunctionGradients(double
 double *OSInstance::calculateObjectiveFunctionGradient(double* x, double *objLambda, double *conLambda,
 		int objIdx, bool new_x, int highestOrder){
 	try{
-		int i;
-
-		
-		// kipp don't don't do this at every iteration --  make more efficient
-		
-		for(i = 0; i < m_iVariableNumber; i++){
-			*(m_mdObjGradient + i) = m_mmdDenseObjectiveCoefficients[ abs( objIdx) - 1][i]; 
-		}
-		// fix above
 		if( new_x == false && (highestOrder <= m_iHighestOrderEvaluated)  ) {
-			return m_mdObjGradient;
+			return m_mmdObjGradient[ abs( objIdx) - 1];
 		}
 		// if here, we need to do an evaluation
 		getIterateResults(x, objLambda, conLambda,  new_x,  highestOrder);
@@ -1838,7 +1839,7 @@ double *OSInstance::calculateObjectiveFunctionGradient(double* x, double *objLam
 //		// make sure the index idx is valid
 //		if(idx >= 0 || getObjectiveNumber() <= ( abs( idx) - 1)  ) throw 
 //			ErrorClass("obj index not valid in OSInstance::calculateObjectiveFunctionGradient");
-//		//if( gradientEvaluated == true) return m_mdObjGradient;
+//		//if( gradientEvaluated == true) return m_mmdObjGradient;
 //		int i;
 //		int numVar = getVariableNumber();
 //		std::map<int, int>::iterator posVarIdx;
@@ -1860,7 +1861,7 @@ double *OSInstance::calculateObjectiveFunctionGradient(double* x, double *objLam
 //				i++;
 //			}
 //		}
-	return m_mdObjGradient;
+	return m_mmdObjGradient[ abs( objIdx) - 1];
 	}
 	catch(const ErrorClass& eclass){
 		throw ErrorClass( eclass.errormsg);
@@ -1868,21 +1869,15 @@ double *OSInstance::calculateObjectiveFunctionGradient(double* x, double *objLam
 }//calculateObjectiveFunctionGradient	
 
 
-double *OSInstance::calculateAllObjectiveFunctionGradients(double* x, double *objLambda, double *conLambda,
+double **OSInstance::calculateAllObjectiveFunctionGradients(double* x, double *objLambda, double *conLambda,
 		bool new_x, int highestOrder){
 	try{
-		int i;
-		//kiipp -- fix this for more than one obj
-		for(i = 0; i < m_iVariableNumber; i++){
-			*(m_mdObjGradient + i) = m_mmdDenseObjectiveCoefficients[ 0][i]; 
-		}
-		// fix above
 		if( new_x == false && (highestOrder <= m_iHighestOrderEvaluated)  ) {
-			return m_mdObjGradient;
+			return m_mmdObjGradient;
 		}
 		// if here, we need to do an evaluation
 		getIterateResults(x, objLambda, conLambda,  new_x,  highestOrder);
-		return m_mdObjGradient;
+		return m_mmdObjGradient;
 	}
 	catch(const ErrorClass& eclass){
 		throw ErrorClass( eclass.errormsg);
@@ -2521,8 +2516,7 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conL
 				else{    // we have an objective function
 					m_vdYjacval = this->reverseAD(1, m_vdRangeUnitVec);
 					for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
-						//kipp fix for multiple objective functions
-						*(m_mdObjGradient +  m_miNonLinearVarsReverseMap[ i]) = m_vdYjacval[ i] + 
+						m_mmdObjGradient[  (abs( idx) - 1)][ m_miNonLinearVarsReverseMap[ i]] = m_vdYjacval[ i] + 
 							m_mmdDenseObjectiveCoefficients[  (abs( idx) - 1)][ m_miNonLinearVarsReverseMap[ i]];
 					}									
 					m_vdRangeUnitVec[ domainIdx] = 0.;
@@ -2559,7 +2553,7 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conL
 					}//end Jacobian calculation
 					else{
 						// kipp fix if more than one obj
-						*(m_mdObjGradient + m_miNonLinearVarsReverseMap[ i]) = m_vdYjacval[ (abs( idx) - 1)] + 
+						m_mmdObjGradient[  (abs( idx) - 1)][ m_miNonLinearVarsReverseMap[ i]] = m_vdYjacval[ (abs( idx) - 1)] + 
 						m_mmdDenseObjectiveCoefficients[  (abs( idx) - 1)][ m_miNonLinearVarsReverseMap[ i]];
 					}					
 				}//end Obj gradient calculation 
@@ -2568,17 +2562,21 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conL
 			m_vdDomainUnitVec[i] = 0.;
 		}
 		#ifdef DEBUG
+		int k;
 		std::cout  << "JACOBIAN DATA " << std::endl;
 		for(idx = 0; idx < m_iConstraintNumber; idx++){
-			for(int k = *(m_sparseJacMatrix->starts + idx); k < *(m_sparseJacMatrix->starts + idx + 1); k++){
+			for(k = *(m_sparseJacMatrix->starts + idx); k < *(m_sparseJacMatrix->starts + idx + 1); k++){
 				std::cout << "row idx = " << idx <<  "  col idx = "<< *(m_sparseJacMatrix->indexes + k)
 				<< " value = " << *(m_sparseJacMatrix->values + k) << std::endl;
 			}
 		}
 		std::cout  << "OBJECTIVE FUNCTION DATA " << std::endl;
-		for(idx = 0; idx < m_iVariableNumber; idx++){
-				std::cout << "var idx = " << idx <<  "  value = "<< *(m_mdObjGradient + idx) << std::endl;
+		for(k = 0; k < m_iObjectiveNumber; k++){
+			for(idx = 0; idx < m_iVariableNumber; idx++){
+				std::cout << "var idx = " << idx <<  "  value = "<< m_mmdObjGradient[k][idx] << std::endl;
+			}
 		}
+		std::cout  << "DONE WITH OBJECTIVE FUNCTION DATA " << std::endl;
 		#endif
 		return true;
 	}//end try
@@ -2636,7 +2634,7 @@ bool OSInstance::getSecondOrderResults(double *x, double *objLambda, double *con
 				}//end Jacobian calculation
 				else{
 					// kipp this needs to be fixed if more than one objective
-					*(m_mdObjGradient + m_miNonLinearVarsReverseMap[ i]) = m_vdYjacval[ (abs( idx) - 1)] + 
+					m_mmdObjGradient[  (abs( idx) - 1)][ m_miNonLinearVarsReverseMap[ i]] = m_vdYjacval[ (abs( idx) - 1)] + 
 					m_mmdDenseObjectiveCoefficients[  (abs( idx) - 1)][ m_miNonLinearVarsReverseMap[ i]];				
 				}//end Obj gradient calculation 
 			}			
@@ -2675,6 +2673,7 @@ bool OSInstance::initForCallBack(){
 	if( m_binitForCallBack == true ) return true;
 	initializeNonLinearStructures( );
 	getJacobianSparsityPattern();
+	initObjGradients();
 	getLagrangianHessianSparsityPattern();
 	int i;
 	for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
@@ -2686,6 +2685,25 @@ bool OSInstance::initForCallBack(){
 	m_binitForCallBack = true;
 	return true;
 }//end initForCallBack
+
+bool OSInstance::initObjGradients(){
+	int i, j;
+	int m, n;
+	m = getObjectiveNumber();
+	n = getVariableNumber();
+	getDenseObjectiveCoefficients();
+	m_mmdObjGradient = new double*[m];
+	for(i = 0; i < m; i++){
+		m_mmdObjGradient[i] = new double[n];
+		for(j = 0; j < n; j++){
+			m_mmdObjGradient[i][j] =  m_mmdDenseObjectiveCoefficients[ i][j];
+			#ifdef DEBUG
+			std::cout << "m_mmdObjGradient[i][j] = " << m_mmdObjGradient[i][j]  << std::endl;
+			#endif
+		}
+	}
+	return true;
+}//endt initObjGradients
 
 
 /**
