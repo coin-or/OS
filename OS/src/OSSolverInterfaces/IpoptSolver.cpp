@@ -280,7 +280,7 @@ bool IpoptSolver::eval_h(Index n, const Number* x, bool new_x,
 		//double* objMultipliers = new double[1];
 		//objMultipliers[0] = obj_factor;
 		//sparseHessian = osinstance->calculateLagrangianHessianReTape((double*)x, (double*)lambda, objMultipliers, false, false);
-		sparseHessian = osinstance->calculateLagrangianHessian((double*)x, obj_factor, (double*)lambda , -1, new_x, 2);
+		sparseHessian = osinstance->calculateLagrangianHessian((double*)x, obj_factor, (double*)lambda ,  new_x, 2);
 		for(i = 0; i < nele_hess; i++){
 			values[ i]  = *(sparseHessian->hessValues + i);
 		}

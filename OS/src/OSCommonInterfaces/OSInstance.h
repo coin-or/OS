@@ -1359,7 +1359,6 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * @param objLambda is the Lagrange multiplier on the objective function
 	 * @param conLambda is pointer (double array) of Lagrange multipliers on
 	 * the constratins
-	 * @parma objIdx is the index of the objective function being optimized
 	 * @param new_x is false if any evaluation method was previously called
 	 * for the current iterate
 	 * @param highestOrder is the highest order of the derivative being calculated
@@ -1367,7 +1366,7 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * Each array member corresponds to one constraint gradient.
 	 */
 	SparseHessianMatrix *calculateLagrangianHessian( double* x, double objLambda, double *conLambda,
-		int objIdx, bool new_x, int highestOrder);
+		bool new_x, int highestOrder);
 	
 	/**
 	 * Calculate the Hessian of the Lagrangian Expression Tree  

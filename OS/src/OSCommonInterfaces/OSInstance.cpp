@@ -2140,7 +2140,7 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( ){
 
 
 SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double objLambda, double *conLambda,
-		int objIdx, bool new_x, int highestOrder){
+		bool new_x, int highestOrder){
 
 		if( new_x == false && (highestOrder <= m_iHighestOrderEvaluated)  ) {
 			return m_LagrangianSparseHessian;
