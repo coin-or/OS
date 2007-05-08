@@ -133,33 +133,33 @@ OSInstance::~OSInstance(){
 	delete[] m_miNonLinearVarsReverseMap;
 	m_miNonLinearVarsReverseMap = NULL;
 	int i;
-	if(instanceData->objectives->numberOfObjectives > 0 && m_mObjectiveCoefficients != NULL){
-		for(i = 0; i < instanceData->objectives->numberOfObjectives; i++){
-			delete m_mObjectiveCoefficients[i];
-			m_mObjectiveCoefficients[i] = NULL;
-		}
-		delete[] m_mObjectiveCoefficients;
-		m_mObjectiveCoefficients = NULL;
-	}
-	if(instanceData->objectives->numberOfObjectives > 0 && m_mmdDenseObjectiveCoefficients != NULL){
-		for(i = 0; i < instanceData->objectives->numberOfObjectives; i++){
-			delete m_mmdDenseObjectiveCoefficients[i];
-			m_mmdDenseObjectiveCoefficients[i] = NULL;
-		}
-		delete[] m_mmdDenseObjectiveCoefficients;
-		m_mmdDenseObjectiveCoefficients = NULL;
-	}
-	if(instanceData->objectives->numberOfObjectives > 0 && m_mmdObjGradient != NULL){
-		for(i = 0; i < instanceData->objectives->numberOfObjectives; i++){
-			delete m_mmdObjGradient[i];
-			#ifdef DEBUG
-			std::cout << "deleting Objective function gradient " << i << std::endl;
-			#endif
-			m_mmdObjGradient[i] = NULL;
-		}
-		delete[] m_mmdObjGradient;
-		m_mmdObjGradient = NULL;
-	}
+//	if(instanceData->objectives->numberOfObjectives > 0 && m_mObjectiveCoefficients != NULL){
+//		for(i = 0; i < instanceData->objectives->numberOfObjectives; i++){
+//			//delete m_mObjectiveCoefficients[i];
+//			m_mObjectiveCoefficients[i] = NULL;
+//		}
+//		//delete[] m_mObjectiveCoefficients;
+//		m_mObjectiveCoefficients = NULL;
+//	}
+//	if(instanceData->objectives->numberOfObjectives > 0 && m_mmdDenseObjectiveCoefficients != NULL){
+//		for(i = 0; i < instanceData->objectives->numberOfObjectives; i++){
+//			//delete m_mmdDenseObjectiveCoefficients[i];
+//			m_mmdDenseObjectiveCoefficients[i] = NULL;
+//		}
+//		//delete[] m_mmdDenseObjectiveCoefficients;
+//		m_mmdDenseObjectiveCoefficients = NULL;
+//	}
+//	if(instanceData->objectives->numberOfObjectives > 0 && m_mmdObjGradient != NULL){
+//		for(i = 0; i < instanceData->objectives->numberOfObjectives; i++){
+//			//delete m_mmdObjGradient[i];
+//			#ifdef DEBUG
+//			std::cout << "deleting Objective function gradient " << i << std::endl;
+//			#endif
+//			m_mmdObjGradient[i] = NULL;
+//		}
+//		//delete[] m_mmdObjGradient;
+//		m_mmdObjGradient = NULL;
+//	}
 	delete[] m_msConstraintNames;
 	m_msConstraintNames = NULL;
 	delete[] m_mcConstraintTypes;
