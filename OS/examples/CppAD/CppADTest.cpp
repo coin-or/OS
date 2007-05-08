@@ -148,7 +148,7 @@ int  main(){
 		xx[2] = 5;
 		osinstance->initForCallBack();
 		sparseJac = osinstance->getJacobianSparsityPattern();
-		osinstance->getIterateResults(x, 1.0, z,  true,  1);
+		osinstance->getIterateResults(x, w, z,  true,  1);
 		return 0;
 		//for(idx = 0; idx < osinstance->getConstraintNumber(); idx++){
 		//	for(k = *(sparseJac->starts + idx); k < *(sparseJac->starts + idx + 1); k++){
@@ -237,12 +237,12 @@ int  main(){
 		// Now start using the nonlinear API
 		// check function values, both objectives and constraints
 		std::cout << "Call  = calculateAllConstraintFunctionValues"  << std::endl;			
-		conVals = osinstance->calculateAllConstraintFunctionValues( x, 0.0, NULL,  true, 0);
+		conVals = osinstance->calculateAllConstraintFunctionValues( x, NULL, NULL,  true, 0);
 		// note: if you just want the value for constraint function indexed by
 		// idx call the method:
 		//calculateFunctionValue(int idx, double *x, bool functionEvaluated)
 		std::cout << "Call  = calculateAllObjectiveFunctionValues"  << std::endl;	
-		objVals = osinstance->calculateAllObjectiveFunctionValues( &x[0], false);
+		objVals = osinstance->calculateAllObjectiveFunctionValues( x, NULL, NULL, true, 0);
 		// note: if you just want the value for the objective function indexed by
 		// idx call the method:
 		//calculateFunctionValue(int idx, double *x, bool functionEvaluated)
@@ -269,7 +269,7 @@ int  main(){
 		double *objGrad;
 		std::cout << "OBJECTIVE FUNCTION GRADIENT"   << std::endl;
 		// in our implementation the objective function is a dense gradient
-		objGrad = osinstance->calculateObjectiveFunctionGradient( &x[0], 0.0, NULL,  -1, false, 1);
+		objGrad = osinstance->calculateObjectiveFunctionGradient( &x[0], NULL, NULL,  -1, false, 1);
 		for(idx = 0; idx < osinstance->getVariableNumber(); idx++){
 			std::cout << "col idxx = " << idx << "  value =  " << *(objGrad + idx)  << std::endl;
 		}
@@ -292,7 +292,7 @@ int  main(){
 		}	
 		std::cout << "JACOBIAN MATRIX"   << std::endl;
 		// now make the gradient calculations and fill in the sparse Jacobian matrix
-		sparseJac = osinstance->calculateAllConstraintFunctionGradients( &x[0], 0.0, NULL,  false, 1);
+		sparseJac = osinstance->calculateAllConstraintFunctionGradients( &x[0], NULL, NULL,  false, 1);
 		for(idx = 0; idx < osinstance->getConstraintNumber(); idx++){
 			for(k = *(sparseJac->starts + idx); k < *(sparseJac->starts + idx + 1); k++){
 				std::cout << "row idx = " << idx <<  "  col idx = "<< *(sparseJac->indexes + k)
@@ -321,7 +321,7 @@ int  main(){
 		}
 		//first iteration 
 		std::cout << "GET LAGRANGIAN HESSIAN FIRST TIME"   << std::endl;
-		sparseHessian = osinstance->calculateLagrangianHessian( x, w[0],  z,  true, 2);
+		sparseHessian = osinstance->calculateLagrangianHessian( x, w,  z,  true, 2);
 		for(idx = 0; idx < sparseHessian->hessDimension; idx++){
 			std::cout << "row idx = " << *(sparseHessian->hessRowIdx + idx) <<  
 			"  col idx = "<< *(sparseHessian->hessColIdx + idx)
@@ -339,7 +339,7 @@ int  main(){
 		//second iteration
 		x[0] = 5;
 		std::cout << "NOW GET LAGRANGIAN HESSIAN SECOND TIME"   << std::endl;
-		sparseHessian = osinstance->calculateLagrangianHessian(  x, w[0],  z,   true, 2);
+		sparseHessian = osinstance->calculateLagrangianHessian(  x, w,  z,   true, 2);
 		for(idx = 0; idx < sparseHessian->hessDimension; idx++){
 			std::cout << "row idx = " << *(sparseHessian->hessRowIdx + idx) <<  
 			"  col idx = "<< *(sparseHessian->hessColIdx + idx)

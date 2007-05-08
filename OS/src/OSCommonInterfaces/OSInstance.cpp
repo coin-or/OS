@@ -1724,7 +1724,7 @@ double OSInstance::calculateFunctionValue(int idx, double *x, bool functionEvalu
 }//calculateFunctionValue
 
 
-double *OSInstance::calculateAllConstraintFunctionValues( double* x, double objLambda, double *conLambda,
+double *OSInstance::calculateAllConstraintFunctionValues( double* x, double *objLambda, double *conLambda,
 	bool new_x, int highestOrder){	
 	try{
 		if( new_x == false && (highestOrder <= m_iHighestOrderEvaluated)  ) {
@@ -1754,7 +1754,7 @@ double *OSInstance::calculateAllConstraintFunctionValues( double* x, double objL
 }//calculateAllConstraintFunctionValues
 
 
-double *OSInstance::calculateAllObjectiveFunctionValues( double* x, double objLambda, double *conLambda,
+double *OSInstance::calculateAllObjectiveFunctionValues( double* x, double *objLambda, double *conLambda,
 	bool new_x, int highestOrder){	
 	try{
 		if( new_x == false && (highestOrder <= m_iHighestOrderEvaluated)  ) {
@@ -1783,7 +1783,7 @@ double *OSInstance::calculateAllObjectiveFunctionValues( double* x, double objLa
 //	return m_mdConstraintFunctionValues;
 }//calculateAllConstraintFunctionValues
 
-double OSInstance::calculateObjectiveFunctionValue(double* x, double objLambda, double *conLambda,
+double OSInstance::calculateObjectiveFunctionValue(double* x, double *objLambda, double *conLambda,
 		int objIdx, bool new_x, int highestOrder){
 	try{
 		if( new_x == false && (highestOrder <= m_iHighestOrderEvaluated)  ) {
@@ -1798,21 +1798,21 @@ double OSInstance::calculateObjectiveFunctionValue(double* x, double objLambda, 
 	} 
 }//calculateObjectiveFunctionValue
 
-double *OSInstance::calculateAllObjectiveFunctionValues( double* x, bool allFunctionsEvaluated){
-	m_iHighestOrderEvaluated = -1;
-	if(allFunctionsEvaluated == true) return m_mdObjectiveFunctionValues;
-	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
-	int idx, numObjectives;
-	numObjectives = getObjectiveNumber();
-	// loop over all objectives
-	for(idx = 0; idx < numObjectives; idx++){
-		// calculateFunctionValue will define *(m_mdObjectiveFunctionValues + ( abs( idx) - 1))
-		calculateFunctionValue(-idx - 1, x, false);	
-	}
-	return m_mdObjectiveFunctionValues;
-}//calculateAllObjectiveFunctionValues
+//double *OSInstance::calculateAllObjectiveFunctionValues( double* x, bool allFunctionsEvaluated){
+//	m_iHighestOrderEvaluated = -1;
+//	if(allFunctionsEvaluated == true) return m_mdObjectiveFunctionValues;
+//	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
+//	int idx, numObjectives;
+//	numObjectives = getObjectiveNumber();
+//	// loop over all objectives
+//	for(idx = 0; idx < numObjectives; idx++){
+//		// calculateFunctionValue will define *(m_mdObjectiveFunctionValues + ( abs( idx) - 1))
+//		calculateFunctionValue(-idx - 1, x, false);	
+//	}
+//	return m_mdObjectiveFunctionValues;
+//}//calculateAllObjectiveFunctionValues
 
-SparseJacobianMatrix *OSInstance::calculateAllConstraintFunctionGradients(double* x, double objLambda, double *conLambda,
+SparseJacobianMatrix *OSInstance::calculateAllConstraintFunctionGradients(double* x, double *objLambda, double *conLambda,
 		bool new_x, int highestOrder){
 	try{
 		// kipp -- put in check to make sure objIdx is valid
@@ -1857,20 +1857,12 @@ SparseJacobianMatrix *OSInstance::calculateAllConstraintFunctionGradients(double
 	return m_sparseJacMatrix;
 }//calculateAllConstraintFunctionGradients	
 
-double *OSInstance::calculateObjectiveFunctionGradient(double* x, double objLambda, double *conLambda,
+double *OSInstance::calculateObjectiveFunctionGradient(double* x, double *objLambda, double *conLambda,
 		int objIdx, bool new_x, int highestOrder){
 	try{
-		int i;
-		// kipp -- put in check to make sure objIdx is valid
-		
-		// kipp don't don't do this at every iteration --  make more efficient
-		
-		for(i = 0; i < m_iVariableNumber; i++){
-			*(m_mdObjGradient + i) = m_mmdDenseObjectiveCoefficients[ abs( objIdx) - 1][i]; 
-		}
-		// fix above
+
 		if( new_x == false && (highestOrder <= m_iHighestOrderEvaluated)  ) {
-			return m_mdObjGradient;
+			return m_mmdObjGradient[abs( objIdx) - 1];
 		}
 		// if here, we need to do an evaluation
 		getIterateResults(x, objLambda, conLambda,  new_x,  highestOrder);
@@ -1906,7 +1898,7 @@ double *OSInstance::calculateObjectiveFunctionGradient(double* x, double objLamb
 	catch(const ErrorClass& eclass){
 		throw ErrorClass( eclass.errormsg);
 	} 
-	return m_mdObjGradient;
+	return m_mmdObjGradient[abs( objIdx) - 1];
 }				
 
 bool OSInstance::getSparseJacobianFromRowMajor( ){
@@ -2191,7 +2183,7 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( ){
 }//getLagrangianHessianSparsityPattern
 
 
-SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double objLambda, double *conLambda,
+SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double *objLambda, double *conLambda,
 		bool new_x, int highestOrder){
 
 		if( new_x == false && (highestOrder <= m_iHighestOrderEvaluated)  ) {
@@ -2398,7 +2390,7 @@ std::vector<double> OSInstance::reverseAD(size_t p, std::vector<double> vdlambda
 	}  
 }//end forwardAD
 
-bool OSInstance::getIterateResults( double *x, double objMultiplier, double* conMultipliers, 
+bool OSInstance::getIterateResults( double *x, double *objLambda, double* conMultipliers, 
 		bool new_x, int highestOrder){
 	try{ 
 		if( m_binitForCallBack == false) initForCallBack();
@@ -2416,19 +2408,19 @@ bool OSInstance::getIterateResults( double *x, double objMultiplier, double* con
 		switch( highestOrder){		
 			case 0:	
 				if(new_x == true || m_iHighestOrderEvaluated < 0)	
-					getZeroOrderResults(x, objMultiplier, conMultipliers, new_x);
+					getZeroOrderResults(x, objLambda, conMultipliers, new_x);
 				break;	
 			case 1:
 				if(new_x == true || m_iHighestOrderEvaluated < 0)	
-					getZeroOrderResults(x, objMultiplier, conMultipliers, new_x);
+					getZeroOrderResults(x, objLambda, conMultipliers, new_x);
 				if(new_x == true || m_iHighestOrderEvaluated < 1)	
-					getFirstOrderResults(x, objMultiplier, conMultipliers, new_x);
+					getFirstOrderResults(x, objLambda, conMultipliers, new_x);
 				break;
 			case 2:	
 				if(new_x == true || m_iHighestOrderEvaluated < 0)	
-					getZeroOrderResults(x, objMultiplier, conMultipliers, new_x);
+					getZeroOrderResults(x, objLambda, conMultipliers, new_x);
 				if(new_x == true || m_iHighestOrderEvaluated < 2)	
-					getSecondOrderResults(x, objMultiplier, conMultipliers, new_x);
+					getSecondOrderResults(x, objLambda, conMultipliers, new_x);
 				break;
 			default:
 				throw ErrorClass("Derivative should be order 0, 1, or 2");	
@@ -2441,7 +2433,7 @@ bool OSInstance::getIterateResults( double *x, double objMultiplier, double* con
 }//end getIterateResults
 
 
-bool OSInstance::getZeroOrderResults(double *x, double objMultiplier, double *conMultipliers, 
+bool OSInstance::getZeroOrderResults(double *x, double *objLambda, double *conMultipliers, 
 	bool new_x){
 	try{ 
 		// initialize everything
@@ -2487,7 +2479,7 @@ bool OSInstance::getZeroOrderResults(double *x, double objMultiplier, double *co
 
 
 
-bool OSInstance::getFirstOrderResults(double *x, double objMultiplier, double *conMultipliers, 
+bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conMultipliers, 
 			bool new_x){
 	try{
 		// initialize everything
@@ -2543,7 +2535,7 @@ bool OSInstance::getFirstOrderResults(double *x, double objMultiplier, double *c
 					m_vdYjacval = this->reverseAD(1, m_vdRangeUnitVec);
 					for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
 						//kipp fix when more than one obj
-							*(m_mdObjGradient +  m_miNonLinearVarsReverseMap[ i]) = m_vdYjacval[ i] + 
+							m_mmdObjGradient[  (abs( idx) - 1)][ m_miNonLinearVarsReverseMap[ i]] = m_vdYjacval[ i] + 
 								m_mmdDenseObjectiveCoefficients[  (abs( idx) - 1)][ m_miNonLinearVarsReverseMap[ i]];
 					}									
 					m_vdRangeUnitVec[ domainIdx] = 0.;
@@ -2581,7 +2573,7 @@ bool OSInstance::getFirstOrderResults(double *x, double objMultiplier, double *c
 					else{
 						// see if we have the objective function of interest
 						// kipp -- fix if more than one obj
-							*(m_mdObjGradient + m_miNonLinearVarsReverseMap[ i]) = m_vdYjacval[ (abs( idx) - 1)] + 
+							m_mmdObjGradient[  (abs( idx) - 1)][ m_miNonLinearVarsReverseMap[ i]] = m_vdYjacval[ (abs( idx) - 1)] + 
 							m_mmdDenseObjectiveCoefficients[  (abs( idx) - 1)][ m_miNonLinearVarsReverseMap[ i]];					
 				}//end Obj gradient calculation 
 			}			
@@ -2611,7 +2603,7 @@ bool OSInstance::getFirstOrderResults(double *x, double objMultiplier, double *c
 }// end getFirstOrderResults
 			
 
-bool OSInstance::getSecondOrderResults(double *x, double objMultiplier, double *conMultipliers,  
+bool OSInstance::getSecondOrderResults(double *x, double *objLambda, double *conMultipliers,  
 			bool new_x){
 	try{
 		// initialize everything
@@ -2629,7 +2621,7 @@ bool OSInstance::getSecondOrderResults(double *x, double objMultiplier, double *
 			}
 			else{
 				// kipp correct when there is more than one obj
-				m_vdLambda.push_back( objMultiplier);
+				m_vdLambda.push_back( objLambda[ abs(posMapExpTree->first) - 1] );
 			}
 		}
 		for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
@@ -2660,7 +2652,7 @@ bool OSInstance::getSecondOrderResults(double *x, double objMultiplier, double *
 				else{
 					// see if we have the objective function of interest
 					//kipp fix if more than one obj
-						*(m_mdObjGradient + m_miNonLinearVarsReverseMap[ i]) = m_vdYjacval[ (abs( idx) - 1)] + 
+						m_mmdObjGradient[  (abs( idx) - 1)][ m_miNonLinearVarsReverseMap[ i]] = m_vdYjacval[ (abs( idx) - 1)] + 
 						m_mmdDenseObjectiveCoefficients[  (abs( idx) - 1)][ m_miNonLinearVarsReverseMap[ i]];					
 			}//end Obj gradient calculation 
 		}			
