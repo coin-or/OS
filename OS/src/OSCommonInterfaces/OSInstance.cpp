@@ -2739,7 +2739,8 @@ bool OSInstance::initForCallBack(){
 	initializeNonLinearStructures( );
 	getJacobianSparsityPattern();
 	getLagrangianHessianSparsityPattern();
-	if( m_iNumberOfNonlinearVariables > 0) initObjGradients();
+	//if( m_iNumberOfNonlinearVariables > 0) initObjGradients();
+	initObjGradients();
 	int i;
 	for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
 		m_vdDomainUnitVec.push_back( 0.0 );

@@ -1053,7 +1053,7 @@ double OSnLNodeSquare::calculateFunction(double *x){
 
 AD<double> OSnLNodeSquare::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
 	//m_CppADTape = CppAD::pow( ( m_mChildren[0]->constructCppADTape( cppADIdx, XAD) ), 2);
-	m_CppADTape = ( m_mChildren[0]->constructCppADTape( cppADIdx, XAD) )*( m_mChildren[0]->constructCppADTape( cppADIdx, XAD) );
+	m_CppADTape = CppAD::pow( m_mChildren[0]->constructCppADTape( cppADIdx, XAD), int( 2) );
 	return m_CppADTape;
 }// end OSnLNodeSquare::constructCppADTape
 
