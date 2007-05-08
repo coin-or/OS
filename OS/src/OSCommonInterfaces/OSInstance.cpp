@@ -133,33 +133,39 @@ OSInstance::~OSInstance(){
 	delete[] m_miNonLinearVarsReverseMap;
 	m_miNonLinearVarsReverseMap = NULL;
 	int i;
-//	if(instanceData->objectives->numberOfObjectives > 0 && m_mObjectiveCoefficients != NULL){
-//		for(i = 0; i < instanceData->objectives->numberOfObjectives; i++){
-//			//delete m_mObjectiveCoefficients[i];
-//			m_mObjectiveCoefficients[i] = NULL;
-//		}
-//		//delete[] m_mObjectiveCoefficients;
-//		m_mObjectiveCoefficients = NULL;
-//	}
-//	if(instanceData->objectives->numberOfObjectives > 0 && m_mmdDenseObjectiveCoefficients != NULL){
-//		for(i = 0; i < instanceData->objectives->numberOfObjectives; i++){
-//			//delete m_mmdDenseObjectiveCoefficients[i];
-//			m_mmdDenseObjectiveCoefficients[i] = NULL;
-//		}
-//		//delete[] m_mmdDenseObjectiveCoefficients;
-//		m_mmdDenseObjectiveCoefficients = NULL;
-//	}
-//	if(instanceData->objectives->numberOfObjectives > 0 && m_mmdObjGradient != NULL){
-//		for(i = 0; i < instanceData->objectives->numberOfObjectives; i++){
-//			//delete m_mmdObjGradient[i];
-//			#ifdef DEBUG
-//			std::cout << "deleting Objective function gradient " << i << std::endl;
-//			#endif
-//			m_mmdObjGradient[i] = NULL;
-//		}
-//		//delete[] m_mmdObjGradient;
-//		m_mmdObjGradient = NULL;
-//	}
+	if(instanceData->objectives->numberOfObjectives > 0 && m_mObjectiveCoefficients != NULL){
+		for(i = 0; i < instanceData->objectives->numberOfObjectives; i++){
+			delete m_mObjectiveCoefficients[i];
+			m_mObjectiveCoefficients[i] = NULL;
+		}
+		delete[] m_mObjectiveCoefficients;
+		m_mObjectiveCoefficients = NULL;
+	}
+	if(instanceData->objectives->numberOfObjectives > 0 && m_mmdDenseObjectiveCoefficients != NULL){
+		for(i = 0; i < instanceData->objectives->numberOfObjectives; i++){
+			delete m_mmdDenseObjectiveCoefficients[i];
+			m_mmdDenseObjectiveCoefficients[i] = NULL;
+		}
+		delete[] m_mmdDenseObjectiveCoefficients;
+		m_mmdDenseObjectiveCoefficients = NULL;
+	}
+	if( (m_binitForCallBack == true) &&  (m_iNumberOfNonlinearVariables > 0) ){
+		if(instanceData->objectives->numberOfObjectives > 0 && m_mmdObjGradient != NULL){
+			#ifdef DEBUG
+			std::cout <<  "The number of objectives =  " << instanceData->objectives->numberOfObjectives << std::endl;
+			#endif
+			for(i = 0; i < instanceData->objectives->numberOfObjectives; i++){
+				#ifdef DEBUG
+				std::cout << "deleting Objective function gradient " << i << std::endl;
+				#endif
+				delete m_mmdObjGradient[i];
+
+				m_mmdObjGradient[i] = NULL;
+			}
+			delete[] m_mmdObjGradient;
+			m_mmdObjGradient = NULL;
+		}
+	}
 	delete[] m_msConstraintNames;
 	m_msConstraintNames = NULL;
 	delete[] m_mcConstraintTypes;
@@ -2696,7 +2702,7 @@ bool OSInstance::initForCallBack(){
 	initializeNonLinearStructures( );
 	getJacobianSparsityPattern();
 	getLagrangianHessianSparsityPattern();
-	initObjGradients();
+	if( m_iNumberOfNonlinearVariables > 0) initObjGradients();
 	int i;
 	for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
 		m_vdDomainUnitVec.push_back( 0.0 );
@@ -2725,7 +2731,7 @@ bool OSInstance::initObjGradients(){
 		}
 	}
 	return true;
-}//endt initObjGradients
+}//end initObjGradients
 /**
  * end revised AD test code
  */
