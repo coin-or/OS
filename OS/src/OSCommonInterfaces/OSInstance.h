@@ -1595,6 +1595,17 @@ public:
 	 */		 
 	bool initForCallBack();
 	
+	/**
+	 * This should be called by initForCallBack()
+	 * 
+	 * <p>
+	 * 
+	 * initObjGradients will initialize the objective function gradients to be equal to the 
+	 * coefficients given in the <coef> section of the OSiL instance
+	 * @return true if successful 
+	 */		 
+	bool initObjGradients();
+	
 	
 	/**
 	 * m_iHighestOrderEvaluated is the highest order derivative
@@ -1647,6 +1658,12 @@ public:
 	 *   
 	 */		
 	std::vector<double> m_vdRangeUnitVec;
+	
+	/**
+	 * m_mdObjGradient holds an array of pointers, each pointer points 
+	 * to gradient of each objective function
+	 */
+	double **m_mmdObjGradient;
 																																																			
 }; //class OSInstance
 
