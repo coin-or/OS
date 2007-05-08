@@ -1348,7 +1348,7 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 		bool new_x, int highestOrder);				
 
 	/**
-	 * Calculate the gradient of the function indexed by idx
+	 * Calculate the gradient of the objective function indexed by objIdx
 	 * 
 	 * <p>
 	 * 
@@ -1364,6 +1364,23 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 */
 	double *calculateObjectiveFunctionGradient(double* x, double *objLambda, double *conLambda,
 		int objIdx, bool new_x, int highestOrder);
+		
+	/**
+	 * Calculate the gradient of all objective functions
+	 * 
+	 * <p>
+	 * 
+	 * @param x is a pointer (double array) to the current variable values
+	 * @param objLambda is the Lagrange multiplier on the objective function
+	 * @param conLambda is pointer (double array) of Lagrange multipliers on
+	 * the constratins
+	 * @param new_x is false if any evaluation method was previously called
+	 * for the current iterate
+	 * @param highestOrder is the highest order of the derivative being calculated
+	 * @return an array of pointer to dense objective function gradients.  
+	 */		
+	double **calculateAllObjectiveFunctionGradients(double* x, double *objLambda, double *conLambda,
+		bool new_x, int highestOrder);
 
 	/**
 	 * Calculate the Hessian of the Lagrangian Expression Tree

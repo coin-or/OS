@@ -181,7 +181,7 @@ bool IpoptSolver::eval_f(Index n, const Number* x, bool new_x, Number& obj_value
 bool IpoptSolver::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f){
  	int i;
  	//cout << "calculate objective function gradient function !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
-  	double *objGrad = osinstance->calculateObjectiveFunctionGradient((double*)x, NULL, NULL, -1, new_x, 1);
+  	double *objGrad = osinstance->calculateAllObjectiveFunctionGradients((double*)x, NULL, NULL,  new_x, 1)[ 0];
  	//osinstance->getIterateResults(  (double*)x, 0.0, NULL, -1, new_x,  1);
   	for(i = 0; i < n; i++){
   		//cout << " gradient function !!!!!!!!!!!!!!!!!!!!!!!!!! = "  <<  objGrad[ i] << endl;

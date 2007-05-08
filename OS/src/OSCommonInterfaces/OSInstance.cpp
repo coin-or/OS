@@ -1896,7 +1896,52 @@ double *OSInstance::calculateObjectiveFunctionGradient(double* x, double *objLam
 		throw ErrorClass( eclass.errormsg);
 	} 
 	return m_mmdObjGradient[abs( objIdx) - 1];
-}				
+}//calculateObjectiveFunctionGradient
+
+
+double **OSInstance::calculateAllObjectiveFunctionGradients(double* x, double *objLambda, double *conLambda,
+		bool new_x, int highestOrder){
+	try{
+
+		if( new_x == false && (highestOrder <= m_iHighestOrderEvaluated)  ) {
+			return m_mmdObjGradient;
+		}
+		// if here, we need to do an evaluation
+		getIterateResults(x, objLambda, conLambda,  new_x,  highestOrder);
+		
+//		int idx = objIdx;
+//		m_iHighestOrderEvaluated = -1;
+//		// make sure the index idx is valid
+//		if(idx >= 0 || getObjectiveNumber() <= ( abs( idx) - 1)  ) throw 
+//			ErrorClass("obj index not valid in OSInstance::calculateObjectiveFunctionGradient");
+//		//if( gradientEvaluated == true) return m_mdObjGradient;
+//		int i;
+//		int numVar = getVariableNumber();
+//		std::map<int, int>::iterator posVarIdx;
+//		std::vector<double> jac;
+//		// get the values from the ObjCoef object
+//		int objIdx = (abs( idx) - 1);
+//		for(i = 0; i < numVar; i++){
+//			*(m_mdObjGradient + i) = m_mmdDenseObjectiveCoefficients[ objIdx][i];
+//		}
+//		// get the gradient
+//		if( m_mapExpressionTreesMod.find( idx) != m_mapExpressionTreesMod.end() ){
+//			//jac = m_mapExpressionTreesMod[ idx]->calculateGradientReTape(x, functionEvaluated);
+//			jac = m_mapExpressionTreesMod[ idx]->calculateGradientReTape(x, false);
+//			i = 0;
+//			for(posVarIdx = (*m_mapExpressionTreesMod[ idx]->mapVarIdx).begin(); posVarIdx 
+//			!= (*m_mapExpressionTreesMod[ idx]->mapVarIdx).end(); ++posVarIdx){
+//				*(m_mdObjGradient + posVarIdx->first) += jac[ i];	
+//				//std::cout << "Objective  Partial = " <<  jac[ i] << std::endl;
+//				i++;
+//			}
+//		}
+	}
+	catch(const ErrorClass& eclass){
+		throw ErrorClass( eclass.errormsg);
+	} 
+	return m_mmdObjGradient;
+}// calculateAllObjectiveFunctionGradients				
 
 bool OSInstance::getSparseJacobianFromRowMajor( ){
 	// Kipp -- todo
@@ -2398,6 +2443,7 @@ bool OSInstance::getIterateResults( double *x, double *objLambda, double* conMul
 			for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
 				m_vdX.push_back( x[ posVarIndexMap->first]) ;
 			}
+			// kipp retape if there are logical operators used
 			if( (m_bCppADFunIsCreated == false)  && (m_mapExpressionTreesMod.size() > 0) ) {
 				createCppADFun( m_vdX);
 			}	
