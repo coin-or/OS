@@ -53,7 +53,6 @@ OSInstance::OSInstance():
 	m_mdObjectiveWeights(NULL),
 	m_mdConstraintFunctionValues( NULL),
 	m_mdObjectiveFunctionValues( NULL),
-	m_mdObjGradient(NULL),
 	m_iHighestTaylorCoeffOrder(-1),
 	m_bCppADFunIsCreated( false),
 	m_LagrangianExpTree(NULL),
@@ -187,8 +186,6 @@ OSInstance::~OSInstance(){
 		m_mdObjectiveFunctionValues = NULL;	
 		delete[] m_mdConstraintFunctionValues;
 		m_mdConstraintFunctionValues = NULL;
-		delete[] m_mdObjGradient;
-		m_mdObjGradient = NULL;	
 	}
 	if(m_bSparseJacobianCalculated == true){
 		delete[] m_miJacStart;
@@ -1533,7 +1530,7 @@ bool OSInstance::initializeNonLinearStructures( ){
 	getDenseObjectiveCoefficients();
 	m_mdConstraintFunctionValues = new double[ this->instanceData->constraints->numberOfConstraints];
 	m_mdObjectiveFunctionValues = new double[ this->instanceData->objectives->numberOfObjectives];
-	m_mdObjGradient = new double[ this->instanceData->variables->numberOfVariables];
+	//m_mdObjGradient = new double[ this->instanceData->variables->numberOfVariables];
 	m_bNonLinearStructuresInitialized = true;
 	return true;
 }
@@ -2591,8 +2588,10 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conM
 			}
 		}
 		std::cout  << "OBJECTIVE FUNCTION DATA " << std::endl;
-		for(idx = 0; idx < m_iVariableNumber; idx++){
-				std::cout << "var idx = " << idx <<  "  value = "<< *(m_mdObjGradient + idx) << std::endl;
+		for(i = 0; i < m_iObjectiveNumber; i++){
+			for(idx = 0; idx < m_iVariableNumber; idx++){
+				std::cout << "var idx = " << idx <<  "  value = "<< m_mmdObjGradient[ i][idx] << std::endl;
+			}
 		}
 		#endif
 		return true;

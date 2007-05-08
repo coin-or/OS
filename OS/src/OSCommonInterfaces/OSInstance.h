@@ -382,7 +382,7 @@ private:
 	/**
 	 * m_mdObjGradient holds a dense vector of an objective function gradient. 
 	 */
-	double* m_mdObjGradient;	
+	//double* m_mdObjGradient;	
 	
 	/**
 	 * m_mmdDenseObjectiveCoefficients holds an array of pointers, each pointer points 
