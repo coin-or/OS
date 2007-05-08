@@ -62,13 +62,8 @@ bool IpoptSolver::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 	cout << "number constraints  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << m << endl;
 	
 	osinstance->initForCallBack( );
- 	//osinstance->initializeNonLinearStructures( );
- 	//osinstance->initObjGrad();
-	// nonzeros in jacobian
-	//if( osinstance->getNumberOfNonlinearExpressions() <= 0 && osinstance->getNumberOfQuadraticTerms() > 0){  
-	//		osinstance->addQTermsToExressionTree();
-	//}
-	
+	// use the OS Expression tree for function evaluations instead of CppAD
+	osinstance->bUseExpTreeForFunEval = true;
 	std::cout << "Call sparse jacobian" << std::endl;
 	SparseJacobianMatrix *sparseJacobian = NULL;
 	try{
@@ -167,13 +162,10 @@ bool IpoptSolver::get_starting_point(Index n, bool init_x, Number* x,
 
 // returns the value of the objective function
 bool IpoptSolver::eval_f(Index n, const Number* x, bool new_x, Number& obj_value){
- 	//cout << "calculate function value !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  " INDEX = " << n << endl;
-	//obj_value = osinstance->calculateObjectiveFunctionValue( (double*)x, 0.0, NULL, -1, new_x, 0);
-	// first element is obj of interest
-	obj_value = osinstance->calculateAllObjectiveFunctionValues((double*)x, NULL, NULL, new_x, 0 )[ 0];
+	obj_value  = osinstance->calculateAllObjectiveFunctionValues((double*)x, NULL, NULL, new_x, 0 )[ 0];
 	if( CommonUtil::ISOSNAN( (double)obj_value) ) return false;
 	//for(int i = 0; i < n; i++) cout << "x[ i] =  !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  x[ i]  << endl;
-	//std::cout << "calculated function value !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  obj_value  << std::endl;
+	std::cout << "calculated function value !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  obj_value  << std::endl;
 	//std::cout << "calculated function value !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  osinstance->calculateAllObjectiveFunctionValues((double*)x, 0.0, NULL, false, 0 )[ 0]  << std::endl;
   	return true;
 }
@@ -182,27 +174,19 @@ bool IpoptSolver::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad
  	int i;
  	//cout << "calculate objective function gradient function !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
   	double *objGrad = osinstance->calculateAllObjectiveFunctionGradients((double*)x, NULL, NULL,  new_x, 1)[ 0];
- 	//osinstance->getIterateResults(  (double*)x, 0.0, NULL, -1, new_x,  1);
   	for(i = 0; i < n; i++){
-  		//cout << " gradient function !!!!!!!!!!!!!!!!!!!!!!!!!! = "  <<  objGrad[ i] << endl;
-  		//cout << " gradient function !!!!!!!!!!!!!!!!!!!!!!!!!! = "  <<  osinstance->m_mdObjGradient[ i] << endl;
-  		// has the Jacobian already been called?
-  		//grad_f[ i]  = osinstance->m_mdObjGradient[ i];
   		grad_f[ i]  = objGrad[ i];
   	}
   	return true;
 }//eval_grad_f
 
 // return the value of the constraints: g(x)
-bool IpoptSolver::eval_g(Index n, const Number* x, bool new_x, Index m, Number* g) {
-	//cout << "get value of constraint !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  " INDEX = " << n << endl;
+	bool IpoptSolver::eval_g(Index n, const Number* x, bool new_x, Index m, Number* g) {
  	double *conVals = osinstance->calculateAllConstraintFunctionValues((double*)x, NULL, NULL, new_x, 0 );
- 	//cout << "got value of constraints !!!!!!!!!!!!!!!!!!!!!!!!!! " <<   endl;
  	int i;
  	for(i = 0; i < m; i++){
  		if( CommonUtil::ISOSNAN( (double)conVals[ i] ) ) return false;
- 		g[i] = conVals[ i]  ;		
- 		//cout << "constraint indx !!!!!!!!!!!!!!! " <<  i <<  "  Value =  " <<   g[ i] <<  endl;
+ 		g[i] = conVals[ i]  ;	
  	} 
 	return true;
 }//eval_g

@@ -844,7 +844,8 @@ double OSnLNodePower::calculateFunction(double *x){
 
 //
 AD<double> OSnLNodePower::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
-	if( typeid( *m_mChildren[1]) == typeid( OSnLNodeNumber) ) {
+	//if( typeid( *m_mChildren[1]) == typeid( OSnLNodeNumber) ) {
+	if( this->m_mChildren[1]->inodeInt == 5001 ) {
 		OSnLNodeNumber *numberNode  =  (OSnLNodeNumber*)m_mChildren[1];
 		// we have a number node see if interger
 		if( (numberNode->value) = int( numberNode->value)){
@@ -1052,7 +1053,6 @@ double OSnLNodeSquare::calculateFunction(double *x){
 
 
 AD<double> OSnLNodeSquare::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
-	//m_CppADTape = CppAD::pow( ( m_mChildren[0]->constructCppADTape( cppADIdx, XAD) ), 2);
 	m_CppADTape = CppAD::pow( m_mChildren[0]->constructCppADTape( cppADIdx, XAD), int( 2) );
 	return m_CppADTape;
 }// end OSnLNodeSquare::constructCppADTape

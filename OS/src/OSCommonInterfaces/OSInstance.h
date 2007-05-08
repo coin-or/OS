@@ -709,6 +709,12 @@ private:
 public:
 
 	/**
+	 * bUseExpTreeForFunEval is set to true if you wish to use the OS Expression Tree for
+	 * function evaluations instead of AD -- false by default. 
+	 */
+	bool bUseExpTreeForFunEval;
+	
+	/**
 	 * Get instance name. 
 	 * 
 	 * @return instance name. Null or empty std::string ("") if there is no instance name. 
@@ -1279,6 +1285,35 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 */
 	double *calculateAllConstraintFunctionValues(double* x, double *objLambda, double *conLambda,
 		bool new_x, int highestOrder);
+		
+	/**
+	 * Calculate all of the constraint function values, we are overloading this function
+	 * this method will not use any AD and will evaluate function values from the 
+	 * OS Expression Tree
+	 * 
+	 * <p>
+	 * 
+	 * @param x is a pointer (double array) to the current variable values
+	 * @param new_x is false if any evaluation method was previously called
+	 * for the current iterate
+	 * @return a double array of constraint function values -- the size of the array is equal to getConstraintNumber().  
+	 */
+	double *calculateAllConstraintFunctionValues(double* x, bool new_x);
+	
+	
+	/**
+	 * Calculate all of the objective function values, we are overloading this function
+	 * this method will not use any AD and will evaluate function values from the 
+	 * OS Expression Tree
+	 * 
+	 * <p>
+	 * 
+	 * @param x is a pointer (double array) to the current variable values
+	 * @param new_x is false if any evaluation method was previously called
+	 * for the current iterate
+	 * @return a double array of objective function values -- the size of the array is equal to getConstraintNumber().  
+	 */
+	double *calculateAllObjectiveFunctionValues(double* x, bool new_x);
 		
 		
 	/**

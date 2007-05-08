@@ -94,7 +94,8 @@ OSInstance::OSInstance():
 	m_iConstraintNumberNonlinear( 0),
 	m_iObjectiveNumberNonlinear( 0),
 	m_iHighestOrderEvaluated( -1),
-	m_binitForCallBack( false)
+	m_binitForCallBack( false),
+	bUseExpTreeForFunEval(false)
 {    
 	#ifdef DEBUG
 	cout << "Inside OSInstance Constructor" << endl;
@@ -1751,6 +1752,24 @@ double *OSInstance::calculateAllConstraintFunctionValues( double* x, double *obj
 }//calculateAllConstraintFunctionValues
 
 
+double *OSInstance::calculateAllConstraintFunctionValues(double* x, bool new_x){
+	try{
+		m_iHighestOrderEvaluated = -1;
+		//if( new_x == false) return m_mdConstraintFunctionValues;
+		int idx, numConstraints;
+		numConstraints = getConstraintNumber();
+		// loop over all constraints
+		for(idx = 0; idx < numConstraints; idx++){
+			m_mdConstraintFunctionValues[ idx]  = calculateFunctionValue(idx, x, false);	
+		}
+		return m_mdConstraintFunctionValues;
+	}
+ 	catch(const ErrorClass& eclass){
+		throw ErrorClass( eclass.errormsg);
+	} 	
+}//end calculateAllConstraintFunctionValues
+
+
 double *OSInstance::calculateAllObjectiveFunctionValues( double* x, double *objLambda, double *conLambda,
 	bool new_x, int highestOrder){	
 	try{
@@ -1764,20 +1783,24 @@ double *OSInstance::calculateAllObjectiveFunctionValues( double* x, double *objL
  	catch(const ErrorClass& eclass){
 		throw ErrorClass( eclass.errormsg);
 	} 
-	// kipp put some code in to execute the code below if we don't want AD to do the
-	// function evaluations	
-//	m_iHighestOrderEvaluated = -1;
-//	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
-//	int idx, numConstraints;
-//	numConstraints = getConstraintNumber();
-//	// loop over all constraints
-//	for(idx = 0; idx < numConstraints; idx++){
-//		// calculateFunctionValue will define *(m_mdConstraintFunctionValues + idx)
-//		//std::cout << "Index =  "  << idx  << std::endl;
-//		m_mdConstraintFunctionValues[ idx]  = calculateFunctionValue(idx, x, false);	
-//		//std::cout << "m_mdConstraintFunctionValues[ idx]  !!!!!!!"  << m_mdConstraintFunctionValues[ idx] << std::endl;
-//	}
-//	return m_mdConstraintFunctionValues;
+}//calculateAllConstraintFunctionValues
+
+
+double *OSInstance::calculateAllObjectiveFunctionValues( double* x, bool new_x){	
+	try{
+		m_iHighestOrderEvaluated = -1;
+		//if( new_x == false) return m_mdObjectiveFunctionValues;
+		int idx, numObjectives;
+		numObjectives = getObjectiveNumber();
+		// loop over all constraints
+		for(idx = 0; idx < numObjectives; idx++){
+			m_mdObjectiveFunctionValues[ idx]  = calculateFunctionValue(-idx -1, x, false);	
+		}
+		return m_mdObjectiveFunctionValues;
+	}
+ 	catch(const ErrorClass& eclass){
+		throw ErrorClass( eclass.errormsg);
+	} 
 }//calculateAllConstraintFunctionValues
 
 double OSInstance::calculateObjectiveFunctionValue(double* x, double *objLambda, double *conLambda,
@@ -1795,19 +1818,9 @@ double OSInstance::calculateObjectiveFunctionValue(double* x, double *objLambda,
 	} 
 }//calculateObjectiveFunctionValue
 
-//double *OSInstance::calculateAllObjectiveFunctionValues( double* x, bool allFunctionsEvaluated){
-//	m_iHighestOrderEvaluated = -1;
-//	if(allFunctionsEvaluated == true) return m_mdObjectiveFunctionValues;
-//	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
-//	int idx, numObjectives;
-//	numObjectives = getObjectiveNumber();
-//	// loop over all objectives
-//	for(idx = 0; idx < numObjectives; idx++){
-//		// calculateFunctionValue will define *(m_mdObjectiveFunctionValues + ( abs( idx) - 1))
-//		calculateFunctionValue(-idx - 1, x, false);	
-//	}
-//	return m_mdObjectiveFunctionValues;
-//}//calculateAllObjectiveFunctionValues
+
+
+
 
 SparseJacobianMatrix *OSInstance::calculateAllConstraintFunctionGradients(double* x, double *objLambda, double *conLambda,
 		bool new_x, int highestOrder){
@@ -2450,8 +2463,16 @@ bool OSInstance::getIterateResults( double *x, double *objLambda, double* conMul
 		}	
 		switch( highestOrder){		
 			case 0:	
-				if(new_x == true || m_iHighestOrderEvaluated < 0)	
-					getZeroOrderResults(x, objLambda, conMultipliers, new_x);
+				if(new_x == true || m_iHighestOrderEvaluated < 0){	
+					if(bUseExpTreeForFunEval == true){
+						calculateAllConstraintFunctionValues( x, new_x);
+						calculateAllObjectiveFunctionValues( x, new_x);
+					}
+					else{
+						getZeroOrderResults(x, objLambda, conMultipliers, new_x);
+					}
+
+				}
 				break;	
 			case 1:
 				if(new_x == true || m_iHighestOrderEvaluated < 0)	
@@ -2500,7 +2521,9 @@ bool OSInstance::getZeroOrderResults(double *x, double *objLambda, double *conMu
 			}	
 			// add in the constraint function constant
 			m_mdConstraintFunctionValues[ rowNum] += m_mdConstraintConstants[ rowNum ];
+			#ifdef DEBUG
 			std::cout << "Constraint " << rowNum << " function value =  " << m_mdConstraintFunctionValues[ rowNum] << std::endl;
+			#endif
 		}
 		// now get the objective function values from the forward result
 		for(objNum = 0; objNum < m_iObjectiveNumber; objNum++){
@@ -2511,7 +2534,9 @@ bool OSInstance::getZeroOrderResults(double *x, double *objLambda, double *conMu
 			for(i = 0; i < m_iVariableNumber; i++){
 				m_mdObjectiveFunctionValues[ objNum] += m_mmdDenseObjectiveCoefficients[ objNum][i]*x[ i];
 			}
+			#ifdef DEBUG
 			std::cout << "Objective " << objNum << " function value =  " << m_mdObjectiveFunctionValues[ objNum] << std::endl;
+			#endif
 		}
 	return true;
 	}//end try
