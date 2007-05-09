@@ -337,6 +337,7 @@ allDiff: ALLDIFFSTART {
 anotherallDiffnlnode ALLDIFFEND {
 	parserData->allDiffVec.back()->m_mChildren = new OSnLNode*[ parserData->allDiffVec.back()->inumberOfChildren];
 	parserData->allDiffVec.pop_back();
+	osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->bCppADMustReTape = true;
 };
 
 anotherallDiffnlnode: nlnode {	parserData->allDiffVec.back()->inumberOfChildren++; }
@@ -351,6 +352,7 @@ max: MAXSTART {
 anothermaxnlnode MAXEND {
 	parserData->maxVec.back()->m_mChildren = new OSnLNode*[ parserData->maxVec.back()->inumberOfChildren];
 	parserData->maxVec.pop_back();
+	osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->bCppADMustReTape = true;
 };
 
 anothermaxnlnode: nlnode {	parserData->maxVec.back()->inumberOfChildren++; }
@@ -364,6 +366,7 @@ min: MINSTART {
 anotherminnlnode MINEND {
 	parserData->minVec.back()->m_mChildren = new OSnLNode*[ parserData->minVec.back()->inumberOfChildren];
 	parserData->minVec.pop_back();
+	osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->bCppADMustReTape = true;
 };
 
 anotherminnlnode: nlnode {	parserData->minVec.back()->inumberOfChildren++; }
@@ -419,13 +422,17 @@ exp: EXPSTART {
 abs: ABSSTART {
 	parserData->nlNodePoint = new OSnLNodeAbs();
 	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
-} nlnode ABSEND;
+} nlnode ABSEND {
+osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->bCppADMustReTape = true;
+};
 
 
 if: IFSTART {
 	parserData->nlNodePoint = new OSnLNodeIf();
 	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
-} nlnode nlnode nlnode IFEND;
+} nlnode nlnode nlnode IFEND {
+osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->bCppADMustReTape = true;
+};
 
 number: NUMBERSTART {
 	parserData->nlNodeNumberPoint = new OSnLNodeNumber();

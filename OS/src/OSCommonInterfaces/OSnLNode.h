@@ -302,6 +302,12 @@ public:
 	 */	
 	virtual AD<double> constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD);
 	
+	/**
+	 * is true if a the Expresion Tree has an expression that can change depending on
+	 * the value of the input, e.g. an if statement -- false by default
+	 */
+	bool bMustReTape;
+	
 
 
 };//end OSnLNodeSum

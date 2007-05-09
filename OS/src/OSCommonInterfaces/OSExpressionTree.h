@@ -16,15 +16,12 @@
  
 #ifndef EXPRESSIONTREE_H
 #define EXPRESSIONTREE_H 
+
 #include "OSnLNode.h"
 #include <vector>
 #include <map>
 #include<cppad/cppad.hpp>
 using CppAD::Parameter;
-
-
-
-
 
 class OSExpressionTree{  
 
@@ -156,6 +153,12 @@ public:
 	 * m_bIndexMapGenerated is set to true if getVariableIndiciesMap() has been called
 	 */	
 	bool  m_bIndexMapGenerated;
+	
+	/**
+	 * is true if a CppAD Expresion Tree has an expression that can change depending on
+	 * the value of the input, e.g. an if statement -- false by default
+	 */
+	bool bCppADMustReTape;
 
 	
 private:

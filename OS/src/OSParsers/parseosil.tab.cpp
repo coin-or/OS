@@ -717,14 +717,14 @@ static const yytype_uint16 yyrline[] =
      271,   272,   273,   274,   275,   276,   277,   278,   279,   280,
      281,   282,   283,   286,   286,   291,   291,   296,   296,   301,
      301,   306,   306,   311,   311,   316,   316,   326,   327,   332,
-     332,   342,   343,   346,   346,   356,   357,   359,   359,   369,
-     370,   373,   373,   383,   384,   387,   387,   392,   392,   397,
-     397,   402,   402,   407,   407,   414,   414,   419,   419,   425,
-     425,   430,   430,   435,   435,   440,   441,   443,   443,   446,
-     447,   449,   449,   452,   453,   455,   456,   456,   463,   464,
-     466,   468,   470,   474,   478,   484,   487,   491,   492,   494,
-     496,   499,   502,   506,   516,   517,   518,   519,   521,   522,
-     524
+     332,   343,   344,   347,   347,   358,   359,   361,   361,   372,
+     373,   376,   376,   386,   387,   390,   390,   395,   395,   400,
+     400,   405,   405,   410,   410,   417,   417,   422,   422,   430,
+     430,   437,   437,   442,   442,   447,   448,   450,   450,   453,
+     454,   456,   456,   459,   460,   462,   463,   463,   470,   471,
+     473,   475,   477,   481,   485,   491,   494,   498,   499,   501,
+     503,   506,   509,   513,   523,   524,   525,   526,   528,   529,
+     531
 };
 #endif
 
@@ -2091,6 +2091,7 @@ parserData->productVec.clear();
     {
 	parserData->allDiffVec.back()->m_mChildren = new OSnLNode*[ parserData->allDiffVec.back()->inumberOfChildren];
 	parserData->allDiffVec.pop_back();
+	osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->bCppADMustReTape = true;
 }
     break;
 
@@ -2118,6 +2119,7 @@ parserData->productVec.clear();
     {
 	parserData->maxVec.back()->m_mChildren = new OSnLNode*[ parserData->maxVec.back()->inumberOfChildren];
 	parserData->maxVec.pop_back();
+	osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->bCppADMustReTape = true;
 }
     break;
 
@@ -2145,6 +2147,7 @@ parserData->productVec.clear();
     {
 	parserData->minVec.back()->m_mChildren = new OSnLNode*[ parserData->minVec.back()->inumberOfChildren];
 	parserData->minVec.pop_back();
+	osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->bCppADMustReTape = true;
 }
     break;
 
@@ -2241,11 +2244,25 @@ parserData->productVec.clear();
 }
     break;
 
+  case 98:
+
+    {
+osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->bCppADMustReTape = true;
+}
+    break;
+
   case 99:
 
     {
 	parserData->nlNodePoint = new OSnLNodeIf();
 	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+}
+    break;
+
+  case 100:
+
+    {
+osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->bCppADMustReTape = true;
 }
     break;
 

@@ -15,9 +15,11 @@
  */
  
 #include "OSnLNode.h"
+#include "ErrorClass.h"
+#include "OSParameters.h"
+
 #include<string>
 #include<math.h>
-#include "OSParameters.h"
 #include <iostream>
 #include <sstream>  
 
@@ -514,12 +516,13 @@ double OSnLNodeAllDiff::calculateFunction(double *x){
 
 
 AD<double> OSnLNodeAllDiff::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
-	m_CppADTape = 0.0;
-	int i;
-	//for(i = 0; i < inumberOfChildren; i++){
-	//		m_CppADTape = m_CppADTape + m_mChildren[i]->constructCppADTape( cppADIdx, XAD);
-	//}
-	// kipp throw error if operation not defined
+	try{
+		throw ErrorClass("AllDifferent operator not supported by current Algorithmic Differentiation implementation");
+		return m_CppADTape;
+	}
+	catch(const ErrorClass& eclass){
+		throw ErrorClass( eclass.errormsg);
+	}
 	return m_CppADTape;
 }// end OSnLNodeAllDiff::constructCppADTape
 
@@ -569,8 +572,14 @@ double OSnLNodeMax::calculateFunction(double *x){
 
 
 AD<double> OSnLNodeMax::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
-	//kipp throw error here
-	return m_CppADTape;
+	//if not support in CppAD, throw an exception
+	try{
+		throw ErrorClass("Max operator not supported by current Algorithmic Differentiation implementation");
+		return m_CppADTape;
+	}
+	catch(const ErrorClass& eclass){
+		throw ErrorClass( eclass.errormsg);
+	}
 }// end OSnLNodeMax::constructCppADTape
 
 
@@ -620,8 +629,14 @@ double OSnLNodeMin::calculateFunction(double *x){
 
 
 AD<double> OSnLNodeMin::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
-	//kipp throw error here
-	return m_CppADTape;
+	//if not support in CppAD, throw an exception
+	try{
+		throw ErrorClass("Min operator not supported by current Algorithmic Differentiation implementation");
+		return m_CppADTape;
+	}
+	catch(const ErrorClass& eclass){
+		throw ErrorClass( eclass.errormsg);
+	}
 }// end OSnLNodeMin::constructCppADTape
 
 
@@ -1228,7 +1243,7 @@ double OSnLNodeAbs::calculateFunction(double *x){
 
 
 AD<double> OSnLNodeAbs::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
-	// kipp throw an exception;
+	m_CppADTape = CppAD::abs( m_mChildren[0]->constructCppADTape( cppADIdx, XAD) );
 	return m_CppADTape;
 }// end OSnLNodeAbs::constructCppADTape
 
@@ -1274,8 +1289,14 @@ double OSnLNodeIf::calculateFunction(double *x){
 }// end OSnLNodeIf::calculate
 
 AD<double> OSnLNodeIf::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD){
-	//kipp throw an exception here;
-	return m_CppADTape;
+	//if not support in CppAD, throw an exception
+	try{
+		throw ErrorClass("if operator not supported by current Algorithmic Differentiation implementation");
+		return m_CppADTape;
+	}
+	catch(const ErrorClass& eclass){
+		throw ErrorClass( eclass.errormsg);
+	}
 }// end OSnLNodeIf::constructCppADTape
 
 OSnLNode* OSnLNodeIf::cloneOSnLNode(){

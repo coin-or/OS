@@ -570,6 +570,12 @@ private:
 	bool m_bCppADTapesBuilt;
 	
 	/**
+	 * is true if a CppAD Expresion Tree has an expression that can change depending on
+	 * the value of the input, e.g. an if statement -- false by default
+	 */
+	bool m_bCppADMustReTape;
+	
+	/**
 	 * m_iNumberOfNonlinearVariables is the number of variables that appear 
 	 * in a nonlinear expression.
 	 */

@@ -95,6 +95,7 @@ OSInstance::OSInstance():
 	m_iObjectiveNumberNonlinear( 0),
 	m_iHighestOrderEvaluated( -1),
 	m_binitForCallBack( false),
+	m_bCppADMustReTape( false),
 	bUseExpTreeForFunEval(false)
 {    
 	#ifdef DEBUG
@@ -2457,7 +2458,7 @@ bool OSInstance::getIterateResults( double *x, double *objLambda, double* conMul
 				m_vdX.push_back( x[ posVarIndexMap->first]) ;
 			}
 			// kipp retape if there are logical operators used
-			if( (m_bCppADFunIsCreated == false)  && (m_mapExpressionTreesMod.size() > 0) ) {
+			if( (m_bCppADFunIsCreated == false || m_bCppADMustReTape == true )  && (m_mapExpressionTreesMod.size() > 0) ) {
 				createCppADFun( m_vdX);
 			}	
 		}	
@@ -2761,11 +2762,19 @@ bool OSInstance::getSecondOrderResults(double *x, double *objLambda, double *con
 
 bool OSInstance::initForCallBack(){
 	if( m_binitForCallBack == true ) return true;
+	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
 	initializeNonLinearStructures( );
 	getJacobianSparsityPattern();
 	getLagrangianHessianSparsityPattern();
-	//if( m_iNumberOfNonlinearVariables > 0) initObjGradients();
+	//see if we need to retape 
+	//loop over expression tree and see if one requires it
+	for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
+		if(posMapExpTree->second->bCppADMustReTape == true) m_bCppADMustReTape = true;
+	}				
 	initObjGradients();
+	#ifdef DEBUG
+	std::cout << "RETAPE ==  " << m_bCppADMustReTape << std::endl;
+	#endif
 	int i;
 	for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
 		m_vdDomainUnitVec.push_back( 0.0 );

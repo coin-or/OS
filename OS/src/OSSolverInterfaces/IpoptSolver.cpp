@@ -162,18 +162,27 @@ bool IpoptSolver::get_starting_point(Index n, bool init_x, Number* x,
 
 // returns the value of the objective function
 bool IpoptSolver::eval_f(Index n, const Number* x, bool new_x, Number& obj_value){
-	obj_value  = osinstance->calculateAllObjectiveFunctionValues((double*)x, NULL, NULL, new_x, 0 )[ 0];
+	try{
+		obj_value  = osinstance->calculateAllObjectiveFunctionValues((double*)x, NULL, NULL, new_x, 0 )[ 0];
+	}
+	catch(const ErrorClass& eclass){
+		ipoptErrorMsg = eclass.errormsg;
+		throw;  
+	}
 	if( CommonUtil::ISOSNAN( (double)obj_value) ) return false;
-	//for(int i = 0; i < n; i++) cout << "x[ i] =  !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  x[ i]  << endl;
-	std::cout << "calculated function value !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  obj_value  << std::endl;
-	//std::cout << "calculated function value !!!!!!!!!!!!!!!!!!!!!!!!!! " <<  osinstance->calculateAllObjectiveFunctionValues((double*)x, 0.0, NULL, false, 0 )[ 0]  << std::endl;
   	return true;
 }
 
 bool IpoptSolver::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f){
  	int i;
- 	//cout << "calculate objective function gradient function !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
-  	double *objGrad = osinstance->calculateAllObjectiveFunctionGradients((double*)x, NULL, NULL,  new_x, 1)[ 0];
+ 	double *objGrad;
+	try{
+  		objGrad = osinstance->calculateAllObjectiveFunctionGradients((double*)x, NULL, NULL,  new_x, 1)[ 0];
+	}
+   	catch(const ErrorClass& eclass){
+		ipoptErrorMsg = eclass.errormsg;
+		throw;  
+	}
   	for(i = 0; i < n; i++){
   		grad_f[ i]  = objGrad[ i];
   	}
@@ -181,14 +190,20 @@ bool IpoptSolver::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad
 }//eval_grad_f
 
 // return the value of the constraints: g(x)
-	bool IpoptSolver::eval_g(Index n, const Number* x, bool new_x, Index m, Number* g) {
- 	double *conVals = osinstance->calculateAllConstraintFunctionValues((double*)x, NULL, NULL, new_x, 0 );
- 	int i;
- 	for(i = 0; i < m; i++){
- 		if( CommonUtil::ISOSNAN( (double)conVals[ i] ) ) return false;
- 		g[i] = conVals[ i]  ;	
- 	} 
-	return true;
+bool IpoptSolver::eval_g(Index n, const Number* x, bool new_x, Index m, Number* g) {
+	try{
+ 		double *conVals = osinstance->calculateAllConstraintFunctionValues((double*)x, NULL, NULL, new_x, 0 );
+ 		int i;
+ 		for(i = 0; i < m; i++){
+ 			if( CommonUtil::ISOSNAN( (double)conVals[ i] ) ) return false;
+ 			g[i] = conVals[ i]  ;	
+ 		} 
+		return true;
+	}
+	catch(const ErrorClass& eclass){
+		ipoptErrorMsg = eclass.errormsg;
+		throw;  
+	}
 }//eval_g
 
 
@@ -198,7 +213,6 @@ bool IpoptSolver::eval_jac_g(Index n, const Number* x, bool new_x,
                            Number* values){
   	SparseJacobianMatrix *sparseJacobian;
 	if (values == NULL) {
-		//cout << "get structure of Jacobian !!!!!!!!!!!!!!!!!!!!!!!!!! "  << endl;
 		// return the values of the jacobian of the constraints
 		cout << "n: " << n << endl;
 		cout << "m: " << m << endl;
@@ -225,8 +239,13 @@ bool IpoptSolver::eval_jac_g(Index n, const Number* x, bool new_x,
 	}
 	else {
 		//std::cout << "EVALUATING JACOBIAN" << std::endl; 
-		sparseJacobian = osinstance->calculateAllConstraintFunctionGradients((double*)x, NULL, NULL,  new_x, 1);
-		//values = sparseJacobian->values;
+		try{
+			sparseJacobian = osinstance->calculateAllConstraintFunctionGradients((double*)x, NULL, NULL,  new_x, 1);
+		}
+		catch(const ErrorClass& eclass){
+			ipoptErrorMsg = eclass.errormsg;
+			throw;  
+		}
 		//osinstance->getIterateResults( (double*)x, 0.0, NULL, -1, new_x,  1);
 		for(int i = 0; i < nele_jac; i++){
 			values[ i] = sparseJacobian->values[i];
@@ -251,7 +270,13 @@ bool IpoptSolver::eval_h(Index n, const Number* x, bool new_x,
 	if (values == NULL) {
 		// return the structure. This is a symmetric matrix, fill the lower left triangle only.
 		//cout << "get structure of HESSIAN !!!!!!!!!!!!!!!!!!!!!!!!!! "  << endl;
-		sparseHessian = osinstance->getLagrangianHessianSparsityPattern( );
+		try{
+			sparseHessian = osinstance->getLagrangianHessianSparsityPattern( );
+		}
+		catch(const ErrorClass& eclass){
+			ipoptErrorMsg = eclass.errormsg;
+			throw;  
+		}
 		cout << "got structure of HESSIAN !!!!!!!!!!!!!!!!!!!!!!!!!! "  << endl;
 		for(i = 0; i < nele_hess; i++){
 			iRow[i] = *(sparseHessian->hessColIdx + i);
@@ -265,8 +290,13 @@ bool IpoptSolver::eval_h(Index n, const Number* x, bool new_x,
 		// return the values. This is a symmetric matrix, fill the lower left triangle only
 		double* objMultipliers = new double[1];
 		objMultipliers[0] = obj_factor;
-		//sparseHessian = osinstance->calculateLagrangianHessianReTape((double*)x, (double*)lambda, objMultipliers, false, false);
-		sparseHessian = osinstance->calculateLagrangianHessian((double*)x, objMultipliers, (double*)lambda ,  new_x, 2);
+		try{
+			sparseHessian = osinstance->calculateLagrangianHessian((double*)x, objMultipliers, (double*)lambda ,  new_x, 2);
+		}
+		catch(const ErrorClass& eclass){
+			ipoptErrorMsg = eclass.errormsg;
+			throw;  
+		}
 		for(i = 0; i < nele_hess; i++){
 			values[ i]  = *(sparseHessian->hessValues + i);
 		}
@@ -294,27 +324,24 @@ void IpoptSolver::finalize_solution(SolverReturn status,
                                   Index m, const Number* g, const Number* lambda,
                                   Number obj_value)
 {
-  // here is where we would store the solution to variables, or write to a file, etc
-  // so we could use the solution.
-
-  // For this example, we write the solution to the console
-  printf("\n\nSolution of the primal variables, x\n");
-  for (Index i=0; i<n; i++) {
-    printf("x[%d] = %e\n", i, x[i]);
-  }
-
-  printf("\n\nSolution of the bound multipliers, z_L and z_U\n");
-  for (Index i=0; i<n; i++) {
-    printf("z_L[%d] = %e\n", i, z_L[i]);
-  }
-  for (Index i=0; i<n; i++) {
-    printf("z_U[%d] = %e\n", i, z_U[i]);
-  }
-
-  printf("\n\nObjective value\n");
-  printf("f(x*) = %e\n", obj_value);
-  
-///////////
+	  // here is where we would store the solution to variables, or write to a file, etc
+	  // so we could use the solution.
+	  // For this example, we write the solution to the console
+	  printf("\n\nSolution of the primal variables, x\n");
+	  for (Index i=0; i<n; i++) {
+	    printf("x[%d] = %e\n", i, x[i]);
+	  }
+	
+	  printf("\n\nSolution of the bound multipliers, z_L and z_U\n");
+	  for (Index i=0; i<n; i++) {
+	    printf("z_L[%d] = %e\n", i, z_L[i]);
+	  }
+	  for (Index i=0; i<n; i++) {
+	    printf("z_U[%d] = %e\n", i, z_U[i]);
+	  }
+	
+	  printf("\n\nObjective value\n");
+	  printf("f(x*) = %e\n", obj_value);
   	int solIdx = 0;
 	ostringstream outStr;
 	double* mdObjValues = new double[1];
