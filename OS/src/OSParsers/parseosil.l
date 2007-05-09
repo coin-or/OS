@@ -61,7 +61,7 @@ equality ([ \t\n\r])*=([ \t\n\r])*
 quote (\"|\') 
 greater_than (>)
 aninteger (-?[0-9]+)
-adouble (-?((([0-9]+)|([0-9]*\.[0-9]+))([eE][-+]?[0-9]+)?|INF))
+adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF))
 %% 
  
 {xmlwhitespace}

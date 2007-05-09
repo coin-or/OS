@@ -256,7 +256,7 @@
                 <el>-1</el>
                 <el>1</el>
                 <el>1</el>
-                <el>1</el>
+                <el>1.</el>
                 <el>1</el>
                 <el>1</el>
                 <el>1</el>
@@ -606,7 +606,7 @@
                                 </plus>
                             </times>
                         </minus>
-                        <number value="2" type="real"/>
+                        <number value="2." type="real"/>
                     </power>
                 </sum>
             </nl>
