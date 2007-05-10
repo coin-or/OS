@@ -592,17 +592,10 @@ private:
 	 */
 	CppAD::vector< AD<double> > m_vX;	
 	
-	/**
-	 * m_vITER is a vector that holds the independent values of the f function evalued by CppAD at each iteration. 
-	 */		
-	std::vector<double> m_vXITER;
-	
-	/**
-	 *  m_vFG is a vector of CppAD  objective and constraint functions.
-	 */
-	CppAD::vector< AD<double> > m_vFG;	
-	
-	
+//	/**
+//	 * m_vITER is a vector that holds the independent values of the f function evalued by CppAD at each iteration. 
+//	 */		
+//	std::vector<double> m_vXITER;
 	
 	/**
 	 * m_bDuplicateExpressionTreeMap is true if m_mapExpressionTrees was duplicated. 
@@ -1386,7 +1379,41 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * @return a pointer a SparseJacobianMatrix. 
 	 */
 	SparseJacobianMatrix *calculateAllConstraintFunctionGradients(double* x, double *objLambda, double *conLambda,
-		bool new_x, int highestOrder);				
+		bool new_x, int highestOrder);		
+		
+
+	/**
+	 * Calculate the gradient of the constraint function indexed by idx
+	 * 
+	 * <p>
+	 * 
+	 * @param x is a pointer (double array) to the current variable values
+	 * @param objLambda is the Lagrange multiplier on the objective function
+	 * @param conLambda is pointer (double array) of Lagrange multipliers on
+	 * the constratins
+	 * @parma idx is the index of the constraint function gradient
+	 * @param new_x is false if any evaluation method was previously called
+	 * for the current iterate
+	 * @param highestOrder is the highest order of the derivative being calculated
+	 * @return a pointer to a sparse vector of doubles.  
+	 */
+	SparseVector *calculateConstraintFunctionGradient(double* x, double *objLambda, double *conLambda,
+		int idx, bool new_x, int highestOrder);
+		
+	/**
+	 * Calculate the gradient of the constraint function indexed by idx
+	 * this function is overloaded
+	 * 
+	 * <p>
+	 * 
+	 * @param x is a pointer (double array) to the current variable values
+	 * @parma idx is the index of the constraint function gradient
+	 * @param new_x is false if any evaluation method was previously called
+	 * for the current iterate
+	 * @param highestOrder is the highest order of the derivative being calculated
+	 * @return a pointer to a sparse vector of doubles.  
+	 */
+	SparseVector *calculateConstraintFunctionGradient(double* x, int idx, bool new_x );		
 
 	/**
 	 * Calculate the gradient of the objective function indexed by objIdx
@@ -1405,6 +1432,21 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 */
 	double *calculateObjectiveFunctionGradient(double* x, double *objLambda, double *conLambda,
 		int objIdx, bool new_x, int highestOrder);
+		
+	/**
+	 * Calculate the gradient of the objective function indexed by objIdx
+	 * this function is overloaded
+	 * 
+	 * <p>
+	 * 
+	 * @param x is a pointer (double array) to the current variable values
+	 * @parma objIdx is the index of the objective function being optimized
+	 * @param new_x is false if any evaluation method was previously called
+	 * for the current iterate
+	 * @param highestOrder is the highest order of the derivative being calculated
+	 * @return a pointer to a dense vector of doubles.  
+	 */
+	double *calculateObjectiveFunctionGradient(double* x, int objIdx, bool new_x );
 		
 	/**
 	 * Calculate the gradient of all objective functions
@@ -1442,31 +1484,21 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 */
 	SparseHessianMatrix *calculateLagrangianHessian( double* x, double *objLambda, double *conLambda,
 		bool new_x, int highestOrder);
-	
+		
 	/**
-	 * Calculate the Hessian of the Lagrangian Expression Tree  
-	 * This method will build the CppAD expression tree for each nonlinear
-	 * constraint and objective function at each iteration. Use this method if the value
-	 * of x does not affect the operations sequence.
+	 * Calculate the Hessian of a constraint or objective function
 	 * <p>
 	 * 
-	 * @param x is a pointer (double) to the current primal variable values
-	 * the size of x should equal instanceData->variables->numberOfVariables
-	 * @param conMultipliers is a pointer (double) to the dual multipliers for the nonlinear 
-	 * rows, it should equal instanceData->constraints->numberOfConstraints
-	 * @param objMultipliers is a pointer (double) to the dual multipliers for the objective
-	 * rows, it should equal instanceData->objectives->numberOfObjectives
-	 * @param allFunctionsEvaluated is true if all constraint and objective functions
-	 * have been evaluated for the current iterate x
-	 * use a value of false if not sure
-	 * @param LagrangianEvaluated is true if the Hessian of the Lagrangian
-	 * has been evaluated for the current iterate x, conMultipliers, objMultipliers
-	 * use a value of false if not sure
-	 * @return a pointer a SparseHessianMatrix. 
+	 * @param x is a pointer (double array) to the current variable values
+	 * @param new_x is false if any evaluation method was previously called
+	 * for the current iterate
+	 * @parma idx is the index of the either a constraint or objective
+	 * function Hessian
+	 * @return a pointer a SparseVector. 
 	 * Each array member corresponds to one constraint gradient.
 	 */
-	SparseHessianMatrix *calculateLagrangianHessianReTape( double* x, double* conMultipliers, 
-	double* objMultipliers, bool allFunctionsEvaluated, bool LagrangianHessianEvaluated);
+	SparseVector *calculateHessian( double* x, int idx, bool new_x);
+	
 				
 	/**
 	 * 

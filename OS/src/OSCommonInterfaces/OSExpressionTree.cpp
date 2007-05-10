@@ -25,6 +25,7 @@ OSExpressionTree::OSExpressionTree():
 	m_treeRoot( NULL),
 	m_bCppADTapeBuilt( false),
 	m_bIndexMapGenerated( false),
+	bCppADMustReTape( false),
 	mapVarIdx( NULL),
 	f(NULL){
 }//end OSExpressionTree

@@ -35,6 +35,7 @@ using std::endl;
 #include "ErrorClass.h"
 #include "OSmps2osil.h"   
 #include "Base64.h"
+#include "CommonUtil.h"
 #ifdef COIN_HAS_ASL
 #include "OSnl2osil.h"
 #endif
@@ -647,6 +648,44 @@ int main(int argC, char* argV[])
 		cout <<  eclass.errormsg <<  endl;
 	}	
 	*/
+	try{
+		std::cout << std::endl << std::endl;
+		std::cout << "Testing AD Features " << std::endl;
+		std::string expTreeTest =  dataDir + "rosenbrockmod.osil";
+		osil = fileUtil->getFileAsString( &expTreeTest[0]);
+		OSInstance *osinstance = NULL;
+		osinstance = new OSInstance();
+		OSiLReader *osilreader = NULL;
+		osilreader = new OSiLReader();
+		//create an osinstance
+		osinstance = osilreader->readOSiL( &osil);
+		double *x;
+		x = new double[ 2];
+		x[0] = 1;
+		x[1] = 2;
+		SparseVector *sp;
+		// get the gradient for constraint 1
+		sp = osinstance->calculateConstraintFunctionGradient(x, 1, true);
+		int i;
+		for(i = 0; i < sp->number; i++){
+			std::cout << "gradient value " << sp->values[i] << std::endl;
+		}
+		ok = true;
+		//check gradient for constraint with index 1
+		double checkObjPartial0Con1 = (1./x[0]) + 7.5 ;
+		ok &= NearEqual(sp->values[ 0], checkObjPartial0Con1, 1e-10, 1e-10); 
+		if(ok == false) throw ErrorClass(" Fail testing gradient calculation");
+		double checkObjPartial1Con1 = (1./x[1]) + 5.25;
+		ok &= NearEqual( sp->values[ 1], checkObjPartial1Con1, 1e-10, 1e-10); 
+		if(ok == false) throw ErrorClass(" Fail testing gradient calculation");
+		delete sp;
+	}
+	catch(const ErrorClass& eclass){
+		cout << endl << endl << endl;
+		cout << eclass.errormsg << endl;
+		cout << "Sorry Unit Test Failed Testing the AD Features" << endl;
+		return 0;
+	}
 	cout << endl << endl << endl;
 	cout << "Congratulations: you passed the unit Test" << endl;
 	return 0;	
