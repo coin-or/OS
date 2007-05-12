@@ -44,12 +44,10 @@ you should get x1 = 540, x2 = 252
  
 
 
-#include <OsiSolverInterface.hpp>
-#include <OsiClpSolverInterface.hpp> 
-#include <OsiCbcSolverInterface.hpp> 
-//#include <OsiGlpkSolverInterface.hpp>
 
 
+
+#include "CoinSolver.h"
 #include "OSConfig.h"
 #include "OSnl2osil.h"
 #include "OSiLReader.h"
@@ -64,7 +62,7 @@ you should get x1 = 540, x2 = 252
 #ifdef COIN_HAS_IPOPT    
 #include "IpoptSolver.h"
 #endif  
-#include "CoinSolver.h"
+
 #include "DefaultSolver.h"
 #include "OSSolverAgent.h"
 #include "OShL.h"

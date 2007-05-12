@@ -146,6 +146,7 @@ if COIN_HAS_GLPK
   OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
 endif
 
+
 if COIN_HAS_LINDO
   AM_CPPFLAGS += -I`$(CYGPATH_W) $(LINDOINCDIR)` 
   OSSolverService_LDADD += $(LINDOLIB)

@@ -31,7 +31,7 @@
 #include "CoinSolver.h"
 #include "WSUtil.h" 
 #include "OSSolverAgent.h"
-#include "OShL.h"  
+#include "OShL.h"    
 #include "ErrorClass.h"
 #include "osOptionsStruc.h" 
 #include <string>
