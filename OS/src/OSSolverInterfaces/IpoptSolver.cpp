@@ -47,21 +47,20 @@ IpoptSolver::~IpoptSolver() {
 bool IpoptSolver::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
                              Index& nnz_h_lag, IndexStyleEnum& index_style)
 {
-  ////
-  
-  	// number of objectives
-
-	if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Ipopt NEEDS AN OBJECTIVE FUNCTION");
-                      	
+	if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Ipopt NEEDS AN OBJECTIVE FUNCTION");                 	
 	// number of variables
 	n = osinstance->getVariableNumber();
-
 	// number of constraints
 	m = osinstance->getConstraintNumber();
 	cout << "number variables  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << n << endl;
 	cout << "number constraints  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << m << endl;
-	
-	osinstance->initForCallBack( );
+	try{
+		osinstance->initForCallBack( );
+	}
+	catch(const ErrorClass& eclass){
+		ipoptErrorMsg = eclass.errormsg;
+		throw;  
+	}	
 	// use the OS Expression tree for function evaluations instead of CppAD
 	osinstance->bUseExpTreeForFunEval = true;
 	std::cout << "Call sparse jacobian" << std::endl;
