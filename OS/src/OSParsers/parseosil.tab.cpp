@@ -1879,7 +1879,7 @@ yyreduce:
     {
         case 4:
 
-    {if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms > parserData->qtermcount ) osilerror( NULL, NULL, NULL,"actual number of qterms less than numberOfQuadraticTerms");}
+    {if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms > parserData->qtermcount ) osilerror( NULL, osinstance, parserData, "actual number of qterms less than numberOfQuadraticTerms");}
     break;
 
   case 5:
@@ -1991,7 +1991,7 @@ if(osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions 
 osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount] = new Nl();
 osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->idx = (yyvsp[(2) - (3)].ival);
 osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree = new OSExpressionTree();
-if(parserData->nlnodecount > parserData->tmpnlcount) osilerror( NULL, NULL, NULL, "actual number of nl terms greater than number attribute");
+if(parserData->nlnodecount > parserData->tmpnlcount) osilerror( NULL, osinstance, parserData, "actual number of nl terms greater than number attribute");
 // clear the vectors of pointers
 parserData->nlNodeVec.clear();
 parserData->sumVec.clear();

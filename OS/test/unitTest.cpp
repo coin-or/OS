@@ -651,7 +651,15 @@ int main(int argC, char* argV[])
 	try{
 		std::cout << std::endl << std::endl;
 		std::cout << "Testing AD Features " << std::endl;
-		std::string expTreeTest =  dataDir + "rosenbrockmod.osil";
+		std::string expTreeTest =  dataDir + "CppADTestLag.osil";
+		/*
+		min x0^2 + 9*x1   -- w[0]
+		s.t. 
+		33 - 105 + 1.37*x1 + 2*x2 <= 10  -- y[0]
+		ln(x0*x2) >= 10  -- y[1]
+		Note: in the first constraint 33 is a constant term and 105 
+		is part of the nl node
+		*/
 		osil = fileUtil->getFileAsString( &expTreeTest[0]);
 		OSInstance *osinstance = NULL;
 		osinstance = new OSInstance();
@@ -660,9 +668,10 @@ int main(int argC, char* argV[])
 		//create an osinstance
 		osinstance = osilreader->readOSiL( &osil);
 		double *x;
-		x = new double[ 2];
+		x = new double[ 3];
 		x[0] = 1;
-		x[1] = 2;
+		x[1] = 5;
+		x[2] = 5;
 		SparseVector *sp;
 		// get the gradient for constraint 1
 		sp = osinstance->calculateConstraintFunctionGradient(x, 1, true);
@@ -672,13 +681,30 @@ int main(int argC, char* argV[])
 		}
 		ok = true;
 		//check gradient for constraint with index 1
-		double checkObjPartial0Con1 = (1./x[0]) + 7.5 ;
+		double checkObjPartial0Con1 = (1./x[0])  ;
 		ok &= NearEqual(sp->values[ 0], checkObjPartial0Con1, 1e-10, 1e-10); 
 		if(ok == false) throw ErrorClass(" Fail testing gradient calculation");
-		double checkObjPartial1Con1 = (1./x[1]) + 5.25;
+		double checkObjPartial1Con1 = (1./x[2]) ;
 		ok &= NearEqual( sp->values[ 1], checkObjPartial1Con1, 1e-10, 1e-10); 
 		if(ok == false) throw ErrorClass(" Fail testing gradient calculation");
 		delete sp;
+		SparseHessianMatrix *sh;
+		sh = osinstance->calculateHessian(x, -1, true);
+		for(i = 0; i < sh->hessDimension; i++){
+			std::cout << "Hessian value " << sh->hessValues[i] << std::endl;
+		}
+		ok &= NearEqual( sh->hessValues[ 0], 2., 1e-10, 1e-10);
+		if(ok == false) throw ErrorClass(" Fail testing Hessian calculation"); 
+		ok &= NearEqual( sh->hessValues[ 1], 0., 1e-10, 1e-10);
+		if(ok == false) throw ErrorClass(" Fail testing Hessian calculation");
+		ok &= NearEqual( sh->hessValues[ 2], 0., 1e-10, 1e-10);
+		if(ok == false) throw ErrorClass(" Fail testing Hessian calculation");
+		ok &= NearEqual( sh->hessValues[ 3], 0., 1e-10, 1e-10);
+		if(ok == false) throw ErrorClass(" Fail testing Hessian calculation");
+		ok &= NearEqual( sh->hessValues[ 4], 0., 1e-10, 1e-10);
+		if(ok == false) throw ErrorClass(" Fail testing Hessian calculation");
+		ok &= NearEqual( sh->hessValues[ 5], 0., 1e-10, 1e-1);
+		if(ok == false) throw ErrorClass(" Fail testing Hessian calculation");
 	}
 	catch(const ErrorClass& eclass){
 		cout << endl << endl << endl;

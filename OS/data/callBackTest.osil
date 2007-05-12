@@ -9,14 +9,14 @@
 	</instanceHeader>
 	<instanceData>
 		<variables numberOfVariables="8">
-			<var name = "x0" lb="1" ub="10"  type="C"/>
-			<var name = "x1" lb="1" ub="10"  type="C"/>
-			<var name = "x2" lb="0" ub="10"  type="C"/>
-			<var name = "x3" lb="0" ub="10"  type="C"/>
-			<var name = "x4" lb="0" ub="10"  type="C"/>
-			<var name = "x5" lb="0" ub="10"  type="C"/>
-			<var name = "x6" lb="0" ub="10"  type="C"/>
-			<var name = "x7" lb="0" ub="10"  type="C"/>
+			<var name = "x0" lb="1" ub="100000"  type="C"/>
+			<var name = "x1" lb="1" ub="100000"  type="C"/>
+			<var name = "x2" lb="0" ub="100000"  type="C"/>
+			<var name = "x3" lb="0" ub="10000"  type="C"/>
+			<var name = "x4" lb="0" ub="10000"  type="C"/>
+			<var name = "x5" lb="0" ub="10000"  type="C"/>
+			<var name = "x6" lb="0" ub="10000"  type="C"/>
+			<var name = "x7" lb="0" ub="10000"  type="C"/>
 		</variables>
 		<objectives numberOfObjectives=" 1">
 			<obj maxOrMin="min" name="minCost" numberOfObjCoef="2">
@@ -53,7 +53,7 @@
 			<qTerm idx="3"  idxOne="1" idxTwo="5"  coef="-1"/>
 			<qTerm idx="4"  idxOne="2" idxTwo="3"  coef="1"/>
 		</quadraticCoefficients>
-		<nonlinearExpressions numberOfNonlinearExpressions="2">
+		<nonlinearExpressions numberOfNonlinearExpressions="3">
 			<nl idx="-1">
 				<ln>
 					<times>
@@ -62,6 +62,7 @@
 					</times>
 				</ln>
 			</nl>
+
 			<nl idx="4">
 				<times>
 					<variable coef="-1.0" idx="2"/>
@@ -69,10 +70,10 @@
 				</times>
 			</nl>
 			<nl idx="-1">
-					<times>
-						<variable coef="1.0" idx="2"/>
-						<variable coef="1.0" idx="2"/>
-					</times>
+				<times>
+					<variable coef="1.0" idx="2"/>
+					<variable coef="1.0" idx="2"/>
+				</times>
 			</nl>
 		</nonlinearExpressions>
 	</instanceData>

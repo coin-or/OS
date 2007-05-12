@@ -1548,9 +1548,7 @@ SparseJacobianMatrix *OSInstance::getJacobianSparsityPattern( ){
 			 getSparseJacobianFromColumnMajor( );
 		}
 		else {
-			throw ErrorClass("cannot handle row major linear + nonlinear");
-			//getSparseJacobianFromRowMajor( );
-			//kipp -- implement getSparseJacobianFromRowMajor
+			getSparseJacobianFromRowMajor( );
 		}
 	}
 	catch(const ErrorClass& eclass){
@@ -1662,22 +1660,20 @@ bool OSInstance::addQTermsToExressionTree(){
 	return true;
 }
 
-double OSInstance::calculateFunctionValue(int idx, double *x, bool functionEvaluated){
+double OSInstance::calculateFunctionValue(int idx, double *x, bool new_x){
 	try{
 
 		int i, j;
 		double dvalue = 0;
-		if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
-		// if we have not filled in the Sparse Jacobian matrix do so now
-		if( m_bSparseJacobianCalculated == false) getJacobianSparsityPattern();
+		if( m_binitForCallBack == false) initForCallBack();
 		if(idx >= 0){ // we have a constraint
 			// make sure the index idx is valid
 			if( getConstraintNumber() <= idx  ) throw 
 			ErrorClass("constraint index not valid in OSInstance::calculateFunctionValue");
-			if( functionEvaluated == true) return *(m_mdConstraintFunctionValues + idx);
+			if( new_x == false) return *(m_mdConstraintFunctionValues + idx);
 			// get the nonlinear part
 			if( m_mapExpressionTreesMod.find( idx) != m_mapExpressionTreesMod.end() ){
-				dvalue = m_mapExpressionTreesMod[ idx]->calculateFunction( x,  functionEvaluated);
+				dvalue = m_mapExpressionTreesMod[ idx]->calculateFunction( x,  new_x);
 				//dvalue = vdFunVals[ idx + 1];
 			}
 			// now the linear part
@@ -1699,10 +1695,10 @@ double OSInstance::calculateFunctionValue(int idx, double *x, bool functionEvalu
 			// make sure the index idx is valid
 			if( getObjectiveNumber() <= ( abs( idx) - 1) ) throw 
 			ErrorClass("objective function index not valid in OSInstance::calculateFunctionValue");
-			if( functionEvaluated == true) return *(m_mdObjectiveFunctionValues + ( abs( idx) - 1));
+			if( new_x == false) return *(m_mdObjectiveFunctionValues + ( abs( idx) - 1));
 			// get the nonlinear part
 			if( m_mapExpressionTreesMod.find( idx) != m_mapExpressionTreesMod.end() ){
-				dvalue = m_mapExpressionTreesMod[ idx]->calculateFunction( x,  functionEvaluated);
+				dvalue = m_mapExpressionTreesMod[ idx]->calculateFunction( x,  new_x);
 			}
 			// get linear part
 			SparseVector **objCoef = getObjectiveCoefficients();
@@ -1742,12 +1738,12 @@ double *OSInstance::calculateAllConstraintFunctionValues( double* x, double *obj
 double *OSInstance::calculateAllConstraintFunctionValues(double* x, bool new_x){
 	try{
 		m_iHighestOrderEvaluated = -1;
-		//if( new_x == false) return m_mdConstraintFunctionValues;
+		if( new_x == false) return m_mdConstraintFunctionValues;
 		int idx, numConstraints;
 		numConstraints = getConstraintNumber();
 		// loop over all constraints
 		for(idx = 0; idx < numConstraints; idx++){
-			m_mdConstraintFunctionValues[ idx]  = calculateFunctionValue(idx, x, false);	
+			m_mdConstraintFunctionValues[ idx]  = calculateFunctionValue(idx, x, new_x);	
 		}
 		return m_mdConstraintFunctionValues;
 	}
@@ -1776,37 +1772,19 @@ double *OSInstance::calculateAllObjectiveFunctionValues( double* x, double *objL
 double *OSInstance::calculateAllObjectiveFunctionValues( double* x, bool new_x){	
 	try{
 		m_iHighestOrderEvaluated = -1;
-		//if( new_x == false) return m_mdObjectiveFunctionValues;
+		if( new_x == false) return m_mdObjectiveFunctionValues;
 		int idx, numObjectives;
 		numObjectives = getObjectiveNumber();
 		// loop over all constraints
 		for(idx = 0; idx < numObjectives; idx++){
-			m_mdObjectiveFunctionValues[ idx]  = calculateFunctionValue(-idx -1, x, false);	
+			m_mdObjectiveFunctionValues[ idx]  = calculateFunctionValue(-idx -1, x, new_x);	
 		}
 		return m_mdObjectiveFunctionValues;
 	}
  	catch(const ErrorClass& eclass){
 		throw ErrorClass( eclass.errormsg);
 	} 
-}//calculateAllConstraintFunctionValues
-
-double OSInstance::calculateObjectiveFunctionValue(double* x, double *objLambda, double *conLambda,
-		int objIdx, bool new_x, int highestOrder){
-	try{
-		if( new_x == false && (highestOrder <= m_iHighestOrderEvaluated)  ) {
-			return m_mdObjectiveFunctionValues[ abs( objIdx) - 1];
-		}
-		// if here, we need to do an evaluation
-		getIterateResults(x, objLambda, conLambda,  new_x,  highestOrder);
-		return m_mdObjectiveFunctionValues[ abs( objIdx) - 1];
-	}
-	catch(const ErrorClass& eclass){
-		throw ErrorClass( eclass.errormsg);
-	} 
-}//calculateObjectiveFunctionValue
-
-
-
+}//calculateAllObjectiveFunctionValues
 
 
 SparseJacobianMatrix *OSInstance::calculateAllConstraintFunctionGradients(double* x, double *objLambda, double *conLambda,
@@ -1877,6 +1855,23 @@ SparseVector *OSInstance::calculateConstraintFunctionGradient(double* x, int idx
 	} 
 }//calculateConstraintFunctionGradient
 
+
+double **OSInstance::calculateAllObjectiveFunctionGradients(double* x, double *objLambda, double *conLambda,
+		bool new_x, int highestOrder){
+	try{
+
+		if( new_x == false && (highestOrder <= m_iHighestOrderEvaluated)  ) {
+			return m_mmdObjGradient;
+		}
+		// if here, we need to do an evaluation
+		getIterateResults(x, objLambda, conLambda,  new_x,  highestOrder);
+	}
+	catch(const ErrorClass& eclass){
+		throw ErrorClass( eclass.errormsg);
+	} 
+	return m_mmdObjGradient;
+}// calculateAllObjectiveFunctionGradients
+
 double *OSInstance::calculateObjectiveFunctionGradient(double* x, double *objLambda, double *conLambda,
 		int objIdx, bool new_x, int highestOrder){
 	try{
@@ -1905,32 +1900,24 @@ double *OSInstance::calculateObjectiveFunctionGradient(double* x, int objIdx, bo
 		throw ErrorClass( eclass.errormsg);
 	} 
 	return m_mmdObjGradient[abs( objIdx) - 1];
-}//calculateObjectiveFunctionGradient
+}//calculateObjectiveFunctionGradient	
 
-
-double **OSInstance::calculateAllObjectiveFunctionGradients(double* x, double *objLambda, double *conLambda,
+SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double *objLambda, double *conLambda,
 		bool new_x, int highestOrder){
-	try{
 
 		if( new_x == false && (highestOrder <= m_iHighestOrderEvaluated)  ) {
-			return m_mmdObjGradient;
+			return m_LagrangianSparseHessian;
 		}
 		// if here, we need to do an evaluation
 		getIterateResults(x, objLambda, conLambda,  new_x,  highestOrder);
-	}
-	catch(const ErrorClass& eclass){
-		throw ErrorClass( eclass.errormsg);
-	} 
-	return m_mmdObjGradient;
-}// calculateAllObjectiveFunctionGradients	
+		return m_LagrangianSparseHessian;
+	return m_LagrangianSparseHessian;
+}//calculateLagrangianHessian
 
-SparseVector *OSInstance::calculateHessian(double* x, int idx, bool new_x){
+SparseHessianMatrix *OSInstance::calculateHessian(double* x, int idx, bool new_x){
 	try{
 		if(idx > instanceData->variables->numberOfVariables ) 
 			throw ErrorClass("invalid index passed to calculateHessian");
-		SparseVector *sp;
-		sp = new SparseVector();
-		sp->bDeleteArrays = true;
 		double *objLambda = new double[ getObjectiveNumber() ];
 		double *conLambda = new double[ getConstraintNumber() ];
 		int i;
@@ -1942,32 +1929,26 @@ SparseVector *OSInstance::calculateHessian(double* x, int idx, bool new_x){
 			conLambda[ i] = 0.0;
 		}
 		// see if we have the index of an objective function or a constraint
+		// and more corresponding component 1.0
 		if(idx < 0){
+			objLambda[ abs(idx) - 1] = 1.0;
 		}
 		else{
+			conLambda[ idx] = 1.0;
 		}
 		if( new_x == true || (2 > m_iHighestOrderEvaluated)  ) 
-			getIterateResults(x, NULL, NULL, new_x,  2);
-		//sp->number = m_miJacStart[ idx + 1] - m_miJacStart[ idx];
-		//sp->values = new double[ sp->number];
-		//sp->indexes = new int[ sp->number];
-		//for(i = 0; i < sp->number; i++){
-		//	sp->values[ i] = m_mdJacValue[ i];
-		//	sp->indexes[ i] = m_miJacIndex[ i];
-		//}
+			getIterateResults(x, objLambda, conLambda, new_x,  2);
+
 		delete[] objLambda;
 		delete[] conLambda;
-		return sp;
+		return m_LagrangianSparseHessian;
 	}
 	catch(const ErrorClass& eclass){
 		throw ErrorClass( eclass.errormsg);
 	} 
 }//calculateHessian			
 
-bool OSInstance::getSparseJacobianFromRowMajor( ){
-	// Kipp -- todo
-	return true;
-}//getSparseJacobianFromRowMajor
+
 
 bool OSInstance::getSparseJacobianFromColumnMajor( ){
 	// we assume column major matrix
@@ -2112,6 +2093,128 @@ bool OSInstance::getSparseJacobianFromColumnMajor( ){
 	return true;
 }//getSparseJacobianFromColumnMajor
 
+
+
+bool OSInstance::getSparseJacobianFromRowMajor( ){
+	// we assume row major matrix
+	if( m_bColumnMajor == true) return false;
+	int iNumJacRowStarts = getConstraintNumber() + 1;	
+	int i,j, k,  iTemp;
+	int *start;
+	int *index;
+	double *value;
+	if(this->instanceData->linearConstraintCoefficients->numberOfValues > 0){
+		start = this->instanceData->linearConstraintCoefficients->start->el;
+		index = this->instanceData->linearConstraintCoefficients->colIdx->el;
+		value = this->instanceData->linearConstraintCoefficients->value->el;
+	}
+	m_miJacStart = new int[ iNumJacRowStarts];
+	m_miJacNumConTerms = new int[ getConstraintNumber()];
+	OSnLNodePlus *nlNodePlus;
+	OSnLNodeVariable *nlNodeVariable;
+	OSExpressionTree *expTree = NULL;
+	// now initialize starts and variable index maps 
+	for ( i = 0; i < iNumJacRowStarts; i++){			
+		m_miJacStart [ i ] = 0;
+		// map the variables  in the nonlinear rows
+		if( m_mapExpressionTreesMod.find( i) != m_mapExpressionTreesMod.end() ){
+			// the following is equivalent to  m_treeRoot->getVariableIndexMap( i);
+			m_mapExpressionTreesMod[ i]->getVariableIndiciesMap();
+			
+		}
+	}
+	int loopLimit =  getConstraintNumber();
+	// only execute the following code if there are linear constraint coefficients
+	// determine the number of terms in constraint with constant partial derivative
+	if(this->instanceData->linearConstraintCoefficients->numberOfValues > 0){
+		// i is indexing rows (constrains) and j is indexing column numbers 
+		for (i = 0; i < loopLimit; i++){
+			m_miJacNumConTerms[ i] = 0;
+			for (j = start[i]; j < start[ i + 1 ]; j++){
+				// determine if variable i is a constant in row j, or if it appears in the 
+				// ExpressionTree for row j
+				// if we pass if test below then variable i is in the expresssion tree and we add
+				// the linear term to the expession tree
+				if( (m_mapExpressionTreesMod.find( i) != m_mapExpressionTreesMod.end() ) &&
+					( (*m_mapExpressionTreesMod[ i]->mapVarIdx).find( index[ j]) != (*m_mapExpressionTreesMod[ i]->mapVarIdx).end()) ){
+					// variable i is appears in the expression tree for row index[ j]
+					// add the coefficient corresponding to variable i in row index[ j] to the expression tree	
+					// define a new OSnLVariable and OSnLnodePlus 
+					nlNodeVariable = new OSnLNodeVariable();
+					nlNodeVariable->coef = value[ j];
+					nlNodeVariable->idx = index[ j];
+					nlNodePlus = new OSnLNodePlus();
+					nlNodePlus->m_mChildren[ 0] = m_mapExpressionTreesMod[ i ]->m_treeRoot;
+					nlNodePlus->m_mChildren[ 1] = nlNodeVariable;
+					expTree = new OSExpressionTree();
+					expTree->m_treeRoot = nlNodePlus ;
+					expTree->mapVarIdx = m_mapExpressionTreesMod[ i]->mapVarIdx;
+					m_mapExpressionTreesMod[ i ]  = expTree;	
+				}
+				else{ 
+					//the partial derivative of variable j in row i is constant
+					m_miJacNumConTerms[ i]++;
+				}				
+			}
+		}
+	}
+	//
+	m_miJacStart[0] = 0;
+	for (i = 1; i < iNumJacRowStarts; i++ ){
+		if( m_mapExpressionTreesMod.find( i - 1) != m_mapExpressionTreesMod.end() ){
+			m_miJacStart[i] = (m_miJacNumConTerms[ i - 1] + (*m_mapExpressionTreesMod[ i - 1]->mapVarIdx).size() );
+		}
+		else{
+			m_miJacStart[i] = m_miJacStart[i - 1] + m_miJacNumConTerms[ i - 1];
+		}	
+	}
+	// we know how many constant terms and size of arrays
+	// dimension miIndex and mdValue here
+	m_iJacValueSize = 	m_miJacStart[ iNumJacRowStarts - 1];
+	m_miJacIndex = new int[  m_iJacValueSize];
+	m_mdJacValue = new double[ m_iJacValueSize ];
+	// now loop again and put in values
+	// first put in the constant terms
+	if(this->instanceData->linearConstraintCoefficients->numberOfValues > 0){
+		for (i = 0; i < loopLimit; i++){
+			k = 0;
+			for (j = start[i]; j < start[ i + 1 ]; j++){
+				if( (m_mapExpressionTreesMod.find( i) == m_mapExpressionTreesMod.end() ) ||
+					( (*m_mapExpressionTreesMod[ i]->mapVarIdx).find( index[ j]) == (*m_mapExpressionTreesMod[ i]->mapVarIdx).end()) ){
+						m_miJacIndex[ m_miJacStart[i] + k ] = index[ j];
+						m_mdJacValue[ m_miJacStart[i] + k ] = value[ j];
+						k++;
+					}			
+			}
+		}
+	}
+	// put in terms from the nonlinear expression tree
+	#ifdef DEBUG
+	std::cout << "HERE ARE ROW STARTS:" << std::endl;
+	for (i = 0; i < iNumJacRowStarts; i++ ){
+		std::cout <<  m_miJacStart[ i] << "  ";	
+	}
+	std::cout << std::endl << std::endl;
+	std::cout << "HERE ARE VARIABLE INDICIES:" << std::endl;
+	for (i = 0; i < m_miJacStart[ iNumJacRowStarts - 1]; i++ ){
+		std::cout <<  m_miJacIndex[ i] << "  ";	
+	}
+	std::cout << std::endl << std::endl;
+	std::cout << "HERE ARE VALUES:" << std::endl;
+	for (i = 0; i < m_miJacStart[ iNumJacRowStarts - 1]; i++ ){
+		std::cout <<  m_mdJacValue[ i] << "  ";	
+	}
+	std::cout << std::endl << std::endl;
+
+	std::cout << "HERE ARE NUMBER OF CONSTANT TERMS:" << std::endl;
+	for (i = 0; i < iNumJacRowStarts - 1; i++ ){
+		std::cout <<  m_miJacNumConTerms[ i ] << "  ";	
+	}
+	std::cout << std::endl << std::endl;
+	#endif
+	return true;
+}//getSparseJacobianFromRowMajor
+
 OSExpressionTree* OSInstance::getLagrangianExpTree( ){
 	if( m_bLagrangianExpTreeCreated == true) return m_LagrangianExpTree;
 	// we calculate the Lagrangian for all the objectives and constraints
@@ -2244,132 +2347,6 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( ){
 	m_bLagrangianSparseHessianCreated = true;
 	return m_LagrangianSparseHessian;
 }//getLagrangianHessianSparsityPattern
-
-
-SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double *objLambda, double *conLambda,
-		bool new_x, int highestOrder){
-
-		if( new_x == false && (highestOrder <= m_iHighestOrderEvaluated)  ) {
-			return m_LagrangianSparseHessian;
-		}
-		// if here, we need to do an evaluation
-		getIterateResults(x, objLambda, conLambda,  new_x,  highestOrder);
-		return m_LagrangianSparseHessian;
-//	if( LagrangianHessianEvaluated == true) return m_LagrangianSparseHessian;
-//	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
-//	if( m_bLagrangianSparseHessianCreated == false)	getLagrangianHessianSparsityPattern();
-//	// initialize everything
-//	int i, j;
-//	std::map<int, int>::iterator posVarIndexMap;
-//	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
-//	// vdX -- vector of primal variables
-//	std::vector<double> vdX( m_iNumberOfNonlinearVariables);	
-//	// vdLamda -- vector of Lagrange multiplies
-//	std::vector<double> vdLambda( m_mapExpressionTreesMod.size());
-//	// vdw is the first and second derivative vector
-//	std::vector<double> vdw( 2*m_iNumberOfNonlinearVariables);
-//	i = 0;
-//	// get the current iterate data
-//	for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
-//			vdX[ i++] = x[ posVarIndexMap->first] ;
-//	}
-//	if(m_bCppADFunIsCreated == false) {
-//		createCppADFun( vdX);
-//	}
-//	//Kipp -- come back and put check in see if m_iHighestTaylorCoeffOrder >= 0, if so, don't execute
-//	this->forwardAD(0, vdX);	
-//	//  get the Lagrange multipliers
-//	i = 0;
-//	for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){	
-//		if( posMapExpTree->first >= 0){
-//			vdLambda[i++] = conMultipliers[ posMapExpTree->first];
-//		}
-//		else{
-//			vdLambda[ i++] =  objMultipliers[ abs(posMapExpTree->first) - 1] ;
-//		}
-//	}
-//	int hessValuesIdx = 0;
-//	// loop over components of x
-//	// initialize to 0
-//	for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
-//		vdX[ i] = 0;
-//	}
-//	for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
-//		vdX[i] = 1.;                
-//		this->forwardAD(1, vdX);     
-//		vdw = this->reverseAD(2, vdLambda);   // derivtative of partial
-//		for(j = i; j < m_iNumberOfNonlinearVariables; j++){
-//			m_LagrangianSparseHessian->hessValues[ hessValuesIdx++] =  vdw[  j*2 + 1];
-//		}
-//		vdX[i] = 0.;
-//	}
-	return m_LagrangianSparseHessian;
-}//calculateLagrangianHessian
-
-//SparseHessianMatrix *OSInstance::calculateLagrangianHessianReTape( double* x, double* conMultipliers, 
-//	double* objMultipliers, bool allFunctionsEvaluated, bool LagrangianHessianEvaluated){
-//	if( LagrangianHessianEvaluated == true) return m_LagrangianSparseHessian;
-//	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
-//	// initialize everything
-//	int i, j;
-//	//std::cout << "START calculateLagrangianHessianReTape" << std::endl;
-//	CppAD::AD<double> tmpVal;
-//	std::map<int, int>::iterator posVarIndexMap;
-//	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
-//	// if we have not filled in the Sparse Jacobian matrix do so now
-//	if( m_bSparseJacobianCalculated == false) getJacobianSparsityPattern();
-//	// get an index map of all of the nonlinear variables in the Hessian of the  Lagrangian
-//	// this method call will define m_iNumberOfNonlinearVariables
-//	if( m_bAllNonlinearVariablesIndex == false) getAllNonlinearVariablesIndexMap( );
-//	// fill in the nonzeros in the sparse Hessian
-//	if( m_bLagrangianSparseHessianCreated == false)	getLagrangianHessianSparsityPattern();
-//	// put in code to call CppAD and get the Hessian
-//	// for each row with a nonlinear term, build a CppAD representation of the  Expression tree
-//	// get the data
-//	// push the primal variables
-//	CppAD::vector< AD<double> > X;
-//	for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
-//		X.push_back( x[ posVarIndexMap->first] );
-//	}
-//	// declare the independent variables and start recording
-//	CppAD::Independent( X);
-//	// For expression tree, record the operations for CppAD
-//	CppAD::vector< AD<double> > L( 1);
-//	L[ 0] = 0;
-//	for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){	
-//		tmpVal = (posMapExpTree->second)->m_treeRoot->constructCppADTape(&m_mapAllNonlinearVariablesIndex, &X);
-//		//std::cout << "VALUE OF FUNCTION == " << tmpVal << std::endl;
-//		if( posMapExpTree->first >= 0){
-//			X.push_back( conMultipliers[ posMapExpTree->first] );
-//			L[ 0] = L[ 0] + conMultipliers[ posMapExpTree->first]*tmpVal;
-//		}
-//		else{
-//			X.push_back( objMultipliers[ abs(posMapExpTree->first) - 1] );
-//			L[ 0] = L[ 0] + objMultipliers[ abs(posMapExpTree->first) - 1]*tmpVal;
-//		}
-//	}	
-//	//create the function and stop recording
-//	CppAD::ADFun<double> G;
-//	G.Dependent( L);
-//	m_vXITER.clear();
-//	// get the current iterate data
-//	//std::cout <<  "LAGRANGIAN VALUE = " << L[ 0]  << std::endl;	
-//	std::vector<double> hess( m_iNumberOfNonlinearVariables * m_iNumberOfNonlinearVariables );
-//	// get the current iterate
-//	for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
-//		m_vXITER.push_back( x[ posVarIndexMap->first] );
-//	}
-//	int hessValuesIdx = 0;
-//	hess = G.Hessian(m_vXITER, 0);
-//	for(i = 0; i <  m_iNumberOfNonlinearVariables; i++){
-//		for (j  = i; j <  m_iNumberOfNonlinearVariables; j++ ){
-//			//std::cout << "UPPER TRIANGULAR HESSIAN VALUES   " << hess[ i*m_iNumberOfNonlinearVariables + j] << std::endl;
-//			m_LagrangianSparseHessian->hessValues[ hessValuesIdx++] =  hess[ i*m_iNumberOfNonlinearVariables + j];
-//		}
-//	}
-//	return m_LagrangianSparseHessian;
-//}//calculateLagrangianHessianReTape
-
 
 
 void OSInstance::duplicateExpressionTreesMap(){

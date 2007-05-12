@@ -582,11 +582,6 @@ private:
 	int m_iNumberOfNonlinearVariables ;
 	
 	
-
-
-	
-	CppAD::vector< AD<double> >m_vL;
-	
 	/**
 	 *  m_vX is a vector of CppAD indpendent variables.
 	 */
@@ -659,6 +654,19 @@ private:
 	 * m_sparseJacMatrix is the Jacobian matrix stored in sparse matrix format
      */  	
  	SparseJacobianMatrix *m_sparseJacMatrix;
+ 	
+ 	/**
+	 * m_iHighestTaylorCoeffOrder is the order of highest calculated
+	 * Taylor coefficient  
+	 */	 
+	 int m_iHighestTaylorCoeffOrder;
+	 
+	/**
+	 * 
+	 * m_bCppADFunIsCreated is true if we have created the OSInstanc
+	 * CppAD Function
+	 */	  
+	 bool m_bCppADFunIsCreated;
 	
 	/**
 	 * process variables. 
@@ -704,6 +712,65 @@ private:
 	/** m_bQTermsAdded is true if we add the quadratic terms to the expression tree
 	 */
 	 bool m_bQTermsAdded;
+	 
+	
+	/**
+	 * m_iHighestOrderEvaluated is the highest order derivative
+	 * of the current iterate
+	 */	 
+	 int m_iHighestOrderEvaluated;
+	
+	
+	//define the vectors
+
+	/**
+	 * m_vdX is a vector of primal variables at each iteration
+	 *   
+	 */		
+	std::vector<double> m_vdX;
+	
+	/**
+	 * m_vdYval is a vector function values
+	 *   
+	 */	
+	std::vector<double> m_vdYval;
+	
+	/**
+	 * m_vdYval is a vector equal to a column or row of the Jacobian
+	 *   
+	 */	
+	std::vector<double> m_vdYjacval;
+
+	/**
+	 * m_vdYval is a vector of derivatives -- output  from a reverse sweep
+	 *   
+	 */		
+	std::vector<double> m_vdw;
+	
+	/**
+	 * m_vdYval is a vector of Lagrange multipliers
+	 *   
+	 */		
+	std::vector<double> m_vdLambda;
+	
+	
+	/**
+	 * m_vdDomainUnitVec is a unit vector in the domain space
+	 *   
+	 */		
+	std::vector<double> m_vdDomainUnitVec;
+	
+	/**
+	 * m_vdRangeUnitVec is a unit vector in the range space
+	 *   
+	 */		
+	std::vector<double> m_vdRangeUnitVec;
+	
+	/**
+	 * m_mdObjGradient holds an array of pointers, each pointer points 
+	 * to gradient of each objective function
+	 */
+	double **m_mmdObjGradient;
 	
 public:
 
@@ -1251,8 +1318,6 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 */
 	bool initializeNonLinearStructures( );
 	
-	
-	
 	/**
 	 * Calculate the function value for function (constraint or objective) 
 	 * indexed by idx
@@ -1261,12 +1326,12 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * 
 	 * @param idx is the index on the constraint (0, 1, 2, 3, ...) or objective function (-1, -2, -3, ...). 
 	 * @param x is a pointer (double array) to the current variable values
-	 * @param functionEvaluated is true if the function indexed by idx
+ 	 * @param new_x is false if any evaluation method was previously called for the current x
 	 * has been evaluated for the current iterate x
 	 * use a value of false if not sure
 	 * @return the function value as a double.  
 	 */
-	double calculateFunctionValue(int idx, double* x, bool functionEvaluated);
+	double calculateFunctionValue(int idx, double* x, bool new_x);
 	
 	/**
 	 * Calculate all of the constraint function values
@@ -1277,7 +1342,7 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * @param objLambda is the Lagrange multiplier on the objective function
 	 * @param conLambda is pointer (double array) of Lagrange multipliers on
 	 * the constratins
-	 * @param new_x is false if any evaluation method was previously called
+	 * @param new_x is false if any evaluation method was previously called for the current x
 	 * for the current iterate
 	 * @param highestOrder is the highest order of the derivative being calculated
 	 * @return a double array of constraint function values -- the size of the array is equal to getConstraintNumber().  
@@ -1287,34 +1352,19 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 		
 	/**
 	 * Calculate all of the constraint function values, we are overloading this function
-	 * this method will not use any AD and will evaluate function values from the 
-	 * OS Expression Tree
+	 * and this version of the method will not use any AD and will evaluate function
+	 * values from the OS Expression Tree
 	 * 
 	 * <p>
 	 * 
 	 * @param x is a pointer (double array) to the current variable values
 	 * @param new_x is false if any evaluation method was previously called
 	 * for the current iterate
-	 * @return a double array of constraint function values -- the size of the array is equal to getConstraintNumber().  
+	 * @return a double array of constraint function values -- 
+	 * the size of the array is equal to getConstraintNumber().  
 	 */
 	double *calculateAllConstraintFunctionValues(double* x, bool new_x);
 	
-	
-	/**
-	 * Calculate all of the objective function values, we are overloading this function
-	 * this method will not use any AD and will evaluate function values from the 
-	 * OS Expression Tree
-	 * 
-	 * <p>
-	 * 
-	 * @param x is a pointer (double array) to the current variable values
-	 * @param new_x is false if any evaluation method was previously called
-	 * for the current iterate
-	 * @return a double array of objective function values -- the size of the array is equal to getConstraintNumber().  
-	 */
-	double *calculateAllObjectiveFunctionValues(double* x, bool new_x);
-		
-		
 	/**
 	 * Calculate all of the objective function values
 	 * 
@@ -1332,37 +1382,22 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 */
 	double *calculateAllObjectiveFunctionValues(double* x, double *objLambda, double *conLambda,
 		bool new_x, int highestOrder);
-		
-		
-	/**
-	 * Calculate an objective function value
-	 * 
-	 * <p>
-	 * 
-	 * @param x is a pointer (double array) to the current variable values
-	 * @param objLambda is the Lagrange multiplier on the objective function
-	 * @param conLambda is pointer (double array) of Lagrange multipliers on
-	 * the constratins
-	 * @parma objIdx is the index of the objective function being optimized
-	 * @param new_x is false if any evaluation method was previously called
-	 * for the current iterate
-	 * @param highestOrder is the highest order of the derivative being calculated
-	 * @return an objective function value as a double.  
-	 */
-	double calculateObjectiveFunctionValue(double* x, double *objLambda, double *conLambda,
-		int objIdx, bool new_x, int highestOrder);
 	
 	/**
-	 * Calculate all of the objective function values
+	 * Calculate all of the objective function values, we are overloading this function
+	 * and this version of the method will not use any AD and will evaluate function
+	 * values from the OS Expression Tree
 	 * 
 	 * <p>
 	 * 
 	 * @param x is a pointer (double array) to the current variable values
-	 * @param allFunctionsEvaluated is true if all objective functions have been evaluated for the current iterate x.
-	 * use a value of false if not sure
-	 * @return a double array of objective function values -- the size of the array is equal to getObjectiveNumber().  
+	 * @param new_x is false if any evaluation method was previously called
+	 * for the current iterate
+	 * @return a double array of objective function values -- 
+	 * the size of the array is equal to getConstraintNumber().  
 	 */
-	//double *calculateAllObjectiveFunctionValues( double* x, bool allFunctionsEvaluated);
+	double *calculateAllObjectiveFunctionValues(double* x, bool new_x);	
+		
 	
 	/**
 	 * Calculate the gradient of all constraint functions  
@@ -1378,8 +1413,8 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * @param highestOrder is the highest order of the derivative being calculated
 	 * @return a pointer a SparseJacobianMatrix. 
 	 */
-	SparseJacobianMatrix *calculateAllConstraintFunctionGradients(double* x, double *objLambda, double *conLambda,
-		bool new_x, int highestOrder);		
+	SparseJacobianMatrix *calculateAllConstraintFunctionGradients(double* x, double *objLambda, 
+		double *conLambda, bool new_x, int highestOrder);		
 		
 
 	/**
@@ -1413,7 +1448,24 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * @param highestOrder is the highest order of the derivative being calculated
 	 * @return a pointer to a sparse vector of doubles.  
 	 */
-	SparseVector *calculateConstraintFunctionGradient(double* x, int idx, bool new_x );		
+	SparseVector *calculateConstraintFunctionGradient(double* x, int idx, bool new_x );
+	
+	/**
+	 * Calculate the gradient of all objective functions
+	 * 
+	 * <p>
+	 * 
+	 * @param x is a pointer (double array) to the current variable values
+	 * @param objLambda is the Lagrange multiplier on the objective function
+	 * @param conLambda is pointer (double array) of Lagrange multipliers on
+	 * the constratins
+	 * @param new_x is false if any evaluation method was previously called
+	 * for the current iterate
+	 * @param highestOrder is the highest order of the derivative being calculated
+	 * @return an array of pointer to dense objective function gradients.  
+	 */		
+	double **calculateAllObjectiveFunctionGradients(double* x, double *objLambda, double *conLambda,
+		bool new_x, int highestOrder);		
 
 	/**
 	 * Calculate the gradient of the objective function indexed by objIdx
@@ -1447,23 +1499,6 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * @return a pointer to a dense vector of doubles.  
 	 */
 	double *calculateObjectiveFunctionGradient(double* x, int objIdx, bool new_x );
-		
-	/**
-	 * Calculate the gradient of all objective functions
-	 * 
-	 * <p>
-	 * 
-	 * @param x is a pointer (double array) to the current variable values
-	 * @param objLambda is the Lagrange multiplier on the objective function
-	 * @param conLambda is pointer (double array) of Lagrange multipliers on
-	 * the constratins
-	 * @param new_x is false if any evaluation method was previously called
-	 * for the current iterate
-	 * @param highestOrder is the highest order of the derivative being calculated
-	 * @return an array of pointer to dense objective function gradients.  
-	 */		
-	double **calculateAllObjectiveFunctionGradients(double* x, double *objLambda, double *conLambda,
-		bool new_x, int highestOrder);
 
 	/**
 	 * Calculate the Hessian of the Lagrangian Expression Tree
@@ -1497,7 +1532,7 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * @return a pointer a SparseVector. 
 	 * Each array member corresponds to one constraint gradient.
 	 */
-	SparseVector *calculateHessian( double* x, int idx, bool new_x);
+	SparseHessianMatrix *calculateHessian( double* x, int idx, bool new_x);
 	
 				
 	/**
@@ -1505,6 +1540,12 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * @return true if successful in generating the constraints gradient.
 	 */
 	bool getSparseJacobianFromColumnMajor();
+	
+	/**
+	 * 
+	 * @return true if successful in generating the constraints gradient.
+	 */
+	bool getSparseJacobianFromRowMajor();
 	
 	/**
 	 * @return a pointer to the ExpressionTree for the Lagrangian function of current instance
@@ -1525,11 +1566,7 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 */
 	SparseHessianMatrix* getLagrangianHessianSparsityPattern();
 	
-	/**
-	 * 
-	 * @return true if successful in generating the constraints gradient.
-	 */ 
-	bool getSparseJacobianFromRowMajor();
+
 	
 	/**
 	 * 
@@ -1549,10 +1586,6 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 */	 
 	void duplicateExpressionTreesMap();
 	
-public:
-	/**
-	 * revised AD test code
-	 */
 	 
 	 /**
 	  * F is a CppAD function the range space is the objective +
@@ -1594,20 +1627,6 @@ public:
 	 * @return a double vector equal to the n*p 
 	 */	
 	std::vector<double> reverseAD(size_t p, std::vector<double> vdlambda);
-
-
-	/**
-	 * m_iHighestTaylorCoeffOrder is the order of highest calculated
-	 * Taylor coefficient  
-	 */	 
-	 int m_iHighestTaylorCoeffOrder;
-	 
-	/**
-	 * 
-	 * m_bCppADFunIsCreated is true if we have created the OSInstanc
-	 * CppAD Function
-	 */	  
-	 bool m_bCppADFunIsCreated;
 	 
 	 /**
 	  * end revised AD code
@@ -1703,64 +1722,6 @@ public:
 	 */		 
 	bool initObjGradients();
 	
-	
-	/**
-	 * m_iHighestOrderEvaluated is the highest order derivative
-	 * of the current iterate
-	 */	 
-	 int m_iHighestOrderEvaluated;
-	
-	
-	//define the vectors
-
-	/**
-	 * m_vdX is a vector of primal variables at each iteration
-	 *   
-	 */		
-	std::vector<double> m_vdX;
-	
-	/**
-	 * m_vdYval is a vector function values
-	 *   
-	 */	
-	std::vector<double> m_vdYval;
-	
-	/**
-	 * m_vdYval is a vector equal to a column or row of the Jacobian
-	 *   
-	 */	
-	std::vector<double> m_vdYjacval;
-
-	/**
-	 * m_vdYval is a vector of derivatives -- output  from a reverse sweep
-	 *   
-	 */		
-	std::vector<double> m_vdw;
-	
-	/**
-	 * m_vdYval is a vector of Lagrange multipliers
-	 *   
-	 */		
-	std::vector<double> m_vdLambda;
-	
-	
-	/**
-	 * m_vdDomainUnitVec is a unit vector in the domain space
-	 *   
-	 */		
-	std::vector<double> m_vdDomainUnitVec;
-	
-	/**
-	 * m_vdRangeUnitVec is a unit vector in the range space
-	 *   
-	 */		
-	std::vector<double> m_vdRangeUnitVec;
-	
-	/**
-	 * m_mdObjGradient holds an array of pointers, each pointer points 
-	 * to gradient of each objective function
-	 */
-	double **m_mmdObjGradient;
 																																																			
 }; //class OSInstance
 

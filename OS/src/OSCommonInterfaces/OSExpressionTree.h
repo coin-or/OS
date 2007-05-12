@@ -51,10 +51,10 @@ public:
 	 * </p>
 	 * 
 	 * @param x holds the values of the variables in a double array.
-	 * @param functionEvaluated is set to true if the function has already been evaluated.
+ 	 * @param new_x is false if any evaluation method was previously called for the current x
 	 * @return the expression tree function value given the current variable values.
 	 */
-	double calculateFunction( double *x, bool functionEvaluated);
+	double calculateFunction( double *x, bool new_x);
 	
 	/**
 	 * Calculate the expression tree function value given the current variable

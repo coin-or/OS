@@ -79,9 +79,9 @@ double OSExpressionTree::calculateFunctionCppAD( double *x, bool functionEvaluat
 	return m_vY[ 0];
 }//calculateFunctionCppAD
 
-double OSExpressionTree::calculateFunction( double *x, bool functionEvaluated){
+double OSExpressionTree::calculateFunction( double *x, bool new_x){
 	//calculateFunctionCppAD( x, functionEvaluated);
-	if(functionEvaluated == true){
+	if( new_x == false){
 		return m_dTreeRootValue; 
 	}
 	else{
