@@ -106,7 +106,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 					}
 					else{
 						if(m_sSolverName.find( "dylp") != std::string::npos){
-							#ifdef COIN_HAS_GLPK
+							#ifdef COIN_HAS_DYLP
 							if( (osinstance->getNumberOfNonlinearExpressions() > 0)
 								|| (osinstance->getNumberOfQuadraticTerms() > 0)  ) throw ErrorClass( "DyLP cannot do nonlinear or quadratic");
 							if( (osinstance->getNumberOfIntegerVariables() > 0)
