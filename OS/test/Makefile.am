@@ -88,7 +88,16 @@ if COIN_HAS_GLPK
   AM_CPPFLAGS += \
 	-I`$(CYGPATH_W) $(GLPKINCDIR)` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
-  unitTest_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
+ unitTest_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
+endif
+
+if COIN_HAS_DYLP
+  AM_CPPFLAGS += \
+  	-I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
+	-I`$(CYGPATH_W) $(DYLPSRCDIR)/inc` \
+	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiDylp`
+ unitTest_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la
+ unitTest_LDADD += $(DYLPSRCDIR)/lib/libDylp.la
 endif
 
 if COIN_HAS_LINDO

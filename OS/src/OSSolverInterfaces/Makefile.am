@@ -79,6 +79,14 @@ if COIN_HAS_GLPK
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
 endif
 
+if COIN_HAS_DYLP
+  AM_CPPFLAGS += \
+	-I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
+	-I`$(CYGPATH_W) $(DYLPSRCDIR)/inc` \
+	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiDylp` 
+endif
+
+
 if COIN_HAS_LINDO
   AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(LINDOINCDIR)` 
 endif
@@ -117,5 +125,7 @@ endif
 if COIN_HAS_IPOPT
 include_HEADERS += IpoptSolver.h
 endif
+
+
 
 

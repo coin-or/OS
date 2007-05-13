@@ -103,6 +103,15 @@ if COIN_HAS_GLPK
   amplClient_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
 endif
 
+if COIN_HAS_DYLP
+  AM_CPPFLAGS += \
+  	-I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
+	-I`$(CYGPATH_W) $(DYLPSRCDIR)/inc` \
+	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiDylp`
+  amplClient_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la
+  amplClient_LDADD += $(DYLPSRCDIR)/lib/libDylp.la
+endif
+
 if COIN_HAS_LINDO
   AM_CPPFLAGS += -I`$(CYGPATH_W) $(LINDOINCDIR)` 
   amplClient_LDADD += $(LINDOLIB)

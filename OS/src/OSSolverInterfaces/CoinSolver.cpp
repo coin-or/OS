@@ -105,7 +105,19 @@ void CoinSolver::solve() throw (ErrorClass) {
 						#endif
 					}
 					else{
-						solverIsDefined = false;
+						if(m_sSolverName.find( "dylp") != std::string::npos){
+							#ifdef COIN_HAS_GLPK
+							if( (osinstance->getNumberOfNonlinearExpressions() > 0)
+								|| (osinstance->getNumberOfQuadraticTerms() > 0)  ) throw ErrorClass( "DyLP cannot do nonlinear or quadratic");
+							if( (osinstance->getNumberOfIntegerVariables() > 0)
+								|| (osinstance->getNumberOfBinaryVariables() > 0)  ) throw ErrorClass( "DyLP cannot do integer programming");
+							solverIsDefined = true;
+							m_OsiSolver = new OsiDylpSolverInterface();
+							#endif
+						}
+						else{
+							solverIsDefined = false;
+						}
 					}
 				}
 			}

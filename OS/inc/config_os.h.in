@@ -21,6 +21,9 @@
 /* Define to 1 if the Cplex package is used */
 #undef COIN_HAS_CPX
 
+/* Define to 1 if the Dylp package is used */
+#undef COIN_HAS_DYLP
+
 /* Define to 1 if the Glpk package is used */
 #undef COIN_HAS_GLPK
 

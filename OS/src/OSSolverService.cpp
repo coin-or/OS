@@ -15,7 +15,6 @@
 
 #include <string> 
 #include <OsiSolverInterface.hpp>
-#include <OsiClpSolverInterface.hpp> 
 #include <CoinMessageHandler.hpp>
 #include "OSConfig.h" 
  
@@ -253,7 +252,13 @@ void solve(){
 									solverType->m_sSolverName = "glpk";
 								}
 								else{
-									throw ErrorClass( "a supported solver is not present");
+									if(strstr(osoptions->solverName, "dylp") != NULL){
+										solverType = new CoinSolver();
+										solverType->m_sSolverName = "dylp";
+									}
+									else{
+										throw ErrorClass( "a supported solver is not present");
+									}
 								}
 							}
 						}

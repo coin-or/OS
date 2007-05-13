@@ -109,6 +109,7 @@ AC_COIN_HAS_PROJECT(Osi)
 AC_COIN_HAS_PROJECT(Clp)
 AC_COIN_HAS_PROJECT(Cbc)
 AC_COIN_HAS_PROJECT(Cgl)
+AC_COIN_HAS_PROJECT(Dylp)
 AC_COIN_HAS_PROJECT(cppad)
 
 #############################
@@ -119,7 +120,7 @@ AC_COIN_HAS_ASL
 
 # Check which third party solvers are available ToDo!
 AC_COIN_HAS_USER_LIBRARY([Cplex],[CPX],[cplex.h],[CPXgetstat])
-AC_COIN_HAS_USER_LIBRARY([Glpk],[GLPK],[glpk.h],[glp_lpx_simplex])
+AC_COIN_HAS_USER_LIBRARY([Glpk],[GLPK],[glpk.h],[])
 AC_COIN_HAS_USER_LIBRARY([Lindo],[LINDO],[lindo.h],[])
 AC_COIN_HAS_USER_LIBRARY([Ipopt],[IPOPT],[IpoptConfig.h],[])
 AC_COIN_HAS_USER_LIBRARY([Knitro],[KNITRO],[knitro.h],[])

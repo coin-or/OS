@@ -114,7 +114,6 @@ AM_CPPFLAGS =\
 	-I`$(CYGPATH_W) $(CBCSRCDIR)/inc` \
 	-I`$(CYGPATH_W) $(CBCOBJDIR)/inc` \
 	-I`$(CYGPATH_W) $(CLPSRCDIR)/src` \
-	-I`$(CYGPATH_W) $(CLPSRCDIR)/inc` \
 	-I`$(CYGPATH_W) $(CLPOBJDIR)/inc` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/inc` \
@@ -144,6 +143,15 @@ if COIN_HAS_GLPK
 	-I`$(CYGPATH_W) $(GLPKINCDIR)` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
   OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
+endif
+
+if COIN_HAS_DYLP
+  AM_CPPFLAGS += \
+	-I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
+	-I`$(CYGPATH_W) $(DYLPSRCDIR)/inc` \
+	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiDylp` 
+  OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
+  OSSolverService_LDADD += $(DYLPSRCDIR)/lib/libDylp.la
 endif
 
 
@@ -188,6 +196,8 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 include_HEADERS = \
 	OSConfig.h \
 	../inc/config_os.h 
+	
+
 
 #############################################################################
 # Create the Config.h file that always defines HAVE_CONFIG_H and install it #

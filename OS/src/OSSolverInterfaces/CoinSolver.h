@@ -34,6 +34,10 @@
 #include <OsiGlpkSolverInterface.hpp>
 #endif
 
+#ifdef COIN_HAS_DYLP
+#include <OsiDylpSolverInterface.hpp>
+#endif
+
 #include <string>
 
 
