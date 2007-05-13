@@ -57,9 +57,8 @@ AC_COIN_MAIN_SUBDIRS(Clp)
 AC_COIN_MAIN_SUBDIRS(Osi)
 AC_COIN_MAIN_SUBDIRS(Cgl)
 AC_COIN_MAIN_SUBDIRS(Cbc)
-AC_COIN_MAIN_SUBDIRS(Cgl)
-AC_COIN_MAIN_SUBDIRS(Dylp)
-AC_COIN_MAIN_SUBDIRS(CppAD)
+AC_COIN_MAIN_SUBDIRS(DyLP)
+AC_COIN_MAIN_SUBDIRS(cppad)
 AC_COIN_MAIN_SUBDIRS(OS)
 
 
@@ -69,7 +68,7 @@ AC_COIN_MAIN_SUBDIRS(OS)
 
 # Here list all the files that configure should create (except for the
 # configuration header file)
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile]) 
 
 # Finally, we let configure write all the output...
 AC_COIN_FINALIZE

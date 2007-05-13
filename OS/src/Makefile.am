@@ -149,6 +149,8 @@ if COIN_HAS_DYLP
   AM_CPPFLAGS += \
 	-I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
 	-I`$(CYGPATH_W) $(DYLPSRCDIR)/inc` \
+	-I`$(CYGPATH_W) $(DYLPSRCDIR)/src/Dylp` \
+    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/DylpStdLib` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiDylp` 
   OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
   OSSolverService_LDADD += $(DYLPSRCDIR)/lib/libDylp.la

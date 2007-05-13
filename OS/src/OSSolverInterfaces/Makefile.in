@@ -63,6 +63,8 @@ host_triplet = @host@
 @COIN_HAS_DYLP_TRUE@am__append_6 = \
 @COIN_HAS_DYLP_TRUE@	-I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
 @COIN_HAS_DYLP_TRUE@	-I`$(CYGPATH_W) $(DYLPSRCDIR)/inc` \
+@COIN_HAS_DYLP_TRUE@    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/Dylp` \
+@COIN_HAS_DYLP_TRUE@    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/DylpStdLib` \
 @COIN_HAS_DYLP_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiDylp` 
 
 @COIN_HAS_LINDO_TRUE@am__append_7 = -I`$(CYGPATH_W) $(LINDOINCDIR)` 
