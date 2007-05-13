@@ -153,7 +153,7 @@ if COIN_HAS_DYLP
     -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/DylpStdLib` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiDylp` 
   OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
-  OSSolverService_LDADD += $(DYLPSRCDIR)/lib/libDylp.la
+  OSSolverService_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la
 endif
 
 

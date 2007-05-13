@@ -99,7 +99,7 @@ if COIN_HAS_DYLP
     -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/DylpStdLib` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiDylp`
  unitTest_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la
- unitTest_LDADD += $(DYLPSRCDIR)/lib/libDylp.la
+ unitTest_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la
 endif
 
 if COIN_HAS_LINDO

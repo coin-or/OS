@@ -50,6 +50,7 @@ AC_COIN_THIRDPARTY_SUBDIRS([ASL],[ThirdParty/ASL],[solvers/asl.h])
 #############################################################################
 
 AC_COIN_MAIN_SUBDIRS(CoinUtils)
+AC_COIN_MAIN_SUBDIRS(DyLP)
 AC_COIN_MAIN_SUBDIRS(Data/Netlib)
 AC_COIN_MAIN_SUBDIRS(Data/Sample)
 AC_COIN_MAIN_SUBDIRS(Data/miplib3)
@@ -57,7 +58,6 @@ AC_COIN_MAIN_SUBDIRS(Clp)
 AC_COIN_MAIN_SUBDIRS(Osi)
 AC_COIN_MAIN_SUBDIRS(Cgl)
 AC_COIN_MAIN_SUBDIRS(Cbc)
-AC_COIN_MAIN_SUBDIRS(DyLP)
 AC_COIN_MAIN_SUBDIRS(cppad)
 AC_COIN_MAIN_SUBDIRS(OS)
 
