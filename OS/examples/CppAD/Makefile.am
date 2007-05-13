@@ -83,6 +83,17 @@ if COIN_HAS_GLPK
      CppADTest_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
 endif
 
+if COIN_HAS_DYLP
+  AM_CPPFLAGS += \
+  	-I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
+	-I`$(CYGPATH_W) $(DYLPSRCDIR)/inc` \
+    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/Dylp` \
+    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/DylpStdLib` \
+	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiDylp`
+  CppADTest_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la
+  CppADTest_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la
+endif
+
 if COIN_HAS_LINDO
   AM_CPPFLAGS += -I`$(CYGPATH_W) $(LINDOINCDIR)` 
   CppADTest_LDADD += $(LINDOLIB)

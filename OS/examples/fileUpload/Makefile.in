@@ -43,6 +43,16 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 noinst_PROGRAMS = fileUpload$(EXEEXT)
+@COIN_HAS_DYLP_TRUE@am__append_1 = \
+@COIN_HAS_DYLP_TRUE@  	-I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
+@COIN_HAS_DYLP_TRUE@	-I`$(CYGPATH_W) $(DYLPSRCDIR)/inc` \
+@COIN_HAS_DYLP_TRUE@    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/Dylp` \
+@COIN_HAS_DYLP_TRUE@    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/DylpStdLib` \
+@COIN_HAS_DYLP_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiDylp`
+
+@COIN_HAS_DYLP_TRUE@am__append_2 =  \
+@COIN_HAS_DYLP_TRUE@	$(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la \
+@COIN_HAS_DYLP_TRUE@	$(DYLPOBJDIR)/src/Dylp/libDylp.la
 subdir = examples/fileUpload
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -57,6 +67,9 @@ PROGRAMS = $(noinst_PROGRAMS)
 am_fileUpload_OBJECTS = fileUpload.$(OBJEXT)
 fileUpload_OBJECTS = $(am_fileUpload_OBJECTS)
 am__DEPENDENCIES_1 =
+@COIN_HAS_DYLP_TRUE@am__DEPENDENCIES_2 =  \
+@COIN_HAS_DYLP_TRUE@	$(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la \
+@COIN_HAS_DYLP_TRUE@	$(DYLPOBJDIR)/src/Dylp/libDylp.la
 @USEWSOCKLIB_FALSE@fileUpload_DEPENDENCIES = $(OSOBJDIR)/src/libOS.la \
 @USEWSOCKLIB_FALSE@	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
 @USEWSOCKLIB_FALSE@	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
@@ -65,7 +78,7 @@ am__DEPENDENCIES_1 =
 @USEWSOCKLIB_FALSE@	$(OSIOBJDIR)/src/libOsi.la \
 @USEWSOCKLIB_FALSE@	$(CLPOBJDIR)/src/libClp.la \
 @USEWSOCKLIB_FALSE@	$(COINUTILSOBJDIR)/src/libCoinUtils.la \
-@USEWSOCKLIB_FALSE@	$(am__DEPENDENCIES_1)
+@USEWSOCKLIB_FALSE@	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_2)
 @USEWSOCKLIB_TRUE@fileUpload_DEPENDENCIES = $(OSOBJDIR)/src/libOS.la \
 @USEWSOCKLIB_TRUE@	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
 @USEWSOCKLIB_TRUE@	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
@@ -74,7 +87,8 @@ am__DEPENDENCIES_1 =
 @USEWSOCKLIB_TRUE@	$(OSIOBJDIR)/src/libOsi.la \
 @USEWSOCKLIB_TRUE@	$(CLPOBJDIR)/src/libClp.la \
 @USEWSOCKLIB_TRUE@	$(COINUTILSOBJDIR)/src/libCoinUtils.la \
-@USEWSOCKLIB_TRUE@	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+@USEWSOCKLIB_TRUE@	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+@USEWSOCKLIB_TRUE@	$(am__DEPENDENCIES_2)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
@@ -290,8 +304,7 @@ AUTOMAKE_OPTIONS = foreign
 
 # List all source files for this executable, including headers
 fileUpload_SOURCES = fileUpload.cpp 
-@USEWSOCKLIB_FALSE@fileUpload_LDADD = \
-@USEWSOCKLIB_FALSE@	$(OSOBJDIR)/src/libOS.la \
+@USEWSOCKLIB_FALSE@fileUpload_LDADD = $(OSOBJDIR)/src/libOS.la \
 @USEWSOCKLIB_FALSE@	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
 @USEWSOCKLIB_FALSE@	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
 @USEWSOCKLIB_FALSE@	$(CBCOBJDIR)/src/libCbc.la \
@@ -299,12 +312,10 @@ fileUpload_SOURCES = fileUpload.cpp
 @USEWSOCKLIB_FALSE@	$(OSIOBJDIR)/src/libOsi.la \
 @USEWSOCKLIB_FALSE@	$(CLPOBJDIR)/src/libClp.la \
 @USEWSOCKLIB_FALSE@	$(COINUTILSOBJDIR)/src/libCoinUtils.la \
-@USEWSOCKLIB_FALSE@	$(ADDLIBS) 
-
+@USEWSOCKLIB_FALSE@	$(ADDLIBS) $(am__append_2)
 
 # List all additionally required COIN libraries
-@USEWSOCKLIB_TRUE@fileUpload_LDADD = \
-@USEWSOCKLIB_TRUE@	$(OSOBJDIR)/src/libOS.la \
+@USEWSOCKLIB_TRUE@fileUpload_LDADD = $(OSOBJDIR)/src/libOS.la \
 @USEWSOCKLIB_TRUE@	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
 @USEWSOCKLIB_TRUE@	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
 @USEWSOCKLIB_TRUE@	$(CBCOBJDIR)/src/libCbc.la \
@@ -312,38 +323,29 @@ fileUpload_SOURCES = fileUpload.cpp
 @USEWSOCKLIB_TRUE@	$(OSIOBJDIR)/src/libOsi.la \
 @USEWSOCKLIB_TRUE@	$(CLPOBJDIR)/src/libClp.la \
 @USEWSOCKLIB_TRUE@	$(COINUTILSOBJDIR)/src/libCoinUtils.la \
-@USEWSOCKLIB_TRUE@	$(ADDLIBS) \
-@USEWSOCKLIB_TRUE@	$(WINSOCKLIB)
-
+@USEWSOCKLIB_TRUE@	$(ADDLIBS) $(WINSOCKLIB) $(am__append_2)
 
 # Now add the include paths for compilation
 
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Windows
-AM_CPPFLAGS = \
-	-I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` \
-	-I`$(CYGPATH_W) $(COINUTILSSRCDIR)/inc` \
-	-I`$(CYGPATH_W) $(COINUTILSOBJDIR)/inc` \
-	-I`$(CYGPATH_W) $(CBCSRCDIR)/src` \
-	-I`$(CYGPATH_W) $(CBCSRCDIR)/inc` \
-	-I`$(CYGPATH_W) $(CBCOBJDIR)/inc` \
-	-I`$(CYGPATH_W) $(CLPSRCDIR)/src` \
-	-I`$(CYGPATH_W) $(CLPSRCDIR)/inc` \
-	-I`$(CYGPATH_W) $(CLPOBJDIR)/inc` \
-	-I`$(CYGPATH_W) $(OSISRCDIR)/src` \
-	-I`$(CYGPATH_W) $(OSISRCDIR)/inc` \
-	-I`$(CYGPATH_W) $(OSIOBJDIR)/inc` \
-	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCbc` \
-	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiClp` \
-	-I`$(CYGPATH_W) $(OSSRCDIR)/src` \
-	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSAgent` \
-	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSParsers` \
-	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSUtils` \
-	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSSolverInterfaces` \
-	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSModelInterfaces` \
-	-I`$(CYGPATH_W) $(CPPADSRCDIR)/..` \
-	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSCommonInterfaces` 
-
+AM_CPPFLAGS = -I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` -I`$(CYGPATH_W) \
+	$(COINUTILSSRCDIR)/inc` -I`$(CYGPATH_W) \
+	$(COINUTILSOBJDIR)/inc` -I`$(CYGPATH_W) $(CBCSRCDIR)/src` \
+	-I`$(CYGPATH_W) $(CBCSRCDIR)/inc` -I`$(CYGPATH_W) \
+	$(CBCOBJDIR)/inc` -I`$(CYGPATH_W) $(CLPSRCDIR)/src` \
+	-I`$(CYGPATH_W) $(CLPSRCDIR)/inc` -I`$(CYGPATH_W) \
+	$(CLPOBJDIR)/inc` -I`$(CYGPATH_W) $(OSISRCDIR)/src` \
+	-I`$(CYGPATH_W) $(OSISRCDIR)/inc` -I`$(CYGPATH_W) \
+	$(OSIOBJDIR)/inc` -I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCbc` \
+	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiClp` -I`$(CYGPATH_W) \
+	$(OSSRCDIR)/src` -I`$(CYGPATH_W) $(OSSRCDIR)/src/OSAgent` \
+	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSParsers` -I`$(CYGPATH_W) \
+	$(OSSRCDIR)/src/OSUtils` -I`$(CYGPATH_W) \
+	$(OSSRCDIR)/src/OSSolverInterfaces` -I`$(CYGPATH_W) \
+	$(OSSRCDIR)/src/OSModelInterfaces` -I`$(CYGPATH_W) \
+	$(CPPADSRCDIR)/..` -I`$(CYGPATH_W) \
+	$(OSSRCDIR)/src/OSCommonInterfaces` $(am__append_1)
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin

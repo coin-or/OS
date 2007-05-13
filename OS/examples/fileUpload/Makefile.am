@@ -84,7 +84,16 @@ LIBS  += `cat $(OSOBJDIR)/os_addlibs.txt`
 
 
 
-
+if COIN_HAS_DYLP
+  AM_CPPFLAGS += \
+  	-I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
+	-I`$(CYGPATH_W) $(DYLPSRCDIR)/inc` \
+    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/Dylp` \
+    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/DylpStdLib` \
+	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiDylp`
+  fileUpload_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la
+  fileUpload_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la
+endif
 
 
 # This line is necessary to allow VPATH compilation with MS compilers
