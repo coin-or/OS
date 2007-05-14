@@ -158,9 +158,10 @@ endif
 if COIN_HAS_SYMPHONY
   AM_CPPFLAGS += \
     -I`$(CYGPATH_W) $(SYMPHONYSRCDIR)/include` \
-	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiSym` 
-  OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
+	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiSym`
   OSSolverService_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la
+  OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
+  
 endif
 
 
