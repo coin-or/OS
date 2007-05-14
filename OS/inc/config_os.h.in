@@ -45,6 +45,9 @@
 /* Define to 1 if readline is available */
 #undef COIN_HAS_READLINE
 
+/* Define to 1 if the SYMPHONY package is used */
+#undef COIN_HAS_SYMPHONY
+
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #undef HAVE_DLFCN_H
 
