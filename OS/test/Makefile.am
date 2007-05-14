@@ -89,6 +89,7 @@ if COIN_HAS_GLPK
 	-I`$(CYGPATH_W) $(GLPKINCDIR)` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
  unitTest_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
+  unitTest_LDADD += $(GLPKLIB)
 endif
 
 if COIN_HAS_DYLP

@@ -22,11 +22,11 @@
 #include "LindoSolver.h" 
 #endif 
 
-#ifdef COIN_HAS_IPOPT      
+#ifdef COIN_HAS_IPOPT       
 #include "IpoptSolver.h"
 #endif   
   
-#include "FileUtil.h"  
+#include "FileUtil.h"   
 #include "CoinSolver.h"
 #include "WSUtil.h" 
 #include "OSSolverAgent.h"
