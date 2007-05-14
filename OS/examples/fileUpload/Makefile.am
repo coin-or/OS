@@ -91,10 +91,17 @@ if COIN_HAS_DYLP
     -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/Dylp` \
     -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/DylpStdLib` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiDylp`
-  fileUpload_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la
+ fileUpload_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la
   fileUpload_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la
 endif
 
+if COIN_HAS_SYMPHONY
+  AM_CPPFLAGS += \
+    -I`$(CYGPATH_W) $(SYMPHONYSRCDIR)/include` \
+	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiSym`
+   fileUpload_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
+  fileUpload_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la
+endif
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin

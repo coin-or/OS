@@ -102,6 +102,14 @@ if COIN_HAS_DYLP
  unitTest_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la
 endif
 
+if COIN_HAS_SYMPHONY
+  AM_CPPFLAGS += \
+    -I`$(CYGPATH_W) $(SYMPHONYSRCDIR)/include` \
+	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiSym`
+   unitTest_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
+  unitTest_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la
+endif
+
 if COIN_HAS_LINDO
   AM_CPPFLAGS += -I`$(CYGPATH_W) $(LINDOINCDIR)` 
   unitTest_LDADD += $(LINDOLIB)

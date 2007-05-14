@@ -89,6 +89,13 @@ if COIN_HAS_DYLP
 endif
 
 
+if COIN_HAS_SYMPHONY
+  AM_CPPFLAGS += \
+    -I`$(CYGPATH_W) $(SYMPHONYSRCDIR)/include` \
+	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiSym` 
+endif
+
+
 if COIN_HAS_LINDO
   AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(LINDOINCDIR)` 
 endif

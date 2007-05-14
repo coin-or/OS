@@ -62,12 +62,19 @@ noinst_PROGRAMS = amplClient$(EXEEXT)
 @COIN_HAS_DYLP_TRUE@am__append_5 =  \
 @COIN_HAS_DYLP_TRUE@	$(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la \
 @COIN_HAS_DYLP_TRUE@	$(DYLPOBJDIR)/src/Dylp/libDylp.la
-@COIN_HAS_LINDO_TRUE@am__append_6 = -I`$(CYGPATH_W) $(LINDOINCDIR)` 
-@COIN_HAS_LINDO_TRUE@am__append_7 = $(LINDOLIB)
-@COIN_HAS_IPOPT_TRUE@am__append_8 = -I`$(CYGPATH_W) $(IPOPTINCDIR)` 
-@COIN_HAS_IPOPT_TRUE@am__append_9 = $(IPOPTLIB)
-@COIN_HAS_ASL_TRUE@am__append_10 = $(ASL_CPPFLAGS) 
-@COIN_HAS_ASL_TRUE@am__append_11 = $(ASLLIB)
+@COIN_HAS_SYMPHONY_TRUE@am__append_6 = \
+@COIN_HAS_SYMPHONY_TRUE@    -I`$(CYGPATH_W) $(SYMPHONYSRCDIR)/include` \
+@COIN_HAS_SYMPHONY_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiSym`
+
+@COIN_HAS_SYMPHONY_TRUE@am__append_7 =  \
+@COIN_HAS_SYMPHONY_TRUE@	$(OSIOBJDIR)/src/OsiSym/libOsiSym.la \
+@COIN_HAS_SYMPHONY_TRUE@	$(SYMPHONYOBJDIR)/src/libSym.la
+@COIN_HAS_LINDO_TRUE@am__append_8 = -I`$(CYGPATH_W) $(LINDOINCDIR)` 
+@COIN_HAS_LINDO_TRUE@am__append_9 = $(LINDOLIB)
+@COIN_HAS_IPOPT_TRUE@am__append_10 = -I`$(CYGPATH_W) $(IPOPTINCDIR)` 
+@COIN_HAS_IPOPT_TRUE@am__append_11 = $(IPOPTLIB)
+@COIN_HAS_ASL_TRUE@am__append_12 = $(ASL_CPPFLAGS) 
+@COIN_HAS_ASL_TRUE@am__append_13 = $(ASLLIB)
 subdir = examples/amplClient
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -86,10 +93,13 @@ amplClient_OBJECTS = $(am_amplClient_OBJECTS)
 @COIN_HAS_DYLP_TRUE@am__DEPENDENCIES_2 =  \
 @COIN_HAS_DYLP_TRUE@	$(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la \
 @COIN_HAS_DYLP_TRUE@	$(DYLPOBJDIR)/src/Dylp/libDylp.la
-am__DEPENDENCIES_3 =
-@COIN_HAS_LINDO_TRUE@am__DEPENDENCIES_4 = $(am__DEPENDENCIES_3)
-@COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_5 = $(am__DEPENDENCIES_3)
-@COIN_HAS_ASL_TRUE@am__DEPENDENCIES_6 = $(am__DEPENDENCIES_3)
+@COIN_HAS_SYMPHONY_TRUE@am__DEPENDENCIES_3 =  \
+@COIN_HAS_SYMPHONY_TRUE@	$(OSIOBJDIR)/src/OsiSym/libOsiSym.la \
+@COIN_HAS_SYMPHONY_TRUE@	$(SYMPHONYOBJDIR)/src/libSym.la
+am__DEPENDENCIES_4 =
+@COIN_HAS_LINDO_TRUE@am__DEPENDENCIES_5 = $(am__DEPENDENCIES_4)
+@COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_6 = $(am__DEPENDENCIES_4)
+@COIN_HAS_ASL_TRUE@am__DEPENDENCIES_7 = $(am__DEPENDENCIES_4)
 @USEWSOCKLIB_FALSE@amplClient_DEPENDENCIES =  \
 @USEWSOCKLIB_FALSE@	$(COINUTILSOBJDIR)/src/libCoinUtils.la \
 @USEWSOCKLIB_FALSE@	$(OSIOBJDIR)/src/libOsi.la \
@@ -101,8 +111,8 @@ am__DEPENDENCIES_3 =
 @USEWSOCKLIB_FALSE@	$(OSOBJDIR)/src/libOS.la \
 @USEWSOCKLIB_FALSE@	$(OSOBJDIR)/src/OSModelInterfaces/libOSModelInterfaces.la \
 @USEWSOCKLIB_FALSE@	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_2) \
-@USEWSOCKLIB_FALSE@	$(am__DEPENDENCIES_4) $(am__DEPENDENCIES_5) \
-@USEWSOCKLIB_FALSE@	$(am__DEPENDENCIES_6)
+@USEWSOCKLIB_FALSE@	$(am__DEPENDENCIES_3) $(am__DEPENDENCIES_5) \
+@USEWSOCKLIB_FALSE@	$(am__DEPENDENCIES_6) $(am__DEPENDENCIES_7)
 @USEWSOCKLIB_TRUE@amplClient_DEPENDENCIES =  \
 @USEWSOCKLIB_TRUE@	$(COINUTILSOBJDIR)/src/libCoinUtils.la \
 @USEWSOCKLIB_TRUE@	$(OSIOBJDIR)/src/libOsi.la \
@@ -113,9 +123,10 @@ am__DEPENDENCIES_3 =
 @USEWSOCKLIB_TRUE@	$(CGLOBJDIR)/src/libCgl.la \
 @USEWSOCKLIB_TRUE@	$(OSOBJDIR)/src/libOS.la \
 @USEWSOCKLIB_TRUE@	$(OSOBJDIR)/src/OSModelInterfaces/libOSModelInterfaces.la \
-@USEWSOCKLIB_TRUE@	$(am__DEPENDENCIES_3) $(am__DEPENDENCIES_1) \
-@USEWSOCKLIB_TRUE@	$(am__DEPENDENCIES_2) $(am__DEPENDENCIES_4) \
-@USEWSOCKLIB_TRUE@	$(am__DEPENDENCIES_5) $(am__DEPENDENCIES_6)
+@USEWSOCKLIB_TRUE@	$(am__DEPENDENCIES_4) $(am__DEPENDENCIES_1) \
+@USEWSOCKLIB_TRUE@	$(am__DEPENDENCIES_2) $(am__DEPENDENCIES_3) \
+@USEWSOCKLIB_TRUE@	$(am__DEPENDENCIES_5) $(am__DEPENDENCIES_6) \
+@USEWSOCKLIB_TRUE@	$(am__DEPENDENCIES_7)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
@@ -347,7 +358,7 @@ amplClient_SOURCES = amplClient.cpp
 @USEWSOCKLIB_FALSE@	$(OSOBJDIR)/src/OSModelInterfaces/libOSModelInterfaces.la \
 @USEWSOCKLIB_FALSE@	$(am__append_3) $(am__append_5) \
 @USEWSOCKLIB_FALSE@	$(am__append_7) $(am__append_9) \
-@USEWSOCKLIB_FALSE@	$(am__append_11)
+@USEWSOCKLIB_FALSE@	$(am__append_11) $(am__append_13)
 
 # List all additionally required COIN libraries
 @USEWSOCKLIB_TRUE@amplClient_LDADD =  \
@@ -362,7 +373,8 @@ amplClient_SOURCES = amplClient.cpp
 @USEWSOCKLIB_TRUE@	$(OSOBJDIR)/src/OSModelInterfaces/libOSModelInterfaces.la \
 @USEWSOCKLIB_TRUE@	$(WINSOCKLIB) $(am__append_3) \
 @USEWSOCKLIB_TRUE@	$(am__append_5) $(am__append_7) \
-@USEWSOCKLIB_TRUE@	$(am__append_9) $(am__append_11)
+@USEWSOCKLIB_TRUE@	$(am__append_9) $(am__append_11) \
+@USEWSOCKLIB_TRUE@	$(am__append_13)
 
 # Now add the include paths for compilation
 
@@ -386,7 +398,7 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` -I`$(CYGPATH_W) \
 	$(CPPADSRCDIR)/..` -I`$(CYGPATH_W) \
 	$(OSSRCDIR)/src/OSCommonInterfaces` $(am__append_1) \
 	$(am__append_2) $(am__append_4) $(am__append_6) \
-	$(am__append_8) $(am__append_10)
+	$(am__append_8) $(am__append_10) $(am__append_12)
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin

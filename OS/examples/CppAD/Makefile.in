@@ -62,10 +62,15 @@ noinst_PROGRAMS = CppADTest$(EXEEXT)
 @COIN_HAS_DYLP_TRUE@am__append_5 =  \
 @COIN_HAS_DYLP_TRUE@	$(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la \
 @COIN_HAS_DYLP_TRUE@	$(DYLPOBJDIR)/src/Dylp/libDylp.la
-@COIN_HAS_LINDO_TRUE@am__append_6 = -I`$(CYGPATH_W) $(LINDOINCDIR)` 
-@COIN_HAS_LINDO_TRUE@am__append_7 = $(LINDOLIB)
-@COIN_HAS_IPOPT_TRUE@am__append_8 = -I`$(CYGPATH_W) $(IPOPTINCDIR)` 
-@COIN_HAS_IPOPT_TRUE@am__append_9 = $(IPOPTLIB)
+@COIN_HAS_SYMPHONY_TRUE@am__append_6 = \
+@COIN_HAS_SYMPHONY_TRUE@    -I`$(CYGPATH_W) $(SYMPHONYSRCDIR)/include` \
+@COIN_HAS_SYMPHONY_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiSym`
+
+@COIN_HAS_SYMPHONY_TRUE@am__append_7 = $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
+@COIN_HAS_LINDO_TRUE@am__append_8 = -I`$(CYGPATH_W) $(LINDOINCDIR)` 
+@COIN_HAS_LINDO_TRUE@am__append_9 = $(LINDOLIB)
+@COIN_HAS_IPOPT_TRUE@am__append_10 = -I`$(CYGPATH_W) $(IPOPTINCDIR)` 
+@COIN_HAS_IPOPT_TRUE@am__append_11 = $(IPOPTLIB)
 subdir = examples/CppAD
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -84,17 +89,19 @@ CppADTest_OBJECTS = $(am_CppADTest_OBJECTS)
 @COIN_HAS_DYLP_TRUE@am__DEPENDENCIES_2 =  \
 @COIN_HAS_DYLP_TRUE@	$(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la \
 @COIN_HAS_DYLP_TRUE@	$(DYLPOBJDIR)/src/Dylp/libDylp.la
-am__DEPENDENCIES_3 =
-@COIN_HAS_LINDO_TRUE@am__DEPENDENCIES_4 = $(am__DEPENDENCIES_3)
-@COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_5 = $(am__DEPENDENCIES_3)
+@COIN_HAS_SYMPHONY_TRUE@am__DEPENDENCIES_3 =  \
+@COIN_HAS_SYMPHONY_TRUE@	$(OSIOBJDIR)/src/OsiSym/libOsiSym.la
+am__DEPENDENCIES_4 =
+@COIN_HAS_LINDO_TRUE@am__DEPENDENCIES_5 = $(am__DEPENDENCIES_4)
+@COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_6 = $(am__DEPENDENCIES_4)
 CppADTest_DEPENDENCIES = $(OSOBJDIR)/src/libOS.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
 	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
 	$(CBCOBJDIR)/src/libCbc.la $(CGLOBJDIR)/src/libCgl.la \
 	$(OSIOBJDIR)/src/libOsi.la $(CLPOBJDIR)/src/libClp.la \
 	$(COINUTILSOBJDIR)/src/libCoinUtils.la $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_2) $(am__DEPENDENCIES_4) \
-	$(am__DEPENDENCIES_5)
+	$(am__DEPENDENCIES_2) $(am__DEPENDENCIES_3) \
+	$(am__DEPENDENCIES_5) $(am__DEPENDENCIES_6)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
@@ -322,7 +329,8 @@ CppADTest_LDADD = $(OSOBJDIR)/src/libOS.la \
 	$(CBCOBJDIR)/src/libCbc.la $(CGLOBJDIR)/src/libCgl.la \
 	$(OSIOBJDIR)/src/libOsi.la $(CLPOBJDIR)/src/libClp.la \
 	$(COINUTILSOBJDIR)/src/libCoinUtils.la $(am__append_3) \
-	$(am__append_5) $(am__append_7) $(am__append_9)
+	$(am__append_5) $(am__append_7) $(am__append_9) \
+	$(am__append_11)
 
 # Now add the include paths for compilation
 
@@ -346,7 +354,7 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` -I`$(CYGPATH_W) \
 	$(CPPADSRCDIR)/..` -I`$(CYGPATH_W) \
 	$(OSSRCDIR)/src/OSCommonInterfaces` $(am__append_1) \
 	$(am__append_2) $(am__append_4) $(am__append_6) \
-	$(am__append_8)
+	$(am__append_8) $(am__append_10)
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
@@ -606,6 +614,7 @@ uninstall-am: uninstall-info-am
 	uninstall-info-am
 
 @COIN_HAS_CPX_TRUE@  	CppADTest_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+@COIN_HAS_SYMPHONY_TRUE@  	CppADTest_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

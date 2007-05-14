@@ -257,7 +257,13 @@ void solve(){
 										solverType->m_sSolverName = "dylp";
 									}
 									else{
-										throw ErrorClass( "a supported solver is not present");
+										if(strstr(osoptions->solverName, "symphony") != NULL){
+											solverType = new CoinSolver();
+											solverType->m_sSolverName = "symphony";
+										}
+										else{
+											throw ErrorClass( "a supported solver is not present");
+										}
 									}
 								}
 							}

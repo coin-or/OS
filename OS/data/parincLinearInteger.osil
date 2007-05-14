@@ -8,7 +8,7 @@
 	</instanceHeader>
 	<instanceData>
 		<variables numberOfVariables="2">
-			<var name="x0" type= "I"  />  
+			<var name="x0" type= "B"  />  
 			<var name="x1" type="C" lb="0.0"/>
 		</variables>
 		<objectives >

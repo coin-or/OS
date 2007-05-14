@@ -152,9 +152,18 @@ if COIN_HAS_DYLP
 	-I`$(CYGPATH_W) $(DYLPSRCDIR)/src/Dylp` \
     -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/DylpStdLib` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiDylp` 
-  OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
-  OSSolverService_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la
+   OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la
+   OSSolverService_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la
 endif
+
+if COIN_HAS_SYMPHONY
+  AM_CPPFLAGS += \
+    -I`$(CYGPATH_W) $(SYMPHONYSRCDIR)/include` \
+	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiSym` 
+  OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
+  OSSolverService_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la
+endif
+
 
 
 if COIN_HAS_LINDO

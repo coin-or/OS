@@ -90,8 +90,16 @@ if COIN_HAS_DYLP
     -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/Dylp` \
     -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/DylpStdLib` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiDylp`
-  CppADTest_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la
+   CppADTest_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la
   CppADTest_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la
+endif
+
+if COIN_HAS_SYMPHONY
+  AM_CPPFLAGS += \
+    -I`$(CYGPATH_W) $(SYMPHONYSRCDIR)/include` \
+	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiSym`
+    CppADTest_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
+  	CppADTest_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la
 endif
 
 if COIN_HAS_LINDO

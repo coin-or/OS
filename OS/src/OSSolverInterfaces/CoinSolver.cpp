@@ -116,7 +116,17 @@ void CoinSolver::solve() throw (ErrorClass) {
 							#endif
 						}
 						else{
-							solverIsDefined = false;
+							if( m_sSolverName.find( "symphony") != std::string::npos) {
+								#ifdef COIN_HAS_SYMPHONY
+								if( (osinstance->getNumberOfNonlinearExpressions() > 0)
+									|| (osinstance->getNumberOfQuadraticTerms() > 0)  ) throw ErrorClass( "SYMPHONY cannot do nonlinear or quadratic");
+								solverIsDefined = true;
+								m_OsiSolver = new OsiSymSolverInterface();
+								#endif
+							}
+							else{
+								solverIsDefined = false;
+							}
 						}
 					}
 				}
@@ -240,35 +250,40 @@ bool CoinSolver::optimize()
 			x = new double[osinstance->getVariableNumber() ];
 			y = new double[osinstance->getConstraintNumber() ];
 			z = new double[1];
+			rcost = new std::string[ osinstance->getVariableNumber()];
 			//
 			*(z + 0)  =  m_OsiSolver->getObjValue();
 			osresult->setObjectiveValues(solIdx, z);
 			for(i=0; i < osinstance->getVariableNumber(); i++){
 				*(x + i) = m_OsiSolver->getColSolution()[i];
-
 			}
 			osresult->setPrimalVariableValues(solIdx, x);
-			for(i=0; i <  osinstance->getConstraintNumber(); i++){
-				*(y + i) = m_OsiSolver->getRowPrice()[ i];
+			// Symphony does not get dual prices
+			if( m_sSolverName.find( "symphony") == std::string::npos){
+				for(i=0; i <  osinstance->getConstraintNumber(); i++){\
+					*(y + i) = m_OsiSolver->getRowPrice()[ i];
+				}
+				osresult->setDualVariableValues(solIdx, y);
 			}
-			osresult->setDualVariableValues(solIdx, y);
 			//
 			//
 			// now put the reduced costs into the osrl
-			int numberOfOtherVariableResult = 1;
-			int otherIdx = 0;
-			// first set the number of Other Variable Results
-			osresult->setNumberOfOtherVariableResult(solIdx, numberOfOtherVariableResult);
-			ostringstream outStr;
-			int numberOfVar =  osinstance->getVariableNumber();
-			rcost = new std::string[ numberOfVar];
-			for(i=0; i < numberOfVar; i++){
-				outStr << m_OsiSolver->getReducedCost()[ i]; 
-				rcost[ i] = outStr.str();
-				outStr.str("");
-			}
-			osresult->setAnOtherVariableResult(solIdx, otherIdx, "reduced costs", "the variable reduced costs", rcost);			
-			// end of settiing reduced costs
+			// Symphony does not get reduced costs
+			if( m_sSolverName.find( "symphony") == std::string::npos){
+				int numberOfOtherVariableResult = 1;
+				int otherIdx = 0;
+				// first set the number of Other Variable Results
+				osresult->setNumberOfOtherVariableResult(solIdx, numberOfOtherVariableResult);
+				ostringstream outStr;
+				int numberOfVar =  osinstance->getVariableNumber();
+				for(i=0; i < numberOfVar; i++){
+					outStr << m_OsiSolver->getReducedCost()[ i]; 
+					rcost[ i] = outStr.str();
+					outStr.str("");
+				}
+				osresult->setAnOtherVariableResult(solIdx, otherIdx, "reduced costs", "the variable reduced costs", rcost);			
+				// end of settiing reduced costs
+			}					
 		}
 		else{ 
 			if(m_OsiSolver->isProvenPrimalInfeasible() == true) 

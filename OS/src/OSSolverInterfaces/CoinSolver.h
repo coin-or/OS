@@ -38,6 +38,10 @@
 #include <OsiDylpSolverInterface.hpp>
 #endif
 
+#ifdef COIN_HAS_SYMPHONY
+#include <OsiSymSolverInterface.hpp>
+#endif
+
 #include <string>
 
 
