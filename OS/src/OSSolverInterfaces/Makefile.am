@@ -53,7 +53,7 @@ AM_CPPFLAGS =\
 	-I`$(CYGPATH_W) $(CBCSRCDIR)/inc` \
 	-I`$(CYGPATH_W) $(CBCOBJDIR)/inc` \
 	-I`$(CYGPATH_W) $(CLPSRCDIR)/src` \
-	-I`$(CYGPATH_W) $(CLPSRCDIR)/inc` \
+	-I`$(CYGPATH_W) $(CLPOBJDIR)/inc` \
 	-I`$(CYGPATH_W) $(CLPOBJDIR)/inc` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSUtils` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src` \
@@ -81,8 +81,7 @@ endif
 
 if COIN_HAS_DYLP
   AM_CPPFLAGS += \
-	-I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
-	-I`$(CYGPATH_W) $(DYLPSRCDIR)/inc` \
+    -I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
     -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/Dylp` \
     -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/DylpStdLib` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiDylp` 
