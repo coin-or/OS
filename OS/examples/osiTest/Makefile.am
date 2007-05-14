@@ -80,6 +80,7 @@ if COIN_HAS_GLPK
 	-I`$(CYGPATH_W) $(GLPKINCDIR)` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
   osiTest_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
+  osiTest_LDADD += $(GLPKLIB)
 endif
 
 if COIN_HAS_DYLP

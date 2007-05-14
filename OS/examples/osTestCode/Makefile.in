@@ -51,7 +51,9 @@ noinst_PROGRAMS = osTestCode$(EXEEXT)
 @COIN_HAS_GLPK_TRUE@	-I`$(CYGPATH_W) $(GLPKINCDIR)` \
 @COIN_HAS_GLPK_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
 
-@COIN_HAS_GLPK_TRUE@am__append_3 = $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
+@COIN_HAS_GLPK_TRUE@am__append_3 =  \
+@COIN_HAS_GLPK_TRUE@	$(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la \
+@COIN_HAS_GLPK_TRUE@	$(GLPKLIB)
 @COIN_HAS_DYLP_TRUE@am__append_4 = \
 @COIN_HAS_DYLP_TRUE@  	-I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
 @COIN_HAS_DYLP_TRUE@	-I`$(CYGPATH_W) $(DYLPSRCDIR)/inc` \
@@ -85,7 +87,8 @@ am_osTestCode_OBJECTS = osTestCode.$(OBJEXT)
 osTestCode_OBJECTS = $(am_osTestCode_OBJECTS)
 am__DEPENDENCIES_1 =
 @COIN_HAS_GLPK_TRUE@am__DEPENDENCIES_2 =  \
-@COIN_HAS_GLPK_TRUE@	$(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
+@COIN_HAS_GLPK_TRUE@	$(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la \
+@COIN_HAS_GLPK_TRUE@	$(am__DEPENDENCIES_1)
 @COIN_HAS_DYLP_TRUE@am__DEPENDENCIES_3 =  \
 @COIN_HAS_DYLP_TRUE@	$(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la \
 @COIN_HAS_DYLP_TRUE@	$(DYLPOBJDIR)/src/Dylp/libDylp.la
