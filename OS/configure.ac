@@ -147,6 +147,7 @@ AC_COIN_VPATH_LINK(data/rosenbrockmod.osil)
 AC_COIN_VPATH_LINK(data/avion2.osil)
 AC_COIN_VPATH_LINK(data/lindoapiaddins.osil)
 AC_COIN_VPATH_LINK(data/parinc.mps)
+AC_COIN_VPATH_LINK(data/p0033.osil)
 AC_COIN_VPATH_LINK(data/CppADTestLag.osil)
 
 ##############################################################################
