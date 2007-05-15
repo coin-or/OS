@@ -142,7 +142,7 @@ AC_COIN_CHECK_GNU_READLINE
 AC_COIN_VPATH_LINK(data/parincLinear.osil)
 AC_COIN_VPATH_LINK(data/parincQuadratic.osil)
 AC_COIN_VPATH_LINK(data/hs71.nl)
-AC_COIN_VPATH_LINK(data/HS071_NLP.nl)
+AC_COIN_VPATH_LINK(data/HS071_NLP.osil)
 AC_COIN_VPATH_LINK(data/rosenbrockmod.osil)
 AC_COIN_VPATH_LINK(data/avion2.osil)
 AC_COIN_VPATH_LINK(data/lindoapiaddins.osil)
