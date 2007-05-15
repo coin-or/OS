@@ -106,11 +106,11 @@ AC_PROG_YACC
 AC_COIN_HAS_PROJECT(OS)
 AC_COIN_HAS_PROJECT(CoinUtils)
 AC_COIN_HAS_PROJECT(Osi)
-AC_COIN_HAS_PROJECT(SYMPHONY)
-AC_COIN_HAS_PROJECT(DyLP)
 AC_COIN_HAS_PROJECT(Clp)
 AC_COIN_HAS_PROJECT(Cbc)
 AC_COIN_HAS_PROJECT(Cgl)
+AC_COIN_HAS_PROJECT(SYMPHONY)
+AC_COIN_HAS_PROJECT(DyLP)
 AC_COIN_HAS_PROJECT(cppad)
 
 #############################
@@ -126,8 +126,6 @@ AC_COIN_HAS_USER_LIBRARY([Lindo],[LINDO],[lindo.h],[])
 AC_COIN_HAS_USER_LIBRARY([Ipopt],[IPOPT],[IpoptConfig.h],[])
 AC_COIN_HAS_USER_LIBRARY([Knitro],[KNITRO],[knitro.h],[])
 
-0
-.......
 
 
 #############################################################################
