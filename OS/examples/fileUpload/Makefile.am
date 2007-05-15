@@ -111,6 +111,26 @@ if COIN_HAS_GLPK
   fileUpload_LDADD += $(GLPKLIB)
 endif
 
+
+if COIN_HAS_CPX
+  AM_CPPFLAGS += \
+	-I`$(CYGPATH_W) $(CPXINCDIR)` \
+	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
+  	fileUpload_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+endif
+
+
+
+if COIN_HAS_LINDO
+  AM_CPPFLAGS += -I`$(CYGPATH_W) $(LINDOINCDIR)` 
+  fileUpload_LDADD += $(LINDOLIB)
+endif
+
+if COIN_HAS_IPOPT
+  AM_CPPFLAGS += -I`$(CYGPATH_W) $(IPOPTINCDIR)` 
+  fileUpload_LDADD += $(IPOPTLIB)
+endif
+
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc

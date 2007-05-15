@@ -43,34 +43,34 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 noinst_PROGRAMS = amplClient$(EXEEXT)
-@COIN_HAS_CPX_TRUE@am__append_1 = \
-@COIN_HAS_CPX_TRUE@	-I`$(CYGPATH_W) $(CPXINCDIR)` \
-@COIN_HAS_CPX_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
-
-@COIN_HAS_GLPK_TRUE@am__append_2 = \
-@COIN_HAS_GLPK_TRUE@	-I`$(CYGPATH_W) $(GLPKINCDIR)` \
-@COIN_HAS_GLPK_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
-
-@COIN_HAS_GLPK_TRUE@am__append_3 =  \
-@COIN_HAS_GLPK_TRUE@	$(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la \
-@COIN_HAS_GLPK_TRUE@	$(GLPKLIB)
-@COIN_HAS_DYLP_TRUE@am__append_4 = \
+@COIN_HAS_DYLP_TRUE@am__append_1 = \
 @COIN_HAS_DYLP_TRUE@  	-I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
 @COIN_HAS_DYLP_TRUE@	-I`$(CYGPATH_W) $(DYLPSRCDIR)/inc` \
 @COIN_HAS_DYLP_TRUE@    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/Dylp` \
 @COIN_HAS_DYLP_TRUE@    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/DylpStdLib` \
 @COIN_HAS_DYLP_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiDylp`
 
-@COIN_HAS_DYLP_TRUE@am__append_5 =  \
+@COIN_HAS_DYLP_TRUE@am__append_2 =  \
 @COIN_HAS_DYLP_TRUE@	$(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la \
 @COIN_HAS_DYLP_TRUE@	$(DYLPOBJDIR)/src/Dylp/libDylp.la
-@COIN_HAS_SYMPHONY_TRUE@am__append_6 = \
+@COIN_HAS_SYMPHONY_TRUE@am__append_3 = \
 @COIN_HAS_SYMPHONY_TRUE@    -I`$(CYGPATH_W) $(SYMPHONYSRCDIR)/include` \
 @COIN_HAS_SYMPHONY_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiSym`
 
-@COIN_HAS_SYMPHONY_TRUE@am__append_7 =  \
+@COIN_HAS_SYMPHONY_TRUE@am__append_4 =  \
 @COIN_HAS_SYMPHONY_TRUE@	$(OSIOBJDIR)/src/OsiSym/libOsiSym.la \
 @COIN_HAS_SYMPHONY_TRUE@	$(SYMPHONYOBJDIR)/src/libSym.la
+@COIN_HAS_CPX_TRUE@am__append_5 = \
+@COIN_HAS_CPX_TRUE@	-I`$(CYGPATH_W) $(CPXINCDIR)` \
+@COIN_HAS_CPX_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
+
+@COIN_HAS_GLPK_TRUE@am__append_6 = \
+@COIN_HAS_GLPK_TRUE@	-I`$(CYGPATH_W) $(GLPKINCDIR)` \
+@COIN_HAS_GLPK_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
+
+@COIN_HAS_GLPK_TRUE@am__append_7 =  \
+@COIN_HAS_GLPK_TRUE@	$(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la \
+@COIN_HAS_GLPK_TRUE@	$(GLPKLIB)
 @COIN_HAS_LINDO_TRUE@am__append_8 = -I`$(CYGPATH_W) $(LINDOINCDIR)` 
 @COIN_HAS_LINDO_TRUE@am__append_9 = $(LINDOLIB)
 @COIN_HAS_IPOPT_TRUE@am__append_10 = -I`$(CYGPATH_W) $(IPOPTINCDIR)` 
@@ -90,19 +90,19 @@ CONFIG_CLEAN_FILES =
 PROGRAMS = $(noinst_PROGRAMS)
 am_amplClient_OBJECTS = amplClient.$(OBJEXT)
 amplClient_OBJECTS = $(am_amplClient_OBJECTS)
-am__DEPENDENCIES_1 =
-@COIN_HAS_GLPK_TRUE@am__DEPENDENCIES_2 =  \
-@COIN_HAS_GLPK_TRUE@	$(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la \
-@COIN_HAS_GLPK_TRUE@	$(am__DEPENDENCIES_1)
-@COIN_HAS_DYLP_TRUE@am__DEPENDENCIES_3 =  \
+@COIN_HAS_DYLP_TRUE@am__DEPENDENCIES_1 =  \
 @COIN_HAS_DYLP_TRUE@	$(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la \
 @COIN_HAS_DYLP_TRUE@	$(DYLPOBJDIR)/src/Dylp/libDylp.la
-@COIN_HAS_SYMPHONY_TRUE@am__DEPENDENCIES_4 =  \
+@COIN_HAS_SYMPHONY_TRUE@am__DEPENDENCIES_2 =  \
 @COIN_HAS_SYMPHONY_TRUE@	$(OSIOBJDIR)/src/OsiSym/libOsiSym.la \
 @COIN_HAS_SYMPHONY_TRUE@	$(SYMPHONYOBJDIR)/src/libSym.la
-@COIN_HAS_LINDO_TRUE@am__DEPENDENCIES_5 = $(am__DEPENDENCIES_1)
-@COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_6 = $(am__DEPENDENCIES_1)
-@COIN_HAS_ASL_TRUE@am__DEPENDENCIES_7 = $(am__DEPENDENCIES_1)
+am__DEPENDENCIES_3 =
+@COIN_HAS_GLPK_TRUE@am__DEPENDENCIES_4 =  \
+@COIN_HAS_GLPK_TRUE@	$(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la \
+@COIN_HAS_GLPK_TRUE@	$(am__DEPENDENCIES_3)
+@COIN_HAS_LINDO_TRUE@am__DEPENDENCIES_5 = $(am__DEPENDENCIES_3)
+@COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_6 = $(am__DEPENDENCIES_3)
+@COIN_HAS_ASL_TRUE@am__DEPENDENCIES_7 = $(am__DEPENDENCIES_3)
 @USEWSOCKLIB_FALSE@amplClient_DEPENDENCIES =  \
 @USEWSOCKLIB_FALSE@	$(COINUTILSOBJDIR)/src/libCoinUtils.la \
 @USEWSOCKLIB_FALSE@	$(OSIOBJDIR)/src/libOsi.la \
@@ -113,7 +113,7 @@ am__DEPENDENCIES_1 =
 @USEWSOCKLIB_FALSE@	$(CGLOBJDIR)/src/libCgl.la \
 @USEWSOCKLIB_FALSE@	$(OSOBJDIR)/src/libOS.la \
 @USEWSOCKLIB_FALSE@	$(OSOBJDIR)/src/OSModelInterfaces/libOSModelInterfaces.la \
-@USEWSOCKLIB_FALSE@	$(am__DEPENDENCIES_2) $(am__DEPENDENCIES_3) \
+@USEWSOCKLIB_FALSE@	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_2) \
 @USEWSOCKLIB_FALSE@	$(am__DEPENDENCIES_4) $(am__DEPENDENCIES_5) \
 @USEWSOCKLIB_FALSE@	$(am__DEPENDENCIES_6) $(am__DEPENDENCIES_7)
 @USEWSOCKLIB_TRUE@amplClient_DEPENDENCIES =  \
@@ -126,8 +126,8 @@ am__DEPENDENCIES_1 =
 @USEWSOCKLIB_TRUE@	$(CGLOBJDIR)/src/libCgl.la \
 @USEWSOCKLIB_TRUE@	$(OSOBJDIR)/src/libOS.la \
 @USEWSOCKLIB_TRUE@	$(OSOBJDIR)/src/OSModelInterfaces/libOSModelInterfaces.la \
-@USEWSOCKLIB_TRUE@	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_2) \
-@USEWSOCKLIB_TRUE@	$(am__DEPENDENCIES_3) $(am__DEPENDENCIES_4) \
+@USEWSOCKLIB_TRUE@	$(am__DEPENDENCIES_3) $(am__DEPENDENCIES_1) \
+@USEWSOCKLIB_TRUE@	$(am__DEPENDENCIES_2) $(am__DEPENDENCIES_4) \
 @USEWSOCKLIB_TRUE@	$(am__DEPENDENCIES_5) $(am__DEPENDENCIES_6) \
 @USEWSOCKLIB_TRUE@	$(am__DEPENDENCIES_7)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
@@ -359,7 +359,7 @@ amplClient_SOURCES = amplClient.cpp
 @USEWSOCKLIB_FALSE@	$(CGLOBJDIR)/src/libCgl.la \
 @USEWSOCKLIB_FALSE@	$(OSOBJDIR)/src/libOS.la \
 @USEWSOCKLIB_FALSE@	$(OSOBJDIR)/src/OSModelInterfaces/libOSModelInterfaces.la \
-@USEWSOCKLIB_FALSE@	$(am__append_3) $(am__append_5) \
+@USEWSOCKLIB_FALSE@	$(am__append_2) $(am__append_4) \
 @USEWSOCKLIB_FALSE@	$(am__append_7) $(am__append_9) \
 @USEWSOCKLIB_FALSE@	$(am__append_11) $(am__append_13)
 
@@ -374,8 +374,8 @@ amplClient_SOURCES = amplClient.cpp
 @USEWSOCKLIB_TRUE@	$(CGLOBJDIR)/src/libCgl.la \
 @USEWSOCKLIB_TRUE@	$(OSOBJDIR)/src/libOS.la \
 @USEWSOCKLIB_TRUE@	$(OSOBJDIR)/src/OSModelInterfaces/libOSModelInterfaces.la \
-@USEWSOCKLIB_TRUE@	$(WINSOCKLIB) $(am__append_3) \
-@USEWSOCKLIB_TRUE@	$(am__append_5) $(am__append_7) \
+@USEWSOCKLIB_TRUE@	$(WINSOCKLIB) $(am__append_2) \
+@USEWSOCKLIB_TRUE@	$(am__append_4) $(am__append_7) \
 @USEWSOCKLIB_TRUE@	$(am__append_9) $(am__append_11) \
 @USEWSOCKLIB_TRUE@	$(am__append_13)
 
@@ -400,7 +400,7 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` -I`$(CYGPATH_W) \
 	$(OSSRCDIR)/src/OSModelInterfaces` -I`$(CYGPATH_W) \
 	$(CPPADSRCDIR)/..` -I`$(CYGPATH_W) \
 	$(OSSRCDIR)/src/OSCommonInterfaces` $(am__append_1) \
-	$(am__append_2) $(am__append_4) $(am__append_6) \
+	$(am__append_3) $(am__append_5) $(am__append_6) \
 	$(am__append_8) $(am__append_10) $(am__append_12)
 
 # This line is necessary to allow VPATH compilation with MS compilers

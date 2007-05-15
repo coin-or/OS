@@ -130,15 +130,6 @@ AM_CPPFLAGS =\
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSCommonInterfaces` 
 
 
-if COIN_HAS_CPX
-  AM_CPPFLAGS += \
-	-I`$(CYGPATH_W) $(CPXINCDIR)` \
-	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
-  	OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
-endif
-
-
-
 
 if COIN_HAS_DYLP
   AM_CPPFLAGS += \
@@ -158,6 +149,18 @@ if COIN_HAS_SYMPHONY
   OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
   
 endif
+
+
+
+if COIN_HAS_CPX
+  AM_CPPFLAGS += \
+	-I`$(CYGPATH_W) $(CPXINCDIR)` \
+	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
+  	OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+endif
+
+
+
 
 if COIN_HAS_GLPK
   AM_CPPFLAGS += \

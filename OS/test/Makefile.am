@@ -76,21 +76,6 @@ if COIN_HAS_IPOPT
 #LIBS += -l$(F77)
 endif
 
-if COIN_HAS_CPX
-  AM_CPPFLAGS += \
-	-I`$(CYGPATH_W) $(CPXINCDIR)` \
-	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
-  	unitTest_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
-endif
-
-
-if COIN_HAS_GLPK
-  AM_CPPFLAGS += \
-	-I`$(CYGPATH_W) $(GLPKINCDIR)` \
-	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
- unitTest_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
-  unitTest_LDADD += $(GLPKLIB)
-endif
 
 if COIN_HAS_DYLP
   AM_CPPFLAGS += \
@@ -109,6 +94,23 @@ if COIN_HAS_SYMPHONY
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiSym`
    unitTest_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
   unitTest_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la
+endif
+
+
+if COIN_HAS_CPX
+  AM_CPPFLAGS += \
+	-I`$(CYGPATH_W) $(CPXINCDIR)` \
+	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
+  	unitTest_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+endif
+
+
+if COIN_HAS_GLPK
+  AM_CPPFLAGS += \
+	-I`$(CYGPATH_W) $(GLPKINCDIR)` \
+	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
+ unitTest_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
+  unitTest_LDADD += $(GLPKLIB)
 endif
 
 if COIN_HAS_LINDO

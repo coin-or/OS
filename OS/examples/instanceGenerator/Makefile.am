@@ -67,21 +67,7 @@ LIBS  += `cat $(OSOBJDIR)/os_addlibs.txt`
 
 
 
-if COIN_HAS_CPX
-  AM_CPPFLAGS += \
-	-I`$(CYGPATH_W) $(CPXINCDIR)` \
-	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
-  	instanceGenerator_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
-endif
 
-
-if COIN_HAS_GLPK
-  AM_CPPFLAGS += \
-	-I`$(CYGPATH_W) $(GLPKINCDIR)` \
-	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
-  instanceGenerator_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
-  instanceGenerator_LDADD += $(GLPKLIB)
-endif
 
 
 if COIN_HAS_DYLP
@@ -101,6 +87,22 @@ if COIN_HAS_SYMPHONY
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiSym` 
   	instanceGenerator_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la
   	instanceGenerator_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la 
+endif
+
+if COIN_HAS_CPX
+  AM_CPPFLAGS += \
+	-I`$(CYGPATH_W) $(CPXINCDIR)` \
+	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
+  	instanceGenerator_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+endif
+
+
+if COIN_HAS_GLPK
+  AM_CPPFLAGS += \
+	-I`$(CYGPATH_W) $(GLPKINCDIR)` \
+	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
+  instanceGenerator_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
+  instanceGenerator_LDADD += $(GLPKLIB)
 endif
 
 if COIN_HAS_IPOPT
