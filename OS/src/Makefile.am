@@ -138,13 +138,7 @@ if COIN_HAS_CPX
 endif
 
 
-if COIN_HAS_GLPK
-  AM_CPPFLAGS += \
-	-I`$(CYGPATH_W) $(GLPKINCDIR)` \
-	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
-  OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
-  OSSolverService_LDADD += $(GLPKLIB)
-endif
+
 
 if COIN_HAS_DYLP
   AM_CPPFLAGS += \
@@ -163,6 +157,14 @@ if COIN_HAS_SYMPHONY
   OSSolverService_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la
   OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
   
+endif
+
+if COIN_HAS_GLPK
+  AM_CPPFLAGS += \
+	-I`$(CYGPATH_W) $(GLPKINCDIR)` \
+	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
+  OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
+  OSSolverService_LDADD += $(GLPKLIB)
 endif
 
 
