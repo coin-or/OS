@@ -150,6 +150,7 @@ AC_COIN_VPATH_LINK(data/lindoapiaddins.osil)
 AC_COIN_VPATH_LINK(data/parinc.mps)
 AC_COIN_VPATH_LINK(data/p0033.osil)
 AC_COIN_VPATH_LINK(data/CppADTestLag.osil)
+AC_COIN_VPATH_LINK(data/testOperators.osil)
 
 ##############################################################################
 #                   Finishing up by writing all the output                   #

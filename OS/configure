@@ -21974,6 +21974,11 @@ if test $coin_vpath_config = yes; then
 fi
 
 
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/testOperators.osil"
+fi
+
+
 ##############################################################################
 #                   Finishing up by writing all the output                   #
 ##############################################################################
