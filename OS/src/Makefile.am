@@ -134,9 +134,9 @@ AM_CPPFLAGS =\
 if COIN_HAS_DYLP
   AM_CPPFLAGS += \
     -I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
-    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/Dylp` \
-    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/DylpStdLib` \
-	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiDylp`
+    -I`$(CYGPATH_W) $(DYLPOBJDIR)/src/Dylp` \
+    -I`$(CYGPATH_W) $(DYLPOBJDIR)/src/DylpStdLib` \
+	-I`$(CYGPATH_W) $(OSIOBJDIR)/src/OsiDylp`
    OSSolverService_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la
   OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la
 endif

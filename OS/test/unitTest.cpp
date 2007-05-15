@@ -17,6 +17,7 @@
   
 using std::cout;   
 using std::endl;
+using std::ostringstream; 
  
 
 #include "OSResult.h" 
@@ -77,6 +78,7 @@ int main(int argC, char* argV[])
 	std::string mpsFileName;     
 	std::string parserTestOSiLFileName;
 	std::string osil;
+	ostringstream unitTestResult;
 	// get the input files
 	 const char dirsep =  CoinFindDirSeparator();
   	// Set directory containing mps data files.
@@ -95,8 +97,11 @@ int main(int argC, char* argV[])
 	//lindoFileName = dataDir + "aircrafta.osil";
 	nlFileName = dataDir + "hs71.nl";
 	mpsFileName =  dataDir + "parinc.mps";
-	parserTestOSiLFileName = dataDir + "parincLinear.osil"; 
+	parserTestOSiLFileName = dataDir + "parincLinear.osil";
+	//parserTestOSiLFileName = dataDir + "osa-60.osil"; 
 	fileUtil = new FileUtil();
+	//
+	unitTestResult << "HERE ARE THE UNIT TEST RESULTS" << std::endl;
 	// solve using using the osil file
 	#ifdef COIN_HAS_IPOPT
 	cout << "create a new IPOPT Solver for OSiL string solution" << endl;
@@ -118,6 +123,7 @@ int main(int argC, char* argV[])
 		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on avion2");
 		delete osilreader;
 		osilreader = NULL;
+		unitTestResult << "Solved problem avion2.osil with Ipopt" << std::endl;
 		// solve another problem
 		// a problem with all nonlinear terms no linear terms
 		ipOptFileName =  dataDir + "HS071_NLP.osil";
@@ -136,6 +142,7 @@ int main(int argC, char* argV[])
 		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on HS071_NLP");
 		delete osilreader;
 		osilreader = NULL;
+		unitTestResult << "Solved problem HS071.osil with Ipopt" << std::endl;
 		// solve another problem
 		// a problem with both quadratic terms and general nonlinear terms
 		ipOptFileName =  dataDir + "rosenbrockmod.osil";
@@ -152,6 +159,7 @@ int main(int argC, char* argV[])
 		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on rosenbrock");
 		delete osilreader;
 		osilreader = NULL;
+		unitTestResult << "Solved problem rosenbrockmod.osil with Ipopt" << std::endl;
 		// solve another problem
 		// a problem that is a pure quadratic
 		ipOptFileName =  dataDir + "parincQuadratic.osil";
@@ -168,6 +176,7 @@ int main(int argC, char* argV[])
 		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on parincQuadradic");
 		delete osilreader;
 		osilreader = NULL;	
+		unitTestResult << "Solved problem parincQuadratic.osil with Ipopt" << std::endl;
 		// solve another problem
 		// try a pure linear program
 		ipOptFileName =  dataDir + "parincLinear.osil";
@@ -183,7 +192,8 @@ int main(int argC, char* argV[])
 		ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-1 , 1e-1);
 		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on parincLinear");
 		delete osilreader;
-		osilreader = NULL;			
+		osilreader = NULL;	
+		unitTestResult << "Solved problem parincLinear.osil with Ipopt" << std::endl;		
 		// not we do not delete ipoptSolver -- this is a smart pointer
 		//delete m_Solver;
 		//m_Solver = NULL;			
@@ -199,23 +209,23 @@ int main(int argC, char* argV[])
 	#endif
 	try{
 		ok = true; 
-		cbcFileName = dataDir + "parincLinear.osil";
-		osil = fileUtil->getFileAsString( &cbcFileName[0]);
+		osilFileName = dataDir + "parincLinear.osil";
+		osil = fileUtil->getFileAsString( &osilFileName[0]);
 		m_Solver = new CoinSolver();
-		m_Solver->m_sSolverName = "cbc";
+		m_Solver->m_sSolverName = "clp";
 		m_Solver->osil = osil;
 		m_Solver->osol = osol;  
 		m_Solver->osinstance = NULL; 
-		cout << "call the COIN - Cbc Solver for parincLinear" << endl;
+		cout << "call the COIN - clp Solver for parincLinear" << endl;
 		m_Solver->solve();
-		cout << "Here is the COIN Cbc solver solution for parincLinear" << endl;
+		cout << "Here is the COIN clp solver solution for parincLinear" << endl;
 		cout << m_Solver->osrl << endl;
 		check = 7668;
 		ok &= NearEqual(getObjVal( m_Solver->osrl) , check,  1e-1 , 1e-1);
-		if(ok == false) throw ErrorClass(" Fail unit test with Cbc on parincLinear");
+		if(ok == false) throw ErrorClass(" Fail unit test with clp on parincLinear");
 		delete m_Solver;
 		m_Solver = NULL;
-		cout << "solution using an OSiL string a success" << endl;
+		unitTestResult << "Solved problem parincLinear.osil with Clp" << std::endl;
 		// now solve another problem -- try an integer program
 		// this problem is also stored in base64 binary
 		cbcFileName = dataDir + "p0033.osil";
@@ -234,6 +244,7 @@ int main(int argC, char* argV[])
 		if(ok == false) throw ErrorClass(" Fail unit test with Cbc on p0033");
 		delete m_Solver;
 		m_Solver = NULL;
+		unitTestResult << "Solved problem p0033.osil with Cbc" << std::endl;
 	}
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  m_Solver->osrl <<  endl;
@@ -241,6 +252,70 @@ int main(int argC, char* argV[])
 		cout << "Sorry Unit Test Failed Testing the Cbc Solver" << endl;
 		return 0;
 	}
+	//
+	//
+	#ifdef COIN_HAS_SYMPHONY
+	try{
+		ok = true; 
+		osilFileName = dataDir + "p0033.osil";
+		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		m_Solver = new CoinSolver();
+		m_Solver->m_sSolverName = "symphony";
+		m_Solver->osil = osil;
+		m_Solver->osol = osol;  
+		m_Solver->osinstance = NULL; 
+		cout << "call the COIN - SYMPHONY Solver for p0033" << endl;
+		m_Solver->solve();
+		cout << "Here is the COIN SYMPHONY solver solution for p0033" << endl;
+		cout << m_Solver->osrl << endl;
+		check = 3089;
+		ok &= NearEqual(getObjVal( m_Solver->osrl) , check,  1e-1 , 1e-1);
+		if(ok == false) throw ErrorClass(" Fail unit test with SYMPHONY on p0033.osil");
+		delete m_Solver;
+		m_Solver = NULL;
+		unitTestResult << "Solved problem p0033.osil with SYMPHONY" << std::endl;
+	}
+	catch(const ErrorClass& eclass){
+		cout << "OSrL =  " <<  m_Solver->osrl <<  endl;
+		cout << endl << endl << endl;
+		cout << "Sorry Unit Test Failed Testing the SYMPHONY Solver" << endl;
+		return 0;
+	}	
+	#endif
+	//
+	//
+	//
+	//
+	#ifdef COIN_HAS_DYLP
+	try{
+		ok = true; 
+		osilFileName = dataDir + "parincLinear.osil";
+		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		m_Solver = new CoinSolver();
+		m_Solver->m_sSolverName = "dylp";
+		m_Solver->osil = osil;
+		m_Solver->osol = osol;  
+		m_Solver->osinstance = NULL; 
+		cout << "call the COIN - DyLP solver for parincLinear" << endl;
+		m_Solver->solve();
+		cout << "Here is the COIN - DyLP solver solution for parincLinear" << endl;
+		cout << m_Solver->osrl << endl;
+		check = 7668;
+		ok &= NearEqual(getObjVal( m_Solver->osrl) , check,  1e-1 , 1e-1);
+		if(ok == false) throw ErrorClass(" Fail unit test with DyLP on parincLinear.osil");
+		delete m_Solver;
+		m_Solver = NULL;
+		unitTestResult << "Solved problem parincLinear.osil with DyLP" << std::endl;
+	}
+	catch(const ErrorClass& eclass){
+		cout << "OSrL =  " <<  m_Solver->osrl <<  endl;
+		cout << endl << endl << endl;
+		cout << "Sorry Unit Test Failed Testing the DyLP Solver" << endl;
+		return 0;
+	}	
+	#endif
+	//
+	//
 	#ifdef COIN_HAS_LINDO
 	try{
 		osil = fileUtil->getFileAsString( &lindoFileName[0]);
@@ -259,6 +334,7 @@ int main(int argC, char* argV[])
 		m_Solver->osinstance = NULL;
 		delete m_Solver;
 		m_Solver = NULL;
+		unitTestResult << "Solved problem lindoapiaddins.osil with Lindo" << std::endl;
 		// now solve the rosenbrock problem from the OSiL paper
 		lindoFileName = dataDir + "rosenbrockmod.osil";
 		osil = fileUtil->getFileAsString( &lindoFileName[0]);
@@ -276,6 +352,7 @@ int main(int argC, char* argV[])
 		m_Solver->osinstance = NULL;
 		delete m_Solver;
 		m_Solver = NULL;
+		unitTestResult << "Solved problem rosenbrockmod.osil with Lindo" << std::endl;
 		// now solve a pure quadratic
 		lindoFileName = dataDir + "parincQuadratic.osil";
 		osil = fileUtil->getFileAsString( &lindoFileName[0]);
@@ -293,6 +370,7 @@ int main(int argC, char* argV[])
 		m_Solver->osinstance = NULL;
 		delete m_Solver;
 		m_Solver = NULL;
+		unitTestResult << "Solved problem parincQuadratic.osil with Lindo" << std::endl;
 		
 	}
 	catch(const ErrorClass& eclass){
@@ -325,6 +403,7 @@ int main(int argC, char* argV[])
 		mps2osil = NULL;
 		cout << endl;
 		cout << "DONE WITH MPS TESTING" << endl;
+		unitTestResult << "Test the MPS -> OSiL converter on parinc.mps usig Cbc" << std::endl;
 	}
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  m_Solver->osrl <<  endl;
@@ -345,7 +424,6 @@ int main(int argC, char* argV[])
 		m_Solver->osinstance = nl2osil->osinstance;	
 		m_Solver->osol = osol;
 		cout << "call LINDO Solve" << endl;
-	  
 		m_Solver->solve();
 		cout << "Here is the LINDO solver solution" << endl;
 		cout << m_Solver->osrl << endl;
@@ -354,7 +432,8 @@ int main(int argC, char* argV[])
 		m_Solver = NULL;
 		cout << "call delete nl2osil" << endl;
 		delete nl2osil;
-		nl2osil = NULL;	 
+		nl2osil = NULL;	
+		unitTestResult << "Test the AMPL nl -> OSiL converter on hs71.nl usig Cbc" << std::endl; 
 #endif
 		cout << "create a COIN Solver for AMPL nl - OSInstance solution" << endl;
 		/*m_Solver = new CoinSolver();
@@ -418,6 +497,7 @@ int main(int argC, char* argV[])
 		m_Solver = NULL;
 		delete mps2osil;
 		mps2osil = NULL;
+		unitTestResult << "Test a problem written in b64 and then converted to OSInstance" << std::endl;
 	}	
 	catch(const ErrorClass& eclass){
 		cout << endl << endl;
@@ -457,6 +537,7 @@ int main(int argC, char* argV[])
 		finish = clock();
 		duration = (double) (finish - start) / CLOCKS_PER_SEC;
 		cout << "Parsing took (seconds): "<< duration << endl;
+		unitTestResult << "Successful test of OSiL parser on problem parincLinear.osil" << std::endl;
 
 	}	
 		catch(const ErrorClass& eclass){
@@ -499,6 +580,7 @@ int main(int argC, char* argV[])
 		finish = clock();
 		duration = (double) (finish - start) / CLOCKS_PER_SEC;
 		cout << "Parsing took (seconds): "<< duration << endl;
+		unitTestResult << "Successful test of OSirL parser on problem parincLinear.osrl" << std::endl;
 
 	}	
 		catch(const ErrorClass& eclass){
@@ -547,6 +629,7 @@ int main(int argC, char* argV[])
 		osinstance = NULL;
 		delete osilreader;
 		osilreader = NULL;
+		unitTestResult << "Successful test of prefix and postfix conversion routines on problem rosenbrockmod.osil" << std::endl;
 		
 	}
 	catch(const ErrorClass& eclass){
@@ -599,6 +682,7 @@ int main(int argC, char* argV[])
 		delete osilwriter;
 		osilwriter = NULL;
 		//create an osinstance
+		unitTestResult << "Successful test of all of the nonlinear operators on file testOperators.osil" << std::endl;
 	}
 	catch(const ErrorClass& eclass){
 		cout << endl << endl << endl;
@@ -705,7 +789,8 @@ int main(int argC, char* argV[])
 		if(ok == false) throw ErrorClass(" Fail testing Hessian calculation");
 		ok &= NearEqual( sh->hessValues[ 5], 0., 1e-10, 1e-1);
 		if(ok == false) throw ErrorClass(" Fail testing Hessian calculation");
-	}
+		unitTestResult << "Successful test of AD gradient and Hessian calculations on problem CppADTestLag.osil" << std::endl;
+	}	
 	catch(const ErrorClass& eclass){
 		cout << endl << endl << endl;
 		cout << eclass.errormsg << endl;
@@ -714,6 +799,8 @@ int main(int argC, char* argV[])
 	}
 	cout << endl << endl << endl;
 	cout << "Congratulations: you passed the unit Test" << endl;
+	cout << unitTestResult.str() << endl;
+	
 	return 0;	
 }
 

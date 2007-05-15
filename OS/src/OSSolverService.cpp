@@ -12,7 +12,7 @@
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */ 
-
+ 
 #include <string> 
 #include <OsiSolverInterface.hpp>
 #include <CoinMessageHandler.hpp>
@@ -32,7 +32,7 @@
 #include "OSSolverAgent.h"
 #include "OShL.h"    
 #include "ErrorClass.h"
-#include "osOptionsStruc.h" 
+#include "osOptionsStruc.h"  
 #include <string>
     
 
