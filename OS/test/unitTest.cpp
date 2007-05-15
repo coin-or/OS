@@ -580,7 +580,7 @@ int main(int argC, char* argV[])
 		finish = clock();
 		duration = (double) (finish - start) / CLOCKS_PER_SEC;
 		cout << "Parsing took (seconds): "<< duration << endl;
-		unitTestResult << "Successful test of OSirL parser on problem parincLinear.osrl" << std::endl;
+		unitTestResult << "Successful test of OSrL parser on problem parincLinear.osrl" << std::endl;
 
 	}	
 		catch(const ErrorClass& eclass){
