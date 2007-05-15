@@ -14,7 +14,7 @@
  */ 
  
 #include <string> 
-#include <OsiSolverInterface.hpp>
+#include <OsiSolverInterface.hpp>   
 #include <CoinMessageHandler.hpp>
 #include "OSConfig.h" 
  
