@@ -107,16 +107,16 @@ endif
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Windows
 AM_CPPFLAGS =\
-	-I`$(CYGPATH_W) $(COINUTILSOBJDIR)/src` \
+	-I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` \
 	-I`$(CYGPATH_W) $(COINUTILSOBJDIR)/inc` \
-	-I`$(CYGPATH_W) $(CBCOBJDIR)/src` \
+	-I`$(CYGPATH_W) $(CBCSRCDIR)/src` \
 	-I`$(CYGPATH_W) $(CBCOBJDIR)/inc` \
-	-I`$(CYGPATH_W) $(CLPOBJDIR)/src` \
+	-I`$(CYGPATH_W) $(CLPSRCDIR)/src` \
 	-I`$(CYGPATH_W) $(CLPOBJDIR)/inc` \
-	-I`$(CYGPATH_W) $(OSIOBJDIR)/src` \
+	-I`$(CYGPATH_W) $(OSISRCDIR)/src` \
 	-I`$(CYGPATH_W) $(OSIOBJDIR)/inc` \
-	-I`$(CYGPATH_W) $(OSIOBJDIR)/src/OsiCbc` \
-	-I`$(CYGPATH_W) $(OSIOBJDIR)/src/OsiClp` \
+	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCbc` \
+	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiClp` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSAgent` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSParsers` \

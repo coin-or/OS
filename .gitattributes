@@ -241,6 +241,7 @@ OS/wsdl/OShL.wsdl -text
 /README -text
 backup/OSiL_NaG.xsd -text
 backup/OSrL_complex.xsd -text
+/compile -text
 /config.guess -text
 /config.sub -text
 /configure -text
