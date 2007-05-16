@@ -24,6 +24,7 @@
  * 3) rosenbrockmod.osil
  * 4) parincQuadratic.osil
  * 5) parincLinear.osil
+ * 6) callBackTest.osil
  *
  * COIN - Clp 
  * 1) parincLinear.osil
@@ -33,8 +34,9 @@
  * 
  * Knitro
  * 1) rosenbrockmod.osil
- * 2) parincQuadratic.osil
- * 3) HS071)NLP
+ * 2) callBackTest.osil
+ * 3) parincQuadratic.osil
+ * 4) HS071_NLP
  * 
  * COIN - SYMPHONY
  * 1) p0033.osil
@@ -49,6 +51,7 @@
  * 1) lindoapiaddins.osil
  * 2) rosenbrockmode.osil
  * 3) parincquadratic.osil
+ * 4) wayneQuadratic.osil -- the only nonlinear integer problem in unitTest
  * 
  * We test the mps to osil converter
  * progam OSmps2osil on parincLinear.mps. Solve with
@@ -249,7 +252,24 @@ int main(int argC, char* argV[])
 		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on parincLinear");
 		delete osilreader;
 		osilreader = NULL;	
-		unitTestResult << "Solved problem parincLinear.osil with Ipopt" << std::endl;		
+		unitTestResult << "Solved problem parincLinear.osil with Ipopt" << std::endl;	
+		// solve another problem
+		// callBackTest.osil
+		osilFileName =  dataDir + "callBackTest.osil";
+		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		cout << "IPOPT Solver created for OSiL string solution" << endl;
+		ipoptSolver->osol = osol;
+		osilreader = new OSiLReader(); 
+		ipoptSolver->osinstance = osilreader->readOSiL( &osil);
+		cout << "call the IPOPT Solver" << endl;
+		ipoptSolver->solve();
+		cout << "Here is the IPOPT solver solution for callBackTest" << endl;
+		check = 1.00045e+06;
+		ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-10 , 1e-10);
+		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on parincLinear");
+		delete osilreader;
+		osilreader = NULL;	
+		unitTestResult << "Solved problem callBack.osil with Ipopt" << std::endl;		
 		// not we do not delete ipoptSolver -- this is a smart pointer
 		//delete m_Solver;
 		//m_Solver = NULL;			
@@ -326,11 +346,30 @@ int main(int argC, char* argV[])
 		cout << m_Solver->osrl << endl;
 		check = 6.7279;
 		ok &= NearEqual(getObjVal( m_Solver->osrl) , check,  1e-10 , 1e-10);
-		if(ok == false) throw ErrorClass(" Fail unit test with LINDO on rosenbrokmod");
+		if(ok == false) throw ErrorClass(" Fail unit test with Knitro on rosenbrokmod");
 		m_Solver->osinstance = NULL;
 		delete m_Solver;
 		m_Solver = NULL;
-		unitTestResult << "Solved problem rosenbrockmod.osil with Lindo" << std::endl;
+		unitTestResult << "Solved problem rosenbrockmod.osil with Knitro" << std::endl;
+		//
+		// now solve callBackTest.osil
+		osilFileName = dataDir + "callBackTest.osil";
+		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		m_Solver = new KnitroSolver();	
+		m_Solver->osil = osil;
+		m_Solver->osol = osol;
+		m_Solver->osinstance = NULL;
+		cout << "call the KNITRO Solver" << endl;
+		m_Solver->solve();
+		cout << "Here is the KNITRO solver solution" << endl;
+		cout << m_Solver->osrl << endl;
+		check = 1.00045e+06;
+		ok &= NearEqual(getObjVal( m_Solver->osrl) , check,  1e-10 , 1e-10);
+		if(ok == false) throw ErrorClass(" Fail unit test with Knitro on callBackTest.osil");
+		m_Solver->osinstance = NULL;
+		delete m_Solver;
+		m_Solver = NULL;
+		unitTestResult << "Solved problem callBackTest.osil with Knitro" << std::endl;		
 		//
 		// now solve a pure quadratic
 		osilFileName = dataDir + "parincQuadratic.osil";
@@ -528,6 +567,24 @@ int main(int argC, char* argV[])
 		delete m_Solver;
 		m_Solver = NULL;
 		unitTestResult << "Solved problem parincQuadratic.osil with Lindo" << std::endl;
+		// now solve a quadratic binary problem
+		// wayneQuadratic.osil
+		osilFileName = dataDir + "wayneQuadratic.osil";
+		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		m_Solver = new LindoSolver();	
+		m_Solver->osil = osil;
+		m_Solver->osol = osol;
+		m_Solver->osinstance = NULL;
+		cout << "call the LINDO Solver" << endl;
+		m_Solver->solve();
+		cout << "Here is the LINDO solver solution" << endl;
+		cout << m_Solver->osrl << endl;
+		check = 2.925;
+		ok &= NearEqual(getObjVal( m_Solver->osrl) , check,  1e-10 , 1e-10);
+		if(ok == false) throw ErrorClass(" Fail unit test with LINDO on wayneQuadratic");
+		delete m_Solver;
+		m_Solver = NULL;
+		unitTestResult << "Solved problem wayneQuadratic.osil with Lindo" << std::endl;
 		
 	}
 	catch(const ErrorClass& eclass){

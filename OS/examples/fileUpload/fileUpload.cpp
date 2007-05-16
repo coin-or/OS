@@ -70,7 +70,7 @@ int main(int argC, char* argV[])
 		finish = time( &tmp);
 		std::cout << "File Upload took (seconds): "<< difftime(finish, start) << std::endl;
 		std::cout << uploadResult << std::endl;
-		return 0;
+		//return 0;
 		// now tell solve the problem remotely with cbc
 		osagent = new OSSolverAgent("http://128.135.130.17:8080/cbc/CBCSolverService.jws");
 		// the osil comes from the remote location

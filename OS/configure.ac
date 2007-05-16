@@ -151,6 +151,13 @@ AC_COIN_VPATH_LINK(data/parinc.mps)
 AC_COIN_VPATH_LINK(data/p0033.osil)
 AC_COIN_VPATH_LINK(data/CppADTestLag.osil)
 AC_COIN_VPATH_LINK(data/testOperators.osil)
+AC_COIN_VPATH_LINK(data/wayneQuadratic.osil)
+AC_COIN_VPATH_LINK(data/testCallBack.osil)
+AC_COIN_VPATH_LINK(data/testLocal.config)
+AC_COIN_VPATH_LINK(data/testremote.config)
+AC_COIN_VPATH_LINK(data/testremoteBIG.config)
+AC_COIN_VPATH_LINK(data/remotegsbkip.osol)
+AC_COIN_VPATH_LINK(data/remoteosil.osol)
 
 ##############################################################################
 #                   Finishing up by writing all the output                   #

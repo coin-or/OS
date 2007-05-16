@@ -4,8 +4,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/OSoL.xsd">
     <general>
         <instanceLocation locationType="local">/home/kmartin/files/code/OSRepository/linear/continuous/osa-60_unindented.osil</instanceLocation>
-        <license>jun</license>
-        <userName>ma</userName>
+        <userName>kmartin</userName>
         <password>OSSystemPassword</password>
     </general>
 </osol>
