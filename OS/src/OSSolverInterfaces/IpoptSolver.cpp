@@ -33,14 +33,14 @@ IpoptSolver::IpoptSolver() {
 }
 
 IpoptSolver::~IpoptSolver() {
-	//#ifdef DEBUG
+	#ifdef DEBUG
 	cout << "inside IpoptSolver destructor" << endl;
-	//#endif
+	#endif
 	delete osrlwriter;
 	osrlwriter = NULL;
-	//#ifdef DEBUG
+	#ifdef DEBUG
 	cout << "leaving IpoptSolver destructor" << endl;
-	//#endif
+	#endif
 }
 
 // returns the size of the problem
