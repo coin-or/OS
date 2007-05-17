@@ -64,29 +64,32 @@ OSSolverService_SOURCES = OSSolverService.cpp
 
 	
 # List all additionally required COIN libraries
-if USEWSOCKLIB
+
 OSSolverService_LDADD =  \
 	$(OSOBJDIR)/src/libOS.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
+if COIN_HAS_SYMPHONY
+  $(OSIOBJDIR)/src/OsiSym/libOsiSym.la\
+  endif
 	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
+if COIN_HAS_DYLP
+  $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la\
+endif
 	$(CBCOBJDIR)/src/libCbc.la \
+if COIN_HAS_SYMPHONY
+  $(SYMPHONYOBJDIR)/src/libSym.la\
+endif
 	$(CGLOBJDIR)/src/libCgl.la \
 	$(OSIOBJDIR)/src/libOsi.la \
 	$(CLPOBJDIR)/src/libClp.la \
-	$(COINUTILSOBJDIR)/src/libCoinUtils.la \
-	$(ADDLIBS) \
-	$(WINSOCKLIB)
-else
-OSSolverService_LDADD =  \
-	$(OSOBJDIR)/src/libOS.la \
-	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
-	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
-	$(CBCOBJDIR)/src/libCbc.la \
-	$(CGLOBJDIR)/src/libCgl.la \
-	$(OSIOBJDIR)/src/libOsi.la \
-	$(CLPOBJDIR)/src/libClp.la \
+if COIN_HAS_DYLP
+   $(DYLPOBJDIR)/src/Dylp/libDylp.la\
+endif
 	$(COINUTILSOBJDIR)/src/libCoinUtils.la \
 	$(ADDLIBS) 
+
+if USEWSOCKLIB
+  OSSolverService_LDADD += $(WINSOCKLIB)
 endif
 
 
@@ -134,17 +137,12 @@ if COIN_HAS_DYLP
     -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/Dylp` \
     -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/DylpStdLib` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiDylp`
-   OSSolverService_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la
-  OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la
 endif
 
 if COIN_HAS_SYMPHONY
   AM_CPPFLAGS += \
     -I`$(CYGPATH_W) $(SYMPHONYSRCDIR)/include` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiSym`
-  OSSolverService_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la
-  OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
-  
 endif
 
 

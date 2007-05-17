@@ -21979,6 +21979,41 @@ if test $coin_vpath_config = yes; then
 fi
 
 
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/wayneQuadratic.osil"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/testCallBack.osil"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/testLocal.config"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/testremote.config"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/testremoteBIG.config"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/remotegsbkip.osol"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/remoteosil.osol"
+fi
+
+
 ##############################################################################
 #                   Finishing up by writing all the output                   #
 ##############################################################################

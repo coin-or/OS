@@ -2,7 +2,7 @@
  * \brief This file defines the OSInstance class along with its supporting classes..
  *
  * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005
+ * @version 1.0, 10/05/2005 
  * @since   OS1.0
  *
  * \remarks
@@ -490,128 +490,7 @@ private:
 	 * (rowIdx, varOneIdx, varTwoIdx, coef)
 	 */
 	
-	/**
-	 * m_bProcessNonlinearExpressions holds whether the nonlinear expressions are processed. 
-	 */
-	bool m_bProcessNonlinearExpressions ;
-	
-	/**
-	 * m_iNonlinearExpressionNumber holds the number of nonlinear expressions. 
-	 */
-	int m_iNonlinearExpressionNumber;
 
-	/**
-	 * m_miNonlinearExpressionIndexes holds an integer array of nonlinear expression indexes,
-	 * negative indexes correspond to objectives.  
-	 */
-	int* m_miNonlinearExpressionIndexes ;
-	
-	/**
-	 * m_bProcessExpressionTrees is true if the expression trees have been processed. 
-	 */
-	bool m_bProcessExpressionTrees;
-	
-	/**
-	 * m_mapExpressionTrees holds a hash map of expression tree pointers, with the key being the row index
-	 * and value being the expression tree representing the nonlinear expression of that row.
-	 */
-	std::map<int, OSExpressionTree*> m_mapExpressionTrees ;
-	
-	/**
-	 * m_LagrangianExpTree is an OSExpressionTree object that is the expression tree
-	 * for the Lagrangian function.
-	 */
-	OSExpressionTree *m_LagrangianExpTree ;
-	
-	/**
-	 * m_bLagrangianHessionCreated is true if a Lagragian function for the Hessian has been created
-	 */ 
-	bool m_bLagrangianExpTreeCreated ;
-	
-	/**
-	 *m_LagrangianSparseHessian is the Hessian Matrix of the Lagrangian function in sparse format
-	 */ 	
-	SparseHessianMatrix* m_LagrangianSparseHessian;
-	
-	/**
-	 * m_bLagrangianSparseHessianCreated is true if the sparse Hessian Matrix for the 
-	 * Lagrangian was created
-	 */ 
-	bool m_bLagrangianSparseHessianCreated;
-	
-	/**
-	 * m_mapAllNonlinearVariablesIndexMap is a map of the variables in the Lagrangian function
-	 */ 	
-	 std::map<int, int> m_mapAllNonlinearVariablesIndex;
-
-	/**
-	 * m_miNonLinearVarsReverseMap maps the nonlinear variable number back into the original variable space
-	 */ 	 
-	int *m_miNonLinearVarsReverseMap;
-	 
-	/**
-	 * m_bAllNonlinearVariablesIndexMap is true if the map of the variables in the 
-	 * Lagrangian function has been constructed
-	 */ 	
-	 bool m_bAllNonlinearVariablesIndex;
-	
-	/**
-	 * m_mapExpressionTreesMod holds a map of expression trees, with the key being the row index
-	 * and value being the expression tree representing a modification of the nonlinear expression of that row.
-	 * We incorporate the linear and quadratic term for a variable into the corresponding expression tree before
-	 * gradient and Hessian calculations
-	 */
-	std::map<int, OSExpressionTree*> m_mapExpressionTreesMod ;
-	
-	/**
-	 * is true if a CppAD Expresion Tree has been built for each row and objective 
-	 * with a nonlinear expression.
-	 */
-	bool m_bCppADTapesBuilt;
-	
-	/**
-	 * is true if a CppAD Expresion Tree has an expression that can change depending on
-	 * the value of the input, e.g. an if statement -- false by default
-	 */
-	bool m_bCppADMustReTape;
-	
-	/**
-	 * m_iNumberOfNonlinearVariables is the number of variables that appear 
-	 * in a nonlinear expression.
-	 */
-	int m_iNumberOfNonlinearVariables ;
-	
-	
-	/**
-	 *  m_vX is a vector of CppAD indpendent variables.
-	 */
-	CppAD::vector< AD<double> > m_vX;	
-	
-//	/**
-//	 * m_vITER is a vector that holds the independent values of the f function evalued by CppAD at each iteration. 
-//	 */		
-//	std::vector<double> m_vXITER;
-	
-	/**
-	 * m_bDuplicateExpressionTreeMap is true if m_mapExpressionTrees was duplicated. 
-	 */
-	bool m_bDuplicateExpressionTreesMap;
-	
-	/**
-	 * m_bNonLinearStructuresInitialized is true if initializeNonLinearStructures( ) has been called. 
-	 */
-	bool m_bNonLinearStructuresInitialized;
-
-	/**
-	 * m_bSparseJacobianCalculated is true if getJacobianSparsityPattern() has been called. 
-	 */
-	bool m_bSparseJacobianCalculated;
-	
-	/**
-	 * m_mapExpressionTrees holds a hash map of expression trees in postfix format, with the key being the row index
-	 * and value being the expression tree representing the nonlinear expression of that row.
-	 */
-	std::map<int, std::vector<OSnLNode*> > m_mapExpressionTreesInPostfix ;
 	
 	/**
 	 * m_mdConstraintFunctionValues holds a double array of constraint function values -- the size of the array is equal to getConstraintNumber().  
@@ -712,6 +591,125 @@ private:
 	/** m_bQTermsAdded is true if we add the quadratic terms to the expression tree
 	 */
 	 bool m_bQTermsAdded;
+	 
+	/**
+	 * m_iNumberOfNonlinearVariables is the number of variables that appear 
+	 * in a nonlinear expression.
+	 */
+	int m_iNumberOfNonlinearVariables ;
+	 
+	/**
+	 * m_bProcessNonlinearExpressions holds whether the nonlinear expressions are processed. 
+	 */
+	bool m_bProcessNonlinearExpressions ;
+	
+	/**
+	 * m_iNonlinearExpressionNumber holds the number of nonlinear expressions. 
+	 */
+	int m_iNonlinearExpressionNumber;
+
+	/**
+	 * m_miNonlinearExpressionIndexes holds an integer array of nonlinear expression indexes,
+	 * negative indexes correspond to objectives.  
+	 */
+	int* m_miNonlinearExpressionIndexes ;
+	
+	/**
+	 * m_bProcessExpressionTrees is true if the expression trees have been processed. 
+	 */
+	bool m_bProcessExpressionTrees;
+	
+	/**
+	 * m_mapExpressionTrees holds a hash map of expression tree pointers, with the key being the row index
+	 * and value being the expression tree representing the nonlinear expression of that row.
+	 */
+	std::map<int, OSExpressionTree*> m_mapExpressionTrees ;
+	
+	/**
+	 * m_LagrangianExpTree is an OSExpressionTree object that is the expression tree
+	 * for the Lagrangian function.
+	 */
+	OSExpressionTree *m_LagrangianExpTree ;
+	
+	/**
+	 * m_bLagrangianHessionCreated is true if a Lagragian function for the Hessian has been created
+	 */ 
+	bool m_bLagrangianExpTreeCreated ;
+	
+	/**
+	 *m_LagrangianSparseHessian is the Hessian Matrix of the Lagrangian function in sparse format
+	 */ 	
+	SparseHessianMatrix* m_LagrangianSparseHessian;
+	
+	/**
+	 * m_bLagrangianSparseHessianCreated is true if the sparse Hessian Matrix for the 
+	 * Lagrangian was created
+	 */ 
+	bool m_bLagrangianSparseHessianCreated;
+	
+	/**
+	 * m_mapAllNonlinearVariablesIndexMap is a map of the variables in the Lagrangian function
+	 */ 	
+	 std::map<int, int> m_mapAllNonlinearVariablesIndex;
+
+	/**
+	 * m_miNonLinearVarsReverseMap maps the nonlinear variable number back into the original variable space
+	 */ 	 
+	int *m_miNonLinearVarsReverseMap;
+	 
+	/**
+	 * m_bAllNonlinearVariablesIndexMap is true if the map of the variables in the 
+	 * Lagrangian function has been constructed
+	 */ 	
+	 bool m_bAllNonlinearVariablesIndex;
+	
+	/**
+	 * m_mapExpressionTreesMod holds a map of expression trees, with the key being the row index
+	 * and value being the expression tree representing a modification of the nonlinear expression of that row.
+	 * We incorporate the linear and quadratic term for a variable into the corresponding expression tree before
+	 * gradient and Hessian calculations
+	 */
+	std::map<int, OSExpressionTree*> m_mapExpressionTreesMod ;
+	
+	/**
+	 * is true if a CppAD Expresion Tree has been built for each row and objective 
+	 * with a nonlinear expression.
+	 */
+	bool m_bCppADTapesBuilt;
+	
+	/**
+	 * is true if a CppAD Expresion Tree has an expression that can change depending on
+	 * the value of the input, e.g. an if statement -- false by default
+	 */
+	bool m_bCppADMustReTape;
+
+	
+	/**
+	 *  m_vX is a vector of CppAD indpendent variables.
+	 */
+	CppAD::vector< AD<double> > m_vX;	
+	
+	
+	/**
+	 * m_bDuplicateExpressionTreeMap is true if m_mapExpressionTrees was duplicated. 
+	 */
+	bool m_bDuplicateExpressionTreesMap;
+	
+	/**
+	 * m_bNonLinearStructuresInitialized is true if initializeNonLinearStructures( ) has been called. 
+	 */
+	bool m_bNonLinearStructuresInitialized;
+
+	/**
+	 * m_bSparseJacobianCalculated is true if getJacobianSparsityPattern() has been called. 
+	 */
+	bool m_bSparseJacobianCalculated;
+	
+	/**
+	 * m_mapExpressionTrees holds a hash map of expression trees in postfix format, with the key being the row index
+	 * and value being the expression tree representing the nonlinear expression of that row.
+	 */
+	std::map<int, std::vector<OSnLNode*> > m_mapExpressionTreesInPostfix ;
 	 
 	
 	/**

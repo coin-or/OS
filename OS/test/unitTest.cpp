@@ -191,9 +191,6 @@ int main(int argC, char* argV[])
 		ipoptSolver->osol = osol;
 		osilreader = new OSiLReader(); 
 		ipoptSolver->osinstance = osilreader->readOSiL( &osil);
-		OSiLWriter osilwriter;
-		cout << osilwriter.writeOSiL( ipoptSolver->osinstance) << endl;
-		cout << "call the IPOPT Solver" << endl;
 		ipoptSolver->solve();
 		cout << "Here is the IPOPT solver solution for HS071_NLP" << endl;
 		check = 17.014;
@@ -261,6 +258,9 @@ int main(int argC, char* argV[])
 		ipoptSolver->osol = osol;
 		osilreader = new OSiLReader(); 
 		ipoptSolver->osinstance = osilreader->readOSiL( &osil);
+		//OSiLWriter osilwriter;
+		//cout << osilwriter.writeOSiL( ipoptSolver->osinstance) << endl;
+		//return 0;
 		cout << "call the IPOPT Solver" << endl;
 		ipoptSolver->solve();
 		cout << "Here is the IPOPT solver solution for callBackTest" << endl;

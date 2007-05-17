@@ -20,7 +20,7 @@
 #include "CommonUtil.h"
 #include "ErrorClass.h"
 #include "OSParameters.h"
-#include<iostream> 
+#include<iostream>  
 #include<sstream>
 
 //#define DEBUG
@@ -34,9 +34,8 @@ OSInstance::OSInstance():
 	m_sInstanceDescription(""),
 	m_bProcessVariables(false),
 	m_iVariableNumber(-1),
-	m_iNumberOfBinaryVariables( 0),
 	m_iNumberOfIntegerVariables( 0),
-	m_iNumberOfNonlinearVariables( 0),
+	m_iNumberOfBinaryVariables( 0),
 	m_msVariableNames(NULL),
 	m_mdVariableInitialValues(NULL),
 	m_msVariableInitialStringValues(NULL),
@@ -54,12 +53,10 @@ OSInstance::OSInstance():
 	m_mdConstraintFunctionValues( NULL),
 	m_mdObjectiveFunctionValues( NULL),
 	m_iHighestTaylorCoeffOrder(-1),
-	m_bCppADFunIsCreated( false),
 	m_LagrangianExpTree(NULL),
 	m_bLagrangianExpTreeCreated( false),
 	m_LagrangianSparseHessian( NULL),
 	m_bLagrangianSparseHessianCreated( false),
-	m_bCppADTapesBuilt( false),
 	m_bAllNonlinearVariablesIndex( false),
 	m_mObjectiveCoefficients(NULL),
 	m_bGetDenseObjectives(false),
@@ -94,7 +91,10 @@ OSInstance::OSInstance():
 	m_iConstraintNumberNonlinear( 0),
 	m_iObjectiveNumberNonlinear( 0),
 	m_iHighestOrderEvaluated( -1),
+	m_iNumberOfNonlinearVariables( 0),
 	m_binitForCallBack( false),
+	m_bCppADTapesBuilt( false),
+	m_bCppADFunIsCreated( false),
 	m_bCppADMustReTape( false),
 	bUseExpTreeForFunEval(false)
 {    
@@ -1010,7 +1010,7 @@ OSExpressionTree* OSInstance::getNonlinearExpressionTree(int rowIdx){
 	if( m_bProcessExpressionTrees == false ){
 		getAllNonlinearExpressionTrees();
 		return m_mapExpressionTrees[ rowIdx];
-	}
+	} 
 	else{
 		//if( m_mapExpressionTrees.find( rowIdx) != m_mapExpressionTrees.end()) return NULL;
 		//else return m_mapExpressionTrees[ rowIdx];
@@ -1024,43 +1024,43 @@ OSExpressionTree* OSInstance::getNonlinearExpressionTree(int rowIdx){
 		//}
 		// if we are rowIdx has no nonlinar terms so return a null
 		//return NULL;
-	}  
-}// getNonlinearExpresssionTree for a specific index
+	}     
+}// getNonlinearExpresssionTree for a specific index   
 
 std::map<int, OSExpressionTree*> OSInstance::getAllNonlinearExpressionTrees(){
 	if(m_bProcessExpressionTrees == true) return m_mapExpressionTrees;
 	std::map<int, int> foundIdx;
 	std::map<int, int>::iterator pos;
 	OSnLNodePlus *nlNodePlus;
-	OSExpressionTree *expTree;
-	m_iObjectiveNumberNonlinear = 0;
-	m_iConstraintNumberNonlinear = 0;
-	int i;
-	int index;
+	OSExpressionTree *expTree;  
+	m_iObjectiveNumberNonlinear = 0;   
+	m_iConstraintNumberNonlinear = 0;    
+	int i;   
+	int index;  
 	// kipp -- what should we return if instanceData->nonlinearExpressions->numberOfNonlinearExpressions is zero
 	for(i = 0; i < instanceData->nonlinearExpressions->numberOfNonlinearExpressions; i++){
 		index = instanceData->nonlinearExpressions->nl[ i]->idx;
-		//if(foundIdx.find( index) != foundIdx.end() ){ 
+		//if(foundIdx.find( index) != foundIdx.end() ){  
 		if(foundIdx[ index] > 0 ){ 
 			nlNodePlus = new OSnLNodePlus();
-			expTree = new OSExpressionTree();
-			// set left child to old index and right child to new one
+			expTree = new OSExpressionTree(); 
+			// set left child to old index and right child to new one 
 			nlNodePlus->m_mChildren[ 0] = m_mapExpressionTrees[ index]->m_treeRoot;
 			nlNodePlus->m_mChildren[ 1] = instanceData->nonlinearExpressions->nl[ i]->osExpressionTree->m_treeRoot;
 			m_mapExpressionTrees[ index] = expTree;
 			m_mapExpressionTrees[ index]->m_treeRoot = nlNodePlus;
 		}
-		else{
+		else{  
 			// we have a new index
 			m_mapExpressionTrees[ index] = instanceData->nonlinearExpressions->nl[ i]->osExpressionTree;
 			m_mapExpressionTrees[ index]->m_treeRoot = instanceData->nonlinearExpressions->nl[ i]->osExpressionTree->m_treeRoot;
 		}
-		foundIdx[ index]++;	
+		foundIdx[ index]++;	 
 	}
 	// count the number of constraints and objective functions with nonlinear terms.
 	for(pos = foundIdx.begin(); pos != foundIdx.end(); ++pos){
 		if(pos->first == -1) {
-			m_iObjectiveNumberNonlinear++;
+			m_iObjectiveNumberNonlinear++; 
 		}
 		else m_iConstraintNumberNonlinear++;
 	}
