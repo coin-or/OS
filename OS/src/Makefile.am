@@ -28,6 +28,7 @@ libOS_la_LDFLAGS = $(LT_LDFLAGS)
 libOS_la_LIBADD = ./OSUtils/libOSUtils.la \
 		./OSCommonInterfaces/libOSCommonInterfaces.la \
 		./OSAgent/libOSAgent.la \
+		./OSModelInterfaces/libOSModelInterfaces.la \
 		./OSParsers/libOSParsers.la \
  		./OSSolverInterfaces/libOSSolverInterfaces.la 
 # Since automake is not doing this on its own, we need to declare the
