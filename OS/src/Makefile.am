@@ -67,26 +67,37 @@ OSSolverService_SOURCES = OSSolverService.cpp
 
 OSSolverService_LDADD =  \
 	$(OSOBJDIR)/src/libOS.la \
-	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
+	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la 
+	
 if COIN_HAS_SYMPHONY
-	$(OSIOBJDIR)/src/OsiSym/libOsiSym.la\
+	OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
 endif
-	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
+
+	OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiClp/libOsiClp.la 
+	
 if COIN_HAS_DYLP
-	$(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la\
+	OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
 endif
-	$(CBCOBJDIR)/src/libCbc.la \
+
+	OSSolverService_LDADD += $(CBCOBJDIR)/src/libCbc.la 
+	
 if COIN_HAS_SYMPHONY
-	$(SYMPHONYOBJDIR)/src/libSym.la\
+	OSSolverService_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la 
 endif
-	$(CGLOBJDIR)/src/libCgl.la \
-	$(OSIOBJDIR)/src/libOsi.la \
-	$(CLPOBJDIR)/src/libClp.la \
+
+	OSSolverService_LDADD += $(CGLOBJDIR)/src/libCgl.la 
+	
+	OSSolverService_LDADD += $(OSIOBJDIR)/src/libOsi.la 
+	
+	OSSolverService_LDADD += $(CLPOBJDIR)/src/libClp.la 
+	
 if COIN_HAS_DYLP
-	$(DYLPOBJDIR)/src/Dylp/libDylp.la\
+	OSSolverService_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la 
 endif
-	$(COINUTILSOBJDIR)/src/libCoinUtils.la \
-	$(ADDLIBS) 
+
+	OSSolverService_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
+	
+	OSSolverService_LDADD += $(ADDLIBS) 
 
 if USEWSOCKLIB
   OSSolverService_LDADD += $(WINSOCKLIB)
