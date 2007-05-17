@@ -122,10 +122,14 @@ am__DEPENDENCIES_5 =
 @COIN_HAS_ASL_TRUE@am__DEPENDENCIES_10 = $(am__DEPENDENCIES_5)
 OSSolverService_DEPENDENCIES = $(OSOBJDIR)/src/libOS.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_2) $(am__DEPENDENCIES_3) \
-	$(am__DEPENDENCIES_4) $(am__DEPENDENCIES_6) \
-	$(am__DEPENDENCIES_7) $(am__DEPENDENCIES_8) \
-	$(am__DEPENDENCIES_9) $(am__DEPENDENCIES_10)
+	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la $(am__DEPENDENCIES_2) \
+	$(CBCOBJDIR)/src/libCbc.la $(am__DEPENDENCIES_3) \
+	$(CGLOBJDIR)/src/libCgl.la $(OSIOBJDIR)/src/libOsi.la \
+	$(CLPOBJDIR)/src/libClp.la $(am__DEPENDENCIES_4) \
+	$(COINUTILSOBJDIR)/src/libCoinUtils.la $(am__DEPENDENCIES_5) \
+	$(am__DEPENDENCIES_6) $(am__DEPENDENCIES_7) \
+	$(am__DEPENDENCIES_8) $(am__DEPENDENCIES_9) \
+	$(am__DEPENDENCIES_10)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
@@ -391,7 +395,11 @@ OSSolverService_SOURCES = OSSolverService.cpp
 # List all additionally required COIN libraries
 OSSolverService_LDADD = $(OSOBJDIR)/src/libOS.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la $(am__append_1) \
-	$(am__append_2) $(am__append_3) $(am__append_4) \
+	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la $(am__append_2) \
+	$(CBCOBJDIR)/src/libCbc.la $(am__append_3) \
+	$(CGLOBJDIR)/src/libCgl.la $(OSIOBJDIR)/src/libOsi.la \
+	$(CLPOBJDIR)/src/libClp.la $(am__append_4) \
+	$(COINUTILSOBJDIR)/src/libCoinUtils.la $(ADDLIBS) \
 	$(am__append_5) $(am__append_10) $(am__append_12) \
 	$(am__append_14) $(am__append_16)
 
@@ -879,20 +887,6 @@ uninstall-info: uninstall-info-recursive
 	uninstall-binPROGRAMS uninstall-includeHEADERS \
 	uninstall-info-am uninstall-libLTLIBRARIES uninstall-local
 
-
-	OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiClp/libOsiClp.la 
-
-	OSSolverService_LDADD += $(CBCOBJDIR)/src/libCbc.la 
-
-	OSSolverService_LDADD += $(CGLOBJDIR)/src/libCgl.la 
-
-	OSSolverService_LDADD += $(OSIOBJDIR)/src/libOsi.la 
-
-	OSSolverService_LDADD += $(CLPOBJDIR)/src/libClp.la 
-
-	OSSolverService_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
-
-	OSSolverService_LDADD += $(ADDLIBS) 
 @COIN_HAS_CPX_TRUE@  	OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 
 install-exec-local:
