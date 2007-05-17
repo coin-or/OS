@@ -14,7 +14,8 @@ AUTOMAKE_OPTIONS = foreign
 
 # Name of the library compiled in this directory.  We want it to be installed
 # in the 'lib' directory
-lib_LTLIBRARIES = libOSModelInterfaces.la
+noinst_LTLIBRARIES = libOSModelInterfaces.la
+#lib_LTLIBRARIES = libOSModelInterfaces.la
 
 # List all source files for this library, including headers
 libOSModelInterfaces_la_SOURCES = \
