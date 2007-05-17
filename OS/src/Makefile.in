@@ -45,34 +45,38 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 bin_PROGRAMS = OSSolverService$(EXEEXT)
-@USEWSOCKLIB_TRUE@am__append_1 = $(WINSOCKLIB)
-@COIN_HAS_DYLP_TRUE@am__append_2 = \
+@COIN_HAS_SYMPHONY_TRUE@am__append_1 = $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
+@COIN_HAS_DYLP_TRUE@am__append_2 = $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
+@COIN_HAS_SYMPHONY_TRUE@am__append_3 = $(SYMPHONYOBJDIR)/src/libSym.la 
+@COIN_HAS_DYLP_TRUE@am__append_4 = $(DYLPOBJDIR)/src/Dylp/libDylp.la 
+@USEWSOCKLIB_TRUE@am__append_5 = $(WINSOCKLIB)
+@COIN_HAS_DYLP_TRUE@am__append_6 = \
 @COIN_HAS_DYLP_TRUE@    -I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
 @COIN_HAS_DYLP_TRUE@    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/Dylp` \
 @COIN_HAS_DYLP_TRUE@    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/DylpStdLib` \
 @COIN_HAS_DYLP_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiDylp`
 
-@COIN_HAS_SYMPHONY_TRUE@am__append_3 = \
+@COIN_HAS_SYMPHONY_TRUE@am__append_7 = \
 @COIN_HAS_SYMPHONY_TRUE@    -I`$(CYGPATH_W) $(SYMPHONYSRCDIR)/include` \
 @COIN_HAS_SYMPHONY_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiSym`
 
-@COIN_HAS_CPX_TRUE@am__append_4 = \
+@COIN_HAS_CPX_TRUE@am__append_8 = \
 @COIN_HAS_CPX_TRUE@	-I`$(CYGPATH_W) $(CPXINCDIR)` \
 @COIN_HAS_CPX_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
 
-@COIN_HAS_GLPK_TRUE@am__append_5 = \
+@COIN_HAS_GLPK_TRUE@am__append_9 = \
 @COIN_HAS_GLPK_TRUE@	-I`$(CYGPATH_W) $(GLPKINCDIR)` \
 @COIN_HAS_GLPK_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
 
-@COIN_HAS_GLPK_TRUE@am__append_6 =  \
+@COIN_HAS_GLPK_TRUE@am__append_10 =  \
 @COIN_HAS_GLPK_TRUE@	$(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la \
 @COIN_HAS_GLPK_TRUE@	$(GLPKLIB)
-@COIN_HAS_LINDO_TRUE@am__append_7 = -I`$(CYGPATH_W) $(LINDOINCDIR)` 
-@COIN_HAS_LINDO_TRUE@am__append_8 = $(LINDOLIB)
-@COIN_HAS_IPOPT_TRUE@am__append_9 = -I`$(CYGPATH_W) $(IPOPTINCDIR)` 
-@COIN_HAS_IPOPT_TRUE@am__append_10 = $(IPOPTLIB)
-@COIN_HAS_ASL_TRUE@am__append_11 = $(ASL_CPPFLAGS) 
-@COIN_HAS_ASL_TRUE@am__append_12 = $(ASLLIB)
+@COIN_HAS_LINDO_TRUE@am__append_11 = -I`$(CYGPATH_W) $(LINDOINCDIR)` 
+@COIN_HAS_LINDO_TRUE@am__append_12 = $(LINDOLIB)
+@COIN_HAS_IPOPT_TRUE@am__append_13 = -I`$(CYGPATH_W) $(IPOPTINCDIR)` 
+@COIN_HAS_IPOPT_TRUE@am__append_14 = $(IPOPTLIB)
+@COIN_HAS_ASL_TRUE@am__append_15 = $(ASL_CPPFLAGS) 
+@COIN_HAS_ASL_TRUE@am__append_16 = $(ASLLIB)
 subdir = src
 DIST_COMMON = $(include_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -100,18 +104,28 @@ binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
 am_OSSolverService_OBJECTS = OSSolverService.$(OBJEXT)
 OSSolverService_OBJECTS = $(am_OSSolverService_OBJECTS)
-am__DEPENDENCIES_1 =
-@USEWSOCKLIB_TRUE@am__DEPENDENCIES_2 = $(am__DEPENDENCIES_1)
-@COIN_HAS_GLPK_TRUE@am__DEPENDENCIES_3 =  \
+@COIN_HAS_SYMPHONY_TRUE@am__DEPENDENCIES_1 =  \
+@COIN_HAS_SYMPHONY_TRUE@	$(OSIOBJDIR)/src/OsiSym/libOsiSym.la
+@COIN_HAS_DYLP_TRUE@am__DEPENDENCIES_2 =  \
+@COIN_HAS_DYLP_TRUE@	$(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la
+@COIN_HAS_SYMPHONY_TRUE@am__DEPENDENCIES_3 =  \
+@COIN_HAS_SYMPHONY_TRUE@	$(SYMPHONYOBJDIR)/src/libSym.la
+@COIN_HAS_DYLP_TRUE@am__DEPENDENCIES_4 =  \
+@COIN_HAS_DYLP_TRUE@	$(DYLPOBJDIR)/src/Dylp/libDylp.la
+am__DEPENDENCIES_5 =
+@USEWSOCKLIB_TRUE@am__DEPENDENCIES_6 = $(am__DEPENDENCIES_5)
+@COIN_HAS_GLPK_TRUE@am__DEPENDENCIES_7 =  \
 @COIN_HAS_GLPK_TRUE@	$(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la \
-@COIN_HAS_GLPK_TRUE@	$(am__DEPENDENCIES_1)
-@COIN_HAS_LINDO_TRUE@am__DEPENDENCIES_4 = $(am__DEPENDENCIES_1)
-@COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_5 = $(am__DEPENDENCIES_1)
-@COIN_HAS_ASL_TRUE@am__DEPENDENCIES_6 = $(am__DEPENDENCIES_1)
+@COIN_HAS_GLPK_TRUE@	$(am__DEPENDENCIES_5)
+@COIN_HAS_LINDO_TRUE@am__DEPENDENCIES_8 = $(am__DEPENDENCIES_5)
+@COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_9 = $(am__DEPENDENCIES_5)
+@COIN_HAS_ASL_TRUE@am__DEPENDENCIES_10 = $(am__DEPENDENCIES_5)
 OSSolverService_DEPENDENCIES = $(OSOBJDIR)/src/libOS.la \
-	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la $(am__DEPENDENCIES_2) \
-	$(am__DEPENDENCIES_3) $(am__DEPENDENCIES_4) \
-	$(am__DEPENDENCIES_5) $(am__DEPENDENCIES_6)
+	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_2) $(am__DEPENDENCIES_3) \
+	$(am__DEPENDENCIES_4) $(am__DEPENDENCIES_6) \
+	$(am__DEPENDENCIES_7) $(am__DEPENDENCIES_8) \
+	$(am__DEPENDENCIES_9) $(am__DEPENDENCIES_10)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
@@ -377,8 +391,9 @@ OSSolverService_SOURCES = OSSolverService.cpp
 # List all additionally required COIN libraries
 OSSolverService_LDADD = $(OSOBJDIR)/src/libOS.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la $(am__append_1) \
-	$(am__append_6) $(am__append_8) $(am__append_10) \
-	$(am__append_12)
+	$(am__append_2) $(am__append_3) $(am__append_4) \
+	$(am__append_5) $(am__append_10) $(am__append_12) \
+	$(am__append_14) $(am__append_16)
 
 # Here we add additional libraries
 # Kipp add the others here
@@ -405,9 +420,9 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` -I`$(CYGPATH_W) \
 	$(OSSRCDIR)/src/OSSolverInterfaces` -I`$(CYGPATH_W) \
 	$(OSSRCDIR)/src/OSModelInterfaces` -I`$(CYGPATH_W) \
 	$(CPPADSRCDIR)/..` -I`$(CYGPATH_W) \
-	$(OSSRCDIR)/src/OSCommonInterfaces` $(am__append_2) \
-	$(am__append_3) $(am__append_4) $(am__append_5) \
-	$(am__append_7) $(am__append_9) $(am__append_11)
+	$(OSSRCDIR)/src/OSCommonInterfaces` $(am__append_6) \
+	$(am__append_7) $(am__append_8) $(am__append_9) \
+	$(am__append_11) $(am__append_13) $(am__append_15)
 
 # ADDLIBS += $(WINSOCKLIB)
 OSSolverService_LDFLAGS = -rpath $(libdir)
@@ -865,23 +880,15 @@ uninstall-info: uninstall-info-recursive
 	uninstall-info-am uninstall-libLTLIBRARIES uninstall-local
 
 
-@COIN_HAS_SYMPHONY_TRUE@	OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
-
 	OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiClp/libOsiClp.la 
 
-@COIN_HAS_DYLP_TRUE@	OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
-
 	OSSolverService_LDADD += $(CBCOBJDIR)/src/libCbc.la 
-
-@COIN_HAS_SYMPHONY_TRUE@	OSSolverService_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la 
 
 	OSSolverService_LDADD += $(CGLOBJDIR)/src/libCgl.la 
 
 	OSSolverService_LDADD += $(OSIOBJDIR)/src/libOsi.la 
 
 	OSSolverService_LDADD += $(CLPOBJDIR)/src/libClp.la 
-
-@COIN_HAS_DYLP_TRUE@	OSSolverService_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la 
 
 	OSSolverService_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
 

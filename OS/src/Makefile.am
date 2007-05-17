@@ -70,19 +70,19 @@ OSSolverService_LDADD =  \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la 
 	
 if COIN_HAS_SYMPHONY
-	OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
+ OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
 endif
 
 	OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiClp/libOsiClp.la 
 	
 if COIN_HAS_DYLP
-	OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
+ OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
 endif
 
 	OSSolverService_LDADD += $(CBCOBJDIR)/src/libCbc.la 
 	
 if COIN_HAS_SYMPHONY
-	OSSolverService_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la 
+ OSSolverService_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la 
 endif
 
 	OSSolverService_LDADD += $(CGLOBJDIR)/src/libCgl.la 
@@ -92,7 +92,7 @@ endif
 	OSSolverService_LDADD += $(CLPOBJDIR)/src/libClp.la 
 	
 if COIN_HAS_DYLP
-	OSSolverService_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la 
+ OSSolverService_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la 
 endif
 
 	OSSolverService_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
