@@ -69,21 +69,21 @@ OSSolverService_LDADD =  \
 	$(OSOBJDIR)/src/libOS.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
 if COIN_HAS_SYMPHONY
-  $(OSIOBJDIR)/src/OsiSym/libOsiSym.la\
-  endif
+	$(OSIOBJDIR)/src/OsiSym/libOsiSym.la\
+endif
 	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
 if COIN_HAS_DYLP
-  $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la\
+	$(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la\
 endif
 	$(CBCOBJDIR)/src/libCbc.la \
 if COIN_HAS_SYMPHONY
-  $(SYMPHONYOBJDIR)/src/libSym.la\
+	$(SYMPHONYOBJDIR)/src/libSym.la\
 endif
 	$(CGLOBJDIR)/src/libCgl.la \
 	$(OSIOBJDIR)/src/libOsi.la \
 	$(CLPOBJDIR)/src/libClp.la \
 if COIN_HAS_DYLP
-   $(DYLPOBJDIR)/src/Dylp/libDylp.la\
+	$(DYLPOBJDIR)/src/Dylp/libDylp.la\
 endif
 	$(COINUTILSOBJDIR)/src/libCoinUtils.la \
 	$(ADDLIBS) 
