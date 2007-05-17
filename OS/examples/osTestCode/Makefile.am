@@ -21,30 +21,46 @@ noinst_PROGRAMS = osTestCode
 osTestCode_SOURCES = osTestCode.cpp 
 
 # List all additionally required COIN libraries
-if USEWSOCKLIB
+
 osTestCode_LDADD =  \
 	$(OSOBJDIR)/src/libOS.la \
-	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
-	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
-	$(CBCOBJDIR)/src/libCbc.la \
-	$(CGLOBJDIR)/src/libCgl.la \
-	$(OSIOBJDIR)/src/libOsi.la \
-	$(CLPOBJDIR)/src/libClp.la \
-	$(COINUTILSOBJDIR)/src/libCoinUtils.la \
-	$(ADDLIBS) \
-	$(WINSOCKLIB)
-else
-osTestCode_LDADD =  \
-	$(OSOBJDIR)/src/libOS.la \
-	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
-	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
-	$(CBCOBJDIR)/src/libCbc.la \
-	$(CGLOBJDIR)/src/libCgl.la \
-	$(OSIOBJDIR)/src/libOsi.la \
-	$(CLPOBJDIR)/src/libClp.la \
-	$(COINUTILSOBJDIR)/src/libCoinUtils.la \
-	$(ADDLIBS) 
+	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la 
+	
+if COIN_HAS_SYMPHONY
+ osTestCode_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
 endif
+
+ osTestCode_LDADD += $(OSIOBJDIR)/src/OsiClp/libOsiClp.la 
+	
+if COIN_HAS_DYLP
+ osTestCode_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
+endif
+
+ osTestCode_LDADD += $(CBCOBJDIR)/src/libCbc.la 
+	
+if COIN_HAS_SYMPHONY
+ osTestCode_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la 
+endif
+
+ osTestCode_LDADD += $(CGLOBJDIR)/src/libCgl.la 
+	
+ osTestCode_LDADD += $(OSIOBJDIR)/src/libOsi.la 
+	
+ osTestCode_LDADD += $(CLPOBJDIR)/src/libClp.la 
+	
+if COIN_HAS_DYLP
+ osTestCode_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la 
+endif
+
+ osTestCode_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
+	
+ osTestCode_LDADD += $(ADDLIBS) 
+
+if USEWSOCKLIB
+  osTestCode_LDADD += $(WINSOCKLIB)
+endif
+
+
 
 # Now add the include paths for compilation
 
@@ -91,16 +107,12 @@ if COIN_HAS_DYLP
     -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/Dylp` \
     -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/DylpStdLib` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiDylp`
-  osTestCode_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la
-  osTestCode_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la
 endif
 
 if COIN_HAS_SYMPHONY
   AM_CPPFLAGS += \
     -I`$(CYGPATH_W) $(SYMPHONYSRCDIR)/include` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiSym` 
-  	osTestCode_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
-  	osTestCode_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la
 endif
 
 if COIN_HAS_CPX

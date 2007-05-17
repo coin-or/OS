@@ -22,14 +22,43 @@ instanceGenerator_SOURCES = instanceGenerator.cpp
 
 # List all additionally required COIN libraries
 instanceGenerator_LDADD =  \
-	$(COINUTILSOBJDIR)/src/libCoinUtils.la \
-	$(OSIOBJDIR)/src/libOsi.la \
-	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
-	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
-	$(CLPOBJDIR)/src/libClp.la \
-	$(CBCOBJDIR)/src/libCbc.la \
-	$(CGLOBJDIR)/src/libCgl.la \
-	$(OSOBJDIR)/src/libOS.la 
+	$(OSOBJDIR)/src/libOS.la \
+	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la 
+	
+if COIN_HAS_SYMPHONY
+ instanceGenerator_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
+endif
+
+ instanceGenerator_LDADD += $(OSIOBJDIR)/src/OsiClp/libOsiClp.la 
+	
+if COIN_HAS_DYLP
+ instanceGenerator_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
+endif
+
+ instanceGenerator_LDADD += $(CBCOBJDIR)/src/libCbc.la 
+	
+if COIN_HAS_SYMPHONY
+ instanceGenerator_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la 
+endif
+
+ instanceGenerator_LDADD += $(CGLOBJDIR)/src/libCgl.la 
+	
+ instanceGenerator_LDADD += $(OSIOBJDIR)/src/libOsi.la 
+	
+ instanceGenerator_LDADD += $(CLPOBJDIR)/src/libClp.la 
+	
+if COIN_HAS_DYLP
+ instanceGenerator_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la 
+endif
+
+ instanceGenerator_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
+	
+ instanceGenerator_LDADD += $(ADDLIBS) 
+
+if USEWSOCKLIB
+  instanceGenerator_LDADD += $(WINSOCKLIB)
+endif
+
 
 # Now add the include paths for compilation
 
@@ -77,16 +106,12 @@ if COIN_HAS_DYLP
     -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/Dylp` \
     -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/DylpStdLib` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiDylp`
-  instanceGenerator_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la
-  instanceGenerator_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la
 endif
 
 if COIN_HAS_SYMPHONY
   AM_CPPFLAGS += \
     -I`$(CYGPATH_W) $(SYMPHONYSRCDIR)/include` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiSym` 
-  	instanceGenerator_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la
-  	instanceGenerator_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la 
 endif
 
 if COIN_HAS_CPX

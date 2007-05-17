@@ -23,14 +23,42 @@ unitTest_SOURCES = unitTest.cpp
 # List all additionally required COIN libraries
 unitTest_LDADD =  \
 	$(OSOBJDIR)/src/libOS.la \
-    $(OSOBJDIR)/src/OSModelInterfaces/libOSModelInterfaces.la \
-	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
-	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
-	$(CBCOBJDIR)/src/libCbc.la \
-	$(CGLOBJDIR)/src/libCgl.la \
-	$(OSIOBJDIR)/src/libOsi.la \
-	$(CLPOBJDIR)/src/libClp.la \
-	$(COINUTILSOBJDIR)/src/libCoinUtils.la 
+	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la 
+	
+if COIN_HAS_SYMPHONY
+ unitTest_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
+endif
+
+ unitTest_LDADD += $(OSIOBJDIR)/src/OsiClp/libOsiClp.la 
+	
+if COIN_HAS_DYLP
+ unitTest_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
+endif
+
+ unitTest_LDADD += $(CBCOBJDIR)/src/libCbc.la 
+	
+if COIN_HAS_SYMPHONY
+ unitTest_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la 
+endif
+
+ unitTest_LDADD += $(CGLOBJDIR)/src/libCgl.la 
+	
+ unitTest_LDADD += $(OSIOBJDIR)/src/libOsi.la 
+	
+ unitTest_LDADD += $(CLPOBJDIR)/src/libClp.la 
+	
+if COIN_HAS_DYLP
+ unitTest_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la 
+endif
+
+ unitTest_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
+	
+ unitTest_LDADD += $(ADDLIBS) 
+
+if USEWSOCKLIB
+  unitTest_LDADD += $(WINSOCKLIB)
+endif
+
 
 
 
@@ -84,16 +112,12 @@ if COIN_HAS_DYLP
 	-I`$(CYGPATH_W) $(DYLPSRCDIR)/src/Dylp` \
     -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/DylpStdLib` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiDylp`
- unitTest_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la
- unitTest_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la
 endif
 
 if COIN_HAS_SYMPHONY
   AM_CPPFLAGS += \
     -I`$(CYGPATH_W) $(SYMPHONYSRCDIR)/include` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiSym`
-   unitTest_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
-  unitTest_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la
 endif
 
 
