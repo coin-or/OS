@@ -140,6 +140,12 @@ if COIN_HAS_LINDO
   instanceGenerator_LDADD += $(LINDOLIB)
 endif
 
+if COIN_HAS_ASL
+  AM_CPPFLAGS += $(ASL_CPPFLAGS) 
+  instanceGenerator_LDADD += $(ASLLIB)
+endif
+
+
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
