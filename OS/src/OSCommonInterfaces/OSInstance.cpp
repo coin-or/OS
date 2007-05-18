@@ -44,58 +44,61 @@ OSInstance::OSInstance():
 	m_mdVariableUpperBounds(NULL),
 	m_bProcessObjectives(false),
 	m_iObjectiveNumber(-1),
+	m_iObjectiveNumberNonlinear( 0),
 	m_msObjectiveNames(NULL),
 	m_msMaxOrMins(NULL),
 	m_miNumberOfObjCoef(NULL),
-	m_miNonLinearVarsReverseMap( NULL),
 	m_mdObjectiveConstants(NULL),
 	m_mdObjectiveWeights(NULL),
-	m_mdConstraintFunctionValues( NULL),
-	m_mdObjectiveFunctionValues( NULL),
-	m_iHighestTaylorCoeffOrder(-1),
-	m_LagrangianExpTree(NULL),
-	m_bLagrangianExpTreeCreated( false),
-	m_LagrangianSparseHessian( NULL),
-	m_bLagrangianSparseHessianCreated( false),
-	m_bAllNonlinearVariablesIndex( false),
 	m_mObjectiveCoefficients(NULL),
 	m_bGetDenseObjectives(false),
 	m_mmdDenseObjectiveCoefficients(NULL),
 	m_bProcessConstraints(false),
 	m_iConstraintNumber(-1),
+	m_iConstraintNumberNonlinear( 0),	
 	m_msConstraintNames(NULL),
 	m_mdConstraintLowerBounds(NULL),
 	m_mdConstraintUpperBounds(NULL),
+	m_mdConstraintConstants( NULL),
 	m_mcConstraintTypes(NULL),
- 	m_mdConstraintConstants( NULL),
-	m_bDuplicateExpressionTreesMap( false),
-	m_bNonLinearStructuresInitialized( false),
-	m_bQTermsAdded( false),
-	m_bSparseJacobianCalculated( false),
+ 	m_bProcessLinearConstraintCoefficients(false),	
+	m_iLinearConstraintCoefficientNumber(-1),
+	m_bColumnMajor(true),
+	m_binitForCallBack( false),	
+	m_linearConstraintCoefficientsInColumnMajor(NULL),
+	m_linearConstraintCoefficientsInRowMajor(NULL),	
+	m_bProcessQuadraticTerms(false),
+	m_iQuadraticTermNumber(-1),
+	m_mdConstraintFunctionValues( NULL),
+	m_mdObjectiveFunctionValues( NULL),
 	m_iJacValueSize( 0),
 	m_miJacStart( NULL),
 	m_miJacIndex( NULL),
 	m_mdJacValue( NULL),
 	m_miJacNumConTerms( NULL),
-	m_sparseJacMatrix( NULL),
-	m_bProcessLinearConstraintCoefficients(false),
-	m_iLinearConstraintCoefficientNumber(-1),
-	m_bColumnMajor(true),
-	m_linearConstraintCoefficientsInColumnMajor(NULL),
-	m_linearConstraintCoefficientsInRowMajor(NULL),
-	m_bProcessQuadraticTerms(false),
-	m_iQuadraticTermNumber(-1),
-	m_quadraticTerms(0),
-	m_iNonlinearExpressionNumber( -1),
-	m_bProcessExpressionTrees( false),
-	m_iConstraintNumberNonlinear( 0),
-	m_iObjectiveNumberNonlinear( 0),
-	m_iHighestOrderEvaluated( -1),
+	m_sparseJacMatrix( NULL),	
+	m_iHighestTaylorCoeffOrder(-1),	
+	m_quadraticTerms(0),	
+	m_bQTermsAdded( false),	
 	m_iNumberOfNonlinearVariables( 0),
-	m_binitForCallBack( false),
-	m_bCppADTapesBuilt( false),
+	m_bProcessNonlinearExpressions( false),
+	m_iNonlinearExpressionNumber( -1),		
+	m_miNonlinearExpressionIndexes( NULL),
+	m_bProcessExpressionTrees( false),
+	m_LagrangianExpTree(NULL),
+	m_bLagrangianExpTreeCreated( false),
+	m_LagrangianSparseHessian( NULL),
+	m_bLagrangianSparseHessianCreated( false),
+	m_miNonLinearVarsReverseMap( NULL),
+	m_bAllNonlinearVariablesIndex( false),
 	m_bCppADFunIsCreated( false),
+	m_bCppADTapesBuilt( false),
 	m_bCppADMustReTape( false),
+	m_bDuplicateExpressionTreesMap( false),
+	m_bNonLinearStructuresInitialized( false),
+	m_bSparseJacobianCalculated( false),
+	m_iHighestOrderEvaluated( -1),
+	m_mmdObjGradient( NULL),
 	bUseExpTreeForFunEval(false)
 {    
 	#ifdef DEBUG
@@ -257,11 +260,11 @@ InstanceHeader::~InstanceHeader(){
 } 
 
 Variable::Variable():
-	name(""),
-	init(OSNAN),
 	lb(0.0),
-	ub(OSINFINITY), 
+	ub(OSINFINITY),
+	init(OSNAN), 
 	type('C'), 
+	name(""),
 	initString("")
 {  
 	#ifdef DEBUG
@@ -313,10 +316,10 @@ ObjCoef::~ObjCoef(){
 }
 
 Objective::Objective():
+	name("") ,
 	maxOrMin("min"),
 	constant(0.0),
 	weight(1.0),
-	name("") , 
 	numberOfObjCoef(0),
 	coef(NULL)
 { 
@@ -456,8 +459,8 @@ QuadraticTerm::~QuadraticTerm(){
 
 
 QuadraticCoefficients::QuadraticCoefficients():
-	qTerm(NULL), 
-	numberOfQuadraticTerms(0)  
+	numberOfQuadraticTerms(0),
+	qTerm(NULL)
 { 
 	#ifdef DEBUG 
 	cout << "Inside the QuadraticCoefficients Constructor" << endl;
@@ -500,8 +503,8 @@ Nl::~Nl(){
 
 
 NonlinearExpressions::NonlinearExpressions():
-	nl(NULL), 
-	numberOfNonlinearExpressions(0)  
+	numberOfNonlinearExpressions(0) ,
+	nl(NULL)
 { 
 	#ifdef DEBUG 
 	cout << "Inside the NonlinearExpressions Constructor" << endl;
@@ -1476,8 +1479,6 @@ bool OSInstance::setQuadraticTermsInNonlinearExpressions(int numQPTerms, int* ro
 		// define the vectors
 		OSnLNode *nlNodePoint;
 		OSnLNodeVariable *nlNodeVariablePoint;
-		OSnLNodeNumber *nlNodeNumberPoint;
-		OSnLNodeMax *nlNodeMaxPoint;
 		std::vector<OSnLNode*> nlNodeVec;
 		//
 		//
@@ -2366,7 +2367,7 @@ bool OSInstance::createCppADFun(std::vector<double> vdX){
 	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
 	//if( m_bAllNonlinearVariablesIndex == false) getAllNonlinearVariablesIndexMap( );
 	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
-	int i;
+	unsigned int i;
 	size_t n = vdX.size();
 	// declare a CppAD vector and fill it in
 	CppADvector< AD<double> > vdaX( n );
@@ -2394,7 +2395,7 @@ bool OSInstance::createCppADFun(std::vector<double> vdX){
 	return true;
 }//end createCppADFun
 
-std::vector<double> OSInstance::forwardAD(size_t p, std::vector<double> vdX){
+std::vector<double> OSInstance::forwardAD(int p, std::vector<double> vdX){
 	try{
 		if(p > (m_iHighestTaylorCoeffOrder + 1) ) throw 
 			ErrorClass( "trying to calculate a p order forward when p-1 Taylor coefficient not available");
@@ -2412,7 +2413,7 @@ std::vector<double> OSInstance::forwardAD(size_t p, std::vector<double> vdX){
 }//end forwardAD
 
 
-std::vector<double> OSInstance::reverseAD(size_t p, std::vector<double> vdlambda){
+std::vector<double> OSInstance::reverseAD(int p, std::vector<double> vdlambda){
 	try{
 		if(p != (m_iHighestTaylorCoeffOrder + 1) ) throw 
 			ErrorClass( "trying to calculate a p order reverse when p-1 Taylor coefficient not available");
@@ -2533,8 +2534,10 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conM
 			bool new_x){
 	try{
 		// initialize everything
-		int i, j, rowNum, objNum, jacIndex;
-		int jstart, jend, idx;
+		unsigned int i, j;
+		int rowNum,  jacIndex;
+		unsigned int jstart, jend;
+		int idx;
 		OSExpressionTree *expTree = NULL;
 		int domainIdx = 0;	
 		std::map<int, OSExpressionTree*>::iterator posMapExpTree;
@@ -2659,8 +2662,9 @@ bool OSInstance::getSecondOrderResults(double *x, double *objLambda, double *con
 			bool new_x){
 	try{
 		// initialize everything
-		int i, j, rowNum, objNum, jacIndex;
-		int jstart, jend, idx;
+		unsigned int i, j;
+		int rowNum,  jacIndex;
+		int jstart,  idx;
 		OSExpressionTree *expTree = NULL;
 		int hessValuesIdx = 0;	
 		std::map<int, OSExpressionTree*>::iterator posMapExpTree;
@@ -2756,7 +2760,7 @@ bool OSInstance::initForCallBack(){
 	#ifdef DEBUG
 	std::cout << "RETAPE ==  " << m_bCppADMustReTape << std::endl;
 	#endif
-	int i;
+	unsigned int i;
 	for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
 		m_vdDomainUnitVec.push_back( 0.0 );
 	}

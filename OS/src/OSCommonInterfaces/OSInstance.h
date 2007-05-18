@@ -380,11 +380,6 @@ private:
 	bool m_bGetDenseObjectives;
 	
 	/**
-	 * m_mdObjGradient holds a dense vector of an objective function gradient. 
-	 */
-	//double* m_mdObjGradient;	
-	
-	/**
 	 * m_mmdDenseObjectiveCoefficients holds an array of pointers, each pointer points 
 	 * to a vector of dense objective function coefficients 
 	 */
@@ -468,11 +463,6 @@ private:
 	 */
 	SparseMatrix* m_linearConstraintCoefficientsInRowMajor ;
 
-	/**
-	 * m_linearConstraintCoefficientsInMatrixMarket holds linear constraint coefficients in the matrix market  
-	 * form (rowIndex, columnIndex, Value[rowIndex,columnIndex]). 
-	 */
-//	MatrixMarket m_linearConstraintCoefficientsInMatrixMarket;
 	
 	/**
 	 * m_bProcessQuadraticTerms holds whether the quadratic terms are processed. 
@@ -485,13 +475,6 @@ private:
 	 */
 	int m_iQuadraticTermNumber ;
 
-	/**
-	 * m_quadraticTerms the data structure for all the quadratic terms in the instance. 
-	 * (rowIdx, varOneIdx, varTwoIdx, coef)
-	 */
-	
-
-	
 	/**
 	 * m_mdConstraintFunctionValues holds a double array of constraint function values -- the size of the array is equal to getConstraintNumber().  
      */
@@ -539,48 +522,6 @@ private:
 	 * Taylor coefficient  
 	 */	 
 	 int m_iHighestTaylorCoeffOrder;
-	 
-	/**
-	 * 
-	 * m_bCppADFunIsCreated is true if we have created the OSInstanc
-	 * CppAD Function
-	 */	  
-	 bool m_bCppADFunIsCreated;
-	
-	/**
-	 * process variables. 
-	 * 
-	 * @return true if the variables are processed. 
-	 * @throws Exception if the elements in variables are logically inconsistent. 
-	 */
-	bool processVariables()	;
-	
-	/**
-	 * process objectives. 
-	 * 
-	 * @return true if the objectives are processed. 
-	 * @throws Exception if the elements in objectives are logically inconsistent. 
-	 */
-	bool processObjectives();
-	
-	
-	/**
-	 * process constraints. 
-	 * 
-	 * @return true if the constraints are processed. 
-	 * @throws Exception if the elements in constraints are logically inconsistent. 
-	 */
-	bool processConstraints();
-	
-	
-	/**
-	 * process linear constraint coefficients. 
-	 * 
-	 * @return true if the inear constraint coefficients are processed. 
-	 * @throws Exception if the elements in inear constraint coefficients are logically inconsistent. 
-	 */
-	bool processLinearConstraintCoefficients();
-	
 	
 	/**
 	 * m_quadraticTerms the data structure for all the quadratic terms in the instance. 
@@ -596,7 +537,7 @@ private:
 	 * m_iNumberOfNonlinearVariables is the number of variables that appear 
 	 * in a nonlinear expression.
 	 */
-	int m_iNumberOfNonlinearVariables ;
+	unsigned int m_iNumberOfNonlinearVariables ;
 	 
 	/**
 	 * m_bProcessNonlinearExpressions holds whether the nonlinear expressions are processed. 
@@ -672,6 +613,13 @@ private:
 	std::map<int, OSExpressionTree*> m_mapExpressionTreesMod ;
 	
 	/**
+	 * 
+	 * m_bCppADFunIsCreated is true if we have created the OSInstanc
+	 * CppAD Function
+	 */	  
+	 bool m_bCppADFunIsCreated;
+	
+	/**
 	 * is true if a CppAD Expresion Tree has been built for each row and objective 
 	 * with a nonlinear expression.
 	 */
@@ -683,12 +631,6 @@ private:
 	 */
 	bool m_bCppADMustReTape;
 
-	
-	/**
-	 *  m_vX is a vector of CppAD indpendent variables.
-	 */
-	CppAD::vector< AD<double> > m_vX;	
-	
 	
 	/**
 	 * m_bDuplicateExpressionTreeMap is true if m_mapExpressionTrees was duplicated. 
@@ -717,9 +659,22 @@ private:
 	 * of the current iterate
 	 */	 
 	 int m_iHighestOrderEvaluated;
+	 
+	/**
+	 * m_mdObjGradient holds an array of pointers, each pointer points 
+	 * to gradient of each objective function
+	 */
+	double **m_mmdObjGradient;
+	
 	
 	
 	//define the vectors
+	
+	
+	/**
+	 *  m_vX is a vector of CppAD indpendent variables.
+	 */
+	CppAD::vector< AD<double> > m_vX;	
 
 	/**
 	 * m_vdX is a vector of primal variables at each iteration
@@ -764,11 +719,42 @@ private:
 	 */		
 	std::vector<double> m_vdRangeUnitVec;
 	
+
+	
 	/**
-	 * m_mdObjGradient holds an array of pointers, each pointer points 
-	 * to gradient of each objective function
+	 * process variables. 
+	 * 
+	 * @return true if the variables are processed. 
+	 * @throws Exception if the elements in variables are logically inconsistent. 
 	 */
-	double **m_mmdObjGradient;
+	bool processVariables()	;
+	
+	/**
+	 * process objectives. 
+	 * 
+	 * @return true if the objectives are processed. 
+	 * @throws Exception if the elements in objectives are logically inconsistent. 
+	 */
+	bool processObjectives();
+	
+	
+	/**
+	 * process constraints. 
+	 * 
+	 * @return true if the constraints are processed. 
+	 * @throws Exception if the elements in constraints are logically inconsistent. 
+	 */
+	bool processConstraints();
+	
+	
+	/**
+	 * process linear constraint coefficients. 
+	 * 
+	 * @return true if the inear constraint coefficients are processed. 
+	 * @throws Exception if the elements in inear constraint coefficients are logically inconsistent. 
+	 */
+	bool processLinearConstraintCoefficients();
+	
 	
 public:
 
@@ -1612,7 +1598,7 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * @return a double vector equal to the dimension of the range space
 	 * the result of the forward p sweep 
 	 */
-	std::vector<double> forwardAD(size_t p, std::vector<double> vdX);
+	std::vector<double> forwardAD(int p, std::vector<double> vdX);
 
 	/**
 	 * Perform an AD reverse sweep  
@@ -1624,7 +1610,7 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * the size of lambda should equal number of objective functions plus number of constraints
 	 * @return a double vector equal to the n*p 
 	 */	
-	std::vector<double> reverseAD(size_t p, std::vector<double> vdlambda);
+	std::vector<double> reverseAD(int p, std::vector<double> vdlambda);
 	 
 	 /**
 	  * end revised AD code
