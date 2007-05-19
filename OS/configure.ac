@@ -158,6 +158,22 @@ AC_COIN_VPATH_LINK(data/testremote.config)
 AC_COIN_VPATH_LINK(data/testremoteBIG.config)
 AC_COIN_VPATH_LINK(data/remotegsbkip.osol)
 AC_COIN_VPATH_LINK(data/remoteosil.osol)
+AC_COIN_VPATH_LINK(data/retrieve.osol)
+AC_COIN_VPATH_LINK(data/send.osol)
+AC_COIN_VPATH_LINK(data/sendWithJobID.osol)
+AC_COIN_VPATH_LINK(data/demo.ospl)
+AC_COIN_VPATH_LINK(data/testRemoteKnock.config)
+AC_COIN_VPATH_LINK(data/testRemotegetJobID.config)
+AC_COIN_VPATH_LINK(data/testremoteRetrieve.config)
+AC_COIN_VPATH_LINK(data/testremoteSend.config)
+AC_COIN_VPATH_LINK(data/testmps.config)
+AC_COIN_VPATH_LINK(data/testnl.config)
+
+
+
+
+
+
 
 ##############################################################################
 #                   Finishing up by writing all the output                   #

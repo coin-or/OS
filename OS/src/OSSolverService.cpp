@@ -12,28 +12,42 @@
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */ 
- 
-#include <string> 
-#include <OsiSolverInterface.hpp>   
-#include <CoinMessageHandler.hpp>
-#include "OSConfig.h" 
- 
-#ifdef COIN_HAS_LINDO
-#include "LindoSolver.h" 
-#endif 
+// 
 
-#ifdef COIN_HAS_IPOPT       
-#include "IpoptSolver.h"
-#endif   
-  
-#include "FileUtil.h"   
+#include "OSResult.h" 
+#include "OSiLReader.h"        
+#include "OSiLWriter.h" 
+#include "OSrLReader.h"        
+#include "OSrLWriter.h"      
+#include "OSInstance.h"  
+#include "FileUtil.h"  
+#include "OSConfig.h" 
 #include "CoinSolver.h"
+#include "DefaultSolver.h"  
 #include "WSUtil.h" 
-#include "OSSolverAgent.h"
-#include "OShL.h"    
+#include "OSSolverAgent.h"   
+#include "OShL.h"     
 #include "ErrorClass.h"
+#include "OSmps2osil.h"   
+#include "Base64.h"
+#include "CommonUtil.h"
+#ifdef COIN_HAS_ASL
+#include "OSnl2osil.h"
+#endif
+#ifdef COIN_HAS_LINDO    
+#include "LindoSolver.h"
+#endif  
+#ifdef COIN_HAS_IPOPT    
+#include "IpoptSolver.h"
+#endif 
+#ifdef COIN_HAS_KNITRO    
+#include "KnitroSolver.h"
+#endif
+
+
+
 #include "osOptionsStruc.h"  
-#include <string>
+
     
 
 #define MAXCHARS 5000 
@@ -52,6 +66,10 @@ void send();
 void kill();
 void retrieve(); 
 void knock();
+
+// additional methods
+void getOSiLFromNl(); 
+void getOSiLFromMps();
 
 //options structure
 // this is the only global variable but 
@@ -82,7 +100,7 @@ int main(int argC, const char* argV[])
 	osoptions = new osOptionsStruc();
 	osoptions->configFile = NULL; 
 	osoptions->osilFile = NULL; 
-	osoptions->osil = ""; 
+	osoptions->osil = NULL; 
 	osoptions->osolFile = NULL; 
 	osoptions->osol = ""; 
 	osoptions->osrlFile = NULL; 
@@ -196,6 +214,21 @@ void solve(){
 	FileUtil *fileUtil = NULL;
 	fileUtil = new FileUtil();
 	try{
+		// call a method here to get OSiL if we have an nl or mps file
+		if(osoptions->osil == NULL){
+			//we better have an osil file present or mps file
+			if(osoptions->nlFile != NULL){
+				getOSiLFromNl();
+			}
+			else{
+				if(osoptions->mpsFile != NULL){
+					getOSiLFromMps();
+				}
+				else{
+					throw ErrorClass("solve called and no osil, nl, or mps file given");
+				}
+			}
+		}
 		// solve either remotely of locally
 		if(osoptions->serviceLocation != NULL){
 			// place a remote cal
@@ -228,7 +261,9 @@ void solve(){
 					bool bLindoIsPresent = false;
 					#ifdef COIN_HAS_LINDO
 					bLindoIsPresent = true;
+					std::cout << "calling the LINDO Solver " << std::endl;
 					solverType = new LindoSolver();
+					std::cout << "DONE calling the LINDO Solver " << std::endl;
 					#endif
 					if(bLindoIsPresent == false) throw ErrorClass( "the Lindo solver requested is not present");
 				}
@@ -355,6 +390,21 @@ void send(){
 	std::string sOSoL = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/OSoL.xsd\"><general> </general></osol>";
 	int iStringpos;
 	try{
+		// call a method here to get OSiL if we have an nl or mps file
+		if(osoptions->osil == NULL){
+			//we better have an osil file present or mps file
+			if(osoptions->nlFile != NULL){
+				getOSiLFromNl();
+			}
+			else{
+				if(osoptions->mpsFile != NULL){
+					getOSiLFromMps();
+				}
+				else{
+					throw ErrorClass("solve called and no osil, nl, or mps file given");
+				}
+			}
+		}
 		if(osoptions->serviceLocation != NULL){
 			osagent = new OSSolverAgent( osoptions->serviceLocation );
 			// check to see if there is an osol 
@@ -383,10 +433,9 @@ void send(){
 			bSend = osagent->send(osoptions->osil, sOSoL);
 			if(bSend == true) cout << "send is true" << endl;
 			else cout << "send is false" << endl;
-			//cout << osagent->solve(osoptions->osil, sOSoL) << endl;
 		}
 		else{
-			cout << "please specify service location (url)" << endl;
+			throw ErrorClass( "please specify service location (url)" );
 		}
 	}
 	catch(const ErrorClass& eclass){
@@ -449,6 +498,53 @@ void kill(){
 		std::cout << eclass.errormsg <<  std::endl;
 	}	
 }//end kill
+
+void getOSiLFromNl(){
+	try{
+		#ifdef COIN_HAS_ASL
+		OSnl2osil *nl2osil = NULL;
+		nl2osil = new OSnl2osil( osoptions->nlFile);
+		nl2osil->createOSInstance() ;
+		OSiLWriter *osilwriter = NULL;
+		osilwriter = new OSiLWriter();
+		std::string osil;
+		osil = osilwriter->writeOSiL(  nl2osil->osinstance) ;
+		osoptions->osil = &osil[0];
+		delete nl2osil;
+		nl2osil = NULL;
+		delete osilwriter;
+		osilwriter = NULL; 	
+		#else
+		throw("trying to convert nl to osil without AMPL ASL configured");
+		#endif
+	}
+	catch(const ErrorClass& eclass){
+		std::cout << eclass.errormsg <<  std::endl;
+	}	
+}//getOSiLFromNl
+
+
+void getOSiLFromMps(){
+	try{
+		OSmps2osil *mps2osil = NULL;
+		mps2osil = new OSmps2osil( osoptions->mpsFile);
+		mps2osil->createOSInstance() ;
+		OSiLWriter *osilwriter = NULL;
+		osilwriter = new OSiLWriter();
+		std::string osil;
+		osil = osilwriter->writeOSiL(  mps2osil->osinstance) ;
+		osoptions->osil = &osil[0];
+		delete mps2osil;
+		mps2osil = NULL;
+		delete osilwriter;
+		osilwriter = NULL; 	
+	}
+	catch(const ErrorClass& eclass){
+		std::cout << eclass.errormsg <<  std::endl;
+	}	
+	
+}//getOSiLFromMps
+
 
 /*
  * INPUTS:

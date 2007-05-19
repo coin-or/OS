@@ -1125,8 +1125,8 @@ YY_RULE_SETUP
 	if(yyextra->mpsFile == NULL){
 		printf("Found option:  %s\n", yytext); 
 		char *ch = strdup(yytext);
-		// move past -mpsFile
-		ch+=8;
+		// move past -mps
+		ch+=4;
 		for(; isspace(*ch); ch++);
 		yyextra->mpsFile = &ch[0]; 
 	}
@@ -1140,8 +1140,8 @@ YY_RULE_SETUP
 	if(yyextra->nlFile == NULL){
 		printf("Found option:  %s\n", yytext);
 		char *ch = strdup(yytext);
-		// move past -nlFile
-		ch+=7;
+		// move past -nl
+		ch+=3;
 		for(; isspace(*ch); ch++);
 		yyextra->nlFile = &ch[0];
 	} 

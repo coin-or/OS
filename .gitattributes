@@ -95,6 +95,8 @@ OS/data/testamplrow.xml -text
 OS/data/testb64.osil -text
 OS/data/testfile2.nl -text
 OS/data/testlocal.config -text
+OS/data/testmps.config -text
+OS/data/testnl.config -text
 OS/data/testremote.config -text
 OS/data/testremoteRetrieve.config -text
 OS/data/testremoteSend.config -text
