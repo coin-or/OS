@@ -56,7 +56,7 @@ void knock();
 //options structure
 // this is the only global variable but 
 // this is not a problem since this is a main routine
-osOptionsStruc *osoptions;
+	osOptionsStruc *osoptions; 
 
 
 
@@ -66,7 +66,8 @@ using std::endl;
 using std::ostringstream;
 
 int main(int argC, const char* argV[])
-{   
+{  
+
 	
 	void* scanner;
 	FileUtil *fileUtil = NULL;
@@ -356,20 +357,24 @@ void send(){
 	try{
 		if(osoptions->serviceLocation != NULL){
 			osagent = new OSSolverAgent( osoptions->serviceLocation );
-			jobID =  osagent->getJobID( osoptions->osol) ;
 			// check to see if there is an osol 
 			if(osoptions->osolFile == NULL){
+				// get a jobID
+				jobID =  osagent->getJobID( sOSoL) ;
 				// insert the jobID into the default osol
 				iStringpos = sOSoL.find("</general");
 				cout << "startel ==  " << iStringpos << endl;
 				if(iStringpos != std::string::npos) sOSoL.insert(iStringpos, "<jobID>" + jobID+ "</jobID>");
 			}
 			else{
-				// see if a jobID is present in the OSiL
+				// we have an osol file use it for the sOSoL
 				sOSoL = osoptions->osol;
+				// see if we have a jobID
 				iStringpos = sOSoL.find("<jobID");
-				if(iStringpos != std::string::npos) bSend = osagent->send(osoptions->osil, osoptions->osol);
-				else{
+				// if we have a jobId send out the osil and osol files
+				if(iStringpos == std::string::npos){
+					// get a jobID and insert it
+					jobID =  osagent->getJobID( osoptions->osol) ;
 					iStringpos = sOSoL.find("</general");
 					if(iStringpos != std::string::npos) sOSoL.insert(iStringpos, "<jobID>" + jobID+ "</jobID>");
 				}
@@ -397,9 +402,20 @@ void retrieve(){
 	try{
 		if(osoptions->serviceLocation != NULL){
 			osagent = new OSSolverAgent( osoptions->serviceLocation );
+			std::cout << "HERE ARE THE OSOL OPTIONS " <<  osoptions->osol << std::endl;
 			osrl = osagent->retrieve( osoptions->osol);
 			if(osoptions->osrlFile != NULL) {
 				fileUtil->writeFileFromString(osoptions->osrlFile, osrl); 
+				if(osoptions->browser != NULL){
+					const char *ch1 = osoptions->browser;
+					char *ch2;
+  					ch2 = new char[strlen( ch1) + strlen(osoptions->osrlFile) + 2];
+  					ch2 = strcpy(ch2, ch1);	
+  					char const *ch3  = " ";
+  					ch2 = strcat(ch2, ch3);
+  					ch2 = strcat(ch2, osoptions->osrlFile);
+					std::system(ch2  );
+				}
 			}
 			else cout << osrl << endl;
 		}
@@ -448,7 +464,7 @@ void kill(){
  * -mps xxxx.mps (only used by local client, converts mps format to osil and has same effect as -osil)
  * -nl xxxx.nl (only used by local client, converts nl format to osil and has same effect as -osil)
  * -solver solverName (this is also going to be in osol)
- * -browser on/off (default is off)
+ * -browser path location to browser e.g. /Applications/Firefox.app/Contents/MacOS/firefox (default is NULL)
 */
 
 /*
