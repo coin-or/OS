@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2007 sp1 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:include schemaLocation="OSnL.xsd"/>
 	<xs:include schemaLocation="OSiL.xsd"/>
 	<xs:element name="osgl"/>
@@ -336,6 +337,7 @@
 			<xs:element name="el" type="EmpiricalDiscreteElement" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="cdf" type="xs:boolean" use="optional" default="false"/>
+		<xs:attribute name="numberOfRealizations"/>
 	</xs:complexType>
 	<xs:element name="empiricalDiscrete" type="EmpiricalDiscrete"/>
 	<xs:complexType name="DiscreteUniform">
@@ -693,6 +695,7 @@
 			<xs:element name="scenario" type="MultivariateDiscreteScenario" minOccurs="2" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="cdf" type="xs:boolean" use="optional" default="false"/>
+		<xs:attribute name="numberOfRealizations"/>
 	</xs:complexType>
 	<xs:element name="multivariateDiscrete" type="MultivariateDiscrete"/>
 	<xs:complexType name="Multinomial">
