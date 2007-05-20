@@ -181,7 +181,6 @@ bool CoinSolver::optimize()
 {
 	double *x, *y, *z;
 	std::string *rcost;
-	int solIdx = 0;
 	// resultHeader infomration
 	if(osresult->setServiceName("Solved with Coin Solver: " + m_sSolverName) != true)
 		throw ErrorClass("OSResult error: setServiceName");

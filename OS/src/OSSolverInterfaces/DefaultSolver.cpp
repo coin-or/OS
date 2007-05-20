@@ -22,13 +22,14 @@ using std::cout;
 using std::endl;
 
 DefaultSolver::DefaultSolver():
-	osinstance(NULL),
-	osresult(NULL),
 	osil(""),
 	osol(""),
 	osrl(""),
-	m_sSolverName(""),
-	insList("")
+	osinstance(NULL),
+	osresult(NULL),
+	insList(""),
+	m_sSolverName("")
+
 { 
 
 

@@ -71,19 +71,23 @@ int CALLTYPE LSwriteMPIFile(pLSmodel pModel, char *pszFname);
 	nlNodeIdxLindo[OS_COS] = EP_COS; 
 
 LindoSolver::LindoSolver():
-	m_mdRhsValue(NULL),
-	m_mdVarLB(NULL),
-	m_mdVarUB(NULL),
-	m_mdConLB(NULL),
-	m_mdConUB(NULL),
-	m_msVarName(NULL),
-	m_mmcVarName(NULL),
-	m_msConName(NULL),
-	m_mcVarType(NULL),
-	m_mcRowType(NULL),
-	pEnv_(NULL), 
-    pModel_(NULL),
-    m_miSlackIdx(NULL)
+	pEnv_( NULL), 
+    pModel_( NULL),
+    m_miSlackIdx( NULL),
+    m_iNumberNewSlacks( 0),
+	m_mdRhsValue( NULL),
+	m_mcRowType( NULL),
+	m_mdVarLB( NULL),
+	m_mdVarUB( NULL),
+	m_mdConLB( NULL),
+	m_mdConUB( NULL),
+	m_mmcVarName( NULL),
+	m_msVarName( NULL),
+	m_msConName( NULL),
+	m_mcVarType( NULL),
+	m_mdObjConstant( 0),
+	osrlwriter( NULL)
+	
 {
 #ifdef DEBUG
 	cout << "Lindo constructor called" << endl;
@@ -101,9 +105,9 @@ cout << "Lindo destructor called" << endl;
 	m_mdConLB = NULL;
 	m_mdConUB = NULL;
 	m_msVarName = NULL;
-	m_msConName = NULL;
 	m_mcVarType = NULL;
     m_mcRowType = NULL;
+	m_msConName = NULL;
 	delete[] m_miSlackIdx;
     m_miSlackIdx = NULL;
 	delete[] m_mdRhsValue; 
@@ -172,7 +176,6 @@ void LindoSolver::solve()  {
 }// end solve
 
 bool LindoSolver::processConstraints(){
-	double SOLVER_FEASTOL = 1.0e-7;
 	int i;
 	m_iNumberNewSlacks = 0;
 	try{
@@ -416,7 +419,6 @@ bool LindoSolver::optimize(){
 	std::string *srcost;
 	bool isNonlinear = false;
 	double *drcost;
-	int i = 0;
 	int nSolStatus;
 	std::string description = "";	
 	// resultHeader infomration

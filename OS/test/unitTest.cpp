@@ -23,7 +23,7 @@
  * 2) HS071_NLP.osil
  * 3) rosenbrockmod.osil
  * 4) parincQuadratic.osil
- * 5) parincLinear.osil
+ * 5) parincLinear.osil 
  * 6) callBackTest.osil
  *
  * COIN - Clp 
@@ -801,10 +801,11 @@ int main(int argC, char* argV[])
 		OSExpressionTree* expTree = osinstance->getNonlinearExpressionTree( -1);
 		std::vector<OSnLNode*> postfixVec;
 		postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();
-		int n = postfixVec.size();
+		unsigned int n = postfixVec.size();
+		unsigned int i;
 		std::string *nodeNames1 = new std::string[ n];
 		std::string *nodeNames2 = new std::string[ n];
-		for (int i = 0 ; i < n; i++){
+		for (i = 0 ; i < n; i++){
 			//std::cout << postfixVec[i]->snodeName << std::endl;
 			nodeNames1[i] = postfixVec[i]->snodeName;
 		}
@@ -819,7 +820,7 @@ int main(int argC, char* argV[])
 		postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();
 		if(postfixVec.size() != n) throw ErrorClass(" Problem with creating expression trees");
 		std::cout << std::endl << std::endl;
-		for (int i = 0 ; i < n; i++){
+		for (i = 0 ; i < n; i++){
 			//std::cout << postfixVec[i]->snodeName << std::endl;
 			nodeNames2[i] = postfixVec[i]->snodeName;
 			if( nodeNames1[i] != nodeNames2[ i]) throw ErrorClass(" Problem with creating expression trees");
@@ -856,7 +857,6 @@ int main(int argC, char* argV[])
 		postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();
 		int n = postfixVec.size();
 		std::string *nodeNames1 = new std::string[ n];
-		std::string *nodeNames2 = new std::string[ n];
 		for (int i = 0 ; i < n; i++){
 			std::cout << postfixVec[i]->snodeName << std::endl;
 			nodeNames1[i] = postfixVec[i]->snodeName;
@@ -1002,8 +1002,8 @@ int main(int argC, char* argV[])
 double getObjVal( std::string osrl){
 	std::string sObjVal;
 	double dObjVal;
-	int pos2;
-	int pos1 = osrl.find( "<obj ");
+	unsigned int pos2;
+	unsigned int pos1 = osrl.find( "<obj ");
 	if(pos1 != std::string::npos){
 		// get the end of the obj start tag
 		pos1 = osrl.find(">", pos1 + 1);

@@ -21,7 +21,7 @@
 #include "OSrLWriter.h"      
 #include "OSInstance.h"  
 #include "FileUtil.h"  
-#include "OSConfig.h" 
+#include "OSConfig.h"  
 #include "CoinSolver.h"
 #include "DefaultSolver.h"  
 #include "WSUtil.h" 
@@ -91,9 +91,9 @@ int main(int argC, const char* argV[])
 	FileUtil *fileUtil = NULL;
 	char osss[MAXCHARS] = " ";
 	const char *space = " "; 
-	char *config = "-config";
+	//char *config = "-config";
 	char *configFileName = NULL;
-	int i, k;
+	int i;
 
 	// initialize the OS options structure
 
@@ -388,7 +388,7 @@ void send(){
 	OSSolverAgent* osagent = NULL;
 	// first get the jobID
 	std::string sOSoL = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/OSoL.xsd\"><general> </general></osol>";
-	int iStringpos;
+	unsigned int iStringpos;
 	try{
 		// call a method here to get OSiL if we have an nl or mps file
 		if(osoptions->osil == NULL){

@@ -43,11 +43,22 @@ public:
 	/** osil holds the problem instance as a std::string */
 	std::string osil;
 	
+	/** osol holds the options for the solver */
+	std::string osol;
+	
+	
+	/** osrl holds the solution or result of the model */
+	std::string osrl;
+	
+	
 	/** osinstance holds the problem instance in-memory as an OSInstance object */
 	OSInstance *osinstance;
 	
-	/** osol holds the options for the solver */
-	std::string osol;
+
+	/** osresult holds the solution or result of the model in-memory as an OSResult object */
+	OSResult  *osresult;
+	
+
 	
 	/** osoption holds the solver options in-memory as an OSOption object */
 	//OSOption  *osoption;
@@ -55,12 +66,7 @@ public:
 	/** osinsList holds the solution or result of the model */
 	std::string insList;
 	
-	
-	/** osrl holds the solution or result of the model */
-	std::string osrl;
-	
-	/** osresult holds the solution or result of the model in-memory as an OSResult object */
-	OSResult  *osresult;
+
 	
 	/** 
 	 * m_sSolverName is the name of the Coin solver used, e.g. glpk, or clp 	 

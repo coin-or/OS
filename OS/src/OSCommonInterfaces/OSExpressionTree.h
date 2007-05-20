@@ -56,59 +56,6 @@ public:
 	 */
 	double calculateFunction( double *x, bool new_x);
 	
-	/**
-	 * Calculate the expression tree function value given the current variable
-	 * values using CppAD. If the function has been calculated, the
-	 * method will retrieve it.
-	 * 
-	 * </p>
-	 * 
-	 * @param x holds the values of the variables in a double array.
-	 * @param functionEvaluated is set to true if the function has already been evaluated.
-	 * @return the expression tree function value given the current variable values.
-	 */
-	double calculateFunctionCppAD( double *x, bool functionEvaluated);
-	
-	
-	/**
-	 * Calculate the gradient of the expression tree function given the current variable
-	 * values. In this case we always retape the CppAD expression tree
-	 * 
-	 * </p>
-	 * 
-	 * @param x holds the values of the variables in a double array.
-	 * @param functionEvaluated is set to true if the function has already been evaluated.
-	 * @return the expression tree gradient given the current variable values.
-	 */
-	std::vector<double> calculateGradientReTape( double *x, bool functionEvaluated);
-	
-	
-	/**
-	 * Calculate the gradient of the expression tree function given the current variable
-	 * values. If the CppAD expression tree has been calculated, the
-	 * method will retrieve it.
-	 * 
-	 * </p>
-	 * 
-	 * @param x holds the values of the variables in a double array.
-	 * @param functionEvaluated is set to true if the function has already been evaluated.
-	 * @return the expression tree gradient given the current variable values.
-	 */
-	std::vector<double> calculateGradient( double *x, bool functionEvaluated);
-	
-	
-	/**
-	 * Calculate the Hessian of the expression tree function given the current variable
-	 * values. If the CppAD expression tree has been calculated, the
-	 * method will retrieve it.
-	 * 
-	 * </p>
-	 * 
-	 * @param x holds the values of the variables in a double array.
-	 * @param functionEvaluated is set to true if the function has already been evaluated.
-	 * @return the expression tree Hessian given the current variable values.
-	 */
-	std::vector<double> calculateHessian( double *x, bool functionEvaluated);
 
 	/**
 	 * Get a vector of pointers to OSnLNodes that correspond to
@@ -162,17 +109,6 @@ public:
 
 	
 private:
-
-
-	/**
-	 * XAD is a vector of AD doubles used by
-	 * constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD)
-	 * to generate the infix expression for CPPAD -- it will hold the vector of doubles from 
-	 * the solver
-	 */	
-	CppAD::vector< AD<double> > m_vXAD;
-	
-
 	
 	/**
 	 * posVarIdx is a map iterator used by the map varIdx
@@ -180,41 +116,10 @@ private:
 	std::map<int, int>::iterator m_mPosVarIdx; 
 	
 	/**
-	 * posVarIdx2 is a second map iterator used by the map varIdx for Hessian calculation
-	 */	
-	std::map<int, int>::iterator m_mPosVarIdx2;
-	
-	/**
 	 * m_CppADTape stores the espression tree for m_treeRoot as an AD<double>.
 	 */
 	CppAD::AD<double> m_CppADTape;
 	
-	/**
-	 *  CppAD requires a vector for the independent variable, store the expression tree
-	 * in Z
-	 */
-	CppAD::vector< AD<double> > m_vZ;
-	
-	
-	/**
-	 * f is a function of X the independent variables and Y the dependent variable. 
-	 */	
-	CppAD::ADFun<double> *f;
-
-	/**  
-	 * m_vY is a one-dimensional vector that holds the value of the f function evalued by CppAD. 
-	 */	
-	std::vector<double> m_vY;
-	
-	/**
-	 * m_vX is a vector that holds the independent values of the f function evalued by CppAD. 
-	 */		
-	std::vector<double> m_vX;
-	
-	/**
-	 * m_bCppADTapeBuilt is a boolean that holds whether or not the CppAD expression tree has been built. 
-	 */		
-	bool m_bCppADTapeBuilt;
 	
 	/**
 	 * m_dTreeRootValue is the function value of the root node
