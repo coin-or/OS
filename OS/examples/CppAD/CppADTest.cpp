@@ -53,7 +53,7 @@ int  main(){
 	bool CheckGradientValues( SparseJacobianMatrix *sparseJac, double *objGrad,
 		double x0, double x1, double x2, double y0, double y1, double z );
 	bool ok = true;
-	int idx, k;
+	int k, idx;
 	//
 	// get the problem data
 	//
@@ -213,19 +213,20 @@ int  main(){
 		lagMultipliers[ 0] = w[ 0];
 		lagMultipliers[ 1] = z[ 0];
 		lagMultipliers[ 2] = z[ 1];	
-		for(idx = 0; idx < n; idx++){
-			unit_col_vec[ idx] = 0;
+		unsigned int index, kj;
+		for(index = 0; index < n; index++){
+			unit_col_vec[ index] = 0;
 		}	
-		for(idx = 0; idx < n; idx++){
-			unit_col_vec[ idx] = 1;
+		for(index = 0; index < n; index++){
+			unit_col_vec[ index] = 1;
 			// calculate column i of the Jacobian matrix
 			gradVals = f.Forward(1, unit_col_vec);
-			unit_col_vec[ idx] = 0;
+			unit_col_vec[ index] = 0;
 			// get the nonzero gradient values in constraint k
-			for(k = 0; k < m; k++){
-				std::cout << "variable " << idx << "  row " << k << "  gradient value" << std::endl;
-				std::cout << "gradient value = " << gradVals[ k] << std::endl;	
-				// if variable i is in (*m_mapExpressionTreesMod[ index[ k]]->mapVarIdx).find( i) put into the gradient vector
+			for(kj = 0; kj < m; kj++){
+				std::cout << "variable " << index << "  row " << kj << "  gradient value" << std::endl;
+				std::cout << "gradient value = " << gradVals[ kj] << std::endl;	
+				// if variable i is in (*m_mapExpressionTreesMod[ index[ kj]]->mapVarindex).find( i) put into the gradient vector
 			}
 			// get row i of the Lagrangian function!!!
 			f.Reverse(2, lagMultipliers);

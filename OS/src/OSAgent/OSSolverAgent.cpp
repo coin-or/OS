@@ -30,7 +30,7 @@ OSSolverAgent::OSSolverAgent(string solverURI) : OShL() {
 	nstart = solverURI.find("/", nstart);
 	postURI = solverURI.substr(nstart, solverURI.size() - 1);
 	// Do we have a port number
-	int colonlocation = solverURI.find(":");
+	unsigned int colonlocation = solverURI.find(":");
 	if(colonlocation == string::npos) {
 		solverAddress = solverURI.substr(0, nstart);
 		solverPortNumber = 80;

@@ -125,9 +125,6 @@ OS/examples/makefile.am -text
 OS/examples/osTestCode/Makefile.am -text
 OS/examples/osTestCode/Makefile.in -text
 OS/examples/osTestCode/osTestCode.cpp -text
-OS/examples/osiTest/Makefile.am -text
-OS/examples/osiTest/Makefile.in -text
-OS/examples/osiTest/osiTest.cpp -text
 OS/inc/config_os.h.in -text
 OS/os_addlibs.txt.in -text
 OS/schemas/OSParameter.xsd -text
