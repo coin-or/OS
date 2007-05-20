@@ -30,108 +30,108 @@ using std::endl;
   
 
  
-
-const std::string msnodeNames[] = {
-	/*1--*/"plus", "sum", "minus", "negate", "times", "divide",
-	"quotient", "rem", "power", "product",
-	/*2--*/"abs", "floor", "ceiling", "percent", "square", "squareRoot", "ln", "log", "log10", "exp",
-	"factorial", "combination", "permutation", "gcd", "lcm", "roundToInt", "round", "truncate", "sign", "rand","gammaFn", "gammaLn",
-	/*3--*/"sin", "cos", "tan", "arcsin", "arccos", "arctan", "sinh", "cosh", "tanh", "arcsinh", "arccosh", "arctanh",
-	"cot", "coth", "arccot", "arccoth", "sec", "sech", "arcsec", "arcsech", "csc", "csch", "arccsc", "arccsch",
-	/*4--*/"mean", "geometricMean", "harmonicMean", "trimMean", "count", "median", "firstQuartile", "thirdQuartile", "mode", "min", "max",
-	"percentile", "large", "small", "range", "interQuantileRange", "absdev", "stddev", "variance", "cv", "skewness", "kurtosis",
-	"covariance", "correlation", "pearsonCorrelation", "rankCorrelation", "autoCorrelation1", "autoCorrelation", "npv", "irr", 
-	/*"empiricalDiscreteDist", "empiricalDiscreteCum", */"discreteUniformDist", "discreteUniformCum", "discreteUniformInv",
-	"bernoulliDist", "bernoulliCum", "bernoulliInv", "binomialDist", "binomialCum", "binomialInv", "multinomialDist", "multinomialCum", "multinomialInv",
-	"hypergeometricDist", "hypergeometricCum", "hypergeometricInv", "poissonDist", "poissonCum", "poissonInv",
-	"geometricDist", "geometricCum", "geometricInv", "negativeBinomialDist", "negativeBinomialCum", "negativeBinomialInv",
-	/*"empiricalContinousDist", "empiricalContinuousCum",*/ "uniformDist", "uniformCum", "uniformInv",
-	"normalDist", "normalCum", "normalInv", "stdNormalDist", "stdNormalCum", "stdNormalInv", "bivariateNormalDist", "bivariateNormalCum",
-	"exponentialDist", "exponentialCum", "exponentialInv", "weibullDist", "weibullCum", "weibullInv", "erlangDist", "erlangCum", "erlangInv",
-	"gammaDist", "gammaCum", "gammaInv", "betaDist", "betaCum", "betaInv", "betaGeneralDist", "betaGeneralCum", "betaGeneralInv",
-	"lognormalDist", "lognormalCum", "lognormalInv", "cauchyDist", "cauchyCum", "cauchyInv", "tDist", "tCum", "tInv",
-	"chiSquareDist", "chiSquareCum", "chiSquareInv", "fDist", "fCum", "fInv", "logisticDist", "logisticCum", "logisticInv",
-	"logLogisticDist", "logLogisticCum", "logLogisticInv", "logarithmicDist", "logarithmicCum", "logarithmicInv",
-	"paretoDist", "paretoCum", "paretoDist", "rayleighDist", "rayleighCum", "rayleighInv", "pertDist", "pertCum", "pertDist",
-	"triangularDist", "triangularCum", "triangularInv",
-	/*5--*/"number", "identifier", "PI", "E", "INF", "EPS", "TRUE", "FALSE", "EULERGAMMA", "NAN",
-	/*6--*/"variable", "objective", "constraint", "parameter",
-	/*7--*/"if", "lt", "leq", "gt", "geq", "eq", "neq", "and", "or", "xor", "implies", "not",
-	"forAll", "exists", "logicCount", "allDiff", /*"allDisjoint",*/ "atMost", "atLeast", "exactly", 
-	"inSet", "inRealSet", "inPositiveRealSet", "inNonnegativeRealSet", "inIntegerSet", "inPositiveIntegerSet","inNonnegativeIntegerSet",
-	/*8--*/
-	/*9--*/"qTerm", "quadratic", "sim", "simInput", "simOutput", "userF", "arg", "xPath", "xPathIndex",
-	"nodeRef", "arcRef", "complements", /*"prob",*/
-};
+//
+//const std::string msnodeNames[] = {
+//	/*1--*/"plus", "sum", "minus", "negate", "times", "divide",
+//	"quotient", "rem", "power", "product",
+//	/*2--*/"abs", "floor", "ceiling", "percent", "square", "squareRoot", "ln", "log", "log10", "exp",
+//	"factorial", "combination", "permutation", "gcd", "lcm", "roundToInt", "round", "truncate", "sign", "rand","gammaFn", "gammaLn",
+//	/*3--*/"sin", "cos", "tan", "arcsin", "arccos", "arctan", "sinh", "cosh", "tanh", "arcsinh", "arccosh", "arctanh",
+//	"cot", "coth", "arccot", "arccoth", "sec", "sech", "arcsec", "arcsech", "csc", "csch", "arccsc", "arccsch",
+//	/*4--*/"mean", "geometricMean", "harmonicMean", "trimMean", "count", "median", "firstQuartile", "thirdQuartile", "mode", "min", "max",
+//	"percentile", "large", "small", "range", "interQuantileRange", "absdev", "stddev", "variance", "cv", "skewness", "kurtosis",
+//	"covariance", "correlation", "pearsonCorrelation", "rankCorrelation", "autoCorrelation1", "autoCorrelation", "npv", "irr", 
+//	/*"empiricalDiscreteDist", "empiricalDiscreteCum", */"discreteUniformDist", "discreteUniformCum", "discreteUniformInv",
+//	"bernoulliDist", "bernoulliCum", "bernoulliInv", "binomialDist", "binomialCum", "binomialInv", "multinomialDist", "multinomialCum", "multinomialInv",
+//	"hypergeometricDist", "hypergeometricCum", "hypergeometricInv", "poissonDist", "poissonCum", "poissonInv",
+//	"geometricDist", "geometricCum", "geometricInv", "negativeBinomialDist", "negativeBinomialCum", "negativeBinomialInv",
+//	/*"empiricalContinousDist", "empiricalContinuousCum",*/ "uniformDist", "uniformCum", "uniformInv",
+//	"normalDist", "normalCum", "normalInv", "stdNormalDist", "stdNormalCum", "stdNormalInv", "bivariateNormalDist", "bivariateNormalCum",
+//	"exponentialDist", "exponentialCum", "exponentialInv", "weibullDist", "weibullCum", "weibullInv", "erlangDist", "erlangCum", "erlangInv",
+//	"gammaDist", "gammaCum", "gammaInv", "betaDist", "betaCum", "betaInv", "betaGeneralDist", "betaGeneralCum", "betaGeneralInv",
+//	"lognormalDist", "lognormalCum", "lognormalInv", "cauchyDist", "cauchyCum", "cauchyInv", "tDist", "tCum", "tInv",
+//	"chiSquareDist", "chiSquareCum", "chiSquareInv", "fDist", "fCum", "fInv", "logisticDist", "logisticCum", "logisticInv",
+//	"logLogisticDist", "logLogisticCum", "logLogisticInv", "logarithmicDist", "logarithmicCum", "logarithmicInv",
+//	"paretoDist", "paretoCum", "paretoDist", "rayleighDist", "rayleighCum", "rayleighInv", "pertDist", "pertCum", "pertDist",
+//	"triangularDist", "triangularCum", "triangularInv",
+//	/*5--*/"number", "identifier", "PI", "E", "INF", "EPS", "TRUE", "FALSE", "EULERGAMMA", "NAN",
+//	/*6--*/"variable", "objective", "constraint", "parameter",
+//	/*7--*/"if", "lt", "leq", "gt", "geq", "eq", "neq", "and", "or", "xor", "implies", "not",
+//	"forAll", "exists", "logicCount", "allDiff", /*"allDisjoint",*/ "atMost", "atLeast", "exactly", 
+//	"inSet", "inRealSet", "inPositiveRealSet", "inNonnegativeRealSet", "inIntegerSet", "inPositiveIntegerSet","inNonnegativeIntegerSet",
+//	/*8--*/
+//	/*9--*/"qTerm", "quadratic", "sim", "simInput", "simOutput", "userF", "arg", "xPath", "xPathIndex",
+//	"nodeRef", "arcRef", "complements", /*"prob",*/
+//};
 
 
 
  
-const int m_miNodeIndexes[] = {
-	/*1--*/1001, 1002, 1003, 1004, 1005, 1006,
-	1007, 1008, 1009, 1010,
-	/*2--*/2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
-	2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022,
-	/*3--*/3001, 3002, 3003, 3004, 3005, 3006, 3007, 3008, 3009, 3010, 3011, 3012,
-	3013, 3014, 3015, 3016, 3017, 3018, 3019, 3020, 3021, 3022, 3023, 3024,
-	/*4--*/4001, 4002, 4003, 4004, 4005, 4006, 4007, 4008, 4009, 4010, 4011,
-	4012, 4013, 4014, 4015, 4016, 4017, 4018, 4019, 4020, 4021, 4022,
-	4023, 4024, 4025, 4026, 4027, 4028, 4029, 4030,
-	/*4101, 4102, */4111, 4112, 4113,
-	4121, 4122, 4123, 4131, 4132, 4133, 4141, 4142, 4143,
-	4151, 4152, 4153, 4161, 4162, 4163,
-	4171, 4172, 4173, 4181, 4182, 4183,
-	/*4401, 4402,*/ 4411, 4412, 4413,
-	4421, 4422, 4423, 4431, 4432, 4433, 4441, 4442,
-	4451, 4452, 4453, 4461, 4462, 4463, 4471, 4472, 4473,
-	4481, 4482, 4483, 4491, 4492, 4493, 4501, 4502, 4503,
-	4511, 4512, 4513, 4521, 4522, 4523, 4531, 4532, 4533,
-	4541, 4542, 4543, 4551, 4552, 4553, 4561, 4562, 4563,
-	4571, 4572, 4573, 4581, 4582, 4583,
-	4591, 4592, 4593, 4601, 4602, 4603, 4611, 4612, 4613,
-	4621, 4622, 4623,
-	/*5--*/5001, 5002, 5003, 5004, 5005, 5006, 5007, 5008, 5009, 5010,
-	/*6--*/6001, 6002, 6003, 6004,
-	/*7--*/7001, 7002, 7003, 7004, 7005, 7006, 7007, 7008, 7009, 7010, 7011, 7012,
-	7013, 7014, 7015, 7016, /*7017,*/ 7018, 7019, 7020, 
-	7021, 7022, 7023, 7024, 7025, 7026, 7027,
-	/*8--*/
-	/*9--*/9001, 9002, 9003, 9004, 9005, 9006, 9007, 9008, 9009,
-	9010, 9011, 9012, /*9013,*/
-};
+//const int m_miNodeIndexes[] = {
+//	/*1--*/1001, 1002, 1003, 1004, 1005, 1006,
+//	1007, 1008, 1009, 1010,
+//	/*2--*/2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
+//	2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022,
+//	/*3--*/3001, 3002, 3003, 3004, 3005, 3006, 3007, 3008, 3009, 3010, 3011, 3012,
+//	3013, 3014, 3015, 3016, 3017, 3018, 3019, 3020, 3021, 3022, 3023, 3024,
+//	/*4--*/4001, 4002, 4003, 4004, 4005, 4006, 4007, 4008, 4009, 4010, 4011,
+//	4012, 4013, 4014, 4015, 4016, 4017, 4018, 4019, 4020, 4021, 4022,
+//	4023, 4024, 4025, 4026, 4027, 4028, 4029, 4030,
+//	/*4101, 4102, */4111, 4112, 4113,
+//	4121, 4122, 4123, 4131, 4132, 4133, 4141, 4142, 4143,
+//	4151, 4152, 4153, 4161, 4162, 4163,
+//	4171, 4172, 4173, 4181, 4182, 4183,
+//	/*4401, 4402,*/ 4411, 4412, 4413,
+//	4421, 4422, 4423, 4431, 4432, 4433, 4441, 4442,
+//	4451, 4452, 4453, 4461, 4462, 4463, 4471, 4472, 4473,
+//	4481, 4482, 4483, 4491, 4492, 4493, 4501, 4502, 4503,
+//	4511, 4512, 4513, 4521, 4522, 4523, 4531, 4532, 4533,
+//	4541, 4542, 4543, 4551, 4552, 4553, 4561, 4562, 4563,
+//	4571, 4572, 4573, 4581, 4582, 4583,
+//	4591, 4592, 4593, 4601, 4602, 4603, 4611, 4612, 4613,
+//	4621, 4622, 4623,
+//	/*5--*/5001, 5002, 5003, 5004, 5005, 5006, 5007, 5008, 5009, 5010,
+//	/*6--*/6001, 6002, 6003, 6004,
+//	/*7--*/7001, 7002, 7003, 7004, 7005, 7006, 7007, 7008, 7009, 7010, 7011, 7012,
+//	7013, 7014, 7015, 7016, /*7017,*/ 7018, 7019, 7020, 
+//	7021, 7022, 7023, 7024, 7025, 7026, 7027,
+//	/*8--*/
+//	/*9--*/9001, 9002, 9003, 9004, 9005, 9006, 9007, 9008, 9009,
+//	9010, 9011, 9012, /*9013,*/
+//};
 
-const int m_miNodeTypes[] = {
-	/*1--*/2, -1, 2, 1, 2, 2,
-	2, 2, 2, -1,
-	/*2--*/1, 1, 1, 1, 1, 1, 1, 2, 1, 1,
-	1, 2, 2, -1, -1, 1, 2, 2, 1, 1, 1, 1,
-	/*3--*/1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-	1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-	/*4--*/-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-	-1, -1, -1, -1, -1, -1, -1, -1,
-	/*-1, -1, */2, 2, 2,
-	2, 2, 2, 3, 3, 3, -1, -1, -1,
-	4, 4, 4, 2, 2, 2,
-	2, 2, 2, 3, 3, 3,
-	/*-1, -1,*/ 3, 3, 3,
-	3, 3, 3, 1, 1, 1, 7, 7,
-	2, 2, 2, 4, 4, 4, 3, 3, 3,
-	3, 3, 3, 3, 3, 3, 5, 5, 5,
-	3, 3, 3, 3, 3, 3, 2, 2, 2,
-	2, 2, 2, 3, 3, 3, 3, 3, 3,
-	3, 3, 3, 3, 3, 3,
-	3, 3, 3, 2, 2, 2, 4, 4, 4,
-	4, 4, 4,
-	/*5--*/0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	/*6--*/-1, -1, -1, 0,
-	/*7--*/3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
-	-1, -1, -1, -1, /*-1,*/ -1, -1, -1, 
-	-1, 1, 1, 1, 1, 1, 1
-	/*8--*/
-	/*9--*/-1, -1, -1, -1, -1, -1, 0, -1, -1,
-	-1, -1, 2, /*1,*/
-};
+//const int m_miNodeTypes[] = {
+//	/*1--*/2, -1, 2, 1, 2, 2,
+//	2, 2, 2, -1,
+//	/*2--*/1, 1, 1, 1, 1, 1, 1, 2, 1, 1,
+//	1, 2, 2, -1, -1, 1, 2, 2, 1, 1, 1, 1,
+//	/*3--*/1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+//	1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+//	/*4--*/-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+//	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+//	-1, -1, -1, -1, -1, -1, -1, -1,
+//	/*-1, -1, */2, 2, 2,
+//	2, 2, 2, 3, 3, 3, -1, -1, -1,
+//	4, 4, 4, 2, 2, 2,
+//	2, 2, 2, 3, 3, 3,
+//	/*-1, -1,*/ 3, 3, 3,
+//	3, 3, 3, 1, 1, 1, 7, 7,
+//	2, 2, 2, 4, 4, 4, 3, 3, 3,
+//	3, 3, 3, 3, 3, 3, 5, 5, 5,
+//	3, 3, 3, 3, 3, 3, 2, 2, 2,
+//	2, 2, 2, 3, 3, 3, 3, 3, 3,
+//	3, 3, 3, 3, 3, 3,
+//	3, 3, 3, 2, 2, 2, 4, 4, 4,
+//	4, 4, 4,
+//	/*5--*/0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+//	/*6--*/-1, -1, -1, 0,
+//	/*7--*/3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1,
+//	-1, -1, -1, -1, /*-1,*/ -1, -1, -1, 
+//	-1, 1, 1, 1, 1, 1, 1
+//	/*8--*/
+//	/*9--*/-1, -1, -1, -1, -1, -1, 0, -1, -1,
+//	-1, -1, 2, /*1,*/
+//};
 
 
 
@@ -141,9 +141,9 @@ const int m_miNodeTypes[] = {
 //
 
 OSnLNode::OSnLNode():
+	snodeName(""),
 	m_mChildren(NULL),
-	m_dFunctionValue( OSNAN),
-	snodeName("")
+	m_dFunctionValue( OSNAN)
 	//inumberOfChildren( 0)
 {
 }//end OSnLNode
@@ -157,7 +157,7 @@ OSnLNode::~OSnLNode(){
 
 OSnLNode* OSnLNode::createExpressionTreeFromPostfix(std::vector<OSnLNode*> nlNodeVec){
 	std::vector<OSnLNode*> stackVec ;
-	int kount =  0;
+	unsigned int kount =  0;
 	while(kount <= nlNodeVec.size() - 1){
 		int numkids = nlNodeVec[kount]->inumberOfChildren;
 		if(numkids  > 0){
@@ -863,7 +863,7 @@ AD<double> OSnLNodePower::constructCppADTape(std::map<int, int> *cppADIdx, CppAD
 	if( this->m_mChildren[1]->inodeInt == 5001 ) {
 		OSnLNodeNumber *numberNode  =  (OSnLNodeNumber*)m_mChildren[1];
 		// we have a number node see if interger
-		if( (numberNode->value) = int( numberNode->value)){
+		if( (numberNode->value) == int( numberNode->value)){
 			m_CppADTape =  CppAD::pow(m_mChildren[0]->constructCppADTape( cppADIdx, XAD) ,  int( numberNode->value));
 		}	
 		else m_CppADTape = CppAD::pow(m_mChildren[0]->constructCppADTape( cppADIdx, XAD) , m_mChildren[1]->constructCppADTape( cppADIdx, XAD) );	
@@ -1718,14 +1718,8 @@ OSnLNode* OSnLNodeVariable::cloneOSnLNode(){
 }//end OSnLNodeVariable::cloneOSnLNode
            
 
-/**
- * m_sDelimiter holds the delimiter used in the expression postfix and prefix notation strings.
- */
-static const std::string m_sDelimiter = ",";
 
-/**
- * m_mdX holds a double array of the current values of variables.
- */
-static double *m_mdX = NULL;
+
+
 
 

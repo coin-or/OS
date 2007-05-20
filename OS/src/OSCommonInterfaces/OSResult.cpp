@@ -72,12 +72,12 @@ OSResult::~OSResult(){
 
 
 ResultHeader::ResultHeader():
-	time(""),
-	jobID(""),
-	message(""),
 	serviceURI(""),
 	serviceName(""),
-	instanceName("")
+	instanceName(""),
+	jobID(""),
+	time(""),
+	message("")
 { 
 	#ifdef DEBUG
 	cout << "Inside the ResultHeader Constructor" << endl;
@@ -445,9 +445,8 @@ ObjectiveSolution::~ObjectiveSolution(){
 ConstraintSolution::ConstraintSolution():
 	numberOfOtherConstraintResult( 0),
 	values( NULL),
-	other( NULL),
-	dualValues( NULL)
-
+	dualValues( NULL),
+	other( NULL)
 { 
 	#ifdef DEBUG
 	cout << "Inside the ConstraintSolution Constructor" << endl;
@@ -527,8 +526,8 @@ OptimizationSolution::~OptimizationSolution(){
 OptimizationResult::OptimizationResult():
 	numberOfVariables( -1),
 	numberOfObjectives( -1),
-	numberOfSolutions( -1),
 	numberOfConstraints(-1),
+	numberOfSolutions( -1),
 	solution(NULL)
 { 
 	#ifdef DEBUG

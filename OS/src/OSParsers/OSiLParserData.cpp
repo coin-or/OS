@@ -23,19 +23,19 @@
  
 
  OSiLParserData::OSiLParserData() :
+ 	qtermcount(0),
+  	qtermidxOneattON(false),
+	qtermidxTwoattON(false),
+	qtermidxattON(false),
+	qtermidattON(false),
+	qtermcoefattON(false),
+	nlnodecount(0),
+	tmpnlcount(0),	
  	numbertypeattON(false),
  	numbervalueattON(false),
  	numberidattON(false),
  	variableidxattON(false),
  	variablecoefattON(false),
- 	qtermidxOneattON(false),
-	qtermidxTwoattON(false),
-	qtermidxattON(false),
-	qtermidattON(false),
-	qtermcoefattON(false),
-	qtermcount(0),
-	tmpnlcount(0),
-	nlnodecount(0),
 	osillineno(0)
  {
 

@@ -30,9 +30,9 @@ number( number_)
 
 
 SparseVector::SparseVector( ):
+	bDeleteArrays(true),
 	indexes( NULL),
-	values( NULL),
-	bDeleteArrays(true)
+	values( NULL)
 {
 }// end SparseVector constructor
 
@@ -51,12 +51,11 @@ SparseVector::~SparseVector(){
 SparseMatrix::SparseMatrix():
 	bDeleteArrays( true),
 	isColumnMajor(true),
+	startSize(0),
+	valueSize(0),
 	starts(NULL),
 	indexes(NULL),
-	values(NULL),
-	startSize(0),
-	valueSize(0)
-
+	values(NULL)
 {
 }// end SparseMatrix Constructor
 
@@ -67,10 +66,11 @@ SparseMatrix::SparseMatrix(bool isColumnMajor_, int startSize_, int valueSize_):
 	startSize(startSize_),
 	valueSize(valueSize_)
 {
+	bDeleteArrays = true;
 	starts = new int[startSize];
 	indexes = new int[valueSize];
 	values = new double[valueSize];
-	bDeleteArrays = true;		
+		
 }//end SparseMatrix constructor
 
 
@@ -130,22 +130,21 @@ bool SparseMatrix::display(int secondaryDim){
 	}//display
 	
 SparseJacobianMatrix::SparseJacobianMatrix():
-	starts(NULL),
-	indexes(NULL),
-	values(NULL),
-	conVals(NULL),
 	bDeleteArrays( true),
 	startSize(0),
-	valueSize(0)
-
+	valueSize(0),
+	starts(NULL),
+	conVals(NULL),
+	indexes(NULL),
+	values(NULL)
 {
 }// end SparseJaccobianMatrix Constructor
 
 
 SparseJacobianMatrix::SparseJacobianMatrix(int startSize_, int valueSize_):
+	bDeleteArrays( true),
 	startSize(startSize_),
-	valueSize(valueSize_),
-	bDeleteArrays( true)
+	valueSize(valueSize_)
 {
 	starts = new int[startSize];
 	conVals = new int[startSize];
@@ -176,16 +175,16 @@ SparseJacobianMatrix::~SparseJacobianMatrix(){
 SparseJacobianVector::SparseJacobianVector( int number_):
 number( number_)
 {
+	bDeleteArrays = true;
 	indexes = new int[ number];
 	values = new double[ number];
-	bDeleteArrays = true;
 }// end SparseJacobianVector constructor
 
 
 SparseJacobianVector::SparseJacobianVector( ):
+	bDeleteArrays( true),
 	indexes( NULL),
-	values( NULL),
-	bDeleteArrays( true)
+	values( NULL)
 {
 }// end SparseJacobianVector constructor
 
@@ -203,11 +202,11 @@ SparseJacobianVector::~SparseJacobianVector(){
 }// end SparseJacobianVector constructor
 	
 SparseHessianMatrix::SparseHessianMatrix():
+	bDeleteArrays( true),
+	hessDimension(0),
 	hessRowIdx( NULL),
 	hessColIdx( NULL),
-	hessValues( NULL),
-	bDeleteArrays( true),
-	hessDimension(0)
+	hessValues( NULL)
 {
 }// end SparseHessianMatrix Constructor
 

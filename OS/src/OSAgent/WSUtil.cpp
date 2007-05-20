@@ -56,14 +56,13 @@ string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned int se
 		/* code taken from "TCP/IP Sockets in C" by Donahoo and Calvert */
 		unsigned long ResolveName(char *name);
 		ostringstream ret_message;
-		int sock;                        /* Socket descriptor */
-		struct sockaddr_in httpServAddr; /* Echo server address */
-		unsigned short httpServPort = servicePortNumber;     /* Echo server port */
-		char *servIP = &serviceIP[0];      /* Server IP address (dotted quad) */
-		char httpBuffer[RCVBUFSIZE] = "";     /* Buffer for http string */
-		unsigned int httpStringLen;      /* Length of string to http */
-		int bytesRcvd, totalBytesRcvd;   /* Bytes read in single recv() and total bytes read */
-		char* message = &theSOAP[0];         /* Second arg: string to http */
+		int sock;                        
+		struct sockaddr_in httpServAddr; 
+		unsigned short httpServPort = servicePortNumber;     
+		char *servIP = &serviceIP[0];      
+		char httpBuffer[RCVBUFSIZE] = "";    
+		int httpStringLen;     
+		char* message = &theSOAP[0];       
 		#ifdef WIN_
 		WSADATA wsaData;
 		if( WSAStartup(MAKEWORD(2, 0), &wsaData) != 0 ) throw ErrorClass( "WSAStartup failed");
@@ -97,7 +96,9 @@ string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned int se
 		#endif
 		int recvMsgSize = 1;
 		int n;
+		#ifdef DEBUG
 		int char_val;
+		#endif
 		httpBuffer[ RCVBUFSIZE - 1] = '\0';
 		while (recvMsgSize > 0) {
 			#ifdef DEBUG
@@ -333,7 +334,7 @@ string WSUtil::getOSxL(string soapstring, string serviceMethod){
 	end = "</"+serviceMethod + "Return";
 	// strip off the return header information 
 	// find start of XML information
-	int startxml = soapstring.find(start , 1);
+	unsigned int startxml = soapstring.find(start , 1);
 	if (startxml == string::npos){
 		return result;	
 	}    
@@ -341,7 +342,7 @@ string WSUtil::getOSxL(string soapstring, string serviceMethod){
 		startxml = soapstring.find(">", startxml + 1);
 		if(startxml == string::npos) return result;
 		// find the end of the string
-		int endxml = soapstring.find(end , startxml);
+		unsigned int endxml = soapstring.find(end , startxml);
 		if(endxml == string::npos){
 			return result;
 		}

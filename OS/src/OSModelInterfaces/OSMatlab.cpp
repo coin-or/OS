@@ -23,7 +23,7 @@
   
 
 using std::cout;
-using std::endl;
+using std::endl; 
 using std::ostringstream; 
 
 
@@ -59,7 +59,6 @@ std::string OSMatlab::solve() {
 	ostringstream outStr;
 	std::string osol = "";
 	osil = "";
-	int i;
 	if(osinstance != NULL){
 		OSiLWriter *osilwriter;
 		osilwriter = new OSiLWriter();

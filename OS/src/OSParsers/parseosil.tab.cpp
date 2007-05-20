@@ -2919,7 +2919,7 @@ bool parseInstanceData( const char **p, OSInstance *osinstance, int* osillineno)
 
 bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 	clock_t start, finish;
-	double duration;
+	//double duration;
 	int ki, numChar;
 	char *attTextEnd;
 	const char *ch = *p;
@@ -3173,7 +3173,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 
 bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 	clock_t start, finish;
-	double duration;
+	//double duration;
 	int ki, numChar;
 	char *attTextEnd;
 	const char *ch = *p;
@@ -3470,7 +3470,7 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 
 bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
 	clock_t start, finish;
-	double duration;
+	//double duration;
 	int ki, numChar;
 	char *attTextEnd;
 	const char *ch = *p;
@@ -3793,7 +3793,7 @@ bool parseLinearConstraintCoefficients( const char **p, OSInstance *osinstance, 
 
 bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
 	clock_t start, finish;
-	double duration;
+	//double duration;
 	const char *ch = *p;
 	start = clock(); 
 	const char* startStart = "<start";
@@ -3904,7 +3904,7 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
 
 bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
 	clock_t start, finish;
-	double duration;
+	//double duration;
 	const char *ch = *p;
 	start = clock(); 
 	const char* startRowIdx = "<rowIdx";
@@ -4018,7 +4018,7 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
 
 bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
 	clock_t start, finish;
-	double duration;
+	//double duration;
 	const char *ch = *p;
 	start = clock(); 
 	const char* startColIdx = "<colIdx";
@@ -4132,7 +4132,7 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
 
 bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
 	clock_t start, finish;
-	double duration;
+	//double duration;
 	const char *ch = *p;
 	start = clock(); 
 	const char* startValue = "<value";
