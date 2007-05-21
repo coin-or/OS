@@ -290,8 +290,9 @@ Variables::~Variables(){
 	#ifdef DEBUG 
 	cout << "Inside the Variables Destructor" << endl;
 	#endif
+	int i;
 	if(numberOfVariables > 0 && var != NULL){
-		for(int i = 0; i < numberOfVariables; i++){
+		for(i = 0; i < numberOfVariables; i++){
 			delete var[i];
 			var[i] = NULL;
 		}
@@ -333,8 +334,9 @@ Objective::~Objective(){
 	#ifdef DEBUG  
 	cout << "Inside the Objective Destructor" << endl;
 	#endif
+	int i;
 	if(numberOfObjCoef > 0 && coef != NULL){
-		for(int i = 0; i < numberOfObjCoef; i++){
+		for(i = 0; i < numberOfObjCoef; i++){
 			delete coef[i];
 			coef[i] = NULL;
 		}
@@ -356,8 +358,9 @@ Objectives::~Objectives(){
 	#ifdef DEBUG 
 	cout << "Inside the Objectives Destructor" << endl;
 	#endif
+	int i;
 	if(numberOfObjectives > 0 && obj != NULL){
-		for(int i = 0; i < numberOfObjectives; i++){
+		for(i = 0; i < numberOfObjectives; i++){
 			delete obj[i];
 			obj[i] = NULL;
 		}
@@ -397,8 +400,9 @@ Constraints::~Constraints(){
 	#ifdef DEBUG
 	cout << "Inside the Constraints Destructor" << endl;
 	#endif
+	int i;
 	if(numberOfConstraints > 0 && con != NULL){
-		for(int i = 0; i < numberOfConstraints; i++){
+		for( i = 0; i < numberOfConstraints; i++){
 			delete con[i];
 			con[i] = NULL;
 		}
@@ -472,8 +476,9 @@ QuadraticCoefficients::~QuadraticCoefficients(){
 	#ifdef DEBUG  
 	cout << "Inside the QuadraticCoefficients Destructor" << endl;
 	#endif
+	int i;
 	if(numberOfQuadraticTerms > 0 && qTerm != NULL){
-		for(int i = 0; i < numberOfQuadraticTerms; i++){
+		for( i = 0; i < numberOfQuadraticTerms; i++){
 			delete qTerm[i];
 			qTerm[i] = NULL;
 		}
@@ -516,8 +521,9 @@ NonlinearExpressions::~NonlinearExpressions(){
 	cout << "Inside the NonlinearExpressions Destructor" << endl;
 	cout << "NUMBER OF NONLINEAR EXPRESSIONS = " << numberOfNonlinearExpressions << endl;
 	#endif
+	int i;
 	if(numberOfNonlinearExpressions > 0 && nl != NULL){
-		for(int i = 0; i < numberOfNonlinearExpressions; i++){
+		for( i = 0; i < numberOfNonlinearExpressions; i++){
 			cout << "DESTROYING EXPRESSION " << nl[ i]->idx << endl;
 			delete nl[i];
 			nl[i] = NULL;
@@ -1071,7 +1077,7 @@ std::map<int, OSExpressionTree*> OSInstance::getAllNonlinearExpressionTrees(){
 	m_bProcessExpressionTrees = true;
 	// important -- tell the nl nodes not to destroy the OSExpression Objects
 	if( instanceData->nonlinearExpressions->numberOfNonlinearExpressions > 0 && instanceData->nonlinearExpressions->nl != NULL){
-		for(int i = 0; i < instanceData->nonlinearExpressions->numberOfNonlinearExpressions; i++){
+		for( i = 0; i < instanceData->nonlinearExpressions->numberOfNonlinearExpressions; i++){
 			instanceData->nonlinearExpressions->nl[i]->m_bDeleteExpressionTree = false;
 		}
 	}
@@ -1270,7 +1276,7 @@ bool OSInstance::setObjectives(int number, string *names, string *maxOrMins, dou
 	instanceData->objectives->numberOfObjectives = number;
 	instanceData->objectives->obj = new Objective*[number];
 	int i = 0;
-	for(int i = 0; i < number; i++)instanceData->objectives->obj[i] = new Objective();
+	for(i = 0; i < number; i++)instanceData->objectives->obj[i] = new Objective();
 	int j = 0;
 	if(names != NULL){
 		for(i = 0; i < number; i++) instanceData->objectives->obj[i]->name = names[i];   			
@@ -2545,7 +2551,7 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conM
 			
 		/** if the number of columns exceeds the number of rows we will get the 
 		 * Jacobian by row, however, if the number of rows exceeds the number of 
-		 * columns we get the Jacobian by columnd
+		 * columns we get the Jacobian by column
 		 */		
 		
 		if(m_iNumberOfNonlinearVariables >= m_mapExpressionTreesMod.size() ){
@@ -2636,9 +2642,10 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conM
 		}
 
 		#ifdef DEBUG
+		int k;
 		std::cout  << "JACOBIAN DATA " << std::endl;
 		for(idx = 0; idx < m_iConstraintNumber; idx++){
-			for(int k = *(m_sparseJacMatrix->starts + idx); k < *(m_sparseJacMatrix->starts + idx + 1); k++){
+			for(k = *(m_sparseJacMatrix->starts + idx); k < *(m_sparseJacMatrix->starts + idx + 1); k++){
 				std::cout << "row idx = " << idx <<  "  col idx = "<< *(m_sparseJacMatrix->indexes + k)
 				<< " value = " << *(m_sparseJacMatrix->values + k) << std::endl;
 			}
@@ -2730,9 +2737,10 @@ bool OSInstance::getSecondOrderResults(double *x, double *objLambda, double *con
 	}
 	#endif
 	#ifdef DEBUG
+	int k;
 	std::cout  << "JACOBIAN DATA " << std::endl;
 	for(idx = 0; idx < m_iConstraintNumber; idx++){
-		for(int k = *(m_sparseJacMatrix->starts + idx); k < *(m_sparseJacMatrix->starts + idx + 1); k++){
+		for(k = *(m_sparseJacMatrix->starts + idx); k < *(m_sparseJacMatrix->starts + idx + 1); k++){
 			//std::cout << "row idx = " << idx <<  "  col idx = "<< *(m_sparseJacMatrix->indexes + k)
 			//<< " value = " << *(m_sparseJacMatrix->values + k) << std::endl;
 		}

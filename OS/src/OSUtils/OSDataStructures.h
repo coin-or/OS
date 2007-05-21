@@ -54,7 +54,7 @@ class SparseVector{
 	 * bDeleteArrays is true if we delete the arrays in garbage collection
 	 * set to true by default
 	 */
-	int bDeleteArrays;
+	bool bDeleteArrays;
 	
 	/**
 	 * number is the number of elements in the indexes and values arrays.
@@ -81,7 +81,7 @@ class SparseMatrix {
 	 * bDeleteArrays is true if we delete the arrays in garbage collection
 	 * set to true by default
 	 */
-	int bDeleteArrays;
+	bool bDeleteArrays;
 	
 	/**
 	 * isColumnMajor holds whether the coefMatrix (AMatrix) holding linear program
@@ -155,7 +155,7 @@ class SparseJacobianMatrix {
 	 * bDeleteArrays is true if we delete the arrays in garbage collection
 	 * set to true by default
 	 */
-	int bDeleteArrays;
+	bool bDeleteArrays;
 	
 	/**
 	 * startSize is the dimension of the starts array -- should equal number of rows + 1
@@ -239,7 +239,7 @@ class SparseJacobianVector{
 	 * bDeleteArrays is true if we delete the arrays in garbage collection
 	 * set to true by default
 	 */
-	int bDeleteArrays;
+	bool bDeleteArrays;
 	
 	
 	/**
@@ -283,7 +283,7 @@ class SparseHessianMatrix {
 	 * bDeleteArrays is true if we delete the arrays in garbage collection
 	 * set to true by default
 	 */
-	int bDeleteArrays;
+	bool bDeleteArrays;
 
 	/**
 	 * hessDimension is the number of nonzeros in each array.

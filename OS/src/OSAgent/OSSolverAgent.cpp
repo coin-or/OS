@@ -48,7 +48,6 @@ string OSSolverAgent::solve(string osil, string osol){
 	string sOSrL ; 
 	string theSOAP; 
 	string solveResult;
-	string getOSxL(string soapstring, string serviceMethod);
 	// CreateSOAPMessage inputs
 	int numInputs = 2;
 	string smethod = "solve";
@@ -95,7 +94,6 @@ string OSSolverAgent::fileUpload( string osilFileName, string theOSiLFile){
 bool OSSolverAgent::send(string osil, string osol){
 	string theSOAP;
 	string sendResult;
-	string getOSxL(string soapstring, string serviceMethod);
 	// CreateSOAPMessage inputs
 	int numInputs = 2;
 	string smethod = "send";
@@ -123,7 +121,6 @@ string OSSolverAgent::getJobID(string osol){
 	string sjobID = "";
 	string getJobIDResult; 
 	string theSOAP;
-	string getOSxL(string soapstring, string serviceMethod);
 	// CreateSOAPMessage inputs
 	int numInputs = 1;
 	string smethod = "getJobID";
@@ -149,7 +146,6 @@ string OSSolverAgent::retrieve(string osol){
 	string sOSrL;
 	string retrieveResult; 
 	string theSOAP;
-	string getOSxL(string soapstring, string serviceMethod);
 	// CreateSOAPMessage inputs
 	int numInputs = 1;
 	string smethod = "retrieve";
@@ -175,7 +171,6 @@ string OSSolverAgent::kill(string osol){
 	string sOSpL;
 	string killResult; 
 	string theSOAP;
-	string getOSxL(string soapstring, string serviceMethod);
 	// CreateSOAPMessage inputs
 	int numInputs = 1;
 	string smethod = "kill";
@@ -201,7 +196,6 @@ string OSSolverAgent::knock(string ospl, string osol){
 	string sOSpL; 
 	string theSOAP;
 	string knockResult;
-	string getOSxL(string soapstring, string serviceMethod);
 	// CreateSOAPMessage inputs
 	int numInputs = 2;
 	string smethod = "knock";

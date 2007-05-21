@@ -102,7 +102,7 @@ int main(int argC, const char* argV[])
 	osoptions->osilFile = NULL; 
 	osoptions->osil = NULL; 
 	osoptions->osolFile = NULL; 
-	osoptions->osol = ""; 
+	osoptions->osol = NULL; 
 	osoptions->osrlFile = NULL; 
 	osoptions->osrl = NULL; 
 	osoptions->insListFile = NULL; 
