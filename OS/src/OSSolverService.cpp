@@ -14,6 +14,9 @@
  */ 
 // 
 
+
+
+
 #include "OSResult.h" 
 #include "OSiLReader.h"        
 #include "OSiLWriter.h" 
@@ -31,6 +34,11 @@
 #include "OSmps2osil.h"   
 #include "Base64.h"
 #include "CommonUtil.h"
+
+#ifdef COIN_HAS_KNITRO    
+#include "KnitroSolver.h"
+#endif
+
 #ifdef COIN_HAS_ASL
 #include "OSnl2osil.h"
 #endif
@@ -40,9 +48,6 @@
 #ifdef COIN_HAS_IPOPT    
 #include "IpoptSolver.h"
 #endif 
-#ifdef COIN_HAS_KNITRO    
-#include "KnitroSolver.h"
-#endif
 
 
 

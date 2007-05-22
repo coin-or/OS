@@ -364,8 +364,11 @@ bool  KnitroSolver::loadProblemIntoKnitro (KTR_context_ptr  kc){
 	_daXLo  = new double[_nN];
     _daXUp  = new double[_nN];
 	for(i = 0; i < _nN; i++){
-		_daXLo[i] = mdVarLB[ i];  //-KTR_INFBOUND;	
-		_daXUp[i] = mdVarUB[ i];  //KTR_INFBOUND;
+		if( mdVarLB[ i] == -OSINFINITY) _daXLo[i] = -KTR_INFBOUND
+			else _daXLo[i] = mdVarLB[ i]; 
+		if( mdVarUB[ i] == OSINFINITY) _daXUp[i] = KTR_INFBOUND
+			else _daXUp[i] = mdVarUB[ i];  	
+			
 		//cout << "x_l !!!!!!!!!!!!!!!!!!!!!!!!!!!" << x_l[i] << endl;
 		//cout << "x_u !!!!!!!!!!!!!!!!!!!!!!!!!!!" << x_u[i] << endl;
 	}
@@ -378,15 +381,15 @@ bool  KnitroSolver::loadProblemIntoKnitro (KTR_context_ptr  kc){
 	_naCType  = new int[_nM];
     _daCLo    = new double[_nM];
     _daCUp    = new double[_nM];
-    _daCLo[0] = -KTR_INFBOUND;
-    _daCUp[0] = 3.0;
     _naCType[0] = KTR_CONTYPE_LINEAR;
 	for(i = 0; i < _nM; i++){
-		_daCLo[i] = mdConLB[ i];
-		_daCUp[0] = mdConUB[ i];
+		if( mdConLB[ i] == -OSINFINITY) _daCLo[i] = -KTR_INFBOUND
+			else _daCLo[i] = mdConLB[ i]; 
+		if( mdConUB[ i] == OSINFINITY) _daCUp[i] = KTR_INFBOUND
+			else _daCUp[i] = mdConUB[ i];  	
 		//cout << "lower !!!!!!!!!!!!!!!!!!!!!!!!!!!" << _daCLo[i] << endl;
 		//cout << "upper !!!!!!!!!!!!!!!!!!!!!!!!!!!" << _daCUp[i] << endl;
-		_naCType[0] = KTR_CONTYPE_GENERAL; //need change
+		_naCType[i] = KTR_CONTYPE_GENERAL; //need change
 	}  
 
 	// use the OS Expression tree for function evaluations instead of CppAD
@@ -433,8 +436,8 @@ bool  KnitroSolver::loadProblemIntoKnitro (KTR_context_ptr  kc){
 		for(i = 0; i < _nNnzH; i++){
 			_naHessRows[i] = *(sparseHessian->hessColIdx + i);
 			_naHessCols[i] = *(sparseHessian->hessRowIdx + i);
-				//cout << "ROW HESS IDX  !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << iRow[i] << endl;
-				//cout << "COL HESS IDX  !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << jCol[i] << endl;
+				//cout << "ROW HESS IDX  !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << _naHessRows[i] << endl;
+				//cout << "COL HESS IDX  !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << _naHessCols[i] << endl;
 		}
 	}
 
@@ -460,8 +463,6 @@ bool  KnitroSolver::loadProblemIntoKnitro (KTR_context_ptr  kc){
   	//cout << "got initial values !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
 
 	double *  daLambdaInit = new double[_nM + _nN];
-    for (i = 0; i < _nN; i++)
-        _daXInit[i] = 0.5;
     for (i = 0; i < _nM + _nN; i++)
         daLambdaInit[i] = 0.0;
     
@@ -498,13 +499,7 @@ bool  KnitroSolver::loadProblemIntoKnitro (KTR_context_ptr  kc){
 //--------------------------------------------------------------------
 bool  KnitroSolver::areDerivativesImplemented
           (const DerivativesImplementedType  nWhichDers){
-    if (nWhichDers == nCAN_COMPUTE_GA)
-        return( true );
-    if (nWhichDers == nCAN_COMPUTE_H)
-        return( true );
-    if (nWhichDers == nCAN_COMPUTE_HV)
-        return( true );
-    return( false );
+	return true;
 }//areDerivativesImplemented
 
 
@@ -530,7 +525,7 @@ int  KnitroSolver::evalFC (const double * const  daX,
  		double *conVals = osinstance->calculateAllConstraintFunctionValues((double*)daX, NULL, NULL, true, 0 );
  		int i;
  		for(i = 0; i < _nM; i++){
- 			if( CommonUtil::ISOSNAN( (double)conVals[ i] ) ) return false;
+ 			if( CommonUtil::ISOSNAN( (double)conVals[ i] ) ) return (-1);
  			daC[i] = conVals[ i]  ;	
  		} 
 	}
@@ -552,11 +547,11 @@ int  KnitroSolver::evalGA (const double * const  daX,
                          double * const  daJ,
                          void   *        userParams){
 	try{
- 		double *conVals = osinstance->calculateAllConstraintFunctionValues((double*)daX, NULL, NULL, true, 0 );
+ 		double *objGrad = osinstance->calculateAllObjectiveFunctionGradients((double*)daX, NULL, NULL, true, 1 );
  		int i;
- 		for(i = 0; i < _nM; i++){
- 			if( CommonUtil::ISOSNAN( (double)conVals[ i] ) ) return (-1);
- 			daG[i] = conVals[ i]  ;	
+ 		for(i = 0; i < _nN; i++){
+ 			if( CommonUtil::ISOSNAN( (double)objGrad[ i] ) ) return (-1);
+ 			daG[i] = objGrad[ i]  ;	
  		} 
 	}
 	catch(const ErrorClass& eclass){
@@ -592,17 +587,10 @@ int  KnitroSolver::evalH (const double * const  daX,
                   const double * const  daLambda,
                         double * const  daH,
                         void   *        userParams){
-    //daH[0] = 4.0;
-    //daH[1] = 2.0;
-    //daH[2] = 2.0;
-    //daH[3] = 4.0;
-    //daH[4] = 2.0;
 	SparseHessianMatrix *sparseHessian;
 	int i;
-	//std::cout << "EVALUATING HESSIAN" << std::endl; 
-	// return the values. This is a symmetric matrix, fill the lower left triangle only 
 	double* objMultipliers = new double[1];
-	objMultipliers[0] = 1;//need to change
+	objMultipliers[0] = 1;
 	try{
 		sparseHessian = osinstance->calculateLagrangianHessian((double*)daX, objMultipliers, (double*)daLambda ,  true, 2);
 	}
@@ -611,7 +599,7 @@ int  KnitroSolver::evalH (const double * const  daX,
 		return (-1);  
 	}
 	for(i = 0; i < _nNnzH; i++){
-		daH[ i]  = *(sparseHessian->hessValues + i); //need to change
+		daH[ i]  = *(sparseHessian->hessValues + i);
 	}
 
     return( 0 );
@@ -625,9 +613,6 @@ int  KnitroSolver::evalHV (const double * const  daX,
                    const double * const  daLambda,
                          double * const  daHV,
                          void   *        userParams){
-    //daHV[0] = (4.0 * daHV[0]) + (2.0 * daHV[1]) + (2.0 * daHV[2]);
-    //daHV[1] = (2.0 * daHV[0]) + (4.0 * daHV[1]);
-    //daHV[2] = (2.0 * daHV[0])                   + (2.0 * daHV[2]);
 
     return( 0 );
 }//evalHV
