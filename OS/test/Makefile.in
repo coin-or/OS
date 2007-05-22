@@ -81,8 +81,10 @@ noinst_PROGRAMS = unitTest$(EXEEXT)
 @COIN_HAS_LINDO_TRUE@am__append_12 = $(LINDOLIB)
 @COIN_HAS_IPOPT_TRUE@am__append_13 = -I`$(CYGPATH_W) $(IPOPTINCDIR)` 
 @COIN_HAS_IPOPT_TRUE@am__append_14 = $(IPOPTLIB) 
-@COIN_HAS_ASL_TRUE@am__append_15 = $(ASL_CPPFLAGS) 
-@COIN_HAS_ASL_TRUE@am__append_16 = $(ASLLIB) 
+@COIN_HAS_KNITRO_TRUE@am__append_15 = -I`$(CYGPATH_W) $(KNITROINCDIR)` 
+@COIN_HAS_KNITRO_TRUE@am__append_16 = $(KNITROLIB)
+@COIN_HAS_ASL_TRUE@am__append_17 = $(ASL_CPPFLAGS) 
+@COIN_HAS_ASL_TRUE@am__append_18 = $(ASLLIB) 
 subdir = test
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -111,7 +113,8 @@ am__DEPENDENCIES_5 =
 @COIN_HAS_GLPK_TRUE@	$(am__DEPENDENCIES_5)
 @COIN_HAS_LINDO_TRUE@am__DEPENDENCIES_8 = $(am__DEPENDENCIES_5)
 @COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_9 = $(am__DEPENDENCIES_5)
-@COIN_HAS_ASL_TRUE@am__DEPENDENCIES_10 = $(am__DEPENDENCIES_5)
+@COIN_HAS_KNITRO_TRUE@am__DEPENDENCIES_10 = $(am__DEPENDENCIES_5)
+@COIN_HAS_ASL_TRUE@am__DEPENDENCIES_11 = $(am__DEPENDENCIES_5)
 unitTest_DEPENDENCIES = $(OSOBJDIR)/src/libOS.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la $(am__DEPENDENCIES_1) \
 	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la $(am__DEPENDENCIES_2) \
@@ -121,7 +124,7 @@ unitTest_DEPENDENCIES = $(OSOBJDIR)/src/libOS.la \
 	$(COINUTILSOBJDIR)/src/libCoinUtils.la $(am__DEPENDENCIES_5) \
 	$(am__DEPENDENCIES_6) $(am__DEPENDENCIES_7) \
 	$(am__DEPENDENCIES_8) $(am__DEPENDENCIES_9) \
-	$(am__DEPENDENCIES_10)
+	$(am__DEPENDENCIES_10) $(am__DEPENDENCIES_11)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
@@ -346,7 +349,7 @@ unitTest_LDADD = $(OSOBJDIR)/src/libOS.la \
 	$(CLPOBJDIR)/src/libClp.la $(am__append_4) \
 	$(COINUTILSOBJDIR)/src/libCoinUtils.la $(ADDLIBS) \
 	$(am__append_5) $(am__append_10) $(am__append_12) \
-	$(am__append_14) $(am__append_16)
+	$(am__append_14) $(am__append_16) $(am__append_18)
 
 # Now add the include paths for compilation
 
@@ -370,7 +373,8 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` -I`$(CYGPATH_W) \
 	$(CPPADSRCDIR)/..` -I`$(CYGPATH_W) \
 	$(OSSRCDIR)/src/OSCommonInterfaces` $(am__append_6) \
 	$(am__append_7) $(am__append_8) $(am__append_9) \
-	$(am__append_11) $(am__append_13) $(am__append_15)
+	$(am__append_11) $(am__append_13) $(am__append_15) \
+	$(am__append_17)
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin

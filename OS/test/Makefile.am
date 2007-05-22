@@ -148,6 +148,12 @@ if COIN_HAS_IPOPT
 endif
 
 
+if COIN_HAS_KNITRO
+  AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(KNITROINCDIR)` 
+  unitTest_LDADD += $(KNITROLIB)
+endif
+
+
 if COIN_HAS_ASL
   AM_CPPFLAGS += $(ASL_CPPFLAGS) 
   unitTest_LDADD += $(ASLLIB) 

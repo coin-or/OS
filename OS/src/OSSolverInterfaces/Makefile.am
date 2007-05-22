@@ -36,7 +36,7 @@ endif
 
 
 if COIN_HAS_KNITRO
-libOSSolverInterfaces_la_SOURCES += 	Knitro.cpp \
+libOSSolverInterfaces_la_SOURCES += 	KnitroSolver.cpp \
 	KnitroSolver.h
 endif
 

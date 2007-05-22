@@ -189,6 +189,11 @@ if COIN_HAS_IPOPT
   OSSolverService_LDADD += $(IPOPTLIB)
 endif
 
+if COIN_HAS_KNITRO
+  AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(KNITROINCDIR)` 
+  OSSolverService_LDADD += $(KNITROLIB)
+endif
+
 
 if COIN_HAS_ASL
   AM_CPPFLAGS += $(ASL_CPPFLAGS) 

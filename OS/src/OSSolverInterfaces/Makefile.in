@@ -49,7 +49,7 @@ host_triplet = @host@
 @COIN_HAS_IPOPT_TRUE@am__append_2 = IpoptSolver.cpp \
 @COIN_HAS_IPOPT_TRUE@	IpoptSolver.h
 
-@COIN_HAS_KNITRO_TRUE@am__append_3 = Knitro.cpp \
+@COIN_HAS_KNITRO_TRUE@am__append_3 = KnitroSolver.cpp \
 @COIN_HAS_KNITRO_TRUE@	KnitroSolver.h
 
 @COIN_HAS_CPX_TRUE@am__append_4 = \
@@ -91,11 +91,11 @@ LTLIBRARIES = $(noinst_LTLIBRARIES)
 libOSSolverInterfaces_la_LIBADD =
 am__libOSSolverInterfaces_la_SOURCES_DIST = DefaultSolver.cpp \
 	DefaultSolver.h CoinSolver.cpp CoinSolver.h LindoSolver.cpp \
-	LindoSolver.h IpoptSolver.cpp IpoptSolver.h Knitro.cpp \
+	LindoSolver.h IpoptSolver.cpp IpoptSolver.h KnitroSolver.cpp \
 	KnitroSolver.h
 @COIN_HAS_LINDO_TRUE@am__objects_1 = LindoSolver.lo
 @COIN_HAS_IPOPT_TRUE@am__objects_2 = IpoptSolver.lo
-@COIN_HAS_KNITRO_TRUE@am__objects_3 = Knitro.lo
+@COIN_HAS_KNITRO_TRUE@am__objects_3 = KnitroSolver.lo
 am_libOSSolverInterfaces_la_OBJECTS = DefaultSolver.lo CoinSolver.lo \
 	$(am__objects_1) $(am__objects_2) $(am__objects_3)
 libOSSolverInterfaces_la_OBJECTS =  \
@@ -431,7 +431,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CoinSolver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DefaultSolver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpoptSolver.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Knitro.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/KnitroSolver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/LindoSolver.Plo@am__quote@
 
 .cpp.o:
