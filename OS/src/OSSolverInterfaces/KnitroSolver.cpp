@@ -157,113 +157,6 @@ static int  wrapperEvalHorHV (const int             evalRequestCode,
 }//wrapperEvalHorHV
 
 
-//--------------------------------------------------------------------
-//  Internal Function:  printUsage
-//--------------------------------------------------------------------
-static void  printUsage (void){
-    cout << "Use KNITRO to solve an optimization problem coded in C++.\n";
-    cout << "  Usage:  driverExample problem_name <checkders>\n";
-    cout << "          'checkders' means check derivatives instead of solving\n";
-    cout << "Note that problem names are case sensitive.\n";
-    return;
-}//printUsage
-
-
-//--------------------------------------------------------------------
-//  Internal Function:  loadProblemCode
-//--------------------------------------------------------------------
-/** Convert the first command line argument to shared link object
- *  that contains a test problem.  The command line may also specify
- *  a boolean flag.
- */
-static bool  loadProblemCode (const int                     argc,
-                              const char          *  const  argv[],
-                                    NlpProblemDef **        pOptProb,
-                                    bool          *  const  pbWantToSolve){
-    *pOptProb = NULL;
-    *pbWantToSolve = true;
-
-    //---- CHECK IF THE USER REQUESTED A HELP MESSAGE.
-    if (argc < 2)
-        return( false );
-    for (int  i = 1; i < argc; i++)
-        if ((strcmp (argv[i], "-?") == 0) || (strcmp (argv[i], "?") == 0))
-            return( false );
-
-    //---- LOAD THE LINK OBJECT.
-    cout << "Attempting to load problem '" << argv[1] << "' ...\n";
-    #if defined(_WIN32)
-        HINSTANCE  hLib = LoadLibrary (argv[1]);
-        if (hLib == NULL)
-            {
-            cout << "*** Could not load DLL '" << argv[1] << "'.\n\n";
-            return( false );
-            }
-        FnType_getNlpProblemDef  fnPtr;
-        fnPtr = (FnType_getNlpProblemDef) GetProcAddress (hLib,
-                                                          "getNlpProblemDef");
-        if (fnPtr == NULL)
-            {
-            cout << "*** Could not find getNlpProblemDef in DLL '"
-                 << argv[1] << "'.\n\n";
-            FreeLibrary (hLib);
-            return( false );
-            }
-        *pOptProb = fnPtr();
-    #else
-        char *  szTmp = new char[100 + 1];
-        strcpy (szTmp, argv[1]);
-        if (strchr (szTmp, '.') == NULL)
-            {
-            #if defined(__APPLE__)
-                strcat (szTmp, ".dylib");
-            #else
-                strcat (szTmp, ".so");
-            #endif
-            }
-        void *  hLib = dlopen (szTmp, RTLD_NOW);
-        if (hLib == NULL)
-            {
-            cout << "*** Could not load problem '" << szTmp << "'.\n";
-            cout << "    " << dlerror() << "\n\n";
-            return( false );
-            }
-        delete[] szTmp;
-        dlerror();    //-- CLEAR THE ERROR ROUTINE.
-        FnType_getNlpProblemDef  fnPtr;
-        *(void **) (&fnPtr) = dlsym (hLib, "getNlpProblemDef");
-        char *  pszError = dlerror();
-        if (pszError != NULL)
-            {
-            cout << "*** Could not find getNlpProblemDef in DLL '"
-                 << argv[1] << "'.\n";
-            cout << "    " << pszError << "\n\n";
-            dlclose (hLib);
-            return( false );
-            }
-        *pOptProb = fnPtr();
-    #endif
-
-    //---- CHECK FOR OPTIONAL COMMAND LINE ARGUMENTS.
-    if (argc == 3)
-        {
-        if (strcmp (argv[2], "checkders") == 0)
-            *pbWantToSolve = false;
-        else
-            {
-            cout << "*** Unknown argument '" << argv[2] << "'.\n\n";
-            return( false );
-            }
-        }
-    if (argc > 3)
-        {
-        cout << "*** Too many arguments.\n\n";
-        return( false );
-        }
-
-    return( true );
-}//loadProblemCode
-
 
 //--------------------------------------------------------------------
 //  Exported Function:  getNlpProblemDef
@@ -304,7 +197,7 @@ KnitroSolver::~KnitroSolver() {
 	#endif
     delete [] _daXInit;
 	_daXInit = NULL;
-}
+} 
 
 //--------------------------------------------------------------------
 //  Simple access methods
@@ -434,13 +327,13 @@ bool  KnitroSolver::loadProblemIntoKnitro (KTR_context_ptr  kc){
 		_naHessRows = new int[_nNnzH];
 		_naHessCols = new int[_nNnzH];
 		for(i = 0; i < _nNnzH; i++){
-			_naHessRows[i] = *(sparseHessian->hessColIdx + i);
-			_naHessCols[i] = *(sparseHessian->hessRowIdx + i);
-				//cout << "ROW HESS IDX  !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << _naHessRows[i] << endl;
-				//cout << "COL HESS IDX  !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << _naHessCols[i] << endl;
+			_naHessCols[i] = *(sparseHessian->hessColIdx + i);
+			_naHessRows[i] = *(sparseHessian->hessRowIdx + i);
+				cout << "ROW HESS IDX  !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << _naHessRows[i] << endl;
+				cout << "COL HESS IDX  !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << _naHessCols[i] << endl;
 		}
-	}
-
+	}  
+ 
 
     //---- INITIAL GUESS FOR x AND lambda.
   	// Here, we assume we only have starting values for x, if you code
@@ -465,9 +358,15 @@ bool  KnitroSolver::loadProblemIntoKnitro (KTR_context_ptr  kc){
 	double *  daLambdaInit = new double[_nM + _nN];
     for (i = 0; i < _nM + _nN; i++)
         daLambdaInit[i] = 0.0;
-    
+        
+    // set obj type
+    int iObjSense = KTR_OBJGOAL_MINIMIZE;
+	if( osinstance->instanceData->objectives->obj[ 0]->maxOrMin.compare("max") == 0){
+  		iObjSense = KTR_OBJGOAL_MAXIMIZE;
+  	}
+    int iObjType = KTR_OBJTYPE_GENERAL; //KTR_OBJTYPE_LINEAR, KTR_OBJTYPE_QUADRATIC
 	i = KTR_init_problem (kc, _nN,
-                          KTR_OBJGOAL_MINIMIZE, KTR_OBJTYPE_QUADRATIC,
+                          iObjSense, iObjType,
                           _daXLo, _daXUp,
                           _nM, _naCType, _daCLo, _daCUp,
                           _nNnzJ, _naJacIndexVars, _naJacIndexCons,
@@ -497,9 +396,14 @@ bool  KnitroSolver::loadProblemIntoKnitro (KTR_context_ptr  kc){
 //--------------------------------------------------------------------
 //  Method:  areDerivativesImplemented
 //--------------------------------------------------------------------
-bool  KnitroSolver::areDerivativesImplemented
-          (const DerivativesImplementedType  nWhichDers){
-	return true;
+bool  KnitroSolver::areDerivativesImplemented(const DerivativesImplementedType  nWhichDers){
+     if (nWhichDers == nCAN_COMPUTE_GA)
+        return( true );
+    if (nWhichDers == nCAN_COMPUTE_H)
+        return( true );
+    if (nWhichDers == nCAN_COMPUTE_HV)
+        return( false);
+    return( false );         	
 }//areDerivativesImplemented
 
 
@@ -549,6 +453,7 @@ int  KnitroSolver::evalGA (const double * const  daX,
 	try{
  		double *objGrad = osinstance->calculateAllObjectiveFunctionGradients((double*)daX, NULL, NULL, true, 1 )[0];
  		int i;
+ 		std::cout << "EVALUATING OBJ GRADIENT" << std::endl;
  		for(i = 0; i < _nN; i++){
  			if( CommonUtil::ISOSNAN( (double)objGrad[ i] ) ) return (-1);
  			daG[i] = objGrad[ i]  ;	
@@ -560,7 +465,7 @@ int  KnitroSolver::evalGA (const double * const  daX,
 	}
 
  	SparseJacobianMatrix *sparseJacobian;
-	//std::cout << "EVALUATING JACOBIAN" << std::endl; 
+	std::cout << "EVALUATING JACOBIAN" << std::endl; 
 	try{
 		sparseJacobian = osinstance->calculateAllConstraintFunctionGradients((double*)daX, NULL, NULL,  true, 1);
 	}
@@ -572,7 +477,7 @@ int  KnitroSolver::evalGA (const double * const  daX,
 	for(int i = 0; i < _nNnzJ; i++){
 		daJ[ i] = sparseJacobian->values[i];
 		//daJ[ i] = osinstance->m_mdJacValue[ i];
-		//cout << "daJ[i]:!!!!!!!!!!!!  " <<  daJ[ i] << endl;
+		cout << "daJ[i]:!!!!!!!!!!!!  " <<  daJ[ i] << endl;
 		//cout << "m_mdJacValue[ i]:!!!!!!!!!!!!  " <<  osinstance->m_mdJacValue[ i] << endl;
 	}
 
@@ -600,6 +505,7 @@ int  KnitroSolver::evalH (const double * const  daX,
 	}
 	for(i = 0; i < _nNnzH; i++){
 		daH[ i]  = *(sparseHessian->hessValues + i);
+		std::cout << "Hessian Value = " << daH[ i] << std::endl;
 	}
 
     return( 0 );
@@ -644,12 +550,6 @@ void KnitroSolver::solve() throw (ErrorClass) {
 		NlpProblemDef *  pOptProb = this;
 		bool             bWantToSolve;
 
-	/* //to do
-		if ((loadProblemCode (argc, argv, &pOptProb, &bWantToSolve) == false)){ //need to change
-			printUsage();
-			exit( EXIT_FAILURE );
-        }
-	*/
 		//---- OPEN A NEW INSTANCE OF KNITRO.
 		KTR_context_ptr  kc;
 		kc = KTR_new();
@@ -693,12 +593,13 @@ void KnitroSolver::solve() throw (ErrorClass) {
 		//---- ALLOCATE ARRAYS
 		double *  daX      = new double[pOptProb->getN()];
 		double *  daLambda = new double[pOptProb->getM() + pOptProb->getN()];
-
+		bWantToSolve = true;
 		if (bWantToSolve == true){
 			//---- CALL KNITRO AND SOLVE.
 			double  dFinalObj;
 			int  nStatus = KTR_solve (kc, daX, daLambda, 0, &dFinalObj,
 									NULL, NULL, NULL, NULL, NULL, NULL);
+			std::cout << "dFinalObj =  " << dFinalObj << std::endl;
 			cout << "*** Final KNITRO status = " << nStatus << "\n";
 		}
 		else{
@@ -707,6 +608,7 @@ void KnitroSolver::solve() throw (ErrorClass) {
 			KTR_check_first_ders (kc, daX, 2, 1.0e-14, 1.0e-14,
 								0, 0.0, NULL, NULL, NULL, NULL);
 		}
+		
 
 		delete [] daX;
 		delete [] daLambda;
