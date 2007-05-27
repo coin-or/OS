@@ -141,7 +141,7 @@ AM_CPPFLAGS =\
 	-I`$(CYGPATH_W) $(CPPADSRCDIR)/..` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSCommonInterfaces` 
 
-
+OSSolverService_LDFLAGS = -rpath $(libdir)
 
 if COIN_HAS_DYLP
   AM_CPPFLAGS += \
@@ -192,6 +192,7 @@ endif
 if COIN_HAS_KNITRO
   AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(KNITROINCDIR)` 
   OSSolverService_LDADD += $(KNITROLIB)
+  OSSolverService_LDFLAGS += -multiply_defined suppress
 endif
 
 
@@ -207,7 +208,7 @@ if USEWSOCKLIB
 endif
 
 
-OSSolverService_LDFLAGS = -rpath $(libdir)
+
 
 
 

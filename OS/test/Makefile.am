@@ -104,6 +104,7 @@ if COIN_HAS_IPOPT
 #LIBS += -l$(F77)
 endif
 
+unitTest_LDFLAGS = -rpath $(libdir)
 
 if COIN_HAS_DYLP
   AM_CPPFLAGS += \
@@ -151,6 +152,7 @@ endif
 if COIN_HAS_KNITRO
   AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(KNITROINCDIR)` 
   unitTest_LDADD += $(KNITROLIB)
+  unitTest_LDFLAGS += -multiply_defined suppress
 endif
 
 
@@ -167,7 +169,7 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 # Finally, the -rpath flag is used by libtool to make sure that the shared
 # library is found (in the lib install directory) when we are using dynamic
 # libraries.
-unitTest_LDFLAGS = -rpath $(libdir)
+
 
 
 test: unitTest$(EXEEXT)
