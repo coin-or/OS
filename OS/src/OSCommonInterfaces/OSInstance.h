@@ -1025,6 +1025,13 @@ public:
 	QuadraticTerms* getQuadraticTerms();
 	
 	/**
+	 * Get the indexes of rows which have a quadratic term. 
+	 * 
+	 * @return a pointer of rows with quadratic terms, null if no quadratic terms. 
+	 */
+	int* getQuadraticRowIndexes();
+	
+	/**
 	 * Get number of nonlinear expressions. 
 	 * 
 	 * @return the number of nonlinear expressions. 

@@ -102,8 +102,11 @@ AM_CPPFLAGS =\
 LIBS += $(ADDLIBS) `cat $(COINUTILSOBJDIR)/coinutils_addlibs.txt`
 LIBS  += `cat $(OSOBJDIR)/os_addlibs.txt`
 
+# The -rpath flag is used by libtool to make sure that the shared
+# library is found (in the lib install directory) when we are using dynamic
+# libraries.
 
-
+amplClient_LDFLAGS = -rpath $(libdir)
 
 
 if COIN_HAS_DYLP
@@ -147,6 +150,12 @@ if COIN_HAS_IPOPT
   amplClient_LDADD += $(IPOPTLIB)
 endif
 
+if COIN_HAS_KNITRO
+  AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(KNITROINCDIR)` 
+  amplClient_LDADD += $(KNITROLIB)
+  amplClient_LDFLAGS += -multiply_defined suppress
+endif
+
 
 if COIN_HAS_ASL
   AM_CPPFLAGS += $(ASL_CPPFLAGS) 
@@ -158,10 +167,7 @@ endif
 # on Cygwin
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 
-# Finally, the -rpath flag is used by libtool to make sure that the shared
-# library is found (in the lib install directory) when we are using dynamic
-# libraries.
-amplClient_LDFLAGS = -rpath $(libdir)
+
 
 
 

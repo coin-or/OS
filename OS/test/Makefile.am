@@ -104,6 +104,9 @@ if COIN_HAS_IPOPT
 #LIBS += -l$(F77)
 endif
 
+# The -rpath flag is used by libtool to make sure that the shared
+# library is found (in the lib install directory) when we are using dynamic
+# libraries.
 unitTest_LDFLAGS = -rpath $(libdir)
 
 if COIN_HAS_DYLP
@@ -166,9 +169,7 @@ endif
 # on Cygwin
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 
-# Finally, the -rpath flag is used by libtool to make sure that the shared
-# library is found (in the lib install directory) when we are using dynamic
-# libraries.
+
 
 
 

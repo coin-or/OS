@@ -376,6 +376,10 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` -I`$(CYGPATH_W) \
 #LIBS  += `cat $(OSOBJDIR)/os_addlibs.txt`
 
 #LIBS += -l$(F77)
+
+# The -rpath flag is used by libtool to make sure that the shared
+# library is found (in the lib install directory) when we are using dynamic
+# libraries.
 unitTest_LDFLAGS = -rpath $(libdir) $(am__append_17)
 
 # This line is necessary to allow VPATH compilation with MS compilers
@@ -631,10 +635,6 @@ uninstall-am: uninstall-info-am
 	uninstall-info-am
 
 @COIN_HAS_CPX_TRUE@  	unitTest_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
-
-# Finally, the -rpath flag is used by libtool to make sure that the shared
-# library is found (in the lib install directory) when we are using dynamic
-# libraries.
 
 test: unitTest$(EXEEXT)
 	./unitTest$(EXEEXT)

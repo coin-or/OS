@@ -141,6 +141,9 @@ AM_CPPFLAGS =\
 	-I`$(CYGPATH_W) $(CPPADSRCDIR)/..` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSCommonInterfaces` 
 
+# The -rpath flag is used by libtool to make sure that the shared
+# library is found (in the lib install directory) when we are using dynamic
+# libraries.
 OSSolverService_LDFLAGS = -rpath $(libdir)
 
 if COIN_HAS_DYLP
