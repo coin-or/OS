@@ -296,6 +296,59 @@ private:
 	 * m_iNumberOfBinaryVariables holds the number of binary variables. 
 	 */
 	int m_iNumberOfBinaryVariables;
+	
+	/**
+	 * m_iNumberOfQuadraticRowIndexes holds the number of distinct rows and objectives with quadratic terms. 
+	 */
+	int m_iNumberOfQuadraticRowIndexes;
+	
+	/**
+	 * m_bQuadraticRowIndexesProcessed is true if getQuadraticRowIndexex() has been called. 
+	 */
+	bool m_bQuadraticRowIndexesProcessed;
+
+	/**
+	 * m_miQuadRowIndexes is an integer pointer to the distinct rows indexes with a quadratic term. 
+	 */	
+	int *m_miQuadRowIndexes;
+	
+	/**
+	 * m_iNumberOfNonlinearExpressionTreeIndexes holds the number of distinct rows and objectives with nonlinear terms. 
+	 */
+	int m_iNumberOfNonlinearExpressionTreeIndexes;
+	
+	/**
+	 * m_bNonlinearExpressionTreeIndexesProcessed is true if getNonlinearExpressionTreeIndexes has been called. 
+	 */
+	bool m_bNonlinearExpressionTreeIndexesProcessed;
+
+	/**
+	 * m_miNonlinearExpressionTreeIndexes is an integer pointer to the distinct rows indexes in the nonlinear expression 
+	 * tree map. 
+	 */	
+	int *m_miNonlinearExpressionTreeIndexes;
+	
+	/**
+	 * m_iNumberOfNonlinearExpressionTreeModIndexes holds the number of distinct rows and objectives with nonlinear terms
+	 * including quadratic terms added to the nonlinear expression trees. 
+	 */
+	int m_iNumberOfNonlinearExpressionTreeModIndexes;
+	
+	/**
+	 * m_bNonlinearExpressionTreeModIndexesProcessed is true if getNonlinearExpressionTreeModIndexes has been called. 
+	 */
+	bool m_bNonlinearExpressionTreeModIndexesProcessed;
+
+	/**
+	 * m_miNonlinearExpressionTreeModIndexes is an integer pointer to the distinct rows indexes in the modified
+	 * expression tree map. 
+	 */	
+	int *m_miNonlinearExpressionTreeModIndexes;
+	
+	
+	
+	
+	
 
 	/**
 	 * m_msVariableNames holds an array of variable names. 
@@ -524,7 +577,7 @@ private:
 	 int m_iHighestTaylorCoeffOrder;
 	
 	/**
-	 * m_quadraticTerms the data structure for all the quadratic terms in the instance. 
+	 * m_quadraticTerms the data structure for all the quadratic terms in the instance. `
 	 * (rowIdx, varOneIdx, varTwoIdx, coef)
 	 */
 	 QuadraticTerms* m_quadraticTerms;
@@ -559,6 +612,11 @@ private:
 	 * m_bProcessExpressionTrees is true if the expression trees have been processed. 
 	 */
 	bool m_bProcessExpressionTrees;
+	
+	/**
+	 * m_bProcessExpressionTreesMod is true if the modified expression trees have been processed. 
+	 */
+	bool m_bProcessExpressionTreesMod;
 	
 	/**
 	 * m_mapExpressionTrees holds a hash map of expression tree pointers, with the key being the row index
@@ -1027,9 +1085,18 @@ public:
 	/**
 	 * Get the indexes of rows which have a quadratic term. 
 	 * 
-	 * @return a pointer of rows with quadratic terms, null if no quadratic terms. 
+	 * @return an integer pointer to the row indexes of rows with quadratic terms,
+	 * objectives functions have index < 0
+	 * NULL if there are no quadratic terms. 
 	 */
 	int* getQuadraticRowIndexes();
+	
+	/**
+	 * Get the number of rows which have a quadratic term. 
+	 * 
+	 * @return an integer which is the number of distinct rows (including obj) with quadratic terms, 
+	 */
+	int getNumberOfQuadraticRowIndexes();
 	
 	/**
 	 * Get number of nonlinear expressions. 
@@ -1040,19 +1107,54 @@ public:
 	
 	
 	/**
-	 * Get the postfix tokens for a given row index  
-	 * 
-	 * @return a vector of pointers to OSnLNodes in postfix, if rowIdx
-	 * does not index a row with a nonlinear term NULL is returned
-	 */
-	//std::vector<OSnLNode*> getNonlinearExpressionTreeInPostfix(int rowIdx);  //kippster implement
-	
-	/**
 	 * Get the expression tree for a given row index  
 	 * 
 	 * @return an expression tree
 	 */
 	OSExpressionTree* getNonlinearExpressionTree(int rowIdx);
+	
+	/**
+	 * Get the expression tree for a given row index for
+	 * the modified expression trees (quadratic terms added) 
+	 * 
+	 * @return an expression tree
+	 */
+	OSExpressionTree* getNonlinearExpressionTreeMod(int rowIdx);
+	
+	/**
+	 * Get the postfix tokens for a given row index.  
+	 * 
+	 * @return a vector of pointers to OSnLNodes in postfix, if rowIdx
+	 * does not index a row with a nonlinear term throw an exception
+	 */
+	std::vector<OSnLNode*> getNonlinearExpressionTreeInPostfix( int rowIdx); 
+	
+	/**
+	 * Get the postfix tokens for a given row index for the modified
+	 * Expression Tree (quadratic terms added).
+	 * 
+	 * @return a vector of pointers to OSnLNodes in postfix, if rowIdx
+	 * does not index a row with a nonlinear term throw an exception
+	 */
+	std::vector<OSnLNode*> getNonlinearExpressionTreeModInPostfix( int rowIdx);  
+	
+	/**
+	 * Get the prefix tokens for a given row index.  
+	 * 
+	 * @return a vector of pointers to OSnLNodes in prefix, if rowIdx
+	 * does not index a row with a nonlinear term throw an exception
+	 */
+	std::vector<OSnLNode*> getNonlinearExpressionTreeInPrefix( int rowIdx);  
+	
+	/**
+	 * Get the prefix tokens for a given row index for the modified
+	 * Expression Tree (quadratic terms added).  
+	 * 
+	 * @return a vector of pointers to OSnLNodes in prefix, if rowIdx
+	 * does not index a row with a nonlinear term throw an exception
+	 */
+	std::vector<OSnLNode*> getNonlinearExpressionTreeModInPrefix( int rowIdx); 	
+
 	
 	/**
 	 * @return the number of Objectives with a nonlinear term
@@ -1081,10 +1183,35 @@ public:
 	 /**
    	 * Get all the nonlinear expression tree indexes, i.e. indexes of rows (objetives or constraints) that contain nonlinear expressions. 
    	 * 
-   	 * @return an integer array of nonlinear expression tree indexes. 
-	 * @throws Exception if the elements in nonlinear expressions are logically inconsistent. 
+   	 * @return a pointer to an integer array of nonlinear expression tree indexes. 
    	 */
-	std::vector<int> getNonlinearExpressionTreeIndexes(); //kippster implement this
+	int* getNonlinearExpressionTreeIndexes(); 
+	
+	
+	 /**
+   	 * Get the number of unique Nonlinear exrpession tree indexes. 
+   	 * 
+   	 * @return the number of unique nonlinear expression tree indexes. 
+   	 */
+	int getNumberOfNonlinearExpressionTreeIndexes(); 
+	
+	
+	 /**
+   	 * Get all the nonlinear expression tree indexes, i.e. indexes of rows (objetives or constraints) that contain nonlinear expressions
+   	 * after modifying the expression tree to contain quadratic terms. 
+   	 * 
+   	 * @return a pointer to an integer array of nonlinear expression tree indexes (including quadratic terms). 
+   	 */
+	int* getNonlinearExpressionTreeModIndexes(); 
+	
+	
+	 /**
+   	 * Get the number of unique Nonlinear exrpession tree indexes after
+   	 * modifying the expression tree to contain quadratic terms. 
+   	 * 
+   	 * @return the number of unique nonlinear expression tree indexes (including quadratic terms). 
+   	 */
+	int getNumberOfNonlinearExpressionTreeModIndexes(); 
 	
 	
 	// the set() methods

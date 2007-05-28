@@ -36,6 +36,15 @@ OSInstance::OSInstance():
 	m_iVariableNumber(-1),
 	m_iNumberOfIntegerVariables( 0),
 	m_iNumberOfBinaryVariables( 0),
+	m_iNumberOfQuadraticRowIndexes( 0),
+	m_bQuadraticRowIndexesProcessed( false),
+	m_miQuadRowIndexes( NULL),
+	m_iNumberOfNonlinearExpressionTreeIndexes( 0),
+	m_bNonlinearExpressionTreeIndexesProcessed( false),
+	m_miNonlinearExpressionTreeIndexes( NULL),
+	m_iNumberOfNonlinearExpressionTreeModIndexes( 0),
+	m_bNonlinearExpressionTreeModIndexesProcessed( false),
+	m_miNonlinearExpressionTreeModIndexes( NULL),		
 	m_msVariableNames(NULL),
 	m_mdVariableInitialValues(NULL),
 	m_msVariableInitialStringValues(NULL),
@@ -78,13 +87,14 @@ OSInstance::OSInstance():
 	m_miJacNumConTerms( NULL),
 	m_sparseJacMatrix( NULL),	
 	m_iHighestTaylorCoeffOrder(-1),	
-	m_quadraticTerms(0),	
+	m_quadraticTerms( NULL),	
 	m_bQTermsAdded( false),	
 	m_iNumberOfNonlinearVariables( 0),
 	m_bProcessNonlinearExpressions( false),
 	m_iNonlinearExpressionNumber( -1),		
 	m_miNonlinearExpressionIndexes( NULL),
 	m_bProcessExpressionTrees( false),
+	m_bProcessExpressionTreesMod( false),
 	m_LagrangianExpTree(NULL),
 	m_bLagrangianExpTreeCreated( false),
 	m_LagrangianSparseHessian( NULL),
@@ -214,6 +224,14 @@ OSInstance::~OSInstance(){
 		delete m_sparseJacMatrix;
 		m_sparseJacMatrix = NULL;
 	}
+	if( (instanceData->quadraticCoefficients->qTerm != NULL) && (m_bProcessQuadraticTerms == true) ){
+		delete m_quadraticTerms;
+		m_quadraticTerms = NULL;
+	}
+	if( (instanceData->quadraticCoefficients->qTerm != NULL)  && (m_bQuadraticRowIndexesProcessed == true) ){
+		delete[] m_miQuadRowIndexes;
+		m_miQuadRowIndexes = NULL;
+	}
 	//
 	// delete the new expression trees that got created
 	// however they already got deleted if we have a lagrangian Hessian
@@ -230,6 +248,15 @@ OSInstance::~OSInstance(){
 				delete m_mapExpressionTreesMod[ posMapExpTree->first ];
 			}
 		}
+	}
+	///
+	if( (m_bNonlinearExpressionTreeIndexesProcessed == true) && (m_mapExpressionTrees.size() > 0) ){
+		delete[] m_miNonlinearExpressionTreeIndexes;
+		m_miNonlinearExpressionTreeIndexes = NULL;
+	}
+	if( (m_bNonlinearExpressionTreeModIndexesProcessed == true) && (m_mapExpressionTreesMod.size() > 0) ){
+		delete[] m_miNonlinearExpressionTreeModIndexes;
+		m_miNonlinearExpressionTreeModIndexes = NULL;
 	}
 	//
 	// delete the two children of OSInstance
@@ -998,6 +1025,100 @@ QuadraticTerms* OSInstance::getQuadraticTerms() {
 	} 
 }//getQuadraticTerms
 
+
+int* OSInstance::getQuadraticRowIndexes() {
+	if(m_bQuadraticRowIndexesProcessed == true) return m_miQuadRowIndexes;
+	m_bQuadraticRowIndexesProcessed = true;
+	int n = getNumberOfQuadraticTerms();	
+	if(n <= 0) return NULL;
+	QuadraticTerms *qTerms = NULL;
+	qTerms = getQuadraticTerms();
+	std::map<int, int> foundIdx;
+	std::map<int, int>::iterator pos;
+	int i;
+	try{
+		for(i = 0; i < n; i++){
+			// add the terms
+			foundIdx[ qTerms->rowIndexes[ i] ];	 
+		}
+		// now put the term into an array
+		m_iNumberOfQuadraticRowIndexes = foundIdx.size();
+		m_miQuadRowIndexes = new int[ m_iNumberOfQuadraticRowIndexes ]	;
+		i = 0;
+		for(pos = foundIdx.begin(); pos != foundIdx.end(); ++pos){
+			m_miQuadRowIndexes[ i++] = pos->first;	
+		}
+		foundIdx.clear();	
+		return m_miQuadRowIndexes;
+	}
+	catch(const ErrorClass& eclass){
+		throw ErrorClass( eclass.errormsg);
+	} 
+}//getQuadraticRowIndexes
+
+
+int OSInstance::getNumberOfQuadraticRowIndexes() {
+	if(m_bQuadraticRowIndexesProcessed == false) getQuadraticRowIndexes();
+	return m_iNumberOfQuadraticRowIndexes;
+}//getNumberOfQuadraticRowIndexes
+
+int* OSInstance::getNonlinearExpressionTreeIndexes(){
+	if(m_bNonlinearExpressionTreeIndexesProcessed == true) return m_miNonlinearExpressionTreeIndexes;
+	m_bNonlinearExpressionTreeIndexesProcessed = true;
+	std::map<int, OSExpressionTree*> expTrees;
+	expTrees = getAllNonlinearExpressionTrees();	
+	std::map<int, OSExpressionTree*>::iterator pos;
+	try{
+		// now put the term into an array
+		m_iNumberOfNonlinearExpressionTreeIndexes = expTrees.size();
+		m_miNonlinearExpressionTreeIndexes = new int[ m_iNumberOfNonlinearExpressionTreeIndexes ]	;
+		int i = 0;
+		for(pos = expTrees.begin(); pos != expTrees.end(); ++pos){
+			m_miNonlinearExpressionTreeIndexes[ i++] = pos->first;	
+		}
+		expTrees.clear();	
+		return m_miNonlinearExpressionTreeIndexes;
+	}
+	catch(const ErrorClass& eclass){
+		throw ErrorClass( eclass.errormsg);
+	} 
+}//getNonlinearExpressionTreeIndexes
+
+int OSInstance::getNumberOfNonlinearExpressionTreeIndexes() {
+	if(m_bNonlinearExpressionTreeIndexesProcessed == false) getNonlinearExpressionTreeIndexes();
+	return m_iNumberOfNonlinearExpressionTreeIndexes;
+}//getNumberOfNonlinearExpressionTreeIndexes
+
+
+
+int* OSInstance::getNonlinearExpressionTreeModIndexes(){
+	if(m_bNonlinearExpressionTreeModIndexesProcessed == true) return m_miNonlinearExpressionTreeModIndexes;
+	m_bNonlinearExpressionTreeModIndexesProcessed = true;
+	std::map<int, OSExpressionTree*> expTrees;
+	expTrees = getAllNonlinearExpressionTreesMod();	
+	std::map<int, OSExpressionTree*>::iterator pos;
+	try{
+		// now put the term into an array
+		m_iNumberOfNonlinearExpressionTreeModIndexes = expTrees.size();
+		m_miNonlinearExpressionTreeModIndexes = new int[ m_iNumberOfNonlinearExpressionTreeModIndexes ]	;
+		int i = 0;
+		for(pos = expTrees.begin(); pos != expTrees.end(); ++pos){
+			m_miNonlinearExpressionTreeModIndexes[ i++] = pos->first;	
+		}
+		expTrees.clear();	
+		return m_miNonlinearExpressionTreeModIndexes;
+	}
+	catch(const ErrorClass& eclass){
+		throw ErrorClass( eclass.errormsg);
+	} 
+}//getNonlinearExpressionTreeModIndexes
+
+int OSInstance::getNumberOfNonlinearExpressionTreeModIndexes() {
+	if(m_bNonlinearExpressionTreeModIndexesProcessed == false) getNonlinearExpressionTreeModIndexes();
+	return m_iNumberOfNonlinearExpressionTreeModIndexes;
+}//getNumberOfNonlinearExpressionTreeModIndexes
+
+
 int OSInstance::getNumberOfNonlinearConstraints(){
 	if( m_bProcessExpressionTrees == false ){
 		getAllNonlinearExpressionTrees();
@@ -1035,6 +1156,107 @@ OSExpressionTree* OSInstance::getNonlinearExpressionTree(int rowIdx){
 		//return NULL;
 	}     
 }// getNonlinearExpresssionTree for a specific index   
+
+
+OSExpressionTree* OSInstance::getNonlinearExpressionTreeMod(int rowIdx){
+	if( m_bProcessExpressionTreesMod == false ){
+		getAllNonlinearExpressionTreesMod();
+		return m_mapExpressionTreesMod[ rowIdx];
+	} 
+	else{
+		//if( m_mapExpressionTrees.find( rowIdx) != m_mapExpressionTrees.end()) return NULL;
+		//else return m_mapExpressionTrees[ rowIdx];
+		if( m_mapExpressionTreesMod.find( rowIdx) != m_mapExpressionTreesMod.end()) return m_mapExpressionTreesMod[ rowIdx];
+		else return NULL ;
+		// check to make sure rowIdx has a nonlinear term and is in the map
+		/** define an iterator for the expression trees map allExpTrees */
+		//std::map<int, OSExpressionTree*>::iterator pos;
+		///for(pos = m_mapExpressionTrees.begin(); pos != m_mapExpressionTrees.end(); ++pos){
+		//	if(pos->first == rowIdx)return m_mapExpressionTrees[ rowIdx];
+		//}
+		// if we are rowIdx has no nonlinar terms so return a null
+		//return NULL;
+	}     
+}// getNonlinearExpresssionTreeMod for a specific index 
+
+
+std::vector<OSnLNode*> OSInstance::getNonlinearExpressionTreeInPostfix( int rowIdx){
+	if( m_bProcessExpressionTrees == false ) getAllNonlinearExpressionTrees();
+	std::vector<OSnLNode*> postfixVec;
+	try{
+		if( m_mapExpressionTrees.find( rowIdx) != m_mapExpressionTrees.end()){
+			OSExpressionTree* expTree = getNonlinearExpressionTree( rowIdx);
+			postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();
+			
+		}  
+		else{
+			throw ErrorClass("Error in getNonlinearExpressionTreeInPostfix, rowIdx not valid");
+		}
+		return postfixVec;	
+	}
+	catch(const ErrorClass& eclass){
+		throw ErrorClass( eclass.errormsg);
+	} 
+}//getNonlinearExpressionTreeInPostfix
+
+
+std::vector<OSnLNode*> OSInstance::getNonlinearExpressionTreeModInPostfix( int rowIdx){
+	if( m_bProcessExpressionTreesMod == false ) getAllNonlinearExpressionTreesMod();
+	std::vector<OSnLNode*> postfixVec;
+	try{
+		if( m_mapExpressionTreesMod.find( rowIdx) != m_mapExpressionTreesMod.end()){
+			OSExpressionTree* expTree = getNonlinearExpressionTreeMod( rowIdx);
+			postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();
+			
+		}  
+		else{
+			throw ErrorClass("Error in getNonlinearExpressionTreeModInPostfix, rowIdx not valid");
+		}
+		return postfixVec;	
+	}
+	catch(const ErrorClass& eclass){
+		throw ErrorClass( eclass.errormsg);
+	} 
+}//getNonlinearExpressionTreeModInPostfix
+
+
+std::vector<OSnLNode*> OSInstance::getNonlinearExpressionTreeInPrefix( int rowIdx){
+	if( m_bProcessExpressionTrees == false ) getAllNonlinearExpressionTrees();
+	std::vector<OSnLNode*> prefixVec;
+	try{
+		if( m_mapExpressionTrees.find( rowIdx) != m_mapExpressionTrees.end()){
+			OSExpressionTree* expTree = getNonlinearExpressionTree( rowIdx);
+			prefixVec = expTree->m_treeRoot->getPrefixFromExpressionTree();
+			
+		}  
+		else{
+			throw ErrorClass("Error in getNonlinearExpressionTreeInPrefix, rowIdx not valid");
+		}
+		return prefixVec;	
+	}
+	catch(const ErrorClass& eclass){
+		throw ErrorClass( eclass.errormsg);
+	} 
+}//getNonlinearExpressionTreeInPrefix
+
+std::vector<OSnLNode*> OSInstance::getNonlinearExpressionTreeModInPrefix( int rowIdx){
+	if( m_bProcessExpressionTreesMod == false ) getAllNonlinearExpressionTreesMod();
+	std::vector<OSnLNode*> prefixVec;
+	try{
+		if( m_mapExpressionTreesMod.find( rowIdx) != m_mapExpressionTreesMod.end()){
+			OSExpressionTree* expTree = getNonlinearExpressionTreeMod( rowIdx);
+			prefixVec = expTree->m_treeRoot->getPrefixFromExpressionTree();
+			
+		}  
+		else{
+			throw ErrorClass("Error in getNonlinearExpressionTreeInPrefix, rowIdx not valid");
+		}
+		return prefixVec;	
+	}
+	catch(const ErrorClass& eclass){
+		throw ErrorClass( eclass.errormsg);
+	} 
+}//getNonlinearExpressionTreeInPrefix
 
 std::map<int, OSExpressionTree*> OSInstance::getAllNonlinearExpressionTrees(){
 	if(m_bProcessExpressionTrees == true) return m_mapExpressionTrees;
@@ -1085,56 +1307,16 @@ std::map<int, OSExpressionTree*> OSInstance::getAllNonlinearExpressionTrees(){
 }// getAllNonlinearExpresssionTrees
 
 std::map<int, OSExpressionTree*> OSInstance::getAllNonlinearExpressionTreesMod(){
+	if( m_bProcessExpressionTreesMod == true ) return m_mapExpressionTreesMod;
+ 	m_bProcessExpressionTreesMod = true;
+	// make sure we have the modified map available
+	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
 	return m_mapExpressionTreesMod;
-}// getAllNonlinearExpresssionTrees
-
-/*
-std::map<int, std::vector<OSnLNode*> > OSInstance::getAllNonlinearExpressionTreesInPostfix(){
-	std::map<int, int> foundIdx;
-	std::map<int, int>::iterator pos;
-	OSnLNodePlus *nlNodePlus;
-	std::vector<OSnLNode*> vPostFixTmp;
-	m_iObjectiveNumberNonlinear = 0;
-	m_iConstraintNumberNonlinear = 0;
-	int i, j;
-	int index;
-	for(i = 0; i < instanceData->nonlinearExpressions->numberOfNonlinearExpressions; i++){
-		index = instanceData->nonlinearExpressions->nl[ i]->idx;
-		cout << "INDEX = " << index << endl;
-		cout << "VALUE = " << foundIdx[ index] << endl;
-		vPostFixTmp = instanceData->nonlinearExpressions->nl[ i]->osExpressionTree->getPostfix();
-		for(j = 0; j < vPostFixTmp.size(); j++){
-			m_mapExpressionTreesInPostfix[ index].push_back( vPostFixTmp[j] );
-		}
-		if(foundIdx[ index] > 0){ 
-			nlNodePlus = new OSnLNodePlus();
-			m_mapExpressionTreesInPostfix[ index].push_back( nlNodePlus );
-		}
-		foundIdx[ index]++;	
-	}
-	// count the number of constraints and objective functions with nonlinear terms.
-	for(pos = foundIdx.begin(); pos != foundIdx.end(); ++pos){
-		cout << "POSITION " << pos->first << endl;
-		if(pos->first == -1) {
-			m_iObjectiveNumberNonlinear++;
-		}
-		else m_iConstraintNumberNonlinear++;
-	}
-	m_bProcessExpressionTreesInPostfix = true;
-	return m_mapExpressionTreesInPostfix;
-}// getAllNonlinearExpresssionTreesInPostfix
-*/
+}// getAllNonlinearExpresssionTreesMod
 
 
-/*
-std::vector<OSnLNode*> OSInstance::getNonlinearExpressionTreeInPostfix(int rowIdx){
-	if( m_bProcessExpressionTreesInPostfix == false ){
-		getAllNonlinearExpressionTreesInPostfix();
-		return m_mapExpressionTreesInPostfix[ rowIdx];
-	}
-	else return m_mapExpressionTreesInPostfix[ rowIdx];
-}// getNonlinearExpresssionTreeInPostfix
-*/
+
+
 
 // the set() methods
 
