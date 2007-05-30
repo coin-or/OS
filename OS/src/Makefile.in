@@ -77,9 +77,8 @@ bin_PROGRAMS = OSSolverService$(EXEEXT)
 @COIN_HAS_IPOPT_TRUE@am__append_14 = $(IPOPTLIB)
 @COIN_HAS_KNITRO_TRUE@am__append_15 = -I`$(CYGPATH_W) $(KNITROINCDIR)` 
 @COIN_HAS_KNITRO_TRUE@am__append_16 = $(KNITROLIB)
-@COIN_HAS_KNITRO_TRUE@am__append_17 = -multiply_defined suppress
-@COIN_HAS_ASL_TRUE@am__append_18 = $(ASL_CPPFLAGS) 
-@COIN_HAS_ASL_TRUE@am__append_19 = $(ASLLIB)
+@COIN_HAS_ASL_TRUE@am__append_17 = $(ASL_CPPFLAGS) 
+@COIN_HAS_ASL_TRUE@am__append_18 = $(ASLLIB)
 subdir = src
 DIST_COMMON = $(include_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -303,6 +302,8 @@ SHELL = @SHELL@
 STRIP = @STRIP@
 SYMPHONYOBJDIR = @SYMPHONYOBJDIR@
 SYMPHONYSRCDIR = @SYMPHONYSRCDIR@
+USEMULTIPLYDEFINED_FALSE = @USEMULTIPLYDEFINED_FALSE@
+USEMULTIPLYDEFINED_TRUE = @USEMULTIPLYDEFINED_TRUE@
 USEWSOCKLIB_FALSE = @USEWSOCKLIB_FALSE@
 USEWSOCKLIB_TRUE = @USEWSOCKLIB_TRUE@
 VERSION = @VERSION@
@@ -406,7 +407,7 @@ OSSolverService_LDADD = $(OSOBJDIR)/src/libOS.la \
 	$(CLPOBJDIR)/src/libClp.la $(am__append_4) \
 	$(COINUTILSOBJDIR)/src/libCoinUtils.la $(ADDLIBS) \
 	$(am__append_5) $(am__append_10) $(am__append_12) \
-	$(am__append_14) $(am__append_16) $(am__append_19)
+	$(am__append_14) $(am__append_16) $(am__append_18)
 
 # Here we add additional libraries
 # Kipp add the others here
@@ -436,12 +437,12 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` -I`$(CYGPATH_W) \
 	$(OSSRCDIR)/src/OSCommonInterfaces` $(am__append_6) \
 	$(am__append_7) $(am__append_8) $(am__append_9) \
 	$(am__append_11) $(am__append_13) $(am__append_15) \
-	$(am__append_18)
+	$(am__append_17)
 
 # The -rpath flag is used by libtool to make sure that the shared
 # library is found (in the lib install directory) when we are using dynamic
 # libraries.
-OSSolverService_LDFLAGS = -rpath $(libdir) $(am__append_17)
+OSSolverService_LDFLAGS = -rpath $(libdir)
 
 # ADDLIBS += $(WINSOCKLIB)
 
@@ -898,6 +899,7 @@ uninstall-info: uninstall-info-recursive
 	uninstall-info-am uninstall-libLTLIBRARIES uninstall-local
 
 @COIN_HAS_CPX_TRUE@  	OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+@COIN_HAS_KNITRO_TRUE@@USEMULTIPLYDEFINED_TRUE@  	OSSolverService_LDFLAGS += -multiply_defined suppress
 
 install-exec-local:
 	echo "#ifndef HAVE_CONFIG_H" >bla

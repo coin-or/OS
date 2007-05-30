@@ -81,6 +81,9 @@
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
 
+/* use if OS is MACOSX */
+#undef MACOSX_
+
 /* use if OS is Cygwin */
 #undef NOMINMAX
 

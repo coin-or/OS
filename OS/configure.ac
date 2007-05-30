@@ -51,7 +51,8 @@ AC_CANONICAL_BUILD
     *-linux-*)
 		 ;;
     *-darwin*)
-         ;;
+        AC_DEFINE([MACOSX_],[1],[use if OS is MACOSX])
+        mac_osx=yes;;
     *-ibm-*)
          ;;
     *-hp-*)
@@ -86,6 +87,7 @@ case "$CXX" in
 esac
   
  AM_CONDITIONAL(USEWSOCKLIB, test $win_sock = yes)
+ AM_CONDITIONAL(USEMULTIPLYDEFINED, test $mac_osx = yes)
  
  AC_SUBST(WINSOCKLIB)
  

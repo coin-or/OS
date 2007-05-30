@@ -195,7 +195,9 @@ endif
 if COIN_HAS_KNITRO
   AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(KNITROINCDIR)` 
   OSSolverService_LDADD += $(KNITROLIB)
-  OSSolverService_LDFLAGS += -multiply_defined suppress
+if USEMULTIPLYDEFINED
+  	OSSolverService_LDFLAGS += -multiply_defined suppress
+endif
 endif
 
 

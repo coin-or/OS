@@ -8,7 +8,14 @@
                     href="http://www.optimiztionservices.org/stylesheets/OSrL.css"/>
             </head>
             <body>
-                <h1>Linear Program Solution</h1>
+                <h1>Optimization Solution</h1>
+                
+                <h2>Solver Used</h2>
+                <p>
+                    <xsl:for-each select="/osrl/resultHeader/serviceName">
+                        <b> <xsl:value-of select="text()"/> </b>
+                    </xsl:for-each>
+                </p>
 
                 <h2>Objective Function Value</h2>
                 <p>
