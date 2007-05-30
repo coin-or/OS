@@ -25,6 +25,7 @@
  * 4) parincQuadratic.osil
  * 5) parincLinear.osil 
  * 6) callBackTest.osil
+ * 7) callBackTestRowMajor.osil
  *
  * COIN - Clp 
  * 1) parincLinear.osil
@@ -273,7 +274,28 @@ int main(int argC, char* argV[])
 		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on parincLinear");
 		delete osilreader;
 		osilreader = NULL;	
-		unitTestResult << "Solved problem callBack.osil with Ipopt" << std::endl;		
+		unitTestResult << "Solved problem callBack.osil with Ipopt" << std::endl;	
+		
+		// solve another problem
+		// callBackTest.osil
+		osilFileName =  dataDir + "callBackTestRowMajor.osil";
+		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		cout << "IPOPT Solver created for OSiL string solution" << endl;
+		ipoptSolver->osol = osol;
+		osilreader = new OSiLReader(); 
+		ipoptSolver->osinstance = osilreader->readOSiL( &osil);
+		//OSiLWriter osilwriter;
+		//cout << osilwriter.writeOSiL( ipoptSolver->osinstance) << endl;
+		//return 0;
+		cout << "call the IPOPT Solver" << endl;
+		ipoptSolver->solve();
+		cout << "Here is the IPOPT solver solution for callBackTestRowMajor" << endl;
+		check = 1.00045e+06;
+		ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-10 , 1e-10);
+		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on parincLinear");
+		delete osilreader;
+		osilreader = NULL;	
+		unitTestResult << "Solved problem callBackRowMajor.osil with Ipopt" << std::endl;	
 		// not we do not delete ipoptSolver -- this is a smart pointer
 		//delete m_Solver;
 		//m_Solver = NULL;			
