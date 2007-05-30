@@ -155,7 +155,9 @@ endif
 if COIN_HAS_KNITRO
   AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(KNITROINCDIR)` 
   unitTest_LDADD += $(KNITROLIB)
+if USEMULTIPLYDEFINED
   unitTest_LDFLAGS += -multiply_defined suppress
+endif
 endif
 
 

@@ -147,7 +147,9 @@ endif
 if COIN_HAS_KNITRO
   AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(KNITROINCDIR)` 
   osTestCode_LDADD += $(KNITROLIB)
+if USEMULTIPLYDEFINED
   osTestCode_LDFLAGS += -multiply_defined suppress
+endif
 endif
 
 if COIN_HAS_ASL

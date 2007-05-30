@@ -153,7 +153,9 @@ endif
 if COIN_HAS_KNITRO
   AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(KNITROINCDIR)` 
   amplClient_LDADD += $(KNITROLIB)
+if USEMULTIPLYDEFINED
   amplClient_LDFLAGS += -multiply_defined suppress
+endif
 endif
 
 

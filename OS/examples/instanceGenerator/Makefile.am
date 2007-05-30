@@ -146,7 +146,9 @@ endif
 if COIN_HAS_KNITRO
   AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(KNITROINCDIR)` 
   instanceGenerator_LDADD += $(KNITROLIB)
+if USEMULTIPLYDEFINED
   instanceGenerator_LDFLAGS += -multiply_defined suppress
+endif
 endif
 
 if COIN_HAS_ASL

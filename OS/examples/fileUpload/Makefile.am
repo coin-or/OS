@@ -147,7 +147,9 @@ endif
 if COIN_HAS_KNITRO
   AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(KNITROINCDIR)` 
   fileUpload_LDADD += $(KNITROLIB)
+if USEMULTIPLYDEFINED
   fileUpload_LDFLAGS += -multiply_defined suppress
+endif
 endif
 
 if COIN_HAS_ASL
