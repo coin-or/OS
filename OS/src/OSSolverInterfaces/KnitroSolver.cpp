@@ -601,6 +601,128 @@ void KnitroSolver::solve() throw (ErrorClass) {
 									NULL, NULL, NULL, NULL, NULL, NULL);
 			std::cout << "dFinalObj =  " << dFinalObj << std::endl;
 			cout << "*** Final KNITRO status = " << nStatus << "\n";
+
+			//construct osresult
+			int solIdx = 0;
+			double* mdObjValues = new double[1];
+			std::string message = "Knitro solver finishes to the end.";
+			std::string solutionDescription = "";	
+
+			// resultHeader infomration
+			if(osresult->setServiceName( "Knitro solver service") != true)
+				throw ErrorClass("OSResult error: setServiceName");
+			if(osresult->setInstanceName(  osinstance->getInstanceName()) != true)
+				throw ErrorClass("OSResult error: setInstanceName");
+
+			//if(osresult->setJobID( osoption->jobID) != true)
+			//	throw ErrorClass("OSResult error: setJobID");
+
+			// set basic problem parameters
+			if(osresult->setVariableNumber( osinstance->getVariableNumber()) != true)
+				throw ErrorClass("OSResult error: setVariableNumer");
+			if(osresult->setObjectiveNumber( 1) != true)
+				throw ErrorClass("OSResult error: setObjectiveNumber");
+			if(osresult->setConstraintNumber( osinstance->getConstraintNumber()) != true)
+				throw ErrorClass("OSResult error: setConstraintNumber");
+			if(osresult->setSolutionNumber(  1) != true)
+				throw ErrorClass("OSResult error: setSolutionNumer");	
+
+
+			if(osresult->setGeneralMessage( message) != true)
+				throw ErrorClass("OSResult error: setGeneralMessage");
+
+			switch( nStatus){
+				case 0:
+					solutionDescription = "LOCALLY OPTIMAL SOLUTION FOUND[KNITRO STATUS 0]: Knitro found a locally optimal point which satisfies the stopping criterion.If the problem is convex (for example, a linear program), then this point corresponds to a globally optimal solution.";
+					osresult->setSolutionStatus(solIdx,  "locallyOptimal", solutionDescription);
+					osresult->setPrimalVariableValues(solIdx, daX);
+					mdObjValues[0] = dFinalObj;
+					osresult->setObjectiveValues(solIdx, mdObjValues);
+				break;
+				case -1:
+					solutionDescription = "Iteration limit reached[KNITRO STATUS -1]: The iteration limit was reached before being able to satisfy the required stopping criteria.";
+					osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);
+					osresult->setPrimalVariableValues(solIdx, daX);
+					mdObjValues[0] = dFinalObj;
+					osresult->setObjectiveValues(solIdx, mdObjValues);
+				break;
+				case -2:
+					solutionDescription = "Convergence to an infeasible point[KNITRO STATUS -2]: Problem may be locally infeasible.The algorithm has converged to an infeasible point from which it cannot further decrease the infeasibility measure. This happens when the problem is infeasible, but may also occur on occasion for feasible problems with nonlinear constraints or badly scaled problems. It is recommended to try various initial points. If this occurs for a variety of initial points, it is likely the problem is infeasible.";
+					osresult->setSolutionStatus(solIdx,  "infeasible", solutionDescription);
+				break;
+				case -3:
+					solutionDescription = "Problem appears to be unbounded[KNITRO STATUS -3]: Iterate is feasible and objective magnitude > objrange. The objective function appears to be decreasing without bound, while satisfying the constraints.If the problem really is bounded, increase the size of the parameter objrange to avoid terminating with this message.";
+					osresult->setSolutionStatus(solIdx,  "unbounded", solutionDescription);
+				break;
+				case -4:
+					solutionDescription = "Relative change in solution estimate < xtol[KNITRO STATUS -4]: The relative change in the solution estimate is less than that specified by the paramater xtol.To try to get more accuracy one may decrease xtol. If xtol is very small already, it is an indication that no more significant progress can be made. If the current point is feasible, it is possible it may be optimal, however the stopping tests cannot be satisfied (perhaps because of degeneracy, ill-conditioning or bad scaling).";
+					osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);
+					osresult->setPrimalVariableValues(solIdx, daX);
+					mdObjValues[0] = dFinalObj;
+					osresult->setObjectiveValues(solIdx, mdObjValues);
+				break;
+				case -5:
+					solutionDescription = "Current solution estimate cannot be improved. Point appears to be optimal, but desired accuracy could not be achieved.[KNITRO  STATUS -5]: No more progress can be made, but the stopping tests are close to being satisfied (within a factor of 100) and so the current approximate solution is believed to be optimal.";
+					osresult->setSolutionStatus(solIdx,  "locallyOptimal", solutionDescription);
+					osresult->setPrimalVariableValues(solIdx, daX);
+					mdObjValues[0] = dFinalObj;
+					osresult->setObjectiveValues(solIdx, mdObjValues);
+				break;
+				case -6:
+					solutionDescription = "Time limit reached[KNITRO STATUS -6]: The time limit was reached before being able to satisfy the required stopping criteria.";
+					osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);
+					osresult->setPrimalVariableValues(solIdx, daX);
+					mdObjValues[0] = dFinalObj;
+					osresult->setObjectiveValues(solIdx, mdObjValues);
+				break;
+				case -50:
+				case -51:
+				case -52:
+				case -53:
+				case -54:
+				case -55:
+				case -56:
+				case -57:
+				case -58:
+				case -59:
+				case -60:
+					solutionDescription = "Input Error[KNITRO STATUS -50 to -60]: Termination values in this range imply some input error. If outlev>0 details of this error will be printed to standard output or the file knitro.log depending on the value of outmode.";
+					osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
+				break;
+				case -90:
+					solutionDescription = "Callback function error[KNITRO STATUS -90]: This termination value indicates that an error (i.e., negative return value) occurred in a user provided callback routine.";
+					osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
+				break;
+				case -97:
+					solutionDescription = "LP solver error[KNITRO STATUS -97]: This termination value indicates that an unrecoverable error occurred in the LP solver used in the active-set algorithm preventing the optimization from continuing.";
+					osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
+				break;
+				case -98:
+					solutionDescription = "Evaluation error[KNITRO STATUS -98]: This termination value indicates that an evaluation error occurred (e.g., divide by 0, taking the square root of a negative number), preventing the optimization from continuing.";
+					osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
+				break;
+				case -99:
+					solutionDescription = "Not enough memory available to solve problem[KNITRO STATUS -99]: This termination value indicates that there was not enough memory available to solve the problem.";
+					osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
+				break;
+				default:
+					solutionDescription = "OTHER[KNITRO]: other unknown solution status from Knitro solver";
+					osresult->setSolutionStatus(solIdx,  "other", solutionDescription);
+			}
+
+			osresult->setGeneralStatusType("success");
+			osrl = osrlwriter->writeOSrL( osresult);
+
+
+
+
+
+
+
+
+
+
+
 		}
 		else{
 			//---- USE KNITRO TO CHECK THE DERIVATIVES CODED IN THE TEST PROBLEM.
