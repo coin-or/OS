@@ -168,7 +168,7 @@ extern "C"
     #if defined(_WIN32)
     __declspec(dllexport) NlpProblemDef *  getNlpProblemDef (void)
     #else
-                          NlpProblemDef *  getNlpProblemDef (void)
+     NlpProblemDef *  getNlpProblemDef (void)
     #endif
     {
         if (g_pTheNlpProblemDefInstance == NULL)
