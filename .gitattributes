@@ -102,6 +102,9 @@ OS/data/testremoteRetrieve.config -text
 OS/data/testremoteSend.config -text
 OS/data/transportation.osil -text
 OS/data/wayneQuadratic.osil -text
+OS/doc/osUsersManual_1.pdf -text
+OS/doc/osUsersManual_1.tex -text
+OS/doc/osUsersManual_1.toc -text
 OS/examples/CppAD/CppADTest.cpp -text
 OS/examples/CppAD/CppADTestOld.cpp -text
 OS/examples/CppAD/Makefile.am -text

@@ -1,0 +1,27 @@
+\contentsline {section}{\numberline {1}Introduction}{3}
+\contentsline {section}{\numberline {2}Download and Installation}{3}
+\contentsline {subsection}{\numberline {2.1}Obtaining the Source Code Subversion Repository (SVN)}{3}
+\contentsline {subsection}{\numberline {2.2}Obtaining the Source Code From a Tarball}{5}
+\contentsline {subsection}{\numberline {2.3}Obtaning a Visual Studio Project}{5}
+\contentsline {subsection}{\numberline {2.4}Obtaining the Binaries}{5}
+\contentsline {section}{\numberline {3}The OS Library Componens}{5}
+\contentsline {subsection}{\numberline {3.1}OSAgent}{5}
+\contentsline {subsection}{\numberline {3.2}OSCommonInterfaces}{5}
+\contentsline {subsection}{\numberline {3.3}OSModelInterfaces}{5}
+\contentsline {subsection}{\numberline {3.4}OSParsers}{5}
+\contentsline {subsection}{\numberline {3.5}OSSolverInterfaces}{5}
+\contentsline {subsection}{\numberline {3.6}OSUtils}{7}
+\contentsline {section}{\numberline {4}OSInstance: A General Instance API}{7}
+\contentsline {subsection}{\numberline {4.1}Get Methods}{7}
+\contentsline {subsection}{\numberline {4.2}Set Methods}{7}
+\contentsline {subsection}{\numberline {4.3}Calculate Methods}{7}
+\contentsline {section}{\numberline {5}Hooking to An Algorithmic Differentiation Package}{7}
+\contentsline {section}{\numberline {6}The OSSolverService}{7}
+\contentsline {subsection}{\numberline {6.1}Solving Problems Locally}{7}
+\contentsline {subsection}{\numberline {6.2}Solving Problems Remotely with Web Services}{7}
+\contentsline {section}{\numberline {7}Setting up a Solver Service with Tomcat}{7}
+\contentsline {section}{\numberline {8}Examples}{7}
+\contentsline {subsection}{\numberline {8.1}AMPL Client: Hooking AMPL to Solvers}{7}
+\contentsline {subsection}{\numberline {8.2}CppAD: Using the CppAD Algorithmic Differentiation Package}{7}
+\contentsline {subsection}{\numberline {8.3}File Upload: Using a File Upload Package}{7}
+\contentsline {subsection}{\numberline {8.4}Instance Generator: Using the OSInstance API to Generate Instances}{7}

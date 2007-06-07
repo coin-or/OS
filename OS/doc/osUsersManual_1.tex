@@ -1,0 +1,345 @@
+\documentclass[12pt]{article}
+\usepackage{graphics,graphicx}
+%\usepackage[dvips]{graphics,graphicx}
+\DeclareGraphicsExtensions{.ps,.jpg,.eps,.pdf,.png}
+\usepackage{amsmath}
+\usepackage{url}
+%\usepackage{secdot}
+%\usepackage{natbib}
+\usepackage{verbatim, moreverb}
+\bibliographystyle{plain}
+
+%Figure path
+
+\newcommand{\figurepath}{../../../figures/}
+\newcommand{\figfiletype}{pdf}
+
+% Define the hangref environment used for the References list:
+\newenvironment{hangref}
+  {\begin{list}{}{\setlength{\itemsep}{4pt}
+  \setlength{\parsep}{0pt}\setlength{\leftmargin}{+\parindent}
+  \setlength{\itemindent}{-\parindent}}}{\end{list}}
+
+% Set the page margins to 1 inch all around:
+\marginparwidth 0pt\marginparsep 0pt \topskip 0pt\headsep
+0pt\headheight 0pt \oddsidemargin 0pt\evensidemargin 0pt
+\textwidth 6.5in \topmargin 0pt\textheight 9.0in
+
+\newtheorem{theorem}{Theorem}
+
+
+%%%%Added by Leo%%%%
+\newcounter{Fig}
+\renewcommand{\theFig}{\arabic{Fig}}
+\newcommand{\Fig}[2]{\refstepcounter{Fig} \label{#1}
+                     {\small\bf Figure \theFig.} {\small\sl #2 \par}}
+
+\setcounter{topnumber}{3}
+\renewcommand{\topfraction}{.9}
+\setcounter{bottomnumber}{3}
+\renewcommand{\bottomfraction}{.9}
+\setcounter{totalnumber}{4}
+\renewcommand{\textfraction}{.1}
+\setlength{\floatsep}{.25in} 
+\setlength{\intextsep}{.25in}
+
+\setlength{\fboxrule}{2\fboxrule} \setlength{\fboxsep}{3\fboxsep}
+
+\newcommand{\Sa}{8pt}
+\newcommand{\Sb}{0pt}
+
+\renewcommand{\_}{{\char"5F}}
+\renewcommand{\{}{{\char"7B}}
+\renewcommand{\}}{{\char"7D}}
+\renewcommand{\^}{{\char"0D}}
+
+\let\accute= \'
+\renewcommand{\'}{{\char"0D}}
+
+\newcommand{\bfit}{\bfseries\itshape}
+
+\newlength{\extopskip} \newlength{\exbottomskip}
+\setlength{\exbottomskip}{1\baselineskip}
+\addtolength{\exbottomskip}{-5.0pt}
+\setlength{\extopskip}{1\exbottomskip}
+\addtolength{\extopskip}{-1\parskip}
+
+\newenvironment{Example}{\vspace{1\extopskip}\noindent\hspace*{2em}
+                         \frenchspacing\small
+                         \tt\begin{tabular}{@{}l@{}}}{
+                         \end{tabular}\\[1\exbottomskip]}
+
+\newcommand{\Titem}{\item[$\triangleright$]}
+\newcommand{\Ditem}{\item[$\diamond$]}
+
+\newenvironment{Itemize}{\begin{quote}\normalsize
+   \baselineskip 20pt plus .3pt minus .1pt \begin{itemize}}
+   {\end{itemize}\end{quote}}
+   % Set path to folder containing figures
+\newcommand{\FigureFolder}{figures}
+ 
+
+\begin{document}
+
+\title{Optimization Services 1.0 User's Manual }
+\vskip 2in
+\author{Robert Fourer, Jun Ma, Kipp Martin}
+\maketitle
+
+\begin{abstract}
+This is the User's Manual for the Optimization Services (OS) project.  The objective of  (OS) is to provide a set of standards for representing optimization instances, results, solver options, and communication between clients and solvers in a distributed environment using Web Services. This COIN-OR project provides source code for libraries and executable programs that implement OS standards. See the Optimization Services (OS) Home Site for more information.
+\end{abstract}
+
+
+\newpage
+\tableofcontents
+\listoffigures
+\listoftables
+\hyphenation{com-plex-Type}
+
+
+
+
+
+
+
+
+
+
+%\noindent\hrulefill
+\newpage
+
+\section{Introduction}
+
+The objective of Optimization Services (OS) is to provide a set of standards for representing optimization instances, results, solver options, and communication between clients and solvers in a distributed environment using Web Services. This COIN-OR project provides source code for libraries and executable programs that implement OS standards. See the Optimization Services (OS) Home Site for more information.
+
+
+\section{Download and Installation}
+
+OS is released as open source code under the Common Public License (CPL). This project was created by Robert Fourer, Jun Ma, and Kipp Martin. The code has been written primarily by Jun Ma, Kipp Martin, Robert Fourer and Huanyuan Sheng, the first two are the COIN project leaders for OS. Below we describe different methods for obtaining the C++ source code and binaries. 
+
+\subsection{Obtaining the Source Code Subversion Repository (SVN)}
+
+The C++ source code can be obtained usin Subversion.  Users with Unix operating systems will most likely have an svn client. For Windows users wishing to obtain and SVN client we recommend ***kipp fillin 
+
+The OS project page with a Wiki is available at \url{projects.coin-or.org\OS}. Execute the following steps to get the source code using SVN.
+
+\noindent {\bf Step 1:}  Connect to a directory where you want the OS proejct to go.  The following command will download the project into the directory COIN-OS
+
+\begin{verbatim}
+svn co https://projects.coin-or.org/svn/OS/stable/1.0 COIN-OS
+\end{verbatim}
+
+\noindent {\bf Step 2:}  Conncect to the distribution root directory.
+
+\begin{verbatim}
+cd COIN-OS
+\end{veerbatim}
+
+
+\noindent {\bf Step 3:} Run the configure script that will generate the makefiles. 
+
+\begin{verbatim}
+./configure
+\end{verbatim}
+
+\noindent {\bf Step 4:}  Run the make files.
+
+\begin{verbatim}
+make
+\end{verbatim}
+
+\noindent {\bf Step 5:} Run the unitTest.
+
+\begin{verbatim}
+make test
+\end{verbatim}
+
+Depending upon which third party software you have installed, the result of running the unitTest should look something like:
+
+
+{\small
+\begin{verbatim}
+HERE ARE THE UNIT TEST RESULTS:
+
+Solved problem avion2.osil with Ipopt
+Solved problem HS071.osil with Ipopt
+Solved problem rosenbrockmod.osil with Ipopt
+Solved problem parincQuadratic.osil with Ipopt
+Solved problem parincLinear.osil with Ipopt
+Solved problem callBack.osil with Ipopt
+Solved problem callBackRowMajor.osil with Ipopt
+Solved problem parincLinear.osil with Clp
+Solved problem p0033.osil with Cbc
+Solved problem rosenbrockmod.osil with Knitro
+Solved problem callBackTest.osil with Knitro
+Solved problem parincQuadratic.osil with Knitro
+Solved problem parincQuadratic.osil with Knitro
+Solved problem p0033.osil with SYMPHONY
+Solved problem parincLinear.osil with DyLP
+Solved problem lindoapiaddins.osil with Lindo
+Solved problem rosenbrockmod.osil with Lindo
+Solved problem parincQuadratic.osil with Lindo
+Solved problem wayneQuadratic.osil with Lindo
+Test the MPS -> OSiL converter on parinc.mps usig Cbc
+Test the AMPL nl -> OSiL converter on hs71.nl using LINDO
+Test a problem written in b64 and then converted to OSInstance
+Successful test of OSiL parser on problem parincLinear.osil
+Successful test of OSrL parser on problem parincLinear.osrl
+Successful test of prefix and postfix conversion routines on problem rosenbrockmod.osil
+Successful test of all of the nonlinear operators on file testOperators.osil
+Successful test of AD gradient and Hessian calculations on problem CppADTestLag.osil
+
+
+CONGRATULATIONS! YOU PASSSED THE UNIT TEST
+\end{verbatim}
+}
+
+If you do not see
+\begin{verbatim}
+CONGRATULATIONS! YOU PASSSED THE UNIT TEST
+\end{verbatim}
+then you have not passed the unitTest and hopefully some semi-inteligle error message was given. CONGRATULATIONS! YOU PASSSED THE UNIT TEST
+
+
+\noindent {\bf Step 6:}  Install the libraries.
+
+\begin{verbatim}
+make install
+\end{verbatim}
+
+This will install all of the libraries in the {\tt lib} directory under the distribution root. 
+
+
+The above steps are fully tested on Mac/Unix, Linux, and on Windows using either MINGW/MSYS or CYGWIN. Popular compilers like gcc/g++ or windows native compiler cl.exe can all be used.
+
+ Note if you download the OS package, you get these additional COIN-OR projects.
+\begin{itemize}
+\item Cbc \url{projects.coin-or.org\Cbc}
+\item Clp  \url{projects.coin-or.org\Clp}
+\item CppAD \url{projects.coin-or.org\CppAD}
+\item Dylp \url{projects.coin-or.org\Dylp}
+\item Osi \url{projects.coin-or.org\Osi}
+\item SYMPHONY \url{projects.coin-or.org\SYMPHONY}
+\end{itemize}
+
+
+\subsection{Obtaining the Source Code From a Tarball}
+
+\subsection{Obtaning a Visual Studio Project}
+
+\subsection{Obtaining the Binaries}
+
+\section{The OS Library Componens}
+
+\subsection{OSAgent}
+
+The {\tt OSAgent}  part of the library is used to facilitate communication with remote solvers. It is not used if the solver is invoked locally (i.e. on the same machine). 
+
+\subsection{OSCommonInterfaces}
+
+\subsection{OSModelInterfaces}
+
+
+
+\subsection{OSParsers}
+
+
+
+\subsection{OSSolverInterfaces}
+
+
+The {\tt OSSolverInterfaces} library is designed to facilitate linking the OS library with various solver APIs. We first describe how to take a problem instance in OSiL format and connect to a solver that has a COIN-OR OSI interface.  See the OSI project \url{www.projects.coin-or.org/Osi}.   We then describe hooking to the COIN-OR nonlinear code {\tt Ipopt.} See \url{www.projects.coin-or.org/Ipopt}.  Finally we describe hooking to two commerical solvers KNITRO and LINDO. 
+
+The OS library has been tested with the following solvers using the Osi Interface.
+
+\begin{itemize}
+\item Cbc
+\item Clp
+\item Cplex
+\item DyLP
+\item Glpk
+\item SYMPHONY
+\end{itemize}
+
+In the {\tt OSSolverInterfaces} library there is an abstract class {\tt DefaultSolver} that has the following key members:
+
+\begin{verbatim}
+std::string osil;
+std::string osol;
+std::string osrl;
+OSInstance *osinstance;
+OSResult  *osresult;
+\end{verbatim}
+and the pure virtual function
+\begin{verbatim}
+virtual void solve() = 0 ;	
+\end{verbatim}
+In order to use a solver through the COIN-OR {\tt Osi} interface it is necessary to an object in the {\tt CoinSolver} class which inherits from the {\tt DefaultSolver} class and implements the appropriate {\tt solve()} function.  We illustrate with the Clp solver.
+
+\begin{verbatim}
+DefaultSolver *solver  = NULL;
+solver = new CoinSolver();
+solver->m_sSolverName = "clp";
+\end{verbatim}
+
+Assume that the data file containing the problem has been read into the string {\tt osil} and the solver options are in the string {\tt osol}. Then the {\tt Clp} solver is invoked as follows.
+
+\begin{verbatim}
+solver->osil = osil;
+solver->osol = osol;
+solver->solve();
+\end{verbatim}
+
+Finally, get the solution in {\tt OSrL} format as follows
+
+\begin{verbatim}
+cout << solver->osrl << endl;
+\end{verbatim}
+
+Even though LINDO and KNITRO are commerical solvers and do not have a COIN-OR {\tt Osi} interface these solvers are used in exactlly the same manner as a COIN-OR solver. For example, to invoke the LINDO solver we do the following.
+
+\begin{verbatim}
+solver = new LindoSolver();	
+\end{verbatim}
+
+Similarly for KNITRO and Ipopt. In the case of the KNITRO, the {\tt KnitroSolver} class inherits from both {\tt DefaultSolver} class and the KNITRO {\tt NlpProblemDef} class. See \url{Kipp -- put in Knitro manual link} for more information on the KNITRO solver C++ implementation and the {\tt NlpProblemDef} class. Similarly, for Ipopt the {\tt IpoptSolver} class inherits from both the  {\tt DefaultSolver} class and the Ipopt {\tt TNLP} class.  See \url{Kipp -- put in Ipopt manual link} for more information on the Ipopt solver C++ implementation and the {\tt TNLP} calss.
+
+In the examples above the problem instance was assumed to be read from a file into the string {\tt osil} and then into the class member {\tt solver->osil.} However, everything can be done entirely in memory. For example, it is possible to use the {\tt OSInstance} class to create an in-memory problem representation and give this representation directly to a solver class that inherits from {\tt DefaultSolver}. The class member to use is {\tt osintance.} This is illustrated in the example given in Section \ref{subsection:exampleOSInstance}.
+
+
+\subsection{OSUtils}
+
+\section{OSInstance: A General Instance API}
+
+\subsection{Get Methods}
+
+\subsection{Set Methods}
+
+\subsection{Calculate Methods}
+
+\section{Hooking to An Algorithmic Differentiation Package}
+
+\section{The OSSolverService}
+
+\subsection{Solving Problems Locally}
+
+\subsection{Solving Problems Remotely with Web Services}
+
+\section{Setting up a Solver Service with Tomcat}
+
+\section{Examples}
+
+\subsection{AMPL Client:  Hooking AMPL to Solvers}
+
+\subsection{CppAD:  Using the CppAD Algorithmic Differentiation Package}
+
+\subsection{File Upload:  Using a File Upload Package}
+
+\subsection{Instance Generator: Using the OSInstance API to Generate Instances}\label{subsection:exampleOSInstance}
+
+\end{document}
+
+\begin{verbatimtab}[5]
+
+\end{verbatimtab}
