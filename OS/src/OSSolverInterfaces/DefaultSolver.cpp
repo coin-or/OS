@@ -28,7 +28,7 @@ DefaultSolver::DefaultSolver():
 	osinstance(NULL),
 	osresult(NULL),
 	insList(""),
-	m_sSolverName("")
+	sSolverName("")
 
 { 
 

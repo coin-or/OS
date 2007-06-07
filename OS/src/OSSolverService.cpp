@@ -275,32 +275,32 @@ void solve(){
 				else{ 
 					if( strstr(osoptions->solverName, "clp") != NULL){
 						solverType = new CoinSolver();
-						solverType->m_sSolverName = "clp";
+						solverType->sSolverName = "clp";
 					}
 					else{
 						if( strstr(osoptions->solverName, "cbc") != NULL){
 							solverType = new CoinSolver();
-							solverType->m_sSolverName = "cbc";
+							solverType->sSolverName = "cbc";
 						}
 						else{
 							if( strstr(osoptions->solverName, "cplex") != NULL){
 								solverType = new CoinSolver();
-								solverType->m_sSolverName = "cplex";
+								solverType->sSolverName = "cplex";
 							}
 							else{
 								if( strstr(osoptions->solverName, "glpk") != NULL){
 									solverType = new CoinSolver();
-									solverType->m_sSolverName = "glpk";
+									solverType->sSolverName = "glpk";
 								}
 								else{
 									if(strstr(osoptions->solverName, "dylp") != NULL){
 										solverType = new CoinSolver();
-										solverType->m_sSolverName = "dylp";
+										solverType->sSolverName = "dylp";
 									}
 									else{
 										if(strstr(osoptions->solverName, "symphony") != NULL){
 											solverType = new CoinSolver();
-											solverType->m_sSolverName = "symphony";
+											solverType->sSolverName = "symphony";
 										}
 										else{
 											throw ErrorClass( "a supported solver is not present");

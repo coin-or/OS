@@ -145,26 +145,26 @@ int main(int argc, char **argv)
 			else{ 
 				if( strstr(amplclient_options, "clp") != NULL){
 					solverType = new CoinSolver();
-					solverType->m_sSolverName = "clp";
+					solverType->sSolverName = "clp";
 				}
 				else{
 					if( strstr(amplclient_options, "cbc") != NULL){
 						solverType = new CoinSolver();
-						solverType->m_sSolverName = "cbc";
+						solverType->sSolverName = "cbc";
 						agent_address = getenv("cbc_options");
 						if( agent_address != NULL) cout << "HERE ARE THE CBC OPTIONS " <<   agent_address << endl;
 					}
 					else{
 						if( strstr(amplclient_options, "cplex") != NULL){
 							solverType = new CoinSolver();
-							solverType->m_sSolverName = "cplex";
+							solverType->sSolverName = "cplex";
 							agent_address = getenv("cplex_options");
 							if( agent_address != NULL) cout << "HERE ARE THE CPLEX OPTIONS " <<   agent_address << endl;
 						}
 						else{
 							if( strstr(amplclient_options, "glpk") != NULL){
 								solverType = new CoinSolver();
-								solverType->m_sSolverName = "glpk";
+								solverType->sSolverName = "glpk";
 								agent_address = getenv("glpk_options");
 								if( agent_address != NULL) cout << "HERE ARE THE GLPK OPTIONS " <<   agent_address << endl;
 							}
@@ -191,7 +191,23 @@ int main(int argc, char **argv)
 									}
 								}
 								else{
-									throw ErrorClass( "a supported solver is not present");
+									if( strstr(amplclient_options, "symphony") != NULL){
+										solverType = new CoinSolver();
+										solverType->sSolverName = "symphony";
+										agent_address = getenv("symphony_options");
+										if( agent_address != NULL) cout << "HERE ARE THE SYMPHONY OPTIONS " <<   agent_address << endl;
+									}
+									else{
+										if( strstr(amplclient_options, "dylp") != NULL){
+											solverType = new CoinSolver();
+											solverType->sSolverName = "dylp";
+											agent_address = getenv("dylp_options");
+											if( agent_address != NULL) cout << "HERE ARE THE DYLP OPTIONS " <<   agent_address << endl;
+										}
+										else{
+											throw ErrorClass( "a supported solver is not present");
+										}
+									}	
 								}
 							}
 						}

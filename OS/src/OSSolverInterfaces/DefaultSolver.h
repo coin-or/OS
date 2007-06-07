@@ -69,9 +69,9 @@ public:
 
 	
 	/** 
-	 * m_sSolverName is the name of the Coin solver used, e.g. glpk, or clp 	 
+	 * sSolverName is the name of the Coin solver used, e.g. glpk, or clp 	 
 	 */
-	std::string m_sSolverName;
+	std::string sSolverName;
 	
 
 	/** solve is a virtual function -- the actual solvers will

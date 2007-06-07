@@ -71,7 +71,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 			cout << "Start Solve with a Coin Solver" << endl;
 		// get the type of solver requested from OSoL string
 		bool solverIsDefined = false;
-		if( m_sSolverName.find("clp") != std::string::npos){
+		if( sSolverName.find("clp") != std::string::npos){
 			if( (osinstance->getNumberOfNonlinearExpressions() > 0)
 				|| (osinstance->getNumberOfQuadraticTerms() > 0) 
 				|| (osinstance->getNumberOfIntegerVariables() > 0)
@@ -80,14 +80,14 @@ void CoinSolver::solve() throw (ErrorClass) {
 			m_OsiSolver = new OsiClpSolverInterface();
 		}
 		else{
-			if( m_sSolverName.find("cbc") != std::string::npos){
+			if( sSolverName.find("cbc") != std::string::npos){
 				if( (osinstance->getNumberOfNonlinearExpressions() > 0)
 					|| (osinstance->getNumberOfQuadraticTerms() > 0) ) throw ErrorClass( "Cbc cannot do nonlinear or quadratic");
 				solverIsDefined = true;
 				m_OsiSolver = new OsiCbcSolverInterface();
 			}
 			else{
-				if( m_sSolverName.find( "cplex") != std::string::npos){
+				if( sSolverName.find( "cplex") != std::string::npos){
 					#ifdef COIN_HAS_CPX
 					if( (osinstance->getNumberOfNonlinearExpressions() > 0)
 						|| (osinstance->getNumberOfQuadraticTerms() > 0) ) throw ErrorClass( "Cplex cannot do nonlinear or quadratic");
@@ -96,7 +96,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 					#endif
 				}
 				else{
-					if(m_sSolverName.find( "glpk") != std::string::npos){
+					if(sSolverName.find( "glpk") != std::string::npos){
 						#ifdef COIN_HAS_GLPK
 						if( (osinstance->getNumberOfNonlinearExpressions() > 0)
 							|| (osinstance->getNumberOfQuadraticTerms() > 0) ) throw ErrorClass( "Glpk cannot do nonlinear or quadratic");
@@ -105,7 +105,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 						#endif
 					}
 					else{
-						if(m_sSolverName.find( "dylp") != std::string::npos){
+						if(sSolverName.find( "dylp") != std::string::npos){
 							#ifdef COIN_HAS_DYLP
 							if( (osinstance->getNumberOfNonlinearExpressions() > 0)
 								|| (osinstance->getNumberOfQuadraticTerms() > 0)  ) throw ErrorClass( "DyLP cannot do nonlinear or quadratic");
@@ -116,7 +116,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 							#endif
 						}
 						else{
-							if( m_sSolverName.find( "symphony") != std::string::npos) {
+							if( sSolverName.find( "symphony") != std::string::npos) {
 								#ifdef COIN_HAS_SYMPHONY
 								if( (osinstance->getNumberOfNonlinearExpressions() > 0)
 									|| (osinstance->getNumberOfQuadraticTerms() > 0)  ) throw ErrorClass( "SYMPHONY cannot do nonlinear or quadratic");
@@ -182,7 +182,7 @@ bool CoinSolver::optimize()
 	double *x, *y, *z;
 	std::string *rcost;
 	// resultHeader infomration
-	if(osresult->setServiceName("Solved with Coin Solver: " + m_sSolverName) != true)
+	if(osresult->setServiceName("Solved with Coin Solver: " + sSolverName) != true)
 		throw ErrorClass("OSResult error: setServiceName");
 	if(osresult->setInstanceName(  osinstance->getInstanceName()) != true)
 		throw ErrorClass("OSResult error: setInstanceName");
@@ -258,7 +258,7 @@ bool CoinSolver::optimize()
 			}
 			osresult->setPrimalVariableValues(solIdx, x);
 			// Symphony does not get dual prices
-			if( m_sSolverName.find( "symphony") == std::string::npos){
+			if( sSolverName.find( "symphony") == std::string::npos){
 				for(i=0; i <  osinstance->getConstraintNumber(); i++){\
 					*(y + i) = m_OsiSolver->getRowPrice()[ i];
 				}
@@ -268,7 +268,7 @@ bool CoinSolver::optimize()
 			//
 			// now put the reduced costs into the osrl
 			// Symphony does not get reduced costs
-			if( m_sSolverName.find( "symphony") == std::string::npos){
+			if( sSolverName.find( "symphony") == std::string::npos){
 				int numberOfOtherVariableResult = 1;
 				int otherIdx = 0;
 				// first set the number of Other Variable Results
