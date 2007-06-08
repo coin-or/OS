@@ -601,6 +601,7 @@ void KnitroSolver::solve() throw (ErrorClass) {
 									NULL, NULL, NULL, NULL, NULL, NULL);
 			std::cout << "dFinalObj =  " << dFinalObj << std::endl;
 			cout << "*** Final KNITRO status = " << nStatus << "\n";
+			cout << "dax[0] = " << daX[0] << "\n";
 
 			//construct osresult
 			int solIdx = 0;
@@ -630,14 +631,18 @@ void KnitroSolver::solve() throw (ErrorClass) {
 
 			if(osresult->setGeneralMessage( message) != true)
 				throw ErrorClass("OSResult error: setGeneralMessage");
-
+		std::cout << "START CASES  " << 0 << endl;
 			switch( nStatus){
 				case 0:
+					std::cout << "WE ARE IN CASE " << 0 << endl;
 					solutionDescription = "LOCALLY OPTIMAL SOLUTION FOUND[KNITRO STATUS 0]: Knitro found a locally optimal point which satisfies the stopping criterion.If the problem is convex (for example, a linear program), then this point corresponds to a globally optimal solution.";
 					osresult->setSolutionStatus(solIdx,  "locallyOptimal", solutionDescription);
+					std::cout << "SET SOLUTION STATUS " << endl;
 					osresult->setPrimalVariableValues(solIdx, daX);
+					std::cout << "SET PRIMAL VALUES " << endl;
 					mdObjValues[0] = dFinalObj;
 					osresult->setObjectiveValues(solIdx, mdObjValues);
+					std::cout << "SET OBJECTIVE VALUES " << endl;
 				break;
 				case -1:
 					solutionDescription = "Iteration limit reached[KNITRO STATUS -1]: The iteration limit was reached before being able to satisfy the required stopping criteria.";
@@ -712,17 +717,6 @@ void KnitroSolver::solve() throw (ErrorClass) {
 
 			osresult->setGeneralStatusType("success");
 			osrl = osrlwriter->writeOSrL( osresult);
-
-
-
-
-
-
-
-
-
-
-
 		}
 		else{
 			//---- USE KNITRO TO CHECK THE DERIVATIVES CODED IN THE TEST PROBLEM.
@@ -737,7 +731,7 @@ void KnitroSolver::solve() throw (ErrorClass) {
 
 		KTR_free (&kc);
 
-		delete pOptProb;
+		//delete pOptProb;
 		//return( EXIT_SUCCESS );	//to do
 	}
 	catch(const ErrorClass& eclass){

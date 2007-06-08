@@ -371,14 +371,12 @@ int main(int argC, char* argV[])
 		solver->solve();
 		cout << "Here is the KNITRO solver solution" << endl;	
 		check = 6.7279;
-		if(solver->osrl != ""){
-			cout << solver->osrl << endl;
-			ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
-			if(ok == false) throw ErrorClass(" Fail unit test with Knitro on rosenbrokmod");
-		}
+		cout << solver->osrl << endl;
+		ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		if(ok == false) throw ErrorClass(" Fail unit test with Knitro on r		return 0;osenbrokmod");
 		solver->osinstance = NULL;
-		//delete solver;
-		//solver = NULL;
+		delete solver;
+		solver = NULL;
 		unitTestResult << "Solved problem rosenbrockmod.osil with Knitro" << std::endl;
 		//
 		// now solve callBackTest.osil
@@ -386,21 +384,19 @@ int main(int argC, char* argV[])
 		osil = fileUtil->getFileAsString( &osilFileName[0]);
 		solver = new KnitroSolver();
 		solver->osrl = "";		
-		solver->osil = osil;
+		solver->osil = osil;		
 		solver->osol = osol;
 		solver->osinstance = NULL;
 		cout << "call the KNITRO Solver" << endl;
 		solver->solve();
 		cout << "Here is the KNITRO solver solution" << endl;
 		check = 1.00045e+06; 
-		if(solver->osrl != ""){
-			cout << solver->osrl << endl;
-			ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
-			if(ok == false) throw ErrorClass(" Fail unit test with Knitro on callBackTest.osil");
-		}
+		cout << solver->osrl << endl;
+		ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		if(ok == false) throw ErrorClass(" Fail unit test with Knitro o		return 0;n callBackTest.osil");
 		solver->osinstance = NULL;
-		//delete solver;
-		//solver = NULL;
+		delete solver;
+		solver = NULL;
 		unitTestResult << "Solved problem callBackTest.osil with Knitro" << std::endl;		
 		//
 		// now solve a pure quadratic
@@ -413,14 +409,12 @@ int main(int argC, char* argV[])
 		cout << "call the Knitro Solver" << endl;
 		solver->solve();
 		cout << "Here is the Knitro solver solution" << endl;
-		if(solver->osrl != ""){
-			cout << solver->osrl << endl;
-			check = 49920.5;
-			ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
-			if(ok == false) throw ErrorClass(" Fail unit test with Knitro on parincQuadratic");
-		}
-		//delete solver;
-		//solver = NULL;
+		cout << solver->osrl << endl;
+		check = 49920.5;
+		ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		if(ok == false) throw ErrorClass(" Fail unit test with Knitro on parincQuadratic");
+		delete solver;
+		solver = NULL;
 		unitTestResult << "Solved problem parincQuadratic.osil with Knitro" << std::endl;
 		//
 		// now solve a HS071_NLP.osil
@@ -431,20 +425,18 @@ int main(int argC, char* argV[])
 		solver->osol = osol;
 		solver->osinstance = NULL;
 		cout << "call the Knitro Solver" << endl;
-		solver->solve();
+		solver->solve();		
 		cout << "Here is the Knitro solver solution" << endl;
-		if(solver->osrl != ""){
-			cout << solver->osrl << endl;
-			check = 17.014;
-			ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
-			if(ok == false) throw ErrorClass(" Fail unit test with Knitro on parincQuadratic");
-		}
-		//delete solver;
-		//solver = NULL;
-		unitTestResult << "Solved problem parincQuadratic.osil with Knitro" << std::endl;
+		cout << solver->osrl << endl;
+		check = 17.014;
+		ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		if(ok == false) throw ErrorClass(" Fail unit test with Knitro on HS071_NLP");
+		delete solver;
+		solver = NULL;
+		unitTestResult << "Solved problem HS071_NLP.osil with Knitro" << std::endl;
 	}
 	catch(const ErrorClass& eclass){
-		cout << "OSrL =  " <<  solver->osrl <<  endl;
+		cout << "OSrL =  " <<  solver->osrl <<  endl;		
 		cout << endl << endl << endl;
 		cout << eclass.errormsg << endl;
 		return 0;
