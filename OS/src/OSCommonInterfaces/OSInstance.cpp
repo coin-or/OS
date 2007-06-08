@@ -109,7 +109,8 @@ OSInstance::OSInstance():
 	m_bSparseJacobianCalculated( false),
 	m_iHighestOrderEvaluated( -1),
 	m_mmdObjGradient( NULL),
-	bUseExpTreeForFunEval(false)
+	iNumberOfStartElements( 0),
+	bUseExpTreeForFunEval( false)
 {    
 	#ifdef DEBUG
 	cout << "Inside OSInstance Constructor" << endl;

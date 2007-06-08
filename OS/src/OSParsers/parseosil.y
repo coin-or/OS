@@ -132,6 +132,9 @@ void osilerror(YYLTYPE* type, OSInstance *osintance,  OSiLParserData *parserData
 %token <sval> ATTRIBUTETEXT 
 %token <ival> INTEGER  
 %token  <dval> DOUBLE 
+%token  <ival> IDXATT
+
+
 
 
 
@@ -214,9 +217,17 @@ qtermatt: qtermidxOneatt   quote
 
 
 qtermidxOneatt: IDXONEATT INTEGER   {  
-osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->idxOne = $2;} ;
+osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->idxOne = $2;
+	if( $2 >= osinstance->instanceData->variables->numberOfVariables){
+	 	osilerror( NULL, osinstance, parserData, "variable index exceeds number of variables");
+	 }
+} ;
 qtermidxTwoatt: IDXTWOATT INTEGER   { 
-osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->idxTwo = $2;} ;
+osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->idxTwo = $2;
+	if( $2 >= osinstance->instanceData->variables->numberOfVariables){
+	 	osilerror( NULL, osinstance, parserData, "variable index exceeds number of variables");
+	 }
+} ;
 qtermcoefatt: COEFATT DOUBLE   {
 osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->coef = $2;} 
 | COEFATT INTEGER   { 
@@ -470,11 +481,11 @@ VARIABLEEND;
 anotherNumberATT:
 			|anotherNumberATT numberATT ;
 			
-numberATT: numbertypeATT quote {if(parserData->numbertypeattON) osilerror( NULL, NULL, NULL, "too many number type attributes"); 
+numberATT: numbertypeATT quote {if(parserData->numbertypeattON) osilerror( NULL, osinstance, parserData, "too many number type attributes"); 
 			parserData->numbertypeattON = true; }
-		| numbervalueATT quote {if(parserData->numbervalueattON) osilerror( NULL, NULL, NULL, "too many number value attributes"); 
+		| numbervalueATT quote {if(parserData->numbervalueattON) osilerror( NULL, osinstance, parserData, "too many number value attributes"); 
 			parserData->numbervalueattON = true; }
-		| numberidATT quote {if(parserData->numberidattON) osilerror( NULL, NULL, NULL,"too many number id attributes"); 
+		| numberidATT quote {if(parserData->numberidattON) osilerror( NULL, osinstance, parserData,"too many number id attributes"); 
 			parserData->numberidattON = true; }			
 			;
 			
@@ -498,10 +509,11 @@ numbervalueATT: VALUEATT  DOUBLE {
 anotherVariableATT:
 			|anotherVariableATT variableATT ;
 			
-variableATT: variablecoefATT quote {if(parserData->variablecoefattON) osilerror( NULL, NULL, NULL, "too many variable coef attributes"); 
+variableATT: variablecoefATT quote {if(parserData->variablecoefattON) osilerror( NULL, osinstance, parserData, "too many variable coef attributes"); 
 			parserData->variablecoefattON = true; }
-		| variableidxATT quote {if(parserData->variableidxattON) osilerror( NULL, NULL, NULL, "too many variable idx attributes"); 
-			parserData->variableidxattON = true; };
+		| variableidxATT quote {if(parserData->variableidxattON) osilerror( NULL, osinstance, parserData, "too many variable idx attributes"); 
+			parserData->variableidxattON = true; 
+			};
 			
 variablecoefATT: COEFATT  DOUBLE {
 	parserData->nlNodeVariablePoint->coef = $2;
@@ -512,6 +524,9 @@ variablecoefATT: COEFATT  DOUBLE {
 				
 variableidxATT: IDXATT  INTEGER {
 	parserData->nlNodeVariablePoint->idx = $2;
+	if( $2 >= osinstance->instanceData->variables->numberOfVariables){
+	 	osilerror( NULL, osinstance, parserData, "variable index exceeds number of variables");
+	 }
 } ; 
 
 
@@ -831,7 +846,8 @@ bool parseInstanceData( const char **p, OSInstance *osinstance, int* osillineno)
 	if( parseVariables( p, osinstance, osillineno) != true) {throw ErrorClass("error in parse variables");}
 	if( parseObjectives( p, osinstance, osillineno) != true)  throw ErrorClass("error in parse objectives");
 	if( parseConstraints( p, osinstance, osillineno) != true) throw ErrorClass("error in parse Constraints");
-	if( parseLinearConstraintCoefficients( p, osinstance, osillineno) != true) throw ErrorClass("error in parse ConstraintCoefficients");	
+	if( parseLinearConstraintCoefficients( p, osinstance, osillineno) != true) throw ErrorClass("error in parse ConstraintCoefficients");
+	
 	//
 	return true;
 }// end parseInstanceData
@@ -1696,7 +1712,7 @@ bool parseLinearConstraintCoefficients( const char **p, OSInstance *osinstance, 
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
 	if( parseStart( &ch, osinstance, osillineno) != true) return false;
 	if( (parseColIdx( &ch, osinstance, osillineno) != true) && ( parseRowIdx( &ch, osinstance, osillineno) != true)) return false;
-	if( (parseColIdx( &ch, osinstance, osillineno) != true) && (parseRowIdx( &ch, osinstance, osillineno) == true) ){  osilerror_wrapper( ch,osillineno,"cannot store by both row and column"); return false;}
+	if( (parseColIdx( &ch, osinstance, osillineno) == true) && (parseRowIdx( &ch, osinstance, osillineno) == true) ){  osilerror_wrapper( ch,osillineno,"cannot store by both row and column"); return false;}
 	if( parseValue( &ch, osinstance, osillineno) != true) return false;
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
 	// get the </linearConstraintCoefficients> tag
@@ -1819,6 +1835,7 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
 	//duration = (double) (finish - start) / CLOCKS_PER_SEC; 
 	//printf("TIME TO PARSE STARTS  = %f\n", duration);
 	*p = ch;
+	osinstance->iNumberOfStartElements = kount;
 	return true;
 }//end parseSart
 
@@ -1875,6 +1892,10 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
 	}
 	else{
 		foundEl = true;
+		// if we are here we are storing the problem by column
+		// this means the number of start elements must equal the number of columns + 1
+		if(osinstance->iNumberOfStartElements != osinstance->instanceData->variables->numberOfVariables  + 1)
+		osilerror_wrapper( ch, osillineno,"we are storing in column major format, but number of start elements not equal number of variables + 1");
 		osinstance->instanceData->linearConstraintCoefficients->rowIdx->el = new int[ osinstance->instanceData->linearConstraintCoefficients->numberOfValues];
 		osinstance->instanceData->linearConstraintCoefficients->colIdx->el = NULL;
 		while(foundEl){
@@ -1989,6 +2010,10 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
 	}
 	else{
 		foundEl = true;
+		// if we are here we are storing the problem by row
+		// this means the number of start elements must equal the number of rows
+		if(osinstance->iNumberOfStartElements != osinstance->instanceData->constraints->numberOfConstraints  + 1)
+		osilerror_wrapper( ch, osillineno,"we are storing in row major format, but number of start elements not equal number of rows + 1");
 		osinstance->instanceData->linearConstraintCoefficients->colIdx->el = new int[ osinstance->instanceData->linearConstraintCoefficients->numberOfValues];
 		osinstance->instanceData->linearConstraintCoefficients->rowIdx->el = NULL;
 		while(foundEl){
@@ -2006,8 +2031,12 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
 			}
 			// we better have a <, or not valid
 			if(*ch != '<') {  osilerror_wrapper( ch,osillineno,"cannot find an </el>"); return false;}
-			osinstance->instanceData->linearConstraintCoefficients->colIdx->el[ kount++] = 
+			osinstance->instanceData->linearConstraintCoefficients->colIdx->el[ kount] = 
 			atoimod1( osillineno, *p, ch);
+			if(osinstance->instanceData->linearConstraintCoefficients->colIdx->el[ kount]  >= osinstance->instanceData->variables->numberOfVariables){
+	 			osilerror_wrapper( ch, osillineno, "variable index exceeds number of variables");
+	 		}
+			kount++;
 			//printf("number = %s\n", *p);
 			// we are pointing to <, make sure there is /el
 			*p = ch;

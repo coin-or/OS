@@ -45,12 +45,12 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 	m_OSResult = theosresult;
 	std::ostringstream outStr;
 	int i, j;
-	if(m_OSResult == NULL)  return outStr.str();
+	if(m_OSResult == NULL)  return outStr.str(); 
 	outStr << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" ; 
 	outStr << "<?xml-stylesheet type = \"text/xsl\" href = \"";
 	outStr << XSLT_LOCATION;
 	outStr << "OSrL.xslt\"?>";
-	outStr << "<osrl xmlns:os=\"os.optimizationservices.org\"   xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org ../schemas/OSiL.xsd\" >" ;
+	outStr << "<osrl xmlns:os=\"os.optimizationservices.org\"   xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/OSrL.xsd\" >" ;
 	outStr << endl;
 	outStr << "<resultHeader>" << endl;
 	if(m_OSResult->resultHeader != NULL){

@@ -12,7 +12,7 @@
 			<var name="x1" ub = "1000" />
 		</variables>
 		<objectives numberOfObjectives="1">
-			<obj name = "Par, Inc. Objective Function" maxOrMin="max" numberOfObjCoef="2">
+			<obj name = "Par, Inc. Objective Function" maxOrMin="max"  numberOfObjCoef="2">
 				<coef idx="0">10</coef>
 				<coef idx="1">9</coef>
 			</obj>

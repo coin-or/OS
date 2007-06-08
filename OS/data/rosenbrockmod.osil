@@ -49,7 +49,7 @@
 							<number type="real" value="1.0"/>
 							<variable coef="1.0" idx="0"/>
 						</minus>
-						<number type="real" value="2.0"/>
+						<number type="real"  value="2.0"/>
 					</power>
 					<times>
 						<number type="real" value="100"/>

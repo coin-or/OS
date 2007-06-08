@@ -817,6 +817,14 @@ private:
 public:
 
 	/**
+	 * iNumberOfStartElements counts the number of elements in the <start>
+	 * section of <linearConstraintCoefficients> this is useful for the parser in
+	 * checking consistency of the number of start elements with variables or
+	 * rows
+	 */
+	int iNumberOfStartElements;
+
+	/**
 	 * bUseExpTreeForFunEval is set to true if you wish to use the OS Expression Tree for
 	 * function evaluations instead of AD -- false by default. 
 	 */

@@ -214,7 +214,6 @@ int main(int argC, char* argV[])
 		ipoptSolver->osinstance = osilreader->readOSiL( &osil);
 		cout << "call the IPOPT Solver" << endl;
 		ipoptSolver->solve();
-		cout << "Here is the IPOPT solver solution for rosenbrockmod" << endl;
 		check = 6.7279;
 		ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-10 , 1e-10);
 		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on rosenbrock");
