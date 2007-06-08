@@ -172,7 +172,7 @@ int main(int argc, char **argv)
 								if( strstr(amplclient_options, "ipopt") != NULL){
 									// have to act differently since Ipopt uses smart pointers
 									// we are requesting the Ipopt solver
-									agent_address = getenv("lindo_options");
+									agent_address = getenv("ipopt_options");
 									if( agent_address != NULL) cout << "HERE ARE THE IPOPT OPTIONS " <<   agent_address << endl;
 									bool bIpoptIsPresent = false;
 									if(agent_address == NULL ){
@@ -240,7 +240,7 @@ int main(int argc, char **argv)
 	try{
 		cout << osrl << endl << endl <<endl;	
 		osresult = osrlreader->readOSrL( osrl);
-		if( osresult->getSolutionNumber( ) > 1)
+		if( osresult->getSolutionNumber( ) > 0)
 		write_sol((char*)osresult->getSolutionMessage( 0).c_str(), 
 			osresult->getOptimalPrimalVariableValues( -1), 
 			osresult->getOptimalDualVariableValues( -1), NULL);
