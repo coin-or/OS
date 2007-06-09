@@ -163,6 +163,13 @@ public:
 	IntVector *rowIdx;
 	IntVector *colIdx;
 	DoubleVector *value;
+	/**
+	 * iNumberOfStartElements counts the number of elements in the <start>
+	 * section of <linearConstraintCoefficients> this is useful for the parser in
+	 * checking consistency of the number of start elements with variables or
+	 * rows
+	 */
+	int iNumberOfStartElements;
 };//class LinearConstraintCoefficients
 
 class QuadraticTerm{
@@ -816,13 +823,6 @@ private:
 	
 public:
 
-	/**
-	 * iNumberOfStartElements counts the number of elements in the <start>
-	 * section of <linearConstraintCoefficients> this is useful for the parser in
-	 * checking consistency of the number of start elements with variables or
-	 * rows
-	 */
-	int iNumberOfStartElements;
 
 	/**
 	 * bUseExpTreeForFunEval is set to true if you wish to use the OS Expression Tree for

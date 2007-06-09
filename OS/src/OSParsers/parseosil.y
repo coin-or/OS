@@ -132,7 +132,7 @@ void osilerror(YYLTYPE* type, OSInstance *osintance,  OSiLParserData *parserData
 %token <sval> ATTRIBUTETEXT 
 %token <ival> INTEGER  
 %token  <dval> DOUBLE 
-%token  <ival> IDXATT
+
 
 
 
@@ -1835,7 +1835,7 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
 	//duration = (double) (finish - start) / CLOCKS_PER_SEC; 
 	//printf("TIME TO PARSE STARTS  = %f\n", duration);
 	*p = ch;
-	osinstance->iNumberOfStartElements = kount;
+	osinstance->instanceData->linearConstraintCoefficients->iNumberOfStartElements = kount;
 	return true;
 }//end parseSart
 
@@ -1894,7 +1894,7 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
 		foundEl = true;
 		// if we are here we are storing the problem by column
 		// this means the number of start elements must equal the number of columns + 1
-		if(osinstance->iNumberOfStartElements != osinstance->instanceData->variables->numberOfVariables  + 1)
+		if( osinstance->instanceData->linearConstraintCoefficients->iNumberOfStartElements != osinstance->instanceData->variables->numberOfVariables  + 1)
 		osilerror_wrapper( ch, osillineno,"we are storing in column major format, but number of start elements not equal number of variables + 1");
 		osinstance->instanceData->linearConstraintCoefficients->rowIdx->el = new int[ osinstance->instanceData->linearConstraintCoefficients->numberOfValues];
 		osinstance->instanceData->linearConstraintCoefficients->colIdx->el = NULL;
@@ -2012,7 +2012,7 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
 		foundEl = true;
 		// if we are here we are storing the problem by row
 		// this means the number of start elements must equal the number of rows
-		if(osinstance->iNumberOfStartElements != osinstance->instanceData->constraints->numberOfConstraints  + 1)
+		if(osinstance->instanceData->linearConstraintCoefficients->iNumberOfStartElements != osinstance->instanceData->constraints->numberOfConstraints  + 1)
 		osilerror_wrapper( ch, osillineno,"we are storing in row major format, but number of start elements not equal number of rows + 1");
 		osinstance->instanceData->linearConstraintCoefficients->colIdx->el = new int[ osinstance->instanceData->linearConstraintCoefficients->numberOfValues];
 		osinstance->instanceData->linearConstraintCoefficients->rowIdx->el = NULL;

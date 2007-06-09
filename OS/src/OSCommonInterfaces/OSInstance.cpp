@@ -109,7 +109,6 @@ OSInstance::OSInstance():
 	m_bSparseJacobianCalculated( false),
 	m_iHighestOrderEvaluated( -1),
 	m_mmdObjGradient( NULL),
-	iNumberOfStartElements( 0),
 	bUseExpTreeForFunEval( false)
 {    
 	#ifdef DEBUG
@@ -442,7 +441,8 @@ Constraints::~Constraints(){
 
 
 LinearConstraintCoefficients::LinearConstraintCoefficients():
-	numberOfValues(0) 
+	numberOfValues(0) ,
+	iNumberOfStartElements( 0)
 { 
 	#ifdef DEBUG 
 	cout << "Inside the LinearConstraintCoefficients Constructor" << endl; 
@@ -451,6 +451,7 @@ LinearConstraintCoefficients::LinearConstraintCoefficients():
 	rowIdx = new IntVector();
 	colIdx = new IntVector();
 	value = new DoubleVector();
+
 } 
 
 

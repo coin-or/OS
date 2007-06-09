@@ -1,7 +1,4 @@
-
-To install this package, please look at the INSTALL file.
-
-This package contains several subdirectories corresponding to COIN-OR
-projects (www.coin-or.org). The AUTHORS, LICENSE and README files in 
-each of the subdirectories give more information about these projects.
+For the OS project README file see the README file in the OS subdirectory.
+For the other COIN-OR projects that are checked out with this
+project, see the README file in the appropriate subdirectory. 
 

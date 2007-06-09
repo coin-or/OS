@@ -1,7 +1,9 @@
-/* A Bison parser, made by GNU Bison 1.875c.  */
+/* A Bison parser, made by GNU Bison 2.3.  */
 
-/* Skeleton parser for Yacc-like parsing with Bison,
-   Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002, 2003 Free Software Foundation, Inc.
+/* Skeleton interface for Bison's Yacc-like parsers in C
+
+   Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002, 2003, 2004, 2005, 2006
+   Free Software Foundation, Inc.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -15,13 +17,21 @@
 
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.  */
+   Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.  */
 
-/* As a special exception, when this file is copied by Bison into a
-   Bison output file, you may use that output file without restriction.
-   This special exception was added by the Free Software Foundation
-   in version 1.24 of Bison.  */
+/* As a special exception, you may create a larger work that contains
+   part or all of the Bison parser skeleton and distribute that work
+   under terms of your choice, so long as that work isn't itself a
+   parser generator using the skeleton or a modified version thereof
+   as a parser skeleton.  Alternatively, if you modify or redistribute
+   the parser skeleton itself, you may (at your option) remove this
+   special exception, which will cause the skeleton and the resulting
+   Bison output files to be licensed under the GNU General Public
+   License without this special exception.
+
+   This special exception was added by the Free Software Foundation in
+   version 2.2 of Bison.  */
 
 /* Tokens.  */
 #ifndef YYTOKENTYPE
@@ -33,20 +43,20 @@
      ATTRIBUTETEXT = 259,
      INTEGER = 260,
      DOUBLE = 261,
-     IDXATT = 262,
-     OSILEND = 263,
-     INSTANCEDATAEND = 264,
-     VALUEATT = 265,
-     NUMBEROFNONLINEAREXPRESSIONS = 266,
-     IDXONEATT = 267,
-     IDXTWOATT = 268,
-     COEFATT = 269,
-     IDATT = 270,
-     TIMESSTART = 271,
-     TIMESEND = 272,
-     NUMBERSTART = 273,
-     NUMBEREND = 274,
-     NUMBEROFQTERMSATT = 275,
+     OSILEND = 262,
+     INSTANCEDATAEND = 263,
+     VALUEATT = 264,
+     NUMBEROFNONLINEAREXPRESSIONS = 265,
+     IDXONEATT = 266,
+     IDXTWOATT = 267,
+     COEFATT = 268,
+     IDATT = 269,
+     TIMESSTART = 270,
+     TIMESEND = 271,
+     NUMBERSTART = 272,
+     NUMBEREND = 273,
+     NUMBEROFQTERMSATT = 274,
+     IDXATT = 275,
      TYPEATT = 276,
      QTERMSTART = 277,
      QTERMEND = 278,
@@ -102,24 +112,25 @@
      PIEND = 328
    };
 #endif
+/* Tokens.  */
 #define QUOTE 258
 #define ATTRIBUTETEXT 259
 #define INTEGER 260
 #define DOUBLE 261
-#define IDXATT 262
-#define OSILEND 263
-#define INSTANCEDATAEND 264
-#define VALUEATT 265
-#define NUMBEROFNONLINEAREXPRESSIONS 266
-#define IDXONEATT 267
-#define IDXTWOATT 268
-#define COEFATT 269
-#define IDATT 270
-#define TIMESSTART 271
-#define TIMESEND 272
-#define NUMBERSTART 273
-#define NUMBEREND 274
-#define NUMBEROFQTERMSATT 275
+#define OSILEND 262
+#define INSTANCEDATAEND 263
+#define VALUEATT 264
+#define NUMBEROFNONLINEAREXPRESSIONS 265
+#define IDXONEATT 266
+#define IDXTWOATT 267
+#define COEFATT 268
+#define IDATT 269
+#define TIMESSTART 270
+#define TIMESEND 271
+#define NUMBERSTART 272
+#define NUMBEREND 273
+#define NUMBEROFQTERMSATT 274
+#define IDXATT 275
 #define TYPEATT 276
 #define QTERMSTART 277
 #define QTERMEND 278
@@ -177,16 +188,18 @@
 
 
 
-#if ! defined (YYSTYPE) && ! defined (YYSTYPE_IS_DECLARED)
+#if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
+typedef union YYSTYPE
 
-typedef union YYSTYPE {
+{
 	double dval;
 	int ival;
 	char* sval;
 	
-} YYSTYPE;
-/* Line 1268 of yacc.c.  */
+}
+/* Line 1529 of yacc.c.  */
 
+	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 # define YYSTYPE_IS_TRIVIAL 1
@@ -194,7 +207,7 @@ typedef union YYSTYPE {
 
 
 
-#if ! defined (YYLTYPE) && ! defined (YYLTYPE_IS_DECLARED)
+#if ! defined YYLTYPE && ! defined YYLTYPE_IS_DECLARED
 typedef struct YYLTYPE
 {
   int first_line;
@@ -206,7 +219,5 @@ typedef struct YYLTYPE
 # define YYLTYPE_IS_DECLARED 1
 # define YYLTYPE_IS_TRIVIAL 1
 #endif
-
-
 
 
