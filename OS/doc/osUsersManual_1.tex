@@ -134,7 +134,7 @@ svn co https://projects.coin-or.org/svn/OS/stable/1.0 COIN-OS
 
 \begin{verbatim}
 cd COIN-OS
-\end{veerbatim}
+\end{verbatim}
 
 
 \noindent {\bf Step 3:} Run the configure script that will generate the makefiles. 
@@ -371,6 +371,33 @@ In the examples above the problem instance was assumed to be read from a file in
 \section{Examples}
 
 \subsection{AMPL Client:  Hooking AMPL to Solvers}
+
+The {\tt amplClient} executable is designed to work with the AMPL program. See \url{www.ampl.com}. The {\tt amplClient} acts like an AMPL ``solver.'' The {\tt amplClient} is linked with the OS library and can be used to solve problems either remotely. In both cases the {\tt amplClient} uses the {\tt OSnl2osil} class to convert the AMPL generated nl file (which represents the problem instance) into the corresponding instance representation in the OSiL format.  
+
+For example, assume that there is a problem instance, {\tt hs71.mod} in AMPL model format. To solve this problem locally by calling the {\tt amplClient} from AMPL first start AMPL and then execute the following commands. In this case we are assuming that the local solver used is {\tt Ipopt.} 
+
+\begin{verbatim}
+# take in problem 71 in Hock and Schittkowski 
+# assume the problem is in the AMPL directory
+model hs71.mod;
+# tell AMPL that the solve is amplClient
+option solver amplClient;
+# now tell amplClient to use Ipopt
+option amplClient_options "solver ipopt";
+# the name of the nl file (this is optional)
+write gtestfile;
+# now solve the problem
+solve;
+\end{verbatim}
+
+This will invoke {\tt Ipopt} locally and the result in OSrL format will be displaye on the screen. In order to call a remote solver service, after the command
+\begin{verbatim}
+option amplClient_options "solver ipopt";
+\end{verbatim}
+provide an option which has the address of the remote solver service.
+\begin{verbatim}
+option ipopt_options "http://128.135.130.17:8080/ipopt/IPOPTSolverService.jws";
+\end{verbatim}
 
 \subsection{CppAD:  Using the CppAD Algorithmic Differentiation Package}
 
