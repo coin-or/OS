@@ -120,17 +120,17 @@ OS is released as open source code under the Common Public License (CPL). This p
 
 \subsection{Obtaining the Source Code Subversion Repository (SVN)}
 
-The C++ source code can be obtained usin Subversion.  Users with Unix operating systems will most likely have an svn client. For Windows users wishing to obtain and SVN client we recommend ***kipp fillin 
+The C++ source code can be obtained using Subversion.  Users with Unix operating systems will most likely have an svn client. For Windows users wishing to obtain and SVN client we recommend ***kipp fillin 
 
 The OS project page with a Wiki is available at \url{projects.coin-or.org\OS}. Execute the following steps to get the source code using SVN.
 
-\noindent {\bf Step 1:}  Connect to a directory where you want the OS proejct to go.  The following command will download the project into the directory COIN-OS
+\noindent {\bf Step 1:}  Connect to a directory where you want the OS project to go.  The following command will download the project into the directory COIN-OS
 
 \begin{verbatim}
 svn co https://projects.coin-or.org/svn/OS/stable/1.0 COIN-OS
 \end{verbatim}
 
-\noindent {\bf Step 2:}  Conncect to the distribution root directory.
+\noindent {\bf Step 2:}  Connect to the distribution root directory.
 
 \begin{verbatim}
 cd COIN-OS
@@ -191,15 +191,15 @@ Successful test of all of the nonlinear operators on file testOperators.osil
 Successful test of AD gradient and Hessian calculations on problem CppADTestLag.osil
 
 
-CONGRATULATIONS! YOU PASSSED THE UNIT TEST
+CONGRATULATIONS! YOU PASSED THE UNIT TEST
 \end{verbatim}
 }
 
 If you do not see
 \begin{verbatim}
-CONGRATULATIONS! YOU PASSSED THE UNIT TEST
+CONGRATULATIONS! YOU PASSED THE UNIT TEST
 \end{verbatim}
-then you have not passed the unitTest and hopefully some semi-inteligle error message was given. CONGRATULATIONS! YOU PASSSED THE UNIT TEST
+then you have not passed the unitTest and hopefully some semi-inteligble error message was given. CONGRATULATIONS! YOUPASSEDD THE UNIT TEST
 
 
 \noindent {\bf Step 6:}  Install the libraries.
@@ -226,7 +226,7 @@ The above steps are fully tested on Mac/Unix, Linux, and on Windows using either
 
 \subsection{Obtaining the Source Code From a Tarball}
 
-\subsection{Obtaning a Visual Studio Project}
+\subsection{Obtaining a Visual Studio Project}
 
 \subsection{Obtaining the Binaries}
 
@@ -270,7 +270,7 @@ SYMPHONY &x&x&x&x&& \\ \hline
 
 
 
-\section{The OS Library Componens}
+\section{The OS Library Components}
 
 \subsection{OSAgent}
 
@@ -289,7 +289,7 @@ The {\tt OSAgent}  part of the library is used to facilitate communication with 
 \subsection{OSSolverInterfaces}
 
 
-The {\tt OSSolverInterfaces} library is designed to facilitate linking the OS library with various solver APIs. We first describe how to take a problem instance in OSiL format and connect to a solver that has a COIN-OR OSI interface.  See the OSI project \url{www.projects.coin-or.org/Osi}.   We then describe hooking to the COIN-OR nonlinear code {\tt Ipopt.} See \url{www.projects.coin-or.org/Ipopt}.  Finally we describe hooking to two commerical solvers KNITRO and LINDO. 
+The {\tt OSSolverInterfaces} library is designed to facilitate linking the OS library with various solver APIs. We first describe how to take a problem instance in OSiL format and connect to a solver that has a COIN-OR OSI interface.  See the OSI project \url{www.projects.coin-or.org/Osi}.   We then describe hooking to the COIN-OR nonlinear code {\tt Ipopt.} See \url{www.projects.coin-or.org/Ipopt}.  Finally we describe hooking to two commercial solvers KNITRO and LINDO. 
 
 The OS library has been tested with the following solvers using the Osi Interface.
 
@@ -337,7 +337,7 @@ Finally, get the solution in {\tt OSrL} format as follows
 cout << solver->osrl << endl;
 \end{verbatim}
 
-Even though LINDO and KNITRO are commerical solvers and do not have a COIN-OR {\tt Osi} interface these solvers are used in exactlly the same manner as a COIN-OR solver. For example, to invoke the LINDO solver we do the following.
+Even though LINDO and KNITRO are commercial solvers and do not have a COIN-OR {\tt Osi} interface these solvers are used in exactly the same manner as a COIN-OR solver. For example, to invoke the LINDO solver we do the following.
 
 \begin{verbatim}
 solver = new LindoSolver();	
@@ -345,7 +345,7 @@ solver = new LindoSolver();
 
 Similarly for KNITRO and Ipopt. In the case of the KNITRO, the {\tt KnitroSolver} class inherits from both {\tt DefaultSolver} class and the KNITRO {\tt NlpProblemDef} class. See \url{Kipp -- put in Knitro manual link} for more information on the KNITRO solver C++ implementation and the {\tt NlpProblemDef} class. Similarly, for Ipopt the {\tt IpoptSolver} class inherits from both the  {\tt DefaultSolver} class and the Ipopt {\tt TNLP} class.  See \url{Kipp -- put in Ipopt manual link} for more information on the Ipopt solver C++ implementation and the {\tt TNLP} calss.
 
-In the examples above the problem instance was assumed to be read from a file into the string {\tt osil} and then into the class member {\tt solver->osil.} However, everything can be done entirely in memory. For example, it is possible to use the {\tt OSInstance} class to create an in-memory problem representation and give this representation directly to a solver class that inherits from {\tt DefaultSolver}. The class member to use is {\tt osintance.} This is illustrated in the example given in Section \ref{subsection:exampleOSInstance}.
+In the examples above the problem instance was assumed to be read from a file into the string {\tt osil} and then into the class member {\tt solver->osil.} However, everything can be done entirely in memory. For example, it is possible to use the {\tt OSInstance} class to create an in-memory problem representation and give this representation directly to a solver class that inherits from {\tt DefaultSolver}. The class member to use is {\tt osinstance.} This is illustrated in the example given in Section \ref{subsection:exampleOSInstance}.
 
 
 \subsection{OSUtils}
@@ -362,9 +362,55 @@ In the examples above the problem instance was assumed to be read from a file in
 
 \section{The OSSolverService}
 
+The {\tt OSSolverService} is a command line executable designed to pass problem instances to solvers and get the result back to be displayed either to standard output or a specified browser.  The {\tt OSSovlerService} can be used to invoke a solver locally or on a remote server. It can work either synchronously or asynchronously. 
+
+\subsection{OSSolverService Input Parameters}
+
+At present, the {\tt OSSolverService} takes the following parameters. The order of the parameters is irrelevant.
+
+\begin{itemize}
+
+\item[] -osil 
+
+\end{itemize}
+ /*
+ * INPUTS:
+ * -osil xxx.osil (file name on local machine of optimization instance, 
+ *       this is NULL by default, however if this remains NULL a problem
+ * 		 instance must be specified in the osol file)
+ * -osol xxx.osol (file name on local machine of solver options, 
+ *       default default value is NULL)
+ * -osrl xxx.osrl (file name on local machine where the optimization 
+ *       result is put, default is NULL)
+ * -serviceLocation location URL (the URL  of the server that is called 
+ *       remotely if the problem not solved locally, default is NULL)
+ * -serviceMethod  (send, solve, kill, knock, getJobID, retrieve, 
+ *       default value is solve)
+ * -os (Not used for now -- ignore)
+ * -osplInput xxx.ospl  (Not used for now -- ignore)
+ * -osplOutput xxx.ospl (Not used for now -- ignore)
+ * -mps xxxx.mps (converts mps format to osil and has same effect as -osil)
+ * -nl xxxx.nl (converts nl format to osil and has same effect as -osil)
+ * -solver solverName (the name of the solver to be invoked)
+ * -browser path location to browser e.g. 
+ *       /Applications/Firefox.app/Contents/MacOS/firefox (default is NULL)
+ * -insList xxx.dat (used only for LINDO, file location on local 
+ *       machine of LINDO instruction list)
+*/
+
+The input parameters to the {\tt OSSolverService} may be given entirely in the command line or in a configuration file.  We first illustrate a configuration file input. Assume that we are interested in invoking a local solver, {\tt Clp} to solve a linear program instance in the file {\tt parincLinear.osil}.  In the OS distribution the {\tt OSSolverService} is the {\tt src} directory. That is, with respect to the distribution root, it is in the directory ./OS/src/.  A copy of {\tt  parincLinear.osil} is in ./OS/data.  The command is:
+\begin{verbatim}
+OSSolverService -config ../data/testlocal.config
+\end{verbatim}
+
+
+Kipp -- point out that what is at the command line will override the configure file.
+
 \subsection{Solving Problems Locally}
 
 \subsection{Solving Problems Remotely with Web Services}
+
+Illustrate when data is uploaded locally or when data is uploaded from another server. 
 
 \section{Setting up a Solver Service with Tomcat}
 
@@ -390,7 +436,7 @@ write gtestfile;
 solve;
 \end{verbatim}
 
-This will invoke {\tt Ipopt} locally and the result in OSrL format will be displaye on the screen. In order to call a remote solver service, after the command
+This will invoke {\tt Ipopt} locally and the result in OSrL format will be displayed on the screen. In order to call a remote solver service, after the command
 \begin{verbatim}
 option amplClient_options "solver ipopt";
 \end{verbatim}

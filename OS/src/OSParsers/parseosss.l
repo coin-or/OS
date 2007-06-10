@@ -45,21 +45,29 @@ using std::ostringstream;
 
 void setyyextra( osOptionsStruc *osoptions, void* scanner);
 
-/*
+ /*
  * INPUTS:
- * -osil xxx.osil (File must be on local machine -- yes)
- * -osol xxx.osol (File must be on local machine -- yes)
- * -osrl xxx.osrl (File must be on local machine -- yes)
- * -insList xxx.dat (File must be on local machine -- yes)
- * -serviceLocation location URL (NOT USED ON SERVER???? -- only on client)
- * -serviceMethod  (send, solve, kill, knock, getJobID, retrieve) (if not specified solve by default)
- * -os (This requires a registry, we are just using optimization services, location is not needed)
- * -osplInput xxx.ospl  (Probably used only by client)
- * -osplOutput xxx.ospl ( location of where it goes, like OSrL)
- * -mps xxxx.mps (only used by local client, converts mps format to osil and has same effect as -osil)
- * -nl xxxx.nl (only used by local client, converts nl format to osil and has same effect as -osil)
- * -solver solver_name (this is also going to be in osol)
- * -browser on/off (default is off)
+ * -osil xxx.osil (file name on local machine of optimization instance, 
+ *       this is NULL by default, however if this remains NULL a problem
+ * 		 instance must be specified in the osol file)
+ * -osol xxx.osol (file name on local machine of solver options, 
+ *       default default value is NULL)
+ * -osrl xxx.osrl (file name on local machine where the optimization 
+ *       result is put, default is NULL)
+ * -serviceLocation location URL (the URL  of the server that is called 
+ *       remotely if the problem not solved locally, default is NULL)
+ * -serviceMethod  (send, solve, kill, knock, getJobID, retrieve, 
+ *       default value is solve)
+ * -os (Not used for now -- ignore)
+ * -osplInput xxx.ospl  (Not used for now -- ignore)
+ * -osplOutput xxx.ospl (Not used for now -- ignore)
+ * -mps xxxx.mps (converts mps format to osil and has same effect as -osil)
+ * -nl xxxx.nl (converts nl format to osil and has same effect as -osil)
+ * -solver solverName (the name of the solver to be invoked)
+ * -browser path location to browser e.g. 
+ *       /Applications/Firefox.app/Contents/MacOS/firefox (default is NULL)
+ * -insList xxx.dat (used only for LINDO, file location on local 
+ *       machine of LINDO instruction list)
 */
 	int ossslex_init(void** ptr_yy_globals);
 

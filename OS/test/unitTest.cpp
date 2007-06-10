@@ -1023,7 +1023,7 @@ int main(int argC, char* argV[])
 	}
 	cout << endl << endl << endl;
 	cout << unitTestResult.str() << endl << endl;
-	cout << "CONGRATULATIONS! YOU PASSSED THE UNIT TEST" <<  endl <<  endl;
+	cout << "CONGRATULATIONS! YOU PASSED THE UNIT TEST" <<  endl <<  endl;
 	
 	return 0;	
 }
@@ -1040,7 +1040,7 @@ double getObjVal( std::string osrl){
 			// get the start of obj end tag
 			pos2 = osrl.find( "</obj", pos1 + 1);
 			if( pos2 != std::string::npos){
-				// get the substrind
+				// get the substring
 				sObjVal = osrl.substr( pos1 + 1, pos2 - pos1 - 1);
 				//std::cout << "HERE IS THE OBJECTIVE FUNCTION VALUE SUBSTRING  " << sObjVal<< std::endl; 
 				return dObjVal = atof( sObjVal.c_str() ); 

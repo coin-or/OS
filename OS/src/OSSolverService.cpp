@@ -12,9 +12,38 @@
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */ 
-// 
 
 
+/**
+ * Below are the possible inputs to
+ * this executable
+ */
+ 
+ 
+ /*
+ * INPUTS:
+ * -osil xxx.osil (file name on local machine of optimization instance, 
+ *       this is NULL by default, however if this remains NULL a problem
+ * 		 instance must be specified in the osol file)
+ * -osol xxx.osol (file name on local machine of solver options, 
+ *       default default value is NULL)
+ * -osrl xxx.osrl (file name on local machine where the optimization 
+ *       result is put, default is NULL)
+ * -serviceLocation location URL (the URL  of the server that is called 
+ *       remotely if the problem not solved locally, default is NULL)
+ * -serviceMethod  (send, solve, kill, knock, getJobID, retrieve, 
+ *       default value is solve)
+ * -os (Not used for now -- ignore)
+ * -osplInput xxx.ospl  (Not used for now -- ignore)
+ * -osplOutput xxx.ospl (Not used for now -- ignore)
+ * -mps xxxx.mps (converts mps format to osil and has same effect as -osil)
+ * -nl xxxx.nl (converts nl format to osil and has same effect as -osil)
+ * -solver solverName (the name of the solver to be invoked)
+ * -browser path location to browser e.g. 
+ *       /Applications/Firefox.app/Contents/MacOS/firefox (default is NULL)
+ * -insList xxx.dat (used only for LINDO, file location on local 
+ *       machine of LINDO instruction list)
+*/
 
 
 #include "OSResult.h" 
@@ -75,6 +104,7 @@ void knock();
 // additional methods
 void getOSiLFromNl(); 
 void getOSiLFromMps();
+string getServiceURI( std::string osol);
 
 //options structure
 // this is the only global variable but 
@@ -105,14 +135,14 @@ int main(int argC, const char* argV[])
 	osoptions = new osOptionsStruc();
 	osoptions->configFile = NULL; 
 	osoptions->osilFile = NULL; 
-	osoptions->osil = NULL; 
+	osoptions->osil = ""; 
 	osoptions->osolFile = NULL; 
 	osoptions->osol = ""; 
 	osoptions->osrlFile = NULL; 
 	osoptions->osrl = NULL; 
 	osoptions->insListFile = NULL; 
 	osoptions->insList = NULL; 
-	osoptions->serviceLocation = NULL; 
+	osoptions->serviceLocation = ""; 
 	osoptions->serviceMethod = NULL; 
 	osoptions->osplInputFile = NULL; 
 	osoptions->osplOutputFile = NULL; 
@@ -165,7 +195,7 @@ int main(int argC, const char* argV[])
 		if(osoptions->osrlFile != NULL) cout << "OSrL file = " << osoptions->osrlFile << endl;
 		if(osoptions->insListFile != NULL) cout << "Instruction List file = " << osoptions->insListFile << endl;
 		if(osoptions->osplInputFile != NULL) cout << "OSpL Input file = " << osoptions->osplInputFile << endl;
-		if(osoptions->serviceLocation != NULL) cout << "Service Location = " << osoptions->serviceLocation << endl;
+		if(osoptions->serviceLocation != "") cout << "Service Location = " << osoptions->serviceLocation << endl;
 		if(osoptions->serviceMethod != NULL) cout << "Service Method = " << osoptions->serviceMethod << endl;
 		if(osoptions->mpsFile != NULL) cout << "MPS File Name = " << osoptions->mpsFile << endl;
 		if(osoptions->nlFile != NULL) cout << "NL File Name = " << osoptions->nlFile << endl;
@@ -220,8 +250,8 @@ void solve(){
 	fileUtil = new FileUtil();
 	try{
 		// call a method here to get OSiL if we have an nl or mps file
-		if(osoptions->osil == NULL){
-			//we better have an osil file present or mps file
+		if(osoptions->osil == ""){
+			//we better have an nl file present or mps file or osol file
 			if(osoptions->nlFile != NULL){
 				getOSiLFromNl();
 			}
@@ -229,14 +259,16 @@ void solve(){
 				if(osoptions->mpsFile != NULL){
 					getOSiLFromMps();
 				}
-				else{
-					throw ErrorClass("solve called and no osil, nl, or mps file given");
+				else{// need an osol file with an instanceLocation specified
+					if( strstr(osoptions->osol, "<instanceLocation") == "")
+						throw ErrorClass("solve called and no osil, osol with osil specified, nl, or mps file given");
 				}
 			}
 		}
-		// solve either remotely of locally
-		if(osoptions->serviceLocation != NULL){
-			// place a remote cal
+		// now solve either remotely or locally
+		if( getServiceURI( osoptions->osol) != "") osoptions->serviceLocation = &getServiceURI( osoptions->osol)[0];
+		if( (osoptions->serviceLocation != "")  ){
+			// place a remote call
 			osagent = new OSSolverAgent( osoptions->serviceLocation );
 			osrl = osagent->solve(osoptions->osil  , osoptions->osol);
 			if(osoptions->osrlFile != NULL) fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
@@ -550,58 +582,28 @@ void getOSiLFromMps(){
 	
 }//getOSiLFromMps
 
+string getServiceURI( std::string osol){
+	if(osol == "") return osol;
+	unsigned int pos2;
+	unsigned int pos1 = osol.find( "<serviceURI");
+	if(pos1 != std::string::npos){
+		// get the end of the serviceURI start tag
+		pos1 = osol.find(">", pos1 + 1);
+		if(pos1 != std::string::npos){
+			// get the start of serviceURI end tag
+			pos2 = osol.find( "</serviceURI", pos1 + 1);
+			if( pos2 != std::string::npos){
+				// get the substring
+				return osol.substr( pos1 + 1, pos2 - pos1 - 1); 
+			}
+			else return "";
+		}
+		else return "";
+	}
+	else return "";
+}
 
-/*
- * INPUTS:
- * -osil xxx.osil (File must be on local machine -- yes)
- * -osol xxx.osol (File must be on local machine -- yes)
- * -osrl xxx.osrl (File must be on local machine -- yes)
- * -insList xxx.dat (File must be on local machine -- yes) -- the LINDO postfix instruction list
- * -serviceLocation location URL (NOT USED ON SERVER???? -- only on client)
- * -serviceMethod  (send, solve, kill, knock, getJobID, retrieve) (if not specified solve by default)
- * -os (This requires a registry, we are just using optimization services, location is not needed)
- * -osplInput xxx.ospl  (Probably used only by client)
- * -osplOutput xxx.ospl ( location of where it goes, like OSrL)
- * -mps xxxx.mps (only used by local client, converts mps format to osil and has same effect as -osil)
- * -nl xxxx.nl (only used by local client, converts nl format to osil and has same effect as -osil)
- * -solver solverName (this is also going to be in osol)
- * -browser path location to browser e.g. /Applications/Firefox.app/Contents/MacOS/firefox (default is NULL)
-*/
 
-/*
 
-1. Ugh -- must be able to parse osol
 
-2. Which parameters is the scheduler going to send??? Only the first three? 
-
-3. Let's specify the options allowed AND their valid values
-
-4. What about kill, retrieve, knock, getJobID -- how do they get specified? Through the service method
-
-5. What does -OS do?
-
-6. Which of the above are done on the local machine, which on the remote?
-
-7. Assumption: if the client want to specify a remote instance, must this be done through osol? I think so.
-
-8. Should client be able to invoke browser on local machine (perhaps browser name and path could be in osol) and then send it the osrl with an xslt specificiation???
-
-9. Should we allow an additional option which is:
-
--config xxx.config
-
-This config specifies all of the options. It could be overwritten by explicitly naming the other options, e.g.
-
-OsSolverService -config myconfigs.config -osil test.osil
-
-Possibly use XML
-
-<OSParameter>
-	<param name="" description="">value</param>
-</OSParameter>
-
-10. List the default values
-
-11. Should we use -- as a flag so we can have - in file names
-*/
 
