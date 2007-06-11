@@ -366,47 +366,71 @@ The {\tt OSSolverService} is a command line executable designed to pass problem 
 
 \subsection{OSSolverService Input Parameters}
 
-At present, the {\tt OSSolverService} takes the following parameters. The order of the parameters is irrelevant.
+At present, the {\tt OSSolverService} takes the following parameters. The order of the parameters is irrelevant.  Not all the parameters are required. However, two pieces of information {\it must} be contained in the input paramters.  First,  the problem instance location must be specified (either locally or on a remote machine). Second, the solver must be specified. 
 
 \begin{itemize}
 
-\item[] -osil 
+\item[] {\bf -osil xxx.osil}  this is the name of the file that contains the optimization instance in OSiL format. It is assumed that this file is available in a directory on the machine that is running {\tt OSSolverService}. If this option is not specified then the instance location must be specified in the OSoL solver options file.
+
+\item[] {\bf -osol xxx.osol}  this is the name of the file that contains the solver options. It is assumed that this file is available in a directory on the machine that is running {\tt OSSolverService}. It is not necessary to specify this option.
+
+\item[] {\bf -osrl xxx.osrl}  this is the name of the file that contains the solver solution. A valid file path must be given on the machine that is running {\tt OSSolverService}. It is not necessary to specify this option.
+
+\item[] {\bf -serviceLocation location URL}  if the problem is solve remotely, this is the URL of the solver service. This is not required, and if not specified it is assumed that the problem is solved locally. 
+
+\item[] {\bf -serviceMethod  method}  this is  the solver service required. The options are {\tt solve}, {\tt send},{\tt kill},{\tt knock}, {\tt getJobID}, and {\tt retrieve}. The use of these options is illustrated in the examples below. This option is not required, and the default value is {\tt sovle.}
+
+\item[] {\bf -mps  xxx.mps}  this is the name of the mps file if the problem instance is in mps format. It is assumed that this file is available in a directory on the machine that is running {\tt OSSolverService}. The default file format is OSiL so this option is not required.
+
+\item[] {\bf -nl  xxx.nl}  this is the name of the AMPL nl file if the problem instance is in AMPL nl  format. It is assumed that this file is available in a directory on the machine that is running {\tt OSSolverService}. The default file format is OSiL so this option is not required.
+
+
+\item[] {\bf -nl  xxx.nl}  this is the name of the AMPL nl file if the problem instance is in AMPL nl  format. It is assumed that this file is available in a directory on the machine that is running {\tt OSSolverService}. The default file format is OSiL so this option is not required.
+
+\item[] {\bf -solver  solverName} this parameter is required if the problem is solved locally. Possible values for default OS installation are {tt clp} (COIN-OR Clp), {\tt cbc} (COIN-OR Cbc), {\tt dylp} (COIN-OR DyLP), and {\tt symphony} (COIN-OR SYMPHONY). Other solvers supported (if the necessary libraries are present) are {\tt cplex} (Cplex through COIN-OR Osi), {\tt glpk} (glpk through COIN-OR Osi), {\tt ipopt} (COIN-OR Ipopt),  {\tt knitro} (Knitro), and {\tt lindo} {\tt LINDO}.
+
+
+\item[] {\bf -browser  browserName} this paramater is a path to the browser on the local machine. If this optional parameter is specified then the solver result in OSrL format is transformed using XSLT into HTML and displayed in the browser. 
+
+\item[] {\bf -config pathToConfigureFile} this parameter specifies a path on the local machine to a text file containing values for the input parameters. This is convenient for the user not wishing to constantly retype parameter values.
 
 \end{itemize}
- /*
- * INPUTS:
- * -osil xxx.osil (file name on local machine of optimization instance, 
- *       this is NULL by default, however if this remains NULL a problem
- * 		 instance must be specified in the osol file)
- * -osol xxx.osol (file name on local machine of solver options, 
- *       default default value is NULL)
- * -osrl xxx.osrl (file name on local machine where the optimization 
- *       result is put, default is NULL)
- * -serviceLocation location URL (the URL  of the server that is called 
- *       remotely if the problem not solved locally, default is NULL)
- * -serviceMethod  (send, solve, kill, knock, getJobID, retrieve, 
- *       default value is solve)
- * -os (Not used for now -- ignore)
- * -osplInput xxx.ospl  (Not used for now -- ignore)
- * -osplOutput xxx.ospl (Not used for now -- ignore)
- * -mps xxxx.mps (converts mps format to osil and has same effect as -osil)
- * -nl xxxx.nl (converts nl format to osil and has same effect as -osil)
- * -solver solverName (the name of the solver to be invoked)
- * -browser path location to browser e.g. 
- *       /Applications/Firefox.app/Contents/MacOS/firefox (default is NULL)
- * -insList xxx.dat (used only for LINDO, file location on local 
- *       machine of LINDO instruction list)
-*/
 
-The input parameters to the {\tt OSSolverService} may be given entirely in the command line or in a configuration file.  We first illustrate a configuration file input. Assume that we are interested in invoking a local solver, {\tt Clp} to solve a linear program instance in the file {\tt parincLinear.osil}.  In the OS distribution the {\tt OSSolverService} is the {\tt src} directory. That is, with respect to the distribution root, it is in the directory ./OS/src/.  A copy of {\tt  parincLinear.osil} is in ./OS/data.  The command is:
+
+
+
+
+
+The input parameters to the {\tt OSSolverService} may be given entirely in the command line or in a configuration file.  We first illustrate giving all the  parameters in the command line. The following command will invoke the {\tt Clp} solver on the local machine to solve the problem instance {\tt parincLinear.osil}.
+
 \begin{verbatim}
-OSSolverService -config ../data/testlocal.config
+OSSolverService -solver clp -osil ../data/parincLinear.osil 
+\end{verbatim}
+
+Alternatively, these parameters can be put into a configuration file. Assume that the configuration file of interest is {\tt testlocalclp.config}. It would contain the two lines of information
+\begin{verbatim}
+-osil ../data/parincLinear.osil
+-solver clp
+\end{verbatim}
+Then the command line is
+\begin{verbatim}
+OSSolverService -config ../data/testlocalclp.config
 \end{verbatim}
 
 
-Kipp -- point out that what is at the command line will override the configure file.
+Parameters specified in the configure file are overridden by parameters specified at the command line. This is convenient if a user has a base configure file and wishes to override only a few options. For example,
+\begin{verbatim}
+OSSolverService -config ../data/testlocalclp.config -solver lindo
+\end{verbatim}
+or
+\begin{verbatim}
+OSSolverService -solver lindo -config ../data/testlocalclp.config 
+\end{verbatim}
+will result in the LINDO solver being used even though Clp is specified in the {\tt testlocalclp} configure file.
 
 \subsection{Solving Problems Locally}
+
+Generally, when solving a problem locally the user will use the {\tt solve} service method. The {\solve} method is invoked synchronously and waits for the solver to return the result. The {\tt sovle} method has two arguments. The first argument is the OSoL file path and the second argument is the OSiL file path. The OSoL file path may be empty. 
 
 \subsection{Solving Problems Remotely with Web Services}
 

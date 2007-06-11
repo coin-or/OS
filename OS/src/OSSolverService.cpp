@@ -41,6 +41,8 @@
  * -solver solverName (the name of the solver to be invoked)
  * -browser path location to browser e.g. 
  *       /Applications/Firefox.app/Contents/MacOS/firefox (default is NULL)
+ * -config pathToConfigFile is the path to a configure file with the problem 
+ * 	     parameters
  * -insList xxx.dat (used only for LINDO, file location on local 
  *       machine of LINDO instruction list)
 */
