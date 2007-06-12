@@ -430,7 +430,41 @@ will result in the LINDO solver being used even though Clp is specified in the {
 
 \subsection{Solving Problems Locally}
 
-Generally, when solving a problem locally the user will use the {\tt solve} service method. The {\solve} method is invoked synchronously and waits for the solver to return the result. The {\tt sovle} method has two arguments. The first argument is the OSoL file path and the second argument is the OSiL file path. The OSoL file path may be empty. 
+Generally, when solving a problem locally the user will use the {\tt solve} service method. The {\tt solve} method is invoked synchronously and waits for the solver to return the result. The {\tt sovle} method has two arguments. The first argument is the OSoL file path and the second argument is the OSiL file path. The OSoL file path may be empty.  Here is an illustration of using a configure file,  {\tt testlocal.config}, to invoke {\tt Ipopt} locally.
+
+\begin{verbatim}
+-osil ../data/parincQuadratic.osil
+-solver ipopt
+-serviceMethod solve
+-browser /Applications/Firefox.app/Contents/MacOS/firefox
+-osrl /Users/kmartin/temp/test.osrl
+\end{verbatim}
+
+The first line of {\tt testlocal.config} gives the local location of the OSiL file, {\tt parincQuadratic.osil}, that contains the problem instance. The second parameter, {\tt -solver ipopt},  is the solver to be invoked. The third parameter {\tt -serviceMethod solve} is not really needed, but included only for purpose of illustration. The default  solver service is {\tt solve.}  The fourth parameter is the location of the browser on the local machine. It will read the OSrL file on the local machine using the path specified by the value of the {\tt osrl} parameter, in this case {\tt /Users/kmartin/temp/test.osrl.}
+
+In the configuration file {\tt testlocalosol.config} we illustrate specifying the instance location in an OSoL file.
+
+\begin{verbatim}
+-osol ../data/demo.osol
+-solver clp
+\end{verbatim}
+
+The file {\tt demo.osol} is
+
+\begin{verbatim}
+<?xml version="1.0" encoding="UTF-8"?>
+<osol xmlns="os.optimizationservices.org"
+xmlns:xs="http://www.w3.org/2001/XMLSchema"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="os.optimizationservices.org 
+http://www.optimizationservices.org/schemas/OSoL.xsd">
+  <general>         
+       <instanceLocation locationType="local">
+       ../data/parincLinear.osil
+       </instanceLocation>
+  </general>
+</osol>
+\end{verbatim}
 
 \subsection{Solving Problems Remotely with Web Services}
 

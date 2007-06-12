@@ -107,6 +107,7 @@ void knock();
 void getOSiLFromNl(); 
 void getOSiLFromMps();
 string getServiceURI( std::string osol);
+string getInstanceLocation( std::string osol);
 
 //options structure
 // this is the only global variable but 
@@ -197,7 +198,6 @@ int main(int argC, const char* argV[])
 		if(osoptions->osrlFile != NULL) cout << "OSrL file = " << osoptions->osrlFile << endl;
 		if(osoptions->insListFile != NULL) cout << "Instruction List file = " << osoptions->insListFile << endl;
 		if(osoptions->osplInputFile != NULL) cout << "OSpL Input file = " << osoptions->osplInputFile << endl;
-		if(osoptions->serviceLocation != "") cout << "Service Location = " << osoptions->serviceLocation << endl;
 		if(osoptions->serviceMethod != NULL) cout << "Service Method = " << osoptions->serviceMethod << endl;
 		if(osoptions->mpsFile != NULL) cout << "MPS File Name = " << osoptions->mpsFile << endl;
 		if(osoptions->nlFile != NULL) cout << "NL File Name = " << osoptions->nlFile << endl;
@@ -207,11 +207,26 @@ int main(int argC, const char* argV[])
 		// get the data from the files
 		fileUtil = new FileUtil();
 		try{	
-			if(osoptions->osilFile != NULL) osoptions->osil = fileUtil->getFileAsChar( &osoptions->osilFile[0]);
 			if(osoptions->insListFile != NULL) osoptions->insList = fileUtil->getFileAsChar( &osoptions->insListFile[0]);
 			if(osoptions->osolFile != NULL) osoptions->osol = fileUtil->getFileAsChar( &osoptions->osolFile[0]);
+			if(osoptions->osilFile != NULL){
+				//this takes precedence over what is in the OSoL file
+				 osoptions->osil = fileUtil->getFileAsChar( &osoptions->osilFile[0]);
+			}
+			else{
+				 if(osoptions->osolFile != NULL) osoptions->osil = fileUtil->getFileAsChar( &getInstanceLocation( osoptions->osol)[ 0] );
+			}
 			if(osoptions->osplInputFile != NULL) osoptions->osplInput = fileUtil->getFileAsChar( &osoptions->osplInputFile[0]);
 			if(osoptions->osplOutputFile != NULL) osoptions->osplOutput = fileUtil->getFileAsChar( &osoptions->osplOutputFile[0]);
+			if(osoptions->serviceLocation != ""){
+				 cout << "Service Location = " << osoptions->serviceLocation << endl;
+			}
+			else{
+				if( getServiceURI( osoptions->osol) != ""){
+					osoptions->serviceLocation = &getServiceURI( osoptions->osol)[0];
+					cout << "Service Location = " << osoptions->serviceLocation << endl;
+				}
+			}
 		}
 		catch(const ErrorClass& eclass){
 			//cout << eclass.errormsg <<  endl;
@@ -268,7 +283,6 @@ void solve(){
 			}
 		}
 		// now solve either remotely or locally
-		if( getServiceURI( osoptions->osol) != "") osoptions->serviceLocation = &getServiceURI( osoptions->osol)[0];
 		if( (osoptions->serviceLocation != "")  ){
 			// place a remote call
 			osagent = new OSSolverAgent( osoptions->serviceLocation );
@@ -603,7 +617,28 @@ string getServiceURI( std::string osol){
 		else return "";
 	}
 	else return "";
-}
+}//getServiceURI
+
+string getInstanceLocation( std::string osol){
+	if(osol == "") return osol;
+	unsigned int pos2;
+	unsigned int pos1 = osol.find( "<instanceLocation");
+	if(pos1 != std::string::npos){
+		// get the end of the instanceLocation start tag
+		pos1 = osol.find(">", pos1 + 1);
+		if(pos1 != std::string::npos){
+			// get the start of instanceLocation end tag
+			pos2 = osol.find( "</instanceLocation", pos1 + 1);
+			if( pos2 != std::string::npos){
+				// get the substring
+				return osol.substr( pos1 + 1, pos2 - pos1 - 1); 
+			}
+			else return "";
+		}
+		else return "";
+	}
+	else return "";
+}//getInstanceLocation
 
 
 

@@ -22045,6 +22045,11 @@ fi
 
 
 if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/demo.osol"
+fi
+
+
+if test $coin_vpath_config = yes; then
   coin_vpath_link_files="$coin_vpath_link_files data/sendWithJobID.osol"
 fi
 
@@ -22081,6 +22086,16 @@ fi
 
 if test $coin_vpath_config = yes; then
   coin_vpath_link_files="$coin_vpath_link_files data/testnl.config"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/testlocalclp.config"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/testlocalosol.config"
 fi
 
 

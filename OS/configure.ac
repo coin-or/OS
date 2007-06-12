@@ -163,6 +163,7 @@ AC_COIN_VPATH_LINK(data/remotegsbkip.osol)
 AC_COIN_VPATH_LINK(data/remoteosil.osol)
 AC_COIN_VPATH_LINK(data/retrieve.osol)
 AC_COIN_VPATH_LINK(data/send.osol)
+AC_COIN_VPATH_LINK(data/demo.osol)
 AC_COIN_VPATH_LINK(data/sendWithJobID.osol)
 AC_COIN_VPATH_LINK(data/demo.ospl)
 AC_COIN_VPATH_LINK(data/testRemoteKnock.config)
@@ -171,6 +172,8 @@ AC_COIN_VPATH_LINK(data/testremoteRetrieve.config)
 AC_COIN_VPATH_LINK(data/testremoteSend.config)
 AC_COIN_VPATH_LINK(data/testmps.config)
 AC_COIN_VPATH_LINK(data/testnl.config)
+AC_COIN_VPATH_LINK(data/testlocalclp.config)
+AC_COIN_VPATH_LINK(data/testlocalosol.config)
 
 
 
