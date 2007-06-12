@@ -259,6 +259,7 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 				
 			case OPVARVAL:
 				cout << "found a variable node" << endl;
+				if(e->a >= osinstance->getVariableNumber() ) throw ErrorClass("OS cannot handle AMPL user defined variables, please reformulate");
 				nlNodeVariablePoint = new OSnLNodeVariable;
 				nlNodeVariablePoint->idx = e->a;
 				nlNodeVariablePoint->coef = 1.0; 
