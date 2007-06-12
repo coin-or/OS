@@ -8,5 +8,6 @@ http://www.optimizationservices.org/schemas/OSoL.xsd">
        <instanceLocation locationType="local">
        ../data/parincLinear.osil
        </instanceLocation>
+       <contact transportType="smtp">kipp.martin@chicagogsb.edu</contact>
   </general>
 </osol>

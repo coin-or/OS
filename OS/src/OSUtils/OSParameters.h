@@ -60,7 +60,7 @@
 #endif
 
 #ifndef XSLT_LOCATION
-	#define XSLT_LOCATION  "/code/temp/";
+	#define XSLT_LOCATION  OSSRCDIR;
 #endif
 
 #endif
