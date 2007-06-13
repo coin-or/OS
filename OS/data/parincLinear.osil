@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="os.optimizationservices.org ../schemas/OSiL.xsd">
+	xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/OSiL.xsd">
 	<instanceHeader>
 		<name>Par Inc. </name>
 		<source>Anderson, Sweeny, and Williams</source>

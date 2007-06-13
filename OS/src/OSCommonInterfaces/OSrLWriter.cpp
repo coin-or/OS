@@ -50,31 +50,15 @@ OSrLWriter::~OSrLWriter(){
 
 
 
-/** This function figures out whether file names should contain slashes or 
-    backslashes as directory separator */
-inline char CoinFindDirSeparatorCopy()
-{
-    int size = 1000;
-    char* buf = 0;
-    while (true) {
-	buf = new char[size];
-	if (getcwd(buf, size))
-	    break;
-	delete[] buf;
-	buf = 0;
-	size = 2*size;
-    }
-    // if first char is '/' then it's unix and the dirsep is '/'. otherwise we 
-    // assume it's dos and the dirsep is '\'
-    char dirsep = buf[0] == '/' ? '/' : '\\';
-    delete[] buf;
-    return dirsep;
-}
+
  
 std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 	m_OSResult = theosresult;
 	std::ostringstream outStr;
-	const char dirsep =  CoinFindDirSeparatorCopy();
+	const char dirsep =  '/';
+	#ifdef WIN_
+		dirsep='\';
+	#endif
   	// Set directory containing mps data files.
   	std::string xsltDir;
     xsltDir = dirsep == '/' ? "/stylesheets/" : "\\stylesheets\\";
