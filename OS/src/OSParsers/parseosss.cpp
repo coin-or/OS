@@ -414,7 +414,7 @@ static yyconst flex_int32_t yy_ec[256] =
 
        17,   18,   19,   20,   21,    6,   22,   23,   24,   25,
        26,   27,    6,   28,   29,   30,   31,   32,   33,    6,
-        6,    6,    1,    1,    1,    1,    1,    1,    1,    1,
+        6,    6,    1,    1,    1,    6,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -653,12 +653,14 @@ void setyyextra( osOptionsStruc *osoptions, void* scanner);
  * -solver solverName (the name of the solver to be invoked)
  * -browser path location to browser e.g. 
  *       /Applications/Firefox.app/Contents/MacOS/firefox (default is NULL)
+ * -config pathToConfigFile is the path to a configure file with the problem 
+ * 	     parameters
  * -insList xxx.dat (used only for LINDO, file location on local 
  *       machine of LINDO instruction list)
 */
 	int ossslex_init(void** ptr_yy_globals);
 
-#line 662 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.cpp"
+#line 664 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.cpp"
 
 #define INITIAL 0
 
@@ -875,10 +877,10 @@ YY_DECL
 	register int yy_act;
     struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
 
-#line 87 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
+#line 89 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
 
 
-#line 882 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.cpp"
+#line 884 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.cpp"
 
 	if ( !yyg->yy_init )
 		{
@@ -976,12 +978,12 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 89 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
+#line 91 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
 
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 92 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
+#line 94 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
 {
 	if(yyextra->osOption == false){
 		printf("Found option:  %s\n", yytext);   
@@ -993,7 +995,7 @@ YY_RULE_SETUP
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 100 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
+#line 102 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
 {
 	printf("Found option:  %s\n", yytext);  
 	char *ch = strdup(yytext);
@@ -1007,7 +1009,7 @@ YY_RULE_SETUP
 case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
-#line 111 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
+#line 113 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
 {
 	if(yyextra->osilFile == NULL){
 		printf("Found option:  %s\n", yytext);  
@@ -1022,7 +1024,7 @@ YY_RULE_SETUP
 case 5:
 /* rule 5 can match eol */
 YY_RULE_SETUP
-#line 122 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
+#line 124 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
 {
 	if(yyextra->osrlFile == NULL){
 		printf("Found option:  %s\n", yytext); 
@@ -1037,7 +1039,7 @@ YY_RULE_SETUP
 case 6:
 /* rule 6 can match eol */
 YY_RULE_SETUP
-#line 133 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
+#line 135 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
 {
 	if(yyextra->insListFile == NULL){
 		printf("Found option:  %s\n", yytext); 
@@ -1052,7 +1054,7 @@ YY_RULE_SETUP
 case 7:
 /* rule 7 can match eol */
 YY_RULE_SETUP
-#line 144 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
+#line 146 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
 {
 	if(yyextra->osolFile == NULL){
 		printf("Found option:  %s\n", yytext); 
@@ -1067,7 +1069,7 @@ YY_RULE_SETUP
 case 8:
 /* rule 8 can match eol */
 YY_RULE_SETUP
-#line 157 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
+#line 159 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
 {
 	if(yyextra->osplInputFile == NULL){
 		printf("Found option:  %s\n", yytext); 
@@ -1082,7 +1084,7 @@ YY_RULE_SETUP
 case 9:
 /* rule 9 can match eol */
 YY_RULE_SETUP
-#line 168 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
+#line 170 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
 {
 	if(yyextra->osplOutputFile == NULL){
 		printf("Found option:  %s\n", yytext); 
@@ -1097,7 +1099,7 @@ YY_RULE_SETUP
 case 10:
 /* rule 10 can match eol */
 YY_RULE_SETUP
-#line 179 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
+#line 181 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
 {
 	if(yyextra->serviceMethod == NULL){
 		printf("Found option:  %s\n", yytext); 
@@ -1112,7 +1114,7 @@ YY_RULE_SETUP
 case 11:
 /* rule 11 can match eol */
 YY_RULE_SETUP
-#line 190 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
+#line 192 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
 {
 	if(yyextra->serviceLocation == NULL){
 		printf("Found option:  %s\n", yytext); 
@@ -1128,7 +1130,7 @@ YY_RULE_SETUP
 case 12:
 /* rule 12 can match eol */
 YY_RULE_SETUP
-#line 202 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
+#line 204 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
 {
 	if(yyextra->mpsFile == NULL){
 		printf("Found option:  %s\n", yytext); 
@@ -1143,7 +1145,7 @@ YY_RULE_SETUP
 case 13:
 /* rule 13 can match eol */
 YY_RULE_SETUP
-#line 213 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
+#line 215 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
 {
 	if(yyextra->nlFile == NULL){
 		printf("Found option:  %s\n", yytext);
@@ -1158,7 +1160,7 @@ YY_RULE_SETUP
 case 14:
 /* rule 14 can match eol */
 YY_RULE_SETUP
-#line 224 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
+#line 226 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
 {
 	if(yyextra->solverName == NULL){
 		printf("Found option:  %s\n", yytext); 
@@ -1173,7 +1175,7 @@ YY_RULE_SETUP
 case 15:
 /* rule 15 can match eol */
 YY_RULE_SETUP
-#line 235 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
+#line 237 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
 {
 	if(yyextra->browser == NULL){
 		printf("Found option:  %s\n", yytext);  
@@ -1187,7 +1189,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 246 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
+#line 248 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
 {
 	std::string error;
 	std::ostringstream outStr;
@@ -1202,10 +1204,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 257 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
+#line 259 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
 ECHO;
 	YY_BREAK
-#line 1209 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.cpp"
+#line 1211 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2323,7 +2325,7 @@ void osssfree (void * ptr , yyscan_t yyscanner)
 
 #define YYTABLES_NAME "yytables"
 
-#line 257 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
+#line 259 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
 
 
 

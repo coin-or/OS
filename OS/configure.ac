@@ -131,8 +131,14 @@ AC_COIN_HAS_USER_LIBRARY([Knitro],[KNITRO],[knitro.h],[])
 
 
 #############################################################################
+# Define the root of the OS project###
+#############################################################################
 
-AC_COIN_CHECK_GNU_READLINE
+AC_SUBST(OSROOT_DIR)
+OSROOT_DIR=`pwd`
+AC_DEFINE_UNQUOTED([OSROOT_DIR], ["$OSROOT_DIR"],
+    [Define the path to the OS root])
+
 
 ##############################################################################
 #                   VPATH links for example input files                      #

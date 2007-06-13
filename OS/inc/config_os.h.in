@@ -42,9 +42,6 @@
 /* Define to 1 if the Osi package is used */
 #undef COIN_HAS_OSI
 
-/* Define to 1 if readline is available */
-#undef COIN_HAS_READLINE
-
 /* Define to 1 if the SYMPHONY package is used */
 #undef COIN_HAS_SYMPHONY
 
@@ -56,9 +53,6 @@
 
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
-
-/* Define to 1 if you have the <readline/readline.h> header file. */
-#undef HAVE_READLINE_READLINE_H
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H
@@ -86,6 +80,9 @@
 
 /* use if OS is Cygwin */
 #undef NOMINMAX
+
+/* Define the path to the OS root */
+#undef OSROOT_DIR
 
 /* Name of package */
 #undef PACKAGE

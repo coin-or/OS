@@ -13,11 +13,18 @@
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
+ 
+ 
+ 
+
+
+
 
 #include "OSrLWriter.h"
 #include "OSResult.h"
 #include "OSParameters.h"
 #include "CommonUtil.h"
+#include "OSConfig.h"
 #include <sstream>   
 #include <iostream>  
 
@@ -40,16 +47,44 @@ OSrLWriter::~OSrLWriter(){
 	return ch;
 }
 */
+
+
+
+/** This function figures out whether file names should contain slashes or 
+    backslashes as directory separator */
+inline char CoinFindDirSeparatorCopy()
+{
+    int size = 1000;
+    char* buf = 0;
+    while (true) {
+	buf = new char[size];
+	if (getcwd(buf, size))
+	    break;
+	delete[] buf;
+	buf = 0;
+	size = 2*size;
+    }
+    // if first char is '/' then it's unix and the dirsep is '/'. otherwise we 
+    // assume it's dos and the dirsep is '\'
+    char dirsep = buf[0] == '/' ? '/' : '\\';
+    delete[] buf;
+    return dirsep;
+}
  
 std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 	m_OSResult = theosresult;
 	std::ostringstream outStr;
+	const char dirsep =  CoinFindDirSeparatorCopy();
+  	// Set directory containing mps data files.
+  	std::string xsltDir;
+    xsltDir = dirsep == '/' ? "/stylesheets/" : "\\stylesheets\\";
 	int i, j;
 	if(m_OSResult == NULL)  return outStr.str(); 
 	outStr << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" ; 
 	outStr << "<?xml-stylesheet type = \"text/xsl\" href = \"";
-	outStr << XSLT_LOCATION;
-	outStr << "/OSrL.xslt\"?>";
+	outStr << OSROOT_DIR;
+	outStr << xsltDir;
+	outStr << "OSrL.xslt\"?>";
 	outStr << "<osrl xmlns:os=\"os.optimizationservices.org\"   xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/OSrL.xsd\" >" ;
 	outStr << endl;
 	outStr << "<resultHeader>" << endl;
@@ -296,3 +331,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 	outStr << "</osrl>" << endl;
 	return outStr.str();
 }// end writeOSrL
+
+//the following is copied from CoinHelperFunctions
+
+
