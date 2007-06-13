@@ -55,9 +55,10 @@ OSrLWriter::~OSrLWriter(){
 std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 	m_OSResult = theosresult;
 	std::ostringstream outStr;
-	const char dirsep =  '/';
 	#ifdef WIN_
-		dirsep='\\';
+	const char	dirsep='\\';
+	#else
+	const char	dirsep='/';
 	#endif
   	// Set directory containing mps data files.
   	std::string xsltDir;
