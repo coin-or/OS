@@ -10,7 +10,6 @@ import java.io.InputStreamReader;
 import java.util.GregorianCalendar;
 import java.util.Vector;
 
-import org.eclipse.swt.custom.BusyIndicator;
 import org.optimizationservices.oscommon.localinterface.DefaultSolver;
 import org.optimizationservices.oscommon.representationparser.OSrLWriter;
 import org.optimizationservices.oscommon.util.IOUtil;
