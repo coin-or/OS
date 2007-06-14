@@ -125,7 +125,7 @@ public class SolverService implements OShL{
 	/**
 	 * static constructor
 	 */
-	static{
+	static{ 
 		OSParameterFile.NAME = IOUtil.getCurrentDir()+ "webapps/os/code/OSParameter.xml";
 		//OSParameterFile.NAME = "/code/OSConfig/OSParameter.xml";
 	}//static constructor
