@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"  xmlns:os="os.optimizationservices.org">
     <xsl:output method="html"/>
     <xsl:template match="/">
         <html>
@@ -12,14 +12,14 @@
                 
                 <h2>Solver Used</h2>
                 <p>
-                    <xsl:for-each select="/osrl/resultHeader/serviceName">
+                    <xsl:for-each select="/os:osrl/os:resultHeader/os:serviceName">
                         <b> <xsl:value-of select="text()"/> </b>
                     </xsl:for-each>
                 </p>
 
                 <h2>Objective Function Value</h2>
                 <p>
-                    <xsl:for-each select="/osrl/resultData/optimization/solution/objectives/values/obj">
+                    <xsl:for-each select="/os:osrl/os:resultData/os:optimization/os:solution/os:objectives/os:values/obj">
                        <b> <xsl:value-of select="text()"/> </b>
                     </xsl:for-each>
                 </p>
@@ -35,7 +35,7 @@
                         </td>
                     </tr>
                     <xsl:for-each
-                        select="/osrl/resultData/optimization/solution/variables/values/var">
+                        select="/os:osrl/os:resultData/os:optimization/os:solution/os:variables/os:values/os:var">
                         <tr>
                             <td>
                                 <xsl:value-of select="@idx"/>
@@ -60,7 +60,7 @@
                         </td>
                     </tr>
                     <xsl:for-each
-                        select="/osrl/resultData/optimization/solution/constraints/dualValues/con">
+                        select="/os:osrl/os:resultData/os:optimization/os:solution/os:constraints/os:dualValues/os:con">
                         <tr>
                             <td>
                                 <xsl:value-of select="@idx"/>

@@ -70,7 +70,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 	outStr << OSROOT_DIR;
 	outStr << xsltDir;
 	outStr << "OSrL.xslt\"?>";
-	outStr << "<osrl xmlns:os=\"os.optimizationservices.org\"   xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/OSrL.xsd\" >" ;
+	outStr << "<osrl xmlns=\"os.optimizationservices.org\"   xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/OSrL.xsd\" >" ;
 	outStr << endl;
 	outStr << "<resultHeader>" << endl;
 	if(m_OSResult->resultHeader != NULL){
