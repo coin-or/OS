@@ -108,6 +108,7 @@ void getOSiLFromNl();
 void getOSiLFromMps();
 string getServiceURI( std::string osol);
 string getInstanceLocation( std::string osol);
+string getSolverName( std::string osol);
 
 //options structure
 // this is the only global variable but 
@@ -201,7 +202,12 @@ int main(int argC, const char* argV[])
 		if(osoptions->serviceMethod != NULL) cout << "Service Method = " << osoptions->serviceMethod << endl;
 		if(osoptions->mpsFile != NULL) cout << "MPS File Name = " << osoptions->mpsFile << endl;
 		if(osoptions->nlFile != NULL) cout << "NL File Name = " << osoptions->nlFile << endl;
-		if(osoptions->solverName != NULL) cout << "Solver Name = " << osoptions->solverName << endl;
+		if(osoptions->solverName != NULL){ 
+			cout << "Solver Name = " << osoptions->solverName << endl;
+		}
+		else{
+			osoptions->solverName  =    &getSolverName( &osoptions->osolFile[0] )[0];
+		}
 		if(osoptions->browser != NULL) cout << "Browser Value = " << osoptions->browser << endl;
 		if( osoptions->os == true ) cout << "OS = " << osoptions->os << endl;
 		// get the data from the files
@@ -293,7 +299,10 @@ void solve(){
 		else{
 			// solve locally
 			// add IPOPT
-			if(osoptions->solverName == NULL ) throw ErrorClass( "a local solver was not specified");
+			if(osoptions->solverName == NULL ){
+				string sSolverName = "cbc";
+				osoptions->solverName = &sSolverName[0];
+			}
 			if( strstr(osoptions->solverName, "ipopt") != NULL) {
 				// we are requesting the Ipopt solver
 				bool bIpoptIsPresent = false;
@@ -639,6 +648,27 @@ string getInstanceLocation( std::string osol){
 	}
 	else return "";
 }//getInstanceLocation
+
+string getSolverName( std::string osol){
+	if(osol == "") return osol;
+	unsigned int pos2;
+	unsigned int pos1 = osol.find( "os_solver");
+	if(pos1 != std::string::npos){
+		// get the end of the instanceLocation start tag
+		pos1 = osol.find(">", pos1 + 1);
+		if(pos1 != std::string::npos){
+			// get the start of instanceLocation end tag
+			pos2 = osol.find( "</other", pos1 + 1);
+			if( pos2 != std::string::npos){
+				// get the substring
+				return osol.substr( pos1 + 1, pos2 - pos1 - 1); 
+			}
+			else return "";
+		}
+		else return "";
+	}
+	else return "";
+}//getSolverName
 
 
 
