@@ -190,6 +190,7 @@ browserState (on|off)
 }
 
 (-serviceLocation{xmlwhitespace}+{optionValue}) {
+	printf("Found option XXXXXXXXXXXXXXXXXXXXX:  %s\n", yytext); 
 	if(yyextra->serviceLocation == NULL){
 		printf("Found option:  %s\n", yytext); 
 		yyextra->serviceLocation = strdup(yytext);

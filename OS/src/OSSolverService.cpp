@@ -146,7 +146,7 @@ int main(int argC, const char* argV[])
 	osoptions->osrl = NULL; 
 	osoptions->insListFile = NULL; 
 	osoptions->insList = NULL; 
-	osoptions->serviceLocation = ""; 
+	osoptions->serviceLocation = NULL; 
 	osoptions->serviceMethod = NULL; 
 	osoptions->osplInputFile = NULL; 
 	osoptions->osplOutputFile = NULL; 
@@ -206,7 +206,9 @@ int main(int argC, const char* argV[])
 			cout << "Solver Name = " << osoptions->solverName << endl;
 		}
 		else{
+			if(osoptions->osolFile != NULL && osoptions->osolFile !=""){
 			osoptions->solverName  =    &getSolverName( &osoptions->osolFile[0] )[0];
+			}
 		}
 		if(osoptions->browser != NULL) cout << "Browser Value = " << osoptions->browser << endl;
 		if( osoptions->os == true ) cout << "OS = " << osoptions->os << endl;
@@ -224,10 +226,12 @@ int main(int argC, const char* argV[])
 			}
 			if(osoptions->osplInputFile != NULL) osoptions->osplInput = fileUtil->getFileAsChar( &osoptions->osplInputFile[0]);
 			if(osoptions->osplOutputFile != NULL) osoptions->osplOutput = fileUtil->getFileAsChar( &osoptions->osplOutputFile[0]);
-			if(osoptions->serviceLocation != ""){
+			 cout << "Service Location Before IF= " << osoptions->serviceLocation << endl;
+			if(osoptions->serviceLocation != NULL){
 				 cout << "Service Location = " << osoptions->serviceLocation << endl;
 			}
 			else{
+				cout << "Service Location after else = " << osoptions->serviceLocation << endl;
 				if( getServiceURI( osoptions->osol) != ""){
 					osoptions->serviceLocation = &getServiceURI( osoptions->osol)[0];
 					cout << "Service Location = " << osoptions->serviceLocation << endl;
@@ -244,7 +248,7 @@ int main(int argC, const char* argV[])
 		if( osoptions->serviceMethod == NULL) solve();
 		else{
 			switch(osoptions->serviceMethod[ 0]){
-				case 'g':
+				case 'g': 
 					getJobID();
 					break;
 				case 'r':
@@ -289,7 +293,7 @@ void solve(){
 			}
 		}
 		// now solve either remotely or locally
-		if( (osoptions->serviceLocation != "")  ){
+		if( (osoptions->serviceLocation != NULL && osoptions->serviceLocation != "")  ){
 			// place a remote call
 			osagent = new OSSolverAgent( osoptions->serviceLocation );
 			osrl = osagent->solve(osoptions->osil  , osoptions->osol);
@@ -407,7 +411,7 @@ void getJobID(){
 	FileUtil *fileUtil = NULL;
 	fileUtil = new FileUtil();
 	try{
-		if(osoptions->serviceLocation != NULL){
+		if(osoptions->serviceLocation != ""){
 			osagent = new OSSolverAgent( osoptions->serviceLocation );
 			jobID = osagent->getJobID( osoptions->osol);
 			cout << jobID << endl;
