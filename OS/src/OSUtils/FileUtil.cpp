@@ -87,6 +87,17 @@ bool FileUtil::writeFileFromString(char* fname, std::string sname){
 	return true;
 } // end writeFileFromString
 
+bool FileUtil::writeFileFromString(std::string  fname, std::string sname){
+	std::ofstream outFile;
+	outFile.open( &fname[ 0] );
+	if(!outFile.is_open()){
+		return false;
+	}
+	outFile << sname;
+	outFile.close();
+	return true;
+} // end writeFileFromString
+
 bool FileUtil::writeFileFromChar(char* fname, char* ch){
 	std::ofstream outFile;
 	outFile.open( fname);

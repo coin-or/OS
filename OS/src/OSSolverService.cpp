@@ -131,30 +131,30 @@ int main(int argC, const char* argV[])
 	char osss[MAXCHARS] = " ";
 	const char *space = " "; 
 	//char *config = "-config";
-	char *configFileName = NULL;
+	std::string configFileName = "";
 	int i;
 
 	// initialize the OS options structure
 
 	osoptions = new osOptionsStruc();
-	osoptions->configFile = NULL; 
-	osoptions->osilFile = NULL; 
+	osoptions->configFile = ""; 
+	osoptions->osilFile = ""; 
 	osoptions->osil = ""; 
-	osoptions->osolFile = NULL; 
-	osoptions->osol = ""; 
-	osoptions->osrlFile = NULL; 
-	osoptions->osrl = NULL; 
-	osoptions->insListFile = NULL; 
-	osoptions->insList = NULL; 
-	osoptions->serviceLocation = NULL; 
-	osoptions->serviceMethod = NULL; 
-	osoptions->osplInputFile = NULL; 
-	osoptions->osplOutputFile = NULL; 
-	osoptions->mpsFile = NULL; 
-	osoptions->nlFile = NULL; 
-	osoptions->solverName = NULL; 
+	osoptions->osolFile = ""; 
+	osoptions->osol = "";  
+	osoptions->osrlFile = ""; 
+	osoptions->osrl = ""; 
+	osoptions->insListFile = ""; 
+	osoptions->insList = ""; 
+	osoptions->serviceLocation = ""; 
+	osoptions->serviceMethod = ""; 
+	osoptions->osplInputFile = ""; 
+	osoptions->osplOutputFile = ""; 
+	osoptions->mpsFile = ""; 
+	osoptions->nlFile = ""; 
+	osoptions->solverName = ""; 
 	osoptions->os = false; 
-	osoptions->browser = NULL; 
+	osoptions->browser = ""; 
 	osoptions->osOption = false;
 	try{
 		if(argC < 2) throw ErrorClass( "there must be at least one command line argument");
@@ -176,10 +176,10 @@ int main(int argC, const char* argV[])
 		ossslex( scanner);
 		std::cout << "done with call to ossslex" << std::endl;
 		// if there is a config file, get those options
-		if(osoptions->configFile != NULL){
+		if(osoptions->configFile != ""){
 			configFileName = osoptions->configFile;
 			cout << "configFileName = " << configFileName << endl;
-			std::string osolfileOptions = fileUtil->getFileAsString( configFileName);
+			std::string osolfileOptions = fileUtil->getFileAsString( &configFileName[ 0]);
 			ossslex_init( &scanner);
 			std::cout << "Call Text Extra" << std::endl;
 			setyyextra( osoptions, scanner);
@@ -193,41 +193,41 @@ int main(int argC, const char* argV[])
 		return 0;
 	} 
 		cout << "HERE ARE THE OPTION VALUES:" << endl;
-		if(osoptions->configFile != NULL) cout << "Config file = " << osoptions->configFile << endl;
-		if(osoptions->osilFile != NULL) cout << "OSiL file = " << osoptions->osilFile << endl;
-		if(osoptions->osolFile != NULL) cout << "OSoL file = " << osoptions->osolFile << endl;
-		if(osoptions->osrlFile != NULL) cout << "OSrL file = " << osoptions->osrlFile << endl;
-		if(osoptions->insListFile != NULL) cout << "Instruction List file = " << osoptions->insListFile << endl;
-		if(osoptions->osplInputFile != NULL) cout << "OSpL Input file = " << osoptions->osplInputFile << endl;
-		if(osoptions->serviceMethod != NULL) cout << "Service Method = " << osoptions->serviceMethod << endl;
-		if(osoptions->mpsFile != NULL) cout << "MPS File Name = " << osoptions->mpsFile << endl;
-		if(osoptions->nlFile != NULL) cout << "NL File Name = " << osoptions->nlFile << endl;
-		if(osoptions->solverName != NULL){ 
+		if(osoptions->configFile != "") cout << "Config file = " << osoptions->configFile << endl;
+		if(osoptions->osilFile != "") cout << "OSiL file = " << osoptions->osilFile << endl;
+		if(osoptions->osolFile != "") cout << "OSoL file = " << osoptions->osolFile << endl;
+		if(osoptions->osrlFile != "") cout << "OSrL file = " << osoptions->osrlFile << endl;
+		if(osoptions->insListFile != "") cout << "Instruction List file = " << osoptions->insListFile << endl;
+		if(osoptions->osplInputFile != "") cout << "OSpL Input file = " << osoptions->osplInputFile << endl;
+		if(osoptions->serviceMethod != "") cout << "Service Method = " << osoptions->serviceMethod << endl;
+		if(osoptions->mpsFile != "") cout << "MPS File Name = " << osoptions->mpsFile << endl;
+		if(osoptions->nlFile != "") cout << "NL File Name = " << osoptions->nlFile << endl;
+		if(osoptions->solverName != ""){ 
 			cout << "Solver Name = " << osoptions->solverName << endl;
 		}
 		else{
-			if(osoptions->osolFile != NULL && osoptions->osolFile !=""){
+			if(osoptions->osolFile != "" && osoptions->osolFile !=""){
 			osoptions->solverName  =    &getSolverName( &osoptions->osolFile[0] )[0];
 			}
 		}
-		if(osoptions->browser != NULL) cout << "Browser Value = " << osoptions->browser << endl;
+		if(osoptions->browser != "") cout << "Browser Value = " << osoptions->browser << endl;
 		if( osoptions->os == true ) cout << "OS = " << osoptions->os << endl;
 		// get the data from the files
 		fileUtil = new FileUtil();
 		try{	
-			if(osoptions->insListFile != NULL) osoptions->insList = fileUtil->getFileAsChar( &osoptions->insListFile[0]);
-			if(osoptions->osolFile != NULL) osoptions->osol = fileUtil->getFileAsChar( &osoptions->osolFile[0]);
-			if(osoptions->osilFile != NULL){
+			if(osoptions->insListFile != "") osoptions->insList = fileUtil->getFileAsChar( &osoptions->insListFile[0]);
+			if(osoptions->osolFile != "") osoptions->osol = fileUtil->getFileAsChar( &osoptions->osolFile[0]);
+			if(osoptions->osilFile != ""){
 				//this takes precedence over what is in the OSoL file
-				 osoptions->osil = fileUtil->getFileAsChar( &osoptions->osilFile[0]);
+				 osoptions->osil = fileUtil->getFileAsString( &osoptions->osilFile[0]);
 			}
 			else{
-				 if(osoptions->osolFile != NULL) osoptions->osil = fileUtil->getFileAsChar( &getInstanceLocation( osoptions->osol)[ 0] );
+				 if(osoptions->osolFile != "") osoptions->osil = fileUtil->getFileAsString( &getInstanceLocation( osoptions->osol)[ 0] );
 			}
-			if(osoptions->osplInputFile != NULL) osoptions->osplInput = fileUtil->getFileAsChar( &osoptions->osplInputFile[0]);
-			if(osoptions->osplOutputFile != NULL) osoptions->osplOutput = fileUtil->getFileAsChar( &osoptions->osplOutputFile[0]);
+			if(osoptions->osplInputFile != "") osoptions->osplInput = fileUtil->getFileAsChar( &osoptions->osplInputFile[0]);
+			if(osoptions->osplOutputFile != "") osoptions->osplOutput = fileUtil->getFileAsChar( &osoptions->osplOutputFile[0]);
 			 cout << "Service Location Before IF= " << osoptions->serviceLocation << endl;
-			if(osoptions->serviceLocation != NULL){
+			if(osoptions->serviceLocation != ""){
 				 cout << "Service Location = " << osoptions->serviceLocation << endl;
 			}
 			else{
@@ -245,7 +245,7 @@ int main(int argC, const char* argV[])
 		}	
 		// now call the correct serviceMethod
 		// solve is the default
-		if( osoptions->serviceMethod == NULL) solve();
+		if( osoptions->serviceMethod == "") solve();
 		else{
 			switch(osoptions->serviceMethod[ 0]){
 				case 'g': 
@@ -279,35 +279,35 @@ void solve(){
 		// call a method here to get OSiL if we have an nl or mps file
 		if(osoptions->osil == ""){
 			//we better have an nl file present or mps file or osol file
-			if(osoptions->nlFile != NULL){
+			if(osoptions->nlFile != ""){
 				getOSiLFromNl();
 			}
 			else{
-				if(osoptions->mpsFile != NULL){
+				if(osoptions->mpsFile != ""){
 					getOSiLFromMps();
 				}
 				else{// need an osol file with an instanceLocation specified
-					if( strstr(osoptions->osol, "<instanceLocation") == "")
+					if( osoptions->osol.find( "<instanceLocation") == std::string::npos)
 						throw ErrorClass("solve called and no osil, osol with osil specified, nl, or mps file given");
 				}
 			}
 		}
 		// now solve either remotely or locally
-		if( (osoptions->serviceLocation != NULL && osoptions->serviceLocation != "")  ){
+		if( (osoptions->serviceLocation != "" && osoptions->serviceLocation != "")  ){
 			// place a remote call
 			osagent = new OSSolverAgent( osoptions->serviceLocation );
 			osrl = osagent->solve(osoptions->osil  , osoptions->osol);
-			if(osoptions->osrlFile != NULL) fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
+			if(osoptions->osrlFile != "") fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
 			else cout << osrl << endl;
 		}
 		else{
 			// solve locally
 			// add IPOPT
-			if(osoptions->solverName == NULL ){
+			if(osoptions->solverName == "" ){
 				string sSolverName = "cbc";
 				osoptions->solverName = &sSolverName[0];
 			}
-			if( strstr(osoptions->solverName, "ipopt") != NULL) {
+			if( osoptions->solverName.find( "ipopt") != std::string::npos) {
 				// we are requesting the Ipopt solver
 				bool bIpoptIsPresent = false;
 				#ifdef COIN_HAS_IPOPT
@@ -315,14 +315,14 @@ void solve(){
 				SmartPtr<IpoptSolver> ipoptSolver  = new IpoptSolver();	
 				ipoptSolver->osol = osoptions->osol;
 				ipoptSolver->osil = osoptions->osil;
-				ipoptSolver->osinstance = NULL;
+				ipoptSolver->osinstance =NULL;
 				ipoptSolver->solve();
 				osrl = ipoptSolver->osrl ;
 				#endif
 				if(bIpoptIsPresent == false) throw ErrorClass( "the Ipopt solver requested is not present");
 			}
 			else{
-				if( strstr(osoptions->solverName, "lindo") != NULL) {
+				if( osoptions->solverName.find( "lindo") != std::string::npos) {
 					// we are requesting the Lindo solver
 					bool bLindoIsPresent = false;
 					#ifdef COIN_HAS_LINDO
@@ -334,32 +334,32 @@ void solve(){
 					if(bLindoIsPresent == false) throw ErrorClass( "the Lindo solver requested is not present");
 				}
 				else{ 
-					if( strstr(osoptions->solverName, "clp") != NULL){
+					if( osoptions->solverName.find( "clp") != std::string::npos){
 						solverType = new CoinSolver();
 						solverType->sSolverName = "clp";
 					}
 					else{
-						if( strstr(osoptions->solverName, "cbc") != NULL){
+						if( osoptions->solverName.find( "cbc") != std::string::npos){
 							solverType = new CoinSolver();
 							solverType->sSolverName = "cbc";
 						}
 						else{
-							if( strstr(osoptions->solverName, "cplex") != NULL){
+							if( osoptions->solverName.find( "cplex") != std::string::npos){
 								solverType = new CoinSolver();
 								solverType->sSolverName = "cplex";
 							}
 							else{
-								if( strstr(osoptions->solverName, "glpk") != NULL){
+								if( osoptions->solverName.find( "glpk") != std::string::npos){
 									solverType = new CoinSolver();
 									solverType->sSolverName = "glpk";
 								}
 								else{
-									if(strstr(osoptions->solverName, "dylp") != NULL){
+									if( osoptions->solverName.find( "dylp") != std::string::npos){
 										solverType = new CoinSolver();
 										solverType->sSolverName = "dylp";
 									}
 									else{
-										if(strstr(osoptions->solverName, "symphony") != NULL){
+										if( osoptions->solverName.find( "symphony") != std::string::npos){
 											solverType = new CoinSolver();
 											solverType->sSolverName = "symphony";
 										}
@@ -373,7 +373,7 @@ void solve(){
 					}
 				}
 			}
-			if( strstr(osoptions->solverName, "ipopt") == NULL){
+			if( osoptions->solverName.find( "ipopt") == std::string::npos){
 				solverType->osil = osoptions->osil;
 				solverType->osol = osoptions->osol;
 				solverType->osinstance = NULL;
@@ -382,18 +382,13 @@ void solve(){
 				osrl = solverType->osrl;
 				cout << "RETURN FROM SOLVER" << endl;
 			}
-			if(osoptions->osrlFile != NULL){
+			if(osoptions->osrlFile != ""){
 				fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
 				//const char *ch1 = "/Applications/Firefox.app/Contents/MacOS/firefox  ";
-				if(osoptions->browser != NULL){
-					const char *ch1 = osoptions->browser;
-					char *ch2;
-	      			ch2 = new char[strlen( ch1) + strlen(osoptions->osrlFile) + 2];
-	      			ch2 = strcpy(ch2, ch1);	
-	      			char const *ch3  = " ";
-	      			ch2 = strcat(ch2, ch3);
-	      			ch2 = strcat(ch2, osoptions->osrlFile);
-					std::system(ch2  );
+				if(osoptions->browser != ""){
+					std::string str = osoptions->browser + "  " +  osoptions->osrlFile;
+					const char *ch = &str[ 0];
+					std::system( ch );
 				}
 			}
 			else cout << osrl << endl;
@@ -401,7 +396,7 @@ void solve(){
 	}
 	catch(const ErrorClass& eclass){
 		std::cout <<  eclass.errormsg << std::endl;
-		if(osoptions->osrlFile != NULL) fileUtil->writeFileFromString(osoptions->osrlFile,  eclass.errormsg);
+		if(osoptions->osrlFile != "") fileUtil->writeFileFromString(osoptions->osrlFile,  eclass.errormsg);
 	}	
 }//end solve
 
@@ -432,10 +427,10 @@ void knock(){
 	FileUtil *fileUtil = NULL;
 	fileUtil = new FileUtil();
 	try{
-		if(osoptions->serviceLocation != NULL){
+		if(osoptions->serviceLocation != ""){
 			osagent = new OSSolverAgent( osoptions->serviceLocation );
 			osplOutput = osagent->knock(osoptions->osplInput,  osoptions->osol);
-			if(osoptions->osplOutputFile != NULL) fileUtil->writeFileFromString(osoptions->osplOutputFile, osplOutput);
+			if(osoptions->osplOutputFile != "") fileUtil->writeFileFromString(osoptions->osplOutputFile, osplOutput);
 			else cout << osplOutput << endl;
 		}
 		else{
@@ -457,13 +452,13 @@ void send(){
 	unsigned int iStringpos;
 	try{
 		// call a method here to get OSiL if we have an nl or mps file
-		if(osoptions->osil == NULL){
+		if(osoptions->osil == ""){
 			//we better have an osil file present or mps file
-			if(osoptions->nlFile != NULL){
+			if(osoptions->nlFile != ""){
 				getOSiLFromNl();
 			}
 			else{
-				if(osoptions->mpsFile != NULL){
+				if(osoptions->mpsFile != ""){
 					getOSiLFromMps();
 				}
 				else{
@@ -471,10 +466,10 @@ void send(){
 				}
 			}
 		}
-		if(osoptions->serviceLocation != NULL){
+		if(osoptions->serviceLocation != ""){
 			osagent = new OSSolverAgent( osoptions->serviceLocation );
 			// check to see if there is an osol 
-			if(osoptions->osolFile == NULL){
+			if(osoptions->osolFile == ""){
 				// get a jobID
 				jobID =  osagent->getJobID( sOSoL) ;
 				// insert the jobID into the default osol
@@ -515,21 +510,16 @@ void retrieve(){
 	FileUtil *fileUtil = NULL;
 	fileUtil = new FileUtil();
 	try{
-		if(osoptions->serviceLocation != NULL){
+		if(osoptions->serviceLocation != ""){
 			osagent = new OSSolverAgent( osoptions->serviceLocation );
 			std::cout << "HERE ARE THE OSOL OPTIONS " <<  osoptions->osol << std::endl;
 			osrl = osagent->retrieve( osoptions->osol);
-			if(osoptions->osrlFile != NULL) {
+			if(osoptions->osrlFile != "") {
 				fileUtil->writeFileFromString(osoptions->osrlFile, osrl); 
-				if(osoptions->browser != NULL){
-					const char *ch1 = osoptions->browser;
-					char *ch2;
-  					ch2 = new char[strlen( ch1) + strlen(osoptions->osrlFile) + 2];
-  					ch2 = strcpy(ch2, ch1);	
-  					char const *ch3  = " ";
-  					ch2 = strcat(ch2, ch3);
-  					ch2 = strcat(ch2, osoptions->osrlFile);
-					std::system(ch2  );
+				if(osoptions->browser != ""){
+					std::string str = osoptions->browser + "  " + osoptions->osrlFile ;
+					const char *ch = &str[ 0];
+					std::system( ch );
 				}
 			}
 			else cout << osrl << endl;
@@ -550,10 +540,10 @@ void kill(){
 	FileUtil *fileUtil = NULL;
 	fileUtil = new FileUtil();
 	try{
-		if(osoptions->serviceLocation != NULL){
+		if(osoptions->serviceLocation != ""){
 			osagent = new OSSolverAgent( osoptions->serviceLocation );
 			osplOutput = osagent->kill( osoptions->osol);
-			if(osoptions->osplOutputFile != NULL) fileUtil->writeFileFromString(osoptions->osplOutputFile, osplOutput);
+			if(osoptions->osplOutputFile != "") fileUtil->writeFileFromString(osoptions->osplOutputFile, osplOutput);
 			else cout << osplOutput << endl;
 		}
 		else{
@@ -575,7 +565,7 @@ void getOSiLFromNl(){
 		osilwriter = new OSiLWriter();
 		std::string osil;
 		osil = osilwriter->writeOSiL(  nl2osil->osinstance) ;
-		osoptions->osil = &osil[0];
+		osoptions->osil = osil;
 		delete nl2osil;
 		nl2osil = NULL;
 		delete osilwriter;
@@ -599,7 +589,7 @@ void getOSiLFromMps(){
 		osilwriter = new OSiLWriter();
 		std::string osil;
 		osil = osilwriter->writeOSiL(  mps2osil->osinstance) ;
-		osoptions->osil = &osil[0];
+		osoptions->osil = osil;
 		delete mps2osil;
 		mps2osil = NULL;
 		delete osilwriter;

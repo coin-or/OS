@@ -41,6 +41,7 @@ public:
 	std::string getFileAsString(  char* fname);
 	char* getFileAsChar(  char* fname);
 	bool writeFileFromString(char* fname, std::string thestring);
+	bool writeFileFromString(std::string fname, std::string thestring);
 	bool writeFileFromChar(char* fname, char* ch);
 };//class MathUtil
 #endif

@@ -20,28 +20,27 @@
 
 
 struct osOptionsStruc{
-	char *configFile;
-	char *osilFile;
-	char *osil;
-	char *osolFile;
-	char *osol;
-	char *osrlFile;
-	char *osrl;
-	char *insListFile;
-	char *insList;
-	char *serviceLocation;
-	char *serviceMethod;
+	std::string configFile;
+	std::string osilFile;
+	std::string osil;
+	std::string osolFile;
+	std::string osol;
+	std::string osrlFile;
+	std::string  osrl;
+	std::string insListFile;
+	std::string insList;
+	std::string serviceLocation;
+	std::string serviceMethod;
 	bool os;
-	char *osplInputFile;
-	char *osplOutputFile;
-	char *osplInput;
-	char *osplOutput;
-	char *mpsFile;
-	char *nlFile;
-	char *solverName;
-	char *browser;
+	std::string osplInputFile;
+	std::string osplOutputFile;
+	std::string osplInput;
+	std::string osplOutput;
+	std::string mpsFile;
+	std::string nlFile;
+	std::string solverName;
+	std::string browser;
 	bool osOption;
-	
 };
 
 
