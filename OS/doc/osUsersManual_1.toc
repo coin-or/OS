@@ -21,15 +21,15 @@
 \contentsline {subsection}{\numberline {6.1}OSSolverService Input Parameters}{9}
 \contentsline {subsection}{\numberline {6.2}Solving Problems Locally}{11}
 \contentsline {subsection}{\numberline {6.3}Solving Problems Remotely with Web Services}{11}
-\contentsline {subsubsection}{\numberline {6.3.1}The Remote {\tt solve} Service Method}{12}
-\contentsline {subsubsection}{\numberline {6.3.2}The Remote {\tt send} Service Method}{13}
-\contentsline {subsubsection}{\numberline {6.3.3}The Remote {\tt retrieve} Service Method}{13}
-\contentsline {subsubsection}{\numberline {6.3.4}The Remote {\tt getJobID} Service Method}{13}
-\contentsline {subsubsection}{\numberline {6.3.5}The Remote {\tt knock} Service Method}{13}
-\contentsline {subsubsection}{\numberline {6.3.6}The Remote {\tt kill} Service Method}{13}
-\contentsline {section}{\numberline {7}Setting up a Solver Service with Tomcat}{13}
-\contentsline {section}{\numberline {8}Examples}{13}
-\contentsline {subsection}{\numberline {8.1}AMPL Client: Hooking AMPL to Solvers}{13}
-\contentsline {subsection}{\numberline {8.2}CppAD: Using the CppAD Algorithmic Differentiation Package}{14}
-\contentsline {subsection}{\numberline {8.3}File Upload: Using a File Upload Package}{14}
-\contentsline {subsection}{\numberline {8.4}Instance Generator: Using the OSInstance API to Generate Instances}{14}
+\contentsline {subsubsection}{\numberline {6.3.1}The {\tt solve} Service Method}{12}
+\contentsline {subsubsection}{\numberline {6.3.2}The {\tt send} Service Method}{13}
+\contentsline {subsubsection}{\numberline {6.3.3}The {\tt retrieve} Service Method}{15}
+\contentsline {subsubsection}{\numberline {6.3.4}The {\tt getJobID} Service Method}{15}
+\contentsline {subsubsection}{\numberline {6.3.5}The {\tt knock} Service Method}{15}
+\contentsline {subsubsection}{\numberline {6.3.6}The {\tt kill} Service Method}{15}
+\contentsline {section}{\numberline {7}Setting up a Solver Service with Tomcat}{16}
+\contentsline {section}{\numberline {8}Examples}{16}
+\contentsline {subsection}{\numberline {8.1}AMPL Client: Hooking AMPL to Solvers}{16}
+\contentsline {subsection}{\numberline {8.2}CppAD: Using the CppAD Algorithmic Differentiation Package}{17}
+\contentsline {subsection}{\numberline {8.3}File Upload: Using a File Upload Package}{17}
+\contentsline {subsection}{\numberline {8.4}Instance Generator: Using the OSInstance API to Generate Instances}{17}
