@@ -202,14 +202,6 @@ int main(int argC, const char* argV[])
 		if(osoptions->serviceMethod != "") cout << "Service Method = " << osoptions->serviceMethod << endl;
 		if(osoptions->mpsFile != "") cout << "MPS File Name = " << osoptions->mpsFile << endl;
 		if(osoptions->nlFile != "") cout << "NL File Name = " << osoptions->nlFile << endl;
-		if(osoptions->solverName != ""){ 
-			cout << "Solver Name = " << osoptions->solverName << endl;
-		}
-		else{
-			if(osoptions->osolFile != "" && osoptions->osolFile !=""){
-			osoptions->solverName  =    &getSolverName( &osoptions->osolFile[0] )[0];
-			}
-		}
 		if(osoptions->browser != "") cout << "Browser Value = " << osoptions->browser << endl;
 		if( osoptions->os == true ) cout << "OS = " << osoptions->os << endl;
 		// get the data from the files
@@ -217,26 +209,33 @@ int main(int argC, const char* argV[])
 		try{	
 			if(osoptions->insListFile != "") osoptions->insList = fileUtil->getFileAsChar( &osoptions->insListFile[0]);
 			if(osoptions->osolFile != "") osoptions->osol = fileUtil->getFileAsChar( &osoptions->osolFile[0]);
-			if(osoptions->osilFile != ""){
-				//this takes precedence over what is in the OSoL file
-				 osoptions->osil = fileUtil->getFileAsString( &osoptions->osilFile[0]);
-			}
-			else{
-				 if(osoptions->osolFile != "") osoptions->osil = fileUtil->getFileAsString( &getInstanceLocation( osoptions->osol)[ 0] );
-			}
-			if(osoptions->osplInputFile != "") osoptions->osplInput = fileUtil->getFileAsChar( &osoptions->osplInputFile[0]);
-			if(osoptions->osplOutputFile != "") osoptions->osplOutput = fileUtil->getFileAsChar( &osoptions->osplOutputFile[0]);
-			 cout << "Service Location Before IF= " << osoptions->serviceLocation << endl;
 			if(osoptions->serviceLocation != ""){
 				 cout << "Service Location = " << osoptions->serviceLocation << endl;
 			}
 			else{
-				cout << "Service Location after else = " << osoptions->serviceLocation << endl;
 				if( getServiceURI( osoptions->osol) != ""){
 					osoptions->serviceLocation = &getServiceURI( osoptions->osol)[0];
 					cout << "Service Location = " << osoptions->serviceLocation << endl;
 				}
 			}
+			if(osoptions->osilFile != ""){
+				//this takes precedence over what is in the OSoL file
+				 osoptions->osil = fileUtil->getFileAsString( &osoptions->osilFile[0]);
+			}
+			else{//get <instanceLocation if we are doing a local solve
+				 if( (osoptions->osol != "") &&  (osoptions->serviceLocation == "") ) osoptions->osil = fileUtil->getFileAsString( &getInstanceLocation( osoptions->osol)[ 0] );
+			}
+			// see if there is a solver specified
+			if(osoptions->solverName != ""){ 
+				cout << "Solver Name = " << osoptions->solverName << endl;
+			}
+			else{
+				if(osoptions->osol != ""){
+				osoptions->solverName  =    &getSolverName( &osoptions->osolFile[0] )[0];
+				}
+			}
+			if(osoptions->osplInputFile != "") osoptions->osplInput = fileUtil->getFileAsChar( &osoptions->osplInputFile[0]);
+			if(osoptions->osplOutputFile != "") osoptions->osplOutput = fileUtil->getFileAsChar( &osoptions->osplOutputFile[0]);
 		}
 		catch(const ErrorClass& eclass){
 			//cout << eclass.errormsg <<  endl;
@@ -293,16 +292,17 @@ void solve(){
 			}
 		}
 		// now solve either remotely or locally
-		if( (osoptions->serviceLocation != "" && osoptions->serviceLocation != "")  ){
+		if( osoptions->serviceLocation != "" ){
 			// place a remote call
 			osagent = new OSSolverAgent( osoptions->serviceLocation );
 			osrl = osagent->solve(osoptions->osil  , osoptions->osol);
 			if(osoptions->osrlFile != "") fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
 			else cout << osrl << endl;
+			delete osagent;
+			osagent = NULL;
 		}
 		else{
 			// solve locally
-			// add IPOPT
 			if(osoptions->solverName == "" ){
 				string sSolverName = "cbc";
 				osoptions->solverName = &sSolverName[0];
@@ -315,7 +315,7 @@ void solve(){
 				SmartPtr<IpoptSolver> ipoptSolver  = new IpoptSolver();	
 				ipoptSolver->osol = osoptions->osol;
 				ipoptSolver->osil = osoptions->osil;
-				ipoptSolver->osinstance =NULL;
+				ipoptSolver->osinstance = NULL;
 				ipoptSolver->solve();
 				osrl = ipoptSolver->osrl ;
 				#endif
@@ -363,9 +363,6 @@ void solve(){
 											solverType = new CoinSolver();
 											solverType->sSolverName = "symphony";
 										}
-										else{
-											throw ErrorClass( "a supported solver is not present");
-										}
 									}
 								}
 							}
@@ -373,14 +370,15 @@ void solve(){
 					}
 				}
 			}
+			// treat non-ipopt solvers differently
 			if( osoptions->solverName.find( "ipopt") == std::string::npos){
 				solverType->osil = osoptions->osil;
 				solverType->osol = osoptions->osol;
 				solverType->osinstance = NULL;
-				cout << "CALL SOLVER" << endl;
 				solverType->solve();
 				osrl = solverType->osrl;
-				cout << "RETURN FROM SOLVER" << endl;
+				delete solverType;
+				solverType = NULL;
 			}
 			if(osoptions->osrlFile != ""){
 				fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
@@ -395,8 +393,19 @@ void solve(){
 		}
 	}
 	catch(const ErrorClass& eclass){
-		std::cout <<  eclass.errormsg << std::endl;
-		if(osoptions->osrlFile != "") fileUtil->writeFileFromString(osoptions->osrlFile,  eclass.errormsg);
+		OSResult *osresult = NULL;
+		OSrLWriter *osrlwriter = NULL;
+		osrlwriter = new OSrLWriter();
+		osresult = new OSResult();
+		osresult->setGeneralMessage( eclass.errormsg);
+		osresult->setGeneralStatusType( "error");
+		std::string osrl = osrlwriter->writeOSrL( osresult);
+		if(osoptions->osrlFile != "") fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
+		else cout << osrl << endl;
+		delete osresult;
+		osresult = NULL;
+		delete osrlwriter;
+		osrlwriter = NULL;
 	}	
 }//end solve
 
@@ -412,11 +421,23 @@ void getJobID(){
 			cout << jobID << endl;
 		}
 		else{
-			cout << "please specify service location (url)" << endl;
+			throw ErrorClass("please specify service location (url)");
 		}
 	}
 	catch(const ErrorClass& eclass){
-		std::cout << eclass.errormsg <<  std::endl;
+		OSResult *osresult = NULL;
+		OSrLWriter *osrlwriter = NULL;
+		osrlwriter = new OSrLWriter();
+		osresult = new OSResult();
+		osresult->setGeneralMessage( eclass.errormsg);
+		osresult->setGeneralStatusType( "error");
+		std::string osrl = osrlwriter->writeOSrL( osresult);
+		if(osoptions->osrlFile != "") fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
+		else cout << osrl << endl;
+		delete osresult;
+		osresult = NULL;
+		delete osrlwriter;
+		osrlwriter = NULL;
 	}	
 }//end getJobID
  
@@ -434,11 +455,23 @@ void knock(){
 			else cout << osplOutput << endl;
 		}
 		else{
-			cout << "please specify service location (url)" << endl;
+			throw ErrorClass( "please specify service location (url)" );
 		}
 	}
 	catch(const ErrorClass& eclass){
-		std::cout << eclass.errormsg <<  std::endl;
+		OSResult *osresult = NULL;
+		OSrLWriter *osrlwriter = NULL;
+		osrlwriter = new OSrLWriter();
+		osresult = new OSResult();
+		osresult->setGeneralMessage( eclass.errormsg);
+		osresult->setGeneralStatusType( "error");
+		std::string osrl = osrlwriter->writeOSrL( osresult);
+		if(osoptions->osrlFile != "") fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
+		else cout << osrl << endl;
+		delete osresult;
+		osresult = NULL;
+		delete osrlwriter;
+		osrlwriter = NULL;
 	}	
 }//end knock
 
@@ -447,6 +480,8 @@ void send(){
 	bool bSend = false;
 	std::string jobID = "";
 	OSSolverAgent* osagent = NULL;
+	FileUtil *fileUtil = NULL;
+	fileUtil = new FileUtil();
 	// first get the jobID
 	std::string sOSoL = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/OSoL.xsd\"><general> </general></osol>";
 	unsigned int iStringpos;
@@ -500,7 +535,19 @@ void send(){
 		}
 	}
 	catch(const ErrorClass& eclass){
-		std::cout << eclass.errormsg <<  std::endl;
+		OSResult *osresult = NULL;
+		OSrLWriter *osrlwriter = NULL;
+		osrlwriter = new OSrLWriter();
+		osresult = new OSResult();
+		osresult->setGeneralMessage( eclass.errormsg);
+		osresult->setGeneralStatusType( "error");
+		std::string osrl = osrlwriter->writeOSrL( osresult);
+		if(osoptions->osrlFile != "") fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
+		else cout << osrl << endl;
+		delete osresult;
+		osresult = NULL;
+		delete osrlwriter;
+		osrlwriter = NULL;
 	}	
 }//end send
 
@@ -525,12 +572,24 @@ void retrieve(){
 			else cout << osrl << endl;
 		}
 		else{
-			cout << "please specify service location (url)" << endl;
+			throw ErrorClass( "please specify service location (url)" );
 		}
 
 	}
 	catch(const ErrorClass& eclass){
-		std::cout << eclass.errormsg <<  std::endl;
+		OSResult *osresult = NULL;
+		OSrLWriter *osrlwriter = NULL;
+		osrlwriter = new OSrLWriter();
+		osresult = new OSResult();
+		osresult->setGeneralMessage( eclass.errormsg);
+		osresult->setGeneralStatusType( "error");
+		std::string osrl = osrlwriter->writeOSrL( osresult);
+		if(osoptions->osrlFile != "") fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
+		else cout << osrl << endl;
+		delete osresult;
+		osresult = NULL;
+		delete osrlwriter;
+		osrlwriter = NULL;
 	}	
 }//end retrieve
 
@@ -547,11 +606,23 @@ void kill(){
 			else cout << osplOutput << endl;
 		}
 		else{
-			cout << "please specify service location (url)" << endl;
+			throw ErrorClass( "please specify service location (url)" );
 		}
 	}
 	catch(const ErrorClass& eclass){
-		std::cout << eclass.errormsg <<  std::endl;
+		OSResult *osresult = NULL;
+		OSrLWriter *osrlwriter = NULL;
+		osrlwriter = new OSrLWriter();
+		osresult = new OSResult();
+		osresult->setGeneralMessage( eclass.errormsg);
+		osresult->setGeneralStatusType( "error");
+		std::string osrl = osrlwriter->writeOSrL( osresult);
+		if(osoptions->osrlFile != "") fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
+		else cout << osrl << endl;
+		delete osresult;
+		osresult = NULL;
+		delete osrlwriter;
+		osrlwriter = NULL;
 	}	
 }//end kill
 

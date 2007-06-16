@@ -77,6 +77,9 @@ OS/data/parincnonlinear.nl -text
 OS/data/pilot87.mps -text
 OS/data/pilot87.osil -text
 OS/data/reducedcost.osrl -text
+OS/data/remoteSolve1.osol -text
+OS/data/remoteSolve2.osol -text
+OS/data/remoteSolve3.osol -text
 OS/data/remotegsbkip.osol -text
 OS/data/remoteosil.osol -text
 OS/data/retrieve.osol -text

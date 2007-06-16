@@ -1,29 +1,35 @@
-\contentsline {section}{\numberline {1}Introduction}{3}
-\contentsline {section}{\numberline {2}Download and Installation}{3}
-\contentsline {subsection}{\numberline {2.1}Obtaining the Source Code Subversion Repository (SVN)}{3}
-\contentsline {subsection}{\numberline {2.2}Obtaining the Source Code From a Tarball}{5}
-\contentsline {subsection}{\numberline {2.3}Obtaining a Visual Studio Project}{5}
-\contentsline {subsection}{\numberline {2.4}Obtaining the Binaries}{5}
-\contentsline {subsection}{\numberline {2.5}Platforms}{5}
-\contentsline {section}{\numberline {3}The OS Library Components}{5}
-\contentsline {subsection}{\numberline {3.1}OSAgent}{5}
-\contentsline {subsection}{\numberline {3.2}OSCommonInterfaces}{6}
-\contentsline {subsection}{\numberline {3.3}OSModelInterfaces}{6}
-\contentsline {subsection}{\numberline {3.4}OSParsers}{6}
-\contentsline {subsection}{\numberline {3.5}OSSolverInterfaces}{6}
-\contentsline {subsection}{\numberline {3.6}OSUtils}{7}
-\contentsline {section}{\numberline {4}OSInstance: A General Instance API}{7}
-\contentsline {subsection}{\numberline {4.1}Get Methods}{7}
-\contentsline {subsection}{\numberline {4.2}Set Methods}{7}
-\contentsline {subsection}{\numberline {4.3}Calculate Methods}{7}
-\contentsline {section}{\numberline {5}Hooking to An Algorithmic Differentiation Package}{7}
-\contentsline {section}{\numberline {6}The OSSolverService}{7}
-\contentsline {subsection}{\numberline {6.1}OSSolverService Input Parameters}{8}
-\contentsline {subsection}{\numberline {6.2}Solving Problems Locally}{9}
-\contentsline {subsection}{\numberline {6.3}Solving Problems Remotely with Web Services}{10}
-\contentsline {section}{\numberline {7}Setting up a Solver Service with Tomcat}{10}
-\contentsline {section}{\numberline {8}Examples}{10}
-\contentsline {subsection}{\numberline {8.1}AMPL Client: Hooking AMPL to Solvers}{10}
-\contentsline {subsection}{\numberline {8.2}CppAD: Using the CppAD Algorithmic Differentiation Package}{11}
-\contentsline {subsection}{\numberline {8.3}File Upload: Using a File Upload Package}{11}
-\contentsline {subsection}{\numberline {8.4}Instance Generator: Using the OSInstance API to Generate Instances}{11}
+\contentsline {section}{\numberline {1}Introduction}{4}
+\contentsline {section}{\numberline {2}Download and Installation}{4}
+\contentsline {subsection}{\numberline {2.1}Obtaining the Source Code Subversion Repository (SVN)}{4}
+\contentsline {subsection}{\numberline {2.2}Obtaining the Source Code From a Tarball}{6}
+\contentsline {subsection}{\numberline {2.3}Obtaining a Visual Studio Project}{6}
+\contentsline {subsection}{\numberline {2.4}Obtaining the Binaries}{6}
+\contentsline {subsection}{\numberline {2.5}Platforms}{6}
+\contentsline {section}{\numberline {3}The OS Library Components}{6}
+\contentsline {subsection}{\numberline {3.1}OSAgent}{6}
+\contentsline {subsection}{\numberline {3.2}OSCommonInterfaces}{7}
+\contentsline {subsection}{\numberline {3.3}OSModelInterfaces}{7}
+\contentsline {subsection}{\numberline {3.4}OSParsers}{7}
+\contentsline {subsection}{\numberline {3.5}OSSolverInterfaces}{7}
+\contentsline {subsection}{\numberline {3.6}OSUtils}{8}
+\contentsline {section}{\numberline {4}OSInstance: A General Instance API}{8}
+\contentsline {subsection}{\numberline {4.1}Get Methods}{8}
+\contentsline {subsection}{\numberline {4.2}Set Methods}{8}
+\contentsline {subsection}{\numberline {4.3}Calculate Methods}{8}
+\contentsline {section}{\numberline {5}Hooking to An Algorithmic Differentiation Package}{8}
+\contentsline {section}{\numberline {6}The OSSolverService}{8}
+\contentsline {subsection}{\numberline {6.1}OSSolverService Input Parameters}{9}
+\contentsline {subsection}{\numberline {6.2}Solving Problems Locally}{11}
+\contentsline {subsection}{\numberline {6.3}Solving Problems Remotely with Web Services}{11}
+\contentsline {subsubsection}{\numberline {6.3.1}The Remote {\tt solve} Service Method}{12}
+\contentsline {subsubsection}{\numberline {6.3.2}The Remote {\tt send} Service Method}{13}
+\contentsline {subsubsection}{\numberline {6.3.3}The Remote {\tt retrieve} Service Method}{13}
+\contentsline {subsubsection}{\numberline {6.3.4}The Remote {\tt getJobID} Service Method}{13}
+\contentsline {subsubsection}{\numberline {6.3.5}The Remote {\tt knock} Service Method}{13}
+\contentsline {subsubsection}{\numberline {6.3.6}The Remote {\tt kill} Service Method}{13}
+\contentsline {section}{\numberline {7}Setting up a Solver Service with Tomcat}{13}
+\contentsline {section}{\numberline {8}Examples}{13}
+\contentsline {subsection}{\numberline {8.1}AMPL Client: Hooking AMPL to Solvers}{13}
+\contentsline {subsection}{\numberline {8.2}CppAD: Using the CppAD Algorithmic Differentiation Package}{14}
+\contentsline {subsection}{\numberline {8.3}File Upload: Using a File Upload Package}{14}
+\contentsline {subsection}{\numberline {8.4}Instance Generator: Using the OSInstance API to Generate Instances}{14}

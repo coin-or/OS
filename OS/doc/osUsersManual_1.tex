@@ -376,14 +376,11 @@ At present, the {\tt OSSolverService} takes the following parameters. The order 
 
 \item[] {\bf -osrl xxx.osrl}  this is the name of the file that contains the solver solution. A valid file path must be given on the machine that is running {\tt OSSolverService}. It is not necessary to specify this option.
 
-\item[] {\bf -serviceLocation location URL}  if the problem is solve remotely, this is the URL of the solver service. This is not required, and if not specified it is assumed that the problem is solved locally. 
+\item[] {\bf -serviceLocation}  is the URL of the solver service. This is not required, and if not specified it is assumed that the problem is solved locally. 
 
 \item[] {\bf -serviceMethod  method}  this is  the solver service required. The options are {\tt solve}, {\tt send},{\tt kill},{\tt knock}, {\tt getJobID}, and {\tt retrieve}. The use of these options is illustrated in the examples below. This option is not required, and the default value is {\tt sovle.}
 
 \item[] {\bf -mps  xxx.mps}  this is the name of the mps file if the problem instance is in mps format. It is assumed that this file is available in a directory on the machine that is running {\tt OSSolverService}. The default file format is OSiL so this option is not required.
-
-\item[] {\bf -nl  xxx.nl}  this is the name of the AMPL nl file if the problem instance is in AMPL nl  format. It is assumed that this file is available in a directory on the machine that is running {\tt OSSolverService}. The default file format is OSiL so this option is not required.
-
 
 \item[] {\bf -nl  xxx.nl}  this is the name of the AMPL nl file if the problem instance is in AMPL nl  format. It is assumed that this file is available in a directory on the machine that is running {\tt OSSolverService}. The default file format is OSiL so this option is not required.
 
@@ -394,10 +391,26 @@ At present, the {\tt OSSolverService} takes the following parameters. The order 
 
 \item[] {\bf -config pathToConfigureFile} this parameter specifies a path on the local machine to a text file containing values for the input parameters. This is convenient for the user not wishing to constantly retype parameter values.
 
+
+
 \end{itemize}
 
 
+{\bf Some Rules:}
 
+\begin{itemize}
+\item[1.]  When using the {\tt send()} or  {\tt solve()} methods a problem instance file location {\it must} be specified either at  the command line, in the configuration file, or in the {\tt <instanceLocation>} element in the OSoL options file file.
+
+\item[2.]  The {\tt serviceMethod} option must be specified at the command line or in a configuration file.  The service method cannot be specified in the OSoL options file. 
+
+\item [3.]  If the {\tt solver} option is not specified, the COIN-OR solver {\tt Cbc} is the default solver used. In this case an error is thrown if the problem instance has quadratic or other nonlinear terms. 
+
+\item[4.]  If the options ={\tt send}, {\tt kill}, {\tt knock},  {\tt getJobID},  or {\tt retrieve} are specified, a  {\tt serviceLocation} must be specified. 
+
+\item[5.]  The default {\tt serviceMethod} used is {\tt solve} if one is not specified.
+
+\item[6.] When calling a remote server, the solver option must be specified in the {\tt OSoL} file.
+\end{itemize}
 
 
 
@@ -468,9 +481,104 @@ http://www.optimizationservices.org/schemas/OSoL.xsd">
 
 \subsection{Solving Problems Remotely with Web Services}
 
+We now illustrate using the {\tt OSSolverService} executable to call a remote solver service.  
+By remote solver service we mean a solver service that is called using Web services.  
+Both the  {\tt OSSolverService} and the Web service could be on the same physical machine.
+
+In the following sections we illustrate each of the six service methods.  All of these examples are based upon a solver service running on a remote server running Apache Tomcat. See \url{tomcat.apache.org}. The Web Service running on the server is a Java program based on Apache Axis. See \url{ws.apache.org/axis}. This is described in greater detail in Section \ref{section:tomcat}.  This Web Service is called {\tt OSSolverService.jws}. This Java program calls a C++ executable OSSolverService on the server. So there is an OSSolverService on the client that calls the Web Service {\tt  OSSolverService.jws} that in turn calls  the executable {\tt OSSovlerService} on the server.  See Figure \ref{*****}.
+ 
+kipp -- put in  a figure of the client OSSolverService call OSSolverService.jws which in turn calls OSSolverService.
+
+
+\subsubsection{The Remote {\tt solve} Service Method}
+
+First we illustrate a simple call to   {\tt OSSolverService.jws} and request a solution using the COIN-OR  {\tt Clp} solver.  The call on the client machine is
+
+\begin{verbatim}
+OSSolverService -config ../data/testremote.config
+\end{verbatim}
+where the {\tt testremote.config} file is
+\begin{verbatim}
+-osil ../data/parincLinear.osil
+-serviceLocation http://128.135.130.17:8080/os/OSSolverService.jws
+\end{verbatim}
+
+No solver is specified so by default the  {\tt Cbc} solver will be used on the server.  
+
+Now use an OSoL options file
+\begin{verbatim}
+OSSolverService -osol ../data/remoteSolve1.osol -osil ../data/parincLinear.osil
+\end{verbatim}
+where {\tt remoteSolve1.osol} is
+\begin{verbatim}
+<?xml version="1.0" encoding="UTF-8"?>
+<osol xmlns="os.optimizationservices.org">
+    <general>
+        <serviceURI>http://128.135.130.17:8080/os/OSSolverService.jws</serviceURI>
+    </general>
+    <optimization>
+    	<other name="os_solver">clp</other>
+    </optimization>
+</osol>
+\end{verbatim}
+In this case we specify a sover to use, name {\tt Clp}.
+
+Next we illustrate a call to the remote SolverService and specify an OSiL instance that is on the remote machine.
+\begin{verbatim}
+OSSolverService -osol ../data/remoteSolve2.osol
+\end{verbatim}
+where the {\tt remoteSolve2.osol} file is
+\begin{verbatim}
+<?xml version="1.0" encoding="UTF-8"?>
+<osol xmlns="os.optimizationservices.org">
+    <general>
+        <serviceURI>http://128.135.130.17:8080/os/OSSolverService.jws</serviceURI>
+         <instanceLocation locationType="local">/home/kmartin/files/code/OSRepository/linear/continuous/pilot.osil</instanceLocation>
+    </general>
+    <optimization>
+    	<other name="os_solver">clp</other>
+    </optimization>
+</osol>
+\end{verbatim}
+if we were to change to the {\tt locationType} attribute in the {\tt <instanceLocation>} element to {\tt http} then we could specify the intance location to on yet another machine. This is illustrate below  for {\tt remoteSovle3.osol}.
+\begin{verbatim}
+<?xml version="1.0" encoding="UTF-8"?>
+<osol xmlns="os.optimizationservices.org">
+    <general>
+        <serviceURI>http://128.135.130.17:8080/os/OSSolverService.jws</serviceURI>
+         <instanceLocation locationType="http">http://gsbkip.chicagogsb.edu/testproblems/parincLinear.osil</instanceLocation>
+    </general>
+    <optimization>
+    	<other name="os_solver">clp</other>
+    </optimization>
+</osol>
+\end{verbatim}
+
+kipp illustrate the above with a figure
+
+
+
+
+
+
 Illustrate when data is uploaded locally or when data is uploaded from another server. 
 
-\section{Setting up a Solver Service with Tomcat}
+\subsubsection{The Remote {\tt send} Service Method}
+
+
+illustrate getting email with smpt
+
+\subsubsection{The Remote {\tt retrieve} Service Method}
+
+
+
+\subsubsection{The Remote {\tt getJobID} Service Method}
+
+\subsubsection{The Remote {\tt knock} Service Method}
+
+\subsubsection{The Remote {\tt kill} Service Method}
+
+\section{Setting up a Solver Service with Tomcat}\label{section:tomcat}
 
 \section{Examples}
 

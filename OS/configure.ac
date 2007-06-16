@@ -180,6 +180,9 @@ AC_COIN_VPATH_LINK(data/testmps.config)
 AC_COIN_VPATH_LINK(data/testnl.config)
 AC_COIN_VPATH_LINK(data/testlocalclp.config)
 AC_COIN_VPATH_LINK(data/testlocalosol.config)
+AC_COIN_VPATH_LINK(data/testremoteSolve1.config)
+AC_COIN_VPATH_LINK(data/testremoteSolve2.config)
+AC_COIN_VPATH_LINK(data/testremoteSolve3.config)
 
 
 
