@@ -268,7 +268,13 @@ SYMPHONY &x&x&x&x&& \\ \hline
  \end{tabular}
  
 
+\section{The OS Project Components}
 
+kipp -- don't forget to mention the schemas, data, xslt files, etc.
+
+\subsection{Key Protocols}
+
+Explain OSiL, OSrL, OSoL, and OSpL. Also, OSnL
 
 \section{The OS Library Components}
 
@@ -567,7 +573,7 @@ kipp illustrate the above with a figure
 
 Illustrate when data is uploaded locally or when data is uploaded from another server. 
 
-\subsubsection{The  {\tt send} Service Method}
+\subsubsection{The  {\tt send} Service Method}\label{section:send}
 
 When the {\tt solve} service method is used, the {\tt OSSolverService} does not finish execution until the solution is returned from the remote solver service. The {\tt solve} method communicates synchronously with the remote solver service. This may not be desirable for large problems when the user does not want to wait for a response. The {\tt send} service method should be used when asynchronous communication is desired. When the send method is used the instance is communicated to the remote service and the {\tt OSSolverService} terminates after submission. An example of this is
 \begin{verbatim}
@@ -646,67 +652,168 @@ The OSoL file {\tt retrieve.osol} contains a tag {\tt <jobID>} that is communica
 
 \subsubsection{The  {\tt getJobID} Service Method}\label{section:getjobid}
 
+Before  submitting a job with the {\tt send} method a {\tt JobID} is required. The {\tt OSSolverService} can get a {\tt JobID} as follows
+\begin{verbatim}
+-serviceLocation http://128.135.130.17:8080/os/OSSolverService.jws
+-serviceMethod getJobID
+\end{verbatim}
+Note that no OSoL input file is specified. In this case, the {\tt OSSolverService} sends an empty string. A string is returned with the {\tt JobID}. This {\tt JobID} is then put into a {\tt <jobID>} element in an OSoL string that would be used by the {\tt send} method.
+
 
 \subsubsection{The  {\tt knock} Service Method}\label{section:knock}
 
-\subsubsection{The  {\tt kill} Service Method}
+The OSSolverService terminates after executing the {\tt send} method. Therefore, it is necessary to know when the job is completed on the remote server. One way is to include an email address in the  {\tt <contact>}  element with the attribute {\tt transportType}     set to {\tt smtp}.  This was illustrated in Section \ref{section:solve}.  A second way to check on the status of a job is to use the {\tt knock} service method.  For example, assume a user   wants to know if  the job with {\tt JobID 123456abcd}  is complete. A user would make the request
+\begin{verbatim}
+OSSolverService -config ../data/testRemoteKnock.config
+\end{verbatim}
+where the {\tt testRemoteKnock.config} file is
+\begin{verbatim}
+-serviceLocation http://128.135.130.17:8080/OS/OSSolverService.jws
+-osplInput ../data/demo.ospl
+-osol ../data/retrieve.osol
+-serviceMethod knock
+\end{verbatim}
+the {\tt demo.ospl} file is
+\begin{verbatim}
+<?xml version="1.0" encoding="UTF-8"?>
+<ospl xmlns="os.optimizationservices.org">
+<processHeader>
+<request action="getAll"/>
+</processHeader>
+<processData/>
+</ospl>
+\end{verbatim}
+and the {\tt retrieve.osol} file is
+\begin{verbatim}
+<?xml version="1.0" encoding="UTF-8"?>
+<osol xmlns="os.optimizationservices.org">
+ 	<general>         
+ 		<jobID>123456abcd</jobID>  
+	</general>
+</osol>
+\end{verbatim}
+The result of this request is a string in OSrL format.  Part of the return format is illustrated below.
+\begin{verbatimtab}[4]
+<jobs>
+	<job jobID="123456abcd">
+		<state>finished</state>
+		<serviceURI>http://128.135.130.17:8080/ipopt/IPOPTSolverService.jws</serviceURI>
+		<submitTime>2007-06-16T14:57:36.678-05:00</submitTime>
+		<startTime>2007-06-16T14:57:36.678-05:00</startTime>
+		<endTime>2007-06-16T14:57:39.404-05:00</endTime>
+		<duration>2.726</duration>
+ </job>
+</jobs>
+\end{verbatimtab}
+Notice the {\tt <state>} element indicating that the job is finished.   
+
+When making a {\tt knock} request,  the OSoL string can be empty. In this example, if the OSoL string had been empty the status of all jobs solved since the disk clean-up would get reported.  Also, there are values other than {\tt getAll} for the OSpL {\tt action} attribute in the {\tt <request>} tag.  For example, the {\tt action} can be set to a value of {\tt ping} if the user just wants to check if the remote solver service is up and running. 
 
 
+
+\subsubsection{The  {\tt kill}   Service Method}
+
+If the user submits a job that is taking too long or is a mistake it is possible to kill the job on the remote server using the {\tt kill} service method. For example to kill job {\tt 123456abcd} .  At the command line type
+\begin{verbatim}
+OSSolverService -config  ../data/kill.config
+\end{verbatim}
+where the configure file {\tt kill.config} is
+\begin{verbatim}
+-osol ../data/kill.osol
+-serviceLocation http://128.135.130.17:8080/os/OSSolverService.jws
+-serviceMethod kill
+\end{verbatim}
+and the {\tt kill.osol} file is
+\begin{verbatimtab}[4]
+<?xml version="1.0" encoding="UTF-8"?>
+<osol xmlns="os.optimizationservices.org">
+ 	<general>         
+ 		<jobID>123456abcd</jobID>  
+	</general>
+</osol>
+\end{verbatimtab}
+
+
+\subsubsection{Summary}
+
+Below is a summary of the inputs and outputs of the six service methods. 
 
 \begin{itemize}
 \item {\tt solve(osil, osol):}
 
 \begin{itemize}
 
-\item Takes OSiL and OSoL and returns OSrL (string/file version)
+\item Inputs: a string with the instance in OSiL format and a string with the solver options in OSoL format
+
+\item  Returns: a string with the solver solution in OSrL format
 
 \item  Synchronous call, blocking request/response
 
 \end{itemize}
 
-\item {\tt getJobID(osol)}
 
-\begin{itemize}
-
-\item Gets a unique job id generated by the solver service
-
-\item  Maintain session and state on a distributed system
-\end{itemize}
 
 \item {\tt send(osil, osol)}
 
 
 \begin{itemize}
 
-\item Same signature as the solve function but returns a boolean
+\item Inputs: a string with the instance in OSiL format and a string with the solver options in OSoL format
+
+\item Returns:  a boolean, true if the problem was successfully submitted, false otherwise
+
+\item Has the same signature as {\tt solve}
 
 \item  Asynchronous (server side), non-blocking call
+
+\item The {\tt osol} string should have a {\tt JobID} in the {\tt <jobID>} element
 \end{itemize}
+
+\item {\tt getJobID( osol)}
+
+\begin{itemize}
+
+\item Inputs: a string  with the solver options in OSoL format (in this case, the string may be empty because no options are required to get the JobID)
+
+\item  Returns: a string which is the unique job id generated by the solver service
+
+\item  Used to maintain session and state on a distributed system
+\end{itemize}
+
+
 
 \item {\tt knock(ospl, osol)}
 
 \begin{itemize}
 
-\item Get process and job status information from the remote server
+\item Inputs: a string in OSpL format and a string with the solver options in OSoL format
+
+\item  Returns: process and job status information from the remote server in OSpL format
 
 \end{itemize}
 
-\item {\tt retrieve(osol)}
+\item {\tt retrieve( osol)}
 
 
 \begin{itemize}
 
-\item Retrieving result from anywhere anytime
+\item Inputs: a string with the solver options  in OSoL format  
+
+\item Returns: a string with the solver solution in OSrL format
+
+\item The {\tt osol} string should have a {\tt JobID} in the {\tt <jobID>} element
 
 
 \end{itemize}
 
-\item {\tt kill(osol)}
+\item {\tt kill( osol)}
 
 
 \begin{itemize}
 
-\item kill remote optimization jobs
+\item Inputs: a string with the solver options  in OSoL format  
+
+\item  Returns: process and job status information from the remote server in OSpL format
 
 \item  Critical in long running optimization jobs
 
