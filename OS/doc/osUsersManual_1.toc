@@ -6,6 +6,7 @@
 \contentsline {subsection}{\numberline {2.4}Obtaining the Binaries}{6}
 \contentsline {subsection}{\numberline {2.5}Platforms}{6}
 \contentsline {section}{\numberline {3}The OS Project Components}{6}
+\contentsline {subsection}{\numberline {3.1}Key Protocols}{6}
 \contentsline {section}{\numberline {4}The OS Library Components}{7}
 \contentsline {subsection}{\numberline {4.1}OSAgent}{7}
 \contentsline {subsection}{\numberline {4.2}OSCommonInterfaces}{7}
@@ -29,9 +30,9 @@
 \contentsline {subsubsection}{\numberline {7.3.5}The {\tt knock} Service Method}{16}
 \contentsline {subsubsection}{\numberline {7.3.6}The {\tt kill} Service Method}{17}
 \contentsline {subsubsection}{\numberline {7.3.7}Summary}{18}
-\contentsline {section}{\numberline {8}Setting up a Solver Service with Tomcat}{19}
-\contentsline {section}{\numberline {9}Examples}{19}
-\contentsline {subsection}{\numberline {9.1}AMPL Client: Hooking AMPL to Solvers}{19}
-\contentsline {subsection}{\numberline {9.2}CppAD: Using the CppAD Algorithmic Differentiation Package}{19}
-\contentsline {subsection}{\numberline {9.3}File Upload: Using a File Upload Package}{19}
-\contentsline {subsection}{\numberline {9.4}Instance Generator: Using the OSInstance API to Generate Instances}{19}
+\contentsline {section}{\numberline {8}Setting up a Solver Service with Tomcat}{20}
+\contentsline {section}{\numberline {9}Examples}{20}
+\contentsline {subsection}{\numberline {9.1}AMPL Client: Hooking AMPL to Solvers}{20}
+\contentsline {subsection}{\numberline {9.2}CppAD: Using the CppAD Algorithmic Differentiation Package}{21}
+\contentsline {subsection}{\numberline {9.3}File Upload: Using a File Upload Package}{21}
+\contentsline {subsection}{\numberline {9.4}Instance Generator: Using the OSInstance API to Generate Instances}{21}
