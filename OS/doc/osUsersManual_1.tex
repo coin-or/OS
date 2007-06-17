@@ -368,11 +368,11 @@ In the examples above the problem instance was assumed to be read from a file in
 
 \section{The OSSolverService}
 
-The {\tt OSSolverService} is a command line executable designed to pass problem instances to solvers and get the result back to be displayed either to standard output or a specified browser.  The {\tt OSSovlerService} can be used to invoke a solver locally or on a remote server. It can work either synchronously or asynchronously. 
+The {\tt OSSolverService} is a command line executable designed to pass problem instances in either  OSiL, AMPL nl, or MPS format  to solvers and get the optimization result back to be displayed either to standard output or a specified browser.  The {\tt OSSovlerService} can be used to invoke a solver locally or on a remote server. It can work either synchronously or asynchronously. 
 
 \subsection{OSSolverService Input Parameters}
 
-At present, the {\tt OSSolverService} takes the following parameters. The order of the parameters is irrelevant.  Not all the parameters are required. However, two pieces of information {\it must} be contained in the input paramters.  First,  the problem instance location must be specified (either locally or on a remote machine). Second, the solver must be specified. 
+At present, the {\tt OSSolverService} takes the following parameters. The order of the parameters is irrelevant.  Not all the parameters are required. However, if the {\tt solve} or {\tt send} service methods are invoked a problem instance location must be specified. 
 
 \begin{itemize}
 
@@ -384,38 +384,19 @@ At present, the {\tt OSSolverService} takes the following parameters. The order 
 
 \item[] {\bf -serviceLocation}  is the URL of the solver service. This is not required, and if not specified it is assumed that the problem is solved locally. 
 
-\item[] {\bf -serviceMethod  method}  this is  the solver service required. The options are {\tt solve}, {\tt send},{\tt kill},{\tt knock}, {\tt getJobID}, and {\tt retrieve}. The use of these options is illustrated in the examples below. This option is not required, and the default value is {\tt sovle.}
+\item[] {\bf -serviceMethod  method}  this is  the solver service required. The options are {\tt solve}, {\tt send},{\tt kill},{\tt knock}, {\tt getJobID}, and {\tt retrieve}. The use of these options is illustrated in the examples below. This option is not required, and the default value is {\tt solve.}
 
 \item[] {\bf -mps  xxx.mps}  this is the name of the mps file if the problem instance is in mps format. It is assumed that this file is available in a directory on the machine that is running {\tt OSSolverService}. The default file format is OSiL so this option is not required.
 
 \item[] {\bf -nl  xxx.nl}  this is the name of the AMPL nl file if the problem instance is in AMPL nl  format. It is assumed that this file is available in a directory on the machine that is running {\tt OSSolverService}. The default file format is OSiL so this option is not required.
 
-\item[] {\bf -solver  solverName} this parameter is required if the problem is solved locally. Possible values for default OS installation are {tt clp} (COIN-OR Clp), {\tt cbc} (COIN-OR Cbc), {\tt dylp} (COIN-OR DyLP), and {\tt symphony} (COIN-OR SYMPHONY). Other solvers supported (if the necessary libraries are present) are {\tt cplex} (Cplex through COIN-OR Osi), {\tt glpk} (glpk through COIN-OR Osi), {\tt ipopt} (COIN-OR Ipopt),  {\tt knitro} (Knitro), and {\tt lindo} {\tt LINDO}.
+\item[] {\bf -solver  solverName}  Possible values for default OS installation are {tt clp} (COIN-OR Clp), {\tt cbc} (COIN-OR Cbc), {\tt dylp} (COIN-OR DyLP), and {\tt symphony} (COIN-OR SYMPHONY). Other solvers supported (if the necessary libraries are present) are {\tt cplex} (Cplex through COIN-OR Osi), {\tt glpk} (glpk through COIN-OR Osi), {\tt ipopt} (COIN-OR Ipopt),  {\tt knitro} (Knitro), and {\tt lindo} {\tt LINDO}. If no value is specified for this parameter, then {\tt cbc} is the default value of this parameter if the the {\tt solve} or {\tt send} service methods are used.
 
 
 \item[] {\bf -browser  browserName} this paramater is a path to the browser on the local machine. If this optional parameter is specified then the solver result in OSrL format is transformed using XSLT into HTML and displayed in the browser. 
 
 \item[] {\bf -config pathToConfigureFile} this parameter specifies a path on the local machine to a text file containing values for the input parameters. This is convenient for the user not wishing to constantly retype parameter values.
 
-
-
-\end{itemize}
-
-
-{\bf Some Rules:}
-
-\begin{itemize}
-\item[1.]  When using the {\tt send()} or  {\tt solve()} methods a problem instance file location {\it must} be specified either at  the command line, in the configuration file, or in the {\tt <instanceLocation>} element in the OSoL options file file.
-
-\item[2.]  The {\tt serviceMethod} option must be specified at the command line or in a configuration file.  The service method cannot be specified in the OSoL options file. 
-
-\item [3.]  If the {\tt solver} option is not specified, the COIN-OR solver {\tt Cbc} is the default solver used. In this case an error is thrown if the problem instance has quadratic or other nonlinear terms. 
-
-\item[4.]  If the options ={\tt send}, {\tt kill}, {\tt knock},  {\tt getJobID},  or {\tt retrieve} are specified, a  {\tt serviceLocation} must be specified. 
-
-\item[5.]  The default {\tt serviceMethod} used is {\tt solve} if one is not specified.
-
-\item[6.] When calling a remote server, the solver option must be specified in the {\tt OSoL} file.
 \end{itemize}
 
 
@@ -437,6 +418,21 @@ OSSolverService -config ../data/testlocalclp.config
 \end{verbatim}
 
 
+{\bf Some Rules:}
+
+\begin{itemize}
+\item[1.]  When using the {\tt send()} or  {\tt solve()} methods a problem instance file location {\it must} be specified either at  the command line, in the configuration file, or in the {\tt <instanceLocation>} element in the OSoL options file file.
+
+\item[2.]  The default {\tt serviceMethod} is {\tt solve} if another service method is not specified.   The service method cannot be specified in the OSoL options file. 
+
+\item [3.]  If the {\tt solver} option is not specified, the COIN-OR solver {\tt Cbc} is the default solver used. In this case an error is thrown if the problem instance has quadratic or other nonlinear terms. 
+
+\item[4.]  If the options {\tt send}, {\tt kill}, {\tt knock},  {\tt getJobID},  or {\tt retrieve} are specified, a  {\tt serviceLocation} must be specified. 
+
+\end{itemize}
+
+
+
 Parameters specified in the configure file are overridden by parameters specified at the command line. This is convenient if a user has a base configure file and wishes to override only a few options. For example,
 \begin{verbatim}
 OSSolverService -config ../data/testlocalclp.config -solver lindo
@@ -447,9 +443,24 @@ OSSolverService -solver lindo -config ../data/testlocalclp.config
 \end{verbatim}
 will result in the LINDO solver being used even though Clp is specified in the {\tt testlocalclp} configure file.
 
+
+
 \subsection{Solving Problems Locally}
 
-Generally, when solving a problem locally the user will use the {\tt solve} service method. The {\tt solve} method is invoked synchronously and waits for the solver to return the result. The {\tt sovle} method has two arguments. The first argument is the OSoL file path and the second argument is the OSiL file path. The OSoL file path may be empty.  Here is an illustration of using a configure file,  {\tt testlocal.config}, to invoke {\tt Ipopt} locally.
+Generally, when solving a problem locally the user will use the {\tt solve} service method. The {\tt solve} method is invoked synchronously and waits for the solver to return the result.  This is illustrated in Figure \ref{figure:ossolverservice}. As illustrated, the {\tt OSSolverService} reads a file on the hard drive with the optimization instance, usually in OSiL format. The optimization instance is parsed into a string which is passed to the {\tt OSLibrary} which is linked with various solvers. The result of the optimization is passed back to the {\tt OSSolverService} as a string in OSrL format.  
+
+
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.5]{\figurepath/OSSolverServiceLocal.png}
+\caption{A local call to {\tt solve}.} 
+\label{figure:ossolverservicelocal}
+\end{figure}
+
+
+
+Here is an example of using a configure file,  {\tt testlocal.config}, to invoke {\tt Ipopt} locally using the {\tt solve} command.
 
 \begin{verbatim}
 -osil ../data/parincQuadratic.osil
@@ -459,47 +470,45 @@ Generally, when solving a problem locally the user will use the {\tt solve} serv
 -osrl /Users/kmartin/temp/test.osrl
 \end{verbatim}
 
-The first line of {\tt testlocal.config} gives the local location of the OSiL file, {\tt parincQuadratic.osil}, that contains the problem instance. The second parameter, {\tt -solver ipopt},  is the solver to be invoked. The third parameter {\tt -serviceMethod solve} is not really needed, but included only for purpose of illustration. The default  solver service is {\tt solve.}  The fourth parameter is the location of the browser on the local machine. It will read the OSrL file on the local machine using the path specified by the value of the {\tt osrl} parameter, in this case {\tt /Users/kmartin/temp/test.osrl.}
 
-In the configuration file {\tt testlocalosol.config} we illustrate specifying the instance location in an OSoL file.
 
+The first line of {\tt testlocal.config} gives the local location of the OSiL file, {\tt parincQuadratic.osil}, that contains the problem instance. The second parameter, {\tt -solver ipopt},  is the solver to be invoked, in this case COIN-OR Ipopt. The third parameter {\tt -serviceMethod solve} is not really needed, but included only for illustration. The default  solver service is {\tt solve.}  The fourth parameter is the location of the browser on the local machine. It will read the OSrL file on the local machine using the path specified by the value of the {\tt osrl} parameter, in this case {\tt /Users/kmartin/temp/test.osrl.}
+
+Parameters may also be contained in an XML-file in OSoL format. In the configuration file {\tt testlocalosol.config} we illustrate specifying the instance location in an OSoL file.
 \begin{verbatim}
 -osol ../data/demo.osol
 -solver clp
 \end{verbatim}
-
 The file {\tt demo.osol} is
 
-\begin{verbatim}
+\begin{verbatimtab}[4]
 <?xml version="1.0" encoding="UTF-8"?>
-<osol xmlns="os.optimizationservices.org"
-xmlns:xs="http://www.w3.org/2001/XMLSchema"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:schemaLocation="os.optimizationservices.org 
-http://www.optimizationservices.org/schemas/OSoL.xsd">
-  <general>         
-       <instanceLocation locationType="local">
-       ../data/parincLinear.osil
-       </instanceLocation>
-  </general>
+<osol xmlns="os.optimizationservices.org">
+	<general>         
+		<instanceLocation locationType="local">
+			../data/parincLinear.osil
+		</instanceLocation>
+	</general>
 </osol>
-\end{verbatim}
+\end{verbatimtab}
 
 \subsection{Solving Problems Remotely with Web Services}
 
-We now illustrate using the {\tt OSSolverService} executable to call a remote solver service.  
-By remote solver service we mean a solver service that is called using Web services.  
-Both the  {\tt OSSolverService} and the Web service could be on the same physical machine.
+We now provide examples that illustrate using the {\tt OSSolverService} executable to call a remote solver service.   By remote solver service we mean a solver service that is called using Web Services.  The OS implementation  of the solver service  uses Apache Tomcat. See \url{tomcat.apache.org}. The Web Service running on the server is a Java program based on Apache Axis. See \url{ws.apache.org/axis}. This is described in greater detail in Section \ref{section:tomcat}.  This Web Service is called {\tt OSSolverService.jws}. It is not necessary to use the Tomcat/Axis combination.
 
-In the following sections we illustrate each of the six service methods.  All of these examples are based upon a solver service running on a remote server running Apache Tomcat. See \url{tomcat.apache.org}. The Web Service running on the server is a Java program based on Apache Axis. See \url{ws.apache.org/axis}. This is described in greater detail in Section \ref{section:tomcat}.  This Web Service is called {\tt OSSolverService.jws}. This Java program calls a C++ executable OSSolverService on the server. So there is an OSSolverService on the client that calls the Web Service {\tt  OSSolverService.jws} that in turn calls  the executable {\tt OSSovlerService} on the server.  See Figure \ref{figure:ossolverservice}.
- 
+
+
+See Figure \ref{figure:ossolverservice} for an illustration of this process. The client machine uses {\tt OSSolverService} executable to call one of the six service methods, e.g. {\tt solve}. The  information such as the problem instance in OSiL format and solver options in OSoL format are packaged into a SOAP envelope and sent to the server. The server is running the Java Web Service {\tt OSSolverService.jws}. This Java program running in the Tomcat Java Servlet container implements the six service methods. If a {\tt solve} or {\tt send} request is sent to the server from the client, an optimization problem must be solved. The Java solver service solves the optimization instance by  calling the  OSSolverService on the server. So there is an OSSolverService on the client that calls the Web Service {\tt  OSSolverService.jws} that in turn calls  the executable {\tt OSSovlerService} on the server. The Java solver service passes options to the local {\tt OSSolverService} such as where the OSiL file is located and where to write the solution result.
+
 \begin{figure}
 \centering
-\includegraphics[scale=0.25]{\figurepath/OSSolverServiceLocal.pdf}
+\includegraphics[scale=0.5]{\figurepath/OSSolverService.png}
 \caption{A remote call to {\tt solve}.} 
 \label{figure:ossolverservice}
 \end{figure}
 
+
+In the following sections we illustrate each of the six service methods.
 
 \subsubsection{The  {\tt solve} Service Method}\label{section:solve}
 

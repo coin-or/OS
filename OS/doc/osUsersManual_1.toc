@@ -23,12 +23,12 @@
 \contentsline {subsection}{\numberline {7.1}OSSolverService Input Parameters}{9}
 \contentsline {subsection}{\numberline {7.2}Solving Problems Locally}{11}
 \contentsline {subsection}{\numberline {7.3}Solving Problems Remotely with Web Services}{12}
-\contentsline {subsubsection}{\numberline {7.3.1}The {\tt solve} Service Method}{12}
-\contentsline {subsubsection}{\numberline {7.3.2}The {\tt send} Service Method}{14}
-\contentsline {subsubsection}{\numberline {7.3.3}The {\tt retrieve} Service Method}{15}
-\contentsline {subsubsection}{\numberline {7.3.4}The {\tt getJobID} Service Method}{16}
-\contentsline {subsubsection}{\numberline {7.3.5}The {\tt knock} Service Method}{16}
-\contentsline {subsubsection}{\numberline {7.3.6}The {\tt kill} Service Method}{17}
+\contentsline {subsubsection}{\numberline {7.3.1}The {\tt solve} Service Method}{13}
+\contentsline {subsubsection}{\numberline {7.3.2}The {\tt send} Service Method}{15}
+\contentsline {subsubsection}{\numberline {7.3.3}The {\tt retrieve} Service Method}{16}
+\contentsline {subsubsection}{\numberline {7.3.4}The {\tt getJobID} Service Method}{17}
+\contentsline {subsubsection}{\numberline {7.3.5}The {\tt knock} Service Method}{17}
+\contentsline {subsubsection}{\numberline {7.3.6}The {\tt kill} Service Method}{18}
 \contentsline {subsubsection}{\numberline {7.3.7}Summary}{18}
 \contentsline {section}{\numberline {8}Setting up a Solver Service with Tomcat}{20}
 \contentsline {section}{\numberline {9}Examples}{20}
