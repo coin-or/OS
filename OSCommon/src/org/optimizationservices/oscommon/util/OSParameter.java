@@ -404,21 +404,42 @@ public final class OSParameter{
 	 * SERVICE_NAME holds the service name. 
 	 */
 	public static String SERVICE_NAME = "OSSolverService";  //change!
-	
+
+	/**
+	 * SERVICE_NAME holds the service name. 
+	 */
+	public static String SERVICE_EXTENSION = "jws";  //change!
+
+	/**
+	 * SERVICE_FOLDER holds the service folder. 
+	 */
+	public static String SERVICE_FOLDER = "os";  //change!
+
+	/**
+	 * SERVICE_PORT holds the service port. 
+	 */
+	public static String SERVICE_PORT = "8080";  //change!
+
+	/**
+	 * SERVICE_PORT holds the service port. 
+	 */
+	public static String SERVICE_HOST = "http://localhost";  //change!
+
 	/**
 	 * SERVICE_URI holds the service uri. 
 	 */
-	public static String SERVICE_URI = "http://localhost:8080/os/ossolver/OSSolverService.jws"; //change!
-	
+	public static String SERVICE_URI = SERVICE_HOST+":"+SERVICE_PORT+"/"+SERVICE_FOLDER+"/"+SERVICE_NAME + "." + SERVICE_EXTENSION; // http://localhost:8080/os/OSSolverService.jws"; //change!
+
+	/**
+	 * OS_SERVICE_SITE holds the main site of the OS services.
+	 */
+	public static String OS_SERVICE_SITE = SERVICE_HOST+":"+SERVICE_PORT+"/"+SERVICE_FOLDER; 
+
 	/**
 	 * SERVICE_TYPE holds the service type. 
 	 */
 	public static String SERVICE_TYPE = "solver"; //change!
 	
-	/**
-	 * OS_SERVICE_SITE holds the main site of the OS services.
-	 */
-	public static String OS_SERVICE_SITE = "http://localhost:8080/os"; 
 
 	/**
 	 * OS_REGISTRY_SITE holds the site of the OS Registry.
@@ -690,7 +711,7 @@ public final class OSParameter{
 	 * @param validate holds whether the reader should be validating against the schema or not.
 	 * @return whether the osParameter is read and set successfully or not.  
 	 */
-   	public static boolean readAndSetOSParameter(String osParameter, boolean isFile, boolean validate) throws Exception{
+   	public static boolean readAndSetOSParameter(String osParameter, boolean isFile, boolean validate){
    		OSParameterReader  osParameterReader = new OSParameterReader(validate);
 		boolean bRead = false;
 		try{
@@ -1316,23 +1337,36 @@ public final class OSParameter{
 		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("SERVICE_NAME");
 		if(sValue != null && sValue.length() > 0) SERVICE_NAME = sValue;
 
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("SERVICE_EXTENSION");
+		if(sValue != null && sValue.length() > 0) SERVICE_EXTENSION = sValue;
+
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("SERVICE_FOLDER");
+		if(sValue != null && sValue.length() > 0) SERVICE_FOLDER = sValue;
+
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("SERVICE_PORT");
+		if(sValue != null && sValue.length() > 0) SERVICE_PORT = sValue;
+
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("SERVICE_HOST");
+		if(sValue != null && sValue.length() > 0) SERVICE_HOST = sValue;
+		else{
+			String sIP = CommonUtil.getIPAddress();
+			SERVICE_HOST = "http://" + sIP;
+		}
+		
 		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("SERVICE_URI");
 		if(sValue != null && sValue.length() > 0) SERVICE_URI = sValue;
 		else{
-			String sIP = CommonUtil.getIPAddress();
-			SERVICE_URI = "http://"+sIP+":8080/os/ossolver/OSSolverService.jws";
+			SERVICE_URI = SERVICE_HOST+":"+SERVICE_PORT+"/"+SERVICE_FOLDER+"/"+SERVICE_NAME + "." + SERVICE_EXTENSION;
 		}
-
-		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("SERVICE_TYPE");
-		if(sValue != null && sValue.length() > 0) SERVICE_TYPE = sValue;
 
 		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("OS_SERVICE_SITE");
 		if(sValue != null && sValue.length() > 0) OS_SERVICE_SITE = sValue;
 		else{
-			int iIndex1 = SERVICE_URI.indexOf("/", 8);
-			int iIndex2 = SERVICE_URI.indexOf("/", iIndex1);
-			OS_SERVICE_SITE = SERVICE_URI.substring(0, iIndex2+1);
+			OS_SERVICE_SITE = SERVICE_HOST+":"+SERVICE_PORT+"/"+SERVICE_FOLDER;
 		}
+
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("SERVICE_TYPE");
+		if(sValue != null && sValue.length() > 0) SERVICE_TYPE = sValue;
 
 		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("OS_REGISTRY_SITE");
 		if(sValue != null && sValue.length() > 0) OS_REGISTRY_SITE = sValue;
@@ -1482,10 +1516,27 @@ public final class OSParameter{
 	public static void main(String[] args){
 	}//main
 	
-	/// <summary>
-	/// static constructor. 
-	/// </summary>
+	/**
+	 * static constructor
+	 */
 	static{
+		String sOSParameterFile = "";
+		if(OSParameterFile.NAME !=null && OSParameterFile.NAME.length() > 0){
+			sOSParameterFile = OSParameterFile.NAME;
+			PARAMETER_FILE = OSParameterFile.NAME;
+		}
+		else{
+			sOSParameterFile = PARAMETER_FILE;
+		}
+		//String sOSParameterFile = IOUtil.getCurrentDir()+"webapps/os/ossolver/OSParameter.xml";
+		//In Eclipse the current directory is the project that the main is in -- e.g. C:/code/java/OSjava/OSTest/
+		//in Tomcat Linux the current directory is PathToTomcat/Tomcat/bin/
+		//in Tomcat the current directory is C:/Program Files/Apache Software Foundation/Tomcat 5.5/???
+		//suggestion: have a file in which each service name is mapped to a different osparam file. 
+		if(sOSParameterFile != null && sOSParameterFile.length() > 0){
+			readAndSetOSParameter(sOSParameterFile, true, false);
+		}
+
 		String sDir = IOUtil.getCurrentDir();
 		if(sDir.toLowerCase().endsWith("bin") || 
 				sDir.toLowerCase().endsWith("bin\\") ||
@@ -1493,7 +1544,7 @@ public final class OSParameter{
 			int iIndex = sDir.lastIndexOf("bin");
 			sDir = sDir.substring(0, iIndex);
 		}
-		CODE_HOME = sDir+= "webapps/os/WEB-INF/code/";
+		CODE_HOME = sDir+= "webapps/"+ SERVICE_FOLDER+"/WEB-INF/code/";
 		String sParameterFile = CODE_HOME + "OSConfig/OSParameter.xml";
 		
 		String sOS =  "window";
@@ -1509,27 +1560,8 @@ public final class OSParameter{
 			}
 		}
 		
-		String sOSParameterFile = "";
-		if(OSParameterFile.NAME !=null && OSParameterFile.NAME.length() > 0){
-			sOSParameterFile = OSParameterFile.NAME;
-			PARAMETER_FILE = OSParameterFile.NAME;
-		}
-		else{
-			sOSParameterFile = PARAMETER_FILE;
-		}
-		//String sOSParameterFile = IOUtil.getCurrentDir()+"webapps/os/ossolver/OSParameter.xml";
-		//In Eclipse the current directory is the project that the main is in -- e.g. C:/code/java/OSjava/OSTest/
-		//in Tomcat Linux the current directory is PathToTomcat/Tomcat/bin/
-		//in Tomcat the current directory is C:/Program Files/Apache Software Foundation/Tomcat 5.5/???
-		//suggestion: have a file in which each service name is mapped to a different osparam file. 
 		if(sOSParameterFile != null && sOSParameterFile.length() > 0){
-		   	try {
-				boolean bRead = readAndSetOSParameter(sOSParameterFile, true, false);
-				if(!bRead) throw new Exception("OSParameter.xml configuration file is not read successfully.");
-		   	} 
-		   	catch (Exception e) {
-		   		IOUtil.log(e.getMessage(), null);
-			}			
+			readAndSetOSParameter(sOSParameterFile, true, false);
 		}
 	}//static constructor
 }//OSParameter
