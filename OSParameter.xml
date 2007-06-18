@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<osParameter xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/OSParameter.xsd">
+	<!--Routine/maintenance related parameters-->
+	<param name="CODE_DRIVE" description="the disk drive of the code installation - automatically dectected if none.(change?)"/>
+	<param name="CODE_HOME" description="the disk drive of the code installation  - automatically dectected if none.(change?)"/>
+	<param name="REGISTRY_FILE" description="the file that keeps the registry information">OSConfig/OSRegistry.xml</param>
+	<param name="PROCESS_FILE" description="the the file that keeps the service process information in OSpL">OSConfig/OSpL.xml</param>
+	<param name="TEMP_FILE_FOLDER" description="the folder to save temporary files">temp/</param>
+	<param name="LOG_FOLDER" description="the main system file for logging messages and errors">log/</param>
+	<param name="LOG_FILE" description="the main system file for logging messages and errors">log.txt</param>
+	<param name="MAX_LOG_FILE_SIZE" description="the maximum size of the log file before it is backed up and started again">5000000</param>
+	<param name="BACKUP_FOLDER" description="the main system folder for backing up">backup/</param>
+	<param name="REGISTRY_LOG_FOLDER" description="the main registry folder for logging registy related messages">log/</param>
+	<param name="REGISTRY_LOG_FILE" description="the main registry file for logging registy related messages">registryLog.txt</param>
+	<param name="REGISTRY_REGISTRATION_FILE" description="the main registry file for logging registration related messages">registryRegistration.txt</param>
+	<param name="REGISTRY_SUMMARY_REPORT" description="the file to log the registry summary report">registrySummaryReport.txt</param>
+	<param name="REGISTRY_DETAILED_REPORT" description="the file to log the registry detailed report">registryDetailedReport.txt</param>
+	<param name="PRINT_FOLDER" description="the main system folder for printing a string">log/</param>
+	<param name="PRINT_FILE" description="the main system file for printing a sting">print.txt</param>
+	<param name="APPEND_PRINT_FILE" description="whether to append or overwrite the PrintFile">true</param>
+	<param name="MINIMUM_DISKSPACE_TRIGGER" description="the minimum disk space before the automatic clean up is triggered to delete temporary files">1000000000</param>
+	<param name="MINIMUM_MEMORY_TRIGGER" description="the minimum memory before the automatic clean up is triggered to get more memory">100000000</param>
+	<param name="CLEAN_UP_FOLDERS" description="the folders to clean up">temp/,backup/</param>
+	<param name="MAX_JOBIDS_TO_KEEP" description="the maximum number of job ids to keep before deleting them">100</param>
+	<!--Time related parameters-->
+	<param name="JOB_MAX_HOURS" description="the maximum minutes allowed for a job">24</param>
+	<param name="JOB_MAX_MINUTES" description="the maximum minutes allowed for a job">0</param>
+	<param name="JOB_MAX_SECONDS" description="the maximum seconds allowed for a job">0</param>
+	<param name="TEMP_FILE_MAX_DAYS" description="the maximum days allowed to keep a temporary file">30</param>
+	<param name="TEMP_FILE_MAX_HOURS" description="the maximum hours allowed to keep a temporary file">0</param>
+	<param name="TEMP_FILE_MAX_MINUTES" description="the maximum minutes allowed to keep a temporary file">0</param>
+	<param name="TEMP_FILE_MAX_SECONDS" description="the maximum seconds allowed to keep a temporary file">0</param>
+	<param name="TEMP_FILE_MIN_DAYS" description="the minimum days allowed to keep a temporary file">2</param>
+	<param name="TEMP_FILE_MIN_HOURS" description="the minimum hours allowed to keep a temporary file">0</param>
+	<param name="TEMP_FILE_MIN_MINUTES" description="the minimum minutes allowed to keep a temporary file">0</param>
+	<param name="TEMP_FILE_MIN_SECONDS" description="the minimum seconds allowed to keep a temporary file">0</param>
+	<!--Server related parameters-->
+	<param name="CPU_SPEED" description="the cpu speed of the server">INF</param>
+	<param name="MEMORY_SIZE" description="the total physical memory of the server">INF</param>
+	<param name="DISK_SPACE" description="the total disk space of the server">INF</param>
+	<param name="MAX_JOB_NUMBERS" description="the maximum number of running jobs allowed per service">3</param>
+	<param name="MAX_WAITING_NUMBERS" description="the maximum number of waiting  jobs allowed per service">5</param>
+	<param name="SERVICE_POLLING_INTERVAL_SHORT" description="the number of milli-seconds that a service periodically carries out maintentance. It is relatively short">60000</param>
+	<param name="SERVICE_POLLING_INTERVAL_MEDIUM" description="the number of milli-seconds that a service periodically carries out maintentance. It is not too short and nor too long">3600000</param>
+	<param name="SERVICE_POLLING_INTERVAL_LONG" description="the number of milli-seconds that a service periodically carries out maintentance. It is relatively long">86400000</param>
+	<!--Solver related parameters-->
+	<param name="SOLVER_CLASS_NAME" description="the full class name (including name space) of the solver">org.optimizationservices.oscommon.util.StandardOSSolver</param>
+	<param name="OS_SOLVER" description="the default solver name that the StandardOSSolver uses, e.g. cbc, clp(change?)">cbc</param>
+	<param name="SOLVER_EXECUTABLE" description="the solver executable that the StandardOSSolver will launch(change?)">OSSolverService</param>
+	<param name="MAXIMUM_TRIAL_NUMBER_FOR_SOLVE" description="the maximum number of trials for a (failed) solve before the service terminates">1</param>
+	<param name="MINIMUM_WAIT_TIME_BEFORE_NEXT_TRIAL" description="holds the minimum wait time (in milliseconds before the service tries another solve after the last solve">1000</param>
+	<param name="MAXIMUM_WAIT_TIME_BEFORE_NEXT_TRIAL" description="holds the maximum wait time (in milliseconds before the service tries another solve after the last solve">30000</param>
+	<param name="REQUIRED_DIRECTORIES_AND_FILES" description="the required directories and files for invoking the solver's solve method"/>
+	<param name="DIRECTORIES_TO_MAKE" description="the directories to make before invoking the solver's solve method"/>
+	<param name="FILES_TO_CREATE" description="the files to create before invoking the solver's solve method"/>
+	<param name="SAVE_INPUTS" description="whether to save the OSiL and OSoL input arguments of the solve or send method">true</param>
+	<param name="PARSE_INSTANCE_INPUT" description="whether to parse the OSiL instance input arguments of the solve or send method">false</param>
+	<param name="INPUT_FILES_TO_MOVE_FROM" description="the names of the input files to move from before invoking the solver's solve method. It should countain the same number of files as in INPUT_FILES_TO_MOVE_TO"/>
+	<param name="INPUT_FILES_TO_MOVE_TO" description="the names of the input files to move to before invoking the solver's solve method. It should countain the same number of files as in INPUT_FILES_TO_MOVE_FROM."/>
+	<param name="INPUT_FILES_TO_COPY_FROM" description="the names of the input files to copy from before invoking the solver's solve method. It should countain the same number of files as in INPUT_FILES_TO_COPY_TO"/>
+	<param name="INPUT_FILES_TO_COPY_TO" description="the names of the input files to copy to before invoking the solver's solve method. It should countain the same number of files as in INPUT_FILES_TO_COPY_FROM"/>
+	<param name="OUTPUT_FILES_TO_COPY_FROM" description="the names of the output files to copy from after the solver's solve method is finished. It should countain the same number of files as in OUTPUT_FILES_TO_COPY_TO. "/>
+	<param name="OUTPUT_FILES_TO_COPY_TO" description="the names of the output files to copy to after the solver's solve method is finished. It should countain the same number of files as in OUTPUT_FILES_TO_COPY_FROM. "/>
+	<param name="OUTPUT_FILES_TO_MOVE_FROM" description="the names of the output files to move from after the solver's solve method is finished. It should countain the same number of files as in OUTPUT_FILES_TO_MOVE_TO. "/>
+	<param name="OUTPUT_FILES_TO_MOVE_TO" description="the names of the output files to move to after the solver's solve method is finished. It should countain the same number of files as in OUTPUT_FILES_TO_MOVE_FROM. "/>
+	<param name="FILES_TO_DELETE" description="the files to delete after the solver's solve method is finished"/>
+	<param name="DIRECTORIES_TO_DELETE" description="the directories to delete after the solver's solve method is finished"/>
+	<param name="PROCESSES_TO_KILL" description="the names of the processes to kill after tge sikver's solve method is finished"/>
+	<!--Service site related parameters-->
+	<param name="SERVICE_NAME" description="the service name (change!)">OSSolverService</param>
+	<param name="SERVICE_EXTENSION" description="the service extension">jws</param>
+	<param name="SERVICE_FOLDER" description="the service folder (change!)">os</param>
+	<param name="SERVICE_PORT" description="the service port (change!)">8080</param>
+	<param name="SERVICE_HOST" description="the service host - automatically detected if none, e.g. http://123.45.67.89(change!)"></param>
+	<param name="SERVICE_URI" description="the service uri - automatically constructed if none, e.g. http://123.45.67.89:8080/os/OSSolverService.jws"/>
+	<param name="OS_SERVICE_SITE" description="the main site of your OS services Web application -automatically constructed if none, e.g. http://123.45.67.89:8080/os "/>
+	<param name="SERVICE_TYPE" description="the service type">solver</param>
+	<param name="OS_REGISTRY_SITE" description="the site of the OS Registry - automatically constructed if none"></param>
+	<param name="OS_SCHEDULER_SITE" description="the site of the OS scheduler - automatically constructed if none"></param>
+	<param name="SCHEDULER_WITH_REGISTRY" description="whether the scheduler service locally sits with the registry service in the same web application">true</param>
+	<!--Mail site related parameters-->
+	<param name="SMTP_SERVER" description="the smtp server address to send the email (change!)"/>
+	<param name="FROM_EMAIL" description="the from email address to send the email (change!)"/>
+	<param name="FROM_PASSWORD" description="the from email address to send the email (change!)"/>
+	<param name="TO_EMAIL" description="the to email address to send the email (change!)"/>
+	<param name="MAIL_SUBJECT" description="the email subject">OS SERVICE NOTIFICATION!!!</param>
+	<param name="MAIL_MESSAGE" description="the email message body">Please check the service.</param>
+	<!--Security related parameters-->
+	<param name="REQUIRE_USER_NAME" description="whether the service needs user name to be submitted">false</param>
+	<param name="REQUIRE_PASSWORD" description="whether the service needs a password for each user">false</param>
+	<param name="REQUIRE_LICENSE" description="whether the service needs a license number for each user">false</param>
+	<param name="REQUIRE_ONLY_JOB_ID_TO_RETRIEVE_JOB_RESULT" description="holds whether only the job id (no user name/password/license) is needed to retrieve a job result">true</param>
+	<param name="REQUIRE_ONLY_JOB_ID_TO_KILL_JOB" description="holds whether only the job id (no user name/password/license) is needed to kill a job">true</param>
+	<param name="MAX_JOBS_PER_USER" description="the maximum number of active jobs a user can run">-1</param>
+	<param name="USER_NAMES" description="all the user names"/>
+	<param name="PASSWORDS" description="the passwords for all the users"/>
+	<param name="LICENSES" description="the licenses for all the users"/>
+	<param name="ALLOW_IO_OPERATIONS_BY_USERS" description="whether the users can carry out io operations (through option files)">true</param>
+	<!--XML related parameters-->
+	<param name="VALIDATE" description="whether the parser should be validating against the xml schema or not">false</param>
+	<param name="XML_INDENTING" description="whether to write out the xml indented">true</param>
+	<param name="FML_PUBLIC_SITE" description="the value of the FML schema public site">http://gsbkip.chicagogsb.edu/fml/testproblems/lpfml.xsd</param>
+	<param name="OS_SITE" description="the site of optimizationservices.org">http://www.optimizationservices.org</param>
+	<param name="OS_SCHEMA_SITE" description="the value of the OSxL schema's public site">http://www.optimizationservices.org/schemas/</param>
+	<param name="XML_ENCODING_STYLE" description="the xml encoding style">http://schemas.xmlsoap.org/soap/encoding</param>
+	<param name="XSLT_LOCATION" description="the location of XSLT; no XSLT file name should be there">http://www.optimizationservices.org/stylesheets/</param>
+</osParameter>
