@@ -33,11 +33,12 @@ public class OSSolverService implements OShL{
 	 * default constructor.
 	 */
 	public OSSolverService(){
+		//All the things in this constructor are optional and should all be deleted just fine. 
 		m_osServiceUtil.serviceName = OSParameter.SERVICE_NAME;
 		m_osServiceUtil.serviceURI = OSParameter.SERVICE_URI;
-		m_osServiceUtil.serviceType = "solver";
+		m_osServiceUtil.serviceType = OSParameter.SERVICE_TYPE;
 		try {
-			String sClassName = OSParameter.SOLVER_CLASS_NAME; //"org.optimizationservices.ossolver.solver.StandardSolver";
+			String sClassName = OSParameter.SOLVER_CLASS_NAME; //"org.optimizationservices.oscommon.util.StandardSolver";
 			Class solverClass = Class.forName(sClassName);
 			m_osServiceUtil.solver =(DefaultSolver)solverClass.newInstance();			
 		} 
@@ -128,6 +129,7 @@ public class OSSolverService implements OShL{
 	 * static constructor
 	 */
 	static{ 
+		//automatically detect where the tomcat installation and webapp context is. 
 		String sDir = IOUtil.getCurrentDir();
 		if(sDir.toLowerCase().endsWith("bin") || 
 				sDir.toLowerCase().endsWith("bin\\") ||
@@ -136,5 +138,7 @@ public class OSSolverService implements OShL{
 			sDir = sDir.substring(0, iIndex);
 		}
 		OSParameterFile.NAME = sDir+= "webapps/os/WEB-INF/code/OSParameter.xml";
+		//all the above line can be rewritten with one line, e.g. on windows, the following hardcoded parameter file address:
+		//OSParameterFile.NAME = sDir+= "/Program Files/Apache Software Foundation/Tomcat 5.5/webapps/os/WEB-INF/code/OSParameter.xml";
 	}//static constructor
 }//class OSSolverService
