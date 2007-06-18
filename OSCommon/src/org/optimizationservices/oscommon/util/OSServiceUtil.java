@@ -453,6 +453,9 @@ public class OSServiceUtil{// implements OShL{
 	 * Default constructor. 
 	 */
 	public OSServiceUtil(){
+		serviceName = OSParameter.SERVICE_NAME;
+	    serviceURI = OSParameter.SERVICE_URI;
+		serviceType = OSParameter.SERVICE_TYPE;
 		try {
 			String sClassName = OSParameter.SOLVER_CLASS_NAME; //"org.optimizationservices.oscommon.util.StandardSolver";
 			Class solverClass = Class.forName(sClassName);
