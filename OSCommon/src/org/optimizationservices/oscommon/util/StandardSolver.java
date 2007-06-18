@@ -57,18 +57,24 @@ public class StandardSolver extends DefaultSolver{
 		osrlWriter.setResultTime(new GregorianCalendar());
 
 		//change starts
-		String sSolverPath =  OSParameter.CODE_HOME + "solver/OSSolverService";
-		if(sOS.toLowerCase().indexOf("window") >= 0){
-			sSolverPath += ".exe";
-		}
-		else if(sOS.toLowerCase().indexOf("linux") >= 0 || sOS.toLowerCase().indexOf("nix") >= 0){
-			sSolverPath += "Linux";;	
-		}
-		else if(sOS.toLowerCase().indexOf("mac") >= 0){
-			sSolverPath += "Mac";;
+		String sSolverPath = "";
+		if(OSParameter.SOLVER_EXECUTABLE.startsWith("OSSolverService")){
+			sSolverPath =  OSParameter.CODE_HOME + "solver/OSSolverService";
+			if(sOS.toLowerCase().indexOf("window") >= 0){
+				sSolverPath += ".exe";
+			}
+			else if(sOS.toLowerCase().indexOf("linux") >= 0 || sOS.toLowerCase().indexOf("nix") >= 0){
+				sSolverPath += "Linux";;	
+			}
+			else if(sOS.toLowerCase().indexOf("mac") >= 0){
+				sSolverPath += "Mac";;
+			}
+			else{
+				;
+			}
 		}
 		else{
-			;
+			sSolverPath =  OSParameter.CODE_HOME + "solver/"+OSParameter.SOLVER_EXECUTABLE;
 		}
 		String sArguments = 
 			" -osil " + sInstanceFile + 
