@@ -82,7 +82,7 @@
 	<param name="SMTP_SERVER" description="the smtp server address to send the email (change!)"/>
 	<param name="FROM_EMAIL" description="the from email address to send the email (change!)"/>
 	<param name="FROM_PASSWORD" description="the from email address to send the email (change!)"/>
-	<param name="TO_EMAIL" description="the to email address to send the email (change!)"/>
+	<param name="TO_EMAIL" description="the to email address to send the email (change!)"/> 
 	<param name="MAIL_SUBJECT" description="the email subject">OS SERVICE NOTIFICATION!!!</param>
 	<param name="MAIL_MESSAGE" description="the email message body">Please check the service.</param>
 	<!--Security related parameters-->
