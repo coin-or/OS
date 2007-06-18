@@ -275,7 +275,12 @@ public final class OSParameter{
 	 * SOLVER_CLASS_NAME holds the full class name (including name space) of the solver
 	 */
 	public static String SOLVER_CLASS_NAME = "org.optimizationservices.oscommon.util.StandardOSSolver"; //change?
-	
+
+	/**
+	 * OS_SOLVER holds the default solver name that the StandardOSSolver uses, e.g. cbc, clp. 
+	 */
+	public static String OS_SOLVER = "cbc"; //change?
+
 	/**
 	 * SOLVER_LIBRARY holds the library file of the solver class. No need if the library is registered or on a class path.
 	 */
@@ -1041,6 +1046,9 @@ public final class OSParameter{
 		---------------------------------------------*/	
 		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("SOLVER_CLASS_NAME");
 		if(sValue != null && sValue.length() > 0) SOLVER_CLASS_NAME = sValue;
+
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("OS_SOLVER");
+		if(sValue != null && sValue.length() > 0) OS_SOLVER = sValue;
 
 		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("SOLVER_LIBRARY");
 		if(sValue != null && sValue.length() > 0) SOLVER_LIBRARY = sValue;
