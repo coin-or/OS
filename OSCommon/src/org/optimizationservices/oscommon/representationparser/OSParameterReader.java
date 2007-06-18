@@ -66,29 +66,33 @@ public class OSParameterReader extends OSgLReader{
 		if(m_osParameterHashMap != null) return m_osParameterHashMap;
 		m_osParameterHashMap = new HashMap<String, String>();
 		m_osParameterDescriptionHashMap = new HashMap<String, String>();
-
-		Vector<Element> vElements = XMLUtil.getChildElementsByTagName(m_eRoot, "param");
-		int iNls	= vElements==null?0:vElements.size();
-		for(int i = 0; i < iNls; i++){
-			Element eParam = (Element)(vElements.elementAt(i));
-			NamedNodeMap	attributes =  eParam.getAttributes();
-			int n =attributes.getLength();
-			String sName = "";
-			String sDescription = "";
-			String sValue = XMLUtil.getElementValue(eParam);
-			for (int j = 0; j < n; j++){
-				Node	attr = attributes.item(j);
-				String sAttributeName  = attr.getNodeName();
-				String sAttributeValue = attr.getNodeValue();
-				if (sAttributeName.equals("name")){
-					sName = sAttributeValue;
+		try{
+			Vector<Element> vElements = XMLUtil.getChildElementsByTagName(m_eRoot, "param");
+			int iNls	= vElements==null?0:vElements.size();
+			for(int i = 0; i < iNls; i++){
+				Element eParam = (Element)(vElements.elementAt(i));
+				NamedNodeMap	attributes =  eParam.getAttributes();
+				int n =attributes.getLength();
+				String sName = "";
+				String sDescription = "";
+				String sValue = XMLUtil.getElementValue(eParam);
+				for (int j = 0; j < n; j++){
+					Node	attr = attributes.item(j);
+					String sAttributeName  = attr.getNodeName();
+					String sAttributeValue = attr.getNodeValue();
+					if (sAttributeName.equals("name")){
+						sName = sAttributeValue;
+					}
+					else if (sAttributeName.equals("description")){
+						sDescription = sAttributeValue;
+					}
 				}
-				else if (sAttributeName.equals("description")){
-					sDescription = sAttributeValue;
-				}
+				m_osParameterHashMap.put(sName, sValue);
+				m_osParameterDescriptionHashMap.put(sName, sDescription);
 			}
-			m_osParameterHashMap.put(sName, sValue);
-			m_osParameterDescriptionHashMap.put(sName, sDescription);
+		}
+		catch(Exception e){
+			
 		}
 		return m_osParameterHashMap;
 	}//getOSParameters
