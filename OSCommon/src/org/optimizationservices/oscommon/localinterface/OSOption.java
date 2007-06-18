@@ -990,6 +990,61 @@ public class OSOption {
 	}//setInitialVariableValues
 	
 	/**
+	 * get a string array of names of other optimization options. 
+	 * 
+	 * @return a string array of names of other options, null if no optimization other options.  
+	 */
+	public String[] getOtherOptimizationOptionNames(){
+		if(optimization == null) return null;
+		if(optimization.other == null) return null;
+		int n = optimization.other.length;
+		if(n <= 0) return null;
+		String[] otherOptimizationOptionNames = new String[n];
+		for(int i = 0; i < n; i++){
+			otherOptimizationOptionNames[i] = optimization.other[i].name;
+		}
+		return otherOptimizationOptionNames;
+	}//getOtherOptimizationOptionNames
+	
+	/**
+	 * get a hashmap of other optimization option values. 
+	 * The keys of the hashmap are the option names, and 
+	 * the values of the hashmap are the option values.  
+	 * 
+	 * @return a hashmap of other optimization option values, null if no other options. 
+	 */
+	public Hashtable<String, String>  getOtherOptimizationOptionValues(){
+		if(optimization == null) return null;
+		if(optimization.other == null) return null;
+		int n = optimization.other.length;
+		if(n <= 0) return null;
+		Hashtable<String, String> otherOptimizationOptionValues = new Hashtable<String, String>();
+		for(int i = 0; i < n; i++){
+			otherOptimizationOptionValues.put(optimization.other[i].name, optimization.other[i].value);
+		}
+		return otherOptimizationOptionValues;
+	}//getOtherOptimizationOptionValues
+	
+	/**
+	 * get a hashmap of other optimization option descriptions. 
+	 * The keys of the hashmap are the option names, and 
+	 * the values of the hashmap are the option descriptions.  
+	 * 
+	 * @return a hashmap of other optimization option descriptions, null if no other options. 
+	 */
+	public Hashtable<String, String>  getOtherOptimizationOptionDescriptions(){
+		if(optimization == null) return null;
+		if(optimization.other == null) return null;
+		int n = optimization.other.length;
+		if(n <= 0) return null;
+		Hashtable<String, String> otherOptimizationOptionDescriptions = new Hashtable<String, String>();
+		for(int i = 0; i < n; i++){
+			otherOptimizationOptionDescriptions.put(optimization.other[i].name, optimization.other[i].description);
+		}
+		return otherOptimizationOptionDescriptions;
+	}//otherOptimizationOptionDescriptions
+	
+	/**
 	 * get a string array of names of other options. 
 	 * 
 	 * @return a string array of names of other options, null if no other options.  
