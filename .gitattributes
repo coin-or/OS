@@ -1048,6 +1048,7 @@ OSCommon/src/org/optimizationservices/oscommon/util/OSServiceUtil.java -text
 OSCommon/src/org/optimizationservices/oscommon/util/ProcessUtil.java -text
 OSCommon/src/org/optimizationservices/oscommon/util/SAXContentHandler.java -text
 OSCommon/src/org/optimizationservices/oscommon/util/SecurityUtil.java -text
+OSCommon/src/org/optimizationservices/oscommon/util/StandardSolver.java -text
 OSCommon/src/org/optimizationservices/oscommon/util/WSUtil.java -text
 OSCommon/src/org/optimizationservices/oscommon/util/XMLUtil.java -text
 OSCommon/src/org/optimizationservices/oscommon/util/XPathUtil.java -text
