@@ -1,5 +1,5 @@
 /**
- * @(#)SolverService 1.0 03/14/2004
+ * @(#)OSSolverService 1.0 03/14/2004
  *
  * Copyright (c) 2004
  */
@@ -14,7 +14,7 @@ import org.optimizationservices.oscommon.util.OSServiceUtil;
 
 /**
  *
- * <P>The <code>SolverService</code> is the Solver's Web Service facade. 
+ * <P>The <code>OSSolverService</code> is the default OS Solver's Web Service facade. 
  *
  * </p>
  * @author Robert Fourer, Jun Ma, Kipp Martin
@@ -22,7 +22,7 @@ import org.optimizationservices.oscommon.util.OSServiceUtil;
  * @see org.optimizationservices.ossolver.api.OShL
  * @since OS 1.0
  */
-public class SolverService implements OShL{
+public class OSSolverService implements OShL{
 	/**
 	 * m_osServiceUtil holds a default implementation of the solver service.
 	 */
@@ -32,7 +32,7 @@ public class SolverService implements OShL{
 	/**
 	 * default constructor.
 	 */
-	public SolverService(){
+	public OSSolverService(){
 		m_osServiceUtil.serviceName = OSParameter.SERVICE_NAME;
 		m_osServiceUtil.serviceURI = OSParameter.SERVICE_URI;
 		m_osServiceUtil.serviceType = "solver";
@@ -137,4 +137,4 @@ public class SolverService implements OShL{
 		}
 		OSParameterFile.NAME = sDir+= "webapps/os/WEB-INF/code/OSParameter.xml";
 	}//static constructor
-}//class SolverService
+}//class OSSolverService

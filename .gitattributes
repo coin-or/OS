@@ -1148,7 +1148,7 @@ OSSolver/src/org/optimizationservices/ossolver/api/JunMaLPSolverService.java -te
 OSSolver/src/org/optimizationservices/ossolver/api/KnitroSolverService.java -text
 OSSolver/src/org/optimizationservices/ossolver/api/LindoOldSolverService.java -text
 OSSolver/src/org/optimizationservices/ossolver/api/LindoSolverService.java -text
-OSSolver/src/org/optimizationservices/ossolver/api/SolverService.java -text
+OSSolver/src/org/optimizationservices/ossolver/api/OSSolverService.java -text
 OSSolver/src/org/optimizationservices/ossolver/api/The10SecondSolverService.java -text
 OSSolver/src/org/optimizationservices/ossolver/api/The1MinuteSolverService.java -text
 OSSolver/src/org/optimizationservices/ossolver/api/The3MinuteSolverService.java -text
