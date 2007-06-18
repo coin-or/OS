@@ -55,7 +55,7 @@ public class IOUtil implements Serializable{
 	 * m_sName holds the name of this class.
 	 */
 	public String m_sName ="IOUtil, implments serizlizable";
-	
+
 	/**
 	 * Encode a plain string with base64 encoding. 
 	 * 
@@ -65,7 +65,7 @@ public class IOUtil implements Serializable{
 	public static String encodeString(String string){
 		return bytesToEncodedString(stringToBytes(string));
 	}//encodeString
-	
+
 	/**
 	 * Deconde a base64 encoded string. 
 	 * 
@@ -75,7 +75,7 @@ public class IOUtil implements Serializable{
 	public static String decodeString(String encodedString){
 		return bytesToString(encodedStringToBytes(encodedString));
 	}//decodeString
-	
+
 	/**
 	 * Read a file into a string (unencoded).
 	 *
@@ -95,7 +95,7 @@ public class IOUtil implements Serializable{
 				if( ((long)fis.read(theBytes, 0, (int) file.length())) == file.length()){
 					returnVal = new String(theBytes );
 				}
-				
+
 			}
 			if(fis != null) fis.close();
 			return returnVal;
@@ -105,7 +105,7 @@ public class IOUtil implements Serializable{
 			return null;
 		}
 	}//fileToString
-	
+
 	/**
 	 * Saves a string into a file.
 	 *
@@ -132,7 +132,7 @@ public class IOUtil implements Serializable{
 			return false;
 		}
 	}//stringToFile
-	
+
 	/**
 	 * Converts any file into a base64 encoded string.
 	 *
@@ -146,11 +146,11 @@ public class IOUtil implements Serializable{
 			File file = new File(fileName);
 			FileInputStream fis = new FileInputStream(file);
 			DataInputStream dis = new DataInputStream(fis);
-			
+
 			int iArraySize = (int)file.length();
 			byte[] bArray = new byte[iArraySize];
 			dis.read(bArray);
-			
+
 			String sOut = (new BASE64Encoder()).encodeBuffer(bArray);
 			fis.close();
 			dis.close();
@@ -161,7 +161,7 @@ public class IOUtil implements Serializable{
 			return null;
 		}
 	}//fileToEncodedString
-	
+
 	/**
 	 * Decodes and saves a base64 encoded string into a file.
 	 *
@@ -188,7 +188,7 @@ public class IOUtil implements Serializable{
 			return false;
 		}
 	}//encodedStringToFile
-	
+
 	/**
 	 * Converts an array of bytes into a string (unencoded).
 	 *
@@ -200,7 +200,7 @@ public class IOUtil implements Serializable{
 	public static String bytesToString(byte[] byteArray) {
 		return (new String(byteArray));
 	}//bytesToString
-	
+
 	/**
 	 * Return a string (unencoded) in an array of bytes.
 	 *
@@ -212,7 +212,7 @@ public class IOUtil implements Serializable{
 	public static byte[] stringToBytes(String string){
 		return string.getBytes();
 	}//stringToBytes
-	
+
 	/**
 	 * Converts an array of bytes into a base64 encoded string.
 	 *
@@ -224,7 +224,7 @@ public class IOUtil implements Serializable{
 	public static String bytesToEncodedString(byte[] byteArray) {
 		return (new BASE64Encoder()).encodeBuffer(byteArray);
 	}//bytesToEncodedString
-	
+
 	/**
 	 * Decodes a base64 encoded string and return them in an array of bytes.
 	 *
@@ -242,7 +242,7 @@ public class IOUtil implements Serializable{
 			return null;
 		}
 	}//encodedStringToBytes
-	
+
 	/**
 	 * Return an object in an array of bytes.
 	 *
@@ -269,7 +269,7 @@ public class IOUtil implements Serializable{
 			return null;
 		}
 	}//objectToBytes
-	
+
 	/**
 	 * Converts an array of bytes into an object.
 	 *
@@ -294,7 +294,7 @@ public class IOUtil implements Serializable{
 			return null;
 		}
 	}//bytesToObject
-	
+
 	/**
 	 * Return an object in a base64 encoded string.
 	 *
@@ -313,7 +313,7 @@ public class IOUtil implements Serializable{
 			return null;
 		}
 	}//objectToEncodedString
-	
+
 	/**
 	 * Decodes a base64 encoded string and return them in an object.
 	 *
@@ -333,7 +333,7 @@ public class IOUtil implements Serializable{
 			return null;
 		}
 	}//encodedStringToObject
-	
+
 	/**
 	 * Save a object into a file.
 	 *
@@ -359,7 +359,7 @@ public class IOUtil implements Serializable{
 			return false;
 		}
 	}//objectToFile
-	
+
 	/**
 	 * Converts file that was previously serialized from an object into an object in memory.
 	 *
@@ -384,7 +384,7 @@ public class IOUtil implements Serializable{
 			return null;
 		}
 	}//fileToObject
-	
+
 	/**
 	 * Save an array of bytes into a file.
 	 *
@@ -409,7 +409,7 @@ public class IOUtil implements Serializable{
 			return false;
 		}
 	}//bytesToFile
-	
+
 	/**
 	 * Retrieve a file into an array of bytes.
 	 *
@@ -431,7 +431,7 @@ public class IOUtil implements Serializable{
 			return null;
 		}
 	}//bytesToFile
-	
+
 	/**
 	 * Converts a string file to a binary file.
 	 *
@@ -460,7 +460,7 @@ public class IOUtil implements Serializable{
 		}
 		return bytesToFile(bArray, outFileName);
 	}//stringFileToBinaryFile
-	
+
 	/**
 	 * Reads from a file to a string in memory.
 	 *
@@ -490,7 +490,7 @@ public class IOUtil implements Serializable{
 			return null;
 		}
 	}//readStringFromFile
-	
+
 	/**
 	 * Writes a string to a file. 
 	 * @param string holds the string to be written to a file.
@@ -509,7 +509,7 @@ public class IOUtil implements Serializable{
 			return false;
 		}
 	}//writeStringToFile
-	
+
 	/**
 	 * Appends a string to a file. 
 	 * @param string holds the string to be appended to a file.
@@ -528,7 +528,7 @@ public class IOUtil implements Serializable{
 			return false;
 		}
 	}//appendStringToFile
-	
+
 	/**
 	 * Reads from a url to a string in memory.
 	 *
@@ -561,7 +561,7 @@ public class IOUtil implements Serializable{
 			return null;
 		}
 	}//readStringFromURI
-	
+
 	/**
 	 * Reads from a url to a string in memory.
 	 *
@@ -589,7 +589,7 @@ public class IOUtil implements Serializable{
 					n = 0;
 					mbChunk = new byte[m *= 8];
 				}
-				
+
 				if ((i = is.read(mbChunk)) < 0) break;				
 				mbTemp = new byte[mbResult.length + i];
 				if (mbResult.length > 0) System.arraycopy(mbResult, 0, mbTemp, 0, mbResult.length);
@@ -603,7 +603,7 @@ public class IOUtil implements Serializable{
 			return null;
 		}
 	}//readBytesFromURL
-	
+
 	/**
 	 *
 	 * @param string holds the string to be converted to an inputstream.
@@ -613,7 +613,7 @@ public class IOUtil implements Serializable{
 		InputStream is = new ByteArrayInputStream(string.getBytes());
 		return is;
 	}//stringToInputStream
-	
+
 	/**
 	 *
 	 * @param file holds the file to converted to an inputstream.
@@ -628,7 +628,7 @@ public class IOUtil implements Serializable{
 			return null;
 		}
 	}//fileToInputStream
-	
+
 	/**
 	 *
 	 * @param file holds the file to converted to an Outputstream.
@@ -643,7 +643,7 @@ public class IOUtil implements Serializable{
 			return null;
 		}
 	}//fileToInputStream
-	
+
 	/// <summary>
 	/// logs message to a file. 
 	/// </summary> 
@@ -671,7 +671,7 @@ public class IOUtil implements Serializable{
 			return false;
 		}		
 	}//log
-			
+
 	/**
 	 * Print out a string message. 
 	 * @param s holds the string message to print.
@@ -692,9 +692,9 @@ public class IOUtil implements Serializable{
 			e.printStackTrace();
 			return false;
 		}
-		
+
 	}//print with the output stream 
-	
+
 	/**
 	 * Print out a line feed "\n". 
 	 * @return whether the print is successful. 
@@ -702,7 +702,7 @@ public class IOUtil implements Serializable{
 	public static boolean println(){
 		return print("\n");
 	}//println
-	
+
 	/**
 	 * Print out a string message with an extra line feed "\n". 
 	 * @param s holds the string message to print. 
@@ -711,7 +711,7 @@ public class IOUtil implements Serializable{
 	public static boolean println(String s){
 		return print(s+"\n");
 	}//println
-	
+
 	/**
 	 * Print out a string message. 
 	 * @param s holds the string message to print. 
@@ -730,7 +730,7 @@ public class IOUtil implements Serializable{
 		else if(OSParameter.DEFAULT_OUTPUT == OSConstant.FILE_OUT){
 			try {
 				outputStream = new FileOutputStream(OSParameter.PRINT_FILE, OSParameter.APPEND_PRINT_FILE);
-				 
+
 			} 
 			catch (FileNotFoundException e){
 				e.printStackTrace();
@@ -742,7 +742,7 @@ public class IOUtil implements Serializable{
 			return true;
 		}	
 	}//print
-	
+
 	/**
 	 * Convert printStackTrace() to a String. 
 	 * 
@@ -761,7 +761,7 @@ public class IOUtil implements Serializable{
 		}
 	}//exceptionStackToString
 
-	
+
 	/**
 	 * clean up disks, mainly including deleting temp files. 
 	 * 
@@ -778,21 +778,21 @@ public class IOUtil implements Serializable{
 		}
 		if(dFreeDiskSpace != -1 && dFreeDiskSpace < OSParameter.MINIMUM_DISKSPACE_TRIGGER){
 			lTempFileKeepTime= OSParameter.TEMP_FILE_MIN_DAYS*86400000
-			   +OSParameter.TEMP_FILE_MIN_HOURS*3600000
-			   +OSParameter.TEMP_FILE_MIN_MINUTES*60000
-			   +OSParameter.TEMP_FILE_MIN_SECONDS*1000;
+			+OSParameter.TEMP_FILE_MIN_HOURS*3600000
+			+OSParameter.TEMP_FILE_MIN_MINUTES*60000
+			+OSParameter.TEMP_FILE_MIN_SECONDS*1000;
 		}
 		else{
 			lTempFileKeepTime= OSParameter.TEMP_FILE_MAX_DAYS*86400000
-			   +OSParameter.TEMP_FILE_MAX_HOURS*3600000
-			   +OSParameter.TEMP_FILE_MAX_MINUTES*60000
-			   +OSParameter.TEMP_FILE_MAX_SECONDS*1000;
+			+OSParameter.TEMP_FILE_MAX_HOURS*3600000
+			+OSParameter.TEMP_FILE_MAX_MINUTES*60000
+			+OSParameter.TEMP_FILE_MAX_SECONDS*1000;
 		}
 
 		IOUtil ioUtil = new IOUtil();
 		DiskCleanUpFilter filter = ioUtil.new DiskCleanUpFilter();
 		filter.m_lTempFileKeepTime = lTempFileKeepTime;
-		
+
 		File dir;
 		int iFolderNumber = OSParameter.CLEAN_UP_FOLDERS==null?0:OSParameter.CLEAN_UP_FOLDERS.length;
 		int i, j;
@@ -814,7 +814,7 @@ public class IOUtil implements Serializable{
 		}
 		//backup files and dirs
 		if((OSParameter.SERVICE_TYPE != null && OSParameter.SERVICE_TYPE.equals("registry")) || 
-			(OSParameter.SERVICE_TYPE != null && OSParameter.SERVICE_TYPE.equals("scheduler") && OSParameter.SCHEDULER_WITH_REGISTRY)){
+				(OSParameter.SERVICE_TYPE != null && OSParameter.SERVICE_TYPE.equals("scheduler") && OSParameter.SCHEDULER_WITH_REGISTRY)){
 			File registryLogFile = new File(OSParameter.REGISTRY_LOG_FILE);
 			if(registryLogFile.exists()){
 				if(registryLogFile.length() >= OSParameter.MAX_LOG_FILE_SIZE){
@@ -877,7 +877,7 @@ public class IOUtil implements Serializable{
 		}			
 		return true;
 	}//cleanUpDisk
-	
+
 	/**
 	 * <P>The <code>DiskCleanUpFilter</code> class is an internal 
 	 *file name filter class called by <code>cleanUpDisk</code>.
@@ -888,7 +888,7 @@ public class IOUtil implements Serializable{
 		 * m_lTempFileKeepTime holds the time to keep the temp file. 
 		 */
 		protected long m_lTempFileKeepTime;
-		
+
 		/**
 		 * Tests if a specified file should be included in a file list. 
 		 * It implements the abstract accept method in FilenameFilter. 
@@ -899,12 +899,12 @@ public class IOUtil implements Serializable{
 		public boolean accept(File dir, String name){
 			boolean bAccept = false;			
 			File file = new File(dir, name);
-			
+
 			Calendar calendar = Calendar.getInstance();
 			long lNow = calendar.getTimeInMillis();
 			long lLastModified = file.lastModified(); 
 			long lDifference = lNow - lLastModified ;
-			
+
 			if( lDifference > m_lTempFileKeepTime){
 				bAccept = true;
 			}
@@ -915,9 +915,9 @@ public class IOUtil implements Serializable{
 
 			return bAccept;
 		}//accept
-		
+
 	}//DiskCleanUpFilter
-	
+
 	/**
 	 * check if a file or directory exists. 
 	 * 
@@ -934,7 +934,7 @@ public class IOUtil implements Serializable{
 			return false;
 		}
 	}//existsFile
-	
+
 	/**
 	 * get the last write time of the file. 
 	 * @param file holds the name of the file to check. 
@@ -944,7 +944,7 @@ public class IOUtil implements Serializable{
 		File f = new File(file);
 		return f.lastModified();
 	}//getLastWriteTime
-	
+
 	/**
 	 * test whether a path is a directory or not. 
 	 * @param path holds the file or dir path. 
@@ -959,7 +959,7 @@ public class IOUtil implements Serializable{
 			return false;
 		}
 	}//isDir
-	
+
 	/**
 	 * Create a file. 
 	 * 
@@ -977,7 +977,7 @@ public class IOUtil implements Serializable{
 			return false;
 		}
 	}//createFile
-	
+
 	/**
 	 * delete a file. 
 	 * 
@@ -995,7 +995,7 @@ public class IOUtil implements Serializable{
 			return false;
 		}
 	}//deleteFile
-	
+
 	/**
 	 * copy a file. 
 	 * 
@@ -1039,21 +1039,21 @@ public class IOUtil implements Serializable{
 	 */
 	public static boolean moveFile(String from, String to) {
 		try {
-		    File fromFile = new File(from);
-		    File toFile = new File(to);
-		    if(fromFile.exists() && toFile.exists()){
-		    	toFile.delete();
-		    }
-		    boolean success = fromFile.renameTo(toFile);
-		    if(!success) throw new Exception("move file from " + from + " to " + to + " not successfull.");
-		    else return true;
+			File fromFile = new File(from);
+			File toFile = new File(to);
+			if(fromFile.exists() && toFile.exists()){
+				toFile.delete();
+			}
+			boolean success = fromFile.renameTo(toFile);
+			if(!success) throw new Exception("move file from " + from + " to " + to + " not successfull.");
+			else return true;
 		} 
 		catch (Exception e) {
 			IOUtil.log(IOUtil.exceptionStackToString(e), null);
 			return false;
 		}
 	}//moveFile
-	
+
 	/**
 	 * Make a directory. 
 	 * 
@@ -1071,7 +1071,7 @@ public class IOUtil implements Serializable{
 			return false;
 		}
 	}//makeDir
-	
+
 	/**
 	 * Delete a directory. 
 	 * 
@@ -1099,7 +1099,7 @@ public class IOUtil implements Serializable{
 			return false;
 		}	
 	}//deleteDir
-	
+
 	/**
 	 * copy directory. 
 	 * 
@@ -1140,7 +1140,7 @@ public class IOUtil implements Serializable{
 			return false;
 		}	
 	}//copyDir
-	
+
 	/**
 	 * move directory. 
 	 * 
@@ -1202,7 +1202,7 @@ public class IOUtil implements Serializable{
 			IOUtil.log(IOUtil.exceptionStackToString(e), null);
 			return null;
 		}	     
-		
+
 	}//getCurrentDir
 
 	/**
@@ -1227,173 +1227,246 @@ public class IOUtil implements Serializable{
 	}//getParentDir
 
 	/**
-     * get free disk space.
-     *
-     * @param path holds the path to get free space for, (including the colon on the windows system.) 
-     * @return the amount of free drive space on the drive
-     * @throws IOException if an error occurs
-     */
+	 * get free disk space.
+	 *
+	 * @param path holds the path to get free space for, (including the colon on the windows system.) 
+	 * @return the amount of free drive space on the drive
+	 * @throws IOException if an error occurs
+	 */
 	public static double getFreeDiskSpace(String path)throws IOException {
+		if (path == null) {
+			throw new IllegalArgumentException("Path must not be null");
+		}
 		String sOS = System.getProperty("os.name").toLowerCase();
 		if(sOS.indexOf("indow") >= 0){ 
-	        if (path.length() > 2 && path.charAt(1) == ':') {
-	            path = path.substring(0, 2);  // seems to make it work
-	        }
-	        // build and run the 'dir' command
-	        String[] cmdAttrbs = new String[] {"cmd.exe", "/C", "dir /-c " + path};
-	
-	        // read in the output of the command to an ArrayList
-	        BufferedReader in = null;
-	        String line = null;
-	        ArrayList<String> lines = new ArrayList<String>();
-	        try {
-	        	Process proc = Runtime.getRuntime().exec(cmdAttrbs);          
-	            in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-	            line = in.readLine();
-	            while (line != null) {
-	                line = line.toLowerCase().trim();
-	                lines.add(line);
-	                line = in.readLine();
-	            }
-	        } 
-	        finally {
-	        	try {
-	                if (in != null) {
-	                    in.close();
-	                }
-	            } catch (IOException ioe) {
-	                // ignore
-	            }	
-	        }
-	        if (lines.size() == 0) {
-	            // unknown problem, throw exception
-	            throw new IOException(
-	                    "Command line 'dir /c' did not return any info " +
-	                    "for command '" + cmdAttrbs[2] + "'");
-	        }
-	        // now iterate over the lines we just read and find the LAST
-	        // non-empty line (the free space bytes should be in the last element
-	        // of the ArrayList anyway, but this will ensure it works even if it's
-	        // not, still assuming it is on the last non-blank line)
-	        double bytes = -1.0;
-	        int i = lines.size() - 1;
-	        int bytesStart = 0;
-	        int bytesEnd = 0;
-	        outerLoop: while (i > 0) {
-	            line = (String) lines.get(i);
-	            if (line.length() > 0) {
-	                // found it, so now read from the end of the line to find the
-	                // last numeric character on the line, then continue until we
-	                // find the first non-numeric character, and everything between
-	                // that and the last numeric character inclusive is our free
-	                // space bytes count
-	                int j = line.length() - 1;
-	                innerLoop1: while (j >= 0) {
-	                    char c = line.charAt(j);
-	                    if (Character.isDigit(c)) {
-	                      // found the last numeric character, this is the end of
-	                      // the free space bytes count
-	                      bytesEnd = j + 1;
-	                      break innerLoop1;
-	                    }
-	                    j--;
-	                }
-	                innerLoop2: while (j >= 0) {
-	                    char c = line.charAt(j);
-	                    if (!Character.isDigit(c) && c != ',' && c != '.') {
-	                      // found the next non-numeric character, this is the
-	                      // beginning of the free space bytes count
-	                      bytesStart = j + 1;
-	                      break innerLoop2;
-	                    }
-	                    j--;
-	                }
-	                break outerLoop;
-	            }
-	        }
-	
-	        // remove commas and dots in the bytes count
-	        StringBuffer buf = new StringBuffer(line.substring(bytesStart, bytesEnd));
-	        for (int k = 0; k < buf.length(); k++) {
-	            if (buf.charAt(k) == ',' || buf.charAt(k) == '.') {
-	                buf.deleteCharAt(k--);
-	            }
-	        }
-	        bytes = Double.parseDouble(buf.toString());
-	        return bytes;
+			if (path.length() > 2 && path.charAt(1) == ':') {
+				path = path.substring(0, 2);  // seems to make it work
+			}
+			// build and run the 'dir' command
+			String[] cmdAttrbs = new String[] {"cmd.exe", "/C", "dir /-c " + path};
+
+			// read in the output of the command to an ArrayList
+			BufferedReader in = null;
+			String line = null;
+			ArrayList<String> lines = new ArrayList<String>();
+			try {
+				Process proc = Runtime.getRuntime().exec(cmdAttrbs);          
+				in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+				line = in.readLine();
+				while (line != null) {
+					line = line.toLowerCase().trim();
+					lines.add(line);
+					line = in.readLine();
+				}
+			} 
+			finally {
+				try {
+					if (in != null) {
+						in.close();
+					}
+				} catch (IOException ioe) {
+					// ignore
+				}	
+			}
+			if (lines.size() == 0) {
+				// unknown problem, throw exception
+				throw new IOException(
+						"Command line 'dir /c' did not return any info " +
+						"for command '" + cmdAttrbs[2] + "'");
+			}
+			// now iterate over the lines we just read and find the LAST
+			// non-empty line (the free space bytes should be in the last element
+			// of the ArrayList anyway, but this will ensure it works even if it's
+			// not, still assuming it is on the last non-blank line)
+			double bytes = -1.0;
+			int i = lines.size() - 1;
+			int bytesStart = 0;
+			int bytesEnd = 0;
+			outerLoop: while (i > 0) {
+				line = (String) lines.get(i);
+				if (line.length() > 0) {
+					// found it, so now read from the end of the line to find the
+					// last numeric character on the line, then continue until we
+					// find the first non-numeric character, and everything between
+					// that and the last numeric character inclusive is our free
+					// space bytes count
+					int j = line.length() - 1;
+					innerLoop1: while (j >= 0) {
+						char c = line.charAt(j);
+						if (Character.isDigit(c)) {
+							// found the last numeric character, this is the end of
+							// the free space bytes count
+							bytesEnd = j + 1;
+							break innerLoop1;
+						}
+						j--;
+					}
+					innerLoop2: while (j >= 0) {
+						char c = line.charAt(j);
+						if (!Character.isDigit(c) && c != ',' && c != '.') {
+							// found the next non-numeric character, this is the
+							// beginning of the free space bytes count
+							bytesStart = j + 1;
+							break innerLoop2;
+						}
+						j--;
+					}
+					break outerLoop;
+				}
+			}
+
+			// remove commas and dots in the bytes count
+			StringBuffer buf = new StringBuffer(line.substring(bytesStart, bytesEnd));
+			for (int k = 0; k < buf.length(); k++) {
+				if (buf.charAt(k) == ',' || buf.charAt(k) == '.') {
+					buf.deleteCharAt(k--);
+				}
+			}
+			bytes = Double.parseDouble(buf.toString());
+			return bytes;
 		}
 		else{//"nix systems"
-			 if (path.length() == 0) {
-		            throw new IllegalArgumentException("Path must not be empty");
-		        }
-		        // build and run the 'dir' command
-		        String[] cmdAttribs = new String[] {"df", path};
+			if (path.length() == 0) {
+				throw new IllegalArgumentException("Path must not be empty");
+			}
+			// build and run the 'df' command
+			String[] cmdAttribs = new String[] {"df", path};
 
-		        // read the output from the command until we come to the second line
-		        double bytes = -1.0;
-		        BufferedReader in = null;
-		        try {
-		        	Process proc = Runtime.getRuntime().exec(cmdAttribs);          
-		            in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-		            String line1 = in.readLine(); // header line (ignore it)
-		            String line2 = in.readLine(); // the line we're interested in
-		            String line3 = in.readLine(); // possibly interesting line
-		            if (line2 == null) {
-		                // unknown problem, throw exception
-		                throw new IOException(
-		                        "Command line 'df' did not return info as expected " +
-		                        "for path '" + path +
-		                        "'- response on first line was '" + line1 + "'");
-		            }
-		            line2 = line2.trim();
+			// read the output from the command until we come to the second line
+			double bytes = -1.0;
+			BufferedReader in = null;
+			try {
+				Process proc = Runtime.getRuntime().exec(cmdAttribs);          
+				in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+				String line1 = in.readLine(); // header line (ignore it)
+				String line2 = in.readLine(); // the line we're interested in
+				String line3 = in.readLine(); // possibly interesting line
+				if (line2 == null) {
+					// unknown problem, throw exception
+					throw new IOException(
+							"Command line 'df' did not return info as expected " +
+							"for path '" + path +
+							"'- response on first line was '" + line1 + "'");
+				}
+				line2 = line2.trim();
 
-		            // Now, we tokenize the string. The fourth element is what we want.
-		            StringTokenizer tok = new StringTokenizer(line2, " ");
-		            if (tok.countTokens() < 4) {
-		                // could be long Filesystem, thus data on third line
-		                if (tok.countTokens() == 1 && line3 != null) {
-		                    line3 = line3.trim();
-		                    tok = new StringTokenizer(line3, " ");
-		                } else {
-		                    throw new IOException(
-		                            "Command line 'df' did not return data as expected " +
-		                            "for path '" + path + "'- check path is valid");
-		                }
-		            } else {
-		                tok.nextToken(); // Ignore Filesystem
-		            }
-		            tok.nextToken(); // Ignore 1K-blocks
-		            tok.nextToken(); // Ignore Used
-		            String freeSpace = tok.nextToken();
-		            try {
-		                bytes = 1000*Double.parseDouble(freeSpace);
-		            } catch (NumberFormatException ex) {
-		                throw new IOException(
-		                        "Command line 'df' did not return numeric data as expected " +
-		                        "for path '" + path + "'- check path is valid");
-		            }
+				// Now, we tokenize the string. The fourth element is what we want.
+				StringTokenizer tok = new StringTokenizer(line2, " ");
+				if (tok.countTokens() < 4) {
+					// could be long Filesystem, thus data on third line
+					if (tok.countTokens() == 1 && line3 != null) {
+						line3 = line3.trim();
+						tok = new StringTokenizer(line3, " ");
+					} else {
+						throw new IOException(
+								"Command line 'df' did not return data as expected " +
+								"for path '" + path + "'- check path is valid");
+					}
+				} 
+				else {
+					tok.nextToken(); // Ignore Filesystem
+				}
+				tok.nextToken(); // Ignore 1K-blocks
+				tok.nextToken(); // Ignore Used
+				String freeSpace = tok.nextToken();
+				try {
+					bytes = 1000*Double.parseDouble(freeSpace);
+				} catch (NumberFormatException ex) {
+					throw new IOException(
+							"Command line 'df' did not return numeric data as expected " +
+							"for path '" + path + "'- check path is valid");
+				}
 
-		        } 
-		        finally {
-		        	try {
-		                if (in != null) {
-		                    in.close();
-		                }
-		            } catch (IOException ioe) {
-		                // ignore
-		            }
-		        }
+			} 
+			finally {
+				try {
+					if (in != null) {
+						in.close();
+					}
+				} catch (IOException ioe) {
+					// ignore
+				}
+			}
 
-		        if (bytes < 0) {
-		            throw new IOException(
-		                    "Command line 'df' did not find free space in response " +
-		                    "for path '" + path + "'- check path is valid");
-		        }
-		        return bytes;
+			if (bytes < 0) {
+				throw new IOException(
+						"Command line 'df' did not find free space in response " +
+						"for path '" + path + "'- check path is valid");
+			}
+			return bytes;
 		}
 
 	}//getFreeDiskSpace
-	
+
+	/**
+	 * get Unix or Linux drive.
+	 *
+	 * @param path holds the path of the file that resides on the drive 
+	 * @return the drive name (e.g. /dev/hda1/ or /dev/hda2/
+	 * @throws IOException if an error occurs
+	 */
+	public static String getUnixDrive(String path)throws IOException {
+		if (path == null) {
+			throw new IllegalArgumentException("Path must not be null");
+		}
+		// build and run the 'df' command
+		String[] cmdAttribs = new String[] {"df", path};
+
+		// read the output from the command until we come to the second line
+		String sDrive = "";
+		BufferedReader in = null;
+		try {
+			Process proc = Runtime.getRuntime().exec(cmdAttribs);          
+			in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+			String line1 = in.readLine(); // header line (ignore it)
+			String line2 = in.readLine(); // the line we're interested in
+			String line3 = in.readLine(); // possibly interesting line
+			if (line2 == null) {
+				// unknown problem, throw exception
+				throw new IOException(
+						"Command line 'df' did not return info as expected " +
+						"for path '" + path +
+						"'- response on first line was '" + line1 + "'");
+			}
+			line2 = line2.trim();
+
+			// Now, we tokenize the string. The first element is what we want.
+			StringTokenizer tok = new StringTokenizer(line2, " ");
+			if (tok.countTokens() < 4) {
+				// could be long Filesystem, thus data on third line
+				if (tok.countTokens() == 1 && line3 != null) {
+					line3 = line3.trim();
+					tok = new StringTokenizer(line3, " ");
+				} 
+				else {
+					throw new IOException(
+							"Command line 'df' did not return data as expected " +
+							"for path '" + path + "'- check path is valid");
+				}
+			} 
+			sDrive = tok.nextToken().trim(); 
+			if(sDrive!=null && !sDrive.endsWith("/")){
+				sDrive += "/";
+			}
+		} 
+		finally {
+			try {
+				if (in != null) {
+					in.close();
+				}
+			} catch (IOException ioe) {
+				// ignore
+			}
+		}
+
+		if (sDrive == null || sDrive.length() < 0) {
+			throw new IOException(
+					"Command line 'df' did not find drive name in response " +
+					"for path '" + path + "'- check path is valid");
+		}
+		return sDrive;
+	}//getUnixDrive
+
 	/**
 	 * main for test purposes.
 	 *
@@ -1419,7 +1492,7 @@ public class IOUtil implements Serializable{
 		System.out.println(sIOUtilObject1);
 		IOUtil ioUtilObject2 = (IOUtil)encodedStringToObject(sIOUtilObject1);
 		System.out.println(ioUtilObject2.m_sName);
-		
+
 		System.out.println("-------------OjectFile_String_FileOjbect---------------------");
 		IOUtil thisIOUtilObject2 = new IOUtil();
 		objectToFile(thisIOUtilObject2, "file/obj1.ser");
@@ -1432,33 +1505,33 @@ public class IOUtil implements Serializable{
 		byte[] bytes = fileToBytes("file/c.xls");
 		System.out.println(bytes.length);
 		bytesToFile(bytes, "file/d.xls");
-		*/
-		
+		 */
+
 //		IOUtil.print("abc");
 //		IOUtil.println("efg");
 //		IOUtil.print("123");
 //		System.out.println(OSParameter.PRINT_STRING_WRITER.toString());
-		
+
 		//IOUtil.copyFile("c:/code/temp/m.xls", "c:/code/temp/copy.xls");
 		//IOUtil.deleteFile("c:/temp/1.temp");
 		//IOUtil.moveFile("c:/abc", "c:/abcd");
 		//IOUtil.createFile("c:/aaa.txt");
 		//IOUtil.cleanUpDisk();
-		
+
 		//System.out.println(IOUtil.getParentDir());
 		//IOUtil.makeDir("c:/abc");
 		//IOUtil.deleteDir("c:/abc");
 		//System.out.println(IOUtil.isDir("c:/abc/abc.txt"));
-//	try {
+//		try {
 //		System.out.println(IOUtil.getFreeDiskSpace("c:/"));
-//	} catch (IOException e) {
+//		} catch (IOException e) {
 //		e.printStackTrace();
-//	}
+//		}
 		//System.out.println(IOUtil.existsFileOrDir("c:/code/"));
 		//System.out.println(IOUtil.getLastWriteTime("C:/code/OSConfig/OSRegistry.xml"));
 		//IOUtil.appendStringToFile("aaaa", "c:/aaabbb.txt");
 		//IOUtil.appendStringToFile("bbbb", "c:/aaabbb.txt");
-		
+
 	}//main
-	
+
 }//class IOUtil

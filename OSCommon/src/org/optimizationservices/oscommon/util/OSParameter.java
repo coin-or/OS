@@ -77,7 +77,7 @@ public final class OSParameter{
 	/**
 	 * MAX_LOG_FILE_SIZE holds the maximum size of the log file before it is backed up and started again. 
 	 */
-	public static long MAX_LOG_FILE_SIZE = 1000000;
+	public static long MAX_LOG_FILE_SIZE = 5000000;
 	
 	/**
 	 * BACKUP_FOLDER holds the main system folder for backing up.
@@ -145,12 +145,12 @@ public final class OSParameter{
 	 * MINIMUM_MEMORY_TRIGGER holds the minimum memory before the automatic 
 	 * clean up is triggered to get more memory. 
 	 */
-	public static long MINIMUM_MEMORY_TRIGGER = 16000; //change?
+	public static long MINIMUM_MEMORY_TRIGGER = 100000000; //change?
 	
 	/**
 	 * CLEAN_UP_FOLDERS holds the folder to clean up. 
 	 */
-	public static String[] CLEAN_UP_FOLDERS = {TEMP_FILE_FOLDER, BACKUP_FOLDER, "c:/temp/"}; //change?
+	public static String[] CLEAN_UP_FOLDERS = {TEMP_FILE_FOLDER, BACKUP_FOLDER}; //change?
 	
 	/**
 	 * MAX_JOBIDS_TO_KEEP holds the maximum number of job ids to keep before deleting them.
@@ -164,7 +164,7 @@ public final class OSParameter{
 	/**
 	 * JOB_MAX_HOUR holds the maximum hours allowed for a job.
 	 */
-	public static long JOB_MAX_HOURS = 48; //change?
+	public static long JOB_MAX_HOURS = 24; //change?
 
 	/**
 	 * JOB_MAX_MINUTE holds the maximum minutes allowed for a job.
@@ -184,7 +184,7 @@ public final class OSParameter{
 	/**
 	 * TEMP_FILE_MAX_DAY holds the maximum days allowed to keep a temporary file.
 	 */
-	public static long TEMP_FILE_MAX_DAYS = 0;
+	public static long TEMP_FILE_MAX_DAYS = 30;
 	
 	/**
 	 * TEMP_FILE_MAX_HOUR holds the maximum hours allowed to keep a temporary file.
@@ -194,7 +194,7 @@ public final class OSParameter{
 	/**
 	 * TEMP_FILE_MAX_MINUTE holds the maximum minutes allowed to keep a temporary file.
 	 */
-	public static long TEMP_FILE_MAX_MINUTES = 1;
+	public static long TEMP_FILE_MAX_MINUTES = 0;
 
 	/**
 	 * TEMP_FILE_MAX_SECOND holds the maximum seconds allowed to keep a temporary file.
@@ -204,7 +204,7 @@ public final class OSParameter{
 	/**
 	 * TEMP_FILE_MIN_DAY holds the minimum days allowed to keep a temporary file.
 	 */
-	public static long TEMP_FILE_MIN_DAYS = 0;
+	public static long TEMP_FILE_MIN_DAYS = 2;
 	
 	/**
 	 * TEMP_FILE_MIN_HOUR holds the minimum hours allowed to keep a temporary file.
@@ -219,7 +219,7 @@ public final class OSParameter{
 	/**
 	 * TEMP_FILE_MIN_SECOND holds the minimum seconds allowed to keep a temporary file.
 	 */
-	public static long TEMP_FILE_MIN_SECONDS = 30;
+	public static long TEMP_FILE_MIN_SECONDS = 0;
 	
 	/*---------------------------------------------
 	Server related parameters
@@ -242,12 +242,12 @@ public final class OSParameter{
 	/**
 	 * MAX_JOB_NUMBERS holds the maximum number of running jobs allowed per service. 
 	 */
-	public static int MAX_JOB_NUMBERS = 1;  //change?
+	public static int MAX_JOB_NUMBERS = 3;  //change?
 	
 	/**
 	 * MAX_WAITING_NUMBERS holds the maximum number of waiting jobs allowed per service. 
 	 */
-	public static int MAX_WAITING_NUMBERS = 10;  //change?
+	public static int MAX_WAITING_NUMBERS = 5;  //change?
 	
 	/**
 	 * SERVICE_POLLING_INTERVAL_SHORT holds the number of milli-seconds that a service 
@@ -274,7 +274,7 @@ public final class OSParameter{
 	/**
 	 * SOLVER_CLASS_NAME holds the full class name (including name space) of the solver
 	 */
-	public static String SOLVER_CLASS_NAME = ""; //change?
+	public static String SOLVER_CLASS_NAME = "org.optimizationservices.oscommon.util.StandardOSSolver"; //change?
 	
 	/**
 	 * SOLVER_LIBRARY holds the library file of the solver class. No need if the library is registered or on a class path.
@@ -390,7 +390,7 @@ public final class OSParameter{
 	/**
 	 * PROCESSES_TO_KILL holds the names of the processes to kill after tge sikver's solve method is finished. 
 	 */
-	public static String[] PROCESSES_TO_KILL = {"excel"};
+	public static String[] PROCESSES_TO_KILL = {};
 	
 	/*---------------------------------------------
 	Service site related parameters
@@ -398,12 +398,12 @@ public final class OSParameter{
 	/**
 	 * SERVICE_NAME holds the service name. 
 	 */
-	public static String SERVICE_NAME = "XXXSolverService";  //change!
+	public static String SERVICE_NAME = "OSSolverService";  //change!
 	
 	/**
 	 * SERVICE_URI holds the service uri. 
 	 */
-	public static String SERVICE_URI = ""; //change!
+	public static String SERVICE_URI = "http://localhost:8080/os/ossolver/OSSolverService.jws"; //change!
 	
 	/**
 	 * SERVICE_TYPE holds the service type. 
@@ -413,17 +413,17 @@ public final class OSParameter{
 	/**
 	 * OS_SERVICE_SITE holds the main site of the OS services.
 	 */
-	public static String OS_SERVICE_SITE = "http://localhost:8080/os/"; 
+	public static String OS_SERVICE_SITE = "http://www.optimizationservices.org/os"; 
 
 	/**
 	 * OS_REGISTRY_SITE holds the site of the OS Registry.
 	 */
-	public static String OS_REGISTRY_SITE = OS_SERVICE_SITE + "osregistry/OSRegistryService.jws"; //change!
+	public static String OS_REGISTRY_SITE = OS_SERVICE_SITE + "/osregistry/OSRegistryService.jws"; //change!
 
 	/**
 	 * OS_SCHEDULER_SITE holds the site of the OS scheduler.
 	 */
-	public static String OS_SCHEDULER_SITE = OS_SERVICE_SITE + "osscheduler/OSSchedulerService.jws"; //change!
+	public static String OS_SCHEDULER_SITE = OS_SERVICE_SITE + "/osscheduler/OSSchedulerService.jws"; //change!
 
 	/**
 	 * SCHEDULER_WITH_REGISTRY holds whether the scheduler service locally sits with the registry service in the same web application.
@@ -436,12 +436,12 @@ public final class OSParameter{
 	/**
 	 * SMTP_SERVER holds the smtp server address to send the email. 
 	 */
-	public static String SMTP_SERVER = "smtp.comcast.net";//"merle.it.northwestern.edu";  //change?
+	public static String SMTP_SERVER = "";//e.g. "smtp.comcast.net";  //change?
 	
 	/**
 	 * FROM_EMAIL holds the from email address to send the email. 
 	 */
-	public static String FROM_EMAIL = "maj@northwestern.edu";
+	public static String FROM_EMAIL = ""; //e.g. maj@northwestern.edu; //change?
 	
 	/**
 	 * FROM_PASSWORD holds the from email address to send the email. 
@@ -451,7 +451,7 @@ public final class OSParameter{
 	/**
 	 * TO_EMAIL holds the to email address to send the email. 
 	 */
-	public static String TO_EMAIL = "majxuh@hotmail.com";
+	public static String TO_EMAIL = ""; //e.g. maj@northwestern.edu
 
 	/**
 	 * MAIL_SUBJECT holds the email subject.  
@@ -494,7 +494,7 @@ public final class OSParameter{
 	/**
 	 * MAX_JOBS_PER_USER holds the maximum number of active jobs a user can run.  
 	 */
-	public static int MAX_JOBS_PER_USER = 5;
+	public static int MAX_JOBS_PER_USER = -1;
 
 	/**
 	 * USER_NAMES holds all the user names. 
@@ -1447,6 +1447,29 @@ public final class OSParameter{
 	/// static constructor. 
 	/// </summary>
 	static{
+		String sDir = IOUtil.getCurrentDir();
+		if(sDir.toLowerCase().endsWith("bin") || 
+				sDir.toLowerCase().endsWith("bin\\") ||
+				sDir.toLowerCase().endsWith("bin/")){
+			int iIndex = sDir.lastIndexOf("bin");
+			sDir = sDir.substring(0, iIndex);
+		}
+		CODE_HOME = sDir+= "webapps/os/WEB-INF/code/";
+		String sParameterFile = CODE_HOME + "OSConfig/OSParameter.xml";
+		
+		String sOS =  "window";
+		if(sOS.toLowerCase().indexOf("window") >= 0){
+			CODE_DRIVE = CODE_HOME.trim().substring(0, 2);
+		}
+		else{ //nix system
+			try{
+				CODE_DRIVE = IOUtil.getUnixDrive(sParameterFile);
+			}
+			catch(Exception e){
+				CODE_DRIVE = "c:";
+			}
+		}
+		
 		String sOSParameterFile = "";
 		if(OSParameterFile.NAME !=null && OSParameterFile.NAME.length() > 0){
 			sOSParameterFile = OSParameterFile.NAME;
