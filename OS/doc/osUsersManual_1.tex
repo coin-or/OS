@@ -87,7 +87,7 @@
 \maketitle
 
 \begin{abstract}
-This is the User's Manual for the Optimization Services (OS) project.  The objective of  (OS) is to provide a set of standards for representing optimization instances, results, solver options, and communication between clients and solvers in a distributed environment using Web Services. This COIN-OR project provides source code for libraries and executable programs that implement OS standards. See the Optimization Services (OS) Home Site for more information.
+This is the User's Manual for the Optimization Services (OS) project.  The objective of  (OS) is to provide a set of standards for representing optimization instances, results, solver options, and communication between clients and solvers in a distributed environment using Web Services. This COIN-OR project provides source code for libraries and executable programs that implement OS standards. See the Optimization Services (OS) Home Site \url{www.optimizationservices.org} and the COIN-OR Trac page \url{projects.coin-or.org} for more information.
 \end{abstract}
 
 
@@ -99,28 +99,43 @@ This is the User's Manual for the Optimization Services (OS) project.  The objec
 
 
 
-
-
-
-
-
-
-
 %\noindent\hrulefill
 \newpage
 
 \section{Introduction}
 
-The objective of Optimization Services (OS) is to provide a set of standards for representing optimization instances, results, solver options, and communication between clients and solvers in a distributed environment using Web Services. This COIN-OR project provides source code for libraries and executable programs that implement OS standards. See the Optimization Services (OS) Home Site for more information.
+The objective of Optimization Services (OS) is to provide a set of standards for representing optimization instances, results, solver options, and communication between clients and solvers in a distributed environment using Web Services. This COIN-OR project provides source code for libraries and executable programs that implement OS standards.  See the Optimization Services (OS) Home Site \url{www.optimizationservices.org} and the COIN-OR Trac page \url{projects.coin-or.org} for more information. The OS project provides the following:
+
+\begin{itemize}
+\item[1.]  A set of XML based standards for representing optimization instances (OSiL), optimization results (OSrL), and optimization solver options (OSoL). There are other standards, but these are the main ones. The schemas for these standards are described in Section   \ref{section:schemadescriptions}.
+
+\item[2.]  A robust API for linear and nonlinear problems.  Corresponding to the OSiL problem instance there is an in-memory object,  {\tt OSInstance}, along with a set of  {\tt get()},   {\tt set()}, and {\tt calculate()} methods for accessing and creating problem instances.  
+This is a very general API for linear, integer, and nonlinear programs.  Any modeling language that can produce OSiL can easily communicate with any solver that uses the OSInstance API.   The {\tt OSInstance} object is described in more detail in Section \ref{section:osinstance}. The nonlinear part of the API is based on the COIN project \url{projects.coin-or.org/CppAD} by Brad Bell but is written in a very general manner and could be used with other algorithmic differentiation packages. More detail on algorithmic differentiation is provided in Section \ref{section:ad}.
+
+
+\item[3.]  A  command line executable {\tt OSSolverService}  for reading problem instances (OSiL format, nl format, MPS format) and calling a solver either locally or on a remote server.  This is described in Section \ref{section:ossolverservice}.
+
+
+\item[4.] Utilities that convert AMPL nl files into the OSiL XML format and MPS files into the OSiL XML format.  This is described in Section \ref{section:osmodelinterfaces}.
+
+
+\item[5.]  Standards that facilitate the communication between clients and optimization solvers using Web Services.  In  Section \ref{section:osagent} we describe the {\tt OSAgent} part of the OS library that is used to create Web Services
+ SOAP packages with OSiL instances and contact a server for solution. 
+
+\item[6.]  An executable program {\tt amplClient} that is designed to work with the AMPL modeling language. The {\tt ampClient} appears as a ``solver'' to AMPL and, based on options given in AMPL, contact solvers either remotely or locally to solve instances created in AMPL. This is described in Section \ref{section:amplclient}.
+
+\item[7.]  Server software that works with Apache Tomcat and Apache Axis.  
+This software uses Web Services technology and acts a middleware between the client that creates the instance and solver on the server that optimizes the instance and returns the result. This is illustrated in Section  \ref{section:tomcat}
+\end{itemize}
 
 
 \section{Download and Installation}
 
-OS is released as open source code under the Common Public License (CPL). This project was created by Robert Fourer, Jun Ma, and Kipp Martin. The code has been written primarily by Jun Ma, Kipp Martin, Robert Fourer and Huanyuan Sheng, the first two are the COIN project leaders for OS. Below we describe different methods for obtaining the C++ source code and binaries. 
+OS is released as open source code under the Common Public License (CPL). This project was created by Robert Fourer, Jun Ma, and Kipp Martin. The code has been written primarily by Jun Ma, Kipp Martin, Robert Fourer, and Huanyuan Sheng.  Jun Ma and Kipp Martin are the COIN project leaders for OS. Below we describe different methods for obtaining the C++ source code and binaries. 
 
 \subsection{Obtaining the Source Code Subversion Repository (SVN)}
 
-The C++ source code can be obtained using Subversion.  Users with Unix operating systems will most likely have an svn client. For Windows users wishing to obtain and SVN client we recommend ***kipp fillin 
+The C++ source code can be obtained using Subversion.  Users with Unix operating systems will most likely have an svn client. For Windows users wishing to obtain and SVN client we recommend  TortoiseSVN.  See \url{tortoisesvn.tigris.org}.
 
 The OS project page with a Wiki is available at \url{projects.coin-or.org\OS}. Execute the following steps to get the source code using SVN.
 
@@ -233,7 +248,9 @@ The above steps are fully tested on Mac/Unix, Linux, and on Windows using either
 
 \subsection{Platforms}
 
-
+\begin{table}
+\caption{Tested Platforms for Solvers}
+\vskip 8pt
  \begin{tabular}{l|c|c|c|c|c|c|}
  &Mac&Linux&Cyg-gcc&Msys-cl&Msys-gcc&MSVS \\ \hline
 AMPL-Client &x&x&&x&& \\ \hline
@@ -245,17 +262,14 @@ Ipopt &x&x&&&& \\ \hline
 Knitro &x&&&&& \\ \hline
 Lindo &x&x&&x&& \\ \hline
 SYMPHONY &x&x&x&x&& \\ \hline
- \end{tabular}
+\end{tabular}
+\end{table}
  
- \vskip 14pt
- 
- 
- {\large
- \noindent {\bf Platform Detail:}
- }
- 
- \vskip 12pt
- 
+
+ \begin{table}
+\caption{Platform Description}
+\centering
+\vskip 8pt
  \begin{tabular}{l|c|c|c|}
  & {\bf Operating System} & {\bf Compiler} & {\bf  Hardware} \\ \hline
  Mac &Mac OS X 10.4.9&gcc 4.0.1&Power PC \\   \hline
@@ -264,27 +278,28 @@ SYMPHONY &x&x&x&x&& \\ \hline
  Msys-cl &Windows XP&Visual Studio 2003 &Dell Intel 32 bit chip \\ \hline
  Msys-gcc &&& \\ \hline
  MSVS &Windows XP&Visual Studio 2003 &Dell Intel 32 bit chip \\ \hline
-
- \end{tabular}
+\end{tabular}
+\end{table}
  
 
-\section{The OS Project Components}
+\section{The OS Project Components}\section{label:projectcomponents}
+
 
 kipp -- don't forget to mention the schemas, data, xslt files, etc.
 
-\subsection{Key Protocols}
+\subsection{Key Protocols}\label{section:schemadescriptions}
 
 Explain OSiL, OSrL, OSoL, and OSpL. Also, OSnL
 
-\section{The OS Library Components}
+\section{The OS Library Components}\label{section:oslibrary}
 
-\subsection{OSAgent}
+\subsection{OSAgent}\label{section:osagent}
 
 The {\tt OSAgent}  part of the library is used to facilitate communication with remote solvers. It is not used if the solver is invoked locally (i.e. on the same machine). 
 
 \subsection{OSCommonInterfaces}
 
-\subsection{OSModelInterfaces}
+\subsection{OSModelInterfaces}\label{section:osmodelinterfaces}
 
 
 
@@ -356,7 +371,7 @@ In the examples above the problem instance was assumed to be read from a file in
 
 \subsection{OSUtils}
 
-\section{OSInstance: A General Instance API}
+\section{OSInstance: A General Instance API}\label{section:osinstance}
 
 \subsection{Get Methods}
 
@@ -364,9 +379,9 @@ In the examples above the problem instance was assumed to be read from a file in
 
 \subsection{Calculate Methods}
 
-\section{Hooking to An Algorithmic Differentiation Package}
+\section{Hooking to An Algorithmic Differentiation Package}\label{section:ad}
 
-\section{The OSSolverService}
+\section{The OSSolverService}\label{section:ossolverservice}
 
 The {\tt OSSolverService} is a command line executable designed to pass problem instances in either  OSiL, AMPL nl, or MPS format  to solvers and get the optimization result back to be displayed either to standard output or a specified browser.  The {\tt OSSovlerService} can be used to invoke a solver locally or on a remote server. It can work either synchronously or asynchronously. 
 
@@ -578,14 +593,14 @@ if we were to change to the {\tt locationType} attribute in the {\tt <instanceLo
 </osol>
 \end{verbatimtab}
 
-kipp illustrate the above with a figure
 
 
 
 
 
 
-Illustrate when data is uploaded locally or when data is uploaded from another server. 
+
+kipp -- Illustrate when data is uploaded locally or when data is uploaded from another server. 
 
 \subsubsection{The  {\tt send} Service Method}\label{section:send}
 
@@ -682,7 +697,7 @@ OSSolverService -config ../data/testRemoteKnock.config
 \end{verbatim}
 where the {\tt testRemoteKnock.config} file is
 \begin{verbatim}
--serviceLocation http://128.135.130.17:8080/OS/OSSolverService.jws
+-serviceLocation http://128.135.130.17:8080/os/OSSolverService.jws
 -osplInput ../data/demo.ospl
 -osol ../data/retrieve.osol
 -serviceMethod knock
@@ -721,7 +736,7 @@ The result of this request is a string in OSrL format.  Part of the return forma
 \end{verbatimtab}
 Notice the {\tt <state>} element indicating that the job is finished.   
 
-When making a {\tt knock} request,  the OSoL string can be empty. In this example, if the OSoL string had been empty the status of all jobs solved since the disk clean-up would get reported.  Also, there are values other than {\tt getAll} for the OSpL {\tt action} attribute in the {\tt <request>} tag.  For example, the {\tt action} can be set to a value of {\tt ping} if the user just wants to check if the remote solver service is up and running. 
+When making a {\tt knock} request,  the OSoL string can be empty. In this example, if the OSoL string had been empty the status of all jobs kept in the file ospl.xml is reported.  In our default solver service implementation, there is a configuration file {\tt OSParameter} that has a parameter {\tt MAX\_JOBIDS\_TO\_KEEP }.  The current default setting is 100.  In a large-scale or commercial implementation it might be wise to keep problem results and statistics in a database.  Also, there are values other than {\tt getAll} for the OSpL {\tt action} attribute in the {\tt <request>} tag.  For example, the {\tt action} can be set to a value of {\tt ping} if the user just wants to check if the remote solver service is up and running. 
 
 
 
@@ -857,9 +872,9 @@ Below is a summary of the inputs and outputs of the six service methods. See als
 
 
 
-\section{Examples}
+\section{Examples}\label{section:examples}
 
-\subsection{AMPL Client:  Hooking AMPL to Solvers}
+\subsection{AMPL Client:  Hooking AMPL to Solvers}\label{section:amplclient}
 
 The {\tt amplClient} executable is designed to work with the AMPL program. See \url{www.ampl.com}. The {\tt amplClient} acts like an AMPL ``solver.'' The {\tt amplClient} is linked with the OS library and can be used to solve problems either remotely. In both cases the {\tt amplClient} uses the {\tt OSnl2osil} class to convert the AMPL generated nl file (which represents the problem instance) into the corresponding instance representation in the OSiL format.  
 
@@ -885,14 +900,18 @@ option amplClient_options "solver ipopt";
 \end{verbatim}
 provide an option which has the address of the remote solver service.
 \begin{verbatim}
-option ipopt_options "http://128.135.130.17:8080/ipopt/IPOPTSolverService.jws";
+option ipopt_options "http://128.135.130.17:8080/os/OSSolverService.jws";
 \end{verbatim}
 
-\subsection{CppAD:  Using the CppAD Algorithmic Differentiation Package}
+\subsection{CppAD:  Using the CppAD Algorithmic Differentiation Package}\label{section:cppad}
 
-\subsection{File Upload:  Using a File Upload Package}
+\subsection{File Upload:  Using a File Upload Package}\label{section:fileupload}
 
 \subsection{Instance Generator: Using the OSInstance API to Generate Instances}\label{subsection:exampleOSInstance}
+
+\section{References}
+
+Kipp -- put in some links to OSiL paper and INFORMS talks.
 
 \end{document}
 
