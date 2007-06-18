@@ -121,12 +121,20 @@ public class SolverService implements OShL{
 		return m_osServiceUtil.knock(osplInput, osol);
 	}//knock
 
-	
+	public static void main(String[] argv){
+		
+	}
 	/**
 	 * static constructor
 	 */
 	static{ 
-		OSParameterFile.NAME = IOUtil.getCurrentDir()+ "webapps/os/code/OSParameter.xml";
-		//OSParameterFile.NAME = "/code/OSConfig/OSParameter.xml";
+		String sDir = IOUtil.getCurrentDir();
+		if(sDir.toLowerCase().endsWith("bin") || 
+				sDir.toLowerCase().endsWith("bin\\") ||
+				sDir.toLowerCase().endsWith("bin/")){
+			int iIndex = sDir.lastIndexOf("bin");
+			sDir = sDir.substring(0, iIndex);
+		}
+		OSParameterFile.NAME = sDir+= "webapps/os/WEB-INF/code/OSParameter.xml";
 	}//static constructor
 }//class SolverService
