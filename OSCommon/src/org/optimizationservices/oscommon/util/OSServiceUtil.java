@@ -453,6 +453,14 @@ public class OSServiceUtil{// implements OShL{
 	 * Default constructor. 
 	 */
 	public OSServiceUtil(){
+		try {
+			String sClassName = OSParameter.SOLVER_CLASS_NAME; //"org.optimizationservices.oscommon.util.StandardSolver";
+			Class solverClass = Class.forName(sClassName);
+			solver =(DefaultSolver)solverClass.newInstance();			
+		} 
+		catch (Exception e) {
+			IOUtil.log(IOUtil.exceptionStackToString(e), null);
+		}
 	}//constructor
 	
 	/**
