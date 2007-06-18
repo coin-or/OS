@@ -46,13 +46,13 @@ public class NEOSRegistryService implements OSdL{
 	 */
 	public String find(String osql, String osol){
 		String sSite = OSParameter.OS_SERVICE_SITE;
-		//String sJunMaLPSolverServiceAddress = "<OSuL>" + sSite + "ossolver/JunMaLPSolverService.jws</OSuL>";
-		String sCOINLPSolverServiceAddress = "<OSuL>" + sSite + "ossolver/COINSolverService.jws</OSuL>";
-		String sLindoSolverServiceAddress = "<OSuL>" + sSite + "ossolver/LindoSolverService.jws</OSuL>";
-		String sKnitroSolverServiceAddress = "<OSuL>" + sSite + "ossolver/KnitroSolverService.jws</OSuL>";
-		String sDrAMPLAnalyzerServiceAddress = "<OSuL>" + sSite + "osanalyzer/DrAMPLAnalyzerService.jws</OSuL>";
-		String sNEOSRegistryServiceAddress = "<OSuL>" + sSite + "osregistry/NEOSRegistryService.jws</OSuL>";
-		String sRosenbrockSimulationServiceAddress = "<OSuL>" + sSite + "ossimulation/RosenbrockSimulationService.jws</OSuL>";
+		//String sJunMaLPSolverServiceAddress = "<OSuL>" + sSite + "/ossolver/JunMaLPSolverService.jws</OSuL>";
+		String sCOINLPSolverServiceAddress = "<OSuL>" + sSite + "/ossolver/COINSolverService.jws</OSuL>";
+		String sLindoSolverServiceAddress = "<OSuL>" + sSite + "/ossolver/LindoSolverService.jws</OSuL>";
+		String sKnitroSolverServiceAddress = "<OSuL>" + sSite + "/ossolver/KnitroSolverService.jws</OSuL>";
+		String sDrAMPLAnalyzerServiceAddress = "<OSuL>" + sSite + "/osanalyzer/DrAMPLAnalyzerService.jws</OSuL>";
+		String sNEOSRegistryServiceAddress = "<OSuL>" + sSite + "/osregistry/NEOSRegistryService.jws</OSuL>";
+		String sRosenbrockSimulationServiceAddress = "<OSuL>" + sSite + "/ossimulation/RosenbrockSimulationService.jws</OSuL>";
 		
 		String sOSuL = "";
 		if(osql.indexOf("xPath") >= 0 || osql.indexOf("userF") >=0 || osql.indexOf("simulation") >=0) {
