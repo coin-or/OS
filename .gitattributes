@@ -1138,6 +1138,7 @@ OSSolver/include/org_optimizationservices_ossolver_solver_KnitroSolver.h -text
 OSSolver/lib/junmaoptimization.jar -text
 OSSolver/lindosol.txt -text
 OSSolver/src/LindoOldSolverService.java -text
+OSSolver/src/OSSolverService.java -text
 OSSolver/src/org/optimizationservices/ossolver/api/CBCSolverService.java -text
 OSSolver/src/org/optimizationservices/ossolver/api/CGSolverService.java -text
 OSSolver/src/org/optimizationservices/ossolver/api/CLPSolverService.java -text
