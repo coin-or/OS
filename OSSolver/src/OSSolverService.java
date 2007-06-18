@@ -9,7 +9,7 @@ import org.optimizationservices.oscommon.util.OSServiceUtil;
 
 /**
  *
- * <P>The <code>OSSolverService</code> is the default OS Solver's Web Service facade. 
+ * the OS Solver's Web Service facade. 
  *
  * </p>
  * @author Robert Fourer, Jun Ma, Kipp Martin
@@ -27,20 +27,19 @@ public class OSSolverService implements OShL{
 	/**
 	 * default constructor.
 	 */
-	public OSSolverService(){
-		//All the things in this constructor are optional and should all be deleted just fine. 
-		m_osServiceUtil.serviceName = OSParameter.SERVICE_NAME;
-		m_osServiceUtil.serviceURI = OSParameter.SERVICE_URI;
-		m_osServiceUtil.serviceType = OSParameter.SERVICE_TYPE;
-		try {
-			String sClassName = OSParameter.SOLVER_CLASS_NAME; //"org.optimizationservices.oscommon.util.StandardSolver";
-			Class solverClass = Class.forName(sClassName);
-			m_osServiceUtil.solver =(DefaultSolver)solverClass.newInstance();			
-		} 
-		catch (Exception e) {
-			IOUtil.log(IOUtil.exceptionStackToString(e), null);
-		}
-	}//constructor
+//	public OSSolverService(){
+//		m_osServiceUtil.serviceName = OSParameter.SERVICE_NAME;
+//		m_osServiceUtil.serviceURI = OSParameter.SERVICE_URI;
+//		m_osServiceUtil.serviceType = OSParameter.SERVICE_TYPE;
+//		try {
+//			String sClassName = OSParameter.SOLVER_CLASS_NAME; //"org.optimizationservices.oscommon.util.StandardSolver";
+//			Class solverClass = Class.forName(sClassName);
+//			m_osServiceUtil.solver =(DefaultSolver)solverClass.newInstance();			
+//		} 
+//		catch (Exception e) {
+//			IOUtil.log(IOUtil.exceptionStackToString(e), null);
+//		}
+//	}//constructor
 	
 	/**
 	 * Solve an optimization problem whose instance is given by a string following
@@ -124,7 +123,8 @@ public class OSSolverService implements OShL{
 	 * static constructor
 	 */
 	static{ 
-		//automatically detect where the tomcat installation and webapp context is. 
+		String SERVICE_FOLDER = "os";
+		//automatically detect where the tomcat installation is. 
 		String sDir = IOUtil.getCurrentDir();
 		if(sDir.toLowerCase().endsWith("bin") || 
 				sDir.toLowerCase().endsWith("bin\\") ||
@@ -132,8 +132,8 @@ public class OSSolverService implements OShL{
 			int iIndex = sDir.lastIndexOf("bin");
 			sDir = sDir.substring(0, iIndex);
 		}
-		OSParameterFile.NAME = sDir+= "webapps/os/WEB-INF/code/OSParameter.xml";
+		OSParameterFile.NAME = sDir+= "webapps/"+SERVICE_FOLDER+"/WEB-INF/code/OSParameter.xml";
 		//all the above line can be rewritten with one line, e.g. on windows, the following hardcoded parameter file address:
 		//OSParameterFile.NAME = sDir+= "/Program Files/Apache Software Foundation/Tomcat 5.5/webapps/os/WEB-INF/code/OSParameter.xml";
 	}//static constructor
-}//class OSSolverService
+}//class 
