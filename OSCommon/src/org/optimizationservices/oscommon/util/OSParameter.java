@@ -277,14 +277,14 @@ public final class OSParameter{
 	public static String SOLVER_CLASS_NAME = "org.optimizationservices.oscommon.util.StandardOSSolver"; //change?
 
 	/**
-	 * OS_SOLVER holds the default solver name that the StandardOSSolver uses, e.g. cbc, clp. 
+	 * SOLVER_EXECUTABLE holds the solver executable that the StandardOSSolver will launch.  
 	 */
-	public static String OS_SOLVER = "cbc"; //change?
+	public static String SOLVER_EXECUTABLE = "OSSolverService"; //change?
 
 	/**
-	 * SOLVER_LIBRARY holds the library file of the solver class. No need if the library is registered or on a class path.
+	 * OS_SOLVER holds the default solver name that the OSSolverService executable uses, e.g. cbc, clp. 
 	 */
-	public static String SOLVER_LIBRARY = ""; 
+	public static String OS_SOLVER = "cbc"; //change?
 
 	/**
 	 * MAXIMUM_TRIAL_NUMBER_FOR_SOLVE holds the maximum number of trials for a (failed) solve
@@ -1068,11 +1068,12 @@ public final class OSParameter{
 		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("SOLVER_CLASS_NAME");
 		if(sValue != null && sValue.length() > 0) SOLVER_CLASS_NAME = sValue;
 
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("SOLVER_EXECUTABLE");
+		if(sValue != null && sValue.length() > 0) SOLVER_EXECUTABLE = sValue;
+
 		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("OS_SOLVER");
 		if(sValue != null && sValue.length() > 0) OS_SOLVER = sValue;
 
-		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("SOLVER_LIBRARY");
-		if(sValue != null && sValue.length() > 0) SOLVER_LIBRARY = sValue;
 		
 		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("MAXIMUM_TRIAL_NUMBER_FOR_SOLVE");
 		if(sValue != null && sValue.length() > 0){
