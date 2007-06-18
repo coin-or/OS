@@ -413,7 +413,7 @@ public final class OSParameter{
 	/**
 	 * OS_SERVICE_SITE holds the main site of the OS services.
 	 */
-	public static String OS_SERVICE_SITE = "http://www.optimizationservices.org/os"; 
+	public static String OS_SERVICE_SITE = "http://localhost:8080/os"; 
 
 	/**
 	 * OS_REGISTRY_SITE holds the site of the OS Registry.
@@ -688,41 +688,51 @@ public final class OSParameter{
    	public static boolean readAndSetOSParameter(String osParameter, boolean isFile, boolean validate) throws Exception{
    		OSParameterReader  osParameterReader = new OSParameterReader(validate);
 		boolean bRead = false;
-		if(isFile){
-			bRead = osParameterReader.readFile(osParameter);
+		try{
+			if(isFile){
+				bRead = osParameterReader.readFile(osParameter);
+			}
+			else{
+				bRead = osParameterReader.readString(osParameter);			
+			}			
 		}
-		else{
-			bRead = osParameterReader.readString(osParameter);			
+		catch(Exception e){
+			bRead = false;
+			IOUtil.log("osParameter string not valid", null);
 		}
-		if(!bRead) throw new Exception("osParameter string not valid");
 		
 		//set the parameters.
 		/*---------------------------------------------
 		Routine/maintenance related parameters
 		---------------------------------------------*/	
 		String sValue = "";
-		sValue = osParameterReader.getOSParameterValueByName("CODE_DRIVE");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("CODE_DRIVE");
 		if(sValue != null && sValue.length() > 0) CODE_DRIVE = sValue;
 		
-		sValue = osParameterReader.getOSParameterValueByName("CODE_HOME");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("CODE_HOME");
 		if(sValue != null && sValue.length() > 0) CODE_HOME = sValue;
 		
-		sValue = osParameterReader.getOSParameterValueByName("REGISTRY_FILE");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("REGISTRY_FILE");
 		if(sValue != null && sValue.length() > 0) REGISTRY_FILE = CODE_HOME + sValue;
-
-		sValue = osParameterReader.getOSParameterValueByName("PROCESS_FILE");
-		if(sValue != null && sValue.length() > 0) PROCESS_FILE = CODE_HOME + sValue;
-
-		sValue = osParameterReader.getOSParameterValueByName("TEMP_FILE_FOLDER");
-		if(sValue != null && sValue.length() > 0) TEMP_FILE_FOLDER = CODE_HOME + sValue;
+		else REGISTRY_FILE = CODE_HOME + "OSConfig/OSRegistry.xml";
 		
-		sValue = osParameterReader.getOSParameterValueByName("LOG_FOLDER");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("PROCESS_FILE");
+		if(sValue != null && sValue.length() > 0) PROCESS_FILE = CODE_HOME + sValue;
+		else PROCESS_FILE = CODE_HOME + "OSConfig/OSpL.xml";
+		
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("TEMP_FILE_FOLDER");
+		if(sValue != null && sValue.length() > 0) TEMP_FILE_FOLDER = CODE_HOME + sValue;
+		else TEMP_FILE_FOLDER = CODE_HOME + "temp/"; 
+			
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("LOG_FOLDER");
 		if(sValue != null && sValue.length() > 0) LOG_FOLDER = CODE_HOME + sValue;
-
-		sValue = osParameterReader.getOSParameterValueByName("LOG_FILE");
+		else LOG_FOLDER = CODE_HOME + "log/";
+		
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("LOG_FILE");
 		if(sValue != null && sValue.length() > 0) LOG_FILE = LOG_FOLDER + sValue;
-
-		sValue = osParameterReader.getOSParameterValueByName("MAX_LOG_FILE_SIZE");
+		else LOG_FILE = LOG_FOLDER + "log.txt";
+		
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("MAX_LOG_FILE_SIZE");
 		if(sValue != null && sValue.length() > 0){
 			try {
 				MAX_LOG_FILE_SIZE = Long.parseLong(sValue);	
@@ -732,37 +742,42 @@ public final class OSParameter{
 			}
 		}
 		
-		sValue = osParameterReader.getOSParameterValueByName("BACKUP_FOLDER");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("BACKUP_FOLDER");
 		if(sValue != null && sValue.length() > 0) BACKUP_FOLDER = CODE_HOME + sValue;
+		else BACKUP_FOLDER = CODE_HOME + "backup/";
 		
-		sValue = osParameterReader.getOSParameterValueByName("REGISTRY_LOG_FOLDER");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("REGISTRY_LOG_FOLDER");
 		if(sValue != null && sValue.length() > 0) REGISTRY_LOG_FOLDER = CODE_HOME + sValue;
+		else REGISTRY_LOG_FOLDER = CODE_HOME + "log/";
 		
-		sValue =osParameterReader.getOSParameterValueByName("REGISTRY_LOG_FILE");
+		if(!bRead) sValue =osParameterReader.getOSParameterValueByName("REGISTRY_LOG_FILE");
 		if(sValue != null && sValue.length() > 0) REGISTRY_LOG_FILE =  REGISTRY_LOG_FOLDER + sValue;
+		else REGISTRY_LOG_FILE = REGISTRY_LOG_FOLDER + "registryLog.txt";
 		
-		sValue = osParameterReader.getOSParameterValueByName("REGISTRY_REGISTRATION_FILE");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("REGISTRY_REGISTRATION_FILE");
 		if(sValue != null && sValue.length() > 0) REGISTRY_REGISTRATION_FILE = REGISTRY_LOG_FOLDER + sValue;
-
-		sValue = osParameterReader.getOSParameterValueByName("REGISTRY_SUMMARY_REPORT");
+		else REGISTRY_REGISTRATION_FILE = REGISTRY_LOG_FOLDER + "registryRegistration.txt";
+		
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("REGISTRY_SUMMARY_REPORT");
 		if(sValue != null && sValue.length() > 0) REGISTRY_SUMMARY_REPORT = REGISTRY_LOG_FOLDER + sValue;
+		else REGISTRY_SUMMARY_REPORT = REGISTRY_LOG_FOLDER + "registrySummaryReport.txt";
 
-		sValue = osParameterReader.getOSParameterValueByName("REGISTRY_DETAILED_REPORT");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("REGISTRY_DETAILED_REPORT");
 		if(sValue != null && sValue.length() > 0) REGISTRY_DETAILED_REPORT = REGISTRY_LOG_FOLDER + sValue;
-
-		sValue = osParameterReader.getOSParameterValueByName("REGISTRY_REGISTRATION_FILE");
-		if(sValue != null && sValue.length() > 0) REGISTRY_REGISTRATION_FILE = REGISTRY_LOG_FOLDER + sValue;
-
-		sValue = osParameterReader.getOSParameterValueByName("PRINT_FOLDER");
+		else REGISTRY_DETAILED_REPORT = REGISTRY_LOG_FOLDER + "registryDetailedReport.txt";
+		
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("PRINT_FOLDER");
 		if(sValue != null && sValue.length() > 0) PRINT_FOLDER = CODE_HOME + sValue;
+		else PRINT_FOLDER = CODE_HOME + "log/";
 		
-		sValue = osParameterReader.getOSParameterValueByName("PRINT_FILE");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("PRINT_FILE");
 		if(sValue != null && sValue.length() > 0) PRINT_FILE = PRINT_FOLDER + sValue;
+		else PRINT_FILE = PRINT_FOLDER + "print.txt";
 		
-		sValue = osParameterReader.getOSParameterValueByName("APPEND_PRINT_FILE");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("APPEND_PRINT_FILE");
 		if(sValue != null && sValue.length() > 0) APPEND_PRINT_FILE = sValue.startsWith("t")?true:false;
 		
-		sValue = osParameterReader.getOSParameterValueByName("MINIMUM_DISKSPACE_TRIGGER");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("MINIMUM_DISKSPACE_TRIGGER");
 		if(sValue != null && sValue.length() > 0){
 			try{
 				MINIMUM_DISKSPACE_TRIGGER = Long.parseLong(sValue);
@@ -772,7 +787,7 @@ public final class OSParameter{
 			}
 		}
 		
-		sValue = osParameterReader.getOSParameterValueByName("MINIMUM_MEMORY_TRIGGER");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("MINIMUM_MEMORY_TRIGGER");
 		if(sValue != null && sValue.length() > 0){
 			try{
 				MINIMUM_MEMORY_TRIGGER =Long.parseLong(sValue);
@@ -782,7 +797,7 @@ public final class OSParameter{
 			}
 		}
 
-		sValue = osParameterReader.getOSParameterValueByName("CLEAN_UP_FOLDERS");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("CLEAN_UP_FOLDERS");
 		if(sValue != null && sValue.length() > 0){
 			Vector<String> vValues = CommonUtil.stringToVector(sValue, ",");
 			CLEAN_UP_FOLDERS = new String[vValues.size()];
@@ -797,8 +812,12 @@ public final class OSParameter{
 				}
 			}
 		}
+		else{
+			CLEAN_UP_FOLDERS[0] = TEMP_FILE_FOLDER;
+			CLEAN_UP_FOLDERS[1] = BACKUP_FOLDER; 
+		}
 
-		sValue = osParameterReader.getOSParameterValueByName("MAX_JOBIDS_TO_KEEP");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("MAX_JOBIDS_TO_KEEP");
 		if(sValue != null && sValue.length() > 0){
 			try{
 				MAX_JOBIDS_TO_KEEP = Integer.parseInt(sValue);
@@ -812,7 +831,7 @@ public final class OSParameter{
 		Time related parameters
 		---------------------------------------------*/	
 		
-		sValue = osParameterReader.getOSParameterValueByName("JOB_MAX_HOURS");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("JOB_MAX_HOURS");
 		if(sValue != null && sValue.length() > 0){
 			try{
 				JOB_MAX_HOURS = Long.parseLong(sValue);
@@ -822,7 +841,7 @@ public final class OSParameter{
 			}
 		}
 
-		sValue = osParameterReader.getOSParameterValueByName("JOB_MAX_MINUTES");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("JOB_MAX_MINUTES");
 		if(sValue != null && sValue.length() > 0){
 			try{
 				JOB_MAX_MINUTES = Long.parseLong(sValue);
@@ -832,7 +851,7 @@ public final class OSParameter{
 			}
 		}
 
-		sValue = osParameterReader.getOSParameterValueByName("JOB_MAX_SECONDS");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("JOB_MAX_SECONDS");
 		if(sValue != null && sValue.length() > 0){
 			try{
 				JOB_MAX_SECONDS = Long.parseLong(sValue);
@@ -844,7 +863,7 @@ public final class OSParameter{
 
 		JOB_MAX_TIME = OSParameter.JOB_MAX_HOURS*3600 + OSParameter.JOB_MAX_MINUTES*60 + OSParameter.JOB_MAX_SECONDS;
 		
-		sValue = osParameterReader.getOSParameterValueByName("TEMP_FILE_MAX_DAYS");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("TEMP_FILE_MAX_DAYS");
 		if(sValue != null && sValue.length() > 0){
 			try{
 				TEMP_FILE_MAX_DAYS = Long.parseLong(sValue);
@@ -854,7 +873,7 @@ public final class OSParameter{
 			}
 		}
 		
-		sValue = osParameterReader.getOSParameterValueByName("TEMP_FILE_MAX_HOURS");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("TEMP_FILE_MAX_HOURS");
 		if(sValue != null && sValue.length() > 0){
 			try{
 				TEMP_FILE_MAX_HOURS = Long.parseLong(sValue);
@@ -864,7 +883,7 @@ public final class OSParameter{
 			}
 		}
 
-		sValue = osParameterReader.getOSParameterValueByName("TEMP_FILE_MAX_MINUTES");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("TEMP_FILE_MAX_MINUTES");
 		if(sValue != null && sValue.length() > 0){
 			try{
 				TEMP_FILE_MAX_MINUTES = Long.parseLong(sValue);
@@ -874,7 +893,7 @@ public final class OSParameter{
 			}
 		}
 
-		sValue = osParameterReader.getOSParameterValueByName("TEMP_FILE_MAX_SECONDS");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("TEMP_FILE_MAX_SECONDS");
 		if(sValue != null && sValue.length() > 0){
 			try{
 				TEMP_FILE_MAX_SECONDS = Long.parseLong(sValue);
@@ -884,7 +903,7 @@ public final class OSParameter{
 			}
 		}
 
-		sValue = osParameterReader.getOSParameterValueByName("TEMP_FILE_MIN_DAYS");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("TEMP_FILE_MIN_DAYS");
 		if(sValue != null && sValue.length() > 0){
 			try{
 				TEMP_FILE_MIN_DAYS = Long.parseLong(sValue);
@@ -894,7 +913,7 @@ public final class OSParameter{
 			}
 		}
 
-		sValue = osParameterReader.getOSParameterValueByName("TEMP_FILE_MIN_HOURS");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("TEMP_FILE_MIN_HOURS");
 		if(sValue != null && sValue.length() > 0){
 			try{
 				TEMP_FILE_MIN_HOURS = Long.parseLong(sValue);
@@ -904,7 +923,7 @@ public final class OSParameter{
 			}
 		}
 
-		sValue = osParameterReader.getOSParameterValueByName("TEMP_FILE_MIN_MINUTES");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("TEMP_FILE_MIN_MINUTES");
 		if(sValue != null && sValue.length() > 0){
 			try{	
 				TEMP_FILE_MIN_MINUTES = Long.parseLong(sValue);
@@ -914,7 +933,7 @@ public final class OSParameter{
 			}
 		}
 
-		sValue = osParameterReader.getOSParameterValueByName("TEMP_FILE_MIN_SECONDS");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("TEMP_FILE_MIN_SECONDS");
 		if(sValue != null && sValue.length() > 0){
 			try{
 				TEMP_FILE_MIN_SECONDS = Long.parseLong(sValue);
@@ -928,7 +947,7 @@ public final class OSParameter{
 		Server related parameters
 		---------------------------------------------*/	
 
-		sValue = osParameterReader.getOSParameterValueByName("CPU_SPEED");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("CPU_SPEED");
 		if(sValue != null && sValue.length() > 0){
 			if(sValue.indexOf("INF") >= 0) CPU_SPEED = Double.POSITIVE_INFINITY;
 			else {
@@ -941,7 +960,7 @@ public final class OSParameter{
 			}
 		}
 		
-		sValue = osParameterReader.getOSParameterValueByName("MEMORY_SIZE");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("MEMORY_SIZE");
 		if(sValue != null && sValue.length() > 0){
 			if(sValue.indexOf("INF") >= 0) MEMORY_SIZE = Double.POSITIVE_INFINITY;
 			else{
@@ -954,7 +973,7 @@ public final class OSParameter{
 			}
 		}
 
-		sValue = osParameterReader.getOSParameterValueByName("DISK_SPACE");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("DISK_SPACE");
 		if(sValue != null && sValue.length() > 0){
 			if(sValue.indexOf("INF") >= 0) DISK_SPACE = Double.POSITIVE_INFINITY;
 			else{
@@ -967,7 +986,7 @@ public final class OSParameter{
 			}
 		}
 
-		sValue = osParameterReader.getOSParameterValueByName("MAX_JOB_NUMBERS");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("MAX_JOB_NUMBERS");
 		if(sValue != null && sValue.length() > 0){
 			try{
 				MAX_JOB_NUMBERS = Integer.parseInt(sValue);
@@ -977,7 +996,7 @@ public final class OSParameter{
 			}
 		}
 
-		sValue = osParameterReader.getOSParameterValueByName("MAX_WAITING_NUMBERS");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("MAX_WAITING_NUMBERS");
 		if(sValue != null && sValue.length() > 0){
 			try{
 				MAX_WAITING_NUMBERS = Integer.parseInt(sValue);
@@ -987,7 +1006,7 @@ public final class OSParameter{
 			}
 		}
 
-		sValue = osParameterReader.getOSParameterValueByName("SERVICE_POLLING_INTERVAL_SHORT");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("SERVICE_POLLING_INTERVAL_SHORT");
 		if(sValue != null && sValue.length() > 0){
 			try{
 				SERVICE_POLLING_INTERVAL_SHORT = Integer.parseInt(sValue);
@@ -997,7 +1016,7 @@ public final class OSParameter{
 			}
 		}
 		
-		sValue = osParameterReader.getOSParameterValueByName("SERVICE_POLLING_INTERVAL_MEDIUM");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("SERVICE_POLLING_INTERVAL_MEDIUM");
 		if(sValue != null && sValue.length() > 0){
 			try{
 				SERVICE_POLLING_INTERVAL_MEDIUM = Integer.parseInt(sValue);
@@ -1007,7 +1026,7 @@ public final class OSParameter{
 			}
 		}
 		
-		sValue = osParameterReader.getOSParameterValueByName("SERVICE_POLLING_INTERVAL_LONG");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("SERVICE_POLLING_INTERVAL_LONG");
 		if(sValue != null && sValue.length() > 0){
 			try{
 				SERVICE_POLLING_INTERVAL_LONG = Integer.parseInt(sValue);
@@ -1020,13 +1039,13 @@ public final class OSParameter{
 		/*---------------------------------------------
 		Solver related parameters
 		---------------------------------------------*/	
-		sValue = osParameterReader.getOSParameterValueByName("SOLVER_CLASS_NAME");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("SOLVER_CLASS_NAME");
 		if(sValue != null && sValue.length() > 0) SOLVER_CLASS_NAME = sValue;
 
-		sValue = osParameterReader.getOSParameterValueByName("SOLVER_LIBRARY");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("SOLVER_LIBRARY");
 		if(sValue != null && sValue.length() > 0) SOLVER_LIBRARY = sValue;
 		
-		sValue = osParameterReader.getOSParameterValueByName("MAXIMUM_TRIAL_NUMBER_FOR_SOLVE");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("MAXIMUM_TRIAL_NUMBER_FOR_SOLVE");
 		if(sValue != null && sValue.length() > 0){
 			try{
 				MAXIMUM_TRIAL_NUMBER_FOR_SOLVE = Integer.parseInt(sValue);
@@ -1035,7 +1054,7 @@ public final class OSParameter{
 				IOUtil.log(IOUtil.exceptionStackToString(e), null);
 			}
 		}
-		sValue = osParameterReader.getOSParameterValueByName("MINIMUM_WAIT_TIME_BEFORE_NEXT_TRIAL");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("MINIMUM_WAIT_TIME_BEFORE_NEXT_TRIAL");
 		if(sValue != null && sValue.length() > 0){
 			try{
 				MINIMUM_WAIT_TIME_BEFORE_NEXT_TRIAL = Integer.parseInt(sValue);
@@ -1045,7 +1064,7 @@ public final class OSParameter{
 			}
 		}
 
-		sValue = osParameterReader.getOSParameterValueByName("MAXIMUM_WAIT_TIME_BEFORE_NEXT_TRIAL");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("MAXIMUM_WAIT_TIME_BEFORE_NEXT_TRIAL");
 		if(sValue != null && sValue.length() > 0){
 			try{
 				MAXIMUM_WAIT_TIME_BEFORE_NEXT_TRIAL = Integer.parseInt(sValue);
@@ -1055,7 +1074,7 @@ public final class OSParameter{
 			}
 		}
 
-		sValue = osParameterReader.getOSParameterValueByName("REQUIRED_DIRECTORIES_AND_FILES");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("REQUIRED_DIRECTORIES_AND_FILES");
 		if(sValue != null && sValue.length() > 0){
 			Vector<String> vValues = CommonUtil.stringToVector(sValue, ",");
 			REQUIRED_DIRECTORIES_AND_FILES = new String[vValues.size()];
@@ -1071,7 +1090,7 @@ public final class OSParameter{
 			}
 		}
 
-		sValue = osParameterReader.getOSParameterValueByName("DIRECTORIES_TO_MAKE");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("DIRECTORIES_TO_MAKE");
 		if(sValue != null && sValue.length() > 0){
 			Vector<String> vValues = CommonUtil.stringToVector(sValue, ",");
 			DIRECTORIES_TO_MAKE = new String[vValues.size()];
@@ -1087,7 +1106,7 @@ public final class OSParameter{
 			}
 		}
 
-		sValue = osParameterReader.getOSParameterValueByName("FILES_TO_CREATE");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("FILES_TO_CREATE");
 		if(sValue != null && sValue.length() > 0){
 			Vector<String> vValues = CommonUtil.stringToVector(sValue, ",");
 			FILES_TO_CREATE = new String[vValues.size()];
@@ -1103,13 +1122,13 @@ public final class OSParameter{
 			}
 		}
 
-		sValue = osParameterReader.getOSParameterValueByName("SAVE_INPUTS");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("SAVE_INPUTS");
 		if(sValue != null && sValue.length() > 0) SAVE_INPUTS = sValue.startsWith("t")?true:false;
 
-		sValue = osParameterReader.getOSParameterValueByName("PARSE_INSTANCE_INPUT");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("PARSE_INSTANCE_INPUT");
 		if(sValue != null && sValue.length() > 0) PARSE_INSTANCE_INPUT = sValue.startsWith("t")?true:false;
 
-		sValue = osParameterReader.getOSParameterValueByName("INPUT_FILES_TO_MOVE_FROM");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("INPUT_FILES_TO_MOVE_FROM");
 		if(sValue != null && sValue.length() > 0){
 			Vector<String> vValues = CommonUtil.stringToVector(sValue, ",");
 			INPUT_FILES_TO_MOVE_FROM = new String[vValues.size()];
@@ -1125,10 +1144,10 @@ public final class OSParameter{
 			}
 		}
 
-		sValue = osParameterReader.getOSParameterValueByName("SAVE_INPUTS");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("SAVE_INPUTS");
 		if(sValue != null && sValue.length() > 0) SAVE_INPUTS = sValue.startsWith("t")?true:false;
 
-		sValue = osParameterReader.getOSParameterValueByName("INPUT_FILES_TO_MOVE_TO");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("INPUT_FILES_TO_MOVE_TO");
 		if(sValue != null && sValue.length() > 0){
 			Vector<String> vValues = CommonUtil.stringToVector(sValue, ",");
 			INPUT_FILES_TO_MOVE_TO = new String[vValues.size()];
@@ -1144,7 +1163,7 @@ public final class OSParameter{
 			}
 		}
 
-		sValue = osParameterReader.getOSParameterValueByName("INPUT_FILES_TO_COPY_FROM");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("INPUT_FILES_TO_COPY_FROM");
 		if(sValue != null && sValue.length() > 0){
 			Vector<String> vValues = CommonUtil.stringToVector(sValue, ",");
 			INPUT_FILES_TO_COPY_FROM = new String[vValues.size()];
@@ -1160,7 +1179,7 @@ public final class OSParameter{
 			}
 		}
 
-		sValue = osParameterReader.getOSParameterValueByName("INPUT_FILES_TO_COPY_TO");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("INPUT_FILES_TO_COPY_TO");
 		if(sValue != null && sValue.length() > 0){
 			Vector<String> vValues = CommonUtil.stringToVector(sValue, ",");
 			INPUT_FILES_TO_COPY_TO = new String[vValues.size()];
@@ -1176,7 +1195,7 @@ public final class OSParameter{
 			}
 		}
 
-		sValue = osParameterReader.getOSParameterValueByName("OUTPUT_FILES_TO_COPY_FROM");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("OUTPUT_FILES_TO_COPY_FROM");
 		if(sValue != null && sValue.length() > 0){
 			Vector<String> vValues = CommonUtil.stringToVector(sValue, ",");
 			OUTPUT_FILES_TO_COPY_FROM = new String[vValues.size()];
@@ -1192,7 +1211,7 @@ public final class OSParameter{
 			}
 		}
 
-		sValue = osParameterReader.getOSParameterValueByName("OUTPUT_FILES_TO_COPY_TO");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("OUTPUT_FILES_TO_COPY_TO");
 		if(sValue != null && sValue.length() > 0){
 			Vector<String> vValues = CommonUtil.stringToVector(sValue, ",");
 			OUTPUT_FILES_TO_COPY_TO = new String[vValues.size()];
@@ -1208,7 +1227,7 @@ public final class OSParameter{
 			}
 		}
 
-		sValue = osParameterReader.getOSParameterValueByName("OUTPUT_FILES_TO_MOVE_FROM");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("OUTPUT_FILES_TO_MOVE_FROM");
 		if(sValue != null && sValue.length() > 0){
 			Vector<String> vValues = CommonUtil.stringToVector(sValue, ",");
 			OUTPUT_FILES_TO_MOVE_FROM = new String[vValues.size()];
@@ -1224,7 +1243,7 @@ public final class OSParameter{
 			}
 		}
 
-		sValue = osParameterReader.getOSParameterValueByName("OUTPUT_FILES_TO_MOVE_TO");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("OUTPUT_FILES_TO_MOVE_TO");
 		if(sValue != null && sValue.length() > 0){
 			Vector<String> vValues = CommonUtil.stringToVector(sValue, ",");
 			OUTPUT_FILES_TO_MOVE_TO = new String[vValues.size()];
@@ -1240,7 +1259,7 @@ public final class OSParameter{
 			}
 		}
 
-		sValue = osParameterReader.getOSParameterValueByName("FILES_TO_DELETE");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("FILES_TO_DELETE");
 		if(sValue != null && sValue.length() > 0){
 			Vector<String> vValues = CommonUtil.stringToVector(sValue, ",");
 			FILES_TO_DELETE = new String[vValues.size()];
@@ -1256,7 +1275,7 @@ public final class OSParameter{
 			}
 		}
 
-		sValue = osParameterReader.getOSParameterValueByName("DIRECTORIES_TO_DELETE");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("DIRECTORIES_TO_DELETE");
 		if(sValue != null && sValue.length() > 0){
 			Vector<String> vValues = CommonUtil.stringToVector(sValue, ",");
 			DIRECTORIES_TO_DELETE = new String[vValues.size()];
@@ -1272,7 +1291,7 @@ public final class OSParameter{
 			}
 		}
 
-		sValue = osParameterReader.getOSParameterValueByName("PROCESSES_TO_KILL");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("PROCESSES_TO_KILL");
 		if(sValue != null && sValue.length() > 0){
 			Vector<String> vValues = CommonUtil.stringToVector(sValue, ",");
 			PROCESSES_TO_KILL = new String[vValues.size()];
@@ -1286,68 +1305,79 @@ public final class OSParameter{
 		/*---------------------------------------------
 		Service site related parameters
 		---------------------------------------------*/
-		sValue = osParameterReader.getOSParameterValueByName("SERVICE_NAME");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("SERVICE_NAME");
 		if(sValue != null && sValue.length() > 0) SERVICE_NAME = sValue;
 
-		sValue = osParameterReader.getOSParameterValueByName("SERVICE_URI");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("SERVICE_URI");
 		if(sValue != null && sValue.length() > 0) SERVICE_URI = sValue;
+		else{
+			String sIP = CommonUtil.getIPAddress();
+			SERVICE_URI = "http://"+sIP+":8080/os/ossolver/OSSolverService.jws";
+		}
 
-		sValue = osParameterReader.getOSParameterValueByName("SERVICE_TYPE");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("SERVICE_TYPE");
 		if(sValue != null && sValue.length() > 0) SERVICE_TYPE = sValue;
 
-		sValue = osParameterReader.getOSParameterValueByName("OS_SERVICE_SITE");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("OS_SERVICE_SITE");
 		if(sValue != null && sValue.length() > 0) OS_SERVICE_SITE = sValue;
+		else{
+			int iIndex1 = SERVICE_URI.indexOf("/", 8);
+			int iIndex2 = SERVICE_URI.indexOf("/", iIndex1);
+			OS_SERVICE_SITE = SERVICE_URI.substring(0, iIndex2+1);
+		}
 
-		sValue = osParameterReader.getOSParameterValueByName("OS_REGISTRY_SITE");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("OS_REGISTRY_SITE");
 		if(sValue != null && sValue.length() > 0) OS_REGISTRY_SITE = sValue;
-
-		sValue = osParameterReader.getOSParameterValueByName("OS_SCHEDULER_SITE");
+		else OS_REGISTRY_SITE = OS_SERVICE_SITE + "/osregistry/OSRegistryService.jws"; 
+			
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("OS_SCHEDULER_SITE");
 		if(sValue != null && sValue.length() > 0) OS_SCHEDULER_SITE = sValue;
-
-		sValue = osParameterReader.getOSParameterValueByName("SCHEDULER_WITH_REGISTRY");
+		else OS_SCHEDULER_SITE = OS_SERVICE_SITE + "/osscheduler/OSSchedulerService.jws"; 
+		
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("SCHEDULER_WITH_REGISTRY");
 		if(sValue != null && sValue.length() > 0) SCHEDULER_WITH_REGISTRY = sValue.startsWith("t")?true:false;
 
 		/*---------------------------------------------
 		Mail related parameters
 		---------------------------------------------*/
-		sValue = osParameterReader.getOSParameterValueByName("SMTP_SERVER");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("SMTP_SERVER");
 		if(sValue != null && sValue.length() > 0) SMTP_SERVER = sValue;
 
-		sValue = osParameterReader.getOSParameterValueByName("FROM_EMAIL");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("FROM_EMAIL");
 		if(sValue != null && sValue.length() > 0) FROM_EMAIL = sValue;
 
-		sValue = osParameterReader.getOSParameterValueByName("FROM_PASSWORD");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("FROM_PASSWORD");
 		if(sValue != null && sValue.length() > 0) FROM_PASSWORD = sValue;
 
-		sValue = osParameterReader.getOSParameterValueByName("TO_EMAIL");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("TO_EMAIL");
 		if(sValue != null && sValue.length() > 0) TO_EMAIL = sValue;
 
-		sValue = osParameterReader.getOSParameterValueByName("MAIL_SUBJECT");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("MAIL_SUBJECT");
 		if(sValue != null && sValue.length() > 0) MAIL_SUBJECT = sValue;
 
-		sValue = osParameterReader.getOSParameterValueByName("MAIL_MESSAGE");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("MAIL_MESSAGE");
 		if(sValue != null && sValue.length() > 0) MAIL_MESSAGE = sValue;
 
 
 		/*---------------------------------------------
 		Security related parameters
 		---------------------------------------------*/
-		sValue = osParameterReader.getOSParameterValueByName("REQUIRE_USER_NAME");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("REQUIRE_USER_NAME");
 		if(sValue != null && sValue.length() > 0) REQUIRE_USER_NAME = sValue.startsWith("t")?true:false;
 
-		sValue = osParameterReader.getOSParameterValueByName("REQUIRE_PASSWORD");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("REQUIRE_PASSWORD");
 		if(sValue != null && sValue.length() > 0) REQUIRE_PASSWORD = sValue.startsWith("t")?true:false;
 
-		sValue = osParameterReader.getOSParameterValueByName("REQUIRE_LICENSE");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("REQUIRE_LICENSE");
 		if(sValue != null && sValue.length() > 0) REQUIRE_LICENSE = sValue.startsWith("t")?true:false;
 
-		sValue = osParameterReader.getOSParameterValueByName("REQUIRE_ONLY_JOB_ID_TO_RETRIEVE_JOB_RESULT");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("REQUIRE_ONLY_JOB_ID_TO_RETRIEVE_JOB_RESULT");
 		if(sValue != null && sValue.length() > 0) REQUIRE_ONLY_JOB_ID_TO_RETRIEVE_JOB_RESULT = sValue.startsWith("t")?true:false;
 
-		sValue = osParameterReader.getOSParameterValueByName("REQUIRE_ONLY_JOB_ID_TO_KILL_JOB");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("REQUIRE_ONLY_JOB_ID_TO_KILL_JOB");
 		if(sValue != null && sValue.length() > 0) REQUIRE_ONLY_JOB_ID_TO_KILL_JOB = sValue.startsWith("t")?true:false;
 
-		sValue = osParameterReader.getOSParameterValueByName("MAX_JOBS_PER_USER");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("MAX_JOBS_PER_USER");
 		if(sValue != null && sValue.length() > 0){
 			try{
 				MAX_JOBS_PER_USER = Integer.parseInt(sValue);
@@ -1357,7 +1387,7 @@ public final class OSParameter{
 			}
 		}
 
-		sValue = osParameterReader.getOSParameterValueByName("USER_NAMES");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("USER_NAMES");
 		if(sValue != null && sValue.length() > 0){
 			Vector<String> vValues = CommonUtil.stringToVector(sValue, ",");
 			USER_NAMES = new String[vValues.size()];
@@ -1368,7 +1398,7 @@ public final class OSParameter{
 			}
 		}
 
-		sValue = osParameterReader.getOSParameterValueByName("PASSWORDS");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("PASSWORDS");
 		if(sValue != null && sValue.length() > 0){
 			Vector<String> vValues = CommonUtil.stringToVector(sValue, ",");
 			PASSWORDS = new String[vValues.size()];
@@ -1379,7 +1409,7 @@ public final class OSParameter{
 			}
 		}
 
-		sValue = osParameterReader.getOSParameterValueByName("LICENSES");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("LICENSES");
 		if(sValue != null && sValue.length() > 0){
 			Vector<String> vValues = CommonUtil.stringToVector(sValue, ",");
 			LICENSES = new String[vValues.size()];
@@ -1390,32 +1420,33 @@ public final class OSParameter{
 			}
 		}
 
-		sValue = osParameterReader.getOSParameterValueByName("ALLOW_IO_OPERATIONS_BY_USERS");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("ALLOW_IO_OPERATIONS_BY_USERS");
 		if(sValue != null && sValue.length() > 0) ALLOW_IO_OPERATIONS_BY_USERS = sValue.startsWith("t")?true:false;
+		
 		/*---------------------------------------------
 		XML related parameters
 		---------------------------------------------*/
-		sValue = osParameterReader.getOSParameterValueByName("VALIDATE");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("VALIDATE");
 		if(sValue != null && sValue.length() > 0) VALIDATE = sValue.startsWith("t")?true:false;
 		
-		sValue = osParameterReader.getOSParameterValueByName("XML_INDENTING");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("XML_INDENTING");
 		if(sValue != null && sValue.length() > 0) XML_INDENTING = sValue.startsWith("t")?true:false;
 		
 		
-		sValue = osParameterReader.getOSParameterValueByName("FML_PUBLIC_SITE");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("FML_PUBLIC_SITE");
 		if(sValue != null && sValue.length() > 0) FML_PUBLIC_SITE = sValue;
 
-		sValue = osParameterReader.getOSParameterValueByName("OS_SITE");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("OS_SITE");
 		if(sValue != null && sValue.length() > 0) OS_SITE = sValue;
 
 		
-		sValue = osParameterReader.getOSParameterValueByName("OS_SCHEMA_SITE");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("OS_SCHEMA_SITE");
 		if(sValue != null && sValue.length() > 0) OS_SCHEMA_SITE = sValue;
 
-		sValue = osParameterReader.getOSParameterValueByName("XML_ENCODING_STYLE");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("XML_ENCODING_STYLE");
 		if(sValue != null && sValue.length() > 0) XML_ENCODING_STYLE = sValue;
 
-		sValue = osParameterReader.getOSParameterValueByName("XSLT_LOCATION");
+		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("XSLT_LOCATION");
 		if(sValue != null && sValue.length() > 0) XSLT_LOCATION = sValue;
 
 		return true;
