@@ -110,6 +110,37 @@ public class CommonUtil{
 		return sJobID;
 	}//getJobID
 
+	/**
+	 * get IP address
+	 * @return IP address in a string
+	 */
+	public static String getIPAddress(){
+		String sIP = "";
+		InetAddress inetAddress = null;
+		try{
+			inetAddress = InetAddress.getLocalHost();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		String sHostName = inetAddress.getHostName();
+		InetAddress[] mIPAddress = null;
+		
+		try {
+			mIPAddress = InetAddress.getAllByName(sHostName);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		int i;
+		int iNumberIPAddress = (mIPAddress == null)?0:mIPAddress.length;
+		for(i = 0; i < iNumberIPAddress; i++){
+			sIP = mIPAddress[i].getHostAddress();
+			if(!sIP.startsWith("0")) return sIP;
+		}
+		return "localhost";
+	}//getIPAddress
+	
+	
 	
 	/**
 	 * Converts a vector of integers to an integer array.
@@ -641,7 +672,7 @@ public class CommonUtil{
 		}
 		*/
 		//create OSRepository
-		CommonUtil.createOSRepository();
+		//CommonUtil.createOSRepository();
 		//check OSRepository
 		//CommonUtil.checkOSRepository();
 		
@@ -663,6 +694,7 @@ public class CommonUtil{
 					"Aardal's paper on mixed integer programming", "No feasible solution.");
 		}
 		 */
+		System.out.println(CommonUtil.getIPAddress());
+		
 	}//main
-	
 }//class CommonUtil
