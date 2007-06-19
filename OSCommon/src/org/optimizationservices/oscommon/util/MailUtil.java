@@ -51,6 +51,9 @@ public class MailUtil{
 	 */
 	public static boolean send(String fromEmail, String toEmail, String ccEmail, String bccEmail, String subject, String message, String attachedFiles){
 		try{
+			if(fromEmail == null || fromEmail.length() <= 0 || fromEmail.indexOf("@") < 0 || fromEmail.indexOf(".") < 0) return false;
+			if(toEmail == null || toEmail.length() <= 0 || toEmail.indexOf("@") < 0 || toEmail.indexOf(".") < 0) return false;
+			if(OSParameter.SMTP_SERVER == null || OSParameter.SMTP_SERVER.length() <= 0) return false;
 			Properties props = System.getProperties();
 			props.put("mail.smtp.host", OSParameter.SMTP_SERVER);
 			//props.put("mail.protocol.user", OSParameter.FROM_EMAIL.substring(0, OSParameter.FROM_EMAIL.indexOf('@')));
