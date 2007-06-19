@@ -8,8 +8,16 @@ package org.optimizationservices.oscommon.util;
 import java.io.StringWriter;
 import java.util.Vector;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.axis.MessageContext;
+import org.apache.axis.transport.http.HTTPConstants;
 import org.optimizationservices.oscommon.representationparser.OSParameterReader;
 import org.optimizationservices.oscommon.representationparser.OSParameterWriter;
+import org.optimizationservices.oscommon.util.CommonUtil;
+import org.optimizationservices.oscommon.util.IOUtil;
+import org.optimizationservices.oscommon.util.OSConstant;
+import org.optimizationservices.oscommon.util.OSParameterFile;
 
 /**
  *
@@ -1343,6 +1351,16 @@ public final class OSParameter{
 
 		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("SERVICE_FOLDER");
 		if(sValue != null && sValue.length() > 0) SERVICE_FOLDER = sValue;
+		else{
+			MessageContext messageContext = MessageContext.getCurrentContext();
+			//HttpServlet servlet = (HttpServlet)messageContext.getProperty(HTTPConstants.MC_HTTP_SERVLET);
+			//ServletContext servletContext = (ServletContext)servlet.getServletContext();
+			HttpServletRequest request = (HttpServletRequest)messageContext.getProperty(HTTPConstants.MC_HTTP_SERVLETREQUEST);
+			//HttpSession session =((HttpServletRequest)messageContext.getProperty(HTTPConstants.MC_HTTP_SERVLETREQUEST)).getSession();		
+			SERVICE_FOLDER = request.getContextPath();
+			if(SERVICE_FOLDER != null && SERVICE_FOLDER.length() > 0)SERVICE_FOLDER = SERVICE_FOLDER.substring(1);
+			if(SERVICE_FOLDER == null || SERVICE_FOLDER.length() <= 0) SERVICE_FOLDER = "os";
+		}
 
 		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("SERVICE_PORT");
 		if(sValue != null && sValue.length() > 0) SERVICE_PORT = sValue;
