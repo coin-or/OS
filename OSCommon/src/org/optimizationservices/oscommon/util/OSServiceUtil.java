@@ -241,11 +241,6 @@ public class OSServiceUtil{// implements OShL{
 	protected String m_sJobState= "unknown";
 	
 	/**
-	 * serviceURI holds the service uri. 
-	 */
-	//public String serviceURI = OSParameter.SERVICE_URI;
-
-	/**
 	 * m_sUserName holds the user name. 
 	 */
 	//protected String m_sUserName = "";
@@ -1698,19 +1693,19 @@ public class OSServiceUtil{// implements OShL{
 		if(jobStatistics != null){
 			if(jobStatistics.state.equals("finished") ){
 				m_osrlWriter.setGeneralStatusType("error");
-				m_osrlWriter.setGeneralStatusDescription("Job " + m_sJobID + " is alreday finished. Cannot submit again. ");
+				m_osrlWriter.setGeneralStatusDescription("Job " + m_sJobID + " is already finished. Cannot submit again. ");
 				sOSrL = m_osrlWriter.writeToString();
 				return sOSrL;
 			}
 			else if(jobStatistics.state.equals("killed") ){
 				m_osrlWriter.setGeneralStatusType("error");
-				m_osrlWriter.setGeneralStatusDescription("Job " + m_sJobID + " is alreday killed. Cannot submit again. ");
+				m_osrlWriter.setGeneralStatusDescription("Job " + m_sJobID + " is already killed. Cannot submit again. ");
 				sOSrL = m_osrlWriter.writeToString();
 				return sOSrL;
 			}
 			else if(jobStatistics.state.equals("running") ){
 				m_osrlWriter.setGeneralStatusType("error");
-				m_osrlWriter.setGeneralStatusDescription("Job " + m_sJobID + " is alreday running. Cannot submit again. ");
+				m_osrlWriter.setGeneralStatusDescription("Job " + m_sJobID + " is already running. Cannot submit again. ");
 				sOSrL = m_osrlWriter.writeToString();
 				return sOSrL;
 			}
@@ -1878,7 +1873,7 @@ public class OSServiceUtil{// implements OShL{
 		
 		//check osol
 		if(osol == null || osol.length() <= 0){
-			IOUtil.log("Empty string for the send method", null);
+			IOUtil.log("Empty osol string for the send method", null);
 			return false;
 		}
 		if(!readOSoL(osol)) return false;	
