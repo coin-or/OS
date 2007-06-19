@@ -1,4 +1,4 @@
-\documentclass[12pt]{article}
+\documentclass[11pt]{article}
 \usepackage{graphics,graphicx}
 %\usepackage[dvips]{graphics,graphicx}
 \DeclareGraphicsExtensions{.ps,.jpg,.eps,.pdf,.png}
@@ -133,7 +133,7 @@ This software uses Web Services technology and acts a middleware between the cli
 
 OS is released as open source code under the Common Public License (CPL). This project was created by Robert Fourer, Jun Ma, and Kipp Martin. The code has been written primarily by Jun Ma, Kipp Martin, Robert Fourer, and Huanyuan Sheng.  Jun Ma and Kipp Martin are the COIN project leaders for OS. Below we describe different methods for obtaining the C++ source code and binaries. 
 
-\subsection{Obtaining the Source Code Subversion Repository (SVN)}
+\subsection{Obtaining the Source Code Subversion Repository (SVN)}\label{section:svn}
 
 The C++ source code can be obtained using Subversion.  Users with Unix operating systems will most likely have an svn client. For Windows users wishing to obtain and SVN client we recommend  TortoiseSVN.  See \url{tortoisesvn.tigris.org}.
 
@@ -223,7 +223,7 @@ then you have not passed the unitTest and hopefully some semi-inteligble error m
 make install
 \end{verbatim}
 
-This will install all of the libraries in the {\tt lib} directory under the distribution root. 
+This will install all of the libraries in the {\tt lib} directory under the distribution root.  In particuar, the main OS library {\tt libOS} along with the libraries of the other COIN-OR project that download with the OS project will get installed in the {\tt lib} directory.  In addtion the {\tt make install} command will install four executable programs in the {\tt bin} directory.  One of these binaries is {\tt OSSolverService} which is main OS project executable. This is described in Section \ref{section:ossolverservice}. In addition {\tt clp}, {\tt cbc}, and {\tt cbc-generic} get installed  in the {\tt bin} directory. 
 
 
 The above steps are fully tested on Mac/Unix, Linux, and on Windows using either MINGW/MSYS or CYGWIN. Popular compilers like gcc/g++ or windows native compiler cl.exe can all be used.
@@ -239,11 +239,54 @@ The above steps are fully tested on Mac/Unix, Linux, and on Windows using either
 \end{itemize}
 
 
-\subsection{Obtaining the Source Code From a Tarball}
+\subsection{Obtaining the Source Code From a Tarball or Zip File}
 
-\subsection{Obtaining a Visual Studio Project}
+The OS source code can also be obtained from either a  tarball or zip file.  This may be preferred for users who are not managing other COIN-OR projects wish to only work with periodic release versions of the code.  In order to obtain the code from a Tarball or Zip file do the following. 
+
+\vskip 8pt
+
+{\bf Step 1:} In a browser go the link \url{http://www.coin-or.org/Tarballs/OS/}.  Listed at this page are files in the format:
+
+\begin{verbatim}
+OS-release_number.tgz
+OS-release_number.zip
+\end{verbatim}
+
+\vskip 8pt
+
+{\bf Step 2:} Click on either the {\tt tgz} or {\tt zip} file and download to the desired directory.
+
+\vskip 8pt
+
+{\bf Step 3:} Upack the files. For {\tt tgz} do the following at the command line:
+\begin{verbatim}
+gunzip OS-release_number.tgz
+tar -xvf OS-release_number.tar
+\end{verbatim}
+
+Windows users should be  able to double click on the file {\tt OS-release\_number.zip} and have the directory unpacked. 
+
+\vskip 8pt
+
+{\bf Step 4:} Rename {\tt OS-release\_number} to {\tt COIN-OS}.    Next follow Steps 2 - 6 outlined in Section \ref{section:svn}.
+
+
+
+
+
+\subsection{Obtaining and Installing a Visual Studio Project}
 
 \subsection{Obtaining the Binaries}
+
+kipp -- discuss with Jun
+
+
+\subsection{Bug Reporting}
+
+Bug reporting is done through the project Trac page. This is at \url{http://projects.coin-or.org/OS}.  To report a bug, you must be a registered user.  For  instructions on  how to register go to 
+ \url{http://www.coin-or.org/usingTrac.html}  After registering, log in and then file a trouble ticket by going to \url{http://projects.coin-or.org/OS/newticket}.
+
+\subsection{Obtaining the Server Software}
 
 
 \subsection{Platforms}
@@ -283,6 +326,26 @@ SYMPHONY &x&x&x&x&& \\ \hline
  
 
 \section{The OS Project Components}\section{label:projectcomponents}
+
+The directories in the  project root  are outlined in Figure  \ref{figure:osprojectrootdir}.
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.5]{\figurepath/OSProjectRootDirectory.png}
+\caption{The OS project root directory.} 
+\label{figure:osprojectrootdir}
+\end{figure}
+
+
+The directories in the OS directory are outlined in Figure \ref{figure:osdirectory}.
+
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.5]{\figurepath/OSDirectory.png}
+\caption{The OS directory.} 
+\label{figure:osdirectory}
+\end{figure}
 
 
 kipp -- don't forget to mention the schemas, data, xslt files, etc.
@@ -577,7 +640,9 @@ where the {\tt remoteSolve2.osol} file is
     </optimization>
 </osol>
 \end{verbatimtab}
-if we were to change to the {\tt locationType} attribute in the {\tt <instanceLocation>} element to {\tt http} then we could specify the intance location to on yet another machine. This is illustrate below  for {\tt remoteSovle3.osol}.
+
+
+If we were to change to the {\tt locationType} attribute in the {\tt <instanceLocation>} element to {\tt http} then we could specify the intance location to on yet another machine. This is illustrated below  for {\tt remoteSovle3.osol}.  The scenario is depicted in Figure \ref{figure:ossolverservice2}.  The OSiL string passed from the client to the solver service is empty.  However, the OSoL element {\tt <instanceLocation>}  has an attribute {\tt locationType} equal to   {\tt http}.  In this case, the text of the {\tt <instanceLoction>} element contains the URL of a third machine which has the problem intance {\tt parincLinear.osil}.  The solver service will contact the machine with URL {\tt gsbkip.chicagogsb.edu} and download this test problem. 
 \begin{verbatimtab}[4]
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org">
@@ -593,14 +658,12 @@ if we were to change to the {\tt locationType} attribute in the {\tt <instanceLo
 </osol>
 \end{verbatimtab}
 
-
-
-
-
-
-
-
-kipp -- Illustrate when data is uploaded locally or when data is uploaded from another server. 
+\begin{figure}
+\centering
+\includegraphics[scale=0.5]{\figurepath/OSSolverService2.png}
+\caption{Downloading the instance from a remote source.} 
+\label{figure:ossolverservice2}
+\end{figure}
 
 \subsubsection{The  {\tt send} Service Method}\label{section:send}
 

@@ -107,8 +107,11 @@ OS/data/testremoteRetrieve.config -text
 OS/data/testremoteSend.config -text
 OS/data/transportation.osil -text
 OS/data/wayneQuadratic.osil -text
+OS/doc/figures/OSDirectory.png -text
+OS/doc/figures/OSProjectRootDirectory.png -text
 OS/doc/figures/OSSolverService.pdf -text
 OS/doc/figures/OSSolverService.png -text
+OS/doc/figures/OSSolverService2.png -text
 OS/doc/figures/OSSolverServiceLocal.pdf -text
 OS/doc/figures/OSSolverServiceLocal.png -text
 OS/doc/figures/asynchronous1.pdf -text
