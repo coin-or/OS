@@ -475,7 +475,7 @@ public final class OSParameter{
 	/**
 	 * FROM_EMAIL holds the from email address to send the email. 
 	 */
-	public static String FROM_EMAIL = ""; //e.g. maj@northwestern.edu; //change?
+	public static String FROM_EMAIL = "optservorg@optimizationservices.org"; 
 	
 	/**
 	 * FROM_PASSWORD holds the from email address to send the email. 
@@ -1352,14 +1352,19 @@ public final class OSParameter{
 		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("SERVICE_FOLDER");
 		if(sValue != null && sValue.length() > 0) SERVICE_FOLDER = sValue;
 		else{
-			MessageContext messageContext = MessageContext.getCurrentContext();
-			//HttpServlet servlet = (HttpServlet)messageContext.getProperty(HTTPConstants.MC_HTTP_SERVLET);
-			//ServletContext servletContext = (ServletContext)servlet.getServletContext();
-			HttpServletRequest request = (HttpServletRequest)messageContext.getProperty(HTTPConstants.MC_HTTP_SERVLETREQUEST);
-			//HttpSession session =((HttpServletRequest)messageContext.getProperty(HTTPConstants.MC_HTTP_SERVLETREQUEST)).getSession();		
-			SERVICE_FOLDER = request.getContextPath();
-			if(SERVICE_FOLDER != null && SERVICE_FOLDER.length() > 0)SERVICE_FOLDER = SERVICE_FOLDER.substring(1);
-			if(SERVICE_FOLDER == null || SERVICE_FOLDER.length() <= 0) SERVICE_FOLDER = "os";
+			try{
+				MessageContext messageContext = MessageContext.getCurrentContext();
+				//HttpServlet servlet = (HttpServlet)messageContext.getProperty(HTTPConstants.MC_HTTP_SERVLET);
+				//ServletContext servletContext = (ServletContext)servlet.getServletContext();
+				HttpServletRequest request = (HttpServletRequest)messageContext.getProperty(HTTPConstants.MC_HTTP_SERVLETREQUEST);
+				//HttpSession session =((HttpServletRequest)messageContext.getProperty(HTTPConstants.MC_HTTP_SERVLETREQUEST)).getSession();		
+				SERVICE_FOLDER = request.getContextPath();
+				if(SERVICE_FOLDER != null && SERVICE_FOLDER.length() > 0)SERVICE_FOLDER = SERVICE_FOLDER.substring(1);
+			}
+			catch(Exception e){
+				
+			}
+			if(SERVICE_FOLDER == null || SERVICE_FOLDER.length() <= 0) SERVICE_FOLDER = "os";	
 		}
 
 		if(!bRead) sValue = osParameterReader.getOSParameterValueByName("SERVICE_PORT");
