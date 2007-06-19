@@ -1,7 +1,12 @@
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.axis.MessageContext;
+import org.apache.axis.transport.http.HTTPConstants;
 import org.optimizationservices.oscommon.communicationinterface.OShL;
 import org.optimizationservices.oscommon.util.IOUtil;
 import org.optimizationservices.oscommon.util.OSParameterFile;
 import org.optimizationservices.oscommon.util.OSServiceUtil;
+
 
 /**
  *
@@ -119,7 +124,15 @@ public class OSSolverService implements OShL{
 	 * static constructor
 	 */
 	static{ 
-		String SERVICE_FOLDER = "os";
+		//automatically detect webapp context
+		String SERVICE_FOLDER = "os";		
+		
+		MessageContext messageContext = MessageContext.getCurrentContext();
+		HttpServletRequest request = (HttpServletRequest)messageContext.getProperty(HTTPConstants.MC_HTTP_SERVLETREQUEST);
+		SERVICE_FOLDER = request.getContextPath();
+		if(SERVICE_FOLDER != null && SERVICE_FOLDER.length() > 0)SERVICE_FOLDER = SERVICE_FOLDER.substring(1);
+		if(SERVICE_FOLDER == null || SERVICE_FOLDER.length() <= 0) SERVICE_FOLDER = "os";		
+
 		//automatically detect where the tomcat installation is. 
 		String sDir = IOUtil.getCurrentDir();
 		if(sDir.toLowerCase().endsWith("bin") || 
@@ -128,8 +141,8 @@ public class OSSolverService implements OShL{
 			int iIndex = sDir.lastIndexOf("bin");
 			sDir = sDir.substring(0, iIndex);
 		}
-		OSParameterFile.NAME = sDir+= "webapps/"+SERVICE_FOLDER+"/WEB-INF/code/OSParameter.xml";
-		//all the above line can be rewritten with one line, e.g. on windows, the following hardcoded parameter file address:
+		OSParameterFile.NAME = sDir+= "webapps/"+SERVICE_FOLDER+"WEB-INF/code/OSParameter.xml";
+		//or directly hard code in the parameter file path by uncommenting and editing the line below. 
 		//OSParameterFile.NAME = sDir+= "/Program Files/Apache Software Foundation/Tomcat 5.5/webapps/os/WEB-INF/code/OSParameter.xml";
 	}//static constructor
 }//class 

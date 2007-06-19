@@ -5,7 +5,6 @@ import org.optimizationservices.oscommon.util.IOUtil;
 import org.optimizationservices.ossolver.api.LindoSolverService;
 import org.optimizationservices.ossolver.parser.LindoOSiLReader;
 import org.optimizationservices.ossolver.solver.LindoOldSolver;
-import org.optimizationservices.ossolver.solver.LindoSolver;
 
 /**
  *

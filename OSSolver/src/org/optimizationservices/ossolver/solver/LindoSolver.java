@@ -11,7 +11,6 @@ import java.util.GregorianCalendar;
 import java.util.Vector;
 
 import org.optimizationservices.oscommon.localinterface.DefaultSolver;
-import org.optimizationservices.oscommon.representationparser.OSiLReader;
 import org.optimizationservices.oscommon.representationparser.OSrLWriter;
 import org.optimizationservices.oscommon.util.IOUtil;
 import org.optimizationservices.oscommon.util.OSParameter;

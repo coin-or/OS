@@ -9,7 +9,6 @@ import org.optimizationservices.oscommon.communicationinterface.OShL;
 import org.optimizationservices.oscommon.util.IOUtil;
 import org.optimizationservices.ossolver.parser.LindoOSiLReader;
 import org.optimizationservices.ossolver.solver.LindoOldSolver;
-import org.optimizationservices.ossolver.solver.LindoSolver;
 
 /**
  *
