@@ -1,5 +1,5 @@
 /**
- * @(#)StandardSolver 1.0 03/14/2004
+ * @(#)StandardOSSolver 1.0 03/14/2004
  *
  * Copyright (c) 2004
  */
@@ -12,21 +12,22 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 import org.optimizationservices.oscommon.localinterface.DefaultSolver;
+import org.optimizationservices.oscommon.localinterface.OSOption;
 import org.optimizationservices.oscommon.representationparser.OSrLWriter;
 /**
 *
-* <P>The <code>StandardSolver</code>class is the standard solver engine. 
+* <P>The <code>StandardOSSolver</code>class is the standard solver engine. 
 *
 * </p>
 * @author Robert Fourer, Jun Ma, Kipp Martin
 * @version 1.0, 03/14/2004
 * @since OS 1.0
 */
-public class StandardSolver extends DefaultSolver{
+public class StandardOSSolver extends DefaultSolver{
 	/**
 	 * default constructor.
 	 */
-	public StandardSolver(){
+	public StandardOSSolver(){
 	}//constructor
 
 	/**
@@ -35,11 +36,7 @@ public class StandardSolver extends DefaultSolver{
 	public void solve(){
 		String sOS = System.getProperty("os.name").toLowerCase();
 		String sJobID = osOption.getJobID();
-		String sOSSolver = "";
-		Hashtable<String, String> otherOptimizationValues = osOption.getOtherOptimizationOptionValues();
-		if(otherOptimizationValues != null){
-			sOSSolver = otherOptimizationValues.get("os_solver;");
-		}
+		String sOSSolver = osOption.getOtherOptimizationOptionValueByName("os_solver");
 		if(sOSSolver == null || sOSSolver.length() <= 0) sOSSolver = OSParameter.OS_SOLVER;
 		
 		String sInstanceFile = OSParameter.TEMP_FILE_FOLDER+sJobID+".osil";
@@ -164,6 +161,15 @@ public class StandardSolver extends DefaultSolver{
 	 * @param argv command line arguments.
 	 */
 	public static void main(String[] argv){
+		OSOption osOption = new OSOption();
+		try {
+			osOption = osOption.readOSoL("c:/remoteSolve1.osol", true, false);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String sOSSolver = osOption.getOtherOptimizationOptionValueByName("os_solver");
+		System.out.println(sOSSolver);
 	}//main
 
-}//StandardSolver
+}//StandardOSSolver
