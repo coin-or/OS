@@ -7,8 +7,8 @@
 \contentsline {subsection}{\numberline {2.5}Bug Reporting}{7}
 \contentsline {subsection}{\numberline {2.6}Obtaining the Server Software}{7}
 \contentsline {subsection}{\numberline {2.7}Platforms}{7}
-\contentsline {section}{\numberline {3}The OS Project Components}{7}
-\contentsline {section}{\numberline {4}label:projectcomponents}{7}
+\contentsline {section}{\numberline {3}The OS Project Components}{8}
+\contentsline {section}{\numberline {4}label:projectcomponents}{8}
 \contentsline {subsection}{\numberline {4.1}Key Protocols}{10}
 \contentsline {section}{\numberline {5}The OS Library Components}{10}
 \contentsline {subsection}{\numberline {5.1}OSAgent}{10}
