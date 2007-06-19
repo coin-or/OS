@@ -1554,13 +1554,12 @@ public final class OSParameter{
 		}
 		else{ //nix system
 			try{
-				CODE_DRIVE = IOUtil.getUnixDrive(sParameterFile);
+				CODE_DRIVE = IOUtil.getUnixDrive(".");
 			}
 			catch(Exception e){
 				CODE_DRIVE = "c:";
 			}
 		}
-		
 		if(sOSParameterFile != null && sOSParameterFile.length() > 0){
 			readAndSetOSParameter(sOSParameterFile, true, false);
 		}
