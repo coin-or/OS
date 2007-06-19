@@ -311,6 +311,11 @@ bool OSnl2osil::createOSInstance(){
 			LUv[2*i+1] < OSINFINITY ? LUv[2*i+1] : OSINFINITY, 
 			vartype, init, initString);
 	}	
+	//
+	//
+	//(expr_v *)e;
+	//
+	//
 	// now create the objective function
 	//	
 	double objWeight = 1.0;
