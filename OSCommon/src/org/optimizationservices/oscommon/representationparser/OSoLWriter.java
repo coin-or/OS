@@ -92,6 +92,20 @@ public class OSoLWriter extends OSgLWriter{
 		if(!setObjectiveNumber(osOption.getObjectiveNumber())) throw new Exception("setObjectiveNumber Unsuccessful");		
 		if(!setConstraintNumber(osOption.getConstraintNumber())) throw new Exception("setConstraintNumber Unsuccessful");		
 		if(!setInitialVariableValues(osOption.getInitialVariableValues())) throw new Exception("setInitialVariableValues Unsuccessful");		
+		if(osOption.optimization != null && osOption.optimization.other != null && osOption.optimization.other.length > 0){
+			int n = osOption.optimization.other.length;
+			String[] msNames = new String[n];
+			String[] msValues = new String[n];
+			String[] msDescriptions = new String[n];
+			for(int i = 0; i < n; i++){
+				msNames[i] = osOption.optimization.other[i].name;
+				msValues[i] = osOption.optimization.other[i].value;
+				msDescriptions[i] = osOption.optimization.other[i].description;
+			}
+			if(!setOtherOptimizationOptions(msNames, msValues, msDescriptions)){
+				throw new Exception("setOtherOptimizationOption Info Unsuccessful");
+			}			
+		}
 		if(osOption.other != null && osOption.other.length > 0){
 			int n = osOption.other.length;
 			String[] msNames = new String[n];
@@ -1934,6 +1948,87 @@ public class OSoLWriter extends OSgLWriter{
 		}
 		return true;
 	}//setInitialVariableValues
+	
+	/**
+	 * Set the other optimization options related elements. 
+	 * 
+	 * @param names holds the names of the other optimization options. It is required. 
+	 * @param values holds the values of the other optimization options, empty string "" if no value for an option.
+	 * @param descriptions holds the descriptions of the other optimization options, empty string "" if no value for an option, null for
+	 * the entire array if none of the options have descriptions.
+	 * @return whether the other optimization options element construction is successful.
+	 */
+	public boolean setOtherOptimizationOptions(String[] names, String[] values, String[] descriptions){
+		if(names == null) return false;
+		if(values == null) return false;
+		if(names.length != values.length) return false;
+		if(descriptions != null && names.length != descriptions.length) return false;
+		for(int i = 0; i < names.length; i++){
+			addOtherOptimizationOption(names[i], values[i], (descriptions==null)?"":descriptions[i]);
+		}
+		return true;
+	}//setOtherOptimizationOptions
+	
+	/**
+	 * Add an other optimization option element. 
+	 * 
+	 * @param name holds the name of the other optimization option element. It is required.
+	 * @param value holds the value of the other optimization option element, empty string "" if none. 
+	 * @param description holds the description of the other optimization option element, empty string "" if none. 
+	 * @return whether the other optimization option element is added successfully.
+	 */
+	public boolean addOtherOptimizationOption(String name, String value, String description){
+		if(name == null) return false;
+		Node nodeRef = null;
+		try{
+			Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSoL, "optimization");
+			if(eOptimization == null){
+				eOptimization = m_document.createElement("optimization");
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "job");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
+					if(nodeRef != null){
+						m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
+						if(nodeRef != null){
+							m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+						}
+						else{
+							nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+							if(nodeRef != null){
+								m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+							}
+							else{
+								m_eOSoL.insertBefore(eOptimization, m_eOSoL.getFirstChild());
+							}		
+						}		
+					}
+				}
+			}			
+			Vector<Element> vElements = XMLUtil.getChildElementsByTagName(eOptimization, "other");
+			Element eOther;
+			int iNls = vElements==null?0:vElements.size();
+			for(int i = 0; i < iNls; i++){
+				eOther = (Element)vElements.elementAt(i);
+				if(eOther.getAttribute("name").equals(name)){
+					eOptimization.removeChild(eOther);
+					break;
+				}
+			}
+			eOther = createOther(name, value, description);
+			eOptimization.appendChild(eOther);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//addOtherOptimizationOption
 	
 	/**
 	 * Set the other options related elements. 

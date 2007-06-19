@@ -51,7 +51,17 @@ public class OSoLReader extends OSgLReader{
 	 * m_iConstraintNumber holds the constraint number. 
 	 */
 	private int m_iConstraintNumber = -1;
-	
+
+	/**
+	 * m_otherOptmizationOptionHashMap holds a hash map of other optimization options.
+	 */
+	protected HashMap<String, String> m_otherOptimizationOptionHashMap = null;
+
+	/**
+	 * m_otherOptimizationOptionDescriptionHashMap holds a hash map of other optimization options' descriptions.
+	 */
+	protected HashMap<String, String>	m_otherOptimizationOptionDescriptionHashMap = null;
+
 	/**
 	 * m_otherOptionHashMap holds a hash map of other options.
 	 */
@@ -125,6 +135,7 @@ public class OSoLReader extends OSgLReader{
 		if(!m_osOption.setObjectiveNumber(getObjectiveNumber())) throw new Exception("setObjectiveNumber Unsuccessful");		
 		if(!m_osOption.setConstraintNumber(getConstraintNumber())) throw new Exception("setConstraintNumber Unsuccessful");		
 		if(!m_osOption.setInitialVariableValues(getInitialVariableValues())) throw new Exception("setInitialVariableValues Unsuccessful");		
+		if(!m_osOption.setOtherOptimizationOptions(getOtherOptimizationOptionNames(), getOtherOptimizationOptionDescriptions(), getOtherOptimizationOptionValues())) throw new Exception("setOtherOptimizationOptionInfo Unsuccessful");
 		if(!m_osOption.setOtherOptions(getOtherOptionNames(), getOtherOptionDescriptions(), getOtherOptionValues())) throw new Exception("setOtherOptionInfo Unsuccessful");
 		return m_osOption;
    	}//getOSOption
@@ -818,6 +829,138 @@ public class OSoLReader extends OSgLReader{
 	}//getInitialVariableValues
 	
 	/**
+	 * Get the hash map of other optimization options. 
+	 * 
+	 * @return the hash map of other options.
+	 */
+	public HashMap getOtherOptimizationOptions(){
+		if(m_otherOptimizationOptionHashMap != null) return m_otherOptimizationOptionHashMap;
+		
+		m_otherOptimizationOptionHashMap = new HashMap<String, String>();
+		m_otherOptimizationOptionDescriptionHashMap = new HashMap<String, String>();
+
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
+		if(eOptimization == null) return null;
+		Vector<Element> vElements = XMLUtil.getChildElementsByTagName(eOptimization, "other");
+		int iNls	= vElements==null?0:vElements.size();
+		for(int i = 0; i < iNls; i++){
+			Element eOther = (Element)(vElements.elementAt(i));
+			NamedNodeMap	attributes =  eOther.getAttributes();
+			int n =attributes.getLength();
+			String sName = "";
+			String sDescription = "";
+			String sValue = XMLUtil.getElementValue(eOther);
+			for (int j = 0; j < n; j++){
+				Node	attr = attributes.item(j);
+				String sAttributeName  = attr.getNodeName();
+				String sAttributeValue = attr.getNodeValue();
+				if (sAttributeName.equals("name")){
+					sName = sAttributeValue;
+				}
+				else if (sAttributeName.equals("description")){
+					sDescription = sAttributeValue;
+				}
+			}
+			m_otherOptimizationOptionHashMap.put(sName, sValue);
+			m_otherOptimizationOptionDescriptionHashMap.put(sName, sDescription);
+		}
+		return m_otherOptimizationOptionHashMap;
+	}//getOtherOptimizationOptions
+
+	/**
+	 * Get the number of other optimization options.  
+	 * 
+	 * @return the number of other optimization options. 
+	 */
+	public int getOtherOptimizationOptionNumber(){
+		getOtherOptimizationOptions();
+		return m_otherOptimizationOptionHashMap.size();
+	}//getOtherOptimizationOptionNumber
+	
+	/**
+	 * Get the string value from the other optimization option hash map. 
+	 * 
+	 * @param name holds the name of optimization option to get.
+	 * @return string value from the other optimization option hash map, null if none. 
+	 */
+	public String getOtherOptimizationOptionValueByName(String name){
+		getOtherOptimizationOptions();
+		if(m_otherOptimizationOptionHashMap.containsKey(name)){
+			return (String)m_otherOptimizationOptionHashMap.get(name);
+		}
+		else{ 
+			return null;
+		}
+	}//getOtherOptimizationOptionValueByName
+	
+	/**
+	 * Get the string description from the other optimization option hash map.
+	 * 
+	 * @param name holds the name of optimization option to get. 
+	 * @return string description from the other option hash map, null if none. 
+	 */
+	public String getOtherOptimizationOptionDescriptionByName(String name){
+		getOtherOptimizationOptions();
+		if(m_otherOptimizationOptionDescriptionHashMap.containsKey(name)){
+			return (String)m_otherOptimizationOptionDescriptionHashMap.get(name);
+		}
+		else{ 
+			return null;
+		}
+	}//getOtherOptimizationOptionDescriptionByName
+	
+
+	/**
+	 * Get the names of all other optimization options. 
+	 * 
+	 * @return the names of all other optimization options. 
+	 */
+	public String[] getOtherOptimizationOptionNames(){
+		getOtherOptimizationOptions();	
+		Set nameSet = m_otherOptimizationOptionHashMap.keySet();
+		Object[] moName = nameSet.toArray();
+		String[] msName = new String[nameSet.size()];
+		for (int i = 0; i < nameSet.size(); i++) {
+			msName[i] = (String)moName[i];
+		}
+		return msName;		
+	}//getOtherOptimizationOptionNames
+	
+	
+	/**
+	 * Get the values of all other optimization options. 
+	 * 
+	 * @return the values of all other optimization options. 
+	 */
+	public String[] getOtherOptimizationOptionValues(){
+		getOtherOptimizationOptions();			
+		Collection valueCollection = m_otherOptimizationOptionHashMap.values();
+		Object[] moValue = valueCollection.toArray();
+		String[] msValue = new String[valueCollection.size()];
+		for (int i = 0; i < valueCollection.size(); i++) {
+			msValue[i] = moValue[i].toString();
+		}
+		return msValue;
+	}//getOtherOptimizationOptionValues
+	
+
+	/**
+	 * Get the descriptions of all optimization other options. 
+	 * 
+	 * @return the descriptions of all other optimization options.
+	 */
+	public String[] getOtherOptimizationOptionDescriptions(){
+		getOtherOptimizationOptions();			
+		Collection valueCollection = m_otherOptimizationOptionDescriptionHashMap.values();
+		Object[] moValue = valueCollection.toArray();
+		String[] msDescription = new String[valueCollection.size()];
+		for (int i = 0; i < valueCollection.size(); i++) {
+			msDescription[i] = moValue[i].toString();
+		}
+		return msDescription;
+	}//getOtherOptimizationOptionDescriptions
+	
+	/**
 	 * Get the hash map of other options. 
 	 * 
 	 * @return the hash map of other options.
@@ -880,10 +1023,10 @@ public class OSoLReader extends OSgLReader{
 	}//getOtherOptionValueByName
 
 	/**
-	 * Get the string value from the other option hash map.
+	 * Get the string description from the other option hash map.
 	 * 
 	 * @param name holds the name of option to get. 
-	 * @return string value from the other option hash map, null if none. 
+	 * @return string description from the other option hash map, null if none. 
 	 */
 	public String getOtherOptionDescriptionByName(String name){
 		getOtherOptions();
