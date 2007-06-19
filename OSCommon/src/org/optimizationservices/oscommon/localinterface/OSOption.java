@@ -1045,6 +1045,58 @@ public class OSOption {
 	}//otherOptimizationOptionDescriptions
 	
 	/**
+	 * Get the string value from the other optimization option hash map. 
+	 * 
+	 * @param name holds the name of optimization option to get.
+	 * @return string value from the other optimization option hash map, null if none. 
+	 */
+	public String getOtherOptimizationOptionValueByName(String name){
+		Hashtable<String, String> otherOptimizationOptionValues = getOtherOptimizationOptionValues();
+		if(otherOptimizationOptionValues != null && otherOptimizationOptionValues.containsKey(name)){
+			return (String)otherOptimizationOptionValues.get(name);
+		}
+		else{ 
+			return null;
+		}
+	}//getOtherOptimizationOptionValueByName
+	
+	/**
+	 * set other optimization options, with their names (required), descriptions (optional) and values (optional). 
+	 * 
+	 * @param names holds the names of the other optimization options; it is required.  
+	 * @param descriptions holds the descriptions of the other optimization options; null if none. 
+	 * @param values holds the values of the other optimization options; null if none. 
+	 * @return whether the other optimization information is set successfully. 
+	 */
+	public boolean setOtherOptimizationOptions(String[] names, String[] descriptions, String[] values){
+		if(names == null) return false;
+		if(descriptions != null && descriptions.length != names.length) return false;
+		if(values != null && values.length != names.length) return false;		
+		
+		int n = names.length;
+		
+		if(optimization == null) optimization = new OptimizationOption();
+		optimization.other = new OtherOption[n];
+		for(int i = 0; i < n; i++){
+			optimization.other[i] = new OtherOption();
+		}
+		for(int i = 0; i < n; i++){
+			optimization.other[i].name = names[i];
+		}
+		if(descriptions != null){
+			for(int i = 0; i < n; i++){
+				optimization.other[i].description = descriptions[i];
+			}	
+		}
+		if(values != null){
+			for(int i = 0; i < n; i++){
+				optimization.other[i].value = values[i];
+			}	
+		}
+		return true;
+	}//setOtherOptimizationOptions
+
+	/**
 	 * get a string array of names of other options. 
 	 * 
 	 * @return a string array of names of other options, null if no other options.  
@@ -1102,7 +1154,7 @@ public class OSOption {
 	 * @param names holds the names of the other options; it is required.  
 	 * @param descriptions holds the descriptions of the other options; null if none. 
 	 * @param values holds the values of the other options; null if none. 
-	 * @return whether the other anlysis information is set successfully. 
+	 * @return whether the other  information is set successfully. 
 	 */
 	public boolean setOtherOptions(String[] names, String[] descriptions, String[] values){
 		if(names == null) return false;
