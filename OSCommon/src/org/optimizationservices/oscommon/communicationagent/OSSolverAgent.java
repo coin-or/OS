@@ -202,8 +202,8 @@ public class OSSolverAgent implements OShL{
 //		//analyzer
 //		String sAnalyzerAddress = sOSuL.substring(6, sOSuL.indexOf("</OSuL>"));
 		//String sOSiL = IOUtil.fileToString("../../../OSRepository/test/osil/parinc.osil"); 
-		String sOSiL = IOUtil.fileToString("../../../OSRepository/test/kmartin/parinc.osil");
-		System.out.println(sOSiL);
+		//String sOSiL = IOUtil.fileToString("../../../OSRepository/test/kmartin/parinc.osil");
+		//System.out.println(sOSiL);
 		//String sOSiL = IOUtil.fileToString("../../../OSRepository/test/osil/markowitzMod.osil"); //a sophisticated model. 
 		//String sOSiL = IOUtil.fileToString("../../../OSRepository/test/osil/osilrosenbrock.osil"); //nonlinear
 		//String sOSiL = IOUtil.fileToString("../../../OSRepository/test/osil/lpparinc.osil"); //linear
@@ -219,7 +219,7 @@ public class OSSolverAgent implements OShL{
 		
 		//solver
 //		String sSolverAddress = sOSuL.substring(6, sOSuL.indexOf("</OSuL>"));
-		String sSolverAddress = "http://128.135.130.17:8181/axis/OSSolverService";
+		String sSolverAddress = "http://localhost:8080/os/OSSolverService.jws";
 //		String sSolverAddress = "http://gsbkip.chicagogsb.edu/os/ossolver/LindoSolverService.jws";
 		//use TCPMon
 		//sSolverAddress = "http://localhost:3838/os/ossolver/LindoSolverService.jws";
@@ -232,9 +232,11 @@ public class OSSolverAgent implements OShL{
 		OSSolverAgent osSolverAgent = new OSSolverAgent();
 		//sSolverAddress = "http://gsbkip.chicagogsb.edu/os/ossolver/LindoSolverService.jws";
 		//sSolverAddress = "http://128.135.211.219:80/os/ossolver/LindoSolverService.jws";
+		//sSolverAddress = "http://localhost:8080/os/OSSolverService.jws";
 		osSolverAgent.solverAddress = sSolverAddress;
-		String sOSrL = osSolverAgent.solve(sOSiL, null);
-		System.out.println("\nsolver result:\n" + sOSrL);
+		System.out.println(osSolverAgent.getJobID(""));
+		//String sOSrL = osSolverAgent.solve(sOSiL, null);
+		//System.out.println("\nsolver result:\n" + sOSrL);
 		
 		//test .net service
 //		OSSolverAgent osSolverAgent = new OSSolverAgent();
