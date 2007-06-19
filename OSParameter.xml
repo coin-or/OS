@@ -69,20 +69,20 @@
 	<!--Service site related parameters-->
 	<param name="SERVICE_NAME" description="the service name (change!)">OSSolverService</param>
 	<param name="SERVICE_EXTENSION" description="the service extension">jws</param>
-	<param name="SERVICE_FOLDER" description="the service folder (change!)">os</param>
+	<param name="SERVICE_FOLDER" description="the service folder -- automatically detected if none (change!)"></param>
 	<param name="SERVICE_PORT" description="the service port (change!)">8080</param>
-	<param name="SERVICE_HOST" description="the service host - automatically detected if none, e.g. http://123.45.67.89(change!)"></param>
+	<param name="SERVICE_HOST" description="the service host - automatically detected if none, e.g. http://123.45.67.89(change!)"/>
 	<param name="SERVICE_URI" description="the service uri - automatically constructed if none, e.g. http://123.45.67.89:8080/os/OSSolverService.jws"/>
 	<param name="OS_SERVICE_SITE" description="the main site of your OS services Web application -automatically constructed if none, e.g. http://123.45.67.89:8080/os "/>
 	<param name="SERVICE_TYPE" description="the service type">solver</param>
-	<param name="OS_REGISTRY_SITE" description="the site of the OS Registry - automatically constructed if none"></param>
-	<param name="OS_SCHEDULER_SITE" description="the site of the OS scheduler - automatically constructed if none"></param>
+	<param name="OS_REGISTRY_SITE" description="the site of the OS Registry - automatically constructed if none"/>
+	<param name="OS_SCHEDULER_SITE" description="the site of the OS scheduler - automatically constructed if none"/>
 	<param name="SCHEDULER_WITH_REGISTRY" description="whether the scheduler service locally sits with the registry service in the same web application">true</param>
 	<!--Mail site related parameters-->
 	<param name="SMTP_SERVER" description="the smtp server address to send the email (change!)"/>
 	<param name="FROM_EMAIL" description="the from email address to send the email (change!)"/>
 	<param name="FROM_PASSWORD" description="the from email address to send the email (change!)"/>
-	<param name="TO_EMAIL" description="the to email address to send the email (change!)"/> 
+	<param name="TO_EMAIL" description="the to email address to send the email (change!)"/>
 	<param name="MAIL_SUBJECT" description="the email subject">OS SERVICE NOTIFICATION!!!</param>
 	<param name="MAIL_MESSAGE" description="the email message body">Please check the service.</param>
 	<!--Security related parameters-->
