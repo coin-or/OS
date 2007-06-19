@@ -1,9 +1,5 @@
-
-
 import org.optimizationservices.oscommon.communicationinterface.OShL;
-import org.optimizationservices.oscommon.localinterface.DefaultSolver;
 import org.optimizationservices.oscommon.util.IOUtil;
-import org.optimizationservices.oscommon.util.OSParameter;
 import org.optimizationservices.oscommon.util.OSParameterFile;
 import org.optimizationservices.oscommon.util.OSServiceUtil;
 
