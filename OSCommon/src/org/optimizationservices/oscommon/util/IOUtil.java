@@ -1346,7 +1346,7 @@ public class IOUtil implements Serializable{
 					throw new IOException(
 							"Command line 'df' did not return info as expected " +
 							"for path '" + path +
-							"'- response on first line was '" + line1 + "'");
+							"'- response on second line was '" + line1 + "'");
 				}
 				line2 = line2.trim();
 
@@ -1378,6 +1378,9 @@ public class IOUtil implements Serializable{
 				}
 
 			} 
+			catch(Exception e){
+				IOUtil.log(IOUtil.exceptionStackToString(e), null);
+			}
 			finally {
 				try {
 					if (in != null) {
@@ -1426,7 +1429,7 @@ public class IOUtil implements Serializable{
 				throw new IOException(
 						"Command line 'df' did not return info as expected " +
 						"for path '" + path +
-						"'- response on first line was '" + line1 + "'");
+						"'- response on second line was '" + line1 + "'");
 			}
 			line2 = line2.trim();
 
@@ -1445,10 +1448,10 @@ public class IOUtil implements Serializable{
 				}
 			} 
 			sDrive = tok.nextToken().trim(); 
-			if(sDrive!=null && !sDrive.endsWith("/")){
-				sDrive += "/";
-			}
 		} 
+		catch(Exception e){
+			IOUtil.log(IOUtil.exceptionStackToString(e), null);
+		}
 		finally {
 			try {
 				if (in != null) {
