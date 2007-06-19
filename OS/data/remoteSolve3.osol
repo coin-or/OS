@@ -3,10 +3,9 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/OSoL.xsd">
     <general>
-        <serviceURI>http://128.135.130.17:8080/clp/CLPSolverService.jws</serviceURI>
          <instanceLocation locationType="http">http://gsbkip.chicagogsb.edu/testproblems/parincLinear.osil</instanceLocation>
     </general>
     <optimization>
-    	<other name="os_solver">clp</other>
+    	<other name="os_solver">symphony</other>
     </optimization>
 </osol>

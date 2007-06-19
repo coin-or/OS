@@ -1124,7 +1124,6 @@ case 11:
 YY_RULE_SETUP
 #line 200 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
 {
-	printf("Found option XXXXXXXXXXXXXXXXXXXXX:  %s\n", yytext); 
 	if(yyextra->serviceLocation == ""){
 		printf("Found option:  %s\n", yytext); 
 		yyextra->serviceLocation = strdup(yytext);
@@ -1140,7 +1139,7 @@ YY_RULE_SETUP
 case 12:
 /* rule 12 can match eol */
 YY_RULE_SETUP
-#line 214 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
+#line 213 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
 {
 	if(yyextra->mpsFile == ""){
 		printf("Found option:  %s\n", yytext); 
@@ -1156,7 +1155,7 @@ YY_RULE_SETUP
 case 13:
 /* rule 13 can match eol */
 YY_RULE_SETUP
-#line 226 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
+#line 225 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
 {
 	if(yyextra->nlFile == ""){
 		printf("Found option:  %s\n", yytext);
@@ -1172,7 +1171,7 @@ YY_RULE_SETUP
 case 14:
 /* rule 14 can match eol */
 YY_RULE_SETUP
-#line 238 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
+#line 237 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
 {
 	if(yyextra->solverName == ""){
 		printf("Found option:  %s\n", yytext); 
@@ -1188,7 +1187,7 @@ YY_RULE_SETUP
 case 15:
 /* rule 15 can match eol */
 YY_RULE_SETUP
-#line 250 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
+#line 249 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
 {
 	if(yyextra->browser == ""){
 		printf("Found option:  %s\n", yytext);  
@@ -1203,7 +1202,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 262 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
+#line 261 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
 {
 	std::string error;
 	std::ostringstream outStr;
@@ -1218,10 +1217,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 273 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
+#line 272 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
 ECHO;
 	YY_BREAK
-#line 1225 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.cpp"
+#line 1224 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2339,7 +2338,7 @@ void osssfree (void * ptr , yyscan_t yyscanner)
 
 #define YYTABLES_NAME "yytables"
 
-#line 273 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
+#line 272 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/src/OSParsers/parseosss.l"
 
 
 

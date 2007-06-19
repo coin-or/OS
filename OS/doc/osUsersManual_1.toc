@@ -31,11 +31,11 @@
 \contentsline {subsubsection}{\numberline {8.3.3}The {\tt retrieve} Service Method}{19}
 \contentsline {subsubsection}{\numberline {8.3.4}The {\tt getJobID} Service Method}{19}
 \contentsline {subsubsection}{\numberline {8.3.5}The {\tt knock} Service Method}{19}
-\contentsline {subsubsection}{\numberline {8.3.6}The {\tt kill} Service Method}{20}
+\contentsline {subsubsection}{\numberline {8.3.6}The {\tt kill} Service Method}{21}
 \contentsline {subsubsection}{\numberline {8.3.7}Summary}{21}
-\contentsline {section}{\numberline {9}Setting up a Solver Service with Tomcat}{22}
-\contentsline {section}{\numberline {10}Examples}{22}
-\contentsline {subsection}{\numberline {10.1}AMPL Client: Hooking AMPL to Solvers}{22}
+\contentsline {section}{\numberline {9}Setting up a Solver Service with Tomcat}{23}
+\contentsline {section}{\numberline {10}Examples}{23}
+\contentsline {subsection}{\numberline {10.1}AMPL Client: Hooking AMPL to Solvers}{23}
 \contentsline {subsection}{\numberline {10.2}CppAD: Using the CppAD Algorithmic Differentiation Package}{24}
 \contentsline {subsection}{\numberline {10.3}File Upload: Using a File Upload Package}{24}
 \contentsline {subsection}{\numberline {10.4}Instance Generator: Using the OSInstance API to Generate Instances}{24}
