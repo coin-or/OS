@@ -321,7 +321,7 @@ SYMPHONY &x&x&x&x&& \\ \hline
 \end{table}
  
 
-\section{The OS Project Components}\section{label:projectcomponents}
+\section{The OS Project Components}\label{section:projectcomponents}
 
 The directories in the  project root  are outlined in Figure  \ref{figure:osprojectrootdir}.
 
@@ -371,12 +371,32 @@ The directories in the OS directory are outlined in Figure \ref{figure:osdirecto
 \label{figure:osdirectory}
 \end{figure}
 
+The OS directories include the following:
+
 \begin{itemize}
-\item wsdl
+
+\item {\tt data} is a directory that holds test problems. These test problems are used by the {\tt unitTest}. Many of these files are also used to illustrate how the {\tt OSSovlerService} works. See Section \ref{section:ossolverservice}.
+
+\item {\tt doc} is the directory with documentation, include this {\it OS User's Manual.}
+
+\item {\tt examples} is a directory with code examples that illustrate various aspects of the OS project.    These are described in Section \ref{section:examples}.
+
+\item {\tt inc} is the directory with the config\_os.h file which has information about which projects are included in the distribution.
+
+\item {\tt schemas} is the directory that contains the W3C XSD (see \url{www.w3c.org}) schemas that are behind the OS standards. These are described in more detail in Section \ref{section:schemadescriptions}.
+
+\item {\tt src} is the directory with all of the source code for the OS Library and for the executable {\tt OSSolverService}. The OS Library components are described in Section \ref{section:oslibrary}.
+
+\item {\tt stylesheets} this directory contains the XSLT stylesheet that is used to transform the solution instance in OSrL format into HTML so that it can be displayed in a browser.
+
+\item {\tt test} this directory contains the {\tt unitTest}.
+
+
+\item  {\tt wsdl} is a directory of WSDL (Web Services Discovery Language) files. These are used to specify the inputs and outputs for the methods provided by a Web service. The most relevant file for the current version of the OS project is {\tt OShL.wsdl}.  This describes the set of inputs and outputs for the methods implemented in the {\tt OSSolverService}. See Section \ref{section:ossolverservice}.
 \end{itemize}
 
 
-kipp -- don't forget to mention the schemas, data, xslt files, etc.
+
 
 \subsection{Key Protocols}\label{section:schemadescriptions}
 
