@@ -31,7 +31,7 @@
 \contentsline {subsubsection}{\numberline {7.3.4}The {\tt getJobID} Service Method}{21}
 \contentsline {subsubsection}{\numberline {7.3.5}The {\tt knock} Service Method}{21}
 \contentsline {subsubsection}{\numberline {7.3.6}The {\tt kill} Service Method}{22}
-\contentsline {subsubsection}{\numberline {7.3.7}Summary}{22}
+\contentsline {subsubsection}{\numberline {7.3.7}Summary}{23}
 \contentsline {section}{\numberline {8}Setting up a Solver Service with Tomcat}{24}
 \contentsline {section}{\numberline {9}Examples}{24}
 \contentsline {subsection}{\numberline {9.1}AMPL Client: Hooking AMPL to Solvers}{24}
