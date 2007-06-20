@@ -15,6 +15,7 @@
 
 
 \newcommand{\figurepath}{./figures}
+\newcommand{\bibpath}{/home/kmartin/files/misc}
 \newcommand{\figfiletype}{pdf}
 
 % Define the hangref environment used for the References list:
@@ -27,7 +28,6 @@
 \marginparwidth 0pt\marginparsep 0pt \topskip 0pt\headsep
 0pt\headheight 0pt \oddsidemargin 0pt\evensidemargin 0pt
 \textwidth 6.5in \topmargin 0pt\textheight 9.0in
-
 \newtheorem{theorem}{Theorem}
 
 
@@ -81,7 +81,6 @@
    % Set path to folder containing figures
 \newcommand{\FigureFolder}{figures}
  
-
 \begin{document}
 
 \title{Optimization Services 1.0 User's Manual }
@@ -399,6 +398,21 @@ The OS directories include the following:
 
 
 \subsection{Key Protocols}\label{section:schemadescriptions}
+
+The objective of  (OS) is to provide a set of standards for representing optimization instances, results, solver options, and communication between clients and solvers in a distributed environment using Web Services.  These standards are specified by W3C XSD schemas. The schemas for the OS project are contained in the {\tt schemas} folder under the {\tt OS} root. There are numerous schemas in this directory that are part of the OS standard. For a full description of all the schemas see  Ma \cite{junma2005}.  We briefly discuss the standards most relevant to the current version of the OS project. 
+
+\begin{itemize}
+
+
+\item[] {\bf OSiL (Optimization Services Instance Language):} an
+XML-based computer language for representing instances of large-scale
+optimization problems including linear programs, mixed-integer programs,
+quadratic programs, and very general nonlinear programs.
+
+
+
+
+\end{itemize}
 
 Explain OSiL, OSrL, OSoL, and OSpL. Also, OSnL
 
@@ -1033,6 +1047,7 @@ option ipopt_options "http://128.135.130.17:8080/os/OSSolverService.jws";
 \section{References}
 
 Kipp -- put in some links to OSiL paper and INFORMS talks.
+\bibliography{\bibpath/kippbib}
 
 \end{document}
 

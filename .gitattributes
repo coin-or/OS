@@ -116,6 +116,7 @@ OS/doc/figures/OSSolverServiceLocal.pdf -text
 OS/doc/figures/OSSolverServiceLocal.png -text
 OS/doc/figures/asynchronous1.pdf -text
 OS/doc/figures/asynchronous2.pdf -text svneol=unset#unset
+OS/doc/osUsersManual_1.bbl -text
 OS/doc/osUsersManual_1.pdf -text
 OS/doc/osUsersManual_1.tex -text
 OS/doc/osUsersManual_1.toc -text
