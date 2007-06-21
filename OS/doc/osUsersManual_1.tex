@@ -15,7 +15,7 @@
 
 
 \newcommand{\figurepath}{./figures}
-\newcommand{\bibpath}{/home/kmartin/files/misc}
+\newcommand{\bibpath}{/Users/kmartin/Documents/files/misc}
 \newcommand{\figfiletype}{pdf}
 
 % Define the hangref environment used for the References list:
@@ -405,16 +405,24 @@ The objective of  (OS) is to provide a set of standards for representing optimiz
 
 
 \item[] {\bf OSiL (Optimization Services Instance Language):} an
-XML-based computer language for representing instances of large-scale
+XML-based language for representing instances of large-scale
 optimization problems including linear programs, mixed-integer programs,
 quadratic programs, and very general nonlinear programs.
 
+\item[] {\bf OSrL (Optimization Services Result Language):}  an
+XML-based language for representing the solution of large-scale
+optimization problems including linear programs, mixed-integer programs,
+quadratic programs, and very general nonlinear programs.
 
+\item[] {\bf OSoL (Optimization Services Result Language):}  an
+XML-based language for representing options that get passed to an optimization solver. 
+
+\item[] {\bf OSnL (Optimization Services Nonlinear Language):}  The OSnL schema is imported by the OSiL schema and is used to represent the nonlinear part of an optimization instane. This is explained in greater detail in Section \ref{section:osexpressiontreeclass}.
+
+\item[]   {\bf OSpL (Optimization Services Process Language):} 
 
 
 \end{itemize}
-
-Explain OSiL, OSrL, OSoL, and OSpL. Also, OSnL
 
 \section{The OS Library Components}\label{section:oslibrary}
 
@@ -423,6 +431,14 @@ Explain OSiL, OSrL, OSoL, and OSpL. Also, OSnL
 The {\tt OSAgent}  part of the library is used to facilitate communication with remote solvers. It is not used if the solver is invoked locally (i.e. on the same machine). 
 
 \subsection{OSCommonInterfaces}
+
+Mention the OSnL node class. List which NL operators can be used.
+
+\subsubsection{The OSInstance Class}\label{section:osinstanceclass}
+
+\subsubsection{The OSExpressionTree Class}\label{section:osexpressiontreeclass}
+
+Exlplain nonlinear nodes here an give an example. 
 
 \subsection{OSModelInterfaces}\label{section:osmodelinterfaces}
 
@@ -496,9 +512,11 @@ In the examples above the problem instance was assumed to be read from a file in
 
 \subsection{OSUtils}
 
-\section{OSInstance: A General Instance API}\label{section:osinstance}
+\section{The  OSInstance API}\label{section:osinstance}
 
 \subsection{Get Methods}
+
+Don't forget to mention getting prefix an postfix. Illustrate some of this like in the unitTest.
 
 \subsection{Set Methods}
 
@@ -634,7 +652,7 @@ The file {\tt demo.osol} is
 
 \subsection{Solving Problems Remotely with Web Services}
 
-We now provide examples that illustrate using the {\tt OSSolverService} executable to call a remote solver service.   By remote solver service we mean a solver service that is called using Web Services.  The OS implementation  of the solver service  uses Apache Tomcat. See \url{tomcat.apache.org}. The Web Service running on the server is a Java program based on Apache Axis. See \url{ws.apache.org/axis}. This is described in greater detail in Section \ref{section:tomcat}.  This Web Service is called {\tt OSSolverService.jws}. It is not necessary to use the Tomcat/Axis combination.
+In many cases the client machine may be a ``weak client'' and  using a more powerful machine to solve a hard optimization instance is required. Indeed, one of the major purposes of Optimization Services is to facilitate optimization in a distributed environment.   We now provide examples that illustrate using the {\tt OSSolverService} executable to call a remote solver service.   By remote solver service we mean a solver service that is called using Web Services.  The OS implementation  of the solver service  uses Apache Tomcat. See \url{tomcat.apache.org}. The Web Service running on the server is a Java program based on Apache Axis. See \url{ws.apache.org/axis}. This is described in greater detail in Section \ref{section:tomcat}.  This Web Service is called {\tt OSSolverService.jws}. It is not necessary to use the Tomcat/Axis combination.
 
 
 
