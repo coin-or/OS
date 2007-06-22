@@ -3,7 +3,8 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/OSoL.xsd">
     <general>
-        <serviceURI>http://128.135.130.17:8080/os/OSSolverService.jws</serviceURI>
+       
+        <instanceLocation locationType="local">/home/kmartin/files/code/OSRepository/linear/continuous/pilot.osil</instanceLocation>
     </general>
     <optimization>
     	<other name="os_solver">cbc</other>

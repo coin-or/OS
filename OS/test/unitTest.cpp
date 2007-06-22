@@ -827,7 +827,8 @@ int main(int argC, char* argV[])
 		osinstance = osilreader->readOSiL( &osil);
 		OSExpressionTree* expTree = osinstance->getNonlinearExpressionTree( -1);
 		std::vector<OSnLNode*> postfixVec;
-		postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();
+		//postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();
+		postfixVec = osinstance->getNonlinearExpressionTreeInPostfix( -1);
 		unsigned int n = postfixVec.size();
 		unsigned int i;
 		std::string *nodeNames1 = new std::string[ n];
@@ -845,8 +846,8 @@ int main(int argC, char* argV[])
 		// now create back the expression tree
 		expTree->m_treeRoot = prefixVec[ 0]->createExpressionTreeFromPrefix( prefixVec);
 		// now get postfix vector again and compare with original
-		//postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();
-		postfixVec = osinstance->getNonlinearExpressionTreeInPostfix( -1);
+		postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();
+		//postfixVec = osinstance->getNonlinearExpressionTreeInPostfix( -1);
 		if(postfixVec.size() != n) throw ErrorClass(" Problem with creating expression trees");
 		std::cout << std::endl << std::endl;
 		for (i = 0 ; i < n; i++){
