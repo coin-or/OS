@@ -393,19 +393,8 @@ void solve(){
 		}
 	}
 	catch(const ErrorClass& eclass){
-		OSResult *osresult = NULL;
-		OSrLWriter *osrlwriter = NULL;
-		osrlwriter = new OSrLWriter();
-		osresult = new OSResult();
-		osresult->setGeneralMessage( eclass.errormsg);
-		osresult->setGeneralStatusType( "error");
-		std::string osrl = osrlwriter->writeOSrL( osresult);
-		if(osoptions->osrlFile != "") fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
-		else cout << osrl << endl;
-		delete osresult;
-		osresult = NULL;
-		delete osrlwriter;
-		osrlwriter = NULL;
+		if(osoptions->osrlFile != "") fileUtil->writeFileFromString(osoptions->osrlFile, eclass.errormsg);
+		else cout << eclass.errormsg << endl;
 	}	
 }//end solve
 

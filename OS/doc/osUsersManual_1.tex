@@ -789,6 +789,49 @@ In Section  \ref{section:amplclient}  we describe the {\tt amplClient} executabl
 
 \subsubsection{Using MATLAB}
 
+Linear, integer, and quadratic problems can be formulated in MATLAB and then optimized either locally or over the network using the OS Library. The {\tt OSMatlab} class functions much like {\tt OSnl2osil} and {\tt OSmps2osil} and takes MATLAB arrays and creates and OSiL instance.  This class is part of the OS library. In order to use the OS library with MATLAB the user should do the following.  In order to use the {\tt OSMatlab} class it is necessary to  compile {\tt matlabSolver.cpp}  into  a MATLAB Executable file.  The {\tt matlabSolver.cpp} file is in the {\tt OSModelInterfaces} directory even though it is not part of the OS library. The following steps should be followed.
+
+\begin{itemize}
+
+
+\item[{\bf Step  1:}] In the project root run {\tt make install.}
+
+\item[{\bf Step  2:}]   Either leave {\tt matlabSolver.cpp} in the  the {\tt OSModelInterfaces} or copy it to another desired directory.
+
+\item[{\bf Step 3:}] Edit the MATLAB  {\bf mexopts.sh} (UNIX) or {\tt mexopts.bat}  so that the {\tt CXXFLAGS} option includes the header files in the {\tt cppad} directory and the {\tt include} directory in the project root. For example, it  should look like:
+\begin{verbatim}
+CXXFLAGS='-fno-common -no-cpp-precomp -fexceptions
+    -I/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/   
+    -I/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/include'
+\end{verbatim}
+
+Next edit the {\tt CXXLIBS} flag so that the OS and supporting libraries are included. For example, it should look like:
+
+\begin{verbatim}
+CXXLIBS="$MLIBS -lstdc++     
+    -L/Users/kmartin/Documents/files/code/ipopt/macosx/Ipopt-3.2.2/lib   
+    -L/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/lib     
+    -lOS  -lIpopt -lOsiCbc -lOsiClp -lCbc -lCgl -lOsi -lClp -lCoinUtils  -lm"
+\end{verbatim}
+
+For a UNIX system the {\tt mexopts.sh} file will usually be found in a directory with the release name in {\tt  ~/.matlab}. On a Windows system, the {\tt  mexopts.bat} file will usually be in a directory with the release name in {\tt C:$\backslash$Documents and Settings$\backslash$Username$\backslash$Application Data$\backslash$Mathworks$\backslash$MATLAB}
+
+
+\item[{\bf Step 4:}]  Build the MATLAB executable file. Start MATLAB and in the MATLAB command window connect to the directory containing the file {\tt matlabSolver.cpp}.  Execute the command:
+
+\begin{verbatim}
+mex -v matlabSolver.cpp
+\end{verbatim}
+
+On a MAC OS X the resulting executable will be named {\tt matlabSolver.mexmac}. On the Windows system the file we named {\tt matlabSolver.mexw32}.
+
+\item[{\bf Step 5:}]  Set the MATLAB path to include the directory with the {\tt matlabSolver} executable. Also, put  the $m-file$ {\tt callMatlabSolver.m} in a directory which is on a MATLAB path.  The  {\tt callMatlabSolver.m} m-file is in the OSModelInterfaces directory. 
+
+\end{itemize}
+
+
+To use the {\tt matlabSolver} it is necessary to put the coefficients  from a linear, integer, or quadratic problem into MATLAB arrays. 
+
 
 
 \subsection{OSParsers}

@@ -3,9 +3,12 @@
 #include <string>
 #include "mex.h"
 #include <stdlib.h>
-#include "OSMatlab.h"
+
+
+// OS includes
 #include "OSDataStructures.h"
 #include "OSParameters.h"
+#include "OSMatlab.h"
 
 
 
@@ -48,8 +51,8 @@ void mexFunction( int  nlhs, mxArray   *plhs[], int  nrhs, const mxArray *prhs[]
      //
      // Check for proper number of input and output arguments
      mexPrintf("BEGIN PROCESSING DATA\n");
-     if (nrhs != 13) {
-          mexErrMsgTxt("Thirteen input arguments are required.");
+     if (nrhs != 15) {
+          mexErrMsgTxt("Fifteen input arguments are required.");
      }
      
      
@@ -181,16 +184,30 @@ void mexFunction( int  nlhs, mxArray   *plhs[], int  nrhs, const mxArray *prhs[]
      if(  !mxIsEmpty( prhs[ 11]) ){
            matlabModel->instanceName = mxArrayToString( prhs[ 11]);
      }
+     //
      buf = mxArrayToString( prhs[ 12]);
      const char *password = "chicagoesmuyFRIO";
      if( strcmp(buf,  password) != 0) mexErrMsgTxt(" Incorrect Password\n");
+     //
+     // get the name of the solver
+      matlabModel->sSolverName = mxArrayToString( prhs[ 13]);    
+      printf("WE ARE USING SOLVER %s\n", &matlabModel->sSolverName[0]);
+     //
+     // get the name of the solver service
+      matlabModel->sAgentAddress = mxArrayToString( prhs[ 14]);    
+      printf("WE ARE USING AGENT %s\n", &matlabModel->sAgentAddress[0]);
+     //
      // create the OSInstance
      mexPrintf("CREATE THE INSTANCE \n");
      matlabModel->createOSInstance();
      mexPrintf("CALL THE REMOTE SERVER \n");
-    sTest = matlabModel->solve();
+     sTest = matlabModel->solve();
+     std::string osil = matlabModel->osil;
+     char *ch = &osil[0];
+     printf("HERE IS THE INSTANCE %s\n", ch);
      mexPrintf("DONE WITH THE REMOTE CALL \n");
-    // mexPrintf(&sTest[0] );
+     mexPrintf("HERE IS THE SOLUTION \n");
+     mexPrintf(&sTest[0] );
     //char *str[100];
      //plhs[0]= mxCreateCharMatrixFromStrings(  1,    (const char **)str); 
      //plhs = 'DOES THIS WORK';

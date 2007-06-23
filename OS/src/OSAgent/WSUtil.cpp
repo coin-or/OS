@@ -129,7 +129,7 @@ string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned int se
 		#else
 		close( sock);
 		#endif	
-		return ret_message.str();
+		return ret_message.str();  
 	}
 	catch(const ErrorClass& eclass){
 		OSResult osresult;
