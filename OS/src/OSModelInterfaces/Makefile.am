@@ -62,9 +62,48 @@ if COIN_HAS_ASL
 AM_CPPFLAGS += 	$(ASL_CPPFLAGS)
 endif
 
-if COIN_HAS_LINDO
-  AM_CPPFLAGS += -I`$(CYGPATH_W) $(LINDOINCDIR)` 
+
+if COIN_HAS_CPX
+  AM_CPPFLAGS += \
+	-I`$(CYGPATH_W) $(CPXINCDIR)` \
+	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
 endif
+
+
+if COIN_HAS_GLPK
+  AM_CPPFLAGS += \
+	-I`$(CYGPATH_W) $(GLPKINCDIR)` \
+	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
+endif
+
+if COIN_HAS_DYLP
+  AM_CPPFLAGS += \
+    -I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
+    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/Dylp` \
+    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/DylpStdLib` \
+	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiDylp` 
+endif
+
+
+if COIN_HAS_SYMPHONY
+  AM_CPPFLAGS += \
+    -I`$(CYGPATH_W) $(SYMPHONYSRCDIR)/include` \
+	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiSym` 
+endif
+
+
+if COIN_HAS_LINDO
+  AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(LINDOINCDIR)` 
+endif
+
+if COIN_HAS_KNITRO
+  AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(KNITROINCDIR)` 
+endif
+
+if COIN_HAS_IPOPT
+  AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(IPOPTINCDIR)` 
+endif
+
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin

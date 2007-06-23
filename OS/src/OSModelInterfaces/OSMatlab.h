@@ -26,7 +26,7 @@
 //#include "FileUtil.h"  
 //#include "OSConfig.h" 
 //#include "CoinSolver.h"
-//#include "DefaultSolver.h"  
+#include "DefaultSolver.h"  
 #include "OSDataStructures.h"
 #include "OSSolverAgent.h" 
 #include "ErrorClass.h" 
@@ -61,7 +61,10 @@ public:
   int *qIndex1;
   int *qIndex2;
   double *qVal;
+  DefaultSolver *solverType;
   std::string instanceName;
+  std::string sSolverName;
+  std::string sAgentAddress;
   std::string solve();
   void createOSInstance();
  	OSInstance *osinstance;

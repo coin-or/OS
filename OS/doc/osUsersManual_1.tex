@@ -748,7 +748,46 @@ The following {\tt  OSnLNode} classes are currently supported.
 
 \subsection{OSModelInterfaces}\label{section:osmodelinterfaces}
 
+This part of the OS library is designed to help integrate the OS standards with other standards and modeling systems. 
 
+\subsubsection{Converting MPS Files}
+
+The MPS standard is still a popular format for representing linear and integer programming problems.  In {\tt OSModelInterfaces,} there is a class {\tt OSmps2osil} that can be used to convert files in MPS format into the OSiL standard. It is used as follows.
+
+\begin{verbatim}
+OSmps2osil *mps2osil = NULL;
+DefaultSolver *solver  = NULL;
+solver = new CoinSolver();
+solver->sSolverName = "cbc";
+mps2osil = new OSmps2osil(  mpsFileName);
+mps2osil->createOSInstance() ;
+solver->osinstance = mps2osil->osinstance;
+solver->solve();
+\end{verbatim}
+
+The {\tt OSmps2osil} class constructor takes a string which should be the file name of the instance in MPS format. The constructor then uses the CoinUtils library to read and parse the MPS file.  The class method {\tt createOSInstance} then builds  an in-memory {\tt osintance} object  that can be used by a solver. 
+
+
+\subsubsection{Converting AMPL nl Files}
+
+AMPL is a popular modeling language that saves  model instances in the AMPL nl format.  The {\tt OSModelInterfaces} library provides a class, {\tt OSnl2osil} for reading in an nl file and creating a corresponding in-memory osinstance object. It is used as follows. 
+
+\begin{verbatim}
+OSnl2osil *nl2osil = NULL;
+DefaultSolver *solver  = NULL;
+solver = new LindoSolver();
+nl2osil = new OSnl2osil( nlFileName); 
+nl2osil->createOSInstance() ;
+solver->osinstance = nl2osil->osinstance;	
+solver->solve();
+\end{verbatim}
+
+
+The {\tt OSnl2osil} class works much like the {\tt OSmps2osil} class. The {\tt OSnl2osil} class constructor takes a string which should be the file name of the instance in nl format. The constructor then uses the AMPL ASL library routines to read and parse the nl file. The class method {\tt createOSInstance} then builds  an in-memory {\tt osintance} object  that can be used by a solver. 
+
+In Section  \ref{section:amplclient}  we describe the {\tt amplClient} executable that acts a ``solver'' for AMPL. The {\tt amplClient} uses the {\tt OSnl2osil} class to convert the instance in nl format to OSiL format before calling a solver either locally or remotely. 
+
+\subsubsection{Using MATLAB}
 
 
 

@@ -10,6 +10,21 @@
             <body>
                 <h1>Optimization Solution</h1>
                 
+                
+                <h2>General Status:</h2>
+                <p>
+                    <xsl:for-each select="/os:osrl/os:resultHeader/os:generalStatus">
+                        <b> <xsl:value-of select="@type"/> </b>
+                    </xsl:for-each>
+                </p>
+                
+                <h2>Message:</h2>
+                <p>
+                    <xsl:for-each select="/os:osrl/os:resultHeader/os:message">
+                        <b> <xsl:value-of select="text()"/> </b>
+                    </xsl:for-each>
+                </p>
+                
                 <h2>Solver Used</h2>
                 <p>
                     <xsl:for-each select="/os:osrl/os:resultHeader/os:serviceName">
@@ -19,7 +34,7 @@
 
                 <h2>Objective Function Value</h2>
                 <p>
-                    <xsl:for-each select="/os:osrl/os:resultData/os:optimization/os:solution/os:objectives/os:values/obj">
+                    <xsl:for-each select="/os:osrl/os:resultData/os:optimization/os:solution/os:objectives/os:values/os:obj">
                        <b> <xsl:value-of select="text()"/> </b>
                     </xsl:for-each>
                 </p>

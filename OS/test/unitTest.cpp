@@ -107,6 +107,7 @@
 #include "OSmps2osil.h"   
 #include "Base64.h"
 #include "CommonUtil.h"
+#include "OsiGlpkSolverInterface.hpp"
 
 #ifdef COIN_HAS_KNITRO    
 #include "KnitroSolver.h"
@@ -123,7 +124,7 @@
 #ifdef COIN_HAS_IPOPT    
 #include "IpoptSolver.h"
 #endif 
-
+ 
 
 #include <string>
 #include <time.h>
@@ -159,7 +160,7 @@ int main(int argC, char* argV[])
   	// Set directory containing mps data files.
   	std::string dataDir;
     dataDir = dirsep == '/' ? "../data/" : "..\\data\\";
-	std::string osol = "<osol></osoL>";
+	std::string osol = "<osol></osol>";
 	nlFileName = dataDir + "hs71.nl";
 	mpsFileName =  dataDir + "parinc.mps";
 	//parserTestOSiLFileName = dataDir + "osa-60.osil"; 
