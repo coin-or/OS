@@ -1,4 +1,3 @@
-
 % the number of constraints
 numCon = 4;
 % the number of variables
@@ -16,7 +15,14 @@ ObjType = 1;
 % leave Q empty if there are no quadratic terms
 Q = [];
 prob_name = 'ParInc Example'
-password = '*****';
+password = 'chicagoesmuyFRIO';
 %
 %
-callMatLabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, VarType, Q, prob_name, password)
+%the solver
+solverName = 'lindo';
+%the remote service service address
+%if left empty we solve locally
+serviceAddress='http://128.135.130.17:8080/os/OSSolverService.jws';
+% now solve
+callMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, ... 
+    VarType, Q, prob_name, password, solverName, serviceAddress)

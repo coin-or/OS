@@ -45,6 +45,10 @@
  * COIN - DyLP
  * 1) parincLinear.osil
  * 
+ * GLPK
+ * 1) p0033.osil
+ * 
+ * 
  * Cplex
  * 1) p0033.osil
  * 
@@ -510,6 +514,38 @@ int main(int argC, char* argV[])
 		return 0;
 	}	
 	#endif
+	//
+	//
+	//
+	#ifdef COIN_HAS_GLPK
+	try{
+		ok = true; 
+		osilFileName = dataDir + "p0033.osil";
+		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		solver = new CoinSolver();
+		solver->sSolverName = "glpk";
+		solver->osil = osil;
+		solver->osol = osol;  
+		solver->osinstance = NULL; 
+		cout << "call the GLPK Solver for p0033" << endl;
+		solver->solve();
+		cout << "Here is the GLPK solver solution for p0033" << endl;
+		cout << solver->osrl << endl;
+		check = 3089;
+		ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		if(ok == false) throw ErrorClass(" Fail unit test with GLPK on p0033.osil");
+		delete solver;
+		solver = NULL;
+		unitTestResult << "Solved problem p0033.osil with GLPK" << std::endl;
+	}
+	catch(const ErrorClass& eclass){
+		cout << "OSrL =  " <<  solver->osrl <<  endl;
+		cout << endl << endl << endl;
+		cout << eclass.errormsg << endl;
+		return 0;
+	}	
+	#endif
+	//
 	//
 	//
 	#ifdef COIN_HAS_CPX

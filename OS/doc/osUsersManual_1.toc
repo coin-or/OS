@@ -7,7 +7,7 @@
 \contentsline {subsection}{\numberline {2.5}Bug Reporting}{7}
 \contentsline {subsection}{\numberline {2.6}Obtaining the Server Software}{7}
 \contentsline {subsection}{\numberline {2.7}Platforms}{7}
-\contentsline {section}{\numberline {3}The OS Project Components}{7}
+\contentsline {section}{\numberline {3}The OS Project Components}{8}
 \contentsline {subsection}{\numberline {3.1}Key Protocols}{11}
 \contentsline {section}{\numberline {4}The OS Library Components}{15}
 \contentsline {subsection}{\numberline {4.1}OSAgent}{15}
@@ -15,7 +15,7 @@
 \contentsline {subsubsection}{\numberline {4.2.1}The OSInstance Class}{15}
 \contentsline {subsubsection}{\numberline {4.2.2}The OSExpressionTree OSnLNode Classes}{15}
 \contentsline {subsection}{\numberline {4.3}OSModelInterfaces}{17}
-\contentsline {subsubsection}{\numberline {4.3.1}Converting MPS Files}{18}
+\contentsline {subsubsection}{\numberline {4.3.1}Converting MPS Files}{17}
 \contentsline {subsubsection}{\numberline {4.3.2}Converting AMPL nl Files}{18}
 \contentsline {subsubsection}{\numberline {4.3.3}Using MATLAB}{18}
 \contentsline {subsection}{\numberline {4.4}OSParsers}{20}
@@ -30,18 +30,18 @@
 \contentsline {subsection}{\numberline {7.1}OSSolverService Input Parameters}{22}
 \contentsline {subsection}{\numberline {7.2}Solving Problems Locally}{24}
 \contentsline {subsection}{\numberline {7.3}Solving Problems Remotely with Web Services}{25}
-\contentsline {subsubsection}{\numberline {7.3.1}The {\tt solve} Service Method}{26}
+\contentsline {subsubsection}{\numberline {7.3.1}The {\tt solve} Service Method}{25}
 \contentsline {subsubsection}{\numberline {7.3.2}The {\tt send} Service Method}{27}
 \contentsline {subsubsection}{\numberline {7.3.3}The {\tt retrieve} Service Method}{29}
 \contentsline {subsubsection}{\numberline {7.3.4}The {\tt getJobID} Service Method}{30}
 \contentsline {subsubsection}{\numberline {7.3.5}The {\tt knock} Service Method}{30}
 \contentsline {subsubsection}{\numberline {7.3.6}The {\tt kill} Service Method}{31}
-\contentsline {subsubsection}{\numberline {7.3.7}Summary}{32}
+\contentsline {subsubsection}{\numberline {7.3.7}Summary}{31}
 \contentsline {section}{\numberline {8}Setting up a Solver Service with Tomcat}{33}
 \contentsline {section}{\numberline {9}Examples}{33}
 \contentsline {subsection}{\numberline {9.1}AMPL Client: Hooking AMPL to Solvers}{33}
-\contentsline {subsection}{\numberline {9.2}CppAD: Using the CppAD Algorithmic Differentiation Package}{35}
-\contentsline {subsection}{\numberline {9.3}File Upload: Using a File Upload Package}{35}
-\contentsline {subsection}{\numberline {9.4}Instance Generator: Using the OSInstance API to Generate Instances}{35}
-\contentsline {section}{\numberline {10}References}{35}
-\contentsline {section}{\numberline {11}Appendix}{35}
+\contentsline {subsection}{\numberline {9.2}CppAD: Using the CppAD Algorithmic Differentiation Package}{34}
+\contentsline {subsection}{\numberline {9.3}File Upload: Using a File Upload Package}{34}
+\contentsline {subsection}{\numberline {9.4}Instance Generator: Using the OSInstance API to Generate Instances}{34}
+\contentsline {section}{\numberline {10}References}{34}
+\contentsline {section}{\numberline {11}Appendix}{34}

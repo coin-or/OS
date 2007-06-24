@@ -90,6 +90,7 @@ OS/data/rosenbrockmod.osrl -text
 OS/data/send.osol -text
 OS/data/sendWithJobID.osol -text
 OS/data/showtree -text
+OS/data/template.m -text
 OS/data/test.config -text
 OS/data/testOperators.osil -text
 OS/data/testRemoteKnock.config -text
