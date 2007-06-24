@@ -107,12 +107,15 @@
 #include "OSmps2osil.h"   
 #include "Base64.h"
 #include "CommonUtil.h"
-#include "OsiGlpkSolverInterface.hpp"
+
 
 #ifdef COIN_HAS_KNITRO    
 #include "KnitroSolver.h"
 #endif 
 
+#ifdef COIN_HAS_GLPK
+#include <OsiGlpkSolverInterface.hpp>
+#endif
 
 
 #ifdef COIN_HAS_ASL
