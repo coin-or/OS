@@ -873,6 +873,14 @@ serviceAddress='http://128.135.130.17:8080/os/OSSolverService.jws';
 callMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, ... 
     VarType, Q, prob_name, password, solverName, serviceAddress)
 \end{verbatim}
+This example m-file is in the {\tt data} directory and is file {\tt parincLinear.m}. Note that in addition to the problem formulation we can specify which solver to use through the {\tt solverName} variable.  If solution with a remote solver is desired this can be specified with the {\tt serviceAddress} variable.  If the {\tt serviceAddress} is left empty, i.e.
+\begin{verbatim}
+serviceAddress='';
+\end{verbatim}
+then a local solver is used. In this case  it is crucial that the appropriate solver is linked in with the {\tt matlabSolver} executable using the {\tt CXXLIBS} option. 
+
+
+The data directory  also contains the m-file  {\tt template.m} which contains extensive comments about how to formulate the problems in MATLAB.  A second example which is a quadratic problem is given in the Appendix. The appropriate m-file is {\tt markowitz.m}.
 
 
 
@@ -1585,6 +1593,159 @@ This is the complete OSiL representation for the optimization problem given in (
 
 }% end
 
+\vfill
+\newpage
+
+We illustrate how to build a simple Markowitz portfolio optimization problem (a quadratic programming problem) from {\bf template.m}. First copy {\bf template.m} to {\bf markowitz.m}. 
+
+Assume that there are three stocks (variables) and two constraints (do not count the upper limit investment of .75 on the variables.).
+
+
+\begin{verbatim}
+% the number of constraints
+numCon = 2;
+% the number of variables
+numVar = 3;
+\end{verbatim}
+
+
+
+All the variables are continuous
+
+
+\begin{verbatim}
+VarType='CCC';
+\end{verbatim}
+
+
+Next define the constraint upper and lower bounds. There are two constraints. A unity constraint (an $=$) and a lower bound on portfolio return of .15 (an $\ge$). These two constraints are expressed as
+
+
+
+\begin{verbatim}
+BU = [1  inf];
+BL = [1   .15];
+\end{verbatim}
+
+
+
+The variables are nonnegative and have upper limits of .75 (no stock can comprise more than 75\% of the portfolio).  This is written as
+
+
+
+
+\begin{verbatim}
+VL = [];
+VU = [.75 .75 .75];
+\end{verbatim}
+
+
+
+There are no nonzero linear coefficients in the objective function, but the objective function vector must always be defined and the number of components of this vector is the number of variables. 
+
+
+
+\begin{verbatim}
+OBJ = [0 0 0 ]
+\end{verbatim}
+
+
+ Now the linear constraints.   In the model the two linear constraints are
+ \begin{eqnarray*}
+ 0.3221 x_{1} +   0.0963x_{2} +    0.1187x_{3}  &\ge& .15 \\
+x_{1} + x_{2} + x_{3} &=& 1 
+ \end{eqnarray*}
+ 
+
+ 
+ These are expressed as
+ 
+
+ 
+ \begin{verbatim}
+ A = [ 1 1 1  ;
+  0.3221   0.0963   0.1187 ];
+ \end{verbatim}
+ 
+
+Now for the quadratic terms. The only quadratic terms are in the objective function. The objective function is
+
+
+\begin{eqnarray*}
+\min  0.4253 x_{1}^{2} +  0.4458 x_{2}^{2} + 0.2314 x_{3}^{2} + 2 \times 0.1852 x_{1} x_{2} \\ + 2 \times 0.1393 x_{1} x_{3} + 2 \times
+ 0.1388 x_{2} x_{3}
+\end{eqnarray*}
+
+
+ The quadratic matrix $Q$ has 4 rows and a column for each quadratic term. In this example there are six quadratic terms.  The first row of $Q$ is the row index where the terms appear. By convention, the objective function has index -1 and we count constraints starting at 0.  The first row of $Q$ is
+
+ 
+ \begin{verbatim}
+ -1 -1 -1 -1 -1 -1
+ \end{verbatim}
+
+The second row of $Q$ is the index of the first variable in the quadratic term. We use zero based counting.  Variable $x_{1}$ has index, variable  $x_{2}$ has index 1, and variable $x_{3}$ has index 2.  Therefore, the second row of $Q$ is
+
+
+
+\begin{verbatim}
+0 1 2 0 0 1
+\end{verbatim} 
+
+
+
+The third row of $Q$ is the index of the second variable in the quadratic term.   Therefore, the third row of $Q$ is
+
+
+
+\begin{verbatim}
+0 1 2  1 2 2
+\end{verbatim} 
+
+
+
+The last (fourth) row is the coefficient. Therefore, the fourth row is
+
+
+
+
+
+\begin{verbatim}
+ .425349654  .445784443   0.231430983   
+ .370437388  .27862509 .27763384
+\end{verbatim}
+
+
+The quadratic matrix is
+
+
+
+\begin{verbatim}
+Q = [ -1 -1 -1 -1 -1 -1;
+0 1 2 0 0 1 ;
+0 1 2 1 2 2;
+.425349654  .445784443   0.231430983   ...
+.370437388  .27862509 .27763384];
+\end{verbatim}
+
+
+Finally, name the problem, specify the solver (in this case {\tt ipopt}), the service address (and password if required by the service), and call the solver.
+
+
+
+\begin{verbatim}
+prob_name = 'Markowitz Example from Anderson, Sweeney, Williams, and Martin'
+password = 'chicagoesmuyFRIO';
+%
+%the solver
+solverName = 'ipopt';
+%the remote service service address
+%if left empty we solve locally
+serviceAddress='http://128.135.130.17:8080/os/OSSolverService.jws';
+% now solve
+callMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, VarType, ...
+     Q, prob_name, password, solverName, serviceAddress)
+\end{verbatim}
 
 \bibliography{\bibpath/kippbib}
 
