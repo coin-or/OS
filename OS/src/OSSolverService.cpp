@@ -84,6 +84,12 @@
 
 #include "osOptionsStruc.h"  
 
+
+using std::cout;
+using std::endl;
+using std::ostringstream;
+using std::string;
+
     
 
 #define MAXCHARS 5000 
@@ -118,9 +124,7 @@ string getSolverName( std::string osol);
 
 
 
-using std::cout;
-using std::endl;
-using std::ostringstream;
+
 
 int main(int argC, const char* argV[])
 {  
