@@ -11,3 +11,14 @@ Cbc           https://projects.coin-or.org/svn/Cbc/stable/1.1/Cbc
 DyLP 		  https://projects.coin-or.org/svn/DyLP/stable/1.2/DyLP
 SYMPHONY 	  https://projects.coin-or.org/svn/SYMPHONY/stable/5.1/SYMPHONY
 cppad         https://projects.coin-or.org/svn/CppAD/trunk/cppad
+Win32/v7/libClp       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/libClp
+Win32/v7/libCbc       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/libCbc
+Win32/v7/libCgl       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/libCgl
+Win32/v7/libCoinUtils       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/libCoinUtils
+Win32/v7/libVol       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/libVol
+Win32/v7/libOsi       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/libOsi
+Win32/v7/libOsiCbc       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/libOsiCbc
+Win32/v7/libOsiClp       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/libOsiClp
+Win32/v7/libOsiVol       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/libOsiVol
+
+
