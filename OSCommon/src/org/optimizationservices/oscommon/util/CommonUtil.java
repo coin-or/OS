@@ -135,7 +135,7 @@ public class CommonUtil{
 		int iNumberIPAddress = (mIPAddress == null)?0:mIPAddress.length;
 		for(i = 0; i < iNumberIPAddress; i++){
 			sIP = mIPAddress[i].getHostAddress();
-			if(!sIP.startsWith("0")) return sIP;
+			if(!sIP.trim().startsWith("0") && sIP.indexOf("127.0.0.1") < 0) return sIP;
 		}
 		return "localhost";
 	}//getIPAddress
@@ -694,7 +694,7 @@ public class CommonUtil{
 					"Aardal's paper on mixed integer programming", "No feasible solution.");
 		}
 		 */
-		System.out.println(CommonUtil.getIPAddress());
+		System.out.println(CommonUtil.getJobID(null));
 		
 	}//main
 }//class CommonUtil
