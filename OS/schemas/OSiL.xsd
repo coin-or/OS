@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- edited with XMLSpy v2005 sp1 U (http://www.xmlspy.com) by oig_trade (oig) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" elementFormDefault="qualified">
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:include schemaLocation="OSnL.xsd"/>
 	<xs:include schemaLocation="OSsL.xsd"/>
@@ -901,7 +901,7 @@
 			<xs:element ref="generalDistribution"/>
 			<xs:element name="userF" type="StochasticMultivariateDistributionUserFunction"/>
 		</xs:choice>
-		<xs:attribute name="numberOfRandomVariables" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfDimensions" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="StochasticMultivariateDistributionUserFunction">
 		<xs:choice>
