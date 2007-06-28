@@ -1191,7 +1191,7 @@
 	</xs:complexType>
 	<xs:complexType name="StochasticJointProbabilisticObjective">
 		<xs:sequence>
-			<xs:element name="row" type="xs:nonNegativeInteger"/>
+			<xs:element name="row" type="StochasticConstraintRow" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="maxOrMin" use="required">
@@ -1242,7 +1242,7 @@
 	</xs:complexType>
 	<xs:complexType name="StochasticJointChanceConstraint">
 		<xs:sequence>
-			<xs:element name="row" type="xs:nonNegativeInteger" maxOccurs="unbounded"/>
+			<xs:element name="row" type="StochasticConstraintRow" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="lb" use="optional" default="0.0">
@@ -1288,7 +1288,7 @@
 	</xs:complexType>
 	<xs:complexType name="StochasticJointIntegratedChanceConstraint">
 		<xs:sequence>
-			<xs:element name="row" type="xs:nonNegativeInteger" maxOccurs="unbounded"/>
+			<xs:element name="row" type="StochasticConstraintRow" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="lb" type="xs:double" use="optional" default="0"/>
@@ -1343,6 +1343,9 @@
 		<xs:sequence>
 			<xs:element ref="OSnLNode" minOccurs="0"/>
 		</xs:sequence>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticConstraintRow">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="StochasticNumber">
