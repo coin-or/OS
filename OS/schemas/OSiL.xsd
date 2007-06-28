@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- edited with XMLSpy v2005 sp1 U (http://www.xmlspy.com) by oig_trade (oig) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" elementFormDefault="qualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:include schemaLocation="OSnL.xsd"/>
 	<xs:include schemaLocation="OSsL.xsd"/>
@@ -765,6 +765,7 @@
 	</xs:complexType>
 	<xs:complexType name="StochasticScenarioTree">
 		<xs:sequence>
+			<xs:element name="stochasticElements" type="StochasticElements" minOccurs="0"/>
 			<xs:element name="rootScenario" type="StochasticScenarioTreeRootScenario"/>
 			<xs:element name="scenario" type="StochasticScenarioTreeScenario" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
@@ -1357,6 +1358,7 @@
 	</xs:complexType>
 	<xs:complexType name="StochasticNumbers">
 		<xs:all>
+			<xs:element name="stochasticElements" type="StochasticNumbersStochasticElements" minOccurs="0"/>
 			<xs:element name="parameters" type="StochasticNumbersParameters" minOccurs="0"/>
 			<xs:element name="variables" type="StochasticNumbersVariables" minOccurs="0"/>
 			<xs:element name="objectives" type="StochasticNumbersObjectives" minOccurs="0"/>
@@ -1370,13 +1372,7 @@
 		<xs:sequence>
 			<xs:element name="param" type="StochasticNumberParam" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfParameters" type="xs:nonNegativeInteger" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="StochasticNumbersVariables">
-		<xs:sequence>
-			<xs:element name="var" type="StochasticNumberVar" maxOccurs="unbounded"/>
-		</xs:sequence>
-		<xs:attribute name="numberOfVariables" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="StochasticNumberParam">
 		<xs:simpleContent>
@@ -1384,6 +1380,25 @@
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 			</xs:extension>
 		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="StochasticNumbersStochasticElements">
+		<xs:sequence>
+			<xs:element name="st" type="StochasticNumberStochasticElement" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticNumberStochasticElement">
+		<xs:simpleContent>
+			<xs:extension base="xs:double">
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="StochasticNumbersVariables">
+		<xs:sequence>
+			<xs:element name="var" type="StochasticNumberVar" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="StochasticNumberVar">
 		<xs:simpleContent>
@@ -1408,7 +1423,7 @@
 		<xs:sequence>
 			<xs:element name="obj" type="StochasticNumberObj" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="StochasticNumberObj">
 		<xs:simpleContent>
@@ -1431,7 +1446,7 @@
 		<xs:sequence>
 			<xs:element name="con" type="StochasticNumberCon" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="StochasticNumberCon">
 		<xs:simpleContent>
@@ -1468,7 +1483,7 @@
 		<xs:sequence>
 			<xs:element name="qTerm" type="StochasticNumberQuadraticCoefficientsQTerm" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfQuadraticTerms" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="StochasticNumberQuadraticCoefficientsQTerm">
 		<xs:simpleContent>
@@ -1483,7 +1498,7 @@
 		<xs:sequence>
 			<xs:element name="number" type="StochasticNumberNonlinearExpressionsNumber" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfNonlinearExpressions" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="StochasticNumberNonlinearExpressionsNumber">
 		<xs:simpleContent>
