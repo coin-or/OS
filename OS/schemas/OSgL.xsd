@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- edited with XMLSpy v2007 sp1 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:include schemaLocation="OSnL.xsd"/>
 	<xs:include schemaLocation="OSiL.xsd"/>
 	<xs:element name="osgl"/>
@@ -197,7 +196,7 @@
 	</xs:complexType>
 	<xs:complexType name="MatrixMarket">
 		<xs:sequence>
-			<xs:element name="el" type="MatrixMarketElement" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="el" type="MatrixMarketElement" minOccurs="2" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="type" use="optional" default="general">
 			<xs:simpleType>
@@ -337,7 +336,6 @@
 			<xs:element name="el" type="EmpiricalDiscreteElement" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="cdf" type="xs:boolean" use="optional" default="false"/>
-		<xs:attribute name="numberOfRealizations"/>
 	</xs:complexType>
 	<xs:element name="empiricalDiscrete" type="EmpiricalDiscrete"/>
 	<xs:complexType name="DiscreteUniform">
@@ -695,7 +693,6 @@
 			<xs:element name="scenario" type="MultivariateDiscreteScenario" minOccurs="2" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="cdf" type="xs:boolean" use="optional" default="false"/>
-		<xs:attribute name="numberOfRealizations"/>
 	</xs:complexType>
 	<xs:element name="multivariateDiscrete" type="MultivariateDiscrete"/>
 	<xs:complexType name="Multinomial">
@@ -743,7 +740,7 @@
 	<xs:element name="bivariateNormal" type="BivariateNormal"/>
 	<xs:complexType name="MultivariateNormal">
 		<xs:sequence>
-			<xs:element name="mu" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="mu" minOccurs="2" maxOccurs="unbounded">
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:double">
@@ -752,7 +749,7 @@
 					</xs:simpleContent>
 				</xs:complexType>
 			</xs:element>
-			<xs:element name="covariance" type="MatrixMarket"/>
+			<xs:element name="covariance" type="MatrixMarket" minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute name="cdf" type="xs:boolean" use="optional" default="false"/>
 	</xs:complexType>
