@@ -30,6 +30,7 @@
 			<xs:element name="quadraticCoefficients" type="QuadraticCoefficients" minOccurs="0"/>
 			<xs:element name="nonlinearExpressions" type="NonlinearExpressions" minOccurs="0"/>
 			<xs:element name="cones" type="Cones" minOccurs="0"/>
+			<xs:element name="parameters" type="Parameters" minOccurs="0"/>
 			<xs:element name="parameterSets" type="ParameterSets" minOccurs="0"/>
 			<xs:element name="modifications" type="Modifcations" minOccurs="0"/>
 			<xs:element name="disjunctiveInformation" type="DisjunctiveInformation" minOccurs="0"/>
@@ -500,7 +501,6 @@
 	</xs:complexType>
 	<xs:complexType name="ParameterSets">
 		<xs:sequence>
-			<xs:element name="parameters" type="Parameters"/>
 			<xs:element name="rowsInCore" type="ParamSetRowsInCore"/>
 			<xs:element name="constraints" type="Constraints" minOccurs="0"/>
 			<xs:element name="linearConstraintCoefficients" type="LinearConstraintCoefficients" minOccurs="0"/>
