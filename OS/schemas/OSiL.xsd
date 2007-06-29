@@ -1089,13 +1089,7 @@
 	</xs:complexType>
 	<xs:complexType name="StochasticLinearTransformationAutoregressiveTerms">
 		<xs:sequence>
-			<xs:element name="historyParameters">
-				<xs:complexType>
-					<xs:complexContent>
-						<xs:extension base="StochasticLinearTransformationHistoryParameters"/>
-					</xs:complexContent>
-				</xs:complexType>
-			</xs:element>
+			<xs:element name="historyParameters" type="StochasticLinearTransformationHistoryParameters"/>
 			<xs:element name="matrixCoefficients" type="StochasticLinearTransformationMatrixCoefficients"/>
 		</xs:sequence>
 	</xs:complexType>
