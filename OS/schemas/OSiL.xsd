@@ -765,6 +765,26 @@
 	<xs:complexType name="StageObj">
 		<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
 	</xs:complexType>
+	<xs:complexType name="IncompleteInformationResolution">
+		<xs:sequence>
+			<xs:element name="row" type="IncompleteInformationResolutionRow" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="IncompleteInformationResolutionRow">
+		<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
+		<xs:attribute name="modifier" use="optional" default="max">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="all"/>
+					<xs:enumeration value="any"/>
+					<xs:enumeration value="avg"/>
+					<xs:enumeration value="min"/>
+					<xs:enumeration value="max"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
 	<xs:complexType name="StochasticInformation">
 		<xs:sequence>
 			<xs:element name="eventTree" type="StochasticEventTree" minOccurs="0"/>
