@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- edited with XMLSpy v2005 sp1 U (http://www.xmlspy.com) by oig_trade (oig) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" elementFormDefault="qualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:include schemaLocation="OSnL.xsd"/>
 	<xs:include schemaLocation="OSsL.xsd"/>
@@ -1046,20 +1046,27 @@
 	</xs:complexType>
 	<xs:complexType name="StochasticLinearTransformationAutoregressiveTerms">
 		<xs:sequence>
-			<xs:element name="historyParameters" type="StochasticLinearTransformationHistoryParameters"/>
+			<xs:element name="historyParameters">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="StochasticLinearTransformationHistoryParameters"/>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
 			<xs:element name="matrixCoefficients" type="StochasticLinearTransformationMatrixCoefficients"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="StochasticLinearTransformationHistoryParameters">
-		<xs:sequence>
-			<xs:element name="el" type="StochasticLinearTransformationHistoryParametersEl" maxOccurs="unbounded"/>
-		</xs:sequence>
+		<xs:choice maxOccurs="unbounded">
+			<xs:element name="param" type="StochasticNumberParam"/>
+			<xs:element name="var" type="StochasticNumberVar"/>
+			<xs:element name="obj" type="StochasticNumberObj"/>
+			<xs:element name="con" type="StochasticNumberCon"/>
+			<xs:element name="el" type="StochasticNumberLinearConstraintCoefficientsEl"/>
+			<xs:element name="qTerm" type="StochasticNumberQuadraticCoefficientsQTerm"/>
+			<xs:element name="number" type="StochasticNumberNonlinearExpressionsNumber"/>
+		</xs:choice>
 		<xs:attribute name="numberOfParameters" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="StochasticLinearTransformationHistoryParametersEl">
-		<xs:complexContent>
-			<xs:extension base="StochasticNumber"/>
-		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="StochasticRandomFunction">
 		<xs:sequence>
@@ -1349,17 +1356,7 @@
 	<xs:complexType name="StochasticConstraintRow">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="StochasticNumber">
-		<xs:choice>
-			<xs:element name="param" type="StochasticNumberParam"/>
-			<xs:element name="var" type="StochasticNumberVar"/>
-			<xs:element name="obj" type="StochasticNumberObj"/>
-			<xs:element name="con" type="StochasticNumberCon"/>
-			<xs:element name="el" type="StochasticNumberLinearConstraintCoefficientsEl"/>
-			<xs:element name="qTerm" type="StochasticNumberQuadraticCoefficientsQTerm"/>
-			<xs:element name="number" type="StochasticNumberNonlinearExpressionsNumber"/>
-		</xs:choice>
-	</xs:complexType>
+	<xs:complexType name="StochasticNumber"/>
 	<xs:complexType name="StochasticNumbers">
 		<xs:all>
 			<xs:element name="stochasticElements" type="StochasticNumbersStochasticElements" minOccurs="0"/>
