@@ -1113,6 +1113,7 @@
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
+		<xs:attribute name="objectiveIdx" type="xs:negativeInteger" use="optional" default="-1"/>
 	</xs:complexType>
 	<xs:complexType name="StochasticSimpleRecourse">
 		<xs:attribute name="shortagePenalty" type="xs:double" use="optional" default="0"/>
