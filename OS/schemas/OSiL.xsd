@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- edited with XMLSpy v2007 rel. 3 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" elementFormDefault="qualified">
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:include schemaLocation="OSnL.xsd"/>
 	<xs:include schemaLocation="OSsL.xsd"/>
@@ -709,8 +709,20 @@
 			<xs:element name="variables" type="StageVariables" minOccurs="0"/>
 			<xs:element name="constraints" type="StageConstraints" minOccurs="0"/>
 			<xs:element name="objectives" type="StageObjectives" minOccurs="0"/>
+			<xs:element name="incompleteInformationResolution" type="IncompleteInformationResolution" minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="incompleteInformationResolution" use="optional" default="max">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="all"/>
+					<xs:enumeration value="any"/>
+					<xs:enumeration value="avg"/>
+					<xs:enumeration value="min"/>
+					<xs:enumeration value="max"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="StageVariables">
 		<xs:sequence minOccurs="0">
