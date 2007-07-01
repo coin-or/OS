@@ -174,6 +174,47 @@ int main(int argC, char* argV[])
 	fileUtil = new FileUtil();
 	//
 	unitTestResult << "HERE ARE THE UNIT TEST RESULTS:" << std::endl << std::endl;
+	
+	
+	
+	
+	
+	
+	
+	#ifdef COIN_HAS_VOL
+	try{
+		ok = true; 
+		osilFileName = dataDir + "parincLinear.osil";
+		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		solver = new CoinSolver();
+		solver->sSolverName = "vol";
+		solver->osil = osil;
+		solver->osol = osol;  
+		solver->osinstance = NULL; 
+		cout << "call the COIN - Vol solver for parincLinear" << endl;
+		solver->solve();
+//		cout << "Here is the COIN - Vol solver solution for parincLinear" << endl;
+//		cout << solver->osrl << endl;
+//		check = 7668;
+//		ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-1 , 1e-1);
+//		if(ok == false) throw ErrorClass(" Fail unit test with Vol on parincLinear.osil");
+//		delete solver;
+//		solver = NULL;
+		unitTestResult << "Solved problem parincLinear.osil with Vol" << std::endl;
+	}
+	catch(const ErrorClass& eclass){
+		cout << "OSrL =  " <<  solver->osrl <<  endl;
+		cout << endl << endl << endl;
+		cout << eclass.errormsg << endl;
+		return 0;
+	}	
+	#endif
+	
+	
+	
+	
+	
+	
 	// solve using using the osil file
 	#ifdef COIN_HAS_IPOPT
 	cout << "create a new IPOPT Solver for OSiL string solution" << endl;
@@ -514,6 +555,14 @@ int main(int argC, char* argV[])
 		return 0;
 	}	
 	#endif
+	//
+	//
+	//
+	
+	//
+	//
+	//
+	//
 	//
 	//
 	//

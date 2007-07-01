@@ -80,11 +80,11 @@ void CoinSolver::solve() throw (ErrorClass) {
 			m_OsiSolver = new OsiClpSolverInterface();
 		}
 		else{
-			if( sSolverName.find("cbc") != std::string::npos){
+			if( sSolverName.find("vol") != std::string::npos){
 				if( (osinstance->getNumberOfNonlinearExpressions() > 0)
-					|| (osinstance->getNumberOfQuadraticTerms() > 0) ) throw ErrorClass( "Cbc cannot do nonlinear or quadratic");
+					|| (osinstance->getNumberOfQuadraticTerms() > 0) ) throw ErrorClass( "Vol cannot do nonlinear or quadratic");
 				solverIsDefined = true;
-				m_OsiSolver = new OsiCbcSolverInterface();
+				m_OsiSolver = new OsiVolSolverInterface();
 			}
 			else{
 				if( sSolverName.find( "cplex") != std::string::npos){
@@ -125,7 +125,11 @@ void CoinSolver::solve() throw (ErrorClass) {
 								#endif
 							}
 							else{
-								solverIsDefined = false;
+								// default solver is CBC
+								if( (osinstance->getNumberOfNonlinearExpressions() > 0)
+									|| (osinstance->getNumberOfQuadraticTerms() > 0) ) throw ErrorClass( "Cbc cannot do nonlinear or quadratic");
+								solverIsDefined = true;
+								m_OsiSolver = new OsiCbcSolverInterface();
 							}
 						}
 					}
@@ -212,10 +216,9 @@ bool CoinSolver::optimize()
 		//			osinstance->getVariableUpperBounds(),  
 		//			osinstance->getDenseObjectiveCoefficients()[0], 
 		//			osinstance->getConstraintLowerBounds(), osinstance->getConstraintUpperBounds());
-
 		if(osinstance->getObjectiveNumber() == 0) throw ErrorClass("there is no objective function");
 
-		//		
+		//	
 		if( osinstance->getObjectiveMaxOrMins()[0] == "min") m_OsiSolver->setObjSense(1.0);
 		else m_OsiSolver->setObjSense(-1.0);
 		m_OsiSolver->setDblParam(OsiObjOffset, osinstance->getObjectiveConstants()[0]);

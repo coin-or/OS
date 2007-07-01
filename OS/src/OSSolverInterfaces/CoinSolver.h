@@ -42,6 +42,10 @@
 #include <OsiSymSolverInterface.hpp>
 #endif
 
+#ifdef COIN_HAS_VOL
+#include <OsiVolSolverInterface.hpp>
+#endif
+
 #include <string>
 
 
