@@ -45,7 +45,7 @@ host_triplet = @host@
 noinst_PROGRAMS = amplClient$(EXEEXT)
 @COIN_HAS_SYMPHONY_TRUE@am__append_1 = $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
 @COIN_HAS_DYLP_TRUE@am__append_2 = $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
-@COIN_HAS_VOL_TRUE@am__append_3 = $(OSIOBJDIR)/src/libOsiVol.la 
+@COIN_HAS_VOL_TRUE@am__append_3 = $(OSIOBJDIR)/src/OsiVol/libOsiVol.la 
 @COIN_HAS_SYMPHONY_TRUE@am__append_4 = $(SYMPHONYOBJDIR)/src/libSym.la 
 @COIN_HAS_DYLP_TRUE@am__append_5 = $(DYLPOBJDIR)/src/Dylp/libDylp.la 
 @COIN_HAS_VOL_TRUE@am__append_6 = $(VOLOBJDIR)/src/libVol.la 
@@ -103,7 +103,8 @@ amplClient_OBJECTS = $(am_amplClient_OBJECTS)
 @COIN_HAS_SYMPHONY_TRUE@	$(OSIOBJDIR)/src/OsiSym/libOsiSym.la
 @COIN_HAS_DYLP_TRUE@am__DEPENDENCIES_2 =  \
 @COIN_HAS_DYLP_TRUE@	$(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la
-@COIN_HAS_VOL_TRUE@am__DEPENDENCIES_3 = $(OSIOBJDIR)/src/libOsiVol.la
+@COIN_HAS_VOL_TRUE@am__DEPENDENCIES_3 =  \
+@COIN_HAS_VOL_TRUE@	$(OSIOBJDIR)/src/OsiVol/libOsiVol.la
 @COIN_HAS_SYMPHONY_TRUE@am__DEPENDENCIES_4 =  \
 @COIN_HAS_SYMPHONY_TRUE@	$(SYMPHONYOBJDIR)/src/libSym.la
 @COIN_HAS_DYLP_TRUE@am__DEPENDENCIES_5 =  \

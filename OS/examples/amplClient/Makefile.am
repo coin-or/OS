@@ -40,7 +40,7 @@ if COIN_HAS_DYLP
 endif
 
 if COIN_HAS_VOL
- amplClient_LDADD += $(OSIOBJDIR)/src/libOsiVol.la 
+ amplClient_LDADD += $(OSIOBJDIR)/src/OsiVol/libOsiVol.la 
 endif
 
  amplClient_LDADD += $(CBCOBJDIR)/src/libCbc.la 
