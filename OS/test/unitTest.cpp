@@ -498,7 +498,7 @@ int main(int argC, char* argV[])
 		solver = new CoinSolver();
 		solver->sSolverName = "dylp";
 		solver->osil = osil;
-		solver->osol = osol;  
+		solver->osol = osol;   
 		solver->osinstance = NULL; 
 		cout << "call the COIN - DyLP solver for parincLinear" << endl;
 		solver->solve();
@@ -525,7 +525,7 @@ int main(int argC, char* argV[])
 	#ifdef COIN_HAS_VOL
 	try{
 		ok = true; 
-		osilFileName = dataDir + "volumeTest.osil";
+		osilFileName = dataDir + "parincLinear.osil";
 		osil = fileUtil->getFileAsString( &osilFileName[0]);
 		solver = new CoinSolver();
 		solver->sSolverName = "vol";

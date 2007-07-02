@@ -136,6 +136,8 @@ void CoinSolver::solve() throw (ErrorClass) {
 				}
 			}
 		}
+		//
+		//
 		if(solverIsDefined == false) throw ErrorClass("a supported solver was not defined");
 		if(osinstance->getConstraintNumber() <= 0)throw ErrorClass("Coin solver Needs Constraints");
 		if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Coin solver requires decision variables");
@@ -236,12 +238,21 @@ bool CoinSolver::optimize()
 			}
 		}
 		m_OsiSolver->setInteger( intIndex,  numOfIntVars);
-		if(numOfIntVars > 0){
-			m_OsiSolver->branchAndBound();
+		// try to catch Coin Solver errors
+		try{
+			if(numOfIntVars > 0){
+				m_OsiSolver->branchAndBound();
+			}
+			else{
+				m_OsiSolver->initialSolve();
+				cout << "DONE WITH INITIAL SOLVE" << endl;
+			}
 		}
-		else{
-			m_OsiSolver->initialSolve();
-			cout << "DONE WITH INITIAL SOLVE" << endl;
+		catch(CoinError e){
+			std::string errmsg;
+			errmsg = "Coin Solver Error: " + e.message() + "\n" + " see method "  
+				+ e.methodName() + " in class " + e.className();
+			throw ErrorClass( errmsg );
 		}
 		int solIdx = 0;
 		std::string description = "";
