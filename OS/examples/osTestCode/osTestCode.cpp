@@ -80,67 +80,92 @@ int main(int argC, char* argV[])
 	try{
 		cout << "Hello World" << endl;
 		//put in test code for OS project
-		OSiLReader *osilreader = NULL;
-		osilreader = new OSiLReader(); 
-		std::cout << "GET FILE AS STRING" << std::endl;
-		osilFileName =  dataDir + "callBackTest.osil";
-		osil = fileUtil->getFileAsString( &osilFileName[0]);
-		std::cout << "GET INSTANCE" << std::endl;
-		osinstance = osilreader->readOSiL( &osil);
-		std::cout << "WE HAVE THE INSTANCE, GET THE ROW INDEXES" << std::endl;
-		int *qRowIndexes = osinstance->getQuadraticRowIndexes();
-		int i = 0;
-		int n = osinstance->getNumberOfQuadraticRowIndexes();
-		for(i = 0; i <  n; i++){
-			std::cout << "quadratic row index = " << qRowIndexes[ i] << std::endl;
-		}
-		
-		
-		
-		int *expTreeIndexes = osinstance->getNonlinearExpressionTreeIndexes();
-		n = osinstance->getNumberOfNonlinearExpressionTreeIndexes();
-		for(i = 0; i <  n; i++){
-			std::cout << "exp tree index = " << expTreeIndexes[ i] << std::endl;
-		}
-	
-		
-//		
-//		int *expTreeModIndexes = osinstance->getNonlinearExpressionTreeModIndexes();
-//		n = osinstance->getNumberOfNonlinearExpressionTreeModIndexes();
-//		for(i = 0; i <  n; i++){
-//			std::cout << "exp tree mod index  = " << expTreeModIndexes[ i] << std::endl;
-//		}
-//	
-		
+			bool ret = true;
+    OsiVolSolverInterface *s;
+    s = new OsiVolSolverInterface();
+	double inf = s->getInfinity();
 
+	CoinPackedMatrix m;
 
-		std::vector<OSnLNode*>  postfixVec ;
-		postfixVec = osinstance->getNonlinearExpressionTreeInPrefix( 4);
-		n = postfixVec.size();
-		std::cout <<  "NUMBER OF TERMS =  " << n << std::endl;
-		std::cout << std::endl << std::endl;
-		for (i = 0 ; i < n; i++){
-			std::cout << postfixVec[i]->snodeName << std::endl;
-			
-		}
-		
-		postfixVec = osinstance->getNonlinearExpressionTreeModInPrefix( 4);
-		n = postfixVec.size();
-		std::cout <<  "NUMBER OF TERMS =  " << n << std::endl;
-		std::cout << std::endl << std::endl;
-		for (i = 0 ; i < n; i++){
-			std::cout << postfixVec[i]->snodeName << std::endl;
-			
-		}
-		
-		delete osilreader;	
-		
-		std::cout << "OSINSTANCE DELETED " << std::endl;
+	m.transpose();
 
+	CoinPackedVector r0;
+	r0.insert(0, 1);
+	r0.insert(1, 0);
+	m.appendRow(r0);
+
+	CoinPackedVector r1;
+	r1.insert(0, 0);
+	r1.insert(1, 1);
+	m.appendRow(r1);
+
+	int numcol = 2;
+
+	double *obj = new double[numcol];
+	obj[0] = 3;
+	obj[1] = 4;
+
+	double *collb = new double[numcol];
+	collb[0] = -1000;
+	collb[1] = -1000;
+
+	double *colub = new double[numcol];
+	colub[0] = 1000;
+	colub[1] = 1000;
+
+	int numrow = 2;
+
+	double *rowlb = new double[numrow];
+	rowlb[0] = 1;
+	rowlb[1] = 1;
+
+	double *rowub = new double[numrow];
+	rowub[0] = 1;
+	rowub[1] = 1;
+
+	s->loadProblem(m, collb, colub, obj, rowlb, rowub);
+
+	delete [] obj;
+	delete [] collb;
+	delete [] colub;
+
+	delete [] rowlb;
+	delete [] rowub;
+
+	s->setObjSense(-1);
+
+	s->initialSolve();
+
+//	ret = ret && s->isProvenOptimal();
+//	ret = ret && !s->isProvenPrimalInfeasible();
+//	ret = ret && !s->isProvenDualInfeasible();
+//
+//	const double solution1[] = {5, 0};
+//	ret = ret && equivalentVectors(s,s,0.0001, s->getColSolution(), solution1, 2);
+//
+//	const double activity1[] = {10, 5};
+//	ret = ret && equivalentVectors(s,s,0.0001, s->getRowActivity(), activity1, 2);
+//
+//	s->setObjCoeff(0, 1);
+//	s->setObjCoeff(1, 1);
+//
+//	s->resolve();
+//
+//	ret = ret && s->isProvenOptimal();
+//	ret = ret && !s->isProvenPrimalInfeasible();
+//	ret = ret && !s->isProvenDualInfeasible();
+//
+//	const double solution2[] = {3, 4};
+//	ret = ret && equivalentVectors(s,s,0.0001, s->getColSolution(), solution2, 2);
+//
+//	const double activity2[] = {10, 15};
+//	ret = ret && equivalentVectors(s,s,0.0001, s->getRowActivity(), activity2, 2);
+//
+//	return ret;
 		return 0;
 	}
-	catch( const ErrorClass& eclass){
-		std::cout << eclass.errormsg <<  std::endl;
+	catch( CoinError e){
+		std::cout << e.message() <<  std::endl;
 		return 0;
 	}
 }// end main

@@ -107,6 +107,7 @@ OS/data/testremote.config -text
 OS/data/testremoteRetrieve.config -text
 OS/data/testremoteSend.config -text
 OS/data/transportation.osil -text
+OS/data/volumeTest.osil -text
 OS/data/wayneQuadratic.osil -text
 OS/doc/figures/OSDirectory.png -text
 OS/doc/figures/OSProjectRootDirectory.png -text
