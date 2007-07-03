@@ -399,7 +399,7 @@
 			</xs:simpleType>
 		</xs:attribute>
 	</xs:complexType>
-	<xs:complexType name="DisjunctionSet">
+	<xs:complexType name="DisjunctiveSet">
 		<xs:sequence>
 			<xs:element name="disjunction" type="Disjunction" minOccurs="2" maxOccurs="unbounded"/>
 		</xs:sequence>
@@ -407,9 +407,9 @@
 	</xs:complexType>
 	<xs:complexType name="DisjunctiveInformation">
 		<xs:sequence>
-			<xs:element name="disjunctionSet" type="DisjunctionSet" maxOccurs="unbounded"/>
+			<xs:element name="disjunctiveSet" type="DisjunctiveSet" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfDisjunctionSets" type="xs:nonNegativeInteger" use="optional" default="1"/>
+		<xs:attribute name="numberOfDisjunctiveSets" type="xs:nonNegativeInteger" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="Parameters">
 		<xs:sequence>
@@ -497,7 +497,7 @@
 			</xs:simpleType>
 		</xs:attribute>
 	</xs:complexType>
-	<xs:complexType name="ParamDisjunctionSet">
+	<xs:complexType name="ParamDisjunctiveSet">
 		<xs:sequence>
 			<xs:element name="disjunction" type="ParamDisjunction" minOccurs="2" maxOccurs="unbounded"/>
 		</xs:sequence>
@@ -505,9 +505,9 @@
 	</xs:complexType>
 	<xs:complexType name="ParamDisjunctiveInformation">
 		<xs:sequence>
-			<xs:element name="disjunctionSet" type="ParamDisjunctionSet" maxOccurs="unbounded"/>
+			<xs:element name="disjunctiveSet" type="ParamDisjunctiveSet" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfDisjunctionSets" type="xs:nonNegativeInteger" use="optional" default="1"/>
+		<xs:attribute name="numberOfDisjunctiveSets" type="xs:nonNegativeInteger" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="ParameterSets">
 		<xs:sequence>
