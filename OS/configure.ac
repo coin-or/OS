@@ -206,9 +206,10 @@ AC_COIN_VPATH_LINK(data/testremoteBIG.config)
 ##
 ## ampl test files
 ##
+AC_COIN_VPATH_LINK(data/hs71.mod)
 AC_COIN_VPATH_LINK(data/hs71.nl)
-AC_COIN_VPATH_LINK(data/parinclinear.nl)
-AC_COIN_VPATH_LINK(data/parincnonlinear.nl)
+AC_COIN_VPATH_LINK(data/parinc.mod)
+AC_COIN_VPATH_LINK(data/parinc.dat)
 ##
 ## mps test files
 ##
