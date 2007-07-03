@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osol xmlns="os.optimizationservices.org"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/OSoL.xsd">
+    <general>
+       
+        <instanceLocation locationType="local">/home/kmartin/files/code/OSRepository/linear/continuous/pilot.osil</instanceLocation>
+    </general>
+    <optimization>
+    	<other name="os_solver">cbc</other>
+    </optimization>
+</osol>

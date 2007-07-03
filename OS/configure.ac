@@ -147,26 +147,25 @@ AC_DEFINE_UNQUOTED([OSROOT_DIR], ["$OSROOT_DIR"],
 
 # In case this is a VPATH configuration we need to make sure that the
 # input files for the examples are available in the VPATH directory.
-
+##
+## osil test files
+##
 AC_COIN_VPATH_LINK(data/parincLinear.osil)
-AC_COIN_VPATH_LINK(data/parincLinear.osrl)
 AC_COIN_VPATH_LINK(data/parincQuadratic.osil)
-AC_COIN_VPATH_LINK(data/hs71.nl)
 AC_COIN_VPATH_LINK(data/HS071_NLP.osil)
 AC_COIN_VPATH_LINK(data/rosenbrockmod.osil)
 AC_COIN_VPATH_LINK(data/avion2.osil)
 AC_COIN_VPATH_LINK(data/lindoapiaddins.osil)
 AC_COIN_VPATH_LINK(data/volumeTest.osil)
-AC_COIN_VPATH_LINK(data/parinc.mps)
 AC_COIN_VPATH_LINK(data/p0033.osil)
 AC_COIN_VPATH_LINK(data/CppADTestLag.osil)
 AC_COIN_VPATH_LINK(data/testOperators.osil)
 AC_COIN_VPATH_LINK(data/wayneQuadratic.osil)
 AC_COIN_VPATH_LINK(data/testCallBack.osil)
 AC_COIN_VPATH_LINK(data/testCallBackRowMajor.osil)
-AC_COIN_VPATH_LINK(data/testLocal.config)
-AC_COIN_VPATH_LINK(data/testremote.config)
-AC_COIN_VPATH_LINK(data/testremoteBIG.config)
+##
+## osol test files
+##
 AC_COIN_VPATH_LINK(data/remotegsbkip.osol)
 AC_COIN_VPATH_LINK(data/remoteosil.osol)
 AC_COIN_VPATH_LINK(data/retrieve.osol)
@@ -174,7 +173,24 @@ AC_COIN_VPATH_LINK(data/send.osol)
 AC_COIN_VPATH_LINK(data/demo.osol)
 AC_COIN_VPATH_LINK(data/sendWithJobID.osol)
 AC_COIN_VPATH_LINK(data/kill.osol)
+AC_COIN_VPATH_LINK(data/remoteSolve1.osol)
+AC_COIN_VPATH_LINK(data/remoteSolve2.osol)
+AC_COIN_VPATH_LINK(data/remoteSolve3.osol)
+AC_COIN_VPATH_LINK(data/demopassword.osol)
+AC_COIN_VPATH_LINK(data/demopasswordjobID.osol)
+##
+## ospl test files
+##
 AC_COIN_VPATH_LINK(data/demo.ospl)
+##
+## osrl test files
+##
+AC_COIN_VPATH_LINK(data/parincLinear.osrl)
+AC_COIN_VPATH_LINK(data/reducedcost.osrl)
+AC_COIN_VPATH_LINK(data/rosenbrockmod.osrl)
+##
+## configure test files
+##
 AC_COIN_VPATH_LINK(data/testRemoteKnock.config)
 AC_COIN_VPATH_LINK(data/testRemotegetJobID.config)
 AC_COIN_VPATH_LINK(data/testremoteRetrieve.config)
@@ -183,10 +199,31 @@ AC_COIN_VPATH_LINK(data/testmps.config)
 AC_COIN_VPATH_LINK(data/testnl.config)
 AC_COIN_VPATH_LINK(data/testlocalclp.config)
 AC_COIN_VPATH_LINK(data/testlocalosol.config)
-AC_COIN_VPATH_LINK(data/testremoteSolve1.config)
-AC_COIN_VPATH_LINK(data/testremoteSolve2.config)
-AC_COIN_VPATH_LINK(data/testremoteSolve3.config)
 AC_COIN_VPATH_LINK(data/kill.config)
+AC_COIN_VPATH_LINK(data/testlocal.config)
+AC_COIN_VPATH_LINK(data/testremote.config)
+AC_COIN_VPATH_LINK(data/testremoteBIG.config)
+##
+## ampl test files
+##
+AC_COIN_VPATH_LINK(data/hs71.nl)
+AC_COIN_VPATH_LINK(data/parinclinear.nl)
+AC_COIN_VPATH_LINK(data/parincnonlinear.nl)
+##
+## mps test files
+##
+AC_COIN_VPATH_LINK(data/parinc.mps)
+##
+## MATLAB test files
+##
+AC_COIN_VPATH_LINK(data/markowitz.m)
+AC_COIN_VPATH_LINK(data/parincLinear.m)
+AC_COIN_VPATH_LINK(data/template.m)
+##
+
+
+
+
 
 
 
