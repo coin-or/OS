@@ -21815,7 +21815,9 @@ _ACEOF
 
 # In case this is a VPATH configuration we need to make sure that the
 # input files for the examples are available in the VPATH directory.
-
+##
+## osil test files
+##
 echo "$as_me:$LINENO: checking whether this is a VPATH configuration" >&5
 echo $ECHO_N "checking whether this is a VPATH configuration... $ECHO_C" >&6
 if test `cd $srcdir; pwd` != `pwd`; then
@@ -21828,198 +21830,275 @@ echo "${ECHO_T}$coin_vpath_config" >&6
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/parincLinear.osil"
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/parincLinear.osil"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/parincLinear.osrl"
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/parincQuadratic.osil"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/parincQuadratic.osil"
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/HS071_NLP.osil"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/hs71.nl"
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/rosenbrockmod.osil"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/HS071_NLP.osil"
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/avion2.osil"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/rosenbrockmod.osil"
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/lindoapiaddins.osil"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/avion2.osil"
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/volumeTest.osil"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/lindoapiaddins.osil"
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/p0033.osil"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/volumeTest.osil"
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/CppADTestLag.osil"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/parinc.mps"
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/testOperators.osil"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/p0033.osil"
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/wayneQuadratic.osil"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/CppADTestLag.osil"
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/testCallBack.osil"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/testOperators.osil"
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/testCallBackRowMajor.osil"
+fi
+
+##
+## osol test files
+##
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/osolFiles/demo.osol"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/wayneQuadratic.osil"
+  coin_vpath_link_files="$coin_vpath_link_files data/osolFiles/remotegsbkip.osol"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/testCallBack.osil"
+  coin_vpath_link_files="$coin_vpath_link_files data/osolFiles/remoteosil.osol"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/testCallBackRowMajor.osil"
+  coin_vpath_link_files="$coin_vpath_link_files data/osolFiles/retrieve.osol"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/testLocal.config"
+  coin_vpath_link_files="$coin_vpath_link_files data/osolFiles/send.osol"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/testremote.config"
+  coin_vpath_link_files="$coin_vpath_link_files data/osolFiles/sendWithJobID.osol"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/testremoteBIG.config"
+  coin_vpath_link_files="$coin_vpath_link_files data/osolFiles/kill.osol"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/remotegsbkip.osol"
+  coin_vpath_link_files="$coin_vpath_link_files data/osolFiles/remoteSolve1.osol"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/remoteosil.osol"
+  coin_vpath_link_files="$coin_vpath_link_files data/osolFiles/remoteSolve2.osol"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/retrieve.osol"
+  coin_vpath_link_files="$coin_vpath_link_files data/osolFiles/remoteSolve3.osol"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/send.osol"
+  coin_vpath_link_files="$coin_vpath_link_files data/osolFiles/demopassword.osol"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/demo.osol"
+  coin_vpath_link_files="$coin_vpath_link_files data/osolFiles/demopasswordjobID.osol"
+fi
+
+##
+## ospl test files
+##
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/osplFiles/demo.ospl"
+fi
+
+##
+## osrl test files
+##
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/osrlFiles/parincLinear.osrl"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/sendWithJobID.osol"
+  coin_vpath_link_files="$coin_vpath_link_files data/osrlFiles/reducedcost.osrl"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/kill.osol"
+  coin_vpath_link_files="$coin_vpath_link_files data/osrlFiles/rosenbrockmod.osrl"
+fi
+
+##
+## configure test files
+##
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/configFiles/kill.config"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/demo.ospl"
+  coin_vpath_link_files="$coin_vpath_link_files data/configFiles/testlocal.config"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/testRemoteKnock.config"
+  coin_vpath_link_files="$coin_vpath_link_files data/configFiles/testlocalclp.config"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/testRemotegetJobID.config"
+  coin_vpath_link_files="$coin_vpath_link_files data/configFiles/testlocalosol.config"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/testremoteRetrieve.config"
+  coin_vpath_link_files="$coin_vpath_link_files data/configFiles/testmps.config"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/testremoteSend.config"
+  coin_vpath_link_files="$coin_vpath_link_files data/configFiles/testnl.config"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/testmps.config"
+  coin_vpath_link_files="$coin_vpath_link_files data/configFiles/testRemoteKnock.config"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/testnl.config"
+  coin_vpath_link_files="$coin_vpath_link_files data/configFiles/testRemotegetJobID.config"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/testlocalclp.config"
+  coin_vpath_link_files="$coin_vpath_link_files data/configFiles/testremote.config"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/testlocalosol.config"
+  coin_vpath_link_files="$coin_vpath_link_files data/configFiles/configFiles/testremoteBIG.config"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/testremoteSolve1.config"
+  coin_vpath_link_files="$coin_vpath_link_files data/configFiles/testremoteRetrieve.config"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/testremoteSolve2.config"
+  coin_vpath_link_files="$coin_vpath_link_files data/configFiles/testremoteSend.config"
+fi
+
+
+##
+## ampl test files
+##
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/amplFiles/hs71.mod"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/testremoteSolve3.config"
+  coin_vpath_link_files="$coin_vpath_link_files data/amplFiles/hs71.nl"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/kill.config"
+  coin_vpath_link_files="$coin_vpath_link_files data/amplFiles/parinc.mod"
 fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/amplFiles/parinc.dat"
+fi
+
+##
+## mps test files
+##
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/mpsFiles/parinc.mps"
+fi
+
+##
+## MATLAB test files
+##
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/matlabFiles/markowitz.m"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/matlabFiles/parincLinear.m"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/matlabFiles/template.m"
+fi
+
+##
+
+
+
 
 
 

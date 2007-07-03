@@ -35,6 +35,10 @@ if COIN_HAS_DYLP
  instanceGenerator_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
 endif
 
+if COIN_HAS_VOL
+ instanceGenerator_LDADD += $(OSIOBJDIR)/src/OsiVol/libOsiVol.la 
+endif
+
  instanceGenerator_LDADD += $(CBCOBJDIR)/src/libCbc.la 
 	
 if COIN_HAS_SYMPHONY
@@ -49,6 +53,10 @@ endif
 	
 if COIN_HAS_DYLP
  instanceGenerator_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la 
+endif
+
+if COIN_HAS_VOL
+ instanceGenerator_LDADD += $(DYLPOBJDIR)/src/libVol.la 
 endif
 
  instanceGenerator_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
@@ -115,6 +123,13 @@ if COIN_HAS_SYMPHONY
   AM_CPPFLAGS += \
     -I`$(CYGPATH_W) $(SYMPHONYSRCDIR)/include` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiSym` 
+endif
+
+if COIN_HAS_VOL
+  AM_CPPFLAGS += \
+    -I`$(CYGPATH_W) $(VOLSRCDIR)/include` \
+    -I`$(CYGPATH_W) $(VOLSRCDIR)/src` \
+	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiVol`
 endif
 
 if COIN_HAS_CPX

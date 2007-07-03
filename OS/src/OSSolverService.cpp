@@ -399,7 +399,14 @@ void solve(){
 		}
 	}
 	catch(const ErrorClass& eclass){
-		if(osoptions->osrlFile != "") fileUtil->writeFileFromString(osoptions->osrlFile, eclass.errormsg);
+		if(osoptions->osrlFile != ""){
+			fileUtil->writeFileFromString(osoptions->osrlFile, eclass.errormsg);
+			if(osoptions->browser != ""){
+				std::string str = osoptions->browser + "  " +  osoptions->osrlFile;
+				const char *ch = &str[ 0];
+				std::system( ch );
+			}
+		}
 		else cout << eclass.errormsg << endl;
 	}	
 }//end solve
