@@ -56,7 +56,7 @@ if COIN_HAS_DYLP
 endif
 
 if COIN_HAS_VOL
- instanceGenerator_LDADD += $(DYLPOBJDIR)/src/libVol.la 
+ instanceGenerator_LDADD += $(VOLOBJDIR)/src/libVol.la 
 endif
 
  instanceGenerator_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  

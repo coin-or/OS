@@ -48,7 +48,7 @@ noinst_PROGRAMS = instanceGenerator$(EXEEXT)
 @COIN_HAS_VOL_TRUE@am__append_3 = $(OSIOBJDIR)/src/OsiVol/libOsiVol.la 
 @COIN_HAS_SYMPHONY_TRUE@am__append_4 = $(SYMPHONYOBJDIR)/src/libSym.la 
 @COIN_HAS_DYLP_TRUE@am__append_5 = $(DYLPOBJDIR)/src/Dylp/libDylp.la 
-@COIN_HAS_VOL_TRUE@am__append_6 = $(DYLPOBJDIR)/src/libVol.la 
+@COIN_HAS_VOL_TRUE@am__append_6 = $(VOLOBJDIR)/src/libVol.la 
 @USEWSOCKLIB_TRUE@am__append_7 = $(WINSOCKLIB)
 @COIN_HAS_DYLP_TRUE@am__append_8 = \
 @COIN_HAS_DYLP_TRUE@  	-I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
@@ -109,7 +109,7 @@ instanceGenerator_OBJECTS = $(am_instanceGenerator_OBJECTS)
 @COIN_HAS_SYMPHONY_TRUE@	$(SYMPHONYOBJDIR)/src/libSym.la
 @COIN_HAS_DYLP_TRUE@am__DEPENDENCIES_5 =  \
 @COIN_HAS_DYLP_TRUE@	$(DYLPOBJDIR)/src/Dylp/libDylp.la
-@COIN_HAS_VOL_TRUE@am__DEPENDENCIES_6 = $(DYLPOBJDIR)/src/libVol.la
+@COIN_HAS_VOL_TRUE@am__DEPENDENCIES_6 = $(VOLOBJDIR)/src/libVol.la
 am__DEPENDENCIES_7 =
 @USEWSOCKLIB_TRUE@am__DEPENDENCIES_8 = $(am__DEPENDENCIES_7)
 @COIN_HAS_GLPK_TRUE@am__DEPENDENCIES_9 =  \
