@@ -1720,7 +1720,9 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	CppAD::ADFun<double> *Fad;
 
 	/**
-	 * Create the a CppAD Function object 
+	 * Create the a CppAD Function object: this is a function where the domain is
+	 * the set of variables for the problem and the range is the objective function 
+	 * plus constraints
 	 * 
 	 * <p>
 	 * 

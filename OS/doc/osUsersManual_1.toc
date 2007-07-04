@@ -26,22 +26,22 @@
 \contentsline {subsection}{\numberline {5.2}Set Methods}{22}
 \contentsline {subsection}{\numberline {5.3}Calculate Methods}{22}
 \contentsline {section}{\numberline {6}Hooking to An Algorithmic Differentiation Package}{22}
-\contentsline {section}{\numberline {7}The OSSolverService}{22}
-\contentsline {subsection}{\numberline {7.1}OSSolverService Input Parameters}{22}
-\contentsline {subsection}{\numberline {7.2}Solving Problems Locally}{24}
-\contentsline {subsection}{\numberline {7.3}Solving Problems Remotely with Web Services}{25}
-\contentsline {subsubsection}{\numberline {7.3.1}The {\tt solve} Service Method}{25}
-\contentsline {subsubsection}{\numberline {7.3.2}The {\tt send} Service Method}{27}
-\contentsline {subsubsection}{\numberline {7.3.3}The {\tt retrieve} Service Method}{29}
-\contentsline {subsubsection}{\numberline {7.3.4}The {\tt getJobID} Service Method}{30}
-\contentsline {subsubsection}{\numberline {7.3.5}The {\tt knock} Service Method}{30}
-\contentsline {subsubsection}{\numberline {7.3.6}The {\tt kill} Service Method}{31}
-\contentsline {subsubsection}{\numberline {7.3.7}Summary}{31}
-\contentsline {section}{\numberline {8}Setting up a Solver Service with Tomcat}{33}
-\contentsline {section}{\numberline {9}Examples}{33}
-\contentsline {subsection}{\numberline {9.1}AMPL Client: Hooking AMPL to Solvers}{33}
-\contentsline {subsection}{\numberline {9.2}CppAD: Using the CppAD Algorithmic Differentiation Package}{34}
-\contentsline {subsection}{\numberline {9.3}File Upload: Using a File Upload Package}{34}
-\contentsline {subsection}{\numberline {9.4}Instance Generator: Using the OSInstance API to Generate Instances}{34}
-\contentsline {section}{\numberline {10}References}{34}
-\contentsline {section}{\numberline {11}Appendix}{34}
+\contentsline {section}{\numberline {7}The OSSolverService}{23}
+\contentsline {subsection}{\numberline {7.1}OSSolverService Input Parameters}{23}
+\contentsline {subsection}{\numberline {7.2}Solving Problems Locally}{25}
+\contentsline {subsection}{\numberline {7.3}Solving Problems Remotely with Web Services}{26}
+\contentsline {subsubsection}{\numberline {7.3.1}The {\tt solve} Service Method}{27}
+\contentsline {subsubsection}{\numberline {7.3.2}The {\tt send} Service Method}{28}
+\contentsline {subsubsection}{\numberline {7.3.3}The {\tt retrieve} Service Method}{30}
+\contentsline {subsubsection}{\numberline {7.3.4}The {\tt getJobID} Service Method}{31}
+\contentsline {subsubsection}{\numberline {7.3.5}The {\tt knock} Service Method}{31}
+\contentsline {subsubsection}{\numberline {7.3.6}The {\tt kill} Service Method}{32}
+\contentsline {subsubsection}{\numberline {7.3.7}Summary}{33}
+\contentsline {section}{\numberline {8}Setting up a Solver Service with Tomcat}{34}
+\contentsline {section}{\numberline {9}Examples}{34}
+\contentsline {subsection}{\numberline {9.1}AMPL Client: Hooking AMPL to Solvers}{34}
+\contentsline {subsection}{\numberline {9.2}CppAD: Using the CppAD Algorithmic Differentiation Package}{36}
+\contentsline {subsection}{\numberline {9.3}File Upload: Using a File Upload Package}{36}
+\contentsline {subsection}{\numberline {9.4}Instance Generator: Using the OSInstance API to Generate Instances}{36}
+\contentsline {section}{\numberline {10}References}{36}
+\contentsline {section}{\numberline {11}Appendix}{36}

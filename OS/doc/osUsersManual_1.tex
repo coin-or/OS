@@ -966,6 +966,85 @@ Don't forget to mention getting prefix an postfix. Illustrate some of this like 
 
 \section{Hooking to An Algorithmic Differentiation Package}\label{section:ad}
 
+The OS library is designed to hook
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{\bf Assumptions:} 
+
+\begin{itemize}
+
+\item[1.] The solver will make use of function callbacks for function evaluations (objective function and constraints), gradient evaluations (objective function and Jacobian of the constraints), and Hessian calculation (usually the Hessian of the Lagrangian function).
+
+\item[2.] The first and second order derivatives will be evaluated by an AD (Automatic Differentiation) package such as CppAD.
+
+\end{itemize}
+
+{\bf Key Idea:} as part of the callback function signatures (arguments) the solver should pass (or make available another way) the following {\it two variables}:
+
+\begin{itemize} 
+
+\item[]   {\bf new\_x} this is boolean and defined as in Ipopt. It is false if any evaluation method was previously called with the same {\bf x}, true otherwise
+
+\item[]  {\bf highestOrder} this is an integer variable that will take on the value 0, 1, or 2 (actually higher values if we want third derivatives etc.).  The value of this variable is the highest order derivative that will be required of the current iterate. For example, if  a callback required a function evaluation and {\bf highestOrder = 0} then only the function need be evaluated at the current iterate.  If, however, {\bf highsetOrder = 2} then we would make a first and second derivative calculation in addition to the function evaluation.
+
+\end{itemize}
+
+
+In order to implement AD efficiently  the code that implements the callback functions (such as our  OS library API) would store a class variable {\bf highestOrderEvaluated}. Every time a forward or reverse sweep is executed this variable gets set to the order of the sweep. For example, {\tt f.forward(1, x)} would result in {\bf highestOrderEvaluated = 1}.  Just knowing the value  of {\bf new\_x} alone is not sufficient. It is also necessary for the AD implementation to know {\bf highestOrder} and {\bf highestOrderEvaluated.}  For example, {\bf new\_x} might be false because of the calculation {\tt f.forward(0, x)}, however if  the callback requires a Hessian calculation, then it is necessary to calculate the first and second derivative at the current iterate. 
+
+Given this information there are {\it  exactly two} conditions that  require a new function or derivative calculation.   A new evaluation is required if and only if
+
+\begin{itemize}
+\item[1.]   The value of {\bf new\_x} is  true
+
+\begin{center}
+ --OR--
+\end{center}
+
+
+\item[2.] For the callback function the value of the input parameter {\bf highestOrder} is strictly greater than the current value  of    {\bf highestOrderEvaluated.} 
+\end{itemize}
+
+
+
+It would be nice if all of the function callbacks in the solver API had the following arguments:
+
+\begin{itemize}
+
+\item[] {\bf double *x} a pointer to the current iterate primal values
+
+\item[] {\bf double *objLambda} a pointer to the objective function (there may be more than 1) Lagrange multipliers
+
+\item[] {\bf double  *conLambda} a pointer to the constraint Lagrange multipliers
+
+\item[] {\bf int objIdx} the index of the objective function of interest -- this is optional.
+
+\item[] {\bf new\_x} explained above
+
+\item[]  {\bf highestOrder} explained above
+
+\end{itemize}
+
+
+
+It is not really necessary for all callback functions to have the above arguments. However, for an efficient implementation of AD it is important to be able to get the Lagrange multipliers and highest order derivative that is required from inside {\it any} callback -- not just the Hessian evaluation callback. For example, in {\bf Ipopt,} if  {\tt eval\_g}  or {\tt eval\_f} are called, and  for the current iterate, {\tt eval\_jac} and {\tt eval\_hess} are also going to be called, then  a more efficient AD implementation is possible if the Lagrange multipliers are available for {\tt eval\_g} and {\tt eval\_f}. 
+
+To make a long story short -- from the standpoint of implementing AD it would be nice to know if when the solver is calling a function evaluation it is doing so only for a line search, or if a Hessian will also be required. 
+
 \section{The OSSolverService}\label{section:ossolverservice}
 
 The {\tt OSSolverService} is a command line executable designed to pass problem instances in either  OSiL, AMPL nl, or MPS format  to solvers and get the optimization result back to be displayed either to standard output or a specified browser.  The {\tt OSSovlerService} can be used to invoke a solver locally or on a remote server. It can work either synchronously or asynchronously. 

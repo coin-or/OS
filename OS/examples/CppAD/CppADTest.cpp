@@ -32,6 +32,7 @@
 #include "OSExpressionTree.h"
 #include "OSnLNode.h"
 #include "OSDataStructures.h"
+#include "CoinHelperFunctions.hpp"
 
 #include <vector>  
 #include <map> 
@@ -60,21 +61,22 @@ int  main(){
  	FileUtil *fileUtil = NULL; 
 	std::string osilFileName;
 	std::string osil;
-	// get the input files
-	// dirsep in later
-	// const char dirsep =  CoinFindDirSeparator();
+	// get the input file
+	const char dirsep =  CoinFindDirSeparator();
   	// Set directory containing mps data files.
   	std::string dataDir;
-    dataDir = "../../data/" ;
+    dataDir = dirsep == '/' ? "../../data/" : "..\\..\\data\\";
 	//osilFileName =  dataDir + "HS071_NLP.osil";
-	osilFileName =  dataDir + "CppADTestLag.osil";
+	osilFileName =  dataDir + "osilFiles" + dirsep  + "CppADTestLag.osil";
+	std::cout  << "osilFileName  =  " << osilFileName << std::endl;
 	/*
-	min x0^2 + 9*x1   -- w[0]
-	s.t. 
-	33 - 105 + 1.37*x1 + 2*x2 <= 10  -- y[0]
-	ln(x0*x2) >= 10  -- y[1]
-	Note: in the first constraint 33 is a constant term and 105 
-	is part of the nl node
+	 * here is the test problem we just read in:
+	 * min x0^2 + 9*x1   -- w[0]
+	 * s.t. 
+	 * 33 - 105 + 1.37*x1 + 2*x2 <= 10  -- y[0]
+	 * ln(x0*x2) >= 10  -- y[1]
+	 * Note: in the first constraint 33 is a constant term and 105 
+	 * is part of the nl node
 	*/
 	fileUtil = new FileUtil();
 	osil = fileUtil->getFileAsString( &osilFileName[0]);	
@@ -82,8 +84,10 @@ int  main(){
 	// create OSReader and OSInstance objects
 	OSiLReader *osilreader = NULL;
 	OSInstance *osinstance = NULL;
-	// create reader, pare the OSiL,  and generate the OSInstance object
+	// create reader, parse the OSiL, and generate the OSInstance object
 	try{
+		// a counter
+		int kjl;
 		// domain space vector
 		size_t n  = 3; // three variables
 		// range space vector
@@ -94,7 +98,7 @@ int  main(){
 		double* x = new double[3]; //primal variables
 		double* z = new double[2]; //Lagrange multipliers on constraints
 		double* w = new double[1]; //Lagrange multiplier on objective
-		x[ 0] = 1; // primal variable 0
+		x[ 0] = 1;  // primal variable 0
 		x[ 1] = 5;  // primal variable 1
 		x[ 2] = 5;  // primal variable 2
 		z[ 0] = 2;  // Lagrange multiplier on constraint 0
@@ -108,31 +112,47 @@ int  main(){
 		objVals = new double[ 1];
 		SparseJacobianMatrix *sparseJac;
 		std::vector<double> xx(3);
-		//
-		//
-		//testing 
-		xx[0] = 1;
-		xx[1] = 5;
-		xx[2] = 5;
-		std::cout << "CALL CppADFun" << std::endl;
+		//test forward and reverse sweeps 
+		xx[0] = x[0];
+		xx[1] = x[1];
+		xx[2] = x[2];
+		// create function with domain the variables and range
+		// objective function plus constraint values
+		std::cout << "CALL createCppADFun" << std::endl;
 		osinstance->createCppADFun( xx);
 		std::cout << "DONE CALL CppADFun" << std::endl;
 		std::cout << "CALL forward" << std::endl;
 		funVals = osinstance->forwardAD(0, xx);
-		std::cout << "Done CALL CppADFun" << std::endl;
-		for(int kjl = 0; kjl < 3; kjl++){
+		for( kjl = 0; kjl < 3; kjl++){
 			std::cout << "forward 0 " << funVals[ kjl] << std::endl;
 		}
 		xx[0] = 1;
 		xx[1] = 0; 
 		xx[2] = 0;
-		std::cout << "NOW THE GRADIENT"  << std::endl;
+		// get the first column of the Jacobian
+		std::cout << "Now the gradient from forwardAD(1, xx)"  << std::endl;
 		funVals = osinstance->forwardAD(1, xx);
-		for(int kjl = 0; kjl < 3; kjl++){
-			std::cout << "forward 0 " << funVals[ kjl] << std::endl;
+		for( kjl = 0; kjl < 3; kjl++){
+			std::cout << "forward 1 " << funVals[ kjl] << std::endl;
 		}
-		
+		// get the second row of the Jacobian using reverse mode
 		std::vector<double> vlambda(3);
+		vlambda[0] = 0;
+		vlambda[1] = 1;
+		vlambda[2] = 0;
+		// do forward of p - 1
+		xx[0] = 1;
+		xx[1] = 1; 
+		xx[2] = 1;
+		osinstance->forwardAD(0, xx);
+		// now the reverse  
+		funVals = osinstance->reverseAD(1, vlambda);
+		for( kjl = 0; kjl < 3; kjl++){
+			std::cout << "reverse 1 " << funVals[ kjl] << std::endl;
+		}
+		// now get the hessian of the Lagrangian of objective and 
+		// with the following multipliers
+		return 0;
 		vlambda[0] = 1;
 		vlambda[1]= 2;
 		vlambda[2] = 1;
@@ -140,37 +160,23 @@ int  main(){
 		for(int kjl = 0; kjl < 6; kjl++){
 			std::cout << dfunVals[ kjl] << std::endl;
 		}
-		//
-		//osinstance->getLagrangianHessianSparsityPattern( );
-		//osinstance->calculateLagrangianHessian( x, z, w, false, false);
 		xx[0] = 1;
 		xx[1] = 5;
 		xx[2] = 5;
-		osinstance->initForCallBack();
+		//osinstance->initForCallBack();
 		sparseJac = osinstance->getJacobianSparsityPattern();
 		osinstance->getIterateResults(x, w, z,  true,  1);
+		for(idx = 0; idx < osinstance->getConstraintNumber(); idx++){
+			for(k = *(sparseJac->starts + idx); k < *(sparseJac->starts + idx + 1); k++){
+				std::cout << "row idx = " << idx <<  "  col idx = "<< *(sparseJac->indexes + k)
+				<< " value = " << *(sparseJac->values + k) << std::endl;
+			}
+		}
 		return 0;
-		//for(idx = 0; idx < osinstance->getConstraintNumber(); idx++){
-		//	for(k = *(sparseJac->starts + idx); k < *(sparseJac->starts + idx + 1); k++){
-		//		std::cout << "row idx = " << idx <<  "  col idx = "<< *(sparseJac->indexes + k)
-		///		<< " value = " << *(sparseJac->values + k) << std::endl;
-		//	}
-		//}
-		//for(int kjl = 0; kjl < k; kjl++){
-		//	std::cout << "forward 0 " << funVals[ kjl] << std::endl;
-		//}
-		//return 0;
+		// now work directly with the CppAD package instead of OSInstance API
 		//
-
-		//
-		//
-		// first we show how to do this with CppAD
-		// then we do this with OS routines -- right now the OS routines
-		// do a lot of extra work
-
 		CppADvector< AD<double> > X(n);
 		CppADvector< AD<double> > Y(m);
-				//
 		X[1] = 5;
 		X[2] = 5;
 		X[0] = 0;
@@ -443,16 +449,6 @@ bool CheckGradientValues( SparseJacobianMatrix *sparseJac, double *objGrad,
 bool CheckHessianUpper(
 SparseHessianMatrix *sparseHessian , 
 double x0, double x1, double x2, double z0, double z1, double w ){
-/* --------------------------------------------------------------------------
-CppAD: C++ Algorithmic Differentiation: Copyright (C) 2003-06 Bradley M. Bell
-
-CppAD is distributed under multiple licenses. This distribution is under
-the terms of the 
-                    Common Public License Version 1.0.
-
-A copy of this license is included in the COPYING file of this distribution.
-Please visit http://www.coin-or.org/CppAD/ for information on other licenses.
--------------------------------------------------------------------------- */
 	using CppAD::NearEqual;
 	bool ok  = true;
 	int hessValuesIdx = 0;
