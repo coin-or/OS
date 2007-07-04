@@ -520,6 +520,8 @@
 			<xs:element name="linearConstraintCoefficients" type="LinearConstraintCoefficients" minOccurs="0"/>
 			<xs:element name="quadraticCoefficients" type="QuadraticCoefficients" minOccurs="0"/>
 			<xs:element name="nonlinearExpressions" type="NonlinearExpressions" minOccurs="0"/>
+			<xs:element name="stages" type="Stages" minOccurs="0"/>
+			<xs:element name="stochasticInformation" type="StochasticInformation" minOccurs="0"/>
 			<xs:element name="realTimeData" type="RealTimeData" minOccurs="0"/>
 			<xs:element name="disjunctiveInformation" type="ParamDisjunctiveInformation"/>
 		</xs:sequence>
