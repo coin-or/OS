@@ -69,14 +69,42 @@ int  main(){
 	//osilFileName =  dataDir + "HS071_NLP.osil";
 	osilFileName =  dataDir + "osilFiles" + dirsep  + "CppADTestLag.osil";
 	std::cout  << "osilFileName  =  " << osilFileName << std::endl;
-	/*
-	 * here is the test problem we just read in:
+	/**
+	 * here is the test problem CppADTestLag.osil:
 	 * min x0^2 + 9*x1   -- w[0]
 	 * s.t. 
 	 * 33 - 105 + 1.37*x1 + 2*x2 <= 10  -- y[0]
 	 * ln(x0*x2) >= 10  -- y[1]
 	 * Note: in the first constraint 33 is a constant term and 105 
 	 * is part of the nl node
+	 * the Jacobian is:
+	 * 
+	 * 2*x0   9       0
+	 * 0      1.37    2
+	 * 1/x0   0       1/x2
+	 * 
+	 * now set x0 = 1, x1 = 5,  x2 = 5
+	 * the Jacobian is
+	 * 
+	 * 2  9     0
+	 * 0  1.37  2
+	 * 1  0     .2
+	 * 
+	 * Now form a Lagrangian with multipliers of w on the objective
+	 * z0 the multiplier on the first constraint and z1 on the second
+	 * the Lagrangain is then:
+	 * 
+	 * 	L = w*(x0^2 + 9*x1) + z0*(1 + 1.37*x1 + 2*x2) + z1*log(x0*x2)
+	 * the partial with respect x0
+	 * L_0 = 2 * w * x0  + z1 / x0
+	 * the partial with respect x1
+	 * L_1 = w * 9 + z0*1.37 
+	 * the partial with respect x2
+	 * L_2 = z0 * 2 + z1 / x2 
+	 * in the Hessian there are only two nonzero terms
+	 * L_00 = 2 * w - z1 / ( x0 * x0 )
+	 * L_22 = - z1 / (x2 * x2)
+	 * 
 	*/
 	fileUtil = new FileUtil();
 	osil = fileUtil->getFileAsString( &osilFileName[0]);	
@@ -94,7 +122,95 @@ int  main(){
 		size_t m = 3; // Lagrangian has an objective and two constraints
 		osilreader = new OSiLReader();
 		osinstance = osilreader->readOSiL( &osil);
-		// here the values of the primal and Lagrange multipliers that we use
+		std::vector<double> funVals(3);
+		std::vector<double> dfunVals(6);
+		double *conVals = NULL;
+		conVals = new double[ 2];
+		double *objVals = NULL;
+		objVals = new double[ 1];
+		SparseJacobianMatrix *sparseJac;
+		std::vector<double> vx(3);
+		//test forward and reverse sweeps 
+		vx[0] = 1;
+		vx[1] = 5;
+		vx[2] = 5;
+		/**
+		 * 
+		 * create function with domain the variables and range
+		 * objective function plus constraint values
+		 * IMPORTANT: the AD calls ONLY apply to the nonlinear 
+		 * part of the problem. The 9*x1 term is not part of the AD
+		 * calculation nor are any terms in <linearConstraintCoefficients>
+		 * that DO NOT appear in any nl nodes
+		 * 
+		 */
+		std::cout << "CALL createCppADFun" << std::endl;
+		osinstance->createCppADFun( vx);
+		std::cout << "DONE CALL CppADFun" << std::endl;
+		std::cout << "CALL forward" << std::endl;
+		funVals = osinstance->forwardAD(0, vx);
+		for( kjl = 0; kjl < 3; kjl++){
+			std::cout << "forward 0 " << funVals[ kjl] << std::endl;
+		}
+		// get the third column of the Jacobian from a forward sweep
+		std::vector<double> e(3);
+		e[0] = 0;
+		e[1] = 0;
+		e[2] = 1;
+		std::cout << "Now get the third column of the Jacobian forwardAD(1, e)"  << std::endl;
+		funVals = osinstance->forwardAD(1, e);
+		for( kjl = 0; kjl < 3; kjl++){
+			std::cout << "forward 1 " << funVals[ kjl] << std::endl;
+		}
+		// get the second row of the Jacobian using a reverse sweep
+		std::vector<double> vlambda(3);
+		vlambda[0] = 0;
+		vlambda[1] = 0;
+		vlambda[2] = 1;
+		// reverse sweep to get second row of Jacobian 
+		std::cout << "Now get the second row of the Jacobian reverseAD(1, vlambda)"  << std::endl;
+		funVals = osinstance->reverseAD(1, vlambda);
+		for( kjl = 0; kjl < 3; kjl++){
+			std::cout << "reverse 1 " << funVals[ kjl] << std::endl;
+		}
+		// now get the Hessian of the Lagrangian of objective and 
+		// with the following multipliers
+		vlambda[0] = 1;
+		vlambda[1] = 2;
+		vlambda[2] = 1;
+		/**
+		 * 
+		 * reverseAD(2, vlambda) will produce a vector
+		 * of  size  2*n, the terms 0, 2, 4,  2*n - 2 will be
+		 * the first partials of the Lagrangian formed using vlambda
+		 * the terms 1, 3, ..., 2*n - 1 will be column (row) row i
+		 * of the Hessian of Lagrangian assuming we did a forwardAD(1, e^{i})
+		 * where e^{i} is the i'th unit vector
+		 * 
+		 */
+		dfunVals = osinstance->reverseAD(2, vlambda);
+		// get the first partials of the Lagrangian
+		std::cout << "Here are the first partials of the Lagrangain" << std::endl;
+		for(int kjl = 0; kjl <= 4; kjl+=2){
+			std::cout << dfunVals[ kjl] << std::endl;
+		}
+		/**
+		 * get the third row (column) of the Lagrangian
+		 * of the Hessian matrix, it the third row because
+		 * we did a  forwardAD(1, e^{3})
+		 */
+		std::cout << "Here is row of Hessian of Lagrangian" << std::endl;
+		for(int kjl = 1; kjl <= 5; kjl+=2){
+			std::cout << dfunVals[ kjl] << std::endl;
+		}
+		/**
+		 * most solver APIs work with pointers and not vectors so
+		 * the OS API works with pointers
+		 * here the values of the primal and Lagrange multipliers 
+		 * that we use
+		 * NOTE: the metods that we illustrate below have all the
+		 * constant terms included, in this 9*x1
+		 */
 		double* x = new double[3]; //primal variables
 		double* z = new double[2]; //Lagrange multipliers on constraints
 		double* w = new double[1]; //Lagrange multiplier on objective
@@ -104,147 +220,12 @@ int  main(){
 		z[ 0] = 2;  // Lagrange multiplier on constraint 0
 		z[ 1] = 1;  // Lagrange multiplier on constraint 1
 		w[ 0] = 1;  // Lagrange multiplier on the objective function
-		std::vector<double> funVals(3);
-		std::vector<double> dfunVals(6);
-		double *conVals = NULL;
-		conVals = new double[ 2];
-		double *objVals = NULL;
-		objVals = new double[ 1];
-		SparseJacobianMatrix *sparseJac;
-		std::vector<double> xx(3);
-		//test forward and reverse sweeps 
-		xx[0] = x[0];
-		xx[1] = x[1];
-		xx[2] = x[2];
-		// create function with domain the variables and range
-		// objective function plus constraint values
-		std::cout << "CALL createCppADFun" << std::endl;
-		osinstance->createCppADFun( xx);
-		std::cout << "DONE CALL CppADFun" << std::endl;
-		std::cout << "CALL forward" << std::endl;
-		funVals = osinstance->forwardAD(0, xx);
-		for( kjl = 0; kjl < 3; kjl++){
-			std::cout << "forward 0 " << funVals[ kjl] << std::endl;
-		}
-		xx[0] = 1;
-		xx[1] = 0; 
-		xx[2] = 0;
-		// get the first column of the Jacobian
-		std::cout << "Now the gradient from forwardAD(1, xx)"  << std::endl;
-		funVals = osinstance->forwardAD(1, xx);
-		for( kjl = 0; kjl < 3; kjl++){
-			std::cout << "forward 1 " << funVals[ kjl] << std::endl;
-		}
-		// get the second row of the Jacobian using reverse mode
-		std::vector<double> vlambda(3);
-		vlambda[0] = 0;
-		vlambda[1] = 1;
-		vlambda[2] = 0;
-		// do forward of p - 1
-		xx[0] = 1;
-		xx[1] = 1; 
-		xx[2] = 1;
-		osinstance->forwardAD(0, xx);
-		// now the reverse  
-		funVals = osinstance->reverseAD(1, vlambda);
-		for( kjl = 0; kjl < 3; kjl++){
-			std::cout << "reverse 1 " << funVals[ kjl] << std::endl;
-		}
-		// now get the hessian of the Lagrangian of objective and 
-		// with the following multipliers
-		return 0;
-		vlambda[0] = 1;
-		vlambda[1]= 2;
-		vlambda[2] = 1;
-		dfunVals = osinstance->reverseAD(2, vlambda);
-		for(int kjl = 0; kjl < 6; kjl++){
-			std::cout << dfunVals[ kjl] << std::endl;
-		}
-		xx[0] = 1;
-		xx[1] = 5;
-		xx[2] = 5;
-		//osinstance->initForCallBack();
-		sparseJac = osinstance->getJacobianSparsityPattern();
-		osinstance->getIterateResults(x, w, z,  true,  1);
-		for(idx = 0; idx < osinstance->getConstraintNumber(); idx++){
-			for(k = *(sparseJac->starts + idx); k < *(sparseJac->starts + idx + 1); k++){
-				std::cout << "row idx = " << idx <<  "  col idx = "<< *(sparseJac->indexes + k)
-				<< " value = " << *(sparseJac->values + k) << std::endl;
-			}
-		}
-		return 0;
-		// now work directly with the CppAD package instead of OSInstance API
-		//
-		CppADvector< AD<double> > X(n);
-		CppADvector< AD<double> > Y(m);
-		X[1] = 5;
-		X[2] = 5;
-		X[0] = 0;
-		// declare independent variables and start tape recording
-		std::cout << "Start Taping" << std::endl;
-		CppAD::Independent( X);
-		// range space vector 
-		Y[ 0] =  CppAD::pow(X[0], 2) + 9*X[1];
-		Y[ 1] =  33 - 105 + 1.37*X[1] + 2*X[2] ;
-		Y[ 2] =  log(X[0]*X[2]) ;
-		// create f: x -> y and stop tape recording
-		CppAD::ADFun<double> f(X, Y); 
-		std::cout << "Stop Taping" << std::endl;
-		// get function values
-		xx.clear();
-		xx.push_back( x[0]);
-		xx.push_back( x[1]);
-		xx.push_back( x[2]);
-		funVals = f.Forward(0, xx);
-		conVals[ 0] = funVals[ 1];
-		std::cout << "conVals[ 0] = " << conVals[ 0] << std::endl;
-		conVals[ 1] = funVals[ 2];
-		std::cout << "conVals[ 1] = " << conVals[ 1] << std::endl;
-		objVals[ 0] = funVals[ 0];
-		std::cout << "objVals[ 0] = " << objVals[ 0] << std::endl;
-		ok = CheckFunctionValues( conVals, *objVals, x[ 0], x[1], x[2], z[0], z[1], w[0] );
-		if( ok == 0){
-			std::cout << "FAILED CHECKING FUNCTION VALUES TEST" << std::endl;
-			return 0;
-		}
-		else{
-			std::cout << "PASSED CHECKING FUNCTION VALUES TEST" << std::endl;
-		}
-		// now get gradient and Hessian
-		// first define and initialze unit vector vector
-		sparseJac = osinstance->getJacobianSparsityPattern();
-		std::vector<double> unit_col_vec( n);
-		std::vector<double> lagMultipliers( m);	
-		std::vector<double> gradVals( m);
-		lagMultipliers[ 0] = w[ 0];
-		lagMultipliers[ 1] = z[ 0];
-		lagMultipliers[ 2] = z[ 1];	
-		unsigned int index, kj;
-		for(index = 0; index < n; index++){
-			unit_col_vec[ index] = 0;
-		}	
-		for(index = 0; index < n; index++){
-			unit_col_vec[ index] = 1;
-			// calculate column i of the Jacobian matrix
-			gradVals = f.Forward(1, unit_col_vec);
-			unit_col_vec[ index] = 0;
-			// get the nonzero gradient values in constraint k
-			for(kj = 0; kj < m; kj++){
-				std::cout << "variable " << index << "  row " << kj << "  gradient value" << std::endl;
-				std::cout << "gradient value = " << gradVals[ kj] << std::endl;	
-				// if variable i is in (*m_mapExpressionTreesMod[ index[ kj]]->mapVarindex).find( i) put into the gradient vector
-			}
-			// get row i of the Lagrangian function!!!
-			f.Reverse(2, lagMultipliers);
-		}
-		// done with CppAD test
-		//
-		//
-		//
-		// Now start using the nonlinear API
+		
+		
 		// check function values, both objectives and constraints
 		std::cout << "Call  = calculateAllConstraintFunctionValues"  << std::endl;			
-		conVals = osinstance->calculateAllConstraintFunctionValues( x, NULL, NULL,  true, 0);
+		//conVals = osinstance->calculateAllConstraintFunctionValues( x, NULL, NULL,  true, 0);
+		conVals = osinstance->calculateAllConstraintFunctionValues(x, true);
 		// note: if you just want the value for constraint function indexed by
 		// idx call the method:
 		//calculateFunctionValue(int idx, double *x, bool functionEvaluated)
@@ -267,9 +248,11 @@ int  main(){
 		else{
 			std::cout << "PASSED CHECKING FUNCTION VALUES TEST" << std::endl;
 		}
-	
+			
 		//
 		// now check gradients of constraints and objective function
+		//
+		//
 		//
 		std::cout << "PERFORM THE GRADIENT TESTS"   << std::endl;
 		
@@ -313,8 +296,8 @@ int  main(){
 		}
 		else{
 			std::cout << "PASSED THE GRADIENT TEST" << std::endl;
-		}
-		//return 0;
+		}		
+		//	
 		// done with gradient checks, now check on the Hessian
 		//
 		SparseHessianMatrix *sparseHessian;
@@ -361,15 +344,80 @@ int  main(){
 			std::cout << "PASSED THE SECOND HESSIAN TEST" << std::endl;
 		}
 		// do garbage collection
-
 		delete osilreader;
 		osilreader = NULL;
-		std::cout << "OSILREADER DELETED" << std::endl;
-		
-			
+		std::cout << "OSILREADER DELETED" << std::endl;		
+		return 0;
+		//
+		//
+		// now work directly with the CppAD package instead of OSInstance API
+		//
+		CppADvector< AD<double> > X(n);
+		CppADvector< AD<double> > Y(m);
+		X[1] = 5;
+		X[2] = 5;
+		X[0] = 0;
+		// declare independent variables and start tape recording
+		std::cout << "Start Taping" << std::endl;
+		CppAD::Independent( X);
+		// range space vector 
+		Y[ 0] =  CppAD::pow(X[0], 2) + 9*X[1];
+		Y[ 1] =  33 - 105 + 1.37*X[1] + 2*X[2] ;
+		Y[ 2] =  log(X[0]*X[2]) ;
+		// create f: x -> y and stop tape recording
+		CppAD::ADFun<double> f(X, Y); 
+		std::cout << "Stop Taping" << std::endl;
+		// get function values
+		vx.clear();
+		vx.push_back( x[0]);
+		vx.push_back( x[1]);
+		vx.push_back( x[2]);
+		funVals = f.Forward(0, vx);
+		conVals[ 0] = funVals[ 1];
+		std::cout << "conVals[ 0] = " << conVals[ 0] << std::endl;
+		conVals[ 1] = funVals[ 2];
+		std::cout << "conVals[ 1] = " << conVals[ 1] << std::endl;
+		objVals[ 0] = funVals[ 0];
+		std::cout << "objVals[ 0] = " << objVals[ 0] << std::endl;
+		ok = CheckFunctionValues( conVals, *objVals, x[ 0], x[1], x[2], z[0], z[1], w[0] );
+		if( ok == 0){
+			std::cout << "FAILED CHECKING FUNCTION VALUES TEST" << std::endl;
+			return 0;
+		}
+		else{
+			std::cout << "PASSED CHECKING FUNCTION VALUES TEST" << std::endl;
+		}
+		// now get gradient and Hessian
+		// first define and initialze unit vector vector
+		sparseJac = osinstance->getJacobianSparsityPattern();
+		std::vector<double> unit_col_vec( n);
+		std::vector<double> lagMultipliers( m);	
+		std::vector<double> gradVals( m);
+		lagMultipliers[ 0] = w[ 0];
+		lagMultipliers[ 1] = z[ 0];
+		lagMultipliers[ 2] = z[ 1];	
+		unsigned int index, kj;
+		for(index = 0; index < n; index++){
+			unit_col_vec[ index] = 0;
+		}	
+		for(index = 0; index < n; index++){
+			unit_col_vec[ index] = 1;
+			// calculate column i of the Jacobian matrix
+			gradVals = f.Forward(1, unit_col_vec);
+			unit_col_vec[ index] = 0;
+			// get the nonzero gradient values in constraint k
+			for(kj = 0; kj < m; kj++){
+				std::cout << "variable " << index << "  row " << kj << "  gradient value" << std::endl;
+				std::cout << "gradient value = " << gradVals[ kj] << std::endl;	
+				// if variable i is in (*m_mapExpressionTreesMod[ index[ kj]]->mapVarindex).find( i) put into the gradient vector
+			}
+			// get row i of the Lagrangian function!!!
+			f.Reverse(2, lagMultipliers);
+		}
+		// done with CppAD test		
 	}
 	catch(const ErrorClass& eclass){
-	std::cout << eclass.errormsg << std::endl;
+		std::cout << eclass.errormsg << std::endl;
 	} 	
 	{
 		// checking CppAD power
@@ -443,8 +491,6 @@ bool CheckGradientValues( SparseJacobianMatrix *sparseJac, double *objGrad,
 	ok &= NearEqual( *(sparseJac->values + 3), checkCon1Partial2, 1e-10, 1e-10); 
 	return ok;
 }//CheckGradientValues
-
-//
 //
 bool CheckHessianUpper(
 SparseHessianMatrix *sparseHessian , 
@@ -454,15 +500,14 @@ double x0, double x1, double x2, double z0, double z1, double w ){
 	int hessValuesIdx = 0;
 	//assert( sparseHessian->hessDimension = n * (n + 1) /2)
 	/*
-	L  =  w*x0*x0 + z0*(1 + 1.37*x1 + 3*x2) + z1*log(x0*x2)
-	the partial with respect x0
-	L_0 = 2 * w * x0 + 9 + z1 / x0
-	the partial with respect x1
-	L_1 = w0 * 1.37 
-	the partial with respect x2
-	L_2 = w0 * 3 + z1 / x2 
+	 * the partial with respect x0
+	 * L_0 = 2 * w * x0  + z1 / x0
+	 * the partial with respect x1
+	 * L_1 = w * 9 + z0*1.37 
+	 * the partial with respect x2
+	 * L_2 = z0 * 2 + z1 / x2 
 	*/
-	// L_00 = 2 * z - z1 / ( x0 * x0 )
+	// L_00 = 2 * w - z1 / ( x0 * x0 )
 	double check = 2. * w - z1 / (x0 * x0);
 	std::cout << check << std::endl;
 	std::cout << *(sparseHessian->hessValues + hessValuesIdx) << std::endl;
@@ -481,7 +526,3 @@ double x0, double x1, double x2, double z0, double z1, double w ){
 	if(ok == false) std::cout << "FAILED SIX" << std::endl;
 	return ok;
 }//CheckHessianUpper
-				//if( (m_mapExpressionTreesMod.find( index[ j]) != m_mapExpressionTreesMod.end() ) &&
-				//	( (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).find( i) != (*m_mapExpressionTreesMod[ index[ j]]->mapVarIdx).end()) ){
-					// variable i is appears in the expression tree for row index[ j]
-					// add the coefficient corresponding to variable i in row index[ j] to the expression tree	

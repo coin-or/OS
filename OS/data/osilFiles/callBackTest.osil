@@ -4,6 +4,7 @@
 		<name>callBackTest.osil</name>
 		<description> 
 			A problem designed to test callback features. 
+			Taken from LINDO API Manual
 		</description>
 	</instanceHeader>
 	<instanceData>

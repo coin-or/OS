@@ -2605,7 +2605,7 @@ std::vector<double> OSInstance::forwardAD(int p, std::vector<double> vdX){
 
 std::vector<double> OSInstance::reverseAD(int p, std::vector<double> vdlambda){
 	try{
-		if(p != (m_iHighestTaylorCoeffOrder + 1) ) throw 
+		if(p > (m_iHighestTaylorCoeffOrder + 1) ) throw 
 			ErrorClass( "trying to calculate a p order reverse when p-1 Taylor coefficient not available");
 		//for(int i  = 0; i < vdlambda.size(); i++){
 		//	std::cout << "ReverseAD Multiplier " << i   << " " << vdlambda[ i] << std::endl;
