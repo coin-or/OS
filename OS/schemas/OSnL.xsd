@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--xs:import namespace="http://www.w3.org/1998/Math/MathML" schemaLocation="http://www.w3.org/Math/XMLSchema/mathml2/mathml2.xsd"/-->
 	<xs:element name="osnl">
 		<xs:annotation>
@@ -1085,7 +1085,7 @@
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:element name="poissonInv" type="OSnLNodePoissonInv" substitutionGroup="OSnLNode"/>
-	<xs:complexType name="OSnLNodeGemoetricDist">
+	<xs:complexType name="OSnLNodeGeometricDist">
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
@@ -1094,8 +1094,8 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="gemoetricDist" type="OSnLNodeGemoetricDist" substitutionGroup="OSnLNode"/>
-	<xs:complexType name="OSnLNodeGemoetricCum">
+	<xs:element name="geometricDist" type="OSnLNodeGeometricDist" substitutionGroup="OSnLNode"/>
+	<xs:complexType name="OSnLNodeGeometricCum">
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
@@ -1104,8 +1104,8 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="gemoetricCum" type="OSnLNodeGemoetricCum" substitutionGroup="OSnLNode"/>
-	<xs:complexType name="OSnLNodeGemoetricInv">
+	<xs:element name="geometricCum" type="OSnLNodeGeometricCum" substitutionGroup="OSnLNode"/>
+	<xs:complexType name="OSnLNodeGeometricInv">
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
 				<xs:sequence minOccurs="2" maxOccurs="2">
@@ -1114,7 +1114,7 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="gemoetricInv" type="OSnLNodeGemoetricInv" substitutionGroup="OSnLNode"/>
+	<xs:element name="geometricInv" type="OSnLNodeGeometricInv" substitutionGroup="OSnLNode"/>
 	<xs:complexType name="OSnLNodeNegativeBinomialDist">
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
