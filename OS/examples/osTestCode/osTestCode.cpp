@@ -19,14 +19,19 @@
  
 
 
+#include <iostream>
+
 #include <string>
-using std::cout;   
+
+
+using std::string;
+using std::cout;
 using std::endl;
 
 
 int main(int argC, char* argV[]){
 // test OS code samples here
-	std::cout << "Hello World " << std::endl;	
+	cout << "Hello World " << endl;	
 
 }// end main
 
