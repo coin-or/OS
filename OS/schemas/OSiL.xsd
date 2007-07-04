@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- edited with XMLSpy v2007 rel. 3 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" elementFormDefault="qualified">
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:include schemaLocation="OSnL.xsd"/>
 	<xs:include schemaLocation="OSsL.xsd"/>
@@ -31,14 +31,14 @@
 			<xs:element name="nonlinearExpressions" type="NonlinearExpressions" minOccurs="0"/>
 			<xs:element name="cones" type="Cones" minOccurs="0"/>
 			<xs:element name="parameters" type="Parameters" minOccurs="0"/>
-			<xs:element name="parameterSets" type="ParameterSets" minOccurs="0"/>
 			<xs:element name="modifications" type="Modifications" minOccurs="0"/>
 			<xs:element name="disjunctiveInformation" type="DisjunctiveInformation" minOccurs="0"/>
+			<xs:element name="parameterSets" type="ParameterSets" minOccurs="0"/>
 			<xs:element name="stages" type="Stages" minOccurs="0"/>
 			<xs:element name="stochasticInformation" type="StochasticInformation" minOccurs="0"/>
+			<xs:element name="realTimeData" type="RealTimeData" minOccurs="0"/>
 			<xs:element name="userFunctions" type="UserFunctions" minOccurs="0"/>
 			<xs:element name="simulations" type="Simulations" minOccurs="0"/>
-			<xs:element name="realTimeData" type="RealTimeData" minOccurs="0"/>
 			<xs:element name="xmlData" type="XMLData" minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>
@@ -156,7 +156,7 @@
 	</xs:complexType>
 	<xs:complexType name="SemidefiniteCone">
 		<xs:sequence minOccurs="0">
-			<xs:element name="var" type="ConeElement" minOccurs="3" maxOccurs="unbounded"/>
+			<xs:element name="el" type="ConeElement" minOccurs="3" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
@@ -173,21 +173,21 @@
 	</xs:complexType>
 	<xs:complexType name="NonnegativeCone">
 		<xs:sequence minOccurs="0">
-			<xs:element name="var" type="ConeElement" maxOccurs="unbounded"/>
+			<xs:element name="el" type="ConeElement" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="startIndex" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="endIndex" type="xs:nonNegativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="QuadraticCone">
 		<xs:sequence minOccurs="0">
-			<xs:element name="var" type="ConeElement" minOccurs="2" maxOccurs="unbounded"/>
+			<xs:element name="el" type="ConeElement" minOccurs="2" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="startIndex" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="endIndex" type="xs:nonNegativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="RotatedQuadraticCone">
 		<xs:sequence minOccurs="0">
-			<xs:element name="var" type="ConeElement" minOccurs="3" maxOccurs="unbounded"/>
+			<xs:element name="el" type="ConeElement" minOccurs="3" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="startIndex" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="endIndex" type="xs:nonNegativeInteger" use="optional"/>
@@ -386,6 +386,8 @@
 			<xs:element name="linearConstraintCoefficients" type="DisjunctionLinearConstraintCoefficients" minOccurs="0"/>
 			<xs:element name="quadraticCoefficients" type="DisjunctionQuadraticCoefficients" minOccurs="0"/>
 			<xs:element name="nonlinearExpressions" type="NonlinearExpressions" minOccurs="0"/>
+			<xs:element name="cones" type="Cones" minOccurs="0"/>
+			<xs:element name="parameterSets" type="ParameterSets" minOccurs="0"/>
 			<xs:element name="stages" type="Stages" minOccurs="0"/>
 			<xs:element name="stochasticInformation" type="StochasticInformation" minOccurs="0"/>
 			<xs:element name="realTimeData" type="RealTimeData" minOccurs="0"/>
@@ -420,7 +422,7 @@
 		<xs:attribute name="numberOfParameters" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="Param">
-		<xs:choice>
+		<xs:choice minOccurs="0">
 			<xs:element name="var" type="StochasticNumberVar"/>
 			<xs:element name="obj" type="StochasticNumberObj"/>
 			<xs:element name="con" type="StochasticNumberCon"/>
@@ -486,8 +488,6 @@
 			<xs:element name="linearConstraintCoefficients" type="DisjunctionLinearConstraintCoefficients" minOccurs="0"/>
 			<xs:element name="quadraticCoefficients" type="DisjunctionQuadraticCoefficients" minOccurs="0"/>
 			<xs:element name="nonlinearExpressions" type="DisjunctionNonlinearExpressions" minOccurs="0"/>
-			<xs:element name="stages" type="Stages" minOccurs="0"/>
-			<xs:element name="stochasticInformation" type="StochasticInformation" minOccurs="0"/>
 			<xs:element name="realTimeData" type="RealTimeData" minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute name="base" use="optional" default="coreProgram">
@@ -520,10 +520,9 @@
 			<xs:element name="linearConstraintCoefficients" type="LinearConstraintCoefficients" minOccurs="0"/>
 			<xs:element name="quadraticCoefficients" type="QuadraticCoefficients" minOccurs="0"/>
 			<xs:element name="nonlinearExpressions" type="NonlinearExpressions" minOccurs="0"/>
-			<xs:element name="stages" type="Stages" minOccurs="0"/>
-			<xs:element name="stochasticInformation" type="StochasticInformation" minOccurs="0"/>
+			<xs:element name="cones" type="Cones" minOccurs="0"/>
+			<xs:element name="disjunctiveInformation" type="ParamDisjunctiveInformation" minOccurs="0"/>
 			<xs:element name="realTimeData" type="RealTimeData" minOccurs="0"/>
-			<xs:element name="disjunctiveInformation" type="ParamDisjunctiveInformation"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfDisjunctions" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
