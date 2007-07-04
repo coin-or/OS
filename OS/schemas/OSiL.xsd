@@ -486,6 +486,8 @@
 			<xs:element name="linearConstraintCoefficients" type="DisjunctionLinearConstraintCoefficients" minOccurs="0"/>
 			<xs:element name="quadraticCoefficients" type="DisjunctionQuadraticCoefficients" minOccurs="0"/>
 			<xs:element name="nonlinearExpressions" type="DisjunctionNonlinearExpressions" minOccurs="0"/>
+			<xs:element name="stages" type="Stages" minOccurs="0"/>
+			<xs:element name="stochasticInformation" type="StochasticInformation" minOccurs="0"/>
 			<xs:element name="realTimeData" type="RealTimeData" minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute name="base" use="optional" default="coreProgram">
