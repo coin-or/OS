@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2007 rel. 3 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:include schemaLocation="OSnL.xsd"/>
 	<xs:include schemaLocation="OSiL.xsd"/>
 	<xs:element name="osgl"/>
@@ -771,8 +772,16 @@
 	<xs:element name="dirichlet" type="Dirichlet"/>
 	<xs:complexType name="GeneralDistribution">
 		<xs:sequence>
-			<xs:element name="randomVariables" type="GeneralDistributionRandomVariables"/>
-			<xs:element name="multivariate" type="GeneralDistributionMultivariate" minOccurs="0"/>
+			<xs:element name="marginals">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="GeneralDistributionRandomVariables">
+							<xs:attribute name="numberOfRandomVariables" type="xs:nonNegativeInteger" use="optional" default="1"/>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="jointDistribution" type="GeneralDistributionMultivariate" minOccurs="0"/>
 			<xs:element name="baseDistribution" type="GeneralDistributionBase" minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute name="cdf" type="xs:boolean" use="optional" default="false"/>
@@ -781,7 +790,7 @@
 		<xs:sequence>
 			<xs:element name="rv" type="GeneralDistributionRandomVariable" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfRandomVariables" type="xs:nonNegativeInteger" use="optional" default="1"/>
+		<xs:attribute name="numberOfMarginals" type="xs:nonNegativeInteger" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="GeneralDistributionRandomVariableMoment">
 		<xs:sequence>
@@ -799,15 +808,15 @@
 		</xs:sequence>
 		<xs:attribute name="numberOfMoments" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="GeneralDistributionRandomVariablePercentile">
+	<xs:complexType name="GeneralDistributionRandomVariableQuantile">
 		<xs:sequence>
 			<xs:element ref="OSnLNode" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="percent" use="required">
+		<xs:attribute name="qProb" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:double">
 					<xs:minInclusive value="0"/>
-					<xs:maxInclusive value="100"/>
+					<xs:maxInclusive value="1"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
@@ -815,7 +824,7 @@
 		<xs:attribute name="lb" type="xs:double" use="optional"/>
 		<xs:attribute name="ub" type="xs:double" use="optional"/>
 	</xs:complexType>
-	<xs:complexType name="GeneralDistributionRandomVariablePercentileDiff">
+	<xs:complexType name="GeneralDistributionRandomVariableQuantileDiff">
 		<xs:sequence>
 			<xs:element ref="OSnLNode" minOccurs="0"/>
 		</xs:sequence>
@@ -839,14 +848,14 @@
 		<xs:attribute name="lb" type="xs:double" use="optional"/>
 		<xs:attribute name="ub" type="xs:double" use="optional"/>
 	</xs:complexType>
-	<xs:complexType name="GeneralDistributionRandomVariablePercentiles">
+	<xs:complexType name="GeneralDistributionRandomVariableQuantiles">
 		<xs:sequence>
-			<xs:element name="percentile" type="GeneralDistributionRandomVariablePercentile" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="percentileDiff" type="GeneralDistributionRandomVariablePercentileDiff" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="quantile" type="GeneralDistributionRandomVariableQuantile" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="quantileDiff" type="GeneralDistributionRandomVariableQuantileDiff" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfPercentiles" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfQuantiles" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="GeneralDistributionRandomVariableQuantile">
+	<xs:complexType name="GeneralDistributionRandomVariableQuartile">
 		<xs:sequence>
 			<xs:element ref="OSnLNode" minOccurs="0"/>
 		</xs:sequence>
@@ -856,7 +865,7 @@
 		<xs:attribute name="lb" type="xs:double" use="optional"/>
 		<xs:attribute name="ub" type="xs:double" use="optional"/>
 	</xs:complexType>
-	<xs:complexType name="GeneralDistributionRandomVariableQuantileDiff">
+	<xs:complexType name="GeneralDistributionRandomVariableQuartileDiff">
 		<xs:sequence>
 			<xs:element ref="OSnLNode" minOccurs="0"/>
 		</xs:sequence>
@@ -867,12 +876,12 @@
 		<xs:attribute name="lb" type="xs:double" use="optional"/>
 		<xs:attribute name="ub" type="xs:double" use="optional"/>
 	</xs:complexType>
-	<xs:complexType name="GeneralDistributionRandomVariableQuantiles">
+	<xs:complexType name="GeneralDistributionRandomVariableQuartiles">
 		<xs:sequence>
-			<xs:element name="quantile" type="GeneralDistributionRandomVariableQuantile" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="quantileDiff" type="GeneralDistributionRandomVariableQuantileDiff" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="quartile" type="GeneralDistributionRandomVariableQuartile" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="quartileDiff" type="GeneralDistributionRandomVariableQuartileDiff" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfPercentiles" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfQuantiles" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="GeneralDistributionRandomVariableInterval">
 		<xs:sequence>
@@ -934,7 +943,6 @@
 	<xs:complexType name="GeneralDistributionRandomVariable">
 		<xs:all>
 			<xs:element name="moments" type="GeneralDistributionRandomVariableMoments" minOccurs="0"/>
-			<xs:element name="percentiles" type="GeneralDistributionRandomVariablePercentiles" minOccurs="0"/>
 			<xs:element name="quantiles" type="GeneralDistributionRandomVariableQuantiles" minOccurs="0"/>
 			<xs:element name="intervals" type="GeneralDistributionRandomVariableIntervals" minOccurs="0"/>
 			<xs:element name="coefficientOfVariation" type="GeneralDistributionRandomVariableCoefficientOfVariation" minOccurs="0"/>
