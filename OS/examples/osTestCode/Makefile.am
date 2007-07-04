@@ -149,14 +149,14 @@ if COIN_HAS_GLPK
   osTestCode_LDADD += $(GLPKLIB)
 endif
 
-if COIN_HAS_IPOPT
-  AM_CPPFLAGS += -I`$(CYGPATH_W) $(IPOPTINCDIR)` 
-  osTestCode_LDADD += $(IPOPTLIB)
-endif
-
 if COIN_HAS_LINDO
   AM_CPPFLAGS += -I`$(CYGPATH_W) $(LINDOINCDIR)` 
   osTestCode_LDADD += $(LINDOLIB)
+endif
+
+if COIN_HAS_IPOPT
+  AM_CPPFLAGS += -I`$(CYGPATH_W) $(IPOPTINCDIR)` 
+  osTestCode_LDADD += $(IPOPTLIB)
 endif
 
 if COIN_HAS_KNITRO
