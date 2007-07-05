@@ -1934,6 +1934,7 @@ double *OSInstance::calculateAllConstraintFunctionValues(double* x, bool new_x){
 		for(idx = 0; idx < numConstraints; idx++){
 			m_mdConstraintFunctionValues[ idx]  = calculateFunctionValue(idx, x, new_x);	
 		}
+		
 	}
  	catch(const ErrorClass& eclass){
 		throw ErrorClass( eclass.errormsg);
@@ -2554,7 +2555,9 @@ void OSInstance::duplicateExpressionTreesMap(){
  *revised AD test code
  */
 bool OSInstance::createCppADFun(std::vector<double> vdX){
-	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
+	//if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
+	if(m_binitForCallBack == false) initForCallBack();
+	
 	//if( m_bAllNonlinearVariablesIndex == false) getAllNonlinearVariablesIndexMap( );
 	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
 	unsigned int i;
@@ -2757,8 +2760,8 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conM
 					jacIndex = 0;
 					for(posVarIdx = m_mapAllNonlinearVariablesIndex.begin(); posVarIdx 
 						!= m_mapAllNonlinearVariablesIndex.end(); ++posVarIdx){
-						std::cout << "Constraint Function Jacobian Values" << "For Constraint  " << idx  << std::endl;
-						std::cout << "Jac Val for index " << posVarIdx->first  << " = " << m_vdYjacval[ jacIndex] << std::endl;
+						//std::cout << "Constraint Function Jacobian Values" << "For Constraint  " << idx  << std::endl;
+						//std::cout << "Jac Val for index " << posVarIdx->first  << " = " << m_vdYjacval[ jacIndex] << std::endl;
 						//if(m_miJacIndex[ jstart] != posVarIdx->first) throw ErrorClass("error calculating Jacobian matrix");
 						// we are working with variable posVarIdx->first in the original variable space
 						// we need to see which variable this is in the individual constraint map

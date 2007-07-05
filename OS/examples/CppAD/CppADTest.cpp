@@ -48,7 +48,7 @@ int  main(){
 	std::cout.precision(12);
 	// error checking functions
 	bool CheckFunctionValues( double *conVals, double objValue,
-		double x0, double x1, double x2, double y0, double y1, double z );
+		double x0, double x1, double x2, double x3, double y0, double y1, double z );
 	bool CheckHessianUpper( SparseHessianMatrix *sparseHessian, 
 		double x0, double x1, double x2, double y0, double y1, double z );
 	bool CheckGradientValues( SparseJacobianMatrix *sparseJac, double *objGrad,
@@ -73,34 +73,38 @@ int  main(){
 	 * here is the test problem CppADTestLag.osil:
 	 * min x0^2 + 9*x1   -- w[0]
 	 * s.t. 
-	 * 33 - 105 + 1.37*x1 + 2*x2 <= 10  -- y[0]
+	 * 33 - 105 + 1.37*x1 + 2*x2  + 5*x1 <= 10  -- y[0]
 	 * ln(x0*x2) >= 10  -- y[1]
 	 * Note: in the first constraint 33 is a constant term and 105 
 	 * is part of the nl node
 	 * the Jacobian is:
 	 * 
 	 * 2*x0   9       0
-	 * 0      1.37    2
+	 * 0      6.37    2
 	 * 1/x0   0       1/x2
 	 * 
 	 * now set x0 = 1, x1 = 5,  x2 = 5
 	 * the Jacobian is
 	 * 
-	 * 2  9     0
-	 * 0  1.37  2
-	 * 1  0     .2
+	 * 2   9     0
+	 * 0   6.37  2
+	 * 1   0     .2
 	 * 
 	 * Now form a Lagrangian with multipliers of w on the objective
 	 * z0 the multiplier on the first constraint and z1 on the second
 	 * the Lagrangain is then:
 	 * 
 	 * 	L = w*(x0^2 + 9*x1) + z0*(1 + 1.37*x1 + 2*x2) + z1*log(x0*x2)
+	 * 
 	 * the partial with respect x0
 	 * L_0 = 2 * w * x0  + z1 / x0
+	 * 
 	 * the partial with respect x1
 	 * L_1 = w * 9 + z0*1.37 
+	 * 
 	 * the partial with respect x2
 	 * L_2 = z0 * 2 + z1 / x2 
+	 * 
 	 * in the Hessian there are only two nonzero terms
 	 * L_00 = 2 * w - z1 / ( x0 * x0 )
 	 * L_22 = - z1 / (x2 * x2)
@@ -128,7 +132,6 @@ int  main(){
 		conVals = new double[ 2];
 		double *objVals = NULL;
 		objVals = new double[ 1];
-		SparseJacobianMatrix *sparseJac;
 		std::vector<double> vx(3);
 		//test forward and reverse sweeps 
 		vx[0] = 1;
@@ -147,6 +150,7 @@ int  main(){
 		std::cout << "CALL createCppADFun" << std::endl;
 		osinstance->createCppADFun( vx);
 		std::cout << "DONE CALL CppADFun" << std::endl;
+		//osinstance->initForCallBack();
 		std::cout << "CALL forward" << std::endl;
 		funVals = osinstance->forwardAD(0, vx);
 		for( kjl = 0; kjl < 3; kjl++){
@@ -155,20 +159,20 @@ int  main(){
 		// get the third column of the Jacobian from a forward sweep
 		std::vector<double> e(3);
 		e[0] = 0;
-		e[1] = 0;
-		e[2] = 1;
-		std::cout << "Now get the third column of the Jacobian forwardAD(1, e)"  << std::endl;
+		e[1] = 1;
+		e[2] = 0;
+		std::cout << "Now get the second column of the Jacobian forwardAD(1, e)"  << std::endl;
 		funVals = osinstance->forwardAD(1, e);
 		for( kjl = 0; kjl < 3; kjl++){
 			std::cout << "forward 1 " << funVals[ kjl] << std::endl;
 		}
-		// get the second row of the Jacobian using a reverse sweep
+		// get the third row of the Jacobian using a reverse sweep
 		std::vector<double> vlambda(3);
 		vlambda[0] = 0;
 		vlambda[1] = 0;
 		vlambda[2] = 1;
-		// reverse sweep to get second row of Jacobian 
-		std::cout << "Now get the second row of the Jacobian reverseAD(1, vlambda)"  << std::endl;
+		// reverse sweep to get third row of Jacobian 
+		std::cout << "Now get the third row of the Jacobian reverseAD(1, vlambda)"  << std::endl;
 		funVals = osinstance->reverseAD(1, vlambda);
 		for( kjl = 0; kjl < 3; kjl++){
 			std::cout << "reverse 1 " << funVals[ kjl] << std::endl;
@@ -187,7 +191,7 @@ int  main(){
 		 * of the Hessian of Lagrangian assuming we did a forwardAD(1, e^{i})
 		 * where e^{i} is the i'th unit vector
 		 * 
-		 */
+		 */		 
 		dfunVals = osinstance->reverseAD(2, vlambda);
 		// get the first partials of the Lagrangian
 		std::cout << "Here are the first partials of the Lagrangain" << std::endl;
@@ -199,7 +203,7 @@ int  main(){
 		 * of the Hessian matrix, it the third row because
 		 * we did a  forwardAD(1, e^{3})
 		 */
-		std::cout << "Here is row of Hessian of Lagrangian" << std::endl;
+		std::cout << "Here is the third row (column) of Hessian of Lagrangian" << std::endl;
 		for(int kjl = 1; kjl <= 5; kjl+=2){
 			std::cout << dfunVals[ kjl] << std::endl;
 		}
@@ -211,36 +215,65 @@ int  main(){
 		 * NOTE: the metods that we illustrate below have all the
 		 * constant terms included, in this 9*x1
 		 */
-		double* x = new double[3]; //primal variables
+		double* x = new double[4]; //primal variables
 		double* z = new double[2]; //Lagrange multipliers on constraints
 		double* w = new double[1]; //Lagrange multiplier on objective
 		x[ 0] = 1;  // primal variable 0
 		x[ 1] = 5;  // primal variable 1
 		x[ 2] = 5;  // primal variable 2
+		x[ 3] = 7;  // primal variable 3
 		z[ 0] = 2;  // Lagrange multiplier on constraint 0
 		z[ 1] = 1;  // Lagrange multiplier on constraint 1
 		w[ 0] = 1;  // Lagrange multiplier on the objective function
 		
+		/**  
+		 * first we show different calls to get constraint and objective 
+		 * function values, many of this function calls are overloaded, 
+		 * for example, to evaluate all of the constraints at the
+		 * current value of x use
+		 * 
+		 * calculateAllConstraintFunctionValues(double* x, double *objLambda, 
+		 * double *conLambda, bool new_x, int highestOrder)
+		 * 
+		 * if you want the functions values calculated using the algorithmic
+		 * differentiation package. This may be desirable if you are also going 
+		 * to calculate derivatives at the same time. However, use
+		 * 
+		 * calculateAllConstraintFunctionValues(double* x, bool new_x)
+		 * 
+		 * if you are going to do a lot of function evaluations without derivative
+		 * calculations, this way you do not need to use operator overloading
+		 * 
+		 * Similar remarks apply to the objective functions
+		 * 
+		 * if you want to get a function value by index here that signature
+		 * 
+		 * double calculateFunctionValue(int idx, double* x, bool new_x);
+		 * 
+		 * for example, use calculateFunctionValue(-1, x,  true)
+		 * to get the first objective function value
+		 * 
+		 */
+		 
+		osinstance->bUseExpTreeForFunEval = false;
+		std::cout << "Calculate objective, idx = -1"  << std::endl;			
+		std::cout << "obj value = " << osinstance->calculateFunctionValue(-1, x,  true) << std::endl;
 		
-		// check function values, both objectives and constraints
-		std::cout << "Call  = calculateAllConstraintFunctionValues"  << std::endl;			
-		//conVals = osinstance->calculateAllConstraintFunctionValues( x, NULL, NULL,  true, 0);
+		std::cout << "Calculate  first constraint, idx = 0"  << std::endl;			
+		std::cout << "constraint index 0 value = " << osinstance->calculateFunctionValue(0, x,  true) << std::endl;
+		 
+		std::cout << "Now use calculateAllConstraintFunctionValues"  << std::endl;			
 		conVals = osinstance->calculateAllConstraintFunctionValues(x, true);
-		// note: if you just want the value for constraint function indexed by
-		// idx call the method:
-		//calculateFunctionValue(int idx, double *x, bool functionEvaluated)
-		std::cout << "Call  = calculateAllObjectiveFunctionValues"  << std::endl;	
-		objVals = osinstance->calculateAllObjectiveFunctionValues( x, NULL, NULL, true, 0);
-		// note: if you just want the value for the objective function indexed by
-		// idx call the method:
-		//calculateFunctionValue(int idx, double *x, bool functionEvaluated)
 		for( idx = 0; idx < osinstance->getConstraintNumber(); idx++){
-			std::cout << "CONSTRAINT FUNCTION INDEX = " <<  idx << " FUNCTION VALUE =  "  << *(conVals + idx) << std::endl;
+			std::cout << "CONSTRAINT FUNCTION INDEX = " <<  idx << "  CONSTRAINT FUNCTION VALUE =  "  << *(conVals + idx) << std::endl;
 		}
+		//
+		std::cout << "Now use calculateAllObjectiveFunctionValues"  << std::endl;	
+		objVals = osinstance->calculateAllObjectiveFunctionValues( x, NULL, NULL, true, 0);
 		for( idx = 0; idx < osinstance->getObjectiveNumber(); idx++){
-			std::cout << "OBJECTIVE FUNCTION  INDEX = " << idx <<  " FUNCTION VALUE = "  << *(objVals + idx) << std::endl;
+			std::cout << "OBJECTIVE FUNCTION  INDEX = " << idx <<  "  OBJECTIVE FUNCTION VALUE = "  << *(objVals + idx) << std::endl;
 		}
-		ok = CheckFunctionValues( conVals, *objVals, x[ 0], x[1], x[2], z[0], z[1], w[0] );
+		ok = CheckFunctionValues( conVals, *objVals, x[ 0], x[1], x[2], x[3],  z[0], z[1], w[0] );
 		if( ok == 0){
 			std::cout << "FAILED CHECKING FUNCTION VALUES TEST" << std::endl;
 			return 0;
@@ -248,26 +281,16 @@ int  main(){
 		else{
 			std::cout << "PASSED CHECKING FUNCTION VALUES TEST" << std::endl;
 		}
-			
-		//
-		// now check gradients of constraints and objective function
-		//
-		//
-		//
-		std::cout << "PERFORM THE GRADIENT TESTS"   << std::endl;
 		
-		double *objGrad;
-		std::cout << "OBJECTIVE FUNCTION GRADIENT"   << std::endl;
-		// in our implementation the objective function is a dense gradient
-		objGrad = osinstance->calculateObjectiveFunctionGradient( &x[0], NULL, NULL,  -1, false, 1);
-		for(idx = 0; idx < osinstance->getVariableNumber(); idx++){
-			std::cout << "col idxx = " << idx << "  value =  " << *(objGrad + idx)  << std::endl;
-		}
-		std::cout << "CONSTRAINT JACOBIAN"   << std::endl;
-		// the constraint gradients are sparse
-		// some solvers have an initial method that require the sparsity structure
-		// get the sparsity structure
-		sparseJac = osinstance->getJacobianSparsityPattern();
+		/**  
+		 * Most solvers that provide call backs want sparsity pattern. 
+		 * Jacobian and Hessain sparsity patters are provided by the 
+		 * OSInstance API
+		 * 
+		 */
+		
+		SparseJacobianMatrix *sparseJac;
+		sparseJac = osinstance->getJacobianSparsityPattern();		
 		// print out just the sparsity pattern
 		std::cout << "JACOBIAN SPARSITY PATTERN"   << std::endl;
 		for(idx = 0; idx < osinstance->getConstraintNumber(); idx++){
@@ -280,7 +303,40 @@ int  main(){
 				std::cout << "row idx = " << idx <<  "  col idx = "<< *(sparseJac->indexes + k) << std::endl;
 			}
 		}	
-		std::cout << "JACOBIAN MATRIX"   << std::endl;
+		
+		SparseHessianMatrix *sparseHessian;
+		// the Hessian test
+		// get the sparsity pattern -- many solvers want to initialize with just the sparsity
+		std::cout << "GET LAGRANGIAN HESSIAN SPARSITY PATTERN"   << std::endl;
+		sparseHessian = osinstance->getLagrangianHessianSparsityPattern( );
+		for(idx = 0; idx < sparseHessian->hessDimension; idx++){
+			std::cout <<  "Row Index = " << *(sparseHessian->hessRowIdx + idx) ;
+			std::cout <<  "  Column Index = " << *(sparseHessian->hessColIdx + idx) << std::endl;
+		}		 
+		
+		/**  
+		 * Most solvers that provide call backs want Jacobian calculation. 
+		 * Constraint Jacobians and objective function gradients are 
+		 * provided OSInstance API 
+		 * the basic signature for these functions is 
+		 * 
+		 * calculateAllConstraintFunctionGradients(double* x, double *objLambda, 
+		 *    double *conLambda, bool new_x, int highestOrder)
+		 * 
+		 * If we have already calculated function values using the AD routine, then
+		 * highestOrder = 0, if we calculated function values using the OS expression 
+		 * tree then highestOrder = -1. Then if new_x = false and highestOrder = 0
+		 * and we make a gradient calcuation, then forwardAD(0, x) WILL NOT be called
+		 * and there is a savings
+		 */
+		double *objGrad;
+		std::cout << "OBJECTIVE FUNCTION GRADIENT"   << std::endl;
+		// in our implementation the objective function is a dense gradient
+		objGrad = osinstance->calculateObjectiveFunctionGradient( &x[0], NULL, NULL,  -1, false, 1);
+		for(idx = 0; idx < osinstance->getVariableNumber(); idx++){
+			std::cout << "col idxx = " << idx << "  value =  " << *(objGrad + idx)  << std::endl;
+		}
+		std::cout << "CONSTRAINT JACOBIAN MATRIX"   << std::endl;
 		// now make the gradient calculations and fill in the sparse Jacobian matrix
 		sparseJac = osinstance->calculateAllConstraintFunctionGradients( &x[0], NULL, NULL,  false, 1);
 		for(idx = 0; idx < osinstance->getConstraintNumber(); idx++){
@@ -296,22 +352,18 @@ int  main(){
 		}
 		else{
 			std::cout << "PASSED THE GRADIENT TEST" << std::endl;
-		}		
-		//	
-		// done with gradient checks, now check on the Hessian
-		//
-		SparseHessianMatrix *sparseHessian;
-		// the Hessian test
-		// get the sparsity pattern -- many solvers want to initialize with just the sparsity
-		std::cout << "GET LAGRANGIAN HESSIAN SPARSITY PATTERN"   << std::endl;
-		sparseHessian = osinstance->getLagrangianHessianSparsityPattern( );
-		for(idx = 0; idx < sparseHessian->hessDimension; idx++){
-			std::cout <<  "Row Index = " << *(sparseHessian->hessRowIdx + idx) ;
-			std::cout <<  "  Column Index = " << *(sparseHessian->hessColIdx + idx) << std::endl;
-		}
+		}	
+					  
+		/**  
+		 * Some solvers that provide call backs want the Hessian of 
+		 * the Lagrangian function. This is provided by the OSInstance
+		 * API
+		 * 
+		 */
+
 		//first iteration 
 		std::cout << "GET LAGRANGIAN HESSIAN FIRST TIME"   << std::endl;
-		sparseHessian = osinstance->calculateLagrangianHessian( x, w,  z,  true, 2);
+		sparseHessian = osinstance->calculateLagrangianHessian( x, w,  z,  false, 2);
 		for(idx = 0; idx < sparseHessian->hessDimension; idx++){
 			std::cout << "row idx = " << *(sparseHessian->hessRowIdx + idx) <<  
 			"  col idx = "<< *(sparseHessian->hessColIdx + idx)
@@ -325,8 +377,7 @@ int  main(){
 		else{
 			std::cout << "PASSED THE FIRST HESSIAN TEST" << std::endl;
 		}
-		//return 0;
-		//second iteration
+		// now change an x value, we don't rebuild the tree
 		x[0] = 5;
 		std::cout << "NOW GET LAGRANGIAN HESSIAN SECOND TIME"   << std::endl;
 		sparseHessian = osinstance->calculateLagrangianHessian(  x, w,  z,   true, 2);
@@ -379,7 +430,7 @@ int  main(){
 		std::cout << "conVals[ 1] = " << conVals[ 1] << std::endl;
 		objVals[ 0] = funVals[ 0];
 		std::cout << "objVals[ 0] = " << objVals[ 0] << std::endl;
-		ok = CheckFunctionValues( conVals, *objVals, x[ 0], x[1], x[2], z[0], z[1], w[0] );
+		ok = CheckFunctionValues( conVals, *objVals, x[ 0], x[1], x[2], x[3], z[0], z[1], w[0] );
 		if( ok == 0){
 			std::cout << "FAILED CHECKING FUNCTION VALUES TEST" << std::endl;
 			return 0;
@@ -409,7 +460,6 @@ int  main(){
 			for(kj = 0; kj < m; kj++){
 				std::cout << "variable " << index << "  row " << kj << "  gradient value" << std::endl;
 				std::cout << "gradient value = " << gradVals[ kj] << std::endl;	
-				// if variable i is in (*m_mapExpressionTreesMod[ index[ kj]]->mapVarindex).find( i) put into the gradient vector
 			}
 			// get row i of the Lagrangian function!!!
 			f.Reverse(2, lagMultipliers);
@@ -419,11 +469,13 @@ int  main(){
 	catch(const ErrorClass& eclass){
 		std::cout << eclass.errormsg << std::endl;
 	} 	
+	
+	//
 	{
-		// checking CppAD power
+		//checking CppAD power, another illustration of CppAD
 		size_t n  = 2;
-     	double x0 = 4;
-     	double x1 = .5;
+	 	double x0 = 4;
+	 	double x1 = .5;
 	   	CppADvector< AD<double> > x(n);
 	    x[0]      = x0;
 	    x[1]      = x1;
@@ -454,15 +506,15 @@ int  main(){
 }// end main program
 
 bool CheckFunctionValues( double *conVals, double objValue,
-	double x0, double x1, double x2, double z0, double z1, double w ){
+	double x0, double x1, double x2, double x3, double z0, double z1, double w ){
 	using CppAD::NearEqual;
 	bool ok  = true;
 	double checkObj = x0*x0 + 9*x1;
 	ok &= NearEqual(objValue, checkObj, 1e-10, 1e-10); 
-	double checkCon0 = 33. - 105. + 1.37*x1 + 2*x2;
+	double checkCon0 = 33. - 105. + 1.37*x1 + 2*x2 + 5*x1;
 	ok &= NearEqual(*(conVals + 0), checkCon0, 1e-10, 1e-10);
-	double checkCon1 = log(x0*x2);
-	ok &= NearEqual( *(conVals + 1), checkCon1, 1e-10, 1e-10);
+	//double checkCon1 = log(x0*x2) + 7*x3;
+	//ok &= NearEqual( *(conVals + 1), checkCon1, 1e-10, 1e-10);
 	return ok;
 }//CheckFunctionValues
 //
@@ -480,7 +532,7 @@ bool CheckGradientValues( SparseJacobianMatrix *sparseJac, double *objGrad,
 	ok &= NearEqual( *(objGrad + 2), checkObjPartial2, 1e-10, 1e-10); 
 	// get the constrating gradient
 	// row 0 gradient -- there are nonzero partials for variables 1 and 2
-	double checkCon0Partial1 = 1.37;
+	double checkCon0Partial1 = 1.37 + 5.0;
 	ok &= NearEqual( *(sparseJac->values + 0), checkCon0Partial1, 1e-10, 1e-10); 	
 	double checkCon0Partial2 = 2.;
 	ok &= NearEqual( *(sparseJac->values + 1), checkCon0Partial2, 1e-10, 1e-10); 
@@ -492,9 +544,8 @@ bool CheckGradientValues( SparseJacobianMatrix *sparseJac, double *objGrad,
 	return ok;
 }//CheckGradientValues
 //
-bool CheckHessianUpper(
-SparseHessianMatrix *sparseHessian , 
-double x0, double x1, double x2, double z0, double z1, double w ){
+bool CheckHessianUpper( SparseHessianMatrix *sparseHessian , 
+	double x0, double x1, double x2, double z0, double z1, double w ){
 	using CppAD::NearEqual;
 	bool ok  = true;
 	int hessValuesIdx = 0;
