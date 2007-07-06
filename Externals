@@ -22,5 +22,6 @@ MSVisualStudio/v7/Osi/libOsiCbc       https://projects.coin-or.org/svn/MSVisualS
 MSVisualStudio/v7/Osi/libOsiClp       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/Osi/libOsiClp
 MSVisualStudio/v7/Osi/libOsiVol       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/Osi/libOsiVol
 MSVisualStudio/v7                   https://projects.coin-or.org/svn/SYMPHONY/stable/5.1/Win32/v7
+MSVisualStudio/v7/OS/libOS       https://projects.coin-or.org/svn/OS/trunk/
 
   

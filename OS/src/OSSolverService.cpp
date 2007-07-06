@@ -302,7 +302,7 @@ void solve(){
 			// place a remote call
 			osagent = new OSSolverAgent( osoptions->serviceLocation );
 			//check to see if a solver option is listed in osol
-			if(osoptions->sovlerName != ""){
+			if(osoptions->solverName != ""){
 				int k;
 			}
 			osrl = osagent->solve(osoptions->osil  , osoptions->osol);
