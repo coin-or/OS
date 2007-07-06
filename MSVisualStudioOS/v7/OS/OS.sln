@@ -1,29 +1,29 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libCgl", "..\Cgl\libCgl\libCgl.vcproj", "{DBEA3904-F0B8-408A-9E1A-6497FEBE8C42}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libCgl", "..\..\..\MSVisualStudioExternals\v7\Cgl\libCgl\libCgl.vcproj", "{DBEA3904-F0B8-408A-9E1A-6497FEBE8C42}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libClp", "..\Clp\libClp\libClp.vcproj", "{4F8F7D1C-3A9E-444D-8EE9-77F33FA05994}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libClp", "..\..\..\MSVisualStudioExternals\v7\Clp\libClp\libClp.vcproj", "{4F8F7D1C-3A9E-444D-8EE9-77F33FA05994}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libCoinUtils", "..\CoinUtils\libCoinUtils\libCoinUtils.vcproj", "{C4867F15-438D-4FF8-8388-62FBAAA9786C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libCoinUtils", "..\..\..\MSVisualStudioExternals\v7\CoinUtils\libCoinUtils\libCoinUtils.vcproj", "{C4867F15-438D-4FF8-8388-62FBAAA9786C}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libOsi", "..\Osi\libOsi\libOsi.vcproj", "{7D98E2CB-876E-4F75-9F71-77D3FE87E149}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libOsi", "..\..\..\MSVisualStudioExternals\v7\Osi\libOsi\libOsi.vcproj", "{7D98E2CB-876E-4F75-9F71-77D3FE87E149}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libOsiCbc", "..\Osi\libOsiCbc\libOsiCbc.vcproj", "{A4D8DB82-7DC6-45EE-AF08-2A6DD7E7AB56}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libOsiCbc", "..\..\..\MSVisualStudioExternals\v7\Osi\libOsiCbc\libOsiCbc.vcproj", "{A4D8DB82-7DC6-45EE-AF08-2A6DD7E7AB56}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libOsiClp", "..\Osi\libOsiClp\libOsiClp.vcproj", "{02D45875-A8CF-41B9-990B-3699C0ECFE10}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libOsiClp", "..\..\..\MSVisualStudioExternals\v7\Osi\libOsiClp\libOsiClp.vcproj", "{02D45875-A8CF-41B9-990B-3699C0ECFE10}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libCbc", "..\Cbc\libCbc\libCbc.vcproj", "{BC0321FC-B509-483A-8D75-35D544B252F3}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libCbc", "..\..\..\MSVisualStudioExternals\v7\Cbc\libCbc\libCbc.vcproj", "{BC0321FC-B509-483A-8D75-35D544B252F3}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -53,26 +53,26 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OSTest", "OSTest\OSTest.vcp
 		{FDE75299-7466-4A6E-861C-E46021777559} = {FDE75299-7466-4A6E-861C-E46021777559}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libDyLP", "..\DyLP\libDyLP\libDylp.vcproj", "{41BA5322-61B4-41B9-857E-E44D6C326AB5}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libDyLP", "..\..\..\MSVisualStudioExternalsDyLP\v7\DyLP\libDyLP\libDylp.vcproj", "{41BA5322-61B4-41B9-857E-E44D6C326AB5}"
 	ProjectSection(ProjectDependencies) = postProject
 		{41BA5322-61B4-41B9-857E-E44D6C326AB5} = {41BA5322-61B4-41B9-857E-E44D6C326AB5}
 		{E86DDDC0-088B-4006-ADE1-0D9F8A6BBE4C} = {E86DDDC0-088B-4006-ADE1-0D9F8A6BBE4C}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libDyLPStdLib", "..\DyLP\libDyLPStdLib\libDylpStd.vcproj", "{41BA5322-61B4-41B9-857E-E44D6C326AB5}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libDyLPStdLib", "..\..\..\MSVisualStudioExternalsDyLP\v7\DyLP\libDyLPStdLib\libDylpStd.vcproj", "{41BA5322-61B4-41B9-857E-E44D6C326AB5}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libOsiDyLP", "..\Osi\libOsiDyLP\libOsiDyLP.vcproj", "{E86DDDC0-088B-4006-ADE1-0D9F8A6BBE4C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libOsiDyLP", "..\..\..\MSVisualStudioExternalsDyLP\v7\Osi\libOsiDyLP\libOsiDyLP.vcproj", "{E86DDDC0-088B-4006-ADE1-0D9F8A6BBE4C}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libSYMPHONY", "..\SYMPHONY\libSYMPHONY\libSYMPHONY.vcproj", "{41BA5322-61B4-41B9-857E-E44D6C326AB5}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libSYMPHONY", "..\..\..\MSVisualStudioExternalsSym\v7\SYMPHONY\libSYMPHONY\libSYMPHONY.vcproj", "{41BA5322-61B4-41B9-857E-E44D6C326AB5}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E86DDDC0-088B-4006-ADE1-0D9F8A6BBE4C} = {E86DDDC0-088B-4006-ADE1-0D9F8A6BBE4C}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libOsiSym", "..\Osi\libOsiSym\libOsiSym.vcproj", "{E86DDDC0-088B-4006-ADE1-0D9F8A6BBE4C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libOsiSym", "..\..\..\MSVisualStudioExternalsSym\v7\Osi\libOsiSym\libOsiSym.vcproj", "{E86DDDC0-088B-4006-ADE1-0D9F8A6BBE4C}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
