@@ -74,36 +74,39 @@ int  main(){
 	 * min x0^2 + 9*x1   -- w[0]
 	 * s.t. 
 	 * 33 - 105 + 1.37*x1 + 2*x2  + 5*x1 <= 10  -- y[0]
-	 * ln(x0*x2) >= 10  -- y[1]
+	 * ln(x0*x2) + 7*x3 >= 10  -- y[1]
 	 * Note: in the first constraint 33 is a constant term and 105 
 	 * is part of the nl node
 	 * the Jacobian is:
 	 * 
-	 * 2*x0   9       0
-	 * 0      6.37    2
-	 * 1/x0   0       1/x2
+	 * 2*x0   9       0      0
+	 * 0      6.37    2      0
+	 * 1/x0   0       1/x2   0
 	 * 
-	 * now set x0 = 1, x1 = 5,  x2 = 5
+	 * now set x0 = 1, x1 = 5,  x2 = 5, x3 = 7
 	 * the Jacobian is
 	 * 
-	 * 2   9     0
-	 * 0   6.37  2
-	 * 1   0     .2
+	 * 2   9       0    0
+	 * 0   6.37    2    0
+	 * 1   0      .2    7
 	 * 
 	 * Now form a Lagrangian with multipliers of w on the objective
 	 * z0 the multiplier on the first constraint and z1 on the second
 	 * the Lagrangain is then:
 	 * 
-	 * 	L = w*(x0^2 + 9*x1) + z0*(1 + 1.37*x1 + 2*x2) + z1*log(x0*x2)
+	 * 	L = w*(x0^2 + 9*x1) + z0*(1 + 1.37*x1 + 2*x2 + 5*x1) + z1*(log(x0*x2) + 7*x3)
 	 * 
 	 * the partial with respect x0
 	 * L_0 = 2 * w * x0  + z1 / x0
 	 * 
 	 * the partial with respect x1
-	 * L_1 = w * 9 + z0*1.37 
+	 * L_1 = w * 9 + z0*1.37 + z0*5
 	 * 
 	 * the partial with respect x2
 	 * L_2 = z0 * 2 + z1 / x2 
+	 * 
+	 * the partial with respect x3
+	 * L_3 = z1*7 
 	 * 
 	 * in the Hessian there are only two nonzero terms
 	 * L_00 = 2 * w - z1 / ( x0 * x0 )
@@ -141,10 +144,13 @@ int  main(){
 		 * 
 		 * create function with domain the variables and range
 		 * objective function plus constraint values
-		 * IMPORTANT: the AD calls ONLY apply to the nonlinear 
-		 * part of the problem. The 9*x1 term is not part of the AD
+		 * IMPORTANT: the forwardAD and reverseAD calls ONLY apply
+		 * to the nonlinear part of the problem. The 9*x1 term
+		 * in the objective is not part of the AD
 		 * calculation nor are any terms in <linearConstraintCoefficients>
-		 * that DO NOT appear in any nl nodes
+		 * that DO NOT appear in any nl nodes, for example the 7*x3 term
+		 * in constraint with index 1. Note also, that there are only three
+		 * variables that appear in nl nodes, x3 does not
 		 * 
 		 */
 		std::cout << "CALL createCppADFun" << std::endl;
@@ -159,9 +165,9 @@ int  main(){
 		// get the third column of the Jacobian from a forward sweep
 		std::vector<double> e(3);
 		e[0] = 0;
-		e[1] = 1;
-		e[2] = 0;
-		std::cout << "Now get the second column of the Jacobian forwardAD(1, e)"  << std::endl;
+		e[1] = 0;
+		e[2] = 1;
+		std::cout << "Now get the third column of the Jacobian forwardAD(1, e)"  << std::endl;
 		funVals = osinstance->forwardAD(1, e);
 		for( kjl = 0; kjl < 3; kjl++){
 			std::cout << "forward 1 " << funVals[ kjl] << std::endl;
@@ -221,7 +227,7 @@ int  main(){
 		x[ 0] = 1;  // primal variable 0
 		x[ 1] = 5;  // primal variable 1
 		x[ 2] = 5;  // primal variable 2
-		x[ 3] = 7;  // primal variable 3
+		x[ 3] = 10;  // primal variable 3
 		z[ 0] = 2;  // Lagrange multiplier on constraint 0
 		z[ 1] = 1;  // Lagrange multiplier on constraint 1
 		w[ 0] = 1;  // Lagrange multiplier on the objective function
@@ -377,7 +383,8 @@ int  main(){
 		else{
 			std::cout << "PASSED THE FIRST HESSIAN TEST" << std::endl;
 		}
-		// now change an x value, we don't rebuild the tree
+		// now change an x value, we don't rebuild the tree, however new_x 
+		// must be set to true
 		x[0] = 5;
 		std::cout << "NOW GET LAGRANGIAN HESSIAN SECOND TIME"   << std::endl;
 		sparseHessian = osinstance->calculateLagrangianHessian(  x, w,  z,   true, 2);
@@ -394,43 +401,46 @@ int  main(){
 		else{
 			std::cout << "PASSED THE SECOND HESSIAN TEST" << std::endl;
 		}
-		// do garbage collection
-		delete osilreader;
-		osilreader = NULL;
-		std::cout << "OSILREADER DELETED" << std::endl;		
-		return 0;
+		//set value back
+		x[ 0] = 1;	
+		//return 0;
 		//
 		//
 		// now work directly with the CppAD package instead of OSInstance API
 		//
+		n = 4;
+		m = 3;
 		CppADvector< AD<double> > X(n);
 		CppADvector< AD<double> > Y(m);
+		X[0] = 5;
 		X[1] = 5;
-		X[2] = 5;
-		X[0] = 0;
+		X[2] = 0;
+		X[3] = 1;
 		// declare independent variables and start tape recording
 		std::cout << "Start Taping" << std::endl;
 		CppAD::Independent( X);
 		// range space vector 
+		// we include the constant terms in the CppAD functions
 		Y[ 0] =  CppAD::pow(X[0], 2) + 9*X[1];
-		Y[ 1] =  33 - 105 + 1.37*X[1] + 2*X[2] ;
-		Y[ 2] =  log(X[0]*X[2]) ;
+		Y[ 1] =  33 - 105 + 1.37*X[1] + 2*X[2] + 5*X[1] ;
+		Y[ 2] =  log(X[0]*X[2]) + 7*X[3] ;
 		// create f: x -> y and stop tape recording
 		CppAD::ADFun<double> f(X, Y); 
 		std::cout << "Stop Taping" << std::endl;
 		// get function values
-		vx.clear();
-		vx.push_back( x[0]);
-		vx.push_back( x[1]);
-		vx.push_back( x[2]);
-		funVals = f.Forward(0, vx);
+		std::vector<double> x_vec( n);
+		x_vec[ 0] = x[ 0];
+		x_vec[ 1] = x[ 1];
+		x_vec[ 2] = x[ 2];
+		x_vec[ 3] = x[ 3];
+		funVals = f.Forward(0, x_vec);
 		conVals[ 0] = funVals[ 1];
 		std::cout << "conVals[ 0] = " << conVals[ 0] << std::endl;
 		conVals[ 1] = funVals[ 2];
 		std::cout << "conVals[ 1] = " << conVals[ 1] << std::endl;
 		objVals[ 0] = funVals[ 0];
 		std::cout << "objVals[ 0] = " << objVals[ 0] << std::endl;
-		ok = CheckFunctionValues( conVals, *objVals, x[ 0], x[1], x[2], x[3], z[0], z[1], w[0] );
+		ok = CheckFunctionValues( conVals, funVals[ 0], x[ 0], x[1], x[2], x[3], z[0], z[1], w[0] );
 		if( ok == 0){
 			std::cout << "FAILED CHECKING FUNCTION VALUES TEST" << std::endl;
 			return 0;
@@ -448,6 +458,7 @@ int  main(){
 		lagMultipliers[ 1] = z[ 0];
 		lagMultipliers[ 2] = z[ 1];	
 		unsigned int index, kj;
+		return 0;
 		for(index = 0; index < n; index++){
 			unit_col_vec[ index] = 0;
 		}	
@@ -464,12 +475,18 @@ int  main(){
 			// get row i of the Lagrangian function!!!
 			f.Reverse(2, lagMultipliers);
 		}
-		// done with CppAD test		
+		// done with CppAD test	
+		// do garbage collection
+		delete osilreader;
+		osilreader = NULL;
+		std::cout << "OSILREADER DELETED" << std::endl;	
+		delete[] conVals;
+		delete[] objVals;		
 	}
 	catch(const ErrorClass& eclass){
 		std::cout << eclass.errormsg << std::endl;
-	} 	
-	
+	} 
+
 	//
 	{
 		//checking CppAD power, another illustration of CppAD
@@ -510,11 +527,14 @@ bool CheckFunctionValues( double *conVals, double objValue,
 	using CppAD::NearEqual;
 	bool ok  = true;
 	double checkObj = x0*x0 + 9*x1;
+	std::cout  << "checkObj = " << checkObj << std::endl;
 	ok &= NearEqual(objValue, checkObj, 1e-10, 1e-10); 
 	double checkCon0 = 33. - 105. + 1.37*x1 + 2*x2 + 5*x1;
+	std::cout  << "checkCon0 = " << checkCon0 << std::endl;
 	ok &= NearEqual(*(conVals + 0), checkCon0, 1e-10, 1e-10);
-	//double checkCon1 = log(x0*x2) + 7*x3;
-	//ok &= NearEqual( *(conVals + 1), checkCon1, 1e-10, 1e-10);
+	double checkCon1 = log(x0*x2) + 7*x3;
+	std::cout  << "checkCon1 = " << checkCon1 << std::endl;
+	ok &= NearEqual( *(conVals + 1), checkCon1, 1e-10, 1e-10);
 	return ok;
 }//CheckFunctionValues
 //
@@ -538,9 +558,9 @@ bool CheckGradientValues( SparseJacobianMatrix *sparseJac, double *objGrad,
 	ok &= NearEqual( *(sparseJac->values + 1), checkCon0Partial2, 1e-10, 1e-10); 
 	// row 1 gradient -- there are nonzero partials for variables 0 and 2
 	double checkCon1Partial1 = 1./x0;
-	ok &= NearEqual( *(sparseJac->values + 2), checkCon1Partial1, 1e-10, 1e-10); 	
+	ok &= NearEqual( *(sparseJac->values + 3), checkCon1Partial1, 1e-10, 1e-10); 	
 	double checkCon1Partial2 = 1./x2;
-	ok &= NearEqual( *(sparseJac->values + 3), checkCon1Partial2, 1e-10, 1e-10); 
+	ok &= NearEqual( *(sparseJac->values + 4), checkCon1Partial2, 1e-10, 1e-10); 
 	return ok;
 }//CheckGradientValues
 //
@@ -550,14 +570,6 @@ bool CheckHessianUpper( SparseHessianMatrix *sparseHessian ,
 	bool ok  = true;
 	int hessValuesIdx = 0;
 	//assert( sparseHessian->hessDimension = n * (n + 1) /2)
-	/*
-	 * the partial with respect x0
-	 * L_0 = 2 * w * x0  + z1 / x0
-	 * the partial with respect x1
-	 * L_1 = w * 9 + z0*1.37 
-	 * the partial with respect x2
-	 * L_2 = z0 * 2 + z1 / x2 
-	*/
 	// L_00 = 2 * w - z1 / ( x0 * x0 )
 	double check = 2. * w - z1 / (x0 * x0);
 	std::cout << check << std::endl;
