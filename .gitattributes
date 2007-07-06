@@ -3,6 +3,8 @@
 /Externals -text
 /INSTALL -text
 /LICENSE -text
+MSVisualStudioDyLP/v7/DyLP/libDyLP/libDylp.vcproj -text
+MSVisualStudioDyLP/v7/DyLP/libDyLPStdLib/libDylpStd.vcproj -text
 MSVisualStudioOS/v7/OS/OS.sln -text
 MSVisualStudioOS/v7/OS/OSSolverService/OSSolverService.vcproj -text
 MSVisualStudioOS/v7/OS/OSTest/OSTest.vcproj -text
