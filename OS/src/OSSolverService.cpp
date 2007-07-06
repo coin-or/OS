@@ -303,7 +303,10 @@ void solve(){
 			osagent = new OSSolverAgent( osoptions->serviceLocation );
 			//check to see if a solver option is listed in osol
 			if(osoptions->solverName != ""){
-				int k;
+				std::string sOSoL = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/OSoL.xsd\"><general> </general></osol>";
+				// if an optimization tag is not there put one there
+				if(iStringpos != std::string::npos) 
+					sOSoL.insert(iStringpos, "<optimization>" "</optimization>");
 			}
 			osrl = osagent->solve(osoptions->osil  , osoptions->osol);
 			if(osoptions->osrlFile != "") fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
