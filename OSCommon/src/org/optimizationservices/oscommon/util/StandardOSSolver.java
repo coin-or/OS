@@ -40,6 +40,7 @@ public class StandardOSSolver extends DefaultSolver{
 		String sOS = System.getProperty("os.name").toLowerCase();
 		String sJobID = osOption.getJobID();
 		String sOSSolver = osOption.getOtherOptimizationOptionValueByName("os_solver");
+		if(sOSSolver == null || sOSSolver.length() <= 0) sOSSolver = osOption.getOtherOptionValueByName("os_solver");
 		if(sOSSolver == null || sOSSolver.length() <= 0) sOSSolver = OSParameter.OS_SOLVER;
 		
 		String sInstanceFile = OSParameter.TEMP_FILE_FOLDER+sJobID+".osil";
