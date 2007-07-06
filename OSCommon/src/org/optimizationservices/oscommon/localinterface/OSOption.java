@@ -1149,6 +1149,22 @@ public class OSOption {
 	}//getOtherOptionValues
 
 	/**
+	 * Get the string value from the other option hash map. 
+	 * 
+	 * @param name holds the name of the other option to get.
+	 * @return string value from the other option hash map, null if none. 
+	 */
+	public String getOtherOptionValueByName(String name){
+		Hashtable<String, String> otherOptionValues = getOtherOptionValues();
+		if(otherOptionValues != null && otherOptionValues.containsKey(name)){
+			return (String)otherOptionValues.get(name);
+		}
+		else{ 
+			return null;
+		}
+	}//getOtherOptionValueByName
+	
+	/**
 	 * set other options, with their names (required), descriptions (optional) and values (optional). 
 	 * 
 	 * @param names holds the names of the other options; it is required.  
