@@ -67,12 +67,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libOsiDyLP", "..\..\..\MSVi
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libSYMPHONY", "..\..\..\MSVisualStudioExternalsSym\v7\SYMPHONY\libSYMPHONY\libSYMPHONY.vcproj", "{41BA5322-61B4-41B9-857E-E44D6C326AB5}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libSYMPHONY", "..\..\..\MSVisualStudioExternalsSym\v7\libSymphony.vcproj", "{41BA5322-61B4-41B9-857E-E44D6C326AB5}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E86DDDC0-088B-4006-ADE1-0D9F8A6BBE4C} = {E86DDDC0-088B-4006-ADE1-0D9F8A6BBE4C}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libOsiSym", "..\..\..\MSVisualStudioExternalsSym\v7\Osi\libOsiSym\libOsiSym.vcproj", "{E86DDDC0-088B-4006-ADE1-0D9F8A6BBE4C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libOsiSym", "..\..\..\MSVisualStudioOS\v7\Osi\libOsiSym\libOsiSym.vcproj", "{E86DDDC0-088B-4006-ADE1-0D9F8A6BBE4C}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
