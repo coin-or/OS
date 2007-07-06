@@ -1066,10 +1066,10 @@ int main(int argC, char* argV[])
 		ok = true;
 		//check gradient for constraint with index 1
 		double checkObjPartial0Con1 = (1./x[0])  ;
-		ok &= NearEqual(sp->values[ 0], checkObjPartial0Con1, 1e-10, 1e-10); 
+		ok &= NearEqual(sp->values[ 1], checkObjPartial0Con1, 1e-10, 1e-10); 
 		if(ok == false) throw ErrorClass(" Fail testing gradient calculation");
 		double checkObjPartial1Con1 = (1./x[2]) ;
-		ok &= NearEqual( sp->values[ 1], checkObjPartial1Con1, 1e-10, 1e-10); 
+		ok &= NearEqual( sp->values[ 2], checkObjPartial1Con1, 1e-10, 1e-10); 
 		if(ok == false) throw ErrorClass(" Fail testing gradient calculation");
 		delete sp;
 		SparseHessianMatrix *sh;
