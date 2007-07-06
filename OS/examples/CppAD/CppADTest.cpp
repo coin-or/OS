@@ -358,15 +358,16 @@ int  main(){
 		}
 		else{
 			std::cout << "PASSED THE GRADIENT TEST" << std::endl;
-		}	
-					  
+		}					  
 		/**  
 		 * Some solvers that provide call backs want the Hessian of 
 		 * the Lagrangian function. This is provided by the OSInstance
 		 * API
 		 * 
+		 * Since we have already made the gradient calcualations we set 
+		 * new_x  = false. 
+		 * 
 		 */
-
 		//first iteration 
 		std::cout << "GET LAGRANGIAN HESSIAN FIRST TIME"   << std::endl;
 		sparseHessian = osinstance->calculateLagrangianHessian( x, w,  z,  false, 2);
@@ -401,6 +402,13 @@ int  main(){
 		else{
 			std::cout << "PASSED THE SECOND HESSIAN TEST" << std::endl;
 		}
+		// we also have the Jacobian for the new value of x
+		idx = 1;
+		for(k = *(sparseJac->starts + idx); k < *(sparseJac->starts + idx + 1); k++){
+			std::cout << "row idx = " << idx <<  "  col idx = "<< *(sparseJac->indexes + k)
+				<< " value = " << *(sparseJac->values + k) << std::endl;
+		}
+		return 0;
 		//set value back
 		x[ 0] = 1;	
 		//return 0;
