@@ -3,10 +3,10 @@
 /Externals -text
 /INSTALL -text
 /LICENSE -text
-MSVisualStudio/v7/OS/OS.sln -text
-MSVisualStudio/v7/OS/OSSolverService/OSSolverService.vcproj -text
-MSVisualStudio/v7/OS/OSTest/OSTest.vcproj -text
-MSVisualStudio/v7/OS/libOS/libOS.vcproj -text
+MSVisualStudioOS/v7/OS/OS.sln -text
+MSVisualStudioOS/v7/OS/OSSolverService/OSSolverService.vcproj -text
+MSVisualStudioOS/v7/OS/OSTest/OSTest.vcproj -text
+MSVisualStudioOS/v7/OS/libOS/libOS.vcproj -text
 /Makefile.am -text
 /Makefile.in -text
 /OS.spp -text
