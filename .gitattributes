@@ -220,7 +220,6 @@ OS/wsdl/OScL.wsdl -text
 OS/wsdl/OSdL.wsdl -text
 OS/wsdl/OShL.wsdl -text
 /OSRepository.xml -text
-/OSSolverService.cpp -text
 /README -text
 /compile -text
 /config.guess -text
