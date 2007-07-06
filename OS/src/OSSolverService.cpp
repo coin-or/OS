@@ -301,6 +301,9 @@ void solve(){
 		if( osoptions->serviceLocation != "" ){
 			// place a remote call
 			osagent = new OSSolverAgent( osoptions->serviceLocation );
+			!check to see if a solver option is listed in osol
+			if(osoptions->sovlerName != ""){
+			}
 			osrl = osagent->solve(osoptions->osil  , osoptions->osol);
 			if(osoptions->osrlFile != "") fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
 			else cout << osrl << endl;

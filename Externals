@@ -12,14 +12,15 @@ DyLP 		  https://projects.coin-or.org/svn/DyLP/stable/1.2/DyLP
 SYMPHONY 	  https://projects.coin-or.org/svn/SYMPHONY/stable/5.1/SYMPHONY
 Vol     	  https://projects.coin-or.org/svn/Vol/stable/1.0/Vol
 cppad         https://projects.coin-or.org/svn/CppAD/trunk/cppad
-Win32/v7/libClp       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/Clp/libClp
-Win32/v7/libCbc       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/Cbc/libCbc
-Win32/v7/libCgl       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/Cgl/libCgl
-Win32/v7/libCoinUtils       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/CoinUtils/libCoinUtils
-Win32/v7/libVol       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/Vol/libVol
-Win32/v7/libOsi       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/Osi/libOsi
-Win32/v7/libOsiCbc       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/Osi/libOsiCbc
-Win32/v7/libOsiClp       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/Osi/libOsiClp
-Win32/v7/libOsiVol       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/Osi/libOsiVol
+MSVisualStudio/v7/Clp/libClp       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/Clp/libClp
+MSVisualStudio/v7/Cbc/libCbc       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/Cbc/libCbc
+MSVisualStudio/v7/Cgl/libCgl       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/Cgl/libCgl
+MSVisualStudio/v7/CoinUtils/libCoinUtils       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/CoinUtils/libCoinUtils
+MSVisualStudio/v7/Vol/libVol       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/Vol/libVol
+MSVisualStudio/v7/Osi/libOsi       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/Osi/libOsi
+MSVisualStudio/v7/Osi/libOsiCbc       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/Osi/libOsiCbc
+MSVisualStudio/v7/Osi/libOsiClp       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/Osi/libOsiClp
+MSVisualStudio/v7/Osi/libOsiVol       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/Osi/libOsiVol
+MSVisualStudio/v7                   https://projects.coin-or.org/svn/SYMPHONY/stable/5.1/Win32/v7/libSymphony.vcproj
 
-
+  
