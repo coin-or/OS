@@ -7,6 +7,6 @@
         <instanceLocation locationType="local">/home/kmartin/files/code/OSRepository/linear/continuous/pilot.osil</instanceLocation>
     </general>
     <optimization>
-    	<other name="os_solver">cbc</other>
+    	<other name="os_solver">clp</other>
     </optimization>
 </osol>

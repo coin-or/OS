@@ -121,11 +121,7 @@ string getSolverName( std::string osol);
 //options structure
 // this is the only global variable but 
 // this is not a problem since this is a main routine
-	osOptionsStruc *osoptions; 
-
-
-
-
+osOptionsStruc *osoptions; 
 
 
 int main(int argC, const char* argV[])
@@ -301,13 +297,31 @@ void solve(){
 		if( osoptions->serviceLocation != "" ){
 			// place a remote call
 			osagent = new OSSolverAgent( osoptions->serviceLocation );
-			//check to see if a solver option is listed in osol
 			if(osoptions->solverName != ""){
-				std::string sOSoL = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/OSoL.xsd\"><general> </general></osol>";
-				// if an optimization tag is not there put one there
-				if(iStringpos != std::string::npos) 
-					sOSoL.insert(iStringpos, "<optimization>" "</optimization>");
+				unsigned int iStringpos;
+				//see if there is an osol file
+				if(osoptions->osol != ""){// we have an osol string
+//					// if an optimization tag is not there put one there
+//					iStringpos = osoptions->osol.find("</optimization");
+//					if(iStringpos != std::string::npos) { //we have an optimization tag
+//						osoptions->osol.insert(iStringpos, "<optimization>" "</optimization>");
+//					}
+//					else{ //we don't have an optimization tag, so insert one
+//						osoptions->osol.insert(iStringpos, "<optimization>" "</optimization>");
+//						// now insert the solver name
+//						iStringpos = osoptions->osol.find("</optimization");
+//						osoptions->osol.insert(iStringpos, "<other name=\"os_solver\">"
+//							+ osoptions->solverName  + "</other>");		
+//					}
+				}
+				else{// no osol string
+					osoptions->osol = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/OSoL.xsd\"><other> </other></osol>";	
+					iStringpos = osoptions->osol.find("</osol");
+					osoptions->osol.insert(iStringpos, "<other name=\"os_solver\">"
+							+ osoptions->solverName  + "</other>");
+				}
 			}
+			std::cout << osoptions->osol << std::endl;
 			osrl = osagent->solve(osoptions->osil  , osoptions->osol);
 			if(osoptions->osrlFile != "") fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
 			else cout << osrl << endl;
