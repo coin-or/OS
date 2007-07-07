@@ -99,15 +99,15 @@ LindoSolver::~LindoSolver() {
 	cout << "Lindo destructor called" << endl;
 #endif
 cout << "Lindo destructor called" << endl;
-	m_mdRhsValue = NULL;
-	m_mdVarLB = NULL;
-	m_mdVarUB = NULL;
-	m_mdConLB = NULL;
-	m_mdConUB = NULL;
-	m_msVarName = NULL;
-	m_mcVarType = NULL;
-    m_mcRowType = NULL;
-	m_msConName = NULL;
+//	m_mdRhsValue = NULL;
+//	m_mdVarLB = NULL;
+//	m_mdVarUB = NULL;
+//	m_mdConLB = NULL;
+//	m_mdConUB = NULL;
+//	m_msVarName = NULL;
+//	m_mcVarType = NULL;
+//    m_mcRowType = NULL;
+//	m_msConName = NULL;
 #ifdef DEBUG
 	cout << "Delete LSdelete" << endl;
 #endif
