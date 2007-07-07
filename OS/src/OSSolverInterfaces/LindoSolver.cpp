@@ -114,12 +114,12 @@ cout << "Lindo destructor called" << endl;
 cout << "delete LSdeleteEvn" << endl;
 	LSdeleteEnv(&pEnv_);
 
-	cout << "delete m_miSlackIdx" << endl;
-	delete[] m_miSlackIdx;
-    m_miSlackIdx = NULL;
-    cout << "delete m_mdRhsValue" << endl;
-	delete[] m_mdRhsValue; 
-	m_mdRhsValue = NULL;
+//	cout << "delete m_miSlackIdx" << endl;
+//	delete[] m_miSlackIdx;
+//    m_miSlackIdx = NULL;
+//    cout << "delete m_mdRhsValue" << endl;
+//	delete[] m_mdRhsValue; 
+//	m_mdRhsValue = NULL;
 	cout << "delete osrlwriter" << endl;
 	delete osrlwriter;
 	osrlwriter = NULL;
