@@ -108,6 +108,12 @@ cout << "Lindo destructor called" << endl;
 	m_mcVarType = NULL;
     m_mcRowType = NULL;
 	m_msConName = NULL;
+#ifdef DEBUG
+	cout << "Delete LSdelete" << endl;
+#endif
+cout << "delete LSdeleteEvn" << endl;
+	LSdeleteEnv(&pEnv_);
+
 	cout << "delete m_miSlackIdx" << endl;
 	delete[] m_miSlackIdx;
     m_miSlackIdx = NULL;
@@ -117,12 +123,7 @@ cout << "Lindo destructor called" << endl;
 	cout << "delete osrlwriter" << endl;
 	delete osrlwriter;
 	osrlwriter = NULL;
-#ifdef DEBUG
-	cout << "Delete LSdelete" << endl;
-#endif
-cout << "delete LSdeleteEvn" << endl;
-	LSdeleteEnv(&pEnv_);
-cout << "Garbage collection done" << endl;
+	cout << "Garbage collection done" << endl;
 }
 
  
