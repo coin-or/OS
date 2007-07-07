@@ -82,6 +82,11 @@
 #include "IpoptSolver.h"
 #endif 
 
+#ifdef COIN_HAS_KNITRO    
+#include "KnitroSolver.h"
+#endif 
+
+
 
 
 #include "osOptionsStruc.h"  
@@ -363,30 +368,40 @@ void solve(){
 						solverType->sSolverName = "clp";
 					}
 					else{
-						if( osoptions->solverName.find( "cbc") != std::string::npos){
+						if( osoptions->solverName.find( "cplex") != std::string::npos){
 							solverType = new CoinSolver();
-							solverType->sSolverName = "cbc";
+							solverType->sSolverName = "cplex";
 						}
 						else{
-							if( osoptions->solverName.find( "cplex") != std::string::npos){
+							if( osoptions->solverName.find( "glpk") != std::string::npos){
 								solverType = new CoinSolver();
-								solverType->sSolverName = "cplex";
+								solverType->sSolverName = "glpk";
 							}
 							else{
-								if( osoptions->solverName.find( "glpk") != std::string::npos){
+								if( osoptions->solverName.find( "dylp") != std::string::npos){
 									solverType = new CoinSolver();
-									solverType->sSolverName = "glpk";
+									solverType->sSolverName = "dylp";
 								}
 								else{
-									if( osoptions->solverName.find( "dylp") != std::string::npos){
+									if( osoptions->solverName.find( "symphony") != std::string::npos){
 										solverType = new CoinSolver();
-										solverType->sSolverName = "dylp";
+										solverType->sSolverName = "symphony";
 									}
 									else{
-										if( osoptions->solverName.find( "symphony") != std::string::npos){
-											solverType = new CoinSolver();
-											solverType->sSolverName = "symphony";
+										if( osoptions->solverName.find( "knitro") != std::string::npos){
+											bool bKnitroIsPresent = false;
+											#ifdef COIN_HAS_KNITRO
+											bKnitroIsPresent = true;
+											std::cout << "calling the KNITRO Solver " << std::endl;
+											solverType = new KnitroSolver();
+											std::cout << "DONE calling the KNITRO Solver " << std::endl;
+											#endif
+											if(bKnitroIsPresent == false) throw ErrorClass( "the Knitro solver requested is not present");		
 										}
+										else{ //cbc is the default
+											solverType = new CoinSolver();
+											solverType->sSolverName = "cbc";
+										}									
 									}
 								}
 							}

@@ -280,14 +280,16 @@ bool LindoSolver::addSlackVars(){
 			delete[] paiArows;
 			delete[] padC;
 			delete[] padU;
-			delete[] pachVartypes;
-			// a LINDO kludge
+			
+			// another LINDO kludge
 			if( m_iNumberNewSlacks == 1){
 				delete paszVarnames;
+				delete pachVartypes;
 			}
 			else{
 				for(i = 0; i < m_iNumberNewSlacks; i++) delete[] paszVarnames[i];
 				delete[] paszVarnames;
+				delete[] pachVartypes;
 			}
 		}
 		return true;
