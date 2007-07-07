@@ -32,7 +32,7 @@ using std::cout;
 using std::endl;
 using std::ostringstream;
 
-//#define DEBUG
+#define DEBUG
 #ifndef __LINDOI_H__
 #define __LINDOI_H__
 
@@ -98,32 +98,26 @@ LindoSolver::~LindoSolver() {
 #ifdef DEBUG
 	cout << "Lindo destructor called" << endl;
 #endif
-cout << "Lindo destructor called" << endl;
-//	m_mdRhsValue = NULL;
-//	m_mdVarLB = NULL;
-//	m_mdVarUB = NULL;
-//	m_mdConLB = NULL;
-//	m_mdConUB = NULL;
-//	m_msVarName = NULL;
-//	m_mcVarType = NULL;
-//    m_mcRowType = NULL;
-//	m_msConName = NULL;
+	m_mdRhsValue = NULL;
+	m_mdVarLB = NULL;
+	m_mdVarUB = NULL;
+	m_mdConLB = NULL;
+	m_mdConUB = NULL;
+	m_msVarName = NULL;
+	m_mcVarType = NULL;
+   	m_mcRowType = NULL;
+	m_msConName = NULL;
 #ifdef DEBUG
 	cout << "Delete LSdelete" << endl;
 #endif
-cout << "delete LSdeleteEvn" << endl;
 	LSdeleteEnv(&pEnv_);
-
-//	cout << "delete m_miSlackIdx" << endl;
-//	delete[] m_miSlackIdx;
-//    m_miSlackIdx = NULL;
-//    cout << "delete m_mdRhsValue" << endl;
-//	delete[] m_mdRhsValue; 
-//	m_mdRhsValue = NULL;
-	cout << "delete osrlwriter" << endl;
+	delete[] m_miSlackIdx;
+    m_miSlackIdx = NULL;
+	delete[] m_mdRhsValue; 
+	m_mdRhsValue = NULL;
 	delete osrlwriter;
 	osrlwriter = NULL;
-	cout << "Garbage collection done" << endl;
+	cout << "Lindo Solver garbage collection done" << endl;
 }
 
  
@@ -167,8 +161,8 @@ void LindoSolver::solve()  {
 			&& !processNonlinearExpressions()) throw ErrorClass("failed adding nonlinear terms");
 		//dataEchoCheck();
 		if( optimize() != true) throw ErrorClass("problem optimizing model");
-		//delete osilreader;
-		//osilreader = NULL;
+		delete osilreader;
+		osilreader = NULL;
 		delete osresult;
 		osresult = NULL;
 	}
@@ -193,9 +187,6 @@ bool LindoSolver::processConstraints(){
 		m_mdRhsValue = new double[ osinstance->getConstraintNumber()];
 		m_miSlackIdx = new int[ osinstance->getConstraintNumber()];
 		m_mcRowType = osinstance->getConstraintTypes();
-		
-
-		
 
 		for(i = 0; i < osinstance->getConstraintNumber(); i++){
 			switch( m_mcRowType[ i] ){
@@ -245,13 +236,12 @@ bool LindoSolver::addSlackVars(){
 	char* pachVartypes = new char[m_iNumberNewSlacks];
 	char** paszVarnames = new char*[m_iNumberNewSlacks];
 	int* paiAcols = new int[m_iNumberNewSlacks + 1];
-	int* pacAcols = 0;
+	int* pacAcols =  NULL; 
 	double* padAcoef = new double[m_iNumberNewSlacks]; 
 	int* paiArows = new int[m_iNumberNewSlacks];
 	double* padC = new double[m_iNumberNewSlacks];
-	double* padL = 0;
+	double* padL =  NULL;
 	double* padU = new double[m_iNumberNewSlacks];
-	
 	for(i = 0; i < m_iNumberNewSlacks; i++){
 		pachVartypes[ i] = 'C';
 		varName << "xyzabc_" ;
@@ -260,7 +250,11 @@ bool LindoSolver::addSlackVars(){
 		tmpstring = varName.str();
 		p = new char[tmpstring.size() + 1]; 
 		strcpy(p, tmpstring.c_str());
-		paszVarnames[i] = p;
+		char ch;
+		ch = ' ';
+		// a LINDO kludge
+		if( m_iNumberNewSlacks == 1) paszVarnames[i] = &ch;
+		else paszVarnames[i] = p;
 		varName << "";
 		paiAcols[ i] = i;
 		padAcoef[ i] = 1.0;
@@ -276,27 +270,29 @@ bool LindoSolver::addSlackVars(){
 		cout<< paszVarnames[ i] << endl;
 	}
 #endif
+
 	if(!LSaddVariables(pModel_, m_iNumberNewSlacks, pachVartypes, paszVarnames, paiAcols,
 				pacAcols, padAcoef, paiArows, padC, padL, padU)){
-		delete[] pachVartypes;
 		if(m_iNumberNewSlacks > 0){
-			for(i = 0; i < m_iNumberNewSlacks; i++) delete[] paszVarnames[i];
-			//delete[] paiAcols;
-			//delete[] padAcoef; 
-			//delete[] paiArows;
-			//delete[] padC;
-			//delete[] padU;
+			//
+			delete[] paiAcols;
+			delete[] padAcoef; 
+			delete[] paiArows;
+			delete[] padC;
+			delete[] padU;
+			delete[] pachVartypes;
+			// a LINDO kludge
+			if( m_iNumberNewSlacks == 1){
+				delete paszVarnames;
+			}
+			else{
+				for(i = 0; i < m_iNumberNewSlacks; i++) delete[] paszVarnames[i];
+				delete[] paszVarnames;
+			}
 		}
 		return true;
 	}
 	else{
-		delete[] pachVartypes;
-		delete[] paszVarnames;
-		delete[] paiAcols;
-		delete[] padAcoef; 
-		delete[] paiArows;
-		delete[] padC;
-		delete[] padU;
 		return false;
 	}
 } // end addSlackVars()
