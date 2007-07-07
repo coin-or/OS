@@ -167,8 +167,8 @@ void LindoSolver::solve()  {
 			&& !processNonlinearExpressions()) throw ErrorClass("failed adding nonlinear terms");
 		//dataEchoCheck();
 		if( optimize() != true) throw ErrorClass("problem optimizing model");
-		delete osilreader;
-		osilreader = NULL;
+		//delete osilreader;
+		//osilreader = NULL;
 		delete osresult;
 		osresult = NULL;
 	}
