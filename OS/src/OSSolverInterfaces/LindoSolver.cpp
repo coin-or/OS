@@ -109,13 +109,13 @@ cout << "Lindo destructor called" << endl;
     m_mcRowType = NULL;
 	m_msConName = NULL;
 	cout << "delete m_miSlackIdx" << endl;
-	delete[] m_miSlackIdx;
+	//delete[] m_miSlackIdx;
     m_miSlackIdx = NULL;
     cout << "delete m_mdRhsValue" << endl;
-	delete[] m_mdRhsValue; 
+	//delete[] m_mdRhsValue; 
 	m_mdRhsValue = NULL;
 	cout << "delete osrlwriter" << endl;
-	delete osrlwriter;
+	//delete osrlwriter;
 	osrlwriter = NULL;
 #ifdef DEBUG
 	cout << "Delete LSdelete" << endl;
@@ -166,9 +166,9 @@ void LindoSolver::solve()  {
 			&& !processNonlinearExpressions()) throw ErrorClass("failed adding nonlinear terms");
 		//dataEchoCheck();
 		if( optimize() != true) throw ErrorClass("problem optimizing model");
-		delete osilreader;
+		//delete osilreader;
 		osilreader = NULL;
-		delete osresult;
+		//delete osresult;
 		osresult = NULL;
 	}
 	catch(const ErrorClass& eclass){
