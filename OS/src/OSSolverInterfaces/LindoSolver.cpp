@@ -122,6 +122,7 @@ cout << "Lindo destructor called" << endl;
 #endif
 cout << "delete LSdeleteEvn" << endl;
 	LSdeleteEnv(&pEnv_);
+cout << "Garbage collection done" << endl;
 }
 
  
