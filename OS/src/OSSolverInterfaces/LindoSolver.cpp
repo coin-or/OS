@@ -281,11 +281,11 @@ bool LindoSolver::addSlackVars(){
 		delete[] pachVartypes;
 		if(m_iNumberNewSlacks > 0){
 			for(i = 0; i < m_iNumberNewSlacks; i++) delete[] paszVarnames[i];
-			delete[] paiAcols;
-			delete[] padAcoef; 
-			delete[] paiArows;
-			delete[] padC;
-			delete[] padU;
+			//delete[] paiAcols;
+			//delete[] padAcoef; 
+			//delete[] paiArows;
+			//delete[] padC;
+			//delete[] padU;
 		}
 		return true;
 	}
