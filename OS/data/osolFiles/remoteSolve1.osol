@@ -9,4 +9,5 @@
     <optimization>
     	<other name="os_solver">clp</other>
     </optimization>
+
 </osol>

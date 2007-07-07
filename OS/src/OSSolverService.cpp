@@ -301,18 +301,13 @@ void solve(){
 				unsigned int iStringpos;
 				//see if there is an osol file
 				if(osoptions->osol != ""){// we have an osol string
-//					// if an optimization tag is not there put one there
-//					iStringpos = osoptions->osol.find("</optimization");
-//					if(iStringpos != std::string::npos) { //we have an optimization tag
-//						osoptions->osol.insert(iStringpos, "<optimization>" "</optimization>");
-//					}
-//					else{ //we don't have an optimization tag, so insert one
-//						osoptions->osol.insert(iStringpos, "<optimization>" "</optimization>");
-//						// now insert the solver name
-//						iStringpos = osoptions->osol.find("</optimization");
-//						osoptions->osol.insert(iStringpos, "<other name=\"os_solver\">"
-//							+ osoptions->solverName  + "</other>");		
-//					}
+					// see if a solver is listed, if so don't do anything
+					iStringpos = osoptions->osol.find("os_solver");
+					if(iStringpos == std::string::npos) { //don't have a solver specify, we must do so
+						iStringpos = osoptions->osol.find("</osol");
+							osoptions->osol.insert(iStringpos, "<other name=\"os_solver\">"
+							+ osoptions->solverName  + "</other>");
+					}
 				}
 				else{// no osol string
 					osoptions->osol = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/OSoL.xsd\"><other> </other></osol>";	
@@ -321,7 +316,9 @@ void solve(){
 							+ osoptions->solverName  + "</other>");
 				}
 			}
-			std::cout << osoptions->osol << std::endl;
+			std::cout  << std::endl;
+			std::cout << "HERE IS THE OSoL FILE" << std::endl;
+			std::cout << osoptions->osol << std::endl << std::endl;
 			osrl = osagent->solve(osoptions->osil  , osoptions->osol);
 			if(osoptions->osrlFile != "") fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
 			else cout << osrl << endl;
