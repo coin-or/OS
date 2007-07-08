@@ -89,6 +89,7 @@
 
 
 
+
 #include "osOptionsStruc.h"  
 
 
@@ -398,9 +399,15 @@ void solve(){
 											#endif
 											if(bKnitroIsPresent == false) throw ErrorClass( "the Knitro solver requested is not present");		
 										}
-										else{ //cbc is the default
-											solverType = new CoinSolver();
-											solverType->sSolverName = "cbc";
+										else{ 
+											if( osoptions->solverName.find( "vol") != std::string::npos){
+												solverType = new CoinSolver();
+												solverType->sSolverName = "vol";
+											}
+											else{ //cbc is the default
+												solverType = new CoinSolver();
+												solverType->sSolverName = "cbc";
+											}
 										}									
 									}
 								}
