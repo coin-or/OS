@@ -1977,6 +1977,7 @@ double *OSInstance::calculateAllObjectiveFunctionValues( double* x, bool new_x){
 SparseJacobianMatrix *OSInstance::calculateAllConstraintFunctionGradients(double* x, double *objLambda, double *conLambda,
 		bool new_x, int highestOrder){
 	try{
+		if(highestOrder < 1 ) throw ErrorClass("When calling calculateAllConstraintFunctionGradients highestOrder should be 1 or 2");
 		if( new_x == true || (highestOrder > m_iHighestOrderEvaluated)  ) 
 			getIterateResults(x, objLambda, conLambda,  new_x,  highestOrder);
 	}//end try
@@ -1991,6 +1992,7 @@ SparseJacobianMatrix *OSInstance::calculateAllConstraintFunctionGradients(double
 SparseVector *OSInstance::calculateConstraintFunctionGradient(double* x, double *objLambda, double *conLambda,
 		int idx, bool new_x, int highestOrder){
 	try{
+		if(highestOrder < 1 ) throw ErrorClass("When calling calculateConstraintFunctionGradient highestOrder should be 1 or 2");
 		if(idx > instanceData->variables->numberOfVariables ) 
 			throw ErrorClass("invalid index passed to calculateConstraintFunctionGrad");
 		SparseVector *sp;
@@ -2042,7 +2044,7 @@ SparseVector *OSInstance::calculateConstraintFunctionGradient(double* x, int idx
 double **OSInstance::calculateAllObjectiveFunctionGradients(double* x, double *objLambda, double *conLambda,
 		bool new_x, int highestOrder){
 	try{
-
+		if(highestOrder < 1 ) throw ErrorClass("When calling calculateAllObjectiveFunctionGradients highestOrder should be 1 or 2");
 		if( new_x == true || (highestOrder > m_iHighestOrderEvaluated)  ) 
 			getIterateResults(x, objLambda, conLambda,  new_x,  highestOrder);
 	}
@@ -2055,6 +2057,7 @@ double **OSInstance::calculateAllObjectiveFunctionGradients(double* x, double *o
 double *OSInstance::calculateObjectiveFunctionGradient(double* x, double *objLambda, double *conLambda,
 		int objIdx, bool new_x, int highestOrder){
 	try{
+		if(highestOrder < 1 ) throw ErrorClass("When calling calculateObjectiveFunctionGradient highestOrder should be 1 or 2");
 		if( new_x == true || (highestOrder > m_iHighestOrderEvaluated)  ) 
 			getIterateResults(x, objLambda, conLambda,  new_x,  highestOrder);
 	}
@@ -2079,6 +2082,7 @@ double *OSInstance::calculateObjectiveFunctionGradient(double* x, int objIdx, bo
 SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double *objLambda, double *conLambda,
 	bool new_x, int highestOrder){
 	try{
+		if(highestOrder != 2 ) throw ErrorClass("When calling calculateLagrangianHessian highestOrder should be 2");
 		if( new_x == true || (highestOrder > m_iHighestOrderEvaluated)  ) {
 			std::cout  << "WE ARE CALCULATING getIterateResults() " << std::endl;
 			getIterateResults(x, objLambda, conLambda,  new_x,  highestOrder);
@@ -2650,22 +2654,22 @@ bool OSInstance::getIterateResults( double *x, double *objLambda, double* conMul
 						calculateAllObjectiveFunctionValues( x, new_x);
 					}
 					else{
-						getZeroOrderResults(x, objLambda, conMultipliers, new_x);
+						getZeroOrderResults(x, objLambda, conMultipliers);
 					}
 
 				}
 				break;	
 			case 1:
 				if(new_x == true || m_iHighestOrderEvaluated < 0)	
-					getZeroOrderResults(x, objLambda, conMultipliers, new_x);
+					getZeroOrderResults(x, objLambda, conMultipliers);
 				if(new_x == true || m_iHighestOrderEvaluated < 1)	
-					getFirstOrderResults(x, objLambda, conMultipliers, new_x);
+					getFirstOrderResults(x, objLambda, conMultipliers);
 				break;
 			case 2:	
 				if(new_x == true || m_iHighestOrderEvaluated < 0)	
-					getZeroOrderResults(x, objLambda, conMultipliers, new_x);
+					getZeroOrderResults(x, objLambda, conMultipliers);
 				if(new_x == true || m_iHighestOrderEvaluated < 2)	
-					getSecondOrderResults(x, objLambda, conMultipliers, new_x);
+					getSecondOrderResults(x, objLambda, conMultipliers);
 				break;
 			default:
 				throw ErrorClass("Derivative should be order 0, 1, or 2");	
@@ -2678,8 +2682,7 @@ bool OSInstance::getIterateResults( double *x, double *objLambda, double* conMul
 }//end getIterateResults
 
 
-bool OSInstance::getZeroOrderResults(double *x, double *objLambda, double *conMultipliers, 
-	bool new_x){
+bool OSInstance::getZeroOrderResults(double *x, double *objLambda, double *conMultipliers){
 	try{ 
 		// initialize everything
 		int i, j, rowNum, objNum;
@@ -2728,8 +2731,7 @@ bool OSInstance::getZeroOrderResults(double *x, double *objLambda, double *conMu
 
 
 
-bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conMultipliers, 
-			bool new_x){
+bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conMultipliers){
 	try{
 		// initialize everything
 		unsigned int i, j;
@@ -2857,8 +2859,7 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conM
 }// end getFirstOrderResults
 			
 
-bool OSInstance::getSecondOrderResults(double *x, double *objLambda, double *conMultipliers,  
-			bool new_x){
+bool OSInstance::getSecondOrderResults(double *x, double *objLambda, double *conMultipliers){
 	try{
 		// initialize everything
 		unsigned int i, j;

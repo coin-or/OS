@@ -1790,11 +1790,9 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 *  on the objective functions
 	 * @param conLambda is a pointer of doubles of the current dual (Lagrange) multipliers
 	 *  on the constraints
-	 * @param new_x is false if any evaluation method was previously called
 	 * @return true if successful 
 	 */		 
-	bool getZeroOrderResults(double *x, double *objLambda, double *conLambda, 
-			bool new_x);
+	bool getZeroOrderResults(double *x, double *objLambda, double *conLambda);
 			
 	/**
 	 * Calculate first derivatives
@@ -1806,11 +1804,9 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 *  on the objective functions
 	 * @param conLambda is a pointer of doubles of the current dual (Lagrange) multipliers
 	 *  on the constraints
-	 * @param new_x is false if any evaluation method was previously called
 	 * @return true if successful 
 	 */		 
-	bool getFirstOrderResults(double *x, double *objLambda, double *conLambda,  
-			bool new_x);
+	bool getFirstOrderResults(double *x, double *objLambda, double *conLambda );
 			
 	/**
 	 * Calculate second derivatives
@@ -1822,11 +1818,9 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 *  on the objective functions
 	 * @param conLambda is a pointer of doubles of the current dual (Lagrange) multipliers
 	 *  on the constraints
-	 * @param new_x is false if any evaluation method was previously called
 	 * @return true if successful 
 	 */		 
-	bool getSecondOrderResults(double *x, double *objLambda, double *conLambda, 
-			bool new_x);
+	bool getSecondOrderResults(double *x, double *objLambda, double *conLambda );
 			
 
 	/**

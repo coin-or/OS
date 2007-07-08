@@ -433,20 +433,34 @@ int  main(){
 				<< " value = " << *(sparseJac->values + k) << std::endl;
 		}
 		std::cout << std::endl; 
-		//set x[0] back to its original value of 1
-		x[ 0] = 1;	
 		/** we can also calculate the Hessian of any row or objective function
 		 * the function signature is
 		 * SparseHessianMatrix *calculateHessian( double* x, int idx, bool new_x);
-		 * Below we get the Hessian for row 1
+		 * Below we get the Hessian for row 1 , Note we set new_x to true since the Lagrange
+		 * multipliers changed
 		 */
-		sparseHessian = osinstance->calculateHessian(x, 1, false);
+		sparseHessian = osinstance->calculateHessian(x, 1, true);
 		std::cout << "HERE IS ROW 1 HESSIAN MATRIX" << std::endl;
 		for(idx = 0; idx < sparseHessian->hessDimension; idx++){
 			std::cout << "row idx = " << *(sparseHessian->hessRowIdx + idx) <<  
 			"  col idx = "<< *(sparseHessian->hessColIdx + idx)
 			<< " value = " << *(sparseHessian->hessValues + idx) << std::endl;
-		}	
+		}
+		//
+		// adjust the Lagrange multipliers to correspond to finding Hessian of constraint 1
+		z[ 0] = 0;  // Lagrange multiplier on constraint 0
+		z[ 1] = 1;  // Lagrange multiplier on constraint 1
+		w[ 0] = 0;  // Lagrange multiplier on the objective function
+		ok = CheckHessianUpper( sparseHessian , x[0],  x[1], x[2], z[0], z[1], w[0] );
+		if( ok == 0){
+			std::cout << "FAILED THE THIRD HESSIAN TEST" << std::endl;
+			return 0;
+		}
+		else{
+			std::cout << "PASSED THE THIRD HESSIAN TEST" << std::endl  << std::endl ;
+		}
+		//set x[0] back to its original value of 1
+
 		return 0;	
 		//
 		//
