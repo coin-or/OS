@@ -387,8 +387,29 @@ int  main(){
 		// now change an x value, we don't rebuild the tree, however new_x 
 		// must be set to true
 		x[0] = 5;
-		std::cout << "NOW GET LAGRANGIAN HESSIAN SECOND TIME"   << std::endl;
-		sparseHessian = osinstance->calculateLagrangianHessian(  x, w,  z,   true, 2);
+		
+		
+		
+		std::cout << "NOW GET LAGRANGIAN HESSIAN SECOND TIME FOR x[0] = 5"   << std::endl;
+		
+		/** If the solver knows that at an iteration all of the derivative 
+		 * information is required then calculating the function values, Jacobian, and
+		 * Hessian at the same time is the most efficient thing to do. This is
+		 * by setting highestOrder = 2. Regardless of whether the call is to calculate
+		 * function values for object or constraint, Jacobians, or even Hessian, 
+		 * setting highestOrder = 2 results in all derivative being calculated
+		 */		
+		osinstance->calculateAllObjectiveFunctionValues( x, w, z, true, 2);
+		/** If we just wanted objective function values we could have used
+		 * 
+		 * osinstance->calculateAllObjectiveFunctionValues( x, w, z, true, 2)
+		 * 
+		 *     --OR --
+		 * 
+		 * calculateAllObjectiveFunctionValues(double* x, bool new_x)
+		 * 
+		 */
+		sparseHessian = osinstance->calculateLagrangianHessian(  x, w,  z,  false, 2);
 		for(idx = 0; idx < sparseHessian->hessDimension; idx++){
 			std::cout << "row idx = " << *(sparseHessian->hessRowIdx + idx) <<  
 			"  col idx = "<< *(sparseHessian->hessColIdx + idx)
@@ -400,18 +421,33 @@ int  main(){
 			return 0;
 		}
 		else{
-			std::cout << "PASSED THE SECOND HESSIAN TEST" << std::endl;
+			std::cout << "PASSED THE SECOND HESSIAN TEST" << std::endl  << std::endl ;
 		}
-		// we also have the Jacobian for the new value of x
+		/** Since we called calculateAllObjectiveFunctionValues() with
+		 * highestOrder = 2 the first derivative information is available
+		 */
+		std::cout << "HERE IS ROW 1 OF JACOBIAN MATRIX" << std::endl; 
 		idx = 1;
 		for(k = *(sparseJac->starts + idx); k < *(sparseJac->starts + idx + 1); k++){
 			std::cout << "row idx = " << idx <<  "  col idx = "<< *(sparseJac->indexes + k)
 				<< " value = " << *(sparseJac->values + k) << std::endl;
 		}
-		return 0;
-		//set value back
+		std::cout << std::endl; 
+		//set x[0] back to its original value of 1
 		x[ 0] = 1;	
-		//return 0;
+		/** we can also calculate the Hessian of any row or objective function
+		 * the function signature is
+		 * SparseHessianMatrix *calculateHessian( double* x, int idx, bool new_x);
+		 * Below we get the Hessian for row 1
+		 */
+		sparseHessian = osinstance->calculateHessian(x, 1, false);
+		std::cout << "HERE IS ROW 1 HESSIAN MATRIX" << std::endl;
+		for(idx = 0; idx < sparseHessian->hessDimension; idx++){
+			std::cout << "row idx = " << *(sparseHessian->hessRowIdx + idx) <<  
+			"  col idx = "<< *(sparseHessian->hessColIdx + idx)
+			<< " value = " << *(sparseHessian->hessValues + idx) << std::endl;
+		}	
+		return 0;	
 		//
 		//
 		// now work directly with the CppAD package instead of OSInstance API
@@ -580,8 +616,6 @@ bool CheckHessianUpper( SparseHessianMatrix *sparseHessian ,
 	//assert( sparseHessian->hessDimension = n * (n + 1) /2)
 	// L_00 = 2 * w - z1 / ( x0 * x0 )
 	double check = 2. * w - z1 / (x0 * x0);
-	std::cout << check << std::endl;
-	std::cout << *(sparseHessian->hessValues + hessValuesIdx) << std::endl;
 	ok &= NearEqual(*(sparseHessian->hessValues + hessValuesIdx++), check, 1e-10, 1e-10); 
 	ok &= NearEqual(*(sparseHessian->hessValues + hessValuesIdx++), 0., 1e-10, 1e-10);
 	if(ok == false) std::cout << "FAILED TWO" << std::endl;

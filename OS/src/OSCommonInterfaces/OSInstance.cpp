@@ -2079,8 +2079,10 @@ double *OSInstance::calculateObjectiveFunctionGradient(double* x, int objIdx, bo
 SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double *objLambda, double *conLambda,
 	bool new_x, int highestOrder){
 	try{
-		if( new_x == true || (highestOrder > m_iHighestOrderEvaluated)  ) 
+		if( new_x == true || (highestOrder > m_iHighestOrderEvaluated)  ) {
+			std::cout  << "WE ARE CALCULATING getIterateResults() " << std::endl;
 			getIterateResults(x, objLambda, conLambda,  new_x,  highestOrder);
+		}
 	}
 	catch(const ErrorClass& eclass){
 		throw ErrorClass( eclass.errormsg);
@@ -2094,6 +2096,8 @@ SparseHessianMatrix *OSInstance::calculateHessian(double* x, int idx, bool new_x
 			throw ErrorClass("invalid index passed to calculateHessian");
 		double *objLambda = new double[ getObjectiveNumber() ];
 		double *conLambda = new double[ getConstraintNumber() ];
+		//std::cout << "NUMBER OF OBJECTIVES = " << getObjectiveNumber() << std::endl;
+		//std::cout << "NUMBER OF CONSTRAINTS = " << getConstraintNumber() << std::endl;
 		int i;
 		// initialize all to zero
 		for(i = 0; i < getObjectiveNumber(); i++){
@@ -2110,9 +2114,10 @@ SparseHessianMatrix *OSInstance::calculateHessian(double* x, int idx, bool new_x
 		else{
 			conLambda[ idx] = 1.0;
 		}
-		if( new_x == true || (2 > m_iHighestOrderEvaluated)  ) 
+		if( new_x == true || (2 > m_iHighestOrderEvaluated)  ) {
 			getIterateResults(x, objLambda, conLambda, new_x,  2);
-
+			std::cout  << "WE ARE CALCULATING getIterateResults() " << std::endl;
+		}
 		delete[] objLambda;
 		delete[] conLambda;
 	}
