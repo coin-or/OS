@@ -2,7 +2,7 @@
 <osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/OSiL.xsd">
 	<instanceHeader>
-		<description>A test problem for CppADTest</description>
+		<description>A test problem for Algorithmic Differentiation</description>
 	</instanceHeader>
 	<instanceData>
 		<variables numberOfVariables="4">
