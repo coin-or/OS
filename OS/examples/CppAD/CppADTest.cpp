@@ -173,29 +173,51 @@ int  main(){
 		// range space vector
 		size_t m = 3; // Lagrangian has an objective and two constraints
 
-		std::vector<double> vx(3);
+		std::vector<double> x0( n);
 		/** Now start to calculate function values and derivatives
 		 * there are three nonlinear variables and we put
-		 * their values into the vector vx
+		 * their values into the vector x0
 		 */
-		vx[0] = 1; // the value for x0
-		vx[1] = 5; // the value for x1
-		vx[2] = 5; // the value for x3				
+		x0[0] = 1; // the value for variable x0
+		x0[1] = 5; // the value for variable x1
+		x0[2] = 5; // the value for variable x3				
 		std::cout << "CALL forward" << std::endl;
-		funVals = osinstance->forwardAD(0, vx);
+		funVals = osinstance->forwardAD(0, x0);
 		for( kjl = 0; kjl < 3; kjl++){
 			std::cout << "forward 0 " << funVals[ kjl] << std::endl;
 		}
 		// get the third column of the Jacobian from a forward sweep
-		std::vector<double> e(3);
-		e[0] = 0;
-		e[1] = 0;
-		e[2] = 1;
-		std::cout << "Now get the third column of the Jacobian forwardAD(1, e)"  << std::endl;
-		funVals = osinstance->forwardAD(1, e);
+		std::vector<double> x1( n);
+		x1[0] = 0;
+		x1[1] = 0;
+		x1[2] = 1;
+		std::cout << "Now get the third column of the Jacobian forwardAD(1, x1)"  << std::endl;
+		funVals = osinstance->forwardAD(1, x1);
 		for( kjl = 0; kjl < 3; kjl++){
 			std::cout << "forward 1 " << funVals[ kjl] << std::endl;
 		}
+		
+		/** now use forward to get the mixed second partials with
+		 * respect to variable x0 and x3
+		 * of every function in the range space
+		 * 
+		 * Since we want the mixed partials of x0 and x3 we take
+		 * the sum of the appropriate unit vectors and do a forward
+		 * order 1 again
+		 */
+		x1[0] = 1;
+		x1[1] = 0;
+		x1[2] = 1;
+		funVals = osinstance->forwardAD(1, x1);
+		std::vector<double> x2( n);
+		x2[0] = 0;
+		x2[1] = 0;
+		x2[2] = 0;
+		std::cout << "Now calcuate forwardAD(2, x2)"  << std::endl;
+		funVals = osinstance->forwardAD(2, x2);
+		for( kjl = 0; kjl < 3; kjl++){
+			std::cout << "forward 2 " << funVals[ kjl] << std::endl;
+		}		 
 		
 		/** function values cannot be calculated with the reverse sweep,
 		 * in order to do a reverse sweep, a forward sweep with at least 
@@ -219,6 +241,16 @@ int  main(){
 		vlambda[0] = 1;
 		vlambda[1] = 2;
 		vlambda[2] = 1;
+		/** for everything below to work out we must go back and 
+		 * do a forward sweep with respect to third unit vector,
+		 * i.e. we do a  forwardAD(1, e^{3})
+		 */
+		 
+		x1[0] = 0;
+		x1[1] = 0;
+		x1[2] = 1;
+		funVals = osinstance->forwardAD(1, x1);		 
+		 
 		/**
 		 * 
 		 * reverseAD(2, vlambda) will produce a vector
@@ -238,7 +270,7 @@ int  main(){
 		/**
 		 * get the third row (column) of the Lagrangian
 		 * of the Hessian matrix, it the third row because
-		 * we did a  forwardAD(1, e^{3})
+		 * we did a forwardAD(1, e^{3})
 		 */
 		std::cout << "Here is the third row (column) of Hessian of Lagrangian" << std::endl;
 		for(int kjl = 1; kjl <= 5; kjl+=2){

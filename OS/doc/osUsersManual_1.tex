@@ -9,14 +9,24 @@
 \usepackage{verbatim, moreverb}
 \bibliographystyle{plain}
 
-%Figure path
 
 
-
-
+%%%%%
+% some other macros
 \newcommand{\figurepath}{./figures}
 \newcommand{\bibpath}{/Users/kmartin/Documents/files/misc}
 \newcommand{\figfiletype}{pdf}
+
+%Brad Bell Macors
+
+% Latex macros defined for all the CppAD documentation:
+\newcommand{\T}{ {\rm T} }
+\newcommand{\R}{ {\bf R} }
+\newcommand{\C}{ {\bf C} }
+\newcommand{\D}[2]{ \frac{\partial #1}{\partial #2} }
+\newcommand{\DD}[3]{ \frac{\partial^2 #1}{\partial #2 \partial #3} }
+\newcommand{\Dpow}[2]{ \frac{\partial^{#1}}{\partial  {#2}^{#1}} }
+\newcommand{\dpow}[2]{ \frac{ {\rm d}^{#1}}{{\rm d}\, {#2}^{#1}} }
 
 % Define the hangref environment used for the References list:
 \newenvironment{hangref}
@@ -990,13 +1000,45 @@ and in general the $x^{(k)}$ correspond to the $k'th$ order Taylor coefficient, 
 \begin{eqnarray*}
 x^{(k)} = \frac{1}{k!}X^{(k)}(0)
 \end{eqnarray*}
-Then $Y(t) = f(X(t))$ is a function from $ \mathbb{R}^{n}$ to $ \mathbb{R}^{m}$ is expressed in terms of its Taylor series expansion as
+Then $Y(t) = f(X(t))$ is a function from $ \mathbb{R}^{1}$ to $ \mathbb{R}^{m}$ and it is expressed in terms of its Taylor series expansion as
 \begin{eqnarray}
 Y(t)  = y^{(0)} +  y^{(1)} t +  y^{(2)} t^{2} + o(t^{3})
 \end{eqnarray} 
 where 
+\begin{eqnarray}
+y^{(k)} = \frac{1}{k!} Y^{(k)}(0)  \label{eq:taylorcoeff}
+\end{eqnarray}
 
-kippster put in taylor coefficient
+
+
+It is shown by Bell \url{http://www.coin-or.org/CppAD/} that:
+\begin{eqnarray}
+y^{(0)} = f(x^{(0)}) \label{eq:forward0Result}
+\end{eqnarray}
+Let $e^{(i)}$ denote the $i'th$ unit vector. 
+
+If $x^{(1)} = e^{(i)}$ then
+\begin{eqnarray}
+y^{(1)} = \D{f}{x_{i}}(x^{(0)})  \label{eq:forward1Result}
+\end{eqnarray}
+
+If $x^{(1)} = e^{(i)}$ and $x^{(2)} = 0$ then for function $f_{k}(x),$
+\begin{eqnarray}
+y^{(2)}_{k} =  \frac{1}{2} \DD{f_{k}(x^{(0)})}{x_{i}}{x_{i}}  \label{eq:forward2Resulta}
+\end{eqnarray}
+
+If $x^{(1)} = e^{(i)} + e^{(j)}$ and $x^{(2)} = 0$ then for function $f_{k}(x),$
+\begin{eqnarray}
+y^{(2)}_{k} =  \frac{1}{2} \left( \DD{f_{k}(x^{(0)})}{x_{i}}{x_{i}}  +   \DD{f_{k}(x^{(0)})}{x_{i}}{x_{j}} +  \DD{f_{k}(x^{(0)})}{x_{j}}{x_{i}} +  \DD{f_{k}(x^{(0)})}{x_{j}}{x_{j}}  \right) \label{eq:forward2Resultb}
+\end{eqnarray}
+or, expressed in terms of the mixed partials,
+\begin{eqnarray}
+  \DD{f_{k}(x^{(0)})}{x_{i}}{x_{j}}  = y_{k}^{(2)}  -  \frac{1}{2} \left( \DD{f_{k}(x^{(0)})}{x_{i}}{x_{i}}  +  \DD{f_{k}(x^{(0)})}{x_{j}}{x_{j}}  \right) \label{eq:forward2Resultb}
+\end{eqnarray}
+
+
+
+ 
 
 \subsection{Using OSInstance Methods}
 
@@ -1054,16 +1096,30 @@ The {\tt forwardAD} signature is
 \begin{verbatim}
 std::vector<double> forwardAD(int p, std::vector<double> vdX);
 \end{verbatim}
-where $p$ is the highest order Taylor coefficient of $f$ to be calculated,  $\tt vdX$ is vector of doubles in $ \mathbb{R}^{n},$ and the function return is a vector of doubles in $ \mathbb{R}^{m}.$  For example, the following call will evaluate each component function defined in \ref{eq:definef}.
+where $p$ is the highest order Taylor coefficient of $f$ to be calculated,  $\tt vdX$ is vector of doubles in $ \mathbb{R}^{n},$ and the function return is a vector of doubles in $ \mathbb{R}^{m}.$  For example, by result in Equation (\ref{eq:forward0Result}) the following call will evaluate each component function defined in \ref{eq:definef}.
 \begin{verbatim}
-vx[0] = 1; // the value for x0
-vx[1] = 5; // the value for x1
-vx[2] = 5; // the value for x3
-funVals = osinstance->forwardAD(0, vx);
+funVals = osinstance->forwardAD(0, x0);
 \end{verbatim}
-Since there are three components in the vector defined by  \ref{eq:definef}, the return value  {\tt funVals} will have three components. For the given input vector, the values of these components are 1, -63.15, and 1.6094.
+Since there are three components in the vector defined by  \ref{eq:definef}, the return value  {\tt funVals} will have three components. For an input vector, 
+\begin{verbatim}
+x0[0] = 1; // the value for variable x0
+x0[1] = 5; // the value for variable x1
+x0[2] = 5; // the value for variable x3
+\end{verbatim}
+the values returned by {\tt osinstance->forwardAD(0, x0)}  are 1, -63.15, and 1.6094, respectively.
+The Jacobian of the example in (\ref{eq:definef}) is
 
-Once 
+\begin{eqnarray}
+J =
+\left[
+\begin{array}{r}
+x_{0}^{2} + 9x_{1}  \\
+33 - 105 + 1.37 x_{1} + 2x_{3} + 5 x_{1} \\
+\ln(x_{0} x_{3}) + 7x_{2}
+\end{array}
+\right] \label{eq:jac}
+\end{eqnarray}
+
 
 
 
