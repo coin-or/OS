@@ -417,7 +417,7 @@ modification of an example of Rosenbrock \cite{rosenbrock1960}:
 %
 \begin{alignat}{2}
 & \mbox{Minimize} & \quad (1 - x_{0})^{2} + 100(x_{1} - x_{0}^{2})^{2} + 9x_{1} \label{eq:roobj}\\
-& \mbox{Subject to} & \quad x_{0} + 10.5 x_{0}^{2} + 11.7 x_{1}^{2} + 3x_{0}x_{1}  &\le 25  \label{eq:ro1}\\
+& \mbox{s.t.} & \quad x_{0} + 10.5 x_{0}^{2} + 11.7 x_{1}^{2} + 3x_{0}x_{1}  &\le 25  \label{eq:ro1}\\
 & & \ln(x_{0} x_{1}) + 7.5 x_{0} + 5.25 x_{1} &\ge 10 \label{eq:ro2}\\
 & & x_{0}, x_{1} &\ge 0 \label{eq:ro3}
 \end{alignat}
@@ -964,41 +964,56 @@ Don't forget to mention getting prefix an postfix. Illustrate some of this like 
 
 \subsection{Calculate Methods}
 
+The calculate methods are described in Section \ref{section:ad}.
+
 \section{Hooking to An Algorithmic Differentiation Package}\label{section:ad}
 
-The OS library provides for algorithmic differentiation.  For an excellent reference on algorithmic differentiation see Griewank \cite{griewank2000}.  The OS package uses the COIN-OR package CppAD which has excellent documentation and information about algorithmic differentiation. See the documentation from Brad Bell at  \url{http://www.coin-or.org/CppAD/}.  
+The OS library provides a set of {\tt calculate} methods for calculating  function values, gradients, and Hessians.     The {\tt calculate} methods are part of the {\tt OSInstance} class and are designed to work with solver APIs.
 
-First we provide some algorithmic  differentiation basics. 
 
-{\bf Assumptions:} 
 
-\begin{itemize}
+\subsection{Algorithmic Differentiation:  Brief Review}\label{section:adtheory}
 
-\item[1.] The solver will make use of function callbacks for function evaluations (objective function and constraints), gradient evaluations (objective function and Jacobian of the constraints), and Hessian calculation (usually the Hessian of the Lagrangian function).
+Here we provide a brief review of algorithmic differentiation.  For an excellent reference on algorithmic differentiation see Griewank \cite{griewank2000}.  The OS package uses the COIN-OR package CppAD which  is also excellent resource with extensive  documentation and information about algorithmic differentiation. See the documentation written by  Brad Bell at  \url{http://www.coin-or.org/CppAD/}.   Consider the function $f:X \rightarrow Y$ from $ \mathbb{R}^{n}$ to $ \mathbb{R}^{m}.$ 
 
-\item[2.] The first and second order derivatives will be evaluated by an AD (Automatic Differentiation) package such as CppAD.
+Express the input vector as scalar function of $t$ by
+\begin{eqnarray}
+X(t) = x^{(0)} +  x^{(1)} t +  x^{(2)} t^{2}
+\end{eqnarray}
+Then 
+\begin{eqnarray*}
+X(0) &=& x^{(0)} \\
+X^{\prime}(0) &=& x^{(1)} \\
+X^{\prime \prime }(0) &=& 2 x^{(2)}
+\end{eqnarray*}
+and in general the $x^{(k)}$ correspond to the $k'th$ order Taylor coefficient, i.e.
+\begin{eqnarray*}
+x^{(k)} = \frac{1}{k!}X^{(k)}(0)
+\end{eqnarray*}
+Then $Y(t) = f(X(t))$ is a function from $ \mathbb{R}^{n}$ to $ \mathbb{R}^{m}$ is expressed in terms of its Taylor series expansion as
+\begin{eqnarray}
+Y(t)  = y^{(0)} +  y^{(1)} t +  y^{(2)} t^{2} + o(t^{3})
+\end{eqnarray} 
+where 
 
-\end{itemize}
+kippster put in taylor coefficient
 
-Consider the function $f:X \rightarrow Y$ from $ \mathbb{R}^{n}$ to $ \mathbb{R}^{m}.$
-Algorithmic differentiation is done using either a forward or reverse sweep through an expression tree. Again, see Griewank book or Bell  online documentation.  The two key methods in the {\tt OSInstance} class are {\tt forwardAD} and {\tt reverseAD}.   The {\tt forwardAD} signature is
-\begin{verbatim}
-std::vector<double> forwardAD(int p, std::vector<double> vdX);
-\end{verbatim}
-where $p$ is the highest order Taylor coefficient calculated and $\tt vdX$ is vector of doubles in $ \mathbb{R}^{n}$ and the function return is a vector of doubles in $ \mathbb{R}^{m}.$  Consider the following example.
+\subsection{Using OSInstance Methods}
+
+We work with the  following example.  The code snippets fused for this are from {\tt CppADTest.cpp} in the {\tt CppADTest} folder in the {\tt examples} folder.
 
 \begin{alignat}{2}
 & \mbox{Minimize} & \quad  x_{0}^{2} + 9x_{1} \label{eq:adobj}\\
-& \mbox{Subject to} & 33 - 105 + 1.37 x_{1} + 2x_{3} + 5 x_{1} &\le 10  \label{eq:adeq0}\\
+& \mbox{s.t.} & 33 - 105 + 1.37 x_{1} + 2x_{3} + 5 x_{1} &\le 10  \label{eq:adeq0}\\
 & & \ln(x_{0} x_{3}) + 7x_{2} &\ge 10 \label{eq:adeq1} \\
 & & x_{0}, x_{1}, x_{2}, x_{3} &\ge 0 \label{eq:adeq2}
 \end{alignat}
 
-The OSiL representation of the instance  (\ref{eq:adobj})-(\ref{eq:adcon2}) is given in Appendix \ref{section:adexample}.  This example is designed to illustrate several features of OSiL. Note that in equation (\ref{eq:adeq0}) the constant 33 appears in the {\tt <con>} element corresponding to this constraint and the constant 105 appears as a {\tt <number>} OSnL node in the {\tt <nonlinearExpressions>} section. Although variable $x_{1}$ does not appear in any nonlinear expression the $5 x_{1}$ term in equation (\ref{eq:adeq0}) is expressed in the {\tt <linearConstraintCoefficients>} section and the $1.37 x_{1}$ term in equation (\ref{eq:adeq0}) is expressed in the {\tt <nonlinearExpressions>} section.  Hence, in the OSInstance API, variable $x_{1}$ is treated as a nonlinear variable for purposes of algorithmic differentiation. However, variable $x_{2}$ never appears in the  {\tt <nonlinearExpressions>} section and is therefore treated as a linear variable and not used  in algorithmic differentiation calculations. 
+The OSiL representation of the instance  (\ref{eq:adobj})-(\ref{eq:adeq2}) is given in Appendix \ref{section:adexample}.  This example is designed to illustrate several features of OSiL. Note that in equation (\ref{eq:adeq0}) the constant 33 appears in the {\tt <con>} element corresponding to this constraint and the constant 105 appears as a {\tt <number>} OSnL node in the {\tt <nonlinearExpressions>} section. Although variable $x_{1}$ does not appear in any nonlinear expression the $5 x_{1}$ term in equation (\ref{eq:adeq0}) is expressed in the {\tt <linearConstraintCoefficients>} section and the $1.37 x_{1}$ term in equation (\ref{eq:adeq0}) is expressed in the {\tt <nonlinearExpressions>} section.  Hence, in the OSInstance API, variable $x_{1}$ is treated as a nonlinear variable for purposes of algorithmic differentiation. However, variable $x_{2}$ never appears in the  {\tt <nonlinearExpressions>} section and is therefore treated as a linear variable and not used  in algorithmic differentiation calculations. 
 
-Ignoring the nonnegativity constraints, instance (\ref{eq:adobj})-(\ref{eq:adcon2})  defines the following function $f:X \rightarrow Y$ from $ \mathbb{R}^{4}$ to $ \mathbb{R}^{3}.$
+Ignoring the nonnegativity constraints, instance (\ref{eq:adobj})-(\ref{eq:adeq2})  defines the following function $f:X \rightarrow Y$ from $ \mathbb{R}^{4}$ to $ \mathbb{R}^{3}.$
 
-\begin{eqnarray*}
+\begin{eqnarray}
 f(x) =
 \left[
 \begin{array}{r}
@@ -1006,8 +1021,8 @@ x_{0}^{2} + 9x_{1}  \\
 33 - 105 + 1.37 x_{1} + 2x_{3} + 5 x_{1} \\
 \ln(x_{0} x_{3}) + 7x_{2}
 \end{array}
-\right]
-\end{eqnarray*}
+\right] \label{eq:definef}
+\end{eqnarray}
 
 
 The OSiL representation for the instance  in  (\ref{eq:adobj})-(\ref{eq:adcon2})  is read into an in-memory OSInstance object as follows
@@ -1032,6 +1047,24 @@ for(posVarIndexMap = varIndexMap.begin(); posVarIndexMap
 }
 \end{verbatim}
 The variable indices listed are 0, 1, and 3 since variable 2 does not appear in the {\tt <nonlinearExpressions>} section. 
+
+Once the nonlinear structures are initialized it is possible to take derivatives using algorithmic differentiation.   Algorithmic differentiation is done using either a forward or reverse sweep through an expression tree (or operation sequence) representation of $f$.  The two key algorithmic differentiation methods in the {\tt OSInstance} class are {\tt forwardAD} and {\tt reverseAD}.   
+
+The {\tt forwardAD} signature is
+\begin{verbatim}
+std::vector<double> forwardAD(int p, std::vector<double> vdX);
+\end{verbatim}
+where $p$ is the highest order Taylor coefficient of $f$ to be calculated,  $\tt vdX$ is vector of doubles in $ \mathbb{R}^{n},$ and the function return is a vector of doubles in $ \mathbb{R}^{m}.$  For example, the following call will evaluate each component function defined in \ref{eq:definef}.
+\begin{verbatim}
+vx[0] = 1; // the value for x0
+vx[1] = 5; // the value for x1
+vx[2] = 5; // the value for x3
+funVals = osinstance->forwardAD(0, vx);
+\end{verbatim}
+Since there are three components in the vector defined by  \ref{eq:definef}, the return value  {\tt funVals} will have three components. For the given input vector, the values of these components are 1, -63.15, and 1.6094.
+
+Once 
+
 
 
 Kipp -- important -- point out that linear variables never are part of the AD

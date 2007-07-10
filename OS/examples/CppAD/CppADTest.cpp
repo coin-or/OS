@@ -168,19 +168,19 @@ int  main(){
 				std::cout <<  "Variable Index = "   << posVarIndexMap->first  << std::endl ;
 		}
 		std::cout << "Number of nonlinear variables =  " << varIndexMap.size() << std::endl;
-		
-		
 		// domain space vector
 		size_t n  = varIndexMap.size(); // three variables
 		// range space vector
 		size_t m = 3; // Lagrangian has an objective and two constraints
 
 		std::vector<double> vx(3);
-		//test forward and reverse sweeps 
-		vx[0] = 1;
-		vx[1] = 5;
-		vx[2] = 5;
-				
+		/** Now start to calculate function values and derivatives
+		 * there are three nonlinear variables and we put
+		 * their values into the vector vx
+		 */
+		vx[0] = 1; // the value for x0
+		vx[1] = 5; // the value for x1
+		vx[2] = 5; // the value for x3				
 		std::cout << "CALL forward" << std::endl;
 		funVals = osinstance->forwardAD(0, vx);
 		for( kjl = 0; kjl < 3; kjl++){
@@ -196,7 +196,14 @@ int  main(){
 		for( kjl = 0; kjl < 3; kjl++){
 			std::cout << "forward 1 " << funVals[ kjl] << std::endl;
 		}
-		// get the third row of the Jacobian using a reverse sweep
+		
+		/** function values cannot be calculated with the reverse sweep,
+		 * in order to do a reverse sweep, a forward sweep with at least 
+		 * p = 0 must be complete
+		 * 
+		 * in the example below we get the third row of the Jacobian
+		 * using a reverse sweep.
+		 */
 		std::vector<double> vlambda(3);
 		vlambda[0] = 0;
 		vlambda[1] = 0;
@@ -239,11 +246,8 @@ int  main(){
 		}
 		/**
 		 * most solver APIs work with pointers and not vectors so
-		 * the OS API works with pointers
-		 * here the values of the primal and Lagrange multipliers 
-		 * that we use
-		 * NOTE: the metods that we illustrate below have all the
-		 * constant terms included, in this 9*x1
+		 * the OS API works with pointer here the values of the 
+		 * primal and Lagrange multipliers that we use
 		 */
 		double* x = new double[4]; //primal variables
 		double* z = new double[2]; //Lagrange multipliers on constraints
