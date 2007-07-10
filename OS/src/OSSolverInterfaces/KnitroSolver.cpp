@@ -241,7 +241,7 @@ bool  KnitroSolver::loadProblemIntoKnitro (KTR_context_ptr  kc){
 	cout << "number variables  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << _nN << endl;
 	cout << "number constraints  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << _nM << endl;
 	try{
-		osinstance->initForCallBack( );
+		osinstance->initForAlgDiff( );
 	}
 	catch(const ErrorClass& eclass){
 		knitroErrorMsg = eclass.errormsg;

@@ -21,6 +21,8 @@
 #include <cppad/cppad.hpp>
 #include <iostream>
 #include <math.h>
+#include <map>
+//
 #include "OSInstance.h"
 #include "OSiLWriter.h"
 #include "OSParameters.h"
@@ -50,9 +52,9 @@ int  main(){
 	bool CheckFunctionValues( double *conVals, double objValue,
 		double x0, double x1, double x2, double x3, double y0, double y1, double z );
 	bool CheckHessianUpper( SparseHessianMatrix *sparseHessian, 
-		double x0, double x1, double x2, double y0, double y1, double z );
+		double x0, double x1, double x2, double x3, double y0, double y1, double z );
 	bool CheckGradientValues( SparseJacobianMatrix *sparseJac, double *objGrad,
-		double x0, double x1, double x2, double y0, double y1, double z );
+		double x0, double x1, double x2, double x3, double y0, double y1, double z );
 	bool ok = true;
 	int k, idx;
 	//
@@ -73,28 +75,28 @@ int  main(){
 	 * here is the test problem CppADTestLag.osil:
 	 * min x0^2 + 9*x1   -- w[0]
 	 * s.t. 
-	 * 33 - 105 + 1.37*x1 + 2*x2  + 5*x1 <= 10  -- y[0]
-	 * ln(x0*x2) + 7*x3 >= 10  -- y[1]
+	 * 33 - 105 + 1.37*x1 + 2*x3  + 5*x1 <= 10  -- y[0]
+	 * ln(x0*x3) + 7*x2 >= 10  -- y[1]
 	 * Note: in the first constraint 33 is a constant term and 105 
 	 * is part of the nl node
 	 * the Jacobian is:
 	 * 
 	 * 2*x0   9       0      0
-	 * 0      6.37    2      0
-	 * 1/x0   0       1/x2   0
+	 * 0      6.37    0      2
+	 * 1/x0   0       7      1/x3
 	 * 
-	 * now set x0 = 1, x1 = 5,  x2 = 5, x3 = 7
+	 * now set x0 = 1, x1 = 5,  x2 = 10, x3 = 5
 	 * the Jacobian is
 	 * 
 	 * 2   9       0    0
-	 * 0   6.37    2    0
-	 * 1   0      .2    7
+	 * 0   6.37    0    2
+	 * 1   0       7   .2
 	 * 
 	 * Now form a Lagrangian with multipliers of w on the objective
 	 * z0 the multiplier on the first constraint and z1 on the second
 	 * the Lagrangain is then:
 	 * 
-	 * 	L = w*(x0^2 + 9*x1) + z0*(1 + 1.37*x1 + 2*x2 + 5*x1) + z1*(log(x0*x2) + 7*x3)
+	 * 	L = w*(x0^2 + 9*x1) + z0*(1 + 1.37*x1 + 2*x3 + 5*x1) + z1*(log(x0*x3) + 7*x2)
 	 * 
 	 * the partial with respect x0
 	 * L_0 = 2 * w * x0  + z1 / x0
@@ -103,14 +105,14 @@ int  main(){
 	 * L_1 = w * 9 + z0*1.37 + z0*5
 	 * 
 	 * the partial with respect x2
-	 * L_2 = z0 * 2 + z1 / x2 
+	 * L_2 = z1*7 
 	 * 
 	 * the partial with respect x3
-	 * L_3 = z1*7 
+	 * L_3 = z0*2 + z1/x3 
 	 * 
 	 * in the Hessian there are only two nonzero terms
 	 * L_00 = 2 * w - z1 / ( x0 * x0 )
-	 * L_22 = - z1 / (x2 * x2)
+	 * L_33 = - z1 / (x3 * x3)
 	 * 
 	*/
 	fileUtil = new FileUtil();
@@ -120,13 +122,9 @@ int  main(){
 	OSiLReader *osilreader = NULL;
 	OSInstance *osinstance = NULL;
 	// create reader, parse the OSiL, and generate the OSInstance object
-	try{
+	try{	
 		// a counter
 		int kjl;
-		// domain space vector
-		size_t n  = 3; // three variables
-		// range space vector
-		size_t m = 3; // Lagrangian has an objective and two constraints
 		osilreader = new OSiLReader();
 		osinstance = osilreader->readOSiL( &osil);
 		std::vector<double> funVals(3);
@@ -135,11 +133,7 @@ int  main(){
 		conVals = new double[ 2];
 		double *objVals = NULL;
 		objVals = new double[ 1];
-		std::vector<double> vx(3);
-		//test forward and reverse sweeps 
-		vx[0] = 1;
-		vx[1] = 5;
-		vx[2] = 5;
+
 		/**
 		 * 
 		 * create function with domain the variables and range
@@ -153,10 +147,40 @@ int  main(){
 		 * variables that appear in nl nodes, x3 does not
 		 * 
 		 */
-		std::cout << "CALL createCppADFun" << std::endl;
-		osinstance->createCppADFun( vx);
-		std::cout << "DONE CALL CppADFun" << std::endl;
-		//osinstance->initForCallBack();
+		//
+		// first initialize the nonlinear structures for call backs
+		std::cout << "Initialize Nonlinear Structures" << std::endl;
+		osinstance->initForAlgDiff( );
+		
+		/**
+		 * get an index map of the nonlinear variables
+		 * and see which variable are in <nonlinearExpressions>
+		 * element
+		 */	
+		std::map<int, int> varIndexMap;
+		std::map<int, int>::iterator posVarIndexMap;
+		varIndexMap = osinstance->getAllNonlinearVariablesIndexMap( );
+		/**
+		 * iterate through and get an index of all variables that
+		 * are in <nonlinearExpressions> element
+		 */		
+		for(posVarIndexMap = varIndexMap.begin(); posVarIndexMap != varIndexMap.end(); ++posVarIndexMap){
+				std::cout <<  "Variable Index = "   << posVarIndexMap->first  << std::endl ;
+		}
+		std::cout << "Number of nonlinear variables =  " << varIndexMap.size() << std::endl;
+		
+		
+		// domain space vector
+		size_t n  = varIndexMap.size(); // three variables
+		// range space vector
+		size_t m = 3; // Lagrangian has an objective and two constraints
+
+		std::vector<double> vx(3);
+		//test forward and reverse sweeps 
+		vx[0] = 1;
+		vx[1] = 5;
+		vx[2] = 5;
+				
 		std::cout << "CALL forward" << std::endl;
 		funVals = osinstance->forwardAD(0, vx);
 		for( kjl = 0; kjl < 3; kjl++){
@@ -224,13 +248,13 @@ int  main(){
 		double* x = new double[4]; //primal variables
 		double* z = new double[2]; //Lagrange multipliers on constraints
 		double* w = new double[1]; //Lagrange multiplier on objective
-		x[ 0] = 1;  // primal variable 0
-		x[ 1] = 5;  // primal variable 1
-		x[ 2] = 5;  // primal variable 2
-		x[ 3] = 10;  // primal variable 3
-		z[ 0] = 2;  // Lagrange multiplier on constraint 0
-		z[ 1] = 1;  // Lagrange multiplier on constraint 1
-		w[ 0] = 1;  // Lagrange multiplier on the objective function
+		x[ 0] = 1;    // primal variable 0
+		x[ 1] = 5;    // primal variable 1
+		x[ 2] = 10;   // primal variable 2
+		x[ 3] = 5;    // primal variable 3
+		z[ 0] = 2;    // Lagrange multiplier on constraint 0
+		z[ 1] = 1;    // Lagrange multiplier on constraint 1
+		w[ 0] = 1;    // Lagrange multiplier on the objective function
 		
 		/**  
 		 * first we show different calls to get constraint and objective 
@@ -351,7 +375,7 @@ int  main(){
 				<< " value = " << *(sparseJac->values + k) << std::endl;
 			}
 		}
-		ok = CheckGradientValues( sparseJac, objGrad, x[ 0], x[1], x[2], z[0], z[1], w[0] );
+		ok = CheckGradientValues( sparseJac, objGrad, x[ 0], x[1], x[2], x[3], z[0], z[1], w[0] );
 		if( ok == 0){
 			std::cout << "FAILED THE GRADIENT TEST" << std::endl;
 			return 0;
@@ -376,7 +400,7 @@ int  main(){
 			"  col idx = "<< *(sparseHessian->hessColIdx + idx)
 			<< " value = " << *(sparseHessian->hessValues + idx) << std::endl;
 		}
-		ok = CheckHessianUpper( sparseHessian, x[0],  x[1], x[2], z[0], z[1], w[0]);
+		ok = CheckHessianUpper( sparseHessian, x[0],  x[1], x[2],  x[3],  z[0], z[1], w[0]);
 		if( ok == 0){
 			std::cout << "FAILED THE FIRST HESSIAN TEST" << std::endl;
 			return 0; 
@@ -415,7 +439,7 @@ int  main(){
 			"  col idx = "<< *(sparseHessian->hessColIdx + idx)
 			<< " value = " << *(sparseHessian->hessValues + idx) << std::endl;
 		}
-		ok = CheckHessianUpper( sparseHessian , x[0],  x[1], x[2], z[0], z[1], w[0] );
+		ok = CheckHessianUpper( sparseHessian , x[0],  x[1], x[2], x[3],  z[0], z[1], w[0] );
 		if( ok == 0){
 			std::cout << "FAILED THE SECOND HESSIAN TEST" << std::endl;
 			return 0;
@@ -451,7 +475,7 @@ int  main(){
 		z[ 0] = 0;  // Lagrange multiplier on constraint 0
 		z[ 1] = 1;  // Lagrange multiplier on constraint 1
 		w[ 0] = 0;  // Lagrange multiplier on the objective function
-		ok = CheckHessianUpper( sparseHessian , x[0],  x[1], x[2], z[0], z[1], w[0] );
+		ok = CheckHessianUpper( sparseHessian , x[0],  x[1], x[2], x[3], z[0], z[1], w[0] );
 		if( ok == 0){
 			std::cout << "FAILED THE THIRD HESSIAN TEST" << std::endl;
 			return 0;
@@ -460,8 +484,8 @@ int  main(){
 			std::cout << "PASSED THE THIRD HESSIAN TEST" << std::endl  << std::endl ;
 		}
 		//set x[0] back to its original value of 1
-
-		return 0;	
+		x[ 0] = 1;
+		//return 0;	
 		//
 		//
 		// now work directly with the CppAD package instead of OSInstance API
@@ -480,8 +504,8 @@ int  main(){
 		// range space vector 
 		// we include the constant terms in the CppAD functions
 		Y[ 0] =  CppAD::pow(X[0], 2) + 9*X[1];
-		Y[ 1] =  33 - 105 + 1.37*X[1] + 2*X[2] + 5*X[1] ;
-		Y[ 2] =  log(X[0]*X[2]) + 7*X[3] ;
+		Y[ 1] =  33 - 105 + 1.37*X[1] + 2*X[3] + 5*X[1] ;
+		Y[ 2] =  log(X[0]*X[3]) + 7*X[2] ;
 		// create f: x -> y and stop tape recording
 		CppAD::ADFun<double> f(X, Y); 
 		std::cout << "Stop Taping" << std::endl;
@@ -587,10 +611,10 @@ bool CheckFunctionValues( double *conVals, double objValue,
 	double checkObj = x0*x0 + 9*x1;
 	std::cout  << "checkObj = " << checkObj << std::endl;
 	ok &= NearEqual(objValue, checkObj, 1e-10, 1e-10); 
-	double checkCon0 = 33. - 105. + 1.37*x1 + 2*x2 + 5*x1;
+	double checkCon0 = 33. - 105. + 1.37*x1 + 2*x3 + 5*x1;
 	std::cout  << "checkCon0 = " << checkCon0 << std::endl;
 	ok &= NearEqual(*(conVals + 0), checkCon0, 1e-10, 1e-10);
-	double checkCon1 = log(x0*x2) + 7*x3;
+	double checkCon1 = log(x0*x3) + 7*x2;
 	std::cout  << "checkCon1 = " << checkCon1 << std::endl;
 	ok &= NearEqual( *(conVals + 1), checkCon1, 1e-10, 1e-10);
 	return ok;
@@ -598,7 +622,7 @@ bool CheckFunctionValues( double *conVals, double objValue,
 //
 //
 bool CheckGradientValues( SparseJacobianMatrix *sparseJac, double *objGrad,
-	double x0, double x1, double x2, double y0, double y1, double w ){
+	double x0, double x1, double x2, double x3, double y0, double y1, double w ){
 	using CppAD::NearEqual;
 	bool ok  = true;
 	// first the objective function gradient
@@ -612,18 +636,20 @@ bool CheckGradientValues( SparseJacobianMatrix *sparseJac, double *objGrad,
 	// row 0 gradient -- there are nonzero partials for variables 1 and 2
 	double checkCon0Partial1 = 1.37 + 5.0;
 	ok &= NearEqual( *(sparseJac->values + 0), checkCon0Partial1, 1e-10, 1e-10); 	
-	double checkCon0Partial2 = 2.;
-	ok &= NearEqual( *(sparseJac->values + 1), checkCon0Partial2, 1e-10, 1e-10); 
+	double checkCon0Partial3 = 2.;
+	ok &= NearEqual( *(sparseJac->values + 1), checkCon0Partial3, 1e-10, 1e-10); 
 	// row 1 gradient -- there are nonzero partials for variables 0 and 2
-	double checkCon1Partial1 = 1./x0;
-	ok &= NearEqual( *(sparseJac->values + 3), checkCon1Partial1, 1e-10, 1e-10); 	
-	double checkCon1Partial2 = 1./x2;
-	ok &= NearEqual( *(sparseJac->values + 4), checkCon1Partial2, 1e-10, 1e-10); 
+	double checkCon1Partial2 = 7;
+	ok &= NearEqual( *(sparseJac->values + 2), checkCon1Partial2, 1e-10, 1e-10); 	
+	double checkCon1Partial0 = 1./x0;
+	ok &= NearEqual( *(sparseJac->values + 3), checkCon1Partial0, 1e-10, 1e-10); 	
+	double checkCon1Partial3 = 1./x3;
+	ok &= NearEqual( *(sparseJac->values + 4), checkCon1Partial3, 1e-10, 1e-10); 
 	return ok;
 }//CheckGradientValues
 //
 bool CheckHessianUpper( SparseHessianMatrix *sparseHessian , 
-	double x0, double x1, double x2, double z0, double z1, double w ){
+	double x0, double x1, double x2, double x3, double z0, double z1, double w ){
 	using CppAD::NearEqual;
 	bool ok  = true;
 	int hessValuesIdx = 0;
@@ -639,8 +665,8 @@ bool CheckHessianUpper( SparseHessianMatrix *sparseHessian ,
 	if(ok == false) std::cout << "FAILED FOUR" << std::endl;
 	ok &= NearEqual(*(sparseHessian->hessValues + hessValuesIdx++), 0., 1e-10, 1e-10);
 	if(ok == false) std::cout << "FAILED FIVE" << std::endl;
-	// L_22 = - z1 / (x2 * x2)
-	check = - z1 / (x2 * x2);
+	// L_22 = - z1 / (x3 * x3)
+	check = - z1 / (x3 * x3);
 	ok &= NearEqual(*(sparseHessian->hessValues + hessValuesIdx++), check, 1e-10, 1e-1);
 	if(ok == false) std::cout << "FAILED SIX" << std::endl;
 	return ok;

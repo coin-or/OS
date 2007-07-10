@@ -989,12 +989,12 @@ where $p$ is the highest order Taylor coefficient calculated and $\tt vdX$ is ve
 
 \begin{alignat}{2}
 & \mbox{Minimize} & \quad  x_{0}^{2} + 9x_{1} \label{eq:adobj}\\
-& \mbox{Subject to} & 33 - 105 + 1.37 x_{1} + 2x_{2} + 5 x_{1} &\le 10  \label{eq:adeq0}\\
-& & \ln(x_{0} x_{2}) + 7x_{3} &\ge 10 \label{eq:adeq1} \\
+& \mbox{Subject to} & 33 - 105 + 1.37 x_{1} + 2x_{3} + 5 x_{1} &\le 10  \label{eq:adeq0}\\
+& & \ln(x_{0} x_{3}) + 7x_{2} &\ge 10 \label{eq:adeq1} \\
 & & x_{0}, x_{1}, x_{2}, x_{3} &\ge 0 \label{eq:adeq2}
 \end{alignat}
 
-The OSiL representation of the instance  (\ref{eq:adobj})-(\ref{eq:adcon2}) is given in Appendix \ref{section:adexample}.  This example is designed to illustrate several features of OSiL. Note that in equation (\ref{eq:adeq0}) the constant 33 appears in the {\tt <con>} element corresponding to this constraint and the constant 105 appears as a {\tt <number>} OSnL node in the {\tt <nonlinearExpressions>} section. Although variable $x_{1}$ does not appear in any nonlinear expression the $5 x_{1}$ term in equation (\ref{eq:adeq0}) is expressed in the {\tt <linearConstraintCoefficients>} section and the $1.37 x_{1}$ term in equation (\ref{eq:adeq0}) is expressed in the {\tt <nonlinearExpressions>} section.  Hence, in the OSInstance API, variable $x_{1}$ is treated as a nonlinear variable for purposes of algorithmic differentiation. However, variable $x_{3}$ never appears in the  {\tt <nonlinearExpressions>} section and is therefore treated as a linear variable and never appears in algorithmic differentiation calculations. 
+The OSiL representation of the instance  (\ref{eq:adobj})-(\ref{eq:adcon2}) is given in Appendix \ref{section:adexample}.  This example is designed to illustrate several features of OSiL. Note that in equation (\ref{eq:adeq0}) the constant 33 appears in the {\tt <con>} element corresponding to this constraint and the constant 105 appears as a {\tt <number>} OSnL node in the {\tt <nonlinearExpressions>} section. Although variable $x_{1}$ does not appear in any nonlinear expression the $5 x_{1}$ term in equation (\ref{eq:adeq0}) is expressed in the {\tt <linearConstraintCoefficients>} section and the $1.37 x_{1}$ term in equation (\ref{eq:adeq0}) is expressed in the {\tt <nonlinearExpressions>} section.  Hence, in the OSInstance API, variable $x_{1}$ is treated as a nonlinear variable for purposes of algorithmic differentiation. However, variable $x_{2}$ never appears in the  {\tt <nonlinearExpressions>} section and is therefore treated as a linear variable and not used  in algorithmic differentiation calculations. 
 
 Ignoring the nonnegativity constraints, instance (\ref{eq:adobj})-(\ref{eq:adcon2})  defines the following function $f:X \rightarrow Y$ from $ \mathbb{R}^{4}$ to $ \mathbb{R}^{3}.$
 
@@ -1003,14 +1003,35 @@ f(x) =
 \left[
 \begin{array}{r}
 x_{0}^{2} + 9x_{1}  \\
-33 - 105 + 1.37 x_{1} + 2x_{2} + 5 x_{1} \\
-\ln(x_{0} x_{2}) + 7x_{3}
+33 - 105 + 1.37 x_{1} + 2x_{3} + 5 x_{1} \\
+\ln(x_{0} x_{3}) + 7x_{2}
 \end{array}
 \right]
 \end{eqnarray*}
 
 
-
+The OSiL representation for the instance  in  (\ref{eq:adobj})-(\ref{eq:adcon2})  is read into an in-memory OSInstance object as follows
+\begin{verbatim}
+fileUtil = new FileUtil();
+osil = fileUtil->getFileAsString( &osilFileName[0]);
+osilreader = new OSiLReader();
+osinstance = osilreader->readOSiL( &osil);
+\end{verbatim} 
+There is a method in the {\tt OSInstance} class, {\tt initForAlgDiff()} that is used to initialize the nonlinear data structures.  A call to this method
+\begin{verbatim}
+osinstance->initForAlgDiff( );
+\end{verbatim}  
+will generate a map of the indices of the nonlinear variables. This is critical because the algorithmic differentiation only operates on variables that appear in the {\tt <nonlinearExpressions>} section.  An example of this map follows.
+\begin{verbatim}
+std::map<int, int> varIndexMap;
+std::map<int, int>::iterator posVarIndexMap;
+varIndexMap = osinstance->getAllNonlinearVariablesIndexMap( );
+for(posVarIndexMap = varIndexMap.begin(); posVarIndexMap 
+	!= varIndexMap.end(); ++posVarIndexMap){
+	std::cout <<  "Variable Index = "   << posVarIndexMap->first  << std::endl ;
+}
+\end{verbatim}
+The variable indices listed are 0, 1, and 3 since variable 2 does not appear in the {\tt <nonlinearExpressions>} section. 
 
 
 Kipp -- important -- point out that linear variables never are part of the AD
@@ -1020,6 +1041,10 @@ Kipp -- important  -- point out that we list constant terms in the Jacobian
 
 
 Point out that in our implementation {\tt forwardAD} and {\tt reverseAD} wrap around the corresponding methods in CppAD. 
+
+Kipp --  point out the following
+%	// use the OS Expression tree for function evaluations instead of %CppAD
+%	osinstance->bUseExpTreeForFunEval = true;
 
 
 

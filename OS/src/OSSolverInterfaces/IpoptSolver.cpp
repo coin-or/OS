@@ -55,7 +55,7 @@ bool IpoptSolver::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 	cout << "number variables  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << n << endl;
 	cout << "number constraints  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << m << endl;
 	try{
-		osinstance->initForCallBack( );
+		osinstance->initForAlgDiff( );
 	}
 	catch(const ErrorClass& eclass){
 		ipoptErrorMsg = eclass.errormsg;

@@ -25,7 +25,7 @@
 				<el>0</el>
 				<el>0</el>
 				<el>1</el>
-				<el>1</el>
+				<el>2</el>
 				<el>2</el>
 			</start>
 			<rowIdx>
@@ -42,7 +42,7 @@
 				<ln>
 					<times>
 						<variable coef="1.0" idx="0"/>
-						<variable coef="1.0" idx="2"/>
+						<variable coef="1.0" idx="3"/>
 					</times>	
 				</ln>
 			</nl>
@@ -50,7 +50,7 @@
 				<sum>
 					<number type="real" value="-105"/>
 					<variable coef="1.37" idx="1"/>
-					<variable coef="2" idx="2"/>
+					<variable coef="2" idx="3"/>
 				</sum>	
 			</nl>
 			<nl idx="-1">

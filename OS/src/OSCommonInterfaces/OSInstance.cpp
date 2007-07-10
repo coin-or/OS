@@ -73,7 +73,7 @@ OSInstance::OSInstance():
  	m_bProcessLinearConstraintCoefficients(false),	
 	m_iLinearConstraintCoefficientNumber(-1),
 	m_bColumnMajor(true),
-	m_binitForCallBack( false),	
+	m_binitForAlgDiff( false),	
 	m_linearConstraintCoefficientsInColumnMajor(NULL),
 	m_linearConstraintCoefficientsInRowMajor(NULL),	
 	m_bProcessQuadraticTerms(false),
@@ -163,7 +163,7 @@ OSInstance::~OSInstance(){
 		delete[] m_mmdDenseObjectiveCoefficients;
 		m_mmdDenseObjectiveCoefficients = NULL;
 	}
-	if( (m_binitForCallBack == true) &&  (m_iNumberOfNonlinearVariables > 0) ){
+	if( (m_binitForAlgDiff == true) &&  (m_iNumberOfNonlinearVariables > 0) ){
 		if(instanceData->objectives->numberOfObjectives > 0 && m_mmdObjGradient != NULL){
 			#ifdef DEBUG
 			std::cout <<  "The number of objectives =  " << instanceData->objectives->numberOfObjectives << std::endl;
@@ -1857,7 +1857,7 @@ double OSInstance::calculateFunctionValue(int idx, double *x, bool new_x){
 
 		int i, j;
 		double dvalue = 0;
-		if( m_binitForCallBack == false) initForCallBack();
+		if( m_binitForAlgDiff == false) initForAlgDiff();
 		if(idx >= 0){ // we have a constraint
 			// make sure the index idx is valid
 			if( getConstraintNumber() <= idx  ) throw 
@@ -2565,7 +2565,7 @@ void OSInstance::duplicateExpressionTreesMap(){
  */
 bool OSInstance::createCppADFun(std::vector<double> vdX){
 	//if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
-	if(m_binitForCallBack == false) initForCallBack();
+	if(m_binitForAlgDiff == false) initForAlgDiff();
 	
 	//if( m_bAllNonlinearVariablesIndex == false) getAllNonlinearVariablesIndexMap( );
 	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
@@ -2599,6 +2599,8 @@ bool OSInstance::createCppADFun(std::vector<double> vdX){
 
 std::vector<double> OSInstance::forwardAD(int p, std::vector<double> vdX){
 	try{
+		// make sure a CppADFun has been created
+		if(m_bCppADFunIsCreated == false) createCppADFun( vdX);
 		if(p > (m_iHighestTaylorCoeffOrder + 1) ) throw 
 			ErrorClass( "trying to calculate a p order forward when p-1 Taylor coefficient not available");
 		// adjust the order of the Taylor coefficient
@@ -2617,6 +2619,8 @@ std::vector<double> OSInstance::forwardAD(int p, std::vector<double> vdX){
 
 std::vector<double> OSInstance::reverseAD(int p, std::vector<double> vdlambda){
 	try{
+		if(p == 0) throw 
+			ErrorClass( "reverseAD must have p >= 1");
 		if(p > (m_iHighestTaylorCoeffOrder + 1) ) throw 
 			ErrorClass( "trying to calculate a p order reverse when p-1 Taylor coefficient not available");
 		//for(int i  = 0; i < vdlambda.size(); i++){
@@ -2633,7 +2637,7 @@ std::vector<double> OSInstance::reverseAD(int p, std::vector<double> vdlambda){
 bool OSInstance::getIterateResults( double *x, double *objLambda, double* conMultipliers, 
 		bool new_x, int highestOrder){
 	try{ 
-		if( m_binitForCallBack == false) initForCallBack();
+		if( m_binitForAlgDiff == false) initForAlgDiff();
 		std::map<int, int>::iterator posVarIndexMap;
 		
 		if(new_x == true){
@@ -2946,8 +2950,8 @@ bool OSInstance::getSecondOrderResults(double *x, double *objLambda, double *con
 	} 
 }// end getSecondOrderResults
 
-bool OSInstance::initForCallBack(){
-	if( m_binitForCallBack == true ) return true;
+bool OSInstance::initForAlgDiff(){
+	if( m_binitForAlgDiff == true ) return true;
 	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
 	initializeNonLinearStructures( );
 	getJacobianSparsityPattern();
@@ -2968,9 +2972,9 @@ bool OSInstance::initForCallBack(){
 	for(i = 0; i < m_mapExpressionTreesMod.size(); i++){
 		m_vdRangeUnitVec.push_back( 0.0 );
 	}
-	m_binitForCallBack = true;
+	m_binitForAlgDiff = true;
 	return true;
-}//end initForCallBack
+}//end initForAlgDiff
 
 bool OSInstance::initObjGradients(){
 	int i, j;

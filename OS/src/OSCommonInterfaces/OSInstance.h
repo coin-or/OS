@@ -506,9 +506,9 @@ private:
 	bool m_bColumnMajor;
 	
 	/**
-	 * m_binitForCallBack  is true if initForCallBack() has been called.
+	 * m_binitForAlgDiff  is true if initForAlgDiff() has been called.
 	 */	
-	bool m_binitForCallBack;
+	bool m_binitForAlgDiff;
 
 
 	/**
@@ -1828,13 +1828,14 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * 
 	 * <p>
 	 * 
-	 * initForCallBack will initialize the correct nonlinear structures for solver callback functions.
+	 * initForAlgDiff will initialize the correct nonlinear structures in preparation
+	 * for using the algorithmic differentiation routines.
 	 * @return true if successful 
 	 */		 
-	bool initForCallBack();
+	bool initForAlgDiff();
 	
 	/**
-	 * This should be called by initForCallBack()
+	 * This should be called by initForAlgDiff()
 	 * 
 	 * <p>
 	 * 
