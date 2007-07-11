@@ -208,6 +208,7 @@ int  main(){
 		x1[0] = 1;
 		x1[1] = 0;
 		x1[2] = 1;
+		// recalculate the forward sweep with the new x1 vector
 		funVals = osinstance->forwardAD(1, x1);
 		std::vector<double> x2( n);
 		x2[0] = 0;
@@ -232,6 +233,7 @@ int  main(){
 		vlambda[2] = 1;
 		// reverse sweep to get third row of Jacobian 
 		std::cout << "Now get the third row of the Jacobian reverseAD(1, vlambda)"  << std::endl;
+		osinstance->forwardAD(0, x0);
 		funVals = osinstance->reverseAD(1, vlambda);
 		for( kjl = 0; kjl < 3; kjl++){
 			std::cout << "reverse 1 " << funVals[ kjl] << std::endl;

@@ -1033,14 +1033,14 @@ y^{(2)}_{k} =  \frac{1}{2} \left( \DD{f_{k}(x^{(0)})}{x_{i}}{x_{i}}  +   \DD{f_{
 \end{eqnarray}
 or, expressed in terms of the mixed partials,
 \begin{eqnarray}
-  \DD{f_{k}(x^{(0)})}{x_{i}}{x_{j}}  = y_{k}^{(2)}  -  \frac{1}{2} \left( \DD{f_{k}(x^{(0)})}{x_{i}}{x_{i}}  +  \DD{f_{k}(x^{(0)})}{x_{j}}{x_{j}}  \right) \label{eq:forward2Resultb}
+  \DD{f_{k}(x^{(0)})}{x_{i}}{x_{j}}  = y_{k}^{(2)}  -  \frac{1}{2} \left( \DD{f_{k}(x^{(0)})}{x_{i}}{x_{i}}  +  \DD{f_{k}(x^{(0)})}{x_{j}}{x_{j}}  \right) \label{eq:forward2Resultc}
 \end{eqnarray}
 
 
 
  
 
-\subsection{Using OSInstance Methods}
+\subsection{Using OSInstance Methods: Low Level Calls}
 
 We work with the  following example.  The code snippets fused for this are from {\tt CppADTest.cpp} in the {\tt CppADTest} folder in the {\tt examples} folder.
 
@@ -1057,6 +1057,14 @@ Ignoring the nonnegativity constraints, instance (\ref{eq:adobj})-(\ref{eq:adeq2
 
 \begin{eqnarray}
 f(x) =
+\left[
+\begin{array}{r}
+f_{1}(x) \\
+f_{2}(x) \\
+f_{3}(x)
+\end{array}
+\right]
+=
 \left[
 \begin{array}{r}
 x_{0}^{2} + 9x_{1}  \\
@@ -1112,13 +1120,174 @@ The Jacobian of the example in (\ref{eq:definef}) is
 \begin{eqnarray}
 J =
 \left[
-\begin{array}{r}
-x_{0}^{2} + 9x_{1}  \\
-33 - 105 + 1.37 x_{1} + 2x_{3} + 5 x_{1} \\
-\ln(x_{0} x_{3}) + 7x_{2}
+\begin{array}{rrrr}
+2x_{0} &9.00&0.00&0.00   \\
+0.00&6.37&0.00&2.00 \\
+1/x_{0}&0.00&7.00&1/x_{3} 
 \end{array}
 \right] \label{eq:jac}
 \end{eqnarray}
+when $x_{0} = 1,$ $x_{1} = 5,$ $x_{2} = 10,$ and $x_{3} = 5$ the Jacobian is
+\begin{eqnarray}
+J =
+\left[
+\begin{array}{rrrr}
+2.00 &9.00&0.00&0.00   \\
+0.00&6.37&0.00&2.00 \\
+1.00&0.00&7.00&0.20 
+\end{array}
+\right] \label{eq:jac2}
+\end{eqnarray}
+A forward sweep will calculate the Jacobian column-wise.  See 
+(\ref{eq:forward1Result}).  The following code will return column 4 of the Jacobian (\ref{eq:jac2}) which corresponds to the third nonlinear variable. 
+\begin{verbatim}
+x1[0] = 0;
+x1[1] = 0;
+x1[2] = 1;
+fosinstance->forwardAD(1, x1);
+\end{verbatim}
+
+Now calculate second derivatives.  To illustrate we use the results in (\ref{eq:forward2Resulta})-(\ref{eq:forward2Resultc}) and calculate
+\begin{eqnarray*}
+\DD{f_{k}(x^{(0)})}{x_{0}}{x_{3}} \quad k = 1, 2, 3.
+\end{eqnarray*}
+Variables $x_{0}$ and $x_{3}$ are the first and third nonlinear variables so by  (\ref{eq:forward2Resultb}) the $x^{(1)}$ should be the sum of the $e^{(1)}$ and $e^{3}$ unit vectors and used in first-order forward sweep calculation.
+\begin{verbatim}
+x1[0] = 1;
+x1[1] = 0;
+x1[2] = 1;
+osinstance->forwardAD(1, x1);
+\end{verbatim}
+Next set $x^{(0)} = 0$ and do a second-order forward sweep.
+\begin{verbatim}
+std::vector<double> x2( n);
+x2[0] = 0;
+x2[1] = 0;
+x2[2] = 0;
+osinstance->forwardAD(2, x2);
+\end{verbatim}
+This call returns the vector of  values
+\begin{eqnarray*}
+y_{1}^{(2)}  = 1, \quad y_{2}^{(2)}  = 0, \quad y_{3}^{(2)} = -.52
+\end{eqnarray*}
+By inspection,
+\begin{eqnarray*}
+\DD{f_{1}(x^{(0)})}{x_{0}}{x_{0}} &=& 2 \\
+\DD{f_{2}(x^{(0)})}{x_{0}}{x_{0}} &=&  0\\
+\DD{f_{3}(x^{(0)})}{x_{0}}{x_{0}} &=& -1 \\
+\DD{f_{1}(x^{(0)})}{x_{3}}{x_{3}} &=& 0 \\
+\DD{f_{2}(x^{(0)})}{x_{3}}{x_{3}} &=& 0\\
+\DD{f_{3}(x^{(0)})}{x_{3}}{x_{3}} &=& -.04 
+\end{eqnarray*}
+Then by (\ref{eq:forward2Resultc}),
+\begin{eqnarray*}
+\DD{f_{1}(x^{(0)})}{x_{0}}{x_{3}} &=&  y_{1}^{(2)}  -  \frac{1}{2} \left( \DD{f_{1}(x^{(0)})}{x_{0}}{x_{0}}  +  \DD{f_{k}(x^{(0)})}{x_{3}}{x_{3}}  \right) =   1 -  \frac{1}{2}(2 +  0) = 0 \\
+\DD{f_{2}(x^{(0)})}{x_{0}}{x_{3}} &=&   y_{2}^{(2)}  -  \frac{1}{2} \left( \DD{f_{2}(x^{(0)})}{x_{0}}{x_{0}}  +  \DD{f_{k}(x^{(0)})}{x_{3}}{x_{3}}  \right)  = 0 -  \frac{1}{2}(0 +  0) = 0 \\
+\DD{f_{3}(x^{(0)})}{x_{0}}{x_{3}} &=&  y_{3}^{(2)}  -  \frac{1}{2} \left( \DD{f_{3}(x^{(0)})}{x_{0}}{x_{0}}  +  \DD{f_{k}(x^{(0)})}{x_{3}}{x_{3}}  \right) = -52 -  \frac{1}{2}(-1 - .04) = 0
+\end{eqnarray*}
+Making all of the first and second derivative calculations using forward sweeps is most effective when the number of rows exceeds the number of variables. 
+
+
+The {\tt reverseAD} signature is
+\begin{verbatim}
+std::vector<double> reverseAD(int p, std::vector<double> vdlambda);
+\end{verbatim}
+where {\tt vdlambda} is a vector of Lagrange multipliers.  This method returns a vector in the range space. If a reverse sweep of order $p$ is called, a forward sweep of order at $p -1$ must have been made prior to the call. 
+
+\subsubsection{First Derivative Reverse Sweep Calculations}
+
+In order to calculate first derivatives execute the following sequence of calls. 
+\begin{verbatim}
+std::vector<double> vlambda(3);
+vlambda[0] = 0;
+vlambda[1] = 0;
+vlambda[2] = 1;
+osinstance->forwardAD(0, x0);
+osinstance->reverseAD(1, vlambda);
+\end{verbatim}
+Since the {\tt vlambda} only includes the third function $f_{1}(x)$ the sequence of calls will produce the third row of the Jacobian, i.e.
+$$
+\D{f_{3}(x^{(0)})}{x_{0}}  = 1,  \quad \D{f_{3}(x^{(0)})}{x_{1}}  = 0, \quad  \D{f_{3}(x^{(0)})}{x_{3}}  = .2 
+$$
+
+\subsubsection{Second Derivative Reverse Sweep Calculations}
+
+In order to calculate second derivatives using {\tt reverseAD} forward sweeps of order 0 and 1 must be assume.  The call to {\tt reverseAD(2, vlambda)} will return a vector of dimension $2n$ where $n$ is the number of variables.  If the first-order sweep is {\tt forwardAD(1, x1)} where $x1 = e^{(i)}$ then the return vector $z = forwardAD(1, x1)$ is
+\begin{eqnarray}
+z[2j - 2]  = \D{L (x^{(0)}, \lambda^{(0)})}{x_{j}}, \quad j = 1, \ldots, n
+\end{eqnarray}
+\begin{eqnarray}
+z[2j - 1]  = \DD{L(x^{(0)}, \lambda^{(0)})}{x_{i}}{x_{j}}, \quad j = 1, \ldots, n
+\end{eqnarray}
+where
+\begin{eqnarray}
+L (x, \lambda) = \sum_{k = 1}^{m} \lambda_{k} f_{k}(x)
+\end{eqnarray}
+
+
+
+For example, the  following calls will calculate the third row (column) of the Hessian of the Lagrangian.
+\begin{verbatim}
+x0[0] = 1;
+x0[1] = 5; 	
+x0[2] = 5; 
+osinstance->forwardAD(0, x0);	 
+x1[0] = 0;
+x1[1] = 0;
+x1[2] = 1;
+osinstance->forwardAD(1, x1);
+vlambda[0] = 1;
+vlambda[1] = 2;
+vlambda[2] = 1;
+osinstance->reverseAD(2, vlambda);
+\end{verbatim}
+This returns
+\begin{eqnarray*}
+\D{L (x^{(0)}, \lambda^{(0)})}{x_{1}} = 3, \quad  \D{L (x^{(0)}, \lambda^{(0)})}{x_{2}} = 12.74, \quad  \D{L (x^{(0)}, \lambda^{(0)})}{x_{3}} = 4.2
+\end{eqnarray*}
+\begin{eqnarray*}
+\DD{L(x^{(0)}, \lambda^{(0)})}{x_{3}}{x_{0}} =0, \quad  \DD{L(x^{(0)}, \lambda^{(0)})}{x_{3}}{x_{1}} = 0, \quad   \DD{L(x^{(0)}, \lambda^{(0)})}{x_{3}}{x_{3}} =  -.04
+\end{eqnarray*}
+
+\subsection{Using OSInstance Methods: High Level Calls}
+
+The methods {\tt forwardAD} and {\tt reverseAD} are low level calls and are not designed to work directly with solver APIs. Other methods are available that will probably be easier to work with. We describe these now.
+
+
+\subsubsection{Sparsity Methods}
+
+Many  solvers such as Ipopt \url{projects.coin-or.org/Ipopt} or Knitro \url{www.ziena.com} require the sparsity pattern of the Jacobian of the constraint matrix and the Hessian of the Lagrangian function. The following code illustrates how to get the sparsity pattern of the constraint Jacobian matrix
+\begin{verbatimtab}[4]
+SparseJacobianMatrix *sparseJac;
+sparseJac = osinstance->getJacobianSparsityPattern();
+for(idx = 0; idx < osinstance->getConstraintNumber(); idx++){
+	std::cout << "number constant terms in constraint "   <<  idx << " is " 
+	<< *(sparseJac->conVals + idx)  << std::endl;
+	for(k = *(sparseJac->starts + idx); k < *(sparseJac->starts + idx + 1); k++){
+		std::cout << "row idx = " << idx <<  "  
+		col idx = "<< *(sparseJac->indexes + k) << std::endl;
+	}
+}
+\end{verbatimtab}
+For the example problem this will produce
+\begin{verbatim}
+JACOBIAN SPARSITY PATTERN
+number constant terms in constraint 0 is 0
+row idx = 0  col idx = 1
+row idx = 0  col idx = 3
+number constant terms in constraint 1 is 1
+row idx = 1  col idx = 2
+row idx = 1  col idx = 0
+row idx = 1  col idx = 3
+\end{verbatim}
+
+
+
+\subsubsection{Function Evaluation Methods}
+
+\subsubsection{Gradient Evaluation Methods}
+
+\subsubsection{Hessian Evaluation Methods}
 
 
 
