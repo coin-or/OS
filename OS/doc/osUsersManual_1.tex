@@ -114,7 +114,7 @@ This is the User's Manual for the Optimization Services (OS) project.  The objec
 %\noindent\hrulefill
 \newpage
 
-\section{Introduction}
+\section{The Optimization Services (OS) Project}
 
 The objective of Optimization Services (OS) is to provide a set of standards for representing optimization instances, results, solver options, and communication between clients and solvers in a distributed environment using Web Services. This COIN-OR project provides source code for libraries and executable programs that implement OS standards.  See the Optimization Services (OS) Home Site \url{www.optimizationservices.org} and the COIN-OR Trac page \url{projects.coin-or.org} for more information. The OS project provides the following:
 
@@ -141,7 +141,7 @@ This software uses Web Services technology and acts a middleware between the cli
 \end{itemize}
 
 
-\section{Download and Installation}
+\section{Download and Installation}\label{section:download}
 
 OS is released as open source code under the Common Public License (CPL). This project was created by Robert Fourer, Jun Ma, and Kipp Martin. The code has been written primarily by Jun Ma, Kipp Martin, Robert Fourer, and Huanyuan Sheng.  Jun Ma and Kipp Martin are the COIN project leaders for OS. Below we describe different methods for obtaining the C++ source code and binaries. 
 
@@ -169,6 +169,10 @@ cd COIN-OS
 \begin{verbatim}
 ./configure
 \end{verbatim}
+
+
+For more information and options on the {\tt ./configure} script see
+\url{https://projects.coin-or.org/BuildTools/wiki/user-configure#PreparingtheCompilation}.
 
 \noindent {\bf Step 4:}  Run the make files.
 
@@ -201,9 +205,11 @@ Solved problem p0033.osil with Cbc
 Solved problem rosenbrockmod.osil with Knitro
 Solved problem callBackTest.osil with Knitro
 Solved problem parincQuadratic.osil with Knitro
-Solved problem parincQuadratic.osil with Knitro
+Solved problem HS071_NLP.osil with Knitro
 Solved problem p0033.osil with SYMPHONY
 Solved problem parincLinear.osil with DyLP
+Solved problem volumeTest.osil with Vol
+Solved problem p0033.osil with GLPK
 Solved problem lindoapiaddins.osil with Lindo
 Solved problem rosenbrockmod.osil with Lindo
 Solved problem parincQuadratic.osil with Lindo
@@ -269,15 +275,136 @@ Windows users should be  able to double click on the file {\tt OS-release\_numbe
 
 {\bf Step 4:} Rename {\tt OS-release\_number} to {\tt COIN-OS}.    Next follow Steps 2 - 6 outlined in Section \ref{section:svn}.
 
+\subsection{Obtaining the Binaries}
 
-
+kipp -- discuss with Jun
 
 
 \subsection{Obtaining and Installing a Visual Studio Project}
 
-\subsection{Obtaining the Binaries}
+In this section, we assume that the user has installed Microsoft Visual Studio on their computer. 
 
-kipp -- discuss with Jun
+
+
+
+\subsection{Third Party Software}
+
+The default OS project is configured out-of-the-box with the COIN-OR  projects {\tt Cbc}, {\tt Clp}, {\tt Cgl}, {\tt CoinUtils}, {\tt CppAD},  {\tt DyLP}, {\tt SYMPHONY}, and {\tt Vol}.  However, the project is also designed to work with other COIN-OR projects and several other open source and commercial software projects. 
+
+In many of the header files there are {\tt \#include} statements inside {\tt  \#ifdef}  statements. For example,
+\begin{verbatim}
+#ifdef COIN_HAS_LINDO    
+#include "LindoSolver.h"
+#endif  
+#ifdef COIN_HAS_IPOPT    
+#include "IpoptSolver.h"
+#endif 
+\end{verbatim}
+In the {\tt inc} subdirectory of the {\tt OS}  directory, there is a header file, {\tt config\_os.h} that defines the values of the  
+\begin{verbatim}
+COIN_HAS_*****
+\end{verbatim}
+variables. If the project is configured with the simple {\tt ./configure} command given in Step 3 with no arguments, then in the {\tt config\_os.h} these variables associated with the third-party software will be undefined. For example.
+\begin{verbatim}
+/* Define to 1 if the Cplex package is used */
+/* #undef COIN_HAS_CPX */
+\end{verbatim}
+unlike the configured COIN-OR projects that appear as
+\begin{verbatim}
+/* Define to 1 if the Clp package is used */
+#define COIN_HAS_CLP 1
+\end{verbatim}
+In the following subsections we  describe how to incorporate various  third-party packages into the OS project and see to it that the 
+\begin{verbatim}
+COIN_HAS_*****
+\end{verbatim}
+variable is defined in  {\tt config\_os.h}.
+
+\subsubsection{AMPL}
+
+The OS library contains a class, {\tt OSnl2osil} (see Section (\ref{section:nl2osil}) ) and {\tt amplClient} (see Section (\ref{section:amplclient}) ) that require the use of the AMPL ASL library.  See \url{http://netlib.sandia.gov/ampl/}  and  \url{}. See Users with a Unix system should locate the {\tt ASL} folder that is part of the distribution. The {\tt ASL} folder is in the {\tt ThirdParty} folder which is in the project root folder. Locate and execute the {\tt get.ASL} script.  Do this prior to running the {\tt configure} script. The {\tt configure} script will build the correct ASL library. 
+
+Microsoft  Visual Studio users will have to build the ASL library separately and then link it with the OS lib in the OS project file.  The necessary source files are at \url{http://netlib.sandia.gov/cgi-bin/netlib/netlibfiles.tar?filename=netlib/ampl/solvers}.  After unpacking the distribution build the source code with the utility {\tt nmake} which should be part of the Visual Studio distribution. The appropriate command is
+\begin{verbatim}
+nmake -f makefile.vc" .
+\end{verbtim}
+
+ If the OS project is properly configured  with the ASL library, {\tt config\_os.h} will contain the lines
+\begin{verbatim}
+/* If defined, the Ampl Solver Library is available. */
+#define COIN_HAS_ASL 1
+\end{verbatim}
+
+At this point the reader may wish to view  \url{https://projects.coin-or.org/BuildTools/wiki/user-configure#CommandLineArgumentsforconfigure} for more information on command line arguments that illustrated in the subsections below.
+
+
+\subsection{Cplex}
+
+Cplex is a linear, integer, and quadratic solver. See \url{http://www.ilog.com/products/cplex/?CFID=4534586&CFTOKEN=61400951}.  Cplex does provide source code and you are can only download the platform dependent binaries. After installing the binaries and include files in an appropriate run configure to point to the include and library directory. An example is given below.
+
+\begin{verbatim}
+configure --with-cplex-lib="-L$(CPLEXDIR)/lib/$(SYSTEM)/$(LIBFORMAT) -lcplex -lilocplex -lm -lpthread" --with-cplex-incdir= $(CPLEXDIR)/include
+\end{verbatim}
+
+You may also need the following environment variables.
+\begin{verbatim}
+SYSTEM     =i86_linux2_glibc2.3_gcc3.2
+LIBFORMAT  =static_pic
+CPLEXDIR      =/usr/local/ilog/cplex90
+OBJECTCPLEX=CplexContinuousRun.o
+CPLEXLIBPATH= -L$(CPLEXDIR)/lib/$(SYSTEM)/$(LIBFORMAT)
+CPLEXINCDIR = $(CPLEXDIR)/include
+CPLEX_LIBS=-lcplex -lilocplex -lm -lpthread
+\end{verbatim}
+
+\subsubsection{GLPK}
+
+{\tt GLPK} is a an open-source linear and integer-programming solver from the GNU organization. See \url{http://www.gnu.org/software/glpk/}.  In order to use GLPK with OS first go to any GNU mirror site (\url{http://www.gnu.org/prep/ftp.html}) and download the GLPK software in the directory {\tt /gnu/glpk/}. Follow the instructions in the {\tt INSTALL} file. After installing GLPK, run the configure script with the path to the GLPK library and include directory. An example is given below.
+
+\begin{verbatim}
+./config --with-glpk-lib="-L/home/kmartin/files/code/glpk/linux/lib -lglpk " --with-glpk-incdir=/home/kmartin/files/code/glpk/linux/include
+\end{verbatim}
+
+
+
+
+
+
+\subsubsection{Ipopt}
+
+Ipopt is a COIN-OR project.  In order to use Ipopt with OS, follow the instructions at  \url{projects.coin-or.org\Ipopt} and build the project. Then when running configure point to the include directory and library directory.  An example is given below.
+
+{\small
+\begin{verbatim}
+./configure --with-ipopt-lib="-L/home/kmartin/files/code/ipopt/linux/Ipopt-3.2.2_clean/lib -lipopt  
+`cat /home/kmartin/files/code/ipopt/linux/Ipopt-3.2.2_clean/lib/ipopt_addlibs_cpp.txt`" 
+--with-ipopt-incdir=/home/kmartin/files/code/ipopt/linux/Ipopt-3.2.2_clean/include/ipopt 
+\end{verbatim}
+}
+
+\subsubsection{Knitro}
+
+
+Knitro is a nonlinear solver. See \url{http://www.ziena.com/}.  Knitro does provide source code and you are can only download the platform dependent binaries. After installing the binaries and include files in an appropriate run configure to point to the include and library directory. An example is given below.
+
+\begin{verbatim}
+./configure --with-knitro-lib="-L/home/kmartin/files/code/knitro/linux/lib -lknitro " 
+--with-knitro-incdir=/home/kmartin/files/code/knitro/linux/include
+\end{verbatim}
+
+
+\subsubsection{LINDO}
+
+LINDO is a commercial linear, integer, and nonlinear solver. See \url{www.lindo.com}.  LINDO does provide source code and you are can only download the platform dependent binaries. After installing the binaries and include files in an appropriate run configure to point to the include and library directory. An example is given below.
+
+\begin{verbatim}
+--with-lindo-lib="-L/home/kmartin/files/code/lindo/linux/lib -llindo -lmosek" --with-lindo-incdir=/home/kmartin/files/code/lindo/linux/include
+\end{verbatim}
+
+
+\subsection{MATLAB}
+
+Install MATLAB on the client machine and follow the instruction in Section \ref{}.
 
 
 \subsection{Bug Reporting}
@@ -307,7 +434,7 @@ Clp &x&x&x&x&& \\ \hline
 Cplex &x&x&&&& \\ \hline
 DyLP &x&x&x&x&& \\ \hline
 Ipopt &x&x&&&& \\ \hline
-Knitro &x&&&&& \\ \hline
+Knitro &x&x&&&& \\ \hline
 Lindo &x&x&&x&& \\ \hline
 SYMPHONY &x&x&x&x&& \\ \hline
 Vol &x&x&x&x&& \\ \hline
@@ -780,7 +907,7 @@ solver->solve();
 The {\tt OSmps2osil} class constructor takes a string which should be the file name of the instance in MPS format. The constructor then uses the CoinUtils library to read and parse the MPS file.  The class method {\tt createOSInstance} then builds  an in-memory {\tt osintance} object  that can be used by a solver. 
 
 
-\subsubsection{Converting AMPL nl Files}
+\subsubsection{Converting AMPL nl Files}\label{section:nl2osil}
 
 AMPL is a popular modeling language that saves  model instances in the AMPL nl format.  The {\tt OSModelInterfaces} library provides a class, {\tt OSnl2osil} for reading in an nl file and creating a corresponding in-memory osinstance object. It is used as follows. 
 
@@ -799,7 +926,7 @@ The {\tt OSnl2osil} class works much like the {\tt OSmps2osil} class. The {\tt O
 
 In Section  \ref{section:amplclient}  we describe the {\tt amplClient} executable that acts a ``solver'' for AMPL. The {\tt amplClient} uses the {\tt OSnl2osil} class to convert the instance in nl format to OSiL format before calling a solver either locally or remotely. 
 
-\subsubsection{Using MATLAB}
+\subsubsection{Using MATLAB}\section{section:usingmatlab}
 
 Linear, integer, and quadratic problems can be formulated in MATLAB and then optimized either locally or over the network using the OS Library. The {\tt OSMatlab} class functions much like {\tt OSnl2osil} and {\tt OSmps2osil} and takes MATLAB arrays and creates and OSiL instance.  This class is part of the OS library. In order to use the OS library with MATLAB the user should do the following.  In order to use the {\tt OSMatlab} class it is necessary to  compile {\tt matlabSolver.cpp}  into  a MATLAB Executable file.  The {\tt matlabSolver.cpp} file is in the {\tt OSModelInterfaces} directory even though it is not part of the OS library. The following steps should be followed.
 
@@ -826,7 +953,11 @@ CXXLIBS="$MLIBS -lstdc++
     -lOS  -lIpopt -lOsiCbc -lOsiClp -lCbc -lCgl -lOsi -lClp -lCoinUtils  -lm"
 \end{verbatim}
 
-For a UNIX system the {\tt mexopts.sh} file will usually be found in a directory with the release name in {\tt  ~/.matlab}. On a Windows system, the {\tt  mexopts.bat} file will usually be in a directory with the release name in {\tt C:$\backslash$Documents and Settings$\backslash$Username$\backslash$Application Data$\backslash$Mathworks$\backslash$MATLAB}
+For a UNIX system the {\tt mexopts.sh} file will usually be found in a directory with the release name in {\tt  $\sim$/.matlab}. For example, 
+{\tt $\sim$/.matlab/R14SP3}.
+
+
+On a Windows system, the {\tt  mexopts.bat} file will usually be in a directory with the release name in {\tt C:$\backslash$Documents and Settings$\backslash$Username$\backslash$Application Data$\backslash$Mathworks$\backslash$MATLAB}
 
 
 \item[{\bf Step 4:}]  Build the MATLAB executable file. Start MATLAB and in the MATLAB command window connect to the directory containing the file {\tt matlabSolver.cpp}.  Execute the command:

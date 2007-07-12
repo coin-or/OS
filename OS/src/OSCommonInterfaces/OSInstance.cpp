@@ -2645,7 +2645,6 @@ bool OSInstance::getIterateResults( double *x, double *objLambda, double* conMul
 			for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
 				m_vdX.push_back( x[ posVarIndexMap->first]) ;
 			}
-			// kipp retape if there are logical operators used
 			if( (m_bCppADFunIsCreated == false || m_bCppADMustReTape == true )  && (m_mapExpressionTreesMod.size() > 0) ) {
 				createCppADFun( m_vdX);
 			}	
