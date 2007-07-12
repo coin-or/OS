@@ -14,16 +14,22 @@
  */
 
 #include<iostream>
+#include <vector>  
+
+
+#include "OSConfig.h" 
 #include "OSInstance.h"
 #include "OSiLWriter.h"
 #include "OSParameters.h"
 #include "OSnLNode.h"
 #include "ErrorClass.h"
-#include <vector>  
+
 
 #ifdef COIN_HAS_LINDO    
 #include "LindoSolver.h"
 #endif  
+
+
  
 
 #include <string>

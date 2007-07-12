@@ -400,13 +400,13 @@ int  main(){
 		double *objGrad;
 		std::cout << "OBJECTIVE FUNCTION GRADIENT"   << std::endl;
 		// in our implementation the objective function is a dense gradient
-		objGrad = osinstance->calculateObjectiveFunctionGradient( &x[0], NULL, NULL,  -1, false, 1);
+		objGrad = osinstance->calculateObjectiveFunctionGradient( x, NULL, NULL,  -1, false, 1);
 		for(idx = 0; idx < osinstance->getVariableNumber(); idx++){
 			std::cout << "col idxx = " << idx << "  value =  " << *(objGrad + idx)  << std::endl;
 		}
 		std::cout << "CONSTRAINT JACOBIAN MATRIX"   << std::endl;
 		// now make the gradient calculations and fill in the sparse Jacobian matrix
-		sparseJac = osinstance->calculateAllConstraintFunctionGradients( &x[0], NULL, NULL,  false, 1);
+		sparseJac = osinstance->calculateAllConstraintFunctionGradients( x, NULL, NULL,  false, 1);
 		for(idx = 0; idx < osinstance->getConstraintNumber(); idx++){
 			for(k = *(sparseJac->starts + idx); k < *(sparseJac->starts + idx + 1); k++){
 				std::cout << "row idx = " << idx <<  "  col idx = "<< *(sparseJac->indexes + k)
@@ -464,14 +464,17 @@ int  main(){
 		osinstance->calculateAllObjectiveFunctionValues( x, w, z, true, 2);
 		/** If we just wanted objective function values we could have used
 		 * 
-		 * osinstance->calculateAllObjectiveFunctionValues( x, w, z, true, 2)
+		 * osinstance->calculateAllObjectiveFunctionValues( x, w, z, true, 0)
 		 * 
 		 *     --OR --
 		 * 
 		 * calculateAllObjectiveFunctionValues(double* x, bool new_x)
 		 * 
+		 * however since we make a call with highestOrder = 2 all derivatives
+		 * are calculated and no other calls are necessary 
+		 * 
 		 */
-		sparseHessian = osinstance->calculateLagrangianHessian(  x, w,  z,  false, 2);
+		
 		for(idx = 0; idx < sparseHessian->hessDimension; idx++){
 			std::cout << "row idx = " << *(sparseHessian->hessRowIdx + idx) <<  
 			"  col idx = "<< *(sparseHessian->hessColIdx + idx)

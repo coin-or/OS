@@ -984,7 +984,9 @@ The OS library provides a set of {\tt calculate} methods for calculating  functi
 
 \subsection{Algorithmic Differentiation:  Brief Review}\label{section:adtheory}
 
-Here we provide a brief review of algorithmic differentiation.  For an excellent reference on algorithmic differentiation see Griewank \cite{griewank2000}.  The OS package uses the COIN-OR package CppAD which  is also excellent resource with extensive  documentation and information about algorithmic differentiation. See the documentation written by  Brad Bell at  \url{http://www.coin-or.org/CppAD/}.   Consider the function $f:X \rightarrow Y$ from $ \mathbb{R}^{n}$ to $ \mathbb{R}^{m}.$ 
+Here we provide a brief review of algorithmic differentiation.  For an excellent reference on algorithmic differentiation see Griewank \cite{griewank2000}.  The OS package uses the COIN-OR package CppAD which  is also excellent resource with extensive  documentation and information about algorithmic differentiation. See the documentation written by  Brad Bell \cite{bell2007}.    The development here is from the CppAD documentation. 
+
+Consider the function $f:X \rightarrow Y$ from $ \mathbb{R}^{n}$ to $ \mathbb{R}^{m}.$ 
 
 Express the input vector as scalar function of $t$ by
 \begin{eqnarray}
@@ -1098,7 +1100,7 @@ for(posVarIndexMap = varIndexMap.begin(); posVarIndexMap
 \end{verbatim}
 The variable indices listed are 0, 1, and 3 since variable 2 does not appear in the {\tt <nonlinearExpressions>} section. 
 
-Once the nonlinear structures are initialized it is possible to take derivatives using algorithmic differentiation.   Algorithmic differentiation is done using either a forward or reverse sweep through an expression tree (or operation sequence) representation of $f$.  The two key algorithmic differentiation methods in the {\tt OSInstance} class are {\tt forwardAD} and {\tt reverseAD}.   
+Once the nonlinear structures are initialized it is possible to take derivatives using algorithmic differentiation.   Algorithmic differentiation is done using either a forward or reverse sweep through an expression tree (or operation sequence) representation of $f$.  The two key algorithmic differentiation {\tt public} methods in the {\tt OSInstance} class are {\tt forwardAD} and {\tt reverseAD}.   These are actually  generic ``wrappers'' around the corresponding CppAD methods with the same signature.  This keeps the OS API  public methods independent of any underlying algorithmic differentiation package. 
 
 The {\tt forwardAD} signature is
 \begin{verbatim}
@@ -1311,12 +1313,25 @@ A second signature for the {\tt calculateAllConstraintFunctionValues} is
 double *calculateAllConstraintFunctionValues(double* x, double *objLambda, 
     double *conLambda, bool new_x, int highestOrder)
 \end{verbatim}
-In this  signature, {\tt x} is a pointer to the current primal values, {\tt objLambda} is a vector of dual multipliers, {\tt conLambda} is a vector of dual multipliers on the constraints,  {\tt new\_x} is true if any components of {\tt x} have changed since the last evaluation, and {\tt highestOrder} is the highest order of derivative to be calculated at this iteration. This requires further explanation. 
-
-  {\tt highestOrder} t is an integer variable that will take on the value 0, 1, or 2 (actually higher values if we want third derivatives etc.).  The value of this variable is the highest order derivative that is required of the current iterate. For example, if  a callback requires a function evaluation and {\bf highestOrder = 0} then only the function need be evaluated at the current iterate.  If, however, {\bf highsetOrder = 2} then the function call
+In this  signature, {\tt x} is a pointer to the current primal values, {\tt objLambda} is a vector of dual multipliers, {\tt conLambda} is a vector of dual multipliers on the constraints,  {\tt new\_x} is true if any components of {\tt x} have changed since the last evaluation, and {\tt highestOrder} is the highest order of derivative to be calculated at this iteration. The following code snippet illustrates defining a set of variable values for the example we are using and then the function call.
 \begin{verbatim}
-calculateAllConstraintFunctionValues(x, objLambda, 
- conLambda, true, 2)
+double* x = new double[4]; //primal variables
+double* z = new double[2]; //Lagrange multipliers on constraints
+double* w = new double[1]; //Lagrange multiplier on objective
+x[ 0] = 1;    // primal variable 0
+x[ 1] = 5;    // primal variable 1
+x[ 2] = 10;   // primal variable 2
+x[ 3] = 5;    // primal variable 3
+z[ 0] = 2;    // Lagrange multiplier on constraint 0
+z[ 1] = 1;    // Lagrange multiplier on constraint 1
+w[ 0] = 1;    // Lagrange multiplier on the objective function
+calculateAllConstraintFunctionValues(x, w, z,  true, 0);
+\end{verbatim}
+When making all high level calls for function, gradient, and Hessian evaluations we use pass all the primal variables in the {\tt x} argument, not just the nonlinear variables. Underneath the call, the nonlinear variables are identified and used in AD function calls. 
+
+The use of the parameters  {\tt new\_x} and {\tt highestOrder}  is important and requires further explanation.    The parameter  {\tt highestOrder}  is an integer variable that will take on the value 0, 1, or 2 (actually higher values if we want third derivatives etc.).  The value of this variable is the highest order derivative that is required of the current iterate. For example, if  a callback requires a function evaluation and {\bf highestOrder = 0} then only the function is evaluated at the current iterate.  However,  if {\tt highsetOrder = 2} then the function call
+\begin{verbatim}
+calculateAllConstraintFunctionValues(x, w, z, true, 2)
 \end{verbatim}  
 will trigger  first and second derivative evaluations in addition to the function evaluations.
 
@@ -1337,6 +1352,8 @@ There are {\it  exactly two} conditions that  require a new function or derivati
 
 It is not really necessary for all callback functions to have the above arguments. However, for an efficient implementation of AD it is important to be able to get the Lagrange multipliers and highest order derivative that is required from inside {\it any} callback -- not just the Hessian evaluation callback. For example, in {\bf Ipopt,} if  {\tt eval\_g}  or {\tt eval\_f} are called, and  for the current iterate, {\tt eval\_jac} and {\tt eval\_hess} are also going to be called, then  a more efficient AD implementation is possible if the Lagrange multipliers are available for {\tt eval\_g} and {\tt eval\_f}. 
 
+Currently, whenever {\tt new\_x = true} in the underlying AD implementation we do not retape the function. This is because we currently throw an exception if there are any logical operators involved in the AD calculations. This may change in a future implementation.
+
 
 There are also similar methods for objective function evaluations.  There is also a method
 \begin{verbatim}
@@ -1346,24 +1363,66 @@ that will return the value of any constraint or objective function indexed by {\
 
 There is also a public variable, {\tt bUseExpTreeForFunEval} that, if set to {\tt true}, will cause the method
 \begin{verbatim}
-calculateAllConstraintFunctionValues(x, objLambda, 
- conLambda, true, highestOrder)
+calculateAllConstraintFunctionValues(x, objLambda,  conLambda, true, highestOrder)
 \end{verbatim}
 to also use the OS expression tree for function evaluations when {\tt highestOrder = 0} rather than use the operator overloading in the CppAD tape.
 
 \subsubsection{Gradient Evaluation Methods}
 
+One {\tt OSInstance} method for gradient calculations is
+\begin{verbatim}
+SparseJacobianMatrix *calculateAllConstraintFunctionGradients(double* x, double *objLambda, 
+     double *conLambda, bool new_x, int highestOrder)
+\end{verbatim}
+If a call has been placed to {\tt calculateAllConstraintFunctionValues} with {\tt highestOrder = 0}, then the appropriate call to get gradient evaluations is
+\begin{verbatim}
+calculateAllConstraintFunctionGradients( x, NULL, NULL,  false, 1);
+\end{verbatim}
+Note that in this function call {\tt new\_x = false}. This prevents a call to {\tt forwardAD()} with order 0 to get the function values. 
+
+
+If, at the current iterate, the Hessian of the Lagrangian function is also desired then an appropriate call is
+\begin{verbatim}
+calculateAllConstraintFunctionGradients(objLambda, conLambda, false, 2);
+\end{verbatim}
+In this case, if there was a prior call 
+\begin{verbatim}
+calculateAllConstraintFunctionValues(x, w, z,  true, 0);
+\end{verbatim}
+then only first and second derivatives are calculated, not function values. 
+
+When calculating the gradients, if the number of nonlinear variables exceeds or is equal  to the number of rows,  a {\tt forwardAD(0, x)} sweep is used to get the function values,  and   a {\tt reverseAD(1, $e^{k}$)}  sweep for each unit vector  $e^{k}$ in the row space  is used to get the vector of first order partials for each row in the constraint Jacobian.  If the number of nonlinear variables is less then the number of rows then a {\tt forwardAD(0, x)} sweep  is used to get the function values and a {\tt forwardAD(1,  $e^{i}$)}  sweep or each unit vector  $e^{i}$ in the column space is used to get the vector of first order partials for each column in the constraint Jacobian. 
+
+Two other gradient methods are
+\begin{verbatim}
+SparseVector *calculateConstraintFunctionGradient(double* x, 
+    double *objLambda, double *conLambda,
+    int idx, bool new_x, int highestOrder);
+\end{verbatim}
+and
+\begin{verbatim}
+SparseVector *calculateConstraintFunctionGradient(double* x, int idx, 
+    bool new_x );
+\end{verbatim}
+
+Similar methods are available for the objective function, however the objective function gradient methods treat the gradient of each objective function as a dense vector. 
+
+
 \subsubsection{Hessian Evaluation Methods}
 
-Point out that in our implementation {\tt forwardAD} and {\tt reverseAD} wrap around the corresponding methods in CppAD. 
-
-Kipp --  point out the following
-%	// use the OS Expression tree for function evaluations instead of %CppAD
-%	osinstance->bUseExpTreeForFunEval = true;
-
-
-Kipp -- don't forget to talk about re-taping the expression tree when necessary
-
+There are two methods for Hessian calculations.  The first method has the signature
+\begin{verbatim}
+SparseHessianMatrix *calculateLagrangianHessian( double* x, 
+    double *objLambda, double *conLambda, bool new_x, int highestOrder);
+\end{verbatim}
+so if either function or first derivatives have been calculated an appropriate call is
+\begin{verbatim}
+calculateLagrangianHessian( x, w, z, false, 2);
+\end{verbatim}
+If the Hessian of a single row or objective function is desired the following method is available
+\begin{verbatim}
+SparseHessianMatrix *calculateHessian( double* x, int idx, bool new_x);
+\end{verbatim}
 
 \section{The OSSolverService}\label{section:ossolverservice}
 
