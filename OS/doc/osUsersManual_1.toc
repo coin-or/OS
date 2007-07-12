@@ -33,27 +33,27 @@
 \contentsline {subsection}{\numberline {6.3}Using OSInstance Methods: High Level Calls}{27}
 \contentsline {subsubsection}{\numberline {6.3.1}Sparsity Methods}{27}
 \contentsline {subsubsection}{\numberline {6.3.2}Function Evaluation Methods}{28}
-\contentsline {subsubsection}{\numberline {6.3.3}Gradient Evaluation Methods}{28}
-\contentsline {subsubsection}{\numberline {6.3.4}Hessian Evaluation Methods}{28}
-\contentsline {section}{\numberline {7}The OSSolverService}{29}
-\contentsline {subsection}{\numberline {7.1}OSSolverService Input Parameters}{29}
-\contentsline {subsection}{\numberline {7.2}Solving Problems Locally}{31}
-\contentsline {subsection}{\numberline {7.3}Solving Problems Remotely with Web Services}{32}
-\contentsline {subsubsection}{\numberline {7.3.1}The {\tt solve} Service Method}{33}
-\contentsline {subsubsection}{\numberline {7.3.2}The {\tt send} Service Method}{34}
-\contentsline {subsubsection}{\numberline {7.3.3}The {\tt retrieve} Service Method}{36}
-\contentsline {subsubsection}{\numberline {7.3.4}The {\tt getJobID} Service Method}{37}
-\contentsline {subsubsection}{\numberline {7.3.5}The {\tt knock} Service Method}{37}
-\contentsline {subsubsection}{\numberline {7.3.6}The {\tt kill} Service Method}{38}
+\contentsline {subsubsection}{\numberline {6.3.3}Gradient Evaluation Methods}{30}
+\contentsline {subsubsection}{\numberline {6.3.4}Hessian Evaluation Methods}{30}
+\contentsline {section}{\numberline {7}The OSSolverService}{30}
+\contentsline {subsection}{\numberline {7.1}OSSolverService Input Parameters}{30}
+\contentsline {subsection}{\numberline {7.2}Solving Problems Locally}{32}
+\contentsline {subsection}{\numberline {7.3}Solving Problems Remotely with Web Services}{33}
+\contentsline {subsubsection}{\numberline {7.3.1}The {\tt solve} Service Method}{34}
+\contentsline {subsubsection}{\numberline {7.3.2}The {\tt send} Service Method}{35}
+\contentsline {subsubsection}{\numberline {7.3.3}The {\tt retrieve} Service Method}{37}
+\contentsline {subsubsection}{\numberline {7.3.4}The {\tt getJobID} Service Method}{38}
+\contentsline {subsubsection}{\numberline {7.3.5}The {\tt knock} Service Method}{38}
+\contentsline {subsubsection}{\numberline {7.3.6}The {\tt kill} Service Method}{39}
 \contentsline {subsubsection}{\numberline {7.3.7}Summary}{39}
-\contentsline {section}{\numberline {8}Setting up a Solver Service with Tomcat}{40}
-\contentsline {section}{\numberline {9}Examples}{40}
-\contentsline {subsection}{\numberline {9.1}AMPL Client: Hooking AMPL to Solvers}{40}
+\contentsline {section}{\numberline {8}Setting up a Solver Service with Tomcat}{41}
+\contentsline {section}{\numberline {9}Examples}{41}
+\contentsline {subsection}{\numberline {9.1}AMPL Client: Hooking AMPL to Solvers}{41}
 \contentsline {subsection}{\numberline {9.2}CppAD: Using the CppAD Algorithmic Differentiation Package}{42}
 \contentsline {subsection}{\numberline {9.3}File Upload: Using a File Upload Package}{42}
 \contentsline {subsection}{\numberline {9.4}Instance Generator: Using the OSInstance API to Generate Instances}{42}
 \contentsline {section}{\numberline {10}References}{42}
-\contentsline {section}{\numberline {11}Appendix}{42}
-\contentsline {subsection}{\numberline {11.1}Building a Model in MATLAB}{42}
-\contentsline {subsection}{\numberline {11.2}OSiL representation for problem given in (1\hbox {})--(4\hbox {})}{44}
+\contentsline {section}{\numberline {11}Appendix}{43}
+\contentsline {subsection}{\numberline {11.1}Building a Model in MATLAB}{43}
+\contentsline {subsection}{\numberline {11.2}OSiL representation for problem given in (1\hbox {})--(4\hbox {})}{45}
 \contentsline {subsection}{\numberline {11.3}OSiL representation for problem given in (19\hbox {})--(\G@refundefinedtrue \text {\normalfont \bfseries ??}\GenericWarning { }{LaTeX Warning: Reference `eq:adcon2' on page 46 undefined})}{46}

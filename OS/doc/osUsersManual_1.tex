@@ -1280,51 +1280,49 @@ row idx = 1  col idx = 2
 row idx = 1  col idx = 0
 row idx = 1  col idx = 3
 \end{verbatim}
+The {\tt SparseJacobianMatrix} object has a data member {\tt starts} which is the index of the start of each constraint row. The {\tt int} data member {\tt indexes} is the variable index of a potential nonzero derivative. There is also a {\tt double} data member  {\tt values} that will the value of the partial derivative of the corresponding index at each iteration. Finally, there is an {\tt int} data member {\tt conVals} which is the number of constant terms in each gradient. A constant term is a partial derivative that cannot change at an iteration.  A variable is considered a constant variable if it appears in the {\tt <linearConstraintCoefficients>} section  but not in the {\tt nonlinearExpressions}.  For a row indexed by {\tt idx} the variable indices are in the  {\tt indexes} array between the elements {\tt sparseJac->starts + idx} and {\tt sparseJac->starts + idx + 1.}   The first  {\tt sparseJac->conVals + idx} variables listed are indices of constant variables. In this example, when {\tt idx} is 1, there is one constant variable and it is variable $x_{2}.$  The constant variables never appear in the AD evaluation. 
 
+The following code illustrates how to get the sparsity pattern of the Hessian of the Lagrangian.
+\begin{verbatim}
+SparseHessianMatrix *sparseHessian;
+sparseHessian = osinstance->getLagrangianHessianSparsityPattern( );
+for(idx = 0; idx < sparseHessian->hessDimension; idx++){
+	std::cout <<  "Row Index = " << *(sparseHessian->hessRowIdx + idx) ;
+	std::cout <<  "  Column Index = " << *(sparseHessian->hessColIdx + idx);
+}
+\end{verbatim}
+The {\tt SparseHessianMatrix} class has the {\tt int} data members {\tt hessRowIdx} and {\tt hessColIdx} for indexing  potential nonzero elements in the Hessian matrix. The {\tt double} data member {\tt hessValues} holds the value of the respective second derivative at each iteration.  If {\tt numVars} is the number of nonlinear variables, each array in {\tt sparseHessian} is of size 
+$$
+numVars*(numVars + 1)/2;
+$$
+All mixed partials of nonlinear terms are considered to be potential nonzeros.  Hopefully, a future implementation will be more robust in preserving sparsity. 
 
 
 \subsubsection{Function Evaluation Methods}
 
-\subsubsection{Gradient Evaluation Methods}
+There are several overloaded methods for calculating objective and constraint values.  The method
+\begin{verbatim}
+double *calculateAllConstraintFunctionValues(double* x, bool new_x)
+\end{verbatim}
+will return a {\tt double} pointer to an array of constraint function values evaluated at {\tt x.}  If the value of {\tt x} has not changed since the last function call, then {\tt new\_x} should be set to {\tt false} and the most recent function values will be returned.  When using this method, with this signature,  all function evaluations  are made in {\tt double} using an {\tt OSExpressionTree} object. 
 
-\subsubsection{Hessian Evaluation Methods}
+A second signature for the {\tt calculateAllConstraintFunctionValues} is
+\begin{verbatim}
+double *calculateAllConstraintFunctionValues(double* x, double *objLambda, 
+    double *conLambda, bool new_x, int highestOrder)
+\end{verbatim}
+In this  signature, {\tt x} is a pointer to the current primal values, {\tt objLambda} is a vector of dual multipliers, {\tt conLambda} is a vector of dual multipliers on the constraints,  {\tt new\_x} is true if any components of {\tt x} have changed since the last evaluation, and {\tt highestOrder} is the highest order of derivative to be calculated at this iteration. This requires further explanation. 
 
+  {\tt highestOrder} t is an integer variable that will take on the value 0, 1, or 2 (actually higher values if we want third derivatives etc.).  The value of this variable is the highest order derivative that is required of the current iterate. For example, if  a callback requires a function evaluation and {\bf highestOrder = 0} then only the function need be evaluated at the current iterate.  If, however, {\bf highsetOrder = 2} then the function call
+\begin{verbatim}
+calculateAllConstraintFunctionValues(x, objLambda, 
+ conLambda, true, 2)
+\end{verbatim}  
+will trigger  first and second derivative evaluations in addition to the function evaluations.
 
+In the {\tt OSInstance} class code,  every time a forward ({\tt forwardAD}) or reverse sweep ({\tt reverseAD}) is executed a private  member, {\tt m\_iHighestOrderEvaluated}  is  set to the order of the sweep. For example, {\tt forwardAD(1, x)} would result in {\tt  m\_iHighestOrderEvaluated = 1}.  Just knowing the value  of {\bf new\_x} alone is not sufficient. It is also necessary  to know {\bf highestOrder} and compare it with {\tt m\_iHighestOrderEvaluated.}  For example, if  {\bf new\_x}  is  false,  but {\tt m\_iHighestOrderEvaluated = 0},  and   the callback requires a Hessian calculation, then it is necessary to calculate the first and second derivatives at the current iterate. 
 
-
-Kipp -- important -- point out that linear variables never are part of the AD
-
-
-Kipp -- important  -- point out that we list constant terms in the Jacobian
-
-
-Point out that in our implementation {\tt forwardAD} and {\tt reverseAD} wrap around the corresponding methods in CppAD. 
-
-Kipp --  point out the following
-%	// use the OS Expression tree for function evaluations instead of %CppAD
-%	osinstance->bUseExpTreeForFunEval = true;
-
-
-
-
-%%%%%%%%%%%%%%%
-%%% Below is email exchange  with Andreas
-%%%%%%%%%%%%%%%
-
-{\bf Key Idea:} as part of the callback function signatures (arguments) the solver should pass (or make available another way) the following {\it two variables}:
-
-\begin{itemize} 
-
-\item[]   {\bf new\_x} this is boolean and defined as in Ipopt. It is false if any evaluation method was previously called with the same {\bf x}, true otherwise
-
-\item[]  {\bf highestOrder} this is an integer variable that will take on the value 0, 1, or 2 (actually higher values if we want third derivatives etc.).  The value of this variable is the highest order derivative that will be required of the current iterate. For example, if  a callback required a function evaluation and {\bf highestOrder = 0} then only the function need be evaluated at the current iterate.  If, however, {\bf highsetOrder = 2} then we would make a first and second derivative calculation in addition to the function evaluation.
-
-\end{itemize}
-
-
-In order to implement AD efficiently  the code that implements the callback functions (such as our  OS library API) would store a class variable {\bf highestOrderEvaluated}. Every time a forward or reverse sweep is executed this variable gets set to the order of the sweep. For example, {\tt f.forward(1, x)} would result in {\bf highestOrderEvaluated = 1}.  Just knowing the value  of {\bf new\_x} alone is not sufficient. It is also necessary for the AD implementation to know {\bf highestOrder} and {\bf highestOrderEvaluated.}  For example, {\bf new\_x} might be false because of the calculation {\tt f.forward(0, x)}, however if  the callback requires a Hessian calculation, then it is necessary to calculate the first and second derivative at the current iterate. 
-
-Given this information there are {\it  exactly two} conditions that  require a new function or derivative calculation.   A new evaluation is required if and only if
+There are {\it  exactly two} conditions that  require a new function or derivative calculation.   A new evaluation is required if and only if
 
 \begin{itemize}
 \item[1.]   The value of {\bf new\_x} is  true
@@ -1334,34 +1332,38 @@ Given this information there are {\it  exactly two} conditions that  require a n
 \end{center}
 
 
-\item[2.] For the callback function the value of the input parameter {\bf highestOrder} is strictly greater than the current value  of    {\bf highestOrderEvaluated.} 
+\item[2.] For the callback function the value of the input parameter {\bf highestOrder} is strictly greater than the current value  of    {\bf m\_iHhighestOrderEvaluated.} 
 \end{itemize}
-
-
-
-It would be nice if all of the function callbacks in the solver API had the following arguments:
-
-\begin{itemize}
-
-\item[] {\bf double *x} a pointer to the current iterate primal values
-
-\item[] {\bf double *objLambda} a pointer to the objective function (there may be more than 1) Lagrange multipliers
-
-\item[] {\bf double  *conLambda} a pointer to the constraint Lagrange multipliers
-
-\item[] {\bf int objIdx} the index of the objective function of interest -- this is optional.
-
-\item[] {\bf new\_x} explained above
-
-\item[]  {\bf highestOrder} explained above
-
-\end{itemize}
-
-
 
 It is not really necessary for all callback functions to have the above arguments. However, for an efficient implementation of AD it is important to be able to get the Lagrange multipliers and highest order derivative that is required from inside {\it any} callback -- not just the Hessian evaluation callback. For example, in {\bf Ipopt,} if  {\tt eval\_g}  or {\tt eval\_f} are called, and  for the current iterate, {\tt eval\_jac} and {\tt eval\_hess} are also going to be called, then  a more efficient AD implementation is possible if the Lagrange multipliers are available for {\tt eval\_g} and {\tt eval\_f}. 
 
-To make a long story short -- from the standpoint of implementing AD it would be nice to know if when the solver is calling a function evaluation it is doing so only for a line search, or if a Hessian will also be required. 
+
+There are also similar methods for objective function evaluations.  There is also a method
+\begin{verbatim}
+double calculateFunctionValue(int idx, double* x, bool new_x);
+\end{verbatim}
+that will return the value of any constraint or objective function indexed by {\tt idx}. This method works strictly with {\tt double} data using an {\tt OSExpressionTree} object.
+
+There is also a public variable, {\tt bUseExpTreeForFunEval} that, if set to {\tt true}, will cause the method
+\begin{verbatim}
+calculateAllConstraintFunctionValues(x, objLambda, 
+ conLambda, true, highestOrder)
+\end{verbatim}
+to also use the OS expression tree for function evaluations when {\tt highestOrder = 0} rather than use the operator overloading in the CppAD tape.
+
+\subsubsection{Gradient Evaluation Methods}
+
+\subsubsection{Hessian Evaluation Methods}
+
+Point out that in our implementation {\tt forwardAD} and {\tt reverseAD} wrap around the corresponding methods in CppAD. 
+
+Kipp --  point out the following
+%	// use the OS Expression tree for function evaluations instead of %CppAD
+%	osinstance->bUseExpTreeForFunEval = true;
+
+
+Kipp -- don't forget to talk about re-taping the expression tree when necessary
+
 
 \section{The OSSolverService}\label{section:ossolverservice}
 
