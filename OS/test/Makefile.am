@@ -61,7 +61,7 @@ endif
 
  unitTest_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
 	
- unitTest_LDADD += $(ADDLIBS) 
+#unitTest_LDADD += $(ADDLIBS) 
 
 if USEWSOCKLIB
   unitTest_LDADD += $(WINSOCKLIB)
@@ -115,7 +115,9 @@ endif
 # The -rpath flag is used by libtool to make sure that the shared
 # library is found (in the lib install directory) when we are using dynamic
 # libraries.
-unitTest_LDFLAGS = -rpath $(libdir)
+unitTest_LDFLAGS = -rpath $(libdir) 
+
+
 
 if COIN_HAS_DYLP
   AM_CPPFLAGS += \
@@ -172,7 +174,7 @@ if COIN_HAS_KNITRO
   AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(KNITROINCDIR)` 
   unitTest_LDADD += $(KNITROLIB)
 if USEMULTIPLYDEFINED
-  unitTest_LDFLAGS += -multiply_defined suppress
+  unitTest_LDFLAGS +=  -multiply_defined suppress 
 endif
 endif
 
