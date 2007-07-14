@@ -277,6 +277,8 @@ Windows users should be  able to double click on the file {\tt OS-release\_numbe
 
 \subsection{Obtaining the Binaries}
 
+
+
 kipp -- discuss with Jun
 
 
@@ -402,9 +404,13 @@ LINDO is a commercial linear, integer, and nonlinear solver. See \url{www.lindo.
 \end{verbatim}
 
 
-\subsection{MATLAB}
+\subsubsection{MATLAB}
 
-Install MATLAB on the client machine and follow the instruction in Section \ref{}.
+Install MATLAB on the client machine and follow the instruction in Section \ref{section:usingmatlab}.
+
+\subsubsection{Library Paths}
+
+After running {\tt configure} as described above,  on Unix systems, it will be necessary to set the {\tt LD\_LIBRARY\_PATH} or {\tt DYLD\_LIBRARY\_PATH} (on Mac OS X) to environment variables to point to the location of the installed third party libraries in the case that the libraries are dynamic and not static libraries. 
 
 
 \subsection{Bug Reporting}

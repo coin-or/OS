@@ -11,11 +11,12 @@
 \contentsline {subsubsection}{\numberline {2.6.2}Ipopt}{10}
 \contentsline {subsubsection}{\numberline {2.6.3}Knitro}{10}
 \contentsline {subsubsection}{\numberline {2.6.4}LINDO}{10}
-\contentsline {subsection}{\numberline {2.7}MATLAB}{10}
-\contentsline {subsection}{\numberline {2.8}Bug Reporting}{10}
-\contentsline {subsection}{\numberline {2.9}Obtaining the Server Software}{10}
-\contentsline {subsection}{\numberline {2.10}Platforms}{10}
-\contentsline {section}{\numberline {3}The OS Project Components}{12}
+\contentsline {subsubsection}{\numberline {2.6.5}MATLAB}{10}
+\contentsline {subsubsection}{\numberline {2.6.6}Library Paths}{10}
+\contentsline {subsection}{\numberline {2.7}Bug Reporting}{10}
+\contentsline {subsection}{\numberline {2.8}Obtaining the Server Software}{11}
+\contentsline {subsection}{\numberline {2.9}Platforms}{11}
+\contentsline {section}{\numberline {3}The OS Project Components}{11}
 \contentsline {subsection}{\numberline {3.1}Key Protocols}{15}
 \contentsline {section}{\numberline {4}The OS Library Components}{19}
 \contentsline {subsection}{\numberline {4.1}OSAgent}{19}
