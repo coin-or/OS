@@ -277,14 +277,18 @@ Windows users should be  able to double click on the file {\tt OS-release\_numbe
 
 \subsection{Obtaining the Binaries}
 
+If the user does not wish to compile source code, the 
+OS library, OSSolverService executable, and Tomcat server software configuration are available at \url{http://www.coin-or.org/Binaries/OS} in binary format.
 
 
-kipp -- discuss with Jun
+kipp -- discuss this more with with Jun
 
 
 \subsection{Obtaining and Installing a Visual Studio Project}
 
 In this section, we assume that the user has installed Microsoft Visual Studio on their computer. 
+
+Jun -- fill in more. 
 
 
 
@@ -329,9 +333,8 @@ The OS library contains a class, {\tt OSnl2osil} (see Section (\ref{section:nl2o
 Microsoft  Visual Studio users will have to build the ASL library separately and then link it with the OS lib in the OS project file.  The necessary source files are at \url{http://netlib.sandia.gov/cgi-bin/netlib/netlibfiles.tar?filename=netlib/ampl/solvers}.  After unpacking the distribution build the source code with the utility {\tt nmake} which should be part of the Visual Studio distribution. The appropriate command is
 \begin{verbatim}
 nmake -f makefile.vc" .
-\end{verbtim}
-
- If the OS project is properly configured  with the ASL library, {\tt config\_os.h} will contain the lines
+\end{verbatim}
+If the OS project is properly configured  with the ASL library, {\tt config\_os.h} will contain the lines
 \begin{verbatim}
 /* If defined, the Ampl Solver Library is available. */
 #define COIN_HAS_ASL 1
@@ -340,12 +343,13 @@ nmake -f makefile.vc" .
 At this point the reader may wish to view  \url{https://projects.coin-or.org/BuildTools/wiki/user-configure#CommandLineArgumentsforconfigure} for more information on command line arguments that illustrated in the subsections below.
 
 
-\subsection{Cplex}
+\subsubsection{Cplex}
 
 Cplex is a linear, integer, and quadratic solver. See \url{http://www.ilog.com/products/cplex/?CFID=4534586&CFTOKEN=61400951}.  Cplex does provide source code and you are can only download the platform dependent binaries. After installing the binaries and include files in an appropriate run configure to point to the include and library directory. An example is given below.
 
 \begin{verbatim}
-configure --with-cplex-lib="-L$(CPLEXDIR)/lib/$(SYSTEM)/$(LIBFORMAT) -lcplex -lilocplex -lm -lpthread" --with-cplex-incdir= $(CPLEXDIR)/include
+configure --with-cplex-lib="-L$(CPLEXDIR)/lib/$(SYSTEM)/$(LIBFORMAT) 
+-lcplex -lilocplex -lm -lpthread" --with-cplex-incdir= $(CPLEXDIR)/include
 \end{verbatim}
 
 You may also need the following environment variables.
@@ -364,7 +368,8 @@ CPLEX_LIBS=-lcplex -lilocplex -lm -lpthread
 {\tt GLPK} is a an open-source linear and integer-programming solver from the GNU organization. See \url{http://www.gnu.org/software/glpk/}.  In order to use GLPK with OS first go to any GNU mirror site (\url{http://www.gnu.org/prep/ftp.html}) and download the GLPK software in the directory {\tt /gnu/glpk/}. Follow the instructions in the {\tt INSTALL} file. After installing GLPK, run the configure script with the path to the GLPK library and include directory. An example is given below.
 
 \begin{verbatim}
-./config --with-glpk-lib="-L/home/kmartin/files/code/glpk/linux/lib -lglpk " --with-glpk-incdir=/home/kmartin/files/code/glpk/linux/include
+./config --with-glpk-lib="-L/home/kmartin/files/code/glpk/linux/lib -lglpk " 
+--with-glpk-incdir=/home/kmartin/files/code/glpk/linux/include
 \end{verbatim}
 
 
@@ -400,13 +405,15 @@ Knitro is a nonlinear solver. See \url{http://www.ziena.com/}.  Knitro does prov
 LINDO is a commercial linear, integer, and nonlinear solver. See \url{www.lindo.com}.  LINDO does provide source code and you are can only download the platform dependent binaries. After installing the binaries and include files in an appropriate run configure to point to the include and library directory. An example is given below.
 
 \begin{verbatim}
---with-lindo-lib="-L/home/kmartin/files/code/lindo/linux/lib -llindo -lmosek" --with-lindo-incdir=/home/kmartin/files/code/lindo/linux/include
+--with-lindo-lib="-L/home/kmartin/files/code/lindo/linux/lib -llindo -lmosek" 
+--with-lindo-incdir=/home/kmartin/files/code/lindo/linux/include
 \end{verbatim}
 
 
 \subsubsection{MATLAB}
 
-Install MATLAB on the client machine and follow the instruction in Section \ref{section:usingmatlab}.
+Install MATLAB on the client machine and follow the instruction in Section
+ \ref{section:usingmatlab}.
 
 \subsubsection{Library Paths}
 
@@ -417,9 +424,43 @@ After running {\tt configure} as described above,  on Unix systems, it will be n
 
 Bug reporting is done through the project Trac page. This is at \url{http://projects.coin-or.org/OS}.  To report a bug, you must be a registered user.  For  instructions on  how to register go to 
  \url{http://www.coin-or.org/usingTrac.html}  After registering, log in and then file a trouble ticket by going to \url{http://projects.coin-or.org/OS/newticket}.
+ 
+ 
+\subsection{Documentation}
+
+If you have Doxygen  \url{www.doxygen.org} available (the executable {\tt doxygen} should be in the {\tt path} command) then executing
+\begin{verbatim}
+make  doxydoc
+\end{verbatim}
+in the project root directory will result in the Doxygen documentation being generated and stored in the {\tt doxydoc} folder in the project root. 
+
+In order to view the documentation, open a browser and open the file 
+\begin{verbatim}
+projectroot/doxydoc/html/index.html
+\end{verbatim}
+
+Running Doxygen will generate documentation for only the  OS project.  Documentation will not be generated for the other COIN-OR projects in the project root. In the {\tt doxydoc}  folder is a configuration file {\tt doxygen.conf}.  This configuration for file contains for the {\tt EXCLUDE} parameter
+
+\begin{verbatim}
+EXCLUDE =  Cbc \ 
+   Cgl \
+   Clp \
+   CoinUtils \
+   cppad \
+   SYMPHONY \
+   Vol \
+   DyLP \
+   ThirdParty \
+   Osi \
+   include
+\end{verbatim}
+
+This file can be edited, and any project for which documentation is desired, can be deleted from the {\tt EXCLUDE} list.
 
 \subsection{Obtaining the Server Software}
 
+
+Kipp -- discuss with Jun
 
 \subsection{Platforms}
 
@@ -480,11 +521,13 @@ If you download the OS package, you get these additional COIN-OR projects. The l
 \begin{itemize}
 \item {\tt BuildTools} \url{projects.coin-or.org\BuildTools}
 \item {\tt Cbc} \url{projects.coin-or.org\Cbc}
+\item {\tt Cgl} \url{projects.coin-or.org\Cgl}
 \item {\tt Clp}  \url{projects.coin-or.org\Clp}
 \item {\tt CppAD} \url{projects.coin-or.org\CppAD}
 \item {\tt Dylp} \url{projects.coin-or.org\Dylp}
 \item {\tt Osi} \url{projects.coin-or.org\Osi}
 \item {\tt SYMPHONY}   \url{projects.coin-or.org\SYMPHONY}
+\item {\tt Vol}   \url{projects.coin-or.org\Vol}
 \end{itemize}
 
 The following directories are also in the project root. 
@@ -542,7 +585,307 @@ The OS directories include the following:
 
 
 
-\subsection{Key Protocols}\label{section:schemadescriptions}
+\section{The OS Library Components}\label{section:oslibrary}
+
+\subsection{OSAgent}\label{section:osagent}
+
+The {\tt OSAgent}  part of the library is used to facilitate communication with remote solvers. It is not used if the solver is invoked locally (i.e. on the same machine).   There are two key classes in the {\tt OSAgent} component of the OS library. The two classes are {\tt OSSolverAgent} and {\tt WSUtil}.
+
+The 
+
+\subsection{OSCommonInterfaces}
+
+Mention the OSnL node class. List which NL operators can be used.
+
+\subsubsection{The OSInstance Class}\label{section:osinstanceclass}
+
+\subsubsection{The OSExpressionTree OSnLNode Classes}\label{section:osexpressiontreeclass}
+
+The {\tt OSExpressionTree} class provides the in-memory representation of the nonlinear terms.  Our design goal is  to allow for efficient parsing of OSiL instances, while providing an API that meets the needs of diverse solvers.  Conceptually, any nonlinear expression in the objective or constraints is represented by a tree.  The expression tree for the nonlinear part of the objective function (\ref{eq:roobj}), for example, has the form illustrated in Figure~\ref{figure:expressiontree}.  The choice of a data structure to store such a tree --- along with the associated methods of an API --- is a key aspect in the design of the {\tt OSInstance} class. 
+
+\begin{figure}[ht]
+\centering
+\includegraphics[%
+  scale=0.38]{\figurepath/expressiontree.png}
+\caption{Conceptual expression tree for the nonlinear part of the objective (\ref{eq:roobj}).} \label{figure:expressiontree}
+\end{figure}
+  
+
+A base abstract class {\tt OSnLNode} is defined and  all of an OSiL file's
+operator and operand elements used in defining a
+nonlinear expression are extensions of the base element type {\tt OSnLNode}. There is an element type {\tt OSnLNodePlus}, for example, that
+extends {\tt OSnLNode}; then in an OSiL instance
+file, there are {\tt <plus>} elements that are of type {\tt
+OSnLNodePlus}.   Each {\tt OSExpressionTree} object contains a pointer to an {\tt OSnLNode} object that is the root of the corresponding expression tree.  To every element that extends the {\tt OSnLNode} type in an OSiL instance file, there corresponds a class that derives from the {\tt OSnLNode} class in an {\tt OSInstance} data structure.  Thus we can construct an expression tree of homogenous nodes, and methods that operate on the expression tree to calculate function values, derivatives, postfix notation, and the like do not require switches or complicated logic.
+
+
+\begin{figure}[ht]
+\centering
+   \small {\obeyspaces\let =\
+\fbox{\tt\begin{tabular}{@{}l@{}}
+   double OSnLNodePlus::calculateFunction(double *x)\{\\[\Sb]
+      m\_dFunctionValue = \\[\Sb]
+         m\_mChildren[0]->calculateFunction(x) +\\[\Sb]
+         m\_mChildren[1]->calculateFunction(x);\\[\Sb]
+      return m\_dFunctionValue;\\[\Sb]
+   \} //calculateFunction\\[\Sb]
+\end{tabular} }} \medskip
+\caption{The function calculation method for the ``plus'' node class with polymorphism}
+   \vspace{-8pt} \label{figure:calcfunction}
+\end{figure}
+
+
+    The {\tt OSInstance} class has a variety of {\tt calculate()} methods, based on two pure virtual functions in the {\tt OSInstance} class.  The first of these, {\tt calculateFunction()}, takes an array of {\tt double} values corresponding to decision variables, and evaluates the expression tree for those values.  Every class
+that extends {\tt OSnLNode} must implement this method.  As an example, the {\tt calculateFunction} method for the {\tt OSnLNodePlus} class is shown in Figure \ref{figure:calcfunction}.  Because the OSiL instance file must be validated against its schema, and in the schema each {\tt <OSnLNodePlus>} element is specified to have exactly two child elements, this {\tt calculateFunction} method can assume that there are
+exactly two children of the node that it is operating on.  Thus through the use of polymorphism and recursion the need for switches like those in Figure~\ref{figure:parsecode1} is eliminated. This design makes adding new operator elements easy; it is simply a matter of adding a new class and implementing the {\tt
+calculateFunction()} method for it.
+
+
+
+The following {\tt  OSnLNode} classes are currently supported.
+
+\begin{itemize}
+\item OSnLNodeVariable
+\item OSnLNodeTimes 
+\item OSnLNodePlus 
+\item OSnLNodeSum 
+\item OSnLNodeMinus 
+\item OSnLNodeNegate
+\item OSnLNodeDivide 
+\item OSnLNodePower 
+\item OSnLNodeProduct
+\item OSnLNodeLn 
+\item OSnLNodeSqrt 
+\item OSnLNodeSquare
+\item OSnLNodeSin
+\item OSnLNodeCos
+\item OSnLNodeExp
+\item OSnLNodeif
+\item OSnLNodeAbs
+\item OSnLNodeMax
+\item OSnLNodeMin
+\item OSnLNodeE
+\item OSnLNodePI
+\item OSnLNodeAllDiff
+\end{itemize}
+
+
+
+
+
+\subsection{OSModelInterfaces}\label{section:osmodelinterfaces}
+
+This part of the OS library is designed to help integrate the OS standards with other standards and modeling systems. 
+
+\subsubsection{Converting MPS Files}
+
+The MPS standard is still a popular format for representing linear and integer programming problems.  In {\tt OSModelInterfaces,} there is a class {\tt OSmps2osil} that can be used to convert files in MPS format into the OSiL standard. It is used as follows.
+
+\begin{verbatim}
+OSmps2osil *mps2osil = NULL;
+DefaultSolver *solver  = NULL;
+solver = new CoinSolver();
+solver->sSolverName = "cbc";
+mps2osil = new OSmps2osil(  mpsFileName);
+mps2osil->createOSInstance() ;
+solver->osinstance = mps2osil->osinstance;
+solver->solve();
+\end{verbatim}
+
+The {\tt OSmps2osil} class constructor takes a string which should be the file name of the instance in MPS format. The constructor then uses the CoinUtils library to read and parse the MPS file.  The class method {\tt createOSInstance} then builds  an in-memory {\tt osintance} object  that can be used by a solver. 
+
+
+\subsubsection{Converting AMPL nl Files}\label{section:nl2osil}
+
+AMPL is a popular modeling language that saves  model instances in the AMPL nl format.  The {\tt OSModelInterfaces} library provides a class, {\tt OSnl2osil} for reading in an nl file and creating a corresponding in-memory osinstance object. It is used as follows. 
+
+\begin{verbatim}
+OSnl2osil *nl2osil = NULL;
+DefaultSolver *solver  = NULL;
+solver = new LindoSolver();
+nl2osil = new OSnl2osil( nlFileName); 
+nl2osil->createOSInstance() ;
+solver->osinstance = nl2osil->osinstance;	
+solver->solve();
+\end{verbatim}
+
+
+The {\tt OSnl2osil} class works much like the {\tt OSmps2osil} class. The {\tt OSnl2osil} class constructor takes a string which should be the file name of the instance in nl format. The constructor then uses the AMPL ASL library routines to read and parse the nl file. The class method {\tt createOSInstance} then builds  an in-memory {\tt osintance} object  that can be used by a solver. 
+
+In Section  \ref{section:amplclient}  we describe the {\tt amplClient} executable that acts a ``solver'' for AMPL. The {\tt amplClient} uses the {\tt OSnl2osil} class to convert the instance in nl format to OSiL format before calling a solver either locally or remotely. 
+
+\subsubsection{Using MATLAB}\label{section:usingmatlab}
+
+Linear, integer, and quadratic problems can be formulated in MATLAB and then optimized either locally or over the network using the OS Library. The {\tt OSMatlab} class functions much like {\tt OSnl2osil} and {\tt OSmps2osil} and takes MATLAB arrays and creates and OSiL instance.  This class is part of the OS library. In order to use the OS library with MATLAB the user should do the following.  In order to use the {\tt OSMatlab} class it is necessary to  compile {\tt matlabSolver.cpp}  into  a MATLAB Executable file.  The {\tt matlabSolver.cpp} file is in the {\tt OSModelInterfaces} directory even though it is not part of the OS library. The following steps should be followed.
+
+\begin{itemize}
+
+
+\item[{\bf Step  1:}] In the project root run {\tt make install.}
+
+\item[{\bf Step  2:}]   Either leave {\tt matlabSolver.cpp} in the  the {\tt OSModelInterfaces} or copy it to another desired directory.
+
+\item[{\bf Step 3:}] Edit the MATLAB  {\bf mexopts.sh} (UNIX) or {\tt mexopts.bat}  so that the {\tt CXXFLAGS} option includes the header files in the {\tt cppad} directory and the {\tt include} directory in the project root. For example, it  should look like:
+\begin{verbatim}
+CXXFLAGS='-fno-common -no-cpp-precomp -fexceptions
+    -I/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/   
+    -I/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/include'
+\end{verbatim}
+
+Next edit the {\tt CXXLIBS} flag so that the OS and supporting libraries are included. For example, it should look like:
+
+\begin{verbatim}
+CXXLIBS="$MLIBS -lstdc++     
+    -L/Users/kmartin/Documents/files/code/ipopt/macosx/Ipopt-3.2.2/lib   
+    -L/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/lib     
+    -lOS  -lIpopt -lOsiCbc -lOsiClp -lCbc -lCgl -lOsi -lClp -lCoinUtils  -lm"
+\end{verbatim}
+
+For a UNIX system the {\tt mexopts.sh} file will usually be found in a directory with the release name in {\tt  $\sim$/.matlab}. For example, 
+{\tt $\sim$/.matlab/R14SP3}.
+
+
+On a Windows system, the {\tt  mexopts.bat} file will usually be in a directory with the release name in {\tt C:$\backslash$Documents and Settings$\backslash$Username$\backslash$Application Data$\backslash$Mathworks$\backslash$MATLAB}
+
+
+\item[{\bf Step 4:}]  Build the MATLAB executable file. Start MATLAB and in the MATLAB command window connect to the directory containing the file {\tt matlabSolver.cpp}.  Execute the command:
+
+\begin{verbatim}
+mex -v matlabSolver.cpp
+\end{verbatim}
+
+On a MAC OS X the resulting executable will be named {\tt matlabSolver.mexmac}. On the Windows system the file we named {\tt matlabSolver.mexw32}.
+
+\item[{\bf Step 5:}]  Set the MATLAB path to include the directory with the {\tt matlabSolver} executable. Also, put  the $m-file$ {\tt callMatlabSolver.m} in a directory which is on a MATLAB path.  The  {\tt callMatlabSolver.m} m-file is in the OSModelInterfaces directory. 
+
+\end{itemize}
+
+
+To use the {\tt matlabSolver} it is necessary to put the coefficients  from a linear, integer, or quadratic problem into MATLAB arrays. 
+
+\begin{alignat}{2}
+& \mbox{Minimize} & \quad 
+10 x_{1} + 9 x_{2}\label{eq:parinobj}\\
+& \mbox{Subject to} & \quad .7x_{1} + x_{2}  &\le 630  \label{eq:parinccon1}\\
+& & .5x_{1} + (5/6) x_{2} &\le 600 \label{eq:parinccon2}\\
+& &  x_{1} + (2/3) x_{2} &\le 708 \label{eq:parinccon3}\\
+& & .1x_{1} + .25 x_{2} &\le 135 \label{eq:parinccon4}\\
+& & x_{1}, x_{2} &\ge 0 \label{eq:parincnonneg}
+\end{alignat}
+
+The MATLAB representation of this problem in MATLAB arrays is
+\begin{verbatim}
+% the number of constraints
+numCon = 4;
+% the number of variables
+numVar = 2;
+% variable types 
+VarType='CC';
+% constraint types
+A = [.7  1; .5  5/6; 1   2/3  ; .1   .25];
+BU = [630 600  708  135];
+BL = [];
+OBJ = [10  9];
+VL = [-inf -inf];
+VU = [];
+ObjType = 1;
+% leave Q empty if there are no quadratic terms
+Q = [];
+prob_name = 'ParInc Example'
+password = 'chicagoesmuyFRIO';
+%
+%
+%the solver
+solverName = 'lindo';
+%the remote service service address
+%if left empty we solve locally
+serviceAddress='http://128.135.130.17:8080/os/OSSolverService.jws';
+% now solve
+callMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, ... 
+    VarType, Q, prob_name, password, solverName, serviceAddress)
+\end{verbatim}
+This example m-file is in the {\tt data} directory and is file {\tt parincLinear.m}. Note that in addition to the problem formulation we can specify which solver to use through the {\tt solverName} variable.  If solution with a remote solver is desired this can be specified with the {\tt serviceAddress} variable.  If the {\tt serviceAddress} is left empty, i.e.
+\begin{verbatim}
+serviceAddress='';
+\end{verbatim}
+then a local solver is used. In this case  it is crucial that the appropriate solver is linked in with the {\tt matlabSolver} executable using the {\tt CXXLIBS} option. 
+
+
+The data directory  also contains the m-file  {\tt template.m} which contains extensive comments about how to formulate the problems in MATLAB.  A second example which is a quadratic problem is given in the Appendix. The appropriate m-file is {\tt markowitz.m}.
+
+
+
+\subsection{OSParsers}
+
+
+
+\subsection{OSSolverInterfaces}
+
+
+The {\tt OSSolverInterfaces} library is designed to facilitate linking the OS library with various solver APIs. We first describe how to take a problem instance in OSiL format and connect to a solver that has a COIN-OR OSI interface.  See the OSI project \url{www.projects.coin-or.org/Osi}.   We then describe hooking to the COIN-OR nonlinear code {\tt Ipopt.} See \url{www.projects.coin-or.org/Ipopt}.  Finally we describe hooking to two commercial solvers KNITRO and LINDO. 
+
+The OS library has been tested with the following solvers using the Osi Interface.
+
+\begin{itemize}
+\item Cbc
+\item Clp
+\item Cplex
+\item DyLP
+\item Glpk
+\item SYMPHONY
+\end{itemize}
+
+In the {\tt OSSolverInterfaces} library there is an abstract class {\tt DefaultSolver} that has the following key members:
+
+\begin{verbatim}
+std::string osil;
+std::string osol;
+std::string osrl;
+OSInstance *osinstance;
+OSResult  *osresult;
+\end{verbatim}
+and the pure virtual function
+\begin{verbatim}
+virtual void solve() = 0 ;	
+\end{verbatim}
+In order to use a solver through the COIN-OR {\tt Osi} interface it is necessary to an object in the {\tt CoinSolver} class which inherits from the {\tt DefaultSolver} class and implements the appropriate {\tt solve()} function.  We illustrate with the Clp solver.
+
+\begin{verbatim}
+DefaultSolver *solver  = NULL;
+solver = new CoinSolver();
+solver->m_sSolverName = "clp";
+\end{verbatim}
+
+Assume that the data file containing the problem has been read into the string {\tt osil} and the solver options are in the string {\tt osol}. Then the {\tt Clp} solver is invoked as follows.
+
+\begin{verbatim}
+solver->osil = osil;
+solver->osol = osol;
+solver->solve();
+\end{verbatim}
+
+Finally, get the solution in {\tt OSrL} format as follows
+
+\begin{verbatim}
+cout << solver->osrl << endl;
+\end{verbatim}
+
+Even though LINDO and KNITRO are commercial solvers and do not have a COIN-OR {\tt Osi} interface these solvers are used in exactly the same manner as a COIN-OR solver. For example, to invoke the LINDO solver we do the following.
+
+\begin{verbatim}
+solver = new LindoSolver();	
+\end{verbatim}
+
+Similarly for KNITRO and Ipopt. In the case of the KNITRO, the {\tt KnitroSolver} class inherits from both {\tt DefaultSolver} class and the KNITRO {\tt NlpProblemDef} class. See \url{Kipp -- put in Knitro manual link} for more information on the KNITRO solver C++ implementation and the {\tt NlpProblemDef} class. Similarly, for Ipopt the {\tt IpoptSolver} class inherits from both the  {\tt DefaultSolver} class and the Ipopt {\tt TNLP} class.  See \url{Kipp -- put in Ipopt manual link} for more information on the Ipopt solver C++ implementation and the {\tt TNLP} calss.
+
+In the examples above the problem instance was assumed to be read from a file into the string {\tt osil} and then into the class member {\tt solver->osil.} However, everything can be done entirely in memory. For example, it is possible to use the {\tt OSInstance} class to create an in-memory problem representation and give this representation directly to a solver class that inherits from {\tt DefaultSolver}. The class member to use is {\tt osinstance.} This is illustrated in the example given in Section \ref{subsection:exampleOSInstance}.
+
+
+\subsection{OSUtils}
+
+\section{OS Protocols}\label{section:schemadescriptions}
+
+
 
 The objective of  (OS) is to provide a set of standards for representing optimization instances, results, solver options, and communication between clients and solvers in a distributed environment using Web Services.  These standards are specified by W3C XSD schemas. The schemas for the OS project are contained in the {\tt schemas} folder under the {\tt OS} root. There are numerous schemas in this directory that are part of the OS standard. For a full description of all the schemas see  Ma \cite{junma2005}.  We briefly discuss the standards most relevant to the current version of the OS project. 
 
@@ -805,301 +1148,7 @@ It is the result of a {\tt knock} operation. See the example given in Section \r
 
 \end{itemize}
 
-\section{The OS Library Components}\label{section:oslibrary}
 
-\subsection{OSAgent}\label{section:osagent}
-
-The {\tt OSAgent}  part of the library is used to facilitate communication with remote solvers. It is not used if the solver is invoked locally (i.e. on the same machine). 
-
-\subsection{OSCommonInterfaces}
-
-Mention the OSnL node class. List which NL operators can be used.
-
-\subsubsection{The OSInstance Class}\label{section:osinstanceclass}
-
-\subsubsection{The OSExpressionTree OSnLNode Classes}\label{section:osexpressiontreeclass}
-
-The {\tt OSExpressionTree} class provides the in-memory representation of the nonlinear terms.  Our design goal is  to allow for efficient parsing of OSiL instances, while providing an API that meets the needs of diverse solvers.  Conceptually, any nonlinear expression in the objective or constraints is represented by a tree.  The expression tree for the nonlinear part of the objective function (\ref{eq:roobj}), for example, has the form illustrated in Figure~\ref{figure:expressiontree}.  The choice of a data structure to store such a tree --- along with the associated methods of an API --- is a key aspect in the design of the {\tt OSInstance} class. 
-
-\begin{figure}[ht]
-\centering
-\includegraphics[%
-  scale=0.38]{\figurepath/expressiontree.png}
-\caption{Conceptual expression tree for the nonlinear part of the objective (\ref{eq:roobj}).} \label{figure:expressiontree}
-\end{figure}
-  
-
-A base abstract class {\tt OSnLNode} is defined and  all of an OSiL file's
-operator and operand elements used in defining a
-nonlinear expression are extensions of the base element type {\tt OSnLNode}. There is an element type {\tt OSnLNodePlus}, for example, that
-extends {\tt OSnLNode}; then in an OSiL instance
-file, there are {\tt <plus>} elements that are of type {\tt
-OSnLNodePlus}.   Each {\tt OSExpressionTree} object contains a pointer to an {\tt OSnLNode} object that is the root of the corresponding expression tree.  To every element that extends the {\tt OSnLNode} type in an OSiL instance file, there corresponds a class that derives from the {\tt OSnLNode} class in an {\tt OSInstance} data structure.  Thus we can construct an expression tree of homogenous nodes, and methods that operate on the expression tree to calculate function values, derivatives, postfix notation, and the like do not require switches or complicated logic.
-
-
-\begin{figure}[ht]
-\centering
-   \small {\obeyspaces\let =\
-\fbox{\tt\begin{tabular}{@{}l@{}}
-   double OSnLNodePlus::calculateFunction(double *x)\{\\[\Sb]
-      m\_dFunctionValue = \\[\Sb]
-         m\_mChildren[0]->calculateFunction(x) +\\[\Sb]
-         m\_mChildren[1]->calculateFunction(x);\\[\Sb]
-      return m\_dFunctionValue;\\[\Sb]
-   \} //calculateFunction\\[\Sb]
-\end{tabular} }} \medskip
-\caption{The function calculation method for the ``plus'' node class with polymorphism}
-   \vspace{-8pt} \label{figure:calcfunction}
-\end{figure}
-
-
-    The {\tt OSInstance} class has a variety of {\tt calculate()} methods, based on two pure virtual functions in the {\tt OSInstance} class.  The first of these, {\tt calculateFunction()}, takes an array of {\tt double} values corresponding to decision variables, and evaluates the expression tree for those values.  Every class
-that extends {\tt OSnLNode} must implement this method.  As an example, the {\tt calculateFunction} method for the {\tt OSnLNodePlus} class is shown in Figure \ref{figure:calcfunction}.  Because the OSiL instance file must be validated against its schema, and in the schema each {\tt <OSnLNodePlus>} element is specified to have exactly two child elements, this {\tt calculateFunction} method can assume that there are
-exactly two children of the node that it is operating on.  Thus through the use of polymorphism and recursion the need for switches like those in Figure~\ref{figure:parsecode1} is eliminated. This design makes adding new operator elements easy; it is simply a matter of adding a new class and implementing the {\tt
-calculateFunction()} method for it.
-
-
-
-The following {\tt  OSnLNode} classes are currently supported.
-
-\begin{itemize}
-\item OSnLNodeVariable
-\item OSnLNodeTimes 
-\item OSnLNodePlus 
-\item OSnLNodeSum 
-\item OSnLNodeMinus 
-\item OSnLNodeNegate
-\item OSnLNodeDivide 
-\item OSnLNodePower 
-\item OSnLNodeProduct
-\item OSnLNodeLn 
-\item OSnLNodeSqrt 
-\item OSnLNodeSquare
-\item OSnLNodeSin
-\item OSnLNodeCos
-\item OSnLNodeExp
-\item OSnLNodeif
-\item OSnLNodeAbs
-\item OSnLNodeMax
-\item OSnLNodeMin
-\item OSnLNodeE
-\item OSnLNodePI
-\item OSnLNodeAllDiff
-\end{itemize}
-
-
-
-
-
-\subsection{OSModelInterfaces}\label{section:osmodelinterfaces}
-
-This part of the OS library is designed to help integrate the OS standards with other standards and modeling systems. 
-
-\subsubsection{Converting MPS Files}
-
-The MPS standard is still a popular format for representing linear and integer programming problems.  In {\tt OSModelInterfaces,} there is a class {\tt OSmps2osil} that can be used to convert files in MPS format into the OSiL standard. It is used as follows.
-
-\begin{verbatim}
-OSmps2osil *mps2osil = NULL;
-DefaultSolver *solver  = NULL;
-solver = new CoinSolver();
-solver->sSolverName = "cbc";
-mps2osil = new OSmps2osil(  mpsFileName);
-mps2osil->createOSInstance() ;
-solver->osinstance = mps2osil->osinstance;
-solver->solve();
-\end{verbatim}
-
-The {\tt OSmps2osil} class constructor takes a string which should be the file name of the instance in MPS format. The constructor then uses the CoinUtils library to read and parse the MPS file.  The class method {\tt createOSInstance} then builds  an in-memory {\tt osintance} object  that can be used by a solver. 
-
-
-\subsubsection{Converting AMPL nl Files}\label{section:nl2osil}
-
-AMPL is a popular modeling language that saves  model instances in the AMPL nl format.  The {\tt OSModelInterfaces} library provides a class, {\tt OSnl2osil} for reading in an nl file and creating a corresponding in-memory osinstance object. It is used as follows. 
-
-\begin{verbatim}
-OSnl2osil *nl2osil = NULL;
-DefaultSolver *solver  = NULL;
-solver = new LindoSolver();
-nl2osil = new OSnl2osil( nlFileName); 
-nl2osil->createOSInstance() ;
-solver->osinstance = nl2osil->osinstance;	
-solver->solve();
-\end{verbatim}
-
-
-The {\tt OSnl2osil} class works much like the {\tt OSmps2osil} class. The {\tt OSnl2osil} class constructor takes a string which should be the file name of the instance in nl format. The constructor then uses the AMPL ASL library routines to read and parse the nl file. The class method {\tt createOSInstance} then builds  an in-memory {\tt osintance} object  that can be used by a solver. 
-
-In Section  \ref{section:amplclient}  we describe the {\tt amplClient} executable that acts a ``solver'' for AMPL. The {\tt amplClient} uses the {\tt OSnl2osil} class to convert the instance in nl format to OSiL format before calling a solver either locally or remotely. 
-
-\subsubsection{Using MATLAB}\section{section:usingmatlab}
-
-Linear, integer, and quadratic problems can be formulated in MATLAB and then optimized either locally or over the network using the OS Library. The {\tt OSMatlab} class functions much like {\tt OSnl2osil} and {\tt OSmps2osil} and takes MATLAB arrays and creates and OSiL instance.  This class is part of the OS library. In order to use the OS library with MATLAB the user should do the following.  In order to use the {\tt OSMatlab} class it is necessary to  compile {\tt matlabSolver.cpp}  into  a MATLAB Executable file.  The {\tt matlabSolver.cpp} file is in the {\tt OSModelInterfaces} directory even though it is not part of the OS library. The following steps should be followed.
-
-\begin{itemize}
-
-
-\item[{\bf Step  1:}] In the project root run {\tt make install.}
-
-\item[{\bf Step  2:}]   Either leave {\tt matlabSolver.cpp} in the  the {\tt OSModelInterfaces} or copy it to another desired directory.
-
-\item[{\bf Step 3:}] Edit the MATLAB  {\bf mexopts.sh} (UNIX) or {\tt mexopts.bat}  so that the {\tt CXXFLAGS} option includes the header files in the {\tt cppad} directory and the {\tt include} directory in the project root. For example, it  should look like:
-\begin{verbatim}
-CXXFLAGS='-fno-common -no-cpp-precomp -fexceptions
-    -I/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/   
-    -I/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/include'
-\end{verbatim}
-
-Next edit the {\tt CXXLIBS} flag so that the OS and supporting libraries are included. For example, it should look like:
-
-\begin{verbatim}
-CXXLIBS="$MLIBS -lstdc++     
-    -L/Users/kmartin/Documents/files/code/ipopt/macosx/Ipopt-3.2.2/lib   
-    -L/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/lib     
-    -lOS  -lIpopt -lOsiCbc -lOsiClp -lCbc -lCgl -lOsi -lClp -lCoinUtils  -lm"
-\end{verbatim}
-
-For a UNIX system the {\tt mexopts.sh} file will usually be found in a directory with the release name in {\tt  $\sim$/.matlab}. For example, 
-{\tt $\sim$/.matlab/R14SP3}.
-
-
-On a Windows system, the {\tt  mexopts.bat} file will usually be in a directory with the release name in {\tt C:$\backslash$Documents and Settings$\backslash$Username$\backslash$Application Data$\backslash$Mathworks$\backslash$MATLAB}
-
-
-\item[{\bf Step 4:}]  Build the MATLAB executable file. Start MATLAB and in the MATLAB command window connect to the directory containing the file {\tt matlabSolver.cpp}.  Execute the command:
-
-\begin{verbatim}
-mex -v matlabSolver.cpp
-\end{verbatim}
-
-On a MAC OS X the resulting executable will be named {\tt matlabSolver.mexmac}. On the Windows system the file we named {\tt matlabSolver.mexw32}.
-
-\item[{\bf Step 5:}]  Set the MATLAB path to include the directory with the {\tt matlabSolver} executable. Also, put  the $m-file$ {\tt callMatlabSolver.m} in a directory which is on a MATLAB path.  The  {\tt callMatlabSolver.m} m-file is in the OSModelInterfaces directory. 
-
-\end{itemize}
-
-
-To use the {\tt matlabSolver} it is necessary to put the coefficients  from a linear, integer, or quadratic problem into MATLAB arrays. 
-
-\begin{alignat}{2}
-& \mbox{Minimize} & \quad 
-10 x_{1} + 9 x_{2}\label{eq:parinobj}\\
-& \mbox{Subject to} & \quad .7x_{1} + x_{2}  &\le 630  \label{eq:parinccon1}\\
-& & .5x_{1} + (5/6) x_{2} &\le 600 \label{eq:parinccon2}\\
-& &  x_{1} + (2/3) x_{2} &\le 708 \label{eq:parinccon3}\\
-& & .1x_{1} + .25 x_{2} &\le 135 \label{eq:parinccon4}\\
-& & x_{1}, x_{2} &\ge 0 \label{eq:parincnonneg}
-\end{alignat}
-
-The MATLAB representation of this problem in MATLAB arrays is
-\begin{verbatim}
-% the number of constraints
-numCon = 4;
-% the number of variables
-numVar = 2;
-% variable types 
-VarType='CC';
-% constraint types
-A = [.7  1; .5  5/6; 1   2/3  ; .1   .25];
-BU = [630 600  708  135];
-BL = [];
-OBJ = [10  9];
-VL = [-inf -inf];
-VU = [];
-ObjType = 1;
-% leave Q empty if there are no quadratic terms
-Q = [];
-prob_name = 'ParInc Example'
-password = 'chicagoesmuyFRIO';
-%
-%
-%the solver
-solverName = 'lindo';
-%the remote service service address
-%if left empty we solve locally
-serviceAddress='http://128.135.130.17:8080/os/OSSolverService.jws';
-% now solve
-callMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, ... 
-    VarType, Q, prob_name, password, solverName, serviceAddress)
-\end{verbatim}
-This example m-file is in the {\tt data} directory and is file {\tt parincLinear.m}. Note that in addition to the problem formulation we can specify which solver to use through the {\tt solverName} variable.  If solution with a remote solver is desired this can be specified with the {\tt serviceAddress} variable.  If the {\tt serviceAddress} is left empty, i.e.
-\begin{verbatim}
-serviceAddress='';
-\end{verbatim}
-then a local solver is used. In this case  it is crucial that the appropriate solver is linked in with the {\tt matlabSolver} executable using the {\tt CXXLIBS} option. 
-
-
-The data directory  also contains the m-file  {\tt template.m} which contains extensive comments about how to formulate the problems in MATLAB.  A second example which is a quadratic problem is given in the Appendix. The appropriate m-file is {\tt markowitz.m}.
-
-
-
-\subsection{OSParsers}
-
-
-
-\subsection{OSSolverInterfaces}
-
-
-The {\tt OSSolverInterfaces} library is designed to facilitate linking the OS library with various solver APIs. We first describe how to take a problem instance in OSiL format and connect to a solver that has a COIN-OR OSI interface.  See the OSI project \url{www.projects.coin-or.org/Osi}.   We then describe hooking to the COIN-OR nonlinear code {\tt Ipopt.} See \url{www.projects.coin-or.org/Ipopt}.  Finally we describe hooking to two commercial solvers KNITRO and LINDO. 
-
-The OS library has been tested with the following solvers using the Osi Interface.
-
-\begin{itemize}
-\item Cbc
-\item Clp
-\item Cplex
-\item DyLP
-\item Glpk
-\item SYMPHONY
-\end{itemize}
-
-In the {\tt OSSolverInterfaces} library there is an abstract class {\tt DefaultSolver} that has the following key members:
-
-\begin{verbatim}
-std::string osil;
-std::string osol;
-std::string osrl;
-OSInstance *osinstance;
-OSResult  *osresult;
-\end{verbatim}
-and the pure virtual function
-\begin{verbatim}
-virtual void solve() = 0 ;	
-\end{verbatim}
-In order to use a solver through the COIN-OR {\tt Osi} interface it is necessary to an object in the {\tt CoinSolver} class which inherits from the {\tt DefaultSolver} class and implements the appropriate {\tt solve()} function.  We illustrate with the Clp solver.
-
-\begin{verbatim}
-DefaultSolver *solver  = NULL;
-solver = new CoinSolver();
-solver->m_sSolverName = "clp";
-\end{verbatim}
-
-Assume that the data file containing the problem has been read into the string {\tt osil} and the solver options are in the string {\tt osol}. Then the {\tt Clp} solver is invoked as follows.
-
-\begin{verbatim}
-solver->osil = osil;
-solver->osol = osol;
-solver->solve();
-\end{verbatim}
-
-Finally, get the solution in {\tt OSrL} format as follows
-
-\begin{verbatim}
-cout << solver->osrl << endl;
-\end{verbatim}
-
-Even though LINDO and KNITRO are commercial solvers and do not have a COIN-OR {\tt Osi} interface these solvers are used in exactly the same manner as a COIN-OR solver. For example, to invoke the LINDO solver we do the following.
-
-\begin{verbatim}
-solver = new LindoSolver();	
-\end{verbatim}
-
-Similarly for KNITRO and Ipopt. In the case of the KNITRO, the {\tt KnitroSolver} class inherits from both {\tt DefaultSolver} class and the KNITRO {\tt NlpProblemDef} class. See \url{Kipp -- put in Knitro manual link} for more information on the KNITRO solver C++ implementation and the {\tt NlpProblemDef} class. Similarly, for Ipopt the {\tt IpoptSolver} class inherits from both the  {\tt DefaultSolver} class and the Ipopt {\tt TNLP} class.  See \url{Kipp -- put in Ipopt manual link} for more information on the Ipopt solver C++ implementation and the {\tt TNLP} calss.
-
-In the examples above the problem instance was assumed to be read from a file into the string {\tt osil} and then into the class member {\tt solver->osil.} However, everything can be done entirely in memory. For example, it is possible to use the {\tt OSInstance} class to create an in-memory problem representation and give this representation directly to a solver class that inherits from {\tt DefaultSolver}. The class member to use is {\tt osinstance.} This is illustrated in the example given in Section \ref{subsection:exampleOSInstance}.
-
-
-\subsection{OSUtils}
 
 \section{The  OSInstance API}\label{section:osinstance}
 
