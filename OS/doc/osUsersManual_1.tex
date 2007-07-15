@@ -616,14 +616,18 @@ The OSInstance class is the in-memory representation of an optimization instance
 
 \subsubsection{Creating an {\tt OSInstance} Object}
 
-The OSCommonInterfaces component contains an {\tt OSiLReader}  class for reading an instance in an OSiL string and creating an in-memory {\tt OSInstance} object.  Assume that {\tt sOSiL} is a string with an instance in OSiL format. The following will create an {\tt OSInstance} object.
+The OSCommonInterfaces component contains an {\tt OSiLReader}  class for reading an instance in an OSiL string and creating an in-memory {\tt OSInstance} object.  Assume that {\tt sOSiL} is a string with an instance in OSiL format. Creating an {\tt OSInstance} object is illustrated in Figure \ref{figure:creatingosinstanceobject}.
+
+\begin{figure}[ht]
+\centering
 \begin{verbatim}
 OSiLReader *osilreader = NULL;
 OSInstance *osinstance = NULL;
 osilreader = new OSiLReader(); 
 osinstance = osilreader->readOSiL( sOSiL);
 \end{verbatim}
-
+\caption{Creating an {\tt OSInstance} Object} \label{figure:creatingosinstanceobject}
+\end{figure}
 
 \subsubsection{Mapping Rules}
 
@@ -1302,24 +1306,33 @@ The OSInstance API can be used to:
 \end{itemize}
 
 
-  Similarly, the {\tt set()} method provides an API for creating or modifying an {\tt OSInstance}.  The {\tt calculate()} methods are discussed in Section~\ref{section:ad}.
 
 \subsection{Get Methods}
 
-The {\tt get()} methods are used by other classes to access data in an existing object or create an instance in postfix or prefix format.    
+The {\tt get()} methods are used by other classes to access data in an existing object or create an instance in postfix or prefix format.   Assume {\tt osinstance} is an object in the {\tt OSInstance} class created as illustrated in Figure \ref{figure:creatingosinstanceobject}. Then, for example, 
+\begin{verbatim}
+osinstance->getVariableNumber();
+\end{verbatim}
+will return an integer which is the number of variables in the problem, 
+\begin{verbatim}
+osintance->getVariableTypes();
+\end{verbatim}
+will return a {\tt char} pointer to the variable types ({\tt C} for continuous, {\tt B} for binary, and {\tt I} for general integer),
+\begin{verbatim}
+getVariableLowerBounds();
+\end{verbatim}
+will  return a {\tt double} pointer to the lower bound on each variable. There are similar {\tt get} methods for the constraints. There are numerous {\tt get} methods for the data in the {\tt <linearConstraintCoefficients>}  element, the {\tt <quadraticCoefficients>} element, and the {\tt <nonlinearExpressions>} element. 
 
+When an {\tt osinstance} object is created, it is stored as in expression tree in an {\tt OSExpressionTree} object. However, some solver APIs (e.g. LINDO) may take the data in a different format such as postfix and prefix. There are methods to return the data in either postfix or prefix format. 
 
-kippster
-
-For example,  the method {\tt getOSInstance()} of the {\tt OSiLReader} class parses an OSiL file and returns a corresponding object {\tt osinstance} of type {\tt OSInstance}. Then the nonzero coefficient values in the linear terms of the constraints are retrieved in column major form~by
-
-\begin{Example}\obeyspaces\let =\ \tt\begin{tabular}{@{}l@{}}
-osinstance->getLinearConstraintCoefficientsInColumnMajor()->values
-\end{tabular}\end{Example}
-%
-and in other forms by analogous calls.
-
-Don't forget to mention getting prefix an postfix. Illustrate some of this like in the unitTest.
+First define a {\tt vector} of pointers to {\tt OSnLNode} objects.
+\begin{verbatim}
+std::vector<OSnLNode*> postfixVec;
+\end{verbatim}
+then get the expression tree as a postfix vector of nodes. 
+\begin{verbatim}
+postfixVec = osinstance->getNonlinearExpressionTreeInPostfix( -1);
+\end{verbatim}
 
 \subsection{Set Methods}
 
