@@ -122,7 +122,7 @@ The objective of Optimization Services (OS) is to provide a set of standards for
 \item[1.]  A set of XML based standards for representing optimization instances (OSiL), optimization results (OSrL), and optimization solver options (OSoL). There are other standards, but these are the main ones. The schemas for these standards are described in Section   \ref{section:schemadescriptions}.
 
 \item[2.]  A robust solver and modeling language interface (API) for linear and nonlinear optimization problems.  Corresponding to the OSiL problem instance representation there is an in-memory object,  {\tt OSInstance}, along with a set of  {\tt get()},   {\tt set()}, and {\tt calculate()} methods for accessing and creating problem instances.  
-This is a very general API for linear, integer, and nonlinear programs.  Any modeling language that can produce OSiL can easily communicate with any solver that uses the OSInstance API.   The {\tt OSInstance} object is described in more detail in Section \ref{section:osinstance}. The nonlinear part of the API is based on the COIN project \url{projects.coin-or.org/CppAD} by Brad Bell but is written in a very general manner and could be used with other algorithmic differentiation packages. More detail on algorithmic differentiation is provided in Section \ref{section:ad}.
+This is a very general API for linear, integer, and nonlinear programs.  Any modeling language that can produce OSiL can easily communicate with any solver that uses the OSInstance API.   The {\tt OSInstance} object is described in more detail in Section \ref{section:osinstanceAPI}. The nonlinear part of the API is based on the COIN project \url{projects.coin-or.org/CppAD} by Brad Bell but is written in a very general manner and could be used with other algorithmic differentiation packages. More detail on algorithmic differentiation is provided in Section \ref{section:ad}.
 
 
 \item[3.]  A  command line executable {\tt OSSolverService}  for reading problem instances (OSiL format, nl format, MPS format) and calling a solver either locally or on a remote server.  This is described in Section \ref{section:ossolverservice}.
@@ -426,7 +426,7 @@ Bug reporting is done through the project Trac page. This is at \url{http://proj
  \url{http://www.coin-or.org/usingTrac.html}  After registering, log in and then file a trouble ticket by going to \url{http://projects.coin-or.org/OS/newticket}.
  
  
-\subsection{Documentation}
+\subsection{Documentation}\label{section:documentation}
 
 If you have Doxygen  \url{www.doxygen.org} available (the executable {\tt doxygen} should be in the {\tt path} command) then executing
 \begin{verbatim}
@@ -591,13 +591,150 @@ The OS directories include the following:
 
 The {\tt OSAgent}  part of the library is used to facilitate communication with remote solvers. It is not used if the solver is invoked locally (i.e. on the same machine).   There are two key classes in the {\tt OSAgent} component of the OS library. The two classes are {\tt OSSolverAgent} and {\tt WSUtil}.
 
-The 
+The {\tt OSSolverAgent} class is used  contact a remote solver service.  For example, assume that {\tt sOSiL} is a string with a problem instance and {\tt sOSoL} is a string with solver options. Then the following code will call a solver service and invoke the {\tt the solve} method.
+\begin{verbatim}
+OSSolverAgent *osagent;
+string serviceLocation = http://128.135.130.17:8080/os/OSSolverService.jws
+osagent = new OSSolverAgent(  serviceLocation );
+osagent->solve(sOSiL, sOSoL);
+\end{verbatim}
+Other methods in the {\tt OSSolverAgent} class are {\tt send}, {\tt retrieve}, {\tt getJobID}, {\tt knock}, and {\tt kill}.  The use of these methods is described in Section \ref{section:servicemethods}.
+
+The methods in the {\tt OSSolverAgent} class call methods in the {\tt WSUtil} class that perform such tasks and creating and parsing SOAP messages and making low level socket calls to the server running the solver service. The average user will not use methods in the {\tt WSUtil} class, but they are available to anyone wanting to make socket calls or create SOAP messages. 
 
 \subsection{OSCommonInterfaces}
 
-Mention the OSnL node class. List which NL operators can be used.
+The classes in the OSCommonInterfaces component of the OS library are  used  to read and write files and strings in the OSiL and OSrL protocols. See Section \ref{section:schemadescriptions} for more detail on OSiL, OSrL, and other OS protocols. For a complete listing of all of the files in {\tt OSCommonInterfaces} see the Doxygen documentation in the {\tt doxydoc} folder (see Section \ref{section:schemadescriptions}).  Below we highlight some key classes.
+
+
+
+
 
 \subsubsection{The OSInstance Class}\label{section:osinstanceclass}
+
+The OSInstance class is the in-memory representation of an optimization instance and is a key class for users of the OS project. This class has an API defined by a collection of {\tt get()} methods for extracting various components (such as bounds and coefficients) from a problem instance, a collection of {\tt set()} methods for modifying or generating an optimization instance, and a collection of {\tt calculate()} methods for function, gradient, and Hessian evaluations.  See Section \ref{section:osinstanceAPI}.  We now describe how to create an {\tt OSInstance} object and the close relationship between the OSiL schema and the {\tt OSInstance} class. 
+
+\subsubsection{Creating an {\tt OSInstance} Object}
+
+The OSCommonInterfaces component contains an {\tt OSiLReader}  class for reading an instance in an OSiL string and creating an in-memory {\tt OSInstance} object.  Assume that {\tt sOSiL} is a string with an instance in OSiL format. The following will create an {\tt OSInstance} object.
+\begin{verbatim}
+OSiLReader *osilreader = NULL;
+OSInstance *osinstance = NULL;
+osilreader = new OSiLReader(); 
+osinstance = osilreader->readOSiL( sOSiL);
+\end{verbatim}
+
+
+\subsubsection{Mapping Rules}
+
+The {\tt OSInstance} class has two member classes, {\tt InstanceHeader} and {\tt InstanceData}.  These correspond to the OSiL schema's complexTypes {\tt instanceHeader} and {\tt instanceData}, and to the XML elements {\tt <instanceHeader>} and {\tt <instanceData>}. 
+
+    Moving down one level, Figure~\ref{figure:instancedata} shows that the {\tt InstanceData} class has in turn the member classes {\tt Variables}, {\tt Objectives}, {\tt Constraints}, {\tt LinearConstraintCoefficients}, {\tt QuadraticCoefficients}, and {\tt NonlinearExpressions}, corresponding to the respective elements in the OSiL schema with the same name.
+
+
+\begin{figure}[ht]
+\centering
+   \small {\obeyspaces\let =\
+\fbox{\tt\begin{tabular}{@{}l@{}}
+class OSInstance\{\\[\Sb]
+public:\\[\Sb]
+     OSInstance(); \\[\Sb]
+     InstanceHeader *instanceHeader;\\[\Sb]
+     InstanceData *instanceData;	\\[\Sb]
+\}; //class OSInstance\\[\Sb]
+\end{tabular} }} \bigskip
+\caption{The {\tt OSInstance} class} \label{figure:osinstance}
+\end{figure}
+
+
+\begin{figure}[ht]
+\centering
+   \small {\obeyspaces\let =\
+\fbox{\tt\begin{tabular}{@{}l@{}}
+class InstanceData\{\\[\Sb]
+public:\\[\Sb]
+     InstanceData();\\[\Sb]
+     Variables *variables;\\[\Sb]
+     Objectives *objectives;\\[\Sb]
+     Constraints *constraints;\\[\Sb]
+     LinearConstraintCoefficients *linearConstraintCoefficients;\\[\Sb]
+     QuadraticCoefficients *quadraticCoefficients;\\[\Sb]
+     NonlinearExpressions *nonlinearExpressions;\\[\Sb]
+\}; // class InstanceData
+\end{tabular} }} \bigskip
+\caption{The {\tt InstanceData} class} \label{figure:instancedata}
+\end{figure}
+
+
+\begin{figure}[hb]
+%\includegraphics[scale=0.8]{../../figures/paradigm1.eps}
+\centering
+   \scriptsize {\obeyspaces\let =\
+\fbox{\tt\begin{tabular}{@{}l@{}}
+\textsf{\textbf{Schema complexType  \hspace{3.74in}  In-memory class}}\\[\Sa]
+<xs:complexType name="Variables">  <---------------------------------------------->  class Variables\{\\[\Sb]
+                                                                                     public:\\[\Sb]
+  <xs:sequence>                                                                        Variables();\\[\Sb]
+    <xs:element name="var" type="Variable" maxOccurs="unbounded"/>  <------------->    Variable *var;\\[\Sb]
+  </xs:sequence>\\[\Sb]
+  <xs:attribute name="number" type="xs:positiveInteger"  use="required"/>  <------>    int number;\\[\Sb]
+</xs:complexType>                                                                    \}; // class Variables\\[\Sb]
+ \\[\Sb]
+ \\[\Sb]
+<xs:complexType name="Variable">  <----------------------------------------------->  class Variable\{\\[\Sb]
+                                                                                     public:\\[\Sb]
+                                                                                       Variable();\\[\Sb]
+  <xs:attribute name="name" type="xs:string" use="optional"/>  <------------------>    string name;\\[\Sb]
+  <xs:attribute name="init" type="xs:double" use="optional"/>  <------------------>    double init;\\[\Sb]
+  <xs:attribute name="initString" type="xs:string" use="optional"/>  <------------>    string initString;\\[\Sb]
+  <xs:attribute name="type" use="optional" default="C">  <------------------------>    char type;\\[\Sb]
+    <xs:simpleType>\\[\Sb]
+      <xs:restriction base="xs:string">\\[\Sb]
+        <xs:enumeration value="C"/>\\[\Sb]
+        <xs:enumeration value="B"/>\\[\Sb]
+        <xs:enumeration value="I"/>\\[\Sb]
+        <xs:enumeration value="S"/>\\[\Sb]
+      </xs:restriction>\\[\Sb]
+    </xs:simpleType>\\[\Sb]
+  </xs:attribute>\\[\Sb]
+  <xs:attribute name="lb" type="xs:double" use="optional" default="0"/>  <-------->    double lb;\\[\Sb]
+  <xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>  <------>    double ub;\\[\Sb]
+</xs:complexType>                                                                    \}; // class Variable\\[\Sb]
+ \\[\Sb]
+ \\[\Sb]
+\textsf{\textbf{OSiL elements          \hspace{2.07in}  In-memory objects}}\\[\Sa]
+<variables number="2">                                  OSInstance osinstance;\\[\Sb]
+   <var lb="0" name="x0" type="C"/>                     osinstance.instanceData.variables.number=2;\\[\Sb]
+   <var lb="0" name="x1" type="C"/>                     osinstance.instanceData.variables.var=new Var[2];\\[\Sb]
+</variables>                                            osinstance.instanceData.variables.var[0].lb=0;\\[\Sb]
+                                                        osinstance.instanceData.variables.var[0].name=x0;\\[\Sb]
+                                                        osinstance.instanceData.variables.var[0].type=C;\\[\Sb]
+                                                        osinstance.instanceData.variables.var[1].lb=0;\\[\Sb]
+                                                        osinstance.instanceData.variables.var[1].name=x1;\\[\Sb]
+                                                        osinstance.instanceData.variables.var[1].type=C;
+\end{tabular} }} \medskip\\[\Sb]
+\caption{The {\tt <variables>} element as an {\tt OSInstance} object} \label{figure:osinstancevariables}
+\end{figure}
+
+
+     Figure \ref{figure:osinstancevariables} uses the {\tt Variables} class to provide a closer look at the correspondence between schema and class. On the right, the {\tt Variables} class contains a {\tt number} data member and a sequence of {\tt var} objects of class {\tt Variable}. The {\tt Variable} class has {\tt lb} (double), {\tt ub} (double), {\tt name} (string), {\tt init} (double), and {\tt type} (char) data members. On the left the corresponding XML complexTypes are shown, with arrows indicating the correspondences. The following rules describe the mapping between the OSiL schema and the {\tt OSInstance} class. 
+%
+\begin{itemize}
+
+\Titem  Each complexType in an OSiL schema corresponds to a class in {\tt OSInstance.} Thus the OSiL schema's complexType {\tt Variable} corresponds to {\tt OSInstance}'s class {\tt Variable}.  Elements in an actual XML file then correspond to objects in {\tt OSInstance}; for example, the {\tt <var>} element that is of type {\tt Variable} in an OSiL file corresponds to a {\tt var} object in class {\tt Variable} of {\tt OSInstance}.
+
+\Titem An attribute or element used in the definition of a {\tt complexType} is a member of the corresponding {\tt OSInstance} class, and the type of the attribute or element matches the type of the member.  In Figure~\ref{figure:osinstancevariables}, for example, {\tt lb} is an attribute of the OSiL {\tt complexType} named {\tt Variable}, and {\tt lb} is a member of the {\tt OSInstance} class {\tt Variable}; both have type {\tt double}.  Similarly, {\tt var} is an element in the definition of the OSiL {\tt complexType} named {\tt Variables}, and {\tt var} is a member of the {\tt OSInstance} class {\tt Variables}; the {\tt var} element has type {\tt Variable} and the {\tt var} member is a {\tt Variable} object.
+
+\Titem A schema sequence corresponds to an array. For example, in Figure~\ref{figure:osinstancevariables} the complexType {\tt Variables} has a sequence of {\tt <var>} elements that are of type {\tt Variable}, and the corresponding {\tt Variables} class has a member that is an array of type {\tt Variable}.
+
+\end{itemize}
+%
+General nonlinear terms are stored in the data structure as {\tt OSExpressionTree} objects, which are the subject of the next section.
+
+     The {\tt OSInstance} class has a set of {\tt get()} , {\tt set()}, and {\tt calculate()} methods that act as an API for the optimization instance and described in Section \ref{section:osinstanceAPI}. 
+
+
+
 
 \subsubsection{The OSExpressionTree OSnLNode Classes}\label{section:osexpressiontreeclass}
 
@@ -668,8 +805,6 @@ The following {\tt  OSnLNode} classes are currently supported.
 \item OSnLNodePI
 \item OSnLNodeAllDiff
 \end{itemize}
-
-
 
 
 
@@ -817,6 +952,7 @@ The data directory  also contains the m-file  {\tt template.m} which contains ex
 
 \subsection{OSParsers}
 
+Mention reentrant.  Mention that we still need OSoL. 
 
 
 \subsection{OSSolverInterfaces}
@@ -833,6 +969,7 @@ The OS library has been tested with the following solvers using the Osi Interfac
 \item DyLP
 \item Glpk
 \item SYMPHONY
+\item Vol
 \end{itemize}
 
 In the {\tt OSSolverInterfaces} library there is an abstract class {\tt DefaultSolver} that has the following key members:
@@ -1150,13 +1287,42 @@ It is the result of a {\tt knock} operation. See the example given in Section \r
 
 
 
-\section{The  OSInstance API}\label{section:osinstance}
+\section{The  OSInstance API}\label{section:osinstanceAPI}
+
+The OSInstance API can be used to:
+
+\begin{itemize}
+
+\item  get information about model parameters, or convert the {\tt OSExrpressionTree} into a prefix or postfix representation through a set of {\tt get} methods,
+
+\item modify, or even create and instance from scratch, using a set of {\tt set} methods,
+
+\item provide information to solvers that require function evaluations, Jacobian and Hessian sparsity patters,  function gradient evaluations, and Hessian evaluations. 
+
+\end{itemize}
+
+
+  Similarly, the {\tt set()} method provides an API for creating or modifying an {\tt OSInstance}.  The {\tt calculate()} methods are discussed in Section~\ref{section:ad}.
 
 \subsection{Get Methods}
+
+The {\tt get()} methods are used by other classes to access data in an existing object or create an instance in postfix or prefix format.    
+
+
+kippster
+
+For example,  the method {\tt getOSInstance()} of the {\tt OSiLReader} class parses an OSiL file and returns a corresponding object {\tt osinstance} of type {\tt OSInstance}. Then the nonzero coefficient values in the linear terms of the constraints are retrieved in column major form~by
+
+\begin{Example}\obeyspaces\let =\ \tt\begin{tabular}{@{}l@{}}
+osinstance->getLinearConstraintCoefficientsInColumnMajor()->values
+\end{tabular}\end{Example}
+%
+and in other forms by analogous calls.
 
 Don't forget to mention getting prefix an postfix. Illustrate some of this like in the unitTest.
 
 \subsection{Set Methods}
+
 
 \subsection{Calculate Methods}
 
@@ -1736,7 +1902,7 @@ The file {\tt demo.osol} is
 </osol>
 \end{verbatimtab}
 
-\subsection{Solving Problems Remotely with Web Services}
+\subsection{Solving Problems Remotely with Web Services}\label{section:servicemethods}
 
 In many cases the client machine may be a ``weak client'' and  using a more powerful machine to solve a hard optimization instance is required. Indeed, one of the major purposes of Optimization Services is to facilitate optimization in a distributed environment.   We now provide examples that illustrate using the {\tt OSSolverService} executable to call a remote solver service.   By remote solver service we mean a solver service that is called using Web Services.  The OS implementation  of the solver service  uses Apache Tomcat. See \url{tomcat.apache.org}. The Web Service running on the server is a Java program based on Apache Axis. See \url{ws.apache.org/axis}. This is described in greater detail in Section \ref{section:tomcat}.  This Web Service is called {\tt OSSolverService.jws}. It is not necessary to use the Tomcat/Axis combination.
 
@@ -2145,6 +2311,8 @@ option ipopt_options "http://128.135.130.17:8080/os/OSSolverService.jws";
 \subsection{CppAD:  Using the CppAD Algorithmic Differentiation Package}\label{section:cppad}
 
 \subsection{File Upload:  Using a File Upload Package}\label{section:fileupload}
+
+Jun --- where should we put the Java server code for the File Uploader???
 
 \subsection{Instance Generator: Using the OSInstance API to Generate Instances}\label{subsection:exampleOSInstance}
 
