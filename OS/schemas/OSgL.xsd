@@ -1090,6 +1090,26 @@
 	</xs:complexType>
 	<xs:complexType name="GeneralDistributionBase">
 		<xs:sequence minOccurs="0">
+			<xs:element name="generator" minOccurs="0">
+				<xs:complexType>
+					<xs:choice>
+						<xs:element name="cdf" minOccurs="0">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element ref="OSnLNode" minOccurs="0"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="pdf" minOccurs="0">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element ref="OSnLNode" minOccurs="0"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
 			<xs:element name="distrParam" type="GeneralDistributionBaseParameter" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="distrName" type="xs:string" use="optional" default="unknown"/>
