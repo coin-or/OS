@@ -122,10 +122,12 @@ public:
    	 * implement the fileUpload() method which is a virtual function in OShL
 	 *
    	 * <p>
-   	 * @param fileName is the string of the file to be uploaded
+   	 * @param osilFileName is the name of the file 
+   	 * with the OSiL instance to be written on the server
+   	 * @param osil is a string with the OSiL problem instance
 	 * </p> 
    	 */	
-	std::string fileUpload(std::string fileName, std::string theOSiLFile);
+	std::string fileUpload(std::string osilFileName, std::string osil);
 	
 private:
 	

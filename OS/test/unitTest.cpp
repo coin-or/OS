@@ -910,7 +910,7 @@ int main(int argC, char* argV[])
 		std::string *nodeNames1 = new std::string[ n];
 		std::string *nodeNames2 = new std::string[ n];
 		for (i = 0 ; i < n; i++){
-			//std::cout << postfixVec[i]->snodeName << std::endl;
+			std::cout << postfixVec[i]->snodeName << std::endl;
 			nodeNames1[i] = postfixVec[i]->snodeName;
 		}
 		// now create back the expression tree 

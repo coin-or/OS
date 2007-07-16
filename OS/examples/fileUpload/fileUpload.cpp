@@ -48,12 +48,12 @@ int main(int argC, char* argV[])
 		time_t start, finish, tmp;
 		std::string osilFileNameWithPath;
 		std::string osilFileName;
-		std::string remoteFileLocation = "/home/kmartin/temp/";
+		//std::string remoteFileLocation = "/home/kmartin/temp/";
 		std::string osil;
 		std::string uploadResult;
 	  	const char dirsep =  CoinFindDirSeparator();
 		osilFileNameWithPath = argV[ 1];
-		std::cout << "FILE NAME = " << argV[1];
+		std::cout << "FILE NAME = " << argV[1] << std::endl;
 		std::cout << "Read the file into a string" << std::endl; 
 		osil = fileUtil->getFileAsString( &osilFileNameWithPath[ 0]); 
 		OSSolverAgent* osagent = NULL;
@@ -65,6 +65,8 @@ int main(int argC, char* argV[])
 		osilFileName = osilFileNameWithPath.substr( index + 1, slength - 1) ;
 		std::cout << std::endl << std::endl;
 		std::cout << "Place remote synchronous call" << std::endl;
+		//std::cout << "osilFileName =  " << osilFileName << std::endl;
+		//std::cout << "osil =  " << osil << std::endl;
 		start = time( &tmp);
 		uploadResult = osagent->fileUpload(osilFileName, osil);
 		finish = time( &tmp);
@@ -72,12 +74,12 @@ int main(int argC, char* argV[])
 		std::cout << uploadResult << std::endl;
 		//return 0;
 		// now tell solve the problem remotely with cbc
-		osagent = new OSSolverAgent("http://128.135.130.17:8080/cbc/CBCSolverService.jws");
+		//osagent = new OSSolverAgent("http://128.135.130.17:8080/os/OSSolverService.jws");
 		// the osil comes from the remote location
-		osil = "";
-		std::string osol = "<osol><general><instanceLocation locationType=\"local\">" + remoteFileLocation + osilFileName + "</instanceLocation></general> </osol>";
-		std::string osrl = osagent->solve(osil, osol);
-		std::cout << osrl << std::endl;
+		//osil = "";
+		//std::string osol = "<osol><general><instanceLocation locationType=\"local\">" + remoteFileLocation + osilFileName + "</instanceLocation></general> </osol>";
+		//std::string osrl = osagent->solve(osil, osol);
+		//std::cout << osrl << std::endl;
 		return 0;
 	}
 	catch( const ErrorClass& eclass){

@@ -326,7 +326,15 @@ void solve(){
 			std::cout << "HERE IS THE OSoL FILE" << std::endl;
 			std::cout << osoptions->osol << std::endl << std::endl;
 			osrl = osagent->solve(osoptions->osil  , osoptions->osol);
-			if(osoptions->osrlFile != "") fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
+			if(osoptions->osrlFile != ""){
+				fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
+				//const char *ch1 = "/Applications/Firefox.app/Contents/MacOS/firefox  ";
+				if(osoptions->browser != ""){
+					std::string str = osoptions->browser + "  " +  osoptions->osrlFile;
+					const char *ch = &str[ 0];
+					std::system( ch );
+				}
+			}
 			else cout << osrl << endl;
 			delete osagent;
 			osagent = NULL;
@@ -437,7 +445,7 @@ void solve(){
 			}
 			else cout << osrl << endl;
 		}
-	}
+	}//end try
 	catch(const ErrorClass& eclass){
 		if(osoptions->osrlFile != ""){
 			fileUtil->writeFileFromString(osoptions->osrlFile, eclass.errormsg);

@@ -600,7 +600,11 @@ osagent->solve(sOSiL, sOSoL);
 \end{verbatim}
 Other methods in the {\tt OSSolverAgent} class are {\tt send}, {\tt retrieve}, {\tt getJobID}, {\tt knock}, and {\tt kill}.  The use of these methods is described in Section \ref{section:servicemethods}.
 
+
+
 The methods in the {\tt OSSolverAgent} class call methods in the {\tt WSUtil} class that perform such tasks and creating and parsing SOAP messages and making low level socket calls to the server running the solver service. The average user will not use methods in the {\tt WSUtil} class, but they are available to anyone wanting to make socket calls or create SOAP messages. 
+
+There is also a method, {\tt fileUpload} in the OSAgentClass that is used to upload files from the hard drive of a client to the server. It is very fast and does not involve SOAP or Web Services. The {\tt fileUpload}  method is illustrated and described in the example code {\tt fileUpload.cpp} described in Section \ref{section:fileupload}.
 
 \subsection{OSCommonInterfaces}
 
@@ -1019,7 +1023,7 @@ solver = new LindoSolver();
 
 Similarly for KNITRO and Ipopt. In the case of the KNITRO, the {\tt KnitroSolver} class inherits from both {\tt DefaultSolver} class and the KNITRO {\tt NlpProblemDef} class. See \url{Kipp -- put in Knitro manual link} for more information on the KNITRO solver C++ implementation and the {\tt NlpProblemDef} class. Similarly, for Ipopt the {\tt IpoptSolver} class inherits from both the  {\tt DefaultSolver} class and the Ipopt {\tt TNLP} class.  See \url{Kipp -- put in Ipopt manual link} for more information on the Ipopt solver C++ implementation and the {\tt TNLP} calss.
 
-In the examples above the problem instance was assumed to be read from a file into the string {\tt osil} and then into the class member {\tt solver->osil.} However, everything can be done entirely in memory. For example, it is possible to use the {\tt OSInstance} class to create an in-memory problem representation and give this representation directly to a solver class that inherits from {\tt DefaultSolver}. The class member to use is {\tt osinstance.} This is illustrated in the example given in Section \ref{subsection:exampleOSInstance}.
+In the examples above the problem instance was assumed to be read from a file into the string {\tt osil} and then into the class member {\tt solver->osil.} However, everything can be done entirely in memory. For example, it is possible to use the {\tt OSInstance} class to create an in-memory problem representation and give this representation directly to a solver class that inherits from {\tt DefaultSolver}. The class member to use is {\tt osinstance.} This is illustrated in the example given in Section \ref{subsection:exampleOSInstanceGeneration}.
 
 
 \subsection{OSUtils}
@@ -1329,13 +1333,41 @@ First define a {\tt vector} of pointers to {\tt OSnLNode} objects.
 \begin{verbatim}
 std::vector<OSnLNode*> postfixVec;
 \end{verbatim}
-then get the expression tree as a postfix vector of nodes. 
+then get the expression tree for the objective function (index = -1) as a postfix vector of nodes. 
 \begin{verbatim}
 postfixVec = osinstance->getNonlinearExpressionTreeInPostfix( -1);
 \end{verbatim}
+If, for example, the {\tt osinstance} object was the in-memory representation of   the instance illustrated in  Section \ref{section:rosenbrockXML} then the code
+\begin{verbatim}
+for (i = 0 ; i < n; i++){
+	cout << postfixVec[i]->snodeName << endl;	
+}
+\end{verbatim}
+will produce
+\begin{verbatim}
+number
+variable
+minus
+number
+power
+number
+variable
+variable
+number
+power
+minus
+number
+power
+times
+plus
+\end{verbatim}
+The method, {\tt processNonlinearExpressions()} in the {\tt LindoSolver} class in the {\tt OSSolverInterfaces} library component illustrates using a postfix vector of {\tt OSnLNode} objects to build a Lindo model instance.
+
 
 \subsection{Set Methods}
 
+The {\tt set} methods can be used to build an in-memory {\tt OSInstance}
+ object. A code example of how to do this is in Section \ref{subsection:exampleOSInstanceGeneration}. 
 
 \subsection{Calculate Methods}
 
@@ -2323,15 +2355,106 @@ option ipopt_options "http://128.135.130.17:8080/os/OSSolverService.jws";
 
 \subsection{CppAD:  Using the CppAD Algorithmic Differentiation Package}\label{section:cppad}
 
-\subsection{File Upload:  Using a File Upload Package}\label{section:fileupload}
+\subsection{File Upload:  Using a File Upload Package}\label{section:fileupload}  
 
-Jun --- where should we put the Java server code for the File Uploader???
 
-\subsection{Instance Generator: Using the OSInstance API to Generate Instances}\label{subsection:exampleOSInstance}
 
-\section{References}
+When the {\tt OSAgent}  class methods {\tt solve} and {\tt send} are used, the problem instance in OSiL format is packaged into a SOAP envelope and communication with the server is done using Web Services (for example Tomcat Axis). However, packing an XML file into a SOAP envelope may add considerably to the size of the file (each {\tt $<$} is replaced with {\tt \&lt;}  and each {\tt $>$} is replaced with {\tt \&gt;}). Also, communicating with a Web Services servlet can also slow down the communication process. This could be a problem for large instances. An alternative approach is to use the {\tt fileUpload} executable on the client end  and the Java servlet {\tt OSFileUpload} on the server end.  The {\tt OSFileUpload} Java servlet code is in the ******** directory.  Jun --- where should we put the Java server code for the File Uploader???
 
-Kipp -- put in some links to OSiL paper and INFORMS talks.
+The {\tt fileUpload} client executable takes one argument on the command line which is the location of the file on the local directory to upload to the server. For example,
+\begin{verbatim}
+fileUpload ../../data/osilFiles/parincQuadratic.osil
+\end{verbartim}
+The {\tt fileUpload} executable first creates an {\tt OSAgent} object.
+\begin{verbatim}
+OSSolverAgent* osagent = NULL;
+osagent = new OSSolverAgent("http://128.135.130.17:8080/fileupload/servlet/OSFileUpload");
+\end{verbatim}
+The {\tt OSAgent}  has a method {\tt fileUpload} with the signature
+\begin{verbatim}
+std::string fileUpload(std::string osilFileName, std::string osil);
+\end{verbatim}
+where {\tt osilFileName} is  the name of the OSiL problem instance to be written on the server and {\tt osil} is the string with the actual instance. Then 
+\begin{verbatim}
+osagent->fileUpload(osilFileName, osil);
+\end{verbatim}
+will place a call to the server, upload the problem instance in the {\tt osil} string, and cause the server to write a file on its hard drive named {\tt osilFileName}.
+
+Once the file is on the server, invoke the local {\tt OSSolverService} by
+\begin{verbatim}
+OSSolverService -config ../data/configFiles/testremote.config
+\end{verbatim}
+where the {\tt config} file is
+\begin{verbatim}
+-osol ../data/osolFiles/remoteSolve2.osol
+-serviceLocation http://128.135.130.17:8080/os/OSSolverService.jws
+-serviceMethod solve
+\end{verbatim}
+and the {\tt osol} file is
+\begin{verbatimtab}[5]
+<osol>
+    <general>
+         <instanceLocation locationType="local">
+         	/home/kmartin/temp/parincQuadratic.osil
+         </instanceLocation>  
+    </general>
+    <optimization>
+    	<other name="os_solver">ipopt</other>
+    </optimization>
+</osol>
+\end{verbatimtab}
+
+
+\subsection{Instance Generator: Using the OSInstance API to Generate Instances}\label{subsection:exampleOSInstanceGeneration}
+
+This example is found in the {\tt instanceGenerator} folder in the {\tt examples} folder.  This example illustrates how to build a complete in-memory model instance using the {\tt OSInstance} API.   See the code {\tt instanceGenerator.cpp} for the complete example. Here provide a few highlights to illustrate the power of the API. 
+
+The first step is to create an {\tt OSInstance} object.
+\begin{verbatim}tt
+OSInstance *osinstance;
+osinstance = new OSInstance();
+\end{verbatim}
+
+Assume that the instance has two variables, $x_{0}$ and $x_{1}.$ Variable $x_{0}$ is a continuous variable with lower bound of -100 and upper bound of 100. Variable $x_{1}$ is a binary variable. First declare the instance to have two variables.
+\begin{verbatim}
+osinstance->setVariableNumber( 2);
+\end{verbatim}
+Next, add each variable. There is an {\tt addVariable} method with the signature
+\begin{verbatim}
+addVariable(int index, string name, double lowerBound, double upperBound, 
+char type, double init, string initString);
+\end{verbatim}
+Then the calls for these two variables are
+\begin{verbatim}
+osinstance->addVariable(0, "x0", -100, 100, 'C', OSNAN, "");
+osinstance->addVariable(1, "x1", 0, 1, 'B', OSNAN, "");
+\end{verbatim}
+There is also a method {\tt setVariables} for adding more than one variable simultaneously.  The objective function(s) and constraints are added through similar calls. 
+
+Nonlinear terms are also easily added.  The following code illustrates how to add a nonlinear term $x_{0}*x_{1}$ in the {\tt <nonlinearExpressions>} section of  OSiL.
+\begin{verbatim}
+osinstance->instanceData->nonlinearExpressions->nl[ 1] = new Nl();
+osinstance->instanceData->nonlinearExpressions->nl[ 1]->idx = 1;
+osinstance->instanceData->nonlinearExpressions->nl[ 1]->osExpressionTree =
+new OSExpressionTree();
+// create a variable nl node for x0
+nlNodeVariablePoint = new OSnLNodeVariable();
+nlNodeVariablePoint->idx=0;
+nlNodeVec.push_back( nlNodeVariablePoint);
+// create the nl node for x1
+nlNodeVariablePoint = new OSnLNodeVariable();
+nlNodeVariablePoint->idx=1;
+nlNodeVec.push_back( nlNodeVariablePoint);
+// create the nl node for *
+nlNodePoint = new OSnLNodeTimes();
+nlNodeVec.push_back( nlNodePoint);
+// the vectors are in postfix format
+// now the expression tree
+osinstance->instanceData->nonlinearExpressions->nl[ 1]->osExpressionTree->m_treeRoot =
+nlNodeVec[ 0]->createExpressionTreeFromPostfix( nlNodeVec);
+\end{verbatim}
+
+
 
 \section{Appendix}\label{section:appendix}
 
@@ -2492,7 +2615,7 @@ callMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, VarType, ...
 
 
 
-\subsection{OSiL representation for problem given in (\ref{eq:roobj})--(\ref{eq:ro3})}. 
+\subsection{OSiL representation for problem given in (\ref{eq:roobj})--(\ref{eq:ro3})}\label{section:rosenbrockXML}
 
 
 {\normalsize \baselineskip 16pt \vspace{2pt}
