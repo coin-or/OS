@@ -94,7 +94,7 @@ AM_CPPFLAGS =\
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSUtils` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSSolverInterfaces` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSModelInterfaces` \
-	-I`$(CYGPATH_W) $(algorithmicDiffSRCDIR)/..` \
+	-I`$(CYGPATH_W) $(CPPADSRCDIR)/..` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSCommonInterfaces` 
 
 

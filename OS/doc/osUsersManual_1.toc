@@ -30,41 +30,41 @@
 \contentsline {subsubsection}{\numberline {4.3.2}Converting AMPL nl Files}{22}
 \contentsline {subsubsection}{\numberline {4.3.3}Using MATLAB}{22}
 \contentsline {subsection}{\numberline {4.4}OSParsers}{24}
-\contentsline {subsection}{\numberline {4.5}OSSolverInterfaces}{24}
-\contentsline {subsection}{\numberline {4.6}OSUtils}{26}
-\contentsline {section}{\numberline {5}OS Protocols}{26}
-\contentsline {section}{\numberline {6}The OSInstance API}{30}
-\contentsline {subsection}{\numberline {6.1}Get Methods}{30}
-\contentsline {subsection}{\numberline {6.2}Set Methods}{31}
-\contentsline {subsection}{\numberline {6.3}Calculate Methods}{31}
-\contentsline {section}{\numberline {7}Hooking to An Algorithmic Differentiation Package}{31}
-\contentsline {subsection}{\numberline {7.1}Algorithmic Differentiation: Brief Review}{32}
-\contentsline {subsection}{\numberline {7.2}Using OSInstance Methods: Low Level Calls}{33}
-\contentsline {subsubsection}{\numberline {7.2.1}First Derivative Reverse Sweep Calculations}{36}
-\contentsline {subsubsection}{\numberline {7.2.2}Second Derivative Reverse Sweep Calculations}{36}
-\contentsline {subsection}{\numberline {7.3}Using OSInstance Methods: High Level Calls}{37}
-\contentsline {subsubsection}{\numberline {7.3.1}Sparsity Methods}{37}
-\contentsline {subsubsection}{\numberline {7.3.2}Function Evaluation Methods}{38}
-\contentsline {subsubsection}{\numberline {7.3.3}Gradient Evaluation Methods}{40}
-\contentsline {subsubsection}{\numberline {7.3.4}Hessian Evaluation Methods}{40}
-\contentsline {section}{\numberline {8}The OSSolverService}{41}
-\contentsline {subsection}{\numberline {8.1}OSSolverService Input Parameters}{41}
-\contentsline {subsection}{\numberline {8.2}Solving Problems Locally}{43}
-\contentsline {subsection}{\numberline {8.3}Solving Problems Remotely with Web Services}{44}
-\contentsline {subsubsection}{\numberline {8.3.1}The {\tt solve} Service Method}{45}
-\contentsline {subsubsection}{\numberline {8.3.2}The {\tt send} Service Method}{46}
-\contentsline {subsubsection}{\numberline {8.3.3}The {\tt retrieve} Service Method}{48}
-\contentsline {subsubsection}{\numberline {8.3.4}The {\tt getJobID} Service Method}{49}
-\contentsline {subsubsection}{\numberline {8.3.5}The {\tt knock} Service Method}{49}
-\contentsline {subsubsection}{\numberline {8.3.6}The {\tt kill} Service Method}{50}
-\contentsline {subsubsection}{\numberline {8.3.7}Summary}{50}
-\contentsline {section}{\numberline {9}Setting up a Solver Service with Tomcat}{52}
-\contentsline {section}{\numberline {10}Examples}{52}
-\contentsline {subsection}{\numberline {10.1}AMPL Client: Hooking AMPL to Solvers}{52}
-\contentsline {subsection}{\numberline {10.2}CppAD: Using the CppAD Algorithmic Differentiation Package}{53}
-\contentsline {subsection}{\numberline {10.3}File Upload: Using a File Upload Package}{53}
-\contentsline {subsection}{\numberline {10.4}Instance Generator: Using the OSInstance API to Generate Instances}{54}
-\contentsline {section}{\numberline {11}Appendix}{55}
-\contentsline {subsection}{\numberline {11.1}Building a Model in MATLAB}{55}
-\contentsline {subsection}{\numberline {11.2}OSiL representation for problem given in (7\hbox {})--(10\hbox {})}{57}
-\contentsline {subsection}{\numberline {11.3}OSiL representation for problem given in (19\hbox {})--(\G@refundefinedtrue \text {\normalfont \bfseries ??}\GenericWarning { }{LaTeX Warning: Reference `eq:adcon2' on page 59 undefined})}{59}
+\contentsline {subsection}{\numberline {4.5}OSSolverInterfaces}{25}
+\contentsline {subsection}{\numberline {4.6}OSUtils}{27}
+\contentsline {section}{\numberline {5}OS Protocols}{27}
+\contentsline {section}{\numberline {6}The OSInstance API}{31}
+\contentsline {subsection}{\numberline {6.1}Get Methods}{31}
+\contentsline {subsection}{\numberline {6.2}Set Methods}{32}
+\contentsline {subsection}{\numberline {6.3}Calculate Methods}{32}
+\contentsline {section}{\numberline {7}Hooking to An Algorithmic Differentiation Package}{33}
+\contentsline {subsection}{\numberline {7.1}Algorithmic Differentiation: Brief Review}{33}
+\contentsline {subsection}{\numberline {7.2}Using OSInstance Methods: Low Level Calls}{34}
+\contentsline {subsubsection}{\numberline {7.2.1}First Derivative Reverse Sweep Calculations}{37}
+\contentsline {subsubsection}{\numberline {7.2.2}Second Derivative Reverse Sweep Calculations}{37}
+\contentsline {subsection}{\numberline {7.3}Using OSInstance Methods: High Level Calls}{38}
+\contentsline {subsubsection}{\numberline {7.3.1}Sparsity Methods}{38}
+\contentsline {subsubsection}{\numberline {7.3.2}Function Evaluation Methods}{39}
+\contentsline {subsubsection}{\numberline {7.3.3}Gradient Evaluation Methods}{41}
+\contentsline {subsubsection}{\numberline {7.3.4}Hessian Evaluation Methods}{42}
+\contentsline {section}{\numberline {8}The OSSolverService}{42}
+\contentsline {subsection}{\numberline {8.1}OSSolverService Input Parameters}{42}
+\contentsline {subsection}{\numberline {8.2}Solving Problems Locally}{44}
+\contentsline {subsection}{\numberline {8.3}Solving Problems Remotely with Web Services}{45}
+\contentsline {subsubsection}{\numberline {8.3.1}The {\tt solve} Service Method}{46}
+\contentsline {subsubsection}{\numberline {8.3.2}The {\tt send} Service Method}{47}
+\contentsline {subsubsection}{\numberline {8.3.3}The {\tt retrieve} Service Method}{49}
+\contentsline {subsubsection}{\numberline {8.3.4}The {\tt getJobID} Service Method}{50}
+\contentsline {subsubsection}{\numberline {8.3.5}The {\tt knock} Service Method}{50}
+\contentsline {subsubsection}{\numberline {8.3.6}The {\tt kill} Service Method}{51}
+\contentsline {subsubsection}{\numberline {8.3.7}Summary}{52}
+\contentsline {section}{\numberline {9}Setting up a Solver Service with Tomcat}{53}
+\contentsline {section}{\numberline {10}Examples}{53}
+\contentsline {subsection}{\numberline {10.1}AMPL Client: Hooking AMPL to Solvers}{53}
+\contentsline {subsection}{\numberline {10.2}Algorithmic Differentiation: Using the OS Algorithmic Differentiation Methods}{54}
+\contentsline {subsection}{\numberline {10.3}File Upload: Using a File Upload Package}{55}
+\contentsline {subsection}{\numberline {10.4}Instance Generator: Using the OSInstance API to Generate Instances}{56}
+\contentsline {section}{\numberline {11}Appendix}{57}
+\contentsline {subsection}{\numberline {11.1}Building a Model in MATLAB}{57}
+\contentsline {subsection}{\numberline {11.2}OSiL representation for problem given in (7\hbox {})--(10\hbox {})}{59}
+\contentsline {subsection}{\numberline {11.3}OSiL representation for problem given in (19\hbox {})--(\G@refundefinedtrue \text {\normalfont \bfseries ??}\GenericWarning { }{LaTeX Warning: Reference `eq:adcon2' on page 60 undefined})}{60}

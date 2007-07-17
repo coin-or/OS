@@ -50,7 +50,7 @@ OSInstance* OSiLReader::readOSiL(std::string *posil) throw(ErrorClass){
 		catch(const ErrorClass& eclass){
 		throw ErrorClass( eclass.errormsg);
 	}
-}
+}//end readOSiL
 
 
 
