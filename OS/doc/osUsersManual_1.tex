@@ -2355,11 +2355,13 @@ option ipopt_options "http://128.135.130.17:8080/os/OSSolverService.jws";
 
 \subsection{CppAD:  Using the CppAD Algorithmic Differentiation Package}\label{section:cppad}
 
+
+
 \subsection{File Upload:  Using a File Upload Package}\label{section:fileupload}  
 
 
 
-When the {\tt OSAgent}  class methods {\tt solve} and {\tt send} are used, the problem instance in OSiL format is packaged into a SOAP envelope and communication with the server is done using Web Services (for example Tomcat Axis). However, packing an XML file into a SOAP envelope may add considerably to the size of the file (each {\tt $<$} is replaced with {\tt \&lt;}  and each {\tt $>$} is replaced with {\tt \&gt;}). Also, communicating with a Web Services servlet can also slow down the communication process. This could be a problem for large instances. An alternative approach is to use the {\tt fileUpload} executable on the client end  and the Java servlet {\tt OSFileUpload} on the server end.  The {\tt OSFileUpload} Java servlet code is in the ******** directory.  Jun --- where should we put the Java server code for the File Uploader???
+When the {\tt OSAgent}  class methods {\tt solve} and {\tt send} are used, the problem instance in OSiL format is packaged into a SOAP envelope and communication with the server is done using Web Services (for example Tomcat Axis). However, packing an XML file into a SOAP envelope may add considerably to the size of the file (each {\tt $<$} is replaced with {\tt \&lt;}  and each {\tt $>$} is replaced with {\tt \&gt;}). Also, communicating with a Web Services servlet can also slow down the communication process. This could be a problem for large instances. An alternative approach is to use the {\tt fileUpload} executable on the client end  and the Java servlet {\tt OSFileUpload} on the server end.  This servlet is based upon the Apache Commons FileUpload. See \url{http://jakarta.apache.org/commons/fileupload/}. The {\tt OSFileUpload} Java servlet code is in the ******** directory.  Jun --- where should we put the Java server code for the File Uploader???
 
 The {\tt fileUpload} client executable takes one argument on the command line which is the location of the file on the local directory to upload to the server. For example,
 \begin{verbatim}

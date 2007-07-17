@@ -85,11 +85,11 @@ OS/doc/osUsersManual_1.bbl -text
 OS/doc/osUsersManual_1.pdf -text
 OS/doc/osUsersManual_1.tex -text
 OS/doc/osUsersManual_1.toc -text
-OS/examples/CppAD/CppADTest.cpp -text
-OS/examples/CppAD/CppADTestOld.cpp -text
-OS/examples/CppAD/Makefile.am -text
-OS/examples/CppAD/Makefile.in -text
 OS/examples/Makefile.in -text
+OS/examples/algorithmicDiff/Makefile -text
+OS/examples/algorithmicDiff/Makefile.am -text
+OS/examples/algorithmicDiff/Makefile.in -text
+OS/examples/algorithmicDiff/algorithmicDiffTest.cpp -text
 OS/examples/amplClient/Makefile.am -text
 OS/examples/amplClient/Makefile.in -text
 OS/examples/amplClient/amplClient.cpp -text

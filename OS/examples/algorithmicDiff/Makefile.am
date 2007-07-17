@@ -10,61 +10,61 @@ AUTOMAKE_OPTIONS = foreign
 
 
 ########################################################################
-#                         CppADTest Example  program                               #
+#                         algorithmicDiffTest Example  program                               #
 ########################################################################
 
 # Name of the executable compiled in this directory.  We want it to be
 # installed in the 'bin' directory
-noinst_PROGRAMS = CppADTest
+noinst_PROGRAMS = algorithmicDiffTest
 
 # List all source files for this executable, including headers
-CppADTest_SOURCES = CppADTest.cpp 
+algorithmicDiffTest_SOURCES = algorithmicDiffTest.cpp 
 
 # List all additionally required COIN and OSlibraries
-CppADTest_LDADD =  \
+algorithmicDiffTest_LDADD =  \
 	$(OSOBJDIR)/src/libOS.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la 
 	
 if COIN_HAS_SYMPHONY
- CppADTest_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
+ algorithmicDiffTest_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
 endif
 
- CppADTest_LDADD += $(OSIOBJDIR)/src/OsiClp/libOsiClp.la 
+ algorithmicDiffTest_LDADD += $(OSIOBJDIR)/src/OsiClp/libOsiClp.la 
 	
 if COIN_HAS_DYLP
- CppADTest_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
+ algorithmicDiffTest_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
 endif
 
 if COIN_HAS_VOL
- CppADTest_LDADD += $(OSIOBJDIR)/src/OsiVol/libOsiVol.la 
+ algorithmicDiffTest_LDADD += $(OSIOBJDIR)/src/OsiVol/libOsiVol.la 
 endif
 
- CppADTest_LDADD += $(CBCOBJDIR)/src/libCbc.la 
+ algorithmicDiffTest_LDADD += $(CBCOBJDIR)/src/libCbc.la 
 	
 if COIN_HAS_SYMPHONY
- CppADTest_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la 
+ algorithmicDiffTest_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la 
 endif
 
- CppADTest_LDADD += $(CGLOBJDIR)/src/libCgl.la 
+ algorithmicDiffTest_LDADD += $(CGLOBJDIR)/src/libCgl.la 
 	
- CppADTest_LDADD += $(OSIOBJDIR)/src/libOsi.la 
+ algorithmicDiffTest_LDADD += $(OSIOBJDIR)/src/libOsi.la 
 	
- CppADTest_LDADD += $(CLPOBJDIR)/src/libClp.la 
+ algorithmicDiffTest_LDADD += $(CLPOBJDIR)/src/libClp.la 
 	
 if COIN_HAS_DYLP
- CppADTest_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la 
+ algorithmicDiffTest_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la 
 endif
 
 if COIN_HAS_VOL
- CppADTest_LDADD += $(VOLOBJDIR)/src/libVol.la 
+ algorithmicDiffTest_LDADD += $(VOLOBJDIR)/src/libVol.la 
 endif
 
- CppADTest_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
+ algorithmicDiffTest_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
 	
- CppADTest_LDADD += $(ADDLIBS) 
+ algorithmicDiffTest_LDADD += $(ADDLIBS) 
 
 if USEWSOCKLIB
-  CppADTest_LDADD += $(WINSOCKLIB)
+  algorithmicDiffTest_LDADD += $(WINSOCKLIB)
 endif
 
 
@@ -94,7 +94,7 @@ AM_CPPFLAGS =\
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSUtils` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSSolverInterfaces` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSModelInterfaces` \
-	-I`$(CYGPATH_W) $(CPPADSRCDIR)/..` \
+	-I`$(CYGPATH_W) $(algorithmicDiffSRCDIR)/..` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSCommonInterfaces` 
 
 
@@ -107,7 +107,7 @@ LIBS  += `cat $(OSOBJDIR)/os_addlibs.txt`
 # The -rpath flag is used by libtool to make sure that the shared
 # library is found (in the lib install directory) when we are using dynamic
 # libraries.
-CppADTest_LDFLAGS = -rpath $(libdir)
+algorithmicDiffTest_LDFLAGS = -rpath $(libdir)
 
 
 if COIN_HAS_DYLP
@@ -136,7 +136,7 @@ if COIN_HAS_CPX
   AM_CPPFLAGS += \
 	-I`$(CYGPATH_W) $(CPXINCDIR)` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
-  	CppADTest_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+  	algorithmicDiffTest_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 endif
 
 
@@ -144,32 +144,32 @@ if COIN_HAS_GLPK
   AM_CPPFLAGS += \
     -I`$(CYGPATH_W) $(GLPKINCDIR)` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
-     CppADTest_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
-     CppADTest_LDADD += $(GLPKLIB)
+     algorithmicDiffTest_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
+     algorithmicDiffTest_LDADD += $(GLPKLIB)
 endif
 
 if COIN_HAS_LINDO
   AM_CPPFLAGS += -I`$(CYGPATH_W) $(LINDOINCDIR)` 
-  CppADTest_LDADD += $(LINDOLIB)
+  algorithmicDiffTest_LDADD += $(LINDOLIB)
 endif
 
 if COIN_HAS_IPOPT
   AM_CPPFLAGS += -I`$(CYGPATH_W) $(IPOPTINCDIR)` 
-  CppADTest_LDADD += $(IPOPTLIB)
+  algorithmicDiffTest_LDADD += $(IPOPTLIB)
 endif
 
 
 if COIN_HAS_KNITRO
   AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(KNITROINCDIR)` 
-  CppADTest_LDADD += $(KNITROLIB)
+  algorithmicDiffTest_LDADD += $(KNITROLIB)
 if USEMULTIPLYDEFINED
-  CppADTest_LDFLAGS += -multiply_defined suppress
+  algorithmicDiffTest_LDFLAGS += -multiply_defined suppress
 endif
 endif
 
 if COIN_HAS_ASL
   AM_CPPFLAGS += $(ASL_CPPFLAGS) 
-  CppADTest_LDADD += $(ASLLIB)
+  algorithmicDiffTest_LDADD += $(ASLLIB)
 endif
 
 
