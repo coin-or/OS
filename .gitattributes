@@ -86,7 +86,6 @@ OS/doc/osUsersManual_1.pdf -text
 OS/doc/osUsersManual_1.tex -text
 OS/doc/osUsersManual_1.toc -text
 OS/examples/Makefile.in -text
-OS/examples/algorithmicDiff/Makefile -text
 OS/examples/algorithmicDiff/Makefile.am -text
 OS/examples/algorithmicDiff/Makefile.in -text
 OS/examples/algorithmicDiff/algorithmicDiffTest.cpp -text

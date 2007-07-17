@@ -252,7 +252,7 @@ AC_CONFIG_FILES([Makefile
           examples/instanceGenerator/Makefile
           examples/amplClient/Makefile
           examples/osTestCode/Makefile
-          examples/CppAD/Makefile
+          examples/algorithmicDiff/Makefile
           examples/fileUpload/Makefile
           os_addlibs.txt])
 
