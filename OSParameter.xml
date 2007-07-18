@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <osParameter xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/OSParameter.xsd">
 	<!--Routine/maintenance related parameters-->
-	<param name="CODE_DRIVE" description="the disk drive of the code installation - automatically dectected if none.(change?)"/>
 	<param name="CODE_HOME" description="the disk drive of the code installation  - automatically dectected if none.(change?)"/>
+	<param name="CODE_DRIVE" description="the disk drive of the code installation - automatically dectected if none.(change?)"/>
 	<param name="REGISTRY_FILE" description="the file that keeps the registry information">OSConfig/OSRegistry.xml</param>
 	<param name="PROCESS_FILE" description="the the file that keeps the service process information in OSpL">OSConfig/OSpL.xml</param>
 	<param name="TEMP_FILE_FOLDER" description="the folder to save temporary files">temp/</param>
