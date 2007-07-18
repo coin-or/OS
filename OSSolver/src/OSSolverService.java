@@ -1,3 +1,5 @@
+import java.io.File;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.axis.MessageContext;
@@ -134,7 +136,21 @@ public class OSSolverService implements OShL{
 		if(SERVICE_FOLDER == null || SERVICE_FOLDER.length() <= 0) SERVICE_FOLDER = "os";		
 
 		//automatically detect where the tomcat installation is. 
-		String sDir = IOUtil.getCurrentDir();
+		String sDir = "";
+		try {
+			File dir = new File (".");
+			sDir = dir.getCanonicalPath();
+			sDir = sDir.replace('\\', '/');
+			if(!sDir.endsWith("/")){
+				sDir += "/";
+			}
+		}
+		catch(Exception e) {
+			sDir = "/Program Files/Apache Software Foundation/Tomcat 5.5/";
+		}
+		
+		
+		
 		if(sDir.toLowerCase().endsWith("bin") || 
 				sDir.toLowerCase().endsWith("bin\\") ||
 				sDir.toLowerCase().endsWith("bin/")){
