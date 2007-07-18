@@ -740,11 +740,56 @@ public final class OSParameter{
 		Routine/maintenance related parameters
 		---------------------------------------------*/	
 		String sValue = "";
-		if(bRead) sValue = osParameterReader.getOSParameterValueByName("CODE_DRIVE");
-		if(sValue != null && sValue.length() > 0) CODE_DRIVE = sValue;
+		if(bRead) sValue = osParameterReader.getOSParameterValueByName("SERVICE_FOLDER");
+		if(sValue != null && sValue.length() > 0) SERVICE_FOLDER = sValue;
+		else{
+			try{
+				MessageContext messageContext = MessageContext.getCurrentContext();
+				//HttpServlet servlet = (HttpServlet)messageContext.getProperty(HTTPConstants.MC_HTTP_SERVLET);
+				//ServletContext servletContext = (ServletContext)servlet.getServletContext();
+				HttpServletRequest request = (HttpServletRequest)messageContext.getProperty(HTTPConstants.MC_HTTP_SERVLETREQUEST);
+				//HttpSession session =((HttpServletRequest)messageContext.getProperty(HTTPConstants.MC_HTTP_SERVLETREQUEST)).getSession();		
+				SERVICE_FOLDER = request.getContextPath();
+				if(SERVICE_FOLDER != null && SERVICE_FOLDER.length() > 0)SERVICE_FOLDER = SERVICE_FOLDER.substring(1);
+			}
+			catch(Exception e){
+				
+			}
+			if(SERVICE_FOLDER == null || SERVICE_FOLDER.length() <= 0) SERVICE_FOLDER = "os";	
+		}
 		
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("CODE_HOME");
 		if(sValue != null && sValue.length() > 0) CODE_HOME = sValue;
+		else{
+			String sDir = IOUtil.getCurrentDir();
+			if(sDir.toLowerCase().endsWith("bin") || 
+					sDir.toLowerCase().endsWith("bin\\") ||
+					sDir.toLowerCase().endsWith("bin/")){
+				int iIndex = sDir.lastIndexOf("bin");
+				sDir = sDir.substring(0, iIndex);
+			}
+			
+			CODE_HOME = sDir+= "webapps/"+ SERVICE_FOLDER+"/WEB-INF/code/";
+		}
+
+		if(bRead) sValue = osParameterReader.getOSParameterValueByName("CODE_DRIVE");
+		if(sValue != null && sValue.length() > 0) CODE_DRIVE = sValue;
+		else{
+			String sOS = System.getProperty("os.name").toLowerCase();
+			if(CODE_DRIVE == null || CODE_DRIVE.length() <= 0){
+				if(sOS.toLowerCase().indexOf("window") >= 0){
+					CODE_DRIVE = CODE_HOME.trim().substring(0, 2);
+				}
+				else{ //nix system
+					try{
+						CODE_DRIVE = IOUtil.getUnixDrive(".");
+					}
+					catch(Exception e){
+						CODE_DRIVE = "c:";
+					}
+				}
+			}
+		}
 		
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("REGISTRY_FILE");
 		if(sValue != null && sValue.length() > 0) REGISTRY_FILE = CODE_HOME + sValue;
@@ -1349,23 +1394,7 @@ public final class OSParameter{
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("SERVICE_EXTENSION");
 		if(sValue != null && sValue.length() > 0) SERVICE_EXTENSION = sValue;
 
-		if(bRead) sValue = osParameterReader.getOSParameterValueByName("SERVICE_FOLDER");
-		if(sValue != null && sValue.length() > 0) SERVICE_FOLDER = sValue;
-		else{
-			try{
-				MessageContext messageContext = MessageContext.getCurrentContext();
-				//HttpServlet servlet = (HttpServlet)messageContext.getProperty(HTTPConstants.MC_HTTP_SERVLET);
-				//ServletContext servletContext = (ServletContext)servlet.getServletContext();
-				HttpServletRequest request = (HttpServletRequest)messageContext.getProperty(HTTPConstants.MC_HTTP_SERVLETREQUEST);
-				//HttpSession session =((HttpServletRequest)messageContext.getProperty(HTTPConstants.MC_HTTP_SERVLETREQUEST)).getSession();		
-				SERVICE_FOLDER = request.getContextPath();
-				if(SERVICE_FOLDER != null && SERVICE_FOLDER.length() > 0)SERVICE_FOLDER = SERVICE_FOLDER.substring(1);
-			}
-			catch(Exception e){
-				
-			}
-			if(SERVICE_FOLDER == null || SERVICE_FOLDER.length() <= 0) SERVICE_FOLDER = "os";	
-		}
+		//SERVICE_FOLDER moved to the top (before CODE_HOME and CODE_DRIVE, which depend on SERVICE_FOLDER)
 
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("SERVICE_PORT");
 		if(sValue != null && sValue.length() > 0) SERVICE_PORT = sValue;
@@ -1557,34 +1586,6 @@ public final class OSParameter{
 		//in Tomcat Linux the current directory is PathToTomcat/Tomcat/bin/
 		//in Tomcat the current directory is C:/Program Files/Apache Software Foundation/Tomcat 5.5/???
 		//suggestion: have a file in which each service name is mapped to a different osparam file. 
-		if(sOSParameterFile != null && sOSParameterFile.length() > 0){
-			readAndSetOSParameter(sOSParameterFile, true, false);
-		}
-
-		String sDir = IOUtil.getCurrentDir();
-		if(sDir.toLowerCase().endsWith("bin") || 
-				sDir.toLowerCase().endsWith("bin\\") ||
-				sDir.toLowerCase().endsWith("bin/")){
-			int iIndex = sDir.lastIndexOf("bin");
-			sDir = sDir.substring(0, iIndex);
-		}
-		
-		CODE_HOME = sDir+= "webapps/"+ SERVICE_FOLDER+"/WEB-INF/code/";
-		String sParameterFile = CODE_HOME + "OSConfig/OSParameter.xml";
-		String sOS = System.getProperty("os.name").toLowerCase();
-		if(CODE_DRIVE == null || CODE_DRIVE.length() <= 0){
-			if(sOS.toLowerCase().indexOf("window") >= 0){
-				CODE_DRIVE = CODE_HOME.trim().substring(0, 2);
-			}
-			else{ //nix system
-				try{
-					CODE_DRIVE = IOUtil.getUnixDrive(".");
-				}
-				catch(Exception e){
-					CODE_DRIVE = "c:";
-				}
-			}
-		}
 		if(sOSParameterFile != null && sOSParameterFile.length() > 0){
 			readAndSetOSParameter(sOSParameterFile, true, false);
 		}
