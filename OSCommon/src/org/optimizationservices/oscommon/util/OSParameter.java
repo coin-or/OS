@@ -734,7 +734,7 @@ public final class OSParameter{
 			bRead = false;
 			IOUtil.log("osParameter string not valid", null);
 		}
-		
+
 		//set the parameters.
 		/*---------------------------------------------
 		Routine/maintenance related parameters
@@ -767,6 +767,9 @@ public final class OSParameter{
 					sDir.toLowerCase().endsWith("bin/")){
 				int iIndex = sDir.lastIndexOf("bin");
 				sDir = sDir.substring(0, iIndex);
+			}
+			if(!sDir.endsWith("/")){
+				sDir += "/";
 			}
 			
 			CODE_HOME = sDir+= "webapps/"+ SERVICE_FOLDER+"/WEB-INF/code/";
@@ -1581,6 +1584,7 @@ public final class OSParameter{
 		else{
 			sOSParameterFile = PARAMETER_FILE;
 		}
+
 		//String sOSParameterFile = IOUtil.getCurrentDir()+"webapps/os/ossolver/OSParameter.xml";
 		//In Eclipse the current directory is the project that the main is in -- e.g. C:/code/java/OSjava/OSTest/
 		//in Tomcat Linux the current directory is PathToTomcat/Tomcat/bin/
@@ -1589,5 +1593,6 @@ public final class OSParameter{
 		if(sOSParameterFile != null && sOSParameterFile.length() > 0){
 			readAndSetOSParameter(sOSParameterFile, true, false);
 		}
+		
 	}//static constructor
 }//OSParameter
