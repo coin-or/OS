@@ -221,10 +221,10 @@ int main(int argC, const char* argV[])
 				 cout << "Service Location = " << osoptions->serviceLocation << endl;
 			}
 			else{
-				if( getServiceURI( osoptions->osol) != ""){
-					osoptions->serviceLocation = &getServiceURI( osoptions->osol)[0];
-					cout << "Service Location = " << osoptions->serviceLocation << endl;
-				}
+				//if( getServiceURI( osoptions->osol) != ""){
+				//	osoptions->serviceLocation = &getServiceURI( osoptions->osol)[0];
+				//	cout << "Service Location = " << osoptions->serviceLocation << endl;
+				//}
 			}
 			if(osoptions->osilFile != ""){
 				//this takes precedence over what is in the OSoL file
