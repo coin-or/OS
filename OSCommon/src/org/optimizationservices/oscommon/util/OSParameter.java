@@ -29,7 +29,7 @@ import org.optimizationservices.oscommon.util.OSParameterFile;
  * @author Robert Fourer, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
  * @since OS 1.0
-*/
+ */
 public final class OSParameter{
 	/**
 	 *
@@ -37,7 +37,7 @@ public final class OSParameter{
 	 */
 	public OSParameter(){
 	}//constructor
-   	
+
 	/*---------------------------------------------
 	Routine/maintenance related parameters
 	---------------------------------------------*/	
@@ -46,7 +46,7 @@ public final class OSParameter{
 	 * CODE_DRIVE holds the disk drive of the code installation. 
 	 */
 	public static String CODE_DRIVE = "";  //change?
-	
+
 	/**
 	 * CODE_HOME holds the home directory of home.
 	 */
@@ -66,12 +66,12 @@ public final class OSParameter{
 	 * PROCESS_FILE holds the file that keeps the service process information in OSpL. 
 	 */
 	public static String PROCESS_FILE = CODE_HOME + "OSConfig/OSpL.xml";
-	
+
 	/**
 	 * TEMP_FILE_FOLDER holds the folder to save temporary files. 
 	 */
 	public static String TEMP_FILE_FOLDER = CODE_HOME + "temp/";
-	
+
 	/**
 	 * LOG_FOLDER holds the main system folder for logging messages and errors.
 	 */
@@ -86,7 +86,7 @@ public final class OSParameter{
 	 * MAX_LOG_FILE_SIZE holds the maximum size of the log file before it is backed up and started again. 
 	 */
 	public static long MAX_LOG_FILE_SIZE = 5000000;
-	
+
 	/**
 	 * BACKUP_FOLDER holds the main system folder for backing up.
 	 */
@@ -101,7 +101,7 @@ public final class OSParameter{
 	 * REGISTRY_LOG_FILE holds the main registry file for logging registy related messages.
 	 */
 	public static String REGISTRY_LOG_FILE = REGISTRY_LOG_FOLDER + "registryLog.txt";
-	
+
 	/**
 	 * REGISTRY_REGISTRATION_FILE holds the main registry file for logging registration related messages.
 	 */
@@ -148,18 +148,18 @@ public final class OSParameter{
 	 * clean up is triggered to delete temporary files. 
 	 */
 	public static long MINIMUM_DISKSPACE_TRIGGER = 1000000000; //change?
-	
+
 	/**
 	 * MINIMUM_MEMORY_TRIGGER holds the minimum memory before the automatic 
 	 * clean up is triggered to get more memory. 
 	 */
 	public static long MINIMUM_MEMORY_TRIGGER = 100000000; //change?
-	
+
 	/**
 	 * CLEAN_UP_FOLDERS holds the folder to clean up. 
 	 */
 	public static String[] CLEAN_UP_FOLDERS = {TEMP_FILE_FOLDER, BACKUP_FOLDER}; //change?
-	
+
 	/**
 	 * MAX_JOBIDS_TO_KEEP holds the maximum number of job ids to keep before deleting them.
 	 */
@@ -183,7 +183,7 @@ public final class OSParameter{
 	 * JOB_MAX_SECOND holds the maximum seconds allowed for a job.
 	 */
 	public static long JOB_MAX_SECONDS = 0;
-	
+
 	/**
 	 * JOB_MAX_TIME holds the maximum job time in seconds. 
 	 */
@@ -193,7 +193,7 @@ public final class OSParameter{
 	 * TEMP_FILE_MAX_DAY holds the maximum days allowed to keep a temporary file.
 	 */
 	public static long TEMP_FILE_MAX_DAYS = 30;
-	
+
 	/**
 	 * TEMP_FILE_MAX_HOUR holds the maximum hours allowed to keep a temporary file.
 	 */
@@ -208,12 +208,12 @@ public final class OSParameter{
 	 * TEMP_FILE_MAX_SECOND holds the maximum seconds allowed to keep a temporary file.
 	 */
 	public static long TEMP_FILE_MAX_SECONDS = 0;
-	
+
 	/**
 	 * TEMP_FILE_MIN_DAY holds the minimum days allowed to keep a temporary file.
 	 */
 	public static long TEMP_FILE_MIN_DAYS = 2;
-	
+
 	/**
 	 * TEMP_FILE_MIN_HOUR holds the minimum hours allowed to keep a temporary file.
 	 */
@@ -228,7 +228,7 @@ public final class OSParameter{
 	 * TEMP_FILE_MIN_SECOND holds the minimum seconds allowed to keep a temporary file.
 	 */
 	public static long TEMP_FILE_MIN_SECONDS = 0;
-	
+
 	/*---------------------------------------------
 	Server related parameters
 	---------------------------------------------*/	
@@ -236,27 +236,27 @@ public final class OSParameter{
 	 * CPU_SPEED holds the cpu speed of the server. 
 	 */
 	public static double CPU_SPEED = Double.POSITIVE_INFINITY;
-	
+
 	/**
 	 * MEMORY_SIZE holds the total physical memory of the server. 
 	 */
 	public static double MEMORY_SIZE = Double.POSITIVE_INFINITY;
-	
+
 	/**
 	 * DISK_SPACE holds the total disk space of the server. 
 	 */
 	public static double DISK_SPACE = Double.POSITIVE_INFINITY;
-	
+
 	/**
 	 * MAX_JOB_NUMBERS holds the maximum number of running jobs allowed per service. 
 	 */
 	public static int MAX_JOB_NUMBERS = 3;  //change?
-	
+
 	/**
 	 * MAX_WAITING_NUMBERS holds the maximum number of waiting jobs allowed per service. 
 	 */
 	public static int MAX_WAITING_NUMBERS = 5;  //change?
-	
+
 	/**
 	 * SERVICE_POLLING_INTERVAL_SHORT holds the number of milli-seconds that a service 
 	 * periodically carries out maintentance. It is relatively short.  
@@ -269,7 +269,7 @@ public final class OSParameter{
 	 */
 	public static int SERVICE_POLLING_INTERVAL_MEDIUM = 3600000; //change?
 
-	
+
 	/**
 	 * SERVICE_POLLING_INTERVAL_LONG holds the number of milli-seconds that a service 
 	 * periodically carries out maintentance. It is relatively long.  
@@ -299,13 +299,13 @@ public final class OSParameter{
 	 * before the service terminates. 
 	 */
 	public static int MAXIMUM_TRIAL_NUMBER_FOR_SOLVE = 1;
-	
+
 	/**
 	 * MINIMUM_WAIT_TIME_BEFORE_NEXT_TRIAL holds the minimum wait time (in milliseconds before the 
 	 * service tries another solve after the last solve. 
 	 */
 	public static int MINIMUM_WAIT_TIME_BEFORE_NEXT_TRIAL  = 1000;
-	
+
 	/**
 	 * MAXIMUM_WAIT_TIME_BEFORE_NEXT_TRIAL holds the maximum wait time (in milliseconds before the 
 	 * service tries another solve after the last solve. 
@@ -321,12 +321,12 @@ public final class OSParameter{
 	 * DIRECTORIES_TO_MAKE holds the directories to make before invoking the solver's solve method.
 	 */
 	public static String[] DIRECTORIES_TO_MAKE = {};
-	
+
 	/**
 	 * FILES_TO_CREATE holds the files to create before invoking the solver's solve method.
 	 */
 	public static String[] FILES_TO_CREATE = {};
-	
+
 	/**
 	 * SAVE_INPUTS holds whether to save the OSiL and OSoL input arguments of the solve or send method.
 	 */
@@ -342,7 +342,7 @@ public final class OSParameter{
 	 * solver's solve method. It should countain the same number of files as in INPUT_FILES_TO_MOVE_TO. 
 	 */
 	public static String[] INPUT_FILES_TO_MOVE_FROM = {};
-	
+
 	/**
 	 * INPUT_FILES_TO_MOVE_TO holds the names of the input files to move to before invoking the 
 	 * solver's solve method. It should countain the same number of files as in INPUT_FILES_TO_MOVE_FROM.
@@ -374,7 +374,7 @@ public final class OSParameter{
 	 * OUTPUT_FILES_TO_COPY_FROM. 
 	 */
 	public static String[] OUTPUT_FILES_TO_COPY_TO = {};
-	
+
 	/**
 	 * OUTPUT_FILES_TO_MOVE_FROM holds the names of the output files to move from after the 
 	 * solver's solve method is finished. It should countain the same number of files as in 
@@ -389,22 +389,22 @@ public final class OSParameter{
 	 */
 	public static String[] OUTPUT_FILES_TO_MOVE_TO = {};
 
-	
+
 	/**
 	 * FILES_TO_DELETE holds the files to delete after the solver's solve method is finished.
 	 */
 	public static String[] FILES_TO_DELETE = {};
-	
+
 	/**
 	 * DIRECTORIES_TO_DELETE holds the directories to delete after the solver's solve method is finished.
 	 */
 	public static String[] DIRECTORIES_TO_DELETE = {};
-	
+
 	/**
 	 * PROCESSES_TO_KILL holds the names of the processes to kill after tge sikver's solve method is finished. 
 	 */
 	public static String[] PROCESSES_TO_KILL = {};
-	
+
 	/*---------------------------------------------
 	Service site related parameters
 	---------------------------------------------*/	
@@ -414,7 +414,7 @@ public final class OSParameter{
 	public static String SERVICE_NAME = "OSSolverService";  //change!
 
 	/**
-	 * SERVICE_NAME holds the service name. 
+	 * SERVICE_EXTENSION holds the service extension. 
 	 */
 	public static String SERVICE_EXTENSION = "jws";  //change!
 
@@ -429,7 +429,7 @@ public final class OSParameter{
 	public static String SERVICE_PORT = "8080";  //change!
 
 	/**
-	 * SERVICE_PORT holds the service port. 
+	 * SERVICE_HOST holds the service host. 
 	 */
 	public static String SERVICE_HOST = "http://localhost";  //change!
 
@@ -447,7 +447,7 @@ public final class OSParameter{
 	 * SERVICE_TYPE holds the service type. 
 	 */
 	public static String SERVICE_TYPE = "solver"; //change!
-	
+
 
 	/**
 	 * OS_REGISTRY_SITE holds the site of the OS Registry.
@@ -463,7 +463,7 @@ public final class OSParameter{
 	 * SCHEDULER_WITH_REGISTRY holds whether the scheduler service locally sits with the registry service in the same web application.
 	 */	
 	public static boolean SCHEDULER_WITH_REGISTRY = true; 
-	
+
 	/*---------------------------------------------
 	Mail related parameters
 	---------------------------------------------*/
@@ -471,17 +471,17 @@ public final class OSParameter{
 	 * SMTP_SERVER holds the smtp server address to send the email. 
 	 */
 	public static String SMTP_SERVER = "";//e.g. "smtp.comcast.net";  //change?
-	
+
 	/**
 	 * FROM_EMAIL holds the from email address to send the email. 
 	 */
 	public static String FROM_EMAIL = "optservorg@optimizationservices.org"; 
-	
+
 	/**
 	 * FROM_PASSWORD holds the from email address to send the email. 
 	 */
 	public static String FROM_PASSWORD = "";
-	
+
 	/**
 	 * TO_EMAIL holds the to email address to send the email. 
 	 */
@@ -496,7 +496,7 @@ public final class OSParameter{
 	 * MAIL_MESSAGE holds the email message body.  
 	 */
 	public static String MAIL_MESSAGE ="Please check the service.";
-	
+
 	/*---------------------------------------------
 	Security related parameters
 	---------------------------------------------*/
@@ -534,17 +534,17 @@ public final class OSParameter{
 	 * USER_NAMES holds all the user names. 
 	 */
 	public static String[] USER_NAMES = {};
-	
+
 	/**
 	 * PASSWORDS holds the passwords for all the users. 
 	 */
 	protected static String[] PASSWORDS = {};
-	
+
 	/**
 	 * LICENSES holds the licenses for all the users.  
 	 */
 	protected static String[] LICENSES = {};
-	
+
 	/**
 	 * ALLOW_IO_OPERATIONS_BY_USERS holds whether the users can carry out io operations (through option files). 
 	 */
@@ -596,7 +596,7 @@ public final class OSParameter{
 			return true;
 		}
 	}//checkUserNameAndPassword
-	
+
 	/**
 	 * check license given a user name and license
 	 * @param userName holds the user name. can be null if the service requires only the license. 
@@ -633,7 +633,7 @@ public final class OSParameter{
 			return true;
 		}
 	}//checkLicense
-	
+
 	/**
 	 * Get the system password used for communication between system components.
 	 *  
@@ -643,7 +643,7 @@ public final class OSParameter{
 		String sSystemPassword = "OSSystemPassword";
 		return sSystemPassword;
 	}//getSystemPassword
-	
+
 	/**
 	 * Check the system password used for communication between system components.
 	 *  
@@ -654,7 +654,7 @@ public final class OSParameter{
 		if(systemPassword == null || systemPassword.length() <= 0) return false;
 		return systemPassword.equals(getSystemPassword());
 	}//getSystemPassword
-	
+
 	/*---------------------------------------------
 	XML related parameters
 	---------------------------------------------*/
@@ -672,7 +672,7 @@ public final class OSParameter{
 	 * FML_PUBLIC_SITE holds the value of the FML schema public site.
 	 */
 	public static String FML_PUBLIC_SITE = "http://gsbkip.chicagogsb.edu/fml/testproblems/lpfml.xsd";
-	
+
 	/**
 	 * OS_SITE holds the site of optimizationservices.org.
 	 */
@@ -682,7 +682,7 @@ public final class OSParameter{
 	 * OS_SCHEMA_SITE holds the value of the OSxL schema's public site.
 	 */
 	public static String OS_SCHEMA_SITE = "http://www.optimizationservices.org/schemas/";
-			
+
 	/**
 	 * XML_ENCODING_STYLE holds the xml encoding style. 
 	 */
@@ -709,7 +709,7 @@ public final class OSParameter{
 	 * XSLT_LOCATION holds the location of XSLT; no XSLT file name should be there. 
 	 */
 	public static String XSLT_LOCATION = "http://www.optimizationservices.org/stylesheets/";
-	
+
 	/**
 	 * read an osParameter file or string and and set the parameters. 
 	 * 
@@ -719,8 +719,8 @@ public final class OSParameter{
 	 * @param validate holds whether the reader should be validating against the schema or not.
 	 * @return whether the osParameter is read and set successfully or not.  
 	 */
-   	public static boolean readAndSetOSParameter(String osParameter, boolean isFile, boolean validate){
-   		OSParameterReader  osParameterReader = new OSParameterReader(validate);
+	public static boolean readAndSetOSParameter(String osParameter, boolean isFile, boolean validate){
+		OSParameterReader  osParameterReader = new OSParameterReader(validate);
 		boolean bRead = false;
 		try{
 			if(isFile){
@@ -753,11 +753,11 @@ public final class OSParameter{
 				if(SERVICE_FOLDER != null && SERVICE_FOLDER.length() > 0)SERVICE_FOLDER = SERVICE_FOLDER.substring(1);
 			}
 			catch(Exception e){
-				
+
 			}
 			if(SERVICE_FOLDER == null || SERVICE_FOLDER.length() <= 0) SERVICE_FOLDER = "os";	
 		}
-		
+
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("CODE_HOME");
 		if(sValue != null && sValue.length() > 0) CODE_HOME = sValue;
 		else{
@@ -771,7 +771,7 @@ public final class OSParameter{
 			if(!sDir.endsWith("/")){
 				sDir += "/";
 			}
-			
+
 			CODE_HOME = sDir+= "webapps/"+ SERVICE_FOLDER+"/WEB-INF/code/";
 		}
 
@@ -793,27 +793,27 @@ public final class OSParameter{
 				}
 			}
 		}
-		
+
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("REGISTRY_FILE");
 		if(sValue != null && sValue.length() > 0) REGISTRY_FILE = CODE_HOME + sValue;
 		else REGISTRY_FILE = CODE_HOME + "OSConfig/OSRegistry.xml";
-		
+
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("PROCESS_FILE");
 		if(sValue != null && sValue.length() > 0) PROCESS_FILE = CODE_HOME + sValue;
 		else PROCESS_FILE = CODE_HOME + "OSConfig/OSpL.xml";
-		
+
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("TEMP_FILE_FOLDER");
 		if(sValue != null && sValue.length() > 0) TEMP_FILE_FOLDER = CODE_HOME + sValue;
 		else TEMP_FILE_FOLDER = CODE_HOME + "temp/"; 
-			
+
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("LOG_FOLDER");
 		if(sValue != null && sValue.length() > 0) LOG_FOLDER = CODE_HOME + sValue;
 		else LOG_FOLDER = CODE_HOME + "log/";
-		
+
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("LOG_FILE");
 		if(sValue != null && sValue.length() > 0) LOG_FILE = LOG_FOLDER + sValue;
 		else LOG_FILE = LOG_FOLDER + "log.txt";
-		
+
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("MAX_LOG_FILE_SIZE");
 		if(sValue != null && sValue.length() > 0){
 			try {
@@ -823,23 +823,23 @@ public final class OSParameter{
 				IOUtil.log(IOUtil.exceptionStackToString(e), null);
 			}
 		}
-		
+
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("BACKUP_FOLDER");
 		if(sValue != null && sValue.length() > 0) BACKUP_FOLDER = CODE_HOME + sValue;
 		else BACKUP_FOLDER = CODE_HOME + "backup/";
-		
+
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("REGISTRY_LOG_FOLDER");
 		if(sValue != null && sValue.length() > 0) REGISTRY_LOG_FOLDER = CODE_HOME + sValue;
 		else REGISTRY_LOG_FOLDER = CODE_HOME + "log/";
-		
+
 		if(bRead) sValue =osParameterReader.getOSParameterValueByName("REGISTRY_LOG_FILE");
 		if(sValue != null && sValue.length() > 0) REGISTRY_LOG_FILE =  REGISTRY_LOG_FOLDER + sValue;
 		else REGISTRY_LOG_FILE = REGISTRY_LOG_FOLDER + "registryLog.txt";
-		
+
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("REGISTRY_REGISTRATION_FILE");
 		if(sValue != null && sValue.length() > 0) REGISTRY_REGISTRATION_FILE = REGISTRY_LOG_FOLDER + sValue;
 		else REGISTRY_REGISTRATION_FILE = REGISTRY_LOG_FOLDER + "registryRegistration.txt";
-		
+
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("REGISTRY_SUMMARY_REPORT");
 		if(sValue != null && sValue.length() > 0) REGISTRY_SUMMARY_REPORT = REGISTRY_LOG_FOLDER + sValue;
 		else REGISTRY_SUMMARY_REPORT = REGISTRY_LOG_FOLDER + "registrySummaryReport.txt";
@@ -847,18 +847,18 @@ public final class OSParameter{
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("REGISTRY_DETAILED_REPORT");
 		if(sValue != null && sValue.length() > 0) REGISTRY_DETAILED_REPORT = REGISTRY_LOG_FOLDER + sValue;
 		else REGISTRY_DETAILED_REPORT = REGISTRY_LOG_FOLDER + "registryDetailedReport.txt";
-		
+
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("PRINT_FOLDER");
 		if(sValue != null && sValue.length() > 0) PRINT_FOLDER = CODE_HOME + sValue;
 		else PRINT_FOLDER = CODE_HOME + "log/";
-		
+
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("PRINT_FILE");
 		if(sValue != null && sValue.length() > 0) PRINT_FILE = PRINT_FOLDER + sValue;
 		else PRINT_FILE = PRINT_FOLDER + "print.txt";
-		
+
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("APPEND_PRINT_FILE");
 		if(sValue != null && sValue.length() > 0) APPEND_PRINT_FILE = sValue.startsWith("t")?true:false;
-		
+
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("MINIMUM_DISKSPACE_TRIGGER");
 		if(sValue != null && sValue.length() > 0){
 			try{
@@ -868,7 +868,7 @@ public final class OSParameter{
 				IOUtil.log(IOUtil.exceptionStackToString(e), null);
 			}
 		}
-		
+
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("MINIMUM_MEMORY_TRIGGER");
 		if(sValue != null && sValue.length() > 0){
 			try{
@@ -908,11 +908,11 @@ public final class OSParameter{
 				IOUtil.log(IOUtil.exceptionStackToString(e), null);
 			}
 		}
-		
+
 		/*---------------------------------------------
 		Time related parameters
 		---------------------------------------------*/	
-		
+
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("JOB_MAX_HOURS");
 		if(sValue != null && sValue.length() > 0){
 			try{
@@ -944,7 +944,7 @@ public final class OSParameter{
 		}
 
 		JOB_MAX_TIME = OSParameter.JOB_MAX_HOURS*3600 + OSParameter.JOB_MAX_MINUTES*60 + OSParameter.JOB_MAX_SECONDS;
-		
+
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("TEMP_FILE_MAX_DAYS");
 		if(sValue != null && sValue.length() > 0){
 			try{
@@ -954,7 +954,7 @@ public final class OSParameter{
 				IOUtil.log(IOUtil.exceptionStackToString(e), null);
 			}
 		}
-		
+
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("TEMP_FILE_MAX_HOURS");
 		if(sValue != null && sValue.length() > 0){
 			try{
@@ -1041,7 +1041,7 @@ public final class OSParameter{
 				}			
 			}
 		}
-		
+
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("MEMORY_SIZE");
 		if(sValue != null && sValue.length() > 0){
 			if(sValue.indexOf("INF") >= 0) MEMORY_SIZE = Double.POSITIVE_INFINITY;
@@ -1097,7 +1097,7 @@ public final class OSParameter{
 				IOUtil.log(IOUtil.exceptionStackToString(e), null);
 			}
 		}
-		
+
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("SERVICE_POLLING_INTERVAL_MEDIUM");
 		if(sValue != null && sValue.length() > 0){
 			try{
@@ -1107,7 +1107,7 @@ public final class OSParameter{
 				IOUtil.log(IOUtil.exceptionStackToString(e), null);
 			}
 		}
-		
+
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("SERVICE_POLLING_INTERVAL_LONG");
 		if(sValue != null && sValue.length() > 0){
 			try{
@@ -1130,7 +1130,7 @@ public final class OSParameter{
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("OS_SOLVER");
 		if(sValue != null && sValue.length() > 0) OS_SOLVER = sValue;
 
-		
+
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("MAXIMUM_TRIAL_NUMBER_FOR_SOLVE");
 		if(sValue != null && sValue.length() > 0){
 			try{
@@ -1401,6 +1401,36 @@ public final class OSParameter{
 
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("SERVICE_PORT");
 		if(sValue != null && sValue.length() > 0) SERVICE_PORT = sValue;
+		else{
+			//try read from Tomcat
+			try{
+				String sDir = IOUtil.getCurrentDir();
+				if(sDir.toLowerCase().endsWith("bin") || 
+						sDir.toLowerCase().endsWith("bin\\") ||
+						sDir.toLowerCase().endsWith("bin/")){
+					int iIndex = sDir.lastIndexOf("bin");
+					sDir = sDir.substring(0, iIndex);
+				}
+				if(!sDir.endsWith("/")){
+					sDir += "/";
+				}
+
+				String sTomcatServerXMLFile = sDir+= "conf/server.xml";
+				String sTomcatServerXMLString = IOUtil.fileToString(sTomcatServerXMLFile);
+				int iIdx0 = sTomcatServerXMLString.indexOf("Connector port=");
+				int iIdx1 = sTomcatServerXMLString.indexOf("\"", iIdx0);
+				int iIdx2 = sTomcatServerXMLString.indexOf("\"", iIdx1+1);
+				SERVICE_PORT = sTomcatServerXMLString.substring(iIdx1+1, iIdx2).trim();
+				if(SERVICE_PORT == null || SERVICE_PORT.trim().length()<=0){
+					SERVICE_PORT = "8080";
+				}
+			}
+			catch(Exception e){
+				SERVICE_PORT = "8080";
+			}
+
+
+		}
 
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("SERVICE_HOST");
 		if(sValue != null && sValue.length() > 0) SERVICE_HOST = sValue;
@@ -1408,7 +1438,7 @@ public final class OSParameter{
 			String sIP = CommonUtil.getIPAddress();
 			SERVICE_HOST = "http://" + sIP;
 		}
-		
+
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("SERVICE_URI");
 		if(sValue != null && sValue.length() > 0) SERVICE_URI = sValue;
 		else{
@@ -1427,11 +1457,11 @@ public final class OSParameter{
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("OS_REGISTRY_SITE");
 		if(sValue != null && sValue.length() > 0) OS_REGISTRY_SITE = sValue;
 		else OS_REGISTRY_SITE = OS_SERVICE_SITE + "/osregistry/OSRegistryService.jws"; 
-			
+
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("OS_SCHEDULER_SITE");
 		if(sValue != null && sValue.length() > 0) OS_SCHEDULER_SITE = sValue;
 		else OS_SCHEDULER_SITE = OS_SERVICE_SITE + "/osscheduler/OSSchedulerService.jws"; 
-		
+
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("SCHEDULER_WITH_REGISTRY");
 		if(sValue != null && sValue.length() > 0) SCHEDULER_WITH_REGISTRY = sValue.startsWith("t")?true:false;
 
@@ -1520,24 +1550,24 @@ public final class OSParameter{
 
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("ALLOW_IO_OPERATIONS_BY_USERS");
 		if(sValue != null && sValue.length() > 0) ALLOW_IO_OPERATIONS_BY_USERS = sValue.startsWith("t")?true:false;
-		
+
 		/*---------------------------------------------
 		XML related parameters
 		---------------------------------------------*/
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("VALIDATE");
 		if(sValue != null && sValue.length() > 0) VALIDATE = sValue.startsWith("t")?true:false;
-		
+
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("XML_INDENTING");
 		if(sValue != null && sValue.length() > 0) XML_INDENTING = sValue.startsWith("t")?true:false;
-		
-		
+
+
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("FML_PUBLIC_SITE");
 		if(sValue != null && sValue.length() > 0) FML_PUBLIC_SITE = sValue;
 
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("OS_SITE");
 		if(sValue != null && sValue.length() > 0) OS_SITE = sValue;
 
-		
+
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("OS_SCHEMA_SITE");
 		if(sValue != null && sValue.length() > 0) OS_SCHEMA_SITE = sValue;
 
@@ -1548,19 +1578,19 @@ public final class OSParameter{
 		if(sValue != null && sValue.length() > 0) XSLT_LOCATION = sValue;
 
 		return true;
-   	}//readAndSetOSParameter
-   	
-   	/**
-   	 * write the OSParameter to an xml string. 
-   	 * 
-   	 * @return the osParameter xml string. 
+	}//readAndSetOSParameter
+
+	/**
+	 * write the OSParameter to an xml string. 
+	 * 
+	 * @return the osParameter xml string. 
 	 * @throws Exception if there are errors in writing the osParameter string. 
-   	 */
-   	public static String writeOSParameter() throws Exception{
+	 */
+	public static String writeOSParameter() throws Exception{
 		OSParameterWriter osParameterWriter = new OSParameterWriter();
 		//TODO write the parameters. 
 		return osParameterWriter.writeToString();
-   	}//writeOSParameter
+	}//writeOSParameter
 
 	/**
 	 * main for test purposes.
@@ -1571,7 +1601,7 @@ public final class OSParameter{
 	 */
 	public static void main(String[] args){
 	}//main
-	
+
 	/**
 	 * static constructor
 	 */
@@ -1593,6 +1623,6 @@ public final class OSParameter{
 		if(sOSParameterFile != null && sOSParameterFile.length() > 0){
 			readAndSetOSParameter(sOSParameterFile, true, false);
 		}
-		
+
 	}//static constructor
 }//OSParameter
