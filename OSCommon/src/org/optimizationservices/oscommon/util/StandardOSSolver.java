@@ -34,7 +34,7 @@ public class StandardOSSolver extends DefaultSolver{
 	}//constructor
 
 	/**
-	 * run the CG solver command that is specified in the batch file. 
+	 * run the standard solve method. 
 	 */
 	public void solve(){
 		String sOS = System.getProperty("os.name").toLowerCase();

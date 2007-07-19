@@ -4939,7 +4939,6 @@ public class OSServiceUtil{// implements OShL{
 			
 			//save ospl
 			saveOSpL();
-
 			//solver
 			if(serviceType == null || serviceType.length() <= 0 || 
 					serviceType.equals("solver") || serviceType.equals("analyzer")){
@@ -4960,7 +4959,7 @@ public class OSServiceUtil{// implements OShL{
 					//prepare osol
 					solver.osol = this.m_sOSoL;
 					solver.osOption = m_osOption;
-					
+
 					//prepare osil
 					if(m_sInstanceAddress != null && m_sInstanceAddress.length() > 0 && (m_sOSiL == null || m_sOSiL.length() <= 0)){
 						if(m_sInstanceLocationType == null || m_sInstanceLocationType.length() <= 0 || m_sInstanceLocationType.equals("local")){
@@ -5019,6 +5018,7 @@ public class OSServiceUtil{// implements OShL{
 							****end wait simulation****/
 
 							solver.solve();
+
 							if(solver.osResult != null || (solver.osrl != null && solver.osrl.length() > 0)){
 								break;
 							}
@@ -5067,6 +5067,7 @@ public class OSServiceUtil{// implements OShL{
 							m_osrlWriter.setResultTime(new GregorianCalendar());
 							m_sOSrL = m_osrlWriter.writeToString();
 						}
+
 					}
 					catch(Exception e){
 						IOUtil.log(IOUtil.exceptionStackToString(e), null);
