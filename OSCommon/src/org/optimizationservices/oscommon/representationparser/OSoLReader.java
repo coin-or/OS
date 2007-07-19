@@ -885,7 +885,7 @@ public class OSoLReader extends OSgLReader{
 	 */
 	public String getOtherOptimizationOptionValueByName(String name){
 		getOtherOptimizationOptions();
-		if(m_otherOptimizationOptionHashMap.containsKey(name)){
+		if(name != null && name.trim().length() > 0 && m_otherOptimizationOptionHashMap.containsKey(name)){
 			return (String)m_otherOptimizationOptionHashMap.get(name);
 		}
 		else{ 
@@ -901,7 +901,7 @@ public class OSoLReader extends OSgLReader{
 	 */
 	public String getOtherOptimizationOptionDescriptionByName(String name){
 		getOtherOptimizationOptions();
-		if(m_otherOptimizationOptionDescriptionHashMap.containsKey(name)){
+		if(name != null && name.trim().length() > 0 && m_otherOptimizationOptionDescriptionHashMap.containsKey(name)){
 			return (String)m_otherOptimizationOptionDescriptionHashMap.get(name);
 		}
 		else{ 
@@ -1014,7 +1014,7 @@ public class OSoLReader extends OSgLReader{
 	 */
 	public String getOtherOptionValueByName(String name){
 		getOtherOptions();
-		if(m_otherOptionHashMap.containsKey(name)){
+		if(name != null && name.trim().length() > 0 && m_otherOptionHashMap.containsKey(name)){
 			return (String)m_otherOptionHashMap.get(name);
 		}
 		else{ 
@@ -1030,7 +1030,7 @@ public class OSoLReader extends OSgLReader{
 	 */
 	public String getOtherOptionDescriptionByName(String name){
 		getOtherOptions();
-		if(m_otherOptionDescriptionHashMap.containsKey(name)){
+		if(name != null && name.trim().length() > 0 && m_otherOptionDescriptionHashMap.containsKey(name)){
 			return (String)m_otherOptionDescriptionHashMap.get(name);
 		}
 		else{ 

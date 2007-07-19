@@ -1052,7 +1052,7 @@ public class OSOption {
 	 */
 	public String getOtherOptimizationOptionValueByName(String name){
 		Hashtable<String, String> otherOptimizationOptionValues = getOtherOptimizationOptionValues();
-		if(otherOptimizationOptionValues != null && otherOptimizationOptionValues.containsKey(name)){
+		if(name != null && name.trim().length() > 0 && otherOptimizationOptionValues != null && otherOptimizationOptionValues.containsKey(name)){
 			return (String)otherOptimizationOptionValues.get(name);
 		}
 		else{ 
@@ -1156,7 +1156,7 @@ public class OSOption {
 	 */
 	public String getOtherOptionValueByName(String name){
 		Hashtable<String, String> otherOptionValues = getOtherOptionValues();
-		if(otherOptionValues != null && otherOptionValues.containsKey(name)){
+		if(name != null && name.trim().length() > 0 && otherOptionValues != null && otherOptionValues.containsKey(name)){
 			return (String)otherOptionValues.get(name);
 		}
 		else{ 

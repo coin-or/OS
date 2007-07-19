@@ -1978,7 +1978,7 @@ public class OSoLWriter extends OSgLWriter{
 	 * @return whether the other optimization option element is added successfully.
 	 */
 	public boolean addOtherOptimizationOption(String name, String value, String description){
-		if(name == null) return false;
+		if(name == null || name.trim().length() <= 0) return false;
 		Node nodeRef = null;
 		try{
 			Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSoL, "optimization");
@@ -2059,7 +2059,7 @@ public class OSoLWriter extends OSgLWriter{
 	 * @return whether the other option element is added successfully.
 	 */
 	public boolean addOtherOption(String name, String value, String description){
-		if(name == null) return false;
+		if(name == null || name.trim().length() <= 0) return false;
 
 		Vector<Element> vElements = XMLUtil.getChildElementsByTagName(m_eOSoL, "other");
 		Element eOther;
