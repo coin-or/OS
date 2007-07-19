@@ -27,6 +27,7 @@ OS/data/amplFiles/parinc.mod -text
 OS/data/configFiles/kill.config -text
 OS/data/configFiles/testRemoteKnock.config -text
 OS/data/configFiles/testRemotegetJobID.config -text
+OS/data/configFiles/testbrowser.config -text
 OS/data/configFiles/testlocal.config -text
 OS/data/configFiles/testlocalclp.config -text
 OS/data/configFiles/testlocalosol.config -text

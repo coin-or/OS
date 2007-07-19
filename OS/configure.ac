@@ -193,6 +193,7 @@ AC_COIN_VPATH_LINK(data/osrlFiles/rosenbrockmod.osrl)
 ##
 AC_COIN_VPATH_LINK(data/configFiles/kill.config)
 AC_COIN_VPATH_LINK(data/configFiles/testlocal.config)
+AC_COIN_VPATH_LINK(data/configFiles/testbrowser.config)
 AC_COIN_VPATH_LINK(data/configFiles/testlocalclp.config)
 AC_COIN_VPATH_LINK(data/configFiles/testlocalosol.config)
 AC_COIN_VPATH_LINK(data/configFiles/testmps.config)
