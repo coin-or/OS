@@ -6,6 +6,7 @@ import org.apache.axis.MessageContext;
 import org.apache.axis.transport.http.HTTPConstants;
 import org.optimizationservices.oscommon.communicationinterface.OShL;
 import org.optimizationservices.oscommon.util.IOUtil;
+import org.optimizationservices.oscommon.util.OSParameter;
 import org.optimizationservices.oscommon.util.OSParameterFile;
 import org.optimizationservices.oscommon.util.OSServiceUtil;
 
@@ -26,23 +27,19 @@ public class OSSolverService implements OShL{
 	 */
 	private OSServiceUtil m_osServiceUtil = new OSServiceUtil();
 
-
 	/**
 	 * default constructor.
 	 */
-//	public OSSolverService(){
-//		m_osServiceUtil.serviceName = OSParameter.SERVICE_NAME;
-//		m_osServiceUtil.serviceURI = OSParameter.SERVICE_URI;
-//		m_osServiceUtil.serviceType = OSParameter.SERVICE_TYPE;
-//		try {
-//			String sClassName = OSParameter.SOLVER_CLASS_NAME; //"org.optimizationservices.oscommon.util.StandardSolver";
-//			Class solverClass = Class.forName(sClassName);
-//			m_osServiceUtil.solver =(DefaultSolver)solverClass.newInstance();			
-//		} 
-//		catch (Exception e) {
-//			IOUtil.log(IOUtil.exceptionStackToString(e), null);
-//		}
-//	}//constructor
+	public OSSolverService(){
+		String sServiceName = OSParameter.SERVICE_NAME;
+		if(sServiceName != null && sServiceName.length() > 0 && sServiceName.equalsIgnoreCase("OSSolverService")){
+			String sSimpleName = this.getClass().getSimpleName();
+			if(!sSimpleName.equalsIgnoreCase("OSSolverService")){
+				OSParameter.SERVICE_NAME = this.getClass().getName();
+
+			}
+		}
+	}//constructor
 	
 	/**
 	 * Solve an optimization problem whose instance is given by a string following
