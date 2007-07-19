@@ -157,7 +157,11 @@ public class OSSolverService implements OShL{
 			int iIndex = sDir.lastIndexOf("bin");
 			sDir = sDir.substring(0, iIndex);
 		}
-		OSParameterFile.NAME = sDir+= "webapps/"+SERVICE_FOLDER+"WEB-INF/code/OSParameter.xml";
+		if(!sDir.endsWith("/")){
+			sDir += "/";
+		}
+
+		OSParameterFile.NAME = sDir+= "webapps/"+SERVICE_FOLDER+"/WEB-INF/code/OSParameter.xml";
 		//or directly hard code in the parameter file path by uncommenting and editing the line below. 
 		//OSParameterFile.NAME = sDir+= "/Program Files/Apache Software Foundation/Tomcat 5.5/webapps/os/WEB-INF/code/OSParameter.xml";
 	}//static constructor
