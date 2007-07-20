@@ -2485,6 +2485,12 @@ and the {\tt osol} file is
 </osol>
 \end{verbatimtab}
 
+As an alternative to using the command line executable {\tt fileUpload}, there is also an html form {\tt fileupload} that can be used to upload files. For example, the URL
+\begin{verbatim}
+http://128.135.130.17:8080/fileupload/fileupload.html
+\end{verbatim}
+will bring up the necessary form that allows the user to browse a directory and select the file to upload. This URL is based on the assumption that {\tt OSFileUpload.class} file is in the {\tt classes} folder inside the {\tt WEB-INF} folder inside a {\tt fileupload} folder in the {\tt Webapps} folder.
+
 
 \subsection{Instance Generator: Using the OSInstance API to Generate Instances}\label{subsection:exampleOSInstanceGeneration}
 
