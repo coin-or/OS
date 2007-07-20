@@ -37,6 +37,10 @@ OSCommon/.classpath -text
 OSCommon/.project -text
 OSCommon/META-INF/MANIFEST.MF -text
 OSCommon/OSCommon.jar -text
+OSCommon/WebContent/META-INF/MANIFEST.MF -text
+OSCommon/WebContent/OSSolverService.jws -text
+OSCommon/WebContent/WEB-INF/web.xml -text
+OSCommon/WebContent/fileupload.html -text
 OSCommon/bak/osresult_complex/ConAllowableDecrease.java -text
 OSCommon/bak/osresult_complex/ConAllowableIncrease.java -text
 OSCommon/bak/osresult_complex/ConIrreducibleInconsistentSystem.java -text
