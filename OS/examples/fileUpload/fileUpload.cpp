@@ -57,7 +57,7 @@ int main(int argC, char* argV[])
 		std::cout << "Read the file into a string" << std::endl; 
 		osil = fileUtil->getFileAsString( &osilFileNameWithPath[ 0]); 
 		OSSolverAgent* osagent = NULL;
-		osagent = new OSSolverAgent("http://128.135.130.17:8080/fileupload/servlet/OSFileUpload");
+		osagent = new OSSolverAgent("http://128.135.130.17:8080/os/servlet/OSFileUpload");
 		// strip off just the file name
 		// modify to into a file C:filename
 		int index = osilFileNameWithPath.find_last_of( dirsep);
