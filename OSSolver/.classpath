@@ -4,8 +4,8 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/OSCommon"/>
 	<classpathentry kind="lib" path="/OSCommon/lib/axis.jar"/>
-	<classpathentry kind="lib" path="/OSCommon/lib/fastutil-4.4.1.jar" sourcepath="C:/eclipse/workspace/FastUtil/fastutil-4.4.1/java"/>
+	<classpathentry kind="lib" path="/OSCommon/lib/fastutil-4.4.1.jar"/>
 	<classpathentry kind="lib" path="/OSCommon/lib/junmaoptimization.jar"/>
-	<classpathentry kind="lib" path="lib/servlet.jar"/>
+	<classpathentry kind="lib" path="/OSCommon/lib/servlet.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

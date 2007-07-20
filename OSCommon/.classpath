@@ -10,7 +10,7 @@
 	<classpathentry kind="lib" path="lib/commons-discovery.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging.jar"/>
 	<classpathentry kind="lib" path="lib/commons-primitives-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/fastutil-4.4.1.jar" sourcepath="C:/eclipse/workspace/FastUtil/fastutil-4.4.1/java"/>
+	<classpathentry kind="lib" path="lib/fastutil-4.4.1.jar"/>
 	<classpathentry kind="lib" path="lib/jaxrpc.jar"/>
 	<classpathentry kind="lib" path="lib/junmaoptimization.jar"/>
 	<classpathentry kind="lib" path="lib/log4j-1.2.8.jar"/>
