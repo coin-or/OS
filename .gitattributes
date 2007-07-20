@@ -767,6 +767,7 @@ OSCommon/doc/package-list -text
 OSCommon/doc/resources/inherit.gif -text
 OSCommon/doc/serialized-form.html -text
 OSCommon/doc/stylesheet.css -text
+OSCommon/html/fileupload.html -text
 OSCommon/src/org/optimizationservices/oscommon/communicationagent/OSAgentService.java -text
 OSCommon/src/org/optimizationservices/oscommon/communicationagent/OSAnalyzerAgent.java -text
 OSCommon/src/org/optimizationservices/oscommon/communicationagent/OSFlowAgent.java -text
@@ -1042,6 +1043,7 @@ OSCommon/src/org/optimizationservices/oscommon/util/IOUtil.java -text
 OSCommon/src/org/optimizationservices/oscommon/util/MailUtil.java -text
 OSCommon/src/org/optimizationservices/oscommon/util/MathUtil.java -text
 OSCommon/src/org/optimizationservices/oscommon/util/OSConstant.java -text
+OSCommon/src/org/optimizationservices/oscommon/util/OSFileUpload.java -text
 OSCommon/src/org/optimizationservices/oscommon/util/OSParameter.java -text
 OSCommon/src/org/optimizationservices/oscommon/util/OSParameterFile.java -text
 OSCommon/src/org/optimizationservices/oscommon/util/OSServiceUtil.java -text
@@ -1063,6 +1065,7 @@ OSCommon/util/ossolver/optimizationservices/org/ASMXTestServiceSoapStub.java -te
 OSCommon/util/tcpmon.bat -text
 OSCommon/util/wsdl.exe -text
 OSCommon/util/wsdl2java.bat -text
+OSCommon/xml/web.xml -text
 OSMain/.classpath -text
 OSMain/.project -text
 OSMain/.umlproject -text
