@@ -33,7 +33,6 @@ Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
 		</init-param>
 		<load-on-startup>100</load-on-startup>
 	</servlet>
-    </servlet>
         <servlet>
         <servlet-name>OSFileUpload</servlet-name>
         <servlet-class>org.optimizationservices.oscommon.util.OSFileUpload</servlet-class>
