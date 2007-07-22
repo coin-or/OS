@@ -99,7 +99,7 @@
 \maketitle
 
 \begin{abstract}
-This is the User's Manual for the Optimization Services (OS) project.  The objective of  (OS) is to provide a set of standards for representing optimization instances, results, solver options, and communication between clients and solvers in a distributed environment using Web Services. This COIN-OR project provides source code for libraries and executable programs that implement OS standards.   The OS library includes a robust solver and modeling language interface (API) for linear and nonlinear optimization problems.   Also included is the source code for a  command line executable {\tt OSSolverService}  for reading problem instances (OSiL format, nl format, MPS format) and calling a solver either locally or on a remote server.  See the Optimization Services (OS) Home Site \url{www.optimizationservices.org} and the COIN-OR Trac page \url{projects.coin-or.org} for more information.
+This is the User's Manual for the Optimization Services (OS) project.  The objective of  (OS) is to provide a set of standards for representing optimization instances, results, solver options, and communication between clients and solvers in a distributed environment using Web Services. This COIN-OR project provides C++ source code for libraries and executable programs that implement OS standards.   The OS library includes a robust solver and modeling language interface (API) for linear and nonlinear optimization problems.   Also included is the C++ source code for a  command line executable {\tt OSSolverService}  for reading problem instances (OSiL format, nl format, MPS format) and calling a solver either locally or on a remote server.  Finally,  both Java source code and a Java war, is provided for users who wish to set up a solver service on a server running Apache Tomcat.   See the Optimization Services (OS) Home Site \url{www.optimizationservices.org} and the COIN-OR Trac page \url{projects.coin-or.org} for more information.
 \end{abstract}
 
 
@@ -160,7 +160,7 @@ If you want to:
 
 \item Use MATLAB to generate problem instances in OSiL format and call a solver either remotely or locally -- see Section \ref{section:usingmatlab}.
 
-\item Use the OS library for algorithmic differentiation (in conjunction with COIN-OR CppAD) -- see \ref{section:ad}.
+\item Use the OS library for algorithmic differentiation (in conjunction with COIN-OR CppAD) -- see Section \ref{section:ad}.
 \end{itemize}
 
 
@@ -301,10 +301,14 @@ Windows users should be  able to double click on the file {\tt OS-release\_numbe
 \subsection{Obtaining the Binaries}
 
 If the user does not wish to compile source code, the 
-OS library, OSSolverService executable, and Tomcat server software configuration are available at \url{http://www.coin-or.org/Binaries/OS} in binary format.
+OS library, OSSolverService executable, and Tomcat server software configuration are available at \url{http://www.coin-or.org/Binaries/OS} in binary format.  In the binary OS root there is are {\tt cpp} and {\tt java} directories for the compiled C++ and Java code.
+
+In the {\tt cpp} directory you will find:
 
 
-kipp -- discuss this more with with Jun
+Kipp describe the naming scheme for the C++ binaries.
+
+In the {\tt java} directory you will find:
 
 
 \subsection{Obtaining and Installing a Visual Studio Project}
@@ -480,10 +484,14 @@ EXCLUDE =  Cbc \
 
 This file can be edited, and any project for which documentation is desired, can be deleted from the {\tt EXCLUDE} list.
 
-\subsection{Obtaining the Server Software}
+\subsection{Java Server Software}
 
 
-Kipp -- discuss with Jun
+The Java source code for the setting up a solver service with Apache Tomcat is checked out as follows:
+\begin{verbatim}
+svn co https://projects.coin-or.org/svn/branches/OSjava  OSJava
+\end{verbatim}
+
 
 \subsection{Platforms}
 
@@ -607,7 +615,7 @@ The OS directories include the following:
 \item  {\tt wsdl} is a directory of WSDL (Web Services Discovery Language) files. These are used to specify the inputs and outputs for the methods provided by a Web service. The most relevant file for the current version of the OS project is {\tt OShL.wsdl}.  This describes the set of inputs and outputs for the methods implemented in the {\tt OSSolverService}. See Section \ref{section:ossolverservice}.
 
 
-\item kipp -- talk about MS Visual Studio after Jun adds this
+\item kipp -- talk about MS Visual Studio and where it goes
 \end{itemize}
 
 
@@ -2395,7 +2403,7 @@ Below is a summary of the inputs and outputs of the six service methods. See als
 
 \section{Setting up a Solver Service with Tomcat}\label{section:tomcat}
 
-
+Jun is to write this
 
 
 
@@ -2440,7 +2448,15 @@ In the {\tt algorithmicDiff} folder is test code {\tt algorithmicDiffTest.cpp}. 
 
 
 
-When the {\tt OSAgent}  class methods {\tt solve} and {\tt send} are used, the problem instance in OSiL format is packaged into a SOAP envelope and communication with the server is done using Web Services (for example Tomcat Axis). However, packing an XML file into a SOAP envelope may add considerably to the size of the file (each {\tt $<$} is replaced with {\tt \&lt;}  and each {\tt $>$} is replaced with {\tt \&gt;}). Also, communicating with a Web Services servlet can also slow down the communication process. This could be a problem for large instances. An alternative approach is to use the {\tt fileUpload} executable on the client end  and the Java servlet {\tt OSFileUpload} on the server end.  This servlet is based upon the Apache Commons FileUpload. See \url{http://jakarta.apache.org/commons/fileupload/}. The {\tt OSFileUpload} Java servlet code is in the ******** directory.  Jun --- where should we put the Java server code for the File Uploader???
+When the {\tt OSAgent}  class methods {\tt solve} and {\tt send} are used, the problem instance in OSiL format is packaged into a SOAP envelope and communication with the server is done using Web Services (for example Tomcat Axis). However, packing an XML file into a SOAP envelope may add considerably to the size of the file (each {\tt $<$} is replaced with {\tt \&lt;}  and each {\tt $>$} is replaced with {\tt \&gt;}). Also, communicating with a Web Services servlet can also slow down the communication process. This could be a problem for large instances. An alternative approach is to use the {\tt fileUpload} executable on the client end  and the Java servlet {\tt OSFileUpload} on the server end.  The {\tt fileUpload} client executable is contained in the {\tt fileUpload}  directory inside the {\tt examples directory}.
+
+This servlet is based upon the Apache Commons FileUpload. See \url{http://jakarta.apache.org/commons/fileupload/}. The {\tt OSFileUpload} Java servlet code, {\tt OSFileUpload.java} is in the directory
+\begin{verbatim}
+/OSCommon/src/org/optimizationservices/oscommon/util
+\end{verbatim}
+relative to the {\tt OSJava} directory. 
+
+
 
 The {\tt fileUpload} client executable takes one argument on the command line which is the location of the file on the local directory to upload to the server. For example,
 \begin{verbatim}
@@ -2485,11 +2501,14 @@ and the {\tt osol} file is
 </osol>
 \end{verbatimtab}
 
-As an alternative to using the command line executable {\tt fileUpload}, there is also an html form {\tt fileupload} that can be used to upload files. For example, the URL
+As an alternative to using the command line executable {\tt fileUpload}, there is also an html form {\tt fileupload.html} that can be used to upload files. For example, the URL
 \begin{verbatim}
-http://128.135.130.17:8080/fileupload/fileupload.html
+http://128.135.130.17:8080/os/fileupload.html
 \end{verbatim}
-will bring up the necessary form that allows the user to browse a directory and select the file to upload. This URL is based on the assumption that {\tt OSFileUpload.class} file is in the {\tt classes} folder inside the {\tt WEB-INF} folder inside a {\tt fileupload} folder in the {\tt Webapps} folder.
+will bring up the necessary form that allows the user to browse a directory and select the file to upload. This URL is based on the assumption that the {\tt OSJava} classes were deployed as described in Section \ref{section:tomcat}. The file {\tt fileupload.html} is in the {\tt WebContent} directory directly under the 
+{\tt OSJava} root. 
+
+
 
 
 \subsection{Instance Generator: Using the OSInstance API to Generate Instances}\label{subsection:exampleOSInstanceGeneration}

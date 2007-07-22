@@ -16,7 +16,7 @@
 \contentsline {subsubsection}{\numberline {3.5.8}Library Paths}{11}
 \contentsline {subsection}{\numberline {3.6}Bug Reporting}{11}
 \contentsline {subsection}{\numberline {3.7}Documentation}{11}
-\contentsline {subsection}{\numberline {3.8}Obtaining the Server Software}{12}
+\contentsline {subsection}{\numberline {3.8}Java Server Software}{12}
 \contentsline {subsection}{\numberline {3.9}Platforms}{12}
 \contentsline {section}{\numberline {4}The OS Project Components}{13}
 \contentsline {section}{\numberline {5}OS Protocols}{16}
@@ -59,7 +59,7 @@
 \contentsline {subsubsection}{\numberline {9.3.5}The {\tt knock} Service Method}{51}
 \contentsline {subsubsection}{\numberline {9.3.6}The {\tt kill} Service Method}{52}
 \contentsline {subsubsection}{\numberline {9.3.7}Summary}{52}
-\contentsline {section}{\numberline {10}Setting up a Solver Service with Tomcat}{54}
+\contentsline {section}{\numberline {10}Setting up a Solver Service with Tomcat}{53}
 \contentsline {section}{\numberline {11}Examples}{54}
 \contentsline {subsection}{\numberline {11.1}AMPL Client: Hooking AMPL to Solvers}{54}
 \contentsline {subsection}{\numberline {11.2}Algorithmic Differentiation: Using the OS Algorithmic Differentiation Methods}{55}
@@ -69,4 +69,4 @@
 \contentsline {section}{\numberline {12}Appendix}{58}
 \contentsline {subsection}{\numberline {12.1}Building a Model in MATLAB}{58}
 \contentsline {subsection}{\numberline {12.2}OSiL representation for problem given in (1\hbox {})--(4\hbox {})}{60}
-\contentsline {subsection}{\numberline {12.3}OSiL representation for problem given in (20\hbox {})--(23\hbox {})}{61}
+\contentsline {subsection}{\numberline {12.3}OSiL representation for problem given in (20\hbox {})--(23\hbox {})}{62}
