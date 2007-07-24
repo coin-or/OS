@@ -1,6 +1,6 @@
 /** @file unitTest.cpp
  * 
- * \brief This file run the OS unitTest.
+ * \brief This file runs the OS unitTest.
  
  *
  * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
@@ -14,52 +14,51 @@
  * This software is licensed under the Common Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
- */ 
-
-/** This is the OS unitTest. It currently runs the following tests.
+ * 
+ * This is the OS unitTest. It currently runs the following tests.
+ * 
  * Solvers:
- * COIN - Ipopt on problems
- * 1) avion2.osil
- * 2) HS071_NLP.osil
- * 3) rosenbrockmod.osil
- * 4) parincQuadratic.osil
- * 5) parincLinear.osil 
- * 6) callBackTest.osil
- * 7) callBackTestRowMajor.osil
+ * 
+ * COIN-Ipopt tested on:
+ * <ol>
+ * <li> avion2.osil  </li>
+ * <li> HS071_NLP.osil </li>
+ * <li> rosenbrockmod.osil </li>
+ * <li> parincQuadratic.osil </li>
+ * <li> parincLinear.osil  </li>
+ * <li> callBackTest.osil </li>
+ * <li> callBackTestRowMajor.osil </li>
+ * </ol>
  *
- * COIN - Clp 
- * 1) parincLinear.osil
+ * COIN-Clp tested on parincLinear.osil
  * 
- * COIN - Cbc
- * 1) p0033.osil
+ * COIN-Cbc tested on p0033.osil
  * 
- * Knitro
- * 1) rosenbrockmod.osil
- * 2) callBackTest.osil
- * 3) parincQuadratic.osil
- * 4) HS071_NLP
+ * Knitro tested on:
+ * <ol>
+ * <li> rosenbrockmod.osil </li>
+ * <li> callBackTest.osil </li>
+ * <li> parincQuadratic.osil </li>
+ * <li> HS071_NLP </li>
+ * </ol>
  * 
- * COIN - SYMPHONY
- * 1) p0033.osil
+ * COIN-SYMPHONY test on p0033.osil
  * 
- * COIN - DyLP
- * 1) parincLinear.osil
+ * COIN-DyLP tested onparincLinear.osil
  * 
- * COIN - Volume
- * 1) volumeTest.osil
+ * COIN-Volume tested on volumeTest.osil
  * 
- * GLPK
- * 1) p0033.osil
+ * GLPK tested on p0033.osil
  * 
+ * Cplex tested on p0033.osil
  * 
- * Cplex
- * 1) p0033.osil
- * 
- * Lindo
- * 1) lindoapiaddins.osil
- * 2) rosenbrockmode.osil
- * 3) parincquadratic.osil
- * 4) wayneQuadratic.osil -- the only nonlinear integer problem in unitTest
+ * Lindo tested on:
+ * <ol>
+ * <li> lindoapiaddins.osil </li>
+ * <li> rosenbrockmode.osil </li>
+ * <li> parincquadratic.osil </li>
+ * <li> wayneQuadratic.osil -- the only nonlinear integer problem in unitTest </li>
+ * </ol>
  * 
  * We test the mps to osil converter
  * progam OSmps2osil on parincLinear.mps. Solve with
@@ -77,19 +76,19 @@
  * parincLinear.osil and the osrl file parincLinear.osrl.
  * 
  * Next we test the prefix and postfix routines. For the
- * test problem rosenbrockmod.osil create an OSExpressionTree
- * from the objective function. Then invoke the getPostfix() method
+ * test problem rosenbrockmod.osil create an <b>OSExpressionTree</b>
+ * from the objective function. Then invoke the <b>getPostfix()</b> method
  * and get a postfix vector representation of the expression tree. Then
- * use  createExpressionTreeFromPostfix to create an expression tree back.
- * Then use getPrefix() to get a prefix vector from this expression tree.
+ * use  <b>createExpressionTreeFromPostfix</b> to create an expression tree back.
+ * Then use <b>getPrefix()</b> to get a prefix vector from this expression tree.
  * Then use createExpressionTreeFromPrefix to create and expression. Then
- * use getPostfix() to get the postfix vector back and compare with the very
+ * use <b>getPostfix()</b> to get the postfix vector back and compare with the very
  * first postfix vector and make sure they are the same. 
  * 
  * Next test all of the nonlinear operators. The file testOperators.osil uses
  * every nonlinear operator currently defined. Parse this file to make sure
  * the parser works on every operator and then use 
- * expTree->m_treeRoot->calculateFunction to make sure the operators are 
+ * <b>expTree->m_treeRoot->calculateFunction</b> to make sure the operators are 
  * evaluated correctly.
  * 
  * Finally test CppAD. Read in CppADTestLag.osil and make sure gradient

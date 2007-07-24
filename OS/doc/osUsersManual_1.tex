@@ -267,7 +267,7 @@ make install
 
 This will install all of the libraries in the {\tt lib} directory under the distribution root.  In particuar, the main OS library {\tt libOS} along with the libraries of the other COIN-OR project that download with the OS project will get installed in the {\tt lib} directory.  In addtion the {\tt make install} command will install four executable programs in the {\tt bin} directory.  One of these binaries is {\tt OSSolverService} which is main OS project executable. This is described in Section \ref{section:ossolverservice}. In addition {\tt clp}, {\tt cbc}, {\tt cbc-generic}, and {\tt symphony} get installed  in the {\tt bin} directory. 
 
-\subsection{Obtaining the Source Code From a Tarball or Zip File}
+\subsection{Obtaining the Source Code From a Tarball or Zip File}\label{section:getTarBalls}
 
 The OS source code can also be obtained from either a  tarball or zip file.  This may be preferred for users who are not managing other COIN-OR projects wish to only work with periodic release versions of the code.  In order to obtain the code from a Tarball or Zip file do the following. 
 
@@ -313,9 +313,11 @@ In the {\tt java} directory you will find:
 
 \subsection{Obtaining and Installing a Visual Studio Project}
 
-In this section, we assume that the user has installed Microsoft Visual Studio on their computer. 
+Microsoft Visual Studio solution files are provided for users of Windows and the Microsoft Visual Studio IDE.  There is a directory {\tt MSVisualStudio} in the {\tt OS} root directory.  The {\tt MSVisualStudio} contains root directories organized by the version of Visual Studio.  We currently provide a solution file for Version 7.    The Microsoft Visual Studio files are automatically downloaded with an SVN checkout. They are also contained in the tarballs.  See Section \ref{section:getTarBalls}.    
 
-Jun -- fill in more. 
+The solution file contains an OS project file that will compile all of the OS source code into the {\tt OSLibrary} and point to the necessary include files. There is also a project file for the {\tt OSSolverService}.  The solution file also contains the project files for the other COIN-OR projects.  It is assumed that the user has installed a copy of Microsoft Visual Studio.
+ 
+
 
 
 
@@ -575,6 +577,9 @@ The following directories are also in the project root.
 
 \item {\tt lib} is a directory of libraries. After running {\tt make install} the OS library along with all other COIN-OR libraries are installed in {\tt lib}.
 
+
+
+
 \item {\tt ThirdParty} is a  directory for third party software. For example, if AMPL related software is used such as {\tt amplClient} is used, then certain AMPL libraries need to be present. This should go into the {\tt ASL} directory in {\tt ThirdParty.}
 \end{itemize}
 
@@ -602,6 +607,9 @@ The OS directories include the following:
 \item {\tt examples} is a directory with code examples that illustrate various aspects of the OS project.    These are described in Section \ref{section:examples}.
 
 \item {\tt inc} is the directory with the config\_os.h file which has information about which projects are included in the distribution.
+
+
+\item {\tt MSVisualStudio} is a directory that  contains solution files for the Microsoft Visual Studio IDE.  The subdirectories are organized by the version of Visual Studio. We currently provide a solution file for Version 7.
 
 \item {\tt schemas} is the directory that contains the W3C XSD (see \url{www.w3c.org}) schemas that are behind the OS standards. These are described in more detail in Section \ref{section:schemadescriptions}.
 

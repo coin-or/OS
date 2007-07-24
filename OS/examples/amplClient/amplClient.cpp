@@ -9,43 +9,33 @@
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
- * Please see the accompanying LICENSE file in root directory for terms.
+ * Please see the accompanying LICENSE file in OS root directory for terms.
+ * 
+ * This executable is designed to act as a "solver" for AMPL. It can be
+ * used to solve problems locally or on a remote server.  For example,
+ * to solve a problem locally, start AMPL. We assume that the model is
+ * hs71.mod. Execute the following sequence of commands:
+ * 
+ * model hs71.mod;  <br />
+ * option solver amplClient; <br />
+ * option amplClient_options "solver ipopt"; <br />
+ * write gtestfile; <br />
+ * solve; <br />
+ * display x1; <br />
+ * you should get:
+ * 
+ * x1 = 1
+ * 
+ * display x2;  <br />
+ * you should get:
+ * 
+ * x2 = 4.743
+ * 
+ * now if you wanted to call a remote OS solver do something like: 
+ * 
+ *option ipopt_options "http://128.135.130.17:8080/os/OSSolverService.jws"; 
  * 
  */
-
-
-
-
-
-/*
-Using AMLP with nl2fml.  Here is the sequence of AMPL commands
-with the parinc problem:
-
-If you want to name the file and not use the AMPL randomly 
-generate file name, do the following:
-   model hs71.mod;
-   option solver amplClient;
-   option amplClient_options "solver lindo";
-   option lindo_options "http://128.135.130.17:8080/lindo/LindoSolverService.jws";
-   write gtestfile;
-   solve;
-	
-of course, replacing gtestfile with btestfile generates a binary nl file. 
-// glpk is the default -- replace lindo with clp for that solver
-// on the Mac it wants the nl file to be text and not binary 
-solve;
-display x;
-//
-you should get x1 = 540, x2 = 252
-*/
-
-
-
- 
-
-
-
-
 
 #include "CoinSolver.h"
 #include "OSConfig.h"
