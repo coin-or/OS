@@ -19,7 +19,7 @@
 	<param name="PRINT_FILE" description="the main system file for printing a sting">print.txt</param>
 	<param name="APPEND_PRINT_FILE" description="whether to append or overwrite the PrintFile">true</param>
 	<param name="MINIMUM_DISKSPACE_TRIGGER" description="the minimum disk space before the automatic clean up is triggered to delete temporary files">1000000000</param>
-	<param name="MINIMUM_MEMORY_TRIGGER" description="the minimum ram memory before the automatic clean up is triggered to get more memory">100000000</param>
+	<param name="MINIMUM_MEMORY_TRIGGER" description="the minimum ram memory before the automatic clean up is triggered to get more memory">100</param>
 	<param name="CLEAN_UP_FOLDERS" description="the folders to clean up">temp/,backup/</param>
 	<param name="MAX_JOBIDS_TO_KEEP" description="the maximum number of job ids to keep before deleting them">100</param>
 	<!--Time related parameters-->
