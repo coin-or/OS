@@ -39,6 +39,7 @@ OSCommon/META-INF/MANIFEST.MF -text
 OSCommon/OSCommon.jar -text
 OSCommon/WebContent/META-INF/MANIFEST.MF -text
 OSCommon/WebContent/OSSolverService.jws -text
+OSCommon/WebContent/WEB-INF/code/OSConfig/OSParameter.xml -text
 OSCommon/WebContent/WEB-INF/web.xml -text
 OSCommon/WebContent/fileupload.html -text
 OSCommon/bak/osresult_complex/ConAllowableDecrease.java -text
