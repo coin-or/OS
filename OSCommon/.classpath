@@ -3,7 +3,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/activation.jar"/>
-	<classpathentry kind="lib" path="lib/apfloat.jar"/>
 	<classpathentry kind="lib" path="lib/axis.jar"/>
 	<classpathentry kind="lib" path="lib/axis-ant.jar"/>
 	<classpathentry kind="lib" path="lib/catalina-root.jar"/>
@@ -15,21 +14,11 @@
 	<classpathentry kind="lib" path="lib/junmaoptimization.jar"/>
 	<classpathentry kind="lib" path="lib/log4j-1.2.8.jar"/>
 	<classpathentry kind="lib" path="lib/mail.jar"/>
-	<classpathentry kind="lib" path="lib/mtj.jar"/>
-	<classpathentry kind="lib" path="lib/mtj1_4.jar"/>
-	<classpathentry kind="lib" path="lib/or124.jar"/>
 	<classpathentry kind="lib" path="lib/saaj.jar"/>
 	<classpathentry kind="lib" path="lib/saxon8.jar"/>
 	<classpathentry kind="lib" path="lib/saxon8-jdom.jar"/>
 	<classpathentry kind="lib" path="lib/saxon8-sql.jar"/>
 	<classpathentry kind="lib" path="lib/servlet.jar"/>
-	<classpathentry kind="lib" path="lib/swt_linux.jar"/>
-	<classpathentry kind="lib" path="lib/swt_mac.jar"/>
-	<classpathentry kind="lib" path="lib/swt_win32.jar"/>
-	<classpathentry kind="lib" path="lib/swt.jar"/>
-	<classpathentry kind="lib" path="lib/swtmac.jar"/>
-	<classpathentry kind="lib" path="lib/swt-pi.jar"/>
-	<classpathentry kind="lib" path="lib/swtw32.jar"/>
 	<classpathentry kind="lib" path="lib/wsdl4j.jar"/>
 	<classpathentry kind="lib" path="lib/xerces.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
