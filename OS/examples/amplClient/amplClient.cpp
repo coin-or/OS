@@ -1,4 +1,4 @@
-/** @file OSSolverService.cpp
+/** @file amplClient.cpp
  * 
  * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
  * @version 1.0, 10/05/2005

@@ -1,4 +1,4 @@
-/** @file OSSolverService.cpp
+/** @file osTestCode.cpp
  * 
  * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
  * @version 1.0, 10/05/2005
@@ -11,11 +11,11 @@
  * This software is licensed under the Common Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
+ * This is a dummy executable that does nothing but 
+ * print <I>Hello World</I>. I put in test code here when doing
+ * various tests.
+ * 
  */
- 
- // this is test code, e.g. test the parser or a solver, etc. 
- // this is just for playing around, do not confuse it with the unitTest
- 
  
 
 

@@ -1,4 +1,4 @@
-/** @file OSSolverService.cpp
+/** @file instanceGenerator.cpp
  * 
  * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
  * @version 1.0, 10/05/2005
@@ -11,6 +11,25 @@
  * This software is licensed under the Common Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
+ * In this example we show how to use the <b>OSInstance</b> API
+ * to generate an OSiL problem instance.
+ * 
+ * The objective of this example is to illustrate how to build a problem instance
+ * using the OSIntance class API. In particular we illutrate a number of the set()
+ * methods in the OSInstance class. As written, we need the LINDO nonlinear solver.
+ *
+ * <b>Model:</b> A nonlinear model with multiple local minimizers.
+ * Taken from the Samples directory of the LINDO API
+ *
+ *           maximize  abs( x0 + 1) + .4 * x1;  <br />
+ *           s.t.     x0           + x1       <= 4; <br />
+ *                    x0 * x1      + x1       <= 6; <br />
+ *                    x0 * x1                    <= 0; <br />
+ *                    max(x0 , x1 + 1)           >= 0; <br />
+ *                    if(x1, 1, x1)              <= 0; <br />
+ *                    (x1 * 2 * x1  -  x1) * x0  <= 0; <br />
+ *                    -100  <=  x0  <=  100 <br />
+ *                    x1 is binary <br />
  */
 
 #include<iostream>
@@ -38,25 +57,6 @@
 using std::cout;
 using std::endl;
 int  main(){	
-/*
-  The objective of this example is to illustrate how to build a problem instance
-  using the OSIntance class API. In particular we illutrate a number of the set()
-  methods in the OSInstance class. As written, we need the LINDO nonlinear solver.
-  
-  
-  Model  : A nonlinear model with multiple local minimizers.
-  Taken from the Samples directory of the LINDO API
-
-            maximize  abs( x0 + 1) + .4 * x1;
-            s.t.     x0           + x1       <= 4;
-                     x0 * x1      + x1       <= 6;
-                     x0 * x1                    <= 0;
-                     max(x0 , x1 + 1)           >= 0;
-                     if(x1, 1, x1)              <= 0;
-                     (x1 * 2 * x1  -  x1) * x0  <= 0;
-                     -100  <=  x0  <=  100
-                     x1 is binary
-*/
 
 	cout << "Start Building the Model" << endl;
 	try{

@@ -1,4 +1,4 @@
-/** @file OSSolverService.cpp
+/** @file algorithmicDiffTest.cpp
  * 
  * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
  * @version 1.0, 10/05/2005
@@ -10,6 +10,61 @@
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
+ * 
+ * This example illustrates the alrorithmic differentiation features
+ * of the OS library
+ * 
+ * The test problem CppADTestLag.osil:
+ * 
+ * min x0^2 + 9*x1   -- w[0]  <br />
+ * s.t.  <br />
+ * 33 - 105 + 1.37*x1 + 2*x3  + 5*x1 <= 10  -- y[0] <br />
+ * ln(x0*x3) + 7*x2 >= 10  -- y[1] <br />
+ * Note: in the first constraint 33 is a constant term and 105  <br />
+ * is part of the nl node <br />
+ * the Jacobian is: <br />
+ * 
+ * 2*x0   9       0      0  <br />
+ * 0      6.37    0      2  <br />
+ * 1/x0   0       7      1/x3  <br />
+ * 
+ * now set x0 = 1, x1 = 5,  x2 = 10, x3 = 5
+ * 
+ * the Jacobian is
+ * 
+ * 2   9       0    0 <br />
+ * 0   6.37    0    2 <br />
+ * 1   0       7   .2 <br />
+ * 
+ * Now form a Lagrangian with multipliers of w on the objective
+ * z0 the multiplier on the first constraint and z1 on the second
+ * the Lagrangain is then:
+ * 
+ * 	L = w*(x0^2 + 9*x1) + z0*(1 + 1.37*x1 + 2*x3 + 5*x1) + z1*(log(x0*x3) + 7*x2)
+ * 
+ * the partial with respect x0 <br />
+ * L_0 = 2 * w * x0  + z1 / x0
+ * 
+ * the partial with respect x1 <br />
+ * L_1 = w * 9 + z0*1.37 + z0*5
+ * 
+ * the partial with respect x2 <br />
+ * L_2 = z1*7 
+ * 
+ * the partial with respect x3 <br />
+ * L_3 = z0*2 + z1/x3 
+ * 
+ * in the Hessian there are only two nonzero terms <br />
+ * L_00 = 2 * w - z1 / ( x0 * x0 ) <br />
+ * L_33 = - z1 / (x3 * x3)
+ * 
+ * <b>IMPORTANT:</b> the forwardAD and reverseAD calls ONLY apply
+ * to the nonlinear part of the problem. The 9*x1 term
+ * in the objective is not part of the AD
+ * calculation nor are any terms in <linearConstraintCoefficients>
+ * that <b>DO NOT</b> appear in any nl nodes, for example the 7*x3 term
+ * in constraint with index 1. Note also, that there are only three
+ * variables that appear in nl nodes, x3 does not
  * 
  */
 
@@ -71,50 +126,6 @@ int  main(){
 	//osilFileName =  dataDir + "HS071_NLP.osil";
 	osilFileName =  dataDir + "osilFiles" + dirsep  + "CppADTestLag.osil";
 	std::cout  << "osilFileName  =  " << osilFileName << std::endl;
-	/**
-	 * here is the test problem CppADTestLag.osil:
-	 * min x0^2 + 9*x1   -- w[0]
-	 * s.t. 
-	 * 33 - 105 + 1.37*x1 + 2*x3  + 5*x1 <= 10  -- y[0]
-	 * ln(x0*x3) + 7*x2 >= 10  -- y[1]
-	 * Note: in the first constraint 33 is a constant term and 105 
-	 * is part of the nl node
-	 * the Jacobian is:
-	 * 
-	 * 2*x0   9       0      0
-	 * 0      6.37    0      2
-	 * 1/x0   0       7      1/x3
-	 * 
-	 * now set x0 = 1, x1 = 5,  x2 = 10, x3 = 5
-	 * the Jacobian is
-	 * 
-	 * 2   9       0    0
-	 * 0   6.37    0    2
-	 * 1   0       7   .2
-	 * 
-	 * Now form a Lagrangian with multipliers of w on the objective
-	 * z0 the multiplier on the first constraint and z1 on the second
-	 * the Lagrangain is then:
-	 * 
-	 * 	L = w*(x0^2 + 9*x1) + z0*(1 + 1.37*x1 + 2*x3 + 5*x1) + z1*(log(x0*x3) + 7*x2)
-	 * 
-	 * the partial with respect x0
-	 * L_0 = 2 * w * x0  + z1 / x0
-	 * 
-	 * the partial with respect x1
-	 * L_1 = w * 9 + z0*1.37 + z0*5
-	 * 
-	 * the partial with respect x2
-	 * L_2 = z1*7 
-	 * 
-	 * the partial with respect x3
-	 * L_3 = z0*2 + z1/x3 
-	 * 
-	 * in the Hessian there are only two nonzero terms
-	 * L_00 = 2 * w - z1 / ( x0 * x0 )
-	 * L_33 = - z1 / (x3 * x3)
-	 * 
-	*/
 	fileUtil = new FileUtil();
 	osil = fileUtil->getFileAsString( &osilFileName[0]);	
 	//

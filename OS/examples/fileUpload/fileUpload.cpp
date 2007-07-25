@@ -1,4 +1,4 @@
-/** @file OSSolverService.cpp
+/** @file fileUpload.cpp
  * 
  * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
  * @version 1.0, 10/05/2005
@@ -11,11 +11,21 @@
  * This software is licensed under the Common Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
+ * <p>
+ * In the case of large OSiL files it may not be desirable 
+ * to use Web Services
+ * to send problem instances to the Web Server. This executable uses
+ * <b>OSFileUpload</b> Java Servlet to upload large files very quickly.
+ * </p>
+ * 
+ * <p>
+ * NOTE: In this example we have hard coded in the URL of the server
+ * http://128.135.130.17:8080/os/servlet/OSFileUpload
+ * the user will need to change this for their server
+ * </p>
  */
  
- // this is test code, e.g. test the parser or a solver, etc. 
- // this is just for playing around, do not confuse it with the unitTest
- 
+
  
 #include "OSResult.h"
 #include "OSiLReader.h"
@@ -48,7 +58,6 @@ int main(int argC, char* argV[])
 		time_t start, finish, tmp;
 		std::string osilFileNameWithPath;
 		std::string osilFileName;
-		//std::string remoteFileLocation = "/home/kmartin/temp/";
 		std::string osil;
 		std::string uploadResult;
 	  	const char dirsep =  CoinFindDirSeparator();
