@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--xs:import namespace="http://www.w3.org/1998/Math/MathML" schemaLocation="http://www.w3.org/Math/XMLSchema/mathml2/mathml2.xsd"/-->
 	<xs:element name="osnl">
 		<xs:annotation>
@@ -1817,6 +1817,16 @@
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:element name="triangularInv" type="OSnLNodeTriangularInv" substitutionGroup="OSnLNode"/>
+	<xs:complexType name="OSnLNodeUnitNormalLinearLoss">
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence minOccurs="1" maxOccurs="1">
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="unitNormalLinearLoss" type="OSnLNodeUnitNormalLinearLoss" substitutionGroup="OSnLNode"/>
 	<!--  MathML Nodes  -->
 	<!--xs:complexType name="mathML">
 		<xs:complexContent>
