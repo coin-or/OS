@@ -3,9 +3,6 @@
 /Externals -text
 /INSTALL -text
 /LICENSE -text
-MSVisualStudioExternalsDyLP/v7/DyLP/libDyLP/libDylp.vcproj -text
-MSVisualStudioExternalsDyLP/v7/DyLP/libDyLPStdLib/libDylpStd.vcproj -text
-MSVisualStudioExternalsDyLP/v7/Osi/libOsiDyLP/libOsiDyLP.vcproj -text
 /Makefile.am -text
 /Makefile.in -text
 /OS.spp -text
