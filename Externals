@@ -14,14 +14,7 @@ Vol     	  https://projects.coin-or.org/svn/Vol/stable/1.1/Vol
 cppad         https://projects.coin-or.org/svn/CppAD/trunk/cppad
 MSVisualStudioExternals/v7/Clp/libClp       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/Clp/libClp
 MSVisualStudioExternals/v7/Cbc/libCbc       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/Cbc/libCbc
-MSVisualStudioExternals/v7/Cgl/libCgl       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/Cgl/libCgl
-MSVisualStudioExternals/v7/CoinUtils/libCoinUtils       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/CoinUtils/libCoinUtils
-MSVisualStudioExternals/v7/Vol/libVol       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/Vol/libVol
-MSVisualStudioExternals/v7/Osi/libOsi       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/Osi/libOsi
-MSVisualStudioExternals/v7/Osi/libOsiCbc       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/Osi/libOsiCbc
-MSVisualStudioExternals/v7/Osi/libOsiClp       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/Osi/libOsiClp
-MSVisualStudioExternals/v7/Osi/libOsiVol       https://projects.coin-or.org/svn/MSVisualStudio/stable/1.0/v7/Osi/libOsiVol
-MSVisualStudioExternalsSym/v7                   https://projects.coin-or.org/svn/SYMPHONY/stable/5.1/Win32/v7
+
 
 
   
