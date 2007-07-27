@@ -2139,9 +2139,9 @@ bool OSInstance::getSparseJacobianFromColumnMajor( ){
 	int iNumRowStarts = getConstraintNumber() + 1;	
 	int i,j, iTemp;
 	int iNumVariableStarts = getVariableNumber() ;
-	int *start;
-	int *index;
-	double *value;
+	int *start = NULL;
+	int *index = NULL;
+	double *value = NULL;
 	if(this->instanceData->linearConstraintCoefficients->numberOfValues > 0){
 		start = this->instanceData->linearConstraintCoefficients->start->el;
 		index = this->instanceData->linearConstraintCoefficients->rowIdx->el;
@@ -2284,9 +2284,9 @@ bool OSInstance::getSparseJacobianFromRowMajor( ){
 	int iNumJacRowStarts = getConstraintNumber() + 1;
 	std::map<int, int>::iterator posVarIdx;	
 	int i,j, k;
-	int *start;
-	int *index;
-	double *value;
+	int *start = NULL;
+	int *index = NULL;
+	double *value = NULL;
 	if(this->instanceData->linearConstraintCoefficients->numberOfValues > 0){
 		start = this->instanceData->linearConstraintCoefficients->start->el;
 		index = this->instanceData->linearConstraintCoefficients->colIdx->el;

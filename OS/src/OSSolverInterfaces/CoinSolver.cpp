@@ -185,8 +185,10 @@ bool CoinSolver::setCoinPackedMatrix(){
 
 bool CoinSolver::optimize()
 {
-	double *x, *y, *z;
-	std::string *rcost;
+	double *x = NULL;
+	double *y = NULL;
+	double *z = NULL;
+	std::string *rcost = NULL;
 	// resultHeader infomration
 	if(osresult->setServiceName("Solved with Coin Solver: " + sSolverName) != true)
 		throw ErrorClass("OSResult error: setServiceName");

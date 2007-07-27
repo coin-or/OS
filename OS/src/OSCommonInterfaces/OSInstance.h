@@ -45,9 +45,8 @@
 
 
 /*! \class Variable
- * \brief The in-memory representation of the <b>variable</b> element..
+ * \brief The in-memory representation of the <b>variable</b> element.
  */
-
 
 class Variable{
 public:
@@ -86,82 +85,226 @@ public:
 	std::string initString;
 }; // class Variable
 
+
+/*! \class Variables
+ * \brief The in-memory representation of the <b>variables</b> element.
+ */
 class Variables{
 public:
+
+	/** The Variables class constructor */
 	Variables();
+	
+	/** The Variables class destructor */
 	~Variables();
+	
+	/** numberOfVariables is the number of variables in the instance */
 	int numberOfVariables;
+	
+	/** var a pointer to an array of var pointers */
 	Variable **var;
 }; // class Variables
 
 
-
+/*! \class ObjCoef
+ * \brief The in-memory representation of the objective
+ * function <b><coef></b> element.
+ */
 class ObjCoef{
 public:
+
+	/** The ObjCoef class constructor */
 	ObjCoef();
+	
+	/** The ObjCoef class destructor */
 	~ObjCoef();
+	
+	/** idx is the index of the variable corresponding
+	 * to the coefficient
+	 */
 	int idx;
+	
+	/** value is the value of the objective function coefficient
+	 * corresponding to the variable with index idx
+	 */
 	double value;
 };//class Coef
 
-
+/*! \class Constraint
+ * \brief The in-memory representation of the 
+ * <b><con></b> element.
+ */
 class Constraint{
 public:
+
+	/** The Constraint class constructor */
 	Constraint();
+	
+	/** The Constraint class destructor */
 	~Constraint();
+	
+	/** name is the name of the constraint */
 	std::string name;
+	
+	/** constant is a value that is added to the constraint */
 	double constant;
+	
+	/** lb is the lower bound on the constraint */
 	double lb;
+	
+	/** ub is the upper bound on the constraint */
 	double ub;
 };//class Constraint
 
+
+/*! \class Constraints
+ * \brief The in-memory representation of the 
+ * <b><constraints></b> element.
+ */
 class Constraints{
 public:
+
+	/** The Constraints class constructor */
 	Constraints();
+	
+	/** The Constraints class destructor */
 	~Constraints();
+	
+	/** numberOfConstraints is the number of 
+	 * constraints in the instance
+	 */
 	int numberOfConstraints;
+	
+	/** con is pointer to an array of Constraint
+	 * object pointers */
 	Constraint **con;
 };//class Constraints
 
 
-
+/*! \class InstanceHeader
+ * \brief The in-memory representation of the 
+ * <b><instanceHeader></b> element.
+ */
 class InstanceHeader{
 public:
+
+	/** The InstanceHeader class constructor */
 	InstanceHeader();
+	
+	/** The Constraints class destructor */
 	~InstanceHeader();
+	
+	/** the problem instance description */
 	std::string description;
+	
+	/** the name of the problem instance */
 	std::string name;
+	
+	/** the source of the problem instance */
 	std::string source;		
 };//class InstanceHeader
 
+/*! \class Objective
+ * \brief The in-memory representation of the 
+ * <b><obj></b> element.
+ */
 class Objective{
 public:
+
+	/** The Objective class constructor */
 	Objective();
+	
+	/** The Objective class destructor */
 	~Objective();
+	
+	/** the name of the objective function */
 	std::string name;
+	
+	/** declare the objective function to be
+	 * a max or a min 
+	 */
 	std::string maxOrMin;
+	
+	/** constant is the constant term added to the
+	 * objective function, 0 by default
+	 */
 	double constant;
+	
+	/** weight is the weight applied to the given
+	 * objective function, 1.0 by default
+	 */
 	double weight;
+	
+	/** numberOfObjCoef is the number of variables
+	 * with a nonzero objective function coefficient
+	 */
 	int numberOfObjCoef;
+	
+	/** coef is pointer to an array of ObjCoef
+	 * object pointers */	
 	ObjCoef **coef;
 };//class Objective
 
+/*! \class Objectives
+ * \brief The in-memory representation of the 
+ * <b><objectives></b> element.
+ */
 class Objectives{
 public:
+
+	/** The Objectives class constructor */	
 	Objectives();
+	
+	/** The Objectives class destructor */
 	~Objectives();
+	
+	/** numberOfObjectives is the number of objective 
+	 * functions in the instance
+	 */
 	int numberOfObjectives;
+	
+	/** coef is pointer to an array of ObjCoef
+	 * object pointers */	
 	Objective **obj;
 };//class Objectives
 
+/*! \class LinearConstraintCoefficients
+ * \brief The in-memory representation of the 
+ * <b><linearConstraintCoefficients></b> element.
+ * 
+ * \remarks
+ * if a large part of the problem is linear, then
+ * store this is the standard sparse format, either by
+ * column or row. There are three arrays, an array of 
+ * nonzero values, an array of either column or row indicies
+ * and then a pointer to the start of each column or row.
+ */
 class LinearConstraintCoefficients{
 public:
+
+	/** The LinearConstraintCoefficients class constructor */	
 	LinearConstraintCoefficients();
+	
+	/** The LinearConstraintCoefficients class destructor */
 	~LinearConstraintCoefficients();
+	
+	/** numberOfValues is the number of nonzero elements stored
+	 * in the <linearConstraintCoefficients> element
+	 */
 	int numberOfValues;
+	
+	/** a pointer to the start of each row or column stored in
+	 * sparse format
+	 */
 	IntVector *start;
+	
+	/** a pointer of row indicies if the problem is stored by column */
 	IntVector *rowIdx;
+	
+	/** a pointer of column indicies if the problem is stored by row */
 	IntVector *colIdx;
+	
+	/** a pointer to the array of nonzero values being stored */
 	DoubleVector *value;
 	/**
 	 * iNumberOfStartElements counts the number of elements in the <start>
@@ -172,28 +315,76 @@ public:
 	int iNumberOfStartElements;
 };//class LinearConstraintCoefficients
 
+
+/*! \class QuadraticTerm
+ * \brief The in-memory representation of the 
+ * <b><qTerm></b> element.
+ * 
+ * \remarks
+ * quadratic terms can be efficient stored by storing
+ * the index of each variable, the coefficient of the
+ * quadratic term, and the row in which it appears
+ */
 class QuadraticTerm{
     public:
+    
+	/** The QuadraticTerm class constructor */
 	QuadraticTerm();
+	
+	/** The QuadraticTerm class destructor */
 	~QuadraticTerm();
+	
+	/** idx is the index of the row in which the
+	 * quadratic term appears
+	 */
 	int idx;
+	
+	/** idxOne is the index of the first variable in
+	 * the quadratic term
+	 */
     int idxOne;
+    
+    /** idxTwo is the index of the second variable in
+     * the quadratic term
+     */
     int idxTwo;
+    
+    /** coef is the coefficient of the quadratic term */
     double coef;
 }; // QuadraticTerm
 
 
 
+
+/*! \class QuadraticCoefficients
+ * \brief The in-memory representation of the 
+ * <b><quadraticCoefficients></b> element.
+ * 
+ */
 class QuadraticCoefficients {
     public:
+    
+    /** The QuadraticCoefficients class constructor */
 	QuadraticCoefficients();
+	
+	/** The QuadraticCoefficients class destructor */
 	~QuadraticCoefficients();
+	
+	/** numberOfQuadraticTerms is the number of quadratic
+	 * terms in the <b><quadraticCoefficients></b> element.
+	 */
 	int numberOfQuadraticTerms;
+	
+	/** qTerm is pointer to an array of QuadraticTerm
+	 * object pointers */	
     QuadraticTerm** qTerm;
 }; // QuadraticCoefficients
 
 
-
+/*! \class Nl
+ * \brief The in-memory representation of the 
+ * <b><nl></b> element.
+ * 
 class Nl{  
 public:	
 	/** idx holds the row index of the nonlinear expression */
@@ -220,25 +411,76 @@ public:
 	~Nl();
 };//end Nl
 
-
+/*! \class NonlinearExpressions
+ * \brief The in-memory representation of the 
+ * <b><nonlinearExpressions></b> element.
+ */
 class NonlinearExpressions {
     public:
+    
+    /** The NonlinearExpressions class constructor */
 	NonlinearExpressions();
+	
+	/** The NonlinearExpressions class destructor */
 	~NonlinearExpressions();
+	
+	/** numberOfNonlinearExpression is the number of
+	 * <nl> elements in the 
+	 * <b><nonlinearExpressions></b> element.
+	 */
 	int numberOfNonlinearExpressions;
+	
+	/** nl is pointer to an array of Nl
+	 * object pointers */	
     Nl **nl;
 }; // NonlinearExpression
  
-
+/*! \class InstanceData
+ * \brief The in-memory representation of the 
+ * <b><instanceData></b> element.
+ * \remarks 
+ * The InstanceData object contains the objects
+ * that define the instance --
+ * <ul>
+ * <li><b>Variables</b> object</li>
+ * <li><b>Objectives</b> object</li>
+ * <li><b>Constraints</b> object</li>
+ * <li><b>LinearConstraintCoefficients</b> object</li>
+ * <li><b>QuadraticCoefficients</b> object</li>
+ * <li><b>NonlinearExpressions/b> object</li>
+ * </ul>
+ */
 class InstanceData{
 public:
+
+	/** The InstanceData class constructor */
 	InstanceData();
+	
+	/** The InstanceData class constructor */
 	~InstanceData();
+	
+	/** variables is a pointer to a Variables object */
 	Variables *variables;
+	
+	/** objectives is a pointer to a Objectives object */
 	Objectives *objectives;
+	
+	/** constraints is a pointer to a Constraints object */
 	Constraints *constraints;
+	
+	/** linearConstraintCoefficients is a pointer to a 
+	 * LinearConstraintCoefficients object
+	 */
 	LinearConstraintCoefficients *linearConstraintCoefficients;
+	
+	/** quadraticCoefficients is a pointer to a 
+	 * QuadraticCoefficients object
+	 */
 	QuadraticCoefficients* quadraticCoefficients;
+	
+	/** nonlinearExpressions is a pointer to a 
+	 * NonlinearExpressions object
+	 */	
 	NonlinearExpressions* nonlinearExpressions;
 }; // class InstanceData
 

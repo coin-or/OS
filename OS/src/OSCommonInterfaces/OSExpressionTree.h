@@ -23,6 +23,15 @@
 #include<cppad/cppad.hpp>
 using CppAD::Parameter;
 
+/*! \class OSExpressionTree 
+ *  \brief Used to hold the instance in memory.
+ *
+ * \remarks 
+ * This class stores the OSiL instance in memory as
+ * an expression tree.
+ * 
+ */
+
 class OSExpressionTree{  
 
 public:	
@@ -126,10 +135,6 @@ private:
 	 */		
 	double m_dTreeRootValue;
 	
-	
-	
-
-
 };//end OSExpressionTree
 
 

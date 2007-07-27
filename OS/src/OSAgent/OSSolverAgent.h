@@ -20,7 +20,7 @@
 using std::string;
 
 /*! \class OSSolverAgent OSSolverAgent.h "OSSolverAgent.h"
- *  \brief Used by a client to invoke a remote solver..
+ *  \brief Used by a client to invoke a remote solver.
  *
  * \remarks 
 	<p> This is an implementation of the virtual class OShL. We 
@@ -49,7 +49,6 @@ public:
 	OSSolverAgent(string solverURI) ;
 	
 	/**
-	 *
 	 * Class destructor. 
 	 */	
 	~OSSolverAgent();

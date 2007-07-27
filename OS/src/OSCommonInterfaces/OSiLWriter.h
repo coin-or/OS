@@ -21,14 +21,15 @@
 #include "OSInstance.h"
 
 /*! \class OSiLWriter OSiLWriter.h "OSiLWriter.h"
- *  \brief Take an OSInstance object and write a string that validates against OSiL..
+ *  \brief Take an OSInstance object and write 
+ * a string that validates against the OSiL schema.
  *
  * 
  */
 class OSiLWriter{  
 private:
 	/** 
-	 * m_cOSInstance is an object in the class OSInstance
+	 * m_OSInstance is an object in the class OSInstance
 	 */
 	OSInstance *m_OSInstance;
 public:

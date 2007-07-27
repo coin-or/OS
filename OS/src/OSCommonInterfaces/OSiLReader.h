@@ -27,16 +27,45 @@
 #include <string>
 
 
-
+/*! \class OSiLReader
+ *  \brief Used to read an OSiL string.
+ *
+ * \remarks 
+ * <p> This class wraps around the OSiL parser and sends
+ * the parser an OSiL string and is returned an OSInstance
+ * object. </p>
+ */
 class OSiLReader{  
 
-private:
-	FILE *file;
-	OSInstance *osinstance;
-
 public:
+
+	/**
+	 * Default constructor. 
+	 */
 	OSiLReader( );
+	
+	/**
+	 * Class destructor. 
+	 */	
 	~OSiLReader();
+	
+   	/**
+   	 * parse the OSiL model instance.
+   	 * 
+   	 * <p>
+   	 * @param osil a string that holds the problem instance. 
+   	 * @return the instance as an OSInstance object.
+	 * </p> 
+   	 */	
 	OSInstance* readOSiL(std::string *osil) throw(ErrorClass);
+
+private:
+	/** osintance is the OSInstance object returned by 
+	 * the OSiLReader
+	 */
+	OSInstance *m_osinstance;
 };
+
+
+
 #endif

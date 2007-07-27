@@ -11,40 +11,60 @@
  * This software is licensed under the Common Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
- */ 
-
-
-/**
- * Below are the possible inputs to
- * this executable
- */
- 
- 
- /*
- * INPUTS:
- * -osil xxx.osil (file name on local machine of optimization instance, 
+ * <b>INPUTS:</b>
+ * <ul>
+ * <li>
+ * <b>-osil</b> xxx.osil (file name on local machine of optimization instance, 
  *       this is NULL by default, however if this remains NULL a problem
  * 		 instance must be specified in the osol file)
- * -osol xxx.osol (file name on local machine of solver options, 
+ * </li>
+ * <li>
+ * <b>-osol</b> xxx.osol (file name on local machine of solver options, 
  *       default default value is NULL)
- * -osrl xxx.osrl (file name on local machine where the optimization 
+ * </li>
+ * <li>
+ * <b>-osrl</b> xxx.osrl (file name on local machine where the optimization 
  *       result is put, default is NULL)
- * -serviceLocation location URL (the URL  of the server that is called 
+ * </li>
+ * <li>
+ * <b>-serviceLocation</b> location URL (the URL  of the server that is called 
  *       remotely if the problem not solved locally, default is NULL)
- * -serviceMethod  (send, solve, kill, knock, getJobID, retrieve, 
+ * </li>
+ * <li>
+ * <b>-serviceMethod</b>  (send, solve, kill, knock, getJobID, retrieve, 
  *       default value is solve)
- * -os (Not used for now -- ignore)
- * -osplInput xxx.ospl  (Not used for now -- ignore)
- * -osplOutput xxx.ospl (Not used for now -- ignore)
- * -mps xxxx.mps (converts mps format to osil and has same effect as -osil)
- * -nl xxxx.nl (converts nl format to osil and has same effect as -osil)
- * -solver solverName (the name of the solver to be invoked)
- * -browser path location to browser e.g. 
+ * </li>
+ * <li>
+ * <b>-os</b> (Not used for now -- ignore)
+ * </li>
+ * <li>
+ * <b>-osplInput</b> xxx.ospl  (Not used for now -- ignore)
+ * </li>
+ * <li>
+ * <b>-osplOutput</b> xxx.ospl (Not used for now -- ignore)
+ * </li>
+ * <li>
+ * <b>-mps</b> xxxx.mps (converts mps format to osil and has same effect as -osil)
+ * </li>
+ * <li>
+ * <b>-nl</b> xxxx.nl (converts nl format to osil and has same effect as -osil)
+ * </li>
+ * <li>
+ * <b>-solver</b> solverName (the name of the solver to be invoked)
+ * </li>
+ * <li>
+ * <b>-browser</b> path location to browser e.g. 
  *       /Applications/Firefox.app/Contents/MacOS/firefox (default is NULL)
- * -config pathToConfigFile is the path to a configure file with the problem 
+ * </li>
+ * <li>
+ * <b>-config</b> pathToConfigFile is the path to a configure file with the problem 
  * 	     parameters
- * -insList xxx.dat (used only for LINDO, file location on local 
+ * </li>
+ * <li>
+ * <b>-insList</b> xxx.dat (used only for LINDO, file location on local 
  *       machine of LINDO instruction list)
+ * </li>
+ * </ul>
 */
 
 
@@ -455,7 +475,16 @@ void solve(){
 				std::system( ch );
 			}
 		}
-		else cout << eclass.errormsg << endl;
+		else{
+			OSResult *osresult = NULL;
+			OSrLWriter *osrlwriter = NULL;
+			osrlwriter = new OSrLWriter();
+			osresult = new OSResult();
+			osresult->setGeneralMessage( eclass.errormsg);
+			osresult->setGeneralStatusType( "error");
+			std::string osrl = osrlwriter->writeOSrL( osresult);
+			std::cout << osrl << std::endl;
+		}
 	}	
 }//end solve
 
