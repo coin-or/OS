@@ -27,14 +27,7 @@
 
 
 
-/*! \class OSnLNode OSnLNode.h "OSnLNode.h"
- *  \brief The OSnLNode Class.
- *
- * @author  Robert Fourer, Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005
- * @since   OS1.0
- * 
- */
+
 
 
  enum OP_CODES{
@@ -66,7 +59,14 @@
 using CppAD::AD;
 using CppAD::vector;
 
-
+/*! \class OSnLNode OSnLNode.h "OSnLNode.h"
+ *  \brief The OSnLNode Class.
+ *
+ * @author  Robert Fourer, Jun Ma, Kipp Martin, 
+ * @version 1.0, 10/05/2005
+ * @since   OS1.0
+ * 
+ */
 class OSnLNode{  
 
 public:	

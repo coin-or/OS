@@ -303,12 +303,32 @@ Windows users should be  able to double click on the file {\tt OS-release\_numbe
 If the user does not wish to compile source code, the 
 OS library, OSSolverService executable, and Tomcat server software configuration are available at \url{http://www.coin-or.org/Binaries/OS} in binary format.  In the binary OS root there is are {\tt cpp} and {\tt java} directories for the compiled C++ and Java code.
 
-In the {\tt cpp} directory you will find:
+In the {\tt cpp} directory you will find binaries for the OS library (see Section \ref{section:oslibrary}), along with the necessary COIN-OR supporting libraries,  and the {\tt OSSolverService} (see Section \ref{section:ossolverservice})  executable.   All the files are packaged together as a {\tt tgz} file for Unix distributions and {\tt zip} for Windows.  The distribution follows the following naming convention:
 
+\begin{verbatim}
+OS-release_number-operating_system-chip-compiler-tgz (zip)
+\end{verbatim}
+For example, Release 1.0 on Linux is
+\begin{verbatim}
+OS-1.0-linux-ix86-gcc3.4.tgz
+\end{verbatim}
+and on Windows
+\begin{verbatim}
+OS-1.0-win32-msvc-v7.zip
+\end{verbatim}
 
-Kipp describe the naming scheme for the C++ binaries.
+The files in the OS binary distribution are illustrated in Figure \ref{figure:osbindistribution}.
 
-In the {\tt java} directory you will find:
+\begin{figure}
+\centering
+\includegraphics[scale=0.7]{\figurepath/osbinDistirbution.png}
+\caption{The OS  binary distribution.} 
+\label{figure:osbindistribution}
+\end{figure}
+
+In the {\tt java} directory you will find the necessary code to build a remote
+
+\ref{section:tomcat}
 
 
 \subsection{Obtaining and Installing a Visual Studio Project}

@@ -489,27 +489,41 @@ public:
  *  \brief The in-memory representation of an OSiL instance..
  *
  * \remarks 
-<p> 1. Elements become objects of class type (the ComplexType is the class) </p>
-
-<p> 2. The attributes, children of the element, and text correspond to members of the class.  </p>
-(Note text does not have a name and becomes .value)
-
-<p> 3. Model groups such as choice and sequence and all correspond to arrays </p>
-
-<p><b>Exceptions:</b> </p>
-<ol>
-<li> anything specific to XML such as base64, multi, incr do not go into classes </li>
-<li> The root OSnLNode of each <nl> element is called ExpressionTree </li>
-<li> Root is not called osil it is called osinstance </li>
-</ol>
+ * <p> 1. Elements become objects of class type 
+ *  (the ComplexType is the class) </p>
+ *
+ * <p> 2. The attributes, children of the element, and text 
+ * correspond to members of the class.  
+ * (Note text does not have a name and becomes .value) </p>
+ *
+ * <p> 3. Model groups such as choice and sequence 
+ *  and all correspond to arrays </p>
+ *
+ * <ol>
+ * <li> anything specific to XML such as base64, multi, 
+ * incr do not go into classes </li>
+ * <li> The root OSnLNode of each <nl> element is called ExpressionTree </li>
+ * <li> Root is not called osil it is called osinstance </li>
+ * </ol>
+ * 
+ * The OSInstance class is composed of two objects: an InstanceHeader object
+ * and and InstanceData object
  *
  * 
  */
 class OSInstance {
 public:
+
+	/** The OSInstance class constructor */
 	OSInstance(); 
+	
+	/** The OSInstance class destructor */
 	~OSInstance();
+	
+	/** A pointer to an InstanceHeader object */
 	InstanceHeader *instanceHeader;
+	
+	/** A pointer to an InstanceData object */
 	InstanceData *instanceData;
 
 private:
@@ -594,11 +608,6 @@ private:
 	 */	
 	int *m_miNonlinearExpressionTreeModIndexes;
 	
-	
-	
-	
-	
-
 	/**
 	 * m_msVariableNames holds an array of variable names. 
 	 */
@@ -718,9 +727,7 @@ private:
 	double* m_mdConstraintUpperBounds;
 	
 	/**
-
 	 * m_mdConstraintConstants holds an array of constraint constants (default = 0.0). 
-
 	 */
 
 	double* m_mdConstraintConstants;
@@ -920,7 +927,6 @@ private:
 	std::map<int, OSExpressionTree*> m_mapExpressionTreesMod ;
 	
 	/**
-	 * 
 	 * m_bCppADFunIsCreated is true if we have created the OSInstanc
 	 * CppAD Function
 	 */	  
@@ -937,7 +943,6 @@ private:
 	 * the value of the input, e.g. an if statement -- false by default
 	 */
 	bool m_bCppADMustReTape;
-
 	
 	/**
 	 * m_bDuplicateExpressionTreeMap is true if m_mapExpressionTrees was duplicated. 
@@ -973,11 +978,8 @@ private:
 	 */
 	double **m_mmdObjGradient;
 	
-	
-	
 	//define the vectors
-	
-	
+		
 	/**
 	 *  m_vX is a vector of CppAD indpendent variables.
 	 */
@@ -1065,7 +1067,6 @@ private:
 	
 public:
 
-
 	/**
 	 * bUseExpTreeForFunEval is set to true if you wish to use the OS Expression Tree for
 	 * function evaluations instead of AD -- false by default. 
@@ -1074,7 +1075,6 @@ public:
 	
 	/**
 	 * Get instance name. 
-	 * 
 	 * @return instance name. Null or empty std::string ("") if there is no instance name. 
 	 */
 	std::string getInstanceName();
@@ -1082,7 +1082,6 @@ public:
 
 	/**
 	 * Get instance source. 
-	 * 
 	 * @return instance source. Null or empty std::string ("") if there is no instance source. 
 	 */
 	std::string getInstanceSource();
@@ -1426,9 +1425,6 @@ public:
 	 * @return a map: the key is the row index and the value is the corresponding expression tree
 	 */		
 	std::map<int, OSExpressionTree* > getAllNonlinearExpressionTreesMod();
-	
-
-	
 	
 	 /**
    	 * Get all the nonlinear expression tree indexes, i.e. indexes of rows (objetives or constraints) that contain nonlinear expressions. 
