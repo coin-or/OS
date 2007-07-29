@@ -343,8 +343,10 @@ void solve(){
 				}
 			}
 			std::cout  << std::endl;
-			std::cout << "HERE IS THE OSoL FILE" << std::endl;
-			std::cout << osoptions->osol << std::endl << std::endl;
+			if(osoptions->osol.length() > 0){
+				std::cout << "HERE IS THE OSoL FILE" << std::endl;
+				std::cout << osoptions->osol << std::endl << std::endl;
+			}
 			osrl = osagent->solve(osoptions->osil  , osoptions->osol);
 			if(osoptions->osrlFile != ""){
 				fileUtil->writeFileFromString(osoptions->osrlFile, osrl);

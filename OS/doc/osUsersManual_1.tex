@@ -317,7 +317,7 @@ and on Windows
 OS-1.0-win32-msvc-v7.zip
 \end{verbatim}
 
-The files in the OS binary distribution are illustrated in Figure \ref{figure:osbindistribution}.
+The files in the OS binary distribution are illustrated in Figure \ref{figure:osbindistribution}.   In the {\tt bin} directory is the executable file {\tt OSSolverService.} In the {\tt include} directory are the header files that are required if the user wishes to write code to link to OS library or any other supporting COIN-OR library in the {\tt lib} directory.   The manual directory contains this document, {\tt osUsersManual\_1.pdf}.
 
 \begin{figure}
 \centering
@@ -326,9 +326,11 @@ The files in the OS binary distribution are illustrated in Figure \ref{figure:os
 \label{figure:osbindistribution}
 \end{figure}
 
-In the {\tt java} directory you will find the necessary code to build a remote
-
-\ref{section:tomcat}
+In the {\tt java} directory  are the binary files required to build a Web service that will take SOAP envelopes with model instances in OSiL format, call the {\tt OSSolverService}, and return the optimization result.  This distribution is named
+\begin{verbatim}
+os-distribution-release_number.zip
+\end{verbatim
+and the details and use of this distribution is described in Section \ref{section:tomcat}.
 
 
 \subsection{Obtaining and Installing a Visual Studio Project}
@@ -513,6 +515,13 @@ The Java source code for the setting up a solver service with Apache Tomcat is c
 \begin{verbatim}
 svn co https://projects.coin-or.org/svn/branches/OSjava  OSJava
 \end{verbatim}
+For users just wishing to setup the Tomcat solver service, all of the necessary binaries are available at
+\begin{verbatim}
+\url{http://www.coin-or.org/Binaries/OS/os-distribution-release_number.zip}
+\end{verbatim}
+For more detail see Section \ref{section:tomcat}.
+
+
 
 
 \subsection{Platforms}
@@ -2431,7 +2440,53 @@ Below is a summary of the inputs and outputs of the six service methods. See als
 
 \section{Setting up a Solver Service with Tomcat}\label{section:tomcat}
 
-Jun is to write this
+Download the java binary distribution at
+\begin{verbatim}
+os-distribution-release_number.zip
+\end{verbatim}
+
+After unpacking {\tt os-distribution-release\_number.zip} there is a directory {\tt os-server-1.0} and a single file {\tt os.war}.  For users that have not installed the Tomcat server,   {\tt os-server-1.0} contains {\tt all} of the necessary files for a OS Solver Service.  If you do not have a Tomcat server running do the following to setup a  Tomcat server  with the OS Solver Service (these instructions are operating system independent):
+
+\begin{itemize}
+\item[1.]  Put the folder  {\tt os-server-1.0}   in the desired location for the OS Solver Service on the server machine. 
+
+\item[2.] Set the environment variable  {\tt CATALINA\_HOME} to point to the directory  {\tt os-server-1.0}.
+
+\item[3.] Connect to the Tomcat {\tt bin} directory in the {\tt os-server-1.0} root and execute {\tt startup.sh} in a Unix environment or {\tt startup.bat} in a Windows environment. 
+
+\item[4.] Open a browser on the server and enter the URL
+\begin{verbatim}
+os/OSSolverService.jws
+\end{verbatim}
+You should see a message {\tt Click to see the WSDL}.  Click on the link and you should see an XML description of the various methods available from the {\tt OSSolverService}.
+
+\item[5.]  On a client machine, create  the file {\tt testremote.config} with the following lines of text
+\begin{verbatim}
+-serviceLocation http://***.***.***.***:8080/os/OSSolverService.jws
+-osil /parincLinear.osil
+\end{verbatim}
+where ***.***.***.*** is the IP address of the solver. Then, assuming the files {\tt testremote.config} and {\tt parincLinear.osil} are in the same directory on the client machine as the {\tt OSSolverService} execute:
+\begin{verbatim}
+OSSolverService -config testremote.config
+\end{verbatim}
+You should get back an OSrL message saying the problem was optimized. 
+
+\end{itemize}
+
+
+If you already have a Tomcat server with Axis installed do the following:
+\begin{itemize}
+\item[1.] copy the file {\tt os.war} into the Tomcat {\tt WEB-INF} directory in the {\tt ROOT} folder under {\tt webapps}.
+
+\item[2.]  Follow Steps 2-5 outlined above.
+\end{itemize} 
+
+In the directory,
+\begin{verbatim}
+os-server-1.0/webapps/os/WEB-INF/code/OSConfig
+\end{verbatim}
+there is a configuration file {\tt OSParameter.xml} that can be modified to fit individual user needs. 
+
 
 
 

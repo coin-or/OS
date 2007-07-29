@@ -384,7 +384,7 @@ class QuadraticCoefficients {
 /*! \class Nl
  * \brief The in-memory representation of the 
  * <b><nl></b> element.
- * 
+ */ 
 class Nl{  
 public:	
 	/** idx holds the row index of the nonlinear expression */
