@@ -4,18 +4,20 @@
 \contentsline {subsection}{\numberline {3.1}Obtaining the Source Code Subversion Repository (SVN)}{6}
 \contentsline {subsection}{\numberline {3.2}Obtaining the Source Code From a Tarball or Zip File}{8}
 \contentsline {subsection}{\numberline {3.3}Obtaining the Binaries}{8}
-\contentsline {subsubsection}{\numberline {3.3.1}AMPL}{10}
-\contentsline {subsubsection}{\numberline {3.3.2}Cplex}{11}
-\contentsline {subsubsection}{\numberline {3.3.3}GLPK}{11}
-\contentsline {subsubsection}{\numberline {3.3.4}Ipopt}{11}
-\contentsline {subsubsection}{\numberline {3.3.5}Knitro}{11}
-\contentsline {subsubsection}{\numberline {3.3.6}LINDO}{12}
-\contentsline {subsubsection}{\numberline {3.3.7}MATLAB}{12}
-\contentsline {subsubsection}{\numberline {3.3.8}Library Paths}{12}
-\contentsline {subsection}{\numberline {3.4}Bug Reporting}{12}
-\contentsline {subsection}{\numberline {3.5}Documentation}{12}
-\contentsline {subsection}{\numberline {3.6}Java Server Software}{13}
-\contentsline {subsection}{\numberline {3.7}Platforms}{13}
+\contentsline {subsection}{\numberline {3.4}Obtaining and Installing a Visual Studio Project}{9}
+\contentsline {subsection}{\numberline {3.5}Third Party Software}{9}
+\contentsline {subsubsection}{\numberline {3.5.1}AMPL}{10}
+\contentsline {subsubsection}{\numberline {3.5.2}Cplex}{11}
+\contentsline {subsubsection}{\numberline {3.5.3}GLPK}{11}
+\contentsline {subsubsection}{\numberline {3.5.4}Ipopt}{11}
+\contentsline {subsubsection}{\numberline {3.5.5}Knitro}{11}
+\contentsline {subsubsection}{\numberline {3.5.6}LINDO}{12}
+\contentsline {subsubsection}{\numberline {3.5.7}MATLAB}{12}
+\contentsline {subsubsection}{\numberline {3.5.8}Library Paths}{12}
+\contentsline {subsection}{\numberline {3.6}Bug Reporting}{12}
+\contentsline {subsection}{\numberline {3.7}Documentation}{12}
+\contentsline {subsection}{\numberline {3.8}Java Server Software}{13}
+\contentsline {subsection}{\numberline {3.9}Platforms}{13}
 \contentsline {section}{\numberline {4}The OS Project Components}{13}
 \contentsline {section}{\numberline {5}OS Protocols}{17}
 \contentsline {section}{\numberline {6}The OS Library Components}{22}
