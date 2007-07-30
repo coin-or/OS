@@ -1,4 +1,4 @@
-/** @file OSExpressionTree.cpp
+/** @file OSnLNode.h
  * \brief This file defines the OSnLNode class along with its derived classes..
  *
  * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
@@ -14,10 +14,6 @@
  * 
  */
 
-
- 
-
- 
 #ifndef OSNLNODE_H
 #define OSNLNODE_H
 #include<iostream>
@@ -25,11 +21,10 @@
 #include <map> 
 #include<cppad/cppad.hpp>
 
-
-
-
-
-
+/** \enum OP_CODES we give a name to each of the values of
+ * inodeInt (number identifying the type of node) -- this ies
+ * easier to work with
+ */
  enum OP_CODES{
 	OS_PLUS = 1001,
 	OS_SUM = 1002,
@@ -66,12 +61,15 @@ using CppAD::vector;
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  * 
+ * \remarks
+ * in this file we define an OSnL node for a subset of the nodes
+ * defined in the OSnL schema
+ * 
  */
 class OSnLNode{  
 
 public:	
 
-	AD<double> rootNode;
 	
 	/** nodeName holds the OSnLNode name */
 	std::string snodeName;
@@ -82,7 +80,9 @@ public:
 	/**  ssymbolInt is the unique integer assigned to the OSnLNode*/	
 	int inodeInt;
 
-	/**  ssymbolInt is the unique integer assigned to the OSnLNode*/	
+	/** inodeType is the number of children the node has, it is set
+	 * to -1 if the number is not known a prior, e.g. a sum node
+	 */	
 	int inodeType;
 	
 	/**
