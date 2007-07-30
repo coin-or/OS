@@ -370,7 +370,7 @@ std::string OSnLNode::getNonlinearExpressionInXML(){
 		outStr << ">" ;
 	}
 	return outStr.str();
-}//getPrefix
+}//getNonlinearExpressionInXML()
 //
 //
 

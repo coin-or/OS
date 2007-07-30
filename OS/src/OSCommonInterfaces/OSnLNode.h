@@ -22,7 +22,7 @@
 #include<cppad/cppad.hpp>
 
 /** \enum OP_CODES we give a name to each of the values of
- * inodeInt (number identifying the type of node) -- this ies
+ * inodeInt (number identifying the type of node) -- this is
  * easier to work with
  */
  enum OP_CODES{
@@ -100,99 +100,114 @@ public:
 	 * m_CppADTape stores the espression tree for the this OSnLNode as an AD<double>.
 	 */
 	AD<double> m_CppADTape;
-	
-
-	
 
 	/**
 	 *
-	 * @return the child nodes of this nlNode.
-	 */
-	//OSnLNode **getChildNodes();
-	
-	
-	
-	/**
-	 *
-	 * @return the the current node and all children in a postfix vector of operator symbols.
-	 * some exceptions:
-	 * a number node should have the format:
-	 * 5001:value:type:id, for example
-	 * 5001:32.5:real: or 5001:32.5::
-	 * we must always have the value
-	 * a variable node should have the format
-	 * 6001[inumberOfChildren]:idx:coef
-	 * idx is the variable index
-	 * coef is the coefficient on the variable, it is 1 by default
+	 * @return the value of inodeInt
 	 */
 	virtual std::string getTokenNumber();
 	
+	/**
+	 *
+	 * @return the value of snodeName
+	 */	
 	virtual std::string getTokenName();
 	
+	/**
+	 * <p>
+	 * the following method writes an OSnLNode in
+	 * OSiL format, it is used by OSiLWriter to take
+	 * an OSInstance and write the corresponding OSiL
+	 * </p>
+	 * 
+	 * @return the OSnLNode and its children as an OSiL string.
+	 */
 	virtual  std::string getNonlinearExpressionInXML();
-	
+
+	/**
+	 * <p>
+	 * Take a vector of OSnLNodes in postfix format and create
+	 * an create an OSExpressionTree root node
+	 * </p>
+	 * @param nlNodeVec holds a vector of pointers to OSnLNodes
+	 * in postfix format
+	 * @return a pointer to an OSnLNode which is the root of
+	 * and OSExpressionTree.
+	 */	
 	OSnLNode* createExpressionTreeFromPostfix(std::vector<OSnLNode*> nlNodeVec);
-	
+
+
+	/**
+	 * <p>
+	 * Take a vector of OSnLNodes in prefix format and create
+	 * an create an OSExpressionTree root node
+	 * </p>
+	 * @param nlNodeVec holds a vector of pointers to OSnLNodes
+	 * in prefix format
+	 * @return a pointer to an OSnLNode which is the root of
+	 * and OSExpressionTree.
+	 */		
 	OSnLNode* createExpressionTreeFromPrefix(std::vector<OSnLNode*> nlNodeVec);
 	
 	/**
+	 * <p>
 	 * Get a vector of pointers to OSnLNodes that correspond to
 	 * the OSExpressionTree in prefix format
-	 * 
 	 * </p>
 	 * 
 	 * @return the expression tree as a vector of OSnLNodes in prefix.
 	 */
 	std::vector<OSnLNode*> getPrefixFromExpressionTree();
 	
-
+	/**
+	 * <p>
+	 * Called by getPrefixFromExpressionTree().  This method calls
+	 * itself recursively and
+	 * generates a vector of pointers to OSnLNodes in prefix
+	 * </p>
+	 * @param a pointer prefixVector to a vector of pointers of OSnLNodes
+	 * @return a vector of pointers to OSnLNodes in prefix.
+	 */
 	std::vector<OSnLNode*> preOrderOSnLNodeTraversal( std::vector<OSnLNode*> *prefixVector);
 	
-		/**
+	/**
+	 * <p>
 	 * Get a vector of pointers to OSnLNodes that correspond to
 	 * the OSExpressionTree in postfix format
-	 * 
 	 * </p>
 	 * 
 	 * @return the expression tree as a vector of OSnLNodes in postfix.
 	 */
 	std::vector<OSnLNode*> getPostfixFromExpressionTree();
 
-	
+	/**
+	 * <p>
+	 * Called by getPostfixFromExpressionTree().  This method calls
+	 * itself recursively and
+	 * generates a vector of pointers to OSnLNodes in postfix
+	 * </p>
+	 * @param a pointer postfixVector to a vector of pointers of OSnLNodes
+	 * @return a vector of pointers to OSnLNodes in postfix.
+	 */	
 	std::vector<OSnLNode*> postOrderOSnLNodeTraversal( std::vector<OSnLNode*> *postfixVector);
-	
+
+	/**
+	 * <p>
+	 * varIdx is a map where the key is the index of an OSnLNodeVariable and
+	 * (*varIdx)[ idx] is the kth variable in the map, e.g.
+	 * (*varIdx)[ 5] = 2 means that variable indexed by 5 is the second variable
+	 * in the OSnLNode and all of its children
+	 * </p>
+	 * @param a pointer to a map of the variables in the OSnLNode and its children
+	 */		
 	virtual void getVariableIndexMap(std::map<int, int> *varIdx);
 	
+
 	/**
-	 *
-	 * @return the the current node as a string token.
-	 * the token is the 
-	 * the integer (opCode) assigned -- inodeType
-	 * some exceptions:
-	 * a sum node should have
-	 * sum[numberOfChildren]
-	 * a product node should have
-	 * product[numberOfChildren]
-	 * a number node should have the format:
-	 * 5001:value:type:id, for example
-	 * 5001:32.5:real: or 5001:32.5::
-	 * we must always have the value
-	 * a variable node should have the format
-	 * 6001[inumberOfChildren]:idx:coef
-	 * idx is the variable index
-	 * coef is the coefficient on the variable, it is 1 by default
-	 */	
-	std::string getToken();
-	
-	//static void setnlNodeIdxMap();
-	
-	//static OSnLNode* getOSnLNodeFromToken(std::string sOSnLNodeToken);
-	
-	/**
+	 * <p>
 	 * Calculate the function value given the current variable values.
 	 * This is an abstract method which is required to be implemented by the concrete
 	 * operator nodes that derive or extend from this OSnLNode class.
-	 *
 	 * </p>
 	 *
 	 * @param x holds the values of the variables in a double array.
@@ -202,10 +217,10 @@ public:
 	
 		
 	/**
-	 * Create the expression tree to be evaluated by CppAD.
+	 * <p>
+	 * Create the AD tape to be evaluated by CppAD.
 	 * This is an abstract method which is required to be implemented by the concrete
 	 * operator nodes that derive or extend from this OSnLNode class.
-	 *
 	 * </p>
 	 *
 	 * @return the expression tree.
@@ -213,10 +228,10 @@ public:
 	virtual AD<double> constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD) = 0;
 
 	/**
+	 * <p>
 	 * Create or clone a node of this type.
 	 * This is an abstract method which is required to be implemented by the concrete
 	 * operator nodes that derive or extend from this OSnLNode class.
-	 *
 	 * </p>
 	 *
 	 * @param x holds the values of the variables in a double array.
@@ -238,6 +253,17 @@ public:
 	
 };//end OSnLNode
 
+/*! \class OSnLNodePlus
+ *  \brief The OSnLNodePlus Class.
+ *
+ * @author  Robert Fourer, Jun Ma, Kipp Martin, 
+ * @version 1.0, 10/05/2005
+ * @since   OS1.0
+ * 
+ * \remarks
+ * The in-memory representation of the OSnL element <plus>
+ * 
+ */
 class OSnLNodePlus : public OSnLNode{  
 public:
 	/**
@@ -271,7 +297,17 @@ public:
 
 };//end OSnLNodePlus
 
-
+/*! \class OSnLNodeSum
+ *  \brief The OSnLNodeSum Class.
+ *
+ * @author  Robert Fourer, Jun Ma, Kipp Martin, 
+ * @version 1.0, 10/05/2005
+ * @since   OS1.0
+ * 
+ * \remarks
+ * The in-memory representation of the OSnL element <sum>
+ * 
+ */
 class OSnLNodeSum : public OSnLNode{  
 public:
 	/**
@@ -307,6 +343,17 @@ public:
 
 };//end OSnLNodeSum
 
+/*! \class OSnLNodeMax
+ *  \brief The OSnLNodeMax Class.
+ *
+ * @author  Robert Fourer, Jun Ma, Kipp Martin, 
+ * @version 1.0, 10/05/2005
+ * @since   OS1.0
+ * 
+ * \remarks
+ * The in-memory representation of the OSnL element <max>
+ * 
+ */
 class OSnLNodeMax : public OSnLNode{  
 public:
 	/**
@@ -341,7 +388,17 @@ public:
 
 };//end OSnLNodeMax
 
-
+/*! \class OSnLNodeMin
+ *  \brief The OSnLNodeMin Class.
+ *
+ * @author  Robert Fourer, Jun Ma, Kipp Martin, 
+ * @version 1.0, 10/05/2005
+ * @since   OS1.0
+ * 
+ * \remarks
+ * The in-memory representation of the OSnL element <min>
+ * 
+ */
 class OSnLNodeMin : public OSnLNode{  
 public:
 	/**
@@ -366,7 +423,7 @@ public:
 	 */	
 	virtual OSnLNode *cloneOSnLNode() ;
 	
-	/*! \fn double OSnLNodeMax::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD) 
+	/*! \fn double OSnLNodeMin::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD) 
 	 *  \brief The implementation of the virtual functions. 
 	 *  \return a AD<double>.
 	 */	
@@ -376,6 +433,18 @@ public:
 
 };//end OSnLNodeMin
 
+
+/*! \class OSnLNodeMinus
+ *  \brief The OSnLNodeMinus Class.
+ *
+ * @author  Robert Fourer, Jun Ma, Kipp Martin, 
+ * @version 1.0, 10/05/2005
+ * @since   OS1.0
+ * 
+ * \remarks
+ * The in-memory representation of the OSnL element <minus>
+ * 
+ */
 class OSnLNodeMinus : public OSnLNode{  
 public:
 	/**
@@ -410,7 +479,17 @@ public:
 
 };//end OSnLNodeMinus
 
-
+/*! \class OSnLNodeNegate
+ *  \brief The OSnLNodeNegate Class.
+ *
+ * @author  Robert Fourer, Jun Ma, Kipp Martin, 
+ * @version 1.0, 10/05/2005
+ * @since   OS1.0
+ * 
+ * \remarks
+ * The in-memory representation of the OSnL element <negate>
+ * 
+ */
 class OSnLNodeNegate : public OSnLNode{  
 public:
 	/**
@@ -441,13 +520,22 @@ public:
 	 *  \return a AD<double>.
 	 */	
 	virtual AD<double> constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD);
-	
 
 
 };//end OSnLNodeNegate
 
 
-
+/*! \class OSnLNodeTimes
+ *  \brief The OSnLNodeTimes Class.
+ *
+ * @author  Robert Fourer, Jun Ma, Kipp Martin, 
+ * @version 1.0, 10/05/2005
+ * @since   OS1.0
+ * 
+ * \remarks
+ * The in-memory representation of the OSnL element <times>
+ * 
+ */
 class OSnLNodeTimes : public OSnLNode{  
 public:
 	/**
@@ -483,7 +571,17 @@ public:
 };//end OSnLNodeTimes
 
 
-
+/*! \class OSnLNodeDivide
+ *  \brief The OSnLNodeDivide Class.
+ *
+ * @author  Robert Fourer, Jun Ma, Kipp Martin, 
+ * @version 1.0, 10/05/2005
+ * @since   OS1.0
+ * 
+ * \remarks
+ * The in-memory representation of the OSnL element <divide>
+ * 
+ */
 class OSnLNodeDivide : public OSnLNode{  
 public:
 	/**
@@ -520,7 +618,17 @@ public:
 
 };//end OSnLNodeDivide
 
-
+/*! \class OSnLNodePower
+ *  \brief The OSnLNodePower Class.
+ *
+ * @author  Robert Fourer, Jun Ma, Kipp Martin, 
+ * @version 1.0, 10/05/2005
+ * @since   OS1.0
+ * 
+ * \remarks
+ * The in-memory representation of the OSnL element <power>
+ * 
+ */
 class OSnLNodePower : public OSnLNode{  
 public:
 	/**
@@ -555,7 +663,17 @@ public:
 
 };//end OSnLNodePower
 
-
+/*! \class OSnLNodeProduct
+ *  \brief The OSnLNodeProduct Class.
+ *
+ * @author  Robert Fourer, Jun Ma, Kipp Martin, 
+ * @version 1.0, 10/05/2005
+ * @since   OS1.0
+ * 
+ * \remarks
+ * The in-memory representation of the OSnL element <product>
+ * 
+ */
 class OSnLNodeProduct : public OSnLNode{  
 public:
 	/**
@@ -591,6 +709,17 @@ public:
 };//end OSnLNodeProduct
 
 
+/*! \class OSnLNodeLn
+ *  \brief The OSnLNodeLn Class.
+ *
+ * @author  Robert Fourer, Jun Ma, Kipp Martin, 
+ * @version 1.0, 10/05/2005
+ * @since   OS1.0
+ * 
+ * \remarks
+ * The in-memory representation of the OSnL element <ln>
+ * 
+ */
 class OSnLNodeLn : public OSnLNode{  
 public:
 	/**
@@ -626,7 +755,17 @@ public:
 
 };//end OSnLNodeLn
 
-
+/*! \class OSnLNodeSqrt
+ *  \brief The OSnLNodeSqrt Class.
+ *
+ * @author  Robert Fourer, Jun Ma, Kipp Martin, 
+ * @version 1.0, 10/05/2005
+ * @since   OS1.0
+ * 
+ * \remarks
+ * The in-memory representation of the OSnL element <sqrt>
+ * 
+ */
 class OSnLNodeSqrt : public OSnLNode{  
 public:
 	/**
@@ -661,7 +800,17 @@ public:
 
 };//end OSnLNodeSqrt
 
-
+/*! \class OSnLNodeSquare
+ *  \brief The OSnLNodeSquare Class.
+ *
+ * @author  Robert Fourer, Jun Ma, Kipp Martin, 
+ * @version 1.0, 10/05/2005
+ * @since   OS1.0
+ * 
+ * \remarks
+ * The in-memory representation of the OSnL element <square>
+ * 
+ */
 class OSnLNodeSquare : public OSnLNode{  
 public:
 	/**
@@ -694,7 +843,17 @@ public:
 
 };//end OSnLNodeSquare
 
-
+/*! \class OSnLNodeCos
+ *  \brief The OSnLNodeCos Class.
+ *
+ * @author  Robert Fourer, Jun Ma, Kipp Martin, 
+ * @version 1.0, 10/05/2005
+ * @since   OS1.0
+ * 
+ * \remarks
+ * The in-memory representation of the OSnL element <cos>
+ * 
+ */
 class OSnLNodeCos : public OSnLNode{  
 public:
 	/**
@@ -727,7 +886,17 @@ public:
 
 };//end OSnLNodeCos
 
-
+/*! \class OSnLNodeSin
+ *  \brief The OSnLNodeSin Class.
+ *
+ * @author  Robert Fourer, Jun Ma, Kipp Martin, 
+ * @version 1.0, 10/05/2005
+ * @since   OS1.0
+ * 
+ * \remarks
+ * The in-memory representation of the OSnL element <sin>
+ * 
+ */
 class OSnLNodeSin : public OSnLNode{  
 public:
 	/**
@@ -760,7 +929,17 @@ public:
 
 };//end OSnLNodeSin
 
-
+/*! \class OSnLNodeExp
+ *  \brief The OSnLNodeExp Class.
+ *
+ * @author  Robert Fourer, Jun Ma, Kipp Martin, 
+ * @version 1.0, 10/05/2005
+ * @since   OS1.0
+ * 
+ * \remarks
+ * The in-memory representation of the OSnL element <exp>
+ * 
+ */
 class OSnLNodeExp : public OSnLNode{  
 public:
 	/**
@@ -794,6 +973,17 @@ public:
 
 };//end OSnLNodeExp
 
+/*! \class OSnLNodeAbs
+ *  \brief The OSnLNodeAbs Class.
+ *
+ * @author  Robert Fourer, Jun Ma, Kipp Martin, 
+ * @version 1.0, 10/05/2005
+ * @since   OS1.0
+ * 
+ * \remarks
+ * The in-memory representation of the OSnL element <abs>
+ * 
+ */
 class OSnLNodeAbs : public OSnLNode{  
 public:
 	/**
@@ -828,7 +1018,17 @@ public:
 
 };//end OSnLNodeAbs
 
-
+/*! \class OSnLNodeIf
+ *  \brief The OSnLNodeIf Class.
+ *
+ * @author  Robert Fourer, Jun Ma, Kipp Martin, 
+ * @version 1.0, 10/05/2005
+ * @since   OS1.0
+ * 
+ * \remarks
+ * The in-memory representation of the OSnL element <if>
+ * 
+ */
 class OSnLNodeIf : public OSnLNode{  
 public:
 	/**
@@ -863,6 +1063,17 @@ public:
 
 };//end OSnLNodeIf
 
+/*! \class OSnLNodeNumber
+ *  \brief The OSnLNodeNumber Class.
+ *
+ * @author  Robert Fourer, Jun Ma, Kipp Martin, 
+ * @version 1.0, 10/05/2005
+ * @since   OS1.0
+ * 
+ * \remarks
+ * The in-memory representation of the OSnL element <number>
+ * 
+ */
 class OSnLNodeNumber : public OSnLNode{  
 public:
 
@@ -925,7 +1136,17 @@ public:
 };//end OSnLNodeNumber
 
 
-
+/*! \class OSnLNodeE
+ *  \brief The OSnLNodeE Class.
+ *
+ * @author  Robert Fourer, Jun Ma, Kipp Martin, 
+ * @version 1.0, 10/05/2005
+ * @since   OS1.0
+ * 
+ * \remarks
+ * The in-memory representation of the OSnL element <E>
+ * 
+ */
 class OSnLNodeE : public OSnLNode{  
 public:
 
@@ -987,7 +1208,17 @@ public:
 
 };//end OSnLNodeE
 
-
+/*! \class OSnLNodePI
+ *  \brief The OSnLNodePI Class.
+ *
+ * @author  Robert Fourer, Jun Ma, Kipp Martin, 
+ * @version 1.0, 10/05/2005
+ * @since   OS1.0
+ * 
+ * \remarks
+ * The in-memory representation of the OSnL element <pi>
+ * 
+ */
 class OSnLNodePI : public OSnLNode{  
 public:
 
@@ -1049,6 +1280,18 @@ public:
 
 };//end OSnLNodePI
 
+
+/*! \class OSnLNodeVariable
+ *  \brief The OSnLNodeVariable Class.
+ *
+ * @author  Robert Fourer, Jun Ma, Kipp Martin, 
+ * @version 1.0, 10/05/2005
+ * @since   OS1.0
+ * 
+ * \remarks
+ * The in-memory representation of the OSnL element <variable>
+ * 
+ */
 class OSnLNodeVariable : public OSnLNode{  
 public:
 
@@ -1108,7 +1351,17 @@ public:
 
 };//end OSnLNodeVariable
 
-
+/*! \class OSnLNodeAllDiff
+ *  \brief The OSnLNodeAllDiff Class.
+ *
+ * @author  Robert Fourer, Jun Ma, Kipp Martin, 
+ * @version 1.0, 10/05/2005
+ * @since   OS1.0
+ * 
+ * \remarks
+ * The in-memory representation of the OSnL element <alldiff>
+ * 
+ */
 class OSnLNodeAllDiff : public OSnLNode{  
 public:
 	/**
