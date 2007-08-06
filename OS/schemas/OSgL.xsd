@@ -770,14 +770,15 @@
 		<xs:attribute name="cdf" type="xs:boolean" use="optional" default="false"/>
 	</xs:complexType>
 	<xs:element name="dirichlet" type="Dirichlet"/>
-	<xs:complexType name="GeneralDistribution">
+	<xs:complexType name="GeneralMultivariateDistribution">
 		<xs:sequence>
-			<xs:element name="marginals">
+			<xs:element name="marginals" minOccurs="0">
 				<xs:complexType>
 					<xs:complexContent>
-						<xs:extension base="GeneralDistributionRandomVariables">
-							<xs:attribute name="numberOfRandomVariables" type="xs:nonNegativeInteger" use="optional" default="1"/>
-						</xs:extension>
+						<xs:extension base="GeneralDistributionRandomVariables"/>
+						<!--	This does not seem needed					
+							<xs:attribute name="numberOfRandomVariables" type="xs:nonNegativeInteger" use="optional" default="1"/>   
+-->
 					</xs:complexContent>
 				</xs:complexType>
 			</xs:element>
@@ -790,7 +791,7 @@
 		<xs:sequence>
 			<xs:element name="rv" type="GeneralDistributionRandomVariable" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfMarginals" type="xs:nonNegativeInteger" use="optional" default="1"/>
+		<xs:attribute name="numberOfMarginals" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="GeneralDistributionRandomVariableMoment">
 		<xs:sequence>
@@ -1114,7 +1115,8 @@
 		</xs:sequence>
 		<xs:attribute name="distrName" type="xs:string" use="optional" default="unknown"/>
 	</xs:complexType>
-	<xs:element name="generalDistribution" type="GeneralDistribution"/>
+	<xs:element name="generalUnivariateDistribution" type="GeneralDistributionRandomVariable"/>
+        <xs:element name="generalMultivariateDistribution" type="GeneralMultivariateDistribution"/>
 	<xs:complexType name="RandomVariableUserFunction">
 		<xs:attribute name="name" type="xs:IDREF" use="required"/>
 	</xs:complexType>

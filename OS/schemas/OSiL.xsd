@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- edited with XMLSpy v2007 rel. 3 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" elementFormDefault="qualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified">
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:include schemaLocation="OSnL.xsd"/>
 	<xs:include schemaLocation="OSsL.xsd"/>
@@ -31,9 +31,9 @@
 			<xs:element name="nonlinearExpressions" type="NonlinearExpressions" minOccurs="0"/>
 			<xs:element name="cones" type="Cones" minOccurs="0"/>
 			<xs:element name="parameters" type="Parameters" minOccurs="0"/>
-			<xs:element name="modifications" type="Modifications" minOccurs="0"/>
 			<xs:element name="disjunctiveInformation" type="DisjunctiveInformation" minOccurs="0"/>
 			<xs:element name="parameterSets" type="ParameterSets" minOccurs="0"/>
+			<xs:element name="modifications" type="Modifications" minOccurs="0"/>
 			<xs:element name="stages" type="Stages" minOccurs="0"/>
 			<xs:element name="stochasticInformation" type="StochasticInformation" minOccurs="0"/>
 			<xs:element name="realTimeData" type="RealTimeData" minOccurs="0"/>
@@ -714,10 +714,10 @@
 			<xs:element name="variables" type="StageVariables" minOccurs="0"/>
 			<xs:element name="constraints" type="StageConstraints" minOccurs="0"/>
 			<xs:element name="objectives" type="StageObjectives" minOccurs="0"/>
-			<xs:element name="incompleteInformationResolution" type="IncompleteInformationResolution" minOccurs="0"/>
+			<xs:element name="ambiguityResolution" type="AmbiguityResolution" minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
-		<xs:attribute name="incompleteInformationResolution" use="optional" default="max">
+		<xs:attribute name="ambiguityResolution" use="optional" default="max">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="all"/>
@@ -770,13 +770,13 @@
 	<xs:complexType name="StageObj">
 		<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="IncompleteInformationResolution">
+	<xs:complexType name="AmbiguityResolution">
 		<xs:sequence>
-			<xs:element name="row" type="IncompleteInformationResolutionRow" maxOccurs="unbounded"/>
+			<xs:element name="row" type="AmbiguityResolutionRow" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="IncompleteInformationResolutionRow">
+	<xs:complexType name="AmbiguityResolutionRow">
 		<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
 		<xs:attribute name="modifier" use="optional" default="max">
 			<xs:simpleType>
@@ -926,7 +926,7 @@
 	<xs:complexType name="StochasticUnivariateDistribution">
 		<xs:choice>
 			<xs:group ref="DistributionGroup"/>
-			<xs:element ref="generalDistribution"/>
+			<xs:element ref="generalUnivariateDistribution"/>
 			<xs:element name="userF" type="StochasticUnivariateDistributionUserFunction"/>
 		</xs:choice>
 	</xs:complexType>
@@ -946,7 +946,7 @@
 	<xs:complexType name="StochasticMultivariateDistribution">
 		<xs:choice>
 			<xs:group ref="MultiDimensionalDistributionGroup"/>
-			<xs:element ref="generalDistribution"/>
+			<xs:element ref="generalMultivariateDistribution"/>
 			<xs:element name="userF" type="StochasticMultivariateDistributionUserFunction"/>
 		</xs:choice>
 		<xs:attribute name="numberOfDimensions" type="xs:nonNegativeInteger" use="required"/>
@@ -1151,7 +1151,7 @@
 	<xs:complexType name="StochasticPenaltiesRow">
 		<xs:choice>
 			<xs:element name="simpleRecourse" type="StochasticSimpleRecourse" minOccurs="0"/>
-			<xs:element name="robustOptimization" type="StochasticRobustOptimization" minOccurs="0"/>
+			<xs:element name="quadraticPenalty" type="StochasticRobustOptimization" minOccurs="0"/>
 			<xs:element name="piecewiseLinearQuadratic" type="StochasticPiecewiseLinearQuadraticPenalty" minOccurs="0"/>
 			<xs:element name="userDefinedPenalty" type="StochasticUserDefinedPenalty" minOccurs="0"/>
 		</xs:choice>
