@@ -104,6 +104,11 @@ if COIN_HAS_VOL
  OSSolverService_LDADD += $(VOLOBJDIR)/src/libVol.la 
 endif
 
+
+if COIN_HAS_GLPK
+ OSSolverService_LDADD += $(GLPKLIB)
+endif
+
  OSSolverService_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
 	
  OSSolverService_LDADD += $(ADDLIBS) 
@@ -195,7 +200,6 @@ if COIN_HAS_GLPK
 	-I`$(CYGPATH_W) $(GLPKINCDIR)` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
   OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
-  OSSolverService_LDADD += $(GLPKLIB)
 endif
 
 
