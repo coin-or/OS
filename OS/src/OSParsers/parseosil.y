@@ -26,9 +26,11 @@
 #include "OSParameters.h"
 #include "OSiLParserData.h"
 #include "Base64.h"
+#include <cstring>
 using std::cout;
 using std::endl;
 using std::ostringstream;
+
 
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
 YY_BUFFER_STATE osil_scan_string (const char *yy_str , void* yyscanner  );

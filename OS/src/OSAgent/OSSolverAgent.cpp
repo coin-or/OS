@@ -17,6 +17,8 @@
 #include "OSSolverAgent.h"
 #include "WSUtil.h"
 
+#include <cstdlib>
+
 //#define DEBUG
 
 using std::string;
