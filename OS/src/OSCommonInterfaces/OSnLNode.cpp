@@ -1410,9 +1410,9 @@ OSnLNodeE::OSnLNodeE()
 	m_mChildren = NULL;
 	snodeName = "E";
 	inodeType = 0;  
-	value = 0.0;
-	type = "real";
-	id = "";
+	//value = 0.0;
+	//type = "real";
+	//id = "";
 
 }//end OSnLNodeE
 
@@ -1427,15 +1427,15 @@ OSnLNodeE::~OSnLNodeE(){
 std::string OSnLNodeE::getTokenNumber(){
 	ostringstream outStr;
 	outStr << inodeInt;
-	outStr << ":" ;
-	outStr << value ;
+	//outStr << ":" ;
+	//outStr << value ;
 	//if(type.length() > 0){
-		outStr << ":" ;
-		outStr << type ;
+	//	outStr << ":" ;
+	//	outStr << type ;
 	//}
 	//if(id.length() > 0){
-		outStr << ":" ;
-		outStr << id;
+	//	outStr << ":" ;
+	//	outStr << id;
 	//}
 	return outStr.str();
 }//getTokenNumber
@@ -1444,15 +1444,15 @@ std::string OSnLNodeE::getTokenNumber(){
 std::string OSnLNodeE::getTokenName(){
 	ostringstream outStr;
 	outStr << snodeName;
-	outStr << ":" ;
-	outStr << value ;
+	//outStr << ":" ;
+	//outStr << value ;
 	//if(type.length() > 0){
-		outStr << ":" ;
-		outStr << type ;
+	//	outStr << ":" ;
+	//	outStr << type ;
 	//}
 	//if(id.length() > 0){
-		outStr << ":" ;
-		outStr << id;
+	//	outStr << ":" ;
+	//	outStr << id;
 	//}
 	return outStr.str();
 }//getTokenName
@@ -1462,17 +1462,17 @@ std::string OSnLNodeE::getNonlinearExpressionInXML(){
 	ostringstream outStr;
 	outStr << "<" ;
 	outStr << snodeName;
-		outStr << "  value=\"";
-		outStr << value ;
-		outStr << "\"";
-		outStr << " type=\"";
-		outStr << type ;
-		outStr << "\"";
-		if(id.length() > 0){
-			outStr << "  id=\"";
-			outStr << id ;
-			outStr << "\"";
-		}
+//		outStr << "  value=\"";
+//		outStr << value ;
+//		outStr << "\"";
+//		outStr << " type=\"";
+//		outStr << type ;
+//		outStr << "\"";
+//		if(id.length() > 0){
+//			outStr << "  id=\"";
+//			outStr << id ;
+//			outStr << "\"";
+//		}
 		outStr << "/>";
 	return outStr.str();
 }//getNonlinearExpressionInXML()
@@ -1505,9 +1505,7 @@ OSnLNodePI::OSnLNodePI()
 	m_mChildren = NULL;
 	snodeName = "PI";
 	inodeType = 0;  
-	value = 0.0;
-	type = "real";
-	id = "";
+
 
 }//end OSnLNodePI
 
@@ -1523,15 +1521,15 @@ OSnLNodePI::~OSnLNodePI(){
 std::string OSnLNodePI::getTokenNumber(){
 	ostringstream outStr;
 	outStr << inodeInt;
-	outStr << ":" ;
-	outStr << value ;
+	//outStr << ":" ;
+	//outStr << value ;
 	//if(type.length() > 0){
-		outStr << ":" ;
-		outStr << type ;
+	//	outStr << ":" ;
+	//	outStr << type ;
 	//}
 	//if(id.length() > 0){
-		outStr << ":" ;
-		outStr << id;
+	//	outStr << ":" ;
+	//	outStr << id;
 	//}
 	return outStr.str();
 }//getTokenNumber
@@ -1540,15 +1538,15 @@ std::string OSnLNodePI::getTokenNumber(){
 std::string OSnLNodePI::getTokenName(){
 	ostringstream outStr;
 	outStr << snodeName;
-	outStr << ":" ;
-	outStr << value ;
+	//outStr << ":" ;
+	//outStr << value ;
 	//if(type.length() > 0){
-		outStr << ":" ;
-		outStr << type ;
+		//outStr << ":" ;
+		//outStr << type ;
 	//}
 	//if(id.length() > 0){
-		outStr << ":" ;
-		outStr << id;
+		//outStr << ":" ;
+		//outStr << id;
 	//}
 	return outStr.str();
 }//getTokenName
@@ -1558,17 +1556,17 @@ std::string OSnLNodePI::getNonlinearExpressionInXML(){
 	ostringstream outStr;
 	outStr << "<" ;
 	outStr << snodeName;
-		outStr << "  value=\"";
-		outStr << value ;
-		outStr << "\"";
-		outStr << " type=\"";
-		outStr << type ;
-		outStr << "\"";
-		if(id.length() > 0){
-			outStr << "  id=\"";
-			outStr << id ;
-			outStr << "\"";
-		}
+//		outStr << "  value=\"";
+//		outStr << value ;
+//		outStr << "\"";
+//		outStr << " type=\"";
+//		outStr << type ;
+//		outStr << "\"";
+//		if(id.length() > 0){
+//			outStr << "  id=\"";
+//			outStr << id ;
+//			outStr << "\"";
+//		}
 		outStr << "/>";
 	return outStr.str();
 }//getNonlinearExpressionInXML()

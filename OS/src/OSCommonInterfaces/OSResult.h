@@ -21,25 +21,27 @@
 #include <vector> 
 
 
-/**
-*
-* <p>A data structure class that corresponds to an xml element in the OSaL schema.  
-*  
-* </p>
-* @author Robert Fourer, Jun Ma, Kipp Martin
-* @version 1.0, 03/14/2004
-* @since OS 1.0
-*/
+/*! \class
+ *  \brief The GeneralStatus  Class.
+ * 
+ * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A data structure class that corresponds to an xml element in 
+ * the OSrL schema.  
+ */
 class GeneralStatus {
 
 public:
 
-		
+	/** the type of status */	
 	std::string type;
-		
+	
+	/** the description of the status */	
 	std::string description;
 	
-//public GeneralSubstatus[] substatus = null;
 
 	/**
 	 *
@@ -55,15 +57,49 @@ public:
 };//GeneralStatus
 
 
+/*! \class
+ *  \brief The ResultHeader  Class.
+ * 
+ * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class that provides the header information 
+ * that is defined the OSrL schema.  
+ */
 class ResultHeader{
 public:
+
+	/** a pointer to the GeneralStatus class */
 	GeneralStatus *generalStatus;
+	
+	/** the serviceURI is the URI of the solver service
+	 * that did the optimiation 
+	 */
 	std::string serviceURI;
+	
+	/** the serviceName is the name of the sovler service
+	 * that did the optimization
+	 */
 	std::string serviceName;
+	
+	/** the name of the instance that was solved */
 	std::string instanceName;
+	
+	/** the jobID is the ID associated with the solution
+	 * of this instance
+	 */
 	std::string jobID;
+	
+	/** the time when solution was complete 
+	 * kippster -- verify this
+	 */
 	std::string time;
+	
+	/** any general message associated with the optimization */
 	std::string message;
+	
 	/**
 	 *
 	 * Default constructor. 
@@ -76,20 +112,26 @@ public:
 	~ResultHeader();
 };//class ResultHeader
 
-/**
-*
-* <p>A data structure class that corresponds to an xml element in the OSrL schema.  
-*  
-* </p>
-* @author Robert Fourer, Jun Ma, Kipp Martin
-* @version 1.0, 03/14/2004
-* @since OS 1.0
-*/
+/*! \class
+ *  \brief VarValue  Class.
+ * 
+ * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class that is used to provide the value and index
+ * associated with the variables in the solution.  
+ */
 class VarValue{
 public:
 
+	/** idx is the index on variable in the solution */
 	int idx;
 	
+	/* value is the value of the variable indexed by idx
+	 * in the solution
+	 */	
 	double value;
 
 	/**
@@ -105,20 +147,29 @@ public:
 
 };// class VarValue
 
-/**
-*
-* <p>A data structure class that corresponds to an xml element in the OSrL schema.  
-*  
-* </p>
-* @author Robert Fourer, Jun Ma, Kipp Martin
-* @version 1.0, 03/14/2004
-* @since OS 1.0
-*/
+
+/*! \class
+ *  \brief OtherVarResult Class.
+ * 
+ * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks A class used to provide solution information
+ * associated with the variables.
+ */
 class OtherVarResult {
 public:
 	
+	/** the index of a variable in the solution */
 	int idx;
 	
+	/** value holds a general value for a variable,
+	 * for example, rather than the value of a variable
+	 * we may wish to store the variable name associated
+	 * with the vairable with index idx, hence we want
+	 * a string here and not a double
+	 */
 	std::string value;
 	
 	/**
@@ -134,20 +185,28 @@ public:
 	
 };//OtherVarResult
 
-/**
-*
-* <p>A data structure class that corresponds to an xml element in the OSrL schema.  
-*  
-* </p>
-* @author Robert Fourer, Jun Ma, Kipp Martin
-* @version 1.0, 03/14/2004
-* @since OS 1.0
-*/
+
+/*! \class
+ *  \brief The OtherObjResult  Class.
+ * 
+ * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class that provides general result information
+ * for objective functions. 
+ */
 class OtherObjResult {
 public:
 	
+	/** idx is the index on a objective function */
 	int idx;
 	
+	
+	/** value is a value associated with an objective function
+	 * indexed by idx
+	 */
 	std::string value;
 	
 	/**
@@ -164,20 +223,29 @@ public:
 };//OtherObjResult
 
 
-/**
-*
-* <p>A data structure class that corresponds to an xml element in the OSrL schema.  
-*  
-* </p>
-* @author Robert Fourer, Jun Ma, Kipp Martin
-* @version 1.0, 03/14/2004
-* @since OS 1.0
-*/
+
+/*! \class
+ *  \brief The OtherConResult  Class.
+ * 
+ * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class that provides general result information
+ * for constraints. 
+ */
 class OtherConResult {
 public:
 	
+	/** idx is the index on the constraint */
 	int idx;
 	
+	/** value is a value associated with the constraint
+	 * indexed by idx, for example value might be the 
+	 * value of a dual variable or it might be the name
+	 * of the constraint.
+	 */
 	std::string value;
 	
 	/**
@@ -194,19 +262,25 @@ public:
 };//OtherConResult
 
 
-/**
-*
-* <p>A data structure class that corresponds to an xml element in the OSrL schema.  
-*  
-* </p>
-* @author Robert Fourer, Jun Ma, Kipp Martin
-* @version 1.0, 03/14/2004
-* @since OS 1.0
-*/
+
+/*! \class
+ *  \brief The ObjValue  Class.
+ * 
+ * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class that provides the value of an objective
+ * function
+ */
 class ObjValue {
 public:	
+
+	/** idx is the index on an objective function */
 	int idx;
 	
+	/** the value of the objective indexed by idx */
 	double value;
 	
 	/**
@@ -224,20 +298,23 @@ public:
 
 
 
-/**
-*
-* <p>A data structure class that corresponds to an xml element in the OSrL schema.  
-*  
-* </p>
-* @author Robert Fourer, Jun Ma, Kipp Martin
-* @version 1.0, 03/14/2004
-* @since OS 1.0
-*/
+/*! \class
+ *  \brief The ConValue  Class.
+ * 
+ * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class that provides the value of a constraint 
+ */
 class ConValue{
 public:
 
+	/** idx is the index on a constraint */
 	int idx;
 	
+	/** the value of the constraint indexed by idx */
 	double value;
 
 	/**
@@ -251,25 +328,42 @@ public:
 	 */
 	~ConValue();
 
-};// class VarValue
+};// class ConValue
 
-/**
-*
-* <p>A data structure class that corresponds to an xml element in the OSrL schema.  
-*  
-* </p>
-* @author Robert Fourer, Jun Ma, Kipp Martin
-* @version 1.0, 03/14/2004
-* @since OS 1.0
-*/
+
+
+/*! \class
+ *  \brief The DualVarValue  Class.
+ * 
+ * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class that provides the dual value of a constraint 
+ */
 class DualVarValue {
 public:	
+
+	/** idx is the index on a constraint */
 	int idx;
-	
+
+	/** lbValue is the value of dual variable on
+	 * the constraint indexed by idx if the constraint
+	 * is at its lower bound
+	 */		
 	double lbValue;
 	
+	
+	/** ubValue is the value of dual variable on
+	 * the constraint indexed by idx if the constraint
+	 * is at its upper bound
+	 */	
 	double ubValue;
 	
+	/** value of dual variable on
+	 * the constraint indexed by idx if the constraint
+	 */
 	double value;
 	
 	/**
@@ -285,9 +379,23 @@ public:
 	
 };//DualVarValue
 
+
+/*! \class
+ *  \brief The VariableValues Class.
+ * 
+ * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class that values for all the variables
+ */	
 class VariableValues{
 public:
 
+	/** a vector of VarValue objects, there will be one
+	 * for each variable in the solution
+	 */
 	std::vector<VarValue*> var;
 
 	
@@ -306,22 +414,30 @@ public:
 };// class VariableValues
 
 
-/**
-*
-* <p>A data structure class that corresponds to an xml element in the OSrL schema.  
-*  
-* </p>
-* @author Robert Fourer, Jun Ma, Kipp Martin
-* @version 1.0, 03/14/2004
-* @since OS 1.0
-*/
+/*! \class
+ *  \brief The OtherVariableResult  Class.
+ * 
+ * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class that allows the solver to report an
+ * arbitrary result associated with variables 
+ */
 class OtherVariableResult {
 public:
 
+	/** the name of the result the user is defining */
 	std::string name;
 	
+	/** a brief description of the type of result */
 	std::string description;
 	
+	/* a vector of OtherVarResult objects that will
+	 * give for each variable the index and value for 
+	 * this user defined variable result
+	 */
 	std::vector<OtherVarResult*> var;	
 	/**
 	 *
@@ -338,22 +454,30 @@ public:
 };//OtherVariableResult
 
 
-/**
-*
-* <p>A data structure class that corresponds to an xml element in the OSrL schema.  
-*  
-* </p>
-* @author Robert Fourer, Jun Ma, Kipp Martin
-* @version 1.0, 03/14/2004
-* @since OS 1.0
-*/
+/*! \class
+ *  \brief The OtherObjectiveResult  Class.
+ * 
+ * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class that allows the solver to report an
+ * arbitrary result associated with objective functions 
+ */
 class OtherObjectiveResult {
 public:
 
+	/** the name of the result the user is defining */
 	std::string name;
 	
+	/** a brief description of the type of result */
 	std::string description;
-	
+
+	/* a vector of OtherObjResult objects that will
+	 * give for each objective function the index and 
+	 * value for this user defined objective function result
+	 */	
 	std::vector<OtherObjResult*> obj;
 	
 	/**
@@ -371,22 +495,31 @@ public:
 };//OtherObjectiveResult
 
 
-/**
-*
-* <p>A data structure class that corresponds to an xml element in the OSrL schema.  
-*  
-* </p>
-* @author Robert Fourer, Jun Ma, Kipp Martin
-* @version 1.0, 03/14/2004
-* @since OS 1.0
-*/
+/*! \class
+ *  \brief The OtherObjectiveResult  Class.
+ * 
+ * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class that allows the solver to report an
+ * arbitrary result associated with constraints. 
+ */
 class OtherConstraintResult {
 public:
 
+	/** the name of the result the user is defining */
 	std::string name;
 	
+	/** a brief description of the type of result */
 	std::string description;
 	
+	
+	/* a vector of OtherConResult objects that will
+	 * give for each constraint the index and 
+	 * value for this user defined objective function result
+	 */	
 	std::vector<OtherConResult*> con;	
 	/**
 	 *
@@ -402,18 +535,23 @@ public:
 	
 };//OtherConstraintResult
 
-/**
-*
-* <p>A data structure class that corresponds to an xml element in the OSrL schema.  
-*  
-* </p>
-* @author Robert Fourer, Jun Ma, Kipp Martin
-* @version 1.0, 03/14/2004
-* @since OS 1.0
-*/
+/*! \class
+ *  \brief The ObjectiveValues  Class.
+ * 
+ * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class for reporting objective function values 
+ */
 class ObjectiveValues {
 public:
 	
+	/** obj is a vector of ObjValue objects that
+	 * give an index and objective function value for
+	 * each objective function.
+	 */
 	std::vector<ObjValue*> obj;
 	
 	/**
@@ -431,17 +569,23 @@ public:
 };//ObjectiveValues
 
 
-/**
-*
-* <p>A data structure class that corresponds to an xml element in the OSrL schema.  
-*  
-* </p>
-* @author Robert Fourer, Jun Ma, Kipp Martin
-* @version 1.0, 03/14/2004
-* @since OS 1.0
-*/
+/*! \class
+ *  \brief The ConstraintValues Class.
+ * 
+ * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class for reporting constraint values 
+ */
 class ConstraintValues{
 public:
+
+	/** con is a vector of ConValue objects that
+	 * give an index and constraint function value for
+	 * each constraint function.
+	 */
 	std::vector<ConValue*> con;
 	
 	/**
@@ -459,17 +603,24 @@ public:
 };// class ConstraintValues
 
 
-/**
-*
-* <p>A data structure class that corresponds to an xml element in the OSrL schema.  
-*  
-* </p>
-* @author Robert Fourer, Jun Ma, Kipp Martin
-* @version 1.0, 03/14/2004
-* @since OS 1.0
-*/
+/*! \class
+ *  \brief The DualVariableValues Class.
+ * 
+ * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class for reporting dual variable values 
+ */
 class DualVariableValues {
 public:
+
+
+	/** con is a vector of DualVarValue objects that
+	 * give an index and dual variable value for
+	 * each constraint function.
+	 */
 	std::vector<DualVarValue*> con;
 	
 	/**
@@ -489,16 +640,32 @@ public:
 
 	
 
-
+/*! \class
+ *  \brief The VariableSolution Class.
+ * 
+ * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class for reporting all of the types of solution values
+ * associated with variables.
+ */
 class VariableSolution{
 public:
 
+	/** the number of types of variable results other
+	 * than the value of the variable
+	 */
 	int numberOfOtherVariableResult;
 
+	/** a pointer to an array of VariableValues objects */
 	VariableValues *values;
 	
-	//VariableStringValues *valuesString;
 
+	/** a pointer to an array of other pointer objects for 
+	 * variables
+	 */
 	OtherVariableResult **other;
 
 	/**
@@ -515,22 +682,32 @@ public:
 
 };// class VariableSolution
 
-/**
-*
-* <p>A data structure class that corresponds to an xml element in the OSrL schema.  
-*  
-* </p>
-* @author Robert Fourer, Jun Ma, Kipp Martin
-* @version 1.0, 03/14/2004
-* @since OS 1.0
-*/
+
+/*! \class
+ *  \brief The ObjectiveSolution Class.
+ * 
+ * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class for reporting all of the types of solution values
+ * associated with objective functions.
+ */
 class ObjectiveSolution {
 public:
 
+	/** the number of types of objective function results other
+	 * than the basic objective function values
+	 */
 	int numberOfOtherObjectiveResult;
-		
-	ObjectiveValues *values;
 	
+	/** a pointer to an array of ObjectiveValues objects */	
+	ObjectiveValues *values;
+
+	/** a pointer to an array of other pointer objects for 
+	 * objective functions
+	 */	
 	OtherObjectiveResult **other; 
 
 	/**
@@ -547,25 +724,36 @@ public:
 
 };//ObjectiveSolution
 
-/**
-*
-* <p>A data structure class that corresponds to an xml element in the OSrL schema.  
-*  
-* </p>
-* @author Robert Fourer, Jun Ma, Kipp Martin
-* @version 1.0, 03/14/2004
-* @since OS 1.0
-*/
+
+/*! \class
+ *  \brief The ConstraintSolution Class.
+ * 
+ * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class for reporting all of the types of solution values
+ * associated with objective functions.
+ */
 class ConstraintSolution {
 
 public:
 
+	/** the number of types of constraint function results other
+	 * than the basic constraint function values
+	 */
 	int numberOfOtherConstraintResult;
 	
+	/** a pointer to an array of ConstraintValues objects */
 	 ConstraintValues *values;
 	 
+	/** a pointer to an array of DualVariableValues objects */
 	 DualVariableValues *dualValues;
-	 
+	
+	/** a pointer to an array of other pointer objects for 
+	 * constraint functions
+	 */	 
 	 OtherConstraintResult **other;
 	
 	/**
@@ -582,23 +770,28 @@ public:
 	
 };//ConstraintSolution
 
-/**
-*
-* <p>A data structure class that corresponds to an xml element in the OSaL schema.  
-*  
-* </p>
-* @author Robert Fourer, Jun Ma, Kipp Martin
-* @version 1.0, 03/14/2004
-* @since OS 1.0
-*/
+
+/*! \class
+ *  \brief The OptimizationSolutionStatus Class.
+ * 
+ * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class for holding various attributes of a solution
+ * status
+ */	
 class OptimizationSolutionStatus {
 public:
 	
+	/** the type of solution status */
 	std::string type;
 	
+	/** a description of the solution status type */
 	std::string description;
 	
-	//public OptimizationSolutionSubstatus[] substatus = null;
+	
 	/**
 	 * Default constructor. 
 	 */
@@ -613,27 +806,46 @@ public:
 
 
 
-/**
-*
-* <p>A data structure class that corresponds to an xml element in the OSrL schema.  
-*  
-* </p>
-* @author Robert Fourer, Jun Ma, Kipp Martin
-* @version 1.0, 03/14/2004
-* @since OS 1.0
-*/
+/*! \class
+ *  \brief The OptimizationSolution Class.
+ * 
+ * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class for reporting the various components of
+ * an optimization solution.
+ */
 class OptimizationSolution{
 public:
+
+	/** the index of the objective function for which we are 
+	 * reporting solution information 
+	 */
 	int objectiveIdx;
 	
+	/** status is a pointer to an OptimizationSolutionStatus
+	 * object associated with this optimization solution
+	 */
 	OptimizationSolutionStatus *status;
 	
+	/** a message associated with this solution */
 	std::string message;
 	
+	/** variables holds the solution information for
+	 * the variables
+	 */
 	VariableSolution *variables;
 	
+	/** objectives holds the solution information
+	 * for the objectives
+	 */
 	ObjectiveSolution *objectives;
 	
+	/** constraints holds the solution information
+	 * for the constraints
+	 */
 	ConstraintSolution *constraints;
 	
 	//OtherOptimizationResult **other = null;
@@ -651,22 +863,45 @@ public:
 };// class OptimizationSolution
 
 
-
+/*! \class
+ *  \brief The OptimizationResult Class.
+ * 
+ * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class for holding information that might be associated
+ * with an optimization solution.
+ */
 class OptimizationResult{
 public:
 	
+	/** numberOfVariables is the number of variables reported 
+	 * in the solution.
+	 */
 	int numberOfVariables;
 	
+	/** numberOfObjectives is the number of objective functions
+	 * reported in the solution.
+	 */
 	int numberOfObjectives;
 
+	/** numberOfConstrants is the number of constraint functions
+	 * reported in the solution.
+	 */
     int numberOfConstraints;
-	
+
+	/** numberOfSolubitons is the number of objective functions
+	 * reported.
+	 */	
 	int numberOfSolutions;
 
+	/** solution is an array of pointers to OptimizationSolution
+	 * objects
+	 */
 	OptimizationSolution **solution;
 	
-	//OSAnalysis osal = null;
-
 	/**
 	 *
 	 * Default constructor. 
@@ -680,11 +915,22 @@ public:
 
 };// class OptimizationResult
 
-
+/*! \class
+ *  \brief The ResultData Class.
+ * 
+ * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class for the result data in an optimization.
+ */
 class ResultData{
 public:
-	//ProcessStatistics *statistics;
-	//OtherResult *other;
+
+	/** optimization is a pointer to an OptimizationResult
+	 * object
+	 */
 	OptimizationResult *optimization;
 
 	/**
@@ -700,7 +946,16 @@ public:
 };//class ResultData
 
 
-
+/*! \class
+ *  \brief The Result Class.
+ * 
+ * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class for holding all the solution information.
+ */
 class OSResult{
 
 public:

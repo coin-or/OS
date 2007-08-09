@@ -60,13 +60,13 @@
 \contentsline {subsubsection}{\numberline {9.3.6}The {\tt kill} Service Method}{53}
 \contentsline {subsubsection}{\numberline {9.3.7}Summary}{54}
 \contentsline {section}{\numberline {10}Setting up a Solver Service with Tomcat}{55}
-\contentsline {section}{\numberline {11}Examples}{57}
-\contentsline {subsection}{\numberline {11.1}AMPL Client: Hooking AMPL to Solvers}{57}
+\contentsline {section}{\numberline {11}Examples}{56}
+\contentsline {subsection}{\numberline {11.1}AMPL Client: Hooking AMPL to Solvers}{56}
 \contentsline {subsection}{\numberline {11.2}Algorithmic Differentiation: Using the OS Algorithmic Differentiation Methods}{57}
-\contentsline {subsection}{\numberline {11.3}File Upload: Using a File Upload Package}{58}
+\contentsline {subsection}{\numberline {11.3}File Upload: Using a File Upload Package}{57}
 \contentsline {subsection}{\numberline {11.4}Instance Generator: Using the OSInstance API to Generate Instances}{59}
 \contentsline {subsection}{\numberline {11.5}osTestCode}{60}
 \contentsline {section}{\numberline {12}Appendix}{60}
 \contentsline {subsection}{\numberline {12.1}Building a Model in MATLAB}{60}
 \contentsline {subsection}{\numberline {12.2}OSiL representation for problem given in (1\hbox {})--(4\hbox {})}{62}
-\contentsline {subsection}{\numberline {12.3}OSiL representation for problem given in (20\hbox {})--(23\hbox {})}{64}
+\contentsline {subsection}{\numberline {12.3}OSiL representation for problem given in (20\hbox {})--(23\hbox {})}{63}

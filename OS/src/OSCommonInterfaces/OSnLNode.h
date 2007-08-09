@@ -1,5 +1,5 @@
 /** @file OSnLNode.h
- * \brief This file defines the OSnLNode class along with its derived classes..
+ * \brief This file defines the OSnLNode class along with its derived classes.
  *
  * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
  * @version 1.0, 10/05/2005
@@ -21,7 +21,7 @@
 #include <map> 
 #include<cppad/cppad.hpp>
 
-/** \enum OP_CODES we give a name to each of the values of
+/** \enum OP_CODES we give a name  or op code to each of the values of
  * inodeInt (number identifying the type of node) -- this is
  * easier to work with
  */
@@ -611,10 +611,6 @@ public:
 	 *  \return a AD<double>.
 	 */	
 	virtual AD<double> constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD);
-	
-
-	
-
 
 };//end OSnLNodeDivide
 
@@ -1076,12 +1072,15 @@ public:
  */
 class OSnLNodeNumber : public OSnLNode{  
 public:
-
-	double value;
-	std::string type;
-	std::string id;
 	
-
+	/** value is the value of the number */
+	double value;
+	/** in the C++ type is real */
+	std::string type;
+	/** later, e.g. stochastic programming, we may wish
+	 * to give an id to a number
+	 */
+	std::string id;
 
 	/**
 	 * default constructor.
@@ -1150,12 +1149,6 @@ public:
 class OSnLNodeE : public OSnLNode{  
 public:
 
-	double value;
-	std::string type;
-	std::string id;
-	
-
-
 	/**
 	 * default constructor.
 	 */
@@ -1221,12 +1214,6 @@ public:
  */
 class OSnLNodePI : public OSnLNode{  
 public:
-
-	double value;
-	std::string type;
-	std::string id;
-	
-
 
 	/**
 	 * default constructor.
@@ -1295,7 +1282,12 @@ public:
 class OSnLNodeVariable : public OSnLNode{  
 public:
 
+	/** coef is an option coefficient on the variable, the
+	 * default value is 1.o
+	 */
 	double coef;
+	
+	/** idx is the index of the variable */
 	int idx;
 
 	/**

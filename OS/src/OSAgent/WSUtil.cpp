@@ -24,7 +24,7 @@
 #include <unistd.h>  
 #include <netdb.h>  
 #endif
-//#define DEBUG 
+#define DEBUG 
 
 #include <stdlib.h>    
 #include <string.h>    
@@ -112,7 +112,7 @@ string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned int se
 				if(recvMsgSize < (RCVBUFSIZE - 1) ){
 					for(n = 0; n < recvMsgSize; n++){
 						char_val = httpBuffer[ n];
-						cout << "char_val = " << char_val << endl;
+						//cout << "char_val = " << char_val << endl;
 					}
 				}
 			#endif
@@ -152,17 +152,18 @@ std::string WSUtil::createSOAPMessage(int numInputs,  string solverAddress, stri
 	cout << "SOAP action = " <<  sSoapAction << endl;
 	cout << "postURI = " <<  postURI << endl;
 	#endif
-	request << "POST "  <<  postURI << " HTTP/1.0" <<  "\r";
+	//request << "POST "  <<  postURI << " HTTP/1.0" <<  "\r";
+	request << "POST "  <<  postURI << " HTTP/1.0" << endl ;
+	request << "Content-Type: text/xml; charset=UTF-8" << endl;
 	request << "Host: " ;
 	request << solverAddress << endl;
-	request << "Content-Type: text/xml; charset=UTF-8" << endl;
 	request << "Connection: close" << endl;
 	request << "Accept: application/soap+xml, application/dime, multipart/related, text/*" << endl;
 	request << "Cache-Control: no-cache" << endl;
 	request << "Pragma: no-cache" << endl;
 	request << "SOAPAction: ";
 	request << "\"" << sSoapAction << "\"" << endl;
-	body << "<?xml version='1.0' encoding='utf-8' ?>" << endl;
+	//body << "<?xml version='1.0' encoding='utf-8' ?>" << endl;
 	body << "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" << endl;
 	body << "<SOAP-ENV:Body>" << endl;
 	body << "<ns1:" << smethod << " " << mynamespace << ">" << endl;
@@ -177,6 +178,7 @@ std::string WSUtil::createSOAPMessage(int numInputs,  string solverAddress, stri
 	body << "\n";
 	request << "Content-Length: " << body.str().length();
 	request << endl << endl;
+
 	request << body.str();
 	return request.str();
 }// end createSOAPMessage

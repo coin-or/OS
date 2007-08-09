@@ -22,15 +22,41 @@
 
 #include "OSResult.h"
 
-
+/*! \class
+ *  \brief The OSrLReader Class.
+ * 
+ * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class for parsing an OSrL string and creating an
+ * OSResult object from the string.
+ */
 class OSrLReader{  
 
-private:
-	FILE *file;
 
 public:
+
+	/**
+	 *
+	 * OSrL class constructor. 
+	 */
 	OSrLReader( );
+	
+	/**
+	 *
+	 * OSrL class destructor. 
+	 */
 	~OSrLReader();
+	
+	
+	/**
+	 * Get an OSResult object from an OSrL string. 
+	 * 
+	 * @param osrl an OSrL string. 
+	 * @return the OSResult object corresponding to the OSrL string. 
+	 */		
 	OSResult *readOSrL(std::string osrl);
 };
 #endif
