@@ -59,6 +59,11 @@ if COIN_HAS_VOL
  unitTest_LDADD += $(VOLOBJDIR)/src/libVol.la 
 endif
 
+if COIN_HAS_GLPK
+ unitTest_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
+ unitTest_LDADD += $(GLPKLIB)
+endif
+
  unitTest_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
 	
 #unitTest_LDADD += $(ADDLIBS) 
@@ -155,8 +160,6 @@ if COIN_HAS_GLPK
   AM_CPPFLAGS += \
 	-I`$(CYGPATH_W) $(GLPKINCDIR)` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
- unitTest_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
-  unitTest_LDADD += $(GLPKLIB)
 endif
 
 if COIN_HAS_LINDO
