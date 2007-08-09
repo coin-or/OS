@@ -81,6 +81,7 @@ OS/doc/osUsersManual_1.bbl -text
 OS/doc/osUsersManual_1.pdf -text
 OS/doc/osUsersManual_1.tex -text
 OS/doc/osUsersManual_1.toc -text
+OS/examples/Makefile.am -text
 OS/examples/Makefile.in -text
 OS/examples/algorithmicDiff/Makefile.am -text
 OS/examples/algorithmicDiff/Makefile.in -text
@@ -99,7 +100,6 @@ OS/examples/fileUpload/fileUpload.cpp -text
 OS/examples/instanceGenerator/Makefile.am -text
 OS/examples/instanceGenerator/Makefile.in -text
 OS/examples/instanceGenerator/instanceGenerator.cpp -text
-OS/examples/makefile.am -text
 OS/examples/osTestCode/Makefile.am -text
 OS/examples/osTestCode/Makefile.in -text
 OS/examples/osTestCode/osTestCode.cpp -text
