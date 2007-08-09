@@ -59,6 +59,11 @@ if COIN_HAS_VOL
  instanceGenerator_LDADD += $(VOLOBJDIR)/src/libVol.la 
 endif
 
+if COIN_HAS_GLPK
+  instanceGenerator_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
+  instanceGenerator_LDADD += $(GLPKLIB)
+endif
+
  instanceGenerator_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
 	
  instanceGenerator_LDADD += $(ADDLIBS) 
@@ -144,8 +149,6 @@ if COIN_HAS_GLPK
   AM_CPPFLAGS += \
 	-I`$(CYGPATH_W) $(GLPKINCDIR)` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
-  instanceGenerator_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
-  instanceGenerator_LDADD += $(GLPKLIB)
 endif
 
 if COIN_HAS_IPOPT

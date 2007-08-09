@@ -63,6 +63,11 @@ if COIN_HAS_VOL
  amplClient_LDADD += $(VOLOBJDIR)/src/libVol.la 
 endif
 
+if COIN_HAS_GLPK
+  amplClient_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
+  amplClient_LDADD += $(GLPKLIB)
+endif
+
  amplClient_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
 	
  amplClient_LDADD += $(ADDLIBS) 
@@ -153,8 +158,6 @@ if COIN_HAS_GLPK
   AM_CPPFLAGS += \
 	-I`$(CYGPATH_W) $(GLPKINCDIR)` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
-  amplClient_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
-  amplClient_LDADD += $(GLPKLIB)
 endif
 
 if COIN_HAS_LINDO

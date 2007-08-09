@@ -63,6 +63,11 @@ if COIN_HAS_VOL
  fileUpload_LDADD += $(VOLOBJDIR)/src/libVol.la 
 endif
 
+if COIN_HAS_GLPK
+  fileUpload_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
+  fileUpload_LDADD += $(GLPKLIB)
+endif
+
  fileUpload_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
 	
  fileUpload_LDADD += $(ADDLIBS) 
@@ -136,8 +141,6 @@ if COIN_HAS_GLPK
   AM_CPPFLAGS += \
 	-I`$(CYGPATH_W) $(GLPKINCDIR)` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
-  fileUpload_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
-  fileUpload_LDADD += $(GLPKLIB)
 endif
 
 
