@@ -22,7 +22,7 @@
 #include "OSResult.h"
 #include "CoinSolver.h"
 #include "OSrLWriter.h"
-
+#include "config_os.h"
 
 #include "OSiLReader.h"        
 #include "OSiLWriter.h" 

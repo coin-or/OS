@@ -124,10 +124,11 @@ AC_COIN_HAS_ASL
 
 # Check which third party solvers are available ToDo!
 AC_COIN_HAS_USER_LIBRARY([Cplex],[CPX],[cplex.h],[CPXgetstat])
-AC_COIN_HAS_USER_LIBRARY([Glpk],[GLPK],[glpk.h],[])
+#AC_COIN_HAS_USER_LIBRARY([Glpk],[GLPK],[glpk.h],[])
 AC_COIN_HAS_USER_LIBRARY([Lindo],[LINDO],[lindo.h],[])
 AC_COIN_HAS_USER_LIBRARY([Ipopt],[IPOPT],[IpoptConfig.h],[])
 AC_COIN_HAS_USER_LIBRARY([Knitro],[KNITRO],[knitro.h],[])
+AC_COIN_HAS_GLPK(Glpk)
 
 
 

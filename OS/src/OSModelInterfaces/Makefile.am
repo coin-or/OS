@@ -47,6 +47,7 @@ AM_CPPFLAGS =\
 	-I`$(CYGPATH_W) $(CLPOBJDIR)/inc` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/inc` \
+	-I`$(CYGPATH_W) $(OSIOBJDIR)/inc` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCbc` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiClp` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src` \
@@ -65,15 +66,15 @@ endif
 
 if COIN_HAS_CPX
   AM_CPPFLAGS += \
-	-I`$(CYGPATH_W) $(CPXINCDIR)` \
-	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
+   -I`$(CYGPATH_W) $(CPXINCDIR)` \
+   -I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
 endif
 
 
 if COIN_HAS_GLPK
   AM_CPPFLAGS += \
-	-I`$(CYGPATH_W) $(GLPKINCDIR)` \
-	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
+     -I`$(CYGPATH_W) $(GLPKINCDIR)` \
+     -I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
 endif
 
 if COIN_HAS_DYLP
@@ -88,12 +89,14 @@ endif
 if COIN_HAS_SYMPHONY
   AM_CPPFLAGS += \
     -I`$(CYGPATH_W) $(SYMPHONYSRCDIR)/include` \
+   -I`$(CYGPATH_W) $(SYMPHONYOBJDIR)/include` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiSym` 
 endif
 
 if COIN_HAS_VOL
   AM_CPPFLAGS += \
     -I`$(CYGPATH_W) $(VOLSRCDIR)/include` \
+   -I`$(CYGPATH_W) $(VOLOBJDIR)/include` \
     -I`$(CYGPATH_W) $(VOLSRCDIR)/src` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiVol`
 endif

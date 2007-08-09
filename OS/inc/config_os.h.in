@@ -18,22 +18,22 @@
 /* Define to 1 if the cppad package is used */
 #undef COIN_HAS_CPPAD
 
-/* Define to 1 if the Cplex package is used */
+/* Define to 1 if the Cplex package is available */
 #undef COIN_HAS_CPX
 
 /* Define to 1 if the DyLP package is used */
 #undef COIN_HAS_DYLP
 
-/* Define to 1 if the Glpk package is used */
+/* Define to 1 if Glpk package is available */
 #undef COIN_HAS_GLPK
 
-/* Define to 1 if the Ipopt package is used */
+/* Define to 1 if the Ipopt package is available */
 #undef COIN_HAS_IPOPT
 
-/* Define to 1 if the Knitro package is used */
+/* Define to 1 if the Knitro package is available */
 #undef COIN_HAS_KNITRO
 
-/* Define to 1 if the Lindo package is used */
+/* Define to 1 if the Lindo package is available */
 #undef COIN_HAS_LINDO
 
 /* Define to 1 if the OS package is used */
