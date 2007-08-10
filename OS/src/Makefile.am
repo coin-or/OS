@@ -70,6 +70,8 @@ OSSolverService_LDADD =  \
 	libOS.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la 
 
+LIBS += `cat $(OSIOBJDIR)/osi_addlibs.txt`
+
 if COIN_HAS_SYMPHONY
  OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
 endif
@@ -85,23 +87,30 @@ if COIN_HAS_VOL
 endif
 
  OSSolverService_LDADD += $(CBCOBJDIR)/src/libCbc.la 
+ LIBS += `cat $(CBCOBJDIR)/cbc_addlibs.txt`
 
 if COIN_HAS_SYMPHONY
  OSSolverService_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la 
+ LIBS += `cat $(SYMPHONYOBJDIR)/sym_addlibs.txt`
 endif
 
  OSSolverService_LDADD += $(CGLOBJDIR)/src/libCgl.la 
+ LIBS += `cat $(CGLOBJDIR)/cgl_addlibs.txt`
 
  OSSolverService_LDADD += $(OSIOBJDIR)/src/libOsi.la 
+ LIBS += `cat $(OSIOBJDIR)/osi_addlibs.txt`
 
  OSSolverService_LDADD += $(CLPOBJDIR)/src/libClp.la 
+ LIBS += `cat $(CLPOBJDIR)/clp_addlibs.txt`
 
 if COIN_HAS_DYLP
  OSSolverService_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la 
+ LIBS += `cat $(DYLPOBJDIR)/dylp_addlibs.txt`
 endif
 
 if COIN_HAS_VOL
  OSSolverService_LDADD += $(VOLOBJDIR)/src/libVol.la 
+ LIBS += `cat $(VOLOBJDIR)/vol_addlibs.txt`
 endif
 
 
@@ -111,19 +120,13 @@ if COIN_HAS_GLPK
 endif
 
  OSSolverService_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
+ LIBS += `cat $(COINUTILSOBJDIR)/coinutils_addlibs.txt`
 
  OSSolverService_LDADD += $(ADDLIBS) 
 
 if USEWSOCKLIB
   OSSolverService_LDADD += $(WINSOCKLIB)
 endif
-
-
-# Here we add additional libraries
-# Kipp add the others here
-#LIBS += $(ADDLIBS) `cat $(COINUTILSOBJDIR)/coinutils_addlibs.txt`
-
-#LIBS  += $(ADDLIBS) `cat $(OSOBJDIR)/os_addlibs.txt`
 
 
 
