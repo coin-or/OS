@@ -30,7 +30,7 @@ libOS_la_LIBADD = ./OSUtils/libOSUtils.la \
 		./OSAgent/libOSAgent.la \
 		./OSModelInterfaces/libOSModelInterfaces.la \
 		./OSParsers/libOSParsers.la \
- 		./OSSolverInterfaces/libOSSolverInterfaces.la 
+		./OSSolverInterfaces/libOSSolverInterfaces.la 
 # Since automake is not doing this on its own, we need to declare the
 # dependencies to the subdirectory libraries here
 libOS_la_DEPENDENCIES = $(libOS_la_LIBADD)
@@ -63,19 +63,19 @@ OSSolverService_SOURCES = OSSolverService.cpp
 
 
 
-	
+
 # List all additionally required COIN libraries
 
 OSSolverService_LDADD =  \
-	$(OSOBJDIR)/src/libOS.la \
+	libOS.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la 
-	
+
 if COIN_HAS_SYMPHONY
  OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
 endif
 
  OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiClp/libOsiClp.la 
-	
+
 if COIN_HAS_DYLP
  OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
 endif
@@ -85,17 +85,17 @@ if COIN_HAS_VOL
 endif
 
  OSSolverService_LDADD += $(CBCOBJDIR)/src/libCbc.la 
-	
+
 if COIN_HAS_SYMPHONY
  OSSolverService_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la 
 endif
 
  OSSolverService_LDADD += $(CGLOBJDIR)/src/libCgl.la 
-	
+
  OSSolverService_LDADD += $(OSIOBJDIR)/src/libOsi.la 
-	
+
  OSSolverService_LDADD += $(CLPOBJDIR)/src/libClp.la 
-	
+
 if COIN_HAS_DYLP
  OSSolverService_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la 
 endif
@@ -111,7 +111,7 @@ if COIN_HAS_GLPK
 endif
 
  OSSolverService_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
-	
+
  OSSolverService_LDADD += $(ADDLIBS) 
 
 if USEWSOCKLIB
@@ -190,7 +190,7 @@ if COIN_HAS_CPX
   AM_CPPFLAGS += \
 	-I`$(CYGPATH_W) $(CPXINCDIR)` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
-  	OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+	OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 endif
 
 
@@ -218,7 +218,7 @@ if COIN_HAS_KNITRO
   AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(KNITROINCDIR)` 
   OSSolverService_LDADD += $(KNITROLIB)
 if USEMULTIPLYDEFINED
-  	OSSolverService_LDFLAGS += -multiply_defined suppress
+	OSSolverService_LDFLAGS += -multiply_defined suppress
 endif
 endif
 
@@ -253,7 +253,7 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 include_HEADERS = \
 	OSConfig.h \
 	../inc/config_os.h 
-	
+
 
 
 #############################################################################

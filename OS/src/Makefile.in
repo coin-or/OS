@@ -135,7 +135,7 @@ am__DEPENDENCIES_7 =
 @COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_11 = $(am__DEPENDENCIES_7)
 @COIN_HAS_KNITRO_TRUE@am__DEPENDENCIES_12 = $(am__DEPENDENCIES_7)
 @COIN_HAS_ASL_TRUE@am__DEPENDENCIES_13 = $(am__DEPENDENCIES_7)
-OSSolverService_DEPENDENCIES = $(OSOBJDIR)/src/libOS.la \
+OSSolverService_DEPENDENCIES = libOS.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la $(am__DEPENDENCIES_1) \
 	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la $(am__DEPENDENCIES_2) \
 	$(am__DEPENDENCIES_3) $(CBCOBJDIR)/src/libCbc.la \
@@ -404,7 +404,7 @@ libOS_la_LIBADD = ./OSUtils/libOSUtils.la \
 		./OSAgent/libOSAgent.la \
 		./OSModelInterfaces/libOSModelInterfaces.la \
 		./OSParsers/libOSParsers.la \
- 		./OSSolverInterfaces/libOSSolverInterfaces.la 
+		./OSSolverInterfaces/libOSSolverInterfaces.la 
 
 # Since automake is not doing this on its own, we need to declare the
 # dependencies to the subdirectory libraries here
@@ -419,14 +419,14 @@ SUBDIRS = OSUtils OSAgent OSCommonInterfaces OSModelInterfaces \
 OSSolverService_SOURCES = OSSolverService.cpp 
 
 # List all additionally required COIN libraries
-OSSolverService_LDADD = $(OSOBJDIR)/src/libOS.la \
-	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la $(am__append_1) \
-	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la $(am__append_2) \
-	$(am__append_3) $(CBCOBJDIR)/src/libCbc.la $(am__append_4) \
-	$(CGLOBJDIR)/src/libCgl.la $(OSIOBJDIR)/src/libOsi.la \
-	$(CLPOBJDIR)/src/libClp.la $(am__append_5) $(am__append_6) \
-	$(am__append_7) $(COINUTILSOBJDIR)/src/libCoinUtils.la \
-	$(ADDLIBS) $(am__append_8) $(am__append_15) $(am__append_17) \
+OSSolverService_LDADD = libOS.la $(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
+	$(am__append_1) $(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
+	$(am__append_2) $(am__append_3) $(CBCOBJDIR)/src/libCbc.la \
+	$(am__append_4) $(CGLOBJDIR)/src/libCgl.la \
+	$(OSIOBJDIR)/src/libOsi.la $(CLPOBJDIR)/src/libClp.la \
+	$(am__append_5) $(am__append_6) $(am__append_7) \
+	$(COINUTILSOBJDIR)/src/libCoinUtils.la $(ADDLIBS) \
+	$(am__append_8) $(am__append_15) $(am__append_17) \
 	$(am__append_19) $(am__append_21)
 
 # Here we add additional libraries
@@ -918,8 +918,8 @@ uninstall-info: uninstall-info-recursive
 	uninstall-binPROGRAMS uninstall-includeHEADERS \
 	uninstall-info-am uninstall-libLTLIBRARIES uninstall-local
 
-@COIN_HAS_CPX_TRUE@  	OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
-@COIN_HAS_KNITRO_TRUE@@USEMULTIPLYDEFINED_TRUE@  	OSSolverService_LDFLAGS += -multiply_defined suppress
+@COIN_HAS_CPX_TRUE@	OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+@COIN_HAS_KNITRO_TRUE@@USEMULTIPLYDEFINED_TRUE@	OSSolverService_LDFLAGS += -multiply_defined suppress
 
 install-exec-local:
 	echo "#ifndef HAVE_CONFIG_H" >bla
