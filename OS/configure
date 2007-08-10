@@ -3903,7 +3903,7 @@ esac
 
 
 
-if test $win_sock = yes; then
+if test x$win_sock = xyes; then
   USEWSOCKLIB_TRUE=
   USEWSOCKLIB_FALSE='#'
 else
@@ -3913,7 +3913,7 @@ fi
 
 
 
-if test $mac_osx = yes; then
+if test x$mac_osx = xyes; then
   USEMULTIPLYDEFINED_TRUE=
   USEMULTIPLYDEFINED_FALSE='#'
 else

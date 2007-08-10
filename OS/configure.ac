@@ -86,8 +86,8 @@ case "$CXX" in
     wsock32="-L/lib -L/mingw/lib -lwsock32" ;;
 esac
   
- AM_CONDITIONAL(USEWSOCKLIB, test $win_sock = yes)
- AM_CONDITIONAL(USEMULTIPLYDEFINED, test $mac_osx = yes)
+ AM_CONDITIONAL(USEWSOCKLIB, test x$win_sock = xyes)
+ AM_CONDITIONAL(USEMULTIPLYDEFINED, test x$mac_osx = xyes)
  
  AC_SUBST(WINSOCKLIB)
  
