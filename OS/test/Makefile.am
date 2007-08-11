@@ -110,11 +110,12 @@ AM_CPPFLAGS =\
 
 # Here we add additional libraries
 # Kipp add the others here
-#LIBS += $(ADDLIBS) `cat $(COINUTILSOBJDIR)/coinutils_addlibs.txt`
-#LIBS  += `cat $(OSOBJDIR)/os_addlibs.txt`
+LIBS += $(ADDLIBS) `cat $(COINUTILSOBJDIR)/coinutils_addlibs.txt`
+LIBS += `cat $(OSIOBJDIR)/osi_addlibs.txt`
+LIBS  += `cat $(OSOBJDIR)/os_addlibs.txt`
 
 if COIN_HAS_IPOPT
-#LIBS += -l$(F77)
+  LIBS += -l$(F77)
 endif
 
 # The -rpath flag is used by libtool to make sure that the shared
@@ -152,7 +153,7 @@ if COIN_HAS_CPX
   AM_CPPFLAGS += \
 	-I`$(CYGPATH_W) $(CPXINCDIR)` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
-  	unitTest_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+  unitTest_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 endif
 
 

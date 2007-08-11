@@ -2696,7 +2696,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 	const char *endDescription = "</description";
 	const char *pinstanceHeadStart = strstr(pchar, startInstanceHeader);
 	char *pelementText = NULL;
-	char *ptemp = NULL;
+	const char *ptemp = NULL;
 	int elementSize;
 	if(pinstanceHeadStart == NULL) {  osilerror_wrapper( pchar,osillineno,"<instanceHeader> element missing"); return false;}
 	// increment the line number counter if there are any newlines between the start of
@@ -4457,7 +4457,7 @@ double atofmod1(int* osillineno, const char *number, const char *numberend){
 				exppower = 10 *exppower + (number[ i] - '0') ;
 			}
 			if(i == exptest) {  osilerror_wrapper( number,osillineno, "error in parsing an XSD:double"); 	}
-			val = val*pow(10, expsign*exppower);
+			val = val*pow(10.0, expsign*exppower);
 			//printf("number = %f\n", val);
 		}
 	}

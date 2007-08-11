@@ -193,7 +193,7 @@ if COIN_HAS_CPX
   AM_CPPFLAGS += \
 	-I`$(CYGPATH_W) $(CPXINCDIR)` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
-	OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+  OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 endif
 
 
@@ -221,7 +221,7 @@ if COIN_HAS_KNITRO
   AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(KNITROINCDIR)` 
   OSSolverService_LDADD += $(KNITROLIB)
 if USEMULTIPLYDEFINED
-	OSSolverService_LDFLAGS += -multiply_defined suppress
+  OSSolverService_LDFLAGS += -multiply_defined suppress
 endif
 endif
 
