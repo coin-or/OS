@@ -170,7 +170,7 @@ int main(int argC, char* argV[])
   	std::string dataDir;
     dataDir = dirsep == '/' ? "../data/" : "..\\data\\";
 	std::string osol = "<osol></osol>";
-	nlFileName =  dataDir  + "amplFiles" + dirsep + "hs71.nl";
+	nlFileName =  dataDir  + "amplFiles" + dirsep + "parinc.nl";
 	mpsFileName =  dataDir + "mpsFiles" + dirsep + "parinc.mps";
 	fileUtil = new FileUtil();
 	//
@@ -736,20 +736,20 @@ int main(int argC, char* argV[])
 		cout << endl;
 		cout << "START AMPL TESTING" << endl << endl;
 #ifdef COIN_HAS_ASL
-#ifdef COIN_HAS_LINDO
-		cout << "create a LINDO Solver for AMPL nl - OSInstance solution" << endl;
-		solver = new LindoSolver();
+		cout << "create a cbc Solver for AMPL nl - OSInstance solution" << endl;
+		solver = new CoinSolver();
+		solver->sSolverName = "cbc";
 		nl2osil = new OSnl2osil( nlFileName); 
 		nl2osil->createOSInstance() ;
 		solver->osinstance = nl2osil->osinstance;	
 		solver->osol = osol;
-		cout << "call LINDO Solve" << endl;
+		cout << "call Cbc Solve" << endl;
 		solver->solve();
-		cout << "Here is the LINDO solver solution" << endl;
+		cout << "Here is the Cbc solver solution" << endl;
 		cout << solver->osrl << endl;
-		check = 17.014;
-		ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
-		if(ok == false) throw ErrorClass(" Fail unit test with OSnl2osil on problem hs71.nl");
+		check = 7668;
+		ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-1 , 1e-1);
+		if(ok == false) throw ErrorClass(" Fail unit test with OSnl2osil on problem parinc.nl");
 		solver->osinstance = NULL;
 		delete solver;
 		solver = NULL;
@@ -757,7 +757,6 @@ int main(int argC, char* argV[])
 		delete nl2osil;
 		nl2osil = NULL;	
 		unitTestResult << "Test the AMPL nl -> OSiL converter on hs71.nl using LINDO" << std::endl; 
-#endif
 #endif
 		cout << "END AMPL TESTING" << endl << endl;
 	}	
