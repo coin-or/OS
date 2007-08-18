@@ -213,6 +213,7 @@ AC_COIN_VPATH_LINK(data/amplFiles/hs71.mod)
 AC_COIN_VPATH_LINK(data/amplFiles/hs71.nl)
 AC_COIN_VPATH_LINK(data/amplFiles/parinc.mod)
 AC_COIN_VPATH_LINK(data/amplFiles/parinc.dat)
+AC_COIN_VPATH_LINK(data/amplFiles/parinc.nl)
 ##
 ## mps test files
 ##
