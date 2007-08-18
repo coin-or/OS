@@ -327,22 +327,22 @@ bool CoinSolver::optimize()
 	}
 } // end optimize
 
-std::string CoinSolver::getCoinSolverType(std::string osol){
+std::string CoinSolver::getCoinSolverType(std::string lcl_osol){
 // this is deprecated, but keep it around
 	try{
-		if( osol.find( "clp") != std::string::npos){
+		if( lcl_osol.find( "clp") != std::string::npos){
 			return "coin_solver_glpk";
 		}
 		else{
-			if( osol.find( "cbc") != std::string::npos){
+			if( lcl_osol.find( "cbc") != std::string::npos){
 				return "coin_solver_cpx";
 			}
 			else{
-				if( osol.find( "cpx") != std::string::npos){
+				if( lcl_osol.find( "cpx") != std::string::npos){
 					return "coin_solver_clp";
 				}
 				else{
-					if(osol.find( "glpk") != std::string::npos){
+					if(lcl_osol.find( "glpk") != std::string::npos){
 						return "";
 					}
 					else throw ErrorClass("a supported solver was not defined");
