@@ -756,7 +756,7 @@ int main(int argC, char* argV[])
 		cout << "call delete nl2osil" << endl;
 		delete nl2osil;
 		nl2osil = NULL;	
-		unitTestResult << "Test the AMPL nl -> OSiL converter on hs71.nl using LINDO" << std::endl; 
+		unitTestResult << "Test the AMPL nl -> OSiL converter on parinc.nl using Cbc" << std::endl; 
 #endif
 		cout << "END AMPL TESTING" << endl << endl;
 	}	
