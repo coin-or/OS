@@ -24,13 +24,13 @@ instanceGenerator_SOURCES = instanceGenerator.cpp
 instanceGenerator_LDADD =  \
 	$(OSOBJDIR)/src/libOS.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la 
-	
+
 if COIN_HAS_SYMPHONY
  instanceGenerator_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
 endif
 
  instanceGenerator_LDADD += $(OSIOBJDIR)/src/OsiClp/libOsiClp.la 
-	
+
 if COIN_HAS_DYLP
  instanceGenerator_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
 endif
@@ -40,17 +40,17 @@ if COIN_HAS_VOL
 endif
 
  instanceGenerator_LDADD += $(CBCOBJDIR)/src/libCbc.la 
-	
+
 if COIN_HAS_SYMPHONY
  instanceGenerator_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la 
 endif
 
  instanceGenerator_LDADD += $(CGLOBJDIR)/src/libCgl.la 
-	
+
  instanceGenerator_LDADD += $(OSIOBJDIR)/src/libOsi.la 
-	
+
  instanceGenerator_LDADD += $(CLPOBJDIR)/src/libClp.la 
-	
+
 if COIN_HAS_DYLP
  instanceGenerator_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la 
 endif
@@ -65,7 +65,7 @@ if COIN_HAS_GLPK
 endif
 
  instanceGenerator_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
-	
+
  instanceGenerator_LDADD += $(ADDLIBS) 
 
 if USEWSOCKLIB
@@ -117,7 +117,7 @@ instanceGenerator_LDFLAGS = -rpath $(libdir)
 
 if COIN_HAS_DYLP
   AM_CPPFLAGS += \
-  	-I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
+	-I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
 	-I`$(CYGPATH_W) $(DYLPSRCDIR)/inc` \
     -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/Dylp` \
     -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/DylpStdLib` \
@@ -141,7 +141,7 @@ if COIN_HAS_CPX
   AM_CPPFLAGS += \
 	-I`$(CYGPATH_W) $(CPXINCDIR)` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
-  	instanceGenerator_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+	instanceGenerator_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 endif
 
 
@@ -152,8 +152,12 @@ if COIN_HAS_GLPK
 endif
 
 if COIN_HAS_IPOPT
-  AM_CPPFLAGS += -I`$(CYGPATH_W) $(IPOPTINCDIR)` 
-  instanceGenerator_LDADD += $(IPOPTLIB)
+  AM_CPPFLAGS += \
+	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Interfaces` \
+	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Common` \
+	-I`$(CYGPATH_W) $(IPOPTOBJDIR)/inc`
+  instanceGenerator_LDADD += $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+  LIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
 endif
 
 if COIN_HAS_LINDO

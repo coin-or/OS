@@ -24,13 +24,13 @@ algorithmicDiffTest_SOURCES = algorithmicDiffTest.cpp
 algorithmicDiffTest_LDADD =  \
 	$(OSOBJDIR)/src/libOS.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la 
-	
+
 if COIN_HAS_SYMPHONY
  algorithmicDiffTest_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
 endif
 
  algorithmicDiffTest_LDADD += $(OSIOBJDIR)/src/OsiClp/libOsiClp.la 
-	
+
 if COIN_HAS_DYLP
  algorithmicDiffTest_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
 endif
@@ -40,17 +40,17 @@ if COIN_HAS_VOL
 endif
 
  algorithmicDiffTest_LDADD += $(CBCOBJDIR)/src/libCbc.la 
-	
+
 if COIN_HAS_SYMPHONY
  algorithmicDiffTest_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la 
 endif
 
  algorithmicDiffTest_LDADD += $(CGLOBJDIR)/src/libCgl.la 
-	
+
  algorithmicDiffTest_LDADD += $(OSIOBJDIR)/src/libOsi.la 
-	
+
  algorithmicDiffTest_LDADD += $(CLPOBJDIR)/src/libClp.la 
-	
+
 if COIN_HAS_DYLP
  algorithmicDiffTest_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la 
 endif
@@ -60,7 +60,7 @@ if COIN_HAS_VOL
 endif
 
  algorithmicDiffTest_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
-	
+
  algorithmicDiffTest_LDADD += $(ADDLIBS) 
 
 if USEWSOCKLIB
@@ -112,7 +112,7 @@ algorithmicDiffTest_LDFLAGS = -rpath $(libdir)
 
 if COIN_HAS_DYLP
   AM_CPPFLAGS += \
-  	-I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
+	-I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
 	-I`$(CYGPATH_W) $(DYLPSRCDIR)/inc` \
     -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/Dylp` \
     -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/DylpStdLib` \
@@ -136,7 +136,7 @@ if COIN_HAS_CPX
   AM_CPPFLAGS += \
 	-I`$(CYGPATH_W) $(CPXINCDIR)` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
-  	algorithmicDiffTest_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+	algorithmicDiffTest_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 endif
 
 
@@ -154,8 +154,12 @@ if COIN_HAS_LINDO
 endif
 
 if COIN_HAS_IPOPT
-  AM_CPPFLAGS += -I`$(CYGPATH_W) $(IPOPTINCDIR)` 
-  algorithmicDiffTest_LDADD += $(IPOPTLIB)
+  AM_CPPFLAGS += \
+	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Interfaces` \
+	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Common` \
+	-I`$(CYGPATH_W) $(IPOPTOBJDIR)/inc`
+  algorithmicDiffTest_LDADD += $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+  LIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
 endif
 
 

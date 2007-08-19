@@ -54,7 +54,7 @@ noinst_PROGRAMS = fileUpload$(EXEEXT)
 @COIN_HAS_GLPK_TRUE@	$(GLPKLIB)
 @USEWSOCKLIB_TRUE@am__append_8 = $(WINSOCKLIB)
 @COIN_HAS_DYLP_TRUE@am__append_9 = \
-@COIN_HAS_DYLP_TRUE@  	-I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
+@COIN_HAS_DYLP_TRUE@	-I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
 @COIN_HAS_DYLP_TRUE@	-I`$(CYGPATH_W) $(DYLPSRCDIR)/inc` \
 @COIN_HAS_DYLP_TRUE@    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/Dylp` \
 @COIN_HAS_DYLP_TRUE@    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/DylpStdLib` \
@@ -79,13 +79,18 @@ noinst_PROGRAMS = fileUpload$(EXEEXT)
 
 @COIN_HAS_LINDO_TRUE@am__append_14 = -I`$(CYGPATH_W) $(LINDOINCDIR)` 
 @COIN_HAS_LINDO_TRUE@am__append_15 = $(LINDOLIB)
-@COIN_HAS_IPOPT_TRUE@am__append_16 = -I`$(CYGPATH_W) $(IPOPTINCDIR)` 
-@COIN_HAS_IPOPT_TRUE@am__append_17 = $(IPOPTLIB)
-@COIN_HAS_KNITRO_TRUE@am__append_18 = -I`$(CYGPATH_W) $(KNITROINCDIR)` 
-@COIN_HAS_KNITRO_TRUE@am__append_19 = $(KNITROLIB)
-@COIN_HAS_KNITRO_TRUE@@USEMULTIPLYDEFINED_TRUE@am__append_20 = -multiply_defined suppress
-@COIN_HAS_ASL_TRUE@am__append_21 = $(ASL_CPPFLAGS) 
-@COIN_HAS_ASL_TRUE@am__append_22 = $(ASLLIB)
+@COIN_HAS_IPOPT_TRUE@am__append_16 = \
+@COIN_HAS_IPOPT_TRUE@	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Interfaces` \
+@COIN_HAS_IPOPT_TRUE@	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Common` \
+@COIN_HAS_IPOPT_TRUE@	-I`$(CYGPATH_W) $(IPOPTOBJDIR)/inc`
+
+@COIN_HAS_IPOPT_TRUE@am__append_17 = $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+@COIN_HAS_IPOPT_TRUE@am__append_18 = `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
+@COIN_HAS_KNITRO_TRUE@am__append_19 = -I`$(CYGPATH_W) $(KNITROINCDIR)` 
+@COIN_HAS_KNITRO_TRUE@am__append_20 = $(KNITROLIB)if USEMULTIPLYDEFINED
+@COIN_HAS_KNITRO_TRUE@am__append_21 = -multiply_defined suppress
+@COIN_HAS_ASL_TRUE@am__append_22 = $(ASL_CPPFLAGS) 
+@COIN_HAS_ASL_TRUE@am__append_23 = $(ASLLIB)
 subdir = examples/fileUpload
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -116,8 +121,9 @@ am__DEPENDENCIES_7 =
 @COIN_HAS_GLPK_TRUE@	$(am__DEPENDENCIES_7)
 @USEWSOCKLIB_TRUE@am__DEPENDENCIES_9 = $(am__DEPENDENCIES_7)
 @COIN_HAS_LINDO_TRUE@am__DEPENDENCIES_10 = $(am__DEPENDENCIES_7)
-@COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_11 = $(am__DEPENDENCIES_7)
-@COIN_HAS_KNITRO_TRUE@am__DEPENDENCIES_12 = $(am__DEPENDENCIES_7)
+@COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_11 = $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+@COIN_HAS_KNITRO_TRUE@am__DEPENDENCIES_12 = $(KNITROLIB)if \
+@COIN_HAS_KNITRO_TRUE@	USEMULTIPLYDEFINED
 @COIN_HAS_ASL_TRUE@am__DEPENDENCIES_13 = $(am__DEPENDENCIES_7)
 fileUpload_DEPENDENCIES = $(OSOBJDIR)/src/libOS.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la $(am__DEPENDENCIES_1) \
@@ -244,8 +250,8 @@ INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
-IPOPTINCDIR = @IPOPTINCDIR@
-IPOPTLIB = @IPOPTLIB@
+IPOPTOBJDIR = @IPOPTOBJDIR@
+IPOPTSRCDIR = @IPOPTSRCDIR@
 KNITROINCDIR = @KNITROINCDIR@
 KNITROLIB = @KNITROLIB@
 LDFLAGS = @LDFLAGS@
@@ -256,7 +262,7 @@ LIBOBJS = @LIBOBJS@
 # Kipp add the others here
 LIBS = @LIBS@ $(ADDLIBS) `cat \
 	$(COINUTILSOBJDIR)/coinutils_addlibs.txt` `cat \
-	$(OSOBJDIR)/os_addlibs.txt`
+	$(OSOBJDIR)/os_addlibs.txt` $(am__append_18)
 LIBTOOL = @LIBTOOL@
 LIBTOOLM4 = @LIBTOOLM4@
 LINDOINCDIR = @LINDOINCDIR@
@@ -368,7 +374,7 @@ fileUpload_LDADD = $(OSOBJDIR)/src/libOS.la \
 	$(CLPOBJDIR)/src/libClp.la $(am__append_5) $(am__append_6) \
 	$(am__append_7) $(COINUTILSOBJDIR)/src/libCoinUtils.la \
 	$(ADDLIBS) $(am__append_8) $(am__append_15) $(am__append_17) \
-	$(am__append_19) $(am__append_22)
+	$(am__append_20) $(am__append_23)
 
 # Now add the include paths for compilation
 
@@ -393,12 +399,12 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` -I`$(CYGPATH_W) \
 	$(OSSRCDIR)/src/OSCommonInterfaces` $(am__append_9) \
 	$(am__append_10) $(am__append_11) $(am__append_12) \
 	$(am__append_13) $(am__append_14) $(am__append_16) \
-	$(am__append_18) $(am__append_21)
+	$(am__append_19) $(am__append_22)
 
 # The -rpath flag is used by libtool to make sure that the shared
 # library is found (in the lib install directory) when we are using dynamic
 # libraries.
-fileUpload_LDFLAGS = -rpath $(libdir) $(am__append_20)
+fileUpload_LDFLAGS = -rpath $(libdir) $(am__append_21)
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
@@ -652,7 +658,7 @@ uninstall-am: uninstall-info-am
 	pdf pdf-am ps ps-am tags uninstall uninstall-am \
 	uninstall-info-am
 
-@COIN_HAS_CPX_TRUE@  	fileUpload_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+@COIN_HAS_CPX_TRUE@	fileUpload_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

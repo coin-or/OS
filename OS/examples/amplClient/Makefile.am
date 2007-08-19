@@ -22,19 +22,17 @@ amplClient_SOURCES = amplClient.cpp
 
 # List all additionally required COIN libraries
 
-	
-	
 
 amplClient_LDADD =  \
 	$(OSOBJDIR)/src/libOS.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la 
-	
+
 if COIN_HAS_SYMPHONY
  amplClient_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
 endif
 
  amplClient_LDADD += $(OSIOBJDIR)/src/OsiClp/libOsiClp.la 
-	
+
 if COIN_HAS_DYLP
  amplClient_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
 endif
@@ -44,17 +42,17 @@ if COIN_HAS_VOL
 endif
 
  amplClient_LDADD += $(CBCOBJDIR)/src/libCbc.la 
-	
+
 if COIN_HAS_SYMPHONY
  amplClient_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la 
 endif
 
  amplClient_LDADD += $(CGLOBJDIR)/src/libCgl.la 
-	
+
  amplClient_LDADD += $(OSIOBJDIR)/src/libOsi.la 
-	
+
  amplClient_LDADD += $(CLPOBJDIR)/src/libClp.la 
-	
+
 if COIN_HAS_DYLP
  amplClient_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la 
 endif
@@ -69,7 +67,7 @@ if COIN_HAS_GLPK
 endif
 
  amplClient_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
-	
+
  amplClient_LDADD += $(ADDLIBS) 
 
 if USEWSOCKLIB
@@ -84,7 +82,7 @@ endif
 
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Windows
-	
+
 AM_CPPFLAGS =\
 	-I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` \
 	-I`$(CYGPATH_W) $(COINUTILSSRCDIR)/inc` \
@@ -124,7 +122,7 @@ amplClient_LDFLAGS = -rpath $(libdir)
 
 if COIN_HAS_DYLP
   AM_CPPFLAGS += \
-  	-I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
+	-I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
 	-I`$(CYGPATH_W) $(DYLPSRCDIR)/inc` \
     -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/Dylp` \
     -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/DylpStdLib` \
@@ -150,7 +148,7 @@ if COIN_HAS_CPX
   AM_CPPFLAGS += \
 	-I`$(CYGPATH_W) $(CPXINCDIR)` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
-  	amplClient_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+	amplClient_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 endif
 
 
@@ -166,9 +164,14 @@ if COIN_HAS_LINDO
 endif
 
 if COIN_HAS_IPOPT
-  AM_CPPFLAGS += -I`$(CYGPATH_W) $(IPOPTINCDIR)` 
-  amplClient_LDADD += $(IPOPTLIB)
+  AM_CPPFLAGS += \
+	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Interfaces` \
+	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Common` \
+	-I`$(CYGPATH_W) $(IPOPTOBJDIR)/inc`
+  amplClient_LDADD += $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+  LIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
 endif
+
 
 if COIN_HAS_KNITRO
   AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(KNITROINCDIR)` 

@@ -64,8 +64,8 @@ AM_CPPFLAGS =\
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src` \
 	-I`$(CYGPATH_W) $(CPPADSRCDIR)/..` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSCommonInterfaces` 
-	
-	
+
+
 if COIN_HAS_CPX
   AM_CPPFLAGS += \
 	-I`$(CYGPATH_W) $(CPXINCDIR)` \
@@ -111,7 +111,11 @@ if COIN_HAS_KNITRO
 endif
 
 if COIN_HAS_IPOPT
-  AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(IPOPTINCDIR)` 
+  AM_CPPFLAGS += \
+	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Interfaces` \
+	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/LinAlg` \
+	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Common` \
+	-I`$(CYGPATH_W) $(IPOPTOBJDIR)/inc`
 endif
 
 # This line is necessary to allow VPATH compilation with MS compilers

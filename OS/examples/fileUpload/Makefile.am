@@ -21,19 +21,19 @@ noinst_PROGRAMS = fileUpload
 fileUpload_SOURCES = fileUpload.cpp 
 
 
-	
+
 # List all additionally required COIN libraries
 
 fileUpload_LDADD =  \
 	$(OSOBJDIR)/src/libOS.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la 
-	
+
 if COIN_HAS_SYMPHONY
  fileUpload_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
 endif
 
  fileUpload_LDADD += $(OSIOBJDIR)/src/OsiClp/libOsiClp.la 
-	
+
 if COIN_HAS_DYLP
  fileUpload_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
 endif
@@ -44,17 +44,17 @@ endif
 
 
  fileUpload_LDADD += $(CBCOBJDIR)/src/libCbc.la 
-	
+
 if COIN_HAS_SYMPHONY
  fileUpload_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la 
 endif
 
  fileUpload_LDADD += $(CGLOBJDIR)/src/libCgl.la 
-	
+
  fileUpload_LDADD += $(OSIOBJDIR)/src/libOsi.la 
-	
+
  fileUpload_LDADD += $(CLPOBJDIR)/src/libClp.la 
-	
+
 if COIN_HAS_DYLP
  fileUpload_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la 
 endif
@@ -69,7 +69,7 @@ if COIN_HAS_GLPK
 endif
 
  fileUpload_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
-	
+
  fileUpload_LDADD += $(ADDLIBS) 
 
 if USEWSOCKLIB
@@ -117,7 +117,7 @@ fileUpload_LDFLAGS = -rpath $(libdir)
 
 if COIN_HAS_DYLP
   AM_CPPFLAGS += \
-  	-I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
+	-I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
 	-I`$(CYGPATH_W) $(DYLPSRCDIR)/inc` \
     -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/Dylp` \
     -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/DylpStdLib` \
@@ -148,7 +148,7 @@ if COIN_HAS_CPX
   AM_CPPFLAGS += \
 	-I`$(CYGPATH_W) $(CPXINCDIR)` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
-  	fileUpload_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+	fileUpload_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 endif
 
 
@@ -159,16 +159,18 @@ if COIN_HAS_LINDO
 endif
 
 if COIN_HAS_IPOPT
-  AM_CPPFLAGS += -I`$(CYGPATH_W) $(IPOPTINCDIR)` 
-  fileUpload_LDADD += $(IPOPTLIB)
+  AM_CPPFLAGS += \
+	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Interfaces` \
+	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Common` \
+	-I`$(CYGPATH_W) $(IPOPTOBJDIR)/inc`
+  fileUpload_LDADD += $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+  LIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
 endif
 
 if COIN_HAS_KNITRO
   AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(KNITROINCDIR)` 
-  fileUpload_LDADD += $(KNITROLIB)
-if USEMULTIPLYDEFINED
+  fileUpload_LDADD += $(KNITROLIB)if USEMULTIPLYDEFINED
   fileUpload_LDFLAGS += -multiply_defined suppress
-endif
 endif
 
 if COIN_HAS_ASL

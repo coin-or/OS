@@ -24,13 +24,13 @@ unitTest_SOURCES = unitTest.cpp
 unitTest_LDADD =  \
 	$(OSOBJDIR)/src/libOS.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la 
-	
+
 if COIN_HAS_SYMPHONY
  unitTest_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
 endif
 
  unitTest_LDADD += $(OSIOBJDIR)/src/OsiClp/libOsiClp.la 
-	
+
 if COIN_HAS_DYLP
  unitTest_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
 endif
@@ -40,17 +40,17 @@ if COIN_HAS_VOL
 endif
 
  unitTest_LDADD += $(CBCOBJDIR)/src/libCbc.la 
-	
+
 if COIN_HAS_SYMPHONY
  unitTest_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la 
 endif
 
  unitTest_LDADD += $(CGLOBJDIR)/src/libCgl.la 
-	
+
  unitTest_LDADD += $(OSIOBJDIR)/src/libOsi.la 
-	
+
  unitTest_LDADD += $(CLPOBJDIR)/src/libClp.la 
-	
+
 if COIN_HAS_DYLP
  unitTest_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la 
 endif
@@ -65,7 +65,7 @@ if COIN_HAS_GLPK
 endif
 
  unitTest_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
-	
+
 #unitTest_LDADD += $(ADDLIBS) 
 
 if USEWSOCKLIB
@@ -114,9 +114,9 @@ LIBS += $(ADDLIBS) `cat $(COINUTILSOBJDIR)/coinutils_addlibs.txt`
 LIBS += `cat $(OSIOBJDIR)/osi_addlibs.txt`
 LIBS  += `cat $(OSOBJDIR)/os_addlibs.txt`
 
-if COIN_HAS_IPOPT
-  LIBS += -l$(F77)
-endif
+#if COIN_HAS_IPOPT
+#  LIBS += -l$(F77)
+#endif
 
 # The -rpath flag is used by libtool to make sure that the shared
 # library is found (in the lib install directory) when we are using dynamic
@@ -127,7 +127,7 @@ unitTest_LDFLAGS = -rpath $(libdir)
 
 if COIN_HAS_DYLP
   AM_CPPFLAGS += \
-  	-I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
+	-I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
 	-I`$(CYGPATH_W) $(DYLPSRCDIR)/inc` \
 	-I`$(CYGPATH_W) $(DYLPSRCDIR)/src/Dylp` \
     -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/DylpStdLib` \
@@ -169,10 +169,13 @@ if COIN_HAS_LINDO
 endif
 
 if COIN_HAS_IPOPT
-  AM_CPPFLAGS += -I`$(CYGPATH_W) $(IPOPTINCDIR)` 
-  unitTest_LDADD += $(IPOPTLIB) 
+  AM_CPPFLAGS += \
+	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Interfaces` \
+	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Common` \
+	-I`$(CYGPATH_W) $(IPOPTOBJDIR)/inc`
+  unitTest_LDADD += $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+  LIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
 endif
-
 
 if COIN_HAS_KNITRO
   AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(KNITROINCDIR)` 

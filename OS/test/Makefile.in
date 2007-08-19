@@ -55,36 +55,40 @@ noinst_PROGRAMS = unitTest$(EXEEXT)
 
 #unitTest_LDADD += $(ADDLIBS) 
 @USEWSOCKLIB_TRUE@am__append_8 = $(WINSOCKLIB)
-@COIN_HAS_IPOPT_TRUE@am__append_9 = -l$(F77)
-@COIN_HAS_DYLP_TRUE@am__append_10 = \
-@COIN_HAS_DYLP_TRUE@  	-I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
+@COIN_HAS_DYLP_TRUE@am__append_9 = \
+@COIN_HAS_DYLP_TRUE@	-I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
 @COIN_HAS_DYLP_TRUE@	-I`$(CYGPATH_W) $(DYLPSRCDIR)/inc` \
 @COIN_HAS_DYLP_TRUE@	-I`$(CYGPATH_W) $(DYLPSRCDIR)/src/Dylp` \
 @COIN_HAS_DYLP_TRUE@    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/DylpStdLib` \
 @COIN_HAS_DYLP_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiDylp`
 
-@COIN_HAS_SYMPHONY_TRUE@am__append_11 = \
+@COIN_HAS_SYMPHONY_TRUE@am__append_10 = \
 @COIN_HAS_SYMPHONY_TRUE@    -I`$(CYGPATH_W) $(SYMPHONYSRCDIR)/include` \
 @COIN_HAS_SYMPHONY_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiSym`
 
-@COIN_HAS_VOL_TRUE@am__append_12 = \
+@COIN_HAS_VOL_TRUE@am__append_11 = \
 @COIN_HAS_VOL_TRUE@    -I`$(CYGPATH_W) $(VOLSRCDIR)/include` \
 @COIN_HAS_VOL_TRUE@    -I`$(CYGPATH_W) $(VOLSRCDIR)/src` \
 @COIN_HAS_VOL_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiVol`
 
-@COIN_HAS_CPX_TRUE@am__append_13 = \
+@COIN_HAS_CPX_TRUE@am__append_12 = \
 @COIN_HAS_CPX_TRUE@	-I`$(CYGPATH_W) $(CPXINCDIR)` \
 @COIN_HAS_CPX_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
 
-@COIN_HAS_CPX_TRUE@am__append_14 = $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
-@COIN_HAS_GLPK_TRUE@am__append_15 = \
+@COIN_HAS_CPX_TRUE@am__append_13 = $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+@COIN_HAS_GLPK_TRUE@am__append_14 = \
 @COIN_HAS_GLPK_TRUE@	-I`$(CYGPATH_W) $(GLPKINCDIR)` \
 @COIN_HAS_GLPK_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
 
-@COIN_HAS_LINDO_TRUE@am__append_16 = -I`$(CYGPATH_W) $(LINDOINCDIR)` 
-@COIN_HAS_LINDO_TRUE@am__append_17 = $(LINDOLIB)
-@COIN_HAS_IPOPT_TRUE@am__append_18 = -I`$(CYGPATH_W) $(IPOPTINCDIR)` 
-@COIN_HAS_IPOPT_TRUE@am__append_19 = $(IPOPTLIB) 
+@COIN_HAS_LINDO_TRUE@am__append_15 = -I`$(CYGPATH_W) $(LINDOINCDIR)` 
+@COIN_HAS_LINDO_TRUE@am__append_16 = $(LINDOLIB)
+@COIN_HAS_IPOPT_TRUE@am__append_17 = \
+@COIN_HAS_IPOPT_TRUE@	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Interfaces` \
+@COIN_HAS_IPOPT_TRUE@	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Common` \
+@COIN_HAS_IPOPT_TRUE@	-I`$(CYGPATH_W) $(IPOPTOBJDIR)/inc`
+
+@COIN_HAS_IPOPT_TRUE@am__append_18 = $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+@COIN_HAS_IPOPT_TRUE@am__append_19 = `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
 @COIN_HAS_KNITRO_TRUE@am__append_20 = -I`$(CYGPATH_W) $(KNITROINCDIR)` 
 @COIN_HAS_KNITRO_TRUE@am__append_21 = $(KNITROLIB)
 @COIN_HAS_KNITRO_TRUE@@USEMULTIPLYDEFINED_TRUE@am__append_22 = -multiply_defined suppress  
@@ -122,7 +126,7 @@ am__DEPENDENCIES_7 =
 @COIN_HAS_CPX_TRUE@am__DEPENDENCIES_10 =  \
 @COIN_HAS_CPX_TRUE@	$(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 @COIN_HAS_LINDO_TRUE@am__DEPENDENCIES_11 = $(am__DEPENDENCIES_7)
-@COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_12 = $(am__DEPENDENCIES_7)
+@COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_12 = $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
 @COIN_HAS_KNITRO_TRUE@am__DEPENDENCIES_13 = $(am__DEPENDENCIES_7)
 @COIN_HAS_ASL_TRUE@am__DEPENDENCIES_14 = $(am__DEPENDENCIES_7)
 unitTest_DEPENDENCIES = $(OSOBJDIR)/src/libOS.la \
@@ -250,8 +254,8 @@ INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
-IPOPTINCDIR = @IPOPTINCDIR@
-IPOPTLIB = @IPOPTLIB@
+IPOPTOBJDIR = @IPOPTOBJDIR@
+IPOPTSRCDIR = @IPOPTSRCDIR@
 KNITROINCDIR = @KNITROINCDIR@
 KNITROLIB = @KNITROLIB@
 LDFLAGS = @LDFLAGS@
@@ -263,7 +267,7 @@ LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@ $(ADDLIBS) `cat \
 	$(COINUTILSOBJDIR)/coinutils_addlibs.txt` `cat \
 	$(OSIOBJDIR)/osi_addlibs.txt` `cat $(OSOBJDIR)/os_addlibs.txt` \
-	$(am__append_9)
+	$(am__append_19)
 LIBTOOL = @LIBTOOL@
 LIBTOOLM4 = @LIBTOOLM4@
 LINDOINCDIR = @LINDOINCDIR@
@@ -374,8 +378,8 @@ unitTest_LDADD = $(OSOBJDIR)/src/libOS.la \
 	$(CGLOBJDIR)/src/libCgl.la $(OSIOBJDIR)/src/libOsi.la \
 	$(CLPOBJDIR)/src/libClp.la $(am__append_5) $(am__append_6) \
 	$(am__append_7) $(COINUTILSOBJDIR)/src/libCoinUtils.la \
-	$(am__append_8) $(am__append_14) $(am__append_17) \
-	$(am__append_19) $(am__append_21) $(am__append_24)
+	$(am__append_8) $(am__append_13) $(am__append_16) \
+	$(am__append_18) $(am__append_21) $(am__append_24)
 
 # Now add the include paths for compilation
 
@@ -397,10 +401,14 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` -I`$(CYGPATH_W) \
 	$(OSSRCDIR)/src/OSSolverInterfaces` -I`$(CYGPATH_W) \
 	$(OSSRCDIR)/src/OSModelInterfaces` -I`$(CYGPATH_W) \
 	$(CPPADSRCDIR)/..` -I`$(CYGPATH_W) \
-	$(OSSRCDIR)/src/OSCommonInterfaces` $(am__append_10) \
-	$(am__append_11) $(am__append_12) $(am__append_13) \
-	$(am__append_15) $(am__append_16) $(am__append_18) \
+	$(OSSRCDIR)/src/OSCommonInterfaces` $(am__append_9) \
+	$(am__append_10) $(am__append_11) $(am__append_12) \
+	$(am__append_14) $(am__append_15) $(am__append_17) \
 	$(am__append_20) $(am__append_23)
+
+#if COIN_HAS_IPOPT
+#  LIBS += -l$(F77)
+#endif
 
 # The -rpath flag is used by libtool to make sure that the shared
 # library is found (in the lib install directory) when we are using dynamic
