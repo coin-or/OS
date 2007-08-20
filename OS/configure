@@ -21853,12 +21853,12 @@ fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/testCallBack.osil"
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/CallBackTest.osil"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/testCallBackRowMajor.osil"
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/CallBackTestRowMajor.osil"
 fi
 
 ##
