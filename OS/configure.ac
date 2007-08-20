@@ -163,8 +163,8 @@ AC_COIN_VPATH_LINK(data/osilFiles/p0033.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/CppADTestLag.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/testOperators.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/wayneQuadratic.osil)
-AC_COIN_VPATH_LINK(data/osilFiles/testCallBack.osil)
-AC_COIN_VPATH_LINK(data/osilFiles/testCallBackRowMajor.osil)
+AC_COIN_VPATH_LINK(data/osilFiles/CallBackTest.osil)
+AC_COIN_VPATH_LINK(data/osilFiles/CallBackTestRowMajor.osil)
 ##
 ## osol test files
 ##
