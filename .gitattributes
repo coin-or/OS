@@ -162,8 +162,6 @@ OS/src/OSModelInterfaces/OSMatlab.cpp -text
 OS/src/OSModelInterfaces/OSMatlab.h -text
 OS/src/OSModelInterfaces/OSmps2osil.cpp -text
 OS/src/OSModelInterfaces/OSmps2osil.h -text
-OS/src/OSModelInterfaces/OSnl2osil.cpp -text
-OS/src/OSModelInterfaces/OSnl2osil.h -text
 OS/src/OSModelInterfaces/callMatlabSolver.m -text
 OS/src/OSModelInterfaces/matlabSolver.cpp -text
 OS/src/OSParsers/Makefile.am -text
@@ -215,6 +213,10 @@ OS/src/OSUtils/MathUtil.h -text
 OS/src/OSUtils/OSDataStructures.cpp -text
 OS/src/OSUtils/OSDataStructures.h -text
 OS/src/OSUtils/OSParameters.h -text
+OS/src/ThirdPartyASL/Makefile.am -text
+OS/src/ThirdPartyASL/Makefile.in -text
+OS/src/ThirdPartyASL/OSnl2osil.cpp -text
+OS/src/ThirdPartyASL/OSnl2osil.h -text
 OS/stylesheets/OSrL.css -text
 OS/stylesheets/OSrL.xslt -text
 OS/test/Makefile.am -text
