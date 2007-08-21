@@ -22091,7 +22091,7 @@ fi
 
 # Here list all the files that configure should create (except for the
 # configuration header file)
-                                                                                                                                                                ac_config_files="$ac_config_files Makefile src/Makefile src/OSAgent/Makefile src/OSUtils/Makefile src/OSCommonInterfaces/Makefile src/OSSolverInterfaces/Makefile src/OSModelInterfaces/Makefile src/OSParsers/Makefile test/Makefile examples/Makefile examples/instanceGenerator/Makefile examples/amplClient/Makefile examples/osTestCode/Makefile examples/algorithmicDiff/Makefile examples/fileUpload/Makefile os_addlibs.txt"
+                                                                                                                                                                          ac_config_files="$ac_config_files Makefile src/Makefile src/OSAgent/Makefile src/OSUtils/Makefile src/OSCommonInterfaces/Makefile src/OSSolverInterfaces/Makefile src/OSModelInterfaces/Makefile src/OSParsers/Makefile src/ThirdPartyASL/Makefile test/Makefile examples/Makefile examples/instanceGenerator/Makefile examples/amplClient/Makefile examples/osTestCode/Makefile examples/algorithmicDiff/Makefile examples/fileUpload/Makefile os_addlibs.txt"
 
 
 # Here put the location and name of the configuration header file
@@ -22881,6 +22881,7 @@ do
   "src/OSSolverInterfaces/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/OSSolverInterfaces/Makefile" ;;
   "src/OSModelInterfaces/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/OSModelInterfaces/Makefile" ;;
   "src/OSParsers/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/OSParsers/Makefile" ;;
+  "src/ThirdPartyASL/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/ThirdPartyASL/Makefile" ;;
   "test/Makefile" ) CONFIG_FILES="$CONFIG_FILES test/Makefile" ;;
   "examples/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/Makefile" ;;
   "examples/instanceGenerator/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/instanceGenerator/Makefile" ;;

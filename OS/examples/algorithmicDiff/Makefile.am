@@ -171,10 +171,7 @@ if USEMULTIPLYDEFINED
 endif
 endif
 
-if COIN_HAS_ASL
-  AM_CPPFLAGS += $(ASL_CPPFLAGS) 
-  algorithmicDiffTest_LDADD += $(ASLLIB)
-endif
+
 
 
 

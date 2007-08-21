@@ -92,8 +92,11 @@ noinst_PROGRAMS = unitTest$(EXEEXT)
 @COIN_HAS_KNITRO_TRUE@am__append_20 = -I`$(CYGPATH_W) $(KNITROINCDIR)` 
 @COIN_HAS_KNITRO_TRUE@am__append_21 = $(KNITROLIB)
 @COIN_HAS_KNITRO_TRUE@@USEMULTIPLYDEFINED_TRUE@am__append_22 = -multiply_defined suppress  
-@COIN_HAS_ASL_TRUE@am__append_23 = $(ASL_CPPFLAGS) 
-@COIN_HAS_ASL_TRUE@am__append_24 = $(ASLLIB) 
+@COIN_HAS_ASL_TRUE@am__append_23 = -I`$(CYGPATH_W) \
+@COIN_HAS_ASL_TRUE@	$(OSSRCDIR)/src/ThirdPartyASL` \
+@COIN_HAS_ASL_TRUE@	$(ASL_CPPFLAGS)
+@COIN_HAS_ASL_TRUE@am__append_24 = $(ASLLIB) \
+@COIN_HAS_ASL_TRUE@	$(OSOBJDIR)/src/ThirdPartyASL/libThirdPartyASL.la
 subdir = test
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -128,7 +131,8 @@ am__DEPENDENCIES_7 =
 @COIN_HAS_LINDO_TRUE@am__DEPENDENCIES_11 = $(am__DEPENDENCIES_7)
 @COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_12 = $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
 @COIN_HAS_KNITRO_TRUE@am__DEPENDENCIES_13 = $(am__DEPENDENCIES_7)
-@COIN_HAS_ASL_TRUE@am__DEPENDENCIES_14 = $(am__DEPENDENCIES_7)
+@COIN_HAS_ASL_TRUE@am__DEPENDENCIES_14 = $(am__DEPENDENCIES_7) \
+@COIN_HAS_ASL_TRUE@	$(OSOBJDIR)/src/ThirdPartyASL/libThirdPartyASL.la
 unitTest_DEPENDENCIES = $(OSOBJDIR)/src/libOS.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la $(am__DEPENDENCIES_1) \
 	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la $(am__DEPENDENCIES_2) \

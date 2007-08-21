@@ -251,6 +251,7 @@ AC_CONFIG_FILES([Makefile
           src/OSSolverInterfaces/Makefile
           src/OSModelInterfaces/Makefile
           src/OSParsers/Makefile
+          src/ThirdPartyASL/Makefile
           test/Makefile
           examples/Makefile
           examples/instanceGenerator/Makefile

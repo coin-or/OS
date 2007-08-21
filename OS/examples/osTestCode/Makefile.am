@@ -175,8 +175,10 @@ endif
 endif
 
 if COIN_HAS_ASL
+  AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
   AM_CPPFLAGS += $(ASL_CPPFLAGS) 
   osTestCode_LDADD += $(ASLLIB)
+  osTestCode_LDADD += $(OSOBJDIR)/src/ThirdPartyASL/libThirdPartyASL.la 
 endif
 
 

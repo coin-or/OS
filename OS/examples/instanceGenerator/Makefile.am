@@ -173,10 +173,7 @@ if USEMULTIPLYDEFINED
 endif
 endif
 
-if COIN_HAS_ASL
-  AM_CPPFLAGS += $(ASL_CPPFLAGS) 
-  instanceGenerator_LDADD += $(ASLLIB)
-endif
+
 
 
 

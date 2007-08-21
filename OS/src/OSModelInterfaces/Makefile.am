@@ -24,10 +24,7 @@ libOSModelInterfaces_la_SOURCES = \
 	OSmps2osil.cpp \
 	OSmps2osil.h 
 
-if COIN_HAS_ASL
-libOSModelInterfaces_la_SOURCES += OSnl2osil.cpp \
-				OSnl2osil.h 
-endif
+
 
 # This is for libtool (on Windows)
 libOSModelInterfaces_la_LDFLAGS = $(LT_LDFLAGS)
@@ -55,9 +52,7 @@ AM_CPPFLAGS =\
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSUtils` 
 
 
-if COIN_HAS_ASL
-AM_CPPFLAGS += 	$(ASL_CPPFLAGS)
-endif
+
 
 
 if COIN_HAS_CPX
@@ -129,9 +124,7 @@ include_HEADERS = \
 	 OSmps2osil.h \
 	 OSMatlab.h
 
-if COIN_HAS_ASL
-include_HEADERS += OSnl2osil.h 
-endif
+
 
 
 

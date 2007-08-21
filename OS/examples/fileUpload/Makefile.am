@@ -173,10 +173,6 @@ if COIN_HAS_KNITRO
   fileUpload_LDFLAGS += -multiply_defined suppress
 endif
 
-if COIN_HAS_ASL
-  AM_CPPFLAGS += $(ASL_CPPFLAGS) 
-  fileUpload_LDADD += $(ASLLIB)
-endif
 
 
 # This line is necessary to allow VPATH compilation with MS compilers
