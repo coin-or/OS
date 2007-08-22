@@ -153,7 +153,9 @@ osOptionsStruc *osoptions;
 int main(int argC, const char* argV[])
 {  
 
-	
+#ifdef COIN_HAS_ASL
+ASL_alloc(ASL_read_fg);
+#endif	
 	void* scanner;
 	FileUtil *fileUtil = NULL;
 	char osss[MAXCHARS] = " ";
