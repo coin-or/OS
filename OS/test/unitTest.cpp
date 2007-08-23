@@ -174,12 +174,14 @@ int main(int argC, char* argV[])
 	nlFileName =  dataDir  + "amplFiles" + dirsep + "parinc.nl";
 #ifdef COIN_HAS_ASL
 	ASL *asl = NULL;
+	FILE *nl;
 	asl = ASL_alloc(ASL_read_fg);
 
     char *stub = &nlFileName[ 0];
 	//cout << "READING FILE " << stub << endl;
 	//Initialize the nl file reading
-	jac0dim(stub, (fint)strlen(stub));
+	nl = jac0dim(stub, (fint)strlen(stub));
+	fg_read(nl, 0);
 	//jac0dim(NULL, 0);
 #endif
 	mpsFileName =  dataDir + "mpsFiles" + dirsep + "parinc.mps";
