@@ -181,7 +181,16 @@ int main(int argC, char* argV[])
 	//cout << "READING FILE " << stub << endl;
 	//Initialize the nl file reading
 	nl = jac0dim(stub, (fint)strlen(stub));
-	fg_read(nl, 0);
+	if(N_OPS > 0){
+		for(int i = 0; i < N_OPS; i++){
+			r_ops_int[i] = (efunc*)(unsigned long)i;
+				
+		}
+		R_OPS = r_ops_int;
+		want_derivs = 0;
+		fg_read(nl, 0);
+		R_OPS = 0;
+	}
 	//jac0dim(NULL, 0);
 #endif
 	mpsFileName =  dataDir + "mpsFiles" + dirsep + "parinc.mps";
