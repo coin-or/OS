@@ -179,7 +179,7 @@ int main(int argC, char* argV[])
     char *stub = &nlFileName[ 0];
 	//cout << "READING FILE " << stub << endl;
 	//Initialize the nl file reading
-	nl = jac0dim(stub, (fint)strlen(stub));
+	jac0dim(stub, (fint)strlen(stub));
 	//jac0dim(NULL, 0);
 #endif
 	mpsFileName =  dataDir + "mpsFiles" + dirsep + "parinc.mps";
