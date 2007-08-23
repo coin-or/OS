@@ -126,16 +126,6 @@
 
 #ifdef COIN_HAS_ASL
 #include "OSnl2osil.h"
-#include "nlp.h"
-#include "getstub.h"
-#include "r_opn.hd" /* for N_OPS */
-#include "opcode.hd"
-
-#define R_OPS ((ASL_fg*)asl)->I.r_ops_
-#define OBJ_DE ((ASL_fg*)asl)->I.obj_de_
-#define CON_DE ((ASL_fg*)asl)->I.con_de_
-
-efunc *r_ops_int[N_OPS];
 #endif
 #ifdef COIN_HAS_LINDO    
 #include "LindoSolver.h"
@@ -182,27 +172,6 @@ int main(int argC, char* argV[])
     dataDir = dirsep == '/' ? "../data/" : "..\\data\\";
 	std::string osol = "<osol></osol>";
 	nlFileName =  dataDir  + "amplFiles" + dirsep + "parinc.nl";
-#ifdef COIN_HAS_ASL
-	ASL *asl = NULL;
-	FILE *nl;
-	asl = ASL_alloc(ASL_read_fg);
-
-    char *stub = &nlFileName[ 0];
-	//cout << "READING FILE " << stub << endl;
-	//Initialize the nl file reading
-	nl = jac0dim(stub, (fint)strlen(stub));
-	if(N_OPS > 0){
-		for(int i = 0; i < N_OPS; i++){
-			r_ops_int[i] = (efunc*)(unsigned long)i;
-				
-		}
-		R_OPS = r_ops_int;
-		want_derivs = 0;
-		fg_read(nl, 0);
-		R_OPS = 0;
-	}
-	//jac0dim(NULL, 0);
-#endif
 	mpsFileName =  dataDir + "mpsFiles" + dirsep + "parinc.mps";
 	fileUtil = new FileUtil();
 	//
