@@ -176,7 +176,7 @@ int main(int argC, char* argV[])
 	ASL *asl = NULL;
 	asl = ASL_alloc(ASL_read_fg);
 
-    std::string stub = &nlfilename[ 0];
+    char *stub = &nlfilename[ 0];
 	//cout << "READING FILE " << stub << endl;
 	//Initialize the nl file reading
 	nl = jac0dim(stub, (fint)strlen(stub));
