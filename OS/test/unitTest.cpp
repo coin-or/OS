@@ -146,7 +146,8 @@ using std::ostringstream;
 int main(int argC, char* argV[])
 {
 #ifdef COIN_HAS_ASL
-//ASL_alloc(ASL_read_fg);
+ASL_alloc(ASL_read_fg);
+jac0dim(NULL, 0)
 #endif
 	double getObjVal(std::string osrl);
 	using CppAD::NearEqual;
