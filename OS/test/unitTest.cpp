@@ -145,11 +145,7 @@ using std::ostringstream;
 
 int main(int argC, char* argV[])
 {
-#ifdef COIN_HAS_ASL
-	ASL *asl = NULL;
-	asl = ASL_alloc(ASL_read_fg);
-	//jac0dim(NULL, 0);
-#endif
+
 	double getObjVal(std::string osrl);
 	using CppAD::NearEqual;
 	bool ok;
@@ -176,6 +172,16 @@ int main(int argC, char* argV[])
     dataDir = dirsep == '/' ? "../data/" : "..\\data\\";
 	std::string osol = "<osol></osol>";
 	nlFileName =  dataDir  + "amplFiles" + dirsep + "parinc.nl";
+#ifdef COIN_HAS_ASL
+	ASL *asl = NULL;
+	asl = ASL_alloc(ASL_read_fg);
+
+    std::string stub = &nlfilename[ 0];
+	//cout << "READING FILE " << stub << endl;
+	//Initialize the nl file reading
+	nl = jac0dim(stub, (fint)strlen(stub));
+	//jac0dim(NULL, 0);
+#endif
 	mpsFileName =  dataDir + "mpsFiles" + dirsep + "parinc.mps";
 	fileUtil = new FileUtil();
 	//
