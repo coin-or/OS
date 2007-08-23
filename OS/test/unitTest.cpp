@@ -126,6 +126,16 @@
 
 #ifdef COIN_HAS_ASL
 #include "OSnl2osil.h"
+#include "nlp.h"
+#include "getstub.h"
+#include "r_opn.hd" /* for N_OPS */
+#include "opcode.hd"
+
+#define R_OPS ((ASL_fg*)asl)->I.r_ops_
+#define OBJ_DE ((ASL_fg*)asl)->I.obj_de_
+#define CON_DE ((ASL_fg*)asl)->I.con_de_
+
+efunc *r_ops_int[N_OPS];
 #endif
 #ifdef COIN_HAS_LINDO    
 #include "LindoSolver.h"
