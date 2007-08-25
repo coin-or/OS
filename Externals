@@ -8,5 +8,11 @@ Osi            https://projects.coin-or.org/svn/Osi/trunk/Osi
 Vol            https://projects.coin-or.org/svn/Vol/trunk/Vol
 SYMPHONY       https://projects.coin-or.org/svn/SYMPHONY/trunk/SYMPHONY
 ThirdParty/ASL https://projects.coin-or.org/svn/BuildTools/ThirdParty/ASL/trunk
+ThirdParty/Blas https://projects.coin-or.org/svn/BuildTools/ThirdParty/Blas/trunk
+ThirdParty/Glpk https://projects.coin-or.org/svn/BuildTools/ThirdParty/Glpk/trunk
+ThirdParty/HSL https://projects.coin-or.org/svn/BuildTools/ThirdParty/HSL/trunk
+ThirdParty/Lapack https://projects.coin-or.org/svn/BuildTools/ThirdParty/Lapack/trunk
+ThirdParty/Mumps https://projects.coin-or.org/svn/BuildTools/ThirdParty/Mumps/trunk
+Ipopt          https://projects.coin-or.org/svn/Ipopt/trunk/Ipopt
 DyLP           https://projects.coin-or.org/svn/DyLP/trunk/DyLP
 cppad         https://projects.coin-or.org/svn/CppAD/trunk/cppad
