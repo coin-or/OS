@@ -2982,19 +2982,247 @@ http://www.microsoft.com/downloads/details.aspx?FamilyId=A55B6B43-E24F-4EA3-A93E
 
 Important comments from Lou:
 
-	Using Coin-All as of late afternoon (up-to-date, according to svnupdate), and after installing the SDK as per Andreas' email, I have a `minimalMsys' build using cl, with ASL, and OS, but it's definitely not clean. Here arethe issues, and the workarounds I used.	Cbc.exe doesn't link with ampl in the mix, and I put the blame onamplsolv.lib. MS link reports a conflict, apparently libcmt.lib and libcmtd.lib(normal and debugging malloc, respectively) are both pulled in. There's a fix:The link message says `use NODEFAULTLIB', and sure enough, if I edit theMakefile to read $(CXXLINK) $(cbc_LDFLAGS) $(cbc_OBJECTS) $(cbc_LDADD) $(LIBS) \   "-link -NODEFAULTLIB:libcmt.lib"then cbc.exe will link. The quotes are necessary because the cl mechanism forpassing things to the linker is `everything on the line after -link', andwithout the quotes libtool rearranges things. I don't know enough about MSVSdefaults to say whether libcmtd is the default on a debug build, or libcmt. JPmight have some insight. I have no immediate ideas on how to work this hackthrough autotools from a Makefile.am. Might be easier to fix amplsolv.lib.	The same hack is necessary to link OSSolverService.exe, the OSunitTest.exe, and the OS amplClient.exe.	When building OSAgent, the -I/include and -I/mingw/include have to go.The cl include order is `current directory, -I options, INCLUDE environmentvariable.' When either of /include or /mingw/include are specified with -I,MinGW include files are selected first, and they're not compatible with MSinclude files.	I didn't run into the problem Ted describes, but that's probablybecause I'm doing static links and the function (CbcOrClpReadCommand) is neverused anywhere except in cbc.exe. Link is bright enough to know it doesn't needit.	The Alps unit test crashes. Which is odd because the Bcps and Blis unittests run just fine.	The OS unit test runs until it gets to the Ampl testing section,and dies because it can't find parinc.nl. I'm not an Ampl user --- is a .nlfile Ampl output? If so, the result makes sense, because I don't have Ampl onthis machine.	While we're here, the -rpath <path> going into libtool seems totranslate into an attempt to pass -L<path> to cl, which it ignores with awarning about an invalid option.  Whatever libtool is hoping to achieve, it'sfailing. And not necessary, apparently, at least for a static build.
+	Using Coin-All as of late afternoon (up-to-date, according to svn
+update), and after installing the SDK as per Andreas' email, I have a `minimal
+Msys' build using cl, with ASL, and OS, but it's definitely not clean. Here are
+the issues, and the workarounds I used.
+
+	Cbc.exe doesn't link with ampl in the mix, and I put the blame on
+amplsolv.lib. MS link reports a conflict, apparently libcmt.lib and libcmtd.lib
+(normal and debugging malloc, respectively) are both pulled in. There's a fix:
+The link message says `use NODEFAULTLIB', and sure enough, if I edit the
+Makefile to read
+
+ $(CXXLINK) $(cbc_LDFLAGS) $(cbc_OBJECTS) $(cbc_LDADD) $(LIBS) \
+   "-link -NODEFAULTLIB:libcmt.lib"
+
+then cbc.exe will link. The quotes are necessary because the cl mechanism for
+passing things to the linker is `everything on the line after -link', and
+without the quotes libtool rearranges things. I don't know enough about MSVS
+defaults to say whether libcmtd is the default on a debug build, or libcmt. JP
+might have some insight. I have no immediate ideas on how to work this hack
+through autotools from a Makefile.am. Might be easier to fix amplsolv.lib.
+
+	The same hack is necessary to link OSSolverService.exe, the OS
+unitTest.exe, and the OS amplClient.exe.
+
+	When building OSAgent, the -I/include and -I/mingw/include have to go.
+The cl include order is `current directory, -I options, INCLUDE environment
+variable.' When either of /include or /mingw/include are specified with -I,
+MinGW include files are selected first, and they're not compatible with MS
+include files.
+
+	I didn't run into the problem Ted describes, but that's probably
+because I'm doing static links and the function (CbcOrClpReadCommand) is never
+used anywhere except in cbc.exe. Link is bright enough to know it doesn't need
+it.
+
+	The Alps unit test crashes. Which is odd because the Bcps and Blis unit
+tests run just fine.
+
+	The OS unit test runs until it gets to the Ampl testing section,
+and dies because it can't find parinc.nl. I'm not an Ampl user --- is a .nl
+file Ampl output? If so, the result makes sense, because I don't have Ampl on
+this machine.
+
+	While we're here, the -rpath <path> going into libtool seems to
+translate into an attempt to pass -L<path> to cl, which it ignores with a
+warning about an invalid option.  Whatever libtool is hoping to achieve, it's
+failing. And not necessary, apparently, at least for a static build.
 	
 %%%%
 
 Important comments from Andreas:
 
 
-This is a well-known problem with the free cl compiler.  I had the same problem and search the web.This is what I believe I did:Download and install the (free) SDK, which has the missing header files:http://www.microsoft.com/downloads/details.aspx?FamilyId=0BAF2B35-C656-4969-ACE8-E4C0C0716ADB&displaylang=enor so.After that, there was still something wrong with the PATH setup for cl.  I edited my/media/win/c/Program Files/Microsoft Visual Studio 8/Common7/Tools/vsvars32.batfile so that the INCLUDE variable includes the correct path to the SDK include files, something like:@set PATH=C:\Program Files\Microsoft Visual Studio 8\Common7\IDE;C:\Program Files\Microsoft Visual Studio 8\VC\BIN;C:\Program Files\Microsoft Visual Studio 8\Common7\Tools;C:\Program Files\Microsoft Visual Studio 8\SDK\v2.0\bin;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727;C:\Program Files\Microsoft Visual Studio 8\VC\VCPackages;C:\Program Files\Microsoft Platform SDK\Bin;%PATH%@set INCLUDE=C:\Program Files\Microsoft Visual Studio 8\VC\INCLUDE;C:\Program Files\Microsoft Platform SDK\Include;%INCLUDE%@set LIB=C:\Program Files\Microsoft Visual Studio 8\VC\LIB;C:\Program Files\Microsoft Visual Studio 8\SDK\v2.0\lib;C:\Program Files\Microsoft Platform SDK\Lib%LIB%@set LIBPATH=C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727There are a number of discussions about this on the web, e.g.http://www.gamedev.net/community/forums/topic.asp?topic_id=440340I hope this helps, 
+
+This is a well-known problem with the free cl compiler.  I had the same problem and search the web.
+
+This is what I believe I did:
+
+Download and install the (free) SDK, which has the missing header files:
+
+http://www.microsoft.com/downloads/details.aspx?FamilyId=0BAF2B35-C656-4969-ACE8-E4C0C0716ADB&displaylang=en
+
+or so.
+
+After that, there was still something wrong with the PATH setup for cl.  I edited my
+
+/media/win/c/Program Files/Microsoft Visual Studio 8/Common7/Tools/vsvars32.bat
+
+file so that the INCLUDE variable includes the correct path to the SDK include files, something like:
+
+@set PATH=C:\Program Files\Microsoft Visual Studio 8\Common7\IDE;C:\Program Files\Microsoft Visual Studio 8\VC\BIN;C:\Program Files\Microsoft Visual Studio 8\Common7\Tools;C:\Program Files\Microsoft Visual Studio 8\SDK\v2.0\bin;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727;C:\Program Files\Microsoft Visual Studio 8\VC\VCPackages;C:\Program Files\Microsoft Platform SDK\Bin;%PATH%
+@set INCLUDE=C:\Program Files\Microsoft Visual Studio 8\VC\INCLUDE;C:\Program Files\Microsoft Platform SDK\Include;%INCLUDE%
+@set LIB=C:\Program Files\Microsoft Visual Studio 8\VC\LIB;C:\Program Files\Microsoft Visual Studio 8\SDK\v2.0\lib;C:\Program Files\Microsoft Platform SDK\Lib%LIB%
+@set LIBPATH=C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727
+
+There are a number of discussions about this on the web, e.g.
+
+http://www.gamedev.net/community/forums/topic.asp?topic_id=440340
+
+I hope this helps, 
 
 %%%%%%
 
 Andreas bug report:
 
-<!DOCTYPE html    PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head> <title>#3 (Problem compiling on AIX (CppAD trouble?)) - Optimization Services - Trac</title><link rel="start" href="/OS/wiki" /><link rel="search" href="/OS/search" /><link rel="help" href="/OS/wiki/TracGuide" /><link rel="stylesheet" href="/OS/chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="/OS/chrome/common/css/ticket.css" type="text/css" /><link rel="icon" href="/OS/chrome/common/trac.ico" type="image/x-icon" /><link rel="shortcut icon" href="/OS/chrome/common/trac.ico" type="image/x-icon" /><link rel="alternate" href="/OS/ticket/3?format=rss" title="RSS Feed" type="trac.ticket.Ticket" /><link rel="alternate" href="/OS/ticket/3?format=tab" title="Tab-delimited Text" type="trac.ticket.Ticket" /><link rel="alternate" href="/OS/ticket/3?format=csv" title="Comma-delimited Text" type="trac.ticket.Ticket" /><style type="text/css"></style> <script type="text/javascript" src="/OS/chrome/common/js/trac.js"></script></head><body><div id="banner"><div id="header"><a id="logo" href="http://www.coin-or.org/"><img src="/OS/chrome/common/coin_banner.jpg" width="80" height="80" alt="" /></a><hr /></div><form id="search" action="/OS/search" method="get"> <div>  <label for="proj-search">Search:</label>  <input type="text" id="proj-search" name="q" size="10" accesskey="f" value="" />  <input type="submit" value="Search" />  <input type="hidden" name="wiki" value="on" />  <input type="hidden" name="changeset" value="on" />  <input type="hidden" name="ticket" value="on" /> </div></form><div id="metanav" class="nav"><ul><li class="first"><a href="/OS/login">Login</a></li><li><a href="/OS/settings">Settings</a></li><li><a accesskey="6" href="/OS/wiki/TracGuide">Help/Guide</a></li><li><a href="/OS/about">About Trac</a></li><li class="last"><a href="/OS/register">Register</a></li></ul></div></div><div id="mainnav" class="nav"><ul><li class="first"><a accesskey="1" href="/OS/wiki">Wiki</a></li><li><a accesskey="2" href="/OS/timeline">Timeline</a></li><li><a accesskey="3" href="/OS/roadmap">Roadmap</a></li><li><a href="/OS/browser">Browse Source</a></li><li class="active"><a href="/OS/report">View Tickets</a></li><li class="last"><a accesskey="4" href="/OS/search">Search</a></li></ul></div><div id="main"><div id="ctxtnav" class="nav"> <h2>Ticket Navigation</h2></div><div id="content" class="ticket"> <h1>Ticket #3 <span class="status">(new defect)</span></h1><div id="searchable"><div id="ticket"> <div class="date">  <p title="08/10/07 12:53:44">Opened 1 week ago</p> </div> <h2 class="summary">Problem compiling on AIX (CppAD trouble?)</h2> <table class="properties">  <tr>   <th id="h_reporter">Reported by:</th>   <td headers="h_reporter">andreasw</td>   <th id="h_owner">Assigned to:</th>   <td headers="h_owner">somebody</td>  </tr><tr>    <th id="h_priority">Priority:</th>    <td headers="h_priority">major</td>    <th id="h_milestone">Milestone:</th>    <td headers="h_milestone"></td></tr><tr>    <th id="h_component">Component:</th>    <td headers="h_component">component1</td>    <th id="h_version">Version:</th>    <td headers="h_version"></td></tr><tr>    <th id="h_keywords">Keywords:</th>    <td headers="h_keywords"></td>    <th id="h_cc">Cc:</th>    <td headers="h_cc"></td></tr><tr></tr> </table>  <form method="get" action="/OS/ticket/3#comment" class="printableform">   <div class="description">    <h3 id="comment:description">     Description     </h3>    <p>I'm trying to compile on AIX (IBM's xlC compiler).</p><p>The first set of problems comes in because CppAD is using the identifiers "isfinite" and "isnan", which on AIX is the name of preprocessor macros, defined in /usr/include/math.h.  I got around this problem buy renaming "isfinite" and "isnan" in CppAD's near_equal.hpp and nan.hpp.  But maybe the issue is related that you use &lt;math.h&gt; in C++ code, whereas the C++ standard says you should use &lt;cmath&gt;.  In Ipopt, I check for each C header if the C++ version is there, and if not, if the C version is there, and include the files accordingly.  There is macro for testing in coin.m4.  In Ipopt's configure.ac I use:</p><pre class="wiki">AC_COIN_CHECK_CXX_CHEADER(math)</pre><p>and then the source code has:</p><pre class="wiki">#ifdef HAVE_CMATH# include &lt;cmath&gt;#else# ifdef HAVE_MATH_H#  include &lt;math.h&gt;# else#  error "don't have header file for math"# endif#endif</pre><p>Once I'm able to get through that point, I get tons of error messages like the following:</p><pre class="wiki">"/u/andreasw/home4/COIN-svn/CoinAll/branches/all-trunk/cppad/../cppad/local/std_math_unary.hpp", line 322.9: 1540-0215 (S) The wrong number of arguments have been specified for "CppAD::AD&lt;double&gt;::cos() const"."/u/andreasw/home4/COIN-svn/CoinAll/branches/all-trunk/cppad/../cppad/local/std_math_unary.hpp", line 322.9: 1540-0700 (I) The previous message was produced while processing "CppAD::AD&lt;double&gt;::cos() const"."/u/andreasw/home4/COIN-svn/CoinAll/branches/all-trunk/cppad/../cppad/local/std_math_unary.hpp", line 322.9: 1540-0700 (I) The previous message was produced while processing "CppAD::cos&lt;double&gt;(const AD&lt;double&gt; &amp;)"."../../../../../../../CoinAll/branches/all-trunk/OS/src/OSCommonInterfaces/OSnLNode.cpp", line 1157.23: 1540-0700 (I) The previous message was produced while processing "OSnLNodeCos::constructCppADTape(std::map&lt;int,int,std::less&lt;int&gt;,std::allocator&lt;std::pair&lt;const int,int&gt; &gt; &gt; *, CppAD::vector&lt;CppAD::AD&lt;double&gt; &gt; *)".</pre>   </div>  </form></div> </div> <script type="text/javascript">  addHeadingLinks(document.getElementById("searchable"), "Permalink to $id"); </script></div><script type="text/javascript">searchHighlight()</script><div id="altlinks"><h3>Download in other formats:</h3><ul><li class="first"><a href="/OS/ticket/3?format=rss">RSS Feed</a></li><li><a href="/OS/ticket/3?format=tab">Tab-delimited Text</a></li><li class="last"><a href="/OS/ticket/3?format=csv">Comma-delimited Text</a></li></ul></div></div><div id="footer"> <hr /> <a id="tracpowered" href="http://trac.edgewall.org/"><img src="/OS/chrome/common/trac_logo_mini.png" height="30" width="107"   alt="Trac Powered"/></a> <p class="left">  Powered by <a href="/OS/about"><strong>Trac 0.10.4</strong></a><br />  By <a href="http://www.edgewall.org/">Edgewall Software</a>. </p> <p class="right">  Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a> </p></div> </body></html>
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+ <title>#3 (Problem compiling on AIX (CppAD trouble?)) - Optimization Services - Trac</title><link rel="start" href="/OS/wiki" /><link rel="search" href="/OS/search" /><link rel="help" href="/OS/wiki/TracGuide" /><link rel="stylesheet" href="/OS/chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="/OS/chrome/common/css/ticket.css" type="text/css" /><link rel="icon" href="/OS/chrome/common/trac.ico" type="image/x-icon" /><link rel="shortcut icon" href="/OS/chrome/common/trac.ico" type="image/x-icon" /><link rel="alternate" href="/OS/ticket/3?format=rss" title="RSS Feed" type="trac.ticket.Ticket" /><link rel="alternate" href="/OS/ticket/3?format=tab" title="Tab-delimited Text" type="trac.ticket.Ticket" /><link rel="alternate" href="/OS/ticket/3?format=csv" title="Comma-delimited Text" type="trac.ticket.Ticket" /><style type="text/css">
+</style>
+ <script type="text/javascript" src="/OS/chrome/common/js/trac.js"></script>
+</head>
+<body>
+
+
+<div id="banner">
+
+<div id="header"><a id="logo" href="http://www.coin-or.org/"><img src="/OS/chrome/common/coin_banner.jpg" width="80" height="80" alt="" /></a><hr /></div>
+
+<form id="search" action="/OS/search" method="get">
+ <div>
+  <label for="proj-search">Search:</label>
+  <input type="text" id="proj-search" name="q" size="10" accesskey="f" value="" />
+  <input type="submit" value="Search" />
+  <input type="hidden" name="wiki" value="on" />
+  <input type="hidden" name="changeset" value="on" />
+  <input type="hidden" name="ticket" value="on" />
+
+ </div>
+</form>
+
+
+
+<div id="metanav" class="nav"><ul><li class="first"><a href="/OS/login">Login</a></li><li><a href="/OS/settings">Settings</a></li><li><a accesskey="6" href="/OS/wiki/TracGuide">Help/Guide</a></li><li><a href="/OS/about">About Trac</a></li><li class="last"><a href="/OS/register">Register</a></li></ul></div>
+</div>
+
+<div id="mainnav" class="nav"><ul><li class="first"><a accesskey="1" href="/OS/wiki">Wiki</a></li><li><a accesskey="2" href="/OS/timeline">Timeline</a></li><li><a accesskey="3" href="/OS/roadmap">Roadmap</a></li><li><a href="/OS/browser">Browse Source</a></li><li class="active"><a href="/OS/report">View Tickets</a></li><li class="last"><a accesskey="4" href="/OS/search">Search</a></li></ul></div>
+
+<div id="main">
+
+
+
+
+<div id="ctxtnav" class="nav">
+ <h2>Ticket Navigation</h2>
+</div>
+
+<div id="content" class="ticket">
+
+ <h1>Ticket #3 <span class="status">(new defect)</span></h1>
+
+<div id="searchable">
+<div id="ticket">
+ <div class="date">
+  <p title="08/10/07 12:53:44">Opened 1 week ago</p>
+ </div>
+ <h2 class="summary">Problem compiling on AIX (CppAD trouble?)</h2>
+ <table class="properties">
+  <tr>
+
+   <th id="h_reporter">Reported by:</th>
+   <td headers="h_reporter">andreasw</td>
+   <th id="h_owner">Assigned to:</th>
+   <td headers="h_owner">somebody</td>
+  </tr><tr>
+    <th id="h_priority">Priority:</th>
+
+    <td headers="h_priority">major</td>
+    <th id="h_milestone">Milestone:</th>
+    <td headers="h_milestone"></td></tr><tr>
+    <th id="h_component">Component:</th>
+    <td headers="h_component">component1</td>
+    <th id="h_version">Version:</th>
+
+    <td headers="h_version"></td></tr><tr>
+    <th id="h_keywords">Keywords:</th>
+    <td headers="h_keywords"></td>
+    <th id="h_cc">Cc:</th>
+    <td headers="h_cc"></td></tr><tr></tr>
+ </table>
+  <form method="get" action="/OS/ticket/3#comment" class="printableform">
+   <div class="description">
+
+    <h3 id="comment:description">
+     Description 
+    </h3>
+    <p>
+I'm trying to compile on AIX (IBM's xlC compiler).
+</p>
+<p>
+The first set of problems comes in because CppAD is using the identifiers "isfinite" and "isnan", which on AIX is the name of preprocessor macros, defined in /usr/include/math.h.  I got around this problem buy renaming "isfinite" and "isnan" in CppAD's near_equal.hpp and nan.hpp.  But maybe the issue is related that you use &lt;math.h&gt; in C++ code, whereas the C++ standard says you should use &lt;cmath&gt;.  In Ipopt, I check for each C header if the C++ version is there, and if not, if the C version is there, and include the files accordingly.  There is macro for testing in coin.m4.  In Ipopt's configure.ac I use:
+</p>
+
+<pre class="wiki">AC_COIN_CHECK_CXX_CHEADER(math)
+</pre><p>
+and then the source code has:
+</p>
+<pre class="wiki">#ifdef HAVE_CMATH
+# include &lt;cmath&gt;
+#else
+# ifdef HAVE_MATH_H
+#  include &lt;math.h&gt;
+# else
+#  error "don't have header file for math"
+# endif
+#endif
+</pre><p>
+Once I'm able to get through that point, I get tons of error messages like the following:
+</p>
+<pre class="wiki">"/u/andreasw/home4/COIN-svn/CoinAll/branches/all-trunk/cppad/../cppad/local/std_math_unary.hpp", line 322.9: 1540-0215 (S) The wrong number of arguments have been specified for "CppAD::AD&lt;double&gt;::cos() const".
+"/u/andreasw/home4/COIN-svn/CoinAll/branches/all-trunk/cppad/../cppad/local/std_math_unary.hpp", line 322.9: 1540-0700 (I) The previous message was produced while processing "CppAD::AD&lt;double&gt;::cos() const".
+"/u/andreasw/home4/COIN-svn/CoinAll/branches/all-trunk/cppad/../cppad/local/std_math_unary.hpp", line 322.9: 1540-0700 (I) The previous message was produced while processing "CppAD::cos&lt;double&gt;(const AD&lt;double&gt; &amp;)".
+"../../../../../../../CoinAll/branches/all-trunk/OS/src/OSCommonInterfaces/OSnLNode.cpp", line 1157.23: 1540-0700 (I) The previous message was produced while processing "OSnLNodeCos::constructCppADTape(std::map&lt;int,int,std::less&lt;int&gt;,std::allocator&lt;std::pair&lt;const int,int&gt; &gt; &gt; *, CppAD::vector&lt;CppAD::AD&lt;double&gt; &gt; *)".
+
+</pre>
+   </div>
+  </form>
+</div>
+
+
+
+
+
+
+
+
+
+ </div>
+
+ <script type="text/javascript">
+  addHeadingLinks(document.getElementById("searchable"), "Permalink to $id");
+ </script>
+</div>
+<script type="text/javascript">searchHighlight()</script>
+<div id="altlinks"><h3>Download in other formats:</h3><ul><li class="first"><a href="/OS/ticket/3?format=rss">RSS Feed</a></li><li><a href="/OS/ticket/3?format=tab">Tab-delimited Text</a></li><li class="last"><a href="/OS/ticket/3?format=csv">Comma-delimited Text</a></li></ul></div>
+
+</div>
+
+<div id="footer">
+ <hr />
+
+ <a id="tracpowered" href="http://trac.edgewall.org/"><img src="/OS/chrome/common/trac_logo_mini.png" height="30" width="107"
+   alt="Trac Powered"/></a>
+ <p class="left">
+  Powered by <a href="/OS/about"><strong>Trac 0.10.4</strong></a><br />
+  By <a href="http://www.edgewall.org/">Edgewall Software</a>.
+ </p>
+ <p class="right">
+  Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a>
+
+ </p>
+</div>
+
+
+
+ </body>
+</html>
+
+for wget see Christoprher G.  Lewis Windows wget
+
 
 
