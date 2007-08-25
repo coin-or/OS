@@ -44,6 +44,11 @@ AC_COIN_INIT_AUTOMAKE
 #############################################################################
 #kipp -- should this be here? Does ASL become a macro?
 AC_COIN_THIRDPARTY_SUBDIRS([ASL],[ThirdParty/ASL],[solvers/asl.h])
+AC_COIN_THIRDPARTY_SUBDIRS([Blas],[ThirdParty/Blas],[daxpy.f])
+AC_COIN_THIRDPARTY_SUBDIRS([Lapack],[ThirdParty/Lapack],[LAPACK/SRC/dlarf.f])
+AC_COIN_THIRDPARTY_SUBDIRS([HSL],[ThirdParty/HSL],[configure.ac])
+AC_COIN_THIRDPARTY_SUBDIRS([Glpk],[ThirdParty/Glpk],[glpk/src/glplpx01.c])
+AC_COIN_THIRDPARTY_SUBDIRS([Mumps],[ThirdParty/Mumps],[MUMPS/src/dmumps_part1.F])
 
 #############################################################################
 #                  Check which subprojects are there                        #
@@ -52,14 +57,13 @@ AC_COIN_THIRDPARTY_SUBDIRS([ASL],[ThirdParty/ASL],[solvers/asl.h])
 AC_COIN_MAIN_SUBDIRS(CoinUtils)
 AC_COIN_MAIN_SUBDIRS(Vol)
 AC_COIN_MAIN_SUBDIRS(DyLP)
-AC_COIN_MAIN_SUBDIRS(Data/Netlib)
 AC_COIN_MAIN_SUBDIRS(Data/Sample)
-AC_COIN_MAIN_SUBDIRS(Data/miplib3)
 AC_COIN_MAIN_SUBDIRS(Clp)
 AC_COIN_MAIN_SUBDIRS(Osi)
 AC_COIN_MAIN_SUBDIRS(Cgl)
 AC_COIN_MAIN_SUBDIRS(Cbc)
 AC_COIN_MAIN_SUBDIRS(SYMPHONY)
+AC_COIN_MAIN_SUBDIRS(Ipopt)
 AC_COIN_MAIN_SUBDIRS(cppad)
 AC_COIN_MAIN_SUBDIRS(OS)
 
