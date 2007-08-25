@@ -42,8 +42,6 @@ OS/data/mpsFiles/parinc.mps -text
 OS/data/osilFiles/CppADTestLag.osil -text
 OS/data/osilFiles/HS071_NLP.osil -text
 OS/data/osilFiles/avion2.osil -text
-OS/data/osilFiles/callBackTest.osil -text
-OS/data/osilFiles/callBackTestRowMajor.osil -text
 OS/data/osilFiles/lindoapiaddins.osil -text
 OS/data/osilFiles/markowitz.osil -text
 OS/data/osilFiles/markowitzMatlab.osil -text
