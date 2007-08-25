@@ -30,6 +30,29 @@ AC_CONFIG_SRCDIR(src/OSUtils/ErrorClass.cpp)
 # /usr/local.
 AC_PREFIX_DEFAULT([`pwd`])
 
+############################################################################
+############################################################################
+#                   Stuff that we need for C++ programs                    #
+############################################################################
+############################################################################
+
+AC_LANG_PUSH(C++)
+
+################
+# Header Files #
+################
+
+
+AC_COIN_CHECK_CXX_CHEADER(math)
+AC_COIN_CHECK_CXX_CHEADER(ctype)
+AC_COIN_CHECK_CXX_CHEADER(assert)
+AC_COIN_CHECK_CXX_CHEADER(stdio)
+AC_COIN_CHECK_CXX_CHEADER(stdlib)
+AC_COIN_CHECK_CXX_CHEADER(stdarg)
+AC_COIN_CHECK_CXX_CHEADER(string)
+AC_COIN_CHECK_CXX_CHEADER(float)
+AC_COIN_CHECK_CXX_CHEADER(time)
+
 #############################################################################
 #                         Standard build tool stuff                         #
 #############################################################################
