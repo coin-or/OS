@@ -1,10 +1,10 @@
 BuildTools     https://projects.coin-or.org/svn/BuildTools/trunk
 Data/Sample    https://projects.coin-or.org/svn/Data/trunk/Sample
-CoinUtils      https://projects.coin-or.org/svn/CoinUtils/stable/2.1/CoinUtils
+CoinUtils      https://projects.coin-or.org/svn/CoinUtils/trunk/CoinUtils
 Cbc            https://projects.coin-or.org/svn/Cbc/trunk/Cbc
 Cgl            https://projects.coin-or.org/svn/Cgl/trunk/Cgl
-Clp            https://projects.coin-or.org/svn/Clp/stable/1.4/Clp
-Osi            https://projects.coin-or.org/svn/Osi/stable/0.96/Osi
+Clp            https://projects.coin-or.org/svn/Clp/trunnk/Clp
+Osi            https://projects.coin-or.org/svn/Osi/trunk/Osi
 Vol            https://projects.coin-or.org/svn/Vol/trunk/Vol
 SYMPHONY       https://projects.coin-or.org/svn/SYMPHONY/trunk/SYMPHONY
 ThirdParty/ASL https://projects.coin-or.org/svn/BuildTools/ThirdParty/ASL/trunk
