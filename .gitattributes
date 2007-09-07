@@ -41,6 +41,7 @@ OS/data/matlabFiles/template.m -text
 OS/data/mpsFiles/parinc.mps -text
 OS/data/osilFiles/CppADTestLag.osil -text
 OS/data/osilFiles/HS071_NLP.osil -text
+OS/data/osilFiles/HS071_NLPMod.osil -text
 OS/data/osilFiles/avion2.osil -text
 OS/data/osilFiles/callBackTest.osil -text
 OS/data/osilFiles/callBackTestRowMajor.osil -text
