@@ -253,7 +253,7 @@ int main(int argC, char* argV[])
 		osilFileName =  dataDir  + "osilFiles" + dirsep + "parincLinear.osil";
 		osil = fileUtil->getFileAsString( &osilFileName[0]);
 		cout << "IPOPT Solver created for OSiL string solution" << endl;
-		ipoptSolver->osol = osol;
+		ipoptSolver->osol = osol; 
 		osilreader = new OSiLReader(); 
 		ipoptSolver->osinstance = osilreader->readOSiL( &osil);
 		cout << "call the IPOPT Solver" << endl;
