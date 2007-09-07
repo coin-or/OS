@@ -178,6 +178,7 @@ AC_DEFINE_UNQUOTED([OSROOT_DIR], ["$OSROOT_DIR"],
 AC_COIN_VPATH_LINK(data/osilFiles/parincLinear.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/parincQuadratic.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/HS071_NLP.osil)
+AC_COIN_VPATH_LINK(data/osilFiles/HS071_NLPMod.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/rosenbrockmod.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/avion2.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/lindoapiaddins.osil)

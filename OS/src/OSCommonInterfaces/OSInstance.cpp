@@ -2703,8 +2703,6 @@ bool OSInstance::getZeroOrderResults(double *x, double *objLambda, double *conMu
 			m_mdConstraintFunctionValues[ rowNum] = 0.0;
 			if( m_mapExpressionTreesMod.find( rowNum) != m_mapExpressionTreesMod.end() ){
 				m_mdConstraintFunctionValues[ rowNum] = m_vdYval[  m_mapCppADFunRangeIndex[ rowNum]];
-				std::cout << "GAIL  = " << rowNum << std::endl;
-				std::cout << " HONDA = " << m_mapCppADFunRangeIndex[ rowNum] << std::endl;
 			}
 			// now the linear part
 			// be careful, loop over only the constant terms in sparseJacMatrix

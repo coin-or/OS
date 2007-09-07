@@ -201,7 +201,7 @@ int main(int argC, char* argV[])
 		unitTestResult << "Solved problem avion2.osil with Ipopt" << std::endl;
 		// solve another problem
 		// a problem with all nonlinear terms no linear terms
-		osilFileName =  dataDir  + "osilFiles" + dirsep + "HS071_NLP.osil";
+		osilFileName =  dataDir  + "osilFiles" + dirsep + "HS071_NLPMod.osil";
 		osil = fileUtil->getFileAsString( &osilFileName[0]);
 		cout << "IPOPT Solver created for OSiL string solution" << endl;
 		ipoptSolver->osol = osol;
