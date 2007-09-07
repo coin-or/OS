@@ -880,6 +880,10 @@ private:
 	 */
 	std::map<int, OSExpressionTree*> m_mapExpressionTrees ;
 	
+	
+	
+	std::map<int, int> m_mapCppADFunRangeIndex ;
+	
 	/**
 	 * m_LagrangianExpTree is an OSExpressionTree object that is the expression tree
 	 * for the Lagrangian function.

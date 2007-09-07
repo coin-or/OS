@@ -2584,9 +2584,15 @@ bool OSInstance::createCppADFun(std::vector<double> vdX){
 	 * objective and constraint functions.
 	 */
 	CppAD::vector< AD<double> > m_vFG;	
+	int kount = 0;
 	for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){	
 		m_vFG.push_back( (posMapExpTree->second)->m_treeRoot->constructCppADTape(&m_mapAllNonlinearVariablesIndex, &vdaX) );
 		std::cout << "PUSHING BACK EXPRESSION NUMBER " << posMapExpTree->first << std::endl;
+		if( m_mapCppADFunRangeIndex.find( posMapExpTree->first) == m_mapCppADFunRangeIndex.end() ){
+			// count which nonlinear obj/constraint this is
+			m_mapCppADFunRangeIndex[ posMapExpTree->first] = kount;
+			kount++;
+		}
 	}	
 	//create the function and stop recording
 	Fad = new CppAD::ADFun<double>(vdaX, m_vFG);
@@ -2696,7 +2702,9 @@ bool OSInstance::getZeroOrderResults(double *x, double *objLambda, double *conMu
 		for(rowNum = 0; rowNum < m_iConstraintNumber; rowNum++){
 			m_mdConstraintFunctionValues[ rowNum] = 0.0;
 			if( m_mapExpressionTreesMod.find( rowNum) != m_mapExpressionTreesMod.end() ){
-				m_mdConstraintFunctionValues[ rowNum] = m_vdYval[m_iObjectiveNumber + rowNum];
+				m_mdConstraintFunctionValues[ rowNum] = m_vdYval[  m_mapCppADFunRangeIndex[ rowNum]];
+				std::cout << "GAIL  = " << rowNum << std::endl;
+				std::cout << " HONDA = " << m_mapCppADFunRangeIndex[ rowNum] << std::endl;
 			}
 			// now the linear part
 			// be careful, loop over only the constant terms in sparseJacMatrix
@@ -2709,7 +2717,7 @@ bool OSInstance::getZeroOrderResults(double *x, double *objLambda, double *conMu
 			// add in the constraint function constant
 			m_mdConstraintFunctionValues[ rowNum] += m_mdConstraintConstants[ rowNum ];
 			#ifdef DEBUG
-			std::cout << "Constraint " << rowNum << " function value =  " << m_mdConstraintFunctionValues[ rowNum] << std::endl;
+			std::cout << "Constraint " <<  rowNum << " function value =  " << m_mdConstraintFunctionValues[ rowNum ] << std::endl;
 			#endif
 		}
 		// now get the objective function values from the forward result
