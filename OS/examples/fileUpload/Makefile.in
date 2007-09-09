@@ -86,9 +86,6 @@ noinst_PROGRAMS = fileUpload$(EXEEXT)
 
 @COIN_HAS_IPOPT_TRUE@am__append_17 = $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
 @COIN_HAS_IPOPT_TRUE@am__append_18 = `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
-@COIN_HAS_KNITRO_TRUE@am__append_19 = -I`$(CYGPATH_W) $(KNITROINCDIR)` 
-@COIN_HAS_KNITRO_TRUE@am__append_20 = $(KNITROLIB)if USEMULTIPLYDEFINED
-@COIN_HAS_KNITRO_TRUE@am__append_21 = -multiply_defined suppress
 subdir = examples/fileUpload
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -120,8 +117,6 @@ am__DEPENDENCIES_7 =
 @USEWSOCKLIB_TRUE@am__DEPENDENCIES_9 = $(am__DEPENDENCIES_7)
 @COIN_HAS_LINDO_TRUE@am__DEPENDENCIES_10 = $(am__DEPENDENCIES_7)
 @COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_11 = $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
-@COIN_HAS_KNITRO_TRUE@am__DEPENDENCIES_12 = $(KNITROLIB)if \
-@COIN_HAS_KNITRO_TRUE@	USEMULTIPLYDEFINED
 fileUpload_DEPENDENCIES = $(OSOBJDIR)/src/libOS.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la $(am__DEPENDENCIES_1) \
 	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la $(am__DEPENDENCIES_2) \
@@ -131,8 +126,7 @@ fileUpload_DEPENDENCIES = $(OSOBJDIR)/src/libOS.la \
 	$(am__DEPENDENCIES_5) $(am__DEPENDENCIES_6) \
 	$(am__DEPENDENCIES_8) $(COINUTILSOBJDIR)/src/libCoinUtils.la \
 	$(am__DEPENDENCIES_7) $(am__DEPENDENCIES_9) \
-	$(am__DEPENDENCIES_10) $(am__DEPENDENCIES_11) \
-	$(am__DEPENDENCIES_12)
+	$(am__DEPENDENCIES_10) $(am__DEPENDENCIES_11)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
@@ -370,8 +364,7 @@ fileUpload_LDADD = $(OSOBJDIR)/src/libOS.la \
 	$(CGLOBJDIR)/src/libCgl.la $(OSIOBJDIR)/src/libOsi.la \
 	$(CLPOBJDIR)/src/libClp.la $(am__append_5) $(am__append_6) \
 	$(am__append_7) $(COINUTILSOBJDIR)/src/libCoinUtils.la \
-	$(ADDLIBS) $(am__append_8) $(am__append_15) $(am__append_17) \
-	$(am__append_20)
+	$(ADDLIBS) $(am__append_8) $(am__append_15) $(am__append_17)
 
 # Now add the include paths for compilation
 
@@ -395,13 +388,18 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` -I`$(CYGPATH_W) \
 	$(CPPADSRCDIR)/..` -I`$(CYGPATH_W) \
 	$(OSSRCDIR)/src/OSCommonInterfaces` $(am__append_9) \
 	$(am__append_10) $(am__append_11) $(am__append_12) \
-	$(am__append_13) $(am__append_14) $(am__append_16) \
-	$(am__append_19)
+	$(am__append_13) $(am__append_14) $(am__append_16)
 
 # The -rpath flag is used by libtool to make sure that the shared
 # library is found (in the lib install directory) when we are using dynamic
 # libraries.
-fileUpload_LDFLAGS = -rpath $(libdir) $(am__append_21)
+fileUpload_LDFLAGS = -rpath $(libdir)
+
+#if COIN_HAS_KNITRO
+#  AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(KNITROINCDIR)` 
+#  fileUpload_LDADD += $(KNITROLIB)if USEMULTIPLYDEFINED
+#  fileUpload_LDFLAGS += -multiply_defined suppress
+#endif
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
