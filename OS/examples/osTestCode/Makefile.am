@@ -152,10 +152,7 @@ if COIN_HAS_GLPK
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
 endif
 
-if COIN_HAS_LINDO
-  AM_CPPFLAGS += -I`$(CYGPATH_W) $(LINDOINCDIR)` 
-  osTestCode_LDADD += $(LINDOLIB)
-endif
+
 
 if COIN_HAS_IPOPT
   AM_CPPFLAGS += \
@@ -166,13 +163,7 @@ if COIN_HAS_IPOPT
   LIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
 endif
 
-if COIN_HAS_KNITRO
-  AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(KNITROINCDIR)` 
-  osTestCode_LDADD += $(KNITROLIB)
-if USEMULTIPLYDEFINED
-  osTestCode_LDFLAGS += -multiply_defined suppress
-endif
-endif
+
 
 if COIN_HAS_ASL
   AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
