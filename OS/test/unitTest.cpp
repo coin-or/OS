@@ -343,7 +343,7 @@ int main(int argC, char* argV[])
 		osilFileName = dataDir  + "osilFiles" + dirsep + "p0033.osil";
 		osil = fileUtil->getFileAsString( &osilFileName[0]);
 		solver = new CoinSolver();
-		solver->sSolverName = "cbc";
+		solver->sSolverName ="cbc";
 		solver->osil = osil;
 		solver->osol = osol;  
 		solver->osinstance = NULL; 
@@ -361,7 +361,7 @@ int main(int argC, char* argV[])
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  solver->osrl <<  endl;
 		cout << endl << endl << endl;
-		cout << eclass.errormsg << endl;
+		cout <<"Sorry Unit Test Failed Testing the Ipopt Solver:"  + eclass.errormsg << endl;
 		return 0;
 	}
 	
@@ -403,7 +403,7 @@ int main(int argC, char* argV[])
 		check = 1.00045e+06; 
 		cout << solver->osrl << endl;
 		ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
-		if(ok == false) throw ErrorClass(" Fail unit test with Knitro o		return 0;n callBackTest.osil");
+		if(ok == false) throw ErrorClass(" Fail unit test with Knitr callBackTest.osil");
 		solver->osinstance = NULL;
 		delete solver;
 		solver = NULL;
@@ -448,7 +448,7 @@ int main(int argC, char* argV[])
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  solver->osrl <<  endl;		
 		cout << endl << endl << endl;
-		cout << eclass.errormsg << endl;
+		cout <<"Sorry Unit Test Failed Testing the Knitro Solver:"  + eclass.errormsg << endl;
 		return 0;
 	}	
 	#endif
@@ -481,7 +481,7 @@ int main(int argC, char* argV[])
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  solver->osrl <<  endl;
 		cout << endl << endl << endl;
-		cout << eclass.errormsg << endl;
+		cout << "Sorry Unit Test Failed Testing the SYMPHONY Solver:"  + eclass.errormsg << endl;
 		return 0;
 	}	
 	#endif
@@ -513,7 +513,7 @@ int main(int argC, char* argV[])
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  solver->osrl <<  endl;
 		cout << endl << endl << endl;
-		cout << eclass.errormsg << endl;
+		cout <<"Sorry Unit Test Failed Testing the DyLP Solver:"  + eclass.errormsg << endl;
 		return 0;
 	}	
 	#endif
@@ -545,7 +545,7 @@ int main(int argC, char* argV[])
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  solver->osrl <<  endl;
 		cout << endl << endl << endl;
-		cout << eclass.errormsg << endl;
+		cout <<"Sorry Unit Test Failed Testing the Vol Solver:"  + eclass.errormsg << endl;
 		return 0;
 	}	
 	#endif
@@ -577,7 +577,7 @@ int main(int argC, char* argV[])
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  solver->osrl <<  endl;
 		cout << endl << endl << endl;
-		cout << eclass.errormsg << endl;
+		cout <<"Sorry Unit Test Failed Testing the Glpk Solver:"  + eclass.errormsg << endl;
 		return 0;
 	}	
 	#endif
@@ -608,7 +608,7 @@ int main(int argC, char* argV[])
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  solver->osrl <<  endl;
 		cout << endl << endl << endl;
-		cout << eclass.errormsg << endl;
+		cout <<"Sorry Unit Test Failed Testing the Cplex Solver:"  + eclass.errormsg << endl;
 		return 0;
 	}	
 	#endif
@@ -683,7 +683,9 @@ int main(int argC, char* argV[])
 		cout << "Here is the LINDO solver solution" << endl;
 		cout << solver->osrl << endl;
 		check = 2.925;
+		std::cout << "CALL NEAR_EQUSL" << std::endl;
 		ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		std::cout << "CALL NEAR_EQUSL" << std::endl;
 		if(ok == false) throw ErrorClass(" Fail unit test with LINDO on wayneQuadratic");
 		delete solver;
 		solver = NULL;
@@ -693,7 +695,7 @@ int main(int argC, char* argV[])
 	catch(const ErrorClass& eclass){
 		//cout << "OSrL =  " <<  solver->osrl <<  endl;
 		cout << endl << endl << endl;
-		cout << eclass.errormsg << endl;
+		cout <<"Sorry Unit Test Failed Testing the LINDO Solver:"  + eclass.errormsg << endl << endl;
 		return 0;
 	}
 	#endif
@@ -728,7 +730,7 @@ int main(int argC, char* argV[])
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  solver->osrl <<  endl;
 		cout << endl << endl << endl;
-		cout << eclass.errormsg << endl;
+		cout <<"Sorry Unit Test Failed Testing the MPS convertor:"  + eclass.errormsg << endl;
 		return 0;
 	}
 	// now solve with an OSInstance created from an AMPL nl file
@@ -764,7 +766,7 @@ int main(int argC, char* argV[])
 		catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  solver->osrl <<  endl;
 		cout << endl << endl << endl;
-		cout << eclass.errormsg << endl;
+		cout <<"Sorry Unit Test Failed Testing AMPL:"  + eclass.errormsg << endl;
 		return 0;
 	}
 	//

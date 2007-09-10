@@ -20,7 +20,7 @@
 
 
 #include <iostream>
-
+#include "ErrorClass.h"
 #include <string>
 
 
@@ -32,6 +32,13 @@ using std::endl;
 int main(int argC, char* argV[]){
 // test OS code samples here
 	cout << "Hello World " << endl;	
-
+	int k = 1;
+	try{
+		if(k == 1) throw ErrorClass("you can't do that");
+	}
+	catch(const ErrorClass& eclass){
+	std::cout << eclass.errormsg <<  std::endl;
+	return 0;
+	} 
 }// end main
 

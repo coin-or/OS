@@ -509,10 +509,10 @@ bool LindoSolver::optimize(){
 				// Get the dual values result
 				if( (osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0)
 					|| (isNonlinear == false) ){
-					m_iLindoErrorCode = LSgetMIPDualSolution( pModel_, y);
-					lindoAPIErrorCheck("Error trying to obtain dual solution with integer variables present");
+					//m_iLindoErrorCode = LSgetMIPDualSolution( pModel_, y);
+					//lindoAPIErrorCheck("Error trying to obtain dual solution with integer variables present");
 				}
-				else{
+				else{  
 					m_iLindoErrorCode = LSgetDualSolution( pModel_, y);
 					lindoAPIErrorCheck("Error trying to obtain dual solution with NO integer variables present");
 				}
@@ -520,8 +520,8 @@ bool LindoSolver::optimize(){
 				// get the reduced cost result
 				if( ( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0)
 					|| (isNonlinear == false ) ) {
-					m_iLindoErrorCode = LSgetMIPReducedCosts( pModel_, drcost); 
-					lindoAPIErrorCheck("Error trying to obtain the reduced costs with integer variables present");
+					//m_iLindoErrorCode = LSgetMIPReducedCosts( pModel_, drcost); 
+					//lindoAPIErrorCheck("Error trying to obtain the reduced costs with integer variables present");
 				}
 				else{
 					m_iLindoErrorCode = LSgetReducedCosts( pModel_, drcost);

@@ -94,6 +94,7 @@
 #include "OSnl2osil.h"
 #endif
 
+
 #ifdef COIN_HAS_LINDO    
 #include "LindoSolver.h"
 #endif 
