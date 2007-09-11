@@ -509,8 +509,8 @@ bool LindoSolver::optimize(){
 				// Get the dual values result
 				if( (osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0)
 					|| (isNonlinear == false) ){
-					//m_iLindoErrorCode = LSgetMIPDualSolution( pModel_, y);
-					//lindoAPIErrorCheck("Error trying to obtain dual solution with integer variables present");
+					m_iLindoErrorCode = LSgetMIPDualSolution( pModel_, y);
+					lindoAPIErrorCheck("Error trying to obtain dual solution with integer variables present");
 				}
 				else{  
 					m_iLindoErrorCode = LSgetDualSolution( pModel_, y);
