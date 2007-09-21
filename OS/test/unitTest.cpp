@@ -165,6 +165,7 @@ int main(int argC, char* argV[])
 	std::string mpsFileName;     
 	std::string osil;
 	ostringstream unitTestResult;
+	ostringstream unitTestResultFailure;
 	// get the input files
 	 const char dirsep =  CoinFindDirSeparator();
   	// Set directory containing mps data files.
@@ -314,9 +315,7 @@ int main(int argC, char* argV[])
 		//solver = NULL;	
 	}
 	catch(const ErrorClass& eclass){
-		cout << endl << endl << endl;
-		cout << "Sorry Unit Test Failed Testing the Ipopt Solver:"  + eclass.errormsg<< endl;
-		return 0;
+		unitTestResultFailure << "Sorry Unit Test Failed Testing the Ipopt Solver:"  + eclass.errormsg<< endl;  
 	}
 	#endif
 	try{
@@ -362,7 +361,6 @@ int main(int argC, char* argV[])
 		cout << "OSrL =  " <<  solver->osrl <<  endl;
 		cout << endl << endl << endl;
 		cout <<"Sorry Unit Test Failed Testing the Ipopt Solver:"  + eclass.errormsg << endl;
-		return 0;
 	}
 	
 	//
@@ -406,7 +404,7 @@ int main(int argC, char* argV[])
 		if(ok == false) throw ErrorClass(" Fail unit test with Knitr callBackTest.osil");
 		solver->osinstance = NULL;
 		delete solver;
-		solver = NULL;
+		solver = NULL;  
 		unitTestResult << "Solved problem callBackTest.osil with Knitro" << std::endl;		
 		//
 		// now solve a pure quadratic
@@ -448,8 +446,7 @@ int main(int argC, char* argV[])
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  solver->osrl <<  endl;		
 		cout << endl << endl << endl;
-		cout <<"Sorry Unit Test Failed Testing the Knitro Solver:"  + eclass.errormsg << endl;
-		return 0;
+		unitTestResultFailure  <<"Sorry Unit Test Failed Testing the Knitro Solver:"  + eclass.errormsg << endl;
 	}	
 	#endif
 	//
@@ -481,8 +478,7 @@ int main(int argC, char* argV[])
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  solver->osrl <<  endl;
 		cout << endl << endl << endl;
-		cout << "Sorry Unit Test Failed Testing the SYMPHONY Solver:"  + eclass.errormsg << endl;
-		return 0;
+		unitTestResultFailure  << "Sorry Unit Test Failed Testing the SYMPHONY Solver:"  + eclass.errormsg << endl;
 	}	
 	#endif
 	//
@@ -513,8 +509,7 @@ int main(int argC, char* argV[])
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  solver->osrl <<  endl;
 		cout << endl << endl << endl;
-		cout <<"Sorry Unit Test Failed Testing the DyLP Solver:"  + eclass.errormsg << endl;
-		return 0;
+		unitTestResultFailure  <<"Sorry Unit Test Failed Testing the DyLP Solver:"  + eclass.errormsg << endl;
 	}	
 	#endif
 	//
@@ -545,8 +540,7 @@ int main(int argC, char* argV[])
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  solver->osrl <<  endl;
 		cout << endl << endl << endl;
-		cout <<"Sorry Unit Test Failed Testing the Vol Solver:"  + eclass.errormsg << endl;
-		return 0;
+		unitTestResultFailure  <<"Sorry Unit Test Failed Testing the Vol Solver:"  + eclass.errormsg << endl;
 	}	
 	#endif
 	//
@@ -577,8 +571,7 @@ int main(int argC, char* argV[])
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  solver->osrl <<  endl;
 		cout << endl << endl << endl;
-		cout <<"Sorry Unit Test Failed Testing the Glpk Solver:"  + eclass.errormsg << endl;
-		return 0;
+		unitTestResultFailure  <<"Sorry Unit Test Failed Testing the Glpk Solver:"  + eclass.errormsg << endl;
 	}	
 	#endif
 	//
@@ -608,8 +601,7 @@ int main(int argC, char* argV[])
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  solver->osrl <<  endl;
 		cout << endl << endl << endl;
-		cout <<"Sorry Unit Test Failed Testing the Cplex Solver:"  + eclass.errormsg << endl;
-		return 0;
+		unitTestResultFailure  <<"Sorry Unit Test Failed Testing the Cplex Solver:"  + eclass.errormsg << endl;
 	}	
 	#endif
 	
@@ -695,8 +687,7 @@ int main(int argC, char* argV[])
 	catch(const ErrorClass& eclass){
 		//cout << "OSrL =  " <<  solver->osrl <<  endl;
 		cout << endl << endl << endl;
-		cout <<"Sorry Unit Test Failed Testing the LINDO Solver:"  + eclass.errormsg << endl << endl;
-		return 0;
+		unitTestResultFailure  <<"Sorry Unit Test Failed Testing the LINDO Solver:"  + eclass.errormsg << endl << endl;
 	}
 	#endif
 	// end solving using the osil file
@@ -730,8 +721,7 @@ int main(int argC, char* argV[])
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  solver->osrl <<  endl;
 		cout << endl << endl << endl;
-		cout <<"Sorry Unit Test Failed Testing the MPS convertor:"  + eclass.errormsg << endl;
-		return 0;
+		unitTestResultFailure  <<"Sorry Unit Test Failed Testing the MPS convertor:"  + eclass.errormsg << endl;
 	}
 	// now solve with an OSInstance created from an AMPL nl file
 	try{
@@ -766,8 +756,7 @@ int main(int argC, char* argV[])
 		catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  solver->osrl <<  endl;
 		cout << endl << endl << endl;
-		cout <<"Sorry Unit Test Failed Testing AMPL:"  + eclass.errormsg << endl;
-		return 0;
+		unitTestResultFailure  <<"Sorry Unit Test Failed Testing AMPL:"  + eclass.errormsg << endl;
 	}
 	//
 	// Now test the b64 feature
@@ -807,8 +796,7 @@ int main(int argC, char* argV[])
 		cout << eclass.errormsg <<  endl << endl;
 		cout << "OSrL =  " <<  solver->osrl <<  endl;
 		cout << endl << endl << endl;
-		cout << "Sorry Unit Test Failed Testing Use of Base 64" << endl;
-		return 0;
+		unitTestResultFailure   << "Sorry Unit Test Failed Testing Use of Base 64" << endl;
 
 	}  
 	//
@@ -847,8 +835,8 @@ int main(int argC, char* argV[])
 		catch(const ErrorClass& eclass){
 		cout << endl << endl << endl;
 		cout << eclass.errormsg << endl;
-		cout << "Sorry Unit Test Failed Testing An OSiL Parser" << endl;
-		return 0;
+		unitTestResultFailure << "Sorry Unit Test Failed Testing An OSiL Parser" << endl;
+		
 	}	
 	
 	//
@@ -889,8 +877,7 @@ int main(int argC, char* argV[])
 	}	
 		catch(const ErrorClass& eclass){
 		cout << endl << endl << endl;
-		cout << eclass.errormsg << endl;
-		return 0;
+		unitTestResultFailure << eclass.errormsg << endl;
 	}
 	// now test postfix and prefix routines
 	try{
@@ -941,8 +928,7 @@ int main(int argC, char* argV[])
 	}
 	catch(const ErrorClass& eclass){
 		cout << endl << endl << endl;
-		cout << eclass.errormsg << endl;
-		return 0;
+		unitTestResultFailure << eclass.errormsg << endl;
 	}
 	// now test the nonlinear operators	
 	try{
@@ -988,8 +974,7 @@ int main(int argC, char* argV[])
 	}
 	catch(const ErrorClass& eclass){
 		cout << endl << endl << endl;
-		cout << eclass.errormsg << endl;
-		return 0;
+		unitTestResultFailure << eclass.errormsg << endl;
 	}
 	// 
 	// now solve on a remote server
@@ -1099,13 +1084,24 @@ int main(int argC, char* argV[])
 	}	
 	catch(const ErrorClass& eclass){
 		cout << endl << endl << endl;
-		cout << eclass.errormsg << endl;
-		return 0;
+		unitTestResultFailure << eclass.errormsg << endl;
 	}
-	cout << endl << endl << endl;
-	cout << unitTestResult.str() << endl << endl;
-	cout << "CONGRATULATIONS! YOU PASSED THE UNIT TEST" <<  endl <<  endl;
-	
+
+	    
+	if(unitTestResultFailure.str().length() > 0){
+		cout << "The unitTest passed the following" << endl << endl;
+		cout << unitTestResult.str() << endl << endl;
+		cout << "Unfortunately, you failed on the following:" << endl << endl;
+		cout << unitTestResultFailure.str() << endl << endl;
+		cout << "Conclusion: FAILURE" << endl;
+	}
+	else{
+		cout << "The unitTest passed the following" << endl << endl;
+		cout << unitTestResult.str() << endl << endl;
+		cout << "Unfortunately, you failed on the following:" << endl << endl;
+		cout << unitTestResultFailure.str() << endl << endl;
+		cout << "CONGRATULATIONS! YOU PASSED THE UNIT TEST" <<  endl <<  endl;
+	}
 	return 0;	
 }
 
