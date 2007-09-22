@@ -1098,8 +1098,6 @@ int main(int argC, char* argV[])
 	else{
 		cout << "The unitTest passed the following" << endl << endl;
 		cout << unitTestResult.str() << endl << endl;
-		cout << "Unfortunately, you failed on the following:" << endl << endl;
-		cout << unitTestResultFailure.str() << endl << endl;
 		cout << "CONGRATULATIONS! YOU PASSED THE UNIT TEST" <<  endl <<  endl;
 	}
 	return 0;	

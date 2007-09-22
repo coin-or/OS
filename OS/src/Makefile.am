@@ -120,16 +120,10 @@ if COIN_HAS_GLPK
  OSSolverService_LDADD += $(GLPKLIB)
 endif
 
- OSSolverService_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
- LIBS += `cat $(COINUTILSOBJDIR)/coinutils_addlibs.txt`
+OSSolverService_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
+LIBS += `cat $(COINUTILSOBJDIR)/coinutils_addlibs.txt`
 
- OSSolverService_LDADD += $(ADDLIBS) 
-
-if USEWSOCKLIB
-  OSSolverService_LDADD += $(WINSOCKLIB)
-endif
-
-
+OSSolverService_LDADD += $(ADDLIBS) 
 
 
 ########################################################################
@@ -237,16 +231,6 @@ if COIN_HAS_ASL
   OSSolverService_LDADD += $(OSOBJDIR)/src/ThirdPartyASL/libThirdPartyASL.la
   OSSolverService_LDADD += $(ASLLIB) 
 endif
-
-
-
-if USEWSOCKLIB
-# ADDLIBS += $(WINSOCKLIB)
-endif
-
-
-
-
 
 
 # This line is necessary to allow VPATH compilation with MS compilers

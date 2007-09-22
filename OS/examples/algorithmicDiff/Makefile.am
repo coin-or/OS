@@ -59,14 +59,9 @@ if COIN_HAS_VOL
  algorithmicDiffTest_LDADD += $(VOLOBJDIR)/src/libVol.la 
 endif
 
- algorithmicDiffTest_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
+algorithmicDiffTest_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
 
- algorithmicDiffTest_LDADD += $(ADDLIBS) 
-
-if USEWSOCKLIB
-  algorithmicDiffTest_LDADD += $(WINSOCKLIB)
-endif
-
+algorithmicDiffTest_LDADD += $(ADDLIBS) 
 
 
 # Now add the include paths for compilation

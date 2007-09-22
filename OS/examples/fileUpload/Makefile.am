@@ -68,13 +68,9 @@ if COIN_HAS_GLPK
   fileUpload_LDADD += $(GLPKLIB)
 endif
 
- fileUpload_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
+fileUpload_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
 
- fileUpload_LDADD += $(ADDLIBS) 
-
-if USEWSOCKLIB
-  fileUpload_LDADD += $(WINSOCKLIB)
-endif
+fileUpload_LDADD += $(ADDLIBS) 
 
 # Now add the include paths for compilation
 

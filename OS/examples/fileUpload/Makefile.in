@@ -52,45 +52,44 @@ noinst_PROGRAMS = fileUpload$(EXEEXT)
 @COIN_HAS_GLPK_TRUE@am__append_7 =  \
 @COIN_HAS_GLPK_TRUE@	$(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la \
 @COIN_HAS_GLPK_TRUE@	$(GLPKLIB)
-@USEWSOCKLIB_TRUE@am__append_8 = $(WINSOCKLIB)
-@COIN_HAS_DYLP_TRUE@am__append_9 = \
+@COIN_HAS_DYLP_TRUE@am__append_8 = \
 @COIN_HAS_DYLP_TRUE@	-I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
 @COIN_HAS_DYLP_TRUE@	-I`$(CYGPATH_W) $(DYLPSRCDIR)/inc` \
 @COIN_HAS_DYLP_TRUE@    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/Dylp` \
 @COIN_HAS_DYLP_TRUE@    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/DylpStdLib` \
 @COIN_HAS_DYLP_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiDylp`
 
-@COIN_HAS_SYMPHONY_TRUE@am__append_10 = \
+@COIN_HAS_SYMPHONY_TRUE@am__append_9 = \
 @COIN_HAS_SYMPHONY_TRUE@    -I`$(CYGPATH_W) $(SYMPHONYSRCDIR)/include` \
 @COIN_HAS_SYMPHONY_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiSym`
 
-@COIN_HAS_VOL_TRUE@am__append_11 = \
+@COIN_HAS_VOL_TRUE@am__append_10 = \
 @COIN_HAS_VOL_TRUE@    -I`$(CYGPATH_W) $(VOLSRCDIR)/include` \
 @COIN_HAS_VOL_TRUE@    -I`$(CYGPATH_W) $(VOLSRCDIR)/src` \
 @COIN_HAS_VOL_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiVol`
 
-@COIN_HAS_GLPK_TRUE@am__append_12 = \
+@COIN_HAS_GLPK_TRUE@am__append_11 = \
 @COIN_HAS_GLPK_TRUE@	-I`$(CYGPATH_W) $(GLPKINCDIR)` \
 @COIN_HAS_GLPK_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
 
-@COIN_HAS_CPX_TRUE@am__append_13 = \
+@COIN_HAS_CPX_TRUE@am__append_12 = \
 @COIN_HAS_CPX_TRUE@	-I`$(CYGPATH_W) $(CPXINCDIR)` \
 @COIN_HAS_CPX_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
 
-@COIN_HAS_LINDO_TRUE@am__append_14 = -I`$(CYGPATH_W) $(LINDOINCDIR)` 
-@COIN_HAS_LINDO_TRUE@am__append_15 = $(LINDOLIB)
-@COIN_HAS_IPOPT_TRUE@am__append_16 = \
+@COIN_HAS_LINDO_TRUE@am__append_13 = -I`$(CYGPATH_W) $(LINDOINCDIR)` 
+@COIN_HAS_LINDO_TRUE@am__append_14 = $(LINDOLIB)
+@COIN_HAS_IPOPT_TRUE@am__append_15 = \
 @COIN_HAS_IPOPT_TRUE@	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Interfaces` \
 @COIN_HAS_IPOPT_TRUE@	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Common` \
 @COIN_HAS_IPOPT_TRUE@	-I`$(CYGPATH_W) $(IPOPTOBJDIR)/inc`
 
-@COIN_HAS_IPOPT_TRUE@am__append_17 = $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
-@COIN_HAS_IPOPT_TRUE@am__append_18 = `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
+@COIN_HAS_IPOPT_TRUE@am__append_16 = $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+@COIN_HAS_IPOPT_TRUE@am__append_17 = `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
 subdir = examples/fileUpload
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
-	$(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/m4/ac_coin_socket_libs.m4 \
+	$(top_srcdir)/acinclude.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
@@ -114,9 +113,8 @@ am__DEPENDENCIES_7 =
 @COIN_HAS_GLPK_TRUE@am__DEPENDENCIES_8 =  \
 @COIN_HAS_GLPK_TRUE@	$(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la \
 @COIN_HAS_GLPK_TRUE@	$(am__DEPENDENCIES_7)
-@USEWSOCKLIB_TRUE@am__DEPENDENCIES_9 = $(am__DEPENDENCIES_7)
-@COIN_HAS_LINDO_TRUE@am__DEPENDENCIES_10 = $(am__DEPENDENCIES_7)
-@COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_11 = $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+@COIN_HAS_LINDO_TRUE@am__DEPENDENCIES_9 = $(am__DEPENDENCIES_7)
+@COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_10 = $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
 fileUpload_DEPENDENCIES = $(OSOBJDIR)/src/libOS.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la $(am__DEPENDENCIES_1) \
 	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la $(am__DEPENDENCIES_2) \
@@ -126,7 +124,7 @@ fileUpload_DEPENDENCIES = $(OSOBJDIR)/src/libOS.la \
 	$(am__DEPENDENCIES_5) $(am__DEPENDENCIES_6) \
 	$(am__DEPENDENCIES_8) $(COINUTILSOBJDIR)/src/libCoinUtils.la \
 	$(am__DEPENDENCIES_7) $(am__DEPENDENCIES_9) \
-	$(am__DEPENDENCIES_10) $(am__DEPENDENCIES_11)
+	$(am__DEPENDENCIES_10)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
@@ -146,6 +144,7 @@ ACLOCAL = @ACLOCAL@
 ADDLIBS = @ADDLIBS@
 ADD_CFLAGS = @ADD_CFLAGS@
 ADD_CXXFLAGS = @ADD_CXXFLAGS@
+ADD_FFLAGS = @ADD_FFLAGS@
 ALWAYS_FALSE_FALSE = @ALWAYS_FALSE_FALSE@
 ALWAYS_FALSE_TRUE = @ALWAYS_FALSE_TRUE@
 AMDEP_FALSE = @AMDEP_FALSE@
@@ -220,6 +219,7 @@ CXXFLAGS = @CXXFLAGS@
 CYGPATH_W = @CYGPATH_W@
 DBG_CFLAGS = @DBG_CFLAGS@
 DBG_CXXFLAGS = @DBG_CXXFLAGS@
+DBG_FFLAGS = @DBG_FFLAGS@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
 DYLPOBJDIR = @DYLPOBJDIR@
@@ -233,6 +233,7 @@ EXEEXT = @EXEEXT@
 F77 = @F77@
 FADDLIBS = @FADDLIBS@
 FFLAGS = @FFLAGS@
+FLIBS = @FLIBS@
 GLPKINCDIR = @GLPKINCDIR@
 GLPKLIB = @GLPKLIB@
 HAVE_EXTERNALS_FALSE = @HAVE_EXTERNALS_FALSE@
@@ -253,7 +254,7 @@ LIBOBJS = @LIBOBJS@
 # Kipp add the others here
 LIBS = @LIBS@ $(ADDLIBS) `cat \
 	$(COINUTILSOBJDIR)/coinutils_addlibs.txt` `cat \
-	$(OSOBJDIR)/os_addlibs.txt` $(am__append_18)
+	$(OSOBJDIR)/os_addlibs.txt` $(am__append_17)
 LIBTOOL = @LIBTOOL@
 LIBTOOLM4 = @LIBTOOLM4@
 LINDOINCDIR = @LINDOINCDIR@
@@ -267,9 +268,11 @@ MAINTAINER_MODE_TRUE = @MAINTAINER_MODE_TRUE@
 MAKEINFO = @MAKEINFO@
 MPICC = @MPICC@
 MPICXX = @MPICXX@
+MPIF77 = @MPIF77@
 OBJEXT = @OBJEXT@
 OPT_CFLAGS = @OPT_CFLAGS@
 OPT_CXXFLAGS = @OPT_CXXFLAGS@
+OPT_FFLAGS = @OPT_FFLAGS@
 OSIOBJDIR = @OSIOBJDIR@
 OSISRCDIR = @OSISRCDIR@
 OSOBJDIR = @OSOBJDIR@
@@ -291,13 +294,10 @@ SYMPHONYOBJDIR = @SYMPHONYOBJDIR@
 SYMPHONYSRCDIR = @SYMPHONYSRCDIR@
 USEMULTIPLYDEFINED_FALSE = @USEMULTIPLYDEFINED_FALSE@
 USEMULTIPLYDEFINED_TRUE = @USEMULTIPLYDEFINED_TRUE@
-USEWSOCKLIB_FALSE = @USEWSOCKLIB_FALSE@
-USEWSOCKLIB_TRUE = @USEWSOCKLIB_TRUE@
 VERSION = @VERSION@
 VOLOBJDIR = @VOLOBJDIR@
 VOLSRCDIR = @VOLSRCDIR@
 VPATH_DISTCLEANFILES = @VPATH_DISTCLEANFILES@
-WINSOCKLIB = @WINSOCKLIB@
 YACC = @YACC@
 abs_bin_dir = @abs_bin_dir@
 abs_include_dir = @abs_include_dir@
@@ -364,7 +364,7 @@ fileUpload_LDADD = $(OSOBJDIR)/src/libOS.la \
 	$(CGLOBJDIR)/src/libCgl.la $(OSIOBJDIR)/src/libOsi.la \
 	$(CLPOBJDIR)/src/libClp.la $(am__append_5) $(am__append_6) \
 	$(am__append_7) $(COINUTILSOBJDIR)/src/libCoinUtils.la \
-	$(ADDLIBS) $(am__append_8) $(am__append_15) $(am__append_17)
+	$(ADDLIBS) $(am__append_14) $(am__append_16)
 
 # Now add the include paths for compilation
 
@@ -386,9 +386,9 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` -I`$(CYGPATH_W) \
 	$(OSSRCDIR)/src/OSSolverInterfaces` -I`$(CYGPATH_W) \
 	$(OSSRCDIR)/src/OSModelInterfaces` -I`$(CYGPATH_W) \
 	$(CPPADSRCDIR)/..` -I`$(CYGPATH_W) \
-	$(OSSRCDIR)/src/OSCommonInterfaces` $(am__append_9) \
-	$(am__append_10) $(am__append_11) $(am__append_12) \
-	$(am__append_13) $(am__append_14) $(am__append_16)
+	$(OSSRCDIR)/src/OSCommonInterfaces` $(am__append_8) \
+	$(am__append_9) $(am__append_10) $(am__append_11) \
+	$(am__append_12) $(am__append_13) $(am__append_15)
 
 # The -rpath flag is used by libtool to make sure that the shared
 # library is found (in the lib install directory) when we are using dynamic

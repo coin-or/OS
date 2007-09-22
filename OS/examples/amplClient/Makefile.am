@@ -66,17 +66,9 @@ if COIN_HAS_GLPK
   amplClient_LDADD += $(GLPKLIB)
 endif
 
- amplClient_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
+amplClient_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
 
- amplClient_LDADD += $(ADDLIBS) 
-
-if USEWSOCKLIB
-  amplClient_LDADD += $(WINSOCKLIB)
-endif
-
-
-
-
+amplClient_LDADD += $(ADDLIBS) 
 
 # Now add the include paths for compilation
 

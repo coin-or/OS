@@ -64,20 +64,9 @@ if COIN_HAS_GLPK
  unitTest_LDADD += $(GLPKLIB)
 endif
 
- unitTest_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
+unitTest_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
 
-#unitTest_LDADD += $(ADDLIBS) 
-
-if USEWSOCKLIB
-  unitTest_LDADD += $(WINSOCKLIB)
-endif
-
-
-
-
-
-
-
+unitTest_LDADD += $(ADDLIBS) 
 
 # Now add the include paths for compilation
 

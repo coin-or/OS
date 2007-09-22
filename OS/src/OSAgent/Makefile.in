@@ -43,19 +43,12 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-@USEWSOCKLIB_TRUE@am__append_1 = -I`$(CYGPATH_W) /usr/include/w32api` \
-@USEWSOCKLIB_TRUE@  				  -I`$(CYGPATH_W) /include` \
-@USEWSOCKLIB_TRUE@  				  -I`$(CYGPATH_W) /mingw/include` \
-@USEWSOCKLIB_TRUE@  				  -I ../include \
-@USEWSOCKLIB_TRUE@  				  -I ../PlatformSDK/include
-
-@USEWSOCKLIB_TRUE@am__append_2 = $(WINSOCKLIB)			  
 subdir = src/OSAgent
 DIST_COMMON = $(include_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
-	$(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/m4/ac_coin_socket_libs.m4 \
+	$(top_srcdir)/acinclude.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
@@ -98,9 +91,10 @@ ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
-ADDLIBS = @ADDLIBS@ $(am__append_2)
+ADDLIBS = @ADDLIBS@
 ADD_CFLAGS = @ADD_CFLAGS@
 ADD_CXXFLAGS = @ADD_CXXFLAGS@
+ADD_FFLAGS = @ADD_FFLAGS@
 ALWAYS_FALSE_FALSE = @ALWAYS_FALSE_FALSE@
 ALWAYS_FALSE_TRUE = @ALWAYS_FALSE_TRUE@
 AMDEP_FALSE = @AMDEP_FALSE@
@@ -175,6 +169,7 @@ CXXFLAGS = @CXXFLAGS@
 CYGPATH_W = @CYGPATH_W@
 DBG_CFLAGS = @DBG_CFLAGS@
 DBG_CXXFLAGS = @DBG_CXXFLAGS@
+DBG_FFLAGS = @DBG_FFLAGS@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
 DYLPOBJDIR = @DYLPOBJDIR@
@@ -188,6 +183,7 @@ EXEEXT = @EXEEXT@
 F77 = @F77@
 FADDLIBS = @FADDLIBS@
 FFLAGS = @FFLAGS@
+FLIBS = @FLIBS@
 GLPKINCDIR = @GLPKINCDIR@
 GLPKLIB = @GLPKLIB@
 HAVE_EXTERNALS_FALSE = @HAVE_EXTERNALS_FALSE@
@@ -217,9 +213,11 @@ MAINTAINER_MODE_TRUE = @MAINTAINER_MODE_TRUE@
 MAKEINFO = @MAKEINFO@
 MPICC = @MPICC@
 MPICXX = @MPICXX@
+MPIF77 = @MPIF77@
 OBJEXT = @OBJEXT@
 OPT_CFLAGS = @OPT_CFLAGS@
 OPT_CXXFLAGS = @OPT_CXXFLAGS@
+OPT_FFLAGS = @OPT_FFLAGS@
 OSIOBJDIR = @OSIOBJDIR@
 OSISRCDIR = @OSISRCDIR@
 OSOBJDIR = @OSOBJDIR@
@@ -241,13 +239,10 @@ SYMPHONYOBJDIR = @SYMPHONYOBJDIR@
 SYMPHONYSRCDIR = @SYMPHONYSRCDIR@
 USEMULTIPLYDEFINED_FALSE = @USEMULTIPLYDEFINED_FALSE@
 USEMULTIPLYDEFINED_TRUE = @USEMULTIPLYDEFINED_TRUE@
-USEWSOCKLIB_FALSE = @USEWSOCKLIB_FALSE@
-USEWSOCKLIB_TRUE = @USEWSOCKLIB_TRUE@
 VERSION = @VERSION@
 VOLOBJDIR = @VOLOBJDIR@
 VOLSRCDIR = @VOLSRCDIR@
 VPATH_DISTCLEANFILES = @VPATH_DISTCLEANFILES@
-WINSOCKLIB = @WINSOCKLIB@
 YACC = @YACC@
 abs_bin_dir = @abs_bin_dir@
 abs_include_dir = @abs_include_dir@
@@ -326,7 +321,8 @@ libOSAgent_la_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/..` -I`$(CYGPATH_W) \
 	$(CLPSRCDIR)/src` -I`$(CYGPATH_W) \
 	$(OSSRCDIR)/src/OSCommonInterfaces` -I`$(CYGPATH_W) \
-	$(OSSRCDIR)/src/OSUtils` $(am__append_1)
+	$(OSSRCDIR)/src/OSUtils` -I`$(CYGPATH_W) /usr/include/w32api` \
+	-I ../include -I ../PlatformSDK/include
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin

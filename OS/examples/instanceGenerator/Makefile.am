@@ -64,13 +64,9 @@ if COIN_HAS_GLPK
   instanceGenerator_LDADD += $(GLPKLIB)
 endif
 
- instanceGenerator_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
+instanceGenerator_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
 
- instanceGenerator_LDADD += $(ADDLIBS) 
-
-if USEWSOCKLIB
-  instanceGenerator_LDADD += $(WINSOCKLIB)
-endif
+instanceGenerator_LDADD += $(ADDLIBS) 
 
 
 # Now add the include paths for compilation

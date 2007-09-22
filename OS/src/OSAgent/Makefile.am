@@ -34,15 +34,9 @@ AM_CPPFLAGS = \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSUtils` 
 	
 	
-if USEWSOCKLIB
-  AM_CPPFLAGS += -I`$(CYGPATH_W) /usr/include/w32api` \
-  				  -I`$(CYGPATH_W) /include` \
-  				  -I`$(CYGPATH_W) /mingw/include` \
+AM_CPPFLAGS += -I`$(CYGPATH_W) /usr/include/w32api` \
   				  -I ../include \
   				  -I ../PlatformSDK/include
-  				  
-  ADDLIBS += $(WINSOCKLIB)			  
-endif
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
