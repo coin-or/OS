@@ -26595,7 +26595,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
   ac_coin_found_socket_libraries=no
   case "$CC" in
     cl* | */cl* | CL* | */CL* )
-      if test x$ac_cv_header_winsock_h = $Xyes ; then
+      if test x$ac_cv_header_winsock_h = xyes ; then
 	LIBS="wsock32.lib"
 	echo "$as_me:$LINENO: checking with \"$LIBS\"" >&5
 echo $ECHO_N "checking with \"$LIBS\"... $ECHO_C" >&6
