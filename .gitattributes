@@ -112,6 +112,7 @@ OS/examples/osTestCode/Makefile.am -text
 OS/examples/osTestCode/Makefile.in -text
 OS/examples/osTestCode/osTestCode.cpp -text
 OS/inc/config_os.h.in -text
+OS/m4/ac_coin_socket_libs.m4 -text
 OS/os_addlibs.txt.in -text
 OS/schemas/OSParameter.xsd -text
 OS/schemas/OSRegistry.xsd -text
