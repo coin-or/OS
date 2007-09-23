@@ -345,20 +345,115 @@ os-distribution-release_number.zip
 and the details and use of this distribution is described in Section \ref{section:tomcat}.
 
 
-\subsection{Obtaining and Installing a Visual Studio Project}
+\subsection{Vpath Installations}
+
+\subsection{Using Ipopt}
+
+
+Ipopt is a COIN-OR project (\url{projects.coin-or.org/Ipopt}) and is included in the download with the OS project. However, unlike the other COIN-OR projects that download with OS, the Ipopt project requires third-party software that is based on FORTRAN and care must be taken if you wish to build OS with the  Ipopt solver.  You can  exclude Ipopt from the OS  build by  by adding the option
+ma27ad.f
+\begin{verbatim}
+COIN_SKIP_PROJECTS=Ipopt
+\end{verbatim}
+to the {\tt configure} script. 
+
+
+If you do choose to build Ipopt first get the necessary third-party software.  First connect into the {\tt ThirdParty} directory. Then execute the following commands:
+
+\begin{verbatim}
+$ cd /Blas$ ./get.Blas$ cd ../Lapack$ ./get.Lapack$ cd ../ASL$ ./get.ASL 
+$ cd ../Mumps$ ./get.Mumps 
+\end{verbatim}
+
+What you do next depends upon whether or not a FORTRAN compiler is present, and if so, which version of FORTRAN.  There are three possibilities.
+
+\begin{itemize}
+
+\item[1.]   If you are building in Unix-like environment and have a FORTRAN 95 compiler available you can simply run the {\tt configure} script and the FORTRAN compiler will be detected and the {\tt Ipopt} project will be built. 
+
+\item[2.]   If you have a FORTRAN 77 compiler, you  must first obtain the  Harwell Subroutine Library (HSL) routine {\tt ma27ad.f}.  Put this in the directory {\tt \$OS/ThirdParty/HSL}.  Now run the {\tt configure} script and described in \ref{section:svn}.  See
+
+\begin{verbatim}
+ http://www.coin-or.org/Ipopt/documentation/node15.html
+ \end{verbatim}
+
+\item[3.]  If you do not have a FORTRAN compiler and do not wish to obtain one, by using the {\tt f2c} compiler from Netlib.  The installation instructions for this are in the {\tt INSTALL} file in 
+\begin{verbatim}
+$OS/BuiltTools/compile_f2c
+\end{verbatim}
+
+This also requires that the  Harwell Subroutine Library (HSL) routine {\tt ma27ad.f} be present in the HSL directory. 
+
+\end{itemize} 
+
+
+
+\subsection{Windows Installations}
+
+There are a number of options open to Windows users.    Mention tortise here. 
+
+
+
+
+\subsubsection{Microsoft Visual Studio}
 
 Microsoft Visual Studio solution files are provided for users of Windows and the Microsoft Visual Studio IDE.  There is a directory {\tt MSVisualStudio} in the {\tt OS} root directory.  The {\tt MSVisualStudio} contains root directories organized by the version of Visual Studio.  We currently provide a solution file for Version 7.    The Microsoft Visual Studio files are automatically downloaded with an SVN checkout. They are also contained in the tarballs.  See Section \ref{section:getTarBalls}.    
 
 The solution file contains an OS project file that will compile all of the OS source code into the {\tt OSLibrary} and point to the necessary include files. There is also a project file for the {\tt OSSolverService}.  The solution file also contains the project files for the other COIN-OR projects.  It is assumed that the user has installed a copy of Microsoft Visual Studio.
+
+
+\subsubsection{Cygwin}
+
+{\tt Cygwin} provides a Unix emulation environment for Windows. It comes with numerous tools including the gcc compilers. See {\tt www.cygwin.com}.   With Cygwin and the corresponding gcc compilers the OS project is  built exactly as described in Section \ref{section:svn}.
+
+\subsubsection{MinGW} 
+
+
+
+MinGW (Minimalist GNU for Windows) is set of runtime headers to be used with the GNU gcc compilers for Windows.  See \url{www.mingw.org}. As with Cygwin, the OS project is  built exactly as described in Section \ref{section:svn}.
+
+\subsubsection{MSYS}
+
+
+
+MSYS (Minimal SYSstem) provides an easy way to use the COIN-OS build system with the Microsoft C++ cl compiler.  MSYS is an application that gives the user a Bourne shell that can run {\tt configure}  scripts and {\tt Makefiles}.  No compilers come with MSYS. In the Cygwin, MinGW, and MSYS hierarchy, it is at the bottom in terms of tools provided. However, it very easy to use and build the OS project with MSYS.    In this discussion we assume that the user has downloaded the OS source code (most likely  with Tortise) and that the {\tt cl} compiler is present.  The project is built using the following steps. 
+
+{\bf Note:} if you wish to use the third-party software with MSYS it is best to get wget ... kipp more detail here. 
+
+
+\begin{itemize}
+
+\item[Step 1.] Download {\tt MSYS} at
+
+\begin{center}
+\url{http://sourceforge.net/project/showfiles.php?group_id=2435&package_id=24963}
+\end{center}
+
+and install.  Double clicking on the MSYS icon will open a Bourne shell window. 
+
+\item[Step 2.]   Set the Visual Studio environment variables. This is done by executing the batch file {\tt  vcvarsall.bat}  that comes with the Visual Studio.  This file is located in the following directory. 
+
+\begin{verbatim}
+C:/Program Files/Microsoft Visual Studio 8/VC
+\end{verbatim}
+
+
+\item[Step 3.]  In the MSYS command window connect to the root of the OS project and run  {tt configure} and then {\tt make} as described in Section \ref{section:svn}.
+
+\end{itemize}
+
+
+
+
+
  
 
 
 
 
+\subsection{Third-Party Software}
 
-\subsection{Third Party Software}
-
-The default OS project is configured out-of-the-box with the COIN-OR  projects {\tt Cbc}, {\tt Clp}, {\tt Cgl}, {\tt CoinUtils}, {\tt CppAD},  {\tt DyLP}, {\tt SYMPHONY}, and {\tt Vol}.  However, the project is also designed to work with other COIN-OR projects and several other open source and commercial software projects. 
+By third-party software we mean software not available for download at \url{www.coin-or.org}. The default OS project is configured out-of-the-box with the COIN-OR  projects {\tt Cbc}, {\tt Clp}, {\tt Cgl}, {\tt CoinUtils}, {\tt CppAD},  {\tt DyLP}, {\tt SYMPHONY}, and {\tt Vol}.  However, the project is also designed to work with other COIN-OR projects and several other open source and commercial software projects.  
 
 In many of the header files there are {\tt \#include} statements inside {\tt  \#ifdef}  statements. For example,
 \begin{verbatim}
@@ -440,17 +535,7 @@ CPLEX_LIBS=-lcplex -lilocplex -lm -lpthread
 
 
 
-\subsubsection{Ipopt}
 
-Ipopt is a COIN-OR project.  In order to use Ipopt with OS, follow the instructions at  \url{projects.coin-or.org\Ipopt} and build the project. Then when running configure point to the include directory and library directory.  An example is given below.
-
-{\small
-\begin{verbatim}
-./configure --with-ipopt-lib="-L/home/kmartin/files/code/ipopt/linux/Ipopt-3.2.2_clean/lib -lipopt  
-`cat /home/kmartin/files/code/ipopt/linux/Ipopt-3.2.2_clean/lib/ipopt_addlibs_cpp.txt`" 
---with-ipopt-incdir=/home/kmartin/files/code/ipopt/linux/Ipopt-3.2.2_clean/include/ipopt 
-\end{verbatim}
-}
 
 \subsubsection{Knitro}
 
