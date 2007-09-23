@@ -172,13 +172,25 @@ OS is released as open source code under the Common Public License (CPL). This p
 
 The C++ source code can be obtained using Subversion.  Users with Unix operating systems will most likely have an svn client. For Windows users wishing to obtain and SVN client we recommend  TortoiseSVN.  See \url{tortoisesvn.tigris.org}.
 
-The OS project page with a Wiki is available at \url{projects.coin-or.org\OS}. Execute the following steps to get the source code using SVN.
+The OS project page with a Wiki is tavailable at \url{projects.coin-or.org\OS}. Execute the following steps to get the source code using SVN.
 
 \noindent {\bf Step 1:}  Connect to a directory where you want the OS project to go.  The following command will download the project into the directory COIN-OS
 
 \begin{verbatim}
 svn co https://projects.coin-or.org/svn/OS/stable/1.0 COIN-OS
 \end{verbatim}
+
+For the rest of this documentation, we assume that  {\tt COIN-OS} is the name of the root directory of the OS project and that the user has defined an environment variable {\tt OS} that is the path to {\tt COIN-OS}.  The {\tt COIN-OS} directory structure is illustrated in Figure \ref{figure:osprojectrootdir}.
+
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.7]{\figurepath/OSProjectRootDirectory.png}
+\caption{The OS project root directory.} 
+\label{figure:osprojectrootdir}
+\end{figure}
+
+\vskip 6pt
 
 \noindent {\bf Step 2:}  Connect to the distribution root directory.
 
@@ -187,15 +199,21 @@ cd COIN-OS
 \end{verbatim}
 
 
-\noindent {\bf Step 3:} Run the configure script that will generate the makefiles. 
+\noindent {\bf Step 3:} Run the configure script that will generate the makefiles.  If you are running on a machine with a FORTRAN 95 compiler present (e.g. {\tt gfortran}) run the command
 
 \begin{verbatim}
 ./configure
 \end{verbatim}
 
+\noindent otherwise use
+
+\begin{verbatim}
+./configure  COIN_SKIP_PROJECTS=Ipopt
+\end{verbatim}
 
 For more information and options on the {\tt ./configure} script see
 \url{https://projects.coin-or.org/BuildTools/wiki/user-configure#PreparingtheCompilation}.
+If {\tt gfortran} is not present and you  wish to build the nonlinear solver {\tt Ipopt} see the instructions in Section \ref{section:ipopt}.
 
 \noindent {\bf Step 4:}  Run the make files.
 
@@ -209,7 +227,7 @@ make
 make test
 \end{verbatim}
 
-Depending upon which third party software you have installed, the result of running the unitTest should look something like:
+Depending upon which third party software you have installed, the result of running the unitTest should look something like (we have included the third-party solvers LINDO and Knitro in the  test results below, they are not part of the default build):
 
 
 {\small
@@ -265,7 +283,7 @@ then you have not passed the unitTest and hopefully some semi-inteligble error m
 make install
 \end{verbatim}
 
-This will install all of the libraries in the {\tt lib} directory under the distribution root.  In particuar, the main OS library {\tt libOS} along with the libraries of the other COIN-OR project that download with the OS project will get installed in the {\tt lib} directory.  In addtion the {\tt make install} command will install four executable programs in the {\tt bin} directory.  One of these binaries is {\tt OSSolverService} which is main OS project executable. This is described in Section \ref{section:ossolverservice}. In addition {\tt clp}, {\tt cbc}, {\tt cbc-generic}, and {\tt symphony} get installed  in the {\tt bin} directory. 
+This will install all of the libraries in the {\tt lib} directory under the distribution root.  In particuar, the main OS library {\tt libOS} along with the libraries of the other COIN-OR project that download with the OS project will get installed in the {\tt lib} directory.  In addtion the {\tt make install} command will install four executable programs in the {\tt bin} directory.  One of these binaries is {\tt OSSolverService} which is main OS project executable. This is described in Section \ref{section:ossolverservice}. In addition {\tt clp}, {\tt cbc}, {\tt ipopt}, and {\tt symphony} get installed  in the {\tt bin} directory. 
 
 \subsection{Obtaining the OS Source Code From a Tarball or Zip File}\label{section:getTarBalls}
 
@@ -307,7 +325,7 @@ svn co https://projects.coin-or.org/svn/branches/OSjava  OSJava
 \end{verbatim}
 For users just wishing to setup the Tomcat solver service, all of the necessary binaries are available at
 \begin{verbatim}
-\url{http://www.coin-or.org/Binaries/OS/os-distribution-release_number.zip}
+http://www.coin-or.org/Binaries/OS/os-distribution-release_number.zip
 \end{verbatim}
 For more detail see Section \ref{section:obtainingbinaries}  below and Section \ref{section:tomcat}.
 
@@ -345,13 +363,31 @@ os-distribution-release_number.zip
 and the details and use of this distribution is described in Section \ref{section:tomcat}.
 
 
-\subsection{Vpath Installations}
+\subsection{VPATH Installations}
 
-\subsection{Using Ipopt}
+
+It is possible to build the OS project in a directory that is different from the directory where the source code is present. This is called a {\tt VPATH}  compiliation.  A {\tt VPATH}  compilation  is very useful if you wish to build several versions (e.g. debug and non-debug version, or versions with various combinations of third-party software available) of the OS project from a single copy the source code.
+
+For  example, assume you wish to build a debug version of the OS project in the directory {\tt vpath-debug} and that the environment variable {\tt OS} is the path to the root of the OS project distribution {\tt COIN-OS}.  Connect to the {\tt vpath-debug} directory run configure as follows (assuming we do want a debug version)
+
+\begin{verbatim}
+$OS/configure --enable-debug
+\end{verbatim}
+
+After you run configure, the OS project directory structure will present in the {\tt vpath-debug} directory along with all of the necessary  {\tt Makefiles}.  Next inside the {\tt vpath-degug} execute
+
+\begin{verbatim}
+make
+\end{verbatim}
+
+and all of  the libraries created will be in their respective directories inside {\tt vpath-debug}  and not {\tt COIN-OS}.
+ 
+
+\subsection{Using Ipopt}\label{section:ipopt}
 
 
 Ipopt is a COIN-OR project (\url{projects.coin-or.org/Ipopt}) and is included in the download with the OS project. However, unlike the other COIN-OR projects that download with OS, the Ipopt project requires third-party software that is based on FORTRAN and care must be taken if you wish to build OS with the  Ipopt solver.  You can  exclude Ipopt from the OS  build by  by adding the option
-ma27ad.f
+
 \begin{verbatim}
 COIN_SKIP_PROJECTS=Ipopt
 \end{verbatim}
@@ -361,8 +397,14 @@ to the {\tt configure} script.
 If you do choose to build Ipopt first get the necessary third-party software.  First connect into the {\tt ThirdParty} directory. Then execute the following commands:
 
 \begin{verbatim}
-$ cd /Blas$ ./get.Blas$ cd ../Lapack$ ./get.Lapack$ cd ../ASL$ ./get.ASL 
-$ cd ../Mumps$ ./get.Mumps 
+$ cd /Blas
+$ ./get.Blas
+$ cd ../Lapack
+$ ./get.Lapack
+$ cd ../ASL
+$ ./get.ASL 
+$ cd ../Mumps
+$ ./get.Mumps 
 \end{verbatim}
 
 What you do next depends upon whether or not a FORTRAN compiler is present, and if so, which version of FORTRAN.  There are three possibilities.
@@ -390,14 +432,17 @@ This also requires that the  Harwell Subroutine Library (HSL) routine {\tt ma27a
 
 \subsection{Windows Installations}
 
-There are a number of options open to Windows users.    Mention tortise here. 
+There are a number of options open to Windows users.   First, if you wish to work with source code we recommend downloading  the svn client,  TortoiseSVN.  See \url{tortoisesvn.tigris.org}.  Also, if you plan to build any of the projects contained in {\tt ThirdParty} (e.g. ASL) we recommend using {\tt wget}.  The {\tt wget} executable is used by the scripts, {\tt get.ASL}, {\tt get.Blas}, etc. and makes it easy to download the software.  A Windows version of {\tt wget} is available at
 
+\begin{verbatim}
+http://www.christopherlewis.com/WGet/WGetFiles.htm
+\end{verbatim}
 
 
 
 \subsubsection{Microsoft Visual Studio}
 
-Microsoft Visual Studio solution files are provided for users of Windows and the Microsoft Visual Studio IDE.  There is a directory {\tt MSVisualStudio} in the {\tt OS} root directory.  The {\tt MSVisualStudio} contains root directories organized by the version of Visual Studio.  We currently provide a solution file for Version 7.    The Microsoft Visual Studio files are automatically downloaded with an SVN checkout. They are also contained in the tarballs.  See Section \ref{section:getTarBalls}.    
+Microsoft Visual Studio solution files are provided for users of Windows and the Microsoft Visual Studio IDE.  There is a directory {\tt MSVisualStudio} in the {\tt COIN-OS/OS}  directory.  The {\tt MSVisualStudio} contains root directories organized by the version of Visual Studio.  We currently provide solution files  for Version 7.  There are project files for building the unitTest ({\tt OSTest.vcproj}),  the OSSolverService ({\tt OSSolverService.vcproj}), and the OS library {\tt libOS.vcproj}.   The Microsoft Visual Studio files are automatically downloaded with an SVN checkout. They are also contained in the tarballs.  See Section \ref{section:getTarBalls}.    
 
 The solution file contains an OS project file that will compile all of the OS source code into the {\tt OSLibrary} and point to the necessary include files. There is also a project file for the {\tt OSSolverService}.  The solution file also contains the project files for the other COIN-OR projects.  It is assumed that the user has installed a copy of Microsoft Visual Studio.
 
@@ -438,7 +483,7 @@ C:/Program Files/Microsoft Visual Studio 8/VC
 \end{verbatim}
 
 
-\item[Step 3.]  In the MSYS command window connect to the root of the OS project and run  {tt configure} and then {\tt make} as described in Section \ref{section:svn}.
+\item[Step 3.]  In the MSYS command window connect to the root of the OS project and run  {\tt configure}  script  and then {\tt make} as described in Section \ref{section:svn}.
 
 \end{itemize}
 
@@ -621,14 +666,14 @@ The build process described in Section \ref{section:svn} has been tested on Linu
 \label{table:testedplatforms}
 \vskip 8pt
  \begin{tabular}{l|c|c|c|c|c|c|}
- &Mac&Linux&Cyg-gcc&Msys-cl&Msys-gcc&MSVS \\ \hline
+ &Mac&Linux&Cyg-gcc&Msys-cl&MinGW-gcc&MSVS \\ \hline
 AMPL-Client &x&x&&x&& \\ \hline
 MATLAB &x&&&&& \\ \hline
 Cbc &x&x&x&x&& \\ \hline
 Clp &x&x&x&x&& \\ \hline
 Cplex &x&x&&&& \\ \hline
 DyLP &x&x&x&x&& \\ \hline
-Ipopt &x&x&&&& \\ \hline
+Ipopt &x&x&x&x&& \\ \hline
 Knitro &x&x&&&& \\ \hline
 Lindo &x&x&&x&& \\ \hline
 SYMPHONY &x&x&x&x&& \\ \hline
@@ -645,10 +690,11 @@ Vol &x&x&x&x&& \\ \hline
  \begin{tabular}{l|c|c|c|}
  & {\bf Operating System} & {\bf Compiler} & {\bf  Hardware} \\ \hline
  Mac &Mac OS X 10.4.9&gcc 4.0.1&Power PC \\   \hline
+  Mac &Mac OS X 10.4.10&gcc 4.0.1&Intel \\   \hline
  Linux &Red Hat 3.4.6-8&gcc 3.4.6& Dell Intel 32 bit chip\\ \hline
  Cyg-gcc &Windows 2003 Server&gcc 3.4.4& Dell Intel 32 bit chip \\ \hline
  Msys-cl &Windows XP&Visual Studio 2003 &Dell Intel 32 bit chip \\ \hline
- Msys-gcc &&& \\ \hline
+ MinGW-gcc &&& \\ \hline
  MSVS &Windows XP&Visual Studio 2003 &Dell Intel 32 bit chip \\ \hline
 \end{tabular}
 \end{table}
@@ -659,13 +705,6 @@ Kipp -- ask Jun which platforms he has tested.
 \section{The OS Project Components}\label{section:projectcomponents}
 
 The directories in the  project root  are outlined in Figure  \ref{figure:osprojectrootdir}.
-
-\begin{figure}
-\centering
-\includegraphics[scale=0.7]{\figurepath/OSProjectRootDirectory.png}
-\caption{The OS project root directory.} 
-\label{figure:osprojectrootdir}
-\end{figure}
 
 If you download the OS package, you get these additional COIN-OR projects. The links to the project home pages are provided below and give more information on these projects. 
 \begin{itemize}
