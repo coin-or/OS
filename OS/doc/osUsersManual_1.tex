@@ -381,6 +381,12 @@ make
 \end{verbatim}
 
 and all of  the libraries created will be in their respective directories inside {\tt vpath-debug}  and not {\tt COIN-OS}.
+
+{\bf Note:}  If you have run the {\tt configure} script inside the {\tt COIN-OS} directory, you cannot do a {\tt VPATH} build. Before doing a {\tt VPATH} build you need to run 
+\begin{verbatim}
+make distclean
+\end{verbatim}
+in the {\tt COIN-OS} directory.
  
 
 \subsection{Using Ipopt}\label{section:ipopt}
