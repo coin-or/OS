@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- edited with XMLSpy v2007 rel. 3 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" elementFormDefault="qualified">
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:include schemaLocation="OSnL.xsd"/>
 	<xs:include schemaLocation="OSsL.xsd"/>
@@ -34,19 +34,7 @@
 			<xs:element name="disjunctiveInformation" type="DisjunctiveInformation" minOccurs="0"/>
 			<xs:element name="parameterSets" type="ParameterSets" minOccurs="0"/>
 			<xs:element name="modifications" type="Modifications" minOccurs="0"/>
-			<xs:element name="timeDomain" minOccurs="0">
-				<xs:complexType>
-					<xs:choice>
-						<xs:element name="stages" type="Stages"/>
-						<xs:element name="interval">
-							<xs:complexType>
-								<xs:attribute name="horizon" type="xs:double" use="optional" default="INF"/>
-								<xs:attribute name="start" type="xs:double" use="optional" default="0"/>
-							</xs:complexType>
-						</xs:element>
-					</xs:choice>
-				</xs:complexType>
-			</xs:element>
+			<xs:element name="timeDomain" type="TimeDomain" minOccurs="0"/>
 			<xs:element name="stochasticInformation" type="StochasticInformation" minOccurs="0"/>
 			<xs:element name="realTimeData" type="RealTimeData" minOccurs="0"/>
 			<xs:element name="userFunctions" type="UserFunctions" minOccurs="0"/>
@@ -538,6 +526,17 @@
 		</xs:sequence>
 		<xs:attribute name="numberOfDisjunctions" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
+	<xs:complexType name="TimeDomain">
+		<xs:choice>
+			<xs:element name="stages" type="Stages"/>
+			<xs:element name="interval">
+				<xs:complexType>
+					<xs:attribute name="horizon" type="xs:double" use="optional" default="INF"/>
+					<xs:attribute name="start" type="xs:double" use="optional" default="0"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+	</xs:complexType>
 	<xs:complexType name="RealTimeDataURI">
 		<xs:simpleContent>
 			<xs:extension base="xs:anyURI">
@@ -720,8 +719,7 @@
 			<xs:element name="stage" maxOccurs="unbounded">
 				<xs:complexType>
 					<xs:complexContent>
-						<xs:extension base="Stage">
-						</xs:extension>
+						<xs:extension base="Stage"/>
 					</xs:complexContent>
 				</xs:complexType>
 			</xs:element>
