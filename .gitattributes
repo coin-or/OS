@@ -1,5 +1,4 @@
 * text=auto !eol
-/Externals -text
 /INSTALL -text
 /LICENSE -text
 /Makefile.am -text
