@@ -809,6 +809,11 @@ void KnitroSolver::dataEchoCheck(){
 } // end dataEchoCheck
 
 
+NlpProblemDef::~NlpProblemDef (void)
+{
+    //---- DO NOTHING.
+   //return;
+   }
 
                                
 
