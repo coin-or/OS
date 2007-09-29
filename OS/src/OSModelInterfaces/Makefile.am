@@ -22,7 +22,9 @@ libOSModelInterfaces_la_SOURCES = \
 	OSMatlab.cpp \
 	OSMatlab.h \
 	OSmps2osil.cpp \
-	OSmps2osil.h 
+    OSmps2osil.h \
+    OSnl2osil.cpp \
+    OSnl2osil.h 
 
 
 
@@ -101,6 +103,13 @@ if COIN_HAS_KNITRO
   AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(KNITROINCDIR)` 
 endif
 
+
+if COIN_HAS_ASL
+  AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
+  AM_CPPFLAGS += $(ASL_CPPFLAGS) 
+endif
+
+
 if COIN_HAS_IPOPT
   AM_CPPFLAGS += \
 	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Interfaces` \
@@ -122,7 +131,8 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 include_HEADERS = \
 	../../inc/config_os.h \
 	 OSmps2osil.h \
-	 OSMatlab.h
+	 OSMatlab.h \
+	 OSnl2osil.h
 
 
 
