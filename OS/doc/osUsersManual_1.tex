@@ -116,7 +116,7 @@ This is the User's Manual for the Optimization Services (OS) project.  The objec
 
 \section{The Optimization Services (OS) Project}
 
-The objective of Optimization Services (OS) is to provide a set of standards for representing optimization instances, results, solver options, and communication between clients and solvers in a distributed environment using Web Services. This COIN-OR project provides source code for libraries and executable programs that implement OS standards.  See the Optimization Services (OS) Home Site \url{www.optimizationservices.org} and the COIN-OR Trac page \url{projects.coin-or.org} for more information. The OS project provides the following:
+The objective of Optimization Services (OS) is to provide a set of standards for representing optimization instances, results, solver options, and communication between clients and solvers in a distributed environment using Web Services. This COIN-OR project provides source code for libraries and executable programs that implement OS standards.  See the COIN-OR Trac page \url{projects.coin-or.org} or the Optimization Services (OS) Home Site \url{www.optimizationservices.org}   for more information. The OS project provides the following:
 
 \begin{itemize}
 \item[1.]  A set of XML based standards for representing optimization instances (OSiL), optimization results (OSrL), and optimization solver options (OSoL). There are other standards, but these are the main ones. The schemas for these standards are described in Section   \ref{section:schemadescriptions}.
@@ -172,7 +172,7 @@ OS is released as open source code under the Common Public License (CPL). This p
 
 The C++ source code can be obtained using Subversion.  Users with Unix operating systems will most likely have an svn client. For Windows users wishing to obtain and SVN client we recommend  TortoiseSVN.  See \url{tortoisesvn.tigris.org}.
 
-The OS project page with a Wiki is tavailable at \url{projects.coin-or.org\OS}. Execute the following steps to get the source code using SVN.
+Users on a Unix system such as Linux, Solaris, Mac OS X, etc. should follow Steps 1 trough 6 listed below.   Windows users should  skip ahead and read Section \ref{section:windowsinstall}.
 
 \noindent {\bf Step 1:}  Connect to a directory where you want the OS project to go.  The following command will download the project into the directory COIN-OS
 
@@ -316,6 +316,83 @@ Windows users should be  able to double click on the file {\tt OS-release\_numbe
 
 {\bf Step 4:} Rename {\tt OS-release\_number} to {\tt COIN-OS}.    Next follow Steps 2 - 6 outlined in Section \ref{section:svn}.
 
+
+
+\subsection{Windows Installations}\label{section:windowsintall}
+
+There are a number of options open to Windows users.   First, if you wish to work with source code we recommend downloading  the svn client,  TortoiseSVN.  See \url{tortoisesvn.tigris.org}.  With TortoiseSVN in the Windows Explorer connect to the directory where you wish to put the OS code. Right click on the directory and select {\tt SVN Checkout}.   In the textbox, {\tt URL of Repository} give the URL for the version of the OS project you wish to checkout.   
+
+
+
+
+Also, if you plan to build any of the projects contained in {\tt ThirdParty} (e.g. ASL) we recommend using {\tt wget}.  The {\tt wget} executable is used by the scripts, {\tt get.ASL}, {\tt get.Blas}, etc. and makes it easy to download the software.  A Windows version of {\tt wget} is available at
+
+\begin{verbatim}
+http://www.christopherlewis.com/WGet/WGetFiles.htm
+\end{verbatim}
+
+
+
+\subsubsection{Microsoft Visual Studio}
+
+Microsoft Visual Studio solution files are provided for users of Windows and the Microsoft Visual Studio IDE.     It is assumed that the user has installed a copy of Microsoft Visual Studio.  Users interested in a Visual Studio build of the OS project can obtain Visual C++ 2008 Express Edition for free at \url{http://msdn2.microsoft.com/en-us/express/future/bb421473.aspx}.  This download will include the Microsoft {\tt cl}  C++ compiler along with necessary libraries. 
+
+
+
+
+There is a directory {\tt MSVisualStudio} in the {\tt COIN-OS/OS}  directory.  The {\tt MSVisualStudio} contains root directories organized by the version of Visual Studio.  We currently provide solution files  for Version 7 and Version 8.  There are project files for building the unitTest ({\tt OSTest.vcproj}),  the OSSolverService ({\tt OSSolverService.vcproj}), and the OS library {\tt libOS.vcproj}.   The Microsoft Visual Studio files are automatically downloaded with an SVN checkout. They are also contained in the tarballs.  See Section \ref{section:getTarBalls}.    
+
+
+
+\subsubsection{Cygwin}
+
+{\tt Cygwin} provides a Unix emulation environment for Windows. It comes with numerous tools including the gcc compilers. See {\tt www.cygwin.com}.   With Cygwin and the corresponding gcc compilers the OS project is  built exactly as described in Section \ref{section:svn}.
+
+\subsubsection{MinGW} 
+
+
+
+MinGW (Minimalist GNU for Windows) is set of runtime headers to be used with the GNU gcc compilers for Windows.  See \url{www.mingw.org}. As with Cygwin, the OS project is  built exactly as described in Section \ref{section:svn}.
+
+\subsubsection{MSYS}
+
+
+
+MSYS (Minimal SYSstem) provides an easy way to use the COIN-OS build system with the Microsoft C++ cl compiler.  MSYS is an application that gives the user a Bourne shell that can run {\tt configure}  scripts and {\tt Makefiles}.  No compilers come with MSYS. In the Cygwin, MinGW, and MSYS hierarchy, it is at the bottom in terms of tools provided. However, it very easy to use and build the OS project with MSYS.    In this discussion we assume that the user has downloaded the OS source code (most likely  with Tortise) and that the {\tt cl} compiler is present.  The project is built using the following steps. 
+
+{\bf Note:} if you wish to use the third-party software with MSYS it is best to get wget ... kipp more detail here. 
+
+
+\begin{itemize}
+
+\item[Step 1.] Download {\tt MSYS} at
+
+\begin{center}
+\url{http://sourceforge.net/project/showfiles.php?group_id=2435&package_id=24963}
+\end{center}
+
+and install.  Double clicking on the MSYS icon will open a Bourne shell window. 
+
+\item[Step 2.]   Set the Visual Studio environment variables. This is done by executing the batch file {\tt  vcvarsall.bat}  that comes with the Visual Studio.  This file is located in the following directory. 
+
+\begin{verbatim}
+C:/Program Files/Microsoft Visual Studio 8/VC
+\end{verbatim}
+
+
+\item[Step 3.]  In the MSYS command window connect to the root of the OS project and run  {\tt configure}  script  and then {\tt make} as described in Section \ref{section:svn}.
+
+\end{itemize}
+
+
+
+
+
+ 
+
+
+
+
 \subsection{Obtaining the Java Server Source Code}
 
 
@@ -446,70 +523,6 @@ CFLAGS = -MTd -DUSE_CLOCK -DMSDOS -DNO_ONEXIT
 
 \end{itemize} 
 
-
-
-\subsection{Windows Installations}
-
-There are a number of options open to Windows users.   First, if you wish to work with source code we recommend downloading  the svn client,  TortoiseSVN.  See \url{tortoisesvn.tigris.org}.  Also, if you plan to build any of the projects contained in {\tt ThirdParty} (e.g. ASL) we recommend using {\tt wget}.  The {\tt wget} executable is used by the scripts, {\tt get.ASL}, {\tt get.Blas}, etc. and makes it easy to download the software.  A Windows version of {\tt wget} is available at
-
-\begin{verbatim}
-http://www.christopherlewis.com/WGet/WGetFiles.htm
-\end{verbatim}
-
-
-
-\subsubsection{Microsoft Visual Studio}
-
-Microsoft Visual Studio solution files are provided for users of Windows and the Microsoft Visual Studio IDE.  There is a directory {\tt MSVisualStudio} in the {\tt COIN-OS/OS}  directory.  The {\tt MSVisualStudio} contains root directories organized by the version of Visual Studio.  We currently provide solution files  for Version 7.  There are project files for building the unitTest ({\tt OSTest.vcproj}),  the OSSolverService ({\tt OSSolverService.vcproj}), and the OS library {\tt libOS.vcproj}.   The Microsoft Visual Studio files are automatically downloaded with an SVN checkout. They are also contained in the tarballs.  See Section \ref{section:getTarBalls}.    
-
-The solution file contains an OS project file that will compile all of the OS source code into the {\tt OSLibrary} and point to the necessary include files. There is also a project file for the {\tt OSSolverService}.  The solution file also contains the project files for the other COIN-OR projects.  It is assumed that the user has installed a copy of Microsoft Visual Studio.
-
-
-\subsubsection{Cygwin}
-
-{\tt Cygwin} provides a Unix emulation environment for Windows. It comes with numerous tools including the gcc compilers. See {\tt www.cygwin.com}.   With Cygwin and the corresponding gcc compilers the OS project is  built exactly as described in Section \ref{section:svn}.
-
-\subsubsection{MinGW} 
-
-
-
-MinGW (Minimalist GNU for Windows) is set of runtime headers to be used with the GNU gcc compilers for Windows.  See \url{www.mingw.org}. As with Cygwin, the OS project is  built exactly as described in Section \ref{section:svn}.
-
-\subsubsection{MSYS}
-
-
-
-MSYS (Minimal SYSstem) provides an easy way to use the COIN-OS build system with the Microsoft C++ cl compiler.  MSYS is an application that gives the user a Bourne shell that can run {\tt configure}  scripts and {\tt Makefiles}.  No compilers come with MSYS. In the Cygwin, MinGW, and MSYS hierarchy, it is at the bottom in terms of tools provided. However, it very easy to use and build the OS project with MSYS.    In this discussion we assume that the user has downloaded the OS source code (most likely  with Tortise) and that the {\tt cl} compiler is present.  The project is built using the following steps. 
-
-{\bf Note:} if you wish to use the third-party software with MSYS it is best to get wget ... kipp more detail here. 
-
-
-\begin{itemize}
-
-\item[Step 1.] Download {\tt MSYS} at
-
-\begin{center}
-\url{http://sourceforge.net/project/showfiles.php?group_id=2435&package_id=24963}
-\end{center}
-
-and install.  Double clicking on the MSYS icon will open a Bourne shell window. 
-
-\item[Step 2.]   Set the Visual Studio environment variables. This is done by executing the batch file {\tt  vcvarsall.bat}  that comes with the Visual Studio.  This file is located in the following directory. 
-
-\begin{verbatim}
-C:/Program Files/Microsoft Visual Studio 8/VC
-\end{verbatim}
-
-
-\item[Step 3.]  In the MSYS command window connect to the root of the OS project and run  {\tt configure}  script  and then {\tt make} as described in Section \ref{section:svn}.
-
-\end{itemize}
-
-
-
-
-
- 
 
 
 

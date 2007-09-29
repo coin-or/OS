@@ -3,16 +3,16 @@
 \contentsline {section}{\numberline {3}Download and Installation}{6}
 \contentsline {subsection}{\numberline {3.1}Obtaining the Source Code Subversion Repository (SVN)}{6}
 \contentsline {subsection}{\numberline {3.2}Obtaining the OS Source Code From a Tarball or Zip File}{9}
-\contentsline {subsection}{\numberline {3.3}Obtaining the Java Server Source Code}{9}
-\contentsline {subsection}{\numberline {3.4}Obtaining the Binaries}{10}
-\contentsline {subsection}{\numberline {3.5}VPATH Installations}{11}
-\contentsline {subsection}{\numberline {3.6}Using Ipopt}{11}
-\contentsline {subsection}{\numberline {3.7}Windows Installations}{12}
-\contentsline {subsubsection}{\numberline {3.7.1}Microsoft Visual Studio}{12}
-\contentsline {subsubsection}{\numberline {3.7.2}Cygwin}{13}
-\contentsline {subsubsection}{\numberline {3.7.3}MinGW}{13}
-\contentsline {subsubsection}{\numberline {3.7.4}MSYS}{13}
-\contentsline {subsection}{\numberline {3.8}Third-Party Software}{13}
+\contentsline {subsection}{\numberline {3.3}Windows Installations}{9}
+\contentsline {subsubsection}{\numberline {3.3.1}Microsoft Visual Studio}{10}
+\contentsline {subsubsection}{\numberline {3.3.2}Cygwin}{10}
+\contentsline {subsubsection}{\numberline {3.3.3}MinGW}{10}
+\contentsline {subsubsection}{\numberline {3.3.4}MSYS}{10}
+\contentsline {subsection}{\numberline {3.4}Obtaining the Java Server Source Code}{11}
+\contentsline {subsection}{\numberline {3.5}Obtaining the Binaries}{11}
+\contentsline {subsection}{\numberline {3.6}VPATH Installations}{12}
+\contentsline {subsection}{\numberline {3.7}Using Ipopt}{13}
+\contentsline {subsection}{\numberline {3.8}Third-Party Software}{14}
 \contentsline {subsubsection}{\numberline {3.8.1}AMPL}{14}
 \contentsline {subsubsection}{\numberline {3.8.2}Cplex}{15}
 \contentsline {subsubsection}{\numberline {3.8.3}GLPK}{15}
@@ -23,7 +23,7 @@
 \contentsline {subsection}{\numberline {3.9}Bug Reporting}{16}
 \contentsline {subsection}{\numberline {3.10}Documentation}{16}
 \contentsline {subsection}{\numberline {3.11}Platforms}{17}
-\contentsline {section}{\numberline {4}The OS Project Components}{17}
+\contentsline {section}{\numberline {4}The OS Project Components}{18}
 \contentsline {section}{\numberline {5}OS Protocols}{20}
 \contentsline {section}{\numberline {6}The OS Library Components}{24}
 \contentsline {subsection}{\numberline {6.1}OSAgent}{24}
