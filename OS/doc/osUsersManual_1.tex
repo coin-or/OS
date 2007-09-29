@@ -413,24 +413,36 @@ $ cd ../Mumps
 $ ./get.Mumps 
 \end{verbatim}
 
-What you do next depends upon whether or not a FORTRAN compiler is present, and if so, which version of FORTRAN.  There are three possibilities.
+What you do next depends upon whether or not a FORTRAN compiler is present, and if so, which version of FORTRAN.  There are three options.
 
 \begin{itemize}
 
-\item[1.]   If you are building in Unix-like environment and have a FORTRAN 95 compiler available you can simply run the {\tt configure} script and the FORTRAN compiler will be detected and the {\tt Ipopt} project will be built. 
+\item[Option 1.]   If you are building in Unix-like environment and have a FORTRAN 95 compiler available you can simply run the {\tt configure} script and the FORTRAN compiler will be detected and the {\tt Ipopt} project will be built. 
 
-\item[2.]   If you have a FORTRAN 77 compiler, you  must first obtain the  Harwell Subroutine Library (HSL) routine {\tt ma27ad.f}.  Put this in the directory {\tt \$OS/ThirdParty/HSL}.  Now run the {\tt configure} script and described in \ref{section:svn}.  See
+\item[Option 2.]   If you have a FORTRAN 77 compiler, you  must first obtain the  Harwell Subroutine Library (HSL) routine {\tt ma27ad.f}.  Put this in the directory {\tt \$OS/ThirdParty/HSL}.  Now run the {\tt configure} script and described in \ref{section:svn}.  See
 
 \begin{verbatim}
  http://www.coin-or.org/Ipopt/documentation/node15.html
  \end{verbatim}
 
-\item[3.]  If you do not have a FORTRAN compiler and do not wish to obtain one, by using the {\tt f2c} compiler from Netlib.  The installation instructions for this are in the {\tt INSTALL} file in 
+\item[Option 3.]  If you do not have a FORTRAN compiler and do not wish to obtain one, by using the {\tt f2c} compiler from Netlib.  The installation instructions for this are in the {\tt INSTALL} file in 
 \begin{verbatim}
 $OS/BuiltTools/compile_f2c
 \end{verbatim}
 
-This also requires that the  Harwell Subroutine Library (HSL) routine {\tt ma27ad.f} be present in the HSL directory. 
+\end{itemize}
+
+Two important points:
+
+
+\begin{itemize}
+\item Option 3 also requires that the  Harwell Subroutine Library (HSL) routine {\tt ma27ad.f} be present in the HSL directory. 
+
+\item If you run configure with the {\tt --enable-debug} option on Windows, then when building the {\tt vcf2c.lib}, use the command line
+
+\begin{verbatim}
+CFLAGS = -MTd -DUSE_CLOCK -DMSDOS -DNO_ONEXIT
+\end{verbatim}
 
 \end{itemize} 
 
@@ -574,12 +586,9 @@ CPLEX_LIBS=-lcplex -lilocplex -lm -lpthread
 
 \subsubsection{GLPK}
 
-{\tt GLPK} is a an open-source linear and integer-programming solver from the GNU organization. See \url{http://www.gnu.org/software/glpk/}.  In order to use GLPK with OS first go to any GNU mirror site (\url{http://www.gnu.org/prep/ftp.html}) and download the GLPK software in the directory {\tt /gnu/glpk/}. Follow the instructions in the {\tt INSTALL} file. After installing GLPK, run the configure script with the path to the GLPK library and include directory. An example is given below.
+{\tt GLPK} is a an open-source linear and integer-programming solver from the GNU organization. See \url{http://www.gnu.org/software/glpk/}.  In order to use GLPK with OS either execute {\tt get.AllThirdParty} or connect to {\tt ThirdParty/Glpk} and execute {\tt get.ThirdParty}.
 
-\begin{verbatim}
-./config --with-glpk-lib="-L/home/kmartin/files/code/glpk/linux/lib -lglpk " 
---with-glpk-incdir=/home/kmartin/files/code/glpk/linux/include
-\end{verbatim}
+
 
 
 
@@ -591,12 +600,38 @@ CPLEX_LIBS=-lcplex -lilocplex -lm -lpthread
 \subsubsection{Knitro}
 
 
-Knitro is a nonlinear solver. See \url{http://www.ziena.com/}.  Knitro does provide source code and you are can only download the platform dependent binaries. After installing the binaries and include files in an appropriate run configure to point to the include and library directory. An example is given below.
+Knitro is a nonlinear solver. See \url{http://www.ziena.com/}.  Ziena does not provide source code for Knitro.  You must download platform dependent binaries.   In order to use Knitro with the OS project perform the following steps.
+
+\begin{itemize}
+
+
+
+\item[Step 1:]  Download {\tt knitro} to the desired directory.
+
+
+\item[Step 2:] Copy the file {\tt nlpProblemDef.h} from the {\tt examples/C++} directory to the {\tt include} directory.
+
+\item[Step 3:]  Edit the file {\tt nlpProblemDef.h} and delete the following lines:
+
+\begin{verbatim}
+NlpProblemDef::~NlpProblemDef (void)
+{
+    //---- DO NOTHING.
+    return;
+}
+\end{verbatim}
+
+
+
+
+\item[Step 4] Run configure with appropriate values for  {\tt --with-knitro-lib} and {--with-knitro-incdir}. For example:
 
 \begin{verbatim}
 ./configure --with-knitro-lib="-L/home/kmartin/files/code/knitro/linux/lib -lknitro " 
 --with-knitro-incdir=/home/kmartin/files/code/knitro/linux/include
 \end{verbatim}
+
+\end{itemize}
 
 
 \subsubsection{LINDO}
@@ -1067,7 +1102,7 @@ The {\tt OSAgent}  part of the library is used to facilitate communication with 
 The {\tt OSSolverAgent} class is used  contact a remote solver service.  For example, assume that {\tt sOSiL} is a string with a problem instance and {\tt sOSoL} is a string with solver options. Then the following code will call a solver service and invoke the {\tt the solve} method.
 \begin{verbatim}
 OSSolverAgent *osagent;
-string serviceLocation = http://128.135.130.17:8080/os/OSSolverService.jws
+string serviceLocation = http://gsbkip.chicagogsb.edu/os/OSSolverService.jws
 osagent = new OSSolverAgent(  serviceLocation );
 osagent->solve(sOSiL, sOSoL);
 \end{verbatim}
@@ -1415,7 +1450,7 @@ password = 'chicagoesmuyFRIO';
 solverName = 'lindo';
 %the remote service service address
 %if left empty we solve locally
-serviceAddress='http://128.135.130.17:8080/os/OSSolverService.jws';
+serviceAddress='http://gsbkip.chicagogsb.edu/os/OSSolverService.jws';
 % now solve
 callMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, ... 
     VarType, Q, prob_name, password, solverName, serviceAddress)
@@ -2228,7 +2263,7 @@ OSSolverService -config ../data/configFiles/testremote.config
 where the {\tt testremote.config} file is
 \begin{verbatim}
 -osil ../data/osilFiles/parincLinear.osil
--serviceLocation http://128.135.130.17:8080/os/OSSolverService.jws
+-serviceLocation http://gsbkip.chicagogsb.edu/os/OSSolverService.jws
 \end{verbatim}
 
 No solver is specified so by default the  {\tt Cbc} solver will be used on the server.  
@@ -2242,7 +2277,7 @@ where {\tt remoteSolve1.osol} is
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org">
     <general>
-        <serviceURI>http://128.135.130.17:8080/os/OSSolverService.jws</serviceURI>
+        <serviceURI>http://gsbkip.chicagogsb.edu/os/OSSolverService.jws</serviceURI>
     </general>
     <optimization>
     	<other name="os_solver">clp</other>
@@ -2260,7 +2295,7 @@ where the {\tt remoteSolve2.osol} file is
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org">
     <general>
-        <serviceURI>http://128.135.130.17:8080/os/OSSolverService.jws</serviceURI>
+        <serviceURI>http://gsbkip.chicagogsb.edu/os/OSSolverService.jws</serviceURI>
          <instanceLocation locationType="local">
 	 /home/kmartin/files/code/OSRepository/linear/continuous/pilot.osil
 	 </instanceLocation>
@@ -2277,7 +2312,7 @@ If we were to change to the {\tt locationType} attribute in the {\tt <instanceLo
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org">
     <general>
-        <serviceURI>http://128.135.130.17:8080/os/OSSolverService.jws</serviceURI>
+        <serviceURI>http://gsbkip.chicagogsb.edu/os/OSSolverService.jws</serviceURI>
          <instanceLocation locationType="http">
 	 http://gsbkip.chicagogsb.edu/testproblems/parincLinear.osil
 	 </instanceLocation>
@@ -2304,7 +2339,7 @@ OSSolverService -config ../data/configFiles/testremoteSend.config
 where the {\tt testremoteSend.config} file is
 \begin{verbatim}
 -nl ../data/amplFiles/hs71.nl
--serviceLocation http://128.135.130.17:8080/os/OSSolverService.jws
+-serviceLocation http://gsbkip.chicagogsb.edu/os/OSSolverService.jws
 -serviceMethod send
 \end{verbatim}
 In this example the COIN-OR {\tt Ipopt} solver is specified. The input file {\tt hs71.nl} is in AMPL format. Before sending this to the remote solver service the {\tt OSSolverService} executable converts  the nl format into the OSiL XML format and packages this into the SOAP envelope used by Web Services. 
@@ -2366,7 +2401,7 @@ OSSolverService -config ../data/configFiles/testremoteRetrieve.config
 \end{verbatim}
 The {\tt testremoteRetrieve.config} file is
 \begin{verbatim}
--serviceLocation http://128.135.130.17:8080/os/OSSolverService.jws
+-serviceLocation http://gsbkip.chicagogsb.edu/os/OSSolverService.jws
 -osol ../data/osolFiles/retrieve.osol
 -serviceMethod retrieve
 -osrl /home/kmartin/temp/test.osrl
@@ -2386,7 +2421,7 @@ The OSoL file {\tt retrieve.osol} contains a tag {\tt <jobID>} that is communica
 
 Before  submitting a job with the {\tt send} method a {\tt JobID} is required. The {\tt OSSolverService} can get a {\tt JobID} as follows
 \begin{verbatim}
--serviceLocation http://128.135.130.17:8080/os/OSSolverService.jws
+-serviceLocation http://gsbkip.chicagogsb.edu/os/OSSolverService.jws
 -serviceMethod getJobID
 \end{verbatim}
 Note that no OSoL input file is specified. In this case, the {\tt OSSolverService} sends an empty string. A string is returned with the {\tt JobID}. This {\tt JobID} is then put into a {\tt <jobID>} element in an OSoL string that would be used by the {\tt send} method.
@@ -2400,7 +2435,7 @@ OSSolverService -config ../data/configFiles/testRemoteKnock.config
 \end{verbatim}
 where the {\tt testRemoteKnock.config} file is
 \begin{verbatim}
--serviceLocation http://128.135.130.17:8080/os/OSSolverService.jws
+-serviceLocation http://gsbkip.chicagogsb.edu/os/OSSolverService.jws
 -osplInput ../data/osolFiles/demo.ospl
 -osol ../data/osolFiles/retrieve.osol
 -serviceMethod knock
@@ -2429,7 +2464,7 @@ The result of this request is a string in OSrL format.  Part of the return forma
 <jobs>
 	<job jobID="123456abcd">
 		<state>finished</state>
-		<serviceURI>http://128.135.130.17:8080/ipopt/IPOPTSolverService.jws</serviceURI>
+		<serviceURI>http://gsbkip.chicagogsb.edu/ipopt/IPOPTSolverService.jws</serviceURI>
 		<submitTime>2007-06-16T14:57:36.678-05:00</submitTime>
 		<startTime>2007-06-16T14:57:36.678-05:00</startTime>
 		<endTime>2007-06-16T14:57:39.404-05:00</endTime>
@@ -2452,7 +2487,7 @@ OSSolverService -config  ../data/confgFiles/kill.config
 where the configure file {\tt kill.config} is
 \begin{verbatim}
 -osol ../data/osolFiles/kill.osol
--serviceLocation http://128.135.130.17:8080/os/OSSolverService.jws
+-serviceLocation http://gsbkip.chicagogsb.edu/os/OSSolverService.jws
 -serviceMethod kill
 \end{verbatim}
 and the {\tt kill.osol} file is
@@ -2571,31 +2606,56 @@ Download the java binary distribution at
 os-distribution-release_number.zip
 \end{verbatim}
 
-After unpacking {\tt os-distribution-release\_number.zip} there is a directory {\tt os-server-1.0} and a single file {\tt os.war}.  For users that have not installed the Tomcat server,   {\tt os-server-1.0} contains {\tt all} of the necessary files for a OS Solver Service.  If you do not have a Tomcat server running do the following to setup a  Tomcat server  with the OS Solver Service (these instructions are operating system independent):
+After unpacking {\tt os-distribution-release\_number.zip} there is a directory {\tt os-server-1.0} and a single file {\tt os.war}.  For users that have not installed the Tomcat server,   {\tt os-server-1.0} contains {\tt all} of the necessary files for a OS Solver Service.  If you do not have a Tomcat server running do the following to setup a  Tomcat server  with the OS Solver Service on a {\bf Unix system}:
 
 \begin{itemize}
-\item[1.]  Put the folder  {\tt os-server-1.0}   in the desired location for the OS Solver Service on the server machine. 
+\item[Step 1.]  Put the folder  {\tt os-server-1.0}   in the desired location for the OS Solver Service on the server machine. 
 
-\item[2.] Set the environment variable  {\tt CATALINA\_HOME} to point to the directory  {\tt os-server-1.0}.
+\item[Step 2.] Connect to the Tomcat {\tt bin} directory in the {\tt os-server-1.0} root and execute {\tt ./startup.sh}. 
 
-\item[3.] Connect to the Tomcat {\tt bin} directory in the {\tt os-server-1.0} root and execute {\tt startup.sh} in a Unix environment or {\tt startup.bat} in a Windows environment. 
-
-\item[4.] Open a browser on the server and enter the URL
+\item[Step 3.] Test to see if the server is running the {\tt OSSolverService}.  Open a browser on the server and enter the URL
 \begin{verbatim}
-os/OSSolverService.jws
+http://127.0.0.1:8080/os/OSSolverService.jws
 \end{verbatim}
 You should see a message {\tt Click to see the WSDL}.  Click on the link and you should see an XML description of the various methods available from the {\tt OSSolverService}.
 
-\item[5.]  On a client machine, create  the file {\tt testremote.config} with the following lines of text
+\item[Step 4.]  On a client machine, create  the file {\tt testremote.config} with the following lines of text
 \begin{verbatim}
 -serviceLocation http://***.***.***.***:8080/os/OSSolverService.jws
 -osil /parincLinear.osil
 \end{verbatim}
-where ***.***.***.*** is the IP address of the solver. Then, assuming the files {\tt testremote.config} and {\tt parincLinear.osil} are in the same directory on the client machine as the {\tt OSSolverService} execute:
+where ***.***.***.*** is the IP address of the Tomcat server machine. Then, assuming the files {\tt testremote.config} and {\tt parincLinear.osil} are in the same directory on the client machine as the {\tt OSSolverService} execute:
 \begin{verbatim}
 OSSolverService -config testremote.config
 \end{verbatim}
 You should get back an OSrL message saying the problem was optimized. 
+
+\end{itemize}
+
+In a Windows environment you want to start the Tomcat server as a service so you can logoff (not shutdown) the machine and have the server continue to run.   On a {\bf Windows machine} do the following:
+
+\begin{itemize}
+
+\item[Step 1.]  Put the folder  {\tt os-server-1.0}   in the desired location for the OS Solver Service on the server machine. 
+
+\item[Step 2.]  Connect to the Tomcat {\tt bin} directory in the {\tt os-server-1.0} root and execute 
+\begin{verbatim}
+service.bat install
+\end{verbatim}
+This will install Tomcat as a Windows service.  To remove the service execute
+\begin{verbatim}
+service.bat remove
+\end{verbatim}
+
+\item[Step 3.]  Connect to the Tomcat {\tt bin} directory and and double click on the {\tt tomcat5w.exe} application.  This will open a Window for controlling the Tomcat server. 
+
+\item[Step 4.]  Select the {\tt Startup} tab and set the {\tt Working Directory} to the path to {\tt os-server-1.0}.
+
+\item[Step 5.]  Select the {\tt General} tab and then click the {\tt Start} button.
+
+\item[Step 6.] Same as Step 3 for Unix.
+
+\item[Step 7:] Same as Step 4 for Unix.
 
 \end{itemize}
 
@@ -2644,7 +2704,7 @@ option amplClient_options "solver ipopt";
 \end{verbatim}
 provide an option which has the address of the remote solver service.
 \begin{verbatim}
-option ipopt_options "http://128.135.130.17:8080/os/OSSolverService.jws";
+option ipopt_options "http://gsbkip.chicagogsb.edu/os/OSSolverService.jws";
 \end{verbatim}
 
 \subsection{Algorithmic Differentiation:  Using the OS Algorithmic Differentiation Methods}\label{section:cppad}
@@ -2674,7 +2734,7 @@ fileUpload ../../data/osilFiles/parincQuadratic.osil
 The {\tt fileUpload} executable first creates an {\tt OSAgent} object.
 \begin{verbatim}
 OSSolverAgent* osagent = NULL;
-osagent = new OSSolverAgent("http://128.135.130.17:8080/fileupload/servlet/OSFileUpload");
+osagent = new OSSolverAgent("http://gsbkip.chicagogsb.edu/fileupload/servlet/OSFileUpload");
 \end{verbatim}
 The {\tt OSAgent}  has a method {\tt fileUpload} with the signature
 \begin{verbatim}
@@ -2693,7 +2753,7 @@ OSSolverService -config ../data/configFiles/testremote.config
 where the {\tt config} file is
 \begin{verbatim}
 -osol ../data/osolFiles/remoteSolve2.osol
--serviceLocation http://128.135.130.17:8080/os/OSSolverService.jws
+-serviceLocation http://gsbkip.chicagogsb.edu/os/OSSolverService.jws
 -serviceMethod solve
 \end{verbatim}
 and the {\tt osol} file is
@@ -2712,7 +2772,7 @@ and the {\tt osol} file is
 
 As an alternative to using the command line executable {\tt fileUpload}, there is also an html form {\tt fileupload.html} that can be used to upload files. For example, the URL
 \begin{verbatim}
-http://128.135.130.17:8080/os/fileupload.html
+http://gsbkip.chicagogsb.edu/os/fileupload.html
 \end{verbatim}
 will bring up the necessary form that allows the user to browse a directory and select the file to upload. This URL is based on the assumption that the {\tt OSJava} classes were deployed as described in Section \ref{section:tomcat}. The file {\tt fileupload.html} is in the {\tt WebContent} directory directly under the 
 {\tt OSJava} root. 
@@ -2923,7 +2983,7 @@ password = 'chicagoesmuyFRIO';
 solverName = 'ipopt';
 %the remote service service address
 %if left empty we solve locally
-serviceAddress='http://128.135.130.17:8080/os/OSSolverService.jws';
+serviceAddress='http://gsbkip.chicagogsb.edu/os/OSSolverService.jws';
 % now solve
 callMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, VarType, ...
      Q, prob_name, password, solverName, serviceAddress)
