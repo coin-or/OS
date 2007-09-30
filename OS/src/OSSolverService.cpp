@@ -327,7 +327,7 @@ void solve(){
 			// place a remote call
 			osagent = new OSSolverAgent( osoptions->serviceLocation );
 			if(osoptions->solverName != ""){
-				unsigned int iStringpos;
+				string::size_type iStringpos;
 				//see if there is an osol file
 				if(osoptions->osol != ""){// we have an osol string
 					// see if a solver is listed, if so don't do anything
@@ -568,7 +568,7 @@ void send(){
 	fileUtil = new FileUtil();
 	// first get the jobID
 	std::string sOSoL = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/OSoL.xsd\"><general> </general></osol>";
-	unsigned int iStringpos;
+	string::size_type iStringpos;
 	try{
 		// call a method here to get OSiL if we have an nl or mps file
 		if(osoptions->osil == ""){
@@ -758,8 +758,8 @@ void getOSiLFromMps(){
 
 string getServiceURI( std::string osol){
 	if(osol == "") return osol;
-	unsigned int pos2;
-	unsigned int pos1 = osol.find( "<serviceURI");
+	string::size_type pos2;
+	string::size_type  pos1 = osol.find( "<serviceURI");
 	if(pos1 != std::string::npos){
 		// get the end of the serviceURI start tag
 		pos1 = osol.find(">", pos1 + 1);
@@ -779,8 +779,8 @@ string getServiceURI( std::string osol){
 
 string getInstanceLocation( std::string osol){
 	if(osol == "") return osol;
-	unsigned int pos2;
-	unsigned int pos1 = osol.find( "<instanceLocation");
+	string::size_type pos2;
+	string::size_type pos1 = osol.find( "<instanceLocation");
 	if(pos1 != std::string::npos){
 		// get the end of the instanceLocation start tag
 		pos1 = osol.find(">", pos1 + 1);
@@ -800,8 +800,8 @@ string getInstanceLocation( std::string osol){
 
 string getSolverName( std::string osol){
 	if(osol == "") return osol;
-	unsigned int pos2;
-	unsigned int pos1 = osol.find( "os_solver");
+	string::size_type pos2;
+	string::size_type pos1 = osol.find( "os_solver");
 	if(pos1 != std::string::npos){
 		// get the end of the instanceLocation start tag
 		pos1 = osol.find(">", pos1 + 1);

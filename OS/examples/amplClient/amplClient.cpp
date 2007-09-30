@@ -240,7 +240,7 @@ int main(int argc, char **argv)
 		cout << osrl << endl << endl <<endl;	
 		osresult = osrlreader->readOSrL( osrl);
 		if( osresult->getSolutionNumber( ) > 0)
-		write_sol((char*)osresult->getSolutionMessage( 0).c_str(), 
+		write_sol(const_cast<char*>(osresult->getSolutionMessage( 0).c_str()), 
 			osresult->getOptimalPrimalVariableValues( -1), 
 			osresult->getOptimalDualVariableValues( -1), NULL);
 	}

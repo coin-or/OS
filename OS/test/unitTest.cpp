@@ -1124,8 +1124,8 @@ int main(int argC, char* argV[])
 double getObjVal( std::string osrl){
 	std::string sObjVal;
 	double dObjVal;
-	unsigned int pos2;
-	unsigned int pos1 = osrl.find( "<obj ");
+	string::size_type pos2;
+	string::size_type pos1 = osrl.find( "<obj ");
 	if(pos1 != std::string::npos){
 		// get the end of the obj start tag
 		pos1 = osrl.find(">", pos1 + 1);

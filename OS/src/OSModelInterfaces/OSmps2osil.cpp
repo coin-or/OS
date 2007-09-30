@@ -60,7 +60,7 @@ bool OSmps2osil::createOSInstance( )
 	int numberObj = 1;
 	int objIndex = -1;
 	double objWeight = 1.0;
-	osinstance->setInstanceName((char*)m_MpsData->getProblemName());
+	osinstance->setInstanceName( const_cast<char*>(m_MpsData->getProblemName()));
 	//
 	// get the variable information
 	//
@@ -78,7 +78,7 @@ bool OSmps2osil::createOSInstance( )
 	//	
 	SparseVector* objectiveCoefficients = NULL;
 	objectiveCoefficients = new SparseVector( numvar);
-	double *p = (double*)m_MpsData->getObjCoefficients();
+	double *p = const_cast<double*>(m_MpsData->getObjCoefficients());
 	for(i = 0; i < numvar; i++){
 		objectiveCoefficients->indexes[i] = i;
 		objectiveCoefficients->values[i] = *(p++);
@@ -108,9 +108,9 @@ bool OSmps2osil::createOSInstance( )
 	int indexesEnd = numnonz - 1;
 	int startsEnd = m_CoinPackedMatrix->isColOrdered()?numvar:numrows;
 	osinstance->setLinearConstraintCoefficients(numnonz,  m_CoinPackedMatrix->isColOrdered(), 
-		(double*)m_CoinPackedMatrix->getElements(), valuesBegin,  valuesEnd, 
-		(int*)m_CoinPackedMatrix->getIndices(),  indexesBegin,  indexesEnd,   			
-		(int*)m_CoinPackedMatrix->getVectorStarts(),  startsBegin,  startsEnd);
+		const_cast<double*>(m_CoinPackedMatrix->getElements()), valuesBegin,  valuesEnd, 
+		const_cast<int*>(m_CoinPackedMatrix->getIndices()),  indexesBegin,  indexesEnd,   			
+		const_cast<int*>(m_CoinPackedMatrix->getVectorStarts()),  startsBegin,  startsEnd);
 	return true;
 }
 

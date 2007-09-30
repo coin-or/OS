@@ -336,7 +336,7 @@ string WSUtil::getOSxL(string soapstring, string serviceMethod){
 	end = "</"+serviceMethod + "Return";
 	// strip off the return header information 
 	// find start of XML information
-	unsigned int startxml = soapstring.find(start , 1);
+	string::size_type startxml = soapstring.find(start , 1);
 	if (startxml == string::npos){
 		return result;	
 	}    
@@ -344,7 +344,7 @@ string WSUtil::getOSxL(string soapstring, string serviceMethod){
 		startxml = soapstring.find(">", startxml + 1);
 		if(startxml == string::npos) return result;
 		// find the end of the string
-		unsigned int endxml = soapstring.find(end , startxml);
+		string::size_type endxml = soapstring.find(end , startxml);
 		if(endxml == string::npos){
 			return result;
 		}

@@ -162,7 +162,7 @@ bool IpoptSolver::get_starting_point(Index n, bool init_x, Number* x,
 // returns the value of the objective function
 bool IpoptSolver::eval_f(Index n, const Number* x, bool new_x, Number& obj_value){
 	try{
-		obj_value  = osinstance->calculateAllObjectiveFunctionValues((double*)x, NULL, NULL, new_x, 0 )[ 0];
+		obj_value  = osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(x), NULL, NULL, new_x, 0 )[ 0];
 	}
 	catch(const ErrorClass& eclass){
 		ipoptErrorMsg = eclass.errormsg;
@@ -176,7 +176,7 @@ bool IpoptSolver::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad
  	int i;
  	double *objGrad;
 	try{
-  		objGrad = osinstance->calculateAllObjectiveFunctionGradients((double*)x, NULL, NULL,  new_x, 1)[ 0];
+  		objGrad = osinstance->calculateAllObjectiveFunctionGradients( const_cast<double*>(x), NULL, NULL,  new_x, 1)[ 0];
 	}
    	catch(const ErrorClass& eclass){
 		ipoptErrorMsg = eclass.errormsg;
@@ -191,7 +191,7 @@ bool IpoptSolver::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad
 // return the value of the constraints: g(x)
 bool IpoptSolver::eval_g(Index n, const Number* x, bool new_x, Index m, Number* g) {
 	try{
- 		double *conVals = osinstance->calculateAllConstraintFunctionValues((double*)x, NULL, NULL, new_x, 0 );
+ 		double *conVals = osinstance->calculateAllConstraintFunctionValues( const_cast<double*>(x), NULL, NULL, new_x, 0 );
  		int i;
  		for(i = 0; i < m; i++){
  			if( CommonUtil::ISOSNAN( (double)conVals[ i] ) ) return false;
@@ -239,7 +239,7 @@ bool IpoptSolver::eval_jac_g(Index n, const Number* x, bool new_x,
 	else {
 		//std::cout << "EVALUATING JACOBIAN" << std::endl; 
 		try{
-			sparseJacobian = osinstance->calculateAllConstraintFunctionGradients((double*)x, NULL, NULL,  new_x, 1);
+			sparseJacobian = osinstance->calculateAllConstraintFunctionGradients( const_cast<double*>(x), NULL, NULL,  new_x, 1);
 		}
 		catch(const ErrorClass& eclass){
 			ipoptErrorMsg = eclass.errormsg;
@@ -290,7 +290,7 @@ bool IpoptSolver::eval_h(Index n, const Number* x, bool new_x,
 		double* objMultipliers = new double[1];
 		objMultipliers[0] = obj_factor;
 		try{
-			sparseHessian = osinstance->calculateLagrangianHessian((double*)x, objMultipliers, (double*)lambda ,  new_x, 2);
+			sparseHessian = osinstance->calculateLagrangianHessian( const_cast<double*>(x), objMultipliers, (double*)lambda ,  new_x, 2);
 		}
 		catch(const ErrorClass& eclass){
 			ipoptErrorMsg = eclass.errormsg;
@@ -377,28 +377,28 @@ void IpoptSolver::finalize_solution(SolverReturn status,
 			case SUCCESS:
 				solutionDescription = "SUCCESS[IPOPT]: Algorithm terminated successfully at a locally optimal point, satisfying the convergence tolerances.";
 				osresult->setSolutionStatus(solIdx,  "locallyOptimal", solutionDescription);
-				osresult->setPrimalVariableValues(solIdx, (double*)x);
+				osresult->setPrimalVariableValues(solIdx, const_cast<double*>(x));
 				mdObjValues[0] = obj_value;
 				osresult->setObjectiveValues(solIdx, mdObjValues);
 			break;
 			case MAXITER_EXCEEDED:
 				solutionDescription = "MAXITER_EXCEEDED[IPOPT]: Maximum number of iterations exceeded.";
 				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);
-				osresult->setPrimalVariableValues(solIdx, (double*)x);
+				osresult->setPrimalVariableValues(solIdx, const_cast<double*>(x));
 				mdObjValues[0] = obj_value;
 				osresult->setObjectiveValues(solIdx, mdObjValues);
 			break;
 			case STOP_AT_TINY_STEP:
 				solutionDescription = "STOP_AT_TINY_STEP[IPOPT]: Algorithm proceeds with very little progress.";
 				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);
-				osresult->setPrimalVariableValues(solIdx, (double*)x);
+				osresult->setPrimalVariableValues(solIdx, const_cast<double*>(x));
 				mdObjValues[0] = obj_value;
 				osresult->setObjectiveValues(solIdx, mdObjValues);
 			break;
 			case STOP_AT_ACCEPTABLE_POINT:
 				solutionDescription = "STOP_AT_ACCEPTABLE_POINT[IPOPT]: Algorithm stopped at a point that was converged, not to _desired_ tolerances, but to _acceptable_ tolerances";
 				osresult->setSolutionStatus(solIdx,  "locallyOptimal", solutionDescription);
-				osresult->setPrimalVariableValues(solIdx, (double*)x);
+				osresult->setPrimalVariableValues(solIdx, const_cast<double*>(x));
 				mdObjValues[0] = obj_value;
 				osresult->setObjectiveValues(solIdx, mdObjValues);
 			break;
