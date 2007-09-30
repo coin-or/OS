@@ -58,8 +58,17 @@
 #include "OShL.h"
 #include "ErrorClass.h"
 #include <sstream>
-#include <string.h> 
-#include <string>
+
+#ifdef HAVE_CSTRING
+# include <cstring>
+#else
+# ifdef HAVE_STRING_H
+#  include <string.h>
+# else
+#  error "don't have header file for string"
+# endif
+#endif
+
 
 //AMPL includes must be last.
 #include <asl.h>

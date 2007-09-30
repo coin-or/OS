@@ -68,6 +68,7 @@
  * 
  */
 
+#include "OSConfig.h" 
 #include <cstddef>
 #include <cstdlib>
 #include <cctype>
@@ -75,7 +76,17 @@
 #include <stack>
 #include <cppad/cppad.hpp>
 #include <iostream>
-#include <math.h>
+
+#ifdef HAVE_CMATH
+# include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# else
+#  error "don't have header file for math"
+# endif
+#endif
+
 #include <map>
 //
 #include "OSInstance.h"

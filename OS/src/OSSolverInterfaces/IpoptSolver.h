@@ -38,8 +38,27 @@
 #include <string>
 # include <cppad/cppad.hpp>
 #include<iostream>
-#include <time.h>   
-#include<math.h>
+
+#ifdef HAVE_CTIME
+# include <ctime>
+#else
+# ifdef HAVE_TIME_H
+#  include <time.h>
+# else
+#  error "don't have header file for time"
+# endif
+#endif 
+
+ 
+#ifdef HAVE_CMATH
+# include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# else
+#  error "don't have header file for math"
+# endif
+#endif
 #include<vector>
 #include <map>  
 

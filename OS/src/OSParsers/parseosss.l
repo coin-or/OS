@@ -19,7 +19,25 @@
 #include <iostream>
 #include "OSConfig.h"
 
-#include <stdio.h> 
+#ifdef HAVE_CSTRING
+# include <cstring>
+#else
+# ifdef HAVE_STRING_H
+#  include <string.h>
+# else
+#  error "don't have header file for string"
+# endif
+#endif
+
+#ifdef HAVE_CSTDIO
+# include <cstdio>
+#else
+# ifdef HAVE_STDIO_H
+#  include <stdio.h>
+# else
+#  error "don't have header file for stdio"
+# endif
+#endif
 #include "ErrorClass.h"
 #include <sstream>   
 #include "osOptionsStruc.h" 

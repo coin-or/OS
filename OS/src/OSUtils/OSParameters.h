@@ -23,9 +23,25 @@
 #ifndef OSPARAMETERS
 #define OSPARAMETERS
 
-#include <math.h>
-#include <float.h>
-#include <limits.h>
+#include "OSConfig.h"
+
+#ifdef HAVE_CMATH
+# include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# else
+#  error "don't have header file for math"
+# endif
+#endif
+#ifdef HAVE_CFLOAT
+# include <cfloat>
+#else
+# ifdef HAVE_FLOAT_H
+#  include <float.h>
+# endif
+#endif
+//#include <limits.h>
 //#ifdef INFINITY //This is the definition in the ISO C99 standard.
 //	#define OSINFINITY INFINITY
 //#else

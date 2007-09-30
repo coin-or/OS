@@ -16,15 +16,53 @@
 
 #include <iostream>
 #include "OSConfig.h"
-#include <string>
-#include <stdio.h> 
+
+
+
+
+
+
+#ifdef HAVE_CSTDIO
+# include <cstdio>
+#else
+# ifdef HAVE_STDIO_H
+#  include <stdio.h>
+# else
+#  error "don't have header file for stdio"
+# endif
+#endif
+
+#ifdef HAVE_CTIME
+# include <ctime>
+#else
+# ifdef HAVE_TIME_H
+#  include <time.h>
+# else
+#  error "don't have header file for time"
+# endif
+#endif
+
+#ifdef HAVE_CMATH
+# include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# else
+#  error "don't have header file for math"
+# endif
+#endif
+
 #include <sstream>  
 #include "OSiLParserData.h"
-#include <time.h>
+
+
+
 #include "ErrorClass.h"
 #include "parseosil.tab.hpp"
 #include "OSInstance.h"
-#include <math.h>
+
+
+
 
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", yytext);

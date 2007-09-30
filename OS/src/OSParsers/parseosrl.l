@@ -16,8 +16,30 @@
 
 #include <iostream>
 #include "OSConfig.h"
-#include <stdio.h>
-#include <string.h>
+
+#ifdef HAVE_CSTDIO
+# include <cstdio>
+#else
+# ifdef HAVE_STDIO_H
+#  include <stdio.h>
+# else
+#  error "don't have header file for stdio"
+# endif
+#endif
+
+#ifdef HAVE_CSTRING
+# include <cstring>
+#else
+# ifdef HAVE_STRING_H
+#  include <string.h>
+# else
+#  error "don't have header file for string"
+# endif
+#endif
+
+
+
+
 #include <sstream>  
 #include "ErrorClass.h"
 #include "OSrLParserData.h"

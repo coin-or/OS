@@ -19,14 +19,35 @@
 #include <string>
 #include <iostream>
 #include <sstream>  
-#include <time.h>   
+ 
 #include "OSInstance.h" 
 #include "OSnLNode.h"
 #include "ErrorClass.h"
 #include "OSParameters.h"
 #include "OSiLParserData.h"
 #include "Base64.h"
-#include <cstring>
+
+#ifdef HAVE_CTIME
+# include <ctime>
+#else
+# ifdef HAVE_TIME_H
+#  include <time.h>
+# else
+#  error "don't have header file for time"
+# endif
+#endif
+
+#ifdef HAVE_CSTRING
+# include <cstring>
+#else
+# ifdef HAVE_STRING_H
+#  include <string.h>
+# else
+#  error "don't have header file for string"
+# endif
+#endif
+
+
 using std::cout;
 using std::endl;
 using std::ostringstream;

@@ -34,11 +34,11 @@ bool CommonUtil::ISOSNAN( double number)
 {
 
 #ifdef NAN 
-	return isnan( number);
+	return std::isnan( number);
 #elif defined NaN
-	return isnan( number);
+	return std::isnan( number);
 #elif defined nan
-	return isnan( number);
+	return std::isnan( number);
 #else
 	return (number == OSNAN);
 #endif
