@@ -76,19 +76,10 @@
 #include <stack>
 #include <cppad/cppad.hpp>
 #include <iostream>
-#include "CoinHelperFunctions.hpp"
-#ifdef HAVE_CMATH
-# include <cmath>
-#else
-# ifdef HAVE_MATH_H
-#  include <math.h>
-# else
-#  error "don't have header file for math"
-# endif
-#endif
 
+// CoinHelperFunctions <has cmath>
+#include "CoinHelperFunctions.hpp"
 #include <map>
-//
 #include "OSInstance.h"
 #include "OSiLWriter.h"
 #include "OSParameters.h"
