@@ -22,11 +22,12 @@ libOSModelInterfaces_la_SOURCES = \
 	OSMatlab.cpp \
 	OSMatlab.h \
 	OSmps2osil.cpp \
-    OSmps2osil.h \
-    OSnl2osil.cpp \
-    OSnl2osil.h 
+    OSmps2osil.h 
 
-
+if COIN_HAS_ASL
+libOSModelInterfaces_la_SOURCES +=  OSnl2osil.cpp \
+	 OSnl2osil.h
+endif
 
 # This is for libtool (on Windows)
 libOSModelInterfaces_la_LDFLAGS = $(LT_LDFLAGS)
