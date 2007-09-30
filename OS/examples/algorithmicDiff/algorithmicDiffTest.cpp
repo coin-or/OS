@@ -67,7 +67,7 @@
  * variables that appear in nl nodes, x3 does not
  * 
  */
-
+#include "CoinHelperFunctions.hpp"
 #include "OSConfig.h" 
 #include <cstddef>
 #include <cstdlib>
@@ -100,7 +100,7 @@
 #include "OSExpressionTree.h"
 #include "OSnLNode.h"
 #include "OSDataStructures.h"
-#include "CoinHelperFunctions.hpp"
+
 
 #include <vector>  
 #include <map> 
