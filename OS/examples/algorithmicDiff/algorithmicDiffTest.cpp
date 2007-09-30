@@ -67,8 +67,8 @@
  * variables that appear in nl nodes, x3 does not
  * 
  */
-#include "CoinHelperFunctions.hpp"
-#include "OSConfig.h" 
+
+
 #include <cstddef>
 #include <cstdlib>
 #include <cctype>
@@ -76,7 +76,7 @@
 #include <stack>
 #include <cppad/cppad.hpp>
 #include <iostream>
-
+#include "CoinHelperFunctions.hpp"
 #ifdef HAVE_CMATH
 # include <cmath>
 #else
