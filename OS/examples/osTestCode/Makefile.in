@@ -86,8 +86,7 @@ noinst_PROGRAMS = osTestCode$(EXEEXT)
 @COIN_HAS_ASL_TRUE@am__append_16 = -I`$(CYGPATH_W) \
 @COIN_HAS_ASL_TRUE@	$(OSSRCDIR)/src/ThirdPartyASL` \
 @COIN_HAS_ASL_TRUE@	$(ASL_CPPFLAGS)
-@COIN_HAS_ASL_TRUE@am__append_17 = $(OSOBJDIR)/src/ThirdPartyASL/libThirdPartyASL.la \
-@COIN_HAS_ASL_TRUE@	$(ASLLIB)
+@COIN_HAS_ASL_TRUE@am__append_17 = $(ASLLIB)
 subdir = examples/osTestCode
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -117,8 +116,7 @@ am__DEPENDENCIES_7 =
 @COIN_HAS_GLPK_TRUE@	$(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la \
 @COIN_HAS_GLPK_TRUE@	$(am__DEPENDENCIES_7)
 @COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_9 = $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
-@COIN_HAS_ASL_TRUE@am__DEPENDENCIES_10 = $(OSOBJDIR)/src/ThirdPartyASL/libThirdPartyASL.la \
-@COIN_HAS_ASL_TRUE@	$(am__DEPENDENCIES_7)
+@COIN_HAS_ASL_TRUE@am__DEPENDENCIES_10 = $(am__DEPENDENCIES_7)
 osTestCode_DEPENDENCIES = $(OSOBJDIR)/src/libOS.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la $(am__DEPENDENCIES_1) \
 	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la $(am__DEPENDENCIES_2) \

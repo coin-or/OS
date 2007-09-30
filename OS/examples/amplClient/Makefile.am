@@ -173,11 +173,16 @@ if USEMULTIPLYDEFINED
 endif
 endif
 
+if COIN_HAS_ASL
+  AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
+  AM_CPPFLAGS += $(ASL_CPPFLAGS) 
+  amplClient_LDADD += $(ASLLIB)
+endif
+
 
 if COIN_HAS_ASL
   AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
   AM_CPPFLAGS += $(ASL_CPPFLAGS) 
-  amplClient_LDADD += $(OSOBJDIR)/src/ThirdPartyASL/libThirdPartyASL.la 
   amplClient_LDADD += $(ASLLIB)
 endif
 

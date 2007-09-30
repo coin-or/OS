@@ -17,6 +17,4 @@ SUBDIRS =
 
 
 
-if COIN_HAS_ASL
-  SUBDIRS += amplClient
-endif
+
