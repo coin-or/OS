@@ -21,10 +21,10 @@
 
 #include <iostream>
 #include "ErrorClass.h"
-#include <string>
 
 
-using std::string;
+
+//using std::string;
 using std::cout;
 using std::endl;
 

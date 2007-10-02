@@ -79,7 +79,6 @@
 
 // CoinHelperFunctions <has cmath>
 #include "CoinHelperFunctions.hpp"
-#include <map>
 #include "OSInstance.h"
 #include "OSiLWriter.h"
 #include "OSParameters.h"
@@ -95,7 +94,7 @@
 
 #include <vector>  
 #include <map> 
-#include <string>
+#include<string>
  
 
 int  main(){	

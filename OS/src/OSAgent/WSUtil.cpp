@@ -25,9 +25,8 @@
 #include <netdb.h>  
 #endif
 //#define DEBUG 
-
-#include <stdlib.h>    
-#include <string.h>    
+  
+  
 
 
 #include <iostream>
