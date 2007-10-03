@@ -222,10 +222,6 @@ OS/src/OSUtils/MathUtil.h -text
 OS/src/OSUtils/OSDataStructures.cpp -text
 OS/src/OSUtils/OSDataStructures.h -text
 OS/src/OSUtils/OSParameters.h -text
-OS/src/ThirdPartyASL/Makefile.am -text
-OS/src/ThirdPartyASL/Makefile.in -text
-OS/src/ThirdPartyASL/OSnl2osil.cpp -text
-OS/src/ThirdPartyASL/OSnl2osil.h -text
 OS/stylesheets/OSrL.css -text
 OS/stylesheets/OSrL.xslt -text
 OS/test/Makefile.am -text
