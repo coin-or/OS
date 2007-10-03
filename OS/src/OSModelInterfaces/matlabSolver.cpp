@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 #include "mex.h"
-#include <stdlib.h>
+
 
 
 // OS includes

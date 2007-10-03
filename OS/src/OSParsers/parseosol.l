@@ -16,7 +16,15 @@
 
 #include <iostream>
 #include "OSConfig.h"
-#include <stdio.h> 
+#ifdef HAVE_CSTDIO
+# include <cstdio>
+#else
+# ifdef HAVE_STDIO_H
+#  include <stdio.h>
+# else
+#  error "don't have header file for stdio"
+# endif
+#endif
 
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", osoltext);

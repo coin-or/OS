@@ -477,7 +477,15 @@ static yyconst flex_int32_t yy_rule_can_match_eol[4] =
 
 #include <iostream>
 #include "OSConfig.h"
-#include <stdio.h> 
+#ifdef HAVE_CSTDIO
+# include <cstdio>
+#else
+# ifdef HAVE_STDIO_H
+#  include <stdio.h>
+# else
+#  error "don't have header file for stdio"
+# endif
+#endif
 
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", osoltext);
@@ -490,7 +498,7 @@ static yyconst flex_int32_t yy_rule_can_match_eol[4] =
 #include <process.h>
 #endif
      
-#line 494 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/parseosol.cpp"
+#line 502 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/parseosol.cpp"
 
 #define INITIAL 0
 
@@ -707,10 +715,10 @@ YY_DECL
 	register int yy_act;
     struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
 
-#line 46 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/parseosol.l"
+#line 54 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/parseosol.l"
 
 
-#line 714 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/parseosol.cpp"
+#line 722 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/parseosol.cpp"
 
 	if ( !yyg->yy_init )
 		{
@@ -808,20 +816,20 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 48 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/parseosol.l"
+#line 56 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/parseosol.l"
 
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 50 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/parseosol.l"
+#line 58 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/parseosol.l"
 
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 52 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/parseosol.l"
+#line 60 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/parseosol.l"
 ECHO;
 	YY_BREAK
-#line 825 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/parseosol.cpp"
+#line 833 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/parseosol.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1939,7 +1947,7 @@ void osolfree (void * ptr , yyscan_t yyscanner)
 
 #define YYTABLES_NAME "yytables"
 
-#line 52 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/parseosol.l"
+#line 60 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/parseosol.l"
 
 
 

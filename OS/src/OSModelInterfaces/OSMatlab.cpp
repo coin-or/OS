@@ -17,7 +17,6 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include <stdlib.h>
 #include "OSMatlab.h"
 #include "OSResult.h"
 #include "CoinSolver.h"

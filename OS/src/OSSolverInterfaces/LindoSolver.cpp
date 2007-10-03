@@ -22,7 +22,15 @@
 
 
 
-#include <time.h>
+#ifdef HAVE_CTIME
+# include <ctime>
+#else
+# ifdef HAVE_TIME_H
+#  include <time.h>
+# else
+#  error "don't have header file for time"
+# endif
+#endif
 #include <iostream>
 #include <sstream>
 #include<vector>

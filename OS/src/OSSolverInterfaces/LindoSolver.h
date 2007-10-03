@@ -23,6 +23,16 @@
 #include "OSConfig.h" 
 #include <string>
 
+#ifdef HAVE_CTIME
+# include <ctime>
+#else
+# ifdef HAVE_TIME_H
+#  include <time.h>
+# else
+#  error "don't have header file for time"
+# endif
+#endif
+
 class LindoSolver : public DefaultSolver{  
 
 public:

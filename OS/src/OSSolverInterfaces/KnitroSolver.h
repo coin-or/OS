@@ -48,7 +48,7 @@
 # include <cppad/cppad.hpp>
 #include<iostream>
 
-#include <time.h>  
+
 
 
 #ifdef HAVE_CTIME
