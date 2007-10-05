@@ -99,7 +99,7 @@
 #include "OSResult.h" 
 #include "OSiLReader.h"        
 #include "OSiLWriter.h" 
-#include "OSrLReader.h"        
+#include "OSrLReader.h"          
 #include "OSrLWriter.h"      
 #include "OSInstance.h"  
 #include "FileUtil.h"  
@@ -113,8 +113,8 @@
 #include "OSmps2osil.h"   
 #include "Base64.h"
 #include "CommonUtil.h"
-
-
+    
+ 
 #ifdef COIN_HAS_KNITRO    
 #include "KnitroSolver.h"
 #endif 

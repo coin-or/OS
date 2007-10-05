@@ -17,7 +17,7 @@
  * <b>-osil</b> xxx.osil (file name on local machine of optimization instance, 
  *       this is NULL by default, however if this remains NULL a problem
  * 		 instance must be specified in the osol file)
- * </li>
+ * </li>  
  * <li>
  * <b>-osol</b> xxx.osol (file name on local machine of solver options, 
  *       default default value is NULL)
@@ -25,7 +25,7 @@
  * <li>
  * <b>-osrl</b> xxx.osrl (file name on local machine where the optimization 
  *       result is put, default is NULL)
- * </li>
+ * </li> 
  * <li>
  * <b>-serviceLocation</b> location URL (the URL  of the server that is called 
  *       remotely if the problem not solved locally, default is NULL)
@@ -39,11 +39,11 @@
  * </li>
  * <li>
  * <b>-osplInput</b> xxx.ospl  (Not used for now -- ignore)
- * </li>
+ * </li> 
  * <li>
  * <b>-osplOutput</b> xxx.ospl (Not used for now -- ignore)
  * </li>
- * <li>
+ * <li> 
  * <b>-mps</b> xxxx.mps (converts mps format to osil and has same effect as -osil)
  * </li>
  * <li>

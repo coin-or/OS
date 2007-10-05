@@ -26,12 +26,27 @@
 class OSmps2osil
 {
 public:
+	/** the OSmps2osil class constructor */
 	OSmps2osil( std::string mpsfilename);
+	
+	/** the OSmps2osil class deconstructor */
 	~OSmps2osil();
+
+   	/**
+   	 * create an OSInstance from the MPS instance representation
+   	 * 
+   	 * @return whether the variable is added successfully. 
+   	 */
 	bool createOSInstance();
+	
+	/** osinstance is a pointer to the OSInstance object that gets
+	 * created from the instance represented in MPS format
+	 */
 	OSInstance *osinstance;
 private:
+	/** m_MpsData is a pointer to a CoinMpsIO object */
 	CoinMpsIO *m_MpsData;
+	/**  m_CoinPackedMatrix is a pointer to a CoinPackedMatrix object */
 	CoinPackedMatrix *m_CoinPackedMatrix;
 };
 #endif
