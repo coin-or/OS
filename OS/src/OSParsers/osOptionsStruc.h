@@ -29,6 +29,7 @@ struct osOptionsStruc{
 	std::string  osrl;
 	std::string insListFile;
 	std::string insList;
+	/** serviceLocation is the URL of the remote solver */
 	std::string serviceLocation;
 	std::string serviceMethod;
 	bool os;

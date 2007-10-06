@@ -18,15 +18,34 @@
 #include "OSnLNode.h"
 #include <vector> 
 
-
+/*! \class
+ *  \brief The OSiLParserData  Class.
+ * 
+ * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * the OSiLParserData class is used to hold the nonlinear
+ * part of the problem when an OSiL instance is parsed
+ * we do this so we can have a reentrant parser.
+ */
 class OSiLParserData{
 public:
-	//methods
+	/** the OSiLParserData class constructor */
 	OSiLParserData( );
+	
+	/** the OSiLParserData class destructor */
 	~OSiLParserData() ;
-	//properties
+
+	/** scanner is used to store data in a reentrant lexer 
+	 * we use this to pass an OSiLParserData object to the parser*/
 	void* scanner;
+	
+	/** a point to an OSnLNode object */
 	OSnLNode *nlNodePoint;
+	
+
 	OSnLNodeVariable *nlNodeVariablePoint;
 	OSnLNodeNumber *nlNodeNumberPoint;
 	int qtermcount;

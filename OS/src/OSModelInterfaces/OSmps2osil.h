@@ -23,6 +23,20 @@
 #include <CoinPackedMatrix.hpp>
 #include <string>
 #include "OSInstance.h"
+
+
+/*! \class
+ *  \brief The OSmps2osil  Class.
+ * 
+ * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * the OSmps2osil class is used for reading an instance
+ * in MPS format and creating an OSInstance object in OSiL format
+ * 
+ */
 class OSmps2osil
 {
 public:
@@ -35,7 +49,7 @@ public:
    	/**
    	 * create an OSInstance from the MPS instance representation
    	 * 
-   	 * @return whether the variable is added successfully. 
+   	 * @return whether the instance is created successfully. 
    	 */
 	bool createOSInstance();
 	
