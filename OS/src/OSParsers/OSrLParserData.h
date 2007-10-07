@@ -18,9 +18,27 @@
 #include "OSnLNode.h"
 #include <vector> 
 
+/*! \struct OtherVariableResultStruct
+ * \brief A structure to information about an OtherVariableResult 
+ * element
+ */
 struct OtherVariableResultStruct{
+	/** name holds the text of the name attribute of the 
+	 * OtherVariableResult element 
+	 */
 	std::string name;
+
+	/** description holds the text of the description attribute 
+	 * of the OtherVariableResult element
+	 */ 
 	std::string description;
+	
+	/** otherVarText is a pointer to an array with number of 
+	 * elements equal to number of variables, each element of the
+	 * array is the value of the variable corresponding to the
+	 * OtherVariableResult, e.g. a variable name or variable
+	 * reduced cost, etc.
+	 */
 	std::string *otherVarText;
 };
 

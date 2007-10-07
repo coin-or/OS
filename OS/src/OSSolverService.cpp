@@ -38,10 +38,10 @@
  * <b>-os</b> (Not used for now -- ignore)
  * </li>
  * <li>
- * <b>-osplInput</b> xxx.ospl  (Not used for now -- ignore)
+ * <b>-osplInput</b> xxx.ospl name of file with input in OS Process Language
  * </li> 
  * <li>
- * <b>-osplOutput</b> xxx.ospl (Not used for now -- ignore)
+ * <b>-osplOutput</b> xxx.ospl name of output file in OS Process Language
  * </li>
  * <li> 
  * <b>-mps</b> xxxx.mps (converts mps format to osil and has same effect as -osil)
@@ -184,9 +184,7 @@ ASL_alloc(ASL_read_fg);
 	osoptions->mpsFile = ""; 
 	osoptions->nlFile = ""; 
 	osoptions->solverName = ""; 
-	osoptions->os = false; 
 	osoptions->browser = ""; 
-	osoptions->osOption = false;
 	try{
 		if(argC < 2) throw ErrorClass( "there must be at least one command line argument");
 		// see if the first argument is a file name
@@ -234,7 +232,6 @@ ASL_alloc(ASL_read_fg);
 		if(osoptions->mpsFile != "") cout << "MPS File Name = " << osoptions->mpsFile << endl;
 		if(osoptions->nlFile != "") cout << "NL File Name = " << osoptions->nlFile << endl;
 		if(osoptions->browser != "") cout << "Browser Value = " << osoptions->browser << endl;
-		if( osoptions->os == true ) cout << "OS = " << osoptions->os << endl;
 		// get the data from the files
 		fileUtil = new FileUtil();
 		try{	

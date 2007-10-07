@@ -76,7 +76,6 @@ void setyyextra( osOptionsStruc *osoptions, void* scanner);
  *       remotely if the problem not solved locally, default is "")
  * -serviceMethod  (send, solve, kill, knock, getJobID, retrieve, 
  *       default value is solve)
- * -os (Not used for now -- ignore)
  * -osplInput xxx.ospl  (Not used for now -- ignore)
  * -osplOutput xxx.ospl (Not used for now -- ignore)
  * -mps xxxx.mps (converts mps format to osil and has same effect as -osil)
@@ -109,13 +108,6 @@ browserState (on|off)
 {xmlwhitespace}*
   
 
--os {
-	if(yyextra->osOption == false){
-		printf("Found option:  %s\n", yytext);   
-		yyextra->os = true;
-		yyextra->osOption = true;
-	}
-}
 
 (-config{xmlwhitespace}+{optionValue}) {
 	printf("Found option:  %s\n", yytext);  
