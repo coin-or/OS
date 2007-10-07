@@ -25,7 +25,7 @@
 #include "OSInstance.h"
 
 
-/*! \class
+/*! \class OSmps2osil
  *  \brief The OSmps2osil  Class.
  * 
  * @author Robert Fourer, Jun Ma, Kipp Martin
@@ -43,7 +43,7 @@ public:
 	/** the OSmps2osil class constructor */
 	OSmps2osil( std::string mpsfilename);
 	
-	/** the OSmps2osil class deconstructor */
+	/** the OSmps2osil class destructor */
 	~OSmps2osil();
 
    	/**

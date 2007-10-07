@@ -23,36 +23,98 @@ struct OtherVariableResultStruct{
 	std::string description;
 	std::string *otherVarText;
 };
+
+
+/*! \class
+ *  \brief The OSrLParserData  Class.
+ * 
+ * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * the OSrLParserData class is used to temporarily 
+ * hold data found in parsing the OSrL instance
+ * we do this so we can have a reentrant parser.
+ */
 class OSrLParserData{
 public:
-	//methods
+	
+	/** the OSrLParserData class constructor */
 	OSrLParserData( );
+	
+	//** the OSrLParserData class destructor */
 	~OSrLParserData() ;
 	
 	
-	//properties
+	/**  the status type of the result */ 
 	std::string statusType;
-	std::string statusDescription;
 	
+	/** the status Description of the solution */
+	std::string statusDescription;
+
+	/** scanner is used to store data in a reentrant lexer 
+	 * we use this to pass an OSrLParserData object to the parser*/
 	void* scanner;
+	
+	/** number of result solutions */
 	int numberOfSolutions;
+	
+	/** number of variables in the solution instance */
 	int numberOfVariables;
+	
+	/** number of constraints in the solution instance */
 	int numberOfConstraints;
+	
+	/** number of Objectives in the solution instance */
 	int numberOfObjectives;
+	
+	/** a tempory counter to count variables, number of attributes, etc. */
 	int kounter;
+	
+	/** the number of types of variable results other
+	 * than the value of the variable
+	 */	
 	int numberOfOtherVariableResult;
+	
+	/** and index on which solution we have found */
 	int solutionIdx;
 
+	/** set statusTypePresent to true if there is
+	 * a status attribute parsed
+	 */
 	bool statusTypePresent;
+	
+	/** set generalStatusTypePresent to true if there is
+	 * a general status attribute parsed
+	 */	
 	bool generalStatusTypePresent;
+	
+	/** set otherNamePresent to true if there is
+	 * a name attribute in anotherVarResult
+	 */	
 	bool otherNamePresent;
 	
+	/** pointer to the array of objective function indexes
+	 * in each solution
+	 */
 	int *objectiveIdx;
+	
+	/**  for each solution we have a pointer to the value of
+	 * each objective function
+	 */
 	double **objectiveValues;
+	
+	/**  for each solution we have a pointer to each primal solution */
 	double **primalSolution;
+	
+	/**  for each solution we have a pointer to each dual solution */
 	double **dualSolution;
 
+	/** a pointer to an OtherVariableResultStruct structure  */
 	struct OtherVariableResultStruct *otherVarStruct;
+	
+	/** store a vector of pointers to otherVarVec structures */
 	std::vector<OtherVariableResultStruct*> otherVarVec;
 };
 

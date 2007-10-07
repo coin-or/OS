@@ -33,7 +33,7 @@
 
 #include <string>
 
-/*! \class
+/*! \class OSMatlab
  *  \brief The OSMatlab  Class.
  * 
  * @author Robert Fourer, Jun Ma, Kipp Martin

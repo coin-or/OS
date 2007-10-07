@@ -26,7 +26,7 @@
 #include <string>
 
 
-/*! \class
+/*! \class OSnl2osil
  *  \brief The OSnl2osil  Class.
  * 
  * @author Robert Fourer, Jun Ma, Kipp Martin
@@ -44,7 +44,7 @@ public:
 	/** the OSnl2osil class constructor */
 	OSnl2osil( std::string nlfilename);
 
-	/** the OSnl2osil class deconstructor */
+	/** the OSnl2osil class destructor */
 	~OSnl2osil();
 	
    	/**
