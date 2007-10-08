@@ -20,6 +20,8 @@
 //kipp fix up the infinity issue
 //kipp define OSINFINITY to COIN_DBL_MAX
 
+
+
 #ifndef OSPARAMETERS
 #define OSPARAMETERS
 
