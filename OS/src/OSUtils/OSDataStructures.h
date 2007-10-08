@@ -14,18 +14,9 @@
  * 
  */ 
 
-/**
-*
-* <p>The <code>SparseMatrix</code> class holds the 3 list 
-* data structure usually used for linear constraint coefficients   
-* </p>
-*/
-
 #ifndef OSDATASTRUCTURES_H
 #define OSDATASTRUCTURES_H
 
-
-#include "OSConfig.h"
 
 #ifdef HAVE_CSTDLIB
 # include <cstdlib>
@@ -35,53 +26,9 @@
 # endif
 #endif
 
-/*! \class SparseVector
- * \brief a sparse vector data structure
- */
-class SparseVector{
-	public:
-	
-	/**
-	 * Constructor.
-	 * 
-	 * @param number holds the size of the vector.
-	 */
-	SparseVector(int number);
-	
-	/**
-	 *
-	 * Default Constructor. 
-	 */	
-	SparseVector();
-	
-	/**
-	 *
-	 * Default destructor. 
-	 */	
-	~SparseVector();
+#include "OSConfig.h"
 
-	/**
-	 * bDeleteArrays is true if we delete the arrays in garbage collection
-	 * set to true by default
-	 */
-	bool bDeleteArrays;
-	
-	/**
-	 * number is the number of elements in the indexes and values arrays.
-	 */
-	int number;
-	
-	/**
-	 * indexes holds an integer array of indexes, which corresponding values are nonzero.
-	 */
-	int* indexes;
 
-	/**
-	 * values holds a double array of nonzero values.
-	 */
-	double* values;
-
-}; //SparseVector
 
 /*! \class SparseMatrix
  * \brief a sparse matrix data structure
@@ -159,7 +106,57 @@ class SparseMatrix {
 
 }; //SparseMatrix
 
-/*! \class SparseJacobianVector
+
+/*! \class SparseVector
+ * \brief a sparse vector data structure
+ */
+class SparseVector{
+	public:
+	
+	/**
+	 * Constructor.
+	 * 
+	 * @param number holds the size of the vector.
+	 */
+	SparseVector(int number);
+	
+	/**
+	 *
+	 * Default Constructor. 
+	 */	
+	SparseVector();
+	
+	/**
+	 *
+	 * Default destructor. 
+	 */	
+	~SparseVector();
+
+	/**
+	 * bDeleteArrays is true if we delete the arrays in garbage collection
+	 * set to true by default
+	 */
+	bool bDeleteArrays;
+	
+	/**
+	 * number is the number of elements in the indexes and values arrays.
+	 */
+	int number;
+	
+	/**
+	 * indexes holds an integer array of indexes, which corresponding values are nonzero.
+	 */
+	int* indexes;
+
+	/**
+	 * values holds a double array of nonzero values.
+	 */
+	double* values;
+
+}; //SparseVector
+
+
+/*! \class SparseJacobianMatrix
  * \brief a sparse Jacobian matrix data structure
  */
 class SparseJacobianMatrix {

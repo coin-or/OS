@@ -22,7 +22,7 @@
 
 #include "OSResult.h"
 
-/*! \class
+/*! \class OSrLReader
  *  \brief The OSrLReader Class.
  * 
  * @author Robert Fourer, Jun Ma, Kipp Martin

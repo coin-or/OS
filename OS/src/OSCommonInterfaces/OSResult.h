@@ -21,7 +21,7 @@
 #include <vector> 
 
 
-/*! \class
+/*! \class GeneralStatus
  *  \brief The GeneralStatus  Class.
  * 
  * @author Robert Fourer, Jun Ma, Kipp Martin
@@ -57,7 +57,7 @@ public:
 };//GeneralStatus
 
 
-/*! \class
+/*! \class ResultHeader
  *  \brief The ResultHeader  Class.
  * 
  * @author Robert Fourer, Jun Ma, Kipp Martin
@@ -112,7 +112,7 @@ public:
 	~ResultHeader();
 };//class ResultHeader
 
-/*! \class
+/*! \class VarValue
  *  \brief VarValue  Class.
  * 
  * @author Robert Fourer, Jun Ma, Kipp Martin
@@ -148,7 +148,7 @@ public:
 };// class VarValue
 
 
-/*! \class
+/*! \class OtherVarResult
  *  \brief OtherVarResult Class.
  * 
  * @author Robert Fourer, Jun Ma, Kipp Martin
@@ -186,7 +186,7 @@ public:
 };//OtherVarResult
 
 
-/*! \class
+/*! \class OtherObjResult
  *  \brief The OtherObjResult  Class.
  * 
  * @author Robert Fourer, Jun Ma, Kipp Martin
@@ -224,7 +224,7 @@ public:
 
 
 
-/*! \class
+/*! \class OtherConResult
  *  \brief The OtherConResult  Class.
  * 
  * @author Robert Fourer, Jun Ma, Kipp Martin
@@ -263,7 +263,7 @@ public:
 
 
 
-/*! \class
+/*! \class ObjValue
  *  \brief The ObjValue  Class.
  * 
  * @author Robert Fourer, Jun Ma, Kipp Martin
@@ -298,7 +298,7 @@ public:
 
 
 
-/*! \class
+/*! \class ConValue
  *  \brief The ConValue  Class.
  * 
  * @author Robert Fourer, Jun Ma, Kipp Martin
@@ -332,7 +332,7 @@ public:
 
 
 
-/*! \class
+/*! \class DualVarValue
  *  \brief The DualVarValue  Class.
  * 
  * @author Robert Fourer, Jun Ma, Kipp Martin
@@ -380,7 +380,7 @@ public:
 };//DualVarValue
 
 
-/*! \class
+/*! \class VariableValues
  *  \brief The VariableValues Class.
  * 
  * @author Robert Fourer, Jun Ma, Kipp Martin
@@ -414,7 +414,7 @@ public:
 };// class VariableValues
 
 
-/*! \class
+/*! \class OtherVariableResult
  *  \brief The OtherVariableResult  Class.
  * 
  * @author Robert Fourer, Jun Ma, Kipp Martin
@@ -454,7 +454,7 @@ public:
 };//OtherVariableResult
 
 
-/*! \class
+/*! \class OtherObjectiveResult
  *  \brief The OtherObjectiveResult  Class.
  * 
  * @author Robert Fourer, Jun Ma, Kipp Martin
@@ -495,8 +495,8 @@ public:
 };//OtherObjectiveResult
 
 
-/*! \class
- *  \brief The OtherObjectiveResult  Class.
+/*! \class OtherConstraintResult
+ *  \brief The OtherConstraintResult  Class.
  * 
  * @author Robert Fourer, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
@@ -535,7 +535,7 @@ public:
 	
 };//OtherConstraintResult
 
-/*! \class
+/*! \class ObjectiveValues
  *  \brief The ObjectiveValues  Class.
  * 
  * @author Robert Fourer, Jun Ma, Kipp Martin
@@ -569,7 +569,7 @@ public:
 };//ObjectiveValues
 
 
-/*! \class
+/*! \class ConstraintValues
  *  \brief The ConstraintValues Class.
  * 
  * @author Robert Fourer, Jun Ma, Kipp Martin
@@ -603,7 +603,7 @@ public:
 };// class ConstraintValues
 
 
-/*! \class
+/*! \class DualVariableValues
  *  \brief The DualVariableValues Class.
  * 
  * @author Robert Fourer, Jun Ma, Kipp Martin
@@ -640,7 +640,7 @@ public:
 
 	
 
-/*! \class
+/*! \class VariableSolution
  *  \brief The VariableSolution Class.
  * 
  * @author Robert Fourer, Jun Ma, Kipp Martin
@@ -683,7 +683,7 @@ public:
 };// class VariableSolution
 
 
-/*! \class
+/*! \class ObjectiveSolution
  *  \brief The ObjectiveSolution Class.
  * 
  * @author Robert Fourer, Jun Ma, Kipp Martin
@@ -725,7 +725,7 @@ public:
 };//ObjectiveSolution
 
 
-/*! \class
+/*! \class ConstraintSolution
  *  \brief The ConstraintSolution Class.
  * 
  * @author Robert Fourer, Jun Ma, Kipp Martin
@@ -771,7 +771,7 @@ public:
 };//ConstraintSolution
 
 
-/*! \class
+/*! \class OptimizationSolutionStatus
  *  \brief The OptimizationSolutionStatus Class.
  * 
  * @author Robert Fourer, Jun Ma, Kipp Martin
@@ -806,7 +806,7 @@ public:
 
 
 
-/*! \class
+/*! \class OptimizationSolution
  *  \brief The OptimizationSolution Class.
  * 
  * @author Robert Fourer, Jun Ma, Kipp Martin
@@ -863,7 +863,7 @@ public:
 };// class OptimizationSolution
 
 
-/*! \class
+/*! \class OptimizationResult
  *  \brief The OptimizationResult Class.
  * 
  * @author Robert Fourer, Jun Ma, Kipp Martin
@@ -915,7 +915,7 @@ public:
 
 };// class OptimizationResult
 
-/*! \class
+/*! \class ResultData
  *  \brief The ResultData Class.
  * 
  * @author Robert Fourer, Jun Ma, Kipp Martin
@@ -946,7 +946,7 @@ public:
 };//class ResultData
 
 
-/*! \class
+/*! \class OSResult
  *  \brief The Result Class.
  * 
  * @author Robert Fourer, Jun Ma, Kipp Martin

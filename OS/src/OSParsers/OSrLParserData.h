@@ -43,7 +43,7 @@ struct OtherVariableResultStruct{
 };
 
 
-/*! \class
+/*! \class OSrLParserData
  *  \brief The OSrLParserData  Class.
  * 
  * @author Robert Fourer, Jun Ma, Kipp Martin

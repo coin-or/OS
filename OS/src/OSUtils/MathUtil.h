@@ -24,8 +24,7 @@
  #include "OSParameters.h"
 
 
-/**
- * \class MathUtil
+/*!  \class MathUtil
  *  \brief this class has routines for linear algebra.
  * 
  * @author Robert Fourer, Jun Ma, Kipp Martin

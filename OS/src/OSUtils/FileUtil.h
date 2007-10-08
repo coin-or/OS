@@ -22,8 +22,7 @@
 #include <fstream>
 #include <string>
 
-/**
- * \class FileUtil
+/*!  \class FileUtil
  *  \brief class used to make it easy to read and write files.
  * 
  * @author Robert Fourer, Jun Ma, Kipp Martin
