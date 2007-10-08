@@ -19,15 +19,43 @@
 
 #include<string>
 
+/*! \class Base64
+ *  \brief use this class to read and write data in base64.
+ * 
+ * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * it possible to save memory by eliminating the need for all the <el>
+ * tabs by writing a long string of numbers in b64 format
+ * 
+ */
 class Base64{
 public:
-	/**
-	 * Constructor.
-	 *
-	 */
+	
+	
+	/** Base64 class constructior */
 	Base64();
+	
+	/** Base64 class destructor */
 	~Base64();
+	
+   	/**
+   	 * encode the data in base 64 
+   	 * 
+   	 * @param bytes is the input to be encoded. 
+   	 * @param size is the size of the pointer in bytes
+   	 * @return a string in base 64 format. 
+   	 */	
 	static std::string encodeb64(char* bytes, int size);
+	
+   	/**
+   	 * dencode the data in base 64 
+   	 * 
+   	 * @param b64bytes is the input to be decoded
+   	 * @return a string that is decoded. 
+   	 */	
 	static std::string decodeb64(char* b64bytes);
 };//class Base64
 

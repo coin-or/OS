@@ -172,35 +172,7 @@ SparseJacobianMatrix::~SparseJacobianMatrix(){
 		values = NULL;
 }// end SparseJacobianMatrix Destructor
 
-SparseJacobianVector::SparseJacobianVector( int number_):
-number( number_)
-{
-	bDeleteArrays = true;
-	indexes = new int[ number];
-	values = new double[ number];
-}// end SparseJacobianVector constructor
 
-
-SparseJacobianVector::SparseJacobianVector( ):
-	bDeleteArrays( true),
-	indexes( NULL),
-	values( NULL)
-{
-}// end SparseJacobianVector constructor
-
-
-SparseJacobianVector::~SparseJacobianVector(){
-	#ifdef DEBUG
-	cout << "inside sparseVector destructor" << endl;
-	#endif
-	if( bDeleteArrays == true){
-		delete[] indexes;
-		delete[] values;
-	}
-	indexes = NULL;
-	values = NULL;
-}// end SparseJacobianVector constructor
-	
 SparseHessianMatrix::SparseHessianMatrix():
 	bDeleteArrays( true),
 	hessDimension(0),

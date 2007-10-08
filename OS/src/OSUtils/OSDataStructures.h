@@ -35,6 +35,9 @@
 # endif
 #endif
 
+/*! \class SparseVector
+ * \brief a sparse vector data structure
+ */
 class SparseVector{
 	public:
 	
@@ -43,7 +46,6 @@ class SparseVector{
 	 * 
 	 * @param number holds the size of the vector.
 	 */
-	
 	SparseVector(int number);
 	
 	/**
@@ -81,7 +83,9 @@ class SparseVector{
 
 }; //SparseVector
 
-
+/*! \class SparseMatrix
+ * \brief a sparse matrix data structure
+ */
 class SparseMatrix {
 	public:
 	
@@ -155,7 +159,9 @@ class SparseMatrix {
 
 }; //SparseMatrix
 
-
+/*! \class SparseJacobianVector
+ * \brief a sparse Jacobian matrix data structure
+ */
 class SparseJacobianMatrix {
 	public:
 	
@@ -220,58 +226,7 @@ class SparseJacobianMatrix {
 }; //SparseJacobianMatrix
 
 
-class SparseJacobianVector{
-	public:
-	
-	/**
-	 * Constructor.
-	 * 
-	 * @param number holds the size of the vector.
-	 */
-	
-	SparseJacobianVector(int number);
-	
-	/**
-	 *
-	 * Default Constructor. 
-	 */	
-	SparseJacobianVector();
-	
-	/**
-	 *
-	 * Default destructor. 
-	 */	
-	~SparseJacobianVector();
-	
-	/**
-	 * bDeleteArrays is true if we delete the arrays in garbage collection
-	 * set to true by default
-	 */
-	bool bDeleteArrays;
-	
-	
-	/**
-	 * number is the number of elements in the indexes and values arrays.
-	 */
-	int number;
-	
-	/**
-	 * numConstant is the number partials that do not change at each iteration
-	 * the first numConstant components are constant.
-	 */
-	int numConstant;
-	
-	/**
-	 * indexes holds an integer array of indexes, which corresponding values are nonzero.
-	 */
-	int* indexes;
 
-	/**
-	 * values holds a double array of nonzero values.
-	 */
-	double* values;
-
-}; //SparseJacobianVector
 
 
 /*! \class SparseHessianMatrix SparseHessianMatrix.h "SparseHessianMatrix.h"
@@ -335,6 +290,9 @@ class SparseHessianMatrix {
 
 }; //SparseHessianMatrix
 
+/*! \class QuadraticTerms
+ * \brief a data structure for holding quadratic terms
+ */
 class QuadraticTerms {
 
 	public:
@@ -369,7 +327,9 @@ class QuadraticTerms {
 }; //QuadraticTerms
 
 
-	
+/*! \class IntVector
+ * \brief an integer Vector data structure
+ */	
 class IntVector{
 public:
 	IntVector();
@@ -377,6 +337,9 @@ public:
 	int *el;
 };//class IntVector
 
+/*! \class DoubleVector
+ * \brief a double vector data structure
+ */
 class DoubleVector{
 public:
 	DoubleVector();

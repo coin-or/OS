@@ -32,8 +32,6 @@
  * @since   OS1.0
  * 
  */
-
-
 class DefaultSolver{  
 
 public:	

@@ -33,23 +33,86 @@
 # endif
 #endif
 
+/*! \class LindoSolver
+ *  \brief the LindoSolver class solves problems using Lindo.
+ * 
+ * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * this class takes an OSiL instance and optimizes it using
+ * the Lindo API 
+ * 
+ */
 class LindoSolver : public DefaultSolver{  
 
 public:
 
+	/** the LindoSolver class constructor */
 	LindoSolver();
+	
+	/** the LindoSolver class destructor */
 	~LindoSolver();
+	
+	/** solve results in an instance being read into the Knitro
+	 * data structrues and optimized */ 
 	virtual void  solve() ;
-	void solveInsList();
+
 	// Lindo specific methods
+	
+   	/**
+   	 * invoke the Lindo API solver
+   	 * @return true if an exception is not thrown.
+   	 */	
 	bool optimize();
-	bool getLPData();
+	
+   	/**
+   	 * read the OSiL instance variables and put these
+   	 * into the LINDO API variables
+   	 * @return true if an exception is not thrown.
+   	 */	
 	bool processVariables();
+	
+   	/**
+   	 * read the OSiL instance constraints and put these
+   	 * into the LINDO API constraints
+   	 * @return true if an exception is not thrown.
+   	 */	
 	bool processConstraints();
+	
+   	/**
+   	 * create the LINDO environment and read the problem into
+   	 * the internal LINDO data structures
+   	 * @return true if an exception is not thrown.
+   	 */	
 	bool generateLindoModel();
+	
+   	/**
+   	 * LINDO does not handle constraints with upper and lower bounds
+   	 * this method is part of kludge where we add a new variable
+   	 * to handle the bounds
+   	 * @return true if an exception is not thrown.
+   	 */	
 	bool addSlackVars();
+	
+   	/**
+	 * read the quadratic terms in the model
+   	 * @return true if an exception is not thrown.
+   	 */		
 	bool processQuadraticTerms();
+	
+   	/**
+	 * read the nonlinear terms in the model
+   	 * @return true if an exception is not thrown.
+   	 */		
 	bool processNonlinearExpressions();
+	
+   	/**
+   	 * use this for debugging, print out the instance that
+   	 * the solver thinks it has and compare this with the OSiL
+   	 * file
+   	 */		
 	void dataEchoCheck();
 
 

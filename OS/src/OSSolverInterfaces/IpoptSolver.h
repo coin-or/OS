@@ -72,14 +72,38 @@
 
 using namespace Ipopt;
 
+
+/*! \class IpoptSolver
+ *  \brief The IpoptSolver class solves problems using Ipopt.
+ * 
+ * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * this class takes an OSiL instance and optimizes it using
+ * the COIN-OR Ipopt solver
+ * 
+ */
 class IpoptSolver : public DefaultSolver, public TNLP{  
 	
 public:
 
+	/** the IpoptSolver class constructor */
 	IpoptSolver();
+	
+	/** the IpoptSolver class destructor */
 	~IpoptSolver();
-	//virtual void  solve() throw(ErrorClass);
+	
+	/** solve results in an instance being read into the Ipopt
+	 * data structrues and optimized */ 
 	virtual void  solve() throw (ErrorClass) ;
+	
+   	/**
+   	 * use this for debugging, print out the instance that
+   	 * the solver thinks it has and compare this with the OSiL
+   	 * file
+   	 */	
 	void dataEchoCheck();
 
 	/** IPOpt specific methods for defining the nlp problem */

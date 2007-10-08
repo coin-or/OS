@@ -47,7 +47,6 @@
 /*! \class Variable
  * \brief The in-memory representation of the <b>variable</b> element.
  */
-
 class Variable{
 public:
 	/** The Variable class constructor */

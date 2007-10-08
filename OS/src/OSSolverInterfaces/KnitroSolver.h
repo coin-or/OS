@@ -78,17 +78,36 @@
 #include <map>  
 
 
-
+/*! \class KnitroSolver
+ *  \brief the KnitroSolver class solves problems using Knitro.
+ * 
+ * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * this class takes an OSiL instance and optimizes it using
+ * the Knitro solver
+ * 
+ */
 class KnitroSolver : public DefaultSolver, public NlpProblemDef {  
 	
 public:
-
+	/** the KnitroSolver class constructor */
 	KnitroSolver();
-	
+
+	/** the KnitroSolver class constructor */
 	~KnitroSolver();
 	
-	//virtual void  solve() throw(ErrorClass);
+	/** solve results in an instance being read into the Knitro
+	 * data structrues and optimized */ 
 	virtual void  solve() throw (ErrorClass) ;
+	
+   	/**
+   	 * use this for debugging, print out the instance that
+   	 * the solver thinks it has and compare this with the OSiL
+   	 * file
+   	 */		
 	void dataEchoCheck(); 
 	
 	//Knitro specific methods

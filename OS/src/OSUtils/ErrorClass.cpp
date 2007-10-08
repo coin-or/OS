@@ -16,6 +16,8 @@
  
 #include "ErrorClass.h"
 
+
+
 ErrorClass::ErrorClass(std::string errormsg_){
 	errormsg = errormsg_;
 }

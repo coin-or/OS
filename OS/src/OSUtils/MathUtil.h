@@ -22,13 +22,28 @@
 #define MATHUTIL_H
  
  #include "OSParameters.h"
+
+
+/**
+ * \class MathUtil
+ *  \brief this class has routines for linear algebra.
+ * 
+ * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * This class will hold linear algebra routines used by other
+ * OS classes. Right now it has a routine to change the column/row 
+ * storage of a sparse matrix 
+ */
 class MathUtil{
 	public:
-	/**
-	 * Constructor.
-	 *
-	 */
+
+	/** the class constructor */
 	MathUtil();
+	
+	/** the class destructor */
 	~MathUtil();
 	
 	/**
@@ -77,7 +92,6 @@ class MathUtil{
 	 * or the row number if the input matrix is column major (columnh count = start.length -1)
 	 * @return Linear constraint coefficient matrix in the other major of the input matrix. Return null if input matrix not valid.
 	 */
-	 
 	static SparseMatrix* convertLinearConstraintCoefficientMatrixToTheOtherMajor(
 			bool isColumnMajor, int startSize, int valueSize, int* start, int* index, 
 			double* value, int dimension);
