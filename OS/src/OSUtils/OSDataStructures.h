@@ -14,9 +14,14 @@
  * 
  */ 
 
+
+
 #ifndef OSDATASTRUCTURES_H
 #define OSDATASTRUCTURES_H
 
+
+
+#include "OSConfig.h"
 
 #ifdef HAVE_CSTDLIB
 # include <cstdlib>
@@ -26,7 +31,7 @@
 # endif
 #endif
 
-#include "OSConfig.h"
+
 
 
 
