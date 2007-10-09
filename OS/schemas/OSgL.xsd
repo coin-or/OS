@@ -971,7 +971,6 @@
 			<xs:element name="quadraticCoefficients" type="QuadraticCoefficients" minOccurs="0"/>
 			<xs:element name="nonlinearExpressions" type="NonlinearExpressions" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfConstraints"/>
 	</xs:complexType>
 	<xs:complexType name="GeneralDistributionMultivariateCorrelationsEl">
 		<xs:sequence>
