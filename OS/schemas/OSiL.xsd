@@ -461,7 +461,7 @@
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="ParamSetRowsInCore">
-		<xs:sequence>
+		<xs:sequence minOccurs="0">
 			<xs:element name="row" type="ParamSetRowInCore" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
@@ -505,17 +505,17 @@
 		<xs:sequence>
 			<xs:element name="disjunction" type="ParamDisjunction" minOccurs="2" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfDisjunction" type="xs:nonNegativeInteger" use="optional" default="2"/>
+		<xs:attribute name="numberOfDisjunction" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ParamDisjunctiveInformation">
-		<xs:sequence>
+		<xs:sequence minOccurs="0">
 			<xs:element name="disjunctiveSet" type="ParamDisjunctiveSet" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfDisjunctiveSets" type="xs:nonNegativeInteger" use="optional" default="1"/>
+		<xs:attribute name="numberOfDisjunctiveSets" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ParameterSets">
 		<xs:sequence minOccurs="0">
-			<xs:element name="rowsInCore" type="ParamSetRowsInCore"/>
+			<xs:element name="rowsInCore" type="ParamSetRowsInCore" minOccurs="0"/>
 			<xs:element name="constraints" type="Constraints" minOccurs="0"/>
 			<xs:element name="linearConstraintCoefficients" type="LinearConstraintCoefficients" minOccurs="0"/>
 			<xs:element name="quadraticCoefficients" type="QuadraticCoefficients" minOccurs="0"/>
