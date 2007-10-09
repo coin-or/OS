@@ -43,8 +43,8 @@
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="Variables">
-		<xs:sequence>
-			<xs:element name="var" type="Variable" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:sequence minOccurs="0">
+			<xs:element name="var" type="Variable" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfVariables" type="xs:positiveInteger" use="required"/>
 	</xs:complexType>
@@ -67,8 +67,8 @@
 		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="Objectives">
-		<xs:sequence>
-			<xs:element name="obj" type="Objective" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:sequence minOccurs="0">
+			<xs:element name="obj" type="Objective" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="optional" default="1"/>
 	</xs:complexType>
@@ -98,8 +98,8 @@
 		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="Constraints">
-		<xs:sequence>
-			<xs:element name="con" type="Constraint" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:sequence minOccurs="0">
+			<xs:element name="con" type="Constraint" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -111,7 +111,7 @@
 		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="LinearConstraintCoefficients">
-		<xs:sequence>
+		<xs:sequence minOccurs="0">
 			<xs:element name="start" type="IntVector"/>
 			<xs:choice>
 				<xs:element name="rowIdx" type="IntVector"/>
@@ -122,8 +122,8 @@
 		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="QuadraticCoefficients">
-		<xs:sequence>
-			<xs:element name="qTerm" type="QuadraticTerm" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:sequence minOccurs="0">
+			<xs:element name="qTerm" type="QuadraticTerm" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfQuadraticTerms" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -134,8 +134,8 @@
 		<xs:attribute name="coef" type="xs:double" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="NonlinearExpressions">
-		<xs:sequence>
-			<xs:element name="nl" type="Nl" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:sequence minOccurs="0">
+			<xs:element name="nl" type="Nl" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfNonlinearExpressions" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -146,13 +146,13 @@
 		<xs:attribute name="idx" type="xs:int" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="Cones">
-		<xs:choice maxOccurs="unbounded">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:element name="nonnegativeCone" type="NonnegativeCone"/>
 			<xs:element name="quadraticCone" type="QuadraticCone"/>
 			<xs:element name="rotatedQuadraticCone" type="RotatedQuadraticCone"/>
 			<xs:element name="semidefinite" type="SemidefiniteCone"/>
 		</xs:choice>
-		<xs:attribute name="numberOfCones" type="xs:positiveInteger" use="required"/>
+		<xs:attribute name="numberOfCones" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="SemidefiniteCone">
 		<xs:sequence minOccurs="0">
@@ -203,7 +203,7 @@
 		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="Modifications">
-		<xs:sequence>
+		<xs:sequence minOccurs="0">
 			<xs:element name="base" default="this">
 				<xs:complexType>
 					<xs:simpleContent>
@@ -410,13 +410,13 @@
 		<xs:attribute name="numberOfDisjunctions" type="xs:nonNegativeInteger" use="optional" default="2"/>
 	</xs:complexType>
 	<xs:complexType name="DisjunctiveInformation">
-		<xs:sequence>
+		<xs:sequence minOccurs="0">
 			<xs:element name="disjunctiveSet" type="DisjunctiveSet" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfDisjunctiveSets" type="xs:nonNegativeInteger" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="Parameters">
-		<xs:sequence>
+		<xs:sequence minOccurs="0">
 			<xs:element name="param" type="Param" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfParameters" type="xs:nonNegativeInteger" use="required"/>
@@ -514,7 +514,7 @@
 		<xs:attribute name="numberOfDisjunctiveSets" type="xs:nonNegativeInteger" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="ParameterSets">
-		<xs:sequence>
+		<xs:sequence minOccurs="0">
 			<xs:element name="rowsInCore" type="ParamSetRowsInCore"/>
 			<xs:element name="constraints" type="Constraints" minOccurs="0"/>
 			<xs:element name="linearConstraintCoefficients" type="LinearConstraintCoefficients" minOccurs="0"/>
@@ -527,7 +527,7 @@
 		<xs:attribute name="numberOfDisjunctions" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="TimeDomain">
-		<xs:choice>
+		<xs:choice minOccurs="0">
 			<xs:element name="stages" type="Stages"/>
 			<xs:element name="interval">
 				<xs:complexType>
@@ -702,7 +702,7 @@
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="RealTimeData">
-		<xs:sequence>
+		<xs:sequence minOccurs="0">
 			<xs:element name="defaultURI" type="xs:anyURI" default="." minOccurs="0"/>
 			<xs:element name="uriAliases" type="RealTimeDataURIAliases" minOccurs="0"/>
 			<xs:element name="parameters" type="RealTimeDataParameters" minOccurs="0"/>
@@ -715,7 +715,7 @@
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="Stages">
-		<xs:sequence>
+		<xs:sequence minOccurs="0">
 			<xs:element name="stage" maxOccurs="unbounded">
 				<xs:complexType>
 					<xs:complexContent>
@@ -809,7 +809,7 @@
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="StochasticInformation">
-		<xs:sequence>
+		<xs:sequence minOccurs="0">
 			<xs:element name="eventTree" type="StochasticEventTree" minOccurs="0"/>
 			<xs:element name="softConstraints" type="StochasticSoftConstraints" minOccurs="0"/>
 		</xs:sequence>
