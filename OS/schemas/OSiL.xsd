@@ -524,7 +524,6 @@
 			<xs:element name="disjunctiveInformation" type="ParamDisjunctiveInformation" minOccurs="0"/>
 			<xs:element name="realTimeData" type="RealTimeData" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfDisjunctions" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="TimeDomain">
 		<xs:choice minOccurs="0">
