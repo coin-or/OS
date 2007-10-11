@@ -27190,7 +27190,22 @@ if test $coin_vpath_config = yes; then
 fi
 
 ##
+## XSLT FILE
+##
 
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/stylesheets/OSrL.xslt"
+fi
+
+##
+## CSS FILE
+##
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/stylesheets/OSrL.css"
+fi
+
+##
 
 
 

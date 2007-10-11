@@ -247,7 +247,14 @@ AC_COIN_VPATH_LINK(data/matlabFiles/markowitz.m)
 AC_COIN_VPATH_LINK(data/matlabFiles/parincLinear.m)
 AC_COIN_VPATH_LINK(data/matlabFiles/template.m)
 ##
-
+## XSLT FILE
+##
+AC_COIN_VPATH_LINK(data/stylesheets/OSrL.xslt)
+##
+## CSS FILE
+##
+AC_COIN_VPATH_LINK(data/stylesheets/OSrL.css)
+##
 
 
 
