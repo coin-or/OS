@@ -249,11 +249,11 @@ AC_COIN_VPATH_LINK(data/matlabFiles/template.m)
 ##
 ## XSLT FILE
 ##
-AC_COIN_VPATH_LINK(data/stylesheets/OSrL.xslt)
+AC_COIN_VPATH_LINK(stylesheets/OSrL.xslt)
 ##
 ## CSS FILE
 ##
-AC_COIN_VPATH_LINK(data/stylesheets/OSrL.css)
+AC_COIN_VPATH_LINK(stylesheets/OSrL.css)
 ##
 
 
