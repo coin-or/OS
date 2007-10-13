@@ -1,7 +1,7 @@
 /** @file OSSolverService.cpp
  * 
  * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005
+ * @version 1.0, 10/05/2005  
  * @since   OS1.0
  * 
  * \remarks
