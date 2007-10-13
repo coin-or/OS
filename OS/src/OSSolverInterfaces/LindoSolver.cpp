@@ -460,6 +460,7 @@ bool LindoSolver::optimize(){
 		if( isNonlinear == true ){ 
 			//m_iLindoErrorCode = LSoptimize( pModel_, LS_METHOD_FREE, &nSolStatus);
 			std::cout << "We are using the LINDO Global Optimizer" << std::endl;
+			std::cout << "We are using the LINDO Global Optimizer 222" << std::endl;
 			m_iLindoErrorCode = LSsolveGOP(pModel_, NULL) ;
 			lindoAPIErrorCheck("There was an ERROR in the call to the Optimizer solver");
 			LSgetInfo (pModel_, LS_IINFO_GOP_STATUS, &nSolStatus);
@@ -960,12 +961,12 @@ bool LindoSolver::processNonlinearExpressions(){
 			std::cout << "padVarLowerBounds =  " << "NULL" << std::endl ;
 			std::cout << "padUpperBounds =  " << "NULL" << std::endl ;
 		#endif
-		LSwriteMPSFile(pModel_, "/Users/kmartin/temp/parincQuadratic.mps", LS_FORMATTED_MPS);
 		m_iLindoErrorCode = LSaddInstruct (pModel_, iNumberOfNonlinearConstraints, 
 			iNumberOfNonlinearObjectives, iNumberOfNewVariables, iNumNonlinearNonz,
 			piObjSense, pachConType,  pachVarType, paiInsList, iInstListLength, paiNonlinearConIndex,
 			padNonlinearNonz, padVarval, paiObjsBegin, paiObjsLength, paiConsBegin,
 			paiConsLength, padVarLowerBounds, padVarUpperBounds);
+		std::cout << "Gail 2" << std::endl;
 		lindoAPIErrorCheck("Error trying to call LSaddInstruct");
 		// Kipp: do some garbage collection
 		// get rid of the local news

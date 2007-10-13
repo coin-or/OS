@@ -3431,7 +3431,38 @@ for wget see Christoprher G.  Lewis Windows wget
 
 What we need for Ipopt
 
-Hi JP,Actually, I just saw now that you sent me also the output of configure.And that one fails because you don't have a Fortran compiler, which at themoment I assume is present for Ipopt, since it is required for almost allpossible configurations.I could take the dependency out for a Fortran compiler, but that doesn'tsolve the problem, since essentially any of the sparse linear solvers needat least the Fortran runtime libraries.  For Ipopt's configure script towork you definitely need:1.  BLAS (either you have it installed already on your system (e.g.,libblas on Linux) or you have the source code)2. one of: MA27, MA57, Pardiso, WSMP, MUMPS (only for MUMPS there is aget.Mumps script)What are you guys trying to accomplish?  Some automated procedure to see iftrunk builds?  If so, why wouldn't you want to provide all dependencies(also ASL and LAPACK) to make sure that more configurations of the codework?Thanks
+Hi JP,
 
+Actually, I just saw now that you sent me also the output of configure.
+And that one fails because you don't have a Fortran compiler, which at the
+moment I assume is present for Ipopt, since it is required for almost all
+possible configurations.
+
+I could take the dependency out for a Fortran compiler, but that doesn't
+solve the problem, since essentially any of the sparse linear solvers need
+at least the Fortran runtime libraries.  For Ipopt's configure script to
+work you definitely need:
+
+1.  BLAS (either you have it installed already on your system (e.g.,
+libblas on Linux) or you have the source code)
+2. one of: MA27, MA57, Pardiso, WSMP, MUMPS (only for MUMPS there is a
+get.Mumps script)
+
+What are you guys trying to accomplish?  Some automated procedure to see if
+trunk builds?  If so, why wouldn't you want to provide all dependencies
+(also ASL and LAPACK) to make sure that more configurations of the code
+work?
+
+Thanks
+
+%%%%%%%%%%%%%%
+
+
+
+lindo
+
+
+
+I have the Mac Intel Lindo API working. A bit of a kludge, but I created a directory on my machine/opt/intel/cc/9.1.037/libThen I copied libimf.dylib and libirc.dylib into this directory.  I built the OS project using the GNU build tools with
 
 
