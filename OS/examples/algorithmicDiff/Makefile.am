@@ -39,6 +39,10 @@ if COIN_HAS_VOL
  algorithmicDiffTest_LDADD += $(OSIOBJDIR)/src/OsiVol/libOsiVol.la 
 endif
 
+if COIN_HAS_CPX
+ algorithmicDiffTest_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+endif
+
  algorithmicDiffTest_LDADD += $(CBCOBJDIR)/src/libCbc.la 
 
 if COIN_HAS_SYMPHONY
