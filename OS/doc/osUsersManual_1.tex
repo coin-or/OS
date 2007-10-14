@@ -172,7 +172,10 @@ OS is released as open source code under the Common Public License (CPL). This p
 
 The C++ source code can be obtained using Subversion.  Users with Unix operating systems will most likely have an svn client. For Windows users wishing to obtain and SVN client we recommend  TortoiseSVN.  See \url{tortoisesvn.tigris.org}.
 
-Users on a Unix system such as Linux, Solaris, Mac OS X, etc. should follow Steps 1 trough 6 listed below.   Windows users should  skip ahead and read Section \ref{section:windowsinstall}.
+Users on a Unix system such as Linux, Solaris, Mac OS X, etc. should follow Steps 1 trough 6 listed below.   Windows users should  skip ahead and read Section 
+\ref{section:windowsintall}.
+
+\vskip 8pt
 
 \noindent {\bf Step 1:}  Connect to a directory where you want the OS project to go.  The following command will download the project into the directory COIN-OS
 
@@ -205,15 +208,24 @@ cd COIN-OS
 ./configure
 \end{verbatim}
 
-\noindent otherwise use
+\noindent otherwise for now use
 
 \begin{verbatim}
 ./configure  COIN_SKIP_PROJECTS=Ipopt
 \end{verbatim}
 
-For more information and options on the {\tt ./configure} script see
+\noindent {\bf Notes:}
+
+\begin{itemize}
+\item If {\tt gfortran} is not present and you  wish to build the nonlinear solver {\tt Ipopt} see the instructions in Section \ref{section:ipopt}.
+
+
+
+\item For more information and options on the {\tt ./configure} script see
 \url{https://projects.coin-or.org/BuildTools/wiki/user-configure#PreparingtheCompilation}.
-If {\tt gfortran} is not present and you  wish to build the nonlinear solver {\tt Ipopt} see the instructions in Section \ref{section:ipopt}.
+\end{itemize}
+
+
 
 \noindent {\bf Step 4:}  Run the make files.
 
@@ -277,13 +289,38 @@ then you have not passed the unitTest and hopefully some semi-inteligble error m
 
 \vskip 8pt
 
-\noindent {\bf Step 6:}  Install the libraries.In addition you will have the following directories.
+\noindent {\bf Step 6:}  Install the libraries.  In addition you will have the following directories.
 
 \begin{verbatim}
 make install
 \end{verbatim}
 
-This will install all of the libraries in the {\tt lib} directory under the distribution root.  In particuar, the main OS library {\tt libOS} along with the libraries of the other COIN-OR project that download with the OS project will get installed in the {\tt lib} directory.  In addtion the {\tt make install} command will install four executable programs in the {\tt bin} directory.  One of these binaries is {\tt OSSolverService} which is main OS project executable. This is described in Section \ref{section:ossolverservice}. In addition {\tt clp}, {\tt cbc}, {\tt ipopt}, and {\tt symphony} get installed  in the {\tt bin} directory. 
+This will install all of the libraries in the {\tt lib} directory.  In particuar, the main OS library {\tt libOS} along with the libraries of the other COIN-OR project that download with the OS project will get installed in the {\tt lib} directory.  In addtion the {\tt make install} command will install four executable programs in the {\tt bin} directory.  One of these binaries is {\tt OSSolverService} which is main OS project executable. This is described in Section \ref{section:ossolverservice}. In addition {\tt clp}, {\tt cbc}, {\tt ipopt}, and {\tt symphony} get installed  in the {\tt bin} directory.  Necessary header files are installed in the {\tt include} directory.   In this case, {\tt bin}, {\tt lib}, and {\tt include} are all subdirectories of where configure is run.   If the user wants these files installed elsewhere, then configure should specify the {\tt prefix} of these directories.  That is,
+
+
+\begin{verbatim}
+./configure  --prefix=prefixDirctory  COIN_SKIP_PROJECTS=Ipopt
+\end{verbatim}
+
+For example, running
+
+\begin{verbatim}
+./configure  --prefix=/usr/local  COIN_SKIP_PROJECTS=Ipopt
+\end{verbatim}
+
+\noindent and then running {\tt make} and {\tt make install} will put the relevant files in
+
+\begin{verbatim}
+/usr/local/bin
+/usr/local/include
+/usr/local/lilb
+\end{verbatim}
+
+\vskip 8pt
+
+{\bf Run an Example!}  If {\tt make test} works, proceed to Section \ref{section:ossolverservice} to run the key executable, {\tt OSSolverService}. 
+
+
 
 \subsection{Obtaining the OS Source Code From a Tarball or Zip File}\label{section:getTarBalls}
 
@@ -360,7 +397,20 @@ MinGW (Minimalist GNU for Windows) is set of runtime headers to be used with the
 
 MSYS (Minimal SYSstem) provides an easy way to use the COIN-OS build system with the Microsoft C++ cl compiler.  MSYS is an application that gives the user a Bourne shell that can run {\tt configure}  scripts and {\tt Makefiles}.  No compilers come with MSYS. In the Cygwin, MinGW, and MSYS hierarchy, it is at the bottom in terms of tools provided. However, it very easy to use and build the OS project with MSYS.    In this discussion we assume that the user has downloaded the OS source code (most likely  with Tortise) and that the {\tt cl} compiler is present.  The project is built using the following steps. 
 
-{\bf Note:} if you wish to use the third-party software with MSYS it is best to get wget ... kipp more detail here. 
+\vskip 8pt
+
+{\bf Note:}
+
+\begin{itemize}
+
+\item If you wish to use the third-party software with MSYS it is best to get {\tt wget}. See \ref{section:windowsintall}. 
+ 
+ \item Do not have any imbedded blanks in the path to the OS project.
+ \end{itemize}
+
+
+
+Execute the following steps to use the Microsoft C++ cl compiler with MSYS.
 
 
 \begin{itemize}
@@ -373,14 +423,41 @@ MSYS (Minimal SYSstem) provides an easy way to use the COIN-OS build system with
 
 and install.  Double clicking on the MSYS icon will open a Bourne shell window. 
 
-\item[Step 2.]   Set the Visual Studio environment variables. This is done by executing the batch file {\tt  vcvarsall.bat}  that comes with the Visual Studio.  This file is located in the following directory. 
+\item[Step 2.]  Download  Visual Studio Express C++ at
+
+ \url{http://msdn2.microsoft.com/en-us/express/future/bb421473.aspx}
+ 
+and install. 
+ 
+ \item[Step 3.]  The part of the OS library responsible for communication with a remote server depends on some underlying Windows socket header files and libraries. There it is necessary to also download and install the Windows Platform SDK. Download the necessary files at
+ 
+ \url{http://msdn2.microsoft.com/en-us/express/aa700755.aspx}
+ 
+ and install. 
+
+\item[Step 4.]   Set the Visual Studio environment variables so that paths to the necessary libraries and header files  are recognized.  Assuming that a standard installation was done for the Visual Studio Express and the Windows Platform SDK set the variables as follows:
 
 \begin{verbatim}
-C:/Program Files/Microsoft Visual Studio 8/VC
+PATH=C:\Program Files\Microsoft Visual Studio 8\Common7\IDE;
+C:\Program Files\Microsoft Visual Studio 8\VC\BIN;
+C:\Program Files\Microsoft Visual Studio 8\Common7\Tools;
+C:\Program Files\Microsoft Visual Studio 8\SDK\v2.0\bin;
+C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727;
+C:\Program Files\Microsoft Visual Studio 8\VC\VCPackages
+
+
+INCLUDE=C:\Program Files\Microsoft Visual Studio 8\VC\INCLUDE;
+C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include
+
+LIB = C:\Program Files\Microsoft Visual Studio 8\VC\LIB;
+C:\Program Files\Microsoft Visual Studio 8\SDK\v2.0\lib;
+C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib
 \end{verbatim}
 
+The environment variables can be set using the {\tt System Properties} in the Windows {\tt Control Panel}.
 
-\item[Step 3.]  In the MSYS command window connect to the root of the OS project and run  {\tt configure}  script  and then {\tt make} as described in Section \ref{section:svn}.
+
+\item[Step 5.]  In the MSYS command window connect to the root of the OS project and run  {\tt configure}  script  and then {\tt make} as described in Section \ref{section:svn}.
 
 \end{itemize}
 
@@ -2160,7 +2237,7 @@ At present, the {\tt OSSolverService} takes the following parameters. The order 
 The input parameters to the {\tt OSSolverService} may be given entirely in the command line or in a configuration file.  We first illustrate giving all the  parameters in the command line. The following command will invoke the {\tt Clp} solver on the local machine to solve the problem instance {\tt parincLinear.osil}.
 
 \begin{verbatim}
-OSSolverService -solver clp -osil ../data/osilFiles/parincLinear.osil 
+./OSSolverService -solver clp -osil ../data/osilFiles/parincLinear.osil 
 \end{verbatim}
 
 Alternatively, these parameters can be put into a configuration file. Assume that the configuration file of interest is {\tt testlocalclp.config}. It would contain the two lines of information
@@ -2170,7 +2247,7 @@ Alternatively, these parameters can be put into a configuration file. Assume tha
 \end{verbatim}
 Then the command line is
 \begin{verbatim}
-OSSolverService -config ../data/configFiles/testlocalclp.config
+./OSSolverService -config ../data/configFiles/testlocalclp.config
 \end{verbatim}
 
 
@@ -2191,11 +2268,11 @@ OSSolverService -config ../data/configFiles/testlocalclp.config
 
 Parameters specified in the configure file are overridden by parameters specified at the command line. This is convenient if a user has a base configure file and wishes to override only a few options. For example,
 \begin{verbatim}
-OSSolverService -config ../data/configFiles/testlocalclp.config -solver lindo
+./OSSolverService -config ../data/configFiles/testlocalclp.config -solver lindo
 \end{verbatim}
 or
 \begin{verbatim}
-OSSolverService -solver lindo -config ../data/configFiles/testlocalclp.config 
+./OSSolverService -solver lindo -config ../data/configFiles/testlocalclp.config 
 \end{verbatim}
 will result in the LINDO solver being used even though Clp is specified in the {\tt testlocalclp} configure file.
 
@@ -2271,7 +2348,7 @@ In the following sections we illustrate each of the six service methods.
 First we illustrate a simple call to   {\tt OSSolverService.jws} and request a solution using the COIN-OR  {\tt Clp} solver.  The call on the client machine is
 
 \begin{verbatim}
-OSSolverService -config ../data/configFiles/testremote.config
+./OSSolverService -config ../data/configFiles/testremote.config
 \end{verbatim}
 where the {\tt testremote.config} file is
 \begin{verbatim}
@@ -2283,7 +2360,7 @@ No solver is specified so by default the  {\tt Cbc} solver will be used on the s
 
 Now use an OSoL options file
 \begin{verbatim}
-OSSolverService -osol ../data/osolFiles/remoteSolve1.osol -osil ../data/parincLinear.osil
+./OSSolverService -osol ../data/osolFiles/remoteSolve1.osol -osil ../data/parincLinear.osil
 \end{verbatim}
 where {\tt remoteSolve1.osol} is
 \begin{verbatim}
@@ -2301,7 +2378,7 @@ In this case we specify a sover to use, name {\tt Clp}.
 
 Next we illustrate a call to the remote SolverService and specify an OSiL instance that is on the remote machine.
 \begin{verbatim}
-OSSolverService -osol ../data/osolFiles/remoteSolve2.osol
+./OSSolverService -osol ../data/osolFiles/remoteSolve2.osol
 \end{verbatim}
 where the {\tt remoteSolve2.osol} file is
 \begin{verbatimtab}[4]
@@ -2347,7 +2424,7 @@ If we were to change to the {\tt locationType} attribute in the {\tt <instanceLo
 
 When the {\tt solve} service method is used, the {\tt OSSolverService} does not finish execution until the solution is returned from the remote solver service. The {\tt solve} method communicates synchronously with the remote solver service. This may not be desirable for large problems when the user does not want to wait for a response. The {\tt send} service method should be used when asynchronous communication is desired. When the send method is used the instance is communicated to the remote service and the {\tt OSSolverService} terminates after submission. An example of this is
 \begin{verbatim}
-OSSolverService -config ../data/configFiles/testremoteSend.config
+./OSSolverService -config ../data/configFiles/testremoteSend.config
 \end{verbatim}
 where the {\tt testremoteSend.config} file is
 \begin{verbatim}
@@ -2410,7 +2487,7 @@ Note that in all of these examples we provided a value for the {\tt name} attrib
 
 The {\tt retrieve} has a single string argument which is an OSoL instance. Here is an example of using the {\tt retrieve} method with {\tt OSSolverService}.
 \begin{verbatim}
-OSSolverService -config ../data/configFiles/testremoteRetrieve.config
+./OSSolverService -config ../data/configFiles/testremoteRetrieve.config
 \end{verbatim}
 The {\tt testremoteRetrieve.config} file is
 \begin{verbatim}
@@ -2444,7 +2521,7 @@ Note that no OSoL input file is specified. In this case, the {\tt OSSolverServic
 
 The OSSolverService terminates after executing the {\tt send} method. Therefore, it is necessary to know when the job is completed on the remote server. One way is to include an email address in the  {\tt <contact>}  element with the attribute {\tt transportType}     set to {\tt smtp}.  This was illustrated in Section \ref{section:solve}.  A second way to check on the status of a job is to use the {\tt knock} service method.  For example, assume a user   wants to know if  the job with {\tt JobID 123456abcd}  is complete. A user would make the request
 \begin{verbatim}
-OSSolverService -config ../data/configFiles/testRemoteKnock.config
+./OSSolverService -config ../data/configFiles/testRemoteKnock.config
 \end{verbatim}
 where the {\tt testRemoteKnock.config} file is
 \begin{verbatim}
@@ -2495,7 +2572,7 @@ When making a {\tt knock} request,  the OSoL string can be empty. In this exampl
 
 If the user submits a job that is taking too long or is a mistake it is possible to kill the job on the remote server using the {\tt kill} service method. For example to kill job {\tt 123456abcd} .  At the command line type
 \begin{verbatim}
-OSSolverService -config  ../data/confgFiles/kill.config
+./OSSolverService -config  ../data/confgFiles/kill.config
 \end{verbatim}
 where the configure file {\tt kill.config} is
 \begin{verbatim}
@@ -2639,7 +2716,7 @@ You should see a message {\tt Click to see the WSDL}.  Click on the link and you
 \end{verbatim}
 where ***.***.***.*** is the IP address of the Tomcat server machine. Then, assuming the files {\tt testremote.config} and {\tt parincLinear.osil} are in the same directory on the client machine as the {\tt OSSolverService} execute:
 \begin{verbatim}
-OSSolverService -config testremote.config
+./OSSolverService -config testremote.config
 \end{verbatim}
 You should get back an OSrL message saying the problem was optimized. 
 
@@ -2761,7 +2838,7 @@ will place a call to the server, upload the problem instance in the {\tt osil} s
 
 Once the file is on the server, invoke the local {\tt OSSolverService} by
 \begin{verbatim}
-OSSolverService -config ../data/configFiles/testremote.config
+./OSSolverService -config ../data/configFiles/testremote.config
 \end{verbatim}
 where the {\tt config} file is
 \begin{verbatim}
@@ -3463,6 +3540,11 @@ lindo
 
 
 
-I have the Mac Intel Lindo API working. A bit of a kludge, but I created a directory on my machine/opt/intel/cc/9.1.037/libThen I copied libimf.dylib and libirc.dylib into this directory.  I built the OS project using the GNU build tools with
+
+I have the Mac Intel Lindo API working. A bit of a kludge, but I created a directory on my machine
+
+/opt/intel/cc/9.1.037/lib
+
+Then I copied libimf.dylib and libirc.dylib into this directory.  I built the OS project using the GNU build tools with
 
 
