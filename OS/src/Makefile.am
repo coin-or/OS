@@ -87,6 +87,11 @@ if COIN_HAS_VOL
  OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiVol/libOsiVol.la 
 endif
 
+
+if COIN_HAS_CPX
+ OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+endif
+
  OSSolverService_LDADD += $(CBCOBJDIR)/src/libCbc.la 
  LIBS += `cat $(CBCOBJDIR)/cbc_addlibs.txt`
 
@@ -113,6 +118,8 @@ if COIN_HAS_VOL
  OSSolverService_LDADD += $(VOLOBJDIR)/src/libVol.la 
  LIBS += `cat $(VOLOBJDIR)/vol_addlibs.txt`
 endif
+
+
 
 
 if COIN_HAS_GLPK
@@ -188,7 +195,6 @@ if COIN_HAS_CPX
   AM_CPPFLAGS += \
 	-I`$(CYGPATH_W) $(CPXINCDIR)` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
-  OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 endif
 
 

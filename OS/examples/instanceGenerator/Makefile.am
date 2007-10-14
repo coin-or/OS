@@ -39,6 +39,10 @@ if COIN_HAS_VOL
  instanceGenerator_LDADD += $(OSIOBJDIR)/src/OsiVol/libOsiVol.la 
 endif
 
+if COIN_HAS_CPX
+ instanceGenerator_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+endif
+
  instanceGenerator_LDADD += $(CBCOBJDIR)/src/libCbc.la 
 
 if COIN_HAS_SYMPHONY
@@ -137,7 +141,6 @@ if COIN_HAS_CPX
   AM_CPPFLAGS += \
 	-I`$(CYGPATH_W) $(CPXINCDIR)` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
-  instanceGenerator_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 endif
 
 

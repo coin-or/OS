@@ -42,6 +42,10 @@ if COIN_HAS_VOL
  fileUpload_LDADD += $(OSIOBJDIR)/src/OsiVol/libOsiVol.la 
 endif
 
+  
+if COIN_HAS_CPX
+ fileUpload_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+endif
 
  fileUpload_LDADD += $(CBCOBJDIR)/src/libCbc.la 
 
@@ -144,7 +148,6 @@ if COIN_HAS_CPX
   AM_CPPFLAGS += \
 	-I`$(CYGPATH_W) $(CPXINCDIR)` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
- fileUpload_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 endif
 
 
