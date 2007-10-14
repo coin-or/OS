@@ -656,22 +656,17 @@ At this point the reader may wish to view  \url{https://projects.coin-or.org/Bui
 
 \subsubsection{Cplex}
 
-Cplex is a linear, integer, and quadratic solver. See \url{http://www.ilog.com/products/cplex/?CFID=4534586&CFTOKEN=61400951}.  Cplex does provide source code and you are can only download the platform dependent binaries. After installing the binaries and include files in an appropriate run configure to point to the include and library directory. An example is given below.
+Cplex is a linear, integer, and quadratic solver. See \url{http://www.ilog.com/products/cplex/}.  Cplex does provide source code and you are can only download the platform dependent binaries. After installing the binaries and include files in an appropriate run configure to point to the include and library directory. An example is given below.
 
 \begin{verbatim}
 configure --with-cplex-lib="-L$(CPLEXDIR)/lib/$(SYSTEM)/$(LIBFORMAT) 
--lcplex -lilocplex -lm -lpthread" --with-cplex-incdir= $(CPLEXDIR)/include
+ $(CPLEX_LIBS)" --with-cplex-incdir= $(CPLEXDIR)/include
 \end{verbatim}
 
-You may also need the following environment variables.
+You may also need the following environment variables (if they are not already set). The following are values we used in a working implementation.
 \begin{verbatim}
-SYSTEM     =i86_linux2_glibc2.3_gcc3.2
-LIBFORMAT  =static_pic
-CPLEXDIR      =/usr/local/ilog/cplex90
-OBJECTCPLEX=CplexContinuousRun.o
-CPLEXLIBPATH= -L$(CPLEXDIR)/lib/$(SYSTEM)/$(LIBFORMAT)
-CPLEXINCDIR = $(CPLEXDIR)/include
-CPLEX_LIBS=-lcplex -lilocplex -lm -lpthread
+SYSTEM =i86_linux2_glibc2.3_gcc3.2LIBFORMAT =static_pic_mtCPLEXDIR =/usr/local/ilog/cplex81/include/ilcplexCPLEXLIBPATH= -L$(CPLEXDIR)/lib/$(SYSTEM)/$(LIBFORMAT)CPLEXINCDIR = $(CPLEXDIR)/includeCPLEX_LIBS=-lcplex -lilocplex -lm -lpthread 
+ILOG_HOME=/usr/local/ilog/cplex81/bin/i86_linux2_glibc2.3_gcc3.2ILOG_LICENSE_FILE=/usr/local/ilog/ilm/access.ilmPATH=***:/usr/local/ilog/cplex81/bin/i86_linux2_glibc2.3_gcc3.2:***CLASSPATH=:/usr/local/ilog/cplex81/bin/i86_linux2_glibc2.3_gcc3.2: 
 \end{verbatim}
 
 \subsubsection{GLPK}
