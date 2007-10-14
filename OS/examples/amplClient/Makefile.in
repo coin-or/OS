@@ -72,28 +72,29 @@ noinst_PROGRAMS = amplClient$(EXEEXT)
 @COIN_HAS_CPX_TRUE@	-I`$(CYGPATH_W) $(CPXINCDIR)` \
 @COIN_HAS_CPX_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
 
-@COIN_HAS_GLPK_TRUE@am__append_12 = \
+@COIN_HAS_CPX_TRUE@am__append_12 = $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+@COIN_HAS_GLPK_TRUE@am__append_13 = \
 @COIN_HAS_GLPK_TRUE@	-I`$(CYGPATH_W) $(GLPKINCDIR)` \
 @COIN_HAS_GLPK_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
 
-@COIN_HAS_LINDO_TRUE@am__append_13 = -I`$(CYGPATH_W) $(LINDOINCDIR)` 
-@COIN_HAS_LINDO_TRUE@am__append_14 = $(LINDOLIB)
-@COIN_HAS_IPOPT_TRUE@am__append_15 = \
+@COIN_HAS_LINDO_TRUE@am__append_14 = -I`$(CYGPATH_W) $(LINDOINCDIR)` 
+@COIN_HAS_LINDO_TRUE@am__append_15 = $(LINDOLIB)
+@COIN_HAS_IPOPT_TRUE@am__append_16 = \
 @COIN_HAS_IPOPT_TRUE@	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Interfaces` \
 @COIN_HAS_IPOPT_TRUE@	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Common` \
 @COIN_HAS_IPOPT_TRUE@	-I`$(CYGPATH_W) $(IPOPTOBJDIR)/inc`
 
-@COIN_HAS_IPOPT_TRUE@am__append_16 = $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
-@COIN_HAS_IPOPT_TRUE@am__append_17 = `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
-@COIN_HAS_KNITRO_TRUE@am__append_18 = -I`$(CYGPATH_W) $(KNITROINCDIR)` 
-@COIN_HAS_KNITRO_TRUE@am__append_19 = $(KNITROLIB)
-@COIN_HAS_KNITRO_TRUE@@USEMULTIPLYDEFINED_TRUE@am__append_20 = -multiply_defined suppress
-@COIN_HAS_ASL_TRUE@am__append_21 = -I`$(CYGPATH_W) \
+@COIN_HAS_IPOPT_TRUE@am__append_17 = $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+@COIN_HAS_IPOPT_TRUE@am__append_18 = `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
+@COIN_HAS_KNITRO_TRUE@am__append_19 = -I`$(CYGPATH_W) $(KNITROINCDIR)` 
+@COIN_HAS_KNITRO_TRUE@am__append_20 = $(KNITROLIB)
+@COIN_HAS_KNITRO_TRUE@@USEMULTIPLYDEFINED_TRUE@am__append_21 = -multiply_defined suppress
+@COIN_HAS_ASL_TRUE@am__append_22 = -I`$(CYGPATH_W) \
 @COIN_HAS_ASL_TRUE@	$(OSSRCDIR)/src/ThirdPartyASL` \
 @COIN_HAS_ASL_TRUE@	$(ASL_CPPFLAGS) -I`$(CYGPATH_W) \
 @COIN_HAS_ASL_TRUE@	$(OSSRCDIR)/src/ThirdPartyASL` \
 @COIN_HAS_ASL_TRUE@	$(ASL_CPPFLAGS)
-@COIN_HAS_ASL_TRUE@am__append_22 = $(ASLLIB) $(ASLLIB)
+@COIN_HAS_ASL_TRUE@am__append_23 = $(ASLLIB) $(ASLLIB)
 subdir = examples/amplClient
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -122,10 +123,12 @@ am__DEPENDENCIES_7 =
 @COIN_HAS_GLPK_TRUE@am__DEPENDENCIES_8 =  \
 @COIN_HAS_GLPK_TRUE@	$(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la \
 @COIN_HAS_GLPK_TRUE@	$(am__DEPENDENCIES_7)
-@COIN_HAS_LINDO_TRUE@am__DEPENDENCIES_9 = $(am__DEPENDENCIES_7)
-@COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_10 = $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
-@COIN_HAS_KNITRO_TRUE@am__DEPENDENCIES_11 = $(am__DEPENDENCIES_7)
-@COIN_HAS_ASL_TRUE@am__DEPENDENCIES_12 = $(am__DEPENDENCIES_7) \
+@COIN_HAS_CPX_TRUE@am__DEPENDENCIES_9 =  \
+@COIN_HAS_CPX_TRUE@	$(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+@COIN_HAS_LINDO_TRUE@am__DEPENDENCIES_10 = $(am__DEPENDENCIES_7)
+@COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_11 = $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+@COIN_HAS_KNITRO_TRUE@am__DEPENDENCIES_12 = $(am__DEPENDENCIES_7)
+@COIN_HAS_ASL_TRUE@am__DEPENDENCIES_13 = $(am__DEPENDENCIES_7) \
 @COIN_HAS_ASL_TRUE@	$(am__DEPENDENCIES_7)
 amplClient_DEPENDENCIES = $(OSOBJDIR)/src/libOS.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la $(am__DEPENDENCIES_1) \
@@ -137,7 +140,7 @@ amplClient_DEPENDENCIES = $(OSOBJDIR)/src/libOS.la \
 	$(am__DEPENDENCIES_8) $(COINUTILSOBJDIR)/src/libCoinUtils.la \
 	$(am__DEPENDENCIES_7) $(am__DEPENDENCIES_9) \
 	$(am__DEPENDENCIES_10) $(am__DEPENDENCIES_11) \
-	$(am__DEPENDENCIES_12)
+	$(am__DEPENDENCIES_12) $(am__DEPENDENCIES_13)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
@@ -267,7 +270,7 @@ LIBOBJS = @LIBOBJS@
 # Kipp add the others here
 LIBS = @LIBS@ $(ADDLIBS) `cat \
 	$(COINUTILSOBJDIR)/coinutils_addlibs.txt` `cat \
-	$(OSOBJDIR)/os_addlibs.txt` $(am__append_17)
+	$(OSOBJDIR)/os_addlibs.txt` $(am__append_18)
 LIBTOOL = @LIBTOOL@
 LIBTOOLM4 = @LIBTOOLM4@
 LINDOINCDIR = @LINDOINCDIR@
@@ -377,8 +380,8 @@ amplClient_LDADD = $(OSOBJDIR)/src/libOS.la \
 	$(CGLOBJDIR)/src/libCgl.la $(OSIOBJDIR)/src/libOsi.la \
 	$(CLPOBJDIR)/src/libClp.la $(am__append_5) $(am__append_6) \
 	$(am__append_7) $(COINUTILSOBJDIR)/src/libCoinUtils.la \
-	$(ADDLIBS) $(am__append_14) $(am__append_16) $(am__append_19) \
-	$(am__append_22)
+	$(ADDLIBS) $(am__append_12) $(am__append_15) $(am__append_17) \
+	$(am__append_20) $(am__append_23)
 
 # Now add the include paths for compilation
 
@@ -402,13 +405,13 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` -I`$(CYGPATH_W) \
 	$(CPPADSRCDIR)/..` -I`$(CYGPATH_W) \
 	$(OSSRCDIR)/src/OSCommonInterfaces` $(am__append_8) \
 	$(am__append_9) $(am__append_10) $(am__append_11) \
-	$(am__append_12) $(am__append_13) $(am__append_15) \
-	$(am__append_18) $(am__append_21)
+	$(am__append_13) $(am__append_14) $(am__append_16) \
+	$(am__append_19) $(am__append_22)
 
 # The -rpath flag is used by libtool to make sure that the shared
 # library is found (in the lib install directory) when we are using dynamic
 # libraries.
-amplClient_LDFLAGS = -rpath $(libdir) $(am__append_20)
+amplClient_LDFLAGS = -rpath $(libdir) $(am__append_21)
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
@@ -662,7 +665,6 @@ uninstall-am: uninstall-info-am
 	pdf pdf-am ps ps-am tags uninstall uninstall-am \
 	uninstall-info-am
 
-@COIN_HAS_CPX_TRUE@	amplClient_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

@@ -144,7 +144,7 @@ if COIN_HAS_CPX
   AM_CPPFLAGS += \
 	-I`$(CYGPATH_W) $(CPXINCDIR)` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
-	fileUpload_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+ fileUpload_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 endif
 
 

@@ -137,8 +137,10 @@ if COIN_HAS_CPX
   AM_CPPFLAGS += \
 	-I`$(CYGPATH_W) $(CPXINCDIR)` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
-	instanceGenerator_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+  instanceGenerator_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 endif
+
+
 
 
 if COIN_HAS_GLPK

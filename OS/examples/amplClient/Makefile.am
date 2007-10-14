@@ -140,7 +140,7 @@ if COIN_HAS_CPX
   AM_CPPFLAGS += \
 	-I`$(CYGPATH_W) $(CPXINCDIR)` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
-	amplClient_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+  amplClient_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 endif
 
 
