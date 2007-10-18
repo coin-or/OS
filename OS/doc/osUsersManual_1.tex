@@ -122,7 +122,7 @@ The objective of Optimization Services (OS) is to provide a general framework co
 \item[1.]  A set of XML based standards for representing optimization instances (OSiL), optimization results (OSrL), and optimization solver options (OSoL). There are other standards, but these are the main ones. The schemas for these standards are described in Section   \ref{section:schemadescriptions}.
 
 \item[2.]  A robust solver and modeling language interface (API) for linear and nonlinear optimization problems.  Corresponding to the OSiL problem instance representation there is an in-memory object,  {\tt OSInstance}, along with a set of  {\tt get()},   {\tt set()}, and {\tt calculate()} methods for accessing and creating problem instances.
-This is a very general API for linear, integer, and nonlinear programs.  Any modeling language that can produce OSiL can easily communicate with any solver that uses the OSInstance API.   The {\tt OSInstance} object is described in more detail in Section \ref{section:osinstanceAPI}. The nonlinear part of the API is based on the COIN-OR project \url{projects.coin-or.org/CppAD} by Brad Bell but is written in a very general manner and could be used with other algorithmic differentiation packages. More detail on algorithmic differentiation is provided in Section \ref{section:ad}.
+This is a very general API for linear, integer, and nonlinear programs. Extensions for other major types of optimization problems are also in the work. Any modeling language that can produce OSiL can easily communicate with any solver that uses the OSInstance API.   The {\tt OSInstance} object is described in more detail in Section \ref{section:osinstanceAPI}. The nonlinear part of the API is based on the COIN-OR project \url{projects.coin-or.org/CppAD} by Brad Bell but is written in a very general manner and could be used with other algorithmic differentiation packages. More detail on algorithmic differentiation is provided in Section \ref{section:ad}.
 
 
 \item[3.]  A  command line executable {\tt OSSolverService}  for reading problem instances (OSiL format, AMPL  nl format,  MPS format) and calling a solver either locally or on a remote server.  This is described in Section \ref{section:ossolverservice}.
@@ -149,7 +149,7 @@ If you want to:
 \item Download  the OS source code -- see Section \ref{section:download}.
 
 
-\item Building the OS project from the source code -- see Section \ref{section:build}.
+\item Build the OS project from the source code -- see Section \ref{section:build}.
 
 \item Use the OS library to build model instances or use solver APIs -- see Sections  \ref{section:osmodelinterfaces},  \ref{section:ossolverinterfaces}, and \ref{section:osinstanceAPI}.
 
@@ -181,7 +181,7 @@ The OS project is an open-source project  with source code under the Common Publ
 
 The C++ source code can be obtained using the Subversion version control package.  Users with Unix operating systems will most likely have a command line svn client.  If an svn client is not present, see \url{http://subversion.tigris.org} to download an svn client.   For Windows users we recommend the  SVN client  TortoiseSVN.  See \url{tortoisesvn.tigris.org}.  The TortoiseSVN client is integrated within the Windows  Explorer.
 
-Users on a Unix system such as Linux, Solaris, Mac OS X, etc. the source code is obtained as follows. In a command window execute:
+For Users on a Unix system such as Linux, Solaris, Mac OS X, etc., the source code is obtained as follows. In a command window execute:
 
 \begin{verbatim}
 svn co https://projects.coin-or.org/svn/OS/stable/1.0 COIN-OS
