@@ -204,7 +204,8 @@ c., Scottsdale, Arizona, US
 
 If so, select {\tt (p)} and you should not get this message again.
 
-On Windows with TortoiseSVN, create a directory {\tt COIN-OS} in the desired location and right-click on this directory.   Select the menu item {\tt SVN Checkout ...} and put in https://projects.coin-or.org/svn/OS/stable/1.0 as URL of repository.
+On Windows with TortoiseSVN, create a directory {\tt COIN-OS} in the desired location and right-click on this directory.   Select the menu item {\tt SVN Checkout ...} and in the textbox, {\tt URL of Repository}
+give the URL for the version of the OS project you wish to checkout, e.g. https://projects.coin-or.org/svn/OS/stable/1.0.
 
 
 Now build the project as described in  Section \ref{section:build}.
@@ -313,18 +314,19 @@ and the details and use of this distribution are described in Section \ref{secti
 \section{Building and Testing the OS Project}\label{section:build}
 
 
-Once the OS source code is obtained the OS libraries, {\tt OSSolverService} executable, and test examples can be built.  We describe how to do this on Unix systems (see Section \ref{section:unixbuilds})  and on Windows (see Section \ref{section:windowsintall}).
+Once the OS source code is obtained, the OS libraries, {\tt OSSolverService} executable, and test examples can be built.  We describe how to do this on Unix/Linux systems (see Section \ref{section:unixbuilds})  and on Windows (see Section \ref{section:windowsintall}).
 
-\subsection{Building the OS Project on Unix Systems}\label{section:unixbuilds}
+\subsection{Building the OS Project on Unix/Linux Systems}\label{section:unixbuilds}
 
-In order to build the OS project on Unix systems do the following.
+In order to build the OS project on Unix/Linux systems do the following.
 
 \vskip 8pt
 
 
-\noindent {\bf Step 1:}  Connect to the distribution root directory.
+\noindent {\bf Step 1:}  Make and connect to the distribution root directory.
 
 \begin{verbatim}
+mkdir COIN-OS
 cd COIN-OS
 \end{verbatim}
 
@@ -340,8 +342,10 @@ cd COIN-OS
 \begin{verbatim}
 ./configure  COIN_SKIP_PROJECTS=Ipopt
 \end{verbatim}
+as COIN-OR's Ipopt project currently uses Fortran to compile some of its dependent libraries. 
 
-\noindent {\bf Notes:}
+\vskip 8pt
+\noindent {\bf Note:}
 
 \begin{itemize}
 \item If {\tt gfortran} is not present and you  wish to build the nonlinear solver {\tt Ipopt} see the instructions in Section \ref{section:ipopt}.
@@ -349,6 +353,8 @@ cd COIN-OS
 \item When using {\tt configure} you may wish to use the {\tt -C} option. This   instructs configure to use a cache file, {\tt config.cache}, to speed up configuration by remembering and reusing the results of tests already performed.
 
 \item For more information and options on the {\tt ./configure} script see
+
+
 \url{https://projects.coin-or.org/BuildTools/wiki/user-configure#PreparingtheCompilation}.
 
 
@@ -368,7 +374,7 @@ make
 make test
 \end{verbatim}
 
-Depending upon which third party software you have installed, the result of running the unitTest should look something like (we have included the third-party solvers LINDO and Knitro in the  test results below, they are not part of the default build):
+Depending upon which third party software you have installed, the result of running the unitTest should look something like (we have included the third-party solvers LINDO and Knitro in the  test results below; they are not part of the default build):
 
 
 {\small
@@ -418,13 +424,13 @@ then you have not passed the unitTest and hopefully some semi-inteligble error m
 
 \vskip 8pt
 
-\noindent {\bf Step 5:}  Install the libraries.  In addition you will have the following directories.
+\noindent {\bf Step 5:}  Install the libraries and executables.  In addition you will have the following directories.
 
 \begin{verbatim}
 make install
 \end{verbatim}
 
-This will install all of the libraries in the {\tt lib} directory.  In particuar, the main OS library {\tt libOS} along with the libraries of the other COIN-OR project that download with the OS project will get installed in the {\tt lib} directory.  In addtion the {\tt make install} command will install four executable programs in the {\tt bin} directory.  One of these binaries is {\tt OSSolverService} which is main OS project executable. This is described in Section \ref{section:ossolverservice}. In addition {\tt clp}, {\tt cbc}, {\tt ipopt}, and {\tt symphony} get installed  in the {\tt bin} directory.  Necessary header files are installed in the {\tt include} directory.   In this case, {\tt bin}, {\tt lib}, and {\tt include} are all subdirectories of where configure is run.   If the user wants these files installed elsewhere, then configure should specify the {\tt prefix} of these directories.  That is,
+This will install all of the libraries in the {\tt lib} directory.  In particuar, the main OS library {\tt libOS} along with the libraries of the other COIN-OR project that download with the OS project will get installed in the {\tt lib} directory.  In addtion the {\tt make install} command will install four executable programs in the {\tt bin} directory.  One of these binaries is {\tt OSSolverService} which is main OS project executable. This is described in Section \ref{section:ossolverservice}. In addition {\tt clp}, {\tt cbc}, {\tt ipopt}, and {\tt symphony} get installed  in the {\tt bin} directory.  Necessary header files are installed in the {\tt include} directory.   In this case, {\tt bin}, {\tt lib}, and {\tt include} are all subdirectories of where {\tt ./configure} is run.   If the user wants these files installed elsewhere, then configure should specify the {\tt prefix} of these directories.  That is,
 
 
 \begin{verbatim}
@@ -457,12 +463,9 @@ For example, running
 
 \subsection{Building the OS Project on Windows}\label{section:windowsintall}
 
-There are a number of options open to Windows users.   First, if you wish to work with source code we recommend downloading  the svn client,  TortoiseSVN.  See \url{tortoisesvn.tigris.org}.  With TortoiseSVN in the Windows Explorer connect to the directory where you wish to put the OS code. Right click on the directory and select {\tt SVN Checkout}.   In the textbox, {\tt URL of Repository} give the URL for the version of the OS project you wish to checkout.
+There are a number of options open to Windows users.   First, if you wish to work with source code we recommend downloading  the svn client,  TortoiseSVN.  See \url{tortoisesvn.tigris.org}.  With TortoiseSVN in the Windows Explorer connect to the directory (e.g. COIN-OS) where you wish to put the OS code. Right click on the directory and select {\tt SVN Checkout}.   In the textbox, {\tt URL of Repository} give the URL for the version of the OS project you wish to checkout, e.g. https://projects.coin-or.org/svn/OS/stable/1.0.
 
-
-
-
-Also, if you plan to build any of the projects contained in {\tt ThirdParty} (e.g. ASL) we recommend using {\tt wget}.  The {\tt wget} executable is used by the scripts, {\tt get.ASL}, {\tt get.Blas}, etc. and makes it easy to download the software.  A Windows version of {\tt wget} is available at
+Also, if you plan to build any of the projects contained in {\tt ThirdParty} (e.g. ASL) we recommend using {\tt wget}.  The {\tt wget} executable is used by the scripts, {\tt get.ASL}, {\tt get.Blas}, etc. in the corresponding third party subdirectories and makes it easy to download the software.  A Windows version of {\tt wget} is available at
 
 \begin{verbatim}
 http://www.christopherlewis.com/WGet/WGetFiles.htm
@@ -483,7 +486,7 @@ There is a directory {\tt MSVisualStudio} in the {\tt COIN-OS/OS}  directory.  T
 
 \subsubsection{Cygwin}
 
-{\tt Cygwin} provides a Unix emulation environment for Windows. It comes with numerous tools including the gcc compilers. See {\tt www.cygwin.com}.   With Cygwin and the corresponding gcc compilers the OS project is  built exactly as described in Section \ref{section:svn}.
+{\tt Cygwin} provides a Unix emulation environment for Windows. It comes with numerous tools and libraries including the gcc compilers. See {\tt www.cygwin.com}.   With Cygwin and the corresponding gcc compilers the OS project is  built exactly as described in Section \ref{section:svn}.
 
 \subsubsection{MinGW}
 
@@ -495,17 +498,17 @@ MinGW (Minimalist GNU for Windows) is set of runtime headers to be used with the
 
 
 
-MSYS (Minimal SYSstem) provides an easy way to use the COIN-OS build system with the Microsoft C++ cl compiler.  MSYS is an application that gives the user a Bourne shell that can run {\tt configure}  scripts and {\tt Makefiles}.  No compilers come with MSYS. In the Cygwin, MinGW, and MSYS hierarchy, it is at the bottom in terms of tools provided. However, it very easy to use and build the OS project with MSYS.    In this discussion we assume that the user has downloaded the OS source code (most likely  with Tortise) and that the {\tt cl} compiler is present.  The project is built using the following steps.
+MSYS (Minimal SYSstem) provides an easy way to use the COIN-OS build system with compilers/linkers of your own choice, such as the Microsoft command line C++ cl compiler.  MSYS is an application that gives the user a Bourne shell that can run {\tt configure}  scripts and {\tt Makefiles}.  No compilers come with MSYS. In the Cygwin, MinGW, and MSYS hierarchy, it is at the bottom in terms of tools provided. However, it is very easy to use and build the OS project with MSYS.    In this discussion we assume that the user has downloaded the OS source code (most likely  with Tortise) and that the {\tt cl} compiler is present.  The project is built using the following steps.
 
 \vskip 8pt
 
-{\bf Note:}
+\noindent {\bf Note:}
 
 \begin{itemize}
 
 \item If you wish to use the third-party software with MSYS it is best to get {\tt wget}. See \ref{section:windowsintall}.
 
- \item Do not have any imbedded blanks in the path to the OS project.
+ \item Do not put any imbedded blanks in the path to the OS project.
  \end{itemize}
 
 
@@ -583,10 +586,10 @@ It is possible to build the OS project in a directory that is different from the
 For  example, assume you wish to build a debug version of the OS project in the directory {\tt vpath-debug} and that the environment variable {\tt OS} is the path to the root of the OS project distribution {\tt COIN-OS}.  Connect to the {\tt vpath-debug} directory run configure as follows (assuming we do want a debug version)
 
 \begin{verbatim}
-../data/configure --enable-debug
+../COIN-OS/configure --enable-debug
 \end{verbatim}
 
-After you run configure, the OS project directory structure will present in the {\tt vpath-debug} directory along with all of the necessary  {\tt Makefiles}.  Next inside the {\tt vpath-degug} execute
+After you run configure, the OS project directory structure will be present in the {\tt vpath-debug} directory along with all of the necessary  {\tt Makefiles}.  Next inside the {\tt vpath-degug} execute
 
 \begin{verbatim}
 make
@@ -594,7 +597,8 @@ make
 
 and all of  the libraries created will be in their respective directories inside {\tt vpath-debug}  and not {\tt COIN-OS}.
 
-{\bf Note:}  If you have run the {\tt configure} script inside the {\tt COIN-OS} directory, you cannot do a {\tt VPATH} build. Before doing a {\tt VPATH} build you need to run
+\vskip 8pt
+\noindent {\bf Note:} If you have run the {\tt configure} script inside the {\tt COIN-OS} directory, you cannot do a {\tt VPATH} build. Before doing a {\tt VPATH} build you need to run
 \begin{verbatim}
 make distclean
 \end{verbatim}
@@ -604,7 +608,7 @@ in the {\tt COIN-OS} directory.
 \subsection{Using Ipopt}\label{section:ipopt}
 
 
-Ipopt is a COIN-OR project (\url{projects.coin-or.org/Ipopt}) and is included in the download with the OS project. However, unlike the other COIN-OR projects that download with OS, the Ipopt project requires third-party software that is based on FORTRAN and care must be taken if you wish to build OS with the  Ipopt solver.  You can  exclude Ipopt from the OS  build by  by adding the option
+Ipopt is a COIN-OR project (\url{projects.coin-or.org/Ipopt}) and is included in the download with the OS project. However, unlike the other COIN-OR projects that download with OS, the Ipopt project requires third-party software that is based on FORTRAN and care must be taken if you wish to build OS with the  Ipopt solver.  You can  exclude Ipopt from the OS  build by adding the option
 
 \begin{verbatim}
 COIN_SKIP_PROJECTS=Ipopt
@@ -612,7 +616,7 @@ COIN_SKIP_PROJECTS=Ipopt
 to the {\tt configure} script.
 
 
-If you do choose to build Ipopt first get the necessary third-party software.  First connect into the {\tt ThirdParty} directory. Then execute the following commands:
+If you do choose to build Ipopt, first get the necessary third-party software.  First connect into the {\tt ThirdParty} directory. Then execute the following commands:
 
 \begin{verbatim}
 $ cd /Blas
@@ -629,22 +633,22 @@ What you do next depends upon whether or not a FORTRAN compiler is present, and 
 
 \begin{itemize}
 
-\item[Option 1.]   If you are building in Unix-like environment and have a FORTRAN 95 compiler available you can simply run the {\tt configure} script and the FORTRAN compiler will be detected and the {\tt Ipopt} project will be built.
+\item[Option 1.]   If you are building in Unix-like environment and have a FORTRAN 95 compiler available, you can simply run the {\tt configure} script and the FORTRAN compiler will be detected and the {\tt Ipopt} project will be built.
 
-\item[Option 2.]   If you have a FORTRAN 77 compiler, you  must first obtain the  Harwell Subroutine Library (HSL) routine {\tt ma27ad.f}.  Put this in the directory {\tt \../data/ThirdParty/HSL}.  Now run the {\tt configure} script and described in \ref{section:svn}.  See
+\item[Option 2.]   If you have a FORTRAN 77 compiler, you  must first obtain the  Harwell Subroutine Library (HSL) routine {\tt ma27ad.f}.  Put this in the directory {\tt \../data/ThirdParty/HSL}.  Now run the {\tt configure} script as described in \ref{section:svn}.  See
 
 \begin{verbatim}
  http://www.coin-or.org/Ipopt/documentation/node15.html
  \end{verbatim}
 
-\item[Option 3.]  If you do not have a FORTRAN compiler and do not wish to obtain one, by using the {\tt f2c} compiler from Netlib.  The installation instructions for this are in the {\tt INSTALL} file in
+\item[Option 3.]  If you do not have a FORTRAN compiler and do not wish to obtain one, you can use the {\tt f2c} compiler from Netlib.  The installation instructions for this are in the {\tt INSTALL} file in
 \begin{verbatim}
 ../data/BuiltTools/compile_f2c
 \end{verbatim}
 
 \end{itemize}
 
-Two important points:
+\noindent Two important points:
 
 
 \begin{itemize}
