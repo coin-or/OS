@@ -209,7 +209,7 @@ On Windows with TortoiseSVN, create a directory {\tt COIN-OS} in the desired loc
 
 Now build the project as described in  Section \ref{section:build}.
 
-For the rest of this documentation, we assume that  {\tt COIN-OS} is the name of the root directory of the OS project and that the user has defined an environment variable {\tt OS} that is the path to {\tt COIN-OS}.  The {\tt COIN-OS} directory structure is illustrated in Figure \ref{figure:osprojectrootdir}.
+For the rest of this documentation, we assume that  {\tt COIN-OS} is the name of the root directory of the OS project and that the user has defined an environment variable {\tt OS} that is the path to {\tt COIN-OS}.  The {\tt COIN-OS} directory structure is illustrated in Figure \ref{figure:osprojectrootdir}. OS source code is mainly contained inside of the OS subdirectory. Other first level subdirectories are mostly external projects (COIN-OR or third party) that the OS project depend on.  
 
 
 \begin{figure}
@@ -280,7 +280,7 @@ Now build the project as described in  Section \ref{section:build}.
 If the user does not wish to compile source code, the
 OS library, OSSolverService executable, and Tomcat server software configuration are available at \url{http://www.coin-or.org/Binaries/OS} in binary format.  In the binary OS root there  are {\tt cpp} and {\tt java} directories for the compiled C++ and Java code.
 
-In the {\tt cpp} directory you will find binaries for the OS library (see Section \ref{section:oslibrary}), along with the necessary COIN-OR supporting libraries,  and the {\tt OSSolverService} (see Section \ref{section:ossolverservice})  executable.   All the files are packaged together as a {\tt tgz} file for Unix distributions and {\tt zip} for Windows.  The distribution follows the following naming convention:
+In the {\tt cpp} directory you will find binaries for the OS library (see Section \ref{section:oslibrary}), along with the necessary COIN-OR supporting libraries,  and the {\tt OSSolverService} (see Section \ref{section:ossolverservice})  executable.   All the files are packaged together as a {\tt tgz} file for Unix distributions and {\tt zip} file for Windows.  The distribution follows the following naming convention:
 
 \begin{verbatim}
 OS-release_number-operating_system-chip-compiler-tgz (zip)
@@ -293,7 +293,7 @@ and on Windows
 \begin{verbatim}
 OS-1.0-win32-msvc-v7.zip
 \end{verbatim}
-After unpacking the {\tt tgz} or {\tt zip} archives, the files in the resulting OS binary distribution are illustrated in Figure \ref{figure:osbindistribution}.   In the {\tt bin} directory is the executable file {\tt OSSolverService.}   The {\tt doc} directory contains this document, {\tt osUsersManual\_1.pdf}.
+After unpacking the {\tt tgz} or {\tt zip} archives, the files in the resulting OS binary distribution are illustrated in Figure \ref{figure:osbindistribution}.   In the {\tt bin} directory is the executable file {\tt OSSolverService.} r any other related COIN-OR executables. The {\tt doc} directory contains this document, {\tt osUsersManual\_1.pdf}.
   In the {\tt include} directory are the header files that are required if the user wishes to write code to link to OS library or any other supporting COIN-OR library in the {\tt lib} directory.
 \begin{figure}
 \centering
@@ -302,11 +302,11 @@ After unpacking the {\tt tgz} or {\tt zip} archives, the files in the resulting 
 \label{figure:osbindistribution}
 \end{figure}
 
-In the {\tt java} directory  are the binary files required to build a an Apache Tomcat-based Web service that will take SOAP envelopes with model instances in OSiL format, call the {\tt OSSolverService}, and return the optimization result.  This distribution is named
+In the {\tt java} directory  are the binary files required to build an Apache Tomcat-based Web service that will take SOAP envelopes with model instances in OSiL format and/or options in OSoL format, call the {\tt OSSolverService}, and return the optimization result in OSrL format.  This distribution is named
 \begin{verbatim}
 os-distribution-release_number.zip
 \end{verbatim}
-and the details and use of this distribution is described in Section \ref{section:tomcat}.
+and the details and use of this distribution are described in Section \ref{section:tomcat}.
 
 
 
