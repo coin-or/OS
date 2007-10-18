@@ -50,7 +50,7 @@
 //	#define OSINFINITY 1e20
 //#endif
 
-#define OSINFINITY 1e20
+#define OSINFINITY 1e30
 #define OS_E_VALUE exp(1.0)
 #define OS_PI_VALUE 2*asin(1.0)
 

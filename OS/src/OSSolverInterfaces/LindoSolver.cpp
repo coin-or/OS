@@ -966,7 +966,6 @@ bool LindoSolver::processNonlinearExpressions(){
 			piObjSense, pachConType,  pachVarType, paiInsList, iInstListLength, paiNonlinearConIndex,
 			padNonlinearNonz, padVarval, paiObjsBegin, paiObjsLength, paiConsBegin,
 			paiConsLength, padVarLowerBounds, padVarUpperBounds);
-		std::cout << "Gail 2" << std::endl;
 		lindoAPIErrorCheck("Error trying to call LSaddInstruct");
 		// Kipp: do some garbage collection
 		// get rid of the local news
