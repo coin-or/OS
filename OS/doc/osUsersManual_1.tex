@@ -681,7 +681,7 @@ In many of the header files there are {\tt \#include} statements inside {\tt  \#
 \end{verbatim}
 In the {\tt inc} subdirectory of the {\tt OS}  directory, there is a header file, {\tt config\_os.h} that defines the values of the
 \begin{verbatim}
-COIN_HAS_*****
+COIN_HAS_XXXXX
 \end{verbatim}
 variables. If the project is configured with the simple {\tt ./configure} command given in Step 3 with no arguments, then in the {\tt config\_os.h} these variables associated with the third-party software will be undefined. For example.
 \begin{verbatim}
@@ -695,17 +695,21 @@ unlike the configured COIN-OR projects that appear as
 \end{verbatim}
 In the following subsections we  describe how to incorporate various  third-party packages into the OS project and see to it that the
 \begin{verbatim}
-COIN_HAS_*****
+COIN_HAS_XXXXX
 \end{verbatim}
 variable is defined in  {\tt config\_os.h}.
 
 \subsubsection{AMPL}
 
-The OS library contains a class, {\tt OSnl2osil} (see Section (\ref{section:nl2osil}) ) and {\tt amplClient} (see Section (\ref{section:amplclient}) ) that require the use of the AMPL ASL library.  See \url{http://netlib.sandia.gov/ampl/}  and  \url{}. See Users with a Unix system should locate the {\tt ASL} folder that is part of the distribution. The {\tt ASL} folder is in the {\tt ThirdParty} folder which is in the project root folder. Locate and execute the {\tt get.ASL} script.  Do this prior to running the {\tt configure} script. The {\tt configure} script will build the correct ASL library.
+The OS library contains a class, {\tt OSnl2osil} (see Section (\ref{section:nl2osil}) ) and {\tt amplClient} (see Section (\ref{section:amplclient}) ) that require the use of the AMPL ASL library.  See \url{http://netlib.sandia.gov/ampl/}  and  \url{http://www.ampl.com}. Users with a Unix system should locate the {\tt ASL} folder that is part of the distribution. The {\tt ASL} folder is in the {\tt ThirdParty} folder which is in the project root folder. Locate and execute the {\tt get.ASL} script.  Do this prior to running the {\tt configure} script. The {\tt configure} script will build the correct ASL library.
 
-Microsoft  Visual Studio users will have to build the ASL library separately and then link it with the OS lib in the OS project file.  The necessary source files are at \url{http://netlib.sandia.gov/cgi-bin/netlib/netlibfiles.tar?filename=netlib/ampl/solvers}.  After unpacking the distribution build the source code with the utility {\tt nmake} which should be part of the Visual Studio distribution. The appropriate command is
+Microsoft  Visual Studio users will have to build the ASL library separately and then link it with the OS lib in the OS project file.  The necessary source files are at 
 \begin{verbatim}
-nmake -f makefile.vc" .
+http://netlib.sandia.gov/cgi-bin/netlib/netlibfiles.tar?filename=netlib/ampl/solvers  
+\end{verbatim}
+ After unpacking the distribution build the source code with the utility {\tt nmake} which should be part of the Visual Studio distribution. The appropriate command is
+\begin{verbatim}
+nmake -f makefile.vc
 \end{verbatim}
 If the OS project is properly configured  with the ASL library, {\tt config\_os.h} will contain the lines
 \begin{verbatim}
@@ -713,12 +717,16 @@ If the OS project is properly configured  with the ASL library, {\tt config\_os.
 #define COIN_HAS_ASL 1
 \end{verbatim}
 
-At this point the reader may wish to view  \url{https://projects.coin-or.org/BuildTools/wiki/user-configure#CommandLineArgumentsforconfigure} for more information on command line arguments that illustrated in the subsections below.
+At this point the reader may wish to view  
+\begin{verbatim}
+https://projects.coin-or.org/BuildTools/wiki/user-configure#CommandLineArgumentsforconfigure
+\end{verbatim}
+for more information on command line arguments that are illustrated in the subsections below.
 
 
 \subsubsection{Cplex}
 
-Cplex is a linear, integer, and quadratic solver. See \url{http://www.ilog.com/products/cplex/}.  Cplex does provide source code and you are can only download the platform dependent binaries. After installing the binaries and include files in an appropriate run configure to point to the include and library directory. An example is given below.
+Cplex is a linear, integer, and quadratic solver. See \url{http://www.ilog.com/products/cplex/}.  Cplex does not provide source code and you can only download the platform dependent binaries. After installing the binaries and include files in an appropriate directory, run configure to point to the include and library directory. An example is given below:
 
 \begin{verbatim}
 configure --with-cplex-lib="-L$(CPLEXDIR)/lib/$(SYSTEM)/$(LIBFORMAT)
@@ -741,7 +749,7 @@ CLASSPATH=:/usr/local/ilog/cplex81/bin/i86_linux2_glibc2.3_gcc3.2:
 
 \subsubsection{GLPK}
 
-{\tt GLPK} is a an open-source linear and integer-programming solver from the GNU organization. See \url{http://www.gnu.org/software/glpk/}.  In order to use GLPK with OS either execute {\tt get.AllThirdParty} or connect to {\tt ThirdParty/Glpk} and execute {\tt get.ThirdParty}.
+{\tt GLPK} is a an open-source linear and integer-programming solver from the GNU organization. See \url{http://www.gnu.org/software/glpk/}.  In order to use GLPK with OS, either execute {\tt get.AllThirdParty} or connect to {\tt ThirdParty/Glpk} and execute {\tt get.ThirdParty}.
 
 
 
@@ -755,7 +763,7 @@ CLASSPATH=:/usr/local/ilog/cplex81/bin/i86_linux2_glibc2.3_gcc3.2:
 \subsubsection{Knitro}
 
 
-Knitro is a nonlinear solver. See \url{http://www.ziena.com/}.  Ziena does not provide source code for Knitro.  You must download platform dependent binaries.   In order to use Knitro with the OS project perform the following steps.
+Knitro is a nonlinear solver. See \url{http://www.ziena.com/}.  Ziena does not provide source code for Knitro.  You must download platform dependent binaries.   In order to use Knitro with the OS project, perform the following steps.
 
 \begin{itemize}
 
@@ -791,7 +799,7 @@ NlpProblemDef::~NlpProblemDef (void)
 
 \subsubsection{LINDO}
 
-LINDO is a commercial linear, integer, and nonlinear solver. See \url{www.lindo.com}.  LINDO does provide source code and you are can only download the platform dependent binaries. After installing the binaries and include files in an appropriate run configure to point to the include and library directory. An example is given below.
+LINDO is a commercial linear, integer, and nonlinear solver. See \url{www.lindo.com}.  LINDO does not provide source code and you can only download the platform dependent binaries. After installing the binaries and include files in an appropriate directory, run configure to point to the include and library directory. An example is given below:
 
 \begin{verbatim}
 --with-lindo-lib="-L/home/kmartin/files/code/lindo/linux/lib -llindo -lmosek"
@@ -806,20 +814,30 @@ Install MATLAB on the client machine and follow the instruction in Section
 
 \subsubsection{Library Paths}
 
-After running {\tt configure} as described above,  on Unix systems, it will be necessary to set the {\tt LD\_LIBRARY\_PATH} or {\tt DYLD\_LIBRARY\_PATH} (on Mac OS X) to environment variables to point to the location of the installed third party libraries in the case that the libraries are dynamic and not static libraries.
+After running {\tt configure} as described above,  on Unix systems, it will be necessary to set the environment variables {\tt LD\_LIBRARY\_PATH} or {\tt DYLD\_LIBRARY\_PATH} (on Mac OS X) to point to the location of the installed third party libraries in the case that the libraries are dynamic and not static libraries.
 
 
 \subsection{Bug Reporting}
 
-Bug reporting is done through the project Trac page. This is at \url{http://projects.coin-or.org/OS}.  To report a bug, you must be a registered user.  For  instructions on  how to register go to
- \url{http://www.coin-or.org/usingTrac.html}  After registering, log in and then file a trouble ticket by going to \url{http://projects.coin-or.org/OS/newticket}.
+Bug reporting is done through the project Trac page. This is at 
+\begin{verbatim}
+http://projects.coin-or.org/OS  
+\end{verbatim}
+To report a bug, you must be a registered user.  For  instructions on  how to register, go to
+\begin{verbatim}
+http://www.coin-or.org/usingTrac.html
+\end{verbatim}
+After registering, log in and then file a trouble ticket by going to 
+\begin{verbatim}
+http://projects.coin-or.org/OS/newticket
+\end{verbatim}
 
 
 \subsection{Documentation}\label{section:documentation}
 
-If you have Doxygen  \url{www.doxygen.org} available (the executable {\tt doxygen} should be in the {\tt path} command) then executing
+If you have Doxygen  (\url{www.doxygen.org}) available (the executable {\tt doxygen} should be in the {\tt path} command) then executing
 \begin{verbatim}
-make  doxydoc
+make doxydoc
 \end{verbatim}
 in the project root directory will result in the Doxygen documentation being generated and stored in the {\tt doxydoc} folder in the project root.
 
@@ -828,7 +846,7 @@ In order to view the documentation, open a browser and open the file
 projectroot/doxydoc/html/index.html
 \end{verbatim}
 
-Running Doxygen will generate documentation for only the  OS project.  Documentation will not be generated for the other COIN-OR projects in the project root. In the {\tt doxydoc}  folder is a configuration file {\tt doxygen.conf}.  This configuration for file contains for the {\tt EXCLUDE} parameter
+Running Doxygen will generate documentation for only the  OS project.  Documentation will not be generated for the other COIN-OR projects in the project root. In the {\tt doxydoc}  folder is a configuration file {\tt doxygen.conf}.  This configuration file contains the {\tt EXCLUDE} parameter
 
 \begin{verbatim}
 EXCLUDE =  Cbc \
@@ -865,15 +883,15 @@ The build process described in Section \ref{section:svn} has been tested on Linu
  &Mac&Linux&Cyg-gcc&Msys-cl&MinGW-gcc&MSVS \\ \hline
 AMPL-Client &x&x&&x&& \\ \hline
 MATLAB &x&&&&& \\ \hline
-Cbc &x&x&x&x&& \\ \hline
-Clp &x&x&x&x&& \\ \hline
+Cbc &x&x&x&x&x&x \\ \hline
+Clp &x&x&x&x&x&x \\ \hline
 Cplex &x&x&&&& \\ \hline
-DyLP &x&x&x&x&& \\ \hline
+DyLP &x&x&x&x&x&x \\ \hline
 Ipopt &x&x&x&x&& \\ \hline
 Knitro &x&x&&&& \\ \hline
-Lindo &x&x&&x&& \\ \hline
-SYMPHONY &x&x&x&x&& \\ \hline
-Vol &x&x&x&x&& \\ \hline
+Lindo &x&x&&x&&x \\ \hline
+SYMPHONY &x&x&x&x&x&x \\ \hline
+Vol &x&x&x&x&x&x \\ \hline
 \end{tabular}
 \end{table}
 
@@ -890,14 +908,10 @@ Vol &x&x&x&x&& \\ \hline
  Linux &Red Hat 3.4.6-8&gcc 3.4.6& Dell Intel 32 bit chip\\ \hline
  Cyg-gcc &Windows 2003 Server&gcc 3.4.4& Dell Intel 32 bit chip \\ \hline
  Msys-cl &Windows XP&Visual Studio 2003 &Dell Intel 32 bit chip \\ \hline
- MinGW-gcc &&& \\ \hline
+ MinGW-gcc &Windows XP&gcc 3.4.2&Dell Intel 32 bit chip \\ \hline
  MSVS &Windows XP&Visual Studio 2003 &Dell Intel 32 bit chip \\ \hline
 \end{tabular}
 \end{table}
-
-Kipp -- ask Jun which platforms he has tested.
-
-
 
 
 \section{The OS Project Components}\label{section:projectcomponents}
