@@ -79,7 +79,7 @@ AC_COIN_HAS_PROJECT(cppad)
 #                             Third party solvers                           #
 #############################################################################
 
-AC_COIN_HAS_USER_LIBRARY([Cplex],[CPX],[cplex.h],[CPXgetstat])
+AC_COIN_HAS_USER_LIBRARY([Cplex],[CPX],[cplex.h],[])
 AC_COIN_HAS_USER_LIBRARY([Lindo],[LINDO],[lindo.h],[])
 #AC_COIN_HAS_USER_LIBRARY([Ipopt],[IPOPT],[IpoptConfig.h],[])
 AC_COIN_HAS_USER_LIBRARY([Knitro],[KNITRO],[knitro.h],[])
