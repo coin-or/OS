@@ -66,13 +66,13 @@
 \contentsline {subsubsection}{\numberline {10.3.6}The {\tt kill} Service Method}{60}
 \contentsline {subsubsection}{\numberline {10.3.7}Summary}{60}
 \contentsline {section}{\numberline {11}Setting up a Solver Service with Tomcat}{62}
-\contentsline {section}{\numberline {12}Examples}{63}
-\contentsline {subsection}{\numberline {12.1}AMPL Client: Hooking AMPL to Solvers}{63}
-\contentsline {subsection}{\numberline {12.2}Algorithmic Differentiation: Using the OS Algorithmic Differentiation Methods}{64}
-\contentsline {subsection}{\numberline {12.3}File Upload: Using a File Upload Package}{64}
-\contentsline {subsection}{\numberline {12.4}Instance Generator: Using the OSInstance API to Generate Instances}{65}
-\contentsline {subsection}{\numberline {12.5}osTestCode}{66}
-\contentsline {section}{\numberline {13}Appendix}{66}
-\contentsline {subsection}{\numberline {13.1}Building a Model in MATLAB}{66}
-\contentsline {subsection}{\numberline {13.2}OSiL representation for problem given in (1\hbox {})--(4\hbox {})}{68}
-\contentsline {subsection}{\numberline {13.3}OSiL representation for problem given in (20\hbox {})--(23\hbox {})}{70}
+\contentsline {section}{\numberline {12}Examples}{64}
+\contentsline {subsection}{\numberline {12.1}AMPL Client: Hooking AMPL to Solvers}{64}
+\contentsline {subsection}{\numberline {12.2}Algorithmic Differentiation: Using the OS Algorithmic Differentiation Methods}{65}
+\contentsline {subsection}{\numberline {12.3}File Upload: Using a File Upload Package}{65}
+\contentsline {subsection}{\numberline {12.4}Instance Generator: Using the OSInstance API to Generate Instances}{66}
+\contentsline {subsection}{\numberline {12.5}osTestCode}{67}
+\contentsline {section}{\numberline {13}Appendix}{67}
+\contentsline {subsection}{\numberline {13.1}Building a Model in MATLAB}{67}
+\contentsline {subsection}{\numberline {13.2}OSiL representation for problem given in (1\hbox {})--(4\hbox {})}{69}
+\contentsline {subsection}{\numberline {13.3}OSiL representation for problem given in (20\hbox {})--(23\hbox {})}{71}

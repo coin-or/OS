@@ -939,7 +939,7 @@ The following directories are also in the project root.
 
 \item {\tt Data} - this directory contains numerous test problems that are used by some of the COIN-OR project's unitTest.
 
-\item {\tt doxydoc} - is a folder for documentation. 
+\item {\tt doxydoc} - is a folder for documentation.
 
 \item {\tt include} - is a directory for header files. If the user wishes to write code to link against any of the libraries in the {\tt lib} directory, it may be necessary to include these header files.
 
@@ -1246,7 +1246,7 @@ http://www.optimizationservices.org/schemas/OSrL.xsd">
 
 
 \item[] {\bf OSoL (Optimization Services option Language):}  an
-XML-based language for representing options that get passed to an optimization solver or a hosted optimization solver Web service. It contains both standard options for generic services and extendable option tags for solver-specific directives. 
+XML-based language for representing options that get passed to an optimization solver or a hosted optimization solver Web service. It contains both standard options for generic services and extendable option tags for solver-specific directives.
 
 \item[] {\bf OSnL (Optimization Services nonlinear Language):}  The OSnL schema is imported by the OSiL schema and is used to represent the nonlinear part of an optimization instane. This is explained in greater detail in Section \ref{section:osexpressiontreeclass}. Also refer to Figue \ref{figure:roobjnlnode} for an illustration of elements from the OSnL standard.
 
@@ -2633,7 +2633,7 @@ The result of this request is again a string in OSpL format, with the data conta
   <processHeader>
     <serviceURI>http://localhost:8080/os/ossolver/CGSolverService.jws</serviceURI>
     <serviceName>CGSolverService</serviceName>
-    <time>2006-05-10T15:49:26.7509413-05:00</time> 
+    <time>2006-05-10T15:49:26.7509413-05:00</time>
   <processHeader>
   <processData>
      <statistics>
@@ -2660,7 +2660,7 @@ The result of this request is again a string in OSpL format, with the data conta
 \end{verbatimtab}
 Notice that the {\tt <state>} element in {\tt <job jobID="123456abcd">} indicates that the job is finished.
 
-When making a {\tt knock} request,  the OSoL string can be empty. In this example, if the OSoL string had been empty the status of all jobs kept in the file ospl.xml is reported.  In our default solver service implementation, there is a configuration file {\tt OSParameter} that has a parameter {\tt MAX\_JOBIDS\_TO\_KEEP }.  The current default setting is 100.  In a large-scale or commercial implementation it might be wise to keep problem results and statistics in a database.  Also, there are values other than {\tt getAll} (i.e. get all process information related to the jobs) for the OSpL {\tt action} attribute in the {\tt <request>} tag.  For example, the {\tt action} can be set to a value of {\tt ping} if the user just wants to check if the remote solver service is up and running. For details, check the OSpL schema. 
+When making a {\tt knock} request,  the OSoL string can be empty. In this example, if the OSoL string had been empty the status of all jobs kept in the file ospl.xml is reported.  In our default solver service implementation, there is a configuration file {\tt OSParameter} that has a parameter {\tt MAX\_JOBIDS\_TO\_KEEP }.  The current default setting is 100.  In a large-scale or commercial implementation it might be wise to keep problem results and statistics in a database.  Also, there are values other than {\tt getAll} (i.e. get all process information related to the jobs) for the OSpL {\tt action} attribute in the {\tt <request>} tag.  For example, the {\tt action} can be set to a value of {\tt ping} if the user just wants to check if the remote solver service is up and running. For details, check the OSpL schema.
 
 \subsubsection{The  {\tt kill}   Service Method}
 
@@ -2790,7 +2790,7 @@ Download the java binary distribution at
 os-distribution-release_number.zip
 \end{verbatim}
 
-After unpacking {\tt os-distribution-release\_number.zip} there is a directory {\tt os-server-1.0} and a single file {\tt os.war}.  For users that have not installed the Tomcat server,   {\tt os-server-1.0} contains {\tt all} of the necessary files for a OS Solver Service.  If you do not have a Tomcat server running do the following to setup a  Tomcat server  with the OS Solver Service on a {\bf Unix system}:
+The server side of the Java distribution is based on the Tomcat 5.5 implementation. After unpacking {\tt os-distribution-release\_number.zip} there is a directory {\tt os-server-1.0} and a single file {\tt os.war}.  For users that have not installed the Tomcat server,   {\tt os-server-1.0} contains {\tt all} of the necessary files for a OS Solver Service.  If you do not have a Tomcat server running do the following to setup a  Tomcat server  with the OS Solver Service on a {\bf Unix system}:
 
 \begin{itemize}
 \item[Step 1.]  Put the folder  {\tt os-server-1.0}   in the desired location for the OS Solver Service on the server machine.
@@ -2798,6 +2798,10 @@ After unpacking {\tt os-distribution-release\_number.zip} there is a directory {
 \item[Step 2.] Connect to the Tomcat {\tt bin} directory in the {\tt os-server-1.0} root and execute {\tt ./startup.sh}.
 
 \item[Step 3.] Test to see if the server is running the {\tt OSSolverService}.  Open a browser on the server and enter the URL
+\begin{verbatim}
+http://localhost:8080/os/OSSolverService.jws
+\end{verbatim}
+or
 \begin{verbatim}
 http://127.0.0.1:8080/os/OSSolverService.jws
 \end{verbatim}
@@ -2816,7 +2820,7 @@ You should get back an OSrL message saying the problem was optimized.
 
 \end{itemize}
 
-In a Windows environment you want to start the Tomcat server as a service so you can logoff (not shutdown) the machine and have the server continue to run.   On a {\bf Windows machine} do the following:
+In a Windows environment you may want to start the Tomcat server as a service so you can log off (not shutdown) the machine and have the server continue to run. On a {\bf Windows machine} do the following:
 
 \begin{itemize}
 
@@ -2843,6 +2847,12 @@ service.bat remove
 
 \end{itemize}
 
+\vskip 8pt
+
+\noindent {\bf Note:}
+There are many ways to start the Tomcat server and the exact way you choose may be different. See \url{http://tomcat.apache.org/} and check out Tomcat version 5.5 for more detail. But do remember to properly set the {\tt Tomcat Working Directory} to the path to {\tt os-server-1.0}. By default, if you start Tomcat on Windows, the {\tt Working Directory} is set to the Windows system folder, which will yield unpredictable results. 
+
+\vskip 8pt
 
 If you already have a Tomcat server with Axis installed do the following:
 \begin{itemize}
@@ -2855,7 +2865,69 @@ In the directory,
 \begin{verbatim}
 os-server-1.0/webapps/os/WEB-INF/code/OSConfig
 \end{verbatim}
-there is a configuration file {\tt OSParameter.xml} that can be modified to fit individual user needs.
+there is a configuration file {\tt OSParameter.xml} that can be modified to fit individual user needs. You can configure such parameters as service name, service URL/URI. Refer to the xml file for more detail. Descriptions for all the parameters are within the file itself.
+
+\vskip 8pt
+
+Below is a summary of the common and important directories and files you may want to know. 
+
+\begin{itemize}
+\item
+\begin{verbatim}
+os-server-1.0/webapps/os/
+\end{verbatim}
+contains the OS Web application. All directories and files outside of this folder are Tomcat server related. 
+\item 
+\begin{verbatim}
+os-server-1.0/webapps/os/WEB-INF
+\end{verbatim}
+contains private and important os configuration, library, class and executable files to run the Optimization Service. All files and directories outside of this folder but within the {\tt /os} Web application folder are publicly viewable (e.g. Web pages).
+\item
+\begin{verbatim}
+os-server-1.0/webapps/os/WEB-INF/code/OSConfig
+\end{verbatim}
+contains configuration files for Optimization Services, such as the {\tt OSParameter.xml} file. 
+\item
+\begin{verbatim}
+os-server-1.0/webapps/os/WEB-INF/code/temp
+\end{verbatim}
+contains temporarily saved files such as submitted OSiL/OSoL input files, and OSrL output files. This folder can get bigger as the service starts to run more jobs. For maintenance purpose, you may want to keep an eye on it. 
+\item
+\begin{verbatim}
+os-server-1.0/webapps/os/WEB-INF/code/log
+\end{verbatim}
+contains log files from the running services in the current Web application. 
+\item
+\begin{verbatim}
+os-server-1.0/webapps/os/WEB-INF/code/solver
+\end{verbatim}
+contains solver binaries that actually carry out the optimization process. 
+\item
+\begin{verbatim}
+os-server-1.0/webapps/os/WEB-INF/code/backup
+\end{verbatim}
+contains backup files from some of the above directories. This folder can get bigger as the service starts to run more jobs. For maintenance purpose, you may want to keep an eye on it.
+\item
+\begin{verbatim}
+os-server-1.0/webapps/os/WEB-INF/classes
+\end{verbatim}
+contains class files to run the Optimization Services.
+\item
+\begin{verbatim}
+os-server-1.0/webapps/os/WEB-INF/lib
+\end{verbatim}
+contains library files needed by the Optimization Services. 
+\item
+\begin{verbatim}
+os-server-1.0/conf
+\end{verbatim}
+contains configuration files for the Tomcat server, such as http server port.
+\item
+\begin{verbatim}
+os-server-1.0/bin
+\end{verbatim}
+contains executables and scripts to start and shutdown the Tomcat server.
+\end{itemize}
 
 
 
