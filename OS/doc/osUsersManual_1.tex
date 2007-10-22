@@ -210,7 +210,7 @@ give the URL for the version of the OS project you wish to checkout, e.g. https:
 
 Now build the project as described in  Section \ref{section:build}.
 
-For the rest of this documentation, we assume that  {\tt COIN-OS} is the name of the root directory of the OS project and that the user has defined an environment variable {\tt OS} that is the path to {\tt COIN-OS}.  The {\tt COIN-OS} directory structure is illustrated in Figure \ref{figure:osprojectrootdir}. OS source code is mainly contained inside of the OS subdirectory. Other first level subdirectories are mostly external projects (COIN-OR or third party) that the OS project depend on.  
+For the rest of this documentation, we assume that  {\tt COIN-OS} is the name of the root directory of the OS project and that the user has defined an environment variable {\tt OS} that is the path to {\tt COIN-OS}.  The {\tt COIN-OS} directory structure is illustrated in Figure \ref{figure:osprojectrootdir}. OS source code is mainly contained inside of the OS subdirectory. Other first level subdirectories are mostly external projects (COIN-OR or third party) that the OS project depend on.
 
 
 \begin{figure}
@@ -342,7 +342,7 @@ cd COIN-OS
 \begin{verbatim}
 ./configure  COIN_SKIP_PROJECTS=Ipopt
 \end{verbatim}
-as COIN-OR's Ipopt project currently uses Fortran to compile some of its dependent libraries. 
+as COIN-OR's Ipopt project currently uses Fortran to compile some of its dependent libraries.
 
 \vskip 8pt
 \noindent {\bf Note:}
@@ -703,9 +703,9 @@ variable is defined in  {\tt config\_os.h}.
 
 The OS library contains a class, {\tt OSnl2osil} (see Section (\ref{section:nl2osil}) ) and {\tt amplClient} (see Section (\ref{section:amplclient}) ) that require the use of the AMPL ASL library.  See \url{http://netlib.sandia.gov/ampl/}  and  \url{http://www.ampl.com}. Users with a Unix system should locate the {\tt ASL} folder that is part of the distribution. The {\tt ASL} folder is in the {\tt ThirdParty} folder which is in the project root folder. Locate and execute the {\tt get.ASL} script.  Do this prior to running the {\tt configure} script. The {\tt configure} script will build the correct ASL library.
 
-Microsoft  Visual Studio users will have to build the ASL library separately and then link it with the OS lib in the OS project file.  The necessary source files are at 
+Microsoft  Visual Studio users will have to build the ASL library separately and then link it with the OS lib in the OS project file.  The necessary source files are at
 \begin{verbatim}
-http://netlib.sandia.gov/cgi-bin/netlib/netlibfiles.tar?filename=netlib/ampl/solvers  
+http://netlib.sandia.gov/cgi-bin/netlib/netlibfiles.tar?filename=netlib/ampl/solvers
 \end{verbatim}
  After unpacking the distribution build the source code with the utility {\tt nmake} which should be part of the Visual Studio distribution. The appropriate command is
 \begin{verbatim}
@@ -717,7 +717,7 @@ If the OS project is properly configured  with the ASL library, {\tt config\_os.
 #define COIN_HAS_ASL 1
 \end{verbatim}
 
-At this point the reader may wish to view  
+At this point the reader may wish to view
 \begin{verbatim}
 https://projects.coin-or.org/BuildTools/wiki/user-configure#CommandLineArgumentsforconfigure
 \end{verbatim}
@@ -819,15 +819,15 @@ After running {\tt configure} as described above,  on Unix systems, it will be n
 
 \subsection{Bug Reporting}
 
-Bug reporting is done through the project Trac page. This is at 
+Bug reporting is done through the project Trac page. This is at
 \begin{verbatim}
-http://projects.coin-or.org/OS  
+http://projects.coin-or.org/OS
 \end{verbatim}
 To report a bug, you must be a registered user.  For  instructions on  how to register, go to
 \begin{verbatim}
 http://www.coin-or.org/usingTrac.html
 \end{verbatim}
-After registering, log in and then file a trouble ticket by going to 
+After registering, log in and then file a trouble ticket by going to
 \begin{verbatim}
 http://projects.coin-or.org/OS/newticket
 \end{verbatim}
@@ -920,36 +920,33 @@ The directories in the  project root  are outlined in Figure  \ref{figure:osproj
 
 If you download the OS package, you get these additional COIN-OR projects. The links to the project home pages are provided below and give more information on these projects.
 \begin{itemize}
-\item {\tt BuildTools} \url{projects.coin-or.org\BuildTools}
-\item {\tt Cbc} \url{projects.coin-or.org\Cbc}
-\item {\tt Cgl} \url{projects.coin-or.org\Cgl}
-\item {\tt Clp}  \url{projects.coin-or.org\Clp}
-\item {\tt CppAD} \url{projects.coin-or.org\CppAD}
-\item {\tt Dylp} \url{projects.coin-or.org\Dylp}
-\item {\tt Osi} \url{projects.coin-or.org\Osi}
-\item {\tt SYMPHONY}   \url{projects.coin-or.org\SYMPHONY}
-\item {\tt Vol}   \url{projects.coin-or.org\Vol}
+\item {\tt BuildTools} - \url{projects.coin-or.org\BuildTools}
+\item {\tt Cbc} - \url{projects.coin-or.org\Cbc}
+\item {\tt Cgl} - \url{projects.coin-or.org\Cgl}
+\item {\tt Clp}  - \url{projects.coin-or.org\Clp}
+\item {\tt CoinUtils} - \url{projects.coin-or.org\CoinUtils}
+\item {\tt CppAD} - \url{projects.coin-or.org\CppAD}
+\item {\tt Dylp} - \url{projects.coin-or.org\Dylp}
+\item {\tt Ipopt} - \url{projects.coin-or.org\Ipopt}
+\item {\tt Osi} - \url{projects.coin-or.org\Osi}
+\item {\tt SYMPHONY}   - \url{projects.coin-or.org\SYMPHONY}
+\item {\tt Vol}   - \url{projects.coin-or.org\Vol}
 \end{itemize}
 
 The following directories are also in the project root.
 \begin{itemize}
-\item {\tt bin} after executing {\tt make install} the bin directory will contain {\tt OSSolverService}, {\tt clp}, {\tt cbc},  {\tt cbc-generic} and {symphony}.
+\item {\tt bin} - after executing {\tt make install} the bin directory will contain {\tt OSSolverService}, {\tt clp}, {\tt cbc},  {\tt cbc-generic} and {\tt symphony}.
 
-\item {\tt Data} this directory contains numerous test problems that are used by some of the COIN-OR project's unitTest.
+\item {\tt Data} - this directory contains numerous test problems that are used by some of the COIN-OR project's unitTest.
 
-\item {\tt doxydoc} is a folder for documentation
+\item {\tt doxydoc} - is a folder for documentation. 
 
-\item {\tt include} is a directory for header files. If the user wishes to write code to link against any of the libraries in the {\tt lib} directory, it may be necessary to include these header files.
+\item {\tt include} - is a directory for header files. If the user wishes to write code to link against any of the libraries in the {\tt lib} directory, it may be necessary to include these header files.
 
-\item {\tt lib} is a directory of libraries. After running {\tt make install} the OS library along with all other COIN-OR libraries are installed in {\tt lib}.
+\item {\tt lib} - is a directory of libraries. After running {\tt make install} the OS library along with all other COIN-OR libraries are installed in {\tt lib}.
 
-
-
-
-\item {\tt ThirdParty} is a  directory for third party software. For example, if AMPL related software is used such as {\tt amplClient} is used, then certain AMPL libraries need to be present. This should go into the {\tt ASL} directory in {\tt ThirdParty.}
+\item {\tt ThirdParty} - is a  directory for third party software. For example, if AMPL related software is used such as {\tt amplClient} is used, then certain AMPL libraries need to be present. This should go into the {\tt ASL} directory in {\tt ThirdParty.}
 \end{itemize}
-
-
 
 
 The directories in the OS directory are outlined in Figure \ref{figure:osdirectory}.
@@ -966,30 +963,29 @@ The OS directories include the following:
 
 \begin{itemize}
 
-\item {\tt data} is a directory that holds test problems. These test problems are used by the {\tt unitTest}. Many of these files are also used to illustrate how the {\tt OSSovlerService} works. See Section \ref{section:ossolverservice}.
+\item {\tt data} - is a directory that holds test problems. These test problems are used by the {\tt unitTest}. Many of these files are also used to illustrate how the {\tt OSSovlerService} works. See Section \ref{section:ossolverservice}.
 
-\item {\tt doc} is the directory with documentation, include this {\it OS User's Manual.}
+\item {\tt doc} - is the directory with documentation, include this {\it OS User's Manual.}
 
-\item {\tt examples} is a directory with code examples that illustrate various aspects of the OS project.    These are described in Section \ref{section:examples}.
+\item {\tt examples} - is a directory with code examples that illustrate various aspects of the OS project.    These are described in Section \ref{section:examples}.
 
-\item {\tt inc} is the directory with the config\_os.h file which has information about which projects are included in the distribution.
+\item {\tt inc} - is the directory with the config\_os.h file which has information about which projects are included in the distribution.
 
+\item {\tt m4} - is a directory that  contains macro scripts written in the m4 language for auto configuration.
 
-\item {\tt MSVisualStudio} is a directory that  contains solution files for the Microsoft Visual Studio IDE.  The subdirectories are organized by the version of Visual Studio. We currently provide a solution file for Version 7.
+\item {\tt MSVisualStudio} - is a directory that  contains solution files for the Microsoft Visual Studio IDE.  The subdirectories are organized by the version of Visual Studio. We currently provide a solution file for Version 7 and 8.
 
-\item {\tt schemas} is the directory that contains the W3C XSD (see \url{www.w3c.org}) schemas that are behind the OS standards. These are described in more detail in Section \ref{section:schemadescriptions}.
+\item {\tt schemas} - is the directory that contains the W3C XSD (see \url{www.w3c.org}) schemas that are behind the OS standards. These are described in more detail in Section \ref{section:schemadescriptions}.
 
-\item {\tt src} is the directory with all of the source code for the OS Library and for the executable {\tt OSSolverService}. The OS Library components are described in Section \ref{section:oslibrary}.
+\item {\tt src} - is the directory with all of the source code for the OS Library and for the executable {\tt OSSolverService}. The OS Library components are described in Section \ref{section:oslibrary}.
 
-\item {\tt stylesheets} this directory contains the XSLT stylesheet that is used to transform the solution instance in OSrL format into HTML so that it can be displayed in a browser.
+\item {\tt stylesheets} - this directory contains the XSLT stylesheet that is used to transform the solution instance in OSrL format into HTML so that it can be displayed in a browser.
 
-\item {\tt test} this directory contains the {\tt unitTest}.
-
-
-\item  {\tt wsdl} is a directory of WSDL (Web Services Discovery Language) files. These are used to specify the inputs and outputs for the methods provided by a Web service. The most relevant file for the current version of the OS project is {\tt OShL.wsdl}.  This describes the set of inputs and outputs for the methods implemented in the {\tt OSSolverService}. See Section \ref{section:ossolverservice}.
+\item {\tt test} - this directory contains the {\tt unitTest}.
 
 
-\item kipp -- talk about MS Visual Studio and where it goes
+\item  {\tt wsdl} - is a directory of WSDL (Web Services Discovery Language) files. These are used to specify the inputs and outputs for the methods and other invocation details provided by a Web service. The most relevant file for the current version of the OS project is {\tt OShL.wsdl}.  This describes the set of inputs and outputs for the methods implemented in the {\tt OSSolverService}. See Section \ref{section:ossolverservice}.
+
 \end{itemize}
 
 

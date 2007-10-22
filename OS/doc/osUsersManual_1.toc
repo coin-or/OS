@@ -32,29 +32,29 @@
 \contentsline {subsubsection}{\numberline {7.2.1}The OSInstance Class}{28}
 \contentsline {subsubsection}{\numberline {7.2.2}Creating an {\tt OSInstance} Object}{28}
 \contentsline {subsubsection}{\numberline {7.2.3}Mapping Rules}{28}
-\contentsline {subsubsection}{\numberline {7.2.4}The OSExpressionTree OSnLNode Classes}{30}
-\contentsline {subsection}{\numberline {7.3}OSModelInterfaces}{32}
+\contentsline {subsubsection}{\numberline {7.2.4}The OSExpressionTree OSnLNode Classes}{31}
+\contentsline {subsection}{\numberline {7.3}OSModelInterfaces}{33}
 \contentsline {subsubsection}{\numberline {7.3.1}Converting MPS Files}{33}
 \contentsline {subsubsection}{\numberline {7.3.2}Converting AMPL nl Files}{33}
-\contentsline {subsubsection}{\numberline {7.3.3}Using MATLAB}{33}
-\contentsline {subsection}{\numberline {7.4}OSParsers}{35}
+\contentsline {subsubsection}{\numberline {7.3.3}Using MATLAB}{34}
+\contentsline {subsection}{\numberline {7.4}OSParsers}{36}
 \contentsline {subsection}{\numberline {7.5}OSSolverInterfaces}{37}
 \contentsline {subsection}{\numberline {7.6}OSUtils}{38}
 \contentsline {section}{\numberline {8}The OSInstance API}{38}
-\contentsline {subsection}{\numberline {8.1}Get Methods}{38}
-\contentsline {subsection}{\numberline {8.2}Set Methods}{39}
+\contentsline {subsection}{\numberline {8.1}Get Methods}{39}
+\contentsline {subsection}{\numberline {8.2}Set Methods}{40}
 \contentsline {subsection}{\numberline {8.3}Calculate Methods}{40}
 \contentsline {section}{\numberline {9}The OS Algorithmic Differentiation Implementation}{40}
 \contentsline {subsection}{\numberline {9.1}Algorithmic Differentiation: Brief Review}{40}
 \contentsline {subsection}{\numberline {9.2}Using OSInstance Methods: Low Level Calls}{41}
 \contentsline {subsubsection}{\numberline {9.2.1}First Derivative Reverse Sweep Calculations}{44}
-\contentsline {subsubsection}{\numberline {9.2.2}Second Derivative Reverse Sweep Calculations}{44}
-\contentsline {subsection}{\numberline {9.3}Using OSInstance Methods: High Level Calls}{45}
+\contentsline {subsubsection}{\numberline {9.2.2}Second Derivative Reverse Sweep Calculations}{45}
+\contentsline {subsection}{\numberline {9.3}Using OSInstance Methods: High Level Calls}{46}
 \contentsline {subsubsection}{\numberline {9.3.1}Sparsity Methods}{46}
 \contentsline {subsubsection}{\numberline {9.3.2}Function Evaluation Methods}{47}
-\contentsline {subsubsection}{\numberline {9.3.3}Gradient Evaluation Methods}{48}
-\contentsline {subsubsection}{\numberline {9.3.4}Hessian Evaluation Methods}{49}
-\contentsline {section}{\numberline {10}The OSSolverService}{49}
+\contentsline {subsubsection}{\numberline {9.3.3}Gradient Evaluation Methods}{49}
+\contentsline {subsubsection}{\numberline {9.3.4}Hessian Evaluation Methods}{50}
+\contentsline {section}{\numberline {10}The OSSolverService}{50}
 \contentsline {subsection}{\numberline {10.1}OSSolverService Input Parameters}{50}
 \contentsline {subsection}{\numberline {10.2}Solving Problems Locally}{52}
 \contentsline {subsection}{\numberline {10.3}Solving Problems Remotely with Web Services}{53}
@@ -64,10 +64,10 @@
 \contentsline {subsubsection}{\numberline {10.3.4}The {\tt getJobID} Service Method}{58}
 \contentsline {subsubsection}{\numberline {10.3.5}The {\tt knock} Service Method}{58}
 \contentsline {subsubsection}{\numberline {10.3.6}The {\tt kill} Service Method}{59}
-\contentsline {subsubsection}{\numberline {10.3.7}Summary}{59}
-\contentsline {section}{\numberline {11}Setting up a Solver Service with Tomcat}{60}
-\contentsline {section}{\numberline {12}Examples}{62}
-\contentsline {subsection}{\numberline {12.1}AMPL Client: Hooking AMPL to Solvers}{62}
+\contentsline {subsubsection}{\numberline {10.3.7}Summary}{60}
+\contentsline {section}{\numberline {11}Setting up a Solver Service with Tomcat}{61}
+\contentsline {section}{\numberline {12}Examples}{63}
+\contentsline {subsection}{\numberline {12.1}AMPL Client: Hooking AMPL to Solvers}{63}
 \contentsline {subsection}{\numberline {12.2}Algorithmic Differentiation: Using the OS Algorithmic Differentiation Methods}{63}
 \contentsline {subsection}{\numberline {12.3}File Upload: Using a File Upload Package}{63}
 \contentsline {subsection}{\numberline {12.4}Instance Generator: Using the OSInstance API to Generate Instances}{65}
@@ -75,4 +75,4 @@
 \contentsline {section}{\numberline {13}Appendix}{66}
 \contentsline {subsection}{\numberline {13.1}Building a Model in MATLAB}{66}
 \contentsline {subsection}{\numberline {13.2}OSiL representation for problem given in (1\hbox {})--(4\hbox {})}{68}
-\contentsline {subsection}{\numberline {13.3}OSiL representation for problem given in (20\hbox {})--(23\hbox {})}{69}
+\contentsline {subsection}{\numberline {13.3}OSiL representation for problem given in (20\hbox {})--(23\hbox {})}{70}
