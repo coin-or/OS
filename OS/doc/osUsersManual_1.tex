@@ -2291,15 +2291,15 @@ At present, the {\tt OSSolverService} takes the following parameters. The order 
 
 \item[] {\bf -osrl xxx.osrl}  this is the name of the file that contains the solver solution. A valid file path must be given on the machine that is running {\tt OSSolverService}. It is not necessary to specify this option.
 
-\item[] {\bf -serviceLocation}  is the URL of the solver service. This is not required, and if not specified it is assumed that the problem is solved locally.
+\item[] {\bf -serviceLocation url}  is the URL of the solver service. This is not required, and if not specified it is assumed that the problem is solved locally.
 
-\item[] {\bf -serviceMethod  method}  this is  the solver service required. The options are {\tt solve}, {\tt send},{\tt kill},{\tt knock}, {\tt getJobID}, and {\tt retrieve}. The use of these options is illustrated in the examples below. This option is not required, and the default value is {\tt solve.}
+\item[] {\bf -serviceMethod  methodName}  this is  the method on the solver service to be invoked. The options are {\tt solve}, {\tt send}, {\tt kill}, {\tt knock}, {\tt getJobID}, and {\tt retrieve}. The use of these options is illustrated in the examples below. This option is not required, and the default value is {\tt solve.}
 
 \item[] {\bf -mps  xxx.mps}  this is the name of the mps file if the problem instance is in mps format. It is assumed that this file is available in a directory on the machine that is running {\tt OSSolverService}. The default file format is OSiL so this option is not required.
 
 \item[] {\bf -nl  xxx.nl}  this is the name of the AMPL nl file if the problem instance is in AMPL nl  format. It is assumed that this file is available in a directory on the machine that is running {\tt OSSolverService}. The default file format is OSiL so this option is not required.
 
-\item[] {\bf -solver  solverName}  Possible values for default OS installation are {tt clp} (COIN-OR Clp), {\tt cbc} (COIN-OR Cbc), {\tt dylp} (COIN-OR DyLP), and {\tt symphony} (COIN-OR SYMPHONY). Other solvers supported (if the necessary libraries are present) are {\tt cplex} (Cplex through COIN-OR Osi), {\tt glpk} (glpk through COIN-OR Osi), {\tt ipopt} (COIN-OR Ipopt),  {\tt knitro} (Knitro), and {\tt lindo} {\tt LINDO}. If no value is specified for this parameter, then {\tt cbc} is the default value of this parameter if the the {\tt solve} or {\tt send} service methods are used.
+\item[] {\bf -solver  solverName}  Possible values for default OS installation are {\tt clp} (COIN-OR Clp), {\tt cbc} (COIN-OR Cbc), {\tt dylp} (COIN-OR DyLP), and {\tt symphony} (COIN-OR SYMPHONY). Other solvers supported (if the necessary libraries are present) are {\tt cplex} (Cplex through COIN-OR Osi), {\tt glpk} (glpk through COIN-OR Osi), {\tt ipopt} (COIN-OR Ipopt),  {\tt knitro} (Knitro), and {\tt lindo} {\tt LINDO}. If no value is specified for this parameter, then {\tt cbc} is the default value of this parameter if the the {\tt solve} or {\tt send} service methods are used.
 
 
 \item[] {\bf -browser  browserName} this paramater is a path to the browser on the local machine. If this optional parameter is specified then the solver result in OSrL format is transformed using XSLT into HTML and displayed in the browser.
@@ -2451,7 +2451,7 @@ where {\tt remoteSolve1.osol} is
     </optimization>
 </osol>
 \end{verbatim}
-In this case we specify a sover to use, name {\tt Clp}.
+In this case we specify a sover to use, named {\tt clp}.
 
 Next we illustrate a call to the remote SolverService and specify an OSiL instance that is on the remote machine.
 \begin{verbatim}
@@ -2626,28 +2626,45 @@ and the {\tt retrieve.osol} file is
 	</general>
 </osol>
 \end{verbatim}
-The result of this request is a string in OSrL format.  Part of the return format is illustrated below.
+The result of this request is again a string in OSpL format, with the data contained in its {\tt processData} section.  Part of the return format is illustrated below.
 \begin{verbatimtab}[4]
-<jobs>
-	<job jobID="123456abcd">
-		<state>finished</state>
-		<serviceURI>http://gsbkip.chicagogsb.edu/ipopt/IPOPTSolverService.jws</serviceURI>
-		<submitTime>2007-06-16T14:57:36.678-05:00</submitTime>
-		<startTime>2007-06-16T14:57:36.678-05:00</startTime>
-		<endTime>2007-06-16T14:57:39.404-05:00</endTime>
-		<duration>2.726</duration>
- </job>
-</jobs>
+<?xml version="1.0" encoding="UTF-8"?>
+<ospl xmlns="os.optimizationservices.org">
+  <processHeader>
+    <serviceURI>http://localhost:8080/os/ossolver/CGSolverService.jws</serviceURI>
+    <serviceName>CGSolverService</serviceName>
+    <time>2006-05-10T15:49:26.7509413-05:00</time> 
+  <processHeader>
+  <processData>
+     <statistics>
+        <currentState>idle</currentState>
+        <availableDiskSpace>23440343040</availableDiskSpace>
+        <availableMemory>70128</availableMemory>
+        <currentJobCount>0</currentJobCount>
+        <totalJobsSoFar>1</totalJobsSoFar>
+        <timeServiceStarted>2006-05-10T10:49:24.9700000-05:00</timeServiceStarted>
+        <serviceUtilization>0.1</serviceUtilization>
+        <jobs>
+    	  <job jobID="123456abcd">
+    		<state>finished</state>
+    		<serviceURI>http://gsbkip.chicagogsb.edu/ipopt/IPOPTSolverService.jws</serviceURI>
+    		<submitTime>2007-06-16T14:57:36.678-05:00</submitTime>
+    		<startTime>2007-06-16T14:57:36.678-05:00</startTime>
+    		<endTime>2007-06-16T14:57:39.404-05:00</endTime>
+    		<duration>2.726</duration>
+          </job>
+        </jobs>
+     </statistics>
+  </processData>
+</ospl>
 \end{verbatimtab}
-Notice the {\tt <state>} element indicating that the job is finished.
+Notice that the {\tt <state>} element in {\tt <job jobID="123456abcd">} indicates that the job is finished.
 
-When making a {\tt knock} request,  the OSoL string can be empty. In this example, if the OSoL string had been empty the status of all jobs kept in the file ospl.xml is reported.  In our default solver service implementation, there is a configuration file {\tt OSParameter} that has a parameter {\tt MAX\_JOBIDS\_TO\_KEEP }.  The current default setting is 100.  In a large-scale or commercial implementation it might be wise to keep problem results and statistics in a database.  Also, there are values other than {\tt getAll} for the OSpL {\tt action} attribute in the {\tt <request>} tag.  For example, the {\tt action} can be set to a value of {\tt ping} if the user just wants to check if the remote solver service is up and running.
-
-
+When making a {\tt knock} request,  the OSoL string can be empty. In this example, if the OSoL string had been empty the status of all jobs kept in the file ospl.xml is reported.  In our default solver service implementation, there is a configuration file {\tt OSParameter} that has a parameter {\tt MAX\_JOBIDS\_TO\_KEEP }.  The current default setting is 100.  In a large-scale or commercial implementation it might be wise to keep problem results and statistics in a database.  Also, there are values other than {\tt getAll} (i.e. get all process information related to the jobs) for the OSpL {\tt action} attribute in the {\tt <request>} tag.  For example, the {\tt action} can be set to a value of {\tt ping} if the user just wants to check if the remote solver service is up and running. For details, check the OSpL schema. 
 
 \subsubsection{The  {\tt kill}   Service Method}
 
-If the user submits a job that is taking too long or is a mistake it is possible to kill the job on the remote server using the {\tt kill} service method. For example to kill job {\tt 123456abcd} .  At the command line type
+If the user submits a job that is taking too long or is a mistake, it is possible to kill the job on the remote server using the {\tt kill} service method. For example to kill job {\tt 123456abcd}, at the command line type
 \begin{verbatim}
 ./OSSolverService -config  ../data/confgFiles/kill.config
 \end{verbatim}
@@ -2677,7 +2694,7 @@ Below is a summary of the inputs and outputs of the six service methods. See als
 
 \begin{itemize}
 
-\item Inputs: a string with the instance in OSiL format and a string with the solver options in OSoL format
+\item Inputs: a string with the instance in OSiL format and an optional string with the solver options in OSoL format
 
 \item  Returns: a string with the solver solution in OSrL format
 
@@ -2692,7 +2709,7 @@ Below is a summary of the inputs and outputs of the six service methods. See als
 
 \begin{itemize}
 
-\item Inputs: a string with the instance in OSiL format and a string with the solver options in OSoL format
+\item Inputs: a string with the instance in OSiL format and a string with the solver options in OSoL format (same as in {\tt solve})
 
 \item Returns:  a boolean, true if the problem was successfully submitted, false otherwise
 
@@ -2720,7 +2737,7 @@ Below is a summary of the inputs and outputs of the six service methods. See als
 
 \begin{itemize}
 
-\item Inputs: a string in OSpL format and a string with the solver options in OSoL format
+\item Inputs: a string in OSpL format and an optional string with the solver options in OSoL format
 
 \item  Returns: process and job status information from the remote server in OSpL format
 
