@@ -1841,7 +1841,7 @@ X(0) &=& x^{(0)} \\
 X^{\prime}(0) &=& x^{(1)} \\
 X^{\prime \prime }(0) &=& 2 x^{(2)}
 \end{eqnarray*}
-In general the $x^{(k)}$ correspond to the $k'th$ order Taylor coefficient, i.e.
+In general the $x^{(k)}$ corresponds to the $k'th$ order Taylor coefficient, i.e.
 \begin{eqnarray}
 x^{(k)} = \frac{1}{k!}X^{(k)}(0), \quad k = 0, 1, 2  \label{eq:xTaylorCoeff}
 \end{eqnarray}
@@ -1856,7 +1856,7 @@ y^{(k)} = \frac{1}{k!} Y^{(k)}(0), \quad k = 0, 1, 2  \label{eq:yTaylorCoeff}
 
 
 
-It is shown by Bell \url{http://www.coin-or.org/CppAD/} that:
+It is shown by Bell (\url{http://www.coin-or.org/CppAD/}) that:
 \begin{eqnarray}
 y^{(0)} = f(x^{(0)}) \label{eq:forward0Result}
 \end{eqnarray}
@@ -2179,7 +2179,7 @@ z[ 1] = 1;    // Lagrange multiplier on constraint 1
 w[ 0] = 1;    // Lagrange multiplier on the objective function
 calculateAllConstraintFunctionValues(x, w, z,  true, 0);
 \end{verbatim}
-When making all high level calls for function, gradient, and Hessian evaluations we use pass all the primal variables in the {\tt x} argument, not just the nonlinear variables. Underneath the call, the nonlinear variables are identified and used in AD function calls.
+When making all high level calls for function, gradient, and Hessian evaluations we pass all the primal variables in the {\tt x} argument, not just the nonlinear variables. Underneath the call, the nonlinear variables are identified and used in AD function calls.
 
 The use of the parameters  {\tt new\_x} and {\tt highestOrder}  is important and requires further explanation.    The parameter  {\tt highestOrder}  is an integer variable that will take on the value 0, 1, or 2 (actually higher values if we want third derivatives etc.).  The value of this variable is the highest order derivative that is required of the current iterate. For example, if  a callback requires a function evaluation and {\bf highestOrder = 0} then only the function is evaluated at the current iterate.  However,  if {\tt highsetOrder = 2} then the function call
 \begin{verbatim}
