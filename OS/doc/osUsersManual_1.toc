@@ -31,7 +31,7 @@
 \contentsline {subsection}{\numberline {7.2}OSCommonInterfaces}{28}
 \contentsline {subsubsection}{\numberline {7.2.1}The OSInstance Class}{28}
 \contentsline {subsubsection}{\numberline {7.2.2}Creating an {\tt OSInstance} Object}{28}
-\contentsline {subsubsection}{\numberline {7.2.3}Mapping Rules}{28}
+\contentsline {subsubsection}{\numberline {7.2.3}Mapping Rules}{29}
 \contentsline {subsubsection}{\numberline {7.2.4}The OSExpressionTree OSnLNode Classes}{31}
 \contentsline {subsection}{\numberline {7.3}OSModelInterfaces}{33}
 \contentsline {subsubsection}{\numberline {7.3.1}Converting MPS Files}{33}
@@ -74,5 +74,5 @@
 \contentsline {subsection}{\numberline {12.5}osTestCode}{66}
 \contentsline {section}{\numberline {13}Appendix}{66}
 \contentsline {subsection}{\numberline {13.1}Building a Model in MATLAB}{66}
-\contentsline {subsection}{\numberline {13.2}OSiL representation for problem given in (1\hbox {})--(4\hbox {})}{68}
-\contentsline {subsection}{\numberline {13.3}OSiL representation for problem given in (20\hbox {})--(23\hbox {})}{70}
+\contentsline {subsection}{\numberline {13.2}OSiL representation for problem given in (\G@refundefinedtrue \text {\normalfont \bfseries ??}\GenericWarning { }{LaTeX Warning: Reference `eq:roobj' on page 68 undefined})--(\G@refundefinedtrue \text {\normalfont \bfseries ??}\GenericWarning { }{LaTeX Warning: Reference `eq:ro3' on page 68 undefined})}{68}
+\contentsline {subsection}{\numberline {13.3}OSiL representation for problem given in (\G@refundefinedtrue \text {\normalfont \bfseries ??}\GenericWarning { }{LaTeX Warning: Reference `eq:adobj' on page 70 undefined})--(\G@refundefinedtrue \text {\normalfont \bfseries ??}\GenericWarning { }{LaTeX Warning: Reference `eq:adeq2' on page 70 undefined})}{70}

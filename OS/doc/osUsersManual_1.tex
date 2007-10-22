@@ -1271,7 +1271,7 @@ The {\tt OSSolverAgent} class is used  contact a remote solver service.  For exa
 OSSolverAgent *osagent;
 string serviceLocation = http://gsbkip.chicagogsb.edu/os/OSSolverService.jws
 osagent = new OSSolverAgent(  serviceLocation );
-osagent->solve(sOSiL, sOSoL);
+string sOSrL = osagent->solve(sOSiL, sOSoL);
 \end{verbatim}
 Other methods in the {\tt OSSolverAgent} class are {\tt send}, {\tt retrieve}, {\tt getJobID}, {\tt knock}, and {\tt kill}.  The use of these methods is described in Section \ref{section:servicemethods}.
 
@@ -1462,7 +1462,7 @@ calculateFunction()} method for it.
 
 
 
-The following {\tt  OSnLNode} classes are currently supported.
+Although in the OSnL schema, there are 200+ nonlinear operators, only the following {\tt  OSnLNode} classes are currently supported in our implementation.
 
 \begin{itemize}
 \item OSnLNodeVariable
@@ -1667,7 +1667,6 @@ The files {\tt parseosrl.l} and {\tt parseosrl.y} are used by {\tt flex} and {\t
 OSrLReader *osrlreader = NULL;
 osrlreader = new OSrLReader();
 OSResult *osresult = NULL;
-osresult = new OSResult();
 osresult = osrlreader->readOSrL( osrl);
 \end{verbatim}
 
