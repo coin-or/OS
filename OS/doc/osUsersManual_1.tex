@@ -2850,7 +2850,7 @@ service.bat remove
 \vskip 8pt
 
 \noindent {\bf Note:}
-There are many ways to start the Tomcat server and the exact way you choose may be different. See \url{http://tomcat.apache.org/} and check out Tomcat version 5.5 for more detail. But do remember to properly set the {\tt Tomcat Working Directory} to the path to {\tt os-server-1.0}. By default, if you start Tomcat on Windows, the {\tt Working Directory} is set to the Windows system folder, which will yield unpredictable results. 
+There are many ways to start the Tomcat server and the exact way you choose may be different. See \url{http://tomcat.apache.org/} and check out Tomcat version 5.5 for more detail. But do remember to properly set the {\tt Tomcat Working Directory} to the path to {\tt os-server-1.0}. By default, if you start Tomcat on Windows, the {\tt Working Directory} is set to the Windows system folder, which will yield unpredictable results.
 
 \vskip 8pt
 
@@ -2869,15 +2869,15 @@ there is a configuration file {\tt OSParameter.xml} that can be modified to fit 
 
 \vskip 8pt
 
-Below is a summary of the common and important directories and files you may want to know. 
+Below is a summary of the common and important directories and files you may want to know.
 
 \begin{itemize}
 \item
 \begin{verbatim}
 os-server-1.0/webapps/os/
 \end{verbatim}
-contains the OS Web application. All directories and files outside of this folder are Tomcat server related. 
-\item 
+contains the OS Web application. All directories and files outside of this folder are Tomcat server related.
+\item
 \begin{verbatim}
 os-server-1.0/webapps/os/WEB-INF
 \end{verbatim}
@@ -2886,22 +2886,22 @@ contains private and important os configuration, library, class and executable f
 \begin{verbatim}
 os-server-1.0/webapps/os/WEB-INF/code/OSConfig
 \end{verbatim}
-contains configuration files for Optimization Services, such as the {\tt OSParameter.xml} file. 
+contains configuration files for Optimization Services, such as the {\tt OSParameter.xml} file.
 \item
 \begin{verbatim}
 os-server-1.0/webapps/os/WEB-INF/code/temp
 \end{verbatim}
-contains temporarily saved files such as submitted OSiL/OSoL input files, and OSrL output files. This folder can get bigger as the service starts to run more jobs. For maintenance purpose, you may want to keep an eye on it. 
+contains temporarily saved files such as submitted OSiL/OSoL input files, and OSrL output files. This folder can get bigger as the service starts to run more jobs. For maintenance purpose, you may want to keep an eye on it.
 \item
 \begin{verbatim}
 os-server-1.0/webapps/os/WEB-INF/code/log
 \end{verbatim}
-contains log files from the running services in the current Web application. 
+contains log files from the running services in the current Web application.
 \item
 \begin{verbatim}
 os-server-1.0/webapps/os/WEB-INF/code/solver
 \end{verbatim}
-contains solver binaries that actually carry out the optimization process. 
+contains solver binaries that actually carry out the optimization process.
 \item
 \begin{verbatim}
 os-server-1.0/webapps/os/WEB-INF/code/backup
@@ -2916,7 +2916,7 @@ contains class files to run the Optimization Services.
 \begin{verbatim}
 os-server-1.0/webapps/os/WEB-INF/lib
 \end{verbatim}
-contains library files needed by the Optimization Services. 
+contains library files needed by the Optimization Services.
 \item
 \begin{verbatim}
 os-server-1.0/conf
@@ -2936,7 +2936,7 @@ contains executables and scripts to start and shutdown the Tomcat server.
 
 \subsection{AMPL Client:  Hooking AMPL to Solvers}\label{section:amplclient}
 
-The {\tt amplClient} executable is designed to work with the AMPL program. See \url{www.ampl.com}. The {\tt amplClient} acts like an AMPL ``solver.'' The {\tt amplClient} is linked with the OS library and can be used to solve problems either locally or remotely. In both cases the {\tt amplClient} uses the {\tt OSnl2osil} class to convert the AMPL generated nl file (which represents the problem instance) into the corresponding instance representation in the OSiL format.
+The {\tt amplClient} executable (in {\tt OS/examples/amplClient}) is designed to work with the AMPL program. See \url{www.ampl.com}. The {\tt amplClient} acts like an AMPL ``solver.'' The {\tt amplClient} is linked with the OS library and can be used to solve problems either locally or remotely. In both cases the {\tt amplClient} uses the {\tt OSnl2osil} class to convert the AMPL generated nl file (which represents the problem instance) into the corresponding instance representation in the OSiL format.
 
 For example, assume that there is a problem instance, {\tt hs71.mod} in AMPL model format. To solve this problem locally by calling the {\tt amplClient} from AMPL first start AMPL and then execute the following commands. In this case we are assuming that the local solver used is {\tt Ipopt.}
 
@@ -2965,7 +2965,7 @@ option ipopt_options "http://gsbkip.chicagogsb.edu/os/OSSolverService.jws";
 
 \subsection{Algorithmic Differentiation:  Using the OS Algorithmic Differentiation Methods}\label{section:cppad}
 
-In the {\tt algorithmicDiff} folder is test code {\tt algorithmicDiffTest.cpp}. This code illustrates the key methods in the {\tt OSInstance} API that are used for algorithmic differentiation.   These methods were described in Section \ref{section:ad}.
+In the {\tt OS/examples/algorithmicDiff} folder is test code {\tt algorithmicDiffTest.cpp}. This code illustrates the key methods in the {\tt OSInstance} API that are used for algorithmic differentiation.   These methods were described in Section \ref{section:ad}.
 
 
 
@@ -2983,10 +2983,10 @@ relative to the {\tt OSJava} directory.
 
 
 
-The {\tt fileUpload} client executable takes one argument on the command line which is the location of the file on the local directory to upload to the server. For example,
+The {\tt fileUpload} client executable ((see {\tt OS/examples/fileUpload})) takes one argument on the command line which is the location of the file on the local directory to upload to the server. For example,
 \begin{verbatim}
 fileUpload ../../data/osilFiles/parincQuadratic.osil
-\end{verbartim}
+\end{verbatim}
 The {\tt fileUpload} executable first creates an {\tt OSAgent} object.
 \begin{verbatim}
 OSSolverAgent* osagent = NULL;
@@ -3000,13 +3000,13 @@ where {\tt osilFileName} is  the name of the OSiL problem instance to be written
 \begin{verbatim}
 osagent->fileUpload(osilFileName, osil);
 \end{verbatim}
-will place a call to the server, upload the problem instance in the {\tt osil} string, and cause the server to write a file on its hard drive named {\tt osilFileName}.
+will place a call to the server, upload the problem instance in the {\tt osil} string, and cause the server to write a file on its hard drive named {\tt osilFileName}. In our implementation, the uploaded file ({\tt parincQuadratic.osil}) is saved to the {\tt/home/kmartin/temp/parincQuadratic.osil} on the server hard drive. This location is used in the {\tt osol} file as shown below. 
 
 Once the file is on the server, invoke the local {\tt OSSolverService} by
 \begin{verbatim}
 ./OSSolverService -config ../data/configFiles/testremote.config
 \end{verbatim}
-where the {\tt config} file is
+where the {\tt config} file is as follows. Notice there is no {\tt -osil}  option as the osil file has already been uploaded and its instance location ("local" to the server) is specified in the {\tt osol} file.
 \begin{verbatim}
 -osol ../data/osolFiles/remoteSolve2.osol
 -serviceLocation http://gsbkip.chicagogsb.edu/os/OSSolverService.jws
@@ -3031,14 +3031,14 @@ As an alternative to using the command line executable {\tt fileUpload}, there i
 http://gsbkip.chicagogsb.edu/os/fileupload.html
 \end{verbatim}
 will bring up the necessary form that allows the user to browse a directory and select the file to upload. This URL is based on the assumption that the {\tt OSJava} classes were deployed as described in Section \ref{section:tomcat}. The file {\tt fileupload.html} is in the {\tt WebContent} directory directly under the
-{\tt OSJava} root.
+{\tt OSJava} root. In our html form implementation, after you upload the OSiL file, it shows you the path of the uploaded file that is saved on the server, so that you can put it in the corresponding {\tt osol} file.
 
 
 
 
 \subsection{Instance Generator: Using the OSInstance API to Generate Instances}\label{subsection:exampleOSInstanceGeneration}
 
-This example is found in the {\tt instanceGenerator} folder in the {\tt examples} folder.  This example illustrates how to build a complete in-memory model instance using the {\tt OSInstance} API.   See the code {\tt instanceGenerator.cpp} for the complete example. Here provide a few highlights to illustrate the power of the API.
+This example is found in the {\tt instanceGenerator} folder in the {\tt examples} folder.  This example illustrates how to build a complete in-memory model instance using the {\tt OSInstance} API.   See the code {\tt instanceGenerator.cpp} for the complete example. Here we provide a few highlights to illustrate the power of the API.
 
 The first step is to create an {\tt OSInstance} object.
 \begin{verbatim}tt

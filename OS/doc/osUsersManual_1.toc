@@ -72,7 +72,7 @@
 \contentsline {subsection}{\numberline {12.3}File Upload: Using a File Upload Package}{65}
 \contentsline {subsection}{\numberline {12.4}Instance Generator: Using the OSInstance API to Generate Instances}{66}
 \contentsline {subsection}{\numberline {12.5}osTestCode}{67}
-\contentsline {section}{\numberline {13}Appendix}{67}
-\contentsline {subsection}{\numberline {13.1}Building a Model in MATLAB}{67}
-\contentsline {subsection}{\numberline {13.2}OSiL representation for problem given in (1\hbox {})--(4\hbox {})}{69}
+\contentsline {section}{\numberline {13}Appendix}{68}
+\contentsline {subsection}{\numberline {13.1}Building a Model in MATLAB}{68}
+\contentsline {subsection}{\numberline {13.2}OSiL representation for problem given in (1\hbox {})--(4\hbox {})}{70}
 \contentsline {subsection}{\numberline {13.3}OSiL representation for problem given in (20\hbox {})--(23\hbox {})}{71}
