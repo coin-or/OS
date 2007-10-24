@@ -34,9 +34,9 @@ AM_CPPFLAGS = \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSUtils` 
 	
 	
-AM_CPPFLAGS += -I`$(CYGPATH_W) /usr/include/w32api` \
-  				  -I ../include \
-  				  -I ../PlatformSDK/include
+#AM_CPPFLAGS += -I`$(CYGPATH_W) /usr/include/w32api` \
+#  				  -I ../include \
+#  				  -I ../PlatformSDK/include
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
