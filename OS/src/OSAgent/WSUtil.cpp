@@ -25,7 +25,7 @@
 #include <netdb.h>  
 #endif
 //#define DEBUG 
-  
+#include <cstring> 
   
 
 
