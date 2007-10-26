@@ -198,7 +198,6 @@ AC_COIN_VPATH_LINK(data/osolFiles/sendWithJobID.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/kill.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/remoteSolve1.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/remoteSolve2.osol)
-AC_COIN_VPATH_LINK(data/osolFiles/remoteSolve3.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/demopassword.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/demopasswordjobID.osol)
 ##

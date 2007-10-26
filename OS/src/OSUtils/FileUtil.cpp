@@ -54,6 +54,7 @@ char* FileUtil::getFileAsChar(  char* fname){
 	char *xml;
 	char ch;
 	std::ifstream inFile;
+	std::cout << fname << std::endl;
 	inFile.open( fname);
 	// get the input file stream into the buffer
 	pbuf = inFile.rdbuf();

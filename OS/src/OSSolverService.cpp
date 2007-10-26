@@ -251,7 +251,9 @@ ASL_alloc(ASL_read_fg);
 				 osoptions->osil = fileUtil->getFileAsString( &osoptions->osilFile[0]);
 			}
 			else{//get <instanceLocation if we are doing a local solve
-				 if( (osoptions->osol != "") &&  (osoptions->serviceLocation == "") ) osoptions->osil = fileUtil->getFileAsString( &getInstanceLocation( osoptions->osol)[ 0] );
+				// make sure we don't have a service URI in the file
+					if( (osoptions->osol != "") &&  (osoptions->serviceLocation == "")  &&  (getServiceURI( osoptions->osol) == "") ) 
+						osoptions->osil = fileUtil->getFileAsString( &getInstanceLocation( osoptions->osol)[ 0] );
 			}
 			// see if there is a solver specified
 			if(osoptions->solverName != ""){ 
@@ -314,8 +316,9 @@ void solve(){
 					getOSiLFromMps();
 				}
 				else{// need an osol file with an instanceLocation specified
-					if( osoptions->osol.find( "<instanceLocation") == std::string::npos)
+					if( osoptions->osol.find( "<instanceLocation") == std::string::npos){
 						throw ErrorClass("solve called and no osil, osol with osil specified, nl, or mps file given");
+					}
 				}
 			}
 		}

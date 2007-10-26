@@ -2422,7 +2422,7 @@ In the following sections we illustrate each of the six service methods.
 
 \subsubsection{The  {\tt solve} Service Method}\label{section:solve}
 
-First we illustrate a simple call to   {\tt OSSolverService.jws} and request a solution using the COIN-OR  {\tt Clp} solver.  The call on the client machine is
+First we illustrate a simple call to  the  {\tt OSSolverService.jws}.  The call on the client machine is
 
 \begin{verbatim}
 ./OSSolverService -config ../data/configFiles/testremote.config
@@ -2433,42 +2433,31 @@ where the {\tt testremote.config} file is
 -serviceLocation http://gsbkip.chicagogsb.edu/os/OSSolverService.jws
 \end{verbatim}
 
-No solver is specified so by default the  {\tt Cbc} solver will be used on the server.
-
-Now use an OSoL options file
+No solver is specified so by default the  {\tt Cbc} solver  is used by the {\tt OSSolverService}.   If, for example, the user wished to solve the problem with the {\tt Clp} solver then this is accomplished either by using the  {\tt -solver} option on the command line
 \begin{verbatim}
-./OSSolverService -osol ../data/osolFiles/remoteSolve1.osol -osil ../data/parincLinear.osil
+./OSSolverService -config ../data/configFiles/testremote.config -solver clp
 \end{verbatim}
-where {\tt remoteSolve1.osol} is
+or by  adding  the line
 \begin{verbatim}
-<?xml version="1.0" encoding="UTF-8"?>
-<osol xmlns="os.optimizationservices.org">
-    <general>
-        <serviceURI>http://gsbkip.chicagogsb.edu/os/OSSolverService.jws</serviceURI>
-    </general>
-    <optimization>
-    	<other name="os_solver">clp</other>
-    </optimization>
-</osol>
+ -solver clp
 \end{verbatim}
-In this case we specify a sover to use, named {\tt clp}.
+to the  {\tt testremote.config} file.  
 
-Next we illustrate a call to the remote SolverService and specify an OSiL instance that is on the remote machine.
+Next we illustrate a call to the remote SolverService and specify an OSiL instance that is actually on the remote machine that is hosting the {\tt OSSolverService} and not on the client machine.
 \begin{verbatim}
-./OSSolverService -osol ../data/osolFiles/remoteSolve2.osol
+./OSSolverService -osol ../data/osolFiles/remoteSolve2.osol -serviceLocation  http://gsbkip.chicagogsb.edu/os/OSSolverService.jws 
 \end{verbatim}
 where the {\tt remoteSolve2.osol} file is
 \begin{verbatimtab}[4]
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org">
     <general>
-        <serviceURI>http://gsbkip.chicagogsb.edu/os/OSSolverService.jws</serviceURI>
          <instanceLocation locationType="local">
-	 /home/kmartin/files/code/OSRepository/linear/continuous/pilot.osil
+	 c:\parincLinear.osil
 	 </instanceLocation>
     </general>
     <optimization>
-    	<other name="os_solver">clp</other>
+    	<other name="os_solver">ipopt</other>
     </optimization>
 </osol>
 \end{verbatimtab}
@@ -2479,13 +2468,12 @@ If we were to change to the {\tt locationType} attribute in the {\tt <instanceLo
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org">
     <general>
-        <serviceURI>http://gsbkip.chicagogsb.edu/os/OSSolverService.jws</serviceURI>
          <instanceLocation locationType="http">
 	 http://gsbkip.chicagogsb.edu/testproblems/parincLinear.osil
 	 </instanceLocation>
     </general>
     <optimization>
-    	<other name="os_solver">clp</other>
+    	<other name="os_solver">ipopt</other>
     </optimization>
 </osol>
 \end{verbatimtab}
