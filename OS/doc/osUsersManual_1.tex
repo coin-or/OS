@@ -2433,7 +2433,7 @@ where the {\tt testremote.config} file is
 -serviceLocation http://gsbkip.chicagogsb.edu/os/OSSolverService.jws
 \end{verbatim}
 
-No solver is specified so by default the  {\tt Cbc} solver  is used by the {\tt OSSolverService}.   If, for example, the user wished to solve the problem with the {\tt Clp} solver then this is accomplished either by using the  {\tt -solver} option on the command line
+No solver is specified and by default the  {\tt Cbc} solver  is used by the {\tt OSSolverService}.   If, for example, the user wished to solve the problem with the {\tt Clp} solver then this is accomplished either by using the  {\tt -solver} option on the command line
 \begin{verbatim}
 ./OSSolverService -config ../data/configFiles/testremote.config -solver clp
 \end{verbatim}
@@ -2443,11 +2443,11 @@ or by  adding  the line
 \end{verbatim}
 to the  {\tt testremote.config} file.  
 
-Next we illustrate a call to the remote SolverService and specify an OSiL instance that is actually on the remote machine that is hosting the {\tt OSSolverService} and not on the client machine.
+Next we illustrate a call to the remote SolverService and specify an OSiL instance that is actually residing on the remote machine that is hosting the {\tt OSSolverService} and not on the client machine.
 \begin{verbatim}
-./OSSolverService -osol ../data/osolFiles/remoteSolve2.osol -serviceLocation  http://gsbkip.chicagogsb.edu/os/OSSolverService.jws 
+./OSSolverService -osol ../data/osolFiles/remoteSolve1.osol -serviceLocation  http://gsbkip.chicagogsb.edu/os/OSSolverService.jws 
 \end{verbatim}
-where the {\tt remoteSolve2.osol} file is
+where the {\tt remoteSolve1.osol} file is
 \begin{verbatimtab}[4]
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org">
@@ -2463,13 +2463,13 @@ where the {\tt remoteSolve2.osol} file is
 \end{verbatimtab}
 
 
-If we were to change to the {\tt locationType} attribute in the {\tt <instanceLocation>} element to {\tt http} then we could specify the intance location to on yet another machine. This is illustrated below  for {\tt remoteSovle3.osol}.  The scenario is depicted in Figure \ref{figure:ossolverservice2}.  The OSiL string passed from the client to the solver service is empty.  However, the OSoL element {\tt <instanceLocation>}  has an attribute {\tt locationType} equal to   {\tt http}.  In this case, the text of the {\tt <instanceLoction>} element contains the URL of a third machine which has the problem intance {\tt parincLinear.osil}.  The solver service will contact the machine with URL {\tt gsbkip.chicagogsb.edu} and download this test problem.
+If we were to change to the {\tt locationType} attribute in the {\tt <instanceLocation>} element to {\tt http} then we could specify the intance location to on yet another machine. This is illustrated below  for {\tt remoteSovle2.osol}.  The scenario is depicted in Figure \ref{figure:ossolverservice2}.  The OSiL string passed from the client to the solver service is empty.  However, the OSoL element {\tt <instanceLocation>}  has an attribute {\tt locationType} equal to   {\tt http}.  In this case, the text of the {\tt <instanceLoction>} element contains the URL of a third machine which has the problem intance {\tt parincLinear.osil}.  The solver service will contact the machine with URL {\tt http://www.coin-or.org/OS/parincLinear.osil} and download this test problem. So the {\tt OSSolverService} is running on the server {\tt gsbkip.chicagogsb.edu} which contacts the server {\tt www.coin-or.org} for the model instance. 
 \begin{verbatimtab}[4]
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org">
     <general>
          <instanceLocation locationType="http">
-	 http://gsbkip.chicagogsb.edu/testproblems/parincLinear.osil
+	http://www.coin-or.org/OS/parincLinear.osil
 	 </instanceLocation>
     </general>
     <optimization>

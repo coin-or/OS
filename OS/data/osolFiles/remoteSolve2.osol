@@ -3,7 +3,7 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/OSoL.xsd">
     <general>
-         <instanceLocation locationType="http">http://gsbkip.chicagogsb.edu/testproblems/parincLinear.osil</instanceLocation>
+         <instanceLocation locationType="http">http://www.coin-or.org/OS/parincLinear.osil</instanceLocation>
     </general>
     <optimization>
     	<other name="os_solver">ipopt</other>
