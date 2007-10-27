@@ -103,6 +103,7 @@ OS/examples/amplClient/nltrans.nl -text
 OS/examples/amplClient/testfile.nl -text
 OS/examples/fileUpload/Makefile.am -text
 OS/examples/fileUpload/Makefile.in -text
+OS/examples/fileUpload/OSFileUpload.java -text
 OS/examples/fileUpload/fileUpload.cpp -text
 OS/examples/instanceGenerator/Makefile.am -text
 OS/examples/instanceGenerator/Makefile.in -text
