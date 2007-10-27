@@ -113,6 +113,7 @@ int main(int argc, char **argv)
 	 */
 	char *amplclient_options = NULL;
 	char *agent_address = NULL;
+	char *solver_option = NULL;
 	// set solver type default to clp
 	DefaultSolver *solverType  = NULL;	
 	OSrLReader *osrlreader = NULL;
@@ -136,16 +137,16 @@ int main(int argc, char **argv)
 				#ifdef COIN_HAS_LINDO
 				sSolverName = "lindo";
 				bLindoIsPresent = true;
-				agent_address = getenv("lindo_options");
-				if( agent_address == NULL)  solverType = new LindoSolver();
+				solver_option = getenv("lindo_options");
+				if(( solver_option == NULL) ||  strstr(solver_option, "service") == NULL)  solverType = new LindoSolver();
 				#endif
 				if(bLindoIsPresent == false) throw ErrorClass( "the Lindo solver requested is not present");
 			}
 			else{ 
 				if( strstr(amplclient_options, "clp") != NULL){
 					sSolverName = "clp";
-					agent_address = getenv("clp_options");
-					if( agent_address == NULL){
+					solver_option = getenv("clp_options");
+					if( ( solver_option == NULL) || (strstr(solver_option, "service") == NULL) ){
 						solverType = new CoinSolver();
 						solverType->sSolverName = "clp";
 					}
@@ -153,8 +154,8 @@ int main(int argc, char **argv)
 				else{
 					if( strstr(amplclient_options, "cbc") != NULL){
 						sSolverName = "cbc";
-						agent_address = getenv("cbc_options");
-						if( agent_address == NULL){
+						solver_option = getenv("cbc_options");
+						if( ( solver_option == NULL) || (strstr(solver_option, "service") == NULL)){
 							solverType = new CoinSolver();
 							solverType->sSolverName = "cbc";
 						}
@@ -162,8 +163,8 @@ int main(int argc, char **argv)
 					else{
 						if( strstr(amplclient_options, "cplex") != NULL){
 							sSolverName = "cplex";
-							agent_address = getenv("cplex_options");
-							if( agent_address == NULL){
+							solver_option = getenv("cplex_options");
+							if(  ( solver_option == NULL) ||  (strstr(solver_option, "service") == NULL)){
 								solverType = new CoinSolver();
 								solverType->sSolverName = "cplex";
 							}
@@ -172,8 +173,8 @@ int main(int argc, char **argv)
 							if( strstr(amplclient_options, "glpk") != NULL){
 								solverType = new CoinSolver();
 								sSolverName = "glpk";
-								agent_address = getenv("glpk_options");
-								if( agent_address == NULL){
+								solver_option = getenv("glpk_options");
+								if( ( solver_option == NULL) || (strstr(solver_option, "service") == NULL)){
 									solverType = new CoinSolver();
 									solverType->sSolverName = "glpk";
 								}
@@ -183,10 +184,11 @@ int main(int argc, char **argv)
 									// have to act differently since Ipopt uses smart pointers
 									// we are requesting the Ipopt solver
 									sSolverName = "ipopt";
-									agent_address = getenv("ipopt_options");
-									if( agent_address != NULL) cout << "HERE ARE THE IPOPT OPTIONS " <<   agent_address << endl;
+									solver_option = getenv("ipopt_options");
+									if( amplclient_options != NULL) cout << "HERE ARE THE AMPLCLIENT OPTIONS " <<   amplclient_options << endl;
+									if( solver_option != NULL) cout << "HERE ARE THE IPOPT OPTIONS " <<   solver_option << endl;
 									bool bIpoptIsPresent = false;
-									if(agent_address == NULL ){
+									if( ( solver_option == NULL) || (strstr(solver_option, "service") == NULL) ){
 										#ifdef COIN_HAS_IPOPT
 										bIpoptIsPresent = true;
 										//std::cout << "Create an Ipopt solver and optimize"<< std::endl;
@@ -205,8 +207,8 @@ int main(int argc, char **argv)
 								else{
 									if( strstr(amplclient_options, "symphony") != NULL){
 										sSolverName = "symphony";
-										agent_address = getenv("symphony_options");
-										if( agent_address == NULL){
+										solver_option = getenv("symphony_options");
+										if(  ( solver_option == NULL) ||  (strstr(solver_option, "service") == NULL)){
 											solverType = new CoinSolver();
 											solverType->sSolverName = "symphony";
 										}
@@ -214,8 +216,8 @@ int main(int argc, char **argv)
 									else{
 										if( strstr(amplclient_options, "dylp") != NULL){
 											sSolverName = "dylp";
-											agent_address = getenv("dylp_options");
-											if( agent_address == NULL){
+											solver_option = getenv("dylp_options");
+											if( ( solver_option == NULL) || (strstr(solver_option, "service") == NULL) ){
 												solverType = new CoinSolver();
 												solverType->sSolverName = "dylp";
 											}
@@ -233,7 +235,7 @@ int main(int argc, char **argv)
 			}
 		}
 		// do a local solve
-		if( (strstr(amplclient_options, "ipopt") == NULL) && (agent_address == NULL)){
+		if( (strstr(amplclient_options, "ipopt") == NULL) && (solver_option == NULL)){
 			solverType->osol = osol;
 			solverType->osinstance = osinstance;
 			solverType->solve();
@@ -259,11 +261,17 @@ int main(int argc, char **argv)
 		return 0;
 	}
 	// do the following for a remote solve
-	if(agent_address != NULL){
+	if( (solver_option != NULL) && (strstr(solver_option, "service") != NULL)){
 		OSSolverAgent* osagent = NULL;
 		OSiLWriter *osilwriter = NULL;
 		osilwriter = new OSiLWriter();
 		std::string  osil = osilwriter->writeOSiL( osinstance);
+		////
+		agent_address = strstr(solver_option, "service");
+		agent_address += 7;
+		// get rid of white space;
+		while(*agent_address  == ' ') agent_address++;
+		///
 		osagent = new OSSolverAgent( agent_address);
 		// if a solver option was specified put that in
 		string::size_type iStringpos;
@@ -290,7 +298,8 @@ int main(int argc, char **argv)
 	}
 	delete osrlreader;
 	osrlreader = NULL;
-	if( strstr(amplclient_options, "ipopt") == NULL  && (agent_address == NULL) ){
+	if( strstr(amplclient_options, "ipopt") == NULL  && ((solver_option != NULL) || (strstr(solver_option, "service") == NULL)) ){
+		
 		delete solverType;
 		solverType = NULL;
 	}
