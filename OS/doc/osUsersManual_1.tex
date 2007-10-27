@@ -2983,11 +2983,14 @@ In the {\tt OS/examples/algorithmicDiff} folder is test code {\tt algorithmicDif
 
 When the {\tt OSAgent}  class methods {\tt solve} and {\tt send} are used, the problem instance in OSiL format is packaged into a SOAP envelope and communication with the server is done using Web Services (for example Tomcat Axis). However, packing an XML file into a SOAP envelope may add considerably to the size of the file (each {\tt $<$} is replaced with {\tt \&lt;}  and each {\tt $>$} is replaced with {\tt \&gt;}). Also, communicating with a Web Services servlet can also slow down the communication process. This could be a problem for large instances. An alternative approach is to use the {\tt fileUpload} executable on the client end  and the Java servlet {\tt OSFileUpload} on the server end.  The {\tt fileUpload} client executable is contained in the {\tt fileUpload}  directory inside the {\tt examples directory}.
 
-This servlet is based upon the Apache Commons FileUpload. See \url{http://jakarta.apache.org/commons/fileupload/}. The {\tt OSFileUpload} Java servlet code, {\tt OSFileUpload.java} is in the directory
+This servlet is based upon the Apache Commons FileUpload. See \url{http://jakarta.apache.org/commons/fileupload/}. The {\tt OSFileUpload} Java class , {\tt OSFileUpload.class} is in the directory
 \begin{verbatim}
-/OSCommon/src/org/optimizationservices/oscommon/util
+webapps\os\WEB-INF\classes\org\optimizationservices\oscommon\util
 \end{verbatim}
-relative to the {\tt OSJava} directory.
+relative to the Web server root.  The source code {\tt OSFileUpload.class} is in the directory
+\begin{verbatim}
+ COIN-OS/OS/examples/fileUpload
+ \end{verbatim}
 
 
 
