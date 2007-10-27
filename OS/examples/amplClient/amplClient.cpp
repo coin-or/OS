@@ -222,7 +222,21 @@ int main(int argc, char **argv)
 		}
 	}
 	catch(const ErrorClass& eclass){
-		osrl = solverType->osrl;
+		osresult = new OSResult();
+		if(solverType == NULL){	
+			osresult->setGeneralMessage( eclass.errormsg);
+			osresult->setGeneralStatusType( "error");
+			osrl = osrlwriter->writeOSrL( osresult);	
+		}
+		else {
+			osresult = osrlreader->readOSrL( osrl);
+			osrl = solverType->osrl;
+		}
+		cout << osrl << endl << endl <<endl;
+		write_sol(const_cast<char*>(osresult->getSolutionMessage( 0).c_str()), 
+			osresult->getOptimalPrimalVariableValues( -1), 
+			osresult->getOptimalDualVariableValues( -1), NULL);
+		return 0;
 	}
 	// do the following for a remote solve
 	if(agent_address != NULL){
