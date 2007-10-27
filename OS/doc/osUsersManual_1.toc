@@ -63,9 +63,9 @@
 \contentsline {subsubsection}{\numberline {10.3.3}The {\tt retrieve} Service Method}{57}
 \contentsline {subsubsection}{\numberline {10.3.4}The {\tt getJobID} Service Method}{58}
 \contentsline {subsubsection}{\numberline {10.3.5}The {\tt knock} Service Method}{58}
-\contentsline {subsubsection}{\numberline {10.3.6}The {\tt kill} Service Method}{59}
+\contentsline {subsubsection}{\numberline {10.3.6}The {\tt kill} Service Method}{60}
 \contentsline {subsubsection}{\numberline {10.3.7}Summary}{60}
-\contentsline {section}{\numberline {11}Setting up a Solver Service with Tomcat}{61}
+\contentsline {section}{\numberline {11}Setting up a Solver Service with Tomcat}{62}
 \contentsline {section}{\numberline {12}Examples}{64}
 \contentsline {subsection}{\numberline {12.1}AMPL Client: Hooking AMPL to Solvers}{64}
 \contentsline {subsection}{\numberline {12.2}Algorithmic Differentiation: Using the OS Algorithmic Differentiation Methods}{65}
@@ -75,4 +75,4 @@
 \contentsline {section}{\numberline {13}Appendix}{68}
 \contentsline {subsection}{\numberline {13.1}Building a Model in MATLAB}{68}
 \contentsline {subsection}{\numberline {13.2}OSiL representation for problem given in (1\hbox {})--(4\hbox {})}{70}
-\contentsline {subsection}{\numberline {13.3}OSiL representation for problem given in (20\hbox {})--(23\hbox {})}{71}
+\contentsline {subsection}{\numberline {13.3}OSiL representation for problem given in (20\hbox {})--(23\hbox {})}{72}
