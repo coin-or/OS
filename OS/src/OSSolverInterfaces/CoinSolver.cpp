@@ -79,12 +79,14 @@ void CoinSolver::solve() throw (ErrorClass) {
 			cout << "Start Solve with a Coin Solver" << endl;
 		// get the type of solver requested from OSoL string
 		bool solverIsDefined = false;
+		std::cout << "SOLVER NAME =  " << sSolverName << std::endl;
 		if( sSolverName.find("clp") != std::string::npos){
 			if( (osinstance->getNumberOfNonlinearExpressions() > 0)
 				|| (osinstance->getNumberOfQuadraticTerms() > 0) 
 				|| (osinstance->getNumberOfIntegerVariables() > 0)
 				|| (osinstance->getNumberOfBinaryVariables() > 0) ) throw ErrorClass( "Clp cannot do nonlinear or quadratic or integer");
 			solverIsDefined = true;
+			
 			m_OsiSolver = new OsiClpSolverInterface();
 		}
 		else{
@@ -114,19 +116,19 @@ void CoinSolver::solve() throw (ErrorClass) {
 					}
 					else{
 						if(sSolverName.find( "dylp") != std::string::npos){
-						std::cout << "HERE IS GAIL" << std::endl;
+						
 							#ifdef COIN_HAS_DYLP
 							if( (osinstance->getNumberOfNonlinearExpressions() > 0)
 								|| (osinstance->getNumberOfQuadraticTerms() > 0)  ) {
-								std::cout << "HERE IS GAIL 00000" << std::endl;
+								
 								throw ErrorClass( "DyLP cannot do nonlinear or quadratic");
 								}
 							if( (osinstance->getNumberOfIntegerVariables() > 0)
 								|| (osinstance->getNumberOfBinaryVariables() > 0)  ) throw ErrorClass( "DyLP cannot do integer programming");
 							solverIsDefined = true;
-							std::cout << "HERE IS GAIL 2" << std::endl;
+							
 							m_OsiSolver = new OsiDylpSolverInterface();
-							std::cout << "HERE IS GAIL 3" << std::endl;
+					
 							#endif
 						}
 						else{
