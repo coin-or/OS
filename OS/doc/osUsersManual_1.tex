@@ -486,27 +486,27 @@ There is a directory {\tt MSVisualStudio} in the {\tt COIN-OS/OS}  directory.  T
 
 \subsubsection{Cygwin}
 
-{\tt Cygwin} provides a Unix emulation environment for Windows. It comes with numerous tools and libraries including the gcc compilers. See {\tt www.cygwin.com}.   Cygwin can be used the Gnu Compiler Collection (gcc) or with the Microsoft {\tt cl} compiler.  
+{\tt Cygwin} provides a Unix emulation environment for Windows. It comes with numerous tools and libraries including the gcc compilers. See {\tt www.cygwin.com}.   Cygwin can be used the Gnu Compiler Collection (gcc) or with the Microsoft {\tt cl} compiler.
 
 
-{\bf Using Cygwin with gcc:}  With Cygwin and the corresponding gcc compilers the OS project is  built exactly as described in Section \ref{section:svn}.
+{\bf Using Cygwin with gcc:}  With Cygwin and the corresponding gcc compilers the OS project is  built exactly as described in Section \ref{section:svn}. If you have previously downloaded Cygwin with version gnome make version 3.81-1,  you must obtain a fixed 3.81 version from \url{http://www.cmake.org/files/cygwin/make.exe}. (See also  the Cygwin mailing list postings \url{http://cygwin.com/ml/cygwin/2006-09/msg00315.html} and \url{http://cygwin.com/ml/cygwin/2006-09/msg00153.html}).  See also the discussion at \url{https://projects.coin-or.org/BuildTools}.
 
 
 \vskip 8pt
 
-{\bf Using Cygwin with Microsoft cl:}   Users who are extremely adventuresome and have an abundance  of free time on their hands may wish use Cygwin the Microsoft {\tt cl} compiler to build the OS project.   The following steps have led to a successful build.
+{\bf Using Cygwin with Microsoft cl:}   Users who are extremely adventuresome and have an abundance  of free time on their hands may wish to use Cygwin the Microsoft {\tt cl} compiler to build the OS project.   The following steps have led to a successful build.
 
 
 \begin{itemize}
-\item[Step 1:]  Download {\tt Cygwin}  from \url{http://www.cygwin.com/setup.exe} and install.    If you have previously download version 3.81,  you must obtain a fixed 3.81 version.   See  \url{http://www.cmake.org/files/cygwin/make.exe}. (See also  the Cygwin mailing list postings \url{http://cygwin.com/ml/cygwin/2006-09/msg00315.html} and \url{http://cygwin.com/ml/cygwin/2006-09/msg00153.html}).  See also the discussion at \url{https://projects.coin-or.org/BuildTools}.
+\item[Step 1:]  Download {\tt Cygwin}  from \url{http://www.cygwin.com/setup.exe} and install.    
 
 
 
 
-\item[Step 2:]   Download  Visual Studio Express C++ at  \url{http://msdn2.microsoft.com/en-us/express/future/bb421473.aspx}.
+\item[Step 2:]   Download  Visual Studio Express C++ at  \url{http://msdn2.microsoft.com/en-us/express/aa975050.aspx}.
 
 
- \item[Step 3.]  The part of the OS library responsible for communication with a remote server depends on some underlying Windows socket header files and libraries. There it is necessary to also download and install the Windows Platform SDK. Download the necessary files at
+ \item[Step 3:]  The part of the OS library responsible for communication with a remote server depends on some underlying Windows socket header files and libraries. There it is necessary to also download and install the Windows Platform SDK. Download the necessary files at
 
  \url{http://msdn2.microsoft.com/en-us/express/aa700755.aspx}
 
@@ -520,7 +520,7 @@ This step is necessary to insure that Cygwin   looks for compilers, linkers, etc
 \begin{itemize}
 
  \item First, Cygwin should look in the Microsoft Visual Studio directories.  If a standard Visual Studio install is done, the following  should part of the Cygwin search path
- 
+
 \begin{verbatim}
 .
 :/cygdrive/c/Program Files/Microsoft Visual Studio 8/Common7/IDE
@@ -558,9 +558,9 @@ This step is necessary to insure that Cygwin   looks for compilers, linkers, etc
 \end{itemize}
 Open the Cygwin shell and check the value of {\tt \$PATH}. If directories don't appear in an order described above, then  {\tt \$PATH} value needs to be reset.
 
-\item Step[5.] This is necessary only if you wish to build with the AMPL {\tt ASL} solver library.   Unpack the file {\tt aslmods.tar.gz}  that is in the   {\tt /COIN-OS/ThirdParty/ASL/} directory (Note this file is currently not there and must be added).  Connect to {\tt /COIN-OS/ThirdParty/ASL/solvers}, open {\tt makefile.vc}  and remove {\tt comptry.bat}  in the 4th line from last line.
+\item [Step 5:] This is necessary only if you wish to build with the AMPL {\tt ASL} solver library.   Unpack the file {\tt aslmods.tar.gz}  that is in the   {\tt /COIN-OS/ThirdParty/ASL/} directory (Note this file is currently not there and must be added).  Connect to {\tt /COIN-OS/ThirdParty/ASL/solvers}, open {\tt makefile.vc}  and remove {\tt comptry.bat}  in the 4th line from last line.
 
-\item Step[6.] Build the OS project (or any COIN-OR project). If you wish to avoid the FORTRAN related issues you should build with Ipopt. Issue the following command in the project root.
+\item [Step 6:] Build the OS project (or any COIN-OR project). If you wish to avoid the FORTRAN related issues you should build without Ipopt. Issue the following command in the project root.
 \begin{verbatim}
 ./configure COIN_SKIP_PROJECTS=Ipopt --enable-doscompile=msvc
 \end{verbatim}
@@ -569,7 +569,7 @@ If you wish to build with Ipopt, then FORTRAN is required and Visual Studio does
 
 \begin{itemize}
 
-\item[Step a.]  Obtain one of the   Harwell Subroutine Library (HSL) routines {\tt ma27ad.f} or {\tt MA57ad.f}.  See \url{http://www.cse.scitech.ac.uk/nag/hsl/}.  Put the Harwell code in the directory {\tt ThirdParty/HSL}. 
+\item[Step a.]  Obtain one of the   Harwell Subroutine Library (HSL) routines {\tt ma27ad.f} or {\tt MA57ad.f}.  See \url{http://www.cse.scitech.ac.uk/nag/hsl/}.  Put the Harwell code in the directory {\tt ThirdParty/HSL}.
 
 
 
@@ -586,12 +586,12 @@ If you wish to build with Ipopt, then FORTRAN is required and Visual Studio does
 \begin{verbatim}
  ./configure  --enable-doscompile=msvc
  \end{verbatim}
- 
- 
+
+
 \end{itemize}
 
 
-\end{itemize} 
+\end{itemize}
 
 \subsubsection{MinGW}
 
@@ -608,7 +608,7 @@ MSYS (Minimal SYSstem) provides an easy way to use the COIN-OS build system with
 \vskip 8pt
 
 \noindent {\bf Note:}
- 
+
 \begin{itemize}
 
 \item If you wish to use the third-party software with MSYS it is best to get {\tt wget}. See \ref{section:windowsintall}.
@@ -732,7 +732,7 @@ $ cd ../Mumps
 $ ./get.Mumps
 \end{verbatim}
 
-Alternatively, you can connect into the project root {\tt COIN-OS} and execute the script {\tt get.AllThirdParty}.  This will also get the AMPL {\tt ASL} libraries. 
+Alternatively, you can connect into the project root {\tt COIN-OS} and execute the script {\tt get.AllThirdParty}.  This will also get the AMPL {\tt ASL} libraries.
 
 What you do next depends upon whether or not a FORTRAN compiler is present, and if so, which version of FORTRAN.  There are three options.
 
@@ -2546,12 +2546,12 @@ or by  adding  the line
 \begin{verbatim}
  -solver clp
 \end{verbatim}
-to the  {\tt testremote.config} file.  
+to the  {\tt testremote.config} file.
 
 Next we illustrate a call to the remote SolverService and specify an OSiL instance that is actually residing on the remote machine that is hosting the {\tt OSSolverService} and not on the client machine.
 \begin{verbatim}
-./OSSolverService -osol ../data/osolFiles/remoteSolve1.osol  
-     -serviceLocation  http://gsbkip.chicagogsb.edu/os/OSSolverService.jws 
+./OSSolverService -osol ../data/osolFiles/remoteSolve1.osol
+     -serviceLocation  http://gsbkip.chicagogsb.edu/os/OSSolverService.jws
 \end{verbatim}
 where the {\tt remoteSolve1.osol} file is
 \begin{verbatimtab}[4]
@@ -2559,7 +2559,7 @@ where the {\tt remoteSolve1.osol} file is
 <osol xmlns="os.optimizationservices.org">
     <general>
          <instanceLocation locationType="local">c:\parincLinear.osil</instanceLocation>
-         <contact transportType="smtp">kipp.martin@chicagogsb.edu</contact>   
+         <contact transportType="smtp">kipp.martin@chicagogsb.edu</contact>
     </general>
     <optimization>
     	<other name="os_solver">ipopt</other>
@@ -2568,7 +2568,7 @@ where the {\tt remoteSolve1.osol} file is
 \end{verbatimtab}
 
 
-If we were to change to the {\tt locationType} attribute in the {\tt <instanceLocation>} element to {\tt http} then we could specify the intance location to on yet another machine. This is illustrated below  for {\tt remoteSovle2.osol}.  The scenario is depicted in Figure \ref{figure:ossolverservice2}.  The OSiL string passed from the client to the solver service is empty.  However, the OSoL element {\tt <instanceLocation>}  has an attribute {\tt locationType} equal to   {\tt http}.  In this case, the text of the {\tt <instanceLoction>} element contains the URL of a third machine which has the problem intance {\tt parincLinear.osil}.  The solver service will contact the machine with URL {\tt http://www.coin-or.org/OS/parincLinear.osil} and download this test problem. So the {\tt OSSolverService} is running on the server {\tt gsbkip.chicagogsb.edu} which contacts the server {\tt www.coin-or.org} for the model instance. 
+If we were to change to the {\tt locationType} attribute in the {\tt <instanceLocation>} element to {\tt http} then we could specify the intance location to on yet another machine. This is illustrated below  for {\tt remoteSovle2.osol}.  The scenario is depicted in Figure \ref{figure:ossolverservice2}.  The OSiL string passed from the client to the solver service is empty.  However, the OSoL element {\tt <instanceLocation>}  has an attribute {\tt locationType} equal to   {\tt http}.  In this case, the text of the {\tt <instanceLoction>} element contains the URL of a third machine which has the problem intance {\tt parincLinear.osil}.  The solver service will contact the machine with URL {\tt http://www.coin-or.org/OS/parincLinear.osil} and download this test problem. So the {\tt OSSolverService} is running on the server {\tt gsbkip.chicagogsb.edu} which contacts the server {\tt www.coin-or.org} for the model instance.
 \begin{verbatimtab}[4]
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org">
@@ -2681,11 +2681,11 @@ The OSoL file {\tt retrieve.osol} contains a tag {\tt <jobID>} that is communica
 \begin{verbatim}
 -osrl /home/kmartin/temp/test.osrl
 \end{verbatim}
-to reflect a valid path for their own machine.  Also, the {\tt <jobID>} should reflect a {\tt <jobID>} that was previously submitted. The {\tt send()} and {\tt retrieve()}  {\tt <jobID>} must match up.  
+to reflect a valid path for their own machine.  Also, the {\tt <jobID>} should reflect a {\tt <jobID>} that was previously submitted. The {\tt send()} and {\tt retrieve()}  {\tt <jobID>} must match up.
 
 \subsubsection{The  {\tt getJobID} Service Method}\label{section:getjobid}
 
-Before  submitting a job with the {\tt send} method a {\tt JobID} is required. The {\tt OSSolverService} can get a {\tt JobID} with 
+Before  submitting a job with the {\tt send} method a {\tt JobID} is required. The {\tt OSSolverService} can get a {\tt JobID} with
 the following options.
 \begin{verbatim}
 -serviceLocation http://gsbkip.chicagogsb.edu/os/OSSolverService.jws
@@ -3038,12 +3038,12 @@ contains executables and scripts to start and shutdown the Tomcat server.
 
 The {\tt amplClient} executable (in {\tt COIN-OS/OS/examples/amplClient}) is designed to work with the AMPL program. See \url{www.ampl.com}. The {\tt amplClient} acts like an AMPL ``solver.'' The {\tt amplClient} is linked with the OS library and can be used to solve problems either locally or remotely. In both cases the {\tt amplClient} uses the {\tt OSnl2osil} class to convert the AMPL generated nl file (which represents the problem instance) into the corresponding instance representation in the OSiL format.
 
-In the following discussion we assume that the AMPL executable {\tt ampl} obtained from {\tt www.ampl.com}, the OS {\tt amplClient}, and the test problem {\tt hs71.mod} are all in the same directory. At first, the user may wish to run everything in the directory 
+In the following discussion we assume that the AMPL executable {\tt ampl} obtained from {\tt www.ampl.com}, the OS {\tt amplClient}, and the test problem {\tt hs71.mod} are all in the same directory. At first, the user may wish to run everything in the directory
 
 \begin{verbatim}
 COIN-OS/OS/examples/amplClient
 \end{verbatim}
-which is where {\tt amplClient} is located when the OS project is built. The user must obtain {\tt ampl} and put it in this directory.  The test problem {\tt hs71.mod} can be copied from 
+which is where {\tt amplClient} is located when the OS project is built. The user must obtain {\tt ampl} and put it in this directory.  The test problem {\tt hs71.mod} can be copied from
 
 \begin{verbatim}
 COIN-OS/OS/data/amplFiles
@@ -3116,7 +3116,7 @@ where {\tt osilFileName} is  the name of the OSiL problem instance to be written
 \begin{verbatim}
 osagent->fileUpload(osilFileName, osil);
 \end{verbatim}
-will place a call to the server, upload the problem instance in the {\tt osil} string, and cause the server to write a file on its hard drive named {\tt osilFileName}. In our implementation, the uploaded file ({\tt parincQuadratic.osil}) is saved to the {\tt/home/kmartin/temp/parincQuadratic.osil} on the server hard drive. This location is used in the {\tt osol} file as shown below. 
+will place a call to the server, upload the problem instance in the {\tt osil} string, and cause the server to write a file on its hard drive named {\tt osilFileName}. In our implementation, the uploaded file ({\tt parincQuadratic.osil}) is saved to the {\tt/home/kmartin/temp/parincQuadratic.osil} on the server hard drive. This location is used in the {\tt osol} file as shown below.
 
 Once the file is on the server, invoke the local {\tt OSSolverService} by
 \begin{verbatim}
