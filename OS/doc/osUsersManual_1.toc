@@ -11,23 +11,23 @@
 \contentsline {subsubsection}{\numberline {4.2.2}Cygwin}{12}
 \contentsline {subsubsection}{\numberline {4.2.3}MinGW}{14}
 \contentsline {subsubsection}{\numberline {4.2.4}MSYS}{14}
-\contentsline {subsection}{\numberline {4.3}VPATH Installations}{15}
+\contentsline {subsection}{\numberline {4.3}VPATH Installations}{16}
 \contentsline {subsection}{\numberline {4.4}Using Ipopt}{16}
 \contentsline {subsection}{\numberline {4.5}Third-Party Software}{17}
 \contentsline {subsubsection}{\numberline {4.5.1}AMPL}{18}
-\contentsline {subsubsection}{\numberline {4.5.2}Cplex}{18}
+\contentsline {subsubsection}{\numberline {4.5.2}Cplex}{19}
 \contentsline {subsubsection}{\numberline {4.5.3}GLPK}{19}
 \contentsline {subsubsection}{\numberline {4.5.4}Knitro}{19}
-\contentsline {subsubsection}{\numberline {4.5.5}LINDO}{19}
+\contentsline {subsubsection}{\numberline {4.5.5}LINDO}{20}
 \contentsline {subsubsection}{\numberline {4.5.6}MATLAB}{20}
 \contentsline {subsubsection}{\numberline {4.5.7}Library Paths}{20}
 \contentsline {subsection}{\numberline {4.6}Bug Reporting}{20}
 \contentsline {subsection}{\numberline {4.7}Documentation}{20}
 \contentsline {subsection}{\numberline {4.8}Platforms}{21}
-\contentsline {section}{\numberline {5}The OS Project Components}{21}
+\contentsline {section}{\numberline {5}The OS Project Components}{22}
 \contentsline {section}{\numberline {6}OS Protocols}{24}
-\contentsline {section}{\numberline {7}The OS Library Components}{28}
-\contentsline {subsection}{\numberline {7.1}OSAgent}{28}
+\contentsline {section}{\numberline {7}The OS Library Components}{29}
+\contentsline {subsection}{\numberline {7.1}OSAgent}{29}
 \contentsline {subsection}{\numberline {7.2}OSCommonInterfaces}{29}
 \contentsline {subsubsection}{\numberline {7.2.1}The OSInstance Class}{29}
 \contentsline {subsubsection}{\numberline {7.2.2}Creating an {\tt OSInstance} Object}{29}
@@ -40,14 +40,14 @@
 \contentsline {subsection}{\numberline {7.4}OSParsers}{37}
 \contentsline {subsection}{\numberline {7.5}OSSolverInterfaces}{38}
 \contentsline {subsection}{\numberline {7.6}OSUtils}{39}
-\contentsline {section}{\numberline {8}The OSInstance API}{39}
+\contentsline {section}{\numberline {8}The OSInstance API}{40}
 \contentsline {subsection}{\numberline {8.1}Get Methods}{40}
 \contentsline {subsection}{\numberline {8.2}Set Methods}{41}
 \contentsline {subsection}{\numberline {8.3}Calculate Methods}{41}
 \contentsline {section}{\numberline {9}The OS Algorithmic Differentiation Implementation}{41}
 \contentsline {subsection}{\numberline {9.1}Algorithmic Differentiation: Brief Review}{41}
 \contentsline {subsection}{\numberline {9.2}Using OSInstance Methods: Low Level Calls}{42}
-\contentsline {subsubsection}{\numberline {9.2.1}First Derivative Reverse Sweep Calculations}{45}
+\contentsline {subsubsection}{\numberline {9.2.1}First Derivative Reverse Sweep Calculations}{46}
 \contentsline {subsubsection}{\numberline {9.2.2}Second Derivative Reverse Sweep Calculations}{46}
 \contentsline {subsection}{\numberline {9.3}Using OSInstance Methods: High Level Calls}{47}
 \contentsline {subsubsection}{\numberline {9.3.1}Sparsity Methods}{47}
@@ -65,7 +65,7 @@
 \contentsline {subsubsection}{\numberline {10.3.5}The {\tt knock} Service Method}{59}
 \contentsline {subsubsection}{\numberline {10.3.6}The {\tt kill} Service Method}{61}
 \contentsline {subsubsection}{\numberline {10.3.7}Summary}{61}
-\contentsline {section}{\numberline {11}Setting up a Solver Service with Tomcat}{63}
+\contentsline {section}{\numberline {11}Setting up a Solver Service with Tomcat}{62}
 \contentsline {section}{\numberline {12}Examples}{65}
 \contentsline {subsection}{\numberline {12.1}AMPL Client: Hooking AMPL to Solvers}{65}
 \contentsline {subsection}{\numberline {12.2}Algorithmic Differentiation: Using the OS Algorithmic Differentiation Methods}{66}

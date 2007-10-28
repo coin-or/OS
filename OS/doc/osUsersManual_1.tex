@@ -506,7 +506,16 @@ There is a directory {\tt MSVisualStudio} in the {\tt COIN-OS/OS}  directory.  T
 \item[Step 2:]   Download  Visual Studio Express C++ at  \url{http://msdn2.microsoft.com/en-us/express/future/bb421473.aspx}.
 
 
-\item[Step 3:]  Set the Cygwin search path configuration. This is important.This step is necessary to insure that Cygwin   looks for compilers, linkers, etc in the correct order.  The right order of directories  is: MSVS command directories, Cygwin command directories, and finally Windows command directories.  This is illustrated below.
+ \item[Step 3.]  The part of the OS library responsible for communication with a remote server depends on some underlying Windows socket header files and libraries. There it is necessary to also download and install the Windows Platform SDK. Download the necessary files at
+
+ \url{http://msdn2.microsoft.com/en-us/express/aa700755.aspx}
+
+ and install.
+
+
+
+\item[Step 4:]  Set the Cygwin search path configuration. This is important.
+This step is necessary to insure that Cygwin   looks for compilers, linkers, etc in the correct order.  The right order of directories  is: MSVS command directories, Cygwin command directories, and finally Windows command directories.  This is illustrated below.
 
 \begin{itemize}
 
@@ -549,9 +558,9 @@ There is a directory {\tt MSVisualStudio} in the {\tt COIN-OS/OS}  directory.  T
 \end{itemize}
 Open the Cygwin shell and check the value of {\tt \$PATH}. If directories don't appear in an order described above, then  {\tt \$PATH} value needs to be reset.
 
-\item Step[4.] This is necessary only if you wish to build with the AMPL {\tt ASL} solver library.   Unpack the file {\tt aslmods.tar.gz}  that is in the   {\tt /COIN-OS/ThirdParty/ASL/} directory (Note this file is currently not there and must be added).  Connect to {\tt /COIN-OS/ThirdParty/ASL/solvers}, open {\tt makefile.vc}  and remove {\tt comptry.bat}  in the 4th line from last line.
+\item Step[5.] This is necessary only if you wish to build with the AMPL {\tt ASL} solver library.   Unpack the file {\tt aslmods.tar.gz}  that is in the   {\tt /COIN-OS/ThirdParty/ASL/} directory (Note this file is currently not there and must be added).  Connect to {\tt /COIN-OS/ThirdParty/ASL/solvers}, open {\tt makefile.vc}  and remove {\tt comptry.bat}  in the 4th line from last line.
 
-\item Step[5.] Build the OS project (or any COIN-OR project). If you wish to avoid the FORTRAN related issues you should build with Ipopt. Issue the following command in the project root.
+\item Step[6.] Build the OS project (or any COIN-OR project). If you wish to avoid the FORTRAN related issues you should build with Ipopt. Issue the following command in the project root.
 \begin{verbatim}
 ./configure COIN_SKIP_PROJECTS=Ipopt --enable-doscompile=msvc
 \end{verbatim}
@@ -571,14 +580,16 @@ If you wish to build with Ipopt, then FORTRAN is required and Visual Studio does
 \end{verbatim}
 
 
-\item[Step c.]  Run configure
+
+\item[Step c.]  Run configure
 
 \begin{verbatim}
  ./configure  --enable-doscompile=msvc
  \end{verbatim}
  
  
-\end{itemize}
+\end{itemize}
+
 
 \end{itemize} 
 
