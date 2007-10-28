@@ -6,7 +6,7 @@ Cgl            https://projects.coin-or.org/svn/Cgl/releases/0.51.0/Cgl
 Clp            https://projects.coin-or.org/svn/Clp/releases/1.6.0/Clp
 Osi            https://projects.coin-or.org/svn/Osi/releases/0.97.0/Osi
 Vol            https://projects.coin-or.org/svn/Vol/releases/1.1.2/Vol
-SYMPHONY       https://projects.coin-or.org/svn/SYMPHONY/releases/5.1.4/SYMPHONY
+SYMPHONY       https://projects.coin-or.org/svn/SYMPHONY/stable/5.1/SYMPHONY
 ThirdParty/ASL https://projects.coin-or.org/svn/BuildTools/ThirdParty/ASL/releases/1.0.7
 ThirdParty/Blas https://projects.coin-or.org/svn/BuildTools/ThirdParty/Blas/releases/1.0.7
 ThirdParty/Glpk https://projects.coin-or.org/svn/BuildTools/ThirdParty/Glpk/releases/1.1.1
