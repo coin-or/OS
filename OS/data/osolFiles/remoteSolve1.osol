@@ -4,7 +4,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/OSoL.xsd">
     <general>
          <instanceLocation locationType="local">c:\parincLinear.osil</instanceLocation>
-         <contact transportType="smtp">kipp.martin@chicagogsb.edu</contact>   
+         <contact transportType="smtp">kipp.martin@uc.edu</contact>   
     </general>
     <optimization>
     	<other name="os_solver">ipopt</other>
