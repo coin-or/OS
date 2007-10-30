@@ -6,7 +6,7 @@ Cgl            https://projects.coin-or.org/svn/Cgl/releases/0.51.0/Cgl
 Clp            https://projects.coin-or.org/svn/Clp/releases/1.6.0/Clp
 Osi            https://projects.coin-or.org/svn/Osi/releases/0.97.0/Osi
 Vol            https://projects.coin-or.org/svn/Vol/releases/1.1.2/Vol
-SYMPHONY       https://projects.coin-or.org/svn/SYMPHONY/stable/5.1/SYMPHONY
+SYMPHONY       https://projects.coin-or.org/svn/SYMPHONY/releases/5.1.5/SYMPHONY
 ThirdParty/ASL https://projects.coin-or.org/svn/BuildTools/ThirdParty/ASL/releases/1.0.7
 ThirdParty/Blas https://projects.coin-or.org/svn/BuildTools/ThirdParty/Blas/releases/1.0.7
 ThirdParty/Glpk https://projects.coin-or.org/svn/BuildTools/ThirdParty/Glpk/releases/1.1.1
@@ -15,4 +15,4 @@ ThirdParty/Lapack https://projects.coin-or.org/svn/BuildTools/ThirdParty/Lapack/
 ThirdParty/Mumps https://projects.coin-or.org/svn/BuildTools/ThirdParty/Mumps/releases/1.0.3
 Ipopt          https://projects.coin-or.org/svn/Ipopt/releases/3.3.3/Ipopt
 DyLP           https://projects.coin-or.org/svn/DyLP/releases/1.3.0/DyLP
-cppad         https://projects.coin-or.org/svn/CppAD/stable/2.0/cppad
+cppad   -r1036      https://projects.coin-or.org/svn/CppAD/stable/2.0/cppad
