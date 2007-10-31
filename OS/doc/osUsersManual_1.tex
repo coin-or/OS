@@ -482,7 +482,13 @@ Microsoft Visual Studio solution files are provided for users of Windows and the
 
 There is a directory {\tt MSVisualStudio} in the {\tt COIN-OS/OS}  directory.  The {\tt MSVisualStudio} contains root directories organized by the version of Visual Studio.  We currently provide solution files  for Version 7 and Version 8.  There are project files for building the unitTest ({\tt OSTest.vcproj}),  the OSSolverService ({\tt OSSolverService.vcproj}), and the OS library {\tt libOS.vcproj}.   The Microsoft Visual Studio files are automatically downloaded with an SVN checkout. They are also contained in the tarballs.  See Section \ref{section:getTarBalls}.
 
+\vskip 8pt
 
+
+{\bf Important Note For  Users of Visual Studio Express:}  The part of the OS library responsible for communication with a remote server depends on some underlying Windows socket header files and libraries. If you are using the Visual Studio Express Edition, these files are not included in the download and it is necessary  to also download and install the Windows Platform SDK. Download the necessary files at
+ \url{http://msdn2.microsoft.com/en-us/express/aa700755.aspx}
+
+{\bf Important Note for Running Executables:}  There are two projects that build executable files. These are {\tt OSTest} and {\tt OSSolverService}. These executable files are located in the {\tt Debug} directory that is the Visual Studio project root. These must be moved to the appropriate directories.   The {\tt OSTest} executable should be moved to the {\tt COIN-OS/OS/test} directory and the {\tt OSSolverService} executable should be moved to either the {\tt COIN-OS/OS/src} directory or {\tt COIN-OS/OS/bin}.
 
 \subsubsection{Cygwin}
 
@@ -506,7 +512,7 @@ There is a directory {\tt MSVisualStudio} in the {\tt COIN-OS/OS}  directory.  T
 \item[Step 2:]   Download  Visual Studio Express C++ at  \url{http://msdn2.microsoft.com/en-us/express/aa975050.aspx}.
 
 
- \item[Step 3:]  The part of the OS library responsible for communication with a remote server depends on some underlying Windows socket header files and libraries. There it is necessary to also download and install the Windows Platform SDK. Download the necessary files at
+ \item[Step 3:]  The part of the OS library responsible for communication with a remote server depends on some underlying Windows socket header files and libraries. Therefore it is necessary to also download and install the Windows Platform SDK. Download the necessary files at
 
  \url{http://msdn2.microsoft.com/en-us/express/aa700755.aspx}
 
@@ -558,7 +564,15 @@ This step is necessary to insure that Cygwin   looks for compilers, linkers, etc
 \end{itemize}
 Open the Cygwin shell and check the value of {\tt \$PATH}. If directories don't appear in an order described above, then  {\tt \$PATH} value needs to be reset.
 
-\item [Step 5:] This is necessary only if you wish to build with the AMPL {\tt ASL} solver library.   Unpack the file {\tt aslmods.tar.gz}  that is in the   {\tt /COIN-OS/ThirdParty/ASL/} directory (Note this file is currently not there and must be added).  Connect to {\tt /COIN-OS/ThirdParty/ASL/solvers}, open {\tt makefile.vc}  and remove {\tt comptry.bat}  in the 4th line from last line.
+\item [Step 5:] This step is necessary only if you wish to build with the AMPL {\tt ASL} solver library.   Execute the script {\tt compile_MS_ASL.in} script   that is in the   {\tt /COIN-OS/ThirdParty/ASL/} directory.   Unfortunately, and we regret this, but the time of this writing {\tt compile_MS_ASL.in}  is available only in trunk version of ASL. This means that it is necessary to download the trunk version separately and replace the release version we have distributed with the trunk version.  The URL for the trunk version is 
+
+\begin{verbatim}
+co https://projects.coin-or.org/svn/BuildTools/ThirdParty/ASL/trunk  ASL
+\end{verbatim}
+
+
+
+
 
 \item [Step 6:] Build the OS project (or any COIN-OR project). If you wish to avoid the FORTRAN related issues you should build without Ipopt. Issue the following command in the project root.
 \begin{verbatim}
@@ -637,7 +651,7 @@ and install.  Double clicking on the MSYS icon will open a Bourne shell window.
 
 and install.
 
- \item[Step 3.]  The part of the OS library responsible for communication with a remote server depends on some underlying Windows socket header files and libraries. There it is necessary to also download and install the Windows Platform SDK. Download the necessary files at
+ \item[Step 3.]  The part of the OS library responsible for communication with a remote server depends on some underlying Windows socket header files and libraries. Therefore it is necessary to also download and install the Windows Platform SDK. Download the necessary files at
 
  \url{http://msdn2.microsoft.com/en-us/express/aa700755.aspx}
 
