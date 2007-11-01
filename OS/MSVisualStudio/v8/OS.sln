@@ -1,5 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual C++ Express 2005
+# Visual Studio 2005
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libCbc", "..\..\..\Cbc\MSVisualStudio\v8\libCbc\libCbc.vcproj", "{363BA154-FEC9-4E1E-BC23-93CEC58AB785}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libCgl", "..\..\..\Cgl\MSVisualStudio\v8\libCgl\libCgl.vcproj", "{DBEA3904-F0B8-408A-9E1A-6497FEBE8C42}"
@@ -99,6 +99,7 @@ Global
 		{C5E6054E-C498-421B-835C-25CAAB7AFB7A}.Release|Win32.ActiveCfg = Debug|Win32
 		{C5E6054E-C498-421B-835C-25CAAB7AFB7A}.Release|Win32.Build.0 = Debug|Win32
 		{BB170874-0B55-4DF6-B0FE-5398CC668B28}.Debug|Win32.ActiveCfg = Debug|Win32
+		{BB170874-0B55-4DF6-B0FE-5398CC668B28}.Debug|Win32.Build.0 = Debug|Win32
 		{BB170874-0B55-4DF6-B0FE-5398CC668B28}.Release|Win32.ActiveCfg = Debug|Win32
 		{BB170874-0B55-4DF6-B0FE-5398CC668B28}.Release|Win32.Build.0 = Debug|Win32
 	EndGlobalSection
