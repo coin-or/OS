@@ -1576,7 +1576,7 @@ OSnLNodePlus}.   Each {\tt OSExpressionTree} object contains a pointer to an {\t
 
     The {\tt OSInstance} class has a variety of {\tt calculate()} methods, based on two pure virtual functions in the {\tt OSInstance} class.  The first of these, {\tt calculateFunction()}, takes an array of {\tt double} values corresponding to decision variables, and evaluates the expression tree for those values.  Every class
 that extends {\tt OSnLNode} must implement this method.  As an example, the {\tt calculateFunction} method for the {\tt OSnLNodePlus} class is shown in Figure \ref{figure:calcfunction}.  Because the OSiL instance file must be validated against its schema, and in the schema each {\tt <OSnLNodePlus>} element is specified to have exactly two child elements, this {\tt calculateFunction} method can assume that there are
-exactly two children of the node that it is operating on.  Thus through the use of polymorphism and recursion the need for switches like those in Figure~\ref{figure:parsecode1} is eliminated. This design makes adding new operator elements easy; it is simply a matter of adding a new class and implementing the {\tt
+exactly two children of the node that it is operating on.  The use of polymorphism and recursion makes adding new operator elements easy; it is simply a matter of adding a new class and implementing the {\tt
 calculateFunction()} method for it.
 
 
