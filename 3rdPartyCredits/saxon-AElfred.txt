@@ -1,6 +1,6 @@
-?lfred
+AElfred
 
-Included in the Saxon distribution is a modified version of the ?lfred XML parser from Microstar. I have taken the relevant part of David Brownell's ?lfred2 distribution, repackaged it, and fixed a few bugs. All cahnges are clearly documented in the source code.
+Included in the Saxon distribution is a modified version of the AElfred XML parser from Microstar. I have taken the relevant part of David Brownell's AElfred2 distribution, repackaged it, and fixed a few bugs. All cahnges are clearly documented in the source code.
 
 This is distributed under the terms of Microstar's terms and conditions, which are as follows:
 	
