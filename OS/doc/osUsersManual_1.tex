@@ -121,22 +121,25 @@ The objective of Optimization Services (OS) is to provide a general framework co
 \begin{itemize}
 \item[1.]  A set of XML based standards for representing optimization instances (OSiL), optimization results (OSrL), and optimization solver options (OSoL). There are other standards, but these are the main ones. The schemas for these standards are described in Section   \ref{section:schemadescriptions}.
 
-\item[2.]  A robust solver and modeling language interface (API) for linear and nonlinear optimization problems.  Corresponding to the OSiL problem instance representation there is an in-memory object,  {\tt OSInstance}, along with a set of  {\tt get()},   {\tt set()}, and {\tt calculate()} methods for accessing and creating problem instances.
+
+\item[2.]  Open source libraries  that support and implement many of the standards.
+
+\item[3.]  A robust solver and modeling language interface (API) for linear and nonlinear optimization problems.  Corresponding to the OSiL problem instance representation there is an in-memory object,  {\tt OSInstance}, along with a set of  {\tt get()},   {\tt set()}, and {\tt calculate()} methods for accessing and creating problem instances.
 This is a very general API for linear, integer, and nonlinear programs. Extensions for other major types of optimization problems are also in the works. Any modeling language that can produce OSiL can easily communicate with any solver that uses the OSInstance API.   The {\tt OSInstance} object is described in more detail in Section \ref{section:osinstanceAPI}. The nonlinear part of the API is based on the COIN-OR project \url{projects.coin-or.org/CppAD} by Brad Bell but is written in a very general manner and could be used with other algorithmic differentiation packages. More detail on algorithmic differentiation is provided in Section \ref{section:ad}.
 
 
-\item[3.]  A  command line executable {\tt OSSolverService}  for reading problem instances (OSiL format, AMPL  nl format,  MPS format) and calling a solver either locally or on a remote server.  This is described in Section \ref{section:ossolverservice}.
+\item[4.]  A  command line executable {\tt OSSolverService}  for reading problem instances (OSiL format, AMPL  nl format,  MPS format) and calling a solver either locally or on a remote server.  This is described in Section \ref{section:ossolverservice}.
 
 
-\item[4.] Utilities that convert AMPL nl files into the OSiL XML format and MPS files into the OSiL XML format.  This is described in Section \ref{section:osmodelinterfaces}.
+\item[5.] Utilities that convert AMPL nl files into the OSiL XML format and MPS files into the OSiL XML format.  This is described in Section \ref{section:osmodelinterfaces}.
 
 
-\item[5.]  Standards that facilitate the communication between clients and optimization solvers using Web Services.  In  Section \ref{section:osagent} we describe the {\tt OSAgent} part of the OS library that is used to create Web Services
+\item[6.]  Standards that facilitate the communication between clients and optimization solvers using Web Services.  In  Section \ref{section:osagent} we describe the {\tt OSAgent} part of the OS library that is used to create Web Services
  SOAP packages with OSiL instances and contact a server for solution.
 
-\item[6.]  An executable program {\tt amplClient} that is designed to work with the AMPL modeling language. The {\tt amplClient} appears as a ``solver'' to AMPL and, based on options given in AMPL, contacts solvers either remotely or locally to solve instances created in AMPL. This is described in Section \ref{section:amplclient}.
+\item[7.]  An executable program {\tt amplClient} that is designed to work with the AMPL modeling language. The {\tt amplClient} appears as a ``solver'' to AMPL and, based on options given in AMPL, contacts solvers either remotely or locally to solve instances created in AMPL. This is described in Section \ref{section:amplclient}.
 
-\item[7.]  Server software that works with Apache Tomcat and Apache Axis.
+\item[8.]  Server software that works with Apache Tomcat and Apache Axis.
 This software uses Web Services technology and acts as middleware between the client that creates the instance, and solver on the server that optimizes the instance and returns the result. This is illustrated in Section  \ref{section:tomcat}
 \end{itemize}
 
