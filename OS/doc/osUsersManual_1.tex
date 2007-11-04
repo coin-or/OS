@@ -564,7 +564,7 @@ This step is necessary to insure that Cygwin   looks for compilers, linkers, etc
 \end{itemize}
 Open the Cygwin shell and check the value of {\tt \$PATH}. If directories don't appear in an order described above, then  {\tt \$PATH} value needs to be reset.
 
-\item [Step 5:] This step is necessary only if you wish to build with the AMPL {\tt ASL} solver library.   Unfortunately, and we regret this, at the time of this writing the working version of ASL for cygwin/cl build is its trunk version. Therefore it is necessary to download the trunk version separately and replace the release version we have distributed with the trunk version.  The URL for the trunk version is
+\item [Step 5:] This step is necessary only if you wish to build with the AMPL {\tt ASL} solver library.   Unfortunately, and we regret this, but at the time of this writing the working version of ASL for cygwin/cl build is its trunk version. This means that it is necessary to download the trunk version separately and replace the release version we have distributed with the trunk version.  The URL for the trunk version is
 
 \begin{verbatim}
 co https://projects.coin-or.org/svn/BuildTools/ThirdParty/ASL/trunk  ASL
@@ -2354,7 +2354,7 @@ Note that in this function call {\tt new\_x = false}. This prevents a call to {\
 
 If, at the current iterate, the Hessian of the Lagrangian function is also desired then an appropriate call is
 \begin{verbatim}
-calculateAllConstraintFunctionGradients(objLambda, conLambda, false, 2);
+calculateAllConstraintFunctionGradients(x, objLambda, conLambda, false, 2);
 \end{verbatim}
 In this case, if there was a prior call
 \begin{verbatim}
@@ -2761,7 +2761,7 @@ The result of this request is again a string in OSpL format, with the data conta
         <jobs>
     	  <job jobID="123456abcd">
     		<state>finished</state>
-    		 <serviceURI>http://gsbkip.chicagogsb.edu/ipopt/IPOPTSolverService.jws</serviceURI>
+    		<serviceURI>http://gsbkip.chicagogsb.edu/ipopt/IPOPTSolverService.jws</serviceURI>
     		<submitTime>2007-06-16T14:57:36.678-05:00</submitTime>
     		<startTime>2007-06-16T14:57:36.678-05:00</startTime>
     		<endTime>2007-06-16T14:57:39.404-05:00</endTime>
