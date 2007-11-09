@@ -39,6 +39,16 @@ OSCommon/.classpath -text
 OSCommon/.project -text
 OSCommon/META-INF/MANIFEST.MF -text
 OSCommon/OSCommon.jar -text
+OSCommon/WEB-INF/jwsClasses/SimpleSolver.jws -text
+OSCommon/WEB-INF/lib/axis-ant.jar -text
+OSCommon/WEB-INF/lib/axis.jar -text
+OSCommon/WEB-INF/lib/commons-discovery.jar -text
+OSCommon/WEB-INF/lib/commons-logging.jar -text
+OSCommon/WEB-INF/lib/jaxrpc.jar -text
+OSCommon/WEB-INF/lib/log4j-1.2.8.jar -text
+OSCommon/WEB-INF/lib/saaj.jar -text
+OSCommon/WEB-INF/lib/wsdl4j.jar -text
+OSCommon/WEB-INF/web.xml -text
 OSCommon/WebContent/META-INF/MANIFEST.MF -text
 OSCommon/WebContent/OSSolverService.jws -text
 OSCommon/WebContent/WEB-INF/code/OSConfig/OSParameter.xml -text

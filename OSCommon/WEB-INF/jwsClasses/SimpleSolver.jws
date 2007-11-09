@@ -1,0 +1,16 @@
+public class SimpleSolver
+{
+public String favoriteSolver (String question)
+{
+if (question.equals("What is your favorite solver?"))
+{
+return "Minos";
+}
+else
+{
+return "Invalid  questions - should respond with fault";
+}   
+}   
+}
+
+
