@@ -2535,10 +2535,10 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( ){
 		}	
 	}
 	//std::cout << "HESSIAN SPARSITY PATTERN" << std::endl;
-	for(i = 0; i < m_LagrangianSparseHessian->hessDimension; i++){
+	//for(i = 0; i < m_LagrangianSparseHessian->hessDimension; i++){
 		//std::cout <<  "Row Index = " << *(m_LagrangianSparseHessian->hessRowIdx + i) << std::endl;
 		//std::cout <<  "Column Index = " << *(m_LagrangianSparseHessian->hessColIdx + i) << std::endl;
-	}
+	//}
 	m_bLagrangianSparseHessianCreated = true;
 	return m_LagrangianSparseHessian;
 }//getLagrangianHessianSparsityPattern

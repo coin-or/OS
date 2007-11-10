@@ -62,9 +62,9 @@
  * to the nonlinear part of the problem. The 9*x1 term
  * in the objective is not part of the AD
  * calculation nor are any terms in <linearConstraintCoefficients>
- * that <b>DO NOT</b> appear in any nl nodes, for example the 7*x3 term
+ * that <b>DO NOT</b> appear in any nl nodes, for example the 7*x2 term
  * in constraint with index 1. Note also, that there are only three
- * variables that appear in nl nodes, x3 does not
+ * variables that appear in nl nodes, x2 does not appear in an nl node
  * 
  */
 
@@ -593,7 +593,7 @@ int  main(){
 		lagMultipliers[ 1] = z[ 0];
 		lagMultipliers[ 2] = z[ 1];	
 		unsigned int index, kj;
-		return 0;
+		//return 0;
 		for(index = 0; index < n; index++){
 			unit_col_vec[ index] = 0;
 		}	
@@ -612,11 +612,11 @@ int  main(){
 		}
 		// done with CppAD test	
 		// do garbage collection
-		delete osilreader;
+		//delete osilreader;
 		osilreader = NULL;
 		std::cout << "OSILREADER DELETED" << std::endl;	
-		delete[] conVals;
-		delete[] objVals;		
+		//delete[] conVals;
+		//delete[] objVals;		
 	}
 	catch(const ErrorClass& eclass){
 		std::cout << eclass.errormsg << std::endl;
@@ -653,6 +653,70 @@ int  main(){
 	     std::cout << "dy =  " <<  dy[ 0] << std::endl;
 	     check = x1 * std::pow(x0, x1-1.);
 	     ok   &= NearEqual(dy[0], check, 1e-10, 1e-10);
+	}
+	
+	{
+		
+		//checking CppAD sparsity features
+		// domain space vector
+		size_t n = 3;
+		CPPAD_TEST_VECTOR< AD<double> > X(n);
+		X[0] = 0.;
+		X[1] = 1.;
+		X[2] = 2.;
+		// declare independent variables and start recording
+		CppAD::Independent(X);
+		// range space vector
+		size_t m = 2;
+		CPPAD_TEST_VECTOR< AD<double> > Y(m);
+		Y[0] = CppAD::pow(X[0], 2)  + CppAD::pow(X[2], 2);
+		Y[1] = -CppAD::pow(X[0], 2) + CppAD::pow(X[1], 2);
+		// create f: X -> Y and stop tape recording
+		CppAD::ADFun<double> f(X, Y);
+		
+		// sparsity pattern for the identity matrix
+		std::vector<bool> r(n * n);
+		//Vector r(n * n);
+		size_t i, j;
+		for(i = 0; i < n; i++) { 
+			for(j = 0; j < n; j++)
+				r[ i * n + j ] = false;
+				r[ i * n + i ] = true;
+		}
+		// compute sparsity pattern for J(x) = F^{(1)} (x)
+		f.ForSparseJac(n, r);
+		///
+		///
+		///
+		std::vector<bool> s(m * m);
+		for(i = 0; i < m; i++){    
+			for(j = 0; j < m; j++)
+				s[ i * m + j ] = false;
+			s[ i * m + i ] = true;
+	     }
+	     // sparsity pattern for F'(x)
+	    // f.RevSparseJac(m, s);			
+		///
+		///
+	    ///
+		// compute sparsity pattern for H(x) = F_0^{(2)} (x)
+		std::vector<bool> e( m);
+		//Vector s(m);
+		for(i = 0; i < m; i++)
+		e[i] = false;
+		e[0] = true;
+		e[ 1] = true;
+		std::vector<bool> h( n*n);
+		//Vector h(n * n);
+		std::cout << "Computing Sparse Hessian" << std::endl;
+		h = f.RevSparseHes(n, e);
+		for(i = 0; i < n; i++){
+			std::cout << "Row " << i << "  of Hessian " << std::endl;
+			for(j = 0; j < n; j++){
+				std::cout << h[ i*n + j] <<  "  ";
+			}
+			std::cout << std::endl;
+		}
 	}
 	return 0;
 }// end main program
