@@ -2539,6 +2539,8 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( ){
 		//std::cout <<  "Row Index = " << *(m_LagrangianSparseHessian->hessRowIdx + i) << std::endl;
 		//std::cout <<  "Column Index = " << *(m_LagrangianSparseHessian->hessColIdx + i) << std::endl;
 	//}
+	
+
 	m_bLagrangianSparseHessianCreated = true;
 	return m_LagrangianSparseHessian;
 }//getLagrangianHessianSparsityPattern
@@ -2564,6 +2566,7 @@ void OSInstance::duplicateExpressionTreesMap(){
  *revised AD test code
  */
 bool OSInstance::createCppADFun(std::vector<double> vdX){
+	if(m_bCppADFunIsCreated == true) return true;
 	//if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
 	if(m_binitForAlgDiff == false) initForAlgDiff();
 	
@@ -2575,6 +2578,7 @@ bool OSInstance::createCppADFun(std::vector<double> vdX){
 	CppADvector< AD<double> > vdaX( n );
 	for(i = 0; i < n; i++){
 		vdaX[ i] = vdX[ i];
+		//std::cout << "vdX =  " << vdX[ i] << std::endl;
 	}
 	// declare the independent variables and start recording
 	CppAD::Independent( vdaX);
@@ -2595,6 +2599,7 @@ bool OSInstance::createCppADFun(std::vector<double> vdX){
 		}
 	}	
 	//create the function and stop recording
+	std::cout << "create the function and stop recording"  << std::endl;
 	Fad = new CppAD::ADFun<double>(vdaX, m_vFG);
 	std::cout << "range space dimension =  " << m_vFG.size() << std::endl;
 	// no forward sweeps done yet
@@ -2958,6 +2963,8 @@ bool OSInstance::initForAlgDiff(){
 	if( m_binitForAlgDiff == true ) return true;
 	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
 	initializeNonLinearStructures( );
+	initObjGradients();
+	getAllNonlinearVariablesIndexMap( );
 	getJacobianSparsityPattern();
 	getLagrangianHessianSparsityPattern();
 	//see if we need to retape 
@@ -2965,7 +2972,7 @@ bool OSInstance::initForAlgDiff(){
 	for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
 		if(posMapExpTree->second->bCppADMustReTape == true) m_bCppADMustReTape = true;
 	}				
-	initObjGradients();
+
 	#ifdef DEBUG
 	std::cout << "RETAPE ==  " << m_bCppADMustReTape << std::endl;
 	#endif
@@ -2976,7 +2983,27 @@ bool OSInstance::initForAlgDiff(){
 	for(i = 0; i < m_mapExpressionTreesMod.size(); i++){
 		m_vdRangeUnitVec.push_back( 0.0 );
 	}
+	
+	
+	//
+	// test code to use CppAD to get sparsity
+	// a vector with number of variables equal to number of nonlinear variables
+	std::vector<double> vx( m_mapAllNonlinearVariablesIndex.size() );
+	//for(i = 0; i < numVars; i++){
+	//	vx[ i] = 0;
+	//}
+	if( vx.size() > 0) vx.clear();
 	m_binitForAlgDiff = true;
+	std::map<int, int>::iterator posVarIndexMap;
+	for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
+		vx.push_back( 1.0) ;
+	}
+	if( (m_bCppADFunIsCreated == false || m_bCppADMustReTape == true )  && (m_mapExpressionTreesMod.size() > 0) ) {
+		createCppADFun( vx);
+	}	
+	//
+		
+
 	return true;
 }//end initForAlgDiff
 
