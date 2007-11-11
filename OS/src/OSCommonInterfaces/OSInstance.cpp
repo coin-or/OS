@@ -2966,7 +2966,6 @@ bool OSInstance::initForAlgDiff(){
 	initObjGradients();
 	getAllNonlinearVariablesIndexMap( );
 	getJacobianSparsityPattern();
-	getLagrangianHessianSparsityPattern();
 	//see if we need to retape 
 	//loop over expression tree and see if one requires it
 	for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
@@ -2988,11 +2987,7 @@ bool OSInstance::initForAlgDiff(){
 	//
 	// test code to use CppAD to get sparsity
 	// a vector with number of variables equal to number of nonlinear variables
-	std::vector<double> vx( m_mapAllNonlinearVariablesIndex.size() );
-	//for(i = 0; i < numVars; i++){
-	//	vx[ i] = 0;
-	//}
-	if( vx.size() > 0) vx.clear();
+	std::vector<double> vx;
 	m_binitForAlgDiff = true;
 	std::map<int, int>::iterator posVarIndexMap;
 	for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
@@ -3002,8 +2997,9 @@ bool OSInstance::initForAlgDiff(){
 		createCppADFun( vx);
 	}	
 	//
-		
-
+	//	
+	//
+	getLagrangianHessianSparsityPattern();
 	return true;
 }//end initForAlgDiff
 
