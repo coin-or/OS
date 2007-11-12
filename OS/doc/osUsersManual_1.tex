@@ -498,7 +498,7 @@ There is a directory {\tt MSVisualStudio} in the {\tt COIN-OS/OS}  directory.  T
 {\tt Cygwin} provides a Unix emulation environment for Windows. It comes with numerous tools and libraries including the gcc compilers. See {\tt www.cygwin.com}.   Cygwin can be used the Gnu Compiler Collection (gcc) or with the Microsoft {\tt cl} compiler.
 
 
-{\bf Using Cygwin with gcc:}  With Cygwin and the corresponding gcc compilers the OS project is  built exactly as described in Section \ref{section:svn}. If you have previously downloaded Cygwin with version gnome make version 3.81-1,  you must obtain a fixed 3.81 version from \url{http://www.cmake.org/files/cygwin/make.exe}. (See also  the Cygwin mailing list postings \url{http://cygwin.com/ml/cygwin/2006-09/msg00315.html} and \url{http://cygwin.com/ml/cygwin/2006-09/msg00153.html}).  See also the discussion at \url{https://projects.coin-or.org/BuildTools}.
+{\bf Using Cygwin with gcc:}  With Cygwin and the corresponding gcc compilers the OS project is  built exactly as described in Section \ref{section:svn}. If you have previously downloaded Cygwin with version gnome make version 3.81-1,  you must obtain a fixed 3.81 version from \url{http://www.cmake.org/files/cygwin/make.exe}. (See also  the Cygwin mailing list postings \url{http://cygwin.com/ml/cygwin/2006-09/msg00315.html} and \url{http://cygwin.com/ml/cygwin/2006-09/msg00153.html}).  See also the discussion at \url{https://projects.coin-or.org/BuildTools/wiki/current-issues}.
 
 
 \vskip 8pt
@@ -3844,5 +3844,17 @@ I have the Mac Intel Lindo API working. A bit of a kludge, but I created a direc
 /opt/intel/cc/9.1.037/lib
 
 Then I copied libimf.dylib and libirc.dylib into this directory.  I built the OS project using the GNU build tools with
+
+
+
+%%%%%%%%%%%%%%
+
+Ted:
+
+Kipp Martin wrote:> Hi Ted:>>>>> By the way, I would suggest you make sure that configuration fails for OS whenever cppad is not present, since it appears that OS will not build without it (right?). I tried to configure it without cppad and it >> The more I think about the above, the less I understand it. True, OS will not build without CppAD but CppAD is in the Externals file. Same is true for CoinUtils. OS will not build without CoinUtils, but it is in the Externals file so I don't check for it.  Why should I treat CppAD different than any other COIN-OR project?Actually, I'm pretty sure that none of the projects are actually doing this 100% right. What I think should happen is that for required external projects, the configure script should check for their existence and fail if they are not present. For optional projects, your code should use the symbols defined for you by autoconf to make sure that the code compiles properly when the optional module is not present, i.e., there should be blocks like#ifdef COIN_HAS_XXX#endifthat are skipped whenever XXX is not present. In your configure.ac, the lineAC_COIN_MAIN_SUBDIRS(CoinUtils)does actually check for the existence of other COIN projects, but it is up to you to figure out what to do if something is not present. Take a look at the configure.ac for Ipopt to see how this works.Ideally, your code would never fail to compile because something is not present. Either the configuration should fail or the code should be able to deal with the lack of presence of some module. So you actually *do* check for the presence of other COIN projects. However, as far as I know, there is no implemented test for cppad, presumably since it does not use the autotools like the other projects. Currently, if you addAC_COIN_MAIN_SUBDIRS(CoinUtils)it doesn't correctly detect its presence. You have this line in your configure.ac, but if you check the logs, it probably says that cppad is not present. I think this is probably because it does not have its own configure script. In that sense, it probably needs to be treated like third party source code.The reason for making sure that your configuration fails when something is not present, even though it is in your externals, is because your externals aren't used when other projects pull in your project (as I am doing with CoinAll). I don't really have any way of knowing which things  in your externals are required for me to build your project with the default options. Hence, I didn't include cppad at first. When I could not get Ipopt to build, I actually tried to build CoinAll without Ipopt and again, OS configured just fine, but failed to build because Ipopt was not present. By the way, is it really true that you need Ipopt to use OS? What if I am only interested in using Clp through OS and don't care about Ipopt? Shouldn't I be able to build it without Ipopt? I'm guessing that this is possible, but it doesn't happen automatically whenever Ipopt is not present, as it should.So the bottom line is that all the COIN projects *should* actually be treated that same way as I've described cppad should be treated. However, it's easier to do this for the projects that use autoconf.I hope this makes sense. Andreas can correct me if I've misspoken anywhere :) .Cheers,Ted-- Dr. Ted RalphsAssociate ProfessorIndustrial and Systems EngineeringLehigh University(610)758-4784ted at lehigh dot eduwww.lehigh.edu/~tkr2
+
+
+
+%%%%%%%%%
 
 
