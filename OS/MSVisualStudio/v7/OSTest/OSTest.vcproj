@@ -39,7 +39,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="wsock32.lib winmm.lib advapi32.lib"
-				OutputFile=".\Debug/OSTest.exe"
+				OutputFile="..\..\..\test\unitTestDebug.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories=""
@@ -98,7 +98,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="wsock32.lib winmm.lib advapi32.lib"
-				OutputFile=".\Release/OSTest.exe"
+				OutputFile="..\..\..\test\unitTestRelease.exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="FALSE"
 				ProgramDatabaseFile=".\Release/OSTest.pdb"
