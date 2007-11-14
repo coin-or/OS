@@ -22368,37 +22368,37 @@ echo "${ECHO_T}$coin_has_cppad" >&6
 
   case $coin_has_cppad in
      unavailable|skipping)
-         { { echo "$as_me:$LINENO: error: cannot find CppAD" >&5
-echo "$as_me: error: cannot find CppAD" >&2;}
+         { { echo "$as_me:$LINENO: error: cannot find CppAD which is necessary to build OS" >&5
+echo "$as_me: error: cannot find CppAD which is necessary to build OS" >&2;}
    { (exit 1); exit 1; }; } ;;
   esac
 
   case $coin_has_coinutils in
      unavailable|skipping)
-         { { echo "$as_me:$LINENO: error: cannot find CoinUtils" >&5
-echo "$as_me: error: cannot find CoinUtils" >&2;}
+         { { echo "$as_me:$LINENO: error: cannot find CoinUtils which is necessary to build OS" >&5
+echo "$as_me: error: cannot find CoinUtils which is necessary to build OS" >&2;}
    { (exit 1); exit 1; }; } ;;
   esac
 
 
   case $coin_has_clp in
      unavailable|skipping)
-         { { echo "$as_me:$LINENO: error: cannot find Clp" >&5
-echo "$as_me: error: cannot find Clp" >&2;}
+         { { echo "$as_me:$LINENO: error: cannot find Clp which is necessary to build OS" >&5
+echo "$as_me: error: cannot find Clp which is necessary to build OS" >&2;}
    { (exit 1); exit 1; }; } ;;
   esac
 
   case $coin_has_cbc in
      unavailable|skipping)
-         { { echo "$as_me:$LINENO: error: cannot find Cbc" >&5
-echo "$as_me: error: cannot find Cbc" >&2;}
+         { { echo "$as_me:$LINENO: error: cannot find Cbc which is necessary to build OS" >&5
+echo "$as_me: error: cannot find Cbc which is necessary to build OS" >&2;}
    { (exit 1); exit 1; }; } ;;
   esac
 
   case $coin_has_cgl in
      unavailable|skipping)
-         { { echo "$as_me:$LINENO: error: cannot find Cgl" >&5
-echo "$as_me: error: cannot find Cgl" >&2;}
+         { { echo "$as_me:$LINENO: error: cannot find Cgl which is necessary to build OS" >&5
+echo "$as_me: error: cannot find Cgl which is necessary to build OS" >&2;}
    { (exit 1); exit 1; }; } ;;
   esac
 
