@@ -22366,6 +22366,32 @@ echo "${ECHO_T}$coin_has_cppad" >&6
 
 
 #############################################################################
+#                              Make sure certain projects are present                      #
+#############################################################################
+
+case $coin_has_cppad in  (unavailable | skipping)    { { echo "$as_me:$LINENO: error: cannot find CppAD: CppAD is required for OS" >&5
+echo "$as_me: error: cannot find CppAD: CppAD is required for OS" >&2;}
+   { (exit 1); exit 1; }; }esac
+
+
+case $coin_has_coinutils in  (unavailable | skipping)    { { echo "$as_me:$LINENO: error: cannot find CoinUtils: CoinUtils is required for OS" >&5
+echo "$as_me: error: cannot find CoinUtils: CoinUtils is required for OS" >&2;}
+   { (exit 1); exit 1; }; }esac
+
+
+case $coin_has_clp in  (unavailable | skipping)    { { echo "$as_me:$LINENO: error: cannot find Clp: Clp is required for OS" >&5
+echo "$as_me: error: cannot find Clp: Clp is required for OS" >&2;}
+   { (exit 1); exit 1; }; }esac
+
+case $coin_has_cbc in  (unavailable | skipping)    { { echo "$as_me:$LINENO: error: cannot find Cbc: Cbc is required for OS" >&5
+echo "$as_me: error: cannot find Cbc: Cbc is required for OS" >&2;}
+   { (exit 1); exit 1; }; }esac
+
+case $coin_has_cgl in  (unavailable | skipping)    { { echo "$as_me:$LINENO: error: cannot find Cgl: Cgl is required for OS" >&5
+echo "$as_me: error: cannot find Cgl: Cgl is required for OS" >&2;}
+   { (exit 1); exit 1; }; }esac
+
+#############################################################################
 #                             Third party solvers                           #
 #############################################################################
 

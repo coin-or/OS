@@ -76,6 +76,22 @@ AC_COIN_HAS_PROJECT(Ipopt)
 AC_COIN_HAS_PROJECT(cppad)
 
 #############################################################################
+#                              Make sure certain projects are present                      #
+#############################################################################
+
+case $coin_has_cppad in  (unavailable | skipping)    AC_MSG_ERROR([cannot find CppAD: CppAD is required for OS])esac
+
+
+case $coin_has_coinutils in  (unavailable | skipping)    AC_MSG_ERROR([cannot find CoinUtils: CoinUtils is required for OS])esac
+
+
+case $coin_has_clp in  (unavailable | skipping)    AC_MSG_ERROR([cannot find Clp: Clp is required for OS])esac
+
+case $coin_has_cbc in  (unavailable | skipping)    AC_MSG_ERROR([cannot find Cbc: Cbc is required for OS])esac
+
+case $coin_has_cgl in  (unavailable | skipping)    AC_MSG_ERROR([cannot find Cgl: Cgl is required for OS])esac
+
+#############################################################################
 #                             Third party solvers                           #
 #############################################################################
 
