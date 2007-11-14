@@ -3904,10 +3904,26 @@ JP
 
 
 
-For OS the command looks like:   vcbuild /u F:\nbBuildDir\OS\trunk\OS\MSVisualStudio\v8\OS.sln $ALLBefore running vcbuild a few environement variables need to set.This is how I do that:    "E:\Microsoft Visual Studio 8\Common7\Tools\vsvars32.bat"    set LIB=E:\Microsoft Platform SDK for Windows Server 2003 R2\Lib    set LIB=E:\Microsoft Visual Studio 8\VC\lib;%LIB%    set INCLUDE=E:\Microsoft Platform SDK for Windows Server 2003 R2\Include;%INCLUDE%
+For OS the command looks like:
+   vcbuild /u F:\nbBuildDir\OS\trunk\OS\MSVisualStudio\v8\OS.sln $ALL
+Before running vcbuild a few environement variables need to set.
+This is how I do that:
+    "E:\Microsoft Visual Studio 8\Common7\Tools\vsvars32.bat"
+    set LIB=E:\Microsoft Platform SDK for Windows Server 2003 R2\Lib
+    set LIB=E:\Microsoft Visual Studio 8\VC\lib;%LIB%
+    set INCLUDE=E:\Microsoft Platform SDK for Windows Server 2003 R2
+\Include;%INCLUDE%
 
 
 
 %%%%%%%%%
+
+
+
+AC_COIN_HAS_PROJECT(cppad)case $coin_has_cppad in  unavailable | skipping)    AC_MSG_ERROR([cannot find CppAD])esac 
+
+Sorry, I didn't read your message well.You are right, AC_COIN_MAIN_SUBDIRS(cppad) tells us that the cppad project is not available, since there is no configure script - and therefore the base directory configure script can't and shouldn't recurse into the cppad subdirectory.  There is actually no need for "AC_COIN_MAIN_SUBDIRS(cppad)" to appear in the configure.ac of OS' base directory.However, the AC_COIN_HAS_PROJECT(cppad) test is independent from that, and that seems to do that right thing in OS (that was what I meant in my other messages).Sorry for the confusion.Andreas 
+
+%%%%%%
 
 
