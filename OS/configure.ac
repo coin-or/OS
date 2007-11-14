@@ -78,28 +78,28 @@ AC_COIN_HAS_PROJECT(cppad)
 
   case $coin_has_cppad in
      unavailable|skipping)
-         AC_MSG_ERROR([cannot find CppAD]) ;;
+         AC_MSG_ERROR([cannot find CppAD which is necessary to build OS]) ;;
   esac
 
   case $coin_has_coinutils in
      unavailable|skipping)
-         AC_MSG_ERROR([cannot find CoinUtils]) ;;
+         AC_MSG_ERROR([cannot find CoinUtils which is necessary to build OS]) ;;
   esac
 
 
   case $coin_has_clp in
      unavailable|skipping)
-         AC_MSG_ERROR([cannot find Clp]) ;;
+         AC_MSG_ERROR([cannot find Clp which is necessary to build OS]) ;;
   esac
 
   case $coin_has_cbc in
      unavailable|skipping)
-         AC_MSG_ERROR([cannot find Cbc]) ;;
+         AC_MSG_ERROR([cannot find Cbc which is necessary to build OS]) ;;
   esac
 
   case $coin_has_cgl in
      unavailable|skipping)
-         AC_MSG_ERROR([cannot find Cgl]) ;;
+         AC_MSG_ERROR([cannot find Cgl which is necessary to build OS]) ;;
   esac
 
 
