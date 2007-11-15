@@ -112,8 +112,8 @@ OS/examples/fileUpload/fileUpload.cpp -text
 OS/examples/instanceGenerator/Makefile.am -text
 OS/examples/instanceGenerator/Makefile.in -text
 OS/examples/instanceGenerator/instanceGenerator.cpp -text
-OS/examples/osTestCode/Makefile.am -text
 OS/examples/osTestCode/Makefile.in -text
+OS/examples/osTestCode/MakefileBak.am -text
 OS/examples/osTestCode/osTestCode.cpp -text
 OS/inc/config_os.h.in -text
 OS/m4/ac_coin_socket_libs.m4 -text

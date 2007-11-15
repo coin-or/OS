@@ -10,7 +10,6 @@ AUTOMAKE_OPTIONS = foreign
 
 SUBDIRS =
   SUBDIRS += instanceGenerator
-  SUBDIRS += osTestCode
   SUBDIRS += algorithmicDiff
   SUBDIRS += fileUpload
 if COIN_HAS_ASL
