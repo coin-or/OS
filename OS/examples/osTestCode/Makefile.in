@@ -39,8 +39,16 @@ CXX = @CXX@
 # C++ Compiler options
 CXXFLAGS = @CXXFLAGS@
 
+
+
+DARWIN=$(findstring darwin, @build_os@)
+
 # additional C++ Compiler options for linking
 CXXLINKFLAGS = @RPATH_FLAGS@
+
+ifeq ($(DARWIN),darwin)
+  CXXLINKFLAGS += -bind_at_load
+endif
 
 # Directory with header files
 OSINCDIR = @includedir@
@@ -55,6 +63,7 @@ prefix = @prefix@
 # Libraries necessary to link
 LIBS = -L$(OSLIBDIR) 
 
+#ADD ALL THE LIBS
 LIBS += -lOS
 LIBS += -lOsiCbc
 @COIN_HAS_SYMPHONY_TRUE@LIBS += -lOsiSym 
@@ -64,16 +73,24 @@ LIBS += -lOsiClp
 @COIN_HAS_CPX_TRUE@LIBS += -lOsiCpx
 LIBS += -lCbc
 @COIN_HAS_SYMPHONY_TRUE@LIBS += -lSym
-LIBS  += -lCgl
+LIBS += -lCgl
 LIBS += -lOsi
 LIBS += -lClp 
 @COIN_HAS_DYLP_TRUE@LIBS += -lDylp 
 @COIN_HAS_VOL_TRUE@LIBS += -lVol
 @COIN_HAS_GLPK_TRUE@LIBS += -lOsiGlpk
-@COIN_HAS_GLPK_TRUE@LIBS += @GLPKLIB@
-@COIN_HAS_GLPK_TRUE@LIBS += -lipopt
-LIBS += -lCoinUtils  
+@COIN_HAS_IPOPT_TRUE@LIBS += -lipopt  `cat @IPOPTOBJDIR@/src/Interfaces/ipopt_addlibs_cpp.txt`
 
+             
+
+
+#if COIN_HAS_ASL
+#  AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
+#  AM_CPPFLAGS += $(ASL_CPPFLAGS) 
+#  amplClient_LDADD += $(ASLLIB)
+#endif
+LIBS += -lCoinUtils  
+#DONE ADDING LIBS
 
 
 
