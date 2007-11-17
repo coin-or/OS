@@ -2084,7 +2084,7 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double *
 	try{
 		if(highestOrder != 2 ) throw ErrorClass("When calling calculateLagrangianHessian highestOrder should be 2");
 		if( new_x == true || (highestOrder > m_iHighestOrderEvaluated)  ) {
-			std::cout  << "WE ARE CALCULATING getIterateResults() " << std::endl;
+			std::cout  << "CALL getIterateResults() FROM calculateLagrangianHessain" << std::endl;
 			getIterateResults(x, objLambda, conLambda,  new_x,  highestOrder);
 		}
 	}
@@ -2120,7 +2120,7 @@ SparseHessianMatrix *OSInstance::calculateHessian(double* x, int idx, bool new_x
 		}
 		if( new_x == true || (2 > m_iHighestOrderEvaluated)  ) {
 			getIterateResults(x, objLambda, conLambda, new_x,  2);
-			std::cout  << "WE ARE CALCULATING getIterateResults() " << std::endl;
+			std::cout  << "CALL getIterateResults() FROM calculateHessian" << std::endl;
 		}
 		delete[] objLambda;
 		delete[] conLambda;
@@ -2507,40 +2507,79 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( ){
 	// the number of lagrangian variables is equal to m_mapExpressionTreesMod.size()s
 	if( m_bAllNonlinearVariablesIndex == false) getAllNonlinearVariablesIndexMap( );
 	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
-	int numVars =  m_mapAllNonlinearVariablesIndex.size();
+	if( m_iNumberOfNonlinearVariables == 0) return NULL;
+	int i = 0;
+	int numNonz = 0;
+	// Test using CppAD for sparsity
+	//
+	
+	// sparsity pattern for the identity matrix
+	std::vector<bool> r(m_iNumberOfNonlinearVariables * m_iNumberOfNonlinearVariables);
+	int j;
+	for(i = 0; i < m_iNumberOfNonlinearVariables; i++) { 
+		for(j = 0; j < m_iNumberOfNonlinearVariables; j++)
+			r[ i * m_iNumberOfNonlinearVariables + j ] = false;
+			r[ i * m_iNumberOfNonlinearVariables + i] = true;
+	}
+	// compute sparsity pattern for J(x) = F^{(1)} (x)
+	std::cout << "CALL FORWARD SPARSE" <<  std::endl;
+	(*Fad).ForSparseJac(m_iNumberOfNonlinearVariables, r);
+	std::cout << "DONE WITH CALL FORWARD SPARSE" << std::endl;
+	//
+	//
+	//now the second derivative
+	int m = m_mapExpressionTreesMod.size();
+	std::vector<bool> e( m);
+	//Vector s(m);
+	for(i = 0; i < m; i++) e[i] = true;
+	std::cout << "Computing Sparse Hessian" << std::endl;
+	m_vbLagHessNonz = (*Fad).RevSparseHes(m_iNumberOfNonlinearVariables, e);
+	for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
+		std::cout << "Row " << i << "  of Hessian " << std::endl;
+		for(j = i; j < m_iNumberOfNonlinearVariables; j++){
+			if(m_vbLagHessNonz[ i*m_iNumberOfNonlinearVariables + j]  == true) numNonz++;
+			std::cout << m_vbLagHessNonz[ i*m_iNumberOfNonlinearVariables + j] <<  "  " ;
+		}
+		std::cout << std::endl;
+	}
+	std::cout << "Lagrangian Hessian Nonzeros = " << numNonz << std::endl;
 	std::map<int, int>::iterator posMap1, posMap2;	
-
+	i = 0;
 	// now that we have the dimension create SparseHessianMatrix (upper triangular)
 	m_LagrangianSparseHessian = new SparseHessianMatrix();
 	m_LagrangianSparseHessian->bDeleteArrays = true;
-	m_LagrangianSparseHessian->hessDimension = numVars*(numVars + 1)/2;
+	m_LagrangianSparseHessian->hessDimension = numNonz;
 	m_LagrangianSparseHessian->hessRowIdx = new int[m_LagrangianSparseHessian->hessDimension];
 	m_LagrangianSparseHessian->hessColIdx = new int[m_LagrangianSparseHessian->hessDimension];
 	m_LagrangianSparseHessian->hessValues = new double[m_LagrangianSparseHessian->hessDimension];
 	//std::cout << "HESSIAN DIMENSION = " << m_LagrangianSparseHessian->hessDimension << std::endl;
-	int i = 0;
+	numNonz = 0;
 	for(posMap1 = m_mapAllNonlinearVariablesIndex.begin(); posMap1 != m_mapAllNonlinearVariablesIndex.end(); ++posMap1){
-		//std::cout << "posMap1->first  " << posMap1->first << std::endl;
-		if(posMap1->first > numVars) break;
+		std::cout << "posMap1->first  " << posMap1->first << std::endl;
+		//if(posMap1->first > numVars) break;
+		j = i;
 		for(posMap2 = posMap1; posMap2 != m_mapAllNonlinearVariablesIndex.end(); ++posMap2){
-			//std::cout << "posMap2->first  " << posMap2->first << std::endl;
-			if(posMap2->first <= numVars){
-				*(m_LagrangianSparseHessian->hessRowIdx + i) = posMap1->first;
-				*(m_LagrangianSparseHessian->hessColIdx + i) = posMap2->first;
-				i++;
+			std::cout << "posMap2->first  " << posMap2->first << std::endl;
+			if(m_vbLagHessNonz[ i*m_iNumberOfNonlinearVariables + j] == true){
+				*(m_LagrangianSparseHessian->hessRowIdx + numNonz) = posMap1->first;
+				*(m_LagrangianSparseHessian->hessColIdx + numNonz) = posMap2->first;
+				numNonz++;
 			}
-			else{
-				break;
-			}
-		}	
+			std::cout << m_vbLagHessNonz[ i*m_iNumberOfNonlinearVariables + j] <<  "  " << std::endl;
+			j++;
+		}
+		i++;
 	}
-	//std::cout << "HESSIAN SPARSITY PATTERN" << std::endl;
-	//for(i = 0; i < m_LagrangianSparseHessian->hessDimension; i++){
-		//std::cout <<  "Row Index = " << *(m_LagrangianSparseHessian->hessRowIdx + i) << std::endl;
-		//std::cout <<  "Column Index = " << *(m_LagrangianSparseHessian->hessColIdx + i) << std::endl;
-	//}
+	std::cout << "HESSIAN SPARSITY PATTERN" << std::endl;
+	for(i = 0; i < m_LagrangianSparseHessian->hessDimension; i++){
+		std::cout <<  "Row Index = " << *(m_LagrangianSparseHessian->hessRowIdx + i) << std::endl;
+		std::cout <<  "Column Index = " << *(m_LagrangianSparseHessian->hessColIdx + i) << std::endl;
+	}
 	
-
+	///	
+	//
+	//
+	//
 	m_bLagrangianSparseHessianCreated = true;
 	return m_LagrangianSparseHessian;
 }//getLagrangianHessianSparsityPattern
@@ -2930,19 +2969,18 @@ bool OSInstance::getSecondOrderResults(double *x, double *objLambda, double *con
 			m_vdw = reverseAD(2, m_vdLambda);   // derivtative of partial
 		}
 		for(j = i; j < m_iNumberOfNonlinearVariables; j++){
-			m_LagrangianSparseHessian->hessValues[ hessValuesIdx++] =  m_vdw[  j*2 + 1];
+			if( m_vbLagHessNonz[i*m_iNumberOfNonlinearVariables + j] == true){
+				m_LagrangianSparseHessian->hessValues[ hessValuesIdx] =  m_vdw[  j*2 + 1];
+				#ifdef DEBUG
+				std::cout << "reverse 2 " << m_LagrangianSparseHessian->hessValues[ hessValuesIdx] << std::endl;
+				#endif
+				hessValuesIdx++;
+			}
 		}
 		//
 		//
 		m_vdDomainUnitVec[i] = 0.;
 	}
-	#ifdef DEBUG
-	std::cout << "HERE IS HESSIAN OF THE LAGRANGIAN" << std::endl;
-	for(i = 0; i < hessValuesIdx; i++){
-		//std::cout << "reverse 2 " << m_LagrangianSparseHessian->hessValues[ i] << std::endl;
-	}
-	#endif
-	#ifdef DEBUG
 	int k;
 	std::cout  << "JACOBIAN DATA " << std::endl;
 	for(idx = 0; idx < m_iConstraintNumber; idx++){
@@ -2951,7 +2989,6 @@ bool OSInstance::getSecondOrderResults(double *x, double *objLambda, double *con
 			//<< " value = " << *(m_sparseJacMatrix->values + k) << std::endl;
 		}
 	}
-	#endif
 	return true;
 	}//end try
 	catch(const ErrorClass& eclass){

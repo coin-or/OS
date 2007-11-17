@@ -54,7 +54,9 @@
  * the partial with respect x3 <br />
  * L_3 = z0*2 + z1/x3 
  * 
- * in the Hessian there are only two nonzero terms <br />
+ * in the Hessian there are only two nonzero terms 
+ * however the code will think there may be three since it
+ * does not know log(x0*x3) = log(x0) + log(x3)<br />
  * L_00 = 2 * w - z1 / ( x0 * x0 ) <br />
  * L_33 = - z1 / (x3 * x3)
  * 
@@ -676,7 +678,6 @@ int  main(){
 		
 		// sparsity pattern for the identity matrix
 		std::vector<bool> r(n * n);
-		//Vector r(n * n);
 		size_t i, j;
 		for(i = 0; i < n; i++) { 
 			for(j = 0; j < n; j++)
@@ -688,13 +689,13 @@ int  main(){
 		///
 		///
 		///
-		std::vector<bool> s(m * m);
-		for(i = 0; i < m; i++){    
-			for(j = 0; j < m; j++)
-				s[ i * m + j ] = false;
-			s[ i * m + i ] = true;
-	     }
-	     // sparsity pattern for F'(x)
+		//std::vector<bool> s(m * m);
+		//for(i = 0; i < m; i++){    
+		//	for(j = 0; j < m; j++)
+		//		s[ i * m + j ] = false;
+		//	s[ i * m + i ] = true;
+	    // }
+	    // sparsity pattern for F'(x)
 	    // f.RevSparseJac(m, s);			
 		///
 		///
@@ -704,7 +705,7 @@ int  main(){
 		//Vector s(m);
 		for(i = 0; i < m; i++)
 		e[i] = false;
-		e[0] = true;
+		e[ 0] = false;
 		e[ 1] = true;
 		std::vector<bool> h( n*n);
 		//Vector h(n * n);
@@ -774,17 +775,12 @@ bool CheckHessianUpper( SparseHessianMatrix *sparseHessian ,
 	// L_00 = 2 * w - z1 / ( x0 * x0 )
 	double check = 2. * w - z1 / (x0 * x0);
 	ok &= NearEqual(*(sparseHessian->hessValues + hessValuesIdx++), check, 1e-10, 1e-10); 
+	if(ok == false) std::cout << "FAILED ONE" << std::endl;
 	ok &= NearEqual(*(sparseHessian->hessValues + hessValuesIdx++), 0., 1e-10, 1e-10);
 	if(ok == false) std::cout << "FAILED TWO" << std::endl;
-	ok &= NearEqual(*(sparseHessian->hessValues + hessValuesIdx++), 0., 1e-10, 1e-10);
-	if(ok == false) std::cout << "FAILED THREE" << std::endl;
-	ok &= NearEqual(*(sparseHessian->hessValues + hessValuesIdx++), 0., 1e-10, 1e-10);
-	if(ok == false) std::cout << "FAILED FOUR" << std::endl;
-	ok &= NearEqual(*(sparseHessian->hessValues + hessValuesIdx++), 0., 1e-10, 1e-10);
-	if(ok == false) std::cout << "FAILED FIVE" << std::endl;
 	// L_22 = - z1 / (x3 * x3)
 	check = - z1 / (x3 * x3);
 	ok &= NearEqual(*(sparseHessian->hessValues + hessValuesIdx++), check, 1e-10, 1e-1);
-	if(ok == false) std::cout << "FAILED SIX" << std::endl;
+	if(ok == false) std::cout << "FAILED THREE" << std::endl;
 	return ok;
 }//CheckHessianUpper

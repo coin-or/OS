@@ -1001,6 +1001,13 @@ private:
 	std::vector<double> m_vdYval;
 	
 	/**
+	 * m_vbLagHessNonz is a boolean vector holding the nonzero patter
+	 * of the Lagrangian of the Hessian
+	 *   
+	 */	
+	std::vector<bool> m_vbLagHessNonz;
+	
+	/**
 	 * m_vdYval is a vector equal to a column or row of the Jacobian
 	 *   
 	 */	

@@ -1082,12 +1082,6 @@ int main(int argC, char* argV[])
 		if(ok == false) throw ErrorClass(" Fail testing Hessian calculation");
 		ok &= NearEqual( sh->hessValues[ 2], 0., 1e-10, 1e-10);
 		if(ok == false) throw ErrorClass(" Fail testing Hessian calculation");
-		ok &= NearEqual( sh->hessValues[ 3], 0., 1e-10, 1e-10);
-		if(ok == false) throw ErrorClass(" Fail testing Hessian calculation");
-		ok &= NearEqual( sh->hessValues[ 4], 0., 1e-10, 1e-10);
-		if(ok == false) throw ErrorClass(" Fail testing Hessian calculation");
-		ok &= NearEqual( sh->hessValues[ 5], 0., 1e-10, 1e-1);
-		if(ok == false) throw ErrorClass(" Fail testing Hessian calculation");
 		unitTestResult << "Successful test of AD gradient and Hessian calculations on problem CppADTestLag.osil" << std::endl;
 	}	
 	catch(const ErrorClass& eclass){
