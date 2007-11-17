@@ -1072,6 +1072,7 @@ int main(int argC, char* argV[])
 		delete sp;
 		SparseHessianMatrix *sh;
 		// calcuate Hessian of objective function (index = -1)
+		osinstance->getLagrangianHessianSparsityPattern( );
 		sh = osinstance->calculateHessian(x, -1, true);
 		for(i = 0; i < sh->hessDimension; i++){
 			std::cout << "Hessian value " << sh->hessValues[i] << std::endl;

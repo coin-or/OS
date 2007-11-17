@@ -2506,14 +2506,21 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( ){
 	// get the number of primal variables in the expression tree
 	// the number of lagrangian variables is equal to m_mapExpressionTreesMod.size()s
 	if( m_bAllNonlinearVariablesIndex == false) getAllNonlinearVariablesIndexMap( );
-	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
 	if( m_iNumberOfNonlinearVariables == 0) return NULL;
 	int i = 0;
 	int numNonz = 0;
-	// Test using CppAD for sparsity
+	// Create the CppAD function if necessary
 	//
-	
-	// sparsity pattern for the identity matrix
+	std::vector<double> vx;
+	std::map<int, int>::iterator posMap1, posMap2;	
+	if( (m_bCppADFunIsCreated == false || m_bCppADMustReTape == true )  && (m_mapExpressionTreesMod.size() > 0) ) {
+		for(posMap1 = m_mapAllNonlinearVariablesIndex.begin(); posMap1 != m_mapAllNonlinearVariablesIndex.end(); ++posMap1){
+			vx.push_back( 1.0) ;
+		}
+		createCppADFun( vx);
+	}
+	//
+	// Use CppAD to do a forward sparsity calculation
 	std::vector<bool> r(m_iNumberOfNonlinearVariables * m_iNumberOfNonlinearVariables);
 	int j;
 	for(i = 0; i < m_iNumberOfNonlinearVariables; i++) { 
@@ -2543,7 +2550,6 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( ){
 		std::cout << std::endl;
 	}
 	std::cout << "Lagrangian Hessian Nonzeros = " << numNonz << std::endl;
-	std::map<int, int>::iterator posMap1, posMap2;	
 	i = 0;
 	// now that we have the dimension create SparseHessianMatrix (upper triangular)
 	m_LagrangianSparseHessian = new SparseHessianMatrix();
@@ -2587,6 +2593,7 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( ){
 
 void OSInstance::duplicateExpressionTreesMap(){
 	//std::cout << "I AM IN DUPLICATE EXPRSSION TREES MAP" << std::endl;
+	// we do this so that we can keep the integrity of the original formulation
 	if(m_bDuplicateExpressionTreesMap == false){ 
 		// first make sure the map was created
 		if( m_bProcessExpressionTrees == false) getAllNonlinearExpressionTrees();
@@ -3022,21 +3029,20 @@ bool OSInstance::initForAlgDiff(){
 	
 	
 	//
-	// test code to use CppAD to get sparsity
-	// a vector with number of variables equal to number of nonlinear variables
-	std::vector<double> vx;
 	m_binitForAlgDiff = true;
-	std::map<int, int>::iterator posVarIndexMap;
-	for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
-		vx.push_back( 1.0) ;
-	}
-	if( (m_bCppADFunIsCreated == false || m_bCppADMustReTape == true )  && (m_mapExpressionTreesMod.size() > 0) ) {
-		createCppADFun( vx);
-	}	
+	// a vector with number of variables equal to number of nonlinear variables
+//	std::vector<double> vx;
+//	std::map<int, int>::iterator posVarIndexMap;
+//	for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
+//		vx.push_back( 1.0) ;
+//	}
+//	if( (m_bCppADFunIsCreated == false || m_bCppADMustReTape == true )  && (m_mapExpressionTreesMod.size() > 0) ) {
+//		createCppADFun( vx);
+//	}	
 	//
 	//	
 	//
-	getLagrangianHessianSparsityPattern();
+	//getLagrangianHessianSparsityPattern();
 	return true;
 }//end initForAlgDiff
 
