@@ -18,7 +18,8 @@
 #ifndef COMMONUTIL_H
 #define COMMONUTIL_H
 
- #include "OSParameters.h"
+#include "OSParameters.h"
+
 
 /*! \class CommonUtil
  *  \brief common utilities for OS classes.

@@ -30,19 +30,23 @@ CommonUtil::~CommonUtil(){
 	
 bool CommonUtil::ISOSNAN( double number)
 {
-	
-	
 
-
-#ifdef NAN 
-	return isnan( number);
-#elif defined NaN
-	return isnan( number);
-#elif defined nan
-	return isnan( number);
+// copy from CoinUtils	
+#ifdef MY_C_ISNAN
+    return MY_C_ISNAN( number)!=0;
 #else
-	return (number == OSNAN);
+    return false;
 #endif
+
+//#ifdef NAN 
+//	return isnan( number);
+//#elif defined NaN
+//	return isnan( number);
+//#elif defined nan
+//	return isnan( number);
+//#else
+//	return (number == OSNAN);
+//#endif
 }
 
 
