@@ -1730,7 +1730,12 @@ bool OSInstance::initializeNonLinearStructures( ){
 
 SparseJacobianMatrix *OSInstance::getJacobianSparsityPattern( ){
 	// if already called return the sparse Jacobian
+	// it is important that this method NOT get called twice -- if
+	// there are linear terms in <linearConstraintCoefficients> that
+	// also appear in <nonlinearExpressions> then they will keep getting added
+	// to the modified expession tree with each call to this method
 	if( m_bSparseJacobianCalculated == true) return m_sparseJacMatrix;
+	std::cout << "INSIDE GET JACOBIAN SPARSITY PATTERN" << std::endl;
 	// determine if we are in column or row major
 	getLinearConstraintCoefficientMajor();
 	// make sure the data structures have been inialized
@@ -1858,6 +1863,7 @@ double OSInstance::calculateFunctionValue(int idx, double *x, bool new_x){
 		int i, j;
 		double dvalue = 0;
 		if( m_binitForAlgDiff == false) initForAlgDiff();
+		if( m_bSparseJacobianCalculated == false) getJacobianSparsityPattern();
 		if(idx >= 0){ // we have a constraint
 			// make sure the index idx is valid
 			if( getConstraintNumber() <= idx  ) throw 
@@ -2415,7 +2421,7 @@ OSExpressionTree* OSInstance::getLagrangianExpTree( ){
 	// we calculate the Lagrangian for all the objectives and constraints
 	// with nonlinear terms
 	// first initialize everything for nonlinear work
-	getJacobianSparsityPattern( );	
+	if(m_bSparseJacobianCalculated == false) getJacobianSparsityPattern( );	
 	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
 	OSnLNodeTimes* nlNodeTimes = NULL;
 	OSnLNodeVariable* nlNodeVariable = NULL;
@@ -2501,13 +2507,10 @@ std::map<int, int> OSInstance::getAllNonlinearVariablesIndexMap( ){
 
 SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( ){
 	// fill in the nonzeros in the sparse Hessian
-	if( m_bLagrangianSparseHessianCreated == true) return m_LagrangianSparseHessian;
-	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
-	// get the number of primal variables in the expression tree
-	// the number of lagrangian variables is equal to m_mapExpressionTreesMod.size()s
-	if( m_bAllNonlinearVariablesIndex == false) getAllNonlinearVariablesIndexMap( );
+	//if( m_bLagrangianSparseHessianCreated == true) return m_LagrangianSparseHessian;
 	if( m_iNumberOfNonlinearVariables == 0) return NULL;
-	int i = 0;
+	if( m_binitForAlgDiff == false ) initForAlgDiff();
+	unsigned int i = 0;
 	int numNonz = 0;
 	// Create the CppAD function if necessary
 	//
@@ -2522,24 +2525,22 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( ){
 	//
 	// Use CppAD to do a forward sparsity calculation
 	std::vector<bool> r(m_iNumberOfNonlinearVariables * m_iNumberOfNonlinearVariables);
-	int j;
+	unsigned int j;
 	for(i = 0; i < m_iNumberOfNonlinearVariables; i++) { 
 		for(j = 0; j < m_iNumberOfNonlinearVariables; j++)
 			r[ i * m_iNumberOfNonlinearVariables + j ] = false;
 			r[ i * m_iNumberOfNonlinearVariables + i] = true;
 	}
 	// compute sparsity pattern for J(x) = F^{(1)} (x)
-	std::cout << "CALL FORWARD SPARSE" <<  std::endl;
 	(*Fad).ForSparseJac(m_iNumberOfNonlinearVariables, r);
-	std::cout << "DONE WITH CALL FORWARD SPARSE" << std::endl;
-	//
 	//
 	//now the second derivative
-	int m = m_mapExpressionTreesMod.size();
+	unsigned int m = m_mapExpressionTreesMod.size();
 	std::vector<bool> e( m);
 	//Vector s(m);
 	for(i = 0; i < m; i++) e[i] = true;
 	std::cout << "Computing Sparse Hessian" << std::endl;
+	//m_vbLagHessNonz holds the sparsity pattern Lagrangian of the Hessian
 	m_vbLagHessNonz = (*Fad).RevSparseHes(m_iNumberOfNonlinearVariables, e);
 	for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
 		std::cout << "Row " << i << "  of Hessian " << std::endl;
@@ -2562,7 +2563,6 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( ){
 	numNonz = 0;
 	for(posMap1 = m_mapAllNonlinearVariablesIndex.begin(); posMap1 != m_mapAllNonlinearVariablesIndex.end(); ++posMap1){
 		std::cout << "posMap1->first  " << posMap1->first << std::endl;
-		//if(posMap1->first > numVars) break;
 		j = i;
 		for(posMap2 = posMap1; posMap2 != m_mapAllNonlinearVariablesIndex.end(); ++posMap2){
 			std::cout << "posMap2->first  " << posMap2->first << std::endl;
@@ -2576,15 +2576,13 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( ){
 		}
 		i++;
 	}
+	#ifdef DEBUG
 	std::cout << "HESSIAN SPARSITY PATTERN" << std::endl;
 	for(i = 0; i < m_LagrangianSparseHessian->hessDimension; i++){
 		std::cout <<  "Row Index = " << *(m_LagrangianSparseHessian->hessRowIdx + i) << std::endl;
 		std::cout <<  "Column Index = " << *(m_LagrangianSparseHessian->hessColIdx + i) << std::endl;
 	}
-	
-	///	
-	//
-	//
+	#endif
 	//
 	m_bLagrangianSparseHessianCreated = true;
 	return m_LagrangianSparseHessian;
@@ -2607,10 +2605,6 @@ void OSInstance::duplicateExpressionTreesMap(){
 }//duplicateExpressionTreesMap
 
 
-/**
- * 
- *revised AD test code
- */
 bool OSInstance::createCppADFun(std::vector<double> vdX){
 	if(m_bCppADFunIsCreated == true) return true;
 	//if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
@@ -2653,6 +2647,7 @@ bool OSInstance::createCppADFun(std::vector<double> vdX){
 	m_bCppADFunIsCreated = true;
 	return true;
 }//end createCppADFun
+
 
 std::vector<double> OSInstance::forwardAD(int p, std::vector<double> vdX){
 	try{
@@ -3005,13 +3000,13 @@ bool OSInstance::getSecondOrderResults(double *x, double *objLambda, double *con
 
 bool OSInstance::initForAlgDiff(){
 	if( m_binitForAlgDiff == true ) return true;
-	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
 	initializeNonLinearStructures( );
 	initObjGradients();
 	getAllNonlinearVariablesIndexMap( );
-	getJacobianSparsityPattern();
+	if(m_bSparseJacobianCalculated  == false) getJacobianSparsityPattern();
 	//see if we need to retape 
 	//loop over expression tree and see if one requires it
+	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
 	for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
 		if(posMapExpTree->second->bCppADMustReTape == true) m_bCppADMustReTape = true;
 	}				
@@ -3026,23 +3021,7 @@ bool OSInstance::initForAlgDiff(){
 	for(i = 0; i < m_mapExpressionTreesMod.size(); i++){
 		m_vdRangeUnitVec.push_back( 0.0 );
 	}
-	
-	
-	//
 	m_binitForAlgDiff = true;
-	// a vector with number of variables equal to number of nonlinear variables
-//	std::vector<double> vx;
-//	std::map<int, int>::iterator posVarIndexMap;
-//	for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
-//		vx.push_back( 1.0) ;
-//	}
-//	if( (m_bCppADFunIsCreated == false || m_bCppADMustReTape == true )  && (m_mapExpressionTreesMod.size() > 0) ) {
-//		createCppADFun( vx);
-//	}	
-	//
-	//	
-	//
-	//getLagrangianHessianSparsityPattern();
 	return true;
 }//end initForAlgDiff
 

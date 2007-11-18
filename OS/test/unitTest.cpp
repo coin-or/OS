@@ -1053,6 +1053,7 @@ int main(int argC, char* argV[])
 		x[3] = 5;
 		SparseVector *sp;
 		// get the gradient for constraint 1
+		osinstance->getJacobianSparsityPattern();
 		sp = osinstance->calculateConstraintFunctionGradient(x, 1, true);
 		int i;
 		for(i = 0; i < sp->number; i++){

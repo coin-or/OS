@@ -27,21 +27,22 @@ CommonUtil::~CommonUtil(){
 }
 
 
- 
-
 	
 bool CommonUtil::ISOSNAN( double number)
 {
+	
+	
+	return MY_C_ISNAN( number);
 
-#ifdef NAN 
-	return std::isnan( number);
-#elif defined NaN
-	return std::isnan( number);
-#elif defined nan
-	return std::isnan( number);
-#else
-	return (number == OSNAN);
-#endif
+//#ifdef NAN 
+//	return MY_C_ISNAN( number);
+//#elif defined NaN
+//	return MY_C_ISNAN( number);
+//#elif defined nan
+//	return MY_C_ISNAN( number);
+//#else
+//	return (number == OSNAN);
+//#endif
 }
 
 

@@ -174,6 +174,121 @@ fi
 ADDLIBS="$WINSOCKLIBS"
   
 AM_CONDITIONAL(USEMULTIPLYDEFINED, test x$mac_osx = xyes)
+
+##  Copied from CoinUtils
+
+###################
+# Function isnan #
+###################
+MY_C_ISNAN=
+AC_CHECK_DECL([isnan],[MY_C_ISNAN=isnan],,[
+#ifdef HAVE_CMATH
+# include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# endif
+#endif
+#ifdef HAVE_CFLOAT
+# include <cfloat>
+#else
+# ifdef HAVE_FLOAT_H
+#  include <float.h>
+# endif
+#endif
+#ifdef HAVE_CIEEEFP
+# include <cieeefp>
+#else
+# ifdef HAVE_IEEEFP_H
+#  include <ieeefp.h>
+# endif
+#endif])
+
+# It appears that for some systems (e.g., Mac OSX), cmath will provide only
+# std::isnan, and bare isnan will be unavailable. Typically we need a parameter
+# in the test to allow C++ to do overload resolution.
+
+if test -z "$MY_C_ISNAN"; then
+  AC_CHECK_DECL([std::isnan(42.42)],[MY_C_ISNAN=std::isnan],,[
+#ifdef HAVE_CMATH
+# include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# endif
+#endif
+#ifdef HAVE_CFLOAT
+# include <cfloat>
+#else
+# ifdef HAVE_FLOAT_H
+#  include <float.h>
+# endif
+#endif
+#ifdef HAVE_CIEEEFP
+# include <cieeefp>
+#else
+# ifdef HAVE_IEEEFP_H
+#  include <ieeefp.h>
+# endif
+#endif])
+fi
+
+if test -z "$MY_C_ISNAN"; then
+  AC_CHECK_DECL([_isnan],[MY_C_ISNAN=_isnan],,[
+#ifdef HAVE_CMATH
+# include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# endif
+#endif
+#ifdef HAVE_CFLOAT
+# include <cfloat>
+#else
+# ifdef HAVE_FLOAT_H
+#  include <float.h>
+# endif
+#endif
+#ifdef HAVE_CIEEEFP
+# include <cieeefp>
+#else
+# ifdef HAVE_IEEEFP_H
+#  include <ieeefp.h>
+# endif
+#endif])
+fi
+if test -z "$MY_C_ISNAN"; then
+  AC_CHECK_DECL([isnand],[MY_C_ISNAN=isnand],,[
+#ifdef HAVE_CMATH
+# include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# endif
+#endif
+#ifdef HAVE_CFLOAT
+# include <cfloat>
+#else
+# ifdef HAVE_FLOAT_H
+#  include <float.h>
+# endif
+#endif
+#ifdef HAVE_CIEEEFP
+# include <cieeefp>
+#else
+# ifdef HAVE_IEEEFP_H
+#  include <ieeefp.h>
+# endif
+#endif])
+fi
+if test -z "$MY_C_ISNAN"; then
+  AC_MSG_WARN(Cannot find C-function for checking NaN. Check will return false)
+else
+  AC_DEFINE_UNQUOTED([MY_C_ISNAN],[$MY_C_ISNAN],
+                     [Define to be the name of C-function for NaN check])
+fi
+
+
  
 #############################################################################
 #                     Parser stuff                         #

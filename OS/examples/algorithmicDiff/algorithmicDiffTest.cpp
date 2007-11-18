@@ -165,6 +165,9 @@ int  main(){
 		// first initialize the nonlinear structures for call backs
 		std::cout << "Initialize Nonlinear Structures" << std::endl;
 		osinstance->initForAlgDiff( );
+		osinstance->getJacobianSparsityPattern( );
+
+
 		
 		/**
 		 * get an index map of the nonlinear variables
@@ -728,12 +731,15 @@ bool CheckFunctionValues( double *conVals, double objValue,
 	bool ok  = true;
 	double checkObj = x0*x0 + 9*x1;
 	std::cout  << "checkObj = " << checkObj << std::endl;
+	std::cout  << "objValue = " << objValue << std::endl;
 	ok &= NearEqual(objValue, checkObj, 1e-10, 1e-10); 
 	double checkCon0 = 33. - 105. + 1.37*x1 + 2*x3 + 5*x1;
 	std::cout  << "checkCon0 = " << checkCon0 << std::endl;
+	std::cout  << "conVals = " << *(conVals + 0) << std::endl;
 	ok &= NearEqual(*(conVals + 0), checkCon0, 1e-10, 1e-10);
 	double checkCon1 = log(x0*x3) + 7*x2;
 	std::cout  << "checkCon1 = " << checkCon1 << std::endl;
+	std::cout  << "conVals = " << *(conVals + 1) << std::endl;
 	ok &= NearEqual( *(conVals + 1), checkCon1, 1e-10, 1e-10);
 	return ok;
 }//CheckFunctionValues

@@ -1933,14 +1933,11 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 */
 	std::map<int, int> getAllNonlinearVariablesIndexMap( );	
 	
-	
 	/**
 	 * @return a pointer to a SparseHessianMatrix with the nonzero structure 
 	 * of the Lagrangian Expression Tree
 	 */
 	SparseHessianMatrix* getLagrangianHessianSparsityPattern();
-	
-
 	
 	/**
 	 * 
