@@ -27160,8 +27160,9 @@ fi
 
 fi
 if test -z "$MY_C_ISNAN"; then
-  { echo "$as_me:$LINENO: WARNING: Cannot find C-function for checking NaN. Check will return false" >&5
-echo "$as_me: WARNING: Cannot find C-function for checking NaN. Check will return false" >&2;}
+  { { echo "$as_me:$LINENO: error: Cannot find C-function for checking NaN. Check will return false" >&5
+echo "$as_me: error: Cannot find C-function for checking NaN. Check will return false" >&2;}
+   { (exit 1); exit 1; }; }
 else
 
 cat >>confdefs.h <<_ACEOF

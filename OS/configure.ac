@@ -282,7 +282,7 @@ if test -z "$MY_C_ISNAN"; then
 #endif])
 fi
 if test -z "$MY_C_ISNAN"; then
-  AC_MSG_WARN(Cannot find C-function for checking NaN. Check will return false)
+  AC_MSG_ERROR(Cannot find C-function for checking NaN. Check will return false)
 else
   AC_DEFINE_UNQUOTED([MY_C_ISNAN],[$MY_C_ISNAN],
                      [Define to be the name of C-function for NaN check])
