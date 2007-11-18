@@ -155,9 +155,6 @@
 /* use if OS is MACOSX */
 #undef MACOSX_
 
-/* Define to be the name of C-function for NaN check */
-#undef MY_C_ISNAN
-
 /* use if OS is Cygwin */
 #undef NOMINMAX
 

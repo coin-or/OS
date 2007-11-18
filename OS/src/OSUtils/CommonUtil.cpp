@@ -18,7 +18,7 @@
  */
 
 #include "CommonUtil.h"
-
+using namespace std;
 
 CommonUtil::CommonUtil(){
 }
@@ -32,17 +32,17 @@ bool CommonUtil::ISOSNAN( double number)
 {
 	
 	
-	return MY_C_ISNAN( number);
 
-//#ifdef NAN 
-//	return MY_C_ISNAN( number);
-//#elif defined NaN
-//	return MY_C_ISNAN( number);
-//#elif defined nan
-//	return MY_C_ISNAN( number);
-//#else
-//	return (number == OSNAN);
-//#endif
+
+#ifdef NAN 
+	return isnan( number);
+#elif defined NaN
+	return isnan( number);
+#elif defined nan
+	return isnan( number);
+#else
+	return (number == OSNAN);
+#endif
 }
 
 
