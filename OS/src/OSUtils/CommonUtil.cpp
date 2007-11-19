@@ -18,7 +18,7 @@
  */
 
 #include "CommonUtil.h"
-using namespace std;
+//using namespace std;
 
 CommonUtil::CommonUtil(){
 }
