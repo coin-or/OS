@@ -257,9 +257,9 @@ bool  KnitroSolver::loadProblemIntoKnitro (KTR_context_ptr  kc){
 	_daXLo  = new double[_nN];
     _daXUp  = new double[_nN];
 	for(i = 0; i < _nN; i++){
-		if( mdVarLB[ i] == -OSINFINITY) _daXLo[i] = -KTR_INFBOUND;
+		if( mdVarLB[ i] == -OSDBL_MAX) _daXLo[i] = -KTR_INFBOUND;
 			else _daXLo[i] = mdVarLB[ i]; 
-		if( mdVarUB[ i] == OSINFINITY) _daXUp[i] = KTR_INFBOUND;
+		if( mdVarUB[ i] == OSDBL_MAX) _daXUp[i] = KTR_INFBOUND;
 			else _daXUp[i] = mdVarUB[ i];  	
 			
 		//cout << "x_l !!!!!!!!!!!!!!!!!!!!!!!!!!!" << x_l[i] << endl;
@@ -276,9 +276,9 @@ bool  KnitroSolver::loadProblemIntoKnitro (KTR_context_ptr  kc){
     _daCUp    = new double[_nM];
     _naCType[0] = KTR_CONTYPE_LINEAR;
 	for(i = 0; i < _nM; i++){
-		if( mdConLB[ i] == -OSINFINITY) _daCLo[i] = -KTR_INFBOUND;
+		if( mdConLB[ i] == -OSDBL_MAX) _daCLo[i] = -KTR_INFBOUND;
 			else _daCLo[i] = mdConLB[ i]; 
-		if( mdConUB[ i] == OSINFINITY) _daCUp[i] = KTR_INFBOUND;
+		if( mdConUB[ i] == OSDBL_MAX) _daCUp[i] = KTR_INFBOUND;
 			else _daCUp[i] = mdConUB[ i];  	
 		//cout << "lower !!!!!!!!!!!!!!!!!!!!!!!!!!!" << _daCLo[i] << endl;
 		//cout << "upper !!!!!!!!!!!!!!!!!!!!!!!!!!!" << _daCUp[i] << endl;

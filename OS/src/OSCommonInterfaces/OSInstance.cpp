@@ -288,7 +288,7 @@ InstanceHeader::~InstanceHeader(){
 
 Variable::Variable():
 	lb(0.0),
-	ub(OSINFINITY),
+	ub(OSDBL_MAX),
 	init(OSNAN), 
 	type('C'), 
 	name(""),
@@ -399,8 +399,8 @@ Objectives::~Objectives(){
 Constraint::Constraint():
 	name(""),
 	constant(0.0),
-	lb(-OSINFINITY),
-	ub(OSINFINITY)
+	lb(-OSDBL_MAX),
+	ub(OSDBL_MAX)
 
 {
 	#ifdef DEBUG  
@@ -854,7 +854,7 @@ bool OSInstance::processConstraints() {
 			m_mdConstraintLowerBounds[i] = instanceData->constraints->con[i]->lb;
 			m_mdConstraintUpperBounds[i] = instanceData->constraints->con[i]->ub;
 			m_mdConstraintConstants[i] = instanceData->constraints->con[i]->constant;
-			if(m_mdConstraintLowerBounds[i] == OSINFINITY || m_mdConstraintUpperBounds[i] == -OSINFINITY) {
+			if(m_mdConstraintLowerBounds[i] == OSDBL_MAX || m_mdConstraintUpperBounds[i] == -OSDBL_MAX) {
 				throw ErrorClass( outStr.str() );
 			}
 			else if(m_mdConstraintLowerBounds[i] > m_mdConstraintUpperBounds[i]) {
@@ -863,13 +863,13 @@ bool OSInstance::processConstraints() {
 				outStr << " is infeasible";
 				throw ErrorClass( outStr.str());
 			}
-			else if(m_mdConstraintLowerBounds[i] == -OSINFINITY && m_mdConstraintUpperBounds[i] == OSINFINITY)
+			else if(m_mdConstraintLowerBounds[i] == -OSDBL_MAX && m_mdConstraintUpperBounds[i] == OSDBL_MAX)
 				m_mcConstraintTypes[i] = 'U';
 			else if(m_mdConstraintLowerBounds[i] == m_mdConstraintUpperBounds[i]) 
 				m_mcConstraintTypes[i] = 'E';
-			else if(m_mdConstraintLowerBounds[i] == -OSINFINITY)
+			else if(m_mdConstraintLowerBounds[i] == -OSDBL_MAX)
 				m_mcConstraintTypes[i] = 'L';
-			else if(m_mdConstraintUpperBounds[i] == OSINFINITY)
+			else if(m_mdConstraintUpperBounds[i] == OSDBL_MAX)
 				m_mcConstraintTypes[i] = 'G';
 			else m_mcConstraintTypes[i] = 'R';
 		}
@@ -1363,9 +1363,9 @@ bool OSInstance::addVariable(int index, string name, double lowerBound, double u
 	instanceData->variables->var[index] = new Variable();
 	if(index < 0 || instanceData->variables->numberOfVariables <= 0 || index >= instanceData->variables->numberOfVariables) return false;
 	instanceData->variables->var[index]->name = name;
-	//if(lowerBound != -OSINFINITY && lowerBound != -OSDBL_MAX)instanceData->variables->var[index]->lb = lowerBound;
+	//if(lowerBound != -OSDBL_MAX && lowerBound != -OSDBL_MAX)instanceData->variables->var[index]->lb = lowerBound;
 	instanceData->variables->var[index]->lb = lowerBound;
-	if(upperBound != OSINFINITY && upperBound != OSDBL_MAX)instanceData->variables->var[index]->ub = upperBound;
+	if(upperBound != OSDBL_MAX && upperBound != OSDBL_MAX)instanceData->variables->var[index]->ub = upperBound;
 	instanceData->variables->var[index]->type = type;
 	if(init != OSNAN) instanceData->variables->var[index]->init = init;
 	instanceData->variables->var[index]->initString = initString;
@@ -1388,12 +1388,12 @@ bool OSInstance::setVariables(int number, string *names, double *lowerBounds,
 	}
 	if(lowerBounds != NULL){
 		for(i = 0; i < number; i++){
-			if(lowerBounds[i] != -OSINFINITY && lowerBounds[i] != -OSDBL_MAX)instanceData->variables->var[i]->lb = lowerBounds[i];  
+			if(lowerBounds[i] != -OSDBL_MAX && lowerBounds[i] != -OSDBL_MAX)instanceData->variables->var[i]->lb = lowerBounds[i];  
 		}
 	}
 	if(upperBounds != NULL){
 		for(i = 0; i < number; i++){
-			if(upperBounds[i] != OSINFINITY && upperBounds[i] != OSDBL_MAX)instanceData->variables->var[i]->ub = upperBounds[i]; 
+			if(upperBounds[i] != OSDBL_MAX && upperBounds[i] != OSDBL_MAX)instanceData->variables->var[i]->ub = upperBounds[i]; 
 		}
 	}
 	if(types != NULL){
@@ -1523,8 +1523,8 @@ bool OSInstance::addConstraint(int index, string name, double lowerBound, double
 	instanceData->constraints->con[ index] = new Constraint();
 	if(index < 0 || instanceData->constraints->numberOfConstraints <= 0 || index >= instanceData->constraints->numberOfConstraints) return false;
 	instanceData->constraints->con[ index]->name = name;
-	if(lowerBound != -OSINFINITY && lowerBound != -OSDBL_MAX) instanceData->constraints->con[ index]->lb = lowerBound;
-	if(upperBound != OSINFINITY && upperBound != OSDBL_MAX)instanceData->constraints->con[ index]->ub = upperBound;
+	if(lowerBound != -OSDBL_MAX && lowerBound != -OSDBL_MAX) instanceData->constraints->con[ index]->lb = lowerBound;
+	if(upperBound != OSDBL_MAX && upperBound != OSDBL_MAX)instanceData->constraints->con[ index]->ub = upperBound;
 	instanceData->constraints->con[ index]->constant = constant;
 	return true;
 }//addConstraint
@@ -1551,12 +1551,12 @@ bool OSInstance::setConstraints(int number, string* names, double* lowerBounds, 
 	}
 	if(lowerBounds != NULL){
 		for(i = 0; i < number; i++){
-			if(lowerBounds[i] != -OSINFINITY && lowerBounds[i] != -OSDBL_MAX)instanceData->constraints->con[i]->lb = lowerBounds[i]; 
+			if(lowerBounds[i] != -OSDBL_MAX && lowerBounds[i] != -OSDBL_MAX)instanceData->constraints->con[i]->lb = lowerBounds[i]; 
 		}
 	}
 	if(upperBounds != NULL){
 		for(i = 0; i < number; i++){
-			if(upperBounds[i] != OSINFINITY && upperBounds[i] != OSDBL_MAX)instanceData->constraints->con[i]->ub = upperBounds[i]; 
+			if(upperBounds[i] != OSDBL_MAX && upperBounds[i] != OSDBL_MAX)instanceData->constraints->con[i]->ub = upperBounds[i]; 
 		}
 	}   
 	if(constants != NULL){
@@ -2570,13 +2570,13 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( ){
 		std::cout << "posMap1->first  " << posMap1->first << std::endl;
 		j = i;
 		for(posMap2 = posMap1; posMap2 != m_mapAllNonlinearVariablesIndex.end(); ++posMap2){
-			std::cout << "posMap2->first  " << posMap2->first << std::endl;
+			//std::cout << "posMap2->first  " << posMap2->first << std::endl;
 			if(m_vbLagHessNonz[ i*m_iNumberOfNonlinearVariables + j] == true){
 				*(m_LagrangianSparseHessian->hessRowIdx + numNonz) = posMap1->first;
 				*(m_LagrangianSparseHessian->hessColIdx + numNonz) = posMap2->first;
 				numNonz++;
 			}
-			std::cout << m_vbLagHessNonz[ i*m_iNumberOfNonlinearVariables + j] <<  "  " << std::endl;
+			//std::cout << m_vbLagHessNonz[ i*m_iNumberOfNonlinearVariables + j] <<  "  " << std::endl;
 			j++;
 		}
 		i++;

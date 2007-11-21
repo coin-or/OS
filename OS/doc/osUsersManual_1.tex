@@ -3920,10 +3920,28 @@ This is how I do that:
 
 
 
-AC_COIN_HAS_PROJECT(cppad)case $coin_has_cppad in  unavailable | skipping)    AC_MSG_ERROR([cannot find CppAD])esac 
+AC_COIN_HAS_PROJECT(cppad)
+case $coin_has_cppad in
+  unavailable | skipping)
+    AC_MSG_ERROR([cannot find CppAD])
+esac 
 
-Sorry, I didn't read your message well.You are right, AC_COIN_MAIN_SUBDIRS(cppad) tells us that the cppad project is not available, since there is no configure script - and therefore the base directory configure script can't and shouldn't recurse into the cppad subdirectory.  There is actually no need for "AC_COIN_MAIN_SUBDIRS(cppad)" to appear in the configure.ac of OS' base directory.However, the AC_COIN_HAS_PROJECT(cppad) test is independent from that, and that seems to do that right thing in OS (that was what I meant in my other messages).Sorry for the confusion.Andreas 
+Sorry, I didn't read your message well.
+
+You are right, AC_COIN_MAIN_SUBDIRS(cppad) tells us that the cppad project is not available, since there is no configure script - and therefore the base directory configure script can't and shouldn't recurse into the cppad subdirectory.  There is actually no need for "AC_COIN_MAIN_SUBDIRS(cppad)" to appear in the configure.ac of OS' base directory.
+
+However, the AC_COIN_HAS_PROJECT(cppad) test is independent from that, and that seems to do that right thing in OS (that was what I meant in my other messages).
+
+Sorry for the confusion.
+
+Andreas 
 
 %%%%%%
+%%%%%%
 
+Just a follow-up to one of Stefan's comments:> > From: Stefan Vigerske [mailto:stefan@math.hu-berlin.de]> > Sent: Wednesday, November 21, 2007 4:57 AM> > To: Steven Dirkse> > Cc: Kipp Martin; Jun Ma @ NWU; Robert Fourer; huanyuan sheng> > Subject: Re: GAMS and OS> > > > - have the possiblity to link the GAMS I/O libs directly to an> > OSiL-compatible solver by giving it an OSInstance object instead of> > pointing it to an OSiL file. Not only that additional rounding errors by> > writing an ASCII-representation and reading it again are avoided, also> > it might be easier to implement advanced features like support for GAMS> > BCH and for GAMS external functions (provided this is supported by OS).If writing an ASCII representation and reading it again are done properly,then there need not be any rounding errors.  The binary representation afterreading the ASCII can be guaranteed to be identical to the binaryrepresentation before writing the ASCII.  This guarantee cannot be achievedif the ASCII representation is limited to 12 characters, however, as in theclassical version of MPS form.For more on this subject see Dave Gay's discussion atwww.ampl.com/REFS/rounding.pdf.  There also is a distribution of therounding routines that is open source -- see the initial comments towww.netlib.org/ampl/solvers/dtoa.c -- but I don't know how this fits withother licenses such as the CPL and GPL.
+
+
+%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%
 

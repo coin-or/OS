@@ -86,9 +86,8 @@ std::string OSiLWriter::writeOSiL( OSInstance *theosinstance){
 						outStr << m_OSInstance->instanceData->variables->var[i]->lb ;
 						outStr <<  "\"";  
 					}
-					if( m_OSInstance->instanceData->variables->var[i]->ub != OSINFINITY
-						&& m_OSInstance->instanceData->variables->var[i]->ub != OSNAN
-						&& m_OSInstance->instanceData->variables->var[i]->ub != OSDBL_MAX) {
+					if( m_OSInstance->instanceData->variables->var[i]->ub != OSDBL_MAX
+						&& m_OSInstance->instanceData->variables->var[i]->ub != OSNAN ) {
 						outStr << " ub=\"" ;
 						outStr << m_OSInstance->instanceData->variables->var[i]->ub ;
 						outStr <<  "\"";
@@ -187,14 +186,12 @@ std::string OSiLWriter::writeOSiL( OSInstance *theosinstance){
 						outStr << m_OSInstance->instanceData->constraints->con[i]->constant ;
 						outStr <<  "\"";
 					}
-					if(m_OSInstance->instanceData->constraints->con[i]->lb != -OSDBL_MAX
-					&& m_OSInstance->instanceData->constraints->con[i]->lb != -OSINFINITY){
+					if(m_OSInstance->instanceData->constraints->con[i]->lb != -OSDBL_MAX ){
 						outStr << " lb=\"" ;
 						outStr << m_OSInstance->instanceData->constraints->con[i]->lb ;
 						outStr <<  "\"";
 					}
-					if(m_OSInstance->instanceData->constraints->con[i]->ub != OSINFINITY
-					&& m_OSInstance->instanceData->constraints->con[i]->ub != OSDBL_MAX){
+					if(m_OSInstance->instanceData->constraints->con[i]->ub != OSDBL_MAX){
 						outStr << " ub=\"" ;
 						outStr << m_OSInstance->instanceData->constraints->con[i]->ub ;
 						outStr <<  "\"";

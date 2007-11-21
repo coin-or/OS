@@ -307,8 +307,8 @@ bool OSnl2osil::createOSInstance(){
 		if(i >= firstIntegerVar) vartype = 'I';
 		if(X0 != NULL) init = X0[ i];
 		osinstance->addVariable(i, var_name(i), 
-			LUv[2*i] > -OSINFINITY  ? LUv[2*i] : -OSINFINITY, 
-			LUv[2*i+1] < OSINFINITY ? LUv[2*i+1] : OSINFINITY, 
+			LUv[2*i] > -OSDBL_MAX  ? LUv[2*i] : -OSDBL_MAX, 
+			LUv[2*i+1] < OSDBL_MAX ? LUv[2*i+1] : OSDBL_MAX, 
 			vartype, init, initString);
 	}	
 	//
@@ -350,8 +350,8 @@ bool OSnl2osil::createOSInstance(){
 	for(i = 0; i < n_con; i++)
 	{
 		osinstance->addConstraint(i, con_name(i), 
-		LUrhs[2*i] > -OSINFINITY ? LUrhs[2*i] : -OSINFINITY, 
-		LUrhs[2*i+1] < OSINFINITY ? LUrhs[2*i+1] : OSINFINITY, 
+		LUrhs[2*i] > -OSDBL_MAX ? LUrhs[2*i] : -OSDBL_MAX, 
+		LUrhs[2*i+1] < OSDBL_MAX ? LUrhs[2*i+1] : OSDBL_MAX, 
 		constant);
 	}	
 	int valuesBegin = 0;
