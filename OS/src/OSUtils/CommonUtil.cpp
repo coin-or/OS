@@ -33,20 +33,23 @@ bool CommonUtil::ISOSNAN( double number)
 
 // copy from CoinUtils	
 #ifdef MY_C_ISNAN
-    return MY_C_ISNAN( number)!=0;
+	if(MY_C_ISNAN( number) == true){
+		return true;
+	}
+	else return(number == OSNAN);
 #else
-    return false;
+	#ifdef NAN 
+		return isnan( number);
+	#elif defined NaN
+		return isnan( number);
+	#elif defined nan
+		return isnan( number);
+	#else
+		return (number == OSNAN);
+	#endif
 #endif
 
-//#ifdef NAN 
-//	return isnan( number);
-//#elif defined NaN
-//	return isnan( number);
-//#elif defined nan
-//	return isnan( number);
-//#else
-//	return (number == OSNAN);
-//#endif
+
 }
 
 

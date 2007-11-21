@@ -344,10 +344,12 @@ bool  KnitroSolver::loadProblemIntoKnitro (KTR_context_ptr  kc){
 	_daXInit = new double[_nN];
  	if( mdXInit != NULL) {
  		for(i = 0; i < _nN; i++){
- 			_daXInit[ i] = mdXInit[ i];
- 			//std::cout << "INITIAL VALUE !!!!!!!!!!!!!!!!!!!!  " << _daXInit[ i] << std::endl;	
- 		}	
- 	}
+ 	 		if(  CommonUtil::ISOSNAN( mdXInit[ i])  == true){
+ 	 			_daXInit[ i] = 1.7171;		
+ 	 		}			
+ 	 		else _daXInit[ i] = mdXInit[ i];
+ 		}
+ 	}	
  	else{
  		for(i = 0; i < _nN; i++){
  			_daXInit[ i] = 1.7171;

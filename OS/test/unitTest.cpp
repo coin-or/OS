@@ -323,7 +323,7 @@ int main(int argC, char* argV[])
 		//solver = NULL;	
 	}
 	catch(const ErrorClass& eclass){
-		unitTestResultFailure << "Sorry Unit Test Failed Testing the Ipopt Solver:"  + eclass.errormsg<< endl;  
+		unitTestResultFailure << "Sorry Unit Test Failed Testing the Ipopt Solver:"  + eclass.errormsg<< endl; 
 	}
 	#endif
 	try{
@@ -389,7 +389,7 @@ int main(int argC, char* argV[])
 		check = 6.7279;
 		cout << solver->osrl << endl;
 		ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
-		if(ok == false) throw ErrorClass(" Fail unit test with Knitro on r		return 0;osenbrokmod");
+		if(ok == false) throw ErrorClass(" Fail unit test with Knitro on rosenbrockmod");
 		solver->osinstance = NULL;
 		delete solver;
 		solver = NULL;
@@ -409,7 +409,7 @@ int main(int argC, char* argV[])
 		check = 1.00045e+06; 
 		cout << solver->osrl << endl;
 		ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
-		if(ok == false) throw ErrorClass(" Fail unit test with Knitr callBackTest.osil");
+		if(ok == false) throw ErrorClass(" Fail unit test with Knitro callBackTest.osil");
 		solver->osinstance = NULL;
 		delete solver;
 		solver = NULL;  
@@ -454,7 +454,7 @@ int main(int argC, char* argV[])
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  solver->osrl <<  endl;		
 		cout << endl << endl << endl;
-		unitTestResultFailure  <<"Sorry Unit Test Failed Testing the Knitro Solver:"  + eclass.errormsg << endl;
+		unitTestResultFailure  << "Sorry Unit Test Failed Testing the Knitro Solver: "  + eclass.errormsg << endl;
 	}	
 	#endif
 	//

@@ -645,12 +645,17 @@ bool OSInstance::processVariables() {
 		if(instanceData->variables->var[0]->name.length() > 0 || instanceData->variables->var[n-1]->name.length() > 0){
 			m_msVariableNames = new string[n];
 			for(i = 0; i < n; i++) m_msVariableNames[i] = instanceData->variables->var[i]->name;
-		}
-
-		if(CommonUtil::ISOSNAN(instanceData->variables->var[ 0]->init) == false ){ 
+		} 
 			m_mdVariableInitialValues = new double[n];
-			for(i = 0; i < n; i++) m_mdVariableInitialValues[i] = instanceData->variables->var[i]->init;
-		}
+			for(i = 0; i < n; i++){
+				if(CommonUtil::ISOSNAN(instanceData->variables->var[ 0]->init) == true ){				
+					m_mdVariableInitialValues[i] =	1.7171;
+				}
+				else{
+					m_mdVariableInitialValues[i] = instanceData->variables->var[i]->init;
+				}
+			}
+		//}
 		if((instanceData->variables->var[0]->initString.length() > 0)){
 			m_msVariableInitialStringValues = new string[n];
 			for(i = 0; i < n; i++) m_msVariableInitialStringValues[i] = instanceData->variables->var[i]->initString;

@@ -146,7 +146,11 @@ bool IpoptSolver::get_starting_point(Index n, bool init_x, Number* x,
  	double *mdXInit = osinstance->getVariableInitialValues(); 
  	if( mdXInit != NULL) {
  		for(i = 0; i < n; i++){
- 			x[ i] = mdXInit[ i];
+ 			if( CommonUtil::ISOSNAN( mdXInit[ i]) == true){ 
+ 				x[ i] = 1.7171; 
+ 				//std::cout << "INITIAL VALUE !!!!!!!!!!!!!!!!!!!!  " << x[ i] << std::endl;
+ 			}
+ 			else x[ i] = mdXInit[ i];
  			//std::cout << "INITIAL VALUE !!!!!!!!!!!!!!!!!!!!  " << x[ i] << std::endl;	
  		}	
  	}
@@ -168,7 +172,7 @@ bool IpoptSolver::eval_f(Index n, const Number* x, bool new_x, Number& obj_value
 		ipoptErrorMsg = eclass.errormsg;
 		throw;  
 	}
-	//if( CommonUtil::ISOSNAN( (double)obj_value) ) return false;
+	if( CommonUtil::ISOSNAN( (double)obj_value) ) return false;
   	return true;
 }
 
@@ -193,10 +197,10 @@ bool IpoptSolver::eval_g(Index n, const Number* x, bool new_x, Index m, Number* 
 	try{
  		double *conVals = osinstance->calculateAllConstraintFunctionValues( const_cast<double*>(x), NULL, NULL, new_x, 0 );
  		int i;
- 		//for(i = 0; i < m; i++){
- 			//if( CommonUtil::ISOSNAN( (double)conVals[ i] ) ) return false;
- 			//g[i] = conVals[ i]  ;	
- 		//} 
+ 		for(i = 0; i < m; i++){
+ 			if( CommonUtil::ISOSNAN( (double)conVals[ i] ) ) return false;
+ 			g[i] = conVals[ i]  ;	
+ 		} 
 		return true;
 	}
 	catch(const ErrorClass& eclass){
