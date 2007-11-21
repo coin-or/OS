@@ -2548,14 +2548,14 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( ){
 	//m_vbLagHessNonz holds the sparsity pattern Lagrangian of the Hessian
 	m_vbLagHessNonz = (*Fad).RevSparseHes(m_iNumberOfNonlinearVariables, e);
 	for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
-		std::cout << "Row " << i << "  of Hessian " << std::endl;
+		//std::cout << "Row " << i << "  of Hessian " << std::endl;
 		for(j = i; j < m_iNumberOfNonlinearVariables; j++){
 			if(m_vbLagHessNonz[ i*m_iNumberOfNonlinearVariables + j]  == true) numNonz++;
-			std::cout << m_vbLagHessNonz[ i*m_iNumberOfNonlinearVariables + j] <<  "  " ;
+			//std::cout << m_vbLagHessNonz[ i*m_iNumberOfNonlinearVariables + j] <<  "  " ;
 		}
-		std::cout << std::endl;
+		//std::cout << std::endl;
 	}
-	std::cout << "Lagrangian Hessian Nonzeros = " << numNonz << std::endl;
+	//std::cout << "Lagrangian Hessian Nonzeros = " << numNonz << std::endl;
 	i = 0;
 	// now that we have the dimension create SparseHessianMatrix (upper triangular)
 	m_LagrangianSparseHessian = new SparseHessianMatrix();
