@@ -50,7 +50,8 @@
 //	#define OSINFINITY 1e20
 //#endif
 
-#define OSINFINITY 1e30
+//#define OSINFINITY 1e30
+
 #define OS_E_VALUE exp(1.0)
 #define OS_PI_VALUE 2*asin(1.0)
 
@@ -67,9 +68,13 @@
 
 #ifdef DBL_MAX
 	#define OSDBL_MAX DBL_MAX
+#elif
+	//#define OSDBL_MAX OSINFINITY
+	#define OSDBL_MAX HUGE_VAL
 #else
-	#define OSDBL_MAX OSINFINITY
+	#define OSDBL_MAX 1e30
 #endif
+
 
 #ifdef INT_MAX
 	#define OSINT_MAX INT_MAX

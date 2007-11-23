@@ -2360,7 +2360,7 @@ double atofmod1(int* osillineno, const char *number, const char *numberend){
 		case 'I':
 			i++;
 			if(number[ i++] == 'N' && number[i++] == 'F'){
-				val = OSINFINITY;
+				val = OSDBL_MAX;
 				break;
 			}
 			else{

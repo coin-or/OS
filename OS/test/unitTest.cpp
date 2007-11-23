@@ -158,6 +158,7 @@ int main(int argC, char* argV[])
 	using CppAD::NearEqual;
 	bool ok;
 	double check;
+	//return 0;
 	cout << "START UNIT TEST" << endl;
 	// define the classes
 	FileUtil *fileUtil = NULL;  
