@@ -68,7 +68,7 @@
 
 #ifdef DBL_MAX
 	#define OSDBL_MAX DBL_MAX
-#elif
+#elif defined HUGE_VAL
 	//#define OSDBL_MAX OSINFINITY
 	#define OSDBL_MAX HUGE_VAL
 #else
