@@ -82,7 +82,8 @@ LIBS += -lClp
 
 #
 #ADDITIONAL IPOPT LIBS
-ADDIPOPTLIBS = $(shell cat $(OSLIBDIR)/ipopt_addlibs_cpp.txt)
+#ADDIPOPTLIBS = $(shell cat $(OSLIBDIR)/ipopt_addlibs_cpp.txt)
+ADDIPOPTLIBS = `cat @prefix@/lib/ipopt_addlibs_cpp.txt`
 @COIN_HAS_IPOPT_TRUE@LIBS += -lipopt $(ADDIPOPTLIBS)
 #
 
