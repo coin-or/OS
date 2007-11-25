@@ -53,7 +53,7 @@ endif
 # Directory with header files
 OSINCDIR = @includedir@
 
-# Directory with libos.a
+# Directory with libOS
 OSLIBDIR = @libdir@
 exec_prefix = @exec_prefix@
 prefix = @prefix@
@@ -61,10 +61,10 @@ prefix = @prefix@
 # Libraries necessary to link with OS
 
 # Libraries necessary to link
-LIBS = -L$(OSLIBDIR) 
+LIBS = @oslib@ @ADDLIBS@  
+
 
 #ADD ALL THE LIBS
-LIBS += -lOS
 LIBS += -lOsiCbc
 @COIN_HAS_SYMPHONY_TRUE@LIBS += -lOsiSym 
 LIBS += -lOsiClp 
@@ -79,16 +79,14 @@ LIBS += -lClp
 @COIN_HAS_DYLP_TRUE@LIBS += -lDylp 
 @COIN_HAS_VOL_TRUE@LIBS += -lVol
 @COIN_HAS_GLPK_TRUE@LIBS += -lOsiGlpk
-@COIN_HAS_IPOPT_TRUE@LIBS += -lipopt  `cat @IPOPTOBJDIR@/src/Interfaces/ipopt_addlibs_cpp.txt`
 
-             
+#
+#ADDITIONAL IPOPT LIBS
+ADDIPOPTLIBS = $(shell cat $(OSLIBDIR)/ipopt_addlibs_cpp.txt)
+@COIN_HAS_IPOPT_TRUE@LIBS += -lipopt $(ADDIPOPTLIBS)
+#
 
-
-#if COIN_HAS_ASL
-#  AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
-#  AM_CPPFLAGS += $(ASL_CPPFLAGS) 
-#  amplClient_LDADD += $(ASLLIB)
-#endif
+@COIN_HAS_ASL_TRUE@LIBS += @ASLLIB@
 LIBS += -lCoinUtils  
 #DONE ADDING LIBS
 

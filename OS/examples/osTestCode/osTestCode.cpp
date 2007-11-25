@@ -19,8 +19,61 @@
  
 
 
-#include <iostream>
+
+#include <cppad/cppad.hpp> 
+#include "OSResult.h" 
+#include "OSiLReader.h"        
+#include "OSiLWriter.h" 
+#include "OSrLReader.h"          
+#include "OSrLWriter.h"      
+#include "OSInstance.h"  
+#include "FileUtil.h"  
+#include "OSConfig.h" 
+#include "CoinSolver.h"
+#include "DefaultSolver.h"  
+#include "WSUtil.h" 
+#include "OSSolverAgent.h"   
+#include "OShL.h"     
 #include "ErrorClass.h"
+#include "OSmps2osil.h"   
+#include "Base64.h"
+#include "CommonUtil.h"
+    
+ 
+#ifdef COIN_HAS_KNITRO    
+#include "KnitroSolver.h"
+#endif 
+
+#ifdef COIN_HAS_GLPK
+#include <OsiGlpkSolverInterface.hpp>
+#endif
+
+
+#ifdef COIN_HAS_ASL
+#include "OSnl2osil.h"
+#endif
+#ifdef COIN_HAS_LINDO    
+#include "LindoSolver.h"
+#endif  
+#ifdef COIN_HAS_IPOPT    
+#include "IpoptSolver.h"
+#endif 
+ 
+
+
+#ifdef HAVE_CTIME
+# include <ctime>
+#else
+# ifdef HAVE_TIME_H
+#  include <time.h>
+# else
+#  error "don't have header file for time"
+# endif
+#endif
+
+
+using std::cout;   
+using std::endl;
 
 
 

@@ -333,6 +333,7 @@ localstatedir = @localstatedir@
 mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
+oslib = @oslib@
 prefix = @prefix@
 program_transform_name = @program_transform_name@
 sbindir = @sbindir@

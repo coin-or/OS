@@ -40,6 +40,8 @@ AC_CANONICAL_BUILD
 # Initialise ADDLIBS and FADDLIBS
 AC_COIN_PROJECTDIR_INIT
 
+LIBS_without_ADDLIBS="$LIBS"
+
 # Check if user wants to produce debugging code
 AC_COIN_DEBUG_COMPILE(OS)
 
@@ -286,7 +288,7 @@ AC_COIN_OS_SOCKET_LIBS
 if test x$ac_coin_found_socket_libraries = xno ; then
   AC_MSG_ERROR([Can't build OS without socket libraries!])
 fi
-ADDLIBS="$WINSOCKLIBS"
+ADDLIBS="$WINSOCKLIBS   $ADDLIBS"
   
 AM_CONDITIONAL(USEMULTIPLYDEFINED, test x$mac_osx = xyes)
 
@@ -307,7 +309,14 @@ OSROOT_DIR=`pwd`
 AC_DEFINE_UNQUOTED([OSROOT_DIR], ["$OSROOT_DIR"],
     [Define the path to the OS root])
 
-
+# The following one is for the example makefiles
+case $CXX in
+  cl*)
+    oslib='`$(CYGPATH_W) $(OSLIBDIR)`\\libOS.lib';;
+  *)
+    oslib="-L\$(OSLIBDIR) -lOS";;
+esac
+AC_SUBST(oslib)
 
 
 ##############################################################################
