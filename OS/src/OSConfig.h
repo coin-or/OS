@@ -1,5 +1,5 @@
 /*
- * Include file for the configuration of Osi.
+ * Include file for the configuration of OS.
  *
  * On systems where the code is configured with the configure script
  * (i.e., compilation is always done with HAVE_CONFIG_H defined), this
@@ -16,24 +16,22 @@
  * setting by editing this file here.
  *
  */
+
+
+
      
 #ifndef __OSCONFIG_H__
  
 
 
-#ifdef HAVE_CONFIG_H
-// undefine the following in case already defined in CppAD package
-#undef PACKAGE
-#undef PACKAGE_BUGREPORT
-#undef PACKAGE_NAME
-#undef PACKAGE_STRING
-#undef PACKAGE_TARNAME
-#undef PACKAGE_VERSION
-#undef VERSION
 
-#ifndef MSVISUALSTUDIO 
+#ifdef HAVE_CONFIG_H
 #include "config_os.h"
-#endif
+
+
+//#ifndef MSVISUALSTUDIO 
+//#include "config_os.h"
+//#endif
 
 /* undefine macros that could conflict with those in other config.h
    files */

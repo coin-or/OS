@@ -15,9 +15,6 @@
 
 
 #include "OSmps2osil.h"
-
-#include <CoinMpsIO.hpp>
-#include <CoinPackedMatrix.hpp>
 #include <iostream> 
 
 

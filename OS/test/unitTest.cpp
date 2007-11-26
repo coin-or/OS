@@ -97,6 +97,9 @@
 
 
 #include <cppad/cppad.hpp> 
+//#include "CoinUtilsConfig.h"
+#include "OSConfig.h"
+#include "OSmps2osil.h" 
 #include "OSResult.h" 
 #include "OSiLReader.h"        
 #include "OSiLWriter.h" 

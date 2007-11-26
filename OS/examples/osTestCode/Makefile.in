@@ -36,8 +36,10 @@ VPATH = @srcdir@
 # C++ Compiler command
 CXX = @CXX@
 
+DEFS = -DHAVE_CONFIG_H
+
 # C++ Compiler options
-CXXFLAGS = @CXXFLAGS@
+CXXFLAGS = @CXXFLAGS@  $(DEFS)
 
 
 
