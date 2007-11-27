@@ -34,7 +34,7 @@
 #include "OSInstance.h"  
 #include "FileUtil.h"  
 #include "OSConfig.h" 
-#include "CoinSolver.h"
+//#include "CoinSolver.h"
 #include "DefaultSolver.h"  
 #include "WSUtil.h" 
 #include "OSSolverAgent.h"   

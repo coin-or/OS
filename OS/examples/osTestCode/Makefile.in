@@ -55,45 +55,43 @@ endif
 # Directory with header files
 OSINCDIR = @includedir@
 
-# Directory with libOS
-OSLIBDIR = @libdir@
+# Directory with the libraries
+INSTALLIBDIR = @libdir@
 exec_prefix = @exec_prefix@
 prefix = @prefix@
 
 # Libraries necessary to link with OS
 
 # Libraries necessary to link
-LIBS = @oslib@ @ADDLIBS@  
+LIBS = @oslib@   
 
-
+#
 #ADD ALL THE LIBS
-LIBS += -lOsiCbc
-@COIN_HAS_SYMPHONY_TRUE@LIBS += -lOsiSym 
-LIBS += -lOsiClp 
-@COIN_HAS_DYLP_TRUE@LIBS += -lOsiDylp
-@COIN_HAS_VOL_TRUE@LIBS += -lOsiVol 
-@COIN_HAS_CPX_TRUE@LIBS += -lOsiCpx
-LIBS += -lCbc
-@COIN_HAS_SYMPHONY_TRUE@LIBS += -lSym
-LIBS += -lCgl
-LIBS += -lOsi
-LIBS += -lClp 
-@COIN_HAS_DYLP_TRUE@LIBS += -lDylp 
-@COIN_HAS_VOL_TRUE@LIBS += -lVol
-@COIN_HAS_GLPK_TRUE@LIBS += -lOsiGlpk
-
+#
+LIBS += @osicbclib@
+@COIN_HAS_SYMPHONY_TRUE@LIBS += @osisymphonylib@
+LIBS += @osiclplib@ 
+@COIN_HAS_DYLP_TRUE@LIBS += @osidylplib@
+@COIN_HAS_VOL_TRUE@LIBS += @osivollib@ 
+LIBS += @cbclib@
+@COIN_HAS_SYMPHONY_TRUE@LIBS += @symphonylib@
+LIBS += @cgllib@
+LIBS += @osilib@
+LIBS += @clplib@ 
+@COIN_HAS_DYLP_TRUE@LIBS += @dylplib@ 
+@COIN_HAS_VOL_TRUE@LIBS += @vollib@
 #
 #ADDITIONAL IPOPT LIBS
 #ADDIPOPTLIBS = $(shell cat $(OSLIBDIR)/ipopt_addlibs_cpp.txt)
 ADDIPOPTLIBS = `cat @prefix@/lib/ipopt_addlibs_cpp.txt`
-@COIN_HAS_IPOPT_TRUE@LIBS += -lipopt $(ADDIPOPTLIBS)
-#
+@COIN_HAS_IPOPT_TRUE@LIBS += @ipoptlib@ $(ADDIPOPTLIBS)
+LIBS += @coinutilslib@ 
 
-@COIN_HAS_ASL_TRUE@LIBS += @ASLLIB@
-LIBS += -lCoinUtils  
+#@COIN_HAS_ASL_TRUE@LIBS += @ASLLIB@
+ 
 #DONE ADDING LIBS
 
-
+LIBS +=  @ADDLIBS@
 
 # Necessary Include dirs (we use the CYGPATH_W variables to allow
 # compilation with Windows compilers)

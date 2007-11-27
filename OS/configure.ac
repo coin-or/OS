@@ -78,32 +78,141 @@ AC_COIN_HAS_PROJECT(Ipopt)
 AC_COIN_HAS_PROJECT(cppad)
 
 
+
+  
   case $coin_has_cppad in
      unavailable|skipping)
          AC_MSG_ERROR([cannot find CppAD which is necessary to build OS]) ;;
   esac
 
-  case $coin_has_coinutils in
-     unavailable|skipping)
-         AC_MSG_ERROR([cannot find CoinUtils which is necessary to build OS]) ;;
+if test $coin_has_coinutils != unavailable &&
+   test $coin_has_coinutils != skipping; then
+  case $CXX in
+    cl*)
+       coinutilslib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libCoinUtils.lib';;
+     *)
+       coinutilslib="-L\$(INSTALLIBDIR) -lCoinUtils";;
   esac
+  AC_SUBST(coinutilslib) 
+  else
+    AC_MSG_ERROR([cannot find CoinTuils which is necessary to build OS])   
+fi
 
-
-  case $coin_has_clp in
-     unavailable|skipping)
-         AC_MSG_ERROR([cannot find Clp which is necessary to build OS]) ;;
+if test $coin_has_clp != unavailable &&
+   test $coin_has_clp != skipping; then
+  case $CXX in
+    cl*)
+       clplib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libClp.lib'
+       osiclplib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOsiClp.lib';;
+     *)
+       clplib="-L\$(INSTALLIBDIR) -lClp"
+       osiclplib="-L\$(INSTALLIBDIR) -lOsiClp";;
   esac
+  AC_SUBST(clplib)
+  AC_SUBST(osiclplib) 
+  else
+    AC_MSG_ERROR([cannot find Clp which is necessary to build OS])   
+fi
 
-  case $coin_has_cbc in
-     unavailable|skipping)
-         AC_MSG_ERROR([cannot find Cbc which is necessary to build OS]) ;;
+if test $coin_has_cbc != unavailable &&
+   test $coin_has_cbc != skipping; then
+  case $CXX in
+    cl*)
+       cbclib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libCbc.lib'
+       osicbclib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOsiCbc.lib';;
+     *)
+       cbclib="-L\$(INSTALLIBDIR) -lCbc"
+       osicbclib="-L\$(INSTALLIBDIR) -lOsiCbc";;
   esac
+  AC_SUBST(cbclib) 
+  AC_SUBST(osicbclib)
+  else
+    AC_MSG_ERROR([cannot find Cbc which is necessary to build OS])   
+fi 
 
-  case $coin_has_cgl in
-     unavailable|skipping)
-         AC_MSG_ERROR([cannot find Cgl which is necessary to build OS]) ;;
+
+if test $coin_has_cgl != unavailable &&
+   test $coin_has_cgl != skipping; then
+  case $CXX in
+    cl*)
+       cgllib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libCgl.lib';;
+     *)
+       cgllib="-L\$(INSTALLIBDIR) -lCgl";;
   esac
+  AC_SUBST(cgllib) 
+  else
+    AC_MSG_ERROR([cannot find Cgl which is necessary to build OS])   
+fi
 
+
+if test $coin_has_osi != unavailable &&
+   test $coin_has_osi != skipping; then
+  case $CXX in
+    cl*)
+       osilib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOsi.lib';;
+     *)
+       osilib="-L\$(INSTALLIBDIR) -lOsi";;
+  esac
+  AC_SUBST(osilib) 
+  else
+    AC_MSG_ERROR([cannot find Osi which is necessary to build OS])   
+fi
+
+
+if test $coin_has_dylp != unavailable &&
+   test $coin_has_dylp != skipping; then
+  case $CXX in
+    cl*)
+       dylplib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libDylp.lib'
+       osidylplib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOsiDylp.lib';;
+     *)
+       dylplib="-L\$(INSTALLIBDIR) -lDylp"
+       osidylplib="-L\$(INSTALLIBDIR) -lOsiDylp";;
+  esac
+  AC_SUBST(dylplib) 
+  AC_SUBST(osidylplib) 
+fi
+
+
+if test $coin_has_vol != unavailable &&
+   test $coin_has_vol != skipping; then
+  case $CXX in
+    cl*)
+       vollib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libVol.lib'
+       osivollib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libVol.lib';;
+     *)
+       vollib="-L\$(INSTALLIBDIR) -lVol"
+       osivollib="-L\$(INSTALLIBDIR) -lOsiVol";;
+  esac
+  AC_SUBST(vollib)
+  AC_SUBST(osivollib)  
+fi
+
+
+if test $coin_has_symphony != unavailable &&
+   test $coin_has_symphony != skipping; then
+  case $CXX in
+    cl*)
+       symphonylib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libSym.lib'
+       osisymphonylib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOsiSym.lib';;
+     *)
+       symphonylib="-L\$(INSTALLIBDIR) -lSym"
+       osisymphonylib="-L\$(INSTALLIBDIR) -lOsiSym";;
+  esac
+  AC_SUBST(symphonylib) 
+  AC_SUBST(osisymphonylib)  
+fi
+
+if test $coin_has_ipopt != unavailable &&
+   test $coin_has_ipopt != skipping; then
+  case $CXX in
+    cl*)
+       ipoptlib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libipopt.lib';;
+     *)
+       ipoptlib="-L\$(INSTALLIBDIR) -lipopt";;
+  esac
+  AC_SUBST(ipoptlib)  
+fi
 
 #############################################################################
 #                             Third party solvers                           #
@@ -312,9 +421,9 @@ AC_DEFINE_UNQUOTED([OSROOT_DIR], ["$OSROOT_DIR"],
 # The following one is for the example makefiles
 case $CXX in
   cl*)
-    oslib='`$(CYGPATH_W) $(OSLIBDIR)`\\libOS.lib';;
+    oslib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOS.lib';;
   *)
-    oslib="-L\$(OSLIBDIR) -lOS";;
+    oslib="-L\$(INSTALLIBDIR) -lOS";;
 esac
 AC_SUBST(oslib)
 
