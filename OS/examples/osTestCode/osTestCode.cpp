@@ -20,15 +20,11 @@
 
 
 #include <cppad/cppad.hpp> 
-
-
 #include "OSConfig.h"
-
-
 
 #include "OSResult.h" 
 #include "OSiLReader.h"        
-#include "OSiLWriter.h" 
+#include "OSiLWriter.h"   
 #include "OSrLReader.h"          
 #include "OSrLWriter.h"      
 #include "OSInstance.h"  
@@ -44,16 +40,6 @@
 #include "CommonUtil.h"
 #include "ErrorClass.h"
 
-#ifdef HAVE_CTIME
-# include <ctime>
-#else
-# ifdef HAVE_TIME_H
-#  include <time.h>
-# else
-#  error "don't have header file for time"
-# endif
-#endif
-
 #include<iostream>
 using std::cout;   
 using std::endl;
@@ -64,14 +50,29 @@ using std::endl;
 
 int main(int argC, char* argV[]){
 // test OS code samples here
-	cout << "Hello World " << endl;	
-	int k = 1;
 	try{
-		if(k == 1) throw ErrorClass("you can't do that");
+		if(argC != 2) throw ErrorClass( "there must be exactly one command line argument");
+		std::string osilFileName;
+		std::string osil;
+		FileUtil *fileUtil = NULL; 
+		fileUtil = new FileUtil();
+		// get the input file
+	    osilFileName =  argV[1];
+	    osil = fileUtil->getFileAsString( &osilFileName[0]);
+	    OSInstance *osinstance = NULL;
+	    OSiLReader *osilreader = NULL;
+	    OSiLWriter *osilwriter = NULL;
+	    osilwriter = new OSiLWriter();
+	    osilreader = new OSiLReader(); 
+	    osinstance = osilreader->readOSiL( &osil);
+	    cout << osilwriter->writeOSiL( osinstance) << endl;
+	    delete osilreader;
+	    delete osilwriter;
+	   // delete osinstance;
 	}
 	catch(const ErrorClass& eclass){
-	std::cout << eclass.errormsg <<  std::endl;
-	return 0;
+		std::cout << eclass.errormsg <<  std::endl;
+		return 0;
 	} 
 }// end main
 

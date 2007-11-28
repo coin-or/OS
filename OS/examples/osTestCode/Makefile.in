@@ -23,11 +23,14 @@ ADDLIBS =
 # CHANGEME: Additional flags for compilation (e.g., include flags)
 ADDINCFLAGS =  
 
-# CHANGEME: Directory to the sources for the (example) problem definition
-# files
+# CHANGEME: SRCDIR and VPATH should be the path to the source code. It is assumed
+# that the lib directory is in prefix/lib and the header files are in
+# prefix/include
 SRCDIR = @srcdir@
 VPATH = @srcdir@
-
+prefix = @prefix@
+#
+#
 ##########################################################################
 #  Usually, you don't have to change anything below.  Note that if you   #
 #  change certain compiler options, you might have to recompile OS.   #
@@ -58,12 +61,12 @@ OSINCDIR = @includedir@
 # Directory with the libraries
 INSTALLIBDIR = @libdir@
 exec_prefix = @exec_prefix@
-prefix = @prefix@
+
 
 # Libraries necessary to link with OS
 
 # Libraries necessary to link
-LIBS = @oslib@   
+LIBS = @oslib@   @ADDLIBS@
 
 #
 #ADD ALL THE LIBS
@@ -83,7 +86,7 @@ LIBS += @clplib@
 #
 #ADDITIONAL IPOPT LIBS
 #ADDIPOPTLIBS = $(shell cat $(OSLIBDIR)/ipopt_addlibs_cpp.txt)
-ADDIPOPTLIBS = `cat @prefix@/lib/ipopt_addlibs_cpp.txt`
+ADDIPOPTLIBS = `cat $(prefix)/lib/ipopt_addlibs_cpp.txt`
 @COIN_HAS_IPOPT_TRUE@LIBS += @ipoptlib@ $(ADDIPOPTLIBS)
 LIBS += @coinutilslib@ 
 
@@ -91,7 +94,7 @@ LIBS += @coinutilslib@
  
 #DONE ADDING LIBS
 
-LIBS +=  @ADDLIBS@
+ 
 
 # Necessary Include dirs (we use the CYGPATH_W variables to allow
 # compilation with Windows compilers)
