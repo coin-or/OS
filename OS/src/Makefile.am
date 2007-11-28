@@ -158,7 +158,6 @@ AM_CPPFLAGS =\
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSSolverInterfaces` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSModelInterfaces` \
 	-I`$(CYGPATH_W) $(CPPADSRCDIR)` \
-	-I`$(CYGPATH_W) $(CPPADSRCDIR)/cppad`  \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSCommonInterfaces` 
 
 # The -rpath flag is used by libtool to make sure that the shared
