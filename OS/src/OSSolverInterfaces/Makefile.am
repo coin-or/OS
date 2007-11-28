@@ -62,7 +62,7 @@ AM_CPPFLAGS =\
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCbc` \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiClp` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src` \
-	-I`$(CYGPATH_W) $(CPPADSRCDIR)/` \
+	-I`$(CYGPATH_W) $(CPPADSRCDIR)` \
 	-I`$(CYGPATH_W) $(CPPADSRCDIR)/cppad`  \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSCommonInterfaces` 
 
