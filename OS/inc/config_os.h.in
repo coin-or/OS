@@ -80,6 +80,9 @@
 /* Define to 1 if you have the <cfloat> header file. */
 #undef HAVE_CFLOAT
 
+/* Define to 1 if you have the <cieeefp> header file. */
+#undef HAVE_CIEEEFP
+
 /* Define to 1 if you have the <cmath> header file. */
 #undef HAVE_CMATH
 
@@ -106,6 +109,9 @@
 
 /* Define to 1 if you have the <float.h> header file. */
 #undef HAVE_FLOAT_H
+
+/* Define to 1 if you have the <ieeefp.h> header file. */
+#undef HAVE_IEEEFP_H
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
