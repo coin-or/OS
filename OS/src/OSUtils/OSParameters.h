@@ -43,6 +43,15 @@
 #  include <float.h>
 # endif
 #endif
+#ifdef HAVE_CIEEEFP
+# include <cieeefp>
+#else
+# ifdef HAVE_IEEEFP_H
+#  include <ieeefp.h>
+# endif
+#endif
+
+
 //#include <limits.h>
 //#ifdef INFINITY //This is the definition in the ISO C99 standard.
 //	#define OSINFINITY INFINITY
