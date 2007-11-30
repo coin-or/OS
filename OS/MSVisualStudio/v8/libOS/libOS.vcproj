@@ -184,7 +184,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\Os\src\OSSolverInterfaces\DefaultSolver.cpp"
+				RelativePath="..\..\..\src\OSCommonInterfaces\DefaultSolver.cpp"
 				>
 			</File>
 			<File
