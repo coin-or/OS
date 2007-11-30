@@ -130,7 +130,7 @@
 				RelativePath="..\..\..\..\Os\src\OSUtils\CommonUtil.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\Os\src\OSSolverInterfaces\DefaultSolver.cpp">
+				RelativePath="..\..\..\src\OSCommonInterfaces\DefaultSolver.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\Os\src\OSUtils\ErrorClass.cpp">
