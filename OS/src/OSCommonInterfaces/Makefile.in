@@ -58,7 +58,7 @@ LTLIBRARIES = $(noinst_LTLIBRARIES)
 libOSCommonInterfaces_la_LIBADD =
 am_libOSCommonInterfaces_la_OBJECTS = OSExpressionTree.lo \
 	OSInstance.lo OSResult.lo OSiLReader.lo OSiLWriter.lo \
-	OSnLNode.lo OSrLReader.lo OSrLWriter.lo
+	OSnLNode.lo OSrLReader.lo OSrLWriter.lo DefaultSolver.lo
 libOSCommonInterfaces_la_OBJECTS =  \
 	$(am_libOSCommonInterfaces_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
@@ -342,7 +342,9 @@ libOSCommonInterfaces_la_SOURCES = \
 	OSrLReader.cpp \
 	OSrLReader.h \
 	OSrLWriter.cpp \
-	OSrLWriter.h 
+	OSrLWriter.h \
+    DefaultSolver.cpp \
+	DefaultSolver.h 
 
 
 # This is for libtool (on Windows)
@@ -375,7 +377,8 @@ include_HEADERS = \
 	OSiLWriter.h \
 	OSnLNode.h \
 	OSrLReader.h \
-	OSrLWriter.h
+	OSrLWriter.h \
+	DefaultSolver.h
 
 all: all-am
 
@@ -428,6 +431,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DefaultSolver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSExpressionTree.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSInstance.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSResult.Plo@am__quote@

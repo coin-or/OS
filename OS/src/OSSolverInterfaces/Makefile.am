@@ -18,8 +18,6 @@ noinst_LTLIBRARIES = libOSSolverInterfaces.la
 
 # List all source files for this library, including headers
 libOSSolverInterfaces_la_SOURCES = \
-	DefaultSolver.cpp \
-	DefaultSolver.h \
 	CoinSolver.cpp \
 	CoinSolver.h  
 
@@ -129,7 +127,6 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 # and that therefore should be installed in 'install'
 include_HEADERS = \
 	../../inc/config_os.h \
-	DefaultSolver.h \
 	CoinSolver.h 
 
 if COIN_HAS_LINDO

@@ -99,15 +99,14 @@ CONFIG_HEADER = $(top_builddir)/inc/config_os.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libOSSolverInterfaces_la_LIBADD =
-am__libOSSolverInterfaces_la_SOURCES_DIST = DefaultSolver.cpp \
-	DefaultSolver.h CoinSolver.cpp CoinSolver.h LindoSolver.cpp \
-	LindoSolver.h IpoptSolver.cpp IpoptSolver.h KnitroSolver.cpp \
-	KnitroSolver.h
+am__libOSSolverInterfaces_la_SOURCES_DIST = CoinSolver.cpp \
+	CoinSolver.h LindoSolver.cpp LindoSolver.h IpoptSolver.cpp \
+	IpoptSolver.h KnitroSolver.cpp KnitroSolver.h
 @COIN_HAS_LINDO_TRUE@am__objects_1 = LindoSolver.lo
 @COIN_HAS_IPOPT_TRUE@am__objects_2 = IpoptSolver.lo
 @COIN_HAS_KNITRO_TRUE@am__objects_3 = KnitroSolver.lo
-am_libOSSolverInterfaces_la_OBJECTS = DefaultSolver.lo CoinSolver.lo \
-	$(am__objects_1) $(am__objects_2) $(am__objects_3)
+am_libOSSolverInterfaces_la_OBJECTS = CoinSolver.lo $(am__objects_1) \
+	$(am__objects_2) $(am__objects_3)
 libOSSolverInterfaces_la_OBJECTS =  \
 	$(am_libOSSolverInterfaces_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
@@ -130,8 +129,8 @@ LINK = $(LIBTOOL) --tag=CC --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 SOURCES = $(libOSSolverInterfaces_la_SOURCES)
 DIST_SOURCES = $(am__libOSSolverInterfaces_la_SOURCES_DIST)
-am__include_HEADERS_DIST = ../../inc/config_os.h DefaultSolver.h \
-	CoinSolver.h LindoSolver.h KnitroSolver.h IpoptSolver.h
+am__include_HEADERS_DIST = ../../inc/config_os.h CoinSolver.h \
+	LindoSolver.h KnitroSolver.h IpoptSolver.h
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
     $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
@@ -377,9 +376,8 @@ AUTOMAKE_OPTIONS = foreign
 noinst_LTLIBRARIES = libOSSolverInterfaces.la
 
 # List all source files for this library, including headers
-libOSSolverInterfaces_la_SOURCES = DefaultSolver.cpp DefaultSolver.h \
-	CoinSolver.cpp CoinSolver.h $(am__append_1) $(am__append_2) \
-	$(am__append_3)
+libOSSolverInterfaces_la_SOURCES = CoinSolver.cpp CoinSolver.h \
+	$(am__append_1) $(am__append_2) $(am__append_3)
 
 # This is for libtool (on Windows)
 libOSSolverInterfaces_la_LDFLAGS = $(LT_LDFLAGS)
@@ -412,8 +410,8 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 
 # Here list all the header files that are required by a user of the library,
 # and that therefore should be installed in 'install'
-include_HEADERS = ../../inc/config_os.h DefaultSolver.h CoinSolver.h \
-	$(am__append_12) $(am__append_13) $(am__append_14)
+include_HEADERS = ../../inc/config_os.h CoinSolver.h $(am__append_12) \
+	$(am__append_13) $(am__append_14)
 all: all-am
 
 .SUFFIXES:
@@ -466,7 +464,6 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CoinSolver.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DefaultSolver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpoptSolver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/KnitroSolver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/LindoSolver.Plo@am__quote@

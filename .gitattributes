@@ -148,6 +148,8 @@ OS/src/OSAgent/OShL.cpp -text
 OS/src/OSAgent/OShL.h -text
 OS/src/OSAgent/WSUtil.cpp -text
 OS/src/OSAgent/WSUtil.h -text
+OS/src/OSCommonInterfaces/DefaultSolver.cpp -text
+OS/src/OSCommonInterfaces/DefaultSolver.h -text
 OS/src/OSCommonInterfaces/Makefile.am -text
 OS/src/OSCommonInterfaces/Makefile.in -text
 OS/src/OSCommonInterfaces/OSExpressionTree.cpp -text
@@ -200,8 +202,6 @@ OS/src/OSParsers/parseosss.cpp -text
 OS/src/OSParsers/parseosss.l -text
 OS/src/OSSolverInterfaces/CoinSolver.cpp -text
 OS/src/OSSolverInterfaces/CoinSolver.h -text
-OS/src/OSSolverInterfaces/DefaultSolver.cpp -text
-OS/src/OSSolverInterfaces/DefaultSolver.h -text
 OS/src/OSSolverInterfaces/IpoptSolver.cpp -text
 OS/src/OSSolverInterfaces/IpoptSolver.h -text
 OS/src/OSSolverInterfaces/KnitroSolver.cpp -text
