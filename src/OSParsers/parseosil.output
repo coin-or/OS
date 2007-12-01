@@ -1,0 +1,3855 @@
+Grammar
+
+    0 $accept: osildoc $end
+
+    1 osildoc: quadraticcoefficients nonlinearExpressions INSTANCEDATAEND OSILEND
+
+    2 quadraticcoefficients: /* empty */
+    3                      | QUADRATICCOEFFICIENTSSTART quadnumberatt qTermlist QUADRATICCOEFFICIENTSEND
+
+    4 quadnumberatt: NUMBEROFQTERMSATT INTEGER quote GREATERTHAN
+
+    5 qTermlist: /* empty */
+    6          | qTermlist qterm
+
+    7 @1: /* empty */
+
+    8 qterm: @1 QTERMSTART anotherqTermATT qtermend
+
+    9 qtermend: ENDOFELEMENT
+   10         | GREATERTHAN QTERMEND
+
+   11 anotherqTermATT: /* empty */
+   12                | anotherqTermATT qtermatt
+
+   13 qtermatt: qtermidxOneatt quote
+   14         | qtermidxTwoatt quote
+   15         | qtermcoefatt quote
+   16         | qtermidxatt quote
+
+   17 qtermidxOneatt: IDXONEATT INTEGER
+
+   18 qtermidxTwoatt: IDXTWOATT INTEGER
+
+   19 qtermcoefatt: COEFATT DOUBLE
+   20             | COEFATT INTEGER
+
+   21 qtermidxatt: IDXATT INTEGER
+
+   22 nonlinearExpressions: /* empty */
+   23                     | NONLINEAREXPRESSIONSSTART nlnumberatt nlnodes NONLINEAREXPRESSIONSEND
+
+   24 nlnumberatt: NUMBEROFNONLINEAREXPRESSIONS INTEGER quote GREATERTHAN
+
+   25 nlnodes: /* empty */
+
+   26 @2: /* empty */
+
+   27 nlnodes: nlnodes NLSTART nlIdxATT GREATERTHAN nlnode @2 NLEND
+
+   28 nlIdxATT: IDXATT INTEGER quote
+
+   29 nlnode: number
+   30       | variable
+   31       | times
+   32       | plus
+   33       | sum
+   34       | minus
+   35       | negate
+   36       | divide
+   37       | power
+   38       | product
+   39       | ln
+   40       | sqrt
+   41       | square
+   42       | sin
+   43       | cos
+   44       | exp
+   45       | if
+   46       | abs
+   47       | max
+   48       | min
+   49       | E
+   50       | PI
+   51       | allDiff
+
+   52 @3: /* empty */
+
+   53 times: TIMESSTART @3 nlnode nlnode TIMESEND
+
+   54 @4: /* empty */
+
+   55 plus: PLUSSTART @4 nlnode nlnode PLUSEND
+
+   56 @5: /* empty */
+
+   57 minus: MINUSSTART @5 nlnode nlnode MINUSEND
+
+   58 @6: /* empty */
+
+   59 negate: NEGATESTART @6 nlnode NEGATEEND
+
+   60 @7: /* empty */
+
+   61 divide: DIVIDESTART @7 nlnode nlnode DIVIDEEND
+
+   62 @8: /* empty */
+
+   63 power: POWERSTART @8 nlnode nlnode POWEREND
+
+   64 @9: /* empty */
+
+   65 sum: SUMSTART @9 anothersumnlnode SUMEND
+
+   66 anothersumnlnode: nlnode
+   67                 | anothersumnlnode nlnode
+
+   68 @10: /* empty */
+
+   69 allDiff: ALLDIFFSTART @10 anotherallDiffnlnode ALLDIFFEND
+
+   70 anotherallDiffnlnode: nlnode
+   71                     | anotherallDiffnlnode nlnode
+
+   72 @11: /* empty */
+
+   73 max: MAXSTART @11 anothermaxnlnode MAXEND
+
+   74 anothermaxnlnode: nlnode
+   75                 | anothermaxnlnode nlnode
+
+   76 @12: /* empty */
+
+   77 min: MINSTART @12 anotherminnlnode MINEND
+
+   78 anotherminnlnode: nlnode
+   79                 | anotherminnlnode nlnode
+
+   80 @13: /* empty */
+
+   81 product: PRODUCTSTART @13 anotherproductnlnode PRODUCTEND
+
+   82 anotherproductnlnode: nlnode
+   83                     | anotherproductnlnode nlnode
+
+   84 @14: /* empty */
+
+   85 ln: LNSTART @14 nlnode LNEND
+
+   86 @15: /* empty */
+
+   87 sqrt: SQRTSTART @15 nlnode SQRTEND
+
+   88 @16: /* empty */
+
+   89 square: SQUARESTART @16 nlnode SQUAREEND
+
+   90 @17: /* empty */
+
+   91 cos: COSSTART @17 nlnode COSEND
+
+   92 @18: /* empty */
+
+   93 sin: SINSTART @18 nlnode SINEND
+
+   94 @19: /* empty */
+
+   95 exp: EXPSTART @19 nlnode EXPEND
+
+   96 @20: /* empty */
+
+   97 abs: ABSSTART @20 nlnode ABSEND
+
+   98 @21: /* empty */
+
+   99 if: IFSTART @21 nlnode nlnode nlnode IFEND
+
+  100 @22: /* empty */
+
+  101 number: NUMBERSTART @22 anotherNumberATT numberend
+
+  102 @23: /* empty */
+
+  103 variable: VARIABLESTART @23 anotherVariableATT variableend
+
+  104 numberend: ENDOFELEMENT
+  105          | NUMBEREND
+
+  106 @24: /* empty */
+
+  107 E: ESTART @24 eend
+
+  108 eend: ENDOFELEMENT
+  109     | GREATERTHAN EEND
+
+  110 @25: /* empty */
+
+  111 PI: PISTART @25 piend
+
+  112 piend: ENDOFELEMENT
+  113      | GREATERTHAN PIEND
+
+  114 variableend: ENDOFELEMENT
+
+  115 @26: /* empty */
+
+  116 variableend: GREATERTHAN nlnode @26 VARIABLEEND
+
+  117 anotherNumberATT: /* empty */
+  118                 | anotherNumberATT numberATT
+
+  119 numberATT: numbertypeATT quote
+  120          | numbervalueATT quote
+  121          | numberidATT quote
+
+  122 numbertypeATT: TYPEATT ATTRIBUTETEXT
+
+  123 numberidATT: IDATT ATTRIBUTETEXT
+
+  124 numbervalueATT: VALUEATT DOUBLE
+  125               | VALUEATT INTEGER
+
+  126 anotherVariableATT: /* empty */
+  127                   | anotherVariableATT variableATT
+
+  128 variableATT: variablecoefATT quote
+  129            | variableidxATT quote
+
+  130 variablecoefATT: COEFATT DOUBLE
+  131                | COEFATT INTEGER
+
+  132 variableidxATT: IDXATT INTEGER
+
+  133 xmlWhiteSpaceChar: ' '
+  134                  | '\t'
+  135                  | '\r'
+  136                  | '\n'
+
+  137 xmlWhiteSpace: /* empty */
+  138              | xmlWhiteSpace xmlWhiteSpaceChar
+
+  139 quote: xmlWhiteSpace QUOTE
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'\t' (9) 134
+'\n' (10) 136
+'\r' (13) 135
+' ' (32) 133
+error (256)
+QUOTE (258) 139
+ATTRIBUTETEXT (259) 122 123
+INTEGER (260) 4 17 18 20 21 24 28 125 131 132
+DOUBLE (261) 19 124 130
+OSILEND (262) 1
+INSTANCEDATAEND (263) 1
+VALUEATT (264) 124 125
+NUMBEROFNONLINEAREXPRESSIONS (265) 24
+IDXONEATT (266) 17
+IDXTWOATT (267) 18
+COEFATT (268) 19 20 130 131
+IDATT (269) 123
+TIMESSTART (270) 53
+TIMESEND (271) 53
+NUMBERSTART (272) 101
+NUMBEREND (273) 105
+NUMBEROFQTERMSATT (274) 4
+IDXATT (275) 21 28 132
+TYPEATT (276) 122
+QTERMSTART (277) 8
+QTERMEND (278) 10
+QUADRATICCOEFFICIENTSSTART (279) 3
+QUADRATICCOEFFICIENTSEND (280) 3
+NONLINEAREXPRESSIONSSTART (281) 23
+NONLINEAREXPRESSIONSEND (282) 23
+NLSTART (283) 27
+NLEND (284) 27
+POWERSTART (285) 63
+POWEREND (286) 63
+PLUSSTART (287) 55
+PLUSEND (288) 55
+MINUSSTART (289) 57
+MINUSEND (290) 57
+DIVIDESTART (291) 61
+DIVIDEEND (292) 61
+LNSTART (293) 85
+LNEND (294) 85
+SQRTSTART (295) 87
+SQRTEND (296) 87
+SUMSTART (297) 65
+SUMEND (298) 65
+PRODUCTSTART (299) 81
+PRODUCTEND (300) 81
+ENDOFELEMENT (301) 9 104 108 112 114
+EXPSTART (302) 95
+EXPEND (303) 95
+NEGATESTART (304) 59
+NEGATEEND (305) 59
+IFSTART (306) 99
+IFEND (307) 99
+SQUARESTART (308) 89
+SQUAREEND (309) 89
+COSSTART (310) 91
+COSEND (311) 91
+SINSTART (312) 93
+SINEND (313) 93
+GREATERTHAN (314) 4 10 24 27 109 113 116
+VARIABLESTART (315) 103
+VARIABLEEND (316) 116
+ABSSTART (317) 97
+ABSEND (318) 97
+MAXSTART (319) 73
+MAXEND (320) 73
+ALLDIFFSTART (321) 69
+ALLDIFFEND (322) 69
+MINSTART (323) 77
+MINEND (324) 77
+ESTART (325) 107
+EEND (326) 109
+PISTART (327) 111
+PIEND (328) 113
+
+
+Nonterminals, with rules where they appear
+
+$accept (78)
+    on left: 0
+osildoc (79)
+    on left: 1, on right: 0
+quadraticcoefficients (80)
+    on left: 2 3, on right: 1
+quadnumberatt (81)
+    on left: 4, on right: 3
+qTermlist (82)
+    on left: 5 6, on right: 3 6
+qterm (83)
+    on left: 8, on right: 6
+@1 (84)
+    on left: 7, on right: 8
+qtermend (85)
+    on left: 9 10, on right: 8
+anotherqTermATT (86)
+    on left: 11 12, on right: 8 12
+qtermatt (87)
+    on left: 13 14 15 16, on right: 12
+qtermidxOneatt (88)
+    on left: 17, on right: 13
+qtermidxTwoatt (89)
+    on left: 18, on right: 14
+qtermcoefatt (90)
+    on left: 19 20, on right: 15
+qtermidxatt (91)
+    on left: 21, on right: 16
+nonlinearExpressions (92)
+    on left: 22 23, on right: 1
+nlnumberatt (93)
+    on left: 24, on right: 23
+nlnodes (94)
+    on left: 25 27, on right: 23 27
+@2 (95)
+    on left: 26, on right: 27
+nlIdxATT (96)
+    on left: 28, on right: 27
+nlnode (97)
+    on left: 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46
+    47 48 49 50 51, on right: 27 53 55 57 59 61 63 66 67 70 71 74 75
+    78 79 82 83 85 87 89 91 93 95 97 99 116
+times (98)
+    on left: 53, on right: 31
+@3 (99)
+    on left: 52, on right: 53
+plus (100)
+    on left: 55, on right: 32
+@4 (101)
+    on left: 54, on right: 55
+minus (102)
+    on left: 57, on right: 34
+@5 (103)
+    on left: 56, on right: 57
+negate (104)
+    on left: 59, on right: 35
+@6 (105)
+    on left: 58, on right: 59
+divide (106)
+    on left: 61, on right: 36
+@7 (107)
+    on left: 60, on right: 61
+power (108)
+    on left: 63, on right: 37
+@8 (109)
+    on left: 62, on right: 63
+sum (110)
+    on left: 65, on right: 33
+@9 (111)
+    on left: 64, on right: 65
+anothersumnlnode (112)
+    on left: 66 67, on right: 65 67
+allDiff (113)
+    on left: 69, on right: 51
+@10 (114)
+    on left: 68, on right: 69
+anotherallDiffnlnode (115)
+    on left: 70 71, on right: 69 71
+max (116)
+    on left: 73, on right: 47
+@11 (117)
+    on left: 72, on right: 73
+anothermaxnlnode (118)
+    on left: 74 75, on right: 73 75
+min (119)
+    on left: 77, on right: 48
+@12 (120)
+    on left: 76, on right: 77
+anotherminnlnode (121)
+    on left: 78 79, on right: 77 79
+product (122)
+    on left: 81, on right: 38
+@13 (123)
+    on left: 80, on right: 81
+anotherproductnlnode (124)
+    on left: 82 83, on right: 81 83
+ln (125)
+    on left: 85, on right: 39
+@14 (126)
+    on left: 84, on right: 85
+sqrt (127)
+    on left: 87, on right: 40
+@15 (128)
+    on left: 86, on right: 87
+square (129)
+    on left: 89, on right: 41
+@16 (130)
+    on left: 88, on right: 89
+cos (131)
+    on left: 91, on right: 43
+@17 (132)
+    on left: 90, on right: 91
+sin (133)
+    on left: 93, on right: 42
+@18 (134)
+    on left: 92, on right: 93
+exp (135)
+    on left: 95, on right: 44
+@19 (136)
+    on left: 94, on right: 95
+abs (137)
+    on left: 97, on right: 46
+@20 (138)
+    on left: 96, on right: 97
+if (139)
+    on left: 99, on right: 45
+@21 (140)
+    on left: 98, on right: 99
+number (141)
+    on left: 101, on right: 29
+@22 (142)
+    on left: 100, on right: 101
+variable (143)
+    on left: 103, on right: 30
+@23 (144)
+    on left: 102, on right: 103
+numberend (145)
+    on left: 104 105, on right: 101
+E (146)
+    on left: 107, on right: 49
+@24 (147)
+    on left: 106, on right: 107
+eend (148)
+    on left: 108 109, on right: 107
+PI (149)
+    on left: 111, on right: 50
+@25 (150)
+    on left: 110, on right: 111
+piend (151)
+    on left: 112 113, on right: 111
+variableend (152)
+    on left: 114 116, on right: 103
+@26 (153)
+    on left: 115, on right: 116
+anotherNumberATT (154)
+    on left: 117 118, on right: 101 118
+numberATT (155)
+    on left: 119 120 121, on right: 118
+numbertypeATT (156)
+    on left: 122, on right: 119
+numberidATT (157)
+    on left: 123, on right: 121
+numbervalueATT (158)
+    on left: 124 125, on right: 120
+anotherVariableATT (159)
+    on left: 126 127, on right: 103 127
+variableATT (160)
+    on left: 128 129, on right: 127
+variablecoefATT (161)
+    on left: 130 131, on right: 128
+variableidxATT (162)
+    on left: 132, on right: 129
+xmlWhiteSpaceChar (163)
+    on left: 133 134 135 136, on right: 138
+xmlWhiteSpace (164)
+    on left: 137 138, on right: 138 139
+quote (165)
+    on left: 139, on right: 4 13 14 15 16 24 28 119 120 121 128 129
+
+
+state 0
+
+    0 $accept: . osildoc $end
+
+    QUADRATICCOEFFICIENTSSTART  shift, and go to state 1
+
+    $default  reduce using rule 2 (quadraticcoefficients)
+
+    osildoc                go to state 2
+    quadraticcoefficients  go to state 3
+
+
+state 1
+
+    3 quadraticcoefficients: QUADRATICCOEFFICIENTSSTART . quadnumberatt qTermlist QUADRATICCOEFFICIENTSEND
+
+    NUMBEROFQTERMSATT  shift, and go to state 4
+
+    quadnumberatt  go to state 5
+
+
+state 2
+
+    0 $accept: osildoc . $end
+
+    $end  shift, and go to state 6
+
+
+state 3
+
+    1 osildoc: quadraticcoefficients . nonlinearExpressions INSTANCEDATAEND OSILEND
+
+    NONLINEAREXPRESSIONSSTART  shift, and go to state 7
+
+    $default  reduce using rule 22 (nonlinearExpressions)
+
+    nonlinearExpressions  go to state 8
+
+
+state 4
+
+    4 quadnumberatt: NUMBEROFQTERMSATT . INTEGER quote GREATERTHAN
+
+    INTEGER  shift, and go to state 9
+
+
+state 5
+
+    3 quadraticcoefficients: QUADRATICCOEFFICIENTSSTART quadnumberatt . qTermlist QUADRATICCOEFFICIENTSEND
+
+    $default  reduce using rule 5 (qTermlist)
+
+    qTermlist  go to state 10
+
+
+state 6
+
+    0 $accept: osildoc $end .
+
+    $default  accept
+
+
+state 7
+
+   23 nonlinearExpressions: NONLINEAREXPRESSIONSSTART . nlnumberatt nlnodes NONLINEAREXPRESSIONSEND
+
+    NUMBEROFNONLINEAREXPRESSIONS  shift, and go to state 11
+
+    nlnumberatt  go to state 12
+
+
+state 8
+
+    1 osildoc: quadraticcoefficients nonlinearExpressions . INSTANCEDATAEND OSILEND
+
+    INSTANCEDATAEND  shift, and go to state 13
+
+
+state 9
+
+    4 quadnumberatt: NUMBEROFQTERMSATT INTEGER . quote GREATERTHAN
+
+    $default  reduce using rule 137 (xmlWhiteSpace)
+
+    xmlWhiteSpace  go to state 14
+    quote          go to state 15
+
+
+state 10
+
+    3 quadraticcoefficients: QUADRATICCOEFFICIENTSSTART quadnumberatt qTermlist . QUADRATICCOEFFICIENTSEND
+    6 qTermlist: qTermlist . qterm
+
+    QUADRATICCOEFFICIENTSEND  shift, and go to state 16
+
+    $default  reduce using rule 7 (@1)
+
+    qterm  go to state 17
+    @1     go to state 18
+
+
+state 11
+
+   24 nlnumberatt: NUMBEROFNONLINEAREXPRESSIONS . INTEGER quote GREATERTHAN
+
+    INTEGER  shift, and go to state 19
+
+
+state 12
+
+   23 nonlinearExpressions: NONLINEAREXPRESSIONSSTART nlnumberatt . nlnodes NONLINEAREXPRESSIONSEND
+
+    $default  reduce using rule 25 (nlnodes)
+
+    nlnodes  go to state 20
+
+
+state 13
+
+    1 osildoc: quadraticcoefficients nonlinearExpressions INSTANCEDATAEND . OSILEND
+
+    OSILEND  shift, and go to state 21
+
+
+state 14
+
+  138 xmlWhiteSpace: xmlWhiteSpace . xmlWhiteSpaceChar
+  139 quote: xmlWhiteSpace . QUOTE
+
+    QUOTE  shift, and go to state 22
+    ' '    shift, and go to state 23
+    '\t'   shift, and go to state 24
+    '\r'   shift, and go to state 25
+    '\n'   shift, and go to state 26
+
+    xmlWhiteSpaceChar  go to state 27
+
+
+state 15
+
+    4 quadnumberatt: NUMBEROFQTERMSATT INTEGER quote . GREATERTHAN
+
+    GREATERTHAN  shift, and go to state 28
+
+
+state 16
+
+    3 quadraticcoefficients: QUADRATICCOEFFICIENTSSTART quadnumberatt qTermlist QUADRATICCOEFFICIENTSEND .
+
+    $default  reduce using rule 3 (quadraticcoefficients)
+
+
+state 17
+
+    6 qTermlist: qTermlist qterm .
+
+    $default  reduce using rule 6 (qTermlist)
+
+
+state 18
+
+    8 qterm: @1 . QTERMSTART anotherqTermATT qtermend
+
+    QTERMSTART  shift, and go to state 29
+
+
+state 19
+
+   24 nlnumberatt: NUMBEROFNONLINEAREXPRESSIONS INTEGER . quote GREATERTHAN
+
+    $default  reduce using rule 137 (xmlWhiteSpace)
+
+    xmlWhiteSpace  go to state 14
+    quote          go to state 30
+
+
+state 20
+
+   23 nonlinearExpressions: NONLINEAREXPRESSIONSSTART nlnumberatt nlnodes . NONLINEAREXPRESSIONSEND
+   27 nlnodes: nlnodes . NLSTART nlIdxATT GREATERTHAN nlnode @2 NLEND
+
+    NONLINEAREXPRESSIONSEND  shift, and go to state 31
+    NLSTART                  shift, and go to state 32
+
+
+state 21
+
+    1 osildoc: quadraticcoefficients nonlinearExpressions INSTANCEDATAEND OSILEND .
+
+    $default  reduce using rule 1 (osildoc)
+
+
+state 22
+
+  139 quote: xmlWhiteSpace QUOTE .
+
+    $default  reduce using rule 139 (quote)
+
+
+state 23
+
+  133 xmlWhiteSpaceChar: ' ' .
+
+    $default  reduce using rule 133 (xmlWhiteSpaceChar)
+
+
+state 24
+
+  134 xmlWhiteSpaceChar: '\t' .
+
+    $default  reduce using rule 134 (xmlWhiteSpaceChar)
+
+
+state 25
+
+  135 xmlWhiteSpaceChar: '\r' .
+
+    $default  reduce using rule 135 (xmlWhiteSpaceChar)
+
+
+state 26
+
+  136 xmlWhiteSpaceChar: '\n' .
+
+    $default  reduce using rule 136 (xmlWhiteSpaceChar)
+
+
+state 27
+
+  138 xmlWhiteSpace: xmlWhiteSpace xmlWhiteSpaceChar .
+
+    $default  reduce using rule 138 (xmlWhiteSpace)
+
+
+state 28
+
+    4 quadnumberatt: NUMBEROFQTERMSATT INTEGER quote GREATERTHAN .
+
+    $default  reduce using rule 4 (quadnumberatt)
+
+
+state 29
+
+    8 qterm: @1 QTERMSTART . anotherqTermATT qtermend
+
+    $default  reduce using rule 11 (anotherqTermATT)
+
+    anotherqTermATT  go to state 33
+
+
+state 30
+
+   24 nlnumberatt: NUMBEROFNONLINEAREXPRESSIONS INTEGER quote . GREATERTHAN
+
+    GREATERTHAN  shift, and go to state 34
+
+
+state 31
+
+   23 nonlinearExpressions: NONLINEAREXPRESSIONSSTART nlnumberatt nlnodes NONLINEAREXPRESSIONSEND .
+
+    $default  reduce using rule 23 (nonlinearExpressions)
+
+
+state 32
+
+   27 nlnodes: nlnodes NLSTART . nlIdxATT GREATERTHAN nlnode @2 NLEND
+
+    IDXATT  shift, and go to state 35
+
+    nlIdxATT  go to state 36
+
+
+state 33
+
+    8 qterm: @1 QTERMSTART anotherqTermATT . qtermend
+   12 anotherqTermATT: anotherqTermATT . qtermatt
+
+    IDXONEATT     shift, and go to state 37
+    IDXTWOATT     shift, and go to state 38
+    COEFATT       shift, and go to state 39
+    IDXATT        shift, and go to state 40
+    ENDOFELEMENT  shift, and go to state 41
+    GREATERTHAN   shift, and go to state 42
+
+    qtermend        go to state 43
+    qtermatt        go to state 44
+    qtermidxOneatt  go to state 45
+    qtermidxTwoatt  go to state 46
+    qtermcoefatt    go to state 47
+    qtermidxatt     go to state 48
+
+
+state 34
+
+   24 nlnumberatt: NUMBEROFNONLINEAREXPRESSIONS INTEGER quote GREATERTHAN .
+
+    $default  reduce using rule 24 (nlnumberatt)
+
+
+state 35
+
+   28 nlIdxATT: IDXATT . INTEGER quote
+
+    INTEGER  shift, and go to state 49
+
+
+state 36
+
+   27 nlnodes: nlnodes NLSTART nlIdxATT . GREATERTHAN nlnode @2 NLEND
+
+    GREATERTHAN  shift, and go to state 50
+
+
+state 37
+
+   17 qtermidxOneatt: IDXONEATT . INTEGER
+
+    INTEGER  shift, and go to state 51
+
+
+state 38
+
+   18 qtermidxTwoatt: IDXTWOATT . INTEGER
+
+    INTEGER  shift, and go to state 52
+
+
+state 39
+
+   19 qtermcoefatt: COEFATT . DOUBLE
+   20             | COEFATT . INTEGER
+
+    INTEGER  shift, and go to state 53
+    DOUBLE   shift, and go to state 54
+
+
+state 40
+
+   21 qtermidxatt: IDXATT . INTEGER
+
+    INTEGER  shift, and go to state 55
+
+
+state 41
+
+    9 qtermend: ENDOFELEMENT .
+
+    $default  reduce using rule 9 (qtermend)
+
+
+state 42
+
+   10 qtermend: GREATERTHAN . QTERMEND
+
+    QTERMEND  shift, and go to state 56
+
+
+state 43
+
+    8 qterm: @1 QTERMSTART anotherqTermATT qtermend .
+
+    $default  reduce using rule 8 (qterm)
+
+
+state 44
+
+   12 anotherqTermATT: anotherqTermATT qtermatt .
+
+    $default  reduce using rule 12 (anotherqTermATT)
+
+
+state 45
+
+   13 qtermatt: qtermidxOneatt . quote
+
+    $default  reduce using rule 137 (xmlWhiteSpace)
+
+    xmlWhiteSpace  go to state 14
+    quote          go to state 57
+
+
+state 46
+
+   14 qtermatt: qtermidxTwoatt . quote
+
+    $default  reduce using rule 137 (xmlWhiteSpace)
+
+    xmlWhiteSpace  go to state 14
+    quote          go to state 58
+
+
+state 47
+
+   15 qtermatt: qtermcoefatt . quote
+
+    $default  reduce using rule 137 (xmlWhiteSpace)
+
+    xmlWhiteSpace  go to state 14
+    quote          go to state 59
+
+
+state 48
+
+   16 qtermatt: qtermidxatt . quote
+
+    $default  reduce using rule 137 (xmlWhiteSpace)
+
+    xmlWhiteSpace  go to state 14
+    quote          go to state 60
+
+
+state 49
+
+   28 nlIdxATT: IDXATT INTEGER . quote
+
+    $default  reduce using rule 137 (xmlWhiteSpace)
+
+    xmlWhiteSpace  go to state 14
+    quote          go to state 61
+
+
+state 50
+
+   27 nlnodes: nlnodes NLSTART nlIdxATT GREATERTHAN . nlnode @2 NLEND
+
+    TIMESSTART     shift, and go to state 62
+    NUMBERSTART    shift, and go to state 63
+    POWERSTART     shift, and go to state 64
+    PLUSSTART      shift, and go to state 65
+    MINUSSTART     shift, and go to state 66
+    DIVIDESTART    shift, and go to state 67
+    LNSTART        shift, and go to state 68
+    SQRTSTART      shift, and go to state 69
+    SUMSTART       shift, and go to state 70
+    PRODUCTSTART   shift, and go to state 71
+    EXPSTART       shift, and go to state 72
+    NEGATESTART    shift, and go to state 73
+    IFSTART        shift, and go to state 74
+    SQUARESTART    shift, and go to state 75
+    COSSTART       shift, and go to state 76
+    SINSTART       shift, and go to state 77
+    VARIABLESTART  shift, and go to state 78
+    ABSSTART       shift, and go to state 79
+    MAXSTART       shift, and go to state 80
+    ALLDIFFSTART   shift, and go to state 81
+    MINSTART       shift, and go to state 82
+    ESTART         shift, and go to state 83
+    PISTART        shift, and go to state 84
+
+    nlnode    go to state 85
+    times     go to state 86
+    plus      go to state 87
+    minus     go to state 88
+    negate    go to state 89
+    divide    go to state 90
+    power     go to state 91
+    sum       go to state 92
+    allDiff   go to state 93
+    max       go to state 94
+    min       go to state 95
+    product   go to state 96
+    ln        go to state 97
+    sqrt      go to state 98
+    square    go to state 99
+    cos       go to state 100
+    sin       go to state 101
+    exp       go to state 102
+    abs       go to state 103
+    if        go to state 104
+    number    go to state 105
+    variable  go to state 106
+    E         go to state 107
+    PI        go to state 108
+
+
+state 51
+
+   17 qtermidxOneatt: IDXONEATT INTEGER .
+
+    $default  reduce using rule 17 (qtermidxOneatt)
+
+
+state 52
+
+   18 qtermidxTwoatt: IDXTWOATT INTEGER .
+
+    $default  reduce using rule 18 (qtermidxTwoatt)
+
+
+state 53
+
+   20 qtermcoefatt: COEFATT INTEGER .
+
+    $default  reduce using rule 20 (qtermcoefatt)
+
+
+state 54
+
+   19 qtermcoefatt: COEFATT DOUBLE .
+
+    $default  reduce using rule 19 (qtermcoefatt)
+
+
+state 55
+
+   21 qtermidxatt: IDXATT INTEGER .
+
+    $default  reduce using rule 21 (qtermidxatt)
+
+
+state 56
+
+   10 qtermend: GREATERTHAN QTERMEND .
+
+    $default  reduce using rule 10 (qtermend)
+
+
+state 57
+
+   13 qtermatt: qtermidxOneatt quote .
+
+    $default  reduce using rule 13 (qtermatt)
+
+
+state 58
+
+   14 qtermatt: qtermidxTwoatt quote .
+
+    $default  reduce using rule 14 (qtermatt)
+
+
+state 59
+
+   15 qtermatt: qtermcoefatt quote .
+
+    $default  reduce using rule 15 (qtermatt)
+
+
+state 60
+
+   16 qtermatt: qtermidxatt quote .
+
+    $default  reduce using rule 16 (qtermatt)
+
+
+state 61
+
+   28 nlIdxATT: IDXATT INTEGER quote .
+
+    $default  reduce using rule 28 (nlIdxATT)
+
+
+state 62
+
+   53 times: TIMESSTART . @3 nlnode nlnode TIMESEND
+
+    $default  reduce using rule 52 (@3)
+
+    @3  go to state 109
+
+
+state 63
+
+  101 number: NUMBERSTART . @22 anotherNumberATT numberend
+
+    $default  reduce using rule 100 (@22)
+
+    @22  go to state 110
+
+
+state 64
+
+   63 power: POWERSTART . @8 nlnode nlnode POWEREND
+
+    $default  reduce using rule 62 (@8)
+
+    @8  go to state 111
+
+
+state 65
+
+   55 plus: PLUSSTART . @4 nlnode nlnode PLUSEND
+
+    $default  reduce using rule 54 (@4)
+
+    @4  go to state 112
+
+
+state 66
+
+   57 minus: MINUSSTART . @5 nlnode nlnode MINUSEND
+
+    $default  reduce using rule 56 (@5)
+
+    @5  go to state 113
+
+
+state 67
+
+   61 divide: DIVIDESTART . @7 nlnode nlnode DIVIDEEND
+
+    $default  reduce using rule 60 (@7)
+
+    @7  go to state 114
+
+
+state 68
+
+   85 ln: LNSTART . @14 nlnode LNEND
+
+    $default  reduce using rule 84 (@14)
+
+    @14  go to state 115
+
+
+state 69
+
+   87 sqrt: SQRTSTART . @15 nlnode SQRTEND
+
+    $default  reduce using rule 86 (@15)
+
+    @15  go to state 116
+
+
+state 70
+
+   65 sum: SUMSTART . @9 anothersumnlnode SUMEND
+
+    $default  reduce using rule 64 (@9)
+
+    @9  go to state 117
+
+
+state 71
+
+   81 product: PRODUCTSTART . @13 anotherproductnlnode PRODUCTEND
+
+    $default  reduce using rule 80 (@13)
+
+    @13  go to state 118
+
+
+state 72
+
+   95 exp: EXPSTART . @19 nlnode EXPEND
+
+    $default  reduce using rule 94 (@19)
+
+    @19  go to state 119
+
+
+state 73
+
+   59 negate: NEGATESTART . @6 nlnode NEGATEEND
+
+    $default  reduce using rule 58 (@6)
+
+    @6  go to state 120
+
+
+state 74
+
+   99 if: IFSTART . @21 nlnode nlnode nlnode IFEND
+
+    $default  reduce using rule 98 (@21)
+
+    @21  go to state 121
+
+
+state 75
+
+   89 square: SQUARESTART . @16 nlnode SQUAREEND
+
+    $default  reduce using rule 88 (@16)
+
+    @16  go to state 122
+
+
+state 76
+
+   91 cos: COSSTART . @17 nlnode COSEND
+
+    $default  reduce using rule 90 (@17)
+
+    @17  go to state 123
+
+
+state 77
+
+   93 sin: SINSTART . @18 nlnode SINEND
+
+    $default  reduce using rule 92 (@18)
+
+    @18  go to state 124
+
+
+state 78
+
+  103 variable: VARIABLESTART . @23 anotherVariableATT variableend
+
+    $default  reduce using rule 102 (@23)
+
+    @23  go to state 125
+
+
+state 79
+
+   97 abs: ABSSTART . @20 nlnode ABSEND
+
+    $default  reduce using rule 96 (@20)
+
+    @20  go to state 126
+
+
+state 80
+
+   73 max: MAXSTART . @11 anothermaxnlnode MAXEND
+
+    $default  reduce using rule 72 (@11)
+
+    @11  go to state 127
+
+
+state 81
+
+   69 allDiff: ALLDIFFSTART . @10 anotherallDiffnlnode ALLDIFFEND
+
+    $default  reduce using rule 68 (@10)
+
+    @10  go to state 128
+
+
+state 82
+
+   77 min: MINSTART . @12 anotherminnlnode MINEND
+
+    $default  reduce using rule 76 (@12)
+
+    @12  go to state 129
+
+
+state 83
+
+  107 E: ESTART . @24 eend
+
+    $default  reduce using rule 106 (@24)
+
+    @24  go to state 130
+
+
+state 84
+
+  111 PI: PISTART . @25 piend
+
+    $default  reduce using rule 110 (@25)
+
+    @25  go to state 131
+
+
+state 85
+
+   27 nlnodes: nlnodes NLSTART nlIdxATT GREATERTHAN nlnode . @2 NLEND
+
+    $default  reduce using rule 26 (@2)
+
+    @2  go to state 132
+
+
+state 86
+
+   31 nlnode: times .
+
+    $default  reduce using rule 31 (nlnode)
+
+
+state 87
+
+   32 nlnode: plus .
+
+    $default  reduce using rule 32 (nlnode)
+
+
+state 88
+
+   34 nlnode: minus .
+
+    $default  reduce using rule 34 (nlnode)
+
+
+state 89
+
+   35 nlnode: negate .
+
+    $default  reduce using rule 35 (nlnode)
+
+
+state 90
+
+   36 nlnode: divide .
+
+    $default  reduce using rule 36 (nlnode)
+
+
+state 91
+
+   37 nlnode: power .
+
+    $default  reduce using rule 37 (nlnode)
+
+
+state 92
+
+   33 nlnode: sum .
+
+    $default  reduce using rule 33 (nlnode)
+
+
+state 93
+
+   51 nlnode: allDiff .
+
+    $default  reduce using rule 51 (nlnode)
+
+
+state 94
+
+   47 nlnode: max .
+
+    $default  reduce using rule 47 (nlnode)
+
+
+state 95
+
+   48 nlnode: min .
+
+    $default  reduce using rule 48 (nlnode)
+
+
+state 96
+
+   38 nlnode: product .
+
+    $default  reduce using rule 38 (nlnode)
+
+
+state 97
+
+   39 nlnode: ln .
+
+    $default  reduce using rule 39 (nlnode)
+
+
+state 98
+
+   40 nlnode: sqrt .
+
+    $default  reduce using rule 40 (nlnode)
+
+
+state 99
+
+   41 nlnode: square .
+
+    $default  reduce using rule 41 (nlnode)
+
+
+state 100
+
+   43 nlnode: cos .
+
+    $default  reduce using rule 43 (nlnode)
+
+
+state 101
+
+   42 nlnode: sin .
+
+    $default  reduce using rule 42 (nlnode)
+
+
+state 102
+
+   44 nlnode: exp .
+
+    $default  reduce using rule 44 (nlnode)
+
+
+state 103
+
+   46 nlnode: abs .
+
+    $default  reduce using rule 46 (nlnode)
+
+
+state 104
+
+   45 nlnode: if .
+
+    $default  reduce using rule 45 (nlnode)
+
+
+state 105
+
+   29 nlnode: number .
+
+    $default  reduce using rule 29 (nlnode)
+
+
+state 106
+
+   30 nlnode: variable .
+
+    $default  reduce using rule 30 (nlnode)
+
+
+state 107
+
+   49 nlnode: E .
+
+    $default  reduce using rule 49 (nlnode)
+
+
+state 108
+
+   50 nlnode: PI .
+
+    $default  reduce using rule 50 (nlnode)
+
+
+state 109
+
+   53 times: TIMESSTART @3 . nlnode nlnode TIMESEND
+
+    TIMESSTART     shift, and go to state 62
+    NUMBERSTART    shift, and go to state 63
+    POWERSTART     shift, and go to state 64
+    PLUSSTART      shift, and go to state 65
+    MINUSSTART     shift, and go to state 66
+    DIVIDESTART    shift, and go to state 67
+    LNSTART        shift, and go to state 68
+    SQRTSTART      shift, and go to state 69
+    SUMSTART       shift, and go to state 70
+    PRODUCTSTART   shift, and go to state 71
+    EXPSTART       shift, and go to state 72
+    NEGATESTART    shift, and go to state 73
+    IFSTART        shift, and go to state 74
+    SQUARESTART    shift, and go to state 75
+    COSSTART       shift, and go to state 76
+    SINSTART       shift, and go to state 77
+    VARIABLESTART  shift, and go to state 78
+    ABSSTART       shift, and go to state 79
+    MAXSTART       shift, and go to state 80
+    ALLDIFFSTART   shift, and go to state 81
+    MINSTART       shift, and go to state 82
+    ESTART         shift, and go to state 83
+    PISTART        shift, and go to state 84
+
+    nlnode    go to state 133
+    times     go to state 86
+    plus      go to state 87
+    minus     go to state 88
+    negate    go to state 89
+    divide    go to state 90
+    power     go to state 91
+    sum       go to state 92
+    allDiff   go to state 93
+    max       go to state 94
+    min       go to state 95
+    product   go to state 96
+    ln        go to state 97
+    sqrt      go to state 98
+    square    go to state 99
+    cos       go to state 100
+    sin       go to state 101
+    exp       go to state 102
+    abs       go to state 103
+    if        go to state 104
+    number    go to state 105
+    variable  go to state 106
+    E         go to state 107
+    PI        go to state 108
+
+
+state 110
+
+  101 number: NUMBERSTART @22 . anotherNumberATT numberend
+
+    $default  reduce using rule 117 (anotherNumberATT)
+
+    anotherNumberATT  go to state 134
+
+
+state 111
+
+   63 power: POWERSTART @8 . nlnode nlnode POWEREND
+
+    TIMESSTART     shift, and go to state 62
+    NUMBERSTART    shift, and go to state 63
+    POWERSTART     shift, and go to state 64
+    PLUSSTART      shift, and go to state 65
+    MINUSSTART     shift, and go to state 66
+    DIVIDESTART    shift, and go to state 67
+    LNSTART        shift, and go to state 68
+    SQRTSTART      shift, and go to state 69
+    SUMSTART       shift, and go to state 70
+    PRODUCTSTART   shift, and go to state 71
+    EXPSTART       shift, and go to state 72
+    NEGATESTART    shift, and go to state 73
+    IFSTART        shift, and go to state 74
+    SQUARESTART    shift, and go to state 75
+    COSSTART       shift, and go to state 76
+    SINSTART       shift, and go to state 77
+    VARIABLESTART  shift, and go to state 78
+    ABSSTART       shift, and go to state 79
+    MAXSTART       shift, and go to state 80
+    ALLDIFFSTART   shift, and go to state 81
+    MINSTART       shift, and go to state 82
+    ESTART         shift, and go to state 83
+    PISTART        shift, and go to state 84
+
+    nlnode    go to state 135
+    times     go to state 86
+    plus      go to state 87
+    minus     go to state 88
+    negate    go to state 89
+    divide    go to state 90
+    power     go to state 91
+    sum       go to state 92
+    allDiff   go to state 93
+    max       go to state 94
+    min       go to state 95
+    product   go to state 96
+    ln        go to state 97
+    sqrt      go to state 98
+    square    go to state 99
+    cos       go to state 100
+    sin       go to state 101
+    exp       go to state 102
+    abs       go to state 103
+    if        go to state 104
+    number    go to state 105
+    variable  go to state 106
+    E         go to state 107
+    PI        go to state 108
+
+
+state 112
+
+   55 plus: PLUSSTART @4 . nlnode nlnode PLUSEND
+
+    TIMESSTART     shift, and go to state 62
+    NUMBERSTART    shift, and go to state 63
+    POWERSTART     shift, and go to state 64
+    PLUSSTART      shift, and go to state 65
+    MINUSSTART     shift, and go to state 66
+    DIVIDESTART    shift, and go to state 67
+    LNSTART        shift, and go to state 68
+    SQRTSTART      shift, and go to state 69
+    SUMSTART       shift, and go to state 70
+    PRODUCTSTART   shift, and go to state 71
+    EXPSTART       shift, and go to state 72
+    NEGATESTART    shift, and go to state 73
+    IFSTART        shift, and go to state 74
+    SQUARESTART    shift, and go to state 75
+    COSSTART       shift, and go to state 76
+    SINSTART       shift, and go to state 77
+    VARIABLESTART  shift, and go to state 78
+    ABSSTART       shift, and go to state 79
+    MAXSTART       shift, and go to state 80
+    ALLDIFFSTART   shift, and go to state 81
+    MINSTART       shift, and go to state 82
+    ESTART         shift, and go to state 83
+    PISTART        shift, and go to state 84
+
+    nlnode    go to state 136
+    times     go to state 86
+    plus      go to state 87
+    minus     go to state 88
+    negate    go to state 89
+    divide    go to state 90
+    power     go to state 91
+    sum       go to state 92
+    allDiff   go to state 93
+    max       go to state 94
+    min       go to state 95
+    product   go to state 96
+    ln        go to state 97
+    sqrt      go to state 98
+    square    go to state 99
+    cos       go to state 100
+    sin       go to state 101
+    exp       go to state 102
+    abs       go to state 103
+    if        go to state 104
+    number    go to state 105
+    variable  go to state 106
+    E         go to state 107
+    PI        go to state 108
+
+
+state 113
+
+   57 minus: MINUSSTART @5 . nlnode nlnode MINUSEND
+
+    TIMESSTART     shift, and go to state 62
+    NUMBERSTART    shift, and go to state 63
+    POWERSTART     shift, and go to state 64
+    PLUSSTART      shift, and go to state 65
+    MINUSSTART     shift, and go to state 66
+    DIVIDESTART    shift, and go to state 67
+    LNSTART        shift, and go to state 68
+    SQRTSTART      shift, and go to state 69
+    SUMSTART       shift, and go to state 70
+    PRODUCTSTART   shift, and go to state 71
+    EXPSTART       shift, and go to state 72
+    NEGATESTART    shift, and go to state 73
+    IFSTART        shift, and go to state 74
+    SQUARESTART    shift, and go to state 75
+    COSSTART       shift, and go to state 76
+    SINSTART       shift, and go to state 77
+    VARIABLESTART  shift, and go to state 78
+    ABSSTART       shift, and go to state 79
+    MAXSTART       shift, and go to state 80
+    ALLDIFFSTART   shift, and go to state 81
+    MINSTART       shift, and go to state 82
+    ESTART         shift, and go to state 83
+    PISTART        shift, and go to state 84
+
+    nlnode    go to state 137
+    times     go to state 86
+    plus      go to state 87
+    minus     go to state 88
+    negate    go to state 89
+    divide    go to state 90
+    power     go to state 91
+    sum       go to state 92
+    allDiff   go to state 93
+    max       go to state 94
+    min       go to state 95
+    product   go to state 96
+    ln        go to state 97
+    sqrt      go to state 98
+    square    go to state 99
+    cos       go to state 100
+    sin       go to state 101
+    exp       go to state 102
+    abs       go to state 103
+    if        go to state 104
+    number    go to state 105
+    variable  go to state 106
+    E         go to state 107
+    PI        go to state 108
+
+
+state 114
+
+   61 divide: DIVIDESTART @7 . nlnode nlnode DIVIDEEND
+
+    TIMESSTART     shift, and go to state 62
+    NUMBERSTART    shift, and go to state 63
+    POWERSTART     shift, and go to state 64
+    PLUSSTART      shift, and go to state 65
+    MINUSSTART     shift, and go to state 66
+    DIVIDESTART    shift, and go to state 67
+    LNSTART        shift, and go to state 68
+    SQRTSTART      shift, and go to state 69
+    SUMSTART       shift, and go to state 70
+    PRODUCTSTART   shift, and go to state 71
+    EXPSTART       shift, and go to state 72
+    NEGATESTART    shift, and go to state 73
+    IFSTART        shift, and go to state 74
+    SQUARESTART    shift, and go to state 75
+    COSSTART       shift, and go to state 76
+    SINSTART       shift, and go to state 77
+    VARIABLESTART  shift, and go to state 78
+    ABSSTART       shift, and go to state 79
+    MAXSTART       shift, and go to state 80
+    ALLDIFFSTART   shift, and go to state 81
+    MINSTART       shift, and go to state 82
+    ESTART         shift, and go to state 83
+    PISTART        shift, and go to state 84
+
+    nlnode    go to state 138
+    times     go to state 86
+    plus      go to state 87
+    minus     go to state 88
+    negate    go to state 89
+    divide    go to state 90
+    power     go to state 91
+    sum       go to state 92
+    allDiff   go to state 93
+    max       go to state 94
+    min       go to state 95
+    product   go to state 96
+    ln        go to state 97
+    sqrt      go to state 98
+    square    go to state 99
+    cos       go to state 100
+    sin       go to state 101
+    exp       go to state 102
+    abs       go to state 103
+    if        go to state 104
+    number    go to state 105
+    variable  go to state 106
+    E         go to state 107
+    PI        go to state 108
+
+
+state 115
+
+   85 ln: LNSTART @14 . nlnode LNEND
+
+    TIMESSTART     shift, and go to state 62
+    NUMBERSTART    shift, and go to state 63
+    POWERSTART     shift, and go to state 64
+    PLUSSTART      shift, and go to state 65
+    MINUSSTART     shift, and go to state 66
+    DIVIDESTART    shift, and go to state 67
+    LNSTART        shift, and go to state 68
+    SQRTSTART      shift, and go to state 69
+    SUMSTART       shift, and go to state 70
+    PRODUCTSTART   shift, and go to state 71
+    EXPSTART       shift, and go to state 72
+    NEGATESTART    shift, and go to state 73
+    IFSTART        shift, and go to state 74
+    SQUARESTART    shift, and go to state 75
+    COSSTART       shift, and go to state 76
+    SINSTART       shift, and go to state 77
+    VARIABLESTART  shift, and go to state 78
+    ABSSTART       shift, and go to state 79
+    MAXSTART       shift, and go to state 80
+    ALLDIFFSTART   shift, and go to state 81
+    MINSTART       shift, and go to state 82
+    ESTART         shift, and go to state 83
+    PISTART        shift, and go to state 84
+
+    nlnode    go to state 139
+    times     go to state 86
+    plus      go to state 87
+    minus     go to state 88
+    negate    go to state 89
+    divide    go to state 90
+    power     go to state 91
+    sum       go to state 92
+    allDiff   go to state 93
+    max       go to state 94
+    min       go to state 95
+    product   go to state 96
+    ln        go to state 97
+    sqrt      go to state 98
+    square    go to state 99
+    cos       go to state 100
+    sin       go to state 101
+    exp       go to state 102
+    abs       go to state 103
+    if        go to state 104
+    number    go to state 105
+    variable  go to state 106
+    E         go to state 107
+    PI        go to state 108
+
+
+state 116
+
+   87 sqrt: SQRTSTART @15 . nlnode SQRTEND
+
+    TIMESSTART     shift, and go to state 62
+    NUMBERSTART    shift, and go to state 63
+    POWERSTART     shift, and go to state 64
+    PLUSSTART      shift, and go to state 65
+    MINUSSTART     shift, and go to state 66
+    DIVIDESTART    shift, and go to state 67
+    LNSTART        shift, and go to state 68
+    SQRTSTART      shift, and go to state 69
+    SUMSTART       shift, and go to state 70
+    PRODUCTSTART   shift, and go to state 71
+    EXPSTART       shift, and go to state 72
+    NEGATESTART    shift, and go to state 73
+    IFSTART        shift, and go to state 74
+    SQUARESTART    shift, and go to state 75
+    COSSTART       shift, and go to state 76
+    SINSTART       shift, and go to state 77
+    VARIABLESTART  shift, and go to state 78
+    ABSSTART       shift, and go to state 79
+    MAXSTART       shift, and go to state 80
+    ALLDIFFSTART   shift, and go to state 81
+    MINSTART       shift, and go to state 82
+    ESTART         shift, and go to state 83
+    PISTART        shift, and go to state 84
+
+    nlnode    go to state 140
+    times     go to state 86
+    plus      go to state 87
+    minus     go to state 88
+    negate    go to state 89
+    divide    go to state 90
+    power     go to state 91
+    sum       go to state 92
+    allDiff   go to state 93
+    max       go to state 94
+    min       go to state 95
+    product   go to state 96
+    ln        go to state 97
+    sqrt      go to state 98
+    square    go to state 99
+    cos       go to state 100
+    sin       go to state 101
+    exp       go to state 102
+    abs       go to state 103
+    if        go to state 104
+    number    go to state 105
+    variable  go to state 106
+    E         go to state 107
+    PI        go to state 108
+
+
+state 117
+
+   65 sum: SUMSTART @9 . anothersumnlnode SUMEND
+
+    TIMESSTART     shift, and go to state 62
+    NUMBERSTART    shift, and go to state 63
+    POWERSTART     shift, and go to state 64
+    PLUSSTART      shift, and go to state 65
+    MINUSSTART     shift, and go to state 66
+    DIVIDESTART    shift, and go to state 67
+    LNSTART        shift, and go to state 68
+    SQRTSTART      shift, and go to state 69
+    SUMSTART       shift, and go to state 70
+    PRODUCTSTART   shift, and go to state 71
+    EXPSTART       shift, and go to state 72
+    NEGATESTART    shift, and go to state 73
+    IFSTART        shift, and go to state 74
+    SQUARESTART    shift, and go to state 75
+    COSSTART       shift, and go to state 76
+    SINSTART       shift, and go to state 77
+    VARIABLESTART  shift, and go to state 78
+    ABSSTART       shift, and go to state 79
+    MAXSTART       shift, and go to state 80
+    ALLDIFFSTART   shift, and go to state 81
+    MINSTART       shift, and go to state 82
+    ESTART         shift, and go to state 83
+    PISTART        shift, and go to state 84
+
+    nlnode            go to state 141
+    times             go to state 86
+    plus              go to state 87
+    minus             go to state 88
+    negate            go to state 89
+    divide            go to state 90
+    power             go to state 91
+    sum               go to state 92
+    anothersumnlnode  go to state 142
+    allDiff           go to state 93
+    max               go to state 94
+    min               go to state 95
+    product           go to state 96
+    ln                go to state 97
+    sqrt              go to state 98
+    square            go to state 99
+    cos               go to state 100
+    sin               go to state 101
+    exp               go to state 102
+    abs               go to state 103
+    if                go to state 104
+    number            go to state 105
+    variable          go to state 106
+    E                 go to state 107
+    PI                go to state 108
+
+
+state 118
+
+   81 product: PRODUCTSTART @13 . anotherproductnlnode PRODUCTEND
+
+    TIMESSTART     shift, and go to state 62
+    NUMBERSTART    shift, and go to state 63
+    POWERSTART     shift, and go to state 64
+    PLUSSTART      shift, and go to state 65
+    MINUSSTART     shift, and go to state 66
+    DIVIDESTART    shift, and go to state 67
+    LNSTART        shift, and go to state 68
+    SQRTSTART      shift, and go to state 69
+    SUMSTART       shift, and go to state 70
+    PRODUCTSTART   shift, and go to state 71
+    EXPSTART       shift, and go to state 72
+    NEGATESTART    shift, and go to state 73
+    IFSTART        shift, and go to state 74
+    SQUARESTART    shift, and go to state 75
+    COSSTART       shift, and go to state 76
+    SINSTART       shift, and go to state 77
+    VARIABLESTART  shift, and go to state 78
+    ABSSTART       shift, and go to state 79
+    MAXSTART       shift, and go to state 80
+    ALLDIFFSTART   shift, and go to state 81
+    MINSTART       shift, and go to state 82
+    ESTART         shift, and go to state 83
+    PISTART        shift, and go to state 84
+
+    nlnode                go to state 143
+    times                 go to state 86
+    plus                  go to state 87
+    minus                 go to state 88
+    negate                go to state 89
+    divide                go to state 90
+    power                 go to state 91
+    sum                   go to state 92
+    allDiff               go to state 93
+    max                   go to state 94
+    min                   go to state 95
+    product               go to state 96
+    anotherproductnlnode  go to state 144
+    ln                    go to state 97
+    sqrt                  go to state 98
+    square                go to state 99
+    cos                   go to state 100
+    sin                   go to state 101
+    exp                   go to state 102
+    abs                   go to state 103
+    if                    go to state 104
+    number                go to state 105
+    variable              go to state 106
+    E                     go to state 107
+    PI                    go to state 108
+
+
+state 119
+
+   95 exp: EXPSTART @19 . nlnode EXPEND
+
+    TIMESSTART     shift, and go to state 62
+    NUMBERSTART    shift, and go to state 63
+    POWERSTART     shift, and go to state 64
+    PLUSSTART      shift, and go to state 65
+    MINUSSTART     shift, and go to state 66
+    DIVIDESTART    shift, and go to state 67
+    LNSTART        shift, and go to state 68
+    SQRTSTART      shift, and go to state 69
+    SUMSTART       shift, and go to state 70
+    PRODUCTSTART   shift, and go to state 71
+    EXPSTART       shift, and go to state 72
+    NEGATESTART    shift, and go to state 73
+    IFSTART        shift, and go to state 74
+    SQUARESTART    shift, and go to state 75
+    COSSTART       shift, and go to state 76
+    SINSTART       shift, and go to state 77
+    VARIABLESTART  shift, and go to state 78
+    ABSSTART       shift, and go to state 79
+    MAXSTART       shift, and go to state 80
+    ALLDIFFSTART   shift, and go to state 81
+    MINSTART       shift, and go to state 82
+    ESTART         shift, and go to state 83
+    PISTART        shift, and go to state 84
+
+    nlnode    go to state 145
+    times     go to state 86
+    plus      go to state 87
+    minus     go to state 88
+    negate    go to state 89
+    divide    go to state 90
+    power     go to state 91
+    sum       go to state 92
+    allDiff   go to state 93
+    max       go to state 94
+    min       go to state 95
+    product   go to state 96
+    ln        go to state 97
+    sqrt      go to state 98
+    square    go to state 99
+    cos       go to state 100
+    sin       go to state 101
+    exp       go to state 102
+    abs       go to state 103
+    if        go to state 104
+    number    go to state 105
+    variable  go to state 106
+    E         go to state 107
+    PI        go to state 108
+
+
+state 120
+
+   59 negate: NEGATESTART @6 . nlnode NEGATEEND
+
+    TIMESSTART     shift, and go to state 62
+    NUMBERSTART    shift, and go to state 63
+    POWERSTART     shift, and go to state 64
+    PLUSSTART      shift, and go to state 65
+    MINUSSTART     shift, and go to state 66
+    DIVIDESTART    shift, and go to state 67
+    LNSTART        shift, and go to state 68
+    SQRTSTART      shift, and go to state 69
+    SUMSTART       shift, and go to state 70
+    PRODUCTSTART   shift, and go to state 71
+    EXPSTART       shift, and go to state 72
+    NEGATESTART    shift, and go to state 73
+    IFSTART        shift, and go to state 74
+    SQUARESTART    shift, and go to state 75
+    COSSTART       shift, and go to state 76
+    SINSTART       shift, and go to state 77
+    VARIABLESTART  shift, and go to state 78
+    ABSSTART       shift, and go to state 79
+    MAXSTART       shift, and go to state 80
+    ALLDIFFSTART   shift, and go to state 81
+    MINSTART       shift, and go to state 82
+    ESTART         shift, and go to state 83
+    PISTART        shift, and go to state 84
+
+    nlnode    go to state 146
+    times     go to state 86
+    plus      go to state 87
+    minus     go to state 88
+    negate    go to state 89
+    divide    go to state 90
+    power     go to state 91
+    sum       go to state 92
+    allDiff   go to state 93
+    max       go to state 94
+    min       go to state 95
+    product   go to state 96
+    ln        go to state 97
+    sqrt      go to state 98
+    square    go to state 99
+    cos       go to state 100
+    sin       go to state 101
+    exp       go to state 102
+    abs       go to state 103
+    if        go to state 104
+    number    go to state 105
+    variable  go to state 106
+    E         go to state 107
+    PI        go to state 108
+
+
+state 121
+
+   99 if: IFSTART @21 . nlnode nlnode nlnode IFEND
+
+    TIMESSTART     shift, and go to state 62
+    NUMBERSTART    shift, and go to state 63
+    POWERSTART     shift, and go to state 64
+    PLUSSTART      shift, and go to state 65
+    MINUSSTART     shift, and go to state 66
+    DIVIDESTART    shift, and go to state 67
+    LNSTART        shift, and go to state 68
+    SQRTSTART      shift, and go to state 69
+    SUMSTART       shift, and go to state 70
+    PRODUCTSTART   shift, and go to state 71
+    EXPSTART       shift, and go to state 72
+    NEGATESTART    shift, and go to state 73
+    IFSTART        shift, and go to state 74
+    SQUARESTART    shift, and go to state 75
+    COSSTART       shift, and go to state 76
+    SINSTART       shift, and go to state 77
+    VARIABLESTART  shift, and go to state 78
+    ABSSTART       shift, and go to state 79
+    MAXSTART       shift, and go to state 80
+    ALLDIFFSTART   shift, and go to state 81
+    MINSTART       shift, and go to state 82
+    ESTART         shift, and go to state 83
+    PISTART        shift, and go to state 84
+
+    nlnode    go to state 147
+    times     go to state 86
+    plus      go to state 87
+    minus     go to state 88
+    negate    go to state 89
+    divide    go to state 90
+    power     go to state 91
+    sum       go to state 92
+    allDiff   go to state 93
+    max       go to state 94
+    min       go to state 95
+    product   go to state 96
+    ln        go to state 97
+    sqrt      go to state 98
+    square    go to state 99
+    cos       go to state 100
+    sin       go to state 101
+    exp       go to state 102
+    abs       go to state 103
+    if        go to state 104
+    number    go to state 105
+    variable  go to state 106
+    E         go to state 107
+    PI        go to state 108
+
+
+state 122
+
+   89 square: SQUARESTART @16 . nlnode SQUAREEND
+
+    TIMESSTART     shift, and go to state 62
+    NUMBERSTART    shift, and go to state 63
+    POWERSTART     shift, and go to state 64
+    PLUSSTART      shift, and go to state 65
+    MINUSSTART     shift, and go to state 66
+    DIVIDESTART    shift, and go to state 67
+    LNSTART        shift, and go to state 68
+    SQRTSTART      shift, and go to state 69
+    SUMSTART       shift, and go to state 70
+    PRODUCTSTART   shift, and go to state 71
+    EXPSTART       shift, and go to state 72
+    NEGATESTART    shift, and go to state 73
+    IFSTART        shift, and go to state 74
+    SQUARESTART    shift, and go to state 75
+    COSSTART       shift, and go to state 76
+    SINSTART       shift, and go to state 77
+    VARIABLESTART  shift, and go to state 78
+    ABSSTART       shift, and go to state 79
+    MAXSTART       shift, and go to state 80
+    ALLDIFFSTART   shift, and go to state 81
+    MINSTART       shift, and go to state 82
+    ESTART         shift, and go to state 83
+    PISTART        shift, and go to state 84
+
+    nlnode    go to state 148
+    times     go to state 86
+    plus      go to state 87
+    minus     go to state 88
+    negate    go to state 89
+    divide    go to state 90
+    power     go to state 91
+    sum       go to state 92
+    allDiff   go to state 93
+    max       go to state 94
+    min       go to state 95
+    product   go to state 96
+    ln        go to state 97
+    sqrt      go to state 98
+    square    go to state 99
+    cos       go to state 100
+    sin       go to state 101
+    exp       go to state 102
+    abs       go to state 103
+    if        go to state 104
+    number    go to state 105
+    variable  go to state 106
+    E         go to state 107
+    PI        go to state 108
+
+
+state 123
+
+   91 cos: COSSTART @17 . nlnode COSEND
+
+    TIMESSTART     shift, and go to state 62
+    NUMBERSTART    shift, and go to state 63
+    POWERSTART     shift, and go to state 64
+    PLUSSTART      shift, and go to state 65
+    MINUSSTART     shift, and go to state 66
+    DIVIDESTART    shift, and go to state 67
+    LNSTART        shift, and go to state 68
+    SQRTSTART      shift, and go to state 69
+    SUMSTART       shift, and go to state 70
+    PRODUCTSTART   shift, and go to state 71
+    EXPSTART       shift, and go to state 72
+    NEGATESTART    shift, and go to state 73
+    IFSTART        shift, and go to state 74
+    SQUARESTART    shift, and go to state 75
+    COSSTART       shift, and go to state 76
+    SINSTART       shift, and go to state 77
+    VARIABLESTART  shift, and go to state 78
+    ABSSTART       shift, and go to state 79
+    MAXSTART       shift, and go to state 80
+    ALLDIFFSTART   shift, and go to state 81
+    MINSTART       shift, and go to state 82
+    ESTART         shift, and go to state 83
+    PISTART        shift, and go to state 84
+
+    nlnode    go to state 149
+    times     go to state 86
+    plus      go to state 87
+    minus     go to state 88
+    negate    go to state 89
+    divide    go to state 90
+    power     go to state 91
+    sum       go to state 92
+    allDiff   go to state 93
+    max       go to state 94
+    min       go to state 95
+    product   go to state 96
+    ln        go to state 97
+    sqrt      go to state 98
+    square    go to state 99
+    cos       go to state 100
+    sin       go to state 101
+    exp       go to state 102
+    abs       go to state 103
+    if        go to state 104
+    number    go to state 105
+    variable  go to state 106
+    E         go to state 107
+    PI        go to state 108
+
+
+state 124
+
+   93 sin: SINSTART @18 . nlnode SINEND
+
+    TIMESSTART     shift, and go to state 62
+    NUMBERSTART    shift, and go to state 63
+    POWERSTART     shift, and go to state 64
+    PLUSSTART      shift, and go to state 65
+    MINUSSTART     shift, and go to state 66
+    DIVIDESTART    shift, and go to state 67
+    LNSTART        shift, and go to state 68
+    SQRTSTART      shift, and go to state 69
+    SUMSTART       shift, and go to state 70
+    PRODUCTSTART   shift, and go to state 71
+    EXPSTART       shift, and go to state 72
+    NEGATESTART    shift, and go to state 73
+    IFSTART        shift, and go to state 74
+    SQUARESTART    shift, and go to state 75
+    COSSTART       shift, and go to state 76
+    SINSTART       shift, and go to state 77
+    VARIABLESTART  shift, and go to state 78
+    ABSSTART       shift, and go to state 79
+    MAXSTART       shift, and go to state 80
+    ALLDIFFSTART   shift, and go to state 81
+    MINSTART       shift, and go to state 82
+    ESTART         shift, and go to state 83
+    PISTART        shift, and go to state 84
+
+    nlnode    go to state 150
+    times     go to state 86
+    plus      go to state 87
+    minus     go to state 88
+    negate    go to state 89
+    divide    go to state 90
+    power     go to state 91
+    sum       go to state 92
+    allDiff   go to state 93
+    max       go to state 94
+    min       go to state 95
+    product   go to state 96
+    ln        go to state 97
+    sqrt      go to state 98
+    square    go to state 99
+    cos       go to state 100
+    sin       go to state 101
+    exp       go to state 102
+    abs       go to state 103
+    if        go to state 104
+    number    go to state 105
+    variable  go to state 106
+    E         go to state 107
+    PI        go to state 108
+
+
+state 125
+
+  103 variable: VARIABLESTART @23 . anotherVariableATT variableend
+
+    $default  reduce using rule 126 (anotherVariableATT)
+
+    anotherVariableATT  go to state 151
+
+
+state 126
+
+   97 abs: ABSSTART @20 . nlnode ABSEND
+
+    TIMESSTART     shift, and go to state 62
+    NUMBERSTART    shift, and go to state 63
+    POWERSTART     shift, and go to state 64
+    PLUSSTART      shift, and go to state 65
+    MINUSSTART     shift, and go to state 66
+    DIVIDESTART    shift, and go to state 67
+    LNSTART        shift, and go to state 68
+    SQRTSTART      shift, and go to state 69
+    SUMSTART       shift, and go to state 70
+    PRODUCTSTART   shift, and go to state 71
+    EXPSTART       shift, and go to state 72
+    NEGATESTART    shift, and go to state 73
+    IFSTART        shift, and go to state 74
+    SQUARESTART    shift, and go to state 75
+    COSSTART       shift, and go to state 76
+    SINSTART       shift, and go to state 77
+    VARIABLESTART  shift, and go to state 78
+    ABSSTART       shift, and go to state 79
+    MAXSTART       shift, and go to state 80
+    ALLDIFFSTART   shift, and go to state 81
+    MINSTART       shift, and go to state 82
+    ESTART         shift, and go to state 83
+    PISTART        shift, and go to state 84
+
+    nlnode    go to state 152
+    times     go to state 86
+    plus      go to state 87
+    minus     go to state 88
+    negate    go to state 89
+    divide    go to state 90
+    power     go to state 91
+    sum       go to state 92
+    allDiff   go to state 93
+    max       go to state 94
+    min       go to state 95
+    product   go to state 96
+    ln        go to state 97
+    sqrt      go to state 98
+    square    go to state 99
+    cos       go to state 100
+    sin       go to state 101
+    exp       go to state 102
+    abs       go to state 103
+    if        go to state 104
+    number    go to state 105
+    variable  go to state 106
+    E         go to state 107
+    PI        go to state 108
+
+
+state 127
+
+   73 max: MAXSTART @11 . anothermaxnlnode MAXEND
+
+    TIMESSTART     shift, and go to state 62
+    NUMBERSTART    shift, and go to state 63
+    POWERSTART     shift, and go to state 64
+    PLUSSTART      shift, and go to state 65
+    MINUSSTART     shift, and go to state 66
+    DIVIDESTART    shift, and go to state 67
+    LNSTART        shift, and go to state 68
+    SQRTSTART      shift, and go to state 69
+    SUMSTART       shift, and go to state 70
+    PRODUCTSTART   shift, and go to state 71
+    EXPSTART       shift, and go to state 72
+    NEGATESTART    shift, and go to state 73
+    IFSTART        shift, and go to state 74
+    SQUARESTART    shift, and go to state 75
+    COSSTART       shift, and go to state 76
+    SINSTART       shift, and go to state 77
+    VARIABLESTART  shift, and go to state 78
+    ABSSTART       shift, and go to state 79
+    MAXSTART       shift, and go to state 80
+    ALLDIFFSTART   shift, and go to state 81
+    MINSTART       shift, and go to state 82
+    ESTART         shift, and go to state 83
+    PISTART        shift, and go to state 84
+
+    nlnode            go to state 153
+    times             go to state 86
+    plus              go to state 87
+    minus             go to state 88
+    negate            go to state 89
+    divide            go to state 90
+    power             go to state 91
+    sum               go to state 92
+    allDiff           go to state 93
+    max               go to state 94
+    anothermaxnlnode  go to state 154
+    min               go to state 95
+    product           go to state 96
+    ln                go to state 97
+    sqrt              go to state 98
+    square            go to state 99
+    cos               go to state 100
+    sin               go to state 101
+    exp               go to state 102
+    abs               go to state 103
+    if                go to state 104
+    number            go to state 105
+    variable          go to state 106
+    E                 go to state 107
+    PI                go to state 108
+
+
+state 128
+
+   69 allDiff: ALLDIFFSTART @10 . anotherallDiffnlnode ALLDIFFEND
+
+    TIMESSTART     shift, and go to state 62
+    NUMBERSTART    shift, and go to state 63
+    POWERSTART     shift, and go to state 64
+    PLUSSTART      shift, and go to state 65
+    MINUSSTART     shift, and go to state 66
+    DIVIDESTART    shift, and go to state 67
+    LNSTART        shift, and go to state 68
+    SQRTSTART      shift, and go to state 69
+    SUMSTART       shift, and go to state 70
+    PRODUCTSTART   shift, and go to state 71
+    EXPSTART       shift, and go to state 72
+    NEGATESTART    shift, and go to state 73
+    IFSTART        shift, and go to state 74
+    SQUARESTART    shift, and go to state 75
+    COSSTART       shift, and go to state 76
+    SINSTART       shift, and go to state 77
+    VARIABLESTART  shift, and go to state 78
+    ABSSTART       shift, and go to state 79
+    MAXSTART       shift, and go to state 80
+    ALLDIFFSTART   shift, and go to state 81
+    MINSTART       shift, and go to state 82
+    ESTART         shift, and go to state 83
+    PISTART        shift, and go to state 84
+
+    nlnode                go to state 155
+    times                 go to state 86
+    plus                  go to state 87
+    minus                 go to state 88
+    negate                go to state 89
+    divide                go to state 90
+    power                 go to state 91
+    sum                   go to state 92
+    allDiff               go to state 93
+    anotherallDiffnlnode  go to state 156
+    max                   go to state 94
+    min                   go to state 95
+    product               go to state 96
+    ln                    go to state 97
+    sqrt                  go to state 98
+    square                go to state 99
+    cos                   go to state 100
+    sin                   go to state 101
+    exp                   go to state 102
+    abs                   go to state 103
+    if                    go to state 104
+    number                go to state 105
+    variable              go to state 106
+    E                     go to state 107
+    PI                    go to state 108
+
+
+state 129
+
+   77 min: MINSTART @12 . anotherminnlnode MINEND
+
+    TIMESSTART     shift, and go to state 62
+    NUMBERSTART    shift, and go to state 63
+    POWERSTART     shift, and go to state 64
+    PLUSSTART      shift, and go to state 65
+    MINUSSTART     shift, and go to state 66
+    DIVIDESTART    shift, and go to state 67
+    LNSTART        shift, and go to state 68
+    SQRTSTART      shift, and go to state 69
+    SUMSTART       shift, and go to state 70
+    PRODUCTSTART   shift, and go to state 71
+    EXPSTART       shift, and go to state 72
+    NEGATESTART    shift, and go to state 73
+    IFSTART        shift, and go to state 74
+    SQUARESTART    shift, and go to state 75
+    COSSTART       shift, and go to state 76
+    SINSTART       shift, and go to state 77
+    VARIABLESTART  shift, and go to state 78
+    ABSSTART       shift, and go to state 79
+    MAXSTART       shift, and go to state 80
+    ALLDIFFSTART   shift, and go to state 81
+    MINSTART       shift, and go to state 82
+    ESTART         shift, and go to state 83
+    PISTART        shift, and go to state 84
+
+    nlnode            go to state 157
+    times             go to state 86
+    plus              go to state 87
+    minus             go to state 88
+    negate            go to state 89
+    divide            go to state 90
+    power             go to state 91
+    sum               go to state 92
+    allDiff           go to state 93
+    max               go to state 94
+    min               go to state 95
+    anotherminnlnode  go to state 158
+    product           go to state 96
+    ln                go to state 97
+    sqrt              go to state 98
+    square            go to state 99
+    cos               go to state 100
+    sin               go to state 101
+    exp               go to state 102
+    abs               go to state 103
+    if                go to state 104
+    number            go to state 105
+    variable          go to state 106
+    E                 go to state 107
+    PI                go to state 108
+
+
+state 130
+
+  107 E: ESTART @24 . eend
+
+    ENDOFELEMENT  shift, and go to state 159
+    GREATERTHAN   shift, and go to state 160
+
+    eend  go to state 161
+
+
+state 131
+
+  111 PI: PISTART @25 . piend
+
+    ENDOFELEMENT  shift, and go to state 162
+    GREATERTHAN   shift, and go to state 163
+
+    piend  go to state 164
+
+
+state 132
+
+   27 nlnodes: nlnodes NLSTART nlIdxATT GREATERTHAN nlnode @2 . NLEND
+
+    NLEND  shift, and go to state 165
+
+
+state 133
+
+   53 times: TIMESSTART @3 nlnode . nlnode TIMESEND
+
+    TIMESSTART     shift, and go to state 62
+    NUMBERSTART    shift, and go to state 63
+    POWERSTART     shift, and go to state 64
+    PLUSSTART      shift, and go to state 65
+    MINUSSTART     shift, and go to state 66
+    DIVIDESTART    shift, and go to state 67
+    LNSTART        shift, and go to state 68
+    SQRTSTART      shift, and go to state 69
+    SUMSTART       shift, and go to state 70
+    PRODUCTSTART   shift, and go to state 71
+    EXPSTART       shift, and go to state 72
+    NEGATESTART    shift, and go to state 73
+    IFSTART        shift, and go to state 74
+    SQUARESTART    shift, and go to state 75
+    COSSTART       shift, and go to state 76
+    SINSTART       shift, and go to state 77
+    VARIABLESTART  shift, and go to state 78
+    ABSSTART       shift, and go to state 79
+    MAXSTART       shift, and go to state 80
+    ALLDIFFSTART   shift, and go to state 81
+    MINSTART       shift, and go to state 82
+    ESTART         shift, and go to state 83
+    PISTART        shift, and go to state 84
+
+    nlnode    go to state 166
+    times     go to state 86
+    plus      go to state 87
+    minus     go to state 88
+    negate    go to state 89
+    divide    go to state 90
+    power     go to state 91
+    sum       go to state 92
+    allDiff   go to state 93
+    max       go to state 94
+    min       go to state 95
+    product   go to state 96
+    ln        go to state 97
+    sqrt      go to state 98
+    square    go to state 99
+    cos       go to state 100
+    sin       go to state 101
+    exp       go to state 102
+    abs       go to state 103
+    if        go to state 104
+    number    go to state 105
+    variable  go to state 106
+    E         go to state 107
+    PI        go to state 108
+
+
+state 134
+
+  101 number: NUMBERSTART @22 anotherNumberATT . numberend
+  118 anotherNumberATT: anotherNumberATT . numberATT
+
+    VALUEATT      shift, and go to state 167
+    IDATT         shift, and go to state 168
+    NUMBEREND     shift, and go to state 169
+    TYPEATT       shift, and go to state 170
+    ENDOFELEMENT  shift, and go to state 171
+
+    numberend       go to state 172
+    numberATT       go to state 173
+    numbertypeATT   go to state 174
+    numberidATT     go to state 175
+    numbervalueATT  go to state 176
+
+
+state 135
+
+   63 power: POWERSTART @8 nlnode . nlnode POWEREND
+
+    TIMESSTART     shift, and go to state 62
+    NUMBERSTART    shift, and go to state 63
+    POWERSTART     shift, and go to state 64
+    PLUSSTART      shift, and go to state 65
+    MINUSSTART     shift, and go to state 66
+    DIVIDESTART    shift, and go to state 67
+    LNSTART        shift, and go to state 68
+    SQRTSTART      shift, and go to state 69
+    SUMSTART       shift, and go to state 70
+    PRODUCTSTART   shift, and go to state 71
+    EXPSTART       shift, and go to state 72
+    NEGATESTART    shift, and go to state 73
+    IFSTART        shift, and go to state 74
+    SQUARESTART    shift, and go to state 75
+    COSSTART       shift, and go to state 76
+    SINSTART       shift, and go to state 77
+    VARIABLESTART  shift, and go to state 78
+    ABSSTART       shift, and go to state 79
+    MAXSTART       shift, and go to state 80
+    ALLDIFFSTART   shift, and go to state 81
+    MINSTART       shift, and go to state 82
+    ESTART         shift, and go to state 83
+    PISTART        shift, and go to state 84
+
+    nlnode    go to state 177
+    times     go to state 86
+    plus      go to state 87
+    minus     go to state 88
+    negate    go to state 89
+    divide    go to state 90
+    power     go to state 91
+    sum       go to state 92
+    allDiff   go to state 93
+    max       go to state 94
+    min       go to state 95
+    product   go to state 96
+    ln        go to state 97
+    sqrt      go to state 98
+    square    go to state 99
+    cos       go to state 100
+    sin       go to state 101
+    exp       go to state 102
+    abs       go to state 103
+    if        go to state 104
+    number    go to state 105
+    variable  go to state 106
+    E         go to state 107
+    PI        go to state 108
+
+
+state 136
+
+   55 plus: PLUSSTART @4 nlnode . nlnode PLUSEND
+
+    TIMESSTART     shift, and go to state 62
+    NUMBERSTART    shift, and go to state 63
+    POWERSTART     shift, and go to state 64
+    PLUSSTART      shift, and go to state 65
+    MINUSSTART     shift, and go to state 66
+    DIVIDESTART    shift, and go to state 67
+    LNSTART        shift, and go to state 68
+    SQRTSTART      shift, and go to state 69
+    SUMSTART       shift, and go to state 70
+    PRODUCTSTART   shift, and go to state 71
+    EXPSTART       shift, and go to state 72
+    NEGATESTART    shift, and go to state 73
+    IFSTART        shift, and go to state 74
+    SQUARESTART    shift, and go to state 75
+    COSSTART       shift, and go to state 76
+    SINSTART       shift, and go to state 77
+    VARIABLESTART  shift, and go to state 78
+    ABSSTART       shift, and go to state 79
+    MAXSTART       shift, and go to state 80
+    ALLDIFFSTART   shift, and go to state 81
+    MINSTART       shift, and go to state 82
+    ESTART         shift, and go to state 83
+    PISTART        shift, and go to state 84
+
+    nlnode    go to state 178
+    times     go to state 86
+    plus      go to state 87
+    minus     go to state 88
+    negate    go to state 89
+    divide    go to state 90
+    power     go to state 91
+    sum       go to state 92
+    allDiff   go to state 93
+    max       go to state 94
+    min       go to state 95
+    product   go to state 96
+    ln        go to state 97
+    sqrt      go to state 98
+    square    go to state 99
+    cos       go to state 100
+    sin       go to state 101
+    exp       go to state 102
+    abs       go to state 103
+    if        go to state 104
+    number    go to state 105
+    variable  go to state 106
+    E         go to state 107
+    PI        go to state 108
+
+
+state 137
+
+   57 minus: MINUSSTART @5 nlnode . nlnode MINUSEND
+
+    TIMESSTART     shift, and go to state 62
+    NUMBERSTART    shift, and go to state 63
+    POWERSTART     shift, and go to state 64
+    PLUSSTART      shift, and go to state 65
+    MINUSSTART     shift, and go to state 66
+    DIVIDESTART    shift, and go to state 67
+    LNSTART        shift, and go to state 68
+    SQRTSTART      shift, and go to state 69
+    SUMSTART       shift, and go to state 70
+    PRODUCTSTART   shift, and go to state 71
+    EXPSTART       shift, and go to state 72
+    NEGATESTART    shift, and go to state 73
+    IFSTART        shift, and go to state 74
+    SQUARESTART    shift, and go to state 75
+    COSSTART       shift, and go to state 76
+    SINSTART       shift, and go to state 77
+    VARIABLESTART  shift, and go to state 78
+    ABSSTART       shift, and go to state 79
+    MAXSTART       shift, and go to state 80
+    ALLDIFFSTART   shift, and go to state 81
+    MINSTART       shift, and go to state 82
+    ESTART         shift, and go to state 83
+    PISTART        shift, and go to state 84
+
+    nlnode    go to state 179
+    times     go to state 86
+    plus      go to state 87
+    minus     go to state 88
+    negate    go to state 89
+    divide    go to state 90
+    power     go to state 91
+    sum       go to state 92
+    allDiff   go to state 93
+    max       go to state 94
+    min       go to state 95
+    product   go to state 96
+    ln        go to state 97
+    sqrt      go to state 98
+    square    go to state 99
+    cos       go to state 100
+    sin       go to state 101
+    exp       go to state 102
+    abs       go to state 103
+    if        go to state 104
+    number    go to state 105
+    variable  go to state 106
+    E         go to state 107
+    PI        go to state 108
+
+
+state 138
+
+   61 divide: DIVIDESTART @7 nlnode . nlnode DIVIDEEND
+
+    TIMESSTART     shift, and go to state 62
+    NUMBERSTART    shift, and go to state 63
+    POWERSTART     shift, and go to state 64
+    PLUSSTART      shift, and go to state 65
+    MINUSSTART     shift, and go to state 66
+    DIVIDESTART    shift, and go to state 67
+    LNSTART        shift, and go to state 68
+    SQRTSTART      shift, and go to state 69
+    SUMSTART       shift, and go to state 70
+    PRODUCTSTART   shift, and go to state 71
+    EXPSTART       shift, and go to state 72
+    NEGATESTART    shift, and go to state 73
+    IFSTART        shift, and go to state 74
+    SQUARESTART    shift, and go to state 75
+    COSSTART       shift, and go to state 76
+    SINSTART       shift, and go to state 77
+    VARIABLESTART  shift, and go to state 78
+    ABSSTART       shift, and go to state 79
+    MAXSTART       shift, and go to state 80
+    ALLDIFFSTART   shift, and go to state 81
+    MINSTART       shift, and go to state 82
+    ESTART         shift, and go to state 83
+    PISTART        shift, and go to state 84
+
+    nlnode    go to state 180
+    times     go to state 86
+    plus      go to state 87
+    minus     go to state 88
+    negate    go to state 89
+    divide    go to state 90
+    power     go to state 91
+    sum       go to state 92
+    allDiff   go to state 93
+    max       go to state 94
+    min       go to state 95
+    product   go to state 96
+    ln        go to state 97
+    sqrt      go to state 98
+    square    go to state 99
+    cos       go to state 100
+    sin       go to state 101
+    exp       go to state 102
+    abs       go to state 103
+    if        go to state 104
+    number    go to state 105
+    variable  go to state 106
+    E         go to state 107
+    PI        go to state 108
+
+
+state 139
+
+   85 ln: LNSTART @14 nlnode . LNEND
+
+    LNEND  shift, and go to state 181
+
+
+state 140
+
+   87 sqrt: SQRTSTART @15 nlnode . SQRTEND
+
+    SQRTEND  shift, and go to state 182
+
+
+state 141
+
+   66 anothersumnlnode: nlnode .
+
+    $default  reduce using rule 66 (anothersumnlnode)
+
+
+state 142
+
+   65 sum: SUMSTART @9 anothersumnlnode . SUMEND
+   67 anothersumnlnode: anothersumnlnode . nlnode
+
+    TIMESSTART     shift, and go to state 62
+    NUMBERSTART    shift, and go to state 63
+    POWERSTART     shift, and go to state 64
+    PLUSSTART      shift, and go to state 65
+    MINUSSTART     shift, and go to state 66
+    DIVIDESTART    shift, and go to state 67
+    LNSTART        shift, and go to state 68
+    SQRTSTART      shift, and go to state 69
+    SUMSTART       shift, and go to state 70
+    SUMEND         shift, and go to state 183
+    PRODUCTSTART   shift, and go to state 71
+    EXPSTART       shift, and go to state 72
+    NEGATESTART    shift, and go to state 73
+    IFSTART        shift, and go to state 74
+    SQUARESTART    shift, and go to state 75
+    COSSTART       shift, and go to state 76
+    SINSTART       shift, and go to state 77
+    VARIABLESTART  shift, and go to state 78
+    ABSSTART       shift, and go to state 79
+    MAXSTART       shift, and go to state 80
+    ALLDIFFSTART   shift, and go to state 81
+    MINSTART       shift, and go to state 82
+    ESTART         shift, and go to state 83
+    PISTART        shift, and go to state 84
+
+    nlnode    go to state 184
+    times     go to state 86
+    plus      go to state 87
+    minus     go to state 88
+    negate    go to state 89
+    divide    go to state 90
+    power     go to state 91
+    sum       go to state 92
+    allDiff   go to state 93
+    max       go to state 94
+    min       go to state 95
+    product   go to state 96
+    ln        go to state 97
+    sqrt      go to state 98
+    square    go to state 99
+    cos       go to state 100
+    sin       go to state 101
+    exp       go to state 102
+    abs       go to state 103
+    if        go to state 104
+    number    go to state 105
+    variable  go to state 106
+    E         go to state 107
+    PI        go to state 108
+
+
+state 143
+
+   82 anotherproductnlnode: nlnode .
+
+    $default  reduce using rule 82 (anotherproductnlnode)
+
+
+state 144
+
+   81 product: PRODUCTSTART @13 anotherproductnlnode . PRODUCTEND
+   83 anotherproductnlnode: anotherproductnlnode . nlnode
+
+    TIMESSTART     shift, and go to state 62
+    NUMBERSTART    shift, and go to state 63
+    POWERSTART     shift, and go to state 64
+    PLUSSTART      shift, and go to state 65
+    MINUSSTART     shift, and go to state 66
+    DIVIDESTART    shift, and go to state 67
+    LNSTART        shift, and go to state 68
+    SQRTSTART      shift, and go to state 69
+    SUMSTART       shift, and go to state 70
+    PRODUCTSTART   shift, and go to state 71
+    PRODUCTEND     shift, and go to state 185
+    EXPSTART       shift, and go to state 72
+    NEGATESTART    shift, and go to state 73
+    IFSTART        shift, and go to state 74
+    SQUARESTART    shift, and go to state 75
+    COSSTART       shift, and go to state 76
+    SINSTART       shift, and go to state 77
+    VARIABLESTART  shift, and go to state 78
+    ABSSTART       shift, and go to state 79
+    MAXSTART       shift, and go to state 80
+    ALLDIFFSTART   shift, and go to state 81
+    MINSTART       shift, and go to state 82
+    ESTART         shift, and go to state 83
+    PISTART        shift, and go to state 84
+
+    nlnode    go to state 186
+    times     go to state 86
+    plus      go to state 87
+    minus     go to state 88
+    negate    go to state 89
+    divide    go to state 90
+    power     go to state 91
+    sum       go to state 92
+    allDiff   go to state 93
+    max       go to state 94
+    min       go to state 95
+    product   go to state 96
+    ln        go to state 97
+    sqrt      go to state 98
+    square    go to state 99
+    cos       go to state 100
+    sin       go to state 101
+    exp       go to state 102
+    abs       go to state 103
+    if        go to state 104
+    number    go to state 105
+    variable  go to state 106
+    E         go to state 107
+    PI        go to state 108
+
+
+state 145
+
+   95 exp: EXPSTART @19 nlnode . EXPEND
+
+    EXPEND  shift, and go to state 187
+
+
+state 146
+
+   59 negate: NEGATESTART @6 nlnode . NEGATEEND
+
+    NEGATEEND  shift, and go to state 188
+
+
+state 147
+
+   99 if: IFSTART @21 nlnode . nlnode nlnode IFEND
+
+    TIMESSTART     shift, and go to state 62
+    NUMBERSTART    shift, and go to state 63
+    POWERSTART     shift, and go to state 64
+    PLUSSTART      shift, and go to state 65
+    MINUSSTART     shift, and go to state 66
+    DIVIDESTART    shift, and go to state 67
+    LNSTART        shift, and go to state 68
+    SQRTSTART      shift, and go to state 69
+    SUMSTART       shift, and go to state 70
+    PRODUCTSTART   shift, and go to state 71
+    EXPSTART       shift, and go to state 72
+    NEGATESTART    shift, and go to state 73
+    IFSTART        shift, and go to state 74
+    SQUARESTART    shift, and go to state 75
+    COSSTART       shift, and go to state 76
+    SINSTART       shift, and go to state 77
+    VARIABLESTART  shift, and go to state 78
+    ABSSTART       shift, and go to state 79
+    MAXSTART       shift, and go to state 80
+    ALLDIFFSTART   shift, and go to state 81
+    MINSTART       shift, and go to state 82
+    ESTART         shift, and go to state 83
+    PISTART        shift, and go to state 84
+
+    nlnode    go to state 189
+    times     go to state 86
+    plus      go to state 87
+    minus     go to state 88
+    negate    go to state 89
+    divide    go to state 90
+    power     go to state 91
+    sum       go to state 92
+    allDiff   go to state 93
+    max       go to state 94
+    min       go to state 95
+    product   go to state 96
+    ln        go to state 97
+    sqrt      go to state 98
+    square    go to state 99
+    cos       go to state 100
+    sin       go to state 101
+    exp       go to state 102
+    abs       go to state 103
+    if        go to state 104
+    number    go to state 105
+    variable  go to state 106
+    E         go to state 107
+    PI        go to state 108
+
+
+state 148
+
+   89 square: SQUARESTART @16 nlnode . SQUAREEND
+
+    SQUAREEND  shift, and go to state 190
+
+
+state 149
+
+   91 cos: COSSTART @17 nlnode . COSEND
+
+    COSEND  shift, and go to state 191
+
+
+state 150
+
+   93 sin: SINSTART @18 nlnode . SINEND
+
+    SINEND  shift, and go to state 192
+
+
+state 151
+
+  103 variable: VARIABLESTART @23 anotherVariableATT . variableend
+  127 anotherVariableATT: anotherVariableATT . variableATT
+
+    COEFATT       shift, and go to state 193
+    IDXATT        shift, and go to state 194
+    ENDOFELEMENT  shift, and go to state 195
+    GREATERTHAN   shift, and go to state 196
+
+    variableend      go to state 197
+    variableATT      go to state 198
+    variablecoefATT  go to state 199
+    variableidxATT   go to state 200
+
+
+state 152
+
+   97 abs: ABSSTART @20 nlnode . ABSEND
+
+    ABSEND  shift, and go to state 201
+
+
+state 153
+
+   74 anothermaxnlnode: nlnode .
+
+    $default  reduce using rule 74 (anothermaxnlnode)
+
+
+state 154
+
+   73 max: MAXSTART @11 anothermaxnlnode . MAXEND
+   75 anothermaxnlnode: anothermaxnlnode . nlnode
+
+    TIMESSTART     shift, and go to state 62
+    NUMBERSTART    shift, and go to state 63
+    POWERSTART     shift, and go to state 64
+    PLUSSTART      shift, and go to state 65
+    MINUSSTART     shift, and go to state 66
+    DIVIDESTART    shift, and go to state 67
+    LNSTART        shift, and go to state 68
+    SQRTSTART      shift, and go to state 69
+    SUMSTART       shift, and go to state 70
+    PRODUCTSTART   shift, and go to state 71
+    EXPSTART       shift, and go to state 72
+    NEGATESTART    shift, and go to state 73
+    IFSTART        shift, and go to state 74
+    SQUARESTART    shift, and go to state 75
+    COSSTART       shift, and go to state 76
+    SINSTART       shift, and go to state 77
+    VARIABLESTART  shift, and go to state 78
+    ABSSTART       shift, and go to state 79
+    MAXSTART       shift, and go to state 80
+    MAXEND         shift, and go to state 202
+    ALLDIFFSTART   shift, and go to state 81
+    MINSTART       shift, and go to state 82
+    ESTART         shift, and go to state 83
+    PISTART        shift, and go to state 84
+
+    nlnode    go to state 203
+    times     go to state 86
+    plus      go to state 87
+    minus     go to state 88
+    negate    go to state 89
+    divide    go to state 90
+    power     go to state 91
+    sum       go to state 92
+    allDiff   go to state 93
+    max       go to state 94
+    min       go to state 95
+    product   go to state 96
+    ln        go to state 97
+    sqrt      go to state 98
+    square    go to state 99
+    cos       go to state 100
+    sin       go to state 101
+    exp       go to state 102
+    abs       go to state 103
+    if        go to state 104
+    number    go to state 105
+    variable  go to state 106
+    E         go to state 107
+    PI        go to state 108
+
+
+state 155
+
+   70 anotherallDiffnlnode: nlnode .
+
+    $default  reduce using rule 70 (anotherallDiffnlnode)
+
+
+state 156
+
+   69 allDiff: ALLDIFFSTART @10 anotherallDiffnlnode . ALLDIFFEND
+   71 anotherallDiffnlnode: anotherallDiffnlnode . nlnode
+
+    TIMESSTART     shift, and go to state 62
+    NUMBERSTART    shift, and go to state 63
+    POWERSTART     shift, and go to state 64
+    PLUSSTART      shift, and go to state 65
+    MINUSSTART     shift, and go to state 66
+    DIVIDESTART    shift, and go to state 67
+    LNSTART        shift, and go to state 68
+    SQRTSTART      shift, and go to state 69
+    SUMSTART       shift, and go to state 70
+    PRODUCTSTART   shift, and go to state 71
+    EXPSTART       shift, and go to state 72
+    NEGATESTART    shift, and go to state 73
+    IFSTART        shift, and go to state 74
+    SQUARESTART    shift, and go to state 75
+    COSSTART       shift, and go to state 76
+    SINSTART       shift, and go to state 77
+    VARIABLESTART  shift, and go to state 78
+    ABSSTART       shift, and go to state 79
+    MAXSTART       shift, and go to state 80
+    ALLDIFFSTART   shift, and go to state 81
+    ALLDIFFEND     shift, and go to state 204
+    MINSTART       shift, and go to state 82
+    ESTART         shift, and go to state 83
+    PISTART        shift, and go to state 84
+
+    nlnode    go to state 205
+    times     go to state 86
+    plus      go to state 87
+    minus     go to state 88
+    negate    go to state 89
+    divide    go to state 90
+    power     go to state 91
+    sum       go to state 92
+    allDiff   go to state 93
+    max       go to state 94
+    min       go to state 95
+    product   go to state 96
+    ln        go to state 97
+    sqrt      go to state 98
+    square    go to state 99
+    cos       go to state 100
+    sin       go to state 101
+    exp       go to state 102
+    abs       go to state 103
+    if        go to state 104
+    number    go to state 105
+    variable  go to state 106
+    E         go to state 107
+    PI        go to state 108
+
+
+state 157
+
+   78 anotherminnlnode: nlnode .
+
+    $default  reduce using rule 78 (anotherminnlnode)
+
+
+state 158
+
+   77 min: MINSTART @12 anotherminnlnode . MINEND
+   79 anotherminnlnode: anotherminnlnode . nlnode
+
+    TIMESSTART     shift, and go to state 62
+    NUMBERSTART    shift, and go to state 63
+    POWERSTART     shift, and go to state 64
+    PLUSSTART      shift, and go to state 65
+    MINUSSTART     shift, and go to state 66
+    DIVIDESTART    shift, and go to state 67
+    LNSTART        shift, and go to state 68
+    SQRTSTART      shift, and go to state 69
+    SUMSTART       shift, and go to state 70
+    PRODUCTSTART   shift, and go to state 71
+    EXPSTART       shift, and go to state 72
+    NEGATESTART    shift, and go to state 73
+    IFSTART        shift, and go to state 74
+    SQUARESTART    shift, and go to state 75
+    COSSTART       shift, and go to state 76
+    SINSTART       shift, and go to state 77
+    VARIABLESTART  shift, and go to state 78
+    ABSSTART       shift, and go to state 79
+    MAXSTART       shift, and go to state 80
+    ALLDIFFSTART   shift, and go to state 81
+    MINSTART       shift, and go to state 82
+    MINEND         shift, and go to state 206
+    ESTART         shift, and go to state 83
+    PISTART        shift, and go to state 84
+
+    nlnode    go to state 207
+    times     go to state 86
+    plus      go to state 87
+    minus     go to state 88
+    negate    go to state 89
+    divide    go to state 90
+    power     go to state 91
+    sum       go to state 92
+    allDiff   go to state 93
+    max       go to state 94
+    min       go to state 95
+    product   go to state 96
+    ln        go to state 97
+    sqrt      go to state 98
+    square    go to state 99
+    cos       go to state 100
+    sin       go to state 101
+    exp       go to state 102
+    abs       go to state 103
+    if        go to state 104
+    number    go to state 105
+    variable  go to state 106
+    E         go to state 107
+    PI        go to state 108
+
+
+state 159
+
+  108 eend: ENDOFELEMENT .
+
+    $default  reduce using rule 108 (eend)
+
+
+state 160
+
+  109 eend: GREATERTHAN . EEND
+
+    EEND  shift, and go to state 208
+
+
+state 161
+
+  107 E: ESTART @24 eend .
+
+    $default  reduce using rule 107 (E)
+
+
+state 162
+
+  112 piend: ENDOFELEMENT .
+
+    $default  reduce using rule 112 (piend)
+
+
+state 163
+
+  113 piend: GREATERTHAN . PIEND
+
+    PIEND  shift, and go to state 209
+
+
+state 164
+
+  111 PI: PISTART @25 piend .
+
+    $default  reduce using rule 111 (PI)
+
+
+state 165
+
+   27 nlnodes: nlnodes NLSTART nlIdxATT GREATERTHAN nlnode @2 NLEND .
+
+    $default  reduce using rule 27 (nlnodes)
+
+
+state 166
+
+   53 times: TIMESSTART @3 nlnode nlnode . TIMESEND
+
+    TIMESEND  shift, and go to state 210
+
+
+state 167
+
+  124 numbervalueATT: VALUEATT . DOUBLE
+  125               | VALUEATT . INTEGER
+
+    INTEGER  shift, and go to state 211
+    DOUBLE   shift, and go to state 212
+
+
+state 168
+
+  123 numberidATT: IDATT . ATTRIBUTETEXT
+
+    ATTRIBUTETEXT  shift, and go to state 213
+
+
+state 169
+
+  105 numberend: NUMBEREND .
+
+    $default  reduce using rule 105 (numberend)
+
+
+state 170
+
+  122 numbertypeATT: TYPEATT . ATTRIBUTETEXT
+
+    ATTRIBUTETEXT  shift, and go to state 214
+
+
+state 171
+
+  104 numberend: ENDOFELEMENT .
+
+    $default  reduce using rule 104 (numberend)
+
+
+state 172
+
+  101 number: NUMBERSTART @22 anotherNumberATT numberend .
+
+    $default  reduce using rule 101 (number)
+
+
+state 173
+
+  118 anotherNumberATT: anotherNumberATT numberATT .
+
+    $default  reduce using rule 118 (anotherNumberATT)
+
+
+state 174
+
+  119 numberATT: numbertypeATT . quote
+
+    $default  reduce using rule 137 (xmlWhiteSpace)
+
+    xmlWhiteSpace  go to state 14
+    quote          go to state 215
+
+
+state 175
+
+  121 numberATT: numberidATT . quote
+
+    $default  reduce using rule 137 (xmlWhiteSpace)
+
+    xmlWhiteSpace  go to state 14
+    quote          go to state 216
+
+
+state 176
+
+  120 numberATT: numbervalueATT . quote
+
+    $default  reduce using rule 137 (xmlWhiteSpace)
+
+    xmlWhiteSpace  go to state 14
+    quote          go to state 217
+
+
+state 177
+
+   63 power: POWERSTART @8 nlnode nlnode . POWEREND
+
+    POWEREND  shift, and go to state 218
+
+
+state 178
+
+   55 plus: PLUSSTART @4 nlnode nlnode . PLUSEND
+
+    PLUSEND  shift, and go to state 219
+
+
+state 179
+
+   57 minus: MINUSSTART @5 nlnode nlnode . MINUSEND
+
+    MINUSEND  shift, and go to state 220
+
+
+state 180
+
+   61 divide: DIVIDESTART @7 nlnode nlnode . DIVIDEEND
+
+    DIVIDEEND  shift, and go to state 221
+
+
+state 181
+
+   85 ln: LNSTART @14 nlnode LNEND .
+
+    $default  reduce using rule 85 (ln)
+
+
+state 182
+
+   87 sqrt: SQRTSTART @15 nlnode SQRTEND .
+
+    $default  reduce using rule 87 (sqrt)
+
+
+state 183
+
+   65 sum: SUMSTART @9 anothersumnlnode SUMEND .
+
+    $default  reduce using rule 65 (sum)
+
+
+state 184
+
+   67 anothersumnlnode: anothersumnlnode nlnode .
+
+    $default  reduce using rule 67 (anothersumnlnode)
+
+
+state 185
+
+   81 product: PRODUCTSTART @13 anotherproductnlnode PRODUCTEND .
+
+    $default  reduce using rule 81 (product)
+
+
+state 186
+
+   83 anotherproductnlnode: anotherproductnlnode nlnode .
+
+    $default  reduce using rule 83 (anotherproductnlnode)
+
+
+state 187
+
+   95 exp: EXPSTART @19 nlnode EXPEND .
+
+    $default  reduce using rule 95 (exp)
+
+
+state 188
+
+   59 negate: NEGATESTART @6 nlnode NEGATEEND .
+
+    $default  reduce using rule 59 (negate)
+
+
+state 189
+
+   99 if: IFSTART @21 nlnode nlnode . nlnode IFEND
+
+    TIMESSTART     shift, and go to state 62
+    NUMBERSTART    shift, and go to state 63
+    POWERSTART     shift, and go to state 64
+    PLUSSTART      shift, and go to state 65
+    MINUSSTART     shift, and go to state 66
+    DIVIDESTART    shift, and go to state 67
+    LNSTART        shift, and go to state 68
+    SQRTSTART      shift, and go to state 69
+    SUMSTART       shift, and go to state 70
+    PRODUCTSTART   shift, and go to state 71
+    EXPSTART       shift, and go to state 72
+    NEGATESTART    shift, and go to state 73
+    IFSTART        shift, and go to state 74
+    SQUARESTART    shift, and go to state 75
+    COSSTART       shift, and go to state 76
+    SINSTART       shift, and go to state 77
+    VARIABLESTART  shift, and go to state 78
+    ABSSTART       shift, and go to state 79
+    MAXSTART       shift, and go to state 80
+    ALLDIFFSTART   shift, and go to state 81
+    MINSTART       shift, and go to state 82
+    ESTART         shift, and go to state 83
+    PISTART        shift, and go to state 84
+
+    nlnode    go to state 222
+    times     go to state 86
+    plus      go to state 87
+    minus     go to state 88
+    negate    go to state 89
+    divide    go to state 90
+    power     go to state 91
+    sum       go to state 92
+    allDiff   go to state 93
+    max       go to state 94
+    min       go to state 95
+    product   go to state 96
+    ln        go to state 97
+    sqrt      go to state 98
+    square    go to state 99
+    cos       go to state 100
+    sin       go to state 101
+    exp       go to state 102
+    abs       go to state 103
+    if        go to state 104
+    number    go to state 105
+    variable  go to state 106
+    E         go to state 107
+    PI        go to state 108
+
+
+state 190
+
+   89 square: SQUARESTART @16 nlnode SQUAREEND .
+
+    $default  reduce using rule 89 (square)
+
+
+state 191
+
+   91 cos: COSSTART @17 nlnode COSEND .
+
+    $default  reduce using rule 91 (cos)
+
+
+state 192
+
+   93 sin: SINSTART @18 nlnode SINEND .
+
+    $default  reduce using rule 93 (sin)
+
+
+state 193
+
+  130 variablecoefATT: COEFATT . DOUBLE
+  131                | COEFATT . INTEGER
+
+    INTEGER  shift, and go to state 223
+    DOUBLE   shift, and go to state 224
+
+
+state 194
+
+  132 variableidxATT: IDXATT . INTEGER
+
+    INTEGER  shift, and go to state 225
+
+
+state 195
+
+  114 variableend: ENDOFELEMENT .
+
+    $default  reduce using rule 114 (variableend)
+
+
+state 196
+
+  116 variableend: GREATERTHAN . nlnode @26 VARIABLEEND
+
+    TIMESSTART     shift, and go to state 62
+    NUMBERSTART    shift, and go to state 63
+    POWERSTART     shift, and go to state 64
+    PLUSSTART      shift, and go to state 65
+    MINUSSTART     shift, and go to state 66
+    DIVIDESTART    shift, and go to state 67
+    LNSTART        shift, and go to state 68
+    SQRTSTART      shift, and go to state 69
+    SUMSTART       shift, and go to state 70
+    PRODUCTSTART   shift, and go to state 71
+    EXPSTART       shift, and go to state 72
+    NEGATESTART    shift, and go to state 73
+    IFSTART        shift, and go to state 74
+    SQUARESTART    shift, and go to state 75
+    COSSTART       shift, and go to state 76
+    SINSTART       shift, and go to state 77
+    VARIABLESTART  shift, and go to state 78
+    ABSSTART       shift, and go to state 79
+    MAXSTART       shift, and go to state 80
+    ALLDIFFSTART   shift, and go to state 81
+    MINSTART       shift, and go to state 82
+    ESTART         shift, and go to state 83
+    PISTART        shift, and go to state 84
+
+    nlnode    go to state 226
+    times     go to state 86
+    plus      go to state 87
+    minus     go to state 88
+    negate    go to state 89
+    divide    go to state 90
+    power     go to state 91
+    sum       go to state 92
+    allDiff   go to state 93
+    max       go to state 94
+    min       go to state 95
+    product   go to state 96
+    ln        go to state 97
+    sqrt      go to state 98
+    square    go to state 99
+    cos       go to state 100
+    sin       go to state 101
+    exp       go to state 102
+    abs       go to state 103
+    if        go to state 104
+    number    go to state 105
+    variable  go to state 106
+    E         go to state 107
+    PI        go to state 108
+
+
+state 197
+
+  103 variable: VARIABLESTART @23 anotherVariableATT variableend .
+
+    $default  reduce using rule 103 (variable)
+
+
+state 198
+
+  127 anotherVariableATT: anotherVariableATT variableATT .
+
+    $default  reduce using rule 127 (anotherVariableATT)
+
+
+state 199
+
+  128 variableATT: variablecoefATT . quote
+
+    $default  reduce using rule 137 (xmlWhiteSpace)
+
+    xmlWhiteSpace  go to state 14
+    quote          go to state 227
+
+
+state 200
+
+  129 variableATT: variableidxATT . quote
+
+    $default  reduce using rule 137 (xmlWhiteSpace)
+
+    xmlWhiteSpace  go to state 14
+    quote          go to state 228
+
+
+state 201
+
+   97 abs: ABSSTART @20 nlnode ABSEND .
+
+    $default  reduce using rule 97 (abs)
+
+
+state 202
+
+   73 max: MAXSTART @11 anothermaxnlnode MAXEND .
+
+    $default  reduce using rule 73 (max)
+
+
+state 203
+
+   75 anothermaxnlnode: anothermaxnlnode nlnode .
+
+    $default  reduce using rule 75 (anothermaxnlnode)
+
+
+state 204
+
+   69 allDiff: ALLDIFFSTART @10 anotherallDiffnlnode ALLDIFFEND .
+
+    $default  reduce using rule 69 (allDiff)
+
+
+state 205
+
+   71 anotherallDiffnlnode: anotherallDiffnlnode nlnode .
+
+    $default  reduce using rule 71 (anotherallDiffnlnode)
+
+
+state 206
+
+   77 min: MINSTART @12 anotherminnlnode MINEND .
+
+    $default  reduce using rule 77 (min)
+
+
+state 207
+
+   79 anotherminnlnode: anotherminnlnode nlnode .
+
+    $default  reduce using rule 79 (anotherminnlnode)
+
+
+state 208
+
+  109 eend: GREATERTHAN EEND .
+
+    $default  reduce using rule 109 (eend)
+
+
+state 209
+
+  113 piend: GREATERTHAN PIEND .
+
+    $default  reduce using rule 113 (piend)
+
+
+state 210
+
+   53 times: TIMESSTART @3 nlnode nlnode TIMESEND .
+
+    $default  reduce using rule 53 (times)
+
+
+state 211
+
+  125 numbervalueATT: VALUEATT INTEGER .
+
+    $default  reduce using rule 125 (numbervalueATT)
+
+
+state 212
+
+  124 numbervalueATT: VALUEATT DOUBLE .
+
+    $default  reduce using rule 124 (numbervalueATT)
+
+
+state 213
+
+  123 numberidATT: IDATT ATTRIBUTETEXT .
+
+    $default  reduce using rule 123 (numberidATT)
+
+
+state 214
+
+  122 numbertypeATT: TYPEATT ATTRIBUTETEXT .
+
+    $default  reduce using rule 122 (numbertypeATT)
+
+
+state 215
+
+  119 numberATT: numbertypeATT quote .
+
+    $default  reduce using rule 119 (numberATT)
+
+
+state 216
+
+  121 numberATT: numberidATT quote .
+
+    $default  reduce using rule 121 (numberATT)
+
+
+state 217
+
+  120 numberATT: numbervalueATT quote .
+
+    $default  reduce using rule 120 (numberATT)
+
+
+state 218
+
+   63 power: POWERSTART @8 nlnode nlnode POWEREND .
+
+    $default  reduce using rule 63 (power)
+
+
+state 219
+
+   55 plus: PLUSSTART @4 nlnode nlnode PLUSEND .
+
+    $default  reduce using rule 55 (plus)
+
+
+state 220
+
+   57 minus: MINUSSTART @5 nlnode nlnode MINUSEND .
+
+    $default  reduce using rule 57 (minus)
+
+
+state 221
+
+   61 divide: DIVIDESTART @7 nlnode nlnode DIVIDEEND .
+
+    $default  reduce using rule 61 (divide)
+
+
+state 222
+
+   99 if: IFSTART @21 nlnode nlnode nlnode . IFEND
+
+    IFEND  shift, and go to state 229
+
+
+state 223
+
+  131 variablecoefATT: COEFATT INTEGER .
+
+    $default  reduce using rule 131 (variablecoefATT)
+
+
+state 224
+
+  130 variablecoefATT: COEFATT DOUBLE .
+
+    $default  reduce using rule 130 (variablecoefATT)
+
+
+state 225
+
+  132 variableidxATT: IDXATT INTEGER .
+
+    $default  reduce using rule 132 (variableidxATT)
+
+
+state 226
+
+  116 variableend: GREATERTHAN nlnode . @26 VARIABLEEND
+
+    $default  reduce using rule 115 (@26)
+
+    @26  go to state 230
+
+
+state 227
+
+  128 variableATT: variablecoefATT quote .
+
+    $default  reduce using rule 128 (variableATT)
+
+
+state 228
+
+  129 variableATT: variableidxATT quote .
+
+    $default  reduce using rule 129 (variableATT)
+
+
+state 229
+
+   99 if: IFSTART @21 nlnode nlnode nlnode IFEND .
+
+    $default  reduce using rule 99 (if)
+
+
+state 230
+
+  116 variableend: GREATERTHAN nlnode @26 . VARIABLEEND
+
+    VARIABLEEND  shift, and go to state 231
+
+
+state 231
+
+  116 variableend: GREATERTHAN nlnode @26 VARIABLEEND .
+
+    $default  reduce using rule 116 (variableend)
