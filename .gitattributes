@@ -140,14 +140,6 @@ OS/schemas/fml.xsl -text
 OS/schemas/lpfml.xsd -text
 OS/src/Makefile.am -text
 OS/src/Makefile.in -text
-OS/src/OSAgent/Makefile.am -text
-OS/src/OSAgent/Makefile.in -text
-OS/src/OSAgent/OSSolverAgent.cpp -text
-OS/src/OSAgent/OSSolverAgent.h -text
-OS/src/OSAgent/OShL.cpp -text
-OS/src/OSAgent/OShL.h -text
-OS/src/OSAgent/WSUtil.cpp -text
-OS/src/OSAgent/WSUtil.h -text
 OS/src/OSCommonInterfaces/DefaultSolver.cpp -text
 OS/src/OSCommonInterfaces/DefaultSolver.h -text
 OS/src/OSCommonInterfaces/Makefile.am -text
