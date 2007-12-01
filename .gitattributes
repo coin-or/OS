@@ -20,3 +20,4 @@ OS/src/OSConfig.h -text
 /configure.ac -text
 /install-sh -text
 /ltmain.sh -text
+/missing -text
