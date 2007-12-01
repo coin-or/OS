@@ -18,6 +18,7 @@ OS/src/Makefile.in -text
 OS/src/OSConfig.h -text
 /configure -text
 /configure.ac -text
+/depcomp -text
 /install-sh -text
 /ltmain.sh -text
 /missing -text
