@@ -12,7 +12,7 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([OS],[0.1],[coin-os@list.coin-or.org])
+AC_INIT([OSCommon],[0.1],[coin-os@list.coin-or.org])
 
 AC_COPYRIGHT([
 Copyright 2006 International Business Machines and others.
@@ -43,7 +43,7 @@ AC_COIN_PROJECTDIR_INIT
 LIBS_without_ADDLIBS="$LIBS"
 
 # Check if user wants to produce debugging code
-AC_COIN_DEBUG_COMPILE(OS)
+AC_COIN_DEBUG_COMPILE(OSCommon)
 
 # Get the name of the C++ compiler and appropriate compiler options
 coin_opt_cxxflags="-O3"
@@ -65,16 +65,7 @@ AC_COIN_INIT_AUTO_TOOLS
 #                              COIN components                              #
 #############################################################################
 
-AC_COIN_HAS_PROJECT(OS)
-AC_COIN_HAS_PROJECT(CoinUtils)
-AC_COIN_HAS_PROJECT(Osi)
-AC_COIN_HAS_PROJECT(Clp)
-AC_COIN_HAS_PROJECT(Cbc)
-AC_COIN_HAS_PROJECT(Cgl)
-AC_COIN_HAS_PROJECT(SYMPHONY)
-AC_COIN_HAS_PROJECT(DyLP)
-AC_COIN_HAS_PROJECT(Vol)
-AC_COIN_HAS_PROJECT(Ipopt)
+#AC_COIN_HAS_PROJECT(OSCommon)
 AC_COIN_HAS_PROJECT(cppad)
 
 
@@ -82,149 +73,10 @@ AC_COIN_HAS_PROJECT(cppad)
   
   case $coin_has_cppad in
      unavailable|skipping)
-         AC_MSG_ERROR([cannot find CppAD which is necessary to build OS]) ;;
+         AC_MSG_ERROR([cannot find CppAD which is necessary to build OSCommon]) ;;
   esac
 
-if test $coin_has_coinutils != unavailable &&
-   test $coin_has_coinutils != skipping; then
-  case $CXX in
-    cl*)
-       coinutilslib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libCoinUtils.lib';;
-     *)
-       coinutilslib="-L\$(INSTALLIBDIR) -lCoinUtils";;
-  esac
-  AC_SUBST(coinutilslib) 
-  else
-    AC_MSG_ERROR([cannot find CoinTuils which is necessary to build OS])   
-fi
 
-if test $coin_has_clp != unavailable &&
-   test $coin_has_clp != skipping; then
-  case $CXX in
-    cl*)
-       clplib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libClp.lib'
-       osiclplib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOsiClp.lib';;
-     *)
-       clplib="-L\$(INSTALLIBDIR) -lClp"
-       osiclplib="-L\$(INSTALLIBDIR) -lOsiClp";;
-  esac
-  AC_SUBST(clplib)
-  AC_SUBST(osiclplib) 
-  else
-    AC_MSG_ERROR([cannot find Clp which is necessary to build OS])   
-fi
-
-if test $coin_has_cbc != unavailable &&
-   test $coin_has_cbc != skipping; then
-  case $CXX in
-    cl*)
-       cbclib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libCbc.lib'
-       osicbclib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOsiCbc.lib';;
-     *)
-       cbclib="-L\$(INSTALLIBDIR) -lCbc"
-       osicbclib="-L\$(INSTALLIBDIR) -lOsiCbc";;
-  esac
-  AC_SUBST(cbclib) 
-  AC_SUBST(osicbclib)
-  else
-    AC_MSG_ERROR([cannot find Cbc which is necessary to build OS])   
-fi 
-
-
-if test $coin_has_cgl != unavailable &&
-   test $coin_has_cgl != skipping; then
-  case $CXX in
-    cl*)
-       cgllib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libCgl.lib';;
-     *)
-       cgllib="-L\$(INSTALLIBDIR) -lCgl";;
-  esac
-  AC_SUBST(cgllib) 
-  else
-    AC_MSG_ERROR([cannot find Cgl which is necessary to build OS])   
-fi
-
-
-if test $coin_has_osi != unavailable &&
-   test $coin_has_osi != skipping; then
-  case $CXX in
-    cl*)
-       osilib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOsi.lib';;
-     *)
-       osilib="-L\$(INSTALLIBDIR) -lOsi";;
-  esac
-  AC_SUBST(osilib) 
-  else
-    AC_MSG_ERROR([cannot find Osi which is necessary to build OS])   
-fi
-
-
-if test $coin_has_dylp != unavailable &&
-   test $coin_has_dylp != skipping; then
-  case $CXX in
-    cl*)
-       dylplib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libDylp.lib'
-       osidylplib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOsiDylp.lib';;
-     *)
-       dylplib="-L\$(INSTALLIBDIR) -lDylp"
-       osidylplib="-L\$(INSTALLIBDIR) -lOsiDylp";;
-  esac
-  AC_SUBST(dylplib) 
-  AC_SUBST(osidylplib) 
-fi
-
-
-if test $coin_has_vol != unavailable &&
-   test $coin_has_vol != skipping; then
-  case $CXX in
-    cl*)
-       vollib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libVol.lib'
-       osivollib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libVol.lib';;
-     *)
-       vollib="-L\$(INSTALLIBDIR) -lVol"
-       osivollib="-L\$(INSTALLIBDIR) -lOsiVol";;
-  esac
-  AC_SUBST(vollib)
-  AC_SUBST(osivollib)  
-fi
-
-
-if test $coin_has_symphony != unavailable &&
-   test $coin_has_symphony != skipping; then
-  case $CXX in
-    cl*)
-       symphonylib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libSym.lib'
-       osisymphonylib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOsiSym.lib';;
-     *)
-       symphonylib="-L\$(INSTALLIBDIR) -lSym"
-       osisymphonylib="-L\$(INSTALLIBDIR) -lOsiSym";;
-  esac
-  AC_SUBST(symphonylib) 
-  AC_SUBST(osisymphonylib)  
-fi
-
-if test $coin_has_ipopt != unavailable &&
-   test $coin_has_ipopt != skipping; then
-  case $CXX in
-    cl*)
-       ipoptlib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libipopt.lib';;
-     *)
-       ipoptlib="-L\$(INSTALLIBDIR) -lipopt";;
-  esac
-  AC_SUBST(ipoptlib)  
-fi
-
-#############################################################################
-#                             Third party solvers                           #
-#############################################################################
-
-AC_COIN_HAS_USER_LIBRARY([Cplex],[CPX],[cplex.h],[])
-AC_COIN_HAS_USER_LIBRARY([Lindo],[LINDO],[lindo.h],[])
-#AC_COIN_HAS_USER_LIBRARY([Ipopt],[IPOPT],[IpoptConfig.h],[])
-AC_COIN_HAS_USER_LIBRARY([Knitro],[KNITRO],[knitro.h],[])
-
-AC_COIN_HAS_GLPK(Glpk)
-AC_COIN_HAS_ASL
 
 #############################################################################
 #                         OS-specific configuration                         #
@@ -430,97 +282,6 @@ esac
 AC_SUBST(oslib)
 
 
-##############################################################################
-#                   VPATH links for example input files                      #
-##############################################################################
-
-# In case this is a VPATH configuration we need to make sure that the
-# input files for the examples are available in the VPATH directory.
-##
-## osil test files
-##
-AC_COIN_VPATH_LINK(data/osilFiles/parincLinear.osil)
-AC_COIN_VPATH_LINK(data/osilFiles/parincQuadratic.osil)
-AC_COIN_VPATH_LINK(data/osilFiles/HS071_NLP.osil)
-AC_COIN_VPATH_LINK(data/osilFiles/HS071_NLPMod.osil)
-AC_COIN_VPATH_LINK(data/osilFiles/rosenbrockmod.osil)
-AC_COIN_VPATH_LINK(data/osilFiles/avion2.osil)
-AC_COIN_VPATH_LINK(data/osilFiles/lindoapiaddins.osil)
-AC_COIN_VPATH_LINK(data/osilFiles/volumeTest.osil)
-AC_COIN_VPATH_LINK(data/osilFiles/p0033.osil)
-AC_COIN_VPATH_LINK(data/osilFiles/CppADTestLag.osil)
-AC_COIN_VPATH_LINK(data/osilFiles/testOperators.osil)
-AC_COIN_VPATH_LINK(data/osilFiles/wayneQuadratic.osil)
-AC_COIN_VPATH_LINK(data/osilFiles/callBackTest.osil)
-AC_COIN_VPATH_LINK(data/osilFiles/callBackTestRowMajor.osil)
-##
-## osol test files
-##
-AC_COIN_VPATH_LINK(data/osolFiles/demo.osol)
-AC_COIN_VPATH_LINK(data/osolFiles/remotegsbkip.osol)
-AC_COIN_VPATH_LINK(data/osolFiles/remoteosil.osol)
-AC_COIN_VPATH_LINK(data/osolFiles/retrieve.osol)
-AC_COIN_VPATH_LINK(data/osolFiles/send.osol)
-AC_COIN_VPATH_LINK(data/osolFiles/sendWithJobID.osol)
-AC_COIN_VPATH_LINK(data/osolFiles/kill.osol)
-AC_COIN_VPATH_LINK(data/osolFiles/remoteSolve1.osol)
-AC_COIN_VPATH_LINK(data/osolFiles/remoteSolve2.osol)
-AC_COIN_VPATH_LINK(data/osolFiles/demopassword.osol)
-AC_COIN_VPATH_LINK(data/osolFiles/demopasswordjobID.osol)
-##
-## ospl test files
-##
-AC_COIN_VPATH_LINK(data/osplFiles/demo.ospl)
-##
-## osrl test files
-##
-AC_COIN_VPATH_LINK(data/osrlFiles/parincLinear.osrl)
-AC_COIN_VPATH_LINK(data/osrlFiles/reducedcost.osrl)
-AC_COIN_VPATH_LINK(data/osrlFiles/rosenbrockmod.osrl)
-##
-## configure test files
-##
-AC_COIN_VPATH_LINK(data/configFiles/kill.config)
-AC_COIN_VPATH_LINK(data/configFiles/testlocal.config)
-AC_COIN_VPATH_LINK(data/configFiles/testbrowser.config)
-AC_COIN_VPATH_LINK(data/configFiles/testlocalclp.config)
-AC_COIN_VPATH_LINK(data/configFiles/testlocalosol.config)
-AC_COIN_VPATH_LINK(data/configFiles/testmps.config)
-AC_COIN_VPATH_LINK(data/configFiles/testnl.config)
-AC_COIN_VPATH_LINK(data/configFiles/testRemoteKnock.config)
-AC_COIN_VPATH_LINK(data/configFiles/testRemotegetJobID.config)
-AC_COIN_VPATH_LINK(data/configFiles/testremote.config)
-AC_COIN_VPATH_LINK(data/configFiles/testremoteBIG.config)
-AC_COIN_VPATH_LINK(data/configFiles/testremoteRetrieve.config)
-AC_COIN_VPATH_LINK(data/configFiles/testremoteSend.config)
-
-##
-## ampl test files
-##
-AC_COIN_VPATH_LINK(data/amplFiles/hs71.mod)
-AC_COIN_VPATH_LINK(data/amplFiles/hs71.nl)
-AC_COIN_VPATH_LINK(data/amplFiles/parinc.mod)
-AC_COIN_VPATH_LINK(data/amplFiles/parinc.dat)
-AC_COIN_VPATH_LINK(data/amplFiles/parinc.nl)
-##
-## mps test files
-##
-AC_COIN_VPATH_LINK(data/mpsFiles/parinc.mps)
-##
-## MATLAB test files
-##
-AC_COIN_VPATH_LINK(data/matlabFiles/markowitz.m)
-AC_COIN_VPATH_LINK(data/matlabFiles/parincLinear.m)
-AC_COIN_VPATH_LINK(data/matlabFiles/template.m)
-##
-## XSLT FILE
-##
-AC_COIN_VPATH_LINK(stylesheets/OSrL.xslt)
-##
-## CSS FILE
-##
-AC_COIN_VPATH_LINK(stylesheets/OSrL.css)
-##
 
 
 
@@ -529,6 +290,12 @@ AC_COIN_VPATH_LINK(stylesheets/OSrL.css)
 
 
 
+
+#############################################################################
+#                  Check which subprojects are there                        #
+#############################################################################
+
+AC_COIN_MAIN_SUBDIRS(cppad)
 
 
 ##############################################################################
@@ -542,16 +309,7 @@ AC_CONFIG_FILES([Makefile
           src/OSAgent/Makefile
           src/OSUtils/Makefile
           src/OSCommonInterfaces/Makefile
-          src/OSSolverInterfaces/Makefile
-          src/OSModelInterfaces/Makefile
           src/OSParsers/Makefile
-          test/Makefile
-          examples/Makefile
-          examples/instanceGenerator/Makefile
-          examples/amplClient/Makefile
-          examples/osTestCode/Makefile
-          examples/algorithmicDiff/Makefile
-          examples/fileUpload/Makefile
           os_addlibs.txt])
 
 # Here put the location and name of the configuration header file
