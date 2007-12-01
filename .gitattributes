@@ -16,6 +16,8 @@ OS/os_addlibs.txt.in -text
 OS/src/Makefile.am -text
 OS/src/Makefile.in -text
 OS/src/OSConfig.h -text
+/config.guess -text
+/config.sub -text
 /configure -text
 /configure.ac -text
 /depcomp -text
