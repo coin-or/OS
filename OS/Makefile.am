@@ -17,16 +17,13 @@ CXXFLAGS = -O3  -pipe -DNDEBUG -pedantic-errors -Wimplicit -Wparentheses -Wretur
 ########################################################################
 
 SUBDIRS = src
-  SUBDIRS += test
-  SUBDIRS += examples
+
 
 # We don't want to compile the test subdirectory, unless the test target is
 # specified.  But we need to list it as subdirectory to make sure that it is
 # included in the tarball
 
-if ALWAYS_FALSE
-  SUBDIRS += test
-endif
+
 
 ########################################################################
 #             Additional files to be included in tarball               #
@@ -41,19 +38,10 @@ EXTRA_DIST =
 #                           Extra Targets                              #
 ########################################################################
 
-test: all
-	cd test; make test
 
 
-unitTest: test
 
-clean-local:
-	if test -r test/Makefile; then cd test; make clean; fi
 
-distclean-local:
-	if test -r test/Makefile; then cd test; make distclean; fi
-
-.PHONY: test unitTest
 
 run_parsers:
 	$(YACC) -ldv -p osrl -o ${abs_source_dir}/src/OSParsers/parseosrl.tab.cpp ${abs_source_dir}/src/OSParsers/parseosrl.y

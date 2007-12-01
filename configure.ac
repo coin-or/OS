@@ -46,7 +46,7 @@ AC_COIN_CREATE_LIBTOOL
 
 
 AC_COIN_MAIN_SUBDIRS(cppad)
-#AC_COIN_MAIN_SUBDIRS(OS)
+AC_COIN_MAIN_SUBDIRS(OS)
 
 
 ##############################################################################

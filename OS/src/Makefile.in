@@ -21,7 +21,6 @@
 # Author:  Andreas Waechter           IBM    2006-04-13
 
 
-
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 VPATH = @srcdir@
@@ -44,67 +43,12 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-bin_PROGRAMS = OSSolverService$(EXEEXT)
-@COIN_HAS_SYMPHONY_TRUE@am__append_1 = $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
-@COIN_HAS_DYLP_TRUE@am__append_2 = $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
-@COIN_HAS_VOL_TRUE@am__append_3 = $(OSIOBJDIR)/src/OsiVol/libOsiVol.la 
-@COIN_HAS_CPX_TRUE@am__append_4 = $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
-@COIN_HAS_SYMPHONY_TRUE@am__append_5 = $(SYMPHONYOBJDIR)/src/libSym.la 
-@COIN_HAS_SYMPHONY_TRUE@am__append_6 = `cat $(SYMPHONYOBJDIR)/sym_addlibs.txt`
-@COIN_HAS_DYLP_TRUE@am__append_7 = $(DYLPOBJDIR)/src/Dylp/libDylp.la 
-@COIN_HAS_DYLP_TRUE@am__append_8 = `cat $(DYLPOBJDIR)/dylp_addlibs.txt`
-@COIN_HAS_VOL_TRUE@am__append_9 = $(VOLOBJDIR)/src/libVol.la 
-@COIN_HAS_VOL_TRUE@am__append_10 = `cat $(VOLOBJDIR)/vol_addlibs.txt`
-@COIN_HAS_GLPK_TRUE@am__append_11 =  \
-@COIN_HAS_GLPK_TRUE@	$(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la \
-@COIN_HAS_GLPK_TRUE@	$(GLPKLIB)
-@COIN_HAS_DYLP_TRUE@am__append_12 = \
-@COIN_HAS_DYLP_TRUE@    -I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
-@COIN_HAS_DYLP_TRUE@    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/Dylp` \
-@COIN_HAS_DYLP_TRUE@    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/DylpStdLib` \
-@COIN_HAS_DYLP_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiDylp`
-
-@COIN_HAS_SYMPHONY_TRUE@am__append_13 = \
-@COIN_HAS_SYMPHONY_TRUE@    -I`$(CYGPATH_W) $(SYMPHONYSRCDIR)/include` \
-@COIN_HAS_SYMPHONY_TRUE@    -I`$(CYGPATH_W) $(SYMPHONYOBJDIR)/include` \
-@COIN_HAS_SYMPHONY_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiSym`
-
-@COIN_HAS_VOL_TRUE@am__append_14 = \
-@COIN_HAS_VOL_TRUE@    -I`$(CYGPATH_W) $(VOLSRCDIR)/include` \
-@COIN_HAS_VOL_TRUE@ -I`$(CYGPATH_W) $(VOLOBJDIR)/include` \
-@COIN_HAS_VOL_TRUE@    -I`$(CYGPATH_W) $(VOLSRCDIR)/src` \
-@COIN_HAS_VOL_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiVol`
-
-@COIN_HAS_CPX_TRUE@am__append_15 = \
-@COIN_HAS_CPX_TRUE@	-I`$(CYGPATH_W) $(CPXINCDIR)` \
-@COIN_HAS_CPX_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
-
-@COIN_HAS_GLPK_TRUE@am__append_16 = \
-@COIN_HAS_GLPK_TRUE@	-I`$(CYGPATH_W) $(GLPKINCDIR)` \
-@COIN_HAS_GLPK_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
-
-@COIN_HAS_LINDO_TRUE@am__append_17 = -I`$(CYGPATH_W) $(LINDOINCDIR)` 
-@COIN_HAS_LINDO_TRUE@am__append_18 = $(LINDOLIB)
-@COIN_HAS_IPOPT_TRUE@am__append_19 = \
-@COIN_HAS_IPOPT_TRUE@	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Interfaces` \
-@COIN_HAS_IPOPT_TRUE@	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Common` \
-@COIN_HAS_IPOPT_TRUE@	-I`$(CYGPATH_W) $(IPOPTOBJDIR)/inc`
-
-@COIN_HAS_IPOPT_TRUE@am__append_20 = $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
-@COIN_HAS_IPOPT_TRUE@am__append_21 = `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
-@COIN_HAS_KNITRO_TRUE@am__append_22 = -I`$(CYGPATH_W) $(KNITROINCDIR)` 
-@COIN_HAS_KNITRO_TRUE@am__append_23 = $(KNITROLIB)
-@COIN_HAS_KNITRO_TRUE@@USEMULTIPLYDEFINED_TRUE@am__append_24 = -multiply_defined suppress
-@COIN_HAS_ASL_TRUE@am__append_25 = -I`$(CYGPATH_W) \
-@COIN_HAS_ASL_TRUE@	$(OSSRCDIR)/src/ThirdPartyASL` \
-@COIN_HAS_ASL_TRUE@	$(ASL_CPPFLAGS)
-@COIN_HAS_ASL_TRUE@am__append_26 = $(ASLLIB) 
 subdir = src
 DIST_COMMON = $(include_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/m4/ac_coin_socket_libs.m4 \
-	$(top_srcdir)/acinclude.m4 $(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
+	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
@@ -116,58 +60,12 @@ am__vpath_adj = case $$p in \
     *) f=$$p;; \
   esac;
 am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
-am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(bindir)" \
-	"$(DESTDIR)$(includedir)"
+am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"
 libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
 am_libOS_la_OBJECTS =
 libOS_la_OBJECTS = $(am_libOS_la_OBJECTS)
-binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
-PROGRAMS = $(bin_PROGRAMS)
-am_OSSolverService_OBJECTS = OSSolverService.$(OBJEXT)
-OSSolverService_OBJECTS = $(am_OSSolverService_OBJECTS)
-@COIN_HAS_SYMPHONY_TRUE@am__DEPENDENCIES_1 =  \
-@COIN_HAS_SYMPHONY_TRUE@	$(OSIOBJDIR)/src/OsiSym/libOsiSym.la
-@COIN_HAS_DYLP_TRUE@am__DEPENDENCIES_2 =  \
-@COIN_HAS_DYLP_TRUE@	$(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la
-@COIN_HAS_VOL_TRUE@am__DEPENDENCIES_3 =  \
-@COIN_HAS_VOL_TRUE@	$(OSIOBJDIR)/src/OsiVol/libOsiVol.la
-@COIN_HAS_CPX_TRUE@am__DEPENDENCIES_4 =  \
-@COIN_HAS_CPX_TRUE@	$(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
-@COIN_HAS_SYMPHONY_TRUE@am__DEPENDENCIES_5 =  \
-@COIN_HAS_SYMPHONY_TRUE@	$(SYMPHONYOBJDIR)/src/libSym.la
-@COIN_HAS_DYLP_TRUE@am__DEPENDENCIES_6 =  \
-@COIN_HAS_DYLP_TRUE@	$(DYLPOBJDIR)/src/Dylp/libDylp.la
-@COIN_HAS_VOL_TRUE@am__DEPENDENCIES_7 = $(VOLOBJDIR)/src/libVol.la
-am__DEPENDENCIES_8 =
-@COIN_HAS_GLPK_TRUE@am__DEPENDENCIES_9 =  \
-@COIN_HAS_GLPK_TRUE@	$(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la \
-@COIN_HAS_GLPK_TRUE@	$(am__DEPENDENCIES_8)
-@COIN_HAS_LINDO_TRUE@am__DEPENDENCIES_10 = $(am__DEPENDENCIES_8)
-@COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_11 = $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
-@COIN_HAS_KNITRO_TRUE@am__DEPENDENCIES_12 = $(am__DEPENDENCIES_8)
-@COIN_HAS_ASL_TRUE@am__DEPENDENCIES_13 = $(am__DEPENDENCIES_8)
-OSSolverService_DEPENDENCIES = libOS.la \
-	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la $(am__DEPENDENCIES_1) \
-	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la $(am__DEPENDENCIES_2) \
-	$(am__DEPENDENCIES_3) $(am__DEPENDENCIES_4) \
-	$(CBCOBJDIR)/src/libCbc.la $(am__DEPENDENCIES_5) \
-	$(CGLOBJDIR)/src/libCgl.la $(OSIOBJDIR)/src/libOsi.la \
-	$(CLPOBJDIR)/src/libClp.la $(am__DEPENDENCIES_6) \
-	$(am__DEPENDENCIES_7) $(am__DEPENDENCIES_9) \
-	$(COINUTILSOBJDIR)/src/libCoinUtils.la $(am__DEPENDENCIES_8) \
-	$(am__DEPENDENCIES_10) $(am__DEPENDENCIES_11) \
-	$(am__DEPENDENCIES_12) $(am__DEPENDENCIES_13)
-depcomp = $(SHELL) $(top_srcdir)/../depcomp
-am__depfiles_maybe = depfiles
-CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
-	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
-LTCXXCOMPILE = $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) \
-	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
-	$(AM_CXXFLAGS) $(CXXFLAGS)
-CXXLD = $(CXX)
-CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
-	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)/inc
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --tag=CC --mode=compile $(CC) $(DEFS) \
@@ -176,8 +74,8 @@ LTCOMPILE = $(LIBTOOL) --tag=CC --mode=compile $(CC) $(DEFS) \
 CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(libOS_la_SOURCES) $(OSSolverService_SOURCES)
-DIST_SOURCES = $(libOS_la_SOURCES) $(OSSolverService_SOURCES)
+SOURCES = $(libOS_la_SOURCES)
+DIST_SOURCES = $(libOS_la_SOURCES)
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	html-recursive info-recursive install-data-recursive \
 	install-exec-recursive install-info-recursive \
@@ -201,66 +99,24 @@ AMDEP_FALSE = @AMDEP_FALSE@
 AMDEP_TRUE = @AMDEP_TRUE@
 AMTAR = @AMTAR@
 AR = @AR@
-ASLLIB = @ASLLIB@
-ASL_CPPFLAGS = @ASL_CPPFLAGS@
 AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AUX_DIR = @AUX_DIR@
 AWK = @AWK@
 BUILDTOOLSDIR = @BUILDTOOLSDIR@
-CBCOBJDIR = @CBCOBJDIR@
-CBCSRCDIR = @CBCSRCDIR@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CDEFS = @CDEFS@
 CFLAGS = @CFLAGS@
-CGLOBJDIR = @CGLOBJDIR@
-CGLSRCDIR = @CGLSRCDIR@
-CLPOBJDIR = @CLPOBJDIR@
-CLPSRCDIR = @CLPSRCDIR@
-COINUTILSOBJDIR = @COINUTILSOBJDIR@
-COINUTILSSRCDIR = @COINUTILSSRCDIR@
-COIN_BUILD_GLPK_FALSE = @COIN_BUILD_GLPK_FALSE@
-COIN_BUILD_GLPK_TRUE = @COIN_BUILD_GLPK_TRUE@
-COIN_HAS_ASL_FALSE = @COIN_HAS_ASL_FALSE@
-COIN_HAS_ASL_TRUE = @COIN_HAS_ASL_TRUE@
-COIN_HAS_CBC_FALSE = @COIN_HAS_CBC_FALSE@
-COIN_HAS_CBC_TRUE = @COIN_HAS_CBC_TRUE@
-COIN_HAS_CGL_FALSE = @COIN_HAS_CGL_FALSE@
-COIN_HAS_CGL_TRUE = @COIN_HAS_CGL_TRUE@
-COIN_HAS_CLP_FALSE = @COIN_HAS_CLP_FALSE@
-COIN_HAS_CLP_TRUE = @COIN_HAS_CLP_TRUE@
-COIN_HAS_COINUTILS_FALSE = @COIN_HAS_COINUTILS_FALSE@
-COIN_HAS_COINUTILS_TRUE = @COIN_HAS_COINUTILS_TRUE@
 COIN_HAS_CPPAD_FALSE = @COIN_HAS_CPPAD_FALSE@
 COIN_HAS_CPPAD_TRUE = @COIN_HAS_CPPAD_TRUE@
-COIN_HAS_CPX_FALSE = @COIN_HAS_CPX_FALSE@
-COIN_HAS_CPX_TRUE = @COIN_HAS_CPX_TRUE@
-COIN_HAS_DYLP_FALSE = @COIN_HAS_DYLP_FALSE@
-COIN_HAS_DYLP_TRUE = @COIN_HAS_DYLP_TRUE@
-COIN_HAS_GLPK_FALSE = @COIN_HAS_GLPK_FALSE@
-COIN_HAS_GLPK_TRUE = @COIN_HAS_GLPK_TRUE@
-COIN_HAS_IPOPT_FALSE = @COIN_HAS_IPOPT_FALSE@
-COIN_HAS_IPOPT_TRUE = @COIN_HAS_IPOPT_TRUE@
-COIN_HAS_KNITRO_FALSE = @COIN_HAS_KNITRO_FALSE@
-COIN_HAS_KNITRO_TRUE = @COIN_HAS_KNITRO_TRUE@
-COIN_HAS_LINDO_FALSE = @COIN_HAS_LINDO_FALSE@
-COIN_HAS_LINDO_TRUE = @COIN_HAS_LINDO_TRUE@
-COIN_HAS_OSI_FALSE = @COIN_HAS_OSI_FALSE@
-COIN_HAS_OSI_TRUE = @COIN_HAS_OSI_TRUE@
 COIN_HAS_OS_FALSE = @COIN_HAS_OS_FALSE@
 COIN_HAS_OS_TRUE = @COIN_HAS_OS_TRUE@
-COIN_HAS_SYMPHONY_FALSE = @COIN_HAS_SYMPHONY_FALSE@
-COIN_HAS_SYMPHONY_TRUE = @COIN_HAS_SYMPHONY_TRUE@
-COIN_HAS_VOL_FALSE = @COIN_HAS_VOL_FALSE@
-COIN_HAS_VOL_TRUE = @COIN_HAS_VOL_TRUE@
 CPP = @CPP@
 CPPADOBJDIR = @CPPADOBJDIR@
 CPPADSRCDIR = @CPPADSRCDIR@
 CPPFLAGS = @CPPFLAGS@
-CPXINCDIR = @CPXINCDIR@
-CPXLIB = @CPXLIB@
 CXX = @CXX@
 CXXCPP = @CXXCPP@
 CXXDEFS = @CXXDEFS@
@@ -272,8 +128,6 @@ DBG_CXXFLAGS = @DBG_CXXFLAGS@
 DBG_FFLAGS = @DBG_FFLAGS@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
-DYLPOBJDIR = @DYLPOBJDIR@
-DYLPSRCDIR = @DYLPSRCDIR@
 ECHO = @ECHO@
 ECHO_C = @ECHO_C@
 ECHO_N = @ECHO_N@
@@ -284,32 +138,18 @@ F77 = @F77@
 FADDLIBS = @FADDLIBS@
 FFLAGS = @FFLAGS@
 FLIBS = @FLIBS@
-GLPKINCDIR = @GLPKINCDIR@
-GLPKLIB = @GLPKLIB@
 HAVE_EXTERNALS_FALSE = @HAVE_EXTERNALS_FALSE@
 HAVE_EXTERNALS_TRUE = @HAVE_EXTERNALS_TRUE@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
-IPOPTOBJDIR = @IPOPTOBJDIR@
-IPOPTSRCDIR = @IPOPTSRCDIR@
-KNITROINCDIR = @KNITROINCDIR@
-KNITROLIB = @KNITROLIB@
 LDFLAGS = @LDFLAGS@
 LIBEXT = @LIBEXT@
 LIBOBJS = @LIBOBJS@
-LIBS = @LIBS@ `cat $(OSIOBJDIR)/osi_addlibs.txt` `cat \
-	$(CBCOBJDIR)/cbc_addlibs.txt` $(am__append_6) `cat \
-	$(CGLOBJDIR)/cgl_addlibs.txt` `cat \
-	$(OSIOBJDIR)/osi_addlibs.txt` `cat \
-	$(CLPOBJDIR)/clp_addlibs.txt` $(am__append_8) $(am__append_10) \
-	`cat $(COINUTILSOBJDIR)/coinutils_addlibs.txt` \
-	$(am__append_21)
+LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
 LIBTOOLM4 = @LIBTOOLM4@
-LINDOINCDIR = @LINDOINCDIR@
-LINDOLIB = @LINDOLIB@
 LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
 LT_LDFLAGS = @LT_LDFLAGS@
@@ -324,8 +164,6 @@ OBJEXT = @OBJEXT@
 OPT_CFLAGS = @OPT_CFLAGS@
 OPT_CXXFLAGS = @OPT_CXXFLAGS@
 OPT_FFLAGS = @OPT_FFLAGS@
-OSIOBJDIR = @OSIOBJDIR@
-OSISRCDIR = @OSISRCDIR@
 OSOBJDIR = @OSOBJDIR@
 OSROOT_DIR = @OSROOT_DIR@
 OSSRCDIR = @OSSRCDIR@
@@ -341,13 +179,9 @@ RPATH_FLAGS = @RPATH_FLAGS@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
-SYMPHONYOBJDIR = @SYMPHONYOBJDIR@
-SYMPHONYSRCDIR = @SYMPHONYSRCDIR@
 USEMULTIPLYDEFINED_FALSE = @USEMULTIPLYDEFINED_FALSE@
 USEMULTIPLYDEFINED_TRUE = @USEMULTIPLYDEFINED_TRUE@
 VERSION = @VERSION@
-VOLOBJDIR = @VOLOBJDIR@
-VOLSRCDIR = @VOLSRCDIR@
 VPATH_DISTCLEANFILES = @VPATH_DISTCLEANFILES@
 YACC = @YACC@
 abs_bin_dir = @abs_bin_dir@
@@ -377,12 +211,7 @@ build_alias = @build_alias@
 build_cpu = @build_cpu@
 build_os = @build_os@
 build_vendor = @build_vendor@
-cbclib = @cbclib@
-cgllib = @cgllib@
-clplib = @clplib@
-coinutilslib = @coinutilslib@
 datadir = @datadir@
-dylplib = @dylplib@
 exec_prefix = @exec_prefix@
 have_autoconf = @have_autoconf@
 have_automake = @have_automake@
@@ -395,33 +224,24 @@ host_vendor = @host_vendor@
 includedir = @includedir@
 infodir = @infodir@
 install_sh = @install_sh@
-ipoptlib = @ipoptlib@
 libdir = @libdir@
 libexecdir = @libexecdir@
 localstatedir = @localstatedir@
 mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
-osicbclib = @osicbclib@
-osiclplib = @osiclplib@
-osidylplib = @osidylplib@
-osilib = @osilib@
-osisymphonylib = @osisymphonylib@
-osivollib = @osivollib@
 oslib = @oslib@
 prefix = @prefix@
 program_transform_name = @program_transform_name@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 sol_cc_compiler = @sol_cc_compiler@
-symphonylib = @symphonylib@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
-vollib = @vollib@
 AUTOMAKE_OPTIONS = foreign
 
 ########################################################################
-#                           libOS  -- Optimization Services Library                               #
+#                           libOS  -- Optimization Services Library    #
 ########################################################################
 
 # Name of the library compiled in this directory.  We want it to be installed
@@ -438,9 +258,7 @@ libOS_la_LDFLAGS = $(LT_LDFLAGS)
 libOS_la_LIBADD = ./OSUtils/libOSUtils.la \
 		./OSCommonInterfaces/libOSCommonInterfaces.la \
 		./OSAgent/libOSAgent.la \
-		./OSModelInterfaces/libOSModelInterfaces.la \
-		./OSParsers/libOSParsers.la \
-		./OSSolverInterfaces/libOSSolverInterfaces.la 
+		./OSParsers/libOSParsers.la 
 
 # Since automake is not doing this on its own, we need to declare the
 # dependencies to the subdirectory libraries here
@@ -448,22 +266,7 @@ libOS_la_DEPENDENCIES = $(libOS_la_LIBADD)
 
 # Now we check into which directories to recurse, and which subdirectory
 # libraries to include
-SUBDIRS = OSUtils OSAgent OSCommonInterfaces OSModelInterfaces \
-	OSParsers OSSolverInterfaces
-
-# List all source files for this executable, including headers
-OSSolverService_SOURCES = OSSolverService.cpp 
-
-# List all additionally required COIN libraries
-OSSolverService_LDADD = libOS.la $(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
-	$(am__append_1) $(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
-	$(am__append_2) $(am__append_3) $(am__append_4) \
-	$(CBCOBJDIR)/src/libCbc.la $(am__append_5) \
-	$(CGLOBJDIR)/src/libCgl.la $(OSIOBJDIR)/src/libOsi.la \
-	$(CLPOBJDIR)/src/libClp.la $(am__append_7) $(am__append_9) \
-	$(am__append_11) $(COINUTILSOBJDIR)/src/libCoinUtils.la \
-	$(ADDLIBS) $(am__append_18) $(am__append_20) $(am__append_23) \
-	$(am__append_26)
+SUBDIRS = OSUtils OSAgent OSCommonInterfaces OSParsers
 
 ########################################################################
 #                            Additional flags                          #
@@ -471,32 +274,14 @@ OSSolverService_LDADD = libOS.la $(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
 
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Windows
-AM_CPPFLAGS = -I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` -I`$(CYGPATH_W) \
-	$(COINUTILSOBJDIR)/inc` -I`$(CYGPATH_W) $(CBCSRCDIR)/src` \
-	-I`$(CYGPATH_W) $(CBCOBJDIR)/inc` -I`$(CYGPATH_W) \
-	$(CLPSRCDIR)/src` -I`$(CYGPATH_W) $(CLPOBJDIR)/inc` \
-	-I`$(CYGPATH_W) $(OSISRCDIR)/src` -I`$(CYGPATH_W) \
-	$(OSIOBJDIR)/inc` -I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCbc` \
-	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiClp` -I`$(CYGPATH_W) \
-	$(OSSRCDIR)/src` -I`$(CYGPATH_W) $(OSSRCDIR)/src/OSAgent` \
-	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSParsers` -I`$(CYGPATH_W) \
-	$(OSSRCDIR)/src/OSUtils` -I`$(CYGPATH_W) \
-	$(OSSRCDIR)/src/OSSolverInterfaces` -I`$(CYGPATH_W) \
-	$(OSSRCDIR)/src/OSModelInterfaces` -I`$(CYGPATH_W) \
-	$(CPPADSRCDIR)` -I`$(CYGPATH_W) \
-	$(OSSRCDIR)/src/OSCommonInterfaces` $(am__append_12) \
-	$(am__append_13) $(am__append_14) $(am__append_15) \
-	$(am__append_16) $(am__append_17) $(am__append_19) \
-	$(am__append_22) $(am__append_25)
+AM_CPPFLAGS = \
+	-I`$(CYGPATH_W) $(OSSRCDIR)/src` \
+	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSAgent` \
+	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSParsers` \
+	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSUtils` \
+	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSCommonInterfaces` \
+	-I`$(CYGPATH_W) $(CPPADSRCDIR)` 
 
-# The -rpath flag is used by libtool to make sure that the shared
-# library is found (in the lib install directory) when we are using dynamic
-# libraries.
-OSSolverService_LDFLAGS = -rpath $(libdir) $(am__append_24)
-
-# This line is necessary to allow VPATH compilation with MS compilers
-# on Cygwin
-DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 
 ########################################################################
 #                Headers that need to be installed                     #
@@ -518,7 +303,6 @@ ConfigHeader = OSConfig.h
 all: all-recursive
 
 .SUFFIXES:
-.SUFFIXES: .cpp .lo .o .obj
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -577,66 +361,12 @@ clean-libLTLIBRARIES:
 	done
 libOS.la: $(libOS_la_OBJECTS) $(libOS_la_DEPENDENCIES) 
 	$(LINK) -rpath $(libdir) $(libOS_la_LDFLAGS) $(libOS_la_OBJECTS) $(libOS_la_LIBADD) $(LIBS)
-install-binPROGRAMS: $(bin_PROGRAMS)
-	@$(NORMAL_INSTALL)
-	test -z "$(bindir)" || $(mkdir_p) "$(DESTDIR)$(bindir)"
-	@list='$(bin_PROGRAMS)'; for p in $$list; do \
-	  p1=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
-	  if test -f $$p \
-	     || test -f $$p1 \
-	  ; then \
-	    f=`echo "$$p1" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`; \
-	   echo " $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(binPROGRAMS_INSTALL) '$$p' '$(DESTDIR)$(bindir)/$$f'"; \
-	   $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(binPROGRAMS_INSTALL) "$$p" "$(DESTDIR)$(bindir)/$$f" || exit 1; \
-	  else :; fi; \
-	done
-
-uninstall-binPROGRAMS:
-	@$(NORMAL_UNINSTALL)
-	@list='$(bin_PROGRAMS)'; for p in $$list; do \
-	  f=`echo "$$p" | sed 's,^.*/,,;s/$(EXEEXT)$$//;$(transform);s/$$/$(EXEEXT)/'`; \
-	  echo " rm -f '$(DESTDIR)$(bindir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(bindir)/$$f"; \
-	done
-
-clean-binPROGRAMS:
-	@list='$(bin_PROGRAMS)'; for p in $$list; do \
-	  f=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
-	  echo " rm -f $$p $$f"; \
-	  rm -f $$p $$f ; \
-	done
-OSSolverService$(EXEEXT): $(OSSolverService_OBJECTS) $(OSSolverService_DEPENDENCIES) 
-	@rm -f OSSolverService$(EXEEXT)
-	$(CXXLINK) $(OSSolverService_LDFLAGS) $(OSSolverService_OBJECTS) $(OSSolverService_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 
 distclean-compile:
 	-rm -f *.tab.c
-
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSSolverService.Po@am__quote@
-
-.cpp.o:
-@am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Po"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ $<
-
-.cpp.obj:
-@am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ `$(CYGPATH_W) '$<'`; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Po"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
-
-.cpp.lo:
-@am__fastdepCXX_TRUE@	if $(LTCXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
-@am__fastdepCXX_TRUE@	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Plo"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCXX_FALSE@	$(LTCXXCOMPILE) -c -o $@ $<
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -842,12 +572,10 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-recursive
-all-am: Makefile $(LTLIBRARIES) $(PROGRAMS) $(HEADERS)
-install-binPROGRAMS: install-libLTLIBRARIES
-
+all-am: Makefile $(LTLIBRARIES) $(HEADERS)
 installdirs: installdirs-recursive
 installdirs-am:
-	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(bindir)" "$(DESTDIR)$(includedir)"; do \
+	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(includedir)"; do \
 	  test -z "$$dir" || $(mkdir_p) "$$dir"; \
 	done
 install: install-recursive
@@ -876,11 +604,10 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-recursive
 
-clean-am: clean-binPROGRAMS clean-generic clean-libLTLIBRARIES \
-	clean-libtool mostlyclean-am
+clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
+	mostlyclean-am
 
 distclean: distclean-recursive
-	-rm -rf ./$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-libtool distclean-tags
@@ -897,8 +624,7 @@ info-am:
 
 install-data-am: install-includeHEADERS
 
-install-exec-am: install-binPROGRAMS install-exec-local \
-	install-libLTLIBRARIES
+install-exec-am: install-exec-local install-libLTLIBRARIES
 
 install-info: install-info-recursive
 
@@ -907,7 +633,6 @@ install-man:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-recursive
-	-rm -rf ./$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
@@ -924,18 +649,18 @@ ps: ps-recursive
 
 ps-am:
 
-uninstall-am: uninstall-binPROGRAMS uninstall-includeHEADERS \
-	uninstall-info-am uninstall-libLTLIBRARIES uninstall-local
+uninstall-am: uninstall-includeHEADERS uninstall-info-am \
+	uninstall-libLTLIBRARIES uninstall-local
 
 uninstall-info: uninstall-info-recursive
 
 .PHONY: $(RECURSIVE_TARGETS) CTAGS GTAGS all all-am check check-am \
-	clean clean-binPROGRAMS clean-generic clean-libLTLIBRARIES \
-	clean-libtool clean-recursive ctags ctags-recursive distclean \
+	clean clean-generic clean-libLTLIBRARIES clean-libtool \
+	clean-recursive ctags ctags-recursive distclean \
 	distclean-compile distclean-generic distclean-libtool \
 	distclean-recursive distclean-tags distdir dvi dvi-am html \
-	html-am info info-am install install-am install-binPROGRAMS \
-	install-data install-data-am install-exec install-exec-am \
+	html-am info info-am install install-am install-data \
+	install-data-am install-exec install-exec-am \
 	install-exec-local install-includeHEADERS install-info \
 	install-info-am install-libLTLIBRARIES install-man \
 	install-strip installcheck installcheck-am installdirs \
@@ -943,8 +668,8 @@ uninstall-info: uninstall-info-recursive
 	maintainer-clean-recursive mostlyclean mostlyclean-compile \
 	mostlyclean-generic mostlyclean-libtool mostlyclean-recursive \
 	pdf pdf-am ps ps-am tags tags-recursive uninstall uninstall-am \
-	uninstall-binPROGRAMS uninstall-includeHEADERS \
-	uninstall-info-am uninstall-libLTLIBRARIES uninstall-local
+	uninstall-includeHEADERS uninstall-info-am \
+	uninstall-libLTLIBRARIES uninstall-local
 
 
 install-exec-local:

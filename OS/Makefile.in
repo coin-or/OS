@@ -51,32 +51,26 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-
-# We don't want to compile the test subdirectory, unless the test target is
-# specified.  But we need to list it as subdirectory to make sure that it is
-# included in the tarball
-@ALWAYS_FALSE@am__append_1 = test
-DIST_COMMON = README $(am__configure_deps) \
+DIST_COMMON = $(am__configure_deps) \
 	$(srcdir)/../BuildTools/Makemain.inc $(srcdir)/../config.guess \
 	$(srcdir)/../config.sub $(srcdir)/../install-sh \
 	$(srcdir)/../ltmain.sh $(srcdir)/../missing \
 	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	$(srcdir)/os_addlibs.txt.in $(top_srcdir)/configure \
-	$(top_srcdir)/examples/osTestCode/Makefile.in \
-	$(top_srcdir)/inc/config_os.h.in AUTHORS
-@HAVE_EXTERNALS_TRUE@am__append_2 = Externals
-@HAVE_EXTERNALS_TRUE@am__append_3 = .Externals-stamp
+	$(top_srcdir)/inc/config_os.h.in
+@HAVE_EXTERNALS_TRUE@am__append_1 = Externals
+@HAVE_EXTERNALS_TRUE@am__append_2 = .Externals-stamp
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/m4/ac_coin_socket_libs.m4 \
-	$(top_srcdir)/acinclude.m4 $(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
+	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno configure.status.lineno
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/inc/config_os.h
-CONFIG_CLEAN_FILES = examples/osTestCode/Makefile os_addlibs.txt
+CONFIG_CLEAN_FILES = os_addlibs.txt
 SOURCES =
 DIST_SOURCES =
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
@@ -87,7 +81,7 @@ RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	uninstall-recursive
 ETAGS = etags
 CTAGS = ctags
-DIST_SUBDIRS = src test examples
+DIST_SUBDIRS = $(SUBDIRS)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -110,66 +104,24 @@ AMDEP_FALSE = @AMDEP_FALSE@
 AMDEP_TRUE = @AMDEP_TRUE@
 AMTAR = @AMTAR@
 AR = @AR@
-ASLLIB = @ASLLIB@
-ASL_CPPFLAGS = @ASL_CPPFLAGS@
 AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AUX_DIR = @AUX_DIR@
 AWK = @AWK@
 BUILDTOOLSDIR = @BUILDTOOLSDIR@
-CBCOBJDIR = @CBCOBJDIR@
-CBCSRCDIR = @CBCSRCDIR@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CDEFS = @CDEFS@
 CFLAGS = @CFLAGS@
-CGLOBJDIR = @CGLOBJDIR@
-CGLSRCDIR = @CGLSRCDIR@
-CLPOBJDIR = @CLPOBJDIR@
-CLPSRCDIR = @CLPSRCDIR@
-COINUTILSOBJDIR = @COINUTILSOBJDIR@
-COINUTILSSRCDIR = @COINUTILSSRCDIR@
-COIN_BUILD_GLPK_FALSE = @COIN_BUILD_GLPK_FALSE@
-COIN_BUILD_GLPK_TRUE = @COIN_BUILD_GLPK_TRUE@
-COIN_HAS_ASL_FALSE = @COIN_HAS_ASL_FALSE@
-COIN_HAS_ASL_TRUE = @COIN_HAS_ASL_TRUE@
-COIN_HAS_CBC_FALSE = @COIN_HAS_CBC_FALSE@
-COIN_HAS_CBC_TRUE = @COIN_HAS_CBC_TRUE@
-COIN_HAS_CGL_FALSE = @COIN_HAS_CGL_FALSE@
-COIN_HAS_CGL_TRUE = @COIN_HAS_CGL_TRUE@
-COIN_HAS_CLP_FALSE = @COIN_HAS_CLP_FALSE@
-COIN_HAS_CLP_TRUE = @COIN_HAS_CLP_TRUE@
-COIN_HAS_COINUTILS_FALSE = @COIN_HAS_COINUTILS_FALSE@
-COIN_HAS_COINUTILS_TRUE = @COIN_HAS_COINUTILS_TRUE@
 COIN_HAS_CPPAD_FALSE = @COIN_HAS_CPPAD_FALSE@
 COIN_HAS_CPPAD_TRUE = @COIN_HAS_CPPAD_TRUE@
-COIN_HAS_CPX_FALSE = @COIN_HAS_CPX_FALSE@
-COIN_HAS_CPX_TRUE = @COIN_HAS_CPX_TRUE@
-COIN_HAS_DYLP_FALSE = @COIN_HAS_DYLP_FALSE@
-COIN_HAS_DYLP_TRUE = @COIN_HAS_DYLP_TRUE@
-COIN_HAS_GLPK_FALSE = @COIN_HAS_GLPK_FALSE@
-COIN_HAS_GLPK_TRUE = @COIN_HAS_GLPK_TRUE@
-COIN_HAS_IPOPT_FALSE = @COIN_HAS_IPOPT_FALSE@
-COIN_HAS_IPOPT_TRUE = @COIN_HAS_IPOPT_TRUE@
-COIN_HAS_KNITRO_FALSE = @COIN_HAS_KNITRO_FALSE@
-COIN_HAS_KNITRO_TRUE = @COIN_HAS_KNITRO_TRUE@
-COIN_HAS_LINDO_FALSE = @COIN_HAS_LINDO_FALSE@
-COIN_HAS_LINDO_TRUE = @COIN_HAS_LINDO_TRUE@
-COIN_HAS_OSI_FALSE = @COIN_HAS_OSI_FALSE@
-COIN_HAS_OSI_TRUE = @COIN_HAS_OSI_TRUE@
 COIN_HAS_OS_FALSE = @COIN_HAS_OS_FALSE@
 COIN_HAS_OS_TRUE = @COIN_HAS_OS_TRUE@
-COIN_HAS_SYMPHONY_FALSE = @COIN_HAS_SYMPHONY_FALSE@
-COIN_HAS_SYMPHONY_TRUE = @COIN_HAS_SYMPHONY_TRUE@
-COIN_HAS_VOL_FALSE = @COIN_HAS_VOL_FALSE@
-COIN_HAS_VOL_TRUE = @COIN_HAS_VOL_TRUE@
 CPP = @CPP@
 CPPADOBJDIR = @CPPADOBJDIR@
 CPPADSRCDIR = @CPPADSRCDIR@
 CPPFLAGS = @CPPFLAGS@
-CPXINCDIR = @CPXINCDIR@
-CPXLIB = @CPXLIB@
 CXX = @CXX@
 CXXCPP = @CXXCPP@
 CXXDEFS = @CXXDEFS@
@@ -183,8 +135,6 @@ DBG_CXXFLAGS = @DBG_CXXFLAGS@
 DBG_FFLAGS = @DBG_FFLAGS@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
-DYLPOBJDIR = @DYLPOBJDIR@
-DYLPSRCDIR = @DYLPSRCDIR@
 ECHO = @ECHO@
 ECHO_C = @ECHO_C@
 ECHO_N = @ECHO_N@
@@ -195,26 +145,18 @@ F77 = @F77@
 FADDLIBS = @FADDLIBS@
 FFLAGS = @FFLAGS@
 FLIBS = @FLIBS@
-GLPKINCDIR = @GLPKINCDIR@
-GLPKLIB = @GLPKLIB@
 HAVE_EXTERNALS_FALSE = @HAVE_EXTERNALS_FALSE@
 HAVE_EXTERNALS_TRUE = @HAVE_EXTERNALS_TRUE@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
-IPOPTOBJDIR = @IPOPTOBJDIR@
-IPOPTSRCDIR = @IPOPTSRCDIR@
-KNITROINCDIR = @KNITROINCDIR@
-KNITROLIB = @KNITROLIB@
 LDFLAGS = @LDFLAGS@
 LIBEXT = @LIBEXT@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
 LIBTOOLM4 = @LIBTOOLM4@
-LINDOINCDIR = @LINDOINCDIR@
-LINDOLIB = @LINDOLIB@
 LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
 LT_LDFLAGS = @LT_LDFLAGS@
@@ -229,8 +171,6 @@ OBJEXT = @OBJEXT@
 OPT_CFLAGS = @OPT_CFLAGS@
 OPT_CXXFLAGS = @OPT_CXXFLAGS@
 OPT_FFLAGS = @OPT_FFLAGS@
-OSIOBJDIR = @OSIOBJDIR@
-OSISRCDIR = @OSISRCDIR@
 OSOBJDIR = @OSOBJDIR@
 OSROOT_DIR = @OSROOT_DIR@
 OSSRCDIR = @OSSRCDIR@
@@ -246,13 +186,9 @@ RPATH_FLAGS = @RPATH_FLAGS@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
-SYMPHONYOBJDIR = @SYMPHONYOBJDIR@
-SYMPHONYSRCDIR = @SYMPHONYSRCDIR@
 USEMULTIPLYDEFINED_FALSE = @USEMULTIPLYDEFINED_FALSE@
 USEMULTIPLYDEFINED_TRUE = @USEMULTIPLYDEFINED_TRUE@
 VERSION = @VERSION@
-VOLOBJDIR = @VOLOBJDIR@
-VOLSRCDIR = @VOLSRCDIR@
 VPATH_DISTCLEANFILES = @VPATH_DISTCLEANFILES@
 YACC = @YACC@
 abs_bin_dir = @abs_bin_dir@
@@ -282,12 +218,7 @@ build_alias = @build_alias@
 build_cpu = @build_cpu@
 build_os = @build_os@
 build_vendor = @build_vendor@
-cbclib = @cbclib@
-cgllib = @cgllib@
-clplib = @clplib@
-coinutilslib = @coinutilslib@
 datadir = @datadir@
-dylplib = @dylplib@
 exec_prefix = @exec_prefix@
 have_autoconf = @have_autoconf@
 have_automake = @have_automake@
@@ -300,42 +231,37 @@ host_vendor = @host_vendor@
 includedir = @includedir@
 infodir = @infodir@
 install_sh = @install_sh@
-ipoptlib = @ipoptlib@
 libdir = @libdir@
 libexecdir = @libexecdir@
 localstatedir = @localstatedir@
 mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
-osicbclib = @osicbclib@
-osiclplib = @osiclplib@
-osidylplib = @osidylplib@
-osilib = @osilib@
-osisymphonylib = @osisymphonylib@
-osivollib = @osivollib@
 oslib = @oslib@
 prefix = @prefix@
 program_transform_name = @program_transform_name@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 sol_cc_compiler = @sol_cc_compiler@
-symphonylib = @symphonylib@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
-vollib = @vollib@
 AUTOMAKE_OPTIONS = foreign
 
 ########################################################################
 #                          Subdirectories                              #
 ########################################################################
-SUBDIRS = src test examples $(am__append_1)
+SUBDIRS = src
+
+# We don't want to compile the test subdirectory, unless the test target is
+# specified.  But we need to list it as subdirectory to make sure that it is
+# included in the tarball
 
 ########################################################################
 #             Additional files to be included in tarball               #
 ########################################################################
 
 # Here we need include all files that are not mentioned in other Makefiles
-EXTRA_DIST = $(am__append_2)
+EXTRA_DIST = $(am__append_1)
 
 ########################################################################
 #                  Installation of the addlibs file                    #
@@ -347,7 +273,7 @@ addlibsfile = os_addlibs.txt
 ########################################################################
 
 # Files that are generated and should be cleaned with make distclean
-DISTCLEANFILES = $(am__append_3) $(VPATH_DISTCLEANFILES)
+DISTCLEANFILES = $(am__append_2) $(VPATH_DISTCLEANFILES)
 all: all-recursive
 
 .SUFFIXES:
@@ -401,8 +327,6 @@ $(top_srcdir)/inc/config_os.h.in: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 
 distclean-hdr:
 	-rm -f inc/config_os.h inc/stamp-h1
-examples/osTestCode/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/osTestCode/Makefile.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
 os_addlibs.txt: $(top_builddir)/config.status $(srcdir)/os_addlibs.txt.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 
@@ -551,7 +475,7 @@ distclean-tags:
 distdir: $(DISTFILES)
 	$(am__remove_distdir)
 	mkdir $(distdir)
-	$(mkdir_p) $(distdir)/. $(distdir)/.. $(distdir)/../BuildTools $(distdir)/examples/osTestCode $(distdir)/inc $(distdir)/m4
+	$(mkdir_p) $(distdir)/. $(distdir)/.. $(distdir)/../BuildTools $(distdir)/inc
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
@@ -722,13 +646,13 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-recursive
 
-clean-am: clean-generic clean-libtool clean-local mostlyclean-am
+clean-am: clean-generic clean-libtool mostlyclean-am
 
 distclean: distclean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -f Makefile
 distclean-am: clean-am distclean-generic distclean-hdr \
-	distclean-libtool distclean-local distclean-tags
+	distclean-libtool distclean-tags
 
 dvi: dvi-recursive
 
@@ -773,39 +697,25 @@ uninstall-am: uninstall-info-am uninstall-local
 uninstall-info: uninstall-info-recursive
 
 .PHONY: $(RECURSIVE_TARGETS) CTAGS GTAGS all all-am am--refresh check \
-	check-am clean clean-generic clean-libtool clean-local \
-	clean-recursive ctags ctags-recursive dist dist-all dist-bzip2 \
-	dist-gzip dist-shar dist-tarZ dist-zip distcheck distclean \
+	check-am clean clean-generic clean-libtool clean-recursive \
+	ctags ctags-recursive dist dist-all dist-bzip2 dist-gzip \
+	dist-shar dist-tarZ dist-zip distcheck distclean \
 	distclean-generic distclean-hdr distclean-libtool \
-	distclean-local distclean-recursive distclean-tags \
-	distcleancheck distdir distuninstallcheck dvi dvi-am html \
-	html-am info info-am install install-am install-data \
-	install-data-am install-exec install-exec-am \
-	install-exec-local install-info install-info-am install-man \
-	install-strip installcheck installcheck-am installdirs \
-	installdirs-am maintainer-clean maintainer-clean-generic \
-	maintainer-clean-recursive mostlyclean mostlyclean-generic \
-	mostlyclean-libtool mostlyclean-recursive pdf pdf-am ps ps-am \
-	tags tags-recursive uninstall uninstall-am uninstall-info-am \
-	uninstall-local
+	distclean-recursive distclean-tags distcleancheck distdir \
+	distuninstallcheck dvi dvi-am html html-am info info-am \
+	install install-am install-data install-data-am install-exec \
+	install-exec-am install-exec-local install-info \
+	install-info-am install-man install-strip installcheck \
+	installcheck-am installdirs installdirs-am maintainer-clean \
+	maintainer-clean-generic maintainer-clean-recursive \
+	mostlyclean mostlyclean-generic mostlyclean-libtool \
+	mostlyclean-recursive pdf pdf-am ps ps-am tags tags-recursive \
+	uninstall uninstall-am uninstall-info-am uninstall-local
 
 
 ########################################################################
 #                           Extra Targets                              #
 ########################################################################
-
-test: all
-	cd test; make test
-
-unitTest: test
-
-clean-local:
-	if test -r test/Makefile; then cd test; make clean; fi
-
-distclean-local:
-	if test -r test/Makefile; then cd test; make distclean; fi
-
-.PHONY: test unitTest
 
 run_parsers:
 	$(YACC) -ldv -p osrl -o ${abs_source_dir}/src/OSParsers/parseosrl.tab.cpp ${abs_source_dir}/src/OSParsers/parseosrl.y
