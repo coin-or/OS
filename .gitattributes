@@ -4,6 +4,7 @@
 /INSTALL -text
 /LICENSE -text
 /Makefile.am -text
+/Makefile.in -text
 OS/Makefile.am -text
 OS/Makefile.in -text
 OS/configure -text
