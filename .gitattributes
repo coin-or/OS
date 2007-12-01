@@ -2,4 +2,9 @@
 /AUTHORS -text
 /Externals -text
 /Makefile.am -text
+OS/Makefile.am -text
+OS/Makefile.in -text
+OS/OSConfig.h -text
+OS/src/Makefile.am -text
+OS/src/Makefile.in -text
 /configure.ac -text
