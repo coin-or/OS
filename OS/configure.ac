@@ -294,16 +294,6 @@ AC_SUBST(oslib)
 
 
 
-
-
-
-
-
-
-
-
-
-
 ##############################################################################
 #                   Finishing up by writing all the output                   #
 ##############################################################################
@@ -316,6 +306,7 @@ AC_CONFIG_FILES([Makefile
           src/OSUtils/Makefile
           src/OSCommonInterfaces/Makefile
           src/OSParsers/Makefile
+          examples/osTestCode/Makefile
           os_addlibs.txt])
 
 # Here put the location and name of the configuration header file

@@ -5,6 +5,9 @@
 OS/Makefile.am -text
 OS/Makefile.in -text
 OS/configure.ac -text
+OS/examples/osTestCode/Makefile.in -text
+OS/examples/osTestCode/osTestCode.cpp -text
+OS/examples/osTestCode/parincLinear.osil -text
 OS/m4/ac_coin_socket_libs.m4 -text
 OS/os_addlibs.txt.in -text
 OS/src/Makefile.am -text
