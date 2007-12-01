@@ -4,6 +4,7 @@
 /Makefile.am -text
 OS/Makefile.am -text
 OS/Makefile.in -text
+OS/configure -text
 OS/configure.ac -text
 OS/examples/osTestCode/Makefile.in -text
 OS/examples/osTestCode/osTestCode.cpp -text
@@ -13,4 +14,5 @@ OS/os_addlibs.txt.in -text
 OS/src/Makefile.am -text
 OS/src/Makefile.in -text
 OS/src/OSConfig.h -text
+/configure -text
 /configure.ac -text
