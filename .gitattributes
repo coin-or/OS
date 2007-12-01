@@ -1,6 +1,8 @@
 * text=auto !eol
 /AUTHORS -text
 /Externals -text
+/INSTALL -text
+/LICENSE -text
 /Makefile.am -text
 OS/Makefile.am -text
 OS/Makefile.in -text
@@ -17,3 +19,4 @@ OS/src/OSConfig.h -text
 /configure -text
 /configure.ac -text
 /install-sh -text
+/ltmain.sh -text
