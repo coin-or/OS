@@ -1,3 +1,3 @@
 BuildTools     https://projects.coin-or.org/svn/BuildTools/trunk
-OS/src/OSAgent     https://projects.coin-or.org/svn/OS/trunk/OS/src/OSAgent 
+OS/src     https://projects.coin-or.org/svn/OS/trunk/OS/src/OSAgent 
 cppad         https://projects.coin-or.org/svn/CppAD/trunk
