@@ -10,28 +10,28 @@ AUTOMAKE_OPTIONS = foreign
 
 
 ########################################################################
-#                           libOS  -- Optimization Services Library    #
+#                           libOSCommon  -- Optimization Services Library    #
 ########################################################################
 
 # Name of the library compiled in this directory.  We want it to be installed
 # in the 'lib' directory
-lib_LTLIBRARIES = libOS.la
+lib_LTLIBRARIES = libOSCommon.la
 
 # List all source files for this library, including headers
-libOS_la_SOURCES = 
+libOSCommon_la_SOURCES = 
 
 # This is for libtool (on Windows)
-libOS_la_LDFLAGS = $(LT_LDFLAGS)
+libOSCommon_la_LDFLAGS = $(LT_LDFLAGS)
 
 
 # We want to have all the OS objects in this library
-libOS_la_LIBADD = ./OSUtils/libOSUtils.la \
+libOSCommon_la_LIBADD = ./OSUtils/libOSUtils.la \
 		./OSCommonInterfaces/libOSCommonInterfaces.la \
 		./OSAgent/libOSAgent.la \
 		./OSParsers/libOSParsers.la 
 # Since automake is not doing this on its own, we need to declare the
 # dependencies to the subdirectory libraries here
-libOS_la_DEPENDENCIES = $(libOS_la_LIBADD)
+libOSCommon_la_DEPENDENCIES = $(libOSCommon_la_LIBADD)
 
 
 

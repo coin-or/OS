@@ -280,11 +280,11 @@ AC_DEFINE_UNQUOTED([OSROOT_DIR], ["$OSROOT_DIR"],
 # The following one is for the example makefiles
 case $CXX in
   cl*)
-    oslib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOS.lib';;
+    oscommonlib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOSCommon.lib';;
   *)
-    oslib="-L\$(INSTALLIBDIR) -lOS";;
+    oscommonlib="-L\$(INSTALLIBDIR) -lOSCommon";;
 esac
-AC_SUBST(oslib)
+AC_SUBST(oscommonlib)
 
 
 ##############################################################################
@@ -306,7 +306,7 @@ AC_CONFIG_FILES([Makefile
           src/OSUtils/Makefile
           src/OSCommonInterfaces/Makefile
           src/OSParsers/Makefile
-          examples/osTestCode/Makefile
+          examples/apiExample/Makefile
           os_addlibs.txt])
 
 # Here put the location and name of the configuration header file
