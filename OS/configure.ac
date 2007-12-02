@@ -548,10 +548,10 @@ AC_CONFIG_FILES([Makefile
           test/Makefile
           examples/Makefile
           examples/instanceGenerator/Makefile
-          examples/amplClient/Makefile
           examples/osTestCode/Makefile
           examples/algorithmicDiff/Makefile
-          examples/fileUpload/Makefile
+          applications/amplClient/Makefile
+          applications/fileUpload/Makefile
           os_addlibs.txt])
 
 # Here put the location and name of the configuration header file

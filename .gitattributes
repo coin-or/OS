@@ -19,6 +19,8 @@ OS/MSVisualStudio/v8/libOS/libOS.vcproj -text
 OS/Makefile.am -text
 OS/Makefile.in -text
 OS/README -text
+OS/applications/Makefile.am -text
+OS/applications/Makefile.in -text
 OS/applications/amplClient/Makefile.am -text
 OS/applications/amplClient/Makefile.in -text
 OS/applications/amplClient/amplClient.cpp -text
@@ -104,8 +106,6 @@ OS/doc/osUsersManual_1.pdf -text
 OS/doc/osUsersManual_1.tex -text
 OS/doc/osUsersManual_1.toc -text
 OS/doc/usersManualAdditions.txt -text
-OS/examples/Makefile.am -text
-OS/examples/Makefile.in -text
 OS/examples/algorithmicDiff/Makefile.in -text
 OS/examples/algorithmicDiff/MakefileBak.am -text
 OS/examples/algorithmicDiff/algorithmicDiffTest.cpp -text

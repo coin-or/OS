@@ -20,6 +20,10 @@ noinst_PROGRAMS = amplClient
 # List all source files for this executable, including headers
 amplClient_SOURCES = amplClient.cpp 
 
+# Name of the executable compiled in this directory.  We want it to be
+# installed in the 'bin' directory
+bin_PROGRAMS = amplClient
+
 # List all additionally required COIN libraries
 
 

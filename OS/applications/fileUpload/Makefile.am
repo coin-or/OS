@@ -20,7 +20,9 @@ noinst_PROGRAMS = fileUpload
 # List all source files for this executable, including headers
 fileUpload_SOURCES = fileUpload.cpp 
 
-
+# Name of the executable compiled in this directory.  We want it to be
+# installed in the 'bin' directory
+bin_PROGRAMS = fileUpload
 
 # List all additionally required COIN libraries
 
