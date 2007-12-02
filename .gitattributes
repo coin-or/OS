@@ -94,8 +94,8 @@ OS/doc/osUsersManual_1.toc -text
 OS/doc/usersManualAdditions.txt -text
 OS/examples/Makefile.am -text
 OS/examples/Makefile.in -text
-OS/examples/algorithmicDiff/Makefile.am -text
 OS/examples/algorithmicDiff/Makefile.in -text
+OS/examples/algorithmicDiff/MakefileBak.am -text
 OS/examples/algorithmicDiff/algorithmicDiffTest.cpp -text
 OS/examples/amplClient/Makefile.am -text
 OS/examples/amplClient/Makefile.in -text
@@ -109,8 +109,8 @@ OS/examples/fileUpload/Makefile.am -text
 OS/examples/fileUpload/Makefile.in -text
 OS/examples/fileUpload/OSFileUpload.java -text
 OS/examples/fileUpload/fileUpload.cpp -text
-OS/examples/instanceGenerator/Makefile.am -text
 OS/examples/instanceGenerator/Makefile.in -text
+OS/examples/instanceGenerator/MakefileBAK.am -text
 OS/examples/instanceGenerator/instanceGenerator.cpp -text
 OS/examples/osTestCode/Makefile.in -text
 OS/examples/osTestCode/MakefileBak.am -text
