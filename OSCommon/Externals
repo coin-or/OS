@@ -1,0 +1,6 @@
+BuildTools     https://projects.coin-or.org/svn/BuildTools/trunk
+OS/src/OSAgent     https://projects.coin-or.org/svn/OS/trunk/OS/src/OSAgent
+OS/src/OSCommonInterfaces     https://projects.coin-or.org/svn/OS/trunk/OS/src/OSCommonInterfaces
+OS/src/OSParsers     https://projects.coin-or.org/svn/OS/trunk/OS/src/OSParsers
+OS/src/OSUtils     https://projects.coin-or.org/svn/OS/trunk/OS/src/OSUtils
+cppad         https://projects.coin-or.org/svn/CppAD/trunk

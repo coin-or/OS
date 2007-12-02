@@ -1,1 +1,27 @@
 * text=auto !eol
+OSCommon/AUTHORS -text
+OSCommon/Externals -text
+OSCommon/INSTALL -text
+OSCommon/LICENSE -text
+OSCommon/Makefile.am -text
+OSCommon/Makefile.in -text
+OSCommon/OS/Makefile.am -text
+OSCommon/OS/Makefile.in -text
+OSCommon/OS/configure -text
+OSCommon/OS/configure.ac -text
+OSCommon/OS/examples/apiExample/Makefile.in -text
+OSCommon/OS/examples/apiExample/apiExample.cpp -text
+OSCommon/OS/inc/config_os.h.in -text
+OSCommon/OS/m4/ac_coin_socket_libs.m4 -text
+OSCommon/OS/os_addlibs.txt.in -text
+OSCommon/OS/src/Makefile.am -text
+OSCommon/OS/src/Makefile.in -text
+OSCommon/OS/src/OSConfig.h -text
+OSCommon/config.guess -text
+OSCommon/config.sub -text
+OSCommon/configure -text
+OSCommon/configure.ac -text
+OSCommon/depcomp -text
+OSCommon/install-sh -text
+OSCommon/ltmain.sh -text
+OSCommon/missing -text
