@@ -316,7 +316,10 @@ int  main(){
 		delete osilwriter;
 		osilwriter = NULL;
 		cout << "Done with garbage collection" << endl;
-		return 0;
+		cout << endl << endl;
+		cout << "SUCCESSFUL RUN OF EXAMPLE!!!!!" << endl;
+		cout << endl << endl;
+		return 0; 
 	}
 	catch(const ErrorClass& eclass){
 		cout << eclass.errormsg <<  endl;
