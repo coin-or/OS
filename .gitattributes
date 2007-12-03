@@ -9,6 +9,8 @@ OSCommon/OS/AUTHORS -text
 OSCommon/OS/LICENSE -text
 OSCommon/OS/MSVisualStudio/v7/OSCommon.sln -text
 OSCommon/OS/MSVisualStudio/v7/libOSCommon/libOSCommon.vcproj -text
+OSCommon/OS/MSVisualStudio/v8/OSCommon.sln -text
+OSCommon/OS/MSVisualStudio/v8/OSCommon/libOSCommon.vcproj -text
 OSCommon/OS/Makefile.am -text
 OSCommon/OS/Makefile.in -text
 OSCommon/OS/README -text
