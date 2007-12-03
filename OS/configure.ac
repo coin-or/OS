@@ -549,6 +549,7 @@ AC_CONFIG_FILES([Makefile
           examples/instanceGenerator/Makefile
           examples/osTestCode/Makefile
           examples/algorithmicDiff/Makefile
+          applications/Makefile
           applications/amplClient/Makefile
           applications/fileUpload/Makefile
           os_addlibs.txt])
