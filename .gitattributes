@@ -5,8 +5,11 @@ OSCommon/INSTALL -text
 OSCommon/LICENSE -text
 OSCommon/Makefile.am -text
 OSCommon/Makefile.in -text
+OSCommon/OS/AUTHORS -text
+OSCommon/OS/LICENSE -text
 OSCommon/OS/Makefile.am -text
 OSCommon/OS/Makefile.in -text
+OSCommon/OS/README -text
 OSCommon/OS/configure -text
 OSCommon/OS/configure.ac -text
 OSCommon/OS/examples/apiExample/Makefile.in -text
