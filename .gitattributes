@@ -13,6 +13,7 @@ OS/MSVisualStudio/v7/OSSolverService/OSSolverService.vcproj -text
 OS/MSVisualStudio/v7/OSTest/OSTest.vcproj -text
 OS/MSVisualStudio/v7/libOS/libOS.vcproj -text
 OS/MSVisualStudio/v8/OS.sln -text
+OS/MSVisualStudio/v8/OSCommon/libOSCommon.vcproj -text
 OS/MSVisualStudio/v8/OSSolverService/OSSolverService.vcproj -text
 OS/MSVisualStudio/v8/OSTest/OSTest.vcproj -text
 OS/MSVisualStudio/v8/libOS/libOS.vcproj -text
