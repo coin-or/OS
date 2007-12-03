@@ -20,6 +20,7 @@ OSCommon/OS/os_addlibs.txt.in -text
 OSCommon/OS/src/Makefile.am -text
 OSCommon/OS/src/Makefile.in -text
 OSCommon/OS/src/OSConfig.h -text
+OSCommon/README -text
 OSCommon/config.guess -text
 OSCommon/config.sub -text
 OSCommon/configure -text
