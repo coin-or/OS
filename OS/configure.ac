@@ -546,7 +546,6 @@ AC_CONFIG_FILES([Makefile
           src/OSModelInterfaces/Makefile
           src/OSParsers/Makefile
           test/Makefile
-          examples/Makefile
           examples/instanceGenerator/Makefile
           examples/osTestCode/Makefile
           examples/algorithmicDiff/Makefile
