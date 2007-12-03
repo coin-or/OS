@@ -180,7 +180,8 @@ bool IpoptSolver::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad
  	int i;
  	double *objGrad;
 	try{
-  		objGrad = osinstance->calculateAllObjectiveFunctionGradients( const_cast<double*>(x), NULL, NULL,  new_x, 1)[ 0];
+  		//objGrad = osinstance->calculateAllObjectiveFunctionGradients( const_cast<double*>(x), NULL, NULL,  new_x, 1)[ 0];
+  		objGrad = osinstance->calculateObjectiveFunctionGradient( const_cast<double*>(x), NULL, NULL, -1,  new_x, 1);
 	}
    	catch(const ErrorClass& eclass){
 		ipoptErrorMsg = eclass.errormsg;
