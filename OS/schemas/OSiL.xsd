@@ -1005,8 +1005,8 @@
 			<xs:element name="el" type="StochasticElementEl"/>
 			<xs:element name="qTerm" type="StochasticElementQTerm"/>
 			<xs:element name="nlNumber" type="StochasticElementNumber"/>
-			<xs:element name="param" type="StochasticElementParam"/>
 			<xs:element name="coneElement" type="StochasticElementVar"/>
+			<xs:element name="param" type="StochasticElementParam"/>
 		</xs:choice>
 		<xs:attribute name="numberOfElements" use="required"/>
 	</xs:complexType>
@@ -1025,8 +1025,6 @@
 			</xs:simpleType>
 		</xs:attribute>
 		<xs:attribute name="baseValue" type="xs:double" use="optional" default="0.0"/>
-		<xs:attribute name="distrIdx" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="distrVarIdx" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="StochasticElementVar">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
@@ -1043,8 +1041,6 @@
 			</xs:simpleType>
 		</xs:attribute>
 		<xs:attribute name="baseValue" type="xs:double" use="optional" default="0.0"/>
-		<xs:attribute name="distrIdx" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="distrVarIdx" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="StochasticElementObj">
 		<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
@@ -1059,8 +1055,6 @@
 		</xs:attribute>
 		<xs:attribute name="varIdx" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="baseValue" type="xs:double" use="optional" default="0.0"/>
-		<xs:attribute name="distrIdx" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="distrVarIdx" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="StochasticElementCon">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
@@ -1075,31 +1069,23 @@
 			</xs:simpleType>
 		</xs:attribute>
 		<xs:attribute name="baseValue" type="xs:double" use="optional" default="0.0"/>
-		<xs:attribute name="distrIdx" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="distrVarIdx" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="StochasticElementEl">
 		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="colIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="baseValue" type="xs:double" use="optional" default="0.0"/>
-		<xs:attribute name="distrIdx" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="distrVarIdx" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="StochasticElementQTerm">
 		<xs:attribute name="idx" type="xs:integer" use="required"/>
 		<xs:attribute name="idxOne" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="idxTwo" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="baseValue" type="xs:double" use="optional" default="0.0"/>
-		<xs:attribute name="distrIdx" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="distrVarIdx" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="StochasticElementNumber">
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
 				<xs:attribute name="id" type="xs:string" use="required"/>
 				<xs:attribute name="baseValue" type="xs:double" use="optional" default="0.0"/>
-				<xs:attribute name="distrIdx" type="xs:nonNegativeInteger" use="optional"/>
-				<xs:attribute name="distrVarIdx" type="xs:nonNegativeInteger" use="optional" default="0"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -1118,8 +1104,6 @@
 			</xs:simpleType>
 		</xs:attribute>
 		<xs:attribute name="baseValue" type="xs:double" use="optional" default="0.0"/>
-		<xs:attribute name="distrIdx" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="distrVarIdx" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="StochasticLinearTransformationMatrixCoefficients">
 		<xs:complexContent>
