@@ -11,7 +11,7 @@
  * This software is licensed under the Common Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
- * This example illustrates the alrorithmic differentiation features
+ * This example illustrates the algorithmic differentiation features
  * of the OS library
  * 
  * The test problem CppADTestLag.osil:
@@ -38,20 +38,20 @@
  * 
  * Now form a Lagrangian with multipliers of w on the objective
  * z0 the multiplier on the first constraint and z1 on the second
- * the Lagrangain is then:
+ * the Lagrangian is then:
  * 
  * 	L = w*(x0^2 + 9*x1) + z0*(1 + 1.37*x1 + 2*x3 + 5*x1) + z1*(log(x0*x3) + 7*x2)
  * 
- * the partial with respect x0 <br />
+ * the partial with respect to x0 <br />
  * L_0 = 2 * w * x0  + z1 / x0
  * 
- * the partial with respect x1 <br />
+ * the partial with respect to x1 <br />
  * L_1 = w * 9 + z0*1.37 + z0*5
  * 
- * the partial with respect x2 <br />
+ * the partial with respect to x2 <br />
  * L_2 = z1*7 
  * 
- * the partial with respect x3 <br />
+ * the partial with respect to x3 <br />
  * L_3 = z0*2 + z1/x3 
  * 
  * in the Hessian there are only two nonzero terms 
@@ -156,9 +156,9 @@ int  main(){
 		 * to the nonlinear part of the problem. The 9*x1 term
 		 * in the objective is not part of the AD
 		 * calculation nor are any terms in <linearConstraintCoefficients>
-		 * that DO NOT appear in any nl nodes, for example the 7*x3 term
+		 * that DO NOT appear in any nl nodes, for example the 7*x2 term
 		 * in constraint with index 1. Note also, that there are only three
-		 * variables that appear in nl nodes, x3 does not
+		 * variables that appear in nl nodes, x2 does not
 		 * 
 		 */
 		//
