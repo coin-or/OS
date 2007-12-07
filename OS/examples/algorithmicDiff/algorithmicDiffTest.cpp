@@ -378,7 +378,8 @@ int  main(){
 		sparseJac = osinstance->getJacobianSparsityPattern();		
 		// print out just the sparsity pattern
 		std::cout << "JACOBIAN SPARSITY PATTERN"   << std::endl;
-		for(idx = 0; idx < sparseJac->startSize; idx++){
+		std::cout << "JACOBIAN START SIZE "   <<  sparseJac->startSize << std::endl;
+		for(idx = 0; idx < osinstance->getConstraintNumber(); idx++){
 			// some solvers (e.g. reduced gradient solvers) may want to know which values of the
 			// Jacobian matrix are constant, i.e. linear, sparseJac->conVals is the number of constant
 			// terms in the gradient for each rowt, the first conVals terms are constant, when getting
