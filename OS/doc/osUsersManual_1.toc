@@ -50,26 +50,26 @@
 \contentsline {subsubsection}{\numberline {9.2.1}First Derivative Reverse Sweep Calculations}{46}
 \contentsline {subsubsection}{\numberline {9.2.2}Second Derivative Reverse Sweep Calculations}{46}
 \contentsline {subsection}{\numberline {9.3}Using OSInstance Methods: High Level Calls}{47}
-\contentsline {subsubsection}{\numberline {9.3.1}Sparsity Methods}{47}
-\contentsline {subsubsection}{\numberline {9.3.2}Function Evaluation Methods}{48}
-\contentsline {subsubsection}{\numberline {9.3.3}Gradient Evaluation Methods}{50}
+\contentsline {subsubsection}{\numberline {9.3.1}Sparsity Methods}{48}
+\contentsline {subsubsection}{\numberline {9.3.2}Function Evaluation Methods}{49}
+\contentsline {subsubsection}{\numberline {9.3.3}Gradient Evaluation Methods}{51}
 \contentsline {subsubsection}{\numberline {9.3.4}Hessian Evaluation Methods}{51}
-\contentsline {section}{\numberline {10}The OSSolverService}{51}
-\contentsline {subsection}{\numberline {10.1}OSSolverService Input Parameters}{51}
-\contentsline {subsection}{\numberline {10.2}Solving Problems Locally}{53}
-\contentsline {subsection}{\numberline {10.3}Solving Problems Remotely with Web Services}{54}
-\contentsline {subsubsection}{\numberline {10.3.1}The {\tt solve} Service Method}{55}
-\contentsline {subsubsection}{\numberline {10.3.2}The {\tt send} Service Method}{56}
-\contentsline {subsubsection}{\numberline {10.3.3}The {\tt retrieve} Service Method}{58}
+\contentsline {section}{\numberline {10}The OSSolverService}{52}
+\contentsline {subsection}{\numberline {10.1}OSSolverService Input Parameters}{52}
+\contentsline {subsection}{\numberline {10.2}Solving Problems Locally}{54}
+\contentsline {subsection}{\numberline {10.3}Solving Problems Remotely with Web Services}{55}
+\contentsline {subsubsection}{\numberline {10.3.1}The {\tt solve} Service Method}{56}
+\contentsline {subsubsection}{\numberline {10.3.2}The {\tt send} Service Method}{57}
+\contentsline {subsubsection}{\numberline {10.3.3}The {\tt retrieve} Service Method}{59}
 \contentsline {subsubsection}{\numberline {10.3.4}The {\tt getJobID} Service Method}{59}
-\contentsline {subsubsection}{\numberline {10.3.5}The {\tt knock} Service Method}{59}
+\contentsline {subsubsection}{\numberline {10.3.5}The {\tt knock} Service Method}{60}
 \contentsline {subsubsection}{\numberline {10.3.6}The {\tt kill} Service Method}{61}
-\contentsline {subsubsection}{\numberline {10.3.7}Summary}{61}
-\contentsline {section}{\numberline {11}Setting up a Solver Service with Tomcat}{62}
-\contentsline {section}{\numberline {12}Examples}{65}
-\contentsline {subsection}{\numberline {12.1}AMPL Client: Hooking AMPL to Solvers}{65}
-\contentsline {subsection}{\numberline {12.2}Algorithmic Differentiation: Using the OS Algorithmic Differentiation Methods}{66}
-\contentsline {subsection}{\numberline {12.3}File Upload: Using a File Upload Package}{66}
+\contentsline {subsubsection}{\numberline {10.3.7}Summary}{62}
+\contentsline {section}{\numberline {11}Setting up a Solver Service with Tomcat}{63}
+\contentsline {section}{\numberline {12}Examples}{66}
+\contentsline {subsection}{\numberline {12.1}AMPL Client: Hooking AMPL to Solvers}{66}
+\contentsline {subsection}{\numberline {12.2}Algorithmic Differentiation: Using the OS Algorithmic Differentiation Methods}{67}
+\contentsline {subsection}{\numberline {12.3}File Upload: Using a File Upload Package}{67}
 \contentsline {subsection}{\numberline {12.4}Instance Generator: Using the OSInstance API to Generate Instances}{68}
 \contentsline {subsection}{\numberline {12.5}osTestCode}{69}
 \contentsline {section}{\numberline {13}Appendix}{69}

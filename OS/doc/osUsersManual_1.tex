@@ -2005,7 +2005,7 @@ or, expressed in terms of the mixed partials,
 
 
 
-\subsection{Using OSInstance Methods: Low Level Calls}
+\subsection{Using OSInstance Methods: Low Level Calls}\label{section:lowlevelADcalls}
 
   The code snippets used in this section  are from the example code {\tt algorithmicDiffTest.cpp} in the {\tt algorithmicDiffTest} folder in the {\tt examples} folder.  The  code is based on the following example.
 
@@ -2016,27 +2016,68 @@ or, expressed in terms of the mixed partials,
 & & x_{0}, x_{1}, x_{2}, x_{3} &\ge 0 \label{eq:adeq2}
 \end{alignat}
 
-The OSiL representation of the instance  (\ref{eq:adobj})-(\ref{eq:adeq2}) is given in Appendix \ref{section:adexample}.  This example is designed to illustrate several features of OSiL. Note that in equation (\ref{eq:adeq0}) the constant 33 appears in the {\tt <con>} element corresponding to this constraint and the constant 105 appears as a {\tt <number>} OSnL node in the {\tt <nonlinearExpressions>} section.  There are no nonlinear terms in the instance that involve variable $x_{1}.$  The $5 x_{1}$ term in equation (\ref{eq:adeq0}) is expressed in the {\tt <linearConstraintCoefficients>} section.  However,  the $1.37 x_{1}$ term in equation (\ref{eq:adeq0}) is expressed in the {\tt <nonlinearExpressions>} section.  Hence, in the OSInstance API, variable $x_{1}$ is treated as a nonlinear variable for purposes of algorithmic differentiation. Variable $x_{2}$ never appears in the  {\tt <nonlinearExpressions>} section and is therefore treated as a linear variable and not used  in any algorithmic differentiation calculations.
+The OSiL representation of the instance  (\ref{eq:adobj})-(\ref{eq:adeq2}) is given in Appendix \ref{section:adexample}.  This example is designed to illustrate several features of OSiL. Note that in equation (\ref{eq:adeq0}) the constant 33 appears in the {\tt <con>} element corresponding to this constraint and the constant 105 appears as a {\tt <number>} OSnL node in the {\tt <nonlinearExpressions>} section.   This distinction is important, as it will lead to different treatment by the code as
+documented below. There are no nonlinear terms in the instance that involve variable $x_{1}.$  The terms $5x_{1}$ in  (\ref{eq:adeq0}) and $7 x_{2}$ in (\ref{eq:adeq1}) are expressed in the {\tt <linearConstraintCoefficicients>}
+section and will again receive special treatment by the code. However, the term $1.37x_1$ in (\ref{eq:adeq0}), 
+along with the term $2x_3$, is expressed in the {\tt <nonlinearExpressions>} section.          Variables $x_{1}$ and $x_{2}$  do not appear in any nonlinear terms. However, in the OSInstance API, variable $x_{1}$  appears in the   {\tt <nonlinearExpressions>} section, it  is treated as a nonlinear variable for purposes of algorithmic differentiation. Variable $x_{2}$ never appears in the  {\tt <nonlinearExpressions>} section and is therefore treated as a linear variable and not used  in any algorithmic differentiation calculations. Variables that do not appear in the {\tt <nonlinearExpressions>} are never part of the algorithmic differentiation calculations. 
 
-Ignoring the nonnegativity constraints, instance (\ref{eq:adobj})-(\ref{eq:adeq2})  defines the following function $f:X \rightarrow Y$ from $ \mathbb{R}^{4}$ to $ \mathbb{R}^{3}.$
+Ignoring the nonnegativity constraints, instance (\ref{eq:adobj})-(\ref{eq:adeq2})  defines a mapping  from $ \mathbb{R}^{4}$ to $ \mathbb{R}^{3}.$
+
+
+
+
+\begin{eqnarray*}
+    \left[ 
+        \begin{array}{r}
+            x_0^2+9x_1 \\ 
+            33 - 105 + 1.37x_1 + 2x_3 + 5x_1 \\
+            \ln (x_0x_3) + 7x_2
+        \end{array}
+    \right]
+&=&
+    \left[ 
+        \begin{array}{r}
+            9x_1 \\ 
+            33 + 5x_1 \\
+            7x_2
+        \end{array}
+    \right]
++
+    \left[ 
+        \begin{array}{r}
+            x_0^2 \\ 
+            - 105 + 1.37x_1 + 2x_3  \\
+            \ln (x_0x_3)
+        \end{array}
+    \right] 
+  \nonumber  \\
+  &=&  \left[ 
+        \begin{array}{r}
+            9x_1 \\ 
+            33 + 5x_1 \\
+            7x_2
+        \end{array}
+    \right]
++
+    \left[ 
+        \begin{array}{r}
+            f_1(x) \\ 
+            f_2(x) \\
+            f_3(x)
+        \end{array}
+    \right]
+\end{eqnarray*}
 
 \begin{eqnarray}
-f(x) =
-\left[
-\begin{array}{r}
-f_{1}(x) \\
-f_{2}(x) \\
-f_{3}(x)
-\end{array}
-\right]
-=
-\left[
-\begin{array}{r}
-x_{0}^{2} + 9x_{1}  \\
-33 - 105 + 1.37 x_{1} + 2x_{3} + 5 x_{1} \\
-\ln(x_{0} x_{3}) + 7x_{2}
-\end{array}
-\right] \label{eq:definef}
+\hbox{\rm where}\ f(x) :=
+%
+    \left[ 
+        \begin{array}{r}
+            f_1(x) \\ 
+            f_2(x) \\
+            f_3(x)
+        \end{array}   \label{eq:definef}
+    \right]
 \end{eqnarray}
 
 
@@ -2059,7 +2100,7 @@ for(posVarIndexMap = varIndexMap.begin(); posVarIndexMap
 	std::cout <<  "Variable Index = "   << posVarIndexMap->first  << std::endl ;
 }
 \end{verbatim}
-The variable indices listed are 0, 1, and 3. Variable 2 does not appear in the {\tt <nonlinearExpressions>} section and is not included in {\tt varIndexMap}.
+The variable indices listed are 0, 1, and 3. Variable 2 does not appear in the {\tt <nonlinearExpressions>} section and is not included in {\tt varIndexMap}.  That is, $f$ will be considered as a map from $ \mathbb{R}^{3}$ to $ \mathbb{R}^{3}.$
 
 Once the nonlinear structures are initialized it is possible to take derivatives using algorithmic differentiation.   Algorithmic differentiation is done using either a forward or reverse sweep through an expression tree (or operation sequence) representation of $f$.  The two key algorithmic differentiation {\tt public} methods in the {\tt OSInstance} class are {\tt forwardAD} and {\tt reverseAD}.   These are actually  generic ``wrappers'' around the corresponding CppAD methods with the same signature.  This keeps the OS API  public methods independent of any underlying algorithmic differentiation package.
 
@@ -2067,7 +2108,7 @@ The {\tt forwardAD} signature is
 \begin{verbatim}
 std::vector<double> forwardAD(int k, std::vector<double> vdX);
 \end{verbatim}
-where $k$ is the highest order Taylor coefficient of $f$ to be returned,  $\tt vdX$ is vector of doubles in $ \mathbb{R}^{n},$ and the function return is a vector of doubles in $ \mathbb{R}^{m}.$  Thus, $k$ corresponds to the $k$ in Equations  (\ref{eq:xTaylorCoeff}) and (\ref{eq:yTaylorCoeff}),  where {\tt vdX} corresponds to the $x^{(k)}$ in Equation (\ref{eq:xTaylorCoeff}) and the $y^{(k)}$ in Equation (\ref{eq:yTaylorCoeff}) is the vector in range space returned by the call to {\tt  forwardAD}.    For example, by  Equation (\ref{eq:forward0Result}) the following call will evaluate each component function defined in (\ref{eq:definef}).
+where $k$ is the highest order Taylor coefficient of $f$ to be returned,  $\tt vdX$ is vector of doubles in $ \mathbb{R}^{n},$ and the function return is a vector of doubles in $ \mathbb{R}^{m}.$  Thus, $k$ corresponds to the $k$ in Equations  (\ref{eq:xTaylorCoeff}) and (\ref{eq:yTaylorCoeff}),  where {\tt vdX} corresponds to the $x^{(k)}$ in Equation (\ref{eq:xTaylorCoeff}) and the $y^{(k)}$ in Equation (\ref{eq:yTaylorCoeff}) is the vector in range space returned by the call to {\tt  forwardAD}.    For example, by  Equation (\ref{eq:forward0Result}) the following call will evaluate each component function defined in (\ref{eq:definef}) corresponding only to the nonlinear part of (\ref{eq:definef}) -- the part denoted by $f(x)$.
 \begin{verbatim}
 funVals = osinstance->forwardAD(0, x0);
 \end{verbatim}
@@ -2090,19 +2131,30 @@ J =
 \end{array}
 \right] \label{eq:jac}
 \end{eqnarray}
-when $x_{0} = 1,$ $x_{1} = 5,$ $x_{2} = 10,$ and $x_{3} = 5$ the Jacobian is
+and the Jacobian $J_f$ of the nonlinear part is
+%
+\begin{equation}
+    J_f = \left[
+        \begin{array}{ccc}
+            2x_0 & 0.00 & 0.00 \\
+            0.00  & 1.37 & 2.00 \\
+            1/x_0 & 0.00 & 1/x_3
+        \end{array}
+    \right]  \label{eq:jac2}
+\end{equation}
+When $x_{0} = 1,$ $x_{1} = 5,$ $x_{2} = 10,$ and $x_{3} = 5$ the Jacobian $J_f$
 \begin{eqnarray}
-J =
-\left[
-\begin{array}{rrrr}
-2.00 &9.00&0.00&0.00   \\
-0.00&6.37&0.00&2.00 \\
-1.00&0.00&7.00&0.20
-\end{array}
-\right] \label{eq:jac2}
+J_f =
+    J_f = \left[
+        \begin{array}{ccc}
+            2.00 & 0.00 & 0.00 \\
+            0.00 & 1.37 & 2.00 \\
+            1.00 & 0.00 & 0.20
+        \end{array}
+    \right] \label{eq:jac3}
 \end{eqnarray}
 A forward sweep with $k = 1$ will calculate the Jacobian column-wise.  See
-(\ref{eq:forward1Result}).  The following code will return column 4 of the Jacobian (\ref{eq:jac2}) which corresponds to nonlinear variable $x_{3}.$
+(\ref{eq:forward1Result}).  The following code will return column 3 of the Jacobian (\ref{eq:jac3}) which corresponds to nonlinear variable $x_{3}.$
 \begin{verbatim}
 x1[0] = 0;
 x1[1] = 0;
@@ -2133,7 +2185,7 @@ This call returns the vector of  values
 \begin{eqnarray*}
 y_{1}^{(2)}  = 1, \quad y_{2}^{(2)}  = 0, \quad y_{3}^{(2)} = -.52
 \end{eqnarray*}
-By inspection,
+By inspection of (\ref{eq:jac2}),
 \begin{eqnarray*}
 \DD{f_{1}(x^{(0)})}{x_{0}}{x_{0}} &=& 2 \\
 \DD{f_{2}(x^{(0)})}{x_{0}}{x_{0}} &=&  0\\
@@ -2146,7 +2198,7 @@ Then by (\ref{eq:forward2Resultc}),
 \begin{eqnarray*}
 \DD{f_{1}(x^{(0)})}{x_{0}}{x_{3}} &=&  y_{1}^{(2)}  -  \frac{1}{2} \left( \DD{f_{1}(x^{(0)})}{x_{0}}{x_{0}}  +  \DD{f_{k}(x^{(0)})}{x_{3}}{x_{3}}  \right) =   1 -  \frac{1}{2}(2 +  0) = 0 \\
 \DD{f_{2}(x^{(0)})}{x_{0}}{x_{3}} &=&   y_{2}^{(2)}  -  \frac{1}{2} \left( \DD{f_{2}(x^{(0)})}{x_{0}}{x_{0}}  +  \DD{f_{k}(x^{(0)})}{x_{3}}{x_{3}}  \right)  = 0 -  \frac{1}{2}(0 +  0) = 0 \\
-\DD{f_{3}(x^{(0)})}{x_{0}}{x_{3}} &=&  y_{3}^{(2)}  -  \frac{1}{2} \left( \DD{f_{3}(x^{(0)})}{x_{0}}{x_{0}}  +  \DD{f_{k}(x^{(0)})}{x_{3}}{x_{3}}  \right) = -52 -  \frac{1}{2}(-1 - .04) = 0
+\DD{f_{3}(x^{(0)})}{x_{0}}{x_{3}} &=&  y_{3}^{(2)}  -  \frac{1}{2} \left( \DD{f_{3}(x^{(0)})}{x_{0}}{x_{0}}  +  \DD{f_{k}(x^{(0)})}{x_{3}}{x_{3}}  \right) = -.52 -  \frac{1}{2}(-1 - .04) = 0
 \end{eqnarray*}
 Making all of the first and second derivative calculations using forward sweeps is most effective when the number of rows exceeds the number of variables.
 
@@ -2171,7 +2223,9 @@ vlambda[2] = 1;
 osinstance->forwardAD(0, x0);
 osinstance->reverseAD(1, vlambda);
 \end{verbatim}
-Since the {\tt vlambda} only includes the third function $f_{1}(x)$ the sequence of calls will produce the third row of the Jacobian, i.e.
+Since {\tt vlambda} only includes 
+the third function $f_3$, this sequence of calls will produce the third row of the 
+Jacobian $J_f$, i.e
 $$
 \D{f_{3}(x^{(0)})}{x_{0}}  = 1,  \quad \D{f_{3}(x^{(0)})}{x_{1}}  = 0, \quad  \D{f_{3}(x^{(0)})}{x_{3}}  = .2
 $$
@@ -2209,21 +2263,22 @@ osinstance->reverseAD(2, vlambda);
 \end{verbatim}
 This returns
 \begin{eqnarray*}
-\D{L (x^{(0)}, \lambda^{(0)})}{x_{1}} = 3, \quad  \D{L (x^{(0)}, \lambda^{(0)})}{x_{2}} = 12.74, \quad  \D{L (x^{(0)}, \lambda^{(0)})}{x_{3}} = 4.2
+\D{L (x^{(0)}, \lambda^{(0)})}{x_{0}} = 3, \quad  \D{L (x^{(0)}, \lambda^{(0)})}{x_{2}} = 2.74, \quad  \D{L (x^{(0)}, \lambda^{(0)})}{x_{3}} = 4.2
 \end{eqnarray*}
 \begin{eqnarray*}
-\DD{L(x^{(0)}, \lambda^{(0)})}{x_{3}}{x_{0}} =0, \quad  \DD{L(x^{(0)}, \lambda^{(0)})}{x_{3}}{x_{1}} = 0, \quad   \DD{L(x^{(0)}, \lambda^{(0)})}{x_{3}}{x_{3}} =  -.04
+\DD{L(x^{(0)}, \lambda^{(0)})}{x_{3}}{x_{0}} =0, \quad  \DD{L(x^{(0)}, \lambda^{(0)})}{x_{3}}{x_{0}} = 0, \quad   \DD{L(x^{(0)}, \lambda^{(0)})}{x_{3}}{x_{3}} =  -.04
 \end{eqnarray*}
 
 The reason that
 $$
-\D{L (x^{(0)}, \lambda^{(0)})}{x_{2}} = 2 \times 6.37 = 12.74
+\D{L (x^{(0)}, \lambda^{(0)})}{x_{1}} = 2 \times 1.37 = 2.74
 $$
 and not
 $$
-\D{L (x^{(0)}, \lambda^{(0)})}{x_{2}} = 1 \times  9 + 2 \times 6.37 = 12.74  = 21.74
+\D{L (x^{(0)}, \lambda^{(0)})}{x_{1}} = 1 \times  9 + 2 \times 6.37 = 9 + 12.74 = 21.74
 $$
-is that the $9x_{1}$ term in the objective is captured in the {\tt <coef>} element in the {\tt <objectives>} section and therefore does not appear as a nonlinear term in {\tt  <nonlinearExpressions>}. Again, {\tt forwardAD} and {\tt reverseAD} only operate on variables and terms in either the {\tt <quadraticCoefficients>} or {\tt <nonlinearExpressions>} sections.
+is that the terms $9x_1$ in the objective and $5x_1$ in the first constraint
+are captured in the linear section of the OSiL input and therefore do not  appear as a nonlinear term in {\tt  <nonlinearExpressions>}. Again, {\tt forwardAD} and {\tt reverseAD} only operate on variables and terms in either the {\tt <quadraticCoefficients>} or {\tt <nonlinearExpressions>} sections.
 
 \subsection{Using OSInstance Methods: High Level Calls}
 
@@ -2232,7 +2287,8 @@ The methods {\tt forwardAD} and {\tt reverseAD} are low level calls and are not 
 
 \subsubsection{Sparsity Methods}
 
-Many  solvers such as Ipopt (\url{projects.coin-or.org/Ipopt}) or Knitro (\url{www.ziena.com}) require the sparsity pattern of the Jacobian of the constraint matrix and the Hessian of the Lagrangian function. The following code illustrates how to get the sparsity pattern of the constraint Jacobian matrix
+Many  solvers such as Ipopt (\url{projects.coin-or.org/Ipopt}) or Knitro (\url{www.ziena.com}) require the sparsity pattern of the Jacobian of the constraint matrix and the Hessian of the Lagrangian function.  Note well that the constraint matrix of the example in Section \ref{section:lowlevelADcalls} 
+constitutes only the last two rows of (\ref{eq:definef}) but does include the linear terms.  The following code illustrates how to get the sparsity pattern of the constraint Jacobian matrix
 \begin{verbatimtab}[4]
 SparseJacobianMatrix *sparseJac;
 sparseJac = osinstance->getJacobianSparsityPattern();
@@ -2256,6 +2312,12 @@ row idx = 1  col idx = 2
 row idx = 1  col idx = 0
 row idx = 1  col idx = 3
 \end{verbatim}
+The   constant term in constraint 1 corresponds to the linear term $7x_2$,
+which is added after the algorithmic differentiation has taken place.
+However, the linear  term $5x_1$ in equation 0 does not
+contribute a nonzero in the Jacobian, as it is combined with the
+term $1.37x_1$ that is treated as a nonlinear term and
+therefore accounted for explicitly.
 The {\tt SparseJacobianMatrix} object has a data member {\tt starts} which is the index of the start of each constraint row. The {\tt int} data member {\tt indexes} is the variable index of a potential nonzero derivative. There is also a {\tt double} data member  {\tt values} that will the value of the partial derivative of the corresponding index at each iteration. Finally, there is an {\tt int} data member {\tt conVals} that is the number of constant terms in each gradient. A constant term is a partial derivative that cannot change at an iteration.  A variable is considered a constant variable if it appears in the {\tt <linearConstraintCoefficients>} section  but not in the {\tt nonlinearExpressions}.  For a row indexed by {\tt idx} the variable indices are in the  {\tt indexes} array between the elements {\tt sparseJac->starts + idx} and {\tt sparseJac->starts + idx + 1.}   The first  {\tt sparseJac->conVals + idx} variables listed are indices of constant variables. In this example, when {\tt idx} is 1, there is one constant variable and it is variable $x_{2}.$  The constant variables never appear in the AD evaluation.
 
 The following code illustrates how to get the sparsity pattern of the Hessian of the Lagrangian.
