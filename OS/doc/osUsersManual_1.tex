@@ -479,20 +479,16 @@ http://www.christopherlewis.com/WGet/WGetFiles.htm
 
 \subsubsection{Microsoft Visual Studio}
 
-Microsoft Visual Studio solution files are provided for users of Windows and the Microsoft Visual Studio IDE.     It is assumed that the user has installed a copy of Microsoft Visual Studio.  Users interested in a Visual Studio build of the OS project can obtain Visual C++ 2008 Express Edition for free at \url{http://msdn2.microsoft.com/en-us/express/future/bb421473.aspx}.  This download will include the Microsoft {\tt cl}  C++ compiler along with necessary libraries.
 
 
 
 
-There is a directory {\tt MSVisualStudio} in the {\tt COIN-OS/OS}  directory.  The {\tt MSVisualStudio} contains root directories organized by the version of Visual Studio.  We currently provide solution files  for Version 7 and Version 8.  There are project files for building the unitTest ({\tt OSTest.vcproj}),  the OSSolverService ({\tt OSSolverService.vcproj}), and the OS library {\tt libOS.vcproj}.   The Microsoft Visual Studio files are automatically downloaded with an SVN checkout. They are also contained in the tarballs.  See Section \ref{section:getTarBalls}.
+Microsoft Visual Studio solution and project files are provided for users of Windows and the Microsoft Visual Studio IDE.   Care must be taken to distinguish different versions of MSVS.   Even though Microsoft  released Version 9 (as of 15 November 2007), we currently support only  Versions 7 and 8. To add to the confusion, these versions are also sometimes referred to by their (approximate) release date, which is 2008 for Version 9, 2005 for Version 8 and 2003 for Version 7.   In addition there is a free version of the Visual Studio IDE C++ compiler,  called Visual C++ Express Edition.    The following steps are necessary to build the OS project using the  Microsoft Visual Studio IDE.
 
-\vskip 8pt
+\begin{itemize}
 
-
-{\bf Important Note For  Users of Visual Studio Express:}  The part of the OS library responsible for communication with a remote server depends on some underlying Windows socket header files and libraries. If you are using the Visual Studio Express Edition, these files are not included in the download and it is necessary  to also download and install the Windows Platform SDK. Download the necessary files at
- \url{http://msdn2.microsoft.com/en-us/express/aa700755.aspx}
-
-{\bf Important Note for Running Executables:}  There are two projects that build executable files. These are {\tt OSTest} and {\tt OSSolverService}. These executable files are located in the {\tt Debug} directory that is the Visual Studio project root. These must be moved to the appropriate directories.   The {\tt OSTest} executable should be moved to the {\tt COIN-OS/OS/test} directory and the {\tt OSSolverService} executable should be moved to either the {\tt COIN-OS/OS/src} directory or {\tt COIN-OS/OS/bin}.
+\item[Step 0] If MSVS  Version 7 or 8 of  the C++ compiler cl is already installed,  go to  to Step 2.\item[Step 1] Download and install the Visual C++ Express Edition, which is available for free at Microsoft's web site. This download contains the Microsoft cl C++ compiler along with necessary libraries.Version 7 is no longer available for download from Microsoft.  Version 8 is at \url{http://msdn2.microsoft.com/en-ca/vstudio/aa700736.aspx}  If you are adventurous, you may wish to download Version 9, which is at\url{http://msdn2.microsoft.com/en-us/express/future/bb421472.aspx}.\item[Step 2] The part of the OS library responsible for communication with a remote server depends on some underlying Windows socket header files and libraries. These files are part of the commercial for-pay version, but are not included in the Visual C++ Express download. If  have the Express Edition, it is necessary to also download and install the Windows Platform SDK. This software is version independent and is at  \url{http://msdn2.microsoft.com/en-us/express/aa700755.aspx}.\item[Step 3] In the COIN-OR/OS directory you will find the folder MSVisualStudio, which contains root directories organized by the version of Visual Studio. We currently provide solution files for Version 7 and Version 8. Each contains project files for building the unitTest (OSTest.vcproj), the OSSolverService (OSSolverService,vcproj),   and the OS library libOS.vcproj. The Microsoft Visual Studio files are automatically downloaded with an SVN checkout. They are also contained in the tarballs (see Section \ref{section:getTarBalls}).Open the project files (for instance by double clicking on them in Windows Explorer)  and select Build from the menu bar.\item[Step 4] Run the  {\tt unitTest}.  Connect  to the directory {\tt COIN-OR/OS/test} directory and run either the release or debug version of the  {\tt unitTest} executable. 
+\end{itemize}
 
 \subsubsection{Cygwin}
 
@@ -1085,6 +1081,9 @@ The directories in the OS directory are outlined in Figure \ref{figure:osdirecto
 
 
 \begin{itemize}
+
+
+\item {\tt applications} - is a directory that holds  the {\tt amplClient} and {\tt fileUpload}  applications.  See Section \ref{section:applications}.
 
 \item {\tt data} - is a directory that holds test problems. These test problems are used by the {\tt unitTest}. Many of these files are also used to illustrate how the {\tt OSSolverService} works. See Section \ref{section:ossolverservice}.
 
@@ -2389,14 +2388,14 @@ There are {\it  exactly two} conditions that  require a new function or derivati
 
 For an efficient implementation of AD it is important to be able to get the Lagrange multipliers and highest order derivative that is required from inside {\it any} callback -- not just the Hessian evaluation callback. For example, in {\tt Ipopt,} if  {\tt eval\_g}  or {\tt eval\_f} are called, and  for the current iterate, {\tt eval\_jac} and {\tt eval\_hess} are also going to be called, then  a more efficient AD implementation is possible if the Lagrange multipliers are available for {\tt eval\_g} and {\tt eval\_f}.
 
-Currently, whenever {\tt new\_x = true} in the underlying AD implementation we do not retape the function. This is because we currently throw an exception if there are any logical operators involved in the AD calculations. This may change in a future implementation.
+Currently, whenever {\tt new\_x = true} in the underlying AD implementation we do not retape (record into the CppAD data structure)  the function. This is because we currently throw an exception if there are any logical operators involved in the AD calculations. This may change in a future implementation.
 
 
-There are also similar methods for objective function evaluations.  There is also a method
+There are also similar methods for objective function evaluations.  The method
 \begin{verbatim}
 double calculateFunctionValue(int idx, double* x, bool new_x);
 \end{verbatim}
-that will return the value of any constraint or objective function indexed by {\tt idx}. This method works strictly with {\tt double} data using an {\tt OSExpressionTree} object.
+ will return the value of any constraint or objective function indexed by {\tt idx}. This method works strictly with {\tt double} data using an {\tt OSExpressionTree} object.
 
 There is also a public variable, {\tt bUseExpTreeForFunEval} that, if set to {\tt true}, will cause the method
 \begin{verbatim}
@@ -2441,7 +2440,7 @@ SparseVector *calculateConstraintFunctionGradient(double* x, int idx,
     bool new_x );
 \end{verbatim}
 
-Similar methods are available for the objective function, however the objective function gradient methods treat the gradient of each objective function as a dense vector.
+Similar methods are available for the objective function; however the objective function gradient methods treat the gradient of each objective function as a dense vector.
 
 
 \subsubsection{Hessian Evaluation Methods}
@@ -2466,7 +2465,7 @@ The {\tt OSSolverService} is a command line executable designed to pass problem 
 
 \subsection{OSSolverService Input Parameters}
 
-At present, the {\tt OSSolverService} takes the following parameters. The order of the parameters is irrelevant.  Not all the parameters are required. However, if the {\tt solve} or {\tt send} service methods are invoked a problem instance location must be specified.
+At present, the {\tt OSSolverService} takes the following parameters. The order of the parameters is irrelevant.  Not all the parameters are required. However, if the {\tt solve} or {\tt send} service    methods  (see Section \ref{section:servicemethods} ) are invoked a problem instance location must be specified.
 
 \begin{itemize}
 
@@ -2484,7 +2483,7 @@ At present, the {\tt OSSolverService} takes the following parameters. The order 
 
 \item[] {\bf -nl  xxx.nl}  this is the name of the AMPL nl file if the problem instance is in AMPL nl  format. It is assumed that this file is available in a directory on the machine that is running {\tt OSSolverService}. The default file format is OSiL so this option is not required.
 
-\item[] {\bf -solver  solverName}  Possible values for default OS installation are {\tt clp} (COIN-OR Clp), {\tt cbc} (COIN-OR Cbc), {\tt dylp} (COIN-OR DyLP), and {\tt symphony} (COIN-OR SYMPHONY). Other solvers supported (if the necessary libraries are present) are {\tt cplex} (Cplex through COIN-OR Osi), {\tt glpk} (glpk through COIN-OR Osi), {\tt ipopt} (COIN-OR Ipopt),  {\tt knitro} (Knitro), and {\tt lindo} {\tt LINDO}. If no value is specified for this parameter, then {\tt cbc} is the default value of this parameter if the the {\tt solve} or {\tt send} service methods are used.
+\item[] {\bf -solver  solverName}  Possible values for default OS installation are {\tt clp} (COIN-OR Clp), {\tt cbc} (COIN-OR Cbc), {\tt dylp} (COIN-OR DyLP), and {\tt symphony} (COIN-OR SYMPHONY). Other solvers supported (if the necessary libraries are present) are {\tt cplex} (Cplex through COIN-OR Osi), {\tt glpk} (glpk through COIN-OR Osi), {\tt ipopt} (COIN-OR Ipopt),  {\tt knitro} (Knitro), and {\tt lindo} (LINDO). If no value is specified for this parameter, then {\tt cbc} is the default value of this parameter if the the {\tt solve} or {\tt send} service methods are used.
 
 
 \item[] {\bf -browser  browserName} this paramater is a path to the browser on the local machine. If this optional parameter is specified then the solver result in OSrL format is transformed using XSLT into HTML and displayed in the browser.
@@ -2495,7 +2494,7 @@ At present, the {\tt OSSolverService} takes the following parameters. The order 
 
 
 
-The input parameters to the {\tt OSSolverService} may be given entirely in the command line or in a configuration file.  We first illustrate giving all the  parameters in the command line. The following command will invoke the {\tt Clp} solver on the local machine to solve the problem instance {\tt parincLinear.osil}.  When invoking the commands below involving {\tt OSSolverservice} we assume that 1) the user is connected to the directory where the {\tt OSSolverService} executable is located, and 2) that {\tt ../data/osilFiles} is a valid path to {\tt COIN-OS/data/osilFiles}.  If the OS project was built successfully, then there is a copy of  {\tt OSSolverService} in {\tt COIN-OS/OS/src}. The user may wish to execute {\tt OSSolverService} from this {\tt src} directory so that all that follows is correct in terms of path definitions.
+The input parameters to the {\tt OSSolverService} may be given entirely in the command line or in a configuration file.  We first illustrate giving all the  parameters in the command line. The following command will invoke the {\tt Clp} solver on the local machine to solve the problem instance {\tt parincLinear.osil}.  When invoking the commands below involving {\tt OSSolverService} we assume that 1) the user is connected to the directory where the {\tt OSSolverService} executable is located, and 2) that {\tt ../data/osilFiles} is a valid path to {\tt COIN-OS/data/osilFiles}.  If the OS project was built successfully, then there is a copy of  {\tt OSSolverService} in {\tt COIN-OS/OS/src}. The user may wish to execute {\tt OSSolverService} from this {\tt src} directory so that all that follows is correct in terms of path definitions.
 
 
 \begin{verbatim}
@@ -2542,7 +2541,7 @@ will result in the LINDO solver being used even though Clp is specified in the {
 
 \subsection{Solving Problems Locally}
 
-Generally, when solving a problem locally the user will use the {\tt solve} service method. The {\tt solve} method is invoked synchronously and waits for the solver to return the result.  This is illustrated in Figure \ref{figure:ossolverservice}. As illustrated, the {\tt OSSolverService} reads a file on the hard drive with the optimization instance, usually in OSiL format. The optimization instance is parsed into a string which is passed to the {\tt OSLibrary} which is linked with various solvers. The result of the optimization is passed back to the {\tt OSSolverService} as a string in OSrL format.
+Generally, when solving a problem locally the user will use the {\tt solve} service method. The {\tt solve} method is invoked synchronously and waits for the solver to return the result.  This is illustrated in Figure \ref{figure:ossolverservicelocal}. As illustrated, the {\tt OSSolverService} reads a file on the hard drive with the optimization instance, usually in OSiL format. The optimization instance is parsed into a string which is passed to the {\tt OSLibrary} which is linked with various solvers. The result of the optimization is passed back to the {\tt OSSolverService} as a string in OSrL format.
 
 
 
@@ -2593,7 +2592,7 @@ In many cases the client machine may be a ``weak client'' and  using a more powe
 
 
 
-See Figure \ref{figure:ossolverservice} for an illustration of this process. The client machine uses {\tt OSSolverService} executable to call one of the six service methods, e.g. {\tt solve}. The  information such as the problem instance in OSiL format and solver options in OSoL format are packaged into a SOAP envelope and sent to the server. The server is running the Java Web Service {\tt OSSolverService.jws}. This Java program running in the Tomcat Java Servlet container implements the six service methods. If a {\tt solve} or {\tt send} request is sent to the server from the client, an optimization problem must be solved. The Java solver service solves the optimization instance by  calling the  OSSolverService on the server. So there is an OSSolverService on the client that calls the Web Service {\tt  OSSolverService.jws} that in turn calls  the executable {\tt OSSovlerService} on the server. The Java solver service passes options to the local {\tt OSSolverService} such as where the OSiL file is located and where to write the solution result.
+See Figure \ref{figure:ossolverservice} for an illustration of this process. The client machine uses {\tt OSSolverService} executable to call one of the six service methods, e.g. {\tt solve}. The  information such as the problem instance in OSiL format and solver options in OSoL format are packaged into a SOAP envelope and sent to the server. The server is running the Java Web Service {\tt OSSolverService.jws}. This Java program running in the Tomcat Java Servlet container implements the six service methods. If a {\tt solve} or {\tt send} request is sent to the server from the client, an optimization problem must be solved. The Java solver service solves the optimization instance by  calling the  OSSolverService on the server. So there is an OSSolverService on the client that calls the Web Service {\tt  OSSolverService.jws} that in turn calls  the executable {\tt OSSolverService} on the server. The Java solver service passes options to the local {\tt OSSolverService} such as where the OSiL file is located and where to write the solution result.
 
 \begin{figure}
 \centering
@@ -2648,7 +2647,7 @@ where the {\tt remoteSolve1.osol} file is
 \end{verbatimtab}
 
 
-If we were to change to the {\tt locationType} attribute in the {\tt <instanceLocation>} element to {\tt http} then we could specify the intance location to on yet another machine. This is illustrated below  for {\tt remoteSovle2.osol}.  The scenario is depicted in Figure \ref{figure:ossolverservice2}.  The OSiL string passed from the client to the solver service is empty.  However, the OSoL element {\tt <instanceLocation>}  has an attribute {\tt locationType} equal to   {\tt http}.  In this case, the text of the {\tt <instanceLoction>} element contains the URL of a third machine which has the problem intance {\tt parincLinear.osil}.  The solver service will contact the machine with URL {\tt http://www.coin-or.org/OS/parincLinear.osil} and download this test problem. So the {\tt OSSolverService} is running on the server {\tt gsbkip.chicagogsb.edu} which contacts the server {\tt www.coin-or.org} for the model instance.
+If we were to change to the {\tt locationType} attribute in the {\tt <instanceLocation>} element to {\tt http} then we could specify the instance location to on yet another machine. This is illustrated below  for {\tt remoteSolve2.osol}.  The scenario is depicted in Figure \ref{figure:ossolverservice2}.  The OSiL string passed from the client to the solver service is empty.  However, the OSoL element {\tt <instanceLocation>}  has an attribute {\tt locationType} equal to   {\tt http}.  In this case, the text of the {\tt <instanceLoction>} element contains the URL of a third machine which has the problem intance {\tt parincLinear.osil}.  The solver service will contact the machine with URL {\tt http://www.coin-or.org/OS/parincLinear.osil} and download this test problem. So the {\tt OSSolverService} is running on the server {\tt gsbkip.chicagogsb.edu} which contacts the server {\tt www.coin-or.org} for the model instance.
 \begin{verbatimtab}[4]
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org">
@@ -2672,7 +2671,7 @@ If we were to change to the {\tt locationType} attribute in the {\tt <instanceLo
 
 \subsubsection{The  {\tt send} Service Method}\label{section:send}
 
-When the {\tt solve} service method is used, the {\tt OSSolverService} does not finish execution until the solution is returned from the remote solver service. The {\tt solve} method communicates synchronously with the remote solver service. This may not be desirable for large problems when the user does not want to wait for a response. The {\tt send} service method should be used when asynchronous communication is desired. When the send method is used the instance is communicated to the remote service and the {\tt OSSolverService} terminates after submission. An example of this is
+When the {\tt solve} service method is used, the {\tt OSSolverService} does not finish execution until the solution is returned from the remote solver service. The {\tt solve} method communicates synchronously with the remote solver service and once started, these jobs cannot be killed. This may not be desirable for large problems when the user does not want to wait for a response. The {\tt send} service method should be used when asynchronous communication is desired. When the send method is used the instance is communicated to the remote service and the {\tt OSSolverService} terminates after submission. An example of this is
 \begin{verbatim}
 ./OSSolverService -config ../data/configFiles/testremoteSend.config
 \end{verbatim}
@@ -2684,7 +2683,7 @@ where the {\tt testremoteSend.config} file is
 \end{verbatim}
 In this example the COIN-OR {\tt Ipopt} solver is specified. The input file {\tt hs71.nl} is in AMPL format. Before sending this to the remote solver service the {\tt OSSolverService} executable converts  the nl format into the OSiL XML format and packages this into the SOAP envelope used by Web Services.
 
-Since the {\tt send} method involves asynchronous communication the remote solver service must keep track of jobs. The send methd requires a {\tt JobID}. In the above example  no {\tt JobID} was specified. When no {\tt JobID} is specified the {\tt OSSolverService} method first invokes the {\tt getJobID} service method to get a {\tt JobID} and then puts this information into a created OSoL file and send the information to the server. More information on the {\tt getJobID} service method is provided in Section \ref{section:getjobid}.    The {\tt OSSolverService} prints the OSoL file to standard output before termination. This is illustrated below,
+Since the {\tt send} method involves asynchronous communication the remote solver service must keep track of jobs. The {\tt send} method requires a {\tt JobID}. In the above example  no {\tt JobID} was specified. When no {\tt JobID} is specified the {\tt OSSolverService} method first invokes the {\tt getJobID} service method to get a {\tt JobID} and then puts this information into an OSoL file it creates and sends the information to the server. More information on the {\tt getJobID} service method is provided in Section \ref{section:getjobid}.    The {\tt OSSolverService} prints the OSoL file to standard output before termination. This is illustrated below,
 \begin{verbatimtab}[4]
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org">
@@ -2713,7 +2712,7 @@ The {\tt JobID} is one that is randomly generated by the server and passed back 
 
 The same {\tt JobID} cannot be used twice, so if {\tt 123456abcd} was used earlier, the result of {\tt send} will be {\tt false}.
 
-In order to be of any use, it is necesary to get the result of the optimization. This is described in Section \ref{section:retrieve}. Before proceeding to this section, we describe two ways for knowing when the optimization is complete. One feature of the standard OS remote SolverService is the ability to send an email when the job is complete. Below is an example of the {\tt OSoL} that uses the email feature.
+In order to be of any use, it is necessary to get the result of the optimization. This is described in Section \ref{section:retrieve}. Before proceeding to this section, we describe two ways for knowing when the optimization is complete. One feature of the standard OS remote SolverService is the ability to send an email when the job is complete. Below is an example of the {\tt OSoL} that uses the email feature.
 \begin{verbatimtab}[4]
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org">
@@ -2737,7 +2736,7 @@ Note that in all of these examples we provided a value for the {\tt name} attrib
 
 \subsubsection{The  {\tt retrieve} Service Method}\label{section:retrieve}
 
-The {\tt retrieve} has a single string argument which is an OSoL instance. Here is an example of using the {\tt retrieve} method with {\tt OSSolverService}.
+The {\tt retrieve} method is used to get information the instance solution.  This method has a single string argument which is an OSoL instance. Here is an example of using the {\tt retrieve} method with {\tt OSSolverService}.
 \begin{verbatim}
 ./OSSolverService -config ../data/configFiles/testremoteRetrieve.config
 \end{verbatim}
@@ -2757,7 +2756,7 @@ and the {\tt retrieve.osol} file is
 	</general>
 </osol>
 \end{verbatimtab}
-The OSoL file {\tt retrieve.osol} contains a tag {\tt <jobID>} that is communicated to the remote service. The remove service locates the result returns it as a string. The string that is returned is an OSrL instance.  The user must modify the line
+The OSoL file {\tt retrieve.osol} contains a tag {\tt <jobID>} that is communicated to the remote service. The remove service locates the result and returns it as a string. The string that is returned is an OSrL instance.  The user must modify the line
 \begin{verbatim}
 -osrl /home/kmartin/temp/test.osrl
 \end{verbatim}
@@ -2864,7 +2863,7 @@ and the {\tt kill.osol} file is
 </osol>
 \end{verbatimtab}
 
-
+The result is returned in  {\tt OSpL}.
 \subsubsection{Summary}
 
 Below is a summary of the inputs and outputs of the six service methods. See also Figure \ref{figure:osCommunicationMethods}.
@@ -2970,7 +2969,7 @@ Download the java binary distribution at
 os-distribution-release_number.zip
 \end{verbatim}
 
-The server side of the Java distribution is based on the Tomcat 5.5 implementation. After unpacking {\tt os-distribution-release\_number.zip} there is a directory {\tt os-server-1.0} and a single file {\tt os.war}.  For users that have not installed the Tomcat server,   {\tt os-server-1.0} contains {\tt all} of the necessary files for a OS Solver Service.  If you do not have a Tomcat server running do the following to setup a  Tomcat server  with the OS Solver Service on a {\bf Unix system}:
+The server side of the Java distribution is based on the Tomcat 5.5 implementation. After unpacking {\tt os-distribution-release\_number.zip} there is a directory {\tt os-server-1.0} and a single file {\tt os.war}.  For users that have not installed the Tomcat server,   {\tt os-server-1.0} contains  all of the necessary files for a OS Solver Service.  If you do not have a Tomcat server running do the following to setup a  Tomcat server  with the OS Solver Service on a {\bf Unix system}:
 
 \begin{itemize}
 \item[Step 1.]  Put the folder  {\tt os-server-1.0}   in the desired location for the OS Solver Service on the server machine.
@@ -3086,7 +3085,7 @@ contains solver binaries that actually carry out the optimization process.
 \begin{verbatim}
 os-server-1.0/webapps/os/WEB-INF/code/backup
 \end{verbatim}
-contains backup files from some of the above directories. This folder can get bigger as the service starts to run more jobs. For maintenance purpose, you may want to keep an eye on it.
+contains backup files from some of the above directories. This folder can get bigger as the service starts to run more jobs. 
 \item
 \begin{verbatim}
 os-server-1.0/webapps/os/WEB-INF/classes
@@ -3110,15 +3109,15 @@ contains executables and scripts to start and shutdown the Tomcat server.
 \end{itemize}
 
 
-
+\section{Applications}\label{section:applications}
 
 \section{Examples}\label{section:examples}
 
 \subsection{AMPL Client:  Hooking AMPL to Solvers}\label{section:amplclient}
 
-The {\tt amplClient} executable (in {\tt COIN-OS/OS/examples/amplClient}) is designed to work with the AMPL program. See \url{www.ampl.com}. The {\tt amplClient} acts like an AMPL ``solver.'' The {\tt amplClient} is linked with the OS library and can be used to solve problems either locally or remotely. In both cases the {\tt amplClient} uses the {\tt OSnl2osil} class to convert the AMPL generated nl file (which represents the problem instance) into the corresponding instance representation in the OSiL format.
+The {\tt amplClient} executable (in {\tt COIN-OS/OS/examples/amplClient}) is designed to work with the AMPL program (see \url{www.ampl.com}). The {\tt amplClient} acts like an AMPL ``solver.'' The {\tt amplClient} is linked with the OS library and can be used to solve problems either locally or remotely. In both cases the {\tt amplClient} uses the {\tt OSnl2osil} class to convert the AMPL generated nl file (which represents the problem instance) into the corresponding instance representation in the OSiL format.
 
-In the following discussion we assume that the AMPL executable {\tt ampl} obtained from {\tt www.ampl.com}, the OS {\tt amplClient}, and the test problem {\tt hs71.mod} are all in the same directory. At first, the user may wish to run everything in the directory
+In the following discussion we assume that the AMPL executable {\tt ampl}  (or {\tt ampl.exe} on Windows) obtained from {\tt www.ampl.com}, the OS {\tt amplClient}, and the test problem {\tt hs71.mod} are all in the same directory. At first, the user may wish to run everything in the directory
 
 \begin{verbatim}
 COIN-OS/OS/examples/amplClient
@@ -3150,7 +3149,7 @@ This will invoke {\tt Ipopt} locally and the result in OSrL format will be displ
 \begin{verbatim}
 option amplClient_options "solver ipopt";
 \end{verbatim}
-Next set the solver {\tt service} option to  the address of the remote solver service.
+set the solver {\tt service} option to  the address of the remote solver service.
 \begin{verbatim}
 option ipopt_options "service http://gsbkip.chicagogsb.edu/os/OSSolverService.jws";
 \end{verbatim}
@@ -3179,7 +3178,7 @@ relative to the Web server root.  The source code {\tt OSFileUpload.class} is in
 
 
 
-The {\tt fileUpload} client executable ((see {\tt OS/examples/fileUpload})) takes one argument on the command line which is the location of the file on the local directory to upload to the server. For example,
+The {\tt fileUpload} client executable (see {\tt OS/examples/fileUpload}) takes one argument on the command line which is the location of the file on the local directory to upload to the server. For example,
 \begin{verbatim}
 fileUpload ../../data/osilFiles/parincQuadratic.osil
 \end{verbatim}
@@ -3236,12 +3235,12 @@ will bring up the necessary form that allows the user to browse a directory and 
 This example is found in the {\tt instanceGenerator} folder in the {\tt examples} folder.  This example illustrates how to build a complete in-memory model instance using the {\tt OSInstance} API.   See the code {\tt instanceGenerator.cpp} for the complete example. Here we provide a few highlights to illustrate the power of the API.
 
 The first step is to create an {\tt OSInstance} object.
-\begin{verbatim}tt
+\begin{verbatim}
 OSInstance *osinstance;
 osinstance = new OSInstance();
 \end{verbatim}
 
-Assume that the instance has two variables, $x_{0}$ and $x_{1}.$ Variable $x_{0}$ is a continuous variable with lower bound of -100 and upper bound of 100. Variable $x_{1}$ is a binary variable. First declare the instance to have two variables.
+Assume that the instance has two variables, $x_{0}$ and $x_{1}.$ Variable $x_{0}$ is a continuous variable with lower bound of $-100$ and upper bound of $100$. Variable $x_{1}$ is a binary variable. First declare the instance to have two variables.
 \begin{verbatim}
 osinstance->setVariableNumber( 2);
 \end{verbatim}
@@ -3311,7 +3310,7 @@ VarType='CCC';
 \end{verbatim}
 
 
-Next define the constraint upper and lower bounds. There are two constraints. A unity constraint (an $=$) and a lower bound on portfolio return of .15 (a $\ge$). These two constraints are expressed as
+Next define the constraint upper and lower bounds. There are two constraints. A equality  constraint (an $=$) and a lower bound on portfolio return of .15 (a $\ge$). These two constraints are expressed as
 
 
 
@@ -3345,8 +3344,8 @@ OBJ = [0 0 0 ]
 
  Now the linear constraints.   In the model the two linear constraints are
  \begin{eqnarray*}
- 0.3221 x_{1} +   0.0963x_{2} +    0.1187x_{3}  &\ge& .15 \\
-x_{1} + x_{2} + x_{3} &=& 1
+ x_{1} + x_{2} + x_{3} &=& 1 \\
+ 0.3221 x_{1} +   0.0963x_{2} +    0.1187x_{3}  &\ge& .15 
  \end{eqnarray*}
 
 
@@ -3377,7 +3376,7 @@ Now for the quadratic terms. The only quadratic terms are in the objective funct
  -1 -1 -1 -1 -1 -1
  \end{verbatim}
 
-The second row of $Q$ is the index of the first variable in the quadratic term. We use zero based counting.  Variable $x_{1}$ has index, variable  $x_{2}$ has index 1, and variable $x_{3}$ has index 2.  Therefore, the second row of $Q$ is
+The second row of $Q$ is the index of the first variable in the quadratic term. We use zero based counting.  Variable $x_{1}$ has index 0, variable  $x_{2}$ has index 1, and variable $x_{3}$ has index 2.  Therefore, the second row of $Q$ is
 
 
 
@@ -3443,8 +3442,7 @@ callMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, VarType, ...
 
 
 
-\subsection{OSiL representation for problem given in
-(\ref{eq:roobj})--(\ref{eq:ro3})}\label{section:rosenbrockXML}
+\subsection{OSiL representation for problem given in Section \ref{section:schemadescriptions}}\label{section:rosenbrockXML}
 
 
 {\normalsize \baselineskip 16pt \vspace{2pt}
@@ -3530,7 +3528,7 @@ callMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, VarType, ...
 }% end
 
 
-\subsection{OSiL representation for problem given in (\ref{eq:adobj})--(\ref{eq:adeq2})}\label{section:adexample}
+\subsection{OSiL representation for problem given in Section \ref{section:lowlevelADcalls} }\label{section:adexample}
 
 \begin{verbatimtab}
 <?xml version="1.0" encoding="UTF-8"?>
@@ -3601,7 +3599,8 @@ callMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, VarType, ...
 </osil>
 \end{verbatimtab}
 
-\addcontentsline{toc}{section}{Bibliography}% \addcontentsline{toc}{section}{Bibliography}% alternative for article class
+\addcontentsline{toc}{section}{Bibliography}
+% \addcontentsline{toc}{section}{Bibliography}% alternative for article class
 \bibliography{\bibpath/kippbib}
 
 \end{document}
