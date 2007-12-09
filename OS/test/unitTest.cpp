@@ -728,7 +728,7 @@ int main(int argC, char* argV[])
 		mps2osil = NULL;
 		cout << endl;
 		cout << "DONE WITH MPS TESTING" << endl;
-		unitTestResult << "Test the MPS -> OSiL converter on parinc.mps usig Cbc" << std::endl;
+		unitTestResult << "Test the MPS -> OSiL converter on parinc.mps using Cbc" << std::endl;
 	}
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  solver->osrl <<  endl;
