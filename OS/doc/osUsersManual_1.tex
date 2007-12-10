@@ -95,7 +95,7 @@
 
 \title{Optimization Services 1.0 User's Manual }
 \vskip 2in
-\author{Robert Fourer, Jun Ma, Kipp Martin, Wayne Sheng}
+\author{Robert Fourer, Jun Ma,  Horand Gassmann, Kipp Martin, Wayne Sheng}
 \maketitle
 
 \begin{abstract}
@@ -720,7 +720,45 @@ The environment variables can be set using the {\tt System Properties} in the Wi
 \subsection{VPATH Installations}
 
 
-\subsection{VPATH Installations}It is possible to build the OS project in a directory that is different fromthe directory where the source code is present. This is called a {\tt VPATH}compiliation.  A {\tt VPATH}  compilation  is very useful if you wish tobuild several versions (e.g.\ debug and non-debug versions, or versions withavailability of various combinations of third-party software) of the OSproject from a single copy the source code.For  example, assume you wish to build a debug version of the OS project inthe directory {\tt vpath-debug} and that {\tt ../COIN-OS} is the path to theroot of the OS project distribution.  From the {\tt vpath-debug} directory,run {\tt configure} as follows:\begin{verbatim}../COIN-OS/configure --enable-debug\end{verbatim}%After you run {\tt configure}, the OS project directory structure will bepresent in the {\tt vpath-debug} directory along with all of the necessary{\tt Makefile}s.  Next from the {\tt vpath-debug} directory execute\begin{verbatim}make\end{verbatim}%and all of  the libraries created will be in their respective directoriesinside {\tt vpath-debug} and not {\tt ../COIN-OS}.\vskip 8pt\noindent {\bf Note:} If you have already run the {\tt configure} scriptinside the {\tt ../COIN-OS} directory, you cannot do a {\tt VPATH} builduntil you have run%\begin{verbatim}make distclean\end{verbatim}%in the {\tt ../COIN-OS} directory.
+\subsection{VPATH Installations}
+
+It is possible to build the OS project in a directory that is different from
+the directory where the source code is present. This is called a {\tt VPATH}
+compiliation.  A {\tt VPATH}  compilation  is very useful if you wish to
+build several versions (e.g.\ debug and non-debug versions, or versions with
+availability of various combinations of third-party software) of the OS
+project from a single copy the source code.
+
+For  example, assume you wish to build a debug version of the OS project in
+the directory {\tt vpath-debug} and that {\tt ../COIN-OS} is the path to the
+root of the OS project distribution.  From the {\tt vpath-debug} directory,
+run {\tt configure} as follows:
+
+\begin{verbatim}
+../COIN-OS/configure --enable-debug
+\end{verbatim}
+%
+After you run {\tt configure}, the OS project directory structure will be
+present in the {\tt vpath-debug} directory along with all of the necessary
+{\tt Makefile}s.  Next from the {\tt vpath-debug} directory execute
+
+\begin{verbatim}
+make
+\end{verbatim}
+%
+and all of  the libraries created will be in their respective directories
+inside {\tt vpath-debug} and not {\tt ../COIN-OS}.
+
+\vskip 8pt
+\noindent {\bf Note:} If you have already run the {\tt configure} script
+inside the {\tt ../COIN-OS} directory, you cannot do a {\tt VPATH} build
+until you have run
+%
+\begin{verbatim}
+make distclean
+\end{verbatim}
+%
+in the {\tt ../COIN-OS} directory.
 
 
 \subsection{Using Ipopt}\label{section:ipopt}
