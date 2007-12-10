@@ -141,6 +141,8 @@ This is a very general API for linear, integer, and nonlinear programs. Extensio
 
 \item[8.]  Server software that works with Apache Tomcat and Apache Axis.
 This software uses Web Services technology and acts as middleware between the client that creates the instance and the  solver on the server that optimizes the instance and returns the result. This is illustrated in Section  \ref{section:tomcat}.
+
+\item[9.]  A lightweight version of the project, {\tt OSCommon} for modeling language and solver developers that want to use OS API, readers, and writers, without the overhead of other COIN-OR projects or any third party software.
 \end{itemize}
 
 
@@ -170,7 +172,10 @@ If you want to:
 \end{itemize}
 
 
-
+The OS project is very extensive and relies on many other COIN-OR projects.  This may not be desirable for modeling language and solver developers that just wish to use the OS API in conjunction with their modeling language or solver.  Hence there is also an ``OS lite'' download that consists of all the code for the OS API and for reading and writing instance and solution files. We refer to this version of the project as {\tt OSCommon} and the code for this project is synched  with the corresponding stable and release versions of the code. For example, to get Stable 1.1 of {\tt OSCommon} use the svn command
+\begin{verbatim}
+svn co https://projects.coin-or.org/svn/OS/stable/OSCommon1.1  OSCommon
+\end{verbatim}
 
 
 \section{Downloading the OS Project}\label{section:download}
@@ -487,7 +492,22 @@ Microsoft Visual Studio solution and project files are provided for users of Win
 
 \begin{itemize}
 
-\item[Step 0] If MSVS  Version 7 or 8 of  the C++ compiler cl is already installed,  go to  to Step 2.\item[Step 1] Download and install the Visual C++ Express Edition, which is available for free at Microsoft's web site. This download contains the Microsoft cl C++ compiler along with necessary libraries.Version 7 is no longer available for download from Microsoft.  Version 8 is at \url{http://msdn2.microsoft.com/en-ca/vstudio/aa700736.aspx}  If you are adventurous, you may wish to download Version 9, which is at\url{http://msdn2.microsoft.com/en-us/express/future/bb421472.aspx}.\item[Step 2] The part of the OS library responsible for communication with a remote server depends on some underlying Windows socket header files and libraries. These files are part of the commercial for-pay version, but are not included in the Visual C++ Express download. If  have the Express Edition, it is necessary to also download and install the Windows Platform SDK. This software is version independent and is at  \url{http://msdn2.microsoft.com/en-us/express/aa700755.aspx}.\item[Step 3] In the COIN-OR/OS directory you will find the folder MSVisualStudio, which contains root directories organized by the version of Visual Studio. We currently provide solution files for Version 7 and Version 8. Each contains project files for building the unitTest (OSTest.vcproj), the OSSolverService (OSSolverService,vcproj),   and the OS library libOS.vcproj. The Microsoft Visual Studio files are automatically downloaded with an SVN checkout. They are also contained in the tarballs (see Section \ref{section:getTarBalls}).Open the project files (for instance by double clicking on them in Windows Explorer)  and select Build from the menu bar.\item[Step 4] Run the  {\tt unitTest}.  Connect  to the directory {\tt COIN-OR/OS/test} directory and run either the release or debug version of the  {\tt unitTest} executable. 
+
+\item[Step 0] If MSVS  Version 7 or 8 of  the C++ compiler cl is already installed,  go to  to Step 2.
+
+\item[Step 1] Download and install the Visual C++ Express Edition, which is available for free at Microsoft's web site. This download contains the Microsoft cl C++ compiler along with necessary libraries.
+
+Version 7 is no longer available for download from Microsoft.  Version 8 is at \url{http://msdn2.microsoft.com/en-ca/vstudio/aa700736.aspx}  If you are adventurous, you may wish to download Version 9, which is at
+\url{http://msdn2.microsoft.com/en-us/express/future/bb421472.aspx}.
+
+
+\item[Step 2] The part of the OS library responsible for communication with a remote server depends on some underlying Windows socket header files and libraries. These files are part of the commercial for-pay version, but are not included in the Visual C++ Express download. If  have the Express Edition, it is necessary to also download and install the Windows Platform SDK. This software is version independent and is at  \url{http://msdn2.microsoft.com/en-us/express/aa700755.aspx}.
+
+\item[Step 3] In the COIN-OR/OS directory you will find the folder MSVisualStudio, which contains root directories organized by the version of Visual Studio. We currently provide solution files for Version 7 and Version 8. Each contains project files for building the unitTest (OSTest.vcproj), the OSSolverService (OSSolverService,vcproj),   and the OS library libOS.vcproj. The Microsoft Visual Studio files are automatically downloaded with an SVN checkout. They are also contained in the tarballs (see Section \ref{section:getTarBalls}).
+
+Open the project files (for instance by double clicking on them in Windows Explorer)  and select Build from the menu bar.
+
+\item[Step 4] Run the  {\tt unitTest}.  Connect  to the directory {\tt COIN-OR/OS/test} directory and run either the release or debug version of the  {\tt unitTest} executable. 
 \end{itemize}
 
 \subsubsection{Cygwin}
@@ -700,28 +720,7 @@ The environment variables can be set using the {\tt System Properties} in the Wi
 \subsection{VPATH Installations}
 
 
-It is possible to build the OS project in a directory that is different from the directory where the source code is present. This is called a {\tt VPATH}  compiliation.  A {\tt VPATH}  compilation  is very useful if you wish to build several versions (e.g. debug and non-debug version, or versions with various combinations of third-party software available) of the OS project from a single copy of the source code.
-
-For  example, assume you wish to build a debug version of the OS project in the directory {\tt vpath-debug} and that the environment variable {\tt OS} is the path to the root of the OS project distribution {\tt COIN-OS}.  Connect to the {\tt vpath-debug} directory and  run {\tt configure}   as follows (assuming we do want a debug version)
-
-\begin{verbatim}
-../COIN-OS/configure --enable-debug
-\end{verbatim}
-
-After you run configure, the OS project directory structure will be present in the {\tt vpath-debug} directory along with all of the necessary  {\tt Makefiles}.  Next inside the {\tt vpath-debug} execute
-
-\begin{verbatim}
-make
-\end{verbatim}
-
-and all of  the libraries created will be in their respective directories inside {\tt vpath-debug}  and not {\tt COIN-OS}.
-
-\vskip 8pt
-\noindent {\bf Note:} If you have run the {\tt configure} script inside the {\tt COIN-OS} directory, you cannot do a {\tt VPATH} build. Before doing a {\tt VPATH} build you need to run
-\begin{verbatim}
-make distclean
-\end{verbatim}
-in the {\tt COIN-OS} directory.
+\subsection{VPATH Installations}It is possible to build the OS project in a directory that is different fromthe directory where the source code is present. This is called a {\tt VPATH}compiliation.  A {\tt VPATH}  compilation  is very useful if you wish tobuild several versions (e.g.\ debug and non-debug versions, or versions withavailability of various combinations of third-party software) of the OSproject from a single copy the source code.For  example, assume you wish to build a debug version of the OS project inthe directory {\tt vpath-debug} and that {\tt ../COIN-OS} is the path to theroot of the OS project distribution.  From the {\tt vpath-debug} directory,run {\tt configure} as follows:\begin{verbatim}../COIN-OS/configure --enable-debug\end{verbatim}%After you run {\tt configure}, the OS project directory structure will bepresent in the {\tt vpath-debug} directory along with all of the necessary{\tt Makefile}s.  Next from the {\tt vpath-debug} directory execute\begin{verbatim}make\end{verbatim}%and all of  the libraries created will be in their respective directoriesinside {\tt vpath-debug} and not {\tt ../COIN-OS}.\vskip 8pt\noindent {\bf Note:} If you have already run the {\tt configure} scriptinside the {\tt ../COIN-OS} directory, you cannot do a {\tt VPATH} builduntil you have run%\begin{verbatim}make distclean\end{verbatim}%in the {\tt ../COIN-OS} directory.
 
 
 \subsection{Using Ipopt}\label{section:ipopt}
@@ -2329,11 +2328,7 @@ for(idx = 0; idx < sparseHessian->hessDimension; idx++){
 	std::cout <<  "  Column Index = " << *(sparseHessian->hessColIdx + idx);
 }
 \end{verbatim}
-The {\tt SparseHessianMatrix} class has the {\tt int} data members {\tt hessRowIdx} and {\tt hessColIdx} for indexing  potential nonzero elements in the Hessian matrix. The {\tt double} data member {\tt hessValues} holds the value of the respective second derivative at each iteration.  If {\tt numVars} is the number of nonlinear variables, each array in {\tt sparseHessian} is of size
-$$
-{\tt numVars}*({\tt numVars} + 1)/2;
-$$
-All mixed partials of nonlinear terms are considered to be potential nonzeros.  Hopefully, a future implementation of the OS library will be more robust in preserving sparsity.
+The {\tt SparseHessianMatrix} class has the {\tt int} data members {\tt hessRowIdx} and {\tt hessColIdx} for indexing  potential nonzero elements in the Hessian matrix. The {\tt double} data member {\tt hessValues} holds the value of the respective second derivative at each iteration.   The data member {\tt hessDimension} is the number of nonzero elements in the Hessian. 
 
 
 \subsubsection{Function Evaluation Methods}
@@ -3111,7 +3106,7 @@ contains executables and scripts to start and shutdown the Tomcat server.
 
 \section{Applications}\label{section:applications}
 
-\section{Examples}\label{section:examples}
+
 
 \subsection{AMPL Client:  Hooking AMPL to Solvers}\label{section:amplclient}
 
@@ -3155,9 +3150,8 @@ option ipopt_options "service http://gsbkip.chicagogsb.edu/os/OSSolverService.jw
 \end{verbatim}
 In this case it is necessary that the {\tt Ipopt} solver be part of the OS build on the server.
 
-\subsection{Algorithmic Differentiation:  Using the OS Algorithmic Differentiation Methods}\label{section:cppad}
 
-In the {\tt OS/examples/algorithmicDiff} folder is test code {\tt algorithmicDiffTest.cpp}. This code illustrates the key methods in the {\tt OSInstance} API that are used for algorithmic differentiation.   These methods were described in Section \ref{section:ad}.
+
 
 
 
@@ -3227,6 +3221,28 @@ http://gsbkip.chicagogsb.edu/os/fileupload.html
 \end{verbatim}
 will bring up the necessary form that allows the user to browse a directory and select the file to upload. This URL is based on the assumption that the {\tt OSJava} classes were deployed as described in Section \ref{section:tomcat}. The file {\tt fileupload.html} is in the directory {\tt WebApps/os}. In our html form implementation, after you upload the OSiL file, it shows you the path of the uploaded file that is saved on the server, so that you can put it in the corresponding {\tt osol} file.
 
+
+
+\section{Examples}\label{section:examples}
+
+The example executable files are not built by running {\tt configure} and {\tt make}.  In order to build the examples the user must first run 
+\begin{verbatim}
+make all
+\end{verbatim}
+in the project root directory.  Running {\tt make install}  will  place all of header files required by the examples in the directory
+\begin{verbatim}
+{\tt  COIN-OS/include}
+\end{verbatim}
+and all of the libraries required by the examples in the directory
+\begin{verbatim}
+{\tt  COIN-OS/lib}
+\end{verbatim}
+Next, the user should connect to the appropriate example directory and run {\tt make}.      The {\tt Makefile} in each example directory is fairly simple and is designed to be easily modified by the user if necessary.  Developers can use the Makefiles as a starting point for building applications that use the OS project libraries. 
+
+
+\subsection{Algorithmic Differentiation:  Using the OS Algorithmic Differentiation Methods}\label{section:cppad}
+
+In the {\tt OS/examples/algorithmicDiff} folder is test code {\tt algorithmicDiffTest.cpp}. This code illustrates the key methods in the {\tt OSInstance} API that are used for algorithmic differentiation.   These methods were described in Section \ref{section:ad}.
 
 
 

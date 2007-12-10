@@ -165,7 +165,7 @@ int  main(){
 		// first initialize the nonlinear structures for call backs
 		std::cout << "Initialize Nonlinear Structures" << std::endl;
 		osinstance->initForAlgDiff( );
-		osinstance->getJacobianSparsityPattern( );
+		//osinstance->getJacobianSparsityPattern( );
 
 
 		
