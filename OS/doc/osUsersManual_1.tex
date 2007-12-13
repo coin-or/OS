@@ -17,7 +17,7 @@
 \newcommand{\bibpath}{/Users/kmartin/Documents/files/misc}
 \newcommand{\figfiletype}{pdf}
 
-%Brad Bell Macors
+%Brad Bell Macros
 
 % Latex macros defined for all the CppAD documentation:
 \newcommand{\T}{ {\rm T} }
@@ -99,7 +99,7 @@
 \maketitle
 
 \begin{abstract}
-This is the User's Manual for the Optimization Services (OS) project.  The objective of  (OS) is to provide a general framework consisting of a set of standards for representing optimization instances, results, solver options, and communication between clients and solvers in a distributed environment using Web Services. This COIN-OR project provides C++ and Java source code for libraries and executable programs that implement OS standards.   The OS library includes a robust solver and modeling language interface (API) for linear, nonlinear and other types of optimization problems.   Also included is the C++ source code for a  command line executable {\tt OSSolverService}  for reading problem instances (OSiL format, nl format, MPS format) and calling a solver either locally or on a remote server.  Finally,  both Java source code and a Java war, are provided for users who wish to set up a solver service on a server running Apache Tomcat.   See the Optimization Services (OS) Home Site \url{www.optimizationservices.org} and the COIN-OR Trac page \url{projects.coin-or.org/OS} for more information.
+This is the User's Manual for the Optimization Services (OS) project.  The objective of  (OS) is to provide a general framework consisting of a set of standards for representing optimization instances, results, solver options, and communication between clients and solvers in a distributed environment using Web Services. This COIN-OR project provides C++ and Java source code for libraries and executable programs that implement OS standards.   The OS library includes a robust solver and modeling language interface (API) for linear, nonlinear and other types of optimization problems.   Also included is the C++ source code for a  command line executable {\tt OSSolverService}  for reading problem instances (OSiL format, nl format, MPS format) and calling a solver either locally or on a remote server.  Finally,  both Java source code and a Java war, are provided for users who wish to set up a solver service on a server running Apache Tomcat.   See the Optimization Services (OS) home page \url{www.optimizationservices.org} and the COIN-OR Trac page \url{projects.coin-or.org/OS} for more information.
 \end{abstract}
 
 
@@ -302,7 +302,7 @@ and on Windows
 \begin{verbatim}
 OS-1.0-win32-msvs-v8.zip
 \end{verbatim}
-After unpacking the {\tt tgz} or {\tt zip} archives, the files in the resulting OS binary distribution are illustrated in Figure \ref{figure:osbindistribution}.   In the {\tt bin} directory is the executable file {\tt OSSolverService}  and any other related COIN-OR executables. The {\tt doc} directory contains this document, {\tt osUsersManual\_1.pdf}.
+After unpacking the {\tt tgz} or {\tt zip} archives, the files in the resulting OS binary distribution are illustrated in Figure \ref{figure:osbindistribution}.   In the {\tt bin} directory are the executable file {\tt OSSolverService}  and any other related COIN-OR executables. The {\tt doc} directory contains this document, {\tt osUsersManual\_1.pdf}.
   In the {\tt include} directory are the header files that are required if the user wishes to write code to link to OS library or any other supporting COIN-OR library in the {\tt lib} directory.
 \begin{figure}
 \centering
@@ -482,7 +482,7 @@ http://www.christopherlewis.com/WGet/WGetFiles.htm
 
 
 
-\subsubsection{Microsoft Visual Studio}
+\subsubsection{Microsoft Visual Studio (MSVS)}
 
 
 
@@ -565,7 +565,7 @@ This step is necessary to insure that Cygwin   looks for compilers, linkers, etc
 
 \item Third, Cygwin should search the Windows specific command directories.  The following is typical.
 
-{\tiny
+{\scriptsize
 \begin{verbatim}
 :/cygdrive/c/WINDOWS/system32:/cygdrive/c/WINDOWS
 :/cygdrive/c/WINDOWS/System32/Wbem:/cygdrive/c/Program Files/ATI Technologies/ATI Control Panel
@@ -645,7 +645,7 @@ MSYS (Minimal SYSstem) provides an easy way to use the COIN-OS build system with
 
 \begin{itemize}
 
-\item If you wish to use the third-party software with MSYS it is best to get {\tt wget}. See \ref{section:windowsintall}.
+\item If you wish to use the third-party software with MSYS it is best to get {\tt wget}. See \pageref{section:windowsintall}.
 
  \item Do not put any imbedded blanks in the path to the OS project.
  \end{itemize}
@@ -710,14 +710,6 @@ The environment variables can be set using the {\tt System Properties} in the Wi
 
 {\bf Run an Example!}  If {\tt make test} works, proceed to Section \ref{section:ossolverservice} to run the key executable, {\tt OSSolverService}.
 
-
-
-
-
-
-
-
-\subsection{VPATH Installations}
 
 
 \subsection{VPATH Installations}
@@ -822,9 +814,9 @@ CFLAGS = -MTd -DUSE_CLOCK -DMSDOS -DNO_ONEXIT
 
 
 
-\subsection{Third-Party Software}
+\subsection{Other third-Party Software}
 
-By third-party software we mean software not available for download at \url{www.coin-or.org}. The default OS project is configured out-of-the-box with the COIN-OR  projects {\tt Cbc}, {\tt Clp}, {\tt Cgl}, {\tt CoinUtils}, {\tt CppAD},  {\tt DyLP}, {\tt SYMPHONY}, and {\tt Vol}.  However, the project is also designed to work with other COIN-OR projects and several other open source and commercial software projects.
+This is software not available for download at \url{www.coin-or.org}. The default OS project is configured out-of-the-box with the COIN-OR  projects {\tt Cbc}, {\tt Clp}, {\tt Cgl}, {\tt CoinUtils}, {\tt CppAD},  {\tt DyLP}, {\tt SYMPHONY}, and {\tt Vol}.  However, the project is also designed to work with other COIN-OR projects and several other open source and commercial software projects.
 
 In many of the header files there are {\tt \#include} statements inside {\tt  \#ifdef}  statements. For example,
 \begin{verbatim}
@@ -1360,7 +1352,7 @@ quadratic programs, and very general nonlinear programs.  As example solution (f
 \begin{verbatim}
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type = "text/xsl"
-    href = "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/stylesheets/OSrL.xslt"?>
+  href = "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/stylesheets/OSrL.xslt"?>
 <osrl xmlns="os.optimizationservices.org"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:schemaLocation="os.optimizationservices.org
@@ -1733,7 +1725,7 @@ mex -v matlabSolver.cpp
 
 On a MAC OS X the resulting executable will be named {\tt matlabSolver.mexmac}. On the Windows system the file is named {\tt matlabSolver.mexw32}.
 
-\item[{\bf Step 5:}]  Set the MATLAB path to include the directory with the {\tt matlabSolver} executable. Also, put  the $m-file$ {\tt callMatlabSolver.m} in a directory which is on a MATLAB path.  The  {\tt callMatlabSolver.m} {\it m-file} is in the OSModelInterfaces directory.
+\item[{\bf Step 5:}]  Set the MATLAB path to include the directory with the {\tt matlabSolver} executable. Also, put  the {\it m-file} {\tt callMatlabSolver.m} in a directory which is on a MATLAB path.  This file is in the {\tt OSModelInterfaces} directory.
 
 \end{itemize}
 
@@ -1814,7 +1806,9 @@ The {\tt  readOSiL} method  has a single argument which is a pointer to a string
 <quadraticCoefficients>
 <nonlinearExpressions>
 \end{verbatim}
-There are other components in the OSiL schema, but they are not yet implemented. In most large-scale applications the {\tt <variables>,} {\tt <objectives>}, {\tt <constraints>}, and {\tt <linearConstraintCoefficients>}  will comprise the bulk of the instance memory.  Because of this, we have ``hard-coded'' the OSiL parser to read these specific elements very efficiently. The parsing of the {\tt <quadraticCoefficients>} and {\tt <nonlinearExpressions>} is done using code generated by {\tt flex} and {\tt bison}. In the {\tt OSParsers}  the file  {\tt parseosil.l} is used by {\tt flex} to generate {\tt parseosil.cpp} and the file {\tt parseosil.y} is used by {\tt bison} to generate {\tt parseosil.tab.cpp}.  In {\tt parseosil.l} we use the {\tt reentrant} option and in {\tt parseosil.y} we use the {\tt pure-parser} option to generate reentrant parsers. The {\tt parseosil.y} file  contains both our  ``hard-coded'' parser and the grammar rules for the  {\tt <quadraticCoefficients>} and {\tt <nonlinearExpressions>} sections.   We are currently using GNU Bison version 3.2 and {\tt flex} 2.5.33.
+There are other components in the OSiL schema, but they are not yet implemented. In most large-scale applications the {\tt <variables>,} {\tt <objectives>}, {\tt <constraints>}, and {\tt <linearConstraintCoefficients>}  will comprise the bulk of the instance memory.  Because of this, we have ``hard-coded'' the OSiL parser to read these specific elements very efficiently. The parsing of the {\tt <quadraticCoefficients>} and {\tt <nonlinearExpressions>} is done using code generated by {\tt flex} and {\tt bison}. In the {\tt OSParsers}  the file  {\tt parseosil.l} is used by {\tt flex} to generate {\tt parseosil.cpp} and the file {\tt parseosil.y} is used by {\tt bison} to generate {\tt parseosil.tab.cpp}.  In {\tt parseosil.l} we use the {\tt reentrant} option and in {\tt parseosil.y} we use the {\tt pure-parser} option to generate reentrant parsers. The {\tt parseosil.y} file  contains both our  ``hard-coded'' parser and the grammar rules for the  {\tt <quadraticCoefficients>!
+ 
+ } and {\tt <nonlinearExpressions>} sections.   We are currently using GNU Bison version 3.2 and {\tt flex} 2.5.33.
 
 The typical OS user will have no need to edit either {\tt parseosil.l} or {\tt parseosil.y} and therefore will not have to worry about running either {\tt flex} or {\tt bison} to generate the parsers. The generated parser code from {\tt flex} and {\tt bison} is distributed with the project and works on all of the platforms listed in Table \ref{table:testedplatforms}.  If the user does edit either {\tt parseosil.l} or {\tt parseosil.y} then {\tt parseosil.cpp} and {\tt parseosil.tab.cpp} need to be regenerated with {\tt flex} and {\tt bison}. If these programs are present, in the OS directory  execute
 \begin{verbatim}
@@ -2054,9 +2048,9 @@ or, expressed in terms of the mixed partials,
 \end{alignat}
 
 The OSiL representation of the instance  (\ref{eq:adobj})-(\ref{eq:adeq2}) is given in Appendix \ref{section:adexample}.  This example is designed to illustrate several features of OSiL. Note that in constraint  (\ref{eq:adeq0}) the constant 33 appears in the {\tt <con>} element corresponding to this constraint and the constant 105 appears as a {\tt <number>} OSnL node in the {\tt <nonlinearExpressions>} section.   This distinction is important, as it will lead to different treatment by the code as
-documented below. There are no nonlinear terms in the instance that involve variable $x_{1}.$  The terms $5x_{1}$ in  (\ref{eq:adeq0}) and $7 x_{2}$ in (\ref{eq:adeq1}) are expressed in the {\tt <linearConstraintCoefficicients>}
-section and will again receive special treatment by the code. However, the term $1.37x_1$ in (\ref{eq:adeq0}), 
-along with the term $2x_3$, is expressed in the {\tt <nonlinearExpressions>} section.          Variables $x_{1}$ and $x_{2}$  do not appear in any nonlinear terms. However, in the OSInstance API, variable $x_{1}$  appears in the   {\tt <nonlinearExpressions>} section, it  is treated as a nonlinear variable for purposes of algorithmic differentiation. Variable $x_{2}$ never appears in the  {\tt <nonlinearExpressions>} section and is therefore treated as a linear variable and not used  in any algorithmic differentiation calculations. Variables that do not appear in the {\tt <nonlinearExpressions>} are never part of the algorithmic differentiation calculations. 
+documented below. There are no nonlinear terms in the instance that involve variable $x_{1}.$  The terms $5x_{1}$ in  (\ref{eq:adeq0}) and $7 x_{2}$ in (\ref{eq:adeq1}) are expressed in the {\tt objectives} and {\tt <linearConstraintCoefficients>}
+sections, respectively, and will again receive special treatment by the code. However, the term $1.37x_1$ in (\ref{eq:adeq0}), 
+along with the term $2x_3$, is expressed in the {\tt <nonlinearExpressions>} section.          Variables $x_{1}$ and $x_{2}$  do not appear in any nonlinear terms. However, in the OSInstance API, variable $x_{1}$  appears in the   {\tt <nonlinearExpressions>} section; hence it  is treated as a nonlinear variable for purposes of algorithmic differentiation. Variable $x_{2}$ never appears in the  {\tt <nonlinearExpressions>} section and is therefore treated as a linear variable and not used  in any algorithmic differentiation calculations. Variables that do not appear in the {\tt <nonlinearExpressions>} are never part of the algorithmic differentiation calculations. 
 
 Ignoring the nonnegativity constraints, instance (\ref{eq:adobj})-(\ref{eq:adeq2})  defines a mapping  from $ \mathbb{R}^{4}$ to $ \mathbb{R}^{3}.$
 
@@ -2181,7 +2175,6 @@ and the Jacobian $J_f$ of the nonlinear part is
 \end{equation}
 When $x_{0} = 1,$ $x_{1} = 5,$ $x_{2} = 10,$ and $x_{3} = 5$ the Jacobian $J_f$
 \begin{eqnarray}
-J_f =
     J_f = \left[
         \begin{array}{ccc}
             2.00 & 0.00 & 0.00 \\
@@ -2300,7 +2293,7 @@ osinstance->reverseAD(2, vlambda);
 \end{verbatim}
 This returns
 \begin{eqnarray*}
-\D{L (x^{(0)}, \lambda^{(0)})}{x_{0}} = 3, \quad  \D{L (x^{(0)}, \lambda^{(0)})}{x_{2}} = 2.74, \quad  \D{L (x^{(0)}, \lambda^{(0)})}{x_{3}} = 4.2
+\D{L (x^{(0)}, \lambda^{(0)})}{x_{0}} = 3, \quad  \D{L (x^{(0)}, \lambda^{(0)})}{x_{1}} = 2.74, \quad  \D{L (x^{(0)}, \lambda^{(0)})}{x_{3}} = 4.2
 \end{eqnarray*}
 \begin{eqnarray*}
 \DD{L(x^{(0)}, \lambda^{(0)})}{x_{3}}{x_{0}} =0, \quad  \DD{L(x^{(0)}, \lambda^{(0)})}{x_{3}}{x_{0}} = 0, \quad   \DD{L(x^{(0)}, \lambda^{(0)})}{x_{3}}{x_{3}} =  -.04
@@ -2355,7 +2348,9 @@ However, the linear  term $5x_1$ in equation 0 does not
 contribute a nonzero in the Jacobian, as it is combined with the
 term $1.37x_1$ that is treated as a nonlinear term and
 therefore accounted for explicitly.
-The {\tt SparseJacobianMatrix} object has a data member {\tt starts} which is the index of the start of each constraint row. The {\tt int} data member {\tt indexes}  gives  is the variable index of every potentially nonzero derivative. There is also a {\tt double} data member  {\tt values} that will the value of the partial derivative of the corresponding index at each iteration. Finally, there is an {\tt int} data member {\tt conVals} that is the number of constant terms in each gradient. A constant term is a partial derivative that cannot change at an iteration.  A variable is considered to have a constant derivative  if it appears in the {\tt <linearConstraintCoefficients>} section  but not in the {\tt <nonlinearExpressions>}.  For a row indexed by {\tt idx} the variable indices are in the  {\tt indexes} array between the elements {\tt sparseJac->starts + idx} and {\tt sparseJac->starts + idx + 1.}   The first  {\tt sparseJac->conVals + idx} variables listed are indices of  variables with constant derivatives. In this example, when {\tt idx} is 1, there is one  variable with a constant derivative and it is variable $x_{2}.$  (Actually variable $x_{1}$ has a constant derivative but the code does not check to see if variables that appear in the {\tt <nonlinearExpressions>} section have constant derivative.) The  variables with constant derivatives never appear in the AD evaluation.
+The {\tt SparseJacobianMatrix} object has a data member {\tt starts} which is the index of the start of each constraint row. The {\tt int} data member {\tt indexes}  gives  is the variable index of every potentially nonzero derivative. There is also a {\tt double} data member  {\tt values} that will the value of the partial derivative of the corresponding index at each iteration. Finally, there is an {\tt int} data member {\tt conVals} that is the number of constant terms in each gradient. A constant term is a partial derivative that cannot change at an iteration.  A variable is considered to have a constant derivative  if it appears in the {\tt <linearConstraintCoefficients>} section  but not in the {\tt <nonlinearExpressions>}.  For a row indexed by {\tt idx} the variable indices are in the  {\tt indexes} array between the elements {\tt sparseJac->starts + idx} and {\tt sparseJac->starts + idx + 1.}   The first  {\tt sparseJac->conVals + idx} variables listed are indices o!
+ 
+ f  variables with constant derivatives. In this example, when {\tt idx} is 1, there is one  variable with a constant derivative and it is variable $x_{2}.$  (Actually variable $x_{1}$ has a constant derivative but the code does not check to see if variables that appear in the {\tt <nonlinearExpressions>} section have constant derivative.) The  variables with constant derivatives never appear in the AD evaluation.
 
 The following code illustrates how to get the sparsity pattern of the Hessian of the Lagrangian.
 \begin{verbatim}
@@ -2495,6 +2490,8 @@ SparseHessianMatrix *calculateHessian( double* x, int idx, bool new_x);
 \section{The OSSolverService}\label{section:ossolverservice}
 
 The {\tt OSSolverService} is a command line executable designed to pass problem instances in either  OSiL, AMPL nl, or MPS format  to solvers and get the optimization result back to be displayed either to standard output or a specified browser.  The {\tt OSSovlerService} can be used to invoke a solver locally or on a remote server. It can work either synchronously or asynchronously.
+At present six service methods are implemented, {\tt solve}, {\tt end}, {\tt retrieve}, {\tt getJobID}, {\tt knock} and {\tt kill}.
+These methods are explained in more detail in section~\ref{section:servicemethods}.
 
 \subsection{OSSolverService Input Parameters}
 
@@ -2625,7 +2622,9 @@ In many cases the client machine may be a ``weak client'' and  using a more powe
 
 
 
-See Figure \ref{figure:ossolverservice} for an illustration of this process. The client machine uses {\tt OSSolverService} executable to call one of the six service methods, e.g. {\tt solve}. The  information such as the problem instance in OSiL format and solver options in OSoL format are packaged into a SOAP envelope and sent to the server. The server is running the Java Web Service {\tt OSSolverService.jws}. This Java program running in the Tomcat Java Servlet container implements the six service methods. If a {\tt solve} or {\tt send} request is sent to the server from the client, an optimization problem must be solved. The Java solver service solves the optimization instance by  calling the  OSSolverService on the server. So there is an OSSolverService on the client that calls the Web Service {\tt  OSSolverService.jws} that in turn calls  the executable {\tt OSSolverService} on the server. The Java solver service passes options to the local {\tt OSSolverService} such as where the OSiL file is located and where to write the solution result.
+See Figure \ref{figure:ossolverservice} for an illustration of this process. The client machine uses {\tt OSSolverService} executable to call one of the six service methods, e.g. {\tt solve}. The  information such as the problem instance in OSiL format and solver options in OSoL format are packaged into a SOAP envelope and sent to the server. The server is running the Java Web Service {\tt OSSolverService.jws}. This Java program running in the Tomcat Java Servlet container implements the six service methods. If a {\tt solve} or {\tt send} request is sent to the server from the client, an optimization problem must be solved. The Java solver service solves the optimization instance by  calling the  OSSolverService on the server. So there is an OSSolverService on the client that calls the Web Service {\tt  OSSolverService.jws} that in turn calls  the executable {\tt OSSolverService} on the server. The Java solver service passes options to the local {\tt OSSolverService} such as!
+ 
+  where the OSiL file is located and where to write the solution result.
 
 \begin{figure}
 \centering
@@ -3162,7 +3161,7 @@ COIN-OS/OS/data/amplFiles
 \end{verbatim}
 It is also assumed that {\tt .} (the current directory) is in the search path.
 
-Assume that the  problem instance, {\tt hs71.mod} is in AMPL model format. To solve this problem locally by calling the {\tt amplClient} from AMPL first start AMPL and then execute the following commands. In this case we testing  {\tt Ipopt} as the local server and therefore it is necessary that {\tt Ipopt} be part of the local OS build. If it is not then another solver must be selected and a test problem used that is a linear or integer program.
+The  problem instance, {\tt hs71.mod} is an AMPL model file included in the {\tt amplclient} directory. To solve this problem locally by calling the {\tt amplClient} from AMPL first start AMPL and then execute the following commands. In this case we testing  {\tt Ipopt} as the local server and therefore it is necessary that {\tt Ipopt} be part of the local OS build. If it is not then another solver must be selected and a test problem used that is a linear or integer program.
 
 \begin{verbatim}
 # take in problem 71 in Hock and Schittkowski
@@ -3344,6 +3343,12 @@ The {\tt osTestCode} example directory holds the file {\tt osTestCode.cpp}. This
 
 We illustrate how to build a simple Markowitz portfolio optimization problem (a quadratic programming problem) from {\bf template.m}. First copy {\bf template.m} to {\bf markowitz.m}.
 
+The problem consists in investing  in a number of stocks. The expected returns and risks
+(covariances) of the stocks are known. Assume that the decision variables $x_i$
+represent the fraction of wealth invested in stock~$i$ and that no stock can have
+more than 75\% of the total wealth. The problem then is to minimize the total risk
+subject to a budget constraint and a lower bound on the expected portfolio return.
+
 Assume that there are three stocks (variables) and two constraints (do not count the upper limit investment of .75 on the variables.).
 
 
@@ -3496,7 +3501,7 @@ callMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, VarType, ...
 
 
 
-\subsection{OSiL representation for problem given in Section \ref{section:schemadescriptions}}\label{section:rosenbrockXML}
+\subsection{OSiL representation for problem given in (\ref{eq:roobj})--(\ref{eq:ro3}) (p.\pageref{eq:roobj})}\label{section:rosenbrockXML}
 
 
 {\normalsize \baselineskip 16pt \vspace{2pt}
@@ -3582,7 +3587,8 @@ callMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, VarType, ...
 }% end
 
 
-\subsection{OSiL representation for problem given in Section \ref{section:lowlevelADcalls} }\label{section:adexample}
+\subsection{OSiL representation for problem given in (\ref{eq:adobj})--(\ref{eq:adeq2}) (p.\pageref{eq:adobj})
+}\label{section:adexample}
 
 \begin{verbatimtab}
 <?xml version="1.0" encoding="UTF-8"?>
@@ -4086,4 +4092,3 @@ other licenses such as the CPL and GPL.
 
 %%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%
-
