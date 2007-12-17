@@ -91,10 +91,12 @@ void CoinSolver::solve() throw (ErrorClass) {
 		}
 		else{
 			if( sSolverName.find("vol") != std::string::npos){
+             #ifdef COIN_HAS_VOL
 				if( (osinstance->getNumberOfNonlinearExpressions() > 0)
 					|| (osinstance->getNumberOfQuadraticTerms() > 0) ) throw ErrorClass( "Vol cannot do nonlinear or quadratic");
 				solverIsDefined = true;
 				m_OsiSolver = new OsiVolSolverInterface();
+             #endif
 			}
 			else{
 				if( sSolverName.find( "cplex") != std::string::npos){
