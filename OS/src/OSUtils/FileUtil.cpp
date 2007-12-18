@@ -17,7 +17,7 @@
  */
 
 #include "FileUtil.h"
-
+#include "ErrorClass.h"
 using std::cout;
 using std::endl;
 
@@ -29,48 +29,59 @@ FileUtil::~FileUtil(){
 } // end destructor
 
 std::string FileUtil::getFileAsString(  char* fname){
-	std::ostringstream outStr;
-	std::string soutString;
-	char ch;
-	std::ifstream inFile( fname);
-	if(!inFile){
-		cout << "Could not open file" << endl; 
-		return "";
+	try{
+		std::ostringstream outStr;
+		std::string soutString;
+		char ch;
+		std::ifstream inFile( fname);
+		if(!inFile){
+			throw ErrorClass(" Could not read the given file");
+		}
+		while((ch = inFile.get() ) != EOF){
+			outStr << ch;
+		}
+		soutString = outStr.str();
+		inFile.close();
+		return soutString;
 	}
-	while((ch = inFile.get() ) != EOF){
-		outStr << ch;
+	catch(const ErrorClass& eclass){
+		throw ErrorClass( eclass.errormsg) ;
 	}
-	soutString = outStr.str();
-	inFile.close();
-	return soutString;
-
 } // end getFileAsString
 
 
 
 char* FileUtil::getFileAsChar(  char* fname){
-	std::filebuf *pbuf;
-	long bufsize = 0;
-	char *xml;
-	char ch;
-	std::ifstream inFile;
-	std::cout << fname << std::endl;
-	inFile.open( fname);
-	// get the input file stream into the buffer
-	pbuf = inFile.rdbuf();
-	// now get the size
-	bufsize = pbuf->pubseekoff(0,std::ios_base::end);
-	// set back to zero
-	pbuf ->pubseekpos(0, std::ios::in);
-	// allocate the character array
-	xml = new char[bufsize + 1];
-	xml[ bufsize] =  '\0';
-	bufsize = 0;
-	while((ch = inFile.get()) != EOF ){
-		xml[ bufsize] = ch;
-		bufsize++;
+	try{
+		std::filebuf *pbuf;
+		long bufsize = 0;
+		char *xml;
+		char ch;
+		std::ifstream inFile;
+		std::cout << fname << std::endl;
+		inFile.open( fname);
+		if(!inFile){
+			throw ErrorClass(" Could not read the given file");
+		}
+		// get the input file stream into the buffer
+		pbuf = inFile.rdbuf();
+		// now get the size
+		bufsize = pbuf->pubseekoff(0,std::ios_base::end);
+		// set back to zero
+		pbuf ->pubseekpos(0, std::ios::in);
+		// allocate the character array
+		xml = new char[bufsize + 1];
+		xml[ bufsize] =  '\0';
+		bufsize = 0;
+		while((ch = inFile.get()) != EOF ){
+			xml[ bufsize] = ch;
+			bufsize++;
+		}
+		return xml;
 	}
-	return xml;
+	catch(const ErrorClass& eclass){
+		throw ErrorClass( eclass.errormsg) ;
+	}
 } // end getFileAsChar
 
 

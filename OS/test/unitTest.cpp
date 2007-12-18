@@ -190,6 +190,22 @@ int main(int argC, char* argV[])
 	//
 	unitTestResult << "HERE ARE THE UNIT TEST RESULTS:" << std::endl << std::endl;
 	
+	//first make sure we can read files
+	try{
+		osilFileName =  dataDir  + "osilFiles" + dirsep +  "parincLinear.osil";
+		std::cout << "Try to read a sample file" << std::endl;
+		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		std::cout << "Done reading the test file" << std::endl;
+		unitTestResult << "Reading files successfully" << std::endl;
+	}
+	catch(const ErrorClass& eclass){
+		unitTestResultFailure << "Sorry Unit Test Failed Reading a file: "  + eclass.errormsg<< endl; 
+		//no point continuing we can't even read a file
+		unitTestResultFailure << "Since we can't read files we are terminating"  << endl; 
+		cout << unitTestResultFailure.str() << endl << endl;
+		cout << "Conclusion: FAILURE" << endl;
+		return 1;
+	}	
 	// solve using using the osil file
 	#ifdef COIN_HAS_IPOPT
 	cout << "create a new IPOPT Solver for OSiL string solution" << endl;
@@ -332,8 +348,10 @@ int main(int argC, char* argV[])
 	#endif
 	try{
 		ok = true; 
+		std::cout << "create a new COIN Clp for OSiL string solution" << std::endl;
 		osilFileName = dataDir  + "osilFiles" + dirsep + "parincLinear.osil";
 		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		std::cout << "create a new Solver object" << std::endl;
 		solver = new CoinSolver();
 		solver->sSolverName = "clp";
 		solver->osil = osil;

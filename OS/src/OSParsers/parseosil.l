@@ -117,7 +117,7 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF))
 ({xmlwhitespace}+numberOfNonlinearExpressions{equality}{quote}{xmlwhitespace}*) {YY_PRINT; return(NUMBEROFNONLINEAREXPRESSIONS);}
 {xmlwhitespace}*\<\/instanceData{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(INSTANCEDATAEND);}
 {xmlwhitespace}*\<quadraticCoefficients {YY_PRINT; return(QUADRATICCOEFFICIENTSSTART);}
-{xmlwhitespace}*\<\/quadraticCoefficients\>{xmlwhitespace}* {YY_PRINT; return(QUADRATICCOEFFICIENTSEND);}
+{xmlwhitespace}*\<\/quadraticCoefficients{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(QUADRATICCOEFFICIENTSEND);}
 {xmlwhitespace}*\<qTerm {YY_PRINT; return(QTERMSTART);}
 {xmlwhitespace}*\<\/qTerm\> {YY_PRINT; return(QTERMEND);}
 ({xmlwhitespace}+numberOfQuadraticTerms{equality}{quote}{xmlwhitespace}*) {YY_PRINT; return(NUMBEROFQTERMSATT);}
