@@ -497,8 +497,7 @@ variableend: ENDOFELEMENT
 			| GREATERTHAN nlnode {
 	parserData->nlNodeVariablePoint->inumberOfChildren = 1;
 	parserData->nlNodeVariablePoint->m_mChildren = new OSnLNode*[ 1];
-}
-VARIABLEEND
+}    VARIABLEEND
            | GREATERTHAN VARIABLEEND;
 			
 
