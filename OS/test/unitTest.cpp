@@ -194,6 +194,8 @@ int main(int argC, char* argV[])
 	try{
 		osilFileName =  dataDir  + "osilFiles" + dirsep +  "parincLinear.osil";
 		std::cout << "Try to read a sample file" << std::endl;
+		std::cout << "The file is: " ;
+		std::cout <<  osilFileName << std::endl;
 		osil = fileUtil->getFileAsString( &osilFileName[0]);
 		std::cout << "Done reading the test file" << std::endl;
 		unitTestResult << "Reading files successfully" << std::endl;

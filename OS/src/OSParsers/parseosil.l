@@ -102,7 +102,7 @@ aninteger (-?[0-9]+)
 adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF))
 %% 
  
-{xmlwhitespace}
+
 
 {quote} {YY_PRINT; return(QUOTE);}
 ({xmlwhitespace}*{greater_than}) {YY_PRINT; return(GREATERTHAN);}
@@ -119,7 +119,7 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF))
 {xmlwhitespace}*\<quadraticCoefficients {YY_PRINT; return(QUADRATICCOEFFICIENTSSTART);}
 {xmlwhitespace}*\<\/quadraticCoefficients{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(QUADRATICCOEFFICIENTSEND);}
 {xmlwhitespace}*\<qTerm {YY_PRINT; return(QTERMSTART);}
-{xmlwhitespace}*\<\/qTerm\> {YY_PRINT; return(QTERMEND);}
+{xmlwhitespace}*\<\/qTerm{xmlwhitespace}*\> {YY_PRINT; return(QTERMEND);}
 ({xmlwhitespace}+numberOfQuadraticTerms{equality}{quote}{xmlwhitespace}*) {YY_PRINT; return(NUMBEROFQTERMSATT);}
 ({xmlwhitespace}+idx{equality}{quote}{xmlwhitespace}*) {YY_PRINT;   return(IDXATT);}
 ({xmlwhitespace}+idxOne{equality}{quote}{xmlwhitespace}*) {YY_PRINT;   return(IDXONEATT);}
@@ -133,7 +133,7 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF))
 {xmlwhitespace}*\<nonlinearExpressions {YY_PRINT;  return(NONLINEAREXPRESSIONSSTART);}
 {xmlwhitespace}*\<\/nonlinearExpressions\>{xmlwhitespace}* {YY_PRINT; return(NONLINEAREXPRESSIONSEND);}
 {xmlwhitespace}*\<nl {YY_PRINT; return(NLSTART);}
-{xmlwhitespace}*\<\/nl\>{xmlwhitespace}* {YY_PRINT; return(NLEND);}
+{xmlwhitespace}*\<\/nl{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(NLEND);}
 {xmlwhitespace}*\<times{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(TIMESSTART);}
 {xmlwhitespace}*\<\/times{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(TIMESEND);}
 {xmlwhitespace}*\<divide{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(DIVIDESTART);}

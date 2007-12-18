@@ -92,7 +92,7 @@ char *parseBase64( const char **p, int *dataSize ,int* osillineno);
 	if( *ch != '=') {  osilerror_wrapper( ch, osillineno, "found an attribute not defined"); return false;}  \
 	ch++; \
 	for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;	\
-	if(*ch != '\"'  && *ch != '\"') {  osilerror_wrapper( ch, osillineno,"missing quote on attribute"); return false;} \
+	if(*ch != '\"'  && *ch != '\'') {  osilerror_wrapper( ch, osillineno,"missing quote on attribute"); return false;} \
 	ch++; \
 	for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ; \
 	*p = ch; \
@@ -201,7 +201,7 @@ osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms = $2;
 if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms > 0 ) osinstance->instanceData->quadraticCoefficients->qTerm = new QuadraticTerm*[ $2 ];
 for(int i = 0; i < $2; i++) osinstance->instanceData->quadraticCoefficients->qTerm[i] = new QuadraticTerm();} ;
 
-qTermlist:  
+qTermlist:  qterm
 		| qTermlist qterm ;
 		   
 qterm: {if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms <= parserData->qtermcount ) osilerror( NULL, osinstance, parserData, "too many QuadraticTerms");} 
@@ -479,7 +479,7 @@ variable: VARIABLESTART {
 } anotherVariableATT  variableend {parserData->variablecoefattON = false; parserData->variableidxattON = false;} ;
 		      
 numberend: ENDOFELEMENT
-			| NUMBEREND;
+			| GREATERTHAN NUMBEREND;
 			
 E: ESTART {	parserData->nlNodePoint = new OSnLNodeE();
 	parserData->nlNodeVec.push_back( parserData->nlNodePoint);} eend;
@@ -498,7 +498,8 @@ variableend: ENDOFELEMENT
 	parserData->nlNodeVariablePoint->inumberOfChildren = 1;
 	parserData->nlNodeVariablePoint->m_mChildren = new OSnLNode*[ 1];
 }
-VARIABLEEND;
+VARIABLEEND
+           | GREATERTHAN VARIABLEEND;
 			
 
 anotherNumberATT:
