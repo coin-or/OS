@@ -102,7 +102,7 @@ aninteger (-?[0-9]+)
 adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF))
 %% 
  
-
+{xmlwhitespace}
 
 {quote} {YY_PRINT; return(QUOTE);}
 ({xmlwhitespace}*{greater_than}) {YY_PRINT; return(GREATERTHAN);}

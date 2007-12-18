@@ -37,16 +37,16 @@
 			</value>
 </linearConstraintCoefficients>
 		<quadraticCoefficients numberOfQuadraticTerms="3">
-			<qTerm idx="0"  idxOne="0" idxTwo="0"  coef="10.5" />
+			<qTerm idx = " 0  "  idxOne   =   "  0" idxTwo="0"  coef="10.5" />
 			<qTerm idx="0"  idxOne="1" idxTwo="1"  coef="11.7"/>
-			<qTerm idx="0"  idxOne="0" idxTwo="1"  coef="3"/>
+			<qTerm idx="0"  idxOne="0" idxTwo="1  "  coef="3"/>
 		</quadraticCoefficients>
 		<nonlinearExpressions numberOfNonlinearExpressions="2">
 			<nl idx="-1">
 				<plus> 
 					<power>
 						<minus>
-							<number type="real" value="1.0"/>
+							<number type="real" value="1.0 "/>
 							<variable coef="1.0" idx="0"/>
 						</minus>
 						<number type="real"  value="2.0"/>
