@@ -925,10 +925,13 @@ int main(int argC, char* argV[])
 		osilreader = new OSiLReader();
 		//create an osinstance
 		osinstance = osilreader->readOSiL( &osil);
+		std::cout << "GAIL 1" << std::endl;
 		OSExpressionTree* expTree = osinstance->getNonlinearExpressionTree( -1);
+		std::cout << "GAIL 2" << std::endl;
 		std::vector<OSnLNode*> postfixVec;
 		//postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();
 		postfixVec = osinstance->getNonlinearExpressionTreeInPostfix( -1);
+		std::cout << "GAIL 3" << std::endl;
 		unsigned int n = postfixVec.size();
 		unsigned int i;
 		std::string *nodeNames1 = new std::string[ n];
@@ -937,14 +940,18 @@ int main(int argC, char* argV[])
 			std::cout << postfixVec[i]->snodeName << std::endl;
 			nodeNames1[i] = postfixVec[i]->snodeName;
 		}
+		std::cout << "GAIL 4" << std::endl;
 		// now create back the expression tree 
 		expTree->m_treeRoot = postfixVec[ n - 1]->createExpressionTreeFromPostfix( postfixVec);
+		std::cout << "GAIL 5" << std::endl;
 		// now get in prefix
 		std::vector<OSnLNode*> prefixVec;
 		//prefixVec = expTree->m_treeRoot->getPrefixFromExpressionTree();
 		prefixVec = osinstance->getNonlinearExpressionTreeInPrefix( -1);
+		std::cout << "GAIL 6" << std::endl;
 		// now create back the expression tree
 		expTree->m_treeRoot = prefixVec[ 0]->createExpressionTreeFromPrefix( prefixVec);
+		std::cout << "GAIL 7" << std::endl;
 		// now get postfix vector again and compare with original
 		postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();
 		//postfixVec = osinstance->getNonlinearExpressionTreeInPostfix( -1);
@@ -955,10 +962,12 @@ int main(int argC, char* argV[])
 			nodeNames2[i] = postfixVec[i]->snodeName;
 			if( nodeNames1[i] != nodeNames2[ i]) throw ErrorClass(" Problem with creating expression trees");
 		}	
+		std::cout << "GAIL 8" << std::endl;
 		//delete osinstance;
 		osinstance = NULL;
 		delete osilreader;
 		osilreader = NULL;
+		std::cout << "GAIL 9" << std::endl;
 		unitTestResult << "Successful test of prefix and postfix conversion routines on problem rosenbrockmod.osil" << std::endl;
 		
 	}
