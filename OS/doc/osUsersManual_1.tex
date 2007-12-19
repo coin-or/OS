@@ -637,7 +637,7 @@ MinGW (Minimalist GNU for Windows) is set of runtime headers to be used with the
 
 
 
-MSYS (Minimal SYSstem) provides an easy way to use the COIN-OS build system with compilers/linkers of your own choice, such as the Microsoft command line C++ cl compiler.  MSYS is an application that gives the user a Bourne shell that can run {\tt configure}  scripts and {\tt Makefiles}.  No compilers come with MSYS. In the Cygwin, MinGW, and MSYS hierarchy, it is at the bottom in terms of tools provided. However, it is very easy to use and build the OS project with MSYS.    In this discussion we assume that the user has downloaded the OS source code (most likely  with TortoiseSVN) and that the {\tt cl} compiler is present.  The project is built using the following steps.
+MSYS (Minimal SYSstem) provides an easy way to use the COIN-OS build system with compilers/linkers of your own choice, such as the Microsoft command line C++ cl compiler.  MSYS is an application that gives the user a Bourne shell that can run {\tt configure}  scripts and {\tt Makefiles}.  No compilers come with MSYS. In the Cygwin, MinGW, and MSYS hierarchy, it is at the bottom the food chain in terms of tools provided. However, it is very easy to use and build the OS project with MSYS.    In this discussion we assume that the user has downloaded the OS source code (most likely  with TortoiseSVN) and that the {\tt cl} compiler is present.  The project is built using the following steps.
 
 \vskip 8pt
 
@@ -709,6 +709,24 @@ The environment variables can be set using the {\tt System Properties} in the Wi
 
 
 {\bf Run an Example!}  If {\tt make test} works, proceed to Section \ref{section:ossolverservice} to run the key executable, {\tt OSSolverService}.
+
+
+Microsoft Windows users that wish to obtain MSYS for building the OS project can download the appropriate software at \url{http://sourceforge.net/project/showfiles.php?group_id=2435}.  The user may find this Web site confusing.   It is only necessary to  download what is referred to as the {\bf MSYS Base System}.  As of this writing the most recent version is MSYS-1.0.11.  This file is listed as {\tt bash-3.1-MSYS-1.0.11} and the  binary download is 
+
+{\small
+\url{http://downloads.sourceforge.net/mingw/bash-3.1-MSYS-1.0.11-1.tar.bz2?modtime=1195140582&big_mirror=1}
+}
+
+This will provide the necessary Bourne shell for executing the configure scripts.  
+Users that want to edit the source code in the parsers described in Section  \ref{section:osparsers} will need the additional  tools , {\bf flex} and {\bf bison.}  These are listed at the Web site as
+
+\begin{verbatim}
+bison-2.3-MSYS-1.0.11
+flex-2.5.33-MSYS-1.0.11
+regex-0.12-MSYS-1.0.11
+\end{verbatim}
+The last one contains an important DLL, msys-regex-0.dll, without which flex
+will not start. 
 
 
 
@@ -1784,7 +1802,7 @@ The data directory  also contains the m-file  {\tt template.m} which contains ex
 
 
 
-\subsection{OSParsers}
+\subsection{OSParsers}\label{section:osparsers}
 
 The OSParsers component of the OS library contains reentrant parsers that  read OSiL and OSrL strings and build, respectively, in-memory OSInstance and OSResult  objects.
 
@@ -4091,4 +4109,41 @@ other licenses such as the CPL and GPL.
 
 
 %%%%%%%%%%%%%%%%%%%
+
+Gus and msys
+
+> Bob -- I am ccing you on all this discussion about parsers since when you implement the David Gay stuff the reading of the numbers into text is done in parseosil.y and many of Gus' questions are relevant.  I think he also has msys and through a fair amount of pain has installed flex and bison so perhaps you can leverage off of him.
+
+Hi Bob,
+
+msys _is_ fairly easy to install, but you have to know what you need,
+and the website is very unhelpful. If you want flex and bison, you are
+going to have to download from
+
+http://sourceforge.net/project/showfiles.php?group_id=2345
+
+the following files:
+
+MSYS-1.0.11-20071204
+bash-3.1-MSYS-1.0.11
+bison-2.3-MSYS-1.0.11
+flex-2.5.33-MSYS-1.0.11
+regex-0.12-MSYS-1.0.11
+
+The last one contains an important DLL, msys-regex-0.dll, without which flex
+will not start. Unfortunately there is no documentation anywhere, and I was
+banging my head against a wall for at least two days on this point.
+
+You might want to get other files, such as
+
+coreutils-5.97-MSYS-1.0.11
+make-3.81-MSYS-1.0.11
+
+but I don't think they are essential.
+
+I still have not figured out the path thing, but I figure, I can write a batch
+file that copies the files back and forth. 
+
+
+%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%
