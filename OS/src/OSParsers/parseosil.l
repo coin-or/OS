@@ -69,6 +69,10 @@
 #else     
 	#define YY_PRINT ;
 #endif
+
+
+
+
 #ifdef WIN_
 #define YY_NO_UNISTD_H
 #include <io.h>
@@ -87,7 +91,8 @@ using std::ostringstream;
 %option prefix="osil"
 %option yylineno
 %option noyywrap   
-%x attributetext
+%x doublequoteattributetext
+%x singlequoteattributetext
 %x startelement
 %x osilattributetext
 %x elementtext
@@ -96,39 +101,42 @@ using std::ostringstream;
  
 xmlwhitespace ([ \t\n\r])
 equality ([ \t\n\r])*=([ \t\n\r])*
-quote (\"|\') 
+quote [\" | \']  
 greater_than (>)
 aninteger (-?[0-9]+)
 adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF))
+
+
 %% 
  
 {xmlwhitespace}
 
-{quote} {YY_PRINT; return(QUOTE);}
+{quote} {YY_PRINT;  yylval->sval = strdup(yytext); return(QUOTE);}
 ({xmlwhitespace}*{greater_than}) {YY_PRINT; return(GREATERTHAN);}
 {aninteger}  {YY_PRINT; yylval->ival = atoi(yytext); return(INTEGER);}
 {adouble} {YY_PRINT; yylval->dval = atof(yytext); return(DOUBLE);}
 ({xmlwhitespace}*\/>) {YY_PRINT;  return(ENDOFELEMENT);}
 
 
+({xmlwhitespace}+numberOfNonlinearExpressions{equality}) {YY_PRINT; return(NUMBEROFNONLINEAREXPRESSIONS);}
+({xmlwhitespace}+numberOfQuadraticTerms{equality}) {YY_PRINT; return(NUMBEROFQTERMSATT);}
+({xmlwhitespace}+idx{equality}) {YY_PRINT;   return(IDXATT);}
+({xmlwhitespace}+idxOne{equality}) {YY_PRINT;   return(IDXONEATT);}
+({xmlwhitespace}+idxTwo{equality}) {YY_PRINT;   return(IDXTWOATT);}
+({xmlwhitespace}+coef{equality}) {YY_PRINT;   return(COEFATT);}
+({xmlwhitespace}+value{equality}) {YY_PRINT;  return(VALUEATT);}
+({xmlwhitespace}+id{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(IDATT);}
+({xmlwhitespace}+id{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(IDATT);}
+({xmlwhitespace}+type{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(TYPEATT);}
+({xmlwhitespace}+type{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(TYPEATT);}
 
 
 {xmlwhitespace}*\<\/osil{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OSILEND);}
-({xmlwhitespace}+numberOfNonlinearExpressions{equality}{quote}{xmlwhitespace}*) {YY_PRINT; return(NUMBEROFNONLINEAREXPRESSIONS);}
 {xmlwhitespace}*\<\/instanceData{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(INSTANCEDATAEND);}
 {xmlwhitespace}*\<quadraticCoefficients {YY_PRINT; return(QUADRATICCOEFFICIENTSSTART);}
 {xmlwhitespace}*\<\/quadraticCoefficients{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(QUADRATICCOEFFICIENTSEND);}
 {xmlwhitespace}*\<qTerm {YY_PRINT; return(QTERMSTART);}
 {xmlwhitespace}*\<\/qTerm{xmlwhitespace}*\> {YY_PRINT; return(QTERMEND);}
-({xmlwhitespace}+numberOfQuadraticTerms{equality}{quote}{xmlwhitespace}*) {YY_PRINT; return(NUMBEROFQTERMSATT);}
-({xmlwhitespace}+idx{equality}{quote}{xmlwhitespace}*) {YY_PRINT;   return(IDXATT);}
-({xmlwhitespace}+idxOne{equality}{quote}{xmlwhitespace}*) {YY_PRINT;   return(IDXONEATT);}
-({xmlwhitespace}+idxTwo{equality}{quote}{xmlwhitespace}*) {YY_PRINT;   return(IDXTWOATT);}
-({xmlwhitespace}+coef{equality}{quote}{xmlwhitespace}*) {YY_PRINT;   return(COEFATT);}
-({xmlwhitespace}+value{equality}{quote}{xmlwhitespace}*) {YY_PRINT;  return(VALUEATT);}
-({xmlwhitespace}+id{equality}{quote}{xmlwhitespace}*) {YY_PRINT; BEGIN attributetext; return(IDATT);}
-({xmlwhitespace}+id{equality}{quote}{quote}) {YY_PRINT; unput('\"'); return(IDATT);  }
-({xmlwhitespace}+type{equality}{quote}{xmlwhitespace}*) {YY_PRINT; BEGIN attributetext; return(TYPEATT);}
 
 {xmlwhitespace}*\<nonlinearExpressions {YY_PRINT;  return(NONLINEAREXPRESSIONSSTART);}
 {xmlwhitespace}*\<\/nonlinearExpressions\>{xmlwhitespace}* {YY_PRINT; return(NONLINEAREXPRESSIONSEND);}
@@ -197,8 +205,8 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF))
  <xmldeclaration>"?>" BEGIN 0;
  
 
-<attributetext>[^\"\']* {YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext); return(ATTRIBUTETEXT);}
-
+<doublequoteattributetext>[^\"]* {YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext); return(ATTRIBUTETEXT);}
+<singlequoteattributetext>[^\']* {YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext); return(ATTRIBUTETEXT);}
 
 . {  
 	std::string error;

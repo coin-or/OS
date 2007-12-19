@@ -92,11 +92,21 @@ char *parseBase64( const char **p, int *dataSize ,int* osillineno);
 	if( *ch != '=') {  osilerror_wrapper( ch, osillineno, "found an attribute not defined"); return false;}  \
 	ch++; \
 	for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;	\
-	if(*ch != '\"'  && *ch != '\'') {  osilerror_wrapper( ch, osillineno,"missing quote on attribute"); return false;} \
-	ch++; \
-	for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ; \
-	*p = ch; \
-	for( ; *ch != '\"' &&  *ch != '\''; ch++); \
+	if(*ch == '\"'){ \
+		ch++; \
+	    for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ; \
+	    *p = ch; \
+	    for( ; *ch != '\"'; ch++); \
+	}\
+	else{\
+	    if(*ch == '\'') { \
+	    	ch++; \
+	        for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ; \
+	        *p = ch; \
+	        for( ; *ch != '\''; ch++); \
+	    } \
+	    else {  osilerror_wrapper( ch, osillineno,"missing quote on attribute"); return false;} \
+	}\
 	numChar = ch - *p; \
 	attText = new char[numChar + 1]; \
 	for(ki = 0; ki < numChar; ki++) attText[ki] = *((*p)++); \
@@ -104,6 +114,8 @@ char *parseBase64( const char **p, int *dataSize ,int* osillineno);
 	attTextEnd = &attText[ki]; 
 	
 #define GAIL printf("GAIL ANN HONDA\n")
+
+
 	
 #define ECHOCHECK \
 	GAIL; \
@@ -151,10 +163,10 @@ void osilerror(YYLTYPE* type, OSInstance *osintance,  OSiLParserData *parserData
 #define scanner parserData->scanner
 %}
 
-%token QUOTE
+%token <sval> QUOTE
 %token <sval> ATTRIBUTETEXT 
 %token <ival> INTEGER  
-%token  <dval> DOUBLE 
+%token <dval> DOUBLE 
 
 
 
@@ -196,10 +208,10 @@ quadraticcoefficients:
 	|  QUADRATICCOEFFICIENTSSTART  quadnumberatt qTermlist  QUADRATICCOEFFICIENTSEND {if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms > parserData->qtermcount ) osilerror( NULL, osinstance, parserData, "actual number of qterms less than numberOfQuadraticTerms");};
    
 
-quadnumberatt: NUMBEROFQTERMSATT INTEGER quote GREATERTHAN  {
-osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms = $2;  
-if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms > 0 ) osinstance->instanceData->quadraticCoefficients->qTerm = new QuadraticTerm*[ $2 ];
-for(int i = 0; i < $2; i++) osinstance->instanceData->quadraticCoefficients->qTerm[i] = new QuadraticTerm();} ;
+quadnumberatt: NUMBEROFQTERMSATT QUOTE INTEGER QUOTE GREATERTHAN  { if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
+osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms = $3;  
+if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms > 0 ) osinstance->instanceData->quadraticCoefficients->qTerm = new QuadraticTerm*[ $3 ];
+for(int i = 0; i < $3; i++) osinstance->instanceData->quadraticCoefficients->qTerm[i] = new QuadraticTerm();} ;
 
 qTermlist:  qterm
 		| qTermlist qterm ;
@@ -224,48 +236,53 @@ anotherqTermATT:
 	
 
 
-qtermatt: qtermidxOneatt   quote
+qtermatt:    qtermidxOneatt   
 			{ if(parserData->qtermidxOneattON) osilerror( NULL, osinstance, parserData, "too many qTerm idxOne attributes"); 
 			parserData->qtermidxOneattON = true;  }
-		| qtermidxTwoatt  quote    
+		| qtermidxTwoatt      
 			{ if(parserData->qtermidxTwoattON) osilerror( NULL, osinstance, parserData, "too many qTerm idxTwo attributes"); 
 			parserData->qtermidxTwoattON = true;  }
-		| qtermcoefatt quote
+		| qtermcoefatt 
 			{ if(parserData->qtermcoefattON) osilerror( NULL, osinstance, parserData, "too many qTerm coef attributes"); 
 			parserData->qtermcoefattON = true;  }
-		| qtermidxatt quote
+		| qtermidxatt 
 			{ if(parserData->qtermidxattON) osilerror( NULL, osinstance, parserData, "too many qTerm idx attributes"); 
 			parserData->qtermidxattON = true;  }
 		;
 
 
-qtermidxOneatt: IDXONEATT INTEGER   {  
-osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->idxOne = $2;
-	if( $2 >= osinstance->instanceData->variables->numberOfVariables){
+qtermidxOneatt:  IDXONEATT QUOTE INTEGER QUOTE  {  if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
+osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->idxOne = $3;
+	if( $3 >= osinstance->instanceData->variables->numberOfVariables){
 	 	osilerror( NULL, osinstance, parserData, "variable index exceeds number of variables");
 	 }
-} ;
-qtermidxTwoatt: IDXTWOATT INTEGER   { 
-osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->idxTwo = $2;
-	if( $2 >= osinstance->instanceData->variables->numberOfVariables){
+}  ;
+
+qtermidxTwoatt: IDXTWOATT QUOTE INTEGER QUOTE  { if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
+osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->idxTwo = $3;
+	if( $3 >= osinstance->instanceData->variables->numberOfVariables){
 	 	osilerror( NULL, osinstance, parserData, "variable index exceeds number of variables");
 	 }
-} ;
-qtermcoefatt: COEFATT DOUBLE   {
-osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->coef = $2;} 
-| COEFATT INTEGER   { 
-osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->coef = $2;}  ;
-qtermidxatt: IDXATT INTEGER   {  
-osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->idx = $2;} ;
+}  ;
+
+qtermcoefatt: COEFATT QUOTE DOUBLE  QUOTE  {if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
+osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->coef = $3;} 
+| COEFATT QUOTE INTEGER  QUOTE  { 
+osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->coef = $3;}  ;
+
+
+qtermidxatt: IDXATT QUOTE INTEGER  QUOTE {  if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
+osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->idx = $3;}  ;
 
 nonlinearExpressions:  
 				| NONLINEAREXPRESSIONSSTART  nlnumberatt nlnodes  NONLINEAREXPRESSIONSEND
 				{  if(parserData->nlnodecount <  parserData->tmpnlcount)  osilerror( NULL, osinstance, parserData, "actual number of nl terms less than number attribute");   };
 				
 
-nlnumberatt: NUMBEROFNONLINEAREXPRESSIONS INTEGER quote  GREATERTHAN {parserData->tmpnlcount = $2;
-osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions = $2;  
-if(osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions > 0 ) osinstance->instanceData->nonlinearExpressions->nl = new Nl*[ $2 ];
+nlnumberatt: NUMBEROFNONLINEAREXPRESSIONS QUOTE INTEGER QUOTE  GREATERTHAN { if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
+parserData->tmpnlcount = $3;
+osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions = $3;  
+if(osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions > 0 ) osinstance->instanceData->nonlinearExpressions->nl = new Nl*[ $3 ];
 };
 				
 nlnodes: 
@@ -277,9 +294,9 @@ nlnodes:
 	parserData->nlnodecount++;
 }  NLEND ;
 
-nlIdxATT:  IDXATT INTEGER quote {
+nlIdxATT:  IDXATT QUOTE INTEGER QUOTE { if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
 osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount] = new Nl();
-osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->idx = $2;
+osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->idx = $3;
 osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree = new OSExpressionTree();
 if(parserData->nlnodecount > parserData->tmpnlcount) osilerror( NULL, osinstance, parserData, "actual number of nl terms greater than number attribute");
 // clear the vectors of pointers
@@ -504,69 +521,58 @@ variableend: ENDOFELEMENT
 anotherNumberATT:
 			|anotherNumberATT numberATT ;
 			
-numberATT: numbertypeATT quote {if(parserData->numbertypeattON) osilerror( NULL, osinstance, parserData, "too many number type attributes"); 
+numberATT: numbertypeATT  {if(parserData->numbertypeattON) osilerror( NULL, osinstance, parserData, "too many number type attributes"); 
 			parserData->numbertypeattON = true; }
-		| numbervalueATT quote {if(parserData->numbervalueattON) osilerror( NULL, osinstance, parserData, "too many number value attributes"); 
+		| numbervalueATT  {if(parserData->numbervalueattON) osilerror( NULL, osinstance, parserData, "too many number value attributes"); 
 			parserData->numbervalueattON = true; }
-		| numberidATT quote {if(parserData->numberidattON) osilerror( NULL, osinstance, parserData,"too many number id attributes"); 
+		| numberidATT  {if(parserData->numberidattON) osilerror( NULL, osinstance, parserData,"too many number id attributes"); 
 			parserData->numberidattON = true; }			
 			;
 			
-numbertypeATT: TYPEATT  ATTRIBUTETEXT {
+numbertypeATT: TYPEATT   ATTRIBUTETEXT {
 	parserData->nlNodeNumberPoint->type = $2;
-} ;
+} QUOTE;
 
 numberidATT: IDATT  ATTRIBUTETEXT {
 	parserData->nlNodeNumberPoint->id = $2;
-} ;
+}  QUOTE ;
 
 
 
-numbervalueATT: VALUEATT  DOUBLE {
-	parserData->nlNodeNumberPoint->value = $2;
+numbervalueATT: VALUEATT QUOTE  DOUBLE QUOTE {if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
+	parserData->nlNodeNumberPoint->value = $3;
 }
-		| VALUEATT INTEGER{
-	parserData->nlNodeNumberPoint->value = $2;
-};
+		| VALUEATT QUOTE INTEGER QUOTE {if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
+	parserData->nlNodeNumberPoint->value = $3;
+} ;
 
 anotherVariableATT:
 			|anotherVariableATT variableATT ;
 			
-variableATT: variablecoefATT quote {if(parserData->variablecoefattON) osilerror( NULL, osinstance, parserData, "too many variable coef attributes"); 
+variableATT: variablecoefATT  {if(parserData->variablecoefattON) osilerror( NULL, osinstance, parserData, "too many variable coef attributes"); 
 			parserData->variablecoefattON = true; }
-		| variableidxATT quote {if(parserData->variableidxattON) osilerror( NULL, osinstance, parserData, "too many variable idx attributes"); 
+		| variableidxATT  {if(parserData->variableidxattON) osilerror( NULL, osinstance, parserData, "too many variable idx attributes"); 
 			parserData->variableidxattON = true; 
 			};
 			
-variablecoefATT: COEFATT  DOUBLE {
-	parserData->nlNodeVariablePoint->coef = $2;
+variablecoefATT: COEFATT  QUOTE DOUBLE QUOTE { if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
+	parserData->nlNodeVariablePoint->coef = $3;
 }
-				| COEFATT  INTEGER {
-	parserData->nlNodeVariablePoint->coef = $2;		
-};
+				| COEFATT  QUOTE INTEGER QUOTE { if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
+	parserData->nlNodeVariablePoint->coef = $3;		
+}  ;
 				
-variableidxATT: IDXATT  INTEGER {
-	parserData->nlNodeVariablePoint->idx = $2;
-	if( $2 >= osinstance->instanceData->variables->numberOfVariables){
+variableidxATT: IDXATT QUOTE  INTEGER QUOTE { if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
+	parserData->nlNodeVariablePoint->idx = $3;
+	if( $3 >= osinstance->instanceData->variables->numberOfVariables){
 	 	osilerror( NULL, osinstance, parserData, "variable index exceeds number of variables");
 	 }
-} ; 
+}  ; 
 
 
 
-
-
-
-
-xmlWhiteSpaceChar: ' '
-				| '\t'
-				| '\r'
-				| '\n' ;
-				
-xmlWhiteSpace: 
-			| xmlWhiteSpace xmlWhiteSpaceChar ;
 		
-quote: xmlWhiteSpace QUOTE;
+
 
 
 

@@ -187,18 +187,22 @@ int main(int argC, char* argV[])
 	nlFileName =  dataDir  + "amplFiles" + dirsep + "parinc.nl";
 	mpsFileName =  dataDir + "mpsFiles" + dirsep + "parinc.mps";
 	fileUtil = new FileUtil();
-	//
+	// 
 	unitTestResult << "HERE ARE THE UNIT TEST RESULTS:" << std::endl << std::endl;
 	
 	//first make sure we can read files
 	try{
-		osilFileName =  dataDir  + "osilFiles" + dirsep +  "parincLinear.osil";
+		osilFileName =  dataDir  + "osilFiles" + dirsep +  "rosenbrockmod.osil";
 		std::cout << "Try to read a sample file" << std::endl;
 		std::cout << "The file is: " ;
 		std::cout <<  osilFileName << std::endl;
 		osil = fileUtil->getFileAsString( &osilFileName[0]);
 		std::cout << "Done reading the test file" << std::endl;
+		OSiLReader *osilreader = NULL;
+		osilreader = new OSiLReader(); 
+		osilreader->readOSiL( &osil);
 		unitTestResult << "Reading files successfully" << std::endl;
+		//return 0;
 	}
 	catch(const ErrorClass& eclass){
 		unitTestResultFailure << "Sorry Unit Test Failed Reading a file: "  + eclass.errormsg<< endl; 
