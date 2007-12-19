@@ -197,7 +197,7 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF))
  <xmldeclaration>"?>" BEGIN 0;
  
 
-<attributetext>([^\"\'])* {YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext); return(ATTRIBUTETEXT);}
+<attributetext>[^\"\']* {YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext); return(ATTRIBUTETEXT);}
 
 
 . {  

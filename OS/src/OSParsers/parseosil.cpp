@@ -879,7 +879,7 @@ static yyconst flex_int32_t yy_rule_can_match_eol[84] =
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 
-    0, 1, 0, 0,     };
+    0, 1, 1, 0,     };
 
 /* The intent behind this definition is that it'll catch
  * any uses of REJECT which flex missed.
@@ -1784,11 +1784,9 @@ BEGIN 0;
 	YY_BREAK
 case 81:
 /* rule 81 can match eol */
-YY_RULE_SETUP
-#line 200 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/parseosil.l"
-{YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext); return(ATTRIBUTETEXT);}
-	YY_BREAK
+#line 201 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/parseosil.l"
 case 82:
+/* rule 82 can match eol */
 YY_RULE_SETUP
 #line 203 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/parseosil.l"
 {  
@@ -1808,7 +1806,7 @@ YY_RULE_SETUP
 #line 215 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/parseosil.l"
 ECHO;
 	YY_BREAK
-#line 1812 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/parseosil.cpp"
+#line 1810 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/parseosil.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(attributetext):
 case YY_STATE_EOF(startelement):
