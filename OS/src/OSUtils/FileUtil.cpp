@@ -39,9 +39,20 @@ std::string FileUtil::getFileAsString( const char* fname){
 			throw ErrorClass(" Could not read the given file");
 		}
 		std::cout << "Inside FileUtil:getFileAsString, file read put into ostringstream" << std::endl;
-		while((ch = inFile.get() ) != EOF){
+		//while((ch = inFile.get() ) != EOF){
+		//	outStr << ch;
+		//	std::cout << ch ;
+		//}
+		
+		while( inFile.get( ch ) ){
 			outStr << ch;
+			std::cout << ch ;
 		}
+		
+		if( !inFile.eof() ){
+			throw ErrorClass(" There was a problem reading the file");
+		}
+		std::cout << std::endl;
 		std::cout << "Inside FileUtil:getFileAsString, convert to a string" << std::endl;
 		soutString = outStr.str();
 		inFile.close();
@@ -76,10 +87,18 @@ char* FileUtil::getFileAsChar(const  char* fname){
 		xml = new char[bufsize + 1];
 		xml[ bufsize] =  '\0';
 		bufsize = 0;
-		while((ch = inFile.get()) != EOF ){
+		while( inFile.get( ch ) ){
 			xml[ bufsize] = ch;
 			bufsize++;
 		}
+		
+		if( !inFile.eof() ){
+			throw ErrorClass(" There was a problem reading the file");
+		}
+		//while((ch = inFile.get()) != EOF ){
+		//	xml[ bufsize] = ch;
+		//	bufsize++;
+		//}
 		return xml;
 	}
 	catch(const ErrorClass& eclass){

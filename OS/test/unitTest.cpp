@@ -200,8 +200,11 @@ int main(int argC, char* argV[])
 		std::cout << "Done reading the test file" << std::endl;
 		OSiLReader *osilreader = NULL;
 		osilreader = new OSiLReader(); 
-		osilreader->readOSiL( &osil);
+		OSInstance *osinstance = osilreader->readOSiL( &osil);
 		unitTestResult << "Reading files successfully" << std::endl;
+		OSiLWriter osilwriter;
+		osilwriter.m_bWhiteSpace = true;
+		std::cout << osilwriter.writeOSiL( osinstance) << std::endl;
 		//return 0;
 	}
 	catch(const ErrorClass& eclass){

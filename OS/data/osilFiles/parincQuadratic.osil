@@ -53,5 +53,5 @@
 			<qTerm idx="-1" idxOne="0" idxTwo="0" coef="-.06666666"/>
 			<qTerm idx="-1" idxOne="1" idxTwo="1" coef="-.2"/>
 		</quadraticCoefficients  >
-	</instanceData>
+</instanceData>
 </osil>

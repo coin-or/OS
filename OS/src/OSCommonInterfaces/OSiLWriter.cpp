@@ -211,32 +211,32 @@ std::string OSiLWriter::writeOSiL( OSInstance *theosinstance){
 			outStr << "\"" ;
 			outStr << ">" ;
 			if( m_bWhiteSpace == true) outStr << endl;
-			if(m_OSInstance->instanceData->linearConstraintCoefficients->start->el != NULL){
-				outStr << "<start>" ;
-				if( m_bWhiteSpace == true) outStr << endl;
-				if(m_OSInstance->instanceData->variables != NULL && m_OSInstance->instanceData->variables->numberOfVariables > 0){
-					if(m_bWriteBase64 == false){
-						for(i = 0; i <= m_OSInstance->instanceData->variables->numberOfVariables; i++){
-							outStr << "<el>" ;
-							outStr << m_OSInstance->instanceData->linearConstraintCoefficients->start->el[i];
-							outStr << "</el>" ;
-							if( m_bWhiteSpace == true) outStr << endl;
-						}
-					}
-					else{
-						//outStr << "<base64BinaryData sizeOf=\"4\" numericType=\"int\" >" ;
-						outStr << "<base64BinaryData sizeOf=\"4\"  >" ;
-						outStr << Base64::encodeb64( (char*)m_OSInstance->instanceData->linearConstraintCoefficients->start->el, 
-							(m_OSInstance->instanceData->variables->numberOfVariables + 1)*sizeof(int) );
-						outStr<< "</base64BinaryData>" ;
-						if( m_bWhiteSpace == true) outStr << endl;
-					}
-				}
-				outStr << "</start>" ;
-				if( m_bWhiteSpace == true) outStr << endl;
-			}
 			if( (m_OSInstance->instanceData->linearConstraintCoefficients->rowIdx != NULL) &&
 				(m_OSInstance->instanceData->linearConstraintCoefficients->rowIdx->el != NULL) ){
+					if(m_OSInstance->instanceData->linearConstraintCoefficients->start->el != NULL){
+						outStr << "<start>" ;
+						if( m_bWhiteSpace == true) outStr << endl;
+						if(m_OSInstance->instanceData->variables != NULL && m_OSInstance->instanceData->variables->numberOfVariables > 0){
+							if(m_bWriteBase64 == false){
+								for(i = 0; i <= m_OSInstance->instanceData->variables->numberOfVariables; i++){
+									outStr << "<el>" ;
+									outStr << m_OSInstance->instanceData->linearConstraintCoefficients->start->el[i];
+									outStr << "</el>" ;
+									if( m_bWhiteSpace == true) outStr << endl;
+								}
+							}
+							else{
+								//outStr << "<base64BinaryData sizeOf=\"4\" numericType=\"int\" >" ;
+								outStr << "<base64BinaryData sizeOf=\"4\"  >" ;
+								outStr << Base64::encodeb64( (char*)m_OSInstance->instanceData->linearConstraintCoefficients->start->el, 
+									(m_OSInstance->instanceData->variables->numberOfVariables + 1)*sizeof(int) );
+								outStr<< "</base64BinaryData>" ;
+								if( m_bWhiteSpace == true) outStr << endl;
+							}
+						}
+						outStr << "</start>" ;
+						if( m_bWhiteSpace == true) outStr << endl;
+					}
 					outStr << "<rowIdx>" ;
 					if( m_bWhiteSpace == true) outStr << endl;
 					if(m_bWriteBase64 == false){		
@@ -261,6 +261,30 @@ std::string OSiLWriter::writeOSiL( OSInstance *theosinstance){
 			else{
 				if( (m_OSInstance->instanceData->linearConstraintCoefficients->colIdx != NULL)  &&
 					(m_OSInstance->instanceData->linearConstraintCoefficients->colIdx->el != NULL) ){
+						if(m_OSInstance->instanceData->linearConstraintCoefficients->start->el != NULL){
+							outStr << "<start>" ;
+							if( m_bWhiteSpace == true) outStr << endl;
+							if(m_OSInstance->instanceData->variables != NULL && m_OSInstance->instanceData->variables->numberOfVariables > 0){
+								if(m_bWriteBase64 == false){
+									for(i = 0; i <= m_OSInstance->instanceData->variables->numberOfVariables; i++){
+										outStr << "<el>" ;
+										outStr << m_OSInstance->instanceData->linearConstraintCoefficients->start->el[i];
+										outStr << "</el>" ;
+										if( m_bWhiteSpace == true) outStr << endl;
+									}
+								}
+								else{
+									//outStr << "<base64BinaryData sizeOf=\"4\" numericType=\"int\" >" ;
+									outStr << "<base64BinaryData sizeOf=\"4\"  >" ;
+									outStr << Base64::encodeb64( (char*)m_OSInstance->instanceData->linearConstraintCoefficients->start->el, 
+										(m_OSInstance->instanceData->variables->numberOfVariables + 1)*sizeof(int) );
+									outStr<< "</base64BinaryData>" ;
+									if( m_bWhiteSpace == true) outStr << endl;
+								}
+							}
+							outStr << "</start>" ;
+							if( m_bWhiteSpace == true) outStr << endl;
+						}
 						outStr << "<colIdx>";
 						if( m_bWhiteSpace == true) outStr << endl;
 						if(m_bWriteBase64 == false){
@@ -358,6 +382,7 @@ std::string OSiLWriter::writeOSiL( OSInstance *theosinstance){
 					outStr << m_OSInstance->instanceData->nonlinearExpressions->nl[i]->osExpressionTree->m_treeRoot->getNonlinearExpressionInXML();
 					outStr << "</nl>";
 				}
+				if( m_bWhiteSpace == true) outStr << endl;
 			}
 			outStr << "</nonlinearExpressions>";
 			if( m_bWhiteSpace == true) outStr << endl;
