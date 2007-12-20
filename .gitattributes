@@ -70,6 +70,7 @@ OS/data/osilFiles/markowitz.osil -text
 OS/data/osilFiles/markowitzMatlab.osil -text
 OS/data/osilFiles/p0033.osil -text
 OS/data/osilFiles/parincLinear.osil -text
+OS/data/osilFiles/parincLinearByRow.osil -text
 OS/data/osilFiles/parincQuadratic.osil -text
 OS/data/osilFiles/rosenbrockmod.osil -text
 OS/data/osilFiles/testOperators.osil -text

@@ -192,7 +192,7 @@ int main(int argC, char* argV[])
 	
 	//first make sure we can read files
 	try{
-		osilFileName =  dataDir  + "osilFiles" + dirsep +  "rosenbrockmod.osil";
+		osilFileName =  dataDir  + "osilFiles" + dirsep +  "parincLinearByRow.osil";
 		std::cout << "Try to read a sample file" << std::endl;
 		std::cout << "The file is: " ;
 		std::cout <<  osilFileName << std::endl;
@@ -205,7 +205,6 @@ int main(int argC, char* argV[])
 		OSiLWriter osilwriter;
 		osilwriter.m_bWhiteSpace = true;
 		std::cout << osilwriter.writeOSiL( osinstance) << std::endl;
-		//return 0;
 	}
 	catch(const ErrorClass& eclass){
 		unitTestResultFailure << "Sorry Unit Test Failed Reading a file: "  + eclass.errormsg<< endl; 
@@ -358,7 +357,7 @@ int main(int argC, char* argV[])
 	try{
 		ok = true; 
 		std::cout << "create a new COIN Clp for OSiL string solution" << std::endl;
-		osilFileName = dataDir  + "osilFiles" + dirsep + "parincLinear.osil";
+		osilFileName = dataDir  + "osilFiles" + dirsep + "parincLinearByRow.osil";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		std::cout << "create a new Solver object" << std::endl;
 		solver = new CoinSolver();

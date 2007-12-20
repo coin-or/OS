@@ -46,7 +46,7 @@ std::string FileUtil::getFileAsString( const char* fname){
 		
 		while( inFile.get( ch ) ){
 			outStr << ch;
-			std::cout << ch ;
+			//std::cout << ch ;
 		}
 		
 		if( !inFile.eof() ){

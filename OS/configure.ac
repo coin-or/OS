@@ -440,6 +440,7 @@ AC_SUBST(oslib)
 ## osil test files
 ##
 AC_COIN_VPATH_LINK(data/osilFiles/parincLinear.osil)
+AC_COIN_VPATH_LINK(data/osilFiles/parincLinearByRow.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/parincQuadratic.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/HS071_NLP.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/HS071_NLPMod.osil)
