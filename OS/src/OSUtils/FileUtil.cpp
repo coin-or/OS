@@ -28,18 +28,21 @@ FileUtil::FileUtil(){
 FileUtil::~FileUtil(){  
 } // end destructor
 
-std::string FileUtil::getFileAsString(  char* fname){
+std::string FileUtil::getFileAsString( const char* fname){
 	try{
 		std::ostringstream outStr;
 		std::string soutString;
 		char ch;
+		std::cout << "Inside FileUtil:getFileAsString and calling inFile" << std::endl;
 		std::ifstream inFile( fname);
-		if(!inFile){
+		if( !inFile){
 			throw ErrorClass(" Could not read the given file");
 		}
+		std::cout << "Inside FileUtil:getFileAsString, file read put into ostringstream" << std::endl;
 		while((ch = inFile.get() ) != EOF){
 			outStr << ch;
 		}
+		std::cout << "Inside FileUtil:getFileAsString, convert to a string" << std::endl;
 		soutString = outStr.str();
 		inFile.close();
 		return soutString;
@@ -51,7 +54,7 @@ std::string FileUtil::getFileAsString(  char* fname){
 
 
 
-char* FileUtil::getFileAsChar(  char* fname){
+char* FileUtil::getFileAsChar(const  char* fname){
 	try{
 		std::filebuf *pbuf;
 		long bufsize = 0;
@@ -101,7 +104,7 @@ bool FileUtil::writeFileFromString(char* fname, std::string sname){
 
 bool FileUtil::writeFileFromString(std::string  fname, std::string sname){
 	std::ofstream outFile;
-	outFile.open( &fname[ 0] );
+	outFile.open( fname.c_str()  );
 	if(!outFile.is_open()){
 		return false;
 	}

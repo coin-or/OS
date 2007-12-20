@@ -51,7 +51,7 @@ public:
    	 * @param fname holds the name of the file. 
    	 * @return the file contents as a sring. 
    	 */	
-	std::string getFileAsString(  char* fname);
+	std::string getFileAsString(const  char* fname);
 	
    	/**
    	 * read a file and return contents as a char pointer. 
@@ -59,7 +59,7 @@ public:
    	 * @param fname holds the name of the file. 
    	 * @return the file contents as a char pointer. 
    	 */	
-	char* getFileAsChar(  char* fname);
+	char* getFileAsChar(const  char* fname);
 	
    	/**
    	 * write a file from an input string. 

@@ -2567,7 +2567,7 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( ){
 	//std::cout << "HESSIAN DIMENSION = " << m_LagrangianSparseHessian->hessDimension << std::endl;
 	numNonz = 0;
 	for(posMap1 = m_mapAllNonlinearVariablesIndex.begin(); posMap1 != m_mapAllNonlinearVariablesIndex.end(); ++posMap1){
-		std::cout << "posMap1->first  " << posMap1->first << std::endl;
+		//std::cout << "posMap1->first  " << posMap1->first << std::endl;
 		j = i;
 		for(posMap2 = posMap1; posMap2 != m_mapAllNonlinearVariablesIndex.end(); ++posMap2){
 			//std::cout << "posMap2->first  " << posMap2->first << std::endl;

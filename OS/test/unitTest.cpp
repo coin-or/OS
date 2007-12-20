@@ -196,7 +196,7 @@ int main(int argC, char* argV[])
 		std::cout << "Try to read a sample file" << std::endl;
 		std::cout << "The file is: " ;
 		std::cout <<  osilFileName << std::endl;
-		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		osil = fileUtil->getFileAsString( osilFileName.c_str() );
 		std::cout << "Done reading the test file" << std::endl;
 		OSiLReader *osilreader = NULL;
 		osilreader = new OSiLReader(); 
@@ -220,7 +220,7 @@ int main(int argC, char* argV[])
 		ok = true;
 		OSiLReader *osilreader = NULL;
 		osilFileName =  dataDir  + "osilFiles" + dirsep +  "avion2.osil";
-		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		osil = fileUtil->getFileAsString(  osilFileName.c_str() );
 		cout << "IPOPT Solver created for OSiL string solution" << endl;
 		ipoptSolver->osol = osol;
 		osilreader = new OSiLReader(); 
@@ -237,7 +237,7 @@ int main(int argC, char* argV[])
 		// solve another problem
 		// a problem with all nonlinear terms no linear terms
 		osilFileName =  dataDir  + "osilFiles" + dirsep + "HS071_NLPMod.osil";
-		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		cout << "IPOPT Solver created for OSiL string solution" << endl;
 		ipoptSolver->osol = osol;
 		osilreader = new OSiLReader(); 
@@ -253,7 +253,7 @@ int main(int argC, char* argV[])
 		// solve another problem
 		// a problem with both quadratic terms and general nonlinear terms
 		osilFileName =  dataDir  + "osilFiles" + dirsep + "rosenbrockmod.osil";
-		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		cout << "IPOPT Solver created for OSiL string solution" << endl;
 		ipoptSolver->osol = osol;
 		osilreader = new OSiLReader(); 
@@ -269,7 +269,7 @@ int main(int argC, char* argV[])
 		// solve another problem
 		// a problem that is a pure quadratic
 		osilFileName =  dataDir  + "osilFiles" + dirsep + "parincQuadratic.osil";
-		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		cout << "IPOPT Solver created for OSiL string solution" << endl;
 		ipoptSolver->osol = osol;
 		osilreader = new OSiLReader(); 
@@ -286,7 +286,7 @@ int main(int argC, char* argV[])
 		// solve another problem
 		// try a pure linear program
 		osilFileName =  dataDir  + "osilFiles" + dirsep + "parincLinear.osil";
-		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		cout << "IPOPT Solver created for OSiL string solution" << endl;
 		ipoptSolver->osol = osol; 
 		osilreader = new OSiLReader(); 
@@ -303,7 +303,7 @@ int main(int argC, char* argV[])
 		// solve another problem
 		// callBackTest.osil
 		osilFileName =  dataDir  + "osilFiles" + dirsep + "callBackTest.osil";
-		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		cout << "IPOPT Solver created for OSiL string solution" << endl;
 		ipoptSolver->osol = osol;
 		osilreader = new OSiLReader(); 
@@ -324,7 +324,7 @@ int main(int argC, char* argV[])
 		// solve another problem
 		// callBackTest.osil
 		osilFileName =  dataDir  + "osilFiles" + dirsep + "callBackTestRowMajor.osil";
-		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		cout << "IPOPT Solver created for OSiL string solution" << endl;
 		ipoptSolver->osol = osol;
 		osilreader = new OSiLReader(); 
@@ -356,7 +356,7 @@ int main(int argC, char* argV[])
 		ok = true; 
 		std::cout << "create a new COIN Clp for OSiL string solution" << std::endl;
 		osilFileName = dataDir  + "osilFiles" + dirsep + "parincLinear.osil";
-		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		std::cout << "create a new Solver object" << std::endl;
 		solver = new CoinSolver();
 		solver->sSolverName = "clp";
@@ -376,7 +376,7 @@ int main(int argC, char* argV[])
 		// now solve another problem -- try an integer program
 		// this problem is also stored in base64 binary
 		osilFileName = dataDir  + "osilFiles" + dirsep + "p0033.osil";
-		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		solver = new CoinSolver();
 		solver->sSolverName ="cbc";
 		solver->osil = osil;
@@ -405,7 +405,7 @@ int main(int argC, char* argV[])
 	try{
 		ok = true; 
 		osilFileName = dataDir  + "osilFiles" + dirsep + "rosenbrockmod.osil";
-		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		solver = new KnitroSolver();
 		solver->osrl = "";	
 		solver->osil = osil;
@@ -425,7 +425,7 @@ int main(int argC, char* argV[])
 		//
 		// now solve callBackTest.osil
 		osilFileName = dataDir  + "osilFiles" + dirsep + "callBackTest.osil";
-		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		solver = new KnitroSolver();
 		solver->osrl = "";		
 		solver->osil = osil;		
@@ -445,7 +445,7 @@ int main(int argC, char* argV[])
 		//
 		// now solve a pure quadratic
 		osilFileName = dataDir  + "osilFiles" + dirsep + "parincQuadratic.osil";
-		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		solver = new KnitroSolver();	
 		solver->osil = osil;
 		solver->osol = osol;
@@ -463,7 +463,7 @@ int main(int argC, char* argV[])
 		//
 		// now solve a HS071_NLP.osil
 		osilFileName = dataDir  + "osilFiles" + dirsep + "HS071_NLP.osil";
-		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		solver = new KnitroSolver();	
 		solver->osil = osil;
 		solver->osol = osol;
@@ -494,7 +494,7 @@ int main(int argC, char* argV[])
 	try{
 		ok = true; 
 		osilFileName = dataDir  + "osilFiles" + dirsep + "p0033.osil";
-		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		solver = new CoinSolver();
 		solver->sSolverName = "symphony";
 		solver->osil = osil;
@@ -525,7 +525,7 @@ int main(int argC, char* argV[])
 	try{
 		ok = true; 
 		osilFileName = dataDir  + "osilFiles" + dirsep + "parincLinear.osil";
-		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		solver = new CoinSolver();
 		solver->sSolverName = "dylp";
 		solver->osil = osil;
@@ -556,7 +556,7 @@ int main(int argC, char* argV[])
 	try{
 		ok = true; 
 		osilFileName = dataDir  + "osilFiles" + dirsep + "volumeTest.osil";
-		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		solver = new CoinSolver();
 		solver->sSolverName = "vol";
 		solver->osil = osil;
@@ -587,7 +587,7 @@ int main(int argC, char* argV[])
 	try{
 		ok = true; 
 		osilFileName = dataDir  + "osilFiles" + dirsep + "p0033.osil";
-		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		solver = new CoinSolver();
 		solver->sSolverName = "glpk";
 		solver->osil = osil;
@@ -617,7 +617,7 @@ int main(int argC, char* argV[])
 	try{
 		ok = true; 
 		osilFileName = dataDir  + "osilFiles" + dirsep + "p0033.osil";
-		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		solver = new CoinSolver();
 		solver->sSolverName = "cplex";
 		solver->osil = osil;
@@ -646,7 +646,7 @@ int main(int argC, char* argV[])
 	try{
 		ok = true;
 		osilFileName = dataDir  + "osilFiles" + dirsep + "lindoapiaddins.osil";
-		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		cout << "create a new LINDO Solver for OSiL string solution" << endl;
 		solver = new LindoSolver();	
 		solver->osil = osil;
@@ -665,7 +665,7 @@ int main(int argC, char* argV[])
 		unitTestResult << "Solved problem lindoapiaddins.osil with Lindo" << std::endl;
 		// now solve the rosenbrock problem from the OSiL paper
 		osilFileName = dataDir  + "osilFiles" + dirsep + "rosenbrockmod.osil";
-		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		solver = new LindoSolver();	
 		solver->osil = osil;
 		solver->osol = osol;
@@ -683,7 +683,7 @@ int main(int argC, char* argV[])
 		unitTestResult << "Solved problem rosenbrockmod.osil with Lindo" << std::endl;
 		// now solve a pure quadratic
 		osilFileName = dataDir  + "osilFiles" + dirsep + "parincQuadratic.osil";
-		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		solver = new LindoSolver();	
 		solver->osil = osil;
 		solver->osol = osol;
@@ -701,7 +701,7 @@ int main(int argC, char* argV[])
 		// now solve a quadratic binary problem
 		// wayneQuadratic.osil
 		osilFileName = dataDir  + "osilFiles" + dirsep + "wayneQuadratic.osil";
-		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		solver = new LindoSolver();	
 		solver->osil = osil;
 		solver->osol = osol;
@@ -850,7 +850,7 @@ int main(int argC, char* argV[])
 		cout << "FIRST READ THE FILE INTO A STRING" << endl;
 		start = clock();
 		osilFileName = dataDir  + "osilFiles" + dirsep + "parincLinear.osil";
-		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		finish = clock();
 		duration = (double) (finish - start) / CLOCKS_PER_SEC;
 		cout << "Reading the file into a string took (seconds): "<< duration << endl;
@@ -891,7 +891,7 @@ int main(int argC, char* argV[])
 		cout << "FIRST READ THE OSrL FILE INTO A STRING" << endl;
 		osrlFileName = dataDir  + "osrlFiles" + dirsep + "parincLinear.osrl"; 
 		start = clock();
-		std::string osrl = fileUtil->getFileAsString( &osrlFileName[0]);
+		std::string osrl = fileUtil->getFileAsString( osrlFileName.c_str() );
 		finish = clock();
 		duration = (double) (finish - start) / CLOCKS_PER_SEC;
 		cout << "Reading the file into a string took (seconds): "<< duration << endl;
@@ -918,7 +918,7 @@ int main(int argC, char* argV[])
 	// now test postfix and prefix routines
 	try{
 		std::string expTreeTest =  dataDir  + "osilFiles" + dirsep + "rosenbrockmod.osil";
-		osil = fileUtil->getFileAsString( &expTreeTest[0]);
+		osil = fileUtil->getFileAsString( expTreeTest.c_str() ) ;
 		OSInstance *osinstance = NULL;
 		osinstance = new OSInstance();
 		OSiLReader *osilreader = NULL;
@@ -979,7 +979,7 @@ int main(int argC, char* argV[])
 		ok = true;
 		std::cout << "Test nonlinear operators" << std::endl;
 		std::string operatorTest =  dataDir  + "osilFiles" + dirsep + "testOperators.osil";
-		osil = fileUtil->getFileAsString( &operatorTest[0]);
+		osil = fileUtil->getFileAsString( operatorTest.c_str() );
 		OSInstance *osinstance = NULL;
 		osinstance = new OSInstance();
 		OSiLReader *osilreader = NULL;
@@ -1074,7 +1074,7 @@ int main(int argC, char* argV[])
 		Note: in the first constraint 33 is a constant term and 105 
 		is part of the nl node
 		*/
-		osil = fileUtil->getFileAsString( &expTreeTest[0]);
+		osil = fileUtil->getFileAsString( expTreeTest.c_str() );
 		OSInstance *osinstance = NULL;
 		osinstance = new OSInstance();
 		OSiLReader *osilreader = NULL;
