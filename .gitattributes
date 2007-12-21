@@ -187,7 +187,6 @@ OS/src/OSParsers/Makefile.in -text
 OS/src/OSParsers/OSOptionsStruc.h -text
 OS/src/OSParsers/OSParseosil.cpp -text
 OS/src/OSParsers/OSParseosil.l -text
-OS/src/OSParsers/OSParseosil.output -text
 OS/src/OSParsers/OSParseosil.tab.cpp -text
 OS/src/OSParsers/OSParseosil.tab.hpp -text
 OS/src/OSParsers/OSParseosil.y -text
