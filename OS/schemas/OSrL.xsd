@@ -1,36 +1,102 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2005 sp1 U (http://www.xmlspy.com) by oig_trade (oig) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<!--OSrL.xsd: current version - 1.0.0-->
+	<!--include: since version 1.0.0-->
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:include schemaLocation="OSaL.xsd"/>
 	<xs:include schemaLocation="OSpL.xsd"/>
-	<xs:element name="osrl" type="OSrL"/>
+	<xs:element name="osrl" type="OSrL">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+	</xs:element>
 	<xs:complexType name="OSrL">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="resultHeader" type="ResultHeader"/>
-			<xs:element name="resultData" type="ResultData"/>
+			<xs:element name="resultHeader" type="ResultHeader">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="resultData" type="ResultData">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="ResultHeader">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="generalStatus" type="GeneralStatus"/>
-			<xs:element name="serviceURI" minOccurs="0"/>
-			<xs:element name="serviceName" minOccurs="0"/>
-			<xs:element name="instanceName" type="xs:string" minOccurs="0"/>
-			<xs:element name="jobID" type="xs:string" minOccurs="0"/>
-			<xs:element name="time" type="xs:dateTime" minOccurs="0"/>
-			<xs:element name="message" type="xs:string" minOccurs="0"/>
+			<xs:element name="generalStatus" type="GeneralStatus">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="serviceURI" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="serviceName" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="instanceName" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="jobID" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="time" type="xs:dateTime" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="message" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="ResultData">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="statistics" type="ProcessStatistics" minOccurs="0"/>
-			<xs:element name="optimization" type="OptimizationResult" minOccurs="0"/>
-			<xs:element name="other" type="OtherResult" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="statistics" type="ProcessStatistics" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="optimization" type="OptimizationResult" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="other" type="OtherResult" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="GeneralSubstatus">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
 				<xs:attribute name="name" type="xs:string" use="required"/>
@@ -39,6 +105,9 @@
 		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="GeneralStatus">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="substatus" type="GeneralSubstatus" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
@@ -54,9 +123,20 @@
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OptimizationResult">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="solution" type="OptimizationSolution" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="osal" type="OSaL" minOccurs="0"/>
+			<xs:element name="solution" type="OptimizationSolution" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="osal" type="OSaL" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfSolutions" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfVariables" type="xs:positiveInteger" use="required"/>
@@ -64,6 +144,9 @@
 		<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="OtherResult">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
 				<xs:attribute name="name" type="xs:string" use="required"/>
@@ -72,6 +155,9 @@
 		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="OptimizationSolution">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="status" type="OptimizationSolutionStatus"/>
 			<xs:element name="message" type="xs:string" minOccurs="0"/>
@@ -83,6 +169,9 @@
 		<xs:attribute name="objectiveIdx" type="xs:negativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OptimizationSolutionStatus">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="substatus" type="OptimizationSolutionSubstatus" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
@@ -106,6 +195,9 @@
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OptimizationSolutionSubstatus">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
 				<xs:attribute name="name" type="xs:string" use="required"/>
@@ -114,12 +206,18 @@
 		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="ObjectiveSolution">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="values" type="ObjectiveValues" minOccurs="0"/>
 			<xs:element name="other" type="OtherObjectiveResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="ObjValue">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:double">
 				<xs:attribute name="idx" type="xs:negativeInteger" use="optional" default="-1"/>
@@ -127,11 +225,17 @@
 		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="ObjectiveValues">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="obj" type="ObjValue" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="OtherObjResult">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
 				<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
@@ -139,6 +243,9 @@
 		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="OtherObjectiveResult">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="obj" type="OtherObjResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
@@ -147,6 +254,9 @@
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="VariableSolution">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="values" type="VariableValues" minOccurs="0"/>
 			<xs:element name="valuesString" type="VariableStringValues" minOccurs="0"/>
@@ -160,6 +270,9 @@
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="VarValue">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:double">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
@@ -167,11 +280,17 @@
 		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="VariableValues">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="var" type="VarValue" default="0.0" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="VarStringValue">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
@@ -179,11 +298,17 @@
 		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="VariableStringValues">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="var" type="VarStringValue" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="OtherVarResult">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
@@ -191,6 +316,9 @@
 		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="OtherVariableResult">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="var" type="OtherVarResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
@@ -199,12 +327,18 @@
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="ConstraintSolution">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="dualValues" type="DualVariableValues" minOccurs="0"/>
 			<xs:element name="other" type="OtherConstraintResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="DualVarValue">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:double">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
@@ -212,11 +346,17 @@
 		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="DualVariableValues">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="con" type="DualVarValue" default="0.0" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="OtherConResult">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
@@ -224,6 +364,9 @@
 		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="OtherConstraintResult">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="con" type="OtherConResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
@@ -232,6 +375,9 @@
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OtherOptimizationResult">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
 				<xs:attribute name="name" type="xs:string" use="required"/>

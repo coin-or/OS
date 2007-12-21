@@ -1,37 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" elementFormDefault="qualified">
+	<!--OSaL.xsd: proposal-->
+	<!--include: proposal-->
 	<xs:include schemaLocation="OSgL.xsd"/>
-	<!--xs:import namespace="http://www.w3.org/1998/Math/MathML" schemaLocation="http://www.w3.org/Math/XMLSchema/mathml2/mathml2.xsd"/-->
 	<xs:element name="osal" type="OSaL">
 		<xs:annotation>
-			<xs:documentation> This is the only allowed root element.</xs:documentation>
+			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="OSaL">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="analysisHeader" type="AnalysisHeader"/>
-			<xs:element name="analysisData" type="AnalysisData"/>
+			<xs:element name="analysisHeader" type="AnalysisHeader">
+				<xs:annotation>
+					<xs:documentation>Proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="analysisData" type="AnalysisData">
+				<xs:annotation>
+					<xs:documentation>Proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<!--xs:element name="math" minOccurs="0"/-->
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="AnalysisHeader">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="status" type="AnalysisStatus"/>
-			<xs:element name="serviceURI" minOccurs="0"/>
-			<xs:element name="serviceName" minOccurs="0"/>
-			<xs:element name="instanceName" type="xs:string" minOccurs="0"/>
-			<xs:element name="jobID" type="xs:string" minOccurs="0"/>
-			<xs:element name="time" type="xs:dateTime" minOccurs="0"/>
-			<xs:element name="message" type="xs:string" minOccurs="0"/>
+			<xs:element name="status" type="AnalysisStatus">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="serviceURI" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="serviceName" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="instanceName" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="jobID" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="time" type="xs:dateTime" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="message" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="AnalysisData">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="instance" type="InstanceAnalysis" minOccurs="0"/>
-			<xs:element name="variables" type="VariableAnalysis" minOccurs="0"/>
-			<xs:element name="objectives" type="ObjectiveAnalysis" minOccurs="0"/>
+			<xs:element name="instance" type="InstanceAnalysis" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="variables" type="VariableAnalysis" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="objectives" type="ObjectiveAnalysis" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="constraints" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
 				<xs:complexType>
 					<xs:complexContent>
 						<xs:extension base="ConstraintAnalysis"/>
@@ -39,6 +100,9 @@
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="linearConstraintCoefficients" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
 				<xs:complexType>
 					<xs:complexContent>
 						<xs:extension base="LinearConstraintCoefficientAnalysis"/>
@@ -46,29 +110,75 @@
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="quadraticCoefficients" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
 				<xs:complexType>
 					<xs:complexContent>
 						<xs:extension base="QuadraticCoefficientAnalysis"/>
 					</xs:complexContent>
 				</xs:complexType>
 			</xs:element>
-			<xs:element name="nonlinearExpressions" type="NonlinearExpressionAnalysis" minOccurs="0"/>
+			<xs:element name="nonlinearExpressions" type="NonlinearExpressionAnalysis" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="semidefiniteBlocks" type="SemidefiniteBlockAnalysis" minOccurs="0"/>
-			<xs:element name="cones" type="ConeAnalysis" minOccurs="0"/>
-			<xs:element name="disjunctiveInformation" type="DisjunctiveInformationAnalysis" minOccurs="0"/>
-			<xs:element name="stages" type="StageAnalysis" minOccurs="0"/>
-			<xs:element name="stochasticInformation" type="StochasticInformationAnalysis" minOccurs="0"/>
-			<xs:element name="userFunctions" type="UserFunctionAnalysis" minOccurs="0"/>
-			<xs:element name="simulations" type="SimulationAnalysis" minOccurs="0"/>
-			<xs:element name="realTimeData" type="RealTimeDataAnalysis" minOccurs="0"/>
-			<xs:element name="xmlData" type="XMLDataAnalysis" minOccurs="0"/>
-			<xs:element name="other" type="OtherAnalysis" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="cones" type="ConeAnalysis" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="disjunctiveInformation" type="DisjunctiveInformationAnalysis" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="stages" type="StageAnalysis" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="stochasticInformation" type="StochasticInformationAnalysis" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="userFunctions" type="UserFunctionAnalysis" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="simulations" type="SimulationAnalysis" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="realTimeData" type="RealTimeDataAnalysis" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="xmlData" type="XMLDataAnalysis" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="other" type="OtherAnalysis" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfVariables" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="AnalysisStatus">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="substatus" type="AnslysisSubstatus" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
@@ -84,6 +194,9 @@
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="AnslysisSubstatus">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
 				<xs:attribute name="name" type="xs:string" use="optional"/>
@@ -92,20 +205,32 @@
 		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="InstanceAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:attribute name="solutionAvailable" type="xs:boolean" use="optional" default="false"/>
 	</xs:complexType>
 	<xs:complexType name="VariableAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="standardAnalysis" type="StandardVariableAnalysis" minOccurs="0"/>
 			<xs:element name="other" type="OtherVariableAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="StandardVariableAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="var" type="StandardVarAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="StandardVarAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="init" type="xs:double" use="optional"/>
 		<xs:attribute name="initString" type="xs:string" use="optional"/>
@@ -127,6 +252,9 @@
 		<xs:attribute name="fixedValueString" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OtherVariableAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="var" type="OtherVarAnalysis"/>
 		</xs:sequence>
@@ -135,23 +263,35 @@
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OtherVarAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="lbValue" type="xs:string" use="optional"/>
 		<xs:attribute name="ubValue" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="ObjectiveAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="standard" type="StandardObjectiveAnalysis" minOccurs="0"/>
 			<xs:element name="other" type="OtherObjectiveAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="StandardObjectiveAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="obj" type="StandardObjAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="StandardObjAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:attribute name="idx" type="xs:int" use="optional"/>
 		<xs:attribute name="lb" type="xs:double" use="optional"/>
 		<xs:attribute name="ub" type="xs:double" use="optional"/>
@@ -174,6 +314,9 @@
 		<xs:attribute name="steepness" type="xs:double" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OtherObjectiveAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="obj" type="OtherObjAnalysis"/>
 		</xs:sequence>
@@ -182,10 +325,16 @@
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OtherObjAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:attribute name="idx" type="xs:negativeInteger" use="optional"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="ConstraintAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="standard" type="StandardConstraintAnalysis" minOccurs="0"/>
 			<xs:element name="constraintRegion" type="ConstraintRegionAnalysis" minOccurs="0"/>
@@ -193,11 +342,17 @@
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="StandardConstraintAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="con" type="StandardConAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="StandardConAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:attribute name="idx" type="xs:int" use="optional"/>
 		<xs:attribute name="lb" type="xs:double" use="optional"/>
 		<xs:attribute name="ub" type="xs:double" use="optional"/>
@@ -270,6 +425,9 @@
 		<xs:attribute name="surface" type="xs:double" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="ConstraintRegionAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:all>
 			<xs:element name="convexity" minOccurs="0">
 				<xs:complexType>
@@ -294,16 +452,25 @@
 		</xs:all>
 	</xs:complexType>
 	<xs:complexType name="FeasiblePoints">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="feasiblePoint" type="DoubleVector" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="NearFeasiblePoints">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="nearFeasiblePoint" type="DoubleVector" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="OtherConstraintAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="con" type="OtherConAnalysis"/>
 		</xs:sequence>
@@ -312,12 +479,18 @@
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OtherConAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="lbValue" type="xs:string" use="optional"/>
 		<xs:attribute name="ubValue" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="LinearConstraintCoefficientAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="start" minOccurs="0"/>
 			<xs:choice minOccurs="0">
@@ -338,18 +511,27 @@
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="QuadraticCoefficientAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="other" type="OtherAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="number" type="xs:nonNegativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="NonlinearExpressionAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="nl" type="NlAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="other" type="OtherAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="NlAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="numberQuadratic" type="xs:nonNegativeInteger" default="0"/>
 			<xs:element name="numberTrigonometric" type="xs:nonNegativeInteger" default="0"/>
@@ -393,8 +575,15 @@
 			</xs:simpleType>
 		</xs:attribute>
 	</xs:complexType>
-	<xs:complexType name="SemidefiniteBlockAnalysis"/>
+	<xs:complexType name="SemidefiniteBlockAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+	</xs:complexType>
 	<xs:complexType name="ConeAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:sequence maxOccurs="unbounded">
 			<xs:element name="rCone" minOccurs="0" maxOccurs="unbounded">
 				<xs:complexType>
@@ -456,14 +645,24 @@
 			<xs:element name="other" type="OtherAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
-	<xs:complexType name="DisjunctiveInformationAnalysis"/>
+	<xs:complexType name="DisjunctiveInformationAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+	</xs:complexType>
 	<xs:complexType name="StageAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="other" type="OtherAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="number" type="xs:positiveInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="StochasticInformationAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:choice minOccurs="0">
 				<xs:element name="explicitScenario">
@@ -606,22 +805,34 @@
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="UserFunctionAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="userFunction" type="UserFAnalysis" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="UserFAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="rowsIn" type="IntVector"/>
 			<xs:element name="other" type="OtherAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="SimulationAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="simulation" type="SimAnalysis" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="SimAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="time" minOccurs="0">
 				<xs:complexType>
@@ -634,6 +845,9 @@
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="RealTimeDataAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="other" type="OtherAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
@@ -641,6 +855,9 @@
 		<xs:attribute name="numberLevels"/>
 	</xs:complexType>
 	<xs:complexType name="XMLDataAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="other" type="OtherAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
@@ -648,6 +865,9 @@
 		<xs:attribute name="numberLevels" type="xs:int" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OtherAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
 				<xs:attribute name="name" type="xs:string" use="required"/>
@@ -656,6 +876,9 @@
 		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="NetworkAndGraphAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="nodeProperties">
 				<xs:complexType>
