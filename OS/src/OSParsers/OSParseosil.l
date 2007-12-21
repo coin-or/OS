@@ -58,7 +58,7 @@
 
 
 #include "ErrorClass.h"
-#include "parseosil.tab.hpp"
+#include "OSParseosil.tab.hpp"
 #include "OSInstance.h"
 
 

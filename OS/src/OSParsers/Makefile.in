@@ -56,7 +56,7 @@ CONFIG_HEADER = $(top_builddir)/inc/config_os.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libOSParsers_la_LIBADD =
-am_libOSParsers_la_OBJECTS = parseosil.lo parseosil.tab.lo \
+am_libOSParsers_la_OBJECTS = OSParseosil.lo OSParseosil.tab.lo \
 	parseosol.lo parseosrl.lo parseosrl.tab.lo parseosss.lo \
 	OSiLParserData.lo OSrLParserData.lo
 libOSParsers_la_OBJECTS = $(am_libOSParsers_la_OBJECTS)
@@ -326,10 +326,10 @@ noinst_LTLIBRARIES = libOSParsers.la
 
 # List all source files for this library, including headers
 libOSParsers_la_SOURCES = \
-		osOptionsStruc.h \
-		parseosil.cpp \
-		parseosil.tab.cpp \
-		parseosil.tab.cpp.h \
+		OSOptionsStruc.h \
+		OSParseosil.cpp \
+		OSParseosil.tab.cpp \
+		OSParseosil.tab.cpp.h \
 		parseosol.cpp \
 		parseosrl.cpp \
 		parseosrl.tab.cpp \
@@ -366,8 +366,8 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 # and that therefore should be installed in 'install'
 include_HEADERS = \
 	../../inc/config_os.h \
-	osOptionsStruc.h \
-	parseosil.tab.hpp \
+	OSOptionsStruc.h \
+	OSParseosil.tab.hpp \
 	parseosrl.tab.hpp \
 	OSiLParserData.h \
 	OSrLParserData.h
@@ -423,10 +423,10 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSParseosil.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSParseosil.tab.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSiLParserData.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSrLParserData.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parseosil.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parseosil.tab.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parseosol.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parseosrl.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parseosrl.tab.Plo@am__quote@
