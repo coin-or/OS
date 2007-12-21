@@ -36,7 +36,7 @@
 #include "OSnLNode.h"
 #include "FileUtil.h"
 #include "ErrorClass.h"
-#include "WSUtil.h" 
+#include "OSWSUtil.h" 
 #include "OSSolverAgent.h" 
 #include "CoinHelperFunctions.hpp"  
 //

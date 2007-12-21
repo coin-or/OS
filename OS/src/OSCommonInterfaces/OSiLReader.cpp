@@ -18,6 +18,8 @@
 #include "OSInstance.h"
 
 OSInstance *yygetOSInstance(const char *osil) throw(ErrorClass);
+
+
 OSiLReader::OSiLReader( ) {								
 }
 

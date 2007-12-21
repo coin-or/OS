@@ -15,7 +15,7 @@
  */ 
  
 #include "OSSolverAgent.h"
-#include "WSUtil.h"
+#include "OSWSUtil.h"
 
 #include <cstdlib>
 

@@ -78,7 +78,7 @@
 #include "OSConfig.h"  
 #include "CoinSolver.h"
 #include "DefaultSolver.h"  
-#include "WSUtil.h" 
+#include "OSWSUtil.h" 
 #include "OSSolverAgent.h"   
 #include "OShL.h"     
 #include "ErrorClass.h"

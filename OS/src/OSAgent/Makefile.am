@@ -18,7 +18,7 @@ noinst_LTLIBRARIES = libOSAgent.la
 # List all source files for this library, including headers
 libOSAgent_la_SOURCES = \
 	OShL.cpp OShL.h OSSolverAgent.cpp \
-	OSSolverAgent.h WSUtil.cpp WSUtil.h
+	OSSolverAgent.h OSWSUtil.cpp OSWSUtil.h
 
 # This is for libtool (on Windows)
 libOSAgent_la_LDFLAGS = $(LT_LDFLAGS)
@@ -51,4 +51,4 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 include_HEADERS =  \
 	../../inc/config_os.h \
 	../OSConfig.h \
-	OShL.h OSSolverAgent.h WSUtil.h
+	OShL.h OSSolverAgent.h OSWSUtil.h
