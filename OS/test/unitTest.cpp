@@ -30,7 +30,7 @@
  * <li> callBackTestRowMajor.osil </li>
  * </ol>
  *
- * COIN-Clp tested on parincLinear.osil
+ * COIN-Clp tested on parincLinearByRow.osil
  * 
  * COIN-Cbc tested on p0033.osil
  * 
@@ -200,7 +200,7 @@ int main(int argC, char* argV[])
 		std::cout << "Done reading the test file" << std::endl;
 		OSiLReader *osilreader = NULL;
 		osilreader = new OSiLReader(); 
-		OSInstance *osinstance = osilreader->readOSiL( &osil);
+		OSInstance *osinstance = osilreader->readOSiL( osil);
 		unitTestResult << "Reading files successfully" << std::endl;
 		OSiLWriter osilwriter;
 		osilwriter.m_bWhiteSpace = true;
@@ -226,7 +226,7 @@ int main(int argC, char* argV[])
 		cout << "IPOPT Solver created for OSiL string solution" << endl;
 		ipoptSolver->osol = osol;
 		osilreader = new OSiLReader(); 
-		ipoptSolver->osinstance = osilreader->readOSiL( &osil);
+		ipoptSolver->osinstance = osilreader->readOSiL( osil);
 		cout << "call the IPOPT Solver" << endl;	
 		ipoptSolver->solve();
 		cout << "Here is the IPOPT solver solution for avion2" << endl;
@@ -243,7 +243,7 @@ int main(int argC, char* argV[])
 		cout << "IPOPT Solver created for OSiL string solution" << endl;
 		ipoptSolver->osol = osol;
 		osilreader = new OSiLReader(); 
-		ipoptSolver->osinstance = osilreader->readOSiL( &osil);
+		ipoptSolver->osinstance = osilreader->readOSiL( osil);
 		ipoptSolver->solve();
 		cout << "Here is the IPOPT solver solution for HS071_NLP" << endl;
 		check = 17.014;
@@ -259,7 +259,7 @@ int main(int argC, char* argV[])
 		cout << "IPOPT Solver created for OSiL string solution" << endl;
 		ipoptSolver->osol = osol;
 		osilreader = new OSiLReader(); 
-		ipoptSolver->osinstance = osilreader->readOSiL( &osil);
+		ipoptSolver->osinstance = osilreader->readOSiL( osil);
 		cout << "call the IPOPT Solver" << endl;
 		ipoptSolver->solve();
 		check = 6.7279;
@@ -275,7 +275,7 @@ int main(int argC, char* argV[])
 		cout << "IPOPT Solver created for OSiL string solution" << endl;
 		ipoptSolver->osol = osol;
 		osilreader = new OSiLReader(); 
-		ipoptSolver->osinstance = osilreader->readOSiL( &osil);
+		ipoptSolver->osinstance = osilreader->readOSiL( osil);
 		cout << "call the IPOPT Solver" << endl;
 		ipoptSolver->solve();
 		cout << "Here is the IPOPT solver solution for parincQuadratic" << endl;
@@ -292,7 +292,7 @@ int main(int argC, char* argV[])
 		cout << "IPOPT Solver created for OSiL string solution" << endl;
 		ipoptSolver->osol = osol; 
 		osilreader = new OSiLReader(); 
-		ipoptSolver->osinstance = osilreader->readOSiL( &osil);
+		ipoptSolver->osinstance = osilreader->readOSiL( osil);
 		cout << "call the IPOPT Solver" << endl;
 		ipoptSolver->solve();
 		cout << "Here is the IPOPT solver solution for parincLinear" << endl;
@@ -309,7 +309,7 @@ int main(int argC, char* argV[])
 		cout << "IPOPT Solver created for OSiL string solution" << endl;
 		ipoptSolver->osol = osol;
 		osilreader = new OSiLReader(); 
-		ipoptSolver->osinstance = osilreader->readOSiL( &osil);
+		ipoptSolver->osinstance = osilreader->readOSiL( osil);
 		//OSiLWriter osilwriter;
 		//cout << osilwriter.writeOSiL( ipoptSolver->osinstance) << endl;
 		//return 0;
@@ -330,7 +330,7 @@ int main(int argC, char* argV[])
 		cout << "IPOPT Solver created for OSiL string solution" << endl;
 		ipoptSolver->osol = osol;
 		osilreader = new OSiLReader(); 
-		ipoptSolver->osinstance = osilreader->readOSiL( &osil);
+		ipoptSolver->osinstance = osilreader->readOSiL( osil);
 		//OSiLWriter osilwriter;
 		//cout << osilwriter.writeOSiL( ipoptSolver->osinstance) << endl;
 		//return 0;
@@ -360,6 +360,14 @@ int main(int argC, char* argV[])
 		osilFileName = dataDir  + "osilFiles" + dirsep + "parincLinearByRow.osil";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		std::cout << "create a new Solver object" << std::endl;
+		OSiLReader *osilreader = NULL;
+		osilreader = new OSiLReader(); 
+		OSInstance *osinstance = osilreader->readOSiL( osil);
+		// now write it again as a string
+		OSiLWriter *osilwriter;
+		osilwriter = new OSiLWriter();
+		osilwriter->m_bWhiteSpace = true;
+		osil = osilwriter->writeOSiL( osinstance) ;
 		solver = new CoinSolver();
 		solver->sSolverName = "clp";
 		solver->osil = osil;
@@ -860,8 +868,8 @@ int main(int argC, char* argV[])
 		osilreader = new OSiLReader(); 
 		start = clock();
 		cout << "PARSE THE OSIL STRING INTO AN OSINSTNACE OBJECT" << endl;
-		osilreader->readOSiL( &osil);
-		//cout << osilwriter->writeOSiL( osilreader->readOSiL( &osil)) << endl;
+		osilreader->readOSiL( osil);
+		//cout << osilwriter->writeOSiL( osilreader->readOSiL( osil)) << endl;
 		delete osilreader;
 		osilreader = 0;
 		finish = clock();
@@ -926,7 +934,7 @@ int main(int argC, char* argV[])
 		OSiLReader *osilreader = NULL;
 		osilreader = new OSiLReader();
 		//create an osinstance
-		osinstance = osilreader->readOSiL( &osil);
+		osinstance = osilreader->readOSiL( osil);
 		OSExpressionTree* expTree = osinstance->getNonlinearExpressionTree( -1);
 		if(expTree == NULL) throw ErrorClass(" Null expression tree when testing prefix and postfix routines");
 		std::vector<OSnLNode*> postfixVec;
@@ -988,7 +996,7 @@ int main(int argC, char* argV[])
 		osilreader = new OSiLReader();
 		OSiLWriter *osilwriter = NULL;
 		osilwriter = new OSiLWriter();
-		osinstance = osilreader->readOSiL( &osil);
+		osinstance = osilreader->readOSiL( osil);
 		OSExpressionTree* expTree = osinstance->getNonlinearExpressionTree( -1);
 		std::vector<OSnLNode*> postfixVec;
 		postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();
@@ -1082,7 +1090,7 @@ int main(int argC, char* argV[])
 		OSiLReader *osilreader = NULL;
 		osilreader = new OSiLReader();
 		//create an osinstance
-		osinstance = osilreader->readOSiL( &osil);
+		osinstance = osilreader->readOSiL( osil);
 		double *x;
 		x = new double[ 4];
 		x[0] = 1;

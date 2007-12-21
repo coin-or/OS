@@ -26,9 +26,9 @@ OSiLReader::~OSiLReader(){
 	m_osinstance = NULL;
 } 
 
-OSInstance* OSiLReader::readOSiL(std::string *posil) throw(ErrorClass){   
+OSInstance* OSiLReader::readOSiL(const std::string& posil) throw(ErrorClass){   
 	try{
-		const char *ch = posil->c_str();
+		const char *ch = posil.c_str();
 		m_osinstance = yygetOSInstance( ch);
 		return m_osinstance;
 	}

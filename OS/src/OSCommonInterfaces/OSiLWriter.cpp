@@ -34,7 +34,7 @@ OSiLWriter::OSiLWriter( ) {
 OSiLWriter::~OSiLWriter(){
 }
 
-std::string OSiLWriter::writeOSiL( OSInstance *theosinstance){
+std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 	m_OSInstance = theosinstance;
 	ostringstream outStr;
 	int i, j;

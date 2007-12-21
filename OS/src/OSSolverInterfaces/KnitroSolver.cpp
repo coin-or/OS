@@ -537,7 +537,7 @@ void KnitroSolver::solve() throw (ErrorClass) {
 		start = clock();
 		if(osinstance == NULL){
 			osilreader = new OSiLReader();
-			osinstance = osilreader->readOSiL( &osil);
+			osinstance = osilreader->readOSiL( osil);
 		}
 		OSiLWriter osilwriter;
 		//cout << osilwriter.writeOSiL( osinstance) << endl;

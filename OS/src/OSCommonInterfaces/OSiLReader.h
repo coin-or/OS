@@ -57,7 +57,7 @@ public:
    	 * @return the instance as an OSInstance object.
 	 * </p> 
    	 */	
-	OSInstance* readOSiL(std::string *osil) throw(ErrorClass);
+	OSInstance* readOSiL(const std::string& osil) throw(ErrorClass);
 
 private:
 	/** osintance is the OSInstance object returned by 

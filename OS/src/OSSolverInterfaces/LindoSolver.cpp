@@ -139,7 +139,7 @@ void LindoSolver::solve()  {
 		start = clock();
 		if(osinstance == NULL){
 			osilreader = new OSiLReader();
-			osinstance = osilreader->readOSiL( &osil);
+			osinstance = osilreader->readOSiL( osil);
 		}
 		
 		finish = clock();

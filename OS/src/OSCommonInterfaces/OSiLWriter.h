@@ -31,7 +31,7 @@ private:
 	/** 
 	 * m_OSInstance is an object in the class OSInstance
 	 */
-	OSInstance *m_OSInstance;
+	const OSInstance *m_OSInstance;
 public:
 
 	/**
@@ -53,7 +53,9 @@ public:
    	 * @return a string with the OSInstance data that validates against the OSiL schema.
 	 * </p> 
    	 */		
-	std::string writeOSiL( OSInstance *theosinstance);
+	std::string writeOSiL( const OSInstance *theosinstance);
+	
+	
 
 	/** m_bWriteBase64 is set to true if we encode the linear constraint coefficients
 	 * in base64 binary
