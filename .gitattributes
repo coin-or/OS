@@ -182,8 +182,6 @@ OS/src/OSModelInterfaces/OSmps2osil.cpp -text
 OS/src/OSModelInterfaces/OSmps2osil.h -text
 OS/src/OSModelInterfaces/OSnl2osil.cpp -text
 OS/src/OSModelInterfaces/OSnl2osil.h -text
-OS/src/OSModelInterfaces/callMatlabSolver.m -text
-OS/src/OSModelInterfaces/matlabSolver.cpp -text
 OS/src/OSParsers/Makefile.am -text
 OS/src/OSParsers/Makefile.in -text
 OS/src/OSParsers/OSOptionsStruc.h -text
