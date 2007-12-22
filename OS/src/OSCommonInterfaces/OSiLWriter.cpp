@@ -264,9 +264,9 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 						if(m_OSInstance->instanceData->linearConstraintCoefficients->start->el != NULL){
 							outStr << "<start>" ;
 							if( m_bWhiteSpace == true) outStr << endl;
-							if(m_OSInstance->instanceData->variables != NULL && m_OSInstance->instanceData->variables->numberOfVariables > 0){
+							if(m_OSInstance->instanceData->constraints != NULL && m_OSInstance->instanceData->constraints->numberOfConstraints > 0){
 								if(m_bWriteBase64 == false){
-									for(i = 0; i <= m_OSInstance->instanceData->variables->numberOfVariables; i++){
+									for(i = 0; i <= m_OSInstance->instanceData->constraints->numberOfConstraints; i++){
 										outStr << "<el>" ;
 										outStr << m_OSInstance->instanceData->linearConstraintCoefficients->start->el[i];
 										outStr << "</el>" ;

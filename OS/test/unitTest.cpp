@@ -362,12 +362,17 @@ int main(int argC, char* argV[])
 		std::cout << "create a new Solver object" << std::endl;
 		OSiLReader *osilreader = NULL;
 		osilreader = new OSiLReader(); 
+		//std::cout <<  osil  << std::endl;
 		OSInstance *osinstance = osilreader->readOSiL( osil);
+		std::cout << " Done reading the OSiL" << std::endl;
 		// now write it again as a string
 		OSiLWriter *osilwriter;
 		osilwriter = new OSiLWriter();
 		osilwriter->m_bWhiteSpace = true;
+		std::cout << " Write the OSiL" << std::endl;
 		osil = osilwriter->writeOSiL( osinstance) ;
+		//std::cout <<  osil  << std::endl;
+		std::cout << " Done writing the OSiL" << std::endl;
 		solver = new CoinSolver();
 		solver->sSolverName = "clp";
 		solver->osil = osil;
@@ -404,9 +409,7 @@ int main(int argC, char* argV[])
 		unitTestResult << "Solved problem p0033.osil with Cbc" << std::endl;
 	}
 	catch(const ErrorClass& eclass){
-		cout << "OSrL =  " <<  solver->osrl <<  endl;
-		cout << endl << endl << endl;
-		cout <<"Sorry Unit Test Failed Testing the Ipopt Solver:"  + eclass.errormsg << endl;
+		unitTestResultFailure << "Sorry Unit Test Failed Testing Clp or Cbc Solver:"  + eclass.errormsg<< endl;
 	}
 	
 	//
