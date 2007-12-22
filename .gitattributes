@@ -190,11 +190,15 @@ OS/src/OSParsers/OSParseosil.l -text
 OS/src/OSParsers/OSParseosil.tab.cpp -text
 OS/src/OSParsers/OSParseosil.tab.hpp -text
 OS/src/OSParsers/OSParseosil.y -text
+OS/src/OSParsers/OSParseosol.cpp -text
+OS/src/OSParsers/OSParseosol.l -text
 OS/src/OSParsers/OSParseosrl.cpp -text
 OS/src/OSParsers/OSParseosrl.l -text
 OS/src/OSParsers/OSParseosrl.tab.cpp -text
 OS/src/OSParsers/OSParseosrl.tab.hpp -text
 OS/src/OSParsers/OSParseosrl.y -text
+OS/src/OSParsers/OSParseosss.cpp -text
+OS/src/OSParsers/OSParseosss.l -text
 OS/src/OSParsers/OSiLParserData.cpp -text
 OS/src/OSParsers/OSiLParserData.h -text
 OS/src/OSParsers/OSrLParserData.cpp -text

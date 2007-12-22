@@ -22,11 +22,11 @@ libOSParsers_la_SOURCES = \
 		OSParseosil.cpp \
 		OSParseosil.tab.cpp \
 		OSParseosil.tab.cpp.h \
-		parseosol.cpp \
+		OSParseosol.cpp \
 		OSParseosrl.cpp \
 		OSParseosrl.tab.cpp \
 		OSParseosrl.tab.cpp.h \
-		parseosss.cpp	\
+		OSParseosss.cpp	\
 		OSiLParserData.h \
 		OSiLParserData.cpp \
 		OSrLParserData.h \

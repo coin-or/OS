@@ -57,8 +57,8 @@ CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libOSParsers_la_LIBADD =
 am_libOSParsers_la_OBJECTS = OSParseosil.lo OSParseosil.tab.lo \
-	parseosol.lo OSParseosrl.lo OSParseosrl.tab.lo parseosss.lo \
-	OSiLParserData.lo OSrLParserData.lo
+	OSParseosol.lo OSParseosrl.lo OSParseosrl.tab.lo \
+	OSParseosss.lo OSiLParserData.lo OSrLParserData.lo
 libOSParsers_la_OBJECTS = $(am_libOSParsers_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
@@ -330,11 +330,11 @@ libOSParsers_la_SOURCES = \
 		OSParseosil.cpp \
 		OSParseosil.tab.cpp \
 		OSParseosil.tab.cpp.h \
-		parseosol.cpp \
+		OSParseosol.cpp \
 		OSParseosrl.cpp \
 		OSParseosrl.tab.cpp \
 		OSParseosrl.tab.cpp.h \
-		parseosss.cpp	\
+		OSParseosss.cpp	\
 		OSiLParserData.h \
 		OSiLParserData.cpp \
 		OSrLParserData.h \
@@ -425,12 +425,12 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSParseosil.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSParseosil.tab.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSParseosol.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSParseosrl.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSParseosrl.tab.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSParseosss.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSiLParserData.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSrLParserData.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parseosol.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parseosss.Plo@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
