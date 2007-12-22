@@ -40,7 +40,7 @@
 #endif
 #include "ErrorClass.h"
 #include <sstream>   
-#include "osOptionsStruc.h" 
+#include "OSOptionsStruc.h" 
 
 
 using std::cout;
