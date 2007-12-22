@@ -23,9 +23,9 @@ libOSParsers_la_SOURCES = \
 		OSParseosil.tab.cpp \
 		OSParseosil.tab.cpp.h \
 		parseosol.cpp \
-		parseosrl.cpp \
-		parseosrl.tab.cpp \
-		parseosrl.tab.cpp.h \
+		OSParseosrl.cpp \
+		OSParseosrl.tab.cpp \
+		OSParseosrl.tab.cpp.h \
 		parseosss.cpp	\
 		OSiLParserData.h \
 		OSiLParserData.cpp \
@@ -58,7 +58,7 @@ include_HEADERS = \
 	../../inc/config_os.h \
 	OSOptionsStruc.h \
 	OSParseosil.tab.hpp \
-	parseosrl.tab.hpp \
+	OSParseosrl.tab.hpp \
 	OSiLParserData.h \
 	OSrLParserData.h
 
