@@ -203,10 +203,6 @@ OS/src/OSParsers/OSiLParserData.cpp -text
 OS/src/OSParsers/OSiLParserData.h -text
 OS/src/OSParsers/OSrLParserData.cpp -text
 OS/src/OSParsers/OSrLParserData.h -text
-OS/src/OSParsers/parseosol.cpp -text
-OS/src/OSParsers/parseosol.l -text
-OS/src/OSParsers/parseosss.cpp -text
-OS/src/OSParsers/parseosss.l -text
 OS/src/OSSolverInterfaces/CoinSolver.cpp -text
 OS/src/OSSolverInterfaces/CoinSolver.h -text
 OS/src/OSSolverInterfaces/IpoptSolver.cpp -text
