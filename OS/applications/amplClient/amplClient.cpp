@@ -53,7 +53,7 @@
 #include "IpoptSolver.h"
 #endif  
 
-#include "DefaultSolver.h"
+#include "OSDefaultSolver.h"
 #include "OSSolverAgent.h"
 #include "OShL.h"
 #include "ErrorClass.h"
