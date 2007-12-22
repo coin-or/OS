@@ -111,7 +111,7 @@
 
 
 
-#include "osOptionsStruc.h"  
+#include "OSOptionsStruc.h"  
 
 
 using std::cout;

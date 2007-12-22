@@ -58,8 +58,8 @@ distclean-local:
 run_parsers:
 	$(YACC) -ldv -p osrl -o ${abs_source_dir}/src/OSParsers/parseosrl.tab.cpp ${abs_source_dir}/src/OSParsers/parseosrl.y
 	flex -Posrl  -o${abs_source_dir}/src/OSParsers/parseosrl.cpp ${abs_source_dir}/src/OSParsers/parseosrl.l
-	$(YACC) -ldv -p osil  -o ${abs_source_dir}/src/OSParsers/parseosil.tab.cpp ${abs_source_dir}/src/OSParsers/parseosil.y
-	flex -Posil -o${abs_source_dir}/src/OSParsers/parseosil.cpp ${abs_source_dir}/src/OSParsers/parseosil.l
+	$(YACC) -ldv -p osil  -o ${abs_source_dir}/src/OSParsers/OSParseosil.tab.cpp ${abs_source_dir}/src/OSParsers/OSParseosil.y
+	flex -Posil -o${abs_source_dir}/src/OSParsers/OSParseosil.cpp ${abs_source_dir}/src/OSParsers/OSParseosil.l
 	flex -Posol -o${abs_source_dir}/src/OSParsers/parseosol.cpp ${abs_source_dir}/src/OSParsers/parseosol.l
 	flex -Posss -o${abs_source_dir}/src/OSParsers/parseosss.cpp ${abs_source_dir}/src/OSParsers/parseosss.l
 	make
