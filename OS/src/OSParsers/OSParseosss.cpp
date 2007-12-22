@@ -627,7 +627,7 @@ static yyconst flex_int32_t yy_rule_can_match_eol[17] =
 #endif
 #include "ErrorClass.h"
 #include <sstream>   
-#include "osOptionsStruc.h" 
+#include "OSOptionsStruc.h" 
 
 
 using std::cout;
