@@ -17,7 +17,7 @@
 #define IPOPTSOLVER_H
 
 #include "OSConfig.h" 
-#include "DefaultSolver.h"
+#include "OSDefaultSolver.h"
 #include "OSrLWriter.h"
 #include "OSInstance.h"
 #include "OSParameters.h"

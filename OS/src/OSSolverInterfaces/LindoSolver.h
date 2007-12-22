@@ -16,7 +16,7 @@
 #ifndef LINDOSOLVER_H
 #define LINDOSOLVER_H
 
-#include "DefaultSolver.h"
+#include "OSDefaultSolver.h"
 #include "OSInstance.h"
 #include "lindo.h"
 #include "OSrLWriter.h"

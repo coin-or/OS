@@ -15,7 +15,7 @@
  
 
 #include "ErrorClass.h"
-#include "DefaultSolver.h"
+#include "OSDefaultSolver.h"
 
 #include<iostream>
 using std::cout;

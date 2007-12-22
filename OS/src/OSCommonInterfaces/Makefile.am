@@ -34,8 +34,8 @@ libOSCommonInterfaces_la_SOURCES = \
 	OSrLReader.h \
 	OSrLWriter.cpp \
 	OSrLWriter.h \
-    DefaultSolver.cpp \
-	DefaultSolver.h 
+    OSDefaultSolver.cpp \
+	OSDefaultSolver.h 
 
 # This is for libtool (on Windows)
 libOSCommonInterfaces_la_LDFLAGS = $(LT_LDFLAGS)
@@ -76,6 +76,6 @@ include_HEADERS = \
 	OSnLNode.h \
 	OSrLReader.h \
 	OSrLWriter.h \
-	DefaultSolver.h
+	OSDefaultSolver.h
 
 

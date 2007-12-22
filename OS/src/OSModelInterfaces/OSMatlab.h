@@ -21,7 +21,7 @@
 #include "OSiLReader.h"       
 #include "OSiLWriter.h"     
 #include "OSInstance.h"  
-#include "DefaultSolver.h"  
+#include "OSDefaultSolver.h"  
 #include "OSDataStructures.h"
 #include "OSSolverAgent.h" 
 #include "ErrorClass.h" 

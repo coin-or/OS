@@ -151,10 +151,10 @@ OS/src/OSAgent/OSWSUtil.cpp -text
 OS/src/OSAgent/OSWSUtil.h -text
 OS/src/OSAgent/OShL.cpp -text
 OS/src/OSAgent/OShL.h -text
-OS/src/OSCommonInterfaces/DefaultSolver.cpp -text
-OS/src/OSCommonInterfaces/DefaultSolver.h -text
 OS/src/OSCommonInterfaces/Makefile.am -text
 OS/src/OSCommonInterfaces/Makefile.in -text
+OS/src/OSCommonInterfaces/OSDefaultSolver.cpp -text
+OS/src/OSCommonInterfaces/OSDefaultSolver.h -text
 OS/src/OSCommonInterfaces/OSExpressionTree.cpp -text
 OS/src/OSCommonInterfaces/OSExpressionTree.h -text
 OS/src/OSCommonInterfaces/OSInstance.cpp -text

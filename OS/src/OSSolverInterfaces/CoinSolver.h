@@ -22,7 +22,7 @@
 #include <OsiCbcSolverInterface.hpp> 
 
 #include "OSConfig.h" 
-#include "DefaultSolver.h"
+#include "OSDefaultSolver.h"
 #include "OSrLWriter.h"
 #include "ErrorClass.h"
 
