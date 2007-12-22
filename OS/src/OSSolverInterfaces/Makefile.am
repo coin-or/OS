@@ -18,24 +18,24 @@ noinst_LTLIBRARIES = libOSSolverInterfaces.la
 
 # List all source files for this library, including headers
 libOSSolverInterfaces_la_SOURCES = \
-	CoinSolver.cpp \
-	CoinSolver.h  
+	OSCoinSolver.cpp \
+	OSCoinSolver.h  
 
 
 if COIN_HAS_LINDO
-libOSSolverInterfaces_la_SOURCES += 	LindoSolver.cpp \
-	LindoSolver.h
+libOSSolverInterfaces_la_SOURCES += 	OSLindoSolver.cpp \
+	OSLindoSolver.h
 endif
 
 if COIN_HAS_IPOPT
-libOSSolverInterfaces_la_SOURCES += 	IpoptSolver.cpp \
-	IpoptSolver.h
+libOSSolverInterfaces_la_SOURCES += 	OSIpoptSolver.cpp \
+	OSIpoptSolver.h
 endif
 
 
 if COIN_HAS_KNITRO
-libOSSolverInterfaces_la_SOURCES += 	KnitroSolver.cpp \
-	KnitroSolver.h
+libOSSolverInterfaces_la_SOURCES += 	OSKnitroSolver.cpp \
+	OSKnitroSolver.h
 endif
 
 # This is for libtool (on Windows)
@@ -127,18 +127,18 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 # and that therefore should be installed in 'install'
 include_HEADERS = \
 	../../inc/config_os.h \
-	CoinSolver.h 
+	OSCoinSolver.h 
 
 if COIN_HAS_LINDO
-include_HEADERS += LindoSolver.h
+include_HEADERS += OSLindoSolver.h
 endif
 
 if COIN_HAS_KNITRO
-include_HEADERS += KnitroSolver.h
+include_HEADERS += OSKnitroSolver.h
 endif
 
 if COIN_HAS_IPOPT
-include_HEADERS += IpoptSolver.h
+include_HEADERS += OSIpoptSolver.h
 endif
 
 

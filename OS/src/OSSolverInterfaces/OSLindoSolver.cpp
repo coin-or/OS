@@ -14,7 +14,7 @@
  */
 
    
-#include "LindoSolver.h"
+#include "OSLindoSolver.h"
 #include "OSiLReader.h"
 #include "OSInstance.h"
 #include "FileUtil.h"

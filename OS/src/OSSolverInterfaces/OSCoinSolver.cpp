@@ -19,7 +19,7 @@
 
       
 
-#include "CoinSolver.h"
+#include "OSCoinSolver.h"
 #include "OSiLReader.h"
 #include "OSInstance.h"
 #include "FileUtil.h"

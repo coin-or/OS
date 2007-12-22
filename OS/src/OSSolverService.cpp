@@ -76,7 +76,7 @@
 #include "OSInstance.h"  
 #include "FileUtil.h"  
 #include "OSConfig.h"  
-#include "CoinSolver.h"
+#include "OSCoinSolver.h"
 #include "OSDefaultSolver.h"  
 #include "OSWSUtil.h" 
 #include "OSSolverAgent.h"   
@@ -86,9 +86,7 @@
 #include "Base64.h"
 #include "CommonUtil.h"
 
-#ifdef COIN_HAS_KNITRO    
-#include "KnitroSolver.h"
-#endif
+
 
 #ifdef COIN_HAS_ASL
 #include "OSnl2osil.h"
@@ -96,15 +94,15 @@
 
 
 #ifdef COIN_HAS_LINDO    
-#include "LindoSolver.h"
+#include "OSLindoSolver.h"
 #endif 
  
 #ifdef COIN_HAS_IPOPT    
-#include "IpoptSolver.h"
+#include "OSIpoptSolver.h"
 #endif 
 
 #ifdef COIN_HAS_KNITRO    
-#include "KnitroSolver.h"
+#include "OSKnitroSolver.h"
 #endif 
 
 

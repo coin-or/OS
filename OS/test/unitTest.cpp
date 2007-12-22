@@ -108,7 +108,7 @@
 #include "OSInstance.h"  
 #include "FileUtil.h"  
 #include "OSConfig.h" 
-#include "CoinSolver.h"
+#include "OSCoinSolver.h"
 #include "OSDefaultSolver.h"  
 #include "OSWSUtil.h" 
 #include "OSSolverAgent.h"   
@@ -120,7 +120,7 @@
     
  
 #ifdef COIN_HAS_KNITRO    
-#include "KnitroSolver.h"
+#include "OSKnitroSolver.h"
 #endif 
 
 #ifdef COIN_HAS_GLPK
@@ -132,10 +132,10 @@
 #include "OSnl2osil.h"
 #endif
 #ifdef COIN_HAS_LINDO    
-#include "LindoSolver.h"
+#include "OSLindoSolver.h"
 #endif  
 #ifdef COIN_HAS_IPOPT    
-#include "IpoptSolver.h"
+#include "OSIpoptSolver.h"
 #endif 
  
 
@@ -387,9 +387,16 @@ int main(int argC, char* argV[])
 		if(ok == false) throw ErrorClass(" Fail unit test with clp on parincLinear");
 		delete solver;
 		solver = NULL;
-		unitTestResult << "Solved problem parincLinear.osil with Clp" << std::endl;
+		unitTestResult << "Solved problem parincLinearByRow.osil with Clp" << std::endl;
 		// now solve another problem -- try an integer program
 		// this problem is also stored in base64 binary
+	}
+	catch(const ErrorClass& eclass){
+		unitTestResultFailure << "Sorry Unit Test Failed Testing Cbc Solver:"  + eclass.errormsg<< endl;
+	}
+	try{
+		std::cout << "create a new COIN Cbc for OSiL string solution" << std::endl;
+		ok = true;
 		osilFileName = dataDir  + "osilFiles" + dirsep + "p0033.osil";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		solver = new CoinSolver();
@@ -409,7 +416,7 @@ int main(int argC, char* argV[])
 		unitTestResult << "Solved problem p0033.osil with Cbc" << std::endl;
 	}
 	catch(const ErrorClass& eclass){
-		unitTestResultFailure << "Sorry Unit Test Failed Testing Clp or Cbc Solver:"  + eclass.errormsg<< endl;
+		unitTestResultFailure << "Sorry Unit Test Failed Testing Cbc Solver:"  + eclass.errormsg<< endl;
 	}
 	
 	//

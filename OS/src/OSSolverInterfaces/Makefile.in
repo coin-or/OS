@@ -43,14 +43,14 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-@COIN_HAS_LINDO_TRUE@am__append_1 = LindoSolver.cpp \
-@COIN_HAS_LINDO_TRUE@	LindoSolver.h
+@COIN_HAS_LINDO_TRUE@am__append_1 = OSLindoSolver.cpp \
+@COIN_HAS_LINDO_TRUE@	OSLindoSolver.h
 
-@COIN_HAS_IPOPT_TRUE@am__append_2 = IpoptSolver.cpp \
-@COIN_HAS_IPOPT_TRUE@	IpoptSolver.h
+@COIN_HAS_IPOPT_TRUE@am__append_2 = OSIpoptSolver.cpp \
+@COIN_HAS_IPOPT_TRUE@	OSIpoptSolver.h
 
-@COIN_HAS_KNITRO_TRUE@am__append_3 = KnitroSolver.cpp \
-@COIN_HAS_KNITRO_TRUE@	KnitroSolver.h
+@COIN_HAS_KNITRO_TRUE@am__append_3 = OSKnitroSolver.cpp \
+@COIN_HAS_KNITRO_TRUE@	OSKnitroSolver.h
 
 @COIN_HAS_CPX_TRUE@am__append_4 = \
 @COIN_HAS_CPX_TRUE@	-I`$(CYGPATH_W) $(CPXINCDIR)` \
@@ -83,9 +83,9 @@ host_triplet = @host@
 @COIN_HAS_IPOPT_TRUE@	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Common` \
 @COIN_HAS_IPOPT_TRUE@	-I`$(CYGPATH_W) $(IPOPTOBJDIR)/inc`
 
-@COIN_HAS_LINDO_TRUE@am__append_12 = LindoSolver.h
-@COIN_HAS_KNITRO_TRUE@am__append_13 = KnitroSolver.h
-@COIN_HAS_IPOPT_TRUE@am__append_14 = IpoptSolver.h
+@COIN_HAS_LINDO_TRUE@am__append_12 = OSLindoSolver.h
+@COIN_HAS_KNITRO_TRUE@am__append_13 = OSKnitroSolver.h
+@COIN_HAS_IPOPT_TRUE@am__append_14 = OSIpoptSolver.h
 subdir = src/OSSolverInterfaces
 DIST_COMMON = $(am__include_HEADERS_DIST) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -99,13 +99,14 @@ CONFIG_HEADER = $(top_builddir)/inc/config_os.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libOSSolverInterfaces_la_LIBADD =
-am__libOSSolverInterfaces_la_SOURCES_DIST = CoinSolver.cpp \
-	CoinSolver.h LindoSolver.cpp LindoSolver.h IpoptSolver.cpp \
-	IpoptSolver.h KnitroSolver.cpp KnitroSolver.h
-@COIN_HAS_LINDO_TRUE@am__objects_1 = LindoSolver.lo
-@COIN_HAS_IPOPT_TRUE@am__objects_2 = IpoptSolver.lo
-@COIN_HAS_KNITRO_TRUE@am__objects_3 = KnitroSolver.lo
-am_libOSSolverInterfaces_la_OBJECTS = CoinSolver.lo $(am__objects_1) \
+am__libOSSolverInterfaces_la_SOURCES_DIST = OSCoinSolver.cpp \
+	OSCoinSolver.h OSLindoSolver.cpp OSLindoSolver.h \
+	OSIpoptSolver.cpp OSIpoptSolver.h OSKnitroSolver.cpp \
+	OSKnitroSolver.h
+@COIN_HAS_LINDO_TRUE@am__objects_1 = OSLindoSolver.lo
+@COIN_HAS_IPOPT_TRUE@am__objects_2 = OSIpoptSolver.lo
+@COIN_HAS_KNITRO_TRUE@am__objects_3 = OSKnitroSolver.lo
+am_libOSSolverInterfaces_la_OBJECTS = OSCoinSolver.lo $(am__objects_1) \
 	$(am__objects_2) $(am__objects_3)
 libOSSolverInterfaces_la_OBJECTS =  \
 	$(am_libOSSolverInterfaces_la_OBJECTS)
@@ -129,8 +130,8 @@ LINK = $(LIBTOOL) --tag=CC --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 SOURCES = $(libOSSolverInterfaces_la_SOURCES)
 DIST_SOURCES = $(am__libOSSolverInterfaces_la_SOURCES_DIST)
-am__include_HEADERS_DIST = ../../inc/config_os.h CoinSolver.h \
-	LindoSolver.h KnitroSolver.h IpoptSolver.h
+am__include_HEADERS_DIST = ../../inc/config_os.h OSCoinSolver.h \
+	OSLindoSolver.h OSKnitroSolver.h OSIpoptSolver.h
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
     $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
@@ -376,7 +377,7 @@ AUTOMAKE_OPTIONS = foreign
 noinst_LTLIBRARIES = libOSSolverInterfaces.la
 
 # List all source files for this library, including headers
-libOSSolverInterfaces_la_SOURCES = CoinSolver.cpp CoinSolver.h \
+libOSSolverInterfaces_la_SOURCES = OSCoinSolver.cpp OSCoinSolver.h \
 	$(am__append_1) $(am__append_2) $(am__append_3)
 
 # This is for libtool (on Windows)
@@ -410,8 +411,8 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 
 # Here list all the header files that are required by a user of the library,
 # and that therefore should be installed in 'install'
-include_HEADERS = ../../inc/config_os.h CoinSolver.h $(am__append_12) \
-	$(am__append_13) $(am__append_14)
+include_HEADERS = ../../inc/config_os.h OSCoinSolver.h \
+	$(am__append_12) $(am__append_13) $(am__append_14)
 all: all-am
 
 .SUFFIXES:
@@ -463,10 +464,10 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CoinSolver.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/IpoptSolver.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/KnitroSolver.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/LindoSolver.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSCoinSolver.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSIpoptSolver.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSKnitroSolver.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSLindoSolver.Plo@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \

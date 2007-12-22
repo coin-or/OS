@@ -37,7 +37,7 @@
  * 
  */
 
-#include "CoinSolver.h"
+#include "OSCoinSolver.h"
 #include "OSConfig.h"
 #include "OSnl2osil.h"
 #include "OSiLReader.h"
@@ -47,10 +47,10 @@
 #include "OSInstance.h"
 #include "OSResult.h"
 #ifdef COIN_HAS_LINDO    
-#include "LindoSolver.h"
+#include "OSLindoSolver.h"
 #endif 
 #ifdef COIN_HAS_IPOPT    
-#include "IpoptSolver.h"
+#include "OSIpoptSolver.h"
 #endif  
 
 #include "OSDefaultSolver.h"

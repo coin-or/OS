@@ -17,7 +17,7 @@
  */
 
 
-#include "IpoptSolver.h"
+#include "OSIpoptSolver.h"
 #include "IpIpoptApplication.hpp"
 #include "CommonUtil.h"
 
