@@ -570,7 +570,7 @@ void send(){
 	try{
 		// call a method here to get OSiL if we have an nl or mps file
 		if(osoptions->osil == ""){
-			//we better have an osil file present or mps file
+			//we better have an nl file present or mps file
 			if(osoptions->nlFile != ""){
 				getOSiLFromNl();
 			}
@@ -724,11 +724,12 @@ void getOSiLFromNl(){
 		delete osilwriter;
 		osilwriter = NULL; 	
 		#else
-		throw("trying to convert nl to osil without AMPL ASL configured");
+		throw ErrorClass("trying to convert nl to osil without AMPL ASL configured");
 		#endif
 	}
 	catch(const ErrorClass& eclass){
 		std::cout << eclass.errormsg <<  std::endl;
+		throw ErrorClass( eclass.errormsg) ;
 	}	
 }//getOSiLFromNl
 
@@ -750,6 +751,7 @@ void getOSiLFromMps(){
 	}
 	catch(const ErrorClass& eclass){
 		std::cout << eclass.errormsg <<  std::endl;
+		throw ErrorClass( eclass.errormsg) ;
 	}	
 	
 }//getOSiLFromMps
