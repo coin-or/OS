@@ -18,16 +18,16 @@ noinst_LTLIBRARIES = libOSUtils.la
 
 # List all source files for this library, including headers
 libOSUtils_la_SOURCES = \
-		Base64.cpp \
-		Base64.h \
-		CommonUtil.cpp \
-		CommonUtil.h \
-		ErrorClass.cpp \
-		ErrorClass.h \
-		FileUtil.cpp \
-		FileUtil.h \
-		MathUtil.cpp \
-		MathUtil.h \
+		OSBase64.cpp \
+		OSBase64.h \
+		OSCommonUtil.cpp \
+		OSCommonUtil.h \
+		OSErrorClass.cpp \
+		OSErrorClass.h \
+		OSFileUtil.cpp \
+		OSFileUtil.h \
+		OSMathUtil.cpp \
+		OSMathUtil.h \
 		OSDataStructures.cpp \
 		OSDataStructures.h \
 		OSParameters.h
@@ -59,11 +59,11 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 # and that therefore should be installed in 'install'
 include_HEADERS = \
 	../../inc/config_os.h \
-	Base64.h \
-	CommonUtil.h \
-	ErrorClass.h \
-	FileUtil.h \
-	MathUtil.h \
+	OSBase64.h \
+	OSCommonUtil.h \
+	OSErrorClass.h \
+	OSFileUtil.h \
+	OSMathUtil.h \
 	OSDataStructures.h \
 	OSParameters.h
 

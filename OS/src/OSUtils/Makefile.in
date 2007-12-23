@@ -56,8 +56,8 @@ CONFIG_HEADER = $(top_builddir)/inc/config_os.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libOSUtils_la_LIBADD =
-am_libOSUtils_la_OBJECTS = Base64.lo CommonUtil.lo ErrorClass.lo \
-	FileUtil.lo MathUtil.lo OSDataStructures.lo
+am_libOSUtils_la_OBJECTS = OSBase64.lo OSCommonUtil.lo OSErrorClass.lo \
+	OSFileUtil.lo OSMathUtil.lo OSDataStructures.lo
 libOSUtils_la_OBJECTS = $(am_libOSUtils_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
@@ -325,16 +325,16 @@ noinst_LTLIBRARIES = libOSUtils.la
 
 # List all source files for this library, including headers
 libOSUtils_la_SOURCES = \
-		Base64.cpp \
-		Base64.h \
-		CommonUtil.cpp \
-		CommonUtil.h \
-		ErrorClass.cpp \
-		ErrorClass.h \
-		FileUtil.cpp \
-		FileUtil.h \
-		MathUtil.cpp \
-		MathUtil.h \
+		OSBase64.cpp \
+		OSBase64.h \
+		OSCommonUtil.cpp \
+		OSCommonUtil.h \
+		OSErrorClass.cpp \
+		OSErrorClass.h \
+		OSFileUtil.cpp \
+		OSFileUtil.h \
+		OSMathUtil.cpp \
+		OSMathUtil.h \
 		OSDataStructures.cpp \
 		OSDataStructures.h \
 		OSParameters.h
@@ -368,11 +368,11 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 # and that therefore should be installed in 'install'
 include_HEADERS = \
 	../../inc/config_os.h \
-	Base64.h \
-	CommonUtil.h \
-	ErrorClass.h \
-	FileUtil.h \
-	MathUtil.h \
+	OSBase64.h \
+	OSCommonUtil.h \
+	OSErrorClass.h \
+	OSFileUtil.h \
+	OSMathUtil.h \
 	OSDataStructures.h \
 	OSParameters.h
 
@@ -427,12 +427,12 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Base64.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CommonUtil.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ErrorClass.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/FileUtil.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/MathUtil.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSBase64.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSCommonUtil.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSDataStructures.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSErrorClass.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSFileUtil.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSMathUtil.Plo@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
