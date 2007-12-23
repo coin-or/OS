@@ -15,10 +15,10 @@ AUTOMAKE_OPTIONS = foreign
 
 # Name of the executable compiled in this directory.  We want it to be
 # installed in the 'bin' directory
-noinst_PROGRAMS = fileUpload
+noinst_PROGRAMS = OSFileUpload
 
 # List all source files for this executable, including headers
-fileUpload_SOURCES = fileUpload.cpp 
+fileUpload_SOURCES = OSFileUpload.cpp 
 
 # Name of the executable compiled in this directory.  We want it to be
 # installed in the 'bin' directory

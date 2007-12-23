@@ -18,11 +18,11 @@ AUTOMAKE_OPTIONS = foreign
 noinst_PROGRAMS = amplClient
 
 # List all source files for this executable, including headers
-amplClient_SOURCES = amplClient.cpp 
+amplClient_SOURCES = OSAmplClient.cpp 
 
 # Name of the executable compiled in this directory.  We want it to be
 # installed in the 'bin' directory
-bin_PROGRAMS = amplClient
+bin_PROGRAMS = OSAmplClient
 
 # List all additionally required COIN libraries
 
