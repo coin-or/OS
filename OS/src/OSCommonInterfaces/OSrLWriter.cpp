@@ -60,14 +60,13 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 	#else
 	const char	dirsep='/';
 	#endif
-  	// Set directory containing mps data files.
+  	// Set directory containing stylesheet files.
   	std::string xsltDir;
-    xsltDir = dirsep == '/' ? "/stylesheets/" : "\\stylesheets\\";
+    xsltDir = dirsep == '/' ? "../stylesheets" : "..\\stylesheets";
 	int i, j;
 	if(m_OSResult == NULL)  return outStr.str(); 
 	outStr << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" ; 
 	outStr << "<?xml-stylesheet type = \"text/xsl\" href = \"";
-	outStr << OSROOT_DIR;
 	outStr << xsltDir;
 	outStr << "OSrL.xslt\"?>";
 	outStr << "<osrl xmlns=\"os.optimizationservices.org\"   xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/OSrL.xsd\" >" ;
