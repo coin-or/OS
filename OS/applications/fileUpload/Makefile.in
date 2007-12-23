@@ -42,8 +42,8 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-noinst_PROGRAMS = fileUpload$(EXEEXT)
-bin_PROGRAMS = fileUpload$(EXEEXT)
+noinst_PROGRAMS = OSFileUpload$(EXEEXT)
+bin_PROGRAMS = OSFileUpload$(EXEEXT)
 @COIN_HAS_SYMPHONY_TRUE@am__append_1 = $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
 @COIN_HAS_DYLP_TRUE@am__append_2 = $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
 @COIN_HAS_VOL_TRUE@am__append_3 = $(OSIOBJDIR)/src/OsiVol/libOsiVol.la 
@@ -107,8 +107,8 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS) $(noinst_PROGRAMS)
-am_fileUpload_OBJECTS = fileUpload.$(OBJEXT)
-fileUpload_OBJECTS = $(am_fileUpload_OBJECTS)
+am_OSFileUpload_OBJECTS = OSFileUpload.$(OBJEXT)
+OSFileUpload_OBJECTS = $(am_OSFileUpload_OBJECTS)
 @COIN_HAS_SYMPHONY_TRUE@am__DEPENDENCIES_1 =  \
 @COIN_HAS_SYMPHONY_TRUE@	$(OSIOBJDIR)/src/OsiSym/libOsiSym.la
 @COIN_HAS_DYLP_TRUE@am__DEPENDENCIES_2 =  \
@@ -130,7 +130,7 @@ am__DEPENDENCIES_8 =
 @COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_11 = $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
 @COIN_HAS_KNITRO_TRUE@am__DEPENDENCIES_12 = $(am__DEPENDENCIES_8)
 @COIN_HAS_ASL_TRUE@am__DEPENDENCIES_13 = $(am__DEPENDENCIES_8)
-fileUpload_DEPENDENCIES = $(OSOBJDIR)/src/libOS.la \
+OSFileUpload_DEPENDENCIES = $(OSOBJDIR)/src/libOS.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la $(am__DEPENDENCIES_1) \
 	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la $(am__DEPENDENCIES_2) \
 	$(am__DEPENDENCIES_3) $(am__DEPENDENCIES_4) \
@@ -151,8 +151,8 @@ LTCXXCOMPILE = $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
 	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(fileUpload_SOURCES)
-DIST_SOURCES = $(fileUpload_SOURCES)
+SOURCES = $(OSFileUpload_SOURCES)
+DIST_SOURCES = $(OSFileUpload_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -386,10 +386,10 @@ vollib = @vollib@
 AUTOMAKE_OPTIONS = foreign
 
 # List all source files for this executable, including headers
-fileUpload_SOURCES = fileUpload.cpp 
+OSFileUpload_SOURCES = OSFileUpload.cpp 
 
 # List all additionally required COIN libraries
-fileUpload_LDADD = $(OSOBJDIR)/src/libOS.la \
+OSFileUpload_LDADD = $(OSOBJDIR)/src/libOS.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la $(am__append_1) \
 	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la $(am__append_2) \
 	$(am__append_3) $(am__append_4) $(CBCOBJDIR)/src/libCbc.la \
@@ -428,7 +428,7 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` -I`$(CYGPATH_W) \
 # The -rpath flag is used by libtool to make sure that the shared
 # library is found (in the lib install directory) when we are using dynamic
 # libraries.
-fileUpload_LDFLAGS = -rpath $(libdir) $(am__append_21)
+OSFileUpload_LDFLAGS = -rpath $(libdir) $(am__append_21)
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
@@ -501,9 +501,9 @@ clean-noinstPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-fileUpload$(EXEEXT): $(fileUpload_OBJECTS) $(fileUpload_DEPENDENCIES) 
-	@rm -f fileUpload$(EXEEXT)
-	$(CXXLINK) $(fileUpload_LDFLAGS) $(fileUpload_OBJECTS) $(fileUpload_LDADD) $(LIBS)
+OSFileUpload$(EXEEXT): $(OSFileUpload_OBJECTS) $(OSFileUpload_DEPENDENCIES) 
+	@rm -f OSFileUpload$(EXEEXT)
+	$(CXXLINK) $(OSFileUpload_LDFLAGS) $(OSFileUpload_OBJECTS) $(OSFileUpload_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -511,7 +511,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fileUpload.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSFileUpload.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \

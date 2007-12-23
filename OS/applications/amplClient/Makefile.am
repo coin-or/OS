@@ -10,15 +10,15 @@ AUTOMAKE_OPTIONS = foreign
 
 
 ########################################################################
-#                          amplClient  program                               #
+#                          OSAmplClient  program                               #
 ########################################################################
 
 # Name of the executable compiled in this directory.  We want it to be
 # installed in the 'bin' directory
-noinst_PROGRAMS = amplClient
+noinst_PROGRAMS = OSAmplClient
 
 # List all source files for this executable, including headers
-amplClient_SOURCES = OSAmplClient.cpp 
+OSAmplClient_SOURCES = OSAmplClient.cpp 
 
 # Name of the executable compiled in this directory.  We want it to be
 # installed in the 'bin' directory
@@ -27,57 +27,57 @@ bin_PROGRAMS = OSAmplClient
 # List all additionally required COIN libraries
 
 
-amplClient_LDADD =  \
+OSAmplClient_LDADD =  \
 	$(OSOBJDIR)/src/libOS.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la 
 
 if COIN_HAS_SYMPHONY
- amplClient_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
+ OSAmplClient_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
 endif
 
- amplClient_LDADD += $(OSIOBJDIR)/src/OsiClp/libOsiClp.la 
+ OSAmplClient_LDADD += $(OSIOBJDIR)/src/OsiClp/libOsiClp.la 
 
 if COIN_HAS_DYLP
- amplClient_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
+ OSAmplClient_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
 endif
 
 if COIN_HAS_VOL
- amplClient_LDADD += $(OSIOBJDIR)/src/OsiVol/libOsiVol.la 
+ OSAmplClient_LDADD += $(OSIOBJDIR)/src/OsiVol/libOsiVol.la 
 endif
 
 
 if COIN_HAS_CPX
- amplClient_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+ OSAmplClient_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 endif
 
- amplClient_LDADD += $(CBCOBJDIR)/src/libCbc.la 
+ OSAmplClient_LDADD += $(CBCOBJDIR)/src/libCbc.la 
 
 if COIN_HAS_SYMPHONY
- amplClient_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la 
+ OSAmplClient_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la 
 endif
 
- amplClient_LDADD += $(CGLOBJDIR)/src/libCgl.la 
+ OSAmplClient_LDADD += $(CGLOBJDIR)/src/libCgl.la 
 
- amplClient_LDADD += $(OSIOBJDIR)/src/libOsi.la 
+ OSAmplClient_LDADD += $(OSIOBJDIR)/src/libOsi.la 
 
- amplClient_LDADD += $(CLPOBJDIR)/src/libClp.la 
+ OSAmplClient_LDADD += $(CLPOBJDIR)/src/libClp.la 
 
 if COIN_HAS_DYLP
- amplClient_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la 
+ OSAmplClient_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la 
 endif
 
 if COIN_HAS_VOL
- amplClient_LDADD += $(VOLOBJDIR)/src/libVol.la 
+ OSAmplClient_LDADD += $(VOLOBJDIR)/src/libVol.la 
 endif
 
 if COIN_HAS_GLPK
-  amplClient_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
-  amplClient_LDADD += $(GLPKLIB)
+  OSAmplClient_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
+  OSAmplClient_LDADD += $(GLPKLIB)
 endif
 
-amplClient_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
+OSAmplClient_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
 
-amplClient_LDADD += $(ADDLIBS) 
+OSAmplClient_LDADD += $(ADDLIBS) 
 
 # Now add the include paths for compilation
 
@@ -118,7 +118,7 @@ LIBS  += `cat $(OSOBJDIR)/os_addlibs.txt`
 # library is found (in the lib install directory) when we are using dynamic
 # libraries.
 
-amplClient_LDFLAGS = -rpath $(libdir)
+OSAmplClient_LDFLAGS = -rpath $(libdir)
 
 
 if COIN_HAS_DYLP
@@ -160,7 +160,7 @@ endif
 
 if COIN_HAS_LINDO
   AM_CPPFLAGS += -I`$(CYGPATH_W) $(LINDOINCDIR)` 
-  amplClient_LDADD += $(LINDOLIB)
+  OSAmplClient_LDADD += $(LINDOLIB)
 endif
 
 if COIN_HAS_IPOPT
@@ -168,23 +168,23 @@ if COIN_HAS_IPOPT
 	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Interfaces` \
 	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Common` \
 	-I`$(CYGPATH_W) $(IPOPTOBJDIR)/inc`
-  amplClient_LDADD += $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+  OSAmplClient_LDADD += $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
   LIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
 endif
 
 
 if COIN_HAS_KNITRO
   AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(KNITROINCDIR)` 
-  amplClient_LDADD += $(KNITROLIB)
+  OSAmplClient_LDADD += $(KNITROLIB)
 if USEMULTIPLYDEFINED
-  amplClient_LDFLAGS += -multiply_defined suppress
+  OSAmplClient_LDFLAGS += -multiply_defined suppress
 endif
 endif
 
 if COIN_HAS_ASL
   AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
   AM_CPPFLAGS += $(ASL_CPPFLAGS) 
-  amplClient_LDADD += $(ASLLIB)
+  OSAmplClient_LDADD += $(ASLLIB)
 endif
 
 

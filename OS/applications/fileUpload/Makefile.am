@@ -10,7 +10,7 @@ AUTOMAKE_OPTIONS = foreign
 
 
 ########################################################################
-#                       fileUpload  program                               #
+#                       OSFileUpload  program                               #
 ########################################################################
 
 # Name of the executable compiled in this directory.  We want it to be
@@ -18,65 +18,65 @@ AUTOMAKE_OPTIONS = foreign
 noinst_PROGRAMS = OSFileUpload
 
 # List all source files for this executable, including headers
-fileUpload_SOURCES = OSFileUpload.cpp 
+OSFileUpload_SOURCES = OSFileUpload.cpp 
 
 # Name of the executable compiled in this directory.  We want it to be
 # installed in the 'bin' directory
-bin_PROGRAMS = fileUpload
+bin_PROGRAMS = OSFileUpload
 
 # List all additionally required COIN libraries
 
-fileUpload_LDADD =  \
+OSFileUpload_LDADD =  \
 	$(OSOBJDIR)/src/libOS.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la 
 
 if COIN_HAS_SYMPHONY
- fileUpload_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
+ OSFileUpload_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
 endif
 
- fileUpload_LDADD += $(OSIOBJDIR)/src/OsiClp/libOsiClp.la 
+ OSFileUpload_LDADD += $(OSIOBJDIR)/src/OsiClp/libOsiClp.la 
 
 if COIN_HAS_DYLP
- fileUpload_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
+ OSFileUpload_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
 endif
 
 if COIN_HAS_VOL
- fileUpload_LDADD += $(OSIOBJDIR)/src/OsiVol/libOsiVol.la 
+ OSFileUpload_LDADD += $(OSIOBJDIR)/src/OsiVol/libOsiVol.la 
 endif
 
   
 if COIN_HAS_CPX
- fileUpload_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+ OSFileUpload_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 endif
 
- fileUpload_LDADD += $(CBCOBJDIR)/src/libCbc.la 
+ OSFileUpload_LDADD += $(CBCOBJDIR)/src/libCbc.la 
 
 if COIN_HAS_SYMPHONY
- fileUpload_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la 
+ OSFileUpload_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la 
 endif
 
- fileUpload_LDADD += $(CGLOBJDIR)/src/libCgl.la 
+ OSFileUpload_LDADD += $(CGLOBJDIR)/src/libCgl.la 
 
- fileUpload_LDADD += $(OSIOBJDIR)/src/libOsi.la 
+ OSFileUpload_LDADD += $(OSIOBJDIR)/src/libOsi.la 
 
- fileUpload_LDADD += $(CLPOBJDIR)/src/libClp.la 
+ OSFileUpload_LDADD += $(CLPOBJDIR)/src/libClp.la 
 
 if COIN_HAS_DYLP
- fileUpload_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la 
+ OSFileUpload_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la 
 endif
 
 if COIN_HAS_VOL
- fileUpload_LDADD += $(VOLOBJDIR)/src/libVol.la 
+ OSFileUpload_LDADD += $(VOLOBJDIR)/src/libVol.la 
 endif
 
 if COIN_HAS_GLPK
-  fileUpload_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
-  fileUpload_LDADD += $(GLPKLIB)
+  OSFileUpload_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
+  OSFileUpload_LDADD += $(GLPKLIB)
 endif
 
-fileUpload_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
+OSFileUpload_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
 
-fileUpload_LDADD += $(ADDLIBS) 
+OSFileUpload_LDADD += $(ADDLIBS) 
 
 # Now add the include paths for compilation
 
@@ -115,7 +115,7 @@ LIBS  += `cat $(OSOBJDIR)/os_addlibs.txt`
 # The -rpath flag is used by libtool to make sure that the shared
 # library is found (in the lib install directory) when we are using dynamic
 # libraries.
-fileUpload_LDFLAGS = -rpath $(libdir)
+OSFileUpload_LDFLAGS = -rpath $(libdir)
 
 if COIN_HAS_DYLP
   AM_CPPFLAGS += \
@@ -156,7 +156,7 @@ endif
 
 if COIN_HAS_LINDO
   AM_CPPFLAGS += -I`$(CYGPATH_W) $(LINDOINCDIR)` 
-  fileUpload_LDADD += $(LINDOLIB)
+  OSFileUpload_LDADD += $(LINDOLIB)
 endif
 
 if COIN_HAS_IPOPT
@@ -164,16 +164,16 @@ if COIN_HAS_IPOPT
 	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Interfaces` \
 	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Common` \
 	-I`$(CYGPATH_W) $(IPOPTOBJDIR)/inc`
-  fileUpload_LDADD += $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+  OSFileUpload_LDADD += $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
   LIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
 endif
 
 
 if COIN_HAS_KNITRO
   AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(KNITROINCDIR)` 
-  fileUpload_LDADD += $(KNITROLIB)
+  OSFileUpload_LDADD += $(KNITROLIB)
 if USEMULTIPLYDEFINED
-  fileUpload_LDFLAGS += -multiply_defined suppress
+  OSFileUpload_LDFLAGS += -multiply_defined suppress
 endif
 endif
 
@@ -182,7 +182,7 @@ endif
 if COIN_HAS_ASL
   AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
   AM_CPPFLAGS += $(ASL_CPPFLAGS) 
-  fileUpload_LDADD += $(ASLLIB)
+  OSFileUpload_LDADD += $(ASLLIB)
 endif
 
 # This line is necessary to allow VPATH compilation with MS compilers

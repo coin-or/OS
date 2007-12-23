@@ -42,8 +42,8 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-noinst_PROGRAMS = amplClient$(EXEEXT)
-bin_PROGRAMS = amplClient$(EXEEXT)
+noinst_PROGRAMS = OSAmplClient$(EXEEXT)
+bin_PROGRAMS = OSAmplClient$(EXEEXT)
 @COIN_HAS_SYMPHONY_TRUE@am__append_1 = $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
 @COIN_HAS_DYLP_TRUE@am__append_2 = $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
 @COIN_HAS_VOL_TRUE@am__append_3 = $(OSIOBJDIR)/src/OsiVol/libOsiVol.la 
@@ -107,8 +107,8 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS) $(noinst_PROGRAMS)
-am_amplClient_OBJECTS = amplClient.$(OBJEXT)
-amplClient_OBJECTS = $(am_amplClient_OBJECTS)
+am_OSAmplClient_OBJECTS = OSAmplClient.$(OBJEXT)
+OSAmplClient_OBJECTS = $(am_OSAmplClient_OBJECTS)
 @COIN_HAS_SYMPHONY_TRUE@am__DEPENDENCIES_1 =  \
 @COIN_HAS_SYMPHONY_TRUE@	$(OSIOBJDIR)/src/OsiSym/libOsiSym.la
 @COIN_HAS_DYLP_TRUE@am__DEPENDENCIES_2 =  \
@@ -130,7 +130,7 @@ am__DEPENDENCIES_8 =
 @COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_11 = $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
 @COIN_HAS_KNITRO_TRUE@am__DEPENDENCIES_12 = $(am__DEPENDENCIES_8)
 @COIN_HAS_ASL_TRUE@am__DEPENDENCIES_13 = $(am__DEPENDENCIES_8)
-amplClient_DEPENDENCIES = $(OSOBJDIR)/src/libOS.la \
+OSAmplClient_DEPENDENCIES = $(OSOBJDIR)/src/libOS.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la $(am__DEPENDENCIES_1) \
 	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la $(am__DEPENDENCIES_2) \
 	$(am__DEPENDENCIES_3) $(am__DEPENDENCIES_4) \
@@ -151,8 +151,8 @@ LTCXXCOMPILE = $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
 	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(amplClient_SOURCES)
-DIST_SOURCES = $(amplClient_SOURCES)
+SOURCES = $(OSAmplClient_SOURCES)
+DIST_SOURCES = $(OSAmplClient_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -386,10 +386,10 @@ vollib = @vollib@
 AUTOMAKE_OPTIONS = foreign
 
 # List all source files for this executable, including headers
-amplClient_SOURCES = amplClient.cpp 
+OSAmplClient_SOURCES = OSAmplClient.cpp 
 
 # List all additionally required COIN libraries
-amplClient_LDADD = $(OSOBJDIR)/src/libOS.la \
+OSAmplClient_LDADD = $(OSOBJDIR)/src/libOS.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la $(am__append_1) \
 	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la $(am__append_2) \
 	$(am__append_3) $(am__append_4) $(CBCOBJDIR)/src/libCbc.la \
@@ -428,7 +428,7 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` -I`$(CYGPATH_W) \
 # The -rpath flag is used by libtool to make sure that the shared
 # library is found (in the lib install directory) when we are using dynamic
 # libraries.
-amplClient_LDFLAGS = -rpath $(libdir) $(am__append_21)
+OSAmplClient_LDFLAGS = -rpath $(libdir) $(am__append_21)
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
@@ -501,9 +501,9 @@ clean-noinstPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-amplClient$(EXEEXT): $(amplClient_OBJECTS) $(amplClient_DEPENDENCIES) 
-	@rm -f amplClient$(EXEEXT)
-	$(CXXLINK) $(amplClient_LDFLAGS) $(amplClient_OBJECTS) $(amplClient_LDADD) $(LIBS)
+OSAmplClient$(EXEEXT): $(OSAmplClient_OBJECTS) $(OSAmplClient_DEPENDENCIES) 
+	@rm -f OSAmplClient$(EXEEXT)
+	$(CXXLINK) $(OSAmplClient_LDFLAGS) $(OSAmplClient_OBJECTS) $(OSAmplClient_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -511,7 +511,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/amplClient.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSAmplClient.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
