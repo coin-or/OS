@@ -216,8 +216,6 @@ OS/src/OSSolverInterfaces/OSLindoSolver.h -text
 OS/src/OSSolverService.cpp -text
 OS/src/OSUtils/Makefile.am -text
 OS/src/OSUtils/Makefile.in -text
-OS/src/OSUtils/MathUtil.cpp -text
-OS/src/OSUtils/MathUtil.h -text
 OS/src/OSUtils/OSBase64.cpp -text
 OS/src/OSUtils/OSBase64.h -text
 OS/src/OSUtils/OSCommonUtil.cpp -text
