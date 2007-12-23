@@ -27988,22 +27988,22 @@ fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/configFiles/testremote.config"
+  coin_vpath_link_files="$coin_vpath_link_files data/configFiles/testRemote.config"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/configFiles/testremoteBIG.config"
+  coin_vpath_link_files="$coin_vpath_link_files data/configFiles/testRemoteBIG.config"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/configFiles/testremoteRetrieve.config"
+  coin_vpath_link_files="$coin_vpath_link_files data/configFiles/testRemoteRetrieve.config"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/configFiles/testremoteSend.config"
+  coin_vpath_link_files="$coin_vpath_link_files data/configFiles/testRemoteSend.config"
 fi
 
 

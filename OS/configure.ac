@@ -490,10 +490,10 @@ AC_COIN_VPATH_LINK(data/configFiles/testmps.config)
 AC_COIN_VPATH_LINK(data/configFiles/testnl.config)
 AC_COIN_VPATH_LINK(data/configFiles/testRemoteKnock.config)
 AC_COIN_VPATH_LINK(data/configFiles/testRemotegetJobID.config)
-AC_COIN_VPATH_LINK(data/configFiles/testremote.config)
-AC_COIN_VPATH_LINK(data/configFiles/testremoteBIG.config)
-AC_COIN_VPATH_LINK(data/configFiles/testremoteRetrieve.config)
-AC_COIN_VPATH_LINK(data/configFiles/testremoteSend.config)
+AC_COIN_VPATH_LINK(data/configFiles/testRemote.config)
+AC_COIN_VPATH_LINK(data/configFiles/testRemoteBIG.config)
+AC_COIN_VPATH_LINK(data/configFiles/testRemoteRetrieve.config)
+AC_COIN_VPATH_LINK(data/configFiles/testRemoteSend.config)
 
 ##
 ## ampl test files

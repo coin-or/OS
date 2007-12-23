@@ -43,7 +43,11 @@ OS/data/amplFiles/parinc.dat -text
 OS/data/amplFiles/parinc.mod -text
 OS/data/amplFiles/parinc.nl -text
 OS/data/configFiles/kill.config -text
+OS/data/configFiles/testRemote.config -text
+OS/data/configFiles/testRemoteBIG.config -text
 OS/data/configFiles/testRemoteKnock.config -text
+OS/data/configFiles/testRemoteRetrieve.config -text
+OS/data/configFiles/testRemoteSend.config -text
 OS/data/configFiles/testRemotegetJobID.config -text
 OS/data/configFiles/testbrowser.config -text
 OS/data/configFiles/testlocal.config -text
@@ -51,10 +55,6 @@ OS/data/configFiles/testlocalclp.config -text
 OS/data/configFiles/testlocalosol.config -text
 OS/data/configFiles/testmps.config -text
 OS/data/configFiles/testnl.config -text
-OS/data/configFiles/testremote.config -text
-OS/data/configFiles/testremoteBIG.config -text
-OS/data/configFiles/testremoteRetrieve.config -text
-OS/data/configFiles/testremoteSend.config -text
 OS/data/matlabFiles/markowitz.m -text
 OS/data/matlabFiles/parincLinear.m -text
 OS/data/matlabFiles/template.m -text
