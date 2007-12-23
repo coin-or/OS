@@ -117,6 +117,7 @@ OS/examples/instanceGenerator/MakefileBAK.am -text
 OS/examples/instanceGenerator/OSInstanceGenerator.cpp -text
 OS/examples/osTestCode/Makefile.in -text
 OS/examples/osTestCode/MakefileBak.am -text
+OS/examples/osTestCode/OSTestCode.cpp -text
 OS/inc/config_os.h.in -text
 OS/m4/ac_coin_socket_libs.m4 -text
 OS/os_addlibs.txt.in -text
