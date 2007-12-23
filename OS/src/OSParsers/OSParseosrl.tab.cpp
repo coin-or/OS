@@ -220,7 +220,7 @@
  
   
 
-#include "ErrorClass.h"
+#include "OSErrorClass.h"
 #include "OSResult.h"
 #include "OSrLParserData.h"
 #include <iostream>

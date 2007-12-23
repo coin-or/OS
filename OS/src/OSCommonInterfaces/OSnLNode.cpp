@@ -15,7 +15,7 @@
  */
  
 #include "OSnLNode.h"
-#include "ErrorClass.h"
+#include "OSErrorClass.h"
 #include "OSParameters.h"
 
 #include<string>

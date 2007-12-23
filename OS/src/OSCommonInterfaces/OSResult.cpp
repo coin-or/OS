@@ -16,7 +16,7 @@
 
 #include "OSResult.h"
 #include "OSParameters.h"
-#include "ErrorClass.h"
+#include "OSErrorClass.h"
 #include<iostream>
 #include<sstream>
 

@@ -22,7 +22,7 @@
 #include "OSCoinSolver.h"
 #include "OSiLReader.h"
 #include "OSInstance.h"
-#include "FileUtil.h"
+#include "OSFileUtil.h"
   
 #include <iostream>
 #ifdef HAVE_CTIME

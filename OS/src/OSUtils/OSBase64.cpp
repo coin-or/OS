@@ -13,7 +13,7 @@
  * 
  */
 
-#include "Base64.h"
+#include "OSBase64.h"
 #include <sstream>  
 
 

@@ -49,7 +49,7 @@ you should get x1 = 540, x2 = 252
 #include <iostream>
 #include "OSiLWriter.h"
 #include "OSnl2osil.h"
-#include "ErrorClass.h"
+#include "OSErrorClass.h"
 
 
 #include "nlp.h"

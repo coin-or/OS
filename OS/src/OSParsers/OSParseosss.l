@@ -38,7 +38,7 @@
 #  error "don't have header file for stdio"
 # endif
 #endif
-#include "ErrorClass.h"
+#include "OSErrorClass.h"
 #include <sstream>   
 #include "OSOptionsStruc.h" 
 

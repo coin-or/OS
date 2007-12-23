@@ -36,8 +36,8 @@
 #include "OSExpressionTree.h"
 #include "OSnLNode.h"
 #include "OSDataStructures.h"
-#include "FileUtil.h"  
-#include "ErrorClass.h"
+#include "OSFileUtil.h"  
+#include "OSErrorClass.h"
 
 # include <cstddef>
 # include <cstdlib>

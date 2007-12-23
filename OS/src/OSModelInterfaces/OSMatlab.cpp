@@ -28,16 +28,16 @@
 #include "OSrLReader.h"        
 #include "OSrLWriter.h"      
 #include "OSInstance.h"  
-#include "FileUtil.h"  
+#include "OSFileUtil.h"  
 #include "OSConfig.h" 
 #include "OSDefaultSolver.h"  
 #include "OSWSUtil.h" 
 #include "OSSolverAgent.h"   
 #include "OShL.h"     
-#include "ErrorClass.h"
+#include "OSErrorClass.h"
 #include "OSmps2osil.h"   
-#include "Base64.h"
-#include "CommonUtil.h"
+#include "OSBase64.h"
+#include "OSCommonUtil.h"
 
 #ifdef COIN_HAS_GLPK
 #include <OsiGlpkSolverInterface.hpp>

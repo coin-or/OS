@@ -981,7 +981,7 @@ static yyconst flex_int32_t yy_rule_can_match_eol[86] =
 
 
 
-#include "ErrorClass.h"
+#include "OSErrorClass.h"
 #include "OSParseosil.tab.hpp"
 #include "OSInstance.h"
 

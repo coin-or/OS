@@ -24,7 +24,7 @@
 #include "OSConfig.h" 
 #include "OSDefaultSolver.h"
 #include "OSrLWriter.h"
-#include "ErrorClass.h"
+#include "OSErrorClass.h"
 
 #ifdef COIN_HAS_CPX
 #include <OsiCpxSolverInterface.hpp>

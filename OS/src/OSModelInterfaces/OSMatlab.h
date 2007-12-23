@@ -24,7 +24,7 @@
 #include "OSDefaultSolver.h"  
 #include "OSDataStructures.h"
 #include "OSSolverAgent.h" 
-#include "ErrorClass.h" 
+#include "OSErrorClass.h" 
 
 //#ifdef COIN_HAS_LINDO    
 //#include "LindoSolver.h"

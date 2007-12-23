@@ -17,8 +17,8 @@
 #include "OSiLWriter.h"
 #include "OSInstance.h"
 #include "OSParameters.h" 
-#include "CommonUtil.h"
-#include "Base64.h"
+#include "OSCommonUtil.h"
+#include "OSBase64.h"
 
 #include <sstream>  
 

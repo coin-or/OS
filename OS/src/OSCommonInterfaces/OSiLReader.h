@@ -22,7 +22,7 @@
 
 #include "OSInstance.h"
 #include "OSiLWriter.h"
-#include "ErrorClass.h"
+#include "OSErrorClass.h"
 
 #include <string>
 

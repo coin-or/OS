@@ -16,9 +16,9 @@
  */
 
 #include "OSInstance.h"
-#include "MathUtil.h"
-#include "CommonUtil.h"
-#include "ErrorClass.h"
+#include "OSMathUtil.h"
+#include "OSCommonUtil.h"
+#include "OSErrorClass.h"
 #include "OSParameters.h"
 #include<iostream>  
 #include<sstream>

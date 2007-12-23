@@ -625,7 +625,7 @@ static yyconst flex_int32_t yy_rule_can_match_eol[17] =
 #  error "don't have header file for stdio"
 # endif
 #endif
-#include "ErrorClass.h"
+#include "OSErrorClass.h"
 #include <sstream>   
 #include "OSOptionsStruc.h" 
 

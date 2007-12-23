@@ -14,7 +14,7 @@
  */
  
 
-#include "ErrorClass.h"
+#include "OSErrorClass.h"
 #include "OSDefaultSolver.h"
 
 #include<iostream>

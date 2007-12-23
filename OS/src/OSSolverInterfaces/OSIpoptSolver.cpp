@@ -19,7 +19,7 @@
 
 #include "OSIpoptSolver.h"
 #include "IpIpoptApplication.hpp"
-#include "CommonUtil.h"
+#include "OSCommonUtil.h"
 
 using std::cout; 
 using std::endl; 

@@ -23,7 +23,7 @@
 #include "OSrLWriter.h"
 #include "OSResult.h"
 #include "OSParameters.h"
-#include "CommonUtil.h"
+#include "OSCommonUtil.h"
 #include "OSConfig.h"
 #include <sstream>   
 #include <iostream>  

@@ -31,7 +31,7 @@
 
 #include <iostream>
 #include <sstream> 
-#include "ErrorClass.h"
+#include "OSErrorClass.h"
 #include "OSResult.h"
 #include "OSrLWriter.h"
 

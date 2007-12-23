@@ -1138,7 +1138,7 @@ static yyconst flex_int32_t yy_rule_can_match_eol[82] =
 
 
 #include <sstream>  
-#include "ErrorClass.h"
+#include "OSErrorClass.h"
 #include "OSrLParserData.h"
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", yytext);

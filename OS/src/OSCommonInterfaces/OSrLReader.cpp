@@ -16,7 +16,7 @@
 
 #include "OSrLReader.h"
 #include "OSResult.h" 
-#include "ErrorClass.h" 
+#include "OSErrorClass.h" 
 
 
 

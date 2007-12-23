@@ -41,7 +41,7 @@
 
 
 #include <sstream>  
-#include "ErrorClass.h"
+#include "OSErrorClass.h"
 #include "OSrLParserData.h"
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", yytext);

@@ -56,7 +56,7 @@
 #include "OSDefaultSolver.h"
 #include "OSSolverAgent.h"
 #include "OShL.h"
-#include "ErrorClass.h"
+#include "OSErrorClass.h"
 #include <sstream>
 
 #ifdef HAVE_CSTRING

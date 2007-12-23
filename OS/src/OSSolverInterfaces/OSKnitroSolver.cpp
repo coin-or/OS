@@ -18,7 +18,7 @@
 
 
 #include "OSKnitroSolver.h"
-#include "CommonUtil.h"
+#include "OSCommonUtil.h"
 
 using std::cout; 
 using std::endl; 

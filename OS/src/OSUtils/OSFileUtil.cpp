@@ -16,8 +16,8 @@
  * Optimization Services (OS) framework. </p>
  */
 
-#include "FileUtil.h"
-#include "ErrorClass.h"
+#include "OSFileUtil.h"
+#include "OSErrorClass.h"
 using std::cout;
 using std::endl;
 

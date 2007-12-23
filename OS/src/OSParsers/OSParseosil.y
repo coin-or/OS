@@ -22,10 +22,10 @@
  
 #include "OSInstance.h" 
 #include "OSnLNode.h"
-#include "ErrorClass.h"
+#include "OSErrorClass.h"
 #include "OSParameters.h"
 #include "OSiLParserData.h"
-#include "Base64.h"
+#include "OSBase64.h"
 
 #ifdef HAVE_CTIME
 # include <ctime>

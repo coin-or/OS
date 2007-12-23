@@ -433,7 +433,7 @@ PACKAGE_VERSION='0.1'
 PACKAGE_STRING='OS 0.1'
 PACKAGE_BUGREPORT='coin-os@list.coin-or.org'
 
-ac_unique_file="src/OSUtils/ErrorClass.cpp"
+ac_unique_file="src/OSUtils/OSErrorClass.cpp"
 ac_default_prefix=`pwd`
 # Factoring default headers for most tests.
 ac_includes_default="\
