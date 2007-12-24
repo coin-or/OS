@@ -833,9 +833,9 @@ static const yytype_uint16 yyrline[] =
      516,   518,   518,   521,   522,   524,   525,   525,   529,   532,
      533,   535,   537,   539,   543,   543,   547,   547,   553,   556,
      560,   561,   563,   565,   569,   572,   576,   583,   584,   585,
-     587,   590,   597,   598,   600,   600,   606,   607,   609,   610,
-     612,   616,   621,   623,   627,   631,   632,   634,   635,   637,
-     641,   646,   650
+     587,   592,   600,   601,   603,   603,   613,   614,   616,   617,
+     619,   623,   628,   630,   634,   638,   639,   641,   642,   644,
+     648,   653,   657
 };
 #endif
 
@@ -2547,30 +2547,37 @@ osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->os
 
   case 140:
 
-    {if(osinstance->instanceData->timeDomain->stages->numberOfStages > parserData->stagecount ) osilerror( NULL, osinstance, parserData, "actual number of stages less than numberOfStages");;}
+    {
+ // if(osinstance->instanceData->timeDomain->stages->numberOfStages > parserData->stagecount ) osilerror( NULL, osinstance, parserData, "actual number of stages less than numberOfStages");
+;}
     break;
 
   case 141:
 
     {
-if ( *(yyvsp[(2) - (5)].sval) != *(yyvsp[(4) - (5)].sval) ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
-osinstance->instanceData->timeDomain->stages->numberOfStages = (yyvsp[(3) - (5)].ival);
-if( osinstance->instanceData->timeDomain->stages->numberOfStages > 0 )
-osinstance->instanceData->timeDomain->stages->stage = new Stage*[ (yyvsp[(3) - (5)].ival) ];
-for(int i = 0; i < (yyvsp[(3) - (5)].ival); i++) osinstance->instanceData->timeDomain->stages->stage[i] = new Stage();;}
+ // if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
+ // osinstance->instanceData->timeDomain->stages->numberOfStages = $3;
+ // if( osinstance->instanceData->timeDomain->stages->numberOfStages > 0 )
+ // osinstance->instanceData->timeDomain->stages->stage = new Stage*[ $3 ];
+ // for(int i = 0; i < $3; i++) osinstance->instanceData->timeDomain->stages->stage[i] = new Stage();
+;}
     break;
 
   case 144:
 
-    {if(osinstance->instanceData->timeDomain->stages->numberOfStages <= parserData->stagecount) osilerror( NULL, osinstance, parserData, "too many stages");;}
+    {
+ // if(osinstance->instanceData->timeDomain->stages->numberOfStages <= parserData->stagecount) osilerror( NULL, osinstance, parserData, "too many stages");
+ ;}
     break;
 
   case 145:
 
-    {parserData->stagecount += parserData->stagemult;
-parserData->stagenameON = false;
-parserData->stagemultON = false;
-parserData->stagemult   = 1;;}
+    {
+ // parserData->stagecount += parserData->stagemult;
+ // parserData->stagenameON = false;
+ // parserData->stagemultON = false;
+ // parserData->stagemult   = 1;
+ ;}
     break;
 
   case 150:

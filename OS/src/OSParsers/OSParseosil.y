@@ -585,23 +585,30 @@ timedomain:
 		| TIMEDOMAINSTART GREATERTHAN interval TIMEDOMAINEND;
 
 stages: STAGESSTART stagenumberatt stagelist STAGESEND
-{if(osinstance->instanceData->timeDomain->stages->numberOfStages > parserData->stagecount ) osilerror( NULL, osinstance, parserData, "actual number of stages less than numberOfStages");};
+{
+ // if(osinstance->instanceData->timeDomain->stages->numberOfStages > parserData->stagecount ) osilerror( NULL, osinstance, parserData, "actual number of stages less than numberOfStages");
+};
 
 stagenumberatt: NUMBEROFSTAGESATT QUOTE INTEGER QUOTE GREATERTHAN {
-if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
-osinstance->instanceData->timeDomain->stages->numberOfStages = $3;
-if( osinstance->instanceData->timeDomain->stages->numberOfStages > 0 )
-osinstance->instanceData->timeDomain->stages->stage = new Stage*[ $3 ];
-for(int i = 0; i < $3; i++) osinstance->instanceData->timeDomain->stages->stage[i] = new Stage();};
+ // if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
+ // osinstance->instanceData->timeDomain->stages->numberOfStages = $3;
+ // if( osinstance->instanceData->timeDomain->stages->numberOfStages > 0 )
+ // osinstance->instanceData->timeDomain->stages->stage = new Stage*[ $3 ];
+ // for(int i = 0; i < $3; i++) osinstance->instanceData->timeDomain->stages->stage[i] = new Stage();
+};
 
 stagelist: stage
 	| stagelist stage;
 
-stage: {if(osinstance->instanceData->timeDomain->stages->numberOfStages <= parserData->stagecount) osilerror( NULL, osinstance, parserData, "too many stages");}
-STAGESTART anotherStageATT stageend {parserData->stagecount += parserData->stagemult;
-parserData->stagenameON = false;
-parserData->stagemultON = false;
-parserData->stagemult   = 1;};
+stage: {
+ // if(osinstance->instanceData->timeDomain->stages->numberOfStages <= parserData->stagecount) osilerror( NULL, osinstance, parserData, "too many stages");
+ }
+STAGESTART anotherStageATT stageend {
+ // parserData->stagecount += parserData->stagemult;
+ // parserData->stagenameON = false;
+ // parserData->stagemultON = false;
+ // parserData->stagemult   = 1;
+ };
 		
 stageend: ENDOFELEMENT
 	| GREATERTHAN STAGEEND;
