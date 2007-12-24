@@ -1,13 +1,13 @@
 /** @file OSInstance.cpp
  * \brief This file defines the OSInstance class along with its supporting classes..
  *
- * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005
+ * @author  Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin, 
+ * @version 2.0, 12/21/2007
  * @since   OS1.0
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Jun Ma, Kipp Martin,
- * Northwestern University, and the University of Chicago.
+ * Copyright (C) 2005, Robert Fourer, Gus Gassmann Jun Ma, Kipp Martin,
+ * Northwestern University, Dalhousie University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -109,7 +109,13 @@ OSInstance::OSInstance():
 	m_bSparseJacobianCalculated( false),
 	m_iHighestOrderEvaluated( -1),
 	m_mmdObjGradient( NULL),
-	bUseExpTreeForFunEval( false)
+	bUseExpTreeForFunEval( false),
+	m_bProcessTimeDomain( false),
+	m_bProcessTimeStages( false),
+	m_bProcessTimeInterval( false),
+	m_bFiniteTimeStages( false),
+	m_iNumberOfTimeStages(-1)
+
 {    
 	#ifdef DEBUG
 	cout << "Inside OSInstance Constructor" << endl;
@@ -258,7 +264,11 @@ OSInstance::~OSInstance(){
 		delete[] m_miNonlinearExpressionTreeModIndexes;
 		m_miNonlinearExpressionTreeModIndexes = NULL;
 	}
-	//
+//	if( (instanceData->timeDomain->stages->stage != NULL) && (m_bProcessTimeStages == true) ){
+//		delete m_Stages;
+//		m_Stages = NULL;
+//	}
+	
 	// delete the two children of OSInstance
 	//delete instanceHeader object
 	delete instanceHeader;
@@ -563,6 +573,90 @@ NonlinearExpressions::~NonlinearExpressions(){
 }//end ~NonlinearExpressions()  
 
 
+TimeDomain::TimeDomain(){
+	#ifdef DEBUG
+	cout << "Inside the TimeDomain Constructor" << endl;
+	#endif
+} 
+
+TimeDomain::~TimeDomain(){  
+	#ifdef DEBUG
+	cout << "Inside the TimeDomain Destructor" << endl;
+	#endif
+} 
+
+Stages::Stages():
+	numberOfStages(0),
+	stage(NULL)
+{
+	#ifdef DEBUG  
+	cout << "Inside the Stages Constructor" << endl;
+	#endif
+} 
+
+
+Stages::~Stages(){  
+	#ifdef DEBUG
+	cout << "Inside the Stages Destructor" << endl;
+	#endif
+	int i;
+	if(numberOfStages > 0 && stage != NULL){
+		for( i = 0; i < numberOfStages; i++){
+			delete stage[i];
+			stage[i] = NULL;
+		}
+	}
+	delete[] stage;
+	stage = NULL;  
+}
+
+
+Stage::Stage():
+	name(""),
+	nvar(0),
+	ncon(0),
+	nobj(0),
+	variables(NULL),
+	constraints(NULL),
+	objectives(NULL)
+{ 
+	#ifdef DEBUG 
+	cout << "Inside the Stage Constructor" << endl;
+	#endif
+}//end Stage() 
+
+
+Stage::~Stage(){
+	#ifdef DEBUG  
+	cout << "Inside the Stage Destructor" << endl;
+	#endif
+	int i;
+	if(nvar > 0 && variables != NULL){
+		for( i = 0; i < nvar; i++){
+			delete variables[i];
+			variables[i] = NULL;
+		}
+	}
+	delete[] variables;
+	variables = NULL;  
+
+	if(ncon > 0 && constraints != NULL){
+		for( i = 0; i < ncon; i++){
+			delete constraints[i];
+			constraints[i] = NULL;
+		}
+	}
+	delete[] constraints;
+	constraints = NULL;  
+	if(nobj > 0 && objectives != NULL){
+		for( i = 0; i < nobj; i++){
+			delete objectives[i];
+			objectives[i] = NULL;
+		}
+	}
+	delete[] objectives;
+	objectives = NULL;  
+}//end ~Stage()  
 
 InstanceData::InstanceData(){ 
 	#ifdef DEBUG 
@@ -574,7 +668,7 @@ InstanceData::InstanceData(){
 	linearConstraintCoefficients = new LinearConstraintCoefficients();
 	quadraticCoefficients = new QuadraticCoefficients();
 	nonlinearExpressions = new NonlinearExpressions();
-	
+	timeDomain = new TimeDomain();
 } 
 
 InstanceData::~InstanceData(){  
@@ -593,7 +687,8 @@ InstanceData::~InstanceData(){
 	quadraticCoefficients = NULL;
 	delete nonlinearExpressions;
 	nonlinearExpressions = NULL;
-	
+	delete timeDomain;
+	timeDomain = NULL;
 } 
 
 string OSInstance::getInstanceName(){
@@ -1162,7 +1257,7 @@ OSExpressionTree* OSInstance::getNonlinearExpressionTree(int rowIdx){
 		// if we are rowIdx has no nonlinar terms so return a null
 		//return NULL;
 	}     
-}// getNonlinearExpresssionTree for a specific index   
+}// getNonlinearExpressionTree for a specific index   
 
 
 OSExpressionTree* OSInstance::getNonlinearExpressionTreeMod(int rowIdx){
@@ -1184,7 +1279,7 @@ OSExpressionTree* OSInstance::getNonlinearExpressionTreeMod(int rowIdx){
 		// if we are rowIdx has no nonlinar terms so return a null
 		//return NULL;
 	}     
-}// getNonlinearExpresssionTreeMod for a specific index 
+}// getNonlinearExpressionTreeMod for a specific index 
 
 
 std::vector<OSnLNode*> OSInstance::getNonlinearExpressionTreeInPostfix( int rowIdx){
@@ -1311,7 +1406,7 @@ std::map<int, OSExpressionTree*> OSInstance::getAllNonlinearExpressionTrees(){
 		}
 	}
 	return m_mapExpressionTrees;
-}// getAllNonlinearExpresssionTrees
+}// getAllNonlinearExpressionTrees
 
 std::map<int, OSExpressionTree*> OSInstance::getAllNonlinearExpressionTreesMod(){
 	if( m_bProcessExpressionTreesMod == true ) return m_mapExpressionTreesMod;
@@ -1319,8 +1414,12 @@ std::map<int, OSExpressionTree*> OSInstance::getAllNonlinearExpressionTreesMod()
 	// make sure we have the modified map available
 	if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
 	return m_mapExpressionTreesMod;
-}// getAllNonlinearExpresssionTreesMod
+}// getAllNonlinearExpressionTreesMod
 
+//bool OSInstance::processTimeDomain() {
+//	if(m_bProcessTimeDomain) return true;
+//	m_bProcessTimeDomain = true;
+//}// processTimeDomain
 
 
 
@@ -2567,7 +2666,7 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( ){
 	//std::cout << "HESSIAN DIMENSION = " << m_LagrangianSparseHessian->hessDimension << std::endl;
 	numNonz = 0;
 	for(posMap1 = m_mapAllNonlinearVariablesIndex.begin(); posMap1 != m_mapAllNonlinearVariablesIndex.end(); ++posMap1){
-		//std::cout << "posMap1->first  " << posMap1->first << std::endl;
+		std::cout << "posMap1->first  " << posMap1->first << std::endl;
 		j = i;
 		for(posMap2 = posMap1; posMap2 != m_mapAllNonlinearVariablesIndex.end(); ++posMap2){
 			//std::cout << "posMap2->first  " << posMap2->first << std::endl;

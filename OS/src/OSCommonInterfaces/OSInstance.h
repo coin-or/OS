@@ -1,13 +1,13 @@
 /** @file OSInstance.h
- * \brief This file defines the OSInstance class along with its supporting classes..
+ * \brief This file defines the OSInstance class along with its supporting classes.
  *
- * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005 
+ * @author  Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin, 
+ * @version 2.0, 12/21/2007 
  * @since   OS1.0
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Jun Ma, Kipp Martin,
- * Northwestern University, and the University of Chicago.
+ * Copyright (C) 2005-2007, Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin,
+ * Northwestern University, Dalhsouie University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -24,7 +24,7 @@
 <ol>
 <li> anything specific to XML such as base64, multi, incr do not go into classes </li>
 <li> The root OSnLNode of each <nl> element is called ExpressionTree </li>
-<li> Root is not called osil it is called osinstance </li>
+<li> Root is not called osil; it is called osinstance </li>
 </ol>
  */
  
@@ -56,7 +56,7 @@ public:
 	~Variable();
 
 	/** lb corresponds to the optional attribute that holds the variable lower bound, 
-	 * the  default value is 0
+	 * the default value is 0
 	 */
 	double lb;
 
@@ -71,7 +71,7 @@ public:
 	double init;
 	
 	/** type corresponds to the attribute that holds the variable type: C (Continuous),
-	 * B (binary), I (general integer), or S (string) the default is C
+	 * B (binary), I (general integer), or S (string). The default is C
 	 */
 	char type;
 	
@@ -100,7 +100,7 @@ public:
 	/** numberOfVariables is the number of variables in the instance */
 	int numberOfVariables;
 	
-	/** var a pointer to an array of var pointers */
+	/** Here we define a pointer to an array of var pointers */
 	Variable **var;
 }; // class Variables
 
@@ -190,7 +190,7 @@ public:
 	/** The InstanceHeader class constructor */
 	InstanceHeader();
 	
-	/** The Constraints class destructor */
+	/** The InstanceHeader class destructor */
 	~InstanceHeader();
 	
 	/** the problem instance description */
@@ -275,7 +275,7 @@ public:
  * if a large part of the problem is linear, then
  * store this is the standard sparse format, either by
  * column or row. There are three arrays, an array of 
- * nonzero values, an array of either column or row indicies
+ * nonzero values, an array of either column or row indices
  * and then a pointer to the start of each column or row.
  */
 class LinearConstraintCoefficients{
@@ -297,10 +297,10 @@ public:
 	 */
 	IntVector *start;
 	
-	/** a pointer of row indicies if the problem is stored by column */
+	/** a pointer of row indices if the problem is stored by column */
 	IntVector *rowIdx;
 	
-	/** a pointer of column indicies if the problem is stored by row */
+	/** a pointer of column indices if the problem is stored by row */
 	IntVector *colIdx;
 	
 	/** a pointer to the array of nonzero values being stored */
@@ -320,7 +320,7 @@ public:
  * <b><qTerm></b> element.
  * 
  * \remarks
- * quadratic terms can be efficient stored by storing
+ * quadratic terms can be stored efficiently by storing
  * the index of each variable, the coefficient of the
  * quadratic term, and the row in which it appears
  */
@@ -374,7 +374,7 @@ class QuadraticCoefficients {
 	 */
 	int numberOfQuadraticTerms;
 	
-	/** qTerm is pointer to an array of QuadraticTerm
+	/** qTerm is a pointer to an array of QuadraticTerm
 	 * object pointers */	
     QuadraticTerm** qTerm;
 }; // QuadraticCoefficients
@@ -434,6 +434,120 @@ class NonlinearExpressions {
     Nl **nl;
 }; // NonlinearExpression
  
+/*! \class Stage
+ * \brief The in-memory representation of the 
+ * <b><stage></b> element.
+ */
+class Stage {
+    public:
+    
+    /** The Stage class constructor */
+	Stage();
+	
+	/** The Stage class destructor */
+	~Stage();
+	
+	/** name corresponds to the optional attribute that holds
+	 * the name of the stage; the default value is empty
+	 */
+	std::string name;
+	
+	/** nvar gives the number of variables associated with this stage
+	 */
+	int nvar;
+	
+	/** ncon gives the number of constraints associated with this stage
+	 */
+	int ncon;
+	
+	/** nobj gives the number of objectives associated with this stage
+	 */
+	int nobj;
+
+	/** variables is a pointer to an array of variables
+	 *  associated with this stage
+	 */
+	int** variables;
+
+	/** constraints is a pointer to an array of constraints
+	 *  associated with this stage
+	 */
+	int** constraints;
+
+	/** objectives is a pointer to an array of objectives
+	 *  associated with this stage
+	 */
+	int** objectives;
+}; // Stage
+ 
+/*! \class Stages
+ * \brief The in-memory representation of the 
+ * <b><stages></b> element.
+ */
+class Stages {
+    public:
+    
+    /** The Stages class constructor */
+	Stages();
+	
+	/** The Stages class destructor */
+	~Stages();
+	
+	/** numberOfStages is the number of stages
+	 * in the <b><stages></b> element.
+	 */
+	int numberOfStages;
+	
+	/** stage is pointer to an array of stage object pointers */	
+    Stage **stage;
+}; // Stages
+ 
+/*! \class Interval
+ * \brief The in-memory representation of the 
+ * <b><interval></b> element.
+ */
+class Interval {
+    public:
+    
+    /** The Interval class constructor */
+	Interval();
+	
+	/** The Interval class destructor */
+	~Interval();
+	
+	/** intervalHorizon is the end of the planning period
+	 * in the <b><interval></b> element.
+	 */
+	double intervalHorizon;
+	
+	/** intervalStart is the start of the planning period
+	 * in the <b><interval></b> element.
+	 */
+	double intervalStart;
+}; // Interval
+ 
+/*! \class TimeDomain
+ * \brief The in-memory representation of the 
+ * <b><timeDomain></b> element.
+ */
+class TimeDomain {
+    public:
+    
+    /** The TimeDomain class constructor */
+	TimeDomain();
+	
+	/** The TimeDomain class destructor */
+	~TimeDomain();
+
+	/** stages is a pointer to a Stages object 
+	 */
+	Stages *stages;
+
+	/** interval is a pointer to an Interval object 
+	 */
+	Interval *interval;
+}; // TimeDomain
+
 /*! \class InstanceData
  * \brief The in-memory representation of the 
  * <b><instanceData></b> element.
@@ -447,6 +561,7 @@ class NonlinearExpressions {
  * <li><b>LinearConstraintCoefficients</b> object</li>
  * <li><b>QuadraticCoefficients</b> object</li>
  * <li><b>NonlinearExpressions/b> object</li>
+ * <li><b>TimeDomain/b> object</li>
  * </ul>
  */
 class InstanceData{
@@ -455,7 +570,7 @@ public:
 	/** The InstanceData class constructor */
 	InstanceData();
 	
-	/** The InstanceData class constructor */
+	/** The InstanceData class destructor */
 	~InstanceData();
 	
 	/** variables is a pointer to a Variables object */
@@ -481,6 +596,11 @@ public:
 	 * NonlinearExpressions object
 	 */	
 	NonlinearExpressions* nonlinearExpressions;
+	
+	/** timeDomain is a pointer to a 
+	 * TimeDomain object
+	 */	
+	TimeDomain* timeDomain;
 }; // class InstanceData
 
 
@@ -565,7 +685,7 @@ private:
 	int m_iNumberOfQuadraticRowIndexes;
 	
 	/**
-	 * m_bQuadraticRowIndexesProcessed is true if getQuadraticRowIndexex() has been called. 
+	 * m_bQuadraticRowIndexesProcessed is true if getQuadraticRowIndexes() has been called. 
 	 */
 	bool m_bQuadraticRowIndexesProcessed;
 
@@ -804,7 +924,7 @@ private:
  	int *m_miJacStart;
  	
      /**
-	 * m_miJacIndex holds a int array of variable indicies for the Jacobian matrix in sparse form (row major).  
+	 * m_miJacIndex holds a int array of variable indices for the Jacobian matrix in sparse form (row major).  
      */    
  	int *m_miJacIndex;
  	
@@ -890,7 +1010,7 @@ private:
 	OSExpressionTree *m_LagrangianExpTree ;
 	
 	/**
-	 * m_bLagrangianHessionCreated is true if a Lagragian function for the Hessian has been created
+	 * m_bLagrangianHessionCreated is true if a Lagrangian function for the Hessian has been created
 	 */ 
 	bool m_bLagrangianExpTreeCreated ;
 	
@@ -995,13 +1115,13 @@ private:
 	std::vector<double> m_vdX;
 	
 	/**
-	 * m_vdYval is a vector function values
+	 * m_vdYval is a vector of function values
 	 *   
 	 */	
 	std::vector<double> m_vdYval;
 	
 	/**
-	 * m_vbLagHessNonz is a boolean vector holding the nonzero patter
+	 * m_vbLagHessNonz is a boolean vector holding the nonzero pattern
 	 * of the Lagrangian of the Hessian
 	 *   
 	 */	
@@ -1038,6 +1158,31 @@ private:
 	 */		
 	std::vector<double> m_vdRangeUnitVec;
 	
+
+	/**
+	 * m_bProcessTimeDomain holds whether the time domain has been processed. 
+	 */
+	bool m_bProcessTimeDomain;
+
+	/**
+	 * m_bProcessTimeStages holds whether the time stages have been processed. 
+	 */
+	bool m_bProcessTimeStages;
+
+	/**
+	 * m_bProcessTimeInterval holds whether a time interval has been processed. 
+	 */
+	bool m_bProcessTimeInterval;
+
+	/**
+	 * m_bFiniteTimeStages holds whether the time domain has the form of finite (discrete) stages. 
+	 */
+	bool m_bFiniteTimeStages;
+
+	/**
+	 * m_iNumberOfTimeStages holds the number of discrete stages
+	 */
+	bool m_iNumberOfTimeStages;
 
 	
 	/**
@@ -1264,7 +1409,7 @@ public:
 	/**
 	 * Get constraint lower bounds. 
 	 * 
-	 * @return a double array of constraint lower bounds, null if constraints.
+	 * @return a double array of constraint lower bounds, null if no constraints.
 	 * @throws Exception if the elements in constraints are logically inconsistent. 
 	 */
 	double* getConstraintLowerBounds();
@@ -1437,7 +1582,7 @@ public:
 	std::map<int, OSExpressionTree* > getAllNonlinearExpressionTreesMod();
 	
 	 /**
-   	 * Get all the nonlinear expression tree indexes, i.e. indexes of rows (objetives or constraints) that contain nonlinear expressions. 
+   	 * Get all the nonlinear expression tree indexes, i.e. indexes of rows (objectives or constraints) that contain nonlinear expressions. 
    	 * 
    	 * @return a pointer to an integer array of nonlinear expression tree indexes. 
    	 */
@@ -1531,8 +1676,10 @@ public:
    	 * 
    	 * @param number holds the number of variables. It is required.  
    	 * @param names holds a std::string array of variable names; use null if no variable names. 
-   	 * @param lowerBounds holds a double array of variable lower bounds; use null all lower bounds are 0; use Double.NEGATIVE_INFINITY if no lower bound for a specific variable in the array. 
-   	 * @param upperBounds holds a double array of variable upper bounds; use null if no upper bounds; use Double.POSITIVE_INFINITY if no upper bound for a specific variable in the array. 
+   	 * @param lowerBounds holds a double array of variable lower bounds; use null if all lower bounds are 0; 
+	 *  use Double.NEGATIVE_INFINITY if no lower bound for a specific variable in the array. 
+   	 * @param upperBounds holds a double array of variable upper bounds; use null if no upper bounds; 
+	 *  use Double.POSITIVE_INFINITY if no upper bound for a specific variable in the array. 
    	 * @param types holds a char array of variable types; use null if all variables are continuous; 
    	 * for a specfic variable in the array use B for Binary, I for Integer, S for String, C or any other char for Continuous,)  
    	 * @param inits holds a double array of varible initial values; use null if no initial values. 
@@ -1928,7 +2075,7 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	OSExpressionTree* getLagrangianExpTree( );
 
 	/**
-	 * @return a pointer to a map of the indicies of all of the variables
+	 * @return a pointer to a map of the indices of all of the variables
 	 * that appear in the Lagrangian function 
 	 */
 	std::map<int, int> getAllNonlinearVariablesIndexMap( );	

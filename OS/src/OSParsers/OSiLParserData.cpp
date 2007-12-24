@@ -1,12 +1,12 @@
-/** @file OSiLParserData.h
+/** @file OSiLParserData.cpp
  * 
- * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005
+ * @author  Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin, 
+ * @version 2.0, 12/21/2007
  * @since   OS1.0
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Jun Ma, Kipp Martin,
- * Northwestern University, and the University of Chicago.
+ * Copyright (C) 2005-2007, Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin,
+ * Northwestern University, Dalhousie University and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -36,6 +36,15 @@
  	numberidattON(false),
  	variableidxattON(false),
  	variablecoefattON(false),
+	stagename(""),
+	stagecount(0),
+	stagemult(0),
+	intervalhorizon(0.0),
+	intervalstart(0.0),
+	stagenameON(false),
+	stagemultON(false),
+	intervalhorizonON(false),
+	intervalstartON(false),
 	osillineno(0)
  {
 

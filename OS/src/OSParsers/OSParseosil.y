@@ -1,12 +1,12 @@
 /** @file parseosil.y
  * 
- * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005
+ * @author  Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin, 
+ * @version 2.0, 12/21/2007
  * @since   OS1.0
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Jun Ma, Kipp Martin,
- * Northwestern University, and the University of Chicago.
+ * Copyright (C) 2005-2007, Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin,
+ * Northwestern University, Dalhousie University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -190,6 +190,17 @@ void osilerror(YYLTYPE* type, OSInstance *osintance,  OSiLParserData *parserData
 %token VARIABLESTART VARIABLEEND ABSSTART ABSEND MAXSTART MAXEND
 %token ALLDIFFSTART ALLDIFFEND MINSTART MINEND ESTART EEND PISTART PIEND
 
+%token TIMEDOMAINSTART TIMEDOMAINEND
+%token STAGESSTART STAGESEND STAGESTART STAGEEND
+%token NAMEATT MULTATT NUMBEROFSTAGESATT HORIZONATT STARTATT
+%token VARIABLESSTART CONSTRAINTSSTART OBJECTIVESSTART
+%token VARIABLESEND CONSTRAINTSEND OBJECTIVESEND
+%token NUMBEROFVARIABLESATT NUMBEROFCONSTRAINTSATT NUMBEROFOBJECTIVESATT
+%token STARTIDXATT ENDIDXATT
+%token VARSTART VAREND CONSTART CONEND OBJSTART OBJEND
+%token INTERVALSTART INTERVALEND
+
+
 
 
 
@@ -198,7 +209,7 @@ void osilerror(YYLTYPE* type, OSInstance *osintance,  OSiLParserData *parserData
 
 
 
-osildoc: quadraticcoefficients  nonlinearExpressions  INSTANCEDATAEND  OSILEND;
+osildoc: quadraticcoefficients  nonlinearExpressions  timedomain INSTANCEDATAEND  OSILEND;
 
 
 
@@ -228,7 +239,7 @@ parserData->qtermidxTwoattON = false;
 parserData->qtermcoefattON = false;} ;
 				
 qtermend:  ENDOFELEMENT
-		| GREATERTHAN  QTERMEND;    
+		| GREATERTHAN  QTERMEND;
 	
 
 anotherqTermATT: 
@@ -569,12 +580,76 @@ variableidxATT: IDXATT QUOTE  INTEGER QUOTE { if ( *$2 != *$4 ) osilerror( NULL,
 	 }
 }  ; 
 
+timedomain:
+		| TIMEDOMAINSTART GREATERTHAN stages   TIMEDOMAINEND
+		| TIMEDOMAINSTART GREATERTHAN interval TIMEDOMAINEND;
 
+stages: STAGESSTART stagenumberatt stagelist STAGESEND
+{if(osinstance->instanceData->timeDomain->stages->numberOfStages > parserData->stagecount ) osilerror( NULL, osinstance, parserData, "actual number of stages less than numberOfStages");};
 
+stagenumberatt: NUMBEROFSTAGESATT QUOTE INTEGER QUOTE GREATERTHAN {
+if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
+osinstance->instanceData->timeDomain->stages->numberOfStages = $3;
+if( osinstance->instanceData->timeDomain->stages->numberOfStages > 0 )
+osinstance->instanceData->timeDomain->stages->stage = new Stage*[ $3 ];
+for(int i = 0; i < $3; i++) osinstance->instanceData->timeDomain->stages->stage[i] = new Stage();};
+
+stagelist: stage
+	| stagelist stage;
+
+stage: {if(osinstance->instanceData->timeDomain->stages->numberOfStages <= parserData->stagecount) osilerror( NULL, osinstance, parserData, "too many stages");}
+STAGESTART anotherStageATT stageend {parserData->stagecount += parserData->stagemult;
+parserData->stagenameON = false;
+parserData->stagemultON = false;
+parserData->stagemult   = 1;};
 		
+stageend: ENDOFELEMENT
+	| GREATERTHAN STAGEEND;
 
+anotherStageATT:
+	| anotherStageATT stageatt;
 
+stageatt: stagenameatt 
+		{ if(parserData->stagenameON) 
+       osilerror( NULL, osinstance, parserData, "too many stage name attributes");
+		parserData->stagenameON = true; }
+	|   stagemultatt 
+		{ if(parserData->stagemultON) 
+       osilerror( NULL, osinstance, parserData, "too many stage mult attributes");
+		parserData->stagemultON = true; }
 
+stagenameatt: NAMEATT ATTRIBUTETEXT {
+		parserData->stagename = $2;};
+stagemultatt: MULTATT QUOTE INTEGER QUOTE {
+		if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
+		parserData->stagemult = $3;};
+
+interval: INTERVALSTART anotherIntervalATT intervalend {
+		parserData->intervalhorizonON = false;
+		parserData->intervalstartON = false;};
+
+intervalend: ENDOFELEMENT
+	| GREATERTHAN INTERVALEND;
+
+anotherIntervalATT:
+	| anotherIntervalATT intervalatt;
+
+intervalatt: intervalhorizonatt 
+		{ if(parserData->intervalhorizonON) 
+       osilerror( NULL, osinstance, parserData, "too many interval horizon attributes");
+		parserData->intervalhorizonON = true; }
+	|   intervalstartatt 
+		{ if(parserData->intervalstartON) 
+       osilerror( NULL, osinstance, parserData, "too many interval start attributes");
+		parserData->intervalstartON = true; }
+
+intervalhorizonatt: HORIZONATT QUOTE DOUBLE QUOTE {
+		if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
+		parserData->intervalhorizon = $3;};
+
+intervalstartatt: STARTATT QUOTE DOUBLE QUOTE {
+		if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
+		parserData->intervalstart = $3;};
 
 
 		
@@ -613,9 +688,9 @@ OSInstance* yygetOSInstance( const char *osil) throw (ErrorClass) {
 		//
 		if(  osilparse( osinstance,  parserData) != 0) {
 			osillex_destroy(scanner);
-		 	delete parserData;
-		  	throw ErrorClass(  "Error parsing the OSiL");
-		 }
+			delete parserData;
+			throw ErrorClass(  "Error parsing the OSiL");
+		}
 		osillex_destroy(scanner);
 		delete parserData;
 		return osinstance;
