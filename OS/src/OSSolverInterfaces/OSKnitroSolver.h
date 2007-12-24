@@ -18,9 +18,8 @@
 
 #include "OSConfig.h" 
 
-#ifndef KNITRO_H__
-#include  "knitro.h"
-#endif
+
+
 #ifndef NLPPROBLEMDEF_H__
 #include  "nlpProblemDef.h"
 #endif
@@ -38,6 +37,10 @@
 #include "OSDataStructures.h"
 #include "OSFileUtil.h"  
 #include "OSErrorClass.h"
+
+#ifndef KNITRO_H__
+#include  "knitro.h"
+#endif
 
 # include <cstddef>
 # include <cstdlib>

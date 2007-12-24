@@ -88,9 +88,16 @@
 
 
 
+#ifdef COIN_HAS_KNITRO    
+#include "OSKnitroSolver.h"
+#endif 
+
+
 #ifdef COIN_HAS_ASL
 #include "OSnl2osil.h"
 #endif
+
+
 
 
 #ifdef COIN_HAS_LINDO    
@@ -101,9 +108,7 @@
 #include "OSIpoptSolver.h"
 #endif 
 
-#ifdef COIN_HAS_KNITRO    
-#include "OSKnitroSolver.h"
-#endif 
+
 
 
 
