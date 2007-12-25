@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osol xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/OSoL.xsd">
+ 	<general>  
+ 		<jobID>xyz123Dec2210AM</jobID>
+ 		<contact transportType="smtp">
+ 			kipp.martin@chicagogsb.edu
+ 		</contact>       
+	</general>
+    <optimization>
+    	<other name="os_solver">ipopt</other>
+    </optimization>
+</osol>
