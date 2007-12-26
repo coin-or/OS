@@ -140,7 +140,7 @@ int  main(){
 		// a counter
 		int kjl;
 		osilreader = new OSiLReader();
-		osinstance = osilreader->readOSiL( &osil);
+		osinstance = osilreader->readOSiL( osil);
 		std::vector<double> funVals(3);
 		std::vector<double> dfunVals(6);
 		double *conVals = NULL;
