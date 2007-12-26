@@ -58,13 +58,13 @@ int main(int argC, char* argV[]){
 		fileUtil = new FileUtil();
 		// get the input file
 	    osilFileName =  argV[1];
-	    osil = fileUtil->getFileAsString( &osilFileName[0]);
+	    osil = fileUtil->getFileAsString( osilFileName.c_str());
 	    OSInstance *osinstance = NULL;
 	    OSiLReader *osilreader = NULL;
 	    OSiLWriter *osilwriter = NULL;
 	    osilwriter = new OSiLWriter();
 	    osilreader = new OSiLReader(); 
-	    osinstance = osilreader->readOSiL( &osil);
+	    osinstance = osilreader->readOSiL( osil);
 	    cout << osilwriter->writeOSiL( osinstance) << endl;
 	    delete osilreader;
 	    delete osilwriter;
