@@ -172,27 +172,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\..\src\OSUtils\Base64.cpp"
+				RelativePath="..\..\..\src\OSUtils\OSBase64.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\src\OSUtils\CommonUtil.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\OSCommonInterfaces\DefaultSolver.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\OSUtils\ErrorClass.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\OSUtils\FileUtil.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\OSUtils\MathUtil.cpp"
+				RelativePath="..\..\..\src\OSUtils\OSCommonUtil.cpp"
 				>
 			</File>
 			<File
@@ -200,7 +184,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\src\OSCommonInterfaces\OSDefaultSolver.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSUtils\OSErrorClass.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\src\OSCommonInterfaces\OSExpressionTree.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSUtils\OSFileUtil.cpp"
 				>
 			</File>
 			<File
@@ -224,7 +220,35 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\src\OSUtils\OSMathUtil.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\src\OSCommonInterfaces\OSnLNode.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSParsers\OSParseosil.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSParsers\OSParseosil.tab.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSParsers\OSParseosol.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSParsers\OSParseosrl.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSParsers\OSParseosrl.tab.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSParsers\OSParseosss.cpp"
 				>
 			</File>
 			<File
@@ -248,31 +272,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\src\OSParsers\parseosil.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\OSParsers\parseosil.tab.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\OSParsers\parseosol.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\OSParsers\parseosrl.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\OSParsers\parseosrl.tab.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\OSParsers\parseosss.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\OSAgent\WSUtil.cpp"
+				RelativePath="..\..\..\src\OSAgent\OSWSUtil.cpp"
 				>
 			</File>
 		</Filter>
@@ -288,10 +288,6 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 		</Filter>
-		<File
-			RelativePath=".\ReadMe.txt"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>
