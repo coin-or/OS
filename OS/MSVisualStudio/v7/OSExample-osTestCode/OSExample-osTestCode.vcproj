@@ -2,8 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="OSSolverService"
-	ProjectGUID="{7F684109-6C1F-40D3-B3EC-FCB18651110A}"
+	Name="OSExample-osTestCode"
+	ProjectGUID="{C5E6054E-C498-421B-835C-25CAAB7AFB7A}"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -22,11 +22,11 @@
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\..\..\OS\src\OSUtils;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\ThirdPartyASL;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src;..\..\..\..;..\..\..\..\CppAD\local;..\..\..\..\CppAD;..\..\..\..\Osi\src\OsiCbc;..\..\..\..\Osi\src;..\..\..\..\Osi\src\OsiClp;..\..\..\..\CoinUtils\src;..\..\..\..\BuildTools\headers;..\..\..\..\Osi\src\OsiVol;..\..\..\..\Vol\src;..\..\..\..\Clp\src;..\..\..\..\Cbc\src"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_LINDO_DLL_"
-				MinimalRebuild="FALSE"
+				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="5"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderFile=".\Debug/OSSolverService.pch"
+				PrecompiledHeaderFile=".\Debug/OSExample-osTestCode.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
 				ProgramDataBaseFileName=".\Debug/"
@@ -39,12 +39,12 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="wsock32.lib winmm.lib advapi32.lib"
-				OutputFile=".\Debug\OSSolverService.exe"
+				OutputFile=".\Debug\OSTestCode.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\Debug/OSSolverService.pdb"
+				ProgramDatabaseFile=".\Debug/OSExample-osTestCode.pdb"
 				SubSystem="1"
 				TargetMachine="1"/>
 			<Tool
@@ -85,7 +85,7 @@
 				EnableFunctionLevelLinking="TRUE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="2"
-				PrecompiledHeaderFile=".\Release/OSSolverService.pch"
+				PrecompiledHeaderFile=".\Release/OSExample-osTestCode.pch"
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
@@ -98,10 +98,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="wsock32.lib winmm.lib advapi32.lib"
-				OutputFile=".\Release\OSSolverService.exe"
+				OutputFile=".\Release\OSTestCode.exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="FALSE"
-				ProgramDatabaseFile=".\Release/OSSolverService.pdb"
+				ProgramDatabaseFile=".\Release/OSExample-osTestCode.pdb"
 				SubSystem="1"
 				OptimizeReferences="0"
 				EnableCOMDATFolding="0"
@@ -136,7 +136,7 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
-				RelativePath="..\..\..\..\Os\src\OSSolverService.cpp">
+				RelativePath="..\..\..\examples\osTestCode\OSTestCode.cpp">
 			</File>
 		</Filter>
 		<Filter
