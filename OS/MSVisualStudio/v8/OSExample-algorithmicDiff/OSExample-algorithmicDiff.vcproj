@@ -2,9 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="OSTest"
-	ProjectGUID="{C5E6054E-C498-421B-835C-25CAAB7AFB7A}"
-	RootNamespace="OSTest"
+	Name="OSExample-algorithmicDiff"
+	ProjectGUID="{9DCDF713-59A1-46CF-9FFC-6BD0B71B482D}"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -48,7 +47,7 @@
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\Debug/OSTest.pch"
+				PrecompiledHeaderFile=".\Debug/OSExample-algorithmicDiff.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
 				ProgramDataBaseFileName=".\Debug/"
@@ -69,12 +68,12 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="wsock32.lib winmm.lib advapi32.lib"
-				OutputFile="..\..\..\test\unitTestDebug.exe"
+				OutputFile=".\Debug\OSAlgorithmicDiff.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;"
+				AdditionalLibraryDirectories=""
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\Debug/OSTest.pdb"
+				ProgramDatabaseFile=".\Debug/OSExample-algorithmicDiff.pdb"
 				SubSystem="1"
 				TargetMachine="1"
 			/>
@@ -137,7 +136,7 @@
 				EnableFunctionLevelLinking="true"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\Release/OSTest.pch"
+				PrecompiledHeaderFile=".\Release/OSExample-algorithmicDiff.pch"
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
@@ -158,11 +157,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="wsock32.lib winmm.lib advapi32.lib"
-				OutputFile="..\..\..\test\unitTestRelease.exe"
+				OutputFile=".\Release\OSAlgorithmicDiff.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;"
 				GenerateDebugInformation="false"
-				ProgramDatabaseFile=".\Release/OSTest.pdb"
+				ProgramDatabaseFile=".\Release/OSExample-algorithmicDiff.pdb"
 				SubSystem="1"
 				OptimizeReferences="0"
 				EnableCOMDATFolding="0"
@@ -203,7 +201,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\..\..\Os\test\unitTest.cpp"
+				RelativePath="..\..\..\examples\algorithmicDiff\OSAlgorithmicDiffTest.cpp"
 				>
 			</File>
 		</Filter>
