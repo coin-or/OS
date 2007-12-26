@@ -9,6 +9,7 @@
 OS/AUTHORS -text
 OS/LICENSE -text
 OS/MSVisualStudio/v7/OS.sln -text
+OS/MSVisualStudio/v7/OSApplication-fileUpload/OSApplication-fileUpload.vcproj -text
 OS/MSVisualStudio/v7/OSExample-algorithmicDiff/OSExample-algorithmicDiff.vcproj -text
 OS/MSVisualStudio/v7/OSExample-instanceGenerator/OSExample-instanceGenerator.vcproj -text
 OS/MSVisualStudio/v7/OSExample-osTestCode/OSExample-osTestCode.vcproj -text
