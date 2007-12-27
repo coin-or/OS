@@ -22,7 +22,7 @@ under the Common Public License.])
 
 # List one file in the package so that the configure script can test
 # whether the package is actually there
-AC_CONFIG_SRCDIR(src/OSUtils/ErrorClass.cpp)
+AC_CONFIG_SRCDIR(src/OSUtils/OSErrorClass.cpp)
 
 # Where should everything be installed by default?  Here, we want it
 # to be installed directly in 'bin', 'lib', 'include' subdirectories
@@ -89,7 +89,13 @@ AC_COIN_HAS_PROJECT(cppad)
          AC_DEFINE([WIN_],[1],[use if OS is Windows]) ;;
       *-cygwin*)
          AC_DEFINE([WIN_],[1],[use if OS is Windows])
-         AC_DEFINE([NOMINMAX],[1],[use if OS is Cygwin]) ;;
+		   case $CXX in
+		    g*)
+		      AC_DEFINE([USE_OLD_UNISTD],[1],[use if OS is Cygwin and complier is gnu]);;
+		     *)
+		     AC_MSG_WARN("DONT HAVE GCC COMPILER WITH GYGWIN");;   
+		  esac   
+		  AC_DEFINE([NOMINMAX],[1],[use if OS is Cygwin]) ;;     
        *-win*)
          AC_DEFINE([WIN_],[1],[use if OS is Windows]) ;;
     *-linux-*)

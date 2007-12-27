@@ -433,7 +433,7 @@ PACKAGE_VERSION='0.1'
 PACKAGE_STRING='OS 0.1'
 PACKAGE_BUGREPORT='coin-os@list.coin-or.org'
 
-ac_unique_file="src/OSUtils/ErrorClass.cpp"
+ac_unique_file="src/OSUtils/OSErrorClass.cpp"
 ac_default_prefix=`pwd`
 # Factoring default headers for most tests.
 ac_includes_default="\
@@ -21950,6 +21950,17 @@ cat >>confdefs.h <<\_ACEOF
 #define WIN_ 1
 _ACEOF
 
+		   case $CXX in
+		    g*)
+
+cat >>confdefs.h <<\_ACEOF
+#define USE_OLD_UNISTD 1
+_ACEOF
+;;
+		     *)
+		     { echo "$as_me:$LINENO: WARNING: \"DONT HAVE GCC COMPILER WITH GYGWIN\"" >&5
+echo "$as_me: WARNING: \"DONT HAVE GCC COMPILER WITH GYGWIN\"" >&2;};;
+		  esac
 
 cat >>confdefs.h <<\_ACEOF
 #define NOMINMAX 1

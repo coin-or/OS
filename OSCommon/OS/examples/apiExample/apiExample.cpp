@@ -40,7 +40,7 @@
 #include "OSiLWriter.h"
 #include "OSParameters.h"
 #include "OSnLNode.h"
-#include "ErrorClass.h"
+#include "OSErrorClass.h"
 
 
 #include<iostream>
