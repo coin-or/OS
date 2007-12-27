@@ -3,4 +3,4 @@ OS/src/OSAgent     https://projects.coin-or.org/svn/OS/stable/1.1/OS/src/OSAgent
 OS/src/OSCommonInterfaces     https://projects.coin-or.org/svn/OS/stable/1.1/OS/src/OSCommonInterfaces
 OS/src/OSParsers     https://projects.coin-or.org/svn/OS/stable/1.1/OS/src/OSParsers
 OS/src/OSUtils     https://projects.coin-or.org/svn/OS/stable/1.1/OS/src/OSUtils
-cppad         https://projects.coin-or.org/svn/CppAD/trunk
+cppad         https://projects.coin-or.org/svn/CppAD/stable/2.2
