@@ -21865,7 +21865,7 @@ cat >>confdefs.h <<\_ACEOF
 #define WIN_ 1
 _ACEOF
 
-         if test $CXX = g*
+         if $CXX = g*
          then
 
 cat >>confdefs.h <<\_ACEOF

@@ -235,7 +235,7 @@ AC_COIN_HAS_ASL
          AC_DEFINE([WIN_],[1],[use if OS is Windows]) ;;
       *-cygwin*)
          AC_DEFINE([WIN_],[1],[use if OS is Windows])
-         if test $CXX = g* 
+         if [$CXX = g*] 
          then
              AC_DEFINE([USE_OLD_UNISTD],[1],[use if OS is Cygwin and complier is gnu])
          else
