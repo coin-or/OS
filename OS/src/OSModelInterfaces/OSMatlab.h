@@ -18,7 +18,6 @@
 // 
 //OS headers
 #include "OSCoinSolver.h"
-#include "OSIpoptSolver.h"
 #include "OSResult.h" 
 #include "OSiLReader.h"       
 #include "OSiLWriter.h"     
@@ -31,14 +30,13 @@
 #ifdef COIN_HAS_LINDO    
 #include "OSLindoSolver.h"
 #endif  
+
 #ifdef COIN_HAS_IPOPT    
 #include "OSIpoptSolver.h"
 #endif 
 
 
-//#ifdef COIN_HAS_LINDO    
-//#include "LindoSolver.h"
-//#endif   
+
 //end OS headers
 
 #include <string>

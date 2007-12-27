@@ -38,15 +38,9 @@ libOSUtils_la_LDFLAGS = $(LT_LDFLAGS)
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Windows
 AM_CPPFLAGS =\
-	-I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` \
-	-I`$(CYGPATH_W) $(COINUTILSOBJDIR)/inc` \
-	-I`$(CYGPATH_W) $(CBCSRCDIR)/src` \
-	-I`$(CYGPATH_W) $(CBCOBJDIR)/src` \
-	-I`$(CYGPATH_W) $(srcdir)/..` \
-	-I`$(CYGPATH_W) $(srcdir)/../OsiClp` \
-	-I`$(CYGPATH_W) $(CLPSRCDIR)/src` \
-	-I`$(CYGPATH_W) $(CLPOBJDIR)/inc` 
+	-I`$(CYGPATH_W) $(srcdir)/..` 
 
+ 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
