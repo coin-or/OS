@@ -98,6 +98,7 @@
 
 #include <cppad/cppad.hpp> 
 //#include "CoinUtilsConfig.h"
+#include "OSCoinSolver.h"
 #include "OSConfig.h"
 #include "OSmps2osil.h" 
 #include "OSResult.h" 
@@ -108,7 +109,7 @@
 #include "OSInstance.h"  
 #include "OSFileUtil.h"  
 #include "OSConfig.h" 
-#include "OSCoinSolver.h"
+
 #include "OSDefaultSolver.h"  
 #include "OSWSUtil.h" 
 #include "OSSolverAgent.h"   

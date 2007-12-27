@@ -67,7 +67,7 @@
  * </ul>
 */
 
-
+#include "OSCoinSolver.h"
 #include "OSResult.h" 
 #include "OSiLReader.h"        
 #include "OSiLWriter.h" 
@@ -76,7 +76,6 @@
 #include "OSInstance.h"  
 #include "OSFileUtil.h"  
 #include "OSConfig.h"  
-#include "OSCoinSolver.h"
 #include "OSDefaultSolver.h"  
 #include "OSWSUtil.h" 
 #include "OSSolverAgent.h"   

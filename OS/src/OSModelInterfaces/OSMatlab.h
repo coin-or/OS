@@ -17,6 +17,8 @@
 #define OSMATLAB_H
 // 
 //OS headers
+#include "OSCoinSolver.h"
+#include "OSIpoptSolver.h"
 #include "OSResult.h" 
 #include "OSiLReader.h"       
 #include "OSiLWriter.h"     
@@ -25,6 +27,14 @@
 #include "OSDataStructures.h"
 #include "OSSolverAgent.h" 
 #include "OSErrorClass.h" 
+
+#ifdef COIN_HAS_LINDO    
+#include "OSLindoSolver.h"
+#endif  
+#ifdef COIN_HAS_IPOPT    
+#include "OSIpoptSolver.h"
+#endif 
+
 
 //#ifdef COIN_HAS_LINDO    
 //#include "LindoSolver.h"

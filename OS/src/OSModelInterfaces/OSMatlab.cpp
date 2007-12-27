@@ -18,45 +18,7 @@
 #include <sstream>
 #include <string>
 #include "OSMatlab.h"
-#include "OSResult.h"
-#include "OSCoinSolver.h"
-#include "OSrLWriter.h"
-#include "config_os.h"
 
-#include "OSiLReader.h"        
-#include "OSiLWriter.h" 
-#include "OSrLReader.h"        
-#include "OSrLWriter.h"      
-#include "OSInstance.h"  
-#include "OSFileUtil.h"  
-#include "OSConfig.h" 
-#include "OSDefaultSolver.h"  
-#include "OSWSUtil.h" 
-#include "OSSolverAgent.h"   
-#include "OShL.h"     
-#include "OSErrorClass.h"
-#include "OSmps2osil.h"   
-#include "OSBase64.h"
-#include "OSCommonUtil.h"
-
-#ifdef COIN_HAS_GLPK
-#include <OsiGlpkSolverInterface.hpp>
-#endif
-
-#ifdef COIN_HAS_DYLP
-#include <OsiDylpSolverInterface.hpp>
-#endif
-
-#ifdef COIN_HAS_SYMPHONY
-#include <OsiSymSolverInterface.hpp>
-#endif
-
-#ifdef COIN_HAS_LINDO    
-#include "OSLindoSolver.h"
-#endif  
-#ifdef COIN_HAS_IPOPT    
-#include "OSIpoptSolver.h"
-#endif 
   
 
 using std::cout;
