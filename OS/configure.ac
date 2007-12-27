@@ -239,7 +239,7 @@ AC_COIN_HAS_ASL
          then
              AC_DEFINE([USE_OLD_UNISTD],[1],[use if OS is Cygwin and complier is gnu])
          else
-            C_MSG_WARN("CYGWIN BUT NOT A GNU COMPILER")    
+             AC_MSG_WARN("CYGWIN BUT NOT A GNU COMPILER")    
          fi
          AC_DEFINE([NOMINMAX],[1],[use if OS is Cygwin]) ;;
        *-win*)

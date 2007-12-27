@@ -492,13 +492,18 @@ static yyconst flex_int32_t yy_rule_can_match_eol[4] =
 #else     
 	#define YY_PRINT  ;
 #endif
+
+
 #ifdef WIN_
-#define YY_NO_UNISTD_H
-#include <io.h>
-#include <process.h>
+  #define YY_NO_UNISTD_H
+  #include <io.h>
+  #include <process.h>
+  #ifdef USE_OLD_UNISTD
+     #include<sys/unistd.h>  
+  #endif
 #endif
      
-#line 502 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/OSParseosol.cpp"
+#line 507 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/OSParseosol.cpp"
 
 #define INITIAL 0
 
@@ -715,10 +720,10 @@ YY_DECL
 	register int yy_act;
     struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
 
-#line 54 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/OSParseosol.l"
+#line 59 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/OSParseosol.l"
 
 
-#line 722 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/OSParseosol.cpp"
+#line 727 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/OSParseosol.cpp"
 
 	if ( !yyg->yy_init )
 		{
@@ -816,20 +821,20 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 56 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/OSParseosol.l"
+#line 61 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/OSParseosol.l"
 
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 58 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/OSParseosol.l"
+#line 63 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/OSParseosol.l"
 
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 60 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/OSParseosol.l"
+#line 65 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/OSParseosol.l"
 ECHO;
 	YY_BREAK
-#line 833 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/OSParseosol.cpp"
+#line 838 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/OSParseosol.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1947,7 +1952,7 @@ void osolfree (void * ptr , yyscan_t yyscanner)
 
 #define YYTABLES_NAME "yytables"
 
-#line 60 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/OSParseosol.l"
+#line 65 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/OSParseosol.l"
 
 
 

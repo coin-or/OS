@@ -21873,7 +21873,8 @@ cat >>confdefs.h <<\_ACEOF
 _ACEOF
 
          else
-            C_MSG_WARN("CYGWIN BUT NOT A GNU COMPILER")
+             { echo "$as_me:$LINENO: WARNING: \"CYGWIN BUT NOT A GNU COMPILER\"" >&5
+echo "$as_me: WARNING: \"CYGWIN BUT NOT A GNU COMPILER\"" >&2;}
          fi
 
 cat >>confdefs.h <<\_ACEOF

@@ -54,12 +54,18 @@ using std::ostringstream;
 #else     
 	#define YY_PRINT  ;
 #endif
+
+
 #ifdef WIN_
-#define YY_NO_UNISTD_H
-#include <io.h>
-#include <process.h>
-# include <sys/unistd.h>
+  #define YY_NO_UNISTD_H
+  #include <io.h>
+  #include <process.h>
+  #ifdef USE_OLD_UNISTD
+     #include<sys/unistd.h>  
+  #endif
 #endif
+
+
 #define YY_EXTRA_TYPE struct osOptionsStruc*
 
 void setyyextra( osOptionsStruc *osoptions, void* scanner);

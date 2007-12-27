@@ -74,11 +74,12 @@
 
 
 #ifdef WIN_
-#define YY_NO_UNISTD_H
-# include <sys/unistd.h>
-#include <io.h>
-#include <process.h>
-# include <sys/unistd.h>
+  #define YY_NO_UNISTD_H
+  #include <io.h>
+  #include <process.h>
+  #ifdef USE_OLD_UNISTD
+     #include<sys/unistd.h>  
+  #endif
 #endif
 using std::cout;
 using std::endl;
