@@ -52,11 +52,11 @@ AC_COIN_PROG_CXX
 # Check if we have a Fortran compiler; if we do, acquire the appropriate
 # options. This has to be done before we call AC_COIN_INIT_AUTO_TOOLS, else
 # it will helpfully set FFLAGS to an incorrect value.
-#AC_COIN_FIND_F77
-#if test "$F77" != unavailable ; then
-#  AC_COIN_PROG_F77
-#  AC_COIN_F77_WRAPPERS
-#fi
+AC_COIN_FIND_F77
+if test "$F77" != unavailable ; then
+  AC_COIN_PROG_F77
+  AC_COIN_F77_WRAPPERS
+fi
 
 # Initialize automake and libtool
 AC_COIN_INIT_AUTO_TOOLS
