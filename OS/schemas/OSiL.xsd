@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- edited with XMLSpy v2007 rel. 3 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
+<!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+<xs:schema xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified">
 	<!--OSiL.xsd: current version - 1.0.0 -->
 	<!--include: since version 1.0.0 -->
 	<xs:include schemaLocation="OSgL.xsd"/>
@@ -1265,7 +1265,7 @@
 			</xs:element>
 			<xs:element name="interval">
 				<xs:annotation>
-					<xs:documentation>draft</xs:documentation>
+					<xs:documentation>experimental</xs:documentation>
 				</xs:annotation>
 				<xs:complexType>
 					<xs:attribute name="horizon" type="xs:double" use="optional" default="INF"/>
@@ -1281,7 +1281,7 @@
 		<xs:sequence minOccurs="0">
 			<xs:element name="stage" type="TimeDomainStage" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfStages" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfStages" type="xs:positiveInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="TimeDomainStage">
 		<xs:annotation>
@@ -1304,7 +1304,6 @@
 		</xs:sequence>
 		<xs:attribute name="numberOfVariables" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="startIdx" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="endIdx" type="xs:nonNegativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="TimeDomainStageVar">
 		<xs:annotation>
@@ -1325,7 +1324,6 @@
 		</xs:sequence>
 		<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="startIdx" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="endIdx" type="xs:nonNegativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="TimeDomainStageCon">
 		<xs:annotation>
@@ -1346,7 +1344,6 @@
 		</xs:sequence>
 		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="startIdx" type="xs:negativeInteger" use="optional"/>
-		<xs:attribute name="endIdx" type="xs:negativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="TimeDomainStageObj">
 		<xs:annotation>
