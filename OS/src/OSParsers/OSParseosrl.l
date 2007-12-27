@@ -53,6 +53,7 @@
 #define YY_NO_UNISTD_H
 #include <io.h>
 #include <process.h>
+# include <sys/unistd.h>
 #endif
 
 #include "OSParseosrl.tab.hpp"

@@ -75,8 +75,10 @@
 
 #ifdef WIN_
 #define YY_NO_UNISTD_H
+# include <sys/unistd.h>
 #include <io.h>
 #include <process.h>
+# include <sys/unistd.h>
 #endif
 using std::cout;
 using std::endl;

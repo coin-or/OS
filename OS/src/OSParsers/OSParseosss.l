@@ -58,6 +58,7 @@ using std::ostringstream;
 #define YY_NO_UNISTD_H
 #include <io.h>
 #include <process.h>
+# include <sys/unistd.h>
 #endif
 #define YY_EXTRA_TYPE struct osOptionsStruc*
 

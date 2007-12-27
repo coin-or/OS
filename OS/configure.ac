@@ -52,11 +52,11 @@ AC_COIN_PROG_CXX
 # Check if we have a Fortran compiler; if we do, acquire the appropriate
 # options. This has to be done before we call AC_COIN_INIT_AUTO_TOOLS, else
 # it will helpfully set FFLAGS to an incorrect value.
-AC_COIN_FIND_F77
-if test "$F77" != unavailable ; then
-  AC_COIN_PROG_F77
-  AC_COIN_F77_WRAPPERS
-fi
+#AC_COIN_FIND_F77
+#if test "$F77" != unavailable ; then
+#  AC_COIN_PROG_F77
+#  AC_COIN_F77_WRAPPERS
+#fi
 
 # Initialize automake and libtool
 AC_COIN_INIT_AUTO_TOOLS
@@ -235,6 +235,12 @@ AC_COIN_HAS_ASL
          AC_DEFINE([WIN_],[1],[use if OS is Windows]) ;;
       *-cygwin*)
          AC_DEFINE([WIN_],[1],[use if OS is Windows])
+         if test $CXX = g* 
+         then
+             AC_DEFINE([USE_OLD_UNISTD],[1],[use if OS is Cygwin and complier is gnu])
+         else
+            C_MSG_WARN("CYGWIN BUT NOT A GNU COMPILER")    
+         fi
          AC_DEFINE([NOMINMAX],[1],[use if OS is Cygwin]) ;;
        *-win*)
          AC_DEFINE([WIN_],[1],[use if OS is Windows]) ;;
