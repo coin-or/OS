@@ -235,13 +235,13 @@ AC_COIN_HAS_ASL
          AC_DEFINE([WIN_],[1],[use if OS is Windows]) ;;
       *-cygwin*)
          AC_DEFINE([WIN_],[1],[use if OS is Windows])
-         if [$CXX = g*] 
-         then
-             AC_DEFINE([USE_OLD_UNISTD],[1],[use if OS is Cygwin and complier is gnu])
-         else
-             AC_MSG_WARN("CYGWIN BUT NOT A GNU COMPILER")    
-         fi
-         AC_DEFINE([NOMINMAX],[1],[use if OS is Cygwin]) ;;
+		   case $CXX in
+		    g*)
+		      AC_DEFINE([USE_OLD_UNISTD],[1],[use if OS is Cygwin and complier is gnu]);;
+		     *)
+		     AC_MSG_WARN("DONT HAVE GCC COMPILER WITH GYGWIN");;   
+		  esac   
+		  AC_DEFINE([NOMINMAX],[1],[use if OS is Cygwin]) ;;     
        *-win*)
          AC_DEFINE([WIN_],[1],[use if OS is Windows]) ;;
     *-linux-*)
@@ -258,14 +258,8 @@ AC_COIN_HAS_ASL
     *)
 	 ;;
   esac
-  
 
-         if [$CXX = g++] 
-         then
-             AC_MSG_WARN("USING G++")
-         else
-             AC_MSG_WARN("NOT USING G++")     
-         fi
+
 
 ############################################################################
 ############################################################################
