@@ -76,6 +76,10 @@ include_HEADERS = \
 	OSConfig.h \
 	../inc/config_os.h 
 
+includecoindir = $(includedir)/coin
+includecoin_HEADERS = \
+	../../inc/config_os.h \
+	OSConfig.h 
 
 
 #############################################################################

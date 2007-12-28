@@ -21,7 +21,8 @@ ADDLIBS =
 
 
 # CHANGEME: Additional flags for compilation (e.g., include flags)
-ADDINCFLAGS =  
+ADDINCFLAGS =  -I${prefix}/include
+
 
 # CHANGEME: SRCDIR and VPATH should be the path to the source code. It is assumed
 # that the lib directory is in prefix/lib and the header files are in
@@ -56,7 +57,7 @@ ifeq ($(DARWIN),darwin)
 endif
 
 # Directory with header files
-OSINCDIR = @includedir@
+OSINCDIR = @includedir@/coin
 
 # Directory with the libraries
 INSTALLIBDIR = @libdir@
