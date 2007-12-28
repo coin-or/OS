@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- edited with XMLSpy v2007 rel. 3 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
+<!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSgL: current version - 1.0.0-->
 	<!--include: since version 1.0.0-->
 	<xs:include schemaLocation="OSnL.xsd"/>
@@ -273,6 +273,9 @@
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
+			<xs:annotation>
+				<xs:documentation>Number must match numberOfUserFunctions</xs:documentation>
+			</xs:annotation>
 			<xs:element name="userFunction" maxOccurs="unbounded">
 				<xs:complexType>
 					<xs:sequence>

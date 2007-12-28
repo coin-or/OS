@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSsL.xsd: finalization-->
 	<xs:element name="ossl" type="OSsL">
 		<xs:annotation>
@@ -29,6 +30,9 @@
 			<xs:documentation>finalization</xs:documentation>
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
+			<xs:annotation>
+				<xs:documentation>Number must match numberOfSimulations</xs:documentation>
+			</xs:annotation>
 			<xs:element name="simulation" type="Simulation" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfSimulations" type="xs:nonNegativeInteger" use="required"/>
