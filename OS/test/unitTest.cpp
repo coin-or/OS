@@ -778,7 +778,7 @@ int main(int argC, char* argV[])
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  solver->osrl <<  endl;
 		cout << endl << endl << endl;
-		unitTestResultFailure  <<"Sorry Unit Test Failed Testing the MPS convertor:"  + eclass.errormsg << endl;
+		unitTestResultFailure  <<"Sorry Unit Test Failed Testing the MPS converter:"  + eclass.errormsg << endl;
 	}
 	// now solve with an OSInstance created from an AMPL nl file
 	try{
@@ -878,7 +878,7 @@ int main(int argC, char* argV[])
 		OSiLReader *osilreader = NULL;
 		osilreader = new OSiLReader(); 
 		start = clock();
-		cout << "PARSE THE OSIL STRING INTO AN OSINSTNACE OBJECT" << endl;
+		cout << "PARSE THE OSIL STRING INTO AN OSINSTANCE OBJECT" << endl;
 		osilreader->readOSiL( osil);
 		//cout << osilwriter->writeOSiL( osilreader->readOSiL( osil)) << endl;
 		delete osilreader;
