@@ -44,9 +44,6 @@
 #include "OSErrorClass.h"
 
 
-#ifdef COIN_HAS_LINDO    
-#include "LindoSolver.h"
-#endif  
 
 
  
@@ -316,21 +313,6 @@ int  main(){
 		cout << osilwriter->writeOSiL( osinstance);
 		// done writing the model
 		cout << "Done writing the Model" << endl;
-		#ifdef COIN_HAS_LINDO
-		cout << "Now Solve with LINDO" << endl;
-		cout << "create a new LINDO Solver for OSiL string solution" << endl;
-		LindoSolver *lindo;
-		lindo = new LindoSolver();	
-		lindo->osinstance = osinstance;
-		cout << "call the LINDO Solver" << endl;
-		lindo->solve();
-		cout << "Here is the LINDO solver solution" << endl;
-		cout << lindo->osrl << endl;
-		// do the garbage collection 
-		lindo->osinstance = NULL;
-		delete lindo;
-		lindo = NULL;
-		#endif
 		delete osinstance;
 		osinstance = NULL;
 		delete osilwriter;
