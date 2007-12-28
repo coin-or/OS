@@ -1182,7 +1182,7 @@ private:
 	/**
 	 * m_iNumberOfTimeStages holds the number of discrete stages
 	 */
-	bool m_iNumberOfTimeStages;
+	int m_iNumberOfTimeStages;
 
 	
 	/**
