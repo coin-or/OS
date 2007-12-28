@@ -56,7 +56,7 @@ ifeq ($(DARWIN),darwin)
 endif
 
 # Directory with header files
-OSINCDIR = @includedir@
+OSINCDIR = @includedir@/coin
 
 # Directory with the libraries
 INSTALLIBDIR = @libdir@
