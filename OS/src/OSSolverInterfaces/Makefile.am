@@ -124,21 +124,22 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 ########################################################################
 
 # Here list all the header files that are required by a user of the library,
-# and that therefore should be installed in 'install'
-include_HEADERS = \
+# and that therefore should be installed in 'install/coin'
+includecoindir = $(includedir)/coin
+includecoin_HEADERS = \
 	../../inc/config_os.h \
 	OSCoinSolver.h 
 
 if COIN_HAS_LINDO
-include_HEADERS += OSLindoSolver.h
+includecoin_HEADERS += OSLindoSolver.h
 endif
 
 if COIN_HAS_KNITRO
-include_HEADERS += OSKnitroSolver.h
+includecoin_HEADERS += OSKnitroSolver.h
 endif
 
 if COIN_HAS_IPOPT
-include_HEADERS += OSIpoptSolver.h
+includecoin_HEADERS += OSIpoptSolver.h
 endif
 
 

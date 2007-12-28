@@ -53,8 +53,9 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 ########################################################################
 
 # Here list all the header files that are required by a user of the library,
-# and that therefore should be installed in 'install'
-include_HEADERS = \
+# and that therefore should be installed in 'install/coin'
+includecoindir = $(includedir)/coin
+includecoin_HEADERS = \
 	../../inc/config_os.h \
 	OSOptionsStruc.h \
 	OSParseosil.tab.hpp \
