@@ -152,6 +152,17 @@
 #endif
 
 
+
+#ifdef HAVE_CSTDIO
+# include <cstdio>
+#else
+# ifdef HAVE_STDIO_H
+#  include <stdio.h>
+# else
+#  error "don't have header file for stdio"
+# endif
+#endif
+
 using std::cout;   
 using std::endl;
 using std::ostringstream; 
@@ -1180,7 +1191,7 @@ double getObjVal( std::string osrl){
 				// get the substring
 				sObjVal = osrl.substr( pos1 + 1, pos2 - pos1 - 1);
 				//std::cout << "HERE IS THE OBJECTIVE FUNCTION VALUE SUBSTRING  " << sObjVal<< std::endl; 
-				return dObjVal = atof( sObjVal.c_str() ); 
+				return dObjVal = atof( sObjVal.c_str()); 
 			}
 			else return OSNAN;
 		}
