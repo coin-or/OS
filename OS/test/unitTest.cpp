@@ -217,6 +217,7 @@ int main(int argC, char* argV[])
 		OSiLWriter osilwriter;
 		osilwriter.m_bWhiteSpace = true;
 		std::cout << osilwriter.writeOSiL( osinstance) << std::endl;
+		return 0;
 	}
 	catch(const ErrorClass& eclass){
 		unitTestResultFailure << "Sorry Unit Test Failed Reading a file: "  + eclass.errormsg<< endl; 

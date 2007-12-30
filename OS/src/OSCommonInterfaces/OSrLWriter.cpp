@@ -54,7 +54,7 @@ OSrLWriter::~OSrLWriter(){
  
 std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 	m_OSResult = theosresult;
-	std::ostringstream outStr;
+	std::ostringstream outStr;  
 	#ifdef WIN_
 	const char	dirsep='\\';
 	#else
@@ -62,13 +62,13 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 	#endif
   	// Set directory containing stylesheet files.
   	std::string xsltDir;
-    xsltDir = dirsep == '/' ? "../stylesheets" : "..\\stylesheets";
+    xsltDir = dirsep == '/' ? "../stylesheets/" : "..\\stylesheets\\";
 	int i, j;
 	if(m_OSResult == NULL)  return outStr.str(); 
 	outStr << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" ; 
 	outStr << "<?xml-stylesheet type = \"text/xsl\" href = \"";
 	outStr << xsltDir;
-	outStr << "OSrL.xslt\"?>";
+	outStr << "OSrL.xslt\"/>";
 	outStr << "<osrl xmlns=\"os.optimizationservices.org\"   xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/OSrL.xsd\" >" ;
 	outStr << endl;
 	outStr << "<resultHeader>" << endl;
