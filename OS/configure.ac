@@ -466,6 +466,7 @@ AC_COIN_VPATH_LINK(data/osilFiles/callBackTestRowMajor.osil)
 ## osol test files
 ##
 AC_COIN_VPATH_LINK(data/osolFiles/demo.osol)
+AC_COIN_VPATH_LINK(data/osolFiles/knock.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/remotegsbkip.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/remoteosil.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/retrieve.osol)
@@ -479,7 +480,7 @@ AC_COIN_VPATH_LINK(data/osolFiles/demopasswordjobID.osol)
 ##
 ## ospl test files
 ##
-AC_COIN_VPATH_LINK(data/osplFiles/demo.ospl)
+AC_COIN_VPATH_LINK(data/osplFiles/knock.ospl)
 ##
 ## osrl test files
 ##

@@ -88,6 +88,7 @@ OS/data/osolFiles/demo.osol -text
 OS/data/osolFiles/demopassword.osol -text
 OS/data/osolFiles/demopasswordjobID.osol -text
 OS/data/osolFiles/kill.osol -text
+OS/data/osolFiles/knock.osol -text
 OS/data/osolFiles/remoteSolve1.osol -text
 OS/data/osolFiles/remoteSolve2.osol -text
 OS/data/osolFiles/remotegsbkip.osol -text
@@ -95,7 +96,7 @@ OS/data/osolFiles/remoteosil.osol -text
 OS/data/osolFiles/retrieve.osol -text
 OS/data/osolFiles/send.osol -text
 OS/data/osolFiles/sendWithJobID.osol -text
-OS/data/osplFiles/demo.ospl -text
+OS/data/osplFiles/knock.ospl -text
 OS/data/osrlFiles/parincLinear.osrl -text
 OS/data/osrlFiles/reducedcost.osrl -text
 OS/data/osrlFiles/rosenbrockmod.osrl -text
