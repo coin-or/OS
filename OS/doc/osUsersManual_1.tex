@@ -137,7 +137,7 @@ This is a very general API for linear, integer, and nonlinear programs. Extensio
 \item[6.]  Standards that facilitate the communication between clients and optimization solvers using Web Services.  In  Section \ref{section:osagent} we describe the {\tt OSAgent} part of the OS library that is used to create Web Services
  SOAP packages with OSiL instances and contact a server for solution.
 
-\item[7.]  An executable program {\tt amplClient} that is designed to work with the AMPL modeling language. The {\tt amplClient} appears as a ``solver'' to AMPL and, based on options given in AMPL, contacts solvers either remotely or locally to solve instances created in AMPL. This is described in Section \ref{section:amplclient}.
+\item[7.]  An executable program {\tt OSAmplclient} that is designed to work with the AMPL modeling language. The {\tt OSAmplclient} appears as a ``solver'' to AMPL and, based on options given in AMPL, contacts solvers either remotely or locally to solve instances created in AMPL. This is described in Section \ref{section:amplclient}.
 
 \item[8.]  Server software that works with Apache Tomcat and Apache Axis.
 This software uses Web Services technology and acts as middleware between the client that creates the instance and the  solver on the server that optimizes the instance and returns the result. This is illustrated in Section  \ref{section:tomcat}.
@@ -867,7 +867,7 @@ variable is defined in  {\tt config\_os.h}.
 
 \subsubsection{AMPL}
 
-The OS library contains a class, {\tt OSnl2osil} (see Section (\ref{section:nl2osil}) ) and {\tt amplClient} (see Section (\ref{section:amplclient}) ) that require the use of the AMPL ASL library.  See \url{http://netlib.sandia.gov/ampl/}  and  \url{http://www.ampl.com}. Users with a Unix system should locate the {\tt ASL} folder that is part of the distribution. The {\tt ASL} folder is in the {\tt ThirdParty} folder which is in the project root folder. Locate and execute the {\tt get.ASL} script.  Do this prior to running the {\tt configure} script. The {\tt configure} script will build the correct ASL library.
+The OS library contains a class, {\tt OSnl2osil} (see Section (\ref{section:nl2osil}) ) and {\tt OSAmplclient} (see Section (\ref{section:amplclient}) ) that require the use of the AMPL ASL library.  See \url{http://netlib.sandia.gov/ampl/}  and  \url{http://www.ampl.com}. Users with a Unix system should locate the {\tt ASL} folder that is part of the distribution. The {\tt ASL} folder is in the {\tt ThirdParty} folder which is in the project root folder. Locate and execute the {\tt get.ASL} script.  Do this prior to running the {\tt configure} script. The {\tt configure} script will build the correct ASL library.
 
 Microsoft  Visual Studio users will have to build the ASL library separately and then link it with the OS lib in the OS project file.  The necessary source files are at
 \begin{verbatim}
@@ -1111,7 +1111,7 @@ The following directories are also in the project root.
 
 \item {\tt lib} - is a directory of libraries. After running {\tt make install} the OS library along with all other COIN-OR libraries are installed in {\tt lib}.
 
-\item {\tt ThirdParty} - is a  directory for third party software. For example, if AMPL related software  such as {\tt amplClient} is used, then certain AMPL libraries need to be present. This should go into the {\tt ASL} directory in {\tt ThirdParty.}
+\item {\tt ThirdParty} - is a  directory for third party software. For example, if AMPL related software  such as {\tt OSAmplclient} is used, then certain AMPL libraries need to be present. This should go into the {\tt ASL} directory in {\tt ThirdParty.}
 \end{itemize}
 
 
@@ -1130,7 +1130,7 @@ The directories in the OS directory are outlined in Figure \ref{figure:osdirecto
 \begin{itemize}
 
 
-\item {\tt applications} - is a directory that holds  the {\tt amplClient} and {\tt fileUpload}  applications.  See Section \ref{section:applications}.
+\item {\tt applications} - is a directory that holds  the {\tt OSAmplclient} and {\tt fileUpload}  applications.  See Section \ref{section:applications}.
 
 \item {\tt data} - is a directory that holds test problems. These test problems are used by the {\tt unitTest}. Many of these files are also used to illustrate how the {\tt OSSolverService} works. See Section \ref{section:ossolverservice}.
 
@@ -1699,7 +1699,7 @@ solver->solve();
 
 The {\tt OSnl2osil} class works much like the {\tt OSmps2osil} class. The {\tt OSnl2osil} class constructor takes a string which should be the file name of the instance in nl format. The constructor then uses the AMPL ASL library routines to read and parse the nl file. The class method {\tt createOSInstance} then builds  an in-memory {\tt osintance} object  that can be used by a solver.
 
-In Section  \ref{section:amplclient}  we describe the {\tt amplClient} executable that acts as a ``solver'' for AMPL. The {\tt amplClient} uses the {\tt OSnl2osil} class to convert the instance in nl format to OSiL format before calling a solver either locally or remotely.
+In Section  \ref{section:amplclient}  we describe the {\tt OSAmplclient} executable that acts as a ``solver'' for AMPL. The {\tt OSAmplclient} uses the {\tt OSnl2osil} class to convert the instance in nl format to OSiL format before calling a solver either locally or remotely.
 
 \subsubsection{Using MATLAB}\label{section:usingmatlab}
 
@@ -3165,30 +3165,30 @@ contains executables and scripts to start and shutdown the Tomcat server.
 
 \subsection{AMPL Client:  Hooking AMPL to Solvers}\label{section:amplclient}
 
-The {\tt amplClient} executable (in {\tt COIN-OS/OS/examples/amplClient}) is designed to work with the AMPL program (see \url{www.ampl.com}). The {\tt amplClient} acts like an AMPL ``solver.'' The {\tt amplClient} is linked with the OS library and can be used to solve problems either locally or remotely. In both cases the {\tt amplClient} uses the {\tt OSnl2osil} class to convert the AMPL generated nl file (which represents the problem instance) into the corresponding instance representation in the OSiL format.
+The {\tt OSAmplclient} executable (in {\tt COIN-OS/OS/examples/OSAmplclient}) is designed to work with the AMPL program (see \url{www.ampl.com}). The {\tt OSAmplclient} acts like an AMPL ``solver.'' The {\tt OSAmplclient} is linked with the OS library and can be used to solve problems either locally or remotely. In both cases the {\tt OSAmplclient} uses the {\tt OSnl2osil} class to convert the AMPL generated nl file (which represents the problem instance) into the corresponding instance representation in the OSiL format.
 
-In the following discussion we assume that the AMPL executable {\tt ampl}  (or {\tt ampl.exe} on Windows) obtained from {\tt www.ampl.com}, the OS {\tt amplClient}, and the test problem {\tt hs71.mod} are all in the same directory. At first, the user may wish to run everything in the directory
+In the following discussion we assume that the AMPL executable {\tt ampl}  (or {\tt ampl.exe} on Windows) obtained from {\tt www.ampl.com}, the OS {\tt OSAmplclient}, and the test problem {\tt hs71.mod} are all in the same directory. At first, the user may wish to run everything in the directory
 
 \begin{verbatim}
-COIN-OS/OS/examples/amplClient
+COIN-OS/OS/examples/OSAmplclient
 \end{verbatim}
-which is where {\tt amplClient} is located when the OS project is built. The user must obtain {\tt ampl} and put it in this directory.  The test problem {\tt hs71.mod} can be copied from
+which is where {\tt OSAmplclient} is located when the OS project is built. The user must obtain {\tt ampl} and put it in this directory.  The test problem {\tt hs71.mod} can be copied from
 
 \begin{verbatim}
 COIN-OS/OS/data/amplFiles
 \end{verbatim}
 It is also assumed that {\tt .} (the current directory) is in the search path.
 
-The  problem instance, {\tt hs71.mod} is an AMPL model file included in the {\tt amplclient} directory. To solve this problem locally by calling the {\tt amplClient} from AMPL first start AMPL and then execute the following commands. In this case we testing  {\tt Ipopt} as the local server and therefore it is necessary that {\tt Ipopt} be part of the local OS build. If it is not then another solver must be selected and a test problem used that is a linear or integer program.
+The  problem instance, {\tt hs71.mod} is an AMPL model file included in the {\tt OSAmplclient} directory. To solve this problem locally by calling the {\tt OSAmplclient} from AMPL first start AMPL and then execute the following commands. In this case we testing  {\tt Ipopt} as the local server and therefore it is necessary that {\tt Ipopt} be part of the local OS build. If it is not then another solver must be selected and a test problem used that is a linear or integer program.
 
 \begin{verbatim}
 # take in problem 71 in Hock and Schittkowski
 # assume the problem is in the AMPL directory
 model hs71.mod;
-# tell AMPL that the solver is amplClient
-option solver amplClient;
-# now tell amplClient to use Ipopt
-option amplClient_options "solver ipopt";
+# tell AMPL that the solver is OSAmplclient
+option solver OSAmplclient;
+# now tell OSAmplclient to use Ipopt
+option OSAmplclient_options "solver ipopt";
 # the name of the nl file (this is optional)
 write gtestfile;
 # now solve the problem
@@ -3197,7 +3197,7 @@ solve;
 
 This will invoke {\tt Ipopt} locally and the result in OSrL format will be displayed on the screen. In order to call a remote solver service, after the command
 \begin{verbatim}
-option amplClient_options "solver ipopt";
+option OSAmplclient_options "solver ipopt";
 \end{verbatim}
 set the solver {\tt service} option to  the address of the remote solver service.
 \begin{verbatim}
@@ -3722,7 +3722,7 @@ might have some insight. I have no immediate ideas on how to work this hack
 through autotools from a Makefile.am. Might be easier to fix amplsolv.lib.
 
 	The same hack is necessary to link OSSolverService.exe, the OS
-unitTest.exe, and the OS amplClient.exe.
+unitTest.exe, and the OS OSAmplclient.exe.
 
 	When building OSAgent, the -I/include and -I/mingw/include have to go.
 The cl include order is `current directory, -I options, INCLUDE environment

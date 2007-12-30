@@ -68,7 +68,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 	outStr << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" ; 
 	outStr << "<?xml-stylesheet type = \"text/xsl\" href = \"";
 	outStr << xsltDir;
-	outStr << "OSrL.xslt\"/>";
+	outStr << "OSrL.xslt\"?>";
 	outStr << "<osrl xmlns=\"os.optimizationservices.org\"   xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/OSrL.xsd\" >" ;
 	outStr << endl;
 	outStr << "<resultHeader>" << endl;
