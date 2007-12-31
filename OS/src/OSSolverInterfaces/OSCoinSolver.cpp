@@ -57,6 +57,8 @@ CoinSolver::~CoinSolver() {
 	m_OsiSolver = NULL;
 	delete osrlwriter;
 	osrlwriter = NULL;
+	delete osresult;
+	osresult = NULL;
 	cout << "leaving CoinSolver destructor" << endl;
 }
 
@@ -335,7 +337,14 @@ bool CoinSolver::optimize()
 		y = NULL;
 		delete[] z;	
 		z = NULL;
-		if(osinstance->getVariableNumber() > 0) delete[] rcost;
+		if(osinstance->getVariableNumber() > 0){
+			delete[] rcost;
+			rcost = NULL;
+		}
+		if(k > 0){ 
+			delete[] intIndex;
+			intIndex = NULL;
+		}
 		return true;
 	}
 	catch(const ErrorClass& eclass){
