@@ -18,9 +18,6 @@
 #include "OSConfig.h"
 
 
-//#define PARSERDEBUG
-
-
 
 #ifdef HAVE_CSTDIO
 # include <cstdio>
@@ -71,12 +68,13 @@
 #endif
 
 
+
 #ifdef WIN_
   #define YY_NO_UNISTD_H
   #include <io.h>
   #include <process.h>
   #ifdef USE_OLD_UNISTD
-     #include<sys/unistd.h>  
+     #include<sys/unistd.h>
   #endif
 #endif
 using std::cout;
@@ -131,9 +129,7 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF))
 ({xmlwhitespace}+idxTwo{equality}) {YY_PRINT;   return(IDXTWOATT);}
 ({xmlwhitespace}+coef{equality}) {YY_PRINT;   return(COEFATT);}
 ({xmlwhitespace}+value{equality}) {YY_PRINT;  return(VALUEATT);}
-({xmlwhitespace}+mult{equality}) {YY_PRINT; return(MULTATT);}
 ({xmlwhitespace}+startIdx{equality}) {YY_PRINT; return(STARTIDXATT);}
-({xmlwhitespace}+endIdx{equality}) {YY_PRINT; return(ENDIDXATT);}
 ({xmlwhitespace}+horizon{equality}) {YY_PRINT; return(HORIZONATT);}
 ({xmlwhitespace}+start{equality}) {YY_PRINT; return(STARTATT);}
 

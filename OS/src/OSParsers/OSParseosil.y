@@ -14,7 +14,7 @@
  */
  
 %{
-
+#define PARSERDEBUG
 
 #include <string>
 #include <iostream>
@@ -219,9 +219,11 @@ quadraticcoefficients:
 	|  QUADRATICCOEFFICIENTSSTART  quadnumberatt qTermlist  QUADRATICCOEFFICIENTSEND {if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms > parserData->qtermcount ) osilerror( NULL, osinstance, parserData, "actual number of qterms less than numberOfQuadraticTerms");};
    
 
-quadnumberatt: NUMBEROFQTERMSATT QUOTE INTEGER QUOTE GREATERTHAN  { if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
+quadnumberatt: NUMBEROFQTERMSATT QUOTE INTEGER QUOTE GREATERTHAN  { 
+if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
 osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms = $3;  
-if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms > 0 ) osinstance->instanceData->quadraticCoefficients->qTerm = new QuadraticTerm*[ $3 ];
+if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms > 0 ) 
+osinstance->instanceData->quadraticCoefficients->qTerm = new QuadraticTerm*[ $3 ];
 for(int i = 0; i < $3; i++) osinstance->instanceData->quadraticCoefficients->qTerm[i] = new QuadraticTerm();} ;
 
 qTermlist:  qterm
@@ -580,9 +582,12 @@ variableidxATT: IDXATT QUOTE  INTEGER QUOTE { if ( *$2 != *$4 ) osilerror( NULL,
 	 }
 }  ; 
 
-timedomain:
-		| TIMEDOMAINSTART GREATERTHAN stages   TIMEDOMAINEND
-		| TIMEDOMAINSTART GREATERTHAN interval TIMEDOMAINEND;
+timedomain: TIMEDOMAINSTART timedomainend
+		  | TIMEDOMAINSTART GREATERTHAN stages   TIMEDOMAINEND
+		  | TIMEDOMAINSTART GREATERTHAN interval TIMEDOMAINEND;
+
+timedomainend: ENDOFELEMENT
+             | GREATERTHAN TIMEDOMAINEND;
 
 stages: STAGESSTART stagenumberatt stagelist STAGESEND
 {
@@ -603,33 +608,110 @@ stagelist: stage
 stage: {
  // if(osinstance->instanceData->timeDomain->stages->numberOfStages <= parserData->stagecount) osilerror( NULL, osinstance, parserData, "too many stages");
  }
-STAGESTART anotherStageATT stageend {
- // parserData->stagecount += parserData->stagemult;
- // parserData->stagenameON = false;
- // parserData->stagemultON = false;
- // parserData->stagemult   = 1;
+STAGESTART stagenameATT stageend {
+parserData->stagecount++;
+parserData->stagenameON = false;
  };
 		
 stageend: ENDOFELEMENT
-	| GREATERTHAN STAGEEND;
+	| GREATERTHAN stagecontent STAGEEND;
 
-anotherStageATT:
-	| anotherStageATT stageatt;
+stagecontent: stagevariables stageconstraints stageobjectives;
 
-stageatt: stagenameatt 
-		{ if(parserData->stagenameON) 
-       osilerror( NULL, osinstance, parserData, "too many stage name attributes");
-		parserData->stagenameON = true; }
-	|   stagemultatt 
-		{ if(parserData->stagemultON) 
-       osilerror( NULL, osinstance, parserData, "too many stage mult attributes");
-		parserData->stagemultON = true; }
-
-stagenameatt: NAMEATT ATTRIBUTETEXT {
+stagenameATT: 
+      | NAMEATT ATTRIBUTETEXT {
 		parserData->stagename = $2;};
-stagemultatt: MULTATT QUOTE INTEGER QUOTE {
-		if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
-		parserData->stagemult = $3;};
+
+stagevariables: 
+      | VARIABLESSTART anotherstagevarATT restofstagevariables;
+
+restofstagevariables: ENDOFELEMENT
+		| GREATERTHAN stagevarlist VARIABLESEND;
+		
+anotherstagevarATT:
+		| anotherstagevarATT stagevaratt;
+		
+stagevaratt: numberofstagevariablesatt
+           | stagevarstartidxATT;
+           
+numberofstagevariablesatt: NUMBEROFVARIABLESATT QUOTE INTEGER QUOTE  {
+};
+
+stagevarstartidxATT: STARTIDXATT QUOTE INTEGER QUOTE
+;
+
+stagevarlist:
+            | stagevarlist stagevar;
+
+stagevar: VARSTART stagevaridxATT stagevarend;
+
+stagevaridxATT: IDXATT QUOTE INTEGER QUOTE {
+};
+
+stagevarend: ENDOFELEMENT
+           | GREATERTHAN VAREND;
+
+stageconstraints: 
+        | CONSTRAINTSSTART anotherstageconATT restofstageconstraints
+;
+
+restofstageconstraints: ENDOFELEMENT
+		| GREATERTHAN stageconlist CONSTRAINTSEND
+;
+		
+anotherstageconATT:
+		| anotherstageconATT stageconatt;
+		
+stageconatt: numberofstageconstraintsatt
+           | stageconstartidxATT
+;
+           
+numberofstageconstraintsatt: NUMBEROFCONSTRAINTSATT QUOTE INTEGER QUOTE {
+};
+
+stageconstartidxATT: STARTIDXATT QUOTE INTEGER QUOTE 
+;
+
+stageconlist:
+            | stageconlist stagecon
+;
+
+stagecon: CONSTART stageconidxATT stageconend;
+
+stageconidxATT: IDXATT QUOTE INTEGER QUOTE {
+};
+
+stageconend: ENDOFELEMENT
+           | GREATERTHAN CONEND;
+
+stageobjectives: 
+        | OBJECTIVESSTART anotherstageobjATT stageobjlist stageobjectivesend;
+
+stageobjectivesend: ENDOFELEMENT
+		| GREATERTHAN OBJECTIVESEND;
+		
+anotherstageobjATT:
+		| anotherstageobjATT stageobjatt;
+		
+stageobjatt: numberofstageobjectivesatt
+           | stageobjstartidxATT;
+           
+numberofstageobjectivesatt: NUMBEROFOBJECTIVESATT QUOTE INTEGER QUOTE {
+};
+
+stageobjstartidxATT: STARTIDXATT QUOTE INTEGER QUOTE {
+};
+
+stageobjlist:
+            | stageobjlist stageobj;
+
+stageobj: OBJSTART stageobjidxATT stageobjend;
+
+stageobjidxATT: IDXATT QUOTE INTEGER QUOTE {
+};
+
+stageobjend: ENDOFELEMENT
+           | GREATERTHAN OBJEND;
 
 interval: INTERVALSTART anotherIntervalATT intervalend {
 		parserData->intervalhorizonON = false;
