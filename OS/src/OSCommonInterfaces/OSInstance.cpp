@@ -349,7 +349,7 @@ ObjCoef::ObjCoef():
 
 ObjCoef::~ObjCoef(){ 
 	#ifdef DEBUG
-	cout << "Inside the ObjCoef Desructor" << endl;  
+	cout << "Inside the ObjCoef Destructor" << endl;  
 	#endif
 }
 
@@ -573,44 +573,6 @@ NonlinearExpressions::~NonlinearExpressions(){
 }//end ~NonlinearExpressions()  
 
 
-TimeDomain::TimeDomain(){
-	#ifdef DEBUG
-	cout << "Inside the TimeDomain Constructor" << endl;
-	#endif
-} 
-
-TimeDomain::~TimeDomain(){  
-	#ifdef DEBUG
-	cout << "Inside the TimeDomain Destructor" << endl;
-	#endif
-} 
-
-Stages::Stages():
-	numberOfStages(0),
-	stage(NULL)
-{
-	#ifdef DEBUG  
-	cout << "Inside the Stages Constructor" << endl;
-	#endif
-} 
-
-
-Stages::~Stages(){  
-	#ifdef DEBUG
-	cout << "Inside the Stages Destructor" << endl;
-	#endif
-	int i;
-	if(numberOfStages > 0 && stage != NULL){
-		for( i = 0; i < numberOfStages; i++){
-			delete stage[i];
-			stage[i] = NULL;
-		}
-	}
-	delete[] stage;
-	stage = NULL;  
-}
-
-
 Stage::Stage():
 	name(""),
 	nvar(0),
@@ -657,6 +619,69 @@ Stage::~Stage(){
 	delete[] objectives;
 	objectives = NULL;  
 }//end ~Stage()  
+
+
+Stages::Stages():
+	numberOfStages(0),
+	stage(NULL)
+{
+	#ifdef DEBUG  
+	cout << "Inside the Stages Constructor" << endl;
+	#endif
+} 
+
+
+Stages::~Stages(){  
+	#ifdef DEBUG
+	cout << "Inside the Stages Destructor" << endl;
+	#endif
+	int i;
+	if(numberOfStages > 0 && stage != NULL){
+		for( i = 0; i < numberOfStages; i++){
+			delete stage[i];
+			stage[i] = NULL;
+		}
+	}
+	delete[] stage;
+	stage = NULL;  
+}
+
+Interval::Interval():
+	intervalStart(0.0),
+	intervalHorizon(0.0)
+{
+	#ifdef DEBUG  
+	cout << "Inside the Interval Constructor" << endl;
+	#endif
+} 
+
+
+Interval::~Interval(){  
+	#ifdef DEBUG
+	cout << "Inside the Interval Destructor" << endl;
+	#endif
+}
+
+TimeDomain::TimeDomain()
+{
+	#ifdef DEBUG
+	cout << "Inside the TimeDomain Constructor" << endl;
+	#endif
+	stages = new Stages();
+	interval = new Interval();
+} 
+
+TimeDomain::~TimeDomain()
+{  
+	#ifdef DEBUG
+	cout << "Inside the TimeDomain Destructor" << endl;
+	#endif
+	delete stages;
+	stages = NULL;
+	delete interval;
+	interval = NULL;
+} 
+
 
 InstanceData::InstanceData(){ 
 	#ifdef DEBUG 

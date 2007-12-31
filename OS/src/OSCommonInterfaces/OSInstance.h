@@ -42,6 +42,29 @@
 
 
 
+/*! \class InstanceHeader
+ * \brief The in-memory representation of the 
+ * <b><instanceHeader></b> element.
+ */
+class InstanceHeader{
+public:
+
+	/** The InstanceHeader class constructor */
+	InstanceHeader();
+	
+	/** The InstanceHeader class destructor */
+	~InstanceHeader();
+	
+	/** the problem instance description */
+	std::string description;
+	
+	/** the name of the problem instance */
+	std::string name;
+	
+	/** the source of the problem instance */
+	std::string source;		
+};//class InstanceHeader
+
 
 
 /*! \class Variable
@@ -180,28 +203,6 @@ public:
 };//class Constraints
 
 
-/*! \class InstanceHeader
- * \brief The in-memory representation of the 
- * <b><instanceHeader></b> element.
- */
-class InstanceHeader{
-public:
-
-	/** The InstanceHeader class constructor */
-	InstanceHeader();
-	
-	/** The InstanceHeader class destructor */
-	~InstanceHeader();
-	
-	/** the problem instance description */
-	std::string description;
-	
-	/** the name of the problem instance */
-	std::string name;
-	
-	/** the source of the problem instance */
-	std::string source;		
-};//class InstanceHeader
 
 /*! \class Objective
  * \brief The in-memory representation of the 

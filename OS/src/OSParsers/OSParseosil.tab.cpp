@@ -852,14 +852,14 @@ static const yytype_uint16 yyrline[] =
      518,   520,   520,   523,   524,   526,   527,   527,   531,   534,
      535,   537,   539,   541,   545,   545,   549,   549,   555,   558,
      562,   563,   565,   567,   571,   574,   578,   585,   586,   587,
-     588,   590,   591,   593,   598,   606,   607,   609,   609,   617,
-     618,   620,   622,   623,   626,   627,   629,   630,   632,   633,
-     635,   636,   638,   641,   644,   645,   647,   649,   652,   653,
-     655,   656,   659,   660,   663,   664,   666,   667,   670,   673,
-     676,   677,   680,   682,   685,   686,   688,   689,   691,   692,
-     694,   695,   697,   698,   700,   703,   706,   707,   709,   711,
-     714,   715,   717,   721,   722,   724,   725,   727,   731,   736,
-     740
+     588,   590,   591,   593,   598,   607,   608,   610,   610,   618,
+     619,   621,   623,   624,   627,   628,   630,   631,   633,   634,
+     636,   637,   639,   642,   645,   646,   648,   650,   653,   654,
+     656,   657,   660,   661,   664,   665,   667,   668,   671,   674,
+     677,   678,   681,   683,   686,   687,   689,   690,   692,   693,
+     695,   696,   698,   699,   701,   704,   707,   708,   710,   712,
+     715,   716,   720,   726,   727,   729,   730,   732,   736,   741,
+     745
 };
 #endif
 
@@ -2637,25 +2637,26 @@ osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->os
   case 143:
 
     {
- // if(osinstance->instanceData->timeDomain->stages->numberOfStages > parserData->stagecount ) osilerror( NULL, osinstance, parserData, "actual number of stages less than numberOfStages");
+if(osinstance->instanceData->timeDomain->stages->numberOfStages > parserData->stagecount ) osilerror( NULL, osinstance, parserData, "actual number of stages less than numberOfStages");
 ;}
     break;
 
   case 144:
 
     {
- // if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
- // osinstance->instanceData->timeDomain->stages->numberOfStages = $3;
- // if( osinstance->instanceData->timeDomain->stages->numberOfStages > 0 )
- // osinstance->instanceData->timeDomain->stages->stage = new Stage*[ $3 ];
- // for(int i = 0; i < $3; i++) osinstance->instanceData->timeDomain->stages->stage[i] = new Stage();
+if ( *(yyvsp[(2) - (5)].sval) != *(yyvsp[(4) - (5)].sval) ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
+printf("Number of stages: %i\n",(yyvsp[(3) - (5)].ival));
+osinstance->instanceData->timeDomain->stages->numberOfStages = (yyvsp[(3) - (5)].ival);
+if( osinstance->instanceData->timeDomain->stages->numberOfStages > 0 )
+osinstance->instanceData->timeDomain->stages->stage = new Stage*[ (yyvsp[(3) - (5)].ival) ];
+for(int i = 0; i < (yyvsp[(3) - (5)].ival); i++) osinstance->instanceData->timeDomain->stages->stage[i] = new Stage();
 ;}
     break;
 
   case 147:
 
     {
- // if(osinstance->instanceData->timeDomain->stages->numberOfStages <= parserData->stagecount) osilerror( NULL, osinstance, parserData, "too many stages");
+if(osinstance->instanceData->timeDomain->stages->numberOfStages <= parserData->stagecount) osilerror( NULL, osinstance, parserData, "too many stages");
  ;}
     break;
 
@@ -2719,7 +2720,9 @@ parserData->stagenameON = false;
 
     {
 		parserData->intervalhorizonON = false;
-		parserData->intervalstartON = false;;}
+		parserData->intervalstartON = false;
+		printf("Interval not yet supported.\n\n");
+;}
     break;
 
   case 207:

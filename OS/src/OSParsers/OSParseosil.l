@@ -18,7 +18,6 @@
 #include "OSConfig.h"
 
 
-
 #ifdef HAVE_CSTDIO
 # include <cstdio>
 #else
