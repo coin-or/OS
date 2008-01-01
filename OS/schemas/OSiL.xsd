@@ -205,7 +205,7 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="Objective">
 		<xs:annotation>
@@ -223,7 +223,7 @@
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="numberOfObjCoef" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfObjCoef" type="xs:nonNegativeInteger" use="optional" default="1"/>
 		<xs:attribute name="constant" type="xs:double" use="optional" default="0.0"/>
 		<xs:attribute name="weight" type="xs:double" use="optional" default="1.0"/>
 		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
