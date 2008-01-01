@@ -68,7 +68,7 @@
                 <table border="2">
                     <tr>
                         <td>
-                            <b>Variable Index</b>
+                            <b>Row Index</b>
                         </td>
                         <td>
                             <b>Value</b>
