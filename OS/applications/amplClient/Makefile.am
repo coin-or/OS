@@ -166,6 +166,7 @@ endif
 if COIN_HAS_IPOPT
   AM_CPPFLAGS += \
 	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Interfaces` \
+	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/LinAlg` \
 	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Common` \
 	-I`$(CYGPATH_W) $(IPOPTOBJDIR)/inc`
   OSAmplClient_LDADD += $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
