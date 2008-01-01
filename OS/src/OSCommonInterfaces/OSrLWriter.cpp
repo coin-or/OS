@@ -63,6 +63,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
   	// Set directory containing stylesheet files.
   	std::string xsltDir;
     xsltDir = dirsep == '/' ? "../stylesheets/" : "..\\stylesheets\\";
+    // always go with '/' -- it is a hypertext reference
+    xsltDir = "../stylesheets/";
 	int i, j;
 	if(m_OSResult == NULL)  return outStr.str(); 
 	outStr << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" ; 

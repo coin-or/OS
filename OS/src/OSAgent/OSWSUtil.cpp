@@ -87,6 +87,8 @@ string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned int se
 		cout << "HERE IS WHAT WE SEND" << endl;
 		cout << message << endl;
 		#endif
+		cout << "HERE IS WHAT WE SEND" << endl;
+		cout << message << endl;
 		/* Send the string to the server */	
 		if (send(sock, message, httpStringLen, 0) != httpStringLen)
 			throw ErrorClass("send() sent a different number of bytes than expected");
