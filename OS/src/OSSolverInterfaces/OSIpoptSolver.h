@@ -64,6 +64,7 @@
 
 
 #include "IpTNLP.hpp"
+#include "IpIpoptApplication.hpp"
 
 using namespace Ipopt;
 
@@ -89,6 +90,12 @@ public:
 	
 	/** the IpoptSolver class destructor */
 	~IpoptSolver();
+	
+	/// add for Stefan
+	
+	SmartPtr<TNLP> nlp;
+	
+	SmartPtr<IpoptApplication> app;
 	
 	/** solve results in an instance being read into the Ipopt
 	 * data structrues and optimized */ 

@@ -18,7 +18,6 @@
 
 
 #include "OSIpoptSolver.h"
-#include "IpIpoptApplication.hpp"
 #include "OSCommonUtil.h"
 
 using std::cout; 
@@ -30,6 +29,11 @@ using namespace Ipopt;
 IpoptSolver::IpoptSolver() {
 	osrlwriter = new OSrLWriter();
 	ipoptErrorMsg = "";
+	nlp = this;
+
+	// Create a new instance of IpoptApplication
+	//  (use a SmartPtr, not raw)
+	app = new IpoptApplication();
 }
 
 IpoptSolver::~IpoptSolver() {
@@ -479,11 +483,11 @@ void IpoptSolver::solve() throw (ErrorClass) {
 		// Create a new instance of your nlp 
 		
 		
-		SmartPtr<TNLP> nlp = this;
+		//SmartPtr<TNLP> nlp = this;
 
 		// Create a new instance of IpoptApplication
 		//  (use a SmartPtr, not raw)
-		SmartPtr<IpoptApplication> app = new IpoptApplication();
+		//SmartPtr<IpoptApplication> app = new IpoptApplication();
 		// Change some options
 		// Note: The following choices are only examples, they might not be
 		//       suitable for your optimization problem.
