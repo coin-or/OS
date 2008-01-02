@@ -2,7 +2,7 @@
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" elementFormDefault="qualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified">
 	<!--OSiL.xsd: current version - 1.0.0 -->
 	<!--include: since version 1.0.0 -->
 	<xs:include schemaLocation="OSgL.xsd"/>
@@ -278,7 +278,7 @@
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
 			<xs:annotation>
-				<xs:documentation>Number the value child elements must agree with numberOfValues (after "mult" has been considered)</xs:documentation>
+				<xs:documentation>Number of entries in the value and rowIdx/colIdx child elements must agree with numberOfValues (after "mult" has been considered)</xs:documentation>
 			</xs:annotation>
 			<xs:element name="start" type="IntVector">
 				<xs:annotation>
@@ -312,7 +312,7 @@
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
 			<xs:annotation>
-				<xs:documentation>Number of the qTerm child elements must agree with numberOfQuadrsaticTerms (after "mult" has been considered)</xs:documentation>
+				<xs:documentation>Number of the qTerm child elements must agree with numberOfQuadraticTerms (after "mult" has been considered)</xs:documentation>
 			</xs:annotation>
 			<xs:element name="qTerm" type="QuadraticTerm" maxOccurs="unbounded">
 				<xs:annotation>
@@ -1359,7 +1359,7 @@
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
 			<xs:annotation>
-				<xs:documentation>Number the stage child elements must agree with numberOfStages (after "mult" has been considered)</xs:documentation>
+				<xs:documentation>Number of the stage child elements must agree with numberOfStages</xs:documentation>
 			</xs:annotation>
 			<xs:element name="stage" type="TimeDomainStage" maxOccurs="unbounded">
 				<xs:annotation>
@@ -1592,7 +1592,7 @@
 						<xs:extension base="StochasticRowModifers">
 							<xs:sequence>
 								<xs:annotation>
-									<xs:documentation>number must match numberOfRows</xs:documentation>
+									<xs:documentation>Number of row child elements must match numberOfRows</xs:documentation>
 								</xs:annotation>
 								<xs:element name="row" type="StochasticRowModifier" maxOccurs="unbounded"/>
 							</xs:sequence>
@@ -1666,7 +1666,7 @@
 		</xs:annotation>
 		<xs:sequence>
 			<xs:annotation>
-				<xs:documentation>number must match numberOfDistributions</xs:documentation>
+				<xs:documentation>Number of distr child elements must match numberOfDistributions</xs:documentation>
 			</xs:annotation>
 			<xs:element name="distr" type="StochasticDistribution" maxOccurs="unbounded"/>
 		</xs:sequence>
