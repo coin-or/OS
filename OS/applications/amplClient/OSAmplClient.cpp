@@ -192,7 +192,7 @@ int main(int argc, char **argv)
 										#ifdef COIN_HAS_IPOPT
 										bIpoptIsPresent = true;
 										//std::cout << "Create an Ipopt solver and optimize"<< std::endl;
-										SmartPtr<IpoptSolver> ipoptSolver  = new IpoptSolver();	
+										IpoptSolver *ipoptSolver  = new IpoptSolver();	
 										ipoptSolver->osol = osol;
 										ipoptSolver->osinstance = osinstance;
 										ipoptSolver->solve();
@@ -298,7 +298,7 @@ int main(int argc, char **argv)
 	}
 	delete osrlreader;
 	osrlreader = NULL;
-	if( strstr(amplclient_options, "ipopt") == NULL  && ((solver_option != NULL) || (strstr(solver_option, "service") == NULL)) ){
+	if(  (solver_option != NULL) || (strstr(solver_option, "service") == NULL) ){
 		
 		delete solverType;
 		solverType = NULL;

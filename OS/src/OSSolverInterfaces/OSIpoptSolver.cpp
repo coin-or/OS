@@ -20,6 +20,7 @@
 #include "OSIpoptSolver.h"
 #include "OSCommonUtil.h"
 
+
 using std::cout; 
 using std::endl; 
 using std::ostringstream;
@@ -28,27 +29,28 @@ using namespace Ipopt;
 
 IpoptSolver::IpoptSolver() {
 	osrlwriter = new OSrLWriter();
+	osresult = new OSResult();
 	ipoptErrorMsg = "";
-	nlp = this;
 
-	// Create a new instance of IpoptApplication
-	//  (use a SmartPtr, not raw)
-	app = new IpoptApplication();
 }
 
 IpoptSolver::~IpoptSolver() {
 	#ifdef DEBUG
 	cout << "inside IpoptSolver destructor" << endl;
 	#endif
+	delete osresult;
+	osresult = NULL;
 	delete osrlwriter;
 	osrlwriter = NULL;
+	//delete osinstance;
+	//osinstance = NULL;
 	#ifdef DEBUG
 	cout << "leaving IpoptSolver destructor" << endl;
 	#endif
 }
 
 // returns the size of the problem
-bool IpoptSolver::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
+bool IpoptProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
                              Index& nnz_h_lag, IndexStyleEnum& index_style)
 {
 	if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Ipopt NEEDS AN OBJECTIVE FUNCTION");                 	
@@ -101,7 +103,7 @@ bool IpoptSolver::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 }//get_nlp_info
 
 
-bool IpoptSolver::get_bounds_info(Index n, Number* x_l, Number* x_u,
+bool  IpoptProblem::get_bounds_info(Index n, Number* x_l, Number* x_u,
                                 Index m, Number* g_l, Number* g_u){
  	int i; 
 	double * mdVarLB = osinstance->getVariableLowerBounds();
@@ -136,7 +138,7 @@ bool IpoptSolver::get_bounds_info(Index n, Number* x_l, Number* x_u,
 
 
 // returns the initial point for the problem
-bool IpoptSolver::get_starting_point(Index n, bool init_x, Number* x,
+bool IpoptProblem::get_starting_point(Index n, bool init_x, Number* x,
      bool init_z, Number* z_L, Number* z_U, Index m, bool init_lambda,
      Number* lambda) {
   	// Here, we assume we only have starting values for x, if you code
@@ -168,7 +170,7 @@ bool IpoptSolver::get_starting_point(Index n, bool init_x, Number* x,
 }//get_starting_point
 
 // returns the value of the objective function
-bool IpoptSolver::eval_f(Index n, const Number* x, bool new_x, Number& obj_value){
+bool IpoptProblem::eval_f(Index n, const Number* x, bool new_x, Number& obj_value){
 	try{
 		obj_value  = osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(x), NULL, NULL, new_x, 0 )[ 0];
 	}
@@ -180,7 +182,7 @@ bool IpoptSolver::eval_f(Index n, const Number* x, bool new_x, Number& obj_value
   	return true;
 }
 
-bool IpoptSolver::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f){
+bool IpoptProblem::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f){
  	int i;
  	double *objGrad;
 	try{
@@ -198,7 +200,7 @@ bool IpoptSolver::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad
 }//eval_grad_f
 
 // return the value of the constraints: g(x)
-bool IpoptSolver::eval_g(Index n, const Number* x, bool new_x, Index m, Number* g) {
+bool IpoptProblem::eval_g(Index n, const Number* x, bool new_x, Index m, Number* g) {
 	try{
  		double *conVals = osinstance->calculateAllConstraintFunctionValues( const_cast<double*>(x), NULL, NULL, new_x, 0 );
  		int i;
@@ -216,7 +218,7 @@ bool IpoptSolver::eval_g(Index n, const Number* x, bool new_x, Index m, Number* 
 
 
 // return the structure or values of the jacobian
-bool IpoptSolver::eval_jac_g(Index n, const Number* x, bool new_x,
+bool IpoptProblem::eval_jac_g(Index n, const Number* x, bool new_x,
                            Index m, Index nele_jac, Index* iRow, Index *jCol,
                            Number* values){
   	SparseJacobianMatrix *sparseJacobian;
@@ -266,7 +268,7 @@ bool IpoptSolver::eval_jac_g(Index n, const Number* x, bool new_x,
 }//eval_jac_g
 
 //return the structure or values of the hessian
-bool IpoptSolver::eval_h(Index n, const Number* x, bool new_x,
+bool IpoptProblem::eval_h(Index n, const Number* x, bool new_x,
                        Number obj_factor, Index m, const Number* lambda,
                        bool new_lambda, Index nele_hess, Index* iRow,
                        Index* jCol, Number* values){
@@ -313,7 +315,7 @@ bool IpoptSolver::eval_h(Index n, const Number* x, bool new_x,
   	return true;
 }//eval_h
 
-bool IpoptSolver::get_scaling_parameters(Number& obj_scaling,
+bool IpoptProblem::get_scaling_parameters(Number& obj_scaling,
                  	bool& use_x_scaling, Index n,
                    	Number* x_scaling,
                     bool& use_g_scaling, Index m,
@@ -327,7 +329,7 @@ bool IpoptSolver::get_scaling_parameters(Number& obj_scaling,
 	return true;
 }//get_scaling_parameters
 
-void IpoptSolver::finalize_solution(SolverReturn status,
+void IpoptProblem::finalize_solution(SolverReturn status,
                                Index n, const Number* x, const Number* z_L, const Number* z_U,
                                   Index m, const Number* g, const Number* lambda,
                                   Number obj_value,
@@ -337,6 +339,8 @@ void IpoptSolver::finalize_solution(SolverReturn status,
 	  // here is where we would store the solution to variables, or write to a file, etc
 	  // so we could use the solution.
 	  // For this example, we write the solution to the console
+	OSrLWriter *osrlwriter ;
+	osrlwriter = new OSrLWriter();
 	  printf("\n\nSolution of the primal variables, x\n");
 	  for (Index i=0; i<n; i++) {
 	    printf("x[%d] = %e\n", i, x[i]);
@@ -447,16 +451,18 @@ void IpoptSolver::finalize_solution(SolverReturn status,
 				solutionDescription = "OTHER[IPOPT]: other unknown solution status from Ipopt solver";
 				osresult->setSolutionStatus(solIdx,  "other", solutionDescription);
 		}
-
 		osresult->setGeneralStatusType("success");
-		osrl = osrlwriter->writeOSrL( osresult);
+		delete osrlwriter;
+		osrlwriter == NULL;
 
 	}
 	catch(const ErrorClass& eclass){
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
-		osrl = osrlwriter->writeOSrL( osresult);
-		throw ;
+		std::string osrl = osrlwriter->writeOSrL( osresult);
+		delete osrlwriter;
+		osrlwriter == NULL;
+		throw ErrorClass(  osrl) ;
 	}
 //////////
 }
@@ -465,17 +471,18 @@ void IpoptSolver::finalize_solution(SolverReturn status,
 //void IpoptSolver::solve() throw (ErrorClass) {
 void IpoptSolver::solve() throw (ErrorClass) {
 	try{
-		OSiLReader* osilreader = NULL; 
-		osresult = new OSResult();
+		
+		//osresult = new OSResult();
 		if(osil.length() == 0 && osinstance == NULL) throw ErrorClass("there is no instance");
 		clock_t start, finish;
 		double duration;
 		start = clock();
+		OSiLReader* osilreader = NULL; 
 		if(osinstance == NULL){
 			osilreader = new OSiLReader();
 			osinstance = osilreader->readOSiL( osil);
 		}
-		OSiLWriter osilwriter;
+		//OSiLWriter osilwriter;
 		//cout << osilwriter.writeOSiL( osinstance) << endl;
 		if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Ipopt requires decision variables");
 		finish = clock();
@@ -485,16 +492,8 @@ void IpoptSolver::solve() throw (ErrorClass) {
 
 		/***************now the ipopt invokation*********************/
 		// Create a new instance of your nlp 
-		
-		
-		//SmartPtr<TNLP> nlp = this;
-
-		// Create a new instance of IpoptApplication
-		//  (use a SmartPtr, not raw)
-		//SmartPtr<IpoptApplication> app = new IpoptApplication();
-		// Change some options
-		// Note: The following choices are only examples, they might not be
-		//       suitable for your optimization problem.
+		SmartPtr<TNLP> nlp = new IpoptProblem( osinstance, osresult);
+		SmartPtr<IpoptApplication> app = new IpoptApplication();
 		app->Options()->SetNumericValue("tol", 1e-9);
 		app->Options()->SetStringValue("mu_strategy", "adaptive");
 		app->Options()->SetStringValue("output_file", "ipopt.out");
@@ -511,15 +510,21 @@ void IpoptSolver::solve() throw (ErrorClass) {
 		std::cout << "Call Ipopt Initialize" << std::endl;
 		app->Initialize();
 		std::cout << "Finished Ipopt Initialize" << std::endl;
+		//nlp->osinstance = this->osinstance;
 		// Ask Ipopt to solve the problem
 		std::cout << "Call Ipopt Optimize" << std::endl;
-		ApplicationReturnStatus status = app->OptimizeTNLP(nlp);
+		ApplicationReturnStatus status = app->OptimizeTNLP( nlp);
 		std::cout << "Finish Ipopt Optimize" << std::endl;
+		osrl = osrlwriter->writeOSrL( osresult);
+		std::cout << "Finish writing the osrl" << std::endl;
 		if (status != Solve_Succeeded) {
 			throw ErrorClass("Ipopt FAILED TO SOLVE THE PROBLEM: " + ipoptErrorMsg);
-		}		
-		delete osilreader;
-		osilreader = NULL;
+		}	
+		if(osinstance == NULL){
+			delete osilreader;
+			osilreader = NULL;
+		}
+
 	}
 	catch(const ErrorClass& eclass){
 		osresult->setGeneralMessage( eclass.errormsg);
@@ -591,6 +596,14 @@ void IpoptSolver::dataEchoCheck(){
 } // end dataEchoCheck
 
 
+IpoptProblem::IpoptProblem(OSInstance *osinstance_,  OSResult *osresult_) {
+	osinstance = osinstance_;
+	osresult = osresult_;
+}
+
+IpoptProblem::~IpoptProblem() {
+
+}
 
 
 

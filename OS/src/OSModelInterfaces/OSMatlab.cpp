@@ -113,7 +113,7 @@ std::string OSMatlab::solve() {
 										#ifdef COIN_HAS_IPOPT
 										bIpoptIsPresent = true;
 										//std::cout << "Create an Ipopt solver and optimize"<< std::endl;
-										SmartPtr<IpoptSolver> ipoptSolver  = new IpoptSolver();	
+										IpoptSolver *ipoptSolver  = new IpoptSolver();	
 										ipoptSolver->osol = osol;
 										ipoptSolver->osinstance = osinstance;
 										ipoptSolver->solve();

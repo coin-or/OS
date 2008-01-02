@@ -826,6 +826,7 @@ bool OSResult::setSolutionNumber(int number){
 	for(int i = 0; i < number; i++){
 		std::cout << "CREATING A NEW OPTIMIZATION SOLUTION" << std::endl;
 		resultData->optimization->solution[i] = new OptimizationSolution();
+		std::cout << "DONE CREATING A NEW OPTIMIZATION SOLUTION" << std::endl;
 	}
 	return true;
 }//setSolutionNumber

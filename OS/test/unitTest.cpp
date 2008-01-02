@@ -173,6 +173,8 @@ int main(int argC, char* argV[])
 	using CppAD::NearEqual;
 	bool ok;
 	double check;
+	
+	
 	//return 0;
 	cout << "START UNIT TEST" << endl;
 	// define the classes
@@ -229,9 +231,10 @@ int main(int argC, char* argV[])
 	}	
 	// solve using using the osil file
 	#ifdef COIN_HAS_IPOPT
-	cout << "create a new IPOPT Solver for OSiL string solution" << endl;
-	SmartPtr<IpoptSolver> ipoptSolver  = new IpoptSolver();	
+	IpoptSolver *ipoptSolver  =  NULL;	
 	try{
+	    ipoptSolver  = new IpoptSolver();
+		cout << "create a new IPOPT Solver for OSiL string solution" << endl;
 		ok = true;
 		OSiLReader *osilreader = NULL;
 		osilFileName =  dataDir  + "osilFiles" + dirsep +  "avion2.osil";
@@ -248,8 +251,12 @@ int main(int argC, char* argV[])
 		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on avion2");
 		delete osilreader;
 		osilreader = NULL;
+		delete ipoptSolver;
+		ipoptSolver = NULL;
 		unitTestResult << "Solved problem avion2.osil with Ipopt" << std::endl;
 		// solve another problem
+		cout << "create a new IPOPT Solver for OSiL string solution" << endl;
+		ipoptSolver  = new IpoptSolver();
 		// a problem with all nonlinear terms no linear terms
 		osilFileName =  dataDir  + "osilFiles" + dirsep + "HS071_NLPMod.osil";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
@@ -265,6 +272,10 @@ int main(int argC, char* argV[])
 		delete osilreader;
 		osilreader = NULL;
 		unitTestResult << "Solved problem HS071.osil with Ipopt" << std::endl;
+		delete ipoptSolver;
+		ipoptSolver = NULL;
+		cout << "create a new IPOPT Solver for OSiL string solution" << endl;
+		ipoptSolver  = new IpoptSolver();
 		// solve another problem
 		// a problem with both quadratic terms and general nonlinear terms
 		osilFileName =  dataDir  + "osilFiles" + dirsep + "rosenbrockmod.osil";
@@ -281,6 +292,10 @@ int main(int argC, char* argV[])
 		delete osilreader;
 		osilreader = NULL;
 		unitTestResult << "Solved problem rosenbrockmod.osil with Ipopt" << std::endl;
+		delete ipoptSolver;
+		ipoptSolver = NULL;
+		cout << "create a new IPOPT Solver for OSiL string solution" << endl;
+		ipoptSolver  = new IpoptSolver();
 		// solve another problem
 		// a problem that is a pure quadratic
 		osilFileName =  dataDir  + "osilFiles" + dirsep + "parincQuadratic.osil";
@@ -298,6 +313,10 @@ int main(int argC, char* argV[])
 		delete osilreader;
 		osilreader = NULL;	
 		unitTestResult << "Solved problem parincQuadratic.osil with Ipopt" << std::endl;
+		delete ipoptSolver;
+		ipoptSolver = NULL;
+		cout << "create a new IPOPT Solver for OSiL string solution" << endl;
+		ipoptSolver  = new IpoptSolver();
 		// solve another problem
 		// try a pure linear program
 		osilFileName =  dataDir  + "osilFiles" + dirsep + "parincLinear.osil";
@@ -314,7 +333,11 @@ int main(int argC, char* argV[])
 		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on parincLinear");
 		delete osilreader;
 		osilreader = NULL;	
-		unitTestResult << "Solved problem parincLinear.osil with Ipopt" << std::endl;	
+		unitTestResult << "Solved problem parincLinear.osil with Ipopt" << std::endl;
+		delete ipoptSolver;
+		ipoptSolver = NULL;
+		cout << "create a new IPOPT Solver for OSiL string solution" << endl;
+		ipoptSolver  = new IpoptSolver();
 		// solve another problem
 		// callBackTest.osil
 		osilFileName =  dataDir  + "osilFiles" + dirsep + "callBackTest.osil";
@@ -335,7 +358,10 @@ int main(int argC, char* argV[])
 		delete osilreader;
 		osilreader = NULL;	
 		unitTestResult << "Solved problem callBack.osil with Ipopt" << std::endl;	
-		
+		delete ipoptSolver;
+		ipoptSolver = NULL;
+		cout << "create a new IPOPT Solver for OSiL string solution" << endl;
+		ipoptSolver  = new IpoptSolver();
 		// solve another problem
 		// callBackTest.osil
 		osilFileName =  dataDir  + "osilFiles" + dirsep + "callBackTestRowMajor.osil";
@@ -355,13 +381,9 @@ int main(int argC, char* argV[])
 		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on parincLinear");
 		delete osilreader;
 		osilreader = NULL;	
-		unitTestResult << "Solved problem callBackRowMajor.osil with Ipopt" << std::endl;	
-		// not we do not delete ipoptSolver -- this is a smart pointer
-		//delete solver;
-		//solver = NULL;			
-		// not we do not delete ipoptSolver -- this is a smart pointer
-		//delete solver;
-		//solver = NULL;	
+		delete ipoptSolver;
+		ipoptSolver = NULL;	
+		unitTestResult << "Solved problem callBackRowMajor.osil with Ipopt" << std::endl;
 	}
 	catch(const ErrorClass& eclass){
 		unitTestResultFailure << "Sorry Unit Test Failed Testing the Ipopt Solver:"  + eclass.errormsg<< endl; 

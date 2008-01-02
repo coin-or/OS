@@ -377,12 +377,18 @@ void solve(){
 				bool bIpoptIsPresent = false;
 				#ifdef COIN_HAS_IPOPT
 				bIpoptIsPresent = true;
-				SmartPtr<IpoptSolver> ipoptSolver  = new IpoptSolver();	
-				ipoptSolver->osol = osoptions->osol;
-				ipoptSolver->osil = osoptions->osil;
-				ipoptSolver->osinstance = NULL;
-				ipoptSolver->solve();
-				osrl = ipoptSolver->osrl ;
+				//IpoptSolver *ipoptSolver  = new IpoptSolver();	
+				//ipoptSolver->osol = osoptions->osol;
+				//ipoptSolver->osil = osoptions->osil;
+				//ipoptSolver->osinstance = NULL;
+				//ipoptSolver->solve();
+				//osrl = ipoptSolver->osrl ;
+				solverType = new IpoptSolver();	
+				solverType->osol = osoptions->osol;
+				solverType->osil = osoptions->osil;
+				solverType->osinstance = NULL;
+				solverType->solve();
+				osrl = solverType->osrl ;
 				#endif
 				if(bIpoptIsPresent == false) throw ErrorClass( "the Ipopt solver requested is not present");
 			}
@@ -452,7 +458,7 @@ void solve(){
 				}
 			}
 			// treat non-ipopt solvers differently
-			if( osoptions->solverName.find( "ipopt") == std::string::npos){
+			//if( osoptions->solverName.find( "ipopt") == std::string::npos){
 				solverType->osil = osoptions->osil;
 				solverType->osol = osoptions->osol;
 				solverType->osinstance = NULL;
@@ -460,7 +466,7 @@ void solve(){
 				osrl = solverType->osrl;
 				delete solverType;
 				solverType = NULL;
-			}
+			//}
 			if(osoptions->osrlFile != ""){
 				fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
 				//const char *ch1 = "/Applications/Firefox.app/Contents/MacOS/firefox  ";

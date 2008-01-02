@@ -252,16 +252,21 @@ OSInstance::~OSInstance(){
 			for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
 				std::cout << "Deleting an expression tree from m_mapExpressionTreesMod" << std::endl;
 				delete m_mapExpressionTreesMod[ posMapExpTree->first ];
+				std::cout << "Done Deleting an expression tree from m_mapExpressionTreesMod" << std::endl;
 			}
 		}
 	}
 	///
 	if( (m_bNonlinearExpressionTreeIndexesProcessed == true) && (m_mapExpressionTrees.size() > 0) ){
+		std::cout << "Deleting  m_miNonlinearExpressionTreeIndexes" << std::endl;
 		delete[] m_miNonlinearExpressionTreeIndexes;
+		std::cout << "Done Deleting  m_miNonlinearExpressionTreeIndexes" << std::endl;
 		m_miNonlinearExpressionTreeIndexes = NULL;
 	}
 	if( (m_bNonlinearExpressionTreeModIndexesProcessed == true) && (m_mapExpressionTreesMod.size() > 0) ){
+		std::cout << "Deleting  m_miNonlinearExpressionTreeModIndexes" << std::endl;
 		delete[] m_miNonlinearExpressionTreeModIndexes;
+		std::cout << "Done Deleting  m_miNonlinearExpressionTreeModIndexes" << std::endl;
 		m_miNonlinearExpressionTreeModIndexes = NULL;
 	}
 //	if( (instanceData->timeDomain->stages->stage != NULL) && (m_bProcessTimeStages == true) ){
