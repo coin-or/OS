@@ -1374,9 +1374,21 @@
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="variables" type="TimeDomainStageVariables" minOccurs="0"/>
-			<xs:element name="constraints" type="TimeDomainStageConstraints" minOccurs="0"/>
-			<xs:element name="objectives" type="TimeDomainStageObjectives" minOccurs="0"/>
+			<xs:element name="variables" type="TimeDomainStageVariables" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>If missing, assume numberOfVariables=0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="constraints" type="TimeDomainStageConstraints" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>If missing, assume numberOfConstraints=0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="objectives" type="TimeDomainStageObjectives" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>If missing, assume ALL objectives are included</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 	</xs:complexType>
