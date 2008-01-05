@@ -413,9 +413,9 @@ int main(int argC, char* argV[])
 		solver->osil = osil;
 		solver->osol = osol;  
 		solver->osinstance = NULL; 
-		cout << "call the COIN - clp Solver for parincLinear" << endl;
+		cout << "call the COIN - clp Solver for parincLinearbyRow" << endl;
 		solver->solve();
-		cout << "Here is the COIN clp solver solution for parincLinear" << endl;
+		cout << "Here is the COIN clp solver solution for parincLinearByRow" << endl;
 		cout << solver->osrl << endl;
 		check = 7668;
 		ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-1 , 1e-1);

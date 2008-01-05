@@ -148,13 +148,15 @@ OSInstance::~OSInstance(){
 	m_mdObjectiveConstants = NULL;
 	delete[] m_mdObjectiveWeights;
 	m_mdObjectiveWeights = NULL;
-	delete[] m_mObjectiveCoefficients;
-	m_mObjectiveCoefficients = NULL;
 	delete[] m_miNonLinearVarsReverseMap;
 	m_miNonLinearVarsReverseMap = NULL;
 	int i;
-	if(instanceData->objectives->numberOfObjectives > 0 && m_mObjectiveCoefficients != NULL){
+	//if(instanceData->objectives->numberOfObjectives > 0 && m_mObjectiveCoefficients != NULL){
+	if(m_bProcessObjectives == true ){
 		for(i = 0; i < instanceData->objectives->numberOfObjectives; i++){
+			#ifdef DEBUG
+			std::cout <<  "Delete m_mObjectiveCoefficients[i]" << std::endl;
+			#endif
 			delete m_mObjectiveCoefficients[i];
 			m_mObjectiveCoefficients[i] = NULL;
 		}
@@ -163,7 +165,11 @@ OSInstance::~OSInstance(){
 	}
 	if(instanceData->objectives->numberOfObjectives > 0 && m_mmdDenseObjectiveCoefficients != NULL){
 		for(i = 0; i < instanceData->objectives->numberOfObjectives; i++){
-			delete m_mmdDenseObjectiveCoefficients[i];
+			//delete m_mmdDenseObjectiveCoefficients[i];
+			#ifdef DEBUG
+			std::cout <<  "delete m_mmdDenseObjectiveCoefficients[i]" << std::endl;
+			#endif
+		    delete[] m_mmdDenseObjectiveCoefficients[i];
 			m_mmdDenseObjectiveCoefficients[i] = NULL;
 		}
 		delete[] m_mmdDenseObjectiveCoefficients;
@@ -186,6 +192,10 @@ OSInstance::~OSInstance(){
 			m_mmdObjGradient = NULL;
 		}
 	}
+	if(m_bProcessLinearConstraintCoefficients == true && m_bColumnMajor == true) delete m_linearConstraintCoefficientsInColumnMajor;
+	if(m_bProcessLinearConstraintCoefficients == true && m_bColumnMajor == false) delete m_linearConstraintCoefficientsInRowMajor;
+	//if(m_linearConstraintCoefficientsInRowMajor != NULL) delete m_linearConstraintCoefficientsInRowMajor;
+	//if(m_linearConstraintCoefficientsInColumnMajor != NULL) delete m_linearConstraintCoefficientsInColumnMajor;
 	delete[] m_msConstraintNames;
 	m_msConstraintNames = NULL;
 	delete[] m_mcConstraintTypes;
@@ -335,6 +345,9 @@ Variables::~Variables(){
 	int i;
 	if(numberOfVariables > 0 && var != NULL){
 		for(i = 0; i < numberOfVariables; i++){
+			#ifdef DEBUG 
+			cout << "Deleting var[ i]" << endl;
+			#endif
 			delete var[i];
 			var[i] = NULL;
 		}
@@ -868,7 +881,11 @@ bool OSInstance::processObjectives() {
 		m_mdObjectiveConstants = new double[n];
 		m_mdObjectiveWeights = new double[n];
 		m_mObjectiveCoefficients = new SparseVector*[n];
-		for(i = 0; i < n; i++) m_mObjectiveCoefficients[i] = new SparseVector(instanceData->objectives->obj[ j]->numberOfObjCoef);
+		for(i = 0; i < n; i++){
+			m_mObjectiveCoefficients[i] = new SparseVector(instanceData->objectives->obj[ j]->numberOfObjCoef);
+			m_mObjectiveCoefficients[i]->bDeleteArrays=false;
+		}
+		
 		//for(i = 0; i < n; i++){
 		//	m_mObjectiveCoefficients[i] = new SparseVector();
 		//	m_mObjectiveCoefficients[i]->number = instanceData->objectives->obj[ j]->numberOfObjCoef;
@@ -1050,6 +1067,7 @@ bool OSInstance::processLinearConstraintCoefficients() {
 			if(instanceData->linearConstraintCoefficients->rowIdx->el != NULL){
 				m_bColumnMajor = true;
 				m_linearConstraintCoefficientsInColumnMajor = new SparseMatrix();
+				m_linearConstraintCoefficientsInColumnMajor->bDeleteArrays = false;
 				m_linearConstraintCoefficientsInColumnMajor->isColumnMajor = true;
 				m_linearConstraintCoefficientsInColumnMajor->valueSize = n;
 				m_linearConstraintCoefficientsInColumnMajor->startSize = instanceData->variables->numberOfVariables + 1;
@@ -1057,6 +1075,7 @@ bool OSInstance::processLinearConstraintCoefficients() {
 			else{ 
 				m_bColumnMajor = false;	
 				m_linearConstraintCoefficientsInRowMajor = new SparseMatrix();
+				m_linearConstraintCoefficientsInRowMajor->bDeleteArrays = false;
 				m_linearConstraintCoefficientsInRowMajor->isColumnMajor = false;
 				m_linearConstraintCoefficientsInRowMajor->valueSize = n;
 				m_linearConstraintCoefficientsInRowMajor->startSize = instanceData->constraints->numberOfConstraints + 1;
@@ -1476,10 +1495,11 @@ bool OSInstance::setInstanceName(string name){
 bool OSInstance::setVariableNumber(int number){
 	// this method assume osinstance->instanceData->variables is not null
 	if(number <= 0) return false;
-	if(instanceData->variables->numberOfVariables != -1  && instanceData->variables->numberOfVariables != number){
-		delete[] instanceData->variables->var;
-		instanceData->variables->var = NULL;
-	} 
+	//if(instanceData->variables->numberOfVariables != -1  && instanceData->variables->numberOfVariables != number){
+	//	delete[] instanceData->variables->var;
+	//	instanceData->variables->var = NULL;
+	//} 
+	if(instanceData->variables == NULL) instanceData->variables = new Variables();
 	instanceData->variables->numberOfVariables = number;
 	if(instanceData->variables->var == NULL){
 		instanceData->variables->var = new Variable*[number];
@@ -1505,39 +1525,48 @@ bool OSInstance::addVariable(int index, string name, double lowerBound, double u
 bool OSInstance::setVariables(int number, string *names, double *lowerBounds, 
 	double *upperBounds, char *types, double *inits, string *initsString){
 	if(number <= 0) return false;
-	if(instanceData->variables == NULL) instanceData->variables = new Variables();
-	instanceData->variables->numberOfVariables = number;
-	instanceData->variables->var = new Variable*[number];
-	int i;
-	for(i = 0; i < number; i++){
-		instanceData->variables->var[ i] = new Variable();
-	}
-	if(names  != NULL){
-		for(i = 0; i < number; i++) instanceData->variables->var[i]->name = names[i];   			
-	}
-	if(lowerBounds != NULL){
-		for(i = 0; i < number; i++){
-			if(lowerBounds[i] != -OSDBL_MAX && lowerBounds[i] != -OSDBL_MAX)instanceData->variables->var[i]->lb = lowerBounds[i];  
+	try{
+		if(instanceData->variables == NULL){
+			throw ErrorClass("There is no variables object");
 		}
-	}
-	if(upperBounds != NULL){
-		for(i = 0; i < number; i++){
-			if(upperBounds[i] != OSDBL_MAX && upperBounds[i] != OSDBL_MAX)instanceData->variables->var[i]->ub = upperBounds[i]; 
+		if(instanceData->variables->numberOfVariables != number){
+			throw ErrorClass("input number of variables not equal to number in class");
 		}
-	}
-	if(types != NULL){
+		//instanceData->variables->var = new Variable*[number];
+		int i;
 		for(i = 0; i < number; i++){
-			instanceData->variables->var[i]->type = types[i];
-			if(types[i] != 'C' && types[i] != 'B' && types[i] != 'I' && types[i] != 'S') types[i] = 'C';
+			instanceData->variables->var[ i] = new Variable();
 		}
+		if(names  != NULL){
+			for(i = 0; i < number; i++) instanceData->variables->var[i]->name = names[i];   			
+		}
+		if(lowerBounds != NULL){
+			for(i = 0; i < number; i++){
+				if(lowerBounds[i] != -OSDBL_MAX && lowerBounds[i] != -OSDBL_MAX)instanceData->variables->var[i]->lb = lowerBounds[i];  
+			}
+		}
+		if(upperBounds != NULL){
+			for(i = 0; i < number; i++){
+				if(upperBounds[i] != OSDBL_MAX && upperBounds[i] != OSDBL_MAX)instanceData->variables->var[i]->ub = upperBounds[i]; 
+			}
+		}
+		if(types != NULL){
+			for(i = 0; i < number; i++){
+				instanceData->variables->var[i]->type = types[i];
+				if(types[i] != 'C' && types[i] != 'B' && types[i] != 'I' && types[i] != 'S') types[i] = 'C';
+			} 
+		}
+		if(inits != NULL){
+			for(i = 0; i < number; i++) instanceData->variables->var[i]->init = inits[i];   			
+		}
+		if(initsString != NULL){
+			for(i = 0; i < number; i++) instanceData->variables->var[i]->initString = initsString[i];   			
+		}
+		return true;
 	}
-	if(inits != NULL){
-		for(i = 0; i < number; i++) instanceData->variables->var[i]->init = inits[i];   			
+	catch(const ErrorClass& eclass){
+		throw ErrorClass(  eclass.errormsg); 
 	}
-	if(initsString != NULL){
-		for(i = 0; i < number; i++) instanceData->variables->var[i]->initString = initsString[i];   			
-	}
-	return true;
 }//setVariables
 
 // begin checking again with Jun Ma
@@ -1584,51 +1613,54 @@ bool OSInstance::addObjective(int index, string name, string maxOrMin, double co
 
 bool OSInstance::setObjectives(int number, string *names, string *maxOrMins, double *constants, double *weights, SparseVector **objectiveCoefficients){
 	if(number < 0) return false;
-	if(number == 0){
-		instanceData->objectives = new Objectives();
-		instanceData->objectives->numberOfObjectives = 0;
-		instanceData->objectives->obj = NULL;
+	try{
+		if(instanceData->objectives == NULL){
+			throw ErrorClass("there is no objectives object");		
+		}		
+		if(instanceData->objectives->numberOfObjectives != number){
+			throw ErrorClass("input number of objective not equal to number in class");		
+		}
+		if(number == 0) return true;
+		int i = 0;
+		for(i = 0; i < number; i++)instanceData->objectives->obj[i] = new Objective();
+		int j = 0;
+		if(names != NULL){
+			for(i = 0; i < number; i++) instanceData->objectives->obj[i]->name = names[i];   			
+		}	
+		if(maxOrMins != NULL){
+			for(i = 0; i < number; i++){
+				if(maxOrMins[i] == "" || (maxOrMins[i].compare("max") != 0 && maxOrMins[i].compare("min") !=0)) return false;
+				instanceData->objectives->obj[i]->maxOrMin = maxOrMins[i];   			
+			}
+		}
+		if(constants != NULL){
+			for(i = 0; i < number; i++) instanceData->objectives->obj[i]->constant = constants[i];   			
+		}
+		if(weights != NULL){
+			for(i = 0; i < number; i++) instanceData->objectives->obj[i]->weight = weights[i];   			
+		}
+		if(objectiveCoefficients != NULL){
+			for(i = 0; i < number; i++){
+				int n = (&objectiveCoefficients[i] == NULL || objectiveCoefficients[i]->indexes == NULL)?0:objectiveCoefficients[i]->number;   		
+				instanceData->objectives->obj[i]->numberOfObjCoef = n;
+				if(n == 0){
+					instanceData->objectives->obj[i]->coef = NULL;
+				}
+				else{
+					instanceData->objectives->obj[i]->coef = new ObjCoef*[n];
+					for(j = 0; j < n; j++){
+						instanceData->objectives->obj[i]->coef[j] = new ObjCoef();
+						instanceData->objectives->obj[i]->coef[j]->idx  = objectiveCoefficients[i]->indexes[j];
+						instanceData->objectives->obj[i]->coef[j]->value = objectiveCoefficients[i]->values[j];   			
+					}   			
+				}   			   				
+			}
+		}
 		return true;
 	}
-	
-	instanceData->objectives->numberOfObjectives = number;
-	instanceData->objectives->obj = new Objective*[number];
-	int i = 0;
-	for(i = 0; i < number; i++)instanceData->objectives->obj[i] = new Objective();
-	int j = 0;
-	if(names != NULL){
-		for(i = 0; i < number; i++) instanceData->objectives->obj[i]->name = names[i];   			
-	}	
-	if(maxOrMins != NULL){
-		for(i = 0; i < number; i++){
-			if(maxOrMins[i] == "" || (maxOrMins[i].compare("max") != 0 && maxOrMins[i].compare("min") !=0)) return false;
-			instanceData->objectives->obj[i]->maxOrMin = maxOrMins[i];   			
-		}
+	catch(const ErrorClass& eclass){
+		throw ErrorClass(  eclass.errormsg); 
 	}
-	if(constants != NULL){
-		for(i = 0; i < number; i++) instanceData->objectives->obj[i]->constant = constants[i];   			
-	}
-	if(weights != NULL){
-		for(i = 0; i < number; i++) instanceData->objectives->obj[i]->weight = weights[i];   			
-	}
-	if(objectiveCoefficients != NULL){
-		for(i = 0; i < number; i++){
-			int n = (&objectiveCoefficients[i] == NULL || objectiveCoefficients[i]->indexes == NULL)?0:objectiveCoefficients[i]->number;   		
-			instanceData->objectives->obj[i]->numberOfObjCoef = n;
-			if(n == 0){
-				instanceData->objectives->obj[i]->coef = NULL;
-			}
-			else{
-				instanceData->objectives->obj[i]->coef = new ObjCoef*[n];
-				for(j = 0; j < n; j++){
-					instanceData->objectives->obj[i]->coef[j] = new ObjCoef();
-					instanceData->objectives->obj[i]->coef[j]->idx  = objectiveCoefficients[i]->indexes[j];
-					instanceData->objectives->obj[i]->coef[j]->value = objectiveCoefficients[i]->values[j];   			
-				}   			
-			}   			   				
-		}
-	}
-	return true;
 }//setObjectives
 
 
@@ -1636,7 +1668,6 @@ bool OSInstance::setConstraintNumber(int number){
 	if(number < 0) return false;
 	if(instanceData->constraints == NULL) instanceData->constraints = new Constraints();
 	if(number == 0){
-		instanceData->constraints = new Constraints();
 		instanceData->constraints->numberOfConstraints = 0;
 		instanceData->constraints->con = 0;
 		return true;
@@ -1661,37 +1692,46 @@ bool OSInstance::addConstraint(int index, string name, double lowerBound, double
 
 bool OSInstance::setConstraints(int number, string* names, double* lowerBounds, double* upperBounds, double* constants){
 	if(number < 0) return false;
-	m_bProcessConstraints = false;
-	m_bProcessConstraints = false;
 	if(number == 0){
-		instanceData->constraints = new Constraints();
-		instanceData->constraints->numberOfConstraints = 0;
-		instanceData->constraints->con = NULL;
+		// this is done in setConstraintNumber
+		//instanceData->constraints = new Constraints();
+		//instanceData->constraints->numberOfConstraints = 0;
+		//instanceData->constraints->con = NULL;
 		return true;
 	}
-	instanceData->constraints->numberOfConstraints = number;
-	instanceData->constraints->con = new Constraint*[number];
-	int i = 0;
-	for(i = 0; i < number; i++){
-		instanceData->constraints->con[i] = new Constraint();
-	}
-	if(names != NULL){
-		for(i = 0; i < number; i++) instanceData->constraints->con[i]->name = names[i];   			
-	}
-	if(lowerBounds != NULL){
-		for(i = 0; i < number; i++){
-			if(lowerBounds[i] != -OSDBL_MAX && lowerBounds[i] != -OSDBL_MAX)instanceData->constraints->con[i]->lb = lowerBounds[i]; 
+	try{
+		
+		if(instanceData->constraints  == NULL){
+			throw ErrorClass("there is no constraints object");		
+		}		
+		if(instanceData->constraints->numberOfConstraints != number){
+			throw ErrorClass("input number of constrasints not equal to number in class");		
 		}
-	}
-	if(upperBounds != NULL){
+		int i = 0;
 		for(i = 0; i < number; i++){
-			if(upperBounds[i] != OSDBL_MAX && upperBounds[i] != OSDBL_MAX)instanceData->constraints->con[i]->ub = upperBounds[i]; 
+			instanceData->constraints->con[i] = new Constraint();
 		}
-	}   
-	if(constants != NULL){
-		for(i = 0; i < number; i++) instanceData->constraints->con[i]->constant = constants[i];   			
+		if(names != NULL){
+			for(i = 0; i < number; i++) instanceData->constraints->con[i]->name = names[i];   			
+		}
+		if(lowerBounds != NULL){
+			for(i = 0; i < number; i++){
+				if(lowerBounds[i] != -OSDBL_MAX && lowerBounds[i] != -OSDBL_MAX)instanceData->constraints->con[i]->lb = lowerBounds[i]; 
+			}
+		}
+		if(upperBounds != NULL){
+			for(i = 0; i < number; i++){
+				if(upperBounds[i] != OSDBL_MAX && upperBounds[i] != OSDBL_MAX)instanceData->constraints->con[i]->ub = upperBounds[i]; 
+			}
+		}   
+		if(constants != NULL){
+			for(i = 0; i < number; i++) instanceData->constraints->con[i]->constant = constants[i];   			
+		}
+		return true;
 	}
-	return true;
+	catch(const ErrorClass& eclass){
+		throw ErrorClass(  eclass.errormsg); 
+	}
 }//setConstraints
 
 bool OSInstance::setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor, 
@@ -2712,9 +2752,10 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( ){
 	}
 	#ifdef DEBUG
 	std::cout << "HESSIAN SPARSITY PATTERN" << std::endl;
-	for(i = 0; i < m_LagrangianSparseHessian->hessDimension; i++){
-		std::cout <<  "Row Index = " << *(m_LagrangianSparseHessian->hessRowIdx + i) << std::endl;
-		std::cout <<  "Column Index = " << *(m_LagrangianSparseHessian->hessColIdx + i) << std::endl;
+	int kj;
+	for(kj = 0; kj < m_LagrangianSparseHessian->hessDimension; kj++){
+		std::cout <<  "Row Index = " << *(m_LagrangianSparseHessian->hessRowIdx + kj) << std::endl;
+		std::cout <<  "Column Index = " << *(m_LagrangianSparseHessian->hessColIdx + kj) << std::endl;
 	}
 	#endif
 	//
@@ -3023,7 +3064,6 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conM
 			m_vdDomainUnitVec[i] = 0.;
 			}
 		}
-
 		#ifdef DEBUG
 		int k;
 		std::cout  << "JACOBIAN DATA " << std::endl;
