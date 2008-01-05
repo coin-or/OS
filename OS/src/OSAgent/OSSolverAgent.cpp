@@ -27,11 +27,13 @@ using std::endl;
 
 OSSolverAgent::OSSolverAgent(string solverURI) : OShL() {
 	int nstart = 0;
+	string::size_type posSlash;
 	// parse the solverURI
 	// get rid of http:// if it is there
 	if (solverURI.find("http://") != string::npos) solverURI = solverURI.substr(7);
 	// now find the first "/" and put in nstart
-	nstart = solverURI.find("/", nstart);
+	posSlash = solverURI.find("/", nstart);
+	if(posSlash != std::string::npos) nstart = posSlash;
 	postURI = solverURI.substr(nstart, solverURI.size() - 1);
 	// Do we have a port number
 	string::size_type colonlocation = solverURI.find(":");

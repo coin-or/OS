@@ -413,7 +413,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 			break;
 			case STOP_AT_ACCEPTABLE_POINT:
 				solutionDescription = "STOP_AT_ACCEPTABLE_POINT[IPOPT]: Algorithm stopped at a point that was converged, not to _desired_ tolerances, but to _acceptable_ tolerances";
-				osresult->setSolutionStatus(solIdx,  "locallyOptimal", solutionDescription);
+				osresult->setSolutionStatus(solIdx,  "IpoptAccetable", solutionDescription);
 				osresult->setPrimalVariableValues(solIdx, const_cast<double*>(x));
 				osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda));
 				mdObjValues[0] = obj_value;
