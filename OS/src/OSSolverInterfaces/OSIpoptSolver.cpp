@@ -517,7 +517,8 @@ void IpoptSolver::solve() throw (ErrorClass) {
 		std::cout << "Finish Ipopt Optimize" << std::endl;
 		osrl = osrlwriter->writeOSrL( osresult);
 		std::cout << "Finish writing the osrl" << std::endl;
-		if (status != Solve_Succeeded) {
+		//if (status != Solve_Succeeded) {
+		if (status < -2) {
 			throw ErrorClass("Ipopt FAILED TO SOLVE THE PROBLEM: " + ipoptErrorMsg);
 		}	
 		if(osinstance == NULL){
