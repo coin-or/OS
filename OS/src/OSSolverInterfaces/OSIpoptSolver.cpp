@@ -477,10 +477,12 @@ void IpoptSolver::solve() throw (ErrorClass) {
 		clock_t start, finish;
 		double duration;
 		start = clock();
+		bool newOSiLReader = false;
 		OSiLReader* osilreader = NULL; 
 		if(osinstance == NULL){
 			osilreader = new OSiLReader();
 			osinstance = osilreader->readOSiL( osil);
+			newOSiLReader = true;
 		}
 		//OSiLWriter osilwriter;
 		//cout << osilwriter.writeOSiL( osinstance) << endl;
@@ -521,11 +523,10 @@ void IpoptSolver::solve() throw (ErrorClass) {
 		if (status < -2) {
 			throw ErrorClass("Ipopt FAILED TO SOLVE THE PROBLEM: " + ipoptErrorMsg);
 		}	
-		if(osinstance == NULL){
+		if(newOSiLReader == true){
 			delete osilreader;
 			osilreader = NULL;
 		}
-
 	}
 	catch(const ErrorClass& eclass){
 		osresult->setGeneralMessage( eclass.errormsg);

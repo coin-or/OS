@@ -384,11 +384,11 @@ void solve(){
 				//ipoptSolver->solve();
 				//osrl = ipoptSolver->osrl ;
 				solverType = new IpoptSolver();	
-				solverType->osol = osoptions->osol;
-				solverType->osil = osoptions->osil;
-				solverType->osinstance = NULL;
-				solverType->solve();
-				osrl = solverType->osrl ;
+				//solverType->osol = osoptions->osol;
+				//solverType->osil = osoptions->osil;
+				//solverType->osinstance = NULL;
+				//solverType->solve();
+				//osrl = solverType->osrl ;
 				#endif
 				if(bIpoptIsPresent == false) throw ErrorClass( "the Ipopt solver requested is not present");
 			}
@@ -462,9 +462,12 @@ void solve(){
 				solverType->osil = osoptions->osil;
 				solverType->osol = osoptions->osol;
 				solverType->osinstance = NULL;
+				std::cout << "CALL SOLVE" << std::endl;
 				solverType->solve();
 				osrl = solverType->osrl;
+				std::cout << "DELETE SOLVER TYPE" << std::endl;
 				delete solverType;
+				std::cout << "DONE DELETE SOVER TYPE" << std::endl;
 				solverType = NULL;
 			//}
 			if(osoptions->osrlFile != ""){

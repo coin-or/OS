@@ -70,10 +70,12 @@ void CoinSolver::solve() throw (ErrorClass) {
 		if(osil.length() == 0 && osinstance == NULL) throw ErrorClass("there is no instance");
 		clock_t start, finish;
 		double duration;
+		bool newOSiLReader = false;
 		start = clock();
 		if(osinstance == NULL){
 			osilreader = new OSiLReader();
 			osinstance = osilreader->readOSiL( osil);
+			newOSiLReader = true;
 		}
 				finish = clock();
 		duration = (double) (finish - start) / CLOCKS_PER_SEC;
@@ -166,8 +168,10 @@ void CoinSolver::solve() throw (ErrorClass) {
 		if(!setCoinPackedMatrix() ) throw ErrorClass("Problem generating coin packed matrix");
 		//dataEchoCheck();
 		if(optimize() != true) throw ErrorClass("there was an error trying to optimize the problem");
-		delete osilreader;
-		osilreader = NULL;
+		if(newOSiLReader == true){
+			delete osilreader;
+			osilreader = NULL;
+		}
 	}// end solve
 	catch(const ErrorClass& eclass){
 		std::cout << "THERE IS AN ERROR" << std::endl;
@@ -253,7 +257,7 @@ bool CoinSolver::optimize()
 		int k = 0;
 		char *varType;
 		int numOfIntVars = osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables();
-		intIndex = new int[ numOfIntVars];
+		if(numOfIntVars > 0) intIndex = new int[ numOfIntVars];
 		varType = osinstance->getVariableTypes();
 		for(i = 0; i < osinstance->getVariableNumber(); i++){
 			if( (varType[i] == 'B') || (varType[i]) == 'I' ) {
@@ -341,10 +345,12 @@ bool CoinSolver::optimize()
 			delete[] rcost;
 			rcost = NULL;
 		}
-		if(k > 0){ 
+
+		if(numOfIntVars > 0){ 
 			delete[] intIndex;
 			intIndex = NULL;
 		}
+		cout << "DONE WITH COIN SOLVER SOLVE" << endl;
 		return true;
 	}
 	catch(const ErrorClass& eclass){

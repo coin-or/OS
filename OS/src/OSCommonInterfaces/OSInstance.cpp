@@ -138,6 +138,7 @@ OSInstance::~OSInstance(){
 	m_msVariableInitialStringValues = NULL;
 	delete[] m_mcVariableTypes;
 	m_mcVariableTypes = NULL;
+	/**
 	delete[] m_msObjectiveNames;
 	m_msObjectiveNames = NULL;
 	delete[] m_msMaxOrMins;
@@ -148,6 +149,7 @@ OSInstance::~OSInstance(){
 	m_mdObjectiveConstants = NULL;
 	delete[] m_mdObjectiveWeights;
 	m_mdObjectiveWeights = NULL;
+	*/
 	delete[] m_miNonLinearVarsReverseMap;
 	m_miNonLinearVarsReverseMap = NULL;
 	int i;
@@ -160,6 +162,23 @@ OSInstance::~OSInstance(){
 			delete m_mObjectiveCoefficients[i];
 			m_mObjectiveCoefficients[i] = NULL;
 		}
+		#ifdef DEBUG
+		std::cout <<  "Delete m_msObjectiveNames" << std::endl;
+		std::cout <<  "Delete m_msMaxOrMins" << std::endl;
+		std::cout <<  "Delete m_miNumberOfObjCoef" << std::endl;
+		std::cout <<  "Delete m_mdObjectiveConstants" << std::endl;
+		std::cout <<  "Delete m_mdObjectiveWeights" << std::endl;
+		#endif		
+		delete[] m_msObjectiveNames;
+		m_msObjectiveNames = NULL;
+		delete[] m_msMaxOrMins;
+		m_msMaxOrMins = NULL;
+		delete[] m_miNumberOfObjCoef;
+		m_miNumberOfObjCoef = NULL;
+		delete[] m_mdObjectiveConstants; 
+		m_mdObjectiveConstants = NULL;
+		delete[] m_mdObjectiveWeights;
+		m_mdObjectiveWeights = NULL;
 		delete[] m_mObjectiveCoefficients;
 		m_mObjectiveCoefficients = NULL;
 	}
@@ -883,7 +902,7 @@ bool OSInstance::processObjectives() {
 		m_mObjectiveCoefficients = new SparseVector*[n];
 		for(i = 0; i < n; i++){
 			m_mObjectiveCoefficients[i] = new SparseVector(instanceData->objectives->obj[ j]->numberOfObjCoef);
-			m_mObjectiveCoefficients[i]->bDeleteArrays=false;
+			//m_mObjectiveCoefficients[i]->bDeleteArrays=false;
 		}
 		
 		//for(i = 0; i < n; i++){

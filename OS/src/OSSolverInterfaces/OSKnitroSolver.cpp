@@ -535,9 +535,11 @@ void KnitroSolver::solve() throw (ErrorClass) {
 		clock_t start, finish;
 		double duration;
 		start = clock();
+		bool newOSiLReader = false;
 		if(osinstance == NULL){
 			osilreader = new OSiLReader();
 			osinstance = osilreader->readOSiL( osil);
+			newOSiLReader = true;
 		}
 		OSiLWriter osilwriter;
 		//cout << osilwriter.writeOSiL( osinstance) << endl;
@@ -732,7 +734,10 @@ void KnitroSolver::solve() throw (ErrorClass) {
 								0, 0.0, NULL, NULL, NULL, NULL);
 		}
 		
-
+		if(newOSiLReader == true){
+			delete osilreader;
+			osilreader = NULL;
+		}
 		delete [] daX;
 		delete [] daLambda;
 

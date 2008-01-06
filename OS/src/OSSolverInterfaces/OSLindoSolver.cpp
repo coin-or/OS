@@ -137,9 +137,12 @@ void LindoSolver::solve()  {
 		clock_t start, finish;
 		double duration;
 		start = clock();
+		bool newOSiLReader = false;
 		if(osinstance == NULL){
 			osilreader = new OSiLReader();
 			osinstance = osilreader->readOSiL( osil);
+			newOSiLReader = true;
+			
 		}
 		
 		finish = clock();
@@ -169,8 +172,10 @@ void LindoSolver::solve()  {
 			&& !processNonlinearExpressions()) throw ErrorClass("failed adding nonlinear terms");
 		//dataEchoCheck();
 		if( optimize() != true) throw ErrorClass("problem optimizing model");
-		delete osilreader;
-		osilreader = NULL;
+		if(newOSiLReader == true){
+			delete osilreader;
+			osilreader = NULL;
+		}
 		delete osresult;
 		osresult = NULL;
 	}
