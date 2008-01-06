@@ -257,14 +257,16 @@ bool CoinSolver::optimize()
 		int k = 0;
 		char *varType;
 		int numOfIntVars = osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables();
-		if(numOfIntVars > 0) intIndex = new int[ numOfIntVars];
-		varType = osinstance->getVariableTypes();
-		for(i = 0; i < osinstance->getVariableNumber(); i++){
-			if( (varType[i] == 'B') || (varType[i]) == 'I' ) {
-				intIndex[k++] = i;
+		if(numOfIntVars > 0) {
+			intIndex = new int[ numOfIntVars];
+			varType = osinstance->getVariableTypes();
+			for(i = 0; i < osinstance->getVariableNumber(); i++){
+				if( (varType[i] == 'B') || (varType[i]) == 'I' ) {
+					intIndex[k++] = i;
+				}
 			}
+			m_OsiSolver->setInteger( intIndex,  numOfIntVars);
 		}
-		m_OsiSolver->setInteger( intIndex,  numOfIntVars);
 		// try to catch Coin Solver errors
 		try{
 			if(numOfIntVars > 0){

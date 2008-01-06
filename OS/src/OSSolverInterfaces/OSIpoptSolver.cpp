@@ -453,7 +453,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 		}
 		osresult->setGeneralStatusType("success");
 		delete osrlwriter;
-		osrlwriter == NULL;
+		osrlwriter = NULL;
 
 	}
 	catch(const ErrorClass& eclass){
@@ -461,7 +461,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 		osresult->setGeneralStatusType( "error");
 		std::string osrl = osrlwriter->writeOSrL( osresult);
 		delete osrlwriter;
-		osrlwriter == NULL;
+		osrlwriter = NULL;
 		throw ErrorClass(  osrl) ;
 	}
 //////////
