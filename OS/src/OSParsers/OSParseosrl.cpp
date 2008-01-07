@@ -1112,8 +1112,8 @@ static yyconst flex_int32_t yy_rule_can_match_eol[82] =
 #line 16 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/OSParseosrl.l"
 
 #include <iostream>
-//#include "OSConfig.h"
-#include "config_os.h"
+#include "OSConfig.h"
+
 
 #ifdef HAVE_CSTDIO
 # include <cstdio>

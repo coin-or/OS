@@ -15,8 +15,7 @@
 %{
 
 #include <iostream>
-//#include "OSConfig.h"
-#include "config_os.h"
+#include "OSConfig.h"
 #ifdef HAVE_CSTDIO
 # include <cstdio>
 #else
