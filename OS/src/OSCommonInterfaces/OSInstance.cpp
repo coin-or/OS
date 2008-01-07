@@ -23,7 +23,7 @@
 #include<iostream>  
 #include<sstream>
 
-//#define DEBUG
+#define DEBUG
  
 using namespace std;
 using CppAD::NearEqual;
@@ -194,8 +194,10 @@ OSInstance::~OSInstance(){
 		delete[] m_mmdDenseObjectiveCoefficients;
 		m_mmdDenseObjectiveCoefficients = NULL;
 	}
-	if( (m_binitForAlgDiff == true) &&  (m_iNumberOfNonlinearVariables > 0) ){
+
+	if( (m_binitForAlgDiff == true)  ){	
 		if(instanceData->objectives->numberOfObjectives > 0 && m_mmdObjGradient != NULL){
+			
 			#ifdef DEBUG
 			std::cout <<  "The number of objectives =  " << instanceData->objectives->numberOfObjectives << std::endl;
 			#endif
@@ -203,7 +205,7 @@ OSInstance::~OSInstance(){
 				#ifdef DEBUG
 				std::cout << "deleting Objective function gradient " << i << std::endl;
 				#endif
-				delete m_mmdObjGradient[i];
+				delete[] m_mmdObjGradient[i];
 
 				m_mmdObjGradient[i] = NULL;
 			}
@@ -211,6 +213,7 @@ OSInstance::~OSInstance(){
 			m_mmdObjGradient = NULL;
 		}
 	}
+
 	if(m_bProcessLinearConstraintCoefficients == true && m_bColumnMajor == true) delete m_linearConstraintCoefficientsInColumnMajor;
 	if(m_bProcessLinearConstraintCoefficients == true && m_bColumnMajor == false) delete m_linearConstraintCoefficientsInRowMajor;
 	//if(m_linearConstraintCoefficientsInRowMajor != NULL) delete m_linearConstraintCoefficientsInRowMajor;

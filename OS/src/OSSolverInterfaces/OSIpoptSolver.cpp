@@ -454,6 +454,8 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 		osresult->setGeneralStatusType("success");
 		delete osrlwriter;
 		osrlwriter = NULL;
+		delete[] mdObjValues;
+		mdObjValues = NULL;
 
 	}
 	catch(const ErrorClass& eclass){
@@ -463,6 +465,8 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 		delete osrlwriter;
 		osrlwriter = NULL;
 		throw ErrorClass(  osrl) ;
+		delete[] mdObjValues;
+		mdObjValues = NULL;
 	}
 //////////
 }
