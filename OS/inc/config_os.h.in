@@ -191,6 +191,9 @@
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
 
+/* use if OS is Cygwin and complier is gnu */
+#undef USE_OLD_UNISTD
+
 /* Version number of package */
 #undef VERSION
 
