@@ -16,9 +16,6 @@
 
 //#define DEBUG 
 
-
-#include "OSConfig.h"
-#include "OSWSUtil.h"
 #ifdef WIN_
 	#ifndef _SYS_UNISTD_H
 		#define _SYS_UNISTD_H
@@ -31,6 +28,7 @@
 	#include <netdb.h>  
 #endif
 
+#include "OSWSUtil.h"
 #include <cstring> 
 #include <iostream>
 #include <sstream> 
