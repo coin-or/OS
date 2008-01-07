@@ -23377,7 +23377,6 @@ fi
 #                         OS-specific configuration                         #
 #############################################################################
 
-
   case $build in
      *-mingw*)
 
@@ -23391,22 +23390,11 @@ cat >>confdefs.h <<\_ACEOF
 #define WIN_ 1
 _ACEOF
 
-		   case $CXX in
-		    g*)
-
-cat >>confdefs.h <<\_ACEOF
-#define USE_OLD_UNISTD 1
-_ACEOF
-;;
-		     *)
-		     { echo "$as_me:$LINENO: WARNING: \"DONT HAVE GCC COMPILER WITH GYGWIN\"" >&5
-echo "$as_me: WARNING: \"DONT HAVE GCC COMPILER WITH GYGWIN\"" >&2;};;
-		  esac
 
 cat >>confdefs.h <<\_ACEOF
 #define NOMINMAX 1
 _ACEOF
-;;
+ ;;
        *-win*)
 
 cat >>confdefs.h <<\_ACEOF
@@ -23431,7 +23419,6 @@ _ACEOF
     *)
 	 ;;
   esac
-
 
 ############################################################################
 ############################################################################
@@ -27829,11 +27816,6 @@ fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/gamstrnsport.osil"
-fi
-
-
-if test $coin_vpath_config = yes; then
   coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/lindoapiaddins.osil"
 fi
 
@@ -27878,11 +27860,6 @@ fi
 
 if test $coin_vpath_config = yes; then
   coin_vpath_link_files="$coin_vpath_link_files data/osolFiles/demo.osol"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/osolFiles/knock.osol"
 fi
 
 
@@ -27940,7 +27917,7 @@ fi
 ##
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/osplFiles/knock.ospl"
+  coin_vpath_link_files="$coin_vpath_link_files data/osplFiles/demo.ospl"
 fi
 
 ##
