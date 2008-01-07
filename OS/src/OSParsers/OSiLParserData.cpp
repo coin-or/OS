@@ -23,6 +23,7 @@
  
 
  OSiLParserData::OSiLParserData() :
+ 	osillineno(0),
  	qtermcount(0),
   	qtermidxOneattON(false),
 	qtermidxTwoattON(false),
@@ -36,16 +37,27 @@
  	numberidattON(false),
  	variableidxattON(false),
  	variablecoefattON(false),
+	timeDomainStages(false),
+	timeDomainInterval(false),
 	stagename(""),
 	stagecount(0),
-	stagemult(0),
 	intervalhorizon(0.0),
 	intervalstart(0.0),
 	stagenameON(false),
-	stagemultON(false),
+	stageVariablesON(false),
+	stageConstraintsON(false),
+	stageObjectivesON(false),
+	stageVariablesOrdered(false),
+	stageConstraintsOrdered(false),
+	stageObjectivesOrdered(false),
+	stageVariableStartIdx(0),
+	stageConstraintStartIdx(0),
+	stageObjectiveStartIdx(0),
+	stagevarcount(0),
+	stageconcount(0),
+	stageobjcount(0),
 	intervalhorizonON(false),
-	intervalstartON(false),
-	osillineno(0)
+	intervalstartON(false)
  {
 
  }//OSiLParserData

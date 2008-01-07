@@ -155,24 +155,66 @@ public:
 	 * parsing we need to temporarily store all of its children
 	 */
 	std::vector<OSnLNode*> minVec;
-	
+
+
 	/** These variables are used to parse the <timeDomain> element */
+
+	/** store the type of <timeDomain> (extend as needed) */
+	bool timeDomainStages;
+	bool timeDomainInterval;
 
 	/** store the number of stages */
 	int stagecount;
-	
-	/** store the multiplicity of the current stage */
-	int stagemult;
+
+	/** stagenameON is true if the current stage was given a name */	 
+	bool stagenameON;	
 	
 	/** store the name of the current stage */
 	std::string stagename;
 
-	/** stagenameON is true if the current stage was given a name */	 
-	bool stagenameON;
-	
-	/** stagemultON is true if the current stage was given a multiplicity */	 
-	bool stagemultON;
-	
+	/** for each stage we need to track whether the <variables>, <constraints>, 
+	 *  <objectives> elements are present... */
+	bool stageVariablesON;
+	bool stageConstraintsON;
+	bool stageObjectivesON;
+
+	/**  ...we need to track whether the variables, constraints, objectives
+	 *   are given in temporal order... */
+	bool stageVariablesOrdered;
+	bool stageConstraintsOrdered;
+	bool stageObjectivesOrdered;
+
+	/**  ...we need to track the first variable, constraint, objective
+	 *   are given in temporal order... */
+	int stageVariableStartIdx;
+	int stageConstraintStartIdx;
+	int stageObjectiveStartIdx;
+
+	/** ...and we need to track the number of variables we have seen */
+	int stagevarcount;
+	int stageconcount;
+	int stageobjcount;
+
+	/** these two integers track how many variables and constraints have been assigned to a stage;
+	 *  this is used for consistency checks. */
+	int nvarcovered;
+	int nconcovered;
+
+	/**
+	 * m_miVarStageInfo is an array that for each variable gives the stage to which it belongs.
+	 */
+	int *m_miVarStageInfo;
+
+	/**
+	 * m_miConStageInfo is an array that for each constraint gives the stage to which it belongs.
+	 */
+	int *m_miConStageInfo;
+
+	/**
+	 * m_miObjStageInfo is an array that for each objective gives the stage to which it belongs.
+	 */
+	int *m_miObjStageInfo;
+
 	/** intervalhorizonON is true if we have found a horizon 
 	 *  for the time interval */	 
 	bool intervalhorizonON;

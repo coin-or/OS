@@ -610,55 +610,41 @@ NonlinearExpressions::~NonlinearExpressions(){
 }//end ~NonlinearExpressions()  
 
 
-Stage::Stage():
+TimeDomainStage::TimeDomainStage():
 	name(""),
 	nvar(0),
 	ncon(0),
-	nobj(0),
-	variables(NULL),
-	constraints(NULL),
-	objectives(NULL)
+	nobj(0)
 { 
 	#ifdef DEBUG 
 	cout << "Inside the Stage Constructor" << endl;
 	#endif
-}//end Stage() 
+	variables   = NULL;
+	constraints = NULL;
+	objectives  = NULL;
+}//end TimeDomainStage() 
 
 
-Stage::~Stage(){
+TimeDomainStage::~TimeDomainStage(){
 	#ifdef DEBUG  
 	cout << "Inside the Stage Destructor" << endl;
 	#endif
-	int i;
-	if(nvar > 0 && variables != NULL){
-		for( i = 0; i < nvar; i++){
-			delete variables[i];
-			variables[i] = NULL;
-		}
+	if (variables != NULL)
+	{	delete [] variables;
+		variables = NULL;
 	}
-	delete[] variables;
-	variables = NULL;  
-
-	if(ncon > 0 && constraints != NULL){
-		for( i = 0; i < ncon; i++){
-			delete constraints[i];
-			constraints[i] = NULL;
-		}
+	if (constraints != NULL)
+	{	delete []  constraints;
+		constraints = NULL;
 	}
-	delete[] constraints;
-	constraints = NULL;  
-	if(nobj > 0 && objectives != NULL){
-		for( i = 0; i < nobj; i++){
-			delete objectives[i];
-			objectives[i] = NULL;
-		}
+	if (objectives != NULL)
+	{	delete [] objectives;
+		objectives = NULL;
 	}
-	delete[] objectives;
-	objectives = NULL;  
-}//end ~Stage()  
+}//end ~TimeDomainStage()  
 
 
-Stages::Stages():
+TimeDomainStages::TimeDomainStages():
 	numberOfStages(0),
 	stage(NULL)
 {
@@ -668,7 +654,7 @@ Stages::Stages():
 } 
 
 
-Stages::~Stages(){  
+TimeDomainStages::~TimeDomainStages(){  
 	#ifdef DEBUG
 	cout << "Inside the Stages Destructor" << endl;
 	#endif
@@ -683,7 +669,7 @@ Stages::~Stages(){
 	stage = NULL;  
 }
 
-Interval::Interval():
+TimeDomainInterval::TimeDomainInterval():
 	intervalStart(0.0),
 	intervalHorizon(0.0)
 {
@@ -693,7 +679,7 @@ Interval::Interval():
 } 
 
 
-Interval::~Interval(){  
+TimeDomainInterval::~TimeDomainInterval(){  
 	#ifdef DEBUG
 	cout << "Inside the Interval Destructor" << endl;
 	#endif
@@ -704,19 +690,23 @@ TimeDomain::TimeDomain()
 	#ifdef DEBUG
 	cout << "Inside the TimeDomain Constructor" << endl;
 	#endif
-	stages = new Stages();
-	interval = new Interval();
-} 
+	stages = NULL;
+	interval = NULL;
+}
 
 TimeDomain::~TimeDomain()
 {  
 	#ifdef DEBUG
 	cout << "Inside the TimeDomain Destructor" << endl;
 	#endif
-	delete stages;
-	stages = NULL;
-	delete interval;
-	interval = NULL;
+	if (stages != NULL)
+	{	delete stages;
+		stages = NULL;
+	};
+	if (interval != NULL)
+	{	delete interval;
+		interval = NULL;
+	};
 } 
 
 
@@ -730,7 +720,7 @@ InstanceData::InstanceData(){
 	linearConstraintCoefficients = new LinearConstraintCoefficients();
 	quadraticCoefficients = new QuadraticCoefficients();
 	nonlinearExpressions = new NonlinearExpressions();
-	timeDomain = new TimeDomain();
+	timeDomain = NULL;
 } 
 
 InstanceData::~InstanceData(){  
@@ -750,7 +740,10 @@ InstanceData::~InstanceData(){
 	delete nonlinearExpressions;
 	nonlinearExpressions = NULL;
 	delete timeDomain;
-	timeDomain = NULL;
+	if (timeDomain != NULL)
+	{   delete timeDomain;
+		timeDomain = NULL;
+	};
 } 
 
 string OSInstance::getInstanceName(){
