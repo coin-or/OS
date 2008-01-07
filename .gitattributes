@@ -44,6 +44,7 @@ OS/applications/fileUpload/Makefile.in -text
 OS/applications/fileUpload/OSFileUpload.cpp -text
 OS/applications/fileUpload/OSFileUpload.java -text
 OS/configure -text
+OS/configure.ac -text
 OS/data/amplFiles/hs71.mod -text
 OS/data/amplFiles/hs71.nl -text
 OS/data/amplFiles/parinc.dat -text
