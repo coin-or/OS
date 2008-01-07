@@ -20,6 +20,9 @@
 #include "OSConfig.h"
 #include "OSWSUtil.h"
 #ifdef WIN_
+	#ifndef _SYS_UNISTD_H
+		#define _SYS_UNISTD_H
+	#endif
    	#include <winsock.h>
 #else
 	#include <sys/socket.h>
