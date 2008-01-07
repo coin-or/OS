@@ -17,8 +17,9 @@
 #include "OSWSUtil.h"
 #ifdef WIN_
 //needed for gcc 3.*.* but not gcc 4.*.*
-#ifndef _SYS_UNISTD_H
-#define _SYS_UNISTD_H
+	#ifndef _SYS_UNISTD_H
+	#define _SYS_UNISTD_H
+	#endif
 #endif
 //#define NOMINMAX
 #include <winsock.h>
