@@ -13,21 +13,22 @@
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */ 
+
+//#define DEBUG 
+
+
 #include "OSConfig.h"
 #include "OSWSUtil.h"
 #ifdef WIN_
-   #include <winsock.h>
+   	#include <winsock.h>
 #else
-#include <sys/socket.h>
-#include <arpa/inet.h>   
-#include <unistd.h>  
-#include <netdb.h>  
+	#include <sys/socket.h>
+	#include <arpa/inet.h>   
+	#include <unistd.h>  
+	#include <netdb.h>  
 #endif
-//#define DEBUG 
+
 #include <cstring> 
-  
-
-
 #include <iostream>
 #include <sstream> 
 #include "OSErrorClass.h"

@@ -17,7 +17,8 @@
 
 
 #include <iostream>
-#include "OSConfig.h"
+//#include "OSConfig.h"
+#include "config_os.h"
 
 #ifdef HAVE_CSTRING
 # include <cstring>
