@@ -20,9 +20,8 @@
 	#ifndef _SYS_UNISTD_H
 	#define _SYS_UNISTD_H
 	#endif
-//#define NOMINMAX
-#include <winsock.h>
-#endif
+	//#define NOMINMAX
+   #include <winsock.h>
 #else
 #include <sys/socket.h>
 #include <arpa/inet.h>   
