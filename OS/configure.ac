@@ -235,13 +235,7 @@ AC_COIN_HAS_ASL
          AC_DEFINE([WIN_],[1],[use if OS is Windows]) ;;
       *-cygwin*)
          AC_DEFINE([WIN_],[1],[use if OS is Windows])
-		   case $CXX in
-		    g*)
-		      AC_DEFINE([USE_OLD_UNISTD],[1],[use if OS is Cygwin and complier is gnu]);;
-		     *)
-		     AC_MSG_WARN("DONT HAVE GCC COMPILER WITH GYGWIN");;   
-		  esac   
-		  AC_DEFINE([NOMINMAX],[1],[use if OS is Cygwin]);;
+         AC_DEFINE([NOMINMAX],[1],[use if OS is Cygwin]) ;;
        *-win*)
          AC_DEFINE([WIN_],[1],[use if OS is Windows]) ;;
     *-linux-*)
@@ -258,6 +252,7 @@ AC_COIN_HAS_ASL
     *)
 	 ;;
   esac
+
 
 
 
