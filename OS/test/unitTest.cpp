@@ -422,6 +422,8 @@ int main(int argC, char* argV[])
 		check = 7668;
 		ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-1 , 1e-1);
 		if(ok == false) throw ErrorClass(" Fail unit test with clp on parincLinear");
+		delete osilreader;
+		osilreader = NULL;	
 		delete solver;
 		solver = NULL;
 		unitTestResult << "Solved problem parincLinearByRow.osil with Clp" << std::endl;
