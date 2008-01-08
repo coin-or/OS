@@ -1357,7 +1357,7 @@
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
+		<xs:sequence>
 			<xs:annotation>
 				<xs:documentation>Number of the stage child elements must agree with numberOfStages</xs:documentation>
 			</xs:annotation>
