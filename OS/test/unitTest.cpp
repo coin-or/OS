@@ -1020,10 +1020,10 @@ int main(int argC, char* argV[])
 		}	
 		
 		//delete osinstance;
-		osinstance = NULL;
+
 		delete osilreader;
 		osilreader = NULL;
-		
+		osinstance = NULL;		
 		unitTestResult << "Successful test of prefix and postfix conversion routines on problem rosenbrockmod.osil" << std::endl;
 		
 	}
@@ -1065,11 +1065,11 @@ int main(int argC, char* argV[])
 		check = 11;
 		ok &= NearEqual(expTree->m_treeRoot->calculateFunction( x) , check,  1e-10 , 1e-10);
 		if(ok == false) throw ErrorClass(" Problem evaluating expression tree");
-		osinstance = NULL;
 		delete osilreader;
 		osilreader = NULL;
 		delete osilwriter;
 		osilwriter = NULL;
+		osinstance = NULL;
 		//create an osinstance
 		unitTestResult << "Successful test of all of the nonlinear operators on file testOperators.osil" << std::endl;
 	}
@@ -1202,7 +1202,7 @@ int main(int argC, char* argV[])
 		cout << "All tests completed successfully" <<  endl <<  endl;
 		return 0;
 	}
-}
+}//ennd main
 
 double getObjVal( std::string osrl){
 	std::string sObjVal;
