@@ -297,6 +297,10 @@ ASL_alloc(ASL_read_fg);
 					break;
 			}
 		}
+	delete	osoptions;
+	osoptions = NULL;
+	delete fileUtil;
+	fileUtil = NULL;
 	return 0;
 }
 
@@ -502,6 +506,8 @@ void solve(){
 			std::cout << osrl << std::endl;
 		}
 	}	
+	delete fileUtil;
+	fileUtil = NULL;
 }//end solve
 
 void getJobID(){

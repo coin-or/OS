@@ -219,6 +219,8 @@ int main(int argC, char* argV[])
 		OSiLWriter osilwriter;
 		osilwriter.m_bWhiteSpace = true;
 		std::cout << osilwriter.writeOSiL( osinstance) << std::endl;
+		delete osilreader;
+		osilreader = NULL;
 		//return 0;
 	}
 	catch(const ErrorClass& eclass){
@@ -975,7 +977,7 @@ int main(int argC, char* argV[])
 		std::string expTreeTest =  dataDir  + "osilFiles" + dirsep + "rosenbrockmod.osil";
 		osil = fileUtil->getFileAsString( expTreeTest.c_str() ) ;
 		OSInstance *osinstance = NULL;
-		osinstance = new OSInstance();
+		//osinstance = new OSInstance();
 		OSiLReader *osilreader = NULL;
 		osilreader = new OSiLReader();
 		//create an osinstance
@@ -1036,7 +1038,7 @@ int main(int argC, char* argV[])
 		std::string operatorTest =  dataDir  + "osilFiles" + dirsep + "testOperators.osil";
 		osil = fileUtil->getFileAsString( operatorTest.c_str() );
 		OSInstance *osinstance = NULL;
-		osinstance = new OSInstance();
+		//osinstance = new OSInstance();
 		OSiLReader *osilreader = NULL;
 		osilreader = new OSiLReader();
 		OSiLWriter *osilwriter = NULL;
@@ -1131,7 +1133,7 @@ int main(int argC, char* argV[])
 		*/
 		osil = fileUtil->getFileAsString( expTreeTest.c_str() );
 		OSInstance *osinstance = NULL;
-		osinstance = new OSInstance();
+		//osinstance = new OSInstance();
 		OSiLReader *osilreader = NULL;
 		osilreader = new OSiLReader();
 		//create an osinstance
@@ -1176,12 +1178,15 @@ int main(int argC, char* argV[])
 		ok &= NearEqual( sh->hessValues[ 2], 0., 1e-10, 1e-10);
 		if(ok == false) throw ErrorClass(" Fail testing Hessian calculation");
 		unitTestResult << "Successful test of AD gradient and Hessian calculations on problem CppADTestLag.osil" << std::endl;
+		delete osilreader;
+		osilreader = NULL;
 	}	
 	catch(const ErrorClass& eclass){
 		cout << endl << endl << endl;
 		unitTestResultFailure << eclass.errormsg << endl;
 	}
-
+	delete fileUtil;
+	fileUtil = NULL;
 	    
 	if(unitTestResultFailure.str().length() > 0){
 		cout << "The unitTest passed the following" << endl << endl;
