@@ -13,9 +13,14 @@
  * 
  */
  #include "OSiLParserData.h"
+#include <iostream>
+using namespace std;
  OSiLParserData::~OSiLParserData(){
  	// clear the vectors of pointers
-	nlNodeVec.clear();
+	 std::cout << "INSIDE THE OSILPARSER DATA DESTRUCTOR " << std::endl;
+	 std::cout << "NLNODEVECTOR =  " << nlNodeVec.size() << std::endl;
+	//nlNodeVec.clear();
+	 delete nlNodeVec.back();
 	sumVec.clear();
 	maxVec.clear();
 	productVec.clear();
