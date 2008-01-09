@@ -19,8 +19,8 @@ using namespace std;
  	// clear the vectors of pointers
 	 std::cout << "INSIDE THE OSILPARSER DATA DESTRUCTOR " << std::endl;
 	 std::cout << "NLNODEVECTOR =  " << nlNodeVec.size() << std::endl;
-	//nlNodeVec.clear();
-	 delete nlNodeVec.back();
+	nlNodeVec.clear();
+	//delete nlNodeVec.back();
 	sumVec.clear();
 	maxVec.clear();
 	productVec.clear();
