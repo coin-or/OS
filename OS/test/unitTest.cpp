@@ -255,6 +255,7 @@ int main(int argC, char* argV[])
 		osilreader = NULL;
 		delete ipoptSolver;
 		ipoptSolver = NULL;
+		return 0;
 		unitTestResult << "Solved problem avion2.osil with Ipopt" << std::endl;
 		// solve another problem
 		cout << "create a new IPOPT Solver for OSiL string solution" << endl;
@@ -921,6 +922,8 @@ int main(int argC, char* argV[])
 		//cout << osilwriter->writeOSiL( osilreader->readOSiL( osil)) << endl;
 		delete osilreader;
 		osilreader = 0;
+		delete osilwriter;
+		osilwriter = NULL;
 		finish = clock();
 		duration = (double) (finish - start) / CLOCKS_PER_SEC;
 		cout << "Parsing took (seconds): "<< duration << endl;
