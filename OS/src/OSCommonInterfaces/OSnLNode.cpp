@@ -969,6 +969,7 @@ OSnLNodeLn::OSnLNodeLn()
 	snodeName = "ln";
 	inodeInt = 2007;
 	inodeType = 1;
+	std::cout << "CREATING OSNLNDOE LN LN LNL LNLNLNLNLNLNLN" << std::endl;
 }//end OSnLNodeLn
 
  

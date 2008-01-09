@@ -220,11 +220,8 @@ int main(int argC, char* argV[])
 		OSiLWriter osilwriter;
 		osilwriter.m_bWhiteSpace = true;
 		std::cout << osilwriter.writeOSiL( osinstance) << std::endl;
-		delete fileUtil;
-		fileUtil = NULL;
 		delete osilreader;
 		osilreader = NULL;
-		return 0;
 		//return 0;
 	}
 	catch(const ErrorClass& eclass){
