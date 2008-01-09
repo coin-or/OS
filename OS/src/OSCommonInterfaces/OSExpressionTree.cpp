@@ -14,7 +14,7 @@
  * 
  */
 
-
+#define DEBUG
 #include "OSExpressionTree.h"
 #include<vector>
 

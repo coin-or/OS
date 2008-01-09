@@ -221,7 +221,6 @@ int main(int argC, char* argV[])
 		std::cout << osilwriter.writeOSiL( osinstance) << std::endl;
 		delete osilreader;
 		osilreader = NULL;
-		//return 0;
 	}
 	catch(const ErrorClass& eclass){
 		unitTestResultFailure << "Sorry Unit Test Failed Reading a file: "  + eclass.errormsg<< endl; 
@@ -255,7 +254,6 @@ int main(int argC, char* argV[])
 		osilreader = NULL;
 		delete ipoptSolver;
 		ipoptSolver = NULL;
-		return 0;
 		unitTestResult << "Solved problem avion2.osil with Ipopt" << std::endl;
 		// solve another problem
 		cout << "create a new IPOPT Solver for OSiL string solution" << endl;
