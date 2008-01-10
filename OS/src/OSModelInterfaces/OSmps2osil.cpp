@@ -30,6 +30,7 @@ OSmps2osil::OSmps2osil( std::string mpsfilename)
 }// end constructor
 
 OSmps2osil::~OSmps2osil(){
+	delete m_MpsData;
 	m_MpsData = NULL;
 	delete m_CoinPackedMatrix;
 	m_CoinPackedMatrix = NULL;
@@ -37,7 +38,7 @@ OSmps2osil::~OSmps2osil(){
 	osinstance->instanceData->linearConstraintCoefficients->start->el = NULL;
 	osinstance->instanceData->linearConstraintCoefficients->colIdx->el = NULL;
 	osinstance->instanceData->linearConstraintCoefficients->rowIdx->el = NULL;
-	delete osinstance;                       
+	delete osinstance;     
 	osinstance = NULL;
 	#ifdef DEBUG
 	cout << "now delete m_MpsData" << endl;

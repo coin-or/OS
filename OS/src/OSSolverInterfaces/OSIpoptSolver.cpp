@@ -302,9 +302,11 @@ bool IpoptProblem::eval_h(Index n, const Number* x, bool new_x,
 		objMultipliers[0] = obj_factor;
 		try{
 			sparseHessian = osinstance->calculateLagrangianHessian( const_cast<double*>(x), objMultipliers, (double*)lambda ,  new_x, 2);
+		delete[]  objMultipliers;
 		}
 		catch(const ErrorClass& eclass){
 			ipoptErrorMsg = eclass.errormsg;
+			delete[]  objMultipliers;
 			throw;  
 		}
 		for(i = 0; i < nele_hess; i++){
@@ -453,9 +455,8 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 		}
 		osresult->setGeneralStatusType("success");
 		delete osrlwriter;
+		delete[] mdObjValues;
 		osrlwriter = NULL;
-		//delete[] mdObjValues;
-		//mdObjValues = NULL;
 
 	}
 	catch(const ErrorClass& eclass){

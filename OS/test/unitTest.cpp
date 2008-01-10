@@ -433,6 +433,8 @@ int main(int argC, char* argV[])
 		osilreader = NULL;	
 		delete solver;
 		solver = NULL;
+		delete osilwriter;
+		osilwriter = NULL;
 		unitTestResult << "Solved problem parincLinearByRow.osil with Clp" << std::endl;
 		// now solve another problem -- try an integer program
 		// this problem is also stored in base64 binary
@@ -1031,6 +1033,8 @@ int main(int argC, char* argV[])
 		}	
 		
 		//delete osinstance;
+		delete[] nodeNames1;
+		delete[] nodeNames2; 
 
 		delete osilreader;
 		osilreader = NULL;
@@ -1076,6 +1080,8 @@ int main(int argC, char* argV[])
 		check = 11;
 		ok &= NearEqual(expTree->m_treeRoot->calculateFunction( x) , check,  1e-10 , 1e-10);
 		if(ok == false) throw ErrorClass(" Problem evaluating expression tree");
+		delete[] x;
+		delete[] nodeNames1;
 		delete osilreader;
 		osilreader = NULL;
 		delete osilwriter;
@@ -1189,6 +1195,7 @@ int main(int argC, char* argV[])
 		ok &= NearEqual( sh->hessValues[ 2], 0., 1e-10, 1e-10);
 		if(ok == false) throw ErrorClass(" Fail testing Hessian calculation");
 		unitTestResult << "Successful test of AD gradient and Hessian calculations on problem CppADTestLag.osil" << std::endl;
+		delete[] x;
 		delete osilreader;
 		osilreader = NULL;
 	}	
