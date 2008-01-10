@@ -412,10 +412,10 @@ OSnLNodePlus::~OSnLNodePlus(){
 	cout << "inside OSnLNodePlus destructor" << endl;
 	#endif
 	for(int i = 0; i < inumberOfChildren; i++){
-		if( m_mChildren[ i] != NULL) delete m_mChildren[ i];
-		m_mChildren[i] = NULL;
+		//if( m_mChildren[ i] != NULL) delete m_mChildren[ i];
+		//m_mChildren[i] = NULL;
 	}
-	m_mChildren = NULL;
+	//m_mChildren = NULL;
 }//end ~OSnLNodePlus
 
 
@@ -453,11 +453,11 @@ OSnLNodeSum::~OSnLNodeSum(){
 	#endif
 	if(inumberOfChildren > 0){
 		for(int i = 0; i < inumberOfChildren; i++){
-			delete m_mChildren[ i];
-			m_mChildren[i] = NULL;
+			//delete m_mChildren[ i];
+			//m_mChildren[i] = NULL;
 		}
 	}
-	m_mChildren = NULL;
+	//m_mChildren = NULL;
 }//end ~OSnLNodeSum
 
 double OSnLNodeSum::calculateFunction(double *x){
@@ -503,11 +503,11 @@ OSnLNodeAllDiff::~OSnLNodeAllDiff(){
 	#endif
 	if(inumberOfChildren > 0){
 		for(int i = 0; i < inumberOfChildren; i++){
-			delete m_mChildren[ i];
-			m_mChildren[i] = NULL;
+			//delete m_mChildren[ i];
+			//m_mChildren[i] = NULL;
 		}
 	}
-	m_mChildren = NULL;
+	//m_mChildren = NULL;
 }//end ~OSnLNodeAllDiff
 
 double OSnLNodeAllDiff::calculateFunction(double *x){
@@ -562,11 +562,11 @@ OSnLNodeMax::~OSnLNodeMax(){
 	#endif
 	if(inumberOfChildren > 0){
 		for(int i = 0; i < inumberOfChildren; i++){
-			delete m_mChildren[ i];
-			m_mChildren[i] = NULL;
+			//delete m_mChildren[ i];
+			//m_mChildren[i] = NULL;
 		}
 	}
-	m_mChildren = NULL;
+	//m_mChildren = NULL;
 }//end ~OSnLNodeMax
 
 double OSnLNodeMax::calculateFunction(double *x){
@@ -619,11 +619,11 @@ OSnLNodeMin::~OSnLNodeMin(){
 	#endif
 	if(inumberOfChildren > 0){
 		for(int i = 0; i < inumberOfChildren; i++){
-			delete m_mChildren[ i];
-			m_mChildren[i] = NULL;
+			//delete m_mChildren[ i];
+			//m_mChildren[i] = NULL;
 		}
 	}
-	m_mChildren = NULL;
+	//m_mChildren = NULL;
 }//end ~OSnLNodeMin
 
 double OSnLNodeMin::calculateFunction(double *x){
@@ -679,10 +679,10 @@ OSnLNodeMinus::~OSnLNodeMinus(){
 	cout << "inside OSnLNodeMinus destructor" << endl;
 	#endif
 	for(int i = 0; i < inumberOfChildren; i++){
-		delete m_mChildren[ i];
-		m_mChildren[i] = NULL;
+		//delete m_mChildren[ i];
+		//m_mChildren[i] = NULL;
 	}
-	m_mChildren = NULL;
+	//m_mChildren = NULL;
 }//end ~OSnLNodeMinus
 
 double OSnLNodeMinus::calculateFunction(double *x){
@@ -725,10 +725,10 @@ OSnLNodeNegate::~OSnLNodeNegate(){
 	cout << "inside OSnLNodeNegate destructor" << endl;
 	#endif
 	for(int i = 0; i < inumberOfChildren; i++){
-		delete m_mChildren[ i];
-		m_mChildren[i] = NULL;
+		//delete m_mChildren[ i];
+		//m_mChildren[i] = NULL;
 	}
-	m_mChildren = NULL;
+	//m_mChildren = NULL;
 }//end ~OSnLNodeNegate
 
 double OSnLNodeNegate::calculateFunction(double *x){
@@ -768,10 +768,10 @@ OSnLNodeTimes::~OSnLNodeTimes(){
 	cout << "inside OSnLNodeTimes destructor" << endl;
 	#endif
 	for(int i = 0; i < inumberOfChildren; i++){
-		delete m_mChildren[ i];
-		m_mChildren[i] = NULL;
+		//delete m_mChildren[ i];
+		//m_mChildren[i] = NULL;
 	}
-	m_mChildren = NULL;
+	//m_mChildren = NULL;
 }//end ~OSnLNodeTimes
 
 double OSnLNodeTimes::calculateFunction(double *x){
@@ -811,10 +811,10 @@ OSnLNodeDivide::~OSnLNodeDivide(){
 	cout << "inside OSnLNodeDivide destructor" << endl;
 	#endif
 	for(int i = 0; i < inumberOfChildren; i++){
-		delete m_mChildren[ i];
-		m_mChildren[i] = NULL;
+		//delete m_mChildren[ i];
+		//m_mChildren[i] = NULL;
 	}
-	m_mChildren = NULL;
+	//m_mChildren = NULL;
 }//end ~OSnLNodeDivide
 
 double OSnLNodeDivide::calculateFunction(double *x){
@@ -856,10 +856,10 @@ OSnLNodePower::~OSnLNodePower(){
 	cout << "inside OSnLNodePower destructor" << endl;
 	#endif
 	for(int i = 0; i < inumberOfChildren; i++){
-		delete m_mChildren[ i];
-		m_mChildren[i] = NULL;
+		//delete m_mChildren[ i];
+		//m_mChildren[i] = NULL;
 	}
-	m_mChildren = NULL;
+	//m_mChildren = NULL;
 }//end ~OSnLNodePower 
 
 double OSnLNodePower::calculateFunction(double *x){
@@ -922,11 +922,11 @@ OSnLNodeProduct::~OSnLNodeProduct(){
 	#endif
 	if(inumberOfChildren > 0){
 		for(int i = 0; i < inumberOfChildren; i++){
-			delete m_mChildren[ i];
-			m_mChildren[i] = NULL;
+			//delete m_mChildren[ i];
+			//m_mChildren[i] = NULL;
 		}
 	}
-	m_mChildren = NULL;
+	//m_mChildren = NULL;
 }//end ~OSnLNodeProduct
 
 double OSnLNodeProduct::calculateFunction(double *x){
@@ -978,10 +978,10 @@ OSnLNodeLn::~OSnLNodeLn(){
 	cout << "inside OSnLNodeLn destructor" << endl;
 	#endif
 	for(int i = 0; i < inumberOfChildren; i++){
-		delete m_mChildren[ i];
-		m_mChildren[i] = NULL;
+		//delete m_mChildren[ i];
+		//m_mChildren[i] = NULL;
 	}
-	m_mChildren = NULL;
+	//m_mChildren = NULL;
 }//end ~OSnLNodeLn
 
 double OSnLNodeLn::calculateFunction(double *x){
@@ -1023,10 +1023,10 @@ OSnLNodeSqrt::~OSnLNodeSqrt(){
 	cout << "inside OSnLNodeSqrt destructor" << endl;
 	#endif
 	for(int i = 0; i < inumberOfChildren; i++){
-		delete m_mChildren[ i];
-		m_mChildren[i] = NULL;
+		//delete m_mChildren[ i];
+		//m_mChildren[i] = NULL;
 	}
-	m_mChildren = NULL;
+	//m_mChildren = NULL;
 }//end ~OSnLNodeSqrt
 
 double OSnLNodeSqrt::calculateFunction(double *x){
@@ -1067,10 +1067,10 @@ OSnLNodeSquare::~OSnLNodeSquare(){
 	cout << "inside OSnLNodeSquare destructor" << endl;
 	#endif
 	for(int i = 0; i < inumberOfChildren; i++){
-		delete m_mChildren[ i];
-		m_mChildren[i] = NULL;
+		//delete m_mChildren[ i];
+		//m_mChildren[i] = NULL;
 	}
-	m_mChildren = NULL;
+	//m_mChildren = NULL;
 }//end ~OSnLNodeSquare
 
 double OSnLNodeSquare::calculateFunction(double *x){
@@ -1109,10 +1109,10 @@ OSnLNodeSin::~OSnLNodeSin(){
 	cout << "inside OSnLNodeSin destructor" << endl;
 	#endif
 	for(int i = 0; i < inumberOfChildren; i++){
-		delete m_mChildren[ i];
-		m_mChildren[i] = NULL;
+		//delete m_mChildren[ i];
+		//m_mChildren[i] = NULL;
 	}
-	m_mChildren = NULL;
+	//m_mChildren = NULL;
 }//end ~OSnLNodeSin
 
 double OSnLNodeSin::calculateFunction(double *x){
@@ -1152,10 +1152,10 @@ OSnLNodeCos::~OSnLNodeCos(){
 	cout << "inside OSnLNodeCos destructor" << endl;
 	#endif
 	for(int i = 0; i < inumberOfChildren; i++){
-		delete m_mChildren[ i];
-		m_mChildren[i] = NULL;
+		//delete m_mChildren[ i];
+		//m_mChildren[i] = NULL;
 	}
-	m_mChildren = NULL;
+	//m_mChildren = NULL;
 }//end ~OSnLNodeCos
 
 double OSnLNodeCos::calculateFunction(double *x){
@@ -1197,10 +1197,10 @@ OSnLNodeExp::~OSnLNodeExp(){
 	cout << "inside OSnLNodeExp destructor" << endl;
 	#endif
 	for(int i = 0; i < inumberOfChildren; i++){
-		delete m_mChildren[ i];
-		m_mChildren[i] = NULL;
+		//delete m_mChildren[ i];
+		//m_mChildren[i] = NULL;
 	}
-	m_mChildren = NULL;
+	//m_mChildren = NULL;
 }//end ~OSnLNodeExp
 
 double OSnLNodeExp::calculateFunction(double *x){
@@ -1242,10 +1242,10 @@ OSnLNodeAbs::~OSnLNodeAbs(){
 	cout << "inside OSnLNodeAbs destructor" << endl;
 	#endif
 	for(int i = 0; i < inumberOfChildren; i++){
-		delete m_mChildren[ i];
-		m_mChildren[i] = NULL;
+		//delete m_mChildren[ i];
+		//m_mChildren[i] = NULL;
 	}
-	m_mChildren = NULL;
+	//m_mChildren = NULL;
 }//end ~OSnLNodeAbs
 
 double OSnLNodeAbs::calculateFunction(double *x){
@@ -1288,10 +1288,10 @@ OSnLNodeIf::~OSnLNodeIf(){
 	cout << "inside OSnLNodeIf destructor" << endl;
 	#endif 
 	for(int i = 0; i < inumberOfChildren; i++){
-		delete m_mChildren[ i];
-		m_mChildren[i] = NULL;
+		//delete m_mChildren[ i];
+		//m_mChildren[i] = NULL;
 	}
-	m_mChildren = NULL;
+	//m_mChildren = NULL;
 }//end ~OSnLNodeIf
 
 double OSnLNodeIf::calculateFunction(double *x){
@@ -1621,11 +1621,11 @@ OSnLNodeVariable::~OSnLNodeVariable(){
 	#endif
 	if(inumberOfChildren > 0){
 		for(int i = 0; i < inumberOfChildren; i++){
-			delete m_mChildren[ i];
-			m_mChildren[i] = NULL;
+			//delete m_mChildren[ i];
+			//m_mChildren[i] = NULL;
 		}
 	}
-	m_mChildren = NULL;
+	//m_mChildren = NULL;
 }//end ~OSnLNodeVariable
 
 

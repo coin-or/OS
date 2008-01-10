@@ -33,7 +33,17 @@ OSExpressionTree::~OSExpressionTree(){
 	#ifdef DEBUG  
 	cout << "Inside the OSExpressionTree Destructor" << endl;
 	#endif
-	if(m_treeRoot != NULL) delete m_treeRoot;
+	if(m_treeRoot != NULL){
+		std::vector<OSnLNode*> postfixVec;
+		postfixVec = m_treeRoot->getPostfixFromExpressionTree();
+		unsigned int n = postfixVec.size();
+		unsigned int i;
+		for (i = 0 ; i < n; i++){
+			std::cout << postfixVec[i]->snodeName << std::endl;
+			delete postfixVec[ i];
+		}
+		//delete m_treeRoot;
+	}
 	m_treeRoot = NULL;
 	if(mapVarIdx != NULL) delete mapVarIdx;
 	mapVarIdx = NULL;
