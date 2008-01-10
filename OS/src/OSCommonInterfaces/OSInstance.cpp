@@ -1621,7 +1621,7 @@ bool OSInstance::addObjective(int index, string name, string maxOrMin, double co
 		for(i = 0; i < n; i++){
 			instanceData->objectives->obj[arrayIndex]->coef[i]->idx = objectiveCoefficients->indexes[i];
 			instanceData->objectives->obj[arrayIndex]->coef[i]->value = objectiveCoefficients->values[i];   
-		}   			
+		}  
 	}
 	return true;
 }//addObjective

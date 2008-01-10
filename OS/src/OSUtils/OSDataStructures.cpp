@@ -13,9 +13,9 @@
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */ 
+ 
 
-
- //#define DEBUG
+ #define DEBUG
 
 #include "OSDataStructures.h"
 #include <iostream>

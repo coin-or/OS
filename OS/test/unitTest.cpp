@@ -237,6 +237,7 @@ int main(int argC, char* argV[])
 		objcoeff->values[ 0] = .4;
 		//bool addObjective(int index, string name, string maxOrMin, double constant, double weight, SparseVector* objectiveCoefficients);
 		osinstance->addObjective(-1, "objfunction", "max", 0.0, 1.0, objcoeff);
+		objcoeff->bDeleteArrays = true;
 		delete objcoeff;
 		//
 		// now the constraints
@@ -386,7 +387,6 @@ int main(int argC, char* argV[])
 		osinstance->instanceData->nonlinearExpressions->nl[ 3]->osExpressionTree->m_treeRoot =
 			nlNodeVec[ 0]->createExpressionTreeFromPostfix( nlNodeVec);
 		nlNodeVec.clear();
-		//delete [] nlNodeMaxPoint->m_mChildren; 
 		//
 		//
 		//
