@@ -89,7 +89,7 @@ int  main(){
 		osinstance->setConstraintNumber( 6); 
 		//bool addConstraint(int index, string name, double lowerBound, double upperBound, double constant);
 		// note: we could use setConstraints() and add all the constraints with one method call -- below is easier
-		osinstance->addConstraint(0, "row0", -OSDBL_MAX, 4, 0);
+		osinstance->addConstraint(0, "row0", -OSDBL_MAX, 4, 0); 
 		osinstance->addConstraint(1, "row1", -OSDBL_MAX, 6, 0);
 		osinstance->addConstraint(2, "row2", -OSDBL_MAX, 0, 0);
 		osinstance->addConstraint(3, "row3", 0 , OSDBL_MAX, 0); 

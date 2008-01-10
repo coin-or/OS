@@ -416,6 +416,7 @@ OSnLNodePlus::~OSnLNodePlus(){
 		//m_mChildren[i] = NULL;
 	}
 	//m_mChildren = NULL;
+	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodePlus
 
 
@@ -458,6 +459,7 @@ OSnLNodeSum::~OSnLNodeSum(){
 		}
 	}
 	//m_mChildren = NULL;
+	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeSum
 
 double OSnLNodeSum::calculateFunction(double *x){
@@ -508,6 +510,7 @@ OSnLNodeAllDiff::~OSnLNodeAllDiff(){
 		}
 	}
 	//m_mChildren = NULL;
+	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeAllDiff
 
 double OSnLNodeAllDiff::calculateFunction(double *x){
@@ -567,6 +570,7 @@ OSnLNodeMax::~OSnLNodeMax(){
 		}
 	}
 	//m_mChildren = NULL;
+	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeMax
 
 double OSnLNodeMax::calculateFunction(double *x){
@@ -623,6 +627,7 @@ OSnLNodeMin::~OSnLNodeMin(){
 			//m_mChildren[i] = NULL;
 		}
 	}
+	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 	//m_mChildren = NULL;
 }//end ~OSnLNodeMin
 
@@ -683,6 +688,7 @@ OSnLNodeMinus::~OSnLNodeMinus(){
 		//m_mChildren[i] = NULL;
 	}
 	//m_mChildren = NULL;
+	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeMinus
 
 double OSnLNodeMinus::calculateFunction(double *x){
@@ -729,6 +735,7 @@ OSnLNodeNegate::~OSnLNodeNegate(){
 		//m_mChildren[i] = NULL;
 	}
 	//m_mChildren = NULL;
+	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeNegate
 
 double OSnLNodeNegate::calculateFunction(double *x){
@@ -772,6 +779,7 @@ OSnLNodeTimes::~OSnLNodeTimes(){
 		//m_mChildren[i] = NULL;
 	}
 	//m_mChildren = NULL;
+	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeTimes
 
 double OSnLNodeTimes::calculateFunction(double *x){
@@ -815,6 +823,7 @@ OSnLNodeDivide::~OSnLNodeDivide(){
 		//m_mChildren[i] = NULL;
 	}
 	//m_mChildren = NULL;
+	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeDivide
 
 double OSnLNodeDivide::calculateFunction(double *x){
@@ -860,6 +869,7 @@ OSnLNodePower::~OSnLNodePower(){
 		//m_mChildren[i] = NULL;
 	}
 	//m_mChildren = NULL;
+	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodePower 
 
 double OSnLNodePower::calculateFunction(double *x){
@@ -927,6 +937,7 @@ OSnLNodeProduct::~OSnLNodeProduct(){
 		}
 	}
 	//m_mChildren = NULL;
+	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeProduct
 
 double OSnLNodeProduct::calculateFunction(double *x){
@@ -982,6 +993,7 @@ OSnLNodeLn::~OSnLNodeLn(){
 		//m_mChildren[i] = NULL;
 	}
 	//m_mChildren = NULL;
+	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeLn
 
 double OSnLNodeLn::calculateFunction(double *x){
@@ -1027,6 +1039,7 @@ OSnLNodeSqrt::~OSnLNodeSqrt(){
 		//m_mChildren[i] = NULL;
 	}
 	//m_mChildren = NULL;
+	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeSqrt
 
 double OSnLNodeSqrt::calculateFunction(double *x){
@@ -1071,6 +1084,7 @@ OSnLNodeSquare::~OSnLNodeSquare(){
 		//m_mChildren[i] = NULL;
 	}
 	//m_mChildren = NULL;
+	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeSquare
 
 double OSnLNodeSquare::calculateFunction(double *x){
@@ -1113,6 +1127,7 @@ OSnLNodeSin::~OSnLNodeSin(){
 		//m_mChildren[i] = NULL;
 	}
 	//m_mChildren = NULL;
+	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeSin
 
 double OSnLNodeSin::calculateFunction(double *x){
@@ -1156,6 +1171,7 @@ OSnLNodeCos::~OSnLNodeCos(){
 		//m_mChildren[i] = NULL;
 	}
 	//m_mChildren = NULL;
+	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeCos
 
 double OSnLNodeCos::calculateFunction(double *x){
@@ -1201,6 +1217,7 @@ OSnLNodeExp::~OSnLNodeExp(){
 		//m_mChildren[i] = NULL;
 	}
 	//m_mChildren = NULL;
+	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeExp
 
 double OSnLNodeExp::calculateFunction(double *x){
@@ -1246,6 +1263,7 @@ OSnLNodeAbs::~OSnLNodeAbs(){
 		//m_mChildren[i] = NULL;
 	}
 	//m_mChildren = NULL;
+	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeAbs
 
 double OSnLNodeAbs::calculateFunction(double *x){
@@ -1292,6 +1310,7 @@ OSnLNodeIf::~OSnLNodeIf(){
 		//m_mChildren[i] = NULL;
 	}
 	//m_mChildren = NULL;
+	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeIf
 
 double OSnLNodeIf::calculateFunction(double *x){
@@ -1626,6 +1645,7 @@ OSnLNodeVariable::~OSnLNodeVariable(){
 		}
 	}
 	//m_mChildren = NULL;
+	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeVariable
 
 
