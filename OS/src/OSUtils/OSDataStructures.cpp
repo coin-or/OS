@@ -43,6 +43,9 @@ SparseVector::~SparseVector(){
 	cout << "inside sparseVector destructor" << endl;
 	#endif
 	if(	bDeleteArrays == true){
+#ifdef DEBUG
+cout << "delete[] indexes and arrays" << endl;
+#endif
 		delete[] indexes;
 		delete[] values;
 	}

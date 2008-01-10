@@ -231,8 +231,6 @@ int main(int argC, char* argV[])
 		// now the coefficient
 		SparseVector *objcoeff;
 		objcoeff = new SparseVector(1);   
-		objcoeff->indexes = new int[1];
-		objcoeff->values = new double[1];
 		objcoeff->indexes[ 0] = 1;
 		objcoeff->values[ 0] = .4;
 		//bool addObjective(int index, string name, string maxOrMin, double constant, double weight, SparseVector* objectiveCoefficients);
