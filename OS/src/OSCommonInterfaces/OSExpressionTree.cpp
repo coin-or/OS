@@ -40,7 +40,7 @@ OSExpressionTree::~OSExpressionTree(){
 		unsigned int i;
 		for (i = 0 ; i < n; i++){
 			std::cout << postfixVec[i]->snodeName << std::endl;
-			delete postfixVec[ i];
+			if( postfixVec[ i] !=  NULL) delete postfixVec[ i];
 		}
 		//delete m_treeRoot;
 	}

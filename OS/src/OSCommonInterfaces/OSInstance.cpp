@@ -272,22 +272,21 @@ OSInstance::~OSInstance(){
 	}
 	//
 	// delete the new expression trees that got created
-	// however they already got deleted if we have a lagrangian Hessian
-	if( m_bLagrangianExpTreeCreated == false){
-		if( (m_bProcessExpressionTrees == true) && (m_bDuplicateExpressionTreesMap == false)  ) {
-			for(posMapExpTree = m_mapExpressionTrees.begin(); posMapExpTree != m_mapExpressionTrees.end(); ++posMapExpTree){
-				std::cout << "Deleting an expression tree from the map for row  " << posMapExpTree->first  << std::endl;
-				delete m_mapExpressionTrees[ posMapExpTree->first ];
-			}
-		}
-		if( m_bDuplicateExpressionTreesMap == true)   {
-			for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
-				std::cout << "Deleting an expression tree from m_mapExpressionTreesMod" << std::endl;
-				delete m_mapExpressionTreesMod[ posMapExpTree->first ];
-				std::cout << "Done Deleting an expression tree from m_mapExpressionTreesMod" << std::endl;
-			}
+	//if( m_bLagrangianExpTreeCreated == false  ||  m_bLagrangianExpTreeCreated == true){
+	if( (m_bProcessExpressionTrees == true) && (m_bDuplicateExpressionTreesMap == false)  ) {
+		for(posMapExpTree = m_mapExpressionTrees.begin(); posMapExpTree != m_mapExpressionTrees.end(); ++posMapExpTree){
+			std::cout << "Deleting an expression tree from the map for row  " << posMapExpTree->first  << std::endl;
+			delete m_mapExpressionTrees[ posMapExpTree->first ];
 		}
 	}
+	if( m_bDuplicateExpressionTreesMap == true)   {
+		for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
+			std::cout << "Deleting an expression tree from m_mapExpressionTreesMod" << std::endl;
+			delete m_mapExpressionTreesMod[ posMapExpTree->first ];
+			std::cout << "Done Deleting an expression tree from m_mapExpressionTreesMod" << std::endl;
+		}
+	}
+	//}
 	///
 	if( (m_bNonlinearExpressionTreeIndexesProcessed == true) && (m_mapExpressionTrees.size() > 0) ){
 		std::cout << "Deleting  m_miNonlinearExpressionTreeIndexes" << std::endl;
@@ -300,6 +299,10 @@ OSInstance::~OSInstance(){
 		delete[] m_miNonlinearExpressionTreeModIndexes;
 		std::cout << "Done Deleting  m_miNonlinearExpressionTreeModIndexes" << std::endl;
 		m_miNonlinearExpressionTreeModIndexes = NULL;
+	}
+	if(m_bCppADFunIsCreated == true){
+		delete Fad;
+		Fad == NULL;
 	}
 //	if( (instanceData->timeDomain->stages->stage != NULL) && (m_bProcessTimeStages == true) ){
 //		delete m_Stages;
