@@ -278,7 +278,7 @@ otherVariableResult:  OTHERSTART {
 	parserData->otherVarStruct = new OtherVariableResultStruct(); 
 	parserData->otherVarStruct->otherVarText = new std::string[parserData->numberOfVariables];} anotherotherVarATT GREATERTHAN {if(parserData->otherNamePresent == false) osrlerror(NULL, NULL, NULL, "other element requires name attribute"); 
 	parserData->otherNamePresent = false;  
-	}  othervar OTHEREND {parserData->otherVarVec.push_back( parserData->otherVarStruct);};
+	}  othervar OTHEREND {parserData->otherVarVec.push_back( parserData->otherVarStruct);  };
  
 othervar: anotherothervar
 | othervar anotherothervar;
@@ -396,9 +396,10 @@ OSResult *yygetOSResult(std::string parsestring){
 		if(  osrlparse( osresult,  parserData) != 0) {
 			osrllex_destroy(scanner);
 		 	delete parserData;
-		  	throw ErrorClass(  "Error parsing the OSiL");
+		  	throw ErrorClass(  "Error parsing the OSrL");
 		 }
-		osrllex_destroy(scanner);
+		osrllex_destroy( scanner);
+		parserData->otherVarStruct;
 		delete parserData;
 		return osresult;
 	}
