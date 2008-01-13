@@ -2707,7 +2707,7 @@ std::map<int, int> OSInstance::getAllNonlinearVariablesIndexMap( ){
 
 SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( ){
 	// fill in the nonzeros in the sparse Hessian
-	//if( m_bLagrangianSparseHessianCreated == true) return m_LagrangianSparseHessian;
+	if( m_bLagrangianSparseHessianCreated == true) return m_LagrangianSparseHessian;
 	if( m_iNumberOfNonlinearVariables == 0) return NULL;
 	if( m_binitForAlgDiff == false ) initForAlgDiff();
 	unsigned int i = 0;

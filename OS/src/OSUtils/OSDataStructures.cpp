@@ -191,7 +191,7 @@ SparseHessianMatrix::SparseHessianMatrix():
 
 SparseHessianMatrix::~SparseHessianMatrix(){
 	#ifdef DEBUG
-	cout << "inside SparseJacobianMatrix destructor" << endl;
+	cout << "inside SparseHessianMatrix destructor" << endl;
 	#endif
 	if(bDeleteArrays == true){
 		delete[] hessRowIdx;
