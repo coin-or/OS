@@ -2011,7 +2011,12 @@ bool OSInstance::addQTermsToExressionTree(){
 			nlNodePlus->m_mChildren[ 1] = nlNodeTimes;
 			//expTree = new OSExpressionTree();
 			expTree->m_treeRoot = nlNodePlus ;
-			expTree->m_bIndexMapGenerated = false;
+			// get rid of old variable map
+			if(expTree->m_bIndexMapGenerated == true){
+				delete expTree->mapVarIdx;
+				expTree->mapVarIdx == NULL;
+				expTree->m_bIndexMapGenerated = false;
+			}	
 			//expTree->m_bIndexMapGenerated = false;
 			//m_mapExpressionTreesMod[ idx ]  = expTree;	
 			//expTree->mapVarIdx = m_mapExpressionTreesMod[ idx]->mapVarIdx;
