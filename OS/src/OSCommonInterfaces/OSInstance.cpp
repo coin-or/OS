@@ -2007,12 +2007,14 @@ bool OSInstance::addQTermsToExressionTree(){
 			nlNodeTimes->m_mChildren[ 1] = nlNodeVariableTwo;		
 			// now add the result to the expression tree
 			nlNodePlus = new OSnLNodePlus();
-			nlNodePlus->m_mChildren[ 0] = m_mapExpressionTreesMod[ idx ]->m_treeRoot;
+			nlNodePlus->m_mChildren[ 0] = expTree->m_treeRoot;
 			nlNodePlus->m_mChildren[ 1] = nlNodeTimes;
-			expTree = new OSExpressionTree();
+			//expTree = new OSExpressionTree();
 			expTree->m_treeRoot = nlNodePlus ;
-			expTree->mapVarIdx = m_mapExpressionTreesMod[ idx]->mapVarIdx;
-			m_mapExpressionTreesMod[ idx ]  = expTree;	
+			expTree->m_bIndexMapGenerated = false;
+			//expTree->m_bIndexMapGenerated = false;
+			//m_mapExpressionTreesMod[ idx ]  = expTree;	
+			//expTree->mapVarIdx = m_mapExpressionTreesMod[ idx]->mapVarIdx;
 		}
 		else{
 			// create the quadratic expression to add to the expression tree
