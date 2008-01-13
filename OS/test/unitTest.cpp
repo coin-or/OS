@@ -850,9 +850,6 @@ int main(int argC, char* argV[])
 		solver->osinstance = NULL;
 		delete solver;
 		solver = NULL;
-		// delete the osinstance created
-		//delete  nl2osil->osinstance;
-		//nl2osil->osinstance = NULL;
 		cout << "call delete nl2osil" << endl;
 		delete nl2osil;
 		nl2osil = NULL;	
@@ -957,7 +954,7 @@ int main(int argC, char* argV[])
 		OSrLWriter *osrlwriter = NULL;
 		osrlwriter = new OSrLWriter();
 		OSrLReader *osrlreader = NULL;
-		osrlreader = new OSrLReader();
+		//osrlreader = new OSrLReader();
 		OSResult *osresult = NULL;
 		//osresult = new OSResult(); 
 		cout << "TEST PARSING AN OSrL FILE" << endl;

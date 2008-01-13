@@ -414,6 +414,8 @@ bool OSnl2osil::createOSInstance(){
 		//std::cout << "DONE WALKING THE TREE FOR NONLINEAR OBJECTIVE TERMS" << std::endl;
 
 	}
+	delete objectiveCoefficients;
+	objectiveCoefficients = NULL;
 	//
 	// end loop of nonlinear rows
 	//    
