@@ -4,7 +4,7 @@
  * @author  Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin, 
  * @version 2.0, 12/21/2007
  * @since   OS1.0
- *
+ *initializeNonLinearStructures
  * \remarks
  * Copyright (C) 2005, Robert Fourer, Gus Gassmann Jun Ma, Kipp Martin,
  * Northwestern University, Dalhousie University, and the University of Chicago.
@@ -2383,16 +2383,17 @@ bool OSInstance::getSparseJacobianFromColumnMajor( ){
 					// variable i is appears in the expression tree for row index[ j]
 					// add the coefficient corresponding to variable i in row index[ j] to the expression tree	
 					// define a new OSnLVariable and OSnLnodePlus 
+					expTree = m_mapExpressionTreesMod[ index[j]  ];
 					nlNodeVariable = new OSnLNodeVariable();
 					nlNodeVariable->coef = value[ j];
 					nlNodeVariable->idx = i;
 					nlNodePlus = new OSnLNodePlus();
 					nlNodePlus->m_mChildren[ 0] = m_mapExpressionTreesMod[ index[ j] ]->m_treeRoot;
 					nlNodePlus->m_mChildren[ 1] = nlNodeVariable;
-					expTree = new OSExpressionTree();
-					expTree->m_treeRoot = nlNodePlus ;
-					expTree->mapVarIdx = m_mapExpressionTreesMod[ index[ j]]->mapVarIdx;
-					m_mapExpressionTreesMod[ index[ j] ]  = expTree;	
+					//expTree = new OSExpressionTree();
+					expTree->m_treeRoot = nlNodePlus ;	
+					//expTree->mapVarIdx = m_mapExpressionTreesMod[ index[ j]]->mapVarIdx;
+					//m_mapExpressionTreesMod[ index[ j] ]  = expTree;
 					//std::cout << m_mapExpressionTreesMod[ index[ j] ]->m_treeRoot->getNonlinearExpressionInXML() << std::endl;	
 					//std::cout << m_mapExpressionTrees[ index[ j] ]->m_treeRoot->getNonlinearExpressionInXML() << std::endl;
 				}
