@@ -112,7 +112,8 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF))
 
  /* General patterns matched in more than one element */
 
-{quote} {YY_PRINT;  yylval->sval = strdup(yytext); return(QUOTE);}
+
+{quote} {YY_PRINT;  yylval->sval = yytext; return(QUOTE);}
 ({xmlwhitespace}*{greater_than}) {YY_PRINT; return(GREATERTHAN);}
 {aninteger}  {YY_PRINT; yylval->ival = atoi(yytext); return(INTEGER);}
 {adouble} {YY_PRINT; yylval->dval = atof(yytext); return(DOUBLE);}
@@ -237,8 +238,8 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF))
  <xmldeclaration>"?>" BEGIN 0;
  
 
-<doublequoteattributetext>[^\"]* {YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext); return(ATTRIBUTETEXT);}
-<singlequoteattributetext>[^\']* {YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext); return(ATTRIBUTETEXT);}
+<doublequoteattributetext>[^\"]* {YY_PRINT;  BEGIN 0; /*yylval->sval = strdup(yytext);*/ yylval->sval = yytext; return(ATTRIBUTETEXT);}
+<singlequoteattributetext>[^\']* {YY_PRINT;  BEGIN 0; /*yylval->sval = strdup(yytext);*/ yylval->sval = yytext; return(ATTRIBUTETEXT);}
 
 . {  
 	std::string error;
