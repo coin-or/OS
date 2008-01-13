@@ -22,8 +22,15 @@
 			primalSolution[ i] = NULL;
 			// now delete other var
 			for(int k = 0; k < numberOfOtherVariableResult; k++){
-				delete[] otherVarVec[ k]->otherVarText;				
+				delete[] otherVarVec[ k]->otherVarText;			
 			}
+	 		if(otherVarStruct != NULL){
+	 			//std::cout << "TRYING TO DELETE otherVarStruct"  << std::endl;
+	 			//delete[] otherVarStruct->otherVarText;
+	 			//std::cout << "DELETED otherVarStruct->otherVarText"  << std::endl;
+				delete otherVarStruct;
+	 			std::cout << "DELETED otherVarStruct"  << std::endl;
+	 		}
 			otherVarVec.clear();
 			if( numberOfConstraints > 0){
 				delete dualSolution[ i];
@@ -39,6 +46,8 @@
 	dualSolution = NULL;
 	delete[] objectiveValues;
 	objectiveValues = NULL;
+
+
  }//~OSrLParserData
  
 

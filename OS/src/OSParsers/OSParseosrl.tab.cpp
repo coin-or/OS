@@ -2243,8 +2243,9 @@ OSResult *yygetOSResult(std::string parsestring){
 		 	delete parserData;
 		  	throw ErrorClass(  "Error parsing the OSrL");
 		 }
+		//delete parserData->otherVarStruct;
+		//delete[] parserData->otherVarStruct->otherVarText;
 		osrllex_destroy( scanner);
-		parserData->otherVarStruct;
 		delete parserData;
 		return osresult;
 	}
