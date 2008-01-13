@@ -222,6 +222,7 @@ int main(int argC, char* argV[])
 		OSiLReader *osilreader = NULL;
 		osilreader = new OSiLReader(); 
 		OSInstance *osinstance = osilreader->readOSiL( osil);
+		osinstance->initForAlgDiff();
 		unitTestResult << "Reading files successfully" << std::endl;
 		OSiLWriter osilwriter;
 		osilwriter.m_bWhiteSpace = true;
