@@ -1959,7 +1959,7 @@ case 78:
 /* rule 78 can match eol */
 YY_RULE_SETUP
 #line 202 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/OSParseosrl.l"
-{YY_PRINT;    yylval->charval = strdup(yytext);
+{YY_PRINT;    /*yylval->charval = strdup(yytext);*/ yylval->charval = yytext;
 							BEGIN 0;  return(ATTRIBUTETEXT);}
 	YY_BREAK
 case 79:

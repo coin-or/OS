@@ -199,7 +199,7 @@ endelementname (<\/[a-zA-Z][a-zA-Z0-9.:_]+)
 
 
 
-<attributetext>([^\"\'])+ {YY_PRINT;    yylval->charval = strdup(yytext);
+<attributetext>([^\"\'])+ {YY_PRINT;    /*yylval->charval = strdup(yytext);*/ yylval->charval = yytext;
 							BEGIN 0;  return(ATTRIBUTETEXT);}
 							
 <osrlattributetext>([^>])* {YY_PRINT;  BEGIN 0; /*yylval->charval = strdup(yytext);*/  yylval->charval = yytext; return(OSRLATTRIBUTETEXT);}
