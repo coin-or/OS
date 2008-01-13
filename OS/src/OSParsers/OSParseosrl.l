@@ -182,7 +182,7 @@ endelementname (<\/[a-zA-Z][a-zA-Z0-9.:_]+)
 
 
 
-[a-zA-X0-9.:_*#$@ \n]+ { YY_PRINT;  yylval->charval = strdup(yytext);   return(ELEMENTTEXT); }
+[a-zA-X0-9.:_*#$@ \n]+ { YY_PRINT;  /*yylval->charval = strdup(yytext);*/ yylval->charval = yytext;  return(ELEMENTTEXT); }
 
 "<!--" BEGIN comment;
  <comment>. |
@@ -202,7 +202,7 @@ endelementname (<\/[a-zA-Z][a-zA-Z0-9.:_]+)
 <attributetext>([^\"\'])+ {YY_PRINT;    yylval->charval = strdup(yytext);
 							BEGIN 0;  return(ATTRIBUTETEXT);}
 							
-<osrlattributetext>([^>])* {YY_PRINT;  BEGIN 0; yylval->charval = strdup(yytext); return(OSRLATTRIBUTETEXT);}
+<osrlattributetext>([^>])* {YY_PRINT;  BEGIN 0; /*yylval->charval = strdup(yytext);*/  yylval->charval = yytext; return(OSRLATTRIBUTETEXT);}
 
 
 .|\n { 
