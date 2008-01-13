@@ -1443,11 +1443,11 @@ std::map<int, OSExpressionTree*> OSInstance::getAllNonlinearExpressionTrees(){
 		//if(foundIdx.find( index) != foundIdx.end() ){  
 		if(foundIdx[ index] > 0 ){ 
 			nlNodePlus = new OSnLNodePlus();
-			expTree = new OSExpressionTree(); 
+			//expTree = new OSExpressionTree(); 
 			// set left child to old index and right child to new one 
 			nlNodePlus->m_mChildren[ 0] = m_mapExpressionTrees[ index]->m_treeRoot;
 			nlNodePlus->m_mChildren[ 1] = instanceData->nonlinearExpressions->nl[ i]->osExpressionTree->m_treeRoot;
-			m_mapExpressionTrees[ index] = expTree;
+			//m_mapExpressionTrees[ index] = expTree;
 			m_mapExpressionTrees[ index]->m_treeRoot = nlNodePlus;
 		}
 		else{  
