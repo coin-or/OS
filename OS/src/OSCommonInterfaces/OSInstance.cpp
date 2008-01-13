@@ -2535,10 +2535,11 @@ bool OSInstance::getSparseJacobianFromRowMajor( ){
 					nlNodePlus = new OSnLNodePlus();
 					nlNodePlus->m_mChildren[ 0] = m_mapExpressionTreesMod[ i ]->m_treeRoot;
 					nlNodePlus->m_mChildren[ 1] = nlNodeVariable;
-					expTree = new OSExpressionTree();
-					expTree->m_treeRoot = nlNodePlus ;
-					expTree->mapVarIdx = m_mapExpressionTreesMod[ i]->mapVarIdx;
-					m_mapExpressionTreesMod[ i ]  = expTree;	
+					//expTree = new OSExpressionTree();
+					//expTree->m_treeRoot = nlNodePlus ;
+					//expTree->mapVarIdx = m_mapExpressionTreesMod[ i]->mapVarIdx;
+					//m_mapExpressionTreesMod[ i ]  = expTree;	
+					m_mapExpressionTreesMod[ i ]->m_treeRoot = nlNodePlus;
 				}
 				else{ 
 					//the partial derivative of variable j in row i is constant
