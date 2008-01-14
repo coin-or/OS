@@ -302,7 +302,7 @@ OSInstance::~OSInstance(){
 	}
 	if(m_bCppADFunIsCreated == true){
 		delete Fad;
-		Fad == NULL;
+		Fad = NULL;
 	}
 //	if( (instanceData->timeDomain->stages->stage != NULL) && (m_bProcessTimeStages == true) ){
 //		delete m_Stages;
@@ -584,7 +584,7 @@ Nl::~Nl(){
 	// don't delete the expression tree if we created a map of the expression
 	// trees, otherwise we would destroy twice
 	if( m_bDeleteExpressionTree == true){
-		osExpressionTree->m_bDestroyNlNodes = false;
+		osExpressionTree->bDestroyNlNodes = false;
 		delete osExpressionTree;
 		osExpressionTree = NULL;
 	}
@@ -2030,14 +2030,14 @@ bool OSInstance::addQTermsToExressionTree(){
 			// get rid of old variable map
 			if(expTree->m_bIndexMapGenerated == true){
 				delete expTree->mapVarIdx;
-				expTree->mapVarIdx == NULL;
+				expTree->mapVarIdx = NULL;
 				expTree->m_bIndexMapGenerated = false;
 			}	
 			//expTree->m_bIndexMapGenerated = false;
 			//m_mapExpressionTreesMod[ idx ]  = expTree;	
 			//expTree->mapVarIdx = m_mapExpressionTreesMod[ idx]->mapVarIdx;
 		}
-		else{
+		else{ 
 			// create the quadratic expression to add to the expression tree
 			nlNodeVariableOne = new OSnLNodeVariable();
 			nlNodeVariableOne->idx = m_quadraticTerms->varOneIndexes[ i];
@@ -2518,7 +2518,7 @@ bool OSInstance::getSparseJacobianFromRowMajor( ){
 	m_miJacNumConTerms = new int[ getConstraintNumber()];
 	OSnLNodePlus *nlNodePlus;
 	OSnLNodeVariable *nlNodeVariable;
-	OSExpressionTree *expTree = NULL;
+	//OSExpressionTree *expTree = NULL;
 	// now initialize starts and variable index maps 
 	for ( i = 0; i < iNumJacRowStarts; i++){			
 		m_miJacStart [ i ] = 0;

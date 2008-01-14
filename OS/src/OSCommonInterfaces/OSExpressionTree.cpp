@@ -24,7 +24,7 @@ using std::endl;
 OSExpressionTree::OSExpressionTree():
 	m_treeRoot( NULL),
 	mapVarIdx( NULL),
-	m_bDestroyNlNodes( true),
+	bDestroyNlNodes( true),
 	m_bIndexMapGenerated( false),
 	bCppADMustReTape( false){
 }//end OSExpressionTree
@@ -34,7 +34,7 @@ OSExpressionTree::~OSExpressionTree(){
 	#ifdef DEBUG  
 	cout << "Inside the OSExpressionTree Destructor" << endl;
 	#endif
-	if(m_bDestroyNlNodes == true){
+	if( bDestroyNlNodes == true){
 		if(m_treeRoot != NULL){
 			std::vector<OSnLNode*> postfixVec;
 			postfixVec = m_treeRoot->getPostfixFromExpressionTree();

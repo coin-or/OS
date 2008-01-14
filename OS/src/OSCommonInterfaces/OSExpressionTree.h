@@ -119,7 +119,7 @@ public:
 	/**
 	 * m_bDestroyNlNodes if the destructor deletes the OSnLNodes in the Expression tree
 	 */			
-	bool m_bDestroyNlNodes;
+	bool bDestroyNlNodes;
 
 	
 private:

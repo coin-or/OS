@@ -204,12 +204,6 @@ int main(int argC, char* argV[])
 	// 
 	unitTestResult << "HERE ARE THE UNIT TEST RESULTS:" << std::endl << std::endl;
 	
-	
-	
-	/////
-	
-	/////
-	
 	//first make sure we can read files
 	try{
 		//osilFileName =  dataDir  + "osilFiles" + dirsep +  "parincLinearByRow.osil";
