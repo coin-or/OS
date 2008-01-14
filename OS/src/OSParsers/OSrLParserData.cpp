@@ -22,15 +22,12 @@
 			primalSolution[ i] = NULL;
 			// now delete other var
 			for(int k = 0; k < numberOfOtherVariableResult; k++){
-				delete[] otherVarVec[ k]->otherVarText;			
+				// the following delete gets rid of otherVarText in otherVarStruct
+				delete[] otherVarVec[ k]->otherVarText;
+				// the following should delete each of otherVarStruct created
+				// each element of otherVarVec is a pointer to an otherVarStruct
+				delete otherVarVec[ k];
 			}
-	 		if(otherVarStruct != NULL){
-	 			//std::cout << "TRYING TO DELETE otherVarStruct"  << std::endl;
-	 			//delete[] otherVarStruct->otherVarText;
-	 			//std::cout << "DELETED otherVarStruct->otherVarText"  << std::endl;
-				delete otherVarStruct;
-	 			std::cout << "DELETED otherVarStruct"  << std::endl;
-	 		}
 			otherVarVec.clear();
 			if( numberOfConstraints > 0){
 				delete dualSolution[ i];
