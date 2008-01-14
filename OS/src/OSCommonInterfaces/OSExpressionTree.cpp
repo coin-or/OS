@@ -24,6 +24,7 @@ using std::endl;
 OSExpressionTree::OSExpressionTree():
 	m_treeRoot( NULL),
 	mapVarIdx( NULL),
+	m_bDestroyNlNodes( true),
 	m_bIndexMapGenerated( false),
 	bCppADMustReTape( false){
 }//end OSExpressionTree
@@ -33,20 +34,22 @@ OSExpressionTree::~OSExpressionTree(){
 	#ifdef DEBUG  
 	cout << "Inside the OSExpressionTree Destructor" << endl;
 	#endif
-	if(m_treeRoot != NULL){
-		std::vector<OSnLNode*> postfixVec;
-		postfixVec = m_treeRoot->getPostfixFromExpressionTree();
-		unsigned int n = postfixVec.size();
-		unsigned int i;
-		for (i = 0 ; i < n; i++){
-			std::cout << postfixVec[i]->snodeName << std::endl;
-			if( postfixVec[ i] !=  NULL){
-				// note m_treeRoot is getting deleted here
-				delete postfixVec[ i];
-				postfixVec[ i] == NULL;
+	if(m_bDestroyNlNodes == true){
+		if(m_treeRoot != NULL){
+			std::vector<OSnLNode*> postfixVec;
+			postfixVec = m_treeRoot->getPostfixFromExpressionTree();
+			unsigned int n = postfixVec.size();
+			unsigned int i;
+			for (i = 0 ; i < n; i++){
+				std::cout << postfixVec[i]->snodeName << std::endl;
+				if( postfixVec[ i] !=  NULL){
+					// note m_treeRoot is getting deleted here
+					delete postfixVec[ i];
+					postfixVec[ i] == NULL;
+				}
 			}
-		}
-	}	
+		}	
+	}
 	if(mapVarIdx != NULL) delete mapVarIdx;
 	mapVarIdx = NULL;
 }//end ~OSExpressionTree 

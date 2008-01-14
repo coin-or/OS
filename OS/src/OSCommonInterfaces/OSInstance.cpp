@@ -583,8 +583,12 @@ Nl::~Nl(){
 	#endif
 	// don't delete the expression tree if we created a map of the expression
 	// trees, otherwise we would destroy twice
-	if( m_bDeleteExpressionTree == true) delete osExpressionTree;
-	osExpressionTree = NULL;
+	if( m_bDeleteExpressionTree == true){
+		osExpressionTree->m_bDestroyNlNodes = false;
+		delete osExpressionTree;
+		osExpressionTree = NULL;
+	}
+	
 }//end ~Nl
 
 
@@ -1446,22 +1450,34 @@ std::map<int, OSExpressionTree*> OSInstance::getAllNonlinearExpressionTrees(){
 	// kipp -- what should we return if instanceData->nonlinearExpressions->numberOfNonlinearExpressions is zero
 	for(i = 0; i < instanceData->nonlinearExpressions->numberOfNonlinearExpressions; i++){
 		index = instanceData->nonlinearExpressions->nl[ i]->idx;
-		//if(foundIdx.find( index) != foundIdx.end() ){  
-		if(foundIdx[ index] > 0 ){ 
+		if(foundIdx.find( index) != foundIdx.end() ){  
+		//if(foundIdx[ index] > 0 ){ 
+			//std::cout << "OLD INDEX FOUND " << index << std::endl;
+			//std::cout << "foundIdx[ index] " << index << std::endl;
+			// found an existing index
+			// important -- at this time m_mapExpressionTrees[ index] points to 
+			// the last OSExpressionTree with this index, it does not point to the 
+			// the just found OSExpressionTree with this index
 			nlNodePlus = new OSnLNodePlus();
 			//expTree = new OSExpressionTree(); 
+			expTree =  instanceData->nonlinearExpressions->nl[ i]->osExpressionTree;
 			// set left child to old index and right child to new one 
 			nlNodePlus->m_mChildren[ 0] = m_mapExpressionTrees[ index]->m_treeRoot;
 			nlNodePlus->m_mChildren[ 1] = instanceData->nonlinearExpressions->nl[ i]->osExpressionTree->m_treeRoot;
-			//m_mapExpressionTrees[ index] = expTree;
+			// we must delete the Expression tree corresponding to the old index value
+			instanceData->nonlinearExpressions->nl[ foundIdx[ index]  ]->m_bDeleteExpressionTree = true;
+			//point to the new expression tree
+			m_mapExpressionTrees[ index] = expTree;
 			m_mapExpressionTrees[ index]->m_treeRoot = nlNodePlus;
+			foundIdx[ index] = i;
 		}
 		else{  
 			// we have a new index
 			m_mapExpressionTrees[ index] = instanceData->nonlinearExpressions->nl[ i]->osExpressionTree;
 			m_mapExpressionTrees[ index]->m_treeRoot = instanceData->nonlinearExpressions->nl[ i]->osExpressionTree->m_treeRoot;
+			foundIdx[ index] = i;
 		}
-		foundIdx[ index]++;	 
+		//foundIdx[ index]++;	 
 	}
 	// count the number of constraints and objective functions with nonlinear terms.
 	for(pos = foundIdx.begin(); pos != foundIdx.end(); ++pos){

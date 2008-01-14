@@ -115,6 +115,11 @@ public:
 	 * the value of the input, e.g. an if statement -- false by default
 	 */
 	bool bCppADMustReTape;
+	
+	/**
+	 * m_bDestroyNlNodes if the destructor deletes the OSnLNodes in the Expression tree
+	 */			
+	bool m_bDestroyNlNodes;
 
 	
 private:
@@ -134,6 +139,8 @@ private:
 	 * m_dTreeRootValue is the function value of the root node
 	 */		
 	double m_dTreeRootValue;
+	
+
 	
 };//end OSExpressionTree
 

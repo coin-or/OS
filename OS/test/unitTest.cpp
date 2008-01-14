@@ -213,7 +213,7 @@ int main(int argC, char* argV[])
 	//first make sure we can read files
 	try{
 		//osilFileName =  dataDir  + "osilFiles" + dirsep +  "parincLinearByRow.osil";
-		osilFileName =  dataDir  + "osilFiles" + dirsep +  "rosenbrockmod.osil";
+		osilFileName =  dataDir  + "osilFiles" + dirsep +  "callBackTest.osil";
 		std::cout << "Try to read a sample file" << std::endl;
 		std::cout << "The file is: " ;
 		std::cout <<  osilFileName << std::endl;
@@ -229,7 +229,6 @@ int main(int argC, char* argV[])
 		std::cout << osilwriter.writeOSiL( osinstance) << std::endl;
 		delete osilreader;
 		osilreader = NULL;
-		//return 0;
 	}
 	catch(const ErrorClass& eclass){
 		unitTestResultFailure << "Sorry Unit Test Failed Reading a file: "  + eclass.errormsg<< endl; 
