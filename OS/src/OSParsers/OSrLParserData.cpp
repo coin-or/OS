@@ -15,10 +15,10 @@
  #include "OSrLParserData.h"
  OSrLParserData::~OSrLParserData() {
  	if(numberOfSolutions > 0){
-		delete objectiveIdx;
+		delete[] objectiveIdx;
 		objectiveIdx = NULL;
 		for(int i = 0; i < numberOfSolutions; i++){
-			delete primalSolution[ i];
+			delete[] primalSolution[ i];
 			primalSolution[ i] = NULL;
 			// now delete other var
 			for(int k = 0; k < numberOfOtherVariableResult; k++){
@@ -30,10 +30,10 @@
 			}
 			otherVarVec.clear();
 			if( numberOfConstraints > 0){
-				delete dualSolution[ i];
+				delete[] dualSolution[ i];
 				dualSolution[ i] = NULL;
 			}
-			delete objectiveValues[i];
+			delete[] objectiveValues[i];
 			objectiveValues[i] = NULL;
 		}
 	}
