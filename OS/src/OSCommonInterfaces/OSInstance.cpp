@@ -573,7 +573,7 @@ QuadraticCoefficients::~QuadraticCoefficients(){
 Nl::Nl(){
 	idx = 0;
 	osExpressionTree = NULL;
-	m_bDeleteExpressionTree = true;
+	m_bDeleteExpressionTree = false;
 }//end Nl
  
  
@@ -1436,6 +1436,12 @@ std::map<int, OSExpressionTree*> OSInstance::getAllNonlinearExpressionTrees(){
 	m_iObjectiveNumberNonlinear = 0;   
 	m_iConstraintNumberNonlinear = 0;    
 	int i;   
+	// important -- tell the nl nodes not to destroy the OSExpression Objects
+	if( instanceData->nonlinearExpressions->numberOfNonlinearExpressions > 0 && instanceData->nonlinearExpressions->nl != NULL){
+		for( i = 0; i < instanceData->nonlinearExpressions->numberOfNonlinearExpressions; i++){
+			instanceData->nonlinearExpressions->nl[i]->m_bDeleteExpressionTree = false;
+		}
+	}
 	int index;  
 	// kipp -- what should we return if instanceData->nonlinearExpressions->numberOfNonlinearExpressions is zero
 	for(i = 0; i < instanceData->nonlinearExpressions->numberOfNonlinearExpressions; i++){
@@ -1466,12 +1472,6 @@ std::map<int, OSExpressionTree*> OSInstance::getAllNonlinearExpressionTrees(){
 	}
 	foundIdx.clear();
 	m_bProcessExpressionTrees = true;
-	// important -- tell the nl nodes not to destroy the OSExpression Objects
-	if( instanceData->nonlinearExpressions->numberOfNonlinearExpressions > 0 && instanceData->nonlinearExpressions->nl != NULL){
-		for( i = 0; i < instanceData->nonlinearExpressions->numberOfNonlinearExpressions; i++){
-			instanceData->nonlinearExpressions->nl[i]->m_bDeleteExpressionTree = false;
-		}
-	}
 	return m_mapExpressionTrees;
 }// getAllNonlinearExpressionTrees
 

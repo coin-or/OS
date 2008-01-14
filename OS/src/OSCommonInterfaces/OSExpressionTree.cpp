@@ -40,11 +40,13 @@ OSExpressionTree::~OSExpressionTree(){
 		unsigned int i;
 		for (i = 0 ; i < n; i++){
 			std::cout << postfixVec[i]->snodeName << std::endl;
-			if( postfixVec[ i] !=  NULL) delete postfixVec[ i];
+			if( postfixVec[ i] !=  NULL){
+				// note m_treeRoot is getting deleted here
+				delete postfixVec[ i];
+				postfixVec[ i] == NULL;
+			}
 		}
-		//delete m_treeRoot;
-	}
-	m_treeRoot = NULL;
+	}	
 	if(mapVarIdx != NULL) delete mapVarIdx;
 	mapVarIdx = NULL;
 }//end ~OSExpressionTree 
