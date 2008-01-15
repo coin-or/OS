@@ -472,15 +472,20 @@ void solve(){
 				delete osilreader;
 			}
 			else{
+
 				//we better have an nl file present or mps file or osol file
 				if(osoptions->nlFile != ""){
-					std::cout << "CREATING AN OSINSTANCE FROM AN NL FILE" << std::endl;
-					OSnl2osil *nl2osil = new OSnl2osil( osoptions->nlFile); 
-					nl2osil->createOSInstance() ;
-					solverType->osinstance = nl2osil->osinstance;	
-					solverType->solve();
-					osrl = solverType->osrl;
-					delete nl2osil;
+					#ifdef COIN_HAS_ASL
+						std::cout << "CREATING AN OSINSTANCE FROM AN NL FILE" << std::endl;
+						OSnl2osil *nl2osil = new OSnl2osil( osoptions->nlFile); 
+						nl2osil->createOSInstance() ;
+						solverType->osinstance = nl2osil->osinstance;	
+						solverType->solve();
+						osrl = solverType->osrl;
+						delete nl2osil;
+					#else
+						throw ErrorClass("nlFile specified locally but ASL not present");
+					#endif
 				}
 				else{
 					if(osoptions->mpsFile != ""){
