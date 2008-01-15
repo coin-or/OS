@@ -17,8 +17,8 @@
  * hs71.mod. Execute the following sequence of commands:
  * 
  * model hs71.mod;  <br />
- * option solver amplClient; <br />
- * option amplClient_options "solver ipopt"; <br />
+ * option solver OSAmplClient; <br />
+ * option OSAmplClient_options "solver ipopt"; <br />
  * write gtestfile; <br />
  * solve; <br />
  * display x1; <br />
@@ -126,7 +126,7 @@ int main(int argc, char **argv)
 	// note that default solver is coin and default subSolver is Cbc
 	std::string osol = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/OSoL.xsd\"><other> </other></osol>";
 	// get the solver set by AMPL
-	amplclient_options = getenv("amplClient_options");
+	amplclient_options = getenv("OSAmplClient_options");
 	if(amplclient_options != NULL) cout << "HERE ARE THE AMPL CLIENT OPTIONS " <<   amplclient_options << endl;
 	try{
 		if(amplclient_options == NULL ) throw ErrorClass( "a local solver was not specified in AMPL option");

@@ -4183,3 +4183,12 @@ libmpfr1
 
 %%%%%%%%%%%%%%%%%%%%%%%
 
+The patch for mumps
+
+
+Hi Kipp and Andreas,To try and bring a conclusion to the saga of building Ipopt with Mumps in Msys, here is a patch file for the changes I had to make to Mumps to get it to compile with gfortran 4.2 in Msys. I've included a version of the get.Mumps script that will automatically download the source and apply the necessary patch. Andreas, it seems this is the easiest of the solutions we discussed and it seems to work fine. Do you think we can just check in the patch and the new version of the script?Kipp, if you want to apply the patch to already downloaded code, please executepatch -p0 < mumps.gcc.patchin the ThirdParty/Mumps directory. I'm a little confused as to why you seem to be having different compilation issues than I did, but try this patch and see if it works.Cheers,
+
+Ted -- email of 12/10/2007
+
+%%%%%%
+
