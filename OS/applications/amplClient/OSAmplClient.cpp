@@ -192,13 +192,15 @@ int main(int argc, char **argv)
 										#ifdef COIN_HAS_IPOPT
 										bIpoptIsPresent = true;
 										//std::cout << "Create an Ipopt solver and optimize"<< std::endl;
-										IpoptSolver *ipoptSolver  = new IpoptSolver();	
-										ipoptSolver->osol = osol;
-										ipoptSolver->osinstance = osinstance;
-										ipoptSolver->solve();
+										//IpoptSolver *ipoptSolver  = new IpoptSolver();	
+										//ipoptSolver->osol = osol;
+										//ipoptSolver->osinstance = osinstance;
+										//ipoptSolver->solve();
 										//std::cout << "Done optimizing with Ipopt"<< std::endl;
-										osrl = ipoptSolver->osrl ;
+										//osrl = ipoptSolver->osrl ;
 										//std::cout << "Have Ipopt writ out osrl"<< std::endl;
+										solverType = new IpoptSolver();
+										solverType->sSolverName = "ipopt";
 				
 										#endif
 										if(bIpoptIsPresent == false) throw ErrorClass( "the Ipopt solver requested is not present");
@@ -223,7 +225,7 @@ int main(int argc, char **argv)
 											}
 										}
 										else{
-											std::cout << "HERE I AM J" << std::endl;
+											std::cout << "HERE I AM " << std::endl;
 											throw ErrorClass( "a supported solver has not been selected");
 										}
 									}	
@@ -235,12 +237,12 @@ int main(int argc, char **argv)
 			}
 		}
 		// do a local solve
-		if( (strstr(amplclient_options, "ipopt") == NULL) && (solver_option == NULL)){
+		if(  solver_option == NULL ){
 			solverType->osol = osol;
 			solverType->osinstance = osinstance;
 			solverType->solve();
 			osrl = solverType->osrl ;
-			std::cout << osrl << std::endl;
+			//std::cout << osrl << std::endl;
 		}
 	}
 	catch(const ErrorClass& eclass){
@@ -287,25 +289,32 @@ int main(int argc, char **argv)
 	try{
 		cout << osrl << endl << endl <<endl;
 		osresult = osrlreader->readOSrL( osrl);
+		cout << "WRITE THE SOLUTION BACK INTO AMPL" <<endl;
 		write_sol(const_cast<char*>(osresult->getSolutionMessage( 0).c_str()), 
 			osresult->getOptimalPrimalVariableValues( -1), 
 			osresult->getOptimalDualVariableValues( -1), NULL);
+		cout << "DONE WRITING THE SOLUTION BACK INTO AMPL" <<endl;
 		delete osresult;
+		cout << "osresult JUST DELETED" <<endl;
 			
 	}
 	catch(const ErrorClass& eclass){
 		cout << "There was an error parsing the OSrL" << endl << eclass.errormsg << endl << endl;
 	}
 	delete osrlreader;
+	cout << "osrlreader JUST DELETED" <<endl;
 	osrlreader = NULL;
-	if(  (solver_option != NULL) || (strstr(solver_option, "service") == NULL) ){
-		
+	if(  solverType != NULL ){
+		cout << "TRY TO DELETE solverType" <<endl;
 		delete solverType;
+		cout << "solverType JUST DELETED" <<endl;
 		solverType = NULL;
 	}
 	delete osrlwriter;
+	cout << "osrlwriter JUST DELETED" <<endl;
 	osrlwriter = NULL;
 	delete nl2osil;
+	cout << "nl2osil JUST DELETED" <<endl;
 	nl2osil = NULL;
 	return 0;
 } // end main

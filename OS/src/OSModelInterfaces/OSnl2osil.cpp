@@ -29,8 +29,8 @@ Alternatively, if you want to name the file and not use the AMPL randomly
 generate file name, do the following:
 
    model hs71.mod;
-   option solver amplclient;
-   option amplclient_options "solver lindo";
+   option solver OSAmplClient;
+   option OSAmplClient_options "solver lindo";
    option lindo_options "<<any options for the lindo solver>>";
    write gtestfile;
    solve;
