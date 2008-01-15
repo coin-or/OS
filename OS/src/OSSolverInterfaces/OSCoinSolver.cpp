@@ -23,6 +23,7 @@
 #include "OSiLReader.h"
 #include "OSInstance.h"
 #include "OSFileUtil.h"
+#include "CglPreProcess.hpp"
   
 #include <iostream>
 #ifdef HAVE_CTIME
@@ -270,9 +271,33 @@ bool CoinSolver::optimize()
 		// try to catch Coin Solver errors
 		try{
 			if(numOfIntVars > 0){
-				m_OsiSolver->initialSolve();
-				m_OsiSolver->branchAndBound();
-				//m_OsiSolver->writeMps("test2");
+				
+
+				if( sSolverName.find( "symphony") != std::string::npos) {
+					m_OsiSolver->initialSolve();
+					m_OsiSolver->branchAndBound();	
+				}
+				else{
+					// copy from John Forrest
+					CglPreProcess process;
+				
+	                /* Do not try and produce equality cliques and
+	                   do up to 10 passes */
+	                OsiSolverInterface *solver2 = process.preProcess(*m_OsiSolver, false, 10);
+	                if (!solver2) {
+	                  throw ErrorClass("Pre-processing says infeasible");
+	                } else {
+	                  printf("processed model has %d rows and %d columns\n",
+	                         solver2->getNumRows(),solver2->getNumCols());
+	                }
+	                //solver2->resolve();
+	                // we have to keep solver2 so pass clone
+	                solver2 = solver2->clone();
+	                m_OsiSolver = solver2;
+	                //m_OsiSolver->assignSolver( solver2);
+	                m_OsiSolver->initialSolve();
+	                m_OsiSolver->branchAndBound();	
+				}
 			}
 			else{
 				m_OsiSolver->initialSolve();
