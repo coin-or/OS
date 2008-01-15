@@ -118,6 +118,10 @@
 #include "OSmps2osil.h"   
 #include "OSBase64.h"
 #include "OSCommonUtil.h"
+
+
+#include <CoinMpsIO.hpp>
+#include <CoinPackedMatrix.hpp>
     
  
 #ifdef COIN_HAS_KNITRO    
@@ -223,6 +227,47 @@ int main(int argC, char* argV[])
 		std::cout << osilwriter.writeOSiL( osinstance) << std::endl;
 		delete osilreader;
 		osilreader = NULL;
+		//nl2osil = new OSnl2osil( nlFileName);
+		// Create a problem pointer.  We use the base class here.
+		/*OsiSolverInterface *si, *si2;
+		// When we instantiate the object, we need a specific derived class.
+		si = new OsiCbcSolverInterface;
+		// Read in an mps file.  This one's from the MIPLIB library.
+		si->readMps( mpsFileName.c_str());
+		// get the problem
+		// variable upper and lower bounds
+		 const double *collb = si->getColLower();
+		 const double *colub = si->getColUpper();		
+		// constraint upper and lower bound	
+		const  double *rowlb = si->getRowLower();
+		const  double *rowub = si->getRowUpper();		
+		//the Coin packed matrix
+		const CoinPackedMatrix *m_CoinPackedMatrix =  si->getMatrixByCol();		
+		//finally the objective function coefficients		
+		const double *objcoef = si->getObjCoefficients();
+		//delete si;
+		si2 = new OsiCbcSolverInterface;
+		std::cout << objcoef[ 0] << std::endl;
+		// now load the problem
+		si2->loadProblem(*m_CoinPackedMatrix, collb, colub,  objcoef, rowlb, rowub);		
+		// Solve the (relaxation of the) problem
+		//si2->branchAndBound();	
+		delete si;
+		delete si2;
+		*/
+		
+		solver = new CoinSolver();
+		solver->sSolverName = "cbc";
+		mps2osil = new OSmps2osil( mpsFileName);
+		mps2osil->createOSInstance() ;
+		solver->osinstance = mps2osil->osinstance;
+		solver->osol = osol;
+		cout << "call COIN Solve" << endl;
+		solver->solve();
+		
+	
+		//return 0;
+		//
 	}
 	catch(const ErrorClass& eclass){
 		unitTestResultFailure << "Sorry Unit Test Failed Reading a file: "  + eclass.errormsg<< endl; 

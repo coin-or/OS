@@ -270,11 +270,15 @@ bool CoinSolver::optimize()
 		// try to catch Coin Solver errors
 		try{
 			if(numOfIntVars > 0){
+				m_OsiSolver->initialSolve();
 				m_OsiSolver->branchAndBound();
+				//m_OsiSolver->writeMps("test2");
 			}
 			else{
 				m_OsiSolver->initialSolve();
 				cout << "DONE WITH INITIAL SOLVE" << endl;
+				//
+				
 			}
 		}
 		catch(CoinError e){

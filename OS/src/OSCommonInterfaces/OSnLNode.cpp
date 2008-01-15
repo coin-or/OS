@@ -13,7 +13,7 @@
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
-#define DEBUGOSNLNODE
+//#define DEBUGOSNLNODE
 #include "OSnLNode.h"
 #include "OSErrorClass.h"
 #include "OSParameters.h"

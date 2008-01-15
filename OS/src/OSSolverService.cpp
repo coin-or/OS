@@ -311,25 +311,25 @@ void solve(){
 	FileUtil *fileUtil = NULL;
 	fileUtil = new FileUtil();
 	try{
-		// call a method here to get OSiL if we have an nl or mps file
-		if(osoptions->osil == ""){
-			//we better have an nl file present or mps file or osol file
-			if(osoptions->nlFile != ""){
-				getOSiLFromNl();
-			}
-			else{
-				if(osoptions->mpsFile != ""){
-					getOSiLFromMps();
+		// now solve either remotely or locally
+		if( osoptions->serviceLocation != "" ){
+			// call a method here to get OSiL if we have an nl or mps file
+			if(osoptions->osil == ""){
+				//we better have an nl file present or mps file or osol file
+				if(osoptions->nlFile != ""){
+					getOSiLFromNl();
 				}
-				else{// need an osol file with an instanceLocation specified
-					if( osoptions->osol.find( "<instanceLocation") == std::string::npos){
-						throw ErrorClass("solve called and no osil, osol with osil specified, nl, or mps file given");
+				else{
+					if(osoptions->mpsFile != ""){
+						getOSiLFromMps();
+					}
+					else{// need an osol file with an instanceLocation specified
+						if( osoptions->osol.find( "<instanceLocation") == std::string::npos){
+							throw ErrorClass("solve called and no osil, osol with osil specified, nl, or mps file given");
+						}
 					}
 				}
 			}
-		}
-		// now solve either remotely or locally
-		if( osoptions->serviceLocation != "" ){
 			// place a remote call
 			osagent = new OSSolverAgent( osoptions->serviceLocation );
 			if(osoptions->solverName != ""){
@@ -461,19 +461,49 @@ void solve(){
 					}
 				}
 			}
-			// treat non-ipopt solvers differently
-			//if( osoptions->solverName.find( "ipopt") == std::string::npos){
-				solverType->osil = osoptions->osil;
-				solverType->osol = osoptions->osol;
-				solverType->osinstance = NULL;
-				std::cout << "CALL SOLVE" << std::endl;
+			std::cout << "CALL SOLVE" << std::endl;
+			solverType->osol = osoptions->osol;
+			if(osoptions->osil != ""){
+				OSiLReader *osilreader = new OSiLReader(); 
+				std::cout << "CREATING AN OSINSTANCE FROM AN OSIL FILE" << std::endl;
+				solverType->osinstance = osilreader->readOSiL( osoptions->osil );
 				solverType->solve();
 				osrl = solverType->osrl;
-				std::cout << "DELETE SOLVER TYPE" << std::endl;
-				delete solverType;
-				std::cout << "DONE DELETE SOVER TYPE" << std::endl;
-				solverType = NULL;
-			//}
+				delete osilreader;
+			}
+			else{
+				//we better have an nl file present or mps file or osol file
+				if(osoptions->nlFile != ""){
+					std::cout << "CREATING AN OSINSTANCE FROM AN NL FILE" << std::endl;
+					OSnl2osil *nl2osil = new OSnl2osil( osoptions->nlFile); 
+					nl2osil->createOSInstance() ;
+					solverType->osinstance = nl2osil->osinstance;	
+					solverType->solve();
+					osrl = solverType->osrl;
+					delete nl2osil;
+				}
+				else{
+					if(osoptions->mpsFile != ""){
+						std::cout << "CREATING AN OSINSTANCE FROM AN MPS FILE" << std::endl;
+						OSmps2osil *mps2osil = new OSmps2osil( osoptions->mpsFile);
+						mps2osil->createOSInstance() ;
+						solverType->osinstance = mps2osil->osinstance;
+						solverType->solve();
+						osrl = solverType->osrl;
+						
+						delete mps2osil;
+					}
+					else{// need an osol file with an instanceLocation specified
+						if( osoptions->osol.find( "<instanceLocation") == std::string::npos){
+							throw ErrorClass("solve called and no osil, osol with osil specified, nl, or mps file given");
+						}
+					}
+				}
+			}
+			std::cout << "DELETE SOLVER TYPE" << std::endl;
+			delete solverType;
+			std::cout << "DONE DELETE SOVER TYPE" << std::endl;
+			solverType = NULL;
 			if(osoptions->osrlFile != ""){
 				fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
 				//const char *ch1 = "/Applications/Firefox.app/Contents/MacOS/firefox  ";
