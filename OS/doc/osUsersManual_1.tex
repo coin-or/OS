@@ -3165,12 +3165,12 @@ contains executables and scripts to start and shutdown the Tomcat server.
 
 \subsection{AMPL Client:  Hooking AMPL to Solvers}\label{section:amplclient}
 
-The {\tt OSAmplClient} executable (in {\tt COIN-OS/OS/applications/OSAmplClient}) is designed to work with the AMPL program (see \url{www.ampl.com}). The {\tt OSAmplClient} acts like an AMPL ``solver.'' The {\tt OSAmplClient} is linked with the OS library and can be used to solve problems either locally or remotely. In both cases the {\tt OSAmplClient} uses the {\tt OSnl2osil} class to convert the AMPL generated nl file (which represents the problem instance) into the corresponding instance representation in the OSiL format.
+The {\tt OSAmplClient} executable (in {\tt COIN-OS/OS/applications/amplClient}) is designed to work with the AMPL program (see \url{www.ampl.com}). The {\tt OSAmplClient} acts like an AMPL ``solver.'' The {\tt OSAmplClient} is linked with the OS library and can be used to solve problems either locally or remotely. In both cases the {\tt OSAmplClient} uses the {\tt OSnl2osil} class to convert the AMPL generated nl file (which represents the problem instance) into the corresponding instance representation in the OSiL format.
 
 In the following discussion we assume that the AMPL executable {\tt ampl}  (or {\tt ampl.exe} on Windows) obtained from {\tt www.ampl.com}, the OS {\tt OSAmplClient}, and the test problem {\tt hs71.mod} are all in the same directory. At first, the user may wish to run everything in the directory
 
 \begin{verbatim}
-COIN-OS/OS/applications/OSAmplClient
+COIN-OS/OS/applications/amplClient
 \end{verbatim}
 which is where {\tt OSAmplClient} is located when the OS project is built. The user must obtain {\tt ampl} and put it in this directory.  The test problem {\tt hs71.mod} can be copied from
 
@@ -3179,7 +3179,7 @@ COIN-OS/OS/data/amplFiles
 \end{verbatim}
 It is also assumed that {\tt .} (the current directory) is in the search path.
 
-The  problem instance, {\tt hs71.mod} is an AMPL model file included in the {\tt OSAmplClient} directory. To solve this problem locally by calling the {\tt OSAmplClient} from AMPL first start AMPL and then execute the following commands. In this case we testing  {\tt Ipopt} as the local server and therefore it is necessary that {\tt Ipopt} be part of the local OS build. If it is not then another solver must be selected and a test problem used that is a linear or integer program.
+The  problem instance, {\tt hs71.mod} is an AMPL model file included in the {\tt amplClient} directory. To solve this problem locally by calling the {\tt OSAmplClient} from AMPL first start AMPL and then execute the following commands. In this case we testing  {\tt Ipopt} as the local server and therefore it is necessary that {\tt Ipopt} be part of the local OS build. If it is not then another solver must be selected and a test problem used that is a linear or integer program.
 
 \begin{verbatim}
 # take in problem 71 in Hock and Schittkowski
