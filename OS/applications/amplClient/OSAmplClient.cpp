@@ -316,5 +316,5 @@ int main(int argc, char **argv)
 	delete nl2osil;
 	cout << "nl2osil JUST DELETED" <<endl;
 	nl2osil = NULL;
-	return 0;
+	return 0; 
 } // end main
