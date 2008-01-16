@@ -116,7 +116,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="-DWIN_ -D_WIN32 -DMSVISUALSTUDIO -DHAVE_MATH_H -DHAVE_STRING_H -DHAVE_STDIO_H -DHAVE_TIME_H"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include&quot;;..\..\..\..\OS\src\OSUtils;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src;..\..\..\..;..\..\..\..\CppAD\local;..\..\..\..\CppAD;..\..\..\..\Osi\src\OsiCbc;..\..\..\..\Osi\src;..\..\..\..\Osi\src\OsiClp;..\..\..\..\CoinUtils\src;..\..\..\..\BuildTools\headers;..\..\..\..\Osi\src\OsiVol;..\..\..\..\Vol\src;..\..\..\..\Clp\src;..\..\..\..\Cbc\src"
+				AdditionalIncludeDirectories="..\..\..\..\OS\src\OSUtils;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src;..\..\..\..;..\..\..\..\CppAD\local;..\..\..\..\CppAD;..\..\..\..\Osi\src\OsiCbc;..\..\..\..\Osi\src;..\..\..\..\Osi\src\OsiClp;..\..\..\..\CoinUtils\src;..\..\..\..\BuildTools\headers;..\..\..\..\Osi\src\OsiVol;..\..\..\..\Vol\src;&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include&quot;;..\..\..\..\Clp\src;..\..\..\..\Cbc\src;&quot;C:\msys\1.0\home\kmartin\COIN-OS\Cgl\src\CglPreProcess&quot;;&quot;C:\msys\1.0\home\kmartin\COIN-OS\Cgl\src&quot;"
 				PreprocessorDefinitions="NDEBUG;WIN32;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;WIN_;_LINDO_DLL_;OSROOT_DIR"
 				StringPooling="true"
 				RuntimeLibrary="0"
