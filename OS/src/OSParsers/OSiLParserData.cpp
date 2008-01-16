@@ -24,6 +24,8 @@ using namespace std;
 	sumVec.clear();
 	maxVec.clear();
 	productVec.clear();
+	minVec.clear();
+	allDiffVec.clear(); 	
  }//~OSiLParserData
  
 

@@ -76,6 +76,7 @@ LIBS += @osicbclib@
 LIBS += @osiclplib@ 
 @COIN_HAS_DYLP_TRUE@LIBS += @osidylplib@
 @COIN_HAS_VOL_TRUE@LIBS += @osivollib@ 
+@COIN_HAS_GLPK_TRUE@LIBS += @osiglpklib@ 
 LIBS += @cbclib@
 @COIN_HAS_SYMPHONY_TRUE@LIBS += @symphonylib@
 LIBS += @cgllib@
@@ -90,7 +91,9 @@ ADDIPOPTLIBS = `cat $(prefix)/lib/ipopt_addlibs_cpp.txt`
 @COIN_HAS_IPOPT_TRUE@LIBS += @ipoptlib@ $(ADDIPOPTLIBS)
 LIBS += @coinutilslib@ 
 
-#@COIN_HAS_ASL_TRUE@LIBS += @ASLLIB@
+
+@COIN_HAS_ASL_TRUE@LIBS += @ASLLIB@
+
  
 #DONE ADDING LIBS
 

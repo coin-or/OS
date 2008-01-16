@@ -29,7 +29,6 @@
 #include "OSrLWriter.h"      
 #include "OSInstance.h"  
 #include "OSFileUtil.h"   
-//#include "CoinSolver.h"
 #include "OSDefaultSolver.h"  
 #include "OSWSUtil.h" 
 #include "OSSolverAgent.h"   

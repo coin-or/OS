@@ -302,6 +302,7 @@ oldincludedir = @oldincludedir@
 osicbclib = @osicbclib@
 osiclplib = @osiclplib@
 osidylplib = @osidylplib@
+osiglpklib = @osiglpklib@
 osilib = @osilib@
 osisymphonylib = @osisymphonylib@
 osivollib = @osivollib@

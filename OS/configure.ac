@@ -163,6 +163,18 @@ if test $coin_has_dylp != unavailable &&
    test $coin_has_dylp != skipping; then
   case $CXX in
     cl*)
+       osiglpklib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOsiGlpk.lib';;
+     *)
+       osiglpklib="-L\$(INSTALLIBDIR) -lOsiGlpk";;
+  esac
+  AC_SUBST(osiglpklib) 
+fi
+
+
+if test $coin_has_dylp != unavailable &&
+   test $coin_has_dylp != skipping; then
+  case $CXX in
+    cl*)
        dylplib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libDylp.lib'
        osidylplib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOsiDylp.lib';;
      *)
@@ -179,7 +191,7 @@ if test $coin_has_vol != unavailable &&
   case $CXX in
     cl*)
        vollib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libVol.lib'
-       osivollib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libVol.lib';;
+       osivollib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOsiVol.lib';;
      *)
        vollib="-L\$(INSTALLIBDIR) -lVol"
        osivollib="-L\$(INSTALLIBDIR) -lOsiVol";;
@@ -187,6 +199,8 @@ if test $coin_has_vol != unavailable &&
   AC_SUBST(vollib)
   AC_SUBST(osivollib)  
 fi
+
+
 
 
 if test $coin_has_symphony != unavailable &&
@@ -213,6 +227,11 @@ if test $coin_has_ipopt != unavailable &&
   esac
   AC_SUBST(ipoptlib)  
 fi
+
+
+
+
+
 
 #############################################################################
 #                             Third party solvers                           #
