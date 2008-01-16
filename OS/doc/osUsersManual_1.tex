@@ -3214,7 +3214,7 @@ In this case it is necessary that the {\tt Ipopt} solver be part of the OS build
 
 
 
-When the {\tt OSAgent}  class methods {\tt solve} and {\tt send} are used, the problem instance in OSiL format is packaged into a SOAP envelope and communication with the server is done using Web Services (for example Tomcat Axis). However, packing an XML file into a SOAP envelope may add considerably to the size of the file (each {\tt $<$} is replaced with {\tt \&lt;}  and each {\tt $>$} is replaced with {\tt \&gt;}). Also, communicating with a Web Services servlet can also slow down the communication process. This could be a problem for large instances. An alternative approach is to use the {\tt fileUpload} executable on the client end  and the Java servlet {\tt OSFileUpload} on the server end.  The {\tt fileUpload} client executable is contained in the {\tt fileUpload}  directory inside the {\tt examples directory}.
+When the {\tt OSAgent}  class methods {\tt solve} and {\tt send} are used, the problem instance in OSiL format is packaged into a SOAP envelope and communication with the server is done using Web Services (for example Tomcat Axis). However, packing an XML file into a SOAP envelope may add considerably to the size of the file (each {\tt $<$} is replaced with {\tt \&lt;}  and each {\tt $>$} is replaced with {\tt \&gt;}). Also, communicating with a Web Services servlet can also slow down the communication process. This could be a problem for large instances. An alternative approach is to use the {\tt OSFileUpload} executable on the client end  and the Java servlet {\tt OSFileUpload} on the server end.  The {\tt OSFileUpload} client executable is contained in the {\tt fileUpload}  directory inside the {\tt applications directory}.
 
 This servlet is based upon the Apache Commons FileUpload. See \url{http://jakarta.apache.org/commons/fileupload/}. The {\tt OSFileUpload} Java class , {\tt OSFileUpload.class} is in the directory
 \begin{verbatim}
@@ -3227,9 +3227,9 @@ relative to the Web server root.  The source code {\tt OSFileUpload.class} is in
 
 
 
-The {\tt fileUpload} client executable (see {\tt OS/applications/fileUpload}) takes one argument on the command line which is the location of the file on the local directory to upload to the server. For example,
+The {\tt OSFileUpload} client executable (see {\tt OS/applications/fileUpload}) takes one argument on the command line which is the location of the file on the local directory to upload to the server. For example,
 \begin{verbatim}
-fileUpload ../../data/osilFiles/parincQuadratic.osil
+OSFileUpload ../../data/osilFiles/parincQuadratic.osil
 \end{verbatim}
 The {\tt fileUpload} executable first creates an {\tt OSAgent} object.
 \begin{verbatim}
@@ -3270,7 +3270,7 @@ and the {\tt osol} file is
 </osol>
 \end{verbatimtab}
 
-As an alternative to using the command line executable {\tt fileUpload}, there is also an html form {\tt fileupload.html} that can be used to upload files. For example, the URL
+As an alternative to using the command line executable {\tt OSFileUpload}, there is also an html form {\tt fileupload.html} that can be used to upload files. For example, the URL
 \begin{verbatim}
 http://gsbkip.chicagogsb.edu/os/fileupload.html
 \end{verbatim}
