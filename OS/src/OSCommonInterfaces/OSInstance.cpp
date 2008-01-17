@@ -584,7 +584,6 @@ Nl::~Nl(){
 	// don't delete the expression tree if we created a map of the expression
 	// trees, otherwise we would destroy twice
 	if( m_bDeleteExpressionTree == true){
-		osExpressionTree->bDestroyNlNodes = false;
 		delete osExpressionTree;
 		osExpressionTree = NULL;
 	}
@@ -1464,8 +1463,9 @@ std::map<int, OSExpressionTree*> OSInstance::getAllNonlinearExpressionTrees(){
 			// set left child to old index and right child to new one 
 			nlNodePlus->m_mChildren[ 0] = m_mapExpressionTrees[ index]->m_treeRoot;
 			nlNodePlus->m_mChildren[ 1] = instanceData->nonlinearExpressions->nl[ i]->osExpressionTree->m_treeRoot;
-			// we must delete the Expression tree corresponding to the old index value
+			// we must delete the Expression tree corresponding to the old index value but not the nl nodes
 			instanceData->nonlinearExpressions->nl[ foundIdx[ index]  ]->m_bDeleteExpressionTree = true;
+			instanceData->nonlinearExpressions->nl[ foundIdx[ index]  ]->osExpressionTree->bDestroyNlNodes = false;
 			//point to the new expression tree
 			m_mapExpressionTrees[ index] = expTree;
 			m_mapExpressionTrees[ index]->m_treeRoot = nlNodePlus;

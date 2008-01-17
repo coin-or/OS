@@ -305,16 +305,16 @@ int main(int argc, char **argv)
 	cout << "osrlreader JUST DELETED" <<endl;
 	osrlreader = NULL;
 	if(  solverType != NULL ){
-		cout << "TRY TO DELETE solverType" <<endl;
+		//cout << "TRY TO DELETE solverType" <<endl;
 		delete solverType;
-		cout << "solverType JUST DELETED" <<endl;
+		//cout << "solverType JUST DELETED" <<endl;
 		solverType = NULL;
 	}
 	delete osrlwriter;
-	cout << "osrlwriter JUST DELETED" <<endl;
+	//cout << "osrlwriter JUST DELETED" <<endl;
 	osrlwriter = NULL;
 	delete nl2osil;
-	cout << "nl2osil JUST DELETED" <<endl;
+	//cout << "nl2osil JUST DELETED" <<endl;
 	nl2osil = NULL;
 	return 0; 
 } // end main

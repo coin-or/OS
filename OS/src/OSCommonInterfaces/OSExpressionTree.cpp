@@ -41,7 +41,7 @@ OSExpressionTree::~OSExpressionTree(){
 			unsigned int n = postfixVec.size();
 			unsigned int i;
 			for (i = 0 ; i < n; i++){
-				std::cout << postfixVec[i]->snodeName << std::endl;
+				//std::cout << postfixVec[i]->snodeName << std::endl;
 				if( postfixVec[ i] !=  NULL){
 					// note m_treeRoot is getting deleted here
 					delete postfixVec[ i];
