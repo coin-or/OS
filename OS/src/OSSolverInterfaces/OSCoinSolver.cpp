@@ -290,11 +290,12 @@ bool CoinSolver::optimize()
 	                  printf("processed model has %d rows and %d columns\n",
 	                         solver2->getNumRows(),solver2->getNumCols());
 	                }
+	                delete m_OsiSolver;
 	                // we have to keep solver2 so pass clone
 	                solver2 = solver2->clone();
 	                m_OsiSolver = solver2;
 	                m_OsiSolver->initialSolve();
-	                m_OsiSolver->branchAndBound();	
+	                m_OsiSolver->branchAndBound();
 				}
 			}
 			else{

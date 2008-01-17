@@ -264,7 +264,8 @@ int main(int argC, char* argV[])
 		solver->osol = osol;
 		cout << "call COIN Solve" << endl;
 		solver->solve();
-		
+		delete solver;
+		delete mps2osil;
 	
 		//return 0;
 		//
