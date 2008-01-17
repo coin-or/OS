@@ -52,7 +52,7 @@
 #ifdef COIN_HAS_IPOPT    
 #include "OSIpoptSolver.h"
 #endif  
-#include "OSFileUtil.h";
+#include "OSFileUtil.h"
 #include "OSDefaultSolver.h"
 #include "OSSolverAgent.h"
 #include "OShL.h"
