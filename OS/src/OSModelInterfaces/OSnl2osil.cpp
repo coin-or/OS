@@ -99,7 +99,7 @@ OSnl2osil::OSnl2osil(std::string nlfilename){
 
 	//fg_read(nl, 0);
 	X0 = (real *)Malloc( n_var*sizeof(real));
-	cout <<  "N_OPS =  " <<  N_OPS << endl;
+	//cout <<  "N_OPS =  " <<  N_OPS << endl;
 	if(N_OPS > 0){
 		for(int i = 0; i < N_OPS; i++){
 			r_ops_int[i] = (efunc*)(unsigned long)i;
@@ -253,7 +253,7 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 			case OPNUM:
 				//cout << "found a number node" << endl;
 				nlNodeNumberPoint = new OSnLNodeNumber;
-				cout << "THE NUMBER" << (double) ((expr_n*)e)->v << endl;
+				//cout << "THE NUMBER" << (double) ((expr_n*)e)->v << endl;
 				nlNodeNumberPoint->value = (double) ((expr_n*)e)->v;
 				return nlNodeNumberPoint;
 				
@@ -381,8 +381,8 @@ bool OSnl2osil::createOSInstance(){
 	//
 	if((nlc + nlo) > 0){
 		OSnLNode* m_treeRoot;
-		cout << nlc << endl;
-		cout << nlo << endl;
+		//cout << nlc << endl;
+		//cout << nlo << endl;
 		osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions = nlc + nlo;
 		osinstance->instanceData->nonlinearExpressions->nl = new Nl*[ nlc + nlo ];
 		int iNLidx = 0;

@@ -283,8 +283,8 @@ int main(int argc, char **argv)
 		cout << "Place remote synchronous call" << endl;
 		osrl = osagent->solve(osil, osol);
 		delete osilwriter;
-		delete osagent;
-	}
+		delete osagent; 
+	} 
 	// okay start to test osrl parser 
 	try{
 		//cout << osrl << endl << endl <<endl;
@@ -293,26 +293,22 @@ int main(int argc, char **argv)
 		fileUtil = new FileUtil();
 		fileUtil->writeFileFromString(sResultFileName, osrl);
 		delete fileUtil;
-		osresult = osrlreader->readOSrL( osrl);
-
 		cout << "WRITE THE SOLUTION BACK INTO AMPL" <<endl;
 		//char *buf = NULL;
-		string::size_type pos1 = osresult->getGeneralStatusType().find( "error");
-		//write_sol(  const_cast<char*>(osrl.c_str()), 
-		//				osresult->getOptimalPrimalVariableValues( -1), 
-		//	
+		//string::size_type pos1 = osresult->getGeneralStatusType().find( "error");
+		string::size_type pos1 = osrl.find( "error");
 		std::string sReport = "model was solved";
 		if(pos1 == std::string::npos){
+			osresult = osrlreader->readOSrL( osrl);
 			write_sol(  const_cast<char*>(sReport.c_str()), 
 					osresult->getOptimalPrimalVariableValues( -1), 
 					osresult->getOptimalDualVariableValues( -1), NULL);
-			}else{
-				write_sol(  const_cast<char*>(osrl.c_str()), NULL, NULL, NULL);
+			delete osresult;
+		}else{
+			write_sol(  const_cast<char*>(osrl.c_str()), NULL, NULL, NULL);
 		}
 		cout << "DONE WRITING THE SOLUTION BACK INTO AMPL" <<endl;
-		delete osresult;
 		//cout << "osresult JUST DELETED" <<endl;
-			
 	}
 	catch(const ErrorClass& eclass){
 		cout << "There was an error parsing the OSrL" << endl << eclass.errormsg << endl << endl;

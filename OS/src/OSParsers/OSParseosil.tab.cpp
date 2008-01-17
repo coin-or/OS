@@ -3236,7 +3236,6 @@ OSInstance* yygetOSInstance( const char *osil) throw (ErrorClass) {
 		//
 		// call the Bison parser
 		//
-		OSInstance* osinstance2 = osinstance;
 		if(  osilparse( osinstance,  parserData) != 0) {
 			osillex_destroy(scanner);
 			delete parserData;
