@@ -173,9 +173,12 @@ If you want to:
 
 
 The OS project is very extensive and relies on many other COIN-OR projects.  This may not be desirable for modeling language and solver developers that just wish to use the OS API in conjunction with their modeling language or solver.  Hence there is also an ``OS lite'' download that consists of all the code for the OS API and for reading and writing instance and solution files. We refer to this version of the project as {\tt OSCommon} and the code for this project is synched  with the corresponding stable and release versions of the code. For example, to get Stable 1.1 of {\tt OSCommon} use the svn command
+
 \begin{verbatim}
 svn co https://projects.coin-or.org/svn/OS/stable/OSCommon1.1  OSCommon
 \end{verbatim}
+
+
 
 
 \section{Downloading the OS Project}\label{section:download}
@@ -3570,6 +3573,7 @@ callMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, VarType, ...
 
 
 {\normalsize \baselineskip 16pt \vspace{2pt}
+
 \begin{verbatimtab}[5]
 <?xml version="1.0" encoding="UTF-8"?>
 <osil xmlns="os.optimizationservices.org">
@@ -3608,9 +3612,6 @@ callMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, VarType, ...
 			<qTerm idx="0" idxOne="1" idxTwo="1" coef="11.7"/>
 			<qTerm idx="0" idxOne="0" idxTwo="1" coef="3."/>
 		</quadraticCoefficients>
-%\end{verbatimtab}
-%   \newpage
-%\begin{verbatimtab}[5]
 		<nonlinearExpressions numberOfNonlinearExpressions="2">
 			<nl idx="-1">
 				<plus>
@@ -3648,6 +3649,7 @@ callMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, VarType, ...
 	</instanceData>
 </osil>
 \end{verbatimtab}
+
 
 }% end
 
