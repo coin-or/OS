@@ -131,7 +131,7 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 	try{
 		switch( opnum) {
 			case OPPLUS:
-				cout << "FOUND  PLUS NODE"  << endl;
+				//cout << "FOUND  PLUS NODE"  << endl;
 				nlNodePoint = new OSnLNodePlus();
 				nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
 				nlNodePoint->m_mChildren[1] = walkTree (e->R.e);
@@ -139,7 +139,7 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 				
 			case OPSUMLIST:
 				i = 0;
-				cout << "INSIDE SUM OPERATOR" << endl;
+				//cout << "INSIDE SUM OPERATOR" << endl;
 				nlNodePoint = new OSnLNodeSum();
 				nlNodePoint->inumberOfChildren = e->R.ep - e->L.ep;
 				nlNodePoint->m_mChildren = new OSnLNode*[ e->R.ep - e->L.ep];
@@ -149,7 +149,7 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 				
 			case MAXLIST:
 				i = 0;
-				cout << "INSIDE MAX OPERATOR" << endl;
+				//cout << "INSIDE MAX OPERATOR" << endl;
 				nlNodePoint = new OSnLNodeMax();
 				nlNodePoint->inumberOfChildren = e->R.ep - e->L.ep;
 				nlNodePoint->m_mChildren = new OSnLNode*[ e->R.ep - e->L.ep];
@@ -169,7 +169,7 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 				return nlNodePoint;
 				
 			case OPMULT:
-				cout << "FOUND MULT NODE"  << endl;
+				//cout << "FOUND MULT NODE"  << endl;
 				nlNodePoint = new OSnLNodeTimes();
 				nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
 				nlNodePoint->m_mChildren[1] = walkTree (e->R.e);
@@ -182,7 +182,7 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 				return nlNodePoint;
 				
 			case OPPOW:
-				cout << "FOUND OPPOW NODE"  << endl;
+				//cout << "FOUND OPPOW NODE"  << endl;
 				nlNodePoint = new OSnLNodePower();
 				nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
 				nlNodePoint->m_mChildren[1] = walkTree (e->R.e); 
@@ -190,8 +190,8 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 				
 				
 			case OP1POW:
-				cout << "FOUND OP1POW NODE"  << endl;
-				cout << "OP1POW EXPONENT =  "  << e->R.en->v<<  endl;
+				//cout << "FOUND OP1POW NODE"  << endl;
+				//cout << "OP1POW EXPONENT =  "  << e->R.en->v<<  endl;
 				nlNodePoint = new OSnLNodePower();
 				nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
 				nlNodeNumberPoint = new OSnLNodeNumber();
@@ -200,7 +200,7 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 				return nlNodePoint;
 				
 			case OP2POW:
-				cout << "FOUND OP2POW NODE"  << endl;
+				//cout << "FOUND OP2POW NODE"  << endl;
 				//nlNodePoint = new OSnLNodePower();
 				//nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
 				//nlNodeNumberPoint = new OSnLNodeNumber();
@@ -211,8 +211,8 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 				return nlNodePoint;
 				
 			case OPCPOW:
-				cout << "FOUND OPCPOW NODE"  << endl;
-				cout << "OPCPOW EXPONENT =  "  << e->R.en->v<<  endl;
+				//cout << "FOUND OPCPOW NODE"  << endl;
+				//cout << "OPCPOW EXPONENT =  "  << e->R.en->v<<  endl;
 				nlNodePoint = new OSnLNodePower();
 				nlNodeNumberPoint = new OSnLNodeNumber();
 				nlNodeNumberPoint->value = e->L.en->v;
@@ -251,14 +251,14 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 				return nlNodePoint;
 				
 			case OPNUM:
-				cout << "found a number node" << endl;
+				//cout << "found a number node" << endl;
 				nlNodeNumberPoint = new OSnLNodeNumber;
 				cout << "THE NUMBER" << (double) ((expr_n*)e)->v << endl;
 				nlNodeNumberPoint->value = (double) ((expr_n*)e)->v;
 				return nlNodeNumberPoint;
 				
 			case OPVARVAL:
-				cout << "found a variable node" << endl;
+				//cout << "found a variable node" << endl;
 				if(e->a >= osinstance->getVariableNumber() ) throw ErrorClass("OS cannot handle AMPL user defined variables, please reformulate");
 				nlNodeVariablePoint = new OSnLNodeVariable;
 				nlNodeVariablePoint->idx = e->a;
@@ -402,7 +402,7 @@ bool OSnl2osil::createOSInstance(){
 		if(nlo > 0){
 			while ( iNLidx < nlc + nlo){
 				m_treeRoot = walkTree ((OBJ_DE + iNLidx - nlc)->e);
-				std::cout << "CREATING A NEW NONLINEAR TERM IN THE OBJECTIVE" << std::endl;
+				//std::cout << "CREATING A NEW NONLINEAR TERM IN THE OBJECTIVE" << std::endl;
 				osinstance->instanceData->nonlinearExpressions->nl[ iNLidx] = new Nl();
 				osinstance->instanceData->nonlinearExpressions->nl[ iNLidx]->idx = -1 - (iNLidx - nlc);
 				osinstance->instanceData->nonlinearExpressions->nl[ iNLidx]->osExpressionTree = new OSExpressionTree();

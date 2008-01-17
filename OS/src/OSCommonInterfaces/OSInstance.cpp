@@ -232,7 +232,7 @@ OSInstance::~OSInstance(){
 	m_mdVariableLowerBounds = NULL;
 	delete[] m_mdVariableUpperBounds;
 	m_mdVariableUpperBounds = NULL;
-	std::cout << "Do garbage collection for the nonlinear API" << std::endl;
+	//std::cout << "Do garbage collection for the nonlinear API" << std::endl;
 	// garbage collection for the gradient
 	if(m_bNonLinearStructuresInitialized == true ){
 		delete[] m_mdObjectiveFunctionValues;
@@ -280,10 +280,11 @@ OSInstance::~OSInstance(){
 		}
 	}
 	if( m_bDuplicateExpressionTreesMap == true)   {
-		for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
-			std::cout << "Deleting an expression tree from m_mapExpressionTreesMod" << std::endl;
+		for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){		
+			#ifdef DEBUG
+				std::cout << "Deleting an expression tree from m_mapExpressionTreesMod" << std::endl;
+			#endif
 			delete m_mapExpressionTreesMod[ posMapExpTree->first ];
-			std::cout << "Done Deleting an expression tree from m_mapExpressionTreesMod" << std::endl;
 		}
 	}
 	//}
@@ -609,7 +610,9 @@ NonlinearExpressions::~NonlinearExpressions(){
 	int i;
 	if(numberOfNonlinearExpressions > 0 && nl != NULL){
 		for( i = 0; i < numberOfNonlinearExpressions; i++){
-			cout << "DESTROYING EXPRESSION " << nl[ i]->idx << endl;
+			#ifdef DEBUG  
+				cout << "DESTROYING EXPRESSION " << nl[ i]->idx << endl;
+			#endif
 			delete nl[i];
 			nl[i] = NULL;
 		}

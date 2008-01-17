@@ -52,7 +52,7 @@
 #ifdef COIN_HAS_IPOPT    
 #include "OSIpoptSolver.h"
 #endif  
-
+#include "OSFileUtil.h";
 #include "OSDefaultSolver.h"
 #include "OSSolverAgent.h"
 #include "OShL.h"
@@ -127,7 +127,6 @@ int main(int argc, char **argv)
 	std::string osol = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/OSoL.xsd\"><other> </other></osol>";
 	// get the solver set by AMPL
 	amplclient_options = getenv("OSAmplClient_options");
-	if(amplclient_options != NULL) cout << "HERE ARE THE AMPL CLIENT OPTIONS " <<   amplclient_options << endl;
 	try{
 		if(amplclient_options == NULL ) throw ErrorClass( "a local solver was not specified in AMPL option");
 		else{
@@ -256,10 +255,9 @@ int main(int argc, char **argv)
 		else {
 			osrl = eclass.errormsg;
 		}
-		cout << osrl << endl << endl <<endl;
+		//cout << osrl << endl << endl <<endl;
 		write_sol(const_cast<char*>(osrl.c_str()), 
-			osresult->getOptimalPrimalVariableValues( -1), 
-			osresult->getOptimalDualVariableValues( -1), NULL);
+			NULL, NULL, NULL);
 		return 0;
 	}
 	// do the following for a remote solve
@@ -284,25 +282,43 @@ int main(int argc, char **argv)
 		osol.insert(iStringpos, solverInput);
 		cout << "Place remote synchronous call" << endl;
 		osrl = osagent->solve(osil, osol);
+		delete osilwriter;
+		delete osagent;
 	}
 	// okay start to test osrl parser 
 	try{
-		cout << osrl << endl << endl <<endl;
+		//cout << osrl << endl << endl <<endl;
+		std::string sResultFileName = "solutionResult.osrl";
+		FileUtil *fileUtil;
+		fileUtil = new FileUtil();
+		fileUtil->writeFileFromString(sResultFileName, osrl);
+		delete fileUtil;
 		osresult = osrlreader->readOSrL( osrl);
+
 		cout << "WRITE THE SOLUTION BACK INTO AMPL" <<endl;
-		write_sol(const_cast<char*>(osresult->getSolutionMessage( 0).c_str()), 
-			osresult->getOptimalPrimalVariableValues( -1), 
-			osresult->getOptimalDualVariableValues( -1), NULL);
+		//char *buf = NULL;
+		string::size_type pos1 = osresult->getGeneralStatusType().find( "error");
+		//write_sol(  const_cast<char*>(osrl.c_str()), 
+		//				osresult->getOptimalPrimalVariableValues( -1), 
+		//	
+		std::string sReport = "model was solved";
+		if(pos1 == std::string::npos){
+			write_sol(  const_cast<char*>(sReport.c_str()), 
+					osresult->getOptimalPrimalVariableValues( -1), 
+					osresult->getOptimalDualVariableValues( -1), NULL);
+			}else{
+				write_sol(  const_cast<char*>(osrl.c_str()), NULL, NULL, NULL);
+		}
 		cout << "DONE WRITING THE SOLUTION BACK INTO AMPL" <<endl;
 		delete osresult;
-		cout << "osresult JUST DELETED" <<endl;
+		//cout << "osresult JUST DELETED" <<endl;
 			
 	}
 	catch(const ErrorClass& eclass){
 		cout << "There was an error parsing the OSrL" << endl << eclass.errormsg << endl << endl;
 	}
 	delete osrlreader;
-	cout << "osrlreader JUST DELETED" <<endl;
+	//cout << "osrlreader JUST DELETED" <<endl;
 	osrlreader = NULL;
 	if(  solverType != NULL ){
 		//cout << "TRY TO DELETE solverType" <<endl;
