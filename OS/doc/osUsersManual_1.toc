@@ -1,80 +1,80 @@
-\contentsline {section}{\numberline {1}The Optimization Services (OS) Project}{5}
-\contentsline {section}{\numberline {2}Quick Roadmap}{6}
-\contentsline {section}{\numberline {3}Downloading the OS Project}{6}
-\contentsline {subsection}{\numberline {3.1}Obtaining OS Source Code Using Subversion (SVN)}{6}
-\contentsline {subsection}{\numberline {3.2}Obtaining the OS Source Code From a Tarball or Zip File}{7}
-\contentsline {subsection}{\numberline {3.3}Obtaining the Binaries}{9}
-\contentsline {section}{\numberline {4}Building and Testing the OS Project}{9}
-\contentsline {subsection}{\numberline {4.1}Building the OS Project on Unix/Linux Systems}{10}
-\contentsline {subsection}{\numberline {4.2}Building the OS Project on Windows}{12}
-\contentsline {subsubsection}{\numberline {4.2.1}Microsoft Visual Studio (MSVS)}{13}
-\contentsline {subsubsection}{\numberline {4.2.2}Cygwin}{13}
-\contentsline {subsubsection}{\numberline {4.2.3}MinGW}{15}
-\contentsline {subsubsection}{\numberline {4.2.4}MSYS}{15}
-\contentsline {subsection}{\numberline {4.3}VPATH Installations}{17}
-\contentsline {subsection}{\numberline {4.4}Using Ipopt}{17}
-\contentsline {subsection}{\numberline {4.5}Other third-Party Software}{18}
-\contentsline {subsubsection}{\numberline {4.5.1}AMPL}{19}
-\contentsline {subsubsection}{\numberline {4.5.2}Cplex}{20}
-\contentsline {subsubsection}{\numberline {4.5.3}GLPK}{20}
-\contentsline {subsubsection}{\numberline {4.5.4}Knitro}{20}
-\contentsline {subsubsection}{\numberline {4.5.5}LINDO}{21}
-\contentsline {subsubsection}{\numberline {4.5.6}MATLAB}{21}
-\contentsline {subsubsection}{\numberline {4.5.7}Library Paths}{21}
-\contentsline {subsection}{\numberline {4.6}Bug Reporting}{21}
-\contentsline {subsection}{\numberline {4.7}Documentation}{21}
-\contentsline {subsection}{\numberline {4.8}Platforms}{22}
-\contentsline {section}{\numberline {5}The OS Project Components}{23}
-\contentsline {section}{\numberline {6}OS Protocols}{25}
-\contentsline {section}{\numberline {7}The OS Library Components}{30}
-\contentsline {subsection}{\numberline {7.1}OSAgent}{30}
-\contentsline {subsection}{\numberline {7.2}OSCommonInterfaces}{30}
-\contentsline {subsubsection}{\numberline {7.2.1}The OSInstance Class}{30}
-\contentsline {subsubsection}{\numberline {7.2.2}Creating an {\tt OSInstance} Object}{31}
-\contentsline {subsubsection}{\numberline {7.2.3}Mapping Rules}{31}
-\contentsline {subsubsection}{\numberline {7.2.4}The OSExpressionTree OSnLNode Classes}{32}
-\contentsline {subsection}{\numberline {7.3}OSModelInterfaces}{35}
-\contentsline {subsubsection}{\numberline {7.3.1}Converting MPS Files}{35}
-\contentsline {subsubsection}{\numberline {7.3.2}Converting AMPL nl Files}{36}
-\contentsline {subsubsection}{\numberline {7.3.3}Using MATLAB}{36}
-\contentsline {subsection}{\numberline {7.4}OSParsers}{38}
-\contentsline {subsection}{\numberline {7.5}OSSolverInterfaces}{39}
-\contentsline {subsection}{\numberline {7.6}OSUtils}{41}
-\contentsline {section}{\numberline {8}The OSInstance API}{41}
-\contentsline {subsection}{\numberline {8.1}Get Methods}{41}
-\contentsline {subsection}{\numberline {8.2}Set Methods}{42}
-\contentsline {subsection}{\numberline {8.3}Calculate Methods}{42}
-\contentsline {section}{\numberline {9}The OS Algorithmic Differentiation Implementation}{42}
-\contentsline {subsection}{\numberline {9.1}Algorithmic Differentiation: Brief Review}{42}
-\contentsline {subsection}{\numberline {9.2}Using OSInstance Methods: Low Level Calls}{44}
-\contentsline {subsubsection}{\numberline {9.2.1}First Derivative Reverse Sweep Calculations}{47}
-\contentsline {subsubsection}{\numberline {9.2.2}Second Derivative Reverse Sweep Calculations}{47}
-\contentsline {subsection}{\numberline {9.3}Using OSInstance Methods: High Level Calls}{48}
-\contentsline {subsubsection}{\numberline {9.3.1}Sparsity Methods}{49}
-\contentsline {subsubsection}{\numberline {9.3.2}Function Evaluation Methods}{50}
-\contentsline {subsubsection}{\numberline {9.3.3}Gradient Evaluation Methods}{51}
-\contentsline {subsubsection}{\numberline {9.3.4}Hessian Evaluation Methods}{52}
-\contentsline {section}{\numberline {10}The OSSolverService}{52}
-\contentsline {subsection}{\numberline {10.1}OSSolverService Input Parameters}{53}
-\contentsline {subsection}{\numberline {10.2}Solving Problems Locally}{55}
-\contentsline {subsection}{\numberline {10.3}Solving Problems Remotely with Web Services}{56}
-\contentsline {subsubsection}{\numberline {10.3.1}The {\tt solve} Service Method}{57}
-\contentsline {subsubsection}{\numberline {10.3.2}The {\tt send} Service Method}{58}
-\contentsline {subsubsection}{\numberline {10.3.3}The {\tt retrieve} Service Method}{60}
-\contentsline {subsubsection}{\numberline {10.3.4}The {\tt getJobID} Service Method}{61}
-\contentsline {subsubsection}{\numberline {10.3.5}The {\tt knock} Service Method}{61}
-\contentsline {subsubsection}{\numberline {10.3.6}The {\tt kill} Service Method}{62}
-\contentsline {subsubsection}{\numberline {10.3.7}Summary}{63}
-\contentsline {section}{\numberline {11}Setting up a Solver Service with Tomcat}{64}
-\contentsline {section}{\numberline {12}Applications}{67}
-\contentsline {subsection}{\numberline {12.1}AMPL Client: Hooking AMPL to Solvers}{67}
-\contentsline {subsection}{\numberline {12.2}File Upload: Using a File Upload Package}{68}
-\contentsline {section}{\numberline {13}Examples}{69}
-\contentsline {subsection}{\numberline {13.1}Algorithmic Differentiation: Using the OS Algorithmic Differentiation Methods}{70}
-\contentsline {subsection}{\numberline {13.2}Instance Generator: Using the OSInstance API to Generate Instances}{70}
-\contentsline {subsection}{\numberline {13.3}osTestCode}{71}
-\contentsline {section}{\numberline {14}Appendix}{71}
-\contentsline {subsection}{\numberline {14.1}Building a Model in MATLAB}{71}
-\contentsline {subsection}{\numberline {14.2}OSiL representation for problem given in (1\hbox {})--(4\hbox {}) (p.26\hbox {})}{73}
-\contentsline {subsection}{\numberline {14.3}OSiL representation for problem given in (20\hbox {})--(23\hbox {}) (p.44\hbox {}) }{75}
-\contentsline {section}{Bibliography}{77}
+\contentsline {section}{\numberline {1}The Optimization Services (OS) Project}{3}
+\contentsline {section}{\numberline {2}Quick Roadmap}{4}
+\contentsline {section}{\numberline {3}Downloading the OS Project}{4}
+\contentsline {subsection}{\numberline {3.1}Obtaining OS Source Code Using Subversion (SVN)}{4}
+\contentsline {subsection}{\numberline {3.2}Obtaining the OS Source Code From a Tarball or Zip File}{5}
+\contentsline {subsection}{\numberline {3.3}Obtaining the Binaries}{7}
+\contentsline {section}{\numberline {4}Building and Testing the OS Project}{7}
+\contentsline {subsection}{\numberline {4.1}Building the OS Project on Unix/Linux Systems}{8}
+\contentsline {subsection}{\numberline {4.2}Building the OS Project on Windows}{10}
+\contentsline {subsubsection}{\numberline {4.2.1}Microsoft Visual Studio (MSVS)}{11}
+\contentsline {subsubsection}{\numberline {4.2.2}Cygwin}{11}
+\contentsline {subsubsection}{\numberline {4.2.3}MinGW}{13}
+\contentsline {subsubsection}{\numberline {4.2.4}MSYS}{13}
+\contentsline {subsection}{\numberline {4.3}VPATH Installations}{15}
+\contentsline {subsection}{\numberline {4.4}Using Ipopt}{15}
+\contentsline {subsection}{\numberline {4.5}Other third-Party Software}{16}
+\contentsline {subsubsection}{\numberline {4.5.1}AMPL}{17}
+\contentsline {subsubsection}{\numberline {4.5.2}Cplex}{18}
+\contentsline {subsubsection}{\numberline {4.5.3}GLPK}{18}
+\contentsline {subsubsection}{\numberline {4.5.4}Knitro}{18}
+\contentsline {subsubsection}{\numberline {4.5.5}LINDO}{19}
+\contentsline {subsubsection}{\numberline {4.5.6}MATLAB}{19}
+\contentsline {subsubsection}{\numberline {4.5.7}Library Paths}{19}
+\contentsline {subsection}{\numberline {4.6}Bug Reporting}{19}
+\contentsline {subsection}{\numberline {4.7}Documentation}{19}
+\contentsline {subsection}{\numberline {4.8}Platforms}{20}
+\contentsline {section}{\numberline {5}The OS Project Components}{21}
+\contentsline {section}{\numberline {6}OS Protocols}{23}
+\contentsline {section}{\numberline {7}The OS Library Components}{28}
+\contentsline {subsection}{\numberline {7.1}OSAgent}{28}
+\contentsline {subsection}{\numberline {7.2}OSCommonInterfaces}{28}
+\contentsline {subsubsection}{\numberline {7.2.1}The OSInstance Class}{28}
+\contentsline {subsubsection}{\numberline {7.2.2}Creating an {\tt OSInstance} Object}{29}
+\contentsline {subsubsection}{\numberline {7.2.3}Mapping Rules}{29}
+\contentsline {subsubsection}{\numberline {7.2.4}The OSExpressionTree OSnLNode Classes}{30}
+\contentsline {subsection}{\numberline {7.3}OSModelInterfaces}{33}
+\contentsline {subsubsection}{\numberline {7.3.1}Converting MPS Files}{33}
+\contentsline {subsubsection}{\numberline {7.3.2}Converting AMPL nl Files}{34}
+\contentsline {subsubsection}{\numberline {7.3.3}Using MATLAB}{34}
+\contentsline {subsection}{\numberline {7.4}OSParsers}{36}
+\contentsline {subsection}{\numberline {7.5}OSSolverInterfaces}{37}
+\contentsline {subsection}{\numberline {7.6}OSUtils}{39}
+\contentsline {section}{\numberline {8}The OSInstance API}{39}
+\contentsline {subsection}{\numberline {8.1}Get Methods}{39}
+\contentsline {subsection}{\numberline {8.2}Set Methods}{40}
+\contentsline {subsection}{\numberline {8.3}Calculate Methods}{40}
+\contentsline {section}{\numberline {9}The OS Algorithmic Differentiation Implementation}{40}
+\contentsline {subsection}{\numberline {9.1}Algorithmic Differentiation: Brief Review}{40}
+\contentsline {subsection}{\numberline {9.2}Using OSInstance Methods: Low Level Calls}{42}
+\contentsline {subsubsection}{\numberline {9.2.1}First Derivative Reverse Sweep Calculations}{45}
+\contentsline {subsubsection}{\numberline {9.2.2}Second Derivative Reverse Sweep Calculations}{45}
+\contentsline {subsection}{\numberline {9.3}Using OSInstance Methods: High Level Calls}{46}
+\contentsline {subsubsection}{\numberline {9.3.1}Sparsity Methods}{47}
+\contentsline {subsubsection}{\numberline {9.3.2}Function Evaluation Methods}{48}
+\contentsline {subsubsection}{\numberline {9.3.3}Gradient Evaluation Methods}{49}
+\contentsline {subsubsection}{\numberline {9.3.4}Hessian Evaluation Methods}{50}
+\contentsline {section}{\numberline {10}The OSSolverService}{50}
+\contentsline {subsection}{\numberline {10.1}OSSolverService Input Parameters}{51}
+\contentsline {subsection}{\numberline {10.2}Solving Problems Locally}{53}
+\contentsline {subsection}{\numberline {10.3}Solving Problems Remotely with Web Services}{54}
+\contentsline {subsubsection}{\numberline {10.3.1}The {\tt solve} Service Method}{55}
+\contentsline {subsubsection}{\numberline {10.3.2}The {\tt send} Service Method}{56}
+\contentsline {subsubsection}{\numberline {10.3.3}The {\tt retrieve} Service Method}{58}
+\contentsline {subsubsection}{\numberline {10.3.4}The {\tt getJobID} Service Method}{59}
+\contentsline {subsubsection}{\numberline {10.3.5}The {\tt knock} Service Method}{59}
+\contentsline {subsubsection}{\numberline {10.3.6}The {\tt kill} Service Method}{60}
+\contentsline {subsubsection}{\numberline {10.3.7}Summary}{61}
+\contentsline {section}{\numberline {11}Setting up a Solver Service with Tomcat}{62}
+\contentsline {section}{\numberline {12}Applications}{65}
+\contentsline {subsection}{\numberline {12.1}AMPL Client: Hooking AMPL to Solvers}{65}
+\contentsline {subsection}{\numberline {12.2}File Upload: Using a File Upload Package}{66}
+\contentsline {section}{\numberline {13}Examples}{67}
+\contentsline {subsection}{\numberline {13.1}Algorithmic Differentiation: Using the OS Algorithmic Differentiation Methods}{68}
+\contentsline {subsection}{\numberline {13.2}Instance Generator: Using the OSInstance API to Generate Instances}{68}
+\contentsline {subsection}{\numberline {13.3}osTestCode}{69}
+\contentsline {section}{\numberline {14}Appendix}{69}
+\contentsline {subsection}{\numberline {14.1}Building a Model in MATLAB}{69}
+\contentsline {subsection}{\numberline {14.2}OSiL representation for problem given in (1\hbox {})--(4\hbox {}) (p.26\hbox {})}{71}
+\contentsline {subsection}{\numberline {14.3}OSiL representation for problem given in (20\hbox {})--(23\hbox {}) (p.44\hbox {}) }{72}
+\contentsline {section}{Bibliography}{74}
