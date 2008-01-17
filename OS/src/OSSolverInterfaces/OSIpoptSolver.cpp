@@ -58,8 +58,8 @@ bool IpoptProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 	n = osinstance->getVariableNumber();
 	// number of constraints
 	m = osinstance->getConstraintNumber();
-	cout << "number variables  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << n << endl;
-	cout << "number constraints  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << m << endl;
+	//cout << "number variables  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << n << endl;
+	//cout << "number constraints  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << m << endl;
 	try{
 		osinstance->initForAlgDiff( );
 	}
@@ -69,7 +69,7 @@ bool IpoptProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 	}	
 	// use the OS Expression tree for function evaluations instead of CppAD
 	osinstance->bUseExpTreeForFunEval = true;
-	std::cout << "Call sparse jacobian" << std::endl;
+	//std::cout << "Call sparse jacobian" << std::endl;
 	SparseJacobianMatrix *sparseJacobian = NULL;
 	try{
 		sparseJacobian = osinstance->getJacobianSparsityPattern();
@@ -78,7 +78,7 @@ bool IpoptProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 		ipoptErrorMsg = eclass.errormsg;
 		throw;  
 	}
-	std::cout << "Done calling sparse jacobian" << std::endl;
+	//std::cout << "Done calling sparse jacobian" << std::endl;
 	nnz_jac_g = sparseJacobian->valueSize;
 	//cout << "nnz_jac_g  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_jac_g << endl;	
 	// nonzeros in upper hessian
@@ -88,9 +88,9 @@ bool IpoptProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 		nnz_h_lag = 0;
 	}
 	else{
-		std::cout << "Get Lagrangain Hessian Sparsity Pattern " << std::endl;
+		//std::cout << "Get Lagrangain Hessian Sparsity Pattern " << std::endl;
 		SparseHessianMatrix *sparseHessian = osinstance->getLagrangianHessianSparsityPattern();
-		std::cout << "Done Getting Lagrangain Hessian Sparsity Pattern " << std::endl;
+		//std::cout << "Done Getting Lagrangain Hessian Sparsity Pattern " << std::endl;
 		nnz_h_lag = sparseHessian->hessDimension;
 	}
 	//cout << "nnz_h_lag  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_h_lag << endl;	
@@ -107,7 +107,7 @@ bool  IpoptProblem::get_bounds_info(Index n, Number* x_l, Number* x_u,
                                 Index m, Number* g_l, Number* g_u){
  	int i; 
 	double * mdVarLB = osinstance->getVariableLowerBounds();
-	std::cout << "GET BOUNDS INFORMATION FOR IPOPT !!!!!!!!!!!!!!!!!" << std::endl;
+	//std::cout << "GET BOUNDS INFORMATION FOR IPOPT !!!!!!!!!!!!!!!!!" << std::endl;
 	// variables upper bounds
 	double * mdVarUB = osinstance->getVariableUpperBounds();
 
@@ -224,9 +224,9 @@ bool IpoptProblem::eval_jac_g(Index n, const Number* x, bool new_x,
   	SparseJacobianMatrix *sparseJacobian;
 	if (values == NULL) {
 		// return the values of the jacobian of the constraints
-		cout << "n: " << n << endl;
-		cout << "m: " << m << endl;
-		cout << "nele_jac: " <<  nele_jac << endl;
+		//cout << "n: " << n << endl;
+		//cout << "m: " << m << endl;
+		//cout << "nele_jac: " <<  nele_jac << endl;
 		// return the structure of the jacobian
 		try{
 			sparseJacobian = osinstance->getJacobianSparsityPattern();
@@ -287,7 +287,7 @@ bool IpoptProblem::eval_h(Index n, const Number* x, bool new_x,
 			ipoptErrorMsg = eclass.errormsg;
 			throw;  
 		}
-		cout << "got structure of HESSIAN !!!!!!!!!!!!!!!!!!!!!!!!!! "  << endl;
+		//cout << "got structure of HESSIAN !!!!!!!!!!!!!!!!!!!!!!!!!! "  << endl;
 		for(i = 0; i < nele_hess; i++){
 			iRow[i] = *(sparseHessian->hessColIdx + i);
 			jCol[i] = *(sparseHessian->hessRowIdx + i);

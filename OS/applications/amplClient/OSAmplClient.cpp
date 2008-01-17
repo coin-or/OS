@@ -224,7 +224,7 @@ int main(int argc, char **argv)
 											}
 										}
 										else{
-											std::cout << "HERE I AM " << std::endl;
+											//std::cout << "HERE I AM " << std::endl;
 											throw ErrorClass( "a supported solver has not been selected");
 										}
 									}	
