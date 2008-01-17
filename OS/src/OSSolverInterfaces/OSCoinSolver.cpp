@@ -274,7 +274,7 @@ bool CoinSolver::optimize()
 				
 
 				if( sSolverName.find( "symphony") != std::string::npos) {
-					m_OsiSolver->initialSolve();
+					//m_OsiSolver->initialSolve();
 					m_OsiSolver->branchAndBound();	
 				}
 				else{
