@@ -573,7 +573,7 @@ QuadraticCoefficients::~QuadraticCoefficients(){
 Nl::Nl(){
 	idx = 0;
 	osExpressionTree = NULL;
-	m_bDeleteExpressionTree = false;
+	m_bDeleteExpressionTree = true;
 }//end Nl
  
  
