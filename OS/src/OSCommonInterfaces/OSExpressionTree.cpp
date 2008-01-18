@@ -45,7 +45,7 @@ OSExpressionTree::~OSExpressionTree(){
 				if( postfixVec[ i] !=  NULL){
 					// note m_treeRoot is getting deleted here
 					delete postfixVec[ i];
-					postfixVec[ i] == NULL;
+					postfixVec[ i] = NULL;
 				}
 			}
 		}	
