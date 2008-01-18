@@ -52,9 +52,9 @@
 \contentsline {subsection}{\numberline {9.3}Using OSInstance Methods: High Level Calls}{48}
 \contentsline {subsubsection}{\numberline {9.3.1}Sparsity Methods}{49}
 \contentsline {subsubsection}{\numberline {9.3.2}Function Evaluation Methods}{50}
-\contentsline {subsubsection}{\numberline {9.3.3}Gradient Evaluation Methods}{51}
+\contentsline {subsubsection}{\numberline {9.3.3}Gradient Evaluation Methods}{52}
 \contentsline {subsubsection}{\numberline {9.3.4}Hessian Evaluation Methods}{52}
-\contentsline {section}{\numberline {10}The OSSolverService}{52}
+\contentsline {section}{\numberline {10}The OSSolverService}{53}
 \contentsline {subsection}{\numberline {10.1}OSSolverService Input Parameters}{53}
 \contentsline {subsection}{\numberline {10.2}Solving Problems Locally}{55}
 \contentsline {subsection}{\numberline {10.3}Solving Problems Remotely with Web Services}{56}

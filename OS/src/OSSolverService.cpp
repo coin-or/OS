@@ -131,6 +131,11 @@ YY_BUFFER_STATE osss_scan_string(const char* osss, void* scanner );
 void setyyextra(osOptionsStruc *osoptions, void* scanner);
 int ossslex(void* scanner );
 int ossslex_init(void** ptr);
+int ossslex_destroy (void* scanner );
+
+
+
+
  
 // the serviceMethods  
 void solve();  
@@ -217,7 +222,6 @@ ASL_alloc(ASL_read_fg);
 			std::cout << "Done with call Text Extra" << std::endl;
 			osss_scan_string( osolfileOptions.c_str() , scanner);
 			ossslex(scanner );	
-			delete scanner;
 		}
 	}
 		catch(const ErrorClass& eclass){
@@ -298,6 +302,7 @@ ASL_alloc(ASL_read_fg);
 					break;
 			}
 		}
+	ossslex_destroy( scanner);
 	delete	osoptions;
 	osoptions = NULL;
 	delete fileUtil;
@@ -540,7 +545,6 @@ void solve(){
 			delete osrlwriter;
 		}
 	}	
-
 	if(osilreader != NULL) delete osilreader;
 	if(solverType != NULL) delete solverType;
 	delete fileUtil;

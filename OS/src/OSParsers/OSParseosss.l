@@ -97,6 +97,7 @@ void setyyextra( osOptionsStruc *osoptions, void* scanner);
  *       machine of LINDO instruction list)
 */
 	int ossslex_init(void** ptr_yy_globals);
+	int ossslex_destroy(void** ptr_yy_globals);
 
 %}
 
