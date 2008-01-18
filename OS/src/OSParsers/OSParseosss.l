@@ -119,7 +119,8 @@ browserState (on|off)
 
 (-config{xmlwhitespace}+{optionValue}) {
 	printf("Found option:  %s\n", yytext);  
-	char *ch = strdup(yytext);
+	//char *ch = strdup(yytext);
+	char *ch = yytext;
 	// move past -config
 	ch+=7;
 	for(; isspace(*ch); ch++);
@@ -132,7 +133,8 @@ browserState (on|off)
 (-osil{xmlwhitespace}+{optionValue}) {
 	if(yyextra->osilFile == ""){
 		printf("Found option:  %s\n", yytext);  
-		char *ch = strdup(yytext);
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
 		// move past -osil
 		ch+=5;
 		for(; isspace(*ch); ch++);
@@ -144,7 +146,8 @@ browserState (on|off)
 (-osrl{xmlwhitespace}+{optionValue}) {
 	if(yyextra->osrlFile == ""){
 		printf("Found option:  %s\n", yytext); 
-		char *ch = strdup(yytext);
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
 		// move past -osrl
 		ch+=5;
 		for(; isspace(*ch); ch++);
@@ -156,7 +159,8 @@ browserState (on|off)
 (-insList{xmlwhitespace}+{optionValue}) {
 	if(yyextra->insListFile == ""){
 		printf("Found option:  %s\n", yytext); 
-		char *ch = strdup(yytext);
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
 		// move past -insList
 		ch+=8;
 		for(; isspace(*ch); ch++);
@@ -168,7 +172,8 @@ browserState (on|off)
 (-osol{xmlwhitespace}+{optionValue}) {
 	if(yyextra->osolFile == ""){
 		printf("Found option:  %s\n", yytext); 
-		char *ch = strdup(yytext);
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
 		// move past -osol
 		ch+=5;
 		for(; isspace(*ch); ch++);
@@ -182,7 +187,8 @@ browserState (on|off)
 (-osplInput{xmlwhitespace}+{optionValue}) {
 	if(yyextra->osplInputFile == ""){
 		printf("Found option:  %s\n", yytext); 
-		char *ch = strdup(yytext);
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
 		// move past -osplInput
 		ch+=10;
 		for(; isspace(*ch); ch++);
@@ -194,7 +200,8 @@ browserState (on|off)
 (-osplOutput{xmlwhitespace}+{optionValue}) {
 	if(yyextra->osplOutputFile == ""){
 		printf("Found option:  %s\n", yytext); 
-		char *ch = strdup(yytext);
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
 		// move past -osplInput
 		ch+=11;
 		for(; isspace(*ch); ch++);
@@ -206,7 +213,8 @@ browserState (on|off)
 (-serviceMethod{xmlwhitespace}+{serviceMethod}) {
 	if(yyextra->serviceMethod == ""){
 		printf("Found option:  %s\n", yytext); 
-		char *ch = strdup(yytext);
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
 		// move past -serviceMethod
 		ch+=14;
 		for(; isspace(*ch); ch++);
@@ -219,7 +227,8 @@ browserState (on|off)
 	if(yyextra->serviceLocation == ""){
 		printf("Found option:  %s\n", yytext); 
 		yyextra->serviceLocation = strdup(yytext);
-		char *ch = strdup(yytext);
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
 		// move past -serviceLocation
 		ch+=16;
 		for(; isspace(*ch); ch++);
@@ -231,7 +240,8 @@ browserState (on|off)
 (-mps{xmlwhitespace}+{optionValue}) {
 	if(yyextra->mpsFile == ""){
 		printf("Found option:  %s\n", yytext); 
-		char *ch = strdup(yytext);
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
 		// move past -mps
 		ch+=4;
 		for(; isspace(*ch); ch++);
@@ -243,7 +253,8 @@ browserState (on|off)
 (-nl{xmlwhitespace}+{optionValue}) {
 	if(yyextra->nlFile == ""){
 		printf("Found option:  %s\n", yytext);
-		char *ch = strdup(yytext);
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
 		// move past -nl
 		ch+=3;
 		for(; isspace(*ch); ch++);
@@ -256,6 +267,8 @@ browserState (on|off)
 	if(yyextra->solverName == ""){
 		printf("Found option:  %s\n", yytext); 
 		char *ch = strdup(yytext);
+		//
+		char *ch = yytext;
 		// move past -solver
 		ch+=7;
 		for(; isspace(*ch); ch++);
@@ -267,7 +280,8 @@ browserState (on|off)
 (-browser{xmlwhitespace}+{optionValue}) {
 	if(yyextra->browser == ""){
 		printf("Found option:  %s\n", yytext);  
-		char *ch = strdup(yytext);
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
 		// move past -browser
 		ch+=8;
 		for(; isspace(*ch); ch++);

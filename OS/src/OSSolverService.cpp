@@ -470,6 +470,7 @@ void solve(){
 				solverType->solve();
 				osrl = solverType->osrl;
 				delete osilreader;
+				delete solverType->osinstance;
 			}
 			else{
 
@@ -505,10 +506,6 @@ void solve(){
 					}
 				}
 			}
-			std::cout << "DELETE SOLVER TYPE" << std::endl;
-			delete solverType;
-			std::cout << "DONE DELETE SOVER TYPE" << std::endl;
-			solverType = NULL;
 			if(osoptions->osrlFile != ""){
 				fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
 				//const char *ch1 = "/Applications/Firefox.app/Contents/MacOS/firefox  ";
@@ -539,8 +536,11 @@ void solve(){
 			osresult->setGeneralStatusType( "error");
 			std::string osrl = osrlwriter->writeOSrL( osresult);
 			std::cout << osrl << std::endl;
+			delete osresult;
+			delete osrlwriter;
 		}
 	}	
+	if(solverType != NULL) delete solverType;
 	delete fileUtil;
 	fileUtil = NULL;
 }//end solve
