@@ -216,7 +216,8 @@ ASL_alloc(ASL_read_fg);
 			setyyextra( osoptions, scanner);
 			std::cout << "Done with call Text Extra" << std::endl;
 			osss_scan_string( osolfileOptions.c_str() , scanner);
-			ossslex(scanner );		
+			ossslex(scanner );	
+			delete scanner;
 		}
 	}
 		catch(const ErrorClass& eclass){
@@ -472,7 +473,6 @@ void solve(){
 				osrl = solverType->osrl;
 			}
 			else{
-
 				//we better have an nl file present or mps file or osol file
 				if(osoptions->nlFile != ""){
 					#ifdef COIN_HAS_ASL
@@ -505,7 +505,7 @@ void solve(){
 					}
 				}
 			}
-			delete fileUtil;
+			//delete fileUtil;
 			if(osoptions->osrlFile != ""){
 				fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
 				//const char *ch1 = "/Applications/Firefox.app/Contents/MacOS/firefox  ";
@@ -540,6 +540,7 @@ void solve(){
 			delete osrlwriter;
 		}
 	}	
+
 	if(osilreader != NULL) delete osilreader;
 	if(solverType != NULL) delete solverType;
 	delete fileUtil;
