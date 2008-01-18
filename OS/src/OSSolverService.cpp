@@ -306,6 +306,7 @@ ASL_alloc(ASL_read_fg);
 
 void solve(){
 	std::string osrl = "";
+	OSiLReader *osilreader = NULL; 
 	OSSolverAgent* osagent = NULL;
 	DefaultSolver *solverType  = NULL;
 	FileUtil *fileUtil = NULL;
@@ -464,13 +465,11 @@ void solve(){
 			std::cout << "CALL SOLVE" << std::endl;
 			solverType->osol = osoptions->osol;
 			if(osoptions->osil != ""){
-				OSiLReader *osilreader = new OSiLReader(); 
+				osilreader = new OSiLReader();
 				std::cout << "CREATING AN OSINSTANCE FROM AN OSIL FILE" << std::endl;
 				solverType->osinstance = osilreader->readOSiL( osoptions->osil );
 				solverType->solve();
 				osrl = solverType->osrl;
-				delete osilreader;
-				delete solverType->osinstance;
 			}
 			else{
 
@@ -541,6 +540,7 @@ void solve(){
 			delete osrlwriter;
 		}
 	}	
+	if(osilreader != NULL) delete osilreader;
 	if(solverType != NULL) delete solverType;
 	delete fileUtil;
 	fileUtil = NULL;
