@@ -173,12 +173,9 @@ If you want to:
 
 
 The OS project is very extensive and relies on many other COIN-OR projects.  This may not be desirable for modeling language and solver developers that just wish to use the OS API in conjunction with their modeling language or solver.  Hence there is also an ``OS lite'' download that consists of all the code for the OS API and for reading and writing instance and solution files. We refer to this version of the project as {\tt OSCommon} and the code for this project is synched  with the corresponding stable and release versions of the code. For example, to get Stable 1.1 of {\tt OSCommon} use the svn command
-
 \begin{verbatim}
 svn co https://projects.coin-or.org/svn/OS/stable/OSCommon1.1  OSCommon
 \end{verbatim}
-
-
 
 
 \section{Downloading the OS Project}\label{section:download}
@@ -325,7 +322,7 @@ and the details and use of this distribution are described in Section \ref{secti
 \section{Building and Testing the OS Project}\label{section:build}
 
 
-Once the OS source code is obtained, the OS libraries, {\tt OSSolverService} executable, and test examples can be built.  We describe how to do this on Unix/Linux systems (see Section \ref{section:unixbuilds})  and on Windows (see Section \ref{section:windowsintall}).
+Once the OS source code is obtained, the OS libraries, {\tt OSSolverService} executable, and test examples can be built.  We describe how to do this on Unix/Linux systems (see Section \ref{section:unixbuilds})  and on Windows (see Section \ref{section:windowsinstall}).
 
 \subsection{Building the OS Project on Unix/Linux Systems}\label{section:unixbuilds}
 
@@ -361,8 +358,8 @@ as COIN-OR's Ipopt project currently uses Fortran to compile some of its depende
 \begin{itemize}
 \item If {\tt gfortran} is not present and you  wish to build the nonlinear solver {\tt Ipopt} see the instructions in Section \ref{section:ipopt}.
 
-\item When using {\tt configure} you may wish to use the {\tt -C} option. This   
-instructs {\tt configure} to use a cache file, {\tt config.cache}, to speed up configuration 
+\item When using {\tt configure} you may wish to use the {\tt -C} option. This
+instructs {\tt configure} to use a cache file, {\tt config.cache}, to speed up configuration
 by remembering and reusing the results of tests already performed.
 
 \item For more information and options on the {\tt ./configure} script see
@@ -475,7 +472,7 @@ For example, running
 
 
 
-\subsection{Building the OS Project on Windows}\label{section:windowsintall}
+\subsection{Building the OS Project on Windows}\label{section:windowsinstall}
 
 There are a number of options open to Windows users.   First, if you wish to work with source code we recommend downloading  the svn client,  TortoiseSVN.  See \url{tortoisesvn.tigris.org}.  With TortoiseSVN in the Windows Explorer connect to the directory (e.g. COIN-OS) where you wish to put the OS code. Right click on the directory and select {\tt SVN Checkout}.   In the textbox, {\tt URL of Repository} give the URL for the version of the OS project you wish to checkout, e.g. https://projects.coin-or.org/svn/OS/stable/1.0.
 
@@ -624,13 +621,16 @@ If you wish to build with Ipopt, then FORTRAN is required and Visual Studio does
 
 \begin{verbatim}
  ./configure  --enable-doscompile=msvc
- \end{verbatim}
+\end{verbatim}
 
 
 \end{itemize}
 
 
 \end{itemize}
+
+
+
 
 \subsubsection{MinGW}
 
@@ -650,10 +650,10 @@ MSYS (Minimal SYSstem) provides an easy way to use the COIN-OS build system with
 
 \begin{itemize}
 
-\item If you wish to use the third-party software with MSYS it is best to get {\tt wget}. See page~\pageref{section:windowsintall}.
+\item If you wish to use the third-party software with MSYS it is best to get {\tt wget}. See page~\pageref{section:windowsinstall}.
 
  \item Do not put any imbedded blanks in the path to the OS project.
- \end{itemize}
+\end{itemize}
 
 
 
@@ -664,9 +664,14 @@ Execute the following steps to use the Microsoft C++ cl compiler with MSYS.
 
 \item[Step 1.] Download {\tt MSYS} at
 
-\begin{center}
-\url{http://sourceforge.net/project/showfiles.php?group_id=2435&package_id=24963}
-\end{center}
+% replaced by \verbatim 18 February --- HIG
+%\begin{center}
+%\url{http://sourceforge.net/project/showfiles.php?group_id=2435&package_id=24963}
+%\end{center}
+
+\begin{verbatim}
+http://sourceforge.net/project/showfiles.php?group_id=2435&package_id=24963
+\end{verbatim}
 
 and install.  Double clicking on the MSYS icon will open a Bourne shell window.
 
@@ -710,24 +715,26 @@ The environment variables can be set using the {\tt System Properties} in the Wi
 
 
 
-
-
-
 {\bf Run an Example!}  If {\tt make test} works, proceed to Section \ref{section:ossolverservice} to run the key executable, {\tt OSSolverService}.
 
 
-Microsoft Windows users who wish to obtain MSYS for building the OS project can download the appropriate software at \url{http://sourceforge.net/project/showfiles.php?group_id=2435}.  
-The user may find this Web site confusing.   
-It is only necessary to  download what is referred to as the {\bf MSYS Base System}.  
-As of this writing the most recent version is MSYS-1.0.11.  
-This file is listed as {\tt bash-3.1-MSYS-1.0.11} and the  binary download is 
+Microsoft Windows users who wish to obtain MSYS for building the OS project can download
+the appropriate software at
+% replaced by \verbatim 18 February --- HIG
+%\url{http://sourceforge.net/project/showfiles.php?group_id=2435}.
+{\tt http://sourceforge.net/project/showfiles.php?group\_id=2435}.
+The user may find this Web site confusing.
+It is only necessary to  download what is referred to as the {\bf MSYS Base System}.
+As of this writing the most recent version is MSYS-1.0.11.
+This file is listed as {\tt bash-3.1-MSYS-1.0.11} and the  binary download is
 
 {\small
-\url{http://downloads.sourceforge.net/mingw/bash-3.1-MSYS-1.0.11-1.tar.bz2?modtime=1195140582&big_mirror=1}
+%\url{http://downloads.sourceforge.net/mingw/bash-3.1-MSYS-1.0.11-1.tar.bz2?modtime=1195140582&big_mirror=1}
+{\tt http://downloads.sourceforge.net/mingw/bash-3.1-MSYS-1.0.11-1.tar.bz2?modtime=1195140582\&big\_mirror=1}
 }
 
-This will provide the necessary Bourne shell for executing the configure scripts.  
-Users who want to edit the source code in the parsers described in 
+This will provide the necessary Bourne shell for executing the configure scripts.
+Users who want to edit the source code in the parsers described in
 Section~\ref{section:osparsers} will need the additional  tools
 {\bf flex} and {\bf bison.}  These are listed at the Web site as
 
@@ -1142,7 +1149,7 @@ The directories in the OS directory are outlined in Figure \ref{figure:osdirecto
 
 
 \item {\tt applications} - is a directory that holds  the {\tt OSAmplClient} and {\tt OSFileUpload}  applications in
-subdirectories called, respectively, {\tt amplClient} and {\tt fileUpload}.  
+subdirectories called, respectively, {\tt amplClient} and {\tt fileUpload}.
 See Section \ref{section:applications}.
 
 \item {\tt data} - is a directory that holds test problems. These test problems are used by the {\tt unitTest}. Many of these files are also used to illustrate how the {\tt OSSolverService} works. See Section \ref{section:ossolverservice}.
@@ -1166,7 +1173,7 @@ See Section \ref{section:applications}.
 \item {\tt test} - this directory contains the {\tt unitTest}.
 
 
-\item  {\tt wsdl} - is a directory of WSDL (Web Services Discovery Language) files. These are used to specify the inputs and outputs for the methods and other invocation details provided by a Web service. The most relevant file for the current version of the OS project is {\tt OShL.wsdl}.  
+\item  {\tt wsdl} - is a directory of WSDL (Web Services Discovery Language) files. These are used to specify the inputs and outputs for the methods and other invocation details provided by a Web service. The most relevant file for the current version of the OS project is {\tt OShL.wsdl}.
 This describes the set of inputs and outputs for the methods implemented in the {\tt OSSolverService}. See Section \ref{section:ossolverservice}.
 
 \end{itemize}
@@ -1506,7 +1513,7 @@ class OSInstance\{\\[\Sb]
 public:\\[\Sb]
      OSInstance(); \\[\Sb]
      InstanceHeader *instanceHeader;\\[\Sb]
-     InstanceData *instanceData;	\\[\Sb]
+     InstanceData *instanceData;    \\[\Sb]
 \}; //class OSInstance\\[\Sb]
 \end{tabular} }} \bigskip
 \caption{The {\tt OSInstance} class} \label{figure:osinstance}
@@ -1706,7 +1713,7 @@ DefaultSolver *solver  = NULL;
 solver = new LindoSolver();
 nl2osil = new OSnl2osil( nlFileName);
 nl2osil->createOSInstance() ;
-solver->osinstance = nl2osil->osinstance;	
+solver->osinstance = nl2osil->osinstance;
 solver->solve();
 \end{verbatim}
 
@@ -1838,11 +1845,11 @@ The {\tt  readOSiL} method  has a single argument which is a pointer to a string
 <quadraticCoefficients>
 <nonlinearExpressions>
 \end{verbatim}
-There are other components in the OSiL schema, but they are not yet implemented. 
-In most large-scale applications the {\tt <variables>,} {\tt <objectives>}, {\tt <constraints>}, and {\tt <linearConstraintCoefficients>}  
-will comprise the bulk of the instance memory.  Because of this, we have ``hard-coded'' the OSiL parser to read these specific elements very efficiently. 
-The parsing of the {\tt <quadraticCoefficients>} and {\tt <nonlinearExpressions>} is done using code generated by {\tt flex} and {\tt bison}. In the {\tt OSParsers}  the file  {\tt OSParseosil.l} is used by {\tt flex} to generate {\tt OSParseosil.cpp} and the file {\tt OSParseosil.y} is used by {\tt bison} to generate {\tt OSParseosil.tab.cpp}.  
-In {\tt OSParseosil.l} we use the {\tt reentrant} option and in {\tt OSParseosil.y} we use the {\tt pure-parser} option to generate reentrant parsers. The {\tt OSParseosil.y} file  contains both our  ``hard-coded'' parser and the grammar rules for the  {\tt <quadraticCoefficients>} and {\tt <nonlinearExpressions>} sections.   
+There are other components in the OSiL schema, but they are not yet implemented.
+In most large-scale applications the {\tt <variables>,} {\tt <objectives>}, {\tt <constraints>}, and {\tt <linearConstraintCoefficients>}
+will comprise the bulk of the instance memory.  Because of this, we have ``hard-coded'' the OSiL parser to read these specific elements very efficiently.
+The parsing of the {\tt <quadraticCoefficients>} and {\tt <nonlinearExpressions>} is done using code generated by {\tt flex} and {\tt bison}. In the {\tt OSParsers}  the file  {\tt OSParseosil.l} is used by {\tt flex} to generate {\tt OSParseosil.cpp} and the file {\tt OSParseosil.y} is used by {\tt bison} to generate {\tt OSParseosil.tab.cpp}.
+In {\tt OSParseosil.l} we use the {\tt reentrant} option and in {\tt OSParseosil.y} we use the {\tt pure-parser} option to generate reentrant parsers. The {\tt OSParseosil.y} file  contains both our  ``hard-coded'' parser and the grammar rules for the  {\tt <quadraticCoefficients>} and {\tt <nonlinearExpressions>} sections.
 We are currently using GNU Bison version 3.2 and {\tt flex} 2.5.33.
 
 The typical OS user will have no need to edit either {\tt OSParseosil.l} or {\tt OSParseosil.y} and therefore will not have to worry about running either {\tt flex} or {\tt bison} to generate the parsers. The generated parser code from {\tt flex} and {\tt bison} is distributed with the project and works on all of the platforms listed in Table \ref{table:testedplatforms}.  If the user does edit either {\tt parseosil.l} or {\tt parseosil.y} then {\tt parseosil.cpp} and {\tt parseosil.tab.cpp} need to be regenerated with {\tt flex} and {\tt bison}. If these programs are present, in the OS directory  execute
@@ -1891,7 +1898,7 @@ OSResult  *osresult;
 \end{verbatim}
 and the pure virtual function
 \begin{verbatim}
-virtual void solve() = 0 ;	
+virtual void solve() = 0 ;
 \end{verbatim}
 In order to use a solver through the COIN-OR {\tt Osi} interface it is necessary to create an object in the {\tt CoinSolver} class which inherits from the {\tt DefaultSolver} class and implements the appropriate {\tt solve()} function.  We illustrate with the Clp solver.
 
@@ -1918,7 +1925,7 @@ cout << solver->osrl << endl;
 Even though LINDO and KNITRO are commercial solvers and do not have a COIN-OR {\tt Osi} interface these solvers are used in exactly the same manner as a COIN-OR solver. For example, to invoke the LINDO solver we do the following.
 
 \begin{verbatim}
-solver = new LindoSolver();	
+solver = new LindoSolver();
 \end{verbatim}
 
 Similarly for KNITRO and Ipopt. In the case of  KNITRO, the {\tt KnitroSolver} class inherits from both {\tt DefaultSolver} class and the KNITRO {\tt NlpProblemDef} class. See \url{http://www.ziena.com/docs/knitroman.pdf} for more information on the KNITRO solver C++ implementation and the {\tt NlpProblemDef} class. Similarly, for Ipopt the {\tt IpoptSolver} class inherits from both the  {\tt DefaultSolver} class and the Ipopt {\tt TNLP} class.  See \url{https://projects.coin-or.org/Ipopt/browser/stable/3.2/Ipopt/doc/documentation.pdf?format=raw} for more information on the Ipopt solver C++ implementation and the {\tt TNLP} calss.
@@ -1976,7 +1983,7 @@ postfixVec = osinstance->getNonlinearExpressionTreeInPostfix( -1);
 If, for example, the {\tt osinstance} object was the in-memory representation of   the instance illustrated in  Section \ref{section:rosenbrockXML} then the code
 \begin{verbatim}
 for (i = 0 ; i < n; i++){
-	cout << postfixVec[i]->snodeName << endl;	
+    cout << postfixVec[i]->snodeName << endl;
 }
 \end{verbatim}
 will produce
@@ -2082,9 +2089,9 @@ or, expressed in terms of the mixed partials,
 & & x_{0}, x_{1}, x_{2}, x_{3} &\ge 0 \label{eq:adeq2}
 \end{alignat}
 
-The OSiL representation of the instance  (\ref{eq:adobj})--(\ref{eq:adeq2}) is given in Appendix~\ref{section:adexample}.  
-This example is designed to illustrate several features of OSiL. Note that in constraint  (\ref{eq:adeq0}) the constant 33 appears in the {\tt <con>} element corresponding to this constraint 
-and the constant 105 appears as a {\tt <number>} OSnL node in the {\tt <nonlinearExpressions>} section.   
+The OSiL representation of the instance  (\ref{eq:adobj})--(\ref{eq:adeq2}) is given in Appendix~\ref{section:adexample}.
+This example is designed to illustrate several features of OSiL. Note that in constraint  (\ref{eq:adeq0}) the constant 33 appears in the {\tt <con>} element corresponding to this constraint
+and the constant 105 appears as a {\tt <number>} OSnL node in the {\tt <nonlinearExpressions>} section.
 This distinction is important, as it will lead to different treatment by the code as
 documented below. There are no nonlinear terms in the instance that involve variable $x_{1}.$  The terms $5x_{1}$ in  (\ref{eq:adeq0}) and $7 x_{2}$ in (\ref{eq:adeq1}) are expressed in the {\tt objectives} and {\tt <linearConstraintCoefficients>}
 sections, respectively, and will again receive special treatment by the code. However, the term $1.37x_1$ in (\ref{eq:adeq0}),
@@ -2134,7 +2141,7 @@ Ignoring the nonnegativity constraints, instance (\ref{eq:adobj})--(\ref{eq:adeq
             f_2(x) \\
             f_3(x)
         \end{array}  \label{eq:definef1}
-    \right] 
+    \right]
 \end{eqnarray}
 
 \begin{eqnarray}
@@ -2165,8 +2172,8 @@ std::map<int, int> varIndexMap;
 std::map<int, int>::iterator posVarIndexMap;
 varIndexMap = osinstance->getAllNonlinearVariablesIndexMap( );
 for(posVarIndexMap = varIndexMap.begin(); posVarIndexMap
-	!= varIndexMap.end(); ++posVarIndexMap){
-	std::cout <<  "Variable Index = "   << posVarIndexMap->first  << std::endl ;
+    != varIndexMap.end(); ++posVarIndexMap){
+    std::cout <<  "Variable Index = "   << posVarIndexMap->first  << std::endl ;
 }
 \end{verbatim}
 The variable indices listed are 0, 1, and 3. Variable 2 does not appear in the {\tt <nonlinearExpressions>} section and is not included in {\tt varIndexMap}.  That is, $f$ will be considered as a map from $ \mathbb{R}^{3}$ to $ \mathbb{R}^{3}.$
@@ -2317,9 +2324,9 @@ L (x, \lambda) = \sum_{k = 1}^{m} \lambda_{k} f_{k}(x)
 For example, the  following calls will calculate the third row (column) of the Hessian of the Lagrangian.
 \begin{verbatim}
 x0[0] = 1;
-x0[1] = 5; 	
+x0[1] = 5;
 x0[2] = 5;
-osinstance->forwardAD(0, x0);	
+osinstance->forwardAD(0, x0);
 x1[0] = 0;
 x1[1] = 0;
 x1[2] = 1;
@@ -2357,19 +2364,36 @@ The methods {\tt forwardAD} and {\tt reverseAD} are low level calls and are not 
 
 Many  solvers such as Ipopt (\url{projects.coin-or.org/Ipopt}) or Knitro (\url{www.ziena.com}) require the sparsity pattern of the Jacobian of the constraint matrix and the Hessian of the Lagrangian function.  Note well that the constraint matrix of the example in Section \ref{section:lowlevelADcalls}
 constitutes only the last two rows of (\ref{eq:definef}) but does include the linear terms.  The following code illustrates how to get the sparsity pattern of the constraint Jacobian matrix
-\begin{verbatimtab}[4]
+
+% replaced by \verbatim 18 February --- HIG
+%\begin{verbatimtab}[4]
+%SparseJacobianMatrix *sparseJac;
+%sparseJac = osinstance->getJacobianSparsityPattern();
+%for(idx = 0; idx < sparseJac->startSize; idx++){
+%	std::cout << "number constant terms in constraint "   <<  idx << " is "
+%	<< *(sparseJac->conVals + idx)  << std::endl;
+%	for(k = *(sparseJac->starts + idx); k < *(sparseJac->starts + idx + 1); k++){
+%		std::cout << "row idx = " << idx <<  "
+%		col idx = "<< *(sparseJac->indexes + k) << std::endl;
+%	}
+%}
+%\end{verbatimtab}
+
+\begin{verbatim}
 SparseJacobianMatrix *sparseJac;
 sparseJac = osinstance->getJacobianSparsityPattern();
 for(idx = 0; idx < sparseJac->startSize; idx++){
-	std::cout << "number constant terms in constraint "   <<  idx << " is "
-	<< *(sparseJac->conVals + idx)  << std::endl;
-	for(k = *(sparseJac->starts + idx); k < *(sparseJac->starts + idx + 1); k++){
-		std::cout << "row idx = " << idx <<  "
-		col idx = "<< *(sparseJac->indexes + k) << std::endl;
-	}
+    std::cout << "number constant terms in constraint "   <<  idx << " is "
+    << *(sparseJac->conVals + idx)  << std::endl;
+    for(k = *(sparseJac->starts + idx); k < *(sparseJac->starts + idx + 1); k++){
+        std::cout << "row idx = " << idx <<  "
+        col idx = "<< *(sparseJac->indexes + k) << std::endl;
+    }
 }
-\end{verbatimtab}
+\end{verbatim}
+
 For the example problem this will produce
+
 \begin{verbatim}
 JACOBIAN SPARSITY PATTERN
 number constant terms in constraint 0 is 0
@@ -2380,31 +2404,32 @@ row idx = 1  col idx = 2
 row idx = 1  col idx = 0
 row idx = 1  col idx = 3
 \end{verbatim}
+
 The   constant term in constraint 1 corresponds to the linear term $7x_2$,
 which is added after the algorithmic differentiation has taken place.
 However, the linear  term $5x_1$ in equation 0 does not
 contribute a nonzero in the Jacobian, as it is combined with the
 term $1.37x_1$ that is treated as a nonlinear term and
 therefore accounted for explicitly.
-The {\tt SparseJacobianMatrix} object has a data member {\tt starts} 
-which is the index of the start of each constraint row. 
-The {\tt int} data member {\tt indexes}  gives  is the variable index 
-of every potentially nonzero derivative. There is also a {\tt double} data member  
-{\tt values} that will the value of the partial derivative of the corresponding 
-index at each iteration. Finally, there is an {\tt int} data member 
-{\tt conVals} that is the number of constant terms in each gradient. 
-A constant term is a partial derivative that cannot change at an iteration.  
-A variable is considered to have a constant derivative  
-if it appears in the {\tt <linearConstraintCoefficients>} section  
-but not in the {\tt <nonlinearExpressions>}.  For a row indexed by {\tt idx} 
-the variable indices are in the  {\tt indexes} array between the elements 
-{\tt sparseJac->starts + idx} and {\tt sparseJac->starts + idx + 1}.   
-The first  {\tt sparseJac->conVals + idx} variables listed are indices 
-of  variables with constant derivatives. In this example, when {\tt idx} is 1, 
-there is one  variable with a constant derivative and it is variable $x_{2}$.  
-(Actually variable $x_{1}$ has a constant derivative but the code does not check 
-to see if variables that appear in the {\tt <nonlinearExpressions>} section 
-have constant derivative.) The  variables with constant derivatives 
+The {\tt SparseJacobianMatrix} object has a data member {\tt starts}
+which is the index of the start of each constraint row.
+The {\tt int} data member {\tt indexes}  gives  is the variable index
+of every potentially nonzero derivative. There is also a {\tt double} data member
+{\tt values} that will the value of the partial derivative of the corresponding
+index at each iteration. Finally, there is an {\tt int} data member
+{\tt conVals} that is the number of constant terms in each gradient.
+A constant term is a partial derivative that cannot change at an iteration.
+A variable is considered to have a constant derivative
+if it appears in the {\tt <linearConstraintCoefficients>} section
+but not in the {\tt <nonlinearExpressions>}.  For a row indexed by {\tt idx}
+the variable indices are in the  {\tt indexes} array between the elements
+{\tt sparseJac->starts + idx} and {\tt sparseJac->starts + idx + 1}.
+The first  {\tt sparseJac->conVals + idx} variables listed are indices
+of  variables with constant derivatives. In this example, when {\tt idx} is 1,
+there is one  variable with a constant derivative and it is variable $x_{2}$.
+(Actually variable $x_{1}$ has a constant derivative but the code does not check
+to see if variables that appear in the {\tt <nonlinearExpressions>} section
+have constant derivative.) The  variables with constant derivatives
 never appear in the AD evaluation.
 
 The following code illustrates how to get the sparsity pattern of the Hessian of the Lagrangian.
@@ -2412,8 +2437,8 @@ The following code illustrates how to get the sparsity pattern of the Hessian of
 SparseHessianMatrix *sparseHessian;
 sparseHessian = osinstance->getLagrangianHessianSparsityPattern( );
 for(idx = 0; idx < sparseHessian->hessDimension; idx++){
-	std::cout <<  "Row Index = " << *(sparseHessian->hessRowIdx + idx) ;
-	std::cout <<  "  Column Index = " << *(sparseHessian->hessColIdx + idx);
+    std::cout <<  "Row Index = " << *(sparseHessian->hessRowIdx + idx) ;
+    std::cout <<  "  Column Index = " << *(sparseHessian->hessColIdx + idx);
 }
 \end{verbatim}
 The {\tt SparseHessianMatrix} class has the {\tt int} data members {\tt hessRowIdx} and {\tt hessColIdx} for indexing  potential nonzero elements in the Hessian matrix. The {\tt double} data member {\tt hessValues} holds the value of the respective second derivative at each iteration.   The data member {\tt hessDimension} is the number of nonzero elements in the Hessian.
@@ -2651,7 +2676,15 @@ Here is an example of using a configure file,  {\tt testlocal.config}, to invoke
 
 
 
-The first line of {\tt testlocal.config} gives the local location of the OSiL file, {\tt parincQuadratic.osil}, that contains the problem instance. The second parameter, {\tt -solver ipopt},  is the solver to be invoked, in this case COIN-OR Ipopt. The third parameter {\tt -serviceMethod solve} is not really needed, but included only for illustration. The default  solver service is {\tt solve.}  The fourth parameter is the location of the browser on the local machine. It will read the OSrL file on the local machine using the path specified by the value of the {\tt osrl} parameter, in this case {\tt /Users/kmartin/temp/test.osrl.}
+The first line of {\tt testlocal.config} gives the local location of the OSiL file,
+{\tt parincQuadratic.osil}, that contains the problem instance. The second parameter,
+{\tt -solver ipopt},  is the solver to be invoked, in this case COIN-OR Ipopt.
+The third parameter {\tt -serviceMethod solve} is not really needed,
+but included only for illustration. The default  solver service is {\tt solve.}
+The fourth parameter is the location of the browser on the local machine.
+It will read the OSrL file on the local machine using the path specified
+by the value of the {\tt osrl} parameter, in this case
+{\tt /Users/kmartin/temp/test.osrl.}
 
 Parameters may also be contained in an XML-file in OSoL format. In the configuration file {\tt testlocalosol.config} we illustrate specifying the instance location in an OSoL file.
 \begin{verbatim}
@@ -2660,16 +2693,29 @@ Parameters may also be contained in an XML-file in OSoL format. In the configura
 \end{verbatim}
 The file {\tt demo.osol} is
 
-\begin{verbatimtab}[4]
+% replaced by \verbatim 18 February --- HIG
+%\begin{verbatimtab}[4]
+%<?xml version="1.0" encoding="UTF-8"?>
+%<osol xmlns="os.optimizationservices.org">
+%	<general>
+%		<instanceLocation locationType="local">
+%			../data/osilFiles/parincLinear.osil
+%		</instanceLocation>
+%	</general>
+%</osol>
+%\end{verbatimtab}
+
+\begin{verbatim}
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org">
-	<general>
-		<instanceLocation locationType="local">
-			../data/osilFiles/parincLinear.osil
-		</instanceLocation>
-	</general>
+    <general>
+        <instanceLocation locationType="local">
+            ../data/osilFiles/parincLinear.osil
+        </instanceLocation>
+    </general>
 </osol>
-\end{verbatimtab}
+\end{verbatim}
+
 
 \subsection{Solving Problems Remotely with Web Services}\label{section:servicemethods}
 
@@ -2677,19 +2723,19 @@ In many cases the client machine may be a ``weak client'' and  using a more powe
 
 
 
-See Figure \ref{figure:ossolverservice} for an illustration of this process. 
-The client machine uses {\tt OSSolverService} executable to call one of the 
-six service methods, e.g. {\tt solve}. The  information such as the problem 
-instance in OSiL format and solver options in OSoL format are packaged into 
-a SOAP envelope and sent to the server. The server is running the Java Web 
-Service {\tt OSSolverService.jws}. This Java program running in the Tomcat 
-Java Servlet container implements the six service methods. If a {\tt solve} 
-or {\tt send} request is sent to the server from the client, an optimization 
-problem must be solved. The Java solver service solves the optimization instance 
-by  calling the  OSSolverService on the server. So there is an OSSolverService 
-on the client that calls the Web Service {\tt  OSSolverService.jws} that in turn 
-calls  the executable {\tt OSSolverService} on the server. 
-The Java solver service passes options to the local {\tt OSSolverService} 
+See Figure \ref{figure:ossolverservice} for an illustration of this process.
+The client machine uses {\tt OSSolverService} executable to call one of the
+six service methods, e.g. {\tt solve}. The  information such as the problem
+instance in OSiL format and solver options in OSoL format are packaged into
+a SOAP envelope and sent to the server. The server is running the Java Web
+Service {\tt OSSolverService.jws}. This Java program running in the Tomcat
+Java Servlet container implements the six service methods. If a {\tt solve}
+or {\tt send} request is sent to the server from the client, an optimization
+problem must be solved. The Java solver service solves the optimization instance
+by  calling the  OSSolverService on the server. So there is an OSSolverService
+on the client that calls the Web Service {\tt  OSSolverService.jws} that in turn
+calls  the executable {\tt OSSolverService} on the server.
+The Java solver service passes options to the local {\tt OSSolverService}
 such as where the OSiL file is located and where to write the solution result.
 
 \begin{figure}
@@ -2731,7 +2777,7 @@ Next we illustrate a call to the remote SolverService and specify an OSiL instan
      -serviceLocation  http://gsbkip.chicagogsb.edu/os/OSSolverService.jws
 \end{verbatim}
 where the {\tt remoteSolve1.osol} file is
-\begin{verbatimtab}[4]
+\begin{verbatim}
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org">
     <general>
@@ -2739,26 +2785,26 @@ where the {\tt remoteSolve1.osol} file is
          <contact transportType="smtp">kipp.martin@chicagogsb.edu</contact>
     </general>
     <optimization>
-    	<other name="os_solver">ipopt</other>
+        <other name="os_solver">ipopt</other>
     </optimization>
 </osol>
-\end{verbatimtab}
+\end{verbatim}
 
 
 If we were to change to the {\tt locationType} attribute in the {\tt <instanceLocation>} element to {\tt http} then we could specify the instance location on yet another machine. This is illustrated below  for {\tt remoteSolve2.osol}.  The scenario is depicted in Figure \ref{figure:ossolverservice2}.  The OSiL string passed from the client to the solver service is empty.  However, the OSoL element {\tt <instanceLocation>}  has an attribute {\tt locationType} equal to   {\tt http}.  In this case, the text of the {\tt <instanceLoction>} element contains the URL of a third machine which has the problem intance {\tt parincLinear.osil}.  The solver service will contact the machine with URL {\tt http://www.coin-or.org/OS/parincLinear.osil} and download this test problem. So the {\tt OSSolverService} is running on the server {\tt gsbkip.chicagogsb.edu} which contacts the server {\tt www.coin-or.org} for the model instance.
-\begin{verbatimtab}[4]
+\begin{verbatim}
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org">
     <general>
          <instanceLocation locationType="http">
-	http://www.coin-or.org/OS/parincLinear.osil
-	 </instanceLocation>
+    http://www.coin-or.org/OS/parincLinear.osil
+     </instanceLocation>
     </general>
     <optimization>
-    	<other name="os_solver">ipopt</other>
+        <other name="os_solver">ipopt</other>
     </optimization>
 </osol>
-\end{verbatimtab}
+\end{verbatim}
 
 \begin{figure}
 \centering
@@ -2782,49 +2828,97 @@ where the {\tt testremoteSend.config} file is
 In this example the COIN-OR {\tt Ipopt} solver is specified. The input file {\tt hs71.nl} is in AMPL format. Before sending this to the remote solver service the {\tt OSSolverService} executable converts  the nl format into the OSiL XML format and packages this into the SOAP envelope used by Web Services.
 
 Since the {\tt send} method involves asynchronous communication the remote solver service must keep track of jobs. The {\tt send} method requires a {\tt JobID}. In the above example  no {\tt JobID} was specified. When no {\tt JobID} is specified the {\tt OSSolverService} method first invokes the {\tt getJobID} service method to get a {\tt JobID} and then puts this information into an OSoL file it creates and sends the information to the server. More information on the {\tt getJobID} service method is provided in Section \ref{section:getjobid}.    The {\tt OSSolverService} prints the OSoL file to standard output before termination. This is illustrated below,
-\begin{verbatimtab}[4]
+
+% replaced by \verbatim 18 February --- HIG
+%\begin{verbatimtab}[4]
+%<?xml version="1.0" encoding="UTF-8"?>
+%<osol xmlns="os.optimizationservices.org">
+%	<general>
+%		<jobID>
+%		gsbrkm4__127.0.0.1__2007-06-16T15.46.46.075-05.00149771253
+%		</jobID>
+%	</general>
+%    <optimization>
+%    	<other name="os_solver">ipopt</other>
+%    </optimization>
+%</osol>
+%\end{verbatimtab}
+
+\begin{verbatim}
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org">
-	<general>
-		<jobID>
-		gsbrkm4__127.0.0.1__2007-06-16T15.46.46.075-05.00149771253
-		</jobID>
-	</general>
+    <general>
+        <jobID>
+        gsbrkm4__127.0.0.1__2007-06-16T15.46.46.075-05.00149771253
+        </jobID>
+    </general>
     <optimization>
-    	<other name="os_solver">ipopt</other>
+        <other name="os_solver">ipopt</other>
     </optimization>
 </osol>
-\end{verbatimtab}
+\end{verbatim}
+
 The {\tt JobID} is one that is randomly generated by the server and passed back to the {\tt OSSolverService.} The user can also provide a {\tt JobID} in their OSoL file. For example, below is a user-provided OSoL file that could be specified in a configuration file or on the command line.
-\begin{verbatimtab}[4]
+
+% replaced by \verbatim 18 February --- HIG
+%\begin{verbatimtab}[4]
+%<?xml version="1.0" encoding="UTF-8"?>
+%<osol xmlns="os.optimizationservices.org">
+%	<general>
+%		<jobID>123456abcd</jobID>
+%	</general>
+%    <optimization>
+%    	<other name="os_solver">ipopt</other>
+%    </optimization>
+%</osol>
+%\end{verbatimtab}
+
+\begin{verbatim}
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org">
-	<general>
-		<jobID>123456abcd</jobID>
-	</general>
+    <general>
+        <jobID>123456abcd</jobID>
+    </general>
     <optimization>
-    	<other name="os_solver">ipopt</other>
+        <other name="os_solver">ipopt</other>
     </optimization>
 </osol>
-\end{verbatimtab}
+\end{verbatim}
 
 The same {\tt JobID} cannot be used twice, so if {\tt 123456abcd} was used earlier, the result of {\tt send} will be {\tt false}.
 
 In order to be of any use, it is necessary to get the result of the optimization. This is described in Section \ref{section:retrieve}. Before proceeding to this section, we describe two ways for knowing when the optimization is complete. One feature of the standard OS remote SolverService is the ability to send an email when the job is complete. Below is an example of the {\tt OSoL} that uses the email feature.
-\begin{verbatimtab}[4]
+
+% replaced by \verbatim 18 February --- HIG
+%\begin{verbatimtab}[4]
+%<?xml version="1.0" encoding="UTF-8"?>
+%<osol xmlns="os.optimizationservices.org">
+%	<general>
+%		<jobID>123456abcd</jobID>
+%		<contact transportType="smtp">
+%			kipp.martin@chicagogsb.edu
+%		</contact>
+%	</general>
+%    <optimization>
+%    	<other name="os_solver">lindo</other>
+%    </optimization>
+%</osol>
+%\end{verbatimtab}
+
+\begin{verbatim}
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org">
- 	<general>
- 		<jobID>123456abcd</jobID>
- 		<contact transportType="smtp">
-			kipp.martin@chicagogsb.edu
-		</contact>
-	</general>
+    <general>
+        <jobID>123456abcd</jobID>
+        <contact transportType="smtp">
+            kipp.martin@chicagogsb.edu
+        </contact>
+    </general>
     <optimization>
-    	<other name="os_solver">lindo</other>
+        <other name="os_solver">lindo</other>
     </optimization>
 </osol>
-\end{verbatimtab}
+\end{verbatim}
 
 The remote Solver Service will send an email to the above address when the job is complete. A second option for knowing when a job is complete is to use the knock method.
 
@@ -2846,14 +2940,16 @@ The {\tt testremoteRetrieve.config} file is
 -osrl /home/kmartin/temp/test.osrl
 \end{verbatim}
 and the {\tt retrieve.osol} file is
-\begin{verbatimtab}[4]
+
+\begin{verbatim}
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org">
- 	<general>
- 		<jobID>123456abcd</jobID>
-	</general>
+    <general>
+        <jobID>123456abcd</jobID>
+    </general>
 </osol>
-\end{verbatimtab}
+\end{verbatim}
+
 The OSoL file {\tt retrieve.osol} contains a tag {\tt <jobID>} that is communicated to the remote service. The remove service locates the result and returns it as a string. The string that is returned is an OSrL instance.  The user must modify the line
 \begin{verbatim}
 -osrl /home/kmartin/temp/test.osrl
@@ -2898,13 +2994,13 @@ and the {\tt retrieve.osol} file is
 \begin{verbatim}
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org">
- 	<general>
- 		<jobID>123456abcd</jobID>
-	</general>
+    <general>
+        <jobID>123456abcd</jobID>
+    </general>
 </osol>
 \end{verbatim}
 The result of this request is again a string in OSpL format, with the data contained in its {\tt processData} section.  Part of the return format is illustrated below.
-\begin{verbatimtab}[4]
+\begin{verbatim}
 <?xml version="1.0" encoding="UTF-8"?>
 <ospl xmlns="os.optimizationservices.org">
   <processHeader>
@@ -2922,19 +3018,19 @@ The result of this request is again a string in OSpL format, with the data conta
         <timeServiceStarted>2006-05-10T10:49:24.9700000-05:00</timeServiceStarted>
         <serviceUtilization>0.1</serviceUtilization>
         <jobs>
-    	  <job jobID="123456abcd">
-    		<state>finished</state>
-    		<serviceURI>http://gsbkip.chicagogsb.edu/ipopt/IPOPTSolverService.jws</serviceURI>
-    		<submitTime>2007-06-16T14:57:36.678-05:00</submitTime>
-    		<startTime>2007-06-16T14:57:36.678-05:00</startTime>
-    		<endTime>2007-06-16T14:57:39.404-05:00</endTime>
-    		<duration>2.726</duration>
+        <job jobID="123456abcd">
+            <state>finished</state>
+            <serviceURI>http://gsbkip.chicagogsb.edu/ipopt/IPOPTSolverService.jws</serviceURI>
+            <submitTime>2007-06-16T14:57:36.678-05:00</submitTime>
+            <startTime>2007-06-16T14:57:36.678-05:00</startTime>
+            <endTime>2007-06-16T14:57:39.404-05:00</endTime>
+            <duration>2.726</duration>
           </job>
         </jobs>
      </statistics>
   </processData>
 </ospl>
-\end{verbatimtab}
+\end{verbatim}
 Notice that the {\tt <state>} element in {\tt <job jobID="123456abcd">} indicates that the job is finished.
 
 When making a {\tt knock} request,  the OSoL string can be empty. In this example, if the OSoL string had been empty the status of all jobs kept in the file ospl.xml is reported.  In our default solver service implementation, there is a configuration file {\tt OSParameter} that has a parameter {\tt MAX\_JOBIDS\_TO\_KEEP }.  The current default setting is 100.  In a large-scale or commercial implementation it might be wise to keep problem results and statistics in a database.  Also, there are values other than {\tt getAll} (i.e. get all process information related to the jobs) for the OSpL {\tt action} attribute in the {\tt <request>} tag.  For example, the {\tt action} can be set to a value of {\tt ping} if the user just wants to check if the remote solver service is up and running. For details, check the OSpL schema.
@@ -2952,14 +3048,14 @@ where the configure file {\tt kill.config} is
 -serviceMethod kill
 \end{verbatim}
 and the {\tt kill.osol} file is
-\begin{verbatimtab}[4]
+\begin{verbatim}
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org">
- 	<general>
- 		<jobID>123456abcd</jobID>
-	</general>
+    <general>
+        <jobID>123456abcd</jobID>
+    </general>
 </osol>
-\end{verbatimtab}
+\end{verbatim}
 
 The result is returned in  {\tt OSpL}.
 \subsubsection{Summary}
@@ -3227,7 +3323,7 @@ COIN-OS/OS/data/amplFiles
 \end{verbatim}
 It is also assumed that {\tt .}~(the current directory) is in the search path.
 
-The  problem instance, {\tt hs71.mod} is an AMPL model file included in the {\tt amplClient} directory. To solve this problem locally by calling the {\tt OSAmplClient} from AMPL first start AMPL and then execute the following commands. 
+The  problem instance, {\tt hs71.mod} is an AMPL model file included in the {\tt amplClient} directory. To solve this problem locally by calling the {\tt OSAmplClient} from AMPL first start AMPL and then execute the following commands.
 In this case we are testing  {\tt Ipopt} as the local server and therefore it is necessary that {\tt Ipopt} be part of the local OS build. If it is not then another solver must be selected and a test problem used that is a linear or integer program.
 
 \begin{verbatim}
@@ -3306,18 +3402,18 @@ where the {\tt config} file is as follows. Notice there is no {\tt -osil}  optio
 -serviceMethod solve
 \end{verbatim}
 and the {\tt osol} file is
-\begin{verbatimtab}[5]
+\begin{verbatim}
 <osol>
     <general>
          <instanceLocation locationType="local">
-         	/home/kmartin/temp/parincQuadratic.osil
+             /home/kmartin/temp/parincQuadratic.osil
          </instanceLocation>
     </general>
     <optimization>
-    	<other name="os_solver">ipopt</other>
+        <other name="os_solver">ipopt</other>
     </optimization>
 </osol>
-\end{verbatimtab}
+\end{verbatim}
 
 As an alternative to using the command line executable {\tt OSFileUpload}, there is also an html form {\tt fileupload.html} that can be used to upload files. For example, the URL
 \begin{verbatim}
@@ -3416,7 +3512,7 @@ represent the fraction of wealth invested in stock~$i$ and that no stock can hav
 more than 75\% of the total wealth. The problem then is to minimize the total risk
 subject to a budget constraint and a lower bound on the expected portfolio return.
 
-Assume that there are three stocks (variables) and two constraints (do not count the upper limit %investment 
+Assume that there are three stocks (variables) and two constraints (do not count the upper limit %investment
 of .75 on the variables).
 
 
@@ -3573,83 +3669,161 @@ callMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, VarType, ...
 
 
 {\normalsize \baselineskip 16pt \vspace{2pt}
+% replaced by \verbatim 18 February --- HIG
+%\begin{verbatimtab}[5]
+%<?xml version="1.0" encoding="UTF-8"?>
+%<osil xmlns="os.optimizationservices.org">
+%	<instanceHeader>
+%		<name>Modified Rosenbrock</name>
+%		<source>Computing Journal 3:175-184, 1960</source>
+%		<description>Rosenbrock problem with constraints</description>
+%	</instanceHeader>
+%	<instanceData>
+%		<variables numberOfVariables="2">
+%			<var lb="0" name="x0" type="C"/>
+%			<var lb="0" name="x1" type="C"/>
+%		</variables>
+%		<objectives numberOfObjectives="1">
+%			<obj maxOrMin="min" name="minCost" numberOfObjCoef="1">
+%				<coef idx="1">9.0</coef>
+%			</obj>
+%		</objectives>
+%		<constraints numberOfConstraints="2">
+%			<con ub="25.0"/>
+%			<con lb="10.0"/>
+%		</constraints>
+%		<linearConstraintCoefficients numberOfValues="3">
+%			<start>
+%				<el>0</el><el>2</el><el>3</el>
+%			</start>
+%			<rowIdx>
+%				<el>0</el><el>1</el><el>1</el>
+%			</rowIdx>
+%			<value>
+%				<el>1.</el><el>7.5</el><el>5.25</el>
+%			</value>
+%		</linearConstraintCoefficients>
+%		<quadraticCoefficients numberOfQuadraticTerms="3">
+%			<qTerm idx="0" idxOne="0" idxTwo="0" coef="10.5"/>
+%			<qTerm idx="0" idxOne="1" idxTwo="1" coef="11.7"/>
+%			<qTerm idx="0" idxOne="0" idxTwo="1" coef="3."/>
+%		</quadraticCoefficients>
+%\end{verbatimtab}
+%   \newpage
+%\begin{verbatimtab}[5]
+%		<nonlinearExpressions numberOfNonlinearExpressions="2">
+%			<nl idx="-1">
+%				<plus>
+%					<power>
+%						<minus>
+%							<number type="real" value="1.0"/>
+%							<variable coef="1.0" idx="0"/>
+%						</minus>
+%						<number type="real" value="2.0"/>
+%					</power>
+%					<times>
+%						<power>
+%							<minus>
+%								<variable coef="1.0" idx="0"/>
+%								<power>
+%									<variable coef="1.0" idx="1"/>
+%									<number type="real" value="2.0"/>
+%								</power>
+%							</minus>
+%							<number type="real" value="2.0"/>
+%						</power>
+%						<number type="real" value="100"/>
+%					</times>
+%				</plus>
+%			</nl>
+%			<nl idx="1">
+%				<ln>
+%					<times>
+%						<variable coef="1.0" idx="0"/>
+%						<variable coef="1.0" idx="1"/>
+%					</times>
+%				</ln>
+%			</nl>
+%		</nonlinearExpressions>
+%	</instanceData>
+%</osil>
+%\end{verbatimtab}
 
-\begin{verbatimtab}[5]
+\begin{verbatim}
 <?xml version="1.0" encoding="UTF-8"?>
 <osil xmlns="os.optimizationservices.org">
-	<instanceHeader>
-		<name>Modified Rosenbrock</name>
-		<source>Computing Journal 3:175-184, 1960</source>
-		<description>Rosenbrock problem with constraints</description>
-	</instanceHeader>
-	<instanceData>
-		<variables numberOfVariables="2">
-			<var lb="0" name="x0" type="C"/>
-			<var lb="0" name="x1" type="C"/>
-		</variables>
-		<objectives numberOfObjectives="1">
-			<obj maxOrMin="min" name="minCost" numberOfObjCoef="1">
-				<coef idx="1">9.0</coef>
-			</obj>
-		</objectives>
-		<constraints numberOfConstraints="2">
-			<con ub="25.0"/>
-			<con lb="10.0"/>
-		</constraints>
-		<linearConstraintCoefficients numberOfValues="3">
-			<start>
-				<el>0</el><el>2</el><el>3</el>
-			</start>
-			<rowIdx>
-				<el>0</el><el>1</el><el>1</el>
-			</rowIdx>
-			<value>
-				<el>1.</el><el>7.5</el><el>5.25</el>
-			</value>
-		</linearConstraintCoefficients>
-		<quadraticCoefficients numberOfQuadraticTerms="3">
-			<qTerm idx="0" idxOne="0" idxTwo="0" coef="10.5"/>
-			<qTerm idx="0" idxOne="1" idxTwo="1" coef="11.7"/>
-			<qTerm idx="0" idxOne="0" idxTwo="1" coef="3."/>
-		</quadraticCoefficients>
-		<nonlinearExpressions numberOfNonlinearExpressions="2">
-			<nl idx="-1">
-				<plus>
-					<power>
-						<minus>
-							<number type="real" value="1.0"/>
-							<variable coef="1.0" idx="0"/>
-						</minus>
-						<number type="real" value="2.0"/>
-					</power>
-					<times>
-						<power>
-							<minus>
-								<variable coef="1.0" idx="0"/>
-								<power>
-									<variable coef="1.0" idx="1"/>
-									<number type="real" value="2.0"/>
-								</power>
-							</minus>
-							<number type="real" value="2.0"/>
-						</power>
-						<number type="real" value="100"/>
-					</times>
-				</plus>
-			</nl>
-			<nl idx="1">
-				<ln>
-					<times>
-						<variable coef="1.0" idx="0"/>
-						<variable coef="1.0" idx="1"/>
-					</times>
-				</ln>
-			</nl>
-		</nonlinearExpressions>
-	</instanceData>
+    <instanceHeader>
+        <name>Modified Rosenbrock</name>
+        <source>Computing Journal 3:175-184, 1960</source>
+        <description>Rosenbrock problem with constraints</description>
+    </instanceHeader>
+    <instanceData>
+        <variables numberOfVariables="2">
+            <var lb="0" name="x0" type="C"/>
+            <var lb="0" name="x1" type="C"/>
+        </variables>
+        <objectives numberOfObjectives="1">
+            <obj maxOrMin="min" name="minCost" numberOfObjCoef="1">
+                <coef idx="1">9.0</coef>
+            </obj>
+        </objectives>
+        <constraints numberOfConstraints="2">
+            <con ub="25.0"/>
+            <con lb="10.0"/>
+        </constraints>
+        <linearConstraintCoefficients numberOfValues="3">
+            <start>
+                <el>0</el><el>2</el><el>3</el>
+            </start>
+            <rowIdx>
+                <el>0</el><el>1</el><el>1</el>
+            </rowIdx>
+            <value>
+                <el>1.</el><el>7.5</el><el>5.25</el>
+            </value>
+        </linearConstraintCoefficients>
+        <quadraticCoefficients numberOfQuadraticTerms="3">
+            <qTerm idx="0" idxOne="0" idxTwo="0" coef="10.5"/>
+            <qTerm idx="0" idxOne="1" idxTwo="1" coef="11.7"/>
+            <qTerm idx="0" idxOne="0" idxTwo="1" coef="3."/>
+        </quadraticCoefficients>
+        <nonlinearExpressions numberOfNonlinearExpressions="2">
+            <nl idx="-1">
+                <plus>
+                    <power>
+                        <minus>
+                            <number type="real" value="1.0"/>
+                            <variable coef="1.0" idx="0"/>
+                        </minus>
+                        <number type="real" value="2.0"/>
+                    </power>
+                    <times>
+                        <power>
+                            <minus>
+                                <variable coef="1.0" idx="0"/>
+                                <power>
+                                    <variable coef="1.0" idx="1"/>
+                                    <number type="real" value="2.0"/>
+                                </power>
+                            </minus>
+                            <number type="real" value="2.0"/>
+                        </power>
+                        <number type="real" value="100"/>
+                    </times>
+                </plus>
+            </nl>
+            <nl idx="1">
+                <ln>
+                    <times>
+                        <variable coef="1.0" idx="0"/>
+                        <variable coef="1.0" idx="1"/>
+                    </times>
+                </ln>
+            </nl>
+        </nonlinearExpressions>
+    </instanceData>
 </osil>
-\end{verbatimtab}
-
+\end{verbatim}
 
 }% end
 
@@ -3657,74 +3831,144 @@ callMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, VarType, ...
 \subsection{OSiL representation for problem given in (\ref{eq:adobj})--(\ref{eq:adeq2}) (p.\pageref{eq:adobj})
 }\label{section:adexample}
 
-\begin{verbatimtab}
+% replaced by \verbatim 18 February --- HIG
+%\begin{verbatimtab}
+%<?xml version="1.0" encoding="UTF-8"?>
+%<osil  xmlns="os.optimizationservices.org"
+%     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+%     xsi:schemaLocation="os.optimizationservices.org
+%     http://www.optimizationservices.org/schemas/OSiL.xsd">
+%	<instanceHeader>
+%		<description>A test problem for Algorithmic Differentiation</description>
+%	</instanceHeader>
+%	<instanceData>
+%		<variables numberOfVariables="4">
+%			<var lb="0" name="x0" type="C"/>
+%			<var lb="0" name="x1" type="C"/>
+%			<var lb="0" name="x2" type="C"/>
+%			<var lb="0" name="x3" type="C"/>
+%		</variables>
+%		<objectives numberOfObjectives=" 1">
+%			<obj maxOrMin="min" name="minCost" numberOfObjCoef="1">
+%				<coef idx="1">9.0</coef>
+%			</obj>
+%		</objectives>
+%		<constraints numberOfConstraints="2">
+%			<con ub="10.0" constant="33"/>
+%			<con lb="10.0"/>
+%		</constraints>
+%		<linearConstraintCoefficients numberOfValues="2">
+%			<start>
+%				<el>0</el>
+%				<el>0</el>
+%				<el>1</el>
+%				<el>2</el>
+%				<el>2</el>
+%			</start>
+%			<rowIdx>
+%				<el>0</el>
+%				<el>1</el>
+%			</rowIdx>
+%			<value>
+%				<el>5</el>
+%				<el>7</el>
+%			</value>
+%		</linearConstraintCoefficients>
+%		<nonlinearExpressions numberOfNonlinearExpressions="3">
+%			<nl idx="1">
+%				<ln>
+%					<times>
+%						<variable coef="1.0" idx="0"/>
+%						<variable coef="1.0" idx="3"/>
+%					</times>
+%				</ln>
+%			</nl>
+%			<nl idx="0">
+%				<sum>
+%					<number type="real" value="-105"/>
+%					<variable coef="1.37" idx="1"/>
+%					<variable coef="2" idx="3"/>
+%				</sum>
+%			</nl>
+%			<nl idx="-1">
+%				<power>
+%					<variable coef="1.0" idx="0"/>
+%					<number type="real" value="2.0"/>
+%				</power>
+%			</nl>
+%		</nonlinearExpressions>
+%	</instanceData>
+%</osil>
+%\end{verbatimtab}
+
+\begin{verbatim}
 <?xml version="1.0" encoding="UTF-8"?>
 <osil  xmlns="os.optimizationservices.org"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="os.optimizationservices.org
      http://www.optimizationservices.org/schemas/OSiL.xsd">
-	<instanceHeader>
-		<description>A test problem for Algorithmic Differentiation</description>
-	</instanceHeader>
-	<instanceData>
-		<variables numberOfVariables="4">
-			<var lb="0" name="x0" type="C"/>
-			<var lb="0" name="x1" type="C"/>
-			<var lb="0" name="x2" type="C"/>
-			<var lb="0" name="x3" type="C"/>
-		</variables>
-		<objectives numberOfObjectives=" 1">
-			<obj maxOrMin="min" name="minCost" numberOfObjCoef="1">
-				<coef idx="1">9.0</coef>
-			</obj>
-		</objectives>
-		<constraints numberOfConstraints="2">
-			<con ub="10.0" constant="33"/>
-			<con lb="10.0"/>
-		</constraints>
-		<linearConstraintCoefficients numberOfValues="2">
-			<start>
-				<el>0</el>
-				<el>0</el>
-				<el>1</el>
-				<el>2</el>
-				<el>2</el>
-			</start>
-			<rowIdx>
-				<el>0</el>
-				<el>1</el>
-			</rowIdx>
-			<value>
-				<el>5</el>
-				<el>7</el>
-			</value>
-		</linearConstraintCoefficients>
-		<nonlinearExpressions numberOfNonlinearExpressions="3">
-			<nl idx="1">
-				<ln>
-					<times>
-						<variable coef="1.0" idx="0"/>
-						<variable coef="1.0" idx="3"/>
-					</times>	
-				</ln>
-			</nl>
-			<nl idx="0">
-				<sum>
-					<number type="real" value="-105"/>
-					<variable coef="1.37" idx="1"/>
-					<variable coef="2" idx="3"/>
-				</sum>	
-			</nl>
-			<nl idx="-1">
-				<power>
-					<variable coef="1.0" idx="0"/>
-					<number type="real" value="2.0"/>
-				</power>
-			</nl>
-		</nonlinearExpressions>
-	</instanceData>
+    <instanceHeader>
+        <description>A test problem for Algorithmic Differentiation</description>
+    </instanceHeader>
+    <instanceData>
+        <variables numberOfVariables="4">
+            <var lb="0" name="x0" type="C"/>
+            <var lb="0" name="x1" type="C"/>
+            <var lb="0" name="x2" type="C"/>
+            <var lb="0" name="x3" type="C"/>
+        </variables>
+        <objectives numberOfObjectives=" 1">
+            <obj maxOrMin="min" name="minCost" numberOfObjCoef="1">
+                <coef idx="1">9.0</coef>
+            </obj>
+        </objectives>
+        <constraints numberOfConstraints="2">
+            <con ub="10.0" constant="33"/>
+            <con lb="10.0"/>
+        </constraints>
+        <linearConstraintCoefficients numberOfValues="2">
+            <start>
+                <el>0</el>
+                <el>0</el>
+                <el>1</el>
+                <el>2</el>
+                <el>2</el>
+            </start>
+            <rowIdx>
+                <el>0</el>
+                <el>1</el>
+            </rowIdx>
+            <value>
+                <el>5</el>
+                <el>7</el>
+            </value>
+        </linearConstraintCoefficients>
+        <nonlinearExpressions numberOfNonlinearExpressions="3">
+            <nl idx="1">
+                <ln>
+                    <times>
+                        <variable coef="1.0" idx="0"/>
+                        <variable coef="1.0" idx="3"/>
+                    </times>
+                </ln>
+            </nl>
+            <nl idx="0">
+                <sum>
+                    <number type="real" value="-105"/>
+                    <variable coef="1.37" idx="1"/>
+                    <variable coef="2" idx="3"/>
+                </sum>
+            </nl>
+            <nl idx="-1">
+                <power>
+                    <variable coef="1.0" idx="0"/>
+                    <number type="real" value="2.0"/>
+                </power>
+            </nl>
+        </nonlinearExpressions>
+    </instanceData>
 </osil>
-\end{verbatimtab}
+\end{verbatim}
 
 \addcontentsline{toc}{section}{Bibliography}
 % \addcontentsline{toc}{section}{Bibliography}% alternative for article class
@@ -3796,7 +4040,7 @@ this machine.
 translate into an attempt to pass -L<path> to cl, which it ignores with a
 warning about an invalid option.  Whatever libtool is hoping to achieve, it's
 failing. And not necessary, apparently, at least for a static build.
-	
+
 %%%%
 
 Important comments from Andreas:
