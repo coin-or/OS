@@ -266,8 +266,7 @@ browserState (on|off)
 (-solver{xmlwhitespace}+{optionValue}) {
 	if(yyextra->solverName == ""){
 		printf("Found option:  %s\n", yytext); 
-		char *ch = strdup(yytext);
-		//
+		//char *ch = strdup(yytext);
 		char *ch = yytext;
 		// move past -solver
 		ch+=7;

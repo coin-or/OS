@@ -506,6 +506,7 @@ void solve(){
 					}
 				}
 			}
+			delete fileUtil;
 			if(osoptions->osrlFile != ""){
 				fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
 				//const char *ch1 = "/Applications/Firefox.app/Contents/MacOS/firefox  ";
