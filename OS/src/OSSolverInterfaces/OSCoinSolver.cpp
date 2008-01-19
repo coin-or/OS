@@ -273,7 +273,7 @@ bool CoinSolver::optimize()
 			if(numOfIntVars > 0){
 				cout << "CALL BRANCH AND BOUND " << endl;
 				if( sSolverName.find( "symphony") != std::string::npos) {
-					m_OsiSolver->initialSolve();
+					//m_OsiSolver->initialSolve();
 					m_OsiSolver->branchAndBound();	
 				}
 				else{
