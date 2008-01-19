@@ -336,6 +336,11 @@ class IntVector{
 public:
 	IntVector();
 	~IntVector();
+	/**
+	 * bDeleteArrays is true if we delete the arrays in garbage collection
+	 * set to true by default
+	 */
+	bool bDeleteArrays;
 	int *el;
 };//class IntVector
 
@@ -346,6 +351,11 @@ class DoubleVector{
 public:
 	DoubleVector();
 	~DoubleVector();
+	/**
+	 * bDeleteArrays is true if we delete the arrays in garbage collection
+	 * set to true by default
+	 */
+	bool bDeleteArrays;
 	double *el;			
 };//class DoubleVector
 

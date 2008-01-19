@@ -229,7 +229,8 @@ QuadraticTerms::~QuadraticTerms(){
 
 
 IntVector::IntVector():
-	el(NULL)
+	el(NULL),
+	bDeleteArrays(true)
 {  
 	#ifdef DEBUG
 	cout << "Inside the IntVector Constructor" << endl;
@@ -240,12 +241,16 @@ IntVector::~IntVector(){
 	#ifdef DEBUG
 	cout << "Inside the IntVector Destructor" << endl;
 	#endif
-	delete[] el;
-	el = NULL;
+	if(	bDeleteArrays == true){
+		delete[] el;
+		el = NULL;
+	}
+
 } 
 
 DoubleVector::DoubleVector():
-	el(NULL)
+	el(NULL),
+	bDeleteArrays(true)
 {
 	#ifdef DEBUG
 	cout << "Inside the DoubleVector Constructor" << endl;
@@ -258,7 +263,9 @@ DoubleVector::~DoubleVector(){
 	#ifdef DEBUG
 	cout << "Inside the DoubleVector Destructor" << endl;
 	#endif
-	delete[] el;
-	el = NULL;
+	if(	bDeleteArrays == true){
+		delete[] el;
+		el = NULL;
+	}
 }
 

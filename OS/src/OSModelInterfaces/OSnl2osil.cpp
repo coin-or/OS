@@ -114,9 +114,11 @@ OSnl2osil::OSnl2osil(std::string nlfilename){
 }
 
 OSnl2osil::~OSnl2osil(){
+	osinstance->instanceData->linearConstraintCoefficients->start->bDeleteArrays = false;
+	osinstance->instanceData->linearConstraintCoefficients->rowIdx->bDeleteArrays = false;
+	osinstance->instanceData->linearConstraintCoefficients->value->bDeleteArrays = false;
 	delete osinstance;
 	osinstance = NULL;
-	delete[] X0;
 	//delete asl;
 }
 
