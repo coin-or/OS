@@ -144,9 +144,9 @@ int  main(){
 		std::vector<double> funVals(3);
 		std::vector<double> dfunVals(6);
 		double *conVals = NULL;
-		conVals = new double[ 2];
+		//conVals = new double[ 2];
 		double *objVals = NULL;
-		objVals = new double[ 1];
+		//objVals = new double[ 1];
 
 		/**
 		 * 
@@ -618,11 +618,14 @@ int  main(){
 		}
 		// done with CppAD test	
 		// do garbage collection
-		//delete osilreader;
+		delete osilreader;
 		osilreader = NULL;
 		std::cout << "OSILREADER DELETED" << std::endl;	
 		//delete[] conVals;
 		//delete[] objVals;		
+		delete[] x;
+		delete[] z;
+		delete[] w;
 	}
 	catch(const ErrorClass& eclass){
 		std::cout << eclass.errormsg << std::endl;
@@ -659,6 +662,7 @@ int  main(){
 	     std::cout << "dy =  " <<  dy[ 0] << std::endl;
 	     check = x1 * std::pow(x0, x1-1.);
 	     ok   &= NearEqual(dy[0], check, 1e-10, 1e-10);
+	     delete osilreader;
 	}
 	
 	{
@@ -723,6 +727,7 @@ int  main(){
 			std::cout << std::endl;
 		}
 	}
+	delete fileUtil;
 	return 0;
 }// end main program
 

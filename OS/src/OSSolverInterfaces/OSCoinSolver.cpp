@@ -272,10 +272,13 @@ bool CoinSolver::optimize()
 		try{
 			if(numOfIntVars > 0){
 				
-
+				m_OsiSolver->branchAndBound();
+				
+				
+				
 				if( sSolverName.find( "symphony") != std::string::npos) {
 					//m_OsiSolver->initialSolve();
-					m_OsiSolver->branchAndBound();	
+					//m_OsiSolver->branchAndBound();	
 				}
 				else{
 					// copy from John Forrest
@@ -283,19 +286,19 @@ bool CoinSolver::optimize()
 				
 	                /* Do not try and produce equality cliques and
 	                   do up to 10 passes */
-	                OsiSolverInterface *solver2 = process.preProcess(*m_OsiSolver, false, 10);
-	                if (!solver2) {
-	                  throw ErrorClass("Pre-processing says infeasible");
-	                } else {
-	                  printf("processed model has %d rows and %d columns\n",
-	                         solver2->getNumRows(),solver2->getNumCols());
-	                }
-	                delete m_OsiSolver;
+	                //OsiSolverInterface *solver2 = process.preProcess(*m_OsiSolver, false, 10);
+	               // if (!solver2) {
+	                //  throw ErrorClass("Pre-processing says infeasible");
+	               // } else {
+	                //  printf("processed model has %d rows and %d columns\n",
+	                //         solver2->getNumRows(),solver2->getNumCols());
+	               // }
+	                //delete m_OsiSolver;
 	                // we have to keep solver2 so pass clone
-	                solver2 = solver2->clone();
-	                m_OsiSolver = solver2;
-	                m_OsiSolver->initialSolve();
-	                m_OsiSolver->branchAndBound();
+	                //solver2 = solver2->clone();
+	               // m_OsiSolver = solver2;
+	               // m_OsiSolver->initialSolve();
+	               // m_OsiSolver->branchAndBound();
 				}
 			}
 			else{
