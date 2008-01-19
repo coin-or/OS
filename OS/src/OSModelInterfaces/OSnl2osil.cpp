@@ -77,7 +77,7 @@ using std::endl;
 OSnl2osil::OSnl2osil(std::string nlfilename){	
 	//Initialize the AMPL library
 	asl = ASL_alloc(ASL_read_fg);
-    	stub = &nlfilename[ 0];
+    stub = &nlfilename[ 0];
 	//cout << "READING FILE " << stub << endl;
 	//Initialize the nl file reading
 	nl = jac0dim(stub, (fint)strlen(stub));
@@ -98,7 +98,8 @@ OSnl2osil::OSnl2osil(std::string nlfilename){
 	#endif
 
 	//fg_read(nl, 0);
-	X0 = (real *)Malloc( n_var*sizeof(real));
+	//X0 = (real *)Malloc( n_var*sizeof(real));
+	X0 = new double(n_var*sizeof(real) );	
 	//cout <<  "N_OPS =  " <<  N_OPS << endl;
 	if(N_OPS > 0){
 		for(int i = 0; i < N_OPS; i++){
@@ -115,6 +116,8 @@ OSnl2osil::OSnl2osil(std::string nlfilename){
 OSnl2osil::~OSnl2osil(){
 	delete osinstance;
 	osinstance = NULL;
+	delete[] X0;
+	delete asl;
 }
 
 OSnLNode* OSnl2osil::walkTree (expr *e){

@@ -255,18 +255,20 @@ int main(int argC, char* argV[])
 		delete si;
 		delete si2;
 		*/
-		
+		//mpsFileName =  dataDir + "mpsFiles" + dirsep + "testfile2.mps";	
 		solver = new CoinSolver();
 		solver->sSolverName = "cbc";
 		mps2osil = new OSmps2osil( mpsFileName);
 		mps2osil->createOSInstance() ;
 		solver->osinstance = mps2osil->osinstance;
+		//solver->osinstance = NULL;
+		//solver->osil = osilwriter.writeOSiL(  mps2osil->osinstance );
 		solver->osol = osol;
 		cout << "call COIN Solve" << endl;
 		solver->solve();
 		delete solver;
 		delete mps2osil;
-	
+		//nl2osil = new OSnl2osil( nlFileName);
 		//return 0;
 		//
 	}
