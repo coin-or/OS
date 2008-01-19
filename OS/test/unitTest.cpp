@@ -1279,6 +1279,7 @@ double getObjVal( std::string osrl){
 				// get the substring
 				sObjVal = osrl.substr( pos1 + 1, pos2 - pos1 - 1);
 				//std::cout << "HERE IS THE OBJECTIVE FUNCTION VALUE SUBSTRING  " << sObjVal<< std::endl; 
+				// return dObjVal = strtod(sObjVal.c_str(), NULL);
 				return dObjVal = atof( sObjVal.c_str()); 
 			}
 			else return OSNAN;
