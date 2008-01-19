@@ -58,7 +58,6 @@ OS/data/configFiles/testRemoteRetrieve.config -text
 OS/data/configFiles/testRemoteSend.config -text
 OS/data/configFiles/testRemotegetJobID.config -text
 OS/data/configFiles/testbrowser.config -text
-OS/data/configFiles/testlocal.config -text
 OS/data/configFiles/testlocalclp.config -text
 OS/data/configFiles/testlocalosol.config -text
 OS/data/configFiles/testmps.config -text
