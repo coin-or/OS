@@ -51,10 +51,12 @@ OS/data/amplFiles/parinc.dat -text
 OS/data/amplFiles/parinc.mod -text
 OS/data/amplFiles/parinc.nl -text
 OS/data/configFiles/kill.config -text
+OS/data/configFiles/testLocal.config -text
 OS/data/configFiles/testRemote.config -text
 OS/data/configFiles/testRemoteBIG.config -text
 OS/data/configFiles/testRemoteKnock.config -text
 OS/data/configFiles/testRemoteRetrieve.config -text
+OS/data/configFiles/testRemoteRetrieveBrowser.config -text
 OS/data/configFiles/testRemoteSend.config -text
 OS/data/configFiles/testRemotegetJobID.config -text
 OS/data/configFiles/testbrowser.config -text
