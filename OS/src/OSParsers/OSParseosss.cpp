@@ -2312,6 +2312,7 @@ int ossslex_destroy  (yyscan_t yyscanner)
     yy_init_globals( yyscanner);
 
     /* Destroy the main struct (reentrant only). */
+    printf("FREE THE SCANNER\n");
     osssfree ( yyscanner , yyscanner );
     yyscanner = NULL;
     return 0;

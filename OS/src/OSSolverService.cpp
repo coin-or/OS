@@ -210,6 +210,7 @@ ASL_alloc(ASL_read_fg);
 		osss_scan_string( osss, scanner); 
 		std::cout << "call ossslex" << std::endl;
 		ossslex( scanner);
+		ossslex_destroy( scanner);
 		std::cout << "done with call to ossslex" << std::endl;
 		// if there is a config file, get those options
 		if(osoptions->configFile != ""){
@@ -222,6 +223,7 @@ ASL_alloc(ASL_read_fg);
 			std::cout << "Done with call Text Extra" << std::endl;
 			osss_scan_string( osolfileOptions.c_str() , scanner);
 			ossslex(scanner );	
+			ossslex_destroy( scanner);
 		}
 	}
 		catch(const ErrorClass& eclass){
@@ -302,9 +304,8 @@ ASL_alloc(ASL_read_fg);
 					break;
 			}
 		}
-	ossslex_destroy( scanner);
 	delete	osoptions;
-	osoptions = NULL;
+	osoptions = NULL;	
 	delete fileUtil;
 	fileUtil = NULL;
 	return 0;
