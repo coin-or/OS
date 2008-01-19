@@ -226,7 +226,8 @@ browserState (on|off)
 (-serviceLocation{xmlwhitespace}+{optionValue}) {
 	if(yyextra->serviceLocation == ""){
 		printf("Found option:  %s\n", yytext); 
-		yyextra->serviceLocation = strdup(yytext);
+		//yyextra->serviceLocation = strdup(yytext);
+		yyextra->serviceLocation =  yytext;
 		//char *ch = strdup(yytext);
 		char *ch = yytext;
 		// move past -serviceLocation

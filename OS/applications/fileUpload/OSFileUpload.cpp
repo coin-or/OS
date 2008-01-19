@@ -58,9 +58,9 @@
 
 int main(int argC, char* argV[])
 {
+	FileUtil *fileUtil = NULL;  
 	try{
 		if( argC != 2) throw ErrorClass( "there must be exactly one command line argument which should be the file name");
-		FileUtil *fileUtil = NULL;  
 		fileUtil = new FileUtil(); 
 		time_t start, finish, tmp;
 		std::string osilFileNameWithPath;
@@ -104,10 +104,12 @@ int main(int argC, char* argV[])
 		//std::string osol = "<osol><general><instanceLocation locationType=\"local\">" + remoteFileLocation + osilFileName + "</instanceLocation></general> </osol>";
 		//std::string osrl = osagent->solve(osil, osol);
 		//std::cout << osrl << std::endl;
+		if(fileUtil != NULL) delete fileUtil;
 		return 0;
 	}
 	catch( const ErrorClass& eclass){
 		std::cout << eclass.errormsg <<  std::endl;
+		if(fileUtil != NULL) delete fileUtil;
 		return 0;
 	}
 }

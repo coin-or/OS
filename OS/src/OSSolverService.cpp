@@ -279,6 +279,10 @@ ASL_alloc(ASL_read_fg);
 		catch(const ErrorClass& eclass){
 			//cout << eclass.errormsg <<  endl;
 			cout << "could not open file properly" << endl;
+			delete	osoptions;
+			osoptions = NULL;	
+			delete fileUtil;
+			fileUtil = NULL;
 			return 1;
 		}	
 		// now call the correct serviceMethod

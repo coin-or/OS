@@ -24,9 +24,9 @@ using std::endl;
 OSExpressionTree::OSExpressionTree():
 	m_treeRoot( NULL),
 	mapVarIdx( NULL),
-	bDestroyNlNodes( true),
 	m_bIndexMapGenerated( false),
-	bCppADMustReTape( false){
+	bCppADMustReTape( false),
+	bDestroyNlNodes( true){
 }//end OSExpressionTree
 
  
@@ -35,23 +35,12 @@ OSExpressionTree::~OSExpressionTree(){
 	cout << "Inside the OSExpressionTree Destructor" << endl;
 	#endif
 	if( bDestroyNlNodes == true){
-		if(m_treeRoot != NULL){
-			std::vector<OSnLNode*> postfixVec;
-			postfixVec = m_treeRoot->getPostfixFromExpressionTree();
-			unsigned int n = postfixVec.size();
-			unsigned int i;
-			for (i = 0 ; i < n; i++){
-				//std::cout << postfixVec[i]->snodeName << std::endl;
-				if( postfixVec[ i] !=  NULL){
-					// note m_treeRoot is getting deleted here
-					delete postfixVec[ i];
-					postfixVec[ i] = NULL;
-				}
-			}
-		}	
+		if(m_treeRoot != NULL) delete m_treeRoot;	
 	}
-	if(mapVarIdx != NULL) delete mapVarIdx;
-	mapVarIdx = NULL;
+	if(mapVarIdx != NULL){
+		delete mapVarIdx;
+		mapVarIdx = NULL;
+	}
 }//end ~OSExpressionTree 
 
 
