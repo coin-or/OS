@@ -28001,7 +28001,17 @@ fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/configFiles/testlocal.config"
+  coin_vpath_link_files="$coin_vpath_link_files data/configFiles/testLocal.config"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/configFiles/testLocalMPS.config"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/configFiles/testLocalNL.config"
 fi
 
 
@@ -28046,12 +28056,27 @@ fi
 
 
 if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/configFiles/testRemoteMPS.config"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/configFiles/testRemoteNL.config"
+fi
+
+
+if test $coin_vpath_config = yes; then
   coin_vpath_link_files="$coin_vpath_link_files data/configFiles/testRemoteBIG.config"
 fi
 
 
 if test $coin_vpath_config = yes; then
   coin_vpath_link_files="$coin_vpath_link_files data/configFiles/testRemoteRetrieve.config"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/configFiles/testRemoteRetrieveBrowser.config"
 fi
 
 
