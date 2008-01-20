@@ -8,7 +8,7 @@
 	<param name="TEMP_FILE_FOLDER" description="the folder to save temporary files">temp/</param>
 	<param name="LOG_FOLDER" description="the main system file for logging messages and errors">log/</param>
 	<param name="LOG_FILE" description="the main system file for logging messages and errors">log.txt</param>
-	<param name="MAX_LOG_FILE_SIZE" description="the maximum size of the log file before it is backed up and started again">5000000</param>
+	<param name="MAX_LOG_FILE_SIZE" description="the maximum size of the log file before it is backed up and started again">10000000</param>
 	<param name="BACKUP_FOLDER" description="the main system folder for backing up">backup/</param>
 	<param name="REGISTRY_LOG_FOLDER" description="the main registry folder for logging registy related messages">log/</param>
 	<param name="REGISTRY_LOG_FILE" description="the main registry file for logging registy related messages">registryLog.txt</param>
@@ -18,19 +18,19 @@
 	<param name="PRINT_FOLDER" description="the main system folder for printing a string">log/</param>
 	<param name="PRINT_FILE" description="the main system file for printing a sting">print.txt</param>
 	<param name="APPEND_PRINT_FILE" description="whether to append or overwrite the PrintFile">true</param>
-	<param name="MINIMUM_DISKSPACE_TRIGGER" description="the minimum disk space before the automatic clean up is triggered to delete temporary files">1000000000</param>
+	<param name="MINIMUM_DISKSPACE_TRIGGER" description="the minimum disk space before the automatic clean up is triggered to delete temporary files">1000000</param>
 	<param name="MINIMUM_MEMORY_TRIGGER" description="the minimum ram memory before the automatic clean up is triggered to get more memory">100</param>
 	<param name="CLEAN_UP_FOLDERS" description="the folders to clean up">temp/,backup/</param>
-	<param name="MAX_JOBIDS_TO_KEEP" description="the maximum number of job ids to keep before deleting them">100</param>
+	<param name="MAX_JOBIDS_TO_KEEP" description="the maximum number of job ids to keep before deleting them">1000</param>
 	<!--Time related parameters-->
-	<param name="JOB_MAX_HOURS" description="the maximum hours allowed for a job">1</param>
+	<param name="JOB_MAX_HOURS" description="the maximum hours allowed for a job">8</param>
 	<param name="JOB_MAX_MINUTES" description="the maximum minutes allowed for a job">0</param>
 	<param name="JOB_MAX_SECONDS" description="the maximum seconds allowed for a job">0</param>
 	<param name="TEMP_FILE_MAX_DAYS" description="the maximum days allowed to keep a temporary file">30</param>
 	<param name="TEMP_FILE_MAX_HOURS" description="the maximum hours allowed to keep a temporary file">0</param>
 	<param name="TEMP_FILE_MAX_MINUTES" description="the maximum minutes allowed to keep a temporary file">0</param>
 	<param name="TEMP_FILE_MAX_SECONDS" description="the maximum seconds allowed to keep a temporary file">0</param>
-	<param name="TEMP_FILE_MIN_DAYS" description="the minimum days allowed to keep a temporary file">2</param>
+	<param name="TEMP_FILE_MIN_DAYS" description="the minimum days allowed to keep a temporary file">5</param>
 	<param name="TEMP_FILE_MIN_HOURS" description="the minimum hours allowed to keep a temporary file">0</param>
 	<param name="TEMP_FILE_MIN_MINUTES" description="the minimum minutes allowed to keep a temporary file">0</param>
 	<param name="TEMP_FILE_MIN_SECONDS" description="the minimum seconds allowed to keep a temporary file">0</param>
@@ -38,8 +38,8 @@
 	<param name="CPU_SPEED" description="the cpu speed of the server">INF</param>
 	<param name="MEMORY_SIZE" description="the total physical memory of the server">INF</param>
 	<param name="DISK_SPACE" description="the total disk space of the server">INF</param>
-	<param name="MAX_JOB_NUMBERS" description="the maximum number of running jobs allowed per service">5</param>
-	<param name="MAX_WAITING_NUMBERS" description="the maximum number of waiting  jobs allowed per service">5</param>
+	<param name="MAX_JOB_NUMBERS" description="the maximum number of running jobs allowed per service">20</param>
+	<param name="MAX_WAITING_NUMBERS" description="the maximum number of waiting  jobs allowed per service">10</param>
 	<param name="SERVICE_POLLING_INTERVAL_SHORT" description="the number of milli-seconds that a service periodically carries out maintentance. It is relatively short">60000</param>
 	<param name="SERVICE_POLLING_INTERVAL_MEDIUM" description="the number of milli-seconds that a service periodically carries out maintentance. It is not too short and nor too long">3600000</param>
 	<param name="SERVICE_POLLING_INTERVAL_LONG" description="the number of milli-seconds that a service periodically carries out maintentance. It is relatively long">86400000</param>
