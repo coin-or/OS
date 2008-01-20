@@ -436,8 +436,13 @@ void solve(){
 							}
 							else{
 								if( osoptions->solverName.find( "dylp") != std::string::npos){
+									bool bDYlPIsPresent  = false;
+									#ifdef COIN_HAS_DYLP
 									solverType = new CoinSolver();
 									solverType->sSolverName = "dylp";
+									bDYlPIsPresent = true;
+									#endif
+									if(bDYlPIsPresent == false) throw ErrorClass( "the DyLP solver requested is not present");
 								}
 								else{
 									if( osoptions->solverName.find( "symphony") != std::string::npos){
