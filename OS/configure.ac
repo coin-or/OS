@@ -279,6 +279,38 @@ AC_COIN_HAS_ASL
 	 ;;
   esac
 
+##############################################################################
+#                            OPENMP defs                                     #
+##############################################################################
+
+
+AC_ARG_ENABLE([openmp],
+[AC_HELP_STRING([--enable-openmp],
+                [compile in OpenMP features])],
+[case "${enableval}" in
+   yes) os_openmp=true
+   ;;
+   no)  os_openmp=false
+   ;;
+   *) AC_MSG_ERROR(Bad value ${enableval} for --enable-openmp)
+   ;;
+esac],
+[os_openmp=false])
+
+if test $os_openmp = true; then
+   AC_MSG_CHECKING([G++ version])
+   fopenmp_version=4.2
+   gcc_required_version=`echo ${fopenmp_version} | sed -e 's/\./0/g'`
+   get_gcc_version=`$CXX -dumpversion`
+   gcc_version=`echo ${get_gcc_version} | sed -e 's/\./0/g'`
+   major_gcc_version=`echo ${gcc_version:0:3}`
+   AC_MSG_RESULT([$get_gcc_version])
+   if test ${major_gcc_version} -lt ${gcc_required_version}; then
+       AC_MSG_ERROR(OpenMP feautures are supported by G++ 4.2.0 or higher.)
+   fi
+fi
+
+AM_CONDITIONAL(OPENMP, [test $os_openmp = true])
 
 ############################################################################
 ############################################################################
@@ -451,6 +483,11 @@ AC_DEFINE_UNQUOTED([OSROOT_DIR], ["$OSROOT_DIR"],
 case $CXX in
   cl*)
     oslib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOS.lib';;
+  g++* | *\g++* | */g++*)
+     if test $os_openmp = true; then
+         CXXFLAGS="$CXXFLAGS -fopenmp"
+     fi
+  ;;
   *)
     oslib="-L\$(INSTALLIBDIR) -lOS";;
 esac
@@ -511,9 +548,7 @@ AC_COIN_VPATH_LINK(data/osrlFiles/rosenbrockmod.osrl)
 ## configure test files
 ##
 AC_COIN_VPATH_LINK(data/configFiles/kill.config)
-AC_COIN_VPATH_LINK(data/configFiles/testLocal.config)
-AC_COIN_VPATH_LINK(data/configFiles/testLocalMPS.config)
-AC_COIN_VPATH_LINK(data/configFiles/testLocalNL.config)
+AC_COIN_VPATH_LINK(data/configFiles/testlocal.config)
 AC_COIN_VPATH_LINK(data/configFiles/testbrowser.config)
 AC_COIN_VPATH_LINK(data/configFiles/testlocalclp.config)
 AC_COIN_VPATH_LINK(data/configFiles/testlocalosol.config)
@@ -522,11 +557,8 @@ AC_COIN_VPATH_LINK(data/configFiles/testnl.config)
 AC_COIN_VPATH_LINK(data/configFiles/testRemoteKnock.config)
 AC_COIN_VPATH_LINK(data/configFiles/testRemotegetJobID.config)
 AC_COIN_VPATH_LINK(data/configFiles/testRemote.config)
-AC_COIN_VPATH_LINK(data/configFiles/testRemoteMPS.config)
-AC_COIN_VPATH_LINK(data/configFiles/testRemoteNL.config)
 AC_COIN_VPATH_LINK(data/configFiles/testRemoteBIG.config)
 AC_COIN_VPATH_LINK(data/configFiles/testRemoteRetrieve.config)
-AC_COIN_VPATH_LINK(data/configFiles/testRemoteRetrieveBrowser.config)
 AC_COIN_VPATH_LINK(data/configFiles/testRemoteSend.config)
 
 ##
