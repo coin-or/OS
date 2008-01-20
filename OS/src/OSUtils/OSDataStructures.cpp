@@ -229,8 +229,8 @@ QuadraticTerms::~QuadraticTerms(){
 
 
 IntVector::IntVector():
-	el(NULL),
-	bDeleteArrays(true)
+	bDeleteArrays(true),
+	el(NULL)
 {  
 	#ifdef DEBUG
 	cout << "Inside the IntVector Constructor" << endl;
@@ -249,8 +249,8 @@ IntVector::~IntVector(){
 } 
 
 DoubleVector::DoubleVector():
-	el(NULL),
-	bDeleteArrays(true)
+	bDeleteArrays(true),
+	el(NULL)
 {
 	#ifdef DEBUG
 	cout << "Inside the DoubleVector Constructor" << endl;

@@ -13,7 +13,7 @@
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  *  
- */
+ */ 
 
 #include "OSInstance.h"
 #include "OSMathUtil.h"
@@ -109,12 +109,12 @@ OSInstance::OSInstance():
 	m_bSparseJacobianCalculated( false),
 	m_iHighestOrderEvaluated( -1),
 	m_mmdObjGradient( NULL),
-	bUseExpTreeForFunEval( false),
 	m_bProcessTimeDomain( false),
 	m_bProcessTimeStages( false),
 	m_bProcessTimeInterval( false),
 	m_bFiniteTimeStages( false),
-	m_iNumberOfTimeStages(-1)
+	m_iNumberOfTimeStages(-1),
+	bUseExpTreeForFunEval( false)
 
 {    
 	#ifdef DEBUG
@@ -682,8 +682,8 @@ TimeDomainStages::~TimeDomainStages(){
 }
 
 TimeDomainInterval::TimeDomainInterval():
-	intervalStart(0.0),
-	intervalHorizon(0.0)
+	intervalHorizon(0.0),
+	intervalStart(0.0)
 {
 	#ifdef DEBUG  
 	cout << "Inside the Interval Constructor" << endl;
@@ -1848,6 +1848,7 @@ bool OSInstance::setQuadraticTerms(int number,
 		int* rowIndexes, int* varOneIndexes, int* varTwoIndexes, double* coefficients,
 		int begin, int end){
 	if(number < 0) return false;
+	if(number != (end - begin) + 1) return false;
 	if(number == 0){
 		instanceData->quadraticCoefficients = 0;
 		return true;
@@ -1862,7 +1863,6 @@ bool OSInstance::setQuadraticTerms(int number,
 	int i = 0;
 	instanceData->quadraticCoefficients->qTerm = new QuadraticTerm*[number];
 	for(i = 0; i < number; i++) instanceData->quadraticCoefficients->qTerm[i] = new QuadraticTerm();
-	// Kipp: check logic below -- looks weird what is the k for???
 	int k = 0;
 	for(i = begin; i <= end; i++){
 			instanceData->quadraticCoefficients->qTerm[k]->idx = rowIndexes[i];

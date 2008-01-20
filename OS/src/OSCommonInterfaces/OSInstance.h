@@ -1222,11 +1222,6 @@ private:
 	
 public:
 
-	/**
-	 * bUseExpTreeForFunEval is set to true if you wish to use the OS Expression Tree for
-	 * function evaluations instead of AD -- false by default. 
-	 */
-	bool bUseExpTreeForFunEval;
 	
 	/**
 	 * Get instance name. 
@@ -2236,6 +2231,13 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * @return true if successful 
 	 */		 
 	bool initObjGradients();
+	
+	
+	/**
+	 * bUseExpTreeForFunEval is set to true if you wish to use the OS Expression Tree for
+	 * function evaluations instead of AD -- false by default. 
+	 */
+	bool bUseExpTreeForFunEval;
 	
 																																																			
 }; //class OSInstance

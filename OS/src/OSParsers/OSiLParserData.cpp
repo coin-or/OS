@@ -46,11 +46,9 @@ using namespace std;
  	variablecoefattON(false),
 	timeDomainStages(false),
 	timeDomainInterval(false),
-	stagename(""),
 	stagecount(0),
-	intervalhorizon(0.0),
-	intervalstart(0.0),
 	stagenameON(false),
+	stagename(""),
 	stageVariablesON(false),
 	stageConstraintsON(false),
 	stageObjectivesON(false),
@@ -64,7 +62,9 @@ using namespace std;
 	stageconcount(0),
 	stageobjcount(0),
 	intervalhorizonON(false),
-	intervalstartON(false)
+	intervalhorizon(0.0),
+	intervalstartON(false),
+	intervalstart(0.0)
  {
 
  }//OSiLParserData

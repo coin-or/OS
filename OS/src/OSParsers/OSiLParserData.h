@@ -3,7 +3,7 @@
  * @author  Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin, 
  * @version 2.0, 12/21/2007
  * @since   OS1.0
- *
+ *  
  * \remarks
  * Copyright (C) 2005-2007, Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, Dalhousie University, and the University of Chicago.
@@ -227,7 +227,7 @@ public:
 	bool intervalstartON;
 
 	/** intervalstart holds the value for the start of the planning horizon*/
-	double intervalstart;
+	double intervalstart; 
 };
 
 #endif /*OSILPARSERDATA_H_*/
