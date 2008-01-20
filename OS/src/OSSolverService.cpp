@@ -162,7 +162,7 @@ int main(int argC, const char* argV[])
 {  
 
 #ifdef COIN_HAS_ASL
-ASL_alloc(ASL_read_fg);
+//ASL_alloc(ASL_read_fg);
 #endif	
 	void* scanner;
 	FileUtil *fileUtil = NULL;
@@ -228,6 +228,9 @@ ASL_alloc(ASL_read_fg);
 	}
 		catch(const ErrorClass& eclass){
 		cout << eclass.errormsg <<  endl;
+		//ossslex_destroy( scanner);
+		delete fileUtil;
+		delete osoptions;
 		return 1;
 	} 
 		cout << "HERE ARE THE OPTION VALUES:" << endl;
