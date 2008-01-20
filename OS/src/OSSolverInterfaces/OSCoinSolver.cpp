@@ -273,7 +273,6 @@ bool CoinSolver::optimize()
 			if(numOfIntVars > 0){
 				cout << "CALL BRANCH AND BOUND " << endl;
 				if( sSolverName.find( "symphony") != std::string::npos) {
-					//m_OsiSolver->initialSolve();
 					m_OsiSolver->branchAndBound();	
 				}
 				else{
@@ -286,14 +285,14 @@ bool CoinSolver::optimize()
 	                if (!m_OsiSolver) {
 	                  throw ErrorClass("Pre-processing says infeasible");
 	                } else {
-	                  printf("processed model has %d rows and %d columns\n",
-	                         //solver2->getNumRows(),solver2->getNumCols());
-	                		  m_OsiSolver->getNumRows(), m_OsiSolver->getNumCols());
+	                	printf("processed model has %d rows and %d columns\n",
+	                      	//solver2->getNumRows(),solver2->getNumCols());
+	                		m_OsiSolver->getNumRows(), m_OsiSolver->getNumCols());
 	                }
 	                //delete m_OsiSolver;
 	                // we have to keep solver2 so pass clone
-	               // solver2 = solver2->clone();
-	               // m_OsiSolver = solver2;
+	                //solver2 = solver2->clone();
+	                //m_OsiSolver = solver2;
 	                m_OsiSolver->initialSolve();
 	                m_OsiSolver->branchAndBound();
 				}
