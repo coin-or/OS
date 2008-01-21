@@ -269,40 +269,42 @@ bool CoinSolver::optimize()
 			m_OsiSolver->setInteger( intIndex,  numOfIntVars);
 		}
 		// try to catch Coin Solver errors
-		OsiSolverInterface *m_OsiSolverPre;
+		//m_OsiSolver->setHintParam(OsiDoScale,false,OsiHintTry);
+		OsiSolverInterface *m_OsiSolverPre = NULL;	
 		try{
 			if(numOfIntVars > 0){
-				cout << "CALL BRANCH AND BOUND " << endl;
+				//cout << "CALL BRANCH AND BOUND " << endl;
+				// just use simple branch and bound for anything but cbc
 				if( sSolverName.find( "cbc") == std::string::npos) {
 					m_OsiSolver->branchAndBound();	
 				}
 				else{
-					// copy from John Forrest
+					// initial solve does not work on Jeff Camm problem without scaling
+					//m_OsiSolver->initialSolve();
+					// copy from John Forrest examples in Cbc
 					CglPreProcess process;
 	                /* Do not try and produce equality cliques and
-	                   do up to 10 passes */
+	                   do up to 10 passes -- I use 10 because John does in Cbc and he is brilliant*/
+					m_OsiSolverPre = process.preProcess(*m_OsiSolver, false, 10);
+	                if (!m_OsiSolverPre) 
 					m_OsiSolverPre = process.preProcess(*m_OsiSolver, false, 10);
 	                if (!m_OsiSolver) {
 	                  throw ErrorClass("Pre-processing says infeasible");
 	                } else {
 	                	printf("processed model has %d rows and %d columns\n",
 	                		m_OsiSolverPre->getNumRows(), m_OsiSolverPre->getNumCols());
-	                }
-	                //delete m_OsiSolver;
-	                // we have to keep solver2 so pass clone
-	                //solver2 = solver2->clone();
-	                //m_OsiSolver = solver2;
-	                //m_OsiSolverPre->initialSolve();
-	                m_OsiSolverPre->branchAndBound();
-	                process.postProcess( *m_OsiSolverPre);
-	                
+	                } 
+	              // return true;
+	               m_OsiSolver->setHintParam( OsiDoScale, true, OsiHintDo) ;
+	               m_OsiSolverPre->branchAndBound( );
+	               cout << "CALL POSTPROCESS " << endl;
+	               process.postProcess( *m_OsiSolverPre);
+	               cout << "DONE WITH CALL POSTROCESS " << endl;
 				}
 			}
 			else{
 				m_OsiSolver->initialSolve();
-				cout << "DONE WITH INITIAL SOLVE" << endl;
-				//
-				
+				cout << "DONE WITH INITIAL SOLVE" << endl;				
 			}
 		}
 		catch(CoinError e){
