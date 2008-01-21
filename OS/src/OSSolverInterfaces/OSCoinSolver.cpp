@@ -269,7 +269,7 @@ bool CoinSolver::optimize()
 			m_OsiSolver->setInteger( intIndex,  numOfIntVars);
 		}
 		// try to catch Coin Solver errors
-		//m_OsiSolver->setHintParam(OsiDoScale,false,OsiHintTry);
+		m_OsiSolver->setHintParam(OsiDoScale,false,OsiHintTry);
 		OsiSolverInterface *m_OsiSolverPre = NULL;	
 		try{
 			if(numOfIntVars > 0){
@@ -296,7 +296,7 @@ bool CoinSolver::optimize()
 	                } 
 	              // return true;
 	               m_OsiSolver->setHintParam( OsiDoScale, true, OsiHintDo) ;
-	               m_OsiSolverPre->branchAndBound( );
+	               m_OsiSolverPre->branchAndBound( ); 
 	               cout << "CALL POSTPROCESS " << endl;
 	               process.postProcess( *m_OsiSolverPre);
 	               cout << "DONE WITH CALL POSTROCESS " << endl;
