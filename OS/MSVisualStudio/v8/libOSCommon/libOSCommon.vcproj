@@ -116,7 +116,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="-DWIN_ -D_WIN32 -DMSVISUALSTUDIO -DHAVE_MATH_H -DHAVE_STRING_H -DHAVE_STDIO_H -DHAVE_TIME_H"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\..\..\OS\src\OSUtils;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src;..\..\..\..\OS;..\..\..\..\CppAD\local;..\..\..\..\CppAD"
+				AdditionalIncludeDirectories="&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include&quot;;..\..\..\..\OS\src\OSUtils;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src;..\..\..\..\OS;..\..\..\..\CppAD\local;..\..\..\..\CppAD"
 				PreprocessorDefinitions="NDEBUG;WIN32;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;WIN_;_LINDO_DLL_;OSROOT_DIR"
 				StringPooling="true"
 				RuntimeLibrary="0"
