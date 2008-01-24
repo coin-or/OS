@@ -138,28 +138,28 @@ generalstatusatt: TYPEATT ATTRIBUTETEXT quote  { osresult->setGeneralStatusType(
 
 serviceURI: 
 | SERVICEURISTARTANDEND
-| SERVICEURISTART ELEMENTTEXT SERVICEURIEND {osresult->setServiceURI( $2);}
+| SERVICEURISTART ELEMENTTEXT SERVICEURIEND {osresult->setServiceURI( $2); free($2);}
 | SERVICEURISTART SERVICEURIEND ;
 
 
 serviceName: 
 | SERVICENAMESTARTANDEND
-| SERVICENAMESTART ELEMENTTEXT SERVICENAMEEND {osresult->setServiceName( $2);}
+| SERVICENAMESTART ELEMENTTEXT SERVICENAMEEND {osresult->setServiceName( $2);  free($2);}
 | SERVICENAMESTART SERVICENAMEEND ;
 
 instanceName: 
 | INSTANCENAMESTARTANDEND
-| INSTANCENAMESTART ELEMENTTEXT INSTANCENAMEEND {osresult->setInstanceName( $2) ;}
+| INSTANCENAMESTART ELEMENTTEXT INSTANCENAMEEND {osresult->setInstanceName( $2) ;  free($2);}
 | INSTANCENAMESTART INSTANCENAMEEND ;
 
 jobID: 
 | JOBIDSTARTANDEND
-| JOBIDSTART ELEMENTTEXT JOBIDEND {osresult->setJobID( $2);}
+| JOBIDSTART ELEMENTTEXT JOBIDEND {osresult->setJobID( $2);  free($2);}
 | JOBIDSTART JOBIDEND ;
 
 headerMessage: 
 | MESSAGESTARTANDEND
-| MESSAGESTART ELEMENTTEXT MESSAGEEND {osresult->setGeneralMessage( $2);}
+| MESSAGESTART ELEMENTTEXT MESSAGEEND {osresult->setGeneralMessage( $2);  free($2);}
 | MESSAGESTART MESSAGEEND ;
 
 resultData: RESULTDATASTARTANDEND 
@@ -288,6 +288,7 @@ if(parserData->kounter < 0 || parserData->kounter > parserData->numberOfVariable
 std::ostringstream outStr;
 outStr << $4;
 parserData->otherVarStruct->otherVarText[parserData->kounter] =  outStr.str();
+free($4);
 }
 |
 VARSTART anIDXATT  GREATERTHAN DOUBLE  VAREND { 
