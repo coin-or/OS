@@ -224,7 +224,7 @@ int main(int argC, const char* argV[])
 	}
 		catch(const ErrorClass& eclass){
 		cout << eclass.errormsg <<  endl;
-		//ossslex_destroy( scanner);
+		ossslex_destroy( scanner);
 		delete fileUtil;
 		delete osoptions;
 		return 1;
