@@ -1238,7 +1238,7 @@ YY_RULE_SETUP
 	outStr << "The first character is: ";
 	outStr <<  yytext;
 	outStr << endl;
-	outStr << "See line number: " << yylineno << endl;  
+	//outStr << "See line number: " << yylineno << endl;  
 	error = outStr.str();
 	throw ErrorClass( error);  
 }
