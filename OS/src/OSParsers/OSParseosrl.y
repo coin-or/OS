@@ -107,13 +107,13 @@ osrldoc: osrlstart resultHeader resultData
 		for(int solIdx = 0; solIdx <  parserData->numberOfSolutions; solIdx++){
 			osresult->setSolutionStatus(solIdx, parserData->statusType, parserData->statusDescription);
 			osresult->setPrimalVariableValues(solIdx, parserData->primalSolution[ solIdx]);
-			osresult->setNumberOfOtherVariableResult(solIdx, parserData->numberOfOtherVariableResult);
+		    osresult->setNumberOfOtherVariableResult(solIdx, parserData->numberOfOtherVariableResult);
 			for(int k = 0; k < parserData->numberOfOtherVariableResult; k++){
 				osresult->setAnOtherVariableResult(solIdx, k, parserData->otherVarVec[ k]->name, parserData->otherVarVec[ k]->description, parserData->otherVarVec[ k]->otherVarText);				
 			}
-			osresult->setDualVariableValues(solIdx, parserData->dualSolution[ solIdx]);
-			osresult->setObjectiveValues(solIdx, parserData->objectiveValues[ solIdx]);
-			osresult->setSolutionObjectiveIndex(solIdx,  *(parserData->objectiveIdx + solIdx));
+			if( (parserData->dualSolution != NULL) &&  (parserData->dualSolution[ solIdx] != NULL) )  osresult->setDualVariableValues(solIdx, parserData->dualSolution[ solIdx]);
+			if( (parserData->objectiveValues != NULL) &&  (parserData->objectiveValues[ solIdx] != NULL) ) osresult->setObjectiveValues(solIdx, parserData->objectiveValues[ solIdx]);
+		    osresult->setSolutionObjectiveIndex(solIdx,  *(parserData->objectiveIdx + solIdx));
 		}
 	}
 }
@@ -176,21 +176,21 @@ optimization: OPTIMIZATIONSTART anotherOptATT
 {
 // we now have the basic problem parameters
 	if(parserData->numberOfSolutions > 0){
-			parserData->primalSolution = new double* [parserData->numberOfSolutions];
-			parserData->dualSolution = new double*[ parserData->numberOfSolutions];
-			parserData->objectiveValues = new double*[ parserData->numberOfSolutions];
-			parserData->objectiveIdx = new int[ parserData->numberOfSolutions];
 			if( parserData->numberOfVariables > 0){
+				parserData->primalSolution = new double* [parserData->numberOfSolutions];
 				for(int i = 0; i < parserData->numberOfSolutions; i++){
 					parserData->primalSolution[ i] = new double[ parserData->numberOfVariables];
 				}
 			}
-			if( parserData->numberOfConstraints > 0){
-				for(int i = 0; i < parserData->numberOfSolutions; i++){
-					parserData->dualSolution[ i] = new double[ parserData->numberOfConstraints];
-				}
-			}
+			//if( parserData->numberOfConstraints > 0){
+			//	parserData->dualSolution = new double*[ parserData->numberOfSolutions];
+			//	for(int i = 0; i < parserData->numberOfSolutions; i++){
+			//		parserData->dualSolution[ i] = new double[ parserData->numberOfConstraints];
+			//	}
+			//}
 			if( parserData->numberOfObjectives > 0){
+				parserData->objectiveValues = new double*[ parserData->numberOfSolutions];
+				parserData->objectiveIdx = new int[ parserData->numberOfSolutions];
 				for(int i = 0; i < parserData->numberOfSolutions; i++){
 					parserData->objectiveValues[ i] = new double[ parserData->numberOfObjectives];
 				}
@@ -228,7 +228,7 @@ solution:  OPTIMIZATIONEND
 | solution anothersolution  OPTIMIZATIONEND;
 
 
-anothersolution: SOLUTIONSTART objectiveIDXATT GREATERTHAN status message variables objectives constraints otherSolution   {parserData->solutionIdx++;};
+anothersolution: SOLUTIONSTART objectiveIDXATT GREATERTHAN status message variables objectives  constraints  otherSolution   {parserData->solutionIdx++;};
 
 
 
@@ -285,7 +285,10 @@ othervar: anotherothervar
 
 anotherothervar: VARSTART anIDXATT  GREATERTHAN ELEMENTTEXT  VAREND { 
 if(parserData->kounter < 0 || parserData->kounter > parserData->numberOfVariables - 1) osrlerror(NULL, NULL, NULL, "index must be greater than 0 and less than the number of variables");
-parserData->otherVarStruct->otherVarText[parserData->kounter] = $4;
+std::ostringstream outStr;
+outStr << $4;
+parserData->otherVarStruct->otherVarText[parserData->kounter] =  outStr.str();
+free($4);
 }
 |
 VARSTART anIDXATT  GREATERTHAN DOUBLE  VAREND { 
@@ -321,7 +324,16 @@ anotherobj: OBJSTART anIDXATT GREATERTHAN DOUBLE OBJEND { *(parserData->objectiv
 
 
 constraints:
-| CONSTRAINTSSTART GREATERTHAN DUALVALUESSTART GREATERTHAN con DUALVALUESEND otherConstraints CONSTRAINTSEND;
+| CONSTRAINTSSTART GREATERTHAN DUALVALUESSTART
+{
+			if( parserData->numberOfConstraints > 0){
+				parserData->dualSolution = new double*[ parserData->numberOfSolutions];
+				for(int i = 0; i < parserData->numberOfSolutions; i++){
+					parserData->dualSolution[ i] = new double[ parserData->numberOfConstraints];
+				}
+			}
+}
+ GREATERTHAN con DUALVALUESEND otherConstraints CONSTRAINTSEND;
 
 con: anothercon
 | con anothercon;

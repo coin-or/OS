@@ -15,33 +15,33 @@
  #include "OSrLParserData.h"
  OSrLParserData::~OSrLParserData() {
  	if(numberOfSolutions > 0){
-		delete[] objectiveIdx;
+ 		if(objectiveIdx != NULL) delete[] objectiveIdx;
 		objectiveIdx = NULL;
 		for(int i = 0; i < numberOfSolutions; i++){
-			delete[] primalSolution[ i];
+			if(primalSolution[ i]  != NULL)   delete[] primalSolution[ i];
 			primalSolution[ i] = NULL;
 			// now delete other var
 			for(int k = 0; k < numberOfOtherVariableResult; k++){
 				// the following delete gets rid of otherVarText in otherVarStruct
-				delete[] otherVarVec[ k]->otherVarText;
+				if(otherVarVec[ k]->otherVarText != NULL ) delete[] otherVarVec[ k]->otherVarText;
 				// the following should delete each of otherVarStruct created
 				// each element of otherVarVec is a pointer to an otherVarStruct
-				delete otherVarVec[ k];
+				if( otherVarVec[ k]  != NULL) delete otherVarVec[ k];
 			}
 			otherVarVec.clear();
-			if( numberOfConstraints > 0){
-				delete[] dualSolution[ i];
+			if( (dualSolution != NULL)  && (numberOfConstraints > 0) ) {
+				if(dualSolution[ i] != NULL) delete[] dualSolution[ i];
 				dualSolution[ i] = NULL;
 			}
-			delete[] objectiveValues[i];
+			if( (objectiveValues != NULL)  && (objectiveValues[i] != NULL) ) delete[] objectiveValues[i];
 			objectiveValues[i] = NULL;
 		}
 	}
-	delete[]  primalSolution;
+	if(primalSolution != NULL) delete[]  primalSolution;
 	primalSolution = NULL;
-	delete[] dualSolution;
+	if(dualSolution != NULL) delete[] dualSolution;
 	dualSolution = NULL;
-	delete[] objectiveValues;
+	if(objectiveValues != NULL) delete[] objectiveValues;
 	objectiveValues = NULL;
 
 
@@ -62,7 +62,10 @@
 	generalStatusTypePresent( false),
 	otherNamePresent( false),
 	objectiveIdx( NULL),
-	otherVarStruct( NULL)
+	otherVarStruct( NULL),
+	objectiveValues( NULL),
+	primalSolution( NULL),
+	dualSolution( NULL)
  {
 
  }//OSrLParserData

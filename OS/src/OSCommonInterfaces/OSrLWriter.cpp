@@ -175,12 +175,12 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 							if(m_OSResult->resultData->optimization->solution[i]->variables->numberOfOtherVariableResult > 0){
 								for(int k = 0; k < m_OSResult->resultData->optimization->solution[i]->variables->numberOfOtherVariableResult; k++){
 									outStr << "<other" ;
-									outStr << " name=\"";\
+									outStr << " name=\"";
 									outStr << m_OSResult->resultData->optimization->solution[i]->variables->other[k]->name;
-									outStr << "\"" ;
+									//outStr << "\"" ;
 									outStr << " description=\"";
 									outStr << m_OSResult->resultData->optimization->solution[i]->variables->other[k]->description;
-									outStr << "\"" ;
+									//outStr << "\"" ;
 									outStr <<  ">" << endl;
 									if(m_OSResult->resultData->optimization->solution[i]->variables->other[k]->var.size() > 0){
 										for(j = 0; j < m_OSResult->resultData->optimization->numberOfVariables; j++){

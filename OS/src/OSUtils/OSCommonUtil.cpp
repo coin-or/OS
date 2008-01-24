@@ -27,29 +27,39 @@ CommonUtil::~CommonUtil(){
 }
 
 
-	
-bool CommonUtil::ISOSNAN( double number)
+/* below is the CoinUtils implementation
+inline bool CoinIsnan(double val)
 {
+#ifdef MY_C_ISNAN
+  //    return static_cast<bool>(MY_C_ISNAN(val));
+    return MY_C_ISNAN(val)!=0;
+#else
+    return false;
+#endif
+}
+*/
 
-// copy from CoinUtils	
+
+	
+bool CommonUtil::ISOSNAN( double number){
+// copy from CoinUtils	-- CoinFinite.hpp
 #ifdef MY_C_ISNAN
 	if(MY_C_ISNAN( number) == true){
 		return true;
 	}
 	else return(number == OSNAN);
 #else
-	#ifdef NAN 
-		return isnan( number);
-	#elif defined NaN
-		return isnan( number);
-	#elif defined nan
-		return isnan( number);
-	#else
-		return (number == OSNAN);
-	#endif
+	//#ifdef NAN 
+	//	return isnan( number);
+	//#elif defined NaN
+	//	return isnan( number);
+	//#elif defined nan
+	//	return isnan( number);
+	//#else
+	//	return (number == OSNAN);
+	//#endif
+	return (number == OSNAN);
 #endif
-
-
 }
 
 

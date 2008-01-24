@@ -247,6 +247,8 @@ bool CoinSolver::optimize()
 		//			osinstance->getDenseObjectiveCoefficients()[0], 
 		//			osinstance->getConstraintLowerBounds(), osinstance->getConstraintUpperBounds());
 		if(osinstance->getObjectiveNumber() == 0) throw ErrorClass("there is no objective function");
+		
+
 
 		//	
 		if( osinstance->getObjectiveMaxOrMins()[0] == "min") m_OsiSolver->setObjSense(1.0);
@@ -268,9 +270,38 @@ bool CoinSolver::optimize()
 			}
 			m_OsiSolver->setInteger( intIndex,  numOfIntVars);
 		}
-		// try to catch Coin Solver errors
-		m_OsiSolver->setHintParam(OsiDoScale,false,OsiHintTry);
+		// set some OSI options
+		//first the number of processors -- applies only to SYMPHONY
+		if( sSolverName.find( "symphony") != std::string::npos) {
+			OsiSymSolverInterface * si =
+			dynamic_cast<OsiSymSolverInterface *>(m_OsiSolver) ;
+			std::string num_proc = "";
+			string::size_type pos1 = this->osol.find("num_proc"); 
+			string::size_type pos2;
+			if(pos1 != std::string::npos){
+				// get the end of the other start element
+				pos1 = osol.find(">", pos1 + 1);
+				if(pos1 != std::string::npos){
+					// get the start of other end tag
+					pos2 = osol.find( "</other", pos1 + 1);
+					if( pos2 != std::string::npos){
+						// get the substring
+						num_proc = osol.substr( pos1 + 1, pos2 - pos1 - 1); 
+					}
+				}
+			}
+			//pass the option on
+			if(num_proc.size() > 0) si->setSymParam("max_active_nodes", num_proc);	
+			//return true;
+		}
+		//
+		//
+		//
+		// now some other Osi options
+		m_OsiSolver->setHintParam(OsiDoScale, false, OsiHintTry);
+		m_OsiSolver->setHintParam(OsiDoReducePrint, true, OsiHintTry);
 		OsiSolverInterface *m_OsiSolverPre = NULL;	
+		// try to catch Coin Solver errors
 		try{
 			if(numOfIntVars > 0){
 				//cout << "CALL BRANCH AND BOUND " << endl;
@@ -304,7 +335,6 @@ bool CoinSolver::optimize()
 			}
 			else{
 				m_OsiSolver->initialSolve();
-				cout << "DONE WITH INITIAL SOLVE" << endl;				
 			}
 		}
 		catch(CoinError e){
@@ -332,7 +362,7 @@ bool CoinSolver::optimize()
 			osresult->setPrimalVariableValues(solIdx, x);
 			// Symphony does not get dual prices
 			if( sSolverName.find( "symphony") == std::string::npos){
-				for(i=0; i <  osinstance->getConstraintNumber(); i++){\
+				for(i=0; i <  osinstance->getConstraintNumber(); i++){
 					*(y + i) = m_OsiSolver->getRowPrice()[ i];
 				}
 				osresult->setDualVariableValues(solIdx, y);
