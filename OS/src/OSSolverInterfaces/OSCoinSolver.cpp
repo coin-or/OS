@@ -271,6 +271,7 @@ bool CoinSolver::optimize()
 			m_OsiSolver->setInteger( intIndex,  numOfIntVars);
 		}
 		// set some OSI options
+#ifdef COIN_HAS_SYMPHONY
 		//first the number of processors -- applies only to SYMPHONY
 		if( sSolverName.find( "symphony") != std::string::npos) {
 			OsiSymSolverInterface * si =
@@ -294,6 +295,7 @@ bool CoinSolver::optimize()
 			if(num_proc.size() > 0) si->setSymParam("max_active_nodes", num_proc);	
 			//return true;
 		}
+#endif
 		//
 		//
 		//
