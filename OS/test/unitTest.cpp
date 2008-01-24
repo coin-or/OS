@@ -255,19 +255,34 @@ int main(int argC, char* argV[])
 		delete si;
 		delete si2;
 		*/
-		//mpsFileName =  dataDir + "mpsFiles" + dirsep + "testfile2.mps";	
-		solver = new CoinSolver();
-		solver->sSolverName = "cbc";
+		mpsFileName =  dataDir + "mpsFiles" + dirsep + "parinc.mps";
 		mps2osil = new OSmps2osil( mpsFileName);
+		// create the first in-memory OSInstance
 		mps2osil->createOSInstance() ;
-		solver->osinstance = mps2osil->osinstance;
-		//solver->osinstance = NULL;
-		//solver->osil = osilwriter.writeOSiL(  mps2osil->osinstance );
-		solver->osol = osol;
-		cout << "call COIN Solve" << endl;
-		solver->solve();
-		delete solver;
+		// write the instance to a string
+		OSInstance *osinstance1 = mps2osil->osinstance;
+		std::string sOSiL = osilwriter.writeOSiL( osinstance1  );
+		// now create a second object
+		osilreader = new OSiLReader();
+		OSInstance *osinstance2 = osilreader->readOSiL( sOSiL);
+		// now compare the elements in the A matrix for the two intances
+		int nvals = osinstance1->instanceData->linearConstraintCoefficients->numberOfValues;
+		double theDiff, theMax;
+		int theIndex = -1;
+		theMax = 0;
+		for(int i = 0; i < nvals; i++){
+			theDiff = abs(osinstance1->instanceData->linearConstraintCoefficients->value->el[ i] -
+				osinstance2->instanceData->linearConstraintCoefficients->value->el[ i])/ abs(osinstance1->instanceData->linearConstraintCoefficients->value->el[ i]);
+			if(theDiff > theMax){
+				theMax = theDiff;
+				theIndex = i;
+			}
+			//std::cout << theDiff << std::endl;
+		}
+		std::cout << "MAXIMUM DIFF = " << theMax << std::endl;
+		std::cout << "MAXIMUM DIFF INDEX  = " << theIndex << std::endl;
 		delete mps2osil;
+		delete osilreader;
 		//nl2osil = new OSnl2osil( nlFileName);
 		//return 0;
 		//
