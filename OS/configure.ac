@@ -548,7 +548,9 @@ AC_COIN_VPATH_LINK(data/osrlFiles/rosenbrockmod.osrl)
 ## configure test files
 ##
 AC_COIN_VPATH_LINK(data/configFiles/kill.config)
-AC_COIN_VPATH_LINK(data/configFiles/testlocal.config)
+AC_COIN_VPATH_LINK(data/configFiles/testLocal.config)
+AC_COIN_VPATH_LINK(data/configFiles/testLocalMPS.config)
+AC_COIN_VPATH_LINK(data/configFiles/testLocalNL.config)
 AC_COIN_VPATH_LINK(data/configFiles/testbrowser.config)
 AC_COIN_VPATH_LINK(data/configFiles/testlocalclp.config)
 AC_COIN_VPATH_LINK(data/configFiles/testlocalosol.config)
@@ -557,13 +559,15 @@ AC_COIN_VPATH_LINK(data/configFiles/testnl.config)
 AC_COIN_VPATH_LINK(data/configFiles/testRemoteKnock.config)
 AC_COIN_VPATH_LINK(data/configFiles/testRemotegetJobID.config)
 AC_COIN_VPATH_LINK(data/configFiles/testRemote.config)
+AC_COIN_VPATH_LINK(data/configFiles/testRemoteMPS.config)
+AC_COIN_VPATH_LINK(data/configFiles/testRemoteNL.config)
 AC_COIN_VPATH_LINK(data/configFiles/testRemoteBIG.config)
 AC_COIN_VPATH_LINK(data/configFiles/testRemoteRetrieve.config)
 AC_COIN_VPATH_LINK(data/configFiles/testRemoteSend.config)
 
 ##
-## ampl test files
-##
+## ampl tes
+AC_COIN_VPATH_LINK(data/amplFiles/testAmpl.run)
 AC_COIN_VPATH_LINK(data/amplFiles/hs71.mod)
 AC_COIN_VPATH_LINK(data/amplFiles/hs71.nl)
 AC_COIN_VPATH_LINK(data/amplFiles/parinc.mod)
