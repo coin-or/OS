@@ -288,7 +288,6 @@ if(parserData->kounter < 0 || parserData->kounter > parserData->numberOfVariable
 std::ostringstream outStr;
 outStr << $4;
 parserData->otherVarStruct->otherVarText[parserData->kounter] =  outStr.str();
-free($4);
 }
 |
 VARSTART anIDXATT  GREATERTHAN DOUBLE  VAREND { 

@@ -244,7 +244,9 @@ int main(int argC, const char* argV[])
 		fileUtil = new FileUtil();
 		try{	
 			if(osoptions->insListFile != "") osoptions->insList = fileUtil->getFileAsChar( (osoptions->insListFile).c_str() );
-			if(osoptions->osolFile != "") osoptions->osol = fileUtil->getFileAsChar( (osoptions->osolFile).c_str() );
+			if(osoptions->osolFile != ""){
+				osoptions->osol = fileUtil->getFileAsString( (osoptions->osolFile).c_str() );
+			}
 			if(osoptions->serviceLocation != ""){
 				 cout << "Service Location = " << osoptions->serviceLocation << endl;
 			}

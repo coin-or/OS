@@ -126,10 +126,6 @@ int main(int argc, char **argv)
 	// note that default solver is coin and default subSolver is Cbc
 	std::string osol = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/OSoL.xsd\"></osol>";
 	
-	//
-	
-	// 
-	char *serviceOption = NULL;
 	char *num_procOption = NULL;
 	char *num_processors = NULL;
 	char *URL = NULL;
@@ -294,58 +290,60 @@ int main(int argc, char **argv)
 		}
 	}
 	catch(const ErrorClass& eclass){
-		osresult = new OSResult();
-		osrl = eclass.errormsg;
-		if(solverType == NULL){	
-			osresult->setGeneralMessage( eclass.errormsg);
-			osresult->setGeneralStatusType( "error");
-			osrl = osrlwriter->writeOSrL( osresult);	
-		}
-		else {
-			osrl = eclass.errormsg;
-		}
-		//cout << osrl << endl << endl <<endl;
-		write_sol(const_cast<char*>(osrl.c_str()), 
-			NULL, NULL, NULL);
+		osresult = new OSResult();	
+		osresult->setGeneralMessage( eclass.errormsg);
+		osresult->setGeneralStatusType( "error");
+		osrl = osrlwriter->writeOSrL( osresult);	
+		write_sol(const_cast<char*>(osrl.c_str()), NULL, NULL, NULL);
+		delete osresult;
 		return 0;
 	}
-	// do the following for a remote solve
-	if( (solver_option != NULL) && (strstr(solver_option, "service") != NULL)){
-		OSSolverAgent* osagent = NULL;
-		OSiLWriter *osilwriter = NULL;
-		osilwriter = new OSiLWriter();
-		std::string  osil = osilwriter->writeOSiL( osinstance);
-		////
-		agent_address = strstr(solver_option, "service");
-		agent_address += 7;
-		URL = strtok( agent_address, delims );
-		///
-		// we should be pointing to the start of the address
-		osagent = new OSSolverAgent( URL);
-		// if a solver option was specified put that in
-		string::size_type iStringpos;
-		iStringpos = osol.find("</osol");
-		//std::cout <<  solverType->sSolverName << std::endl;
-		std::string solverInput = "<other name=\"os_solver\">"
-			+ sSolverName  + "</other>";
-		osol.insert(iStringpos, solverInput);
-		cout << "Place remote synchronous call" << endl;
-		cout << osol << endl;
-		osrl = osagent->solve(osil, osol);
-		delete osilwriter;
-		delete osagent; 
-	} 
-	// okay start to test osrl parser 
+	try{
+		// do the following for a remote solve
+		if( (solver_option != NULL) && (strstr(solver_option, "service") != NULL)){
+			OSSolverAgent* osagent = NULL;
+			OSiLWriter *osilwriter = NULL;
+			osilwriter = new OSiLWriter();
+			std::string  osil = osilwriter->writeOSiL( osinstance);
+			////
+			agent_address = strstr(solver_option, "service");
+			agent_address += 7;
+			URL = strtok( agent_address, delims );
+			std::string sURL = URL;
+			///
+			// we should be pointing to the start of the address
+			osagent = new OSSolverAgent( URL);
+			// if a solver option was specified put that in
+			string::size_type iStringpos;
+			iStringpos = osol.find("</osol");
+			//std::cout <<  solverType->sSolverName << std::endl;
+			std::string solverInput = "<other name=\"os_solver\">"
+				+ sSolverName  + "</other>";
+			osol.insert(iStringpos, solverInput);
+			cout << "Place remote synchronous call: " + sURL << endl << endl << endl;
+			cout << osol << endl;
+			osrl = osagent->solve(osil, osol);
+			if (osrl.size() == 0) throw ErrorClass("Nothing was returned from the server, please check service address");
+			delete osilwriter;
+			delete osagent; 
+		} 
+	}
+	catch(const ErrorClass& eclass){
+		osresult = new OSResult();
+		osresult->setGeneralMessage( eclass.errormsg);
+		osresult->setGeneralStatusType( "error");
+		osrl = osrlwriter->writeOSrL( osresult);	
+		write_sol(const_cast<char*>(osrl.c_str()), NULL, NULL, NULL);
+		delete osresult;
+		return 0;
+	}
 	try{ 
-		//cout << osrl << endl << endl <<endl;
 		std::string sResultFileName = "solutionResult.osrl";
 		FileUtil *fileUtil;
 		fileUtil = new FileUtil();
 		fileUtil->writeFileFromString(sResultFileName, osrl);
 		delete fileUtil;
 		cout << "WRITE THE SOLUTION BACK INTO AMPL" <<endl;
-		//char *buf = NULL;
-		//string::size_type pos1 = osresult->getGeneralStatusType().find( "error");
 		string::size_type pos1 = osrl.find( "error");
 		std::string sReport = "model was solved";
 		if(pos1 == std::string::npos){
@@ -358,8 +356,6 @@ int main(int argc, char **argv)
 			write_sol(  const_cast<char*>(osrl.c_str()), NULL, NULL, NULL);
 		}
 		cout << "DONE WRITING THE SOLUTION BACK INTO AMPL" <<endl;
-		//osresult->getOptimalDualVariableValues( -1)
-		//cout << "osresult JUST DELETED" <<endl;
 	}
 	catch(const ErrorClass& eclass){
 		cout << "There was an error parsing the OSrL" << endl << eclass.errormsg << endl << endl;
