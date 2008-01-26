@@ -228,7 +228,8 @@ int main(int argC, char* argV[])
 		delete osilreader;
 		osilreader = NULL;
 		/*
-		//nl2osil = new OSnl2osil( nlFileName);
+		// below is just a bunch of misc. stuff kipp is testing
+		//
 		// Create a problem pointer.  We use the base class here.
 		OsiSolverInterface *si, *si2;
 		// When we instantiate the object, we need a specific derived class.

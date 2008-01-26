@@ -4469,8 +4469,11 @@ sample code
 
 static UString integer_part_noexp(double d){    int decimalPoint;    int sign;    char *result = kjs_dtoa(d, 0, 0, &decimalPoint, &sign, NULL);    int length = strlen(result);        UString str = sign ? "-" : "";    if (decimalPoint == 9999) {        str += UString(result);    } else if (decimalPoint <= 0) {        str += UString("0");    } else {        char *buf;                if (length <= decimalPoint) {            buf = (char*)malloc(decimalPoint+1);            strcpy(buf,result);            memset(buf+length,'0',decimalPoint-length);        } else {            buf = (char*)malloc(decimalPoint+1);            strncpy(buf,result,decimalPoint);        }                buf[decimalPoint] = '\0';        str += UString(buf);        free(buf);    }        kjs_freedtoa(result);        return str;}
 
+See:
 
-http://www.krugle.org/examples/p-UkvJ53OlMMjGJ0QO/number_object.cpp
+1) http://www.krugle.org/examples/p-UkvJ53OlMMjGJ0QO/number_object.cpp
+
+2) http://www.krugle.org/examples/p-UkvJ53OlMMjGJ0QO/dtoa.h
 
 
 %%%%%%%%%%%%%%%%%%%%%%
