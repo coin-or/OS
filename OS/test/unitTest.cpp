@@ -258,13 +258,14 @@ int main(int argC, char* argV[])
 		delete si2;
 		*/
 		/*
-		mpsFileName =  dataDir + "mpsFiles" + dirsep + "parinc.mps";
+		mpsFileName =  dataDir + "mpsFiles" + dirsep + "p0201.mps";
 		mps2osil = new OSmps2osil( mpsFileName);
 		// create the first in-memory OSInstance
 		mps2osil->createOSInstance() ;
 		// write the instance to a string
 		OSInstance *osinstance1 = mps2osil->osinstance;
 		std::string sOSiL = osilwriter.writeOSiL( osinstance1  );
+		//fileUtil->writeFileFromString("p0201.osil", sOSiL);
 		// now create a second object
 		osilreader = new OSiLReader();
 		OSInstance *osinstance2 = osilreader->readOSiL( sOSiL);
@@ -535,6 +536,26 @@ int main(int argC, char* argV[])
 		delete solver;
 		solver = NULL;
 		unitTestResult << "Solved problem p0033.osil with Cbc" << std::endl;
+		// now test p0201.osil
+		/*
+		ok = true;
+		osilFileName = dataDir  + "osilFiles" + dirsep + "p0201.osil";
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
+		solver = new CoinSolver();
+		solver->sSolverName ="cbc";
+		solver->osil = osil;
+		solver->osol = osol;  
+		solver->osinstance = NULL; 
+		cout << "call the COIN - Cbc Solver for p0201" << endl;
+		solver->solve();
+		cout << "Here is the COIN Cbc solver solution for p0201" << endl;
+		check = 7615;
+		ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		if(ok == false) throw ErrorClass(" Fail unit test with Cbc on p0548");
+		delete solver;
+		solver = NULL;
+		unitTestResult << "Solved problem p0201.osil with Cbc" << std::endl;
+		*/
 	}
 	catch(const ErrorClass& eclass){
 		unitTestResultFailure << "Sorry Unit Test Failed Testing Cbc Solver:"  + eclass.errormsg<< endl;
