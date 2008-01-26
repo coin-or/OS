@@ -23,6 +23,7 @@
 #include "OSInstance.h"
 #include "OSiLWriter.h"
 #include "OSErrorClass.h"
+#include "OSiLParserData.h"
 
 #include <string>
 
@@ -64,6 +65,10 @@ private:
 	 * the OSiLReader
 	 */
 	OSInstance *m_osinstance;
+	
+	/** parerData is the  object used in the parser to temporarily store data 
+	 */
+	OSiLParserData *m_parserData;
 };
 
 

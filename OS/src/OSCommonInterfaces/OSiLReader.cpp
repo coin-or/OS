@@ -17,7 +17,8 @@
 #include "OSiLReader.h"
 #include "OSInstance.h"
 
-OSInstance *yygetOSInstance(const char *osil) throw(ErrorClass);
+
+OSInstance *yygetOSInstance(const char *osil, OSInstance* osinstance, OSiLParserData *parserData) throw(ErrorClass);
 
 
 OSiLReader::OSiLReader( ) {								
@@ -26,16 +27,19 @@ OSiLReader::OSiLReader( ) {
 OSiLReader::~OSiLReader(){
 	if(m_osinstance != NULL) delete m_osinstance;
 	m_osinstance = NULL;
+	if( m_parserData != NULL) delete m_parserData;
+	m_parserData = NULL;
 } 
 
 OSInstance* OSiLReader::readOSiL(const std::string& posil) throw(ErrorClass){   
 	try{
 		const char *ch = posil.c_str();
-		m_osinstance = yygetOSInstance( ch);
+		m_osinstance = new OSInstance();
+		m_parserData = new OSiLParserData();
+		yygetOSInstance( ch, m_osinstance, m_parserData);
 		return m_osinstance;
 	}
 		catch(const ErrorClass& eclass){
-		m_osinstance = NULL;
 		throw ErrorClass( eclass.errormsg);
 	}
 }//end readOSiL

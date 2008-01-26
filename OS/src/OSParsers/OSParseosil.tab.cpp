@@ -331,7 +331,7 @@ int osillex_destroy (void* yyscanner );
 int osilget_lineno( void* yyscanner);
 char *osilget_text (void* yyscanner );
 void osilset_lineno (int line_number , void* yyscanner );
-OSInstance *yygetOSInstance(const char *osil) throw(ErrorClass);
+OSInstance *yygetOSInstance(const char *osil, OSInstance* osinstance, OSiLParserData *parserData) throw(ErrorClass);
 //
 
 double atofmod1(int* osillineno, const char *ch1, const char *ch2 );
@@ -3217,21 +3217,13 @@ void osilerror(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData* parserDa
 	outStr << "See line number: " << osilget_lineno( scanner) << endl; 
 	outStr << "The offending text is: " << osilget_text ( scanner ) << endl; 
 	error = outStr.str();
-	if(parserData != NULL){
-		delete parserData;
-		parserData = NULL;
-	}
 	osillex_destroy(scanner);
 	throw ErrorClass( error);
 }//end osilerror() 
 
 
-OSInstance* yygetOSInstance( const char *osil) throw (ErrorClass) {
+OSInstance* yygetOSInstance( const char *osil, OSInstance* osinstance, OSiLParserData *parserData) throw (ErrorClass) {
 	try {
-		OSInstance* osinstance = NULL;
-		OSiLParserData *parserData = NULL;
-		osinstance = new OSInstance();
-		parserData = new OSiLParserData();
 		parseInstanceHeader( &osil, osinstance, &parserData->osillineno);
 		parseInstanceData( &osil, osinstance, &parserData->osillineno);	
 		// call the flex scanner
@@ -3243,11 +3235,11 @@ OSInstance* yygetOSInstance( const char *osil) throw (ErrorClass) {
 		//
 		if(  osilparse( osinstance,  parserData) != 0) {
 			osillex_destroy(scanner);
-			delete parserData;
+			//delete parserData;
 			throw ErrorClass(  "Error parsing the OSiL");
 		}
 		osillex_destroy(scanner);
-		if(parserData != NULL) delete parserData;
+		//if(parserData != NULL) delete parserData;
 		return osinstance;
 	}
 	catch(const ErrorClass& eclass){
@@ -5088,6 +5080,7 @@ void osilerror_wrapper( const char* ch, int* osillineno, const char* errormsg){
 	outStr << endl;
 	outStr << "See line number: " << *osillineno << endl;  
 	error = outStr.str();
+	//osillex_destroy(scanner);
 	throw ErrorClass( error);
 }//end osilerror_wrapper
 
