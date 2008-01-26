@@ -256,6 +256,7 @@ int main(int argC, char* argV[])
 		delete si;
 		delete si2;
 		*/
+		/*
 		mpsFileName =  dataDir + "mpsFiles" + dirsep + "parinc.mps";
 		mps2osil = new OSmps2osil( mpsFileName);
 		// create the first in-memory OSInstance
@@ -284,9 +285,22 @@ int main(int argC, char* argV[])
 		std::cout << "MAXIMUM DIFF INDEX  = " << theIndex << std::endl;
 		delete mps2osil;
 		delete osilreader;
-		//nl2osil = new OSnl2osil( nlFileName);
-		//return 0;
-		//
+		*/
+		/*
+		// using dtoa
+	    int decimalPoint; // where the decimal point goes
+	    int sign; // 1 if negative, 0 if positive
+	    double d = 2./3.;
+	    d = 1.23456589e-20;
+	    char *result =dtoa(d, 0, 0, &decimalPoint, &sign, NULL);
+	    printf("HERE IS THE RESULT  %s\n\n", result);
+	    printf("HERE IS THE RESULT of sign  %d\n\n", sign);
+	    printf("HERE IS THE RESULT decimal point  %d\n\n", decimalPoint);
+	    printf("HERE IS THE LENGTH OF THE RESULT  %d\n\n",  strlen(result));
+		nl2osil = new OSnl2osil( nlFileName);
+	    return 0;
+	    */
+
 	}
 	catch(const ErrorClass& eclass){
 		unitTestResultFailure << "Sorry Unit Test Failed Reading a file: "  + eclass.errormsg<< endl; 

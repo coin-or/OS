@@ -4461,8 +4461,16 @@ Bob --
 Right -- I am planning on using the functions strtod and dtoa described in
 www.ampl.com/REFS/abstracts.html#rounding and available from netlib.
 
+ #ifdef KR_headers02644     (d, mode, ndigits, decpt, sign, rve)02645     double d; int mode, ndigits, *decpt, *sign; char **rve;02646 #else02647     (double d, int mode, int ndigits, int *decpt, int *sign, char **rve)02648 #endif02649 {02650  /* Arguments ndigits, decpt, sign are similar to those02651     of ecvt and fcvt; trailing zeros are suppressed from02652     the returned string.  If not null, *rve is set to point02653     to the end of the return value.  If d is +-Infinity or NaN,02654     then *decpt is set to 9999.02655 02656     mode:02657         0 ==> shortest string that yields d when read in02658             and rounded to nearest.02659         1 ==> like 0, but with Steele & White stopping rule;02660             e.g. with IEEE P754 arithmetic , mode 0 gives02661             1e23 whereas mode 1 gives 9.999999999999999e22.02662         2 ==> max(1,ndigits) significant digits.  This gives a02663             return value similar to that of ecvt, except02664             that trailing zeros are suppressed.02665         3 ==> through ndigits past the decimal point.  This02666             gives a return value similar to that from fcvt,02667             except that trailing zeros are suppressed, and02668             ndigits can be negative.02669         4,5 ==> similar to 2 and 3, respectively, but (in02670             round-nearest mode) with the tests of mode 0 to02671             possibly return a shorter string that rounds to d.02672             With IEEE arithmetic and compilation with02673             -DHonor_FLT_ROUNDS, modes 4 and 5 behave the same02674             as modes 2 and 3 when FLT_ROUNDS != 1.02675         6-9 ==> Debugging modes similar to mode - 4:  don't try02676             fast floating-point estimate (if applicable).02677 02678         Values of mode other than 0-9 are treated as mode 0.02679 02680         Sufficient space is allocated to the return value02681         to hold the suppressed trailing zeros.02682     */
 
-Kipp -- see also c()
+
+
+sample code
+
+static UString integer_part_noexp(double d){    int decimalPoint;    int sign;    char *result = kjs_dtoa(d, 0, 0, &decimalPoint, &sign, NULL);    int length = strlen(result);        UString str = sign ? "-" : "";    if (decimalPoint == 9999) {        str += UString(result);    } else if (decimalPoint <= 0) {        str += UString("0");    } else {        char *buf;                if (length <= decimalPoint) {            buf = (char*)malloc(decimalPoint+1);            strcpy(buf,result);            memset(buf+length,'0',decimalPoint-length);        } else {            buf = (char*)malloc(decimalPoint+1);            strncpy(buf,result,decimalPoint);        }                buf[decimalPoint] = '\0';        str += UString(buf);        free(buf);    }        kjs_freedtoa(result);        return str;}
+
+
+http://www.krugle.org/examples/p-UkvJ53OlMMjGJ0QO/number_object.cpp
 
 
 %%%%%%%%%%%%%%%%%%%%%%
