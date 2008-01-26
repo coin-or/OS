@@ -24,7 +24,7 @@ OSiLReader::OSiLReader( ) {
 }
 
 OSiLReader::~OSiLReader(){
-	delete m_osinstance;
+	if(m_osinstance != NULL) delete m_osinstance;
 	m_osinstance = NULL;
 } 
 
@@ -35,6 +35,7 @@ OSInstance* OSiLReader::readOSiL(const std::string& posil) throw(ErrorClass){
 		return m_osinstance;
 	}
 		catch(const ErrorClass& eclass){
+		m_osinstance = NULL;
 		throw ErrorClass( eclass.errormsg);
 	}
 }//end readOSiL

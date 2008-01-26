@@ -3217,6 +3217,11 @@ void osilerror(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData* parserDa
 	outStr << "See line number: " << osilget_lineno( scanner) << endl; 
 	outStr << "The offending text is: " << osilget_text ( scanner ) << endl; 
 	error = outStr.str();
+	if(parserData != NULL){
+		delete parserData;
+		parserData = NULL;
+	}
+	osillex_destroy(scanner);
 	throw ErrorClass( error);
 }//end osilerror() 
 
@@ -3242,10 +3247,11 @@ OSInstance* yygetOSInstance( const char *osil) throw (ErrorClass) {
 			throw ErrorClass(  "Error parsing the OSiL");
 		}
 		osillex_destroy(scanner);
-		delete parserData;
+		if(parserData != NULL) delete parserData;
 		return osinstance;
 	}
 	catch(const ErrorClass& eclass){
+		//if(scanner != NULL) osillex_destroy( scanner);
 		throw ErrorClass(  eclass.errormsg); 
 	}
 }//end yygetOSInstance
