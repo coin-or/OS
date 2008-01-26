@@ -227,9 +227,10 @@ int main(int argC, char* argV[])
 		std::cout << osilwriter.writeOSiL( osinstance) << std::endl;
 		delete osilreader;
 		osilreader = NULL;
+		/*
 		//nl2osil = new OSnl2osil( nlFileName);
 		// Create a problem pointer.  We use the base class here.
-		/*OsiSolverInterface *si, *si2;
+		OsiSolverInterface *si, *si2;
 		// When we instantiate the object, we need a specific derived class.
 		si = new OsiCbcSolverInterface;
 		// Read in an mps file.  This one's from the MIPLIB library.
@@ -271,8 +272,8 @@ int main(int argC, char* argV[])
 		int theIndex = -1;
 		theMax = 0;
 		for(int i = 0; i < nvals; i++){
-			theDiff = abs(osinstance1->instanceData->linearConstraintCoefficients->value->el[ i] -
-				osinstance2->instanceData->linearConstraintCoefficients->value->el[ i])/ abs(osinstance1->instanceData->linearConstraintCoefficients->value->el[ i]);
+			theDiff = fabs(osinstance1->instanceData->linearConstraintCoefficients->value->el[ i] -
+				osinstance2->instanceData->linearConstraintCoefficients->value->el[ i])/ fabs(osinstance1->instanceData->linearConstraintCoefficients->value->el[ i]);
 			if(theDiff > theMax){
 				theMax = theDiff;
 				theIndex = i;
