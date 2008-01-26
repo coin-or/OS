@@ -210,10 +210,10 @@ int main(int argC, const char* argV[])
 		std::cout << "done with call to ossslex" << std::endl;
 		// if there is a config file, get those options
 		if(osoptions->configFile != ""){
+			ossslex_init( &scanner);
 			configFileName = osoptions->configFile;
 			cout << "configFileName = " << configFileName << endl;
 			std::string osolfileOptions = fileUtil->getFileAsString( configFileName.c_str() );
-			ossslex_init( &scanner);
 			std::cout << "Call Text Extra" << std::endl;
 			setyyextra( osoptions, scanner);
 			std::cout << "Done with call Text Extra" << std::endl;
