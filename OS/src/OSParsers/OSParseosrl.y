@@ -369,7 +369,7 @@ otherSolution: SOLUTIONEND
 
 quote: xmlWhiteSpace QUOTE;
 
-xmlWhiteSpaceChar: ' '
+xmlWhiteSpaceChar: ' ' 
 				| '\t'
 				| '\r'
 				| '\n' ;
@@ -389,6 +389,7 @@ void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, 
 	outStr << "See line number: " << osrlget_lineno( scanner) << std::endl; 
 	outStr << "The offending text is: " << osrlget_text ( scanner ) << std::endl; 
 	error = outStr.str();
+	if(mytype != NULL)  free( mytype);
 	osrllex_destroy( scanner);
 	throw ErrorClass( error);
 } //end osrlerror
