@@ -1061,7 +1061,6 @@ int main(int argC, char* argV[])
 		cout << "Reading the file into a string took (seconds): "<< duration << endl;
 		start = clock();
 		cout << "PARSE THE OSRL STRING INTO AN OSRESULT OBJECT" << endl;
-		osrlreader->readOSrL( osrl);
 		osresult = osrlreader->readOSrL( osrl);
 		cout << osrlwriter->writeOSrL( osresult) << endl;
 		delete osrlwriter;
