@@ -15,7 +15,6 @@
  */ 
 
 #include "OSrLReader.h"
-#include "OSResult.h" 
 #include "OSErrorClass.h" 
 
 
@@ -32,13 +31,10 @@ OSrLReader::~OSrLReader(){
 
 OSResult* OSrLReader::readOSrL(std::string osrl){   
 	try{
+		m_parserDataOSrL = new OSrLParserData();
 		return yygetOSResult( osrl);
 	}
 		catch(const ErrorClass& eclass){
 		throw ErrorClass( eclass.errormsg); 
 	}
 }
-
-
-
-

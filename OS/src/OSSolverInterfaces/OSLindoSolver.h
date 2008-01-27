@@ -20,6 +20,7 @@
 #include "OSInstance.h"
 #include "lindo.h"
 #include "OSrLWriter.h"
+#include "OSiLWriter.h"
 #include "OSConfig.h" 
 #include <string>
 

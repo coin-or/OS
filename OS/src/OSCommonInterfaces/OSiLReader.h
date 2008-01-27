@@ -21,10 +21,8 @@
 
 
 #include "OSInstance.h"
-#include "OSiLWriter.h"
-#include "OSErrorClass.h"
 #include "OSiLParserData.h"
-
+#include "OSErrorClass.h"
 #include <string>
 
 

@@ -27,6 +27,7 @@
 #include "OSConfig.h" 
 #include "OSDefaultSolver.h"
 #include "OSrLWriter.h"
+#include "OSiLWriter.h"
 #include "OSInstance.h"
 #include "OSParameters.h"
 #include "OSnLNode.h"
