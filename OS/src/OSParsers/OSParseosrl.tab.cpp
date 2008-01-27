@@ -1924,11 +1924,11 @@ yyreduce:
   case 82:
 
     { 
-if(parserData->kounter < 0 || parserData->kounter > parserData->numberOfVariables - 1) osrlerror(NULL, NULL, NULL, "index must be greater than 0 and less than the number of variables");
 std::ostringstream outStr;
 outStr << (yyvsp[(4) - (5)].charval);
 parserData->otherVarStruct->otherVarText[parserData->kounter] =  outStr.str();
 free((yyvsp[(4) - (5)].charval));
+if(parserData->kounter < 0 || parserData->kounter > parserData->numberOfVariables - 1) osrlerror(NULL, NULL, NULL, "index must be greater than 0 and less than the number of variables");
 }
     break;
 

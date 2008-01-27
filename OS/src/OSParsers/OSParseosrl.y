@@ -284,11 +284,11 @@ othervar: anotherothervar
 | othervar anotherothervar;
 
 anotherothervar: VARSTART anIDXATT  GREATERTHAN ELEMENTTEXT  VAREND { 
-if(parserData->kounter < 0 || parserData->kounter > parserData->numberOfVariables - 1) osrlerror(NULL, NULL, NULL, "index must be greater than 0 and less than the number of variables");
 std::ostringstream outStr;
 outStr << $4;
 parserData->otherVarStruct->otherVarText[parserData->kounter] =  outStr.str();
 free($4);
+if(parserData->kounter < 0 || parserData->kounter > parserData->numberOfVariables - 1) osrlerror(NULL, NULL, NULL, "index must be greater than 0 and less than the number of variables");
 }
 |
 VARSTART anIDXATT  GREATERTHAN DOUBLE  VAREND { 
