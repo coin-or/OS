@@ -235,7 +235,7 @@ int osrlget_lineno( void* yyscanner);
 char *osrlget_text (void* yyscanner );
 void osrlset_lineno (int line_number , void* yyscanner );
 void osrlset_extra (OSrLParserData* parserData ,   void* yyscanner );
-OSResult *yygetOSResult( std::string parsestring) ;
+void  yygetOSResult(const char *ch, OSResult* m_osresult, OSrLParserData *m_parserData ) ;
 
 
 
@@ -1784,27 +1784,27 @@ yyreduce:
 
   case 15:
 
-    {osresult->setServiceURI( (yyvsp[(2) - (3)].charval)); free((yyvsp[(2) - (3)].charval)); (yyvsp[(2) - (3)].charval)=NULL;}
+    {osresult->setServiceURI( (yyvsp[(2) - (3)].charval)); free((yyvsp[(2) - (3)].charval)); parserData->errorText = NULL;}
     break;
 
   case 19:
 
-    {osresult->setServiceName( (yyvsp[(2) - (3)].charval));  free((yyvsp[(2) - (3)].charval));   (yyvsp[(2) - (3)].charval)=NULL;}
+    {osresult->setServiceName( (yyvsp[(2) - (3)].charval));  free((yyvsp[(2) - (3)].charval));   parserData->errorText = NULL;}
     break;
 
   case 23:
 
-    {osresult->setInstanceName( (yyvsp[(2) - (3)].charval)) ;  free((yyvsp[(2) - (3)].charval));   (yyvsp[(2) - (3)].charval)=NULL;}
+    {osresult->setInstanceName( (yyvsp[(2) - (3)].charval)) ;  free((yyvsp[(2) - (3)].charval));   parserData->errorText = NULL;}
     break;
 
   case 27:
 
-    {osresult->setJobID( (yyvsp[(2) - (3)].charval));  free((yyvsp[(2) - (3)].charval));  (yyvsp[(2) - (3)].charval)=NULL;}
+    {osresult->setJobID( (yyvsp[(2) - (3)].charval));  free((yyvsp[(2) - (3)].charval));  parserData->errorText = NULL;}
     break;
 
   case 31:
 
-    {osresult->setGeneralMessage( (yyvsp[(2) - (3)].charval));  free((yyvsp[(2) - (3)].charval));  (yyvsp[(2) - (3)].charval)=NULL;}
+    {osresult->setGeneralMessage( (yyvsp[(2) - (3)].charval));  free((yyvsp[(2) - (3)].charval));  parserData->errorText = NULL;}
     break;
 
   case 40:
@@ -1905,7 +1905,7 @@ yyreduce:
   case 77:
 
     {  
-    parserData->numberOfOtherVariableResult++;
+   // parserData->numberOfOtherVariableResult++;
 	parserData->otherVarStruct = new OtherVariableResultStruct(); 
 	parserData->otherVarStruct->otherVarText = new std::string[parserData->numberOfVariables];}
     break;
@@ -1919,7 +1919,7 @@ yyreduce:
 
   case 79:
 
-    {parserData->otherVarVec.push_back( parserData->otherVarStruct);  }
+    {parserData->otherVarVec.push_back( parserData->otherVarStruct); parserData->numberOfOtherVariableResult++; }
     break;
 
   case 82:
@@ -1928,7 +1928,7 @@ yyreduce:
 std::ostringstream outStr;
 outStr << (yyvsp[(4) - (5)].charval);
 parserData->otherVarStruct->otherVarText[parserData->kounter] =  outStr.str();
-free((yyvsp[(4) - (5)].charval)); (yyvsp[(4) - (5)].charval)=NULL;
+free((yyvsp[(4) - (5)].charval)); parserData->errorText = NULL;
 if(parserData->kounter < 0 || parserData->kounter > parserData->numberOfVariables - 1) osrlerror(NULL, NULL, NULL, "index must be greater than 0 and less than the number of variables");
 }
     break;
@@ -2239,18 +2239,18 @@ void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, 
 	outStr << "See line number: " << osrlget_lineno( scanner) << std::endl; 
 	outStr << "The offending text is: " << osrlget_text ( scanner ) << std::endl; 
 	error = outStr.str();
-	printf("THIS DID NOT GET DESTROYED:   %s\n", parserData->errorText);
-	if( parserData->errorText != NULL) free(  parserData->errorText);
+	//printf("THIS DID NOT GET DESTROYED:   %s\n", parserData->errorText);
+	//if( (parserData->errorText != NULL) &&  (strlen(parserData->errorText) > 0) ) free(  parserData->errorText);
 	osrllex_destroy( scanner);
 	throw ErrorClass( error);
 } //end osrlerror
 
-OSResult *yygetOSResult(std::string parsestring, OSResult *osresult, OSrLParserData *parserData){
+void  yygetOSResult(const char *parsestring, OSResult *osresult, OSrLParserData *parserData){
 	try{
 		// call the flex scanner
 		osrllex_init( &scanner);
 		osrlset_extra (parserData ,   scanner);
-		osrl_scan_string( parsestring.c_str(), scanner);
+		osrl_scan_string( parsestring, scanner);
 		osrlset_lineno (1 , scanner );
 		//
 		// call the Bison parser
@@ -2260,7 +2260,6 @@ OSResult *yygetOSResult(std::string parsestring, OSResult *osresult, OSrLParserD
 		  	throw ErrorClass(  "Error parsing the OSrL");
 		 }
 		osrllex_destroy( scanner);
-		return osresult;
 	}
 	catch(const ErrorClass& eclass){
 		throw ErrorClass(  eclass.errormsg); 

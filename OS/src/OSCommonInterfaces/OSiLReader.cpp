@@ -18,7 +18,7 @@
 #include "OSInstance.h"
 
 
-OSInstance *yygetOSInstance(const char *osil, OSInstance* osinstance, OSiLParserData *parserData) throw(ErrorClass);
+void yygetOSInstance(const char *osil, OSInstance* osinstance, OSiLParserData *parserData) throw(ErrorClass);
 
 
 OSiLReader::OSiLReader( ) {	

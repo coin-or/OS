@@ -23,7 +23,7 @@
 			// now delete other var
 			for(int k = 0; k < numberOfOtherVariableResult; k++){
 				// the following delete gets rid of otherVarText in otherVarStruct
-				if(otherVarVec[ k]->otherVarText != NULL ) delete[] otherVarVec[ k]->otherVarText;
+				if( (otherVarVec[ k]  != NULL) && (otherVarVec[ k]->otherVarText != NULL) ) delete[] otherVarVec[ k]->otherVarText;
 				// the following should delete each of otherVarStruct created
 				// each element of otherVarVec is a pointer to an otherVarStruct
 				if( otherVarVec[ k]  != NULL) delete otherVarVec[ k];

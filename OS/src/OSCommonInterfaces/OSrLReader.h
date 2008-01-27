@@ -62,7 +62,7 @@ public:
 	 * @param osrl an OSrL string. 
 	 * @return the OSResult object corresponding to the OSrL string. 
 	 */		
-	OSResult *readOSrL(std::string osrl);
+	OSResult *readOSrL(const std::string& posrl) throw(ErrorClass);
 	
 private:
 	/** m_osreslut is the OSResult object returned by 

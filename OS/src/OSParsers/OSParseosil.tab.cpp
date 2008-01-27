@@ -331,7 +331,7 @@ int osillex_destroy (void* yyscanner );
 int osilget_lineno( void* yyscanner);
 char *osilget_text (void* yyscanner );
 void osilset_lineno (int line_number , void* yyscanner );
-OSInstance *yygetOSInstance(const char *osil, OSInstance* osinstance, OSiLParserData *parserData) throw(ErrorClass);
+void yygetOSInstance(const char *osil, OSInstance* osinstance, OSiLParserData *parserData) throw(ErrorClass);
 //
 
 double atofmod1(int* osillineno, const char *ch1, const char *ch2 );
@@ -3222,7 +3222,7 @@ void osilerror(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData* parserDa
 }//end osilerror() 
 
 
-OSInstance* yygetOSInstance( const char *osil, OSInstance* osinstance, OSiLParserData *parserData) throw (ErrorClass) {
+void  yygetOSInstance( const char *osil, OSInstance* osinstance, OSiLParserData *parserData) throw (ErrorClass) {
 	try {
 		parseInstanceHeader( &osil, osinstance, &parserData->osillineno);
 		parseInstanceData( &osil, osinstance, &parserData->osillineno);	
@@ -3230,20 +3230,14 @@ OSInstance* yygetOSInstance( const char *osil, OSInstance* osinstance, OSiLParse
         osillex_init( &scanner);
 		osil_scan_string( osil, scanner );
 		osilset_lineno (parserData->osillineno , scanner );
-		//
 		// call the Bison parser
-		//
 		if(  osilparse( osinstance,  parserData) != 0) {
 			osillex_destroy(scanner);
-			//delete parserData;
 			throw ErrorClass(  "Error parsing the OSiL");
 		}
 		osillex_destroy(scanner);
-		//if(parserData != NULL) delete parserData;
-		return osinstance;
 	}
 	catch(const ErrorClass& eclass){
-		//if(scanner != NULL) osillex_destroy( scanner);
 		throw ErrorClass(  eclass.errormsg); 
 	}
 }//end yygetOSInstance
