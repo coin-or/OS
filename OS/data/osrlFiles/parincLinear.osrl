@@ -2,7 +2,7 @@
 <osrl xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="os.optimizationservices.org ../schemas/OSiL.xsd">
     <resultHeader>
-     afdfdfda   <generalStatus type="success"/>
+      <generalStatus type="success"/>
     <serviceName>Solved with Coin Solver: coin_solver_clp</serviceName>
         <instanceName>ParInc.</instanceName>
     </resultHeader>
