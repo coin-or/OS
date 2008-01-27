@@ -43,6 +43,7 @@
 	dualSolution = NULL;
 	if(objectiveValues != NULL) delete[] objectiveValues;
 	objectiveValues = NULL;
+	if(errorText != NULL) free( errorText);
 
 
  }//~OSrLParserData
@@ -65,7 +66,9 @@
 	otherVarStruct( NULL),
 	objectiveValues( NULL),
 	primalSolution( NULL),
-	dualSolution( NULL)
+	dualSolution( NULL),
+	errorText(NULL),
+	test(77.7)
  {
 
  }//OSrLParserData

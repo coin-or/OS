@@ -28,7 +28,6 @@ OSrLReader::OSrLReader( ) {
 }
 
 OSrLReader::~OSrLReader(){
-
 	if(m_osresult != NULL) delete m_osresult;
 	m_osresult = NULL;
 	if( m_parserData != NULL) delete m_parserData;
@@ -36,8 +35,7 @@ OSrLReader::~OSrLReader(){
 	
 } 
 
-OSResult* OSrLReader::readOSrL(std::string osrl){  
-		
+OSResult* OSrLReader::readOSrL(std::string osrl){  	
 	try{
 		m_parserData = new OSrLParserData();
 		m_osresult = new OSResult(); 

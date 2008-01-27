@@ -3,7 +3,7 @@
     xsi:schemaLocation="os.optimizationservices.org ../schemas/OSiL.xsd">
     <resultHeader>
         <generalStatus type="success"/>
-        <serviceName>Solved with Coin Solver: coin_solver_clp</serviceName>
+    <serviceName>Solved with Coin Solver: coin_solver_clp</serviceName>
         <instanceName>ParInc.</instanceName>
     </resultHeader>
     <resultData>

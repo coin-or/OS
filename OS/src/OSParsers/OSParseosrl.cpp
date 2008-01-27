@@ -1917,7 +1917,7 @@ case 69:
 /* rule 69 can match eol */
 YY_RULE_SETUP
 #line 185 "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/src/OSParsers/OSParseosrl.l"
-{ YY_PRINT;  yylval->charval = strdup( yytext);   /*yylval->charval = yytext;*/  return (ELEMENTTEXT); }
+{ YY_PRINT;  yylval->charval = strdup( yytext);   yyextra->errorText = yylval->charval;    /*yylval->charval = yytext;*/  return (ELEMENTTEXT); }
 	YY_BREAK
 case 70:
 YY_RULE_SETUP

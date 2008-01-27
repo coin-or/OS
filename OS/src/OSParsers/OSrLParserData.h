@@ -128,12 +128,23 @@ public:
 	
 	/**  for each solution we have a pointer to each dual solution */
 	double **dualSolution;
+	
+	
+
 
 	/** a pointer to an OtherVariableResultStruct structure  */
 	struct OtherVariableResultStruct *otherVarStruct;
 	
 	/** store a vector of pointers to otherVarVec structures */
 	std::vector<OtherVariableResultStruct*> otherVarVec;
+	
+	
+	/**  if the parser finds invalid text it is held here and we delete
+	 * if the file was not valid
+	 */
+	char *errorText;
+	
+	double test;
 };
 
 #endif /*OSRLPARSERDATA_H_*/

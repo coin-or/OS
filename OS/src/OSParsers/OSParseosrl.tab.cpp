@@ -234,6 +234,7 @@ int osrllex_destroy (void* yyscanner );
 int osrlget_lineno( void* yyscanner);
 char *osrlget_text (void* yyscanner );
 void osrlset_lineno (int line_number , void* yyscanner );
+void osrlset_extra (OSrLParserData* parserData ,   void* yyscanner );
 OSResult *yygetOSResult( std::string parsestring) ;
 
 
@@ -636,18 +637,18 @@ static const yytype_int16 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   105,   105,   104,   122,   123,   127,   129,   130,   132,
-     133,   135,   136,   139,   140,   141,   142,   145,   146,   147,
-     148,   150,   151,   152,   153,   155,   156,   157,   158,   160,
-     161,   162,   163,   165,   166,   167,   169,   170,   172,   173,
-     176,   175,   203,   204,   206,   207,   209,   210,   211,   212,
-     216,   218,   220,   222,   226,   227,   228,   231,   237,   238,
-     241,   242,   245,   246,   248,   249,   251,   252,   253,   255,
-     256,   259,   260,   262,   266,   273,   274,   276,   279,   276,
-     283,   284,   286,   294,   300,   308,   309,   311,   312,   315,
-     316,   318,   319,   321,   323,   326,   328,   327,   338,   339,
-     341,   344,   351,   357,   358,   360,   361,   363,   364,   370,
-     372,   373,   374,   375,   377,   378
+       0,   106,   106,   105,   123,   124,   128,   130,   131,   133,
+     134,   136,   137,   140,   141,   142,   143,   146,   147,   148,
+     149,   151,   152,   153,   154,   156,   157,   158,   159,   161,
+     162,   163,   164,   166,   167,   168,   170,   171,   173,   174,
+     177,   176,   204,   205,   207,   208,   210,   211,   212,   213,
+     217,   219,   221,   223,   227,   228,   229,   232,   238,   239,
+     242,   243,   246,   247,   249,   250,   252,   253,   254,   256,
+     257,   260,   261,   263,   267,   274,   275,   277,   280,   277,
+     284,   285,   287,   295,   301,   309,   310,   312,   313,   316,
+     317,   319,   320,   322,   324,   327,   329,   328,   339,   340,
+     342,   345,   352,   358,   359,   361,   362,   364,   365,   371,
+     373,   374,   375,   376,   378,   379
 };
 #endif
 
@@ -1783,27 +1784,27 @@ yyreduce:
 
   case 15:
 
-    {osresult->setServiceURI( (yyvsp[(2) - (3)].charval)); free((yyvsp[(2) - (3)].charval));}
+    {osresult->setServiceURI( (yyvsp[(2) - (3)].charval)); free((yyvsp[(2) - (3)].charval)); (yyvsp[(2) - (3)].charval)=NULL;}
     break;
 
   case 19:
 
-    {osresult->setServiceName( (yyvsp[(2) - (3)].charval));  free((yyvsp[(2) - (3)].charval));}
+    {osresult->setServiceName( (yyvsp[(2) - (3)].charval));  free((yyvsp[(2) - (3)].charval));   (yyvsp[(2) - (3)].charval)=NULL;}
     break;
 
   case 23:
 
-    {osresult->setInstanceName( (yyvsp[(2) - (3)].charval)) ;  free((yyvsp[(2) - (3)].charval));}
+    {osresult->setInstanceName( (yyvsp[(2) - (3)].charval)) ;  free((yyvsp[(2) - (3)].charval));   (yyvsp[(2) - (3)].charval)=NULL;}
     break;
 
   case 27:
 
-    {osresult->setJobID( (yyvsp[(2) - (3)].charval));  free((yyvsp[(2) - (3)].charval));}
+    {osresult->setJobID( (yyvsp[(2) - (3)].charval));  free((yyvsp[(2) - (3)].charval));  (yyvsp[(2) - (3)].charval)=NULL;}
     break;
 
   case 31:
 
-    {osresult->setGeneralMessage( (yyvsp[(2) - (3)].charval));  free((yyvsp[(2) - (3)].charval));}
+    {osresult->setGeneralMessage( (yyvsp[(2) - (3)].charval));  free((yyvsp[(2) - (3)].charval));  (yyvsp[(2) - (3)].charval)=NULL;}
     break;
 
   case 40:
@@ -1927,7 +1928,7 @@ yyreduce:
 std::ostringstream outStr;
 outStr << (yyvsp[(4) - (5)].charval);
 parserData->otherVarStruct->otherVarText[parserData->kounter] =  outStr.str();
-free((yyvsp[(4) - (5)].charval));
+free((yyvsp[(4) - (5)].charval)); (yyvsp[(4) - (5)].charval)=NULL;
 if(parserData->kounter < 0 || parserData->kounter > parserData->numberOfVariables - 1) osrlerror(NULL, NULL, NULL, "index must be greater than 0 and less than the number of variables");
 }
     break;
@@ -2238,6 +2239,7 @@ void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, 
 	outStr << "See line number: " << osrlget_lineno( scanner) << std::endl; 
 	outStr << "The offending text is: " << osrlget_text ( scanner ) << std::endl; 
 	error = outStr.str();
+	printf("THIS DID NOT GET DESTROYED:   %s\n", parserData->errorText);
 	osrllex_destroy( scanner);
 	throw ErrorClass( error);
 } //end osrlerror
@@ -2246,6 +2248,7 @@ OSResult *yygetOSResult(std::string parsestring, OSResult *osresult, OSrLParserD
 	try{
 		// call the flex scanner
 		osrllex_init( &scanner);
+		osrlset_extra (parserData ,   scanner);
 		osrl_scan_string( parsestring.c_str(), scanner);
 		osrlset_lineno (1 , scanner );
 		//
