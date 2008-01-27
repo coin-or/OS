@@ -389,6 +389,7 @@ void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, 
 	outStr << "See line number: " << osrlget_lineno( scanner) << std::endl; 
 	outStr << "The offending text is: " << osrlget_text ( scanner ) << std::endl; 
 	error = outStr.str();
+	osrllex_destroy( scanner);
 	throw ErrorClass( error);
 } //end osrlerror
 
