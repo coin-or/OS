@@ -19,20 +19,30 @@
 
 
 
-OSResult *yygetOSResult( std::string parsestring) ;
+OSResult *yygetOSResult( std::string parsestring, OSResult* m_osresult, OSrLParserData *m_parserData) ;
 
 
-OSrLReader::OSrLReader( ) {								
+OSrLReader::OSrLReader( ) {	
+	m_osresult = NULL;
+	m_parserData = NULL;							
 }
 
 OSrLReader::~OSrLReader(){
+
+	if(m_osresult != NULL) delete m_osresult;
+	m_osresult = NULL;
+	if( m_parserData != NULL) delete m_parserData;
+	m_parserData = NULL;
 	
 } 
 
-OSResult* OSrLReader::readOSrL(std::string osrl){   
+OSResult* OSrLReader::readOSrL(std::string osrl){  
+		
 	try{
-		m_parserDataOSrL = new OSrLParserData();
-		return yygetOSResult( osrl);
+		m_parserData = new OSrLParserData();
+		m_osresult = new OSResult(); 
+		yygetOSResult( osrl, m_osresult, m_parserData);
+		return m_osresult;
 	}
 		catch(const ErrorClass& eclass){
 		throw ErrorClass( eclass.errormsg); 

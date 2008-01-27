@@ -1048,7 +1048,7 @@ int main(int argC, char* argV[])
 		OSrLWriter *osrlwriter = NULL;
 		osrlwriter = new OSrLWriter();
 		OSrLReader *osrlreader = NULL;
-		//osrlreader = new OSrLReader();
+		osrlreader = new OSrLReader();
 		OSResult *osresult = NULL;
 		//osresult = new OSResult(); 
 		cout << "TEST PARSING AN OSrL FILE" << endl;
@@ -1061,14 +1061,13 @@ int main(int argC, char* argV[])
 		cout << "Reading the file into a string took (seconds): "<< duration << endl;
 		start = clock();
 		cout << "PARSE THE OSRL STRING INTO AN OSRESULT OBJECT" << endl;
+		osrlreader->readOSrL( osrl);
 		osresult = osrlreader->readOSrL( osrl);
 		cout << osrlwriter->writeOSrL( osresult) << endl;
 		delete osrlwriter;
 		osrlwriter = NULL;
 		delete osrlreader;
 		osrlreader = NULL;
-		delete osresult;
-		osresult = NULL;
 		finish = clock();
 		duration = (double) (finish - start) / CLOCKS_PER_SEC;
 		cout << "Parsing took (seconds): "<< duration << endl;

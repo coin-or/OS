@@ -21,7 +21,9 @@
 OSInstance *yygetOSInstance(const char *osil, OSInstance* osinstance, OSiLParserData *parserData) throw(ErrorClass);
 
 
-OSiLReader::OSiLReader( ) {								
+OSiLReader::OSiLReader( ) {	
+	m_osinstance = NULL;
+	m_parserData = NULL;
 }
 
 OSiLReader::~OSiLReader(){

@@ -20,8 +20,10 @@
 
 
 #include "OSResult.h"
-#include "OSErrorClass.h"
 #include "OSrLParserData.h"
+#include "OSErrorClass.h"
+
+
 #include <string>
 
 
@@ -63,13 +65,14 @@ public:
 	OSResult *readOSrL(std::string osrl);
 	
 private:
-	/** osintance is the OSInstance object returned by 
-	 * the OSiLReader
+	/** m_osreslut is the OSResult object returned by 
+	 * the OSrLReader
 	 */
-	//OSInstance *m_osinstance;
+	OSResult *m_osresult;
 	
-	/** parerData is the  object used in the parser to temporarily store data 
+	/** m_parerData is the  object used in the parser to 
+	 * temporarily store data 
 	 */
-	OSrLParserData *m_parserDataOSrL;
+	OSrLParserData *m_parserData;
 };
 #endif

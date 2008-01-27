@@ -2241,12 +2241,8 @@ void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, 
 	throw ErrorClass( error);
 } //end osrlerror
 
-OSResult *yygetOSResult(std::string parsestring){
+OSResult *yygetOSResult(std::string parsestring, OSResult *osresult, OSrLParserData *parserData){
 	try{
-		OSResult* osresult = NULL;
-		osresult = new OSResult();
-		OSrLParserData *parserData = NULL;
-		parserData = new OSrLParserData();
 		// call the flex scanner
 		osrllex_init( &scanner);
 		osrl_scan_string( parsestring.c_str(), scanner);
@@ -2256,13 +2252,9 @@ OSResult *yygetOSResult(std::string parsestring){
 		//
 		if(  osrlparse( osresult,  parserData) != 0) {
 			osrllex_destroy(scanner);
-		 	delete parserData;
 		  	throw ErrorClass(  "Error parsing the OSrL");
 		 }
-		//delete parserData->otherVarStruct;
-		//delete[] parserData->otherVarStruct->otherVarText;
 		osrllex_destroy( scanner);
-		delete parserData;
 		return osresult;
 	}
 	catch(const ErrorClass& eclass){
