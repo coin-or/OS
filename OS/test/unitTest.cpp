@@ -188,6 +188,8 @@ int main(int argC, char* argV[])
 	#endif 
 	OSmps2osil *mps2osil = NULL;
 	DefaultSolver *solver  = NULL;
+	OSrLWriter *osrlwriter = NULL;
+	OSrLReader *osrlreader = NULL;
 	// end classes    
 	std::string osilFileName;
 	std::string osrlFileName;
@@ -1045,9 +1047,7 @@ int main(int argC, char* argV[])
 		cout << endl;
 		clock_t start, finish;
 		double duration;
-		OSrLWriter *osrlwriter = NULL;
 		osrlwriter = new OSrLWriter();
-		OSrLReader *osrlreader = NULL;
 		osrlreader = new OSrLReader();
 		OSResult *osresult = NULL;
 		//osresult = new OSResult(); 
@@ -1075,6 +1075,8 @@ int main(int argC, char* argV[])
 	}	
 		catch(const ErrorClass& eclass){
 		cout << endl << endl << endl;
+		if(osrlwriter != NULL) delete osrlwriter;
+		if(osrlreader != NULL) delete osrlreader;
 		unitTestResultFailure << eclass.errormsg << endl;
 	}
 	// now test postfix and prefix routines
