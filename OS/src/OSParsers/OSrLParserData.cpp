@@ -44,7 +44,8 @@
 	if(objectiveValues != NULL) delete[] objectiveValues;
 	objectiveValues = NULL;
 
-
+	// now delete the scanner
+	osrllex_destroy (scanner );
 
  }//~OSrLParserData
  

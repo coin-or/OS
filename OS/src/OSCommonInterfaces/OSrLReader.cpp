@@ -19,7 +19,8 @@
 
 
 
-void yygetOSResult( const char *ch, OSResult* m_osresult, OSrLParserData *m_parserData) ;
+void yygetOSResult( const char *ch, OSResult* m_osresult, OSrLParserData *m_parserData) throw(ErrorClass);
+
 
 
 OSrLReader::OSrLReader( ) {	

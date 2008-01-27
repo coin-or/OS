@@ -32,8 +32,8 @@ int osrllex_destroy (void* yyscanner );
 int osrlget_lineno( void* yyscanner);
 char *osrlget_text (void* yyscanner );
 void osrlset_lineno (int line_number , void* yyscanner );
-void osrlset_extra (OSrLParserData* parserData ,   void* yyscanner );
-void  yygetOSResult(const char *ch, OSResult* m_osresult, OSrLParserData *m_parserData ) ;
+void osrlset_extra (OSrLParserData* parserData , void* yyscanner );
+void  yygetOSResult(const char *ch, OSResult* m_osresult, OSrLParserData *m_parserData ) throw(ErrorClass);
 
 
 %}
@@ -61,7 +61,7 @@ this fails on in Mac OS X
 
 %{
 
-void osrlerror(YYLTYPE* type, OSResult *osresult,  OSrLParserData *parserData ,const char* errormsg );
+void osrlerror(YYLTYPE* type, OSResult *osresult,  OSrLParserData *parserData ,const char* errormsg ) ;
 int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
  
 #define scanner parserData->scanner
@@ -392,11 +392,11 @@ void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, 
 	error = outStr.str();
 	//printf("THIS DID NOT GET DESTROYED:   %s\n", parserData->errorText);
 	//if( (parserData->errorText != NULL) &&  (strlen(parserData->errorText) > 0) ) free(  parserData->errorText);
-	osrllex_destroy( scanner);
+	//osrllex_destroy( scanner);
 	throw ErrorClass( error);
 } //end osrlerror
 
-void  yygetOSResult(const char *parsestring, OSResult *osresult, OSrLParserData *parserData){
+void  yygetOSResult(const char *parsestring, OSResult *osresult, OSrLParserData *parserData) throw(ErrorClass){
 	try{
 		// call the flex scanner
 		osrllex_init( &scanner);
@@ -407,10 +407,10 @@ void  yygetOSResult(const char *parsestring, OSResult *osresult, OSrLParserData 
 		// call the Bison parser
 		//
 		if(  osrlparse( osresult,  parserData) != 0) {
-			osrllex_destroy(scanner);
+			//osrllex_destroy(scanner);
 		  	throw ErrorClass(  "Error parsing the OSrL");
 		 }
-		osrllex_destroy( scanner);
+		//osrllex_destroy( scanner);
 	}
 	catch(const ErrorClass& eclass){
 		throw ErrorClass(  eclass.errormsg); 
