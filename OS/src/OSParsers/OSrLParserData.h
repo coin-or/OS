@@ -143,8 +143,6 @@ public:
 	 * if the file was not valid
 	 */
 	char *errorText;
-	
-	double test;
 };
 
 #endif /*OSRLPARSERDATA_H_*/

@@ -2240,6 +2240,7 @@ void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, 
 	outStr << "The offending text is: " << osrlget_text ( scanner ) << std::endl; 
 	error = outStr.str();
 	printf("THIS DID NOT GET DESTROYED:   %s\n", parserData->errorText);
+	if( parserData->errorText != NULL) free(  parserData->errorText);
 	osrllex_destroy( scanner);
 	throw ErrorClass( error);
 } //end osrlerror
