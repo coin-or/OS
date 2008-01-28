@@ -52,40 +52,43 @@ host_triplet = @host@
 @COIN_HAS_KNITRO_TRUE@am__append_3 = OSKnitroSolver.cpp \
 @COIN_HAS_KNITRO_TRUE@	OSKnitroSolver.h
 
-@COIN_HAS_CPX_TRUE@am__append_4 = \
+@COIN_HAS_ASL_TRUE@am__append_4 = -I`$(CYGPATH_W) \
+@COIN_HAS_ASL_TRUE@	$(OSSRCDIR)/src/ThirdPartyASL` \
+@COIN_HAS_ASL_TRUE@	$(ASL_CPPFLAGS)
+@COIN_HAS_CPX_TRUE@am__append_5 = \
 @COIN_HAS_CPX_TRUE@	-I`$(CYGPATH_W) $(CPXINCDIR)` \
 @COIN_HAS_CPX_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
 
-@COIN_HAS_GLPK_TRUE@am__append_5 = \
+@COIN_HAS_GLPK_TRUE@am__append_6 = \
 @COIN_HAS_GLPK_TRUE@	-I`$(CYGPATH_W) $(GLPKINCDIR)` \
 @COIN_HAS_GLPK_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
 
-@COIN_HAS_DYLP_TRUE@am__append_6 = \
+@COIN_HAS_DYLP_TRUE@am__append_7 = \
 @COIN_HAS_DYLP_TRUE@    -I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
 @COIN_HAS_DYLP_TRUE@    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/Dylp` \
 @COIN_HAS_DYLP_TRUE@    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/DylpStdLib` \
 @COIN_HAS_DYLP_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiDylp` 
 
-@COIN_HAS_SYMPHONY_TRUE@am__append_7 = \
+@COIN_HAS_SYMPHONY_TRUE@am__append_8 = \
 @COIN_HAS_SYMPHONY_TRUE@    -I`$(CYGPATH_W) $(SYMPHONYSRCDIR)/include` \
 @COIN_HAS_SYMPHONY_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiSym` 
 
-@COIN_HAS_VOL_TRUE@am__append_8 = \
+@COIN_HAS_VOL_TRUE@am__append_9 = \
 @COIN_HAS_VOL_TRUE@    -I`$(CYGPATH_W) $(VOLSRCDIR)/include` \
 @COIN_HAS_VOL_TRUE@    -I`$(CYGPATH_W) $(VOLSRCDIR)/src` \
 @COIN_HAS_VOL_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiVol`
 
-@COIN_HAS_LINDO_TRUE@am__append_9 = -I`$(CYGPATH_W) $(LINDOINCDIR)` 
-@COIN_HAS_KNITRO_TRUE@am__append_10 = -I`$(CYGPATH_W) $(KNITROINCDIR)` 
-@COIN_HAS_IPOPT_TRUE@am__append_11 = \
+@COIN_HAS_LINDO_TRUE@am__append_10 = -I`$(CYGPATH_W) $(LINDOINCDIR)` 
+@COIN_HAS_KNITRO_TRUE@am__append_11 = -I`$(CYGPATH_W) $(KNITROINCDIR)` 
+@COIN_HAS_IPOPT_TRUE@am__append_12 = \
 @COIN_HAS_IPOPT_TRUE@	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Interfaces` \
 @COIN_HAS_IPOPT_TRUE@	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/LinAlg` \
 @COIN_HAS_IPOPT_TRUE@	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Common` \
 @COIN_HAS_IPOPT_TRUE@	-I`$(CYGPATH_W) $(IPOPTOBJDIR)/inc`
 
-@COIN_HAS_LINDO_TRUE@am__append_12 = OSLindoSolver.h
-@COIN_HAS_KNITRO_TRUE@am__append_13 = OSKnitroSolver.h
-@COIN_HAS_IPOPT_TRUE@am__append_14 = OSIpoptSolver.h
+@COIN_HAS_LINDO_TRUE@am__append_13 = OSLindoSolver.h
+@COIN_HAS_KNITRO_TRUE@am__append_14 = OSKnitroSolver.h
+@COIN_HAS_IPOPT_TRUE@am__append_15 = OSIpoptSolver.h
 subdir = src/OSSolverInterfaces
 DIST_COMMON = $(am__includecoin_HEADERS_DIST) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -417,7 +420,7 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` -I`$(CYGPATH_W) \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSParsers` $(am__append_4) \
 	$(am__append_5) $(am__append_6) $(am__append_7) \
 	$(am__append_8) $(am__append_9) $(am__append_10) \
-	$(am__append_11)
+	$(am__append_11) $(am__append_12)
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
@@ -431,7 +434,7 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 # and that therefore should be installed in 'install/coin'
 includecoindir = $(includedir)/coin
 includecoin_HEADERS = ../../inc/config_os.h OSCoinSolver.h \
-	$(am__append_12) $(am__append_13) $(am__append_14)
+	$(am__append_13) $(am__append_14) $(am__append_15)
 all: all-am
 
 .SUFFIXES:
