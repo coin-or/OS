@@ -12,7 +12,8 @@
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
- #include "OSrLParserData.h"
+ #include "OSrLParserData.h" 
+
  OSrLParserData::~OSrLParserData() {
  	if(numberOfSolutions > 0){
  		if(objectiveIdx != NULL) delete[] objectiveIdx;
@@ -44,8 +45,6 @@
 	if(objectiveValues != NULL) delete[] objectiveValues;
 	objectiveValues = NULL;
 
-	// now delete the scanner
-	osrllex_destroy (scanner );
 
  }//~OSrLParserData
  
@@ -64,10 +63,10 @@
 	generalStatusTypePresent( false),
 	otherNamePresent( false),
 	objectiveIdx( NULL),
-	otherVarStruct( NULL),
 	objectiveValues( NULL),
 	primalSolution( NULL),
 	dualSolution( NULL),
+	otherVarStruct( NULL),
 	errorText(NULL)
  {
 

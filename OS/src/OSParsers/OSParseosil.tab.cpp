@@ -328,6 +328,7 @@ typedef struct yy_buffer_state *YY_BUFFER_STATE;
 YY_BUFFER_STATE osil_scan_string (const char *yy_str , void* yyscanner  );
 int osillex_init(void** ptr_yy_globals);
 int osillex_destroy (void* yyscanner );
+void osilset_extra (OSiLParserData* parserData , void* yyscanner );
 int osilget_lineno( void* yyscanner);
 char *osilget_text (void* yyscanner );
 void osilset_lineno (int line_number , void* yyscanner );
@@ -841,29 +842,29 @@ static const yytype_int16 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   211,   211,   217,   218,   223,   230,   231,   233,   233,
-     245,   246,   249,   250,   254,   257,   260,   263,   269,   276,
-     283,   285,   289,   292,   293,   297,   303,   305,   304,   312,
-     327,   328,   329,   330,   331,   332,   333,   334,   335,   336,
-     337,   338,   339,   340,   341,   342,   343,   344,   345,   346,
-     347,   348,   349,   352,   352,   357,   357,   362,   362,   367,
-     367,   372,   372,   377,   377,   382,   382,   392,   393,   398,
-     398,   409,   410,   413,   413,   424,   425,   427,   427,   438,
-     439,   442,   442,   452,   453,   456,   456,   461,   461,   466,
-     466,   471,   471,   476,   476,   483,   483,   488,   488,   496,
-     496,   503,   503,   508,   508,   513,   514,   516,   516,   519,
-     520,   522,   522,   525,   526,   528,   529,   529,   533,   536,
-     537,   539,   541,   543,   547,   547,   551,   551,   557,   560,
-     564,   565,   567,   569,   573,   576,   580,   588,   588,   590,
-     592,   593,   594,   595,   597,   598,   600,   651,   653,   661,
-     662,   664,   664,   688,   689,   692,   693,   695,   697,   698,
-     702,   703,   705,   706,   708,   719,   725,   732,   734,   735,
-     737,   738,   740,   740,   743,   748,   749,   751,   752,   756,
-     757,   759,   760,   762,   773,   779,   786,   789,   790,   792,
-     793,   795,   795,   798,   803,   804,   806,   814,   819,   820,
-     822,   823,   825,   836,   842,   849,   851,   852,   854,   855,
-     857,   857,   860,   865,   866,   871,   871,   879,   880,   882,
-     883,   885,   889,   894,   898
+       0,   212,   212,   218,   219,   224,   231,   232,   234,   234,
+     246,   247,   250,   251,   255,   258,   261,   264,   270,   277,
+     284,   286,   290,   293,   294,   298,   304,   306,   305,   313,
+     328,   329,   330,   331,   332,   333,   334,   335,   336,   337,
+     338,   339,   340,   341,   342,   343,   344,   345,   346,   347,
+     348,   349,   350,   353,   353,   358,   358,   363,   363,   368,
+     368,   373,   373,   378,   378,   383,   383,   393,   394,   399,
+     399,   410,   411,   414,   414,   425,   426,   428,   428,   439,
+     440,   443,   443,   453,   454,   457,   457,   462,   462,   467,
+     467,   472,   472,   477,   477,   484,   484,   489,   489,   497,
+     497,   504,   504,   509,   509,   514,   515,   517,   517,   520,
+     521,   523,   523,   526,   527,   529,   530,   530,   534,   537,
+     538,   540,   542,   544,   548,   548,   552,   552,   558,   561,
+     565,   566,   568,   570,   574,   577,   581,   589,   589,   591,
+     593,   594,   595,   596,   598,   599,   601,   652,   654,   662,
+     663,   665,   665,   689,   690,   693,   694,   696,   698,   699,
+     703,   704,   706,   707,   709,   720,   726,   733,   735,   736,
+     738,   739,   741,   741,   744,   749,   750,   752,   753,   757,
+     758,   760,   761,   763,   774,   780,   787,   790,   791,   793,
+     794,   796,   796,   799,   804,   805,   807,   815,   820,   821,
+     823,   824,   826,   837,   843,   850,   852,   853,   855,   856,
+     858,   858,   861,   866,   867,   872,   872,   880,   881,   883,
+     884,   886,   890,   895,   899
 };
 #endif
 
@@ -3217,7 +3218,7 @@ void osilerror(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData* parserDa
 	outStr << "See line number: " << osilget_lineno( scanner) << endl; 
 	outStr << "The offending text is: " << osilget_text ( scanner ) << endl; 
 	error = outStr.str();
-	osillex_destroy(scanner);
+	//osillex_destroy(scanner);
 	throw ErrorClass( error);
 }//end osilerror() 
 
@@ -3227,15 +3228,15 @@ void  yygetOSInstance( const char *osil, OSInstance* osinstance, OSiLParserData 
 		parseInstanceHeader( &osil, osinstance, &parserData->osillineno);
 		parseInstanceData( &osil, osinstance, &parserData->osillineno);	
 		// call the flex scanner
-        osillex_init( &scanner);
+       // osillex_init( &scanner);
 		osil_scan_string( osil, scanner );
 		osilset_lineno (parserData->osillineno , scanner );
 		// call the Bison parser
 		if(  osilparse( osinstance,  parserData) != 0) {
-			osillex_destroy(scanner);
+			//osillex_destroy(scanner);
 			throw ErrorClass(  "Error parsing the OSiL");
 		}
-		osillex_destroy(scanner);
+		//osillex_destroy(scanner);
 	}
 	catch(const ErrorClass& eclass){
 		throw ErrorClass(  eclass.errormsg); 

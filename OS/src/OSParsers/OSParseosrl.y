@@ -399,8 +399,8 @@ void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, 
 void  yygetOSResult(const char *parsestring, OSResult *osresult, OSrLParserData *parserData) throw(ErrorClass){
 	try{
 		// call the flex scanner
-		osrllex_init( &scanner);
-		osrlset_extra (parserData ,   scanner);
+		//osrllex_init( &scanner);
+		//osrlset_extra (parserData ,   scanner);
 		osrl_scan_string( parsestring, scanner);
 		osrlset_lineno (1 , scanner );
 		//

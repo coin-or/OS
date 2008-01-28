@@ -89,6 +89,41 @@ SparseMatrix* MathUtil::convertLinearConstraintCoefficientMatrixToTheOtherMajor(
 	return matrix;		
 }//convertLinearConstraintCoefficientMatrixToTheOtherMajor
 
-
+std::string MathUtil::osdtoa(double  x){
+	std::string sResult = "";
+	// kipp check for nan and all that stuff???
+#ifdef COIN_HAS_ASL
+	char *charResult;
+    int decimalPointPos;
+    int sign;
+    int strLength = 0;
+    int k = 0;
+    charResult = dtoa(x, 0, 0, &decimalPointPos, &sign, NULL);
+    // get the length
+    strLength = strlen( charResult);
+    // get the sign, 1 for negative
+    if( sign == 1){
+    	sResult = "-";
+    }
+    if(decimalPointPos >= 0){
+    	if(decimalPointPos > strLength){
+    		// put in all of the characters in charResult
+    		for(k = 0; k < strLength; k++)sResult += charResult[ k];
+    		for(k = strLength; k < decimalPointPos; k++)sResult += "0";
+    	}else{
+    		for(k = 0; k < decimalPointPos; k++) sResult += charResult[ k];
+    		sResult += ".";
+    		for(k = decimalPointPos; k < strLength; k++) sResult += charResult[ k];
+    	}
+    }else{
+    	sResult += ".";
+    	for(k = 0; k < -decimalPointPos; k++)sResult += "0";
+    	for(k = 0; k < strLength; k++)sResult += charResult[ k];
+    }
+    //
+    freedtoa( charResult);
+#endif
+	return sResult;
+}// end dtoa
 
 

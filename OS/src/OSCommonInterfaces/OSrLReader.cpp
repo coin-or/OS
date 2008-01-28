@@ -15,22 +15,28 @@
  */ 
 
 #include "OSrLReader.h"
-#include "OSErrorClass.h" 
+
 
 
 
 void yygetOSResult( const char *ch, OSResult* m_osresult, OSrLParserData *m_parserData) throw(ErrorClass);
+int osrllex_init(void** ptr_yy_globals);
+int osrllex_destroy (void* scanner );
+void osrlset_extra (OSrLParserData* parserData , void* yyscanner );
 
 
-
-OSrLReader::OSrLReader( ) {	
-	m_osresult = NULL;
-	m_parserData = NULL;							
+OSrLReader::OSrLReader( )  :	
+	m_osresult( NULL),
+	m_parserData( NULL) {							
 }
 
 OSrLReader::~OSrLReader(){
+	// delete the osresult object
 	if(m_osresult != NULL) delete m_osresult;
 	m_osresult = NULL;
+	// now delete the scanner that was initialized
+	osrllex_destroy(m_parserData->scanner );
+	// findally delete parser data
 	if( m_parserData != NULL) delete m_parserData;
 	m_parserData = NULL;
 	
@@ -41,6 +47,9 @@ OSResult* OSrLReader::readOSrL(const std::string& posrl) throw(ErrorClass){
 		const char *ch = posrl.c_str();
 		m_parserData = new OSrLParserData();
 		m_osresult = new OSResult(); 
+		// initialize the lexer and set yyextra
+		osrllex_init( &(m_parserData->scanner) );
+		osrlset_extra (m_parserData ,   m_parserData->scanner);
 		yygetOSResult( ch, m_osresult, m_parserData);
 		return m_osresult;
 	}

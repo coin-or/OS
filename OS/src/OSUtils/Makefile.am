@@ -62,4 +62,8 @@ includecoin_HEADERS = \
 	OSDataStructures.h \
 	OSParameters.h
 
+if COIN_HAS_ASL
+  AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
+  AM_CPPFLAGS += $(ASL_CPPFLAGS) 
+endif
 

@@ -343,6 +343,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 	  // For this example, we write the solution to the console
 	OSrLWriter *osrlwriter ;
 	osrlwriter = new OSrLWriter();
+#ifdef DEBUG
 	  printf("\n\nSolution of the primal variables, x\n");
 	  for (Index i=0; i<n; i++) {
 	    printf("x[%d] = %e\n", i, x[i]);
@@ -355,7 +356,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 	  for (Index i=0; i<n; i++) {
 	    printf("z_U[%d] = %e\n", i, z_U[i]);
 	  }
-	
+#endif
 	  printf("\n\nObjective value\n");
 	  printf("f(x*) = %e\n", obj_value);
   	int solIdx = 0;
@@ -502,6 +503,7 @@ void IpoptSolver::solve() throw (ErrorClass) {
 		SmartPtr<TNLP> nlp = new IpoptProblem( osinstance, osresult);
 		SmartPtr<IpoptApplication> app = new IpoptApplication();
 		app->Options()->SetNumericValue("tol", 1e-9);
+		app->Options()->SetIntegerValue("print_level", 0);
 		app->Options()->SetStringValue("mu_strategy", "adaptive");
 		app->Options()->SetStringValue("output_file", "ipopt.out");
 		app->Options()->SetStringValue("check_derivatives_for_naninf", "yes");

@@ -56,6 +56,7 @@ typedef struct yy_buffer_state *YY_BUFFER_STATE;
 YY_BUFFER_STATE osil_scan_string (const char *yy_str , void* yyscanner  );
 int osillex_init(void** ptr_yy_globals);
 int osillex_destroy (void* yyscanner );
+void osilset_extra (OSiLParserData* parserData , void* yyscanner );
 int osilget_lineno( void* yyscanner);
 char *osilget_text (void* yyscanner );
 void osilset_lineno (int line_number , void* yyscanner );
@@ -915,7 +916,7 @@ void osilerror(YYLTYPE* mytype, OSInstance *osinstance, OSiLParserData* parserDa
 	outStr << "See line number: " << osilget_lineno( scanner) << endl; 
 	outStr << "The offending text is: " << osilget_text ( scanner ) << endl; 
 	error = outStr.str();
-	osillex_destroy(scanner);
+	//osillex_destroy(scanner);
 	throw ErrorClass( error);
 }//end osilerror() 
 
@@ -924,16 +925,14 @@ void  yygetOSInstance( const char *osil, OSInstance* osinstance, OSiLParserData 
 	try {
 		parseInstanceHeader( &osil, osinstance, &parserData->osillineno);
 		parseInstanceData( &osil, osinstance, &parserData->osillineno);	
-		// call the flex scanner
-        osillex_init( &scanner);
+		//call the flex scanner
+       // osillex_init( &scanner); // alreay initialized in OSiLReader
 		osil_scan_string( osil, scanner );
 		osilset_lineno (parserData->osillineno , scanner );
 		// call the Bison parser
 		if(  osilparse( osinstance,  parserData) != 0) {
-			osillex_destroy(scanner);
 			throw ErrorClass(  "Error parsing the OSiL");
 		}
-		osillex_destroy(scanner);
 	}
 	catch(const ErrorClass& eclass){
 		throw ErrorClass(  eclass.errormsg); 

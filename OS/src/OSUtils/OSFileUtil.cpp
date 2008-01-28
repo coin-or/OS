@@ -33,12 +33,12 @@ std::string FileUtil::getFileAsString( const char* fname){
 		std::ostringstream outStr;
 		std::string soutString;
 		char ch;
-		std::cout << "Inside FileUtil:getFileAsString and calling inFile" << std::endl;
+		//std::cout << "Inside FileUtil:getFileAsString and calling inFile" << std::endl;
 		std::ifstream inFile( fname);
 		if( !inFile){
 			throw ErrorClass(" Could not read the given file");
 		}
-		std::cout << "Inside FileUtil:getFileAsString, file read put into ostringstream" << std::endl;
+		//std::cout << "Inside FileUtil:getFileAsString, file read put into ostringstream" << std::endl;
 		//while((ch = inFile.get() ) != EOF){
 		//	outStr << ch;
 		//	std::cout << ch ;
@@ -52,8 +52,8 @@ std::string FileUtil::getFileAsString( const char* fname){
 		if( !inFile.eof() ){
 			throw ErrorClass(" There was a problem reading the file");
 		}
-		std::cout << std::endl;
-		std::cout << "Inside FileUtil:getFileAsString, convert to a string" << std::endl;
+		//std::cout << std::endl;
+		//std::cout << "Inside FileUtil:getFileAsString, convert to a string" << std::endl;
 		soutString = outStr.str();
 		inFile.close();
 		return soutString;

@@ -120,6 +120,7 @@
 #include "OSCommonUtil.h"
 
 
+
 #include <CoinMpsIO.hpp>
 #include <CoinPackedMatrix.hpp>
     
@@ -127,6 +128,8 @@
 #ifdef COIN_HAS_KNITRO    
 #include "OSKnitroSolver.h"
 #endif 
+
+#include "OSMathUtil.h"
 
 #ifdef COIN_HAS_GLPK
 #include <OsiGlpkSolverInterface.hpp>
@@ -292,15 +295,19 @@ int main(int argC, char* argV[])
 		*/
 		/*
 		// using dtoa
+		MathUtil *mathUtil = new MathUtil();
 	    int decimalPoint; // where the decimal point goes
 	    int sign; // 1 if negative, 0 if positive
-	    double d = 2./3.;
-	    d = 1.23456589e-20;
+	    double d ;
+	    d = -2./3.;
+	    //d = 123.4567;
+	    d = 1.23456589e-2;
 	    char *result =dtoa(d, 0, 0, &decimalPoint, &sign, NULL);
 	    printf("HERE IS THE RESULT  %s\n\n", result);
 	    printf("HERE IS THE RESULT of sign  %d\n\n", sign);
-	    printf("HERE IS THE RESULT decimal point  %d\n\n", decimalPoint);
+	    printf("HERE IS THE RESULT decimal point  %i\n\n", decimalPoint);
 	    printf("HERE IS THE LENGTH OF THE RESULT  %d\n\n",  strlen(result));
+	    std::cout << "HERE IS THE RESULT OF OS dtoa: " << mathUtil->osdtoa( d) << std::endl;
 		nl2osil = new OSnl2osil( nlFileName);
 	    return 0;
 	    */
@@ -1077,7 +1084,9 @@ int main(int argC, char* argV[])
 		cout << endl << endl << endl;
 		if(osrlwriter != NULL) delete osrlwriter;
 		if(osrlreader != NULL) delete osrlreader;
+		 " Problem with the test reading OSrL data";
 		unitTestResultFailure << eclass.errormsg << endl;
+		unitTestResultFailure << "There was a failure in the test for reading OSrL" << endl;
 	}
 	// now test postfix and prefix routines
 	try{

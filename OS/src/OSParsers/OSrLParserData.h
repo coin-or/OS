@@ -18,7 +18,7 @@
 #include "OSnLNode.h"
 #include <vector> 
 
-int osrllex_destroy (void* scanner );
+
 
 /*! \struct OtherVariableResultStruct
  * \brief A structure to information about an OtherVariableResult 

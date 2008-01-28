@@ -1946,7 +1946,7 @@ SparseJacobianMatrix *OSInstance::getJacobianSparsityPattern( ){
 	// also appear in <nonlinearExpressions> then they will keep getting added
 	// to the modified expession tree with each call to this method
 	if( m_bSparseJacobianCalculated == true) return m_sparseJacMatrix;
-	std::cout << "INSIDE GET JACOBIAN SPARSITY PATTERN" << std::endl;
+	//std::cout << "INSIDE GET JACOBIAN SPARSITY PATTERN" << std::endl;
 	// determine if we are in column or row major
 	getLinearConstraintCoefficientMajor();
 	// make sure the data structures have been inialized
@@ -2308,7 +2308,7 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double *
 	try{
 		if(highestOrder != 2 ) throw ErrorClass("When calling calculateLagrangianHessian highestOrder should be 2");
 		if( new_x == true || (highestOrder > m_iHighestOrderEvaluated)  ) {
-			std::cout  << "CALL getIterateResults() FROM calculateLagrangianHessain" << std::endl;
+			//std::cout  << "CALL getIterateResults() FROM calculateLagrangianHessain" << std::endl;
 			getIterateResults(x, objLambda, conLambda,  new_x,  highestOrder);
 		}
 	}
@@ -2782,7 +2782,7 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( ){
 	//std::cout << "HESSIAN DIMENSION = " << m_LagrangianSparseHessian->hessDimension << std::endl;
 	numNonz = 0;
 	for(posMap1 = m_mapAllNonlinearVariablesIndex.begin(); posMap1 != m_mapAllNonlinearVariablesIndex.end(); ++posMap1){
-		std::cout << "posMap1->first  " << posMap1->first << std::endl;
+		//std::cout << "posMap1->first  " << posMap1->first << std::endl;
 		j = i;
 		for(posMap2 = posMap1; posMap2 != m_mapAllNonlinearVariablesIndex.end(); ++posMap2){
 			//std::cout << "posMap2->first  " << posMap2->first << std::endl;
@@ -2852,7 +2852,7 @@ bool OSInstance::createCppADFun(std::vector<double> vdX){
 	int kount = 0;
 	for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){	
 		m_vFG.push_back( (posMapExpTree->second)->m_treeRoot->constructCppADTape(&m_mapAllNonlinearVariablesIndex, &vdaX) );
-		std::cout << "PUSHING BACK EXPRESSION NUMBER " << posMapExpTree->first << std::endl;
+		//std::cout << "PUSHING BACK EXPRESSION NUMBER " << posMapExpTree->first << std::endl;
 		if( m_mapCppADFunRangeIndex.find( posMapExpTree->first) == m_mapCppADFunRangeIndex.end() ){
 			// count which nonlinear obj/constraint this is
 			m_mapCppADFunRangeIndex[ posMapExpTree->first] = kount;
@@ -3204,13 +3204,15 @@ bool OSInstance::getSecondOrderResults(double *x, double *objLambda, double *con
 		m_vdDomainUnitVec[i] = 0.;
 	}
 	int k;
+	#ifdef DEBUG
 	std::cout  << "JACOBIAN DATA " << std::endl;
 	for(idx = 0; idx < m_iConstraintNumber; idx++){
 		for(k = *(m_sparseJacMatrix->starts + idx); k < *(m_sparseJacMatrix->starts + idx + 1); k++){
-			//std::cout << "row idx = " << idx <<  "  col idx = "<< *(m_sparseJacMatrix->indexes + k)
-			//<< " value = " << *(m_sparseJacMatrix->values + k) << std::endl;
+			std::cout << "row idx = " << idx <<  "  col idx = "<< *(m_sparseJacMatrix->indexes + k)
+			<< " value = " << *(m_sparseJacMatrix->values + k) << std::endl;
 		}
 	}
+	#endif
 	return true;
 	}//end try
 	catch(const ErrorClass& eclass){

@@ -24,6 +24,13 @@
  #include "OSParameters.h"
 
 
+#ifdef COIN_HAS_ASL
+#include "asl.h"
+#endif
+
+#include<string>
+
+
 /*!  \class MathUtil
  *  \brief this class has routines for linear algebra.
  * 
@@ -94,8 +101,12 @@ class MathUtil{
 	static SparseMatrix* convertLinearConstraintCoefficientMatrixToTheOtherMajor(
 			bool isColumnMajor, int startSize, int valueSize, int* start, int* index, 
 			double* value, int dimension);
+	
+	/**
+	 * 
+	 * @param x is the double that gets converted into a string
+	 */
+	std::string osdtoa( double x);
 			
-
-
 };//class MathUtil
 #endif

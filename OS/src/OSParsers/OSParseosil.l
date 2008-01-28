@@ -97,6 +97,10 @@ using std::ostringstream;
 %x elementtext
 %x comment
 %x xmldeclaration
+
+%{
+#define YY_EXTRA_TYPE OSiLParserData*
+%} 
  
 xmlwhitespace ([ \t\n\r])
 equality ([ \t\n\r])*=([ \t\n\r])*
