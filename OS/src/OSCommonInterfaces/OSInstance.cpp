@@ -3203,8 +3203,9 @@ bool OSInstance::getSecondOrderResults(double *x, double *objLambda, double *con
 		//
 		m_vdDomainUnitVec[i] = 0.;
 	}
-	int k;
+
 	#ifdef DEBUG
+	int k;
 	std::cout  << "JACOBIAN DATA " << std::endl;
 	for(idx = 0; idx < m_iConstraintNumber; idx++){
 		for(k = *(m_sparseJacMatrix->starts + idx); k < *(m_sparseJacMatrix->starts + idx + 1); k++){
