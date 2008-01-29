@@ -120,7 +120,6 @@
 #include "OSCommonUtil.h"
 
 
-
 #include <CoinMpsIO.hpp>
 #include <CoinPackedMatrix.hpp>
     
@@ -155,6 +154,15 @@
 #  include <time.h>
 # else
 #  error "don't have header file for time"
+# endif
+#endif
+
+
+#ifdef HAVE_CMATH
+# include <cmath>
+#else
+# ifdef HAVE_CMATH_H
+#  include <cmath.h>
 # endif
 #endif
 
@@ -262,14 +270,17 @@ int main(int argC, char* argV[])
 		delete si;
 		delete si2;
 		*/
+		
+		
 		/*
-		mpsFileName =  dataDir + "mpsFiles" + dirsep + "p0201.mps";
+		mpsFileName =  dataDir + "mpsFiles" + dirsep + "parinc.mps";
 		mps2osil = new OSmps2osil( mpsFileName);
 		// create the first in-memory OSInstance
 		mps2osil->createOSInstance() ;
 		// write the instance to a string
 		OSInstance *osinstance1 = mps2osil->osinstance;
 		std::string sOSiL = osilwriter.writeOSiL( osinstance1  );
+		cout << sOSiL << endl;
 		//fileUtil->writeFileFromString("p0201.osil", sOSiL);
 		// now create a second object
 		osilreader = new OSiLReader();
@@ -286,13 +297,14 @@ int main(int argC, char* argV[])
 				theMax = theDiff;
 				theIndex = i;
 			}
-			//std::cout << theDiff << std::endl;
+			std::cout << theDiff << std::endl;
 		}
 		std::cout << "MAXIMUM DIFF = " << theMax << std::endl;
 		std::cout << "MAXIMUM DIFF INDEX  = " << theIndex << std::endl;
 		delete mps2osil;
 		delete osilreader;
 		*/
+	
 		/*
 		// using dtoa
 		MathUtil *mathUtil = new MathUtil();
@@ -302,13 +314,28 @@ int main(int argC, char* argV[])
 	    d = -2./3.;
 	    //d = 123.4567;
 	    d = 1.23456589e-2;
+	    d = .00001123;
 	    char *result =dtoa(d, 0, 0, &decimalPoint, &sign, NULL);
-	    printf("HERE IS THE RESULT  %s\n\n", result);
-	    printf("HERE IS THE RESULT of sign  %d\n\n", sign);
-	    printf("HERE IS THE RESULT decimal point  %i\n\n", decimalPoint);
-	    printf("HERE IS THE LENGTH OF THE RESULT  %d\n\n",  strlen(result));
-	    std::cout << "HERE IS THE RESULT OF OS dtoa: " << mathUtil->osdtoa( d) << std::endl;
-		nl2osil = new OSnl2osil( nlFileName);
+	    for(int kj = 5; kj < 9; kj++){
+	    	d = pow(10. ,kj) + pow(10., (kj-1));
+	    	//d = 57.7;
+	    	result =dtoa(d, 0, 0, &decimalPoint, &sign, NULL);
+	    	printf("HERE IS THE RESULT  %s\n\n", result);
+	    	printf("HERE IS THE RESULT of sign  %d\n\n", sign);
+	    	printf("HERE IS THE RESULT decimal point  %i\n\n", decimalPoint);
+	    	printf("HERE IS THE LENGTH OF THE RESULT  %d\n\n",  strlen(result));
+	    	std::cout << "HERE IS THE RESULT OF OS dtoa: " << mathUtil->osdtoa( d) << std::endl;
+	    }
+	    d = .00001123;
+	    d = -2./3.;
+	    d = 100;
+	    result = dtoa(OSDBL_MAX, 0, 0, &decimalPoint, &sign, NULL);
+    	printf("HERE IS THE RESULT  %s\n\n", result);
+    	printf("HERE IS THE RESULT of sign  %d\n\n", sign);
+    	printf("HERE IS THE RESULT decimal point  %i\n\n", decimalPoint);
+    	printf("HERE IS THE LENGTH OF THE RESULT  %d\n\n",  strlen(result));
+    	std::cout << "HERE IS THE RESULT OF OS dtoa: " << mathUtil->osdtoa( OSDBL_MAX) << std::endl;
+	    nl2osil = new OSnl2osil( nlFileName);
 	    return 0;
 	    */
 

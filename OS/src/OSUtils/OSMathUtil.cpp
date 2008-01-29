@@ -90,12 +90,13 @@ SparseMatrix* MathUtil::convertLinearConstraintCoefficientMatrixToTheOtherMajor(
 }//convertLinearConstraintCoefficientMatrixToTheOtherMajor
 
 std::string MathUtil::osdtoa(double  x){
-	std::string sResult = "";
-	// kipp check for nan and all that stuff???
+	ostringstream outStr;
+	outStr << "";
+	// kipp check for nan, DBL_MAX, and all that stuff???
 #ifdef COIN_HAS_ASL
 	char *charResult;
     int decimalPointPos;
-    int sign;
+    int sign;  
     int strLength = 0;
     int k = 0;
     charResult = dtoa(x, 0, 0, &decimalPointPos, &sign, NULL);
@@ -103,27 +104,38 @@ std::string MathUtil::osdtoa(double  x){
     strLength = strlen( charResult);
     // get the sign, 1 for negative
     if( sign == 1){
-    	sResult = "-";
+    	outStr << "-";
     }
+    if(decimalPointPos == strLength){ //don't we have an integer?
+    	for(k = 0; k < strLength; k++)outStr << charResult[ k];
+    	return outStr.str();
+    } 
     if(decimalPointPos >= 0){
     	if(decimalPointPos > strLength){
-    		// put in all of the characters in charResult
-    		for(k = 0; k < strLength; k++)sResult += charResult[ k];
-    		for(k = strLength; k < decimalPointPos; k++)sResult += "0";
+    		// put in all of the characters from charResult
+    		outStr << charResult[ 0];
+    		outStr <<  ".";
+    		for(k = 1; k < strLength; k++)outStr << charResult[ k];
+    		//for(k = strLength; k < decimalPointPos; k++) outStr <<  "0";
+    		outStr <<  "e";
+    		outStr <<  decimalPointPos - strLength ;
     	}else{
-    		for(k = 0; k < decimalPointPos; k++) sResult += charResult[ k];
-    		sResult += ".";
-    		for(k = decimalPointPos; k < strLength; k++) sResult += charResult[ k];
+    		for(k = 0; k < decimalPointPos; k++) outStr << charResult[ k];
+    		outStr <<  ".";
+    		for(k = decimalPointPos; k < strLength; k++) outStr << charResult[ k];
     	}
     }else{
-    	sResult += ".";
-    	for(k = 0; k < -decimalPointPos; k++)sResult += "0";
-    	for(k = 0; k < strLength; k++)sResult += charResult[ k];
+		outStr << charResult[ 0];
+		outStr <<  ".";
+    	//for(k = 0; k < -decimalPointPos; k++) outStr << "0";
+    	for(k = 1; k < strLength; k++)outStr <<  charResult[ k];
+		outStr <<  "e";
+		outStr <<  decimalPointPos -1 ;
     }
     //
     freedtoa( charResult);
 #endif
-	return sResult;
+	return outStr.str();
 }// end dtoa
 
 

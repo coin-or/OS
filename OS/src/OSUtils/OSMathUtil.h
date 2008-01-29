@@ -28,8 +28,10 @@
 #include "asl.h"
 #endif
 
+#include <sstream>  
 #include<string>
 
+using std::ostringstream; 
 
 /*!  \class MathUtil
  *  \brief this class has routines for linear algebra.
