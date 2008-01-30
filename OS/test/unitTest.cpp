@@ -274,6 +274,7 @@ int main(int argC, char* argV[])
 		
 		/*
 		mpsFileName =  dataDir + "mpsFiles" + dirsep + "testfile2.mps";
+		//mpsFileName =  dataDir + "mpsFiles" + dirsep + "parinc.mps";
 		mps2osil = new OSmps2osil( mpsFileName);
 		// create the first in-memory OSInstance
 		mps2osil->createOSInstance() ;
@@ -303,10 +304,10 @@ int main(int argC, char* argV[])
 		std::cout << "MAXIMUM DIFF INDEX  = " << theIndex << std::endl;
 		delete mps2osil;
 		delete osilreader;
-	    nl2osil = new OSnl2osil( nlFileName);
+		nl2osil = new OSnl2osil( nlFileName);
 	    return 0;	
-	    */
-	
+	    
+		*/
 		/*
 		// using dtoa
 		MathUtil *mathUtil = new MathUtil();
@@ -337,9 +338,19 @@ int main(int argC, char* argV[])
     	printf("HERE IS THE RESULT decimal point  %i\n\n", decimalPoint);
     	printf("HERE IS THE LENGTH OF THE RESULT  %d\n\n",  strlen(result));
     	std::cout << "HERE IS THE RESULT OF OS dtoa: " << mathUtil->osdtoa( OSDBL_MAX) << std::endl;
+    	//
+    	char szOrbits[] = "77.77 99.99";
+    	char *pEnd;
+    	double d1, d2;
+    	d1 = strtod_ASL (szOrbits,&pEnd);
+    	d2 = strtod_ASL (pEnd,NULL);
+    	std::cout << d1 << std::endl;
+    	std::cout << d2 << std::endl;
 	    nl2osil = new OSnl2osil( nlFileName);
 	    return 0;
 	    */
+	   
+	    
 
 	}
 	catch(const ErrorClass& eclass){

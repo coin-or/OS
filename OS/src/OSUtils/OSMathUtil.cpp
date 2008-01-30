@@ -103,9 +103,7 @@ std::string MathUtil::osdtoa(double  x){
     // get the length
     strLength = strlen( charResult);
     // get the sign, 1 for negative
-    if( sign == 1){
-    	outStr << "-";
-    }
+    if( sign == 1) outStr << "-";
     if(decimalPointPos == strLength){ //don't we have an integer?
     	for(k = 0; k < strLength; k++)outStr << charResult[ k];
     	return outStr.str();

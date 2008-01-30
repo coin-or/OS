@@ -298,6 +298,12 @@
 #include "OSiLParserData.h"
 #include "OSBase64.h"
 
+#include "OSConfig.h"
+
+#ifdef COIN_HAS_ASL
+#include "asl.h"
+#endif
+
 #ifdef HAVE_CTIME
 # include <ctime>
 #else
@@ -842,29 +848,29 @@ static const yytype_int16 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   212,   212,   218,   219,   224,   231,   232,   234,   234,
-     246,   247,   250,   251,   255,   258,   261,   264,   270,   277,
-     284,   286,   290,   293,   294,   298,   304,   306,   305,   313,
-     328,   329,   330,   331,   332,   333,   334,   335,   336,   337,
-     338,   339,   340,   341,   342,   343,   344,   345,   346,   347,
-     348,   349,   350,   353,   353,   358,   358,   363,   363,   368,
-     368,   373,   373,   378,   378,   383,   383,   393,   394,   399,
-     399,   410,   411,   414,   414,   425,   426,   428,   428,   439,
-     440,   443,   443,   453,   454,   457,   457,   462,   462,   467,
-     467,   472,   472,   477,   477,   484,   484,   489,   489,   497,
-     497,   504,   504,   509,   509,   514,   515,   517,   517,   520,
-     521,   523,   523,   526,   527,   529,   530,   530,   534,   537,
-     538,   540,   542,   544,   548,   548,   552,   552,   558,   561,
-     565,   566,   568,   570,   574,   577,   581,   589,   589,   591,
-     593,   594,   595,   596,   598,   599,   601,   652,   654,   662,
-     663,   665,   665,   689,   690,   693,   694,   696,   698,   699,
-     703,   704,   706,   707,   709,   720,   726,   733,   735,   736,
-     738,   739,   741,   741,   744,   749,   750,   752,   753,   757,
-     758,   760,   761,   763,   774,   780,   787,   790,   791,   793,
-     794,   796,   796,   799,   804,   805,   807,   815,   820,   821,
-     823,   824,   826,   837,   843,   850,   852,   853,   855,   856,
-     858,   858,   861,   866,   867,   872,   872,   880,   881,   883,
-     884,   886,   890,   895,   899
+       0,   218,   218,   224,   225,   230,   237,   238,   240,   240,
+     252,   253,   256,   257,   261,   264,   267,   270,   276,   283,
+     290,   292,   296,   299,   300,   304,   310,   312,   311,   319,
+     334,   335,   336,   337,   338,   339,   340,   341,   342,   343,
+     344,   345,   346,   347,   348,   349,   350,   351,   352,   353,
+     354,   355,   356,   359,   359,   364,   364,   369,   369,   374,
+     374,   379,   379,   384,   384,   389,   389,   399,   400,   405,
+     405,   416,   417,   420,   420,   431,   432,   434,   434,   445,
+     446,   449,   449,   459,   460,   463,   463,   468,   468,   473,
+     473,   478,   478,   483,   483,   490,   490,   495,   495,   503,
+     503,   510,   510,   515,   515,   520,   521,   523,   523,   526,
+     527,   529,   529,   532,   533,   535,   536,   536,   540,   543,
+     544,   546,   548,   550,   554,   554,   558,   558,   564,   567,
+     571,   572,   574,   576,   580,   583,   587,   595,   595,   597,
+     599,   600,   601,   602,   604,   605,   607,   658,   660,   668,
+     669,   671,   671,   695,   696,   699,   700,   702,   704,   705,
+     709,   710,   712,   713,   715,   726,   732,   739,   741,   742,
+     744,   745,   747,   747,   750,   755,   756,   758,   759,   763,
+     764,   766,   767,   769,   780,   786,   793,   796,   797,   799,
+     800,   802,   802,   805,   810,   811,   813,   821,   826,   827,
+     829,   830,   832,   843,   849,   856,   858,   859,   861,   862,
+     864,   864,   867,   872,   873,   878,   878,   886,   887,   889,
+     890,   892,   896,   901,   905
 };
 #endif
 
@@ -3227,16 +3233,14 @@ void  yygetOSInstance( const char *osil, OSInstance* osinstance, OSiLParserData 
 	try {
 		parseInstanceHeader( &osil, osinstance, &parserData->osillineno);
 		parseInstanceData( &osil, osinstance, &parserData->osillineno);	
-		// call the flex scanner
-       // osillex_init( &scanner);
+		//call the flex scanner
+       // osillex_init( &scanner); // alreay initialized in OSiLReader
 		osil_scan_string( osil, scanner );
 		osilset_lineno (parserData->osillineno , scanner );
 		// call the Bison parser
 		if(  osilparse( osinstance,  parserData) != 0) {
-			//osillex_destroy(scanner);
 			throw ErrorClass(  "Error parsing the OSiL");
 		}
-		//osillex_destroy(scanner);
 	}
 	catch(const ErrorClass& eclass){
 		throw ErrorClass(  eclass.errormsg); 
@@ -4952,12 +4956,19 @@ char *parseBase64(const char **p, int *dataSize, int* osillineno ){
 	return b64string;
 }
 
-
-
-
-
 double atofmod1(int* osillineno, const char *number, const char *numberend){
-	double val, power;
+	double val;
+#ifdef COIN_HAS_ASL
+   	char *pEnd;
+	val = strtod_ASL(number, &pEnd);
+	// pEnd should now point to the first character after the number;
+	// burn off any white space	
+	for( ; ISWHITESPACE( *pEnd) || isnewline( *pEnd, osillineno); pEnd++ ) ;
+	// pEnd should now point to numberend, if not we have an error
+	if(pEnd != numberend) osilerror_wrapper( pEnd,   osillineno, "error in parsing an XSD:double");
+	return val;
+#endif
+	double power;
 	int i;
 	int sign = 1;
 	int expsign, exppower, exptest;
