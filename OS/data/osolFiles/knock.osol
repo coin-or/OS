@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/OSoL.xsd">
  	<general>         
- 		<jobID>GSBKIP__192.168.0.219_128.135.211.219_192.168.234.235__2008-01-19T15.39.49.556-06.00762800339</jobID>
+ 		<jobID>xyz123Dec3010AM</jobID>
 	</general>
 </osol>

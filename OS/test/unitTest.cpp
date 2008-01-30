@@ -273,14 +273,14 @@ int main(int argC, char* argV[])
 		
 		
 		/*
-		mpsFileName =  dataDir + "mpsFiles" + dirsep + "parinc.mps";
+		mpsFileName =  dataDir + "mpsFiles" + dirsep + "testfile2.mps";
 		mps2osil = new OSmps2osil( mpsFileName);
 		// create the first in-memory OSInstance
 		mps2osil->createOSInstance() ;
 		// write the instance to a string
 		OSInstance *osinstance1 = mps2osil->osinstance;
 		std::string sOSiL = osilwriter.writeOSiL( osinstance1  );
-		cout << sOSiL << endl;
+		//cout << sOSiL << endl;
 		//fileUtil->writeFileFromString("p0201.osil", sOSiL);
 		// now create a second object
 		osilreader = new OSiLReader();
@@ -297,13 +297,15 @@ int main(int argC, char* argV[])
 				theMax = theDiff;
 				theIndex = i;
 			}
-			std::cout << theDiff << std::endl;
+			//std::cout << theDiff << std::endl;
 		}
 		std::cout << "MAXIMUM DIFF = " << theMax << std::endl;
 		std::cout << "MAXIMUM DIFF INDEX  = " << theIndex << std::endl;
 		delete mps2osil;
 		delete osilreader;
-		*/
+	    nl2osil = new OSnl2osil( nlFileName);
+	    return 0;	
+	    */
 	
 		/*
 		// using dtoa
