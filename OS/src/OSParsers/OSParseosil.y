@@ -931,8 +931,11 @@ void  yygetOSInstance( const char *osil, OSInstance* osinstance, OSiLParserData 
 	try {
 		parseInstanceHeader( &osil, osinstance, &parserData->osillineno);
 		parseInstanceData( &osil, osinstance, &parserData->osillineno);	
-		//call the flex scanner
-       // osillex_init( &scanner); // alreay initialized in OSiLReader
+		/** at this point here we have parsed everything through <linearConstraint coefficient>
+		 *	we have done so without bison and just moved the pointer on osil to point to what is past
+		 *	the linear part	
+		 */
+		call the flex scanner and start scanning the nonlinear part of the problem
 		osil_scan_string( osil, scanner );
 		osilset_lineno (parserData->osillineno , scanner );
 		// call the Bison parser

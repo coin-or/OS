@@ -200,9 +200,9 @@ int main(int argC, const char* argV[])
 		}
 		cout << "Input String = "  << osss << endl;
 		ossslex_init( &scanner);
-		std::cout << "Call Text Extra" << std::endl;
+		//std::cout << "Call Text Extra" << std::endl;
 		setyyextra( osoptions, scanner);
-		std::cout << "Call scan string " << std::endl;
+		//std::cout << "Call scan string " << std::endl;
 		osss_scan_string( osss, scanner); 
 		std::cout << "call ossslex" << std::endl;
 		ossslex( scanner);

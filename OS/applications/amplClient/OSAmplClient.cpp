@@ -117,7 +117,6 @@ int main(int argc, char **argv)
 	// set solver type default to clp
 	DefaultSolver *solverType  = NULL;	
 	OSrLReader *osrlreader = NULL;
-	osrlreader = new OSrLReader();
 	OSrLWriter *osrlwriter;
 	osrlwriter = new OSrLWriter();
 	OSResult *osresult = NULL;
@@ -347,11 +346,13 @@ int main(int argc, char **argv)
 		string::size_type pos1 = osrl.find( "error");
 		std::string sReport = "model was solved";
 		if(pos1 == std::string::npos){
+			osrlreader = new OSrLReader();
 			osresult = osrlreader->readOSrL( osrl);
 			write_sol(  const_cast<char*>(sReport.c_str()), 
 					osresult->getOptimalPrimalVariableValues( -1), 
 					osresult->getOptimalDualVariableValues( -1) , NULL);
-			delete osresult;
+			delete osrlreader;
+			osrlreader = NULL;
 		}else{
 			write_sol(  const_cast<char*>(osrl.c_str()), NULL, NULL, NULL);
 		}
@@ -360,9 +361,6 @@ int main(int argc, char **argv)
 	catch(const ErrorClass& eclass){
 		cout << "There was an error parsing the OSrL" << endl << eclass.errormsg << endl << endl;
 	}
-	delete osrlreader;
-	//cout << "osrlreader JUST DELETED" <<endl;
-	osrlreader = NULL;
 	if(  solverType != NULL ){
 		//cout << "TRY TO DELETE solverType" <<endl;
 		delete solverType;

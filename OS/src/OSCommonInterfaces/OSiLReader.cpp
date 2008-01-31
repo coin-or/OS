@@ -25,9 +25,12 @@ int osillex_destroy (void* scanner );
 void osilset_extra (OSiLParserData* parserData , void* yyscanner );
 
 
-OSiLReader::OSiLReader( ) : 	
-	m_osinstance( NULL),
-	m_parserData( NULL) {
+OSiLReader::OSiLReader( ) {
+	m_osinstance = new OSInstance();
+	m_parserData = new OSiLParserData();
+	// initialize the lexer and set yyextra
+	osillex_init( &(m_parserData->scanner) );
+	osilset_extra (m_parserData ,   m_parserData->scanner);
 }
 
 OSiLReader::~OSiLReader(){
@@ -42,11 +45,6 @@ OSiLReader::~OSiLReader(){
 OSInstance* OSiLReader::readOSiL(const std::string& posil) throw(ErrorClass){   
 	try{
 		const char *ch = posil.c_str();
-		m_osinstance = new OSInstance();
-		m_parserData = new OSiLParserData();
-		// initialize the lexer and set yyextra
-		osillex_init( &(m_parserData->scanner) );
-		osilset_extra (m_parserData ,   m_parserData->scanner);
 		yygetOSInstance( ch, m_osinstance, m_parserData);
 		return m_osinstance;
 	}
