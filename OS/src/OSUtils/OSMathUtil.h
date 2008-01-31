@@ -25,7 +25,11 @@
 
 
 #ifdef COIN_HAS_ASL
-#include "asl.h"
+//#include "asl.h"
+extern "C" double strtod_ASL(const char * str, char ** endptr );
+extern "C" char *dtoa(double d, int mode, int ndigits,
+			  int *decpt, int *sign, char **rve);
+extern "C" void freedtoa(char *s);
 #endif
 
 #include <sstream>  

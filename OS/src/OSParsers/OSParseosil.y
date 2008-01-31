@@ -25,12 +25,11 @@
 #include "OSParameters.h"
 #include "OSiLParserData.h"
 #include "OSBase64.h"
+#include "OSMathUtil.h"
 
 #include "OSConfig.h"
 
-#ifdef COIN_HAS_ASL
-#include "asl.h"
-#endif
+
 
 #ifdef HAVE_CTIME
 # include <ctime>
@@ -934,8 +933,8 @@ void  yygetOSInstance( const char *osil, OSInstance* osinstance, OSiLParserData 
 		/** at this point here we have parsed everything through <linearConstraint coefficient>
 		 *	we have done so without bison and just moved the pointer on osil to point to what is past
 		 *	the linear part	
-		 */
-		call the flex scanner and start scanning the nonlinear part of the problem
+		 * call the flex scanner and start scanning the nonlinear part of the problem
+		 */	
 		osil_scan_string( osil, scanner );
 		osilset_lineno (parserData->osillineno , scanner );
 		// call the Bison parser

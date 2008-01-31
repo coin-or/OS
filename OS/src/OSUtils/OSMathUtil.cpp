@@ -102,6 +102,11 @@ std::string MathUtil::osdtoa(double  x){
     charResult = dtoa(x, 0, 0, &decimalPointPos, &sign, NULL);
     // get the length
     strLength = strlen( charResult);
+    // return charResult if we have nan or infinity
+    if(decimalPointPos == 9999){
+    	for(k = 0; k < strLength; k++)outStr << charResult[ k];
+    	return outStr.str();    	
+    }
     // get the sign, 1 for negative
     if( sign == 1) outStr << "-";
     if(decimalPointPos == strLength){ //don't we have an integer?
@@ -116,7 +121,7 @@ std::string MathUtil::osdtoa(double  x){
     		for(k = 1; k < strLength; k++)outStr << charResult[ k];
     		//for(k = strLength; k < decimalPointPos; k++) outStr <<  "0";
     		outStr <<  "e";
-    		outStr <<  decimalPointPos - strLength ;
+    		outStr <<  decimalPointPos -  1;
     	}else{
     		for(k = 0; k < decimalPointPos; k++) outStr << charResult[ k];
     		outStr <<  ".";

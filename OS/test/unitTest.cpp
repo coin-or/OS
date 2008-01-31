@@ -224,7 +224,7 @@ int main(int argC, char* argV[])
 	//first make sure we can read files
 	try{
 		//osilFileName =  dataDir  + "osilFiles" + dirsep +  "parincLinearByRow.osil";
-		osilFileName =  dataDir  + "osilFiles" + dirsep +  "callBackTest.osil";
+		osilFileName =  dataDir  + "osilFiles" + dirsep +  "parincLinear.osil";
 		std::cout << "Try to read a sample file" << std::endl;
 		std::cout << "The file is: " ;
 		std::cout <<  osilFileName << std::endl;
@@ -309,7 +309,7 @@ int main(int argC, char* argV[])
 	    
 		*/
 		/*
-		// using dtoa
+		//using dtoa
 		MathUtil *mathUtil = new MathUtil();
 	    int decimalPoint; // where the decimal point goes
 	    int sign; // 1 if negative, 0 if positive
@@ -332,26 +332,38 @@ int main(int argC, char* argV[])
 	    d = .00001123;
 	    d = -2./3.;
 	    d = 100;
-	    result = dtoa(OSDBL_MAX, 0, 0, &decimalPoint, &sign, NULL);
+	    result = dtoa(DBL_MAX, 0, 0, &decimalPoint, &sign, NULL);
     	printf("HERE IS THE RESULT  %s\n\n", result);
     	printf("HERE IS THE RESULT of sign  %d\n\n", sign);
     	printf("HERE IS THE RESULT decimal point  %i\n\n", decimalPoint);
     	printf("HERE IS THE LENGTH OF THE RESULT  %d\n\n",  strlen(result));
-    	std::cout << "HERE IS THE RESULT OF OS dtoa: " << mathUtil->osdtoa( OSDBL_MAX) << std::endl;
+    	std::cout << "HERE IS THE RESULT OF OS dtoa: " << mathUtil->osdtoa( OSDBL_MAX) << std::endl;  	
+    	d = .000234;
+	    result = dtoa(d, 0, 0, &decimalPoint, &sign, NULL);
+    	printf("HERE IS THE RESULT  %s\n\n", result);
+    	printf("HERE IS THE RESULT of sign  %d\n\n", sign);
+    	printf("HERE IS THE RESULT decimal point  %i\n\n", decimalPoint);
+    	printf("HERE IS THE LENGTH OF THE RESULT  %d\n\n",  strlen(result));
+    	std::cout << "HERE IS THE RESULT OF OS dtoa: " << mathUtil->osdtoa( d) << std::endl;
     	//
-    	char szOrbits[] = "77.77 99.99";
+    	char sInput[] = "77.77 99.99";
     	char *pEnd;
     	double d1, d2;
-    	d1 = strtod_ASL (szOrbits,&pEnd);
+    	d1 = strtod_ASL (sInput,  &pEnd);
     	d2 = strtod_ASL (pEnd,NULL);
     	std::cout << d1 << std::endl;
     	std::cout << d2 << std::endl;
-	    nl2osil = new OSnl2osil( nlFileName);
-	    return 0;
-	    */
-	   
-	    
-
+    	
+    	std::cout << "HERE IS THE RESULT OF OS dtoa OSDBL_MAX: " << mathUtil->osdtoa( OSDBL_MAX) << std::endl;
+    	std::cout << "HERE IS THE RESULT OF OS dtoa OSDBL_MAX: " << OSDBL_MAX << std::endl;
+    	std::cout << "HERE IS THE RESULT OF OS dtoa DBL_MAX: " << mathUtil->osdtoa( DBL_MAX) << std::endl;
+    	std::cout << "HERE IS THE RESULT OF OS dtoa DBL_MAX: " <<  DBL_MAX << std::endl;
+    	d1 = strtod_ASL(mathUtil->osdtoa( OSDBL_MAX).c_str(),     NULL);
+    	if(d1 == DBL_MAX )std::cout <<  "SUCCESS" << endl;
+    	else std::cout <<  "FAILURE" << endl;
+    	nl2osil = new OSnl2osil( nlFileName);
+	    //return 0;
+    	*/
 	}
 	catch(const ErrorClass& eclass){
 		unitTestResultFailure << "Sorry Unit Test Failed Reading a file: "  + eclass.errormsg<< endl; 

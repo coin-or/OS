@@ -397,6 +397,7 @@ void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, 
 } //end osrlerror
 
 void  yygetOSResult(const char *parsestring, OSResult *osresult, OSrLParserData *parserData) throw(ErrorClass){
+	try{
 		osrl_scan_string( parsestring, scanner);
 		osrlset_lineno (1 , scanner );
 		//
