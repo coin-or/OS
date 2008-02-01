@@ -61,6 +61,14 @@ fi
 # Initialize automake and libtool
 AC_COIN_INIT_AUTO_TOOLS
 
+# And determine whether we're big-endian or little-endian. This is necessary to
+# define the correct patterns for IEEE infinity and quiet_nan, in the event
+# that we can't get them any other way. This will define WORDS_BIGENDIAN if
+# we're on a big-endian machine, and do nothing otherwise. Also necessary for
+# the David Gay dtoa
+
+AC_C_BIGENDIAN
+
 #############################################################################
 #                              COIN components                              #
 #############################################################################
@@ -311,6 +319,23 @@ if test $os_openmp = true; then
 fi
 
 AM_CONDITIONAL(OPENMP, [test $os_openmp = true])
+
+
+###########################################################################
+# check to see if we turn off dtoa
+###########################################################################
+ 	
+
+AC_ARG_ENABLE([nodtoa],
+[AC_HELP_STRING([--enable-nodtoa],
+                [do not use dtoa use the C and C++ for string to decimal and back])],
+[case "${enableval}" in
+  yes) nodtoa=true ;;
+  no)  nodtoa=false ;;
+  *) AC_MSG_ERROR(bad value ${enableval} for --enable-nodtoa) ;;
+esac],[nodtoa=false])
+AM_CONDITIONAL(USE_DTOA, test x$nodtoa = xfalse)
+
 
 ############################################################################
 ############################################################################

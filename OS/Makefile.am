@@ -75,6 +75,9 @@ install-exec-local: install-doc
 
 uninstall-local: uninstall-doc
 	rm -f $(DESTDIR)$(libdir)/$(addlibsfile)
+	
+
+
 
 ########################################################################
 #                         Maintainer Stuff                             #

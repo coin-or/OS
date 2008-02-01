@@ -27,6 +27,9 @@ using std::cout;
 using std::endl;
 using std::ostringstream; 
 
+//#define USE_DTOA
+
+
 OSiLWriter::OSiLWriter( ) {	
 	m_bWriteBase64 = false;
 	m_bWhiteSpace = false;
@@ -36,6 +39,7 @@ OSiLWriter::~OSiLWriter(){
 }
 
 std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
+
 	m_OSInstance = theosinstance;
 	MathUtil *fileUtil = new MathUtil();
 	ostringstream outStr;
@@ -156,8 +160,8 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 								outStr << ">";
 								//
 								//
-#ifdef COIN_HAS_ASL
-								outStr << fileUtil->osdtoa( m_OSInstance->instanceData->objectives->obj[j]->coef[i]->value) ;
+#ifdef USE_DTOA
+								outStr << fileUtil->format_os_dtoa( m_OSInstance->instanceData->objectives->obj[j]->coef[i]->value) ;
 #else
 
 								outStr << m_OSInstance->instanceData->objectives->obj[j]->coef[i]->value ;
@@ -323,8 +327,8 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 					if(m_bWriteBase64 == false){
 						for(i = 0; i < m_OSInstance->instanceData->linearConstraintCoefficients->numberOfValues; i++){
 							outStr << "<el>";
-#ifdef COIN_HAS_ASL
-							outStr <<   fileUtil->osdtoa( m_OSInstance->instanceData->linearConstraintCoefficients->value->el[i] );
+#ifdef USE_DTOA
+							outStr <<   fileUtil->format_os_dtoa( m_OSInstance->instanceData->linearConstraintCoefficients->value->el[i] );
 #else
 							outStr <<   m_OSInstance->instanceData->linearConstraintCoefficients->value->el[i] ;
 #endif

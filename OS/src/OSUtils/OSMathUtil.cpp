@@ -89,20 +89,18 @@ SparseMatrix* MathUtil::convertLinearConstraintCoefficientMatrixToTheOtherMajor(
 	return matrix;		
 }//convertLinearConstraintCoefficientMatrixToTheOtherMajor
 
-std::string MathUtil::osdtoa(double  x){
+std::string MathUtil::format_os_dtoa(double  x){
 	ostringstream outStr;
 	outStr << "";
-	// kipp check for nan, DBL_MAX, and all that stuff???
-#ifdef COIN_HAS_ASL
 	char *charResult;
     int decimalPointPos;
     int sign;  
     int strLength = 0;
     int k = 0;
-    charResult = dtoa(x, 0, 0, &decimalPointPos, &sign, NULL);
+    charResult = os_dtoa(x, 0, 0, &decimalPointPos, &sign, NULL);
     // get the length
     strLength = strlen( charResult);
-    // return charResult if we have nan or infinity
+    // return charResult if we have nan or infinity  -- if so, return orginal string
     if(decimalPointPos == 9999){
     	for(k = 0; k < strLength; k++)outStr << charResult[ k];
     	return outStr.str();    	
@@ -136,8 +134,7 @@ std::string MathUtil::osdtoa(double  x){
 		outStr <<  decimalPointPos -1 ;
     }
     //
-    freedtoa( charResult);
-#endif
+    os_freedtoa( charResult);
 	return outStr.str();
 }// end dtoa
 

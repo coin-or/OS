@@ -2658,9 +2658,10 @@ char *parseBase64(const char **p, int *dataSize, int* osillineno ){
 
 double atofmod1(int* osillineno, const char *number, const char *numberend){
 	double val;
-#ifdef COIN_HAS_ASL
+
+#ifdef USE_DTOA
    	char *pEnd;
-	val = strtod_ASL(number, &pEnd);
+	val = os_strtod(number, &pEnd);
 	// pEnd should now point to the first character after the number;
 	// burn off any white space	
 	for( ; ISWHITESPACE( *pEnd) || isnewline( *pEnd, osillineno); pEnd++ ) ;

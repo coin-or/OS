@@ -21,16 +21,8 @@
 #ifndef MATHUTIL_H
 #define MATHUTIL_H
  
- #include "OSParameters.h"
-
-
-#ifdef COIN_HAS_ASL
-//#include "asl.h"
-extern "C" double strtod_ASL(const char * str, char ** endptr );
-extern "C" char *dtoa(double d, int mode, int ndigits,
-			  int *decpt, int *sign, char **rve);
-extern "C" void freedtoa(char *s);
-#endif
+#include "OSParameters.h"
+#include "OSdtoa.h"
 
 #include <sstream>  
 #include<string>
@@ -112,7 +104,7 @@ class MathUtil{
 	 * 
 	 * @param x is the double that gets converted into a string
 	 */
-	std::string osdtoa( double x);
+	std::string format_os_dtoa( double x);
 			
 };//class MathUtil
 #endif

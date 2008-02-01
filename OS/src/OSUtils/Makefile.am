@@ -30,7 +30,9 @@ libOSUtils_la_SOURCES = \
 		OSMathUtil.h \
 		OSDataStructures.cpp \
 		OSDataStructures.h \
-		OSParameters.h
+		OSParameters.h \
+		OSdtoa.h \
+		OSdtoa.cpp
 
 # This is for libtool (on Windows)
 libOSUtils_la_LDFLAGS = $(LT_LDFLAGS)
@@ -60,7 +62,8 @@ includecoin_HEADERS = \
 	OSFileUtil.h \
 	OSMathUtil.h \
 	OSDataStructures.h \
-	OSParameters.h
+	OSParameters.h \
+	OSdtoa.h
 
 if COIN_HAS_ASL
   AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 

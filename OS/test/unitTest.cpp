@@ -306,10 +306,10 @@ int main(int argC, char* argV[])
 		delete osilreader;
 		nl2osil = new OSnl2osil( nlFileName);
 	    return 0;	
-	    
-		*/
+	    */
+		
 		/*
-		//using dtoa
+		//using format_os_dtoa
 		MathUtil *mathUtil = new MathUtil();
 	    int decimalPoint; // where the decimal point goes
 	    int sign; // 1 if negative, 0 if positive
@@ -318,52 +318,53 @@ int main(int argC, char* argV[])
 	    //d = 123.4567;
 	    d = 1.23456589e-2;
 	    d = .00001123;
-	    char *result =dtoa(d, 0, 0, &decimalPoint, &sign, NULL);
+	    char *result = os_dtoa(d, 0, 0, &decimalPoint, &sign, NULL);
 	    for(int kj = 5; kj < 9; kj++){
 	    	d = pow(10. ,kj) + pow(10., (kj-1));
 	    	//d = 57.7;
-	    	result =dtoa(d, 0, 0, &decimalPoint, &sign, NULL);
+	    	result =os_dtoa(d, 0, 0, &decimalPoint, &sign, NULL);
 	    	printf("HERE IS THE RESULT  %s\n\n", result);
 	    	printf("HERE IS THE RESULT of sign  %d\n\n", sign);
 	    	printf("HERE IS THE RESULT decimal point  %i\n\n", decimalPoint);
 	    	printf("HERE IS THE LENGTH OF THE RESULT  %d\n\n",  strlen(result));
-	    	std::cout << "HERE IS THE RESULT OF OS dtoa: " << mathUtil->osdtoa( d) << std::endl;
+	    	std::cout << "HERE IS THE RESULT OF OS format_os_dtoa: " << mathUtil->format_os_dtoa( d) << std::endl;
 	    }
 	    d = .00001123;
 	    d = -2./3.;
 	    d = 100;
-	    result = dtoa(DBL_MAX, 0, 0, &decimalPoint, &sign, NULL);
+	    result = os_dtoa(DBL_MAX, 0, 0, &decimalPoint, &sign, NULL);
     	printf("HERE IS THE RESULT  %s\n\n", result);
     	printf("HERE IS THE RESULT of sign  %d\n\n", sign);
     	printf("HERE IS THE RESULT decimal point  %i\n\n", decimalPoint);
     	printf("HERE IS THE LENGTH OF THE RESULT  %d\n\n",  strlen(result));
-    	std::cout << "HERE IS THE RESULT OF OS dtoa: " << mathUtil->osdtoa( OSDBL_MAX) << std::endl;  	
+    	std::cout << "HERE IS THE RESULT OF OS format_os_dtoa: " << mathUtil->format_os_dtoa( OSDBL_MAX) << std::endl;  	
     	d = .000234;
-	    result = dtoa(d, 0, 0, &decimalPoint, &sign, NULL);
+	    result = os_dtoa(d, 0, 0, &decimalPoint, &sign, NULL);
     	printf("HERE IS THE RESULT  %s\n\n", result);
     	printf("HERE IS THE RESULT of sign  %d\n\n", sign);
     	printf("HERE IS THE RESULT decimal point  %i\n\n", decimalPoint);
     	printf("HERE IS THE LENGTH OF THE RESULT  %d\n\n",  strlen(result));
-    	std::cout << "HERE IS THE RESULT OF OS dtoa: " << mathUtil->osdtoa( d) << std::endl;
+    	std::cout << "HERE IS THE RESULT OF OS format_os_dtoa: " << mathUtil->format_os_dtoa( d) << std::endl;
     	//
     	char sInput[] = "77.77 99.99";
     	char *pEnd;
     	double d1, d2;
-    	d1 = strtod_ASL (sInput,  &pEnd);
-    	d2 = strtod_ASL (pEnd,NULL);
+    	d1 = os_strtod (sInput,  &pEnd);
+    	d2 = os_strtod (pEnd,NULL);
     	std::cout << d1 << std::endl;
     	std::cout << d2 << std::endl;
     	
-    	std::cout << "HERE IS THE RESULT OF OS dtoa OSDBL_MAX: " << mathUtil->osdtoa( OSDBL_MAX) << std::endl;
-    	std::cout << "HERE IS THE RESULT OF OS dtoa OSDBL_MAX: " << OSDBL_MAX << std::endl;
-    	std::cout << "HERE IS THE RESULT OF OS dtoa DBL_MAX: " << mathUtil->osdtoa( DBL_MAX) << std::endl;
-    	std::cout << "HERE IS THE RESULT OF OS dtoa DBL_MAX: " <<  DBL_MAX << std::endl;
-    	d1 = strtod_ASL(mathUtil->osdtoa( OSDBL_MAX).c_str(),     NULL);
+    	std::cout << "HERE IS THE RESULT OF OS format_os_dtoa OSDBL_MAX: " << mathUtil->format_os_dtoa( OSDBL_MAX) << std::endl;
+    	std::cout << "HERE IS THE RESULT OF OS format_os_dtoa OSDBL_MAX: " << OSDBL_MAX << std::endl;
+    	std::cout << "HERE IS THE RESULT OF OS format_os_dtoa DBL_MAX: " << mathUtil->format_os_dtoa( DBL_MAX) << std::endl;
+    	std::cout << "HERE IS THE RESULT OF OS format_os_dtoa DBL_MAX: " <<  DBL_MAX << std::endl;
+    	d1 = os_strtod(mathUtil->format_os_dtoa( OSDBL_MAX).c_str(),     NULL);
     	if(d1 == DBL_MAX )std::cout <<  "SUCCESS" << endl;
     	else std::cout <<  "FAILURE" << endl;
     	nl2osil = new OSnl2osil( nlFileName);
-	    //return 0;
-    	*/
+	    return 0;
+	    */
+    
 	}
 	catch(const ErrorClass& eclass){
 		unitTestResultFailure << "Sorry Unit Test Failed Reading a file: "  + eclass.errormsg<< endl; 

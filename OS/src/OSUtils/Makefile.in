@@ -60,7 +60,7 @@ CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libOSUtils_la_LIBADD =
 am_libOSUtils_la_OBJECTS = OSBase64.lo OSCommonUtil.lo OSErrorClass.lo \
-	OSFileUtil.lo OSMathUtil.lo OSDataStructures.lo
+	OSFileUtil.lo OSMathUtil.lo OSDataStructures.lo OSdtoa.lo
 libOSUtils_la_OBJECTS = $(am_libOSUtils_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
@@ -245,6 +245,8 @@ SYMPHONYOBJDIR = @SYMPHONYOBJDIR@
 SYMPHONYSRCDIR = @SYMPHONYSRCDIR@
 USEMULTIPLYDEFINED_FALSE = @USEMULTIPLYDEFINED_FALSE@
 USEMULTIPLYDEFINED_TRUE = @USEMULTIPLYDEFINED_TRUE@
+USE_DTOA_FALSE = @USE_DTOA_FALSE@
+USE_DTOA_TRUE = @USE_DTOA_TRUE@
 VERSION = @VERSION@
 VOLOBJDIR = @VOLOBJDIR@
 VOLSRCDIR = @VOLSRCDIR@
@@ -343,7 +345,9 @@ libOSUtils_la_SOURCES = \
 		OSMathUtil.h \
 		OSDataStructures.cpp \
 		OSDataStructures.h \
-		OSParameters.h
+		OSParameters.h \
+		OSdtoa.h \
+		OSdtoa.cpp
 
 
 # This is for libtool (on Windows)
@@ -372,7 +376,8 @@ includecoin_HEADERS = \
 	OSFileUtil.h \
 	OSMathUtil.h \
 	OSDataStructures.h \
-	OSParameters.h
+	OSParameters.h \
+	OSdtoa.h
 
 all: all-am
 
@@ -431,6 +436,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSErrorClass.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSFileUtil.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSMathUtil.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSdtoa.Plo@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
