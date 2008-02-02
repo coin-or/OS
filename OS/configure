@@ -22096,6 +22096,15 @@ presetting ac_cv_c_bigendian=no (or yes) will help" >&2;}
 esac
 
 
+# We also need to worry about long long if -pedantic used for OSdtoa
+# the following was added to autoconf 2.60 -- put in when build tools switches over
+# this will define HAVE_LONG_LONG_INT
+#AC_TYPE_LONG_LONG_INT
+#
+#
+#
+
+
 #############################################################################
 #                              COIN components                              #
 #############################################################################

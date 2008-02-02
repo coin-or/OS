@@ -69,6 +69,15 @@ AC_COIN_INIT_AUTO_TOOLS
 
 AC_C_BIGENDIAN
 
+# We also need to worry about long long if -pedantic used for OSdtoa
+# the following was added to autoconf 2.60 -- put in when build tools switches over
+# this will define HAVE_LONG_LONG_INT
+#AC_TYPE_LONG_LONG_INT 
+#
+#
+#
+
+
 #############################################################################
 #                              COIN components                              #
 #############################################################################

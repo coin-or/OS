@@ -182,6 +182,10 @@
 #endif
 
 #define INFNAN_CHECK
+
+// long long causes an error with -pedantic-errors
+#define NO_LONG_LONG 
+#define Just_16 
 /** 
  * end of OS code, below is David Gay
  * except we changed the names of dtoa to os_dtoa
