@@ -183,6 +183,7 @@
 
 #define INFNAN_CHECK
 
+
 // long long causes an error with -pedantic-errors
 #define NO_LONG_LONG 
 #define Just_16 

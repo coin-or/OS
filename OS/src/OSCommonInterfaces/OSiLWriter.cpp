@@ -163,7 +163,6 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 #ifdef USE_DTOA
 								outStr << fileUtil->format_os_dtoa( m_OSInstance->instanceData->objectives->obj[j]->coef[i]->value) ;
 #else
-
 								outStr << m_OSInstance->instanceData->objectives->obj[j]->coef[i]->value ;
 #endif
 								outStr << "</coef>" ;
