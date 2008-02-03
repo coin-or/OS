@@ -223,8 +223,8 @@ int main(int argC, char* argV[])
 	
 	//first make sure we can read files
 	try{
-		//osilFileName =  dataDir  + "osilFiles" + dirsep +  "parincLinearByRow.osil";
-		osilFileName =  dataDir  + "osilFiles" + dirsep +  "parincLinear.osil";
+		osilFileName =  dataDir  + "osilFiles" + dirsep +  "parincLinearByRow.osil";
+		//osilFileName =  dataDir  + "osilFiles" + dirsep +  "parincLinear.osil";
 		std::cout << "Try to read a sample file" << std::endl;
 		std::cout << "The file is: " ;
 		std::cout <<  osilFileName << std::endl;
@@ -233,13 +233,18 @@ int main(int argC, char* argV[])
 		OSiLReader *osilreader = NULL;
 		osilreader = new OSiLReader(); 
 		OSInstance *osinstance = osilreader->readOSiL( osil);
-		osinstance->initForAlgDiff();
+		//osinstance->initForAlgDiff();
 		unitTestResult << "Reading files successfully" << std::endl;
 		OSiLWriter osilwriter;
 		osilwriter.m_bWhiteSpace = true;
 		std::cout << osilwriter.writeOSiL( osinstance) << std::endl;
 		delete osilreader;
 		osilreader = NULL;
+		cout << "The unitTest passed the following" << endl << endl;
+		cout << unitTestResult.str() << endl << endl;
+		cout << "All tests completed successfully" <<  endl <<  endl;
+		nl2osil = new OSnl2osil( nlFileName);
+		return 0;
 		/*
 		// below is just a bunch of misc. stuff kipp is testing
 		//

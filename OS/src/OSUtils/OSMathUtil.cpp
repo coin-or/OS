@@ -97,7 +97,9 @@ std::string MathUtil::format_os_dtoa(double  x){
     int sign;  
     int strLength = 0;
     int k = 0;
+    std::cout << "input to os_dtoa =  " <<  x << std::endl;
     charResult = os_dtoa(x, 0, 0, &decimalPointPos, &sign, NULL);
+    std::cout << "charResult in  os_dtoa =  " <<  charResult << std::endl;
     // get the length
     strLength = strlen( charResult);
     // return charResult if we have nan or infinity  -- if so, return orginal string

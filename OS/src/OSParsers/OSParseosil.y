@@ -2662,6 +2662,7 @@ double atofmod1(int* osillineno, const char *number, const char *numberend){
 #ifdef USE_DTOA
    	char *pEnd;
 	val = os_strtod(number, &pEnd);
+	std::cout << "VAL " << val << std::endl;
 	// pEnd should now point to the first character after the number;
 	// burn off any white space	
 	for( ; ISWHITESPACE( *pEnd) || isnewline( *pEnd, osillineno); pEnd++ ) ;
