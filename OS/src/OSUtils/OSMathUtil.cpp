@@ -100,10 +100,12 @@ std::string MathUtil::format_os_dtoa(double  x){
     std::cout << "input to os_dtoa =  " <<  x << std::endl;
     charResult = os_dtoa(x, 0, 0, &decimalPointPos, &sign, NULL);
     std::cout << "charResult in  os_dtoa =  " <<  charResult << std::endl;
+    std::cout << "decimalPointPos in  os_dtoa =  " << decimalPointPos  << std::endl;
     // get the length
     strLength = strlen( charResult);
     // return charResult if we have nan or infinity  -- if so, return orginal string
     if(decimalPointPos == 9999){
+    	
     	for(k = 0; k < strLength; k++)outStr << charResult[ k];
     	return outStr.str();    	
     }
