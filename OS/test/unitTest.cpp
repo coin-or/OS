@@ -243,7 +243,9 @@ int main(int argC, char* argV[])
 		cout << "The unitTest passed the following" << endl << endl;
 		cout << unitTestResult.str() << endl << endl;
 		cout << "All tests completed successfully" <<  endl <<  endl;
-		nl2osil = new OSnl2osil( nlFileName);
+		#ifdef COIN_HAS_ASL
+		nl2osil = new OSnl2osil( nlFileName);		
+		#endif 	
 		return 0;
 		/*
 		// below is just a bunch of misc. stuff kipp is testing
@@ -1142,7 +1144,7 @@ int main(int argC, char* argV[])
 		cout << endl << endl << endl;
 		if(osrlwriter != NULL) delete osrlwriter;
 		if(osrlreader != NULL) delete osrlreader;
-		 " Problem with the test reading OSrL data";
+		// " Problem with the test reading OSrL data";
 		unitTestResultFailure << eclass.errormsg << endl;
 		unitTestResultFailure << "There was a failure in the test for reading OSrL" << endl;
 	}
