@@ -244,7 +244,7 @@ int main(int argC, char* argV[])
 		cout << unitTestResult.str() << endl << endl;
 		cout << "All tests completed successfully" <<  endl <<  endl;
 		nl2osil = new OSnl2osil( nlFileName);
-		return 0;
+		//return 0;
 		/*
 		// below is just a bunch of misc. stuff kipp is testing
 		//
@@ -277,9 +277,9 @@ int main(int argC, char* argV[])
 		*/
 		
 		
-		/*
-		mpsFileName =  dataDir + "mpsFiles" + dirsep + "testfile2.mps";
-		//mpsFileName =  dataDir + "mpsFiles" + dirsep + "parinc.mps";
+		
+		//mpsFileName =  dataDir + "mpsFiles" + dirsep + "testfile2.mps";
+		mpsFileName =  dataDir + "mpsFiles" + dirsep + "parinc.mps";
 		mps2osil = new OSmps2osil( mpsFileName);
 		// create the first in-memory OSInstance
 		mps2osil->createOSInstance() ;
@@ -311,7 +311,7 @@ int main(int argC, char* argV[])
 		delete osilreader;
 		nl2osil = new OSnl2osil( nlFileName);
 	    return 0;	
-	    */
+	    
 		
 		/*
 		//using format_os_dtoa

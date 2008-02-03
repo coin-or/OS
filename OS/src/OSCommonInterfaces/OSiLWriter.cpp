@@ -89,18 +89,18 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 					}
 					if( m_OSInstance->instanceData->variables->var[i]->lb != 0.0){
 						outStr << " lb=\"" ;
-						outStr << m_OSInstance->instanceData->variables->var[i]->lb ;
+						outStr << fileUtil->format_os_dtoa( m_OSInstance->instanceData->variables->var[i]->lb) ;
 						outStr <<  "\"";  
 					}
 					if( m_OSInstance->instanceData->variables->var[i]->ub != OSDBL_MAX
 						&& m_OSInstance->instanceData->variables->var[i]->ub != OSNAN ) {
 						outStr << " ub=\"" ;
-						outStr << m_OSInstance->instanceData->variables->var[i]->ub ;
+						outStr << fileUtil->format_os_dtoa( m_OSInstance->instanceData->variables->var[i]->ub) ;
 						outStr <<  "\"";
 					}
 					if(CommonUtil::ISOSNAN(m_OSInstance->instanceData->variables->var[i]->init) == false){
 						outStr << " init=\"" ;
-						outStr << m_OSInstance->instanceData->variables->var[i]->init ;
+						outStr << fileUtil->format_os_dtoa(m_OSInstance->instanceData->variables->var[i]->init) ;
 						outStr <<  "\"";
 					}
 					if(m_OSInstance->instanceData->variables->var[i]->initString != ""){
@@ -132,12 +132,12 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 					}
 					if(m_OSInstance->instanceData->objectives->obj[j]->constant != 0.0){
 						outStr << " constant=\"" ;
-						outStr <<  m_OSInstance->instanceData->objectives->obj[j]->constant  ;
+						outStr <<  fileUtil->format_os_dtoa(m_OSInstance->instanceData->objectives->obj[j]->constant)  ;
 						outStr <<  "\"";
 					}
 					if(m_OSInstance->instanceData->objectives->obj[j]->weight != 1.0){
 						outStr << " weight=\"" ;
-						outStr <<  m_OSInstance->instanceData->objectives->obj[j]->weight  ;
+						outStr <<  fileUtil->format_os_dtoa(m_OSInstance->instanceData->objectives->obj[j]->weight)  ;
 						outStr <<  "\"";
 					}
 					if(m_OSInstance->instanceData->objectives->obj[j]->name.length() > 0){
@@ -160,11 +160,8 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 								outStr << ">";
 								//
 								//
-#ifdef USE_DTOA
 								outStr << fileUtil->format_os_dtoa( m_OSInstance->instanceData->objectives->obj[j]->coef[i]->value) ;
-#else
-								outStr << m_OSInstance->instanceData->objectives->obj[j]->coef[i]->value ;
-#endif
+								//outStr << m_OSInstance->instanceData->objectives->obj[j]->coef[i]->value ;
 								outStr << "</coef>" ;
 								if( m_bWhiteSpace == true) outStr << endl;
 							}
@@ -195,17 +192,17 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 					}
 					if(m_OSInstance->instanceData->constraints->con[i]->constant != 0){
 						outStr << " constant=\"" ;
-						outStr << m_OSInstance->instanceData->constraints->con[i]->constant ;
+						outStr << fileUtil->format_os_dtoa( m_OSInstance->instanceData->constraints->con[i]->constant) ;
 						outStr <<  "\"";
 					}
 					if(m_OSInstance->instanceData->constraints->con[i]->lb != -OSDBL_MAX ){
 						outStr << " lb=\"" ;
-						outStr << m_OSInstance->instanceData->constraints->con[i]->lb ;
+						outStr << fileUtil->format_os_dtoa( m_OSInstance->instanceData->constraints->con[i]->lb) ;
 						outStr <<  "\"";
 					}
 					if(m_OSInstance->instanceData->constraints->con[i]->ub != OSDBL_MAX){
 						outStr << " ub=\"" ;
-						outStr << m_OSInstance->instanceData->constraints->con[i]->ub ;
+						outStr << fileUtil->format_os_dtoa( m_OSInstance->instanceData->constraints->con[i]->ub) ;
 						outStr <<  "\"";
 					}
 					outStr << "/>" ;
@@ -326,11 +323,8 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 					if(m_bWriteBase64 == false){
 						for(i = 0; i < m_OSInstance->instanceData->linearConstraintCoefficients->numberOfValues; i++){
 							outStr << "<el>";
-#ifdef USE_DTOA
 							outStr <<   fileUtil->format_os_dtoa( m_OSInstance->instanceData->linearConstraintCoefficients->value->el[i] );
-#else
-							outStr <<   m_OSInstance->instanceData->linearConstraintCoefficients->value->el[i] ;
-#endif
+							//outStr <<   m_OSInstance->instanceData->linearConstraintCoefficients->value->el[i] ;
 							outStr << "</el>" ;
 							if( m_bWhiteSpace == true) outStr << endl;		
 						}

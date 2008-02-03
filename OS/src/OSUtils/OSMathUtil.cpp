@@ -18,6 +18,8 @@
  
 #include "OSDataStructures.h" 
 #include "OSMathUtil.h"
+
+
 #include <iostream>
 
 
@@ -91,6 +93,10 @@ SparseMatrix* MathUtil::convertLinearConstraintCoefficientMatrixToTheOtherMajor(
 
 std::string MathUtil::format_os_dtoa(double  x){
 	ostringstream outStr;
+#ifndef USE_DTOA
+	outStr << x;
+	return outStr.str();
+#endif
 	outStr << "";
 	char *charResult;
     int decimalPointPos;
@@ -120,7 +126,7 @@ std::string MathUtil::format_os_dtoa(double  x){
     		// put in all of the characters from charResult
     		outStr << charResult[ 0];
     		outStr <<  ".";
-    		for(k = 1; k < strLength; k++)outStr << charResult[ k];
+    		for(k = 1; k < strLength; k++) outStr << charResult[ k];
     		//for(k = strLength; k < decimalPointPos; k++) outStr <<  "0";
     		outStr <<  "e";
     		outStr <<  decimalPointPos -  1;
