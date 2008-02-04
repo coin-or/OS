@@ -188,6 +188,13 @@
 // long long causes an error with -pedantic-errors
 #define NO_LONG_LONG 
 #define Just_16 
+
+#if  SIZEOF_LONG == 2*SIZEOF_INT
+#define Long int 
+#define Intcast (int)(long)
+#endif
+
+
 /** 
  * end of OS code, below is David Gay
  * except we changed the names of dtoa to os_dtoa
@@ -201,6 +208,8 @@
 #ifndef Long
 #define Long long
 #endif
+
+
 #ifndef ULong
 typedef unsigned Long ULong;
 #endif

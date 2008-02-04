@@ -237,16 +237,11 @@ int main(int argC, char* argV[])
 		unitTestResult << "Reading files successfully" << std::endl;
 		OSiLWriter osilwriter;
 		osilwriter.m_bWhiteSpace = true;
-		std::cout << osilwriter.writeOSiL( osinstance) << std::endl;
+		//std::cout << osilwriter.writeOSiL( osinstance) << std::endl;
 		delete osilreader;
 		osilreader = NULL;
-		cout << "The unitTest passed the following" << endl << endl;
-		cout << unitTestResult.str() << endl << endl;
-		cout << "All tests completed successfully" <<  endl <<  endl;
-		#ifdef COIN_HAS_ASL
-		nl2osil = new OSnl2osil( nlFileName);		
-		#endif 	
-		return 0;
+		//cout << "The unitTest passed the following" << endl << endl;
+		//cout << unitTestResult.str() << endl << endl;
 		/*
 		// below is just a bunch of misc. stuff kipp is testing
 		//
@@ -279,9 +274,9 @@ int main(int argC, char* argV[])
 		*/
 		
 		
-		/*
+		
 		//mpsFileName =  dataDir + "mpsFiles" + dirsep + "testfile2.mps";
-		mpsFileName =  dataDir + "mpsFiles" + dirsep + "parinc.mps";
+		//mpsFileName =  dataDir + "mpsFiles" + dirsep + "parinc.mps";
 		mps2osil = new OSmps2osil( mpsFileName);
 		// create the first in-memory OSInstance
 		mps2osil->createOSInstance() ;
@@ -309,12 +304,12 @@ int main(int argC, char* argV[])
 		}
 		std::cout << "MAXIMUM DIFF = " << theMax << std::endl;
 		std::cout << "MAXIMUM DIFF INDEX  = " << theIndex << std::endl;
+		if(theMax > 0) unitTestResult << "WARNING:  you do not have lossless IO" << std::endl;
+		else unitTestResult << "passed lossless IO test" << std::endl;
 		delete mps2osil;
 		delete osilreader;
-		nl2osil = new OSnl2osil( nlFileName);
-	    return 0;	
-	    */
-		
+		//nl2osil = new OSnl2osil( nlFileName);
+	    //return 0;	
 		/*
 		//using format_os_dtoa
 		MathUtil *mathUtil = new MathUtil();

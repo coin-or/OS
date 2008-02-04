@@ -75,8 +75,10 @@ AC_C_BIGENDIAN
 #AC_TYPE_LONG_LONG_INT 
 #
 #
+AC_CHECK_SIZEOF( int)
+AC_CHECK_SIZEOF( double)
+AC_CHECK_SIZEOF( long)
 #
-
 
 #############################################################################
 #                              COIN components                              #
