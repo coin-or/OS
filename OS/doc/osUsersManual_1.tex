@@ -172,7 +172,7 @@ If you want to:
 \end{itemize}
 
 
-The OS project is very extensive and relies on many other COIN-OR projects.  This may not be desirable for modeling language and solver developers that just wish to use the OS API in conjunction with their modeling language or solver.  Hence there is also an ``OS lite'' download that consists of all the code for the OS API and for reading and writing instance and solution files. We refer to this version of the project as {\tt OSCommon} and the code for this project is synched  with the corresponding stable and release versions of the code. For example, to get Stable 1.1 of {\tt OSCommon} use the svn command
+The OS project is very extensive and relies on many other COIN-OR projects.  This may not be desirable for modeling language and solver developers who just wish to use the OS API in conjunction with their modeling language or solver.  Hence there is also an ``OS lite'' download that consists of all the code for the OS API and for reading and writing instance and solution files. We refer to this version of the project as {\tt OSCommon} and the code for this project is synched  with the corresponding stable and release versions of the code. For example, to get Stable 1.1 of {\tt OSCommon} use the svn command
 \begin{verbatim}
 svn co https://projects.coin-or.org/svn/OS/stable/OSCommon1.1  OSCommon
 \end{verbatim}
@@ -212,13 +212,13 @@ c., Scottsdale, Arizona, US
 
 If so, select {\tt (p)} and you should not get this message again.
 
-On Windows with TortoiseSVN, create a directory {\tt COIN-OS} in the desired location and right-click on this directory.   Select the menu item {\tt SVN Checkout ...} and in the textbox, {\tt URL of Repository}
-give the URL for the version of the OS project you wish to checkout, e.g. https://projects.coin-or.org/svn/OS/stable/1.0.
+On Windows with TortoiseSVN, create a directory {\tt COIN-OS} in the desired location and right-click on this directory.   Select the menu item {\tt SVN Checkout ...} and in the textbox ``{\tt URL of Repository}''
+give the URL for the version of the OS project you wish to check out, e.g. https://projects.coin-or.org/svn/OS/stable/1.0.
 
 
 Now build the project as described in  Section \ref{section:build}.
 
-For the rest of this documentation, we assume that  {\tt COIN-OS} is the name of the root directory of the OS project and that the user has defined an environment variable {\tt OS} that is the path to {\tt COIN-OS}.  The {\tt COIN-OS} directory structure is illustrated in Figure \ref{figure:osprojectrootdir}. OS source code is mainly contained inside of the OS subdirectory. Other first level subdirectories are mostly external projects (COIN-OR or third party) that the OS project depend on.
+For the rest of this documentation, we assume that  {\tt COIN-OS} is the name of the root directory of the OS project and that the user has defined an environment variable {\tt OS} that is the path to {\tt COIN-OS}.  The {\tt COIN-OS} directory structure is illustrated in Figure \ref{figure:osprojectrootdir}. OS source code is mainly contained inside of the OS subdirectory. Other first level subdirectories are mostly external projects (COIN-OR or third party) that the OS project depends on.
 
 
 \begin{figure}
@@ -232,7 +232,7 @@ For more information on downloading the OS project or other COIN-OR projects usi
 
 The Java source code for  setting up a solver service with Apache Tomcat is checked out as follows:
 \begin{verbatim}
-svn co https://projects.coin-or.org/svn/branches/OSjava  OSJava
+svn co https://projects.coin-or.org/svn/OS/branches/OSjava  OSJava
 \end{verbatim}
 For more detail on running a Tomcat solver service  see  Section \ref{section:tomcat}.
 
@@ -2093,9 +2093,18 @@ The OSiL representation of the instance  (\ref{eq:adobj})--(\ref{eq:adeq2}) is g
 This example is designed to illustrate several features of OSiL. Note that in constraint  (\ref{eq:adeq0}) the constant 33 appears in the {\tt <con>} element corresponding to this constraint
 and the constant 105 appears as a {\tt <number>} OSnL node in the {\tt <nonlinearExpressions>} section.
 This distinction is important, as it will lead to different treatment by the code as
-documented below. There are no nonlinear terms in the instance that involve variable $x_{1}.$  The terms $5x_{1}$ in  (\ref{eq:adeq0}) and $7 x_{2}$ in (\ref{eq:adeq1}) are expressed in the {\tt objectives} and {\tt <linearConstraintCoefficients>}
-sections, respectively, and will again receive special treatment by the code. However, the term $1.37x_1$ in (\ref{eq:adeq0}),
-along with the term $2x_3$, is expressed in the {\tt <nonlinearExpressions>} section.          Variables $x_{1}$ and $x_{2}$  do not appear in any nonlinear terms. However, in the OSInstance API, variable $x_{1}$  appears in the   {\tt <nonlinearExpressions>} section; hence it  is treated as a nonlinear variable for purposes of algorithmic differentiation. Variable $x_{2}$ never appears in the  {\tt <nonlinearExpressions>} section and is therefore treated as a linear variable and not used  in any algorithmic differentiation calculations. Variables that do not appear in the {\tt <nonlinearExpressions>} are never part of the algorithmic differentiation calculations.
+documented below. 
+%There are no nonlinear terms in the instance that involve variable $x_{1}.$  
+Variables $x_{1}$ and $x_{2}$  do not appear in any nonlinear terms. 
+The terms $5x_{1}$ in  (\ref{eq:adeq0}) and $7 x_{2}$ in (\ref{eq:adeq1}) are expressed in the 
+{\tt objectives} and {\tt <linearConstraintCoefficients>} sections, respectively, and will again 
+receive special treatment by the code. However, the term $1.37x_1$ in (\ref{eq:adeq0}),
+along with the term $2x_3$, is expressed in the {\tt <nonlinearExpressions>} section,
+%Variables $x_{1}$ and $x_{2}$  do not appear in any nonlinear terms. 
+%However, in the OSInstance API, variable $x_{1}$  appears in the   {\tt <nonlinearExpressions>} section; 
+hence it  is treated as a nonlinear variable for purposes of algorithmic differentiation. 
+Variable $x_{2}$ never appears in the  {\tt <nonlinearExpressions>} section and is therefore treated as a linear variable and not used  in any algorithmic differentiation calculations. 
+Variables that do not appear in the {\tt <nonlinearExpressions>} are never part of the algorithmic differentiation calculations.
 
 Ignoring the nonnegativity constraints, instance (\ref{eq:adobj})--(\ref{eq:adeq2})  defines a mapping  from $ \mathbb{R}^{4}$ to $ \mathbb{R}^{3}$.
 
@@ -2157,7 +2166,8 @@ Ignoring the nonnegativity constraints, instance (\ref{eq:adobj})--(\ref{eq:adeq
 \end{eqnarray}
 
 
-The OSiL representation for the instance  in  (\ref{eq:adobj})--(\ref{eq:adeq2})  is read into an in-memory OSInstance object as follows (we assume that {\tt osil} is a {\tt string} with the OSiL instance)
+The OSiL representation for the instance  in  (\ref{eq:adobj})--(\ref{eq:adeq2})  is read into an in-memory 
+OSInstance object as follows (we assume that {\tt osil} is a {\tt string} containing the OSiL instance)
 \begin{verbatim}
 osilreader = new OSiLReader();
 osinstance = osilreader->readOSiL( &osil);
@@ -4548,7 +4558,25 @@ See:
 
 
 
-I got a reply from Dave Gay about the lossless conversion issues.  All of therelevant routines are in www.netlib.org/fp -- it's not necessary to searchthrough the ASL routines for them.  In particular, to get the shortest decimalstring that correctly represents a binary value, we can use     g_fmt(register char *b, double x)which is in www.netlib.org/fp/g_fmt.c.  This routine calls dtoa and convertsthe return value and arguments to the appropriate string.  In the process itinserts a sign, decimal point, and exponent if appropriate.As you suspected, dtoa.c contains its own strtod routine because, at the timeDave wrote dtoa, many strtod routines in other libraries did not do theconversion in a lossless way.  Dave considers it likely that many stdlibimplementations get this right by now, but I guess there is still no easy wayto be sure that they all get it right.A look at the change log suggests that some people are actively using theseroutines independently of ASL.
+I got a reply from Dave Gay about the lossless conversion issues.  All of the
+relevant routines are in www.netlib.org/fp -- it's not necessary to search
+through the ASL routines for them.  In particular, to get the shortest decimal
+string that correctly represents a binary value, we can use
+
+     g_fmt(register char *b, double x)
+
+which is in www.netlib.org/fp/g_fmt.c.  This routine calls dtoa and converts
+the return value and arguments to the appropriate string.  In the process it
+inserts a sign, decimal point, and exponent if appropriate.
+
+As you suspected, dtoa.c contains its own strtod routine because, at the time
+Dave wrote dtoa, many strtod routines in other libraries did not do the
+conversion in a lossless way.  Dave considers it likely that many stdlib
+implementations get this right by now, but I guess there is still no easy way
+to be sure that they all get it right.
+
+A look at the change log suggests that some people are actively using these
+routines independently of ASL.
 
 
 %%%%%%%%%%%%%%%%%%%%%%
