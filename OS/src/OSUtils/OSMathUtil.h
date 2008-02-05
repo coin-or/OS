@@ -23,6 +23,7 @@
  
 #include "OSParameters.h"
 #include "OSdtoa.h"
+#include "OSErrorClass.h"
 
 
 #include <sstream>  
@@ -105,8 +106,19 @@ class MathUtil{
 	/**
 	 * 
 	 * @param x is the double that gets converted into a string
+	 * this takes the David Gay dtoa and converts to a formatted string
 	 */
 	std::string format_os_dtoa( double x);
+	
+	
+	/**
+	 * 
+	 * @param str is the char* string that gets converted to double
+	 * this method actually wraps around os_strtod (which is really the
+	 * David Gay version of strtod) and will throw an exception
+	 * if the str contains text or is in anyway not a valid number
+	 */
+	double os_strtod_wrap(const char *str) throw(ErrorClass);
 			
 };//class MathUtil
 #endif

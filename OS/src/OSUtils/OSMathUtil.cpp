@@ -22,6 +22,8 @@
 
 #include <iostream>
 
+#define	ISWHITESPACE( char_) ((char_) == ' ' || \
+                     (char_) == '\t' ||  (char_) == '\r')
 
 
 MathUtil::MathUtil(){
@@ -145,4 +147,33 @@ std::string MathUtil::format_os_dtoa(double  x){
 	return outStr.str();
 }// end dtoa
 
-
+double os_strtod_wrap(const char *str) throw(ErrorClass){
+	double val;
+   	char *pEnd;
+	try{
+		#ifdef USE_DTOA
+			val = os_strtod(str, &pEnd);
+			// pEnd should now point to the first character after the number;
+			// there should not be anything but white space
+			// burn off any white space	
+			//if( (pchar - *p) != 12)
+			for( ; *pEnd == ' ' |  *pEnd == '\t' |  *pEnd == '\r' |   *pEnd == '\n'   ; pEnd++ ) ;
+			// pEnd should now point to str, if not we have an error
+			if(*pEnd != '\0') throw ErrorClass( "error in parsing an XSD:double");
+			return val;
+		#else
+			val = strtod(str, &pEnd);
+			// pEnd should now point to the first character after the number;
+			// there should not be anything but white space
+			// burn off any white space	
+			//if( (pchar - *p) != 12)
+			for( ; *pEnd == ' ' |  *pEnd == '\t' |  *pEnd == '\r' |   *pEnd == '\n'   ; pEnd++ ) ;
+			// pEnd should now point to str, if not we have an error
+			if(*pEnd != '\0') throw ErrorClass( "error in parsing an XSD:double");
+			return val;
+		#endif
+	}
+	catch(const ErrorClass& eclass){
+		throw ErrorClass( eclass.errormsg) ;
+	}
+}
