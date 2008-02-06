@@ -94,6 +94,7 @@
 #include "OSDataStructures.h"
 
 
+
 #include <vector>  
 #include <map> 
 #include<string>
@@ -103,7 +104,7 @@ int  main(){
 	using std::cout;
 	using std::endl;
 	using CppAD::AD;
-	using CppAD::NearEqual;
+	//using CppAD::NearEqual;
 	using CppAD::vector;
 	std::cout.precision(12);
 	// error checking functions
@@ -647,14 +648,11 @@ int  main(){
 	     // range space vector 
 	     size_t m = 1;
 	     CppADvector< AD<double> > y(m);
-	     y[0] = CppAD::pow(x[0], x[1]);
+	     y[0] = std::pow(x0, x1);
 	     // create f: x -> y and stop tape recording
 	     CppAD::ADFun<double> f(x, y); 
 	     // check value 
 	     double check = std::pow(x0, x1);
-	     check = CppAD::pow(x0, x1);
-	     std::cout << "check " <<  y[ 0] << std::endl;
-	     ok &= NearEqual(y[0] , check,  1e-10 , 1e-10);
 	     // forward computation of first partial w.r.t. x[0]
 	     std::vector<double> dx(n);
 	     std::vector<double> dy(m);
@@ -663,7 +661,8 @@ int  main(){
 	     dy    = f.Forward(1, dx);
 	     std::cout << "dy =  " <<  dy[ 0] << std::endl;
 	     check = x1 * std::pow(x0, x1-1.);
-	     ok   &= NearEqual(dy[0], check, 1e-10, 1e-10);
+	     //ok   &= NearEqual(dy[0], check, 1e-10, 1e-10);
+	     ok = ( fabs(check - dy[0])/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 	}
 	
 	{
@@ -739,15 +738,18 @@ bool CheckFunctionValues( double *conVals, double objValue,
 	double checkObj = x0*x0 + 9*x1;
 	std::cout  << "checkObj = " << checkObj << std::endl;
 	std::cout  << "objValue = " << objValue << std::endl;
-	ok &= NearEqual(objValue, checkObj, 1e-10, 1e-10); 
+	//ok &= NearEqual(objValue, checkObj, 1e-10, 1e-10); 
+	ok = ( fabs(checkObj - objValue )/(fabs( checkObj) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 	double checkCon0 = 33. - 105. + 1.37*x1 + 2*x3 + 5*x1;
 	std::cout  << "checkCon0 = " << checkCon0 << std::endl;
 	std::cout  << "conVals = " << *(conVals + 0) << std::endl;
-	ok &= NearEqual(*(conVals + 0), checkCon0, 1e-10, 1e-10);
+	//ok &= NearEqual(*(conVals + 0), checkCon0, 1e-10, 1e-10);
+	ok = ( fabs(checkCon0 - *(conVals + 0) )/(fabs( checkCon0) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 	double checkCon1 = log(x0*x3) + 7*x2;
 	std::cout  << "checkCon1 = " << checkCon1 << std::endl;
 	std::cout  << "conVals = " << *(conVals + 1) << std::endl;
-	ok &= NearEqual( *(conVals + 1), checkCon1, 1e-10, 1e-10);
+	//ok &= NearEqual( *(conVals + 1), checkCon1, 1e-10, 1e-10);
+	ok = ( fabs(checkCon1 - *(conVals + 1) )/(fabs( checkCon1) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 	return ok;
 }//CheckFunctionValues
 //
@@ -758,24 +760,32 @@ bool CheckGradientValues( SparseJacobianMatrix *sparseJac, double *objGrad,
 	bool ok  = true;
 	// first the objective function gradient
 	double checkObjPartial0 = 2*x0;
-	ok &= NearEqual( *(objGrad + 0), checkObjPartial0, 1e-10, 1e-10); 
+	//ok &= NearEqual( *(objGrad + 0), checkObjPartial0, 1e-10, 1e-10); 
+	ok = ( fabs(checkObjPartial0 - *(objGrad + 0) )/(fabs( checkObjPartial0) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 	double checkObjPartial1 = 9;
-	ok &= NearEqual( *(objGrad + 1), checkObjPartial1, 1e-10, 1e-10); 	
+	//ok &= NearEqual( *(objGrad + 1), checkObjPartial1, 1e-10, 1e-10); 
+	ok = ( fabs(checkObjPartial1 - *(objGrad + 1) )/(fabs( checkObjPartial1) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 	double checkObjPartial2 = 0;
-	ok &= NearEqual( *(objGrad + 2), checkObjPartial2, 1e-10, 1e-10); 
+	//ok &= NearEqual( *(objGrad + 2), checkObjPartial2, 1e-10, 1e-10); 
+	ok = ( fabs(checkObjPartial2 - *(objGrad + 2) )/(fabs( checkObjPartial2) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 	// get the constrating gradient
 	// row 0 gradient -- there are nonzero partials for variables 1 and 2
 	double checkCon0Partial1 = 1.37 + 5.0;
-	ok &= NearEqual( *(sparseJac->values + 0), checkCon0Partial1, 1e-10, 1e-10); 	
+	//ok &= NearEqual( *(sparseJac->values + 0), checkCon0Partial1, 1e-10, 1e-10); 
+	ok = ( fabs(checkCon0Partial1 - *(sparseJac->values + 0) )/(fabs( checkCon0Partial1) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 	double checkCon0Partial3 = 2.;
-	ok &= NearEqual( *(sparseJac->values + 1), checkCon0Partial3, 1e-10, 1e-10); 
+	//ok &= NearEqual( *(sparseJac->values + 1), checkCon0Partial3, 1e-10, 1e-10); 
+	ok = ( fabs(checkCon0Partial3 - *(sparseJac->values + 1) )/(fabs( checkCon0Partial3) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 	// row 1 gradient -- there are nonzero partials for variables 0 and 2
 	double checkCon1Partial2 = 7;
-	ok &= NearEqual( *(sparseJac->values + 2), checkCon1Partial2, 1e-10, 1e-10); 	
+	//ok &= NearEqual( *(sparseJac->values + 2), checkCon1Partial2, 1e-10, 1e-10); 	
+	ok = ( fabs(checkCon1Partial2 - *(sparseJac->values + 2) )/(fabs( checkCon1Partial2) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 	double checkCon1Partial0 = 1./x0;
-	ok &= NearEqual( *(sparseJac->values + 3), checkCon1Partial0, 1e-10, 1e-10); 	
+	//ok &= NearEqual( *(sparseJac->values + 3), checkCon1Partial0, 1e-10, 1e-10); 
+	ok = ( fabs(checkCon1Partial0 - *(sparseJac->values + 3) )/(fabs( checkCon1Partial0) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 	double checkCon1Partial3 = 1./x3;
-	ok &= NearEqual( *(sparseJac->values + 4), checkCon1Partial3, 1e-10, 1e-10); 
+	//ok &= NearEqual( *(sparseJac->values + 4), checkCon1Partial3, 1e-10, 1e-10); 
+	ok = ( fabs(checkCon1Partial3 - *(sparseJac->values + 4) )/(fabs( checkCon1Partial3) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 	return ok;
 }//CheckGradientValues
 //

@@ -36,7 +36,7 @@ AC_DEFUN([AC_COIN_OS_SOCKET_LIBS],
   CFLAGS=`echo $CFLAGS | sed -e 's/-pedantic-errors//'`
   ac_coin_found_socket_libraries=no
   case "$CC" in
-    cl* | */cl* | CL* | */CL* )
+    cl* | */cl* | CL* | */CL* | icl*)
       if test x$ac_cv_header_winsock_h = xyes ; then
 	LIBS="wsock32.lib"
 	AC_MSG_CHECKING(with "$LIBS")

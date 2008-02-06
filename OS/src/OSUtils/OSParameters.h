@@ -73,7 +73,11 @@
 
 #define OS_E_VALUE exp(1.0)
 #define OS_PI_VALUE 2*asin(1.0)
-
+/**
+ * we use OS_NEAR_EQUAL in unitTest to see if we 
+ * are close to the optimal obj value
+ */
+#define OS_NEAR_EQUAL 1e-1
 
 #ifdef NAN 
 	#define OSNAN NAN

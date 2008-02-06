@@ -185,7 +185,7 @@ using std::ostringstream;
 int main(int argC, char* argV[])
 {
 	double getObjVal(std::string osrl);
-	using CppAD::NearEqual;
+	//using CppAD::NearEqual;
 	bool ok;
 	double check;
 	
@@ -232,7 +232,7 @@ int main(int argC, char* argV[])
 		std::cout << "Done reading the test file" << std::endl;
 		OSiLReader *osilreader = NULL;
 		osilreader = new OSiLReader(); 
-		OSInstance *osinstance = osilreader->readOSiL( osil);
+		//OSInstance *osinstance = osilreader->readOSiL( osil);
 		//osinstance->initForAlgDiff();
 		unitTestResult << "Reading files successfully" << std::endl;
 		OSiLWriter osilwriter;
@@ -394,7 +394,8 @@ int main(int argC, char* argV[])
 		ipoptSolver->solve();
 		cout << "Here is the IPOPT solver solution for avion2" << endl;
 		check = 9.46801e+07;
-		ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-10 , 1e-10);
+		//ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-10 , 1e-10);
+		ok = ( fabs(check - getObjVal( ipoptSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on avion2");
 		delete osilreader;
 		osilreader = NULL;
@@ -414,7 +415,8 @@ int main(int argC, char* argV[])
 		ipoptSolver->solve();
 		cout << "Here is the IPOPT solver solution for HS071_NLP" << endl;
 		check = 17.014;
-		ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-10 , 1e-10);
+		//ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-10 , 1e-10);
+		ok = ( fabs(check - getObjVal( ipoptSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on HS071_NLP");
 		delete osilreader;
 		osilreader = NULL;
@@ -434,7 +436,8 @@ int main(int argC, char* argV[])
 		cout << "call the IPOPT Solver" << endl;
 		ipoptSolver->solve();
 		check = 6.7279;
-		ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-10 , 1e-10);
+		//ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-10 , 1e-10);
+		ok = ( fabs(check - getObjVal( ipoptSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on rosenbrock");
 		delete osilreader;
 		osilreader = NULL;
@@ -455,7 +458,8 @@ int main(int argC, char* argV[])
 		ipoptSolver->solve();
 		cout << "Here is the IPOPT solver solution for parincQuadratic" << endl;
 		check = 49920.5;
-		ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-10 , 1e-10);
+		//ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-10 , 1e-10);
+		ok = ( fabs(check - getObjVal( ipoptSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on parincQuadradic");
 		delete osilreader;
 		osilreader = NULL;	
@@ -476,7 +480,8 @@ int main(int argC, char* argV[])
 		ipoptSolver->solve();
 		cout << "Here is the IPOPT solver solution for parincLinear" << endl;
 		check = 7668;
-		ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-1 , 1e-1);
+		//ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-1 , 1e-1);
+		ok = ( fabs(check - getObjVal( ipoptSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on parincLinear");
 		delete osilreader;
 		osilreader = NULL;	
@@ -500,7 +505,8 @@ int main(int argC, char* argV[])
 		ipoptSolver->solve();
 		cout << "Here is the IPOPT solver solution for callBackTest" << endl;
 		check = 1.00045e+06;
-		ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-10 , 1e-10);
+		//ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-10 , 1e-10);
+		ok = ( fabs(check - getObjVal( ipoptSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on parincLinear");
 		delete osilreader;
 		osilreader = NULL;	
@@ -524,7 +530,8 @@ int main(int argC, char* argV[])
 		ipoptSolver->solve();
 		cout << "Here is the IPOPT solver solution for callBackTestRowMajor" << endl;
 		check = 1.00045e+06;
-		ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-10 , 1e-10);
+		//ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-10 , 1e-10);
+		ok = ( fabs(check - getObjVal( ipoptSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on parincLinear");
 		delete osilreader;
 		osilreader = NULL;	
@@ -565,7 +572,8 @@ int main(int argC, char* argV[])
 		cout << "Here is the COIN clp solver solution for parincLinearByRow" << endl;
 		cout << solver->osrl << endl;
 		check = 7668;
-		ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-1 , 1e-1);
+		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-1 , 1e-1);
 		if(ok == false) throw ErrorClass(" Fail unit test with clp on parincLinear");
 		delete osilreader;
 		osilreader = NULL;	
@@ -595,7 +603,8 @@ int main(int argC, char* argV[])
 		cout << "Here is the COIN Cbc solver solution for p0033" << endl;
 		//cout << solver->osrl << endl;
 		check = 3089;
-		ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail unit test with Cbc on p0033");
 		delete solver;
 		solver = NULL;
@@ -614,7 +623,8 @@ int main(int argC, char* argV[])
 		solver->solve();
 		cout << "Here is the COIN Cbc solver solution for p0201" << endl;
 		check = 7615;
-		ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail unit test with Cbc on p0548");
 		delete solver;
 		solver = NULL;
@@ -642,7 +652,8 @@ int main(int argC, char* argV[])
 		cout << "Here is the KNITRO solver solution" << endl;	
 		check = 6.7279;
 		cout << solver->osrl << endl;
-		ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail unit test with Knitro on rosenbrockmod");
 		solver->osinstance = NULL;
 		delete solver;
@@ -662,7 +673,8 @@ int main(int argC, char* argV[])
 		cout << "Here is the KNITRO solver solution" << endl;
 		check = 1.00045e+06; 
 		cout << solver->osrl << endl;
-		ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail unit test with Knitro callBackTest.osil");
 		solver->osinstance = NULL;
 		delete solver;
@@ -681,7 +693,8 @@ int main(int argC, char* argV[])
 		cout << "Here is the Knitro solver solution" << endl;
 		cout << solver->osrl << endl;
 		check = 49920.5;
-		ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail unit test with Knitro on parincQuadratic");
 		delete solver;
 		solver = NULL;
@@ -699,7 +712,8 @@ int main(int argC, char* argV[])
 		cout << "Here is the Knitro solver solution" << endl;
 		cout << solver->osrl << endl;
 		check = 17.014;
-		ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail unit test with Knitro on HS071_NLP");
 		delete solver;
 		solver = NULL;
@@ -731,7 +745,8 @@ int main(int argC, char* argV[])
 		cout << "Here is the COIN SYMPHONY solver solution for p0033" << endl;
 		cout << solver->osrl << endl;
 		check = 3089;
-		ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail unit test with SYMPHONY on p0033.osil");
 		delete solver;
 		solver = NULL;
@@ -762,7 +777,8 @@ int main(int argC, char* argV[])
 		cout << "Here is the COIN - DyLP solver solution for parincLinear" << endl;
 		cout << solver->osrl << endl;
 		check = 7668;
-		ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-1 , 1e-1);
+		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-1 , 1e-1);
+		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail unit test with DyLP on parincLinear.osil");
 		delete solver;
 		solver = NULL;
@@ -793,7 +809,8 @@ int main(int argC, char* argV[])
 		cout << "Here is the COIN - Vol solver solution for parincLinear" << endl;
 		cout << solver->osrl << endl;
 		check = 7;
-		ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-1 , 1e-1);
+		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-1 , 1e-1);
+		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail unit test with Vol on volumeTest.osil");
 		delete solver;
 		solver = NULL;
@@ -824,7 +841,8 @@ int main(int argC, char* argV[])
 		cout << "Here is the GLPK solver solution for p0033" << endl;
 		cout << solver->osrl << endl;
 		check = 3089;
-		ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail unit test with GLPK on p0033.osil");
 		delete solver;
 		solver = NULL;
@@ -854,7 +872,8 @@ int main(int argC, char* argV[])
 		cout << "Here is the CPLEX solver solution for p0033" << endl;
 		cout << solver->osrl << endl;
 		check = 3089;
-		ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail unit test with CPLEX on p0033.osil");
 		delete solver;
 		solver = NULL;
@@ -883,7 +902,8 @@ int main(int argC, char* argV[])
 		cout << "Here is the LINDO solver solution" << endl;
 		cout << solver->osrl << endl;
 		check = 99;
-		ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail unit test with LINDO on lindoapiaddins");
 		solver->osinstance = NULL;
 		delete solver;
@@ -901,7 +921,8 @@ int main(int argC, char* argV[])
 		cout << "Here is the LINDO solver solution" << endl;
 		cout << solver->osrl << endl;
 		check = 6.7279;
-		ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail unit test with LINDO on rosenbrockmod");
 		solver->osinstance = NULL;
 		delete solver;
@@ -919,7 +940,8 @@ int main(int argC, char* argV[])
 		cout << "Here is the LINDO solver solution" << endl;
 		cout << solver->osrl << endl;
 		check = 49920.5;
-		ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail unit test with LINDO on parincQuadratic");
 		delete solver;
 		solver = NULL;
@@ -938,7 +960,8 @@ int main(int argC, char* argV[])
 		cout << solver->osrl << endl;
 		check = 2.925;
 		std::cout << "CALL NEAR_EQUSL" << std::endl;
-		ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		std::cout << "CALL NEAR_EQUSL" << std::endl;
 		if(ok == false) throw ErrorClass(" Fail unit test with LINDO on wayneQuadratic");
 		delete solver;
@@ -970,7 +993,8 @@ int main(int argC, char* argV[])
 		cout << "Here is the COIN solver solution" << endl;
 		cout << solver->osrl << endl;
 		check = -7668;
-		ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-1 , 1e-1);
+		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-1 , 1e-1);
+		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail unit test with COIN Solver on MPS test problem parincLinear.mps");
 		delete solver;
 		solver = NULL;
@@ -1003,7 +1027,8 @@ int main(int argC, char* argV[])
 		cout << "Here is the Cbc solver solution" << endl;
 		cout << solver->osrl << endl;
 		check = 7668;
-		ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-1 , 1e-1);
+		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-1 , 1e-1);
+		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail unit test with OSnl2osil on problem parinc.nl");
 		solver->osinstance = NULL;
 		delete solver;
@@ -1044,7 +1069,8 @@ int main(int argC, char* argV[])
 		cout << "COIN solution of a OSiL string in b64 format" << endl;
 		cout << solver->osrl;
 		check = -7668;
-		ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-1 , 1e-1);
+		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-1 , 1e-1);
+		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail unit test with COIN Cbc cSolver on b64 test problem parincLinear.mps");
 		solver->osinstance = NULL;
 		delete solver;
@@ -1236,7 +1262,8 @@ int main(int argC, char* argV[])
 		double parserTestVal = expTree->m_treeRoot->calculateFunction( x);
 		std::cout << "ParserTest Val = " << parserTestVal << std::endl;
 		check = 11;
-		ok &= NearEqual(expTree->m_treeRoot->calculateFunction( x) , check,  1e-10 , 1e-10);
+		//ok &= NearEqual(expTree->m_treeRoot->calculateFunction( x) , check,  1e-10 , 1e-10);
+		ok = ( fabs(check -  expTree->m_treeRoot->calculateFunction( x))/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Problem evaluating expression tree");
 		delete[] x;
 		delete[] nodeNames1;
@@ -1330,13 +1357,16 @@ int main(int argC, char* argV[])
 		ok = true;
 		//check gradient for constraint with index 1
 		double checkPartial2Con1 = 7.0 ;
-		ok &= NearEqual( sp->values[ 0], checkPartial2Con1, 1e-10, 1e-10); 
+		//ok &= NearEqual( sp->values[ 0], checkPartial2Con1, 1e-10, 1e-10); 
+		ok = ( fabs(checkPartial2Con1 - sp->values[ 0] )/(fabs( checkPartial2Con1) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail testing gradient calculation");
 		double checkPartial0Con1 = (1./x[0])  ;
-		ok &= NearEqual(sp->values[ 1], checkPartial0Con1, 1e-10, 1e-10); 
+		//ok &= NearEqual(sp->values[ 1], checkPartial0Con1, 1e-10, 1e-10); 
+		ok = ( fabs(checkPartial0Con1 - sp->values[ 1] )/(fabs( checkPartial0Con1) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail testing gradient calculation");
 		double checkPartial3Con1 = (1./x[3]) ;
-		ok &= NearEqual( sp->values[ 2], checkPartial3Con1, 1e-10, 1e-10); 
+		//ok &= NearEqual( sp->values[ 2], checkPartial3Con1, 1e-10, 1e-10); 
+		ok = ( fabs(checkPartial3Con1 - sp->values[ 2] )/(fabs( checkPartial3Con1) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail testing gradient calculation");
 		delete sp;
 		SparseHessianMatrix *sh;
@@ -1346,11 +1376,14 @@ int main(int argC, char* argV[])
 		for(i = 0; i < sh->hessDimension; i++){
 			std::cout << "Hessian value " << sh->hessValues[i] << std::endl;
 		}
-		ok &= NearEqual( sh->hessValues[ 0], 2., 1e-10, 1e-10);
+		//ok &= NearEqual( sh->hessValues[ 0], 2., 1e-10, 1e-10);
+		ok = ( fabs(2. - sh->hessValues[0] )/(2. + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail testing Hessian calculation"); 
-		ok &= NearEqual( sh->hessValues[ 1], 0., 1e-10, 1e-10);
+		//ok &= NearEqual( sh->hessValues[ 1], 0., 1e-10, 1e-10);
+		ok = ( fabs(0. - sh->hessValues[ 1] )/(0. + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail testing Hessian calculation");
-		ok &= NearEqual( sh->hessValues[ 2], 0., 1e-10, 1e-10);
+		//ok &= NearEqual( sh->hessValues[ 2], 0., 1e-10, 1e-10);
+		ok = ( fabs(0. - sh->hessValues[2] )/(0. + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail testing Hessian calculation");
 		unitTestResult << "Successful test of AD gradient and Hessian calculations on problem CppADTestLag.osil" << std::endl;
 		delete[] x;
@@ -1396,6 +1429,7 @@ double getObjVal( std::string osrl){
 				sObjVal = osrl.substr( pos1 + 1, pos2 - pos1 - 1);
 				//std::cout << "HERE IS THE OBJECTIVE FUNCTION VALUE SUBSTRING  " << sObjVal<< std::endl; 
 				// return dObjVal = strtod(sObjVal.c_str(), NULL);
+
 				return dObjVal = atof( sObjVal.c_str()); 
 			}
 			else return OSNAN;
