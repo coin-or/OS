@@ -147,8 +147,8 @@ std::string MathUtil::format_os_dtoa(double  x){
 #endif
 }// end dtoa
 
-double os_strtod_wrap(const char *str) throw(ErrorClass){
-	double val;
+double MathUtil::os_strtod_wrap(const char *str) throw(ErrorClass){
+	double val = 0;
    	char *pEnd;
    	// str should be null terminated
 	try{
@@ -179,8 +179,8 @@ double os_strtod_wrap(const char *str) throw(ErrorClass){
 }
 
 
-double os_strtod_wrap(const char *str,  const char *strEnd) throw(ErrorClass){
-	double val;
+double MathUtil::os_strtod_wrap(const char *str,  const char *strEnd) throw(ErrorClass){
+	double val = 0;
    	char *pEnd;
    	// str should be null terminated
 	try{

@@ -15,8 +15,12 @@
 %{
 
 
-#include <iostream>
+#include "OSDataStructures.h"
+#include "OSMathUtil.h"
 #include "OSConfig.h"
+
+#include <iostream>
+
 
 
 #ifdef HAVE_CSTDIO
@@ -120,7 +124,17 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF))
 {quote} {YY_PRINT;  yylval->sval = yytext; return(QUOTE);}
 ({xmlwhitespace}*{greater_than}) {YY_PRINT; return(GREATERTHAN);}
 {aninteger}  {YY_PRINT; yylval->ival = atoi(yytext); return(INTEGER);}
-{adouble} {YY_PRINT; yylval->dval = atof(yytext); return(DOUBLE);}
+
+{adouble} {YY_PRINT; 
+#ifdef  USE_DTOA 
+yylval->dval = os_strtod( yytext, NULL);
+#else
+yylval->dval = strtod( yytext, NULL);
+#endif
+return(DOUBLE);}
+
+
+
 ({xmlwhitespace}*\/>) {YY_PRINT;  return(ENDOFELEMENT);}
 
 
