@@ -373,7 +373,7 @@ int  main(){
 		 * OSInstance API
 		 * 
 		 */
-		
+		std::cout << "PLACE CALL TO JACOBIAN SPARSITY PATTERN"   << std::endl;
 		SparseJacobianMatrix *sparseJac;
 		sparseJac = osinstance->getJacobianSparsityPattern();		
 		// print out just the sparsity pattern
@@ -614,7 +614,9 @@ int  main(){
 				std::cout << "gradient value = " << gradVals[ kj] << std::endl;	
 			}
 			// get row i of the Lagrangian function!!!
+			std::cout << "CALL f.Reverse -------" << std::endl;
 			f.Reverse(2, lagMultipliers);
+			std::cout << "FINISH CALL f.Reverse -------" << std::endl;
 		}
 		// done with CppAD test	
 		// do garbage collection
@@ -662,7 +664,6 @@ int  main(){
 	     std::cout << "dy =  " <<  dy[ 0] << std::endl;
 	     check = x1 * std::pow(x0, x1-1.);
 	     ok   &= NearEqual(dy[0], check, 1e-10, 1e-10);
-	     delete osilreader;
 	}
 	
 	{

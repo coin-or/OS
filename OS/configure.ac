@@ -523,9 +523,10 @@ case $CXX in
      if test $os_openmp = true; then
          CXXFLAGS="$CXXFLAGS -fopenmp"
      fi
+     oslib="-L\$(INSTALLIBDIR) -lOS"
   ;;
   *)
-    oslib="-L\$(INSTALLIBDIR) -lOS";;
+   ;;
 esac
 AC_SUBST(oslib)
 

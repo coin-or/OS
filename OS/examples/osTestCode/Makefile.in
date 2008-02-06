@@ -66,7 +66,8 @@ exec_prefix = @exec_prefix@
 # Libraries necessary to link with OS
 
 # Libraries necessary to link
-LIBS = @oslib@   @ADDLIBS@
+LIBS = @oslib@   
+LIBS += @ADDLIBS@
 
 #
 #ADD ALL THE LIBS
