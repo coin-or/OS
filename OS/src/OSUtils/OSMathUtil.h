@@ -117,8 +117,19 @@ class MathUtil{
 	 * this method actually wraps around os_strtod (which is really the
 	 * David Gay version of strtod) and will throw an exception
 	 * if the str contains text or is in anyway not a valid number
+	 * str should be null terminated
 	 */
 	double os_strtod_wrap(const char *str) throw(ErrorClass);
+	
+	/**
+	 * 
+	 * @param str is the char* string that gets converted to double
+	 * @param strEnd should point to the end of str
+	 * this method actually wraps around os_strtod (which is really the
+	 * David Gay version of strtod) and will throw an exception
+	 * if the str contains text or is in anyway not a valid number
+	 */
+	double os_strtod_wrap(const char *str,  const char *strEnd) throw(ErrorClass);
 			
 };//class MathUtil
 #endif
