@@ -213,6 +213,9 @@
 				RelativePath="..\..\..\src\OSUtils\OSCommonUtil.h">
 			</File>
 			<File
+				RelativePath="..\..\..\src\OSConfig.h">
+			</File>
+			<File
 				RelativePath="..\..\..\src\OSUtils\OSDataStructures.h">
 			</File>
 			<File
