@@ -4960,17 +4960,15 @@ char *parseBase64(const char **p, int *dataSize, int* osillineno ){
 
 double atofmod1(int* osillineno, const char *number, const char *numberend){
 	double val;
-
-#ifdef USE_DTOA
    	char *pEnd;
-	val = os_strtod(number, &pEnd);
+	val = os_strtod_wrap(number, &pEnd);
 	// pEnd should now point to the first character after the number;
 	// burn off any white space	
 	for( ; ISWHITESPACE( *pEnd) || isnewline( *pEnd, osillineno); pEnd++ ) ;
 	// pEnd should now point to numberend, if not we have an error
 	if(pEnd != numberend) osilerror_wrapper( pEnd,   osillineno, "error in parsing an XSD:double");
 	return val;
-#endif
+	/**
 	double power;
 	int i;
 	int sign = 1;
@@ -5049,6 +5047,7 @@ double atofmod1(int* osillineno, const char *number, const char *numberend){
 		return sign*val;
 	}
 	else {  osilerror_wrapper( number,osillineno,"error in parsing an XSD:double"); 	return OSNAN;}
+	*/
 }//end atofmod
 
 

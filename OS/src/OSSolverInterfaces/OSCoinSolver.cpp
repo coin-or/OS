@@ -319,8 +319,6 @@ bool CoinSolver::optimize()
 	                /* Do not try and produce equality cliques and
 	                   do up to 10 passes -- I use 10 because John does in Cbc and he is brilliant*/
 					m_OsiSolverPre = process.preProcess(*m_OsiSolver, false, 10);
-	                if (!m_OsiSolverPre) 
-					m_OsiSolverPre = process.preProcess(*m_OsiSolver, false, 10);
 	                if (!m_OsiSolver) {
 	                  throw ErrorClass("Pre-processing says infeasible");
 	                } else {

@@ -30,6 +30,17 @@
 #include<string>
 
 
+#ifdef __cplusplus
+extern "C" std::string os_dtoa_format(double  x);
+extern "C" double os_strtod_wrap(const char *str,   char **strEnd);
+#else
+#ifdef __STDC__
+std::string os_dtoa_format(double  x);
+double os_strtod_wrap(const char *str,  char **strEnd);
+#endif
+#endif 
+
+
 using std::ostringstream; 
 
 /*!  \class MathUtil
@@ -119,7 +130,7 @@ class MathUtil{
 	 * if the str contains text or is in anyway not a valid number
 	 * str should be null terminated
 	 */
-	double os_strtod_wrap(const char *str) throw(ErrorClass);
+	//double os_strtod_wrap(const char *str) throw(ErrorClass);
 	
 	/**
 	 * 
@@ -129,7 +140,7 @@ class MathUtil{
 	 * David Gay version of strtod) and will throw an exception
 	 * if the str contains text or is in anyway not a valid number
 	 */
-	double os_strtod_wrap(const char *str,  const char *strEnd) throw(ErrorClass);
+	//double os_strtod_wrap(const char *str,  const char *strEnd) throw(ErrorClass);
 			
 };//class MathUtil
 #endif

@@ -28,8 +28,7 @@
 
 
 #ifdef __cplusplus
-
-extern "C" double os_strtod(const char * str, char ** endptr );
+extern "C" double os_strtod(const char *str, char **strEnd );
 extern "C" char *os_dtoa(double d, int mode, int ndigits, int *decpt, int *sign, char **rve);
 extern "C" void os_freedtoa(char *s);
 #else
@@ -38,8 +37,7 @@ double os_strtod(const char * str, char ** endptr );
 char  *os_dtoa(double d, int mode, int ndigits, int *decpt, int *sign, char **rve);
 void  os_freedtoa(char *s);	
 #endif
-
-#endif // end __cplusplus
+#endif 
 
 
 

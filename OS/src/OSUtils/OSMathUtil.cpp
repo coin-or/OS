@@ -92,7 +92,17 @@ SparseMatrix* MathUtil::convertLinearConstraintCoefficientMatrixToTheOtherMajor(
 	return matrix;		
 }//convertLinearConstraintCoefficientMatrixToTheOtherMajor
 
-std::string MathUtil::format_os_dtoa(double  x){
+
+double os_strtod_wrap(const char *str,  char **strEnd){
+#ifndef USE_DTOA
+	return os_strtod(str,  strEnd);
+#else
+	return strtod(str,  strEnd);
+#endif
+}//end os_strtod_wrap
+
+
+std::string os_dtoa_format(double  x){
 	ostringstream outStr;
 #ifndef USE_DTOA
 	outStr << x;
@@ -145,67 +155,8 @@ std::string MathUtil::format_os_dtoa(double  x){
     os_freedtoa( charResult);
 	return outStr.str();
 #endif
-}// end dtoa
-
-double MathUtil::os_strtod_wrap(const char *str) throw(ErrorClass){
-	double val = 0;
-   	char *pEnd;
-   	// str should be null terminated
-	try{
-		#ifdef USE_DTOA
-			val = os_strtod(str, &pEnd);
-			// pEnd should now point to the first character after the number;
-			// there should not be anything but white space
-			// burn off any white space	
-			//if( (pchar - *p) != 12)
-			for( ; *pEnd == ' ' |  *pEnd == '\t' |  *pEnd == '\r' |   *pEnd == '\n'   ; pEnd++ ) ;
-			// pEnd should now point to str, if not we have an error
-			if(*pEnd != '\0') throw ErrorClass( "error in parsing an XSD:double");
-			return val;
-		#else
-			val = strtod(str, &pEnd);
-			// pEnd should now point to the first character after the number;
-			// there should not be anything but white space
-			// burn off any white space	
-			for( ; *pEnd == ' ' |  *pEnd == '\t' |  *pEnd == '\r' |   *pEnd == '\n'   ; pEnd++ ) ;
-			// pEnd should now point to end of str, if not we have an error
-			if(*pEnd != '\0') throw ErrorClass( "error in parsing an XSD:double");
-			return val;
-		#endif
-	}
-	catch(const ErrorClass& eclass){
-		throw ErrorClass( eclass.errormsg) ;
-	}
-}
+}// end os_dtoa_format
 
 
-double MathUtil::os_strtod_wrap(const char *str,  const char *strEnd) throw(ErrorClass){
-	double val = 0;
-   	char *pEnd;
-   	// str should be null terminated
-	try{
-		#ifdef USE_DTOA
-			val = os_strtod(str, &pEnd);
-			// pEnd should now point to the first character after the number;
-			// there should not be anything but white space
-			// burn off any white space	
-			//if( (pchar - *p) != 12)
-			for( ; *pEnd == ' ' |  *pEnd == '\t' |  *pEnd == '\r' |   *pEnd == '\n'   ; pEnd++ ) ;
-			// pEnd should now point to str, if not we have an error
-			if(pEnd != strEnd) throw ErrorClass( "error in parsing an XSD:double");
-			return val;
-		#else
-			val = strtod(str, &pEnd);
-			// pEnd should now point to the first character after the number;
-			// there should not be anything but white space
-			// burn off any white space	
-			for( ; *pEnd == ' ' |  *pEnd == '\t' |  *pEnd == '\r' |   *pEnd == '\n'   ; pEnd++ ) ;
-			// pEnd should now point to end of str, if not we have an error
-			if(*pEnd != '\0') throw ErrorClass( "error in parsing an XSD:double");
-			return val;
-		#endif
-	}
-	catch(const ErrorClass& eclass){
-		throw ErrorClass( eclass.errormsg) ;
-	}
-}
+
+

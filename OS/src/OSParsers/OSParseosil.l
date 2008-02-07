@@ -126,23 +126,17 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF))
 {aninteger}  {YY_PRINT; yylval->ival = atoi(yytext); return(INTEGER);}
 
 {adouble} {YY_PRINT; 
-#ifdef  USE_DTOA 
 char *yytextEnd;
-yylval->dval = os_strtod( yytext, &yytextEnd);
-	if( (yytextEnd - yytext) != strlen( yytext)){
-		std::string error;
+yylval->dval = os_strtod_wrap( yytext, &yytextEnd);
+	if( (unsigned)(yytextEnd - yytext) != strlen( yytext)){
 		std::ostringstream outStr;
 		outStr << "encountered a spurious character in the lexer" << endl;
 		outStr << "The first character is: ";
 		outStr <<  yytext;
 		outStr << endl;
 		outStr << "See line number: " << yylineno << endl;  
-		error = outStr.str();
-		throw ErrorClass( error);
+		throw ErrorClass( outStr.str());
 	}
-#else
-yylval->dval = strtod( yytext, NULL);
-#endif
 return(DOUBLE);}
 
 

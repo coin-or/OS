@@ -4612,4 +4612,32 @@ Cheers,
 Ted -- email of 12/10/2007
 
 %%%%%%
+Using SYMPHONY remotely.
+http://calvin.ie.lehigh.edu/os/OSSolverService.jws
+
+
+
+-serviceLocation http://calvin.ie.lehigh.edu/os/OSSolverService.jws
+-osil ../data/osilFiles/p0201.osil
+-solver symphony
+-osol ../data/osolFiles/symphony.osol
+-osrl ./test.osrl
+-browser /Applications/Firefox.app/Contents/MacOS/firefox
+
+<?xml version="1.0" encoding="UTF-8"?>
+<osol xmlns="os.optimizationservices.org"
+xmlns:xs="http://www.w3.org/2001/XMLSchema"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="os.optimizationservices.org 
+http://www.optimizationservices.org/schemas/OSoL.xsd">
+  <general>         
+ 
+  </general>
+    <optimization>
+    	<other name="num_proc">4</other>
+    </optimization>
+</osol>
+
+
+
 

@@ -30,7 +30,7 @@
  * necessary to #include "float.h" or another system-dependent header
  * file.
  */
-
+ 
 /* strtod for IEEE-, VAX-, and IBM-arithmetic machines.
  *
  * This strtod returns a nearest machine number to the input decimal
@@ -554,7 +554,7 @@ Balloc
 #endif
 
 	ACQUIRE_DTOA_LOCK(0);
-	if (rv = freelist[k]) {
+	if ( (rv = freelist[k]) ) {
 		freelist[k] = rv->next;
 		}
 	else {
@@ -881,7 +881,7 @@ mult
 		}
 #else
 	for(; xb < xbe; xc0++) {
-		if (y = *xb++) {
+		if ( (y = *xb++) ) {
 			x = xa;
 			xc = xc0;
 			carry = 0;
@@ -915,7 +915,7 @@ pow5mult
 	int i;
 	static int p05[3] = { 5, 25, 125 };
 
-	if (i = k & 3)
+	if ( (i = k & 3 ))
 		b = multadd(b, p05[i-1], 0);
 
 	if (!(k >>= 2))
@@ -1008,7 +1008,7 @@ lshift
 			z = *x++ >> k1;
 			}
 			while(x < xe);
-		if (*x1 = z)
+		if ( (*x1 = z ))
 			++n1;
 		}
 #endif
@@ -1298,7 +1298,7 @@ d2b
 	z |= Exp_msk11;
 #endif
 #else
-	if (de = (int)(d0 >> Exp_shift))
+	if ( (de = (int)(d0 >> Exp_shift) ))
 		z |= Exp_msk1;
 #endif
 #ifdef Pack_32
@@ -1328,8 +1328,8 @@ d2b
 		k += 32;
 		}
 #else
-	if (y = d1) {
-		if (k = lo0bits(&y))
+	if ( (y = d1) ) {
+		if ( (k = lo0bits(&y)) )
 			if (k >= 16) {
 				x[0] = y | z << 32 - k & 0xffff;
 				x[1] = z >> k - 16 & 0xffff;
@@ -1497,7 +1497,7 @@ match
 	int c, d;
 	CONST char *s = *sp;
 
-	while(d = *t++) {
+	while( (d = *t++) ) {
 		if ((c = *++s) >= 'A' && c <= 'Z')
 			c += 'a' - 'A';
 		if (c != d)
@@ -1509,7 +1509,7 @@ match
 
 #ifndef No_Hex_NaN
  static void
-hexnan
+hexnan 
 #ifdef KR_headers
 	(rvp, sp) double *rvp; CONST char **sp;
 #else
@@ -1524,7 +1524,7 @@ hexnan
 	havedig = xshift = 0;
 	udx0 = 1;
 	s = *sp;
-	while(c = *(CONST unsigned char*)++s) {
+	while( (c = *(CONST unsigned char*)++s) ) {
 		if (c >= '0' && c <= '9')
 			c -= '0';
 		else if (c >= 'a' && c <= 'f')
@@ -1864,7 +1864,7 @@ os_strtod
 	/* Get starting approximation = rv * 10**e1 */
 
 	if (e1 > 0) {
-		if (i = e1 & 15)
+		if ( (i = e1 & 15) )
 			dval(rv) *= tens[i];
 		if (e1 &= ~15) {
 			if (e1 > DBL_MAX_10_EXP) {
@@ -1924,7 +1924,7 @@ os_strtod
 		}
 	else if (e1 < 0) {
 		e1 = -e1;
-		if (i = e1 & 15)
+		if ( (i = e1 & 15) )
 			dval(rv) /= tens[i];
 		if (e1 >>= 4) {
 			if (e1 >= 1 << n_bigtens)
@@ -2585,7 +2585,7 @@ rv_alloc(int i)
 
 	j = sizeof(ULong);
 	for(k = 0;
-		sizeof(Bigint) - sizeof(ULong) - sizeof(int) + j <= i;
+		sizeof(Bigint) - sizeof(ULong) - sizeof(int) + j <= (unsigned)i;
 		j <<= 1)
 			k++;
 	r = (int*)Balloc(k);
@@ -2607,7 +2607,7 @@ nrv_alloc(char *s, char **rve, int n)
 	char *rv, *t;
 
 	t = rv = rv_alloc(n);
-	while(*t = *s++) t++;
+	while( (*t = *s++) ) t++;
 	if (rve)
 		*rve = t;
 	return rv;
@@ -2787,7 +2787,7 @@ os_dtoa
 #ifdef Sudden_Underflow
 	i = (int)(word0(d) >> Exp_shift1 & (Exp_mask>>Exp_shift1));
 #else
-	if (i = (int)(word0(d) >> Exp_shift1 & (Exp_mask>>Exp_shift1))) {
+	if ( (i = (int)(word0(d) >> Exp_shift1 & (Exp_mask>>Exp_shift1))  ) ) {
 #endif
 		dval(d2) = dval(d);
 		word0(d2) &= Frac_mask1;
@@ -2941,7 +2941,7 @@ os_dtoa
 					}
 			dval(d) /= ds;
 			}
-		else if (j1 = -k) {
+		else if ( (j1 = -k) ) {
 			dval(d) *= tens[j1 & 0xf];
 			for(j = j1 >> 4; j; j >>= 1, i++)
 				if (j & 1) {
@@ -3102,7 +3102,7 @@ os_dtoa
 				Bfree(b);
 				b = b1;
 				}
-			if (j = b5 - m5)
+			if ( (j = b5 - m5) )
 				b = pow5mult(b, j);
 			}
 		else
@@ -3143,7 +3143,7 @@ os_dtoa
 	if (i = ((s5 ? 32 - hi0bits(S->x[S->wds-1]) : 1) + s2) & 0x1f)
 		i = 32 - i;
 #else
-	if (i = ((s5 ? 32 - hi0bits(S->x[S->wds-1]) : 1) + s2) & 0xf)
+	if ( (i = ((s5 ? 32 - hi0bits(S->x[S->wds-1]) : 1) + s2) & 0xf) )
 		i = 16 - i;
 #endif
 	if (i > 4) {
@@ -3317,7 +3317,9 @@ os_dtoa
 		++*s++;
 		}
 	else {
+#ifdef Honor_FLT_ROUNDS
  trimzeros:
+#endif
 		while(*--s == '0');
 		s++;
 		}

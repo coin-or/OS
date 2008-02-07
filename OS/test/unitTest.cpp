@@ -311,7 +311,7 @@ int main(int argC, char* argV[])
 		//nl2osil = new OSnl2osil( nlFileName);
 	    //return 0;	
 		/*
-		//using format_os_dtoa
+		//using os_dtoa_format
 		MathUtil *mathUtil = new MathUtil();
 	    int decimalPoint; // where the decimal point goes
 	    int sign; // 1 if negative, 0 if positive
@@ -329,7 +329,7 @@ int main(int argC, char* argV[])
 	    	printf("HERE IS THE RESULT of sign  %d\n\n", sign);
 	    	printf("HERE IS THE RESULT decimal point  %i\n\n", decimalPoint);
 	    	printf("HERE IS THE LENGTH OF THE RESULT  %d\n\n",  strlen(result));
-	    	std::cout << "HERE IS THE RESULT OF OS format_os_dtoa: " << mathUtil->format_os_dtoa( d) << std::endl;
+	    	std::cout << "HERE IS THE RESULT OF OS os_dtoa_format: " << os_dtoa_format( d) << std::endl;
 	    }
 	    d = .00001123;
 	    d = -2./3.;
@@ -339,14 +339,14 @@ int main(int argC, char* argV[])
     	printf("HERE IS THE RESULT of sign  %d\n\n", sign);
     	printf("HERE IS THE RESULT decimal point  %i\n\n", decimalPoint);
     	printf("HERE IS THE LENGTH OF THE RESULT  %d\n\n",  strlen(result));
-    	std::cout << "HERE IS THE RESULT OF OS format_os_dtoa: " << mathUtil->format_os_dtoa( OSDBL_MAX) << std::endl;  	
+    	std::cout << "HERE IS THE RESULT OF OS os_dtoa_format: " << os_dtoa_format( OSDBL_MAX) << std::endl;  	
     	d = .000234;
 	    result = os_dtoa(d, 0, 0, &decimalPoint, &sign, NULL);
     	printf("HERE IS THE RESULT  %s\n\n", result);
     	printf("HERE IS THE RESULT of sign  %d\n\n", sign);
     	printf("HERE IS THE RESULT decimal point  %i\n\n", decimalPoint);
     	printf("HERE IS THE LENGTH OF THE RESULT  %d\n\n",  strlen(result));
-    	std::cout << "HERE IS THE RESULT OF OS format_os_dtoa: " << mathUtil->format_os_dtoa( d) << std::endl;
+    	std::cout << "HERE IS THE RESULT OF OS os_dtoa_format: " << os_dtoa_format( d) << std::endl;
     	//
     	char sInput[] = "77.77 99.99";
     	char *pEnd;
@@ -356,11 +356,11 @@ int main(int argC, char* argV[])
     	std::cout << d1 << std::endl;
     	std::cout << d2 << std::endl;
     	
-    	std::cout << "HERE IS THE RESULT OF OS format_os_dtoa OSDBL_MAX: " << mathUtil->format_os_dtoa( OSDBL_MAX) << std::endl;
-    	std::cout << "HERE IS THE RESULT OF OS format_os_dtoa OSDBL_MAX: " << OSDBL_MAX << std::endl;
-    	std::cout << "HERE IS THE RESULT OF OS format_os_dtoa DBL_MAX: " << mathUtil->format_os_dtoa( DBL_MAX) << std::endl;
-    	std::cout << "HERE IS THE RESULT OF OS format_os_dtoa DBL_MAX: " <<  DBL_MAX << std::endl;
-    	d1 = os_strtod(mathUtil->format_os_dtoa( OSDBL_MAX).c_str(),     NULL);
+    	std::cout << "HERE IS THE RESULT OF OS os_dtoa_format OSDBL_MAX: " << os_dtoa_format( OSDBL_MAX) << std::endl;
+    	std::cout << "HERE IS THE RESULT OF OS os_dtoa_format OSDBL_MAX: " << OSDBL_MAX << std::endl;
+    	std::cout << "HERE IS THE RESULT OF OS os_dtoa_format DBL_MAX: " << os_dtoa_format( DBL_MAX) << std::endl;
+    	std::cout << "HERE IS THE RESULT OF OS os_dtoa_format DBL_MAX: " <<  DBL_MAX << std::endl;
+    	d1 = os_strtod(os_dtoa_format( OSDBL_MAX).c_str(),     NULL);
     	if(d1 == DBL_MAX )std::cout <<  "SUCCESS" << endl;
     	else std::cout <<  "FAILURE" << endl;
     	nl2osil = new OSnl2osil( nlFileName);
