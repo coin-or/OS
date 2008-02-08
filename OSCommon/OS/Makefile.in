@@ -20,7 +20,7 @@
 
 # Author:  Andreas Waechter           IBM    2006-04-13
 
-# Copyright (C) 2006 International Business Machines and others.
+# Copyright (C) 2006, 2007 International Business Machines and others.
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
@@ -105,6 +105,8 @@ AMDEP_FALSE = @AMDEP_FALSE@
 AMDEP_TRUE = @AMDEP_TRUE@
 AMTAR = @AMTAR@
 AR = @AR@
+ASLLIB = @ASLLIB@
+ASL_CPPFLAGS = @ASL_CPPFLAGS@
 AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
@@ -115,14 +117,29 @@ CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CDEFS = @CDEFS@
 CFLAGS = @CFLAGS@
+COIN_BUILD_GLPK_FALSE = @COIN_BUILD_GLPK_FALSE@
+COIN_BUILD_GLPK_TRUE = @COIN_BUILD_GLPK_TRUE@
+COIN_HAS_ASL_FALSE = @COIN_HAS_ASL_FALSE@
+COIN_HAS_ASL_TRUE = @COIN_HAS_ASL_TRUE@
 COIN_HAS_CPPAD_FALSE = @COIN_HAS_CPPAD_FALSE@
 COIN_HAS_CPPAD_TRUE = @COIN_HAS_CPPAD_TRUE@
+COIN_HAS_CPX_FALSE = @COIN_HAS_CPX_FALSE@
+COIN_HAS_CPX_TRUE = @COIN_HAS_CPX_TRUE@
+COIN_HAS_GLPK_FALSE = @COIN_HAS_GLPK_FALSE@
+COIN_HAS_GLPK_TRUE = @COIN_HAS_GLPK_TRUE@
+COIN_HAS_KNITRO_FALSE = @COIN_HAS_KNITRO_FALSE@
+COIN_HAS_KNITRO_TRUE = @COIN_HAS_KNITRO_TRUE@
+COIN_HAS_LINDO_FALSE = @COIN_HAS_LINDO_FALSE@
+COIN_HAS_LINDO_TRUE = @COIN_HAS_LINDO_TRUE@
 COIN_HAS_OS_FALSE = @COIN_HAS_OS_FALSE@
 COIN_HAS_OS_TRUE = @COIN_HAS_OS_TRUE@
 CPP = @CPP@
+CPPADDOCDIR = @CPPADDOCDIR@
 CPPADOBJDIR = @CPPADOBJDIR@
 CPPADSRCDIR = @CPPADSRCDIR@
 CPPFLAGS = @CPPFLAGS@
+CPXINCDIR = @CPXINCDIR@
+CPXLIB = @CPXLIB@
 CXX = @CXX@
 CXXCPP = @CXXCPP@
 CXXDEFS = @CXXDEFS@
@@ -146,18 +163,24 @@ F77 = @F77@
 FADDLIBS = @FADDLIBS@
 FFLAGS = @FFLAGS@
 FLIBS = @FLIBS@
+GLPKINCDIR = @GLPKINCDIR@
+GLPKLIB = @GLPKLIB@
 HAVE_EXTERNALS_FALSE = @HAVE_EXTERNALS_FALSE@
 HAVE_EXTERNALS_TRUE = @HAVE_EXTERNALS_TRUE@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
+KNITROINCDIR = @KNITROINCDIR@
+KNITROLIB = @KNITROLIB@
 LDFLAGS = @LDFLAGS@
 LIBEXT = @LIBEXT@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
 LIBTOOLM4 = @LIBTOOLM4@
+LINDOINCDIR = @LINDOINCDIR@
+LINDOLIB = @LINDOLIB@
 LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
 LT_LDFLAGS = @LT_LDFLAGS@
@@ -169,9 +192,12 @@ MPICC = @MPICC@
 MPICXX = @MPICXX@
 MPIF77 = @MPIF77@
 OBJEXT = @OBJEXT@
+OPENMP_FALSE = @OPENMP_FALSE@
+OPENMP_TRUE = @OPENMP_TRUE@
 OPT_CFLAGS = @OPT_CFLAGS@
 OPT_CXXFLAGS = @OPT_CXXFLAGS@
 OPT_FFLAGS = @OPT_FFLAGS@
+OSDOCDIR = @OSDOCDIR@
 OSOBJDIR = @OSOBJDIR@
 OSROOT_DIR = @OSROOT_DIR@
 OSSRCDIR = @OSSRCDIR@
@@ -189,6 +215,8 @@ SHELL = @SHELL@
 STRIP = @STRIP@
 USEMULTIPLYDEFINED_FALSE = @USEMULTIPLYDEFINED_FALSE@
 USEMULTIPLYDEFINED_TRUE = @USEMULTIPLYDEFINED_TRUE@
+USE_DTOA_FALSE = @USE_DTOA_FALSE@
+USE_DTOA_TRUE = @USE_DTOA_TRUE@
 VERSION = @VERSION@
 VPATH_DISTCLEANFILES = @VPATH_DISTCLEANFILES@
 YACC = @YACC@
@@ -268,6 +296,7 @@ EXTRA_DIST = $(am__append_1)
 #                  Installation of the addlibs file                    #
 ########################################################################
 addlibsfile = os_addlibs.txt
+addlibsdir = $(prefix)/share/doc/coin/$(PACKAGE_NAME)/
 
 ########################################################################
 #                         Maintainer Stuff                             #
@@ -276,7 +305,7 @@ addlibsfile = os_addlibs.txt
 # Files that are generated and should be cleaned with make distclean
 DISTCLEANFILES = $(am__append_2) $(VPATH_DISTCLEANFILES)
 DocFiles = README AUTHORS LICENSE
-DocInstallDir = $(prefix)/share/doc/$(PACKAGE_NAME)
+DocInstallDir = $(prefix)/share/doc/coin/$(PACKAGE_NAME)
 all: all-recursive
 
 .SUFFIXES:
@@ -731,13 +760,13 @@ run_parsers:
 	flex -Posss -o${abs_source_dir}/src/OSParsers/parseosss.cpp ${abs_source_dir}/src/OSParsers/parseosss.l
 	make
 
-install-exec-local:
-	$(install_sh_DATA) $(addlibsfile) $(DESTDIR)$(libdir)/$(addlibsfile)
+install-exec-local: install-doc
+	$(install_sh_DATA) $(addlibsfile) $(addlibsdir)/$(addlibsfile)
 
-uninstall-local:
+uninstall-local: uninstall-doc
 	rm -f $(DESTDIR)$(libdir)/$(addlibsfile)
 
-install-doc:
+install-doc: $(DocFiles)
 	test -z "$(DocInstallDir)" || $(mkdir_p) "$(DESTDIR)$(DocInstallDir)"
 	for file in $(DocFiles); do \
 	  if test -f "$$file"; then dir=; else dir="$(srcdir)/"; fi; \

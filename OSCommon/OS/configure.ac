@@ -29,7 +29,6 @@ AC_CONFIG_SRCDIR(src/OSUtils/OSErrorClass.cpp)
 # of the directory where configure is run.  The default would be
 # /usr/local.
 AC_PREFIX_DEFAULT([`pwd`])
-
 #############################################################################
 #                         Standard build tool stuff                         #
 #############################################################################
@@ -61,6 +60,25 @@ fi
 # Initialize automake and libtool
 AC_COIN_INIT_AUTO_TOOLS
 
+# And determine whether we're big-endian or little-endian. This is necessary to
+# define the correct patterns for IEEE infinity and quiet_nan, in the event
+# that we can't get them any other way. This will define WORDS_BIGENDIAN if
+# we're on a big-endian machine, and do nothing otherwise. Also necessary for
+# the David Gay dtoa
+
+AC_C_BIGENDIAN
+
+# We also need to worry about long long if -pedantic used for OSdtoa
+# the following was added to autoconf 2.60 -- put in when build tools switches over
+# this will define HAVE_LONG_LONG_INT
+#AC_TYPE_LONG_LONG_INT 
+#
+#
+AC_CHECK_SIZEOF( int)
+AC_CHECK_SIZEOF( double)
+AC_CHECK_SIZEOF( long)
+#
+
 #############################################################################
 #                              COIN components                              #
 #############################################################################
@@ -76,13 +94,24 @@ AC_COIN_HAS_PROJECT(cppad)
          AC_MSG_ERROR([cannot find CppAD which is necessary to build OS]) ;;
   esac
 
+#############################################################################
+#                             Third party solvers                           #
+#############################################################################
 
 
+AC_COIN_HAS_USER_LIBRARY([Cplex],[CPX],[cplex.h],[])
+AC_COIN_HAS_USER_LIBRARY([Lindo],[LINDO],[lindo.h],[])
+#AC_COIN_HAS_USER_LIBRARY([Ipopt],[IPOPT],[IpoptConfig.h],[])
+AC_COIN_HAS_USER_LIBRARY([Knitro],[KNITRO],[knitro.h],[])
+
+AC_COIN_HAS_GLPK(Glpk)
+AC_COIN_HAS_ASL
 
 
 #############################################################################
 #                         OS-specific configuration                         #
 #############################################################################
+
 
   case $build in
      *-mingw*)
@@ -95,7 +124,7 @@ AC_COIN_HAS_PROJECT(cppad)
 		     *)
 		     AC_MSG_WARN("DONT HAVE GCC COMPILER WITH GYGWIN");;   
 		  esac   
-		  AC_DEFINE([NOMINMAX],[1],[use if OS is Cygwin]) ;;     
+		  AC_DEFINE([NOMINMAX],[1],[use if OS is Cygwin]);;
        *-win*)
          AC_DEFINE([WIN_],[1],[use if OS is Windows]) ;;
     *-linux-*)
@@ -112,6 +141,56 @@ AC_COIN_HAS_PROJECT(cppad)
     *)
 	 ;;
   esac
+
+##############################################################################
+#                            OPENMP defs                                     #
+##############################################################################
+
+
+AC_ARG_ENABLE([openmp],
+[AC_HELP_STRING([--enable-openmp],
+                [compile in OpenMP features])],
+[case "${enableval}" in
+   yes) os_openmp=true
+   ;;
+   no)  os_openmp=false
+   ;;
+   *) AC_MSG_ERROR(Bad value ${enableval} for --enable-openmp)
+   ;;
+esac],
+[os_openmp=false])
+
+if test $os_openmp = true; then
+   AC_MSG_CHECKING([G++ version])
+   fopenmp_version=4.2
+   gcc_required_version=`echo ${fopenmp_version} | sed -e 's/\./0/g'`
+   get_gcc_version=`$CXX -dumpversion`
+   gcc_version=`echo ${get_gcc_version} | sed -e 's/\./0/g'`
+   major_gcc_version=`echo ${gcc_version:0:3}`
+   AC_MSG_RESULT([$get_gcc_version])
+   if test ${major_gcc_version} -lt ${gcc_required_version}; then
+       AC_MSG_ERROR(OpenMP feautures are supported by G++ 4.2.0 or higher.)
+   fi
+fi
+
+AM_CONDITIONAL(OPENMP, [test $os_openmp = true])
+
+
+###########################################################################
+# check to see if we turn off dtoa
+###########################################################################
+ 	
+
+AC_ARG_ENABLE([nodtoa],
+[AC_HELP_STRING([--enable-nodtoa],
+                [do not use dtoa use the C and C++ for string to decimal and back])],
+[case "${enableval}" in
+  yes) nodtoa=true ;;
+  no)  nodtoa=false ;;
+  *) AC_MSG_ERROR(bad value ${enableval} for --enable-nodtoa) ;;
+esac],[nodtoa=false])
+AM_CONDITIONAL(USE_DTOA, test x$nodtoa = xfalse)
+
 
 ############################################################################
 ############################################################################
@@ -250,7 +329,6 @@ else
   AC_DEFINE_UNQUOTED([MY_C_ISNAN],[$MY_C_ISNAN],
                      [Define to be the name of C-function for NaN check])
 fi
-
 
 
 

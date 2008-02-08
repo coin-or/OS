@@ -1,7 +1,22 @@
 /* inc/config_os.h.in.  Generated from configure.ac by autoheader.  */
 
+/* If defined, the Ampl Solver Library is available. */
+#undef COIN_HAS_ASL
+
 /* Define to 1 if the cppad package is used */
 #undef COIN_HAS_CPPAD
+
+/* Define to 1 if the Cplex package is available */
+#undef COIN_HAS_CPX
+
+/* Define to 1 if Glpk package is available */
+#undef COIN_HAS_GLPK
+
+/* Define to 1 if the Knitro package is available */
+#undef COIN_HAS_KNITRO
+
+/* Define to 1 if the Lindo package is available */
+#undef COIN_HAS_LINDO
 
 /* Define to 1 if the OS package is used */
 #undef COIN_HAS_OS
@@ -146,6 +161,15 @@
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
+/* The size of a `double', as computed by sizeof. */
+#undef SIZEOF_DOUBLE
+
+/* The size of a `int', as computed by sizeof. */
+#undef SIZEOF_INT
+
+/* The size of a `long', as computed by sizeof. */
+#undef SIZEOF_LONG
+
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
 
@@ -157,3 +181,7 @@
 
 /* use if OS is Windows */
 #undef WIN_
+
+/* Define to 1 if your processor stores words with the most significant byte
+   first (like Motorola and SPARC, unlike Intel and VAX). */
+#undef WORDS_BIGENDIAN

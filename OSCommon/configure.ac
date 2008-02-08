@@ -36,6 +36,18 @@ AC_PREFIX_DEFAULT([`pwd`])
 #  Do the tests necessary to configure compilers and initialise autotools   #
 #############################################################################
 
+##
+#             Check which ThirdParty sources are available                  #
+#############################################################################
+
+AC_COIN_THIRDPARTY_SUBDIRS([ASL],[ThirdParty/ASL],[solvers/asl.h])
+AC_COIN_THIRDPARTY_SUBDIRS([Blas],[ThirdParty/Blas],[daxpy.f])
+AC_COIN_THIRDPARTY_SUBDIRS([Lapack],[ThirdParty/Lapack],[LAPACK/SRC/dlarf.f])
+AC_COIN_THIRDPARTY_SUBDIRS([HSL],[ThirdParty/HSL],[configure.ac])
+AC_COIN_THIRDPARTY_SUBDIRS([Glpk],[ThirdParty/Glpk],[glpk/src/glplpx01.c])
+AC_COIN_THIRDPARTY_SUBDIRS([Mumps],[ThirdParty/Mumps],[MUMPS/src/dmumps_part1.F])
+
+
 AC_COIN_CREATE_LIBTOOL
 
 #
