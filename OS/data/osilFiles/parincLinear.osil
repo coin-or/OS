@@ -3,7 +3,7 @@
 	xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/OSiL.xsd">
 	<instanceHeader>
 		<name>Par Inc. </name>
-		<source>Anderson, Sweeny, and Williams</source>
+		<source>Anderson, Sweeney, and Williams</source>
 		<description> A production scheduling problem </description>
 	</instanceHeader>
 	<instanceData>
@@ -40,12 +40,13 @@
 				<el>3</el>
 			</rowIdx>
 			<value>
-			<el>.7</el>
+				<el>.7</el>
 				<el>.5</el>
 				<el>1.</el>				
 				<el>.1</el>
 				<el>1.0</el>
-				<el>0.8333</el><el>0.6667</el>
+				<el>0.8333</el>
+				<el>0.6667</el>
 				<el>0.25</el>
 			</value>
 	</linearConstraintCoefficients>
