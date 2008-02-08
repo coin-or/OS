@@ -71,14 +71,14 @@ int main(int argC, char* argV[])
 		osilFileNameWithPath = argV[ 1];
 		std::cout << "FILE NAME = " << argV[1] << std::endl;
 		std::cout << "Read the file into a string" << std::endl; 
-		osil = fileUtil->getFileAsString( &osilFileNameWithPath[ 0]); 
+		osil = fileUtil->getFileAsString( osilFileNameWithPath.c_str() ); 
 		OSSolverAgent* osagent = NULL;
 		//
 		// kipp-- you have changed the path name on the server
 		//
 		throw ErrorClass( "please go in and put in a valid server URL and recompile \n  see line 81" );
 		// put in a valid URL below
-		osagent = new OSSolverAgent("http://******/os/servlet/OSFileUpload");
+		osagent = new OSSolverAgent("http://***/os/servlet/OSFileUpload");
 		// put in a valid URL above
 		//
 		//
@@ -86,7 +86,7 @@ int main(int argC, char* argV[])
 		// modify to into a file C:filename
 		int index = osilFileNameWithPath.find_last_of( dirsep);
 		int slength = osilFileNameWithPath.size();
-		osilFileName = osilFileNameWithPath.substr( index + 1, slength - 1) ;
+		osilFileName = osilFileNameWithPath.substr( index + 1, slength) ;
 		std::cout << std::endl << std::endl;
 		std::cout << "Place remote synchronous call" << std::endl;
 		//std::cout << "osilFileName =  " << osilFileName << std::endl;
