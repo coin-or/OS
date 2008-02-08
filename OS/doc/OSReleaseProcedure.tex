@@ -236,11 +236,14 @@ You do not need to put in jobID information. The knock will get the status of al
 \begin{verbatim}
 OSSolverService  -config ../data/configFiles/testRemoteRetrieve.config
 \end{verbatim}
-Before executing this command make sure to put your jobID into the file {\bf retrieve.osol }
-
-The result of the optimization will be put into a file called {\bf test.osrl} that will be in the directory in which you are running the {\bf OSSolverService.}
+Before executing this command make sure to put your jobID into the file {\bf retrieve.osol }.  Also, either delete the {\tt -browser} option or put in the path to your browser.
+The result of the optimization will be put into a file called {\bf test.osrl} that will be in the directory in which you are running the {\bf OSSolverService.} 
 
 \end{itemize}
+
+
+
+{\bf IMPORTANT:}  Please do NOT commit the changes to these config files. 
 
 
 \item[5.] Test {\bf OSCommon}. Build the OSCommon library.  Build the {\bf OSCommon} library.  Do a {\bf make install}.   Then connect to {\bf apiExamples} directory, build and run the {\bf apiExample.}
