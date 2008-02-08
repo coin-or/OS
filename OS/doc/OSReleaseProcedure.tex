@@ -1,0 +1,249 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
+%\geometry{landscape}                % Activate for for rotated page geometry
+%\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+                                      % Activate to display a given date or no date
+
+\begin{document}
+
+
+\begin{center}
+{\Large
+{\bf OS Release Procedure }
+}%end large
+\end{center}
+
+\begin{itemize}
+
+\item[1.] Run the {\bf nightlyBuild.py} script.
+
+\item[2.] Test the examples.  They are in {\bf OS/examples}.  Do a {\bf make install} before running these.
+
+\begin{itemize}
+
+\item[a.]  Connect to the {\bf algorithmicDiff} folder, build and run {\bf OSAlgorithmicDiffTest.cpp}.  This takes no arguments.  This will test a bunch of the AD routines.
+
+
+
+\item[b.]  Connect to the {\bf instanceGenerator} folder, build and run {\bf OSInstanceGenerator.cpp}.  This takes no arguments.
+
+\item[c.]  Connect to the {\bf osTestCode} folder, build and run {\bf OSTestCode.cpp}.  This takes a single argument which is the location of any OSiL file.
+
+
+\end{itemize}
+
+\item[3.] Test the applications.  They are in {\bf OS/applications}.
+
+\begin{itemize}
+ 
+ 
+ \item[a.]  Test {\bf OSAmplClient}.  This is not a stand-alone application and is designed to be called from  {\bf ampl}.   Probably the easiest way to test this is to test the {\bf OSAmplClient}  that gets installed in the {\bf bin} directory as a result of {\bf make install}. To make life easy, temporarily copy your {\bf ampl} executable into this {\bf bin} directory.   Also copy the test problem {\bf hs71.nl}  from {\bf OS/data/amplFiles/} into the {\bf bin} directory.   Do five tests. Three local and two remote.
+ 
+ 
+ \vskip 10pt
+ 
+ 
+ {\bf Test 1:}  Inside  {\bf ampl} execute the following
+ 
+
+
+\begin{verbatim}
+model hs71.mod;
+option solver OSAmplClient;
+option OSAmplClient_options "solver xyz";
+solve;
+\end{verbatim}
+
+The result should be an error saying:
+\begin{verbatim}
+<message>a supported solver has not been selected</message>
+\end{verbatim}
+ 
+ \vskip 10pt
+ 
+ {\bf Test 2:}  Inside  {\bf ampl} execute the following
+ 
+
+
+\begin{verbatim}
+model hs71.mod;
+option solver OSAmplClient;
+option OSAmplClient_options "solver ipopt";
+solve;
+display x1;
+\end{verbatim}
+
+The result of {\bf display x3} should be 3.82115. 
+
+
+ \vskip 10pt
+ 
+ {\bf Test 3:}  Inside  {\bf ampl} execute the following
+ 
+
+
+\begin{verbatim}
+model hs71.mod;
+option solver OSAmplClient;
+option OSAmplClient_options "solver cbc";
+solve;
+\end{verbatim}
+
+You should get an error message saying:
+\begin{verbatim}
+<message>Cbc cannot do nonlinear or quadratic</message>
+\end{verbatim}
+
+
+\vskip 10pt
+
+{\small
+{\bf Test 4:}  Inside  {\bf ampl} execute the following
+\begin{verbatim}
+model hs71.mod;
+option solver OSAmplClient;
+option OSAmplClient_options "solver ipopt";
+option ipopt_options "service http://gsbkip.chicagogsb.edu/os/OSSolverService.jws";
+solve;
+display x1;
+\end{verbatim}
+}%end small
+
+The result of {\bf display x3} should be 3.82115. 
+
+
+\vskip 10pt
+
+{\small
+{\bf Test 5:}  Inside  {\bf ampl} execute the following
+\begin{verbatim}
+model hs71.mod;
+option solver OSAmplClient;
+option OSAmplClient_options "solver clp";
+option clp_options "service http://gsbkip.chicagogsb.edu/os/OSSolverService.jws";
+solve;
+display x3;
+\end{verbatim}
+}%end small
+
+You should get an error message saying"
+\begin{verbatim}
+<message>Clp cannot do nonlinear or quadratic or integer</message>
+\end{verbatim}
+
+
+
+There is command script, {\bf testAmpl.run} in the directory {\bf OS/data/amplFiles} that contains the commands for all of these test. Simply start {\bf ampl} and execute
+\begin{verbatim}
+include testAmpl.run;
+\end{verbatim}
+
+
+
+\item[b.] Test the {\bf OSFileUpload} application.    Edit  {\bf OSFileUpload.cpp}. First comment out line 79 and then modify line 
+\begin{verbatim}
+osagent = new OSSolverAgent("http://******/os/servlet/OSFileUpload");
+\end{verbatim}
+to
+{\small
+\begin{verbatim}
+osagent = new OSSolverAgent("http://gsbkip.chicagogsb.edu/os/servlet/OSFileUpload");
+\end{verbatim}
+}
+Rebuild and run. This application takes one command line argument which is the file to be uploaded. 
+
+\end{itemize}
+
+\item[4.] Test the {\bf OSSolverService}.
+
+\begin{itemize}
+\item[a.] Test running a local solver.  (These examples assume that the {\bf OS/data} directory is one level above the directory  in which {\bf OSSolverService} is running. Test  for OSiL, mps, and nl files.
+
+\begin{verbatim}
+OSSolverService -config ../data/configFiles/testLocal.config
+OSSolverService -config ../data/configFiles/testLocalMPS.config
+OSSolverService -config ../data/configFiles/testLocalNL.config
+\end{verbatim}
+
+
+You should get the OSrL for the simple test problem.   In all of these look for {\tt <obj idx="-1">-7667.94</obj>} in the MPS test and {\tt <obj idx="-1">-7667.94</obj>} in the other two.
+
+
+\item[b.]  Test the service methods on the remote server.  
+
+
+\noindent{\bf Step 1:} Test remote {\bf solve()} method for OSiL, mps, and nl files.
+
+
+
+\begin{verbatim}
+OSSolverService -config ../data/configFiles/testRemote.config
+OSSolverService -config ../data/configFiles/testRemoteMPS.config
+OSSolverService -config ../data/configFiles/testRemoteNL.config
+\end{verbatim}
+
+
+You should get the OSrL for the simple test problem in each case.  In all of these look for {\tt <obj idx="-1">-7667.94</obj>}.
+
+\vskip 10pt
+
+
+\noindent{\bf Step 2:} Test remote {\bf getJobID()} method.
+
+
+\begin{verbatim}
+OSSolverService  -config ../data/configFiles/testRemotegetJobID.config
+\end{verbatim}
+
+
+
+You will get a long jobID.
+
+
+\vskip 10pt
+
+
+\noindent{\bf Step 3:} Test remote {\bf send()} method. Use the {\bf send()} method with the jobID just  generated.  To do this open the file
+\begin{verbatim}
+/data/osolFiles/sendWithJobID.osol
+\end{verbatim}
+and replace the existing jobID with the one just generated.  Then run
+\begin{verbatim}
+OSSolverService  -config ../data/configFiles/testRemoteSend.config
+\end{verbatim}
+The result should be ``send is true.''
+
+\vskip 10pt
+
+\noindent{\bf Step 4:} Test remote {\bf knock()} method.  See if the  job is complete.
+
+
+\begin{verbatim}
+OSSolverService  -config ../data/configFiles/testRemoteKnock.config
+\end{verbatim}
+
+You do not need to put in jobID information. The knock will get the status of all jobs. However, if want just the status of the job you submitted put your jobID in the {\tt knock.osol} file. 
+
+\vskip 10pt
+
+\noindent{\bf Step 5:} Test remote {\bf retrieve()} method. Get the result.
+
+\begin{verbatim}
+OSSolverService  -config ../data/configFiles/testRemoteRetrieve.config
+\end{verbatim}
+Before executing this command make sure to put your jobID into the file {\bf retrieve.osol }
+
+The result of the optimization will be put into a file called {\bf test.osrl} that will be in the directory in which you are running the {\bf OSSolverService.}
+
+\end{itemize}
+
+
+\item[5.] Test {\bf OSCommon}. Build the OSCommon library.  Build the {\bf OSCommon} library.  Do a {\bf make install}.   Then connect to {\bf apiExamples} directory, build and run the {\bf apiExample.}
+\end{itemize}
+
+\end{document}  

@@ -453,7 +453,7 @@ bool LindoSolver::optimize(){
 		//
 		//if(LSoptimize( pModel_, LS_METHOD_FREE, &nSolStatus) != 0)throw ErrorClass("Problem in optimize routine");
 		//if(LSsolveMIP( pModel_,  &nSolStatus) != 0)throw ErrorClass("Problem in optimize routine");
-		LSwriteMPIFile(pModel_, "/Users/kmartin/temp/hs71.mpi"); 
+		//LSwriteMPIFile(pModel_, "/Users/kmartin/temp/hs71.mpi"); 
 		// some testing // 
 		//cout << "NUMBER OF NEW SLACKS = " <<  m_iNumberNewSlacks << endl;
 		//for(int kj = 0; kj < osinstance->getConstraintNumber(); kj++){

@@ -1,5 +1,5 @@
 /****************************************************************
- *
+ * 
  * The author of this software is David M. Gay.
  *
  * Copyright (c) 1991, 2000, 2001 by Lucent Technologies.
@@ -16,7 +16,7 @@
  * OF THIS SOFTWARE OR ITS FITNESS FOR ANY PARTICULAR PURPOSE.
  *
  ***************************************************************/
-
+ 
 /* Please send bug reports to David M. Gay (dmg at acm dot org,
  * with " at " changed at "@" and " dot " changed to ".").	*/
 
@@ -1579,7 +1579,8 @@ os_strtod
 	double aadj, aadj1, adj, rv, rv0;
 	Long L;
 	ULong y, z;
-	Bigint *bb, *bb1, *bd, *bd0, *bs, *delta;
+	Bigint *bb = NULL, *bb1 = NULL, *bd = NULL, 
+	 	*bd0 = NULL, *bs = NULL, *delta = NULL;
 #ifdef SET_INEXACT
 	int inexact, oldinexact;
 #endif
@@ -2332,7 +2333,7 @@ os_strtod
 #ifdef Avoid_Underflow
 			if (scale && y <= 2*P*Exp_msk1) {
 				if (aadj <= 0x7fffffff) {
-					if ((z = aadj) <= 0)
+					if ((z = (ULong)aadj) <= 0)
 						z = 1;
 					aadj = z;
 					aadj1 = dsign ? aadj : -aadj;
@@ -2712,7 +2713,7 @@ os_dtoa
 		to hold the suppressed trailing zeros.
 	*/
 
-	int bbits, b2, b5, be, dig, i, ieps, ilim, ilim0, ilim1,
+	int bbits, b2, b5, be, dig, i, ieps, ilim = 0, ilim0, ilim1 =0,
 		j, j1, k, k0, k_check, leftright, m2, m5, s2, s5,
 		spec_case, try_quick;
 	Long L;
@@ -2720,7 +2721,7 @@ os_dtoa
 	int denorm;
 	ULong x;
 #endif
-	Bigint *b, *b1, *delta, *mlo, *mhi, *S;
+	Bigint *b, *b1, *delta, *mlo = NULL, *mhi, *S;
 	double d2, ds, eps;
 	char *s, *s0;
 #ifdef Honor_FLT_ROUNDS
@@ -2975,7 +2976,7 @@ os_dtoa
 			 */
 			dval(eps) = 0.5/tens[ilim-1] - dval(eps);
 			for(i = 0;;) {
-				L = dval(d);
+				L = (long int) dval(d);
 				dval(d) -= L;
 				*s++ = '0' + (int)L;
 				if (dval(d) < dval(eps))

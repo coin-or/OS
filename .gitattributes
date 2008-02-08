@@ -108,6 +108,8 @@ OS/data/osplFiles/knock.ospl -text
 OS/data/osrlFiles/parincLinear.osrl -text
 OS/data/osrlFiles/reducedcost.osrl -text
 OS/data/osrlFiles/rosenbrockmod.osrl -text
+OS/doc/OSReleaseProcedure.pdf -text
+OS/doc/OSReleaseProcedure.tex -text
 OS/doc/figures/OSDirectory.png -text
 OS/doc/figures/OSProjectRootDirectory.png -text
 OS/doc/figures/OSSolverService.pdf -text

@@ -256,7 +256,7 @@ bool CoinSolver::optimize()
 		m_OsiSolver->setDblParam(OsiObjOffset, osinstance->getObjectiveConstants()[0]);
 		//
 		// set the integer variables
-		int *intIndex;
+		int *intIndex = NULL;
 		int k = 0;
 		char *varType;
 		int numOfIntVars = osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables();
