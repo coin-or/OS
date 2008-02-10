@@ -69,15 +69,19 @@ AC_COIN_INIT_AUTO_TOOLS
 
 AC_C_BIGENDIAN
 
-# We also need to worry about long long if -pedantic used for OSdtoa
+# We also need to worry about long long 
+# if -pedantic used for OSdtoa then we crash without
 # the following was added to autoconf 2.60 -- put in when build tools switches over
 # this will define HAVE_LONG_LONG_INT
 #AC_TYPE_LONG_LONG_INT 
-#
+# but we have autoconf 2.60 so use the following deprecated
+#AC_CHECK_TYPE([long long],[],
+#      [AC_DEFINE([NO_LONG_LONG],[1],[use if there is no long long])],[])
 #
 AC_CHECK_SIZEOF( int)
 AC_CHECK_SIZEOF( double)
 AC_CHECK_SIZEOF( long)
+AC_CHECK_SIZEOF( long long)
 #
 
 #############################################################################
@@ -345,7 +349,13 @@ AC_ARG_ENABLE([nodtoa],
   no)  nodtoa=false ;;
   *) AC_MSG_ERROR(bad value ${enableval} for --enable-nodtoa) ;;
 esac],[nodtoa=false])
-AM_CONDITIONAL(USE_DTOA, test x$nodtoa = xfalse)
+
+if test $nodtoa = false; then
+   AC_DEFINE([USE_DTOA],[1],[use to get lossless IO])
+fi
+
+#the above make the below unnecessary
+#AM_CONDITIONAL(USE_DTOA, test x$nodtoa = xfalse)
 
 
 ############################################################################

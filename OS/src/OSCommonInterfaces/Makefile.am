@@ -59,9 +59,9 @@ endif
 
 AM_CPPFLAGS += -DLindo_Off 
 
-if USE_DTOA
-AM_CPPFLAGS += -DUSE_DTOA=1
-endif
+#if USE_DTOA
+#AM_CPPFLAGS += -DUSE_DTOA=1
+#endif
 
 
 # This line is necessary to allow VPATH compilation with MS compilers

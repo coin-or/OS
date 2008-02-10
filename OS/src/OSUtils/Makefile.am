@@ -43,9 +43,9 @@ AM_CPPFLAGS =\
 	-I`$(CYGPATH_W) $(srcdir)/..` 
 
 
-if USE_DTOA
-AM_CPPFLAGS += -DUSE_DTOA=1
-endif
+#if USE_DTOA
+#AM_CPPFLAGS += -DUSE_DTOA=1
+#endif
 
 
  

@@ -46,7 +46,6 @@ host_triplet = @host@
 @COIN_HAS_ASL_TRUE@am__append_1 = -I`$(CYGPATH_W) \
 @COIN_HAS_ASL_TRUE@	$(OSSRCDIR)/src/ThirdPartyASL` \
 @COIN_HAS_ASL_TRUE@	$(ASL_CPPFLAGS)
-@USE_DTOA_TRUE@am__append_2 = -DUSE_DTOA=1
 subdir = src/OSParsers
 DIST_COMMON = $(includecoin_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -257,8 +256,6 @@ SYMPHONYOBJDIR = @SYMPHONYOBJDIR@
 SYMPHONYSRCDIR = @SYMPHONYSRCDIR@
 USEMULTIPLYDEFINED_FALSE = @USEMULTIPLYDEFINED_FALSE@
 USEMULTIPLYDEFINED_TRUE = @USEMULTIPLYDEFINED_TRUE@
-USE_DTOA_FALSE = @USE_DTOA_FALSE@
-USE_DTOA_TRUE = @USE_DTOA_TRUE@
 VERSION = @VERSION@
 VOLDOCDIR = @VOLDOCDIR@
 VOLOBJDIR = @VOLOBJDIR@
@@ -370,8 +367,11 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/..` -I`$(CYGPATH_W) \
 	$(OSSRCDIR)/src/OSUtils` -I`$(CYGPATH_W) \
 	$(OSSRCDIR)/src/OSSolverInterfaces` -I`$(CYGPATH_W) \
 	$(CPPADSRCDIR)` -I`$(CYGPATH_W) \
-	$(OSSRCDIR)/src/OSCommonInterfaces` $(am__append_1) \
-	$(am__append_2)
+	$(OSSRCDIR)/src/OSCommonInterfaces` $(am__append_1)
+
+#if USE_DTOA
+#AM_CPPFLAGS += -DUSE_DTOA=1
+#endif
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin

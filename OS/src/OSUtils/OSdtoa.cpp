@@ -186,8 +186,15 @@
 
 
 // long long causes an error with -pedantic-errors
-#define NO_LONG_LONG 
+// below was working but not general
+//#define NO_LONG_LONG 
+//#define Just_16 
+
+
+#if  SIZEOF_LONG_LONG < 8
+#define NO_LONG_LONG
 #define Just_16 
+#endif
 
 #if  SIZEOF_LONG == 2*SIZEOF_INT
 #define Long int 

@@ -43,8 +43,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-@USE_DTOA_TRUE@am__append_1 = -DUSE_DTOA=1
-@COIN_HAS_ASL_TRUE@am__append_2 = -I`$(CYGPATH_W) \
+@COIN_HAS_ASL_TRUE@am__append_1 = -I`$(CYGPATH_W) \
 @COIN_HAS_ASL_TRUE@	$(OSSRCDIR)/src/ThirdPartyASL` \
 @COIN_HAS_ASL_TRUE@	$(ASL_CPPFLAGS)
 subdir = src/OSUtils
@@ -256,8 +255,6 @@ SYMPHONYOBJDIR = @SYMPHONYOBJDIR@
 SYMPHONYSRCDIR = @SYMPHONYSRCDIR@
 USEMULTIPLYDEFINED_FALSE = @USEMULTIPLYDEFINED_FALSE@
 USEMULTIPLYDEFINED_TRUE = @USEMULTIPLYDEFINED_TRUE@
-USE_DTOA_FALSE = @USE_DTOA_FALSE@
-USE_DTOA_TRUE = @USE_DTOA_TRUE@
 VERSION = @VERSION@
 VOLDOCDIR = @VOLDOCDIR@
 VOLOBJDIR = @VOLOBJDIR@
@@ -367,8 +364,11 @@ libOSUtils_la_LDFLAGS = $(LT_LDFLAGS)
 
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Windows
-AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/..` $(am__append_1) \
-	$(am__append_2)
+AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/..` $(am__append_1)
+
+#if USE_DTOA
+#AM_CPPFLAGS += -DUSE_DTOA=1
+#endif
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
