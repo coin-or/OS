@@ -276,7 +276,7 @@ int main(int argC, char* argV[])
 		
 		
 		//mpsFileName =  dataDir + "mpsFiles" + dirsep + "testfile2.mps";
-		//mpsFileName =  dataDir + "mpsFiles" + dirsep + "parinc.mps";
+		mpsFileName =  dataDir + "mpsFiles" + dirsep + "parinc.mps";
 		mps2osil = new OSmps2osil( mpsFileName);
 		// create the first in-memory OSInstance
 		mps2osil->createOSInstance() ;
