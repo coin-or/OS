@@ -95,9 +95,9 @@ SparseMatrix* MathUtil::convertLinearConstraintCoefficientMatrixToTheOtherMajor(
 
 double os_strtod_wrap(const char *str,  char **strEnd){
 #ifndef USE_DTOA
-	return os_strtod(str,  strEnd);
+	return strtod(str,  strEnd);	
 #else
-	return strtod(str,  strEnd);
+	return os_strtod(str,  strEnd);;
 #endif
 }//end os_strtod_wrap
 
