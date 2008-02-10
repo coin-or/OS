@@ -23515,6 +23515,7 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 
 
+#the following crashes on the Mac OS X with -C configure option
 echo "$as_me:$LINENO: checking for long long" >&5
 echo $ECHO_N "checking for long long... $ECHO_C" >&6
 if test "${ac_cv_type_long_long+set}" = set; then
@@ -23983,6 +23984,7 @@ echo "${ECHO_T}$ac_cv_sizeof_long_long" >&6
 cat >>confdefs.h <<_ACEOF
 #define SIZEOF_LONG_LONG $ac_cv_sizeof_long_long
 _ACEOF
+
 
 
 #

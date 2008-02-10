@@ -81,7 +81,9 @@ AC_C_BIGENDIAN
 AC_CHECK_SIZEOF( int)
 AC_CHECK_SIZEOF( double)
 AC_CHECK_SIZEOF( long)
+#the following crashes on the Mac OS X with -C configure option
 AC_CHECK_SIZEOF( long long)
+
 #
 
 #############################################################################
