@@ -79,7 +79,7 @@ AC_C_BIGENDIAN
 AC_LANG_PUSH( C++)
 
 #for now assume C++
-#AC_DEFINE([SIZEOF_LONG_LONG],[0],[in C++ make sure NO_LONG_LONG is less than 8])
+AC_DEFINE([SIZEOF_LONG_LONG],[0],[in C++ make sure NO_LONG_LONG is less than 8])
 #AC_CHECK_SIZEOF( long long)
 AC_CHECK_SIZEOF( int)
 AC_CHECK_SIZEOF( double)

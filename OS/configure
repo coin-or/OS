@@ -22111,7 +22111,11 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 
 #for now assume C++
-#AC_DEFINE([SIZEOF_LONG_LONG],[0],[in C++ make sure NO_LONG_LONG is less than 8])
+
+cat >>confdefs.h <<\_ACEOF
+#define SIZEOF_LONG_LONG 0
+_ACEOF
+
 #AC_CHECK_SIZEOF( long long)
 echo "$as_me:$LINENO: checking for int" >&5
 echo $ECHO_N "checking for int... $ECHO_C" >&6
