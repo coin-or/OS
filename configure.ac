@@ -75,7 +75,6 @@ AC_COIN_MAIN_SUBDIRS(OS)
 # configuration header file)
 AC_CONFIG_FILES([Makefile]) 
 
-AC_CHECK_SIZEOF( long long)
 
 # Finally, we let configure write all the output...
 AC_COIN_FINALIZE

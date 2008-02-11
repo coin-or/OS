@@ -30,10 +30,11 @@ AC_CONFIG_SRCDIR(src/OSUtils/OSErrorClass.cpp)
 # /usr/local.
 AC_PREFIX_DEFAULT([`pwd`])
 
+
+
 #############################################################################
 #                         Standard build tool stuff                         #
 #############################################################################
-
 # Get the system type
 AC_CANONICAL_BUILD
 
@@ -41,7 +42,7 @@ AC_CANONICAL_BUILD
 AC_COIN_PROJECTDIR_INIT
 
 LIBS_without_ADDLIBS="$LIBS"
-
+  
 # Check if user wants to produce debugging code
 AC_COIN_DEBUG_COMPILE(OS)
 
@@ -74,17 +75,16 @@ AC_C_BIGENDIAN
 # the following was added to autoconf 2.60 -- put in when build tools switches over
 # this will define HAVE_LONG_LONG_INT
 #AC_TYPE_LONG_LONG_INT 
-# but we have autoconf 2.60 so use the following deprecated
-#AC_CHECK_TYPE([long long],[],
-#      [AC_DEFINE([NO_LONG_LONG],[1],[use if there is no long long])],[])
-#
+
+AC_LANG_PUSH( C++)
+
+#for now assume C++
+#AC_DEFINE([SIZEOF_LONG_LONG],[0],[in C++ make sure NO_LONG_LONG is less than 8])
+#AC_CHECK_SIZEOF( long long)
 AC_CHECK_SIZEOF( int)
 AC_CHECK_SIZEOF( double)
 AC_CHECK_SIZEOF( long)
-#the following crashes on the Mac OS X with -C configure option
-AC_CHECK_SIZEOF( long long)
 
-#
 
 #############################################################################
 #                              COIN components                              #
