@@ -339,7 +339,7 @@ cd COIN-OS
 \end{verbatim}
 
 
-\noindent {\bf Step 2:} Run the configure script that will generate the makefiles.  If you are running on a machine with a FORTRAN 95 compiler present (e.g. {\tt gfortran}) run the command
+\noindent {\bf Step 2:} Run the configure script that will generate the makefiles.  If you are running on a machine with a Fortran compiler present (e.g. {\tt gfortran}) run the command
 
 \begin{verbatim}
 ./configure
@@ -503,7 +503,7 @@ Version 7 is no longer available for download from Microsoft.  Version 8 is at \
 \url{http://msdn2.microsoft.com/en-us/express/future/bb421472.aspx}.
 
 
-\item[Step 2] The part of the OS library responsible for communication with a remote server depends on some underlying Windows socket header files and libraries. These files are part of the commercial for-pay version, but are not included in the Visual C++ Express download. If  have the Express Edition, it is necessary to also download and install the Windows Platform SDK. This software is version independent and is at  \url{http://msdn2.microsoft.com/en-us/express/aa700755.aspx}.
+\item[Step 2] The part of the OS library responsible for communication with a remote server depends on some underlying Windows socket header files and libraries. These files are part of the commercial for-pay version, but are not included in the Visual C++ Express download. If you have the Express Edition, it is necessary to also download and install the Windows Platform SDK. This software is version independent and is at  \url{http://msdn2.microsoft.com/en-us/express/aa700755.aspx}.
 
 \item[Step 3] In the COIN-OR/OS directory you will find the folder MSVisualStudio, which contains root directories organized by the version of Visual Studio. We currently provide solution files for Version 7 and Version 8. Each contains project files for building the unitTest (OSTest.vcproj), the OSSolverService (OSSolverService,vcproj),   and the OS library libOS.vcproj. The Microsoft Visual Studio files are automatically downloaded with an SVN checkout. They are also contained in the tarballs (see Section \ref{section:getTarBalls}).
 
@@ -517,7 +517,7 @@ Open the project files (for instance by double clicking on them in Windows Explo
 {\tt Cygwin} provides a Unix emulation environment for Windows. It comes with numerous tools and libraries including the gcc compilers. See {\tt www.cygwin.com}.   Cygwin can be used with the Gnu Compiler Collection (gcc) or with the Microsoft {\tt cl} compiler.
 
 
-{\bf Using Cygwin with gcc:}  With Cygwin and the corresponding gcc compilers the OS project is  built exactly as described in Section \ref{section:svn}. If you have previously downloaded Cygwin with version gnome make version 3.81-1,  you must obtain a fixed 3.81 version from \url{http://www.cmake.org/files/cygwin/make.exe}. (See also  the Cygwin mailing list postings \url{http://cygwin.com/ml/cygwin/2006-09/msg00315.html} and \url{http://cygwin.com/ml/cygwin/2006-09/msg00153.html}).  See also the discussion at \url{https://projects.coin-or.org/BuildTools/wiki/current-issues}.
+{\bf Using Cygwin with gcc:}  With Cygwin and the corresponding gcc compilers the OS project is  built exactly as described in Section \ref{section:svn}. If you have previously downloaded Cygwin with gnome make version 3.81-1,  you must obtain a fixed 3.81 version from \url{http://www.cmake.org/files/cygwin/make.exe}. (See also  the Cygwin mailing list postings \url{http://cygwin.com/ml/cygwin/2006-09/msg00315.html} and \url{http://cygwin.com/ml/cygwin/2006-09/msg00153.html}).  See also the discussion at \url{https://projects.coin-or.org/BuildTools/wiki/current-issues}.
 
 
 \vskip 8pt
@@ -753,7 +753,7 @@ will not start.
 
 It is possible to build the OS project in a directory that is different from
 the directory where the source code is present. This is called a {\tt VPATH}
-compiliation.  A {\tt VPATH}  compilation  is very useful if you wish to
+compilation.  A {\tt VPATH}  compilation  is very useful if you wish to
 build several versions (e.g.\ debug and non-debug versions, or versions with
 availability of various combinations of third-party software) of the OS
 project from a single copy the source code.
@@ -886,7 +886,7 @@ variable is defined in  {\tt config\_os.h}.
 
 \subsubsection{AMPL}
 
-The OS library contains a class, {\tt OSnl2osil} (see Section (\ref{section:nl2osil}) ) and {\tt OSAmplClient} (see Section (\ref{section:amplclient}) ) that require the use of the AMPL ASL library.  See \url{http://netlib.sandia.gov/ampl/}  and  \url{http://www.ampl.com}. Users with a Unix system should locate the {\tt ASL} folder that is part of the distribution. The {\tt ASL} folder is in the {\tt ThirdParty} folder which is in the project root folder. Locate and execute the {\tt get.ASL} script.  Do this prior to running the {\tt configure} script. The {\tt configure} script will build the correct ASL library.
+The OS library contains a class, {\tt OSnl2osil} (see Section \ref{section:nl2osil}), and the program {\tt OSAmplClient} (see Section \ref{section:amplclient}) that require the use of the AMPL ASL library.  See \url{http://netlib.sandia.gov/ampl/}  and  \url{http://www.ampl.com}. Users with a Unix system should locate the {\tt ASL} folder that is part of the distribution. The {\tt ASL} folder is in the {\tt ThirdParty} folder which is in the project root folder. Locate and execute the {\tt get.ASL} script.  Do this prior to running the {\tt configure} script. The {\tt configure} script will build the correct ASL library.
 
 Microsoft  Visual Studio users will have to build the ASL library separately and then link it with the OS lib in the OS project file.  The necessary source files are at
 \begin{verbatim}
@@ -1165,7 +1165,7 @@ See Section \ref{section:applications}.
 
 \item {\tt MSVisualStudio} - is a directory that  contains solution files for the Microsoft Visual Studio IDE.  The subdirectories are organized by the version of Visual Studio. We currently provide a solution file for Version 7 and 8.
 
-\item {\tt schemas} - is the directory that contains the W3C XSD (see \url{www.w3c.org}) schemas that are behind the OS standards. These are described in more detail in Section \ref{section:schemadescriptions}.
+\item {\tt schemas} - is the directory that contains the W3C XSD (see \url{www.w3.org}) schemas that are behind the OS standards. These are described in more detail in Section \ref{section:schemadescriptions}.
 
 \item {\tt src} - is the directory with all of the source code for the OS Library and for the executable {\tt OSSolverService}. The OS Library components are described in Section \ref{section:oslibrary}.
 
@@ -1325,7 +1325,7 @@ matrix using three arrays as proposed in the earlier LPFML schema
 (\ref{eq:ro1}) and (\ref{eq:ro2}).}\label{figure:rolistMatrix}
 \end{figure}
 
-The quadratic part of the problem is represented  in Figure \ref{eq:ro1}.
+The quadratic part of the problem is represented  in Figure \ref{figure:qterms}.
 
 \begin{figure}[ht]
 \centering
@@ -1457,7 +1457,7 @@ It is the result of a {\tt knock} operation. See the example given in Section \r
 
 The {\tt OSAgent}  part of the library is used to facilitate communication with remote solvers. It is not used if the solver is invoked locally (i.e. on the same machine).   There are two key classes in the {\tt OSAgent} component of the OS library. The two classes are {\tt OSSolverAgent} and {\tt WSUtil}.
 
-The {\tt OSSolverAgent} class is used  contact a remote solver service.  For example, assume that {\tt sOSiL} is a string with a problem instance and {\tt sOSoL} is a string with solver options. Then the following code will call a solver service and invoke the {\tt the solve} method.
+The {\tt OSSolverAgent} class is used to contact a remote solver service.  For example, assume that {\tt sOSiL} is a string with a problem instance and {\tt sOSoL} is a string with solver options. Then the following code will call a solver service and invoke the {\tt solve} method.
 \begin{verbatim}
 OSSolverAgent *osagent;
 string serviceLocation = http://gsbkip.chicagogsb.edu/os/OSSolverService.jws
@@ -1470,7 +1470,7 @@ Other methods in the {\tt OSSolverAgent} class are {\tt send}, {\tt retrieve}, {
 
 The methods in the {\tt OSSolverAgent} class call methods in the {\tt WSUtil} class that perform such tasks as creating and parsing SOAP messages and making low level socket calls to the server running the solver service. The average user will not use methods in the {\tt WSUtil} class, but they are available to anyone wanting to make socket calls or create SOAP messages.
 
-There is also a method, {\tt OSFileUpload} in the OSAgentClass that is used to upload files from the hard drive of a client to the server. It is very fast and does not involve SOAP or Web Services. The {\tt OSFileUpload}  method is illustrated and described in the example code {\tt OSFileUpload.cpp} described in Section \ref{section:fileupload}.
+There is also a method, {\tt OSFileUpload}, in the OSAgentClass that is used to upload files from the hard drive of a client to the server. It is very fast and does not involve SOAP or Web Services. The {\tt OSFileUpload}  method is illustrated and described in the example code {\tt OSFileUpload.cpp} described in Section \ref{section:fileupload}.
 
 \subsection{OSCommonInterfaces}
 
@@ -4613,7 +4613,8 @@ Ted -- email of 12/10/2007
 
 %%%%%%
 Using SYMPHONY remotely.
-http://calvin.ie.lehigh.edu/os/OSSolverService.jws
+
+http://calvin.ie.lehigh.edu/os/OSSolverService.jws
 
 
 
