@@ -177,10 +177,10 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 									outStr << "<other" ;
 									outStr << " name=\"";
 									outStr << m_OSResult->resultData->optimization->solution[i]->variables->other[k]->name;
-									//outStr << "\"" ;
+									outStr << "\"" ;
 									outStr << " description=\"";
 									outStr << m_OSResult->resultData->optimization->solution[i]->variables->other[k]->description;
-									//outStr << "\"" ;
+									outStr << "\"" ;
 									outStr <<  ">" << endl;
 									if(m_OSResult->resultData->optimization->solution[i]->variables->other[k]->var.size() > 0){
 										for(j = 0; j < m_OSResult->resultData->optimization->numberOfVariables; j++){

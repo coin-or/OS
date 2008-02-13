@@ -575,18 +575,23 @@ int main(int argC, char* argV[])
 		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-1 , 1e-1);
 		if(ok == false) throw ErrorClass(" Fail unit test with clp on parincLinear");
+		// parse the osrl file
+		osrlreader =  new OSrLReader();
+		osrlreader->readOSrL( solver->osrl);
 		delete osilreader;
 		osilreader = NULL;	
 		delete solver;
 		solver = NULL;
 		delete osilwriter;
 		osilwriter = NULL;
+		delete osrlreader;
+		osrlreader = NULL;
 		unitTestResult << "Solved problem parincLinearByRow.osil with Clp" << std::endl;
 		// now solve another problem -- try an integer program
 		// this problem is also stored in base64 binary
 	}
 	catch(const ErrorClass& eclass){
-		unitTestResultFailure << "Sorry Unit Test Failed Testing Cbc Solver:"  + eclass.errormsg<< endl;
+		unitTestResultFailure << "Sorry Unit Test Failed Testing Clp Solver:"  + eclass.errormsg<< endl;
 	}
 	try{
 		std::cout << "create a new COIN Cbc for OSiL string solution" << std::endl;

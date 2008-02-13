@@ -54,6 +54,11 @@ SUBDIRS =
 #                    OSSolverService program                               #
 ########################################################################
 
+LDADD =
+ALLLDADD =
+LIBS = 
+OSSolverService_DEPENDENCIES =
+
 # Name of the executable compiled in this directory.  We want it to be
 # installed in the 'bin' directory
 bin_PROGRAMS = OSSolverService
@@ -67,70 +72,83 @@ OSSolverService_SOURCES = OSSolverService.cpp
 
 # List all additionally required COIN libraries
 
-OSSolverService_LDADD =  \
+LDADD +=  \
 	libOS.la \
 	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la 
 
-LIBS += `cat $(OSIOBJDIR)/osi_addlibs.txt`
+OSSolverService_DEPENDENCIES += libOS.la
 
 if COIN_HAS_SYMPHONY
- OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
+ LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
+ OSSolverService_DEPENDENCIES += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
 endif
 
- OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiClp/libOsiClp.la 
+LDADD += $(OSIOBJDIR)/src/OsiClp/libOsiClp.la 
+OSSolverService_DEPENDENCIES += $(OSIOBJDIR)/src/OsiClp/libOsiClp.la 
 
 if COIN_HAS_DYLP
- OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
+ LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
+ OSSolverService_DEPENDENCIES += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
 endif
 
 if COIN_HAS_VOL
- OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiVol/libOsiVol.la 
+ LDADD += $(OSIOBJDIR)/src/OsiVol/libOsiVol.la 
+ OSSolverService_DEPENDENCIES += $(OSIOBJDIR)/src/OsiVol/libOsiVol.la
 endif
 
 
 if COIN_HAS_CPX
- OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+ LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+ OSSolverService_DEPENDENCIES += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 endif
 
- OSSolverService_LDADD += $(CBCOBJDIR)/src/libCbc.la 
- LIBS += `cat $(CBCOBJDIR)/cbc_addlibs.txt`
+ LDADD += $(CBCOBJDIR)/src/libCbc.la 
+ADDLIBS += `cat $(CBCOBJDIR)/cbc_addlibs.txt`
+OSSolverService_DEPENDENCIES += $(CBCOBJDIR)/src/libCbc.la
 
 if COIN_HAS_SYMPHONY
- OSSolverService_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la 
- LIBS += `cat $(SYMPHONYOBJDIR)/sym_addlibs.txt`
+ LDADD += $(SYMPHONYOBJDIR)/src/libSym.la 
+ADDLIBS += `cat $(SYMPHONYOBJDIR)/sym_addlibs.txt`
+OSSolverService_DEPENDENCIES += $(SYMPHONYOBJDIR)/src/libSym.la 
 endif
 
- OSSolverService_LDADD += $(CGLOBJDIR)/src/libCgl.la 
- LIBS += `cat $(CGLOBJDIR)/cgl_addlibs.txt`
+ LDADD += $(CGLOBJDIR)/src/libCgl.la 
+ADDLIBS += `cat $(CGLOBJDIR)/cgl_addlibs.txt`
+OSSolverService_DEPENDENCIES += $(CGLOBJDIR)/src/libCgl.la 
 
- OSSolverService_LDADD += $(OSIOBJDIR)/src/libOsi.la 
- LIBS += `cat $(OSIOBJDIR)/osi_addlibs.txt`
+ LDADD += $(OSIOBJDIR)/src/libOsi.la 
+ADDLIBS += `cat $(OSIOBJDIR)/osi_addlibs.txt`
+OSSolverService_DEPENDENCIES +=  $(OSIOBJDIR)/src/libOsi.la 
 
- OSSolverService_LDADD += $(CLPOBJDIR)/src/libClp.la 
- LIBS += `cat $(CLPOBJDIR)/clp_addlibs.txt`
+ LDADD += $(CLPOBJDIR)/src/libClp.la 
+ADDLIBS += `cat $(CLPOBJDIR)/clp_addlibs.txt`
+OSSolverService_DEPENDENCIES +=  $(CLPOBJDIR)/src/libClp.la 
 
 if COIN_HAS_DYLP
- OSSolverService_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la 
- LIBS += `cat $(DYLPOBJDIR)/dylp_addlibs.txt`
+ LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la 
+ADDLIBS += `cat $(DYLPOBJDIR)/dylp_addlibs.txt`
+OSSolverService_DEPENDENCIES +=  $(DYLPOBJDIR)/src/Dylp/libDylp.la
 endif
 
 if COIN_HAS_VOL
- OSSolverService_LDADD += $(VOLOBJDIR)/src/libVol.la 
- LIBS += `cat $(VOLOBJDIR)/vol_addlibs.txt`
+ LDADD += $(VOLOBJDIR)/src/libVol.la 
+ADDLIBS += `cat $(VOLOBJDIR)/vol_addlibs.txt`
+OSSolverService_DEPENDENCIES +=  $(VOLOBJDIR)/src/libVol.la
 endif
 
 
 
 
 if COIN_HAS_GLPK
- OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
- OSSolverService_LDADD += $(GLPKLIB)
+ LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
+ LDADD += $(GLPKLIB)
+ OSSolverService_DEPENDENCIES +=  $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
+  OSSolverService_DEPENDENCIES +=  $(GLPKLIB)
 endif
 
-OSSolverService_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
-LIBS += `cat $(COINUTILSOBJDIR)/coinutils_addlibs.txt`
+LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
+ADDLIBS += `cat $(COINUTILSOBJDIR)/coinutils_addlibs.txt`
 
-OSSolverService_LDADD += $(ADDLIBS) 
 
 
 ########################################################################
@@ -206,11 +224,11 @@ if COIN_HAS_GLPK
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
 endif
 
-
+ 
 
 if COIN_HAS_LINDO
   AM_CPPFLAGS += -I`$(CYGPATH_W) $(LINDOINCDIR)` 
-  OSSolverService_LDADD += $(LINDOLIB)
+  LDADD += $(LINDOLIB)
 endif
 
 if COIN_HAS_IPOPT
@@ -219,15 +237,16 @@ if COIN_HAS_IPOPT
 	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/LinAlg` \
 	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Common` \
 	-I`$(CYGPATH_W) $(IPOPTOBJDIR)/inc`
-  OSSolverService_LDADD += $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
-  LIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
+  LDADD += $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+  OSSolverService_DEPENDENCIES +=  $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+ADDLIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
 endif
 
 
 
 if COIN_HAS_KNITRO
   AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(KNITROINCDIR)` 
-  OSSolverService_LDADD += $(KNITROLIB)
+  LDADD += $(KNITROLIB)
 if USEMULTIPLYDEFINED
   OSSolverService_LDFLAGS += -multiply_defined suppress
 endif
@@ -237,7 +256,7 @@ endif
 if COIN_HAS_ASL
   AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
   AM_CPPFLAGS += $(ASL_CPPFLAGS) 
-  OSSolverService_LDADD += $(ASLLIB) 
+  LDADD += $(ASLLIB) 
 endif
 
 
@@ -245,7 +264,11 @@ endif
 # on Cygwin
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 
+ALLLDADD += $(LDADD) 
 
+
+
+OSSolverService_LDADD = $(ALLLDADD) $(ADDLIBS)  
 ########################################################################
 #                Headers that need to be installed                     #
 ########################################################################
