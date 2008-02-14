@@ -170,8 +170,14 @@
 /* The size of a `long', as computed by sizeof. */
 #undef SIZEOF_LONG
 
+/* in C++ make sure SIZEOF_LONG_LONG is less than 8 */
+#undef SIZEOF_LONG_LONG
+
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
+
+/* use to get lossless IO */
+#undef USE_DTOA
 
 /* use if OS is Cygwin and complier is gnu */
 #undef USE_OLD_UNISTD

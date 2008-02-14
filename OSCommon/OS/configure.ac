@@ -73,6 +73,7 @@ AC_C_BIGENDIAN
 # this will define HAVE_LONG_LONG_INT
 #AC_TYPE_LONG_LONG_INT 
 #
+AC_DEFINE([SIZEOF_LONG_LONG],[0],[in C++ make sure SIZEOF_LONG_LONG is less than 8])
 #
 AC_CHECK_SIZEOF( int)
 AC_CHECK_SIZEOF( double)
@@ -189,7 +190,11 @@ AC_ARG_ENABLE([nodtoa],
   no)  nodtoa=false ;;
   *) AC_MSG_ERROR(bad value ${enableval} for --enable-nodtoa) ;;
 esac],[nodtoa=false])
-AM_CONDITIONAL(USE_DTOA, test x$nodtoa = xfalse)
+
+if test $nodtoa = false; then
+   AC_DEFINE([USE_DTOA],[1],[use to get lossless IO])
+fi
+
 
 
 ############################################################################
