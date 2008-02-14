@@ -22116,6 +22116,8 @@ cat >>confdefs.h <<\_ACEOF
 #define SIZEOF_LONG_LONG 0
 _ACEOF
 
+
+# the following does not work for cached variables
 #AC_CHECK_SIZEOF( long long)
 echo "$as_me:$LINENO: checking for int" >&5
 echo $ECHO_N "checking for int... $ECHO_C" >&6
@@ -29615,8 +29617,10 @@ esac
 
 # In case this is a VPATH configuration we need to make sure that the
 # input files for the examples are available in the VPATH directory.
+
+
 ##
-## osil test files
+## the help file
 ##
 echo "$as_me:$LINENO: checking whether this is a VPATH configuration" >&5
 echo $ECHO_N "checking whether this is a VPATH configuration... $ECHO_C" >&6
@@ -29628,6 +29632,15 @@ fi
 echo "$as_me:$LINENO: result: $coin_vpath_config" >&5
 echo "${ECHO_T}$coin_vpath_config" >&6
 
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files src/help.txt"
+fi
+
+
+##
+## osil test files
+##
 
 if test $coin_vpath_config = yes; then
   coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/parincLinear.osil"

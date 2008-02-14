@@ -551,6 +551,13 @@ AC_SUBST(oslib)
 
 # In case this is a VPATH configuration we need to make sure that the
 # input files for the examples are available in the VPATH directory.
+
+
+##
+## the help file
+##
+AC_COIN_VPATH_LINK(src/help.txt)
+
 ##
 ## osil test files
 ##

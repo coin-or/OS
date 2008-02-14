@@ -203,7 +203,6 @@ OS/src/OSModelInterfaces/OSnl2osil.cpp -text
 OS/src/OSModelInterfaces/OSnl2osil.h -text
 OS/src/OSParsers/Makefile.am -text
 OS/src/OSParsers/Makefile.in -text
-OS/src/OSParsers/OSOptionsStruc.h -text
 OS/src/OSParsers/OSParseosil.cpp -text
 OS/src/OSParsers/OSParseosil.l -text
 OS/src/OSParsers/OSParseosil.tab.cpp -text
@@ -250,6 +249,7 @@ OS/src/OSUtils/OSMathUtil.h -text
 OS/src/OSUtils/OSParameters.h -text
 OS/src/OSUtils/OSdtoa.cpp -text
 OS/src/OSUtils/OSdtoa.h -text
+OS/src/help.txt -text
 OS/stylesheets/OSrL.css -text
 OS/stylesheets/OSrL.xslt -text
 OS/test/Makefile.am -text

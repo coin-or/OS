@@ -189,7 +189,11 @@ int main(int argC, const char* argV[])
 	osoptions->solverName = ""; 
 	osoptions->browser = ""; 
 	try{
-		if(argC < 2) throw ErrorClass( "there must be at least one command line argument");
+		if(argC < 2){
+			std::cout << "There must be at least one command line argument" << std::endl;
+			std::cout << "Try -help or --help" << std::endl;
+			return 1;
+		}
 		// see if the first argument is a file name
 		i = 1;
 		while(i < argC) {
@@ -224,11 +228,23 @@ int main(int argC, const char* argV[])
 	}
 		catch(const ErrorClass& eclass){
 		cout << eclass.errormsg <<  endl;
+		cout << "try -help or --help" <<  endl;
 		ossslex_destroy( scanner);
 		delete fileUtil;
 		delete osoptions;
 		return 1;
 	} 
+		if(osoptions->invokeHelp == true){
+			FileUtil *helpFileUtil = NULL;  
+			helpFileUtil = new FileUtil();
+			std::string helpTxt = helpFileUtil->getFileAsString( "help.txt" );
+			std::cout << helpTxt << std::endl;
+			delete	osoptions;
+			osoptions = NULL;	
+			delete fileUtil;
+			fileUtil = NULL;
+			return 0;
+		}
 		cout << "HERE ARE THE OPTION VALUES:" << endl;
 		if(osoptions->configFile != "") cout << "Config file = " << osoptions->configFile << endl;
 		if(osoptions->osilFile != "") cout << "OSiL file = " << osoptions->osilFile << endl;

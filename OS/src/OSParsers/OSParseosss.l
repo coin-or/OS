@@ -130,6 +130,21 @@ browserState (on|off)
 }
 
 
+(--help) {
+	printf("Found option:  %s\n", yytext);  
+	yyextra->invokeHelp = true;
+	//printf("gsgersdf= %d\n", gster);
+}
+
+(-help) {
+	printf("Found option:  %s\n", yytext); 
+	yyextra->invokeHelp = true;
+	//printf("gsgersdf= %d\n", gster); 
+	
+}
+
+
+
 (-osil{xmlwhitespace}+{optionValue}) {
 	if(yyextra->osilFile == ""){
 		printf("Found option:  %s\n", yytext);  

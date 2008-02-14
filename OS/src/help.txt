@@ -1,0 +1,21 @@
+ In this HELP file we assume that  the solve service method is used. See Section 10.3 of the User's Manual for other service methods. The OSSolverService takes the following parameters. The order of the parameters is irrelevant.  Not all the parameters are required.  However, the location of an instance file is required.
+
+*  -osil xxx.osil  this is the name of the file that contains the optimization instance in OSiL format. It is assumed that this file is available in a directory on the machine that is running {\tt OSSolverService}. If this option is not specified then the instance location must be specified in the OSoL solver options file.
+
+*  -osol xxx.osol  this is the name of the file that contains the solver options. It is assumed that this file is available in a directory on the machine that is running {\tt OSSolverService}. It is not necessary to specify this option.
+
+*  -osrl xxx.osrl  this is the name of the file that contains the solver solution. A valid file path must be given on the machine that is running {\tt OSSolverService}. It is not necessary to specify this option.
+
+* -serviceLocation url  is the URL of the solver service. This is not required, and if not specified it is assumed that the problem is solved locally.
+
+*  -serviceMethod  methodName  this is  the method on the solver service to be invoked. The options are  solve,  send,  kill,  knock,  getJobID, and t retrieve.  This option is not required, and the default value is  solve.
+
+*  -mps  xxx.mps  this is the name of the mps file if the problem instance is in mps format. It is assumed that this file is available in a directory on the machine that is running OSSolverService. The default file format is OSiL so this option is not required.
+
+*  -nl  xxx.nl  this is the name of the AMPL nl file if the problem instance is in AMPL nl  format. It is assumed that this file is available in a directory on the machine that is running {\tt OSSolverService}. The default file format is OSiL so this option is not required.
+
+*  -solver  solverName  Possible values for default OS installation are  clp (COIN-OR Clp), cbc (COIN-OR Cbc), dylp (COIN-OR DyLP), and symphony (COIN-OR SYMPHONY). Other solvers supported (if the necessary libraries are present) are cplex (Cplex through COIN-OR Osi),  glpk (glpk through COIN-OR Osi), ipopt (COIN-OR Ipopt),  knitro (Knitro), and lindo (LINDO). If no value is specified for this parameter, then cbc  is the default value of this parameter.
+
+*  -browser  browserName this paramater is a path to the browser on the local machine. If this optional parameter is specified then the solver result in OSrL format is transformed using XSLT into HTML and displayed in the browser.
+
+*  -config pathToConfigureFile this parameter specifies a path on the local machine to a text file containing values for the input parameters. This is convenient for the user not wishing to constantly retype parameter values.

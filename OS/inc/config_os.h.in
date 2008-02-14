@@ -197,7 +197,7 @@
 /* The size of a `long', as computed by sizeof. */
 #undef SIZEOF_LONG
 
-/* in C++ make sure NO_LONG_LONG is less than 8 */
+/* in C++ make sure SIZEOF_LONG_LONG is less than 8 */
 #undef SIZEOF_LONG_LONG
 
 /* Define to 1 if you have the ANSI C header files. */
