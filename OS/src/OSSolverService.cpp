@@ -162,6 +162,7 @@ int main(int argC, const char* argV[])
 {  	
 	void* scanner;
 	FileUtil *fileUtil = NULL;
+	FileUtil *inputFileUtil = NULL; 
 	char osss[MAXCHARS] = " ";
 	const char *space = " "; 
 	//char *config = "-config";
@@ -188,6 +189,8 @@ int main(int argC, const char* argV[])
 	osoptions->nlFile = ""; 
 	osoptions->solverName = ""; 
 	osoptions->browser = ""; 
+	osoptions->invokeHelp = false;
+	osoptions->writeVersion = false;
 	try{
 		if(argC < 2){
 			std::cout << "There must be at least one command line argument" << std::endl;
@@ -234,17 +237,40 @@ int main(int argC, const char* argV[])
 		delete osoptions;
 		return 1;
 	} 
-		if(osoptions->invokeHelp == true){
-			FileUtil *helpFileUtil = NULL;  
-			helpFileUtil = new FileUtil();
-			std::string helpTxt = helpFileUtil->getFileAsString( "help.txt" );
-			std::cout << helpTxt << std::endl;
+		try{
+			if(osoptions->invokeHelp == true){ 
+				inputFileUtil = new FileUtil();
+				std::string helpTxt = inputFileUtil->getFileAsString( "help.txt" );
+				std::cout << std::endl << std::endl;
+				std::cout << helpTxt << std::endl;
+				delete	osoptions;
+				osoptions = NULL;	
+				delete inputFileUtil;
+				inputFileUtil = NULL;
+				return 0;
+			}
+			if(osoptions->writeVersion == true){ 
+				inputFileUtil = new FileUtil();
+				std::string writeTxt = "OS Version 1.0\n";
+				writeTxt += inputFileUtil->getFileAsString( "version.txt" );
+				std::cout << std::endl << std::endl;
+				std::cout << writeTxt << std::endl;
+				delete	osoptions;
+				osoptions = NULL;	
+				delete inputFileUtil;
+				inputFileUtil = NULL;
+				return 0;
+			}
+		}
+		catch(const ErrorClass& eclass){
+			cout << eclass.errormsg <<  endl;
+			cout << "try -help or --help" <<  endl;
 			delete	osoptions;
 			osoptions = NULL;	
-			delete fileUtil;
-			fileUtil = NULL;
-			return 0;
-		}
+			delete inputFileUtil;
+			inputFileUtil  = NULL;
+			return 1;
+		} 
 		cout << "HERE ARE THE OPTION VALUES:" << endl;
 		if(osoptions->configFile != "") cout << "Config file = " << osoptions->configFile << endl;
 		if(osoptions->osilFile != "") cout << "OSiL file = " << osoptions->osilFile << endl;
@@ -296,6 +322,7 @@ int main(int argC, const char* argV[])
 		catch(const ErrorClass& eclass){
 			//cout << eclass.errormsg <<  endl;
 			cout << "could not open file properly" << endl;
+			cout << "try -help or --help" <<  endl;
 			delete	osoptions;
 			osoptions = NULL;	
 			delete fileUtil;

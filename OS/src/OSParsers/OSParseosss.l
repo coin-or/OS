@@ -143,6 +143,19 @@ browserState (on|off)
 	
 }
 
+(--version) {
+	printf("Found option:  %s\n", yytext);  
+	yyextra->writeVersion = true;
+	//printf("gsgersdf= %d\n", gster);
+}
+
+(-version) {
+	printf("Found option:  %s\n", yytext); 
+	yyextra->writeVersion = true;
+	//printf("gsgersdf= %d\n", gster); 
+	
+}
+
 
 
 (-osil{xmlwhitespace}+{optionValue}) {

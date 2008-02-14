@@ -32,6 +32,8 @@ AC_PREFIX_DEFAULT([`pwd`])
 
 
 
+
+
 #############################################################################
 #                         Standard build tool stuff                         #
 #############################################################################
@@ -683,9 +685,20 @@ AC_CONFIG_FILES([Makefile
           applications/amplClient/Makefile
           applications/fileUpload/Makefile
           os_addlibs.txt])
+          
 
 # Here put the location and name of the configuration header file
 AC_CONFIG_HEADER([inc/config_os.h])
 
 # Finally, we let configure write all the output...
 AC_COIN_FINALIZE
+
+
+#create a file with the current version 
+
+cd $srcdir
+#pwd
+svn info | tail -4 > $ac_default_prefix/src/version.txt
+cd $ac_default_prefix
+#pwd
+

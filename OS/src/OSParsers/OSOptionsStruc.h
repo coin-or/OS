@@ -140,6 +140,11 @@ struct osOptionsStruc{
 	 */
 	bool invokeHelp;
 	
+	/** if this parameter is true we print the current version
+	 * of the OS project 
+	 */
+	bool writeVersion;
+	
 };
 
 
