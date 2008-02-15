@@ -352,7 +352,7 @@ In order to build the OS project on Unix/Linux systems do the following.
 
 
 \noindent {\bf Step 2:} \label{itemize:unixbuilds} Run the configure script that will generate the makefiles.  
-If you are running on a machine with a Fortran compiler present (e.g. {\tt gfortran}), and you have
+If you are running on a machine with a Fortran 95 compiler present (e.g. {\tt gfortran}), and you have
 previously downloaded the third-party software packages {\tt BLAS} and {\tt Mumps} (see Section~\ref{section:ipopt}),
  run the command
 
@@ -382,7 +382,7 @@ by remembering and reusing the results of tests already performed.
 
 \url{https://projects.coin-or.org/BuildTools/wiki/user-configure#PreparingtheCompilation}.
 
-
+\item You  cannot apply  {\tt COIN\_SKIP\_PROJECTS} to {\tt Cbc}, {\tt Clp}, {\tt Cgl}, {\tt CoinUtils}, {\tt CppAD}, or {\tt Osi}. These projects must be present.
 \end{itemize}
 
 
@@ -887,22 +887,19 @@ CFLAGS = -MTd -DUSE_CLOCK -DMSDOS -DNO_ONEXIT
 
 \subsection{Other Third-Party Software} \label{section:otherthirdparty}
 
-This is software not available for download at \url{www.coin-or.org}. The default OS project is configured 
-out-of-the-box with the COIN-OR  projects {\tt Cbc}, {\tt Clp}, {\tt Cgl}, {\tt CoinUtils}, {\tt CppAD},  
-{\tt DyLP}, {\tt SYMPHONY}, and {\tt Vol}.  However, the project is also designed to work with other COIN-OR 
-projects and several other open source and commercial software projects. These projects are reflected in the
-OS distribution directory structure (see Figure~\ref{figure:osprojectrootdir}), although by default they do
-not contain anything other than {\tt get.xxxx} scripts and other utilities. The source code for any of these
-packages must be downloaded separately, and the entire project must be {\tt configure}d again (in the
-distribution root directory or with a VPATH installation as explained in Section~\ref{section:vpath}).
+Third-Party is software not available for download at \url{www.coin-or.org}. The OS project distribution  includes the COIN-OR  projects {\tt Cbc}, {\tt Clp}, {\tt Cgl}, {\tt CoinUtils}, {\tt CppAD},   {\tt DyLP},   {\tt Ipopt},  {\tt Osi}, {\tt SYMPHONY}, and {\tt Vol}.  However, the project is also designed to work with  several other open source and commercial software projects.      In the 
+OS distribution directory structure (see Figure~\ref{figure:osprojectrootdir}), there is a {\tt ThirdParty} directory, but it does not contain anything other than {\tt get.xxxx} scripts and other utilities.  The source code for any of these
+packages must be downloaded separately using the {\tt get.xxx} scripts and the {\tt configure} will not build these projects without the source code being present.
+
+
 
 In many of the header files there are {\tt \#include} statements inside {\tt  \#ifdef}  statements. For example,
 \begin{verbatim}
 #ifdef COIN_HAS_LINDO
 #include "LindoSolver.h"
 #endif
-#ifdef COIN_HAS_IPOPT
-#include "IpoptSolver.h"
+#ifdef COIN_HAS_GLPK
+#include <OsiGlpkSolverInterface.hpp>
 #endif
 \end{verbatim}
 In the {\tt inc} subdirectory of the {\tt OS}  directory, there is a header file, {\tt config\_os.h} that defines the values of the
@@ -1125,10 +1122,12 @@ The build process described in Section \ref{section:svn} has been tested on Linu
 AMPL-Client &x&x&&x&& \\ \hline
 MATLAB &x&&&&& \\ \hline
 Cbc &x&x&x&x&x&x \\ \hline
+Cgl &x&x&x&x&x&x \\ \hline
 Clp &x&x&x&x&x&x \\ \hline
 Cplex &&x&&&& \\ \hline
 DyLP &x&x&x&x&x&x \\ \hline
-Ipopt &x&x&x&x&& \\ \hline
+Glpk &x&x&x&&x&x \\ \hline
+Ipopt &x&x&x&x&x& \\ \hline
 Knitro &x&x&&&& \\ \hline
 Lindo &x&x&&x&&x \\ \hline
 SYMPHONY &x&x&x&x&x&x \\ \hline
