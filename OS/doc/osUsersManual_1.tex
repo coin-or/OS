@@ -6,7 +6,8 @@
 \usepackage{url}
 %\usepackage{secdot}
 %\usepackage{natbib}
-\usepackage{verbatim, moreverb}
+\usepackage{verbatim}
+%\usepackage{moreverb}
 \bibliographystyle{plain}
 
 
@@ -212,19 +213,22 @@ c., Scottsdale, Arizona, US
 
 If so, select {\tt (p)} and you should not get this message again.
 
-On Windows with TortoiseSVN, create a directory {\tt COIN-OS} in the desired location and right-click on this directory.   Select the menu item {\tt SVN Checkout ...} and in the textbox ``{\tt URL of Repository}''
+On Windows with TortoiseSVN, create a directory {\tt COIN-OS} in the desired location and right-click on this directory.   
+Select the menu item {\tt SVN Checkout ...} and in the textbox ``{\tt URL of Repository}''
 give the URL for the version of the OS project you wish to check out, e.g. https://projects.coin-or.org/svn/OS/stable/1.0.
 
 
 Now build the project as described in  Section \ref{section:build}.
 
-For the rest of this documentation, we assume that  {\tt COIN-OS} is the name of the root directory of the OS project and that the user has defined an environment variable {\tt OS} that is the path to {\tt COIN-OS}.  The {\tt COIN-OS} directory structure is illustrated in Figure \ref{figure:osprojectrootdir}. OS source code is mainly contained inside of the OS subdirectory. Other first level subdirectories are mostly external projects (COIN-OR or third party) that the OS project depends on.
+For the rest of this documentation, we assume that  {\tt COIN-OS} is the name of the root directory 
+of the OS project distribution and that the user has defined an environment variable {\tt OS} that is the path to 
+{\tt COIN-OS}.  The {\tt COIN-OS} directory structure is illustrated in Figure~\ref{figure:osprojectrootdir}. OS source code is mainly contained inside of the OS subdirectory. Other first level subdirectories are mostly external projects (COIN-OR or third party) that the OS project depends on.
 
 
 \begin{figure}
 \centering
 \includegraphics[scale=0.7]{\figurepath/OSProjectRootDirectory.png}
-\caption{The OS project root directory.}
+\caption{The OS distribution root directory.}
 \label{figure:osprojectrootdir}
 \end{figure}
 
@@ -249,7 +253,10 @@ The OS source code can also be obtained from either a  tarball or zip file.  Thi
 
 \vskip 8pt
 
-{\bf Step 1:} In a browser open the link \url{http://www.coin-or.org/Tarballs/OS/}.  Listed at this page are files in the format:
+\begin{enumerate}
+\item
+[{\bf Step 1:}]
+In a browser open the link \url{http://www.coin-or.org/Tarballs/OS/}.  Listed at this page are files in the format:
 
 \begin{verbatim}
 OS-release_number.tgz
@@ -258,11 +265,15 @@ OS-release_number.zip
 
 \vskip 8pt
 
-{\bf Step 2:} Click on either the {\tt tgz} or {\tt zip} file and download to the desired directory.
+\item
+[{\bf Step 2:}]
+Click on either the {\tt tgz} or {\tt zip} file and download to the desired directory.
 
 \vskip 8pt
 
-{\bf Step 3:} Unpack the files. For {\tt tgz} do the following at the command line:
+\item
+[{\bf Step 3:}]
+Unpack the files. For {\tt tgz} do the following at the command line:
 \begin{verbatim}
 gunzip OS-release_number.tgz
 tar -xvf OS-release_number.tar
@@ -272,7 +283,10 @@ Windows users should be  able to double click on the file {\tt OS-release\_numbe
 
 \vskip 8pt
 
-{\bf Step 4:} Rename {\tt OS-release\_number} to {\tt COIN-OS}.
+\item
+[{\bf Step 4:}]
+Rename {\tt OS-release\_number} to {\tt COIN-OS}.
+\end{enumerate}
 
 
 Now build the project as described in  Section \ref{section:build}.
@@ -331,15 +345,16 @@ In order to build the OS project on Unix/Linux systems do the following.
 \vskip 8pt
 
 
-\noindent {\bf Step 1:}  Make and connect to the distribution root directory.
+\noindent {\bf Step 1:}  Connect to the OS distribution root directory ({\tt COIN-OS} in Figure~\ref{figure:osprojectrootdir}).
 
-\begin{verbatim}
-mkdir COIN-OS
-cd COIN-OS
-\end{verbatim}
+\vskip 8pt
 
 
-\noindent {\bf Step 2:} Run the configure script that will generate the makefiles.  If you are running on a machine with a Fortran compiler present (e.g. {\tt gfortran}) run the command
+
+\noindent {\bf Step 2:} \label{itemize:unixbuilds} Run the configure script that will generate the makefiles.  
+If you are running on a machine with a Fortran compiler present (e.g. {\tt gfortran}), and you have
+previously downloaded the third-party software packages {\tt BLAS} and {\tt Mumps} (see Section~\ref{section:ipopt}),
+ run the command
 
 \begin{verbatim}
 ./configure
@@ -441,11 +456,19 @@ then you have not passed the unitTest and hopefully some semi-intelligible error
 make install
 \end{verbatim}
 
-This will install all of the libraries in the  {\tt lib} directory.  In particular, the main OS library {\tt libOS} along with the libraries of the other COIN-OR projects  that download with the OS project will get installed in the {\tt lib} directory.  In addition the {\tt make install} command will install four executable programs in the {\tt bin} directory.  One of these binaries is {\tt OSSolverService} which is the main OS project executable. This is described in Section \ref{section:ossolverservice}. In addition {\tt clp}, {\tt cbc}, {\tt ipopt}, and {\tt symphony} get installed  in the {\tt bin} directory.  Necessary header files are installed in the {\tt include} directory.   In this case, {\tt bin}, {\tt lib}, and {\tt include} are all subdirectories of where {\tt ./configure} is run.   If the user wants these files installed elsewhere, then configure should specify the {\tt prefix} of these directories.  That is,
+This will install all of the libraries in the  {\tt lib} directory.  In particular, the main OS library {\tt libOS} 
+along with the libraries of the other COIN-OR projects  that download with the OS project will get installed 
+in the {\tt lib} directory.  In addition the {\tt make install} command will install four executable programs in 
+the {\tt bin} directory.  One of these binaries is {\tt OSSolverService} which is the main OS project executable. 
+This is described in Section \ref{section:ossolverservice}. In addition {\tt clp}, {\tt cbc}, {\tt ipopt}, 
+and {\tt symphony} get installed  in the {\tt bin} directory.  Necessary header files are installed in the 
+{\tt include} directory.   In this case, {\tt bin}, {\tt lib}, and {\tt include} are all subdirectories of where 
+{\tt ./configure} is run.   If the user wants these files installed elsewhere, then {\tt configure} should specify 
+the {\tt prefix} of these directories.  That is,
 
 
 \begin{verbatim}
-./configure  --prefix=prefixDirctory  COIN_SKIP_PROJECTS=Ipopt
+./configure  --prefix=prefixDirectory  COIN_SKIP_PROJECTS=Ipopt
 \end{verbatim}
 
 For example, running
@@ -459,7 +482,7 @@ For example, running
 \begin{verbatim}
 /usr/local/bin
 /usr/local/include
-/usr/local/lilb
+/usr/local/lib
 \end{verbatim}
 
 \vskip 8pt
@@ -517,7 +540,9 @@ Open the project files (for instance by double clicking on them in Windows Explo
 {\tt Cygwin} provides a Unix emulation environment for Windows. It comes with numerous tools and libraries including the gcc compilers. See {\tt www.cygwin.com}.   Cygwin can be used with the Gnu Compiler Collection (gcc) or with the Microsoft {\tt cl} compiler.
 
 
-{\bf Using Cygwin with gcc:}  With Cygwin and the corresponding gcc compilers the OS project is  built exactly as described in Section \ref{section:svn}. If you have previously downloaded Cygwin with gnome make version 3.81-1,  you must obtain a fixed 3.81 version from \url{http://www.cmake.org/files/cygwin/make.exe}. (See also  the Cygwin mailing list postings \url{http://cygwin.com/ml/cygwin/2006-09/msg00315.html} and \url{http://cygwin.com/ml/cygwin/2006-09/msg00153.html}).  See also the discussion at \url{https://projects.coin-or.org/BuildTools/wiki/current-issues}.
+{\bf Using Cygwin with gcc:}  With Cygwin and the corresponding gcc compilers the OS project is  
+built exactly as described in Section \ref{section:unixbuilds}. If you have previously downloaded 
+Cygwin with gnome make version 3.81-1,  you must obtain a fixed 3.81 version from \url{http://www.cmake.org/files/cygwin/make.exe}. (See also  the Cygwin mailing list postings \url{http://cygwin.com/ml/cygwin/2006-09/msg00315.html} and \url{http://cygwin.com/ml/cygwin/2006-09/msg00153.html}).  See also the discussion at \url{https://projects.coin-or.org/BuildTools/wiki/current-issues}.
 
 
 \vskip 8pt
@@ -749,7 +774,7 @@ will not start.
 
 
 
-\subsection{VPATH Installations}
+\subsection{VPATH Installations} \label{section:vpath}
 
 It is possible to build the OS project in a directory that is different from
 the directory where the source code is present. This is called a {\tt VPATH}
@@ -760,16 +785,18 @@ project from a single copy the source code.
 
 For  example, assume you wish to build a debug version of the OS project in
 the directory {\tt vpath-debug} and that {\tt ../COIN-OS} is the path to the
-root of the OS project distribution.  From the {\tt vpath-debug} directory,
+root of the OS project distribution.  Create the {\tt vpath-debug} directory,
+leaving it empty for the moment.
+From the {\tt vpath-debug} directory,
 run {\tt configure} as follows:
 
 \begin{verbatim}
 ../COIN-OS/configure --enable-debug
 \end{verbatim}
 %
-After you run {\tt configure}, the OS project directory structure will be
-present in the {\tt vpath-debug} directory along with all of the necessary
-{\tt Makefile}s.  Next from the {\tt vpath-debug} directory execute
+After you run {\tt configure}, the OS distribution directory structure (see Figure~\ref{figure:osprojectrootdir})
+will be mirrored in the {\tt vpath-debug} directory, and all of the necessary
+{\tt Makefile}s will be copied there.  Next from the {\tt vpath-debug} directory execute
 
 \begin{verbatim}
 make
@@ -793,7 +820,12 @@ in the {\tt ../COIN-OS} directory.
 \subsection{Using Ipopt}\label{section:ipopt}
 
 
-Ipopt is a COIN-OR project (\url{projects.coin-or.org/Ipopt}) and is included in the download with the OS project. However, unlike the other COIN-OR projects that download with OS, the Ipopt project requires third-party software that is based on FORTRAN and care must be taken if you wish to build OS with the  Ipopt solver.  You can  exclude Ipopt from the OS  build by adding the option
+Ipopt is a COIN-OR project (\url{projects.coin-or.org/Ipopt}) and is included in the download with the OS project. 
+However, unlike the other COIN-OR projects that download with OS, the Ipopt project requires third-party software 
+that is based on FORTRAN and and is {\it not} part of the default distribution. Care must therefore be taken if 
+you wish to build OS with the  Ipopt solver.  
+
+You can  exclude Ipopt from the OS  build by adding the option
 
 \begin{verbatim}
 COIN_SKIP_PROJECTS=Ipopt
@@ -801,10 +833,12 @@ COIN_SKIP_PROJECTS=Ipopt
 to the {\tt configure} script.
 
 
-If you do choose to build Ipopt, first get the necessary third-party software.  First connect into the {\tt ThirdParty} directory. Then execute the following commands:
+If you do choose to build Ipopt, it is best to work in Unix or one of the Unix-like environments described in
+section~\ref{section:windowsinstall} (we recommend MSYS). To get the necessary third-party software, first 
+connect into the {\tt ThirdParty} directory. Then execute the following commands:
 
 \begin{verbatim}
-$ cd /Blas
+$ cd Blas
 $ ./get.Blas
 $ cd ../Lapack
 $ ./get.Lapack
@@ -851,9 +885,16 @@ CFLAGS = -MTd -DUSE_CLOCK -DMSDOS -DNO_ONEXIT
 
 
 
-\subsection{Other third-Party Software}
+\subsection{Other Third-Party Software} \label{section:otherthirdparty}
 
-This is software not available for download at \url{www.coin-or.org}. The default OS project is configured out-of-the-box with the COIN-OR  projects {\tt Cbc}, {\tt Clp}, {\tt Cgl}, {\tt CoinUtils}, {\tt CppAD},  {\tt DyLP}, {\tt SYMPHONY}, and {\tt Vol}.  However, the project is also designed to work with other COIN-OR projects and several other open source and commercial software projects.
+This is software not available for download at \url{www.coin-or.org}. The default OS project is configured 
+out-of-the-box with the COIN-OR  projects {\tt Cbc}, {\tt Clp}, {\tt Cgl}, {\tt CoinUtils}, {\tt CppAD},  
+{\tt DyLP}, {\tt SYMPHONY}, and {\tt Vol}.  However, the project is also designed to work with other COIN-OR 
+projects and several other open source and commercial software projects. These projects are reflected in the
+OS distribution directory structure (see Figure~\ref{figure:osprojectrootdir}), although by default they do
+not contain anything other than {\tt get.xxxx} scripts and other utilities. The source code for any of these
+packages must be downloaded separately, and the entire project must be {\tt configure}d again (in the
+distribution root directory or with a VPATH installation as explained in Section~\ref{section:vpath}).
 
 In many of the header files there are {\tt \#include} statements inside {\tt  \#ifdef}  statements. For example,
 \begin{verbatim}
@@ -868,7 +909,8 @@ In the {\tt inc} subdirectory of the {\tt OS}  directory, there is a header file
 \begin{verbatim}
 COIN_HAS_XXXXX
 \end{verbatim}
-variables. If the project is configured with the simple {\tt ./configure} command given in Step 3 with no arguments, then in the {\tt config\_os.h} these variables associated with the third-party software will be undefined. For example.
+variables. If the project is configured with the simple {\tt ./configure} command given in Step 2 on page~\pageref{itemize:unixbuilds}
+with no arguments, then in the {\tt config\_os.h} header file the variables associated with the third-party software described in this subsection will be undefined. For example.
 \begin{verbatim}
 /* Define to 1 if the Cplex package is used */
 /* #undef COIN_HAS_CPX */
@@ -882,11 +924,28 @@ In the following subsections we  describe how to incorporate various  third-part
 \begin{verbatim}
 COIN_HAS_XXXXX
 \end{verbatim}
-variable is defined in  {\tt config\_os.h}.
+variable is defined in  {\tt config\_os.h}. 
+
+Make sure to run {\tt configure} after you have downloaded the required
+source code, in order to modify the makefiles appropriately. It is {\bf important to note} that even though there are
+multiple files named {\tt configure} in various subdirectories, you should only ever run the master configure in the 
+distribution root directory, possibly accessed from a {\tt VPATH} as in Section~\ref{section:vpath}.
+It sets important global variables and will call all other necessary configure files in turn.
+You may also wish to view
+\begin{verbatim}
+https://projects.coin-or.org/BuildTools/wiki/user-configure#CommandLineArgumentsforconfigure
+\end{verbatim}
+for more information on command line arguments that are illustrated in the subsections below.
+
 
 \subsubsection{AMPL}
 
-The OS library contains a class, {\tt OSnl2osil} (see Section \ref{section:nl2osil}), and the program {\tt OSAmplClient} (see Section \ref{section:amplclient}) that require the use of the AMPL ASL library.  See \url{http://netlib.sandia.gov/ampl/}  and  \url{http://www.ampl.com}. Users with a Unix system should locate the {\tt ASL} folder that is part of the distribution. The {\tt ASL} folder is in the {\tt ThirdParty} folder which is in the project root folder. Locate and execute the {\tt get.ASL} script.  Do this prior to running the {\tt configure} script. The {\tt configure} script will build the correct ASL library.
+The OS library contains a class, {\tt OSnl2osil} (see Section \ref{section:nl2osil}), and the program 
+{\tt OSAmplClient} (see Section \ref{section:amplclient}) that require the use of the AMPL ASL library.  
+See \url{http://netlib.sandia.gov/ampl/}  and  \url{http://www.ampl.com}. Users with a Unix system should locate 
+the {\tt ASL} folder that is part of the distribution. The {\tt ASL} folder is in the {\tt ThirdParty} folder 
+which is in the distribution root folder. Locate and execute the {\tt get.ASL} script.  Do this prior to running 
+the {\tt configure} script. The {\tt configure} script will build the correct ASL library.
 
 Microsoft  Visual Studio users will have to build the ASL library separately and then link it with the OS lib in the OS project file.  The necessary source files are at
 \begin{verbatim}
@@ -902,16 +961,13 @@ If the OS project is properly configured  with the ASL library, {\tt config\_os.
 #define COIN_HAS_ASL 1
 \end{verbatim}
 
-At this point the reader may wish to view
-\begin{verbatim}
-https://projects.coin-or.org/BuildTools/wiki/user-configure#CommandLineArgumentsforconfigure
-\end{verbatim}
-for more information on command line arguments that are illustrated in the subsections below.
-
 
 \subsubsection{Cplex}
 
-Cplex is a linear, integer, and quadratic solver. See \url{http://www.ilog.com/products/cplex/}.  Cplex does not provide source code and you can only download the platform dependent binaries. After installing the binaries and include files in an appropriate directory, run configure to point to the include and library directory. An example is given below:
+Cplex is a linear, integer, and quadratic solver. See \url{http://www.ilog.com/products/cplex/}.  
+Cplex does not provide source code and you can only download the platform dependent binaries. 
+After installing the binaries and include files in an appropriate directory, run {\tt configure} to point to the 
+include and library directory. An example is given below:
 
 \begin{verbatim}
 configure --with-cplex-lib="-L$(CPLEXDIR)/lib/$(SYSTEM)/$(LIBFORMAT)
@@ -934,14 +990,10 @@ CLASSPATH=:/usr/local/ilog/cplex81/bin/i86_linux2_glibc2.3_gcc3.2:
 
 \subsubsection{GLPK}
 
-{\tt GLPK} is a an open-source linear and integer-programming solver from the GNU organization. See \url{http://www.gnu.org/software/glpk/}.  In order to use GLPK with OS, either execute {\tt get.AllThirdParty} or connect to {\tt ThirdParty/Glpk} and execute {\tt get.ThirdParty}.
-
-
-
-
-
-
-
+{\tt GLPK} is a an open-source linear and integer-programming solver from the GNU organization. 
+See \url{http://www.gnu.org/software/glpk/}.  In order to use GLPK with OS, either execute {\tt get.AllThirdParty} 
+or connect to {\tt ThirdParty/Glpk} and execute {\tt get.ThirdParty}. Once the source code has been downloaded, 
+run {\tt configure}, followed by a {\tt make}, as explained in Section~\ref{section:unixbuilds} or Section~\ref{section:vpath}.
 
 
 
@@ -972,7 +1024,8 @@ NlpProblemDef::~NlpProblemDef (void)
 
 
 
-\item[Step 4] Run configure with appropriate values for  {\tt --with-knitro-lib} and {\tt --with-knitro-incdir}. For example:
+\item[Step 4] Run {\tt configure} with appropriate values for  {\tt --with-knitro-lib} and {\tt --with-knitro-incdir}.
+For example:
 
 \begin{verbatim}
 ./configure --with-knitro-lib="-L/home/kmartin/files/code/knitro/linux/lib -lknitro "
@@ -984,7 +1037,10 @@ NlpProblemDef::~NlpProblemDef (void)
 
 \subsubsection{LINDO}
 
-LINDO is a commercial linear, integer, and nonlinear solver. See \url{www.lindo.com}.  LINDO does not provide source code and you can only download the platform dependent binaries. After installing the binaries and include files in an appropriate directory, run configure to point to the include and library directory. An example is given below:
+LINDO is a commercial linear, integer, and nonlinear solver. See \url{www.lindo.com}.  
+LINDO does not provide source code and you can only download the platform dependent binaries. 
+After installing the binaries and include files in an appropriate directory, run {\tt configure} to point to the 
+include and library directory. An example is given below:
 
 \begin{verbatim}
 --with-lindo-lib="-L/home/kmartin/files/code/lindo/linux/lib -llindo -lmosek"
@@ -1105,17 +1161,17 @@ The directories in the  project root  are outlined in Figure  \ref{figure:osproj
 
 If you download the OS package, you get these additional COIN-OR projects. The links to the project home pages are provided below and give more information on these projects.
 \begin{itemize}
-\item {\tt BuildTools} - \url{projects.coin-or.org\BuildTools}
-\item {\tt Cbc} - \url{projects.coin-or.org\Cbc}
-\item {\tt Cgl} - \url{projects.coin-or.org\Cgl}
-\item {\tt Clp}  - \url{projects.coin-or.org\Clp}
-\item {\tt CoinUtils} - \url{projects.coin-or.org\CoinUtils}
-\item {\tt CppAD} - \url{projects.coin-or.org\CppAD}
-\item {\tt Dylp} - \url{projects.coin-or.org\Dylp}
-\item {\tt Ipopt} - \url{projects.coin-or.org\Ipopt}
-\item {\tt Osi} - \url{projects.coin-or.org\Osi}
-\item {\tt SYMPHONY}   - \url{projects.coin-or.org\SYMPHONY}
-\item {\tt Vol}   - \url{projects.coin-or.org\Vol}
+\item {\tt BuildTools} - \url{http://projects.coin-or.org\BuildTools}
+\item {\tt Cbc} - \url{http://projects.coin-or.org/Cbc}
+\item {\tt Cgl} - \url{http://projects.coin-or.org/Cgl}
+\item {\tt Clp} - \url{http://projects.coin-or.org/Clp}
+\item {\tt CoinUtils} - \url{http://projects.coin-or.org/CoinUtils}
+\item {\tt CppAD} - \url{http://projects.coin-or.org/CppAD}
+\item {\tt Dylp}  - \url{http://projects.coin-or.org/Dylp}
+\item {\tt Ipopt} - \url{http://projects.coin-or.org/Ipopt}
+\item {\tt Osi} - \url{http://projects.coin-or.org/Osi}
+\item {\tt SYMPHONY}   - \url{http://projects.coin-or.org/SYMPHONY}
+\item {\tt Vol} - \url{http://projects.coin-or.org/Vol}
 \end{itemize}
 
 The following directories are also in the project root.
@@ -1486,16 +1542,18 @@ The OSInstance class is the in-memory representation of an optimization instance
 
 \subsubsection{Creating an {\tt OSInstance} Object}
 
-The OSCommonInterfaces component contains an {\tt OSiLReader}  class for reading an instance in an OSiL string and creating an in-memory {\tt OSInstance} object.  Assume that {\tt sOSiL} is a string with an instance in OSiL format. Creating an {\tt OSInstance} object is illustrated in Figure \ref{figure:creatingosinstanceobject}.
+The OSCommonInterfaces component contains an {\tt OSiLReader}  class for reading an instance in an OSiL string and 
+creating an in-memory {\tt OSInstance} object.  Assume that {\tt sOSiL} is a string that will hold the instance in OSiL format. Creating an {\tt OSInstance} object is illustrated in Figure \ref{figure:creatingosinstanceobject}.
 
 \begin{figure}[ht]
 \centering
-\begin{verbatim}
-OSiLReader *osilreader = NULL;
-OSInstance *osinstance = NULL;
-osilreader = new OSiLReader();
-osinstance = osilreader->readOSiL( sOSiL);
-\end{verbatim}
+   \small {\obeyspaces\let =\
+\fbox{\tt\begin{tabular}{@{}l@{}}
+OSiLReader *osilreader = NULL;\\[\Sb]
+OSInstance *osinstance = NULL;\\[\Sb]
+osilreader = new OSiLReader();\\[\Sb]
+osinstance = osilreader->readOSiL( sOSiL);\\[\Sb]
+\end{tabular} }} \bigskip
 \caption{Creating an {\tt OSInstance} Object} \label{figure:creatingosinstanceobject}
 \end{figure}
 
@@ -2355,7 +2413,7 @@ This returns
 \DD{L(x^{(0)}, \lambda^{(0)})}{x_{3}}{x_{0}} =0, \quad  \DD{L(x^{(0)}, \lambda^{(0)})}{x_{3}}{x_{0}} = 0, \quad   \DD{L(x^{(0)}, \lambda^{(0)})}{x_{3}}{x_{3}} =  -.04
 \end{eqnarray*}
 
-The reason that
+The reason why
 $$
 \D{L (x^{(0)}, \lambda^{(0)})}{x_{1}} = 2 \times 1.37 = 2.74
 $$
@@ -2364,11 +2422,13 @@ $$
 \D{L (x^{(0)}, \lambda^{(0)})}{x_{1}} = 1 \times  9 + 2 \times 6.37 = 9 + 12.74 = 21.74
 $$
 is that the terms $9x_1$ in the objective and $5x_1$ in the first constraint
-are captured in the linear section of the OSiL input and therefore do not  appear as a nonlinear term in {\tt  <nonlinearExpressions>}. Again, {\tt forwardAD} and {\tt reverseAD} only operate on variables and terms in either the {\tt <quadraticCoefficients>} or {\tt <nonlinearExpressions>} sections.
+are captured in the linear section of the OSiL input and therefore do not appear as nonlinear terms 
+in {\tt  <nonlinearExpressions>}. Again, {\tt forwardAD} and {\tt reverseAD} only operate on variables and terms 
+in either the {\tt <quadraticCoefficients>} or {\tt <nonlinearExpressions>} sections.
 
 \subsection{Using OSInstance Methods: High Level Calls}
 
-The methods {\tt forwardAD} and {\tt reverseAD} are low level calls and are not designed to work directly with solver APIs. The {\tt OSInstance} API has other methods that most users will want to invoke when linking with solver APIs.  We describe these now.
+The methods {\tt forwardAD} and {\tt reverseAD} are low-level calls and are not designed to work directly with solver APIs. The {\tt OSInstance} API has other methods that most users will want to invoke when linking with solver APIs.  We describe these now.
 
 
 \subsubsection{Sparsity Methods}
