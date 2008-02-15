@@ -431,7 +431,6 @@ bool LindoSolver::generateLindoModel(){
 
 bool LindoSolver::optimize(){
 	double *x,  *y, *z;
-	//int *pnStatus;
 	int solIdx = 0;
 	ostringstream outStr;
 	std::string *srcost;
@@ -467,7 +466,7 @@ bool LindoSolver::optimize(){
 			//m_iLindoErrorCode = LSoptimize( pModel_, LS_METHOD_FREE, &nSolStatus);
 			std::cout << "We are using the LINDO Global Optimizer" << std::endl;
 			std::cout << "We are using the LINDO Global Optimizer 222" << std::endl;
-			m_iLindoErrorCode = LSsolveGOP(pModel_,  NULL) ;
+			m_iLindoErrorCode = LSsolveGOP(pModel_,  &nSolStatus) ;
 			lindoAPIErrorCheck("There was an ERROR in the call to the Optimizer solver");
 			LSgetInfo (pModel_, LS_IINFO_GOP_STATUS, &nSolStatus);
 		}
