@@ -499,8 +499,8 @@ bool LindoSolver::optimize(){
 		srcost = new std::string[ osinstance->getVariableNumber() + m_iNumberNewSlacks];
 		drcost = new double[ osinstance->getVariableNumber() + m_iNumberNewSlacks];
 		for(int i = 0; i <  osinstance->getVariableNumber() + m_iNumberNewSlacks; i++){
-			drcost[i] = 0.0;
-			srcost[i] = "0.0";
+			//drcost[i] = 0.0;
+			//srcost[i] = "0.0";
 		}
 		y = new double[ osinstance->getConstraintNumber() ];
 		z = new double[1]; 
