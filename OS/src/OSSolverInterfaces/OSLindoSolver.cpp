@@ -106,9 +106,10 @@ LindoSolver::~LindoSolver() {
 #ifdef DEBUG
 	cout << "Lindo destructor called" << endl;
 #endif
-	m_mdRhsValue = NULL;
-	m_mdVarLB = NULL;
-	m_mdVarUB = NULL;
+	//delete[] m_mdRhsValue ;
+	//delete[] m_mdVarLB ;
+	//delete[] m_mdVarUB ;
+	delete[] m_mmcVarName ;
 	m_mdConLB = NULL;
 	m_mdConUB = NULL;
 	m_msVarName = NULL;
