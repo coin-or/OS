@@ -532,7 +532,7 @@ KnitroSolver::KnitroSolver() {
 
 KnitroSolver::~KnitroSolver() {
 	#ifdef DEBUG
-	cout << "inside IpoptSolver destructor" << endl;
+	cout << "inside KnitroSolver destructor" << endl;
 	#endif
 	delete osresult;
 	osresult = NULL;
@@ -541,14 +541,14 @@ KnitroSolver::~KnitroSolver() {
 	//delete osinstance;
 	//osinstance = NULL;
 	#ifdef DEBUG
-	cout << "leaving IpoptSolver destructor" << endl;
+	cout << "leaving KnitroSolver destructor" << endl;
 	#endif
 }
 
 void KnitroSolver::solve() throw (ErrorClass) {
 	try{
 		OSiLReader* osilreader = NULL; 
-		osresult = new OSResult();
+		//osresult = new OSResult();
 		if(osil.length() == 0 && osinstance == NULL) throw ErrorClass("there is no instance");
 		clock_t start, finish;
 		double duration;
