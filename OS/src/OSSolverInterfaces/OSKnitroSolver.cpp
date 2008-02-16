@@ -742,6 +742,7 @@ void KnitroSolver::solve() throw (ErrorClass) {
 		}
 		delete [] daX;
 		delete [] daLambda;
+		delete [] mdObjValues;
 
 		KTR_free (&kc);
 
