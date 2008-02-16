@@ -557,7 +557,7 @@ void KnitroSolver::solve() throw (ErrorClass) {
 		bool             bWantToSolve;
 
 		//---- OPEN A NEW INSTANCE OF KNITRO.
-		KTR_context_ptr  kc;
+		KTR_context  *kc;
 		kc = KTR_new();
 		if (kc == NULL){
 			cout << "*** KTR_new failed, maybe a license issue?\n";
