@@ -566,7 +566,7 @@ void KnitroSolver::solve() throw (ErrorClass) {
 
 		//---- APPLY ANY USER OPTIONS (PROCEED EVEN IF THERE IS AN ERROR).
 		KTR_load_param_file (kc, "knitro.opt");
-
+		loadProblemIntoKnitro (kc);
 		//---- LOAD THE PROBLEM INTO KNITRO.
 		//if (pOptProb->loadProblemIntoKnitro (kc) == false){
 		//	cout << "*** loadProblemIntoKnitro failed\n";
