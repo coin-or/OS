@@ -49,12 +49,12 @@ using std::endl;
 
 int main(int argC, char* argV[]){
 // test OS code samples here
+	FileUtil *fileUtil = NULL; 
+	fileUtil = new FileUtil();
 	try{
 		if(argC != 2) throw ErrorClass( "there must be exactly one command line argument");
 		std::string osilFileName;
 		std::string osil;
-		FileUtil *fileUtil = NULL; 
-		fileUtil = new FileUtil();
 		// get the input file
 	    osilFileName =  argV[1];
 	    osil = fileUtil->getFileAsString( osilFileName.c_str());
@@ -71,6 +71,7 @@ int main(int argC, char* argV[]){
 	   // delete osinstance;
 	}
 	catch(const ErrorClass& eclass){
+		delete fileUtil;
 		std::cout << eclass.errormsg <<  std::endl;
 		return 0;
 	} 
