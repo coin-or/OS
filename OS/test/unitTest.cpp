@@ -953,6 +953,7 @@ int main(int argC, char* argV[])
 		unitTestResult << "Solved problem parincQuadratic.osil with Lindo" << std::endl;
 		// now solve a quadratic binary problem
 		// wayneQuadratic.osil
+		/*
 		osilFileName = dataDir  + "osilFiles" + dirsep + "wayneQuadratic.osil";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		solver = new LindoSolver();	
@@ -972,6 +973,7 @@ int main(int argC, char* argV[])
 		delete solver;
 		solver = NULL;
 		unitTestResult << "Solved problem wayneQuadratic.osil with Lindo" << std::endl;
+		*/
 		
 	}
 	catch(const ErrorClass& eclass){
