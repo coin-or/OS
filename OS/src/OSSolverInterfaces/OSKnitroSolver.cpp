@@ -568,10 +568,10 @@ void KnitroSolver::solve() throw (ErrorClass) {
 		KTR_load_param_file (kc, "knitro.opt");
 
 		//---- LOAD THE PROBLEM INTO KNITRO.
-		if (pOptProb->loadProblemIntoKnitro (kc) == false){
-			cout << "*** loadProblemIntoKnitro failed\n";
-			exit( EXIT_FAILURE );
-        }
+		//if (pOptProb->loadProblemIntoKnitro (kc) == false){
+		//	cout << "*** loadProblemIntoKnitro failed\n";
+		//	exit( EXIT_FAILURE );
+        //}
 
 		//---- SET CALLBACK POINTERS FOR EVALUATION OF PROBLEM INFORMATION.
 		//---- IF THE TEST CODE DOES NOT SUPPLY DERIVATIVES, THEN THE
