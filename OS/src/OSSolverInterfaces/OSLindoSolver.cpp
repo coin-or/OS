@@ -125,6 +125,8 @@ LindoSolver::~LindoSolver() {
 	m_mdRhsValue = NULL;
 	delete osrlwriter;
 	osrlwriter = NULL;
+	delete osresult;
+	osresult = NULL;
 	cout << "Lindo Solver garbage collection done" << endl;
 }
 
@@ -176,8 +178,6 @@ void LindoSolver::solve()  {
 			delete osilreader;
 			osilreader = NULL;
 		}
-		delete osresult;
-		osresult = NULL;
 	}
 	catch(const ErrorClass& eclass){
 		osresult->setGeneralMessage( eclass.errormsg);

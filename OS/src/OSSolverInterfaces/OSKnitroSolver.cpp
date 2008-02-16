@@ -192,6 +192,8 @@ KnitroSolver::~KnitroSolver() {
 	#endif
 	delete osrlwriter;
 	osrlwriter = NULL;
+	delete osresult;
+	osresult = NULL;
 	#ifdef DEBUG
 	cout << "leaving KnitroSolver destructor" << endl;
 	#endif
