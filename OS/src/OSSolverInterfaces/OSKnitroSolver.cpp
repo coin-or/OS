@@ -745,8 +745,9 @@ void KnitroSolver::solve() throw (ErrorClass) {
 		delete [] mdObjValues;
 
 		KTR_free (&kc);
-
 		//delete pOptProb;
+		
+		
 		//return( EXIT_SUCCESS );	//to do
 	}
 	catch(const ErrorClass& eclass){

@@ -97,6 +97,10 @@
 class KnitroSolver : public DefaultSolver, public NlpProblemDef {  
 	
 public:
+	
+
+	
+	
 	/** the KnitroSolver class constructor */
 	KnitroSolver();
 

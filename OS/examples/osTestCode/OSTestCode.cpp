@@ -67,6 +67,7 @@ int main(int argC, char* argV[]){
 	    cout << osilwriter->writeOSiL( osinstance) << endl;
 	    delete osilreader;
 	    delete osilwriter;
+	    delete fileUtil;
 	   // delete osinstance;
 	}
 	catch(const ErrorClass& eclass){

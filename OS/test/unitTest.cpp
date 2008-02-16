@@ -664,7 +664,6 @@ int main(int argC, char* argV[])
 		delete solver;
 		solver = NULL;
 		unitTestResult << "Solved problem rosenbrockmod.osil with Knitro" << std::endl;
-		return 0;
 		//
 		// now solve callBackTest.osil
 		osilFileName = dataDir  + "osilFiles" + dirsep + "callBackTest.osil";
