@@ -511,7 +511,7 @@ int  KnitroSolver::evalH (const double * const  daX,
 		daH[ i]  = *(sparseHessian->hessValues + i);
 		std::cout << "Hessian Value = " << daH[ i] << std::endl;
 	}
-
+	delete[] objMultiplers;
     return( 0 );
 }//evalH
 
