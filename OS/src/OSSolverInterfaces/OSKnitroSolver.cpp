@@ -233,8 +233,8 @@ bool  KnitroProblem::loadProblemIntoKnitro (KTR_context_ptr  kc){
 	_nN = osinstance->getVariableNumber();
 	// number of constraints
 	_nM = osinstance->getConstraintNumber();
-	cout << "number variables  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << _nN << endl;
-	cout << "number constraints  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << _nM << endl;
+	cout << "number variables  !!!!!!!!!!!!!!!!!!!!!!!!!!!"   <<   _nN << endl;
+	cout << "number constraints  !!!!!!!!!!!!!!!!!!!!!!!!!!!" <<   _nM << endl;
 	try{
 		osinstance->initForAlgDiff( );
 	}
@@ -256,7 +256,6 @@ bool  KnitroProblem::loadProblemIntoKnitro (KTR_context_ptr  kc){
 			else _daXLo[i] = mdVarLB[ i]; 
 		if( mdVarUB[ i] == OSDBL_MAX) _daXUp[i] = KTR_INFBOUND;
 			else _daXUp[i] = mdVarUB[ i];  	
-			
 		//cout << "x_l !!!!!!!!!!!!!!!!!!!!!!!!!!!" << x_l[i] << endl;
 		//cout << "x_u !!!!!!!!!!!!!!!!!!!!!!!!!!!" << x_u[i] << endl;
 	}
@@ -266,9 +265,9 @@ bool  KnitroProblem::loadProblemIntoKnitro (KTR_context_ptr  kc){
 	//constraint upper bounds
 	double * mdConUB = osinstance->getConstraintUpperBounds();
 	
-	_naCType  = new int[_nM];
-    _daCLo    = new double[_nM];
-    _daCUp    = new double[_nM];
+	_naCType = new int[ _nM];
+    _daCLo   = new double[ _nM];
+    _daCUp   = new double[ _nM];
     _naCType[0] = KTR_CONTYPE_LINEAR;
 	for(i = 0; i < _nM; i++){
 		if( mdConLB[ i] == -OSDBL_MAX) _daCLo[i] = -KTR_INFBOUND;
@@ -328,8 +327,6 @@ bool  KnitroProblem::loadProblemIntoKnitro (KTR_context_ptr  kc){
 				cout << "COL HESS IDX  !!!!!!!!!!!!!!!!!!!!!!!!!!!"  << _naHessCols[i] << endl;
 		}
 	}  
- 
-
     //---- INITIAL GUESS FOR x AND lambda.
   	// Here, we assume we only have starting values for x, if you code
   	// your own NLP, you can provide starting values for the dual variables
@@ -569,8 +566,8 @@ void KnitroSolver::solve() throw (ErrorClass) {
 
 		/***************now the Knitro invokation*********************/
 		// Create a new instance of your nlp 
-		NlpProblemDef *  pOptProb = new KnitroProblem(osinstance, osresult);
-		bool             bWantToSolve;
+		NlpProblemDef *pOptProb = new KnitroProblem(osinstance, osresult);
+		bool bWantToSolve;
 
 		//---- OPEN A NEW INSTANCE OF KNITRO.
 		KTR_context  *kc;
@@ -583,7 +580,7 @@ void KnitroSolver::solve() throw (ErrorClass) {
 		//---- APPLY ANY USER OPTIONS (PROCEED EVEN IF THERE IS AN ERROR).
 		KTR_load_param_file (kc, "knitro.opt");
 		//---- LOAD THE PROBLEM INTO KNITRO.
-		if (pOptProb->loadProblemIntoKnitro (kc) == false){
+		if (pOptProb->loadProblemIntoKnitro ( kc) == false){
 			cout << "*** loadProblemIntoKnitro failed\n";
 			exit( EXIT_FAILURE );
         }
@@ -760,7 +757,7 @@ void KnitroSolver::solve() throw (ErrorClass) {
 		delete [] daLambda;
 		delete [] mdObjValues;
 
-		KTR_free (&kc);
+		KTR_free( &kc);
 		delete pOptProb;
 		
 		

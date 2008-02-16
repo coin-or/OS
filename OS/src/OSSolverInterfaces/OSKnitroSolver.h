@@ -78,8 +78,8 @@
 
 
 
-#include<vector>
-#include <map>  
+//#include<vector>
+//#include <map>  
 
 
 
@@ -134,17 +134,12 @@ public:
  * @version 1.0, 03/14/2004
  * @since OS 1.0
  * 
- * 
- * 
- *
- * 
  * \remarks
  * this class takes an OSiL instance and optimizes it using
  * the Knitro solver
  * 
  */
 class KnitroSolver : public DefaultSolver {  
-	
 	
 public:
 	
@@ -165,7 +160,7 @@ public:
    	 */		
 	void dataEchoCheck(); 
 	
-
+private:
 
 	OSrLWriter  *osrlwriter;
 
