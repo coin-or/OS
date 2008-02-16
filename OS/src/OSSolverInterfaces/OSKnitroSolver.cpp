@@ -599,6 +599,7 @@ void KnitroSolver::solve() throw (ErrorClass) {
 		//---- ALLOCATE ARRAYS
 		double *  daX      = new double[pOptProb->getN()];
 		double *  daLambda = new double[pOptProb->getM() + pOptProb->getN()];
+		double* mdObjValues = new double[1];
 		bWantToSolve = true;
 		if (bWantToSolve == true){
 			//---- CALL KNITRO AND SOLVE.
@@ -611,7 +612,7 @@ void KnitroSolver::solve() throw (ErrorClass) {
 
 			//construct osresult
 			int solIdx = 0;
-			double* mdObjValues = new double[1];
+			
 			std::string message = "Knitro solver finishes to the end.";
 			std::string solutionDescription = "";	
 
