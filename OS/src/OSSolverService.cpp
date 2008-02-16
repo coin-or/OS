@@ -195,6 +195,7 @@ int main(int argC, const char* argV[])
 		if(argC < 2){
 			std::cout << "There must be at least one command line argument" << std::endl;
 			std::cout << "Try -help or --help" << std::endl;
+			delete osoptions;
 			return 1;
 		}
 		// see if the first argument is a file name
