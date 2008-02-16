@@ -538,7 +538,7 @@ void KnitroSolver::solve() throw (ErrorClass) {
 		double duration;
 		start = clock();
 		bool newOSiLReader = false;
-		if(osinstance == NULL){
+		if( osinstance == NULL){
 			osilreader = new OSiLReader();
 			osinstance = osilreader->readOSiL( osil);
 			newOSiLReader = true;
@@ -566,12 +566,11 @@ void KnitroSolver::solve() throw (ErrorClass) {
 
 		//---- APPLY ANY USER OPTIONS (PROCEED EVEN IF THERE IS AN ERROR).
 		KTR_load_param_file (kc, "knitro.opt");
-		loadProblemIntoKnitro (kc);
 		//---- LOAD THE PROBLEM INTO KNITRO.
-		//if (pOptProb->loadProblemIntoKnitro (kc) == false){
-		//	cout << "*** loadProblemIntoKnitro failed\n";
-		//	exit( EXIT_FAILURE );
-        //}
+		if (pOptProb->loadProblemIntoKnitro (kc) == false){
+			cout << "*** loadProblemIntoKnitro failed\n";
+			exit( EXIT_FAILURE );
+        }
 
 		//---- SET CALLBACK POINTERS FOR EVALUATION OF PROBLEM INFORMATION.
 		//---- IF THE TEST CODE DOES NOT SUPPLY DERIVATIVES, THEN THE
