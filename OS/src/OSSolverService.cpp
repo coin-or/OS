@@ -317,8 +317,10 @@ int main(int argC, const char* argV[])
 				osoptions->solverName  =    getSolverName( osoptions->osolFile.c_str()  );
 				}
 			}
-			if(osoptions->osplInputFile != "") osoptions->osplInput = fileUtil->getFileAsChar( (osoptions->osplInputFile).c_str()  );
-			if(osoptions->osplOutputFile != "") osoptions->osplOutput = fileUtil->getFileAsChar( (osoptions->osplOutputFile).c_str() );
+			//if(osoptions->osplInputFile != "") osoptions->osplInput = fileUtil->getFileAsChar( (osoptions->osplInputFile).c_str()  );
+			if(osoptions->osplInputFile != "") osoptions->osplInput = fileUtil->getFileAsString( (osoptions->osplInputFile).c_str() );
+			//if(osoptions->osplOutputFile != "") osoptions->osplOutput = fileUtil->getFileAsChar( (osoptions->osplOutputFile).c_str() );
+			if(osoptions->osplOutputFile != "") osoptions->osplOutput = fileUtil->getFileAsString( (osoptions->osplOutputFile).c_str() );
 		}
 		catch(const ErrorClass& eclass){
 			//cout << eclass.errormsg <<  endl;
@@ -609,19 +611,23 @@ void solve(){
 void getJobID(){
 	std::string jobID = "";
 	OSSolverAgent* osagent = NULL;
-	FileUtil *fileUtil = NULL;
-	fileUtil = new FileUtil();
 	try{
 		if(osoptions->serviceLocation != ""){
 			osagent = new OSSolverAgent( osoptions->serviceLocation );
 			jobID = osagent->getJobID( osoptions->osol);
 			cout << jobID << endl;
+			delete osagent;
+			osagent = NULL;
 		}
 		else{
+			delete osagent;
+			osagent = NULL;
 			throw ErrorClass("please specify service location (url)");
 		}
 	}
 	catch(const ErrorClass& eclass){
+		FileUtil *fileUtil = NULL;
+		fileUtil = new FileUtil();
 		OSResult *osresult = NULL;
 		OSrLWriter *osrlwriter = NULL;
 		osrlwriter = new OSrLWriter();
@@ -635,6 +641,8 @@ void getJobID(){
 		osresult = NULL;
 		delete osrlwriter;
 		osrlwriter = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
 	}	
 }//end getJobID
  
@@ -650,10 +658,14 @@ void knock(){
 			osplOutput = osagent->knock(osoptions->osplInput,  osoptions->osol);
 			if(osoptions->osplOutputFile != "") fileUtil->writeFileFromString(osoptions->osplOutputFile, osplOutput);
 			else cout << osplOutput << endl;
+			delete osagent;
 		}
 		else{
+			delete osagent;
 			throw ErrorClass( "please specify service location (url)" );
 		}
+		delete fileUtil;
+		fileUtil = NULL;
 	}
 	catch(const ErrorClass& eclass){
 		OSResult *osresult = NULL;
@@ -669,6 +681,8 @@ void knock(){
 		osresult = NULL;
 		delete osrlwriter;
 		osrlwriter = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
 	}	
 }//end knock
 
@@ -677,8 +691,6 @@ void send(){
 	bool bSend = false;
 	std::string jobID = "";
 	OSSolverAgent* osagent = NULL;
-	FileUtil *fileUtil = NULL;
-	fileUtil = new FileUtil();
 	// first get the jobID
 	std::string sOSoL = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/OSoL.xsd\"><general> </general></osol>";
 	string::size_type iStringpos;
@@ -726,12 +738,16 @@ void send(){
 			bSend = osagent->send(osoptions->osil, sOSoL);
 			if(bSend == true) cout << "send is true" << endl;
 			else cout << "send is false" << endl;
+			delete  osagent;
 		}
 		else{
+			delete  osagent;
 			throw ErrorClass( "please specify service location (url)" );
 		}
 	}
 	catch(const ErrorClass& eclass){
+		FileUtil *fileUtil = NULL;
+		fileUtil = new FileUtil();
 		OSResult *osresult = NULL;
 		OSrLWriter *osrlwriter = NULL;
 		osrlwriter = new OSrLWriter();
@@ -745,14 +761,16 @@ void send(){
 		osresult = NULL;
 		delete osrlwriter;
 		osrlwriter = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
 	}	
 }//end send
 
 void retrieve(){
-	std::string osrl = "";
-	OSSolverAgent* osagent = NULL;
 	FileUtil *fileUtil = NULL;
 	fileUtil = new FileUtil();
+	std::string osrl = "";
+	OSSolverAgent* osagent = NULL;
 	try{
 		if(osoptions->serviceLocation != ""){
 			osagent = new OSSolverAgent( osoptions->serviceLocation );
@@ -767,11 +785,16 @@ void retrieve(){
 				}
 			}
 			else cout << osrl << endl;
+			delete osagent;
+			osagent = NULL;
 		}
 		else{
+			delete osagent;
+			osagent = NULL;
 			throw ErrorClass( "please specify service location (url)" );
 		}
-
+		delete fileUtil;
+		fileUtil = NULL;
 	}
 	catch(const ErrorClass& eclass){
 		OSResult *osresult = NULL;
@@ -787,24 +810,32 @@ void retrieve(){
 		osresult = NULL;
 		delete osrlwriter;
 		osrlwriter = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
 	}	
 }//end retrieve
 
 void kill(){
-	std::string osplOutput = "";
-	OSSolverAgent* osagent = NULL;
 	FileUtil *fileUtil = NULL;
 	fileUtil = new FileUtil();
+	std::string osplOutput = "";
+	OSSolverAgent* osagent = NULL;
 	try{
 		if(osoptions->serviceLocation != ""){
 			osagent = new OSSolverAgent( osoptions->serviceLocation );
 			osplOutput = osagent->kill( osoptions->osol);
 			if(osoptions->osplOutputFile != "") fileUtil->writeFileFromString(osoptions->osplOutputFile, osplOutput);
 			else cout << osplOutput << endl;
+			delete osagent;
+			osagent = NULL;
 		}
 		else{
+			delete osagent;
+			osagent = NULL;
 			throw ErrorClass( "please specify service location (url)" );
 		}
+		delete fileUtil;
+		fileUtil = NULL;
 	}
 	catch(const ErrorClass& eclass){
 		OSResult *osresult = NULL;
@@ -820,6 +851,8 @@ void kill(){
 		osresult = NULL;
 		delete osrlwriter;
 		osrlwriter = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
 	}	
 }//end kill
 
