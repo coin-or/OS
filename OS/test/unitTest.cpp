@@ -660,7 +660,6 @@ int main(int argC, char* argV[])
 		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
 		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail unit test with Knitro on rosenbrockmod");
-		solver->osinstance = NULL;
 		delete solver;
 		solver = NULL;
 		unitTestResult << "Solved problem rosenbrockmod.osil with Knitro" << std::endl;
@@ -672,7 +671,6 @@ int main(int argC, char* argV[])
 		solver->osrl = "";		
 		solver->osil = osil;		
 		solver->osol = osol;
-		solver->osinstance = NULL;
 		cout << "call the KNITRO Solver" << endl;
 		solver->solve();
 		cout << "Here is the KNITRO solver solution" << endl;
@@ -681,7 +679,6 @@ int main(int argC, char* argV[])
 		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
 		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail unit test with Knitro callBackTest.osil");
-		solver->osinstance = NULL;
 		delete solver;
 		solver = NULL;  
 		unitTestResult << "Solved problem callBackTest.osil with Knitro" << std::endl;		
