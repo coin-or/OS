@@ -129,10 +129,8 @@ OS/doc/osUsersManual_1.tex -text
 OS/doc/osUsersManual_1.toc -text
 OS/doc/usersManualAdditions.txt -text
 OS/examples/algorithmicDiff/Makefile.in -text
-OS/examples/algorithmicDiff/MakefileBak.am -text
 OS/examples/algorithmicDiff/OSAlgorithmicDiffTest.cpp -text
 OS/examples/instanceGenerator/Makefile.in -text
-OS/examples/instanceGenerator/MakefileBAK.am -text
 OS/examples/instanceGenerator/OSInstanceGenerator.cpp -text
 OS/examples/osTestCode/Makefile.in -text
 OS/examples/osTestCode/MakefileBak.am -text
