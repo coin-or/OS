@@ -887,13 +887,23 @@ CFLAGS = -MTd -DUSE_CLOCK -DMSDOS -DNO_ONEXIT
 
 \subsection{Other Third-Party Software} \label{section:otherthirdparty}
 
-Third-Party is software not available for download at \url{www.coin-or.org}. The OS project distribution  includes the COIN-OR  projects {\tt Cbc}, {\tt Clp}, {\tt Cgl}, {\tt CoinUtils}, {\tt CppAD},   {\tt DyLP},   {\tt Ipopt},  {\tt Osi}, {\tt SYMPHONY}, and {\tt Vol}.  However, the project is also designed to work with  several other open source and commercial software projects.      In the 
-OS distribution directory structure (see Figure~\ref{figure:osprojectrootdir}), there is a {\tt ThirdParty} directory, but it does not contain anything other than {\tt get.xxxx} scripts and other utilities.  The source code for any of these
-packages must be downloaded separately using the {\tt get.xxx} scripts and the {\tt configure} will not build these projects without the source code being present.
+This section deals with other third-party software not available for download at \url{www.coin-or.org}. 
+The OS project distribution includes the COIN-OR projects {\tt Cbc}, {\tt Clp}, {\tt Cgl}, {\tt CoinUtils}, 
+{\tt CppAD},   {\tt DyLP},   {\tt Ipopt},  {\tt Osi}, {\tt SYMPHONY}, and {\tt Vol}.  However, the project is also 
+designed to work with  several other open source and commercial software projects.      In the 
+OS distribution directory structure (see Figure~\ref{figure:osprojectrootdir}), there is a {\tt ThirdParty} 
+directory, which does not contain anything other than {\tt get.xxxx} scripts and other utilities.  
+The source code for any of these packages must be downloaded separately using the {\tt get.xxxx} scripts, 
+as {\tt configure} will not build these projects without the source code being present.
 
+In the {\tt inc} subdirectory of the {\tt OS}  directory, there is a header file, {\tt config\_os.h} that defines 
+the values of a number of
+\begin{verbatim}
+COIN_HAS_XXXXX
+\end{verbatim}
+variables. 
 
-
-In many of the header files there are {\tt \#include} statements inside {\tt  \#ifdef}  statements. For example,
+Many of the other header files contain {\tt \#include} statements inside {\tt  \#ifdef}  statements. For example,
 \begin{verbatim}
 #ifdef COIN_HAS_LINDO
 #include "LindoSolver.h"
@@ -902,11 +912,8 @@ In many of the header files there are {\tt \#include} statements inside {\tt  \#
 #include <OsiGlpkSolverInterface.hpp>
 #endif
 \end{verbatim}
-In the {\tt inc} subdirectory of the {\tt OS}  directory, there is a header file, {\tt config\_os.h} that defines the values of the
-\begin{verbatim}
-COIN_HAS_XXXXX
-\end{verbatim}
-variables. If the project is configured with the simple {\tt ./configure} command given in Step 2 on page~\pageref{itemize:unixbuilds}
+
+If the project is configured with the simple {\tt ./configure} command given in Step 2 on page~\pageref{itemize:unixbuilds}
 with no arguments, then in the {\tt config\_os.h} header file the variables associated with the third-party software described in this subsection will be undefined. For example.
 \begin{verbatim}
 /* Define to 1 if the Cplex package is used */
@@ -923,6 +930,7 @@ COIN_HAS_XXXXX
 \end{verbatim}
 variable is defined in  {\tt config\_os.h}. 
 
+\medskip
 Make sure to run {\tt configure} after you have downloaded the required
 source code, in order to modify the makefiles appropriately. It is {\bf important to note} that even though there are
 multiple files named {\tt configure} in various subdirectories, you should only ever run the master configure in the 
