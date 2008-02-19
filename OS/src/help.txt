@@ -20,6 +20,8 @@ In this HELP file we assume that the solve service method is used and that we ar
 
 -config pathToConfigureFile this parameter specifies a path on the local machine to a text file containing values for the input parameters. This is convenient for the user not wishing to constantly retype parameter values. This configure file can contain values for all of the other parameters.
 
--version get the current version of this executable 
+--version or -v get the current version of this executable 
+
+--help or -h  to get this help file
 
 Note: If you specify a configure file by using the -config option, you can  override the values of the options in the configure file by putting them in at the command line

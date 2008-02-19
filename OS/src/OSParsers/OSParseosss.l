@@ -136,7 +136,7 @@ browserState (on|off)
 	//printf("gsgersdf= %d\n", gster);
 }
 
-(-help) {
+(-h) {
 	printf("Found option:  %s\n", yytext); 
 	yyextra->invokeHelp = true;
 	//printf("gsgersdf= %d\n", gster); 
@@ -149,7 +149,7 @@ browserState (on|off)
 	//printf("gsgersdf= %d\n", gster);
 }
 
-(-version) {
+(-v) {
 	printf("Found option:  %s\n", yytext); 
 	yyextra->writeVersion = true;
 	//printf("gsgersdf= %d\n", gster); 
