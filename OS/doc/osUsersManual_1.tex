@@ -662,13 +662,23 @@ The following is a work-around. (See also section~\ref{section:ipopt}.)
 
 
 
-MinGW (Minimalist GNU for Windows) is a set of runtime headers to be used with the GNU gcc compilers for Windows.  See \url{www.mingw.org}. As with Cygwin, the OS project is  built exactly as described in Section \ref{section:svn}.
+MinGW (Minimalist GNU for Windows) is a set of runtime headers to be used with the GNU {\tt gcc} compilers for Windows.  
+See \url{www.mingw.org}. As with Cygwin, the OS project is  built exactly as described in Section \ref{section:svn}.
+
+The MinGW installation includes the {\tt gcc} compiler, which can interact negatively with the Microsoft {\tt cl} compiler.
+For that reason it is advisable to download the even smaller installation MSYS (see next section) if you intend to
+build any software with the Microsoft Visual Studio suite.
 
 \subsubsection{MSYS}
 
-
-
-MSYS (Minimal SYSstem) provides an easy way to use the COIN-OS build system with compilers/linkers of your own choice, such as the Microsoft command line C++ cl compiler.  MSYS is an application that gives the user a Bourne shell that can run {\tt configure}  scripts and {\tt Makefiles}.  No compilers come with MSYS. In the Cygwin, MinGW, and MSYS hierarchy, it is at the bottom the food chain in terms of tools provided. However, it is very easy to use and build the OS project with MSYS.    In this discussion we assume that the user has downloaded the OS source code (most likely  with TortoiseSVN) and that the {\tt cl} compiler is present.  The project is built using the following steps.
+MSYS (Minimal SYStem) provides an easy way to use the COIN-OS build system with compilers/linkers of your own choice,
+such as the Microsoft command line C++ cl compiler.  MSYS is intended as an alternative to the DOS command window.
+It is an application that gives the user a Bourne shell that can run {\tt configure}  scripts and {\tt Makefiles}.  
+No compilers come with MSYS. 
+In the Cygwin, MinGW, and MSYS hierarchy, it is at the bottom of the food chain in terms of tools provided. 
+However, it is very easy to use and build the OS project with MSYS.    In this discussion we assume that the user 
+has downloaded the OS source code (most likely  with TortoiseSVN) and that the {\tt cl} compiler is present.  
+The project is built using the following steps.
 
 \vskip 8pt
 
