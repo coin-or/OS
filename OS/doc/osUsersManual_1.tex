@@ -96,7 +96,7 @@
 
 \title{Optimization Services 1.0 User's Manual }
 \vskip 2in
-\author{Robert Fourer, Jun Ma,  Horand Gassmann, Kipp Martin, Wayne Sheng}
+\author{Robert Fourer, Horand Gassmann, Jun Ma,  Kipp Martin, Wayne Sheng}
 \maketitle
 
 \begin{abstract}
@@ -152,7 +152,7 @@ This software uses Web Services technology and acts as middleware between the cl
 If you want to:
 
 \begin{itemize}
-\item Download  the OS source code -- see Section \ref{section:download}.
+\item Download  the OS source code or binaries -- see Section \ref{section:download}.
 
 
 \item Build the OS project from the source code -- see Section \ref{section:build}.
@@ -173,22 +173,136 @@ If you want to:
 \end{itemize}
 
 
-The OS project is very extensive and relies on many other COIN-OR projects.  This may not be desirable for modeling language and solver developers who just wish to use the OS API in conjunction with their modeling language or solver.  Hence there is also an ``OS lite'' download that consists of all the code for the OS API and for reading and writing instance and solution files. We refer to this version of the project as {\tt OSCommon} and the code for this project is synched  with the corresponding stable and release versions of the code. For example, to get Stable 1.1 of {\tt OSCommon} use the svn command
-\begin{verbatim}
-svn co https://projects.coin-or.org/svn/OS/stable/OSCommon1.1  OSCommon
-\end{verbatim}
+%The OS project is very extensive and relies on many other COIN-OR projects.  
+%This may not be desirable for modeling language and solver developers who just wish to use the OS API 
+%in conjunction with their modeling language or solver.  Hence there is also an ``OS lite'' download 
+%that consists of all the code for the OS API and for reading and writing instance and solution files. 
+%We refer to this version of the project as {\tt OSCommon} and the code for this project is synched  
+%with the corresponding stable and release versions of the code. 
+%For example, to get Stable 1.1 of {\tt OSCommon} use the svn command
+%\begin{verbatim}
+%svn co https://projects.coin-or.org/svn/OS/stable/OSCommon1.1  OSCommon
+%\end{verbatim}
 
 
 \section{Downloading the OS Project}\label{section:download}
 
-The OS project is an open-source project  with source code under the Common Public License (CPL). This project was created by Robert Fourer, Jun Ma, and Kipp Martin. The code has been written primarily by Jun Ma, Kipp Martin, Robert Fourer, and Huanyuan Sheng.  Jun Ma and Kipp Martin are the COIN project leaders for OS.    Below we describe different methods for obtaining the C++ source code or the binaries.
+The OS project is an open-source project  with source code under the Common Public License (CPL). 
+This project was created by Robert Fourer, Jun Ma, and Kipp Martin. 
+The code has been written primarily by Jun Ma, Kipp Martin, Robert Fourer, and Huanyuan Sheng.  
+Jun Ma and Kipp Martin are the COIN project leaders for OS.    
+Below we describe different methods for obtaining the C++ source code or the binaries.
 
 
 
 
-\subsection{Obtaining OS Source Code Using Subversion (SVN)}\label{section:svn}
+\subsection{Obtaining the Binaries}\label{section:obtainingbinaries}
 
-The C++ source code can be obtained using the Subversion version control package.  Users with Unix operating systems will most likely have a command line svn client.  If an svn client is not present, see \url{http://subversion.tigris.org} to download an svn client.   For Windows users we recommend the  SVN client  TortoiseSVN.  See \url{tortoisesvn.tigris.org}.  The TortoiseSVN client is integrated within the Windows  Explorer.
+If the user does not wish to compile source code, the OS library, OSSolverService executable 
+and Tomcat server software configuration are available at \url{http://www.coin-or.org/Binaries/OS} 
+in binary format.  In the binary OS root there  are {\tt cpp} and {\tt java} directories for the 
+compiled C++ and Java code.
+
+In the {\tt cpp} directory you will find binaries for the OS library (see Section \ref{section:oslibrary}), 
+along with the necessary COIN-OR supporting libraries,  and the {\tt OSSolverService} executable 
+(see Section~\ref{section:ossolverservice}).   All the files are packaged together as a {\tt tgz} file 
+for Unix distributions and {\tt zip} file for Windows.  The distribution follows the following naming convention:
+
+\begin{verbatim}
+OS-release_number-operating_system-chip-compiler.tgz (zip)
+\end{verbatim}
+For example, Release 1.0 on Linux is
+\begin{verbatim}
+OS-1.0-linux-ix86-gcc3.4.tgz
+\end{verbatim}
+and on Windows
+\begin{verbatim}
+OS-1.0-win32-msvs-v8.zip
+\end{verbatim}
+After unpacking the {\tt tgz} or {\tt zip} archives, the files in the resulting OS binary distribution are illustrated in Figure \ref{figure:osbindistribution}.   In the {\tt bin} directory are the executable file {\tt OSSolverService}  and any other related COIN-OR executables. The {\tt doc} directory contains this document, {\tt osUsersManual\_1.pdf}.
+  In the {\tt include} directory are the header files that are required if the user wishes to write code to link to OS library or any other supporting COIN-OR library in the {\tt lib} directory.
+\begin{figure}
+\centering
+\includegraphics[scale=0.7]{\figurepath/osbinDistribution.png}
+\caption{The OS  binary distribution.}
+\label{figure:osbindistribution}
+\end{figure}
+
+In the {\tt java} directory  are the binary files required to build an Apache Tomcat-based Web service that will take SOAP envelopes with model instances in OSiL format and/or options in OSoL format, call the {\tt OSSolverService}, and return the optimization result in OSrL format.  This distribution is named
+\begin{verbatim}
+os-distribution-release_number.zip
+\end{verbatim}
+and the details and use of this distribution are described in Section \ref{section:tomcat}.
+
+\subsection{Auxiliary Software for Working with the OS Project} \label{section:auxiliarydownloads}
+
+Compiling and modifying the OS project source code can be a daunting task, 
+made somewhat easier by the inclusion of configure scripts and makefiles 
+in the distribution of the source. However, additional software packages are 
+sometimes needed or convenient, especially on Windows. 
+We collect in this section a number of recommended packages that we ourselves use in the development and maintenance of the code.
+
+\subsubsection{Subversion (SVN)}\label{section:svn}
+
+The Subversion version control package is used to obtain the C++ source code.  Users with Unix operating systems will most likely have a command line svn client.  If an svn client is not present, 
+see \url{http://subversion.tigris.org} to download an svn client.   For Windows users we recommend the  
+SVN client  TortoiseSVN.  See \url{tortoisesvn.tigris.org}.  The TortoiseSVN client is integrated within the 
+Windows  Explorer.
+
+\subsubsection{wget}\label{section:wget}
+Certain third-party software (see section~\ref{section:otherthirdparty} is available in source form but is not contained in the OS project distribution. Scripts are included to download this code using the {\tt wget} executable.
+
+
+%The {\tt wget} executable is used by the scripts, {\tt get.ASL}, {\tt %get.Blas}, etc. in the corresponding third party subdirectories and makes it %easy to download the software.  
+A Windows version of {\tt wget} is available at
+
+\begin{verbatim}
+http://www.christopherlewis.com/WGet/WGetFiles.htm
+\end{verbatim}
+
+Windows users are advised to download only the binary found in
+
+\begin{verbatim}
+http://www.christopherlewis.com/WGet/wget-1.10.2b.zip
+\end{verbatim}
+or the beta version of the new release at
+\begin{verbatim}
+http://www.christopherlewis.com/WGet/wget-1.11-beta-1b.zip
+\end{verbatim}
+
+There is no need to rebuild the code locally, which relies on several levels of other software.
+
+\subsubsection{Windows development platform}\label{section:windowsdevelopment}
+A development platform is essential for users on Windows. OS Project provides support for Microsoft Visual Studio (see section~\ref{ section:msvs}) and several unix emulators, including Cygwin (section~\ref{ section:cygwin}), MinGW (section~\ref{ section:mingw }) and MSYS (section~\ref{section:msys}). Download instructions for all of these packages are included in the sections referenced above.
+
+\subsubsection{C++ compiler}\label{section:cpp}
+A C++ compiler is needed to compile the OS source. This should be present under all unix installations. If no C++ compiler is available on the system, the free {\tt gcc} compiler can be downloaded from {\tt http://gcc.gnu.org}.
+
+Microsoft Visual Studio can be configured with the Microsoft {\tt cl} compiler, which also works under MSYS. MinGW is normally configured with the Gnu compiler collection ({\tt gcc}), although it can also be used with the {\tt cl} compiler. However, extreme care is needed if the last option is followed. {\tt gcc} and {\tt cl} have very different header files, and it is important to set up the {\tt \$PATH} variable correctly in order not to confuse the header files. In our experience, best results are achieved with the minimal unix-like installation, MSYS, and the Microsoft {\tt cl} compiler.
+
+\subsubsection{Fortran Compiler}\label{section:fortran}
+The COIN-OR project IPopt (see section~\ref{section:ipopt} and several of the third-party software described in section~\ref{section:otherthirdparty} include Fortran subroutines, which must be compiled with a Fortran compiler if the user wants to include these projects in the build. A free Fortran 95 compiler can be downloaded from {\tt http://www.g95.org}.
+
+\subsubsection{ {\tt flex} and {\tt bison} }\label{section:flex} 
+Users who want to edit the source code in the parsers described in
+Section~\ref{section:osparsers} will need the additional  tools
+{\bf flex} and {\bf bison.}  These can be downloaded from
+{\tt http://sourceforge.net/project/showfiles.php?group\_id=2435}
+and are listed at the Web site as
+
+\begin{verbatim}
+bison-2.3-MSYS-1.0.11
+flex-2.5.33-MSYS-1.0.11
+regex-0.12-MSYS-1.0.11
+\end{verbatim}
+The last one contains an important DLL, msys-regex-0.dll, without which flex
+will not start.
+
+\subsubsection{ doxygen }\label{section:doxygen}
+Doxygen  (\url{www.doxygen.org}) is a document production system that can be used to prepare documentation for the OS project and related software. For details, see section~\ref{section:documentation}
+
+
+\subsection{Obtaining OS Source Code Using Subversion (SVN)}\label{section:downloadwithsvn}
 
 For Users on a Unix system such as Linux, Solaris, Mac OS X, etc., the source code is obtained as follows. In a command window execute:
 
@@ -297,40 +411,17 @@ Now build the project as described in  Section \ref{section:build}.
 
 
 
-
-\subsection{Obtaining the Binaries}\label{section:obtainingbinaries}
-
-If the user does not wish to compile source code, the
-OS library, OSSolverService executable, and Tomcat server software configuration are available at \url{http://www.coin-or.org/Binaries/OS} in binary format.  In the binary OS root there  are {\tt cpp} and {\tt java} directories for the compiled C++ and Java code.
-
-In the {\tt cpp} directory you will find binaries for the OS library (see Section \ref{section:oslibrary}), along with the necessary COIN-OR supporting libraries,  and the {\tt OSSolverService} executable (see Section~\ref{section:ossolverservice}).   All the files are packaged together as a {\tt tgz} file for Unix distributions and {\tt zip} file for Windows.  The distribution follows the following naming convention:
-
-\begin{verbatim}
-OS-release_number-operating_system-chip-compiler.tgz (zip)
-\end{verbatim}
-For example, Release 1.0 on Linux is
-\begin{verbatim}
-OS-1.0-linux-ix86-gcc3.4.tgz
-\end{verbatim}
-and on Windows
-\begin{verbatim}
-OS-1.0-win32-msvs-v8.zip
-\end{verbatim}
-After unpacking the {\tt tgz} or {\tt zip} archives, the files in the resulting OS binary distribution are illustrated in Figure \ref{figure:osbindistribution}.   In the {\tt bin} directory are the executable file {\tt OSSolverService}  and any other related COIN-OR executables. The {\tt doc} directory contains this document, {\tt osUsersManual\_1.pdf}.
-  In the {\tt include} directory are the header files that are required if the user wishes to write code to link to OS library or any other supporting COIN-OR library in the {\tt lib} directory.
-\begin{figure}
-\centering
-\includegraphics[scale=0.7]{\figurepath/osbinDistribution.png}
-\caption{The OS  binary distribution.}
-\label{figure:osbindistribution}
-\end{figure}
-
-In the {\tt java} directory  are the binary files required to build an Apache Tomcat-based Web service that will take SOAP envelopes with model instances in OSiL format and/or options in OSoL format, call the {\tt OSSolverService}, and return the optimization result in OSrL format.  This distribution is named
-\begin{verbatim}
-os-distribution-release_number.zip
-\end{verbatim}
-and the details and use of this distribution are described in Section \ref{section:tomcat}.
-
+%\subsection{Obtaining source for the OS Project API} \label{section{oslite}
+%The OS project is very extensive and relies on many other COIN-OR projects.  
+%This may not be desirable for modeling language and solver developers who just wish to use the OS API 
+%in conjunction with their modeling language or solver.  Hence there is also an ``OS lite'' download 
+%that consists of all the code for the OS API and for reading and writing instance and solution files. 
+%We refer to this version of the project as {\tt OSCommon} and the code for this project is synched  
+%with the corresponding stable and release versions of the code. 
+%For example, to get Stable 1.1 of {\tt OSCommon} use the svn command
+%\begin{verbatim}
+%svn co https://projects.coin-or.org/svn/OS/stable/OSCommon1.1  OSCommon
+%\end{verbatim}
 
 
 \section{Building and Testing the OS Project}\label{section:build}
@@ -497,17 +588,18 @@ For example, running
 
 \subsection{Building the OS Project on Windows}\label{section:windowsinstall}
 
-There are a number of options open to Windows users.   First, if you wish to work with source code we recommend downloading  the svn client,  TortoiseSVN.  See \url{tortoisesvn.tigris.org}.  With TortoiseSVN in the Windows Explorer connect to the directory (e.g. COIN-OS) where you wish to put the OS code. Right click on the directory and select {\tt SVN Checkout}.   In the textbox, {\tt URL of Repository} give the URL for the version of the OS project you wish to checkout, e.g. https://projects.coin-or.org/svn/OS/stable/1.0.
+There are a number of options open to Windows users.   First, if you wish to work with source code we recommend downloading  the svn client,  TortoiseSVN.  See section~\ref{section:svn}.  With TortoiseSVN in the Windows Explorer connect to the directory (e.g. COIN-OS) where you wish to put the OS code. Right click on the directory and select {\tt SVN Checkout}.   In the textbox, {\tt URL of Repository} give the URL for the version of the OS project you wish to checkout, e.g. https://projects.coin-or.org/svn/OS/stable/1.0.
 
-Also, if you plan to build any of the projects contained in {\tt ThirdParty} (e.g. ASL) we recommend using {\tt wget}.  The {\tt wget} executable is used by the scripts, {\tt get.ASL}, {\tt get.Blas}, etc. in the corresponding third party subdirectories and makes it easy to download the software.  A Windows version of {\tt wget} is available at
+Also, if you plan to build any of the projects contained in {\tt ThirdParty} (e.g. ASL) we recommend using {\tt wget}. See section~\ref{section:wget} 
+%The {\tt wget} executable is used by the scripts, {\tt get.ASL}, {\tt %get.Blas}, etc. in the corresponding third party subdirectories and makes it %easy to download the software.  A Windows version of {\tt wget} is available at
+%
+%\begin{verbatim}
+%http://www.christopherlewis.com/WGet/WGetFiles.htm
+%\end{verbatim}
 
-\begin{verbatim}
-http://www.christopherlewis.com/WGet/WGetFiles.htm
-\end{verbatim}
 
 
-
-\subsubsection{Microsoft Visual Studio (MSVS)}
+\subsubsection{Microsoft Visual Studio (MSVS)} \label{section:msvs}
 
 
 
@@ -535,7 +627,7 @@ Open the project files (for instance by double clicking on them in Windows Explo
 \item[Step 4] Run the  {\tt unitTest}.  Connect  to the directory {\tt COIN-OR/OS/test} directory and run either the release or debug version of the  {\tt unitTest} executable.
 \end{itemize}
 
-\subsubsection{Cygwin}
+\subsubsection{Cygwin}\label{section:cygwin}
 
 {\tt Cygwin} provides a Unix emulation environment for Windows. It comes with numerous tools and libraries including the gcc compilers. See {\tt www.cygwin.com}.   Cygwin can be used with the Gnu Compiler Collection (gcc) or with the Microsoft {\tt cl} compiler.
 
@@ -658,18 +750,18 @@ The following is a work-around. (See also section~\ref{section:ipopt}.)
 
 
 
-\subsubsection{MinGW}
+\subsubsection{MinGW} \label{section:mingw}
 
 
 
 MinGW (Minimalist GNU for Windows) is a set of runtime headers to be used with the GNU {\tt gcc} compilers for Windows.  
-See \url{www.mingw.org}. As with Cygwin, the OS project is  built exactly as described in Section \ref{section:svn}.
+See \url{www.mingw.org}. As with Cygwin, the OS project is  built exactly as described in Section \ref{section:unixbuilds}.
 
 The MinGW installation includes the {\tt gcc} compiler, which can interact negatively with the Microsoft {\tt cl} compiler.
 For that reason it is advisable to download the even smaller installation MSYS (see next section) if you intend to
 build any software with the Microsoft Visual Studio suite.
 
-\subsubsection{MSYS}
+\subsubsection{MSYS} \label{section:msys}
 
 MSYS (Minimal SYStem) provides an easy way to use the COIN-OS build system with compilers/linkers of your own choice,
 such as the Microsoft command line C++ cl compiler.  MSYS is intended as an alternative to the DOS command window.
@@ -772,15 +864,16 @@ This file is listed as {\tt bash-3.1-MSYS-1.0.11} and the  binary download is
 This will provide the necessary Bourne shell for executing the configure scripts.
 Users who want to edit the source code in the parsers described in
 Section~\ref{section:osparsers} will need the additional  tools
-{\bf flex} and {\bf bison.}  These are listed at the Web site as
-
-\begin{verbatim}
-bison-2.3-MSYS-1.0.11
-flex-2.5.33-MSYS-1.0.11
-regex-0.12-MSYS-1.0.11
-\end{verbatim}
-The last one contains an important DLL, msys-regex-0.dll, without which flex
-will not start.
+{\bf flex} and {\bf bison} as described in section~\ref{section:flex}.
+%These are listed at the Web site as
+%
+%\begin{verbatim}
+%bison-2.3-MSYS-1.0.11
+%flex-2.5.33-MSYS-1.0.11
+%regex-0.12-MSYS-1.0.11
+%\end{verbatim}
+%The last one contains an important DLL, msys-regex-0.dll, without which flex
+%will not start.
 
 
 
@@ -864,7 +957,7 @@ What you do next depends upon whether or not a FORTRAN compiler is present, and 
 
 \item[Option 1.]   If you are building in a Unix-like environment and have a Fortran 95 compiler available, you can simply run the {\tt configure} script and the FORTRAN compiler will be detected and the {\tt Ipopt} project will be built.
 
-\item[Option 2.]   If you have a FORTRAN 77 compiler, you  must first obtain one of the   Harwell Subroutine Library (HSL) routines {\tt ma27ad.f} or {\tt MA57ad.f}.  See \url{http://www.cse.scitech.ac.uk/nag/hsl/}.  Put the Harwell code in the directory {\tt \../data/ThirdParty/HSL}.  Now run the {\tt configure} script as described in \ref{section:svn}.  See
+\item[Option 2.]   If you have a FORTRAN 77 compiler, you  must first obtain one of the   Harwell Subroutine Library (HSL) routines {\tt ma27ad.f} or {\tt MA57ad.f}.  See \url{http://www.cse.scitech.ac.uk/nag/hsl/}.  Put the Harwell code in the directory {\tt \../data/ThirdParty/HSL}.  Now run the {\tt configure} script as described in \ref{section:unixbuilds}.  See
 
 \begin{verbatim}
  http://www.coin-or.org/Ipopt/documentation/node15.html
@@ -904,7 +997,13 @@ designed to work with  several other open source and commercial software project
 OS distribution directory structure (see Figure~\ref{figure:osprojectrootdir}), there is a {\tt ThirdParty} 
 directory, which does not contain anything other than {\tt get.xxxx} scripts and other utilities.  
 The source code for any of these packages must be downloaded separately using the {\tt get.xxxx} scripts, 
-as {\tt configure} will not build these projects without the source code being present.
+as {\tt configure} will not build these projects without the source code being present. After the download, {\tt configure} will recognize the presence of these files and will configure the makefiles accordingly. 
+
+If the user wants to exclude these projects from the build after they have been downloaded and detected, a new {\tt configure} is required with instructions to skip them. For instance, if the user experiences problems with the Fortran compiler and its interaction with the system, the following command can be used to skip all projects that use Fortran code:
+
+\begin{verbatim}
+Configure COIN_SKIP_PROJECTS="Ipopt ThirdParty/Blas ThirdParty/Lapack ThirdParty/Mumps"
+\end{verbatim}
 
 In the {\tt inc} subdirectory of the {\tt OS}  directory, there is a header file, {\tt config\_os.h} that defines 
 the values of a number of
@@ -985,8 +1084,8 @@ After installing the binaries and include files in an appropriate directory, run
 include and library directory. An example is given below:
 
 \begin{verbatim}
-configure --with-cplex-lib="-L$(CPLEXDIR)/lib/$(SYSTEM)/$(LIBFORMAT)
- $(CPLEX_LIBS)" --with-cplex-incdir= $(CPLEXDIR)/include
+configure --with-cplex-lib="-L$(CPLEXDIR)/lib/$(SYSTEM)/$(LIBFORMAT) $(CPLEX_LIBS)" 
+--with-cplex-incdir= $(CPLEXDIR)/include
 \end{verbatim}
 
 You may also need the following environment variables (if they are not already set). The following are values we used in a working implementation.
@@ -1043,7 +1142,7 @@ NlpProblemDef::~NlpProblemDef (void)
 For example:
 
 \begin{verbatim}
-./configure --with-knitro-lib="-L/home/kmartin/files/code/knitro/linux/lib -lknitro "
+configure --with-knitro-lib="-L/home/kmartin/files/code/knitro/linux/lib -lknitro "
 --with-knitro-incdir=/home/kmartin/files/code/knitro/linux/include
 \end{verbatim}
 
@@ -1058,8 +1157,8 @@ After installing the binaries and include files in an appropriate directory, run
 include and library directory. An example is given below:
 
 \begin{verbatim}
+configure --with-lindo-incdir=/home/kmartin/files/code/lindo/linux/include
 --with-lindo-lib="-L/home/kmartin/files/code/lindo/linux/lib -llindo -lmosek"
---with-lindo-incdir=/home/kmartin/files/code/lindo/linux/include
 \end{verbatim}
 
 
@@ -1127,7 +1226,7 @@ This file can be edited, and any project for which documentation is desired, can
 
 \subsection{Platforms}
 
-The build process described in Section \ref{section:svn} has been tested on Linux, Mac OS X, and on Windows using  MINGW/MSYS and CYGWIN. The  gcc/g++ and Microsoft  cl compiler have been tested. A number of solvers have also been tested with the OS library. For a list of tested solvers and platforms see Table \ref{table:testedplatforms}.  More detail on the platforms listed in Table  \ref{table:testedplatforms} is given in Table \ref{table:platformdescription}.
+The build process described in Section \ref{section:unixbuilds} has been tested on Linux, Mac OS X, and on Windows using  MINGW/MSYS and CYGWIN. The  gcc/g++ and Microsoft  cl compiler have been tested. A number of solvers have also been tested with the OS library. For a list of tested solvers and platforms see Table \ref{table:testedplatforms}.  More detail on the platforms listed in Table  \ref{table:testedplatforms} is given in Table \ref{table:platformdescription}.
 
 
 \begin{table}
