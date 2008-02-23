@@ -24,16 +24,16 @@
  * the user will need to change this for their server
  * </p>
  */
- 
 
- 
-#include "OSResult.h"
-#include "OSiLReader.h"
-#include "OSiLWriter.h"
-#include "OSrLReader.h"
-#include "OSrLWriter.h"
-#include "OSInstance.h"
-#include "OSnLNode.h"
+//#include "OSResult.h"
+//#include "OSiLReader.h"
+//#include "OSiLWriter.h"
+//#include "OSrLReader.h"
+//#include "OSrLWriter.h"
+//#include "OSInstance.h"
+//#include "OSnLNode.h"
+
+#include "OSParameters.h"
 #include "OSFileUtil.h"
 #include "OSErrorClass.h"
 #include "OSWSUtil.h" 
@@ -54,7 +54,7 @@
 
 #include <sstream>
 #include <vector>
-
+//#include <asl.h>
 
 int main(int argC, char* argV[])
 {

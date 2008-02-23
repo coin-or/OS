@@ -17,7 +17,7 @@
  */
 
 
-      
+#define DEBUG
 
 #include "OSCoinSolver.h"
 #include "OSiLReader.h"
@@ -91,7 +91,6 @@ void CoinSolver::solve() throw (ErrorClass) {
 				|| (osinstance->getNumberOfIntegerVariables() > 0)
 				|| (osinstance->getNumberOfBinaryVariables() > 0) ) throw ErrorClass( "Clp cannot do nonlinear or quadratic or integer");
 			solverIsDefined = true;
-			
 			m_OsiSolver = new OsiClpSolverInterface();
 		}
 		else{
