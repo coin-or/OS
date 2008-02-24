@@ -363,9 +363,10 @@ int main(int argC, char* argV[])
     	d1 = os_strtod(os_dtoa_format( OSDBL_MAX).c_str(),     NULL);
     	if(d1 == DBL_MAX )std::cout <<  "SUCCESS" << endl;
     	else std::cout <<  "FAILURE" << endl;
+    	*/
     	nl2osil = new OSnl2osil( nlFileName);
+		cout << "All tests completed successfully" <<  endl <<  endl;
 	    return 0;
-	    */
     
 	}
 	catch(const ErrorClass& eclass){
