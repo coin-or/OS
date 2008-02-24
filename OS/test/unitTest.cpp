@@ -364,9 +364,9 @@ int main(int argC, char* argV[])
     	if(d1 == DBL_MAX )std::cout <<  "SUCCESS" << endl;
     	else std::cout <<  "FAILURE" << endl;
     	*/
-    	nl2osil = new OSnl2osil( nlFileName);
-		cout << "All tests completed successfully" <<  endl <<  endl;
-	    return 0;
+    	//nl2osil = new OSnl2osil( nlFileName);
+		//cout << "All tests completed successfully" <<  endl <<  endl;
+	    //return 0;
     
 	}
 	catch(const ErrorClass& eclass){
@@ -1435,7 +1435,7 @@ double getObjVal( std::string osrl){
 				//std::cout << "HERE IS THE OBJECTIVE FUNCTION VALUE SUBSTRING  " << sObjVal<< std::endl; 
 				// return dObjVal = strtod(sObjVal.c_str(), NULL);
 
-				return dObjVal = atof( sObjVal.c_str()); 
+				return dObjVal = os_strtod( sObjVal.c_str(), NULL); 
 			}
 			else return OSNAN;
 		}
