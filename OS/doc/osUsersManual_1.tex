@@ -188,6 +188,7 @@ If you want to:
 \section{Downloading the OS Project}\label{section:download}
 
 The OS project is an open-source project  with source code under the Common Public License (CPL). 
+See~\url{http://www.ibm.com/developerworks/library/os-cpl.html}.
 This project was created by Robert Fourer, Jun Ma, and Kipp Martin. 
 The code has been written primarily by Jun Ma, Kipp Martin, Robert Fourer, and Huanyuan Sheng.  
 Jun Ma and Kipp Martin are the COIN project leaders for OS.    
@@ -723,14 +724,16 @@ The following is a work-around. (See also section~\ref{section:ipopt}.)
 
 \begin{itemize}
 
-\item[Step a.]  Obtain one of the   Harwell Subroutine Library (HSL) routines {\tt ma27ad.f} or {\tt MA57ad.f}.  See \url{http://www.cse.scitech.ac.uk/nag/hsl/}.  Put the Harwell code in the directory {\tt ThirdParty/HSL}.
+\item[Step a.]  Obtain one of the   Harwell Subroutine Library (HSL) routines {\tt ma27ad.f} or {\tt MA57ad.f}.  
+See \url{http://www.cse.scitech.ac.uk/nag/hsl/}.  Put the Harwell code in the directory {\tt ThirdParty/HSL}.
 
 
 
 
-\item[Step b.]  Follow the instructions for downloading and installing the {\tt f2c} compiler from Netlib.  The installation instructions for this are in the {\tt INSTALL} file in
+\item[Step b.]  Follow the instructions for downloading and installing the {\tt f2c} compiler from Netlib.  
+The installation instructions for this are in the {\tt INSTALL} file in
 \begin{verbatim}
-../data/BuildTools/compile_f2c
+BuildTools/compile_f2c
 \end{verbatim}
 
 
@@ -949,23 +952,38 @@ $ cd ../Mumps
 $ ./get.Mumps
 \end{verbatim}
 
-Alternatively, you can connect into the project root {\tt COIN-OS} and execute the script {\tt get.AllThirdParty}.  This will also get the AMPL {\tt ASL} libraries.
+Alternatively, you can connect into the project root {\tt COIN-OS} and execute the script {\tt get.AllThirdParty}.  
+This will also get the AMPL {\tt ASL} libraries.
 
-What you do next depends upon whether or not a FORTRAN compiler is present, and if so, which version of FORTRAN.  There are three options.
+What you do next depends upon whether or not a FORTRAN compiler is present, and if so, which version of FORTRAN.  
+There are several options. See also
+
+\begin{verbatim}
+ http://www.coin-or.org/Ipopt/documentation/node13.html
+ \end{verbatim}
+
 
 \begin{itemize}
 
-\item[Option 1.]   If you are building in a Unix-like environment and have a Fortran 95 compiler available, you can simply run the {\tt configure} script and the FORTRAN compiler will be detected and the {\tt Ipopt} project will be built.
+\item[Option 1.]   If you are building in a Unix-like environment and have a Fortran 95 compiler that recognizes
+embedded preprocessor statements (such as {\tt gfortran} --- see~\url{http://gcc.gnu.org/fortran/} or {\tt g95} ---
+see~\url{http://www.g95.org/}),
+you can simply run the {\tt configure} script and the FORTRAN compiler will be detected and the {\tt Ipopt} project will be built.
 
-\item[Option 2.]   If you have a FORTRAN 77 compiler, you  must first obtain one of the   Harwell Subroutine Library (HSL) routines {\tt ma27ad.f} or {\tt MA57ad.f}.  See \url{http://www.cse.scitech.ac.uk/nag/hsl/}.  Put the Harwell code in the directory {\tt \../data/ThirdParty/HSL}.  Now run the {\tt configure} script as described in \ref{section:unixbuilds}.  See
+\item[Option 2.]   If you have a Fortran 95 compiler that cannot deal with the embedded preprocessor statements,
+you may have to resort to manual edits before you can build Ipopt --- or see Option 3.
 
+\item[Option 3.]   If you have a FORTRAN 77 compiler, you must first obtain one of the Harwell Subroutine Library (HSL)
+routines {\tt ma27ad.f} or {\tt MA57ad.f}.  See \url{http://www.cse.scitech.ac.uk/nag/hsl/}.  Put the Harwell code 
+in the directory {\tt \../ThirdParty/HSL}.  Now run the {\tt configure} script as described in \ref{section:unixbuilds}.  
+
+Note that the Harwell Subroutine Library is not governed by the Common Public License. It is the user's responsibility
+to ensure adherence to appropriate copyright and distribution agreements. 
+
+\item[Option 4.]  If you do not have a FORTRAN compiler and do not wish to obtain one, you can use the {\tt f2c} 
+compiler from Netlib.  The installation instructions for this are in the {\tt INSTALL} file in
 \begin{verbatim}
- http://www.coin-or.org/Ipopt/documentation/node15.html
- \end{verbatim}
-
-\item[Option 3.]  If you do not have a FORTRAN compiler and do not wish to obtain one, you can use the {\tt f2c} compiler from Netlib.  The installation instructions for this are in the {\tt INSTALL} file in
-\begin{verbatim}
-../data/BuildTools/compile_f2c
+BuildTools/compile_f2c
 \end{verbatim}
 
 \end{itemize}
@@ -974,7 +992,7 @@ What you do next depends upon whether or not a FORTRAN compiler is present, and 
 
 
 \begin{itemize}
-\item Option 3 also requires that  one of the  Harwell Subroutine Library (HSL) routines {\tt ma27ad.f} or  {\tt MA57ad.f} be present in the HSL directory.
+\item Option 4 also requires that one of the Harwell Subroutine Library (HSL) routines {\tt ma27ad.f} or {\tt MA57ad.f} be present in the HSL directory.
 
 \item If you run configure with the {\tt --enable-debug} option on Windows, then when building the {\tt vcf2c.lib}, use the command line
 
@@ -4815,9 +4833,23 @@ http://www.optimizationservices.org/schemas/OSoL.xsd">
     </optimization>
 </osol>
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-I can reproduce what you say on a Mac that should be similar to yours.The problem might be that the use of atof triggers some ASL routinesthat ask for _Stderr.However, Stderr gets defined in stderr.c of the ASL library:FILE *Stderr;Also "nm amplsolver.a | grep Stderr" produces00000010 C _StderrMaybe the "C" (=common) does not count as symbol definition? I do notreally understand what "man nm" tells me about this.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+I can reproduce what you say on a Mac that should be similar to yours.
+
+The problem might be that the use of atof triggers some SL routines
+that ask for _Stderr.
+However, Stderr gets defined in stderr.c of the ASL library:
+FILE *Stderr;
+
+Also "nm amplsolver.a | grep Stderr" produces
+00000010 C _Stderr
+
+Maybe the "C" (=common) does not count as symbol definition? I do not
+really understand what "man nm" tells me about this.
+
+ 
 
 
 
