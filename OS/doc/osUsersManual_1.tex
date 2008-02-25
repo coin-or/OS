@@ -4815,6 +4815,9 @@ http://www.optimizationservices.org/schemas/OSoL.xsd">
     </optimization>
 </osol>
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+I can reproduce what you say on a Mac that should be similar to yours.The problem might be that the use of atof triggers some ASL routinesthat ask for _Stderr.However, Stderr gets defined in stderr.c of the ASL library:FILE *Stderr;Also "nm amplsolver.a | grep Stderr" produces00000010 C _StderrMaybe the "C" (=common) does not count as symbol definition? I do notreally understand what "man nm" tells me about this.
 
 
 
