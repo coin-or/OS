@@ -1010,9 +1010,10 @@ CFLAGS = -MTd -DUSE_CLOCK -DMSDOS -DNO_ONEXIT
 
 This section deals with other third-party software not available for download at \url{www.coin-or.org}. 
 The OS project distribution includes the COIN-OR projects {\tt Cbc}, {\tt Clp}, {\tt Cgl}, {\tt CoinUtils}, 
-{\tt CppAD},   {\tt DyLP},   {\tt Ipopt},  {\tt Osi}, {\tt SYMPHONY}, and {\tt Vol}.  However, the project is also 
-designed to work with  several other open source and commercial software projects.      In the 
-OS distribution directory structure (see Figure~\ref{figure:osprojectrootdir}), there is a {\tt ThirdParty} 
+{\tt CppAD},   {\tt DyLP},   {\tt Ipopt},  {\tt Osi}, {\tt SYMPHONY}, and {\tt Vol}.  
+(For details on any of these projects see \url{http://www.coin-or.org/projects/}.)
+However, the project is also designed to work with  several other open source and commercial software projects.
+In the OS distribution directory structure (see Figure~\ref{figure:osprojectrootdir}), there is a {\tt ThirdParty} 
 directory, which does not contain anything other than {\tt get.xxxx} scripts and other utilities.  
 The source code for any of these packages must be downloaded separately using the {\tt get.xxxx} scripts, 
 as {\tt configure} will not build these projects without the source code being present. After the download, {\tt configure} will recognize the presence of these files and will configure the makefiles accordingly. 
