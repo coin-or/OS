@@ -251,7 +251,7 @@ SVN client  TortoiseSVN.  See \url{tortoisesvn.tigris.org}.  The TortoiseSVN cli
 Windows  Explorer.
 
 \subsubsection{wget}\label{section:wget}
-Certain third-party software (see section~\ref{section:otherthirdparty} is available in source form but is not contained in the OS project distribution. Scripts are included to download this code using the {\tt wget} executable.
+Certain third-party software (see section~\ref{section:otherthirdparty}) is available in source form but is not contained in the OS project distribution. Scripts are included to download this code using the {\tt wget} executable.
 
 
 %The {\tt wget} executable is used by the scripts, {\tt get.ASL}, {\tt %get.Blas}, etc. in the corresponding third party subdirectories and makes it %easy to download the software.  
@@ -282,13 +282,16 @@ A C++ compiler is needed to compile the OS source. This should be present under 
 Microsoft Visual Studio can be configured with the Microsoft {\tt cl} compiler, which also works under MSYS. MinGW is normally configured with the Gnu compiler collection ({\tt gcc}), although it can also be used with the {\tt cl} compiler. However, extreme care is needed if the last option is followed. {\tt gcc} and {\tt cl} have very different header files, and it is important to set up the {\tt \$PATH} variable correctly in order not to confuse the header files. In our experience, best results are achieved with the minimal unix-like installation, MSYS, and the Microsoft {\tt cl} compiler.
 
 \subsubsection{Fortran Compiler}\label{section:fortran}
-The COIN-OR project IPopt (see section~\ref{section:ipopt} and several of the third-party software described in section~\ref{section:otherthirdparty} include Fortran subroutines, which must be compiled with a Fortran compiler if the user wants to include these projects in the build. A free Fortran 95 compiler can be downloaded from {\tt http://www.g95.org}.
+The COIN-OR project IPopt (see section~\ref{section:ipopt}) and several of the third-party software described in section~\ref{section:otherthirdparty} include Fortran subroutines, which must be compiled with a Fortran compiler if the user wants to include these projects in the build. A free Fortran 95 compiler can be downloaded from {\tt http://www.g95.org}.
 
 \subsubsection{ {\tt flex} and {\tt bison} }\label{section:flex} 
 Users who want to edit the source code in the parsers described in
 Section~\ref{section:osparsers} will need the additional  tools
 {\bf flex} and {\bf bison.}  These can be downloaded from
+
+\begin{verbatim}
 {\tt http://sourceforge.net/project/showfiles.php?group\_id=2435}
+\end{verbatim}
 and are listed at the Web site as
 
 \begin{verbatim}
@@ -300,7 +303,8 @@ The last one contains an important DLL, msys-regex-0.dll, without which flex
 will not start.
 
 \subsubsection{ doxygen }\label{section:doxygen}
-Doxygen  (\url{www.doxygen.org}) is a document production system that can be used to prepare documentation for the OS project and related software. For details, see section~\ref{section:documentation}
+Doxygen  (\url{www.doxygen.org}) is a document production system that can be used to prepare documentation 
+for the OS project and related software. For details, see section~\ref{section:documentation}.
 
 
 \subsection{Obtaining OS Source Code Using Subversion (SVN)}\label{section:downloadwithsvn}
@@ -971,7 +975,7 @@ see~\url{http://www.g95.org/}),
 you can simply run the {\tt configure} script and the FORTRAN compiler will be detected and the {\tt Ipopt} project will be built.
 
 \item[Option 2.]   If you have a Fortran 95 compiler that cannot deal with the embedded preprocessor statements,
-you may have to resort to manual edits before you can build Ipopt --- or see Option 3.
+you may have to resort to manual edits before you can build Ipopt --- or see Option~3.
 
 \item[Option 3.]   If you have a FORTRAN 77 compiler, you must first obtain one of the Harwell Subroutine Library (HSL)
 routines {\tt ma27ad.f} or {\tt MA57ad.f}.  See \url{http://www.cse.scitech.ac.uk/nag/hsl/}.  Put the Harwell code 
