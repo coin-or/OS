@@ -1798,7 +1798,7 @@ bool OSInstance::setLinearConstraintCoefficients(int numberOfValues, bool isColu
 			instanceData->linearConstraintCoefficients->start->el[k] = starts[i];
 			k++;
 		}
-	}		 
+	}	
 	//values
 	if(instanceData->linearConstraintCoefficients->value == NULL) instanceData->linearConstraintCoefficients->value = new DoubleVector();
 	if(valuesBegin == 0 ){
