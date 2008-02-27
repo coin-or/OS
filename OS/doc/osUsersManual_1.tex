@@ -277,12 +277,26 @@ There is no need to rebuild the code locally, which relies on several levels of 
 A development platform is essential for users on Windows. OS Project provides support for Microsoft Visual Studio (see section~\ref{section:msvs}) and several unix emulators, including Cygwin (section~\ref{section:cygwin}), MinGW (section~\ref{section:mingw}) and MSYS (section~\ref{section:msys}). Download instructions for all of these packages are included in the sections referenced above.
 
 \subsubsection{C++ compiler}\label{section:cpp}
-A C++ compiler is needed to compile the OS source. This should be present under all unix installations. If no C++ compiler is available on the system, the free {\tt gcc} compiler can be downloaded from {\tt http://gcc.gnu.org}.
+A C++ compiler is needed to compile the OS source. This should be present under all unix installations. 
+If no C++ compiler is available on the system, the free {\tt gcc} compiler can be downloaded from 
+{\tt http://gcc.gnu.org}.
 
-Microsoft Visual Studio can be configured with the Microsoft {\tt cl} compiler, which also works under MSYS. MinGW is normally configured with the Gnu compiler collection ({\tt gcc}), although it can also be used with the {\tt cl} compiler. However, extreme care is needed if the last option is followed. {\tt gcc} and {\tt cl} have very different header files, and it is important to set up the {\tt \$PATH} variable correctly in order not to confuse the header files. In our experience, best results are achieved with the minimal unix-like installation, MSYS, and the Microsoft {\tt cl} compiler.
+Microsoft Visual Studio can be configured with the Microsoft {\tt cl} compiler, which also works under MSYS. 
+MinGW is normally configured with the Gnu compiler collection ({\tt gcc}), although it can also be used with 
+the {\tt cl} compiler. However, extreme care is needed if the last option is followed. {\tt gcc} and {\tt cl} 
+have very different header files, and it is important to set up the {\tt \$PATH} variable correctly in order 
+not to confuse the header files. In our experience, best results are achieved with the minimal unix-like 
+installation, MSYS, and the Microsoft {\tt cl} compiler.
 
 \subsubsection{Fortran Compiler}\label{section:fortran}
-The COIN-OR project IPopt (see section~\ref{section:ipopt}) and several of the third-party software described in section~\ref{section:otherthirdparty} include Fortran subroutines, which must be compiled with a Fortran compiler if the user wants to include these projects in the build. A free Fortran 95 compiler can be downloaded from {\tt http://www.g95.org}.
+The COIN-OR project IPopt (see section~\ref{section:ipopt}) and several of the third-party software 
+described in section~\ref{section:otherthirdparty} include Fortran subroutines, which must be compiled 
+with a Fortran compiler if the user wants to include these projects in the build. A free Fortran 95 compiler 
+can be downloaded from {\tt http://www.g95.org}. For Fortran~77 code (which includes the Blas, HSL, Ipopt 
+and Lapack projects --- but {\bf not} Mumps), it might be sufficient to download the {\tt f2c} translator 
+which turns Fortran~77 code into code that can subsequently be fed into a C compiler. 
+The {\tt f2c} translator and the {\tt f2c} runtime library can be downloaded from \url{http://www.netlib.org/f2c}. 
+Further details are available in the file {\tt BuildTools/compile_f2c/INSTALL}, which is part of the OS distribution.
 
 \subsubsection{ {\tt flex} and {\tt bison} }\label{section:flex} 
 Users who want to edit the source code in the parsers described in
@@ -708,8 +722,12 @@ This step is necessary to insure that Cygwin   looks for compilers, linkers, etc
 \end{itemize}
 Open the Cygwin shell and check the value of {\tt \$PATH}. If directories don't appear in an order described above, then  {\tt \$PATH} value needs to be reset.
 
-%\item [Step 5:] This step is necessary only if you wish to build with the AMPL {\tt ASL} solver library.   %Unfortunately, and we regret this, but at the time of this writing the working version of ASL for cygwin/%cl build is its trunk version. This means that it is necessary to download the trunk version separately %and replace the release version we have distributed with the trunk version.  The URL for the trunk %%version is
-
+%\item [Step 5:] This step is necessary only if you wish to build with the AMPL {\tt ASL} solver library.   
+%Unfortunately, and we regret this, but at the time of this writing the working version of ASL for cygwin/
+%cl build is its trunk version. This means that it is necessary to download the trunk version separately 
+%and replace the release version we have distributed with the trunk version.  The URL for the trunk 
+%version is
+%
 %\begin{verbatim}
 %co https://projects.coin-or.org/svn/BuildTools/ThirdParty/ASL/trunk  ASL
 %\end{verbatim}
@@ -1082,7 +1100,7 @@ The OS library contains a class, {\tt OSnl2osil} (see Section \ref{section:nl2os
 See \url{http://netlib.sandia.gov/ampl/}  and  \url{http://www.ampl.com}. Users with a Unix system should locate 
 the {\tt ASL} folder that is part of the distribution. The {\tt ASL} folder is in the {\tt ThirdParty} folder 
 which is in the distribution root folder. Locate and execute the {\tt get.ASL} script.  Do this prior to running 
-the {\tt configure} script. The {\tt configure} script will build the correct ASL library.
+the {\tt configure} script. The {\tt configure} script will then build the correct ASL library.
 
 Microsoft  Visual Studio users will have to build the ASL library separately and then link it with the OS lib in the OS project file.  The necessary source files are at
 \begin{verbatim}
