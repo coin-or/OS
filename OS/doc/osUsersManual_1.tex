@@ -4872,6 +4872,11 @@ Also "nm amplsolver.a | grep Stderr" produces
 Maybe the "C" (=common) does not count as symbol definition? I do not
 really understand what "man nm" tells me about this.
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+I've run Ipopt's configure from the vpath-directory.To be more elaborate:I've two directories:Ipopt-trunk is where I have checked out Ipopt/trunk.Ipopt-shared is the vpath-directory where I build Ipopt (using shared libs).What to do is to:1. Put the HSL source into Ipopt-trunk/ThirdParty/HSL2. In Ipopt-shared, call      ../Ipopt-trunk/configure --enable-library-loader3. Patch Ipopt-shared/libtool4. In Ipopt-shared (or in its ThirdParty/HSL subdir) call make.Now the gfortran call that builds the libhsl.dylib should next to the -dynamiclib argument also have a -single_module argument. If that is not sufficient, then one need to add also ADD_FFLAGS="-fno-common" to the configure call in step 2. I have not figures this out.It should also be possible to run only the configure in ThirdParty/HSL, but then one need to give a lot of options for prefix or subdir... (see beginning of ThirdParty/HSL/config.log).
+
  
 
 

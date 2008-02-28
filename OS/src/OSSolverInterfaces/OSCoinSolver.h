@@ -100,16 +100,18 @@ public:
 	 */ 
 	void dataEchoCheck();
 	
+	/** 
+	 * m_OsiSolver is the osi solver object -- in this case clp, glpk, cbc, or cplex	 
+	 */	
+ 	OsiSolverInterface *osiSolver;
+	
  
 	
 private:
 
 
 
-	/** 
-	 * m_OsiSolver is the osi solver object -- in this case clp, glpk, cbc, or cplex	 
-	 */	
- 	OsiSolverInterface *m_OsiSolver;
+
 	
 	/** 
 	 * m_CoinPackedMatrix is a Coin Packed Matrix ojbect

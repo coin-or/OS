@@ -38,31 +38,10 @@
 #include "OSBase64.h"
 #include "OSCommonUtil.h"
 #include "OSErrorClass.h"
-
-#include<iostream>
-
-
-#ifdef COIN_HAS_KNITRO    
-#include "OSKnitroSolver.h"
-#endif 
-
+#include "CglGomory.hpp"
 #include "OSMathUtil.h"
 
-#ifdef COIN_HAS_GLPK
-#include <OsiGlpkSolverInterface.hpp>
-#endif
-
-
-#ifdef COIN_HAS_ASL
-#include "OSnl2osil.h"
-#endif
-#ifdef COIN_HAS_LINDO    
-#include "OSLindoSolver.h"
-#endif  
-#ifdef COIN_HAS_IPOPT    
-#include "OSIpoptSolver.h"
-#endif 
- 
+#include<iostream> 
 using std::cout;   
 using std::endl;
 
@@ -90,8 +69,8 @@ int main( ){
 		osinstance->setVariableNumber( 2);   
 		//addVariable(int index, string name, double lowerBound, double upperBound, char type, double init, string initString);
 		// we could use setVariables() and add all the variable with one method call -- below is easier
-		osinstance->addVariable(0, "x0", 0, OSDBL_MAX, 'C', OSNAN, "");
-		osinstance->addVariable(1, "x1", 0, OSDBL_MAX, 'C', OSNAN, "");
+		osinstance->addVariable(0, "x0", 0, OSDBL_MAX, 'I', OSNAN, "");
+		osinstance->addVariable(1, "x1", 0, OSDBL_MAX, 'I', OSNAN, "");
 		//
 		// now add the objective function
 		osinstance->setObjectiveNumber( 1);
@@ -155,15 +134,39 @@ int main( ){
 		// done writing the model
 		cout << "Done writing the Model" << endl;
 		// now solve the model
-		DefaultSolver *solver  = NULL;
+		CoinSolver *solver  = NULL;
 		solver = new CoinSolver();
 		solver->osinstance = osinstance;
-		solver->sSolverName ="cbc"; 
+		solver->sSolverName ="clp"; 
 		cout << "call the COIN - Cbc Solver" << endl;
+		// we want a fractional solution
+		osinstance->instanceData->constraints->con[0]->ub = 620;
 		solver->solve();
 		cout << "Here is the COIN Cbc solver solution" << endl;
-		cout << solver->osrl << endl;	
+		cout << solver->osrl << endl;
+		//
+		//
 		// done solving the model
+		// add a Gomory Cut
+
+	    CglGomory gomory;
+	    OsiCuts cuts;
+	    OsiSolverInterface::ApplyCutsReturnCode acRc;
+	    gomory.generateCuts(*solver->m_OsiSolver, cuts);
+	    acRc = solver->m_OsiSolver->applyCuts(cuts,0.0);
+	    // Print applyCuts return code
+	    cout <<endl <<endl;
+	    cout <<cuts.sizeCuts() <<" cuts were generated" <<endl;
+	    cout <<"  " <<acRc.getNumInconsistent() <<" were inconsistent" <<endl;
+	    cout <<"  " <<acRc.getNumInconsistentWrtIntegerModel() 
+           <<" were inconsistent for this problem" <<endl;
+	    cout <<"  " <<acRc.getNumInfeasible() <<" were infeasible" <<endl;
+	    cout <<"  " <<acRc.getNumIneffective() <<" were ineffective" <<endl;
+	    cout <<"  " <<acRc.getNumApplied() <<" were applied" <<endl;
+      	cout <<endl <<endl;
+		solver->solve();
+		cout << "Here is the COIN Cbc solver solution" << endl;
+		cout << solver->osrl << endl;
 		// do garbage collection
 		delete osinstance;
 		osinstance = NULL;

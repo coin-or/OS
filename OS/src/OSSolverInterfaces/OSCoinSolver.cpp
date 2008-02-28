@@ -41,7 +41,7 @@ using std::ostringstream;
 
 
 CoinSolver::CoinSolver() : 
-m_OsiSolver(NULL),
+osiSolver(NULL),
 m_CoinPackedMatrix(NULL) 
 {
 osrlwriter = new OSrLWriter();
@@ -54,8 +54,8 @@ CoinSolver::~CoinSolver() {
 	cout << "inside CoinSolver destructor" << endl;
 	delete m_CoinPackedMatrix;
 	m_CoinPackedMatrix = NULL;
-	delete m_OsiSolver;
-	m_OsiSolver = NULL;
+	delete osiSolver;
+	osiSolver = NULL;
 	delete osrlwriter;
 	osrlwriter = NULL;
 	delete osresult;
@@ -88,10 +88,11 @@ void CoinSolver::solve() throw (ErrorClass) {
 		if( sSolverName.find("clp") != std::string::npos){
 			if( (osinstance->getNumberOfNonlinearExpressions() > 0)
 				|| (osinstance->getNumberOfQuadraticTerms() > 0) 
-				|| (osinstance->getNumberOfIntegerVariables() > 0)
-				|| (osinstance->getNumberOfBinaryVariables() > 0) ) throw ErrorClass( "Clp cannot do nonlinear or quadratic or integer");
+				//|| (osinstance->getNumberOfIntegerVariables() > 0)
+				//|| (osinstance->getNumberOfBinaryVariables() > 0) 
+				) throw ErrorClass( "Clp cannot do nonlinear or quadratic or integer");
 			solverIsDefined = true;
-			m_OsiSolver = new OsiClpSolverInterface();
+			osiSolver = new OsiClpSolverInterface();
 		}
 		else{
 			if( sSolverName.find("vol") != std::string::npos){
@@ -99,7 +100,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 				if( (osinstance->getNumberOfNonlinearExpressions() > 0)
 					|| (osinstance->getNumberOfQuadraticTerms() > 0) ) throw ErrorClass( "Vol cannot do nonlinear or quadratic");
 				solverIsDefined = true;
-				m_OsiSolver = new OsiVolSolverInterface();
+				osiSolver = new OsiVolSolverInterface();
              #endif
 			}
 			else{
@@ -108,7 +109,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 					if( (osinstance->getNumberOfNonlinearExpressions() > 0)
 						|| (osinstance->getNumberOfQuadraticTerms() > 0) ) throw ErrorClass( "Cplex cannot do nonlinear or quadratic");
 					solverIsDefined = true;
-					m_OsiSolver = new OsiCpxSolverInterface();
+					osiSolver = new OsiCpxSolverInterface();
 					#endif
 				}
 				else{
@@ -117,7 +118,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 						if( (osinstance->getNumberOfNonlinearExpressions() > 0)
 							|| (osinstance->getNumberOfQuadraticTerms() > 0) ) throw ErrorClass( "Glpk cannot do nonlinear or quadratic");
 						solverIsDefined = true;
-						m_OsiSolver = new OsiGlpkSolverInterface();
+						osiSolver = new OsiGlpkSolverInterface();
 						#endif
 					}
 					else{
@@ -133,7 +134,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 								|| (osinstance->getNumberOfBinaryVariables() > 0)  ) throw ErrorClass( "DyLP cannot do integer programming");
 							solverIsDefined = true;
 							
-							m_OsiSolver = new OsiDylpSolverInterface();
+							osiSolver = new OsiDylpSolverInterface();
 					
 							#endif
 						}
@@ -143,7 +144,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 								if( (osinstance->getNumberOfNonlinearExpressions() > 0)
 									|| (osinstance->getNumberOfQuadraticTerms() > 0)  ) throw ErrorClass( "SYMPHONY cannot do nonlinear or quadratic");
 								solverIsDefined = true;
-								m_OsiSolver = new OsiSymSolverInterface();
+								osiSolver = new OsiSymSolverInterface();
 								#endif
 							}
 							else{
@@ -151,7 +152,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 								if( (osinstance->getNumberOfNonlinearExpressions() > 0)
 									|| (osinstance->getNumberOfQuadraticTerms() > 0) ) throw ErrorClass( "Cbc cannot do nonlinear or quadratic");
 								solverIsDefined = true;
-								m_OsiSolver = new OsiCbcSolverInterface();
+								osiSolver = new OsiCbcSolverInterface();
 							}
 						}
 					}
@@ -235,13 +236,13 @@ bool CoinSolver::optimize()
 	//
 	int i = 0;
 	try{
-		m_OsiSolver->loadProblem(*m_CoinPackedMatrix, osinstance->getVariableLowerBounds(), 
+		osiSolver->loadProblem(*m_CoinPackedMatrix, osinstance->getVariableLowerBounds(), 
 					osinstance->getVariableUpperBounds(),  
 					osinstance->getDenseObjectiveCoefficients()[0], 
 					osinstance->getConstraintLowerBounds(), osinstance->getConstraintUpperBounds());
 		
 		// the code below causes a memory problem because it does not create a new copy in memory
-		//m_OsiSolver->assignProblem(m_CoinPackedMatrix, osinstance->getVariableLowerBounds(), 
+		//osiSolver->assignProblem(m_CoinPackedMatrix, osinstance->getVariableLowerBounds(), 
 		//			osinstance->getVariableUpperBounds(),  
 		//			osinstance->getDenseObjectiveCoefficients()[0], 
 		//			osinstance->getConstraintLowerBounds(), osinstance->getConstraintUpperBounds());
@@ -250,9 +251,9 @@ bool CoinSolver::optimize()
 
 
 		//	
-		if( osinstance->getObjectiveMaxOrMins()[0] == "min") m_OsiSolver->setObjSense(1.0);
-		else m_OsiSolver->setObjSense(-1.0);
-		m_OsiSolver->setDblParam(OsiObjOffset, osinstance->getObjectiveConstants()[0]);
+		if( osinstance->getObjectiveMaxOrMins()[0] == "min") osiSolver->setObjSense(1.0);
+		else osiSolver->setObjSense(-1.0);
+		osiSolver->setDblParam(OsiObjOffset, osinstance->getObjectiveConstants()[0]);
 		//
 		// set the integer variables
 		int *intIndex = NULL;
@@ -267,14 +268,14 @@ bool CoinSolver::optimize()
 					intIndex[k++] = i;
 				}
 			}
-			m_OsiSolver->setInteger( intIndex,  numOfIntVars);
+			osiSolver->setInteger( intIndex,  numOfIntVars);
 		}
 		// set some OSI options
 #ifdef COIN_HAS_SYMPHONY
 		//first the number of processors -- applies only to SYMPHONY
 		if( sSolverName.find( "symphony") != std::string::npos) {
 			OsiSymSolverInterface * si =
-			dynamic_cast<OsiSymSolverInterface *>(m_OsiSolver) ;
+			dynamic_cast<OsiSymSolverInterface *>(osiSolver) ;
 			std::string num_proc = "";
 			string::size_type pos1 = this->osol.find("num_proc"); 
 			string::size_type pos2;
@@ -299,8 +300,8 @@ bool CoinSolver::optimize()
 		//
 		//
 		// now some other Osi options
-		m_OsiSolver->setHintParam(OsiDoScale, false, OsiHintTry);
-		m_OsiSolver->setHintParam(OsiDoReducePrint, true, OsiHintTry);
+		osiSolver->setHintParam(OsiDoScale, false, OsiHintTry);
+		osiSolver->setHintParam(OsiDoReducePrint, true, OsiHintTry);
 		OsiSolverInterface *m_OsiSolverPre = NULL;	
 		// try to catch Coin Solver errors
 		try{
@@ -308,24 +309,25 @@ bool CoinSolver::optimize()
 				//cout << "CALL BRANCH AND BOUND " << endl;
 				// just use simple branch and bound for anything but cbc
 				if( sSolverName.find( "cbc") == std::string::npos) {
-					m_OsiSolver->branchAndBound();	
+					osiSolver->branchAndBound();	
 				}
 				else{
+					// this is cbc
 					// initial solve does not work on Jeff Camm problem without scaling
-					//m_OsiSolver->initialSolve();
+					//osiSolver->initialSolve();
 					// copy from John Forrest examples in Cbc
 					CglPreProcess process;
 	                /* Do not try and produce equality cliques and
 	                   do up to 10 passes -- I use 10 because John does in Cbc and he is brilliant*/
-					m_OsiSolverPre = process.preProcess(*m_OsiSolver, false, 10);
-	                if (!m_OsiSolver) {
+					m_OsiSolverPre = process.preProcess(*osiSolver, false, 10);
+	                if (!osiSolver) {
 	                  throw ErrorClass("Pre-processing says infeasible");
 	                } else {
 	                	printf("processed model has %d rows and %d columns\n",
 	                		m_OsiSolverPre->getNumRows(), m_OsiSolverPre->getNumCols());
 	                } 
 	              // return true;
-	               m_OsiSolver->setHintParam( OsiDoScale, true, OsiHintDo) ;
+	               osiSolver->setHintParam( OsiDoScale, true, OsiHintDo) ;
 	               m_OsiSolverPre->branchAndBound( ); 
 	               cout << "CALL POSTPROCESS " << endl;
 	               process.postProcess( *m_OsiSolverPre);
@@ -333,7 +335,7 @@ bool CoinSolver::optimize()
 				}
 			}
 			else{
-				m_OsiSolver->initialSolve();
+				osiSolver->initialSolve();
 			}
 		}
 		catch(CoinError e){
@@ -345,7 +347,7 @@ bool CoinSolver::optimize()
 		int solIdx = 0;
 		std::string description = "";
 		osresult->setGeneralStatusType("success");
-		if (m_OsiSolver->isProvenOptimal() == true){
+		if (osiSolver->isProvenOptimal() == true){
 			osresult->setSolutionStatus(solIdx, "optimal", description);
 			/* Retrieve the solution */
 			x = new double[osinstance->getVariableNumber() ];
@@ -353,16 +355,16 @@ bool CoinSolver::optimize()
 			z = new double[1];
 			rcost = new std::string[ osinstance->getVariableNumber()];
 			//
-			*(z + 0)  =  m_OsiSolver->getObjValue();
+			*(z + 0)  =  osiSolver->getObjValue();
 			osresult->setObjectiveValues(solIdx, z);
 			for(i=0; i < osinstance->getVariableNumber(); i++){
-				*(x + i) = m_OsiSolver->getColSolution()[i];
+				*(x + i) = osiSolver->getColSolution()[i];
 			}
 			osresult->setPrimalVariableValues(solIdx, x);
 			// Symphony does not get dual prices
 			if( sSolverName.find( "symphony") == std::string::npos){
 				for(i=0; i <  osinstance->getConstraintNumber(); i++){
-					*(y + i) = m_OsiSolver->getRowPrice()[ i];
+					*(y + i) = osiSolver->getRowPrice()[ i];
 				}
 				osresult->setDualVariableValues(solIdx, y);
 			}
@@ -378,7 +380,7 @@ bool CoinSolver::optimize()
 				ostringstream outStr;
 				int numberOfVar =  osinstance->getVariableNumber();
 				for(i=0; i < numberOfVar; i++){
-					outStr << m_OsiSolver->getReducedCost()[ i]; 
+					outStr << osiSolver->getReducedCost()[ i]; 
 					rcost[ i] = outStr.str();
 					outStr.str("");
 				}
@@ -387,10 +389,10 @@ bool CoinSolver::optimize()
 			}					
 		}
 		else{ 
-			if(m_OsiSolver->isProvenPrimalInfeasible() == true) 
+			if(osiSolver->isProvenPrimalInfeasible() == true) 
 				osresult->setSolutionStatus(solIdx, "infeasible", description);
 			else
-				if(m_OsiSolver->isProvenDualInfeasible() == true) 
+				if(osiSolver->isProvenDualInfeasible() == true) 
 					osresult->setSolutionStatus(solIdx, "dualinfeasible", description);
 				else
 					osresult->setSolutionStatus(solIdx, "other", description);
