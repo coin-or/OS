@@ -149,6 +149,12 @@ public:
 	/** the KnitroSolver class constructor */
 	~KnitroSolver();
 	
+	/*! \fn void CoinSolver::buildSolverInstance() 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return void.
+	 */	
+	virtual void  buildSolverInstance() throw(ErrorClass);
+	
 	/** solve results in an instance being read into the Knitro
 	 * data structrues and optimized */ 
 	virtual void  solve() throw (ErrorClass) ;

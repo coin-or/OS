@@ -77,6 +77,12 @@ public:
 	 */ 
 	virtual void solve() = 0 ;	
 	
+	/** buildSolverInstance is a virtual function -- the actual solvers will
+	 * implement their own solve method  -- the solver instance is the instance
+	 * the individual solver sees in its api
+	 */ 
+	virtual void buildSolverInstance() = 0 ;	
+	
 	/**
 	 * default constructor.
 	 */

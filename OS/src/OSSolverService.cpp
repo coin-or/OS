@@ -531,6 +531,7 @@ void solve(){
 				osilreader = new OSiLReader();
 				std::cout << "CREATING AN OSINSTANCE FROM AN OSIL FILE" << std::endl;
 				solverType->osinstance = osilreader->readOSiL( osoptions->osil );
+				solverType->buildSolverInstance();
 				solverType->solve();
 				osrl = solverType->osrl;
 			}
@@ -541,7 +542,8 @@ void solve(){
 						std::cout << "CREATING AN OSINSTANCE FROM AN NL FILE" << std::endl;
 						OSnl2osil *nl2osil = new OSnl2osil( osoptions->nlFile); 
 						nl2osil->createOSInstance() ;
-						solverType->osinstance = nl2osil->osinstance;	
+						solverType->osinstance = nl2osil->osinstance;
+						solverType->buildSolverInstance();
 						solverType->solve();
 						osrl = solverType->osrl;
 						delete nl2osil;
@@ -555,6 +557,7 @@ void solve(){
 						OSmps2osil *mps2osil = new OSmps2osil( osoptions->mpsFile);
 						mps2osil->createOSInstance() ;
 						solverType->osinstance = mps2osil->osinstance;
+						solverType->buildSolverInstance();
 						solverType->solve();
 						osrl = solverType->osrl;
 						

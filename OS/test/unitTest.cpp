@@ -392,6 +392,7 @@ int main(int argC, char* argV[])
 		osilreader = new OSiLReader(); 
 		ipoptSolver->osinstance = osilreader->readOSiL( osil);
 		cout << "call the IPOPT Solver" << endl;	
+		ipoptSolver->buildSolverInstance();
 		ipoptSolver->solve();
 		cout << "Here is the IPOPT solver solution for avion2" << endl;
 		check = 9.46801e+07;
@@ -413,6 +414,7 @@ int main(int argC, char* argV[])
 		ipoptSolver->osol = osol;
 		osilreader = new OSiLReader(); 
 		ipoptSolver->osinstance = osilreader->readOSiL( osil);
+		ipoptSolver->buildSolverInstance();
 		ipoptSolver->solve();
 		cout << "Here is the IPOPT solver solution for HS071_NLP" << endl;
 		check = 17.014;
@@ -435,6 +437,7 @@ int main(int argC, char* argV[])
 		osilreader = new OSiLReader(); 
 		ipoptSolver->osinstance = osilreader->readOSiL( osil);
 		cout << "call the IPOPT Solver" << endl;
+		ipoptSolver->buildSolverInstance();
 		ipoptSolver->solve();
 		check = 6.7279;
 		//ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-10 , 1e-10);
@@ -456,6 +459,7 @@ int main(int argC, char* argV[])
 		osilreader = new OSiLReader(); 
 		ipoptSolver->osinstance = osilreader->readOSiL( osil);
 		cout << "call the IPOPT Solver" << endl;
+		ipoptSolver->buildSolverInstance();
 		ipoptSolver->solve();
 		cout << "Here is the IPOPT solver solution for parincQuadratic" << endl;
 		check = 49920.5;
@@ -478,6 +482,7 @@ int main(int argC, char* argV[])
 		osilreader = new OSiLReader(); 
 		ipoptSolver->osinstance = osilreader->readOSiL( osil);
 		cout << "call the IPOPT Solver" << endl;
+		ipoptSolver->buildSolverInstance();
 		ipoptSolver->solve();
 		cout << "Here is the IPOPT solver solution for parincLinear" << endl;
 		check = 7668;
@@ -503,6 +508,7 @@ int main(int argC, char* argV[])
 		//cout << osilwriter.writeOSiL( ipoptSolver->osinstance) << endl;
 		//return 0;
 		cout << "call the IPOPT Solver" << endl;
+		ipoptSolver->buildSolverInstance();
 		ipoptSolver->solve();
 		cout << "Here is the IPOPT solver solution for callBackTest" << endl;
 		check = 1.00045e+06;
@@ -528,6 +534,7 @@ int main(int argC, char* argV[])
 		//cout << osilwriter.writeOSiL( ipoptSolver->osinstance) << endl;
 		//return 0;
 		cout << "call the IPOPT Solver" << endl;
+		ipoptSolver->buildSolverInstance();
 		ipoptSolver->solve();
 		cout << "Here is the IPOPT solver solution for callBackTestRowMajor" << endl;
 		check = 1.00045e+06;
@@ -569,6 +576,7 @@ int main(int argC, char* argV[])
 		solver->osol = osol;  
 		solver->osinstance = NULL; 
 		cout << "call the COIN - clp Solver for parincLinearbyRow" << endl;
+		solver->buildSolverInstance();
 		solver->solve();
 		cout << "Here is the COIN clp solver solution for parincLinearByRow" << endl;
 		cout << solver->osrl << endl;
@@ -605,6 +613,7 @@ int main(int argC, char* argV[])
 		solver->osol = osol;  
 		solver->osinstance = NULL; 
 		cout << "call the COIN - Cbc Solver for p0033" << endl;
+		solver->buildSolverInstance();
 		solver->solve();
 		cout << "Here is the COIN Cbc solver solution for p0033" << endl;
 		//cout << solver->osrl << endl;
@@ -744,6 +753,7 @@ int main(int argC, char* argV[])
 		solver->osol = osol;  
 		solver->osinstance = NULL; 
 		cout << "call the COIN - SYMPHONY Solver for p0033" << endl;
+		solver->buildSolverInstance();
 		solver->solve();
 		cout << "Here is the COIN SYMPHONY solver solution for p0033" << endl;
 		cout << solver->osrl << endl;
@@ -776,6 +786,7 @@ int main(int argC, char* argV[])
 		solver->osol = osol;   
 		solver->osinstance = NULL; 
 		cout << "call the COIN - DyLP solver for parincLinear" << endl;
+		solver->buildSolverInstance();
 		solver->solve();
 		cout << "Here is the COIN - DyLP solver solution for parincLinear" << endl;
 		cout << solver->osrl << endl;
@@ -808,6 +819,7 @@ int main(int argC, char* argV[])
 		solver->osol = osol;  
 		solver->osinstance = NULL; 
 		cout << "call the COIN - Vol solver for parincLinear" << endl;
+		solver->buildSolverInstance();
 		solver->solve();
 		cout << "Here is the COIN - Vol solver solution for parincLinear" << endl;
 		cout << solver->osrl << endl;
@@ -840,6 +852,7 @@ int main(int argC, char* argV[])
 		solver->osol = osol;  
 		solver->osinstance = NULL; 
 		cout << "call the GLPK Solver for p0033" << endl;
+		solver->buildSolverInstance();
 		solver->solve();
 		cout << "Here is the GLPK solver solution for p0033" << endl;
 		cout << solver->osrl << endl;
@@ -871,6 +884,7 @@ int main(int argC, char* argV[])
 		solver->osol = osol;  
 		solver->osinstance = NULL; 
 		cout << "call the CPLEX Solver for p0033" << endl;
+		solver->buildSolverInstance();
 		solver->solve();
 		cout << "Here is the CPLEX solver solution for p0033" << endl;
 		cout << solver->osrl << endl;
@@ -901,6 +915,7 @@ int main(int argC, char* argV[])
 		solver->osol = osol;
 		solver->osinstance = NULL;
 		cout << "call the LINDO Solver" << endl;
+		solver->buildSolverInstance();
 		solver->solve();
 		cout << "Here is the LINDO solver solution" << endl;
 		cout << solver->osrl << endl;
@@ -920,6 +935,7 @@ int main(int argC, char* argV[])
 		solver->osol = osol;
 		solver->osinstance = NULL;
 		cout << "call the LINDO Solver" << endl;
+		solver->buildSolverInstance();
 		solver->solve();
 		cout << "Here is the LINDO solver solution" << endl;
 		cout << solver->osrl << endl;
@@ -939,6 +955,7 @@ int main(int argC, char* argV[])
 		solver->osol = osol;
 		solver->osinstance = NULL;
 		cout << "call the LINDO Solver" << endl;
+		solver->buildSolverInstance();
 		solver->solve();
 		cout << "Here is the LINDO solver solution" << endl;
 		cout << solver->osrl << endl;
@@ -959,6 +976,7 @@ int main(int argC, char* argV[])
 		solver->osol = osol;
 		solver->osinstance = NULL;
 		cout << "call the LINDO Solver" << endl;
+		solver->buildSolverInstance();
 		solver->solve();
 		cout << "Here is the LINDO solver solution" << endl;
 		cout << solver->osrl << endl;
@@ -994,6 +1012,7 @@ int main(int argC, char* argV[])
 		solver->osinstance = mps2osil->osinstance;
 		solver->osol = osol;
 		cout << "call COIN Solve" << endl;
+		solver->buildSolverInstance();
 		solver->solve();
 		cout << "Here is the COIN solver solution" << endl;
 		cout << solver->osrl << endl;
@@ -1028,6 +1047,7 @@ int main(int argC, char* argV[])
 		solver->osinstance = nl2osil->osinstance;	
 		solver->osol = osol;
 		cout << "call Cbc Solve" << endl;
+		solver->buildSolverInstance();
 		solver->solve();
 		cout << "Here is the Cbc solver solution" << endl;
 		cout << solver->osrl << endl;
@@ -1069,6 +1089,7 @@ int main(int argC, char* argV[])
 		mps2osil->createOSInstance() ;
 		solver->osil = osilwriter.writeOSiL( mps2osil->osinstance) ;
 		std::cout << solver->osil << std::endl;
+		solver->buildSolverInstance();
 		solver->solve();
 		cout << endl << endl;
 		cout << "COIN solution of a OSiL string in b64 format" << endl;

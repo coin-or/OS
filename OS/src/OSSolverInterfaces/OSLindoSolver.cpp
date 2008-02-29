@@ -79,6 +79,7 @@ int CALLTYPE LSwriteMPIFile(pLSmodel pModel, char *pszFname);
 	nlNodeIdxLindo[OS_COS] = EP_COS; 
 
 LindoSolver::LindoSolver():
+	m_osilreader( NULL),
 	pEnv_( NULL), 
     pModel_( NULL),
     m_miSlackIdx( NULL),
@@ -128,18 +129,17 @@ LindoSolver::~LindoSolver() {
 	osrlwriter = NULL;
 	delete osresult;
 	osresult = NULL;
+	if(m_osilreader != NULL) delete m_osilreader;
+	m_osilreader = NULL;
 	cout << "Lindo Solver garbage collection done" << endl;
 }
 
- 
-void LindoSolver::solve()  {
+
+void LindoSolver::buildSolverInstance() throw (ErrorClass) {
 	try{
 		osresult = new OSResult();
 		if(osil.length() == 0 && osinstance == NULL) throw ErrorClass("there is no instance");
 		OSiLReader* osilreader = NULL;
-		clock_t start, finish;
-		double duration;
-		start = clock();
 		bool newOSiLReader = false;
 		if(osinstance == NULL){
 			osilreader = new OSiLReader();
@@ -148,9 +148,6 @@ void LindoSolver::solve()  {
 			
 		}
 		
-		finish = clock();
-		duration = (double) (finish - start) / CLOCKS_PER_SEC;
-		std::cout << "Parsing took (seconds): "<< duration << std::endl;
 		OSiLWriter osilwriter;
 
 		if (osinstance->instanceData->constraints->numberOfConstraints <= 0){
@@ -173,12 +170,23 @@ void LindoSolver::solve()  {
 		if(m_iNumberNewSlacks > 0 && !addSlackVars()) throw ErrorClass("failed adding slack variables");
 		if( (osinstance->getNumberOfNonlinearExpressions() > 0 || osinstance->getNumberOfQuadraticTerms() > 0)
 			&& !processNonlinearExpressions()) throw ErrorClass("failed adding nonlinear terms");
-		//dataEchoCheck();
+		//dataEchoCheck();		
+	}
+	catch(const ErrorClass& eclass){
+		std::cout << "THERE IS AN ERROR" << std::endl;
+		osresult->setGeneralMessage( eclass.errormsg);
+		osresult->setGeneralStatusType( "error");
+		osrl = osrlwriter->writeOSrL( osresult);
+		throw ErrorClass( osrl) ;
+	}				
+}//end buildSolverInstance()
+
+ 
+void LindoSolver::solve()  {
+	try{
+
 		if( optimize() != true) throw ErrorClass("problem optimizing model");
-		if(newOSiLReader == true){
-			delete osilreader;
-			osilreader = NULL;
-		}
+
 	}
 	catch(const ErrorClass& eclass){
 		osresult->setGeneralMessage( eclass.errormsg);

@@ -25,6 +25,7 @@
 #include "OSDefaultSolver.h"
 #include "OSrLWriter.h"
 #include "OSErrorClass.h"
+#include "OSiLReader.h"
 
 #ifdef COIN_HAS_CPX
 #include <OsiCpxSolverInterface.hpp>
@@ -75,11 +76,12 @@ public:
 	 */	
 	virtual void  solve() throw(ErrorClass);
 	
-	/*! \fn string CoinSolver::optimize() 
-	 *  \brief This function calls solver->loadProblem. 
-	 *  \return true if there was not an optimization error.
-	 */ 
-	bool optimize();
+	/*! \fn void CoinSolver::buildSolverInstance() 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return void.
+	 */	
+	virtual void  buildSolverInstance() throw(ErrorClass);
+	
 	
 	/*! \fn bool CoinSolver::setCoinPackedMatrix() 
 	 *  \brief  Create a CoinPackedMatrix
@@ -101,9 +103,17 @@ public:
 	void dataEchoCheck();
 	
 	/** 
-	 * m_OsiSolver is the osi solver object -- in this case clp, glpk, cbc, or cplex	 
+	 * ossiSolver is the osi solver object -- in this case clp, glpk, cbc, or cplex	 
 	 */	
  	OsiSolverInterface *osiSolver;
+ 	
+ 	
+ 	
+	/** 
+	 * m_osilreader is an OSiLReader object used to create an osinstance from an
+	 * osil string if needed	 
+	 */		
+	OSiLReader *m_osilreader;
 	
  
 	

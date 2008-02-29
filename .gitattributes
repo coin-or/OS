@@ -128,6 +128,8 @@ OS/doc/osUsersManual_1.pdf -text
 OS/doc/osUsersManual_1.tex -text
 OS/doc/osUsersManual_1.toc -text
 OS/doc/usersManualAdditions.txt -text
+OS/examples/addCuts/Makefile.in -text
+OS/examples/addCuts/OSAddCuts.cpp -text
 OS/examples/algorithmicDiff/Makefile.in -text
 OS/examples/algorithmicDiff/OSAlgorithmicDiffTest.cpp -text
 OS/examples/instanceGenerator/Makefile.in -text

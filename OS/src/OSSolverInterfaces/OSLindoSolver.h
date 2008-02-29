@@ -21,6 +21,7 @@
 #include "lindo.h"
 #include "OSrLWriter.h"
 #include "OSiLWriter.h"
+#include "OSiLReader.h"
 #include "OSConfig.h" 
 #include <string>
 
@@ -59,6 +60,13 @@ public:
 	/** solve results in an instance being read into the Knitro
 	 * data structrues and optimized */ 
 	virtual void  solve() ;
+	
+	/*! \fn void CoinSolver::buildSolverInstance() 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return void.
+	 */	
+	virtual void  buildSolverInstance() throw(ErrorClass);
+	
 
 	// Lindo specific methods
 	
@@ -109,9 +117,15 @@ public:
    	 */		
 	bool processNonlinearExpressions();
 	
+	/** 
+	 * m_osilreader is an OSiLReader object used to create an osinstance from an
+	 * osil string if needed	 
+	 */		
+	OSiLReader *m_osilreader;
+	
    	/**
    	 * use this for debugging, print out the instance that
-   	 * the solver thinks it has and compare this with the OSiL
+   	 * the solver thinks it has and compare this with the OSiL 
    	 * file
    	 */		
 	void dataEchoCheck();

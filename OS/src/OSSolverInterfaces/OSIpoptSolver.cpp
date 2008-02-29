@@ -30,6 +30,7 @@ using namespace Ipopt;
 IpoptSolver::IpoptSolver() {
 	osrlwriter = new OSrLWriter();
 	osresult = new OSResult();
+	m_osilreader = NULL;
 	ipoptErrorMsg = "";
 
 }
@@ -38,6 +39,8 @@ IpoptSolver::~IpoptSolver() {
 	#ifdef DEBUG
 	cout << "inside IpoptSolver destructor" << endl;
 	#endif
+	if(m_osilreader != NULL) delete m_osilreader;
+	m_osilreader = NULL;
 	delete osresult;
 	osresult = NULL;
 	delete osrlwriter;
@@ -474,22 +477,36 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 }
 
 
+void IpoptSolver::buildSolverInstance() throw (ErrorClass) {
+	try{
+		
+		if(osil.length() == 0 && osinstance == NULL) throw ErrorClass("there is no instance");
+
+		OSiLReader* osilreader = NULL; 
+		if(osinstance == NULL){
+			m_osilreader = new OSiLReader();
+			osinstance = m_osilreader->readOSiL( osil);
+		}
+		// Create a new instance of your nlp 
+		nlp = new IpoptProblem( osinstance, osresult);
+		app = new IpoptApplication();
+	}
+	catch(const ErrorClass& eclass){
+		std::cout << "THERE IS AN ERROR" << std::endl;
+		osresult->setGeneralMessage( eclass.errormsg);
+		osresult->setGeneralStatusType( "error");
+		osrl = osrlwriter->writeOSrL( osresult);
+		throw ErrorClass( osrl) ;
+	}				
+}//end buildSolverInstance()
+
+
 //void IpoptSolver::solve() throw (ErrorClass) {
 void IpoptSolver::solve() throw (ErrorClass) {
 	try{
-		
-		//osresult = new OSResult();
-		if(osil.length() == 0 && osinstance == NULL) throw ErrorClass("there is no instance");
 		clock_t start, finish;
 		double duration;
 		start = clock();
-		bool newOSiLReader = false;
-		OSiLReader* osilreader = NULL; 
-		if(osinstance == NULL){
-			osilreader = new OSiLReader();
-			osinstance = osilreader->readOSiL( osil);
-			newOSiLReader = true;
-		}
 		//OSiLWriter osilwriter;
 		//cout << osilwriter.writeOSiL( osinstance) << endl;
 		if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Ipopt requires decision variables");
@@ -497,11 +514,7 @@ void IpoptSolver::solve() throw (ErrorClass) {
 		duration = (double) (finish - start) / CLOCKS_PER_SEC;
 		cout << "Parsing took (seconds): "<< duration << endl;
 		//dataEchoCheck();
-
 		/***************now the ipopt invokation*********************/
-		// Create a new instance of your nlp 
-		SmartPtr<TNLP> nlp = new IpoptProblem( osinstance, osresult);
-		SmartPtr<IpoptApplication> app = new IpoptApplication();
 		app->Options()->SetNumericValue("tol", 1e-9);
 		app->Options()->SetIntegerValue("print_level", 0);
 		app->Options()->SetStringValue("mu_strategy", "adaptive");
@@ -530,10 +543,6 @@ void IpoptSolver::solve() throw (ErrorClass) {
 		if (status < -2) {
 			throw ErrorClass("Ipopt FAILED TO SOLVE THE PROBLEM: " + ipoptErrorMsg);
 		}	
-		if(newOSiLReader == true){
-			delete osilreader;
-			osilreader = NULL;
-		}
 	}
 	catch(const ErrorClass& eclass){
 		osresult->setGeneralMessage( eclass.errormsg);

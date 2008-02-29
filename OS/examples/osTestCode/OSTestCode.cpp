@@ -38,7 +38,6 @@
 #include "OSBase64.h"
 #include "OSCommonUtil.h"
 #include "OSErrorClass.h"
-#include "CglGomory.hpp"
 #include "OSMathUtil.h"
 
 #include<iostream> 
@@ -69,8 +68,8 @@ int main( ){
 		osinstance->setVariableNumber( 2);   
 		//addVariable(int index, string name, double lowerBound, double upperBound, char type, double init, string initString);
 		// we could use setVariables() and add all the variable with one method call -- below is easier
-		osinstance->addVariable(0, "x0", 0, OSDBL_MAX, 'I', OSNAN, "");
-		osinstance->addVariable(1, "x1", 0, OSDBL_MAX, 'I', OSNAN, "");
+		osinstance->addVariable(0, "x0", 0, OSDBL_MAX, 'C', OSNAN, "");
+		osinstance->addVariable(1, "x1", 0, OSDBL_MAX, 'C', OSNAN, "");
 		//
 		// now add the objective function
 		osinstance->setObjectiveNumber( 1);
@@ -138,35 +137,13 @@ int main( ){
 		solver = new CoinSolver();
 		solver->osinstance = osinstance;
 		solver->sSolverName ="clp"; 
-		cout << "call the COIN - Cbc Solver" << endl;
+		cout << "call the COIN - Clp Solver" << endl;
 		// we want a fractional solution
-		osinstance->instanceData->constraints->con[0]->ub = 620;
+		//osinstance->instanceData->constraints->con[0]->ub = 620;
+		solver->buildSolverInstance();
 		solver->solve();
-		cout << "Here is the COIN Cbc solver solution" << endl;
-		cout << solver->osrl << endl;
-		//
-		//
-		// done solving the model
-		// add a Gomory Cut
+		std::cout << solver->osrl << std::endl;
 
-	    CglGomory gomory;
-	    OsiCuts cuts;
-	    OsiSolverInterface::ApplyCutsReturnCode acRc;
-	    gomory.generateCuts(*solver->m_OsiSolver, cuts);
-	    acRc = solver->m_OsiSolver->applyCuts(cuts,0.0);
-	    // Print applyCuts return code
-	    cout <<endl <<endl;
-	    cout <<cuts.sizeCuts() <<" cuts were generated" <<endl;
-	    cout <<"  " <<acRc.getNumInconsistent() <<" were inconsistent" <<endl;
-	    cout <<"  " <<acRc.getNumInconsistentWrtIntegerModel() 
-           <<" were inconsistent for this problem" <<endl;
-	    cout <<"  " <<acRc.getNumInfeasible() <<" were infeasible" <<endl;
-	    cout <<"  " <<acRc.getNumIneffective() <<" were ineffective" <<endl;
-	    cout <<"  " <<acRc.getNumApplied() <<" were applied" <<endl;
-      	cout <<endl <<endl;
-		solver->solve();
-		cout << "Here is the COIN Cbc solver solution" << endl;
-		cout << solver->osrl << endl;
 		// do garbage collection
 		delete osinstance;
 		osinstance = NULL;

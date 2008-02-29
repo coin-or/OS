@@ -87,6 +87,8 @@ public:
 	
 	OSInstance *osinstance;
 	
+
+	
 	/** IPOpt specific methods for defining the nlp problem */
 	virtual bool get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
                             Index& nnz_h_lag, IndexStyleEnum& index_style);
@@ -187,6 +189,8 @@ private:
 
 class IpoptSolver : public DefaultSolver{ 	
 public:
+	
+
 
 	/** the IpoptSolver class constructor */
 	IpoptSolver();
@@ -194,10 +198,20 @@ public:
 	/** the IpoptSolver class destructor */
 	~IpoptSolver();
 	
+	SmartPtr<TNLP> nlp;
+	
+	SmartPtr<IpoptApplication> app;
+	
 	
 	/** solve results in an instance being read into the Ipopt
 	 * data structrues and optimized */ 
 	virtual void  solve() throw (ErrorClass) ;
+	
+	/*! \fn void CoinSolver::buildSolverInstance() 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return void.
+	 */	
+	virtual void  buildSolverInstance() throw(ErrorClass);
 	
    	/**
    	 * use this for debugging, print out the instance that
@@ -205,6 +219,12 @@ public:
    	 * file
    	 */	
 	void dataEchoCheck();
+	
+	/** 
+	 * m_osilreader is an OSiLReader object used to create an osinstance from an
+	 * osil string if needed	 
+	 */		
+	OSiLReader *m_osilreader;
 
 
 private:

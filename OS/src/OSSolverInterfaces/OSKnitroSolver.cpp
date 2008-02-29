@@ -194,6 +194,8 @@ KnitroProblem::~KnitroProblem() {
 	_daXInit = NULL;
 } 
 
+
+
 //--------------------------------------------------------------------
 //  Simple access methods
 //--------------------------------------------------------------------
@@ -526,6 +528,20 @@ KnitroSolver::KnitroSolver() {
 	knitroErrorMsg = "";
 
 }
+
+
+void KnitroSolver::buildSolverInstance() throw (ErrorClass) {
+	try{
+		
+	}
+	catch(const ErrorClass& eclass){
+		std::cout << "THERE IS AN ERROR" << std::endl;
+		osresult->setGeneralMessage( eclass.errormsg);
+		osresult->setGeneralStatusType( "error");
+		osrl = osrlwriter->writeOSrL( osresult);
+		throw ErrorClass( osrl) ;
+	}				
+}//end buildSolverInstance()
 
 KnitroSolver::~KnitroSolver() {
 	#ifdef DEBUG

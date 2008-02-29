@@ -283,6 +283,7 @@ int main(int argc, char **argv)
 			solverType->osol = osol;
 			//std::cout << osol << std::endl;
 			solverType->osinstance = osinstance;
+			solverType->buildSolverInstance();
 			solverType->solve();
 			osrl = solverType->osrl ;
 			//std::cout << osrl << std::endl;
