@@ -107,7 +107,12 @@ int main( ){
         cout <<endl;
         cout <<"After applying cuts, objective value changed to: "
              <<   solver->osiSolver->getObjValue() <<endl <<endl;
-
+		delete solver;
+		solver = NULL;
+		delete osilreader;
+		osilreader = NULL;
+		delete fileUtil;
+		fileUtil  = NULL;
 		cout << "Done with garbage collection" << endl;
 		return 0;
 		//
