@@ -296,7 +296,7 @@ can be downloaded from {\tt http://www.g95.org}. For Fortran~77 code (which incl
 and Lapack projects --- but {\bf not} Mumps), it might be sufficient to download the {\tt f2c} translator 
 which turns Fortran~77 code into code that can subsequently be fed into a C compiler. 
 The {\tt f2c} translator and the {\tt f2c} runtime library can be downloaded from \url{http://www.netlib.org/f2c}. 
-Further details are available in the file {\tt BuildTools/compile_f2c/INSTALL}, which is part of the OS distribution.
+Further details are available in the file {\tt BuildTools/compile\_f2c/INSTALL}, which is part of the OS distribution.
 
 \subsubsection{ {\tt flex} and {\tt bison} }\label{section:flex} 
 Users who want to edit the source code in the parsers described in
@@ -1093,28 +1093,7 @@ https://projects.coin-or.org/BuildTools/wiki/user-configure#CommandLineArguments
 for more information on command line arguments that are illustrated in the subsections below.
 
 
-\subsubsection{AMPL}
-
-The OS library contains a class, {\tt OSnl2osil} (see Section \ref{section:nl2osil}), and the program 
-{\tt OSAmplClient} (see Section \ref{section:amplclient}) that require the use of the AMPL ASL library.  
-See \url{http://netlib.sandia.gov/ampl/}  and  \url{http://www.ampl.com}. Users with a Unix system should locate 
-the {\tt ASL} folder that is part of the distribution. The {\tt ASL} folder is in the {\tt ThirdParty} folder 
-which is in the distribution root folder. Locate and execute the {\tt get.ASL} script.  Do this prior to running 
-the {\tt configure} script. The {\tt configure} script will then build the correct ASL library.
-
-Microsoft  Visual Studio users will have to build the ASL library separately and then link it with the OS lib in the OS project file.  The necessary source files are at
-\begin{verbatim}
-http://netlib.sandia.gov/cgi-bin/netlib/netlibfiles.tar?filename=netlib/ampl/solvers
-\end{verbatim}
- After unpacking the distribution build the source code with the utility {\tt nmake} which should be part of the Visual Studio distribution. The appropriate command is
-\begin{verbatim}
-nmake -f makefile.vc
-\end{verbatim}
-If the OS project is properly configured  with the ASL library, {\tt config\_os.h} will contain the lines
-\begin{verbatim}
-/* If defined, the Ampl Solver Library is available. */
-#define COIN_HAS_ASL 1
-\end{verbatim}
+%----------------------------------------------------------------\subsubsection{AMPL}The OS library contains a class, {\tt OSnl2osil} (see Section\ref{section:nl2osil}), and the program{\tt OSAmplClient} (see Section \ref{section:amplclient}) that require the useof the AMPL ASL library.See \url{http://netlib.sandia.gov/ampl/}  and  \url{http://www.ampl.com}. Userswith a Unix system should locatethe {\tt ASL} folder that is part of the distribution. The {\tt ASL} folder isin the {\tt ThirdParty} folderwhich is in the distribution root folder. Locate and execute the {\tt get.ASL}script.  Do this prior to runningthe {\tt configure} script. The {\tt configure} script will then build thecorrect ASL library.Microsoft  Visual Studio users will have to build the ASL library separately andthen link it with theOS lib in the OS project file.  The necessary source files are at\begin{verbatim}http://netlib.sandia.gov/cgi-bin/netlib/netlibfiles.tar?filename=netlib/ampl/solvers\end{verbatim}After unpacking the distribution you will have to create the file {\ttThirdParty/ASL/details.c} by hand,as follows: Copy the file {\tt details.c0} to {\tt details.c} and replace theline\begin{verbatim}char sysdetails_ASL[] = "System_details"\end{verbatim}by\begin{verbatim}char sysdetails_ASL[] = "MS VC++ {$n$}.0"\end{verbatim}where $n$ is the version number of the {\tt cl} compiler on your system (mostlikely version 6, 7 or~8).Then build the source code with the utility {\tt nmake}which should be part of the Visual Studio distribution. The appropriate commandis\begin{verbatim}nmake -f makefile.vc\end{verbatim}Next you should run {\tt configure}. If the OS project is properly configured with the ASL library,{\tt config\_os.h} will contain the lines\begin{verbatim}/* If defined, the Ampl Solver Library is available. */#define COIN_HAS_ASL 1\end{verbatim}%---------------------------------------------------------------- 
 
 
 \subsubsection{Cplex}
@@ -1656,8 +1635,8 @@ XML-based language for representing options that get passed to an optimization s
 
 
 
-\item[]   {\bf OSpL (Optimization Services process Language):} is a standard for dynamic process information that is kept by the Optimization Services registry.
-It is the result of a {\tt knock} operation. See the example given in Section \ref{section:knock}.
+\item[]   {\bf OSpL (Optimization Services process Language):} is a standard for dynamic process information that is kept by the Optimization Services registry. The string returned from the {\tt knock} method is in the OSpL format.
+ See the example given in Section \ref{section:knock}.
 
 \end{itemize}
 
@@ -3391,6 +3370,8 @@ Download the java binary distribution at
 os-distribution-release_number.zip
 \end{verbatim}
 
+For example, {\tt os-distribution-1.0.0} for release 1.0.0.
+
 The server side of the Java distribution is based on the Tomcat 5.5 implementation. After unpacking {\tt os-distribution-release\_number.zip} there is a directory {\tt os-server-1.0} and a single file {\tt os.war}.  For users who have not installed the Tomcat server,   {\tt os-server-1.0} contains  all of the necessary files for a OS Solver Service.  If you do not have a Tomcat server running, do the following to setup a  Tomcat server  with the OS Solver Service on a {\bf Unix system}:
 
 \begin{itemize}
@@ -4875,7 +4856,22 @@ really understand what "man nm" tells me about this.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-I've run Ipopt's configure from the vpath-directory.To be more elaborate:I've two directories:Ipopt-trunk is where I have checked out Ipopt/trunk.Ipopt-shared is the vpath-directory where I build Ipopt (using shared libs).What to do is to:1. Put the HSL source into Ipopt-trunk/ThirdParty/HSL2. In Ipopt-shared, call      ../Ipopt-trunk/configure --enable-library-loader3. Patch Ipopt-shared/libtool4. In Ipopt-shared (or in its ThirdParty/HSL subdir) call make.Now the gfortran call that builds the libhsl.dylib should next to the -dynamiclib argument also have a -single_module argument. If that is not sufficient, then one need to add also ADD_FFLAGS="-fno-common" to the configure call in step 2. I have not figures this out.It should also be possible to run only the configure in ThirdParty/HSL, but then one need to give a lot of options for prefix or subdir... (see beginning of ThirdParty/HSL/config.log).
+
+I've run Ipopt's configure from the vpath-directory.
+To be more elaborate:
+I've two directories:
+Ipopt-trunk is where I have checked out Ipopt/trunk.
+Ipopt-shared is the vpath-directory where I build Ipopt (using shared libs).
+What to do is to:
+1. Put the HSL source into Ipopt-trunk/ThirdParty/HSL
+2. In Ipopt-shared, call
+      ../Ipopt-trunk/configure --enable-library-loader
+3. Patch Ipopt-shared/libtool
+4. In Ipopt-shared (or in its ThirdParty/HSL subdir) call make.
+
+Now the gfortran call that builds the libhsl.dylib should next to the -dynamiclib argument also have a -single_module argument. If that is not sufficient, then one need to add also ADD_FFLAGS="-fno-common" to the configure call in step 2. I have not figures this out.
+
+It should also be possible to run only the configure in ThirdParty/HSL, but then one need to give a lot of options for prefix or subdir... (see beginning of ThirdParty/HSL/config.log).
 
  
 
