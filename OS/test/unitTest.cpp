@@ -576,7 +576,7 @@ int main(int argC, char* argV[])
 		solver->osol = osol;  
 		solver->osinstance = NULL; 
 		cout << "call the COIN - clp Solver for parincLinearbyRow" << endl;
-		solver->buildSolverInstance();
+		//solver->buildSolverInstance();
 		solver->solve();
 		cout << "Here is the COIN clp solver solution for parincLinearByRow" << endl;
 		cout << solver->osrl << endl;

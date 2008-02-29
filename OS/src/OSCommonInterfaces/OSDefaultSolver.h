@@ -71,6 +71,13 @@ public:
 	 */
 	std::string sSolverName;
 	
+	
+	/** 
+	 * bCallbuildSolverInstance is set to true if buildSolverService has
+	 * been called	 
+	 */
+	bool bCallbuildSolverInstance;
+	
 
 	/** solve is a virtual function -- the actual solvers will
 	 * implement their own solve method 
@@ -92,6 +99,10 @@ public:
 	 * default destructor.
 	 */	
 	virtual	~DefaultSolver() = 0;
+	
+
+	
+
 	
 	
 	

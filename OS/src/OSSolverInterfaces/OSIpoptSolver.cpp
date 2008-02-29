@@ -33,7 +33,7 @@ IpoptSolver::IpoptSolver() {
 	m_osilreader = NULL;
 	ipoptErrorMsg = "";
 
-}
+} 
 
 IpoptSolver::~IpoptSolver() {
 	#ifdef DEBUG
@@ -481,8 +481,6 @@ void IpoptSolver::buildSolverInstance() throw (ErrorClass) {
 	try{
 		
 		if(osil.length() == 0 && osinstance == NULL) throw ErrorClass("there is no instance");
-
-		OSiLReader* osilreader = NULL; 
 		if(osinstance == NULL){
 			m_osilreader = new OSiLReader();
 			osinstance = m_osilreader->readOSiL( osil);
@@ -490,6 +488,7 @@ void IpoptSolver::buildSolverInstance() throw (ErrorClass) {
 		// Create a new instance of your nlp 
 		nlp = new IpoptProblem( osinstance, osresult);
 		app = new IpoptApplication();
+		this->bCallbuildSolverInstance = true;
 	}
 	catch(const ErrorClass& eclass){
 		std::cout << "THERE IS AN ERROR" << std::endl;
@@ -498,11 +497,12 @@ void IpoptSolver::buildSolverInstance() throw (ErrorClass) {
 		osrl = osrlwriter->writeOSrL( osresult);
 		throw ErrorClass( osrl) ;
 	}				
-}//end buildSolverInstance()
+}//end buildSolverInstance() 
 
 
 //void IpoptSolver::solve() throw (ErrorClass) {
 void IpoptSolver::solve() throw (ErrorClass) {
+	if( this->bCallbuildSolverInstance == false) buildSolverInstance();
 	try{
 		clock_t start, finish;
 		double duration;

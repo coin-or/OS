@@ -42,7 +42,7 @@ using std::ostringstream;
 CoinSolver::CoinSolver() : 
 osiSolver(NULL),
 m_osilreader(NULL),
-m_CoinPackedMatrix(NULL) 
+m_CoinPackedMatrix(NULL)
 {
 osrlwriter = new OSrLWriter();
 }
@@ -170,6 +170,7 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass) {
 				delete[] intIndex;
 				intIndex = NULL;
 			}
+			bCallbuildSolverInstance = true;
 	}
 	catch(const ErrorClass& eclass){
 		std::cout << "THERE IS AN ERROR" << std::endl;
@@ -206,6 +207,8 @@ bool CoinSolver::setCoinPackedMatrix(){
 } // end setCoinPackedMatrix
 
 void CoinSolver::solve() throw (ErrorClass) {
+	// make sure the solver instance exists
+	if( this->bCallbuildSolverInstance == false) buildSolverInstance();
 	// first check the various solvers and see if they are of the proper problem type
 	if( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0){
 		// throw an exception if we have a solver that cannot do integer programming

@@ -170,6 +170,7 @@ void LindoSolver::buildSolverInstance() throw (ErrorClass) {
 		if(m_iNumberNewSlacks > 0 && !addSlackVars()) throw ErrorClass("failed adding slack variables");
 		if( (osinstance->getNumberOfNonlinearExpressions() > 0 || osinstance->getNumberOfQuadraticTerms() > 0)
 			&& !processNonlinearExpressions()) throw ErrorClass("failed adding nonlinear terms");
+		this->bCallbuildSolverInstance = true ;
 		//dataEchoCheck();		
 	}
 	catch(const ErrorClass& eclass){
@@ -183,6 +184,7 @@ void LindoSolver::buildSolverInstance() throw (ErrorClass) {
 
  
 void LindoSolver::solve()  {
+	if( this->bCallbuildSolverInstance == false) buildSolverInstance();
 	try{
 
 		if( optimize() != true) throw ErrorClass("problem optimizing model");

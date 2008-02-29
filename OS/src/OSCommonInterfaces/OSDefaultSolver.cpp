@@ -28,7 +28,8 @@ DefaultSolver::DefaultSolver():
 	osinstance(NULL),
 	osresult(NULL),
 	insList(""),
-	sSolverName("")
+	sSolverName(""),
+	bCallbuildSolverInstance( false)
 
 { 
 
