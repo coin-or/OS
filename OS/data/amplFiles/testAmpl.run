@@ -1,5 +1,5 @@
 model hs71.mod;
-option solver OSAmplClient;
+option solver .OSAmplClient;
 option OSAmplClient_options "solver xyz";
 solve;
 reset;

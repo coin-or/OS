@@ -85,19 +85,12 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass) {
 			bool solverIsDefined = false;
 			std::cout << "SOLVER NAME =  " << sSolverName << std::endl;
 			if( sSolverName.find("clp") != std::string::npos){
-				if( (osinstance->getNumberOfNonlinearExpressions() > 0)
-					|| (osinstance->getNumberOfQuadraticTerms() > 0) 
-					//|| (osinstance->getNumberOfIntegerVariables() > 0)
-					//|| (osinstance->getNumberOfBinaryVariables() > 0) 
-					) throw ErrorClass( "Clp cannot do nonlinear or quadratic programming");
 				solverIsDefined = true;
 				osiSolver = new OsiClpSolverInterface();
 			}
 			else{
 				if( sSolverName.find("vol") != std::string::npos){
 	             #ifdef COIN_HAS_VOL
-					if( (osinstance->getNumberOfNonlinearExpressions() > 0)
-						|| (osinstance->getNumberOfQuadraticTerms() > 0) ) throw ErrorClass( "Vol cannot do nonlinear or quadratic");
 					solverIsDefined = true;
 					osiSolver = new OsiVolSolverInterface();
 	             #endif
@@ -105,8 +98,6 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass) {
 				else{
 					if( sSolverName.find( "cplex") != std::string::npos){
 						#ifdef COIN_HAS_CPX
-						if( (osinstance->getNumberOfNonlinearExpressions() > 0)
-							|| (osinstance->getNumberOfQuadraticTerms() > 0) ) throw ErrorClass( "Cplex cannot do nonlinear or quadratic");
 						solverIsDefined = true;
 						osiSolver = new OsiCpxSolverInterface();
 						#endif
@@ -114,42 +105,26 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass) {
 					else{
 						if(sSolverName.find( "glpk") != std::string::npos){
 							#ifdef COIN_HAS_GLPK
-							if( (osinstance->getNumberOfNonlinearExpressions() > 0)
-								|| (osinstance->getNumberOfQuadraticTerms() > 0) ) throw ErrorClass( "Glpk cannot do nonlinear or quadratic");
 							solverIsDefined = true;
 							osiSolver = new OsiGlpkSolverInterface();
 							#endif
 						}
 						else{
 							if(sSolverName.find( "dylp") != std::string::npos){
-							
 								#ifdef COIN_HAS_DYLP
-								if( (osinstance->getNumberOfNonlinearExpressions() > 0)
-									|| (osinstance->getNumberOfQuadraticTerms() > 0)  ) {
-									
-									throw ErrorClass( "DyLP cannot do nonlinear or quadratic");
-									}
-								if( 
-									 (osinstance->getNumberOfBinaryVariables() > 0)  ) throw ErrorClass( "DyLP cannot do nonlinear programming");
 								solverIsDefined = true;
-								
 								osiSolver = new OsiDylpSolverInterface();
-						
 								#endif
 							}
 							else{
 								if( sSolverName.find( "symphony") != std::string::npos) {
 									#ifdef COIN_HAS_SYMPHONY
-									if( (osinstance->getNumberOfNonlinearExpressions() > 0)
-										|| (osinstance->getNumberOfQuadraticTerms() > 0)  ) throw ErrorClass( "SYMPHONY cannot do nonlinear or quadratic");
 									solverIsDefined = true;
 									osiSolver = new OsiSymSolverInterface();
 									#endif
 								}
 								else{
 									// default solver is CBC
-									if( (osinstance->getNumberOfNonlinearExpressions() > 0)
-										|| (osinstance->getNumberOfQuadraticTerms() > 0) ) throw ErrorClass( "Cbc cannot do nonlinear or quadratic");
 									solverIsDefined = true;
 									osiSolver = new OsiCbcSolverInterface();
 								}
@@ -167,9 +142,10 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass) {
 			if(osinstance->getLinearConstraintCoefficientNumber() <= 0) throw ErrorClass("Coin solver needs linear constraints");
 			if(!setCoinPackedMatrix() ) throw ErrorClass("Problem generating coin packed matrix");
 			osiSolver->loadProblem(*m_CoinPackedMatrix, osinstance->getVariableLowerBounds(), 
-						osinstance->getVariableUpperBounds(),  
-						osinstance->getDenseObjectiveCoefficients()[0], 
-						osinstance->getConstraintLowerBounds(), osinstance->getConstraintUpperBounds());
+				osinstance->getVariableUpperBounds(),  
+				osinstance->getDenseObjectiveCoefficients()[0], 
+				osinstance->getConstraintLowerBounds(), osinstance->getConstraintUpperBounds()
+			);
 			//dataEchoCheck();	
 			if(osinstance->getObjectiveNumber() == 0) throw ErrorClass("there is no objective function");
 			if( osinstance->getObjectiveMaxOrMins()[0] == "min") osiSolver->setObjSense(1.0);
@@ -230,6 +206,19 @@ bool CoinSolver::setCoinPackedMatrix(){
 } // end setCoinPackedMatrix
 
 void CoinSolver::solve() throw (ErrorClass) {
+	// first check the various solvers and see if they are of the proper problem type
+	if( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0){
+		// throw an exception if we have a solver that cannot do integer programming
+		if( sSolverName.find("clp") != std::string::npos) throw ErrorClass( "Clp cannot do integer programming");
+		if( sSolverName.find("vol") != std::string::npos) throw ErrorClass( "Vol cannot do integer programming");
+		if( sSolverName.find("dylp") != std::string::npos) throw ErrorClass( "DyLP cannot do integer programming");
+		if( sSolverName.find("ipopt") != std::string::npos) throw ErrorClass( "Ipopt cannot do integer programming");
+	}
+	if( (osinstance->getNumberOfNonlinearExpressions() > 0)
+		|| (osinstance->getNumberOfQuadraticTerms() > 0) ){
+		throw ErrorClass( "This COIN-OR Solver is not configured for nonlinear programming");
+	}
+	// if we are throw an exception if the problem is nonlinear
 	double *x = NULL;
 	double *y = NULL;
 	double *z = NULL;
@@ -291,17 +280,13 @@ void CoinSolver::solve() throw (ErrorClass) {
 		// try to catch Coin Solver errors
 		try{
 			if( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0){
-				if( sSolverName.find("clp") != std::string::npos) throw ErrorClass( "Clp cannot do integer programming");
-				if( sSolverName.find("vol") != std::string::npos) throw ErrorClass( "Vol cannot do integer programming");
-				if( sSolverName.find("dylp") != std::string::npos) throw ErrorClass( "DyLP cannot do integer programming");
-				if( sSolverName.find("ipopt") != std::string::npos) throw ErrorClass( "Ipopt cannot do integer programming");
 				//cout << "CALL BRANCH AND BOUND " << endl;
 				// just use simple branch and bound for anything but cbc
 				if( sSolverName.find( "cbc") == std::string::npos) {
 					osiSolver->branchAndBound();	
 				}
 				else{
-					// this is cbc
+					// this is Solver Cbc
 					// initial solve does not work on Jeff Camm problem without scaling
 					//osiSolver->initialSolve();
 					// copy from John Forrest examples in Cbc
