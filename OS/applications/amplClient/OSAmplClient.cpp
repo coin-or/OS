@@ -293,7 +293,9 @@ int main(int argc, char **argv)
 		osresult = new OSResult();	
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
-		osrl = osrlwriter->writeOSrL( osresult);	
+		osrl = osrlwriter->writeOSrL( osresult);
+		std::cout  << osrl << std::endl;
+		osrl = " ";
 		write_sol(const_cast<char*>(osrl.c_str()), NULL, NULL, NULL);
 		delete osresult;
 		return 0;
@@ -338,36 +340,41 @@ int main(int argc, char **argv)
 		return 0;
 	}
 	try{ 
+		//need_nl = 0;
 		std::string sResultFileName = "solutionResult.osrl";
 		FileUtil *fileUtil;
 		fileUtil = new FileUtil();
 		fileUtil->writeFileFromString(sResultFileName, osrl);
 		delete fileUtil;
-		cout << "WRITE THE SOLUTION BACK INTO AMPL" <<endl;
+		//cout << "WRITE THE SOLUTION BACK INTO AMPL" <<endl;
 		string::size_type pos1 = osrl.find( "error");
-		std::string sReport = "model was solved";
 		if(pos1 == std::string::npos){
+			std::string sReport = "model was solved";
+			std::cout << sReport << std::endl;
 			osrlreader = new OSrLReader();
 			osresult = osrlreader->readOSrL( osrl);
 			// do the following so output is not written twice
 			// see page 23 of hooking solver to AMPL
-			need_nl = printf( sReport.c_str());
+			//need_nl = printf( sReport.c_str());
+
 			//
+			sReport = " ";
 			write_sol(  const_cast<char*>(sReport.c_str()), 
 					osresult->getOptimalPrimalVariableValues( -1), 
 					osresult->getOptimalDualVariableValues( -1) , NULL);
-			need_nl = 0;
+			
 			delete osrlreader;
 			osrlreader = NULL;
 		}else{
 			// do the following so output is not written twice
 			// see page 23 of hooking solver to AMPL
-			need_nl = printf( sReport.c_str());
+			std::cout  << osrl << std::endl;
+			osrl = " ";
 			//
 			write_sol(  const_cast<char*>(osrl.c_str()), NULL, NULL, NULL);
 			need_nl = 0;
 		}
-		cout << "DONE WRITING THE SOLUTION BACK INTO AMPL" <<endl;
+		//cout << "DONE WRITING THE SOLUTION BACK INTO AMPL" <<endl;
 	}
 	catch(const ErrorClass& eclass){
 		cout << "There was an error parsing the OSrL" << endl << eclass.errormsg << endl << endl;
