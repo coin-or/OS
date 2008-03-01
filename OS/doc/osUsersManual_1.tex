@@ -1093,7 +1093,55 @@ https://projects.coin-or.org/BuildTools/wiki/user-configure#CommandLineArguments
 for more information on command line arguments that are illustrated in the subsections below.
 
 
-%----------------------------------------------------------------\subsubsection{AMPL}The OS library contains a class, {\tt OSnl2osil} (see Section\ref{section:nl2osil}), and the program{\tt OSAmplClient} (see Section \ref{section:amplclient}) that require the useof the AMPL ASL library.See \url{http://netlib.sandia.gov/ampl/}  and  \url{http://www.ampl.com}. Userswith a Unix system should locatethe {\tt ASL} folder that is part of the distribution. The {\tt ASL} folder isin the {\tt ThirdParty} folderwhich is in the distribution root folder. Locate and execute the {\tt get.ASL}script.  Do this prior to runningthe {\tt configure} script. The {\tt configure} script will then build thecorrect ASL library.Microsoft  Visual Studio users will have to build the ASL library separately andthen link it with theOS lib in the OS project file.  The necessary source files are at\begin{verbatim}http://netlib.sandia.gov/cgi-bin/netlib/netlibfiles.tar?filename=netlib/ampl/solvers\end{verbatim}After unpacking the distribution you will have to create the file {\ttThirdParty/ASL/details.c} by hand,as follows: Copy the file {\tt details.c0} to {\tt details.c} and replace theline\begin{verbatim}char sysdetails_ASL[] = "System_details"\end{verbatim}by\begin{verbatim}char sysdetails_ASL[] = "MS VC++ {$n$}.0"\end{verbatim}where $n$ is the version number of the {\tt cl} compiler on your system (mostlikely version 6, 7 or~8).Then build the source code with the utility {\tt nmake}which should be part of the Visual Studio distribution. The appropriate commandis\begin{verbatim}nmake -f makefile.vc\end{verbatim}Next you should run {\tt configure}. If the OS project is properly configured with the ASL library,{\tt config\_os.h} will contain the lines\begin{verbatim}/* If defined, the Ampl Solver Library is available. */#define COIN_HAS_ASL 1\end{verbatim}%---------------------------------------------------------------- 
+
+%----------------------------------------------------------------
+\subsubsection{AMPL}
+
+The OS library contains a class, {\tt OSnl2osil} (see Section
+\ref{section:nl2osil}), and the program
+{\tt OSAmplClient} (see Section \ref{section:amplclient}) that require the use
+of the AMPL ASL library.
+See \url{http://netlib.sandia.gov/ampl/}  and  \url{http://www.ampl.com}. Users
+with a Unix system should locate
+the {\tt ASL} folder that is part of the distribution. The {\tt ASL} folder is
+in the {\tt ThirdParty} folder
+which is in the distribution root folder. Locate and execute the {\tt get.ASL}
+script.  Do this prior to running
+the {\tt configure} script. The {\tt configure} script will then build the
+correct ASL library.
+
+Microsoft  Visual Studio users will have to build the ASL library separately and
+then link it with the
+OS lib in the OS project file.  The necessary source files are at
+\begin{verbatim}
+http://netlib.sandia.gov/cgi-bin/netlib/netlibfiles.tar?filename=netlib/ampl/solvers
+\end{verbatim}
+After unpacking the distribution you will have to create the file {\tt
+ThirdParty/ASL/details.c} by hand,
+as follows: Copy the file {\tt details.c0} to {\tt details.c} and replace the
+line
+\begin{verbatim}
+char sysdetails_ASL[] = "System_details"
+\end{verbatim}
+by
+\begin{verbatim}
+char sysdetails_ASL[] = "MS VC++ {$n$}.0"
+\end{verbatim}
+where $n$ is the version number of the {\tt cl} compiler on your system (most
+likely version 6, 7 or~8).
+Then build the source code with the utility {\tt nmake}
+which should be part of the Visual Studio distribution. The appropriate command
+is
+\begin{verbatim}
+nmake -f makefile.vc
+\end{verbatim}
+Next you should run {\tt configure}. If the OS project is properly configured with the ASL library,
+{\tt config\_os.h} will contain the lines
+\begin{verbatim}
+/* If defined, the Ampl Solver Library is available. */
+#define COIN_HAS_ASL 1
+\end{verbatim}
+%---------------------------------------------------------------- 
 
 
 \subsubsection{Cplex}
@@ -4865,7 +4913,7 @@ Ipopt-shared is the vpath-directory where I build Ipopt (using shared libs).
 What to do is to:
 1. Put the HSL source into Ipopt-trunk/ThirdParty/HSL
 2. In Ipopt-shared, call
-      ../Ipopt-trunk/configure --enable-library-loader
+      ../Ipopt-trunk/configure --enable-loadable-library
 3. Patch Ipopt-shared/libtool
 4. In Ipopt-shared (or in its ThirdParty/HSL subdir) call make.
 
@@ -4873,7 +4921,18 @@ Now the gfortran call that builds the libhsl.dylib should next to the -dynamicli
 
 It should also be possible to run only the configure in ThirdParty/HSL, but then one need to give a lot of options for prefix or subdir... (see beginning of ThirdParty/HSL/config.log).
 
- 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Code for user defined variables.  
+
+See:
+
+http://www.gerad.ca/~orban/drampl/def-vars.html
+
+
+
+ k = (expr_v *)e - VAR_E; if( k >= n_var ) {     // This is a common expression. Find pointer to its root.     j = k - n_var;     if( j < ncom0 )         com_expr = CEXPS;     else         com_expr = CEXPS1 - ncom0;     Printf( "    Nonlinear part:\n" );     display_expr( (com_expr + j)->e, asl );     nlin = (com_expr + j)->nlin; // Number of linear terms     if( nlin > 0 ) {         Printf( "\n    Linear terms:\n" );         L = (com_expr + j)->L;         for( i = 0; i < nlin; i++ ) {             vp = (expr_v *)((char *)L->v.rp - ((char *)&ev.v - (char *)&ev));             Printf( " %-g x[%-d]", L->fac, (int)(vp - VAR_E) );             L++;         }     }  }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
