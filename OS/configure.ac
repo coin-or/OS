@@ -77,11 +77,13 @@ AC_C_BIGENDIAN
 # the following was added to autoconf 2.60 -- put in when build tools switches over
 # this will define HAVE_LONG_LONG_INT
 #AC_TYPE_LONG_LONG_INT 
+#for now assume C++
+#AC_DEFINE([SIZEOF_LONG_LONG],[0],[in C++ make sure SIZEOF_LONG_LONG is less than 8])
+#KIPP deal with the above
 
 AC_LANG_PUSH( C++)
 
-#for now assume C++
-AC_DEFINE([SIZEOF_LONG_LONG],[0],[in C++ make sure SIZEOF_LONG_LONG is less than 8])
+
 
 # the following does not work for cached variables
 #AC_CHECK_SIZEOF( long long)
