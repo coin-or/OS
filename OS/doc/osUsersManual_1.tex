@@ -100,7 +100,17 @@
 \maketitle
 
 \begin{abstract}
-This is the User's Manual for the Optimization Services (OS) project.  The objective of  (OS) is to provide a general framework consisting of a set of standards for representing optimization instances, results, solver options, and communication between clients and solvers in a distributed environment using Web Services. This COIN-OR project provides C++ and Java source code for libraries and executable programs that implement OS standards.   The OS library includes a robust solver and modeling language interface (API) for linear, nonlinear and other types of optimization problems.   Also included is the C++ source code for a  command line executable {\tt OSSolverService}  for reading problem instances (OSiL format, nl format, MPS format) and calling a solver either locally or on a remote server.  Finally,  both Java source code and a Java war, are provided for users who wish to set up a solver service on a server running Apache Tomcat.   See the Optimization Services (OS) home page \url{www.optimizationservices.org} and the COIN-OR Trac page \url{projects.coin-or.org/OS} for more information.
+This is the User's Manual for the Optimization Services (OS) project.  The objective of  (OS) is to provide a 
+general framework consisting of a set of standards for representing optimization instances, results, 
+solver options, and communication between clients and solvers in a distributed environment using Web Services. 
+This COIN-OR project provides C++ and Java source code for libraries and executable programs that implement 
+OS standards.   The OS library includes a robust solver and modeling language interface (API) for linear, 
+nonlinear and other types of optimization problems.   Also included is the C++ source code for a  command line 
+executable {\tt OSSolverService}  for reading problem instances (OSiL format, nl format, MPS format) and 
+calling a solver either locally or on a remote server.  Finally,  both Java source code and a Java {\tt war} file
+are provided for users who wish to set up a solver service on a server running Apache Tomcat.   
+See the Optimization Services (OS) home page \url{www.optimizationservices.org} and the COIN-OR Trac page 
+\url{projects.coin-or.org/OS} for more information.
 \end{abstract}
 
 
@@ -117,10 +127,14 @@ This is the User's Manual for the Optimization Services (OS) project.  The objec
 
 \section{The Optimization Services (OS) Project}
 
-The objective of Optimization Services (OS) is to provide a general framework consisting of a set of standards for representing optimization instances, results, solver options, and communication between clients and solvers in a distributed environment using Web Services. This COIN-OR project provides source code for libraries and executable programs that implement OS standards.  See the COIN-OR Trac page \url{projects.coin-or.org/OS} or the Optimization Services (OS) Home Site \url{www.optimizationservices.org}   for more information. The OS project provides the following:
+The objective of Optimization Services (OS) is to provide a general framework consisting of a set of standards 
+for representing optimization instances, results, solver options, and communication between clients and solvers 
+in a distributed environment using Web Services. This COIN-OR project provides source code for libraries and 
+executable programs that implement OS standards.  See the COIN-OR Trac page \url{projects.coin-or.org/OS} 
+or the Optimization Services (OS) Home Page \url{www.optimizationservices.org}   for more information. The OS project provides the following:
 
 \begin{itemize}
-\item[1.]  A set of XML based standards for representing optimization instances (OSiL), optimization results (OSrL), and optimization solver options (OSoL). There are other standards, but these are the main ones. The schemas for these standards are described in Section   \ref{section:schemadescriptions}.
+\item[1.]  A set of XML based standards for representing optimization instances (OSiL), optimization results (OSrL), and optimization solver options (OSoL). There are other standards, but these are the main ones. The schemas for these standards are described in Section~\ref{section:schemadescriptions}.
 
 
 \item[2.]  Open source libraries  that support and implement many of the standards.
@@ -345,6 +359,8 @@ c., Scottsdale, Arizona, US
 \end{verbatim}
 
 If so, select {\tt (p)} and you should not get this message again.
+
+\vskip 8pt
 
 On Windows with TortoiseSVN, create a directory {\tt COIN-OS} in the desired location and right-click on this directory.   
 Select the menu item {\tt SVN Checkout ...} and in the textbox ``{\tt URL of Repository}''
@@ -648,10 +664,10 @@ Open the project files (for instance by double clicking on them in Windows Explo
 
 \subsubsection{Cygwin}\label{section:cygwin}
 
-{\tt Cygwin} provides a Unix emulation environment for Windows. It comes with numerous tools and libraries including the gcc compilers. See {\tt www.cygwin.com}.   Cygwin can be used with the Gnu Compiler Collection (gcc) or with the Microsoft {\tt cl} compiler.
+{\tt Cygwin} provides a Unix emulation environment for Windows. It comes with numerous tools and libraries including the {\tt gcc} compilers. See {\tt www.cygwin.com}.   Cygwin can be used with the Gnu Compiler Collection ({\tt gcc}) or with the Microsoft {\tt cl} compiler.
 
 
-{\bf Using Cygwin with gcc:}  With Cygwin and the corresponding gcc compilers the OS project is  
+{\bf Using Cygwin with {\tt gcc}:}  With Cygwin and the corresponding {\tt gcc} compilers the OS project is  
 built exactly as described in Section \ref{section:unixbuilds}. If you have previously downloaded 
 Cygwin with gnome make version 3.81-1,  you must obtain a fixed 3.81 version from \url{http://www.cmake.org/files/cygwin/make.exe}. (See also  the Cygwin mailing list postings \url{http://cygwin.com/ml/cygwin/2006-09/msg00315.html} and \url{http://cygwin.com/ml/cygwin/2006-09/msg00153.html}).  See also the discussion at \url{https://projects.coin-or.org/BuildTools/wiki/current-issues}.
 
@@ -1094,7 +1110,6 @@ for more information on command line arguments that are illustrated in the subse
 
 
 
-%----------------------------------------------------------------
 \subsubsection{AMPL}
 
 The OS library contains a class, {\tt OSnl2osil} (see Section
@@ -1111,13 +1126,12 @@ the {\tt configure} script. The {\tt configure} script will then build the
 correct ASL library.
 
 Microsoft  Visual Studio users will have to build the ASL library separately and
-then link it with the
-OS lib in the OS project file.  The necessary source files are at
+then link it with the OS lib in the OS project file.  The necessary source files are at
 \begin{verbatim}
 http://netlib.sandia.gov/cgi-bin/netlib/netlibfiles.tar?filename=netlib/ampl/solvers
 \end{verbatim}
-After unpacking the distribution you will have to create the file {\tt
-ThirdParty/ASL/details.c} by hand,
+After unpacking the distribution you will have to create the file 
+{\tt ThirdParty/ASL/details.c} by hand,
 as follows: Copy the file {\tt details.c0} to {\tt details.c} and replace the
 line
 \begin{verbatim}
@@ -1128,8 +1142,7 @@ by
 char sysdetails_ASL[] = "MS VC++ {$n$}.0"
 \end{verbatim}
 where $n$ is the version number of the {\tt cl} compiler on your system (most
-likely version 6, 7 or~8).
-Then build the source code with the utility {\tt nmake}
+likely version 6, 7 or~8). Then build the source code with the utility {\tt nmake}
 which should be part of the Visual Studio distribution. The appropriate command
 is
 \begin{verbatim}
@@ -1141,7 +1154,6 @@ Next you should run {\tt configure}. If the OS project is properly configured wi
 /* If defined, the Ampl Solver Library is available. */
 #define COIN_HAS_ASL 1
 \end{verbatim}
-%---------------------------------------------------------------- 
 
 
 \subsubsection{Cplex}
@@ -1294,7 +1306,11 @@ This file can be edited, and any project for which documentation is desired, can
 
 \subsection{Platforms}
 
-The build process described in Section \ref{section:unixbuilds} has been tested on Linux, Mac OS X, and on Windows using  MINGW/MSYS and CYGWIN. The  gcc/g++ and Microsoft  cl compiler have been tested. A number of solvers have also been tested with the OS library. For a list of tested solvers and platforms see Table \ref{table:testedplatforms}.  More detail on the platforms listed in Table  \ref{table:testedplatforms} is given in Table \ref{table:platformdescription}.
+The build process described in Section \ref{section:unixbuilds} has been tested on Linux, Mac OS X, and on Windows 
+using  MINGW/MSYS and CYGWIN. The  {\tt gcc}/{\tt g++} and Microsoft {\tt cl} compiler have been tested. 
+A number of solvers have also been tested with the OS library. For a list of tested solvers and platforms see 
+Table~\ref{table:testedplatforms}.  More detail on the platforms listed in Table~\ref{table:testedplatforms} 
+is given in Table~\ref{table:platformdescription}.
 
 
 \begin{table}
@@ -1397,15 +1413,17 @@ See Section \ref{section:applications}.
 
 \item {\tt doc} - is the directory with documentation, including this {\it OS User's Manual.}
 
-\item {\tt examples} - is a directory with code examples that illustrate various aspects of the OS project.    These are described in Section \ref{section:examples}.
+\item {\tt examples} - is a directory with code examples that illustrate various aspects of the OS project.    These are described in Section~\ref{section:examples}.
 
 \item {\tt inc} - is the directory with the config\_os.h file which has information about which projects are included in the distribution.
 
 \item {\tt m4} - is a directory that  contains macro scripts written in the m4 language for auto configuration.
 
-\item {\tt MSVisualStudio} - is a directory that  contains solution files for the Microsoft Visual Studio IDE.  The subdirectories are organized by the version of Visual Studio. We currently provide a solution file for Version 7 and 8.
+\item {\tt MSVisualStudio} - is a directory that  contains folders for the solution files for the 
+Microsoft Visual Studio IDE.  The subdirectories are organized by the version of Visual Studio. 
+We currently provide solution files for versions 7 and~8.
 
-\item {\tt schemas} - is the directory that contains the W3C XSD (see \url{www.w3.org}) schemas that are behind the OS standards. These are described in more detail in Section \ref{section:schemadescriptions}.
+\item {\tt schemas} - is the directory that contains the W3C XSD (see \url{www.w3.org}) schemas that are behind the OS standards. These are described in more detail in Section~\ref{section:schemadescriptions}.
 
 \item {\tt src} - is the directory with all of the source code for the OS Library and for the executable {\tt OSSolverService}. The OS Library components are described in Section \ref{section:oslibrary}.
 
@@ -1422,15 +1440,12 @@ This describes the set of inputs and outputs for the methods implemented in the 
 
 \section{OS Protocols}\label{section:schemadescriptions}
 
-
-
 The objective of  (OS) is to provide a set of standards for representing optimization instances, results, solver options, and communication between clients and solvers in a distributed environment using Web Services.  These standards are specified by W3C XSD schemas. The schemas for the OS project are contained in the {\tt schemas} folder under the {\tt OS} root. There are numerous schemas in this directory that are part of the OS standard. For a full description of all the schemas see  Ma \cite{junma2005}.  We briefly discuss the standards most relevant to the current version of the OS project.
 
-\begin{itemize}
 
-
-\item[] {\bf OSiL (Optimization Services instance Language):} an
-XML-based language for representing instances of large-scale
+\subsection{OSiL (Optimization Services instance Language)} \label{section:osilschema}
+OSiL is
+an XML-based language for representing instances of large-scale
 optimization problems including linear programs, mixed-integer programs,
 quadratic programs, and very general nonlinear programs.
 
@@ -1528,7 +1543,7 @@ schema.}\label{figure:osilvar}
 
 
 
-Figure ~\ref{figure:osilvariables} is a piece of our schema for OSiL. In W3C XML Schema jargon, it defines a {\it complexType,}  whose purpose is to specify elements and attributes that are allowed to appear in a valid XML instance file such as the one excerpted in Figure~\ref{figure:variableselement}. In particular, Figure~\ref{figure:osilvariables} defines the complexType named {\tt Variables}, which
+Figure~\ref{figure:osilvariables} is a piece of our schema for OSiL. In W3C XML Schema jargon, it defines a {\it complexType,}  whose purpose is to specify elements and attributes that are allowed to appear in a valid XML instance file such as the one excerpted in Figure~\ref{figure:variableselement}. In particular, Figure~\ref{figure:osilvariables} defines the complexType named {\tt Variables}, which
 comprises an element named {\tt <var>} and an attribute named {\tt
 numberOfVariables}. The {\tt numberOfVariables} attribute is of a
 standard type {\tt positiveInteger}, whereas the {\tt <var>} element is
@@ -1565,7 +1580,7 @@ matrix using three arrays as proposed in the earlier LPFML schema
 (\ref{eq:ro1}) and (\ref{eq:ro2}).}\label{figure:rolistMatrix}
 \end{figure}
 
-The quadratic part of the problem is represented  in Figure \ref{figure:qterms}.
+The quadratic part of the problem is represented  in Figure~\ref{figure:qterms}.
 
 \begin{figure}[ht]
 \centering
@@ -1619,14 +1634,13 @@ The nonlinear part of the problem is given in Figure \ref{figure:roobjnlnode}.
 \end{figure}
 }
 
+The complete OSiL representation is given in the Appendix (Section~\ref{section:rosenbrockXML}).
 
 
- The complete OSiL representation is given in the Appendix (Section \ref{section:rosenbrockXML}).
-
-\item[] {\bf OSrL (Optimization Services result Language):}  an
-XML-based language for representing the solution of large-scale
+\subsection{OSrL (Optimization Services result Language)} \label{section:osrlschema}
+OSrL is an XML-based language for representing the solution of large-scale
 optimization problems including linear programs, mixed-integer programs,
-quadratic programs, and very general nonlinear programs.  As example solution (for the problem given in
+quadratic programs, and very general nonlinear programs.  An example solution (for the problem given in
  (\ref{eq:roobj})--(\ref{eq:ro3}) ) in OSrL format is given below.
 
 \begin{verbatim}
@@ -1676,17 +1690,25 @@ http://www.optimizationservices.org/schemas/OSrL.xsd">
 
 
 
-\item[] {\bf OSoL (Optimization Services option Language):}  an
-XML-based language for representing options that get passed to an optimization solver or a hosted optimization solver Web service. It contains both standard options for generic services and extendable option tags for solver-specific directives.
+\subsection{OSoL (Optimization Services option Language)} \label{section:osolschema}
+OSoL is
+an XML-based language for representing options that get passed to an optimization solver or a hosted optimization 
+solver Web service. It contains both standard options for generic services and extendable option tags for 
+solver-specific directives. 
+Several examples of files in OSoL format are presented in Section~\ref{section:servicemethods}.
 
-\item[] {\bf OSnL (Optimization Services nonlinear Language):}  The OSnL schema is imported by the OSiL schema and is used to represent the nonlinear part of an optimization instane. This is explained in greater detail in Section \ref{section:osexpressiontreeclass}. Also refer to Figure \ref{figure:roobjnlnode} for an illustration of elements from the OSnL standard.
+
+\subsection{OSnL (Optimization Services nonlinear Language)} \label{section:osnlschema}
+The OSnL schema is imported by the OSiL schema and is used to represent the nonlinear part of an optimization 
+instance. This is explained in greater detail in Section~\ref{section:osexpressiontreeclass}. Also refer to 
+Figure~\ref{figure:roobjnlnode} for an illustration of elements from the OSnL standard.
 
 
+\subsection{OSpL (Optimization Services process Language)} \label{section:osplschema}
+This
+is a standard for dynamic process information that is kept by the Optimization Services registry.
+The string returned from the {\tt knock} method is in the OSpL format. See the example given in Section~\ref{section:knock}.
 
-\item[]   {\bf OSpL (Optimization Services process Language):} is a standard for dynamic process information that is kept by the Optimization Services registry. The string returned from the {\tt knock} method is in the OSpL format.
- See the example given in Section \ref{section:knock}.
-
-\end{itemize}
 
 
 
@@ -1714,7 +1736,7 @@ There is also a method, {\tt OSFileUpload}, in the OSAgentClass that is used to 
 
 \subsection{OSCommonInterfaces}
 
-The classes in the OSCommonInterfaces component of the OS library are  used  to read and write files and strings in the OSiL and OSrL protocols. See Section \ref{section:schemadescriptions} for more detail on OSiL, OSrL, and other OS protocols. For a complete listing of all of the files in {\tt OSCommonInterfaces} see the Doxygen documentation in the {\tt doxydoc} folder (see Section \ref{section:documentation}).  Below we highlight some key classes.
+The classes in the OSCommonInterfaces component of the OS library are  used  to read and write files and strings in the OSiL and OSrL protocols. See Section~\ref{section:schemadescriptions} for more detail on OSiL, OSrL, and other OS protocols. For a complete listing of all of the files in {\tt OSCommonInterfaces} see the Doxygen documentation in the {\tt doxydoc} folder (see Section \ref{section:documentation}).  Below we highlight some key classes.
 
 
 
@@ -1913,7 +1935,7 @@ Although in the OSnL schema, there are 200+ nonlinear operators, only the follow
 \item OSnLNodeSin
 \item OSnLNodeCos
 \item OSnLNodeExp
-\item OSnLNodeif
+\item OSnLNodeIf
 \item OSnLNodeAbs
 \item OSnLNodeMax
 \item OSnLNodeMin
@@ -1943,7 +1965,7 @@ solver->osinstance = mps2osil->osinstance;
 solver->solve();
 \end{verbatim}
 
-The {\tt OSmps2osil} class constructor takes a string which should be the file name of the instance in MPS format. The constructor then uses the CoinUtils library to read and parse the MPS file.  The class method {\tt createOSInstance} then builds  an in-memory {\tt osintance} object  that can be used by a solver.
+The {\tt OSmps2osil} class constructor takes a string which should be the file name of the instance in MPS format. The constructor then uses the CoinUtils library to read and parse the MPS file.  The class method {\tt createOSInstance} then builds  an in-memory {\tt osinstance} object  that can be used by a solver.
 
 
 \subsubsection{Converting AMPL nl Files}\label{section:nl2osil}
@@ -1961,7 +1983,7 @@ solver->solve();
 \end{verbatim}
 
 
-The {\tt OSnl2osil} class works much like the {\tt OSmps2osil} class. The {\tt OSnl2osil} class constructor takes a string which should be the file name of the instance in nl format. The constructor then uses the AMPL ASL library routines to read and parse the nl file. The class method {\tt createOSInstance} then builds  an in-memory {\tt osintance} object  that can be used by a solver.
+The {\tt OSnl2osil} class works much like the {\tt OSmps2osil} class. The {\tt OSnl2osil} class constructor takes a string which should be the file name of the instance in nl format. The constructor then uses the AMPL ASL library routines to read and parse the nl file. The class method {\tt createOSInstance} then builds  an in-memory {\tt osinstance} object  that can be used by a solver.
 
 In Section  \ref{section:amplclient}  we describe the {\tt OSAmplClient} executable that acts as a ``solver'' for AMPL. The {\tt OSAmplClient} uses the {\tt OSnl2osil} class to convert the instance in nl format to OSiL format before calling a solver either locally or remotely.
 
@@ -2062,7 +2084,7 @@ serviceAddress='';
 then a local solver is used. In this case  it is crucial that the appropriate solver is linked in with the {\tt matlabSolver} executable using the {\tt CXXLIBS} option.
 
 
-The data directory  also contains the m-file  {\tt template.m} which contains extensive comments about how to formulate the problems in MATLAB.  A second example which is a quadratic problem is given in the Appendix. The appropriate m-file is {\tt markowitz.m}.
+The data directory  also contains the m-file  {\tt template.m} which contains extensive comments about how to formulate the problems in MATLAB.  A second example which is a quadratic problem is given in section~\ref{section:matlab}. The appropriate m-file is {\tt markowitz.m}.
 
 
 
@@ -2090,9 +2112,16 @@ The {\tt  readOSiL} method  has a single argument which is a pointer to a string
 \end{verbatim}
 There are other components in the OSiL schema, but they are not yet implemented.
 In most large-scale applications the {\tt <variables>,} {\tt <objectives>}, {\tt <constraints>}, and {\tt <linearConstraintCoefficients>}
-will comprise the bulk of the instance memory.  Because of this, we have ``hard-coded'' the OSiL parser to read these specific elements very efficiently.
-The parsing of the {\tt <quadraticCoefficients>} and {\tt <nonlinearExpressions>} is done using code generated by {\tt flex} and {\tt bison}. In the {\tt OSParsers}  the file  {\tt OSParseosil.l} is used by {\tt flex} to generate {\tt OSParseosil.cpp} and the file {\tt OSParseosil.y} is used by {\tt bison} to generate {\tt OSParseosil.tab.cpp}.
-In {\tt OSParseosil.l} we use the {\tt reentrant} option and in {\tt OSParseosil.y} we use the {\tt pure-parser} option to generate reentrant parsers. The {\tt OSParseosil.y} file  contains both our  ``hard-coded'' parser and the grammar rules for the  {\tt <quadraticCoefficients>} and {\tt <nonlinearExpressions>} sections.
+will comprise the bulk of the instance memory.  Because of this, we have ``hard-coded'' the OSiL parser 
+to read these specific elements very efficiently.
+The parsing of the {\tt <quadraticCoefficients>} and {\tt <nonlinearExpressions>} is done using code generated 
+by {\tt flex} and {\tt bison}. In the {\tt OSParsers}  the file  {\tt OSParseosil.l} is used by {\tt flex} 
+to generate {\tt OSParseosil.cpp} and the file {\tt OSParseosil.y} is used by {\tt bison} to generate 
+{\tt OSParseosil.tab.cpp}.
+In {\tt OSParseosil.l} we use the {\tt reentrant} option and in {\tt OSParseosil.y} we use the 
+{\tt pure-parser} option to generate reentrant parsers. The {\tt OSParseosil.y} file  contains both our  
+``hard-coded'' parser and the grammar rules for the  {\tt <quadraticCoefficients>} and 
+{\tt <nonlinearExpressions>} sections.
 We are currently using GNU Bison version 3.2 and {\tt flex} 2.5.33.
 
 The typical OS user will have no need to edit either {\tt OSParseosil.l} or {\tt OSParseosil.y} and therefore will not have to worry about running either {\tt flex} or {\tt bison} to generate the parsers. The generated parser code from {\tt flex} and {\tt bison} is distributed with the project and works on all of the platforms listed in Table \ref{table:testedplatforms}.  If the user does edit either {\tt parseosil.l} or {\tt parseosil.y} then {\tt parseosil.cpp} and {\tt parseosil.tab.cpp} need to be regenerated with {\tt flex} and {\tt bison}. If these programs are present, in the OS directory  execute
@@ -2205,7 +2234,7 @@ osinstance->getVariableNumber();
 \end{verbatim}
 will return an integer which is the number of variables in the problem,
 \begin{verbatim}
-osintance->getVariableTypes();
+osinstance->getVariableTypes();
 \end{verbatim}
 will return a {\tt char} pointer to the variable types ({\tt C} for continuous, {\tt B} for binary, and {\tt I} for general integer),
 \begin{verbatim}
@@ -2213,7 +2242,7 @@ getVariableLowerBounds();
 \end{verbatim}
 will  return a {\tt double} pointer to the lower bound on each variable. There are similar {\tt get} methods for the constraints. There are numerous {\tt get} methods for the data in the {\tt <linearConstraintCoefficients>}  element, the {\tt <quadraticCoefficients>} element, and the {\tt <nonlinearExpressions>} element.
 
-When an {\tt osinstance} object is created, it is stored as in expression tree in an {\tt OSExpressionTree} object. However, some solver APIs (e.g. LINDO) may take the data in a different format such as postfix and prefix. There are methods to return the data in either postfix or prefix format.
+When an {\tt osinstance} object is created, it is stored as an expression tree in an {\tt OSExpressionTree} object. However, some solver APIs (e.g. LINDO) may take the data in a different format such as postfix and prefix. There are methods to return the data in either postfix or prefix format.
 
 First define a {\tt vector} of pointers to {\tt OSnLNode} objects.
 \begin{verbatim}
@@ -2513,7 +2542,7 @@ This call returns the vector of  values
 \begin{eqnarray*}
 y_{1}^{(2)}  = 1, \quad y_{2}^{(2)}  = 0, \quad y_{3}^{(2)} = -.52
 \end{eqnarray*}
-By inspection of (\ref{eq:jac2}),
+By inspection of (\ref{eq:jac2}) (or by appropriate calls to {\tt osinstance->forwardAD} --- not shown here),
 \begin{eqnarray*}
 \DD{f_{1}(x^{(0)})}{x_{0}}{x_{0}} &=& 2 \\
 \DD{f_{2}(x^{(0)})}{x_{0}}{x_{0}} &=&  0\\
@@ -2834,26 +2863,28 @@ At present, the {\tt OSSolverService} takes the following parameters. The order 
 
 \begin{itemize}
 
-\item[] {\bf -osil xxx.osil}  this is the name of the file that contains the optimization instance in OSiL format. It is assumed that this file is available in a directory on the machine that is running {\tt OSSolverService}. If this option is not specified then the instance location must be specified in the OSoL solver options file.
+\item[] {\bf -osil xxx.osil}\ \ This is the name of the file that contains the optimization instance in OSiL format. It is assumed that this file is available in a directory on the machine that is running {\tt OSSolverService}. If this option is not specified then the instance location must be specified in the OSoL solver options file.
 
-\item[] {\bf -osol xxx.osol}  this is the name of the file that contains the solver options. It is assumed that this file is available in a directory on the machine that is running {\tt OSSolverService}. It is not necessary to specify this option.
+\item[] {\bf -osol xxx.osol}\ \ This is the name of the file that contains the solver options. It is assumed that this file is available in a directory on the machine that is running {\tt OSSolverService}. It is not necessary to specify this option.
 
-\item[] {\bf -osrl xxx.osrl}  this is the name of the file that contains the solver solution. A valid file path must be given on the machine that is running {\tt OSSolverService}. It is not necessary to specify this option.
+\item[] {\bf -osrl xxx.osrl}\ \  This is the name of the file that contains the solver solution. A valid file path must be given on the machine that is running {\tt OSSolverService}. It is not necessary to specify this option.
 
-\item[] {\bf -serviceLocation url}  is the URL of the solver service. This is not required, and if not specified it is assumed that the problem is solved locally.
+\item[] {\bf -serviceLocation url}\ \ This is the URL of the solver service. It is not required, and if not specified it is assumed that the problem is solved locally.
 
-\item[] {\bf -serviceMethod  methodName}  this is  the method on the solver service to be invoked. The options are {\tt solve}, {\tt send}, {\tt kill}, {\tt knock}, {\tt getJobID}, and {\tt retrieve}. The use of these options is illustrated in the examples below. This option is not required, and the default value is {\tt solve.}
+\item[] {\bf -serviceMethod  methodName}\ \ This is  the method on the solver service to be invoked. 
+The options are {\tt solve}, {\tt send}, {\tt kill}, {\tt knock}, {\tt getJobID}, and {\tt retrieve}. 
+The use of these options is illustrated in the examples below. This option is not required, and the default 
+value is {\tt solve.}
 
-\item[] {\bf -mps  xxx.mps}  this is the name of the mps file if the problem instance is in mps format. It is assumed that this file is available in a directory on the machine that is running {\tt OSSolverService}. The default file format is OSiL so this option is not required.
+\item[] {\bf -mps  xxx.mps}\ \ This is the name of the mps file if the problem instance is in mps format. It is assumed that this file is available in a directory on the machine that is running {\tt OSSolverService}. The default file format is OSiL so this option is not required.
 
-\item[] {\bf -nl  xxx.nl}  this is the name of the AMPL nl file if the problem instance is in AMPL nl  format. It is assumed that this file is available in a directory on the machine that is running {\tt OSSolverService}. The default file format is OSiL so this option is not required.
+\item[] {\bf -nl  xxx.nl}\ \ This is the name of the AMPL nl file if the problem instance is in AMPL nl  format. It is assumed that this file is available in a directory on the machine that is running {\tt OSSolverService}. The default file format is OSiL so this option is not required.
 
-\item[] {\bf -solver  solverName}  Possible values for default OS installation are {\tt clp} (COIN-OR Clp), {\tt cbc} (COIN-OR Cbc), {\tt dylp} (COIN-OR DyLP), and {\tt symphony} (COIN-OR SYMPHONY). Other solvers supported (if the necessary libraries are present) are {\tt cplex} (Cplex through COIN-OR Osi), {\tt glpk} (glpk through COIN-OR Osi), {\tt ipopt} (COIN-OR Ipopt),  {\tt knitro} (Knitro), and {\tt lindo} (LINDO). If no value is specified for this parameter, then {\tt cbc} is the default value of this parameter if the the {\tt solve} or {\tt send} service methods are used.
+\item[] {\bf -solver  solverName}\ \ Possible values for default OS installation are {\tt clp} (COIN-OR Clp), {\tt cbc} (COIN-OR Cbc), {\tt dylp} (COIN-OR DyLP), and {\tt symphony} (COIN-OR SYMPHONY). Other solvers supported (if the necessary libraries are present) are {\tt cplex} (Cplex through COIN-OR Osi), {\tt glpk} (glpk through COIN-OR Osi), {\tt ipopt} (COIN-OR Ipopt),  {\tt knitro} (Knitro), and {\tt lindo} (LINDO). If no value is specified for this parameter, then {\tt cbc} is the default value of this parameter if the the {\tt solve} or {\tt send} service methods are used.
 
+\item[] {\bf -browser  browserName}\ \ This parameter is a path to the browser on the local machine. If this optional parameter is specified then the solver result in OSrL format is transformed using XSLT into HTML and displayed in the browser.
 
-\item[] {\bf -browser  browserName} this paramater is a path to the browser on the local machine. If this optional parameter is specified then the solver result in OSrL format is transformed using XSLT into HTML and displayed in the browser.
-
-\item[] {\bf -config pathToConfigureFile} this parameter specifies a path on the local machine to a text file containing values for the input parameters. This is convenient for the user not wishing to constantly retype parameter values.
+\item[] {\bf -config pathToConfigureFile}\ \ This parameter specifies a path on the local machine to a text file containing values for the input parameters. This is convenient for the user not wishing to constantly retype parameter values.
 
 \end{itemize}
 
@@ -3046,7 +3077,7 @@ where the {\tt remoteSolve1.osol} file is
 \end{verbatim}
 
 
-If we were to change to the {\tt locationType} attribute in the {\tt <instanceLocation>} element to {\tt http} then we could specify the instance location on yet another machine. This is illustrated below  for {\tt remoteSolve2.osol}.  The scenario is depicted in Figure \ref{figure:ossolverservice2}.  The OSiL string passed from the client to the solver service is empty.  However, the OSoL element {\tt <instanceLocation>}  has an attribute {\tt locationType} equal to   {\tt http}.  In this case, the text of the {\tt <instanceLoction>} element contains the URL of a third machine which has the problem intance {\tt parincLinear.osil}.  The solver service will contact the machine with URL {\tt http://www.coin-or.org/OS/parincLinear.osil} and download this test problem. So the {\tt OSSolverService} is running on the server {\tt gsbkip.chicagogsb.edu} which contacts the server {\tt www.coin-or.org} for the model instance.
+If we were to change the {\tt locationType} attribute in the {\tt <instanceLocation>} element to {\tt http} then we could specify the instance location on yet another machine. This is illustrated below  for {\tt remoteSolve2.osol}.  The scenario is depicted in Figure \ref{figure:ossolverservice2}.  The OSiL string passed from the client to the solver service is empty.  However, the OSoL element {\tt <instanceLocation>}  has an attribute {\tt locationType} equal to   {\tt http}.  In this case, the text of the {\tt <instanceLoction>} element contains the URL of a third machine which has the problem instance {\tt parincLinear.osil}.  The solver service will contact the machine with URL {\tt http://www.coin-or.org/OS/parincLinear.osil} and download this test problem. So the {\tt OSSolverService} is running on the server {\tt gsbkip.chicagogsb.edu} which contacts the server {\tt www.coin-or.org} for the model instance.
 \begin{verbatim}
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org">
@@ -3183,7 +3214,7 @@ Note that in all of these examples we provided a value for the {\tt name} attrib
 
 \subsubsection{The  {\tt retrieve} Service Method}\label{section:retrieve}
 
-The {\tt retrieve} method is used to get information the instance solution.  This method has a single string argument which is an OSoL instance. Here is an example of using the {\tt retrieve} method with {\tt OSSolverService}.
+The {\tt retrieve} method is used to get information about the instance solution.  This method has a single string argument which is an OSoL instance. Here is an example of using the {\tt retrieve} method with {\tt OSSolverService}.
 \begin{verbatim}
 ./OSSolverService -config ../data/configFiles/testremoteRetrieve.config
 \end{verbatim}
@@ -3239,10 +3270,10 @@ the {\tt demo.ospl} file is
 \begin{verbatim}
 <?xml version="1.0" encoding="UTF-8"?>
 <ospl xmlns="os.optimizationservices.org">
-<processHeader>
-<request action="getAll"/>
-</processHeader>
-<processData/>
+    <processHeader>
+        <request action="getAll"/>
+    </processHeader>
+    <processData/>
 </ospl>
 \end{verbatim}
 and the {\tt retrieve.osol} file is
@@ -3254,7 +3285,7 @@ and the {\tt retrieve.osol} file is
     </general>
 </osol>
 \end{verbatim}
-The result of this request is again a string in OSpL format, with the data contained in its {\tt processData} section.  Part of the return format is illustrated below.
+The result of this request is a string in OSpL format, with the data contained in its {\tt processData} section.  Part of the return format is illustrated below.
 \begin{verbatim}
 <?xml version="1.0" encoding="UTF-8"?>
 <ospl xmlns="os.optimizationservices.org">
@@ -3312,13 +3343,13 @@ and the {\tt kill.osol} file is
 </osol>
 \end{verbatim}
 
-The result is returned in  {\tt OSpL}.
+The result is returned in  OSpL format.
 \subsubsection{Summary}
 
 Below is a summary of the inputs and outputs of the six service methods. See also Figure \ref{figure:osCommunicationMethods}.
 
 \begin{itemize}
-\item {\tt solve(osil, osol):}
+\item {\tt solve( osil, osol ):}
 
 \begin{itemize}
 
@@ -3332,7 +3363,7 @@ Below is a summary of the inputs and outputs of the six service methods. See als
 
 
 
-\item {\tt send(osil, osol)}
+\item {\tt send( osil, osol ):}
 
 
 \begin{itemize}
@@ -3348,7 +3379,7 @@ Below is a summary of the inputs and outputs of the six service methods. See als
 \item The {\tt osol} string should have a {\tt JobID} in the {\tt <jobID>} element
 \end{itemize}
 
-\item {\tt getJobID( osol)}
+\item {\tt getJobID( osol ):}
 
 \begin{itemize}
 
@@ -3361,7 +3392,7 @@ Below is a summary of the inputs and outputs of the six service methods. See als
 
 
 
-\item {\tt knock(ospl, osol)}
+\item {\tt knock( ospl, osol ):}
 
 \begin{itemize}
 
@@ -3371,7 +3402,7 @@ Below is a summary of the inputs and outputs of the six service methods. See als
 
 \end{itemize}
 
-\item {\tt retrieve( osol)}
+\item {\tt retrieve( osol ):}
 
 
 \begin{itemize}
@@ -3384,7 +3415,7 @@ Below is a summary of the inputs and outputs of the six service methods. See als
 
 \end{itemize}
 
-\item {\tt kill( osol)}
+\item {\tt kill( osol ):}
 
 
 \begin{itemize}
@@ -3418,7 +3449,8 @@ Download the java binary distribution at
 os-distribution-release_number.zip
 \end{verbatim}
 
-For example, {\tt os-distribution-1.0.0} for release 1.0.0.
+For example, the current release 1.0.0 is in {\tt os-distribution-1.0.0.zip}.
+
 
 The server side of the Java distribution is based on the Tomcat 5.5 implementation. After unpacking {\tt os-distribution-release\_number.zip} there is a directory {\tt os-server-1.0} and a single file {\tt os.war}.  For users who have not installed the Tomcat server,   {\tt os-server-1.0} contains  all of the necessary files for a OS Solver Service.  If you do not have a Tomcat server running, do the following to setup a  Tomcat server  with the OS Solver Service on a {\bf Unix system}:
 
@@ -3679,10 +3711,11 @@ http://gsbkip.chicagogsb.edu/os/fileupload.html
 will bring up the necessary form that allows the user to browse a directory and select the file to upload. This URL is based on the assumption that the {\tt OSJava} classes were deployed as described in Section \ref{section:tomcat}. The file {\tt fileupload.html} is in the directory {\tt WebApps/os}. In our html form implementation, after you upload the OSiL file, it shows you the path of the uploaded file that is saved on the server, so that you can put it in the corresponding {\tt osol} file.
 
 
+%\section{Examples}\label{section:examples}
+\section{Code samples to illustrate the {\tt OSInstance} API}\label{section:examples}
 
-\section{Examples}\label{section:examples}
-
-The example executable files are not built by running {\tt configure} and {\tt make}.  In order to build the examples the user must first run
+The example executable files are not built by running {\tt configure} and {\tt make}.  In order to build the examples 
+the user must first run
 \begin{verbatim}
 make all
 \end{verbatim}
@@ -3713,7 +3746,7 @@ OSInstance *osinstance;
 osinstance = new OSInstance();
 \end{verbatim}
 
-Assume that the instance has two variables, $x_{0}$ and $x_{1}.$ Variable $x_{0}$ is a continuous variable with lower bound of $-100$ and upper bound of $100$. Variable $x_{1}$ is a binary variable. First declare the instance to have two variables.
+The instance has two variables, $x_{0}$ and $x_{1}$. Variable $x_{0}$ is a continuous variable with lower bound of $-100$ and upper bound of $100$. Variable $x_{1}$ is a binary variable. First declare the instance to have two variables.
 \begin{verbatim}
 osinstance->setVariableNumber( 2);
 \end{verbatim}
@@ -3729,8 +3762,12 @@ osinstance->addVariable(1, "x1", 0, 1, 'B', OSNAN, "");
 \end{verbatim}
 There is also a method {\tt setVariables} for adding more than one variable simultaneously.  The objective function(s) and constraints are added through similar calls.
 
-Nonlinear terms are also easily added.  The following code illustrates how to add a nonlinear term $x_{0}*x_{1}$ in the {\tt <nonlinearExpressions>} section of  OSiL.
+Nonlinear terms are also easily added.  The following code illustrates how to add a nonlinear term 
+$x_{0}*x_{1}$ in the {\tt <nonlinearExpressions>} section of  OSiL. This term is part of constraint~1
+and is the second of six constraints contained in the instance.
 \begin{verbatim}
+osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions = 6;
+osinstance->instanceData->nonlinearExpressions->nl = new Nl*[ 6 ];
 osinstance->instanceData->nonlinearExpressions->nl[ 1] = new Nl();
 osinstance->instanceData->nonlinearExpressions->nl[ 1]->idx = 1;
 osinstance->instanceData->nonlinearExpressions->nl[ 1]->osExpressionTree =
@@ -3754,12 +3791,10 @@ nlNodeVec[ 0]->createExpressionTreeFromPostfix( nlNodeVec);
 
 \subsection{osTestCode}\label{subsection:exampleOSTestCode}
 
-The {\tt osTestCode} example directory holds the file {\tt osTestCode.cpp}. This is not designed to do anything specific and is simply a holder for testing out code and features of the OS library.
-
-\section{Appendix}\label{section:appendix}
+The {\tt osTestCode} folder holds the file {\tt osTestCode.cpp}. This is not designed to do anything specific and is simply a holder for testing out code and features of the OS library.
 
 
-\subsection{Building a Model in MATLAB}
+\section{Building a Model in MATLAB} \label{section:matlab}
 
 We illustrate how to build a simple Markowitz portfolio optimization problem (a quadratic programming problem) from {\bf template.m}. First copy {\bf template.m} to {\bf markowitz.m}.
 
@@ -3844,12 +3879,12 @@ Now for the quadratic terms. The only quadratic terms are in the objective funct
 
 
 \begin{eqnarray*}
-\min  0.4253 x_{1}^{2} +  0.4458 x_{2}^{2} + 0.2314 x_{3}^{2} + 2 \times 0.1852 x_{1} x_{2} \\ + 2 \times 0.1393 x_{1} x_{3} + 2 \times
- 0.1388 x_{2} x_{3}
+\min  0.425349694 x_{1}^{2} +  0.445784443 x_{2}^{2} + 0.231430983 x_{3}^{2} + 2 \times 0.185218694 x_{1} x_{2} \\ 
++ 2 \times 0.139312545 x_{1} x_{3} + 2 \times 0.13881692 x_{2} x_{3}
 \end{eqnarray*}
 
 
- The quadratic matrix $Q$ has 4 rows and a column for each quadratic term. In this example there are six quadratic terms.  The first row of $Q$ is the row index where the terms appear. By convention, the objective function has index -1 and we count constraints starting at 0.  The first row of $Q$ is
+ The quadratic matrix $Q$ has four rows and a column for each quadratic term. In this example there are six quadratic terms.  The first row of $Q$ is the row index where the terms appear. By convention, the objective function has index -1 and we count constraints starting at 0.  The first row of $Q$ is
 
 
  \begin{verbatim}
@@ -3920,6 +3955,7 @@ callMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, VarType, ...
 \end{verbatim}
 
 
+\section{Appendix -- Sample OSiL files}\label{section:appendix}
 
 
 \subsection{OSiL representation for problem given in (\ref{eq:roobj})--(\ref{eq:ro3}) (p.\pageref{eq:roobj})}\label{section:rosenbrockXML}
@@ -4901,6 +4937,7 @@ Also "nm amplsolver.a | grep Stderr" produces
 Maybe the "C" (=common) does not count as symbol definition? I do not
 really understand what "man nm" tells me about this.
 
+ 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -4931,7 +4968,31 @@ http://www.gerad.ca/~orban/drampl/def-vars.html
 
 
 
- k = (expr_v *)e - VAR_E; if( k >= n_var ) {     // This is a common expression. Find pointer to its root.     j = k - n_var;     if( j < ncom0 )         com_expr = CEXPS;     else         com_expr = CEXPS1 - ncom0;     Printf( "    Nonlinear part:\n" );     display_expr( (com_expr + j)->e, asl );     nlin = (com_expr + j)->nlin; // Number of linear terms     if( nlin > 0 ) {         Printf( "\n    Linear terms:\n" );         L = (com_expr + j)->L;         for( i = 0; i < nlin; i++ ) {             vp = (expr_v *)((char *)L->v.rp - ((char *)&ev.v - (char *)&ev));             Printf( " %-g x[%-d]", L->fac, (int)(vp - VAR_E) );             L++;         }     }  }
+ k = (expr_v *)e - VAR_E;
+ if( k >= n_var ) {
+
+     // This is a common expression. Find pointer to its root.
+
+     j = k - n_var;
+     if( j < ncom0 )
+         com_expr = CEXPS;
+     else
+         com_expr = CEXPS1 - ncom0;
+
+     Printf( "    Nonlinear part:\n" );
+     display_expr( (com_expr + j)->e, asl );
+
+     nlin = (com_expr + j)->nlin; // Number of linear terms
+     if( nlin > 0 ) {
+         Printf( "\n    Linear terms:\n" );
+         L = (com_expr + j)->L;
+         for( i = 0; i < nlin; i++ ) {
+             vp = (expr_v *)((char *)L->v.rp - ((char *)&ev.v - (char *)&ev));
+             Printf( " %-g x[%-d]", L->fac, (int)(vp - VAR_E) );
+             L++;
+         }
+     } 
+ }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
