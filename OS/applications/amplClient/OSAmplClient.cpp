@@ -391,5 +391,6 @@ int main(int argc, char **argv)
 	delete nl2osil;
 	//cout << "nl2osil JUST DELETED" <<endl;
 	nl2osil = NULL;
+	ASL_free(&asl);
 	return 0; 
 } // end main
