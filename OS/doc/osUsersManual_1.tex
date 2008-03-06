@@ -141,7 +141,7 @@ or the Optimization Services (OS) Home Page \url{www.optimizationservices.org}  
 
 \item[2.]  Open source libraries  that support and implement many of the standards.
 
-\item[3.]  A robust solver and modeling language interface (API) for linear and nonlinear optimization problems.  Corresponding to the OSiL problem instance representation there is an in-memory object,  {\tt OSInstance}, along with a set of  {\tt get()},   {\tt set()}, and {\tt calculate()} methods for accessing and creating problem instances.
+\item[3.]  A robust solver and modeling language interface (API) for linear and nonlinear optimization problems.  Corresponding to the OSiL problem instance representation there is an in-memory object,  {\tt OSInstance}, along with a collection of  {\tt get()},   {\tt set()}, and {\tt calculate()} methods for accessing and creating problem instances.
 This is a very general API for linear, integer, and nonlinear programs. Extensions for other major types of optimization problems are also in the works. Any modeling language that can produce OSiL can easily communicate with any solver that uses the OSInstance API.   The {\tt OSInstance} object is described in more detail in Section \ref{section:osinstanceAPI}. The nonlinear part of the API is based on the COIN-OR project \url{projects.coin-or.org/CppAD} by Brad Bell but is written in a very general manner and could be used with other algorithmic differentiation packages. More detail on algorithmic differentiation is provided in Section \ref{section:ad}.
 
 
@@ -1052,7 +1052,14 @@ CFLAGS = -MTd -DUSE_CLOCK -DMSDOS -DNO_ONEXIT
 
 \end{itemize}
 
+\vskip 8pt
 
+Users of Microsoft Visual Studio without access to a unix-like environment (Cygwin, MinGW or MSYS) 
+will have to use anonymous ftp to download
+BLAS (from \url{ftp://www.netlib.org/blas/blas.tgz})
+LAPACK (from \url{ftp://www.netlib.org/lapack/lapack-lite-3.1.0.tgz})
+and either Mumps (from \url{http://mumps.enseeiht.fr}) 
+or HSL (see above).
 
 
 
@@ -1156,8 +1163,8 @@ by
 \noindent
 where $n$ is the version number of the {\tt cl} compiler on your system (most
 likely 6, 7 or~8). Then build the source code with the utility {\tt nmake}
-which should be part of the Visual Studio distribution. The appropriate command
-is
+which should be part of the Visual Studio distribution. (This can be done in a Command Window.)
+The appropriate command is
 \begin{verbatim}
 nmake -f makefile.vc
 \end{verbatim}
@@ -1177,6 +1184,15 @@ See \url{http://www.gnu.org/software/glpk/}.  In order to use GLPK with OS, eith
 or connect to {\tt ThirdParty/Glpk} and execute {\tt get.Glpk}. Once the source code has been downloaded, 
 run {\tt configure}, followed by a {\tt make}, as explained in Section~\ref{section:unixbuilds} or Section~\ref{section:vpath}.
 
+Users on MSVS can download the source by anonymous {\tt ftp} from
+\begin{verbatim}
+ftp://ftp://ftp.gnu.org/gnu/glpk/glpk-version_number.tar.gz
+\end{verbatim}
+
+At the time of this writing, the most up-to-date version is 4.27, which can be found at
+\begin{verbatim}
+ftp://ftp://ftp.gnu.org/gnu/glpk/glpk-4.27.tar.gz
+\end{verbatim}
 
 \subsubsection{Cplex}
 
