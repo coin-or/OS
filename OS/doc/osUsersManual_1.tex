@@ -92,6 +92,8 @@
    % Set path to folder containing figures
 \newcommand{\FigureFolder}{figures}
 
+\newif\ifknitro \knitrofalse    % change to \knitrotrue once we get knitro connected again
+
 \begin{document}
 
 \title{Optimization Services 1.0 User's Manual }
@@ -176,7 +178,8 @@ If you want to:
 \item Use the OSSolverService to read files in nl, OSiL, or MPS format and call a solver locally or remotely -- see Section \ref{section:ossolverservice}.
 
 
-\item Use AMPL to solve problems either locally or remotely with a COIN-OR solver, Cplex, GLPK, Knitro, or LINDO -- see Section \ref{section:amplclient}.
+\item Use AMPL to solve problems either locally or remotely with a COIN-OR solver, Cplex, GLPK, \ifknitro Knitro, \fi 
+or LINDO -- see Section \ref{section:amplclient}.
 
 
 \item Build a remote solver service using Apache Tomcat -- see Section \ref{section:tomcat}.
@@ -265,10 +268,13 @@ SVN client  TortoiseSVN.  See \url{tortoisesvn.tigris.org}.  The TortoiseSVN cli
 Windows  Explorer.
 
 \subsubsection{wget}\label{section:wget}
-Certain third-party software (see section~\ref{section:otherthirdparty}) is available in source form but is not contained in the OS project distribution. Scripts are included to download this code using the {\tt wget} executable.
+Certain third-party software (see section~\ref{section:otherthirdparty}) is available in source form but is not 
+contained in the OS project distribution. Scripts are included to download this code using the {\tt wget} executable.
 
 
-%The {\tt wget} executable is used by the scripts, {\tt get.ASL}, {\tt %get.Blas}, etc. in the corresponding third party subdirectories and makes it %easy to download the software.  
+%The {\tt wget} executable is used by the scripts, {\tt get.ASL}, 
+%{\tt get.Blas}, etc. in the corresponding third party subdirectories 
+%and makes it easy to download the software.  
 A Windows version of {\tt wget} is available at
 
 \begin{verbatim}
@@ -288,7 +294,10 @@ http://www.christopherlewis.com/WGet/wget-1.11-beta-1b.zip
 There is no need to rebuild the code locally, which relies on several levels of other software.
 
 \subsubsection{Windows development platform}\label{section:windowsdevelopment}
-A development platform is essential for users on Windows. OS Project provides support for Microsoft Visual Studio (see section~\ref{section:msvs}) and several unix emulators, including Cygwin (section~\ref{section:cygwin}), MinGW (section~\ref{section:mingw}) and MSYS (section~\ref{section:msys}). Download instructions for all of these packages are included in the sections referenced above.
+A development platform is essential for users on Windows. OS Project provides support for Microsoft Visual Studio 
+(see section~\ref{section:msvs}) and several unix emulators, including Cygwin (section~\ref{section:cygwin}), 
+MinGW (section~\ref{section:mingw}) and MSYS (section~\ref{section:msys}). Download instructions for all of these 
+packages are included in the sections referenced above.
 
 \subsubsection{C++ compiler}\label{section:cpp}
 A C++ compiler is needed to compile the OS source. This should be present under all unix installations. 
@@ -525,7 +534,9 @@ make
 make test
 \end{verbatim}
 
-Depending upon which third party software you have installed, the result of running the {\tt unitTest} should look something like (we have included the third-party solvers LINDO and Knitro in the  test results below; they are not part of the default build):
+Depending upon which third party software you have installed, the result of running the {\tt unitTest} should look 
+something like (we have included the third-party solvers LINDO and Knitro in the  test results below; they are not 
+part of the default build):
 
 
 {\small
@@ -736,7 +747,8 @@ This step is necessary to insure that Cygwin   looks for compilers, linkers, etc
 
 
 \end{itemize}
-Open the Cygwin shell and check the value of {\tt \$PATH}. If directories don't appear in an order described above, then  {\tt \$PATH} value needs to be reset.
+Open the Cygwin shell and check the value of {\tt \$PATH}. If directories don't appear in an order described above, 
+then the {\tt \$PATH} value needs to be reset.
 
 %\item [Step 5:] This step is necessary only if you wish to build with the AMPL {\tt ASL} solver library.   
 %Unfortunately, and we regret this, but at the time of this writing the working version of ASL for cygwin/
@@ -1138,11 +1150,12 @@ line
 char sysdetails_ASL[] = "System_details"
 \end{verbatim}
 by
-\begin{verbatim}
-char sysdetails_ASL[] = "MS VC++ {$n$}.0"
-\end{verbatim}
+\vskip 8pt
+\noindent{\tt char sysdetails\_ASL[] = "MS VC++ }$n${\tt .0"}
+\vskip 8pt
+\noindent
 where $n$ is the version number of the {\tt cl} compiler on your system (most
-likely version 6, 7 or~8). Then build the source code with the utility {\tt nmake}
+likely 6, 7 or~8). Then build the source code with the utility {\tt nmake}
 which should be part of the Visual Studio distribution. The appropriate command
 is
 \begin{verbatim}
@@ -1154,6 +1167,15 @@ Next you should run {\tt configure}. If the OS project is properly configured wi
 /* If defined, the Ampl Solver Library is available. */
 #define COIN_HAS_ASL 1
 \end{verbatim}
+
+
+\subsubsection{GLPK}
+
+{\tt GLPK} is a an open-source linear and integer-programming solver from the GNU organization. 
+See \url{http://www.gnu.org/software/glpk/}.  In order to use GLPK with OS, either execute {\tt get.AllThirdParty}
+(see Section~\ref{section:ipopt}) 
+or connect to {\tt ThirdParty/Glpk} and execute {\tt get.Glpk}. Once the source code has been downloaded, 
+run {\tt configure}, followed by a {\tt make}, as explained in Section~\ref{section:unixbuilds} or Section~\ref{section:vpath}.
 
 
 \subsubsection{Cplex}
@@ -1182,26 +1204,15 @@ PATH=***:/usr/local/ilog/cplex81/bin/i86_linux2_glibc2.3_gcc3.2:***
 CLASSPATH=:/usr/local/ilog/cplex81/bin/i86_linux2_glibc2.3_gcc3.2:
 \end{verbatim}
 
-\subsubsection{GLPK}
 
-{\tt GLPK} is a an open-source linear and integer-programming solver from the GNU organization. 
-See \url{http://www.gnu.org/software/glpk/}.  In order to use GLPK with OS, either execute {\tt get.AllThirdParty} 
-or connect to {\tt ThirdParty/Glpk} and execute {\tt get.Glpk}. Once the source code has been downloaded, 
-run {\tt configure}, followed by a {\tt make}, as explained in Section~\ref{section:unixbuilds} or Section~\ref{section:vpath}.
-
-
-
+\ifknitro % skip this section for the time being
 \subsubsection{Knitro}
-
 
 Knitro is a nonlinear solver. See \url{http://www.ziena.com/}.  Ziena does not provide source code for Knitro.  You must download platform dependent binaries.   In order to use Knitro with the OS project, perform the following steps.
 
 \begin{itemize}
 
-
-
 \item[Step 1:]  Download {\tt knitro} to the desired directory.
-
 
 \item[Step 2:] Copy the file {\tt nlpProblemDef.h} from the {\tt examples/C++} directory to the {\tt include} directory.
 
@@ -1215,9 +1226,6 @@ NlpProblemDef::~NlpProblemDef (void)
 }
 \end{verbatim}
 
-
-
-
 \item[Step 4] Run {\tt configure} with appropriate values for  {\tt --with-knitro-lib} and {\tt --with-knitro-incdir}.
 For example:
 
@@ -1227,7 +1235,7 @@ configure --with-knitro-lib="-L/home/kmartin/files/code/knitro/linux/lib -lknitr
 \end{verbatim}
 
 \end{itemize}
-
+\fi     % end skipped material
 
 \subsubsection{LINDO}
 
@@ -1329,7 +1337,9 @@ Cplex &&x&&&& \\ \hline
 DyLP &x&x&x&x&x&x \\ \hline
 Glpk &x&x&x&&x&x \\ \hline
 Ipopt &x&x&x&x&x& \\ \hline
+\ifknitro
 Knitro &x&x&&&& \\ \hline
+\fi
 Lindo &x&x&&x&&x \\ \hline
 SYMPHONY &x&x&x&x&x&x \\ \hline
 Vol &x&x&x&x&x&x \\ \hline
@@ -1378,7 +1388,8 @@ The following directories are also in the project root.
 \begin{itemize}
 \item {\tt bin} - after executing {\tt make install} the bin directory will contain {\tt OSSolverService}, {\tt clp}, {\tt cbc},  {\tt cbc-generic} and {\tt symphony}.
 
-\item {\tt Data} - this directory contains numerous test problems that are used by  the {\tt unitTest} for many  COIN-OR projects.
+\item {\tt Data} - this directory contains numerous test problems that are used by the {\tt unitTest}s of
+the COIN-OR projects just mentioned.
 
 \item {\tt doxydoc} - is a folder for documentation.
 
@@ -1409,7 +1420,8 @@ The directories in the OS directory are outlined in Figure \ref{figure:osdirecto
 subdirectories called, respectively, {\tt amplClient} and {\tt fileUpload}.
 See Section \ref{section:applications}.
 
-\item {\tt data} - is a directory that holds test problems. These test problems are used by the {\tt unitTest}. Many of these files are also used to illustrate how the {\tt OSSolverService} works. See Section \ref{section:ossolverservice}.
+\item {\tt data} - is a directory that holds test problems. These test problems are used by the {\tt unitTest} of the OS Project.
+Many of these files are also used to illustrate how the {\tt OSSolverService} works. See Section \ref{section:ossolverservice}.
 
 \item {\tt doc} - is the directory with documentation, including this {\it OS User's Manual.}
 
@@ -1809,23 +1821,24 @@ public:\\[\Sb]
 \centering
    \scriptsize {\obeyspaces\let =\
 \fbox{\tt\begin{tabular}{@{}l@{}}
-\textsf{\textbf{Schema complexType  \hspace{3.74in}  In-memory class}}\\[\Sa]
-<xs:complexType name="Variables">  <---------------------------------------------->  class Variables\{\\[\Sb]
-                                                                                     public:\\[\Sb]
-  <xs:sequence>                                                                        Variables();\\[\Sb]
-    <xs:element name="var" type="Variable" maxOccurs="unbounded"/>  <------------->    Variable *var;\\[\Sb]
+\textsf{\textbf{Schema complexType  \hspace{3.64in}  In-memory class}}\\[\Sa]
+<xs:complexType name="Variables">  <-------------------------------------------->  class Variables\{\\[\Sb]
+                                                                                   public:\\[\Sb]
+  <xs:sequence>                                                                      Variables();\\[\Sb]
+    <xs:element name="var" type="Variable" maxOccurs="unbounded"/>  <----------->    Variable *var;\\[\Sb]
   </xs:sequence>\\[\Sb]
-  <xs:attribute name="number" type="xs:positiveInteger"  use="required"/>  <------>    int number;\\[\Sb]
-</xs:complexType>                                                                    \}; // class Variables\\[\Sb]
+  <xs:attribute name="numberOfVariables" type="xs:positiveInteger"  
+                use="required"/>  <--------------------------------------------->    int numberOfVariables;\\[\Sb]
+</xs:complexType>                                                                  \}; // class Variables\\[\Sb]
  \\[\Sb]
  \\[\Sb]
-<xs:complexType name="Variable">  <----------------------------------------------->  class Variable\{\\[\Sb]
-                                                                                     public:\\[\Sb]
-                                                                                       Variable();\\[\Sb]
-  <xs:attribute name="name" type="xs:string" use="optional"/>  <------------------>    string name;\\[\Sb]
-  <xs:attribute name="init" type="xs:double" use="optional"/>  <------------------>    double init;\\[\Sb]
-  <xs:attribute name="initString" type="xs:string" use="optional"/>  <------------>    string initString;\\[\Sb]
-  <xs:attribute name="type" use="optional" default="C">  <------------------------>    char type;\\[\Sb]
+<xs:complexType name="Variable">  <--------------------------------------------->  class Variable\{\\[\Sb]
+                                                                                   public:\\[\Sb]
+                                                                                     Variable();\\[\Sb]
+  <xs:attribute name="name" type="xs:string" use="optional"/>  <---------------->    string name;\\[\Sb]
+  <xs:attribute name="init" type="xs:double" use="optional"/>  <---------------->    double init;\\[\Sb]
+  <xs:attribute name="initString" type="xs:string" use="optional"/>  <---------->    string initString;\\[\Sb]
+  <xs:attribute name="type" use="optional" default="C">  <---------------------->    char type;\\[\Sb]
     <xs:simpleType>\\[\Sb]
       <xs:restriction base="xs:string">\\[\Sb]
         <xs:enumeration value="C"/>\\[\Sb]
@@ -1835,21 +1848,21 @@ public:\\[\Sb]
       </xs:restriction>\\[\Sb]
     </xs:simpleType>\\[\Sb]
   </xs:attribute>\\[\Sb]
-  <xs:attribute name="lb" type="xs:double" use="optional" default="0"/>  <-------->    double lb;\\[\Sb]
-  <xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>  <------>    double ub;\\[\Sb]
-</xs:complexType>                                                                    \}; // class Variable\\[\Sb]
+  <xs:attribute name="lb" type="xs:double" use="optional" default="0"/>  <------>    double lb;\\[\Sb]
+  <xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>  <---->    double ub;\\[\Sb]
+</xs:complexType>                                                                  \}; // class Variable\\[\Sb]
  \\[\Sb]
  \\[\Sb]
-\textsf{\textbf{OSiL elements          \hspace{2.07in}  In-memory objects}}\\[\Sa]
-<variables number="2">                                  OSInstance osinstance;\\[\Sb]
-   <var lb="0" name="x0" type="C"/>                     osinstance.instanceData.variables.number=2;\\[\Sb]
-   <var lb="0" name="x1" type="C"/>                     osinstance.instanceData.variables.var=new Var[2];\\[\Sb]
-</variables>                                            osinstance.instanceData.variables.var[0].lb=0;\\[\Sb]
-                                                        osinstance.instanceData.variables.var[0].name=x0;\\[\Sb]
-                                                        osinstance.instanceData.variables.var[0].type=C;\\[\Sb]
-                                                        osinstance.instanceData.variables.var[1].lb=0;\\[\Sb]
-                                                        osinstance.instanceData.variables.var[1].name=x1;\\[\Sb]
-                                                        osinstance.instanceData.variables.var[1].type=C;
+\textsf{\textbf{OSiL elements          \hspace{1.97in}  In-memory objects}}\\[\Sa]
+<variables numberOfVariables="2">                   OSInstance osinstance;\\[\Sb]
+   <var lb="0" name="x0" type="C"/>                 osinstance.instanceData.variables.numberOfVariables=2;\\[\Sb]
+   <var lb="0" name="x1" type="C"/>                 osinstance.instanceData.variables.var=new Var[2];\\[\Sb]
+</variables>                                        osinstance.instanceData.variables.var[0].lb=0;\\[\Sb]
+                                                    osinstance.instanceData.variables.var[0].name=x0;\\[\Sb]
+                                                    osinstance.instanceData.variables.var[0].type=C;\\[\Sb]
+                                                    osinstance.instanceData.variables.var[1].lb=0;\\[\Sb]
+                                                    osinstance.instanceData.variables.var[1].name=x1;\\[\Sb]
+                                                    osinstance.instanceData.variables.var[1].type=C;
 \end{tabular} }} \medskip\\[\Sb]
 \caption{The {\tt <variables>} element as an {\tt OSInstance} object} \label{figure:osinstancevariables}
 \end{figure}
@@ -2145,8 +2158,15 @@ We hope to have a parser for OSoL  in a future version of the project.
 \subsection{OSSolverInterfaces}\label{section:ossolverinterfaces}
 
 
-The {\tt OSSolverInterfaces} library is designed to facilitate linking the OS library with various solver APIs. We first describe how to take a problem instance in OSiL format and connect to a solver that has a COIN-OR OSI interface.  See the OSI project \url{www.projects.coin-or.org/Osi}.   We then describe hooking to the COIN-OR nonlinear code {\tt Ipopt.} See \url{www.projects.coin-or.org/Ipopt}.  Finally we describe hooking to two commercial solvers KNITRO and LINDO.
-
+The {\tt OSSolverInterfaces} library is designed to facilitate linking the OS library with various solver APIs. 
+We first describe how to take a problem instance in OSiL format and connect to a solver that has a COIN-OR OSI interface.  
+See the OSI project \url{www.projects.coin-or.org/Osi}.   
+We then describe hooking to the COIN-OR nonlinear code {\tt Ipopt.} See \url{www.projects.coin-or.org/Ipopt}.  
+\ifknitro
+Finally we describe hooking to two commercial solvers KNITRO and LINDO.
+\else
+Finally we describe hooking to the commercial solver LINDO.
+\fi
 The OS library has been tested with the following solvers using the Osi Interface.
 
 \begin{itemize}
@@ -2194,13 +2214,35 @@ Finally, get the solution in {\tt OSrL} format as follows
 cout << solver->osrl << endl;
 \end{verbatim}
 
-Even though LINDO and KNITRO are commercial solvers and do not have a COIN-OR {\tt Osi} interface these solvers are used in exactly the same manner as a COIN-OR solver. For example, to invoke the LINDO solver we do the following.
+\ifknitro   %--------------------------------------------------------------------------
+Even though LINDO and KNITRO are commercial solvers and do not have a COIN-OR {\tt Osi} interface, these solvers are 
+used in exactly the same manner as a COIN-OR solver. For example, to invoke the LINDO solver we do the following.
 
 \begin{verbatim}
 solver = new LindoSolver();
 \end{verbatim}
 
-Similarly for KNITRO and Ipopt. In the case of  KNITRO, the {\tt KnitroSolver} class inherits from both {\tt DefaultSolver} class and the KNITRO {\tt NlpProblemDef} class. See \url{http://www.ziena.com/docs/knitroman.pdf} for more information on the KNITRO solver C++ implementation and the {\tt NlpProblemDef} class. Similarly, for Ipopt the {\tt IpoptSolver} class inherits from both the  {\tt DefaultSolver} class and the Ipopt {\tt TNLP} class.  See \url{https://projects.coin-or.org/Ipopt/browser/stable/3.2/Ipopt/doc/documentation.pdf?format=raw} for more information on the Ipopt solver C++ implementation and the {\tt TNLP} calss.
+Similarly for KNITRO and Ipopt. In the case of  KNITRO, the {\tt KnitroSolver} class inherits from both 
+{\tt DefaultSolver} class and the KNITRO {\tt NlpProblemDef} class. See \url{http://www.ziena.com/docs/knitroman.pdf} 
+for more information on the KNITRO solver C++ implementation and the {\tt NlpProblemDef} class. 
+Similarly, for Ipopt the {\tt IpoptSolver} class inherits from both the  {\tt DefaultSolver} class and the Ipopt 
+{\tt TNLP} class.  See \url{https://projects.coin-or.org/Ipopt/browser/stable/3.2/Ipopt/doc/documentation.pdf?format=raw} 
+for more information on the Ipopt solver C++ implementation and the {\tt TNLP} class.
+
+\else
+
+Commercial solvers like LINDO do not have a COIN-OR {\tt Osi} interface, but it is possible to write wrappers so that
+they can be used in exactly the same manner as a COIN-OR solver. For example, to invoke the LINDO solver we do the following.
+
+\begin{verbatim}
+solver = new LindoSolver();
+\end{verbatim}
+
+A similar call is used for Ipopt. In this case, the {\tt IpoptSolver} class inherits from both the  {\tt DefaultSolver} class 
+and the Ipopt {\tt TNLP} class.  See \url{https://projects.coin-or.org/Ipopt/browser/stable/3.2/Ipopt/doc/documentation.pdf?format=raw} 
+for more information on the Ipopt solver C++ implementation and the {\tt TNLP} class.
+\fi         %--------------------------------------------------------------------------
+
 
 In the examples above,  the problem instance was assumed to be read from a file into the string {\tt osil} and then into the class member {\tt solver->osil.} However, everything can be done entirely in memory. For example, it is possible to use the {\tt OSInstance} class to create an in-memory problem representation and give this representation directly to a solver class that inherits from {\tt DefaultSolver}. The class member to use is {\tt osinstance.} This is illustrated in the example given in Section \ref{subsection:exampleOSInstanceGeneration}.
 
@@ -2880,7 +2922,11 @@ value is {\tt solve.}
 
 \item[] {\bf -nl  xxx.nl}\ \ This is the name of the AMPL nl file if the problem instance is in AMPL nl  format. It is assumed that this file is available in a directory on the machine that is running {\tt OSSolverService}. The default file format is OSiL so this option is not required.
 
-\item[] {\bf -solver  solverName}\ \ Possible values for default OS installation are {\tt clp} (COIN-OR Clp), {\tt cbc} (COIN-OR Cbc), {\tt dylp} (COIN-OR DyLP), and {\tt symphony} (COIN-OR SYMPHONY). Other solvers supported (if the necessary libraries are present) are {\tt cplex} (Cplex through COIN-OR Osi), {\tt glpk} (glpk through COIN-OR Osi), {\tt ipopt} (COIN-OR Ipopt),  {\tt knitro} (Knitro), and {\tt lindo} (LINDO). If no value is specified for this parameter, then {\tt cbc} is the default value of this parameter if the the {\tt solve} or {\tt send} service methods are used.
+\item[] {\bf -solver  solverName}\ \ Possible values for default OS installation are {\tt clp} (COIN-OR Clp), 
+{\tt cbc} (COIN-OR Cbc), {\tt dylp} (COIN-OR DyLP), and {\tt symphony} (COIN-OR SYMPHONY). Other solvers supported 
+(if the necessary libraries are present) are {\tt cplex} (Cplex through COIN-OR Osi), 
+{\tt glpk} (glpk through COIN-OR Osi), {\tt ipopt} (COIN-OR Ipopt),  
+\ifknitro{\tt knitro} (Knitro),\fi and {\tt lindo} (LINDO). If no value is specified for this parameter, then {\tt cbc} is the default value of this parameter if the the {\tt solve} or {\tt send} service methods are used.
 
 \item[] {\bf -browser  browserName}\ \ This parameter is a path to the browser on the local machine. If this optional parameter is specified then the solver result in OSrL format is transformed using XSLT into HTML and displayed in the browser.
 
@@ -2966,9 +3012,9 @@ The first line of {\tt testlocal.config} gives the local location of the OSiL fi
 {\tt parincQuadratic.osil}, that contains the problem instance. The second parameter,
 {\tt -solver ipopt},  is the solver to be invoked, in this case COIN-OR Ipopt.
 The third parameter {\tt -serviceMethod solve} is not really needed,
-but included only for illustration. The default  solver service is {\tt solve.}
+but included only for illustration. The default solver service is {\tt solve.}
 The fourth parameter is the location of the browser on the local machine.
-It will read the OSrL file on the local machine using the path specified
+It will write the OSrL file on the local machine using the path specified
 by the value of the {\tt osrl} parameter, in this case
 {\tt /Users/kmartin/temp/test.osrl.}
 
@@ -3099,9 +3145,19 @@ If we were to change the {\tt locationType} attribute in the {\tt <instanceLocat
 \label{figure:ossolverservice2}
 \end{figure}
 
+{\bf Note:} The {\tt solve} method communicates synchronously with the remote solver service 
+and once started, these jobs cannot be killed. This may not be desirable for large 
+problems when the user does not want to wait for a response or when there is a possibility
+for the solver to enter an infinite loop. The {\tt send} service 
+method should be used when asynchronous communication is desired.
+
 \subsubsection{The  {\tt send} Service Method}\label{section:send}
 
-When the {\tt solve} service method is used, the {\tt OSSolverService} does not finish execution until the solution is returned from the remote solver service. The {\tt solve} method communicates synchronously with the remote solver service and once started, these jobs cannot be killed. This may not be desirable for large problems when the user does not want to wait for a response. The {\tt send} service method should be used when asynchronous communication is desired. When the send method is used the instance is communicated to the remote service and the {\tt OSSolverService} terminates after submission. An example of this is
+When the {\tt solve} service method is used, the {\tt OSSolverService} does not 
+finish execution until the solution is returned from the remote solver service. 
+ When the {\tt send} 
+method is used the instance is communicated to the remote service and the 
+{\tt OSSolverService} terminates after submission. An example of this is
 \begin{verbatim}
 ./OSSolverService -config ../data/configFiles/testremoteSend.config
 \end{verbatim}
@@ -3236,11 +3292,17 @@ and the {\tt retrieve.osol} file is
 </osol>
 \end{verbatim}
 
-The OSoL file {\tt retrieve.osol} contains a tag {\tt <jobID>} that is communicated to the remote service. The remove service locates the result and returns it as a string. The string that is returned is an OSrL instance.  The user must modify the line
+The OSoL file {\tt retrieve.osol} contains a tag {\tt <jobID>} that is communicated to 
+the remote service. The remove service locates the result and returns it as a string. 
+The {\tt <jobID>} should reflect a {\tt <jobID>} that was previously submitted
+using a {\tt send()} command.
+The result is returned as a string in OSrL format.  The user must modify the line
 \begin{verbatim}
 -osrl /home/kmartin/temp/test.osrl
 \end{verbatim}
-to reflect a valid path for their own machine.  Also, the {\tt <jobID>} should reflect a {\tt <jobID>} that was previously submitted. The {\tt send()} and {\tt retrieve()}  {\tt <jobID>} must match up.
+to reflect a valid path for their own machine.  (It is also possible to delete the line 
+in which case the result will be displayed on the screen instead of being saved to the 
+file indicated in the {\tt -osrl} option.) 
 
 \subsubsection{The  {\tt getJobID} Service Method}\label{section:getjobid}
 
@@ -3285,7 +3347,18 @@ and the {\tt retrieve.osol} file is
     </general>
 </osol>
 \end{verbatim}
-The result of this request is a string in OSpL format, with the data contained in its {\tt processData} section.  Part of the return format is illustrated below.
+
+The result of this request is a string in OSpL format, with the data contained in its 
+{\tt processData} section.  The result is displayed on the screen; if the user desires it
+to be redirected to a file, a command should be added to the {\tt testRemoteKnock.config}
+file with a valid path name on the local system, e.g.,
+
+\begin{verbatim}
+-osplOutput ./result.ospl
+\end{verbatim}
+
+Part of the return format is illustrated below.
+
 \begin{verbatim}
 <?xml version="1.0" encoding="UTF-8"?>
 <ospl xmlns="os.optimizationservices.org">
