@@ -130,6 +130,8 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 	expr **ep;
 	int opnum;
 	int i;
+	//std::cout << "Variable Index " << varIdx << std::endl;
+	int j = ((expr_v *)e - VAR_E) - osinstance->getVariableNumber() ;
 	//std::cout << "GET OPERATOR NUMBER" << std::endl;
 	op = e->op;
 	opnum = Intcast op;
@@ -266,12 +268,7 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 				
 			case OPVARVAL:
 				//cout << "found a variable node" << endl;
-				int varIdx = (expr_v *)e - VAR_E;	
-				//std::cout << "Variable Index " << varIdx << std::endl;
-				int j = varIdx - osinstance->getVariableNumber() ;
 				// treat the common expression or defined variables
-				//
-				
 				if( j >= 0 ){
 					// process common expression
 					/*
@@ -350,26 +347,23 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 						else return walkTree(  common->e);
 					}
 				}
-			else{
 				//if(e->a > osinstance->getVariableNumber() ) throw ErrorClass("OS cannot handle AMPL user defined variables, please reformulate");
 				nlNodeVariablePoint = new OSnLNodeVariable;
 				nlNodeVariablePoint->idx = e->a;
-				//nlNodeVariablePoint->idx = varIdx;
 				nlNodeVariablePoint->coef = 1.0; 
 				return nlNodeVariablePoint;
-			}
-				
+				break;
 			default:
-			std::ostringstream outStr;
-			std::string error;
-			outStr  << endl;
-			outStr  << endl;
-			error = "ERROR:  An unsupported operator found, AMPL operator number =  "  ;
-			outStr << error;
-			outStr << opnum;
-			outStr << endl;
-			error = outStr.str();
-			throw ErrorClass( error );
+				std::ostringstream outStr;
+				std::string error;
+				outStr  << endl;
+				outStr  << endl;
+				error = "ERROR:  An unsupported operator found, AMPL operator number =  "  ;
+				outStr << error;
+				outStr << opnum;
+				outStr << endl;
+				error = outStr.str();
+				throw ErrorClass( error );
 		}//end switch	
 	}//end try
 	catch(const ErrorClass& eclass){
