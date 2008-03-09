@@ -59,6 +59,7 @@ you should get x1 = 540, x2 = 252
 
 #define R_OPS ((ASL_fg*)asl)->I.r_ops_
 #define OBJ_DE ((ASL_fg*)asl)->I.obj_de_
+#define VAR_E  ((ASL_fg *) asl) -> I.var_e_
 #define CON_DE ((ASL_fg*)asl)->I.con_de_
 
 efunc *r_ops_int[N_OPS];
@@ -129,8 +130,10 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 	expr **ep;
 	int opnum;
 	int i;
+	//std::cout << "GET OPERATOR NUMBER" << std::endl;
 	op = e->op;
 	opnum = Intcast op;
+	//std::cout << "OPERATOR NUMBER = " << opnum << std::endl;
 	//Printf ("op %d  optype %d  ", opnum, optype[opnum]);
 	try{
 		switch( opnum) {
@@ -263,11 +266,98 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 				
 			case OPVARVAL:
 				//cout << "found a variable node" << endl;
-				if(e->a >= osinstance->getVariableNumber() ) throw ErrorClass("OS cannot handle AMPL user defined variables, please reformulate");
+				int varIdx = (expr_v *)e - VAR_E;	
+				//std::cout << "Variable Index " << varIdx << std::endl;
+				int j = varIdx - osinstance->getVariableNumber() ;
+				// treat the common expression or defined variables
+				//
+				
+				if( j >= 0 ){
+					// process common expression
+					/*
+					std::cout << "como = "  << como  << std::endl;
+					std::cout << "comc = "  << comc  << std::endl;
+					std::cout << "comb = "  << comb  << std::endl;
+					std::cout << "como1 = "  << como1  << std::endl;
+					std::cout << "comc1 = "  << comc1  << std::endl;
+					std::cout << "ncom0 = "  << ncom0  << std::endl;
+					std::cout << "jjjjjjjjjjjjjjjjjj = "  << j  << std::endl;
+					*/
+					if(j < ncom0){		
+						struct cexp *common = ((const ASL_fg *) asl) -> I.cexps_ + j ;
+						//walk the tree for the non-linear stuff
+						
+						// now add the linear terms
+						int nlin = common -> nlin;
+						//std::cout << "Number of linear terms in common expression " << nlin << std::endl;
+						 
+						if( nlin > 0) {
+							nlNodePoint = new OSnLNodeSum();
+							nlNodePoint->inumberOfChildren = nlin + 1;
+							nlNodePoint->m_mChildren = new OSnLNode*[ nlin + 1];			
+							// we have linear variables
+							// get the index and coefficient
+							linpart *L = common -> L;
+							for(int kj = 0; kj < nlin; kj++) {
+								
+								// get the coefficient
+								//std::cout << "Linear coefficient  "  << L [kj].fac << std::endl;
+								 
+								// get the index
+								//std::cout  << "Variable index  "  << ((uintptr_t) (L [kj].v.rp) - (uintptr_t) VAR_E) / sizeof (expr_v) << std::endl;
+								// add an OSnLSumNode with the linear terms
+								nlNodePoint->m_mChildren[ kj] = new OSnLNodeVariable;
+								nlNodeVariablePoint = (OSnLNodeVariable*)nlNodePoint->m_mChildren[ kj];
+								nlNodeVariablePoint->coef = L [kj]. fac;
+								nlNodeVariablePoint->idx = ((uintptr_t) (L [kj].v.rp) - (uintptr_t) VAR_E) / sizeof (expr_v);
+							}
+							nlNodePoint->m_mChildren[ nlin] = walkTree(  common->e);
+							return nlNodePoint;
+						}
+						else return walkTree(  common->e);
+					}
+					else{					
+						 struct cexp1 *common = ((const ASL_fg *) asl) -> I.cexps1_ + (j - ncom0);
+						//walk the tree for the non-linear stuff
+						
+						// now add the linear terms
+						int nlin = common -> nlin;
+						//std::cout << "Number of linear terms in common expression " << nlin << std::endl;
+						 
+						if( nlin > 0) {
+							nlNodePoint = new OSnLNodeSum();
+							nlNodePoint->inumberOfChildren = nlin + 1;
+							nlNodePoint->m_mChildren = new OSnLNode*[ nlin + 1];			
+							// we have linear variables
+							// get the index and coefficient
+							linpart *L = common -> L;
+							for(int kj = 0; kj < nlin; kj++) {
+								
+								// get the coefficient
+								//std::cout << "Linear coefficient  "  << L [kj].fac << std::endl;
+								 
+								// get the index
+								//std::cout  << "Variable index  "  << ((uintptr_t) (L [kj].v.rp) - (uintptr_t) VAR_E) / sizeof (expr_v) << std::endl;
+								// add an OSnLSumNode with the linear terms
+								nlNodePoint->m_mChildren[ kj] = new OSnLNodeVariable;
+								nlNodeVariablePoint = (OSnLNodeVariable*)nlNodePoint->m_mChildren[ kj];
+								nlNodeVariablePoint->coef = L [kj]. fac;
+								nlNodeVariablePoint->idx = ((uintptr_t) (L [kj].v.rp) - (uintptr_t) VAR_E) / sizeof (expr_v);
+							}
+							nlNodePoint->m_mChildren[ nlin] = walkTree(  common->e);
+							return nlNodePoint;
+						}
+						else return walkTree(  common->e);
+					}
+				}
+			else{
+				//if(e->a > osinstance->getVariableNumber() ) throw ErrorClass("OS cannot handle AMPL user defined variables, please reformulate");
 				nlNodeVariablePoint = new OSnLNodeVariable;
 				nlNodeVariablePoint->idx = e->a;
+				//nlNodeVariablePoint->idx = varIdx;
 				nlNodeVariablePoint->coef = 1.0; 
 				return nlNodeVariablePoint;
+			}
 				
 			default:
 			std::ostringstream outStr;
@@ -416,16 +506,19 @@ bool OSnl2osil::createOSInstance(){
 			}
 		}
 		//std::cout << "DONE WALKING THE TREE FOR NONLINEAR OBJECTIVE TERMS" << std::endl;
+		
 
 	}
 	delete objectiveCoefficients;
 	objectiveCoefficients = NULL;
 	//
 	// end loop of nonlinear rows
-	//    
-	//OSiLWriter osilwriter;
-	//std::cout << "WRITE THE INSTANCE" << std::endl;
-	//std::cout << osilwriter.writeOSiL( osinstance) << std::endl;
-	//std::cout << "DONE WRITE THE INSTANCE" << std::endl;
+	//  
+	/*
+	OSiLWriter osilwriter;
+	std::cout << "WRITE THE INSTANCE" << std::endl;
+	std::cout << osilwriter.writeOSiL( osinstance) << std::endl;
+	std::cout << "DONE WRITE THE INSTANCE" << std::endl;
+	*/
 	return true;
 }

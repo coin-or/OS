@@ -61,8 +61,8 @@ bool IpoptProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 	n = osinstance->getVariableNumber();
 	// number of constraints
 	m = osinstance->getConstraintNumber();
-	//cout << "number variables  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << n << endl;
-	//cout << "number constraints  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << m << endl;
+	cout << "number variables  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << n << endl;
+	cout << "number constraints  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << m << endl;
 	try{
 		osinstance->initForAlgDiff( );
 	}
@@ -83,7 +83,7 @@ bool IpoptProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 	}
 	//std::cout << "Done calling sparse jacobian" << std::endl;
 	nnz_jac_g = sparseJacobian->valueSize;
-	//cout << "nnz_jac_g  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_jac_g << endl;	
+	cout << "nnz_jac_g  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_jac_g << endl;	
 	// nonzeros in upper hessian
 	
 	if( (osinstance->getNumberOfNonlinearExpressions() == 0) && (osinstance->getNumberOfQuadraticTerms() == 0) ) {
@@ -96,7 +96,7 @@ bool IpoptProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 		//std::cout << "Done Getting Lagrangain Hessian Sparsity Pattern " << std::endl;
 		nnz_h_lag = sparseHessian->hessDimension;
 	}
-	//cout << "nnz_h_lag  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_h_lag << endl;	
+	cout << "nnz_h_lag  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_h_lag << endl;	
 	// use the C style indexing (0-based)
 	index_style = TNLP::C_STYLE;
   
