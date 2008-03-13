@@ -159,6 +159,7 @@
 				AdditionalDependencies="wsock32.lib winmm.lib advapi32.lib"
 				OutputFile=".\Release\OSTestCode.exe"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;;C:\msys\1.0\home\kmartin\qa752\lib"
 				GenerateDebugInformation="false"
 				ProgramDatabaseFile=".\Release/OSExample-osTestCode.pdb"
 				SubSystem="1"
