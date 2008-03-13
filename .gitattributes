@@ -8,7 +8,6 @@
 /OS.spp -text
 OS/AUTHORS -text
 OS/LICENSE -text
-OS/MSVisualStudio/lib/libipopt.lib -text
 OS/MSVisualStudio/v7/OS.sln -text
 OS/MSVisualStudio/v7/OSApplication-fileUpload/OSApplication-fileUpload.vcproj -text
 OS/MSVisualStudio/v7/OSExample-algorithmicDiff/OSExample-algorithmicDiff.vcproj -text

@@ -228,10 +228,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\src\OSSolverInterfaces\OSIpoptSolver.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\src\OSUtils\OSMathUtil.cpp"
 				>
 			</File>
