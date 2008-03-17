@@ -116,8 +116,17 @@
 
 
 
+//#ifdef COIN_HAS_IPOPT  
+//#include "OSIpoptSolver.h"
+//#endif
+
 #ifdef COIN_HAS_IPOPT  
-#include "OSIpoptSolver.h"
+	#ifndef COIN_HAS_ASL
+		#include "OSIpoptSolver.h"
+		#undef COIN_HAS_ASL
+	#else
+		#include "OSIpoptSolver.h"
+	#endif
 #endif
 
 
