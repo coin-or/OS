@@ -517,6 +517,7 @@ void IpoptSolver::solve() throw (ErrorClass) {
 		/***************now the ipopt invokation*********************/
 		app->Options()->SetNumericValue("tol", 1e-9);
 		app->Options()->SetIntegerValue("print_level", 0);
+		app->Options()->SetIntegerValue("max_iter", 20000);
 		app->Options()->SetStringValue("mu_strategy", "adaptive");
 		app->Options()->SetStringValue("output_file", "ipopt.out");
 		app->Options()->SetStringValue("check_derivatives_for_naninf", "yes");
