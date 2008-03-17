@@ -145,6 +145,7 @@
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="0"
 				CompileAs="0"
+				UndefinePreprocessorDefinitions="COIN_HAS_ASL"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -157,17 +158,17 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wsock32.lib libIpopt.lib"
+				AdditionalDependencies="wsock32.lib"
 				OutputFile=".\Release\OSSolverService.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="..\..\lib;&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;"
+				AdditionalLibraryDirectories="..\..\lib\f2c;..\..\lib\ifort;..\..\lib;&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;"
 				GenerateManifest="false"
 				GenerateDebugInformation="false"
 				ProgramDatabaseFile=""
 				SubSystem="1"
 				OptimizeReferences="0"
 				EnableCOMDATFolding="0"
-				LinkTimeCodeGeneration="1"
+				LinkTimeCodeGeneration="0"
 				TargetMachine="1"
 			/>
 			<Tool

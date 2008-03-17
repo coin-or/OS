@@ -157,7 +157,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wsock32.lib winmm.lib advapi32.lib libipopt.lib"
+				AdditionalDependencies="wsock32.lib winmm.lib advapi32.lib"
 				OutputFile="..\..\..\test\unitTestRelease.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\lib;&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;"

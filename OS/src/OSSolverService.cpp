@@ -92,10 +92,6 @@
 #endif 
 
 
-#ifdef COIN_HAS_ASL
-#include "OSnl2osil.h"
-#endif
-
 
 
 
@@ -103,11 +99,18 @@
 #include "OSLindoSolver.h"
 #endif 
  
-#ifdef COIN_HAS_IPOPT    
-#include "OSIpoptSolver.h"
+#ifdef COIN_HAS_IPOPT  
+	#ifndef COIN_HAS_ASL
+		#include "OSIpoptSolver.h"
+		#undef COIN_HAS_ASL
+	#else
+		#include "OSIpoptSolver.h"
+#endif
 #endif 
 
-
+#ifdef COIN_HAS_ASL
+#include "OSnl2osil.h"
+#endif
 
 
 
