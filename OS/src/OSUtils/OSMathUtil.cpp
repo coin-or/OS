@@ -115,15 +115,14 @@ std::string os_dtoa_format(double  x){
     int k = 0;
     charResult = os_dtoa(x, 0, 0, &decimalPointPos, &sign, NULL);
     // get the length
+    // get the sign, 1 for negative
+    if( sign == 1) outStr << "-";
     strLength = strlen( charResult);
     // return charResult if we have nan or infinity  -- if so, return orginal string
     if(decimalPointPos == 9999){
-    	
     	for(k = 0; k < strLength; k++)outStr << charResult[ k];
     	return outStr.str();    	
     }
-    // get the sign, 1 for negative
-    if( sign == 1) outStr << "-";
     if(decimalPointPos == strLength){ //don't we have an integer?
     	for(k = 0; k < strLength; k++)outStr << charResult[ k];
     	return outStr.str();
