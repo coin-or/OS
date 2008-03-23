@@ -8,7 +8,7 @@
 	</instanceHeader>
 	<instanceData>
 		<variables numberOfVariables="2">
-			<var name="x0"lb="-800" ub = "1000"  />
+			<var name="x0"lb="-INF" ub = "1000"  />
 			<var name="x1" ub = "1000" />
 		</variables>
 		<objectives numberOfObjectives="1">
