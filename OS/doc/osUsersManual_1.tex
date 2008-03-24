@@ -8,6 +8,7 @@
 %\usepackage{natbib}
 \usepackage{verbatim}
 %\usepackage{moreverb}
+\usepackage{enumerate}
 \bibliographystyle{plain}
 
 
@@ -135,32 +136,32 @@ in a distributed environment using Web Services. This COIN-OR project provides s
 executable programs that implement OS standards.  See the COIN-OR Trac page \url{projects.coin-or.org/OS} 
 or the Optimization Services (OS) Home Page \url{www.optimizationservices.org}   for more information. The OS project provides the following:
 
-\begin{itemize}
-\item[1.]  A set of XML based standards for representing optimization instances (OSiL), optimization results (OSrL), and optimization solver options (OSoL). There are other standards, but these are the main ones. The schemas for these standards are described in Section~\ref{section:schemadescriptions}.
+\begin{enumerate}
+\item{}  A set of XML based standards for representing optimization instances (OSiL), optimization results (OSrL), and optimization solver options (OSoL). There are other standards, but these are the main ones. The schemas for these standards are described in Section~\ref{section:schemadescriptions}.
 
 
-\item[2.]  Open source libraries  that support and implement many of the standards.
+\item{}  Open source libraries  that support and implement many of the standards.
 
-\item[3.]  A robust solver and modeling language interface (API) for linear and nonlinear optimization problems.  Corresponding to the OSiL problem instance representation there is an in-memory object,  {\tt OSInstance}, along with a collection of  {\tt get()},   {\tt set()}, and {\tt calculate()} methods for accessing and creating problem instances.
+\item{}  A robust solver and modeling language interface (API) for linear and nonlinear optimization problems.  Corresponding to the OSiL problem instance representation there is an in-memory object,  {\tt OSInstance}, along with a collection of  {\tt get()},   {\tt set()}, and {\tt calculate()} methods for accessing and creating problem instances.
 This is a very general API for linear, integer, and nonlinear programs. Extensions for other major types of optimization problems are also in the works. Any modeling language that can produce OSiL can easily communicate with any solver that uses the OSInstance API.   The {\tt OSInstance} object is described in more detail in Section \ref{section:osinstanceAPI}. The nonlinear part of the API is based on the COIN-OR project \url{projects.coin-or.org/CppAD} by Brad Bell but is written in a very general manner and could be used with other algorithmic differentiation packages. More detail on algorithmic differentiation is provided in Section \ref{section:ad}.
 
 
-\item[4.]  A  command line executable {\tt OSSolverService}  for reading problem instances (OSiL format, AMPL  nl format,  MPS format) and calling a solver either locally or on a remote server.  This is described in Section \ref{section:ossolverservice}.
+\item{}  A  command line executable {\tt OSSolverService}  for reading problem instances (OSiL format, AMPL  nl format,  MPS format) and calling a solver either locally or on a remote server.  This is described in Section \ref{section:ossolverservice}.
 
 
-\item[5.] Utilities that convert AMPL nl files  and MPS files into the OSiL XML format.  This is described in Section \ref{section:osmodelinterfaces}.
+\item{} Utilities that convert AMPL nl files  and MPS files into the OSiL XML format.  This is described in Section \ref{section:osmodelinterfaces}.
 
 
-\item[6.]  Standards that facilitate the communication between clients and optimization solvers using Web Services.  In  Section \ref{section:osagent} we describe the {\tt OSAgent} part of the OS library that is used to create Web Services
+\item{}  Standards that facilitate the communication between clients and optimization solvers using Web Services.  In  Section \ref{section:osagent} we describe the {\tt OSAgent} part of the OS library that is used to create Web Services
  SOAP packages with OSiL instances and contact a server for solution.
 
-\item[7.]  An executable program {\tt OSAmplClient} that is designed to work with the AMPL modeling language. The {\tt OSAmplClient} appears as a ``solver'' to AMPL and, based on options given in AMPL, contacts solvers either remotely or locally to solve instances created in AMPL. This is described in Section \ref{section:amplclient}.
+\item{}  An executable program {\tt OSAmplClient} that is designed to work with the AMPL modeling language. The {\tt OSAmplClient} appears as a ``solver'' to AMPL and, based on options given in AMPL, contacts solvers either remotely or locally to solve instances created in AMPL. This is described in Section \ref{section:amplclient}.
 
-\item[8.]  Server software that works with Apache Tomcat and Apache Axis.
+\item{}  Server software that works with Apache Tomcat and Apache Axis.
 This software uses Web Services technology and acts as middleware between the client that creates the instance and the  solver on the server that optimizes the instance and returns the result. This is illustrated in Section  \ref{section:tomcat}.
 
-\item[9.]  A lightweight version of the project, {\tt OSCommon} for modeling language and solver developers that want to use OS API, readers, and writers, without the overhead of other COIN-OR projects or any third party software.
-\end{itemize}
+\item{}  A lightweight version of the project, {\tt OSCommon} for modeling language and solver developers that want to use OS API, readers, and writers, without the overhead of other COIN-OR projects or any third party software.
+\end{enumerate}
 
 
 \section{Quick Roadmap}\label{section:roadmap}
@@ -479,14 +480,14 @@ In order to build the OS project on Unix/Linux systems do the following.
 
 \vskip 8pt
 
-
-\noindent {\bf Step 1:}  Connect to the OS distribution root directory ({\tt COIN-OS} in Figure~\ref{figure:osprojectrootdir}).
+\begin{enumerate}[{\bf Step 1:}]
+\item{} Connect to the OS distribution root directory ({\tt COIN-OS} in Figure~\ref{figure:osprojectrootdir}).
 
 \vskip 8pt
 
 
 
-\noindent {\bf Step 2:} \label{itemize:unixbuilds} Run the configure script that will generate the makefiles.  
+\item{} \label{itemize:unixbuilds} Run the configure script that will generate the makefiles.  
 If you are running on a machine with a Fortran 95 compiler present (e.g. {\tt gfortran}), and you have
 previously downloaded the third-party software packages {\tt BLAS} and {\tt Mumps} (see Section~\ref{section:ipopt}),
  run the command
@@ -522,18 +523,19 @@ by remembering and reusing the results of tests already performed.
 
 
 
-\noindent {\bf Step 3:}  Run the make files.
+\item{}  Run the make files.
 
 \begin{verbatim}
 make
 \end{verbatim}
 
-\noindent {\bf Step 4:} Run the {\tt unitTest}.
+\item{} Run the {\tt unitTest}.
 
 \begin{verbatim}
 make test
 \end{verbatim}
 
+\ifknitro
 Depending upon which third party software you have installed, the result of running the {\tt unitTest} should look 
 something like (we have included the third-party solvers LINDO and Knitro in the  test results below; they are not 
 part of the default build):
@@ -573,10 +575,49 @@ Successful test of prefix and postfix conversion routines on problem rosenbrockm
 Successful test of all of the nonlinear operators on file testOperators.osil
 Successful test of AD gradient and Hessian calculations on problem CppADTestLag.osil
 
+All tests completed successfully
+\end{verbatim}
+}
+\else
+Depending upon which third party software you have installed, the result of running the {\tt unitTest} should look 
+something like (we have included the third-party solver LINDO in the test results below; it is not 
+part of the default build):
+
+
+{\small
+\begin{verbatim}
+HERE ARE THE UNIT TEST RESULTS:
+
+Solved problem avion2.osil with Ipopt
+Solved problem HS071.osil with Ipopt
+Solved problem rosenbrockmod.osil with Ipopt
+Solved problem parincQuadratic.osil with Ipopt
+Solved problem parincLinear.osil with Ipopt
+Solved problem callBack.osil with Ipopt
+Solved problem callBackRowMajor.osil with Ipopt
+Solved problem parincLinear.osil with Clp
+Solved problem p0033.osil with Cbc
+Solved problem p0033.osil with SYMPHONY
+Solved problem parincLinear.osil with DyLP
+Solved problem volumeTest.osil with Vol
+Solved problem p0033.osil with GLPK
+Solved problem lindoapiaddins.osil with Lindo
+Solved problem rosenbrockmod.osil with Lindo
+Solved problem parincQuadratic.osil with Lindo
+Solved problem wayneQuadratic.osil with Lindo
+Test the MPS -> OSiL converter on parinc.mps using Cbc
+Test the AMPL nl -> OSiL converter on hs71.nl using LINDO
+Test a problem written in b64 and then converted to OSInstance
+Successful test of OSiL parser on problem parincLinear.osil
+Successful test of OSrL parser on problem parincLinear.osrl
+Successful test of prefix and postfix conversion routines on problem rosenbrockmod.osil
+Successful test of all of the nonlinear operators on file testOperators.osil
+Successful test of AD gradient and Hessian calculations on problem CppADTestLag.osil
 
 All tests completed successfully
 \end{verbatim}
 }
+\fi
 
 If you do not see
 \begin{verbatim}
@@ -586,7 +627,7 @@ then you have not passed the unitTest and hopefully some semi-intelligible error
 
 \vskip 8pt
 
-\noindent {\bf Step 5:}  Install the libraries and executables.
+\item{}  Install the libraries and executables.
 
 
 \begin{verbatim}
@@ -622,6 +663,8 @@ For example, running
 /usr/local/lib
 \end{verbatim}
 
+\end{enumerate}
+
 \vskip 8pt
 
 {\bf Run an Example!}  If {\tt make test} works, proceed to Section \ref{section:ossolverservice} to run the key executable, {\tt OSSolverService}.
@@ -655,7 +698,6 @@ Microsoft Visual Studio solution and project files are provided for users of Win
 
 \begin{itemize}
 
-
 \item[Step 0] If MSVS  Version 7 or 8 of  the C++ compiler cl is already installed,  go to  to Step 2.
 
 \item[Step 1] Download and install the Visual C++ Express Edition, which is available for free at Microsoft's web site. This download contains the Microsoft cl C++ compiler along with necessary libraries.
@@ -673,6 +715,7 @@ Open the project files (for instance by double clicking on them in Windows Explo
 \item[Step 4] Run the  {\tt unitTest}.  Connect  to the directory {\tt COIN-OR/OS/test} directory and run either the release or debug version of the  {\tt unitTest} executable.
 \end{itemize}
 
+
 \subsubsection{Cygwin}\label{section:cygwin}
 
 {\tt Cygwin} provides a Unix emulation environment for Windows. It comes with numerous tools and libraries including the {\tt gcc} compilers. See {\tt www.cygwin.com}.   Cygwin can be used with the Gnu Compiler Collection ({\tt gcc}) or with the Microsoft {\tt cl} compiler.
@@ -688,16 +731,16 @@ Cygwin with gnome make version 3.81-1,  you must obtain a fixed 3.81 version fro
 {\bf Using Cygwin with Microsoft cl:}   Users who are extremely adventuresome and have an abundance  of free time on their hands may wish to use Cygwin with the Microsoft {\tt cl} compiler to build the OS project.   The following steps have led to a successful build.
 
 
-\begin{itemize}
-\item[Step 1:]  Download {\tt Cygwin}  from \url{http://www.cygwin.com/setup.exe} and install.
+\begin{enumerate}[Step 1:]
+\item{}  Download {\tt Cygwin}  from \url{http://www.cygwin.com/setup.exe} and install.
 
 
 
 
-\item[Step 2:]   Download  Visual Studio Express C++ at  \url{http://msdn2.microsoft.com/en-us/express/aa975050.aspx}.
+\item{}  Download  Visual Studio Express C++ at  \url{http://msdn2.microsoft.com/en-us/express/aa975050.aspx}.
 
 
- \item[Step 3:]  The part of the OS library responsible for communication with a remote server depends on some underlying Windows socket header files and libraries. Therefore it is necessary to also download and install the Windows Platform SDK. Download the necessary files at
+\item{}  The part of the OS library responsible for communication with a remote server depends on some underlying Windows socket header files and libraries. Therefore it is necessary to also download and install the Windows Platform SDK. Download the necessary files at
 
  \url{http://msdn2.microsoft.com/en-us/express/aa700755.aspx}
 
@@ -705,7 +748,7 @@ Cygwin with gnome make version 3.81-1,  you must obtain a fixed 3.81 version fro
 
 
 
-\item[Step 4:]  Set the Cygwin search path configuration. This is important.
+\item{}  Set the Cygwin search path configuration. This is important.
 This step is necessary to insure that Cygwin   looks for compilers, linkers, etc in the correct order.  The right order of directories  is: MSVS command directories, Cygwin command directories, and finally Windows command directories.  This is illustrated below.
 
 \begin{itemize}
@@ -750,7 +793,7 @@ This step is necessary to insure that Cygwin   looks for compilers, linkers, etc
 Open the Cygwin shell and check the value of {\tt \$PATH}. If directories don't appear in an order described above, 
 then the {\tt \$PATH} value needs to be reset.
 
-%\item [Step 5:] This step is necessary only if you wish to build with the AMPL {\tt ASL} solver library.   
+%\item{} This step is necessary only if you wish to build with the AMPL {\tt ASL} solver library.   
 %Unfortunately, and we regret this, but at the time of this writing the working version of ASL for cygwin/
 %cl build is its trunk version. This means that it is necessary to download the trunk version separately 
 %and replace the release version we have distributed with the trunk version.  The URL for the trunk 
@@ -764,7 +807,7 @@ then the {\tt \$PATH} value needs to be reset.
 
 
 
-\item [Step 5:] Build the OS project (or any COIN-OR project). If you wish to avoid the FORTRAN related issues you should build without Ipopt. Issue the following command in the project root.
+\item{} Build the OS project (or any COIN-OR project). If you wish to avoid the FORTRAN related issues you should build without Ipopt. Issue the following command in the project root.
 \begin{verbatim}
 ./configure COIN_SKIP_PROJECTS=Ipopt --enable-doscompile=msvc
 \end{verbatim}
@@ -772,15 +815,15 @@ then the {\tt \$PATH} value needs to be reset.
 If you wish to build with Ipopt, then FORTRAN is required and Visual Studio does not ship with a FORTRAN compiler. 
 The following is a work-around. (See also section~\ref{section:ipopt}.)
 
-\begin{itemize}
+\begin{enumerate}[Step a.]
 
-\item[Step a.]  Obtain one of the   Harwell Subroutine Library (HSL) routines {\tt ma27ad.f} or {\tt MA57ad.f}.  
+\item{}  Obtain one of the   Harwell Subroutine Library (HSL) routines {\tt ma27ad.f} or {\tt MA57ad.f}.  
 See \url{http://www.cse.scitech.ac.uk/nag/hsl/}.  Put the Harwell code in the directory {\tt ThirdParty/HSL}.
 
 
 
 
-\item[Step b.]  Follow the instructions for downloading and installing the {\tt f2c} compiler from Netlib.  
+\item{}  Follow the instructions for downloading and installing the {\tt f2c} compiler from Netlib.  
 The installation instructions for this are in the {\tt INSTALL} file in
 \begin{verbatim}
 BuildTools/compile_f2c
@@ -788,17 +831,17 @@ BuildTools/compile_f2c
 
 
 
-\item[Step c.]  Run configure
+\item{}  Run the configure script
 
 \begin{verbatim}
  ./configure  --enable-doscompile=msvc
 \end{verbatim}
 
 
-\end{itemize}
+\end{enumerate}
 
 
-\end{itemize}
+\end{enumerate}
 
 
 
@@ -841,14 +884,9 @@ The project is built using the following steps.
 Execute the following steps to use the Microsoft C++ cl compiler with MSYS.
 
 
-\begin{itemize}
+\begin{enumerate}[Step 1.]
 
-\item[Step 1.] Download {\tt MSYS} at
-
-% replaced by \verbatim 18 February --- HIG
-%\begin{center}
-%\url{http://sourceforge.net/project/showfiles.php?group_id=2435&package_id=24963}
-%\end{center}
+\item{} Download {\tt MSYS} at
 
 \begin{verbatim}
 http://sourceforge.net/project/showfiles.php?group_id=2435&package_id=24963
@@ -856,19 +894,19 @@ http://sourceforge.net/project/showfiles.php?group_id=2435&package_id=24963
 
 and install.  Double clicking on the MSYS icon will open a Bourne shell window.
 
-\item[Step 2.]  Download  Visual Studio Express C++ at
+\item{}  Download  Visual Studio Express C++ at
 
  \url{http://msdn2.microsoft.com/en-us/express/future/bb421473.aspx}
 
 and install.
 
- \item[Step 3.]  The part of the OS library responsible for communication with a remote server depends on some underlying Windows socket header files and libraries. Therefore it is necessary to also download and install the Windows Platform SDK. Download the necessary files at
+ \item{}  The part of the OS library responsible for communication with a remote server depends on some underlying Windows socket header files and libraries. Therefore it is necessary to also download and install the Windows Platform SDK. Download the necessary files at
 
  \url{http://msdn2.microsoft.com/en-us/express/aa700755.aspx}
 
  and install.
 
-\item[Step 4.]   Set the Visual Studio environment variables so that paths to the necessary libraries and header files  are recognized.  Assuming that a standard installation was done for the Visual Studio Express and the Windows Platform SDK set the variables as follows:
+\item{}   Set the Visual Studio environment variables so that paths to the necessary libraries and header files  are recognized.  Assuming that a standard installation was done for the Visual Studio Express and the Windows Platform SDK set the variables as follows:
 
 \begin{verbatim}
 PATH=C:\Program Files\Microsoft Visual Studio 8\Common7\IDE;
@@ -890,9 +928,9 @@ C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib
 The environment variables can be set using the {\tt System Properties} in the Windows {\tt Control Panel}.
 
 
-\item[Step 5.]  In the MSYS command window connect to the root of the OS project and run  {\tt configure}  script  and then {\tt make} as described in Section \ref{section:unixbuilds}.
+\item{}  In the MSYS command window connect to the root of the OS project and run  {\tt configure}  script  and then {\tt make} as described in Section \ref{section:unixbuilds}.
 
-\end{itemize}
+\end{enumerate}
 
 
 
@@ -1013,30 +1051,30 @@ There are several options. See also
  \end{verbatim}
 
 
-\begin{itemize}
+\begin{enumerate}[Option 1.]
 
-\item[Option 1.]   If you are building in a Unix-like environment and have a Fortran 95 compiler that recognizes
+\item{}   If you are building in a Unix-like environment and have a Fortran 95 compiler that recognizes
 embedded preprocessor statements (such as {\tt gfortran} --- see~\url{http://gcc.gnu.org/fortran/} or {\tt g95} ---
 see~\url{http://www.g95.org/}),
 you can simply run the {\tt configure} script and the FORTRAN compiler will be detected and the {\tt Ipopt} project will be built.
 
-\item[Option 2.]   If you have a Fortran 95 compiler that cannot deal with the embedded preprocessor statements,
+\item{}   If you have a Fortran 95 compiler that cannot deal with the embedded preprocessor statements,
 you may have to resort to manual edits before you can build Ipopt --- or see Option~3.
 
-\item[Option 3.]   If you have a FORTRAN 77 compiler, you must first obtain one of the Harwell Subroutine Library (HSL)
+\item{}   If you have a FORTRAN 77 compiler, you must first obtain one of the Harwell Subroutine Library (HSL)
 routines {\tt ma27ad.f} or {\tt MA57ad.f}.  See \url{http://www.cse.scitech.ac.uk/nag/hsl/}.  Put the Harwell code 
 in the directory {\tt \../ThirdParty/HSL}.  Now run the {\tt configure} script as described in \ref{section:unixbuilds}.  
 
 Note that the Harwell Subroutine Library is not governed by the Common Public License. It is the user's responsibility
 to ensure adherence to appropriate copyright and distribution agreements. 
 
-\item[Option 4.]  If you do not have a FORTRAN compiler and do not wish to obtain one, you can use the {\tt f2c} 
+\item{}  If you do not have a FORTRAN compiler and do not wish to obtain one, you can use the {\tt f2c} 
 compiler from Netlib.  The installation instructions for this are in the {\tt INSTALL} file in
 \begin{verbatim}
 BuildTools/compile_f2c
 \end{verbatim}
 
-\end{itemize}
+\end{enumerate}
 
 \noindent Two important points:
 
@@ -1098,8 +1136,9 @@ Many of the other header files contain {\tt \#include} statements inside {\tt  \
 #endif
 \end{verbatim}
 
-If the project is configured with the simple {\tt ./configure} command given in Step 2 on page~\pageref{itemize:unixbuilds}
-with no arguments, then in the {\tt config\_os.h} header file the variables associated with the third-party software described in this subsection will be undefined. For example.
+If the project is configured with the simple {\tt ./configure} command given in Step~\ref{itemize:unixbuilds} 
+on page~\pageref{itemize:unixbuilds} with no arguments, then in the {\tt config\_os.h} header file the variables 
+associated with the third-party software described in this subsection will be undefined. For example:
 \begin{verbatim}
 /* Define to 1 if the Cplex package is used */
 /* #undef COIN_HAS_CPX */
@@ -1226,13 +1265,13 @@ CLASSPATH=:/usr/local/ilog/cplex81/bin/i86_linux2_glibc2.3_gcc3.2:
 
 Knitro is a nonlinear solver. See \url{http://www.ziena.com/}.  Ziena does not provide source code for Knitro.  You must download platform dependent binaries.   In order to use Knitro with the OS project, perform the following steps.
 
-\begin{itemize}
+\begin{enumerate}[Step 1:]
 
-\item[Step 1:]  Download {\tt knitro} to the desired directory.
+\item{}  Download {\tt knitro} to the desired directory.
 
-\item[Step 2:] Copy the file {\tt nlpProblemDef.h} from the {\tt examples/C++} directory to the {\tt include} directory.
+\item{}  Copy the file {\tt nlpProblemDef.h} from the {\tt examples/C++} directory to the {\tt include} directory.
 
-\item[Step 3:]  Edit the file {\tt nlpProblemDef.h} and delete the following lines:
+\item{}  Edit the file {\tt nlpProblemDef.h} and delete the following lines:
 
 \begin{verbatim}
 NlpProblemDef::~NlpProblemDef (void)
@@ -1242,7 +1281,7 @@ NlpProblemDef::~NlpProblemDef (void)
 }
 \end{verbatim}
 
-\item[Step 4] Run {\tt configure} with appropriate values for  {\tt --with-knitro-lib} and {\tt --with-knitro-incdir}.
+\item{} Run {\tt configure} with appropriate values for  {\tt --with-knitro-lib} and {\tt --with-knitro-incdir}.
 For example:
 
 \begin{verbatim}
@@ -2020,14 +2059,14 @@ In Section  \ref{section:amplclient}  we describe the {\tt OSAmplClient} executa
 
 Linear, integer, and quadratic problems can be formulated in MATLAB and then optimized either locally or over the network using the OS Library. The {\tt OSMatlab} class functions much like {\tt OSnl2osil} and {\tt OSmps2osil} and takes MATLAB arrays and creates an OSiL instance.  This class is part of the OS library. In order to use the OS library with MATLAB the user should do the following.  In order to use the {\tt OSMatlab} class it is necessary to  compile {\tt matlabSolver.cpp}  into  a MATLAB Executable file.  The {\tt matlabSolver.cpp} file is in the {\tt OSModelInterfaces} directory even though it is not part of the OS library. The following steps should be followed.
 
-\begin{itemize}
+\begin{enumerate}[{\bf Step 1:}]
 
 
-\item[{\bf Step  1:}] In the project root run {\tt make install.}
+\item{} In the project root run {\tt make install.}
 
-\item[{\bf Step  2:}]   Either leave {\tt matlabSolver.cpp} in the  the {\tt OSModelInterfaces} or copy it to another desired directory.
+\item{} Either leave {\tt matlabSolver.cpp} in the  the {\tt OSModelInterfaces} or copy it to another desired directory.
 
-\item[{\bf Step 3:}] Edit the MATLAB  {\bf mexopts.sh} (UNIX) or {\tt mexopts.bat}  so that the {\tt CXXFLAGS} option includes the header files in the {\tt cppad} directory and the {\tt include} directory in the project root. For example, it  should look like:
+\item{} Edit the MATLAB  {\bf mexopts.sh} (UNIX) or {\tt mexopts.bat}  so that the {\tt CXXFLAGS} option includes the header files in the {\tt cppad} directory and the {\tt include} directory in the project root. For example, it  should look like:
 \begin{verbatim}
 CXXFLAGS='-fno-common -no-cpp-precomp -fexceptions
     -I/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/
@@ -2050,7 +2089,7 @@ For a UNIX system the {\tt mexopts.sh} file will usually be found in a directory
 On a Windows system, the {\tt  mexopts.bat} file will usually be in a directory with the release name in {\tt C:$\backslash$Documents and Settings$\backslash$Username$\backslash$Application Data$\backslash$Mathworks$\backslash$MATLAB}
 
 
-\item[{\bf Step 4:}]  Build the MATLAB executable file. Start MATLAB and in the MATLAB command window connect to the directory containing the file {\tt matlabSolver.cpp}.  Execute the command:
+\item{}  Build the MATLAB executable file. Start MATLAB and in the MATLAB command window connect to the directory containing the file {\tt matlabSolver.cpp}.  Execute the command:
 
 \begin{verbatim}
 mex -v matlabSolver.cpp
@@ -2058,9 +2097,9 @@ mex -v matlabSolver.cpp
 
 On a MAC OS X the resulting executable will be named {\tt matlabSolver.mexmac}. On the Windows system the file is named {\tt matlabSolver.mexw32}.
 
-\item[{\bf Step 5:}]  Set the MATLAB path to include the directory with the {\tt matlabSolver} executable. Also, put  the {\it m-file} {\tt callMatlabSolver.m} in a directory which is on a MATLAB path.  This file is in the {\tt OSModelInterfaces} directory.
+\item{}  Set the MATLAB path to include the directory with the {\tt matlabSolver} executable. Also, put  the {\it m-file} {\tt callMatlabSolver.m} in a directory which is on a MATLAB path.  This file is in the {\tt OSModelInterfaces} directory.
 
-\end{itemize}
+\end{enumerate}
 
 
 To use the {\tt matlabSolver} it is necessary to put the coefficients  from a linear, integer, or quadratic problem into MATLAB arrays.
@@ -2825,16 +2864,16 @@ In the {\tt OSInstance} class code,  every time a forward ({\tt forwardAD}) or r
 
 There are {\it  exactly two} conditions that  require a new function or derivative evaluation.   A new evaluation is required if and only if
 
-\begin{itemize}
-\item[1.]   The value of {\tt new\_x} is  true
+\begin{enumerate}
+\item{}   The value of {\tt new\_x} is  true
 
 \begin{center}
  --OR--
 \end{center}
 
 
-\item[2.] For the callback function the value of the input parameter {\tt highestOrder} is strictly greater than the current value  of    {\tt m\_iHhighestOrderEvaluated.}
-\end{itemize}
+\item{} For the callback function the value of the input parameter {\tt highestOrder} is strictly greater than the current value  of    {\tt m\_iHhighestOrderEvaluated.}
+\end{enumerate}
 
 For an efficient implementation of AD it is important to be able to get the Lagrange multipliers and highest order derivative that is required from inside {\it any} callback -- not just the Hessian evaluation callback. For example, in {\tt Ipopt,} if  {\tt eval\_g}  or {\tt eval\_f} are called, and  for the current iterate, {\tt eval\_jac} and {\tt eval\_hess} are also going to be called, then  a more efficient AD implementation is possible if the Lagrange multipliers are available for {\tt eval\_g} and {\tt eval\_f}.
 
@@ -2972,16 +3011,16 @@ Then the command line is
 
 {\bf Some Rules:}
 
-\begin{itemize}
-\item[1.]  When using the {\tt send()} or  {\tt solve()} methods a problem instance file location {\it must} be specified either at  the command line, in the configuration file, or in the {\tt <instanceLocation>} element in the OSoL options file file.
+\begin{enumerate}
+\item{}  When using the {\tt send()} or  {\tt solve()} methods a problem instance file location {\it must} be specified either at  the command line, in the configuration file, or in the {\tt <instanceLocation>} element in the OSoL options file file.
 
-\item[2.]  The default {\tt serviceMethod} is {\tt solve} if another service method is not specified.   The service method cannot be specified in the OSoL options file.
+\item{}  The default {\tt serviceMethod} is {\tt solve} if another service method is not specified.   The service method cannot be specified in the OSoL options file.
 
-\item [3.]  If the {\tt solver} option is not specified, the COIN-OR solver {\tt Cbc} is the default solver used. In this case an error is thrown if the problem instance has quadratic or other nonlinear terms.
+\item{}  If the {\tt solver} option is not specified, the COIN-OR solver {\tt Cbc} is the default solver used. In this case an error is thrown if the problem instance has quadratic or other nonlinear terms.
 
-\item[4.]  If the options {\tt send}, {\tt kill}, {\tt knock},  {\tt getJobID},  or {\tt retrieve} are specified, a  {\tt serviceLocation} must be specified.
+\item{}  If the options {\tt send}, {\tt kill}, {\tt knock},  {\tt getJobID},  or {\tt retrieve} are specified, a  {\tt serviceLocation} must be specified.
 
-\end{itemize}
+\end{enumerate}
 
 
 
@@ -3543,12 +3582,13 @@ For example, the current release 1.0.0 is in {\tt os-distribution-1.0.0.zip}.
 
 The server side of the Java distribution is based on the Tomcat 5.5 implementation. After unpacking {\tt os-distribution-release\_number.zip} there is a directory {\tt os-server-1.0} and a single file {\tt os.war}.  For users who have not installed the Tomcat server,   {\tt os-server-1.0} contains  all of the necessary files for a OS Solver Service.  If you do not have a Tomcat server running, do the following to setup a  Tomcat server  with the OS Solver Service on a {\bf Unix system}:
 
-\begin{itemize}
-\item[Step 1.]  Put the folder  {\tt os-server-1.0}   in the desired location for the OS Solver Service on the server machine.
+\begin{enumerate}[Step 1.]
+\item{}  Put the folder  {\tt os-server-1.0}   in the desired location for the OS Solver Service on the server machine.
 
-\item[Step 2.] Connect to the Tomcat {\tt bin} directory in the {\tt os-server-1.0} root and execute {\tt ./startup.sh}.
+\item{} Connect to the Tomcat {\tt bin} directory in the {\tt os-server-1.0} root and execute {\tt ./startup.sh}.
 
-\item[Step 3.] Test to see if the server is running the {\tt OSSolverService}.  Open a browser on the server and enter the URL
+\item{} \label{itemize:tomcatunix3}
+Test to see if the server is running the {\tt OSSolverService}.  Open a browser on the server and enter the URL
 \begin{verbatim}
 http://localhost:8080/os/OSSolverService.jws
 \end{verbatim}
@@ -3558,7 +3598,8 @@ http://127.0.0.1:8080/os/OSSolverService.jws
 \end{verbatim}
 You should see a message {\tt Click to see the WSDL}.  Click on the link and you should see an XML description of the various methods available from the {\tt OSSolverService}.
 
-\item[Step 4.]  On a client machine, create  the file {\tt testremote.config} with the following lines of text
+\item{}  \label{itemize:tomcatunix4}
+On a client machine, create  the file {\tt testremote.config} with the following lines of text
 \begin{verbatim}
 -serviceLocation http://***.***.***.***:8080/os/OSSolverService.jws
 -osil /parincLinear.osil
@@ -3569,15 +3610,15 @@ where ***.***.***.*** is the IP address of the Tomcat server machine. Then, assu
 \end{verbatim}
 You should get back an OSrL message saying the problem was optimized.
 
-\end{itemize}
+\end{enumerate}
 
 In a Windows environment you may want to start the Tomcat server as a service so you can log off (not shutdown) the machine and have the server continue to run. On a {\bf Windows machine} do the following:
 
-\begin{itemize}
+\begin{enumerate}[Step 1.]
 
-\item[Step 1.]  Put the folder  {\tt os-server-1.0}   in the desired location for the OS Solver Service on the server machine.
+\item{}  Put the folder  {\tt os-server-1.0}   in the desired location for the OS Solver Service on the server machine.
 
-\item[Step 2.]  Connect to the Tomcat {\tt bin} directory in the {\tt os-server-1.0} root and execute
+\item{} \label{itemize:tomcatwin2}  Connect to the Tomcat {\tt bin} directory in the {\tt os-server-1.0} root and execute
 \begin{verbatim}
 service.bat install
 \end{verbatim}
@@ -3586,17 +3627,17 @@ This will install Tomcat as a Windows service.  To remove the service execute
 service.bat remove
 \end{verbatim}
 
-\item[Step 3.]  Connect to the Tomcat {\tt bin} directory and and double click on the {\tt tomcat5w.exe} application.  This will open a Window for controlling the Tomcat server.
+\item{}  \label{itemize:tomcatwin3}  Connect to the Tomcat {\tt bin} directory and and double click on the {\tt tomcat5w.exe} application.  This will open a Window for controlling the Tomcat server.
 
-\item[Step 4.]  Select the {\tt Startup} tab and set the {\tt Working Directory} to the path to {\tt os-server-1.0}.
+\item{}  \label{itemize:tomcatwin4} Select the {\tt Startup} tab and set the {\tt Working Directory} to the path to {\tt os-server-1.0}.
 
-\item[Step 5.]  Select the {\tt General} tab and then click the {\tt Start} button.
+\item{}  \label{itemize:tomcatwin5} Select the {\tt General} tab and then click the {\tt Start} button.
 
-\item[Step 6.] Same as Step 3 for Unix.
+\item{}  Same as Step~\ref{itemize:tomcatunix3} for Unix.
 
-\item[Step 7:] Same as Step 4 for Unix.
+\item{}  Same as Step~\ref{itemize:tomcatunix4} for Unix.
 
-\end{itemize}
+\end{enumerate}
 
 \vskip 8pt
 
@@ -3606,11 +3647,11 @@ There are many ways to start the Tomcat server and the exact way you choose may 
 \vskip 8pt
 
 If you already have a Tomcat server with Axis installed do the following:
-\begin{itemize}
-\item[1.] copy the file {\tt os.war} into the Tomcat {\tt WEB-INF} directory in the {\tt ROOT} folder under {\tt webapps}.
+\begin{enumerate}
+\item{} copy the file {\tt os.war} into the Tomcat {\tt WEB-INF} directory in the {\tt ROOT} folder under {\tt webapps}.
 
-\item[2.]  Follow Steps 2-5 outlined above.
-\end{itemize}
+\item[2.]  Follow Steps \ref{itemize:tomcatwin2}-\ref{itemize:tomcatwin5} outlined above.
+\end{enumerate}
 
 In the directory,
 \begin{verbatim}
@@ -3803,20 +3844,60 @@ will bring up the necessary form that allows the user to browse a directory and 
 %\section{Examples}\label{section:examples}
 \section{Code samples to illustrate the {\tt OSInstance} API}\label{section:examples}
 
+
+
 The example executable files are not built by running {\tt configure} and {\tt make}.  In order to build the examples 
 the user must first run
 \begin{verbatim}
-make all
+make install
 \end{verbatim}
-in the project root directory.  Running {\tt make install}  will  place all of header files required by the examples in the directory
+in the COIN-OS project root directory (the discussion in this section assumes that the project root directory is {\tt COIN-OS}).  Running {\tt make install}  will  place all of header files required by the examples in the directory
 \begin{verbatim}
-{\tt  COIN-OS/include}
+COIN-OS/include
 \end{verbatim}
 and all of the libraries required by the examples in the directory
 \begin{verbatim}
-{\tt  COIN-OS/lib}
+COIN-OS/lib
 \end{verbatim}
-Next, the user should connect to the appropriate example directory and run {\tt make}.      The {\tt Makefile} in each example directory is fairly simple and is designed to be easily modified by the user if necessary.  Developers can use the Makefiles as a starting point for building applications that use the OS project libraries.
+The source code for the examples is in the directory {\tt COIN-OS/OS/examples}.  For example, the {\tt osTestCode} example is in the directory
+\begin{verbatim}
+COIN-OS/OS/examples/osTestCode
+\end{verbatim}
+Next, the user should connect to the appropriate example directory and run {\tt make}.  If the user has done a vpath build, the Makefiles will be in each respective example directory under
+\begin{verbatim}
+vpath_root/OS/examples
+\end{verbatim}
+otherwise, the Makefiles will be in each respective example directory under
+\begin{verbatim}
+COIN-OS/OS/examples
+\end{verbatim}
+
+The {\tt Makefile} in each example directory is fairly simple and is designed to be easily modified by the user if necessary.  The part of the Makefile to be adjusted, if necessary, is
+\begin{verbatim}
+#########################################################################
+#    You can modify this example makefile to fit for your own program.   #
+#    Usually, you only need to change the five CHANGEME entries below.   #
+##########################################################################
+
+# CHANGEME: This should be the name of your executable
+EXE = OSTestCode
+# CHANGEME: Here is the name of all object files corresponding to the source
+#           code that you wrote in order to define the problem statement
+OBJS =  OSTestCode.o 
+# CHANGEME: Additional libraries
+ADDLIBS = 
+# CHANGEME: Additional flags for compilation (e.g., include flags)
+ADDINCFLAGS =  -I${prefix}/include  
+# CHANGEME: SRCDIR and VPATH should be the path to the source code. It is assumed
+# that the lib directory is in prefix/lib and the header files are in
+# prefix/include
+SRCDIR = /Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/examples/osTestCode
+VPATH = /Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/examples/osTestCode
+prefix = /Users/kmartin/Documents/files/code/cpp/OScpp/vpath
+\end{verbatim}
+
+
+Developers can use the Makefiles as a starting point for building applications that use the OS project libraries.
 
 
 \subsection{Algorithmic Differentiation:  Using the OS Algorithmic Differentiation Methods}\label{section:cppad}
@@ -3880,8 +3961,7 @@ nlNodeVec[ 0]->createExpressionTreeFromPostfix( nlNodeVec);
 
 \subsection{osTestCode}\label{subsection:exampleOSTestCode}
 
-The {\tt osTestCode} folder holds the file {\tt osTestCode.cpp}. This is not designed to do anything specific and is simply a holder for testing out code and features of the OS library.
-
+The {\tt osTestCode} folder holds the file {\tt osTestCode.cpp}. This  is similar to the {\tt instanceGenerator} example. In this case, a simple linear program is generated. This example also illustrates calling a COIN-OR solver, in this case {\tt Clp}.
 
 \section{Building a Model in MATLAB} \label{section:matlab}
 
@@ -5083,6 +5163,29 @@ http://www.gerad.ca/~orban/drampl/def-vars.html
      } 
  }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-> > >> > > These are often called "defined variables" in descriptions of AMPL.  An nl> file> > > gives statistics for the number of defined variables appearing> > >> > >      b   in both the objective and constraints> > >      c   in two or more constraints but not any objectives> > >      o   in two or more objectives but not any constraints> > >      c1  in only one constraint and no objectives> > >      o1  in only one objective and no constraints> > I am curious, where would the user find the above information? What is> particularly confusing is that three lines above> >   0 0 0 3 0	# common exprs: b,c,o,c1,o1> > is the line> > 0 0 0 0 0	# discrete variables: binary, integer, nonlinear (b,c,o)> > > so the triple (b, c, o) has two distinct meanings.
+> > >
+> > > These are often called "defined variables" in descriptions of AMPL.  An nl
+> file
+> > > gives statistics for the number of defined variables appearing
+> > >
+> > >      b   in both the objective and constraints
+> > >      c   in two or more constraints but not any objectives
+> > >      o   in two or more objectives but not any constraints
+> > >      c1  in only one constraint and no objectives
+> > >      o1  in only one objective and no constraints
+> 
+> I am curious, where would the user find the above information? What is
+> particularly confusing is that three lines above
+> 
+>   0 0 0 3 0	# common exprs: b,c,o,c1,o1
+> 
+> is the line
+> 
+> 0 0 0 0 0	# discrete variables: binary, integer, nonlinear (b,c,o)
+> 
+> 
+> so the triple (b, c, o) has two distinct meanings.
+
 
