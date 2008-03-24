@@ -151,26 +151,6 @@ int main( ){
 		osilwriter = NULL;
 		cout << "Done with garbage collection" << endl;
 		return 0;
-		//
-		/*
-		if(argC != 2) throw ErrorClass( "there must be exactly one command line argument");
-		std::string osilFileName;
-		std::string osil;
-		// get the input file
-	    osilFileName =  argV[1];
-	    osil = fileUtil->getFileAsString( osilFileName.c_str());
-	    OSInstance *osinstance = NULL;
-	    OSiLReader *osilreader = NULL;
-	    OSiLWriter *osilwriter = NULL;
-	    osilwriter = new OSiLWriter();
-	    osilreader = new OSiLReader(); 
-	    osinstance = osilreader->readOSiL( osil);
-	    cout << osilwriter->writeOSiL( osinstance) << endl;
-	    delete osilreader;
-	    delete osilwriter;
-	    delete fileUtil;
-	   // delete osinstance;
-	    */
 	}
 	catch(const ErrorClass& eclass){
 		delete fileUtil;

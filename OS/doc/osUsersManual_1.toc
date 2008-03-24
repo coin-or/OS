@@ -85,7 +85,8 @@
 \contentsline {subsection}{\numberline {13.1}Algorithmic Differentiation: Using the OS Algorithmic Differentiation Methods}{72}
 \contentsline {subsection}{\numberline {13.2}Instance Generator: Using the OSInstance API to Generate Instances}{72}
 \contentsline {subsection}{\numberline {13.3}osTestCode}{73}
-\contentsline {section}{\numberline {14}Building a Model in MATLAB}{73}
+\contentsline {subsection}{\numberline {13.4}OSAddCuts: Using the OSInstance API to Generate Cutting Planes}{73}
+\contentsline {section}{\numberline {14}Building a Model in MATLAB}{74}
 \contentsline {section}{\numberline {15}Appendix -- Sample OSiL files}{76}
 \contentsline {subsection}{\numberline {15.1}OSiL representation for problem given in (1\hbox {})--(4\hbox {}) (p.27\hbox {})}{76}
 \contentsline {subsection}{\numberline {15.2}OSiL representation for problem given in (20\hbox {})--(23\hbox {}) (p.45\hbox {}) }{77}
