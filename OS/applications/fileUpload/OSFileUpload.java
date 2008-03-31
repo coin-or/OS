@@ -1,7 +1,7 @@
 /**
  * @(#)OSFileUpload 1.0 05/20/2005
  *
- * Copyright (c) 2005 Impact 
+ * Copyright (c) 2005 Kipp Martin 
  */
 package org.optimizationservices.oscommon.util;
 import java.io.File;

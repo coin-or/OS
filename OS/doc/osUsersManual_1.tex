@@ -5194,3 +5194,7 @@ http://www.gerad.ca/~orban/drampl/def-vars.html
 > so the triple (b, c, o) has two distinct meanings.
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Yes.>I believe this is possible.> >is it possible to tell vcbuild to skip certain configurations> >rather than running them all?NBbuildConfig.py has the line:    vcbuild='vcbuild /u ' + slnFileName + ' $ALL'I'm pretty sure that the $ALL means build all configurations.It could be changed to be the name of the configuration to be built.Here is some documentation I just found:http://msdn2.microsoft.com/en-us/library/kdxzbw9t.aspxJP FasanoSTSM, Watson Math Departmentjpfasano@us.ibm.com(914)945-1324  (tie line 862-1324)
+
+

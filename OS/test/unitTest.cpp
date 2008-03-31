@@ -193,7 +193,7 @@
 # endif
 #endif
 
-#undef COIN_HAS_ASL
+
 using std::cout;   
 using std::endl;
 using std::ostringstream; 
