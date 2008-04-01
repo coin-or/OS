@@ -94,6 +94,7 @@
 \newcommand{\FigureFolder}{figures}
 
 \newif\ifknitro \knitrofalse    % change to \knitrotrue once we get knitro connected again
+\newif\ifipopt  \ipoptfalse     % change to \ipopttrue  once we get the build problems sorted out
 
 \begin{document}
 
@@ -160,7 +161,7 @@ This is a very general API for linear, integer, and nonlinear programs. Extensio
 \item{}  Server software that works with Apache Tomcat and Apache Axis.
 This software uses Web Services technology and acts as middleware between the client that creates the instance and the  solver on the server that optimizes the instance and returns the result. This is illustrated in Section  \ref{section:tomcat}.
 
-\item{}  A lightweight version of the project, {\tt OSCommon} for modeling language and solver developers that want to use OS API, readers, and writers, without the overhead of other COIN-OR projects or any third party software.
+\item{}  A lightweight version of the project, {\tt OSCommon} for modeling language and solver developers that want to use OS API, readers, and writers, without the overhead of other COIN-OR projects or any third-party software.
 \end{enumerate}
 
 
@@ -274,7 +275,7 @@ contained in the OS project distribution. Scripts are included to download this 
 
 
 %The {\tt wget} executable is used by the scripts, {\tt get.ASL}, 
-%{\tt get.Blas}, etc. in the corresponding third party subdirectories 
+%{\tt get.Blas}, etc. in the corresponding third-party subdirectories 
 %and makes it easy to download the software.  
 A Windows version of {\tt wget} is available at
 
@@ -313,7 +314,7 @@ not to confuse the header files. In our experience, best results are achieved wi
 installation, MSYS, and the Microsoft {\tt cl} compiler.
 
 \subsubsection{Fortran Compiler}\label{section:fortran}
-The COIN-OR project IPopt (see section~\ref{section:ipopt}) and several of the third-party software 
+The COIN-OR project Ipopt (see section~\ref{section:ipopt}) and several of the third-party software 
 described in section~\ref{section:otherthirdparty} include Fortran subroutines, which must be compiled 
 with a Fortran compiler if the user wants to include these projects in the build. A free Fortran 95 compiler 
 can be downloaded from {\tt http://www.g95.org}. For Fortran~77 code (which includes the Blas, HSL, Ipopt 
@@ -322,7 +323,7 @@ which turns Fortran~77 code into code that can subsequently be fed into a C comp
 The {\tt f2c} translator and the {\tt f2c} runtime library can be downloaded from \url{http://www.netlib.org/f2c}. 
 Further details are available in the file {\tt BuildTools/compile\_f2c/INSTALL}, which is part of the OS distribution.
 
-\subsubsection{ {\tt flex} and {\tt bison} }\label{section:flex} 
+\subsubsection{{\tt flex} and {\tt bison} }\label{section:flex} 
 Users who want to edit the source code in the parsers described in
 Section~\ref{section:osparsers} will need the additional  tools
 {\bf flex} and {\bf bison.}  These can be downloaded from
@@ -340,7 +341,7 @@ regex-0.12-MSYS-1.0.11
 The last one contains an important DLL, msys-regex-0.dll, without which flex
 will not start.
 
-\subsubsection{ doxygen }\label{section:doxygen}
+\subsubsection{doxygen }\label{section:doxygen}
 Doxygen  (\url{www.doxygen.org}) is a document production system that can be used to prepare documentation 
 for the OS project and related software. For details, see section~\ref{section:documentation}.
 
@@ -362,8 +363,8 @@ Error validating server certificate for 'https://projects.coin-or.org:443':
 Certificate information:
  - Hostname: projects.coin-or.org
  - Valid: from Jun 10 22:51:18 2007 GMT until Jun 15 21:00:28 2009 GMT
- - Issuer: 07969287, http://certificates.godaddy.com/repository, GoDaddy.com, In
-c., Scottsdale, Arizona, US
+ - Issuer: 07969287, http://certificates.godaddy.com/repository, GoDaddy.com, Inc., 
+Scottsdale, Arizona, US
  - Fingerprint: f7:26:0f:bb:e1:94:a5:23:7f:5c:cb:c3:9a:c4:74:51:e5:c7:4d:29
 (R)eject, accept (t)emporarily or accept (p)ermanently?
 \end{verbatim}
@@ -374,14 +375,14 @@ If so, select {\tt (p)} and you should not get this message again.
 
 On Windows with TortoiseSVN, create a directory {\tt COIN-OS} in the desired location and right-click on this directory.   
 Select the menu item {\tt SVN Checkout ...} and in the textbox ``{\tt URL of Repository}''
-give the URL for the version of the OS project you wish to check out, e.g. https://projects.coin-or.org/svn/OS/stable/1.0.
+give the URL for the version of the OS project you wish to check out, for instance, https://projects.coin-or.org/svn/OS/stable/1.0.
 
 
 Now build the project as described in  Section \ref{section:build}.
 
 For the rest of this documentation, we assume that  {\tt COIN-OS} is the name of the root directory 
 of the OS project distribution and that the user has defined an environment variable {\tt OS} that is the path to 
-{\tt COIN-OS}.  The {\tt COIN-OS} directory structure is illustrated in Figure~\ref{figure:osprojectrootdir}. OS source code is mainly contained inside of the OS subdirectory. Other first level subdirectories are mostly external projects (COIN-OR or third party) that the OS project depends on.
+{\tt COIN-OS}.  The {\tt COIN-OS} directory structure is illustrated in Figure~\ref{figure:osprojectrootdir}. OS source code is mainly contained inside of the OS subdirectory. Other first level subdirectories are mostly external projects (COIN-OR or third-party) that the OS project depends on.
 
 
 \begin{figure}
@@ -515,8 +516,9 @@ by remembering and reusing the results of tests already performed.
 
 \item For more information and options on the {\tt ./configure} script see
 
-
+{\footnotesize
 \url{https://projects.coin-or.org/BuildTools/wiki/user-configure#PreparingtheCompilation}.
+}
 
 \item You  cannot apply  {\tt COIN\_SKIP\_PROJECTS} to {\tt Cbc}, {\tt Clp}, {\tt Cgl}, {\tt CoinUtils}, {\tt CppAD}, or {\tt Osi}. These projects must be present.
 \end{itemize}
@@ -536,8 +538,8 @@ make test
 \end{verbatim}
 
 \ifknitro
-Depending upon which third party software you have installed, the result of running the {\tt unitTest} should look 
-something like (we have included the third-party solvers LINDO and Knitro in the  test results below; they are not 
+Depending upon which third-party software you have installed, the result of running the {\tt unitTest} should look 
+something like (we have included the third-party solvers LINDO and Knitro in the test results below; they are not 
 part of the default build):
 
 
@@ -579,7 +581,7 @@ All tests completed successfully
 \end{verbatim}
 }
 \else
-Depending upon which third party software you have installed, the result of running the {\tt unitTest} should look 
+Depending upon which third-party software you have installed, the result of running the {\tt unitTest} should look 
 something like (we have included the third-party solver LINDO in the test results below; it is not 
 part of the default build):
 
@@ -680,7 +682,7 @@ For example, running
 There are a number of options open to Windows users.   First, if you wish to work with source code we recommend downloading  the svn client,  TortoiseSVN.  See section~\ref{section:svn}.  With TortoiseSVN in the Windows Explorer connect to the directory (e.g. COIN-OS) where you wish to put the OS code. Right click on the directory and select {\tt SVN Checkout}.   In the textbox, {\tt URL of Repository} give the URL for the version of the OS project you wish to checkout, e.g. https://projects.coin-or.org/svn/OS/stable/1.0.
 
 Also, if you plan to build any of the projects contained in {\tt ThirdParty} (e.g. ASL) we recommend using {\tt wget}. See section~\ref{section:wget} 
-%The {\tt wget} executable is used by the scripts, {\tt get.ASL}, {\tt %get.Blas}, etc. in the corresponding third party subdirectories and makes it %easy to download the software.  A Windows version of {\tt wget} is available at
+%The {\tt wget} executable is used by the scripts, {\tt get.ASL}, {\tt %get.Blas}, etc. in the corresponding third-party subdirectories and makes it %easy to download the software.  A Windows version of {\tt wget} is available at
 %
 %\begin{verbatim}
 %http://www.christopherlewis.com/WGet/WGetFiles.htm
@@ -708,13 +710,29 @@ Version 7 is no longer available for download from Microsoft.  Version 8 is at \
 
 \item[Step 2] The part of the OS library responsible for communication with a remote server depends on some underlying Windows socket header files and libraries. These files are part of the commercial for-pay version, but are not included in the Visual C++ Express download. If you have the Express Edition, it is necessary to also download and install the Windows Platform SDK. This software is version independent and is at  \url{http://msdn2.microsoft.com/en-us/express/aa700755.aspx}.
 
-\item[Step 3] In the COIN-OR/OS directory you will find the folder MSVisualStudio, which contains root directories organized by the version of Visual Studio. We currently provide solution files for Version 7 and Version 8. Each contains project files for building the unitTest (OSTest.vcproj), the OSSolverService (OSSolverService,vcproj),   and the OS library libOS.vcproj. The Microsoft Visual Studio files are automatically downloaded with an SVN checkout. They are also contained in the tarballs (see Section \ref{section:getTarBalls}).
+\item[Step 3] In the COIN-OR/OS directory you will find the folder MSVisualStudio, 
+which contains root directories organized by the version of Visual Studio. 
+We currently provide solution files for Version 7 and Version 8. Each contains 
+the file {\tt OS.sln} and project files for building the unitTest ({\tt OSTest.vcproj}), 
+the OSSolverService ({\tt OSSolverService.vcproj}) and the OS library ({\tt libOS.vcproj}).
+The Microsoft Visual Studio files are automatically downloaded with an SVN checkout. They are also contained in the tarballs (see Section \ref{section:getTarBalls}).
 
-Open the project files (for instance by double clicking on them in Windows Explorer)  and select Build from the menu bar.
+Open the solution file or the individual project files (for instance by double clicking 
+on them in Windows Explorer)  and select Build from the menu bar.
 
 \item[Step 4] Run the  {\tt unitTest}.  Connect  to the directory {\tt COIN-OR/OS/test} directory and run either the release or debug version of the  {\tt unitTest} executable.
 \end{itemize}
 
+\ifipopt
+The solution file for version~7 provides two configurations, Debug and Release. 
+The former includes debug information, but both are configured without Ipopt 
+(see section~\ref{section:ipopt}) or any of the third-party software described in 
+section~\ref{section:otherthirdparty}. The solution file for version~8 includes a third 
+configuration, Enhanced, which can be used to add Ipopt and ASL 
+(see section~\ref{section:ASL}). In order to build this section successfully, 
+the user must first download and process additional software as explained in sections 
+\ref{section:ipopt-msvs} and~\ref{section:ASL-msvs}.
+\fi
 
 \subsubsection{Cygwin}\label{section:cygwin}
 
@@ -807,12 +825,13 @@ then the {\tt \$PATH} value needs to be reset.
 
 
 
-\item{} Build the OS project (or any COIN-OR project). If you wish to avoid the FORTRAN related issues you should build without Ipopt. Issue the following command in the project root.
+\item{} Build the OS project (or any COIN-OR project). If you wish to avoid the FORTRAN related issues you should 
+build without Ipopt. Issue the following command in the project root.
 \begin{verbatim}
 ./configure COIN_SKIP_PROJECTS=Ipopt --enable-doscompile=msvc
 \end{verbatim}
 
-If you wish to build with Ipopt, then FORTRAN is required and Visual Studio does not ship with a FORTRAN compiler. 
+If you wish to build with Ipopt, then FORTRAN is required --- and Visual Studio does not ship with a FORTRAN compiler. 
 The following is a work-around. (See also section~\ref{section:ipopt}.)
 
 \begin{enumerate}[Step a.]
@@ -947,7 +966,7 @@ It is only necessary to  download what is referred to as the {\bf MSYS Base Syst
 As of this writing the most recent version is MSYS-1.0.11.
 This file is listed as {\tt bash-3.1-MSYS-1.0.11} and the  binary download is
 
-{\small
+{\footnotesize
 %\url{http://downloads.sourceforge.net/mingw/bash-3.1-MSYS-1.0.11-1.tar.bz2?modtime=1195140582&big_mirror=1}
 {\tt http://downloads.sourceforge.net/mingw/bash-3.1-MSYS-1.0.11-1.tar.bz2?modtime=1195140582\&big\_mirror=1}
 }
@@ -1016,19 +1035,25 @@ in the {\tt ../COIN-OS} directory.
 
 Ipopt is a COIN-OR project (\url{projects.coin-or.org/Ipopt}) and is included in the download with the OS project. 
 However, unlike the other COIN-OR projects that download with OS, the Ipopt project requires third-party software 
-that is based on FORTRAN and and is {\it not} part of the default distribution. Care must therefore be taken if 
-you wish to build OS with the  Ipopt solver.  
+that is based on FORTRAN and is {\it not} part of the default distribution. Care must therefore be taken if 
+you wish to build OS with the Ipopt solver.  
 
-You can  exclude Ipopt from the OS  build by adding the option
+You can exclude Ipopt from the OS build by adding the option
 
 \begin{verbatim}
 COIN_SKIP_PROJECTS=Ipopt
 \end{verbatim}
 to the {\tt configure} script.
 
-
+\ifipopt
+\subsubsection{Building Ipopt in Unix or a Unix-like environment} \label{section:ipopt-unix}
+If you are working in Unix or one of the Unix-like environments described in
+section~\ref{section:windowsinstall}, you can proceed as follows.
+\else
 If you do choose to build Ipopt, it is best to work in Unix or one of the Unix-like environments described in
-section~\ref{section:windowsinstall} (we recommend MSYS). To get the necessary third-party software, first 
+section~\ref{section:windowsinstall} (we recommend MSYS). 
+\fi
+To get the necessary third-party software, first 
 connect into the {\tt ThirdParty} directory. Then execute the following commands:
 
 \begin{verbatim}
@@ -1041,7 +1066,7 @@ $ ./get.Mumps
 \end{verbatim}
 
 Alternatively, you can connect into the project root {\tt COIN-OS} and execute the script {\tt get.AllThirdParty}.  
-This will also get the AMPL {\tt ASL} libraries.
+This will also get the AMPL {\tt ASL} libraries (see section~\ref{section:ASL}.
 
 What you do next depends upon whether or not a FORTRAN compiler is present, and if so, which version of FORTRAN.  
 There are several options. See also
@@ -1053,23 +1078,27 @@ There are several options. See also
 
 \begin{enumerate}[{Option} 1.]
 
-\item{}   If you are building in a Unix-like environment and have a Fortran 95 compiler that recognizes
-embedded preprocessor statements (such as {\tt gfortran} --- see~\url{http://gcc.gnu.org/fortran/} or {\tt g95} ---
-see~\url{http://www.g95.org/}),
-you can simply run the {\tt configure} script and the FORTRAN compiler will be detected and the {\tt Ipopt} project will be built.
+\item{}   If you \ifipopt\else are building in a Unix-like environment and\fi have a Fortran 95 compiler that 
+recognizes embedded preprocessor statements (such as {\tt gfortran} --- see~\url{http://gcc.gnu.org/fortran/} 
+or {\tt g95} --- see~\url{http://www.g95.org/}), you can simply run the {\tt configure} script and the FORTRAN 
+compiler will be detected and the {\tt Ipopt} project will be built.
 
-\item{}   If you have a Fortran 95 compiler that cannot deal with the embedded preprocessor statements,
-you may have to resort to manual edits before you can build Ipopt --- or see Option~3.
+\item{}   If you have a Fortran 95 compiler that cannot deal with the preprocessor statements embedded in the Mumps code,
+you may have to resort to manual edits before you can build Ipopt --- or see Option~\ref{enumerate:ipopt3}.
 
-\item{}   If you have a FORTRAN 77 compiler, you must first obtain one of the Harwell Subroutine Library (HSL)
-routines {\tt ma27ad.f} or {\tt MA57ad.f}.  See \url{http://www.cse.scitech.ac.uk/nag/hsl/}.  Put the Harwell code 
+\item{} \label{enumerate:ipopt3} 
+If you have a FORTRAN 77 compiler, you can replace Mumps by one of the Harwell Subroutine Library (HSL)
+routines {\tt ma27ad.f} or {\tt MA57ad.f}.  See \url{http://www.cse.scitech.ac.uk/nag/hsl/}.  You must obtain
+the Harwell code and put it
 in the directory {\tt \../ThirdParty/HSL}.  Now run the {\tt configure} script as described in \ref{section:unixbuilds}.  
 
 Note that the Harwell Subroutine Library is not governed by the Common Public License. It is the user's responsibility
 to ensure adherence to appropriate copyright and distribution agreements. 
 
-\item{}  If you do not have a FORTRAN compiler and do not wish to obtain one, you can use the {\tt f2c} 
-compiler from Netlib.  The installation instructions for this are in the {\tt INSTALL} file in
+\item{} \label{enumerate:ipopt4}
+If you do not have a FORTRAN compiler and do not wish to obtain one, you can use the {\tt f2c} 
+translator from Netlib to translate HSL to {\tt C}.  The installation instructions for {\tt f2c}
+are in the {\tt INSTALL} file in
 \begin{verbatim}
 BuildTools/compile_f2c
 \end{verbatim}
@@ -1080,7 +1109,8 @@ BuildTools/compile_f2c
 
 
 \begin{itemize}
-\item Option 4 also requires that one of the Harwell Subroutine Library (HSL) routines {\tt ma27ad.f} or {\tt MA57ad.f} be present in the HSL directory.
+\item Option~\ref{enumerate:ipopt4} also requires that one of the Harwell Subroutine Library (HSL) routines 
+{\tt ma27ad.f} or {\tt MA57ad.f} be present in the HSL directory.
 
 \item If you run configure with the {\tt --enable-debug} option on Windows, then when building the {\tt vcf2c.lib}, use the command line
 
@@ -1092,13 +1122,102 @@ CFLAGS = -MTd -DUSE_CLOCK -DMSDOS -DNO_ONEXIT
 
 \vskip 8pt
 
-Users of Microsoft Visual Studio without access to a unix-like environment (Cygwin, MinGW or MSYS) 
-will have to use anonymous ftp to download
-BLAS (from \url{ftp://www.netlib.org/blas/blas.tgz})
-LAPACK (from \url{ftp://www.netlib.org/lapack/lapack-lite-3.1.0.tgz})
-and either Mumps (from \url{http://mumps.enseeiht.fr}) 
-or HSL (see above).
+\ifipopt
+\subsubsection{Ipopt and Microsoft Visual Studio} \label{section:ipopt-msvs}
 
+Users of Microsoft Visual Studio without access to a unix-like environment (Cygwin, MinGW or MSYS) 
+will have to prepare the third-party code after downloading. Since some of this code is written in Fortran,
+you also need to obtain the {\tt f2c} Fortran to C translator. The steps are as follows.
+
+\begin{enumerate}
+
+
+\item{} From netlib, download the file
+
+\begin{verbatim}
+   http://http://www.netlib.org/f2c/libf2c.zip
+\end{verbatim}
+
+   and extract it in
+
+\begin{verbatim}
+   Ipopt\MSVisualStudio\v8
+\end{verbatim}
+ which is a folder in the root directory (see figure~\ref{figure:osprojectrootdir}). Make sure that the files
+are extracted into the subfolder {\tt libf2c} directly, instead of the subfolder {\tt libf2c$\tt\backslash$libf2c}. 
+One file created in this process should be
+
+\begin{verbatim}
+   Ipopt\MSVisualStudio\v8\libf2c\makefile.vc
+\end{verbatim}
+
+
+\item{} Open a Command Window (DOS prompt) and go into the directory
+
+\begin{verbatim}   
+   Ipopt\MSVisualStudio\v8\libf2c\
+\end{verbatim}
+
+   Here, type
+
+\begin{verbatim}   
+   nmake -f makefile.vc all
+\end{verbatim}
+
+   (If you see a problem related to the file {\tt comptry.bat}, edit the
+   file {\tt makefile.vc} and just delete the one occurance of
+   '{\tt comptry.bat}'.)
+
+\item{} Download the executable {\tt f2c.exe} from \url{http://www.netlib.org/f2c/mswin/}
+and put it somewhere into your path
+   (e.g., C:$\backslash$Windows)
+
+\item{} Download the source code for Blas (from \url{ftp://www.netlib.org/blas/blas.tgz}), 
+Lapack (from \url{ftp://www.netlib.org/lapack/lapack-lite-3.1.0.tgz}), and HSL (see previous section).
+Install each download into the appropriate subdirectory in {\tt ThirdParty}.
+
+\item{} \label{enumerate:ipopt-step5}
+In a DOS window, go to the directory
+
+\begin{verbatim}
+   Ipopt\MSVisualStudio\v8\libCoinBlas
+\end{verbatim}
+
+   and run the batch file
+
+\begin{verbatim}
+   convert_blas.bat
+\end{verbatim}
+
+   This runs the {\tt f2c} translator and generates new C files.
+
+
+\item{} Repeat step~\ref{enumerate:ipopt-step5} in the directories
+
+\begin{verbatim}
+   Ipopt\MSVisualStudio\v8\libCoinLapack
+
+   BASDIR\Ipopt\MSVisualStudio\v8\libCoinHSL
+\end{verbatim}
+
+   using the {\tt convert\_*.bat} files you find there.
+
+\item{}
+   Download the ASL code and follow the steps in section~\ref{section:ASL}.
+
+\item{}
+Now you can open the solution file
+
+\begin{verbatim}
+   OS\MSVisualStudio\v8\OS.sln
+\end{verbatim}
+
+and select the configuration Enhanced. This will build the OSSolverService executable and a unitTest
+with the Ipopt solver and the AMPL solver library  (see section~\ref{section:ASL}).
+\end{enumerate}
+
+
+\fi
 
 
 \subsection{Other Third-Party Software} \label{section:otherthirdparty}
@@ -1162,26 +1281,22 @@ distribution root directory, possibly accessed from a {\tt VPATH} as in Section~
 It sets important global variables and will call all other necessary configure files in turn.
 You may also wish to view
 \begin{verbatim}
+{\small
 https://projects.coin-or.org/BuildTools/wiki/user-configure#CommandLineArgumentsforconfigure
 \end{verbatim}
+}
 for more information on command line arguments that are illustrated in the subsections below.
 
 
 
-\subsubsection{AMPL}
+\subsubsection{AMPL} \label{section:ASL}
 
-The OS library contains a class, {\tt OSnl2osil} (see Section
-\ref{section:nl2osil}), and the program
-{\tt OSAmplClient} (see Section \ref{section:amplclient}) that require the use
-of the AMPL ASL library.
-See \url{http://netlib.sandia.gov/ampl/}  and  \url{http://www.ampl.com}. Users
-with a Unix system should locate
-the {\tt ASL} folder that is part of the distribution. The {\tt ASL} folder is
-in the {\tt ThirdParty} folder
-which is in the distribution root folder. Locate and execute the {\tt get.ASL}
-script.  Do this prior to running
-the {\tt configure} script. The {\tt configure} script will then build the
-correct ASL library.
+The OS library contains a class, {\tt OSnl2osil} (see Section \ref{section:nl2osil}), and the program
+{\tt OSAmplClient} (see Section \ref{section:amplclient}) that require the use of the AMPL ASL library.
+See \url{http://netlib.sandia.gov/ampl/}  and  \url{http://www.ampl.com}. Users with a Unix system should locate
+the {\tt ASL} folder that is part of the distribution. The {\tt ASL} folder is in the {\tt ThirdParty} folder
+which is in the distribution root folder. Locate and execute the {\tt get.ASL} script.  Do this prior to running
+the {\tt configure} script. The {\tt configure} script will then build the correct ASL library.
 
 Microsoft  Visual Studio users will have to build the ASL library separately and
 then link it with the OS lib in the OS project file.  The necessary source files are at
@@ -1201,19 +1316,46 @@ by
 \vskip 8pt
 \noindent
 where $n$ is the version number of the {\tt cl} compiler on your system (most
-likely 6, 7 or~8). Then build the source code with the utility {\tt nmake}
+likely 6, 7 or~8). 
+
+To avoid linker errors in MSVS, you must also edit the file {\tt fpinitmt.c}. Specifically you must
+hide the definition of {\tt \_matherr}, that is, you must comment out lines 212--225
+which read
+\begin{verbatim}
+ matherr_rettype
+matherr( struct _exception *e )
+{
+	switch(e->type) {
+	  case _DOMAIN:
+	  case _SING:
+		errno = set_errno(EDOM);
+		break;
+	  case _TLOSS:
+	  case _OVERFLOW:
+		errno = set_errno(ERANGE);
+	  }
+	return 0;
+	}
+\end{verbatim}
+
+Then you must build the source code with the utility {\tt nmake}
 which should be part of the Visual Studio distribution. (This can be done in a Command Window.)
 The appropriate command is
 \begin{verbatim}
 nmake -f makefile.vc
 \end{verbatim}
-Next you should run {\tt configure}. If the OS project is properly configured with the ASL library,
-{\tt config\_os.h} will contain the lines
-\begin{verbatim}
-/* If defined, the Ampl Solver Library is available. */
-#define COIN_HAS_ASL 1
-\end{verbatim}
+This produces the library file {\tt amplsolv.lib}, which is placed in the subfolder
+{\tt ThirdParty$\tt\backslash$ASL$\tt\backslash$solvers}.
 
+\ifipopt
+Before you can use the Enhanced configuration in our solution file {\tt OS.sln}, you must also prepare the source for the solver Ipopt 
+(see section~\ref{section:ipopt-msvs}). If you want to add other third-party software or include debug information, 
+you may have to modify (or copy) this configuration and tailor it to your needs.
+\else
+Now you are ready to use MSVS. We have prepared a configuration that builds OS executables with ASL, called
+{\tt Release-with-ASL}. If you want to add other third-party software or include debug information, you may have to modify
+(or copy) this configuration and tailor it to your needs.
+\fi
 
 \subsubsection{GLPK}
 
@@ -1260,7 +1402,7 @@ CLASSPATH=:/usr/local/ilog/cplex81/bin/i86_linux2_glibc2.3_gcc3.2:
 \end{verbatim}
 
 
-\ifknitro % skip this section for the time being
+\ifknitro 
 \subsubsection{Knitro}
 
 Knitro is a nonlinear solver. See \url{http://www.ziena.com/}.  Ziena does not provide source code for Knitro.  You must download platform dependent binaries.   In order to use Knitro with the OS project, perform the following steps.
@@ -1290,7 +1432,7 @@ configure --with-knitro-lib="-L/home/kmartin/files/code/knitro/linux/lib -lknitr
 \end{verbatim}
 
 \end{itemize}
-\fi     % end skipped material
+\fi    
 
 \subsubsection{LINDO}
 
@@ -1312,7 +1454,7 @@ Install MATLAB on the client machine and follow the instruction in Section
 
 \subsubsection{Library Paths}
 
-After running {\tt configure} as described above,  on Unix systems, it will be necessary to set the environment variables {\tt LD\_LIBRARY\_PATH} or {\tt DYLD\_LIBRARY\_PATH} (on Mac OS X) to point to the location of the installed third party libraries in the case that the libraries are dynamic and not static libraries.
+After running {\tt configure} as described above,  on Unix systems, it will be necessary to set the environment variables {\tt LD\_LIBRARY\_PATH} or {\tt DYLD\_LIBRARY\_PATH} (on Mac OS X) to point to the location of the installed third-party libraries in the case that the libraries are dynamic and not static libraries.
 
 
 \subsection{Bug Reporting}
@@ -1452,7 +1594,7 @@ the COIN-OR projects just mentioned.
 
 \item {\tt lib} - is a directory of libraries. After running {\tt make install} the OS library along with all other COIN-OR libraries are installed in {\tt lib}.
 
-\item {\tt ThirdParty} - is a  directory for third party software. For example, if AMPL related software  such as {\tt OSAmplClient} is used, then certain AMPL libraries need to be present. This should go into the {\tt ASL} directory in {\tt ThirdParty.}
+\item {\tt ThirdParty} - is a  directory for third-party software. For example, if AMPL related software  such as {\tt OSAmplClient} is used, then certain AMPL libraries need to be present. This should go into the {\tt ASL} directory in {\tt ThirdParty.}
 \end{itemize}
 
 
@@ -1711,6 +1853,7 @@ quadratic programs, and very general nonlinear programs.  An example solution (f
  (\ref{eq:roobj})--(\ref{eq:ro3}) ) in OSrL format is given below.
 
 \begin{verbatim}
+{\small
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type = "text/xsl"
   href = "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/stylesheets/OSrL.xslt"?>
@@ -1751,7 +1894,7 @@ http://www.optimizationservices.org/schemas/OSrL.xsd">
                 </constraints>
             </solution>
         </optimization>
-
+}
 \end{verbatim}
 
 
@@ -1881,8 +2024,8 @@ public:\\[\Sb]
                                                                                    public:\\[\Sb]
   <xs:sequence>                                                                      Variables();\\[\Sb]
     <xs:element name="var" type="Variable" maxOccurs="unbounded"/>  <----------->    Variable *var;\\[\Sb]
-  </xs:sequence>\\[\Sb]
-  <xs:attribute name="numberOfVariables" type="xs:positiveInteger"  
+  </xs:sequence>                                                                   \\[\Sb]
+  <xs:attribute name="numberOfVariables" type="xs:positiveInteger"                 \\[\Sb]
                 use="required"/>  <--------------------------------------------->    int numberOfVariables;\\[\Sb]
 </xs:complexType>                                                                  \}; // class Variables\\[\Sb]
  \\[\Sb]
@@ -2299,7 +2442,7 @@ for more information on the Ipopt solver C++ implementation and the {\tt TNLP} c
 \fi         %--------------------------------------------------------------------------
 
 
-In the examples above,  the problem instance was assumed to be read from a file into the string {\tt osil} and then into the class member {\tt solver->osil.} However, everything can be done entirely in memory. For example, it is possible to use the {\tt OSInstance} class to create an in-memory problem representation and give this representation directly to a solver class that inherits from {\tt DefaultSolver}. The class member to use is {\tt osinstance.} This is illustrated in the example given in Section \ref{subsection:exampleOSInstanceGeneration}.
+In the examples above,  the problem instance was assumed to be read from a file into the string {\tt osil} and then into the class member {\tt solver->osil.} However, everything can be done entirely in memory. For example, it is possible to use the {\tt OSInstance} class to create an in-memory problem representation and give this representation directly to a solver class that inherits from {\tt DefaultSolver}. The class member to use is {\tt osinstance.} This is illustrated in the example given in Section \ref{section:exampleOSInstanceGeneration}.
 
 
 \subsection{OSUtils}
@@ -2379,7 +2522,7 @@ The method, {\tt processNonlinearExpressions()} in the {\tt LindoSolver} class i
 \subsection{Set Methods}
 
 The {\tt set} methods can be used to build an in-memory {\tt OSInstance}
- object. A code example of how to do this is in Section \ref{subsection:exampleOSInstanceGeneration}.
+ object. A code example of how to do this is in Section \ref{section:exampleOSInstanceGeneration}.
 
 \subsection{Calculate Methods}
 
@@ -2743,8 +2886,11 @@ The methods {\tt forwardAD} and {\tt reverseAD} are low-level calls and are not 
 
 \subsubsection{Sparsity Methods}
 
-Many  solvers such as Ipopt (\url{projects.coin-or.org/Ipopt}) or Knitro (\url{www.ziena.com}) require the sparsity pattern of the Jacobian of the constraint matrix and the Hessian of the Lagrangian function.  Note well that the constraint matrix of the example in Section \ref{section:lowlevelADcalls}
-constitutes only the last two rows of (\ref{eq:definef}) but does include the linear terms.  The following code illustrates how to get the sparsity pattern of the constraint Jacobian matrix
+Many solvers such as Ipopt (\url{projects.coin-or.org/Ipopt}) \ifknitro or Knitro (\url{www.ziena.com}) \fi
+require the sparsity pattern of the Jacobian of the constraint matrix and the Hessian of the Lagrangian function.  
+Note well that the constraint matrix of the example in Section \ref{section:lowlevelADcalls}
+constitutes only the last two rows of (\ref{eq:definef}) but does include the linear terms.  
+The following code illustrates how to get the sparsity pattern of the constraint Jacobian matrix
 
 % replaced by \verbatim 18 February --- HIG
 %\begin{verbatimtab}[4]
@@ -3650,7 +3796,7 @@ If you already have a Tomcat server with Axis installed do the following:
 \begin{enumerate}
 \item{} copy the file {\tt os.war} into the Tomcat {\tt WEB-INF} directory in the {\tt ROOT} folder under {\tt webapps}.
 
-\item[2.]  Follow Steps \ref{itemize:tomcatwin2}-\ref{itemize:tomcatwin5} outlined above.
+\item{}  Follow Steps \ref{itemize:tomcatwin2}-\ref{itemize:tomcatwin5} outlined above.
 \end{enumerate}
 
 In the directory,
@@ -3844,8 +3990,6 @@ will bring up the necessary form that allows the user to browse a directory and 
 %\section{Examples}\label{section:examples}
 \section{Code samples to illustrate the {\tt OSInstance} API}\label{section:examples}
 
-
-
 The example executable files are not built by running {\tt configure} and {\tt make}.  In order to build the examples 
 the user must first run
 \begin{verbatim}
@@ -3874,7 +4018,7 @@ COIN-OS/OS/examples
 
 The {\tt Makefile} in each example directory is fairly simple and is designed to be easily modified by the user if necessary.  The part of the Makefile to be adjusted, if necessary, is
 \begin{verbatim}
-#########################################################################
+##########################################################################
 #    You can modify this example makefile to fit for your own program.   #
 #    Usually, you only need to change the five CHANGEME entries below.   #
 ##########################################################################
@@ -3906,7 +4050,7 @@ In the {\tt OS/examples/algorithmicDiff} folder is test code {\tt algorithmicDif
 
 
 
-\subsection{Instance Generator: Using the OSInstance API to Generate Instances}\label{subsection:exampleOSInstanceGeneration}
+\subsection{Instance Generator: Using the OSInstance API to Generate Instances}\label{section:exampleOSInstanceGeneration}
 
 This example is found in the {\tt instanceGenerator} folder in the {\tt examples} folder.  This example illustrates how to build a complete in-memory model instance using the {\tt OSInstance} API.   See the code {\tt instanceGenerator.cpp} for the complete example. Here we provide a few highlights to illustrate the power of the API.
 
@@ -3959,12 +4103,12 @@ osinstance->instanceData->nonlinearExpressions->nl[ 1]->osExpressionTree->m_tree
 nlNodeVec[ 0]->createExpressionTreeFromPostfix( nlNodeVec);
 \end{verbatim}
 
-\subsection{osTestCode}\label{subsection:exampleOSTestCode}
+\subsection{osTestCode}\label{section:exampleOSTestCode}
 
-The {\tt osTestCode} folder holds the file {\tt osTestCode.cpp}. This  is similar to the {\tt instanceGenerator} example. In this case, a simple linear program is generated. This example also illustrates calling a COIN-OR solver, in this case {\tt Clp}.
+The {\tt osTestCode} folder holds the file {\tt osTestCode.cpp}. This is similar to the {\tt instanceGenerator} example. In this case, a simple linear program is generated. This example also illustrates calling a COIN-OR solver, in this case {\tt Clp}.
 
 
-\subsection{OSAddCuts: Using the OSInstance API to Generate Cutting Planes}\label{subsection:exampleOSAddCuts}
+\subsection{OSAddCuts: Using the OSInstance API to Generate Cutting Planes}\label{section:exampleOSAddCuts}
 
 In this example, we show how to add cuts to tighten an LP using CGL (Cut Generation Library).
 
@@ -5195,6 +5339,29 @@ http://www.gerad.ca/~orban/drampl/def-vars.html
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
-Yes.>I believe this is possible.> >is it possible to tell vcbuild to skip certain configurations> >rather than running them all?NBbuildConfig.py has the line:    vcbuild='vcbuild /u ' + slnFileName + ' $ALL'I'm pretty sure that the $ALL means build all configurations.It could be changed to be the name of the configuration to be built.Here is some documentation I just found:http://msdn2.microsoft.com/en-us/library/kdxzbw9t.aspxJP FasanoSTSM, Watson Math Departmentjpfasano@us.ibm.com(914)945-1324  (tie line 862-1324)
+
+Yes.>
+I believe this is possible.
+
+> >is it possible to tell vcbuild to skip certain configurations
+> >rather than running them all?
+
+NBbuildConfig.py has the line:
+    vcbuild='vcbuild /u ' + slnFileName + ' $ALL'
+
+I'm pretty sure that the $ALL means build all configurations.
+It could be changed to be the name of the configuration to be built.
+
+Here is some documentation I just found:
+http://msdn2.microsoft.com/en-us/library/kdxzbw9t.aspx
+
+JP Fasano
+STSM, Watson Math Department
+jpfasano@us.ibm.com
+(914)945-1324  (tie line 862-1324)
+
+
+
+
 
 
