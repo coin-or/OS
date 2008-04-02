@@ -44,7 +44,6 @@ using std::endl;
 //int main(int argC, char* argV[]){
 int main( ){
 // test OS code samples here
-	int errno;
 	FileUtil *fileUtil = NULL; 
 	fileUtil = new FileUtil();
 	cout << "Start Building the Model" << endl;
@@ -171,6 +170,8 @@ int main( ){
 		osilwriter = NULL;
 		delete solver;
 		solver = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
 		cout << "Done with garbage collection" << endl;
 		return 0;
 		//
