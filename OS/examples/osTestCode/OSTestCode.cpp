@@ -1,27 +1,24 @@
 /** @file osTestCode.cpp
  * 
- * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
+ * @author  Jun Ma, Kipp Martin, 
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
- * This is a dummy executable that does nothing but 
- * print <I>Hello World</I>. I put in test code here when doing
- * various tests.
- * 
- */
+ */ 
  
 
 
 #include <cppad/cppad.hpp> 
 #include "OSConfig.h"
 #include "OSCoinSolver.h"
+#include "OSIpoptSolver.h"
 #include "OSResult.h" 
 #include "OSiLReader.h"        
 #include "OSiLWriter.h"   
@@ -30,8 +27,8 @@
 #include "OSInstance.h"  
 #include "OSFileUtil.h"   
 #include "OSDefaultSolver.h"  
-#include "OSWSUtil.h" 
-#include "OSSolverAgent.h"   
+//#include "OSWSUtil.h" 
+//#include "OSSolverAgent.h"   
 #include "OShL.h"     
 #include "OSErrorClass.h"
 #include "OSmps2osil.h"   
@@ -44,20 +41,16 @@
 using std::cout;   
 using std::endl;
 
-
-
-
-
 //int main(int argC, char* argV[]){
 int main( ){
 // test OS code samples here
+	int errno;
 	FileUtil *fileUtil = NULL; 
 	fileUtil = new FileUtil();
 	cout << "Start Building the Model" << endl;
 	try{
-		OSInstance *osinstance;
-		osinstance = new OSInstance();
-		//
+		OSInstance *osinstance = new OSInstance();
+
 		// put in some of the OSInstance <instanceHeader> information
 		osinstance->setInstanceSource("From Anderson, Sweeney, Williams, and Martin");
 		osinstance->setInstanceDescription("The Par Inc. Problem");
@@ -74,8 +67,7 @@ int main( ){
 		// now add the objective function
 		osinstance->setObjectiveNumber( 1);
 		// now the coefficient
-		SparseVector *objcoeff;
-		objcoeff = new SparseVector(2);   
+		SparseVector *objcoeff = new SparseVector(2);   
 		objcoeff->indexes[ 0] = 0;
 		objcoeff->values[ 0] = 10;
 		objcoeff->indexes[ 1] = 1;
@@ -93,13 +85,13 @@ int main( ){
 		osinstance->addConstraint(1, "row1", -OSDBL_MAX, 600, 0);
 		osinstance->addConstraint(2, "row2", -OSDBL_MAX, 708, 0);
 		osinstance->addConstraint(3, "row3", -OSDBL_MAX, 135, 0); 
-		//
-		//
-		// now add the <linearConstraintCoefficients>
-		//bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor, 
-		//double* values, int valuesBegin, int valuesEnd, 
-		//int* indexes, int indexesBegin, int indexesEnd,   			
-		//int* starts, int startsBegin, int startsEnd);	
+		/*
+		now add the <linearConstraintCoefficients>
+		first do column major
+		bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor, 
+		double* values, int valuesBegin, int valuesEnd, 
+		int* indexes, int indexesBegin, int indexesEnd,   			
+		int* starts, int startsBegin, int startsEnd);	
 		double *values = new double[ 8];
 		int *indexes = new int[ 8];
 		int *starts = new int[ 3];  
@@ -117,7 +109,7 @@ int main( ){
 		indexes[ 3] = 3;
 		indexes[ 4] = 0;
 		indexes[ 5] = 1;
-		indexes[ 6] = 2;
+		indexes[ 6] = 2;  
 		indexes[ 7] = 3;
 		starts[ 0] = 0;
 		starts[ 1] = 4;
@@ -125,32 +117,63 @@ int main( ){
 		cout << "Call setLinearConstraintCoefficients" << endl;
 		osinstance->setLinearConstraintCoefficients(8, true, values, 0, 7, 
 			indexes, 0, 7, starts, 0, 2);	
+		
+		now row major
+		*/
+		double *values = new double[ 8];
+		int *indexes = new int[ 8];
+		int *starts = new int[ 5];  
+		values[ 0] = .7;
+		values[ 1] = 1;
+		values[ 2] = .5;
+		values[ 3] = 5./6.;
+		values[ 4] = 1.0;
+		values[ 5] = 2./3.;
+		values[ 6] = .1;
+		values[ 7] = .25;
+		indexes[ 0] = 0;
+		indexes[ 1] = 1;
+		indexes[ 2] = 0;
+		indexes[ 3] = 1;
+		indexes[ 4] = 0;
+		indexes[ 5] = 1;
+		indexes[ 6] = 0;  
+		indexes[ 7] = 1;
+		starts[ 0] = 0;
+		starts[ 1] = 2;
+		starts[ 2] = 4;
+		starts[ 3] = 6;
+		starts[ 4] = 8;
+		cout << "Call setLinearConstraintCoefficients" << endl;
+		osinstance->setLinearConstraintCoefficients(8, false, values, 0, 7, 
+			indexes, 0, 7, starts, 0, 4);
 		cout << "End Building the Model" << endl; 
 		// Write out the model
-		OSiLWriter *osilwriter;
+		OSiLWriter *osilwriter; 
 		osilwriter = new OSiLWriter();
 		cout << osilwriter->writeOSiL( osinstance);
 		// done writing the model
 		cout << "Done writing the Model" << endl;
 		// now solve the model
-		CoinSolver *solver  = NULL;
-		solver = new CoinSolver();
+		CoinSolver *solver = new CoinSolver();
+		//IpoptSolver *solver = new IpoptSolver();
 		solver->osinstance = osinstance;
 		solver->sSolverName ="clp"; 
 		cout << "call the COIN - Clp Solver" << endl;
-		// we want a fractional solution
-		//osinstance->instanceData->constraints->con[0]->ub = 620;
 		solver->buildSolverInstance();
 		solver->solve();
 		std::cout << solver->osrl << std::endl;
-
+ 
 		// do garbage collection
 		delete osinstance;
 		osinstance = NULL;
 		delete osilwriter;
 		osilwriter = NULL;
+		delete solver;
+		solver = NULL;
 		cout << "Done with garbage collection" << endl;
 		return 0;
+		//
 	}
 	catch(const ErrorClass& eclass){
 		delete fileUtil;
