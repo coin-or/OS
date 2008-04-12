@@ -75,6 +75,8 @@ int main( ){
 		solver->osinstance = osilreader->readOSiL( osil);;
 		cout << "call the COIN - Clp Solver" << endl;
 		solver->buildSolverInstance();
+		// suppress LP output
+		solver->osiSolver->setHintParam(OsiDoReducePrint, true, OsiHintTry);
 		solver->osiSolver->initialSolve();
 		cout << endl << endl << endl;
 		cout << "Here is the p0033 objective value "  << solver->osiSolver->getObjValue()  << endl;

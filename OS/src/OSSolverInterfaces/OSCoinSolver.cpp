@@ -279,7 +279,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 		// now some other Osi options
 		osiSolver->setHintParam(OsiDoScale, false, OsiHintTry);
 		osiSolver->setHintParam(OsiDoReducePrint, true, OsiHintTry);
-		OsiSolverInterface *m_OsiSolverPre = NULL;	
+		//OsiSolverInterface *m_OsiSolverPre = NULL;	
 		// try to catch Coin Solver errors
 		try{
 			if( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0){
@@ -290,12 +290,14 @@ void CoinSolver::solve() throw (ErrorClass) {
 				}
 				else{
 					// this is Solver Cbc
+					OsiSolverInterface *m_OsiSolverPre = NULL;
+				    //model.solver()->messageHandler()->setLogLevel(0);
 					// initial solve does not work on Jeff Camm problem without scaling
 					//osiSolver->initialSolve();
 					// copy from John Forrest examples in Cbc
 					CglPreProcess process;
 	                /* Do not try and produce equality cliques and
-	                   do up to 10 passes -- I use 10 because John does in Cbc and he is brilliant*/
+	                   do up to 10 pass;es -- I use 10 because John does in Cbc and he is brilliant*/
 					m_OsiSolverPre = process.preProcess(*osiSolver, false, 10);
 	                if (!osiSolver) {
 	                  throw ErrorClass("Pre-processing says infeasible");
@@ -304,9 +306,15 @@ void CoinSolver::solve() throw (ErrorClass) {
 	                		m_OsiSolverPre->getNumRows(), m_OsiSolverPre->getNumCols());
 	                } 
 	               osiSolver->setHintParam( OsiDoScale, true, OsiHintDo) ;
-	               m_OsiSolverPre->branchAndBound( ); 
+	               
+	               CbcModel model( *m_OsiSolverPre);
+	               model.setLogLevel( 0);
+				   model.branchAndBound();
+	               //osiSolver->messageHandler()->setLogLevel( 0) ;
+	               //m_OsiSolverPre->branchAndBound( ); 
 	               cout << "CALL POSTPROCESS " << endl;
-	               process.postProcess( *m_OsiSolverPre);
+	               //process.postProcess( *m_OsiSolverPre);
+	               process.postProcess( *model.solver() );
 	               cout << "DONE WITH CALL POSTROCESS " << endl;
 				}
 			}
