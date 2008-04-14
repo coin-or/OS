@@ -291,9 +291,6 @@ void CoinSolver::solve() throw (ErrorClass) {
 				else{
 					// this is Solver Cbc
 					OsiSolverInterface *m_OsiSolverPre = NULL;
-				    //model.solver()->messageHandler()->setLogLevel(0);
-					// initial solve does not work on Jeff Camm problem without scaling
-					//osiSolver->initialSolve();
 					// copy from John Forrest examples in Cbc
 					CglPreProcess process;
 	                /* Do not try and produce equality cliques and
@@ -308,7 +305,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 	               osiSolver->setHintParam( OsiDoScale, true, OsiHintDo) ;
 	               
 	               CbcModel model( *m_OsiSolverPre);
-	               model.setLogLevel( 0);
+	               model.setLogLevel( 1);
 				   model.branchAndBound();
 	               //osiSolver->messageHandler()->setLogLevel( 0) ;
 	               //m_OsiSolverPre->branchAndBound( ); 
