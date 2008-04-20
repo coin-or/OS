@@ -18,7 +18,16 @@
 #include <cppad/cppad.hpp> 
 #include "OSConfig.h"
 #include "OSCoinSolver.h"
-#include "OSIpoptSolver.h"
+
+#ifdef COIN_HAS_IPOPT  
+	#ifndef COIN_HAS_ASL
+		#include "OSIpoptSolver.h"
+		#undef COIN_HAS_ASL
+	#else
+		#include "OSIpoptSolver.h"
+	#endif
+#endif
+
 #include "OSResult.h" 
 #include "OSiLReader.h"        
 #include "OSiLWriter.h"   
