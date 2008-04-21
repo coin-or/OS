@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/OSoL.xsd">
  	<general>  
- 		<jobID>xyz123Dec3010AM</jobID>
+ 		<jobID>GSBKIP__192.168.0.219_128.135.211.219_192.168.234.235__2008-04-20T16.04.55.936-05.00544633780</jobID>
  		<contact transportType="smtp">
  			kipp.martin@chicagogsb.edu
  		</contact>       
