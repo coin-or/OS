@@ -10,9 +10,9 @@ SYMPHONY       https://projects.coin-or.org/svn/SYMPHONY/stable/5.1/SYMPHONY
 ThirdParty/ASL https://projects.coin-or.org/svn/BuildTools/ThirdParty/ASL/stable/1.0
 ThirdParty/Blas https://projects.coin-or.org/svn/BuildTools/ThirdParty/Blas/stable/1.0
 ThirdParty/Glpk https://projects.coin-or.org/svn/BuildTools/ThirdParty/Glpk/stable/1.3
-ThirdParty/HSL https://projects.coin-or.org/svn/BuildTools/ThirdParty/HSL/stable/1.0
+ThirdParty/HSL https://projects.coin-or.org/svn/BuildTools/ThirdParty/HSL/stable/1.1
 ThirdParty/Lapack https://projects.coin-or.org/svn/BuildTools/ThirdParty/Lapack/stable/1.0
 ThirdParty/Mumps https://projects.coin-or.org/svn/BuildTools/ThirdParty/Mumps/stable/1.0
 DyLP           https://projects.coin-or.org/svn/DyLP/stable/1.4/DyLP
-Ipopt          https://projects.coin-or.org/svn/Ipopt/stable/3.3/Ipopt
-cppad          https://projects.coin-or.org/svn/CppAD/stable/2.0/
+Ipopt          https://projects.coin-or.org/svn/Ipopt/stable/3.4/Ipopt
+cppad          https://projects.coin-or.org/svn/CppAD/stable/2.3/
