@@ -18,6 +18,7 @@ OS/MSVisualStudio/v7/OSTest/OSTest.vcproj -text
 OS/MSVisualStudio/v7/libOS/libOS.vcproj -text
 OS/MSVisualStudio/v7/libOSCommon/libOSCommon.vcproj -text
 OS/MSVisualStudio/v8/OS.sln -text
+OS/MSVisualStudio/v8/OSAmplClient/OSamplclient.vcproj -text
 OS/MSVisualStudio/v8/OSApplication-fileUpload/OSApplication-fileUpload.vcproj -text
 OS/MSVisualStudio/v8/OSExample-algorithmicDiff/OSExample-algorithmicDiff.vcproj -text
 OS/MSVisualStudio/v8/OSExample-instanceGenerator/OSExample-instanceGenerator.vcproj -text
@@ -26,6 +27,7 @@ OS/MSVisualStudio/v8/OSSolverService/OSSolverService.vcproj -text
 OS/MSVisualStudio/v8/OSTest/OSTest.vcproj -text
 OS/MSVisualStudio/v8/libOS/libOS.vcproj -text
 OS/MSVisualStudio/v8/libOSCommon/libOSCommon.vcproj -text
+OS/MSVisualStudio/v8/libOSnl2OSiL/libOSnl2OSiL.vcproj -text
 OS/Makefile.am -text
 OS/Makefile.in -text
 OS/README -text
