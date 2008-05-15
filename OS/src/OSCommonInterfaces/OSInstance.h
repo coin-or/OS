@@ -2488,42 +2488,42 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	* (I.e., for each stage numberOfVariables gives the number of variables accociated 
 	* with this stage and startIdx gives the first variable in this stage.)
 	*/
-	bool OSInstance::setTimeDomainStageVariablesOrdered(int numberOfStages, int *numberOfVariables, int *startIdx);
+	bool setTimeDomainStageVariablesOrdered(int numberOfStages, int *numberOfVariables, int *startIdx);
 
 	/**
 	* This sets the variables associated with each time domain stage in srbitrary order.
 	* (I.e., for each stage numberOfVariables gives the number of variables accociated 
 	* with this stage and varIndex[i] gives the index of each variable in stage[i].)
 	*/
-	bool OSInstance::setTimeDomainStageVariablesUnordered(int numberOfStages, int *numberOfVariables, int **varIndex);
+	bool setTimeDomainStageVariablesUnordered(int numberOfStages, int *numberOfVariables, int **varIndex);
 
 	/**
 	* This sets the constraints associated with each time domain stage in temporal order.
 	* (I.e., for each stage numberOfConstraints gives the number of constraints accociated 
 	* with this stage and startIdx gives the first constraint in this stage.)
 	*/
-	bool OSInstance::setTimeDomainStageConstraintsOrdered(int numberOfStages, int *numberOfConstraints, int *startIdx);
+	bool setTimeDomainStageConstraintsOrdered(int numberOfStages, int *numberOfConstraints, int *startIdx);
 
 	/**
 	* This sets the constraints associated with each time domain stage in srbitrary order.
 	* (I.e., for each stage numberOfConstraints gives the number of constraints accociated 
 	* with this stage and conIndex[i] gives the index of each constraint in stage[i].)
 	*/
-	bool OSInstance::setTimeDomainStageConstraintsUnordered(int numberOfStages, int *numberOfConstraints, int **conIndex);
+	bool setTimeDomainStageConstraintsUnordered(int numberOfStages, int *numberOfConstraints, int **conIndex);
 
 	/**
 	* This sets the objectives associated with each time domain stage in temporal order.
 	* (I.e., for each stage numberOfObjectives gives the number of objectives accociated 
 	* with this stage and startIdx gives the first objective in this stage.)
 	*/
-	bool OSInstance::setTimeDomainStageObjectivesOrdered(int numberOfStages, int *numberOfObjectives, int *startIdx);
+	bool setTimeDomainStageObjectivesOrdered(int numberOfStages, int *numberOfObjectives, int *startIdx);
 
 	/**
 	* This sets the objectives associated with each time domain stage in arbitrary order.
 	* (I.e., for each stage numberOfObjectives gives the number of objectives accociated 
 	* with this stage and objIndex[i] gives the index of each objective in stage[i].)
 	*/
-	bool OSInstance::setTimeDomainStageObjectivesUnordered(int numberOfStages, int *numberOfObjectives, int **varIndex);
+	bool setTimeDomainStageObjectivesUnordered(int numberOfStages, int *numberOfObjectives, int **varIndex);
 
 	/**
 	 * This sets the start and end of the time interval

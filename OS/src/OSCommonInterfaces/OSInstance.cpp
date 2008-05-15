@@ -701,7 +701,7 @@ TimeDomainStageVariables::~TimeDomainStageVariables()
 			delete var[i];
 			var[i] = NULL;
 		}
-	};
+	}
 	delete [] var;
 	var = NULL;
 } // end ~TimeDomainStageVariables
@@ -743,7 +743,7 @@ TimeDomainStageConstraints::~TimeDomainStageConstraints()
 			delete con[i];
 			con[i] = NULL;
 		}
-	};
+	}
 	delete [] con;
 	con = NULL;
 } // end ~TimeDomainStageConstraints
@@ -785,7 +785,7 @@ TimeDomainStageObjectives::~TimeDomainStageObjectives()
 			delete obj[i];
 			obj[i] = NULL;
 		}
-	};
+	}
 	delete [] obj;
 	obj = NULL;
 } // end ~TimeDomainStageObjectives
@@ -879,11 +879,11 @@ TimeDomain::~TimeDomain()
 	if (stages != NULL)
 	{	delete stages;
 		stages = NULL;
-	};
+	}
 	if (interval != NULL)
 	{	delete interval;
 		interval = NULL;
-	};
+	}
 } 
 
 
@@ -919,7 +919,7 @@ InstanceData::~InstanceData(){
 	if (timeDomain != NULL)
 	{   delete timeDomain;
 		timeDomain = NULL;
-	};
+	}
 } 
 
 string OSInstance::getInstanceName(){
@@ -1680,7 +1680,7 @@ char* OSInstance::getTimeDomainFormat()
 	if (instanceData->timeDomain->stages != NULL)
 		return "stages";
 	return "";
-}; 
+} 
 
 /**
  * Get the number of stages that make up the time domain
@@ -1695,7 +1695,7 @@ int OSInstance::getTimeDomainStageNumber()
 	if (instanceData->timeDomain->stages == NULL)
 		return 1;
 	return instanceData->timeDomain->stages->numberOfStages;
-}; 
+} 
 	
 /**
  * Get the names of the stages (NULL or empty string ("") if a stage has not been given a name
@@ -1717,7 +1717,7 @@ std::string* OSInstance::getTimeDomainStageNames()
 	for (int i = 0; i < instanceData->timeDomain->stages->numberOfStages; i++)
 		m_msTimeDomainStageNames[i] = instanceData->timeDomain->stages->stage[i]->name;
 	return m_msTimeDomainStageNames;
-}; 
+} 
 	
 /**
  * Get the number of variables contained in each time stage
@@ -1739,7 +1739,7 @@ int* OSInstance::getTimeDomainStageNumberOfVariables()
 	for (int i = 0; i < instanceData->timeDomain->stages->numberOfStages; i++) 
 		m_miTimeDomainStageVariableNumber[i] = instanceData->timeDomain->stages->stage[i]->variables->numberOfVariables;
 	return m_miTimeDomainStageVariableNumber;
-}; 
+} 
 	
 /**
  * Get the number of variables contained in each time stage
@@ -1761,7 +1761,7 @@ int* OSInstance::getTimeDomainStageNumberOfConstraints()
 	for (int i = 0; i < instanceData->timeDomain->stages->numberOfStages; i++)
 		m_miTimeDomainStageConstraintNumber[i] = instanceData->timeDomain->stages->stage[i]->constraints->numberOfConstraints;
 	return m_miTimeDomainStageConstraintNumber;
-}; 
+} 
 
 /**
  * Get the number of objectives contained in each time stage
@@ -1783,7 +1783,7 @@ int* OSInstance::getTimeDomainStageNumberOfObjectives()
 	for (int i = 0; i < instanceData->timeDomain->stages->numberOfStages; i++)
 		m_miTimeDomainStageObjectiveNumber[i] = instanceData->timeDomain->stages->stage[i]->objectives->numberOfObjectives;
 	return m_miTimeDomainStageObjectiveNumber;
-}; 
+} 
 	
 /**
  * Get the list of variables in each stage
@@ -1812,9 +1812,9 @@ int** OSInstance::getTimeDomainStageVarList()
 		else
 			for (int j = 0; j < m_miTimeDomainStageVariableNumber[i]; j++)
 				m_mmiTimeDomainStageVarList[i][j] = instanceData->timeDomain->stages->stage[i]->variables->startIdx + j;
-	};
+	}
 	return m_mmiTimeDomainStageVarList;
-}; 
+} 
 	
 /**
  * Get the list of constraints in each stage
@@ -1843,9 +1843,9 @@ int** OSInstance::getTimeDomainStageConList()
 		else
 			for (int j = 0; j < m_miTimeDomainStageConstraintNumber[i]; j++)
 				m_mmiTimeDomainStageConList[i][j] = instanceData->timeDomain->stages->stage[i]->constraints->startIdx + j;
-	};
+	}
 	return m_mmiTimeDomainStageConList;
-}; 
+} 
 /**
  * Get the list of objectives in each stage
  * 
@@ -1873,9 +1873,9 @@ int** OSInstance::getTimeDomainStageObjList()
 		else
 			for (int j = 0; j < m_miTimeDomainStageObjectiveNumber[i]; j++)
 				m_mmiTimeDomainStageObjList[i][j] = instanceData->timeDomain->stages->stage[i]->objectives->startIdx - j;
-	};
+	}
 	return m_mmiTimeDomainStageObjList;
-}; 
+} 
 
 /**
  * Get the start for the time domain interval
@@ -1890,7 +1890,7 @@ double OSInstance::getTimeDomainIntervalStart()
 	if (instanceData->timeDomain->interval == NULL)
 		return 0.0;
 	return instanceData->timeDomain->interval->start;
-}; 
+} 
 
 /**
  * Get the horizon for the time domain interval
@@ -1905,7 +1905,7 @@ double OSInstance::getTimeDomainIntervalHorizon()
 	if (instanceData->timeDomain->interval == NULL)
 		return 0.0;
 	return instanceData->timeDomain->interval->horizon;
-}; 
+} 
 
 
 
@@ -3678,38 +3678,38 @@ bool OSInstance::setTimeDomain(std::string format)
 		return false;
 	if (instanceData->timeDomain == NULL)
 	{	instanceData->timeDomain = new TimeDomain();
-	};
+	}
 	if (format == "stages")
 	{	if (instanceData->timeDomain->interval != NULL)
 		{	delete instanceData->timeDomain->interval;
 			instanceData->timeDomain->interval = NULL;
-		};
+		}
 		if (instanceData->timeDomain->stages == NULL)
 			instanceData->timeDomain->stages = new TimeDomainStages();
 		m_sTimeDomainFormat = format;
-	};
+	}
 	if (format == "interval")
 	{	if (instanceData->timeDomain->stages != NULL)
 		{	delete instanceData->timeDomain->stages;
 			instanceData->timeDomain->stages = NULL;
-		};
+		}
 		if (instanceData->timeDomain->interval == NULL)
 			instanceData->timeDomain->interval = new TimeDomainInterval();
 		m_sTimeDomainFormat = format;
-	};
+	}
 	if (format == "none")
 	{	if (instanceData->timeDomain->stages != NULL)
 		{	delete instanceData->timeDomain->stages;
 			instanceData->timeDomain->stages = NULL;
-		};
+		}
 		if (instanceData->timeDomain->interval != NULL)
 		{	delete instanceData->timeDomain->interval;
 			instanceData->timeDomain->interval = NULL;
-		};
+		}
 		m_sTimeDomainFormat = "";
-	};
+	}
 	return true;
-}; //end setTimeDomain
+} //end setTimeDomain
 
 /**
  * set time domain stages
@@ -3728,58 +3728,58 @@ bool OSInstance::setTimeDomainStages(int number, std::string *names)
 			{	if (instanceData->timeDomain->stages->stage[i]->variables != NULL)
 				{	delete instanceData->timeDomain->stages->stage[i]->variables;
 					instanceData->timeDomain->stages->stage[i]->variables = NULL;
-				};
+				}
 				if (instanceData->timeDomain->stages->stage[i]->constraints != NULL)
 				{	delete instanceData->timeDomain->stages->stage[i]->constraints;
 					instanceData->timeDomain->stages->stage[i]->constraints = NULL;
-				};
+				}
 				if (instanceData->timeDomain->stages->stage[i]->objectives != NULL)
 				{	delete instanceData->timeDomain->stages->stage[i]->objectives;
 					instanceData->timeDomain->stages->stage[i]->objectives = NULL;
-				};
+				}
 				delete instanceData->timeDomain->stages->stage[i];
 				instanceData->timeDomain->stages->stage[i] = NULL;
-			};
+			}
 			delete []instanceData->timeDomain->stages->stage;
 			instanceData->timeDomain->stages->stage = NULL;
-		};
-	};
+		}
+	}
 	if (number != 0 )
 	{	if (instanceData->timeDomain->stages->stage == NULL)
 			instanceData->timeDomain->stages->stage = new TimeDomainStage*[number];
 		for (int i = 0; i < number; i++)
 		{	instanceData->timeDomain->stages->stage[i] = new TimeDomainStage();
-		};
+		}
 		instanceData->timeDomain->stages->numberOfStages = number;
-	};
+	}
 	for (int i = 0; i < number; i++)
 	//initial or empty vars, cons, objectives and set default to all objectives
 	{	if (instanceData->timeDomain->stages->stage[i]->variables != NULL)
 		{	delete instanceData->timeDomain->stages->stage[i]->variables;
 			instanceData->timeDomain->stages->stage[i]->variables = NULL;
-		};
+		}
 		instanceData->timeDomain->stages->stage[i]->variables = new TimeDomainStageVariables();
 		if (instanceData->timeDomain->stages->stage[i]->constraints != NULL)
 		{	delete instanceData->timeDomain->stages->stage[i]->constraints;
 			instanceData->timeDomain->stages->stage[i]->constraints = NULL;
-		};
+		}
 		instanceData->timeDomain->stages->stage[i]->constraints = new TimeDomainStageConstraints();
 		if (instanceData->timeDomain->stages->stage[i]->objectives != NULL)
 		{	delete instanceData->timeDomain->stages->stage[i]->objectives;
 			instanceData->timeDomain->stages->stage[i]->objectives = NULL;
-		};
-		instanceData->timeDomain->stages->stage[i]->objectives = new TimeDomainStageObjectives();;
+		}
+		instanceData->timeDomain->stages->stage[i]->objectives = new TimeDomainStageObjectives();
 		instanceData->timeDomain->stages->stage[i]->objectives->numberOfObjectives = instanceData->objectives->numberOfObjectives;
 		instanceData->timeDomain->stages->stage[i]->objectives->obj = new TimeDomainStageObj*[instanceData->objectives->numberOfObjectives];
 		for (int j = 0; j < instanceData->objectives->numberOfObjectives; j++)
 		{	instanceData->timeDomain->stages->stage[i]->objectives->obj[j] = new TimeDomainStageObj();
 			instanceData->timeDomain->stages->stage[i]->objectives->obj[j]->idx = -(j+1);
-		};
+		}
 		if (names != NULL)
 			instanceData->timeDomain->stages->stage[i]->name = names[i];
-	};
+	}
 	return true;
-}; //end setTimeDomainStages
+} //end setTimeDomainStages
 
 /**
  * set time domain stage variables in temporal order
@@ -3795,28 +3795,28 @@ bool OSInstance::setTimeDomainStageVariablesOrdered(int numberOfStages, int *num
 	{	if ((instanceData->timeDomain->stages->numberOfStages != numberOfStages) &&
 			(instanceData->timeDomain->stages->numberOfStages != 0))
 			 return false;
-	};
+	}
 	if (instanceData->timeDomain->stages->numberOfStages == 0)
 	{	instanceData->timeDomain->stages->numberOfStages = numberOfStages;
 		if (instanceData->timeDomain->stages->stage == NULL)
 			instanceData->timeDomain->stages->stage = new TimeDomainStage*[numberOfStages];
 		for (int i = 0; i < numberOfStages; i++)
 			instanceData->timeDomain->stages->stage[i] = new TimeDomainStage();
-	};
+	}
 	int checksum = 0;
 	for (int i = 0; i < numberOfStages; i++)
 	//initial or empty vars, cons, objectives and set default to all objectives
 	{	if (instanceData->timeDomain->stages->stage[i]->variables != NULL)
 		{	delete instanceData->timeDomain->stages->stage[i]->variables;
 			instanceData->timeDomain->stages->stage[i]->variables = NULL;
-		};
+		}
 		instanceData->timeDomain->stages->stage[i]->variables = new TimeDomainStageVariables();
 		instanceData->timeDomain->stages->stage[i]->variables->startIdx = startIdx[i];
 		instanceData->timeDomain->stages->stage[i]->variables->numberOfVariables = numberOfVariables[i];
 		checksum += numberOfVariables[i];
-	};
+	}
 	return (checksum == instanceData->variables->numberOfVariables);
-}; //end setTimeDomainVariablesOrdered
+} //end setTimeDomainVariablesOrdered
 
 /**
  * set time domain stage variables in arbitrary order
@@ -3832,30 +3832,30 @@ bool OSInstance::setTimeDomainStageVariablesUnordered(int numberOfStages, int *n
 	{	if ((instanceData->timeDomain->stages->numberOfStages != numberOfStages) &&
 			(instanceData->timeDomain->stages->numberOfStages != 0))
 			 return false;
-	};
+	}
 	if (instanceData->timeDomain->stages->numberOfStages == 0 )
 	{	instanceData->timeDomain->stages->numberOfStages = numberOfStages;
 		if (instanceData->timeDomain->stages->stage == NULL)
 			instanceData->timeDomain->stages->stage = new TimeDomainStage*[numberOfStages];
 		for (int i = 0; i < numberOfStages; i++)
 			instanceData->timeDomain->stages->stage[i] = new TimeDomainStage();
-	};
+	}
 	int checksum = 0;
 	for (int i = 0; i < numberOfStages; i++)
 	//initial or empty vars, cons, objectives and set default to all objectives
 	{	if (instanceData->timeDomain->stages->stage[i]->variables != NULL)
 		{	delete instanceData->timeDomain->stages->stage[i]->variables;
 			instanceData->timeDomain->stages->stage[i]->variables = NULL;
-		};
+		}
 		instanceData->timeDomain->stages->stage[i]->variables = new TimeDomainStageVariables();
 		instanceData->timeDomain->stages->stage[i]->variables->numberOfVariables = numberOfVariables[i];
 		instanceData->timeDomain->stages->stage[i]->variables->var = new TimeDomainStageVar*[numberOfVariables[i]];
 		for (int j = 0; j < numberOfVariables[i]; j++)
 		{	instanceData->timeDomain->stages->stage[i]->variables->var[j] = new TimeDomainStageVar();
 			instanceData->timeDomain->stages->stage[i]->variables->var[j]->idx = varIndex[i][j];
-		};
+		}
 		checksum += numberOfVariables[i];
-	};
+	}
 	if (checksum != instanceData->variables->numberOfVariables) return false;
 	int *checkvar = new int[instanceData->variables->numberOfVariables];
 	for (int j = 0; j < instanceData->variables->numberOfVariables; j++)
@@ -3868,13 +3868,13 @@ bool OSInstance::setTimeDomainStageVariablesUnordered(int numberOfStages, int *n
 			{	delete [] checkvar;
 				checkvar = NULL;
 				return false;
-			};
+			}
 			checkvar[k] = instanceData->timeDomain->stages->stage[i]->variables->var[j]->idx;
-		};
+		}
 	delete [] checkvar;
 	checkvar = NULL;			
 	return true;
-}; //end setTimeDomainVariablesUnordered
+} //end setTimeDomainVariablesUnordered
 
 /**
  * set time domain stage constraints in temporal order
@@ -3890,28 +3890,28 @@ bool OSInstance::setTimeDomainStageConstraintsOrdered(int numberOfStages, int *n
 	{	if ((instanceData->timeDomain->stages->numberOfStages != numberOfStages) &&
 			(instanceData->timeDomain->stages->numberOfStages != 0))
 			 return false;
-	};
+	}
 	if (instanceData->timeDomain->stages->numberOfStages == 0 )
 	{	instanceData->timeDomain->stages->numberOfStages = numberOfStages;
 		if (instanceData->timeDomain->stages->stage == NULL)
 			instanceData->timeDomain->stages->stage = new TimeDomainStage*[numberOfStages];
 		for (int i = 0; i < numberOfStages; i++)
 			instanceData->timeDomain->stages->stage[i] = new TimeDomainStage();
-	};
+	}
 	int checksum = 0;
 	for (int i = 0; i < numberOfStages; i++)
 	//initial or empty vars, cons, objectives and set default to all objectives
 	{	if (instanceData->timeDomain->stages->stage[i]->constraints != NULL)
 		{	delete instanceData->timeDomain->stages->stage[i]->constraints;
 			instanceData->timeDomain->stages->stage[i]->constraints = NULL;
-		};
+		}
 		instanceData->timeDomain->stages->stage[i]->constraints = new TimeDomainStageConstraints();
 		instanceData->timeDomain->stages->stage[i]->constraints->startIdx = startIdx[i];
 		instanceData->timeDomain->stages->stage[i]->constraints->numberOfConstraints = numberOfConstraints[i];
 		checksum += numberOfConstraints[i];
-	};
+	}
 	return (checksum == instanceData->constraints->numberOfConstraints);
-}; // end of setTimeStageConstraintsOrdered
+} // end of setTimeStageConstraintsOrdered
 
 /**
  * set time domain stage constraints in arbitrary order
@@ -3927,30 +3927,30 @@ bool OSInstance::setTimeDomainStageConstraintsUnordered(int numberOfStages, int 
 	{	if ((instanceData->timeDomain->stages->numberOfStages != numberOfStages) &&
 			(instanceData->timeDomain->stages->numberOfStages != 0))
 			 return false;
-	};
+	}
 	if ( instanceData->timeDomain->stages->numberOfStages == 0 )
 	{	instanceData->timeDomain->stages->numberOfStages = numberOfStages;
 		if (instanceData->timeDomain->stages->stage == NULL)
 			instanceData->timeDomain->stages->stage = new TimeDomainStage*[numberOfStages];
 		for (int i = 0; i < numberOfStages; i++)
 			instanceData->timeDomain->stages->stage[i] = new TimeDomainStage();
-	};
+	}
 	int checksum = 0;
 	for (int i = 0; i < numberOfStages; i++)
 	//initial or empty vars, cons, objectives and set default to all objectives
 	{	if (instanceData->timeDomain->stages->stage[i]->constraints != NULL)
 		{	delete instanceData->timeDomain->stages->stage[i]->constraints;
 			instanceData->timeDomain->stages->stage[i]->constraints = NULL;
-		};
+		}
 		instanceData->timeDomain->stages->stage[i]->constraints = new TimeDomainStageConstraints();
 		instanceData->timeDomain->stages->stage[i]->constraints->numberOfConstraints = numberOfConstraints[i];
 		instanceData->timeDomain->stages->stage[i]->constraints->con = new TimeDomainStageCon*[numberOfConstraints[i]];
 		for (int j = 0; j < numberOfConstraints[i]; j++)
 		{	instanceData->timeDomain->stages->stage[i]->constraints->con[j] = new TimeDomainStageCon();
 			instanceData->timeDomain->stages->stage[i]->constraints->con[j]->idx = conIndex[i][j];
-		};
+		}
 		checksum += numberOfConstraints[i];
-	};
+	}
 	if (checksum != instanceData->constraints->numberOfConstraints) return false;
 	int *checkvar = new int[instanceData->constraints->numberOfConstraints];
 	for (int j = 0; j < instanceData->constraints->numberOfConstraints; j++)
@@ -3963,13 +3963,13 @@ bool OSInstance::setTimeDomainStageConstraintsUnordered(int numberOfStages, int 
 			{	delete [] checkvar;
 				checkvar = NULL;
 				return false;
-			};
+			}
 			checkvar[k] = instanceData->timeDomain->stages->stage[i]->constraints->con[j]->idx;
-		};
+		}
 	delete [] checkvar;
 	checkvar = NULL;			
 	return true;
-};// end setTimeDomainStageConstraintsUnordered()
+}// end setTimeDomainStageConstraintsUnordered()
 
 /**
  * set time domain stage objectives in temporal order
@@ -3985,26 +3985,26 @@ bool OSInstance::setTimeDomainStageObjectivesOrdered(int numberOfStages, int *nu
 	{	if ((instanceData->timeDomain->stages->numberOfStages != numberOfStages) &&
 			(instanceData->timeDomain->stages->numberOfStages != 0))
 			 return false;
-	};
+	}
 	if (instanceData->timeDomain->stages->numberOfStages == 0)
 	{	instanceData->timeDomain->stages->numberOfStages = numberOfStages;
 		if (instanceData->timeDomain->stages->stage == NULL)
 			instanceData->timeDomain->stages->stage = new TimeDomainStage*[numberOfStages];
 		for (int i = 0; i < numberOfStages; i++)
 			instanceData->timeDomain->stages->stage[i] = new TimeDomainStage();
-	};
+	}
 	for (int i = 0; i < numberOfStages; i++)
 	//initial or empty vars, cons, objectives and set default to all objectives
 	{	if (instanceData->timeDomain->stages->stage[i]->objectives != NULL)
 		{	delete instanceData->timeDomain->stages->stage[i]->objectives;
 			instanceData->timeDomain->stages->stage[i]->objectives = NULL;
-		};
+		}
 		instanceData->timeDomain->stages->stage[i]->objectives = new TimeDomainStageObjectives();
 		instanceData->timeDomain->stages->stage[i]->objectives->startIdx = startIdx[i];
 		instanceData->timeDomain->stages->stage[i]->objectives->numberOfObjectives = numberOfObjectives[i];
-	};
+	}
 	return true;
-};
+}
 
 /**
  * set time domain stage objectives in arbitrary order
@@ -4020,28 +4020,28 @@ bool OSInstance::setTimeDomainStageObjectivesUnordered(int numberOfStages, int *
 	{	if ((instanceData->timeDomain->stages->numberOfStages != numberOfStages) &&
 			(instanceData->timeDomain->stages->numberOfStages != 0))
 			 return false;
-	};
+	}
 	if (instanceData->timeDomain->stages->numberOfStages == 0)
 	{	instanceData->timeDomain->stages->numberOfStages = numberOfStages;
 		if (instanceData->timeDomain->stages->stage == NULL)
 			instanceData->timeDomain->stages->stage = new TimeDomainStage*[numberOfStages];
 		for (int i = 0; i < numberOfStages; i++)
 			instanceData->timeDomain->stages->stage[i] = new TimeDomainStage();
-	};
+	}
 	for (int i = 0; i < numberOfStages; i++)
 	//initial or empty vars, cons, objectives and set default to all objectives
 	{	if (instanceData->timeDomain->stages->stage[i]->objectives != NULL)
 		{	delete instanceData->timeDomain->stages->stage[i]->objectives;
 			instanceData->timeDomain->stages->stage[i]->objectives = NULL;
-		};
+		}
 		instanceData->timeDomain->stages->stage[i]->objectives = new TimeDomainStageObjectives();
 		instanceData->timeDomain->stages->stage[i]->objectives->numberOfObjectives = numberOfObjectives[i];
 		instanceData->timeDomain->stages->stage[i]->objectives->obj = new TimeDomainStageObj*[numberOfObjectives[i]];
 		for (int j = 0; j < numberOfObjectives[i]; j++)
 		{	instanceData->timeDomain->stages->stage[i]->objectives->obj[j] = new TimeDomainStageObj();
 			instanceData->timeDomain->stages->stage[i]->objectives->obj[j]->idx = objIndex[i][j];
-		};
-	};
+		}
+	}
 	int *checkvar = new int[instanceData->objectives->numberOfObjectives];
 	for (int j = 0; j < instanceData->objectives->numberOfObjectives; j++)
 		checkvar[j] = 0;
@@ -4050,17 +4050,17 @@ bool OSInstance::setTimeDomainStageObjectivesUnordered(int numberOfStages, int *
 		for (int j = 0; j < instanceData->timeDomain->stages->stage[i]->objectives->numberOfObjectives; j++)
 		{	k = -instanceData->timeDomain->stages->stage[i]->objectives->obj[j]->idx-1;
 			checkvar[k] = instanceData->timeDomain->stages->stage[i]->objectives->obj[j]->idx;
-		};
+		}
 	for (int i = 0; i < instanceData->objectives->numberOfObjectives; i++)
 		if (checkvar[i] == 0)
 		{	delete [] checkvar;
 			checkvar = NULL;
 			return false;
-		};
+		}
 	delete [] checkvar;
 	checkvar = NULL;			
 	return true;
-};
+}
 
 /**
  * set time domain interval
@@ -4075,5 +4075,5 @@ bool OSInstance::setTimeDomainInterval(double start, double horizon)
 	instanceData->timeDomain->interval->start = start;
 	instanceData->timeDomain->interval->horizon = horizon;
 	return true;
-}; //end setTimeDomainInterval
+} //end setTimeDomainInterval
 
