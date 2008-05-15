@@ -7,7 +7,7 @@
  *
  * \remarks
  * Copyright (C) 2005-2007, Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin,
- * Northwestern University, Dalhsouie University, and the University of Chicago.
+ * Northwestern University, Dalhousie University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -326,7 +326,7 @@ public:
  * quadratic term, and the row in which it appears
  */
 class QuadraticTerm{
-    public:
+public:
     
 	/** The QuadraticTerm class constructor */
 	QuadraticTerm();
@@ -362,7 +362,7 @@ class QuadraticTerm{
  * 
  */
 class QuadraticCoefficients {
-    public:
+public:
     
     /** The QuadraticCoefficients class constructor */
 	QuadraticCoefficients();
@@ -416,7 +416,7 @@ public:
  * <b><nonlinearExpressions></b> element.
  */
 class NonlinearExpressions {
-    public:
+public:
     
     /** The NonlinearExpressions class constructor */
 	NonlinearExpressions();
@@ -434,18 +434,143 @@ class NonlinearExpressions {
 	 * object pointers */	
     Nl **nl;
 }; // NonlinearExpression
- 
+
+
+
+/*! \class TimeDomainStageVar
+ * \brief The in-memory representation of the 
+ * <b><var></b> element.
+ */
+class TimeDomainStageVar {
+public:
+    
+    /** The TimeDomainStageVar class constructor */
+	TimeDomainStageVar();
+	
+	/** The TimeDomainStageVar class destructor */
+	~TimeDomainStageVar();
+	
+	/** idx gives the index of this variable */
+	int idx;
+}; // TimeDomainStageVar
+
+/*! \class TimeDomainStageVariables
+ * \brief The in-memory representation of the 
+ * <b><variables></b> child of the <stage> element.
+ */
+class TimeDomainStageVariables {
+public:
+    
+    /** The TimeDomainStageVariables class constructor */
+	TimeDomainStageVariables();
+	
+	/** The TimeDomainStageVariables class destructor */
+	~TimeDomainStageVariables();
+	
+	/** numberOfVariables gives the number of variables contained in this stage */
+	int numberOfVariables;
+
+	/** startdIdx gives the number of the first variable contained in this stage */
+	int startIdx;
+
+	/** var is a pointer to an array of TimeDomainStageVar object pointers */
+	TimeDomainStageVar** var;
+}; // TimeDomainStageVariables
+
+
+/*! \class TimeDomainStageCon
+ * \brief The in-memory representation of the 
+ * <b><con></b> element.
+ */
+class TimeDomainStageCon {
+public:
+    
+    /** The TimeDomainStageCon class constructor */
+	TimeDomainStageCon();
+	
+	/** The TimeDomainStageCon class destructor */
+	~TimeDomainStageCon();
+	
+	/** idx gives the index of this constraint */
+	int idx;
+}; // TimeDomainStageCon
+
+/*! \class TimeDomainStageConstraints
+ * \brief The in-memory representation of the 
+ * <b><constraints></b> child of the <stage> element.
+ */
+class TimeDomainStageConstraints {
+public:
+    
+    /** The TimeDomainStageConstraints class constructor */
+	TimeDomainStageConstraints();
+	
+	/** The TimeDomainStageConstraints class destructor */
+	~TimeDomainStageConstraints();
+	
+	/** numberOfConstraints gives the number of constraints contained in this stage */
+	int numberOfConstraints;
+
+	/** startdIdx gives the number of the first constraint contained in this stage */
+	int startIdx;
+
+	/** con is a pointer to an array of TimeDomainStageCon object pointers */
+	TimeDomainStageCon** con;
+}; // TimeDomainStageConstraints
+
+
+/*! \class TimeDomainStageObj
+ * \brief The in-memory representation of the 
+ * <b><obj></b> element.
+ */
+class TimeDomainStageObj {
+public:
+    
+    /** The TimeDomainStageObj class constructor */
+	TimeDomainStageObj();
+	
+	/** The TimeDomainStageObj class destructor */
+	~TimeDomainStageObj();
+	
+	/** idx gives the index of this variable */
+	int idx;
+}; // TimeDomainStageObj
+
+/*! \class TimeDomainStageObjectives
+ * \brief The in-memory representation of the 
+ * <b><objectives></b> child of the <stage> element.
+ */
+class TimeDomainStageObjectives {
+public:
+    
+    /** The TimeDomainStageObjectives class constructor */
+	TimeDomainStageObjectives();
+	
+	/** The TimeDomainStageObjectives class destructor */
+	~TimeDomainStageObjectives();
+	
+	/** numberOfObjectives gives the number of objectives contained in this stage */
+	int numberOfObjectives;
+
+	/** startdIdx gives the number of the first objective contained in this stage */
+	int startIdx;
+
+	/** obj is a pointer to an array of TimeDomainStageObj object pointers */
+	TimeDomainStageObj** obj;
+}; // TimeDomainStageObjectives
+
+
 /*! \class TimeDomainStage
  * \brief The in-memory representation of the 
  * <b><stage></b> element.
  */
 class TimeDomainStage {
-    public:
+public:
     
-    /** The Stage class constructor */
+    /** The TimeDomainStage class constructor */
 	TimeDomainStage();
 	
-	/** The Stage class destructor */
+	/** The TimeDomainStage class destructor */
 	~TimeDomainStage();
 	
 	/** name corresponds to the optional attribute that holds
@@ -453,40 +578,22 @@ class TimeDomainStage {
 	 */
 	std::string name;
 	
-	/** nvar gives the number of variables associated with this stage
-	 */
-	int nvar;
-	
-	/** ncon gives the number of constraints associated with this stage
-	 */
-	int ncon;
-	
-	/** nobj gives the number of objectives associated with this stage
-	 */
-	int nobj;
+	/** variables is a pointer to a TimeDomainVariables object */
+	TimeDomainStageVariables *variables;
 
-	/** variables is a pointer to an array of variables
-	 *  associated with this stage
-	 */
-	int *variables;
+	/** constraints is a pointer to a TimeDomainConstraints object */
+	TimeDomainStageConstraints *constraints;
 
-	/** constraints is a pointer to an array of constraints
-	 *  associated with this stage
-	 */
-	int *constraints;
-
-	/** objectives is a pointer to an array of objectives
-	 *  associated with this stage
-	 */
-	int *objectives;
-}; // Stage
+	/** objectives is a pointer to a TimeDomainObjectives object */
+	TimeDomainStageObjectives *objectives;
+}; // TimeDomainStage
  
 /*! \class TimeDomainStages
  * \brief The in-memory representation of the 
  * <b><stages></b> element.
  */
 class TimeDomainStages {
-    public:
+public:
     
     /** The Stages class constructor */
 	TimeDomainStages();
@@ -508,7 +615,7 @@ class TimeDomainStages {
  * <b><interval></b> element.
  */
 class TimeDomainInterval {
-    public:
+public:
     
     /** The Interval class constructor */
 	TimeDomainInterval();
@@ -516,15 +623,15 @@ class TimeDomainInterval {
 	/** The Interval class destructor */
 	~TimeDomainInterval();
 	
-	/** intervalHorizon is the end of the planning period
+	/** horizon is the end of the planning period
 	 * in the <b><interval></b> element.
 	 */
-	double intervalHorizon;
+	double horizon;
 	
-	/** intervalStart is the start of the planning period
+	/** start is the start of the planning period
 	 * in the <b><interval></b> element.
 	 */
-	double intervalStart;
+	double start;
 }; // Interval
  
 /*! \class TimeDomain
@@ -532,7 +639,7 @@ class TimeDomainInterval {
  * <b><timeDomain></b> element.
  */
 class TimeDomain {
-    public:
+public:
     
     /** The TimeDomain class constructor */
 	TimeDomain();
@@ -1186,6 +1293,54 @@ private:
 	int m_iNumberOfTimeStages;
 
 	/**
+	 * m_sTimeDomainFormat holds the format ("stages"/"interval") of the time domain.
+	 */
+	std::string m_sTimeDomainFormat;
+
+	/**
+	 * m_msTimeDomainStageNames holds the names of the time stages.
+	 *
+	 */
+	std::string* m_msTimeDomainStageNames;
+
+	/**
+	 * m_miTimeDomainStageVariableNumber holds the number of variables in each stage.
+	 *
+	 */
+	int* m_miTimeDomainStageVariableNumber;
+
+	/**
+	 * m_mmiTimeDomainStageVarList holds the list of variables in each stage.
+	 *
+	 */
+	int** m_mmiTimeDomainStageVarList;
+
+	/**
+	 * m_miTimeDomainStageConstraintNumber holds the number of constraints in each stage.
+	 *
+	 */
+	int* m_miTimeDomainStageConstraintNumber;
+
+	/**
+	 * m_mmiTimeDomainStageConList holds the list of constraints in each stage.
+	 *
+	 */
+	int** m_mmiTimeDomainStageConList;
+
+	/**
+	 * m_miTimeDomainStageObjectiveNumber holds the number of objectives in each stage.
+	 *
+	 */
+	int* m_miTimeDomainStageObjectiveNumber;
+
+	/**
+	 * m_mmiTimeDomainStageObjList holds the list of objectives in each stage.
+	 *
+	 */
+	int** m_mmiTimeDomainStageObjList;
+
+
+	/**
 	 * process variables. 
 	 * 
 	 * @return true if the variables are processed. 
@@ -1222,7 +1377,6 @@ private:
 	
 public:
 
-	
 	/**
 	 * Get instance name. 
 	 * @return instance name. Null or empty std::string ("") if there is no instance name. 
@@ -1585,7 +1739,7 @@ public:
 	
 	
 	 /**
-   	 * Get the number of unique Nonlinear exrpession tree indexes. 
+   	 * Get the number of unique Nonlinear expression tree indexes. 
    	 * 
    	 * @return the number of unique nonlinear expression tree indexes. 
    	 */
@@ -1602,12 +1756,91 @@ public:
 	
 	
 	 /**
-   	 * Get the number of unique Nonlinear exrpession tree indexes after
+   	 * Get the number of unique Nonlinear expression tree indexes after
    	 * modifying the expression tree to contain quadratic terms. 
    	 * 
    	 * @return the number of unique nonlinear expression tree indexes (including quadratic terms). 
    	 */
 	int getNumberOfNonlinearExpressionTreeModIndexes(); 
+	
+	
+	 /**
+   	 * Get the format of the time domain ("stages"/"interval")
+   	 * 
+   	 * @return the format of the time domain. 
+   	 */
+	char* getTimeDomainFormat(); 
+	
+	 /**
+   	 * Get the number of stages that make up the time domain
+   	 * 
+   	 * @return the number of time stages. 
+   	 */
+	int getTimeDomainStageNumber(); 
+	
+	 /**
+   	 * Get the names of the stages (NULL or empty string ("") if a stage has not been given a name
+   	 * 
+   	 * @return the names of time stages. 
+   	 */
+	std::string* getTimeDomainStageNames(); 
+	
+	 /**
+   	 * Get the number of variables contained in each time stage
+   	 * 
+   	 * @return a vector of size numberOfStages. 
+   	 */
+	int* getTimeDomainStageNumberOfVariables(); 
+	
+	 /**
+   	 * Get the number of constraints contained in each time stage
+   	 * 
+   	 * @return a vector of size numberOfStages. 
+   	 */
+	int* getTimeDomainStageNumberOfConstraints(); 
+	
+	 /**
+   	 * Get the number of objectives contained in each time stage
+   	 * 
+   	 * @return a vector of size numberOfStages. 
+   	 */
+	int* getTimeDomainStageNumberOfObjectives(); 
+	
+	 /**
+   	 * Get the list of variables in each stage
+   	 * 
+   	 * @return one array of integers for each stage. 
+   	 */
+	int** getTimeDomainStageVarList(); 
+	
+	 /**
+   	 * Get the list of constraints in each stage
+   	 * 
+   	 * @return one array of integers for each stage. 
+   	 */
+	int** getTimeDomainStageConList(); 
+	
+	 /**
+   	 * Get the list of objectives in each stage
+   	 * 
+   	 * @return one array of integers for each stage. 
+   	 */
+	int** getTimeDomainStageObjList(); 
+
+	 /**
+   	 * Get the start for the time domain interval
+   	 * 
+   	 * @return start end of the time interval. 
+   	 */
+	double getTimeDomainIntervalStart(); 
+
+	 /**
+   	 * Get the horizon for the time domain interval
+   	 * 
+   	 * @return the end of the time interval. 
+   	 */
+	double getTimeDomainIntervalHorizon(); 
+	
 	
 	
 	// the set() methods
@@ -2231,15 +2464,73 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * @return true if successful 
 	 */		 
 	bool initObjGradients();
-	
-	
+
+
 	/**
 	 * bUseExpTreeForFunEval is set to true if you wish to use the OS Expression Tree for
 	 * function evaluations instead of AD -- false by default. 
 	 */
 	bool bUseExpTreeForFunEval;
 	
-																																																			
+	
+	/**
+	 * This sets the format of the time domain ("stages"/"interval"/"none")
+	 */
+	bool setTimeDomain(std::string format);
+	
+	/**
+	 * This sets the number (and optionally names) of the time stages
+	 */
+	bool setTimeDomainStages(int number, std::string *names);
+
+	/**
+	* This sets the variables associated with each time domain stage in temporal order.
+	* (I.e., for each stage numberOfVariables gives the number of variables accociated 
+	* with this stage and startIdx gives the first variable in this stage.)
+	*/
+	bool OSInstance::setTimeDomainStageVariablesOrdered(int numberOfStages, int *numberOfVariables, int *startIdx);
+
+	/**
+	* This sets the variables associated with each time domain stage in srbitrary order.
+	* (I.e., for each stage numberOfVariables gives the number of variables accociated 
+	* with this stage and varIndex[i] gives the index of each variable in stage[i].)
+	*/
+	bool OSInstance::setTimeDomainStageVariablesUnordered(int numberOfStages, int *numberOfVariables, int **varIndex);
+
+	/**
+	* This sets the constraints associated with each time domain stage in temporal order.
+	* (I.e., for each stage numberOfConstraints gives the number of constraints accociated 
+	* with this stage and startIdx gives the first constraint in this stage.)
+	*/
+	bool OSInstance::setTimeDomainStageConstraintsOrdered(int numberOfStages, int *numberOfConstraints, int *startIdx);
+
+	/**
+	* This sets the constraints associated with each time domain stage in srbitrary order.
+	* (I.e., for each stage numberOfConstraints gives the number of constraints accociated 
+	* with this stage and conIndex[i] gives the index of each constraint in stage[i].)
+	*/
+	bool OSInstance::setTimeDomainStageConstraintsUnordered(int numberOfStages, int *numberOfConstraints, int **conIndex);
+
+	/**
+	* This sets the objectives associated with each time domain stage in temporal order.
+	* (I.e., for each stage numberOfObjectives gives the number of objectives accociated 
+	* with this stage and startIdx gives the first objective in this stage.)
+	*/
+	bool OSInstance::setTimeDomainStageObjectivesOrdered(int numberOfStages, int *numberOfObjectives, int *startIdx);
+
+	/**
+	* This sets the objectives associated with each time domain stage in arbitrary order.
+	* (I.e., for each stage numberOfObjectives gives the number of objectives accociated 
+	* with this stage and objIndex[i] gives the index of each objective in stage[i].)
+	*/
+	bool OSInstance::setTimeDomainStageObjectivesUnordered(int numberOfStages, int *numberOfObjectives, int **varIndex);
+
+	/**
+	 * This sets the start and end of the time interval
+	 */
+	bool setTimeDomainInterval(double start, double horizon);
+
+
 }; //class OSInstance
 
 #endif
