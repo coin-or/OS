@@ -3,13 +3,14 @@
  * \brief This file runs the OS unitTest.
  
  *
- * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
+ * @version 1.1, 05/Feb/2008
  * @since   OS1.0
+ *    stresstest
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Jun Ma, Kipp Martin,
- * Northwestern University, and the University of Chicago.
+ * Copyright (C) 2005-2008, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Northwestern University, Dalhousie University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -73,7 +74,8 @@
  * write a new instance in base 64 format and solve it.
  * 
  * We next test the parsers. We test parsing the osil file
- * parincLinear.osil and the osrl file parincLinear.osrl.
+ * parincLinear.osil, finplan1.osil and the osrl file parincLinear.osrl.
+ * We test the get() and set() methods for osinstance.
  * 
  * Next we test the prefix and postfix routines. For the
  * test problem rosenbrockmod.osil create an <b>OSExpressionTree</b>
@@ -94,7 +96,6 @@
  * Finally test CppAD. Read in CppADTestLag.osil and make sure gradient
  * and Hessian calculations are working correctly.
  */ 
-
 
 #include <cppad/cppad.hpp> 
 //#include "CoinUtilsConfig.h"
@@ -135,32 +136,17 @@
 #endif
 
 
-
-#ifdef COIN_HAS_LINDO    
-#include "OSLindoSolver.h"
-#endif  
-
-
- 
 #ifdef COIN_HAS_ASL
 #include "OSnl2osil.h"
 #endif
+#ifdef COIN_HAS_LINDO    
+#include "OSLindoSolver.h"
+#endif  
+#ifdef COIN_HAS_IPOPT    
+#include "OSIpoptSolver.h"
+#endif 
+ 
 
-
-#ifdef COIN_HAS_IPOPT  
-	#ifndef COIN_HAS_ASL
-		#include "OSIpoptSolver.h"
-		#undef COIN_HAS_ASL
-	#else
-		#include "OSIpoptSolver.h"
-	#endif
-#endif
-
-//#ifdef COIN_HAS_IPOPT  
-//#include "OSIpoptSolver.h"
-//#endif
-
-  
 
 #ifdef HAVE_CTIME
 # include <ctime>
@@ -192,7 +178,6 @@
 #  error "don't have header file for stdio"
 # endif
 #endif
-
 
 using std::cout;   
 using std::endl;
@@ -997,10 +982,10 @@ int main(int argC, char* argV[])
 		cout << "Here is the LINDO solver solution" << endl;
 		cout << solver->osrl << endl;
 		check = 2.925;
-		std::cout << "CALL NEAR_EQUSL" << std::endl;
+		std::cout << "CALL NEAR_EQUAL" << std::endl;
 		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
 		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-		std::cout << "CALL NEAR_EQUSL" << std::endl;
+		std::cout << "CALL NEAR_EQUAL" << std::endl;
 		if(ok == false) throw ErrorClass(" Fail unit test with LINDO on wayneQuadratic");
 		delete solver;
 		solver = NULL;
@@ -1170,7 +1155,299 @@ int main(int argC, char* argV[])
 		unitTestResultFailure << "Sorry Unit Test Failed Testing An OSiL Parser" << endl;
 		
 	}	
-	
+
+	//
+	// Now test the extensions to the OSiL format: <timeDomain>, etc.
+
+#ifdef STRESSTEST
+	try{ 
+		cout << endl;
+		clock_t start, finish;
+		double duration;
+		OSiLWriter *osilwriter = NULL;
+		osilwriter = new OSiLWriter();
+		//delete fileUtil;
+		//fileUtil = NULL;
+		//fileUtil = new FileUtil();
+		cout << "\nTEST PARSING A STOCHASTIC MODEL" << endl;
+		cout << "FIRST READ THE FILE INTO A STRING" << endl;
+		start = clock();
+		osilFileName = dataDir  + "osilFiles" + dirsep + "finplan1.osil";
+		osil = fileUtil->getFileAsString( &osilFileName[0]);
+		finish = clock();
+		duration = (double) (finish - start) / CLOCKS_PER_SEC;
+		cout << "Reading the file into a string took (seconds): "<< duration << endl;
+		OSiLReader *osilreader = NULL;
+		osilreader = new OSiLReader(); 
+		start = clock();
+		cout << "PARSE THE OSIL STRING INTO AN OSINSTANCE OBJECT" << endl;
+		osilreader->readOSiL( osil);
+		//cout << osilwriter->writeOSiL( osilreader->readOSiL( &osil)) << endl;
+		delete osilreader;
+		osilreader = 0;
+		finish = clock();
+		duration = (double) (finish - start) / CLOCKS_PER_SEC;
+		cout << "Parsing took (seconds): "<< duration << endl;
+		unitTestResult << "Successful test of OSiL parser on problem finplan1.osil" << std::endl;
+/** --------------------------------
+ *  Test the get() and set() methods
+ *  --------------------------------**/
+		cout << "\nTEST THE GET() AND SET() METHODS FOR TimeDomain OBJECT" << endl;
+		OSInstance *osinstance = NULL;
+		//osinstance = new OSInstance();
+		//OSiLReader *osilreader = NULL;
+		osilreader = new OSiLReader();
+		//create an osinstance
+		osinstance = osilreader->readOSiL( osil);
+		char* f = osinstance->getTimeDomainFormat();
+		ok = (f == "stages");
+		int n = osinstance->getTimeDomainStageNumber();
+		ok &= (n == 6);
+
+		std::string* sncheck = new std::string[6];
+		sncheck[0] = "";
+		sncheck[1] = "";
+		sncheck[2] = "";
+		sncheck[3] = "test";
+		sncheck[4] = "Wha'zzup?";
+		sncheck[5] = "";
+
+		std::string* sn = osinstance->getTimeDomainStageNames();
+
+		for (int i = 0; i < 6; i++)
+			ok &= (sn[i] == sncheck[i]);
+
+		int* nv = osinstance->getTimeDomainStageNumberOfVariables();
+
+		int* nvcheck = new int[6];
+		nvcheck[0] = 2;
+		nvcheck[1] = 2;
+		nvcheck[2] = 0;
+		nvcheck[3] = 0;
+		nvcheck[4] = 2;
+		nvcheck[5] = 2;
+
+		for (int i = 0; i < 6; i++)
+			ok &= (nv[i] == nvcheck[i]);
+
+		int* nc = osinstance->getTimeDomainStageNumberOfConstraints();
+
+		int* nccheck = new int[6];
+		nccheck[0] = 1;
+		nccheck[1] = 1;
+		nccheck[2] = 0;
+		nccheck[3] = 0;
+		nccheck[4] = 1;
+		nccheck[5] = 1;
+
+		for (int i = 0; i < 6; i++)
+			ok &= (nc[i] == nccheck[i]);
+
+		int* no = osinstance->getTimeDomainStageNumberOfObjectives();
+
+		int* nocheck = new int[6];
+		nocheck[0] = 1;
+		nocheck[1] = 1;
+		nocheck[2] = 1;
+		nocheck[3] = 0;
+		nocheck[4] = 1;
+		nocheck[5] = 1;
+
+		for (int i = 0; i < 6; i++)
+			ok &= (no[i] == nocheck[i]);
+
+		int** lv = osinstance->getTimeDomainStageVarList();
+		int** lc = osinstance->getTimeDomainStageConList();
+		int** lo = osinstance->getTimeDomainStageObjList();
+
+		int** lvcheck = new int*[6];
+		int** lccheck = new int*[6];
+		int** locheck = new int*[6];
+		for (int i = 0; i < 6; i++) {
+			lvcheck[i] = new int[2];
+			lccheck[i] = new int[2];
+			locheck[i] = new int[2];
+		};
+		lvcheck[0][0] = 0;
+		lvcheck[0][1] = 1;
+		lvcheck[1][0] = 2;
+		lvcheck[1][1] = 3;
+		lvcheck[4][0] = 4;
+		lvcheck[4][1] = 5;
+		lvcheck[5][0] = 6;
+		lvcheck[5][1] = 7;
+		lccheck[0][0] = 0;
+		lccheck[1][0] = 1;
+		lccheck[4][0] = 2;
+		lccheck[5][0] = 3;
+		locheck[0][0] = -1;
+		locheck[1][0] = -1;
+		locheck[2][0] = -1;
+		locheck[4][0] = -1;
+		locheck[5][0] = -1;
+
+		for (int i = 0; i < 6; i++) {
+			for (int j = 0; j < nv[i]; j++) 
+				ok &= (lvcheck[i][j] == lv[i][j]);
+			for (int j = 0; j < nc[i]; j++) 
+				ok &= (lccheck[i][j] == lc[i][j]);
+			for (int j = 0; j < no[i]; j++) 
+				ok &= (locheck[i][j] == lo[i][j]);
+		};
+
+		std::string* sn1 = new std::string[6];
+		int* nv1 = new int[6];
+		int* nc1 = new int[6];
+		int* no1 = new int[6];
+		int** lv1 = new int*[6];
+		int** lc1 = new int*[6];
+		int** lo1 = new int*[6];
+		for (int i = 0; i < 6; i++) {
+			lv1[i] = new int[2];
+			lc1[i] = new int[2];
+			lo1[i] = new int[2];
+		};
+		for (int i = 0; i < 6; i++) {
+			sn1[i] = sn[i];
+			nv1[i] = nv[i];
+			nc1[i] = nc[i];
+			no1[i] = no[i];
+			for (int j = 0; j < nv[i]; j++) {
+				lv1[i][j] = lv[i][j];
+			};
+			for (int j = 0; j < nc[i]; j++) {
+				lc1[i][j] = lc[i][j];
+			};
+			for (int j = 0; j < no[i]; j++) {
+				lo1[i][j] = lo[i][j];
+			};
+		};
+
+		ok &= osinstance->setTimeDomain("none");
+		n = 0;
+		ok &= osinstance->setTimeDomainStages(n,NULL);
+		ok &= osinstance->setTimeDomainStages(4,NULL);
+
+		n = osinstance->getTimeDomainStageNumber();
+		ok &= (n == 4);
+
+		int *nelem, *startIdx, **VI;
+		nelem = new int[4];
+		startIdx = new int[4];
+		VI = new int*[4];
+		for (i = 0; i < 4; i++)
+		{	nelem[i] = 2;
+			startIdx[i] = 2*i;
+			VI[i] = new int[2];
+			VI[i][0] = 2*i;
+			VI[i][1] = 2*i + 1;
+		};
+		ok &= osinstance->setTimeDomainStageVariablesUnordered(4,nelem,VI);
+
+		for (i = 0; i < 4; i++)
+		{	nelem[i] = 1;
+			startIdx[i] = i;
+		};
+		ok &= osinstance->setTimeDomainStageConstraintsOrdered(4,nelem,startIdx);
+
+		for (i = 0; i < 4; i++)
+		{	nelem[i] = 1;
+			startIdx[i] = -1;
+		};
+		ok &= osinstance->setTimeDomainStageObjectivesOrdered(4,nelem,startIdx);
+
+		ok &= osinstance->setTimeDomain("none");
+
+		ok &= osinstance->setTimeDomain("interval");
+
+		ok &= osinstance->setTimeDomainInterval(0.0, 1.0);
+		double lower = osinstance->getTimeDomainIntervalStart();
+		ok &= (lower == 0.0);
+		double upper = osinstance->getTimeDomainIntervalHorizon();
+		ok &= (upper == 1.0);
+
+		ok &= osinstance->setTimeDomain("none");
+
+		ok &= osinstance->setTimeDomainStages(6,sncheck);
+		ok &= osinstance->setTimeDomainStageVariablesUnordered(6,nvcheck,lvcheck);
+		ok &= osinstance->setTimeDomainStageObjectivesUnordered(6,nocheck,locheck);
+		ok &= osinstance->setTimeDomainStageConstraintsUnordered(6,nccheck,lccheck);
+		int n2 = osinstance->getTimeDomainStageNumber();
+		ok &= (n2 == 6);
+		std::string* sn2 = osinstance->getTimeDomainStageNames();
+		int* nv2 = osinstance->getTimeDomainStageNumberOfVariables();
+		int* nc2 = osinstance->getTimeDomainStageNumberOfConstraints();
+		int* no2 = osinstance->getTimeDomainStageNumberOfObjectives();
+		int** lv2 = osinstance->getTimeDomainStageVarList();
+		int** lc2 = osinstance->getTimeDomainStageConList();
+		int** lo2 = osinstance->getTimeDomainStageObjList();
+		for (int i = 0; i < n2; i++)
+		{	ok &= (sn2[i] == sncheck[i]);
+			ok &= (nv2[i] == nvcheck[i]);
+			ok &= (nc2[i] == nccheck[i]);
+			ok &= (no2[i] == nocheck[i]);
+			for (int j = 0; j < nv2[i]; j++)
+				ok &= (lv2[i][j] == lvcheck[i][j]);
+			for (int j = 0; j < nc2[i]; j++)
+				ok &= (lc2[i][j] == lccheck[i][j]);
+			for (int j = 0; j < no2[i]; j++)
+				ok &= (lo2[i][j] == locheck[i][j]);
+		};
+		delete [] sncheck;
+		sncheck = NULL;
+		delete [] nvcheck;
+		nvcheck = NULL;
+		delete [] nccheck;
+		nccheck = NULL;
+		delete [] nocheck;
+		nocheck = NULL;
+		for (int i = 0; i < 6; i++) {
+			delete [] lvcheck[i];
+			delete [] lccheck[i];
+			delete [] locheck[i];
+			delete [] lv1[i];
+			delete [] lc1[i];
+			delete [] lo1[i];
+		};
+		delete [] lvcheck;
+		lvcheck = NULL;
+		delete [] lccheck;
+		lccheck = NULL;
+		delete [] locheck;
+		locheck = NULL;
+		delete [] lv1;
+		lv1 = NULL;
+		delete [] lc1;
+		lc1 = NULL;
+		delete [] lo1;
+		lo1 = NULL;
+		delete [] sn1;
+		sn1 = NULL;
+		delete nv1;
+		nv1 = NULL;
+		delete nc1;
+		nc1 = NULL;
+		delete no1;
+		no1 = NULL;
+		delete [] nelem;
+		nelem = NULL;
+		delete [] startIdx;
+		startIdx = NULL;
+		for (int i = 0; i < 4; i++) {
+			delete [] VI[i];
+		};
+		delete [] VI;
+		VI = NULL;
+		unitTestResult << "Successful test of osinstance get() and set() methods" << std::endl;
+	}	
+	catch(const ErrorClass& eclass){
+		cout << endl << endl << endl;
+		cout << eclass.errormsg << endl;
+		unitTestResultFailure << "Sorry Unit Test Failed osinstance get() and set() Methods" << endl;		
+	}	
+#endif
+
+
 	//
 	// Now just test the OSrL parser
 	try{ 
@@ -1453,7 +1730,7 @@ int main(int argC, char* argV[])
 		cout << "All tests completed successfully" <<  endl <<  endl;
 		return 0;
 	}
-}//ennd main
+}//end main
 
 double getObjVal( std::string osrl){
 	std::string sObjVal;
@@ -1471,8 +1748,7 @@ double getObjVal( std::string osrl){
 				sObjVal = osrl.substr( pos1 + 1, pos2 - pos1 - 1);
 				//std::cout << "HERE IS THE OBJECTIVE FUNCTION VALUE SUBSTRING  " << sObjVal<< std::endl; 
 				// return dObjVal = strtod(sObjVal.c_str(), NULL);
-
-				return dObjVal = os_strtod( sObjVal.c_str(), NULL); 
+				return dObjVal = os_strtod(sObjVal.c_str(), NULL); 
 			}
 			else return OSNAN;
 		}
