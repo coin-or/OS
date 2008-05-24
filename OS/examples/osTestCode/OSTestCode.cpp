@@ -181,6 +181,7 @@ int main( ){
 		solver = NULL;
 		delete fileUtil;
 		fileUtil = NULL;
+
 		cout << "Done with garbage collection" << endl;
 		return 0;
 		//
