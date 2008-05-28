@@ -44,7 +44,7 @@
 	<param name="SERVICE_POLLING_INTERVAL_MEDIUM" description="the number of milli-seconds that a service periodically carries out maintentance. It is not too short and nor too long">3600000</param>
 	<param name="SERVICE_POLLING_INTERVAL_LONG" description="the number of milli-seconds that a service periodically carries out maintentance. It is relatively long">86400000</param>
 	<!--Solver related parameters-->
-	<param name="" description="the full class name (including name space) of the solver">org.optimizationservices.oscommon.util.StandardOSSolver</param>
+	<param name="SOLVER_CLASS_NAME" description="the full class name (including name space) of the solver">org.optimizationservices.oscommon.util.StandardOSSolver</param>
 	<param name="OS_SOLVER" description="the default solver name that the StandardOSSolver uses, e.g. cbc, clp(change?)">cbc</param>
 	<param name="SOLVER_EXECUTABLE" description="the solver executable that the StandardOSSolver will launch(change?)">OSSolverService</param>
 	<param name="MAXIMUM_TRIAL_NUMBER_FOR_SOLVE" description="the maximum number of trials for a (failed) solve before the service terminates">1</param>
