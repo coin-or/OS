@@ -7,7 +7,7 @@
 
 // OS includes
 #include "OSDataStructures.h"
-#include "OSParameters.h"
+//#include "OSParameters.h"
 #include "OSMatlab.h"
 
 
@@ -32,6 +32,7 @@ using std::endl;
 
 
 void mexFunction( int  nlhs, mxArray   *plhs[], int  nrhs, const mxArray *prhs[] ) {
+
    /**
     * The parameters are:
     * A -- the constraint matrix
@@ -59,6 +60,7 @@ void mexFunction( int  nlhs, mxArray   *plhs[], int  nrhs, const mxArray *prhs[]
      //
      // get number of variables and number of constraints
      matlabModel->numVar =  (int) mxGetScalar( prhs[ 0]) ;
+     //printf("variable numVar = %i\n",  matlabModel->numVar );
      matlabModel->numCon = (int) mxGetScalar( prhs[ 1]);
      //
      // get the constraint matrix
@@ -82,7 +84,7 @@ void mexFunction( int  nlhs, mxArray   *plhs[], int  nrhs, const mxArray *prhs[]
           matlabModel->bl =  mxGetPr( prhs[ 3]);
           // convert Matlab -infinity to OS -infinity
           for(i = 0;  i < matlabModel->numCon;  i++){
-               if(  mxIsInf(  -(matlabModel->bl[i]) ) ) matlabModel->bl[ i] = -OSINFINITY;
+               if(  mxIsInf(  -(matlabModel->bl[i]) ) ) matlabModel->bl[ i] = -OSDBL_MAX;
           }
      }
      //
@@ -94,7 +96,7 @@ void mexFunction( int  nlhs, mxArray   *plhs[], int  nrhs, const mxArray *prhs[]
           matlabModel->bu =  mxGetPr( prhs[ 4]);
           // convert Matlab infinity to OS infinity
           for(i = 0;  i < matlabModel->numCon;  i++){
-               if(  mxIsInf( matlabModel->bu[i]) ) matlabModel->bu[ i] = OSINFINITY;
+               if(  mxIsInf( matlabModel->bu[i]) ) matlabModel->bu[ i] = OSDBL_MAX;
           }
      }
      //
@@ -112,7 +114,8 @@ void mexFunction( int  nlhs, mxArray   *plhs[], int  nrhs, const mxArray *prhs[]
           matlabModel->vl =  mxGetPr( prhs[ 6]);
           // convert Matlab -infinity to OS -infinity
           for(i = 0;  i < matlabModel->numVar;  i++){
-               if(  mxIsInf(  -(matlabModel->vl[i]) ) ) matlabModel->vl[ i] = -OSINFINITY;
+              //printf("variable lb = %f\n",  matlabModel->vl[i] );
+               if(  mxIsInf(  -(matlabModel->vl[i]) ) ) matlabModel->vl[ i] = -OSDBL_MAX;
           }
      }
      //
@@ -124,7 +127,8 @@ void mexFunction( int  nlhs, mxArray   *plhs[], int  nrhs, const mxArray *prhs[]
           matlabModel->vu =  mxGetPr( prhs[ 7]);
           // convert Matlab infinity to OS infinity
           for(i = 0;  i < matlabModel->numVar;  i++){
-               if(  mxIsInf( matlabModel->vu[i]) ) matlabModel->vu[ i] = OSINFINITY;
+              //printf("variable ub = %f\n",  matlabModel->vu[i] );
+               if(  mxIsInf( matlabModel->vu[i]) ) matlabModel->vu[ i] = OSDBL_MAX;
           }
      }
      //
@@ -204,8 +208,8 @@ void mexFunction( int  nlhs, mxArray   *plhs[], int  nrhs, const mxArray *prhs[]
      sTest = matlabModel->solve();
      std::string osil = matlabModel->osil;
      char *ch = &osil[0];
-     printf("HERE IS THE INSTANCE %s\n", ch);
-     mexPrintf("DONE WITH THE REMOTE CALL \n");
+    printf("HERE IS THE INSTANCE %s\n", ch);
+    mexPrintf("DONE WITH THE REMOTE CALL \n");
      mexPrintf("HERE IS THE SOLUTION \n");
      mexPrintf(&sTest[0] );
     //char *str[100];
@@ -217,7 +221,7 @@ void mexFunction( int  nlhs, mxArray   *plhs[], int  nrhs, const mxArray *prhs[]
       str[ 0] = &sTest[0] ;
       plhs[0]= mxCreateCharMatrixFromStrings( 1, (const char **)str); 
      delete matlabModel;
-     return;
+     return  ;
 }
 SparseMatrix* getConstraintMatrix( const mxArray *prhs){
      SparseMatrix *sparseMat = NULL;
