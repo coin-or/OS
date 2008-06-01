@@ -7,22 +7,22 @@ VarType='CC';
 % constraint types
 A = [.7  1; .5  5/6; 1   2/3  ; .1   .25];
 BU = [630 600  708  135];
-BL = [];
+BL = [-inf -inf -inf -inf ];
 OBJ = [10  9];
-VL = [-inf -inf];
-VU = [];
+VL = [0 0];
+VU = [inf inf];
 ObjType = 1;
 % leave Q empty if there are no quadratic terms
 Q = [];
-prob_name = 'ParInc Example'
+prob_name = 'ParInc Example';
 password = 'chicagoesmuyFRIO';
 %
 %
 %the solver
-solverName = 'lindo';
+solverName = 'clp';
 %the remote service service address
 %if left empty we solve locally
-serviceAddress='http://128.135.130.17:8080/os/OSSolverService.jws';
+serviceAddress='http://gsbkip.chicagogsb.edu/os/OSSolverService.jws';
 % now solve
-callMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, ... 
+OSCallMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, ... 
     VarType, Q, prob_name, password, solverName, serviceAddress)

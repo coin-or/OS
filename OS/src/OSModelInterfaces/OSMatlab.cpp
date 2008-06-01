@@ -33,7 +33,6 @@ OSMatlab::OSMatlab() {
 	bu = NULL;
   	bl = NULL;
   	obj = NULL;
-  	vu = NULL;
   	vl = NULL;
   	vu = NULL;
   	objType = 0;
@@ -215,6 +214,7 @@ std::string OSMatlab::solve() {
 
 void OSMatlab::createOSInstance(){
 	ostringstream outStr;
+
 	int i;
 	osinstance = new OSInstance();
 	//
@@ -228,15 +228,16 @@ void OSMatlab::createOSInstance(){
 	// first the variables
 	std::string *varNames;
 	varNames = new std::string[ numVar];
+	osinstance->setVariableNumber( numVar);   
 	for(i = 0; i < numVar; i++){
 		outStr << "x";
 		outStr << i ;
 		varNames[ i] = outStr.str();
-		//osinstance->addVariable(i, varNames[ i] , vl[ i], vu[ i], varType[ i], OSNAN, "");
+		osinstance->addVariable(i, varNames[ i] , vl[ i], vu[ i], varType[ i], OSNAN, "");
 		outStr.str("");
 	}
 	//
-	osinstance->setVariables(numVar, varNames, vl, vu, varType, NULL, NULL);
+	//osinstance->setVariables(numVar, varNames, vl, vu, varType, NULL, NULL);
 	//
 	// now add the objective function
 	osinstance->setObjectiveNumber( 1);
@@ -255,19 +256,26 @@ void OSMatlab::createOSInstance(){
 	osinstance->addObjective(-1, "objfunction", maxOrMin, 0.0, 1.0, objcoeff);
 	//
 	// now the constraints
-	
+
 	std::string *conNames;
 	conNames = new std::string[ numCon];
 	outStr.str("");
+	osinstance->setConstraintNumber( numCon); 
 	for(i = 0; i < numCon; i++){
 		outStr << "r";
 		outStr << i;
 		conNames[ i] = outStr.str();
-		//osinstance->addConstraint(i, outStr.str() , bl[ i], bu[ i], 0);
+		osinstance->addConstraint(i, "row" , bl[ i], bu[ i], 0);
+		 
 		outStr.str("");
 	}
+	//osinstance->addConstraint(0, "row0", -OSDBL_MAX, 4, 0); 
+	//osinstance->addConstraint(1, "row1", -OSDBL_MAX, 6, 0);
+	//osinstance->addConstraint(2, "row2", -OSDBL_MAX, 0, 0);
+	//osinstance->addConstraint(3, "row3", 0 , OSDBL_MAX, 0); 
+
 	
-	osinstance->setConstraints( numCon, conNames, bl, bu, NULL);
+	//osinstance->setConstraints( numCon, conNames, bl, bu, NULL);
 	//
 	// now add the <linearConstraintCoefficients>
 	//bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor, 

@@ -25,7 +25,7 @@ BL = [1   .15];
 % leave VU empty if all variables have upper 
 % bound of inf
 % both VL and VU must be a 1 by numVar matrix
-VL = [];
+VL = [0 0 0 ];
 VU = [.75 .75 .75];
 % the objective function coefficients
 % OBJ is a 1 by numVar matrix
@@ -53,15 +53,15 @@ Q = [ -1 -1 -1 -1 -1 -1;
 0 1 2  1 2 2;
  .425349654  .445784443   0.231430983   .370437388  .27862509 .27763384];
 % replace Template with the name of your  problem
-prob_name = 'Markowitz Example from Anderson, Sweeney, Williams, and Martin'
+prob_name = 'Markowitz Example from Anderson, Sweeney, Williams, and Martin';
 password = 'chicagoesmuyFRIO';
 %
 %the solver
 solverName = 'ipopt';
 %the remote service service address
 %if left empty we solve locally
-serviceAddress='http://128.135.130.17:8080/os/OSSolverService.jws';
+serviceAddress='http://gsbkip.chicagogsb.edu/os/OSSolverService.jws';
 % now solve
-callMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, VarType, ...
+OSCallMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, VarType, ...
      Q, prob_name, password, solverName, serviceAddress)
 
