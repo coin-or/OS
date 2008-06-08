@@ -4074,18 +4074,18 @@ In this example, we show how to add cuts to tighten an LP using CGL (Cut Generat
 
 \subsection{MATLAB:  Using MATLAB to Build and Run OSiL Model Instances}\label{section:matlab}
 
-This example differs from the other examples in that makefiles are not used. Indeed, if the user has done a vpath build, the relevant Cpp file remains in the original OS download directory under {\bf OS/examples/matlab} not in the vpath directory.
+This example differs from the other examples in that makefiles are not used. Indeed, if the user has done a vpath build, the relevant {\tt cpp} file remains in the original OS download directory under {\bf OS/examples/matlab},  not in the vpath directory.
 
 
 
 
-Linear, integer, and quadratic problems can be formulated in MATLAB and then optimized either locally or over the network using the OS Library. The {\tt OSMatlab} class functions much like {\tt OSnl2osil} and {\tt OSmps2osil} and takes MATLAB arrays and creates an OSiL instance.  This class is part of the OS library. In order to use the OS library with MATLAB the user should do the following.  In order to use the {\tt OSMatlab} class it is necessary to  compile {\tt OSmatlabSolver.cpp}  into  a MATLAB Executable file.  The {\tt matlabSolver.cpp} file is in the {\tt OSModelInterfaces} directory even though it is not part of the OS library. The following steps should be followed.  We assume the user has already done a {\bf make install}.
+Linear, integer, and quadratic problems can be formulated in MATLAB and then optimized either locally or over the network using the OS Library. The {\tt OSMatlab} class functions much like {\tt OSnl2osil} and {\tt OSmps2osil} and takes MATLAB arrays and creates an OSiL instance.  This class is part of the OS library.   In order to use the {\tt OSMatlab} class it is necessary to  compile {\tt OSmatlabSolver.cpp}  into  a MATLAB Executable ({\tt mex}) file.  The {\tt OSmatlabSolver.cpp} file is in the {\tt  OS/examples/matlab} directory. The following steps should be followed.  We assume the user has already done a {\bf make install}.
 
 \begin{enumerate}[{\bf Step 1:}]
 
 
 
-\item{} Edit the MATLAB  {\bf mexopts.sh} (UNIX) or {\tt mexopts.bat}  so that the {\tt CXXFLAGS} option includes the header files in the {\tt cppad} directory and the {\tt include} directory in the project root. For example, it  should look like:
+\item{} Edit the MATLAB  {\bf mexopts.sh} (UNIX) or {\tt mexopts.bat}  (Windows) so that the {\tt CXXFLAGS} option includes the header files in the {\tt cppad} directory and the {\tt include} directory in the project root. For example, it  should look like:
 \begin{verbatim}
 CXXFLAGS='-fno-common -no-cpp-precomp -fexceptions
     -I/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/
@@ -4098,30 +4098,33 @@ Next edit the {\tt CXXLIBS} flag so that the OS and supporting libraries are inc
 CXXLIBS="$MLIBS -lstdc++
     -L/Users/kmartin/Documents/files/code/ipopt/macosx/Ipopt-3.2.2/lib
     -L/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/lib
-    -lOS  -lIpopt -lOsiCbc -lOsiClp -lCbc -lCgl -lOsi -lClp -lCoinUtils  -lm"
+    -lOS  -lIpopt -lOsiCbc -lOsiClp -lOsiSym -lCbc -lCgl -lOsi -lClp -lSym -lCoinUtils  -lm"
 \end{verbatim}
 
-For a UNIX system the {\tt mexopts.sh} file will usually be found in a directory with the release name in {\tt  $\sim$/.matlab}. For example,
-{\tt $\sim$/.matlab/R14SP3}.
+For a UNIX system the {\tt mexopts.sh} file  is typically  found in a directory with the release name in {\tt  $\sim$/.matlab}. For example,
+{\tt $\sim$/.matlab/R14SP3}.  It may also be in the {\tt bin} directory in the MATLAB application root folder. 
 
 
 On a Windows system, the {\tt  mexopts.bat} file will usually be in a directory with the release name in {\tt C:$\backslash$Documents and Settings$\backslash$Username$\backslash$Application Data$\backslash$Mathworks$\backslash$MATLAB}
 
 
-\item{}  Build the MATLAB executable file. Start MATLAB and in the MATLAB command window connect to the directory containing the file {\tt matlabSolver.cpp}.  Execute the command:
+\item{}  Build the MATLAB executable file. Start MATLAB and in the MATLAB command window connect to the directory {\tt OS/examples/matlab} which  contains the file {\tt OSmatlabSolver.cpp}.    Execute the command:
 
 \begin{verbatim}
 mex -v OSMatlabSolver.cpp
 \end{verbatim}
 
-On a MAC OS X the resulting executable will be named {\tt matlabSolver.mexmac}. On the Windows system the file is named {\tt matlabSolver.mexw32}.
+On an Intel MAC OS X the resulting executable will be named {\tt OSmatlabSolver.mexmaci}. On the Windows system the file is named {\tt OSmatlabSolver.mexw32}.
 
-\item{}  Set the MATLAB path to include the directory with the {\tt matlabSolver} executable. Also, put  the {\it m-file} {\tt callMatlabSolver.m} in a directory which is on a MATLAB path.  This file is in the {\tt OSModelInterfaces} directory.
+\item{}  Set the MATLAB path to include the directory with the {\tt OSmatlabSolver} executable. 
+
+
+\item{}   In the MATLAB command window, connect to the directory {\tt OS/data/matlabFiles}. Run either of the MATLAB files {\bf markowitz.m} or {\bf parincLinear.m}.  The result should be displayed in the MATLAB browser window.  
 
 \end{enumerate}
 
 
-To use the {\tt matlabSolver} it is necessary to put the coefficients  from a linear, integer, or quadratic problem into MATLAB arrays.
+To use the {\tt OSmatlabSolver} it is necessary to put the coefficients  from a linear, integer, or quadratic problem into MATLAB arrays.   We illustrate for the linear program:
 
 \begin{alignat}{2}
 & \mbox{Minimize} & \quad
@@ -4175,24 +4178,21 @@ executable using the {\tt CXXLIBS} option.
 
 
 The data directory  also contains the m-file  {\tt template.m} which contains extensive comments about how to formulate 
-the problems in MATLAB.  A second example which is a quadratic problem is given in section~\ref{section:matlab}. 
-The appropriate m-file is {\tt markowitz.m}.
+the problems in MATLAB.   The user can edit the {\tt template.m} file as necessary and create a new instance. 
 
 
 
 
-
-
-
-We now illustrate how to build a simple Markowitz portfolio optimization problem (a quadratic programming problem).  The appropriate MATLAB file is {\bf markowitz.m} and it is the {data/matlabFiles} directory.
+ A second example which is a quadratic problem is given in section~\ref{section:matlab}. 
+The appropriate m-file is {\tt markowitz.m}.  The appropriate MATLAB file is {\bf markowitz.m} and it is the {data/matlabFiles} directory.
 The problem consists in investing  in a number of stocks. The expected returns and risks
 (covariances) of the stocks are known. Assume that the decision variables $x_i$
 represent the fraction of wealth invested in stock~$i$ and that no stock can have
 more than 75\% of the total wealth. The problem then is to minimize the total risk
 subject to a budget constraint and a lower bound on the expected portfolio return.
 
-Assume that there are three stocks (variables) and two constraints (do not count the upper limit %investment
-of .75 on the variables).
+Assume that there are three stocks (variables) and two constraints (do not count the upper limit  %investment
+of .75 on the investment variables).
 
 
 \begin{verbatim}
@@ -4329,7 +4329,8 @@ Finally, name the problem, specify the solver (in this case {\tt ipopt}), the se
 
 
 \begin{verbatim}
-prob_name = 'Markowitz Example from Anderson, Sweeney, Williams, and Martin'
+% replace Template with the name of your  problem
+prob_name = 'Markowitz Example from Anderson, Sweeney, Williams, and Martin';
 password = 'chicagoesmuyFRIO';
 %
 %the solver
@@ -4338,7 +4339,7 @@ solverName = 'ipopt';
 %if left empty we solve locally
 serviceAddress='http://gsbkip.chicagogsb.edu/os/OSSolverService.jws';
 % now solve
-callMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, VarType, ...
+OSCallMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, VarType, ...
      Q, prob_name, password, solverName, serviceAddress)
 \end{verbatim}
 
