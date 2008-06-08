@@ -29916,7 +29916,7 @@ fi
 
 
 ##
-## ampl tes
+## ampl test files
 
 if test $coin_vpath_config = yes; then
   coin_vpath_link_files="$coin_vpath_link_files data/amplFiles/testAmpl.run"
@@ -29971,6 +29971,11 @@ fi
 
 if test $coin_vpath_config = yes; then
   coin_vpath_link_files="$coin_vpath_link_files data/matlabFiles/template.m"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/matlabFiles/OSCallMatlabSolver.m"
 fi
 
 ##

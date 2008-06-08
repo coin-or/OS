@@ -62,6 +62,7 @@ OS/data/configFiles/testlocalclp.config -text
 OS/data/configFiles/testlocalosol.config -text
 OS/data/configFiles/testmps.config -text
 OS/data/configFiles/testnl.config -text
+OS/data/matlabFiles/OSCallMatlabSolver.m -text
 OS/data/matlabFiles/markowitz.m -text
 OS/data/matlabFiles/parincLinear.m -text
 OS/data/matlabFiles/template.m -text
@@ -129,6 +130,7 @@ OS/examples/algorithmicDiff/Makefile.in -text
 OS/examples/algorithmicDiff/OSAlgorithmicDiffTest.cpp -text
 OS/examples/instanceGenerator/Makefile.in -text
 OS/examples/instanceGenerator/OSInstanceGenerator.cpp -text
+OS/examples/matlab/OSMatlabSolver.cpp -text
 OS/examples/osTestCode/Makefile.in -text
 OS/examples/osTestCode/OSTestCode.cpp -text
 OS/inc/config_os.h.in -text

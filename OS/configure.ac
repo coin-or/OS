@@ -629,7 +629,7 @@ AC_COIN_VPATH_LINK(data/configFiles/testRemoteRetrieve.config)
 AC_COIN_VPATH_LINK(data/configFiles/testRemoteSend.config)
 
 ##
-## ampl tes
+## ampl test files
 AC_COIN_VPATH_LINK(data/amplFiles/testAmpl.run)
 AC_COIN_VPATH_LINK(data/amplFiles/hs71.mod)
 AC_COIN_VPATH_LINK(data/amplFiles/hs71.nl)
@@ -646,6 +646,7 @@ AC_COIN_VPATH_LINK(data/mpsFiles/parinc.mps)
 AC_COIN_VPATH_LINK(data/matlabFiles/markowitz.m)
 AC_COIN_VPATH_LINK(data/matlabFiles/parincLinear.m)
 AC_COIN_VPATH_LINK(data/matlabFiles/template.m)
+AC_COIN_VPATH_LINK(data/matlabFiles/OSCallMatlabSolver.m)
 ##
 ## XSLT FILE
 ##
