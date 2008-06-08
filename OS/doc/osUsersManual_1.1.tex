@@ -198,7 +198,7 @@ or LINDO -- see Section~\ref{section:amplclient}.
 
 \item Build a remote solver service using Apache Tomcat -- see Section~\ref{section:tomcat}.
 
-\item Use MATLAB to generate problem instances in OSiL format and call a solver either remotely or locally -- see Section~\ref{section:usingmatlab}.
+\item Use MATLAB to generate problem instances in OSiL format and call a solver either remotely or locally -- see Section~\ref{section:matlab}.
 
 \item Use the OS library for algorithmic differentiation (in conjunction with COIN-OR CppAD) -- see Section~\ref{section:ad}.
 \end{itemize}
@@ -1469,7 +1469,7 @@ configure --with-lindo-incdir=/home/kmartin/files/code/lindo/linux/include
 
 \subsubsection{MATLAB}
 
-Install MATLAB on the client machine and follow the instruction in Section~\ref{section:usingmatlab}.
+Install MATLAB on the client machine and follow the instruction in Section~\ref{section:matlab}.
 
 \subsubsection{Library Paths}
 
@@ -2231,110 +2231,6 @@ solver->solve();
 The {\tt OSnl2osil} class works much like the {\tt OSmps2osil} class. The {\tt OSnl2osil} class constructor takes a string which should be the file name of the instance in nl format. The constructor then uses the AMPL ASL library routines to read and parse the nl file. The class method {\tt createOSInstance} then builds  an in-memory {\tt osinstance} object  that can be used by a solver.
 
 In Section~\ref{section:amplclient}  we describe the {\tt OSAmplClient} executable that acts as a ``solver'' for AMPL. The {\tt OSAmplClient} uses the {\tt OSnl2osil} class to convert the instance in nl format to OSiL format before calling a solver either locally or remotely.
-
-\subsubsection{Using MATLAB}\label{section:usingmatlab}
-
-Linear, integer, and quadratic problems can be formulated in MATLAB and then optimized either locally or over the network using the OS Library. The {\tt OSMatlab} class functions much like {\tt OSnl2osil} and {\tt OSmps2osil} and takes MATLAB arrays and creates an OSiL instance.  This class is part of the OS library. In order to use the OS library with MATLAB the user should do the following.  In order to use the {\tt OSMatlab} class it is necessary to  compile {\tt matlabSolver.cpp}  into  a MATLAB Executable file.  The {\tt matlabSolver.cpp} file is in the {\tt OSModelInterfaces} directory even though it is not part of the OS library. The following steps should be followed.
-
-\begin{enumerate}[{\bf Step 1:}]
-
-
-\item{} In the project root run {\tt make install.}
-
-\item{} Either leave {\tt matlabSolver.cpp} in the  the {\tt OSModelInterfaces} or copy it to another desired directory.
-
-\item{} Edit the MATLAB  {\bf mexopts.sh} (UNIX) or {\tt mexopts.bat}  so that the {\tt CXXFLAGS} option includes the header files in the {\tt cppad} directory and the {\tt include} directory in the project root. For example, it  should look like:
-\begin{verbatim}
-CXXFLAGS='-fno-common -no-cpp-precomp -fexceptions
-    -I/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/
-    -I/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/include'
-\end{verbatim}
-
-Next edit the {\tt CXXLIBS} flag so that the OS and supporting libraries are included. For example, it should look like:
-
-\begin{verbatim}
-CXXLIBS="$MLIBS -lstdc++
-    -L/Users/kmartin/Documents/files/code/ipopt/macosx/Ipopt-3.2.2/lib
-    -L/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/lib
-    -lOS  -lIpopt -lOsiCbc -lOsiClp -lCbc -lCgl -lOsi -lClp -lCoinUtils  -lm"
-\end{verbatim}
-
-For a UNIX system the {\tt mexopts.sh} file will usually be found in a directory with the release name in {\tt  $\sim$/.matlab}. For example,
-{\tt $\sim$/.matlab/R14SP3}.
-
-
-On a Windows system, the {\tt  mexopts.bat} file will usually be in a directory with the release name in {\tt C:$\backslash$Documents and Settings$\backslash$Username$\backslash$Application Data$\backslash$Mathworks$\backslash$MATLAB}
-
-
-\item{}  Build the MATLAB executable file. Start MATLAB and in the MATLAB command window connect to the directory containing the file {\tt matlabSolver.cpp}.  Execute the command:
-
-\begin{verbatim}
-mex -v matlabSolver.cpp
-\end{verbatim}
-
-On a MAC OS X the resulting executable will be named {\tt matlabSolver.mexmac}. On the Windows system the file is named {\tt matlabSolver.mexw32}.
-
-\item{}  Set the MATLAB path to include the directory with the {\tt matlabSolver} executable. Also, put  the {\it m-file} {\tt callMatlabSolver.m} in a directory which is on a MATLAB path.  This file is in the {\tt OSModelInterfaces} directory.
-
-\end{enumerate}
-
-
-To use the {\tt matlabSolver} it is necessary to put the coefficients  from a linear, integer, or quadratic problem into MATLAB arrays.
-
-\begin{alignat}{2}
-& \mbox{Minimize} & \quad
-10 x_{1} + 9 x_{2}\label{eq:parinobj}\\
-& \mbox{Subject to} & \quad .7x_{1} + x_{2}  &\le 630  \label{eq:parinccon1}\\
-& & .5x_{1} + (5/6) x_{2} &\le 600 \label{eq:parinccon2}\\
-& &  x_{1} + (2/3) x_{2} &\le 708 \label{eq:parinccon3}\\
-& & .1x_{1} + .25 x_{2} &\le 135 \label{eq:parinccon4}\\
-& & x_{1}, x_{2} &\ge 0 \label{eq:parincnonneg}
-\end{alignat}
-
-The MATLAB representation of this problem in MATLAB arrays is
-\begin{verbatim}
-% the number of constraints
-numCon = 4;
-% the number of variables
-numVar = 2;
-% variable types
-VarType='CC';
-% constraint types
-A = [.7  1; .5  5/6; 1   2/3  ; .1   .25];
-BU = [630 600  708  135];
-BL = [];
-OBJ = [10  9];
-VL = [-inf -inf];
-VU = [];
-ObjType = 1;
-% leave Q empty if there are no quadratic terms
-Q = [];
-prob_name = 'ParInc Example'
-password = 'chicagoesmuyFRIO';
-%
-%
-%the solver
-solverName = 'lindo';
-%the remote service service address
-%if left empty we solve locally
-serviceAddress='http://gsbkip.chicagogsb.edu/os/OSSolverService.jws';
-% now solve
-callMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, ...
-    VarType, Q, prob_name, password, solverName, serviceAddress)
-\end{verbatim}
-This example m-file is in the {\tt data} directory and is file {\tt parincLinear.m}. Note that in addition to the problem formulation 
-we can specify which solver to use through the {\tt solverName} variable.  If solution with a remote solver is desired 
-this can be specified with the {\tt serviceAddress} variable.  If the {\tt serviceAddress} is left empty, i.e.,
-\begin{verbatim}
-serviceAddress='';
-\end{verbatim}
-then a local solver is used. In this case  it is crucial that the appropriate solver is linked in with the {\tt matlabSolver} 
-executable using the {\tt CXXLIBS} option.
-
-
-The data directory  also contains the m-file  {\tt template.m} which contains extensive comments about how to formulate 
-the problems in MATLAB.  A second example which is a quadratic problem is given in section~\ref{section:matlab}. 
-The appropriate m-file is {\tt markowitz.m}.
 
 
 
@@ -4174,10 +4070,121 @@ The {\tt osTestCode} folder holds the file {\tt osTestCode.cpp}. This is similar
 
 In this example, we show how to add cuts to tighten an LP using CGL (Cut Generation Library).
 
-\section{Building a Model in MATLAB} \label{section:matlab}
 
-We illustrate how to build a simple Markowitz portfolio optimization problem (a quadratic programming problem) from {\bf template.m}. First copy {\bf template.m} to {\bf markowitz.m}.
 
+\subsection{MATLAB:  Using MATLAB to Build and Run OSiL Model Instances}\label{section:matlab}
+
+This example differs from the other examples in that makefiles are not used. Indeed, if the user has done a vpath build, the relevant Cpp file remains in the original OS download directory under {\bf OS/examples/matlab} not in the vpath directory.
+
+
+
+
+Linear, integer, and quadratic problems can be formulated in MATLAB and then optimized either locally or over the network using the OS Library. The {\tt OSMatlab} class functions much like {\tt OSnl2osil} and {\tt OSmps2osil} and takes MATLAB arrays and creates an OSiL instance.  This class is part of the OS library. In order to use the OS library with MATLAB the user should do the following.  In order to use the {\tt OSMatlab} class it is necessary to  compile {\tt OSmatlabSolver.cpp}  into  a MATLAB Executable file.  The {\tt matlabSolver.cpp} file is in the {\tt OSModelInterfaces} directory even though it is not part of the OS library. The following steps should be followed.  We assume the user has already done a {\bf make install}.
+
+\begin{enumerate}[{\bf Step 1:}]
+
+
+
+\item{} Edit the MATLAB  {\bf mexopts.sh} (UNIX) or {\tt mexopts.bat}  so that the {\tt CXXFLAGS} option includes the header files in the {\tt cppad} directory and the {\tt include} directory in the project root. For example, it  should look like:
+\begin{verbatim}
+CXXFLAGS='-fno-common -no-cpp-precomp -fexceptions
+    -I/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/
+    -I/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/include'
+\end{verbatim}
+
+Next edit the {\tt CXXLIBS} flag so that the OS and supporting libraries are included. For example, it should look like:
+
+\begin{verbatim}
+CXXLIBS="$MLIBS -lstdc++
+    -L/Users/kmartin/Documents/files/code/ipopt/macosx/Ipopt-3.2.2/lib
+    -L/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/lib
+    -lOS  -lIpopt -lOsiCbc -lOsiClp -lCbc -lCgl -lOsi -lClp -lCoinUtils  -lm"
+\end{verbatim}
+
+For a UNIX system the {\tt mexopts.sh} file will usually be found in a directory with the release name in {\tt  $\sim$/.matlab}. For example,
+{\tt $\sim$/.matlab/R14SP3}.
+
+
+On a Windows system, the {\tt  mexopts.bat} file will usually be in a directory with the release name in {\tt C:$\backslash$Documents and Settings$\backslash$Username$\backslash$Application Data$\backslash$Mathworks$\backslash$MATLAB}
+
+
+\item{}  Build the MATLAB executable file. Start MATLAB and in the MATLAB command window connect to the directory containing the file {\tt matlabSolver.cpp}.  Execute the command:
+
+\begin{verbatim}
+mex -v OSMatlabSolver.cpp
+\end{verbatim}
+
+On a MAC OS X the resulting executable will be named {\tt matlabSolver.mexmac}. On the Windows system the file is named {\tt matlabSolver.mexw32}.
+
+\item{}  Set the MATLAB path to include the directory with the {\tt matlabSolver} executable. Also, put  the {\it m-file} {\tt callMatlabSolver.m} in a directory which is on a MATLAB path.  This file is in the {\tt OSModelInterfaces} directory.
+
+\end{enumerate}
+
+
+To use the {\tt matlabSolver} it is necessary to put the coefficients  from a linear, integer, or quadratic problem into MATLAB arrays.
+
+\begin{alignat}{2}
+& \mbox{Minimize} & \quad
+10 x_{1} + 9 x_{2}\label{eq:parinobj}\\
+& \mbox{Subject to} & \quad .7x_{1} + x_{2}  &\le 630  \label{eq:parinccon1}\\
+& & .5x_{1} + (5/6) x_{2} &\le 600 \label{eq:parinccon2}\\
+& &  x_{1} + (2/3) x_{2} &\le 708 \label{eq:parinccon3}\\
+& & .1x_{1} + .25 x_{2} &\le 135 \label{eq:parinccon4}\\
+& & x_{1}, x_{2} &\ge 0 \label{eq:parincnonneg}
+\end{alignat}
+
+The MATLAB representation of this problem in MATLAB arrays is
+\begin{verbatim}
+% the number of constraints
+numCon = 4;
+% the number of variables
+numVar = 2;
+% variable types
+VarType='CC';
+% constraint types
+A = [.7  1; .5  5/6; 1   2/3  ; .1   .25];
+BU = [630 600  708  135];
+BL = [];
+OBJ = [10  9];
+VL = [-inf -inf];
+VU = [];
+ObjType = 1;
+% leave Q empty if there are no quadratic terms
+Q = [];
+prob_name = 'ParInc Example'
+password = 'chicagoesmuyFRIO';
+%
+%
+%the solver
+solverName = 'lindo';
+%the remote service service address
+%if left empty we solve locally
+serviceAddress='http://gsbkip.chicagogsb.edu/os/OSSolverService.jws';
+% now solve
+callMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, ...
+    VarType, Q, prob_name, password, solverName, serviceAddress)
+\end{verbatim}
+This example m-file is in the {\tt data} directory and is file {\tt parincLinear.m}. Note that in addition to the problem formulation 
+we can specify which solver to use through the {\tt solverName} variable.  If solution with a remote solver is desired 
+this can be specified with the {\tt serviceAddress} variable.  If the {\tt serviceAddress} is left empty, i.e.,
+\begin{verbatim}
+serviceAddress='';
+\end{verbatim}
+then a local solver is used. In this case  it is crucial that the appropriate solver is linked in with the {\tt matlabSolver} 
+executable using the {\tt CXXLIBS} option.
+
+
+The data directory  also contains the m-file  {\tt template.m} which contains extensive comments about how to formulate 
+the problems in MATLAB.  A second example which is a quadratic problem is given in section~\ref{section:matlab}. 
+The appropriate m-file is {\tt markowitz.m}.
+
+
+
+
+
+
+
+We now illustrate how to build a simple Markowitz portfolio optimization problem (a quadratic programming problem).  The appropriate MATLAB file is {\bf markowitz.m} and it is the {data/matlabFiles} directory.
 The problem consists in investing  in a number of stocks. The expected returns and risks
 (covariances) of the stocks are known. Assume that the decision variables $x_i$
 represent the fraction of wealth invested in stock~$i$ and that no stock can have
