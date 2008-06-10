@@ -110,6 +110,7 @@
 #include "OSInstance.h"  
 #include "OSFileUtil.h"  
 #include "OSConfig.h" 
+#include "CoinError.hpp"
 
 #include "OSDefaultSolver.h"  
 #include "OSWSUtil.h" 
@@ -179,12 +180,19 @@
 # endif
 #endif
 
+#ifdef HAVE_WINDOWS_H
+#include <windows.h>
+#endif
+
 using std::cout;   
 using std::endl;
 using std::ostringstream; 
 
 int main(int argC, char* argV[])
 {
+#ifdef HAVE_WINDOWS_H
+   SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX);
+#endif
 	double getObjVal(std::string osrl);
 	//using CppAD::NearEqual;
 	bool ok;
