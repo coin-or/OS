@@ -192,7 +192,8 @@ int main(int argC, char* argV[])
 {
 //#ifdef HAVE_WINDOWS_H
 //   SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX);
-//#endif
+//#endif 
+	WindowsErrorPopupBlocker();
 	double getObjVal(std::string osrl);
 	//using CppAD::NearEqual;
 	bool ok;
