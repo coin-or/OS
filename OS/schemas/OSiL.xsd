@@ -101,7 +101,7 @@
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="parameters" type="Parameters" minOccurs="0">
+			<xs:element name="parametersAndStochasticElements" type="Parameters" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
@@ -1006,10 +1006,10 @@
 			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
-	<!--RealTimeData: recommendaion-->
+	<!--RealTimeData: recommendation-->
 	<xs:complexType name="RealTimeData">
 		<xs:annotation>
-			<xs:documentation>recommendaion</xs:documentation>
+			<xs:documentation>recommendation</xs:documentation>
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
 			<xs:element name="defaultURI" type="xs:anyURI" default="." minOccurs="0">
@@ -1061,7 +1061,7 @@
 	</xs:complexType>
 	<xs:complexType name="RealTimeDataURI">
 		<xs:annotation>
-			<xs:documentation>recommendaion</xs:documentation>
+			<xs:documentation>recommendation</xs:documentation>
 		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:anyURI">
@@ -1071,7 +1071,7 @@
 	</xs:complexType>
 	<xs:complexType name="RealTimeDataURIAliases">
 		<xs:annotation>
-			<xs:documentation>recommendaion</xs:documentation>
+			<xs:documentation>recommendation</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:annotation>
@@ -1083,7 +1083,7 @@
 	</xs:complexType>
 	<xs:complexType name="RealTimeDataParam">
 		<xs:annotation>
-			<xs:documentation>recommendaion</xs:documentation>
+			<xs:documentation>recommendation</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="RealTimeAccess">
@@ -1103,7 +1103,7 @@
 	</xs:complexType>
 	<xs:complexType name="RealTimeDataParameters">
 		<xs:annotation>
-			<xs:documentation>recommendaion</xs:documentation>
+			<xs:documentation>recommendation</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:annotation>
@@ -1115,7 +1115,7 @@
 	</xs:complexType>
 	<xs:complexType name="RealTimeDataVar">
 		<xs:annotation>
-			<xs:documentation>recommendaion</xs:documentation>
+			<xs:documentation>recommendation</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="RealTimeAccess">
@@ -1135,7 +1135,7 @@
 	</xs:complexType>
 	<xs:complexType name="RealTimeDataVariables">
 		<xs:annotation>
-			<xs:documentation>recommendaion</xs:documentation>
+			<xs:documentation>recommendation</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:annotation>
@@ -1147,7 +1147,7 @@
 	</xs:complexType>
 	<xs:complexType name="RealTimeDataCon">
 		<xs:annotation>
-			<xs:documentation>recommendaion</xs:documentation>
+			<xs:documentation>recommendation</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="RealTimeAccess">
@@ -1166,7 +1166,7 @@
 	</xs:complexType>
 	<xs:complexType name="RealTimeDataConstraints">
 		<xs:annotation>
-			<xs:documentation>recommendaion</xs:documentation>
+			<xs:documentation>recommendation</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:annotation>
@@ -1178,7 +1178,7 @@
 	</xs:complexType>
 	<xs:complexType name="RealTimeDataObj">
 		<xs:annotation>
-			<xs:documentation>recommendaion</xs:documentation>
+			<xs:documentation>recommendation</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="RealTimeAccess">
@@ -1198,7 +1198,7 @@
 	</xs:complexType>
 	<xs:complexType name="RealTimdDataObjectives">
 		<xs:annotation>
-			<xs:documentation>recommendaion</xs:documentation>
+			<xs:documentation>recommendation</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:annotation>
@@ -1210,7 +1210,7 @@
 	</xs:complexType>
 	<xs:complexType name="RealTimeDataLinearConstraintCoefficientElement">
 		<xs:annotation>
-			<xs:documentation>recommendaion</xs:documentation>
+			<xs:documentation>recommendation</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="RealTimeAccess">
@@ -1221,7 +1221,7 @@
 	</xs:complexType>
 	<xs:complexType name="RealTimeDataLinearConstraintCoefficients">
 		<xs:annotation>
-			<xs:documentation>recommendaion</xs:documentation>
+			<xs:documentation>recommendation</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:annotation>
@@ -1233,7 +1233,7 @@
 	</xs:complexType>
 	<xs:complexType name="RealTimeDataQuadraticCoefficients">
 		<xs:annotation>
-			<xs:documentation>recommendaion</xs:documentation>
+			<xs:documentation>recommendation</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:annotation>
@@ -1245,7 +1245,7 @@
 	</xs:complexType>
 	<xs:complexType name="RealTimeDataQuadraticTerm">
 		<xs:annotation>
-			<xs:documentation>recommendaion</xs:documentation>
+			<xs:documentation>recommendation</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="RealTimeAccess">
@@ -1257,7 +1257,7 @@
 	</xs:complexType>
 	<xs:complexType name="RealTimeDataNonlinearExpressionNumber">
 		<xs:annotation>
-			<xs:documentation>recommendaion</xs:documentation>
+			<xs:documentation>recommendation</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="RealTimeAccess">
@@ -1267,7 +1267,7 @@
 	</xs:complexType>
 	<xs:complexType name="RealTimeDataNonlinearExpressionString">
 		<xs:annotation>
-			<xs:documentation>recommendaion</xs:documentation>
+			<xs:documentation>recommendation</xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="RealTimeAccess">
@@ -1277,7 +1277,7 @@
 	</xs:complexType>
 	<xs:complexType name="RealTimeDataNonlinearExpressions">
 		<xs:annotation>
-			<xs:documentation>recommendaion</xs:documentation>
+			<xs:documentation>recommendation</xs:documentation>
 		</xs:annotation>
 		<xs:choice maxOccurs="unbounded">
 			<xs:annotation>
@@ -1290,7 +1290,7 @@
 	</xs:complexType>
 	<xs:complexType name="RealTimeAccessXPath">
 		<xs:annotation>
-			<xs:documentation>recommendaion</xs:documentation>
+			<xs:documentation>recommendation</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="uri" type="xs:anyURI" use="optional" default="."/>
 		<xs:attribute name="uriAlias" type="xs:string" use="optional"/>
@@ -1298,7 +1298,7 @@
 	</xs:complexType>
 	<xs:complexType name="RealTimeAccess">
 		<xs:annotation>
-			<xs:documentation>recommendaion</xs:documentation>
+			<xs:documentation>recommendation</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="xPath" type="RealTimeAccessXPath"/>
