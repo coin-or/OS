@@ -94,7 +94,7 @@
 \newcommand{\FigureFolder}{figures}
 
 \newif\ifknitro \knitrofalse    % change to \knitrotrue once we get knitro connected again
-\newif\ifipopt  \ipoptfalse     % change to \ipopttrue  once we get the build problems sorted out
+\newif\ifipopt  \ipopttrue      % change to \ipopttrue  once we get the build problems sorted out
 
 \begin{document}
 
@@ -198,7 +198,7 @@ or LINDO -- see Section~\ref{section:amplclient}.
 
 \item Build a remote solver service using Apache Tomcat -- see Section~\ref{section:tomcat}.
 
-\item Use MATLAB to generate problem instances in OSiL format and call a solver either remotely or locally -- see Section~\ref{section:matlab}.
+\item Use MATLAB to generate problem instances in OSiL format and call a solver either remotely or locally -- see Section~\ref{section:usingmatlab}.
 
 \item Use the OS library for algorithmic differentiation (in conjunction with COIN-OR CppAD) -- see Section~\ref{section:ad}.
 \end{itemize}
@@ -732,16 +732,21 @@ The Microsoft Visual Studio files are automatically downloaded with an SVN check
 
 Open the solution file or the individual project files (for instance by double clicking 
 on them in Windows Explorer)  and select Build from the menu bar.
+If you have ASL (see Section~\ref{section:ASL-msvs}) downloaded,
+you can also build the {\tt OSAmplClient} (see Section~\ref{section:amplclient} 
+by modifying the Configuration Manager and selecting the
+two projects {\tt libOSnl2OSiL} and {\tt OSAmplClient},
+which by default are not included in the build.
 
 \item{} Run the {\tt unitTest}. Connect to the directory {\tt COIN-OR/OS/test} and run either the release or debug version of the {\tt unitTest} executable.
 \end{enumerate}
 
 \ifipopt
-The solution file for version~7 provides two configurations, Debug and Release. 
+The solution file for version~7 provides two configurations, {\tt Debug} and {\tt Release}.
 The former includes debug information, but both are configured without Ipopt 
 (see section~\ref{section:ipopt}) or any of the third-party software described in 
 section~\ref{section:otherthirdparty}. The solution file for version~8 includes a third 
-configuration, Enhanced, which can be used to add Ipopt and ASL 
+configuration, {\tt Release-ipopt}, which can be used to add Ipopt and ASL 
 (see section~\ref{section:ASL}). In order to build this section successfully, 
 the user must first download and process additional software as explained in sections 
 \ref{section:ipopt-msvs} and~\ref{section:ASL-msvs}.
@@ -911,7 +916,8 @@ The project is built using the following steps.
 
 \begin{itemize}
 
-\item If you wish to use the third-party software with MSYS it is best to get {\tt wget}. See page~\pageref{section:windowsinstall}.
+\item If you wish to use the third-party software with MSYS it is best to get {\tt wget}. 
+See section~\ref{section:wget}.
 
  \item Do not put any imbedded blanks in the path to the OS project.
 \end{itemize}
@@ -1070,7 +1076,7 @@ to the {\tt configure} script.
 If you are working in Unix or one of the Unix-like environments described in
 section~\ref{section:windowsinstall}, you can proceed as follows.
 \else
-If you do choose to build Ipopt, it is best to work in Unix or one of the Unix-like environments described in
+If you do choose to build {\tt Ipopt}, it is best to work in Unix or one of the Unix-like environments described in
 section~\ref{section:windowsinstall} (we recommend MSYS). 
 \fi
 To get the necessary third-party software, first 
@@ -1098,7 +1104,7 @@ http://www.coin-or.org/Ipopt/documentation/node13.html
 
 \begin{enumerate}[{Option} 1.]
 
-\item{}   If you \ifipopt\else are building in a Unix-like environment and\fi have a Fortran 95 compiler that 
+\item{}   If you \ifipopt\else are building in a Unix-like environment and \fi have a Fortran 95 compiler that 
 recognizes embedded preprocessor statements (such as {\tt gfortran} --- see~\url{http://gcc.gnu.org/fortran/} 
 or {\tt g95} --- see~\url{http://www.g95.org/}), you can simply run the {\tt configure} script and the FORTRAN 
 compiler will be detected and the {\tt Ipopt} project will be built.
@@ -1155,7 +1161,7 @@ you also need to obtain the {\tt f2c} Fortran to C translator. The steps are as 
 \item{} From netlib, download the file
 
 \begin{verbatim}
-   http://http://www.netlib.org/f2c/libf2c.zip
+   http://www.netlib.org/f2c/libf2c.zip
 \end{verbatim}
 
    and extract it in
@@ -1185,12 +1191,21 @@ One file created in this process should be
 \end{verbatim}
 
    (If you see a problem related to the file {\tt comptry.bat}, edit the
-   file {\tt makefile.vc} and just delete the one occurance of
+   file {\tt makefile.vc} and just delete the line containg the one occurance of
    '{\tt comptry.bat}'.)
+
+Another possible error is that the system cannot find the header file {\tt unistd.h}.
+If this occurs, add
+
+\begin{verbatim}
+-DNO_ISATTY
+\end{verbatim}
+
+at the end of line~9 of {\tt makefile.vc}.
 
 \item{} Download the executable {\tt f2c.exe} from \url{http://www.netlib.org/f2c/mswin/}
 and put it somewhere into your path
-   (e.g., C:$\backslash$Windows)
+   (e.g., {\tt C:$\backslash$Windows})
 
 \item{} Download the source code for Blas (from \url{ftp://www.netlib.org/blas/blas.tgz}), 
 Lapack (from \url{ftp://www.netlib.org/lapack/lapack-lite-3.1.0.tgz}), and HSL (see previous section).
@@ -1232,8 +1247,17 @@ Now you can open the solution file
    OS\MSVisualStudio\v8\OS.sln
 \end{verbatim}
 
-and select the configuration Enhanced. This will build the OSSolverService executable and a unitTest
-with the Ipopt solver and the AMPL solver library  (see section~\ref{section:ASL}).
+and select the configuration {\tt Release-ipopt}. 
+Open the Configuration Manager (in the Build menu)
+and set all twenty-three projects to "Build"
+(by clicking the check-box next to the project name).
+Then select Build (or press F7).
+This will build all the necessary libraries for the
+{\tt OSSolverService} executable
+with the {\tt Ipopt} solver. A {\tt unitTest},
+the OSAmplClient (see section~\ref{section:amplclient})
+and all the utility programs in sections \ref{section:applications}
+and~\ref{section:examples} are included in the build, as well.
 \end{enumerate}
 
 
@@ -1300,11 +1324,12 @@ multiple files named {\tt configure} in various subdirectories, you should only 
 distribution root directory, possibly accessed from a {\tt VPATH} as in Section~\ref{section:vpath}.
 It sets important global variables and will call all other necessary configure files in turn.
 You may also wish to view
-\begin{verbatim}
+
 {\small
+\begin{verbatim}
 https://projects.coin-or.org/BuildTools/wiki/user-configure#CommandLineArgumentsforconfigure
-}
 \end{verbatim}
+}
 for more information on command line arguments that are illustrated in the subsections below.
 
 
@@ -1319,7 +1344,7 @@ which is in the distribution root folder. Locate and execute the {\tt get.ASL} s
 the {\tt configure} script. The {\tt configure} script will then build the correct ASL library.
 
 Microsoft  Visual Studio users will have to build the ASL library separately and
-then link it with the OS lib in the OS project file.  The necessary source files are at
+then link it with the OS library in the OS project file.  The necessary source files are at
 \begin{verbatim}
 http://netlib.sandia.gov/cgi-bin/netlib/netlibfiles.tar?filename=netlib/ampl/solvers
 \end{verbatim}
@@ -1328,18 +1353,19 @@ After unpacking the distribution you will have to create the file
 as follows: Copy the file {\tt details.c0} to {\tt details.c} and replace the
 line
 \begin{verbatim}
-char sysdetails_ASL[] = "System_details"
+char sysdetails_ASL[] = "System_details";
 \end{verbatim}
 by
 \vskip 8pt
-\noindent{\tt char sysdetails\_ASL[] = "MS VC++ }$n${\tt .0"}
+\noindent{\tt char sysdetails\_ASL[] = "MS VC++ }$n${\tt .0";}
 \vskip 8pt
 \noindent
 where $n$ is the version number of the {\tt cl} compiler on your system (most
 likely 6, 7 or~8). 
 
-To avoid linker errors in MSVS, you must also edit the file {\tt fpinitmt.c}. Specifically you must
-hide the definition of {\tt \_matherr}, that is, you must comment out lines 212--225
+To avoid linker errors in MSVS, you may have to edit the file {\tt fpinitmt.c}. 
+Specifically, if you see the error ``multiply defined object \_matherr'', you must
+hide the definition of {\tt \_matherr} in {\tt fpinitmt.c} and comment out lines 212--225
 which read
 \begin{verbatim}
  matherr_rettype
@@ -1368,12 +1394,18 @@ This produces the library file {\tt amplsolv.lib}, which is placed in the subfol
 {\tt ThirdParty$\tt\backslash$ASL$\tt\backslash$solvers}.
 
 \ifipopt
-Before you can use the Enhanced configuration in our solution file {\tt OS.sln}, you must also prepare the source for the solver Ipopt 
+Before you can use the {\tt Release-ipopt} configuration in our solution file {\tt OS.sln}, 
+you must also prepare the source for the solver {\tt Ipopt}
 (see section~\ref{section:ipopt-msvs}). If you want to add other third-party software or include debug information, 
 you may have to modify (or copy) this configuration and tailor it to your needs.
 \else
-Now you are ready to use MSVS. We have prepared a configuration that builds OS executables with ASL, called
-{\tt Release-with-ASL}. If you want to add other third-party software or include debug information, you may have to modify
+Now you are ready to use MSVS. Both the {\tt Debug} and {\tt Release} configurations
+contain two projects, {\tt libOSnl2OSiL} and {\tt OSAmplClient}, which use the ASL library
+and are normally deactivated. Activate these projects
+in the Configuration Manager (available from the Build menu), then select Build.
+%We have prepared a configuration that builds OS executables 
+%with ASL, called {\tt Release-with-ASL}. 
+If you want to add other third-party software or include debug information, you may have to modify
 (or copy) this configuration and tailor it to your needs.
 \fi
 
@@ -1469,7 +1501,7 @@ configure --with-lindo-incdir=/home/kmartin/files/code/lindo/linux/include
 
 \subsubsection{MATLAB}
 
-Install MATLAB on the client machine and follow the instruction in Section~\ref{section:matlab}.
+Install MATLAB on the client machine and follow the instruction in Section~\ref{section:usingmatlab}.
 
 \subsubsection{Library Paths}
 
@@ -1871,8 +1903,8 @@ optimization problems including linear programs, mixed-integer programs,
 quadratic programs, and very general nonlinear programs.  An example solution (for the problem given in
  (\ref{eq:roobj})--(\ref{eq:ro3}) ) in OSrL format is given below.
 
-\begin{verbatim}
 {\small
+\begin{verbatim}
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type = "text/xsl"
   href = "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/stylesheets/OSrL.xslt"?>
@@ -1913,8 +1945,8 @@ http://www.optimizationservices.org/schemas/OSrL.xsd">
                 </constraints>
             </solution>
         </optimization>
-}
 \end{verbatim}
+}
 
 
 
@@ -3707,7 +3739,7 @@ On a client machine, create  the file {\tt testremote.config} with the following
 -serviceLocation http://***.***.***.***:8080/os/OSSolverService.jws
 -osil /parincLinear.osil
 \end{verbatim}
-where ***.***.***.*** is the IP address of the Tomcat server machine. Then, assuming the files {\tt testremote.config} and {\tt parincLinear.osil} are in the same directory on the client machine as the {\tt OSSolverService} execute:
+where {\tt ***.***.***.***} is the IP address of the Tomcat server machine. Then, assuming the files {\tt testremote.config} and {\tt parincLinear.osil} are in the same directory on the client machine as the {\tt OSSolverService} execute:
 \begin{verbatim}
 ./OSSolverService -config testremote.config
 \end{verbatim}
@@ -4072,20 +4104,31 @@ In this example, we show how to add cuts to tighten an LP using CGL (Cut Generat
 
 
 
-\subsection{MATLAB:  Using MATLAB to Build and Run OSiL Model Instances}\label{section:matlab}
+\subsection{MATLAB:  Using MATLAB to Build and Run OSiL Model Instances}\label{section:usingmatlab}
 
-This example differs from the other examples in that makefiles are not used. Indeed, if the user has done a vpath build, the relevant {\tt cpp} file remains in the original OS download directory under {\bf OS/examples/matlab},  not in the vpath directory.
+This example differs from the other examples in that makefiles are not used. 
+Indeed, if the user has done a vpath build, the relevant {\tt cpp} file remains 
+in the original OS download directory under {\tt OS/examples/matlab},  
+not in the vpath directory.
 
 
 
 
-Linear, integer, and quadratic problems can be formulated in MATLAB and then optimized either locally or over the network using the OS Library. The {\tt OSMatlab} class functions much like {\tt OSnl2osil} and {\tt OSmps2osil} and takes MATLAB arrays and creates an OSiL instance.  This class is part of the OS library.   In order to use the {\tt OSMatlab} class it is necessary to  compile {\tt OSmatlabSolver.cpp}  into  a MATLAB Executable ({\tt mex}) file.  The {\tt OSmatlabSolver.cpp} file is in the {\tt  OS/examples/matlab} directory. The following steps should be followed.  We assume the user has already done a {\bf make install}.
+Linear, integer, and quadratic problems can be formulated in MATLAB and then optimized 
+either locally or over the network using the OS Library. The {\tt OSMatlab} class 
+functions much like {\tt OSnl2osil} and {\tt OSmps2osil} and takes MATLAB arrays 
+to create an OSiL instance.  This class is part of the OS library.   
+In order to use the {\tt OSMatlab} class it is necessary to  compile 
+{\tt OSmatlabSolver.cpp}  into  a MATLAB Executable ({\tt mex}) file.  
+The {\tt OSmatlabSolver.cpp} file is in the {\tt  OS/examples/matlab} directory. 
+The following steps should be followed.  
+(We assume the user has already done a {\tt make install}.)
 
 \begin{enumerate}[{\bf Step 1:}]
 
 
 
-\item{} Edit the MATLAB  {\bf mexopts.sh} (UNIX) or {\tt mexopts.bat}  (Windows) so that the {\tt CXXFLAGS} option includes the header files in the {\tt cppad} directory and the {\tt include} directory in the project root. For example, it  should look like:
+\item{} Edit the MATLAB file {\tt mexopts.sh} (UNIX) or {\tt mexopts.bat}  (Windows) so that the {\tt CXXFLAGS} option includes the header files in the {\tt cppad} directory and the {\tt include} directory in the project root. For example, it  should look like:
 \begin{verbatim}
 CXXFLAGS='-fno-common -no-cpp-precomp -fexceptions
     -I/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/
@@ -4183,7 +4226,7 @@ the problems in MATLAB.   The user can edit the {\tt template.m} file as necessa
 
 
 
- A second example which is a quadratic problem is given in section~\ref{section:matlab}. 
+ A second example which is a quadratic problem is given in section~\ref{section:usingmatlab}. 
 The appropriate m-file is {\tt markowitz.m}.  The appropriate MATLAB file is {\bf markowitz.m} and it is the {data/matlabFiles} directory.
 The problem consists in investing  in a number of stocks. The expected returns and risks
 (covariances) of the stocks are known. Assume that the decision variables $x_i$
@@ -4204,7 +4247,7 @@ numVar = 3;
 
 
 
-All the variables are continuous
+All the variables are continuous:
 
 
 \begin{verbatim}
@@ -4217,8 +4260,8 @@ Next define the constraint upper and lower bounds. There are two constraints, an
 
 
 \begin{verbatim}
-BU = [1  inf];
 BL = [1   .15];
+BU = [1  inf];
 \end{verbatim}
 
 
@@ -4298,7 +4341,7 @@ The third row of $Q$ is the index of the second variable in the quadratic term. 
 
 
 
-The last (fourth) row is the coefficient. Therefore, the fourth row is
+The last (fourth) row is the coefficient. Therefore, the fourth row reads
 
 
 
