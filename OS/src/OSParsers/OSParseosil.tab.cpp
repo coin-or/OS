@@ -3689,9 +3689,9 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 					if(varinitStringattON == true) {  osilerror_wrapper( ch,osillineno,"error too many variable initString attributes"); return false;}
 					varinitStringattON = true;
 					GETATTRIBUTETEXT;
-					delete [] attText;
 					//printf("ATTRIBUTE = %s\n", attText);
 					osinstance->instanceData->variables->var[varcount]->initString=attText;
+					delete [] attText;
 					initString -= 11;
 				}
 				break;
