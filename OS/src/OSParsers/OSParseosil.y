@@ -1305,7 +1305,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 				// if i < 4 there is an error
 				// if i = 4 we matched init
 				// if i = 10 we matched initString
-				if( ( (ch - *p) != 4)  && (i != 10)) {  osilerror_wrapper( ch,osillineno,"error in variables init or initString attribute"); return false;}
+				if( ( (ch - *p) != 4)  && ( (ch - *p) != 10)) {  osilerror_wrapper( ch,osillineno,"error in variables init or initString attribute"); return false;}
 				if((ch - *p) == 4){
 					if(varinitattON == true) {  osilerror_wrapper( ch,osillineno,"error too many variable init attributes"); return false;}
 					varinitattON = true;
@@ -1319,9 +1319,9 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 					if(varinitStringattON == true) {  osilerror_wrapper( ch,osillineno,"error too many variable initString attributes"); return false;}
 					varinitStringattON = true;
 					GETATTRIBUTETEXT;
-					delete [] attText;
 					//printf("ATTRIBUTE = %s\n", attText);
 					osinstance->instanceData->variables->var[varcount]->initString=attText;
+					delete [] attText;
 					initString -= 11;
 				}
 				break;

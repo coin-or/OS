@@ -103,7 +103,7 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 						outStr <<  "\"";
 					}
 					if(m_OSInstance->instanceData->variables->var[i]->initString != ""){
-						outStr << " initstring=\"" ;
+						outStr << " initString=\"" ;
 						outStr << m_OSInstance->instanceData->variables->var[i]->initString ;
 						outStr <<  "\"";
 					}
