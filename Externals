@@ -15,4 +15,4 @@ ThirdParty/Lapack  https://projects.coin-or.org/svn/BuildTools/ThirdParty/Lapack
 ThirdParty/Mumps  https://projects.coin-or.org/svn/BuildTools/ThirdParty/Mumps/releases/1.0.3
 Ipopt  https://projects.coin-or.org/svn/Ipopt/releases/3.3.3/Ipopt
 DyLP  https://projects.coin-or.org/svn/DyLP/releases/1.3.0/DyLP
-cppad  https://projects.coin-or.org/svn/CppAD/releases/2.0.1/cppad
+cppad  https://projects.coin-or.org/svn/CppAD/releases/20071016.1/cppad
