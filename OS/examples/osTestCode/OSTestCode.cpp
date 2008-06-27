@@ -36,8 +36,8 @@
 #include "OSInstance.h"  
 #include "OSFileUtil.h"   
 #include "OSDefaultSolver.h"  
-//#include "OSWSUtil.h" 
-//#include "OSSolverAgent.h"   
+#include "OSWSUtil.h" 
+#include "OSSolverAgent.h"   
 #include "OShL.h"     
 #include "OSErrorClass.h"
 #include "OSmps2osil.h"   
@@ -159,7 +159,8 @@ int main( ){
 		// Write out the model
 		OSiLWriter *osilwriter; 
 		osilwriter = new OSiLWriter();
-		cout << osilwriter->writeOSiL( osinstance);
+		std::string osil = osilwriter->writeOSiL( osinstance);
+		cout << osil;
 		// done writing the model
 		cout << "Done writing the Model" << endl;
 		// now solve the model
@@ -171,6 +172,19 @@ int main( ){
 		solver->buildSolverInstance();
 		solver->solve();
 		std::cout << solver->osrl << std::endl;
+		
+		
+		// now solve remotely
+		
+		OSSolverAgent* osagent = NULL;
+		osagent = new OSSolverAgent("gsbkip.chicagogsb.edu/os/OSSolverService.jws");	
+		
+		std::string osol = "<osol></osol>";
+		cout << "osil:" << endl << endl;
+		cout << osil  << endl << endl;
+		std::string osrl = osagent->solve(osil, osol);
+		cout << "osrl result from osagent:" << endl << endl;
+		cout << osrl  << endl << endl;
  
 		// do garbage collection
 		delete osinstance;
