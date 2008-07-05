@@ -106,6 +106,7 @@ AC_COIN_HAS_PROJECT(SYMPHONY)
 AC_COIN_HAS_PROJECT(DyLP)
 AC_COIN_HAS_PROJECT(Vol)
 AC_COIN_HAS_PROJECT(Ipopt)
+AC_COIN_HAS_PROJECT(Bonmin)
 AC_COIN_HAS_PROJECT(cppad)
 
 
@@ -260,7 +261,16 @@ if test $coin_has_ipopt != unavailable &&
 fi
 
 
-
+if test $coin_has_bonmin != unavailable &&
+   test $coin_has_bonmin != skipping; then
+  case $CXX in
+    cl*)
+       bonominlib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libbonmin.lib';;
+     *)
+       bonminlib="-L\$(INSTALLIBDIR) -lbonmin";;
+  esac
+  AC_SUBST(ipoptlib)  
+fi
 
 
 
