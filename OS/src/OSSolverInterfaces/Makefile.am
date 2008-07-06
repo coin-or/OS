@@ -33,6 +33,13 @@ libOSSolverInterfaces_la_SOURCES += 	OSIpoptSolver.cpp \
 endif
 
 
+if COIN_HAS_BONMIN
+libOSSolverInterfaces_la_SOURCES += 	OSBonminSolver.cpp \
+	OSBonminSolver.h
+endif
+
+
+
 if COIN_HAS_KNITRO
 libOSSolverInterfaces_la_SOURCES += 	OSKnitroSolver.cpp \
 	OSKnitroSolver.h
@@ -137,6 +144,16 @@ if COIN_HAS_IPOPT
 	-I`$(CYGPATH_W) $(IPOPTOBJDIR)/inc`
 endif
 
+
+
+if COIN_HAS_BONMIN
+  AM_CPPFLAGS += \
+	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/Interfaces` \
+	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/Algorithms` \
+	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/CbcBonmin` \
+	-I`$(CYGPATH_W) $(BONMINOBJDIR)/inc`
+endif
+
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
@@ -164,6 +181,9 @@ if COIN_HAS_IPOPT
 includecoin_HEADERS += OSIpoptSolver.h
 endif
 
+if COIN_HAS_BONMIN
+includecoin_HEADERS += OSBonminSolver.h
+endif
 
 
 

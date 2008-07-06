@@ -83,6 +83,7 @@ OS/data/osilFiles/CppADTestLag.osil -text
 OS/data/osilFiles/HS071_NLP.osil -text
 OS/data/osilFiles/HS071_NLPMod.osil -text
 OS/data/osilFiles/avion2.osil -text
+OS/data/osilFiles/bonminEx1.osil -text
 OS/data/osilFiles/callBackTest.osil -text
 OS/data/osilFiles/callBackTestRowMajor.osil -text
 OS/data/osilFiles/gamstrnsport.osil -text
@@ -230,6 +231,8 @@ OS/src/OSParsers/OSrLParserData.cpp -text
 OS/src/OSParsers/OSrLParserData.h -text
 OS/src/OSSolverInterfaces/Makefile.am -text
 OS/src/OSSolverInterfaces/Makefile.in -text
+OS/src/OSSolverInterfaces/OSBonminSolver.cpp -text
+OS/src/OSSolverInterfaces/OSBonminSolver.h -text
 OS/src/OSSolverInterfaces/OSCoinSolver.cpp -text
 OS/src/OSSolverInterfaces/OSCoinSolver.h -text
 OS/src/OSSolverInterfaces/OSIpoptSolver.cpp -text

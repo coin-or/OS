@@ -24411,7 +24411,7 @@ if test $coin_has_bonmin != unavailable &&
    test $coin_has_bonmin != skipping; then
   case $CXX in
     cl*)
-       bonominlib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libbonmin.lib';;
+       bonminlib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libbonmin.lib';;
      *)
        bonminlib="-L\$(INSTALLIBDIR) -lbonmin";;
   esac
@@ -29719,6 +29719,11 @@ fi
 ##
 ## osil test files
 ##
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/bonminEx1.osil"
+fi
+
 
 if test $coin_vpath_config = yes; then
   coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/parincLinear.osil"

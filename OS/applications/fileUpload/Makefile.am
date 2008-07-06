@@ -170,6 +170,17 @@ if COIN_HAS_IPOPT
 endif
 
 
+
+if COIN_HAS_BONMIN
+  AM_CPPFLAGS += \
+	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/Interfaces` \
+	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/Algorithms` \
+	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/CbcBonmin` \
+	-I`$(CYGPATH_W) $(BONMINOBJDIR)/inc`
+  OSFileUpload_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la
+endif
+
+
 if COIN_HAS_KNITRO
   AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(KNITROINCDIR)` 
   OSFileUpload_LDADD += $(KNITROLIB)

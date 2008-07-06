@@ -244,6 +244,19 @@ endif
 
 
 
+if COIN_HAS_BONMIN
+  AM_CPPFLAGS += \
+	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/Interfaces` \
+	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/Algorithms` \
+	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/CbcBonmin` \
+	-I`$(CYGPATH_W) $(BONMINOBJDIR)/inc`
+  LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la
+  OSSolverService_DEPENDENCIES +=  $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la
+#ADDLIBS += `cat $(BONMINOBJDIR)/src/Interfaces/bonmin_addlibs_cpp.txt`
+endif
+
+
+
 if COIN_HAS_KNITRO
   AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(KNITROINCDIR)` 
   LDADD += $(KNITROLIB)
