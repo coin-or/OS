@@ -189,8 +189,8 @@ public:
 	  virtual const SosInfo * sosConstraints() const{return NULL;}
 	  virtual const BranchingInfo* branchingInfo() const{return NULL;}
 	  
-	  //void printSolutionAtEndOfAlgorithm(){
-	  //printSol_ = true;}
+	  void printSolutionAtEndOfAlgorithm(){
+	  printSol_ = true;}
 	  
 	  
 
@@ -253,7 +253,7 @@ public:
 	
 	//SmartPtr<BonminProblem> tminlp = new BonminProblem;
 	
-	SmartPtr<TMINLP> tminlp;
+	SmartPtr<BonminProblem> tminlp;
 	
 	//SmartPtr<IpoptApplication> app;
 	

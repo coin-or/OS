@@ -659,7 +659,7 @@ void BonminSolver::solve() throw (ErrorClass) {
 		  int printSolution;
 		  bonmin.options()->GetEnumValue("print_solution", printSolution,"");
 		  if(printSolution == 1){
-		   // tminlp->printSolutionAtEndOfAlgorithm();
+		    tminlp->printSolutionAtEndOfAlgorithm();
 		  }
 
 		  //Now initialize from tminlp
@@ -803,7 +803,7 @@ void BonminSolver::dataEchoCheck(){
 BonminProblem::BonminProblem(OSInstance *osinstance_,  OSResult *osresult_) {
 	osinstance = osinstance_;
 	osresult = osresult_;
-	printSol_ = true;
+	printSol_ = false;
 }
 
 BonminProblem::~BonminProblem() {
