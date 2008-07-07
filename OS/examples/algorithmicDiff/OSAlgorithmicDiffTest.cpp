@@ -186,6 +186,24 @@ int  main(){
 				std::cout <<  "Variable Index = "   << posVarIndexMap->first  << std::endl ;
 		}
 		std::cout << "Number of nonlinear variables =  " << varIndexMap.size() << std::endl;
+		
+		//
+		
+		// get the number of nonlinear terms
+		
+		size_t mm = osinstance->getNumberOfNonlinearExpressionTreeModIndexes();
+		
+		int jj;
+		
+		for(jj = 0; jj < mm; jj++){
+			std::cout << osinstance->getNonlinearExpressionTreeModIndexes()[ jj] << std::endl;
+		}
+		
+		std::cout << "Number of unique nonlinear terms =  " <<  mm << std::endl;
+		//return 0;
+		
+		
+		
 		// domain space vector
 		size_t n  = varIndexMap.size(); // three variables
 		// range space vector

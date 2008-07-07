@@ -79,11 +79,66 @@ bool BonminProblem::get_variables_types(Index n, VariableType* var_types){
 
 bool BonminProblem::get_variables_linearity(Index n, Ipopt::TNLP::LinearityType* var_types){
 	
+	
+	
+	std::cout << "Initialize Nonlinear Structures" << std::endl;
+	try{
+		osinstance->initForAlgDiff( );
+	}
+	catch(const ErrorClass& eclass){
+		bonminErrorMsg = eclass.errormsg;
+		throw;  
+	}	
+	/**
+	 * get an index map of the nonlinear variables
+	 * and see which variable are in <nonlinearExpressions>
+	 * element
+	 */	
+	std::map<int, int> varIndexMap;
+	std::map<int, int>::iterator posVarIndexMap;
+	varIndexMap = osinstance->getAllNonlinearVariablesIndexMap( );
+	/* first make all continuous */
+	
+	int i;
+	
+	for(i = 0; i < n; i++){
+		var_types[ i] = Ipopt::TNLP::LINEAR;	
+	}
+	/**
+	 * iterate through and get an index of all variables that
+	 * are in <nonlinearExpressions> element
+	 */		
+	for(posVarIndexMap = varIndexMap.begin(); posVarIndexMap != varIndexMap.end(); ++posVarIndexMap){
+			std::cout <<  "Variable Index = "   << posVarIndexMap->first  << std::endl ;
+			var_types[ posVarIndexMap->first] = Ipopt::TNLP::NON_LINEAR;
+	}
+	std::cout << "Number of nonlinear variables =  " << varIndexMap.size() << std::endl;	
 
 	return true;
 }
 
 bool BonminProblem::get_constraints_linearity(Index m, Ipopt::TNLP::LinearityType* const_types){
+	
+	int i;
+	
+	for(i  = 0; i < m; i++){
+		const_types[ i] = Ipopt::TNLP::LINEAR;
+	}
+	
+	
+	int mm = osinstance->getNumberOfNonlinearExpressionTreeModIndexes();
+	
+
+	
+	for(i = 0; i < mm; i++){
+		if(osinstance->getNonlinearExpressionTreeModIndexes()[ i] >= 0){
+			std::cout << osinstance->getNonlinearExpressionTreeModIndexes()[ i] << std::endl;
+			const_types[ osinstance->getNonlinearExpressionTreeModIndexes()[ i] ] = Ipopt::TNLP::NON_LINEAR;
+			
+		}
+		
+	}
+		
 	return true;
 }
 
@@ -102,7 +157,7 @@ bool BonminProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 		osinstance->initForAlgDiff( );
 	}
 	catch(const ErrorClass& eclass){
-		ipoptErrorMsg = eclass.errormsg;
+		bonminErrorMsg = eclass.errormsg;
 		throw;  
 	}	
 	// use the OS Expression tree for function evaluations instead of CppAD
@@ -113,7 +168,7 @@ bool BonminProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 		sparseJacobian = osinstance->getJacobianSparsityPattern();
 	}
 	catch(const ErrorClass& eclass){
-		ipoptErrorMsg = eclass.errormsg;
+		bonminErrorMsg = eclass.errormsg;
 		throw;  
 	}
 	//std::cout << "Done calling sparse jacobian" << std::endl;
@@ -213,7 +268,7 @@ bool BonminProblem::eval_f(Index n, const Number* x, bool new_x, Number& obj_val
 		obj_value  = osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(x), NULL, NULL, new_x, 0 )[ 0];
 	}
 	catch(const ErrorClass& eclass){
-		ipoptErrorMsg = eclass.errormsg;
+		bonminErrorMsg = eclass.errormsg;
 		throw;  
 	}
 	if( CommonUtil::ISOSNAN( (double)obj_value) ) return false;
@@ -228,7 +283,7 @@ bool BonminProblem::eval_grad_f(Index n, const Number* x, bool new_x, Number* gr
   		objGrad = osinstance->calculateObjectiveFunctionGradient( const_cast<double*>(x), NULL, NULL, -1,  new_x, 1);
 	}
    	catch(const ErrorClass& eclass){
-		ipoptErrorMsg = eclass.errormsg;
+		bonminErrorMsg = eclass.errormsg;
 		throw;  
 	}
   	for(i = 0; i < n; i++){
@@ -249,7 +304,7 @@ bool BonminProblem::eval_g(Index n, const Number* x, bool new_x, Index m, Number
 		return true;
 	}
 	catch(const ErrorClass& eclass){
-		ipoptErrorMsg = eclass.errormsg;
+		bonminErrorMsg = eclass.errormsg;
 		throw;  
 	}
 }//eval_g
@@ -270,7 +325,7 @@ bool BonminProblem::eval_jac_g(Index n, const Number* x, bool new_x,
 			sparseJacobian = osinstance->getJacobianSparsityPattern();
 		}
 		catch(const ErrorClass& eclass){
-			ipoptErrorMsg =  eclass.errormsg; 
+			bonminErrorMsg =  eclass.errormsg; 
 			throw; 
 		}
 		int i = 0;
@@ -291,7 +346,7 @@ bool BonminProblem::eval_jac_g(Index n, const Number* x, bool new_x,
 			sparseJacobian = osinstance->calculateAllConstraintFunctionGradients( const_cast<double*>(x), NULL, NULL,  new_x, 1);
 		}
 		catch(const ErrorClass& eclass){
-			ipoptErrorMsg = eclass.errormsg;
+			bonminErrorMsg = eclass.errormsg;
 			throw;  
 		}
 		//osinstance->getIterateResults( (double*)x, 0.0, NULL, -1, new_x,  1);
@@ -322,7 +377,7 @@ bool BonminProblem::eval_h(Index n, const Number* x, bool new_x,
 			sparseHessian = osinstance->getLagrangianHessianSparsityPattern( );
 		}
 		catch(const ErrorClass& eclass){
-			ipoptErrorMsg = eclass.errormsg;
+			bonminErrorMsg = eclass.errormsg;
 			throw;  
 		}
 		//cout << "got structure of HESSIAN !!!!!!!!!!!!!!!!!!!!!!!!!! "  << endl;
@@ -343,7 +398,7 @@ bool BonminProblem::eval_h(Index n, const Number* x, bool new_x,
 		delete[]  objMultipliers;
 		}
 		catch(const ErrorClass& eclass){
-			ipoptErrorMsg = eclass.errormsg;
+			bonminErrorMsg = eclass.errormsg;
 			delete[]  objMultipliers;
 			throw;  
 		}
@@ -569,6 +624,76 @@ void BonminSolver::solve() throw (ErrorClass) {
 		finish = clock();
 		duration = (double) (finish - start) / CLOCKS_PER_SEC;
 		cout << "Parsing took (seconds): "<< duration << endl;
+		
+		
+		
+		
+		
+		  BonminSetup bonmin;
+		  bonmin.initializeOptionsAndJournalist();
+		  //Register an additional option
+		  bonmin.roptions()->AddStringOption2("print_solution","Do we print the solution or not?",
+		                                 "yes",
+		                                 "no", "No, we don't.",
+		                                 "yes", "Yes, we do.",
+		                                 "A longer comment can be put here");
+		  
+		  
+		  
+		  // Here we can change the default value of some Bonmin or Ipopt option
+		  bonmin.options()->SetNumericValue("bonmin.time_limit", 5); //changes bonmin's time limit
+		  bonmin.options()->SetStringValue("mu_oracle","loqo");
+		  
+		  //Here we read several option files
+		  bonmin.readOptionsFile("Mybonmin.opt");
+		  bonmin.readOptionsFile();// This reads the default file "bonmin.opt"
+		  
+		  // Options can also be set by using a string with a format similar to the bonmin.opt file
+		  bonmin.readOptionsString("bonmin.algorithm B-BB\n");
+		  
+		  // Now we can obtain the value of the new option
+		  int printSolution;
+		  bonmin.options()->GetEnumValue("print_solution", printSolution,"");
+		  if(printSolution == 1){
+		    //tminlp->printSolutionAtEndOfAlgorithm();
+		  }
+
+		  //Now initialize from tminlp
+		  bonmin.initialize(GetRawPtr(tminlp));
+
+
+
+		  //Set up done, now let's branch and bound
+		  double time1 = 0.0;
+		  try {
+		    Bab bb;
+		    bb(bonmin);//process parameter file using Ipopt and do branch and bound using Cbc
+
+
+		  }
+		  catch(TNLPSolver::UnsolvedError *E) {
+		    //There has been a failure to solve a problem with Ipopt.
+		    std::cerr<<"Ipopt has failed to solve a problem"<<std::endl;
+		  }
+		  catch(OsiTMINLPInterface::SimpleError &E) {
+		    std::cerr<<E.className()<<"::"<<E.methodName()
+			     <<std::endl
+			     <<E.message()<<std::endl;
+		  }
+		  catch(CoinError &E) {
+		    std::cerr<<E.className()<<"::"<<E.methodName()
+			     <<std::endl
+			     <<E.message()<<std::endl;
+		  }
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		//dataEchoCheck();
 		/***************now the ipopt invokation*********************/
 		//app->Options()->SetNumericValue("tol", 1e-9);
@@ -594,7 +719,7 @@ void BonminSolver::solve() throw (ErrorClass) {
 		std::cout << "Call Bonmin Optimize" << std::endl;
 		//ApplicationReturnStatus status = app->OptimizeTNLP( nlp);
 		std::cout << "Finish Bonmin Optimize" << std::endl;
-		osrl = osrlwriter->writeOSrL( osresult);
+		//osrl = osrlwriter->writeOSrL( osresult);
 		std::cout << "Finish writing the osrl" << std::endl;
 		//if (status != Solve_Succeeded) {
 		//if (status < -2) {

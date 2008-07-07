@@ -206,7 +206,7 @@ private:
 	BonminProblem& operator=(const BonminProblem&);
   //@}
 	
-	std::string ipoptErrorMsg;
+	std::string bonminErrorMsg;
 private:
    bool printSol_;
 	

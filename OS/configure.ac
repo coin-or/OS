@@ -269,7 +269,7 @@ if test $coin_has_bonmin != unavailable &&
      *)
        bonminlib="-L\$(INSTALLIBDIR) -lbonmin";;
   esac
-  AC_SUBST(ipoptlib)  
+  AC_SUBST(bonminlib)  
 fi
 
 
