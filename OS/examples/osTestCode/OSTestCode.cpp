@@ -58,9 +58,6 @@ int main( ){
 	FileUtil *fileUtil = NULL; 
 	fileUtil = new FileUtil();
 	cout << "Start Building the Model" << endl;
-	
-	
-
 	std::string osilFileName;
 	std::string sosil;
 	// get the input file
@@ -73,34 +70,25 @@ int main( ){
 	std::cout  << "osilFileName  =  " << osilFileName << std::endl;
 	fileUtil = new FileUtil();
 	sosil = fileUtil->getFileAsString( &osilFileName[0]);	
-	
 	std::cout << sosil << std::endl;
-
-	
-	
 	BonminSolver *bonminSolver  =  NULL;
 	bonminSolver = new BonminSolver();
-	
 	bonminSolver->osol = " ";
 	OSiLReader *osilrdr = NULL;
 	osilrdr = new OSiLReader(); 
 	bonminSolver->osinstance = osilrdr->readOSiL( sosil);
-	
-	
-	bonminSolver->buildSolverInstance();
-	
+	bonminSolver->buildSolverInstance();	
 	bonminSolver->solve();
-	
-	//OSiLReader *osilreader = NULL;
-	//OSInstance *osinstance = NULL;
-
+	OSrLWriter *osrlwrt;
+	osrlwrt = new OSrLWriter();
+	std::cout <<  osrlwrt->writeOSrL( bonminSolver->osresult ) << std::endl;
 	//osilreader = new OSiLReader();
 	//osinstance = osilreader->readOSiL( osil);
-	
 	return 0;
+	
+	
+	
 	try{
-		
-
 		
 		OSInstance *osinstance = new OSInstance();
 

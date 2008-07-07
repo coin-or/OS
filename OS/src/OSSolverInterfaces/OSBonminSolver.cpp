@@ -435,48 +435,22 @@ void
 BonminProblem::finalize_solution(TMINLP::SolverReturn status,
                             Index n, const Number* x, Number obj_value)
 {
-  std::cout<<"Problem status: "<<status<<std::endl;
-  std::cout<<"Objective value: "<<obj_value<<std::endl;
-  if(printSol_ && x != NULL){
-    std::cout<<"Solution:"<<std::endl;
-    for(int i = 0 ; i < n ; i++){
-      std::cout<<"x["<<i<<"] = "<<x[i];
-      if(i < n-1) std::cout<<", ";}
-    std::cout<<std::endl;
-  }
-}
-
-
-/*
-void BonminProblem::finalize_solution(SolverReturn status,
-                               Index n, const Number* x, const Number* z_L, const Number* z_U,
-                                  Index m, const Number* g, const Number* lambda,
-                                  Number obj_value,
-                                   const IpoptData* ip_data,
-                                   IpoptCalculatedQuantities* ip_cq)
-{
-	  // here is where we would store the solution to variables, or write to a file, etc
-	  // so we could use the solution.
-	  // For this example, we write the solution to the console
 	OSrLWriter *osrlwriter ;
 	osrlwriter = new OSrLWriter();
-#ifdef DEBUG
-	  printf("\n\nSolution of the primal variables, x\n");
-	  for (Index i=0; i<n; i++) {
-	    printf("x[%d] = %e\n", i, x[i]);
-	  }
+	std::cout<<"Problem status: "<<status<<std::endl;
+	std::cout<<"Objective value: "<<obj_value<<std::endl;
+	if(printSol_ && x != NULL){
+		std::cout<<"Solution:"<<std::endl;
+		for(int i = 0 ; i < n ; i++){
+			std::cout<<"x["<<i<<"] = "<<x[i];
+			if(i < n-1) std::cout<<", ";
+		}
+		std::cout<<std::endl;
+	}
 	
-	  printf("\n\nSolution of the bound multipliers, z_L and z_U\n");
-	  for (Index i=0; i<n; i++) {
-	    printf("z_L[%d] = %e\n", i, z_L[i]);
-	  }
-	  for (Index i=0; i<n; i++) {
-	    printf("z_U[%d] = %e\n", i, z_U[i]);
-	  }
-#endif
 	  printf("\n\nObjective value\n");
 	  printf("f(x*) = %e\n", obj_value);
-  	int solIdx = 0;
+	int solIdx = 0;
 	ostringstream outStr;
 	double* mdObjValues = new double[1];
 	std::string message = "Bonmin solver finishes to the end.";
@@ -511,7 +485,7 @@ void BonminProblem::finalize_solution(SolverReturn status,
 				solutionDescription = "SUCCESS[IPOPT]: Algorithm terminated successfully at a locally optimal point, satisfying the convergence tolerances.";
 				osresult->setSolutionStatus(solIdx,  "locallyOptimal", solutionDescription);
 				osresult->setPrimalVariableValues(solIdx, const_cast<double*>(x));
-				osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda));
+				//osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda));
 				mdObjValues[0] = obj_value;
 				osresult->setObjectiveValues(solIdx, mdObjValues);
 			break;
@@ -519,7 +493,7 @@ void BonminProblem::finalize_solution(SolverReturn status,
 				solutionDescription = "MAXITER_EXCEEDED[IPOPT]: Maximum number of iterations exceeded.";
 				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);
 				osresult->setPrimalVariableValues(solIdx, const_cast<double*>(x));
-				osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda));
+				//osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda));
 				mdObjValues[0] = obj_value;
 				osresult->setObjectiveValues(solIdx, mdObjValues);
 			break;
@@ -527,7 +501,7 @@ void BonminProblem::finalize_solution(SolverReturn status,
 				solutionDescription = "STOP_AT_TINY_STEP[IPOPT]: Algorithm proceeds with very little progress.";
 				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);
 				osresult->setPrimalVariableValues(solIdx, const_cast<double*>( x));
-				osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda));
+				//osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda));
 				mdObjValues[0] = obj_value;
 				osresult->setObjectiveValues(solIdx, mdObjValues);
 			break;
@@ -535,7 +509,7 @@ void BonminProblem::finalize_solution(SolverReturn status,
 				solutionDescription = "STOP_AT_ACCEPTABLE_POINT[IPOPT]: Algorithm stopped at a point that was converged, not to _desired_ tolerances, but to _acceptable_ tolerances";
 				osresult->setSolutionStatus(solIdx,  "BonminAccetable", solutionDescription);
 				osresult->setPrimalVariableValues(solIdx, const_cast<double*>(x));
-				osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda));
+				//osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda));
 				mdObjValues[0] = obj_value;
 				osresult->setObjectiveValues(solIdx, mdObjValues);
 			break;
@@ -577,6 +551,7 @@ void BonminProblem::finalize_solution(SolverReturn status,
 		osrlwriter = NULL;
 
 	}
+	
 	catch(const ErrorClass& eclass){
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
@@ -587,9 +562,10 @@ void BonminProblem::finalize_solution(SolverReturn status,
 		delete[] mdObjValues;
 		mdObjValues = NULL;
 	}
-//////////
 }
-*/
+
+
+
 
 void BonminSolver::buildSolverInstance() throw (ErrorClass) {
 	try{
@@ -689,14 +665,6 @@ void BonminSolver::solve() throw (ErrorClass) {
 			     <<std::endl
 			     <<E.message()<<std::endl;
 		  }
-		
-		
-		
-		
-		
-		
-		
-		
 		
 		//dataEchoCheck();
 		/***************now the ipopt invokation*********************/
