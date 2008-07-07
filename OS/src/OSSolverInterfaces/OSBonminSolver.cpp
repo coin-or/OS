@@ -20,6 +20,10 @@
 #include "OSCommonUtil.h"
 #include "OSBonminSolver.h"
 
+#include "BonOsiTMINLPInterface.hpp"
+#include "BonCbc.hpp"
+#include "BonBonminSetup.hpp"
+
 using std::cout; 
 using std::endl; 
 using std::ostringstream;
@@ -655,7 +659,7 @@ void BonminSolver::solve() throw (ErrorClass) {
 		  int printSolution;
 		  bonmin.options()->GetEnumValue("print_solution", printSolution,"");
 		  if(printSolution == 1){
-		    //tminlp->printSolutionAtEndOfAlgorithm();
+		   // tminlp->printSolutionAtEndOfAlgorithm();
 		  }
 
 		  //Now initialize from tminlp
@@ -664,7 +668,7 @@ void BonminSolver::solve() throw (ErrorClass) {
 
 
 		  //Set up done, now let's branch and bound
-		  double time1 = 0.0;
+		  //double time1 = 0.0;
 		  try {
 		    Bab bb;
 		    bb(bonmin);//process parameter file using Ipopt and do branch and bound using Cbc
@@ -799,6 +803,7 @@ void BonminSolver::dataEchoCheck(){
 BonminProblem::BonminProblem(OSInstance *osinstance_,  OSResult *osresult_) {
 	osinstance = osinstance_;
 	osresult = osresult_;
+	printSol_ = true;
 }
 
 BonminProblem::~BonminProblem() {

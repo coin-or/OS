@@ -67,8 +67,7 @@
 
 
 
-#include "BonCbc.hpp"
-#include "BonBonminSetup.hpp"
+
 #include "BonTMINLP.hpp"
 using namespace  Ipopt;
 using namespace Bonmin;
@@ -79,6 +78,7 @@ using namespace Bonmin;
 
 // for Stefan
 class BonminProblem : public TMINLP{  
+
 	
 public:
 	
@@ -188,6 +188,16 @@ public:
 
 	  virtual const SosInfo * sosConstraints() const{return NULL;}
 	  virtual const BranchingInfo* branchingInfo() const{return NULL;}
+	  
+	  //void printSolutionAtEndOfAlgorithm(){
+	  //printSol_ = true;}
+	  
+	  
+
+	  
+	  
+private:
+   bool printSol_;
 	
 private:
   /**@name Methods to block default compiler methods.
@@ -202,13 +212,13 @@ private:
    */
   //@{
   //  HS071_NLP();
-	BonminProblem(const BonminProblem&);
-	BonminProblem& operator=(const BonminProblem&);
+
   //@}
 	
+
+	
 	std::string bonminErrorMsg;
-private:
-   bool printSol_;
+
 	
 };
 
@@ -239,7 +249,7 @@ public:
 	~BonminSolver();
 	
 	
-	BonminSetup *bonmin;
+
 	
 	//SmartPtr<BonminProblem> tminlp = new BonminProblem;
 	
