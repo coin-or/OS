@@ -119,11 +119,11 @@ AC_COIN_HAS_PROJECT(cppad)
 
 
 
-#if test $coin_has_bonmin != unavailable &&
-#   test $coin_has_bonmin != skipping  && $coin_has_ipopt in 
-#      unavailable|skipping) ; then
-#       AC_MSG_ERROR([Bonmin is present, but not the necessary Ipopt])   
-#fi
+if test $coin_has_ipopt != unavailable &&
+   test $coin_has_ipopt != skipping  && 
+   test $coin_has_bonmin = true ; then
+       AC_MSG_ERROR([Bonmin is present, but not the necessary Ipopt])   
+fi
 
 if test $coin_has_coinutils != unavailable &&
    test $coin_has_coinutils != skipping; then
