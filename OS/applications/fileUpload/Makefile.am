@@ -27,8 +27,13 @@ bin_PROGRAMS = OSFileUpload
 # List all additionally required COIN libraries
 
 OSFileUpload_LDADD =  \
-	$(OSOBJDIR)/src/libOS.la \
-	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la 
+	$(OSOBJDIR)/src/libOS.la 
+	 
+if COIN_HAS_BONMIN
+  OSFileUpload_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la
+endif	
+	
+OSFileUpload_LDADD += $(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la
 
 if COIN_HAS_SYMPHONY
  OSFileUpload_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
@@ -177,7 +182,6 @@ if COIN_HAS_BONMIN
 	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/Algorithms` \
 	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/CbcBonmin` \
 	-I`$(CYGPATH_W) $(BONMINOBJDIR)/inc`
-  OSFileUpload_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la
 endif
 
 

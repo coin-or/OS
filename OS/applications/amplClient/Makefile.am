@@ -28,8 +28,14 @@ bin_PROGRAMS = OSAmplClient
 
 
 OSAmplClient_LDADD =  \
-	$(OSOBJDIR)/src/libOS.la \
-	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la 
+	$(OSOBJDIR)/src/libOS.la 
+	
+	
+if COIN_HAS_BONMIN
+   OSAmplClient_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la
+endif	 
+	
+OSAmplClient_LDADD += $(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la
 
 if COIN_HAS_SYMPHONY
  OSAmplClient_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
@@ -180,7 +186,6 @@ if COIN_HAS_BONMIN
 	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/Algorithms` \
 	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/CbcBonmin` \
 	-I`$(CYGPATH_W) $(BONMINOBJDIR)/inc`
-  OSAmplClient_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la
 endif
 
 

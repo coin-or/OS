@@ -66,8 +66,11 @@ exec_prefix = @exec_prefix@
 # Libraries necessary to link with OS
 
 # Libraries necessary to link
-LIBS = @oslib@   @ADDLIBS@
+LIBS = @oslib@   
 
+@COIN_HAS_BONMIN_TRUE@LIBS += @bonminlib@
+
+LIBS += @ADDLIBS@
 #
 #ADD ALL THE LIBS
 #
@@ -91,7 +94,7 @@ ADDIPOPTLIBS = `cat $(prefix)/share/doc/coin/Ipopt/ipopt_addlibs_cpp.txt`
 @COIN_HAS_IPOPT_TRUE@LIBS += @ipoptlib@ $(ADDIPOPTLIBS)
 LIBS += @coinutilslib@ 
 
-@COIN_HAS_BONMIN_TRUE@LIBS += @bonminlib@
+
 
 @COIN_HAS_ASL_TRUE@LIBS += @ASLLIB@
  

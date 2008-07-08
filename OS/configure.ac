@@ -113,9 +113,17 @@ AC_COIN_HAS_PROJECT(cppad)
 
   
   case $coin_has_cppad in
-     unavailable|skipping)
+   unavailable|skipping)
          AC_MSG_ERROR([cannot find CppAD which is necessary to build OS]) ;;
   esac
+
+
+
+#if test $coin_has_bonmin != unavailable &&
+#   test $coin_has_bonmin != skipping  && $coin_has_ipopt in 
+#      unavailable|skipping) ; then
+#       AC_MSG_ERROR([Bonmin is present, but not the necessary Ipopt])   
+#fi
 
 if test $coin_has_coinutils != unavailable &&
    test $coin_has_coinutils != skipping; then

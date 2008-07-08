@@ -22,8 +22,18 @@ unitTest_SOURCES = unitTest.cpp
 
 # List all additionally required COIN libraries
 unitTest_LDADD =  \
-	$(OSOBJDIR)/src/libOS.la \
-	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la 
+	$(OSOBJDIR)/src/libOS.la 
+	
+	
+	
+if COIN_HAS_BONMIN
+  unitTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la
+#unitTest_DEPENDENCIES +=  $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la
+endif
+
+
+unitTest_LDADD +=  $(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la 
+
 
 if COIN_HAS_SYMPHONY
  unitTest_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
@@ -177,7 +187,6 @@ if COIN_HAS_BONMIN
 	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/Algorithms` \
 	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/CbcBonmin` \
 	-I`$(CYGPATH_W) $(BONMINOBJDIR)/inc`
-   unitTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la
 endif
 
 if COIN_HAS_KNITRO

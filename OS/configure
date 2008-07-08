@@ -24247,11 +24247,19 @@ echo "${ECHO_T}$coin_has_cppad" >&6
 
 
   case $coin_has_cppad in
-     unavailable|skipping)
+   unavailable|skipping)
          { { echo "$as_me:$LINENO: error: cannot find CppAD which is necessary to build OS" >&5
 echo "$as_me: error: cannot find CppAD which is necessary to build OS" >&2;}
    { (exit 1); exit 1; }; } ;;
   esac
+
+
+
+#if test $coin_has_bonmin != unavailable &&
+#   test $coin_has_bonmin != skipping  && $coin_has_ipopt in
+#      unavailable|skipping) ; then
+#       AC_MSG_ERROR([Bonmin is present, but not the necessary Ipopt])
+#fi
 
 if test $coin_has_coinutils != unavailable &&
    test $coin_has_coinutils != skipping; then
