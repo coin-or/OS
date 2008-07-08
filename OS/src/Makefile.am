@@ -79,8 +79,8 @@ LDADD +=  \
 OSSolverService_DEPENDENCIES += libOS.la
 
 if COIN_HAS_BONMIN
- 	LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la
-    OSSolverService_DEPENDENCIES +=  $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la
+   LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la
+#   OSSolverService_DEPENDENCIES +=  $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la
 endif
 
 
