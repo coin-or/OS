@@ -54,6 +54,7 @@ using std::endl;
 
 //int main(int argC, char* argV[]){
 int main( ){
+	WindowsErrorPopupBlocker();
 // test OS code samples here
 	FileUtil *fileUtil = NULL; 
 	fileUtil = new FileUtil();

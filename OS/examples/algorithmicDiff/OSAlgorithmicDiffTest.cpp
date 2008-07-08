@@ -101,6 +101,7 @@
  
 
 int  main(){	
+	WindowsErrorPopupBlocker();
 	using std::cout;
 	using std::endl;
 	using CppAD::AD;
@@ -191,7 +192,7 @@ int  main(){
 		
 		// get the number of nonlinear terms
 		
-		size_t mm = osinstance->getNumberOfNonlinearExpressionTreeModIndexes();
+		int mm = osinstance->getNumberOfNonlinearExpressionTreeModIndexes();
 		
 		int jj;
 		

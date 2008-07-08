@@ -48,6 +48,7 @@ using std::cout;
 using std::endl;
 
 int main( ){
+	WindowsErrorPopupBlocker();
 // test OS code samples here
 	FileUtil *fileUtil = NULL; 
 	fileUtil = new FileUtil();

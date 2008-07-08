@@ -131,7 +131,9 @@
 
 
 
-
+#ifdef COIN_HAS_BONMIN    
+#include "OSBonminSolver.h"
+#endif 
 
 
 #include "OSOptionsStruc.h"  
@@ -181,6 +183,7 @@ osOptionsStruc *osoptions;
 
 int main(int argC, const char* argV[])
 {  	
+	WindowsErrorPopupBlocker();
 	void* scanner;
 	FileUtil *fileUtil = NULL;
 	FileUtil *inputFileUtil = NULL; 
@@ -461,18 +464,7 @@ void solve(){
 				bool bIpoptIsPresent = false;
 				#ifdef COIN_HAS_IPOPT
 				bIpoptIsPresent = true;
-				//IpoptSolver *ipoptSolver  = new IpoptSolver();	
-				//ipoptSolver->osol = osoptions->osol;
-				//ipoptSolver->osil = osoptions->osil;
-				//ipoptSolver->osinstance = NULL;
-				//ipoptSolver->solve();
-				//osrl = ipoptSolver->osrl ;
 				solverType = new IpoptSolver();	
-				//solverType->osol = osoptions->osol;
-				//solverType->osil = osoptions->osil;
-				//solverType->osinstance = NULL;
-				//solverType->solve();
-				//osrl = solverType->osrl ;
 				#endif
 				if(bIpoptIsPresent == false) throw ErrorClass( "the Ipopt solver requested is not present");
 			}
@@ -534,9 +526,19 @@ void solve(){
 												solverType = new CoinSolver();
 												solverType->sSolverName = "vol";
 											}
-											else{ //cbc is the default
-												solverType = new CoinSolver();
-												solverType->sSolverName = "cbc";
+											else{
+												if(osoptions->solverName.find( "bonmin") != std::string::npos){
+													// we are requesting the Bonmin solver
+													bool bBonminIsPresent = false;
+													#ifdef COIN_HAS_BONMIN
+													bBonminIsPresent = true;
+													solverType = new BonminSolver();	
+													#endif												
+												}
+												else{ //cbc is the default
+													solverType = new CoinSolver();
+													solverType->sSolverName = "cbc";
+												}
 											}
 										}									
 									}

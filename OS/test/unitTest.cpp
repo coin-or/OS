@@ -44,6 +44,7 @@
  * </ol>
  * 
  * COIN-SYMPHONY test on p0033.osil
+ * COIN-BONMIN test on bonminEx1.osil
  * 
  * COIN-DyLP tested onparincLinear.osil
  * 
@@ -145,6 +146,10 @@
 #endif  
 #ifdef COIN_HAS_IPOPT    
 #include "OSIpoptSolver.h"
+#endif 
+
+#ifdef COIN_HAS_BONMIN    
+#include "OSBonminSolver.h"
 #endif 
  
 
@@ -524,7 +529,7 @@ int main(int argC, char* argV[])
 		check = 1.00045e+06;
 		//ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-10 , 1e-10);
 		ok = ( fabs(check - getObjVal( ipoptSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on parincLinear");
+		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on callBackTest");
 		delete osilreader;
 		osilreader = NULL;	
 		unitTestResult << "Solved problem callBack.osil with Ipopt" << std::endl;	
@@ -550,7 +555,7 @@ int main(int argC, char* argV[])
 		check = 1.00045e+06;
 		//ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-10 , 1e-10);
 		ok = ( fabs(check - getObjVal( ipoptSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on parincLinear");
+		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on callBackTestRowMajor");
 		delete osilreader;
 		osilreader = NULL;	
 		delete ipoptSolver;
@@ -785,6 +790,39 @@ int main(int argC, char* argV[])
 	//
 	//
 	//
+#ifdef COIN_HAS_BONMIN
+try{
+	ok = true; 
+	osilFileName = dataDir  + "osilFiles" + dirsep + "bonminEx1.osil";
+	osil = fileUtil->getFileAsString( osilFileName.c_str());
+	solver = new BonminSolver();
+	solver->sSolverName = "bonmin";
+	solver->osil = osil;
+	solver->osol = osol;  
+	solver->osinstance = NULL; 
+	cout << "call the COIN - Bonmin Solver for bonminEx1" << endl;
+	solver->buildSolverInstance();
+	solver->solve();
+	cout << "Here is the COIN SYMPHONY solver solution for bonminEx1" << endl;
+	cout << solver->osrl << endl;
+	check = -1.70711;
+	//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+	ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+	if(ok == false) throw ErrorClass(" Fail unit test with Bonmin on bonminEx1.osil");
+	delete solver;
+	solver = NULL;
+	unitTestResult << "Solved problem bonminEx1.osil with Bonmin" << std::endl;
+}
+catch(const ErrorClass& eclass){
+	cout << "OSrL =  " <<  solver->osrl <<  endl;
+	cout << endl << endl << endl;
+	unitTestResultFailure  << "Sorry Unit Test Failed Testing the Bonmin Solver:"  + eclass.errormsg << endl;
+}	
+#endif
+//
+//
+//
+//
 	#ifdef COIN_HAS_DYLP
 	try{
 		ok = true; 

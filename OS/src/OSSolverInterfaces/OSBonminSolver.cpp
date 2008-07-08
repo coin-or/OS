@@ -204,7 +204,7 @@ bool  BonminProblem::get_bounds_info(Index n, Number* x_l, Number* x_u,
                                 Index m, Number* g_l, Number* g_u){
  	int i; 
 	double * mdVarLB = osinstance->getVariableLowerBounds();
-	//std::cout << "GET BOUNDS INFORMATION FOR IPOPT !!!!!!!!!!!!!!!!!" << std::endl;
+	//std::cout << "GET BOUNDS INFORMATION FOR BONMIN !!!!!!!!!!!!!!!!!" << std::endl;
 	// variables upper bounds
 	double * mdVarUB = osinstance->getVariableUpperBounds();
 
@@ -216,7 +216,7 @@ bool  BonminProblem::get_bounds_info(Index n, Number* x_l, Number* x_u,
 	}
 	// Bonmin interprets any number greater than nlp_upper_bound_inf as
 	// infinity. The default value of nlp_upper_bound_inf and nlp_lower_bound_inf
-	// is 1e19 and can be changed through ipopt options.
+	// is 1e19 and can be changed through bonmin options.
 	// e.g. g_u[0] = 2e19;
 
 	//constraint lower bounds
@@ -419,12 +419,15 @@ bool BonminProblem::get_scaling_parameters(Number& obj_scaling,
                    	Number* x_scaling,
                     bool& use_g_scaling, Index m,
                     Number* g_scaling){
-	if( osinstance->instanceData->objectives->obj[ 0]->maxOrMin.compare("min") != 0){
+	/*
+	 * Bonmin assumes problems cast as a min
+	 * if( osinstance->instanceData->objectives->obj[ 0]->maxOrMin.compare("min") != 0){
   		obj_scaling = -1;
   	}
     else obj_scaling = 1;
     use_x_scaling = false;
     use_g_scaling = false;
+    */
 	return true;
 }//get_scaling_parameters
 
@@ -482,7 +485,7 @@ BonminProblem::finalize_solution(TMINLP::SolverReturn status,
 
 		switch( status){
 			case SUCCESS:
-				solutionDescription = "SUCCESS[IPOPT]: Algorithm terminated successfully at a locally optimal point, satisfying the convergence tolerances.";
+				solutionDescription = "SUCCESS[BONMIN]: Algorithm terminated successfully at a locally optimal point, satisfying the convergence tolerances.";
 				osresult->setSolutionStatus(solIdx,  "locallyOptimal", solutionDescription);
 				osresult->setPrimalVariableValues(solIdx, const_cast<double*>(x));
 				//osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda));
@@ -490,7 +493,7 @@ BonminProblem::finalize_solution(TMINLP::SolverReturn status,
 				osresult->setObjectiveValues(solIdx, mdObjValues);
 			break;
 			case MAXITER_EXCEEDED:
-				solutionDescription = "MAXITER_EXCEEDED[IPOPT]: Maximum number of iterations exceeded.";
+				solutionDescription = "MAXITER_EXCEEDED[BONMIN]: Maximum number of iterations exceeded.";
 				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);
 				osresult->setPrimalVariableValues(solIdx, const_cast<double*>(x));
 				//osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda));
@@ -498,7 +501,7 @@ BonminProblem::finalize_solution(TMINLP::SolverReturn status,
 				osresult->setObjectiveValues(solIdx, mdObjValues);
 			break;
 			case STOP_AT_TINY_STEP:
-				solutionDescription = "STOP_AT_TINY_STEP[IPOPT]: Algorithm proceeds with very little progress.";
+				solutionDescription = "STOP_AT_TINY_STEP[BONMIN]: Algorithm proceeds with very little progress.";
 				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);
 				osresult->setPrimalVariableValues(solIdx, const_cast<double*>( x));
 				//osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda));
@@ -506,7 +509,7 @@ BonminProblem::finalize_solution(TMINLP::SolverReturn status,
 				osresult->setObjectiveValues(solIdx, mdObjValues);
 			break;
 			case STOP_AT_ACCEPTABLE_POINT:
-				solutionDescription = "STOP_AT_ACCEPTABLE_POINT[IPOPT]: Algorithm stopped at a point that was converged, not to _desired_ tolerances, but to _acceptable_ tolerances";
+				solutionDescription = "STOP_AT_ACCEPTABLE_POINT[BONMIN]: Algorithm stopped at a point that was converged, not to _desired_ tolerances, but to _acceptable_ tolerances";
 				osresult->setSolutionStatus(solIdx,  "BonminAccetable", solutionDescription);
 				osresult->setPrimalVariableValues(solIdx, const_cast<double*>(x));
 				//osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda));
@@ -514,35 +517,35 @@ BonminProblem::finalize_solution(TMINLP::SolverReturn status,
 				osresult->setObjectiveValues(solIdx, mdObjValues);
 			break;
 			case LOCAL_INFEASIBILITY:
-				solutionDescription = "LOCAL_INFEASIBILITY[IPOPT]: Algorithm converged to a point of local infeasibility. Problem may be infeasible.";
+				solutionDescription = "LOCAL_INFEASIBILITY[BONMIN]: Algorithm converged to a point of local infeasibility. Problem may be infeasible.";
 				osresult->setSolutionStatus(solIdx,  "infeasible", solutionDescription);
 			break;
 			case USER_REQUESTED_STOP:
-				solutionDescription = "USER_REQUESTED_STOP[IPOPT]: The user call-back function  intermediate_callback returned false, i.e., the user code requested a premature termination of the optimization.";
+				solutionDescription = "USER_REQUESTED_STOP[BONMIN]: The user call-back function  intermediate_callback returned false, i.e., the user code requested a premature termination of the optimization.";
 				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
 			break;
 			case DIVERGING_ITERATES:
-				solutionDescription = "DIVERGING_ITERATES[IPOPT]: It seems that the iterates diverge.";
+				solutionDescription = "DIVERGING_ITERATES[BONMIN]: It seems that the iterates diverge.";
 				osresult->setSolutionStatus(solIdx,  "unbounded", solutionDescription);
 			break;
 			case RESTORATION_FAILURE:
-				solutionDescription = "RESTORATION_FAILURE[IPOPT]: Restoration phase failed, algorithm doesn't know how to proceed.";
+				solutionDescription = "RESTORATION_FAILURE[BONMIN]: Restoration phase failed, algorithm doesn't know how to proceed.";
 				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
 			break;
 			case ERROR_IN_STEP_COMPUTATION:
-				solutionDescription = "ERROR_IN_STEP_COMPUTATION[IPOPT]: An unrecoverable error occurred while IPOPT tried to compute the search direction.";
+				solutionDescription = "ERROR_IN_STEP_COMPUTATION[BONMIN]: An unrecoverable error occurred while IPOPT tried to compute the search direction.";
 				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
 			break;
 			case INVALID_NUMBER_DETECTED:
-				solutionDescription = "INVALID_NUMcatBER_DETECTED[IPOPT]: Algorithm received an invalid number (such as NaN or Inf) from the NLP; see also option check_derivatives_for_naninf.";
+				solutionDescription = "INVALID_NUMcatBER_DETECTED[BONMIN]: Algorithm received an invalid number (such as NaN or Inf) from the NLP; see also option check_derivatives_for_naninf.";
 				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
 			break;
 			case INTERNAL_ERROR:
-				solutionDescription = "INTERNAL_ERROR[IPOPT]: An unknown internal error occurred. Please contact the IPOPT authors through the mailing list.";
+				solutionDescription = "INTERNAL_ERROR[BONMIN]: An unknown internal error occurred. Please contact the IPOPT authors through the mailing list.";
 				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
 			break;
 			default:
-				solutionDescription = "OTHER[IPOPT]: other unknown solution status from Bonmin solver";
+				solutionDescription = "OTHER[BONMIN]: other unknown solution status from Bonmin solver";
 				osresult->setSolutionStatus(solIdx,  "other", solutionDescription);
 		}
 		osresult->setGeneralStatusType("success");
@@ -691,7 +694,7 @@ void BonminSolver::solve() throw (ErrorClass) {
 		std::cout << "Call Bonmin Optimize" << std::endl;
 		//ApplicationReturnStatus status = app->OptimizeTNLP( nlp);
 		std::cout << "Finish Bonmin Optimize" << std::endl;
-		//osrl = osrlwriter->writeOSrL( osresult);
+		osrl = osrlwriter->writeOSrL( osresult);
 		std::cout << "Finish writing the osrl" << std::endl;
 		//if (status != Solve_Succeeded) {
 		//if (status < -2) {

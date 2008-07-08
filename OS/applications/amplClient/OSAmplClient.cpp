@@ -52,6 +52,9 @@
 #ifdef COIN_HAS_IPOPT    
 #include "OSIpoptSolver.h"
 #endif  
+#ifdef COIN_HAS_BONMIN    
+#include "OSBonminSolver.h"
+#endif 
 #include "OSFileUtil.h"
 #include "OSDefaultSolver.h"
 #include "OSSolverAgent.h"
@@ -79,6 +82,7 @@ using std::endl;
 
 int main(int argc, char **argv)
 {
+	WindowsErrorPopupBlocker();
 	char *stub;
 	// set AMPL structures
 	ASL *asl;
@@ -266,9 +270,25 @@ int main(int argc, char **argv)
 												}
 											#endif
 											if(bDyLPIsPresent == false) throw ErrorClass( "the DyLP solver requested is not present");
-										}
+										}						
 										else{
-											throw ErrorClass( "a supported solver has not been selected");
+											if( strstr(amplclient_options, "bonmin") != NULL ){
+												bool bBonminIsPresent = false;
+												#ifdef COIN_HAS_BONMIN
+													bBonminIsPresent = true;
+													sSolverName = "bonmin";
+													solver_option = getenv("bonmin_options");
+													if( solver_option != NULL) cout << "HERE ARE THE Bonmin SOLVER OPTIONS " <<   solver_option << endl;
+													if( ( solver_option == NULL) || (strstr(solver_option, "service") == NULL) ){
+														solverType = new BonminSolver();
+														solverType->sSolverName = "bonmin";
+													}
+												#endif
+												if(bBonminIsPresent == false) throw ErrorClass( "the Bonmin solver requested is not present");												
+											}
+											else{
+												throw ErrorClass( "a supported solver has not been selected");
+											}
 										}
 									}	
 								} 
