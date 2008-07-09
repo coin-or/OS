@@ -24255,13 +24255,13 @@ echo "$as_me: error: cannot find CppAD which is necessary to build OS" >&2;}
 
 
 
-if test $coin_has_ipopt != unavailable &&
-   test $coin_has_ipopt != skipping  &&
-   test $coin_has_bonmin = true ; then
+if test $coin_has_ipopt = skipping &&
+   test $coin_has_bonmin != skipping ; then
        { { echo "$as_me:$LINENO: error: Bonmin is present, but not the necessary Ipopt" >&5
 echo "$as_me: error: Bonmin is present, but not the necessary Ipopt" >&2;}
    { (exit 1); exit 1; }; }
 fi
+
 
 if test $coin_has_coinutils != unavailable &&
    test $coin_has_coinutils != skipping; then
