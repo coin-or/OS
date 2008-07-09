@@ -3495,7 +3495,7 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conM
 							jacIndex = (*m_mapExpressionTreesMod[ idx]->mapVarIdx)[ m_miNonLinearVarsReverseMap[ i]];
 							jstart = m_miJacStart[ idx] + m_miJacNumConTerms[ idx];
 							// kipp change 1 to number of objective functions
-							m_mdJacValue[ jstart + jacIndex] = m_vdYjacval[m_iObjectiveNumber + rowNum];
+							m_mdJacValue[ jstart + jacIndex] = m_vdYjacval[m_iObjectiveNumberNonlinear + rowNum];
 						}
 						rowNum++;
 					}//end Jacobian calculation
@@ -3575,7 +3575,7 @@ bool OSInstance::getSecondOrderResults(double *x, double *objLambda, double *con
 					if( (*expTree->mapVarIdx).find( m_miNonLinearVarsReverseMap[ i]) != (*expTree->mapVarIdx).end()  ){		
 						jacIndex = (*m_mapExpressionTreesMod[ idx]->mapVarIdx)[ m_miNonLinearVarsReverseMap[ i]];
 						jstart = m_miJacStart[ idx] + m_miJacNumConTerms[ idx];
-						m_mdJacValue[ jstart + jacIndex] = m_vdYjacval[m_iObjectiveNumber + rowNum];
+						m_mdJacValue[ jstart + jacIndex] = m_vdYjacval[m_iObjectiveNumberNonlinear + rowNum];
 					}
 					rowNum++;
 				}//end Jacobian calculation
