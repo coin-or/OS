@@ -2694,7 +2694,7 @@ double *OSInstance::calculateObjectiveFunctionGradient(double* x, double *objLam
 
 double *OSInstance::calculateObjectiveFunctionGradient(double* x, int objIdx, bool new_x){
 	try{
-		if( new_x == true && ( m_iHighestOrderEvaluated < 1)  ) 
+		if( new_x == true || ( m_iHighestOrderEvaluated < 1)  ) 
 			getIterateResults(x, NULL, NULL, new_x,  1);
 	}
 	catch(const ErrorClass& eclass){
