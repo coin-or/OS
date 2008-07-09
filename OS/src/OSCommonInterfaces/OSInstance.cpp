@@ -2682,8 +2682,29 @@ double *OSInstance::calculateObjectiveFunctionGradient(double* x, double *objLam
 		int objIdx, bool new_x, int highestOrder){
 	try{
 		if(highestOrder < 1 ) throw ErrorClass("When calling calculateObjectiveFunctionGradient highestOrder should be 1 or 2");
-		if( new_x == true || (highestOrder > m_iHighestOrderEvaluated)  ) 
+		if( new_x == true || (highestOrder > m_iHighestOrderEvaluated)  ) {
+			int domainIdx = 0;	
+			std::map<int, OSExpressionTree*>::iterator posMapExpTree;
+			std::map<int, int>::iterator posVarIdx;			
+			int i;	
+			for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
+				//kipp  all for more than one obj
+				if(posMapExpTree->first == -1){
+					m_vdRangeUnitVec[ domainIdx] = 1.;
+					//this->reverseAD(1, m_vdRangeUnitVec);
+					//m_vdYjacval = this->reverseAD(1, m_vdRangeUnitVec);
+					for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
+						//kipp fix when more than one obj
+					//		m_mmdObjGradient[  0][ m_miNonLinearVarsReverseMap[ i]] = m_vdYjacval[ i] + 
+					//			m_mmdDenseObjectiveCoefficients[  0][ m_miNonLinearVarsReverseMap[ i]];
+					}		
+					m_vdRangeUnitVec[ domainIdx] = 0.;
+				}
+				domainIdx++;
+			}
 			getIterateResults(x, objLambda, conLambda,  new_x,  highestOrder);
+		}	
+		
 	}
 	catch(const ErrorClass& eclass){
 		throw ErrorClass( eclass.errormsg);
@@ -3418,7 +3439,7 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conM
 		int domainIdx = 0;	
 		std::map<int, OSExpressionTree*>::iterator posMapExpTree;
 		std::map<int, int>::iterator posVarIdx;
-			
+		
 		/** if the number of columns exceeds the number of rows we will get the 
 		 * Jacobian by row, however, if the number of rows exceeds the number of 
 		 * columns we get the Jacobian by column
@@ -3460,6 +3481,8 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conM
 					domainIdx++;
 				}
 				else{    // we have an objective function
+					
+					
 					m_vdRangeUnitVec[ domainIdx] = 1.;
 					m_vdYjacval = this->reverseAD(1, m_vdRangeUnitVec);
 					for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
@@ -3502,6 +3525,7 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conM
 					else{
 						// see if we have the objective function of interest
 						// kipp -- fix if more than one obj
+						
 							m_mmdObjGradient[  (abs( idx) - 1)][ m_miNonLinearVarsReverseMap[ i]] = m_vdYjacval[ (abs( idx) - 1)] + 
 							m_mmdDenseObjectiveCoefficients[  (abs( idx) - 1)][ m_miNonLinearVarsReverseMap[ i]];					
 				}//end Obj gradient calculation 
