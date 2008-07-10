@@ -2265,12 +2265,20 @@ SparseVector *OSInstance::calculateConstraintFunctionGradient(double* x, int idx
 }//calculateConstraintFunctionGradient
 
 
+
 double **OSInstance::calculateAllObjectiveFunctionGradients(double* x, double *objLambda, double *conLambda,
 		bool new_x, int highestOrder){
 	try{
 		if(highestOrder < 1 ) throw ErrorClass("When calling calculateAllObjectiveFunctionGradients highestOrder should be 1 or 2");
-		if( new_x == true || (highestOrder > m_iHighestOrderEvaluated)  ) 
-			getIterateResults(x, objLambda, conLambda,  new_x,  highestOrder);
+		if( new_x == true || (highestOrder > m_iHighestOrderEvaluated)  ) {
+			std::map<int, OSExpressionTree*>::iterator posMapExpTree;
+			for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
+				if(posMapExpTree->first < 0){ // this nonlinear expression indexes an objective function
+					m_mmdObjGradient[ abs( posMapExpTree->first) - 1 ] = calculateObjectiveFunctionGradient(x, objLambda, conLambda, 
+							posMapExpTree->first, new_x, highestOrder);
+				}	
+			}
+		}
 	}
 	catch(const ErrorClass& eclass){
 		throw ErrorClass( eclass.errormsg);
@@ -2280,10 +2288,48 @@ double **OSInstance::calculateAllObjectiveFunctionGradients(double* x, double *o
 
 double *OSInstance::calculateObjectiveFunctionGradient(double* x, double *objLambda, double *conLambda,
 		int objIdx, bool new_x, int highestOrder){
+	/* if we are just doing an objective function gradient we should do a zero order forward sweep
+	 * and a reverse first order reverse sweep
+	 */
 	try{
-		if(highestOrder < 1 ) throw ErrorClass("When calling calculateObjectiveFunctionGradient highestOrder should be 1 or 2");
-		if( new_x == true || (highestOrder > m_iHighestOrderEvaluated)  ) 
-			getIterateResults(x, objLambda, conLambda,  new_x,  highestOrder);
+		if(highestOrder < 1 ) throw ErrorClass("When calling calculateObjectiveFunctionGradient highestOrder should be 1 or 2");	
+		if( new_x == true || (highestOrder > m_iHighestOrderEvaluated)  ) {
+			int domainIdx = 0;	
+			std::map<int, OSExpressionTree*>::iterator posMapExpTree;
+			std::map<int, int>::iterator posVarIndexMap;		
+			int i, iHighestOrderEvaluatedStore;	
+			iHighestOrderEvaluatedStore = m_iHighestOrderEvaluated;
+			for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
+				//kipp: modify for more than one obj
+				if(posMapExpTree->first == objIdx){
+					if( new_x == true ){
+						if( m_vdX.size() > 0) m_vdX.clear();
+						for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
+							m_vdX.push_back( x[ posVarIndexMap->first]) ;
+						}
+						if( (m_bCppADFunIsCreated == false || m_bCppADMustReTape == true )  && (m_mapExpressionTreesMod.size() > 0) ) {
+							createCppADFun( m_vdX);
+						}						
+					}	
+					
+					if(( new_x == true ) || (m_iHighestOrderEvaluated < 0) )this->forwardAD(0, m_vdX);
+					
+					if(( new_x == true ) || (m_iHighestOrderEvaluated < 1) ) {
+						m_vdRangeUnitVec[ domainIdx] = 1.;
+						m_vdYjacval = this->reverseAD(1, m_vdRangeUnitVec);
+						for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
+							m_mmdObjGradient[ abs( objIdx) - 1 ][ m_miNonLinearVarsReverseMap[ i]] = m_vdYjacval[ i] + 
+								m_mmdDenseObjectiveCoefficients[  abs( objIdx) - 1][ m_miNonLinearVarsReverseMap[ i]];
+						}
+					}
+					m_iHighestOrderEvaluated = iHighestOrderEvaluatedStore;
+					m_vdRangeUnitVec[ domainIdx] = 0.;
+					// exit the loop
+					break;
+				}
+				domainIdx++;
+			}
+		}			
 	}
 	catch(const ErrorClass& eclass){
 		throw ErrorClass( eclass.errormsg);
@@ -2294,14 +2340,47 @@ double *OSInstance::calculateObjectiveFunctionGradient(double* x, double *objLam
 
 double *OSInstance::calculateObjectiveFunctionGradient(double* x, int objIdx, bool new_x){
 	try{
-		if( new_x == true || ( m_iHighestOrderEvaluated < 1)  ) 
-			getIterateResults(x, NULL, NULL, new_x,  1);
-	}
+		int domainIdx = 0;	
+		std::map<int, OSExpressionTree*>::iterator posMapExpTree;
+		std::map<int, int>::iterator posVarIndexMap;		
+		int i, iHighestOrderEvaluatedStore;	
+		iHighestOrderEvaluatedStore = m_iHighestOrderEvaluated;
+		for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
+			if(posMapExpTree->first == objIdx){
+				if( new_x == true ){
+					if( m_vdX.size() > 0) m_vdX.clear();
+					for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
+						m_vdX.push_back( x[ posVarIndexMap->first]) ;
+					}
+					if( (m_bCppADFunIsCreated == false || m_bCppADMustReTape == true )  && (m_mapExpressionTreesMod.size() > 0) ) {
+						createCppADFun( m_vdX);
+					}						
+				}	
+				
+				if(( new_x == true ) || (m_iHighestOrderEvaluated < 0) )this->forwardAD(0, m_vdX);
+				
+				if(( new_x == true ) || (m_iHighestOrderEvaluated < 1) ) {
+					m_vdRangeUnitVec[ domainIdx] = 1.;
+					m_vdYjacval = this->reverseAD(1, m_vdRangeUnitVec);
+					for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
+						m_mmdObjGradient[ abs( objIdx) - 1 ][ m_miNonLinearVarsReverseMap[ i]] = m_vdYjacval[ i] + 
+							m_mmdDenseObjectiveCoefficients[  abs( objIdx) - 1][ m_miNonLinearVarsReverseMap[ i]];
+					}
+				}
+				m_iHighestOrderEvaluated = iHighestOrderEvaluatedStore;
+				m_vdRangeUnitVec[ domainIdx] = 0.;
+				// exit the loop
+				break;
+			}
+			domainIdx++;
+		}
+	}	
 	catch(const ErrorClass& eclass){
 		throw ErrorClass( eclass.errormsg);
 	} 
 	return m_mmdObjGradient[abs( objIdx) - 1];
 }//calculateObjectiveFunctionGradient	
+
 
 SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double *objLambda, double *conLambda,
 	bool new_x, int highestOrder){
@@ -2921,6 +3000,16 @@ bool OSInstance::getIterateResults( double *x, double *objLambda, double* conMul
 			if( (m_bCppADFunIsCreated == false || m_bCppADMustReTape == true )  && (m_mapExpressionTreesMod.size() > 0) ) {
 				createCppADFun( m_vdX);
 			}	
+		}
+		else{ // make sure vector not empty -- this could happen if we have linear obj and nonlinear constraints
+			if( m_vdX.size() == 0) {
+				for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
+					m_vdX.push_back( x[ posVarIndexMap->first]) ;
+				}
+				if( (m_bCppADFunIsCreated == false || m_bCppADMustReTape == true )  && (m_mapExpressionTreesMod.size() > 0) ) {
+					createCppADFun( m_vdX);
+				}	
+			}
 		}	
 		switch( highestOrder){		
 			case 0:	
@@ -3060,14 +3149,7 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conM
 					domainIdx++;
 				}
 				else{    // we have an objective function
-					m_vdRangeUnitVec[ domainIdx] = 1.;
-					m_vdYjacval = this->reverseAD(1, m_vdRangeUnitVec);
-					for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
-						//kipp fix when more than one obj
-							m_mmdObjGradient[  (abs( idx) - 1)][ m_miNonLinearVarsReverseMap[ i]] = m_vdYjacval[ i] + 
-								m_mmdDenseObjectiveCoefficients[  (abs( idx) - 1)][ m_miNonLinearVarsReverseMap[ i]];
-					}									
-					m_vdRangeUnitVec[ domainIdx] = 0.;
+
 					domainIdx++;
 				}
 			}
@@ -3095,16 +3177,11 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conM
 							jacIndex = (*m_mapExpressionTreesMod[ idx]->mapVarIdx)[ m_miNonLinearVarsReverseMap[ i]];
 							jstart = m_miJacStart[ idx] + m_miJacNumConTerms[ idx];
 							// kipp change 1 to number of objective functions
-							m_mdJacValue[ jstart + jacIndex] = m_vdYjacval[m_iObjectiveNumber + rowNum];
+							m_mdJacValue[ jstart + jacIndex] = m_vdYjacval[m_iObjectiveNumberNonlinear + rowNum];
 						}
 						rowNum++;
 					}//end Jacobian calculation
-					else{
-						// see if we have the objective function of interest
-						// kipp -- fix if more than one obj
-							m_mmdObjGradient[  (abs( idx) - 1)][ m_miNonLinearVarsReverseMap[ i]] = m_vdYjacval[ (abs( idx) - 1)] + 
-							m_mmdDenseObjectiveCoefficients[  (abs( idx) - 1)][ m_miNonLinearVarsReverseMap[ i]];					
-				}//end Obj gradient calculation 
+
 			}			
 			//
 			m_vdDomainUnitVec[i] = 0.;
@@ -3119,12 +3196,7 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conM
 				<< " value = " << *(m_sparseJacMatrix->values + k) << std::endl;
 			}
 		}
-		std::cout  << "OBJECTIVE FUNCTION DATA " << std::endl;
-		for(i = 0; i < m_iObjectiveNumber; i++){
-			for(idx = 0; idx < m_iVariableNumber; idx++){
-				std::cout << "var idx = " << idx <<  "  value = "<< m_mmdObjGradient[ i][idx] << std::endl;
-			}
-		}
+
 		#endif
 		return true;
 	}//end try
@@ -3175,7 +3247,7 @@ bool OSInstance::getSecondOrderResults(double *x, double *objLambda, double *con
 					if( (*expTree->mapVarIdx).find( m_miNonLinearVarsReverseMap[ i]) != (*expTree->mapVarIdx).end()  ){		
 						jacIndex = (*m_mapExpressionTreesMod[ idx]->mapVarIdx)[ m_miNonLinearVarsReverseMap[ i]];
 						jstart = m_miJacStart[ idx] + m_miJacNumConTerms[ idx];
-						m_mdJacValue[ jstart + jacIndex] = m_vdYjacval[m_iObjectiveNumber + rowNum];
+						m_mdJacValue[ jstart + jacIndex] = m_vdYjacval[m_iObjectiveNumberNonlinear + rowNum];
 					}
 					rowNum++;
 				}//end Jacobian calculation

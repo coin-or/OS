@@ -1910,7 +1910,7 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * @param new_x is false if any evaluation method was previously called
 	 * for the current iterate
 	 * @return a double array of objective function values -- 
-	 * the size of the array is equal to getConstraintNumber().  
+	 * the size of the array is equal to getObjectiveNumber().  
 	 */
 	double *calculateAllObjectiveFunctionValues(double* x, bool new_x);	
 		
@@ -1958,10 +1958,9 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * <p>
 	 * 
 	 * @param x is a pointer (double array) to the current variable values
-	 * @parma idx is the index of the constraint function gradient
+	 * @param idx is the index of the constraint function gradient
 	 * @param new_x is false if any evaluation method was previously called
 	 * for the current iterate
-	 * @param highestOrder is the highest order of the derivative being calculated
 	 * @return a pointer to a sparse vector of doubles.  
 	 */
 	SparseVector *calculateConstraintFunctionGradient(double* x, int idx, bool new_x );
