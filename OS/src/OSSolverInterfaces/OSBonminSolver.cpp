@@ -284,7 +284,8 @@ bool BonminProblem::eval_grad_f(Index n, const Number* x, bool new_x, Number* gr
  	double *objGrad;
 	try{
   		//objGrad = osinstance->calculateAllObjectiveFunctionGradients( const_cast<double*>(x), NULL, NULL,  new_x, 1)[ 0];
-		std::cout << "Calculate Objective function gradient " << std::endl;
+		//std::cout << "Calculate Objective function gradient " << std::endl;
+		// we assume we are doing the objective function indexed by -1
   		objGrad = osinstance->calculateObjectiveFunctionGradient( const_cast<double*>(x), NULL, NULL, -1,  new_x, 1);
 	}
    	catch(const ErrorClass& eclass){
@@ -295,7 +296,7 @@ bool BonminProblem::eval_grad_f(Index n, const Number* x, bool new_x, Number* gr
   		grad_f[ i]  = objGrad[ i];
   		//std::cout << grad_f[ i]  << std::endl;
   	}
-  	std::cout << "DONE WITH Calculate Objective function gradient " << std::endl;
+  	//std::cout << "DONE WITH Calculate Objective function gradient " << std::endl;
   	return true;
 }//eval_grad_f
 
