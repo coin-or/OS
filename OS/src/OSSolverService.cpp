@@ -274,7 +274,7 @@ int main(int argC, const char* argV[])
 			}
 			if(osoptions->writeVersion == true){ 
 				inputFileUtil = new FileUtil();
-				std::string writeTxt = "OS Version 1.0\n";
+				std::string writeTxt = "OS Version 1.1\n";
 				writeTxt += inputFileUtil->getFileAsString( "version.txt" );
 				std::cout << std::endl << std::endl;
 				std::cout << writeTxt << std::endl;
