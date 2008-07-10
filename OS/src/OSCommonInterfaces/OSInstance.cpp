@@ -3391,7 +3391,17 @@ bool OSInstance::getIterateResults( double *x, double *objLambda, double* conMul
 			if( (m_bCppADFunIsCreated == false || m_bCppADMustReTape == true )  && (m_mapExpressionTreesMod.size() > 0) ) {
 				createCppADFun( m_vdX);
 			}	
-		}	
+		}
+		else{ // make sure vector not empty
+			if( m_vdX.size() == 0) {
+				for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
+					m_vdX.push_back( x[ posVarIndexMap->first]) ;
+				}
+				if( (m_bCppADFunIsCreated == false || m_bCppADMustReTape == true )  && (m_mapExpressionTreesMod.size() > 0) ) {
+					createCppADFun( m_vdX);
+				}	
+			}
+		}
 		switch( highestOrder){		
 			case 0:	
 				if(new_x == true || m_iHighestOrderEvaluated < 0){	
