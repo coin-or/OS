@@ -2241,10 +2241,9 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * <p>
 	 * 
 	 * @param x is a pointer (double array) to the current variable values
-	 * @parma objIdx is the index of the objective function being optimized
+	 * @param objIdx is the index of the objective function being optimized
 	 * @param new_x is false if any evaluation method was previously called
 	 * for the current iterate
-	 * @param highestOrder is the highest order of the derivative being calculated
 	 * @return a pointer to a dense vector of doubles.  
 	 */
 	double *calculateObjectiveFunctionGradient(double* x, int objIdx, bool new_x );
