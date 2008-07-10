@@ -59,7 +59,7 @@
  * <li> lindoapiaddins.osil </li>
  * <li> rosenbrockmode.osil </li>
  * <li> parincquadratic.osil </li>
- * <li> wayneQuadratic.osil -- the only nonlinear integer problem in unitTest </li>
+ * <li> wayneQuadratic.osil  </li>
  * </ol>
  * 
  * We test the mps to osil converter
@@ -812,6 +812,28 @@ try{
 	delete solver;
 	solver = NULL;
 	unitTestResult << "Solved problem bonminEx1.osil with Bonmin" << std::endl;
+	
+	ok = true;
+	osilFileName = dataDir  + "osilFiles" + dirsep + "wayneQuadratic.osil";
+	osil = fileUtil->getFileAsString( osilFileName.c_str());
+	solver = new BonminSolver();	
+	solver->osil = osil;
+	solver->osol = osol;
+	solver->osinstance = NULL;
+	cout << "call the Bonmin Solver for wayneQuadratic" << endl;
+	solver->buildSolverInstance();
+	solver->solve();
+	cout << "Here is the Bonmin solver solution" << endl;
+	cout << solver->osrl << endl;
+	check = 2.925;
+	std::cout << "CALL NEAR_EQUAL" << std::endl;
+	//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+	ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+	std::cout << "CALL NEAR_EQUAL" << std::endl;
+	if(ok == false) throw ErrorClass(" Fail unit test with Bonmin on wayneQuadratic");
+	delete solver;
+	solver = NULL;
+	unitTestResult << "Solved problem wayneQuadratic.osil with Bonmin" << std::endl;
 }
 catch(const ErrorClass& eclass){
 	cout << "OSrL =  " <<  solver->osrl <<  endl;

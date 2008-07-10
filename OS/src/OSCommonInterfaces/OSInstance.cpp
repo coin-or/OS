@@ -2669,8 +2669,15 @@ double **OSInstance::calculateAllObjectiveFunctionGradients(double* x, double *o
 		bool new_x, int highestOrder){
 	try{
 		if(highestOrder < 1 ) throw ErrorClass("When calling calculateAllObjectiveFunctionGradients highestOrder should be 1 or 2");
-		if( new_x == true || (highestOrder > m_iHighestOrderEvaluated)  ) 
-			getIterateResults(x, objLambda, conLambda,  new_x,  highestOrder);
+		if( new_x == true || (highestOrder > m_iHighestOrderEvaluated)  ) {
+			std::map<int, OSExpressionTree*>::iterator posMapExpTree;
+			for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
+				if(posMapExpTree->first < 0){ // this nonlinear expression indexes an objective function
+					m_mmdObjGradient[ abs( posMapExpTree->first) - 1 ] = calculateObjectiveFunctionGradient(x, objLambda, conLambda, 
+							posMapExpTree->first, new_x, highestOrder);
+				}	
+			}
+		}
 	}
 	catch(const ErrorClass& eclass){
 		throw ErrorClass( eclass.errormsg);
