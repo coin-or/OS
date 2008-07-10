@@ -2680,8 +2680,8 @@ double **OSInstance::calculateAllObjectiveFunctionGradients(double* x, double *o
 
 double *OSInstance::calculateObjectiveFunctionGradient(double* x, double *objLambda, double *conLambda,
 		int objIdx, bool new_x, int highestOrder){
-	/* if we are just doing an objective function gradient we should do a forward zero order
-	 * and a reverse first order
+	/* if we are just doing an objective function gradient we should do a zero order forward sweep
+	 * and a reverse first order reverse sweep
 	 */
 	try{
 		if(highestOrder < 1 ) throw ErrorClass("When calling calculateObjectiveFunctionGradient highestOrder should be 1 or 2");	
@@ -3392,7 +3392,7 @@ bool OSInstance::getIterateResults( double *x, double *objLambda, double* conMul
 				createCppADFun( m_vdX);
 			}	
 		}
-		else{ // make sure vector not empty
+		else{ // make sure vector not empty -- this could happen if we have linear obj and nonlinear constraints
 			if( m_vdX.size() == 0) {
 				for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
 					m_vdX.push_back( x[ posVarIndexMap->first]) ;

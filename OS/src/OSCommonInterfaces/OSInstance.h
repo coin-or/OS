@@ -2143,7 +2143,7 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * @param new_x is false if any evaluation method was previously called
 	 * for the current iterate
 	 * @return a double array of objective function values -- 
-	 * the size of the array is equal to getConstraintNumber().  
+	 * the size of the array is equal to getObjectiveNumber().  
 	 */
 	double *calculateAllObjectiveFunctionValues(double* x, bool new_x);	
 		
