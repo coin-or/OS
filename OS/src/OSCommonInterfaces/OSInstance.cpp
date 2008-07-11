@@ -243,7 +243,7 @@ OSInstance::~OSInstance(){
 	//std::cout << "Do garbage collection for the nonlinear API" << std::endl;
 	// garbage collection for the gradient
 	if(m_bNonLinearStructuresInitialized == true ){
-		delete[] m_mdObjectiveFunctionValues;
+		delete[] m_mdObjectiveFunctionValues; 
 		m_mdObjectiveFunctionValues = NULL;	
 		delete[] m_mdConstraintFunctionValues;
 		m_mdConstraintFunctionValues = NULL;
@@ -2699,7 +2699,8 @@ double *OSInstance::calculateObjectiveFunctionGradient(double* x, double *objLam
 			int domainIdx = 0;	
 			std::map<int, OSExpressionTree*>::iterator posMapExpTree;
 			std::map<int, int>::iterator posVarIndexMap;		
-			int i, iHighestOrderEvaluatedStore;	
+			int iHighestOrderEvaluatedStore;
+			unsigned int i;
 			iHighestOrderEvaluatedStore = m_iHighestOrderEvaluated;
 			for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
 				//kipp: modify for more than one obj
@@ -2744,8 +2745,9 @@ double *OSInstance::calculateObjectiveFunctionGradient(double* x, int objIdx, bo
 	try{
 		int domainIdx = 0;	
 		std::map<int, OSExpressionTree*>::iterator posMapExpTree;
-		std::map<int, int>::iterator posVarIndexMap;		
-		int i, iHighestOrderEvaluatedStore;	
+		std::map<int, int>::iterator posVarIndexMap;	
+		unsigned int i;
+		int  iHighestOrderEvaluatedStore;	
 		iHighestOrderEvaluatedStore = m_iHighestOrderEvaluated;
 		for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
 			if(posMapExpTree->first == objIdx){
