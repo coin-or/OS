@@ -397,7 +397,7 @@ Variable::~Variable(){
 	#ifdef DEBUG
 	cout << "Inside the Variable Destructor" << endl; 
 	#endif
-}  
+} 
 
 Variables::Variables(){  
 	#ifdef DEBUG
@@ -1673,13 +1673,16 @@ std::map<int, OSExpressionTree*> OSInstance::getAllNonlinearExpressionTreesMod()
  * @return the format of the time domain. 
  */
 char* OSInstance::getTimeDomainFormat()
-{	if (instanceData->timeDomain == NULL)
-		return "";
+{	char *sstages = "stages";
+	char *sinterval = "interval";
+	char *sempty = "";
+	if (instanceData->timeDomain == NULL)
+		return sempty;
 	if (instanceData->timeDomain->interval != NULL)
-		return "interval";
+		return sinterval;
 	if (instanceData->timeDomain->stages != NULL)
-		return "stages";
-	return "";
+		return sstages;
+	return sempty;
 } 
 
 /**
