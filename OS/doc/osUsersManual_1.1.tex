@@ -732,7 +732,7 @@ The Microsoft Visual Studio files are automatically downloaded with an SVN check
 
 Open the solution file or the individual project files (for instance by double clicking 
 on them in Windows Explorer)  and select Build from the menu bar.
-If you have ASL (see Section~\ref{section:ASL-msvs}) downloaded,
+If you have ASL (see Section~\ref{section:ASL}) downloaded,
 you can also build the {\tt OSAmplClient} (see Section~\ref{section:amplclient} 
 by modifying the Configuration Manager and selecting the
 two projects {\tt libOSnl2OSiL} and {\tt OSAmplClient},
@@ -749,7 +749,7 @@ section~\ref{section:otherthirdparty}. The solution file for version~8 includes 
 configuration, {\tt Release-ipopt}, which can be used to add Ipopt and ASL 
 (see section~\ref{section:ASL}). In order to build this section successfully, 
 the user must first download and process additional software as explained in sections 
-\ref{section:ipopt-msvs} and~\ref{section:ASL-msvs}.
+\ref{section:ipopt-msvs} and~\ref{section:ASL}.
 \fi
 
 \subsubsection{Cygwin}\label{section:cygwin}
@@ -835,7 +835,7 @@ Open the Cygwin shell and check the value of {\tt \$PATH}. If directories don't 
 then the {\tt \$PATH} value needs to be reset.
 
 %\item{} This step is necessary only if you wish to build with the AMPL {\tt ASL} solver library.   
-%Unfortunately, and we regret this, but at the time of this writing the working version of ASL for cygwin/
+%Unfortunately, and we regret this, but at the time of this writing the working version of {\tt ASL} for cygwin/
 %cl build is its trunk version. This means that it is necessary to download the trunk version separately 
 %and replace the release version we have distributed with the trunk version.  The URL for the trunk 
 %version is
@@ -931,8 +931,8 @@ Execute the following steps to use the Microsoft C++ {\tt cl} compiler with MSYS
 
 \item{} Download {\tt MSYS} at
 
-\begin{verbatim}http://downloads.sourceforge.net/mingw/MSYS-1.0.10.exe?modtime=1079444447&big_mirror=1
-\end{verbatim}
+\begin{verbatim}
+http://downloads.sourceforge.net/mingw/MSYS-1.0.10.exe?modtime=1079444447&big_mirror=1\end{verbatim}
 
 and install.  Double clicking on the MSYS icon will open a Bourne shell window.
 
@@ -3606,9 +3606,11 @@ and the {\tt kill.osol} file is
 \end{verbatim}
 
 The result is returned in  OSpL format.
-\subsubsection{Summary}
+\subsubsection{Summary and description of the API}
 
-Below is a summary of the inputs and outputs of the six service methods. See also Figure~\ref{figure:osCommunicationMethods}.
+The six service methods just described are also available as callable routines.
+Below is a summary of the inputs and outputs of the six methods. See also Figure~\ref{figure:osCommunicationMethods}.
+A test program illustrating the use of the methods is described in Section~\ref{section:exampleOSRemoteTest}.
 
 \begin{itemize}
 \item {\tt solve( osil, osol ):}
@@ -4096,6 +4098,14 @@ nlNodeVec[ 0]->createExpressionTreeFromPostfix( nlNodeVec);
 
 The {\tt osTestCode} folder holds the file {\tt osTestCode.cpp}. This is similar to the {\tt instanceGenerator} example. In this case, a simple linear program is generated. This example also illustrates calling a COIN-OR solver, in this case {\tt Clp}.
 
+\subsection{osRemoteTest}\label{section:exampleOSRemoteTest}
+
+This example illustrates the API for the six service methods described in Section~\ref{section:servicemethods}.
+The file {\tt osRemoteTest.cpp} in folder {\tt osRemoteTest} first builds a small linear
+example, solves it remotely in synchronous mode and displays the solution. 
+The asynchronous mode is also tested by submitting the problem to a remote solver, 
+checking the status and either retrieving the answer or killing the process if it has not
+yet finished.
 
 \subsection{OSAddCuts: Using the OSInstance API to Generate Cutting Planes}\label{section:exampleOSAddCuts}
 
