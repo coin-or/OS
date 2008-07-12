@@ -650,6 +650,8 @@ AC_COIN_VPATH_LINK(data/configFiles/testRemoteSend.config)
 ##
 ## ampl test files
 AC_COIN_VPATH_LINK(data/amplFiles/testAmpl.run)
+AC_COIN_VPATH_LINK(data/amplFiles/bonminEx1.mod)
+AC_COIN_VPATH_LINK(data/amplFiles/bonminEx1.nl)
 AC_COIN_VPATH_LINK(data/amplFiles/hs71.mod)
 AC_COIN_VPATH_LINK(data/amplFiles/hs71.nl)
 AC_COIN_VPATH_LINK(data/amplFiles/parinc.mod)
