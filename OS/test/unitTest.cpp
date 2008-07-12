@@ -44,7 +44,7 @@
  * </ol>
  * 
  * COIN-SYMPHONY test on p0033.osil
- * COIN-BONMIN test on bonminEx1.osil
+ * COIN-BONMIN test on bonminEx1.osil and wayneQuadratic
  * 
  * COIN-DyLP tested onparincLinear.osil
  * 
@@ -792,14 +792,16 @@ int main(int argC, char* argV[])
 	//
 #ifdef COIN_HAS_BONMIN
 try{
+	OSiLReader *osilreader = NULL;
+	osilreader = new OSiLReader(); 
 	ok = true; 
 	osilFileName = dataDir  + "osilFiles" + dirsep + "bonminEx1.osil";
 	osil = fileUtil->getFileAsString( osilFileName.c_str());
 	solver = new BonminSolver();
-	solver->sSolverName = "bonmin";
-	solver->osil = osil;
+	//solver->sSolverName = "bonmin";
+	solver->osinstance = osilreader->readOSiL( osil);
+	//solver->osil = osil;
 	solver->osol = osol;  
-	solver->osinstance = NULL; 
 	cout << "call the COIN - Bonmin Solver for bonminEx1" << endl;
 	solver->buildSolverInstance();
 	solver->solve();
@@ -812,7 +814,8 @@ try{
 	delete solver;
 	solver = NULL;
 	unitTestResult << "Solved problem bonminEx1.osil with Bonmin" << std::endl;
-	
+	delete osilreader;
+	osilreader = NULL;
 	ok = true;
 	osilFileName = dataDir  + "osilFiles" + dirsep + "wayneQuadratic.osil";
 	osil = fileUtil->getFileAsString( osilFileName.c_str());

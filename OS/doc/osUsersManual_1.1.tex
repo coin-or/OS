@@ -201,6 +201,8 @@ or LINDO -- see Section~\ref{section:amplclient}.
 \item Use MATLAB to generate problem instances in OSiL format and call a solver either remotely or locally -- see Section~\ref{section:usingmatlab}.
 
 \item Use the OS library for algorithmic differentiation (in conjunction with COIN-OR CppAD) -- see Section~\ref{section:ad}.
+
+\item Use modeling languages to generate model instances in OSiL format. See Section \ref{section:modellang}.
 \end{itemize}
 
 
@@ -1266,7 +1268,7 @@ and~\ref{section:examples} are included in the build, as well.
 \subsection{Other Third-Party Software} \label{section:otherthirdparty}
 
 This section deals with other third-party software not available for download at \url{www.coin-or.org}. 
-The OS project distribution includes the COIN-OR projects {\tt Cbc}, {\tt Clp}, {\tt Cgl}, {\tt CoinUtils}, 
+The OS project distribution includes the COIN-OR projects  {\tt Bonmin}, {\tt Cbc}, {\tt Clp}, {\tt Cgl}, {\tt CoinUtils}, 
 {\tt CppAD},   {\tt DyLP},   {\tt Ipopt},  {\tt Osi}, {\tt SYMPHONY}, and {\tt Vol}.  
 (For details on any of these projects see \url{http://www.coin-or.org/projects/}.)
 However, the project is also designed to work with  several other open source and commercial software projects.
@@ -1539,7 +1541,8 @@ projectroot/doxydoc/html/index.html
 By default, running Doxygen will generate documentation for only the  OS project.  Documentation will not be generated for the other COIN-OR projects in the project root. In the {\tt doxydoc}  folder is a configuration file {\tt doxygen.conf}.  This configuration file contains the {\tt EXCLUDE} parameter
 
 \begin{verbatim}
-EXCLUDE =  Cbc \
+EXCLUDE =  Bonmin \
+   Cbc\
    Cgl \
    Clp \
    CoinUtils \
@@ -1576,6 +1579,7 @@ is given in Table~\ref{table:platformdescription}.
  \begin{tabular}{l|c|c|c|c|c|c|}
  &Mac&Linux&Cyg-gcc&Msys-cl&MinGW-gcc&MSVS \\ \hline
 AMPL-Client &x&x&&x&& \\ \hline
+Bonmin &x&x&x&x&x& \\ \hline
 MATLAB &x&&&&& \\ \hline
 Cbc &x&x&x&x&x&x \\ \hline
 Cgl &x&x&x&x&x&x \\ \hline
@@ -3978,8 +3982,64 @@ http://gsbkip.chicagogsb.edu/os/fileupload.html
 will bring up the necessary form that allows the user to browse a directory and select the file to upload. This URL is based on the assumption that the {\tt OSJava} classes were deployed as described in Section~\ref{section:tomcat}. The file {\tt fileupload.html} is in the directory {\tt WebApps/os}. In our html form implementation, after you upload the OSiL file, it shows you the path of the uploaded file that is saved on the server, so that you can put it in the corresponding {\tt osol} file.
 
 
+
+\section{Modeling Language Support}\label{section:modellang}
+
+The AMPL and GAMS modeling languages can be used to generate model instances as input  to an OS compliant solver. In Section \ref{section:amplclient} we described how to hook the AMPL modeling language to solvers using {\bf OSAmplclient}.  It is also possible to use GAMS via the COIN-OR GAMSlinks project. 
+
+For instructions on downloading and building  the GAMSlinks project see \url{projects.coin-or.org/GAMSlinks}.  In the following discussion we assume that the user has both GAMS and GAMSlinks on their machine.    The user should build the GAMSlinks project as follows.
+
+\begin{itemize}
+
+\item[1.]  Checkout \url{https://projects.coin-or.org/svn/GAMSlinks/trunk}
+
+\item[2.] Uncomment the {\bf cppad} and {\bf OS} projects in {\bf Externals} file.
+\item[3.] Execute the command
+
+\begin{verbatim}
+svn propset svn:externals . -F Externals
+\end{verbatim}
+
+\item[4.]  Do an {\bf svn update}
+\item[5.] Run {\bf configure} with 
+
+\begin{verbatim}
+./configure   --enable-os-solver
+\end{verbatim}
+
+
+\item[6.] Run {\bf make}  and then {\bf make install}. 
+
+
+\end{itemize}
+
+After successfully running the {\bf make install} you should have in {\bf GAMSlinks} bin folder three files:
+\begin{verbatim}
+gmsos_.zip
+\end{verbatim}
+
+Copy these three files into the your GAMS root folder.  Then run {\bf gamsinstall}.  You can solve solve problems either locally or remotely. To solve a problem locally, call
+
+\begin{verbatim}
+gamslib trnsport   (get trnsport model)gams trnsport lp=OS
+\end{verbatim}
+
+\begin{verbatim}
+writeosil osil.xmlwriteosrl osrl.xmlreadosol osol.xml*service dummyadresssolver ipopt
+\end{verbatim}
+
+\begin{verbatim}
+gamslib trnsportgams trnsport lp=os optfile=1
+\end{verbatim}
+
+
+
+
+
+
+
 %\section{Examples}\label{section:examples}
-\section{Code samples to illustrate the {\tt OSInstance} API}\label{section:examples}
+\section{Code samples to illustrate the OS Project}\label{section:examples}
 
 The example executable files are not built by running {\tt configure} and {\tt make}.  In order to build the examples 
 the user must first run
