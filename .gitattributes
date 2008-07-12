@@ -145,6 +145,7 @@ OS/examples/algorithmicDiff/OSAlgorithmicDiffTest.cpp -text
 OS/examples/instanceGenerator/Makefile.in -text
 OS/examples/instanceGenerator/OSInstanceGenerator.cpp -text
 OS/examples/matlab/OSMatlabSolver.cpp -text
+OS/examples/osRemoteTest/Makefile.in -text
 OS/examples/osRemoteTest/OSRemoteTest.cpp -text
 OS/examples/osTestCode/Makefile.in -text
 OS/examples/osTestCode/OSTestCode.cpp -text
