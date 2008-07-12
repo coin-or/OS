@@ -58,36 +58,6 @@ int main( ){
 // test OS code samples here
 	FileUtil *fileUtil = NULL; 
 	fileUtil = new FileUtil();
-	cout << "Start Building the Model" << endl;
-	std::string osilFileName;
-	std::string sosil;
-	// get the input file
-	const char dirsep =  CoinFindDirSeparator();
-  	// Set directory containing mps data files.
-  	std::string dataDir;
-    dataDir = dirsep == '/' ? "../../data/" : "..\\..\\data\\";
-	//osilFileName =  dataDir + "HS071_NLP.osil";
-	osilFileName =  dataDir + "osilFiles" + dirsep  + "bonminEx1.osil";
-	std::cout  << "osilFileName  =  " << osilFileName << std::endl;
-	fileUtil = new FileUtil();
-	sosil = fileUtil->getFileAsString( &osilFileName[0]);	
-	std::cout << sosil << std::endl;
-	BonminSolver *bonminSolver  =  NULL;
-	bonminSolver = new BonminSolver();
-	bonminSolver->osol = " ";
-	OSiLReader *osilrdr = NULL;
-	osilrdr = new OSiLReader(); 
-	bonminSolver->osinstance = osilrdr->readOSiL( sosil);
-	bonminSolver->buildSolverInstance();	
-	bonminSolver->solve();
-	OSrLWriter *osrlwrt;
-	osrlwrt = new OSrLWriter();
-	std::cout <<  osrlwrt->writeOSrL( bonminSolver->osresult ) << std::endl;
-	//osilreader = new OSiLReader();
-	//osinstance = osilreader->readOSiL( osil);
-	return 0;
-	
-	
 	
 	try{
 		
@@ -209,7 +179,7 @@ int main( ){
 		
 		
 		// now solve remotely
-		
+		/*
 		OSSolverAgent* osagent = NULL;
 		osagent = new OSSolverAgent("gsbkip.chicagogsb.edu/os/OSSolverService.jws");	
 		
@@ -219,7 +189,8 @@ int main( ){
 		std::string osrl = osagent->solve(osil, osol);
 		cout << "osrl result from osagent:" << endl << endl;
 		cout << osrl  << endl << endl;
- 
+		delete osagent
+ 		*/
 		// do garbage collection
 		delete osinstance;
 		osinstance = NULL;
