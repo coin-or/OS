@@ -704,6 +704,7 @@ AC_CONFIG_FILES([Makefile
           examples/osTestCode/Makefile
           examples/algorithmicDiff/Makefile
           examples/addCuts/Makefile
+          examples/osRemoteTest/Makefile
           applications/Makefile
           applications/amplClient/Makefile
           applications/fileUpload/Makefile
