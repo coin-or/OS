@@ -623,15 +623,15 @@ public:
 	/** The Interval class destructor */
 	~TimeDomainInterval();
 	
-	/** horizon is the end of the planning period
-	 * in the <b><interval></b> element.
-	 */
-	double horizon;
-	
 	/** start is the start of the planning period
 	 * in the <b><interval></b> element.
 	 */
 	double start;
+	
+	/** horizon is the end of the planning period
+	 * in the <b><interval></b> element.
+	 */
+	double horizon;
 }; // Interval
  
 /*! \class TimeDomain
