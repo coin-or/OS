@@ -3993,15 +3993,19 @@ For instructions on downloading and building  the GAMSlinks project see \url{pro
 
 \item[1.]  Checkout \url{https://projects.coin-or.org/svn/GAMSlinks/trunk}
 
-\item[2.] Uncomment the {\bf cppad} and {\bf OS} projects in {\bf Externals} file.
-\item[3.] Execute the command
+
+\item[2.] Uncomment the {\bf cppad} and {\bf OS} projects in {\bf Externals} file.
+
+\item[3.] Execute the command
 
 \begin{verbatim}
 svn propset svn:externals . -F Externals
 \end{verbatim}
 
-\item[4.]  Do an {\bf svn update}
-\item[5.] Run {\bf configure} with 
+
+\item[4.]  Do an {\bf svn update}
+
+\item[5.] Run {\bf configure} with 
 
 \begin{verbatim}
 ./configure   --enable-os-solver
@@ -4013,24 +4017,47 @@ svn propset svn:externals . -F Externals
 
 \end{itemize}
 
-After successfully running the {\bf make install} you should have in {\bf GAMSlinks} bin folder three files:
+After successfully running the {\bf make install} you should have in the {\bf GAMSlinks} bin folder the following files:
 \begin{verbatim}
+gmsbm_.zip
+gmscc_.zip
+gmsip_.zip
 gmsos_.zip
 \end{verbatim}
 
-Copy these three files into the your GAMS root folder.  Then run {\bf gamsinstall}.  You can solve solve problems either locally or remotely. To solve a problem locally, call
+Copy these  files into the your GAMS root folder.  Then run {\bf gamsinst}.  You can now solve  a wide variety of  problems either locally or remotely. To solve a problem locally, call
 
 \begin{verbatim}
-gamslib trnsport   (get trnsport model)gams trnsport lp=OS
+gamslib rbrock   (get the rosenbrock nonlinear test  model)
+gams rbrock nlp=os (solve the model)
 \end{verbatim}
 
-\begin{verbatim}
-writeosil osil.xmlwriteosrl osrl.xmlreadosol osol.xml*service dummyadresssolver ipopt
-\end{verbatim}
+It is also possible to have GAMSlink generate the instance OSiL file and write the solution  OSrL file.  This is done by giving GAMS an options file. One such file, {\bf os.opt}, is illustrated below. In addition, the options file specifies a service address ({\bf dummyaddress}) and a solver ({\bf ipopt}) to call.   The {\bf os.opt} file is:
 
 \begin{verbatim}
-gamslib trnsportgams trnsport lp=os optfile=1
+writeosil osil.xml
+writeosrl osrl.xml
+service dummyaddress
+solver ipopt
 \end{verbatim}
+
+In order to solve the Rosenbrock test problem using the  {\bf os.opt} options file execute the following command.
+
+\begin{verbatim}
+gams rbrock nlp=os optfile=1
+\end{verbatim}
+
+The numbering system for the GAMS option files works as follows:
+
+\begin{verbatim}
+optfile=1 corresponds to <solver>.opt
+optfile=2 corresponds to <solver>.op2
+...
+optfile=99 corresponds to <solver>.op99
+\end{verbatim}
+
+
+
 
 
 
