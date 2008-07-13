@@ -1546,9 +1546,24 @@ catch(const ErrorClass& eclass){
 		osrlwriter = NULL;
 		delete osrlreader;
 		osrlreader = NULL;
+		// now a second example
+		cout << "TEST PARSING AN OSrL FILE" << endl;
+		osrlwriter = new OSrLWriter();
+		osrlreader = new OSrLReader();
+		cout << "FIRST READ THE OSrL FILE INTO A STRING" << endl;
+		//errorExample.osrl -- check to see if we read an error message correct;
+		osrlFileName = dataDir  + "osrlFiles" + dirsep + "errorExample.osrl"; 
+		osrl = fileUtil->getFileAsString( osrlFileName.c_str() );
 		finish = clock();
 		duration = (double) (finish - start) / CLOCKS_PER_SEC;
-		cout << "Parsing took (seconds): "<< duration << endl;
+		cout << "Reading the file into a string took (seconds): "<< duration << endl;
+		cout << "PARSE THE OSRL STRING INTO AN OSRESULT OBJECT" << endl;
+		osresult = osrlreader->readOSrL( osrl);
+		cout << osrlwriter->writeOSrL( osresult) << endl;
+		delete osrlwriter;
+		osrlwriter = NULL;
+		delete osrlreader;
+		osrlreader = NULL;
 		unitTestResult << "Successful test of OSrL parser on problem parincLinear.osrl" << std::endl;
 
 	}	

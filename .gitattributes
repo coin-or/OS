@@ -113,6 +113,7 @@ OS/data/osolFiles/retrieve.osol -text
 OS/data/osolFiles/send.osol -text
 OS/data/osolFiles/sendWithJobID.osol -text
 OS/data/osplFiles/knock.ospl -text
+OS/data/osrlFiles/errorExample.osrl -text
 OS/data/osrlFiles/parincLinear.osrl -text
 OS/data/osrlFiles/reducedcost.osrl -text
 OS/data/osrlFiles/rosenbrockmod.osrl -text

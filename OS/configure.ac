@@ -626,6 +626,7 @@ AC_COIN_VPATH_LINK(data/osplFiles/knock.ospl)
 AC_COIN_VPATH_LINK(data/osrlFiles/parincLinear.osrl)
 AC_COIN_VPATH_LINK(data/osrlFiles/reducedcost.osrl)
 AC_COIN_VPATH_LINK(data/osrlFiles/rosenbrockmod.osrl)
+AC_COIN_VPATH_LINK(data/osrlFiles/errorExample.osrl)
 ##
 ## configure test files
 ##
