@@ -1769,7 +1769,7 @@ public:
    	 * 
    	 * @return the format of the time domain. 
    	 */
-	char* getTimeDomainFormat(); 
+	std::string getTimeDomainFormat(); 
 	
 	 /**
    	 * Get the number of stages that make up the time domain

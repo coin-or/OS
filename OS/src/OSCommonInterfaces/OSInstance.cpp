@@ -1672,17 +1672,14 @@ std::map<int, OSExpressionTree*> OSInstance::getAllNonlinearExpressionTreesMod()
  * 
  * @return the format of the time domain. 
  */
-char* OSInstance::getTimeDomainFormat()
-{	char *sstages = "stages";
-	char *sinterval = "interval";
-	char *sempty = "";
-	if (instanceData->timeDomain == NULL)
-		return sempty;
+std::string OSInstance::getTimeDomainFormat()
+{	if (instanceData->timeDomain == NULL)
+		return "";
 	if (instanceData->timeDomain->interval != NULL)
-		return sinterval;
+		return "interval";
 	if (instanceData->timeDomain->stages != NULL)
-		return sstages;
-	return sempty;
+		return "stages";
+	return "";
 } 
 
 /**
