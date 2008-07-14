@@ -1271,7 +1271,7 @@ catch(const ErrorClass& eclass){
 		osilreader = new OSiLReader();
 		//create an osinstance
 		osinstance = osilreader->readOSiL( osil);
-		char* f = osinstance->getTimeDomainFormat();
+		std::string f = osinstance->getTimeDomainFormat();
 		ok = (f == "stages");
 		int n = osinstance->getTimeDomainStageNumber();
 		ok &= (n == 6);
