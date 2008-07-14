@@ -70,6 +70,11 @@ LIBS = @oslib@
 
 @COIN_HAS_BONMIN_TRUE@LIBS += @bonminlib@
 
+
+#ADDIPOPTLIBS = $(shell cat $(OSLIBDIR)/ipopt_addlibs_cpp.txt)
+ADDIPOPTLIBS = `cat $(prefix)/share/doc/coin/Ipopt/ipopt_addlibs_cpp.txt`
+@COIN_HAS_IPOPT_TRUE@LIBS += @ipoptlib@ $(ADDIPOPTLIBS)
+
 LIBS += @ADDLIBS@
 #
 #ADD ALL THE LIBS
@@ -89,9 +94,7 @@ LIBS += @clplib@
 @COIN_HAS_VOL_TRUE@LIBS += @vollib@
 #
 #ADDITIONAL IPOPT LIBS
-#ADDIPOPTLIBS = $(shell cat $(OSLIBDIR)/ipopt_addlibs_cpp.txt)
-ADDIPOPTLIBS = `cat $(prefix)/share/doc/coin/Ipopt/ipopt_addlibs_cpp.txt`
-@COIN_HAS_IPOPT_TRUE@LIBS += @ipoptlib@ $(ADDIPOPTLIBS)
+
 LIBS += @coinutilslib@ 
 
 

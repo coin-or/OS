@@ -69,6 +69,10 @@ exec_prefix = @exec_prefix@
 LIBS = @oslib@   
 @COIN_HAS_BONMIN_TRUE@LIBS += @bonminlib@
 
+#ADDITIONAL IPOPT LIBS
+ADDIPOPTLIBS = `cat $(prefix)/share/doc/coin/Ipopt/ipopt_addlibs_cpp.txt`
+@COIN_HAS_IPOPT_TRUE@LIBS += @ipoptlib@ $(ADDIPOPTLIBS)
+
 LIBS += @ADDLIBS@
 
 
@@ -90,9 +94,7 @@ LIBS += @clplib@
 @COIN_HAS_DYLP_TRUE@LIBS += @dylplib@ 
 @COIN_HAS_VOL_TRUE@LIBS += @vollib@
 #
-#ADDITIONAL IPOPT LIBS
-ADDIPOPTLIBS = `cat $(prefix)/share/doc/coin/Ipopt/ipopt_addlibs_cpp.txt`
-@COIN_HAS_IPOPT_TRUE@LIBS += @ipoptlib@ $(ADDIPOPTLIBS)
+
 LIBS += @coinutilslib@ 
 
 

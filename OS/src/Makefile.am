@@ -84,6 +84,14 @@ if COIN_HAS_BONMIN
 endif
 
 
+if COIN_HAS_IPOPT
+  LDADD += $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+  ADDLIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
+endif
+
+#  OSSolverService_DEPENDENCIES +=  $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+
+
 LDADD +=  $(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la 
 
 if COIN_HAS_SYMPHONY
@@ -245,9 +253,6 @@ if COIN_HAS_IPOPT
 	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/LinAlg` \
 	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Common` \
 	-I`$(CYGPATH_W) $(IPOPTOBJDIR)/inc`
-  LDADD += $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
-  OSSolverService_DEPENDENCIES +=  $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
-ADDLIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
 endif
 
 
