@@ -46,7 +46,7 @@
 #include "OSErrorClass.h"
 #include "OSMathUtil.h"
 
-#include "OSBonminSolver.h"
+
 
 #include<iostream> 
 using std::cout;   
