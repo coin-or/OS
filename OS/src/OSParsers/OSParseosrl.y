@@ -133,8 +133,8 @@ generalStatus: GENERALSTATUSSTART anotherGeneralStatusATT GREATERTHAN GENERALSTA
 anotherGeneralStatusATT: generalstatusatt
 	| anotherGeneralStatusATT generalstatusatt  ;
 
-generalstatusatt: TYPEATT ATTRIBUTETEXT quote  { osresult->setGeneralStatusType($2);  parserData->generalStatusTypePresent = true;}   
-		|  DESCRIPTIONATT ATTRIBUTETEXT  quote {  osresult->setGeneralStatusDescription($2); }    
+generalstatusatt: TYPEATT ATTRIBUTETEXT quote  { osresult->setGeneralStatusType($2);  free($2);  ; parserData->generalStatusTypePresent = true;}   
+		|  DESCRIPTIONATT ATTRIBUTETEXT  quote {  osresult->setGeneralStatusDescription($2);    free($2);}    
 
 
 serviceURI: 

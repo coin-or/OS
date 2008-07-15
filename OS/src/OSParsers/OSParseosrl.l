@@ -95,7 +95,7 @@ endelementname (<\/[a-zA-Z][a-zA-Z0-9.:_]+)
 {xmlwhitespace}* {printf("HERE IS WHITESPACE\n");}
 
 
- {quote} {YY_PRINT; return(QUOTE);}
+{quote} {YY_PRINT;  yylval->charval = yytext; return(QUOTE);}
 ({xmlwhitespace}*{greater_than}) {YY_PRINT;     return(GREATERTHAN);}
 -?[0-9]+  {YY_PRINT; yylval->ival = atoi( yytext); return(INTEGER);}
 -?((([0-9]+)|([0-9]*\.[0-9]+))([eE][-+]?[0-9]+)?|INF) {YY_PRINT; yylval->dval = atof( yytext); return(DOUBLE);}
@@ -199,8 +199,8 @@ endelementname (<\/[a-zA-Z][a-zA-Z0-9.:_]+)
 
 
 
-<attributetext>([^\"\'])+ {YY_PRINT;    /*yylval->charval = strdup(yytext);*/ yylval->charval = yytext;
-							BEGIN 0;  return(ATTRIBUTETEXT);}
+<attributetext>([^\"\'])+ {YY_PRINT;  BEGIN 0;  /*yylval->charval = strdup(yytext);*/ yylval->charval = strdup( yytext);  
+							  return(ATTRIBUTETEXT);}
 							
 <osrlattributetext>([^>])* {YY_PRINT;  BEGIN 0; /*yylval->charval = strdup(yytext);*/  yylval->charval = yytext; return(OSRLATTRIBUTETEXT);}
 

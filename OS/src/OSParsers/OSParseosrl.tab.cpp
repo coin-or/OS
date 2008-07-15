@@ -1774,7 +1774,7 @@ yyreduce:
 
   case 11:
 
-    { osresult->setGeneralStatusType((yyvsp[(2) - (3)].charval));  parserData->generalStatusTypePresent = true;}
+    { osresult->setGeneralStatusType((yyvsp[(2) - (3)].charval));  free((yyvsp[(2) - (3)].charval));  ; parserData->generalStatusTypePresent = true;}
     break;
 
   case 12:
