@@ -1779,7 +1779,7 @@ yyreduce:
 
   case 12:
 
-    {  osresult->setGeneralStatusDescription((yyvsp[(2) - (3)].charval)); }
+    {  osresult->setGeneralStatusDescription((yyvsp[(2) - (3)].charval));    free((yyvsp[(2) - (3)].charval));}
     break;
 
   case 15:
@@ -1878,12 +1878,12 @@ yyreduce:
 
   case 64:
 
-    {parserData->statusType = (yyvsp[(2) - (3)].charval); parserData->statusTypePresent = true;}
+    {parserData->statusType = (yyvsp[(2) - (3)].charval); parserData->statusTypePresent = true; free((yyvsp[(2) - (3)].charval));}
     break;
 
   case 65:
 
-    {parserData->statusDescription = (yyvsp[(2) - (3)].charval);}
+    {parserData->statusDescription = (yyvsp[(2) - (3)].charval);  free((yyvsp[(2) - (3)].charval));}
     break;
 
   case 73:
@@ -1955,12 +1955,12 @@ parserData->otherVarStruct->otherVarText[parserData->kounter] =  outStr.str();
 
   case 87:
 
-    { parserData->otherNamePresent = true; parserData->otherVarStruct->name = (yyvsp[(2) - (3)].charval);}
+    { parserData->otherNamePresent = true; parserData->otherVarStruct->name = (yyvsp[(2) - (3)].charval);  free((yyvsp[(2) - (3)].charval));}
     break;
 
   case 88:
 
-    {   parserData->otherVarStruct->description = (yyvsp[(2) - (3)].charval);}
+    {   parserData->otherVarStruct->description = (yyvsp[(2) - (3)].charval);  free((yyvsp[(2) - (3)].charval));}
     break;
 
   case 93:
