@@ -1517,7 +1517,7 @@ YY_RULE_SETUP
 case 2:
 YY_RULE_SETUP
 #line 98 "/Users/kmartin/stable-1.1/OS/src/OSParsers/OSParseosrl.l"
-{YY_PRINT; return(QUOTE);}
+{YY_PRINT; yylval->charval = yytext; return(QUOTE);}
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
@@ -1959,8 +1959,7 @@ case 78:
 /* rule 78 can match eol */
 YY_RULE_SETUP
 #line 202 "/Users/kmartin/stable-1.1/OS/src/OSParsers/OSParseosrl.l"
-{YY_PRINT;    /*yylval->charval = strdup(yytext);*/ yylval->charval = yytext;
-							BEGIN 0;  return(ATTRIBUTETEXT);}
+{YY_PRINT; BEGIN 0;  yylval->charval = strdup(yytext); return(ATTRIBUTETEXT);}
 	YY_BREAK
 case 79:
 /* rule 79 can match eol */

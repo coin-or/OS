@@ -133,8 +133,8 @@ generalStatus: GENERALSTATUSSTART anotherGeneralStatusATT GREATERTHAN GENERALSTA
 anotherGeneralStatusATT: generalstatusatt
 	| anotherGeneralStatusATT generalstatusatt  ;
 
-generalstatusatt: TYPEATT ATTRIBUTETEXT quote  { osresult->setGeneralStatusType($2);  parserData->generalStatusTypePresent = true;}   
-		|  DESCRIPTIONATT ATTRIBUTETEXT  quote {  osresult->setGeneralStatusDescription($2); }    
+generalstatusatt: TYPEATT ATTRIBUTETEXT quote  { osresult->setGeneralStatusType($2);  free($2);  ; parserData->generalStatusTypePresent = true;}   
+		|  DESCRIPTIONATT ATTRIBUTETEXT  quote {  osresult->setGeneralStatusDescription($2);    free($2);}    
 
 
 serviceURI: 
@@ -246,8 +246,8 @@ status: STATUSSTART anotherStatusATT GREATERTHAN  STATUSEND {if(parserData->stat
 anotherStatusATT: statusatt
 	| anotherStatusATT statusatt  ;
 
-statusatt:  TYPEATT ATTRIBUTETEXT  quote  {parserData->statusType = $2; parserData->statusTypePresent = true;}  
-		|  DESCRIPTIONATT ATTRIBUTETEXT quote  {parserData->statusDescription = $2;}  ;
+statusatt:  TYPEATT ATTRIBUTETEXT  quote  {parserData->statusType = $2; parserData->statusTypePresent = true; free($2);}  
+		|  DESCRIPTIONATT ATTRIBUTETEXT quote  {parserData->statusDescription = $2;  free($2);}  ;
 
 message:
 | MESSAGESTART ELEMENTTEXT MESSAGEEND
@@ -309,8 +309,8 @@ parserData->otherVarStruct->otherVarText[parserData->kounter] =  outStr.str();
 anotherotherVarATT: otheratt
 	|  anotherotherVarATT otheratt  ; 
 
-otheratt:  NAMEATT ATTRIBUTETEXT quote  { parserData->otherNamePresent = true; parserData->otherVarStruct->name = $2;}
-		| DESCRIPTIONATT ATTRIBUTETEXT  quote {   parserData->otherVarStruct->description = $2;}    ;
+otheratt:  NAMEATT ATTRIBUTETEXT quote  { parserData->otherNamePresent = true; parserData->otherVarStruct->name = $2;  free($2);}
+		| DESCRIPTIONATT ATTRIBUTETEXT  quote {   parserData->otherVarStruct->description = $2;  free($2);}    ;
 
 
 objectives:
