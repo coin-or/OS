@@ -73,10 +73,16 @@ OSSolverService_SOURCES = OSSolverService.cpp
 # List all additionally required COIN libraries
 
 LDADD +=  \
-	libOS.la \
-	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la 
+	libOS.la 
 
 OSSolverService_DEPENDENCIES += libOS.la
+
+if COIN_HAS_IPOPT
+  LDADD += $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+  ADDLIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
+endif
+
+LDADD +=  $(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la 
 
 if COIN_HAS_SYMPHONY
  LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
@@ -237,9 +243,6 @@ if COIN_HAS_IPOPT
 	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/LinAlg` \
 	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Common` \
 	-I`$(CYGPATH_W) $(IPOPTOBJDIR)/inc`
-  LDADD += $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
-  OSSolverService_DEPENDENCIES +=  $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
-ADDLIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
 endif
 
 

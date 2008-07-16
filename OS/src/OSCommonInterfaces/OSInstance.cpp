@@ -2296,8 +2296,9 @@ double *OSInstance::calculateObjectiveFunctionGradient(double* x, double *objLam
 		if( new_x == true || (highestOrder > m_iHighestOrderEvaluated)  ) {
 			int domainIdx = 0;	
 			std::map<int, OSExpressionTree*>::iterator posMapExpTree;
-			std::map<int, int>::iterator posVarIndexMap;		
-			int i, iHighestOrderEvaluatedStore;	
+			std::map<int, int>::iterator posVarIndexMap;
+			unsigned int i;
+			int iHighestOrderEvaluatedStore;	
 			iHighestOrderEvaluatedStore = m_iHighestOrderEvaluated;
 			for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
 				//kipp: modify for more than one obj
@@ -2342,8 +2343,9 @@ double *OSInstance::calculateObjectiveFunctionGradient(double* x, int objIdx, bo
 	try{
 		int domainIdx = 0;	
 		std::map<int, OSExpressionTree*>::iterator posMapExpTree;
-		std::map<int, int>::iterator posVarIndexMap;		
-		int i, iHighestOrderEvaluatedStore;	
+		std::map<int, int>::iterator posVarIndexMap;
+		unsigned int i;
+		int iHighestOrderEvaluatedStore;	
 		iHighestOrderEvaluatedStore = m_iHighestOrderEvaluated;
 		for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
 			if(posMapExpTree->first == objIdx){
