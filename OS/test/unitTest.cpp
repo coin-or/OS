@@ -1523,7 +1523,16 @@ catch(const ErrorClass& eclass){
 	//
 	// Now just test the OSrL parser
 	try{ 
+		/**
+		 * int this part of the unitTest we
+		 * 1) read an OsRL string from a file
+		 * 2) create and OSResult object from the string
+		 * 3) write a new OSrL string from the in-memory oOSResult bject
+		 * 4) read the string back again to make sure nothing lost
+		 * in translation
+		 */
 		cout << endl;
+		std::string tmpOSrL;
 		clock_t start, finish;
 		double duration;
 		osrlwriter = new OSrLWriter();
@@ -1541,7 +1550,12 @@ catch(const ErrorClass& eclass){
 		start = clock();
 		cout << "PARSE THE OSRL STRING INTO AN OSRESULT OBJECT" << endl;
 		osresult = osrlreader->readOSrL( osrl);
-		cout << osrlwriter->writeOSrL( osresult) << endl;
+		tmpOSrL = osrlwriter->writeOSrL( osresult) ;
+		// make ssure we can parse without error
+		delete osrlreader;
+		osrlreader = NULL;
+		osrlreader = new OSrLReader();
+		osrlreader->readOSrL( tmpOSrL);
 		delete osrlwriter;
 		osrlwriter = NULL;
 		delete osrlreader;
@@ -1559,12 +1573,18 @@ catch(const ErrorClass& eclass){
 		cout << "Reading the file into a string took (seconds): "<< duration << endl;
 		cout << "PARSE THE OSRL STRING INTO AN OSRESULT OBJECT" << endl;
 		osresult = osrlreader->readOSrL( osrl);
-		cout << osrlwriter->writeOSrL( osresult) << endl;
+		tmpOSrL = osrlwriter->writeOSrL( osresult) ;
+		delete osrlreader;
+		osrlreader = NULL;
+		osrlreader = new OSrLReader();
+		osrlreader->readOSrL( tmpOSrL);
 		delete osrlwriter;
 		osrlwriter = NULL;
 		delete osrlreader;
 		osrlreader = NULL;
-		unitTestResult << "Successful test of OSrL parser on problem parincLinear.osrl" << std::endl;
+		unitTestResult << 
+		     "Successful test of OSrL parser on problems parincLinear.osrl and errorExample.osrl" 
+		      << std::endl;
 
 	}	
 		catch(const ErrorClass& eclass){
