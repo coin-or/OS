@@ -31,6 +31,11 @@ OSFileUpload_LDADD =  \
 	 
 if COIN_HAS_BONMIN
   OSFileUpload_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la
+endif
+
+if COIN_HAS_IPOPT
+  OSFileUpload_LDADD += $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+  LIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
 endif	
 	
 OSFileUpload_LDADD += $(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la
@@ -170,8 +175,6 @@ if COIN_HAS_IPOPT
 	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/LinAlg` \
 	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Common` \
 	-I`$(CYGPATH_W) $(IPOPTOBJDIR)/inc`
-  OSFileUpload_LDADD += $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
-  LIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
 endif
 
 
