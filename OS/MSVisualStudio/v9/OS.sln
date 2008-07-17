@@ -1,5 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+# Visual C++ Express 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libCbc", "..\..\..\Cbc\MSVisualStudio\v8\libCbc\libCbc.vcproj", "{363BA154-FEC9-4E1E-BC23-93CEC58AB785}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libCgl", "..\..\..\Cgl\MSVisualStudio\v8\libCgl\libCgl.vcproj", "{DBEA3904-F0B8-408A-9E1A-6497FEBE8C42}"
@@ -189,15 +189,19 @@ Global
 		{9B52F86F-D29F-4EB4-B2AB-35A894A98FBD}.Release|Win32.Build.0 = Release|Win32
 		{9B52F86F-D29F-4EB4-B2AB-35A894A98FBD}.Release-Ipopt|Win32.ActiveCfg = Release-Ipopt|Win32
 		{244910F7-BA68-43C5-A8A5-598D0769F228}.Debug|Win32.ActiveCfg = Debug|Win32
+		{244910F7-BA68-43C5-A8A5-598D0769F228}.Debug|Win32.Build.0 = Debug|Win32
 		{244910F7-BA68-43C5-A8A5-598D0769F228}.Release|Win32.ActiveCfg = Release|Win32
 		{244910F7-BA68-43C5-A8A5-598D0769F228}.Release-Ipopt|Win32.ActiveCfg = Release-Ipopt|Win32
 		{9DCDF713-59A1-46CF-9FFC-6BD0B71B482D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9DCDF713-59A1-46CF-9FFC-6BD0B71B482D}.Debug|Win32.Build.0 = Debug|Win32
 		{9DCDF713-59A1-46CF-9FFC-6BD0B71B482D}.Release|Win32.ActiveCfg = Release|Win32
 		{9DCDF713-59A1-46CF-9FFC-6BD0B71B482D}.Release-Ipopt|Win32.ActiveCfg = Release-Ipopt|Win32
 		{D903BF1A-E383-48A8-B4B9-61F6CA2075E3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D903BF1A-E383-48A8-B4B9-61F6CA2075E3}.Debug|Win32.Build.0 = Debug|Win32
 		{D903BF1A-E383-48A8-B4B9-61F6CA2075E3}.Release|Win32.ActiveCfg = Release|Win32
 		{D903BF1A-E383-48A8-B4B9-61F6CA2075E3}.Release-Ipopt|Win32.ActiveCfg = Release-Ipopt|Win32
 		{963AE46B-8C67-4C69-B9DF-5845B65806A9}.Debug|Win32.ActiveCfg = Debug|Win32
+		{963AE46B-8C67-4C69-B9DF-5845B65806A9}.Debug|Win32.Build.0 = Debug|Win32
 		{963AE46B-8C67-4C69-B9DF-5845B65806A9}.Release|Win32.ActiveCfg = Release|Win32
 		{963AE46B-8C67-4C69-B9DF-5845B65806A9}.Release-Ipopt|Win32.ActiveCfg = Release-Ipopt|Win32
 		{204183DA-1FC1-498D-A97C-6E7B9482DFC6}.Debug|Win32.ActiveCfg = Debug|Win32
