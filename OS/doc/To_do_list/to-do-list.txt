@@ -1,0 +1,8 @@
+To-do list
+
+1. vcbuild issues
+2. OSoL parser
+3. OSiL: stochastic programs vs. robust optimization problems
+   a) Schema resolution
+   b) Parser implementation
+4. "Ticket system" like other COIN-OR programs
