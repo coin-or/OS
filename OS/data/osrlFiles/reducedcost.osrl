@@ -25,11 +25,7 @@
                         <var idx="1">x1</var>
                     </other>
                 </variables>
-                <objectives>
-                    <values>
-                        <obj idx="-1">-7667.94</obj>
-                    </values>
-                </objectives>
+
                 <constraints>
                     <dualValues>
                         <con idx="0">-4.37457</con>

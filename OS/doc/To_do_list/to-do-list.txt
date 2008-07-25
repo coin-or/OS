@@ -8,6 +8,12 @@ General:
    a) Schema resolution
    b) Parser implementation
 4. "Ticket system" like other COIN-OR programs
+5. Implement Brad Bells new sparse algorithmic differentiation techniques
+6. Improve the OSSolverService call to Cbc so that several classes of cuts get added
+7. Once OSoL parser is built put in facility to implement the Osi options.
+8. Once OSoL parser is built put in facility to allow user to select classes of cutting planes to add
+9. Add code so that we can take a LINGO postfix problem instance and generate an OSExpression tree
+10. Contribute to FlopC++ so that it generates OSiL
 ----------------------------------------------------
 Gus:
 
