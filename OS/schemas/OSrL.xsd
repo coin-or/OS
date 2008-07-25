@@ -254,9 +254,11 @@
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="VariableSolution">
+		
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
+		
 		<xs:sequence>
 			<xs:element name="values" type="VariableValues" minOccurs="0"/>
 			<xs:element name="valuesString" type="VariableStringValues" minOccurs="0"/>
@@ -268,6 +270,7 @@
 				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
+		<xs:attribute name="numberOfOtherVariableResult" type="xs:positiveInteger" use="required"  />
 	</xs:complexType>
 	<xs:complexType name="VarValue">
 		<xs:annotation>
