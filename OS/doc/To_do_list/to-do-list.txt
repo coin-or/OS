@@ -1,4 +1,6 @@
 To-do list
+----------------------------------------------------
+General: 
 
 1. vcbuild issues
 2. OSoL parser
@@ -6,3 +8,14 @@ To-do list
    a) Schema resolution
    b) Parser implementation
 4. "Ticket system" like other COIN-OR programs
+----------------------------------------------------
+Gus:
+
+----------------------------------------------------
+Kipp:
+
+----------------------------------------------------
+Jun:
+
+1. vcbuild issues/MSVisual Studio v8
+----------------------------------------------------
