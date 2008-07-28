@@ -14,6 +14,10 @@ General:
 8. Once OSoL parser is built put in facility to allow user to select classes of cutting planes to add
 9. Add code so that we can take a LINGO postfix problem instance and generate an OSExpression tree
 10. Contribute to FlopC++ so that it generates OSiL
+11. Add Symphony to MSVS build
+12. Prepare libDyLP.vcproj.
+13. Add DyLP to MSVS build
+14. Add BonMin to MSVS build (release-plus configuration only)
 ----------------------------------------------------
 Gus:
 

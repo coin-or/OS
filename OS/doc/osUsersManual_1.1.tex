@@ -3093,9 +3093,11 @@ value is {\tt solve.}
 
 \item[] {\bf -nl  xxx.nl}\ \ This is the name of the AMPL nl file if the problem instance is in AMPL nl  format. It is assumed that this file is available in a directory on the machine that is running {\tt OSSolverService}. The default file format is OSiL so this option is not required.
 
-\item[] {\bf -solver  solverName}\ \ Possible values for default OS installation are {\tt clp} (COIN-OR Clp), 
-{\tt cbc} (COIN-OR Cbc), {\tt dylp} (COIN-OR DyLP), and {\tt symphony} (COIN-OR SYMPHONY). Other solvers supported 
-(if the necessary libraries are present) are {\tt cplex} (Cplex through COIN-OR Osi), 
+\item[] {\bf -solver  solverName}\ \ Possible values for the default OS installation (see Section~\ref{section:obtainingbinaries}) are 
+{\tt clp} (COIN-OR Clp), {\tt cbc} (COIN-OR Cbc), {\tt dylp} (COIN-OR DyLP), {\tt symphony} (COIN-OR SYMPHONY),
+and {\tt vol} (COIN-OR Vol). Other solvers supported (if the necessary libraries are present) are 
+{\tt bonmin} (COIN-OR BonMin),
+{\tt cplex} (Cplex through COIN-OR Osi), 
 {\tt glpk} (glpk through COIN-OR Osi), {\tt ipopt} (COIN-OR Ipopt),  
 \ifknitro{\tt knitro} (Knitro),\fi and {\tt lindo} (LINDO). If no value is specified for this parameter, then {\tt cbc} is the default value of this parameter if the the {\tt solve} or {\tt send} service methods are used.
 
@@ -5574,9 +5576,77 @@ jpfasano@us.ibm.com
 %%%%%%%%%%%%%%%%%%%
 Gus and Visual Studio
 
-Quoting Kipp Martin <Kipp.Martin@ChicagoGSB.edu>:> Hi Gus:>>>> Any thoughts?>> That seems to have worked in terms of VS recognizing that the project is there. However, when I now open OS.sln in v9 inside Visual Studio it says: "the solution or project you are opening was created in a different version of Visual Studio ..." Then it wants to go through a conversion process.  So something is now wrong with the solution file in  v9.I don't have v9 running on this machine, but the conversion process is trivial.If you do not want to let MSVS do the conversion for you, just edit the file(it's XML) and change the version number to 10.00 and the package title toVisual Studio 2008. I go in the opposite direction, changing the version to9.00 and the title year to 2005.> Was the osRemoteTest project you committed created in v8? Are you able to open OS.sln in v9 from Visual Studio without it asking to convert?>> Also, how do you turn on/off a project so that is is/is not built from vcbuild?  I don't see how to do that so I can't test the Windows Popup blocker issue.  I am pretty stumped, especially since the WindowsErrorPopupBlocker(); code is in unitTest and unitTest works from vcbuild.Again there are two ways to do it. In MSVS you select the configuration youwant, and then select Configuration Manager from the build menu. Just click onthe projects you want to build. You have to do this separately in eachconfiguration. (Just be careful _not_ to change the configuration in theconfiguration manager. It's an easy tab, so it is very tempting, but it's donefunny things to my setup.)You can also select projects in an editor. If you open OS.sln you will see atthe end of the file a bunch of lines that have project numbers and blah blahblah Activecfg = ...These lines tell MSVS which projects are included in which configurations. Thereare also lines with ...Build.0 = ... These lines tell MSVS which projectsshould be built by default. If you want to change that, yo can simply add ordelete the appropriate entries.Hope that helpsgus
+Quoting Kipp Martin <Kipp.Martin@ChicagoGSB.edu>:
 
-> Hi Gus:>> Okay, for v9 I went into Configuration Manager (the debug tab was selected) and I turned on fileupload and all of the examples including your new osRemoteTest. Then I saved the OS.sln file. Then went to the command line and ran vcbuild OS.sln. All of the projects built with no problem!>> I think you said not to change the tab in the Configuration Manager so how do I turn these guys on in both release and debug mode?You should have a list box on the tool bar that shows the currently activeconfiguration. If you select Release from there and then go back into theConfiguration Manager, everything is fine. The problem comes about when youchange the configuration inside the Configuration Manager, as MSVS then assumesthat in addition to the selections you make, you would like the project in theconfiguration you change to be built using the active configuration. (Thissounds very confusing,  so I'll give an example.)Suppose you have Debug as your active configuration and open the ConfigurationManager. If you then click Release inside the Configuration Manager and turnon, say, osTest, you tell MSVS to build Release with the Debug informationturned on, that is, osTest --- and possibly all the other projects, can'tremember for sure --- will have entries in the .sln files changes from{project number}.Release.ActiveCfg = Release|Win32 (or something close to that)to{project number}.Release.ActiveCfg = Debug|Win32 (which presumably you didn'twant)But if you close the Configuration Manager before you change the configuration,everything is fine.Hope this helpsgus 
+> Hi Gus:
+>>
+>> Any thoughts?
+>
+> That seems to have worked in terms of VS recognizing that the project is there. However, when I now open OS.sln in v9 inside Visual Studio it says: "the solution or project you are opening was created in a different version of Visual Studio ..." Then it wants to go through a conversion process.  So something is now wrong with the solution file in  v9.
+
+I don't have v9 running on this machine, but the conversion process is trivial.
+If you do not want to let MSVS do the conversion for you, just edit the file
+(it's XML) and change the version number to 10.00 and the package title to
+Visual Studio 2008. I go in the opposite direction, changing the version to
+9.00 and the title year to 2005.
+
+> Was the osRemoteTest project you committed created in v8? Are you able to open OS.sln in v9 from Visual Studio without it asking to convert?
+>
+> Also, how do you turn on/off a project so that is is/is not built from vcbuild?  I don't see how to do that so I can't test the Windows Popup blocker issue.  I am pretty stumped, especially since the WindowsErrorPopupBlocker(); code is in unitTest and unitTest works from vcbuild.
+
+Again there are two ways to do it. In MSVS you select the configuration you
+want, and then select Configuration Manager from the build menu. Just click on
+the projects you want to build. You have to do this separately in each
+configuration. (Just be careful _not_ to change the configuration in the
+configuration manager. It's an easy tab, so it is very tempting, but it's done
+funny things to my setup.)
+
+You can also select projects in an editor. If you open OS.sln you will see at
+the end of the file a bunch of lines that have project numbers and blah blah
+blah Activecfg = ...
+These lines tell MSVS which projects are included in which configurations. There
+are also lines with ...Build.0 = ... These lines tell MSVS which projects
+should be built by default. If you want to change that, yo can simply add or
+delete the appropriate entries.
+
+Hope that helps
+
+gus
+
+
+> Hi Gus:
+>
+> Okay, for v9 I went into Configuration Manager (the debug tab was selected) and I turned on fileupload and all of the examples including your new osRemoteTest. Then I saved the OS.sln file. Then went to the command line and ran vcbuild OS.sln. All of the projects built with no problem!
+>
+> I think you said not to change the tab in the Configuration Manager so how do I turn these guys on in both release and debug mode?
+
+You should have a list box on the tool bar that shows the currently active
+configuration. If you select Release from there and then go back into the
+Configuration Manager, everything is fine. The problem comes about when you
+change the configuration inside the Configuration Manager, as MSVS then assumes
+that in addition to the selections you make, you would like the project in the
+configuration you change to be built using the active configuration. (This
+sounds very confusing,  so I'll give an example.)
+
+Suppose you have Debug as your active configuration and open the Configuration
+Manager. If you then click Release inside the Configuration Manager and turn
+on, say, osTest, you tell MSVS to build Release with the Debug information
+turned on, that is, osTest --- and possibly all the other projects, can't
+remember for sure --- will have entries in the .sln files changes from
+
+{project number}.Release.ActiveCfg = Release|Win32 (or something close to that)
+
+to
+
+{project number}.Release.ActiveCfg = Debug|Win32 (which presumably you didn't
+want)
+
+But if you close the Configuration Manager before you change the configuration,
+everything is fine.
+
+Hope this helps
+
+gus 
 
 
 
