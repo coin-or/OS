@@ -24342,6 +24342,12 @@ if test $coin_has_ipopt != unavailable &&
   case $CXX in
     cl*)
        ipoptlib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libipopt.lib';;
+    xl*)
+
+cat >>confdefs.h <<\_ACEOF
+#define XLC_ 1
+_ACEOF
+;;
      *)
        ipoptlib="-L\$(INSTALLIBDIR) -lipopt";;
   esac
