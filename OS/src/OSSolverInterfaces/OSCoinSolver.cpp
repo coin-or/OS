@@ -342,12 +342,14 @@ void CoinSolver::solve() throw (ErrorClass) {
 				*(x + i) = osiSolver->getColSolution()[i];
 			}
 			osresult->setPrimalVariableValues(solIdx, x);
-			// Symphony does not get dual prices
-			if( sSolverName.find( "symphony") == std::string::npos && osinstance->getNumberOfIntegerVariables() == 0 && osinstance->getNumberOfBinaryVariables() == 0) {
-				for(i=0; i <  osinstance->getConstraintNumber(); i++){
-					*(y + i) = osiSolver->getRowPrice()[ i];
+			if( (osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() ) <= 0){
+				// Symphony does not get dual prices
+				if( sSolverName.find( "symphony") == std::string::npos && osinstance->getNumberOfIntegerVariables() == 0 && osinstance->getNumberOfBinaryVariables() == 0) {
+					for(i=0; i <  osinstance->getConstraintNumber(); i++){
+						*(y + i) = osiSolver->getRowPrice()[ i];
+					}
+					osresult->setDualVariableValues(solIdx, y);
 				}
-				osresult->setDualVariableValues(solIdx, y);
 			}
 			//
 			//
