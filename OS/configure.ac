@@ -701,7 +701,7 @@ AC_COIN_FINALIZE
 
 cd $srcdir
 #pwd
-svn info | tail -4 > $ac_default_prefix/src/version.txt
+svn info | tail -n 4 > $ac_default_prefix/src/version.txt
 cd $ac_default_prefix
 #pwd
 
