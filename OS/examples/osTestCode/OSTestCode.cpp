@@ -66,6 +66,15 @@ int main( ){
 		// put in some of the OSInstance <instanceHeader> information
 		osinstance->setInstanceSource("From Anderson, Sweeney, Williams, and Martin");
 		osinstance->setInstanceDescription("The Par Inc. Problem");
+		/* Here is the model:
+		 * Max 10*x0 + 9*x1
+		 * s.t.
+		 * .7*x0 + x1 <= 630
+		 * .5*x0 + (5/6)*x1 <= 600
+		 *  x0 + (2/3)*x1 <= 708
+		 * .1*x0 + .25*x1 <= 135
+		 * 
+		 */
 		//
 		// now put in the OSInstance <instanceData> information
 		// 

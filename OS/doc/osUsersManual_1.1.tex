@@ -5649,7 +5649,11 @@ Hope this helps
 gus 
 
 
+%%%%%%%%%%%%%%%
 
+New improvement from stefan
+
+Hi,I just managed to build the CoinAll system (from BSP) on a Windows system with cl, f2c, no fortran 90 compiler, and user given mumps libraries without having to patch the Ipopt configure scripts.I have put all files that I used athttp://www.gams.com/~svigerske/mumps/(Kipp, this are essentially the same as you used before for the same thing, just reduced to the essential ones.)The readme.txt just says that i used the following site script:with_mumps_lib="c:/cygwin/home/stefan/mumps/libcoinmumps.lib \c:/cygwin/home/stefan/mumps/blas_ifort.lib \c:/cygwin/home/stefan/mumps/intel-libs/libmmt.lib \c:/cygwin/home/stefan/mumps/intel-libs/libirc.lib \c:/cygwin/home/stefan/mumps/intel-libs/svml_disp.lib \c:/cygwin/home/stefan/mumps/intel-libs/ifconsol.lib \c:/cygwin/home/stefan/mumps/intel-libs/libifcoremt.lib \c:/cygwin/home/stefan/mumps/intel-libs/libifport.lib"with_mumps_incdir="c:/cygwin/home/stefan/mumps/inc"It's not nice yet, but an improvement I think ;-) .Stefan-- 
 
 
 
