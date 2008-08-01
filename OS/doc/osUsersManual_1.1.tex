@@ -696,38 +696,34 @@ Also, if you plan to build any of the projects contained in {\tt ThirdParty} (e.
 \subsubsection{Microsoft Visual Studio (MSVS)} \label{section:msvs}
 
 
-
-
-
 Microsoft Visual Studio solution and project files are provided for users of Windows and the Microsoft Visual Studio IDE.   
-Care must be taken to distinguish different versions of MSVS.   Even though Microsoft  released Version~9 in November 2007, 
-we currently support only  Versions 7 and~8. To add to the confusion, these versions are also sometimes referred to by their 
-(approximate) release dates, which is 2008 for Version 9, 2005 for Version~8 and 2003 for Version~7.   In addition there is 
+%Care must be taken to distinguish different versions of MSVS.   Even though Microsoft  released Version~9 in November 2007, 
+%we currently support only  Versions 7 and~8. To add to the confusion, these versions are also sometimes referred to by their 
+%(approximate) release dates, which is 2008 for Version 9, 2005 for Version~8 and 2003 for Version~7.   In addition there is 
+%a free version of the Visual Studio IDE C++ compiler,  called Visual C++ Express Edition.    
+We currently support Versions 8 and~9. These versions are also sometimes referred to by their 
+(approximate) release dates, which is 2008 for Version~9 and 2005 for Version~8.   In addition there is 
 a free version of the Visual Studio IDE C++ compiler,  called Visual C++ Express Edition.    
 
 The following steps are necessary to build the OS project using the  Microsoft Visual Studio IDE.
 
 \begin{enumerate}[Step 1.] \setcounter{enumi}{-1}
-\item{} If MSVS  Version 7 or~8 of  the C++ compiler {\tt cl} is already
+\item{} If the C++ compiler {\tt cl} is already
 installed,  go to  to Step~\ref{enumerate:winbuild2}.
 
 \item{} Download and install the Visual C++ Express Edition, which is available for free at Microsoft's web site. 
+Version~9 is at \url{http://www.microsoft.com/express/download/#webInstall}.  
 This download contains the Microsoft {\tt cl} C++ compiler along with necessary libraries.
-
-Version~7 is no longer available for download from Microsoft.  Version~8 is at \url{http://msdn2.microsoft.com/en-ca/vstudio/aa700736.aspx}.  
-If you are adventurous, you may wish to download Version~9, which is at
-\url{http://msdn2.microsoft.com/en-us/express/future/bb421472.aspx}.
-
 
 \item{} \label{enumerate:winbuild2} The part of the OS library responsible for communication with a remote server depends on some 
 underlying Windows socket header files and libraries. These files are part of the commercial for-pay version, 
 but are not included in the Visual C++ Express download. If you have the Express Edition, it is necessary 
-to also download and install the Windows Platform SDK. This software is version independent and is at  
-\url{http://msdn2.microsoft.com/en-us/express/aa700755.aspx}.
+to also download and install the Windows Platform SDK, which can be found at
+\url{http://www.microsoft.com/downloads/details.aspx?FamilyID=E6E1C3DF-A74F-4207-8586-711EBE331CDC&displaylang=en}.
 
 \item{} In the COIN-OR/OS directory you will find the folder MSVisualStudio, 
 which contains root directories organized by the version of Visual Studio. 
-We currently provide solution files for Version 7 and Version 8. Each contains 
+We currently provide solution files for Version~8 and Version~9. Each contains 
 the file {\tt OS.sln} and project files for building the unitTest ({\tt OSTest.vcproj}), 
 the OSSolverService ({\tt OSSolverService.vcproj}) and the OS library ({\tt libOS.vcproj}).
 The Microsoft Visual Studio files are automatically downloaded with an SVN checkout. They are also contained in the tarballs (see Section~\ref{section:getTarBalls}).
@@ -933,20 +929,23 @@ Execute the following steps to use the Microsoft C++ {\tt cl} compiler with MSYS
 
 \item{} Download {\tt MSYS} at
 
+{\small
 \begin{verbatim}
-http://downloads.sourceforge.net/mingw/MSYS-1.0.10.exe?modtime=1079444447&big_mirror=1\end{verbatim}
+http://downloads.sourceforge.net/mingw/MSYS-1.0.10.exe?modtime=1079444447&big_mirror=1\
+\end{verbatim}
+}
 
 and install.  Double clicking on the MSYS icon will open a Bourne shell window.
 
 \item{}  Download  Visual Studio Express C++ at
 
- \url{http://msdn2.microsoft.com/en-us/express/future/bb421473.aspx}
+ \url{http://www.microsoft.com/express/download/#webInstall}
 
 and install.
 
  \item{}  The part of the OS library responsible for communication with a remote server depends on some underlying Windows socket header files and libraries. Therefore it is necessary to also download and install the Windows Platform SDK. Download the necessary files at
 
- \url{http://msdn2.microsoft.com/en-us/express/aa700755.aspx}
+ \url{http://www.microsoft.com/downloads/details.aspx?FamilyID=E6E1C3DF-A74F-4207-8586-711EBE331CDC&displaylang=en}
 
  and install.
 
@@ -1093,7 +1092,7 @@ $ ./get.Mumps
 \end{verbatim}
 
 Alternatively, you can connect into the project root {\tt COIN-OS} and execute the script {\tt get.AllThirdParty}.  
-This will also get the AMPL {\tt ASL} libraries (see section~\ref{section:ASL}.
+This will also get the AMPL {\tt ASL} libraries (see section~\ref{section:ASL}).
 
 What you do next depends upon whether or not a FORTRAN compiler is present, and if so, which version of FORTRAN.  
 There are several options. See also
@@ -1233,7 +1232,7 @@ In a DOS window, go to the directory
 \begin{verbatim}
    Ipopt\MSVisualStudio\v8\libCoinLapack
 
-   BASDIR\Ipopt\MSVisualStudio\v8\libCoinHSL
+   Ipopt\MSVisualStudio\v8\libCoinHSL
 \end{verbatim}
 
    using the {\tt convert\_*.bat} files you find there.
@@ -1250,7 +1249,7 @@ Now you can open the solution file
 
 and select the configuration {\tt Release-ipopt}. 
 Open the Configuration Manager (in the Build menu)
-and set all twenty-three projects to "Build"
+and set all projects to ``Build''
 (by clicking the check-box next to the project name).
 Then select Build (or press F7).
 This will build all the necessary libraries for the
@@ -1362,7 +1361,7 @@ by
 \vskip 8pt
 \noindent
 where $n$ is the version number of the {\tt cl} compiler on your system (most
-likely 6, 7 or~8). 
+likely 7, 8 or~9). 
 
 To avoid linker errors in MSVS, you may have to edit the file {\tt fpinitmt.c}. 
 Specifically, if you see the error ``multiply defined object \_matherr'', you must
@@ -1966,7 +1965,7 @@ Several examples of files in OSoL format are presented in Section~\ref{section:s
 The OSnL schema is imported by the OSiL schema and is used to represent the nonlinear part of an optimization 
 instance. This is explained in greater detail in Section~\ref{section:osexpressiontreeclass}. Also refer to 
 Figure~\ref{figure:roobjnlnode} for an illustration of elements from the OSnL standard. This figure represents
-the nonlinear part of the objective in equation~\ref{eq:roobj}, that is, 
+the nonlinear part of the objective in equation~(\ref{eq:roobj}), that is, 
 %
 $$
 (1-x_0)^2 + 100 (x_1-x_0^2)^2.
@@ -3093,13 +3092,43 @@ value is {\tt solve.}
 
 \item[] {\bf -nl  xxx.nl}\ \ This is the name of the AMPL nl file if the problem instance is in AMPL nl  format. It is assumed that this file is available in a directory on the machine that is running {\tt OSSolverService}. The default file format is OSiL so this option is not required.
 
-\item[] {\bf -solver  solverName}\ \ Possible values for the default OS installation (see Section~\ref{section:obtainingbinaries}) are 
-{\tt clp} (COIN-OR Clp), {\tt cbc} (COIN-OR Cbc), {\tt dylp} (COIN-OR DyLP), {\tt symphony} (COIN-OR SYMPHONY),
-and {\tt vol} (COIN-OR Vol). Other solvers supported (if the necessary libraries are present) are 
-{\tt bonmin} (COIN-OR BonMin),
-{\tt cplex} (Cplex through COIN-OR Osi), 
-{\tt glpk} (glpk through COIN-OR Osi), {\tt ipopt} (COIN-OR Ipopt),  
-\ifknitro{\tt knitro} (Knitro),\fi and {\tt lindo} (LINDO). If no value is specified for this parameter, then {\tt cbc} is the default value of this parameter if the the {\tt solve} or {\tt send} service methods are used.
+\item[] {\bf -solver  solverName}\ \ 
+%Possible values for default OS installation are {\tt clp} (COIN-OR Clp), 
+%{\tt cbc} (COIN-OR Cbc), {\tt dylp} (COIN-OR DyLP), and {\tt symphony} (COIN-OR SYMPHONY). 
+Possible values of this parameter depend on the installation. The default configurations can be read off from 
+Table~\ref{table:configurations}.
+Other solvers supported (if the necessary libraries are present) are {\tt cplex} (Cplex through COIN-OR Osi), 
+{\tt glpk} (glpk through COIN-OR Osi),% {\tt ipopt} (COIN-OR Ipopt), 
+\ifknitro{\tt knitro} (Knitro),\fi and {\tt lindo} (LINDO). 
+If no value is specified for this parameter, 
+then {\tt cbc} is the default value of this parameter if the the {\tt solve} or {\tt send} service methods are used.
+
+ \begin{table}
+\caption{Solver configurations}
+\centering
+\label{table:configurations}
+\vskip 8pt
+ \begin{tabular}{l|c|c|c|}
+ & {binaries} & {UNIX build} & {MSVS build} \\ 
+ & (Section~\ref{section:obtainingbinaries}) 
+ & (Section~\ref{section:unixbuilds})
+ & (Section~\ref{section:windowsinstall})\\ \hline
+Bonmin   & x & x$^1$ & --- \\
+cbc      & x & x     & x \\
+clp      & x & x     & x \\
+DyLP     & x & x     & --- \\
+Ipopt    & x & x$^1$ & x$^{1,2}$ \\
+Symphony & x & x     & x \\
+Vol      & x & x     & x \\ \hline
+\end{tabular}
+\vskip 6pt
+\begin{tabular}{l}
+Explanations:\\
+$^1$Requires third-party software to be downloaded\\
+$^2$Requires Fortran compiler (see Section~\ref{section:ipopt})
+\end{tabular}
+\end{table}
+
 
 \item[] {\bf -browser  browserName}\ \ This parameter is a path to the browser on the local machine. If this optional parameter is specified then the solver result in OSrL format is transformed using XSLT into HTML and displayed in the browser.
 
@@ -5653,7 +5682,39 @@ gus
 
 New improvement from stefan
 
-Hi,I just managed to build the CoinAll system (from BSP) on a Windows system with cl, f2c, no fortran 90 compiler, and user given mumps libraries without having to patch the Ipopt configure scripts.I have put all files that I used athttp://www.gams.com/~svigerske/mumps/(Kipp, this are essentially the same as you used before for the same thing, just reduced to the essential ones.)The readme.txt just says that i used the following site script:with_mumps_lib="c:/cygwin/home/stefan/mumps/libcoinmumps.lib \c:/cygwin/home/stefan/mumps/blas_ifort.lib \c:/cygwin/home/stefan/mumps/intel-libs/libmmt.lib \c:/cygwin/home/stefan/mumps/intel-libs/libirc.lib \c:/cygwin/home/stefan/mumps/intel-libs/svml_disp.lib \c:/cygwin/home/stefan/mumps/intel-libs/ifconsol.lib \c:/cygwin/home/stefan/mumps/intel-libs/libifcoremt.lib \c:/cygwin/home/stefan/mumps/intel-libs/libifport.lib"with_mumps_incdir="c:/cygwin/home/stefan/mumps/inc"It's not nice yet, but an improvement I think ;-) .Stefan-- 
+Hi,
+
+I just managed to build the CoinAll system (from BSP) on a Windows system with cl, f2c, no fortran 90 compiler, and user given mumps libraries without having to patch the Ipopt configure scripts.
+I have put all files that I used at
+
+http://www.gams.com/~svigerske/mumps/
+
+(Kipp, this are essentially the same as you used before for the same thing, just reduced to the essential ones.)
+
+The readme.txt just says that i used the following site script:
+
+with_mumps_lib="c:/cygwin/home/stefan/mumps/libcoinmumps.lib \
+c:/cygwin/home/stefan/mumps/blas_ifort.lib \
+c:/cygwin/home/stefan/mumps/intel-libs/libmmt.lib \
+c:/cygwin/home/stefan/mumps/intel-libs/libirc.lib \
+c:/cygwin/home/stefan/mumps/intel-libs/svml_disp.lib \
+c:/cygwin/home/stefan/mumps/intel-libs/ifconsol.lib \
+c:/cygwin/home/stefan/mumps/intel-libs/libifcoremt.lib \
+c:/cygwin/home/stefan/mumps/intel-libs/libifport.lib"
+
+with_mumps_incdir="c:/cygwin/home/stefan/mumps/inc"
+
+It's not nice yet, but an improvement I think ;-) .
+
+Stefan
+
+-- 
+
+
+
+
+
+
 
 
 
