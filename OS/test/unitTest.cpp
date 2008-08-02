@@ -612,7 +612,6 @@ int main(int argC, char* argV[])
 		osrlreader = NULL;
 		unitTestResult << "Solved problem parincLinearByRow.osil with Clp" << std::endl;
 		// now solve another problem -- try an integer program
-		// this problem is also stored in base64 binary
 	}
 	catch(const ErrorClass& eclass){
 		unitTestResultFailure << "Sorry Unit Test Failed Testing Clp Solver:"  + eclass.errormsg<< endl;
@@ -1144,13 +1143,13 @@ catch(const ErrorClass& eclass){
 		unitTestResultFailure  <<"Sorry Unit Test Failed Testing AMPL:"  + eclass.errormsg << endl;
 	}
 	//
-	// Now test the b64 feature
+	// Now test the mps feature
 	//
 	try{
 		ok = true;
 		cout << endl;
 		cout << endl;
-		cout << "TESTING BASE 64 WITH A COIN SOLVER"<< endl;
+		cout << "TESTING b64 OPERATIONS WITH A COIN SOLVER"<< endl;
 		cout << endl;
 		OSiLWriter osilwriter;
 		osilwriter.m_bWriteBase64 = true;
@@ -1163,6 +1162,7 @@ catch(const ErrorClass& eclass){
 		solver->osil = osilwriter.writeOSiL( mps2osil->osinstance) ;
 		std::cout << solver->osil << std::endl;
 		solver->buildSolverInstance();
+		//return 0;
 		solver->solve();
 		cout << endl << endl;
 		cout << "COIN solution of a OSiL string in b64 format" << endl;

@@ -2519,10 +2519,19 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
 		std::string base64decodeddata = Base64::decodeb64( b64string );
 		int base64decodeddatalength = base64decodeddata.length();
 		double *doublevec = NULL;
+		char tmpAlign[8];
+		std::cout <<  "data size =  " << dataSize << std::endl;
 		osinstance->instanceData->linearConstraintCoefficients->value->el = new double[(base64decodeddatalength/dataSize) ];
-		doublevec = (double*)&base64decodeddata[0];
+		//doublevec = (double*)&base64decodeddata[0];
+		int kountChar = 0;
 		for(i = 0; i < (base64decodeddatalength/dataSize); i++){
-			osinstance->instanceData->linearConstraintCoefficients->value->el[ i] = *(doublevec++);
+			for(int kj = 0; kj < 8; kj++){
+				tmpAlign[ kj] = base64decodeddata[kountChar];
+				kountChar++;
+			}
+			doublevec = (double*)&tmpAlign;
+			osinstance->instanceData->linearConstraintCoefficients->value->el[ i] = *doublevec;
+			std::cout << osinstance->instanceData->linearConstraintCoefficients->value->el[ i] << std::endl;
 			kount++;
 		}
 		delete [] b64string;
