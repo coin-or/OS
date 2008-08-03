@@ -2471,11 +2471,28 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
 		if( b64string == NULL)  {  osilerror_wrapper( ch,osillineno,"<start> must have children or base64 data"); return false;};
 		std::string base64decodeddata = Base64::decodeb64( b64string );
 		int base64decodeddatalength = base64decodeddata.length();
-		double *doublevec = NULL;
 		osinstance->instanceData->linearConstraintCoefficients->value->el = new double[(base64decodeddatalength/dataSize) ];
-		doublevec = (double*)&base64decodeddata[0];
+		int kountChar = 0;
+		int kj;
+		/* Take care of Lou's memory alignment problem */
+		/* dataSize had better equal sizeof( double) or we need to abandon ship */
+		if( sizeof( double)  != dataSize ) {  
+			osilerror_wrapper( ch, osillineno, 
+				"base 64 encoded with a size of double different than on this machine"); 
+			return false;
+		}	
+		union doubleBuffer{
+			char memAlign[sizeof(double)];
+			double dble;
+		};
+		doubleBuffer dbuf;
 		for(i = 0; i < (base64decodeddatalength/dataSize); i++){
-			osinstance->instanceData->linearConstraintCoefficients->value->el[ i] = *(doublevec++);
+			for(kj = 0; kj < dataSize; kj++){
+				dbuf.memAlign[ kj] = base64decodeddata[kountChar];
+				kountChar++;
+			}
+			osinstance->instanceData->linearConstraintCoefficients->value->el[ i] = dbuf.dble;
+			std::cout << dbuf.dble << std::endl;
 			kount++;
 		}
 		delete [] b64string;
