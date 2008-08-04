@@ -154,6 +154,8 @@ int ossslex(void* scanner );
 int ossslex_init(void** ptr);
 int ossslex_destroy (void* scanner );
 
+std::string get_help();
+std::string get_version();
 
 
 
@@ -263,7 +265,7 @@ int main(int argC, const char* argV[])
 		try{
 			if(osoptions->invokeHelp == true){ 
 				inputFileUtil = new FileUtil();
-				std::string helpTxt = inputFileUtil->getFileAsString( "help.txt" );
+				std::string helpTxt = get_help();
 				std::cout << std::endl << std::endl;
 				std::cout << helpTxt << std::endl;
 				delete	osoptions;
@@ -274,8 +276,7 @@ int main(int argC, const char* argV[])
 			}
 			if(osoptions->writeVersion == true){ 
 				inputFileUtil = new FileUtil();
-				std::string writeTxt = "OS Version 1.1\n";
-				writeTxt += inputFileUtil->getFileAsString( "version.txt" );
+				std::string writeTxt = get_version();
 				std::cout << std::endl << std::endl;
 				std::cout << writeTxt << std::endl;
 				delete	osoptions;
@@ -993,6 +994,120 @@ string getSolverName( std::string osol){
 }//getSolverName
 
 
+std::string get_help(){
 
+	std::ostringstream helpMsg;
+	
+	helpMsg << "************************* HELP *************************" << endl << endl;
+	helpMsg << "In this HELP file we assume that the solve service method is used and " << endl; 
+	helpMsg << "that we are solving problems locally, that is the solver is on the " << endl; 
+	helpMsg << "machine running this OSSolverService.  See Section 10.3 of the User\'s  " << endl;
+	helpMsg << "Manual for other service methods or calling a server remotely. " << endl; 
+	helpMsg << "The OSSolverService takes the parameters listed below.  " << endl;
+	helpMsg << "The order of the parameters is irrelevant.  Not all the parameters  " << endl;
+	helpMsg << "are required.  However, the location of an instance file is  " << endl;
+	helpMsg << "required when using the solve service method. The location of the " << endl;
+	helpMsg << "instance file is specified using the osil option. " << endl;
+
+	helpMsg << endl;
+	
+	helpMsg << "-osil xxx.osil this is the name of the file that contains the  " << endl;
+	helpMsg << "optimization instance in OSiL format.  This option may be  " << endl;
+	helpMsg << "specified in the OSoL solver options file. " << endl;
+	
+	helpMsg << endl;
+
+	helpMsg << "-osol xxx.osol  this is the name of the file that contains the solver options.   " << endl;
+	helpMsg << "It is not necessary to specify this option. " << endl; 
+	
+	helpMsg << endl;
+
+	helpMsg << "-osrl xxx.osrl  this is the name of the file to which the solver solution is written.  " << endl; 
+	helpMsg << "It is not necessary to specify this option. If this option is not specified,  " << endl;
+	helpMsg << "the result will be printed to standard out.  " << endl;
+	
+	helpMsg << endl;
+
+	helpMsg << "-serviceLocation url is the URL of the solver service.  " << endl;
+	helpMsg << "This is not required, and if not specified it is assumed that   " << endl;
+	helpMsg << "the problem is solved locally.  " << endl;
+	
+	helpMsg << endl;
+
+	helpMsg << "-serviceMethod  methodName this is the method on the solver service to be invoked.  " << endl; 
+	helpMsg << "The options are  solve,  send,  kill,  knock,  getJobID, and t retrieve.   " << endl;
+	helpMsg << "This option is not required, and the default value is  solve.  " << endl;
+	
+	helpMsg << endl;
+
+	helpMsg << "-mps  xxx.mps  this is the name of the mps file if the problem instance  " << endl;
+	helpMsg << "is in mps format. The default file format is OSiL so this option is not required.  " << endl;
+	
+	helpMsg << endl;
+
+	helpMsg << "-nl  xxx.nl  this is the name of the AMPL nl file if the problem  " << endl;
+	helpMsg << "instance is in AMPL nl  format. The default file format is OSiL  " << endl;
+	helpMsg << "so this option is not required.  " << endl;
+	
+	helpMsg << endl;
+
+	helpMsg << "-solver  solverName  Possible values for default OS installation  " << endl;
+	helpMsg << "are  bonmn(COIN-OR Bonmin), clp (COIN-OR Clp), cbc (COIN-OR Cbc), " << endl;
+	helpMsg << "dylp (COIN-OR DyLP), and symphony (COIN-OR SYMPHONY). Other solvers supported  " << endl;
+	helpMsg << "(if the necessary libraries are present) are cplex (Cplex through COIN-OR Osi),   " << endl;
+	helpMsg << "glpk (glpk through COIN-OR Osi), ipopt (COIN-OR Ipopt),   " << endl;
+	helpMsg << "knitro (Knitro), and lindo (LINDO). If no value is specified for this  " << endl;
+	helpMsg << "parameter, then cbc is the default value of this parameter.  " << endl; 
+	
+	helpMsg << endl;
+
+	helpMsg << "-browser  browserName this paramater is a path to the browser on the  " << endl; 
+	helpMsg << "local machine. If this optional parameter is specified then the  " << endl; 
+	helpMsg << "solver result in OSrL format is transformed using XSLT into  " << endl; 
+	helpMsg << "HTML and displayed in the browser.  " << endl; 
+	
+	helpMsg << endl;
+
+	helpMsg << "-config pathToConfigureFile this parameter specifies a path on  " << endl; 
+	helpMsg << "the local machine to a text file containing values for the input parameters.  " << endl; 
+	helpMsg << "This is convenient for the user not wishing to constantly retype parameter values.  " << endl;
+	helpMsg << "This configure file can contain values for all of the other parameters. " << endl;
+	
+	helpMsg << endl;
+
+	helpMsg << "--version or -v get the current version of this executable  " << endl;
+	
+	helpMsg << endl;
+
+	helpMsg << "--help or -h  to get this help file " << endl;
+
+	
+	helpMsg << endl;
+	
+	helpMsg << "Note: If you specify a configure file by using the -config option, you can  " << endl;
+	helpMsg << "override the values of the options in the configure file by putting them in   " << endl;
+	helpMsg << "at the command line. " << endl << endl;
+	
+	helpMsg << "See the OS User\' Manual: http://www.coin-or.org/OS/doc/osUsersManual_1.1.pdf" << endl;
+	helpMsg << "for more detail on how to use the OS project. " << endl;
+	
+	helpMsg << endl;
+	helpMsg << "********************************************************" << endl << endl;
+
+	return helpMsg.str();
+}// get help
+
+
+std::string get_version(){
+
+	std::ostringstream versionMsg;
+	versionMsg << "In order to find the version of this project " << endl;
+	versionMsg << "connect to the directory where you downloaded " << endl;
+	versionMsg << "and do: " << endl;
+	versionMsg << "svn info " << endl;
+	
+	
+	return versionMsg.str();
+}// get version
 
 

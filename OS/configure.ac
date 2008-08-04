@@ -560,7 +560,7 @@ AC_SUBST(oslib)
 ##
 ## the help file
 ##
-AC_COIN_VPATH_LINK(src/help.txt)
+#AC_COIN_VPATH_LINK(src/help.txt)
 
 ##
 ## osil test files
@@ -699,9 +699,9 @@ AC_COIN_FINALIZE
 
 #create a file with the current version 
 
-cd $srcdir
+#cd $srcdir
 #pwd
-svn info | tail -n 4 > $ac_default_prefix/src/version.txt
-cd $ac_default_prefix
+#svn info | tail -n 4 > $ac_default_prefix/src/version.txt
+#cd $ac_default_prefix
 #pwd
 
