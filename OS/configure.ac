@@ -578,7 +578,7 @@ AC_SUBST(oslib)
 ##
 ## the help file
 ##
-AC_COIN_VPATH_LINK(src/help.txt)
+#AC_COIN_VPATH_LINK(src/help.txt)
 
 ##
 ## osil test files
