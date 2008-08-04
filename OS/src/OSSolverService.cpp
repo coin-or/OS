@@ -157,7 +157,7 @@ int ossslex_init(void** ptr);
 int ossslex_destroy (void* scanner );
 
 std::string get_help();
-
+std::string get_version();
 
 
 
@@ -279,8 +279,8 @@ int main(int argC, const char* argV[])
 			}
 			if(osoptions->writeVersion == true){ 
 				inputFileUtil = new FileUtil();
-				std::string writeTxt = "OS Version 1.1\n";
-				writeTxt += inputFileUtil->getFileAsString( "version.txt" );
+				std::string writeTxt;
+				writeTxt = get_version();
 				std::cout << std::endl << std::endl;
 				std::cout << writeTxt << std::endl;
 				delete	osoptions;
@@ -1001,6 +1001,7 @@ std::string get_help(){
 
 	std::ostringstream helpMsg;
 	
+	helpMsg << "************************* HELP *************************" << endl << endl;
 	helpMsg << "In this HELP file we assume that the solve service method is used and " << endl; 
 	helpMsg << "that we are solving problems locally, that is the solver is on the " << endl; 
 	helpMsg << "machine running this OSSolverService.  See Section 10.3 of the User\'s  " << endl;
@@ -1054,8 +1055,8 @@ std::string get_help(){
 	helpMsg << endl;
 
 	helpMsg << "-solver  solverName  Possible values for default OS installation  " << endl;
-	helpMsg << "are  clp (COIN-OR Clp), cbc (COIN-OR Cbc), dylp (COIN-OR DyLP),   " << endl;
-	helpMsg << "and symphony (COIN-OR SYMPHONY). Other solvers supported  " << endl;
+	helpMsg << "are  bonmn(COIN-OR Bonmin), clp (COIN-OR Clp), cbc (COIN-OR Cbc), " << endl;
+	helpMsg << "dylp (COIN-OR DyLP), and symphony (COIN-OR SYMPHONY). Other solvers supported  " << endl;
 	helpMsg << "(if the necessary libraries are present) are cplex (Cplex through COIN-OR Osi),   " << endl;
 	helpMsg << "glpk (glpk through COIN-OR Osi), ipopt (COIN-OR Ipopt),   " << endl;
 	helpMsg << "knitro (Knitro), and lindo (LINDO). If no value is specified for this  " << endl;
@@ -1088,9 +1089,27 @@ std::string get_help(){
 	
 	helpMsg << "Note: If you specify a configure file by using the -config option, you can  " << endl;
 	helpMsg << "override the values of the options in the configure file by putting them in   " << endl;
-	helpMsg << "at the command line. " << endl;
+	helpMsg << "at the command line. " << endl << endl;
+	
+	helpMsg << "See the OS User\' Manual: http://www.coin-or.org/OS/doc/osUsersManual_1.1.pdf" << endl;
+	helpMsg << "for more detail on how to use the OS project. " << endl;
+	
+	helpMsg << endl;
+	helpMsg << "********************************************************" << endl << endl;
 
 	return helpMsg.str();
-}
+}// get help
 
+
+std::string get_version(){
+
+	std::ostringstream versionMsg;
+	versionMsg << "In order to find the version of this project " << endl;
+	versionMsg << "connect to the directory where you downloaded " << endl;
+	versionMsg << "and do: " << endl;
+	versionMsg << "svn info " << endl;
+	
+	
+	return versionMsg.str();
+}// get version
 
