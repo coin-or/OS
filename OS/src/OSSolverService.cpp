@@ -1088,7 +1088,7 @@ std::string get_help(){
 	helpMsg << "override the values of the options in the configure file by putting them in   " << endl;
 	helpMsg << "at the command line. " << endl << endl;
 	
-	helpMsg << "See the OS User\' Manual: http://www.coin-or.org/OS/doc/osUsersManual_1.1.pdf" << endl;
+	helpMsg << "See the OS User\'s Manual: http://www.coin-or.org/OS/doc/osUsersManual_1.1.pdf" << endl;
 	helpMsg << "for more detail on how to use the OS project. " << endl;
 	
 	helpMsg << endl;
