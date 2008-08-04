@@ -29795,6 +29795,11 @@ esac
 ##
 ## the help file
 ##
+#AC_COIN_VPATH_LINK(src/help.txt)
+
+##
+## osil test files
+##
 echo "$as_me:$LINENO: checking whether this is a VPATH configuration" >&5
 echo $ECHO_N "checking whether this is a VPATH configuration... $ECHO_C" >&6
 if test `cd $srcdir; pwd` != `pwd`; then
@@ -29805,15 +29810,6 @@ fi
 echo "$as_me:$LINENO: result: $coin_vpath_config" >&5
 echo "${ECHO_T}$coin_vpath_config" >&6
 
-
-if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files src/help.txt"
-fi
-
-
-##
-## osil test files
-##
 
 if test $coin_vpath_config = yes; then
   coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/parincLinear.osil"
@@ -32049,9 +32045,9 @@ fi
 
 #create a file with the current version
 
-cd $srcdir
+#cd $srcdir
 #pwd
-svn info | tail -n  4 > $ac_default_prefix/src/version.txt
-cd $ac_default_prefix
+#svn info | tail -n  4 > $ac_default_prefix/src/version.txt
+#cd $ac_default_prefix
 #pwd
 

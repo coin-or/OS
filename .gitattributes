@@ -251,7 +251,6 @@ OS/src/OSUtils/OSMathUtil.h -text
 OS/src/OSUtils/OSParameters.h -text
 OS/src/OSUtils/OSdtoa.cpp -text
 OS/src/OSUtils/OSdtoa.h -text
-OS/src/help.txt -text
 OS/stylesheets/OSrL.css -text
 OS/stylesheets/OSrL.xslt -text
 OS/test/Makefile.am -text
