@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSoL.xsd: current version - 1.0.0 -->
 	<!--include: since version 1.0.0-->
 	<xs:include schemaLocation="OSgL.xsd"/>
@@ -332,8 +332,8 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="var" type="InitVarValue" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:sequence minOccurs="0">
+			<xs:element name="var" type="InitVarValue" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfVars" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -363,8 +363,8 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="var" type="OtherVarOption" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:sequence minOccurs="0">
+			<xs:element name="var" type="OtherVarOption" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfVars" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
@@ -411,8 +411,8 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="obj" type="InitObjValue" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:sequence minOccurs="0">
+			<xs:element name="obj" type="InitObjValue" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfObjs" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -431,8 +431,8 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="obj" type="InitObjBound" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:sequence minOccurs="0">
+			<xs:element name="obj" type="InitObjBound" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfObjs" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -452,8 +452,8 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="obj" type="OtherObjOption" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:sequence minOccurs="0">
+			<xs:element name="obj" type="OtherObjOption" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfObjs" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
@@ -498,8 +498,8 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="con" type="InitConValue" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:sequence minOccurs="0">
+			<xs:element name="con" type="InitConValue" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfCons" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -518,8 +518,8 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="con" type="InitDualVarValue" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:sequence minOccurs="0">
+			<xs:element name="con" type="InitDualVarValue" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfCons" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -543,8 +543,8 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="con" type="OtherConOption" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:sequence minOccurs="0">
+			<xs:element name="con" type="OtherConOption" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfCons" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
