@@ -414,6 +414,7 @@
 		<xs:sequence>
 			<xs:element name="obj" type="InitObjValue" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute name="numberOfObjs" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="InitObjValue">
 		<xs:annotation>
@@ -433,6 +434,7 @@
 		<xs:sequence>
 			<xs:element name="obj" type="InitObjBound" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute name="numberOfObjs" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="InitObjBound">
 		<xs:annotation>
@@ -453,6 +455,7 @@
 		<xs:sequence>
 			<xs:element name="obj" type="OtherObjOption" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute name="numberOfObjs" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
