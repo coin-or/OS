@@ -335,6 +335,7 @@
 		<xs:sequence>
 			<xs:element name="process" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute name="numberOfProcesses" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="News">
 		<xs:annotation>
