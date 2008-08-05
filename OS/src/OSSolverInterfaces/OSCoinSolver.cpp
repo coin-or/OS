@@ -23,6 +23,10 @@
 #include "OSInstance.h"
 #include "OSFileUtil.h"
 #include "CglPreProcess.hpp"
+#include "CglGomory.hpp"
+#include "CglSimpleRounding.hpp"
+#include "CglMixedIntegerRounding2.hpp"
+#include "CglKnapsackCover.hpp"
   
 #include <iostream>
 #ifdef HAVE_CTIME
@@ -305,6 +309,16 @@ void CoinSolver::solve() throw (ErrorClass) {
 	               osiSolver->setHintParam( OsiDoScale, true, OsiHintDo) ;
 	               
 	               CbcModel model( *m_OsiSolverPre);
+	       		   CglKnapsackCover cover;
+	       	       CglSimpleRounding round;  
+	       	       CglMixedIntegerRounding2 roundmixed; 
+	       		   CglGomory gomory;
+	       		
+	       	
+	       		   model.addCutGenerator(&gomory, 1, "Gomory");
+	       		   model.addCutGenerator(&cover, 1, "Cover");
+	       		   model.addCutGenerator(&round, 1, "Round");
+	       		   model.addCutGenerator(&roundmixed, 1, "MixedRound");
 	               model.setLogLevel( 1);
 				   model.branchAndBound();
 	               //osiSolver->messageHandler()->setLogLevel( 0) ;

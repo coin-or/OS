@@ -65,6 +65,7 @@ AM_CPPFLAGS =\
 	-I`$(CYGPATH_W) $(CGLSRCDIR)/src/CglFlowCover` \
 	-I`$(CYGPATH_W) $(CGLSRCDIR)/src/CglGomory` \
 	-I`$(CYGPATH_W) $(CGLSRCDIR)/src/CglKnapsackCover` \
+	-I`$(CYGPATH_W) $(CGLSRCDIR)/src/CglSimpleRounding` \
 	-I`$(CYGPATH_W) $(CGLSRCDIR)/src/CglMixedIntegerRounding` \
 	-I`$(CYGPATH_W) $(CGLSRCDIR)/src/CglMixedIntegerRounding2` \
 	-I`$(CYGPATH_W) $(CGLSRCDIR)/src/CglOddHole` \
