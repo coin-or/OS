@@ -163,6 +163,7 @@
 			<xs:element name="other" type="OtherOptimizationResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="objectiveIdx" type="xs:negativeInteger" use="optional"/>
+		<xs:attribute name="numberOfOtherResults" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="OptimizationSolutionStatus">
 		<xs:annotation>
