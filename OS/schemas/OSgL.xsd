@@ -326,6 +326,7 @@
 		<xs:sequence>
 			<xs:element name="path" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute name="numbrOfPaths" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="Processes">
 		<xs:annotation>
