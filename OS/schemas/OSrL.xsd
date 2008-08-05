@@ -169,9 +169,10 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="substatus" type="OptimizationSolutionSubstatus" minOccurs="0" maxOccurs="unbounded"/>
+		<xs:sequence minOccurs="0">
+			<xs:element name="substatus" type="OptimizationSolutionSubstatus" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute name="numberOfSubstatuses" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="type" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
