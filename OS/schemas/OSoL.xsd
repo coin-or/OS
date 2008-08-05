@@ -405,6 +405,7 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
+		<xs:attribute name="numberOfOtherObjectiveOptions" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="InitObjectiveValues">
 		<xs:annotation>
