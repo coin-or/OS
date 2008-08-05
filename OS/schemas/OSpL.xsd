@@ -251,8 +251,8 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="job" minOccurs="0" maxOccurs="unbounded">
+		<xs:sequence minOccurs="0">
+			<xs:element name="job" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>draft</xs:documentation>
 				</xs:annotation>
@@ -263,6 +263,7 @@
 				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
+		<xs:attribute name="numberOfJobs" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="StandardOptimizationProcessInformation">
 		<xs:annotation>
@@ -310,40 +311,45 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
+		<xs:sequence minOccurs="0">
 			<xs:element name="var" type="xs:string" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute name="numberOfVars" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="UpdatedVariableValues">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
+		<xs:sequence minOccurs="0">
 			<xs:element name="var" type="xs:double" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute name="numberOfVars" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="UpdatedVariableReducedCosts">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
+		<xs:sequence minOccurs="0">
 			<xs:element name="var" type="xs:double" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute name="numberOfVars" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="UpdatedConstraintValues">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
+		<xs:sequence minOccurs="0">
 			<xs:element name="con" type="xs:double" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute name="numberOfCons" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="UpdatedDualValues">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
+		<xs:sequence minOccurs="0">
 			<xs:element name="con" type="xs:double" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute name="numberOfCons" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 </xs:schema>
