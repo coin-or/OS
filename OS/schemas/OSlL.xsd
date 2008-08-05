@@ -64,7 +64,7 @@
  */
 -->
 <!-- $Id: lpfml.xsd,v 1.18 2003/11/09 22:31:24 kipp Exp $   -->
-<xs:schema targetNamespace="http://FML/lpfml.xsd" xmlns="http://FML/lpfml.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+<xs:schema targetNamespace="http://FML/lpfml.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://FML/lpfml.xsd" elementFormDefault="qualified">
 	<!--OSlL.xsd: finalization, in honor of LPFML -->
 	<xs:element name="mathProgram">
 		<xs:annotation>
