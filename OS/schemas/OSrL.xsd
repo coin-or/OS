@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2005 sp1 U (http://www.xmlspy.com) by oig_trade (oig) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSrL.xsd: current version - 1.0.0-->
 	<!--include: since version 1.0.0-->
 	<xs:include schemaLocation="OSgL.xsd"/>
@@ -111,6 +111,7 @@
 		<xs:sequence>
 			<xs:element name="substatus" type="GeneralSubstatus" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute name="numberOfSubstatuses" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="type" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -254,11 +255,9 @@
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="VariableSolution">
-		
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		
 		<xs:sequence>
 			<xs:element name="values" type="VariableValues" minOccurs="0"/>
 			<xs:element name="valuesString" type="VariableStringValues" minOccurs="0"/>
@@ -270,7 +269,7 @@
 				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfOtherVariableResult" type="xs:positiveInteger" use="required"  />
+		<xs:attribute name="numberOfOtherVariableResult" type="xs:positiveInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="VarValue">
 		<xs:annotation>
