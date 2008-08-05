@@ -335,7 +335,7 @@
 		<xs:sequence>
 			<xs:element name="var" type="InitVarValue" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfIntialVariableValues" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfVars" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="InitVarValue">
 		<xs:annotation>
@@ -366,6 +366,7 @@
 		<xs:sequence>
 			<xs:element name="var" type="OtherVarOption" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute name="numberOfVars" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
