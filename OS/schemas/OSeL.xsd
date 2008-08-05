@@ -220,9 +220,10 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="key" type="xs:string" maxOccurs="unbounded"/>
+		<xs:sequence minOccurs="0">
+			<xs:element name="keyWord" type="xs:string" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute name="numberOfKeyWords" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="Owner">
 		<xs:annotation>
@@ -298,9 +299,10 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
+		<xs:sequence minOccurs="0">
 			<xs:element name="link" type="Link" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute name="numberOfLinks" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="Link">
 		<xs:annotation>
