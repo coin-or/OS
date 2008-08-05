@@ -308,6 +308,7 @@
 		<xs:attribute name="numberOfVariables" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfOtherOptions" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="VariableOption">
 		<xs:annotation>
