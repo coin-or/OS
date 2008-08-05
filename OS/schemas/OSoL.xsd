@@ -492,6 +492,7 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
+		<xs:attribute name="numberOfOtherConstraintOptions" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="InitConstraintValues">
 		<xs:annotation>
