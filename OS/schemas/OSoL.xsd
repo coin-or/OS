@@ -501,17 +501,7 @@
 		<xs:sequence>
 			<xs:element name="con" type="InitConValue" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-	</xs:complexType>
-	<xs:complexType name="OtherConstraintOption">
-		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="con" type="OtherConOption" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
-		<xs:attribute name="name" type="xs:string" use="required"/>
-		<xs:attribute name="value" type="xs:string" use="optional"/>
-		<xs:attribute name="description" type="xs:string" use="optional"/>
+		<xs:attribute name="numberOfCons" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="InitConValue">
 		<xs:annotation>
@@ -531,6 +521,7 @@
 		<xs:sequence>
 			<xs:element name="con" type="InitDualVarValue" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute name="numberOfCons" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="InitDualVarValue">
 		<xs:annotation>
@@ -547,6 +538,18 @@
 				<xs:restriction base="xs:double"/>
 			</xs:simpleType>
 		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="OtherConstraintOption">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="con" type="OtherConOption" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfCons" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OtherConOption">
 		<xs:annotation>
