@@ -20,12 +20,19 @@ General:
 14. Add BonMin to MSVS build (release-plus configuration only)
 ----------------------------------------------------
 Gus:
+Stochastic Programming extension design in OSiL/Conference call just on stchastic/robust  08/13/08
+OSoL schema/c++ parsers 
 
 ----------------------------------------------------
 Kipp:
-
+SOS related research
+OSoL/OSrL schema examination/Existing OSrL reader/writer modification
+Cone programming potential collaboration
 ----------------------------------------------------
 Jun:
+OSoL/OSrL java modification
+Constrait programming document/report
+SOS extension in OSiL
 
-1. vcbuild issues/MSVisual Studio v8
+
 ----------------------------------------------------
