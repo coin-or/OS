@@ -4247,9 +4247,13 @@ functions much like {\tt OSnl2osil} and {\tt OSmps2osil} and takes MATLAB arrays
 to create an OSiL instance.  This class is part of the OS library.   
 In order to use the {\tt OSMatlab} class it is necessary to  compile 
 {\tt OSmatlabSolver.cpp}  into  a MATLAB Executable ({\tt mex}) file.  
-The {\tt OSmatlabSolver.cpp} file is in the {\tt  OS/examples/matlab} directory. 
-The following steps should be followed.  
-(We assume the user has already done a {\tt make install}.)
+The {\tt OSmatlabSolver.cpp} file is in the {\tt  OS/examples/matlab} directory.  
+We  assume the user has already done a {\tt make install} and that in the OS root directory
+\begin{verbatim}
+/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS
+\end{verbatim}
+there is an include directory and lib directory that results from the make install.  The following steps should be followed. 
+
 
 \begin{enumerate}[{\bf Step 1:}]
 
@@ -4268,7 +4272,7 @@ Next edit the {\tt CXXLIBS} flag so that the OS and supporting libraries are inc
 CXXLIBS="$MLIBS -lstdc++
     -L/Users/kmartin/Documents/files/code/ipopt/macosx/Ipopt-3.2.2/lib
     -L/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/lib
-    -lOS  -lIpopt -lOsiCbc -lOsiClp -lOsiSym -lCbc -lCgl -lOsi -lClp -lSym -lCoinUtils  -lm"
+    -lOS  -lbonmin -lIpopt -lOsiCbc -lOsiClp -lOsiSym -lCbc -lCgl -lOsi -lClp -lSym -lCoinUtils  -lm"
 \end{verbatim}
 
 For a UNIX system the {\tt mexopts.sh} file  is typically  found in a directory with the release name in {\tt  $\sim$/.matlab}. For example,
@@ -5716,7 +5720,48 @@ Ted:
 
 Mac OS X issues
 
-I did some more digging and for those who are interested, I seem to have gotten to the bottom of how to successfully build CoinAll on OSX 10.5 (Leopard). As I had suspected, the problem is essentially a name-mangling issue. The bottom line is that between 10.4 and 10.5, Apple changed the implementation of a lot of the system routines in order to gain UNIX certification (who knew there still was such a thing?). In order to maintain backwards compatibility, however, the symbols associated with the new versions of system calls have $UNIX2003 appended to the symbol name in libraries compiled under 10.5. For more details, see here:http://developer.apple.com/releasenotes/Darwin/SymbolVariantsRelNotes/index.htmlThe problem arises because ASL itself reimplements one of the Unix system calls that was also reimplemented by OSX (strtod). Presumably to avoid name conflicts with the original system call, the line#define strtod strtod_ASLwas inserted into the file dtoa1.c, so that the system call would be replaced with the ASL reimplementation everywhere. The compiler then apparently gets a little confused and thinks that the symbol strtod_ASL refers to an OSX system call and helpfully appends $UNIX2003 to its symbol name strtod_ASL in the amplsolver.a library. The linker, however, does not then seem to properly link calls to strtod_ASL in other object files to this new definition. Got that? It's a little confusing and I think it's actually a bug in the compiler.There are a number of possible fixes, however. The easiest one seems to be to use a compiler option that forces the use of the old system calls in order to allow building of codes on 10.5 that run on older variants:?mmacosx-version-min=10.4This is also the same as defining "MAC_OSX_DEPLOYMENT_TARGET=10.4". Since we probably want our binaries to be compatible with older versions of OSX anyway and this will allow ASL to build properly, I would suggest that we add that compiler option automatically for OSX in coin.m4. I'm not sure whether older compilers will understand it, so if not, we'll need to detect whether we are working version 10.5 or an earlier one. Alternatively, we could simply modify the compile_unix_ASL script or patch ASL itself. Thoughts?
+I did some more digging and for those who are interested, I seem to have 
+gotten to the bottom of how to successfully build CoinAll on OSX 10.5 
+(Leopard). As I had suspected, the problem is essentially a 
+name-mangling issue. The bottom line is that between 10.4 and 10.5, 
+Apple changed the implementation of a lot of the system routines in 
+order to gain UNIX certification (who knew there still was such a 
+thing?). In order to maintain backwards compatibility, however, the 
+symbols associated with the new versions of system calls have $UNIX2003 
+appended to the symbol name in libraries compiled under 10.5. For more 
+details, see here:
+
+http://developer.apple.com/releasenotes/Darwin/SymbolVariantsRelNotes/index.html
+
+The problem arises because ASL itself reimplements one of the Unix 
+system calls that was also reimplemented by OSX (strtod). Presumably to 
+avoid name conflicts with the original system call, the line
+
+#define strtod strtod_ASL
+
+was inserted into the file dtoa1.c, so that the system call would be 
+replaced with the ASL reimplementation everywhere. The compiler then 
+apparently gets a little confused and thinks that the symbol strtod_ASL 
+refers to an OSX system call and helpfully appends $UNIX2003 to its 
+symbol name strtod_ASL in the amplsolver.a library. The linker, however, 
+does not then seem to properly link calls to strtod_ASL in other object 
+files to this new definition. Got that? It's a little confusing and I 
+think it's actually a bug in the compiler.
+
+There are a number of possible fixes, however. The easiest one seems to 
+be to use a compiler option that forces the use of the old system calls 
+in order to allow building of codes on 10.5 that run on older variants:
+
+?mmacosx-version-min=10.4
+
+This is also the same as defining "MAC_OSX_DEPLOYMENT_TARGET=10.4". 
+Since we probably want our binaries to be compatible with older versions 
+of OSX anyway and this will allow ASL to build properly, I would suggest 
+that we add that compiler option automatically for OSX in coin.m4. I'm 
+not sure whether older compilers will understand it, so if not, we'll 
+need to detect whether we are working version 10.5 or an earlier one. 
+Alternatively, we could simply modify the compile_unix_ASL script or 
+patch ASL itself. Thoughts?
 
 
 
