@@ -31,6 +31,8 @@ Kipp:
 SOS related research
 OSoL/OSrL schema examination/Existing OSrL reader/writer modification
 Cone programming potential collaboration
+
+
 ----------------------------------------------------
 Jun:
 OSoL/OSrL java modification
