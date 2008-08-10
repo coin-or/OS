@@ -18,6 +18,9 @@ General:
 12. Prepare libDyLP.vcproj.
 13. Add DyLP to MSVS build
 14. Add BonMin to MSVS build (release-plus configuration only)
+15. Right now the OSSolverService command line parser requires / for path -- allow \ for Windows users
+
+
 ----------------------------------------------------
 Gus:
 Stochastic Programming extension design in OSiL/Conference call just on stchastic/robust  08/13/08
