@@ -752,10 +752,7 @@ InstanceData::~InstanceData(){
 	delete nonlinearExpressions;
 	nonlinearExpressions = NULL;
 	delete timeDomain;
-	if (timeDomain != NULL)
-	{   delete timeDomain;
-		timeDomain = NULL;
-	};
+	timeDomain = NULL;
 } 
 
 string OSInstance::getInstanceName(){
