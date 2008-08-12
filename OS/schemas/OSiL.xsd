@@ -2,7 +2,7 @@
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" elementFormDefault="qualified">
 	<!--OSiL.xsd: current version - 1.0.0 -->
 	<!--include: since version 1.0.0 -->
 	<xs:include schemaLocation="OSgL.xsd"/>
@@ -89,6 +89,11 @@
 			<xs:element name="nonlinearExpressions" type="NonlinearExpressions" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="sos" type="SOS" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="cones" type="Cones" minOccurs="0">
@@ -360,6 +365,63 @@
 		</xs:sequence>
 		<xs:attribute name="idx" type="xs:int" use="required"/>
 	</xs:complexType>
+	<!--SOS: experiment -->
+	<xs:complexType name="SOS">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:annotation>
+				<xs:documentation>Number of various cone child elements must match numberOfCones</xs:documentation>
+			</xs:annotation>
+			<xs:element name="sos1" type="SOS1">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="sos2" type="SOS2">
+				<xs:annotation>
+					<xs:documentation>experiment</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:choice>
+		<xs:attribute name="numberOfCones" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="SOS1">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:sequence minOccurs="0">
+			<xs:element name="el" type="SOSElement" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="startIndex" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="endIndex" type="xs:nonNegativeInteger" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="SOS2">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:sequence minOccurs="0">
+			<xs:element name="el" type="SOSElement" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="startIndex" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="endIndex" type="xs:nonNegativeInteger" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="SOSElement">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:nonNegativeInteger">
+				<xs:attribute name="start" type="xs:int" use="optional"/>
+				<xs:attribute name="end" type="xs:int" use="optional"/>
+				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+				<xs:attribute name="incr" type="xs:int" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
 	<!--Cones: draft -->
 	<xs:complexType name="Cones">
 		<xs:annotation>
@@ -399,6 +461,7 @@
 		<xs:sequence minOccurs="0">
 			<xs:element name="el" type="ConeElement" minOccurs="3" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="positive" type="xs:boolean" use="optional" default="true"/>
@@ -419,6 +482,7 @@
 		<xs:sequence minOccurs="0">
 			<xs:element name="el" type="ConeElement" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="startIndex" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="endIndex" type="xs:nonNegativeInteger" use="optional"/>
 	</xs:complexType>
@@ -429,6 +493,7 @@
 		<xs:sequence minOccurs="0">
 			<xs:element name="el" type="ConeElement" minOccurs="2" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="startIndex" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="endIndex" type="xs:nonNegativeInteger" use="optional"/>
 	</xs:complexType>
@@ -439,6 +504,7 @@
 		<xs:sequence minOccurs="0">
 			<xs:element name="el" type="ConeElement" minOccurs="3" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="startIndex" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="endIndex" type="xs:nonNegativeInteger" use="optional"/>
 	</xs:complexType>
