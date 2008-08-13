@@ -93,7 +93,7 @@
 			</xs:element>
 			<xs:element name="specialOrderedSets" type="SpecialOrderedSets" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>draft</xs:documentation>
+					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="cones" type="Cones" minOccurs="0">
