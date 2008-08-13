@@ -390,7 +390,7 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:choice>
-		<xs:attribute name="numberOSpecialOrderSets" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOSpecialOrderedSets" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="SOS1">
 		<xs:annotation>
@@ -430,10 +430,9 @@
 		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:nonNegativeInteger">
-				<xs:attribute name="idx" type="xs:int" use="optional"/>
-				<xs:attribute name="start" type="xs:int" use="optional"/>
-				<xs:attribute name="end" type="xs:int" use="optional"/>
-				<xs:attribute name="incr" type="xs:int" use="optional"/>
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="mult" type="xs:nonNegativeInteger" use="optional" default="1"/>
+				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
 				<xs:attribute name="weight" type="xs:double" use="optional"/>
 			</xs:extension>
 		</xs:simpleContent>
