@@ -390,55 +390,49 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:choice>
-		<xs:attribute name="numberOfCones" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOSpecialOrderSets" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="SOS1">
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
-			<xs:element name="el" type="SOSElement" maxOccurs="unbounded"/>
+			<xs:element name="var" type="SOSVar" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="startIndex" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="endIndex" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="numberOfVariables" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="maxNumberOfNonNegativeVarialbes" type="xs:nonNegativeInteger" default="1"/>
-		<xs:attribute name="defaultWeightSchem" type="xs:string" use="optional"/>
+		<xs:attribute name="defaultWeightScheme" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="SOS2">
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
-			<xs:element name="el" type="SOSElement" maxOccurs="unbounded"/>
+			<xs:element name="var" type="SOSVar" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="startIndex" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="endIndex" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="defaultWeightSchem" type="xs:string" use="optional"/>
+		<xs:attribute name="numberOfVariables" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="defaultWeightScheme" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="SOS3">
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
-			<xs:element name="el" type="SOSElement" maxOccurs="unbounded"/>
+			<xs:element name="var" type="SOSVar" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfVariables" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="convexConstraintIndex" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="startIndex" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="endIndex" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="defaultWeightSchem" type="xs:string" use="optional"/>
+		<xs:attribute name="defaultWeightScheme" type="xs:string" use="optional"/>
 	</xs:complexType>
-	<xs:complexType name="SOSElement">
+	<xs:complexType name="SOSVar">
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:nonNegativeInteger">
+				<xs:attribute name="idx" type="xs:int" use="optional"/>
 				<xs:attribute name="start" type="xs:int" use="optional"/>
 				<xs:attribute name="end" type="xs:int" use="optional"/>
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
 				<xs:attribute name="incr" type="xs:int" use="optional"/>
 				<xs:attribute name="weight" type="xs:double" use="optional"/>
 			</xs:extension>
