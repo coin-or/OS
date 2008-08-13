@@ -402,6 +402,8 @@
 		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="startIndex" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="endIndex" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="maxNumberOfNonNegativeVarialbes" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="defaultWeightSchem" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="SOS2">
 		<xs:annotation>
@@ -413,6 +415,7 @@
 		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="startIndex" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="endIndex" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="defaultWeightSchem" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="SOS3">
 		<xs:annotation>
@@ -422,8 +425,10 @@
 			<xs:element name="el" type="SOSElement" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="convexConstraintIndex" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="startIndex" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="endIndex" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="defaultWeightSchem" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="SOSElement">
 		<xs:annotation>
@@ -435,6 +440,7 @@
 				<xs:attribute name="end" type="xs:int" use="optional"/>
 				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
 				<xs:attribute name="incr" type="xs:int" use="optional"/>
+				<xs:attribute name="weight" type="xs:double" use="optional"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
