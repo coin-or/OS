@@ -2,13 +2,13 @@ To-do list
 ----------------------------------------------------
 General: 
 
-1. vcbuild issues
+1. vcbuild issues (resolved - 15 Aug 2008)
 2. OSoL parser
 3. OSiL: stochastic programs vs. robust optimization problems
    a) Schema resolution
    b) Parser implementation
-4. "Ticket system" like other COIN-OR programs
-5. Implement Brad Bells new sparse algorithmic differentiation techniques
+4. "Ticket system" like other COIN-OR programs (still needed?)
+5. Implement Brad Bell's new sparse algorithmic differentiation techniques
 6. Improve the OSSolverService call to Cbc so that several classes of cuts get added
 7. Once OSoL parser is built put in facility to implement the Osi options.
 8. Once OSoL parser is built put in facility to allow user to select classes of cutting planes to add
@@ -23,7 +23,7 @@ General:
 
 ----------------------------------------------------
 Gus:
-Stochastic Programming extension design in OSiL/Conference call just on stchastic/robust  08/13/08
+Stochastic Programming extension design in OSiL/Conference call just on stochastic/robust  08/22/08
 OSoL schema/c++ parsers 
 
 ----------------------------------------------------
@@ -32,12 +32,10 @@ SOS related research
 OSoL/OSrL schema examination/Existing OSrL reader/writer modification
 Cone programming potential collaboration
 
-
 ----------------------------------------------------
 Jun:
 OSoL/OSrL java modification
-Constrait programming document/report
+Constraint programming document/report
 SOS extension in OSiL
-
 
 ----------------------------------------------------
