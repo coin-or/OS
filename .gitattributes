@@ -137,6 +137,7 @@ OS/doc/figures/expressiontree.png -text
 OS/doc/figures/osCommunicationMethods.pdf -text
 OS/doc/figures/osCommunicationMethods.png -text
 OS/doc/figures/osbinDistribution.png -text
+OS/doc/osUsersManual_1.1.bbl -text
 OS/doc/osUsersManual_1.1.idx -text
 OS/doc/osUsersManual_1.1.pdf -text
 OS/doc/osUsersManual_1.1.tex -text
@@ -144,6 +145,8 @@ OS/doc/osUsersManual_1.bbl -text
 OS/doc/osUsersManual_1.pdf -text
 OS/doc/osUsersManual_1.tex -text
 OS/doc/osUsersManual_1.toc -text
+OS/doc/osusersmanual_1.1.ind -text
+OS/doc/osusersmanual_1.1.pdf -text svneol=unset#unset
 OS/doc/usersManualAdditions.txt -text
 OS/examples/addCuts/Makefile.in -text
 OS/examples/addCuts/OSAddCuts.cpp -text
