@@ -263,25 +263,19 @@ int main(int argC, const char* argV[])
 	} 
 		try{
 			if(osoptions->invokeHelp == true){ 
-				inputFileUtil = new FileUtil();
 				std::string helpTxt = get_help();
 				std::cout << std::endl << std::endl;
 				std::cout << helpTxt << std::endl;
 				delete	osoptions;
 				osoptions = NULL;	
-				delete inputFileUtil;
-				inputFileUtil = NULL;
 				return 0;
 			}
 			if(osoptions->writeVersion == true){ 
-				inputFileUtil = new FileUtil();
 				std::string writeTxt = get_version();
 				std::cout << std::endl << std::endl;
 				std::cout << writeTxt << std::endl;
 				delete	osoptions;
 				osoptions = NULL;	
-				delete inputFileUtil;
-				inputFileUtil = NULL;
 				return 0;
 			}
 		}
