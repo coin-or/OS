@@ -14,6 +14,7 @@
  * <p>The <code>MathUtil</code> class contains methods for performing
  * mathematics related operations used by many classes in the
  * Optimization Services (OS) framework. </p>
+ *
  */
  
 #include "OSDataStructures.h" 

@@ -400,6 +400,8 @@ int main(int argC, char* argV[])
 		cout << "create a new IPOPT Solver for OSiL string solution" << endl;
 		ok = true;
 		OSiLReader *osilreader = NULL;
+		// avion does not work with Mumps on AIX xlC compiler
+#ifndef XLC_
 		osilFileName =  dataDir  + "osilFiles" + dirsep +  "avion2.osil";
 		osil = fileUtil->getFileAsString(  osilFileName.c_str() );
 		cout << "IPOPT Solver created for OSiL string solution" << endl;
@@ -419,6 +421,7 @@ int main(int argC, char* argV[])
 		delete ipoptSolver;
 		ipoptSolver = NULL;
 		unitTestResult << "Solved problem avion2.osil with Ipopt" << std::endl;
+#endif
 		// solve another problem
 		cout << "create a new IPOPT Solver for OSiL string solution" << endl;
 		ipoptSolver  = new IpoptSolver();

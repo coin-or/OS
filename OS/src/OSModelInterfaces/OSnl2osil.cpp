@@ -70,9 +70,9 @@ using std::cerr;
 using std::cout;
 using std::endl;
 
-
-
-
+#ifdef HAVE_STDINT_H
+#include <stdint.h>
+#endif
    
 
 OSnl2osil::OSnl2osil(std::string nlfilename){	

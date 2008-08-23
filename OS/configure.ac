@@ -262,6 +262,8 @@ if test $coin_has_ipopt != unavailable &&
   case $CXX in
     cl*)
        ipoptlib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libipopt.lib';;
+    xl*)
+       AC_DEFINE([XLC_],[1],[use if XLC is the compiler]);;
      *)
        ipoptlib="-L\$(INSTALLIBDIR) -lipopt";;
   esac
@@ -407,6 +409,7 @@ AC_COIN_CHECK_CXX_CHEADER(string)
 AC_COIN_CHECK_CXX_CHEADER(float)
 AC_COIN_CHECK_CXX_CHEADER(time)
 AC_COIN_CHECK_CXX_CHEADER(ieeefp)
+AC_COIN_CHECK_HEADER(stdint.h)
 
 #AC_CHECK_HEADERS([windows.h])
 
@@ -721,11 +724,5 @@ AC_CONFIG_HEADER([inc/config_os.h])
 AC_COIN_FINALIZE
 
 
-#create a file with the current version 
 
-#cd $srcdir
-#pwd
-#svn info | tail -n 4 > $ac_default_prefix/src/version.txt
-#cd $ac_default_prefix
-#pwd
 

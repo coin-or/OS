@@ -159,7 +159,8 @@ int ossslex_destroy (void* scanner );
 std::string get_help();
 std::string get_version();
 
-
+std::string get_help();
+std::string get_version();
 
  
 // the serviceMethods  
@@ -266,27 +267,19 @@ int main(int argC, const char* argV[])
 	} 
 		try{
 			if(osoptions->invokeHelp == true){ 
-				inputFileUtil = new FileUtil();
-				//std::string helpTxt = inputFileUtil->getFileAsString( "help.txt" );
 				std::string helpTxt = get_help();
 				std::cout << std::endl << std::endl;
 				std::cout << helpTxt << std::endl;
 				delete	osoptions;
 				osoptions = NULL;	
-				delete inputFileUtil;
-				inputFileUtil = NULL;
 				return 0;
 			}
 			if(osoptions->writeVersion == true){ 
-				inputFileUtil = new FileUtil();
-				std::string writeTxt;
-				writeTxt = get_version();
+				std::string writeTxt = get_version();
 				std::cout << std::endl << std::endl;
 				std::cout << writeTxt << std::endl;
 				delete	osoptions;
 				osoptions = NULL;	
-				delete inputFileUtil;
-				inputFileUtil = NULL;
 				return 0;
 			}
 		}
@@ -996,10 +989,10 @@ string getSolverName( std::string osol){
 	else return "";
 }//getSolverName
 
-
 std::string get_help(){
 
 	std::ostringstream helpMsg;
+
 	
 	helpMsg << "************************* HELP *************************" << endl << endl;
 	helpMsg << "In this HELP file we assume that the solve service method is used and " << endl; 
@@ -1091,7 +1084,7 @@ std::string get_help(){
 	helpMsg << "override the values of the options in the configure file by putting them in   " << endl;
 	helpMsg << "at the command line. " << endl << endl;
 	
-	helpMsg << "See the OS User\'s Manual: http://www.coin-or.org/OS/doc/osUsersManual_1.1.pdf" << endl;
+	helpMsg << "See the OS User\' Manual: http://www.coin-or.org/OS/doc/osUsersManual_1.1.pdf" << endl;
 	helpMsg << "for more detail on how to use the OS project. " << endl;
 	
 	helpMsg << endl;
@@ -1112,4 +1105,8 @@ std::string get_version(){
 	
 	return versionMsg.str();
 }// get version
+
+
+
+
 
