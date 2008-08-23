@@ -323,6 +323,15 @@
 # endif
 #endif
 
+#ifdef HAVE_CSTDIO
+# include <cstdio>
+#else
+# ifdef HAVE_STDIO_H
+#  include <stdio.h>
+# else
+#  error "don't have header file for stdio"
+# endif
+#endif
 
 using std::cout;
 using std::endl;
@@ -847,29 +856,29 @@ static const yytype_int16 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   217,   217,   223,   224,   229,   236,   237,   239,   239,
-     251,   252,   255,   256,   260,   263,   266,   269,   275,   282,
-     289,   291,   295,   298,   299,   303,   309,   311,   310,   318,
-     333,   334,   335,   336,   337,   338,   339,   340,   341,   342,
-     343,   344,   345,   346,   347,   348,   349,   350,   351,   352,
-     353,   354,   355,   358,   358,   363,   363,   368,   368,   373,
-     373,   378,   378,   383,   383,   388,   388,   398,   399,   404,
-     404,   415,   416,   419,   419,   430,   431,   433,   433,   444,
-     445,   448,   448,   458,   459,   462,   462,   467,   467,   472,
-     472,   477,   477,   482,   482,   489,   489,   494,   494,   502,
-     502,   509,   509,   514,   514,   519,   520,   522,   522,   525,
-     526,   528,   528,   531,   532,   534,   535,   535,   539,   542,
-     543,   545,   547,   549,   553,   553,   557,   557,   563,   566,
-     570,   571,   573,   575,   579,   582,   586,   594,   594,   596,
-     598,   599,   600,   601,   603,   604,   606,   657,   659,   667,
-     668,   670,   670,   694,   695,   698,   699,   701,   703,   704,
-     708,   709,   711,   712,   714,   725,   731,   738,   740,   741,
-     743,   744,   746,   746,   749,   754,   755,   757,   758,   762,
-     763,   765,   766,   768,   779,   785,   792,   795,   796,   798,
-     799,   801,   801,   804,   809,   810,   812,   820,   825,   826,
-     828,   829,   831,   842,   848,   855,   857,   858,   860,   861,
-     863,   863,   866,   871,   872,   877,   877,   885,   886,   888,
-     889,   891,   895,   900,   904
+       0,   226,   226,   232,   233,   238,   245,   246,   248,   248,
+     260,   261,   264,   265,   269,   272,   275,   278,   284,   291,
+     298,   300,   304,   307,   308,   312,   318,   320,   319,   327,
+     342,   343,   344,   345,   346,   347,   348,   349,   350,   351,
+     352,   353,   354,   355,   356,   357,   358,   359,   360,   361,
+     362,   363,   364,   367,   367,   372,   372,   377,   377,   382,
+     382,   387,   387,   392,   392,   397,   397,   407,   408,   413,
+     413,   424,   425,   428,   428,   439,   440,   442,   442,   453,
+     454,   457,   457,   467,   468,   471,   471,   476,   476,   481,
+     481,   486,   486,   491,   491,   498,   498,   503,   503,   511,
+     511,   518,   518,   523,   523,   528,   529,   531,   531,   534,
+     535,   537,   537,   540,   541,   543,   544,   544,   548,   551,
+     552,   554,   556,   558,   562,   562,   566,   566,   572,   575,
+     579,   580,   582,   584,   588,   591,   595,   603,   603,   605,
+     607,   608,   609,   610,   612,   613,   615,   666,   668,   676,
+     677,   679,   679,   703,   704,   707,   708,   710,   712,   713,
+     717,   718,   720,   721,   723,   734,   740,   747,   749,   750,
+     752,   753,   755,   755,   758,   763,   764,   766,   767,   771,
+     772,   774,   775,   777,   788,   794,   801,   804,   805,   807,
+     808,   810,   810,   813,   818,   819,   821,   829,   834,   835,
+     837,   838,   840,   851,   857,   864,   866,   867,   869,   870,
+     872,   872,   875,   880,   881,   886,   886,   894,   895,   897,
+     898,   900,   904,   909,   913
 };
 #endif
 
@@ -4773,11 +4782,28 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
 		if( b64string == NULL)  {  osilerror_wrapper( ch,osillineno,"<start> must have children or base64 data"); return false;};
 		std::string base64decodeddata = Base64::decodeb64( b64string );
 		int base64decodeddatalength = base64decodeddata.length();
-		double *doublevec = NULL;
 		osinstance->instanceData->linearConstraintCoefficients->value->el = new double[(base64decodeddatalength/dataSize) ];
-		doublevec = (double*)&base64decodeddata[0];
+		int kountChar = 0;
+		int kj;
+		/* Take care of Lou's memory alignment problem */
+		/* dataSize had better equal sizeof( double) or we need to abandon ship */
+		if( sizeof( double)  != dataSize ) {  
+			osilerror_wrapper( ch, osillineno, 
+				"base 64 encoded with a size of double different than on this machine"); 
+			return false;
+		}	
+		union doubleBuffer{
+			char memAlign[sizeof(double)];
+			double dble;
+		};
+		doubleBuffer dbuf;
 		for(i = 0; i < (base64decodeddatalength/dataSize); i++){
-			osinstance->instanceData->linearConstraintCoefficients->value->el[ i] = *(doublevec++);
+			for(kj = 0; kj < dataSize; kj++){
+				dbuf.memAlign[ kj] = base64decodeddata[kountChar];
+				kountChar++;
+			}
+			osinstance->instanceData->linearConstraintCoefficients->value->el[ i] = dbuf.dble;
+			std::cout << dbuf.dble << std::endl;
 			kount++;
 		}
 		delete [] b64string;

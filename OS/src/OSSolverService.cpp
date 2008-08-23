@@ -154,10 +154,9 @@ int ossslex(void* scanner );
 int ossslex_init(void** ptr);
 int ossslex_destroy (void* scanner );
 
+
 std::string get_help();
 std::string get_version();
-
-
 
  
 // the serviceMethods  
@@ -993,7 +992,6 @@ string getSolverName( std::string osol){
 	else return "";
 }//getSolverName
 
-
 std::string get_help(){
 
 	std::ostringstream helpMsg;
@@ -1052,7 +1050,7 @@ std::string get_help(){
 	helpMsg << endl;
 
 	helpMsg << "-solver  solverName  Possible values for default OS installation  " << endl;
-	helpMsg << "are  bonmn(COIN-OR Bonmin), clp (COIN-OR Clp), cbc (COIN-OR Cbc), " << endl;
+	helpMsg << "are  bonmin(COIN-OR Bonmin), clp (COIN-OR Clp), cbc (COIN-OR Cbc), " << endl;
 	helpMsg << "dylp (COIN-OR DyLP), and symphony (COIN-OR SYMPHONY). Other solvers supported  " << endl;
 	helpMsg << "(if the necessary libraries are present) are cplex (Cplex through COIN-OR Osi),   " << endl;
 	helpMsg << "glpk (glpk through COIN-OR Osi), ipopt (COIN-OR Ipopt),   " << endl;
@@ -1088,7 +1086,7 @@ std::string get_help(){
 	helpMsg << "override the values of the options in the configure file by putting them in   " << endl;
 	helpMsg << "at the command line. " << endl << endl;
 	
-	helpMsg << "See the OS User\'s Manual: http://www.coin-or.org/OS/doc/osUsersManual_1.1.pdf" << endl;
+	helpMsg << "See the OS User\' Manual: http://www.coin-or.org/OS/doc/osUsersManual_1.1.pdf" << endl;
 	helpMsg << "for more detail on how to use the OS project. " << endl;
 	
 	helpMsg << endl;
@@ -1109,5 +1107,7 @@ std::string get_version(){
 	
 	return versionMsg.str();
 }// get version
+
+
 
 

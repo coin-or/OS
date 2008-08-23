@@ -343,7 +343,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 			}
 			osresult->setPrimalVariableValues(solIdx, x);
 			// Symphony does not get dual prices
-			if( sSolverName.find( "symphony") == std::string::npos){
+			if( sSolverName.find( "symphony") == std::string::npos && osinstance->getNumberOfIntegerVariables() == 0 && osinstance->getNumberOfBinaryVariables() == 0) {
 				for(i=0; i <  osinstance->getConstraintNumber(); i++){
 					*(y + i) = osiSolver->getRowPrice()[ i];
 				}
@@ -353,7 +353,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 			//
 			// now put the reduced costs into the osrl
 			// Symphony does not get reduced costs
-			if( sSolverName.find( "symphony") == std::string::npos){
+			if( sSolverName.find( "symphony") == std::string::npos && osinstance->getNumberOfIntegerVariables() == 0 && osinstance->getNumberOfBinaryVariables() == 0){
 				int numberOfOtherVariableResult = 1;
 				int otherIdx = 0;
 				// first set the number of Other Variable Results

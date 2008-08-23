@@ -191,7 +191,7 @@ endif
 # on Cygwin
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 
-
+DISTCLEANFILES = ipopt.out
 
 
 
