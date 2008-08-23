@@ -120,7 +120,7 @@
 \indexentry{Configuration Manager}{22}
 \indexentry{OSSolverService@{\tt OSSolverService}}{22}
 \indexentry{unitTest@{\tt unitTest}}{22}
-\indexentry{OSAmplClient@{\tt OSAmpClient}}{22}
+\indexentry{OSAmplClient@{\tt OSAmplClient}}{22}
 \indexentry{Third-party software|(}{22}
 \indexentry{Bonmin@{\tt Bonmin}}{22}
 \indexentry{Cbc@{\tt Cbc}}{22}
@@ -135,6 +135,7 @@
 \indexentry{Vol@{\tt Vol}}{22}
 \indexentry{Fortran}{22}
 \indexentry{COIN_SKIP_PROJECTS@{\tt COIN\_SKIP\_PROJECTS}}{22}
+\indexentry{VPATH}{23}
 \indexentry{Third-party software|)}{23}
 \indexentry{AMPL Solver Library (ASL)|(}{23}
 \indexentry{OSnl2osil@{\tt OSnl2osil}}{23}
@@ -150,7 +151,6 @@
 \indexentry{GLPK@{\tt GLPK}|)}{24}
 \indexentry{cplex@{\tt cplex}|(}{25}
 \indexentry{cplex@{\tt cplex}|)}{25}
-\indexentry{Knitro|)}{25}
 \indexentry{LINDO|(}{25}
 \indexentry{LINDO|)}{25}
 \indexentry{MATLAB|(}{25}
@@ -360,6 +360,8 @@
 \indexentry{OSSolverService@{\tt OSSolverService}|)}{67}
 \indexentry{Apache Tomcat|(}{67}
 \indexentry{Apache Tomcat|)}{70}
+\indexentry{AMPL}{71}
+\indexentry{GAMS}{71}
 \indexentry{OSAmplClient@{\tt OSAmplClient}|(}{71}
 \indexentry{OSnl2osil@{\tt OSnl2osil}}{71}
 \indexentry{AMPL nl format}{71}
@@ -368,18 +370,17 @@
 \indexentry{OSrL}{71}
 \indexentry{Ipopt@{\tt Ipopt}|)}{71}
 \indexentry{OSAmplClient@{\tt OSAmplClient}|)}{71}
-\indexentry{OSFileUpload@{\tt OSFileUpload}|(}{72}
-\indexentry{OSAgent@{\tt OSAgent}}{72}
-\indexentry{solve@{\tt solve}}{72}
-\indexentry{send@{\tt send}}{72}
-\indexentry{OSiL@{\tt OSiL}}{72}
-\indexentry{SOAP}{72}
-\indexentry{Apache Tomcat}{72}
+\indexentry{GAMSLinks|(}{72}
+\indexentry{GAMSLinks|)}{73}
+\indexentry{OSFileUpload@{\tt OSFileUpload}|(}{73}
+\indexentry{OSAgent@{\tt OSAgent}}{73}
+\indexentry{solve@{\tt solve}}{73}
+\indexentry{send@{\tt send}}{73}
 \indexentry{OSiL@{\tt OSiL}}{73}
-\indexentry{OSFileUpload@{\tt OSFileUpload}|)}{73}
-\indexentry{AMPL}{73}
-\indexentry{GAMSLinks|(}{73}
-\indexentry{GAMSLinks|)}{74}
+\indexentry{SOAP}{73}
+\indexentry{Apache Tomcat}{73}
+\indexentry{OSiL@{\tt OSiL}}{74}
+\indexentry{OSFileUpload@{\tt OSFileUpload}|)}{74}
 \indexentry{VPATH}{75}
 \indexentry{Algorithmic differentiation|}{75}
 \indexentry{OSInstance@{\tt OSInstance}}{75}
