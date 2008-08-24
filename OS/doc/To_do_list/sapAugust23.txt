@@ -1,0 +1,20 @@
+Hi Johannes:
+
+The OS project is in early stages of development and we are still in the process of testing the project. A few things to note:
+
+1)  The OS project is not a solver but provides, among other things, a means for interacting with solvers in a distributed environment. Therefore, the size of problems solved depends on the solvers themselves. We have successfully tested the OS project with the solvers Bonmin, Cbc, Clp, Cplex, DyLP, Glpk, Ipopt, Lindo, and SYMPHONY  on various platforms. See the attached document (the OS User's Manual).  This represents a broad range of linear, integer, and nonlinear solvers. See
+http://plato.asu.edu/bench.htmlfor benchmarking of these solvers.
+
+2) The Mosek optimization solver and the Frontline Systems Solver Platform SDK currently support OSiL for problem instance representation of mixed integer linear programs. 
+
+3) LogicBlox is a company developing spreadsheet and algebraic language modeling software, along with other computational and optimization tools as online services.  At their server backend, they have adopted the OSFramework and we are collaborating with them on the project. We also had similar projects before with other companies.
+
+4) The very popular AMPL and GAMS modeling languages can be used with Optimization Services. 
+
+5) When solving problems with millions of variables and constraints, the main constraint will be solution time, not the time to parse model instance files in OSiL format or write solution files in OSrL format. 
+
+6) One of the OS developers is working with a large utility company formulating energy models that will solved within the Optimization Services framework.
+
+If you would like further information or help in testing the OS framework, please do not hesitate to ask.
+
+Thank you,
