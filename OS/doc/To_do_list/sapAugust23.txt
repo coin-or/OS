@@ -12,7 +12,7 @@ for benchmarking of these solvers.
 
 3) LogicBlox is a company developing spreadsheet and algebraic language modeling software, along with other computational and optimization tools as online services.  At their server backend, they have adopted the OS framework and we are collaborating with them on the project. We also had similar projects before with other companies.
 
-4) The very popular AMPL and GAMS modeling languages can be used with Optimization Services. 
+4) The very popular AMPL and GAMS modeling languages can be used with Optimization Services.  See Chapter 12 of the attached User's Manual.
 
 5) When solving problems with millions of variables and constraints, the main constraint will be solution time, not the time to parse model instance files in OSiL format or write solution files in OSrL format. 
 
