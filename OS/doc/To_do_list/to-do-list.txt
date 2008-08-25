@@ -37,5 +37,7 @@ Jun:
 OSoL/OSrL java modification
 Constraint programming document/report
 SOS extension in OSiL
+init attribute in var of OSiL.xsd.   
+
 
 ----------------------------------------------------
