@@ -3,9 +3,9 @@ To-do list
 General: 
 
 1. vcbuild issues (resolved - 15 Aug 2008)
-2. OSoL parser
+2. OSoL parser (assigned to Gus)
 3. OSiL: stochastic programs vs. robust optimization problems
-   a) Schema resolution
+   a) Schema resolution (assigned to Gus)
    b) Parser implementation
 4. "Ticket system" like other COIN-OR programs (still needed?)
 5. Implement Brad Bell's new sparse algorithmic differentiation techniques
