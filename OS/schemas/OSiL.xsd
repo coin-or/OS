@@ -2,7 +2,7 @@
 <!-- edited with XMLSpy v2007 rel. 3 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" elementFormDefault="qualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified">
 	<!--OSiL.xsd: current version - 1.0.0 -->
 	<!--include: since version 1.0.0 -->
 	<xs:include schemaLocation="OSgL.xsd"/>
@@ -402,7 +402,6 @@
 			<xs:element name="var" type="SOS1Var" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="priority" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="SOS2">
 		<xs:annotation>
@@ -415,7 +414,6 @@
 			<xs:element name="var" type="SOS2Var" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="priority" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="SOS3">
 		<xs:annotation>
@@ -429,7 +427,6 @@
 		</xs:sequence>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="convexRowIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="priority" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="SOS1Var">
 		<xs:annotation>
@@ -440,7 +437,6 @@
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
 				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-				<xs:attribute name="weight" type="xs:double" use="optional"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -453,7 +449,6 @@
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
 				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-				<xs:attribute name="weight" type="xs:double" use="optional"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -466,7 +461,6 @@
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
 				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-				<xs:attribute name="weight" type="xs:double" use="optional"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
