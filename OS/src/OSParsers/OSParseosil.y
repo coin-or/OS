@@ -1,7 +1,7 @@
 /** @file parseosil.y
  * 
  * @author  Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin, 
- * @version 2.0, 12/21/2007
+ * @version 1.1, 12/21/2007
  * @since   OS1.0
  *
  * \remarks
@@ -214,7 +214,7 @@ void osilerror(YYLTYPE* type, OSInstance *osintance,  OSiLParserData *parserData
 %token VARSTART VAREND CONSTART CONEND OBJSTART OBJEND
 %token INTERVALSTART INTERVALEND
 
-
+%token PARAMETERSSTART PARAMETERSEND PARAMSTART PARAMEND
 
 
 
@@ -223,7 +223,7 @@ void osilerror(YYLTYPE* type, OSInstance *osintance,  OSiLParserData *parserData
 
 
 
-osildoc: quadraticcoefficients  nonlinearExpressions  timeDomain INSTANCEDATAEND  OSILEND;
+osildoc: quadraticcoefficients nonlinearExpressions timeDomain parametersAndStochasticElements INSTANCEDATAEND  OSILEND;
 
 
 
@@ -960,6 +960,7 @@ intervalstartatt: STARTATT QUOTE DOUBLE QUOTE {
 		parserData->intervalstart = $3;};
 
 
+parameters: | PARAMETERSSTART PARAMETERSEND;
 		
 %%
 

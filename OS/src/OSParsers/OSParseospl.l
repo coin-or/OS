@@ -1,12 +1,12 @@
-/** @file parseosrl.l
+/** @file parseospl.l
  * 
- * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005
- * @since   OS1.0
+ * @author  Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin, 
+ * @version 1.0, 12/07/2008
+ * @since   OS1.1
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Jun Ma, Kipp Martin,
- * Northwestern University, and the University of Chicago.
+ * Copyright (C) 2005-2008, Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin,
+ * Northwestern University, Dalhousie University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -43,7 +43,7 @@
 
 #include <sstream>  
 #include "OSErrorClass.h"
-#include "OSrLParserData.h"
+#include "OSpLParserData.h"
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", yytext);
 #else     
@@ -59,7 +59,7 @@
   #endif
 #endif
 
-#include "OSParseosrl.tab.hpp"
+#include "OSParseospl.tab.hpp"
 
 
      
@@ -70,16 +70,16 @@
 %option bison-locations
 
 
-%option prefix="osrl"
+%option prefix="ospl"
 %option yylineno   
 %option noyywrap  
 %x attributetext
-%x osrlattributetext
+%x osplattributetext
 %x comment
 %x xmldeclaration
    
 %{
-#define YY_EXTRA_TYPE OSrLParserData*
+#define YY_EXTRA_TYPE OSpLParserData*
 %}  
 
 xmlwhitespace ([ \t\r\n])
@@ -95,15 +95,15 @@ endelementname (<\/[a-zA-Z][a-zA-Z0-9.:_]+)
 {xmlwhitespace}* {printf("HERE IS WHITESPACE\n");}
 
 
-{quote} {YY_PRINT;  yylval->charval = yytext; return(QUOTE);}
+ {quote} {YY_PRINT; return(QUOTE);}
 ({xmlwhitespace}*{greater_than}) {YY_PRINT;     return(GREATERTHAN);}
 -?[0-9]+  {YY_PRINT; yylval->ival = atoi( yytext); return(INTEGER);}
 -?((([0-9]+)|([0-9]*\.[0-9]+))([eE][-+]?[0-9]+)?|INF) {YY_PRINT; yylval->dval = atof( yytext); return(DOUBLE);}
 ({xmlwhitespace}*\/>) {YY_PRINT;  return(ENDOFELEMENT);}
 
 
-{xmlwhitespace}*\<osrl{xmlwhitespace}+ {YY_PRINT; BEGIN osrlattributetext;  return(OSRLSTART);}
-{xmlwhitespace}*\<\/osrl{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OSRLEND);}
+{xmlwhitespace}*\<ospl{xmlwhitespace}+ {YY_PRINT; BEGIN osplattributetext;  return(OSPLSTART);}
+{xmlwhitespace}*\<\/ospl{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OSPLEND);}
 {xmlwhitespace}*\<resultHeader{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(RESULTHEADERSTART);}
 {xmlwhitespace}*\<\/resultHeader{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(RESULTHEADEREND);}
 {xmlwhitespace}*\<serviceURI{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(SERVICEURISTART);}
@@ -199,16 +199,16 @@ endelementname (<\/[a-zA-Z][a-zA-Z0-9.:_]+)
 
 
 
-<attributetext>([^\"\'])+ {YY_PRINT;  BEGIN 0;  /*yylval->charval = strdup(yytext);*/ yylval->charval = strdup( yytext);  
-							  return(ATTRIBUTETEXT);}
+<attributetext>([^\"\'])+ {YY_PRINT;    /*yylval->charval = strdup(yytext);*/ yylval->charval = yytext;
+							BEGIN 0;  return(ATTRIBUTETEXT);}
 							
-<osrlattributetext>([^>])* {YY_PRINT;  BEGIN 0; /*yylval->charval = strdup(yytext);*/  yylval->charval = yytext; return(OSRLATTRIBUTETEXT);}
+<osplattributetext>([^>])* {YY_PRINT;  BEGIN 0; /*yylval->charval = strdup(yytext);*/  yylval->charval = yytext; return(OSPLATTRIBUTETEXT);}
 
 
 .|\n { 
 	std::string error;
 	std::ostringstream outStr;
-        outStr << "encountered a spurious character in the lexer" << std::endl;
+	outStr << "encountered a spurious character in the lexer" << std::endl;
 	outStr << "The first character is: ";
 	outStr <<  yytext;
 	outStr << std::endl;
