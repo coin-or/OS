@@ -970,11 +970,11 @@ public:
 	 */
 	~OSResult();
 	/**
-	 * resultHeader holds the first child of the OSResult specified by the OSiL Schema. 
+	 * resultHeader holds the first child of the OSResult specified by the OSrL Schema. 
 	 */
 	ResultHeader *resultHeader;
 	/**
-	 * resultData holds the second child of the OSResult specified by the OSiL Schema. 
+	 * resultData holds the second child of the OSResult specified by the OSrL Schema. 
 	 */
 	ResultData *resultData;
 public:	

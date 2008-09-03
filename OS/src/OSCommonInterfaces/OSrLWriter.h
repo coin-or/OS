@@ -24,7 +24,7 @@
 
 
 /*! \class OSrLWriter OSrLWriter.h "OSrLWriter.h"
- *  \brief Take an OSResult object and write a string that validates against OSrL..
+ *  \brief Take an OSResult object and write a string that validates against OSrL.
  *
  * 
  */

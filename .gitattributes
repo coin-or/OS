@@ -200,6 +200,8 @@ OS/src/OSCommonInterfaces/OSExpressionTree.cpp -text
 OS/src/OSCommonInterfaces/OSExpressionTree.h -text
 OS/src/OSCommonInterfaces/OSInstance.cpp -text
 OS/src/OSCommonInterfaces/OSInstance.h -text
+OS/src/OSCommonInterfaces/OSOption.cpp -text
+OS/src/OSCommonInterfaces/OSOption.h -text
 OS/src/OSCommonInterfaces/OSResult.cpp -text
 OS/src/OSCommonInterfaces/OSResult.h -text
 OS/src/OSCommonInterfaces/OSiLReader.cpp -text
@@ -208,6 +210,10 @@ OS/src/OSCommonInterfaces/OSiLWriter.cpp -text
 OS/src/OSCommonInterfaces/OSiLWriter.h -text
 OS/src/OSCommonInterfaces/OSnLNode.cpp -text
 OS/src/OSCommonInterfaces/OSnLNode.h -text
+OS/src/OSCommonInterfaces/OSoLReader.cpp -text
+OS/src/OSCommonInterfaces/OSoLReader.h -text
+OS/src/OSCommonInterfaces/OSoLWriter.cpp -text
+OS/src/OSCommonInterfaces/OSoLWriter.h -text
 OS/src/OSCommonInterfaces/OSrLReader.cpp -text
 OS/src/OSCommonInterfaces/OSrLReader.h -text
 OS/src/OSCommonInterfaces/OSrLWriter.cpp -text

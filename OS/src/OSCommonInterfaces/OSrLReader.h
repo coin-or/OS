@@ -65,13 +65,13 @@ public:
 	OSResult *readOSrL(const std::string& posrl) throw(ErrorClass);
 	
 private:
-	/** m_osreslut is the OSResult object returned by 
+	/** m_osresult is the OSResult object returned by 
 	 * the OSrLReader
 	 */
 	OSResult *m_osresult;
 	
-	/** m_parerData is the  object used in the parser to 
-	 * temporarily store data 
+	/** m_parserData is the object used in the parser to 
+	 * temporarily store data. 
 	 */
 	OSrLParserData *m_parserData;
 };
