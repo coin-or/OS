@@ -214,7 +214,7 @@ void osilerror(YYLTYPE* type, OSInstance *osintance,  OSiLParserData *parserData
 %token VARSTART VAREND CONSTART CONEND OBJSTART OBJEND
 %token INTERVALSTART INTERVALEND
 
-%token PARAMETERSSTART PARAMETERSEND PARAMSTART PARAMEND
+%token PARAMETERSSTART PARAMETERSEND PARAMSTART PARAMEND  NUMBEROFPARAMETERSATT
 
 
 
@@ -226,7 +226,7 @@ void osilerror(YYLTYPE* type, OSInstance *osintance,  OSiLParserData *parserData
 osildoc: quadraticcoefficients nonlinearExpressions timeDomain parametersAndStochasticElements INSTANCEDATAEND  OSILEND;
 
 
-
+parametersAndStochasticElements:
 
 
 quadraticcoefficients: 
