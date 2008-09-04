@@ -719,7 +719,7 @@ class OtherObjOption {
 
 public:
 	/** variable index*/
-	int idx;;
+	int idx;
 
 	/** value of the option */
 	std::string value;
