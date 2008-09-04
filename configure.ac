@@ -12,7 +12,7 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([OS],[1.1],[coin-os@lists.coin-or.org])
+AC_INIT([OS],[0.1],[coin-os@lists.coin-or.org])
 
 AC_COPYRIGHT([
 Copyright 2006 International Business Machines and others.
@@ -64,6 +64,7 @@ AC_COIN_MAIN_SUBDIRS(SYMPHONY)
 AC_COIN_MAIN_SUBDIRS(Cbc)
 AC_COIN_MAIN_SUBDIRS(Ipopt)
 AC_COIN_MAIN_SUBDIRS(cppad)
+AC_COIN_MAIN_SUBDIRS(Bonmin)
 AC_COIN_MAIN_SUBDIRS(OS)
 
 

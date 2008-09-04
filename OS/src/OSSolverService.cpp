@@ -131,7 +131,9 @@
 
 
 
-
+#ifdef COIN_HAS_BONMIN    
+#include "OSBonminSolver.h"
+#endif 
 
 
 #include "OSOptionsStruc.h"  
@@ -154,6 +156,8 @@ int ossslex(void* scanner );
 int ossslex_init(void** ptr);
 int ossslex_destroy (void* scanner );
 
+std::string get_help();
+std::string get_version();
 
 std::string get_help();
 std::string get_version();
@@ -456,18 +460,7 @@ void solve(){
 				bool bIpoptIsPresent = false;
 				#ifdef COIN_HAS_IPOPT
 				bIpoptIsPresent = true;
-				//IpoptSolver *ipoptSolver  = new IpoptSolver();	
-				//ipoptSolver->osol = osoptions->osol;
-				//ipoptSolver->osil = osoptions->osil;
-				//ipoptSolver->osinstance = NULL;
-				//ipoptSolver->solve();
-				//osrl = ipoptSolver->osrl ;
 				solverType = new IpoptSolver();	
-				//solverType->osol = osoptions->osol;
-				//solverType->osil = osoptions->osil;
-				//solverType->osinstance = NULL;
-				//solverType->solve();
-				//osrl = solverType->osrl ;
 				#endif
 				if(bIpoptIsPresent == false) throw ErrorClass( "the Ipopt solver requested is not present");
 			}
@@ -529,9 +522,19 @@ void solve(){
 												solverType = new CoinSolver();
 												solverType->sSolverName = "vol";
 											}
-											else{ //cbc is the default
-												solverType = new CoinSolver();
-												solverType->sSolverName = "cbc";
+											else{
+												if(osoptions->solverName.find( "bonmin") != std::string::npos){
+													// we are requesting the Bonmin solver
+													bool bBonminIsPresent = false;
+													#ifdef COIN_HAS_BONMIN
+													bBonminIsPresent = true;
+													solverType = new BonminSolver();	
+													#endif												
+												}
+												else{ //cbc is the default
+													solverType = new CoinSolver();
+													solverType->sSolverName = "cbc";
+												}
 											}
 										}									
 									}
@@ -989,6 +992,7 @@ string getSolverName( std::string osol){
 std::string get_help(){
 
 	std::ostringstream helpMsg;
+
 	
 	helpMsg << "************************* HELP *************************" << endl << endl;
 	helpMsg << "In this HELP file we assume that the solve service method is used and " << endl; 
@@ -1044,7 +1048,7 @@ std::string get_help(){
 	helpMsg << endl;
 
 	helpMsg << "-solver  solverName  Possible values for default OS installation  " << endl;
-	helpMsg << "are  bonmin(COIN-OR Bonmin), clp (COIN-OR Clp), cbc (COIN-OR Cbc), " << endl;
+	helpMsg << "are  bonmn(COIN-OR Bonmin), clp (COIN-OR Clp), cbc (COIN-OR Cbc), " << endl;
 	helpMsg << "dylp (COIN-OR DyLP), and symphony (COIN-OR SYMPHONY). Other solvers supported  " << endl;
 	helpMsg << "(if the necessary libraries are present) are cplex (Cplex through COIN-OR Osi),   " << endl;
 	helpMsg << "glpk (glpk through COIN-OR Osi), ipopt (COIN-OR Ipopt),   " << endl;
@@ -1101,6 +1105,7 @@ std::string get_version(){
 	
 	return versionMsg.str();
 }// get version
+
 
 
 

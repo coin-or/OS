@@ -69,6 +69,7 @@ OS/data/configFiles/testlocalclp.config -text
 OS/data/configFiles/testlocalosol.config -text
 OS/data/configFiles/testmps.config -text
 OS/data/configFiles/testnl.config -text
+OS/data/matlabFiles/OSCallMatlabSolver.m -text
 OS/data/matlabFiles/markowitz.m -text
 OS/data/matlabFiles/parincLinear.m -text
 OS/data/matlabFiles/template.m -text
@@ -77,6 +78,7 @@ OS/data/osilFiles/CppADTestLag.osil -text
 OS/data/osilFiles/HS071_NLP.osil -text
 OS/data/osilFiles/HS071_NLPMod.osil -text
 OS/data/osilFiles/avion2.osil -text
+OS/data/osilFiles/bonminEx1.osil -text
 OS/data/osilFiles/callBackTest.osil -text
 OS/data/osilFiles/callBackTestRowMajor.osil -text
 OS/data/osilFiles/gamstrnsport.osil -text
@@ -105,6 +107,7 @@ OS/data/osolFiles/retrieve.osol -text
 OS/data/osolFiles/send.osol -text
 OS/data/osolFiles/sendWithJobID.osol -text
 OS/data/osplFiles/knock.ospl -text
+OS/data/osrlFiles/errorExample.osrl -text
 OS/data/osrlFiles/parincLinear.osrl -text
 OS/data/osrlFiles/reducedcost.osrl -text
 OS/data/osrlFiles/rosenbrockmod.osrl -text
@@ -136,6 +139,9 @@ OS/examples/algorithmicDiff/Makefile.in -text
 OS/examples/algorithmicDiff/OSAlgorithmicDiffTest.cpp -text
 OS/examples/instanceGenerator/Makefile.in -text
 OS/examples/instanceGenerator/OSInstanceGenerator.cpp -text
+OS/examples/matlab/OSMatlabSolver.cpp -text
+OS/examples/osRemoteTest/Makefile.in -text
+OS/examples/osRemoteTest/OSRemoteTest.cpp -text
 OS/examples/osTestCode/Makefile.in -text
 OS/examples/osTestCode/OSTestCode.cpp -text
 OS/inc/config_os.h.in -text
@@ -225,6 +231,8 @@ OS/src/OSParsers/OSrLParserData.cpp -text
 OS/src/OSParsers/OSrLParserData.h -text
 OS/src/OSSolverInterfaces/Makefile.am -text
 OS/src/OSSolverInterfaces/Makefile.in -text
+OS/src/OSSolverInterfaces/OSBonminSolver.cpp -text
+OS/src/OSSolverInterfaces/OSBonminSolver.h -text
 OS/src/OSSolverInterfaces/OSCoinSolver.cpp -text
 OS/src/OSSolverInterfaces/OSCoinSolver.h -text
 OS/src/OSSolverInterfaces/OSIpoptSolver.cpp -text

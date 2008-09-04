@@ -23,13 +23,23 @@ unitTest_SOURCES = unitTest.cpp
 # List all additionally required COIN libraries
 unitTest_LDADD =  \
 	$(OSOBJDIR)/src/libOS.la 
+	
+	
+	
+if COIN_HAS_BONMIN
+  unitTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la
+#unitTest_DEPENDENCIES +=  $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la
+endif
+
 
 if COIN_HAS_IPOPT
   unitTest_LDADD += $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
   LIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
 endif
 
+
 unitTest_LDADD +=  $(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la 
+
 
 if COIN_HAS_SYMPHONY
  unitTest_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
@@ -169,6 +179,18 @@ if COIN_HAS_IPOPT
 	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/LinAlg` \
 	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Common` \
 	-I`$(CYGPATH_W) $(IPOPTOBJDIR)/inc`
+endif
+
+
+
+
+
+if COIN_HAS_BONMIN
+  AM_CPPFLAGS += \
+	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/Interfaces` \
+	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/Algorithms` \
+	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/CbcBonmin` \
+	-I`$(CYGPATH_W) $(BONMINOBJDIR)/inc`
 endif
 
 if COIN_HAS_KNITRO

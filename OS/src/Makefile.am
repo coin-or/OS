@@ -74,13 +74,23 @@ OSSolverService_SOURCES = OSSolverService.cpp
 
 LDADD +=  \
 	libOS.la 
+	
 
 OSSolverService_DEPENDENCIES += libOS.la
+
+if COIN_HAS_BONMIN
+   LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la
+#   OSSolverService_DEPENDENCIES +=  $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la
+endif
+
 
 if COIN_HAS_IPOPT
   LDADD += $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
   ADDLIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
 endif
+
+#  OSSolverService_DEPENDENCIES +=  $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+
 
 LDADD +=  $(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la 
 
@@ -246,6 +256,13 @@ if COIN_HAS_IPOPT
 endif
 
 
+if COIN_HAS_BONMIN
+  AM_CPPFLAGS += \
+	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/Interfaces` \
+	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/Algorithms` \
+	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/CbcBonmin` \
+	-I`$(CYGPATH_W) $(BONMINOBJDIR)/inc`
+endif
 
 if COIN_HAS_KNITRO
   AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(KNITROINCDIR)` 

@@ -35,7 +35,7 @@
 #include<iostream>
 #include <vector>  
 
-
+#include "CoinHelperFunctions.hpp"
 #include "OSConfig.h" 
 #include "OSInstance.h"
 #include "OSiLWriter.h"
@@ -53,7 +53,7 @@
 using std::cout;
 using std::endl;
 int  main(){	
-
+	WindowsErrorPopupBlocker();
 	cout << "Start Building the Model" << endl;
 	try{
 		OSInstance *osinstance;
