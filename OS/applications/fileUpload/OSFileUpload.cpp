@@ -58,6 +58,7 @@
 
 int main(int argC, char* argV[])
 {
+	WindowsErrorPopupBlocker();
 	FileUtil *fileUtil = NULL;  
 	try{
 		if( argC != 2) throw ErrorClass( "there must be exactly one command line argument which should be the file name");

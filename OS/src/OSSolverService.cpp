@@ -182,7 +182,7 @@ osOptionsStruc *osoptions;
 
 int main(int argC, const char* argV[])
 {  	
-	//WindowsErrorPopupBlocker();
+	WindowsErrorPopupBlocker();
 	void* scanner;
 	FileUtil *fileUtil = NULL;
 	FileUtil *inputFileUtil = NULL; 

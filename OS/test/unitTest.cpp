@@ -200,7 +200,7 @@ using std::ostringstream;
 
 int main(int argC, char* argV[])
 {
-	//WindowsErrorPopupBlocker();
+	WindowsErrorPopupBlocker();
 	double getObjVal(std::string osrl);
 	//using CppAD::NearEqual;
 	bool ok;

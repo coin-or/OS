@@ -79,6 +79,7 @@ using std::endl;
 
 int main(int argc, char **argv)
 {
+	WindowsErrorPopupBlocker();
 	char *stub;
 	// set AMPL structures
 	ASL *asl;
