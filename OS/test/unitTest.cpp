@@ -852,6 +852,7 @@ catch(const ErrorClass& eclass){
 //
 	#ifdef COIN_HAS_DYLP
 	try{
+		/*
 		ok = true; 
 		osilFileName = dataDir  + "osilFiles" + dirsep + "parincLinear.osil";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
@@ -872,6 +873,7 @@ catch(const ErrorClass& eclass){
 		delete solver;
 		solver = NULL;
 		unitTestResult << "Solved problem parincLinear.osil with DyLP" << std::endl;
+		*/
 	}
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  solver->osrl <<  endl;
