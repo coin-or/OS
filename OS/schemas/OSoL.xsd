@@ -92,6 +92,11 @@
 					<xs:documentation>since version 1.0.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="other" type="OtherOption" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:all>
 	</xs:complexType>
 	<xs:complexType name="InstanceLocationOption">
@@ -572,6 +577,8 @@
 			<xs:extension base="xs:string">
 				<xs:attribute name="name" type="xs:string" use="required"/>
 				<xs:attribute name="description" type="xs:string" use="optional"/>
+				<xs:attribute name="solver" type="xs:string" use="optional"/>
+				<xs:attribute name="class" type="xs:string" use="optional"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
