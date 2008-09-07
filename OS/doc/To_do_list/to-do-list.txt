@@ -37,14 +37,4 @@ Cone programming potential collaboration
 Jun:
 OSoL/OSrL java modification
 Constraint programming document/report
-SOS extension in OSiL
-init attribute in var of OSiL.xsd.   
-add in OSoL: optional solver attribute in other option
-in general: add solverToInvoke in OSoL.
-unit: for system
-minCPUNumber: 
-default service type : solver
-maxTime: unit
-merge copy/move/from/to
-other in general
 ----------------------------------------------------
