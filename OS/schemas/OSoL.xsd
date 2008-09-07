@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSoL.xsd: current version - 1.0.0 -->
 	<!--include: since version 1.0.0-->
 	<xs:include schemaLocation="OSgL.xsd"/>
@@ -420,7 +420,6 @@
 		<xs:attribute name="numberOfVariables" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfOtherOptions" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="VariableOption">
 		<xs:annotation>
@@ -481,8 +480,6 @@
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
-		<xs:attribute name="class" type="xs:string" use="optional"/>
-		<xs:attribute name="solver" type="xs:string" use="optional"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OtherVarOption">
@@ -586,8 +583,6 @@
 			<xs:extension base="xs:string">
 				<xs:attribute name="idx" type="xs:negativeInteger" use="optional"/>
 				<xs:attribute name="value" type="xs:string" use="optional"/>
-				<xs:attribute name="class" type="xs:string" use="optional"/>
-				<xs:attribute name="solver" type="xs:string" use="optional"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -683,8 +678,6 @@
 				<xs:attribute name="value" type="xs:string" use="optional"/>
 				<xs:attribute name="lbValue" type="xs:string" use="optional"/>
 				<xs:attribute name="ubValue" type="xs:string" use="optional"/>
-				<xs:attribute name="class" type="xs:string" use="optional"/>
-				<xs:attribute name="solver" type="xs:string" use="optional"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
