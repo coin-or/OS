@@ -336,7 +336,7 @@ OtherVariableOption::~OtherVariableOption()
 	cout << "OtherVariableOption Destructor Called" << endl;
 	#endif
 	if (var != NULL) {
-		for (int i; i < numberOfVar; i++)
+		for (int i=0; i < numberOfVar; i++)
 		{	delete var[i];
 			var[i] = NULL;
 		}
@@ -407,7 +407,7 @@ InitObjectiveValues::~InitObjectiveValues()
 	cout << "InitObjectiveValues Destructor Called" << endl;
 	#endif
 	if (obj != NULL) 
-	{	for (int i; i < numberOfObj; i++)
+	{	for (int i=0; i < numberOfObj; i++)
 		{	delete obj[i];
 			obj[i] = NULL;
 		}
@@ -450,7 +450,7 @@ InitObjectiveBounds::~InitObjectiveBounds()
 	cout << "InitObjectiveBounds Destructor Called" << endl;
 	#endif
 	if (obj != NULL) 
-	{	for (int i; i < numberOfObj; i++)
+	{	for (int i=0; i < numberOfObj; i++)
 		{	delete obj[i];
 			obj[i] = NULL;
 		}
@@ -495,7 +495,7 @@ OtherObjectiveOption::~OtherObjectiveOption()
 	cout << "OtherObjectiveOption Destructor Called" << endl;
 	#endif
 	if (obj != NULL) 
-	{	for (int i; i < numberOfObj; i++)
+	{	for (int i=0; i < numberOfObj; i++)
 		{	delete obj[i];
 			obj[i] = NULL;
 		}
