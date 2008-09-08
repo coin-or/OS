@@ -14,7 +14,6 @@ OS/MSVisualStudio/v8/OSApplication-fileUpload/OSApplication-fileUpload.vcproj -t
 OS/MSVisualStudio/v8/OSExample-algorithmicDiff/OSExample-algorithmicDiff.vcproj -text
 OS/MSVisualStudio/v8/OSExample-instanceGenerator/OSExample-instanceGenerator.vcproj -text
 OS/MSVisualStudio/v8/OSExample-osRemoteTest/OSExample-osRemoteTest.vcproj -text
-OS/MSVisualStudio/v8/OSExample-osRemoteTest/OSExample-osRemoteTest.vcproj.HGASSMANN-L2.gassmann.user -text
 OS/MSVisualStudio/v8/OSExample-osTestCode/OSExample-osTestCode.vcproj -text
 OS/MSVisualStudio/v8/OSSolverService/OSSolverService.vcproj -text
 OS/MSVisualStudio/v8/OSTest/OSTest.vcproj -text

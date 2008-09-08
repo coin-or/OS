@@ -5,7 +5,7 @@
 	Name="libOSnl2OSiL"
 	ProjectGUID="{208CFD6F-447B-41A3-84D5-6D7E20D90464}"
 	RootNamespace="libOSnl2OSiL"
-	TargetFrameworkVersion="131072"
+	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
 		<Platform
@@ -85,13 +85,13 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="Release-Ipopt|Win32"
+			Name="Release|Win32"
 			OutputDirectory=".\$(ConfigurationName)"
 			IntermediateDirectory=".\$(ConfigurationName)"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
-			WholeProgramOptimization="1"
+			WholeProgramOptimization="0"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -112,9 +112,8 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="-DWIN_ -D_WIN32 -DMSVISUALSTUDIO -DHAVE_MATH_H -DHAVE_STRING_H -DHAVE_STDIO_H -DHAVE_TIME_H"
 				Optimization="2"
-				WholeProgramOptimization="false"
 				AdditionalIncludeDirectories="..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSUtils;..\..\..\..\OS\src;..\..\..\..\CppAd;..\..\..\..\CppAd\local;..\..\..\..\ThirdParty\ASL;..\..\..\..\ThirdParty\ASL\solvers"
-				PreprocessorDefinitions="WIN32;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;WIN_;_LINDO_DLL_;OSROOT_DIR;USE_DTOA"
+                                PreprocessorDefinitions="NDEBUG;WIN32;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;WIN_;_LINDO_DLL_;OSROOT_DIR;USE_DTOA"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="0"
@@ -123,7 +122,7 @@
 				ProgramDataBaseFileName=".\$(ConfigurationName)\"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="3"
+				DebugInformationFormat="0"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -155,13 +154,13 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="Release|Win32"
+			Name="Release-Plus|Win32"
 			OutputDirectory=".\$(ConfigurationName)"
 			IntermediateDirectory=".\$(ConfigurationName)"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
-			WholeProgramOptimization="0"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -182,8 +181,9 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="-DWIN_ -D_WIN32 -DMSVISUALSTUDIO -DHAVE_MATH_H -DHAVE_STRING_H -DHAVE_STDIO_H -DHAVE_TIME_H"
 				Optimization="2"
+				WholeProgramOptimization="false"
 				AdditionalIncludeDirectories="..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSUtils;..\..\..\..\OS\src;..\..\..\..\CppAd;..\..\..\..\CppAd\local;..\..\..\..\ThirdParty\ASL;..\..\..\..\ThirdParty\ASL\solvers"
-				PreprocessorDefinitions="WIN32;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;WIN_;_LINDO_DLL_;OSROOT_DIR;USE_DTOA"
+                                PreprocessorDefinitions="NDEBUG;WIN32;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;WIN_;_LINDO_DLL_;OSROOT_DIR;USE_DTOA"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="0"
@@ -192,7 +192,7 @@
 				ProgramDataBaseFileName=".\$(ConfigurationName)\"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="0"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"

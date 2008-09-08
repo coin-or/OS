@@ -6,7 +6,6 @@
 	ProjectGUID="{204183DA-1FC1-498D-A97C-6E7B9482DFC6}"
 	RootNamespace="OSamplclient"
 	Keyword="ManagedCProj"
-	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -45,7 +44,7 @@
 				AdditionalOptions="-DWIN_ -D_WIN32 -DMSVISUALSTUDIO -DHAVE_MATH_H -DHAVE_STRING_H -DHAVE_STDIO_H -DHAVE_TIME_H"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\..\..\Ipopt\src\Interfaces;..\..\..\..\Ipopt\src\Common;..\..\..\..\Ipopt\src\LinAlg;..\..\..\..\OS\src;..\..\..\..\OS\src\OSUtils;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSAgent;..\..\..\..;..\..\..\..\CppAD;..\..\..\..\CppAD\local;..\..\..\..\Osi\src;..\..\..\..\Osi\src\OsiCbc;..\..\..\..\Osi\src\OsiClp;..\..\..\..\Osi\src\OsiVol;..\..\..\..\Cbc\src;..\..\..\..\Clp\src;..\..\..\..\Vol\src;..\..\..\..\CoinUtils\src;..\..\..\..\BuildTools\headers;..\..\..\..\ThirdParty\ASL;..\..\..\..\ThirdParty\ASL\solvers;&quot;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_LINDO_DLL_"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_LINDO_DLL_;COIN_HAS_SYMPHONY"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
@@ -80,8 +79,6 @@
 				AssemblyDebug="0"
 				ProgramDatabaseFile=".\$(ConfigurationName)\$(ProjectName).pdb"
 				SubSystem="1"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -103,89 +100,7 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
-			Name="Release-Ipopt|Win32"
-			OutputDirectory="$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
-			CharacterSet="1"
-			ManagedExtensions="0"
-			WholeProgramOptimization="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="2"
-				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="&quot;..\..\..\..\..\Ipopt-stable\Ipopt\src\Interfaces&quot;;&quot;..\..\..\..\..\Ipopt-stable\Ipopt\src\Common&quot;;&quot;..\..\..\..\..\Ipopt-stable\Ipopt\src\LinAlg&quot;;..\..\..\..\OS\src;..\..\..\..\OS\src\OSUtils;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSAgent;..\..\..\..;..\..\..\..\CppAD;..\..\..\..\CppAD\local;..\..\..\..\Osi\src;..\..\..\..\Osi\src\OsiCbc;..\..\..\..\Osi\src\OsiClp;..\..\..\..\Osi\src\OsiVol;..\..\..\..\Cbc\src;..\..\..\..\Clp\src;..\..\..\..\Vol\src;..\..\..\..\CoinUtils\src;..\..\..\..\BuildTools\headers;..\..\..\..\ThirdParty\ASL;..\..\..\..\ThirdParty\ASL\solvers"
-				PreprocessorDefinitions="WIN32;NDEBUG;COIN_HAS_IPOPT;HAVE_MA27"
-				RuntimeLibrary="0"
-				UsePrecompiledHeader="0"
-				AssemblerListingLocation=".\$(ConfigurationName)\"
-				ObjectFile=".\$(ConfigurationName)\"
-				ProgramDataBaseFileName=".\$(ConfigurationName)\"
-				WarningLevel="3"
-				DebugInformationFormat="3"
-				UndefinePreprocessorDefinitions="HAVE_CONFIG_H"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="wsock32.lib winmm.lib libIpopt.lib amplsolv.lib libCoinBlas.lib libCoinHSL.lib libCoinLapack.lib vcf2c.lib"
-				OutputFile="$(ConfigurationName)\$(ProjectName).exe"
-				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;;..\..\..\..\ThirdParty\ASL;..\..\..\..\\Ipopt\MSVisualStudio\v8\libIpopt\Release;..\..\..\..\\Ipopt\MSVisualStudio\v8\libCoinBlas\Release;..\..\..\..\\Ipopt\MSVisualStudio\v8\libCoinHSL\Release;..\..\..\..\\Ipopt\MSVisualStudio\v8\libCoinLapack\Release;..\..\..\..\Ipopt\MSVisualStudio\v8\libf2c;&quot;..\libOSnl2OSiL\Release-Ipopt&quot;"
-				GenerateManifest="false"
-				IgnoreDefaultLibraryNames=""
-				GenerateDebugInformation="false"
-				SubSystem="1"
-				LinkTimeCodeGeneration="0"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
-				TargetMachine="1"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -221,7 +136,7 @@
 				Optimization="2"
 				WholeProgramOptimization="false"
 				AdditionalIncludeDirectories="..\..\..\..\Ipopt\src\Interfaces;..\..\..\..\Ipopt\src\Common;..\..\..\..\Ipopt\src\LinAlg;..\..\..\..\OS\src;..\..\..\..\OS\src\OSUtils;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSAgent;..\..\..\..;..\..\..\..\CppAD;..\..\..\..\CppAD\local;..\..\..\..\Osi\src;..\..\..\..\Osi\src\OsiCbc;..\..\..\..\Osi\src\OsiClp;..\..\..\..\Osi\src\OsiVol;..\..\..\..\Cbc\src;..\..\..\..\Clp\src;..\..\..\..\Vol\src;..\..\..\..\CoinUtils\src;..\..\..\..\BuildTools\headers;..\..\..\..\ThirdParty\ASL;..\..\..\..\ThirdParty\ASL\solvers"
-				PreprocessorDefinitions="WIN32"
+				PreprocessorDefinitions="WIN32;COIN_HAS_SYMPHONY;NDEBUG"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
 				AssemblerListingLocation=".\$(ConfigurationName)\"
@@ -252,8 +167,6 @@
 				GenerateDebugInformation="false"
 				SubSystem="1"
 				LinkTimeCodeGeneration="0"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -275,6 +188,95 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release-Plus|Win32"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="1"
+			CharacterSet="1"
+			ManagedExtensions="0"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				WholeProgramOptimization="false"
+				AdditionalIncludeDirectories="&quot;..\..\..\..\..\Ipopt-stable\Ipopt\src\Interfaces&quot;;&quot;..\..\..\..\..\Ipopt-stable\Ipopt\src\Common&quot;;&quot;..\..\..\..\..\Ipopt-stable\Ipopt\src\LinAlg&quot;;..\..\..\..\OS\src;..\..\..\..\OS\src\OSUtils;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSAgent;..\..\..\..;..\..\..\..\CppAD;..\..\..\..\CppAD\local;..\..\..\..\Osi\src;..\..\..\..\Osi\src\OsiCbc;..\..\..\..\Osi\src\OsiClp;..\..\..\..\Osi\src\OsiVol;..\..\..\..\Cbc\src;..\..\..\..\Clp\src;..\..\..\..\Vol\src;..\..\..\..\CoinUtils\src;..\..\..\..\BuildTools\headers;..\..\..\..\ThirdParty\ASL;..\..\..\..\ThirdParty\ASL\solvers"
+				PreprocessorDefinitions="WIN32;NDEBUG;COIN_HAS_IPOPT;COIN_HAS_SYMPHONY;HAVE_MA27"
+				RuntimeLibrary="0"
+				UsePrecompiledHeader="0"
+				AssemblerListingLocation=".\$(ConfigurationName)\"
+				ObjectFile=".\$(ConfigurationName)\"
+				ProgramDataBaseFileName=".\$(ConfigurationName)\"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+				UndefinePreprocessorDefinitions="HAVE_CONFIG_H"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="wsock32.lib winmm.lib libIpopt.lib amplsolv.lib libCoinBlas.lib libCoinHSL.lib libCoinLapack.lib vcf2c.lib"
+				OutputFile="$(ConfigurationName)\$(ProjectName).exe"
+				LinkIncremental="1"
+				AdditionalLibraryDirectories="&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;;&quot;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;;..\..\..\..\ThirdParty\ASL;..\..\..\..\\Ipopt\MSVisualStudio\v8\libIpopt\Release;..\..\..\..\\Ipopt\MSVisualStudio\v8\libCoinBlas\Release;..\..\..\..\\Ipopt\MSVisualStudio\v8\libCoinHSL\Release;..\..\..\..\\Ipopt\MSVisualStudio\v8\libCoinLapack\Release;..\..\..\..\Ipopt\MSVisualStudio\v8\libf2c;&quot;..\libOSnl2OSiL\Release-Ipopt&quot;;..\..\..\..\ThirdParty\ASL\solvers"
+				GenerateManifest="false"
+				IgnoreDefaultLibraryNames=""
+				GenerateDebugInformation="false"
+				SubSystem="1"
+				LinkTimeCodeGeneration="0"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
@@ -291,7 +293,7 @@
 				RelativePath="..\..\..\applications\amplClient\OSAmplClient.cpp"
 				>
 				<FileConfiguration
-					Name="Enhanced|Win32"
+					Name="Release-Plus|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
