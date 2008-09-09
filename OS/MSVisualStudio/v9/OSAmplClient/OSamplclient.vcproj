@@ -222,7 +222,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="&quot;..\..\..\..\..\Ipopt-stable\Ipopt\src\Interfaces&quot;;&quot;..\..\..\..\..\Ipopt-stable\Ipopt\src\Common&quot;;&quot;..\..\..\..\..\Ipopt-stable\Ipopt\src\LinAlg&quot;;..\..\..\..\OS\src;..\..\..\..\OS\src\OSUtils;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSAgent;..\..\..\..;..\..\..\..\CppAD;..\..\..\..\CppAD\local;..\..\..\..\Osi\src;..\..\..\..\Osi\src\OsiCbc;..\..\..\..\Osi\src\OsiClp;..\..\..\..\Osi\src\OsiVol;..\..\..\..\Cbc\src;..\..\..\..\Clp\src;..\..\..\..\Vol\src;..\..\..\..\CoinUtils\src;..\..\..\..\BuildTools\headers;..\..\..\..\ThirdParty\ASL;..\..\..\..\ThirdParty\ASL\solvers"
+				AdditionalIncludeDirectories="..\..\..\..\Ipopt\src\Interfaces;..\..\..\..\Ipopt\src\Common;..\..\..\..\Ipopt\src\LinAlg;..\..\..\..\OS\src;..\..\..\..\OS\src\OSUtils;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSAgent;..\..\..\..;..\..\..\..\CppAD;..\..\..\..\CppAD\local;..\..\..\..\Osi\src;..\..\..\..\Osi\src\OsiCbc;..\..\..\..\Osi\src\OsiClp;..\..\..\..\Osi\src\OsiSym;..\..\..\..\Osi\src\OsiVol;..\..\..\..\Cbc\src;..\..\..\..\Clp\src;..\..\..\..\SYMPHONY/Include;..\..\..\..\Vol\src;..\..\..\..\CoinUtils\src;..\..\..\..\BuildTools\headers;..\..\..\..\ThirdParty\ASL;..\..\..\..\ThirdParty\ASL\solvers"
 				PreprocessorDefinitions="WIN32;NDEBUG;COIN_HAS_IPOPT;COIN_HAS_SYMPHONY;HAVE_MA27"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
