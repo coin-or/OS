@@ -7,6 +7,7 @@
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:include schemaLocation="OSaL.xsd"/>
 	<xs:include schemaLocation="OSpL.xsd"/>
+	<!--OSrL->resultData->Optimization: proposal (The entire schema)-->
 	<xs:element name="osrl" type="OSrL">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
