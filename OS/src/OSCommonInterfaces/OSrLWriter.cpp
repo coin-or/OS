@@ -21,15 +21,14 @@
 
 
 #include "OSrLWriter.h"
-#include "OSiLWriter.h"
 #include "OSResult.h"
 
-
+#include "OSDataStructures.h"
 #include "OSParameters.h" 
 #include "OSCommonUtil.h"
-#include "OSBase64.h"
 #include "OSMathUtil.h"
 
+  
 
 
 #include <sstream>   
@@ -172,7 +171,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 									outStr << " idx=\"";
 									outStr << j ;
 									outStr <<  "\">";
-									outStr <<  m_OSResult->resultData->optimization->solution[i]->variables->values->var[j]->value;
+									outStr <<  os_dtoa_format( m_OSResult->resultData->optimization->solution[i]->variables->values->var[j]->value );
 									outStr << "</var>" << endl;
 								}
 							}
@@ -196,7 +195,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 												outStr << " idx=\"";
 												outStr << j ;
 												outStr <<  "\">";
-												outStr <<   m_OSResult->resultData->optimization->solution[i]->variables->other[k]->var[j]->value;
+												outStr <<    m_OSResult->resultData->optimization->solution[i]->variables->other[k]->var[j]->value;
 												outStr << "</var>" << endl;
 											}
 										}
@@ -265,7 +264,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 									outStr << " idx=\"";
 									outStr <<  j ;
 									outStr <<  "\">";
-									outStr <<  m_OSResult->resultData->optimization->solution[i]->constraints->values->con[j]->value;
+									outStr <<  os_dtoa_format( m_OSResult->resultData->optimization->solution[i]->constraints->values->con[j]->value);
 									outStr << "</con>" << endl;
 								}
 							}
@@ -279,7 +278,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 									outStr << " idx=\"";
 									outStr <<  j ;
 									outStr <<  "\">";
-									outStr <<  m_OSResult->resultData->optimization->solution[i]->constraints->dualValues->con[j]->value;
+									outStr <<  os_dtoa_format( m_OSResult->resultData->optimization->solution[i]->constraints->dualValues->con[j]->value );
 									outStr << "</con>" << endl;
 								}
 							}
