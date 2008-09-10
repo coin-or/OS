@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSoL.xsd: current version - 1.0.0 -->
 	<!--include: since version 1.0.0-->
 	<xs:include schemaLocation="OSgL.xsd"/>
@@ -93,7 +93,7 @@
 					<xs:documentation>since version 1.0.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="others" type="OtherOptions" minOccurs="0"/>
+			<xs:element name="otherOptions" type="OtherOptions" minOccurs="0"/>
 		</xs:all>
 	</xs:complexType>
 	<xs:complexType name="InstanceLocationOption">
@@ -159,7 +159,7 @@
 					<xs:documentation>since version 1.0.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="others" type="OtherOptions" minOccurs="0"/>
+			<xs:element name="otherOptions" type="OtherOptions" minOccurs="0"/>
 		</xs:all>
 	</xs:complexType>
 	<xs:complexType name="MinDiskSpace">
@@ -256,7 +256,7 @@
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:element>
-			<xs:element name="others" type="OtherOptions" minOccurs="0"/>
+			<xs:element name="otherOptions" type="OtherOptions" minOccurs="0"/>
 		</xs:all>
 	</xs:complexType>
 	<xs:complexType name="JobOption">
@@ -344,7 +344,7 @@
 					<xs:documentation>since version 1.0.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="others" type="OtherOptions"/>
+			<xs:element name="otherOptions" type="OtherOptions" minOccurs="0"/>
 		</xs:all>
 	</xs:complexType>
 	<xs:complexType name="MaxTime">
@@ -370,7 +370,7 @@
 		<xs:sequence>
 			<xs:element name="pathPair" type="PathPair"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfPaths" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfPathPairs" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="PathPair">
 		<xs:attribute name="from" type="xs:string" use="required"/>
@@ -393,7 +393,6 @@
 			<xs:element name="other" type="OtherOption" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfOtherOptions" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="solver" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OptimizationOption">
 		<xs:annotation>
@@ -415,7 +414,7 @@
 					<xs:documentation>since version 1.0.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="others" type="OtherOptimizationOptions" minOccurs="0"/>
+			<xs:element name="solverOptions" type="SolverOptions" minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfVariables" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="required"/>
@@ -681,23 +680,33 @@
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
-	<xs:complexType name="OtherOptimizationOption">
+	<xs:complexType name="SolverOption">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
 				<xs:attribute name="name" type="xs:string" use="required"/>
-				<xs:attribute name="class" type="xs:string" use="optional"/>
+				<xs:attribute name="category" type="xs:string" use="optional"/>
 				<xs:attribute name="solver" type="xs:string" use="optional"/>
 				<xs:attribute name="description" type="xs:string" use="optional"/>
+				<xs:attribute name="type">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="double"/>
+							<xs:enumeration value="integer"/>
+							<xs:enumeration value="boolean"/>
+							<xs:enumeration value="string"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
-	<xs:complexType name="OtherOptimizationOptions">
+	<xs:complexType name="SolverOptions">
 		<xs:sequence>
-			<xs:element name="other" type="OtherOptimizationOption" maxOccurs="unbounded"/>
+			<xs:element name="solverOption" type="SolverOption" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfOtherOptions" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfSolverOptions" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 </xs:schema>
