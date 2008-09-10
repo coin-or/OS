@@ -21,10 +21,17 @@
 
 
 #include "OSrLWriter.h"
+#include "OSiLWriter.h"
 #include "OSResult.h"
-#include "OSParameters.h"
+
+
+#include "OSParameters.h" 
 #include "OSCommonUtil.h"
-#include "OSConfig.h"
+#include "OSBase64.h"
+#include "OSMathUtil.h"
+
+
+
 #include <sstream>   
 #include <iostream>  
 
@@ -189,7 +196,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 												outStr << " idx=\"";
 												outStr << j ;
 												outStr <<  "\">";
-												outStr <<  os_dtoa_format( m_OSResult->resultData->optimization->solution[i]->variables->other[k]->var[j]->value);
+												outStr <<   m_OSResult->resultData->optimization->solution[i]->variables->other[k]->var[j]->value;
 												outStr << "</var>" << endl;
 											}
 										}
@@ -237,7 +244,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 												outStr << " idx=\"";
 												outStr << j ;
 												outStr <<  "\">";
-												outStr <<  os_dtoa_format( m_OSResult->resultData->optimization->solution[i]->objectives->other[k]->obj[j]->value);
+												outStr <<   m_OSResult->resultData->optimization->solution[i]->objectives->other[k]->obj[j]->value;
 												outStr << "</obj>" << endl;
 											}
 										}
