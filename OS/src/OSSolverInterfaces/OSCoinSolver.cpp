@@ -28,6 +28,12 @@
 #include "CglMixedIntegerRounding2.hpp"
 #include "CglKnapsackCover.hpp"
 #include "CglFlowCover.hpp"
+
+
+#include "OSDataStructures.h"
+#include "OSParameters.h" 
+#include "OSCommonUtil.h"
+#include "OSMathUtil.h"
   
 #include <iostream>
 #ifdef HAVE_CTIME
@@ -378,9 +384,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 				ostringstream outStr;
 				int numberOfVar =  osinstance->getVariableNumber();
 				for(i=0; i < numberOfVar; i++){
-					outStr << osiSolver->getReducedCost()[ i]; 
-					rcost[ i] = outStr.str();
-					outStr.str("");
+					rcost[ i] = os_dtoa_format( osiSolver->getReducedCost()[ i]);
 				}
 				osresult->setAnOtherVariableResult(solIdx, otherIdx, "reduced costs", "the variable reduced costs", rcost);			
 				// end of settiing reduced costs
