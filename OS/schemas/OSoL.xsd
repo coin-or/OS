@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSoL.xsd: current version - 1.0.0 -->
 	<!--include: since version 1.0.0-->
+	<!--OSoL: proposal (The entire schema)-->
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:element name="osol" type="OSoL">
 		<xs:annotation>
@@ -154,7 +155,7 @@
 					<xs:documentation>since version 1.0.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="minCPUNumber" type="MinCPUNumber" default="0.0" minOccurs="0">
+			<xs:element name="minCPUNumber" type="MinCPUNumber" default="1" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>since version 1.0.0</xs:documentation>
 				</xs:annotation>
@@ -232,7 +233,7 @@
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 		<xs:simpleContent>
-			<xs:extension base="xs:double"/>
+			<xs:extension base="xs:int"/>
 		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="ServiceOption">
@@ -368,7 +369,7 @@
 	</xs:complexType>
 	<xs:complexType name="PathPairs">
 		<xs:sequence>
-			<xs:element name="pathPair" type="PathPair"/>
+			<xs:element name="pathPair" type="PathPair" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfPathPairs" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -381,12 +382,9 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:simpleContent>
-			<xs:extension base="xs:string">
-				<xs:attribute name="name" type="xs:string" use="required"/>
-				<xs:attribute name="description" type="xs:string" use="optional"/>
-			</xs:extension>
-		</xs:simpleContent>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OtherOptions">
 		<xs:sequence>
@@ -451,23 +449,15 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:simpleContent>
-			<xs:extension base="xs:string">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="optional"/>
-				<xs:attribute name="value" type="xs:string" use="optional"/>
-			</xs:extension>
-		</xs:simpleContent>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="InitVarValueString">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:simpleContent>
-			<xs:extension base="xs:string">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="optional"/>
-				<xs:attribute name="value" type="xs:double" use="optional"/>
-			</xs:extension>
-		</xs:simpleContent>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="value" type="xs:double" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OtherVariableOption">
 		<xs:annotation>
@@ -479,22 +469,28 @@
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="solver" type="xs:string" use="optional"/>
+		<xs:attribute name="category" type="xs:string" use="optional"/>
+		<xs:attribute name="type" use="optional" default="string">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="double"/>
+					<xs:enumeration value="integer"/>
+					<xs:enumeration value="boolean"/>
+					<xs:enumeration value="string"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OtherVarOption">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:simpleContent>
-			<xs:extension base="xs:string">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-				<xs:attribute name="value" type="xs:string" use="optional"/>
-				<xs:attribute name="lbValue" type="xs:string" use="optional"/>
-				<xs:attribute name="ubValue" type="xs:string" use="optional"/>
-				<xs:attribute name="class" type="xs:string" use="optional"/>
-				<xs:attribute name="solver" type="xs:string" use="optional"/>
-			</xs:extension>
-		</xs:simpleContent>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="lbValue" type="xs:string" use="optional"/>
+		<xs:attribute name="ubValue" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="ObjectiveOption">
 		<xs:annotation>
@@ -532,12 +528,8 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:simpleContent>
-			<xs:extension base="xs:string">
-				<xs:attribute name="idx" type="xs:negativeInteger" use="optional"/>
-				<xs:attribute name="value" type="xs:double" use="optional"/>
-			</xs:extension>
-		</xs:simpleContent>
+		<xs:attribute name="idx" type="xs:negativeInteger" use="optional"/>
+		<xs:attribute name="value" type="xs:double" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="InitObjectiveBounds">
 		<xs:annotation>
@@ -552,13 +544,9 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:simpleContent>
-			<xs:extension base="xs:string">
-				<xs:attribute name="idx" type="xs:negativeInteger" use="optional"/>
-				<xs:attribute name="lbValue" type="xs:double" use="optional"/>
-				<xs:attribute name="ubValue" type="xs:double" use="optional"/>
-			</xs:extension>
-		</xs:simpleContent>
+		<xs:attribute name="idx" type="xs:negativeInteger" use="optional"/>
+		<xs:attribute name="lbValue" type="xs:double" use="optional"/>
+		<xs:attribute name="ubValue" type="xs:double" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OtherObjectiveOption">
 		<xs:annotation>
@@ -570,20 +558,26 @@
 		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
-		<xs:attribute name="class" type="xs:string" use="optional"/>
 		<xs:attribute name="solver" type="xs:string" use="optional"/>
+		<xs:attribute name="category" type="xs:string" use="optional"/>
+		<xs:attribute name="type" use="optional" default="string">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="double"/>
+					<xs:enumeration value="integer"/>
+					<xs:enumeration value="boolean"/>
+					<xs:enumeration value="string"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OtherObjOption">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:simpleContent>
-			<xs:extension base="xs:string">
-				<xs:attribute name="idx" type="xs:negativeInteger" use="optional"/>
-				<xs:attribute name="value" type="xs:string" use="optional"/>
-			</xs:extension>
-		</xs:simpleContent>
+		<xs:attribute name="idx" type="xs:negativeInteger" use="optional"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="ConstraintOption">
 		<xs:annotation>
@@ -621,12 +615,8 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:simpleContent>
-			<xs:extension base="xs:string">
-				<xs:attribute name="idx" type="xs:negativeInteger" use="optional"/>
-				<xs:attribute name="value" type="xs:double" use="optional"/>
-			</xs:extension>
-		</xs:simpleContent>
+		<xs:attribute name="idx" type="xs:negativeInteger" use="optional"/>
+		<xs:attribute name="value" type="xs:double" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="InitDualVariableValues">
 		<xs:annotation>
@@ -663,45 +653,48 @@
 		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
-		<xs:attribute name="class" type="xs:string" use="optional"/>
 		<xs:attribute name="solver" type="xs:string" use="optional"/>
+		<xs:attribute name="category" type="xs:string" use="optional"/>
+		<xs:attribute name="type" use="optional" default="string">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="double"/>
+					<xs:enumeration value="integer"/>
+					<xs:enumeration value="boolean"/>
+					<xs:enumeration value="string"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OtherConOption">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:simpleContent>
-			<xs:extension base="xs:string">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="optional"/>
-				<xs:attribute name="value" type="xs:string" use="optional"/>
-				<xs:attribute name="lbValue" type="xs:string" use="optional"/>
-				<xs:attribute name="ubValue" type="xs:string" use="optional"/>
-			</xs:extension>
-		</xs:simpleContent>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="lbValue" type="xs:string" use="optional"/>
+		<xs:attribute name="ubValue" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="SolverOption">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0.0. The category attribute should be separated by : if there are more than 1 categories or extra subcategories</xs:documentation>
 		</xs:annotation>
-		<xs:simpleContent>
-			<xs:extension base="xs:string">
-				<xs:attribute name="name" type="xs:string" use="required"/>
-				<xs:attribute name="category" type="xs:string" use="optional"/>
-				<xs:attribute name="solver" type="xs:string" use="optional"/>
-				<xs:attribute name="description" type="xs:string" use="optional"/>
-				<xs:attribute name="type">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="double"/>
-							<xs:enumeration value="integer"/>
-							<xs:enumeration value="boolean"/>
-							<xs:enumeration value="string"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:attribute>
-			</xs:extension>
-		</xs:simpleContent>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="solver" type="xs:string" use="optional"/>
+		<xs:attribute name="category" type="xs:string" use="optional"/>
+		<xs:attribute name="type" use="optional" default="string">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="double"/>
+					<xs:enumeration value="integer"/>
+					<xs:enumeration value="boolean"/>
+					<xs:enumeration value="string"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="SolverOptions">
 		<xs:sequence>
