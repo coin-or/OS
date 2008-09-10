@@ -37,4 +37,13 @@ Cone programming potential collaboration
 Jun:
 OSoL/OSrL java modification
 Constraint programming document/report
+others->otherOptions
+otherOptions->solverOptions
+class->category
+option->string attribute instead of content
+option type -> double, integer, real, string
+path pairs has to be infinite
+other options under job is optional
+numberOfpaths -> numberOfPathPairs
+proposal
 ----------------------------------------------------
