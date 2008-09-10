@@ -608,6 +608,7 @@ AC_COIN_VPATH_LINK(data/osilFiles/callBackTestRowMajor.osil)
 ## osol test files
 ##
 AC_COIN_VPATH_LINK(data/osolFiles/demo.osol)
+AC_COIN_VPATH_LINK(data/osolFiles/demo1.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/knock.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/remotegsbkip.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/remoteosil.osol)
