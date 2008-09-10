@@ -61,7 +61,8 @@ LTLIBRARIES = $(noinst_LTLIBRARIES)
 libOSCommonInterfaces_la_LIBADD =
 am_libOSCommonInterfaces_la_OBJECTS = OSExpressionTree.lo \
 	OSInstance.lo OSResult.lo OSiLReader.lo OSiLWriter.lo \
-	OSnLNode.lo OSrLReader.lo OSrLWriter.lo OSDefaultSolver.lo
+	OSoLWriter.lo OSoLReader.lo OSOption.lo OSnLNode.lo \
+	OSrLReader.lo OSrLWriter.lo OSDefaultSolver.lo
 libOSCommonInterfaces_la_OBJECTS =  \
 	$(am_libOSCommonInterfaces_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
@@ -360,6 +361,12 @@ libOSCommonInterfaces_la_SOURCES = \
 	OSiLReader.h \
 	OSiLWriter.cpp \
 	OSiLWriter.h \
+        OSoLWriter.h \
+        OSoLWriter.cpp \
+        OSoLReader.h \
+        OSoLReader.cpp \
+        OSOption.h \
+        OSOption.cpp \
 	OSnLNode.cpp \
 	OSnLNode.h \
 	OSrLReader.cpp \
@@ -406,7 +413,10 @@ includecoin_HEADERS = \
 	OSnLNode.h \
 	OSrLReader.h \
 	OSrLWriter.h \
-	OSDefaultSolver.h
+	OSDefaultSolver.h \
+        OSoLWriter.h \
+        OSoLReader.h \
+        OSOption.h 
 
 all: all-am
 
@@ -462,10 +472,13 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSDefaultSolver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSExpressionTree.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSInstance.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSOption.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSResult.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSiLReader.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSiLWriter.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSnLNode.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSoLReader.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSoLWriter.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSrLReader.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSrLWriter.Plo@am__quote@
 

@@ -60,8 +60,9 @@ CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libOSParsers_la_LIBADD =
 am_libOSParsers_la_OBJECTS = OSParseosil.lo OSParseosil.tab.lo \
-	OSParseosol.lo OSParseosrl.lo OSParseosrl.tab.lo \
-	OSParseosss.lo OSiLParserData.lo OSrLParserData.lo
+	OSParseosol.lo OSParseosol.tab.lo OSParseosrl.lo \
+	OSParseosrl.tab.lo OSParseosss.lo OSiLParserData.lo \
+	OSrLParserData.lo OSoLParserData.lo
 libOSParsers_la_OBJECTS = $(am_libOSParsers_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
@@ -352,16 +353,20 @@ libOSParsers_la_SOURCES = \
 		OSOptionsStruc.h \
 		OSParseosil.cpp \
 		OSParseosil.tab.cpp \
-		OSParseosil.tab.cpp.h \
+		OSParseosil.tab.hpp \
 		OSParseosol.cpp \
+		OSParseosol.tab.cpp \
+		OSParseosol.tab.hpp \
 		OSParseosrl.cpp \
 		OSParseosrl.tab.cpp \
-		OSParseosrl.tab.cpp.h \
+		OSParseosrl.tab.hpp \
 		OSParseosss.cpp	\
 		OSiLParserData.h \
 		OSiLParserData.cpp \
 		OSrLParserData.h \
-		OSrLParserData.cpp		
+		OSrLParserData.cpp \
+                OSoLParserData.h \
+                OSoLParserData.cpp
 
 
 # This is for libtool (on Windows)
@@ -395,8 +400,10 @@ includecoin_HEADERS = \
 	OSOptionsStruc.h \
 	OSParseosil.tab.hpp \
 	OSParseosrl.tab.hpp \
+        OSParseosol.tab.hpp \
 	OSiLParserData.h \
-	OSrLParserData.h
+	OSrLParserData.h \
+        OSoLParserData.h
 
 all: all-am
 
@@ -452,10 +459,12 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSParseosil.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSParseosil.tab.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSParseosol.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSParseosol.tab.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSParseosrl.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSParseosrl.tab.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSParseosss.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSiLParserData.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSoLParserData.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSrLParserData.Plo@am__quote@
 
 .cpp.o:

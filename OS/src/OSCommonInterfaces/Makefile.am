@@ -28,6 +28,12 @@ libOSCommonInterfaces_la_SOURCES = \
 	OSiLReader.h \
 	OSiLWriter.cpp \
 	OSiLWriter.h \
+        OSoLWriter.h \
+        OSoLWriter.cpp \
+        OSoLReader.h \
+        OSoLReader.cpp \
+        OSOption.h \
+        OSOption.cpp \
 	OSnLNode.cpp \
 	OSnLNode.h \
 	OSrLReader.cpp \
@@ -85,6 +91,9 @@ includecoin_HEADERS = \
 	OSnLNode.h \
 	OSrLReader.h \
 	OSrLWriter.h \
-	OSDefaultSolver.h
+	OSDefaultSolver.h \
+        OSoLWriter.h \
+        OSoLReader.h \
+        OSOption.h 
 
 

@@ -21,16 +21,21 @@ libOSParsers_la_SOURCES = \
 		OSOptionsStruc.h \
 		OSParseosil.cpp \
 		OSParseosil.tab.cpp \
-		OSParseosil.tab.cpp.h \
+		OSParseosil.tab.hpp \
 		OSParseosol.cpp \
+		OSParseosol.tab.cpp \
+		OSParseosol.tab.hpp \
 		OSParseosrl.cpp \
 		OSParseosrl.tab.cpp \
-		OSParseosrl.tab.cpp.h \
+		OSParseosrl.tab.hpp \
 		OSParseosss.cpp	\
 		OSiLParserData.h \
 		OSiLParserData.cpp \
 		OSrLParserData.h \
-		OSrLParserData.cpp		
+		OSrLParserData.cpp \
+                OSoLParserData.h \
+                OSoLParserData.cpp
+		
 
 # This is for libtool (on Windows)
 libOSParsers_la_LDFLAGS = $(LT_LDFLAGS)
@@ -70,7 +75,9 @@ includecoin_HEADERS = \
 	OSOptionsStruc.h \
 	OSParseosil.tab.hpp \
 	OSParseosrl.tab.hpp \
+        OSParseosol.tab.hpp \
 	OSiLParserData.h \
-	OSrLParserData.h
+	OSrLParserData.h \
+        OSoLParserData.h
 
 
