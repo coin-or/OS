@@ -22,9 +22,15 @@
 
 #include "OSrLWriter.h"
 #include "OSResult.h"
-#include "OSParameters.h"
+
+#include "OSDataStructures.h"
+#include "OSParameters.h" 
 #include "OSCommonUtil.h"
-#include "OSConfig.h"
+#include "OSMathUtil.h"
+
+  
+
+
 #include <sstream>   
 #include <iostream>  
 
@@ -165,7 +171,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 									outStr << " idx=\"";
 									outStr << j ;
 									outStr <<  "\">";
-									outStr <<  m_OSResult->resultData->optimization->solution[i]->variables->values->var[j]->value;
+									outStr <<  os_dtoa_format( m_OSResult->resultData->optimization->solution[i]->variables->values->var[j]->value );
 									outStr << "</var>" << endl;
 								}
 							}
@@ -189,7 +195,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 												outStr << " idx=\"";
 												outStr << j ;
 												outStr <<  "\">";
-												outStr <<  m_OSResult->resultData->optimization->solution[i]->variables->other[k]->var[j]->value;
+												outStr <<    m_OSResult->resultData->optimization->solution[i]->variables->other[k]->var[j]->value;
 												outStr << "</var>" << endl;
 											}
 										}
@@ -213,7 +219,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 									outStr << " idx=\"";
 									outStr << -(1 + j) ;
 									outStr <<  "\">";
-									outStr <<  m_OSResult->resultData->optimization->solution[i]->objectives->values->obj[j]->value;
+									outStr <<  os_dtoa_format( m_OSResult->resultData->optimization->solution[i]->objectives->values->obj[j]->value);
 									outStr << "</obj>" << endl;
 								}
 							}
@@ -237,7 +243,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 												outStr << " idx=\"";
 												outStr << j ;
 												outStr <<  "\">";
-												outStr <<  m_OSResult->resultData->optimization->solution[i]->objectives->other[k]->obj[j]->value;
+												outStr <<   m_OSResult->resultData->optimization->solution[i]->objectives->other[k]->obj[j]->value;
 												outStr << "</obj>" << endl;
 											}
 										}
@@ -258,7 +264,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 									outStr << " idx=\"";
 									outStr <<  j ;
 									outStr <<  "\">";
-									outStr <<  m_OSResult->resultData->optimization->solution[i]->constraints->values->con[j]->value;
+									outStr <<  os_dtoa_format( m_OSResult->resultData->optimization->solution[i]->constraints->values->con[j]->value);
 									outStr << "</con>" << endl;
 								}
 							}
@@ -272,7 +278,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 									outStr << " idx=\"";
 									outStr <<  j ;
 									outStr <<  "\">";
-									outStr <<  m_OSResult->resultData->optimization->solution[i]->constraints->dualValues->con[j]->value;
+									outStr <<  os_dtoa_format( m_OSResult->resultData->optimization->solution[i]->constraints->dualValues->con[j]->value );
 									outStr << "</con>" << endl;
 								}
 							}

@@ -20,6 +20,11 @@
 #include "OSIpoptSolver.h"
 #include "OSCommonUtil.h"
 
+#include "OSDataStructures.h"
+#include "OSParameters.h" 
+#include "OSCommonUtil.h"
+#include "OSMathUtil.h"
+
 
 using std::cout; 
 using std::endl; 
@@ -362,8 +367,13 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 #endif
 	  printf("\n\nObjective value\n");
 	  printf("f(x*) = %e\n", obj_value);
+	  
   	int solIdx = 0;
+  	int numberOfOtherVariableResult;
+  	int otherIdx;
 	ostringstream outStr;
+	
+	std::string *rcost = NULL;
 	double* mdObjValues = new double[1];
 	std::string message = "Ipopt solver finishes to the end.";
 	std::string solutionDescription = "";	
@@ -400,6 +410,35 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 				osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda));
 				mdObjValues[0] = obj_value;
 				osresult->setObjectiveValues(solIdx, mdObjValues);
+				
+				
+				// set other
+				
+				numberOfOtherVariableResult = 2;
+				osresult->setNumberOfOtherVariableResult(solIdx, numberOfOtherVariableResult);
+				
+			
+				rcost = new std::string[ osinstance->getVariableNumber()];
+				
+
+				for (Index i = 0; i < n; i++) {
+				    rcost[ i] =  os_dtoa_format( z_L[i]); 
+				 }
+				otherIdx = 0;
+				osresult->setAnOtherVariableResult(solIdx, otherIdx, "varL", "Lagrange Multiplier on the Variable Lower Bound", rcost);
+				
+				
+				for (Index i = 0; i < n; i++) {
+				    rcost[ i] =  os_dtoa_format( z_U[i]); 
+				 }
+				otherIdx = 1;
+				osresult->setAnOtherVariableResult(solIdx, otherIdx, "varU", "Lagrange Multiplier on the Variable Upper Bound", rcost);
+				
+				delete[] rcost;
+				
+				// done with other
+				
+				
 			break;
 			case MAXITER_EXCEEDED:
 				solutionDescription = "MAXITER_EXCEEDED[IPOPT]: Maximum number of iterations exceeded.";
