@@ -5949,7 +5949,38 @@ patch ASL itself. Thoughts?
 How Osi works
 
 
-Folks,	The way it works for Osi is this:  The code for all OsiXXX solverinterface layers is always included in the Osi distribution.  If solver XXX isnot available, OsiXXX is not configured, built, or tested.  The configure scriptsorts this out.	For Osi/stable and Osi/releases, the default Externals specifies clp,dylp, vol, and ThirdParty/Glpk (but unless the user downloads glpk, OsiGlpk willnot be enabled).	For Osi/trunk, the default Externals adds Cbc and SYMPHONY, plus Cgl asa dependency.  OsiCbc and OsiSym will be enabled.  There's a configure hook tospecify the underlying OsiXXX that's used by OsiCbc.  OsiClp is generally safeand is the default.  OsiDylp may work, or may be broken due to incompatibilitiesin libCbc.  Other solvers haven't been tested, to my knowledge.	There's ongoing debate over the appropriateness of this set ofExternals, and ongoing debate over the viability (design-wise) of OsiCbc.	Commercial solvers always require the user to specify the location ofthe libraries and includes.  If the user gives a location for XXX, thecorresponding OsiXXX is configured and built.
+Folks,
+
+	The way it works for Osi is this:  The code for all OsiXXX solver
+interface layers is always included in the Osi distribution.  If solver XXX is
+not available, OsiXXX is not configured, built, or tested.  The configure script
+sorts this out.
+
+	For Osi/stable and Osi/releases, the default Externals specifies clp,
+dylp, vol, and ThirdParty/Glpk (but unless the user downloads glpk, OsiGlpk will
+not be enabled).
+
+	For Osi/trunk, the default Externals adds Cbc and SYMPHONY, plus Cgl as
+a dependency.  OsiCbc and OsiSym will be enabled.  There's a configure hook to
+specify the underlying OsiXXX that's used by OsiCbc.  OsiClp is generally safe
+and is the default.  OsiDylp may work, or may be broken due to incompatibilities
+in libCbc.  Other solvers haven't been tested, to my knowledge.
+
+	There's ongoing debate over the appropriateness of this set of
+Externals, and ongoing debate over the viability (design-wise) of OsiCbc.
+
+	Commercial solvers always require the user to specify the location of
+the libraries and includes.  If the user gives a location for XXX, the
+corresponding OsiXXX is configured and built.
+
+%%%%%%%%%%%%%%
+
+For GAMSlinks this may be necessary:
+
+
+Seem to be the same thing we had a month ago.Can you try if adding the following to GamsOS.cpp helps again?extern "C" {  double slvminf = 1;  unsigned char G2DMATHNEW_exceptmsg[256] = "hack";}
+
+
 
 
 
