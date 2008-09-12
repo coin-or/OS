@@ -80,6 +80,7 @@ OS/data/configFiles/testmps.config -text
 OS/data/configFiles/testnl.config -text
 OS/data/gamsFiles/os.opt -text
 OS/data/gamsFiles/rbrockmod.gms -text
+OS/data/gamsFiles/trnsport.gms -text
 OS/data/matlabFiles/OSCallMatlabSolver.m -text
 OS/data/matlabFiles/markowitz.m -text
 OS/data/matlabFiles/parincLinear.m -text
