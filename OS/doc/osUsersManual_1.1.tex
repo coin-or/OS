@@ -5978,10 +5978,15 @@ corresponding OsiXXX is configured and built.
 For GAMSlinks this may be necessary:
 
 
-Seem to be the same thing we had a month ago.Can you try if adding the following to GamsOS.cpp helps again?extern "C" {  double slvminf = 1;  unsigned char G2DMATHNEW_exceptmsg[256] = "hack";}
+Seem to be the same thing we had a month ago.
+Can you try if adding the following to GamsOS.cpp helps again?
 
+extern "C" {
+  double slvminf = 1;
+  unsigned char G2DMATHNEW_exceptmsg[256] = "hack";
+}
 
-
+I've committed these lines into the repository now too, but you have to activate them by adding a -DUSE_UNUSED_SYMBOLS (I know, I'm very bad in naming) to the CXXFLAGS, see https://projects.coin-or.org/GAMSlinks/changeset/540I am not convinced yet that this is not some bug in the compiler you use.
 
 
 
