@@ -393,11 +393,11 @@ bool OSnl2osil::createOSInstance(){
 	for(i = 0; i < n_var; i++){
 		if(i >= firstBinaryVar) vartype = 'B';
 		if(i >= firstIntegerVar) vartype = 'I';
-		if(X0 != NULL) init = X0[ i];
+		//if(X0 != NULL) init = X0[ i];
 		osinstance->addVariable(i, var_name(i), 
 			LUv[2*i] > -OSDBL_MAX  ? LUv[2*i] : -OSDBL_MAX, 
 			LUv[2*i+1] < OSDBL_MAX ? LUv[2*i+1] : OSDBL_MAX, 
-			vartype, init, initString);
+			vartype, OSNAN, initString);
 	}	
 	//
 	//

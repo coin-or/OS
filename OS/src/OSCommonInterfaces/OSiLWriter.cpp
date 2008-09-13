@@ -97,11 +97,13 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 						outStr << os_dtoa_format( m_OSInstance->instanceData->variables->var[i]->ub) ;
 						outStr <<  "\"";
 					}
+					/*
 					if(CommonUtil::ISOSNAN(m_OSInstance->instanceData->variables->var[i]->init) == false){
 						outStr << " init=\"" ;
 						outStr << os_dtoa_format(m_OSInstance->instanceData->variables->var[i]->init) ;
 						outStr <<  "\"";
 					}
+					*/
 					if(m_OSInstance->instanceData->variables->var[i]->initString != ""){
 						outStr << " initString=\"" ;
 						outStr << m_OSInstance->instanceData->variables->var[i]->initString ;
