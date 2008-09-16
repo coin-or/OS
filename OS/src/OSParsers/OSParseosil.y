@@ -206,15 +206,15 @@ void osilerror(YYLTYPE* type, OSInstance *osintance,  OSiLParserData *parserData
 
 %token TIMEDOMAINSTART TIMEDOMAINEND
 %token STAGESSTART STAGESEND STAGESTART STAGEEND
-%token NAMEATT MULTATT NUMBEROFSTAGESATT HORIZONATT STARTATT
+%token NAMEATT  NUMBEROFSTAGESATT HORIZONATT STARTATT
 %token VARIABLESSTART CONSTRAINTSSTART OBJECTIVESSTART
 %token VARIABLESEND CONSTRAINTSEND OBJECTIVESEND
 %token NUMBEROFVARIABLESATT NUMBEROFCONSTRAINTSATT NUMBEROFOBJECTIVESATT
-%token STARTIDXATT ENDIDXATT
+%token STARTIDXATT 
 %token VARSTART VAREND CONSTART CONEND OBJSTART OBJEND
 %token INTERVALSTART INTERVALEND
 
-%token PARAMETERSSTART PARAMETERSEND PARAMSTART PARAMEND  NUMBEROFPARAMETERSATT
+
 
 
 
@@ -223,10 +223,10 @@ void osilerror(YYLTYPE* type, OSInstance *osintance,  OSiLParserData *parserData
 
 
 
-osildoc: quadraticcoefficients nonlinearExpressions timeDomain parametersAndStochasticElements INSTANCEDATAEND  OSILEND;
+osildoc: quadraticcoefficients nonlinearExpressions timeDomain INSTANCEDATAEND  OSILEND;
 
 
-parametersAndStochasticElements:
+
 
 
 quadraticcoefficients: 
@@ -960,7 +960,7 @@ intervalstartatt: STARTATT QUOTE DOUBLE QUOTE {
 		parserData->intervalstart = $3;};
 
 
-parameters: | PARAMETERSSTART PARAMETERSEND;
+
 		
 %%
 

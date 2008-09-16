@@ -150,7 +150,7 @@ return(DOUBLE);}
 ({xmlwhitespace}+numberOfQuadraticTerms{equality}) {YY_PRINT; return(NUMBEROFQTERMSATT);}
 ({xmlwhitespace}+numberOfNonlinearExpressions{equality}) {YY_PRINT; return(NUMBEROFNONLINEAREXPRESSIONS);}
 ({xmlwhitespace}+numberOfStages{equality}) {YY_PRINT; return(NUMBEROFSTAGESATT);}
-({xmlwhitespace}+numberOfParameters{equality}) {YY_PRINT; return(NUMBEROFPARAMETERSATT);}
+
 
 ({xmlwhitespace}+idx{equality}) {YY_PRINT;   return(IDXATT);}
 ({xmlwhitespace}+idxOne{equality}) {YY_PRINT;   return(IDXONEATT);}
@@ -252,11 +252,12 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/interval{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(INTERVALEND);}
 
 
- /* patterns for <parametersAndStochasticElements> */
+ /* patterns for <parametersAndStochasticElements> 
 {xmlwhitespace}*\<parametersAndStochasticElements {YY_PRINT; return(PARAMETERSSTART);}
 {xmlwhitespace}*\<\/parametersAndStochasticElements{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(PARAMETERSEND);}
 {xmlwhitespace}*\<param {YY_PRINT; return(PARAMSTART);}
 {xmlwhitespace}*\<\/param{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(PARAMEND);}
+*/
 
  "<!--" BEGIN comment;
  <comment>. |
