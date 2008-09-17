@@ -107,14 +107,29 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption){
 		};
 		if (m_OSOption->general->contact != NULL)
 		{	outStr << "<contact>";
-			if (m_OSOption->general->contact->contactType == "")
+			if (m_OSOption->general->contact->transportType == "")
 			{	outStr << "<contact>";
 			}
 			else 
-			{	outStr << "<contact contactType=\"" + m_OSOption->general->contact->contactType + "\">";
+			{	outStr << "<contact contactType=\"" + m_OSOption->general->contact->transportType + "\">";
 			};
 			outStr << "\"" + m_OSOption->general->contact->value + "\"</contact>" << endl;
 		};
+		if (m_OSOption->general->otherOptions != NULL)
+		{	if (m_OSOption->general->otherOptions->numberOfOtherOptions > 0)
+			{	outStr << "<otherOptions numberOfOtherOptions=\""; 
+				outStr << m_OSOption->general->otherOptions->numberOfOtherOptions + "\">" << endl;
+				for (int i=0; i < m_OSOption->general->otherOptions->numberOfOtherOptions; i++)
+				{	outStr << "<other name=\"" + m_OSOption->general->otherOptions->other[i]->name + "\"";
+					if (m_OSOption->general->otherOptions->other[i]->value != "")
+						outStr << "value=\" + m_OSOption->general->otherOptions->other[i]->value + \"";
+					if (m_OSOption->general->otherOptions->other[i]->description != "")
+						outStr << "description=\" + m_OSOption->general->otherOptions->other[i]->description + \"";
+					outStr << "/>" << endl;
+				}
+				outStr << "</otherOptions>" << endl;
+			}
+		}
 		outStr << "</general>" << endl;
 	};
 
@@ -123,15 +138,42 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption){
  */
 	if(m_OSOption->system != NULL){
 		outStr << "<system>" << endl;
-		if (m_OSOption->system->minDiskSpace > 0.0)
-		{	outStr << "<minDiskSpace>" << m_OSOption->system->minDiskSpace << "</minDiskSpace>";
+		if (m_OSOption->system->minDiskSpace != NULL)
+		{	if (m_OSOption->system->minDiskSpace->unit == "")
+				m_OSOption->system->minDiskSpace->unit = "byte";
+			outStr << "<minDiskSpace unit=\"" << m_OSOption->system->minDiskSpace->unit << "\">";
+			outStr << m_OSOption->system->minDiskSpace->value << "</minDiskSpace>" << endl;
+		}
+		if (m_OSOption->system->minMemorySize != NULL)
+		{	if (m_OSOption->system->minMemorySize->unit == "")
+				m_OSOption->system->minMemorySize->unit = "byte";
+			outStr << "<minMemorySize unit=\"" << m_OSOption->system->minMemorySize->unit << "\">";
+			outStr << m_OSOption->system->minMemorySize->value << "</minMemorySize>" << endl;
+		}
+		if (m_OSOption->system->minCPUSpeed != NULL)
+		{	if (m_OSOption->system->minCPUSpeed->unit == "")
+				m_OSOption->system->minCPUSpeed->unit = "hertz";
+			outStr << "<minCPUSpeed unit=\"" << m_OSOption->system->minCPUSpeed->unit << "\">";
+			outStr << m_OSOption->system->minCPUSpeed->value << "</minCPUSpeed>" << endl;
+		}
+		if (m_OSOption->system->minCPUNumber > 0.0)
+		{	outStr << "<minCPUNumber>" << m_OSOption->system->minCPUNumber << "</minCPUNumber>";
 		};
-		if (m_OSOption->system->minMemorySize > 0.0)
-		{	outStr << "<minMemorySize>" << m_OSOption->system->minMemorySize << "</minMemorySize>";
-		};
-		if (m_OSOption->system->minCPUSpeed > 0.0)
-		{	outStr << "<minCPUSpeed>" << m_OSOption->system->minCPUSpeed << "</minCPUSpeed>";
-		};
+		if (m_OSOption->system->otherOptions != NULL)
+		{	if (m_OSOption->system->otherOptions->numberOfOtherOptions > 0)
+			{	outStr << "<otherOptions numberOfOtherOptions=\""; 
+				outStr << m_OSOption->system->otherOptions->numberOfOtherOptions << "\">" << endl;
+				for (int i=0; i < m_OSOption->system->otherOptions->numberOfOtherOptions; i++)
+				{	outStr << "<other name=\"" + m_OSOption->system->otherOptions->other[i]->name + "\"";
+					if (m_OSOption->system->otherOptions->other[i]->value != "")
+						outStr << "value=\" + m_OSOption->system->otherOptions->other[i]->value + \"";
+					if (m_OSOption->system->otherOptions->other[i]->description != "")
+						outStr << "description=\" + m_OSOption->system->otherOptions->other[i]->description + \"";
+					outStr << "/>" << endl;
+				}
+				outStr << "</otherOptions>" << endl;
+			}
+		}
 		outStr << "</system>" << endl;
 	};
 
@@ -143,6 +185,21 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption){
 		if (m_OSOption->service->type != "")
 		{	outStr << "<type>" + m_OSOption->service->type + "</type>";
 		};
+		if (m_OSOption->service->otherOptions != NULL)
+		{	if (m_OSOption->service->otherOptions->numberOfOtherOptions > 0)
+			{	outStr << "<otherOptions numberOfOtherOptions=\""; 
+				outStr << m_OSOption->service->otherOptions->numberOfOtherOptions + "\">" << endl;
+				for (int i=0; i < m_OSOption->service->otherOptions->numberOfOtherOptions; i++)
+				{	outStr << "<other name=\"" + m_OSOption->service->otherOptions->other[i]->name + "\"";
+					if (m_OSOption->service->otherOptions->other[i]->value != "")
+						outStr << "value=\" + m_OSOption->service->otherOptions->other[i]->value + \"";
+					if (m_OSOption->service->otherOptions->other[i]->description != "")
+						outStr << "description=\" + m_OSOption->service->otherOptions->other[i]->description + \"";
+					outStr << "/>" << endl;
+				}
+				outStr << "</otherOptions>" << endl;
+			}
+		}
 		outStr << "</service>" << endl;
 	};
 
@@ -151,8 +208,8 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption){
  */
 	if(m_OSOption->job != NULL)
 	{	outStr << "<job>" << endl;
-		outStr << "<maxTime>" << m_OSOption->job->maxTime << "</maxTime>" << endl;
-		outStr << "<scheduledStartTime>" + m_OSOption->job->scheduledStartTime + "</scheduledStartTime>" << endl;
+//		outStr << "<maxTime>" << m_OSOption->job->maxTime << "</maxTime>" << endl;
+//		outStr << "<scheduledStartTime>" + m_OSOption->job->scheduledStartTime + "</scheduledStartTime>" << endl;
 //dependencies
 //requiredDirectoriesAndFiles
 //directoriesToMake
@@ -182,15 +239,6 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption){
 		outStr << "</optimization>" << endl;
 	};
 
-/**
- * 	Put the <other> element
- */
-	if(m_OSOption->other != NULL)
-	{	outStr << "<other>" << endl;
-
-//other
-		outStr << "</other>" << endl;
-	};
 
 
 	outStr << "</osol>" << endl;

@@ -26,7 +26,7 @@
 using namespace std;
 
 InstanceLocationOption::InstanceLocationOption(): 
-	locationType (""),
+	locationType ("local"),
 	value ("")
 {    
 	#ifdef DEBUG
@@ -43,13 +43,13 @@ InstanceLocationOption::~InstanceLocationOption()
 
 
 ContactOption::ContactOption(): 
-	contactType (""),
+	transportType ("osp"),
 	value ("")
 {    
 	#ifdef DEBUG
 	cout << "Inside ContactOption Constructor" << endl;
 	#endif
-}// end ContactOption constructor  template
+}// end ContactOption constructor 
 
 ContactOption::~ContactOption()
 {    
@@ -59,11 +59,55 @@ ContactOption::~ContactOption()
 }//end ContactOption destructor
 
 
+OtherOption::OtherOption(): 
+	name (""),
+	value (""),
+	description ("")
+{    
+	#ifdef DEBUG
+	cout << "Inside OtherOption Constructor" << endl;
+	#endif
+}// end OtherOption constructor 
+
+OtherOption::~OtherOption()
+{    
+	#ifdef DEBUG
+	cout << "OtherOption Destructor Called" << endl;
+	#endif
+}//end OtherOption destructor
+
+
+OtherOptions::OtherOptions(): 
+	numberOfOtherOptions(0)
+{    
+	#ifdef DEBUG
+	cout << "Inside OtherOptions Constructor" << endl;
+	#endif
+	other = NULL;
+}// end OtherOptions constructor 
+
+OtherOptions::~OtherOptions()
+{    
+	#ifdef DEBUG
+	cout << "OtherOptions Destructor Called" << endl;
+	#endif
+	if (other != NULL)
+	{	for ( int i=0; i<numberOfOtherOptions; i++)
+		{	delete other[i];
+			other[i] = NULL;
+		}
+		delete other;
+		other = NULL;
+	}
+}//end OtherOptions destructor
+
+
 GeneralOption::GeneralOption(): 
 	serviceURI (""),
 	serviceName (""),
 	instanceName (""),
 	jobID (""),
+	solverToInvoke (""),
 	license (""),
 	userName (""),
 	password ("")
@@ -73,6 +117,7 @@ GeneralOption::GeneralOption():
 	#endif
 	instanceLocation = NULL;
 	contact = NULL;
+	otherOptions = NULL;
 }// end GeneralOption constructor  
 
 GeneralOption::~GeneralOption()
@@ -84,17 +129,72 @@ GeneralOption::~GeneralOption()
 	instanceLocation = NULL;
 	if (contact != NULL) delete contact;
 	contact = NULL;
+	if (otherOptions != NULL) delete otherOptions;
+	otherOptions = NULL;
 }//end GeneralOption destructor 
 
 
+MinDiskSpace::MinDiskSpace():
+	unit ("byte"),
+	value (0.0)
+{
+	#ifdef DEBUG
+	cout << "Inside MinDiskSpace Constructor" << endl;
+	#endif
+}// end MinDiskSpace constructor
+
+MinDiskSpace::~MinDiskSpace()
+{
+	#ifdef DEBUG
+	cout << "MinDiskSpace Destructor Called" << endl;
+	#endif
+}// end MinDiskSpace constructor
+
+
+MinMemorySize::MinMemorySize():
+	unit ("byte"),
+	value (0.0)
+{
+	#ifdef DEBUG
+	cout << "Inside MinMemorySize Constructor" << endl;
+	#endif
+}// end MinMemorySize constructor
+
+MinMemorySize::~MinMemorySize()
+{
+	#ifdef DEBUG
+	cout << "MinMemorySize Destructor Called" << endl;
+	#endif
+}// end MinMemorySize constructor
+
+
+MinCPUSpeed::MinCPUSpeed():
+	unit ("hertz"),
+	value (0.0)
+{
+	#ifdef DEBUG
+	cout << "Inside MinCPUSpeed Constructor" << endl;
+	#endif
+}// end MinCPUSpeed constructor
+
+MinCPUSpeed::~MinCPUSpeed()
+{
+	#ifdef DEBUG
+	cout << "MinCPUSpeed Destructor Called" << endl;
+	#endif
+}// end MinCPUSpeed constructor
+
+
 SystemOption::SystemOption(): 
-	minDiskSpace (0.0),
-	minMemorySize (0.0),
-	minCPUSpeed (0.0)
+	minCPUNumber (0.0)
 {    
 	#ifdef DEBUG
 	cout << "Inside SystemOption Constructor" << endl;
 	#endif
+	minDiskSpace = NULL;
+	minMemorySize = NULL;
+	minCPUSpeed = NULL;
+	otherOptions = NULL;
 }// end SystemOption constructor  
 
 SystemOption::~SystemOption()
@@ -102,6 +202,14 @@ SystemOption::~SystemOption()
 	#ifdef DEBUG
 	cout << "SystemOption Destructor Called" << endl;
 	#endif
+	if (minDiskSpace != NULL) delete minDiskSpace;
+	minDiskSpace = NULL;
+	if (minMemorySize != NULL) delete minMemorySize;
+	minMemorySize = NULL;
+	if (minCPUSpeed != NULL) delete minCPUSpeed;
+	minCPUSpeed = NULL;
+	if (otherOptions != NULL) delete otherOptions;
+	otherOptions = NULL;
 }//end SystemOption destructor 
 
 
@@ -111,6 +219,7 @@ ServiceOption::ServiceOption():
 	#ifdef DEBUG
 	cout << "Inside ServiceOption Constructor" << endl;
 	#endif
+	otherOptions = NULL;
 }// end ServiceOption constructor  
 
 ServiceOption::~ServiceOption()
@@ -118,7 +227,26 @@ ServiceOption::~ServiceOption()
 	#ifdef DEBUG
 	cout << "ServiceOption Destructor Called" << endl;
 	#endif
+	if (otherOptions != NULL) delete otherOptions;
+	otherOptions = NULL;
 }//end ServiceOption destructor 
+
+
+MaxTime::MaxTime():
+	unit ("second"),
+	value (std::numeric_limits<double>::infinity())
+{
+	#ifdef DEBUG
+	cout << "Inside MaxTime Constructor" << endl;
+	#endif
+}// end MaxTime constructor
+
+MaxTime::~MaxTime()
+{
+	#ifdef DEBUG
+	cout << "MaxTime Destructor Called" << endl;
+	#endif
+}// end MaxTime constructor
 
 
 JobDependencies::JobDependencies():
@@ -161,7 +289,7 @@ DirectoriesAndFiles::~DirectoriesAndFiles()
 	cout << "DirectoriesAndFiles Destructor Called" << endl;
 	#endif
 	if (path != NULL) 
-//	{	for (int i=0; , > numberOfPaths; i++)
+//	{	for (int i=0; i < numberOfPaths; i++)
 //		{	delete path[i];
 //			path[i] = NULL;
 //		}
@@ -171,7 +299,52 @@ DirectoriesAndFiles::~DirectoriesAndFiles()
 }//end DirectoriesAndFiles destructor 
 
 
-Processes::Processes()
+PathPair::PathPair():
+	from (""),
+	to (""),
+	makeCopy (false)
+{    
+	#ifdef DEBUG
+	cout << "Inside PathPair Constructor" << endl;
+	#endif
+}// end PathPair constructor  
+
+PathPair::~PathPair()
+{    
+	#ifdef DEBUG
+	cout << "PathPair Destructor Called" << endl;
+	#endif
+}//end PathPair destructor 
+
+
+PathPairs::PathPairs():
+	numberOfPathPairs(0)
+{    
+	#ifdef DEBUG
+	cout << "Inside PathPairs Constructor" << endl;
+	#endif
+	pathPair = NULL;
+}// end PathPairs constructor  
+
+PathPairs::~PathPairs()
+{    
+	#ifdef DEBUG
+	cout << "PathPairs Destructor Called" << endl;
+	#endif
+	if (pathPair != NULL) 
+	{	for (int i=0; i < numberOfPathPairs; i++)	
+		{	delete pathPair[i];
+			pathPair[i] = NULL;
+		}
+		delete pathPair;
+		pathPair = NULL;
+	}
+}//end PathPairs destructor 
+
+
+
+Processes::Processes():
+	numberOfProcesses(0)
 {    
 	#ifdef DEBUG
 	cout << "Inside Processes Constructor" << endl;
@@ -201,22 +374,20 @@ JobOption::JobOption():
 	#ifdef DEBUG
 	cout << "Inside JobOption Constructor" << endl;
 	#endif
-	maxTime = std::numeric_limits<double>::infinity();
+	maxTime = NULL;
 	dependencies = NULL;
-	requiredDirectoriesAndFiles = NULL;
+	requiredDirectories = NULL;
+	requiredFiles = NULL;
 	directoriesToMake = NULL;
 	filesToCreate = NULL;
-	inputFilesToCopyFrom = NULL;
-	inputFilesToCopyTo = NULL;
-	inputFilesToMoveFrom = NULL;
-	inputFilesToMoveTo = NULL;
-	outputFilesToCopyFrom = NULL;
-	outputFilesToCopyTo = NULL;
-	outputFilesToMoveFrom = NULL;
-	outputFilesToMoveTo = NULL;
+	inputDirectoriesToMove = NULL;
+	inputFilesToMove = NULL;
+	outputDirectoriesToMove = NULL;
+	outputFilesToMove = NULL;
 	filesToDelete = NULL;
 	directoriesToDelete = NULL;
 	processesToKill = NULL;
+	otherOptions = NULL;
 }// end JobOption constructor  
 
 JobOption::~JobOption()
@@ -224,36 +395,34 @@ JobOption::~JobOption()
 	#ifdef DEBUG
 	cout << "JobOption Destructor Called" << endl;
 	#endif
+	if (maxTime != NULL) delete maxTime;
+	maxTime = NULL;
 	if (dependencies != NULL) delete dependencies;
 	dependencies = NULL;
-	if (requiredDirectoriesAndFiles != NULL) delete requiredDirectoriesAndFiles;
-	requiredDirectoriesAndFiles = NULL;
+	if (requiredDirectories != NULL) delete requiredDirectories;
+	requiredDirectories = NULL;
+	if (requiredFiles != NULL) delete requiredFiles;
+	requiredFiles = NULL;
 	if (directoriesToMake != NULL) delete directoriesToMake;
 	directoriesToMake = NULL;
 	if (filesToCreate != NULL) delete filesToCreate;
 	filesToCreate = NULL;
-	if (inputFilesToCopyFrom != NULL) delete inputFilesToCopyFrom;
-	inputFilesToCopyFrom = NULL;
-	if (inputFilesToCopyTo != NULL) delete inputFilesToCopyTo;
-	inputFilesToCopyTo = NULL;
-	if (inputFilesToMoveFrom != NULL) delete inputFilesToMoveFrom;
-	inputFilesToMoveFrom = NULL;
-	if (inputFilesToMoveTo != NULL) delete inputFilesToMoveTo;
-	inputFilesToMoveTo = NULL;
-	if (outputFilesToCopyFrom != NULL) delete outputFilesToCopyFrom;
-	outputFilesToCopyFrom = NULL;
-	if (outputFilesToCopyTo != NULL) delete outputFilesToCopyTo;
-	outputFilesToCopyTo = NULL;
-	if (outputFilesToMoveFrom != NULL) delete outputFilesToMoveFrom;
-	outputFilesToMoveFrom = NULL;
-	if (outputFilesToMoveTo != NULL) delete outputFilesToMoveTo;
-	outputFilesToMoveTo = NULL;
+	if (inputDirectoriesToMove != NULL) delete inputDirectoriesToMove;
+	inputDirectoriesToMove = NULL;
+	if (inputFilesToMove != NULL) delete inputFilesToMove;
+	inputFilesToMove = NULL;
+	if (outputDirectoriesToMove != NULL) delete outputDirectoriesToMove;
+	outputDirectoriesToMove = NULL;
+	if (outputFilesToMove != NULL) delete outputFilesToMove;
+	outputFilesToMove = NULL;
 	if (filesToDelete != NULL) delete filesToDelete;
 	filesToDelete = NULL;
 	if (directoriesToDelete != NULL) delete directoriesToDelete;
 	directoriesToDelete = NULL;
 	if (processesToKill != NULL) delete processesToKill;
 	processesToKill = NULL;
+	if (otherOptions != NULL) delete otherOptions;
+	otherOptions = NULL;
 }//end JobOption destructor 
 
 
@@ -289,13 +458,13 @@ InitVariableValues::~InitVariableValues()
 	cout << "InitVariableValues Destructor Called" << endl;
 	#endif
 	if (var != NULL) 
-//	{	for (int i=0; i < numberOfVar; i++)
-//		{	delete var[i];
-//			var[i] = NULL;
-//		}
+	{	for (int i=0; i < numberOfVar; i++)
+		{	delete var[i];
+			var[i] = NULL;
+		}
 		delete var;
 		var = NULL;
-//	}
+	}
 }//end InitVariableValues destructor 
 
 
@@ -322,6 +491,9 @@ OtherVariableOption::OtherVariableOption():
 	numberOfVar (0),
 	name (""),
 	value (""),
+	solver(""),
+	category (""),
+	type (""),
 	description ("")
 {    
 	#ifdef DEBUG
@@ -481,6 +653,9 @@ OtherObjectiveOption::OtherObjectiveOption():
 	numberOfObj (0),
 	name (""),
 	value (""),
+	solver(""),
+	category (""),
+	type (""),
 	description ("")
 {    
 	#ifdef DEBUG
@@ -568,13 +743,13 @@ InitConstraintValues::~InitConstraintValues()
 	cout << "InitConstraintValues Destructor Called" << endl;
 	#endif
 	if (con != NULL) 
-//	{	for (int i=0; i < numberOfCon; i++)
-//		{	delete con[i];
-//			con[i] = NULL;
-//		}
+	{	for (int i=0; i < numberOfCon; i++)
+		{	delete con[i];
+			con[i] = NULL;
+		}
 		delete con;
 		con = NULL;
-//	};
+	};
 }//end InitConstraintValues destructor
 
 
@@ -596,29 +771,29 @@ InitDualVarValue::~InitDualVarValue()
 }//end InitDualVarValue destructor
 
 
-InitDualValues::InitDualValues(): 
+InitDualVariableValues::InitDualVariableValues(): 
 	numberOfCon (0)
 {    
 	#ifdef DEBUG
-	cout << "Inside InitDualValues Constructor" << endl;
+	cout << "Inside InitDualVariableValues Constructor" << endl;
 	#endif
 	con = NULL;
-}// end InitDualValues constructor  
+}// end InitDualVariableValues constructor  
 
-InitDualValues::~InitDualValues()
+InitDualVariableValues::~InitDualVariableValues()
 {    
 	#ifdef DEBUG
-	cout << "InitDualValues Destructor Called" << endl;
+	cout << "InitDualVariableValues Destructor Called" << endl;
 	#endif
 	if (con != NULL) 
-//	{	for (int i; i++, i < numberOfCon)
-//		{	delete con[i];
-//			con[i] = NULL;
-//		}
+	{	for (int i=0; i < numberOfCon; i++)
+		{	delete con[i];
+			con[i] = NULL;
+		}
 		delete con;
 		con = NULL;
-//	};
-}//end InitDualValues destructor
+	};
+}//end InitDualVariableValues destructor
 
 
 OtherConOption::OtherConOption(): 
@@ -644,6 +819,9 @@ OtherConstraintOption::OtherConstraintOption():
 	numberOfCon(0),
 	name (""),
 	value (""),
+	solver(""),
+	category (""),
+	type (""),
 	description ("")
 {    
 	#ifdef DEBUG
@@ -658,13 +836,13 @@ OtherConstraintOption::~OtherConstraintOption()
 	cout << "OtherConstraintOption Destructor Called" << endl;
 	#endif
 	if (con != NULL) 
-//	{	for (int i; i < numberOfCon; i++)
-//		{	delete con[i];
-//			con[i] = NULL;
-//		}
+	{	for (int i=0; i < numberOfCon; i++)
+		{	delete con[i];
+			con[i] = NULL;
+		}
 		delete con;
 		con = NULL;
-//	};
+	};
 }//end OtherConstraintOption destructor
 
 
@@ -699,28 +877,56 @@ ConstraintOption::~ConstraintOption()
 }//end ConstraintOption destructor
 
 
-OtherOption::OtherOption(): 
+SolverOption::SolverOption(): 
 	name (""),
+	value (""),
+	solver(""),
+	category (""),
+	type (""),
 	description ("")
 {    
 	#ifdef DEBUG
-	cout << "Inside OtherOption Constructor" << endl;
+	cout << "Inside SolverOption Constructor" << endl;
 	#endif
-}// end OtherOption constructor  
+}// end SolverOption constructor  
 
-OtherOption::~OtherOption()
+SolverOption::~SolverOption()
 {    
 	#ifdef DEBUG
-	cout << "OtherOption Destructor Called" << endl;
+	cout << "SolverOption Destructor Called" << endl;
 	#endif
-}//end OtherOption destructor
+}//end SolverOption destructor
+
+
+SolverOptions::SolverOptions(): 
+	numberOfSolverOptions(0)
+{    
+	#ifdef DEBUG
+	cout << "Inside SolverOptions Constructor" << endl;
+	#endif
+	solverOption = NULL;
+}// end SolverOptions constructor 
+
+SolverOptions::~SolverOptions()
+{    
+	#ifdef DEBUG
+	cout << "SolverOptions Destructor Called" << endl;
+	#endif
+	if (solverOption != NULL)
+	{	for ( int i=0; i<numberOfSolverOptions; i++)
+		{	delete solverOption[i];
+			solverOption[i] = NULL;
+		}
+		delete solverOption;
+		solverOption = NULL;
+	}
+}//end SolverOptions destructor
 
 
 OptimizationOption::OptimizationOption(): 
 	numberOfVariables (0),
 	numberOfObjectives (0),
-	numberOfConstraints (0),
-	numberOfOtherOptions (0)
+	numberOfConstraints (0)
 {    
 	#ifdef DEBUG
 	cout << "Inside OptimizationOption Constructor" << endl;
@@ -728,7 +934,7 @@ OptimizationOption::OptimizationOption():
 	variables = NULL;
 	objectives = NULL;
 	constraints = NULL;
-	other = NULL;
+	solverOptions = NULL;
 }// end OptimizationOption constructor  
 
 OptimizationOption::~OptimizationOption()
@@ -742,14 +948,8 @@ OptimizationOption::~OptimizationOption()
 	objectives = NULL;
 	if (constraints != NULL) delete constraints;
 	constraints = NULL;
-	if (other != NULL) 
-	{	for (int i=0; i < numberOfOtherOptions; i++)
-		{	delete other[i];
-			other[i] = NULL;
-		}
-		delete other;
-		other = NULL;
-	};
+	if (solverOptions != NULL) delete solverOptions;
+	solverOptions = NULL;
 }//end OptimizationOption destructor
 
 
@@ -764,7 +964,6 @@ OSOption::OSOption()
 	service = NULL;
 	job = NULL;
 	optimization = NULL;
-	other = NULL;
 }// end OSOption constructor  
 
 OSOption::~OSOption()
@@ -782,8 +981,6 @@ OSOption::~OSOption()
 	job = NULL;
 	if (optimization != NULL) delete optimization;
 	optimization = NULL;
-	if (other != NULL) delete other;
-	other = NULL;
 }//end OSOption destructor
 
 

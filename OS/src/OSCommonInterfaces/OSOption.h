@@ -21,7 +21,6 @@
 #include <vector> 
 
 
-
 /*! \class InstanceLocationOption
  *  \brief the InstanceLocationOption class.
  * 
@@ -31,7 +30,7 @@
  * 
  * \remarks
  * A data structure class that corresponds to the instanceLocation 
- * in the OSoL schema.  
+ * element in the OSoL schema.  
  */
 class InstanceLocationOption {
 
@@ -69,8 +68,8 @@ public:
 class ContactOption {
 
 public:
-	/** the contact type */
-	std::string contactType;
+	/** the contact mechanism */
+	std::string transportType;
 
 	/** the value of the <contact> element */
 	std::string value;
@@ -86,6 +85,75 @@ public:
 	 */
 	~ContactOption();		
 }; //ContactOption
+
+
+/*! \class OtherOption
+ *  \brief the OtherOption class.
+ * 
+ * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/07/2008
+ * @since OS 1.1
+ * 
+ * \remarks
+ * A data structure class that corresponds to the OtherOption
+ * element in the OSoL schema.  
+ */
+class OtherOption {
+
+public:
+	/** the name of the option */
+	std::string name;
+
+	/** the value of the option */
+	std::string value;
+
+	/** the description of the option */
+	std::string description;
+ 
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	OtherOption();
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~OtherOption();
+}; //OtherOption
+
+
+/*! \class OtherOptions
+ *  \brief the OtherOptions class.
+ * 
+ * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/07/2008
+ * @since OS 1.1
+ * 
+ * \remarks
+ * A data structure class that corresponds to the OtherOptions 
+ * element in the OSoL schema.  
+ */
+class OtherOptions {
+
+public:
+	/** the number of other options */
+	int numberOfOtherOptions;
+ 
+	/** the list of other options */
+	OtherOption **other;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	OtherOptions();
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~OtherOptions();
+}; //OtherOptions
 
 
 /*! \class GeneralOption
@@ -118,6 +186,9 @@ public:
 	/** the job ID */
 	std::string jobID;
 
+	/** the solver to invoke */
+	std::string solverToInvoke;
+
 	/** the license information */
 	std::string license;
 
@@ -130,6 +201,9 @@ public:
 	/** the contact method */
 	ContactOption *contact;
 
+	/** the list of other general options */
+	OtherOptions *otherOptions;
+
 	/**
 	 *
 	 * Default constructor. 
@@ -141,6 +215,105 @@ public:
 	 */
 	~GeneralOption();		
 };//GeneralOption
+
+/*! \class MinDiskSpace
+ *  \brief the MinDiskSpace class.
+ * 
+ * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/07/2008
+ * @since OS 1.1
+ * 
+ * \remarks
+ * A data structure class that corresponds to an xml element in 
+ * the OSoL schema.  
+ */
+class MinDiskSpace {
+
+public:
+	/** the unit in which disk space is measured */
+	std::string unit;
+
+	/** the minimum disk space required */
+	double value;
+
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	MinDiskSpace();
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~MinDiskSpace();
+}; //MinDiskSpace
+
+/*! \class MinMemorySize
+ *  \brief the MinMemorySize class.
+ * 
+ * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/07/2008
+ * @since OS 1.1
+ * 
+ * \remarks
+ * A data structure class that corresponds to an xml element in 
+ * the OSoL schema.  
+ */
+class MinMemorySize {
+
+public:
+	/** the unit in which memory size is measured */
+	std::string unit;
+
+	/** the minimum memory size required */
+	double value;
+
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	MinMemorySize();
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~MinMemorySize();
+}; //MinMemorySize
+
+/*! \class MinCPUSpeed
+ *  \brief the MinCPUSpeed class.
+ * 
+ * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/07/2008
+ * @since OS 1.1
+ * 
+ * \remarks
+ * A data structure class that corresponds to an xml element in 
+ * the OSoL schema.  
+ */
+class MinCPUSpeed {
+
+public:
+	/** the unit in which CPU speed is measured */
+	std::string unit;
+
+	/** the minimum CPU speed required */
+	double value;
+
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	MinCPUSpeed();
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~MinCPUSpeed();
+}; //MinCPUSpeed
 
 
 /*! \class SystemOption
@@ -158,13 +331,19 @@ class SystemOption {
 
 public:
 	/** the minimum disk space required */
-	double minDiskSpace;
+	MinDiskSpace *minDiskSpace;
 
 	/** the minimum memory required */
-	double minMemorySize;
+	MinMemorySize *minMemorySize;
 
 	/** the minimum CPU speed required */
-	double minCPUSpeed;
+	MinCPUSpeed *minCPUSpeed;
+
+	/** the minimum number of processors required */
+	double minCPUNumber;
+
+	/** the list of other system options */
+	OtherOptions *otherOptions;
 
 	/**
 	 *
@@ -196,6 +375,9 @@ public:
 	/** the service type */
 	std::string type;
 
+	/** the list of other service options */
+	OtherOptions *otherOptions;
+
 	/**
 	 *
 	 * Default constructor. 
@@ -207,6 +389,40 @@ public:
 	 */
 	~ServiceOption();
 }; //ServiceOption
+
+
+/*! \class MaxTime
+ *  \brief the MaxTime class.
+ * 
+ * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/07/2008
+ * @since OS 1.1
+ * 
+ * \remarks
+ * A data structure class that corresponds to an xml element in 
+ * the OSoL schema.  
+ */
+class MaxTime {
+
+public:
+	/** the unit in which time is measured */
+	std::string unit;
+
+	/** the maximum time allowed */
+	double value;
+
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	MaxTime();
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~MaxTime();
+}; //MaxTime
 
 
 /*! \class JobDependencies
@@ -275,6 +491,77 @@ public:
 }; //DirectoriesAndFiles
 
 
+
+/*! \class PathPair
+ *  \brief the PathPair class.
+ * 
+ * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/07/2008
+ * @since OS 1.1
+ * 
+ * \remarks
+ * A data structure class that corresponds to an xml element in 
+ * the OSoL schema.  
+ */
+class PathPair {
+
+public:
+	/** the file or directory to move/copy from */
+	std::string from;
+
+	/** the file or directory to move/copy to */
+	std::string to;
+
+	/** record whether a copy is to be made */
+	bool makeCopy;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	PathPair();
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~PathPair();
+}; //PathPair
+
+
+
+/*! \class PathPairs
+ *  \brief the PathPairs class.
+ * 
+ * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/07/2008
+ * @since OS 1.1
+ * 
+ * \remarks
+ * A data structure class that corresponds to an xml element in 
+ * the OSoL schema.  
+ */
+class PathPairs {
+
+public:
+	/** the number of <path> children */
+	int numberOfPathPairs;
+
+	/** the list of directory and file paths */
+	PathPair **pathPair;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	PathPairs();
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~PathPairs();
+}; //PathPairs
+
+
 /*! \class Processes
  *  \brief the Processes class.
  * 
@@ -323,7 +610,7 @@ class JobOption {
 
 public:
 	/** the maximum time allowed */
-	double maxTime;
+	MaxTime *maxTime;
 
 	/** the scheduled time to start the job */
 	std::string scheduledStartTime;
@@ -331,8 +618,11 @@ public:
 	/** the dependency set */
 	JobDependencies *dependencies;
 
-	/** directories and files required to run the job */
-	DirectoriesAndFiles *requiredDirectoriesAndFiles;
+	/** directories  required to run the job */
+	DirectoriesAndFiles *requiredDirectories;
+
+	/** files required to run the job */
+	DirectoriesAndFiles *requiredFiles;
 
 	/** directories to make during the job */
 	DirectoriesAndFiles *directoriesToMake;
@@ -340,29 +630,17 @@ public:
 	/** files to make during the job */
 	DirectoriesAndFiles *filesToCreate;
 
-	/** input files to copy from */
-	DirectoriesAndFiles *inputFilesToCopyFrom;
+	/** input directories to move or copy */
+	PathPairs *inputDirectoriesToMove;
 
-	/** input files to copy into */
-	DirectoriesAndFiles *inputFilesToCopyTo;
+	/** input files to move or copy */
+	PathPairs *inputFilesToMove;
 
-	/** input files to move from */
-	DirectoriesAndFiles *inputFilesToMoveFrom;
+	/** output directories to move or copy */
+	PathPairs *outputDirectoriesToMove;
 
-	/** input files to move to */
-	DirectoriesAndFiles *inputFilesToMoveTo;
-
-	/** output files to copy from */
-	DirectoriesAndFiles *outputFilesToCopyFrom;
-
-	/** output files to copy into */
-	DirectoriesAndFiles *outputFilesToCopyTo;
-
-	/** output files to move from */
-	DirectoriesAndFiles *outputFilesToMoveFrom;
-
-	/** output files to move to */
-	DirectoriesAndFiles *outputFilesToMoveTo;
+	/** output files to move or copy */
+	PathPairs *outputFilesToMove;
 
 	/** files to delete upon completeion */
 	DirectoriesAndFiles *filesToDelete;
@@ -372,6 +650,9 @@ public:
 
 	/** processes to kill upon completion */
 	Processes *processesToKill;
+
+	/** list of other job options */
+	OtherOptions *otherOptions;
 
 	/**
 	 *
@@ -437,7 +718,7 @@ public:
 	int numberOfVar;
 
 	/** initial value for each variable */
-	InitVarValue *var;
+	InitVarValue **var;
 
 	/**
 	 *
@@ -514,6 +795,15 @@ public:
 	/** value of the option */
 	std::string value;
 
+	/** name of the solver to which this option applies */
+	std::string solver;
+
+	/** name of the category into which this option falls */
+	std::string category;
+
+	/** type of the option value (integer, double, boolean, string) */
+	std::string type;
+
 	/** description of the option */
 	std::string description;
 
@@ -553,7 +843,7 @@ public:
 	/** initial values for the variables */
 	InitVariableValues *initialVariableValues;
 
-	/** other information about the variables */
+	/** other variable options */
 	OtherVariableOption **other;
 
 	/**
@@ -760,6 +1050,15 @@ public:
 	/** value of the option */
 	std::string value;
 
+	/** name of the solver to which this option applies */
+	std::string solver;
+
+	/** name of the category into which this option falls */
+	std::string category;
+
+	/** type of the option value (integer, double, boolean, string) */
+	std::string type;
+
 	/** description of the option */
 	std::string description;
 
@@ -920,8 +1219,8 @@ public:
 }; //InitDualVarValue
 
 
-/*! \class InitDualValues
- *  \brief the InitDualValues class.
+/*! \class InitDualVariableValues
+ *  \brief the InitDualVariableValues class.
  * 
  * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
@@ -931,7 +1230,7 @@ public:
  * A data structure class that corresponds to an xml element in 
  * the OSoL schema.  
  */
-class InitDualValues {
+class InitDualVariableValues {
 
 public:
 	/** number of <con> children */
@@ -944,13 +1243,13 @@ public:
 	 *
 	 * Default constructor. 
 	 */
-	InitDualValues();
+	InitDualVariableValues();
 	/**
 	 *
 	 * Class destructor. 
 	 */
-	~InitDualValues();		
-}; //InitDualValues
+	~InitDualVariableValues();		
+}; //InitDualVariableValues
 
 
 /*! \class OtherConOption
@@ -1015,6 +1314,15 @@ public:
 	/** value of the option */
 	std::string value;
 
+	/** name of the solver to which this option applies */
+	std::string solver;
+
+	/** name of the category into which this option falls */
+	std::string category;
+
+	/** type of the option value (integer, double, boolean, string) */
+	std::string type;
+
 	/** description of the option */
 	std::string description;
 
@@ -1055,7 +1363,7 @@ public:
 	InitConstraintValues *initialConstraintValues;
 
 	/** initial dual values for the constraints */
-	InitDualValues *initialDualValues;
+	InitDualVariableValues *initialDualValues;
 
 	/** other information about the constraints */
 	OtherConstraintOption **other;
@@ -1073,8 +1381,8 @@ public:
 }; //ConstraintOption
 
 
-/*! \class OtherOption
- *  \brief the OtherOption class.
+/*! \class SolverOption
+ *  \brief the SolverOption class.
  * 
  * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
@@ -1084,11 +1392,23 @@ public:
  * A data structure class that corresponds to an xml element in 
  * the OSoL schema.  
  */
-class OtherOption {
+class SolverOption {
 
 public:
 	/** the name of the option */
 	std::string name;
+
+	/** the value of the option */
+	std::string value;
+
+	/** the solver to which the option applies*/
+	std::string solver;
+
+	/** the category to which the option belongs */
+	std::string category;
+
+	/** the type of the option value (integer, double, boolean, string) */
+	std::string type;
 
 	/** the description of the option */
 	std::string description;
@@ -1097,13 +1417,46 @@ public:
 	 *
 	 * Default constructor. 
 	 */
-	OtherOption();
+	SolverOption();
 	/**
 	 *
 	 * Class destructor. 
 	 */
-	~OtherOption();		
-}; //OtherOption
+	~SolverOption();		
+}; //SolverOption
+
+
+/*! \class SolverOptions
+ *  \brief the SolverOptions class.
+ * 
+ * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/07/2008
+ * @since OS 1.1
+ * 
+ * \remarks
+ * A data structure class that corresponds to an xml element in 
+ * the OSoL schema.  
+ */
+class SolverOptions {
+
+public:
+	/** the number of solver options */
+	int numberOfSolverOptions;
+
+	/** the list of solver options */
+	SolverOption **solverOption;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	SolverOptions();
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~SolverOptions();		
+}; //SolverOptions
 
 
 /*! \class OptimizationOption
@@ -1129,9 +1482,6 @@ public:
 	/** the number of constraints */
 	int numberOfConstraints;
 
-	/** the number of <other> optimization options */
-	int numberOfOtherOptions;
-
 	/** the options for the variables */
 	VariableOption *variables;
 
@@ -1141,8 +1491,8 @@ public:
 	/** the options for the constraints */
 	ConstraintOption *constraints;
 
-	/** other optimization options */
-	OtherOption **other;
+	/** other solver options */
+	SolverOptions *solverOptions;
 	/**
 	 *
 	 * Default constructor. 
@@ -1181,7 +1531,7 @@ public:
 	~OSOption();
 
 	/** 
-	 * OSOption has six children: general, system, service, job, optimization and other.
+	 * OSOption has five children: general, system, service, job, and optimization.
 	 *
 	 * generalOption holds the first child of the OSOption specified by the OSoL Schema. 
 	 */
@@ -1202,13 +1552,29 @@ public:
 	 * optimizationOption holds the fifth child of the OSOption specified by the OSoL Schema. 
 	 */
 	OptimizationOption *optimization;
-	/**
-	 * otherOption holds the sixth child of the OSOption specified by the OSoL Schema. 
-	 */
-	OtherOption **other;
 
 
 public:	
+
+	/**
+	 * m_inumberOfOtherGeneralOptions holds the number of other general option objects. 
+	 */	
+	int m_inumberOfOtherGeneralOptions;
+
+	/**
+	 * m_inumberOfOtherSystemOptions holds the number of other system option objects. 
+	 */	
+	int m_inumberOfOtherSystemOptions;
+
+	/**
+	 * m_inumberOfOtherServiceOptions holds the number of other service option objects. 
+	 */	
+	int m_inumberOfOtherServiceOptions;
+
+	/**
+	 * m_inumberOfOtherJobOptions holds the number of other job option objects. 
+	 */	
+	int m_inumberOfOtherJobOptions;
 
 	/**
 	 * m_inumberOfJobDependencies holds the number of JobDependencies objects. 
@@ -1216,9 +1582,14 @@ public:
 	int m_inumberOfJobDependencies;
 
 	/**
-	 * m_inumberOfRequiredDirectories holds the number of RequiredDirectoriesAndFiles objects. 
+	 * m_inumberOfRequiredDirectories holds the number of RequiredDirectories objects. 
 	 */	
 	int m_inumberOfRequiredDirectories;
+
+	/**
+	 * m_inumberOfRequiredFiles holds the number of RequiredFiles objects. 
+	 */	
+	int m_inumberOfRequiredFiles;
 
 	/**
 	 * m_inumberOfDirectoriesToMake holds the number of DirectoriesToMake objects. 
@@ -1231,44 +1602,24 @@ public:
 	int m_inumberOfFilesToCreate;
 
 	/**
-	 * m_inumberOfInputFilesToCopyFrom holds the number of InputFilesToCopyFrom objects. 
+	 * m_inumberOfInputDirectoriesToMove holds the number of input directories to move or copy. 
 	 */	
-	int m_inumberOfInputFilesToCopyFrom;
+	int m_inumberOfInputDirectoriesToMove;
 
 	/**
-	 * m_inumberOfInputFilesToCopyTo holds the number of InputFilesToCopyTo objects. 
+	 * m_inumberOfInputFilesToMove holds the number of input files to move or copy. 
 	 */	
-	int m_inumberOfInputFilesToCopyTo;
+	int m_inumberOfInputFilesToMove;
 
 	/**
-	 * m_inumberOfInputFilesToMoveFrom holds the number of InputFilesToMoveFrom objects. 
+	 * m_inumberOfOutputDirectoriesToMove holds the number of output directories to move or copy. 
 	 */	
-	int m_inumberOfInputFilesToMoveFrom;
+	int m_inumberOfOutputDirectoriesToMove;
 
 	/**
-	 * m_inumberOfInputFilesToMoveTo holds the number of InputFilesToMoveTo objects. 
+	 * m_inumberOfOutputFilesToMove holds the number of output files to move or copy. 
 	 */	
-	int m_inumberOfInputFilesToMoveTo;
-
-	/**
-	 * m_inumberOfOutputFilesToCopyFrom holds the number of OutputFilesToCopyFrom objects. 
-	 */	
-	int m_inumberOfOutputFilesToCopyFrom;
-
-	/**
-	 * m_inumberOfOutputFilesToCopyTo holds the number of OutputFilesToCopyTo objects. 
-	 */	
-	int m_inumberOfOutputFilesToCopyTo;
-
-	/**
-	 * m_inumberOfOutputFilesToMoveFrom holds the number of OutputFilesToMoveFrom objects. 
-	 */	
-	int m_inumberOfOutputFilesToMoveFrom;
-
-	/**
-	 * m_inumberOfOutputFilesToMoveTo holds the number of OutputFilesToMoveTo objects. 
-	 */	
-	int m_inumberOfOutputFilesToMoveTo;
+	int m_inumberOfOutputFilesToMove;
 
 	/**
 	 * m_inumberOfFilesToDelete holds the number of FilesToDelete objects. 
@@ -1341,14 +1692,9 @@ public:
 	int *mm_inumberOfOtherConOptions;
 
 	/**
-	 * m_inumberOfOtherOptimizationOptions holds the number of OtherOptimizationOptions objects. 
+	 * m_inumberOfSolverOptions holds the number of SolverOption objects. 
 	 */	
-	int m_inumberOfOtherOptimizationOptions;
-
-	/**
-	 * m_inumberOfOtherOptions holds the number of OtherOptions objects. 
-	 */	
-	int m_inumberOfOtherOptions;
+	int m_inumberOfSolverOptions;
 
 
 public: //Put the get() and set() methods...
