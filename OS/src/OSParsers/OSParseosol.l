@@ -14,6 +14,8 @@
  */
 %{
 
+#define PARSERDEBUG
+
 #include <iostream>
 #include "OSDataStructures.h"
 #include "OSMathUtil.h"
@@ -29,15 +31,35 @@
 # endif
 #endif
 
+
+#ifdef HAVE_CTIME
+# include <ctime>
+#else
+# ifdef HAVE_TIME_H
+#  include <time.h>
+# else
+#  error "don't have header file for time"
+# endif
+#endif
+
+#ifdef HAVE_CMATH
+# include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# else
+#  error "don't have header file for math"
+# endif
+#endif
  
 #include <sstream>  
 #include "OSoLParserData.h"
 #include "OSErrorClass.h"
 #include "OSParseosol.tab.hpp"
 #include "OSOption.h"
-    
+
 #ifdef PARSERDEBUG
-	#define YY_PRINT  printf("%s", osoltext);
+	#define YY_PRINT  printf("%s", yytext);
 #else     
 	#define YY_PRINT  ;
 #endif
@@ -291,7 +313,7 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/solverOption{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(SOLVEROPTIONEND);}
 
 
-[a-zA-X0-9.:_*#$@ \n]+ { YY_PRINT;  yylval->sval = strdup( yytext);   yyextra->errorText = yylval->sval;    /*yylval->sval = yytext;*/  return (ELEMENTTEXT); }
+[a-zA-Z0-9.:_*#$@\- \n\/\\]+ { YY_PRINT;  /*yylval->sval = strdup( yytext);*/ yylval->sval = yytext;  yyextra->errorText = yylval->sval;    /*yylval->sval = yytext;*/  return (ELEMENTTEXT); }
 
 
  "<!--" BEGIN comment;

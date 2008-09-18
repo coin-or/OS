@@ -121,13 +121,13 @@ int osollex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %%
 
 
-osoldoc: osolstart GREATERTHAN osolcontent OSOLEND
+osoldoc: osolstart GREATERTHAN osolcontent OSOLEND;
 	| osolstart ENDOFELEMENT;
 
 osolstart:	OSOLSTART   
 	| OSOLSTART OSOLATTRIBUTETEXT ;
 
-osolcontent: osolgeneral osolsystem osolservice osoljob osoloptimization;
+osolcontent: osolgeneral osolsystem osolservice osoljob osoloptimization ;
 
 osolgeneral: 
 	| GENERALSTART GREATERTHAN generalcontent GENERALEND
@@ -305,14 +305,14 @@ systemcontent: | systemcontent systemoption;
 
 systemoption: mindiskspace | minmemorysize | mincpuspeed | mincpunumber | othersystemoptions;
 
-mindiskspace: MINDISKSPACESTART mindiskspaceunit GREATERTHAN ELEMENTTEXT MINDISKSPACEEND
+mindiskspace: MINDISKSPACESTART mindiskspaceunit GREATERTHAN DOUBLE MINDISKSPACEEND
 {
 };
 mindiskspaceunit: | UNITATT ATTRIBUTETEXT QUOTE
 {
 };
 
-minmemorysize: MINMEMORYSIZESTART minmemoryunit GREATERTHAN ELEMENTTEXT MINMEMORYSIZEEND
+minmemorysize: MINMEMORYSIZESTART minmemoryunit GREATERTHAN DOUBLE MINMEMORYSIZEEND
 {
 };
 
@@ -320,7 +320,7 @@ minmemoryunit: | UNITATT ATTRIBUTETEXT QUOTE
 {
 };
 
-mincpuspeed: MINCPUSPEEDSTART mincpuspeedunit GREATERTHAN ELEMENTTEXT MINCPUSPEEDEND
+mincpuspeed: MINCPUSPEEDSTART mincpuspeedunit GREATERTHAN DOUBLE MINCPUSPEEDEND
 {
 };
 
@@ -335,7 +335,7 @@ emptymincpunumber: MINCPUNUMBERSTART ENDOFELEMENT
 {
 };
 
-nonemptymincpunumber: MINCPUNUMBERSTART GREATERTHAN ELEMENTTEXT MINCPUNUMBEREND
+nonemptymincpunumber: MINCPUNUMBERSTART GREATERTHAN DOUBLE MINCPUNUMBEREND
 {
 };
 
@@ -476,7 +476,7 @@ reqdirpath: PATHSTART GREATERTHAN ELEMENTTEXT PATHEND
 {
 };
 
-requiredfiles: REQUIREDFILESSTART numberofreqfilpathsatt reqfilpathlist 
+requiredfiles: REQUIREDFILESSTART numberofreqfilpathsatt GREATERTHAN reqfilpathlist 
    REQUIREDFILESEND;
 
 numberofreqfilpathsatt: NUMBEROFPATHSATT ATTRIBUTETEXT QUOTE
@@ -489,7 +489,7 @@ reqfilpath: PATHSTART GREATERTHAN ELEMENTTEXT PATHEND
 {
 };
 
-directoriestomake: DIRECTORIESTOMAKESTART numberofdirtomakepathsatt dirtomakepathlist
+directoriestomake: DIRECTORIESTOMAKESTART numberofdirtomakepathsatt GREATERTHAN dirtomakepathlist
    DIRECTORIESTOMAKEEND;
 
 numberofdirtomakepathsatt: NUMBEROFPATHSATT ATTRIBUTETEXT QUOTE
@@ -502,7 +502,7 @@ dirtomakepath: PATHSTART GREATERTHAN ELEMENTTEXT PATHEND
 {
 };
 
-filestocreate: FILESTOCREATESTART numberoffilestomakepathsatt filestomakepathlist
+filestocreate: FILESTOCREATESTART numberoffilestomakepathsatt GREATERTHAN filestomakepathlist
    FILESTOCREATEEND;
 
 numberoffilestomakepathsatt: NUMBEROFPATHSATT ATTRIBUTETEXT QUOTE
@@ -516,7 +516,7 @@ filestomakepath: PATHSTART GREATERTHAN ELEMENTTEXT PATHEND
 };
 
 inputdirectoriestomove: INPUTDIRECTORIESTOMOVESTART numberofindirtomovepathpairsatt 
-   indirtomovepathpairlist INPUTDIRECTORIESTOMOVEEND;
+   GREATERTHAN indirtomovepathpairlist INPUTDIRECTORIESTOMOVEEND;
 
 numberofindirtomovepathpairsatt: NUMBEROFPATHPAIRSATT ATTRIBUTETEXT QUOTE
 {
@@ -548,7 +548,7 @@ indirtomovepathpairend: GREATERTHAN PATHPAIREND | ENDOFELEMENT;
 
 
 inputfilestomove: INPUTFILESTOMOVESTART numberofinfilestomovepathpairsatt 
-   infilestomovepathpairlist INPUTFILESTOMOVEEND;
+   GREATERTHAN infilestomovepathpairlist INPUTFILESTOMOVEEND;
 
 numberofinfilestomovepathpairsatt: NUMBEROFPATHPAIRSATT ATTRIBUTETEXT QUOTE
 {
@@ -580,7 +580,7 @@ infilestomovepathpairend: GREATERTHAN PATHPAIREND | ENDOFELEMENT;
 
 
 outputdirectoriestomove: OUTPUTDIRECTORIESTOMOVESTART numberofoutdirtomovepathpairsatt 
-   outdirtomovepathpairlist OUTPUTDIRECTORIESTOMOVEEND;
+   GREATERTHAN outdirtomovepathpairlist OUTPUTDIRECTORIESTOMOVEEND;
 
 numberofoutdirtomovepathpairsatt: NUMBEROFPATHPAIRSATT ATTRIBUTETEXT QUOTE
 {
@@ -612,7 +612,7 @@ outdirtomovepathpairend: GREATERTHAN PATHPAIREND | ENDOFELEMENT;
 
 
 outputfilestomove: OUTPUTFILESTOMOVESTART numberofoutfilestomovepathpairsatt 
-   outfilestomovepathpairlist OUTPUTFILESTOMOVEEND;
+   GREATERTHAN outfilestomovepathpairlist OUTPUTFILESTOMOVEEND;
 
 numberofoutfilestomovepathpairsatt: NUMBEROFPATHPAIRSATT ATTRIBUTETEXT QUOTE
 {
@@ -644,7 +644,7 @@ outfilestomovepathpairend: GREATERTHAN PATHPAIREND | ENDOFELEMENT;
 
 
 
-filestodelete: FILESTODELETESTART numberoffilestodeletepathsatt filestodeletepathlist
+filestodelete: FILESTODELETESTART numberoffilestodeletepathsatt GREATERTHAN filestodeletepathlist
    FILESTODELETEEND;
 
 numberoffilestodeletepathsatt: NUMBEROFPATHSATT ATTRIBUTETEXT QUOTE
@@ -657,7 +657,7 @@ filestodeletepath: PATHSTART GREATERTHAN ELEMENTTEXT PATHEND
 {
 };
 
-directoriestodelete: DIRECTORIESTODELETESTART numberofdirtodeletepathsatt dirtodeletepathlist
+directoriestodelete: DIRECTORIESTODELETESTART numberofdirtodeletepathsatt GREATERTHAN dirtodeletepathlist
    DIRECTORIESTODELETEEND;
 
 numberofdirtodeletepathsatt: NUMBEROFPATHSATT ATTRIBUTETEXT QUOTE
@@ -671,7 +671,7 @@ dirtodeletepath: PATHSTART GREATERTHAN ELEMENTTEXT PATHEND
 };
 
 
-processestokill: PROCESSESTOKILLSTART numberofprocesstokillatt processestokilllist
+processestokill: PROCESSESTOKILLSTART numberofprocesstokillatt GREATERTHAN processestokilllist
    PROCESSESTOKILLEND;
 
 numberofprocesstokillatt: NUMBEROFPROCESSESATT ATTRIBUTETEXT QUOTE
@@ -716,7 +716,7 @@ otherjoboptionsend: ENDOFELEMENT | GREATERTHAN OTHEREND
 };
 
 
-osoloptimization: OPTIMIZATIONSTART optimizationattlist restofoptimization;
+osoloptimization: | OPTIMIZATIONSTART optimizationattlist restofoptimization;
 
 optimizationattlist: | optimizationattlist optimizationatt;
 

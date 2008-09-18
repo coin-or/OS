@@ -75,7 +75,8 @@
  * write a new instance in base 64 format and solve it.
  * 
  * We next test the parsers. We test parsing the osil file
- * parincLinear.osil, finplan1.osil and the osrl file parincLinear.osrl.
+ * parincLinear.osil, finplan1.osil, the osrl file parincLinear.osrl
+ * and the osol file osolTest.osol.
  * We test the get() and set() methods for osinstance.
  * 
  * Next we test the prefix and postfix routines. For the
@@ -104,8 +105,11 @@
 #include "OSConfig.h"
 #include "OSmps2osil.h" 
 #include "OSResult.h" 
+#include "OSOption.h"
 #include "OSiLReader.h"        
 #include "OSiLWriter.h" 
+#include "OSoLReader.h"        
+#include "OSoLWriter.h" 
 #include "OSrLReader.h"          
 #include "OSrLWriter.h"      
 #include "OSInstance.h"  
@@ -218,6 +222,7 @@ int main(int argC, char* argV[])
 	OSrLReader *osrlreader = NULL;
 	// end classes    
 	std::string osilFileName;
+	std::string osolFileName;
 	std::string osrlFileName;
 	std::string nlFileName; 
 	std::string mpsFileName;     
@@ -392,7 +397,7 @@ int main(int argC, char* argV[])
 		cout << "Conclusion: FAILURE" << endl;
 		return 1;
 	}	
-	// solve using using the osil file
+	// solve using the osil file
 	#ifdef COIN_HAS_IPOPT
 	IpoptSolver *ipoptSolver  =  NULL;	
 	try{
@@ -422,6 +427,7 @@ int main(int argC, char* argV[])
 		ipoptSolver = NULL;
 		unitTestResult << "Solved problem avion2.osil with Ipopt" << std::endl;
 #endif
+
 		// solve another problem
 		cout << "create a new IPOPT Solver for OSiL string solution" << endl;
 		ipoptSolver  = new IpoptSolver();
@@ -614,6 +620,7 @@ int main(int argC, char* argV[])
 		delete osrlreader;
 		osrlreader = NULL;
 		unitTestResult << "Solved problem parincLinearByRow.osil with Clp" << std::endl;
+
 		// now solve another problem -- try an integer program
 	}
 	catch(const ErrorClass& eclass){
@@ -1165,7 +1172,6 @@ catch(const ErrorClass& eclass){
 		solver->osil = osilwriter.writeOSiL( mps2osil->osinstance) ;
 		std::cout << solver->osil << std::endl;
 		solver->buildSolverInstance();
-		//return 0;
 		solver->solve();
 		cout << endl << endl;
 		cout << "COIN solution of a OSiL string in b64 format" << endl;
@@ -1527,12 +1533,12 @@ catch(const ErrorClass& eclass){
 	// Now just test the OSrL parser
 	try{ 
 		/**
-		 * int this part of the unitTest we
-		 * 1) read an OsRL string from a file
-		 * 2) create and OSResult object from the string
-		 * 3) write a new OSrL string from the in-memory oOSResult bject
-		 * 4) read the string back again to make sure nothing lost
-		 * in translation
+		 * in this part of the unitTest we
+		 * 1) read an OSrL string from a file
+		 * 2) create an OSResult object from the string
+		 * 3) write a new OSrL string from the in-memory OSResult object
+		 * 4) read the string back again to make sure nothing was lost
+		 *    in translation
 		 */
 		cout << endl;
 		std::string tmpOSrL;
@@ -1554,7 +1560,7 @@ catch(const ErrorClass& eclass){
 		cout << "PARSE THE OSRL STRING INTO AN OSRESULT OBJECT" << endl;
 		osresult = osrlreader->readOSrL( osrl);
 		tmpOSrL = osrlwriter->writeOSrL( osresult) ;
-		// make ssure we can parse without error
+		// make sure we can parse without error
 		delete osrlreader;
 		osrlreader = NULL;
 		osrlreader = new OSrLReader();
@@ -1598,6 +1604,71 @@ catch(const ErrorClass& eclass){
 		unitTestResultFailure << eclass.errormsg << endl;
 		unitTestResultFailure << "There was a failure in the test for reading OSrL" << endl;
 	}
+
+
+
+	//
+	// Now test the OSoL parser
+	OSoLWriter *osolwriter = NULL;
+	OSoLReader *osolreader = NULL;
+	osolwriter = new OSoLWriter();
+	osolreader = new OSoLReader();
+
+	try{ 
+		/**
+		 * in this part of the unitTest we
+		 * 1) read an OSoL string from a file
+		 * 2) create an OSOption object from the string
+		 * 3) write a new OSoL string from the in-memory OSOption object
+		 * 4) read the string back again to make sure nothing was lost
+		 *    in translation
+		 */
+		cout << endl;
+		std::string tmpOSoL;
+		clock_t start, finish;
+		double duration;
+		osolwriter = new OSoLWriter();
+		osolreader = new OSoLReader();
+		OSOption *osoption = NULL;
+		//osoption = new OSOption(); 
+		cout << "TEST PARSING AN OSoL FILE" << endl;
+		cout << "FIRST READ THE OSoL FILE INTO A STRING" << endl;
+		osolFileName = dataDir  + "osolFiles" + dirsep + "parsertest.osol"; 
+		start = clock();
+		std::string osol = fileUtil->getFileAsString( osolFileName.c_str() );
+		finish = clock();
+		duration = (double) (finish - start) / CLOCKS_PER_SEC;
+		cout << "Reading the file into a string took (seconds): "<< duration << endl;
+		start = clock();
+		cout << "PARSE THE OSOL STRING INTO AN OSOPTION OBJECT" << endl;
+		osoption = osolreader->readOSoL( osol);
+		cout << "Write the content to a new file" <<endl;
+		tmpOSoL = osolwriter->writeOSoL( osoption) ;
+		// make sure we can parse without error
+		delete osolreader;
+		osolreader = NULL;
+		osolreader = new OSoLReader();
+		cout << "Read the string back" << endl;
+		osolreader->readOSoL( tmpOSoL);
+		delete osolwriter;
+		osolwriter = NULL;
+		delete osolreader;
+		osolreader = NULL;
+		unitTestResult << 
+		     "Successful test of OSoL parser on file osolTest.osol" 
+		      << std::endl;
+
+	}	
+		catch(const ErrorClass& eclass){
+		cout << endl << endl << endl;
+		if(osolwriter != NULL) delete osolwriter;
+		if(osolreader != NULL) delete osolreader;
+		// " Problem with the test reading OSoL data";
+		unitTestResultFailure << eclass.errormsg << endl;
+		unitTestResultFailure << "There was a failure in the test for reading OSoL" << endl;
+	}
+
+
 	// now test postfix and prefix routines
 	try{
 		std::string expTreeTest =  dataDir  + "osilFiles" + dirsep + "rosenbrockmod.osil";

@@ -182,7 +182,7 @@ endelementname (<\/[a-zA-Z][a-zA-Z0-9.:_]+)
 
 
 
-[a-zA-X0-9.:_*#$@ \n]+ { YY_PRINT;  yylval->charval = strdup( yytext);   yyextra->errorText = yylval->charval;    /*yylval->charval = yytext;*/  return (ELEMENTTEXT); }
+[a-zA-Z0-9.:_*#$@ \n]+ { YY_PRINT;  yylval->charval = strdup( yytext);   yyextra->errorText = yylval->charval;    /*yylval->charval = yytext;*/  return (ELEMENTTEXT); }
 
 "<!--" BEGIN comment;
  <comment>. |
