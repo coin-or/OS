@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osol xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org C:\DataFiles\RESEARCH\OS\OS-trunk-work\OS\schemas\OSoL.xsd">
+<!-- This file doesn't do anything but test the parser. The options are not intended to make any sense. -->
+	<general>
+		<solverToInvoke>Ipopt</solverToInvoke>
+		<serviceURI/>
+		<license></license>
+		<userName>gassmann</userName>
+		<password>a.n.other</password>
+		<contact transportType="ftp"></contact>
+		<serviceName></serviceName>
+	</general>
+	<system>
+		<minDiskSpace unit="megabyte">0.0</minDiskSpace>
+		<minMemorySize>1.0</minMemorySize>
+                <minCPUNumber>0.</minCPUNumber>
+	</system>
+	<service>
+		<otherOptions numberOfOtherOptions="3">
+			<other name="test" value="5"></other>
+			<other name="other"></other>
+			<other name="third"/>
+		</otherOptions>
+	</service>
+	<job>
+	<directoriesToMake numberOfPaths="1">
+		<path>C:\datafiles\research\OS\OS-trunk-work\OS\test\temp</path>
+	</directoriesToMake>
+	<inputFilesToMove numberOfPathPairs="1">
+		<pathPair to="C:\datafiles\research\OS\OS-trunk-work\OS\test\temp\input.mps" 
+					from="C:\datafiles\research\mslip\data\diet.mps" makeCopy="true"></pathPair>
+	</inputFilesToMove>
+	</job>	
+	<optimization numberOfObjectives="1" numberOfConstraints="2" numberOfVariables="3">
+		<variables numberOfOtherVariableOptions="0">
+			<initialVariableValues numberOfVar="2">
+				<var idx="0" value="1.0"></var>
+				<var value="2" idx="2"/>
+			</initialVariableValues>
+		</variables>	
+		<solverOptions numberOfSolverOptions="5">
+			<solverOption name="zero" solver="ipopt" category="tol:model" value="1.e-5"></solverOption>
+			<solverOption name="zero" solver="ipopt" category="tol:general" value="1.e-5"></solverOption>
+			<solverOption name="pivot" solver="ipopt" category="tol:model" value="1.e-5"/>
+			<solverOption name="tiny" solver="ipopt" category="tol:model:input" value="1.e-5"></solverOption>
+			<solverOption name="other" solver="ipopt" category="another" value="1.e-5"></solverOption>
+		</solverOptions>
+	</optimization>
+</osol>

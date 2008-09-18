@@ -114,6 +114,7 @@ OS/data/osolFiles/demopassword.osol -text
 OS/data/osolFiles/demopasswordjobID.osol -text
 OS/data/osolFiles/kill.osol -text
 OS/data/osolFiles/knock.osol -text
+OS/data/osolFiles/parsertest.osol -text
 OS/data/osolFiles/remoteSolve1.osol -text
 OS/data/osolFiles/remoteSolve2.osol -text
 OS/data/osolFiles/remotegsbkip.osol -text
