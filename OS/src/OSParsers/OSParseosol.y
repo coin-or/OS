@@ -56,7 +56,7 @@ void  yygetOSOption(const char *ch, OSOption* m_osoption, OSoLParserData *m_pars
 }
 
 /* %name-prefix="osol" 
-this fails on in Mac OS X
+this fails in Mac OS X
 */
 
 %{
@@ -339,8 +339,7 @@ emptymincpunumber: MINCPUNUMBERSTART ENDOFELEMENT
 {
 };
 
-nonemptymincpunumber: MINCPUNUMBERSTART GREATERTHAN DOUBLE MINCPUNUMBEREND
- |  MINCPUNUMBERSTART GREATERTHAN INTEGER MINCPUNUMBEREND 
+nonemptymincpunumber: MINCPUNUMBERSTART GREATERTHAN INTEGER MINCPUNUMBEREND
 {
 };
 

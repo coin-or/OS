@@ -186,7 +186,7 @@ MinCPUSpeed::~MinCPUSpeed()
 
 
 SystemOption::SystemOption(): 
-	minCPUNumber (0.0)
+	minCPUNumber (1)
 {    
 	#ifdef DEBUG
 	cout << "Inside SystemOption Constructor" << endl;

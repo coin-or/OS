@@ -13,7 +13,7 @@
 	<system>
 		<minDiskSpace unit="megabyte">0</minDiskSpace>
 		<minMemorySize>1.0</minMemorySize>
-                <minCPUNumber>0.</minCPUNumber>
+            <minCPUNumber>0</minCPUNumber>
 	</system>
 	<service>
 		<otherOptions numberOfOtherOptions="3">

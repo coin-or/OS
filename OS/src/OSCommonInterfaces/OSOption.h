@@ -340,7 +340,7 @@ public:
 	MinCPUSpeed *minCPUSpeed;
 
 	/** the minimum number of processors required */
-	double minCPUNumber;
+	int minCPUNumber;
 
 	/** the list of other system options */
 	OtherOptions *otherOptions;
