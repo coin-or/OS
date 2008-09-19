@@ -1,6 +1,6 @@
 BuildTools     https://projects.coin-or.org/svn/BuildTools/stable/0.5
 Data/Sample    https://projects.coin-or.org/svn/Data/stable/1.0/Sample
-CoinUtils      https://projects.coin-or.org/svn/CoinUtils//stable/2.3/CoinUtils
+CoinUtils      https://projects.coin-or.org/svn/CoinUtils/stable/2.3/CoinUtils
 Cbc            https://projects.coin-or.org/svn/Cbc/stable/2.2/Cbc
 Cgl            https://projects.coin-or.org/svn/Cgl/stable/0.53/Cgl
 Clp            https://projects.coin-or.org/svn/Clp/stable/1.8/Clp
