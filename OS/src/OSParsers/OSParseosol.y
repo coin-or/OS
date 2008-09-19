@@ -306,13 +306,16 @@ systemcontent: | systemcontent systemoption;
 systemoption: mindiskspace | minmemorysize | mincpuspeed | mincpunumber | othersystemoptions;
 
 mindiskspace: MINDISKSPACESTART mindiskspaceunit GREATERTHAN DOUBLE MINDISKSPACEEND
+| MINDISKSPACESTART mindiskspaceunit GREATERTHAN INTEGER MINDISKSPACEEND
 {
 };
+
 mindiskspaceunit: | UNITATT ATTRIBUTETEXT QUOTE
 {
 };
 
 minmemorysize: MINMEMORYSIZESTART minmemoryunit GREATERTHAN DOUBLE MINMEMORYSIZEEND
+ | MINMEMORYSIZESTART minmemoryunit GREATERTHAN INTEGER MINMEMORYSIZEEND
 {
 };
 
@@ -321,6 +324,7 @@ minmemoryunit: | UNITATT ATTRIBUTETEXT QUOTE
 };
 
 mincpuspeed: MINCPUSPEEDSTART mincpuspeedunit GREATERTHAN DOUBLE MINCPUSPEEDEND
+ |  MINCPUSPEEDSTART mincpuspeedunit GREATERTHAN INTEGER MINCPUSPEEDEND
 {
 };
 
@@ -336,6 +340,7 @@ emptymincpunumber: MINCPUNUMBERSTART ENDOFELEMENT
 };
 
 nonemptymincpunumber: MINCPUNUMBERSTART GREATERTHAN DOUBLE MINCPUNUMBEREND
+ |  MINCPUNUMBERSTART GREATERTHAN INTEGER MINCPUNUMBEREND 
 {
 };
 

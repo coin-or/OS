@@ -11,7 +11,7 @@
 		<serviceName></serviceName>
 	</general>
 	<system>
-		<minDiskSpace unit="megabyte">0.0</minDiskSpace>
+		<minDiskSpace unit="megabyte">0</minDiskSpace>
 		<minMemorySize>1.0</minMemorySize>
                 <minCPUNumber>0.</minCPUNumber>
 	</system>
