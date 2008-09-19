@@ -30130,6 +30130,11 @@ fi
 
 
 if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/osolFiles/parsetest.osol"
+fi
+
+
+if test $coin_vpath_config = yes; then
   coin_vpath_link_files="$coin_vpath_link_files data/osolFiles/demopasswordjobID.osol"
 fi
 
