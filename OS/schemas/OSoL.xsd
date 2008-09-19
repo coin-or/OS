@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSoL.xsd: current version - 1.0.0 -->
 	<!--include: since version 1.0.0-->
 	<!--OSoL: proposal (The entire schema)-->
@@ -150,7 +150,7 @@
 					<xs:documentation>since version 1.0.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="minCPUSpeed" type="MinCPUSpeed" default="0.0" minOccurs="0">
+			<xs:element name="minCPUSpeed" type="MinCPUSpeed" default="1" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>since version 1.0.0</xs:documentation>
 				</xs:annotation>
@@ -208,24 +208,7 @@
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 		<xs:simpleContent>
-			<xs:extension base="xs:double">
-				<xs:attribute name="unit" use="optional" default="hertz">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="hertz"/>
-							<xs:enumeration value="kilohertz"/>
-							<xs:enumeration value="megahertz"/>
-							<xs:enumeration value="gigahertz"/>
-							<xs:enumeration value="terahertz"/>
-							<xs:enumeration value="flops"/>
-							<xs:enumeration value="kiloflops"/>
-							<xs:enumeration value="megaflops"/>
-							<xs:enumeration value="gigaflops"/>
-							<xs:enumeration value="teraflops"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:attribute>
-			</xs:extension>
+			<xs:extension base="xs:int"/>
 		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="MinCPUNumber">
