@@ -1630,7 +1630,7 @@ catch(const ErrorClass& eclass){
 		osolwriter = new OSoLWriter();
 		osolreader = new OSoLReader();
 		OSOption *osoption = NULL;
-		osoption = new OSOption(); 
+		//osoption = new OSOption(); 
 		cout << "TEST PARSING AN OSoL FILE" << endl;
 		cout << "FIRST READ THE OSoL FILE INTO A STRING" << endl;
 		osolFileName = dataDir  + "osolFiles" + dirsep + "parsertest.osol"; 
