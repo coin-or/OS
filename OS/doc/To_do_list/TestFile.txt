@@ -1,2 +1,0 @@
-This is TestFile.txt. Its purpose is to test the committal of
-files from a Windows environment via svn.
