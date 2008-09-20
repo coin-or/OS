@@ -1611,8 +1611,8 @@ catch(const ErrorClass& eclass){
 	// Now test the OSoL parser
 	OSoLWriter *osolwriter = NULL;
 	OSoLReader *osolreader = NULL;
-	osolwriter = new OSoLWriter();
-	osolreader = new OSoLReader();
+	//osolwriter = new OSoLWriter();
+	//osolreader = new OSoLReader();
 
 	try{ 
 		/**
@@ -1647,9 +1647,9 @@ catch(const ErrorClass& eclass){
 		// make sure we can parse without error
 		delete osolreader;
 		osolreader = NULL;
-		//osolreader = new OSoLReader();
-		//cout << "Read the string back" << endl;
-		//osolreader->readOSoL( tmpOSoL);
+		osolreader = new OSoLReader();
+		cout << "Read the string back" << endl;
+		osolreader->readOSoL( tmpOSoL);
 		delete osolwriter;
 		osolwriter = NULL;
 		delete osolreader;
