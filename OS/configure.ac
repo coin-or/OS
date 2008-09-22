@@ -308,17 +308,6 @@ AC_COIN_HAS_USER_LIBRARY([Knitro],[KNITRO],[knitro.h],[])
 AC_COIN_HAS_GLPK(Glpk)
 AC_COIN_HAS_ASL
 
-if test $coin_has_asl != unavailable &&
-   test $coin_has_asl != skipping; then
-  case $CXX in
-    cl*)
-       asllibrary='`$(CYGPATH_W) $(INSTALLIBDIR)`\\amplsolv.lib';;
-     *)
-       asllibrary="\$(INSTALLIBDIR)/ThirdParty/ASL/amplsolver.a";;
-  esac
-  AC_SUBST(asllibrary)  
-fi
-
 
 
 #############################################################################

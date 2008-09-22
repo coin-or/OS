@@ -96,8 +96,8 @@ LIBS += @clplib@
 LIBS += @coinutilslib@ 
 
 
-#@COIN_HAS_ASL_TRUE@LIBS += @ASLLIB@
-@COIN_HAS_ASL_TRUE@LIBS += @asllibrary@
+@COIN_HAS_ASL_TRUE@LIBS += @ASLLIB@
+
  
 #DONE ADDING LIBS
 
