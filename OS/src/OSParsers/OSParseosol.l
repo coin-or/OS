@@ -14,7 +14,7 @@
  */
 %{
 
-#define PARSERDEBUG
+//#define PARSERDEBUG
 
 #include <iostream>
 #include "OSDataStructures.h"
@@ -329,9 +329,9 @@ return(DOUBLE);}
  <xmldeclaration>"?>" BEGIN 0;
  
 
-<doublequoteattributetext>[^\"]* {YY_PRINT;  BEGIN 0; /*yylval->sval = strdup(yytext);*/ yylval->sval = yytext; return(ATTRIBUTETEXT);}
-<singlequoteattributetext>[^\']* {YY_PRINT;  BEGIN 0; /*yylval->sval = strdup(yytext);*/ yylval->sval = yytext; return(ATTRIBUTETEXT);}
-<osolattributetext>([^>])* {YY_PRINT;  BEGIN 0; /*yylval->sval = strdup(yytext);*/  yylval->sval = yytext; return(OSOLATTRIBUTETEXT);}
+<doublequoteattributetext>[^\"]* {YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext);   /*yylval->sval = yytext;*/ return(ATTRIBUTETEXT);}
+<singlequoteattributetext>[^\']* {YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext);   /*yylval->sval = yytext;*/  return(ATTRIBUTETEXT);}
+<osolattributetext>([^>])* {YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext);  /* yylval->sval = yytext;*/   return(OSOLATTRIBUTETEXT);}
 
 . {  
 	std::string error;

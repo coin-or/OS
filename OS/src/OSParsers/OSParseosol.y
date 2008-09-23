@@ -167,8 +167,8 @@ serviceURIbody: ENDOFELEMENT
 	| GREATERTHAN SERVICEURIEND
 	| GREATERTHAN ELEMENTTEXT SERVICEURIEND
 {
-//osoption->general->serviceURI = $2;//free($2);
-//printf("%s","\n$2 contains: ");printf("%s",$2);printf("%s","\n");
+osoption->general->serviceURI = $2;//free($2);
+printf("%s","\n$2 contains: ");printf("%s",$2);printf("%s","\n");
 };
 
 
@@ -284,6 +284,7 @@ nonemptycontact: CONTACTSTART transporttypeatt GREATERTHAN ELEMENTTEXT CONTACTEN
 
 transporttypeatt: | TRANSPORTTYPEATT ATTRIBUTETEXT QUOTE
 {
+printf("TRANSSPORT ATTRIBUTE TEXT =  %s",$2);printf("%s","\n");
 };
 
 

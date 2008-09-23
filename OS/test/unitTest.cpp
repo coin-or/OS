@@ -1645,6 +1645,7 @@ catch(const ErrorClass& eclass){
 		cout << "Write the content to a new file" <<endl;
 		tmpOSoL = osolwriter->writeOSoL( osoption);
 		cout << endl << endl << tmpOSoL << endl;
+		return 0;
 		// make sure we can parse without error
 		delete osolreader;
 		osolreader = NULL;
