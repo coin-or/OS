@@ -1,6 +1,6 @@
 /** @file parseosol.l
  * 
- * @author  Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin, 
+ * @author  Gus Gassmann, Jun Ma, Kipp Martin, 
  * @version 1.1, 10/07/2008
  * @since   OS1.1
  *

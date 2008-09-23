@@ -1659,7 +1659,7 @@ static yyconst flex_int32_t yy_rule_can_match_eol[187] =
 #line 1 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosol.l"
 /** @file parseosol.l
  * 
- * @author  Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin, 
+ * @author  Gus Gassmann, Jun Ma, Kipp Martin, 
  * @version 1.1, 10/07/2008
  * @since   OS1.1
  *
