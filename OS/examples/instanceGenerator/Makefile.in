@@ -99,7 +99,7 @@ LIBS += @coinutilslib@
 
 
 
-@COIN_HAS_ASL_TRUE@LIBS += @ASLLIB@
+@COIN_HAS_ASL_TRUE@LIBS += @USE_ASL_LIB@
 
  
 #DONE ADDING LIBS

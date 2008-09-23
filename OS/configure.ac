@@ -583,6 +583,17 @@ case $CXX in
 esac
 AC_SUBST(oslib)
 
+#############################################################################
+#  See if we are disabling shared libs###
+#############################################################################
+
+
+     if test $enable_static != yes; then
+         USE_ASL_LIB=$ASLLIB
+     fi
+
+AC_SUBST(USE_ASL_LIB)
+
 
 ##############################################################################
 #                   VPATH links for example input files                      #
@@ -697,14 +708,6 @@ AC_COIN_VPATH_LINK(stylesheets/OSrL.xslt)
 ##
 AC_COIN_VPATH_LINK(stylesheets/OSrL.css)
 ##
-
-
-
-
-
-
-
-
 
 
 ##############################################################################
