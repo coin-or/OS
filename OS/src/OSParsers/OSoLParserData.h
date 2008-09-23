@@ -45,7 +45,7 @@ public:
 
 
 	/** children of the <general> element */
-	bool serviceIDPresent;
+	bool serviceURIPresent;
 	bool serviceNamePresent;
 	bool instanceNamePresent;
 	bool instanceLocationPresent;

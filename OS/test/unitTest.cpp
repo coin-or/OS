@@ -1643,7 +1643,8 @@ catch(const ErrorClass& eclass){
 		cout << "PARSE THE OSOL STRING INTO AN OSOPTION OBJECT" << endl;
 		osoption = osolreader->readOSoL( osol);
 		cout << "Write the content to a new file" <<endl;
-		tmpOSoL = osolwriter->writeOSoL( osoption) ;
+		tmpOSoL = osolwriter->writeOSoL( osoption);
+		cout << endl << endl << tmpOSoL << endl;
 		// make sure we can parse without error
 		delete osolreader;
 		osolreader = NULL;
@@ -1655,7 +1656,7 @@ catch(const ErrorClass& eclass){
 		delete osolreader;
 		osolreader = NULL;
 		unitTestResult << 
-		     "Successful test of OSoL parser on file osolTest.osol" 
+		     "Successful test of OSoL parser on file parsertest.osol" 
 		      << std::endl;
 
 	}	

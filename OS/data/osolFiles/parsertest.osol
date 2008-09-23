@@ -2,8 +2,8 @@
 <osol xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org C:\DataFiles\RESEARCH\OS\OS-trunk-work\OS\schemas\OSoL.xsd">
 <!-- This file doesn't do anything but test the parser. The options are not intended to make any sense. -->
 	<general>
-		<solverToInvoke>Ipopt</solverToInvoke>
-		<serviceURI/>
+		<solverToInvoke/>
+		<serviceURI>http://www.w3.org/2001/XMLSchema-instance</serviceURI>
 		<license></license>
 		<userName>gassmann</userName>
 		<password>a.n.other</password>

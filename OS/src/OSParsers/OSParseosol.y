@@ -5,7 +5,7 @@
  * @since   OS1.1
  *
  * \remarks
- * Copyright (C) 2005-2008, Gus Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2008, Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, Dalhousie University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
@@ -129,9 +129,21 @@ osolstart:	OSOLSTART
 
 osolcontent: osolgeneral osolsystem osolservice osoljob osoloptimization ;
 
-osolgeneral: 
-	| GENERALSTART GREATERTHAN generalcontent GENERALEND
-	| GENERALSTART ENDOFELEMENT;
+osolgeneral: | generalhead generalbody
+
+generalhead: GENERALSTART 
+{	if (parserData->osolgeneralPresent)
+	{	osolerror( NULL, osoption, parserData, "only one <general> element allowed");
+	}
+	else
+	{	parserData->osolgeneralPresent = true;	
+		osoption->general = new GeneralOption();
+	}
+}; 
+
+generalbody:
+	  GREATERTHAN generalcontent GENERALEND
+	| ENDOFELEMENT;
 
 generalcontent: | generalcontent generaloption;
 
@@ -139,15 +151,24 @@ generaloption: serviceURI | servicename | instancename | instancelocation | jobi
  | solvertoinvoke | license | username | password | contact | othergeneraloptions;
 
 
-serviceURI: emptyURI | nonemptyURI;
+serviceURI: serviceURIhead serviceURIbody
 
-emptyURI: SERVICEURISTART ENDOFELEMENT
-	|   SERVICEURISTART GREATERTHAN SERVICEURIEND
-{
-};
+serviceURIhead: SERVICEURISTART 
+{	if (parserData->serviceURIPresent)
+	{	osolerror( NULL, osoption, parserData, "only one <serviceURI> element allowed");
+	}
+	else
+	{	parserData->serviceURIPresent = true;	
+	}
+	printf("%s","serviceURI found\n");
+}; 
 
-nonemptyURI: SERVICEURISTART GREATERTHAN ELEMENTTEXT SERVICEURIEND
+serviceURIbody: ENDOFELEMENT
+	| GREATERTHAN SERVICEURIEND
+	| GREATERTHAN ELEMENTTEXT SERVICEURIEND
 {
+//osoption->general->serviceURI = $2;//free($2);
+//printf("%s","\n$2 contains: ");printf("%s",$2);printf("%s","\n");
 };
 
 

@@ -25,7 +25,7 @@
 	osolservicePresent(false),
 	osoljobPresent(false),
 	osoloptimizationPresent(false),
-	serviceIDPresent(false),
+	serviceURIPresent(false),
 	serviceNamePresent(false),
 	instanceNamePresent(false),
 	instanceLocationPresent(false),

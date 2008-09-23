@@ -5,7 +5,7 @@
  * @since   OS1.1
  *
  * \remarks
- * Copyright (C) 2005-2008, Gus Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2008, Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, Dalhousie University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
@@ -57,6 +57,8 @@
 #include "OSErrorClass.h"
 #include "OSParseosol.tab.hpp"
 #include "OSOption.h"
+
+#define PARSERDEBUG
 
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", yytext);
@@ -313,7 +315,7 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/solverOption{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(SOLVEROPTIONEND);}
 
 
-[a-zA-Z0-9.:_*#$@\- \n\/\\]+ { YY_PRINT;  /*yylval->sval = strdup( yytext);*/ yylval->sval = yytext;  yyextra->errorText = yylval->sval;    /*yylval->sval = yytext;*/  return (ELEMENTTEXT); }
+[a-zA-Z0-9.:_*#$@\- \n\t\r\/\\]+ { YY_PRINT; yylval->sval = strdup( yytext); /*yylval->sval = yytext;*/ yyextra->errorText = yylval->sval;  return (ELEMENTTEXT); }
 
 
  "<!--" BEGIN comment;
