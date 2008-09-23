@@ -37,4 +37,7 @@ Cone programming potential collaboration
 Jun:
 OSoL/OSrL java modification
 Constraint programming document/report
+add initialVariableValuesString
+optional numberOfxxx attributes in optimization.
 ----------------------------------------------------
+
