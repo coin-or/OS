@@ -30381,7 +30381,7 @@ fi
 
 # Here list all the files that configure should create (except for the
 # configuration header file)
-                                                                                                                                                                                    ac_config_files="$ac_config_files Makefile src/Makefile src/OSAgent/Makefile src/OSUtils/Makefile src/OSCommonInterfaces/Makefile src/OSSolverInterfaces/Makefile src/OSModelInterfaces/Makefile src/OSParsers/Makefile test/Makefile examples/instanceGenerator/Makefile examples/osTestCode/Makefile examples/algorithmicDiff/Makefile examples/addCuts/Makefile examples/osRemoteTest/Makefile applications/Makefile applications/amplClient/Makefile applications/fileUpload/Makefile os_addlibs.txt"
+                                                                                                                                                                                                        ac_config_files="$ac_config_files Makefile src/Makefile src/OSAgent/Makefile src/OSUtils/Makefile src/OSCommonInterfaces/Makefile src/OSSolverInterfaces/Makefile src/OSModelInterfaces/Makefile src/OSParsers/Makefile test/Makefile examples/instanceGenerator/Makefile examples/osTestCode/Makefile examples/algorithmicDiff/Makefile examples/addCuts/Makefile examples/osRemoteTest/Makefile examples/template/Makefile examples/CppAD/Makefile applications/Makefile applications/amplClient/Makefile applications/fileUpload/Makefile os_addlibs.txt"
 
 
 
@@ -31185,6 +31185,8 @@ do
   "examples/algorithmicDiff/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/algorithmicDiff/Makefile" ;;
   "examples/addCuts/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/addCuts/Makefile" ;;
   "examples/osRemoteTest/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/osRemoteTest/Makefile" ;;
+  "examples/template/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/template/Makefile" ;;
+  "examples/CppAD/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/CppAD/Makefile" ;;
   "applications/Makefile" ) CONFIG_FILES="$CONFIG_FILES applications/Makefile" ;;
   "applications/amplClient/Makefile" ) CONFIG_FILES="$CONFIG_FILES applications/amplClient/Makefile" ;;
   "applications/fileUpload/Makefile" ) CONFIG_FILES="$CONFIG_FILES applications/fileUpload/Makefile" ;;

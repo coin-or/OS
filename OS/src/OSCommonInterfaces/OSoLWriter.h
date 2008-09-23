@@ -1,7 +1,7 @@
 /** @file OSoLWriter.h
  * 
  *
- * @author  Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin, 
+ * @author  Gus Gassmann, Jun Ma, Kipp Martin, 
  * @version 1.0, 17/July/2008
  * @since   OS1.1
  *

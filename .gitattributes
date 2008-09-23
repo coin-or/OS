@@ -154,6 +154,7 @@ OS/doc/osUsersManual_1.pdf -text
 OS/doc/osUsersManual_1.tex -text
 OS/doc/osUsersManual_1.toc -text
 OS/doc/usersManualAdditions.txt -text
+OS/examples/CppAD/Makefile.in -text
 OS/examples/addCuts/Makefile.in -text
 OS/examples/addCuts/OSAddCuts.cpp -text
 OS/examples/algorithmicDiff/Makefile.in -text
@@ -165,6 +166,8 @@ OS/examples/osRemoteTest/Makefile.in -text
 OS/examples/osRemoteTest/OSRemoteTest.cpp -text
 OS/examples/osTestCode/Makefile.in -text
 OS/examples/osTestCode/OSTestCode.cpp -text
+OS/examples/template/Makefile.in -text
+OS/examples/template/template.cpp -text
 OS/inc/config_os.h.in -text
 OS/m4/ac_coin_socket_libs.m4 -text
 OS/os_addlibs.txt.in -text

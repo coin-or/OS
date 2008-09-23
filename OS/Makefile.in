@@ -62,11 +62,13 @@ DIST_COMMON = README $(am__configure_deps) \
 	$(srcdir)/../ltmain.sh $(srcdir)/../missing \
 	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	$(srcdir)/os_addlibs.txt.in $(top_srcdir)/configure \
+	$(top_srcdir)/examples/CppAD/Makefile.in \
 	$(top_srcdir)/examples/addCuts/Makefile.in \
 	$(top_srcdir)/examples/algorithmicDiff/Makefile.in \
 	$(top_srcdir)/examples/instanceGenerator/Makefile.in \
 	$(top_srcdir)/examples/osRemoteTest/Makefile.in \
 	$(top_srcdir)/examples/osTestCode/Makefile.in \
+	$(top_srcdir)/examples/template/Makefile.in \
 	$(top_srcdir)/inc/config_os.h.in AUTHORS
 @HAVE_EXTERNALS_TRUE@am__append_2 = Externals
 @HAVE_EXTERNALS_TRUE@am__append_3 = .Externals-stamp
@@ -83,6 +85,7 @@ CONFIG_HEADER = $(top_builddir)/inc/config_os.h
 CONFIG_CLEAN_FILES = examples/instanceGenerator/Makefile \
 	examples/osTestCode/Makefile examples/algorithmicDiff/Makefile \
 	examples/addCuts/Makefile examples/osRemoteTest/Makefile \
+	examples/template/Makefile examples/CppAD/Makefile \
 	os_addlibs.txt
 SOURCES =
 DIST_SOURCES =
@@ -443,6 +446,10 @@ examples/addCuts/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 examples/osRemoteTest/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/osRemoteTest/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
+examples/template/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/template/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+examples/CppAD/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/CppAD/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
 os_addlibs.txt: $(top_builddir)/config.status $(srcdir)/os_addlibs.txt.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 
@@ -591,7 +598,7 @@ distclean-tags:
 distdir: $(DISTFILES)
 	$(am__remove_distdir)
 	mkdir $(distdir)
-	$(mkdir_p) $(distdir)/. $(distdir)/.. $(distdir)/../BuildTools $(distdir)/examples/addCuts $(distdir)/examples/algorithmicDiff $(distdir)/examples/instanceGenerator $(distdir)/examples/osRemoteTest $(distdir)/examples/osTestCode $(distdir)/inc $(distdir)/m4
+	$(mkdir_p) $(distdir)/. $(distdir)/.. $(distdir)/../BuildTools $(distdir)/examples/CppAD $(distdir)/examples/addCuts $(distdir)/examples/algorithmicDiff $(distdir)/examples/instanceGenerator $(distdir)/examples/osRemoteTest $(distdir)/examples/osTestCode $(distdir)/examples/template $(distdir)/inc $(distdir)/m4
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \

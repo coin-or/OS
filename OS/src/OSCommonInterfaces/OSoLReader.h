@@ -1,7 +1,7 @@
 /** @file OSoLReader.h
  * 
  *
- * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
  * @version 1.0, 17/07/2008
  * @since   OS1.1
  *

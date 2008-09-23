@@ -730,6 +730,8 @@ AC_CONFIG_FILES([Makefile
           examples/algorithmicDiff/Makefile
           examples/addCuts/Makefile
           examples/osRemoteTest/Makefile
+          examples/template/Makefile
+          examples/CppAD/Makefile
           applications/Makefile
           applications/amplClient/Makefile
           applications/fileUpload/Makefile
