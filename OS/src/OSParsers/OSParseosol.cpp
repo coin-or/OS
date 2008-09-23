@@ -1717,7 +1717,7 @@ static yyconst flex_int32_t yy_rule_can_match_eol[187] =
 #include "OSParseosol.tab.hpp"
 #include "OSOption.h"
 
-#define PARSERDEBUG
+//#define PARSERDEBUG
 
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", yytext);
@@ -3139,7 +3139,7 @@ case 173:
 /* rule 173 can match eol */
 YY_RULE_SETUP
 #line 318 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosol.l"
-{ YY_PRINT; yylval->sval = strdup( yytext); /*yylval->sval = yytext;*/ yyextra->errorText = yylval->sval;  return (ELEMENTTEXT); }
+{ YY_PRINT; /*yylval->sval = strdup( yytext);*/   yylval->sval = yytext; yyextra->errorText = yylval->sval;  return (ELEMENTTEXT); }
 	YY_BREAK
 case 174:
 YY_RULE_SETUP
@@ -3181,19 +3181,19 @@ case 182:
 /* rule 182 can match eol */
 YY_RULE_SETUP
 #line 332 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosol.l"
-{YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext);   /*yylval->sval = yytext;*/ return(ATTRIBUTETEXT);}
+{YY_PRINT;  BEGIN 0; /*yylval->sval = strdup(yytext);*/   yylval->sval = yytext; return(ATTRIBUTETEXT);}
 	YY_BREAK
 case 183:
 /* rule 183 can match eol */
 YY_RULE_SETUP
 #line 333 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosol.l"
-{YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext);   /*yylval->sval = yytext;*/  return(ATTRIBUTETEXT);}
+{YY_PRINT;  BEGIN 0; /*yylval->sval = strdup(yytext);*/   yylval->sval = yytext;  return(ATTRIBUTETEXT);}
 	YY_BREAK
 case 184:
 /* rule 184 can match eol */
 YY_RULE_SETUP
 #line 334 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosol.l"
-{YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext);  /* yylval->sval = yytext;*/   return(OSOLATTRIBUTETEXT);}
+{YY_PRINT;  BEGIN 0; /*yylval->sval = strdup(yytext);*/   yylval->sval = yytext;   return(OSOLATTRIBUTETEXT);}
 	YY_BREAK
 case 185:
 YY_RULE_SETUP

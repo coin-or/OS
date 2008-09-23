@@ -165,11 +165,11 @@ serviceURIhead: SERVICEURISTART
 
 serviceURIbody: ENDOFELEMENT
 	| GREATERTHAN SERVICEURIEND
-	| GREATERTHAN ELEMENTTEXT SERVICEURIEND
-{
-osoption->general->serviceURI = $2;//free($2);
+	| GREATERTHAN ELEMENTTEXT {
+osoption->general->serviceURI = $2;
 printf("%s","\n$2 contains: ");printf("%s",$2);printf("%s","\n");
-};
+} SERVICEURIEND
+;
 
 
 servicename: emptyservicename | nonemptyservicename;
@@ -282,10 +282,11 @@ nonemptycontact: CONTACTSTART transporttypeatt GREATERTHAN ELEMENTTEXT CONTACTEN
 {
 };
 
-transporttypeatt: | TRANSPORTTYPEATT ATTRIBUTETEXT QUOTE
+transporttypeatt: | TRANSPORTTYPEATT ATTRIBUTETEXT 
 {
 printf("TRANSSPORT ATTRIBUTE TEXT =  %s",$2);printf("%s","\n");
-};
+//delete($2);
+} QUOTE;
 
 
 othergeneraloptions: OTHEROPTIONSSTART numberofothergeneraloptions GREATERTHAN othergeneraloptionslist OTHEROPTIONSEND;
