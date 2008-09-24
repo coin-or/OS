@@ -151,7 +151,7 @@ generaloption: serviceURI | servicename | instancename | instancelocation | jobi
  | solvertoinvoke | license | username | password | contact | othergeneraloptions;
 
 
-serviceURI: serviceURIhead serviceURIbody
+serviceURI: serviceURIhead serviceURIbody;
 
 serviceURIhead: SERVICEURISTART 
 {	if (parserData->serviceURIPresent)
@@ -160,56 +160,63 @@ serviceURIhead: SERVICEURISTART
 	else
 	{	parserData->serviceURIPresent = true;	
 	}
-	printf("%s","serviceURI found\n");
 }; 
 
 serviceURIbody: ENDOFELEMENT
 	| GREATERTHAN SERVICEURIEND
-	| GREATERTHAN ELEMENTTEXT {
-osoption->general->serviceURI = $2;
-printf("%s","\n$2 contains: ");printf("%s",$2);printf("%s","\n");
-} SERVICEURIEND
-;
+	| GREATERTHAN ELEMENTTEXT {osoption->general->serviceURI = $2;} SERVICEURIEND;
 
 
-servicename: emptyservicename | nonemptyservicename;
+servicename: servicenamehead servicenamebody;
 
-emptyservicename: SERVICENAMESTART ENDOFELEMENT
-	|   SERVICENAMESTART GREATERTHAN SERVICENAMEEND
-{
-};
+servicenamehead: SERVICENAMESTART 
+{	if (parserData->serviceNamePresent)
+	{	osolerror( NULL, osoption, parserData, "only one <serviceName> element allowed");
+	}
+	else
+	{	parserData->serviceNamePresent = true;	
+	}
+}; 
 
-nonemptyservicename: SERVICENAMESTART GREATERTHAN ELEMENTTEXT SERVICENAMEEND
-{
-};
-
-
-instancename: emptyinstancename | nonemptyinstancename;
-
-emptyinstancename: INSTANCENAMESTART ENDOFELEMENT
-	|   INSTANCENAMESTART GREATERTHAN INSTANCENAMEEND
-{
-};
-
-nonemptyinstancename: INSTANCENAMESTART GREATERTHAN ELEMENTTEXT INSTANCENAMEEND
-{
-};
+servicenamebody: ENDOFELEMENT
+	| GREATERTHAN SERVICENAMEEND
+	| GREATERTHAN ELEMENTTEXT {osoption->general->serviceName = $2;} SERVICENAMEEND;
 
 
-instancelocation: emptylocation | nonemptylocation;
+instancename: instancenamehead instancenamebody;
 
-emptylocation: INSTANCELOCATIONSTART ENDOFELEMENT
-	|   INSTANCELOCATIONSTART locationtypeatt GREATERTHAN INSTANCELOCATIONEND
-{
-};
+instancenamehead: INSTANCENAMESTART 
+{	if (parserData->instanceNamePresent)
+	{	osolerror( NULL, osoption, parserData, "only one <instanceName> element allowed");
+	}
+	else
+	{	parserData->instanceNamePresent = true;	
+	}
+}; 
 
-nonemptylocation: INSTANCELOCATIONSTART locationtypeatt GREATERTHAN ELEMENTTEXT INSTANCELOCATIONEND
-{
-};
+instancenamebody: ENDOFELEMENT
+	| GREATERTHAN INSTANCENAMEEND
+	| GREATERTHAN ELEMENTTEXT {osoption->general->instanceName = $2;} INSTANCENAMEEND;
 
-locationtypeatt: | LOCATIONTYPEATT ATTRIBUTETEXT QUOTE
-{
-};
+
+instancelocation: instancelocationhead instancelocationbody;
+
+instancelocationhead: INSTANCELOCATIONSTART 
+{	if (parserData->instanceLocationPresent)
+	{	osolerror( NULL, osoption, parserData, "only one <instanceLocation> element allowed");
+	}
+	else
+	{	parserData->instanceLocationPresent = true;
+		osoption->general->instanceLocation = new InstanceLocationOption();
+	}
+}; 
+
+instancelocationbody: ENDOFELEMENT
+	|   locationtypeatt GREATERTHAN instancelocationtext INSTANCELOCATIONEND;
+
+locationtypeatt: | LOCATIONTYPEATT ATTRIBUTETEXT {osoption->general->instanceLocation->locationType = $2;} QUOTE;
+
+instancelocationtext: | ELEMENTTEXT {osoption->general->instanceLocation->value = $1;};
 
 
 jobid: emptyjobid | nonemptyjobid;

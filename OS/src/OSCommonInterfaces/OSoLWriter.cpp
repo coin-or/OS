@@ -85,7 +85,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 			else 
 			{	outStr << "<instanceLocation locationType=\"" + m_OSOption->general->instanceLocation->locationType + "\">";
 			};
-			outStr << "\"" + m_OSOption->general->instanceLocation->value + "\"</instanceLocation>" << endl;
+			outStr << m_OSOption->general->instanceLocation->value + "</instanceLocation>" << endl;
 		};
 		if (m_OSOption->general->jobID != "")
 		{	outStr << "<jobID>" + m_OSOption->general->jobID + "</jobID>" << endl;

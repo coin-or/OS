@@ -8,6 +8,7 @@
 		<password>a.n.other</password>
 		<contact transportType="ftp"></contact>
 		<serviceName></serviceName>
+		<instanceLocation locationType="http">http://myweb.dal.ca/gassmann</instanceLocation>
 	</general>
 	<system>
 		<minDiskSpace unit="megabyte">0</minDiskSpace>

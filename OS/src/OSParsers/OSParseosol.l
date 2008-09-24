@@ -14,8 +14,6 @@
  */
 %{
 
-//#define PARSERDEBUG
-
 #include <iostream>
 #include "OSDataStructures.h"
 #include "OSMathUtil.h"
@@ -58,7 +56,7 @@
 #include "OSParseosol.tab.hpp"
 #include "OSOption.h"
 
-//#define PARSERDEBUG
+#define PARSERDEBUG
 
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", yytext);
