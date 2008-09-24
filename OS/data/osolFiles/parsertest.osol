@@ -22,14 +22,6 @@
             <minCPUNumber>0</minCPUNumber>
 	</system>
 	<service>
-<!--
-		<otherOptions numberOfOtherOptions="4">
-			<other name="test" value="5"></other>
-			<other value="0" name="other"></other>
-			<other name="third"/>
-			<other description="" value="" name="four"/>
-		</otherOptions>
--->
 	</service>
 	<job>
 	<directoriesToMake numberOfPaths="1">
