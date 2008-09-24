@@ -7,6 +7,17 @@
 /Makefile.in -text
 /OS.spp -text
 OS/AUTHORS -text
+OS/CoinAllExamples/CppAD/Makefile.in -text
+OS/CoinAllExamples/CppAD/ipopt_cppad.cpp -text
+OS/CoinAllExamples/CppAD/ipopt_cppad_nlp.cpp -text
+OS/CoinAllExamples/CppAD/ipopt_cppad_nlp.hpp -text
+OS/CoinAllExamples/CppAD/main.cpp -text
+OS/CoinAllExamples/addCuts/Makefile.in -text
+OS/CoinAllExamples/addCuts/OSAddCuts.cpp -text
+OS/CoinAllExamples/instanceGenerator/Makefile.in -text
+OS/CoinAllExamples/instanceGenerator/OSInstanceGenerator.cpp -text
+OS/CoinAllExamples/osTestCode/Makefile.in -text
+OS/CoinAllExamples/osTestCode/OSTestCode.cpp -text
 OS/LICENSE -text
 OS/MSVisualStudio/v8/OS.sln -text
 OS/MSVisualStudio/v8/OSAmplClient/OSamplclient.vcproj -text

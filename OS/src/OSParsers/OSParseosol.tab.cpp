@@ -2760,7 +2760,7 @@ yyreduce:
 	{	parserData->osolgeneralPresent = true;	
 		osoption->general = new GeneralOption();
 	}
-;}
+}
     break;
 
   case 26:
@@ -2771,12 +2771,12 @@ yyreduce:
 	else
 	{	parserData->serviceURIPresent = true;	
 	}
-;}
+}
     break;
 
   case 29:
 
-    {osoption->general->serviceURI = (yyvsp[(2) - (2)].sval);;}
+    {osoption->general->serviceURI = (yyvsp[(2) - (2)].sval);}
     break;
 
   case 32:
@@ -2787,12 +2787,12 @@ yyreduce:
 	else
 	{	parserData->serviceNamePresent = true;	
 	}
-;}
+}
     break;
 
   case 35:
 
-    {osoption->general->serviceName = (yyvsp[(2) - (2)].sval);;}
+    {osoption->general->serviceName = (yyvsp[(2) - (2)].sval);}
     break;
 
   case 38:
@@ -2803,12 +2803,12 @@ yyreduce:
 	else
 	{	parserData->instanceNamePresent = true;	
 	}
-;}
+}
     break;
 
   case 41:
 
-    {osoption->general->instanceName = (yyvsp[(2) - (2)].sval);;}
+    {osoption->general->instanceName = (yyvsp[(2) - (2)].sval);}
     break;
 
   case 44:
@@ -2820,17 +2820,17 @@ yyreduce:
 	{	parserData->instanceLocationPresent = true;
 		osoption->general->instanceLocation = new InstanceLocationOption();
 	}
-;}
+}
     break;
 
   case 46:
 
-    {osoption->general->instanceLocation->locationType = (yyvsp[(2) - (2)].sval);;}
+    {osoption->general->instanceLocation->locationType = (yyvsp[(2) - (2)].sval);}
     break;
 
   case 51:
 
-    {osoption->general->instanceLocation->value = (yyvsp[(1) - (1)].sval);;}
+    {osoption->general->instanceLocation->value = (yyvsp[(1) - (1)].sval);}
     break;
 
   case 53:
@@ -2841,12 +2841,12 @@ yyreduce:
 	else
 	{	parserData->jobIDPresent = true;	
 	}
-;}
+}
     break;
 
   case 56:
 
-    {osoption->general->jobID = (yyvsp[(2) - (2)].sval);;}
+    {osoption->general->jobID = (yyvsp[(2) - (2)].sval);}
     break;
 
   case 59:
@@ -2857,12 +2857,12 @@ yyreduce:
 	else
 	{	parserData->solverToInvokePresent = true;	
 	}
-;}
+}
     break;
 
   case 62:
 
-    {osoption->general->solverToInvoke = (yyvsp[(2) - (2)].sval);;}
+    {osoption->general->solverToInvoke = (yyvsp[(2) - (2)].sval);}
     break;
 
   case 65:
@@ -2873,12 +2873,12 @@ yyreduce:
 	else
 	{	parserData->licensePresent = true;	
 	}
-;}
+}
     break;
 
   case 68:
 
-    {osoption->general->license = (yyvsp[(2) - (2)].sval);;}
+    {osoption->general->license = (yyvsp[(2) - (2)].sval);}
     break;
 
   case 71:
@@ -2889,12 +2889,12 @@ yyreduce:
 	else
 	{	parserData->usernamePresent = true;	
 	}
-;}
+}
     break;
 
   case 74:
 
-    {osoption->general->userName = (yyvsp[(2) - (2)].sval);;}
+    {osoption->general->userName = (yyvsp[(2) - (2)].sval);}
     break;
 
   case 77:
@@ -2905,12 +2905,12 @@ yyreduce:
 	else
 	{	parserData->passwordPresent = true;	
 	}
-;}
+}
     break;
 
   case 80:
 
-    {osoption->general->password = (yyvsp[(2) - (2)].sval);;}
+    {osoption->general->password = (yyvsp[(2) - (2)].sval);}
     break;
 
   case 83:
@@ -2922,17 +2922,17 @@ yyreduce:
 	{	parserData->contactPresent = true;
 		osoption->general->contact = new ContactOption();
 	}
-;}
+}
     break;
 
   case 85:
 
-    {osoption->general->contact->transportType = (yyvsp[(2) - (2)].sval);;}
+    {osoption->general->contact->transportType = (yyvsp[(2) - (2)].sval);}
     break;
 
   case 90:
 
-    {osoption->general->contact->value = (yyvsp[(1) - (1)].sval);;}
+    {osoption->general->contact->value = (yyvsp[(1) - (1)].sval);}
     break;
 
   case 92:
@@ -2945,7 +2945,7 @@ yyreduce:
 		osoption->general->otherOptions = new OtherOptions();	
 		osoption->general->otherOptions->other = new OtherOption*();	
 	}
-;}
+}
     break;
 
   case 93:
@@ -2953,14 +2953,14 @@ yyreduce:
     {	osoption->general->otherOptions->numberOfOtherOptions = (yyvsp[(3) - (4)].ival);
 	osoption->general->otherOptions->other = new OtherOption*[(yyvsp[(3) - (4)].ival)];
 	for (int i=0; i < (yyvsp[(3) - (4)].ival); i++) osoption->general->otherOptions->other[i] = new OtherOption();
-;}
+}
     break;
 
   case 94:
 
     {	if (parserData->numberOfOtherGeneralOptions != osoption->general->otherOptions->numberOfOtherOptions)
 		osolerror (NULL, osoption, parserData, "wrong number of other options in <general> element"); 
-;}
+}
     break;
 
   case 97:
@@ -2968,7 +2968,7 @@ yyreduce:
     {	if (parserData->numberOfOtherGeneralOptions >= osoption->general->otherOptions->numberOfOtherOptions)
 		{	osolerror (NULL, osoption, parserData, "too many other options in <general> element");
 		};
-	;}
+	}
     break;
 
   case 98:
@@ -2980,7 +2980,7 @@ yyreduce:
 	parserData->otherOptionValuePresent = false;
 	parserData->otherOptionDescriptionPresent = false;
 	parserData->numberOfOtherGeneralOptions++;
-;}
+}
     break;
 
   case 104:
@@ -2992,7 +2992,7 @@ yyreduce:
 	{	parserData->otherOptionNamePresent = true;
 		osoption->general->otherOptions->other[parserData->numberOfOtherGeneralOptions]->name = (yyvsp[(2) - (2)].sval);	
 	}
-;}
+}
     break;
 
   case 106:
@@ -3004,7 +3004,7 @@ yyreduce:
 	{	parserData->otherOptionValuePresent = true;
 		osoption->general->otherOptions->other[parserData->numberOfOtherGeneralOptions]->value = (yyvsp[(2) - (2)].sval);	
 	}
-;}
+}
     break;
 
   case 108:
@@ -3016,7 +3016,7 @@ yyreduce:
 	{	parserData->otherOptionDescriptionPresent = true;
 		osoption->general->otherOptions->other[parserData->numberOfOtherGeneralOptions]->description = (yyvsp[(2) - (2)].sval);	
 	}
-;}
+}
     break;
 
   case 114:
@@ -3028,7 +3028,7 @@ yyreduce:
 	{	parserData->osolsystemPresent = true;	
 		osoption->system = new SystemOption();
 	}
-;}
+}
     break;
 
   case 125:
@@ -3040,22 +3040,22 @@ yyreduce:
 	{	parserData-> minDiskSpacePresent = true;	
 		osoption->system->minDiskSpace = new MinDiskSpace();
 	}
-;}
+}
     break;
 
   case 127:
 
-    {osoption->system->minDiskSpace->unit = (yyvsp[(2) - (2)].sval);;}
+    {osoption->system->minDiskSpace->unit = (yyvsp[(2) - (2)].sval);}
     break;
 
   case 131:
 
-    {osoption->system->minDiskSpace->value = (yyvsp[(2) - (2)].dval);;}
+    {osoption->system->minDiskSpace->value = (yyvsp[(2) - (2)].dval);}
     break;
 
   case 133:
 
-    {osoption->system->minDiskSpace->value = (yyvsp[(2) - (2)].ival);;}
+    {osoption->system->minDiskSpace->value = (yyvsp[(2) - (2)].ival);}
     break;
 
   case 136:
@@ -3067,22 +3067,22 @@ yyreduce:
 	{	parserData-> minMemorySizePresent = true;	
 		osoption->system->minMemorySize = new MinMemorySize();
 	}
-;}
+}
     break;
 
   case 138:
 
-    {osoption->system->minMemorySize->unit = (yyvsp[(2) - (2)].sval);;}
+    {osoption->system->minMemorySize->unit = (yyvsp[(2) - (2)].sval);}
     break;
 
   case 142:
 
-    {osoption->system->minMemorySize->value = (yyvsp[(2) - (2)].dval);;}
+    {osoption->system->minMemorySize->value = (yyvsp[(2) - (2)].dval);}
     break;
 
   case 144:
 
-    {osoption->system->minMemorySize->value = (yyvsp[(2) - (2)].ival);;}
+    {osoption->system->minMemorySize->value = (yyvsp[(2) - (2)].ival);}
     break;
 
   case 147:
@@ -3094,22 +3094,22 @@ yyreduce:
 	{	parserData-> minCPUSpeedPresent = true;	
 		osoption->system->minCPUSpeed = new MinCPUSpeed();
 	}
-;}
+}
     break;
 
   case 149:
 
-    {osoption->system->minCPUSpeed->unit = (yyvsp[(2) - (2)].sval);;}
+    {osoption->system->minCPUSpeed->unit = (yyvsp[(2) - (2)].sval);}
     break;
 
   case 153:
 
-    {osoption->system->minCPUSpeed->value = (yyvsp[(2) - (2)].dval);;}
+    {osoption->system->minCPUSpeed->value = (yyvsp[(2) - (2)].dval);}
     break;
 
   case 155:
 
-    {osoption->system->minCPUSpeed->value = (yyvsp[(2) - (2)].ival);;}
+    {osoption->system->minCPUSpeed->value = (yyvsp[(2) - (2)].ival);}
     break;
 
   case 158:
@@ -3120,12 +3120,12 @@ yyreduce:
 	else
 	{	parserData->minCPUNumberPresent = true;	
 	}
-;}
+}
     break;
 
   case 161:
 
-    {osoption->system->minCPUNumber = (yyvsp[(2) - (2)].ival);;}
+    {osoption->system->minCPUNumber = (yyvsp[(2) - (2)].ival);}
     break;
 
   case 164:
@@ -3138,7 +3138,7 @@ yyreduce:
 		osoption->system->otherOptions = new OtherOptions();	
 		osoption->system->otherOptions->other = new OtherOption*();	
 	}
-;}
+}
     break;
 
   case 165:
@@ -3146,14 +3146,14 @@ yyreduce:
     {	osoption->system->otherOptions->numberOfOtherOptions = (yyvsp[(3) - (4)].ival);
 	osoption->system->otherOptions->other = new OtherOption*[(yyvsp[(3) - (4)].ival)];
 	for (int i=0; i < (yyvsp[(3) - (4)].ival); i++) osoption->system->otherOptions->other[i] = new OtherOption();
-;}
+}
     break;
 
   case 166:
 
     {	if (parserData->numberOfOtherSystemOptions != osoption->system->otherOptions->numberOfOtherOptions)
 		osolerror (NULL, osoption, parserData, "wrong number of other options in <system> element"); 
-;}
+}
     break;
 
   case 169:
@@ -3161,7 +3161,7 @@ yyreduce:
     {	if (parserData->numberOfOtherSystemOptions >= osoption->system->otherOptions->numberOfOtherOptions)
 		{	osolerror (NULL, osoption, parserData, "too many other options in <system> element");
 		};
-	;}
+	}
     break;
 
   case 170:
@@ -3173,7 +3173,7 @@ yyreduce:
 	parserData->otherOptionValuePresent = false;
 	parserData->otherOptionDescriptionPresent = false;
 	parserData->numberOfOtherSystemOptions++;
-;}
+}
     break;
 
   case 174:
@@ -3185,7 +3185,7 @@ yyreduce:
 	{	parserData->otherOptionNamePresent = true;
 		osoption->system->otherOptions->other[parserData->numberOfOtherSystemOptions]->name = (yyvsp[(2) - (2)].sval);	
 	}
-;}
+}
     break;
 
   case 176:
@@ -3197,7 +3197,7 @@ yyreduce:
 	{	parserData->otherOptionValuePresent = true;
 		osoption->system->otherOptions->other[parserData->numberOfOtherSystemOptions]->value = (yyvsp[(2) - (2)].sval);	
 	}
-;}
+}
     break;
 
   case 178:
@@ -3209,7 +3209,7 @@ yyreduce:
 	{	parserData->otherOptionDescriptionPresent = true;
 		osoption->system->otherOptions->other[parserData->numberOfOtherSystemOptions]->description = (yyvsp[(2) - (2)].sval);	
 	}
-;}
+}
     break;
 
   case 184:
@@ -3221,7 +3221,7 @@ yyreduce:
 	{	parserData->osolservicePresent = true;	
 		osoption->service = new ServiceOption();
 	}
-;}
+}
     break;
 
   case 193:
@@ -3232,12 +3232,12 @@ yyreduce:
 	else
 	{	parserData->serviceTypePresent = true;	
 	}
-;}
+}
     break;
 
   case 196:
 
-    {osoption->service->type = (yyvsp[(2) - (2)].ival);;}
+    {osoption->service->type = (yyvsp[(2) - (2)].ival);}
     break;
 
   case 199:
@@ -3250,7 +3250,7 @@ yyreduce:
 		osoption->service->otherOptions = new OtherOptions();	
 		osoption->service->otherOptions->other = new OtherOption*();	
 	}
-;}
+}
     break;
 
   case 200:
@@ -3258,14 +3258,14 @@ yyreduce:
     {	osoption->service->otherOptions->numberOfOtherOptions = (yyvsp[(3) - (4)].ival);
 	osoption->service->otherOptions->other = new OtherOption*[(yyvsp[(3) - (4)].ival)];
 	for (int i=0; i < (yyvsp[(3) - (4)].ival); i++) osoption->service->otherOptions->other[i] = new OtherOption();
-;}
+}
     break;
 
   case 201:
 
     {	if (parserData->numberOfOtherServiceOptions != osoption->service->otherOptions->numberOfOtherOptions)
 		osolerror (NULL, osoption, parserData, "wrong number of other options in <service> element"); 
-;}
+}
     break;
 
   case 204:
@@ -3273,7 +3273,7 @@ yyreduce:
     {	if (parserData->numberOfOtherServiceOptions >= osoption->service->otherOptions->numberOfOtherOptions)
 		{	osolerror (NULL, osoption, parserData, "too many other options in <service> element");
 		};
-	;}
+	}
     break;
 
   case 205:
@@ -3285,7 +3285,7 @@ yyreduce:
 	parserData->otherOptionValuePresent = false;
 	parserData->otherOptionDescriptionPresent = false;
 	parserData->numberOfOtherServiceOptions++;
-;}
+}
     break;
 
   case 209:
@@ -3297,7 +3297,7 @@ yyreduce:
 	{	parserData->otherOptionNamePresent = true;
 		osoption->service->otherOptions->other[parserData->numberOfOtherServiceOptions]->name = (yyvsp[(2) - (2)].sval);	
 	}
-;}
+}
     break;
 
   case 212:
@@ -3309,7 +3309,7 @@ yyreduce:
 	{	parserData->otherOptionValuePresent = true;
 		osoption->service->otherOptions->other[parserData->numberOfOtherServiceOptions]->value = (yyvsp[(2) - (2)].sval);	
 	}
-;}
+}
     break;
 
   case 215:
@@ -3321,613 +3321,613 @@ yyreduce:
 	{	parserData->otherOptionDescriptionPresent = true;
 		osoption->service->otherOptions->other[parserData->numberOfOtherServiceOptions]->description = (yyvsp[(2) - (2)].sval);	
 	}
-;}
+}
     break;
 
   case 239:
 
     {
-;}
+}
     break;
 
   case 241:
 
     {
-;}
+}
     break;
 
   case 245:
 
     {
-;}
+}
     break;
 
   case 246:
 
     {
-;}
+}
     break;
 
   case 248:
 
     {
-;}
+}
     break;
 
   case 251:
 
     {
-;}
+}
     break;
 
   case 253:
 
     {
-;}
+}
     break;
 
   case 256:
 
     {
-;}
+}
     break;
 
   case 258:
 
     {
-;}
+}
     break;
 
   case 261:
 
     {
-;}
+}
     break;
 
   case 263:
 
     {
-;}
+}
     break;
 
   case 266:
 
     {
-;}
+}
     break;
 
   case 268:
 
     {
-;}
+}
     break;
 
   case 271:
 
     {
-;}
+}
     break;
 
   case 273:
 
     {
-;}
+}
     break;
 
   case 276:
 
     {
-;}
+}
     break;
 
   case 282:
 
     {
-;}
+}
     break;
 
   case 283:
 
     {
-;}
+}
     break;
 
   case 284:
 
     {
-;}
+}
     break;
 
   case 288:
 
     {
-;}
+}
     break;
 
   case 291:
 
     {
-;}
+}
     break;
 
   case 297:
 
     {
-;}
+}
     break;
 
   case 298:
 
     {
-;}
+}
     break;
 
   case 299:
 
     {
-;}
+}
     break;
 
   case 303:
 
     {
-;}
+}
     break;
 
   case 306:
 
     {
-;}
+}
     break;
 
   case 312:
 
     {
-;}
+}
     break;
 
   case 313:
 
     {
-;}
+}
     break;
 
   case 314:
 
     {
-;}
+}
     break;
 
   case 318:
 
     {
-;}
+}
     break;
 
   case 321:
 
     {
-;}
+}
     break;
 
   case 327:
 
     {
-;}
+}
     break;
 
   case 328:
 
     {
-;}
+}
     break;
 
   case 329:
 
     {
-;}
+}
     break;
 
   case 333:
 
     {
-;}
+}
     break;
 
   case 336:
 
     {
-;}
+}
     break;
 
   case 338:
 
     {
-;}
+}
     break;
 
   case 341:
 
     {
-;}
+}
     break;
 
   case 343:
 
     {
-;}
+}
     break;
 
   case 346:
 
     {
-;}
+}
     break;
 
   case 348:
 
     {
-;}
+}
     break;
 
   case 355:
 
     {
-;}
+}
     break;
 
   case 357:
 
     {
-;}
+}
     break;
 
   case 359:
 
     {
-;}
+}
     break;
 
   case 361:
 
     {
-;}
+}
     break;
 
   case 369:
 
     {
-;}
+}
     break;
 
   case 370:
 
     {
-;}
+}
     break;
 
   case 371:
 
     {
-;}
+}
     break;
 
   case 378:
 
     {
-;}
+}
     break;
 
   case 390:
 
     {
-;}
+}
     break;
 
   case 391:
 
     {
-;}
+}
     break;
 
   case 405:
 
     {
-;}
+}
     break;
 
   case 406:
 
     {
-;}
+}
     break;
 
   case 407:
 
     {
-;}
+}
     break;
 
   case 408:
 
     {
-;}
+}
     break;
 
   case 409:
 
     {
-;}
+}
     break;
 
   case 410:
 
     {
-;}
+}
     break;
 
   case 411:
 
     {
-;}
+}
     break;
 
   case 420:
 
     {
-;}
+}
     break;
 
   case 421:
 
     {
-;}
+}
     break;
 
   case 422:
 
     {
-;}
+}
     break;
 
   case 423:
 
     {
-;}
+}
     break;
 
   case 429:
 
     {
-;}
+}
     break;
 
   case 441:
 
     {
-;}
+}
     break;
 
   case 442:
 
     {
-;}
+}
     break;
 
   case 454:
 
     {
-;}
+}
     break;
 
   case 455:
 
     {
-;}
+}
     break;
 
   case 469:
 
     {
-;}
+}
     break;
 
   case 470:
 
     {
-;}
+}
     break;
 
   case 471:
 
     {
-;}
+}
     break;
 
   case 472:
 
     {
-;}
+}
     break;
 
   case 473:
 
     {
-;}
+}
     break;
 
   case 474:
 
     {
-;}
+}
     break;
 
   case 475:
 
     {
-;}
+}
     break;
 
   case 484:
 
     {
-;}
+}
     break;
 
   case 485:
 
     {
-;}
+}
     break;
 
   case 486:
 
     {
-;}
+}
     break;
 
   case 487:
 
     {
-;}
+}
     break;
 
   case 493:
 
     {
-;}
+}
     break;
 
   case 505:
 
     {
-;}
+}
     break;
 
   case 506:
 
     {
-;}
+}
     break;
 
   case 518:
 
     {
-;}
+}
     break;
 
   case 519:
 
     {
-;}
+}
     break;
 
   case 533:
 
     {
-;}
+}
     break;
 
   case 534:
 
     {
-;}
+}
     break;
 
   case 535:
 
     {
-;}
+}
     break;
 
   case 536:
 
     {
-;}
+}
     break;
 
   case 537:
 
     {
-;}
+}
     break;
 
   case 538:
 
     {
-;}
+}
     break;
 
   case 539:
 
     {
-;}
+}
     break;
 
   case 548:
 
     {
-;}
+}
     break;
 
   case 549:
 
     {
-;}
+}
     break;
 
   case 550:
 
     {
-;}
+}
     break;
 
   case 551:
 
     {
-;}
+}
     break;
 
   case 556:
 
     {
-;}
+}
     break;
 
   case 568:
 
     {
-;}
+}
     break;
 
   case 569:
 
     {
-;}
+}
     break;
 
   case 570:
 
     {
-;}
+}
     break;
 
   case 571:
 
     {
-;}
+}
     break;
 
   case 572:
 
     {
-;}
+}
     break;
 
   case 573:
 
     {
-;}
+}
     break;
 
 

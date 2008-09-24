@@ -732,6 +732,11 @@ AC_CONFIG_FILES([Makefile
           examples/osRemoteTest/Makefile
           examples/template/Makefile
           examples/CppAD/Makefile
+          CoinAllExamples/instanceGenerator/Makefile
+          CoinAllExamples/osTestCode/Makefile
+          CoinAllExamples/addCuts/Makefile
+          CoinAllExamples/template/Makefile
+          CoinAllExamples/CppAD/Makefile
           applications/Makefile
           applications/amplClient/Makefile
           applications/fileUpload/Makefile
