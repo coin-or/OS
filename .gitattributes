@@ -18,6 +18,8 @@ OS/CoinAllExamples/instanceGenerator/Makefile.in -text
 OS/CoinAllExamples/instanceGenerator/OSInstanceGenerator.cpp -text
 OS/CoinAllExamples/osTestCode/Makefile.in -text
 OS/CoinAllExamples/osTestCode/OSTestCode.cpp -text
+OS/CoinAllExamples/template/Makefile.in -text
+OS/CoinAllExamples/template/template.cpp -text
 OS/LICENSE -text
 OS/MSVisualStudio/v8/OS.sln -text
 OS/MSVisualStudio/v8/OSAmplClient/OSamplclient.vcproj -text
