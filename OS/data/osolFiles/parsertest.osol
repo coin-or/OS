@@ -9,6 +9,12 @@
 		<contact transportType="ftp"></contact>
 		<serviceName></serviceName>
 		<instanceLocation locationType="http">http://myweb.dal.ca/gassmann</instanceLocation>
+		<otherOptions numberOfOtherOptions="4">
+			<other name="test" value="5"></other>
+			<other value="0" name="other"></other>
+			<other name="third"/>
+			<other description="could-be-blank" value="NaN" name="four"/>
+		</otherOptions>
 	</general>
 	<system>
 		<minDiskSpace unit="megabyte">0</minDiskSpace>
@@ -16,11 +22,14 @@
             <minCPUNumber>0</minCPUNumber>
 	</system>
 	<service>
-		<otherOptions numberOfOtherOptions="3">
+<!--
+		<otherOptions numberOfOtherOptions="4">
 			<other name="test" value="5"></other>
-			<other name="other"></other>
+			<other value="0" name="other"></other>
 			<other name="third"/>
+			<other description="" value="" name="four"/>
 		</otherOptions>
+-->
 	</service>
 	<job>
 	<directoriesToMake numberOfPaths="1">

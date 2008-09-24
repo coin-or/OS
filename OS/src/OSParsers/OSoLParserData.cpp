@@ -99,6 +99,9 @@
 	numberOfCon(0),
 	initialDualVariableValuesPresent(false),
 	numberOfDuals(0),
+	otherOptionNamePresent(false),
+	otherOptionValuePresent(false),
+	otherOptionDescriptionPresent(false),
 
  	statusType(""),
 	statusDescription(""),

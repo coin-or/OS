@@ -64,6 +64,7 @@ OtherOption::OtherOption():
 	value (""),
 	description ("")
 {    
+	cout << "Inside OtherOption Constructor" << endl;
 	#ifdef DEBUG
 	cout << "Inside OtherOption Constructor" << endl;
 	#endif
@@ -268,7 +269,7 @@ JobDependencies::~JobDependencies()
 //		{	delete jobID[i];
 //			jobID[i] = NULL;
 //		}
-		delete[] jobID;
+		delete jobID;
 		jobID = NULL;
 //	}
 }//end JobDependencies destructor 
@@ -293,7 +294,7 @@ DirectoriesAndFiles::~DirectoriesAndFiles()
 //		{	delete path[i];
 //			path[i] = NULL;
 //		}
-		delete[] path;
+		delete path;
 		path = NULL;
 //	}
 }//end DirectoriesAndFiles destructor 
@@ -362,7 +363,7 @@ Processes::~Processes()
 //		{	delete process[i];
 //			process[i] = NULL;
 //		}
-		delete[] process;
+		delete process;
 		process = NULL;
 //	}
 }//end Processes destructor 

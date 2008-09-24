@@ -129,7 +129,7 @@ osolstart:	OSOLSTART
 
 osolcontent: osolgeneral osolsystem osolservice osoljob osoloptimization ;
 
-osolgeneral: | generalhead generalbody
+osolgeneral: | generalhead generalbody;
 
 generalhead: GENERALSTART 
 {	if (parserData->osolgeneralPresent)
@@ -199,7 +199,7 @@ instancenamebody: ENDOFELEMENT
 	| GREATERTHAN ELEMENTTEXT {osoption->general->instanceName = $2;} INSTANCENAMEEND;
 
 
-instancelocation: instancelocationhead instancelocationbody;
+instancelocation: instancelocationhead locationtypeatt instancelocationbody;
 
 instancelocationhead: INSTANCELOCATIONSTART 
 {	if (parserData->instanceLocationPresent)
@@ -211,248 +211,488 @@ instancelocationhead: INSTANCELOCATIONSTART
 	}
 }; 
 
-instancelocationbody: ENDOFELEMENT
-	|   locationtypeatt GREATERTHAN instancelocationtext INSTANCELOCATIONEND;
-
 locationtypeatt: | LOCATIONTYPEATT ATTRIBUTETEXT {osoption->general->instanceLocation->locationType = $2;} QUOTE;
+
+instancelocationbody: ENDOFELEMENT
+	|   GREATERTHAN instancelocationtext INSTANCELOCATIONEND;
 
 instancelocationtext: | ELEMENTTEXT {osoption->general->instanceLocation->value = $1;};
 
 
-jobid: emptyjobid | nonemptyjobid;
+jobid: jobidhead jobidbody;
 
-emptyjobid: JOBIDSTART ENDOFELEMENT
-	|   JOBIDSTART GREATERTHAN JOBIDEND
-{
+jobidhead: JOBIDSTART 
+{	if (parserData->jobIDPresent)
+	{	osolerror( NULL, osoption, parserData, "only one <jobID> element allowed");
+	}
+	else
+	{	parserData->jobIDPresent = true;	
+	}
+}; 
+
+jobidbody: ENDOFELEMENT
+	| GREATERTHAN JOBIDEND
+	| GREATERTHAN ELEMENTTEXT {osoption->general->jobID = $2;} JOBIDEND;
+
+
+solvertoinvoke: solvertoinvokehead solvertoinvokebody;
+
+solvertoinvokehead: SOLVERTOINVOKESTART 
+{	if (parserData->solverToInvokePresent)
+	{	osolerror( NULL, osoption, parserData, "only one <solverToInvoke> element allowed");
+	}
+	else
+	{	parserData->solverToInvokePresent = true;	
+	}
+}; 
+
+solvertoinvokebody: ENDOFELEMENT
+	| GREATERTHAN SOLVERTOINVOKEEND
+	| GREATERTHAN ELEMENTTEXT {osoption->general->solverToInvoke = $2;} SOLVERTOINVOKEEND;
+
+
+license: licensehead licensebody;
+
+licensehead: LICENSESTART 
+{	if (parserData->licensePresent)
+	{	osolerror( NULL, osoption, parserData, "only one <license> element allowed");
+	}
+	else
+	{	parserData->licensePresent = true;	
+	}
+}; 
+
+licensebody: ENDOFELEMENT
+	| GREATERTHAN LICENSEEND
+	| GREATERTHAN ELEMENTTEXT {osoption->general->license = $2;} LICENSEEND;
+
+
+username: usernamehead usernamebody;
+
+usernamehead: USERNAMESTART 
+{	if (parserData->usernamePresent)
+	{	osolerror( NULL, osoption, parserData, "only one <userName> element allowed");
+	}
+	else
+	{	parserData->usernamePresent = true;	
+	}
+}; 
+
+usernamebody: ENDOFELEMENT
+	| GREATERTHAN USERNAMEEND
+	| GREATERTHAN ELEMENTTEXT {osoption->general->userName = $2;} USERNAMEEND;
+
+
+password: passwordhead passwordbody;
+
+passwordhead: PASSWORDSTART 
+{	if (parserData->passwordPresent)
+	{	osolerror( NULL, osoption, parserData, "only one <password> element allowed");
+	}
+	else
+	{	parserData->passwordPresent = true;	
+	}
+}; 
+
+passwordbody: ENDOFELEMENT
+	| GREATERTHAN PASSWORDEND
+	| GREATERTHAN ELEMENTTEXT {osoption->general->password = $2;} PASSWORDEND;
+
+
+contact: contacthead transporttypeatt contactbody;
+
+contacthead: CONTACTSTART 
+{	if (parserData->contactPresent)
+	{	osolerror( NULL, osoption, parserData, "only one <contact> element allowed");
+	}
+	else
+	{	parserData->contactPresent = true;
+		osoption->general->contact = new ContactOption();
+	}
+}; 
+
+transporttypeatt: | TRANSPORTTYPEATT ATTRIBUTETEXT {osoption->general->contact->transportType = $2;} QUOTE;
+
+contactbody: ENDOFELEMENT
+	|   GREATERTHAN contacttext CONTACTEND;
+
+contacttext: | ELEMENTTEXT {osoption->general->contact->value = $1;};
+
+
+othergeneraloptions: othergeneraloptionshead numberofothergeneraloptions GREATERTHAN othergeneraloptionsbody;
+
+othergeneraloptionshead: OTHEROPTIONSSTART 
+{	if (parserData->otherGeneralOptionsPresent)
+	{	osolerror( NULL, osoption, parserData, "only one <otherOptions> element allowed");
+	}
+	else
+	{	parserData->otherGeneralOptionsPresent = true;
+		osoption->general->otherOptions = new OtherOptions();	
+		osoption->general->otherOptions->other = new OtherOption*();	
+	}
+}; 
+
+numberofothergeneraloptions: NUMBEROFOTHEROPTIONSATT QUOTE INTEGER QUOTE
+{	osoption->general->otherOptions->numberOfOtherOptions = $3;
+	osoption->general->otherOptions->other = new OtherOption*[$3];
+	for (int i=0; i < $3; i++) osoption->general->otherOptions->other[i] = new OtherOption();
 };
 
-nonemptyjobid: JOBIDSTART GREATERTHAN ELEMENTTEXT JOBIDEND
-{
-};
-
-
-solvertoinvoke: emptysolver | nonemptysolver;
-
-emptysolver: SOLVERTOINVOKESTART ENDOFELEMENT
-        |   SOLVERTOINVOKESTART GREATERTHAN SOLVERTOINVOKEEND
-{
-};
-
-nonemptysolver: SOLVERTOINVOKESTART GREATERTHAN ELEMENTTEXT SOLVERTOINVOKEEND
-{
-};
-
-
-license: emptylicense | nonemptylicense;
-
-emptylicense: LICENSESTART ENDOFELEMENT
-	|   LICENSESTART GREATERTHAN LICENSEEND
-{
-};
-
-nonemptylicense: LICENSESTART GREATERTHAN ELEMENTTEXT LICENSEEND
-{
-};
-
-
-username: emptyusername | nonemptyusername;
-
-emptyusername: USERNAMESTART ENDOFELEMENT
-	|   USERNAMESTART GREATERTHAN USERNAMEEND
-{
-};
-
-nonemptyusername: USERNAMESTART GREATERTHAN ELEMENTTEXT USERNAMEEND
-{
-};
-
-
-password: emptypassword | nonemptypassword;
-
-emptypassword: PASSWORDSTART ENDOFELEMENT
-	|   PASSWORDSTART GREATERTHAN PASSWORDEND
-{
-};
-
-nonemptypassword: PASSWORDSTART GREATERTHAN ELEMENTTEXT PASSWORDEND
-{
-};
-
-contact: emptycontact | nonemptycontact;
-
-emptycontact: CONTACTSTART ENDOFELEMENT
-	|   CONTACTSTART transporttypeatt GREATERTHAN CONTACTEND
-{
-};
-
-nonemptycontact: CONTACTSTART transporttypeatt GREATERTHAN ELEMENTTEXT CONTACTEND
-{
-};
-
-transporttypeatt: | TRANSPORTTYPEATT ATTRIBUTETEXT 
-{
-printf("TRANSSPORT ATTRIBUTE TEXT =  %s",$2);printf("%s","\n");
-//delete($2);
-} QUOTE;
-
-
-othergeneraloptions: OTHEROPTIONSSTART numberofothergeneraloptions GREATERTHAN othergeneraloptionslist OTHEROPTIONSEND;
-
-numberofothergeneraloptions: NUMBEROFOTHEROPTIONSATT ATTRIBUTETEXT QUOTE
-{
+othergeneraloptionsbody: othergeneraloptionslist OTHEROPTIONSEND
+{	if (parserData->numberOfOtherGeneralOptions != osoption->general->otherOptions->numberOfOtherOptions)
+		osolerror (NULL, osoption, parserData, "wrong number of other options in <general> element"); 
 };
 
 othergeneraloptionslist: | othergeneraloptionslist othergeneraloption;
 
-othergeneraloption: OTHERSTART othergeneralattributes othergeneraloptionsend;
+othergeneraloption: OTHERSTART 
+	{	if (parserData->numberOfOtherGeneralOptions >= osoption->general->otherOptions->numberOfOtherOptions)
+		{	osolerror (NULL, osoption, parserData, "too many other options in <general> element");
+		};
+	} 
+    othergeneralattributes othergeneraloptionend
+{	if (!parserData->otherOptionNamePresent)
+		osolerror (NULL, osoption, parserData, "name attribute must be present");
+	/* reset defaults for the next option */
+	parserData->otherOptionNamePresent = false;
+	parserData->otherOptionValuePresent = false;
+	parserData->otherOptionDescriptionPresent = false;
+	parserData->numberOfOtherGeneralOptions++;
+};
+
 
 othergeneralattributes: | othergeneralattributes othergeneralattribute;
 
-othergeneralattribute: generaloptionnameatt generaloptionvalueatt generaloptiondescriptionatt;
+othergeneralattribute: generaloptionnameatt | generaloptionvalueatt | generaloptiondescriptionatt;
 
-generaloptionnameatt: NAMEATT ATTRIBUTETEXT QUOTE
-{
-};
+generaloptionnameatt: NAMEATT ATTRIBUTETEXT 
+{	if (parserData->otherOptionNamePresent)
+	{	osolerror( NULL, osoption, parserData, "only one name attribute allowed");
+	}
+	else
+	{	parserData->otherOptionNamePresent = true;
+		osoption->general->otherOptions->other[parserData->numberOfOtherGeneralOptions]->name = $2;	
+	}
+}
+QUOTE; 
 
-generaloptionvalueatt: | VALUEATT ATTRIBUTETEXT QUOTE
-{
-};
+generaloptionvalueatt: VALUEATT ATTRIBUTETEXT 
+{	if (parserData->otherOptionValuePresent)
+	{	osolerror( NULL, osoption, parserData, "only one value attribute allowed");
+	}
+	else
+	{	parserData->otherOptionValuePresent = true;
+		osoption->general->otherOptions->other[parserData->numberOfOtherGeneralOptions]->value = $2;	
+	}
+}
+QUOTE;
 
-generaloptiondescriptionatt: | DESCRIPTIONATT ATTRIBUTETEXT QUOTE
-{
-};
+generaloptiondescriptionatt: DESCRIPTIONATT ATTRIBUTETEXT 
+{	if (parserData->otherOptionDescriptionPresent)
+	{	osolerror( NULL, osoption, parserData, "only one description attribute allowed");
+	}
+	else
+	{	parserData->otherOptionDescriptionPresent = true;
+		osoption->general->otherOptions->other[parserData->numberOfOtherGeneralOptions]->description = $2;	
+	}
+}
+QUOTE;
 
-othergeneraloptionsend: ENDOFELEMENT | GREATERTHAN OTHEREND
-{
-};
+othergeneraloptionend: ENDOFELEMENT | GREATERTHAN OTHEREND;
 
 
-osolsystem: 
-	| SYSTEMSTART GREATERTHAN systemcontent SYSTEMEND
-	| SYSTEMSTART ENDOFELEMENT;
+osolsystem: | systemhead systembody;
+
+systemhead: SYSTEMSTART 
+{	if (parserData->osolsystemPresent)
+	{	osolerror( NULL, osoption, parserData, "only one <system> element allowed");
+	}
+	else
+	{	parserData->osolsystemPresent = true;	
+		osoption->system = new SystemOption();
+	}
+}; 
+
+systembody:
+	  GREATERTHAN systemcontent SYSTEMEND
+	| ENDOFELEMENT;
 
 systemcontent: | systemcontent systemoption;
 
 systemoption: mindiskspace | minmemorysize | mincpuspeed | mincpunumber | othersystemoptions;
 
-mindiskspace: MINDISKSPACESTART mindiskspaceunit GREATERTHAN DOUBLE MINDISKSPACEEND
-| MINDISKSPACESTART mindiskspaceunit GREATERTHAN INTEGER MINDISKSPACEEND
-{
+mindiskspace: mindiskspacehead mindiskspaceunit mindiskspacebody;
+
+mindiskspacehead: MINDISKSPACESTART
+{	if (parserData->minDiskSpacePresent)
+	{	osolerror( NULL, osoption, parserData, "only one <minDiskSpace> element allowed");
+	}
+	else
+	{	parserData-> minDiskSpacePresent = true;	
+		osoption->system->minDiskSpace = new MinDiskSpace();
+	}
+}; 
+
+mindiskspaceunit: | UNITATT ATTRIBUTETEXT {osoption->system->minDiskSpace->unit = $2;} QUOTE;
+
+mindiskspacebody: ENDOFELEMENT
+	| GREATERTHAN MINDISKSPACEEND 
+	| GREATERTHAN DOUBLE  {osoption->system->minDiskSpace->value = $2;} MINDISKSPACEEND
+	| GREATERTHAN INTEGER {osoption->system->minDiskSpace->value = $2;} MINDISKSPACEEND;
+
+
+minmemorysize: minmemorysizehead minmemoryunit minmemorysizebody;
+
+minmemorysizehead: MINMEMORYSIZESTART 
+{	if (parserData->minMemorySizePresent)
+	{	osolerror( NULL, osoption, parserData, "only one <minMemorySize> element allowed");
+	}
+	else
+	{	parserData-> minMemorySizePresent = true;	
+		osoption->system->minMemorySize = new MinMemorySize();
+	}
+}; 
+
+minmemoryunit: | UNITATT ATTRIBUTETEXT {osoption->system->minMemorySize->unit = $2;} QUOTE;
+
+minmemorysizebody: ENDOFELEMENT
+	| GREATERTHAN MINMEMORYSIZEEND 
+	| GREATERTHAN DOUBLE  {osoption->system->minMemorySize->value = $2;} MINMEMORYSIZEEND
+	| GREATERTHAN INTEGER {osoption->system->minMemorySize->value = $2;} MINMEMORYSIZEEND;
+
+
+mincpuspeed: mincpuspeedhead mincpuspeedunit mincpuspeedbody;
+
+mincpuspeedhead: MINCPUSPEEDSTART 
+{	if (parserData->minCPUSpeedPresent)
+	{	osolerror( NULL, osoption, parserData, "only one <minCPUSpeed> element allowed");
+	}
+	else
+	{	parserData-> minCPUSpeedPresent = true;	
+		osoption->system->minCPUSpeed = new MinCPUSpeed();
+	}
+}; 
+ 
+mincpuspeedunit: | UNITATT ATTRIBUTETEXT {osoption->system->minCPUSpeed->unit = $2;} QUOTE;
+
+mincpuspeedbody: ENDOFELEMENT
+	| GREATERTHAN MINCPUSPEEDEND
+	| GREATERTHAN DOUBLE  {osoption->system->minCPUSpeed->value = $2;} MINCPUSPEEDEND
+	| GREATERTHAN INTEGER {osoption->system->minCPUSpeed->value = $2;} MINCPUSPEEDEND;
+
+
+mincpunumber: mincpunumberhead mincpunumberbody;
+
+mincpunumberhead: MINCPUNUMBERSTART 
+{	if (parserData->minCPUNumberPresent)
+	{	osolerror( NULL, osoption, parserData, "only one <minCPUNumber> element allowed");
+	}
+	else
+	{	parserData->minCPUNumberPresent = true;	
+	}
+}; 
+
+mincpunumberbody: ENDOFELEMENT
+	| GREATERTHAN MINCPUNUMBEREND
+	| GREATERTHAN INTEGER {osoption->system->minCPUNumber = $2;} MINCPUNUMBEREND;
+
+
+othersystemoptions: othersystemoptionshead numberofothersystemoptions GREATERTHAN othersystemoptionsbody;
+
+othersystemoptionshead: OTHEROPTIONSSTART
+{	if (parserData->otherSystemOptionsPresent)
+	{	osolerror( NULL, osoption, parserData, "only one <otherOptions> element allowed");
+	}
+	else
+	{	parserData->otherSystemOptionsPresent = true;
+		osoption->system->otherOptions = new OtherOptions();	
+		osoption->system->otherOptions->other = new OtherOption*();	
+	}
+}; 
+ 
+numberofothersystemoptions: NUMBEROFOTHEROPTIONSATT QUOTE INTEGER QUOTE
+{	osoption->system->otherOptions->numberOfOtherOptions = $3;
+	osoption->system->otherOptions->other = new OtherOption*[$3];
+	for (int i=0; i < $3; i++) osoption->system->otherOptions->other[i] = new OtherOption();
 };
 
-mindiskspaceunit: | UNITATT ATTRIBUTETEXT QUOTE
-{
-};
-
-minmemorysize: MINMEMORYSIZESTART minmemoryunit GREATERTHAN DOUBLE MINMEMORYSIZEEND
- | MINMEMORYSIZESTART minmemoryunit GREATERTHAN INTEGER MINMEMORYSIZEEND
-{
-};
-
-minmemoryunit: | UNITATT ATTRIBUTETEXT QUOTE
-{
-};
-
-mincpuspeed: MINCPUSPEEDSTART mincpuspeedunit GREATERTHAN DOUBLE MINCPUSPEEDEND
- |  MINCPUSPEEDSTART mincpuspeedunit GREATERTHAN INTEGER MINCPUSPEEDEND
-{
-};
-
-mincpuspeedunit: | UNITATT ATTRIBUTETEXT QUOTE
-{
-};
-
-mincpunumber: emptymincpunumber | nonemptymincpunumber;
-
-emptymincpunumber: MINCPUNUMBERSTART ENDOFELEMENT
-	|   MINCPUNUMBERSTART GREATERTHAN MINCPUNUMBEREND
-{
-};
-
-nonemptymincpunumber: MINCPUNUMBERSTART GREATERTHAN INTEGER MINCPUNUMBEREND
-{
-};
-
-othersystemoptions: OTHEROPTIONSSTART numberofothersystemoptions GREATERTHAN othersystemoptionslist OTHEROPTIONSEND;
-
-numberofothersystemoptions: NUMBEROFOTHEROPTIONSATT ATTRIBUTETEXT QUOTE
-{
+othersystemoptionsbody: othersystemoptionslist OTHEROPTIONSEND
+{	if (parserData->numberOfOtherSystemOptions != osoption->system->otherOptions->numberOfOtherOptions)
+		osolerror (NULL, osoption, parserData, "wrong number of other options in <system> element"); 
 };
 
 othersystemoptionslist: | othersystemoptionslist othersystemoption;
 
-othersystemoption: OTHERSTART othersystemattributes othersystemoptionsend;
+othersystemoption: OTHERSTART 
+	{	if (parserData->numberOfOtherSystemOptions >= osoption->system->otherOptions->numberOfOtherOptions)
+		{	osolerror (NULL, osoption, parserData, "too many other options in <system> element");
+		};
+	} 
+    othersystemattributes othersystemoptionsend
+{	if (!parserData->otherOptionNamePresent)
+		osolerror (NULL, osoption, parserData, "name attribute must be present");
+	/* reset defaults for the next option */
+	parserData->otherOptionNamePresent = false;
+	parserData->otherOptionValuePresent = false;
+	parserData->otherOptionDescriptionPresent = false;
+	parserData->numberOfOtherSystemOptions++;
+};
 
 othersystemattributes: | othersystemattributes othersystemattribute;
 
 othersystemattribute: systemoptionnameatt systemoptionvalueatt systemoptiondescriptionatt;
 
-systemoptionnameatt: NAMEATT ATTRIBUTETEXT QUOTE
-{
-};
+systemoptionnameatt: NAMEATT ATTRIBUTETEXT 
+{	if (parserData->otherOptionNamePresent)
+	{	osolerror( NULL, osoption, parserData, "only one name attribute allowed");
+	}
+	else
+	{	parserData->otherOptionNamePresent = true;
+		osoption->system->otherOptions->other[parserData->numberOfOtherSystemOptions]->name = $2;	
+	}
+}
+QUOTE; 
 
-systemoptionvalueatt: | VALUEATT ATTRIBUTETEXT QUOTE
-{
-};
+systemoptionvalueatt: VALUEATT ATTRIBUTETEXT 
+{	if (parserData->otherOptionValuePresent)
+	{	osolerror( NULL, osoption, parserData, "only one value attribute allowed");
+	}
+	else
+	{	parserData->otherOptionValuePresent = true;
+		osoption->system->otherOptions->other[parserData->numberOfOtherSystemOptions]->value = $2;	
+	}
+}
+QUOTE;
 
-systemoptiondescriptionatt: | DESCRIPTIONATT ATTRIBUTETEXT QUOTE
-{
-};
 
-othersystemoptionsend: ENDOFELEMENT | GREATERTHAN OTHEREND
-{
-};
+systemoptiondescriptionatt: DESCRIPTIONATT ATTRIBUTETEXT 
+{	if (parserData->otherOptionDescriptionPresent)
+	{	osolerror( NULL, osoption, parserData, "only one description attribute allowed");
+	}
+	else
+	{	parserData->otherOptionDescriptionPresent = true;
+		osoption->system->otherOptions->other[parserData->numberOfOtherSystemOptions]->description = $2;	
+	}
+}
+QUOTE;
+
+othersystemoptionsend: ENDOFELEMENT | GREATERTHAN OTHEREND;
 
 
-osolservice: 
-	| SERVICESTART GREATERTHAN servicecontent SERVICEEND
-	| SERVICESTART ENDOFELEMENT;
+osolservice: | servicehead servicebody;
+
+servicehead: SERVICESTART 
+{	if (parserData->osolservicePresent)
+	{	osolerror( NULL, osoption, parserData, "only one <service> element allowed");
+	}
+	else
+	{	parserData->osolservicePresent = true;	
+		osoption->service = new ServiceOption();
+	}
+}; 
+
+servicebody:
+	  GREATERTHAN servicecontent SERVICEEND
+	| ENDOFELEMENT;
 
 servicecontent: | servicecontent serviceoption;
 
 serviceoption: servicetype | otherserviceoptions;
 
-servicetype: emptyservicetype | nonemptyservicetype;
+servicetype: servicetypehead | servicetypebody;
 
-emptyservicetype: SERVICETYPESTART ENDOFELEMENT
-	|   SERVICETYPESTART GREATERTHAN SERVICETYPEEND
-{
+servicetypehead: SERVICETYPESTART 
+{	if (parserData->serviceTypePresent)
+	{	osolerror( NULL, osoption, parserData, "only one <type> element allowed");
+	}
+	else
+	{	parserData->serviceTypePresent = true;	
+	}
+}; 
+
+servicetypebody: ENDOFELEMENT
+	| GREATERTHAN SERVICETYPEEND
+	| GREATERTHAN INTEGER {osoption->service->type = $2;} SERVICETYPEEND;
+
+otherserviceoptions: otherserviceoptionshead numberofotherserviceoptions GREATERTHAN otherserviceoptionsbody;
+
+otherserviceoptionshead: OTHEROPTIONSSTART
+{	if (parserData->otherServiceOptionsPresent)
+	{	osolerror( NULL, osoption, parserData, "only one <otherOptions> element allowed");
+	}
+	else
+	{	parserData->otherServiceOptionsPresent = true;
+		osoption->service->otherOptions = new OtherOptions();	
+		osoption->service->otherOptions->other = new OtherOption*();	
+	}
+}; 
+
+numberofotherserviceoptions: NUMBEROFOTHEROPTIONSATT QUOTE INTEGER QUOTE
+{	osoption->service->otherOptions->numberOfOtherOptions = $3;
+	osoption->service->otherOptions->other = new OtherOption*[$3];
+	for (int i=0; i < $3; i++) osoption->service->otherOptions->other[i] = new OtherOption();
 };
 
-nonemptyservicetype: SERVICETYPESTART GREATERTHAN ELEMENTTEXT SERVICETYPEEND
-{
-};
-
-
-otherserviceoptions: OTHEROPTIONSSTART numberofotherserviceoptions GREATERTHAN otherserviceoptionslist OTHEROPTIONSEND;
-
-numberofotherserviceoptions: NUMBEROFOTHEROPTIONSATT ATTRIBUTETEXT QUOTE
-{
+otherserviceoptionsbody: otherserviceoptionslist OTHEROPTIONSEND
+{	if (parserData->numberOfOtherServiceOptions != osoption->service->otherOptions->numberOfOtherOptions)
+		osolerror (NULL, osoption, parserData, "wrong number of other options in <service> element"); 
 };
 
 otherserviceoptionslist: | otherserviceoptionslist otherserviceoption;
 
-otherserviceoption: OTHERSTART otherserviceattributes otherserviceoptionsend;
+otherserviceoption: OTHERSTART 
+	{	if (parserData->numberOfOtherServiceOptions >= osoption->service->otherOptions->numberOfOtherOptions)
+		{	osolerror (NULL, osoption, parserData, "too many other options in <service> element");
+		};
+	} 
+otherserviceattributes otherserviceoptionsend
+{	if (!parserData->otherOptionNamePresent)
+		osolerror (NULL, osoption, parserData, "name attribute must be present");
+	/* reset defaults for the next option */
+	parserData->otherOptionNamePresent = false;
+	parserData->otherOptionValuePresent = false;
+	parserData->otherOptionDescriptionPresent = false;
+	parserData->numberOfOtherServiceOptions++;
+};
 
 otherserviceattributes: | otherserviceattributes otherserviceattribute;
 
 otherserviceattribute: serviceoptionnameatt serviceoptionvalueatt serviceoptiondescriptionatt;
 
-serviceoptionnameatt: NAMEATT ATTRIBUTETEXT QUOTE
-{
-};
+serviceoptionnameatt: NAMEATT ATTRIBUTETEXT 
+{	if (parserData->otherOptionNamePresent)
+	{	osolerror( NULL, osoption, parserData, "only one name attribute allowed");
+	}
+	else
+	{	parserData->otherOptionNamePresent = true;
+		osoption->service->otherOptions->other[parserData->numberOfOtherServiceOptions]->name = $2;	
+	}
+}
+QUOTE; 
 
-serviceoptionvalueatt: | VALUEATT ATTRIBUTETEXT QUOTE
-{
-};
+serviceoptionvalueatt: | VALUEATT ATTRIBUTETEXT 
+{	if (parserData->otherOptionValuePresent)
+	{	osolerror( NULL, osoption, parserData, "only one value attribute allowed");
+	}
+	else
+	{	parserData->otherOptionValuePresent = true;
+		osoption->service->otherOptions->other[parserData->numberOfOtherServiceOptions]->value = $2;	
+	}
+}
+QUOTE;
 
-serviceoptiondescriptionatt: | DESCRIPTIONATT ATTRIBUTETEXT QUOTE
-{
-};
+serviceoptiondescriptionatt: | DESCRIPTIONATT ATTRIBUTETEXT 
+{	if (parserData->otherOptionDescriptionPresent)
+	{	osolerror( NULL, osoption, parserData, "only one description attribute allowed");
+	}
+	else
+	{	parserData->otherOptionDescriptionPresent = true;
+		osoption->service->otherOptions->other[parserData->numberOfOtherServiceOptions]->description = $2;	
+	}
+}
+QUOTE;
 
-otherserviceoptionsend: ENDOFELEMENT | GREATERTHAN OTHEREND
-{
-};
+otherserviceoptionsend: ENDOFELEMENT | GREATERTHAN OTHEREND;
 
 
 osoljob: 

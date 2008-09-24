@@ -136,13 +136,12 @@ return(DOUBLE);}
 
 ({xmlwhitespace}*\/>) {YY_PRINT;  return(ENDOFELEMENT);}
 
+({xmlwhitespace}+numberOfOtherOptions{equality}) {YY_PRINT; return(NUMBEROFOTHEROPTIONSATT);}
 
 ({xmlwhitespace}+locationType{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(LOCATIONTYPEATT);}
 ({xmlwhitespace}+locationType{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(LOCATIONTYPEATT);}
 ({xmlwhitespace}+transportType{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(TRANSPORTTYPEATT);}
 ({xmlwhitespace}+transportType{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(TRANSPORTTYPEATT);}
-({xmlwhitespace}+numberOfOtherOptions{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(NUMBEROFOTHEROPTIONSATT);}
-({xmlwhitespace}+numberOfOtherOptions{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(NUMBEROFOTHEROPTIONSATT);}
 ({xmlwhitespace}+name{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(NAMEATT);}
 ({xmlwhitespace}+name{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(NAMEATT);}
 ({xmlwhitespace}+value{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(VALUEATT);}

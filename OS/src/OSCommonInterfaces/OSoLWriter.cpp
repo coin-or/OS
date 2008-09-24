@@ -73,52 +73,52 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 	if(m_OSOption->general != NULL)
 	{	outStr << "<general>" << endl;
 		if (m_OSOption->general->serviceURI != "")
-			outStr << "<serviceURI>" + m_OSOption->general->serviceURI + "</serviceURI>" << endl;
+			outStr << "<serviceURI>" << m_OSOption->general->serviceURI << "</serviceURI>" << endl;
 		if (m_OSOption->general->serviceName != "")
-			outStr << "<serviceName>" + m_OSOption->general->serviceName + "</serviceName>" << endl;
+			outStr << "<serviceName>" << m_OSOption->general->serviceName << "</serviceName>" << endl;
 		if (m_OSOption->general->instanceName != "")
-			outStr << "<instanceName>" + m_OSOption->general->instanceName + "</instanceName>" << endl;
+			outStr << "<instanceName>" << m_OSOption->general->instanceName << "</instanceName>" << endl;
 		if (m_OSOption->general->instanceLocation != NULL)
 		{	if (m_OSOption->general->instanceLocation->locationType == "")
 			{	outStr << "<instanceLocation>";
 			}
 			else 
-			{	outStr << "<instanceLocation locationType=\"" + m_OSOption->general->instanceLocation->locationType + "\">";
+			{	outStr << "<instanceLocation locationType=\"" << m_OSOption->general->instanceLocation->locationType << "\">";
 			};
-			outStr << m_OSOption->general->instanceLocation->value + "</instanceLocation>" << endl;
+			outStr << m_OSOption->general->instanceLocation->value << "</instanceLocation>" << endl;
 		};
 		if (m_OSOption->general->jobID != "")
-		{	outStr << "<jobID>" + m_OSOption->general->jobID + "</jobID>" << endl;
+		{	outStr << "<jobID>" << m_OSOption->general->jobID << "</jobID>" << endl;
 		};
 		if (m_OSOption->general->license != "")
-		{	outStr << "<license>" + m_OSOption->general->license + "</license>" << endl;
+		{	outStr << "<license>" << m_OSOption->general->license << "</license>" << endl;
 		};
 		if (m_OSOption->general->userName != "")
-		{	outStr << "<userName>" + m_OSOption->general->userName + "</userName>" << endl;
+		{	outStr << "<userName>" << m_OSOption->general->userName << "</userName>" << endl;
 		};
 		if (m_OSOption->general->password != "")
-		{	outStr << "<password>" + m_OSOption->general->password + "</password>" << endl;
+		{	outStr << "<password>" << m_OSOption->general->password << "</password>" << endl;
 		};
 		if (m_OSOption->general->contact != NULL)
-		{	outStr << "<contact>";
-			if (m_OSOption->general->contact->transportType == "")
+		{	if (m_OSOption->general->contact->transportType == "")
 			{	outStr << "<contact>";
 			}
 			else 
-			{	outStr << "<contact contactType=\"" + m_OSOption->general->contact->transportType + "\">";
+			{	outStr << "<contact transportType=\"" << m_OSOption->general->contact->transportType << "\">";
 			};
-			outStr << "\"" + m_OSOption->general->contact->value + "\"</contact>" << endl;
+			outStr << m_OSOption->general->contact->value << "</contact>" << endl;
 		};
 		if (m_OSOption->general->otherOptions != NULL)
 		{	if (m_OSOption->general->otherOptions->numberOfOtherOptions > 0)
 			{	outStr << "<otherOptions numberOfOtherOptions=\""; 
-				outStr << m_OSOption->general->otherOptions->numberOfOtherOptions + "\">" << endl;
+		cout << "number of other options" << m_OSOption->general->otherOptions->numberOfOtherOptions << endl;
+				outStr << m_OSOption->general->otherOptions->numberOfOtherOptions << "\">" << endl;
 				for (int i=0; i < m_OSOption->general->otherOptions->numberOfOtherOptions; i++)
-				{	outStr << "<other name=\"" + m_OSOption->general->otherOptions->other[i]->name + "\"";
+				{	outStr << "<other name=\"" << m_OSOption->general->otherOptions->other[i]->name << "\"";
 					if (m_OSOption->general->otherOptions->other[i]->value != "")
-						outStr << "value=\" + m_OSOption->general->otherOptions->other[i]->value + \"";
+						outStr << " value=\"" << m_OSOption->general->otherOptions->other[i]->value << "\"";
 					if (m_OSOption->general->otherOptions->other[i]->description != "")
-						outStr << "description=\" + m_OSOption->general->otherOptions->other[i]->description + \"";
+						outStr << " description=\"" << m_OSOption->general->otherOptions->other[i]->description << "\"";
 					outStr << "/>" << endl;
 				}
 				outStr << "</otherOptions>" << endl;
@@ -158,11 +158,11 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 			{	outStr << "<otherOptions numberOfOtherOptions=\""; 
 				outStr << m_OSOption->system->otherOptions->numberOfOtherOptions << "\">" << endl;
 				for (int i=0; i < m_OSOption->system->otherOptions->numberOfOtherOptions; i++)
-				{	outStr << "<other name=\"" + m_OSOption->system->otherOptions->other[i]->name + "\"";
+				{	outStr << "<other name=\"" << m_OSOption->system->otherOptions->other[i]->name << "\"";
 					if (m_OSOption->system->otherOptions->other[i]->value != "")
-						outStr << "value=\" + m_OSOption->system->otherOptions->other[i]->value + \"";
+						outStr << " value=\"" << m_OSOption->system->otherOptions->other[i]->value << "\"";
 					if (m_OSOption->system->otherOptions->other[i]->description != "")
-						outStr << "description=\" + m_OSOption->system->otherOptions->other[i]->description + \"";
+						outStr << " description=\"" << m_OSOption->system->otherOptions->other[i]->description << "\"";
 					outStr << "/>" << endl;
 				}
 				outStr << "</otherOptions>" << endl;
@@ -177,18 +177,18 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 	if(m_OSOption->service != NULL)
 	{	outStr << "<service>" << endl;
 		if (m_OSOption->service->type != "")
-		{	outStr << "<type>" + m_OSOption->service->type + "</type>";
+		{	outStr << "<type>" << m_OSOption->service->type << "</type>";
 		};
 		if (m_OSOption->service->otherOptions != NULL)
 		{	if (m_OSOption->service->otherOptions->numberOfOtherOptions > 0)
 			{	outStr << "<otherOptions numberOfOtherOptions=\""; 
-				outStr << m_OSOption->service->otherOptions->numberOfOtherOptions + "\">" << endl;
+				outStr << m_OSOption->service->otherOptions->numberOfOtherOptions << "\">" << endl;
 				for (int i=0; i < m_OSOption->service->otherOptions->numberOfOtherOptions; i++)
-				{	outStr << "<other name=\"" + m_OSOption->service->otherOptions->other[i]->name + "\"";
+				{	outStr << "<other name=\"" << m_OSOption->service->otherOptions->other[i]->name << "\"";
 					if (m_OSOption->service->otherOptions->other[i]->value != "")
-						outStr << "value=\" + m_OSOption->service->otherOptions->other[i]->value + \"";
+						outStr << " value=\"" << m_OSOption->service->otherOptions->other[i]->value << "\"";
 					if (m_OSOption->service->otherOptions->other[i]->description != "")
-						outStr << "description=\" + m_OSOption->service->otherOptions->other[i]->description + \"";
+						outStr << " description=\"" << m_OSOption->service->otherOptions->other[i]->description << "\"";
 					outStr << "/>" << endl;
 				}
 				outStr << "</otherOptions>" << endl;
@@ -208,7 +208,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 			outStr << "<maxTime unit=\"" << m_OSOption->job->maxTime->unit << "\">";
 			outStr << m_OSOption->job->maxTime->value << "</maxTime>" << endl;
 		}
-		outStr << "<scheduledStartTime>" + m_OSOption->job->scheduledStartTime + "</scheduledStartTime>" << endl;
+		outStr << "<scheduledStartTime>" << m_OSOption->job->scheduledStartTime << "</scheduledStartTime>" << endl;
 		if (m_OSOption->job->dependencies != NULL)
 		{	if (m_OSOption->job->dependencies->numberOfJobIDs > 0)
 			{	outStr << "<dependencies numberOfJobIDs=\"";
@@ -260,9 +260,9 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				outStr << m_OSOption->job->inputDirectoriesToMove->numberOfPathPairs << "\">" << endl; 
 				for (int i=0; i < m_OSOption->job->inputDirectoriesToMove->numberOfPathPairs; i++)
 				{	outStr << "<pathPair";
-					outStr << "from=\"" << m_OSOption->job->inputDirectoriesToMove->pathPair[i]->from + "\"";
-					outStr << "to=\"" << m_OSOption->job->inputDirectoriesToMove->pathPair[i]->to + "\"";
-					outStr << "makeCopy=\"" << m_OSOption->job->inputDirectoriesToMove->pathPair[i]->makeCopy + "\"/>";
+					outStr << " from=\"" << m_OSOption->job->inputDirectoriesToMove->pathPair[i]->from << "\"";
+					outStr << " to=\"" << m_OSOption->job->inputDirectoriesToMove->pathPair[i]->to << "\"";
+					outStr << " makeCopy=\"" << m_OSOption->job->inputDirectoriesToMove->pathPair[i]->makeCopy << "\"/>";
 				}
 				outStr << "</inputDirectoriesToMove>" << endl;
 			}
@@ -273,9 +273,9 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				outStr << m_OSOption->job->inputFilesToMove->numberOfPathPairs << "\">" << endl; 
 				for (int i=0; i < m_OSOption->job->inputFilesToMove->numberOfPathPairs; i++)
 				{	outStr << "<pathPair";
-					outStr << "from=\"" << m_OSOption->job->inputFilesToMove->pathPair[i]->from + "\"";
-					outStr << "to=\"" << m_OSOption->job->inputFilesToMove->pathPair[i]->to + "\"";
-					outStr << "makeCopy=\"" << m_OSOption->job->inputFilesToMove->pathPair[i]->makeCopy + "\"/>";
+					outStr << " from=\"" << m_OSOption->job->inputFilesToMove->pathPair[i]->from << "\"";
+					outStr << " to=\"" << m_OSOption->job->inputFilesToMove->pathPair[i]->to << "\"";
+					outStr << " makeCopy=\"" << m_OSOption->job->inputFilesToMove->pathPair[i]->makeCopy << "\"/>";
 				}
 				outStr << "</inputFilesToMove>" << endl;
 			}
@@ -286,9 +286,9 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				outStr << m_OSOption->job->outputDirectoriesToMove->numberOfPathPairs << "\">" << endl; 
 				for (int i=0; i < m_OSOption->job->outputDirectoriesToMove->numberOfPathPairs; i++)
 				{	outStr << "<pathPair";
-					outStr << "from=\"" << m_OSOption->job->outputDirectoriesToMove->pathPair[i]->from + "\"";
-					outStr << "to=\"" << m_OSOption->job->outputDirectoriesToMove->pathPair[i]->to + "\"";
-					outStr << "makeCopy=\"" << m_OSOption->job->outputDirectoriesToMove->pathPair[i]->makeCopy + "\"/>";
+					outStr << " from=\"" << m_OSOption->job->outputDirectoriesToMove->pathPair[i]->from << "\"";
+					outStr << " to=\"" << m_OSOption->job->outputDirectoriesToMove->pathPair[i]->to << "\"";
+					outStr << " makeCopy=\"" << m_OSOption->job->outputDirectoriesToMove->pathPair[i]->makeCopy << "\"/>";
 				}
 				outStr << "</outputDirectoriesToMove>" << endl;
 			}
@@ -299,9 +299,9 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				outStr << m_OSOption->job->outputFilesToMove->numberOfPathPairs << "\">" << endl; 
 				for (int i=0; i < m_OSOption->job->outputFilesToMove->numberOfPathPairs; i++)
 				{	outStr << "<pathPair";
-					outStr << "from=\"" << m_OSOption->job->outputFilesToMove->pathPair[i]->from + "\"";
-					outStr << "to=\"" << m_OSOption->job->outputFilesToMove->pathPair[i]->to + "\"";
-					outStr << "makeCopy=\"" << m_OSOption->job->outputFilesToMove->pathPair[i]->makeCopy + "\"/>";
+					outStr << " from=\"" << m_OSOption->job->outputFilesToMove->pathPair[i]->from << "\"";
+					outStr << " to=\"" << m_OSOption->job->outputFilesToMove->pathPair[i]->to << "\"";
+					outStr << " makeCopy=\"" << m_OSOption->job->outputFilesToMove->pathPair[i]->makeCopy << "\"/>";
 				}
 				outStr << "</outputFilesToMove>" << endl;
 			}
@@ -336,13 +336,13 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 		if (m_OSOption->job->otherOptions != NULL)
 		{	if (m_OSOption->job->otherOptions->numberOfOtherOptions > 0)
 			{	outStr << "<otherOptions numberOfOtherOptions=\""; 
-				outStr << m_OSOption->job->otherOptions->numberOfOtherOptions + "\">" << endl;
+				outStr << m_OSOption->job->otherOptions->numberOfOtherOptions << "\">" << endl;
 				for (int i=0; i < m_OSOption->job->otherOptions->numberOfOtherOptions; i++)
-				{	outStr << "<other name=\"" + m_OSOption->job->otherOptions->other[i]->name + "\"";
+				{	outStr << "<other name=\"" << m_OSOption->job->otherOptions->other[i]->name << "\"";
 					if (m_OSOption->job->otherOptions->other[i]->value != "")
-						outStr << " value=\" + m_OSOption->job->otherOptions->other[i]->value + \"";
+						outStr << " value=\"" << m_OSOption->job->otherOptions->other[i]->value << "\"";
 					if (m_OSOption->job->otherOptions->other[i]->description != "")
-						outStr << " description=\" + m_OSOption->job->otherOptions->other[i]->description + \"";
+						outStr << " description=\"" << m_OSOption->job->otherOptions->other[i]->description << "\"";
 					outStr << "/>" << endl;
 				}
 				outStr << "</otherOptions>" << endl;
@@ -355,10 +355,10 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
  * 	Put the <optimization> element
  */
 	if(m_OSOption->optimization != NULL)
-	{	outStr << "<optimization ";
-		outStr << "numberOfVariables=\"" << m_OSOption->optimization->numberOfVariables << "\" ";
-		outStr << "numberOfObjectives=\"" << m_OSOption->optimization->numberOfObjectives << "\" ";
-		outStr << "numberOfConstraints=\"" << m_OSOption->optimization->numberOfConstraints << "\" ";
+	{	outStr << "<optimization";
+		outStr << " numberOfVariables=\"" << m_OSOption->optimization->numberOfVariables << "\" ";
+		outStr << " numberOfObjectives=\"" << m_OSOption->optimization->numberOfObjectives << "\" ";
+		outStr << " numberOfConstraints=\"" << m_OSOption->optimization->numberOfConstraints << "\" ";
 		outStr << ">" << endl;
 		if (m_OSOption->optimization->variables != NULL)
 		{	outStr << "<variables";

@@ -1,6 +1,6 @@
 /** @file OSoLParserData.h
  * 
- * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
  * @version 1.0, 29/08/2008
  * @since   OS1.1
  *
@@ -25,7 +25,7 @@
 /*! \class OSoLParserData
  *  \brief The OSoLParserData  Class.
  * 
- * @author Horand Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 08/29/2008
  * @since OS 1.1
  * 
@@ -155,6 +155,10 @@ public:
 	bool initialDualVariableValuesPresent;
 	int numberOfDuals;
 
+	/** attributes of other options */
+	bool otherOptionNamePresent;
+	bool otherOptionValuePresent;
+	bool otherOptionDescriptionPresent;
 
 	/** the OSoLParserData class constructor */
 	OSoLParserData( );
