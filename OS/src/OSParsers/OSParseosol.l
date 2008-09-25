@@ -5,7 +5,7 @@
  * @since   OS1.1
  *
  * \remarks
- * Copyright (C) 2005-2008, Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2008, Gus Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, Dalhousie University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 

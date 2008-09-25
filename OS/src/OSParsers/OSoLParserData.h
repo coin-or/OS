@@ -1,11 +1,11 @@
 /** @file OSoLParserData.h
  * 
- * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
+ * @author   Horand Gassmann, Jun Ma, Kipp Martin, 
  * @version 1.0, 29/08/2008
  * @since   OS1.1
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005,  Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, Dalhousie University and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 

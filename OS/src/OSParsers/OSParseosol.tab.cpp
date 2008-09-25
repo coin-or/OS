@@ -2943,7 +2943,7 @@ yyreduce:
 	else
 	{	parserData->otherGeneralOptionsPresent = true;
 		osoption->general->otherOptions = new OtherOptions();	
-		osoption->general->otherOptions->other = new OtherOption*();	
+			
 	}
 }
     break;
