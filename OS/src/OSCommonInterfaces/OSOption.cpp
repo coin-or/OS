@@ -97,7 +97,7 @@ OtherOptions::~OtherOptions()
 		{	delete other[i];
 			other[i] = NULL;
 		}
-		delete other;
+		delete[] other;
 		other = NULL;
 	}
 }//end OtherOptions destructor
