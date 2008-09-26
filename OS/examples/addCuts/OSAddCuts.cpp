@@ -1,22 +1,17 @@
-/** @file osTestCode.cpp
+/** @file OSAddCuts.cpp
  * 
- * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005
- * @since   OS1.0
+ * @author  Gus Gassmann, Jun Ma, Kipp Martin, 
+ * @version 1.0, 26/06/2008
+ * @since   OS1.1
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Jun Ma, Kipp Martin,
- * Northwestern University, and the University of Chicago.
+ * Copyright (C) 2008, Gus Gassmann, Jun Ma, Kipp Martin,
+ * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
- * This is a dummy executable that does nothing but 
- * print <I>Hello World</I>. I put in test code here when doing
- * various tests.
- * 
- */
- 
+ */ 
 
 
 #include <cppad/cppad.hpp> 
@@ -67,48 +62,118 @@ int main( ){
 		std::string osil = fileUtil->getFileAsString( osilFileName.c_str() );
 		OSiLReader *osilreader = NULL;
 		osilreader = new OSiLReader(); 
+		OSInstance *osinstance;
+		osinstance = osilreader->readOSiL( osil);
 		// done writing the model
 		cout << "Done writing the Model" << endl;
 		// now solve the model
 		CoinSolver *solver  = NULL;
 		solver = new CoinSolver();
 		solver->sSolverName ="clp"; 
-		solver->osinstance = osilreader->readOSiL( osil);;
-		cout << "call the COIN - Clp Solver" << endl;
+		solver->osinstance = osinstance;
 		solver->buildSolverInstance();
-		// suppress LP output
 		solver->osiSolver->setHintParam(OsiDoReducePrint, true, OsiHintTry);
 		solver->osiSolver->initialSolve();
-		cout << endl << endl << endl;
-		cout << "Here is the p0033 objective value "  << solver->osiSolver->getObjValue()  << endl;
-		//
-		// done solving the model
-		// add Rounding and Cover cuts
-		//
-	    CglKnapsackCover cover;
+		cout << "Here is the initial objective value "  << solver->osiSolver->getObjValue()  << endl;
+		CglKnapsackCover cover;
 	    CglSimpleRounding round;  
-	    CoinRelFltEq eq(0.0001);
-	    OsiSolverInterface::ApplyCutsReturnCode acRc;    
-	    OsiCuts cuts;
-	    cover.generateCuts(*(solver->osiSolver), cuts);
-	    round.generateCuts(*(solver->osiSolver), cuts);
-	    acRc = solver->osiSolver->applyCuts(cuts,  0.0);
-	    // Print applyCuts return code
-	    cout <<  endl <<endl;
-	    cout << cuts.sizeCuts() <<" cuts were generated" <<endl;
-	    cout <<"  " <<acRc.getNumInconsistent() <<" were inconsistent" <<endl;
-	    cout <<"  " <<acRc.getNumInconsistentWrtIntegerModel() 
-           <<" were inconsistent for this problem" <<endl;
-	    cout <<"  " <<acRc.getNumInfeasible() <<" were infeasible" <<endl;
-	    cout <<"  " <<acRc.getNumIneffective() <<" were ineffective" <<endl;
-	    cout <<"  " <<acRc.getNumApplied() <<" were applied" <<endl;
-      	cout <<endl <<endl;
-        // Resolve
-      	solver->osiSolver->resolve();
-        cout <<endl;
-        cout <<"After applying cuts, objective value changed to: "
-             <<   solver->osiSolver->getObjValue() <<endl <<endl;
+		CglGomory gomory;
+		CbcModel *model = new CbcModel( *solver->osiSolver);
+
+		//model->setBestObjectiveValue(4000);
+		model->setMaximumNodes(100000);
+		//
+		model->addCutGenerator(&gomory, 1, "Gomory");
+		model->addCutGenerator(&cover, 1, "Cover");
+		model->addCutGenerator(&round, 1, "Round");
+		model->branchAndBound();	
+		// now create a result object
+		OSResult *osresult = new OSResult();
+		// if we are throw an exception if the problem is nonlinear
+		double *x = NULL;
+		double *y = NULL;
+		double *z = NULL;
+		//int i = 0;
+		std::string *rcost = NULL;
+		// resultHeader infomration
+		if(osresult->setServiceName("Solved with Coin Solver: " + solver->sSolverName) != true)
+			throw ErrorClass("OSResult error: setServiceName");
+		if(osresult->setInstanceName(  solver->osinstance->getInstanceName()) != true)
+			throw ErrorClass("OSResult error: setInstanceName");
+		if(osresult->setVariableNumber( solver->osinstance->getVariableNumber()) != true)
+			throw ErrorClass("OSResult error: setVariableNumer");
+		if(osresult->setObjectiveNumber( 1) != true)
+			throw ErrorClass("OSResult error: setObjectiveNumber");
+		if(osresult->setConstraintNumber( solver->osinstance->getConstraintNumber()) != true)
+			throw ErrorClass("OSResult error: setConstraintNumber");
+		if(osresult->setSolutionNumber(  1) != true)
+			throw ErrorClass("OSResult error: setSolutionNumer");	
+		int solIdx = 0;
+		std::string description = "";
+		osresult->setGeneralStatusType("success");
+		std::cout << "PROVEN OPTIMAL " << model->isProvenOptimal() << std::endl;
+		int i;
+		if (model->isProvenOptimal() == 1){
+			osresult->setSolutionStatus(solIdx, "optimal", description);
+			/* Retrieve the solution */
+			x = new double[solver->osinstance->getVariableNumber() ];
+			y = new double[solver->osinstance->getConstraintNumber() ];
+			z = new double[1];
+			rcost = new std::string[ solver->osinstance->getVariableNumber()];
+			//
+			*(z + 0)  =  model->getObjValue();
+			osresult->setObjectiveValues(solIdx, z);
+			for(i=0; i < solver->osinstance->getVariableNumber(); i++){
+				*(x + i) = model->getColSolution()[i];
+			}
+			osresult->setPrimalVariableValues(solIdx, x);
+			//if( solver->sSolverName.find( "symphony") == std::string::npos){
+			for(i=0; i <  solver->osinstance->getConstraintNumber(); i++){
+				*(y + i) = model->getRowPrice()[ i];
+			}
+			osresult->setDualVariableValues(solIdx, y);
+			//
+			// now put the reduced costs into the osrl
+			int numberOfOtherVariableResult = 1;
+			int otherIdx = 0;
+			// first set the number of Other Variable Results
+			osresult->setNumberOfOtherVariableResult(solIdx, numberOfOtherVariableResult);
+			ostringstream outStr;
+			int numberOfVar =  solver->osinstance->getVariableNumber();
+			for(i=0; i < numberOfVar; i++){
+				outStr << model->getReducedCost()[ i]; 
+				rcost[ i] = outStr.str();
+				outStr.str("");
+			}
+			osresult->setAnOtherVariableResult(solIdx, otherIdx, "reduced costs", "the variable reduced costs", rcost);			
+			// end of settiing reduced costs			
+		}
+		else{ 
+			if(solver->osiSolver->isProvenPrimalInfeasible() == true) 
+				osresult->setSolutionStatus(solIdx, "infeasible", description);
+			else
+				if(solver->osiSolver->isProvenDualInfeasible() == true) 
+					osresult->setSolutionStatus(solIdx, "dualinfeasible", description);
+				else
+					osresult->setSolutionStatus(solIdx, "other", description);
+		}
+		OSrLWriter *osrlwriter = new OSrLWriter();
+		std::cout <<  osrlwriter->writeOSrL( osresult) << std::endl;
+		if(solver->osinstance->getVariableNumber() > 0) delete[] x;
+		x = NULL;
+		if(solver->osinstance->getConstraintNumber()) delete[] y;
+		y = NULL;
+		delete[] z;	
+		z = NULL;
+		if(solver->osinstance->getVariableNumber() > 0){
+			delete[] rcost;
+			rcost = NULL;
+		}
     	// do garbage collection
+		delete osresult;
+		osresult = NULL;
+		delete osrlwriter;
+		osrlwriter = NULL;
 		delete solver;
 		solver = NULL;
 		delete osilreader;

@@ -1,12 +1,12 @@
 /** @file osTestCode.cpp
  * 
- * @author  Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005
- * @since   OS1.0
+ * @author  Gus Gassmann, Jun Ma, Kipp Martin, 
+ * @version 1.0, 26/06/2008
+ * @since   OS1.1
  *
  * \remarks
- * Copyright (C) 2005, Jun Ma, Kipp Martin,
- * Northwestern University, and the University of Chicago.
+ * Copyright (C) 2008, Gus Gassmann, Jun Ma, Kipp Martin,
+ * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -18,16 +18,7 @@
 #include <cppad/cppad.hpp> 
 #include "OSConfig.h"
 #include "OSCoinSolver.h"
-
-#ifdef COIN_HAS_IPOPT  
-	#ifndef COIN_HAS_ASL
-		#include "OSIpoptSolver.h"
-		#undef COIN_HAS_ASL
-	#else
-		#include "OSIpoptSolver.h"
-	#endif
-#endif
-
+#include "OSIpoptSolver.h"
 #include "OSResult.h" 
 #include "OSiLReader.h"        
 #include "OSiLWriter.h"   
@@ -36,8 +27,8 @@
 #include "OSInstance.h"  
 #include "OSFileUtil.h"   
 #include "OSDefaultSolver.h"  
-#include "OSWSUtil.h" 
-#include "OSSolverAgent.h"   
+//#include "OSWSUtil.h" 
+//#include "OSSolverAgent.h"   
 #include "OShL.h"     
 #include "OSErrorClass.h"
 #include "OSmps2osil.h"   
@@ -46,35 +37,22 @@
 #include "OSErrorClass.h"
 #include "OSMathUtil.h"
 
-
-
 #include<iostream> 
 using std::cout;   
 using std::endl;
 
 //int main(int argC, char* argV[]){
 int main( ){
-	WindowsErrorPopupBlocker();
 // test OS code samples here
 	FileUtil *fileUtil = NULL; 
 	fileUtil = new FileUtil();
-	
+	cout << "Start Building the Model" << endl;
 	try{
-		
 		OSInstance *osinstance = new OSInstance();
 
 		// put in some of the OSInstance <instanceHeader> information
 		osinstance->setInstanceSource("From Anderson, Sweeney, Williams, and Martin");
 		osinstance->setInstanceDescription("The Par Inc. Problem");
-		/* Here is the model:
-		 * Max 10*x0 + 9*x1
-		 * s.t.
-		 * .7*x0 + x1 <= 630
-		 * .5*x0 + (5/6)*x1 <= 600
-		 *  x0 + (2/3)*x1 <= 708
-		 * .1*x0 + .25*x1 <= 135
-		 * 
-		 */
 		//
 		// now put in the OSInstance <instanceData> information
 		// 
@@ -172,34 +150,22 @@ int main( ){
 		// Write out the model
 		OSiLWriter *osilwriter; 
 		osilwriter = new OSiLWriter();
-		std::string osil = osilwriter->writeOSiL( osinstance);
-		cout << osil;
+		cout << osilwriter->writeOSiL( osinstance);
 		// done writing the model
 		cout << "Done writing the Model" << endl;
 		// now solve the model
 		CoinSolver *solver = new CoinSolver();
-		//IpoptSolver *solver = new IpoptSolver();
 		solver->osinstance = osinstance;
-		solver->sSolverName ="clp"; 
-		cout << "call the COIN - Clp Solver" << endl;
+		solver->sSolverName ="cbc"; 
 		solver->buildSolverInstance();
 		solver->solve();
 		std::cout << solver->osrl << std::endl;
-		
-		
-		// now solve remotely
-		/*
-		OSSolverAgent* osagent = NULL;
-		osagent = new OSSolverAgent("gsbkip.chicagogsb.edu/os/OSSolverService.jws");	
-		
-		std::string osol = "<osol></osol>";
-		cout << "osil:" << endl << endl;
-		cout << osil  << endl << endl;
-		std::string osrl = osagent->solve(osil, osol);
-		cout << "osrl result from osagent:" << endl << endl;
-		cout << osrl  << endl << endl;
-		delete osagent
- 		*/
+		// write the answer to a file
+		fileUtil->writeFileFromString("../result.xml", solver->osrl);
+		// work with the OSResult object
+		OSResult *result = NULL;
+		result = solver->osresult;
+		std::cout << result->resultData->optimization->solution[0]->objectives->values->obj[0]->value << std::endl;
 		// do garbage collection
 		delete osinstance;
 		osinstance = NULL;
@@ -209,7 +175,6 @@ int main( ){
 		solver = NULL;
 		delete fileUtil;
 		fileUtil = NULL;
-
 		cout << "Done with garbage collection" << endl;
 		return 0;
 		//
