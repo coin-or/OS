@@ -9,10 +9,8 @@
 OS/AUTHORS -text
 OS/CoinAllExamples/CppAD/Makefile.in -text
 OS/CoinAllExamples/CppAD/dc08.cpp -text
-OS/CoinAllExamples/CppAD/ipopt_cppad.cpp -text
 OS/CoinAllExamples/CppAD/ipopt_cppad_nlp.cpp -text
 OS/CoinAllExamples/CppAD/ipopt_cppad_nlp.hpp -text
-OS/CoinAllExamples/CppAD/main.cpp -text
 OS/CoinAllExamples/addCuts/Makefile.in -text
 OS/CoinAllExamples/addCuts/OSAddCuts.cpp -text
 OS/CoinAllExamples/addCuts/p0033.osil -text
