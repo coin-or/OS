@@ -60,8 +60,10 @@ int main( ){
 	try{
 		// get the p0033 problem
 		std::string osilFileName;
-		osilFileName =  dataDir  + "osilFiles" + dirsep +  "p0033.osil";
+		//osilFileName =  dataDir  + "osilFiles" + dirsep +  "p0033.osil";
+		//assume file in same directory
 		std::cout << "Try to read a sample file" << std::endl;
+		osilFileName =  "p0033.osil";
 		std::cout << "The file is: " ;
 		std::cout <<  osilFileName << std::endl;
 		std::string osil = fileUtil->getFileAsString( osilFileName.c_str() );
