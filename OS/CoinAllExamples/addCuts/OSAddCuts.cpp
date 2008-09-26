@@ -55,7 +55,8 @@ int main( ){
 	try{
 		// get the p0033 problem
 		std::string osilFileName;
-		osilFileName =  dataDir  + "osilFiles" + dirsep +  "p0033.osil";
+		//osilFileName =  dataDir  + "osilFiles" + dirsep +  "p0033.osil";
+		osilFileName =  "p0033.osil";
 		std::cout << "Try to read a sample file" << std::endl;
 		std::cout << "The file is: " ;
 		std::cout <<  osilFileName << std::endl;
