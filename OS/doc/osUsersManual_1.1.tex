@@ -235,9 +235,8 @@ Section~\ref{section:ad}.
 
 The OS project is an open-source project  with source code under the Common Public License (CPL). 
 See~\url{http://www.ibm.com/developerworks/library/os-cpl.html}.
-This project was created by Robert Fourer, Jun Ma, and Kipp Martin. 
-The code has been written primarily by Jun Ma, Kipp Martin, Robert Fourer, and Huanyuan Sheng.  
-Jun Ma and Kipp Martin are the COIN project leaders for OS.    
+This project was initially created by Robert Fourer, Jun Ma, and Kipp Martin. 
+The code has been written primarily by Jun Ma,  Horand Gassmann,   and Kipp Martin.    Jun Ma, Horand Gassmann, and Kipp Martin are the COIN project leaders for OS.    
 Below we describe different methods for obtaining the C++ source code or the binaries.
 
 
@@ -246,7 +245,7 @@ Below we describe different methods for obtaining the C++ source code or the bin
 \subsection{Obtaining the Binaries}\label{section:obtainingbinaries}
 
 If the user does not wish to compile source code, the OS library, OSSolverService executable 
-and Tomcat server software configuration are available at \url{http://www.coin-or.org/Binaries/OS}%
+and Tomcat server software configuration are available at \url{http://www.coin-or.org/download/binary/OS/}%
 \index{Downloading!binaries} 
 in binary format.  In the binary OS root there  are {\tt cpp} and {\tt java} directories for the 
 compiled C++ and Java code.
@@ -4249,12 +4248,14 @@ gmsip_.zip
 gmsos_.zip
 \end{verbatim}
 
-Copy these  files into your GAMS root folder (where you keep the GAMS system).  Then run {\tt gamsinst}.  
-You can now solve  a wide variety of  problems either locally or remotely. To solve a problem locally, call
+Copy these  files into your GAMS root folder (where you keep the GAMS system).  Then run {\tt gamsinst}.   You can now solve  a wide variety of  problems either locally or remotely. 
+
+
+In {\tt OS/data/gamsFiles} directory are several test problems in GAMS model format. 
+ For example, to solve the test problem {\tt rbrockmod.gms} copy this file into the GAMS root folder and execute the following command.
 
 \begin{verbatim}
-gamslib rbrock   (get the Rosenbrock nonlinear test model)
-gams rbrock nlp=os (solve the model)
+gams rbrockmod nlp=os
 \end{verbatim}
 
 It is also possible to have GAMSlinks generate the instance OSiL file and write the solution  OSrL file.  
@@ -4284,6 +4285,13 @@ execute the command
 
 \begin{verbatim}
 gams rbrock nlp=os optfile=1
+\end{verbatim}
+
+
+\noindent {\bf Note:} On Mac OS X add   {\tt -DUSE\_UNUSED\_SYMBOLS} to {\tt CXXFLAGS} so the configure line is
+
+\begin{verbatim}
+./configure   --enable-os-solver CXXFLAGS=-DUSE_UNUSED_SYMBOLS
 \end{verbatim}
 
 \index{GAMSLinks|)}
@@ -5986,7 +5994,9 @@ extern "C" {
   unsigned char G2DMATHNEW_exceptmsg[256] = "hack";
 }
 
-I've committed these lines into the repository now too, but you have to activate them by adding a -DUSE_UNUSED_SYMBOLS (I know, I'm very bad in naming) to the CXXFLAGS, see https://projects.coin-or.org/GAMSlinks/changeset/540I am not convinced yet that this is not some bug in the compiler you use.
+
+I've committed these lines into the repository now too, but you have to activate them by adding a -DUSE_UNUSED_SYMBOLS (I know, I'm very bad in naming) to the CXXFLAGS, see https://projects.coin-or.org/GAMSlinks/changeset/540
+I am not convinced yet that this is not some bug in the compiler you use.
 
 
 
