@@ -72,325 +72,326 @@
 \indexentry{Bonmin@{\tt Bonmin}}{15}
 \indexentry{AMPL Solver Library (ASL)}{15}
 \indexentry{Third-party software}{15}
-\indexentry{Cygwin|(}{15}
-\indexentry{Windows Platform SDK}{15}
-\indexentry{PATH@{\tt \$PATH}}{16}
-\indexentry{AMPL Solver Library (ASL)}{16}
-\indexentry{Fortran}{16}
-\indexentry{Ipopt@{\tt Ipopt}}{16}
-\indexentry{Bonmin@{\tt Bonmin}}{16}
-\indexentry{COIN_SKIP_PROJECTS@{\tt COIN\_SKIP\_PROJECTS}}{16}
-\indexentry{Harwell Subroutine Library (HSL)}{16}
-\indexentry{f2c@{\tt f2c}}{17}
-\indexentry{Cygwin|)}{17}
-\indexentry{MinGW}{17}
-\indexentry{MSYS|(}{17}
-\indexentry{Cygwin}{17}
-\indexentry{MinGW}{17}
-\indexentry{MSYS}{17}
-\indexentry{TortoiseSVN}{17}
-\indexentry{wget@{\tt wget}}{17}
-\indexentry{Windows Platform SDK}{18}
-\indexentry{flex@{\tt flex}}{18}
-\indexentry{bison@{\tt bison}}{18}
-\indexentry{MSYS|)}{18}
-\indexentry{VPATH|(}{19}
-\indexentry{Blas}{19}
-\indexentry{COIN_SKIP_PROJECTS@{\tt COIN\_SKIP\_PROJECTS}}{19}
-\indexentry{VPATH|)}{19}
-\indexentry{Ipopt@{\tt Ipopt}|(}{19}
-\indexentry{Bonmin@{\tt Bonmin}|(}{19}
-\indexentry{Fortran}{19}
-\indexentry{Third-party software}{20}
-\indexentry{AMPL Solver Library (ASL)}{20}
+\indexentry{Windows Platform SDK}{16}
+\indexentry{Cygwin|(}{16}
+\indexentry{Windows Platform SDK}{17}
+\indexentry{PATH@{\tt \$PATH}}{17}
+\indexentry{AMPL Solver Library (ASL)}{17}
+\indexentry{Fortran}{17}
+\indexentry{Ipopt@{\tt Ipopt}}{17}
+\indexentry{Bonmin@{\tt Bonmin}}{17}
+\indexentry{COIN_SKIP_PROJECTS@{\tt COIN\_SKIP\_PROJECTS}}{18}
+\indexentry{Harwell Subroutine Library (HSL)}{18}
+\indexentry{f2c@{\tt f2c}}{18}
+\indexentry{Cygwin|)}{18}
+\indexentry{MinGW}{18}
+\indexentry{MSYS|(}{18}
+\indexentry{Cygwin}{18}
+\indexentry{MinGW}{18}
+\indexentry{MSYS}{18}
+\indexentry{TortoiseSVN}{18}
+\indexentry{wget@{\tt wget}}{18}
+\indexentry{Windows Platform SDK}{19}
+\indexentry{flex@{\tt flex}}{19}
+\indexentry{bison@{\tt bison}}{19}
+\indexentry{MSYS|)}{19}
+\indexentry{VPATH|(}{20}
+\indexentry{Blas}{20}
+\indexentry{COIN_SKIP_PROJECTS@{\tt COIN\_SKIP\_PROJECTS}}{20}
+\indexentry{VPATH|)}{20}
+\indexentry{Ipopt@{\tt Ipopt}|(}{20}
+\indexentry{Bonmin@{\tt Bonmin}|(}{20}
 \indexentry{Fortran}{20}
-\indexentry{Mumps}{20}
-\indexentry{Harwell Subroutine Library (HSL)}{20}
-\indexentry{Common Public License}{20}
-\indexentry{f2c@{\tt f2c}}{20}
-\indexentry{Ipopt@{\tt Ipopt}|)}{20}
-\indexentry{Bonmin@{\tt Bonmin}|)}{20}
-\indexentry{f2c@{\tt f2c}|(}{21}
-\indexentry{Blas}{21}
-\indexentry{Lapack}{21}
+\indexentry{Third-party software}{21}
+\indexentry{AMPL Solver Library (ASL)}{21}
+\indexentry{Fortran}{21}
+\indexentry{Mumps}{21}
 \indexentry{Harwell Subroutine Library (HSL)}{21}
-\indexentry{f2c@{\tt f2c}|)}{22}
-\indexentry{AMPL Solver Library (ASL)}{22}
-\indexentry{Release-Plus@{\tt Release-Plus}}{22}
-\indexentry{Configuration Manager}{22}
-\indexentry{OSSolverService@{\tt OSSolverService}}{22}
-\indexentry{unitTest@{\tt unitTest}}{22}
-\indexentry{OSAmplClient@{\tt OSAmplClient}}{22}
-\indexentry{Third-party software|(}{22}
-\indexentry{Bonmin@{\tt Bonmin}}{22}
-\indexentry{Cbc@{\tt Cbc}}{22}
-\indexentry{Clp@{\tt Clp}}{22}
-\indexentry{Cgl@{\tt Cgl}}{22}
-\indexentry{CoinUtils@{\tt CoinUtils}}{22}
-\indexentry{CppAD@{\tt CppAD}}{22}
-\indexentry{DyLP@{\tt DyLP}}{22}
-\indexentry{Ipopt@{\tt Ipopt}}{22}
-\indexentry{Osi@{\tt Osi}}{22}
-\indexentry{SYMPHONY@{\tt SYMPHONY}}{22}
-\indexentry{Vol@{\tt Vol}}{22}
-\indexentry{Fortran}{22}
-\indexentry{COIN_SKIP_PROJECTS@{\tt COIN\_SKIP\_PROJECTS}}{22}
-\indexentry{VPATH}{23}
-\indexentry{Third-party software|)}{23}
-\indexentry{AMPL Solver Library (ASL)|(}{23}
-\indexentry{OSnl2osil@{\tt OSnl2osil}}{23}
+\indexentry{Common Public License}{21}
+\indexentry{f2c@{\tt f2c}}{21}
+\indexentry{Ipopt@{\tt Ipopt}|)}{21}
+\indexentry{Bonmin@{\tt Bonmin}|)}{21}
+\indexentry{f2c@{\tt f2c}|(}{22}
+\indexentry{Blas}{22}
+\indexentry{Lapack}{22}
+\indexentry{Harwell Subroutine Library (HSL)}{22}
+\indexentry{f2c@{\tt f2c}|)}{23}
+\indexentry{AMPL Solver Library (ASL)}{23}
+\indexentry{Release-Plus@{\tt Release-Plus}}{23}
+\indexentry{Configuration Manager}{23}
+\indexentry{OSSolverService@{\tt OSSolverService}}{23}
+\indexentry{unitTest@{\tt unitTest}}{23}
 \indexentry{OSAmplClient@{\tt OSAmplClient}}{23}
-\indexentry{Unix}{23}
-\indexentry{Microsoft Visual Studio}{23}
-\indexentry{linker errors}{24}
-\indexentry{Release-Plus@{\tt Release-Plus}}{24}
-\indexentry{Ipopt@{\tt Ipopt}}{24}
-\indexentry{AMPL Solver Library (ASL)|)}{24}
-\indexentry{GLPK@{\tt GLPK}|(}{24}
+\indexentry{Third-party software|(}{23}
+\indexentry{Bonmin@{\tt Bonmin}}{23}
+\indexentry{Cbc@{\tt Cbc}}{23}
+\indexentry{Clp@{\tt Clp}}{23}
+\indexentry{Cgl@{\tt Cgl}}{23}
+\indexentry{CoinUtils@{\tt CoinUtils}}{23}
+\indexentry{CppAD@{\tt CppAD}}{23}
+\indexentry{DyLP@{\tt DyLP}}{23}
+\indexentry{Ipopt@{\tt Ipopt}}{23}
+\indexentry{Osi@{\tt Osi}}{23}
+\indexentry{SYMPHONY@{\tt SYMPHONY}}{23}
+\indexentry{Vol@{\tt Vol}}{23}
+\indexentry{Fortran}{23}
+\indexentry{COIN_SKIP_PROJECTS@{\tt COIN\_SKIP\_PROJECTS}}{23}
+\indexentry{VPATH}{24}
+\indexentry{Third-party software|)}{24}
+\indexentry{AMPL Solver Library (ASL)|(}{24}
+\indexentry{OSnl2osil@{\tt OSnl2osil}}{24}
+\indexentry{OSAmplClient@{\tt OSAmplClient}}{24}
+\indexentry{Unix}{24}
 \indexentry{Microsoft Visual Studio}{24}
-\indexentry{GLPK@{\tt GLPK}|)}{24}
-\indexentry{cplex@{\tt cplex}|(}{25}
-\indexentry{cplex@{\tt cplex}|)}{25}
-\indexentry{LINDO|(}{25}
-\indexentry{LINDO|)}{25}
-\indexentry{MATLAB|(}{25}
-\indexentry{MATLAB|)}{25}
-\indexentry{Bug reporting}{26}
-\indexentry{Doxygen|(}{26}
-\indexentry{Doxygen|)}{26}
-\indexentry{Linux}{26}
-\indexentry{Mac OS X}{26}
-\indexentry{MinGW}{26}
-\indexentry{MSYS}{26}
-\indexentry{Cygwin}{26}
-\indexentry{BuildTools@{\tt BuildTools}}{28}
-\indexentry{Cbc@{\tt Cbc}}{28}
-\indexentry{Cgl@{\tt Cgl}}{28}
-\indexentry{Clp@{\tt Clp}}{28}
-\indexentry{CoinUtils@{\tt CoinUtils}}{28}
-\indexentry{CppAD@{\tt CppAD}}{28}
-\indexentry{DyLP@{\tt DyLP}}{28}
-\indexentry{Ipopt@{\tt Ipopt}}{28}
-\indexentry{Osi@{\tt Osi}}{28}
-\indexentry{SYMPHONY@{\tt SYMPHONY}}{28}
-\indexentry{Vol@{\tt Vol}}{28}
-\indexentry{AMPL}{28}
-\indexentry{OSAmplClient@{\tt OSAmplClient}}{28}
-\indexentry{OSAmplClient@{\tt OSAmplClient}}{28}
-\indexentry{unitTest@{\tt unitTest}}{30}
-\indexentry{OSSolverService@{\tt OSSolverService}}{30}
-\indexentry{Microsoft Visual Studio}{30}
-\indexentry{OSiL@{\tt OSiL}|(}{30}
-\indexentry{Rosenbrock, H.H.@{\it Rosenbrock, H.H.}}{31}
-\indexentry{OSiL@{\tt OSiL}|)}{32}
-\indexentry{OSrL|(}{32}
-\indexentry{OSrL|)}{34}
-\indexentry{OSoL|(}{34}
-\indexentry{OSoL|)}{34}
-\indexentry{OSnL|(}{34}
-\indexentry{OSnL|)}{35}
-\indexentry{OSpL|(}{35}
-\indexentry{OSpL|)}{35}
-\indexentry{OSAgent@{\tt OSAgent}|(}{35}
-\indexentry{OSSolverAgent@{\tt OSSolverAgent}}{35}
-\indexentry{WSUtil@{\tt WSUtil}}{35}
-\indexentry{OSAgent@{\tt OSAgent}|)}{35}
-\indexentry{Doxygen}{35}
-\indexentry{OSInstance@{\tt OSInstance}|(}{35}
-\indexentry{OSiL@{\tt OSiL}}{36}
-\indexentry{OSExpressionTree@{\tt OSExpressionTree}}{37}
+\indexentry{linker errors}{25}
+\indexentry{Release-Plus@{\tt Release-Plus}}{25}
+\indexentry{Ipopt@{\tt Ipopt}}{25}
+\indexentry{AMPL Solver Library (ASL)|)}{25}
+\indexentry{GLPK@{\tt GLPK}|(}{25}
+\indexentry{Microsoft Visual Studio}{25}
+\indexentry{GLPK@{\tt GLPK}|)}{25}
+\indexentry{cplex@{\tt cplex}|(}{26}
+\indexentry{cplex@{\tt cplex}|)}{26}
+\indexentry{LINDO|(}{26}
+\indexentry{LINDO|)}{26}
+\indexentry{MATLAB|(}{26}
+\indexentry{MATLAB|)}{26}
+\indexentry{Bug reporting}{27}
+\indexentry{Doxygen|(}{27}
+\indexentry{Doxygen|)}{27}
+\indexentry{Linux}{27}
+\indexentry{Mac OS X}{27}
+\indexentry{MinGW}{27}
+\indexentry{MSYS}{27}
+\indexentry{Cygwin}{27}
+\indexentry{BuildTools@{\tt BuildTools}}{29}
+\indexentry{Cbc@{\tt Cbc}}{29}
+\indexentry{Cgl@{\tt Cgl}}{29}
+\indexentry{Clp@{\tt Clp}}{29}
+\indexentry{CoinUtils@{\tt CoinUtils}}{29}
+\indexentry{CppAD@{\tt CppAD}}{29}
+\indexentry{DyLP@{\tt DyLP}}{29}
+\indexentry{Ipopt@{\tt Ipopt}}{29}
+\indexentry{Osi@{\tt Osi}}{29}
+\indexentry{SYMPHONY@{\tt SYMPHONY}}{29}
+\indexentry{Vol@{\tt Vol}}{29}
+\indexentry{AMPL}{29}
+\indexentry{OSAmplClient@{\tt OSAmplClient}}{29}
+\indexentry{OSAmplClient@{\tt OSAmplClient}}{29}
+\indexentry{unitTest@{\tt unitTest}}{31}
+\indexentry{OSSolverService@{\tt OSSolverService}}{31}
+\indexentry{Microsoft Visual Studio}{31}
+\indexentry{OSiL@{\tt OSiL}|(}{31}
+\indexentry{Rosenbrock, H.H.@{\it Rosenbrock, H.H.}}{32}
+\indexentry{OSiL@{\tt OSiL}|)}{33}
+\indexentry{OSrL|(}{33}
+\indexentry{OSrL|)}{35}
+\indexentry{OSoL|(}{35}
+\indexentry{OSoL|)}{35}
+\indexentry{OSnL|(}{35}
+\indexentry{OSnL|)}{36}
+\indexentry{OSpL|(}{36}
+\indexentry{OSpL|)}{36}
+\indexentry{OSAgent@{\tt OSAgent}|(}{36}
+\indexentry{OSSolverAgent@{\tt OSSolverAgent}}{36}
+\indexentry{WSUtil@{\tt WSUtil}}{36}
+\indexentry{OSAgent@{\tt OSAgent}|)}{36}
+\indexentry{Doxygen}{36}
+\indexentry{OSInstance@{\tt OSInstance}|(}{36}
 \indexentry{OSiL@{\tt OSiL}}{37}
-\indexentry{OSInstance@{\tt OSInstance}|)}{40}
-\indexentry{MPS format|(}{40}
-\indexentry{OSmps2osil@{\tt OSmps2osil}|(}{40}
-\indexentry{OSiL@{\tt OSiL}}{40}
-\indexentry{OSmps2osil@{\tt OSmps2osil}|)}{40}
-\indexentry{MPS format|)}{40}
-\indexentry{AMPL nl format|(}{41}
-\indexentry{OSnl2osil@{\tt OSnl2osil}}{41}
-\indexentry{OSInstance@{\tt OSInstance}}{41}
-\indexentry{OSmps2osil@{\tt OSmps2osil}}{41}
-\indexentry{OSAmplClient@{\tt OSAmplClient}}{41}
+\indexentry{OSExpressionTree@{\tt OSExpressionTree}}{38}
+\indexentry{OSiL@{\tt OSiL}}{38}
+\indexentry{OSInstance@{\tt OSInstance}|)}{41}
+\indexentry{MPS format|(}{41}
+\indexentry{OSmps2osil@{\tt OSmps2osil}|(}{41}
 \indexentry{OSiL@{\tt OSiL}}{41}
-\indexentry{AMPL nl format|)}{41}
-\indexentry{OSiL@{\tt OSiL}|(}{41}
-\indexentry{OSrL}{41}
-\indexentry{OSInstance@{\tt OSInstance}}{41}
-\indexentry{OSResult}{41}
-\indexentry{OSiL@{\tt OSiL}|)}{41}
-\indexentry{flex@{\tt flex}}{41}
-\indexentry{bison@{\tt bison}}{41}
+\indexentry{OSmps2osil@{\tt OSmps2osil}|)}{41}
+\indexentry{MPS format|)}{41}
+\indexentry{AMPL nl format|(}{42}
+\indexentry{OSnl2osil@{\tt OSnl2osil}}{42}
+\indexentry{OSInstance@{\tt OSInstance}}{42}
+\indexentry{OSmps2osil@{\tt OSmps2osil}}{42}
+\indexentry{OSAmplClient@{\tt OSAmplClient}}{42}
+\indexentry{OSiL@{\tt OSiL}}{42}
+\indexentry{AMPL nl format|)}{42}
+\indexentry{OSiL@{\tt OSiL}|(}{42}
+\indexentry{OSrL}{42}
+\indexentry{OSInstance@{\tt OSInstance}}{42}
+\indexentry{OSResult}{42}
+\indexentry{OSiL@{\tt OSiL}|)}{42}
 \indexentry{flex@{\tt flex}}{42}
 \indexentry{bison@{\tt bison}}{42}
-\indexentry{OSiL@{\tt OSiL}}{42}
-\indexentry{Ipopt@{\tt Ipopt}}{42}
-\indexentry{LINDO}{42}
-\indexentry{LINDO}{43}
-\indexentry{LINDO}{43}
+\indexentry{flex@{\tt flex}}{43}
+\indexentry{bison@{\tt bison}}{43}
+\indexentry{OSiL@{\tt OSiL}}{43}
 \indexentry{Ipopt@{\tt Ipopt}}{43}
-\indexentry{OSInstance@{\tt OSInstance}}{43}
-\indexentry{Algorithmic differentiation|(}{45}
-\indexentry{Griewank, A.@{\it Griewank, A.}}{45}
-\indexentry{CppAD@{\tt CppAD}|(}{45}
-\indexentry{Bell, Bradley M.@{\it Bell, Bradley M.}}{45}
-\indexentry{Algorithmic differentiation|)}{46}
-\indexentry{CppAD@{\tt CppAD}|)}{46}
-\indexentry{OSInstance@{\tt OSInstance}}{48}
-\indexentry{Ipopt@{\tt Ipopt}}{52}
-\indexentry{OSSolverService@{\tt OSSolverService}|(}{56}
-\indexentry{OSiL@{\tt OSiL}}{56}
-\indexentry{AMPL nl format}{56}
-\indexentry{MPS format}{56}
-\indexentry{solve@{\tt solve}}{56}
-\indexentry{send@{\tt send}}{56}
-\indexentry{retrieve@{\tt retrieve}}{56}
-\indexentry{getJobID@{\tt getJobID}}{56}
-\indexentry{knock@{\tt knock}}{56}
-\indexentry{kill@{\tt kill}}{56}
-\indexentry{solve@{\tt solve}}{56}
-\indexentry{send@{\tt send}}{56}
-\indexentry{OSiL@{\tt OSiL}}{56}
-\indexentry{OSoL}{56}
-\indexentry{solve@{\tt solve}|(}{56}
-\indexentry{send@{\tt send}}{56}
-\indexentry{kill@{\tt kill}}{56}
-\indexentry{knock@{\tt knock}}{56}
-\indexentry{getJobID@{\tt getJobID}}{56}
-\indexentry{retrieve@{\tt retrieve}}{56}
-\indexentry{solve@{\tt solve}|)}{56}
-\indexentry{MPS format}{56}
-\indexentry{OSiL@{\tt OSiL}}{56}
-\indexentry{AMPL nl format}{56}
-\indexentry{OSiL@{\tt OSiL}}{56}
-\indexentry{cplex@{\tt cplex}}{56}
-\indexentry{GLPK@{\tt GLPK}}{56}
-\indexentry{Osi@{\tt Osi}}{56}
-\indexentry{LINDO}{56}
-\indexentry{Cbc@{\tt Cbc}}{56}
-\indexentry{solve@{\tt solve}}{56}
-\indexentry{send@{\tt send}}{56}
-\indexentry{OSrL}{57}
-\indexentry{Clp@{\tt Clp}}{57}
-\indexentry{parincLinear.osil@{\tt parincLinear.osil}|(}{57}
-\indexentry{parincLinear.osil@{\tt parincLinear.osil}|)}{57}
-\indexentry{send@{\tt send}}{57}
+\indexentry{LINDO}{43}
+\indexentry{LINDO}{44}
+\indexentry{LINDO}{44}
+\indexentry{Ipopt@{\tt Ipopt}}{44}
+\indexentry{OSInstance@{\tt OSInstance}}{44}
+\indexentry{Algorithmic differentiation|(}{46}
+\indexentry{Griewank, A.@{\it Griewank, A.}}{46}
+\indexentry{CppAD@{\tt CppAD}|(}{46}
+\indexentry{Bell, Bradley M.@{\it Bell, Bradley M.}}{46}
+\indexentry{Algorithmic differentiation|)}{47}
+\indexentry{CppAD@{\tt CppAD}|)}{47}
+\indexentry{OSInstance@{\tt OSInstance}}{49}
+\indexentry{Ipopt@{\tt Ipopt}}{53}
+\indexentry{OSSolverService@{\tt OSSolverService}|(}{57}
+\indexentry{OSiL@{\tt OSiL}}{57}
+\indexentry{AMPL nl format}{57}
+\indexentry{MPS format}{57}
 \indexentry{solve@{\tt solve}}{57}
+\indexentry{send@{\tt send}}{57}
+\indexentry{retrieve@{\tt retrieve}}{57}
+\indexentry{getJobID@{\tt getJobID}}{57}
+\indexentry{knock@{\tt knock}}{57}
+\indexentry{kill@{\tt kill}}{57}
+\indexentry{solve@{\tt solve}}{57}
+\indexentry{send@{\tt send}}{57}
+\indexentry{OSiL@{\tt OSiL}}{57}
 \indexentry{OSoL}{57}
-\indexentry{Cbc@{\tt Cbc}}{58}
-\indexentry{send@{\tt send}}{58}
-\indexentry{kill@{\tt kill}}{58}
-\indexentry{knock@{\tt knock}}{58}
-\indexentry{getJobID@{\tt getJobID}}{58}
-\indexentry{retrieve@{\tt retrieve}}{58}
-\indexentry{serviceLocation@{\tt serviceLocation}}{58}
-\indexentry{LINDO}{58}
-\indexentry{Clp@{\tt Clp}}{58}
-\indexentry{solve@{\tt solve}}{58}
-\indexentry{OSiL@{\tt OSiL}}{58}
-\indexentry{OSLibrary@{\tt OSLibrary}}{58}
+\indexentry{solve@{\tt solve}|(}{57}
+\indexentry{send@{\tt send}}{57}
+\indexentry{kill@{\tt kill}}{57}
+\indexentry{knock@{\tt knock}}{57}
+\indexentry{getJobID@{\tt getJobID}}{57}
+\indexentry{retrieve@{\tt retrieve}}{57}
+\indexentry{solve@{\tt solve}|)}{57}
+\indexentry{MPS format}{57}
+\indexentry{OSiL@{\tt OSiL}}{57}
+\indexentry{AMPL nl format}{57}
+\indexentry{OSiL@{\tt OSiL}}{57}
+\indexentry{cplex@{\tt cplex}}{57}
+\indexentry{GLPK@{\tt GLPK}}{57}
+\indexentry{Osi@{\tt Osi}}{57}
+\indexentry{LINDO}{57}
+\indexentry{Cbc@{\tt Cbc}}{57}
+\indexentry{solve@{\tt solve}}{57}
+\indexentry{send@{\tt send}}{57}
 \indexentry{OSrL}{58}
-\indexentry{testlocal.config@{\tt testlocal.config}|(}{58}
-\indexentry{Ipopt@{\tt Ipopt}}{58}
+\indexentry{Clp@{\tt Clp}}{58}
+\indexentry{parincLinear.osil@{\tt parincLinear.osil}|(}{58}
+\indexentry{parincLinear.osil@{\tt parincLinear.osil}|)}{58}
+\indexentry{send@{\tt send}}{58}
 \indexentry{solve@{\tt solve}}{58}
-\indexentry{testlocal.config@{\tt testlocal.config}|)}{59}
-\indexentry{OSrL}{59}
-\indexentry{OSoL}{59}
-\indexentry{Apache Tomcat}{59}
-\indexentry{Apache Axis}{59}
-\indexentry{OSSolverService.jws@{\tt OSSolverService.jws}}{59}
+\indexentry{OSoL}{58}
+\indexentry{Cbc@{\tt Cbc}}{59}
+\indexentry{send@{\tt send}}{59}
+\indexentry{kill@{\tt kill}}{59}
+\indexentry{knock@{\tt knock}}{59}
+\indexentry{getJobID@{\tt getJobID}}{59}
+\indexentry{retrieve@{\tt retrieve}}{59}
+\indexentry{serviceLocation@{\tt serviceLocation}}{59}
+\indexentry{LINDO}{59}
+\indexentry{Clp@{\tt Clp}}{59}
 \indexentry{solve@{\tt solve}}{59}
 \indexentry{OSiL@{\tt OSiL}}{59}
-\indexentry{OSoL}{59}
-\indexentry{SOAP}{59}
-\indexentry{solve@{\tt solve}|(}{60}
-\indexentry{testremote.config@{\tt testremote.config}|(}{60}
-\indexentry{testremote.config@{\tt testremote.config}|)}{60}
-\indexentry{remoteSolve1.osol@{\tt remoteSolve1.osol}|(}{60}
-\indexentry{remoteSolve1.osol@{\tt remoteSolve1.osol}|)}{60}
-\indexentry{solve@{\tt solve}|)}{61}
-\indexentry{send@{\tt send}|(}{61}
-\indexentry{Ipopt@{\tt Ipopt}}{62}
-\indexentry{AMPL nl format|(}{62}
-\indexentry{AMPL nl format|)}{62}
-\indexentry{OSiL@{\tt OSiL}}{62}
-\indexentry{SOAP}{62}
-\indexentry{JobID@{\tt JobID}|(}{62}
-\indexentry{OSoL|(}{62}
-\indexentry{JobID@{\tt JobID}|)}{63}
-\indexentry{OSoL|)}{63}
-\indexentry{knock@{\tt knock}}{63}
-\indexentry{send@{\tt send}|)}{63}
-\indexentry{retrieve@{\tt retrieve}|(}{63}
-\indexentry{JobID@{\tt JobID}}{64}
-\indexentry{retrieve@{\tt retrieve}|)}{64}
-\indexentry{getJobID@{\tt getJobID}|(}{64}
-\indexentry{send@{\tt send}}{64}
-\indexentry{JobID@{\tt JobID}}{64}
-\indexentry{OSoL|(}{64}
-\indexentry{send@{\tt send}}{64}
-\indexentry{getJobID@{\tt getJobID}|)}{64}
-\indexentry{knock@{\tt knock}|(}{64}
-\indexentry{send@{\tt send}}{64}
-\indexentry{JobID@{\tt JobID}}{64}
-\indexentry{OSpL|(}{65}
-\indexentry{OSpL|)}{66}
-\indexentry{knock@{\tt knock}|)}{66}
-\indexentry{kill@{\tt kill}|(}{66}
-\indexentry{kill@{\tt kill}|)}{66}
-\indexentry{solve@{\tt solve}}{66}
-\indexentry{OSiL@{\tt OSiL}}{66}
-\indexentry{OSoL}{66}
-\indexentry{OSrL}{67}
+\indexentry{OSLibrary@{\tt OSLibrary}}{59}
+\indexentry{OSrL}{59}
+\indexentry{testlocal.config@{\tt testlocal.config}|(}{59}
+\indexentry{Ipopt@{\tt Ipopt}}{59}
+\indexentry{solve@{\tt solve}}{59}
+\indexentry{testlocal.config@{\tt testlocal.config}|)}{60}
+\indexentry{OSrL}{60}
+\indexentry{OSoL}{60}
+\indexentry{Apache Tomcat}{60}
+\indexentry{Apache Axis}{60}
+\indexentry{OSSolverService.jws@{\tt OSSolverService.jws}}{60}
+\indexentry{solve@{\tt solve}}{60}
+\indexentry{OSiL@{\tt OSiL}}{60}
+\indexentry{OSoL}{60}
+\indexentry{SOAP}{60}
+\indexentry{solve@{\tt solve}|(}{61}
+\indexentry{testremote.config@{\tt testremote.config}|(}{61}
+\indexentry{testremote.config@{\tt testremote.config}|)}{61}
+\indexentry{remoteSolve1.osol@{\tt remoteSolve1.osol}|(}{61}
+\indexentry{remoteSolve1.osol@{\tt remoteSolve1.osol}|)}{61}
+\indexentry{solve@{\tt solve}|)}{62}
+\indexentry{send@{\tt send}|(}{62}
+\indexentry{Ipopt@{\tt Ipopt}}{63}
+\indexentry{AMPL nl format|(}{63}
+\indexentry{AMPL nl format|)}{63}
+\indexentry{OSiL@{\tt OSiL}}{63}
+\indexentry{SOAP}{63}
+\indexentry{JobID@{\tt JobID}|(}{63}
+\indexentry{OSoL|(}{63}
+\indexentry{JobID@{\tt JobID}|)}{64}
+\indexentry{OSoL|)}{64}
+\indexentry{knock@{\tt knock}}{64}
+\indexentry{send@{\tt send}|)}{64}
+\indexentry{retrieve@{\tt retrieve}|(}{64}
+\indexentry{JobID@{\tt JobID}}{65}
+\indexentry{retrieve@{\tt retrieve}|)}{65}
+\indexentry{getJobID@{\tt getJobID}|(}{65}
+\indexentry{send@{\tt send}}{65}
+\indexentry{JobID@{\tt JobID}}{65}
+\indexentry{OSoL|(}{65}
+\indexentry{send@{\tt send}}{65}
+\indexentry{getJobID@{\tt getJobID}|)}{65}
+\indexentry{knock@{\tt knock}|(}{65}
+\indexentry{send@{\tt send}}{65}
+\indexentry{JobID@{\tt JobID}}{65}
+\indexentry{OSpL|(}{66}
+\indexentry{OSpL|)}{67}
+\indexentry{knock@{\tt knock}|)}{67}
+\indexentry{kill@{\tt kill}|(}{67}
+\indexentry{kill@{\tt kill}|)}{67}
 \indexentry{solve@{\tt solve}}{67}
 \indexentry{OSiL@{\tt OSiL}}{67}
 \indexentry{OSoL}{67}
-\indexentry{JobID@{\tt JobID}}{67}
-\indexentry{getJobID@{\tt getJobID}}{67}
-\indexentry{OSoL}{67}
-\indexentry{knock@{\tt knock}}{67}
-\indexentry{OSpL}{67}
-\indexentry{OSoL}{67}
-\indexentry{retrieve@{\tt retrieve}}{67}
-\indexentry{OSoL}{67}
-\indexentry{OSrL}{67}
-\indexentry{JobID@{\tt JobID}}{67}
-\indexentry{kill@{\tt kill}}{67}
-\indexentry{OSoL}{67}
-\indexentry{OSpL}{67}
-\indexentry{OSSolverService@{\tt OSSolverService}|)}{67}
-\indexentry{Apache Tomcat|(}{67}
-\indexentry{Apache Tomcat|)}{70}
-\indexentry{AMPL}{71}
-\indexentry{GAMS}{71}
-\indexentry{OSAmplClient@{\tt OSAmplClient}|(}{71}
-\indexentry{OSnl2osil@{\tt OSnl2osil}}{71}
-\indexentry{AMPL nl format}{71}
-\indexentry{OSiL@{\tt OSiL}}{71}
-\indexentry{Ipopt@{\tt Ipopt}|(}{71}
-\indexentry{OSrL}{71}
-\indexentry{Ipopt@{\tt Ipopt}|)}{71}
-\indexentry{OSAmplClient@{\tt OSAmplClient}|)}{71}
-\indexentry{GAMSLinks|(}{72}
-\indexentry{GAMSLinks|)}{73}
-\indexentry{OSFileUpload@{\tt OSFileUpload}|(}{73}
-\indexentry{OSAgent@{\tt OSAgent}}{73}
-\indexentry{solve@{\tt solve}}{73}
-\indexentry{send@{\tt send}}{73}
-\indexentry{OSiL@{\tt OSiL}}{73}
-\indexentry{SOAP}{73}
-\indexentry{Apache Tomcat}{73}
+\indexentry{OSrL}{68}
+\indexentry{solve@{\tt solve}}{68}
+\indexentry{OSiL@{\tt OSiL}}{68}
+\indexentry{OSoL}{68}
+\indexentry{JobID@{\tt JobID}}{68}
+\indexentry{getJobID@{\tt getJobID}}{68}
+\indexentry{OSoL}{68}
+\indexentry{knock@{\tt knock}}{68}
+\indexentry{OSpL}{68}
+\indexentry{OSoL}{68}
+\indexentry{retrieve@{\tt retrieve}}{68}
+\indexentry{OSoL}{68}
+\indexentry{OSrL}{68}
+\indexentry{JobID@{\tt JobID}}{68}
+\indexentry{kill@{\tt kill}}{68}
+\indexentry{OSoL}{68}
+\indexentry{OSpL}{68}
+\indexentry{OSSolverService@{\tt OSSolverService}|)}{68}
+\indexentry{Apache Tomcat|(}{68}
+\indexentry{Apache Tomcat|)}{71}
+\indexentry{AMPL}{72}
+\indexentry{GAMS}{72}
+\indexentry{OSAmplClient@{\tt OSAmplClient}|(}{72}
+\indexentry{OSnl2osil@{\tt OSnl2osil}}{72}
+\indexentry{AMPL nl format}{72}
+\indexentry{OSiL@{\tt OSiL}}{72}
+\indexentry{Ipopt@{\tt Ipopt}|(}{72}
+\indexentry{OSrL}{72}
+\indexentry{Ipopt@{\tt Ipopt}|)}{72}
+\indexentry{OSAmplClient@{\tt OSAmplClient}|)}{72}
+\indexentry{GAMSLinks|(}{73}
+\indexentry{GAMSLinks|)}{74}
+\indexentry{OSFileUpload@{\tt OSFileUpload}|(}{74}
+\indexentry{OSAgent@{\tt OSAgent}}{74}
+\indexentry{solve@{\tt solve}}{74}
+\indexentry{send@{\tt send}}{74}
 \indexentry{OSiL@{\tt OSiL}}{74}
-\indexentry{OSFileUpload@{\tt OSFileUpload}|)}{74}
-\indexentry{VPATH}{75}
-\indexentry{Algorithmic differentiation|}{76}
-\indexentry{OSInstance@{\tt OSInstance}}{76}
-\indexentry{OSInstance@{\tt OSInstance}}{76}
-\indexentry{Algorithmic differentiation|)}{77}
-\indexentry{Clp@{\tt Clp}}{77}
-\indexentry{MATLAB|(}{77}
-\indexentry{VPATH}{77}
-\indexentry{OSnl2osil@{\tt OSnl2osil}}{77}
-\indexentry{OSmps2osil@{\tt OSmps2osil}}{77}
-\indexentry{MATLAB|)}{81}
-\indexentry{OSiL@{\tt OSiL}|(}{82}
-\indexentry{OSiL@{\tt OSiL}|)}{85}
+\indexentry{SOAP}{74}
+\indexentry{Apache Tomcat}{74}
+\indexentry{OSiL@{\tt OSiL}}{75}
+\indexentry{OSFileUpload@{\tt OSFileUpload}|)}{75}
+\indexentry{VPATH}{76}
+\indexentry{Algorithmic differentiation|}{77}
+\indexentry{OSInstance@{\tt OSInstance}}{77}
+\indexentry{OSInstance@{\tt OSInstance}}{77}
+\indexentry{Algorithmic differentiation|)}{78}
+\indexentry{Clp@{\tt Clp}}{78}
+\indexentry{MATLAB|(}{78}
+\indexentry{VPATH}{78}
+\indexentry{OSnl2osil@{\tt OSnl2osil}}{78}
+\indexentry{OSmps2osil@{\tt OSmps2osil}}{78}
+\indexentry{MATLAB|)}{82}
+\indexentry{OSiL@{\tt OSiL}|(}{83}
+\indexentry{OSiL@{\tt OSiL}|)}{86}

@@ -292,11 +292,11 @@ The details and use of this distribution are described in Section~\ref{section:t
 
 Finally for Windows users we provide Visual Studio project files (and supporting libraries and header files) for building projects based on the OS library and libraries used by the OS project. The binary for this is named
 \begin{verbatim}
-VisualStudio-OS-version_number.zip
+OS-version_number-VisualStudio.zip
 \end{verbatim}
 For example, the necessary files associated with  OS  stable 1.1 are in the binary distribution
 \begin{verbatim}
-VisualStudio-OS-1.1.tgz
+OS-1.1-VisualStudio.tgz
 \end{verbatim}
 The binaries provided are based on Visual Studio Express 2008.  See Section \ref{section:vsexamples} for more detail.
 
@@ -823,6 +823,74 @@ the user must first download and process additional third-party software\index{T
 
 
 \subsubsection{Visual Studio Examples Distribution}\label{section:vsexamples}
+
+Many users will not be interested in actually building the OS project from source code.   At the link, \url{https://projects.coin-or.org/CoinBinary/browser/binary/OS}, are  binaries for using the OS project.  There are also Visual Studio project files for building applications that use the precompiled OS libraries.  In particular, download and unpack the file
+
+\begin{verbatim}
+OS-version_number-VisualStudio.zip
+\end{verbatim}
+
+This zip archive contains a  {\tt bin} directory that holds  the executable  {\tt OSSolverService.exe}.    The {\tt OSSolverService.exe} is configured to run, out-of-the-box,   the following solvers.
+
+\begin{itemize}
+
+\item Bonmin
+
+\item Clp
+
+\item Cbc
+
+\item Dylp
+
+\item Ipopt
+
+
+\item  SYMPHONY
+
+\end{itemize}
+The libraries necessary to run these solvers are included in the download.  {\it No additional software is necessary to solve models with these solvers!}   See Section \ref{section:ossolverservice} for details on how to use the {\tt OSSolverService.exe} executable for solving optimization problems. 
+
+
+The {\tt bin} directory also contains the {\tt OSAmplClient.exe} executable. If the user has a Windows version of AMPL, then AMPL can be used to invoke all of the solvers mentioned above through the {\tt OSAmplClient}.  For details see Section \ref{section:amplclient}.
+
+
+
+
+
+
+
+
+
+
+This zip archive also contains a  {\tt lib} directory that holds  libraries for a number of COIN-OR projects, including OS. It is possible to build customized optimization applications that link against these libraries. We provide several examples that use various aspects of the OS project in order to build customized applications. 
+The Visual Studio example solution file is named {\tt osExamples.sln} and it is in the folder {\tt MSVisualStudioOSExamples}.  The {\tt osExamples.sln}  currently contains five projects (examples).
+
+\begin{itemize}
+
+\item[]  {\bf addCuts --} this project illustrates the use of  the {\bf Cbc} and {\bf Cgl} projects. A file ({\tt p0033.osil}) in OSiL format is used to create an OSInstance object. The linear programming relaxation is solved. Then, Gomory, simple rounding, and knapsack cuts are added using {\tt Cgl}.  The model is then optimized using {\bf Cbc}.
+
+
+
+\item[]  {\bf algorithmicDiff --} this project illustrates the {\tt calculate()} method calls in the {\tt OSInstance} class. These {\tt calculate()} calls are used to calculate function values, gradients, and Hessians. These methods make underlying calls to the {\bf CppAD} project.
+
+
+\item[]  {\bf instanceGenerator --}  this project shows  how to build an instance using the {\tt OSInstance} class.   A number of key nonlinear operators are illustrated. 
+
+
+\item[]  {\bf osRemoteTest --}  this project shows  how to call a remote solver using Web Services. {\bf Important:}  this project links to wsock32.lib which is not part of the Visual Studio  Express Package and    it is necessary 
+to also download and install the Windows Platform SDK\index{Windows Platform SDK}, which can be found at
+\url{http://www.microsoft.com/downloads/details.aspx?FamilyID=E6E1C3DF-A74F-4207-8586-711EBE331CDC&displaylang=en}.  Refer back to Section \ref{section:msvs}.
+
+\item[] {\bf osTestCode --} this provide yet another illustration of how to build an optimization instance using the {\bf OSInstance} class.  In addition, this project  shows how to build solver objects and use the solver object to optimize the problem. In this particular case, the {\bf Clp} solver is used.
+
+\end{itemize}
+
+
+In addition, in the zip archive there is a folder {\tt MSVisualStudioTemplate}. This project contains a simple {\tt Hello World} demo in the code {\tt demoCode.cpp}. However, the solution file is configured to link with all of the libraries in the {\tt lib} directory and points to all of the header files in the {\tt include} directory. The user can simply replace what is currently in {\tt demoCode.cpp} with his or her own code. 
+
+
+
+
 
 \subsubsection{Cygwin}\label{section:cygwin}
 
