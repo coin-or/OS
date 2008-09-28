@@ -14,23 +14,23 @@
 \indexentry{Apache Tomcat}{5}
 \indexentry{OSCommon@{\tt OSCommon}}{5}
 \indexentry{Downloading!binaries}{6}
-\indexentry{Subversion}{8}
+\indexentry{Subversion}{7}
 \indexentry{wget@{\tt wget}}{8}
 \indexentry{Fortran}{8}
 \indexentry{Blas}{8}
 \indexentry{Harwell Subroutine Library (HSL)}{8}
 \indexentry{Lapack}{8}
-\indexentry{Mumps}{9}
-\indexentry{f2c@{\tt f2c}}{9}
+\indexentry{Mumps}{8}
+\indexentry{f2c@{\tt f2c}}{8}
 \indexentry{flex@{\tt flex}}{9}
 \indexentry{bison@{\tt bison}}{9}
 \indexentry{Doxygen}{9}
 \indexentry{Downloading!subversion!unix}{9}
 \indexentry{Downloading!subversion!Windows}{9}
-\indexentry{Apache Tomcat}{10}
-\indexentry{Downloading!tarball}{10}
-\indexentry{Downloading!zip file}{10}
-\indexentry{OSCommon@{\tt OSCommon}}{10}
+\indexentry{Apache Tomcat}{11}
+\indexentry{Downloading!tarball}{11}
+\indexentry{Downloading!zip file}{11}
+\indexentry{OSCommon@{\tt OSCommon}}{11}
 \indexentry{Fortran}{12}
 \indexentry{Blas}{12}
 \indexentry{Mumps}{12}
@@ -81,7 +81,7 @@
 \indexentry{Bonmin@{\tt Bonmin}}{16}
 \indexentry{COIN_SKIP_PROJECTS@{\tt COIN\_SKIP\_PROJECTS}}{16}
 \indexentry{Harwell Subroutine Library (HSL)}{16}
-\indexentry{f2c@{\tt f2c}}{16}
+\indexentry{f2c@{\tt f2c}}{17}
 \indexentry{Cygwin|)}{17}
 \indexentry{MinGW}{17}
 \indexentry{MSYS|(}{17}
@@ -90,18 +90,18 @@
 \indexentry{MSYS}{17}
 \indexentry{TortoiseSVN}{17}
 \indexentry{wget@{\tt wget}}{17}
-\indexentry{Windows Platform SDK}{17}
+\indexentry{Windows Platform SDK}{18}
 \indexentry{flex@{\tt flex}}{18}
 \indexentry{bison@{\tt bison}}{18}
 \indexentry{MSYS|)}{18}
-\indexentry{VPATH|(}{18}
+\indexentry{VPATH|(}{19}
 \indexentry{Blas}{19}
 \indexentry{COIN_SKIP_PROJECTS@{\tt COIN\_SKIP\_PROJECTS}}{19}
 \indexentry{VPATH|)}{19}
 \indexentry{Ipopt@{\tt Ipopt}|(}{19}
 \indexentry{Bonmin@{\tt Bonmin}|(}{19}
 \indexentry{Fortran}{19}
-\indexentry{Third-party software}{19}
+\indexentry{Third-party software}{20}
 \indexentry{AMPL Solver Library (ASL)}{20}
 \indexentry{Fortran}{20}
 \indexentry{Mumps}{20}
@@ -110,11 +110,11 @@
 \indexentry{f2c@{\tt f2c}}{20}
 \indexentry{Ipopt@{\tt Ipopt}|)}{20}
 \indexentry{Bonmin@{\tt Bonmin}|)}{20}
-\indexentry{f2c@{\tt f2c}|(}{20}
+\indexentry{f2c@{\tt f2c}|(}{21}
 \indexentry{Blas}{21}
 \indexentry{Lapack}{21}
 \indexentry{Harwell Subroutine Library (HSL)}{21}
-\indexentry{f2c@{\tt f2c}|)}{21}
+\indexentry{f2c@{\tt f2c}|)}{22}
 \indexentry{AMPL Solver Library (ASL)}{22}
 \indexentry{Release-Plus@{\tt Release-Plus}}{22}
 \indexentry{Configuration Manager}{22}

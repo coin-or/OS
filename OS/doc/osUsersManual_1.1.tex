@@ -236,8 +236,8 @@ Section~\ref{section:ad}.
 The OS project is an open-source project  with source code under the Common Public License (CPL). 
 See~\url{http://www.ibm.com/developerworks/library/os-cpl.html}.
 This project was initially created by Robert Fourer, Jun Ma, and Kipp Martin. 
-The code has been written primarily by Jun Ma,  Horand Gassmann,   and Kipp Martin.    Jun Ma, Horand Gassmann, and Kipp Martin are the COIN project leaders for OS.    
-Below we describe different methods for obtaining the C++ source code or the binaries.
+The code has been written primarily by  Horand Gassmann,   Jun Ma,  and Kipp Martin.    Horand Gassmann,  Jun Ma,  and Kipp Martin are the COIN-OR project leaders and active developers for the OS project.    
+Below we describe different methods for obtaining the binaries and C++ source code.
 
 
 
@@ -246,46 +246,59 @@ Below we describe different methods for obtaining the C++ source code or the bin
 
 If the user does not wish to compile source code, the OS library, OSSolverService executable 
 and Tomcat server software configuration are available at \url{http://www.coin-or.org/download/binary/OS/}%
-\index{Downloading!binaries} 
-in binary format.  In the binary OS root there  are {\tt cpp} and {\tt java} directories for the 
-compiled C++ and Java code.
+\index{Downloading!binaries}  in binary format.    The binary distribution for the OS library and executables follows the following naming convention:
+\begin{verbatim}
+OS-version_number-platform-compiler-build_options.tgz (zip)
+\end{verbatim}
+For example, OS  Release 1.1.0 compiled with the Intel 9.1 compiler on an Intel 32-bit Linux system is:
+\begin{verbatim}
+OS-1.1.0-linux-x86-icc9.1.tgz
+\end{verbatim}
 
-In the {\tt cpp} directory you will find binaries for the OS library (see Section~\ref{section:oslibrary}), 
-along with the necessary COIN-OR supporting libraries,  and the {\tt OSSolverService} executable 
-(see Section~\ref{section:ossolverservice}).   All the files are packaged together as a {\tt tgz} file 
-for Unix distributions and {\tt zip} file for Windows.  The distribution follows the following naming convention:
+For more detail on the naming convention and examples see:
 
 \begin{verbatim}
-OS-release_number-operating_system-chip-compiler.tgz (zip)
+https://projects.coin-or.org/CoinBinary/wiki/ArchiveNamingConventions
 \end{verbatim}
-For example, Release 1.1 on Linux is
-\begin{verbatim}
-OS-1.1-linux-ix86-gcc3.4.tgz
-\end{verbatim}
-and on Windows
-\begin{verbatim}
-OS-1.1-win32-msvs-v8.zip
-\end{verbatim}
-After unpacking the {\tt tgz} or {\tt zip} archives, the files in the resulting OS binary distribution are illustrated 
-in Figure~\ref{figure:osbindistribution}.   In the {\tt bin} directory are the executable file {\tt OSSolverService}  
-and any other related COIN-OR executables. The {\tt doc} directory contains this document, {\tt osUsersManual\_1.pdf}.
-  In the {\tt include} directory are the header files that are required if the user wishes to write code to link 
-to OS library or any other supporting COIN-OR library in the {\tt lib} directory.
-\begin{figure}
-\centering
-%\includegraphics[scale=0.7]{\figurepath/osbinDistribution.png}
-\includegraphics[scale=0.7]{./figures/osbinDistribution.png}
-\caption{The OS  binary distribution.}
-\label{figure:osbindistribution}
-\end{figure}
 
-In the {\tt java} directory  are the binary files required to build an Apache Tomcat-based Web service that will 
-take SOAP envelopes with model instances in OSiL format and/or options in OSoL format, call the {\tt OSSolverService}, 
-and return the optimization result in OSrL format.  This distribution is named
+
+After unpacking the {\tt tgz} or {\tt zip} archives, the following folders are available.
+\begin{itemize}
+
+\item[] {\bf bin --} this directory has the executables {\tt OSSolverService}, {\tt OSFileUpload}, and {\tt OSAmplClient}.
+
+\item[]  {\bf include --} the header files that are necessary necessary  in order to link against the OS library.
+
+\item[] {\bf lib --} the libraries that are necessary for creating applications that use the OS library.
+
+\item[] {\bf  share --} license and author information for all the projects used by the OS project 
+\end{itemize}
+
+
+
+Files are also provided for an Apache Tomcat  Web server along with the associated Web service that can 
+read SOAP envelopes with model instances in OSiL format and/or options in OSoL format, call the {\tt OSSolverService}, 
+and return the optimization result in OSrL format.  
+The naming convention for the server binary is
 \begin{verbatim}
-os-distribution-release_number.zip
+OS-version_number-server.tgz (.zip)
 \end{verbatim}
-and the details and use of this distribution are described in Section~\ref{section:tomcat}.
+For example, the files associated with  OS  release 1.0.0 are in the binary distribution
+\begin{verbatim}
+OS-1.0.0-server.tgz
+\end{verbatim}
+There is no platform information given since the server and related binaries were written in Java. 
+The details and use of this distribution are described in Section~\ref{section:tomcat}.
+
+Finally for Windows users we provide Visual Studio project files (and supporting libraries and header files) for building projects based on the OS library and libraries used by the OS project. The binary for this is named
+\begin{verbatim}
+VisualStudio-OS-version_number.zip
+\end{verbatim}
+For example, the necessary files associated with  OS  stable 1.1 are in the binary distribution
+\begin{verbatim}
+VisualStudio-OS-1.1.tgz
+\end{verbatim}
+The binaries provided are based on Visual Studio Express 2008.  See Section \ref{section:vsexamples} for more detail.
 
 \subsection{Auxiliary Software for Working with the OS Project} \label{section:auxiliarydownloads}
 
@@ -807,6 +820,9 @@ add Ipopt\index{Ipopt@{\tt Ipopt}}, Bonmin\index{Bonmin@{\tt Bonmin}} and ASL\in
 the user must first download and process additional third-party software\index{Third-party software} as explained in sections 
 \ref{section:ipopt-msvs} and~\ref{section:ASL}.
 \fi
+
+
+\subsubsection{Visual Studio Examples Distribution}\label{section:vsexamples}
 
 \subsubsection{Cygwin}\label{section:cygwin}
 
