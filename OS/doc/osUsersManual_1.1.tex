@@ -276,8 +276,10 @@ After unpacking the {\tt tgz} or {\tt zip} archives, the following folders are a
 
 
 
-Files are also provided for an Apache Tomcat  Web server along with the associated Web service that can 
-read SOAP envelopes with model instances in OSiL format and/or options in OSoL format, call the {\tt OSSolverService}, 
+Files are also provided for an Apache Tomcat \index{Apache Tomcat} Web server along with the associated Web service 
+that can 
+read SOAP \index {SOAP protocol} envelopes with model instances in OSiL format and/or options in OSoL format, 
+call the {\tt OSSolverService}, 
 and return the optimization result in OSrL format.  
 The naming convention for the server binary is
 \begin{verbatim}
@@ -287,10 +289,12 @@ For example, the files associated with  OS  release 1.0.0 are in the binary dist
 \begin{verbatim}
 OS-1.0.0-server.tgz
 \end{verbatim}
-There is no platform information given since the server and related binaries were written in Java. 
+There is no platform information given since the server and related binaries were written in Java \index{Java}. 
 The details and use of this distribution are described in Section~\ref{section:tomcat}.
 
-Finally for Windows users we provide Visual Studio project files (and supporting libraries and header files) for building projects based on the OS library and libraries used by the OS project. The binary for this is named
+Finally for Windows users we provide Visual Studio \index{Microsoft Visual Studio} project files (and supporting 
+libraries and header files) for building projects based on the OS library and libraries used by the OS project. 
+The binary for this is named
 \begin{verbatim}
 OS-version_number-VisualStudio.zip
 \end{verbatim}
@@ -824,13 +828,17 @@ the user must first download and process additional third-party software\index{T
 
 \subsubsection{Visual Studio Examples Distribution}\label{section:vsexamples}
 
-Many users will not be interested in actually building the OS project from source code.   At the link, \url{https://projects.coin-or.org/CoinBinary/browser/binary/OS}, are  binaries for using the OS project.  There are also Visual Studio project files for building applications that use the precompiled OS libraries.  In particular, download and unpack the file
+Many users will not be interested in actually building the OS project from source code.   At the link
+\url{https://projects.coin-or.org/CoinBinary/browser/binary/OS} are  binaries for using the OS project.  
+There are also Visual Studio project files for building applications that use the precompiled OS libraries.  
+In particular, download and unpack the file
 
 \begin{verbatim}
 OS-version_number-VisualStudio.zip
 \end{verbatim}
 
-This zip archive contains a  {\tt bin} directory that holds  the executable  {\tt OSSolverService.exe}.    The {\tt OSSolverService.exe} is configured to run, out-of-the-box,   the following solvers.
+This zip archive contains a  {\tt bin} directory that holds  the executable  {\tt OSSolverService.exe}.   
+The {\tt OSSolverService.exe} is configured to run, out-of-the-box,   the following solvers.
 
 \begin{itemize}
 
@@ -848,45 +856,58 @@ This zip archive contains a  {\tt bin} directory that holds  the executable  {\t
 \item  SYMPHONY
 
 \end{itemize}
-The libraries necessary to run these solvers are included in the download.  {\it No additional software is necessary to solve models with these solvers!}   See Section \ref{section:ossolverservice} for details on how to use the {\tt OSSolverService.exe} executable for solving optimization problems. 
+The libraries necessary to run these solvers are included in the download.  {\it No additional software is necessary 
+to solve models with these solvers!}   See Section~\ref{section:ossolverservice} for details on how to use the 
+{\tt OSSolverService.exe} executable for solving optimization problems. 
 
 
-The {\tt bin} directory also contains the {\tt OSAmplClient.exe} executable. If the user has a Windows version of AMPL, then AMPL can be used to invoke all of the solvers mentioned above through the {\tt OSAmplClient}.  For details see Section \ref{section:amplclient}.
-
-
-
-
-
-
-
+The {\tt bin} directory also contains the {\tt OSAmplClient.exe} executable. If the user has a Windows version of AMPL, 
+then AMPL can be used to invoke all of the solvers mentioned above through the {\tt OSAmplClient}.  For details 
+see Section~\ref{section:amplclient}.
 
 
 
-This zip archive also contains a  {\tt lib} directory that holds  libraries for a number of COIN-OR projects, including OS. It is possible to build customized optimization applications that link against these libraries. We provide several examples that use various aspects of the OS project in order to build customized applications. 
-The Visual Studio example solution file is named {\tt osExamples.sln} and it is in the folder {\tt MSVisualStudioOSExamples}.  The {\tt osExamples.sln}  currently contains five projects (examples).
+This zip archive also contains a  {\tt lib} directory that holds  libraries for a number of COIN-OR projects, including OS.
+It is possible to build customized optimization applications that link against these libraries. We provide several examples
+that use various aspects of the OS project in order to build customized applications. 
+The Visual Studio example solution file is named {\tt osExamples.sln} and it is in the folder {\tt MSVisualStudioOSExamples}.  
+The solution file {\tt osExamples.sln}  currently contains five projects (examples).
 
 \begin{itemize}
 
-\item[]  {\bf addCuts --} this project illustrates the use of  the {\bf Cbc} and {\bf Cgl} projects. A file ({\tt p0033.osil}) in OSiL format is used to create an OSInstance object. The linear programming relaxation is solved. Then, Gomory, simple rounding, and knapsack cuts are added using {\tt Cgl}.  The model is then optimized using {\bf Cbc}.
+\item[]  {\bf addCuts --} this project illustrates the use of  the {\tt Cbc} and {\tt Cgl} projects. 
+A file ({\tt p0033.osil}) in OSiL format is used to create an OSInstance object. The linear programming relaxation 
+is solved. Then, Gomory, simple rounding, and knapsack cuts are added using {\tt Cgl}.  The model is then optimized 
+using {\tt Cbc}.
 
 
 
-\item[]  {\bf algorithmicDiff --} this project illustrates the {\tt calculate()} method calls in the {\tt OSInstance} class. These {\tt calculate()} calls are used to calculate function values, gradients, and Hessians. These methods make underlying calls to the {\bf CppAD} project.
+\item[]  {\bf algorithmicDiff --} this project illustrates the {\tt calculate()} method calls in the {\tt OSInstance} class.
+These {\tt calculate()} calls are used to calculate function values, gradients, and Hessians. These methods make underlying 
+calls to the {\tt CppAD} project.
 
 
-\item[]  {\bf instanceGenerator --}  this project shows  how to build an instance using the {\tt OSInstance} class.   A number of key nonlinear operators are illustrated. 
+\item[]  {\bf instanceGenerator --}  this project shows  how to build an instance using the {\tt OSInstance} class.   
+A number of key nonlinear operators are illustrated. 
 
 
-\item[]  {\bf osRemoteTest --}  this project shows  how to call a remote solver using Web Services. {\bf Important:}  this project links to wsock32.lib which is not part of the Visual Studio  Express Package and    it is necessary 
+\item[]  {\bf osRemoteTest --}  this project shows  how to call a remote solver using Web Services. {\bf Important:}  
+This project links to {\tt wsock32.lib}, which is not part of the Visual Studio  Express Package.  It is necessary 
 to also download and install the Windows Platform SDK\index{Windows Platform SDK}, which can be found at
-\url{http://www.microsoft.com/downloads/details.aspx?FamilyID=E6E1C3DF-A74F-4207-8586-711EBE331CDC&displaylang=en}.  Refer back to Section \ref{section:msvs}.
+\url{http://www.microsoft.com/downloads/details.aspx?FamilyID=E6E1C3DF-A74F-4207-8586-711EBE331CDC&displaylang=en}.  
+Refer to Section~\ref{section:msvs}.
 
-\item[] {\bf osTestCode --} this provide yet another illustration of how to build an optimization instance using the {\bf OSInstance} class.  In addition, this project  shows how to build solver objects and use the solver object to optimize the problem. In this particular case, the {\bf Clp} solver is used.
+\item[] {\bf osTestCode --} this provide yet another illustration of how to build an optimization instance using the 
+{\tt OSInstance} class.  In addition, this project  shows how to build solver objects and use the solver object to 
+optimize the problem. In this particular case, the {\tt Clp} solver is used.
 
 \end{itemize}
 
 
-In addition, in the zip archive there is a folder {\tt MSVisualStudioTemplate}. This project contains a simple {\tt Hello World} demo in the code {\tt demoCode.cpp}. However, the solution file is configured to link with all of the libraries in the {\tt lib} directory and points to all of the header files in the {\tt include} directory. The user can simply replace what is currently in {\tt demoCode.cpp} with his or her own code. 
+In addition, in the zip archive there is a folder {\tt MSVisualStudioTemplate}. This project contains a simple 
+{\tt Hello World} demo in the code {\tt demoCode.cpp}. However, the solution file is configured to link with all 
+of the libraries in the {\tt lib} directory and points to all of the header files in the {\tt include} directory. 
+The user can simply replace what is currently in {\tt demoCode.cpp} with his or her own code. 
 
 
 
@@ -3750,7 +3771,7 @@ email when the job is complete. Below is an example of the {\tt OSoL} that uses 
     <optimization>
         <other name="os_solver">lindo</other>
     </optimization>
-</osol>
+</osol> 
 \end{verbatim}
 
 The remote Solver Service will send an email to the above address when the job is complete. A second option for 
@@ -3809,7 +3830,7 @@ is required. The {\tt OSSolverService} can get a {\tt JobID} with the following 
 -serviceLocation http://gsbkip.chicagogsb.edu/os/OSSolverService.jws
 -serviceMethod getJobID
 \end{verbatim}
-Note that no OSoL\index{OSoL|(} input file is specified. In this case, the {\tt OSSolverService} sends an empty string. 
+Note that no OSoL\index{OSoL} input file is specified. In this case, the {\tt OSSolverService} sends an empty string. 
 A string is returned with the {\tt JobID}. This {\tt JobID} is then put into a {\tt <jobID>} element in an 
 OSoL string that would be used by the {\tt send}\index{send@{\tt send}} method.
 \index{getJobID@{\tt getJobID}|)}
@@ -4559,7 +4580,7 @@ Developers can use the Makefiles as a starting point for building applications t
 
 \subsection{Algorithmic Differentiation:  Using the OS Algorithmic Differentiation Methods}\label{section:cppad}
 
-\index{Algorithmic differentiation|}
+\index{Algorithmic differentiation|(}
 In the {\tt OS/examples/algorithmicDiff} folder is test code {\tt algorithmicDiffTest.cpp}. This code 
 illustrates the key methods in the {\tt OSInstance}\index{OSInstance@{\tt OSInstance}} API that are used for 
 algorithmic differentiation.   These methods were described in Section~\ref{section:ad}.

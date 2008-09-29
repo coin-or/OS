@@ -14,6 +14,10 @@
 \indexentry{Apache Tomcat}{5}
 \indexentry{OSCommon@{\tt OSCommon}}{5}
 \indexentry{Downloading!binaries}{6}
+\indexentry{Apache Tomcat}{7}
+\indexentry{ }{7}
+\indexentry{Java}{7}
+\indexentry{Microsoft Visual Studio}{7}
 \indexentry{Subversion}{7}
 \indexentry{wget@{\tt wget}}{8}
 \indexentry{Fortran}{8}
@@ -327,7 +331,7 @@
 \indexentry{getJobID@{\tt getJobID}|(}{65}
 \indexentry{send@{\tt send}}{65}
 \indexentry{JobID@{\tt JobID}}{65}
-\indexentry{OSoL|(}{65}
+\indexentry{OSoL}{65}
 \indexentry{send@{\tt send}}{65}
 \indexentry{getJobID@{\tt getJobID}|)}{65}
 \indexentry{knock@{\tt knock}|(}{65}
@@ -383,7 +387,7 @@
 \indexentry{OSiL@{\tt OSiL}}{75}
 \indexentry{OSFileUpload@{\tt OSFileUpload}|)}{75}
 \indexentry{VPATH}{76}
-\indexentry{Algorithmic differentiation|}{77}
+\indexentry{Algorithmic differentiation|(}{77}
 \indexentry{OSInstance@{\tt OSInstance}}{77}
 \indexentry{OSInstance@{\tt OSInstance}}{77}
 \indexentry{Algorithmic differentiation|)}{78}
