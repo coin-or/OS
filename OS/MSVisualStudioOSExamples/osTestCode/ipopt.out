@@ -1,0 +1,11 @@
+
+******************************************************************************
+This program contains Ipopt, a library for large-scale nonlinear optimization.
+ Ipopt is released as open source code under the Common Public License (CPL).
+         For more information visit http://projects.coin-or.org/Ipopt
+******************************************************************************
+
+NOTE: You are using Ipopt by default with the MUMPS linear solver.
+      Other linear solvers might be more efficient (see Ipopt documentation).
+
+
