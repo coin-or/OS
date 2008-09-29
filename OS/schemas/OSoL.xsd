@@ -411,7 +411,7 @@
 					<xs:documentation>since version 1.0.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="initialVariableValuesString" type="InitVariableValues" minOccurs="0">
+			<xs:element name="initialVariableValuesString" type="InitVariableValuesString" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>since version 1.0.0</xs:documentation>
 				</xs:annotation>
@@ -447,7 +447,7 @@
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="value" type="xs:double" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="InitVarValueString">
 		<xs:annotation>
