@@ -6103,6 +6103,11 @@ extern "C" {
 I've committed these lines into the repository now too, but you have to activate them by adding a -DUSE_UNUSED_SYMBOLS (I know, I'm very bad in naming) to the CXXFLAGS, see https://projects.coin-or.org/GAMSlinks/changeset/540
 I am not convinced yet that this is not some bug in the compiler you use.
 
+%%%%%%%%%%%%%%%%%%%%%%%
+
+From Laci
+
+OK, I have reverted the changes. Go ahead and create the releases.--LaciPS: btw, the way to revert the changes is really simple:  svn checkout https://projects.coin-or.org/svn/OS/stable/1.1  cd 1.1  svn merge -r2088:2087 https://projects.coin-or.org/svn/OS/stable/1.1  svn commitOnce you know it it's really logical. 
 
 
 
