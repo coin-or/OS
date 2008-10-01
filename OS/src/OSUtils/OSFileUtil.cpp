@@ -33,7 +33,7 @@ std::string FileUtil::getFileAsString( const char* fname){
 		std::ostringstream outStr;
 		std::string soutString;
 		char ch;
-		//std::cout << "Inside FileUtil:getFileAsString and calling inFile" << std::endl;
+		//std::cout << "Inside FileUtil:getFileAsString and calling inFile " << fname << std::endl;
 		std::ifstream inFile( fname);
 		if( !inFile){
 			throw ErrorClass(" Could not read the given file");

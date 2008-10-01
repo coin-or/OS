@@ -21,7 +21,7 @@
 #include<sstream>
 #include <limits>
 
-//#define DEBUG
+#define DEBUG
 
 using namespace std;
 
@@ -64,7 +64,6 @@ OtherOption::OtherOption():
 	value (""),
 	description ("")
 {    
-	cout << "Inside OtherOption Constructor" << endl;
 	#ifdef DEBUG
 	cout << "Inside OtherOption Constructor" << endl;
 	#endif
@@ -97,7 +96,7 @@ OtherOptions::~OtherOptions()
 		{	delete other[i];
 			other[i] = NULL;
 		}
-		delete[] other;
+		delete other;
 		other = NULL;
 	}
 }//end OtherOptions destructor
@@ -265,13 +264,9 @@ JobDependencies::~JobDependencies()
 	cout << "JobDependencies Destructor Called" << endl;
 	#endif
 	if (jobID != NULL) 
-//	{	for (int i; i < numberOfJobIDs; i++)
-//		{	delete jobID[i];
-//			jobID[i] = NULL;
-//		}
-		delete jobID;
+	{	delete []jobID;
 		jobID = NULL;
-//	}
+	}
 }//end JobDependencies destructor 
 
 
@@ -290,13 +285,9 @@ DirectoriesAndFiles::~DirectoriesAndFiles()
 	cout << "DirectoriesAndFiles Destructor Called" << endl;
 	#endif
 	if (path != NULL) 
-//	{	for (int i=0; i < numberOfPaths; i++)
-//		{	delete path[i];
-//			path[i] = NULL;
-//		}
-		delete path;
+	{	delete []path;
 		path = NULL;
-//	}
+	}
 }//end DirectoriesAndFiles destructor 
 
 
@@ -359,13 +350,9 @@ Processes::~Processes()
 	cout << "Processes Destructor Called" << endl;
 	#endif
 	if (process != NULL) 
-//	{	for (int i=0; i < numberOfProcesses; i++)	
-//		{	delete process[i];
-//			process[i] = NULL;
-//		}
-		delete process;
+	{	delete []process;
 		process = NULL;
-//	}
+	}
 }//end Processes destructor 
 
 
@@ -429,7 +416,7 @@ JobOption::~JobOption()
 
 InitVarValue::InitVarValue(): 
 	idx (0),
-	value ("")
+	value (OSNAN)
 {    
 	#ifdef DEBUG
 	cout << "Inside InitVarValue Constructor" << endl;
@@ -457,6 +444,48 @@ InitVariableValues::~InitVariableValues()
 {    
 	#ifdef DEBUG
 	cout << "InitVariableValues Destructor Called" << endl;
+	#endif
+	if (var != NULL) 
+	{	for (int i=0; i < numberOfVar; i++)
+		{	delete var[i];
+			var[i] = NULL;
+		}
+		delete var;
+		var = NULL;
+	}
+}//end InitVariableValues destructor 
+
+
+InitVarValueString::InitVarValueString(): 
+	idx (0),
+	value ("")
+{    
+	#ifdef DEBUG
+	cout << "Inside InitVarValueString Constructor" << endl;
+	#endif
+}// end InitVarValueString constructor  
+
+InitVarValueString::~InitVarValueString()
+{    
+	#ifdef DEBUG
+	cout << "InitVarValueString Destructor Called" << endl;
+	#endif
+}//end InitVarValueString destructor 
+
+
+InitVariableValuesString::InitVariableValuesString():
+	numberOfVar (0)
+{    
+	#ifdef DEBUG
+	cout << "Inside InitVariableValuesString Constructor" << endl;
+	#endif
+	var = NULL;
+}// end InitVariableValuesString constructor  
+
+InitVariableValuesString::~InitVariableValuesString()
+{    
+	#ifdef DEBUG
+	cout << "InitVariableValuesString Destructor Called" << endl;
 	#endif
 	if (var != NULL) 
 	{	for (int i=0; i < numberOfVar; i++)
@@ -526,6 +555,7 @@ VariableOption::VariableOption():
 	cout << "Inside VariableOption Constructor" << endl;
 	#endif
 	initialVariableValues = NULL;
+	initialVariableValuesString = NULL;
 	other = NULL;
 }// end VariableOption constructor  
 
@@ -536,6 +566,8 @@ VariableOption::~VariableOption()
 	#endif
 	if (initialVariableValues != NULL) delete initialVariableValues;
 	initialVariableValues = NULL;
+	if (initialVariableValuesString != NULL) delete initialVariableValuesString;
+	initialVariableValuesString = NULL;
 	if (other != NULL) 
 	{   for (int i=0; i < numberOfOtherVariableOptions; i++)
 		{	if (other[i] != NULL)

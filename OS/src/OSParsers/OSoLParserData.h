@@ -1,11 +1,11 @@
 /** @file OSoLParserData.h
  * 
- * @author   Horand Gassmann, Jun Ma, Kipp Martin, 
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
  * @version 1.0, 29/08/2008
  * @since   OS1.1
  *
  * \remarks
- * Copyright (C) 2005,  Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, Dalhousie University and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
@@ -109,6 +109,10 @@ public:
 	bool filesToCreatePresent;
 	int numberOfFilesToCreate;
 
+	bool pathPairFromPresent;
+	bool pathPairToPresent;
+	bool pathPairMakeCopyPresent;
+
 	bool inputDirectoriesToMovePresent;
 	int numberOfInputDirectoriesToMove;
 
@@ -121,26 +125,31 @@ public:
 	bool outputFilesToMovePresent;
 	int numberOfOutputFilesToMove;
 
-	bool DirectoriesToDeletePresent;
+	bool directoriesToDeletePresent;
 	int numberOfDirectoriesToDelete;
 
-	bool FilesToDeletePresent;
+	bool filesToDeletePresent;
 	int numberOfFilesToDelete;
 
 	bool processesToKillPresent;
-	int numberOfPtocessesToKill;
+	int numberOfProcessesToKill;
 
 	bool otherJobOptionsPresent;
       int numberOfOtherJobOptions;
 	
 	/** children of the <optimization> element */
 	int numberOfVariables;
+	bool numberOfVariablesPresent;
 	int numberOfObjectives;
+	bool numberOfObjectivesPresent;
 	int numberOfConstraints;
+	bool numberOfConstraintsPresent;
 	bool variablesPresent;
 	bool objectivesPresent;
 	bool constraintsPresent;
 	bool solverOptionsPresent;
+	bool idxAttributePresent;
+	bool valAttributePresent;
 	int numberOfOtherVariableOptions;
 	bool initialVariableValuesPresent;
 	int numberOfVar;
@@ -155,7 +164,7 @@ public:
 	bool initialDualVariableValuesPresent;
 	int numberOfDuals;
 
-	/** attributes of other options */
+	/** attributes of <other> options */
 	bool otherOptionNamePresent;
 	bool otherOptionValuePresent;
 	bool otherOptionDescriptionPresent;

@@ -1,11 +1,11 @@
 /** @file OSoLParserData.cpp
  * 
- * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  *
  * \remarks
- * Copyright (C) 2005,  Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, Dalhousie University and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
@@ -55,6 +55,7 @@
 	maxTimeUnitPresent(false),
 	scheduledStartTimePresent(false),
 	dependenciesPresent(false),
+	numberOfDependencies(0),
 	requiredDirectoriesPresent(false),
 	numberOfRequiredDirectories(0),
 	requiredFilesPresent(false),
@@ -63,6 +64,9 @@
 	numberOfDirectoriesToMake(0),
 	filesToCreatePresent(false),
 	numberOfFilesToCreate(0),
+	pathPairFromPresent(false),
+	pathPairToPresent(false),
+	pathPairMakeCopyPresent(false),
 	inputDirectoriesToMovePresent(false),
 	numberOfInputDirectoriesToMove(0),
 	inputFilesToMovePresent(false),
@@ -71,21 +75,26 @@
 	numberOfOutputDirectoriesToMove(0),
 	outputFilesToMovePresent(false),
 	numberOfOutputFilesToMove(0),
-	DirectoriesToDeletePresent(false),
+	directoriesToDeletePresent(false),
 	numberOfDirectoriesToDelete(0),
-	FilesToDeletePresent(false),
+	filesToDeletePresent(false),
 	numberOfFilesToDelete(0),
 	processesToKillPresent(false),
-	numberOfPtocessesToKill(0),
+	numberOfProcessesToKill(0),
 	otherJobOptionsPresent(false),
       numberOfOtherJobOptions(0),
 	numberOfVariables(0),
+	numberOfVariablesPresent(false),
 	numberOfObjectives(0),
+	numberOfObjectivesPresent(false),
 	numberOfConstraints(0),
+	numberOfConstraintsPresent(false),
 	variablesPresent(false),
 	objectivesPresent(false),
 	constraintsPresent(false),
 	solverOptionsPresent(false),
+	idxAttributePresent(false),
+	valAttributePresent(false),
 	numberOfOtherVariableOptions(0),
 	initialVariableValuesPresent(false),
 	numberOfVar(0),

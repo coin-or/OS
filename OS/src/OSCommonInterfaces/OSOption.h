@@ -685,7 +685,7 @@ public:
 	int idx;
 
 	/** initial value */
-	std::string value;
+	double value;
 
 	/**
 	 *
@@ -731,6 +731,72 @@ public:
 	 */
 	~InitVariableValues();
 }; //InitVariableValues
+
+
+/*! \class InitVarValueString
+ *  \brief the InitVarValueString class.
+ * 
+ * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/07/2008
+ * @since OS 1.1
+ * 
+ * \remarks
+ * A data structure class that corresponds to an xml element in 
+ * the OSoL schema.  
+ */
+class InitVarValueString {
+
+public:
+	/** variable index */
+	int idx;
+
+	/** initial value */
+	std::string value;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	InitVarValueString();
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~InitVarValueString();		
+}; //InitVarValueString
+
+
+/*! \class InitVariableValuesString
+ *  \brief the InitVariableValuesString class.
+ * 
+ * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/07/2008
+ * @since OS 1.1
+ * 
+ * \remarks
+ * A data structure class that corresponds to an xml element in 
+ * the OSoL schema.  
+ */
+class InitVariableValuesString {
+
+public:
+	/** number of <var> children */
+	int numberOfVar;
+
+	/** initial value for each variable */
+	InitVarValueString **var;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	InitVariableValuesString();
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~InitVariableValuesString();
+}; //InitVariableValuesString
 
 
 /*! \class OtherVarOption
@@ -842,6 +908,9 @@ public:
 
 	/** initial values for the variables */
 	InitVariableValues *initialVariableValues;
+
+	/** initial values for string-valued variables */
+	InitVariableValuesString *initialVariableValuesString;
 
 	/** other variable options */
 	OtherVariableOption **other;

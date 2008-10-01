@@ -111,7 +111,6 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 		if (m_OSOption->general->otherOptions != NULL)
 		{	if (m_OSOption->general->otherOptions->numberOfOtherOptions > 0)
 			{	outStr << "<otherOptions numberOfOtherOptions=\""; 
-		cout << "number of other options" << m_OSOption->general->otherOptions->numberOfOtherOptions << endl;
 				outStr << m_OSOption->general->otherOptions->numberOfOtherOptions << "\">" << endl;
 				for (int i=0; i < m_OSOption->general->otherOptions->numberOfOtherOptions; i++)
 				{	outStr << "<other name=\"" << m_OSOption->general->otherOptions->other[i]->name << "\"";
@@ -125,6 +124,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 			}
 		}
 		outStr << "</general>" << endl;
+		cout << "Done with <general> element" << endl;
 	};
 
 /**
@@ -169,6 +169,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 			}
 		}
 		outStr << "</system>" << endl;
+		cout << "Done with <system> element" << endl;
 	};
 
 /**
@@ -195,6 +196,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 			}
 		}
 		outStr << "</service>" << endl;
+		cout << "Done with <service> element" << endl;
 	};
 
 /**
@@ -209,13 +211,21 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 			outStr << m_OSOption->job->maxTime->value << "</maxTime>" << endl;
 		}
 		outStr << "<scheduledStartTime>" << m_OSOption->job->scheduledStartTime << "</scheduledStartTime>" << endl;
+		cout << "Before <dependencies>" << endl;
 		if (m_OSOption->job->dependencies != NULL)
-		{	if (m_OSOption->job->dependencies->numberOfJobIDs > 0)
+		{	cout << "Starting <dependencies>" << endl;
+			if (m_OSOption->job->dependencies->numberOfJobIDs > 0)
 			{	outStr << "<dependencies numberOfJobIDs=\"";
 				outStr << m_OSOption->job->dependencies->numberOfJobIDs << "\">" << endl; 
+				cout << "<dependencies numberOfJobIDs=\"";
+				cout << m_OSOption->job->dependencies->numberOfJobIDs << "\">" << endl; 
+				cout << "Put <dependencies> job list" << endl;
 				for (int i=0; i < m_OSOption->job->dependencies->numberOfJobIDs; i++)
-					outStr << "<job>" << m_OSOption->job->dependencies->jobID[i] << "</job>" << endl;
+				{	cout << "job " << i << endl;
+					outStr << "<jobID>" << m_OSOption->job->dependencies->jobID[i] << "</jobID>" << endl;
+				}
 				outStr << "</dependencies>" << endl;
+		cout << "Done with <dependencies>" << endl;
 			}
 		}
 		if (m_OSOption->job->requiredDirectories != NULL)
@@ -349,6 +359,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 			}
 		}
 		outStr << "</job>" << endl;
+		cout << "Done with <job> element" << endl;
 	};
 
 /**
