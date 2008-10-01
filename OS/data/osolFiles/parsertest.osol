@@ -19,24 +19,41 @@
 	<system>
 		<minDiskSpace unit="megabyte">0</minDiskSpace>
 		<minMemorySize>1.0</minMemorySize>
-            <minCPUNumber>0</minCPUNumber>
+        <minCPUNumber>0</minCPUNumber>
+   		<otherOptions numberOfOtherOptions="1">
+			<other name="test" value="5"></other>
+		</otherOptions>
 	</system>
 	<service>
+		<otherOptions numberOfOtherOptions="4">
+			<other name="test" value="5"></other>
+			<other value="0" name="other"></other>
+			<other name="third"/>
+                        <other description="q" name="four"/>
+		</otherOptions>
 	</service>
 	<job>
-	<directoriesToMake numberOfPaths="1">
-		<path>C:\datafiles\research\OS\OS-trunk-work\OS\test\temp</path>
-	</directoriesToMake>
-	<inputFilesToMove numberOfPathPairs="1">
-		<pathPair to="C:\datafiles\research\OS\OS-trunk-work\OS\test\temp\input.mps" 
-					from="C:\datafiles\research\mslip\data\diet.mps" makeCopy="true"></pathPair>
-	</inputFilesToMove>
+		<dependencies numberOfJobIDs="2">
+			<jobID>Job1</jobID>
+			<jobID>1234567890ABCD</jobID>
+		</dependencies>
+		<directoriesToMake numberOfPaths="1">
+			<path>C:\datafiles\research\OS\OS-trunk-work\OS\test\temp</path>
+		</directoriesToMake>
+		<inputDirectoriesToMove numberOfPathPairs="1">
+			<pathPair to="C:\datafiles\research\OS\OS-trunk-work\OS\test\temp" 
+						from="C:\datafiles\research\mslip\data" makeCopy="true"></pathPair>
+		</inputDirectoriesToMove>
+		<inputFilesToMove numberOfPathPairs="1">
+			<pathPair to="C:\datafiles\research\OS\OS-trunk-work\OS\test\temp\input.mps" 
+						from="C:\datafiles\research\mslip\data\diet.mps" makeCopy="true"></pathPair>
+		</inputFilesToMove>
 	</job>	
 	<optimization numberOfObjectives="1" numberOfConstraints="2" numberOfVariables="3">
 		<variables numberOfOtherVariableOptions="0">
 			<initialVariableValues numberOfVar="2">
 				<var idx="0" value="1.0"></var>
-				<var value="2" idx="2"/>
+				<var value="2.0" idx="2"/>
 			</initialVariableValues>
 		</variables>	
 		<solverOptions numberOfSolverOptions="5">
