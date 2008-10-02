@@ -24,6 +24,7 @@
 #include "OSoLParserData.h"
 #include <iostream>
 #include <sstream> 
+#include <stdio.h>
 
 
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
