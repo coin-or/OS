@@ -336,7 +336,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 		}
 		if (m_OSOption->job->processesToKill != NULL)
 		{	if (m_OSOption->job->processesToKill->numberOfProcesses > 0)
-			{	outStr << "<processesToKill numberOfPaths=\"";
+			{	outStr << "<processesToKill numberOfProcesses=\"";
 				outStr << m_OSOption->job->processesToKill->numberOfProcesses << "\">" << endl; 
 				for (int i=0; i < m_OSOption->job->processesToKill->numberOfProcesses; i++)
 					outStr << "<process>" << m_OSOption->job->processesToKill->process[i] << "</process>" << endl;
@@ -440,8 +440,8 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				for (int i=0; i < m_OSOption->optimization->objectives->initialObjectiveValues->numberOfObj; i++)
 				{	outStr << "<obj";
 					outStr << " idx=\"" << m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->idx << "\"";
-					outStr << " value=\"" << m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->value;
-					outStr << "/>";
+					outStr << " value=\"" << m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->value << "\"";
+					outStr << "/>" << endl;
 				}
 				outStr << "</initialObjectiveValues>" << endl;
 			}
@@ -453,7 +453,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 					outStr << " idx=\"" << m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->idx << "\"";
 					outStr << " lbValue=\"" << m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->lbValue << "\"";
 					outStr << " ubValue=\"" << m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->ubValue << "\"";
-					outStr << "/>";
+					outStr << "/>" << endl;
 				}
 				outStr << "</initialObjectiveBounds>" << endl;
 			}
@@ -494,8 +494,8 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				for (int i=0; i < m_OSOption->optimization->constraints->initialConstraintValues->numberOfCon; i++)
 				{	outStr << "<con";
 					outStr << " idx=\"" << m_OSOption->optimization->constraints->initialConstraintValues->con[i]->idx << "\"";
-					outStr << " value=\"" << m_OSOption->optimization->constraints->initialConstraintValues->con[i]->value;
-					outStr << "/>";
+					outStr << " value=\"" << m_OSOption->optimization->constraints->initialConstraintValues->con[i]->value << "\"";
+					outStr << "/>" << endl;
 				}
 				outStr << "</initialConstraintValues>" << endl;
 			}
@@ -505,9 +505,9 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				for (int i=0; i < m_OSOption->optimization->constraints->initialDualValues->numberOfCon; i++)
 				{	outStr << "<con";
 					outStr << " idx=\"" << m_OSOption->optimization->constraints->initialDualValues->con[i]->idx << "\"";
-					outStr << " lbValue=\"" << m_OSOption->optimization->constraints->initialDualValues->con[i]->lbValue;
-					outStr << " ubValue=\"" << m_OSOption->optimization->constraints->initialDualValues->con[i]->ubValue;
-					outStr << "/>";
+					outStr << " lbValue=\"" << m_OSOption->optimization->constraints->initialDualValues->con[i]->lbValue << "\"";
+					outStr << " ubValue=\"" << m_OSOption->optimization->constraints->initialDualValues->con[i]->ubValue << "\"";
+					outStr << "/>" << endl;
 				}
 				outStr << "</initialDualValues>" << endl;
 			}
@@ -547,7 +547,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 			{	outStr << "<solverOptions numberOfSolverOptions=\""; 
 				outStr << m_OSOption->optimization->solverOptions->numberOfSolverOptions << "\">" << endl;
 				for (int i=0; i < m_OSOption->optimization->solverOptions->numberOfSolverOptions; i++)
-				{	outStr << "<other name=\"" << m_OSOption->optimization->solverOptions->solverOption[i]->name << "\"";
+				{	outStr << "<solverOption name=\"" << m_OSOption->optimization->solverOptions->solverOption[i]->name << "\"";
 					if (m_OSOption->optimization->solverOptions->solverOption[i]->value != "")
 						outStr << " value=\"" << m_OSOption->optimization->solverOptions->solverOption[i]->value << "\"";
 					if (m_OSOption->optimization->solverOptions->solverOption[i]->solver != "")

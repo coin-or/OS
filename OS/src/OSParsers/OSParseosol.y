@@ -1564,7 +1564,7 @@ initvarstrvaluevalueatt: VALUEATT ATTRIBUTETEXT
 {	if (parserData->valAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one variable index allowed");
 	parserData->valAttributePresent = true;
-	osoption->optimization->variables->initialVariableValuesString->var[parserData->numberOfVarStr]->value = strtod($2, NULL);  
+	osoption->optimization->variables->initialVariableValuesString->var[parserData->numberOfVarStr]->value = $2;  
 }
 QUOTE;
 
@@ -1677,7 +1677,7 @@ objvaluelist: | objvaluelist initobjvalue;
 
 initobjvalue: objvaluestart initobjvalueattlist initobjvalueend
 {	if (!parserData->idxAttributePresent)
-		osolerror (NULL, osoption, parserData, "variable index required");
+		osolerror (NULL, osoption, parserData, "objective index required");
 	parserData->idxAttributePresent = false;
 	parserData->valAttributePresent = false;
 	parserData->numberOfObjValues++;
@@ -1720,7 +1720,8 @@ initialobjectivebounds: | INITIALOBJECTIVEBOUNDSSTART numberofobjbounds GREATERT
     objboundlist INITIALOBJECTIVEBOUNDSEND;
 
 numberofobjbounds: NUMBEROFOBJATT QUOTE INTEGER QUOTE 
-{	if ($3 <= 0) osolerror (NULL, osoption, parserData, "number of <obj> elements must be positive");
+{	printf("\n$s$d\n","number of objective bounds: ",$3);
+	if ($3 <= 0) osolerror (NULL, osoption, parserData, "number of <obj> elements must be positive");
 	osoption->optimization->objectives->initialObjectiveBounds = new InitObjectiveBounds();
 	osoption->optimization->objectives->initialObjectiveBounds->numberOfObj = $3;
 	osoption->optimization->objectives->initialObjectiveBounds->obj = new InitObjBound*[$3];
@@ -1732,7 +1733,7 @@ objboundlist: | objboundlist initobjbound;
 
 initobjbound: objboundstart initobjboundattlist initobjboundend
 {	if (!parserData->idxAttributePresent)
-		osolerror (NULL, osoption, parserData, "variable index required");
+		osolerror (NULL, osoption, parserData, "objective index required");
 	parserData->idxAttributePresent = false;
 	parserData->lbvalAttributePresent = false;
 	parserData->ubvalAttributePresent = false;
@@ -2062,15 +2063,47 @@ otherconoptionubvalue: UBVALUEATT ATTRIBUTETEXT QUOTE
 otherconoptionend: GREATERTHAN CONEND | ENDOFELEMENT;
 
 
-solveroptions: | SOLVEROPTIONSSTART numberofsolveroptionsatt GREATERTHAN solveroptionlist SOLVEROPTIONSEND;
+solveroptions: | solveroptionsstart numberofsolveroptionsatt GREATERTHAN solveroptionlist SOLVEROPTIONSEND
+{	if (parserData->numberOfSolverOptions != osoption->optimization->solverOptions->numberOfSolverOptions)
+		osolerror (NULL, osoption, parserData, "wrong number of solver options in <optimization> element"); 
+};
+
+solveroptionsstart: SOLVEROPTIONSSTART 
+{	if (parserData->solverOptionsPresent)
+	{	osolerror( NULL, osoption, parserData, "only one <solverOptions> element allowed");
+	}
+	else
+	{	parserData->solverOptionsPresent = true;
+		osoption->optimization->solverOptions = new SolverOptions();	
+	}
+}; 
 
 numberofsolveroptionsatt: NUMBEROFSOLVEROPTIONSATT QUOTE INTEGER QUOTE
-{
+{	if ($3 < 0) osolerror (NULL, osoption, parserData, "number of solver options cannot be negative");
+	osoption->optimization->solverOptions->numberOfSolverOptions = $3;
+	osoption->optimization->solverOptions->solverOption = new SolverOption*[$3];
+	for (int i=0; i < $3; i++) osoption->optimization->solverOptions->solverOption[i] = new SolverOption();
 };
 
 solveroptionlist: | solveroptionlist solveroption;
 
-solveroption: SOLVEROPTIONSTART solveroptionattlist solveroptionend;
+solveroption: SOLVEROPTIONSTART 
+{	if (parserData->numberOfSolverOptions >= osoption->optimization->solverOptions->numberOfSolverOptions)
+	{	osolerror (NULL, osoption, parserData, "too many solver options in <optimization> element");
+	};
+} 
+solveroptionattlist solveroptionend
+{	if (!parserData->solverOptionNamePresent)
+		osolerror (NULL, osoption, parserData, "name attribute must be present");
+	/* reset defaults for the next option */
+	parserData->solverOptionNamePresent = false;
+	parserData->solverOptionValuePresent = false;
+	parserData->solverOptionSolverPresent = false;
+	parserData->solverOptionCategoryPresent = false;
+	parserData->solverOptionTypePresent = false;
+	parserData->solverOptionDescriptionPresent = false;
+	parserData->numberOfSolverOptions++;
+};
 
 solveroptionattlist: | solveroptionattlist solveroptionatt;
 
@@ -2082,33 +2115,75 @@ solveroptionatt:
    | solveroptiontype
    | solveroptiondescription;
 
-solveroptionname: NAMEATT ATTRIBUTETEXT QUOTE
-{
-};
 
-solveroptionvalue: VALUEATT ATTRIBUTETEXT QUOTE
-{
-};
+solveroptionname: NAMEATT ATTRIBUTETEXT 
+{	if (parserData->solverOptionNamePresent)
+	{	osolerror( NULL, osoption, parserData, "only one name attribute allowed");
+	}
+	else
+	{	parserData->solverOptionNamePresent = true;
+		osoption->optimization->solverOptions->solverOption[parserData->numberOfSolverOptions]->name = $2;	
+	}
+}
+QUOTE;
 
-solveroptionsolver: SOLVERATT ATTRIBUTETEXT QUOTE
-{
-};
+solveroptionvalue: VALUEATT ATTRIBUTETEXT 
+{	if (parserData->solverOptionValuePresent)
+	{	osolerror( NULL, osoption, parserData, "only one value attribute allowed");
+	}
+	else
+	{	parserData->solverOptionValuePresent = true;
+		osoption->optimization->solverOptions->solverOption[parserData->numberOfSolverOptions]->value = $2;	
+	}
+}
+QUOTE;
 
-solveroptioncategory: CATEGORYATT ATTRIBUTETEXT QUOTE
-{
-};
+solveroptionsolver: SOLVERATT ATTRIBUTETEXT 
+{	if (parserData->solverOptionSolverPresent)
+	{	osolerror( NULL, osoption, parserData, "only one solver attribute allowed");
+	}
+	else
+	{	parserData->solverOptionSolverPresent = true;
+		osoption->optimization->solverOptions->solverOption[parserData->numberOfSolverOptions]->solver = $2;	
+	}
+}
+QUOTE;
 
-solveroptiontype: TYPEATT ATTRIBUTETEXT QUOTE
-{
-};
+solveroptioncategory: CATEGORYATT ATTRIBUTETEXT 
+{	if (parserData->solverOptionCategoryPresent)
+	{	osolerror( NULL, osoption, parserData, "only one category attribute allowed");
+	}
+	else
+	{	parserData->solverOptionCategoryPresent = true;
+		osoption->optimization->solverOptions->solverOption[parserData->numberOfSolverOptions]->category = $2;	
+	}
+}
+QUOTE;
 
-solveroptiondescription: DESCRIPTIONATT ATTRIBUTETEXT QUOTE
-{
-};
+solveroptiontype: TYPEATT ATTRIBUTETEXT 
+{	if (parserData->solverOptionTypePresent)
+	{	osolerror( NULL, osoption, parserData, "only one type attribute allowed");
+	}
+	else
+	{	parserData->solverOptionTypePresent = true;
+		osoption->optimization->solverOptions->solverOption[parserData->numberOfSolverOptions]->type = $2;	
+	}
+}
+QUOTE;
+
+solveroptiondescription: DESCRIPTIONATT ATTRIBUTETEXT 
+{	if (parserData->solverOptionNamePresent)
+	{	osolerror( NULL, osoption, parserData, "only one name attribute allowed");
+	}
+	else
+	{	parserData->solverOptionNamePresent = true;
+		osoption->optimization->solverOptions->solverOption[parserData->numberOfSolverOptions]->name = $2;	
+	}
+}
+QUOTE;
 
 
 solveroptionend: GREATERTHAN SOLVEROPTIONEND | ENDOFELEMENT;
-
 
 
 

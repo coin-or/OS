@@ -167,11 +167,21 @@ public:
 	int numberOfCon;
 	bool initialDualVariableValuesPresent;
 	int numberOfDuals;
+	int numberOfSolverOptions;
 
 	/** attributes of <other> options */
 	bool otherOptionNamePresent;
 	bool otherOptionValuePresent;
 	bool otherOptionDescriptionPresent;
+
+	/** attributes of <solverOptions> element */
+	bool solverOptionNamePresent;
+	bool solverOptionValuePresent;
+	bool solverOptionSolverPresent;
+	bool solverOptionCategoryPresent;
+	bool solverOptionTypePresent;
+	bool solverOptionDescriptionPresent;
+
 
 	/** the OSoLParserData class constructor */
 	OSoLParserData( );
