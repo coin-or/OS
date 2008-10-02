@@ -5,7 +5,7 @@
  * @since   OS1.1
  *
  * \remarks
- * Copyright (C) 2005-2008, Gus Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2008, Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, Dalhousie University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
@@ -15,9 +15,10 @@
 
 %{
 
- 
-  
 
+ 
+#include "OSParameters.h"
+#include "OSConfig.h"
 #include "OSErrorClass.h"
 #include "OSOption.h"
 #include "OSoLParserData.h"
@@ -108,6 +109,7 @@ int osollex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token PROCESSESTOKILLSTART PROCESSESTOKILLEND PROCESSSTART PROCESSEND;
 %token VARIABLESSTART VARIABLESEND;
 %token INITIALVARIABLEVALUESSTART INITIALVARIABLEVALUESEND VARSTART VAREND;
+%token INITIALVARIABLEVALUESSTRINGSTART INITIALVARIABLEVALUESSTRINGEND;
 %token OBJECTIVESSTART OBJECTIVESEND;
 %token INITIALOBJECTIVEVALUESSTART INITIALOBJECTIVEVALUESEND OBJSTART OBJEND;
 %token INITIALOBJECTIVEBOUNDSSTART INITIALOBJECTIVEBOUNDSEND;
@@ -328,7 +330,6 @@ othergeneraloptionshead: OTHEROPTIONSSTART
 	else
 	{	parserData->otherGeneralOptionsPresent = true;
 		osoption->general->otherOptions = new OtherOptions();	
-			
 	}
 }; 
 
@@ -506,7 +507,6 @@ othersystemoptionshead: OTHEROPTIONSSTART
 	else
 	{	parserData->otherSystemOptionsPresent = true;
 		osoption->system->otherOptions = new OtherOptions();	
-		osoption->system->otherOptions->other = new OtherOption*();	
 	}
 }; 
  
@@ -528,7 +528,7 @@ othersystemoption: OTHERSTART
 		{	osolerror (NULL, osoption, parserData, "too many other options in <system> element");
 		};
 	} 
-    othersystemattributes othersystemoptionsend
+    othersystemattributes othersystemoptionend
 {	if (!parserData->otherOptionNamePresent)
 		osolerror (NULL, osoption, parserData, "name attribute must be present");
 	/* reset defaults for the next option */
@@ -540,7 +540,7 @@ othersystemoption: OTHERSTART
 
 othersystemattributes: | othersystemattributes othersystemattribute;
 
-othersystemattribute: systemoptionnameatt systemoptionvalueatt systemoptiondescriptionatt;
+othersystemattribute: systemoptionnameatt | systemoptionvalueatt | systemoptiondescriptionatt;
 
 systemoptionnameatt: NAMEATT ATTRIBUTETEXT 
 {	if (parserData->otherOptionNamePresent)
@@ -576,7 +576,7 @@ systemoptiondescriptionatt: DESCRIPTIONATT ATTRIBUTETEXT
 }
 QUOTE;
 
-othersystemoptionsend: ENDOFELEMENT | GREATERTHAN OTHEREND;
+othersystemoptionend: {printf("%s","firing />");} ENDOFELEMENT | {printf("%s","firing </other>");} GREATERTHAN OTHEREND;
 
 
 osolservice: | servicehead servicebody;
@@ -623,7 +623,6 @@ otherserviceoptionshead: OTHEROPTIONSSTART
 	else
 	{	parserData->otherServiceOptionsPresent = true;
 		osoption->service->otherOptions = new OtherOptions();	
-		osoption->service->otherOptions->other = new OtherOption*();	
 	}
 }; 
 
@@ -657,7 +656,7 @@ otherserviceattributes otherserviceoptionsend
 
 otherserviceattributes: | otherserviceattributes otherserviceattribute;
 
-otherserviceattribute: serviceoptionnameatt serviceoptionvalueatt serviceoptiondescriptionatt;
+otherserviceattribute: serviceoptionnameatt | serviceoptionvalueatt | serviceoptiondescriptionatt;
 
 serviceoptionnameatt: NAMEATT ATTRIBUTETEXT 
 {	if (parserData->otherOptionNamePresent)
@@ -670,7 +669,7 @@ serviceoptionnameatt: NAMEATT ATTRIBUTETEXT
 }
 QUOTE; 
 
-serviceoptionvalueatt: | VALUEATT ATTRIBUTETEXT 
+serviceoptionvalueatt: VALUEATT ATTRIBUTETEXT 
 {	if (parserData->otherOptionValuePresent)
 	{	osolerror( NULL, osoption, parserData, "only one value attribute allowed");
 	}
@@ -681,7 +680,7 @@ serviceoptionvalueatt: | VALUEATT ATTRIBUTETEXT
 }
 QUOTE;
 
-serviceoptiondescriptionatt: | DESCRIPTIONATT ATTRIBUTETEXT 
+serviceoptiondescriptionatt: DESCRIPTIONATT ATTRIBUTETEXT 
 {	if (parserData->otherOptionDescriptionPresent)
 	{	osolerror( NULL, osoption, parserData, "only one description attribute allowed");
 	}
@@ -695,9 +694,20 @@ QUOTE;
 otherserviceoptionsend: ENDOFELEMENT | GREATERTHAN OTHEREND;
 
 
-osoljob: 
-	| JOBSTART GREATERTHAN jobcontent JOBEND
-	| JOBSTART ENDOFELEMENT;
+osoljob: jobhead jobbody;
+
+jobhead: JOBSTART 
+{	if (parserData->osoljobPresent)
+	{	osolerror( NULL, osoption, parserData, "only one <job> element allowed");
+	}
+	else
+	{	parserData->osoljobPresent = true;	
+		osoption->job = new JobOption();
+	}
+}; 
+
+jobbody: GREATERTHAN jobcontent JOBEND
+	|  ENDOFELEMENT;
 
 jobcontent: | jobcontent joboption; 
 
@@ -705,342 +715,842 @@ joboption: maxtime | scheduledstarttime | dependencies | requireddirectories | r
 | directoriestomake | filestocreate | inputdirectoriestomove | inputfilestomove | outputdirectoriestomove 
 | outputfilestomove | filestodelete | directoriestodelete | processestokill | otherjoboptions;
 
-maxtime: MAXTIMESTART maxtimeunit GREATERTHAN ELEMENTTEXT MAXTIMEEND
-{
-};
 
-maxtimeunit: | UNITATT ATTRIBUTETEXT QUOTE
-{
-};
+maxtime: maxtimehead maxtimeunit maxtimebody;
 
-scheduledstarttime: emptystarttime | nonemptystarttime;
+maxtimehead: MAXTIMESTART 
+{	if (parserData->maxTimePresent)
+	{	osolerror( NULL, osoption, parserData, "only one <maxTime> element allowed");
+	}
+	else
+	{	parserData-> maxTimePresent = true;	
+		osoption->job->maxTime = new MaxTime();
+	}
+}; 
 
-emptystarttime: SCHEDULEDSTARTTIMESTART ENDOFELEMENT
-        |   SCHEDULEDSTARTTIMESTART GREATERTHAN SCHEDULEDSTARTTIMEEND
-{
-};
+maxtimeunit: | UNITATT ATTRIBUTETEXT {osoption->job->maxTime->unit = $2;} QUOTE;
 
-nonemptystarttime: SCHEDULEDSTARTTIMESTART GREATERTHAN ELEMENTTEXT SCHEDULEDSTARTTIMEEND
-{
-};
+maxtimebody: ENDOFELEMENT
+	| GREATERTHAN MAXTIMEEND
+	| GREATERTHAN DOUBLE  {osoption->job->maxTime->value = $2;} MAXTIMEEND
+	| GREATERTHAN INTEGER {osoption->job->maxTime->value = $2;} MAXTIMEEND;
 
-dependencies: DEPENDENCIESSTART numberofjobidsatt dependencieslist DEPENDENCIESEND;
+scheduledstarttime: starttimehead starttimebody;
 
-numberofjobidsatt: NUMBEROFJOBIDSATT ATTRIBUTETEXT QUOTE
-{
-};
+starttimehead: SCHEDULEDSTARTTIMESTART 
+{	if (parserData->scheduledStartTimePresent)
+	{	osolerror( NULL, osoption, parserData, "only one <scheduledStartTime> element allowed");
+	}
+	else
+	{	parserData->scheduledStartTimePresent = true;	
+	}
+}; 
+
+starttimebody: ENDOFELEMENT
+	| GREATERTHAN SCHEDULEDSTARTTIMEEND
+	| GREATERTHAN ELEMENTTEXT {osoption->general->userName = $2;} SCHEDULEDSTARTTIMEEND;
+
+dependencies: dependencieshead numberofjobidsatt GREATERTHAN dependencieslist DEPENDENCIESEND;
+
+dependencieshead: DEPENDENCIESSTART 
+{	if (parserData->dependenciesPresent)
+	{	osolerror( NULL, osoption, parserData, "only one <dependencies> element allowed");
+	}
+	else
+	{	parserData->dependenciesPresent = true;
+		osoption->job->dependencies = new JobDependencies();	
+	}
+}; 
+
+numberofjobidsatt: NUMBEROFJOBIDSATT QUOTE INTEGER QUOTE
+{	osoption->job->dependencies->numberOfJobIDs = $3;
+	osoption->job->dependencies->jobID = new std::string[$3];
+}
+;
 
 dependencieslist: | dependencieslist dependencyjobid;
 
+dependencyjobid: JOBIDSTART GREATERTHAN ELEMENTTEXT 
+{	
+	if (parserData->numberOfDependencies >= osoption->job->dependencies->numberOfJobIDs)
+	{	osolerror (NULL, osoption, parserData, "too many job IDs in <dependencies> element");
+	}
+	else
+	{	osoption->job->dependencies->jobID[parserData->numberOfDependencies] = $3;
+		parserData->numberOfDependencies++; 
+	};
+} 
+JOBIDEND;
 
-dependencyjobid: JOBIDSTART GREATERTHAN ELEMENTTEXT JOBIDEND
-{
-};
 
-requireddirectories: REQUIREDDIRECTORIESSTART numberofreqdirpathsatt reqdirpathlist 
+requireddirectories: requireddirectorieshead numberofreqdirpathsatt GREATERTHAN reqdirpathlist 
    REQUIREDDIRECTORIESEND;
 
-numberofreqdirpathsatt: NUMBEROFPATHSATT ATTRIBUTETEXT QUOTE
-{
+requireddirectorieshead: REQUIREDDIRECTORIESSTART 
+{	if (parserData->requiredDirectoriesPresent)
+	{	osolerror( NULL, osoption, parserData, "only one <requiredDirectories> element allowed");
+	}
+	else
+	{	parserData->requiredDirectoriesPresent = true;
+		osoption->job->requiredDirectories = new DirectoriesAndFiles();	
+	}
+}; 
+
+numberofreqdirpathsatt: NUMBEROFPATHSATT QUOTE INTEGER QUOTE
+{	osoption->job->requiredDirectories->numberOfPaths = $3;
+	osoption->job->requiredDirectories->path = new std::string[$3];
 };
 
 reqdirpathlist: | reqdirpathlist reqdirpath;
 
-reqdirpath: PATHSTART GREATERTHAN ELEMENTTEXT PATHEND
-{
-};
+reqdirpath: PATHSTART GREATERTHAN ELEMENTTEXT {	
+	if (parserData->numberOfRequiredDirectories >= osoption->job->requiredDirectories->numberOfPaths)
+	{	osolerror (NULL, osoption, parserData, "too many job IDs in <requiredDirectories> element");
+	}
+	else
+	{	osoption->job->requiredDirectories->path[parserData->numberOfRequiredDirectories] = $3;
+		parserData->numberOfRequiredDirectories++; 
+	};
+} 
+PATHEND;
 
-requiredfiles: REQUIREDFILESSTART numberofreqfilpathsatt GREATERTHAN reqfilpathlist 
+
+requiredfiles: requiredfileshead numberofreqfilespathsatt GREATERTHAN reqfilespathlist 
    REQUIREDFILESEND;
 
-numberofreqfilpathsatt: NUMBEROFPATHSATT ATTRIBUTETEXT QUOTE
-{
+requiredfileshead: REQUIREDFILESSTART 
+{	if (parserData->requiredFilesPresent)
+	{	osolerror( NULL, osoption, parserData, "only one <requiredFiles> element allowed");
+	}
+	else
+	{	parserData->requiredFilesPresent = true;
+		osoption->job->requiredFiles = new DirectoriesAndFiles();	
+	}
+}; 
+
+numberofreqfilespathsatt: NUMBEROFPATHSATT QUOTE INTEGER QUOTE
+{	osoption->job->requiredFiles->numberOfPaths = $3;
+	osoption->job->requiredFiles->path = new std::string[$3];
 };
 
-reqfilpathlist: | reqfilpathlist reqfilpath;
+reqfilespathlist: | reqfilespathlist reqfilepath;
 
-reqfilpath: PATHSTART GREATERTHAN ELEMENTTEXT PATHEND
-{
-};
+reqfilepath: PATHSTART GREATERTHAN ELEMENTTEXT {	
+	if (parserData->numberOfRequiredFiles >= osoption->job->requiredFiles->numberOfPaths)
+	{	osolerror (NULL, osoption, parserData, "too many job IDs in <requiredFiles> element");
+	}
+	else
+	{	osoption->job->requiredFiles->path[parserData->numberOfRequiredFiles] = $3;
+		parserData->numberOfRequiredFiles++; 
+	};
+} 
+PATHEND;
 
-directoriestomake: DIRECTORIESTOMAKESTART numberofdirtomakepathsatt GREATERTHAN dirtomakepathlist
+
+directoriestomake: directoriestomakehead numberofdirtomakepathsatt GREATERTHAN dirtomakepathlist
    DIRECTORIESTOMAKEEND;
 
-numberofdirtomakepathsatt: NUMBEROFPATHSATT ATTRIBUTETEXT QUOTE
-{
+directoriestomakehead: DIRECTORIESTOMAKESTART 
+{	if (parserData->directoriesToMakePresent)
+	{	osolerror( NULL, osoption, parserData, "only one <directoriesToMake> element allowed");
+	}
+	else
+	{	parserData->directoriesToMakePresent = true;
+		osoption->job->directoriesToMake = new DirectoriesAndFiles();	
+	}
+}; 
+numberofdirtomakepathsatt: NUMBEROFPATHSATT QUOTE INTEGER QUOTE
+{	osoption->job->directoriesToMake->numberOfPaths = $3;
+	osoption->job->directoriesToMake->path = new std::string[$3];
 };
 
 dirtomakepathlist: | dirtomakepathlist dirtomakepath;
 
-dirtomakepath: PATHSTART GREATERTHAN ELEMENTTEXT PATHEND
-{
-};
+dirtomakepath: PATHSTART GREATERTHAN ELEMENTTEXT 
+{	if (parserData->numberOfDirectoriesToMake >= osoption->job->directoriesToMake->numberOfPaths)
+	{	osolerror (NULL, osoption, parserData, "too many job IDs in <directoriesToMake> element");
+	}
+	else
+	{	osoption->job->directoriesToMake->path[parserData->numberOfDirectoriesToMake] = $3;
+		parserData->numberOfDirectoriesToMake++; 
+	};
+} 
+PATHEND;
 
-filestocreate: FILESTOCREATESTART numberoffilestomakepathsatt GREATERTHAN filestomakepathlist
+
+filestocreate: filestocreatehead numberoffilestomakepathsatt GREATERTHAN filestomakepathlist
    FILESTOCREATEEND;
 
-numberoffilestomakepathsatt: NUMBEROFPATHSATT ATTRIBUTETEXT QUOTE
-{
+filestocreatehead: FILESTOCREATESTART 
+{	if (parserData->filesToCreatePresent)
+	{	osolerror( NULL, osoption, parserData, "only one <filesToCreate> element allowed");
+	}
+	else
+	{	parserData->filesToCreatePresent = true;
+		osoption->job->filesToCreate = new DirectoriesAndFiles();	
+	}
+}; 
+
+numberoffilestomakepathsatt: NUMBEROFPATHSATT QUOTE INTEGER QUOTE
+{	osoption->job->filesToCreate->numberOfPaths = $3;
+	osoption->job->filesToCreate->path = new std::string[$3];
 };
 
 filestomakepathlist: | filestomakepathlist filestomakepath;
 
-filestomakepath: PATHSTART GREATERTHAN ELEMENTTEXT PATHEND
-{
-};
+filestomakepath: PATHSTART GREATERTHAN ELEMENTTEXT 
+{	if (parserData->numberOfFilesToCreate >= osoption->job->filesToCreate->numberOfPaths)
+	{	osolerror (NULL, osoption, parserData, "too many job IDs in <filesToCreate> element");
+	}
+	else
+	{	osoption->job->filesToCreate->path[parserData->numberOfFilesToCreate] = $3;
+		parserData->numberOfFilesToCreate++; 
+	};
+} 
+PATHEND;
 
-inputdirectoriestomove: INPUTDIRECTORIESTOMOVESTART numberofindirtomovepathpairsatt 
+
+inputdirectoriestomove: inputdirectoriestomovehead numberofindirtomovepathpairsatt 
    GREATERTHAN indirtomovepathpairlist INPUTDIRECTORIESTOMOVEEND;
 
-numberofindirtomovepathpairsatt: NUMBEROFPATHPAIRSATT ATTRIBUTETEXT QUOTE
-{
+inputdirectoriestomovehead: INPUTDIRECTORIESTOMOVESTART 
+{	if (parserData->inputDirectoriesToMovePresent)
+	{	osolerror( NULL, osoption, parserData, "only one <inputDirectoriesToMove> element allowed");
+	}
+	else
+	{	parserData->inputDirectoriesToMovePresent = true;
+		osoption->job->inputDirectoriesToMove = new PathPairs();
+	}
+}; 
+
+numberofindirtomovepathpairsatt: NUMBEROFPATHPAIRSATT QUOTE INTEGER QUOTE
+{	if ($3 <= 0) osolerror (NULL, osoption, parserData, "Require positive number of directories to move");
+	osoption->job->inputDirectoriesToMove->numberOfPathPairs = $3;
+	osoption->job->inputDirectoriesToMove->pathPair = new PathPair*[$3];
+	for (int i = 0; i < $3; i++)
+		osoption->job->inputDirectoriesToMove->pathPair[i] = new PathPair();
 };
 
 indirtomovepathpairlist: | indirtomovepathpairlist indirtomovepathpair;
 
-indirtomovepathpair: PATHPAIRSTART indirtomovepathpairattlist indirtomovepathpairend
-{
+indirtomovepathpair: indirtomovepathpairhead indirtomovepathpairattlist indirtomovepathpairend
+{	if (!parserData->pathPairFromPresent)
+		osolerror (NULL, osoption, parserData, "\"from\" attribute must be present");
+	if (!parserData->pathPairToPresent)
+		osolerror (NULL, osoption, parserData, "\"to\" attribute must be present");
+	/* reset defaults for the next option */	
+	parserData->pathPairFromPresent= false;
+	parserData->pathPairToPresent= false;
+	parserData->pathPairMakeCopyPresent= false;
+	parserData->numberOfInputDirectoriesToMove++; 
 };
+
+indirtomovepathpairhead: PATHPAIRSTART 
+{	if (parserData->numberOfInputDirectoriesToMove >= osoption->job->inputDirectoriesToMove->numberOfPathPairs)
+	{	osolerror (NULL, osoption, parserData, "too many path pairs in <inputDirectoriesToMove> element");
+	};
+}; 
 
 indirtomovepathpairattlist: | indirtomovepathpairattlist indirtomovepathpairatt;
 
 indirtomovepathpairatt: indirtomovefromatt | indirtomovetoatt | indirtomovemakecopyatt;
 
-indirtomovefromatt: FROMATT ATTRIBUTETEXT QUOTE
-{
-};
+indirtomovefromatt: FROMATT ATTRIBUTETEXT 
+{	if (parserData->pathPairFromPresent)
+	{	osolerror( NULL, osoption, parserData, "only one \"from\" attribute allowed");
+	}
+	else
+	{	parserData->pathPairFromPresent = true;
+		osoption->job->inputDirectoriesToMove->pathPair[parserData->numberOfInputDirectoriesToMove]->from = $2;	
+	}
+}
+QUOTE; 
 
-indirtomovetoatt: TOATT ATTRIBUTETEXT QUOTE
-{
-};
+indirtomovetoatt: TOATT ATTRIBUTETEXT 
+{	if (parserData->pathPairToPresent)
+	{	osolerror( NULL, osoption, parserData, "only one \"to\" attribute allowed");
+	}
+	else
+	{	parserData->pathPairToPresent = true;
+		osoption->job->inputDirectoriesToMove->pathPair[parserData->numberOfInputDirectoriesToMove]->to = $2;	
+	}
+}
+QUOTE; 
 
-indirtomovemakecopyatt: MAKECOPYATT ATTRIBUTETEXT QUOTE
-{
-};
+indirtomovemakecopyatt: MAKECOPYATT ATTRIBUTETEXT 
+{	if (parserData->pathPairMakeCopyPresent)
+	{	osolerror( NULL, osoption, parserData, "only one \"makeCopy\" attribute allowed");
+	}
+	else
+	{	parserData->pathPairMakeCopyPresent = true;
+		if ($2 == "true")
+			osoption->job->inputDirectoriesToMove->pathPair[parserData->numberOfInputDirectoriesToMove]->makeCopy = $2;	
+	}
+}
+QUOTE; 
 
 indirtomovepathpairend: GREATERTHAN PATHPAIREND | ENDOFELEMENT;
 
 
-inputfilestomove: INPUTFILESTOMOVESTART numberofinfilestomovepathpairsatt 
+inputfilestomove: inputfilestomovehead numberofinfilestomovepathpairsatt 
    GREATERTHAN infilestomovepathpairlist INPUTFILESTOMOVEEND;
 
-numberofinfilestomovepathpairsatt: NUMBEROFPATHPAIRSATT ATTRIBUTETEXT QUOTE
-{
+inputfilestomovehead: INPUTFILESTOMOVESTART 
+{	if (parserData->inputFilesToMovePresent)
+	{	osolerror( NULL, osoption, parserData, "only one <inputFilesToMove> element allowed");
+	}
+	else
+	{	parserData->inputFilesToMovePresent = true;
+		osoption->job->inputFilesToMove = new PathPairs();	
+	}
+}; 
+
+numberofinfilestomovepathpairsatt: NUMBEROFPATHPAIRSATT QUOTE INTEGER QUOTE
+{	if ($3 <= 0) osolerror (NULL, osoption, parserData, "Require positive number of files to move");
+	osoption->job->inputFilesToMove->numberOfPathPairs = $3;
+	osoption->job->inputFilesToMove->pathPair = new PathPair*[$3];
+	for (int i = 0; i < $3; i++) osoption->job->inputFilesToMove->pathPair[i] = new PathPair();
 };
 
 infilestomovepathpairlist: | infilestomovepathpairlist infilestomovepathpair;
 
-infilestomovepathpair: PATHPAIRSTART infilestomovepathpairattlist infilestomovepathpairend
-{
+infilestomovepathpair: infilestomovepathpairhead infilestomovepathpairattlist infilestomovepathpairend
+{	if (!parserData->pathPairFromPresent)
+		osolerror (NULL, osoption, parserData, "\"from\" attribute must be present");
+	if (!parserData->pathPairToPresent)
+		osolerror (NULL, osoption, parserData, "\"to\" attribute must be present");
+	/* reset defaults for the next option */	
+	parserData->pathPairFromPresent= false;
+	parserData->pathPairToPresent= false;
+	parserData->pathPairMakeCopyPresent= false;
+	parserData->numberOfInputFilesToMove++; 
 };
+
+infilestomovepathpairhead: PATHPAIRSTART 
+{	if (parserData->numberOfInputFilesToMove >= osoption->job->inputFilesToMove->numberOfPathPairs)
+	{	osolerror (NULL, osoption, parserData, "too many path pairs in <inputFilesToMove> element");
+	};
+} 
 
 infilestomovepathpairattlist: | infilestomovepathpairattlist infilestomovepathpairatt;
 
 infilestomovepathpairatt: infilestomovefromatt | infilestomovetoatt | infilestomovemakecopyatt;
 
-infilestomovefromatt: FROMATT ATTRIBUTETEXT QUOTE
-{
-};
+infilestomovefromatt: FROMATT ATTRIBUTETEXT 
+{	if (parserData->pathPairFromPresent)
+	{	osolerror( NULL, osoption, parserData, "only one \"from\" attribute allowed");
+	}
+	else
+	{	parserData->pathPairFromPresent = true;
+		osoption->job->inputFilesToMove->pathPair[parserData->numberOfInputFilesToMove]->from = $2;	
+	}
+}
+QUOTE; 
 
-infilestomovetoatt: TOATT ATTRIBUTETEXT QUOTE
-{
-};
+infilestomovetoatt: TOATT ATTRIBUTETEXT 
+{	if (parserData->pathPairToPresent)
+	{	osolerror( NULL, osoption, parserData, "only one \"to\" attribute allowed");
+	}
+	else
+	{	parserData->pathPairToPresent = true;
+		osoption->job->inputFilesToMove->pathPair[parserData->numberOfInputFilesToMove]->to = $2;	
+	}
+}
+QUOTE; 
 
-infilestomovemakecopyatt: MAKECOPYATT ATTRIBUTETEXT QUOTE
-{
-};
+infilestomovemakecopyatt: MAKECOPYATT ATTRIBUTETEXT 
+{	if (parserData->pathPairMakeCopyPresent)
+	{	osolerror( NULL, osoption, parserData, "only one \"makeCopy\" attribute allowed");
+	}
+	else
+	{	parserData->pathPairMakeCopyPresent = true;
+		if ($2 == "true")
+			osoption->job->inputFilesToMove->pathPair[parserData->numberOfInputFilesToMove]->makeCopy = $2;	
+	}
+}
+QUOTE; 
 
 infilestomovepathpairend: GREATERTHAN PATHPAIREND | ENDOFELEMENT;
 
 
-outputdirectoriestomove: OUTPUTDIRECTORIESTOMOVESTART numberofoutdirtomovepathpairsatt 
+outputdirectoriestomove: outputdirectoriestomovehead numberofoutdirtomovepathpairsatt 
    GREATERTHAN outdirtomovepathpairlist OUTPUTDIRECTORIESTOMOVEEND;
 
-numberofoutdirtomovepathpairsatt: NUMBEROFPATHPAIRSATT ATTRIBUTETEXT QUOTE
-{
+outputdirectoriestomovehead: OUTPUTDIRECTORIESTOMOVESTART 
+{	if (parserData->outputDirectoriesToMovePresent)
+	{	osolerror( NULL, osoption, parserData, "only one <outputDirectoriesToMove> element allowed");
+	}
+	else
+	{	parserData->outputDirectoriesToMovePresent = true;
+		osoption->job->outputDirectoriesToMove = new PathPairs();	
+	}
+}; 
+
+numberofoutdirtomovepathpairsatt: NUMBEROFPATHPAIRSATT QUOTE INTEGER QUOTE
+{	if ($3 <= 0) osolerror (NULL, osoption, parserData, "Require positive number of directories to move");
+	osoption->job->outputDirectoriesToMove->numberOfPathPairs = $3;
+	osoption->job->outputDirectoriesToMove->pathPair = new PathPair*[$3];
+	for (int i = 0; i < $3; i++)
+		osoption->job->outputDirectoriesToMove->pathPair[i] = new PathPair();
 };
 
 outdirtomovepathpairlist: | outdirtomovepathpairlist outdirtomovepathpair;
 
-outdirtomovepathpair: PATHPAIRSTART outdirtomovepathpairattlist outdirtomovepathpairend
-{
+outdirtomovepathpair: outdirtomovepathpairhead outdirtomovepathpairattlist outdirtomovepathpairend
+{	if (!parserData->pathPairFromPresent)
+		osolerror (NULL, osoption, parserData, "\"from\" attribute must be present");
+	if (!parserData->pathPairToPresent)
+		osolerror (NULL, osoption, parserData, "\"to\" attribute must be present");
+	/* reset defaults for the next option */	
+	parserData->pathPairFromPresent= false;
+	parserData->pathPairToPresent= false;
+	parserData->pathPairMakeCopyPresent= false;
+	parserData->numberOfOutputDirectoriesToMove++; 
 };
+
+outdirtomovepathpairhead: PATHPAIRSTART 
+{	if (parserData->numberOfOutputDirectoriesToMove >= osoption->job->outputDirectoriesToMove->numberOfPathPairs)
+	{	osolerror (NULL, osoption, parserData, "too many path pairs in <outputDirectoriesToMove> element");
+	};
+} 
 
 outdirtomovepathpairattlist: | outdirtomovepathpairattlist outdirtomovepathpairatt;
 
 outdirtomovepathpairatt: outdirtomovefromatt | outdirtomovetoatt | outdirtomovemakecopyatt;
 
-outdirtomovefromatt: FROMATT ATTRIBUTETEXT QUOTE
-{
-};
+outdirtomovefromatt: FROMATT ATTRIBUTETEXT 
+{	if (parserData->pathPairFromPresent)
+	{	osolerror( NULL, osoption, parserData, "only one \"from\" attribute allowed");
+	}
+	else
+	{	parserData->pathPairFromPresent = true;
+		osoption->job->outputDirectoriesToMove->pathPair[parserData->numberOfOutputDirectoriesToMove]->from = $2;	
+	}
+}
+QUOTE; 
 
-outdirtomovetoatt: TOATT ATTRIBUTETEXT QUOTE
-{
-};
+outdirtomovetoatt: TOATT ATTRIBUTETEXT 
+{	if (parserData->pathPairToPresent)
+	{	osolerror( NULL, osoption, parserData, "only one \"to\" attribute allowed");
+	}
+	else
+	{	parserData->pathPairToPresent = true;
+		osoption->job->outputDirectoriesToMove->pathPair[parserData->numberOfOutputDirectoriesToMove]->to = $2;	
+	}
+}
+QUOTE; 
 
-outdirtomovemakecopyatt: MAKECOPYATT ATTRIBUTETEXT QUOTE
-{
-};
+outdirtomovemakecopyatt: MAKECOPYATT ATTRIBUTETEXT 
+{	if (parserData->pathPairMakeCopyPresent)
+	{	osolerror( NULL, osoption, parserData, "only one \"makeCopy\" attribute allowed");
+	}
+	else
+	{	parserData->pathPairMakeCopyPresent = true;
+		if ($2 == "true")
+			osoption->job->outputDirectoriesToMove->pathPair[parserData->numberOfOutputDirectoriesToMove]->makeCopy = $2;	
+	}
+}
+QUOTE; 
 
 outdirtomovepathpairend: GREATERTHAN PATHPAIREND | ENDOFELEMENT;
 
 
-outputfilestomove: OUTPUTFILESTOMOVESTART numberofoutfilestomovepathpairsatt 
+outputfilestomove: outputfilestomovehead numberofoutfilestomovepathpairsatt 
    GREATERTHAN outfilestomovepathpairlist OUTPUTFILESTOMOVEEND;
 
-numberofoutfilestomovepathpairsatt: NUMBEROFPATHPAIRSATT ATTRIBUTETEXT QUOTE
-{
-};
+outputfilestomovehead: OUTPUTFILESTOMOVESTART 
+{	if (parserData->outputFilesToMovePresent)
+	{	osolerror( NULL, osoption, parserData, "only one <outputFilesToMove> element allowed");
+	}
+	else
+	{	parserData->outputFilesToMovePresent = true;
+		osoption->job->outputFilesToMove = new PathPairs();	
+	}
+}; 
+
+numberofoutfilestomovepathpairsatt: NUMBEROFPATHPAIRSATT QUOTE INTEGER QUOTE
+{	if ($3 <= 0) osolerror (NULL, osoption, parserData, "Require positive number of files to move");
+	osoption->job->outputFilesToMove->numberOfPathPairs = $3;
+	osoption->job->outputFilesToMove->pathPair = new PathPair*[$3];
+	for (int i = 0; i < $3; i++)
+		osoption->job->outputFilesToMove->pathPair[i] = new PathPair();};
 
 outfilestomovepathpairlist: | outfilestomovepathpairlist outfilestomovepathpair;
 
-outfilestomovepathpair: PATHPAIRSTART outfilestomovepathpairattlist outfilestomovepathpairend
-{
+outfilestomovepathpair: outfilestomovepathpairhead outfilestomovepathpairattlist outfilestomovepathpairend
+{	if (!parserData->pathPairFromPresent)
+		osolerror (NULL, osoption, parserData, "\"from\" attribute must be present");
+	if (!parserData->pathPairToPresent)
+		osolerror (NULL, osoption, parserData, "\"to\" attribute must be present");
+	/* reset defaults for the next option */	
+	parserData->pathPairFromPresent= false;
+	parserData->pathPairToPresent= false;
+	parserData->pathPairMakeCopyPresent= false;
+	parserData->numberOfOutputFilesToMove++; 
 };
+
+outfilestomovepathpairhead: PATHPAIRSTART 
+{	if (parserData->numberOfOutputFilesToMove >= osoption->job->outputFilesToMove->numberOfPathPairs)
+	{	osolerror (NULL, osoption, parserData, "too many path pairs in <outputFilesToMove> element");
+	};
+} 
 
 outfilestomovepathpairattlist: | outfilestomovepathpairattlist outfilestomovepathpairatt;
 
 outfilestomovepathpairatt: outfilestomovefromatt | outfilestomovetoatt | outfilestomovemakecopyatt;
 
-outfilestomovefromatt: FROMATT ATTRIBUTETEXT QUOTE
-{
-};
+outfilestomovefromatt: FROMATT ATTRIBUTETEXT 
+{	if (parserData->pathPairFromPresent)
+	{	osolerror( NULL, osoption, parserData, "only one \"from\" attribute allowed");
+	}
+	else
+	{	parserData->pathPairFromPresent = true;
+		osoption->job->outputFilesToMove->pathPair[parserData->numberOfOutputFilesToMove]->from = $2;	
+	}
+}
+QUOTE; 
 
-outfilestomovetoatt: TOATT ATTRIBUTETEXT QUOTE
-{
-};
+outfilestomovetoatt: TOATT ATTRIBUTETEXT 
+{	if (parserData->pathPairToPresent)
+	{	osolerror( NULL, osoption, parserData, "only one \"to\" attribute allowed");
+	}
+	else
+	{	parserData->pathPairToPresent = true;
+		osoption->job->outputFilesToMove->pathPair[parserData->numberOfOutputFilesToMove]->to = $2;	
+	}
+}
+QUOTE; 
 
-outfilestomovemakecopyatt: MAKECOPYATT ATTRIBUTETEXT QUOTE
-{
-};
+outfilestomovemakecopyatt: MAKECOPYATT ATTRIBUTETEXT 
+{	if (parserData->pathPairMakeCopyPresent)
+	{	osolerror( NULL, osoption, parserData, "only one \"makeCopy\" attribute allowed");
+	}
+	else
+	{	parserData->pathPairMakeCopyPresent = true;
+		if ($2 == "true")
+			osoption->job->outputFilesToMove->pathPair[parserData->numberOfOutputFilesToMove]->makeCopy = $2;	
+	}
+}
+QUOTE; 
 
 outfilestomovepathpairend: GREATERTHAN PATHPAIREND | ENDOFELEMENT;
 
 
-
-filestodelete: FILESTODELETESTART numberoffilestodeletepathsatt GREATERTHAN filestodeletepathlist
+filestodelete: filestodeletehead numberoffilestodeletepathsatt GREATERTHAN filestodeletepathlist
    FILESTODELETEEND;
 
-numberoffilestodeletepathsatt: NUMBEROFPATHSATT ATTRIBUTETEXT QUOTE
-{
+filestodeletehead: FILESTODELETESTART 
+{	if (parserData->filesToDeletePresent)
+	{	osolerror( NULL, osoption, parserData, "only one <filesToDelete> element allowed");
+	}
+	else
+	{	parserData->filesToDeletePresent = true;
+		osoption->job->filesToDelete = new DirectoriesAndFiles();	
+	}
+}; 
+
+numberoffilestodeletepathsatt: NUMBEROFPATHSATT QUOTE INTEGER QUOTE
+{	osoption->job->filesToDelete->numberOfPaths = $3;
+	osoption->job->filesToDelete->path = new std::string[$3];
 };
 
 filestodeletepathlist: | filestodeletepathlist filestodeletepath;
 
-filestodeletepath: PATHSTART GREATERTHAN ELEMENTTEXT PATHEND
-{
-};
+filestodeletepath: PATHSTART GREATERTHAN ELEMENTTEXT 
+{	if (parserData->numberOfFilesToDelete >= osoption->job->filesToDelete->numberOfPaths)
+	{	osolerror (NULL, osoption, parserData, "too many job IDs in <filesToDelete> element");
+	}
+	else
+	{	osoption->job->filesToDelete->path[parserData->numberOfFilesToDelete] = $3;
+		parserData->numberOfFilesToDelete++; 
+	};
+} 
+PATHEND;
 
-directoriestodelete: DIRECTORIESTODELETESTART numberofdirtodeletepathsatt GREATERTHAN dirtodeletepathlist
+
+directoriestodelete: directoriestodeletehead numberofdirtodeletepathsatt GREATERTHAN dirtodeletepathlist
    DIRECTORIESTODELETEEND;
 
-numberofdirtodeletepathsatt: NUMBEROFPATHSATT ATTRIBUTETEXT QUOTE
-{
+directoriestodeletehead: DIRECTORIESTODELETESTART 
+{	if (parserData->directoriesToDeletePresent)
+	{	osolerror( NULL, osoption, parserData, "only one <directoriesToDelete> element allowed");
+	}
+	else
+	{	parserData->directoriesToDeletePresent = true;
+		osoption->job->directoriesToDelete = new DirectoriesAndFiles();	
+	}
+}; 
+
+numberofdirtodeletepathsatt: NUMBEROFPATHSATT QUOTE INTEGER QUOTE
+{	osoption->job->directoriesToDelete->numberOfPaths = $3;
+	osoption->job->directoriesToDelete->path = new std::string[$3];
 };
 
 dirtodeletepathlist: | dirtodeletepathlist dirtodeletepath;
 
-dirtodeletepath: PATHSTART GREATERTHAN ELEMENTTEXT PATHEND
-{
-};
+dirtodeletepath: PATHSTART GREATERTHAN ELEMENTTEXT 
+{	if (parserData->numberOfDirectoriesToDelete >= osoption->job->directoriesToDelete->numberOfPaths)
+	{	osolerror (NULL, osoption, parserData, "too many job IDs in <directoriesToDelete> element");
+	}
+	else
+	{	osoption->job->directoriesToDelete->path[parserData->numberOfDirectoriesToDelete] = $3;
+		parserData->numberOfDirectoriesToDelete++; 
+	};
+} 
+PATHEND;
 
 
-processestokill: PROCESSESTOKILLSTART numberofprocesstokillatt GREATERTHAN processestokilllist
+processestokill: processestokillhead numberofprocesstokillatt GREATERTHAN processestokilllist
    PROCESSESTOKILLEND;
 
-numberofprocesstokillatt: NUMBEROFPROCESSESATT ATTRIBUTETEXT QUOTE
-{
+
+processestokillhead: PROCESSESTOKILLSTART 
+{	if (parserData->processesToKillPresent)
+	{	osolerror( NULL, osoption, parserData, "only one <processesToKill> element allowed");
+	}
+	else
+	{	parserData->processesToKillPresent = true;
+		osoption->job->processesToKill = new Processes();	
+	}
+}; 
+
+numberofprocesstokillatt: NUMBEROFPROCESSESATT QUOTE INTEGER QUOTE
+{	osoption->job->processesToKill->numberOfProcesses = $3;
+	osoption->job->processesToKill->process = new std::string[$3];
 };
 
 processestokilllist: | processestokilllist processtokill;
 
-processtokill: PROCESSSTART GREATERTHAN ELEMENTTEXT PROCESSEND
-{
+processtokill: PROCESSSTART GREATERTHAN ELEMENTTEXT 
+{	if (parserData->numberOfProcessesToKill >= osoption->job->processesToKill->numberOfProcesses)
+	{	osolerror (NULL, osoption, parserData, "too many job IDs in <processesToKill> element");
+	}
+	else
+	{	osoption->job->processesToKill->process[parserData->numberOfProcessesToKill] = $3;
+		parserData->numberOfProcessesToKill++; 
+	};
+} 
+PROCESSEND;
+
+
+otherjoboptions: otherjoboptionshead numberofotherjoboptions GREATERTHAN otherjoboptionsbody;
+
+otherjoboptionshead: OTHEROPTIONSSTART
+{	if (parserData->otherJobOptionsPresent)
+	{	osolerror( NULL, osoption, parserData, "only one <otherOptions> element allowed");
+	}
+	else
+	{	parserData->otherJobOptionsPresent = true;
+		osoption->job->otherOptions = new OtherOptions();	
+	}
+}; 
+
+numberofotherjoboptions: NUMBEROFOTHEROPTIONSATT QUOTE INTEGER QUOTE
+{	osoption->job->otherOptions->numberOfOtherOptions = $3;
+	osoption->job->otherOptions->other = new OtherOption*[$3];
+	for (int i=0; i < $3; i++) osoption->job->otherOptions->other[i] = new OtherOption();
 };
 
-
-otherjoboptions: OTHEROPTIONSSTART numberofotherjoboptions GREATERTHAN otherjoboptionslist OTHEROPTIONSEND;
-
-numberofotherjoboptions: NUMBEROFOTHEROPTIONSATT ATTRIBUTETEXT QUOTE
-{
+otherjoboptionsbody: otherjoboptionslist OTHEROPTIONSEND
+{	if (parserData->numberOfOtherJobOptions != osoption->job->otherOptions->numberOfOtherOptions)
+		osolerror (NULL, osoption, parserData, "wrong number of other options in <job> element"); 
 };
 
 otherjoboptionslist: | otherjoboptionslist otherjoboption;
 
-otherjoboption: OTHERSTART otherjobattributes otherjoboptionsend;
+otherjoboption: OTHERSTART 
+	{	if (parserData->numberOfOtherJobOptions >= osoption->job->otherOptions->numberOfOtherOptions)
+		{	osolerror (NULL, osoption, parserData, "too many other options in <job> element");
+		};
+	} 
+otherjobattributes otherjoboptionsend
+{	if (!parserData->otherOptionNamePresent)
+		osolerror (NULL, osoption, parserData, "name attribute must be present");
+	/* reset defaults for the next option */
+	parserData->otherOptionNamePresent = false;
+	parserData->otherOptionValuePresent = false;
+	parserData->otherOptionDescriptionPresent = false;
+	parserData->numberOfOtherJobOptions++;
+};
 
 otherjobattributes: | otherjobattributes otherjobattribute;
 
-otherjobattribute: joboptionnameatt joboptionvalueatt joboptiondescriptionatt;
+otherjobattribute: joboptionnameatt | joboptionvalueatt | joboptiondescriptionatt;
 
-joboptionnameatt: NAMEATT ATTRIBUTETEXT QUOTE
-{
-};
+joboptionnameatt: NAMEATT ATTRIBUTETEXT 
+{	if (parserData->otherOptionNamePresent)
+	{	osolerror( NULL, osoption, parserData, "only one name attribute allowed");
+	}
+	else
+	{	parserData->otherOptionNamePresent = true;
+		osoption->job->otherOptions->other[parserData->numberOfOtherJobOptions]->name = $2;	
+	}
+}
+QUOTE; 
 
-joboptionvalueatt: | VALUEATT ATTRIBUTETEXT QUOTE
-{
-};
+joboptionvalueatt: VALUEATT ATTRIBUTETEXT 
+{	if (parserData->otherOptionValuePresent)
+	{	osolerror( NULL, osoption, parserData, "only one value attribute allowed");
+	}
+	else
+	{	parserData->otherOptionValuePresent = true;
+		osoption->job->otherOptions->other[parserData->numberOfOtherJobOptions]->value = $2;	
+	}
+}
+QUOTE;
 
-joboptiondescriptionatt: | DESCRIPTIONATT ATTRIBUTETEXT QUOTE
-{
-};
+joboptiondescriptionatt: DESCRIPTIONATT ATTRIBUTETEXT 
+{	if (parserData->otherOptionDescriptionPresent)
+	{	osolerror( NULL, osoption, parserData, "only one description attribute allowed");
+	}
+	else
+	{	parserData->otherOptionDescriptionPresent = true;
+		osoption->job->otherOptions->other[parserData->numberOfOtherJobOptions]->description = $2;	
+	}
+}
+QUOTE;
 
-otherjoboptionsend: ENDOFELEMENT | GREATERTHAN OTHEREND
-{
-};
+otherjoboptionsend: ENDOFELEMENT | GREATERTHAN OTHEREND;
 
 
-osoloptimization: | OPTIMIZATIONSTART optimizationattlist restofoptimization;
+osoloptimization: | optimizationhead optimizationattlist optimizationbody;
+
+optimizationhead: OPTIMIZATIONSTART 
+{	if (parserData->osoloptimizationPresent)
+	{	osolerror( NULL, osoption, parserData, "only one <optimization> element allowed");
+	}
+	else
+	{	parserData->osoloptimizationPresent = true;	
+		osoption->optimization = new OptimizationOption();
+	}
+}; 
 
 optimizationattlist: | optimizationattlist optimizationatt;
 
 optimizationatt: optimizationnvar | optimizationncon | optimizationnobj;
 
-optimizationnvar: NUMBEROFVARIABLESATT ATTRIBUTETEXT QUOTE
-{
+optimizationnvar: NUMBEROFVARIABLESATT QUOTE INTEGER QUOTE
+{	osoption->optimization->numberOfVariables = $3;
 };
 
-optimizationncon: NUMBEROFCONSTRAINTSATT ATTRIBUTETEXT QUOTE
-{
+optimizationncon: NUMBEROFCONSTRAINTSATT QUOTE INTEGER QUOTE
+{	osoption->optimization->numberOfConstraints = $3;
 };
 
-optimizationnobj: NUMBEROFOBJECTIVESATT ATTRIBUTETEXT QUOTE
-{
+optimizationnobj: NUMBEROFOBJECTIVESATT QUOTE INTEGER QUOTE
+{	osoption->optimization->numberOfObjectives = $3;
 };
 
-restofoptimization: GREATERTHAN optimizationcontent OPTIMIZATIONEND | ENDOFELEMENT;
+optimizationbody: GREATERTHAN optimizationcontent OPTIMIZATIONEND | ENDOFELEMENT;
 
-optimizationcontent: variables objectives constraints solveroptions;
+optimizationcontent: variables objectives constraints solveroptions
+{printf("\n%s\n","Finished <optimization element>");};
 
-variables: | VARIABLESSTART numberofothervariablesatt restofvariables;
+variables: | variablesstart numberofothervariablesatt restofvariables;
 
-numberofothervariablesatt: | NUMBEROFOTHERVARIABLEOPTIONSATT ATTRIBUTETEXT QUOTE
-{
+variablesstart: VARIABLESSTART 
+{	osoption->optimization->variables = new VariableOption();
 };
 
-restofvariables: GREATERTHAN initialvariablevalues othervariableoptions VARIABLESEND
+numberofothervariablesatt: | NUMBEROFOTHERVARIABLEOPTIONSATT QUOTE INTEGER QUOTE
+{	if ($3 < 0) osolerror (NULL, osoption, parserData, "number of <other> variable options cannot be negative");
+	osoption->optimization->variables->numberOfOtherVariableOptions = $3;
+	osoption->optimization->variables->other = new OtherVariableOption*[$3];
+	for (int i= 0; i < $3; i++)
+		osoption->optimization->variables->other[i] = new OtherVariableOption();
+
+};
+
+restofvariables: GREATERTHAN initialvariablevalues initialvariablevaluesstring othervariableoptions VARIABLESEND
+{   printf("\n%s\n","Matched </variables");
+}
    | ENDOFELEMENT;
 
-initialvariablevalues: | INITIALVARIABLEVALUESSTART NUMBEROFVARATT ATTRIBUTETEXT QUOTE GREATERTHAN 
-    varlist INITIALVARIABLEVALUESEND;
+initialvariablevalues: | INITIALVARIABLEVALUESSTART numberofvar GREATERTHAN varlist INITIALVARIABLEVALUESEND
+{   printf("\n%s\n","Matched </initialVariableValues");
+}
+;
+
+numberofvar: NUMBEROFVARATT QUOTE INTEGER QUOTE 
+{	if ($3 <= 0) osolerror (NULL, osoption, parserData, "number of <var> elements must be positive");
+	osoption->optimization->variables->initialVariableValues = new InitVariableValues();
+	osoption->optimization->variables->initialVariableValues->numberOfVar = $3;
+	osoption->optimization->variables->initialVariableValues->var = new InitVarValue*[$3];
+	for (int i = 0; i < $3; i++)
+		osoption->optimization->variables->initialVariableValues->var[i] = new InitVarValue();
+};
 
 varlist: | varlist initvarvalue;
 
-initvarvalue: VARSTART initvarvalueattlist initvarvalueend;
+initvarvalue: varstart initvarvalueattlist initvarvalueend
+{	if (!parserData->idxAttributePresent)
+		osolerror (NULL, osoption, parserData, "variable index required");
+	parserData->idxAttributePresent = false;
+	parserData->valAttributePresent = false;
+	parserData->numberOfVar++;
+	printf("\n%s%d\n","number of var elements ",parserData->numberOfVar);
+};
 
-initvarvalueattlist: | initvarvalueattlist initvarvalueatt;
+varstart: VARSTART 
+{	if (parserData->numberOfVar >= osoption->optimization->variables->initialVariableValues->numberOfVar)
+		osolerror(NULL, osoption, parserData, "too many initial variable values");
+	printf("\n%s%d\n","populate var element ",parserData->numberOfVar); // this is matched...
+};
+
+initvarvalueattlist: | initvarvalueattlist {printf("\n%s\n","Just checking...");} initvarvalueatt;
 
 initvarvalueatt: initvarvalueidxatt | initvarvaluevalueatt;
 
-initvarvalueidxatt: IDXATT ATTRIBUTETEXT QUOTE
+initvarvalueidxatt: IDXATT QUOTE INTEGER QUOTE
+{	// ...but we never get here!
+	printf("\n%s%d%s%d\n","found index for element ",parserData->numberOfVar," ",$3);
+	if ($3 < 0) osolerror (NULL, osoption, parserData, "variable index must be nonnegative");
+	if (parserData->numberOfVariablesPresent)
+	{	if ($3 >= parserData->numberOfVariables)
+			osolerror (NULL, osoption, parserData, "variable index exceeds upper limit");
+	};
+	if (parserData->idxAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one variable index allowed");
+	parserData->idxAttributePresent = true;
+	printf("\n%s%d\n","use var element ",parserData->numberOfVar);
+	osoption->optimization->variables->initialVariableValues->var[parserData->numberOfVar]->idx = $3;  
+}
+;
+
+initvarvaluevalueatt: VALUEATT ATTRIBUTETEXT 
+{	printf("\n%s%d\n","found value for element ",parserData->numberOfVar);
+	if (parserData->valAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one variable index allowed");
+	parserData->valAttributePresent = true;
+	printf("\n%s%d\n","use var element ",parserData->numberOfVar);
+	osoption->optimization->variables->initialVariableValues->var[parserData->numberOfVar]->value = strtod($2, NULL);  
+}
+QUOTE;
+
+initvarvalueend: GREATERTHAN VAREND {{printf("\n%s\n","explicit end of <var> element");}}
+	| ENDOFELEMENT {printf("\n%s\n","trivial end of <var> element");};
+
+
+initialvariablevaluesstring: | INITIALVARIABLEVALUESSTRINGSTART NUMBEROFVARATT QUOTE INTEGER QUOTE GREATERTHAN 
+    varstrlist INITIALVARIABLEVALUESSTRINGEND;
+
+varstrlist: | varstrlist initvarstrvalue;
+
+initvarstrvalue: VARSTART initvarstrvalueattlist initvarstrvalueend;
+
+initvarstrvalueattlist: | initvarstrvalueattlist initvarstrvalueatt;
+
+initvarstrvalueatt: initvarstrvalueidxatt | initvarstrvaluevalueatt;
+
+initvarstrvalueidxatt: IDXATT ATTRIBUTETEXT QUOTE
+{	
+};
+
+initvarstrvaluevalueatt: VALUEATT ATTRIBUTETEXT QUOTE
 {
 };
 
-initvarvaluevalueatt: VALUEATT ATTRIBUTETEXT QUOTE
-{
-};
-
-initvarvalueend: GREATERTHAN VAREND | ENDOFELEMENT;
+initvarstrvalueend: GREATERTHAN VAREND | ENDOFELEMENT;
 
 
 othervariableoptions: | OTHERSTART othervariableoptionsattlist restofothervariableoptions;
@@ -1056,33 +1566,33 @@ othervariableoptionsatt:
    | othervariableoptiontype
    | othervariableoptiondescription;
 
-othervariableoptionnumberofvar: NUMBEROFVARATT ATTRIBUTETEXT QUOTE
+othervariableoptionnumberofvar: NUMBEROFVARATT QUOTE INTEGER 
 {
-};
+}QUOTE;
 
-othervariableoptionname: NAMEATT ATTRIBUTETEXT QUOTE
+othervariableoptionname: NAMEATT ATTRIBUTETEXT 
 {
-};
+}QUOTE;
 
-othervariableoptionvalue: VALUEATT ATTRIBUTETEXT QUOTE
+othervariableoptionvalue: VALUEATT ATTRIBUTETEXT 
 {
-};
+}QUOTE;
 
-othervariableoptionsolver: SOLVERATT ATTRIBUTETEXT QUOTE
+othervariableoptionsolver: SOLVERATT ATTRIBUTETEXT 
 {
-};
+}QUOTE;
 
-othervariableoptioncategory: CATEGORYATT ATTRIBUTETEXT QUOTE
+othervariableoptioncategory: CATEGORYATT ATTRIBUTETEXT 
 {
-};
+}QUOTE;
 
-othervariableoptiontype: TYPEATT ATTRIBUTETEXT QUOTE
+othervariableoptiontype: TYPEATT ATTRIBUTETEXT 
 {
-};
+}QUOTE;
 
-othervariableoptiondescription: DESCRIPTIONATT ATTRIBUTETEXT QUOTE
+othervariableoptiondescription: DESCRIPTIONATT ATTRIBUTETEXT 
 {
-};
+}QUOTE;
 
 
 restofothervariableoptions: GREATERTHAN othervariableoptionsvarlist OTHEREND;
@@ -1097,8 +1607,8 @@ othervaroptionatt:
    | othervaroptionlbvalue
    | othervaroptionubvalue;
 
-othervaroptionidx: IDXATT ATTRIBUTETEXT QUOTE
-{
+othervaroptionidx: IDXATT INTEGER QUOTE
+{	
 };
 
 othervaroptionvalue: VALUEATT ATTRIBUTETEXT QUOTE
@@ -1117,7 +1627,7 @@ othervaroptionend: GREATERTHAN VAREND | ENDOFELEMENT;
 
 objectives: | OBJECTIVESSTART numberofotherobjectivesatt restofobjectives;
 
-numberofotherobjectivesatt: | NUMBEROFOTHEROBJECTIVEOPTIONSATT ATTRIBUTETEXT QUOTE
+numberofotherobjectivesatt: | NUMBEROFOTHEROBJECTIVEOPTIONSATT QUOTE INTEGER QUOTE
 {
 };
 
@@ -1126,7 +1636,7 @@ restofobjectives: GREATERTHAN initialobjectivevalues initialobjectivebounds
    | ENDOFELEMENT;
 
 
-initialobjectivevalues: | INITIALOBJECTIVEVALUESSTART NUMBEROFOBJATT ATTRIBUTETEXT QUOTE GREATERTHAN
+initialobjectivevalues: | INITIALOBJECTIVEVALUESSTART NUMBEROFOBJATT QUOTE INTEGER QUOTE GREATERTHAN
     objvaluelist INITIALOBJECTIVEVALUESEND;
 
 objvaluelist: | objvaluelist initobjvalue;
@@ -1138,7 +1648,7 @@ initobjvalueattlist: | initobjvalueattlist initobjvalueatt;
 initobjvalueatt: initobjvalueidxatt | initobjvaluevalueatt;
 
 initobjvalueidxatt: IDXATT ATTRIBUTETEXT QUOTE
-{
+{	
 };
 
 initobjvaluevalueatt: VALUEATT ATTRIBUTETEXT QUOTE
@@ -1148,7 +1658,7 @@ initobjvaluevalueatt: VALUEATT ATTRIBUTETEXT QUOTE
 initobjvalueend: GREATERTHAN OBJEND | ENDOFELEMENT;
 
 
-initialobjectivebounds: | INITIALOBJECTIVEBOUNDSSTART NUMBEROFOBJATT ATTRIBUTETEXT QUOTE GREATERTHAN
+initialobjectivebounds: | INITIALOBJECTIVEBOUNDSSTART NUMBEROFOBJATT QUOTE INTEGER QUOTE GREATERTHAN
     objboundlist INITIALOBJECTIVEBOUNDSEND;
 
 objboundlist: | objboundlist initobjbound;
@@ -1160,7 +1670,7 @@ initobjboundattlist: | initobjboundattlist initobjboundatt;
 initobjboundatt: initobjboundidxatt | initobjboundvalueatt;
 
 initobjboundidxatt: IDXATT ATTRIBUTETEXT QUOTE
-{
+{	
 };
 
 initobjboundvalueatt: VALUEATT ATTRIBUTETEXT QUOTE
@@ -1183,7 +1693,7 @@ otherobjectiveoptionsatt:
    | otherobjectiveoptiontype
    | otherobjectiveoptiondescription;
 
-otherobjectiveoptionnumberofvar: NUMBEROFOBJATT ATTRIBUTETEXT QUOTE
+otherobjectiveoptionnumberofvar: NUMBEROFOBJATT QUOTE INTEGER QUOTE
 {
 };
 
@@ -1225,7 +1735,7 @@ otherobjoptionatt:
    | otherobjoptionubvalue;
 
 otherobjoptionidx: IDXATT ATTRIBUTETEXT QUOTE
-{
+{	
 };
 
 otherobjoptionvalue: VALUEATT ATTRIBUTETEXT QUOTE
@@ -1244,7 +1754,7 @@ otherobjoptionend: GREATERTHAN VAREND | ENDOFELEMENT;
 
 constraints: | CONSTRAINTSSTART numberofotherconstraintsatt restofconstraints;
 
-numberofotherconstraintsatt: | NUMBEROFOTHERCONSTRAINTOPTIONSATT ATTRIBUTETEXT QUOTE
+numberofotherconstraintsatt: | NUMBEROFOTHERCONSTRAINTOPTIONSATT QUOTE INTEGER QUOTE
 {
 };
 
@@ -1252,7 +1762,7 @@ restofconstraints: GREATERTHAN initialconstraintvalues initialdualvalues
    otherconstraintoptions CONSTRAINTSEND
    | ENDOFELEMENT;
 
-initialconstraintvalues: | INITIALCONSTRAINTVALUESSTART NUMBEROFCONATT ATTRIBUTETEXT QUOTE GREATERTHAN 
+initialconstraintvalues: | INITIALCONSTRAINTVALUESSTART NUMBEROFCONATT QUOTE INTEGER QUOTE GREATERTHAN 
     conlist INITIALCONSTRAINTVALUESEND;
 
 conlist: | conlist initconvalue;
@@ -1264,7 +1774,7 @@ initconvalueattlist: | initconvalueattlist initconvalueatt;
 initconvalueatt: initconvalueidxatt | initconvaluevalueatt;
 
 initconvalueidxatt: IDXATT ATTRIBUTETEXT QUOTE
-{
+{	
 };
 
 initconvaluevalueatt: VALUEATT ATTRIBUTETEXT QUOTE
@@ -1274,7 +1784,7 @@ initconvaluevalueatt: VALUEATT ATTRIBUTETEXT QUOTE
 initconvalueend: GREATERTHAN CONEND | ENDOFELEMENT;
 
 
-initialdualvalues: | INITIALDUALVALUESSTART NUMBEROFCONATT ATTRIBUTETEXT QUOTE GREATERTHAN 
+initialdualvalues: | INITIALDUALVALUESSTART NUMBEROFCONATT QUOTE INTEGER QUOTE GREATERTHAN 
 duallist INITIALDUALVALUESEND;
 
 duallist: | duallist initdualvalue;
@@ -1286,7 +1796,7 @@ initdualvalueattlist: | initdualvalueattlist initdualvalueatt;
 initdualvalueatt: initdualvalueidxatt | initdualvaluevalueatt;
 
 initdualvalueidxatt: IDXATT ATTRIBUTETEXT QUOTE
-{
+{	
 };
 
 initdualvaluevalueatt: VALUEATT ATTRIBUTETEXT QUOTE
@@ -1309,7 +1819,7 @@ otherconstraintoptionsatt:
    | otherconstraintoptiontype
    | otherconstraintoptiondescription;
 
-otherconstraintoptionnumberofvar: NUMBEROFCONATT ATTRIBUTETEXT QUOTE
+otherconstraintoptionnumberofvar: NUMBEROFCONATT QUOTE INTEGER QUOTE
 {
 };
 
@@ -1351,7 +1861,7 @@ otherconoptionatt:
    | otherconoptionubvalue;
 
 otherconoptionidx: IDXATT ATTRIBUTETEXT QUOTE
-{
+{	
 };
 
 otherconoptionvalue: VALUEATT ATTRIBUTETEXT QUOTE
@@ -1371,7 +1881,7 @@ otherconoptionend: GREATERTHAN CONEND | ENDOFELEMENT;
 
 solveroptions: | SOLVEROPTIONSSTART numberofsolveroptionsatt GREATERTHAN solveroptionlist SOLVEROPTIONSEND;
 
-numberofsolveroptionsatt: NUMBEROFSOLVEROPTIONSATT ATTRIBUTETEXT QUOTE
+numberofsolveroptionsatt: NUMBEROFSOLVEROPTIONSATT QUOTE INTEGER QUOTE
 {
 };
 

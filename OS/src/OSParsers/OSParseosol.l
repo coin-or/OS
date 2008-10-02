@@ -5,7 +5,7 @@
  * @since   OS1.1
  *
  * \remarks
- * Copyright (C) 2005-2008, Gus Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2008, Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, Dalhousie University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
@@ -137,6 +137,21 @@ return(DOUBLE);}
 ({xmlwhitespace}*\/>) {YY_PRINT;  return(ENDOFELEMENT);}
 
 ({xmlwhitespace}+numberOfOtherOptions{equality}) {YY_PRINT; return(NUMBEROFOTHEROPTIONSATT);}
+({xmlwhitespace}+numberOfJobIDs{equality}) {YY_PRINT; return(NUMBEROFJOBIDSATT);}
+({xmlwhitespace}+numberOfPaths{equality}) {YY_PRINT; return(NUMBEROFPATHSATT);}
+({xmlwhitespace}+numberOfPathPairs{equality}) {YY_PRINT; return(NUMBEROFPATHPAIRSATT);}
+({xmlwhitespace}+numberOfProcesses{equality}) {YY_PRINT; return(NUMBEROFPROCESSESATT);}
+({xmlwhitespace}+numberOfVariables{equality}) {YY_PRINT; return(NUMBEROFVARIABLESATT);}
+({xmlwhitespace}+numberOfObjectives{equality}) {YY_PRINT; return(NUMBEROFOBJECTIVESATT);}
+({xmlwhitespace}+numberOfConstraints{equality}) {YY_PRINT; return(NUMBEROFCONSTRAINTSATT);}
+({xmlwhitespace}+numberOfOtherVariableOptions{equality}) {YY_PRINT; return(NUMBEROFOTHERVARIABLEOPTIONSATT);}
+({xmlwhitespace}+numberOfVar{equality}) {YY_PRINT; return(NUMBEROFVARATT);}
+({xmlwhitespace}+numberOfOtherObjectiveOptions{equality}) {YY_PRINT; return(NUMBEROFOTHEROBJECTIVEOPTIONSATT);}
+({xmlwhitespace}+numberOfObj{equality}) {YY_PRINT; return(NUMBEROFOBJATT);}
+({xmlwhitespace}+numberOfOtherConstraintOptions{equality}) {YY_PRINT; return(NUMBEROFOTHERCONSTRAINTOPTIONSATT);}
+({xmlwhitespace}+numberOfCon{equality}) {YY_PRINT; return(NUMBEROFCONATT);}
+({xmlwhitespace}+numberOfSolverOptions{equality}) {YY_PRINT; return(NUMBEROFSOLVEROPTIONSATT);}
+({xmlwhitespace}+idx{equality}) {YY_PRINT; return(IDXATT);}
 
 ({xmlwhitespace}+locationType{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(LOCATIONTYPEATT);}
 ({xmlwhitespace}+locationType{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(LOCATIONTYPEATT);}
@@ -150,32 +165,12 @@ return(DOUBLE);}
 ({xmlwhitespace}+description{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(DESCRIPTIONATT);}
 ({xmlwhitespace}+unit{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(UNITATT);}
 ({xmlwhitespace}+unit{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(UNITATT);}
-({xmlwhitespace}+numberOfJobIDs{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(NUMBEROFJOBIDSATT);}
-({xmlwhitespace}+numberOfJobIDs{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(NUMBEROFJOBIDSATT);}
-({xmlwhitespace}+numberOfPaths{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(NUMBEROFPATHSATT);}
-({xmlwhitespace}+numberOfPaths{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(NUMBEROFPATHSATT);}
-({xmlwhitespace}+numberOfPathPairs{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(NUMBEROFPATHPAIRSATT);}
-({xmlwhitespace}+numberOfPathPairs{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(NUMBEROFPATHPAIRSATT);}
 ({xmlwhitespace}+from{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(FROMATT);}
 ({xmlwhitespace}+from{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(FROMATT);}
 ({xmlwhitespace}+to{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(TOATT);}
 ({xmlwhitespace}+to{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(TOATT);}
 ({xmlwhitespace}+makeCopy{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(MAKECOPYATT);}
 ({xmlwhitespace}+makeCopy{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(MAKECOPYATT);}
-({xmlwhitespace}+numberOfProcesses{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(NUMBEROFPROCESSESATT);}
-({xmlwhitespace}+numberOfProcesses{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(NUMBEROFPROCESSESATT);}
-({xmlwhitespace}+numberOfVariables{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(NUMBEROFVARIABLESATT);}
-({xmlwhitespace}+numberOfVariables{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(NUMBEROFVARIABLESATT);}
-({xmlwhitespace}+numberOfObjectives{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(NUMBEROFOBJECTIVESATT);}
-({xmlwhitespace}+numberOfObjectives{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(NUMBEROFOBJECTIVESATT);}
-({xmlwhitespace}+numberOfConstraints{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(NUMBEROFCONSTRAINTSATT);}
-({xmlwhitespace}+numberOfConstraints{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(NUMBEROFCONSTRAINTSATT);}
-({xmlwhitespace}+numberOfOtherVariableOptions{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(NUMBEROFOTHERVARIABLEOPTIONSATT);}
-({xmlwhitespace}+numberOfOtherVariableOptions{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(NUMBEROFOTHERVARIABLEOPTIONSATT);}
-({xmlwhitespace}+numberOfVar{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(NUMBEROFVARATT);}
-({xmlwhitespace}+numberOfVar{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(NUMBEROFVARATT);}
-({xmlwhitespace}+idx{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(IDXATT);}
-({xmlwhitespace}+idx{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(IDXATT);}
 ({xmlwhitespace}+solver{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(SOLVERATT);}
 ({xmlwhitespace}+solver{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(SOLVERATT);}
 ({xmlwhitespace}+category{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(CATEGORYATT);}
@@ -186,16 +181,6 @@ return(DOUBLE);}
 ({xmlwhitespace}+lbValue{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(LBVALUEATT);}
 ({xmlwhitespace}+ubValue{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(UBVALUEATT);}
 ({xmlwhitespace}+ubValue{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(UBVALUEATT);}
-({xmlwhitespace}+numberOfOtherObjectiveOptions{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(NUMBEROFOTHEROBJECTIVEOPTIONSATT);}
-({xmlwhitespace}+numberOfOtherObjectiveOptions{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(NUMBEROFOTHEROBJECTIVEOPTIONSATT);}
-({xmlwhitespace}+numberOfObj{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(NUMBEROFOBJATT);}
-({xmlwhitespace}+numberOfObj{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(NUMBEROFOBJATT);}
-({xmlwhitespace}+numberOfOtherConstraintOptions{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(NUMBEROFOTHERCONSTRAINTOPTIONSATT);}
-({xmlwhitespace}+numberOfOtherConstraintOptions{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(NUMBEROFOTHERCONSTRAINTOPTIONSATT);}
-({xmlwhitespace}+numberOfCon{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(NUMBEROFCONATT);}
-({xmlwhitespace}+numberOfCon{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(NUMBEROFCONATT);}
-({xmlwhitespace}+numberOfSolverOptions{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(NUMBEROFSOLVEROPTIONSATT);}
-({xmlwhitespace}+numberOfSolverOptions{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(NUMBEROFSOLVEROPTIONSATT);}
 
 
 {xmlwhitespace}*\<osol{xmlwhitespace}+ {YY_PRINT; BEGIN osolattributetext;  return(OSOLSTART);}
@@ -288,6 +273,8 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/variables{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(VARIABLESEND);}
 {xmlwhitespace}*\<initialVariableValues {YY_PRINT; return(INITIALVARIABLEVALUESSTART);}
 {xmlwhitespace}*\<\/initialVariableValues{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(INITIALVARIABLEVALUESEND);}
+{xmlwhitespace}*\<initialVariableValuesString {YY_PRINT; return(INITIALVARIABLEVALUESSTRINGSTART);}
+{xmlwhitespace}*\<\/initialVariableValuesString{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(INITIALVARIABLEVALUESSTRINGEND);}
 {xmlwhitespace}*\<var {YY_PRINT; return(VARSTART);}
 {xmlwhitespace}*\<\/var{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(VAREND);}
 {xmlwhitespace}*\<objectives {YY_PRINT; return(OBJECTIVESSTART);}

@@ -382,10 +382,21 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				for (int i=0; i < m_OSOption->optimization->variables->initialVariableValues->numberOfVar; i++)
 				{	outStr << "<var";
 					outStr << " idx=\"" << m_OSOption->optimization->variables->initialVariableValues->var[i]->idx << "\"";
-					outStr << " value=\"" << m_OSOption->optimization->variables->initialVariableValues->var[i]->value;
-					outStr << "/>";
+					outStr << " value=\"" << m_OSOption->optimization->variables->initialVariableValues->var[i]->value << "\"";
+					outStr << "/>" << endl;
 				}
-				outStr << "</initialVariableValues" << endl;
+				outStr << "</initialVariableValues>" << endl;
+			}
+			if (m_OSOption->optimization->variables->initialVariableValuesString != NULL)
+			{	outStr << "<initialVariableValuesString numberOfVar=\"";
+				outStr << m_OSOption->optimization->variables->initialVariableValuesString->numberOfVar << "\">" << endl;
+				for (int i=0; i < m_OSOption->optimization->variables->initialVariableValuesString->numberOfVar; i++)
+				{	outStr << "<var";
+					outStr << " idx=\"" << m_OSOption->optimization->variables->initialVariableValuesString->var[i]->idx << "\"";
+					outStr << " value=\"" << m_OSOption->optimization->variables->initialVariableValuesString->var[i]->value << "\"";
+					outStr << "/>" << endl;
+				}
+				outStr << "</initialVariableValuesString>" << endl;
 			}
 			if (m_OSOption->optimization->variables->numberOfOtherVariableOptions > 0)
 				for (int i=0; i < m_OSOption->optimization->variables->numberOfOtherVariableOptions; i++)
@@ -432,7 +443,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 					outStr << " value=\"" << m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->value;
 					outStr << "/>";
 				}
-				outStr << "</initialObjectiveValues" << endl;
+				outStr << "</initialObjectiveValues>" << endl;
 			}
 			if (m_OSOption->optimization->objectives->initialObjectiveBounds != NULL)
 			{	outStr << "<initialObjectiveBounds numberOfObj=\"";
@@ -444,7 +455,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 					outStr << " ubValue=\"" << m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->ubValue << "\"";
 					outStr << "/>";
 				}
-				outStr << "</initialObjectiveBounds" << endl;
+				outStr << "</initialObjectiveBounds>" << endl;
 			}
 			if (m_OSOption->optimization->objectives->numberOfOtherObjectiveOptions > 0)
 				for (int i=0; i < m_OSOption->optimization->objectives->numberOfOtherObjectiveOptions; i++)
@@ -486,7 +497,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 					outStr << " value=\"" << m_OSOption->optimization->constraints->initialConstraintValues->con[i]->value;
 					outStr << "/>";
 				}
-				outStr << "</initialConstraintValues" << endl;
+				outStr << "</initialConstraintValues>" << endl;
 			}
 			if (m_OSOption->optimization->constraints->initialDualValues != NULL)
 			{	outStr << "<initialDualValues numberOfCon=\"";
@@ -498,7 +509,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 					outStr << " ubValue=\"" << m_OSOption->optimization->constraints->initialDualValues->con[i]->ubValue;
 					outStr << "/>";
 				}
-				outStr << "</initialDualValues" << endl;
+				outStr << "</initialDualValues>" << endl;
 			}
 			if (m_OSOption->optimization->constraints->numberOfOtherConstraintOptions > 0)
 				for (int i=0; i < m_OSOption->optimization->constraints->numberOfOtherConstraintOptions; i++)
