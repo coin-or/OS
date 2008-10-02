@@ -1459,18 +1459,12 @@ numberofothervariablesatt: | NUMBEROFOTHERVARIABLEOPTIONSATT QUOTE INTEGER QUOTE
 	osoption->optimization->variables->other = new OtherVariableOption*[$3];
 	for (int i= 0; i < $3; i++)
 		osoption->optimization->variables->other[i] = new OtherVariableOption();
-
 };
 
 restofvariables: GREATERTHAN initialvariablevalues initialvariablevaluesstring othervariableoptions VARIABLESEND
-{   printf("\n%s\n","Matched </variables");
-}
    | ENDOFELEMENT;
 
-initialvariablevalues: | INITIALVARIABLEVALUESSTART numberofvar GREATERTHAN varlist INITIALVARIABLEVALUESEND
-{   printf("\n%s\n","Matched </initialVariableValues");
-}
-;
+initialvariablevalues: | INITIALVARIABLEVALUESSTART numberofvar GREATERTHAN varlist INITIALVARIABLEVALUESEND;
 
 numberofvar: NUMBEROFVARATT QUOTE INTEGER QUOTE 
 {	if ($3 <= 0) osolerror (NULL, osoption, parserData, "number of <var> elements must be positive");
@@ -1489,67 +1483,90 @@ initvarvalue: varstart initvarvalueattlist initvarvalueend
 	parserData->idxAttributePresent = false;
 	parserData->valAttributePresent = false;
 	parserData->numberOfVar++;
-	printf("\n%s%d\n","number of var elements ",parserData->numberOfVar);
 };
 
 varstart: VARSTART 
 {	if (parserData->numberOfVar >= osoption->optimization->variables->initialVariableValues->numberOfVar)
 		osolerror(NULL, osoption, parserData, "too many initial variable values");
-	printf("\n%s%d\n","populate var element ",parserData->numberOfVar); // this is matched...
 };
 
-initvarvalueattlist: | initvarvalueattlist {printf("\n%s\n","Just checking...");} initvarvalueatt;
+initvarvalueattlist: | initvarvalueattlist initvarvalueatt;
 
 initvarvalueatt: initvarvalueidxatt | initvarvaluevalueatt;
 
 initvarvalueidxatt: IDXATT QUOTE INTEGER QUOTE
-{	// ...but we never get here!
-	printf("\n%s%d%s%d\n","found index for element ",parserData->numberOfVar," ",$3);
+{	if (parserData->idxAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one variable index allowed");
+	parserData->idxAttributePresent = true;
 	if ($3 < 0) osolerror (NULL, osoption, parserData, "variable index must be nonnegative");
 	if (parserData->numberOfVariablesPresent)
 	{	if ($3 >= parserData->numberOfVariables)
 			osolerror (NULL, osoption, parserData, "variable index exceeds upper limit");
 	};
-	if (parserData->idxAttributePresent)
-		osolerror (NULL, osoption, parserData, "only one variable index allowed");
-	parserData->idxAttributePresent = true;
-	printf("\n%s%d\n","use var element ",parserData->numberOfVar);
 	osoption->optimization->variables->initialVariableValues->var[parserData->numberOfVar]->idx = $3;  
-}
-;
+};
 
 initvarvaluevalueatt: VALUEATT ATTRIBUTETEXT 
-{	printf("\n%s%d\n","found value for element ",parserData->numberOfVar);
-	if (parserData->valAttributePresent)
-		osolerror (NULL, osoption, parserData, "only one variable index allowed");
+{	if (parserData->valAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one variable value allowed");
 	parserData->valAttributePresent = true;
-	printf("\n%s%d\n","use var element ",parserData->numberOfVar);
 	osoption->optimization->variables->initialVariableValues->var[parserData->numberOfVar]->value = strtod($2, NULL);  
 }
 QUOTE;
 
-initvarvalueend: GREATERTHAN VAREND {{printf("\n%s\n","explicit end of <var> element");}}
-	| ENDOFELEMENT {printf("\n%s\n","trivial end of <var> element");};
+initvarvalueend: GREATERTHAN VAREND | ENDOFELEMENT;
 
 
-initialvariablevaluesstring: | INITIALVARIABLEVALUESSTRINGSTART NUMBEROFVARATT QUOTE INTEGER QUOTE GREATERTHAN 
+initialvariablevaluesstring: | INITIALVARIABLEVALUESSTRINGSTART numberofvarstr GREATERTHAN 
     varstrlist INITIALVARIABLEVALUESSTRINGEND;
+
+numberofvarstr: NUMBEROFVARATT QUOTE INTEGER QUOTE 
+{	if ($3 <= 0) osolerror (NULL, osoption, parserData, "number of <var> elements must be positive");
+	osoption->optimization->variables->initialVariableValuesString = new InitVariableValuesString ();
+	osoption->optimization->variables->initialVariableValuesString->numberOfVar = $3;
+	osoption->optimization->variables->initialVariableValuesString->var = new InitVarValueString*[$3];
+	for (int i = 0; i < $3; i++)
+		osoption->optimization->variables->initialVariableValuesString->var[i] = new InitVarValueString ();
+};
 
 varstrlist: | varstrlist initvarstrvalue;
 
-initvarstrvalue: VARSTART initvarstrvalueattlist initvarstrvalueend;
+initvarstrvalue: varstrstart initvarstrvalueattlist initvarstrvalueend
+{	if (!parserData->idxAttributePresent)
+		osolerror (NULL, osoption, parserData, "variable index required");
+	parserData->idxAttributePresent = false;
+	parserData->valAttributePresent = false;
+	parserData->numberOfVarStr++;
+};
+
+varstrstart: VARSTART
+{	if (parserData->numberOfVarStr >= osoption->optimization->variables->initialVariableValuesString->numberOfVar)
+		osolerror(NULL, osoption, parserData, "too many initial variable strings");
+};
 
 initvarstrvalueattlist: | initvarstrvalueattlist initvarstrvalueatt;
 
 initvarstrvalueatt: initvarstrvalueidxatt | initvarstrvaluevalueatt;
 
-initvarstrvalueidxatt: IDXATT ATTRIBUTETEXT QUOTE
-{	
+initvarstrvalueidxatt: IDXATT QUOTE INTEGER QUOTE
+{	if (parserData->idxAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one variable index allowed");
+	parserData->idxAttributePresent = true;
+	if ($3 < 0) osolerror (NULL, osoption, parserData, "variable index must be nonnegative");
+	if (parserData->numberOfVariablesPresent)
+	{	if ($3 >= parserData->numberOfVariables)
+			osolerror (NULL, osoption, parserData, "variable index exceeds upper limit");
+	};
+	osoption->optimization->variables->initialVariableValuesString->var[parserData->numberOfVarStr]->idx = $3;  
 };
 
-initvarstrvaluevalueatt: VALUEATT ATTRIBUTETEXT QUOTE
-{
-};
+initvarstrvaluevalueatt: VALUEATT ATTRIBUTETEXT 
+{	if (parserData->valAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one variable index allowed");
+	parserData->valAttributePresent = true;
+	osoption->optimization->variables->initialVariableValuesString->var[parserData->numberOfVarStr]->value = strtod($2, NULL);  
+}
+QUOTE;
 
 initvarstrvalueend: GREATERTHAN VAREND | ENDOFELEMENT;
 
@@ -1626,57 +1643,138 @@ othervaroptionubvalue: UBVALUEATT ATTRIBUTETEXT QUOTE
 
 othervaroptionend: GREATERTHAN VAREND | ENDOFELEMENT;
 
-objectives: | OBJECTIVESSTART numberofotherobjectivesatt restofobjectives;
 
-numberofotherobjectivesatt: | NUMBEROFOTHEROBJECTIVEOPTIONSATT QUOTE INTEGER QUOTE
-{
+objectives: | objectivesstart numberofotherobjectivesatt restofobjectives;
+
+objectivesstart: OBJECTIVESSTART
+{	osoption->optimization->objectives = new ObjectiveOption();
 };
 
-restofobjectives: GREATERTHAN initialobjectivevalues initialobjectivebounds
-   otherobjectiveoptions OBJECTIVESEND
+numberofotherobjectivesatt: | NUMBEROFOTHEROBJECTIVEOPTIONSATT QUOTE INTEGER QUOTE
+{	if ($3 < 0) osolerror (NULL, osoption, parserData, "number of <other> objective options cannot be negative");
+        osoption->optimization->objectives->numberOfOtherObjectiveOptions = $3;
+	osoption->optimization->objectives->other = new OtherObjectiveOption*[$3];
+	for (int i= 0; i < $3; i++)
+		osoption->optimization->objectives->other[i] = new OtherObjectiveOption();
+};
+
+restofobjectives: GREATERTHAN initialobjectivevalues initialobjectivebounds otherobjectiveoptions OBJECTIVESEND
    | ENDOFELEMENT;
 
-
-initialobjectivevalues: | INITIALOBJECTIVEVALUESSTART NUMBEROFOBJATT QUOTE INTEGER QUOTE GREATERTHAN
+initialobjectivevalues: | INITIALOBJECTIVEVALUESSTART numberofobjval GREATERTHAN
     objvaluelist INITIALOBJECTIVEVALUESEND;
+
+numberofobjval: NUMBEROFOBJATT QUOTE INTEGER QUOTE
+{	if ($3 <= 0) osolerror (NULL, osoption, parserData, "number of <obj> elements must be positive");
+	osoption->optimization->objectives->initialObjectiveValues = new InitObjectiveValues();
+	osoption->optimization->objectives->initialObjectiveValues->numberOfObj = $3;
+	osoption->optimization->objectives->initialObjectiveValues->obj = new InitObjValue*[$3];
+	for (int i = 0; i < $3; i++)
+		osoption->optimization->objectives->initialObjectiveValues->obj[i] = new InitObjValue();
+};
 
 objvaluelist: | objvaluelist initobjvalue;
 
-initobjvalue: OBJSTART initobjvalueattlist initobjvalueend;
+initobjvalue: objvaluestart initobjvalueattlist initobjvalueend
+{	if (!parserData->idxAttributePresent)
+		osolerror (NULL, osoption, parserData, "variable index required");
+	parserData->idxAttributePresent = false;
+	parserData->valAttributePresent = false;
+	parserData->numberOfObjValues++;
+};
+
+objvaluestart: OBJSTART
+{	if (parserData->numberOfObjValues >= osoption->optimization->objectives->initialObjectiveValues->numberOfObj)
+		osolerror(NULL, osoption, parserData, "too many initial objective values");
+};
 
 initobjvalueattlist: | initobjvalueattlist initobjvalueatt;
 
 initobjvalueatt: initobjvalueidxatt | initobjvaluevalueatt;
 
-initobjvalueidxatt: IDXATT ATTRIBUTETEXT QUOTE
-{	
+initobjvalueidxatt: IDXATT QUOTE INTEGER QUOTE
+{	if (parserData->idxAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one objective index allowed");
+	parserData->idxAttributePresent = true;
+	if ($3 >= 0) osolerror (NULL, osoption, parserData, "objective index must be negative");
+	if (parserData->numberOfObjectivesPresent)
+	{	if (-$3 > parserData->numberOfObjectives)
+			osolerror (NULL, osoption, parserData, "objective index out of range");
+	};
+	osoption->optimization->objectives->initialObjectiveValues->obj[parserData->numberOfObjValues]->idx = $3;  
 };
 
-initobjvaluevalueatt: VALUEATT ATTRIBUTETEXT QUOTE
-{
-};
+
+initobjvaluevalueatt: VALUEATT ATTRIBUTETEXT 
+{	if (parserData->valAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one objective value allowed");
+	parserData->valAttributePresent = true;
+	osoption->optimization->objectives->initialObjectiveValues->obj[parserData->numberOfObjValues]->value = strtod($2, NULL);  
+}
+QUOTE;
 
 initobjvalueend: GREATERTHAN OBJEND | ENDOFELEMENT;
 
 
-initialobjectivebounds: | INITIALOBJECTIVEBOUNDSSTART NUMBEROFOBJATT QUOTE INTEGER QUOTE GREATERTHAN
+initialobjectivebounds: | INITIALOBJECTIVEBOUNDSSTART numberofobjbounds GREATERTHAN
     objboundlist INITIALOBJECTIVEBOUNDSEND;
+
+numberofobjbounds: NUMBEROFOBJATT QUOTE INTEGER QUOTE 
+{	if ($3 <= 0) osolerror (NULL, osoption, parserData, "number of <obj> elements must be positive");
+	osoption->optimization->objectives->initialObjectiveBounds = new InitObjectiveBounds();
+	osoption->optimization->objectives->initialObjectiveBounds->numberOfObj = $3;
+	osoption->optimization->objectives->initialObjectiveBounds->obj = new InitObjBound*[$3];
+	for (int i = 0; i < $3; i++)
+		osoption->optimization->objectives->initialObjectiveBounds->obj[i] = new InitObjBound ();
+};
 
 objboundlist: | objboundlist initobjbound;
 
-initobjbound: OBJSTART initobjboundattlist initobjboundend;
+initobjbound: objboundstart initobjboundattlist initobjboundend
+{	if (!parserData->idxAttributePresent)
+		osolerror (NULL, osoption, parserData, "variable index required");
+	parserData->idxAttributePresent = false;
+	parserData->lbvalAttributePresent = false;
+	parserData->ubvalAttributePresent = false;
+	parserData->numberOfObjBounds++;
+};
+
+objboundstart: OBJSTART 
+{	if (parserData->numberOfObjBounds >= osoption->optimization->objectives->initialObjectiveBounds->numberOfObj)
+		osolerror(NULL, osoption, parserData, "too many initial objective bounds");
+};
 
 initobjboundattlist: | initobjboundattlist initobjboundatt;
 
-initobjboundatt: initobjboundidxatt | initobjboundvalueatt;
+initobjboundatt: initobjboundidxatt | initobjvaluelowerboundatt | initobjvalueupperboundatt;
 
-initobjboundidxatt: IDXATT ATTRIBUTETEXT QUOTE
-{	
+initobjboundidxatt: IDXATT QUOTE INTEGER QUOTE
+{	if (parserData->idxAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one objective index allowed");
+	parserData->idxAttributePresent = true;
+	if ($3 >= 0) osolerror (NULL, osoption, parserData, "objective index must be negative");
+	if (parserData->numberOfObjectivesPresent)
+	{	if (-$3 > parserData->numberOfObjectives)
+			osolerror (NULL, osoption, parserData, "objective index out of range");
+	};
+	osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->idx = $3;  
 };
 
-initobjboundvalueatt: VALUEATT ATTRIBUTETEXT QUOTE
-{
-};
+initobjvaluelowerboundatt: LBVALUEATT ATTRIBUTETEXT 
+{	if (parserData->lbvalAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one objective lower bound allowed");
+	parserData->lbvalAttributePresent = true;
+	osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->lbValue = strtod($2, NULL);  
+}
+QUOTE;
+
+initobjvalueupperboundatt: UBVALUEATT ATTRIBUTETEXT 
+{	if (parserData->ubvalAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one objective upper bound allowed");
+	parserData->ubvalAttributePresent = true;
+	osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->ubValue = strtod($2, NULL);  
+}
+QUOTE;
 
 initobjboundend: GREATERTHAN OBJEND | ENDOFELEMENT;
 
@@ -1753,56 +1851,140 @@ otherobjoptionubvalue: UBVALUEATT ATTRIBUTETEXT QUOTE
 
 otherobjoptionend: GREATERTHAN VAREND | ENDOFELEMENT;
 
-constraints: | CONSTRAINTSSTART numberofotherconstraintsatt restofconstraints;
+
+constraints: | constraintsstart numberofotherconstraintsatt restofconstraints;
+
+constraintsstart: CONSTRAINTSSTART 
+{	osoption->optimization->constraints = new ConstraintOption();
+};
 
 numberofotherconstraintsatt: | NUMBEROFOTHERCONSTRAINTOPTIONSATT QUOTE INTEGER QUOTE
-{
+{	if ($3 < 0) osolerror (NULL, osoption, parserData, "number of <other> constraint options cannot be negative");
+        osoption->optimization->constraints->numberOfOtherConstraintOptions = $3;
+	osoption->optimization->constraints->other = new OtherConstraintOption*[$3];
+	for (int i= 0; i < $3; i++)
+		osoption->optimization->constraints->other[i] = new OtherConstraintOption();
 };
 
 restofconstraints: GREATERTHAN initialconstraintvalues initialdualvalues
    otherconstraintoptions CONSTRAINTSEND
    | ENDOFELEMENT;
 
-initialconstraintvalues: | INITIALCONSTRAINTVALUESSTART NUMBEROFCONATT QUOTE INTEGER QUOTE GREATERTHAN 
+initialconstraintvalues: | INITIALCONSTRAINTVALUESSTART numberofconval GREATERTHAN 
     conlist INITIALCONSTRAINTVALUESEND;
+
+numberofconval: NUMBEROFCONATT QUOTE INTEGER QUOTE 
+{	if ($3 <= 0) osolerror (NULL, osoption, parserData, "number of <con> elements must be positive");
+	osoption->optimization->constraints->initialConstraintValues = new InitConstraintValues();
+	osoption->optimization->constraints->initialConstraintValues->numberOfCon = $3;
+	osoption->optimization->constraints->initialConstraintValues->con = new InitConValue*[$3];
+	for (int i = 0; i < $3; i++)
+		osoption->optimization->constraints->initialConstraintValues->con[i] = new InitConValue();
+};
 
 conlist: | conlist initconvalue;
 
-initconvalue: CONSTART initconvalueattlist initconvalueend;
+initconvalue: constart initconvalueattlist initconvalueend
+{	if (!parserData->idxAttributePresent)
+		osolerror (NULL, osoption, parserData, "variable index required");
+	parserData->idxAttributePresent = false;
+	parserData->valAttributePresent = false;
+	parserData->numberOfCon++;
+};
+
+constart: CONSTART
+{	if (parserData->numberOfCon >= osoption->optimization->constraints->initialConstraintValues->numberOfCon)
+		osolerror(NULL, osoption, parserData, "too many initial constraint values");
+};
 
 initconvalueattlist: | initconvalueattlist initconvalueatt;
 
 initconvalueatt: initconvalueidxatt | initconvaluevalueatt;
 
-initconvalueidxatt: IDXATT ATTRIBUTETEXT QUOTE
-{	
+initconvalueidxatt: IDXATT QUOTE INTEGER QUOTE
+{	if (parserData->idxAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one constraint index allowed");
+	parserData->idxAttributePresent = true;
+	if ($3 < 0) osolerror (NULL, osoption, parserData, "constraint index must be nonnegative");
+	if (parserData->numberOfConstraintsPresent)
+	{	if ($3 > parserData->numberOfConstraints)
+			osolerror (NULL, osoption, parserData, "constraint index out of range");
+	};
+	osoption->optimization->constraints->initialConstraintValues->con[parserData->numberOfCon]->idx = $3;  
 };
 
-initconvaluevalueatt: VALUEATT ATTRIBUTETEXT QUOTE
-{
-};
+
+initconvaluevalueatt: VALUEATT ATTRIBUTETEXT 
+{	if (parserData->valAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one constraint value allowed");
+	parserData->valAttributePresent = true;
+	osoption->optimization->constraints->initialConstraintValues->con[parserData->numberOfCon]->value = strtod($2, NULL);  
+}
+QUOTE;
 
 initconvalueend: GREATERTHAN CONEND | ENDOFELEMENT;
 
 
-initialdualvalues: | INITIALDUALVALUESSTART NUMBEROFCONATT QUOTE INTEGER QUOTE GREATERTHAN 
-duallist INITIALDUALVALUESEND;
+initialdualvalues: | INITIALDUALVALUESSTART numberofduals GREATERTHAN 
+    duallist INITIALDUALVALUESEND;
+
+numberofduals: NUMBEROFCONATT QUOTE INTEGER QUOTE 
+{	if ($3 <= 0) osolerror (NULL, osoption, parserData, "number of <con> elements must be positive");
+	osoption->optimization->constraints->initialDualValues = new InitDualVariableValues();
+	osoption->optimization->constraints->initialDualValues->numberOfCon = $3;
+	osoption->optimization->constraints->initialDualValues->con = new InitDualVarValue*[$3];
+	for (int i = 0; i < $3; i++)
+		osoption->optimization->constraints->initialDualValues->con[i] = new InitDualVarValue ();
+};
 
 duallist: | duallist initdualvalue;
 
-initdualvalue: CONSTART initdualvalueattlist initdualvalueend;
+initdualvalue: dualstart initdualvalueattlist initdualvalueend
+{	if (!parserData->idxAttributePresent)
+		osolerror (NULL, osoption, parserData, "constraint index required");
+	parserData->idxAttributePresent = false;
+	parserData->lbvalAttributePresent = false;
+	parserData->ubvalAttributePresent = false;
+	parserData->numberOfDuals++;
+};
+
+dualstart: CONSTART 
+{	if (parserData->numberOfDuals >= osoption->optimization->constraints->initialDualValues->numberOfCon)
+		osolerror(NULL, osoption, parserData, "too many initial dual variable bounds");
+};
 
 initdualvalueattlist: | initdualvalueattlist initdualvalueatt;
 
-initdualvalueatt: initdualvalueidxatt | initdualvaluevalueatt;
+initdualvalueatt: initdualvalueidxatt | initdualvaluelowerboundatt | initdualvalueupperboundatt;
 
-initdualvalueidxatt: IDXATT ATTRIBUTETEXT QUOTE
-{	
+initdualvalueidxatt: IDXATT QUOTE INTEGER QUOTE
+{	if (parserData->idxAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one constraint index allowed");
+	parserData->idxAttributePresent = true;
+	if ($3 < 0) osolerror (NULL, osoption, parserData, "constraint index must be nonnegative");
+	if (parserData->numberOfConstraintsPresent)
+	{	if ($3 > parserData->numberOfConstraints)
+			osolerror (NULL, osoption, parserData, "constraint index out of range");
+	};
+	osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->idx = $3;  
 };
 
-initdualvaluevalueatt: VALUEATT ATTRIBUTETEXT QUOTE
-{
-};
+initdualvaluelowerboundatt: LBVALUEATT ATTRIBUTETEXT 
+{	if (parserData->lbvalAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one dual variable lower bound allowed");
+	parserData->lbvalAttributePresent = true;
+	osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->lbValue = strtod($2, NULL);  
+}
+QUOTE;
+
+initdualvalueupperboundatt: UBVALUEATT ATTRIBUTETEXT 
+{	if (parserData->ubvalAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one dual variable upper bound allowed");
+	parserData->ubvalAttributePresent = true;
+	osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->ubValue = strtod($2, NULL);  
+}
+QUOTE;
+
 
 initdualvalueend: GREATERTHAN CONEND | ENDOFELEMENT;
 

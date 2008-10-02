@@ -150,9 +150,13 @@ public:
 	bool solverOptionsPresent;
 	bool idxAttributePresent;
 	bool valAttributePresent;
+	bool lbvalAttributePresent;
+	bool ubvalAttributePresent;
 	int numberOfOtherVariableOptions;
 	bool initialVariableValuesPresent;
 	int numberOfVar;
+	bool initialVariableValuesStringPresent;
+	int numberOfVarStr;
 	int numberOfOtherObjectiveOptions;
 	bool initialObjectiveValuesPresent;
 	int numberOfObjValues;
