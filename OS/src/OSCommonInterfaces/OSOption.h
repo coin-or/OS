@@ -1083,6 +1083,12 @@ public:
 	/** value of the option */
 	std::string value;
 
+
+	/** lower bound on the value */
+	std::string lbValue;
+
+	/** lower bound on the value */
+	std::string ubValue;
 	/**
 	 *
 	 * Default constructor. 

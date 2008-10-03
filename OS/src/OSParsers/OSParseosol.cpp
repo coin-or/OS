@@ -1697,8 +1697,6 @@ static yyconst flex_int32_t yy_rule_can_match_eol[173] =
 #include "OSParseosol.tab.hpp"
 #include "OSOption.h"
 
-#define PARSERDEBUG
-
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", yytext);
 #else     
@@ -1726,9 +1724,9 @@ using std::ostringstream;
 
 
 
-#line 101 "OSParseosol.l"
+#line 99 "OSParseosol.l"
 #define YY_EXTRA_TYPE OSoLParserData*
-#line 1732 "OSParseosol.cpp"
+#line 1730 "OSParseosol.cpp"
 
 #define INITIAL 0
 #define osolattributetext 1
@@ -1970,11 +1968,11 @@ YY_DECL
 	register int yy_act;
     struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
 
-#line 111 "OSParseosol.l"
+#line 109 "OSParseosol.l"
 
 
  
-#line 1978 "OSParseosol.cpp"
+#line 1976 "OSParseosol.cpp"
 
     yylval = yylval_param;
 
@@ -2076,29 +2074,29 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 114 "OSParseosol.l"
+#line 112 "OSParseosol.l"
 
 	YY_BREAK
 /* General patterns matched in more than one element */
 case 2:
 YY_RULE_SETUP
-#line 119 "OSParseosol.l"
+#line 117 "OSParseosol.l"
 {YY_PRINT;  yylval->sval = yytext; return(QUOTE);}
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 120 "OSParseosol.l"
+#line 118 "OSParseosol.l"
 {YY_PRINT; return(GREATERTHAN);}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 121 "OSParseosol.l"
+#line 119 "OSParseosol.l"
 {YY_PRINT; yylval->ival = atoi(yytext); return(INTEGER);}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 123 "OSParseosol.l"
+#line 121 "OSParseosol.l"
 {YY_PRINT; 
 char *yytextEnd;
 yylval->dval = os_strtod_wrap( yytext, &yytextEnd);
@@ -2116,984 +2114,984 @@ return(DOUBLE);}
 case 6:
 /* rule 6 can match eol */
 YY_RULE_SETUP
-#line 137 "OSParseosol.l"
+#line 135 "OSParseosol.l"
 {YY_PRINT;  return(ENDOFELEMENT);}
 	YY_BREAK
 case 7:
 /* rule 7 can match eol */
 YY_RULE_SETUP
-#line 139 "OSParseosol.l"
+#line 137 "OSParseosol.l"
 {YY_PRINT; return(NUMBEROFOTHEROPTIONSATT);}
 	YY_BREAK
 case 8:
 /* rule 8 can match eol */
 YY_RULE_SETUP
-#line 140 "OSParseosol.l"
+#line 138 "OSParseosol.l"
 {YY_PRINT; return(NUMBEROFJOBIDSATT);}
 	YY_BREAK
 case 9:
 /* rule 9 can match eol */
 YY_RULE_SETUP
-#line 141 "OSParseosol.l"
+#line 139 "OSParseosol.l"
 {YY_PRINT; return(NUMBEROFPATHSATT);}
 	YY_BREAK
 case 10:
 /* rule 10 can match eol */
 YY_RULE_SETUP
-#line 142 "OSParseosol.l"
+#line 140 "OSParseosol.l"
 {YY_PRINT; return(NUMBEROFPATHPAIRSATT);}
 	YY_BREAK
 case 11:
 /* rule 11 can match eol */
 YY_RULE_SETUP
-#line 143 "OSParseosol.l"
+#line 141 "OSParseosol.l"
 {YY_PRINT; return(NUMBEROFPROCESSESATT);}
 	YY_BREAK
 case 12:
 /* rule 12 can match eol */
 YY_RULE_SETUP
-#line 144 "OSParseosol.l"
+#line 142 "OSParseosol.l"
 {YY_PRINT; return(NUMBEROFVARIABLESATT);}
 	YY_BREAK
 case 13:
 /* rule 13 can match eol */
 YY_RULE_SETUP
-#line 145 "OSParseosol.l"
+#line 143 "OSParseosol.l"
 {YY_PRINT; return(NUMBEROFOBJECTIVESATT);}
 	YY_BREAK
 case 14:
 /* rule 14 can match eol */
 YY_RULE_SETUP
-#line 146 "OSParseosol.l"
+#line 144 "OSParseosol.l"
 {YY_PRINT; return(NUMBEROFCONSTRAINTSATT);}
 	YY_BREAK
 case 15:
 /* rule 15 can match eol */
 YY_RULE_SETUP
-#line 147 "OSParseosol.l"
+#line 145 "OSParseosol.l"
 {YY_PRINT; return(NUMBEROFOTHERVARIABLEOPTIONSATT);}
 	YY_BREAK
 case 16:
 /* rule 16 can match eol */
 YY_RULE_SETUP
-#line 148 "OSParseosol.l"
+#line 146 "OSParseosol.l"
 {YY_PRINT; return(NUMBEROFVARATT);}
 	YY_BREAK
 case 17:
 /* rule 17 can match eol */
 YY_RULE_SETUP
-#line 149 "OSParseosol.l"
+#line 147 "OSParseosol.l"
 {YY_PRINT; return(NUMBEROFOTHEROBJECTIVEOPTIONSATT);}
 	YY_BREAK
 case 18:
 /* rule 18 can match eol */
 YY_RULE_SETUP
-#line 150 "OSParseosol.l"
+#line 148 "OSParseosol.l"
 {YY_PRINT; return(NUMBEROFOBJATT);}
 	YY_BREAK
 case 19:
 /* rule 19 can match eol */
 YY_RULE_SETUP
-#line 151 "OSParseosol.l"
+#line 149 "OSParseosol.l"
 {YY_PRINT; return(NUMBEROFOTHERCONSTRAINTOPTIONSATT);}
 	YY_BREAK
 case 20:
 /* rule 20 can match eol */
 YY_RULE_SETUP
-#line 152 "OSParseosol.l"
+#line 150 "OSParseosol.l"
 {YY_PRINT; return(NUMBEROFCONATT);}
 	YY_BREAK
 case 21:
 /* rule 21 can match eol */
 YY_RULE_SETUP
-#line 153 "OSParseosol.l"
+#line 151 "OSParseosol.l"
 {YY_PRINT; return(NUMBEROFSOLVEROPTIONSATT);}
 	YY_BREAK
 case 22:
 /* rule 22 can match eol */
 YY_RULE_SETUP
-#line 154 "OSParseosol.l"
+#line 152 "OSParseosol.l"
 {YY_PRINT; return(IDXATT);}
 	YY_BREAK
 case 23:
 /* rule 23 can match eol */
 YY_RULE_SETUP
-#line 156 "OSParseosol.l"
+#line 154 "OSParseosol.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(LOCATIONTYPEATT);}
 	YY_BREAK
 case 24:
 /* rule 24 can match eol */
 YY_RULE_SETUP
-#line 157 "OSParseosol.l"
+#line 155 "OSParseosol.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(LOCATIONTYPEATT);}
 	YY_BREAK
 case 25:
 /* rule 25 can match eol */
 YY_RULE_SETUP
-#line 158 "OSParseosol.l"
+#line 156 "OSParseosol.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(TRANSPORTTYPEATT);}
 	YY_BREAK
 case 26:
 /* rule 26 can match eol */
 YY_RULE_SETUP
-#line 159 "OSParseosol.l"
+#line 157 "OSParseosol.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(TRANSPORTTYPEATT);}
 	YY_BREAK
 case 27:
 /* rule 27 can match eol */
 YY_RULE_SETUP
-#line 160 "OSParseosol.l"
+#line 158 "OSParseosol.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(NAMEATT);}
 	YY_BREAK
 case 28:
 /* rule 28 can match eol */
 YY_RULE_SETUP
-#line 161 "OSParseosol.l"
+#line 159 "OSParseosol.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(NAMEATT);}
 	YY_BREAK
 case 29:
 /* rule 29 can match eol */
 YY_RULE_SETUP
-#line 162 "OSParseosol.l"
+#line 160 "OSParseosol.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(VALUEATT);}
 	YY_BREAK
 case 30:
 /* rule 30 can match eol */
 YY_RULE_SETUP
-#line 163 "OSParseosol.l"
+#line 161 "OSParseosol.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(VALUEATT);}
 	YY_BREAK
 case 31:
 /* rule 31 can match eol */
 YY_RULE_SETUP
-#line 164 "OSParseosol.l"
+#line 162 "OSParseosol.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(DESCRIPTIONATT);}
 	YY_BREAK
 case 32:
 /* rule 32 can match eol */
 YY_RULE_SETUP
-#line 165 "OSParseosol.l"
+#line 163 "OSParseosol.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(DESCRIPTIONATT);}
 	YY_BREAK
 case 33:
 /* rule 33 can match eol */
 YY_RULE_SETUP
-#line 166 "OSParseosol.l"
+#line 164 "OSParseosol.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(UNITATT);}
 	YY_BREAK
 case 34:
 /* rule 34 can match eol */
 YY_RULE_SETUP
-#line 167 "OSParseosol.l"
+#line 165 "OSParseosol.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(UNITATT);}
 	YY_BREAK
 case 35:
 /* rule 35 can match eol */
 YY_RULE_SETUP
-#line 168 "OSParseosol.l"
+#line 166 "OSParseosol.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(FROMATT);}
 	YY_BREAK
 case 36:
 /* rule 36 can match eol */
 YY_RULE_SETUP
-#line 169 "OSParseosol.l"
+#line 167 "OSParseosol.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(FROMATT);}
 	YY_BREAK
 case 37:
 /* rule 37 can match eol */
 YY_RULE_SETUP
-#line 170 "OSParseosol.l"
+#line 168 "OSParseosol.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(TOATT);}
 	YY_BREAK
 case 38:
 /* rule 38 can match eol */
 YY_RULE_SETUP
-#line 171 "OSParseosol.l"
+#line 169 "OSParseosol.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(TOATT);}
 	YY_BREAK
 case 39:
 /* rule 39 can match eol */
 YY_RULE_SETUP
-#line 172 "OSParseosol.l"
+#line 170 "OSParseosol.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(MAKECOPYATT);}
 	YY_BREAK
 case 40:
 /* rule 40 can match eol */
 YY_RULE_SETUP
-#line 173 "OSParseosol.l"
+#line 171 "OSParseosol.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(MAKECOPYATT);}
 	YY_BREAK
 case 41:
 /* rule 41 can match eol */
 YY_RULE_SETUP
-#line 174 "OSParseosol.l"
+#line 172 "OSParseosol.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(SOLVERATT);}
 	YY_BREAK
 case 42:
 /* rule 42 can match eol */
 YY_RULE_SETUP
-#line 175 "OSParseosol.l"
+#line 173 "OSParseosol.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(SOLVERATT);}
 	YY_BREAK
 case 43:
 /* rule 43 can match eol */
 YY_RULE_SETUP
-#line 176 "OSParseosol.l"
+#line 174 "OSParseosol.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(CATEGORYATT);}
 	YY_BREAK
 case 44:
 /* rule 44 can match eol */
 YY_RULE_SETUP
-#line 177 "OSParseosol.l"
+#line 175 "OSParseosol.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(CATEGORYATT);}
 	YY_BREAK
 case 45:
 /* rule 45 can match eol */
 YY_RULE_SETUP
-#line 178 "OSParseosol.l"
+#line 176 "OSParseosol.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(TYPEATT);}
 	YY_BREAK
 case 46:
 /* rule 46 can match eol */
 YY_RULE_SETUP
-#line 179 "OSParseosol.l"
+#line 177 "OSParseosol.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(TYPEATT);}
 	YY_BREAK
 case 47:
 /* rule 47 can match eol */
 YY_RULE_SETUP
-#line 180 "OSParseosol.l"
+#line 178 "OSParseosol.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(LBVALUEATT);}
 	YY_BREAK
 case 48:
 /* rule 48 can match eol */
 YY_RULE_SETUP
-#line 181 "OSParseosol.l"
+#line 179 "OSParseosol.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(LBVALUEATT);}
 	YY_BREAK
 case 49:
 /* rule 49 can match eol */
 YY_RULE_SETUP
-#line 182 "OSParseosol.l"
+#line 180 "OSParseosol.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(UBVALUEATT);}
 	YY_BREAK
 case 50:
 /* rule 50 can match eol */
 YY_RULE_SETUP
-#line 183 "OSParseosol.l"
+#line 181 "OSParseosol.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(UBVALUEATT);}
 	YY_BREAK
 case 51:
 /* rule 51 can match eol */
 YY_RULE_SETUP
-#line 186 "OSParseosol.l"
+#line 184 "OSParseosol.l"
 {YY_PRINT; BEGIN osolattributetext;  return(OSOLSTART);}
 	YY_BREAK
 case 52:
 /* rule 52 can match eol */
 YY_RULE_SETUP
-#line 187 "OSParseosol.l"
+#line 185 "OSParseosol.l"
 {YY_PRINT; return(OSOLEND);}
 	YY_BREAK
 case 53:
 /* rule 53 can match eol */
 YY_RULE_SETUP
-#line 188 "OSParseosol.l"
+#line 186 "OSParseosol.l"
 {YY_PRINT; return(GENERALSTART);}
 	YY_BREAK
 case 54:
 /* rule 54 can match eol */
 YY_RULE_SETUP
-#line 189 "OSParseosol.l"
+#line 187 "OSParseosol.l"
 {YY_PRINT; return(GENERALEND);}
 	YY_BREAK
 case 55:
 /* rule 55 can match eol */
 YY_RULE_SETUP
-#line 190 "OSParseosol.l"
+#line 188 "OSParseosol.l"
 {YY_PRINT; return(SYSTEMSTART);}
 	YY_BREAK
 case 56:
 /* rule 56 can match eol */
 YY_RULE_SETUP
-#line 191 "OSParseosol.l"
+#line 189 "OSParseosol.l"
 {YY_PRINT; return(SYSTEMEND);}
 	YY_BREAK
 case 57:
 /* rule 57 can match eol */
 YY_RULE_SETUP
-#line 192 "OSParseosol.l"
+#line 190 "OSParseosol.l"
 {YY_PRINT; return(SERVICESTART);}
 	YY_BREAK
 case 58:
 /* rule 58 can match eol */
 YY_RULE_SETUP
-#line 193 "OSParseosol.l"
+#line 191 "OSParseosol.l"
 {YY_PRINT; return(SERVICEEND);}
 	YY_BREAK
 case 59:
 /* rule 59 can match eol */
 YY_RULE_SETUP
-#line 194 "OSParseosol.l"
+#line 192 "OSParseosol.l"
 {YY_PRINT; return(JOBSTART);}
 	YY_BREAK
 case 60:
 /* rule 60 can match eol */
 YY_RULE_SETUP
-#line 195 "OSParseosol.l"
+#line 193 "OSParseosol.l"
 {YY_PRINT; return(JOBEND);}
 	YY_BREAK
 case 61:
 /* rule 61 can match eol */
 YY_RULE_SETUP
-#line 196 "OSParseosol.l"
+#line 194 "OSParseosol.l"
 {YY_PRINT; return(OPTIMIZATIONSTART);}
 	YY_BREAK
 case 62:
 /* rule 62 can match eol */
 YY_RULE_SETUP
-#line 197 "OSParseosol.l"
+#line 195 "OSParseosol.l"
 {YY_PRINT; return(OPTIMIZATIONEND);}
 	YY_BREAK
 case 63:
 /* rule 63 can match eol */
 YY_RULE_SETUP
-#line 199 "OSParseosol.l"
+#line 197 "OSParseosol.l"
 {YY_PRINT; return(SERVICEURISTART);}
 	YY_BREAK
 case 64:
 /* rule 64 can match eol */
 YY_RULE_SETUP
-#line 200 "OSParseosol.l"
+#line 198 "OSParseosol.l"
 {YY_PRINT; return(SERVICEURIEND);}
 	YY_BREAK
 case 65:
 /* rule 65 can match eol */
 YY_RULE_SETUP
-#line 201 "OSParseosol.l"
+#line 199 "OSParseosol.l"
 {YY_PRINT; return(SERVICENAMESTART);}
 	YY_BREAK
 case 66:
 /* rule 66 can match eol */
 YY_RULE_SETUP
-#line 202 "OSParseosol.l"
+#line 200 "OSParseosol.l"
 {YY_PRINT; return(SERVICENAMEEND);}
 	YY_BREAK
 case 67:
 /* rule 67 can match eol */
 YY_RULE_SETUP
-#line 203 "OSParseosol.l"
+#line 201 "OSParseosol.l"
 {YY_PRINT; return(INSTANCENAMESTART);}
 	YY_BREAK
 case 68:
 /* rule 68 can match eol */
 YY_RULE_SETUP
-#line 204 "OSParseosol.l"
+#line 202 "OSParseosol.l"
 {YY_PRINT; return(INSTANCENAMEEND);}
 	YY_BREAK
 case 69:
 /* rule 69 can match eol */
 YY_RULE_SETUP
-#line 205 "OSParseosol.l"
+#line 203 "OSParseosol.l"
 {YY_PRINT; return(INSTANCELOCATIONSTART);}
 	YY_BREAK
 case 70:
 /* rule 70 can match eol */
 YY_RULE_SETUP
-#line 206 "OSParseosol.l"
+#line 204 "OSParseosol.l"
 {YY_PRINT; return(INSTANCELOCATIONEND);}
 	YY_BREAK
 case 71:
 /* rule 71 can match eol */
 YY_RULE_SETUP
-#line 207 "OSParseosol.l"
+#line 205 "OSParseosol.l"
 {YY_PRINT; return(JOBIDSTART);}
 	YY_BREAK
 case 72:
 /* rule 72 can match eol */
 YY_RULE_SETUP
-#line 208 "OSParseosol.l"
+#line 206 "OSParseosol.l"
 {YY_PRINT; return(JOBIDEND);}
 	YY_BREAK
 case 73:
 /* rule 73 can match eol */
 YY_RULE_SETUP
-#line 209 "OSParseosol.l"
+#line 207 "OSParseosol.l"
 {YY_PRINT; return(SOLVERTOINVOKESTART);}
 	YY_BREAK
 case 74:
 /* rule 74 can match eol */
 YY_RULE_SETUP
-#line 210 "OSParseosol.l"
+#line 208 "OSParseosol.l"
 {YY_PRINT; return(SOLVERTOINVOKEEND);}
 	YY_BREAK
 case 75:
 /* rule 75 can match eol */
 YY_RULE_SETUP
-#line 211 "OSParseosol.l"
+#line 209 "OSParseosol.l"
 {YY_PRINT; return(LICENSESTART);}
 	YY_BREAK
 case 76:
 /* rule 76 can match eol */
 YY_RULE_SETUP
-#line 212 "OSParseosol.l"
+#line 210 "OSParseosol.l"
 {YY_PRINT; return(LICENSEEND);}
 	YY_BREAK
 case 77:
 /* rule 77 can match eol */
 YY_RULE_SETUP
-#line 213 "OSParseosol.l"
+#line 211 "OSParseosol.l"
 {YY_PRINT; return(USERNAMESTART);}
 	YY_BREAK
 case 78:
 /* rule 78 can match eol */
 YY_RULE_SETUP
-#line 214 "OSParseosol.l"
+#line 212 "OSParseosol.l"
 {YY_PRINT; return(USERNAMEEND);}
 	YY_BREAK
 case 79:
 /* rule 79 can match eol */
 YY_RULE_SETUP
-#line 215 "OSParseosol.l"
+#line 213 "OSParseosol.l"
 {YY_PRINT; return(PASSWORDSTART);}
 	YY_BREAK
 case 80:
 /* rule 80 can match eol */
 YY_RULE_SETUP
-#line 216 "OSParseosol.l"
+#line 214 "OSParseosol.l"
 {YY_PRINT; return(PASSWORDEND);}
 	YY_BREAK
 case 81:
 /* rule 81 can match eol */
 YY_RULE_SETUP
-#line 217 "OSParseosol.l"
+#line 215 "OSParseosol.l"
 {YY_PRINT; return(CONTACTSTART);}
 	YY_BREAK
 case 82:
 /* rule 82 can match eol */
 YY_RULE_SETUP
-#line 218 "OSParseosol.l"
+#line 216 "OSParseosol.l"
 {YY_PRINT; return(CONTACTEND);}
 	YY_BREAK
 case 83:
 /* rule 83 can match eol */
 YY_RULE_SETUP
-#line 219 "OSParseosol.l"
+#line 217 "OSParseosol.l"
 {YY_PRINT; return(OTHEROPTIONSSTART);}
 	YY_BREAK
 case 84:
 /* rule 84 can match eol */
 YY_RULE_SETUP
-#line 220 "OSParseosol.l"
+#line 218 "OSParseosol.l"
 {YY_PRINT; return(OTHEROPTIONSEND);}
 	YY_BREAK
 case 85:
 /* rule 85 can match eol */
 YY_RULE_SETUP
-#line 221 "OSParseosol.l"
+#line 219 "OSParseosol.l"
 {YY_PRINT; return(OTHERSTART);}
 	YY_BREAK
 case 86:
 /* rule 86 can match eol */
 YY_RULE_SETUP
-#line 222 "OSParseosol.l"
+#line 220 "OSParseosol.l"
 {YY_PRINT; return(OTHEREND);}
 	YY_BREAK
 case 87:
 /* rule 87 can match eol */
 YY_RULE_SETUP
-#line 224 "OSParseosol.l"
+#line 222 "OSParseosol.l"
 {YY_PRINT; return(MINDISKSPACESTART);}
 	YY_BREAK
 case 88:
 /* rule 88 can match eol */
 YY_RULE_SETUP
-#line 225 "OSParseosol.l"
+#line 223 "OSParseosol.l"
 {YY_PRINT; return(MINDISKSPACEEND);}
 	YY_BREAK
 case 89:
 /* rule 89 can match eol */
 YY_RULE_SETUP
-#line 226 "OSParseosol.l"
+#line 224 "OSParseosol.l"
 {YY_PRINT; return(MINMEMORYSIZESTART);}
 	YY_BREAK
 case 90:
 /* rule 90 can match eol */
 YY_RULE_SETUP
-#line 227 "OSParseosol.l"
+#line 225 "OSParseosol.l"
 {YY_PRINT; return(MINMEMORYSIZEEND);}
 	YY_BREAK
 case 91:
 /* rule 91 can match eol */
 YY_RULE_SETUP
-#line 228 "OSParseosol.l"
+#line 226 "OSParseosol.l"
 {YY_PRINT; return(MINCPUSPEEDSTART);}
 	YY_BREAK
 case 92:
 /* rule 92 can match eol */
 YY_RULE_SETUP
-#line 229 "OSParseosol.l"
+#line 227 "OSParseosol.l"
 {YY_PRINT; return(MINCPUSPEEDEND);}
 	YY_BREAK
 case 93:
 /* rule 93 can match eol */
 YY_RULE_SETUP
-#line 230 "OSParseosol.l"
+#line 228 "OSParseosol.l"
 {YY_PRINT; return(MINCPUNUMBERSTART);}
 	YY_BREAK
 case 94:
 /* rule 94 can match eol */
 YY_RULE_SETUP
-#line 231 "OSParseosol.l"
+#line 229 "OSParseosol.l"
 {YY_PRINT; return(MINCPUNUMBEREND);}
 	YY_BREAK
 case 95:
 /* rule 95 can match eol */
 YY_RULE_SETUP
-#line 233 "OSParseosol.l"
+#line 231 "OSParseosol.l"
 {YY_PRINT; return(SERVICETYPESTART);}
 	YY_BREAK
 case 96:
 /* rule 96 can match eol */
 YY_RULE_SETUP
-#line 234 "OSParseosol.l"
+#line 232 "OSParseosol.l"
 {YY_PRINT; return(SERVICETYPEEND);}
 	YY_BREAK
 case 97:
 /* rule 97 can match eol */
 YY_RULE_SETUP
-#line 236 "OSParseosol.l"
+#line 234 "OSParseosol.l"
 {YY_PRINT; return(MAXTIMESTART);}
 	YY_BREAK
 case 98:
 /* rule 98 can match eol */
 YY_RULE_SETUP
-#line 237 "OSParseosol.l"
+#line 235 "OSParseosol.l"
 {YY_PRINT; return(MAXTIMEEND);}
 	YY_BREAK
 case 99:
 /* rule 99 can match eol */
 YY_RULE_SETUP
-#line 238 "OSParseosol.l"
+#line 236 "OSParseosol.l"
 {YY_PRINT; return(SCHEDULEDSTARTTIMESTART);}
 	YY_BREAK
 case 100:
 /* rule 100 can match eol */
 YY_RULE_SETUP
-#line 239 "OSParseosol.l"
+#line 237 "OSParseosol.l"
 {YY_PRINT; return(SCHEDULEDSTARTTIMEEND);}
 	YY_BREAK
 case 101:
 /* rule 101 can match eol */
 YY_RULE_SETUP
-#line 240 "OSParseosol.l"
+#line 238 "OSParseosol.l"
 {YY_PRINT; return(DEPENDENCIESSTART);}
 	YY_BREAK
 case 102:
 /* rule 102 can match eol */
 YY_RULE_SETUP
-#line 241 "OSParseosol.l"
+#line 239 "OSParseosol.l"
 {YY_PRINT; return(DEPENDENCIESEND);}
 	YY_BREAK
 case 103:
 /* rule 103 can match eol */
 YY_RULE_SETUP
-#line 242 "OSParseosol.l"
+#line 240 "OSParseosol.l"
 {YY_PRINT; return(REQUIREDDIRECTORIESSTART);}
 	YY_BREAK
 case 104:
 /* rule 104 can match eol */
 YY_RULE_SETUP
-#line 243 "OSParseosol.l"
+#line 241 "OSParseosol.l"
 {YY_PRINT; return(REQUIREDDIRECTORIESEND);}
 	YY_BREAK
 case 105:
 /* rule 105 can match eol */
 YY_RULE_SETUP
-#line 244 "OSParseosol.l"
+#line 242 "OSParseosol.l"
 {YY_PRINT; return(PATHSTART);}
 	YY_BREAK
 case 106:
 /* rule 106 can match eol */
 YY_RULE_SETUP
-#line 245 "OSParseosol.l"
+#line 243 "OSParseosol.l"
 {YY_PRINT; return(PATHEND);}
 	YY_BREAK
 case 107:
 /* rule 107 can match eol */
 YY_RULE_SETUP
-#line 246 "OSParseosol.l"
+#line 244 "OSParseosol.l"
 {YY_PRINT; return(REQUIREDFILESSTART);}
 	YY_BREAK
 case 108:
 /* rule 108 can match eol */
 YY_RULE_SETUP
-#line 247 "OSParseosol.l"
+#line 245 "OSParseosol.l"
 {YY_PRINT; return(REQUIREDFILESEND);}
 	YY_BREAK
 case 109:
 /* rule 109 can match eol */
 YY_RULE_SETUP
-#line 248 "OSParseosol.l"
+#line 246 "OSParseosol.l"
 {YY_PRINT; return(DIRECTORIESTOMAKESTART);}
 	YY_BREAK
 case 110:
 /* rule 110 can match eol */
 YY_RULE_SETUP
-#line 249 "OSParseosol.l"
+#line 247 "OSParseosol.l"
 {YY_PRINT; return(DIRECTORIESTOMAKEEND);}
 	YY_BREAK
 case 111:
 /* rule 111 can match eol */
 YY_RULE_SETUP
-#line 250 "OSParseosol.l"
+#line 248 "OSParseosol.l"
 {YY_PRINT; return(FILESTOCREATESTART);}
 	YY_BREAK
 case 112:
 /* rule 112 can match eol */
 YY_RULE_SETUP
-#line 251 "OSParseosol.l"
+#line 249 "OSParseosol.l"
 {YY_PRINT; return(FILESTOCREATEEND);}
 	YY_BREAK
 case 113:
 /* rule 113 can match eol */
 YY_RULE_SETUP
-#line 252 "OSParseosol.l"
+#line 250 "OSParseosol.l"
 {YY_PRINT; return(INPUTDIRECTORIESTOMOVESTART);}
 	YY_BREAK
 case 114:
 /* rule 114 can match eol */
 YY_RULE_SETUP
-#line 253 "OSParseosol.l"
+#line 251 "OSParseosol.l"
 {YY_PRINT; return(INPUTDIRECTORIESTOMOVEEND);}
 	YY_BREAK
 case 115:
 /* rule 115 can match eol */
 YY_RULE_SETUP
-#line 254 "OSParseosol.l"
+#line 252 "OSParseosol.l"
 {YY_PRINT; return(INPUTFILESTOMOVESTART);}
 	YY_BREAK
 case 116:
 /* rule 116 can match eol */
 YY_RULE_SETUP
-#line 255 "OSParseosol.l"
+#line 253 "OSParseosol.l"
 {YY_PRINT; return(INPUTFILESTOMOVEEND);}
 	YY_BREAK
 case 117:
 /* rule 117 can match eol */
 YY_RULE_SETUP
-#line 256 "OSParseosol.l"
+#line 254 "OSParseosol.l"
 {YY_PRINT; return(PATHPAIRSTART);}
 	YY_BREAK
 case 118:
 /* rule 118 can match eol */
 YY_RULE_SETUP
-#line 257 "OSParseosol.l"
+#line 255 "OSParseosol.l"
 {YY_PRINT; return(PATHPAIREND);}
 	YY_BREAK
 case 119:
 /* rule 119 can match eol */
 YY_RULE_SETUP
-#line 258 "OSParseosol.l"
+#line 256 "OSParseosol.l"
 {YY_PRINT; return(OUTPUTDIRECTORIESTOMOVESTART);}
 	YY_BREAK
 case 120:
 /* rule 120 can match eol */
 YY_RULE_SETUP
-#line 259 "OSParseosol.l"
+#line 257 "OSParseosol.l"
 {YY_PRINT; return(OUTPUTDIRECTORIESTOMOVEEND);}
 	YY_BREAK
 case 121:
 /* rule 121 can match eol */
 YY_RULE_SETUP
-#line 260 "OSParseosol.l"
+#line 258 "OSParseosol.l"
 {YY_PRINT; return(OUTPUTFILESTOMOVESTART);}
 	YY_BREAK
 case 122:
 /* rule 122 can match eol */
 YY_RULE_SETUP
-#line 261 "OSParseosol.l"
+#line 259 "OSParseosol.l"
 {YY_PRINT; return(OUTPUTFILESTOMOVEEND);}
 	YY_BREAK
 case 123:
 /* rule 123 can match eol */
 YY_RULE_SETUP
-#line 262 "OSParseosol.l"
+#line 260 "OSParseosol.l"
 {YY_PRINT; return(DIRECTORIESTODELETESTART);}
 	YY_BREAK
 case 124:
 /* rule 124 can match eol */
 YY_RULE_SETUP
-#line 263 "OSParseosol.l"
+#line 261 "OSParseosol.l"
 {YY_PRINT; return(DIRECTORIESTODELETEEND);}
 	YY_BREAK
 case 125:
 /* rule 125 can match eol */
 YY_RULE_SETUP
-#line 264 "OSParseosol.l"
+#line 262 "OSParseosol.l"
 {YY_PRINT; return(FILESTODELETESTART);}
 	YY_BREAK
 case 126:
 /* rule 126 can match eol */
 YY_RULE_SETUP
-#line 265 "OSParseosol.l"
+#line 263 "OSParseosol.l"
 {YY_PRINT; return(FILESTODELETEEND);}
 	YY_BREAK
 case 127:
 /* rule 127 can match eol */
 YY_RULE_SETUP
-#line 266 "OSParseosol.l"
+#line 264 "OSParseosol.l"
 {YY_PRINT; return(PROCESSESTOKILLSTART);}
 	YY_BREAK
 case 128:
 /* rule 128 can match eol */
 YY_RULE_SETUP
-#line 267 "OSParseosol.l"
+#line 265 "OSParseosol.l"
 {YY_PRINT; return(PROCESSESTOKILLEND);}
 	YY_BREAK
 case 129:
 /* rule 129 can match eol */
 YY_RULE_SETUP
-#line 268 "OSParseosol.l"
+#line 266 "OSParseosol.l"
 {YY_PRINT; return(PROCESSSTART);}
 	YY_BREAK
 case 130:
 /* rule 130 can match eol */
 YY_RULE_SETUP
-#line 269 "OSParseosol.l"
+#line 267 "OSParseosol.l"
 {YY_PRINT; return(PROCESSEND);}
 	YY_BREAK
 case 131:
 /* rule 131 can match eol */
 YY_RULE_SETUP
-#line 272 "OSParseosol.l"
+#line 270 "OSParseosol.l"
 {YY_PRINT; return(VARIABLESSTART);}
 	YY_BREAK
 case 132:
 /* rule 132 can match eol */
 YY_RULE_SETUP
-#line 273 "OSParseosol.l"
+#line 271 "OSParseosol.l"
 {YY_PRINT; return(VARIABLESEND);}
 	YY_BREAK
 case 133:
 /* rule 133 can match eol */
 YY_RULE_SETUP
-#line 274 "OSParseosol.l"
+#line 272 "OSParseosol.l"
 {YY_PRINT; return(INITIALVARIABLEVALUESSTART);}
 	YY_BREAK
 case 134:
 /* rule 134 can match eol */
 YY_RULE_SETUP
-#line 275 "OSParseosol.l"
+#line 273 "OSParseosol.l"
 {YY_PRINT; return(INITIALVARIABLEVALUESEND);}
 	YY_BREAK
 case 135:
 /* rule 135 can match eol */
 YY_RULE_SETUP
-#line 276 "OSParseosol.l"
+#line 274 "OSParseosol.l"
 {YY_PRINT; return(INITIALVARIABLEVALUESSTRINGSTART);}
 	YY_BREAK
 case 136:
 /* rule 136 can match eol */
 YY_RULE_SETUP
-#line 277 "OSParseosol.l"
+#line 275 "OSParseosol.l"
 {YY_PRINT; return(INITIALVARIABLEVALUESSTRINGEND);}
 	YY_BREAK
 case 137:
 /* rule 137 can match eol */
 YY_RULE_SETUP
-#line 278 "OSParseosol.l"
+#line 276 "OSParseosol.l"
 {YY_PRINT; return(VARSTART);}
 	YY_BREAK
 case 138:
 /* rule 138 can match eol */
 YY_RULE_SETUP
-#line 279 "OSParseosol.l"
+#line 277 "OSParseosol.l"
 {YY_PRINT; return(VAREND);}
 	YY_BREAK
 case 139:
 /* rule 139 can match eol */
 YY_RULE_SETUP
-#line 280 "OSParseosol.l"
+#line 278 "OSParseosol.l"
 {YY_PRINT; return(OBJECTIVESSTART);}
 	YY_BREAK
 case 140:
 /* rule 140 can match eol */
 YY_RULE_SETUP
-#line 281 "OSParseosol.l"
+#line 279 "OSParseosol.l"
 {YY_PRINT; return(OBJECTIVESEND);}
 	YY_BREAK
 case 141:
 /* rule 141 can match eol */
 YY_RULE_SETUP
-#line 282 "OSParseosol.l"
+#line 280 "OSParseosol.l"
 {YY_PRINT; return(INITIALOBJECTIVEVALUESSTART);}
 	YY_BREAK
 case 142:
 /* rule 142 can match eol */
 YY_RULE_SETUP
-#line 283 "OSParseosol.l"
+#line 281 "OSParseosol.l"
 {YY_PRINT; return(INITIALOBJECTIVEVALUESEND);}
 	YY_BREAK
 case 143:
 /* rule 143 can match eol */
 YY_RULE_SETUP
-#line 284 "OSParseosol.l"
+#line 282 "OSParseosol.l"
 {YY_PRINT; return(OBJSTART);}
 	YY_BREAK
 case 144:
 /* rule 144 can match eol */
 YY_RULE_SETUP
-#line 285 "OSParseosol.l"
+#line 283 "OSParseosol.l"
 {YY_PRINT; return(OBJEND);}
 	YY_BREAK
 case 145:
 /* rule 145 can match eol */
 YY_RULE_SETUP
-#line 286 "OSParseosol.l"
+#line 284 "OSParseosol.l"
 {YY_PRINT; return(INITIALOBJECTIVEBOUNDSSTART);}
 	YY_BREAK
 case 146:
 /* rule 146 can match eol */
 YY_RULE_SETUP
-#line 287 "OSParseosol.l"
+#line 285 "OSParseosol.l"
 {YY_PRINT; return(INITIALOBJECTIVEBOUNDSEND);}
 	YY_BREAK
 case 147:
 /* rule 147 can match eol */
 YY_RULE_SETUP
-#line 288 "OSParseosol.l"
+#line 286 "OSParseosol.l"
 {YY_PRINT; return(CONSTRAINTSSTART);}
 	YY_BREAK
 case 148:
 /* rule 148 can match eol */
 YY_RULE_SETUP
-#line 289 "OSParseosol.l"
+#line 287 "OSParseosol.l"
 {YY_PRINT; return(CONSTRAINTSEND);}
 	YY_BREAK
 case 149:
 /* rule 149 can match eol */
 YY_RULE_SETUP
-#line 290 "OSParseosol.l"
+#line 288 "OSParseosol.l"
 {YY_PRINT; return(INITIALCONSTRAINTVALUESSTART);}
 	YY_BREAK
 case 150:
 /* rule 150 can match eol */
 YY_RULE_SETUP
-#line 291 "OSParseosol.l"
+#line 289 "OSParseosol.l"
 {YY_PRINT; return(INITIALCONSTRAINTVALUESEND);}
 	YY_BREAK
 case 151:
 /* rule 151 can match eol */
 YY_RULE_SETUP
-#line 292 "OSParseosol.l"
+#line 290 "OSParseosol.l"
 {YY_PRINT; return(CONSTART);}
 	YY_BREAK
 case 152:
 /* rule 152 can match eol */
 YY_RULE_SETUP
-#line 293 "OSParseosol.l"
+#line 291 "OSParseosol.l"
 {YY_PRINT; return(CONEND);}
 	YY_BREAK
 case 153:
 /* rule 153 can match eol */
 YY_RULE_SETUP
-#line 294 "OSParseosol.l"
+#line 292 "OSParseosol.l"
 {YY_PRINT; return(INITIALDUALVALUESSTART);}
 	YY_BREAK
 case 154:
 /* rule 154 can match eol */
 YY_RULE_SETUP
-#line 295 "OSParseosol.l"
+#line 293 "OSParseosol.l"
 {YY_PRINT; return(INITIALDUALVALUESEND);}
 	YY_BREAK
 case 155:
 /* rule 155 can match eol */
 YY_RULE_SETUP
-#line 296 "OSParseosol.l"
+#line 294 "OSParseosol.l"
 {YY_PRINT; return(SOLVEROPTIONSSTART);}
 	YY_BREAK
 case 156:
 /* rule 156 can match eol */
 YY_RULE_SETUP
-#line 297 "OSParseosol.l"
+#line 295 "OSParseosol.l"
 {YY_PRINT; return(SOLVEROPTIONSEND);}
 	YY_BREAK
 case 157:
 /* rule 157 can match eol */
 YY_RULE_SETUP
-#line 298 "OSParseosol.l"
+#line 296 "OSParseosol.l"
 {YY_PRINT; return(SOLVEROPTIONSTART);}
 	YY_BREAK
 case 158:
 /* rule 158 can match eol */
 YY_RULE_SETUP
-#line 299 "OSParseosol.l"
+#line 297 "OSParseosol.l"
 {YY_PRINT; return(SOLVEROPTIONEND);}
 	YY_BREAK
 case 159:
 /* rule 159 can match eol */
 YY_RULE_SETUP
-#line 302 "OSParseosol.l"
+#line 300 "OSParseosol.l"
 { YY_PRINT; /*yylval->sval = strdup( yytext);*/   yylval->sval = yytext; yyextra->errorText = yylval->sval;  return (ELEMENTTEXT); }
 	YY_BREAK
 case 160:
 YY_RULE_SETUP
-#line 305 "OSParseosol.l"
+#line 303 "OSParseosol.l"
 BEGIN comment;
 	YY_BREAK
 case 161:
-#line 307 "OSParseosol.l"
+#line 305 "OSParseosol.l"
 case 162:
 /* rule 162 can match eol */
 YY_RULE_SETUP
-#line 307 "OSParseosol.l"
+#line 305 "OSParseosol.l"
 ;
 	YY_BREAK
 case 163:
 YY_RULE_SETUP
-#line 308 "OSParseosol.l"
+#line 306 "OSParseosol.l"
 BEGIN 0;
 	YY_BREAK
 case 164:
 YY_RULE_SETUP
-#line 310 "OSParseosol.l"
+#line 308 "OSParseosol.l"
 BEGIN xmldeclaration;
 	YY_BREAK
 case 165:
-#line 312 "OSParseosol.l"
+#line 310 "OSParseosol.l"
 case 166:
 /* rule 166 can match eol */
 YY_RULE_SETUP
-#line 312 "OSParseosol.l"
+#line 310 "OSParseosol.l"
 ;
 	YY_BREAK
 case 167:
 YY_RULE_SETUP
-#line 313 "OSParseosol.l"
+#line 311 "OSParseosol.l"
 BEGIN 0;
 	YY_BREAK
 case 168:
 /* rule 168 can match eol */
 YY_RULE_SETUP
-#line 316 "OSParseosol.l"
+#line 314 "OSParseosol.l"
 {YY_PRINT;  BEGIN 0; /*yylval->sval = strdup(yytext);*/   yylval->sval = yytext; return(ATTRIBUTETEXT);}
 	YY_BREAK
 case 169:
 /* rule 169 can match eol */
 YY_RULE_SETUP
-#line 317 "OSParseosol.l"
+#line 315 "OSParseosol.l"
 {YY_PRINT;  BEGIN 0; /*yylval->sval = strdup(yytext);*/   yylval->sval = yytext;  return(ATTRIBUTETEXT);}
 	YY_BREAK
 case 170:
 /* rule 170 can match eol */
 YY_RULE_SETUP
-#line 318 "OSParseosol.l"
+#line 316 "OSParseosol.l"
 {YY_PRINT;  BEGIN 0; /*yylval->sval = strdup(yytext);*/   yylval->sval = yytext;   return(OSOLATTRIBUTETEXT);}
 	YY_BREAK
 case 171:
 YY_RULE_SETUP
-#line 320 "OSParseosol.l"
+#line 318 "OSParseosol.l"
 {  
 	std::string error;
 	std::ostringstream outStr;
@@ -3108,10 +3106,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 172:
 YY_RULE_SETUP
-#line 332 "OSParseosol.l"
+#line 330 "OSParseosol.l"
 ECHO;
 	YY_BREAK
-#line 3115 "OSParseosol.cpp"
+#line 3113 "OSParseosol.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(osolattributetext):
 case YY_STATE_EOF(doublequoteattributetext):
@@ -4260,7 +4258,7 @@ void osolfree (void * ptr , yyscan_t yyscanner)
 
 #define YYTABLES_NAME "yytables"
 
-#line 332 "OSParseosol.l"
+#line 330 "OSParseosol.l"
 
 
 

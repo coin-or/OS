@@ -25,6 +25,7 @@
 	osolservicePresent(false),
 	osoljobPresent(false),
 	osoloptimizationPresent(false),
+
 	serviceURIPresent(false),
 	serviceNamePresent(false),
 	instanceNamePresent(false),
@@ -39,6 +40,7 @@
 	transportTypeattON(false),
 	otherGeneralOptionsPresent(false),
       numberOfOtherGeneralOptions(0),
+
 	minDiskSpacePresent(false),
 	minDiskSpaceUnitPresent(false),
 	minMemorySizePresent(false),
@@ -51,6 +53,7 @@
 	serviceTypePresent(false),
 	otherServiceOptionsPresent(false),
       numberOfOtherServiceOptions(0),
+
 	maxTimePresent(false),
 	maxTimeUnitPresent(false),
 	scheduledStartTimePresent(false),
@@ -83,6 +86,7 @@
 	numberOfProcessesToKill(0),
 	otherJobOptionsPresent(false),
       numberOfOtherJobOptions(0),
+
 	numberOfVariables(0),
 	numberOfVariablesPresent(false),
 	numberOfObjectives(0),
@@ -113,9 +117,17 @@
 	initialDualVariableValuesPresent(false),
 	numberOfDuals(0),
 	numberOfSolverOptions(0),
+
+	numberOfObj(0),
+
+	otherOptionNumberPresent(false),
 	otherOptionNamePresent(false),
 	otherOptionValuePresent(false),
+	otherOptionSolverPresent(false),
+	otherOptionCategoryPresent(false),
+	otherOptionTypePresent(false),
 	otherOptionDescriptionPresent(false),
+
 	solverOptionNamePresent(false),
 	solverOptionValuePresent(false),
 	solverOptionSolverPresent(false),

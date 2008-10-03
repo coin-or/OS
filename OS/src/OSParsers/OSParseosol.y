@@ -1,6 +1,6 @@
 /** @file parseosol.y
- * 
- * @author  Gus Gassmann, Jun Ma, Kipp Martin, 
+ *
+ * @author  Gus Gassmann, Jun Ma, Kipp Martin,
  * @version 1.1, 10/07/2008
  * @since   OS1.1
  *
@@ -8,22 +8,22 @@
  * Copyright (C) 2005-2008, Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, Dalhousie University, and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Common Public License.
  * Please see the accompanying LICENSE file in root directory for terms.
- * 
+ *
  */
 
 %{
 
 
- 
+
 #include "OSParameters.h"
 #include "OSConfig.h"
 #include "OSErrorClass.h"
 #include "OSOption.h"
 #include "OSoLParserData.h"
 #include <iostream>
-#include <sstream> 
+#include <sstream>
 #include <stdio.h>
 
 
@@ -57,7 +57,7 @@ void  yygetOSOption(const char *ch, OSOption* m_osoption, OSoLParserData *m_pars
 	char* sval;
 }
 
-/* %name-prefix="osol" 
+/* %name-prefix="osol"
 this fails in Mac OS X
 */
 
@@ -65,7 +65,7 @@ this fails in Mac OS X
 
 void osolerror(YYLTYPE* type, OSOption *osoption,  OSoLParserData *parserData, const char* errormsg ) ;
 int osollex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
- 
+
 #define scanner parserData->scanner
 %}
 
@@ -76,7 +76,7 @@ int osollex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token <sval> QUOTE
 
 
-%token GREATERTHAN ENDOFELEMENT 
+%token GREATERTHAN ENDOFELEMENT
 %token OSOLSTART OSOLATTRIBUTETEXT OSOLEND
 
 
@@ -92,16 +92,16 @@ int osollex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 
 %token GENERALSTART GENERALEND SYSTEMSTART SYSTEMEND SERVICESTART SERVICEEND;
 %token JOBSTART JOBEND OPTIMIZATIONSTART OPTIMIZATIONEND;
-%token SERVICEURISTART SERVICEURIEND SERVICENAMESTART SERVICENAMEEND; 
+%token SERVICEURISTART SERVICEURIEND SERVICENAMESTART SERVICENAMEEND;
 %token INSTANCENAMESTART INSTANCENAMEEND INSTANCELOCATIONSTART INSTANCELOCATIONEND;
 %token JOBIDSTART JOBIDEND SOLVERTOINVOKESTART SOLVERTOINVOKEEND;
 %token LICENSESTART LICENSEEND USERNAMESTART USERNAMEEND PASSWORDSTART PASSWORDEND;
 %token CONTACTSTART CONTACTEND OTHEROPTIONSSTART OTHEROPTIONSEND OTHERSTART OTHEREND;
 %token MINDISKSPACESTART MINDISKSPACEEND MINMEMORYSIZESTART MINMEMORYSIZEEND MINCPUSPEEDSTART MINCPUSPEEDEND;
 %token MINCPUNUMBERSTART MINCPUNUMBEREND SERVICETYPESTART SERVICETYPEEND;
-%token MAXTIMESTART MAXTIMEEND SCHEDULEDSTARTTIMESTART SCHEDULEDSTARTTIMEEND; 
+%token MAXTIMESTART MAXTIMEEND SCHEDULEDSTARTTIMESTART SCHEDULEDSTARTTIMEEND;
 %token DEPENDENCIESSTART DEPENDENCIESEND;
-%token REQUIREDDIRECTORIESSTART REQUIREDDIRECTORIESEND REQUIREDFILESSTART REQUIREDFILESEND; 
+%token REQUIREDDIRECTORIESSTART REQUIREDDIRECTORIESEND REQUIREDFILESSTART REQUIREDFILESEND;
 %token PATHSTART PATHEND PATHPAIRSTART PATHPAIREND;
 %token DIRECTORIESTOMAKESTART DIRECTORIESTOMAKEEND FILESTOCREATESTART FILESTOCREATEEND;
 %token DIRECTORIESTODELETESTART DIRECTORIESTODELETEEND FILESTODELETESTART FILESTODELETEEND;
@@ -127,22 +127,22 @@ int osollex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 osoldoc: osolstart GREATERTHAN osolcontent OSOLEND;
 	| osolstart ENDOFELEMENT;
 
-osolstart:	OSOLSTART   
+osolstart:	OSOLSTART
 	| OSOLSTART OSOLATTRIBUTETEXT ;
 
 osolcontent: osolgeneral osolsystem osolservice osoljob osoloptimization ;
 
 osolgeneral: | generalhead generalbody;
 
-generalhead: GENERALSTART 
+generalhead: GENERALSTART
 {	if (parserData->osolgeneralPresent)
 	{	osolerror( NULL, osoption, parserData, "only one <general> element allowed");
 	}
 	else
-	{	parserData->osolgeneralPresent = true;	
+	{	parserData->osolgeneralPresent = true;
 		osoption->general = new GeneralOption();
 	}
-}; 
+};
 
 generalbody:
 	  GREATERTHAN generalcontent GENERALEND
@@ -156,14 +156,14 @@ generaloption: serviceURI | servicename | instancename | instancelocation | jobi
 
 serviceURI: serviceURIhead serviceURIbody;
 
-serviceURIhead: SERVICEURISTART 
+serviceURIhead: SERVICEURISTART
 {	if (parserData->serviceURIPresent)
 	{	osolerror( NULL, osoption, parserData, "only one <serviceURI> element allowed");
 	}
 	else
-	{	parserData->serviceURIPresent = true;	
+	{	parserData->serviceURIPresent = true;
 	}
-}; 
+};
 
 serviceURIbody: ENDOFELEMENT
 	| GREATERTHAN SERVICEURIEND
@@ -172,14 +172,14 @@ serviceURIbody: ENDOFELEMENT
 
 servicename: servicenamehead servicenamebody;
 
-servicenamehead: SERVICENAMESTART 
+servicenamehead: SERVICENAMESTART
 {	if (parserData->serviceNamePresent)
 	{	osolerror( NULL, osoption, parserData, "only one <serviceName> element allowed");
 	}
 	else
-	{	parserData->serviceNamePresent = true;	
+	{	parserData->serviceNamePresent = true;
 	}
-}; 
+};
 
 servicenamebody: ENDOFELEMENT
 	| GREATERTHAN SERVICENAMEEND
@@ -188,14 +188,14 @@ servicenamebody: ENDOFELEMENT
 
 instancename: instancenamehead instancenamebody;
 
-instancenamehead: INSTANCENAMESTART 
+instancenamehead: INSTANCENAMESTART
 {	if (parserData->instanceNamePresent)
 	{	osolerror( NULL, osoption, parserData, "only one <instanceName> element allowed");
 	}
 	else
-	{	parserData->instanceNamePresent = true;	
+	{	parserData->instanceNamePresent = true;
 	}
-}; 
+};
 
 instancenamebody: ENDOFELEMENT
 	| GREATERTHAN INSTANCENAMEEND
@@ -204,7 +204,7 @@ instancenamebody: ENDOFELEMENT
 
 instancelocation: instancelocationhead locationtypeatt instancelocationbody;
 
-instancelocationhead: INSTANCELOCATIONSTART 
+instancelocationhead: INSTANCELOCATIONSTART
 {	if (parserData->instanceLocationPresent)
 	{	osolerror( NULL, osoption, parserData, "only one <instanceLocation> element allowed");
 	}
@@ -212,7 +212,7 @@ instancelocationhead: INSTANCELOCATIONSTART
 	{	parserData->instanceLocationPresent = true;
 		osoption->general->instanceLocation = new InstanceLocationOption();
 	}
-}; 
+};
 
 locationtypeatt: | LOCATIONTYPEATT ATTRIBUTETEXT {osoption->general->instanceLocation->locationType = $2;} QUOTE;
 
@@ -224,14 +224,14 @@ instancelocationtext: | ELEMENTTEXT {osoption->general->instanceLocation->value 
 
 jobid: jobidhead jobidbody;
 
-jobidhead: JOBIDSTART 
+jobidhead: JOBIDSTART
 {	if (parserData->jobIDPresent)
 	{	osolerror( NULL, osoption, parserData, "only one <jobID> element allowed");
 	}
 	else
-	{	parserData->jobIDPresent = true;	
+	{	parserData->jobIDPresent = true;
 	}
-}; 
+};
 
 jobidbody: ENDOFELEMENT
 	| GREATERTHAN JOBIDEND
@@ -240,14 +240,14 @@ jobidbody: ENDOFELEMENT
 
 solvertoinvoke: solvertoinvokehead solvertoinvokebody;
 
-solvertoinvokehead: SOLVERTOINVOKESTART 
+solvertoinvokehead: SOLVERTOINVOKESTART
 {	if (parserData->solverToInvokePresent)
 	{	osolerror( NULL, osoption, parserData, "only one <solverToInvoke> element allowed");
 	}
 	else
-	{	parserData->solverToInvokePresent = true;	
+	{	parserData->solverToInvokePresent = true;
 	}
-}; 
+};
 
 solvertoinvokebody: ENDOFELEMENT
 	| GREATERTHAN SOLVERTOINVOKEEND
@@ -256,14 +256,14 @@ solvertoinvokebody: ENDOFELEMENT
 
 license: licensehead licensebody;
 
-licensehead: LICENSESTART 
+licensehead: LICENSESTART
 {	if (parserData->licensePresent)
 	{	osolerror( NULL, osoption, parserData, "only one <license> element allowed");
 	}
 	else
 	{	parserData->licensePresent = true;	
 	}
-}; 
+};
 
 licensebody: ENDOFELEMENT
 	| GREATERTHAN LICENSEEND
@@ -272,14 +272,14 @@ licensebody: ENDOFELEMENT
 
 username: usernamehead usernamebody;
 
-usernamehead: USERNAMESTART 
+usernamehead: USERNAMESTART
 {	if (parserData->usernamePresent)
 	{	osolerror( NULL, osoption, parserData, "only one <userName> element allowed");
 	}
 	else
-	{	parserData->usernamePresent = true;	
+	{	parserData->usernamePresent = true;
 	}
-}; 
+};
 
 usernamebody: ENDOFELEMENT
 	| GREATERTHAN USERNAMEEND
@@ -288,14 +288,14 @@ usernamebody: ENDOFELEMENT
 
 password: passwordhead passwordbody;
 
-passwordhead: PASSWORDSTART 
+passwordhead: PASSWORDSTART
 {	if (parserData->passwordPresent)
 	{	osolerror( NULL, osoption, parserData, "only one <password> element allowed");
 	}
 	else
-	{	parserData->passwordPresent = true;	
+	{	parserData->passwordPresent = true;
 	}
-}; 
+};
 
 passwordbody: ENDOFELEMENT
 	| GREATERTHAN PASSWORDEND
@@ -304,7 +304,7 @@ passwordbody: ENDOFELEMENT
 
 contact: contacthead transporttypeatt contactbody;
 
-contacthead: CONTACTSTART 
+contacthead: CONTACTSTART
 {	if (parserData->contactPresent)
 	{	osolerror( NULL, osoption, parserData, "only one <contact> element allowed");
 	}
@@ -312,7 +312,7 @@ contacthead: CONTACTSTART
 	{	parserData->contactPresent = true;
 		osoption->general->contact = new ContactOption();
 	}
-}; 
+};
 
 transporttypeatt: | TRANSPORTTYPEATT ATTRIBUTETEXT {osoption->general->contact->transportType = $2;} QUOTE;
 
@@ -324,15 +324,15 @@ contacttext: | ELEMENTTEXT {osoption->general->contact->value = $1;};
 
 othergeneraloptions: othergeneraloptionshead numberofothergeneraloptions GREATERTHAN othergeneraloptionsbody;
 
-othergeneraloptionshead: OTHEROPTIONSSTART 
+othergeneraloptionshead: OTHEROPTIONSSTART
 {	if (parserData->otherGeneralOptionsPresent)
 	{	osolerror( NULL, osoption, parserData, "only one <otherOptions> element allowed");
 	}
 	else
 	{	parserData->otherGeneralOptionsPresent = true;
-		osoption->general->otherOptions = new OtherOptions();	
+		osoption->general->otherOptions = new OtherOptions();
 	}
-}; 
+};
 
 numberofothergeneraloptions: NUMBEROFOTHEROPTIONSATT QUOTE INTEGER QUOTE
 {	osoption->general->otherOptions->numberOfOtherOptions = $3;
@@ -342,16 +342,16 @@ numberofothergeneraloptions: NUMBEROFOTHEROPTIONSATT QUOTE INTEGER QUOTE
 
 othergeneraloptionsbody: othergeneraloptionslist OTHEROPTIONSEND
 {	if (parserData->numberOfOtherGeneralOptions != osoption->general->otherOptions->numberOfOtherOptions)
-		osolerror (NULL, osoption, parserData, "wrong number of other options in <general> element"); 
+		osolerror (NULL, osoption, parserData, "wrong number of other options in <general> element");
 };
 
 othergeneraloptionslist: | othergeneraloptionslist othergeneraloption;
 
-othergeneraloption: OTHERSTART 
+othergeneraloption: OTHERSTART
 	{	if (parserData->numberOfOtherGeneralOptions >= osoption->general->otherOptions->numberOfOtherOptions)
 		{	osolerror (NULL, osoption, parserData, "too many other options in <general> element");
 		};
-	} 
+	}
     othergeneralattributes othergeneraloptionend
 {	if (!parserData->otherOptionNamePresent)
 		osolerror (NULL, osoption, parserData, "name attribute must be present");
@@ -367,35 +367,35 @@ othergeneralattributes: | othergeneralattributes othergeneralattribute;
 
 othergeneralattribute: generaloptionnameatt | generaloptionvalueatt | generaloptiondescriptionatt;
 
-generaloptionnameatt: NAMEATT ATTRIBUTETEXT 
+generaloptionnameatt: NAMEATT ATTRIBUTETEXT
 {	if (parserData->otherOptionNamePresent)
 	{	osolerror( NULL, osoption, parserData, "only one name attribute allowed");
 	}
 	else
 	{	parserData->otherOptionNamePresent = true;
-		osoption->general->otherOptions->other[parserData->numberOfOtherGeneralOptions]->name = $2;	
+		osoption->general->otherOptions->other[parserData->numberOfOtherGeneralOptions]->name = $2;
 	}
 }
-QUOTE; 
+QUOTE;
 
-generaloptionvalueatt: VALUEATT ATTRIBUTETEXT 
+generaloptionvalueatt: VALUEATT ATTRIBUTETEXT
 {	if (parserData->otherOptionValuePresent)
 	{	osolerror( NULL, osoption, parserData, "only one value attribute allowed");
 	}
 	else
 	{	parserData->otherOptionValuePresent = true;
-		osoption->general->otherOptions->other[parserData->numberOfOtherGeneralOptions]->value = $2;	
+		osoption->general->otherOptions->other[parserData->numberOfOtherGeneralOptions]->value = $2;
 	}
 }
 QUOTE;
 
-generaloptiondescriptionatt: DESCRIPTIONATT ATTRIBUTETEXT 
+generaloptiondescriptionatt: DESCRIPTIONATT ATTRIBUTETEXT
 {	if (parserData->otherOptionDescriptionPresent)
 	{	osolerror( NULL, osoption, parserData, "only one description attribute allowed");
 	}
 	else
 	{	parserData->otherOptionDescriptionPresent = true;
-		osoption->general->otherOptions->other[parserData->numberOfOtherGeneralOptions]->description = $2;	
+		osoption->general->otherOptions->other[parserData->numberOfOtherGeneralOptions]->description = $2;
 	}
 }
 QUOTE;
@@ -405,15 +405,15 @@ othergeneraloptionend: ENDOFELEMENT | GREATERTHAN OTHEREND;
 
 osolsystem: | systemhead systembody;
 
-systemhead: SYSTEMSTART 
+systemhead: SYSTEMSTART
 {	if (parserData->osolsystemPresent)
 	{	osolerror( NULL, osoption, parserData, "only one <system> element allowed");
 	}
 	else
-	{	parserData->osolsystemPresent = true;	
+	{	parserData->osolsystemPresent = true;
 		osoption->system = new SystemOption();
 	}
-}; 
+};
 
 systembody:
 	  GREATERTHAN systemcontent SYSTEMEND
@@ -430,51 +430,51 @@ mindiskspacehead: MINDISKSPACESTART
 	{	osolerror( NULL, osoption, parserData, "only one <minDiskSpace> element allowed");
 	}
 	else
-	{	parserData-> minDiskSpacePresent = true;	
+	{	parserData-> minDiskSpacePresent = true;
 		osoption->system->minDiskSpace = new MinDiskSpace();
 	}
-}; 
+};
 
 mindiskspaceunit: | UNITATT ATTRIBUTETEXT {osoption->system->minDiskSpace->unit = $2;} QUOTE;
 
 mindiskspacebody: ENDOFELEMENT
-	| GREATERTHAN MINDISKSPACEEND 
+	| GREATERTHAN MINDISKSPACEEND
 	| GREATERTHAN DOUBLE  {osoption->system->minDiskSpace->value = $2;} MINDISKSPACEEND
 	| GREATERTHAN INTEGER {osoption->system->minDiskSpace->value = $2;} MINDISKSPACEEND;
 
 
 minmemorysize: minmemorysizehead minmemoryunit minmemorysizebody;
 
-minmemorysizehead: MINMEMORYSIZESTART 
+minmemorysizehead: MINMEMORYSIZESTART
 {	if (parserData->minMemorySizePresent)
 	{	osolerror( NULL, osoption, parserData, "only one <minMemorySize> element allowed");
 	}
 	else
-	{	parserData-> minMemorySizePresent = true;	
+	{	parserData-> minMemorySizePresent = true;
 		osoption->system->minMemorySize = new MinMemorySize();
 	}
-}; 
+};
 
 minmemoryunit: | UNITATT ATTRIBUTETEXT {osoption->system->minMemorySize->unit = $2;} QUOTE;
 
 minmemorysizebody: ENDOFELEMENT
-	| GREATERTHAN MINMEMORYSIZEEND 
+	| GREATERTHAN MINMEMORYSIZEEND
 	| GREATERTHAN DOUBLE  {osoption->system->minMemorySize->value = $2;} MINMEMORYSIZEEND
 	| GREATERTHAN INTEGER {osoption->system->minMemorySize->value = $2;} MINMEMORYSIZEEND;
 
 
 mincpuspeed: mincpuspeedhead mincpuspeedunit mincpuspeedbody;
 
-mincpuspeedhead: MINCPUSPEEDSTART 
+mincpuspeedhead: MINCPUSPEEDSTART
 {	if (parserData->minCPUSpeedPresent)
 	{	osolerror( NULL, osoption, parserData, "only one <minCPUSpeed> element allowed");
 	}
 	else
-	{	parserData-> minCPUSpeedPresent = true;	
+	{	parserData-> minCPUSpeedPresent = true;
 		osoption->system->minCPUSpeed = new MinCPUSpeed();
 	}
-}; 
- 
+};
+
 mincpuspeedunit: | UNITATT ATTRIBUTETEXT {osoption->system->minCPUSpeed->unit = $2;} QUOTE;
 
 mincpuspeedbody: ENDOFELEMENT
@@ -485,14 +485,14 @@ mincpuspeedbody: ENDOFELEMENT
 
 mincpunumber: mincpunumberhead mincpunumberbody;
 
-mincpunumberhead: MINCPUNUMBERSTART 
+mincpunumberhead: MINCPUNUMBERSTART
 {	if (parserData->minCPUNumberPresent)
 	{	osolerror( NULL, osoption, parserData, "only one <minCPUNumber> element allowed");
 	}
 	else
-	{	parserData->minCPUNumberPresent = true;	
+	{	parserData->minCPUNumberPresent = true;
 	}
-}; 
+};
 
 mincpunumberbody: ENDOFELEMENT
 	| GREATERTHAN MINCPUNUMBEREND
@@ -507,10 +507,10 @@ othersystemoptionshead: OTHEROPTIONSSTART
 	}
 	else
 	{	parserData->otherSystemOptionsPresent = true;
-		osoption->system->otherOptions = new OtherOptions();	
+		osoption->system->otherOptions = new OtherOptions();
 	}
-}; 
- 
+};
+
 numberofothersystemoptions: NUMBEROFOTHEROPTIONSATT QUOTE INTEGER QUOTE
 {	osoption->system->otherOptions->numberOfOtherOptions = $3;
 	osoption->system->otherOptions->other = new OtherOption*[$3];
@@ -519,16 +519,16 @@ numberofothersystemoptions: NUMBEROFOTHEROPTIONSATT QUOTE INTEGER QUOTE
 
 othersystemoptionsbody: othersystemoptionslist OTHEROPTIONSEND
 {	if (parserData->numberOfOtherSystemOptions != osoption->system->otherOptions->numberOfOtherOptions)
-		osolerror (NULL, osoption, parserData, "wrong number of other options in <system> element"); 
+		osolerror (NULL, osoption, parserData, "wrong number of other options in <system> element");
 };
 
 othersystemoptionslist: | othersystemoptionslist othersystemoption;
 
-othersystemoption: OTHERSTART 
+othersystemoption: OTHERSTART
 	{	if (parserData->numberOfOtherSystemOptions >= osoption->system->otherOptions->numberOfOtherOptions)
 		{	osolerror (NULL, osoption, parserData, "too many other options in <system> element");
 		};
-	} 
+	}
     othersystemattributes othersystemoptionend
 {	if (!parserData->otherOptionNamePresent)
 		osolerror (NULL, osoption, parserData, "name attribute must be present");
@@ -543,54 +543,54 @@ othersystemattributes: | othersystemattributes othersystemattribute;
 
 othersystemattribute: systemoptionnameatt | systemoptionvalueatt | systemoptiondescriptionatt;
 
-systemoptionnameatt: NAMEATT ATTRIBUTETEXT 
+systemoptionnameatt: NAMEATT ATTRIBUTETEXT
 {	if (parserData->otherOptionNamePresent)
 	{	osolerror( NULL, osoption, parserData, "only one name attribute allowed");
 	}
 	else
 	{	parserData->otherOptionNamePresent = true;
-		osoption->system->otherOptions->other[parserData->numberOfOtherSystemOptions]->name = $2;	
+		osoption->system->otherOptions->other[parserData->numberOfOtherSystemOptions]->name = $2;
 	}
 }
-QUOTE; 
+QUOTE;
 
-systemoptionvalueatt: VALUEATT ATTRIBUTETEXT 
+systemoptionvalueatt: VALUEATT ATTRIBUTETEXT
 {	if (parserData->otherOptionValuePresent)
 	{	osolerror( NULL, osoption, parserData, "only one value attribute allowed");
 	}
 	else
 	{	parserData->otherOptionValuePresent = true;
-		osoption->system->otherOptions->other[parserData->numberOfOtherSystemOptions]->value = $2;	
+		osoption->system->otherOptions->other[parserData->numberOfOtherSystemOptions]->value = $2;
 	}
 }
 QUOTE;
 
 
-systemoptiondescriptionatt: DESCRIPTIONATT ATTRIBUTETEXT 
+systemoptiondescriptionatt: DESCRIPTIONATT ATTRIBUTETEXT
 {	if (parserData->otherOptionDescriptionPresent)
 	{	osolerror( NULL, osoption, parserData, "only one description attribute allowed");
 	}
 	else
 	{	parserData->otherOptionDescriptionPresent = true;
-		osoption->system->otherOptions->other[parserData->numberOfOtherSystemOptions]->description = $2;	
+		osoption->system->otherOptions->other[parserData->numberOfOtherSystemOptions]->description = $2;
 	}
 }
 QUOTE;
 
-othersystemoptionend: {printf("%s","firing />");} ENDOFELEMENT | {printf("%s","firing </other>");} GREATERTHAN OTHEREND;
+othersystemoptionend: ENDOFELEMENT | GREATERTHAN OTHEREND;
 
 
 osolservice: | servicehead servicebody;
 
-servicehead: SERVICESTART 
+servicehead: SERVICESTART
 {	if (parserData->osolservicePresent)
 	{	osolerror( NULL, osoption, parserData, "only one <service> element allowed");
 	}
 	else
-	{	parserData->osolservicePresent = true;	
+	{	parserData->osolservicePresent = true;
 		osoption->service = new ServiceOption();
 	}
-}; 
+};
 
 servicebody:
 	  GREATERTHAN servicecontent SERVICEEND
@@ -602,14 +602,14 @@ serviceoption: servicetype | otherserviceoptions;
 
 servicetype: servicetypehead | servicetypebody;
 
-servicetypehead: SERVICETYPESTART 
+servicetypehead: SERVICETYPESTART
 {	if (parserData->serviceTypePresent)
 	{	osolerror( NULL, osoption, parserData, "only one <type> element allowed");
 	}
 	else
-	{	parserData->serviceTypePresent = true;	
+	{	parserData->serviceTypePresent = true;
 	}
-}; 
+};
 
 servicetypebody: ENDOFELEMENT
 	| GREATERTHAN SERVICETYPEEND
@@ -623,9 +623,9 @@ otherserviceoptionshead: OTHEROPTIONSSTART
 	}
 	else
 	{	parserData->otherServiceOptionsPresent = true;
-		osoption->service->otherOptions = new OtherOptions();	
+		osoption->service->otherOptions = new OtherOptions();
 	}
-}; 
+};
 
 numberofotherserviceoptions: NUMBEROFOTHEROPTIONSATT QUOTE INTEGER QUOTE
 {	osoption->service->otherOptions->numberOfOtherOptions = $3;
@@ -635,16 +635,16 @@ numberofotherserviceoptions: NUMBEROFOTHEROPTIONSATT QUOTE INTEGER QUOTE
 
 otherserviceoptionsbody: otherserviceoptionslist OTHEROPTIONSEND
 {	if (parserData->numberOfOtherServiceOptions != osoption->service->otherOptions->numberOfOtherOptions)
-		osolerror (NULL, osoption, parserData, "wrong number of other options in <service> element"); 
+		osolerror (NULL, osoption, parserData, "wrong number of other options in <service> element");
 };
 
 otherserviceoptionslist: | otherserviceoptionslist otherserviceoption;
 
-otherserviceoption: OTHERSTART 
+otherserviceoption: OTHERSTART
 	{	if (parserData->numberOfOtherServiceOptions >= osoption->service->otherOptions->numberOfOtherOptions)
 		{	osolerror (NULL, osoption, parserData, "too many other options in <service> element");
 		};
-	} 
+	}
 otherserviceattributes otherserviceoptionsend
 {	if (!parserData->otherOptionNamePresent)
 		osolerror (NULL, osoption, parserData, "name attribute must be present");
@@ -659,35 +659,35 @@ otherserviceattributes: | otherserviceattributes otherserviceattribute;
 
 otherserviceattribute: serviceoptionnameatt | serviceoptionvalueatt | serviceoptiondescriptionatt;
 
-serviceoptionnameatt: NAMEATT ATTRIBUTETEXT 
+serviceoptionnameatt: NAMEATT ATTRIBUTETEXT
 {	if (parserData->otherOptionNamePresent)
 	{	osolerror( NULL, osoption, parserData, "only one name attribute allowed");
 	}
 	else
 	{	parserData->otherOptionNamePresent = true;
-		osoption->service->otherOptions->other[parserData->numberOfOtherServiceOptions]->name = $2;	
+		osoption->service->otherOptions->other[parserData->numberOfOtherServiceOptions]->name = $2;
 	}
 }
-QUOTE; 
+QUOTE;
 
-serviceoptionvalueatt: VALUEATT ATTRIBUTETEXT 
+serviceoptionvalueatt: VALUEATT ATTRIBUTETEXT
 {	if (parserData->otherOptionValuePresent)
 	{	osolerror( NULL, osoption, parserData, "only one value attribute allowed");
 	}
 	else
 	{	parserData->otherOptionValuePresent = true;
-		osoption->service->otherOptions->other[parserData->numberOfOtherServiceOptions]->value = $2;	
+		osoption->service->otherOptions->other[parserData->numberOfOtherServiceOptions]->value = $2;
 	}
 }
 QUOTE;
 
-serviceoptiondescriptionatt: DESCRIPTIONATT ATTRIBUTETEXT 
+serviceoptiondescriptionatt: DESCRIPTIONATT ATTRIBUTETEXT
 {	if (parserData->otherOptionDescriptionPresent)
 	{	osolerror( NULL, osoption, parserData, "only one description attribute allowed");
 	}
 	else
 	{	parserData->otherOptionDescriptionPresent = true;
-		osoption->service->otherOptions->other[parserData->numberOfOtherServiceOptions]->description = $2;	
+		osoption->service->otherOptions->other[parserData->numberOfOtherServiceOptions]->description = $2;
 	}
 }
 QUOTE;
@@ -697,37 +697,37 @@ otherserviceoptionsend: ENDOFELEMENT | GREATERTHAN OTHEREND;
 
 osoljob: jobhead jobbody;
 
-jobhead: JOBSTART 
+jobhead: JOBSTART
 {	if (parserData->osoljobPresent)
 	{	osolerror( NULL, osoption, parserData, "only one <job> element allowed");
 	}
 	else
-	{	parserData->osoljobPresent = true;	
+	{	parserData->osoljobPresent = true;
 		osoption->job = new JobOption();
 	}
-}; 
+};
 
 jobbody: GREATERTHAN jobcontent JOBEND
 	|  ENDOFELEMENT;
 
-jobcontent: | jobcontent joboption; 
+jobcontent: | jobcontent joboption;
 
 joboption: maxtime | scheduledstarttime | dependencies | requireddirectories | requiredfiles
-| directoriestomake | filestocreate | inputdirectoriestomove | inputfilestomove | outputdirectoriestomove 
+| directoriestomake | filestocreate | inputdirectoriestomove | inputfilestomove | outputdirectoriestomove
 | outputfilestomove | filestodelete | directoriestodelete | processestokill | otherjoboptions;
 
 
 maxtime: maxtimehead maxtimeunit maxtimebody;
 
-maxtimehead: MAXTIMESTART 
+maxtimehead: MAXTIMESTART
 {	if (parserData->maxTimePresent)
 	{	osolerror( NULL, osoption, parserData, "only one <maxTime> element allowed");
 	}
 	else
-	{	parserData-> maxTimePresent = true;	
+	{	parserData-> maxTimePresent = true;
 		osoption->job->maxTime = new MaxTime();
 	}
-}; 
+};
 
 maxtimeunit: | UNITATT ATTRIBUTETEXT {osoption->job->maxTime->unit = $2;} QUOTE;
 
@@ -738,14 +738,14 @@ maxtimebody: ENDOFELEMENT
 
 scheduledstarttime: starttimehead starttimebody;
 
-starttimehead: SCHEDULEDSTARTTIMESTART 
+starttimehead: SCHEDULEDSTARTTIMESTART
 {	if (parserData->scheduledStartTimePresent)
 	{	osolerror( NULL, osoption, parserData, "only one <scheduledStartTime> element allowed");
 	}
 	else
-	{	parserData->scheduledStartTimePresent = true;	
+	{	parserData->scheduledStartTimePresent = true;
 	}
-}; 
+};
 
 starttimebody: ENDOFELEMENT
 	| GREATERTHAN SCHEDULEDSTARTTIMEEND
@@ -753,15 +753,15 @@ starttimebody: ENDOFELEMENT
 
 dependencies: dependencieshead numberofjobidsatt GREATERTHAN dependencieslist DEPENDENCIESEND;
 
-dependencieshead: DEPENDENCIESSTART 
+dependencieshead: DEPENDENCIESSTART
 {	if (parserData->dependenciesPresent)
 	{	osolerror( NULL, osoption, parserData, "only one <dependencies> element allowed");
 	}
 	else
 	{	parserData->dependenciesPresent = true;
-		osoption->job->dependencies = new JobDependencies();	
+		osoption->job->dependencies = new JobDependencies();
 	}
-}; 
+};
 
 numberofjobidsatt: NUMBEROFJOBIDSATT QUOTE INTEGER QUOTE
 {	osoption->job->dependencies->numberOfJobIDs = $3;
@@ -771,31 +771,31 @@ numberofjobidsatt: NUMBEROFJOBIDSATT QUOTE INTEGER QUOTE
 
 dependencieslist: | dependencieslist dependencyjobid;
 
-dependencyjobid: JOBIDSTART GREATERTHAN ELEMENTTEXT 
-{	
+dependencyjobid: JOBIDSTART GREATERTHAN ELEMENTTEXT
+{
 	if (parserData->numberOfDependencies >= osoption->job->dependencies->numberOfJobIDs)
 	{	osolerror (NULL, osoption, parserData, "too many job IDs in <dependencies> element");
 	}
 	else
 	{	osoption->job->dependencies->jobID[parserData->numberOfDependencies] = $3;
-		parserData->numberOfDependencies++; 
+		parserData->numberOfDependencies++;
 	};
-} 
+}
 JOBIDEND;
 
 
-requireddirectories: requireddirectorieshead numberofreqdirpathsatt GREATERTHAN reqdirpathlist 
+requireddirectories: requireddirectorieshead numberofreqdirpathsatt GREATERTHAN reqdirpathlist
    REQUIREDDIRECTORIESEND;
 
-requireddirectorieshead: REQUIREDDIRECTORIESSTART 
+requireddirectorieshead: REQUIREDDIRECTORIESSTART
 {	if (parserData->requiredDirectoriesPresent)
 	{	osolerror( NULL, osoption, parserData, "only one <requiredDirectories> element allowed");
 	}
 	else
 	{	parserData->requiredDirectoriesPresent = true;
-		osoption->job->requiredDirectories = new DirectoriesAndFiles();	
+		osoption->job->requiredDirectories = new DirectoriesAndFiles();
 	}
-}; 
+};
 
 numberofreqdirpathsatt: NUMBEROFPATHSATT QUOTE INTEGER QUOTE
 {	osoption->job->requiredDirectories->numberOfPaths = $3;
@@ -804,30 +804,30 @@ numberofreqdirpathsatt: NUMBEROFPATHSATT QUOTE INTEGER QUOTE
 
 reqdirpathlist: | reqdirpathlist reqdirpath;
 
-reqdirpath: PATHSTART GREATERTHAN ELEMENTTEXT {	
+reqdirpath: PATHSTART GREATERTHAN ELEMENTTEXT {
 	if (parserData->numberOfRequiredDirectories >= osoption->job->requiredDirectories->numberOfPaths)
 	{	osolerror (NULL, osoption, parserData, "too many job IDs in <requiredDirectories> element");
 	}
 	else
 	{	osoption->job->requiredDirectories->path[parserData->numberOfRequiredDirectories] = $3;
-		parserData->numberOfRequiredDirectories++; 
+		parserData->numberOfRequiredDirectories++;
 	};
-} 
+}
 PATHEND;
 
 
-requiredfiles: requiredfileshead numberofreqfilespathsatt GREATERTHAN reqfilespathlist 
+requiredfiles: requiredfileshead numberofreqfilespathsatt GREATERTHAN reqfilespathlist
    REQUIREDFILESEND;
 
-requiredfileshead: REQUIREDFILESSTART 
+requiredfileshead: REQUIREDFILESSTART
 {	if (parserData->requiredFilesPresent)
 	{	osolerror( NULL, osoption, parserData, "only one <requiredFiles> element allowed");
 	}
 	else
 	{	parserData->requiredFilesPresent = true;
-		osoption->job->requiredFiles = new DirectoriesAndFiles();	
+		osoption->job->requiredFiles = new DirectoriesAndFiles();
 	}
-}; 
+};
 
 numberofreqfilespathsatt: NUMBEROFPATHSATT QUOTE INTEGER QUOTE
 {	osoption->job->requiredFiles->numberOfPaths = $3;
@@ -836,30 +836,30 @@ numberofreqfilespathsatt: NUMBEROFPATHSATT QUOTE INTEGER QUOTE
 
 reqfilespathlist: | reqfilespathlist reqfilepath;
 
-reqfilepath: PATHSTART GREATERTHAN ELEMENTTEXT {	
+reqfilepath: PATHSTART GREATERTHAN ELEMENTTEXT {
 	if (parserData->numberOfRequiredFiles >= osoption->job->requiredFiles->numberOfPaths)
 	{	osolerror (NULL, osoption, parserData, "too many job IDs in <requiredFiles> element");
 	}
 	else
 	{	osoption->job->requiredFiles->path[parserData->numberOfRequiredFiles] = $3;
-		parserData->numberOfRequiredFiles++; 
+		parserData->numberOfRequiredFiles++;
 	};
-} 
+}
 PATHEND;
 
 
 directoriestomake: directoriestomakehead numberofdirtomakepathsatt GREATERTHAN dirtomakepathlist
    DIRECTORIESTOMAKEEND;
 
-directoriestomakehead: DIRECTORIESTOMAKESTART 
+directoriestomakehead: DIRECTORIESTOMAKESTART
 {	if (parserData->directoriesToMakePresent)
 	{	osolerror( NULL, osoption, parserData, "only one <directoriesToMake> element allowed");
 	}
 	else
 	{	parserData->directoriesToMakePresent = true;
-		osoption->job->directoriesToMake = new DirectoriesAndFiles();	
+		osoption->job->directoriesToMake = new DirectoriesAndFiles();
 	}
-}; 
+};
 numberofdirtomakepathsatt: NUMBEROFPATHSATT QUOTE INTEGER QUOTE
 {	osoption->job->directoriesToMake->numberOfPaths = $3;
 	osoption->job->directoriesToMake->path = new std::string[$3];
@@ -867,30 +867,30 @@ numberofdirtomakepathsatt: NUMBEROFPATHSATT QUOTE INTEGER QUOTE
 
 dirtomakepathlist: | dirtomakepathlist dirtomakepath;
 
-dirtomakepath: PATHSTART GREATERTHAN ELEMENTTEXT 
+dirtomakepath: PATHSTART GREATERTHAN ELEMENTTEXT
 {	if (parserData->numberOfDirectoriesToMake >= osoption->job->directoriesToMake->numberOfPaths)
 	{	osolerror (NULL, osoption, parserData, "too many job IDs in <directoriesToMake> element");
 	}
 	else
 	{	osoption->job->directoriesToMake->path[parserData->numberOfDirectoriesToMake] = $3;
-		parserData->numberOfDirectoriesToMake++; 
+		parserData->numberOfDirectoriesToMake++;
 	};
-} 
+}
 PATHEND;
 
 
 filestocreate: filestocreatehead numberoffilestomakepathsatt GREATERTHAN filestomakepathlist
    FILESTOCREATEEND;
 
-filestocreatehead: FILESTOCREATESTART 
+filestocreatehead: FILESTOCREATESTART
 {	if (parserData->filesToCreatePresent)
 	{	osolerror( NULL, osoption, parserData, "only one <filesToCreate> element allowed");
 	}
 	else
 	{	parserData->filesToCreatePresent = true;
-		osoption->job->filesToCreate = new DirectoriesAndFiles();	
+		osoption->job->filesToCreate = new DirectoriesAndFiles();
 	}
-}; 
+};
 
 numberoffilestomakepathsatt: NUMBEROFPATHSATT QUOTE INTEGER QUOTE
 {	osoption->job->filesToCreate->numberOfPaths = $3;
@@ -899,22 +899,22 @@ numberoffilestomakepathsatt: NUMBEROFPATHSATT QUOTE INTEGER QUOTE
 
 filestomakepathlist: | filestomakepathlist filestomakepath;
 
-filestomakepath: PATHSTART GREATERTHAN ELEMENTTEXT 
+filestomakepath: PATHSTART GREATERTHAN ELEMENTTEXT
 {	if (parserData->numberOfFilesToCreate >= osoption->job->filesToCreate->numberOfPaths)
 	{	osolerror (NULL, osoption, parserData, "too many job IDs in <filesToCreate> element");
 	}
 	else
 	{	osoption->job->filesToCreate->path[parserData->numberOfFilesToCreate] = $3;
-		parserData->numberOfFilesToCreate++; 
+		parserData->numberOfFilesToCreate++;
 	};
-} 
+}
 PATHEND;
 
 
-inputdirectoriestomove: inputdirectoriestomovehead numberofindirtomovepathpairsatt 
+inputdirectoriestomove: inputdirectoriestomovehead numberofindirtomovepathpairsatt
    GREATERTHAN indirtomovepathpairlist INPUTDIRECTORIESTOMOVEEND;
 
-inputdirectoriestomovehead: INPUTDIRECTORIESTOMOVESTART 
+inputdirectoriestomovehead: INPUTDIRECTORIESTOMOVESTART
 {	if (parserData->inputDirectoriesToMovePresent)
 	{	osolerror( NULL, osoption, parserData, "only one <inputDirectoriesToMove> element allowed");
 	}
@@ -922,7 +922,7 @@ inputdirectoriestomovehead: INPUTDIRECTORIESTOMOVESTART
 	{	parserData->inputDirectoriesToMovePresent = true;
 		osoption->job->inputDirectoriesToMove = new PathPairs();
 	}
-}; 
+};
 
 numberofindirtomovepathpairsatt: NUMBEROFPATHPAIRSATT QUOTE INTEGER QUOTE
 {	if ($3 <= 0) osolerror (NULL, osoption, parserData, "Require positive number of directories to move");
@@ -939,72 +939,72 @@ indirtomovepathpair: indirtomovepathpairhead indirtomovepathpairattlist indirtom
 		osolerror (NULL, osoption, parserData, "\"from\" attribute must be present");
 	if (!parserData->pathPairToPresent)
 		osolerror (NULL, osoption, parserData, "\"to\" attribute must be present");
-	/* reset defaults for the next option */	
+	/* reset defaults for the next option */
 	parserData->pathPairFromPresent= false;
 	parserData->pathPairToPresent= false;
 	parserData->pathPairMakeCopyPresent= false;
-	parserData->numberOfInputDirectoriesToMove++; 
+	parserData->numberOfInputDirectoriesToMove++;
 };
 
-indirtomovepathpairhead: PATHPAIRSTART 
+indirtomovepathpairhead: PATHPAIRSTART
 {	if (parserData->numberOfInputDirectoriesToMove >= osoption->job->inputDirectoriesToMove->numberOfPathPairs)
 	{	osolerror (NULL, osoption, parserData, "too many path pairs in <inputDirectoriesToMove> element");
 	};
-}; 
+};
 
 indirtomovepathpairattlist: | indirtomovepathpairattlist indirtomovepathpairatt;
 
 indirtomovepathpairatt: indirtomovefromatt | indirtomovetoatt | indirtomovemakecopyatt;
 
-indirtomovefromatt: FROMATT ATTRIBUTETEXT 
+indirtomovefromatt: FROMATT ATTRIBUTETEXT
 {	if (parserData->pathPairFromPresent)
 	{	osolerror( NULL, osoption, parserData, "only one \"from\" attribute allowed");
 	}
 	else
 	{	parserData->pathPairFromPresent = true;
-		osoption->job->inputDirectoriesToMove->pathPair[parserData->numberOfInputDirectoriesToMove]->from = $2;	
+		osoption->job->inputDirectoriesToMove->pathPair[parserData->numberOfInputDirectoriesToMove]->from = $2;
 	}
 }
-QUOTE; 
+QUOTE;
 
-indirtomovetoatt: TOATT ATTRIBUTETEXT 
+indirtomovetoatt: TOATT ATTRIBUTETEXT
 {	if (parserData->pathPairToPresent)
 	{	osolerror( NULL, osoption, parserData, "only one \"to\" attribute allowed");
 	}
 	else
 	{	parserData->pathPairToPresent = true;
-		osoption->job->inputDirectoriesToMove->pathPair[parserData->numberOfInputDirectoriesToMove]->to = $2;	
+		osoption->job->inputDirectoriesToMove->pathPair[parserData->numberOfInputDirectoriesToMove]->to = $2;
 	}
 }
-QUOTE; 
+QUOTE;
 
-indirtomovemakecopyatt: MAKECOPYATT ATTRIBUTETEXT 
+indirtomovemakecopyatt: MAKECOPYATT ATTRIBUTETEXT
 {	if (parserData->pathPairMakeCopyPresent)
 	{	osolerror( NULL, osoption, parserData, "only one \"makeCopy\" attribute allowed");
 	}
 	else
 	{	parserData->pathPairMakeCopyPresent = true;
 		if ($2 == "true")
-			osoption->job->inputDirectoriesToMove->pathPair[parserData->numberOfInputDirectoriesToMove]->makeCopy = $2;	
+			osoption->job->inputDirectoriesToMove->pathPair[parserData->numberOfInputDirectoriesToMove]->makeCopy = $2;
 	}
 }
-QUOTE; 
+QUOTE;
 
 indirtomovepathpairend: GREATERTHAN PATHPAIREND | ENDOFELEMENT;
 
 
-inputfilestomove: inputfilestomovehead numberofinfilestomovepathpairsatt 
+inputfilestomove: inputfilestomovehead numberofinfilestomovepathpairsatt
    GREATERTHAN infilestomovepathpairlist INPUTFILESTOMOVEEND;
 
-inputfilestomovehead: INPUTFILESTOMOVESTART 
+inputfilestomovehead: INPUTFILESTOMOVESTART
 {	if (parserData->inputFilesToMovePresent)
 	{	osolerror( NULL, osoption, parserData, "only one <inputFilesToMove> element allowed");
 	}
 	else
 	{	parserData->inputFilesToMovePresent = true;
-		osoption->job->inputFilesToMove = new PathPairs();	
+		osoption->job->inputFilesToMove = new PathPairs();
 	}
-}; 
+};
 
 numberofinfilestomovepathpairsatt: NUMBEROFPATHPAIRSATT QUOTE INTEGER QUOTE
 {	if ($3 <= 0) osolerror (NULL, osoption, parserData, "Require positive number of files to move");
@@ -1020,72 +1020,72 @@ infilestomovepathpair: infilestomovepathpairhead infilestomovepathpairattlist in
 		osolerror (NULL, osoption, parserData, "\"from\" attribute must be present");
 	if (!parserData->pathPairToPresent)
 		osolerror (NULL, osoption, parserData, "\"to\" attribute must be present");
-	/* reset defaults for the next option */	
+	/* reset defaults for the next option */
 	parserData->pathPairFromPresent= false;
 	parserData->pathPairToPresent= false;
 	parserData->pathPairMakeCopyPresent= false;
-	parserData->numberOfInputFilesToMove++; 
+	parserData->numberOfInputFilesToMove++;
 };
 
-infilestomovepathpairhead: PATHPAIRSTART 
+infilestomovepathpairhead: PATHPAIRSTART
 {	if (parserData->numberOfInputFilesToMove >= osoption->job->inputFilesToMove->numberOfPathPairs)
 	{	osolerror (NULL, osoption, parserData, "too many path pairs in <inputFilesToMove> element");
 	};
-} 
+}
 
 infilestomovepathpairattlist: | infilestomovepathpairattlist infilestomovepathpairatt;
 
 infilestomovepathpairatt: infilestomovefromatt | infilestomovetoatt | infilestomovemakecopyatt;
 
-infilestomovefromatt: FROMATT ATTRIBUTETEXT 
+infilestomovefromatt: FROMATT ATTRIBUTETEXT
 {	if (parserData->pathPairFromPresent)
 	{	osolerror( NULL, osoption, parserData, "only one \"from\" attribute allowed");
 	}
 	else
 	{	parserData->pathPairFromPresent = true;
-		osoption->job->inputFilesToMove->pathPair[parserData->numberOfInputFilesToMove]->from = $2;	
+		osoption->job->inputFilesToMove->pathPair[parserData->numberOfInputFilesToMove]->from = $2;
 	}
 }
-QUOTE; 
+QUOTE;
 
-infilestomovetoatt: TOATT ATTRIBUTETEXT 
+infilestomovetoatt: TOATT ATTRIBUTETEXT
 {	if (parserData->pathPairToPresent)
 	{	osolerror( NULL, osoption, parserData, "only one \"to\" attribute allowed");
 	}
 	else
 	{	parserData->pathPairToPresent = true;
-		osoption->job->inputFilesToMove->pathPair[parserData->numberOfInputFilesToMove]->to = $2;	
+		osoption->job->inputFilesToMove->pathPair[parserData->numberOfInputFilesToMove]->to = $2;
 	}
 }
-QUOTE; 
+QUOTE;
 
-infilestomovemakecopyatt: MAKECOPYATT ATTRIBUTETEXT 
+infilestomovemakecopyatt: MAKECOPYATT ATTRIBUTETEXT
 {	if (parserData->pathPairMakeCopyPresent)
 	{	osolerror( NULL, osoption, parserData, "only one \"makeCopy\" attribute allowed");
 	}
 	else
 	{	parserData->pathPairMakeCopyPresent = true;
 		if ($2 == "true")
-			osoption->job->inputFilesToMove->pathPair[parserData->numberOfInputFilesToMove]->makeCopy = $2;	
+			osoption->job->inputFilesToMove->pathPair[parserData->numberOfInputFilesToMove]->makeCopy = $2;
 	}
 }
-QUOTE; 
+QUOTE;
 
 infilestomovepathpairend: GREATERTHAN PATHPAIREND | ENDOFELEMENT;
 
 
-outputdirectoriestomove: outputdirectoriestomovehead numberofoutdirtomovepathpairsatt 
+outputdirectoriestomove: outputdirectoriestomovehead numberofoutdirtomovepathpairsatt
    GREATERTHAN outdirtomovepathpairlist OUTPUTDIRECTORIESTOMOVEEND;
 
-outputdirectoriestomovehead: OUTPUTDIRECTORIESTOMOVESTART 
+outputdirectoriestomovehead: OUTPUTDIRECTORIESTOMOVESTART
 {	if (parserData->outputDirectoriesToMovePresent)
 	{	osolerror( NULL, osoption, parserData, "only one <outputDirectoriesToMove> element allowed");
 	}
 	else
 	{	parserData->outputDirectoriesToMovePresent = true;
-		osoption->job->outputDirectoriesToMove = new PathPairs();	
+		osoption->job->outputDirectoriesToMove = new PathPairs();
 	}
-}; 
+};
 
 numberofoutdirtomovepathpairsatt: NUMBEROFPATHPAIRSATT QUOTE INTEGER QUOTE
 {	if ($3 <= 0) osolerror (NULL, osoption, parserData, "Require positive number of directories to move");
@@ -1102,72 +1102,72 @@ outdirtomovepathpair: outdirtomovepathpairhead outdirtomovepathpairattlist outdi
 		osolerror (NULL, osoption, parserData, "\"from\" attribute must be present");
 	if (!parserData->pathPairToPresent)
 		osolerror (NULL, osoption, parserData, "\"to\" attribute must be present");
-	/* reset defaults for the next option */	
+	/* reset defaults for the next option */
 	parserData->pathPairFromPresent= false;
 	parserData->pathPairToPresent= false;
 	parserData->pathPairMakeCopyPresent= false;
-	parserData->numberOfOutputDirectoriesToMove++; 
+	parserData->numberOfOutputDirectoriesToMove++;
 };
 
-outdirtomovepathpairhead: PATHPAIRSTART 
+outdirtomovepathpairhead: PATHPAIRSTART
 {	if (parserData->numberOfOutputDirectoriesToMove >= osoption->job->outputDirectoriesToMove->numberOfPathPairs)
 	{	osolerror (NULL, osoption, parserData, "too many path pairs in <outputDirectoriesToMove> element");
 	};
-} 
+}
 
 outdirtomovepathpairattlist: | outdirtomovepathpairattlist outdirtomovepathpairatt;
 
 outdirtomovepathpairatt: outdirtomovefromatt | outdirtomovetoatt | outdirtomovemakecopyatt;
 
-outdirtomovefromatt: FROMATT ATTRIBUTETEXT 
+outdirtomovefromatt: FROMATT ATTRIBUTETEXT
 {	if (parserData->pathPairFromPresent)
 	{	osolerror( NULL, osoption, parserData, "only one \"from\" attribute allowed");
 	}
 	else
 	{	parserData->pathPairFromPresent = true;
-		osoption->job->outputDirectoriesToMove->pathPair[parserData->numberOfOutputDirectoriesToMove]->from = $2;	
+		osoption->job->outputDirectoriesToMove->pathPair[parserData->numberOfOutputDirectoriesToMove]->from = $2;
 	}
 }
-QUOTE; 
+QUOTE;
 
-outdirtomovetoatt: TOATT ATTRIBUTETEXT 
+outdirtomovetoatt: TOATT ATTRIBUTETEXT
 {	if (parserData->pathPairToPresent)
 	{	osolerror( NULL, osoption, parserData, "only one \"to\" attribute allowed");
 	}
 	else
 	{	parserData->pathPairToPresent = true;
-		osoption->job->outputDirectoriesToMove->pathPair[parserData->numberOfOutputDirectoriesToMove]->to = $2;	
+		osoption->job->outputDirectoriesToMove->pathPair[parserData->numberOfOutputDirectoriesToMove]->to = $2;
 	}
 }
-QUOTE; 
+QUOTE;
 
-outdirtomovemakecopyatt: MAKECOPYATT ATTRIBUTETEXT 
+outdirtomovemakecopyatt: MAKECOPYATT ATTRIBUTETEXT
 {	if (parserData->pathPairMakeCopyPresent)
 	{	osolerror( NULL, osoption, parserData, "only one \"makeCopy\" attribute allowed");
 	}
 	else
 	{	parserData->pathPairMakeCopyPresent = true;
 		if ($2 == "true")
-			osoption->job->outputDirectoriesToMove->pathPair[parserData->numberOfOutputDirectoriesToMove]->makeCopy = $2;	
+			osoption->job->outputDirectoriesToMove->pathPair[parserData->numberOfOutputDirectoriesToMove]->makeCopy = $2;
 	}
 }
-QUOTE; 
+QUOTE;
 
 outdirtomovepathpairend: GREATERTHAN PATHPAIREND | ENDOFELEMENT;
 
 
-outputfilestomove: outputfilestomovehead numberofoutfilestomovepathpairsatt 
+outputfilestomove: outputfilestomovehead numberofoutfilestomovepathpairsatt
    GREATERTHAN outfilestomovepathpairlist OUTPUTFILESTOMOVEEND;
 
-outputfilestomovehead: OUTPUTFILESTOMOVESTART 
+outputfilestomovehead: OUTPUTFILESTOMOVESTART
 {	if (parserData->outputFilesToMovePresent)
 	{	osolerror( NULL, osoption, parserData, "only one <outputFilesToMove> element allowed");
 	}
 	else
 	{	parserData->outputFilesToMovePresent = true;
-		osoption->job->outputFilesToMove = new PathPairs();	
+		osoption->job->outputFilesToMove = new PathPairs();
 	}
-}; 
+};
 
 numberofoutfilestomovepathpairsatt: NUMBEROFPATHPAIRSATT QUOTE INTEGER QUOTE
 {	if ($3 <= 0) osolerror (NULL, osoption, parserData, "Require positive number of files to move");
@@ -1183,56 +1183,56 @@ outfilestomovepathpair: outfilestomovepathpairhead outfilestomovepathpairattlist
 		osolerror (NULL, osoption, parserData, "\"from\" attribute must be present");
 	if (!parserData->pathPairToPresent)
 		osolerror (NULL, osoption, parserData, "\"to\" attribute must be present");
-	/* reset defaults for the next option */	
+	/* reset defaults for the next option */
 	parserData->pathPairFromPresent= false;
 	parserData->pathPairToPresent= false;
 	parserData->pathPairMakeCopyPresent= false;
-	parserData->numberOfOutputFilesToMove++; 
+	parserData->numberOfOutputFilesToMove++;
 };
 
-outfilestomovepathpairhead: PATHPAIRSTART 
+outfilestomovepathpairhead: PATHPAIRSTART
 {	if (parserData->numberOfOutputFilesToMove >= osoption->job->outputFilesToMove->numberOfPathPairs)
 	{	osolerror (NULL, osoption, parserData, "too many path pairs in <outputFilesToMove> element");
 	};
-} 
+}
 
 outfilestomovepathpairattlist: | outfilestomovepathpairattlist outfilestomovepathpairatt;
 
 outfilestomovepathpairatt: outfilestomovefromatt | outfilestomovetoatt | outfilestomovemakecopyatt;
 
-outfilestomovefromatt: FROMATT ATTRIBUTETEXT 
+outfilestomovefromatt: FROMATT ATTRIBUTETEXT
 {	if (parserData->pathPairFromPresent)
 	{	osolerror( NULL, osoption, parserData, "only one \"from\" attribute allowed");
 	}
 	else
 	{	parserData->pathPairFromPresent = true;
-		osoption->job->outputFilesToMove->pathPair[parserData->numberOfOutputFilesToMove]->from = $2;	
+		osoption->job->outputFilesToMove->pathPair[parserData->numberOfOutputFilesToMove]->from = $2;
 	}
 }
-QUOTE; 
+QUOTE;
 
-outfilestomovetoatt: TOATT ATTRIBUTETEXT 
+outfilestomovetoatt: TOATT ATTRIBUTETEXT
 {	if (parserData->pathPairToPresent)
 	{	osolerror( NULL, osoption, parserData, "only one \"to\" attribute allowed");
 	}
 	else
 	{	parserData->pathPairToPresent = true;
-		osoption->job->outputFilesToMove->pathPair[parserData->numberOfOutputFilesToMove]->to = $2;	
+		osoption->job->outputFilesToMove->pathPair[parserData->numberOfOutputFilesToMove]->to = $2;
 	}
 }
-QUOTE; 
+QUOTE;
 
-outfilestomovemakecopyatt: MAKECOPYATT ATTRIBUTETEXT 
+outfilestomovemakecopyatt: MAKECOPYATT ATTRIBUTETEXT
 {	if (parserData->pathPairMakeCopyPresent)
 	{	osolerror( NULL, osoption, parserData, "only one \"makeCopy\" attribute allowed");
 	}
 	else
 	{	parserData->pathPairMakeCopyPresent = true;
 		if ($2 == "true")
-			osoption->job->outputFilesToMove->pathPair[parserData->numberOfOutputFilesToMove]->makeCopy = $2;	
+			osoption->job->outputFilesToMove->pathPair[parserData->numberOfOutputFilesToMove]->makeCopy = $2;
 	}
 }
-QUOTE; 
+QUOTE;
 
 outfilestomovepathpairend: GREATERTHAN PATHPAIREND | ENDOFELEMENT;
 
@@ -1240,15 +1240,15 @@ outfilestomovepathpairend: GREATERTHAN PATHPAIREND | ENDOFELEMENT;
 filestodelete: filestodeletehead numberoffilestodeletepathsatt GREATERTHAN filestodeletepathlist
    FILESTODELETEEND;
 
-filestodeletehead: FILESTODELETESTART 
+filestodeletehead: FILESTODELETESTART
 {	if (parserData->filesToDeletePresent)
 	{	osolerror( NULL, osoption, parserData, "only one <filesToDelete> element allowed");
 	}
 	else
 	{	parserData->filesToDeletePresent = true;
-		osoption->job->filesToDelete = new DirectoriesAndFiles();	
+		osoption->job->filesToDelete = new DirectoriesAndFiles();
 	}
-}; 
+};
 
 numberoffilestodeletepathsatt: NUMBEROFPATHSATT QUOTE INTEGER QUOTE
 {	osoption->job->filesToDelete->numberOfPaths = $3;
@@ -1257,30 +1257,30 @@ numberoffilestodeletepathsatt: NUMBEROFPATHSATT QUOTE INTEGER QUOTE
 
 filestodeletepathlist: | filestodeletepathlist filestodeletepath;
 
-filestodeletepath: PATHSTART GREATERTHAN ELEMENTTEXT 
+filestodeletepath: PATHSTART GREATERTHAN ELEMENTTEXT
 {	if (parserData->numberOfFilesToDelete >= osoption->job->filesToDelete->numberOfPaths)
 	{	osolerror (NULL, osoption, parserData, "too many job IDs in <filesToDelete> element");
 	}
 	else
 	{	osoption->job->filesToDelete->path[parserData->numberOfFilesToDelete] = $3;
-		parserData->numberOfFilesToDelete++; 
+		parserData->numberOfFilesToDelete++;
 	};
-} 
+}
 PATHEND;
 
 
 directoriestodelete: directoriestodeletehead numberofdirtodeletepathsatt GREATERTHAN dirtodeletepathlist
    DIRECTORIESTODELETEEND;
 
-directoriestodeletehead: DIRECTORIESTODELETESTART 
+directoriestodeletehead: DIRECTORIESTODELETESTART
 {	if (parserData->directoriesToDeletePresent)
 	{	osolerror( NULL, osoption, parserData, "only one <directoriesToDelete> element allowed");
 	}
 	else
 	{	parserData->directoriesToDeletePresent = true;
-		osoption->job->directoriesToDelete = new DirectoriesAndFiles();	
+		osoption->job->directoriesToDelete = new DirectoriesAndFiles();
 	}
-}; 
+};
 
 numberofdirtodeletepathsatt: NUMBEROFPATHSATT QUOTE INTEGER QUOTE
 {	osoption->job->directoriesToDelete->numberOfPaths = $3;
@@ -1289,15 +1289,15 @@ numberofdirtodeletepathsatt: NUMBEROFPATHSATT QUOTE INTEGER QUOTE
 
 dirtodeletepathlist: | dirtodeletepathlist dirtodeletepath;
 
-dirtodeletepath: PATHSTART GREATERTHAN ELEMENTTEXT 
+dirtodeletepath: PATHSTART GREATERTHAN ELEMENTTEXT
 {	if (parserData->numberOfDirectoriesToDelete >= osoption->job->directoriesToDelete->numberOfPaths)
 	{	osolerror (NULL, osoption, parserData, "too many job IDs in <directoriesToDelete> element");
 	}
 	else
 	{	osoption->job->directoriesToDelete->path[parserData->numberOfDirectoriesToDelete] = $3;
-		parserData->numberOfDirectoriesToDelete++; 
+		parserData->numberOfDirectoriesToDelete++;
 	};
-} 
+}
 PATHEND;
 
 
@@ -1305,15 +1305,15 @@ processestokill: processestokillhead numberofprocesstokillatt GREATERTHAN proces
    PROCESSESTOKILLEND;
 
 
-processestokillhead: PROCESSESTOKILLSTART 
+processestokillhead: PROCESSESTOKILLSTART
 {	if (parserData->processesToKillPresent)
 	{	osolerror( NULL, osoption, parserData, "only one <processesToKill> element allowed");
 	}
 	else
 	{	parserData->processesToKillPresent = true;
-		osoption->job->processesToKill = new Processes();	
+		osoption->job->processesToKill = new Processes();
 	}
-}; 
+};
 
 numberofprocesstokillatt: NUMBEROFPROCESSESATT QUOTE INTEGER QUOTE
 {	osoption->job->processesToKill->numberOfProcesses = $3;
@@ -1322,15 +1322,15 @@ numberofprocesstokillatt: NUMBEROFPROCESSESATT QUOTE INTEGER QUOTE
 
 processestokilllist: | processestokilllist processtokill;
 
-processtokill: PROCESSSTART GREATERTHAN ELEMENTTEXT 
+processtokill: PROCESSSTART GREATERTHAN ELEMENTTEXT
 {	if (parserData->numberOfProcessesToKill >= osoption->job->processesToKill->numberOfProcesses)
 	{	osolerror (NULL, osoption, parserData, "too many job IDs in <processesToKill> element");
 	}
 	else
 	{	osoption->job->processesToKill->process[parserData->numberOfProcessesToKill] = $3;
-		parserData->numberOfProcessesToKill++; 
+		parserData->numberOfProcessesToKill++;
 	};
-} 
+}
 PROCESSEND;
 
 
@@ -1342,9 +1342,9 @@ otherjoboptionshead: OTHEROPTIONSSTART
 	}
 	else
 	{	parserData->otherJobOptionsPresent = true;
-		osoption->job->otherOptions = new OtherOptions();	
+		osoption->job->otherOptions = new OtherOptions();
 	}
-}; 
+};
 
 numberofotherjoboptions: NUMBEROFOTHEROPTIONSATT QUOTE INTEGER QUOTE
 {	osoption->job->otherOptions->numberOfOtherOptions = $3;
@@ -1354,16 +1354,16 @@ numberofotherjoboptions: NUMBEROFOTHEROPTIONSATT QUOTE INTEGER QUOTE
 
 otherjoboptionsbody: otherjoboptionslist OTHEROPTIONSEND
 {	if (parserData->numberOfOtherJobOptions != osoption->job->otherOptions->numberOfOtherOptions)
-		osolerror (NULL, osoption, parserData, "wrong number of other options in <job> element"); 
+		osolerror (NULL, osoption, parserData, "wrong number of other options in <job> element");
 };
 
 otherjoboptionslist: | otherjoboptionslist otherjoboption;
 
-otherjoboption: OTHERSTART 
+otherjoboption: OTHERSTART
 	{	if (parserData->numberOfOtherJobOptions >= osoption->job->otherOptions->numberOfOtherOptions)
 		{	osolerror (NULL, osoption, parserData, "too many other options in <job> element");
 		};
-	} 
+	}
 otherjobattributes otherjoboptionsend
 {	if (!parserData->otherOptionNamePresent)
 		osolerror (NULL, osoption, parserData, "name attribute must be present");
@@ -1378,35 +1378,35 @@ otherjobattributes: | otherjobattributes otherjobattribute;
 
 otherjobattribute: joboptionnameatt | joboptionvalueatt | joboptiondescriptionatt;
 
-joboptionnameatt: NAMEATT ATTRIBUTETEXT 
+joboptionnameatt: NAMEATT ATTRIBUTETEXT
 {	if (parserData->otherOptionNamePresent)
 	{	osolerror( NULL, osoption, parserData, "only one name attribute allowed");
 	}
 	else
 	{	parserData->otherOptionNamePresent = true;
-		osoption->job->otherOptions->other[parserData->numberOfOtherJobOptions]->name = $2;	
+		osoption->job->otherOptions->other[parserData->numberOfOtherJobOptions]->name = $2;
 	}
 }
-QUOTE; 
+QUOTE;
 
-joboptionvalueatt: VALUEATT ATTRIBUTETEXT 
+joboptionvalueatt: VALUEATT ATTRIBUTETEXT
 {	if (parserData->otherOptionValuePresent)
 	{	osolerror( NULL, osoption, parserData, "only one value attribute allowed");
 	}
 	else
 	{	parserData->otherOptionValuePresent = true;
-		osoption->job->otherOptions->other[parserData->numberOfOtherJobOptions]->value = $2;	
+		osoption->job->otherOptions->other[parserData->numberOfOtherJobOptions]->value = $2;
 	}
 }
 QUOTE;
 
-joboptiondescriptionatt: DESCRIPTIONATT ATTRIBUTETEXT 
+joboptiondescriptionatt: DESCRIPTIONATT ATTRIBUTETEXT
 {	if (parserData->otherOptionDescriptionPresent)
 	{	osolerror( NULL, osoption, parserData, "only one description attribute allowed");
 	}
 	else
 	{	parserData->otherOptionDescriptionPresent = true;
-		osoption->job->otherOptions->other[parserData->numberOfOtherJobOptions]->description = $2;	
+		osoption->job->otherOptions->other[parserData->numberOfOtherJobOptions]->description = $2;
 	}
 }
 QUOTE;
@@ -1416,15 +1416,15 @@ otherjoboptionsend: ENDOFELEMENT | GREATERTHAN OTHEREND;
 
 osoloptimization: | optimizationhead optimizationattlist optimizationbody;
 
-optimizationhead: OPTIMIZATIONSTART 
+optimizationhead: OPTIMIZATIONSTART
 {	if (parserData->osoloptimizationPresent)
 	{	osolerror( NULL, osoption, parserData, "only one <optimization> element allowed");
 	}
 	else
-	{	parserData->osoloptimizationPresent = true;	
+	{	parserData->osoloptimizationPresent = true;
 		osoption->optimization = new OptimizationOption();
 	}
-}; 
+};
 
 optimizationattlist: | optimizationattlist optimizationatt;
 
@@ -1444,12 +1444,11 @@ optimizationnobj: NUMBEROFOBJECTIVESATT QUOTE INTEGER QUOTE
 
 optimizationbody: GREATERTHAN optimizationcontent OPTIMIZATIONEND | ENDOFELEMENT;
 
-optimizationcontent: variables objectives constraints solveroptions
-{printf("\n%s\n","Finished <optimization element>");};
+optimizationcontent: variables objectives constraints solveroptions;
 
 variables: | variablesstart numberofothervariablesatt restofvariables;
 
-variablesstart: VARIABLESSTART 
+variablesstart: VARIABLESSTART
 {	osoption->optimization->variables = new VariableOption();
 };
 
@@ -1461,12 +1460,12 @@ numberofothervariablesatt: | NUMBEROFOTHERVARIABLEOPTIONSATT QUOTE INTEGER QUOTE
 		osoption->optimization->variables->other[i] = new OtherVariableOption();
 };
 
-restofvariables: GREATERTHAN initialvariablevalues initialvariablevaluesstring othervariableoptions VARIABLESEND
+restofvariables: GREATERTHAN initialvariablevalues initialvariablevaluesstring othervariableoptionlist VARIABLESEND
    | ENDOFELEMENT;
 
 initialvariablevalues: | INITIALVARIABLEVALUESSTART numberofvar GREATERTHAN varlist INITIALVARIABLEVALUESEND;
 
-numberofvar: NUMBEROFVARATT QUOTE INTEGER QUOTE 
+numberofvar: NUMBEROFVARATT QUOTE INTEGER QUOTE
 {	if ($3 <= 0) osolerror (NULL, osoption, parserData, "number of <var> elements must be positive");
 	osoption->optimization->variables->initialVariableValues = new InitVariableValues();
 	osoption->optimization->variables->initialVariableValues->numberOfVar = $3;
@@ -1485,7 +1484,7 @@ initvarvalue: varstart initvarvalueattlist initvarvalueend
 	parserData->numberOfVar++;
 };
 
-varstart: VARSTART 
+varstart: VARSTART
 {	if (parserData->numberOfVar >= osoption->optimization->variables->initialVariableValues->numberOfVar)
 		osolerror(NULL, osoption, parserData, "too many initial variable values");
 };
@@ -1503,24 +1502,24 @@ initvarvalueidxatt: IDXATT QUOTE INTEGER QUOTE
 	{	if ($3 >= parserData->numberOfVariables)
 			osolerror (NULL, osoption, parserData, "variable index exceeds upper limit");
 	};
-	osoption->optimization->variables->initialVariableValues->var[parserData->numberOfVar]->idx = $3;  
+	osoption->optimization->variables->initialVariableValues->var[parserData->numberOfVar]->idx = $3;
 };
 
-initvarvaluevalueatt: VALUEATT ATTRIBUTETEXT 
+initvarvaluevalueatt: VALUEATT ATTRIBUTETEXT
 {	if (parserData->valAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one variable value allowed");
 	parserData->valAttributePresent = true;
-	osoption->optimization->variables->initialVariableValues->var[parserData->numberOfVar]->value = strtod($2, NULL);  
+	osoption->optimization->variables->initialVariableValues->var[parserData->numberOfVar]->value = strtod($2, NULL);
 }
 QUOTE;
 
 initvarvalueend: GREATERTHAN VAREND | ENDOFELEMENT;
 
 
-initialvariablevaluesstring: | INITIALVARIABLEVALUESSTRINGSTART numberofvarstr GREATERTHAN 
+initialvariablevaluesstring: | INITIALVARIABLEVALUESSTRINGSTART numberofvarstr GREATERTHAN
     varstrlist INITIALVARIABLEVALUESSTRINGEND;
 
-numberofvarstr: NUMBEROFVARATT QUOTE INTEGER QUOTE 
+numberofvarstr: NUMBEROFVARATT QUOTE INTEGER QUOTE
 {	if ($3 <= 0) osolerror (NULL, osoption, parserData, "number of <var> elements must be positive");
 	osoption->optimization->variables->initialVariableValuesString = new InitVariableValuesString ();
 	osoption->optimization->variables->initialVariableValuesString->numberOfVar = $3;
@@ -1557,26 +1556,35 @@ initvarstrvalueidxatt: IDXATT QUOTE INTEGER QUOTE
 	{	if ($3 >= parserData->numberOfVariables)
 			osolerror (NULL, osoption, parserData, "variable index exceeds upper limit");
 	};
-	osoption->optimization->variables->initialVariableValuesString->var[parserData->numberOfVarStr]->idx = $3;  
+	osoption->optimization->variables->initialVariableValuesString->var[parserData->numberOfVarStr]->idx = $3;
 };
 
-initvarstrvaluevalueatt: VALUEATT ATTRIBUTETEXT 
+initvarstrvaluevalueatt: VALUEATT ATTRIBUTETEXT
 {	if (parserData->valAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one variable index allowed");
 	parserData->valAttributePresent = true;
-	osoption->optimization->variables->initialVariableValuesString->var[parserData->numberOfVarStr]->value = $2;  
+	osoption->optimization->variables->initialVariableValuesString->var[parserData->numberOfVarStr]->value = $2;
 }
 QUOTE;
 
 initvarstrvalueend: GREATERTHAN VAREND | ENDOFELEMENT;
 
 
-othervariableoptions: | OTHERSTART othervariableoptionsattlist restofothervariableoptions;
+
+
+othervariableoptionlist: | othervariableoptionlist othervariableoption;
+
+othervariableoption: othervariableoptionstart othervariableoptionsattlist restofothervariableoption;
+
+othervariableoptionstart: OTHERSTART
+{	if (parserData->numberOfOtherVariableOptions >= osoption->optimization->variables->numberOfOtherVariableOptions)
+		osolerror(NULL, osoption, parserData, "too many <other> variable options");
+};
 
 othervariableoptionsattlist: | othervariableoptionsattlist othervariableoptionsatt;
 
-othervariableoptionsatt: 
-     othervariableoptionnumberofvar 
+othervariableoptionsatt:
+     othervariableoptionnumberofvar
    | othervariableoptionname
    | othervariableoptionvalue
    | othervariableoptionsolver
@@ -1584,64 +1592,149 @@ othervariableoptionsatt:
    | othervariableoptiontype
    | othervariableoptiondescription;
 
-othervariableoptionnumberofvar: NUMBEROFVARATT QUOTE INTEGER 
-{
-}QUOTE;
+othervariableoptionnumberofvar: NUMBEROFVARATT QUOTE INTEGER QUOTE
+{ 	if (parserData->otherOptionNumberPresent)
+		osolerror (NULL, osoption, parserData, "only one numberOfVar attribute allowed");
+	parserData->otherOptionNumberPresent = true;
+	parserData->numberOfVar = 0;
+	if ($3 < 0) osolerror (NULL, osoption, parserData, "number of <other> variable options must be nonnegative");
+	osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->numberOfVar = $3;
+	osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->var = new OtherVarOption*[$3];
+	for (int i = 0; i < $3; i++)
+	{	osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->var[i] = new OtherVarOption();
+	}
+	osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->var[0]->lbValue = "junk"; //!!!
+};
 
-othervariableoptionname: NAMEATT ATTRIBUTETEXT 
-{
-}QUOTE;
+othervariableoptionname: NAMEATT ATTRIBUTETEXT
+{	if (parserData->otherOptionNamePresent)
+		osolerror (NULL, osoption, parserData, "only one name attribute allowed");
+	parserData->otherOptionNamePresent = true;
+	osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->name = $2;
+}
+QUOTE;
 
-othervariableoptionvalue: VALUEATT ATTRIBUTETEXT 
-{
-}QUOTE;
+othervariableoptionvalue: VALUEATT ATTRIBUTETEXT
+{	if (parserData->otherOptionValuePresent)
+		osolerror (NULL, osoption, parserData, "only one value attribute allowed");
+	parserData->otherOptionValuePresent = true;
+	osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->value = $2;
+}
+QUOTE;
 
-othervariableoptionsolver: SOLVERATT ATTRIBUTETEXT 
-{
-}QUOTE;
+othervariableoptionsolver: SOLVERATT ATTRIBUTETEXT
+{	if (parserData->otherOptionSolverPresent)
+		osolerror (NULL, osoption, parserData, "only one solver attribute allowed");
+	parserData->otherOptionSolverPresent = true;
+	osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->solver = $2;
+}
+QUOTE;
 
-othervariableoptioncategory: CATEGORYATT ATTRIBUTETEXT 
-{
-}QUOTE;
+othervariableoptioncategory: CATEGORYATT ATTRIBUTETEXT
+{	if (parserData->otherOptionCategoryPresent)
+		osolerror (NULL, osoption, parserData, "only one category attribute allowed");
+	parserData->otherOptionCategoryPresent = true;
+	osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->category = $2;
+}
+QUOTE;
 
-othervariableoptiontype: TYPEATT ATTRIBUTETEXT 
-{
-}QUOTE;
+othervariableoptiontype: TYPEATT ATTRIBUTETEXT
+{	if (parserData->otherOptionTypePresent)
+		osolerror (NULL, osoption, parserData, "only one type attribute allowed");
+	parserData->otherOptionTypePresent = true;
+	osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->type = $2;
+}
+QUOTE;
 
-othervariableoptiondescription: DESCRIPTIONATT ATTRIBUTETEXT 
-{
-}QUOTE;
+othervariableoptiondescription: DESCRIPTIONATT ATTRIBUTETEXT
+{	if (parserData->otherOptionDescriptionPresent)
+		osolerror (NULL, osoption, parserData, "only one description attribute allowed");
+	parserData->otherOptionDescriptionPresent = true;
+	osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->description = $2;
+}
+QUOTE;
 
 
-restofothervariableoptions: GREATERTHAN othervariableoptionsvarlist OTHEREND;
+restofothervariableoption: GREATERTHAN othervariableoptionsvarlist OTHEREND
+{ 	if (parserData->numberOfVar < osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->numberOfVar)
+		osolerror(NULL, osoption, parserData, "not enough <var> entries in <other> variable element");
+	if (!parserData->otherOptionNumberPresent)
+		osolerror (NULL, osoption, parserData, "number attribute required");
+	if (!parserData->otherOptionNamePresent)
+		osolerror (NULL, osoption, parserData, "name attribute required");
+	parserData->otherOptionNumberPresent = false;
+	parserData->otherOptionNamePresent = false;
+	parserData->otherOptionValuePresent = false;
+	parserData->otherOptionSolverPresent = false;
+	parserData->otherOptionCategoryPresent = false;
+	parserData->otherOptionTypePresent = false;
+	parserData->otherOptionDescriptionPresent = false;
+	parserData->numberOfOtherVariableOptions++;
+};
 
-othervariableoptionsvarlist: VARSTART othervaroptionattlist othervaroptionend;
+othervariableoptionsvarlist: | othervariableoptionsvarlist othervariableoptionsvar;
+
+othervariableoptionsvar: othervariableoptionsvarstart othervaroptionattlist othervaroptionend
+{	if (!parserData->idxAttributePresent)
+		osolerror(NULL, osoption, parserData, "required idx attribute was not found");
+	parserData->idxAttributePresent = false;
+	parserData->valAttributePresent = false;
+	parserData->lbvalAttributePresent = false;
+	parserData->ubvalAttributePresent = false;
+	parserData->numberOfVar++;
+};
+
+othervariableoptionsvarstart: VARSTART
+{	if (parserData->numberOfVar >= osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->numberOfVar)
+		osolerror(NULL, osoption, parserData, "too many <var> entries in <other> variable element");
+};
 
 othervaroptionattlist: | othervaroptionattlist othervaroptionatt;
 
-othervaroptionatt: 
+othervaroptionatt:
      othervaroptionidx
    | othervaroptionvalue
    | othervaroptionlbvalue
    | othervaroptionubvalue;
 
-othervaroptionidx: IDXATT INTEGER QUOTE
-{	
+othervaroptionidx: IDXATT QUOTE INTEGER QUOTE
+{	if (parserData->idxAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one variable index allowed");
+	parserData->idxAttributePresent = true;
+	if ($3 < 0) osolerror (NULL, osoption, parserData, "variable index must be nonnegative");
+	if (parserData->numberOfVariablesPresent)
+	{	if ($3 >= parserData->numberOfVariables)
+			osolerror (NULL, osoption, parserData, "variable index exceeds upper limit");
+	};
+	osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->var[parserData->numberOfVar]->idx = $3;
 };
 
-othervaroptionvalue: VALUEATT ATTRIBUTETEXT QUOTE
-{
-};
+othervaroptionvalue: VALUEATT ATTRIBUTETEXT
+{	if (parserData->valAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one variable value allowed");
+	parserData->valAttributePresent = true;
+	osoption->optimization->variables-> other[parserData->numberOfOtherVariableOptions]->var[parserData->numberOfVar]->value = $2;
+}
+QUOTE;
 
-othervaroptionlbvalue: LBVALUEATT ATTRIBUTETEXT QUOTE
-{
-};
+othervaroptionlbvalue: LBVALUEATT ATTRIBUTETEXT
+{	if (parserData->lbvalAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one lower bound value allowed");
+	parserData->lbvalAttributePresent = true;
+	osoption->optimization->variables-> other[parserData->numberOfOtherVariableOptions]->var[parserData->numberOfVar]->lbValue = $2;
+}
+QUOTE;
 
-othervaroptionubvalue: UBVALUEATT ATTRIBUTETEXT QUOTE
-{
-};
+othervaroptionubvalue: UBVALUEATT ATTRIBUTETEXT
+{	if (parserData->ubvalAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one upper bound value allowed");
+	parserData->ubvalAttributePresent = true;
+	osoption->optimization->variables-> other[parserData->numberOfOtherVariableOptions]->var[parserData->numberOfVar]->ubValue = $2;
+}
+QUOTE;
 
 othervaroptionend: GREATERTHAN VAREND | ENDOFELEMENT;
+
 
 
 objectives: | objectivesstart numberofotherobjectivesatt restofobjectives;
@@ -1658,7 +1751,7 @@ numberofotherobjectivesatt: | NUMBEROFOTHEROBJECTIVEOPTIONSATT QUOTE INTEGER QUO
 		osoption->optimization->objectives->other[i] = new OtherObjectiveOption();
 };
 
-restofobjectives: GREATERTHAN initialobjectivevalues initialobjectivebounds otherobjectiveoptions OBJECTIVESEND
+restofobjectives: GREATERTHAN initialobjectivevalues initialobjectivebounds otherobjectiveoptionlist OBJECTIVESEND
    | ENDOFELEMENT;
 
 initialobjectivevalues: | INITIALOBJECTIVEVALUESSTART numberofobjval GREATERTHAN
@@ -1701,15 +1794,15 @@ initobjvalueidxatt: IDXATT QUOTE INTEGER QUOTE
 	{	if (-$3 > parserData->numberOfObjectives)
 			osolerror (NULL, osoption, parserData, "objective index out of range");
 	};
-	osoption->optimization->objectives->initialObjectiveValues->obj[parserData->numberOfObjValues]->idx = $3;  
+	osoption->optimization->objectives->initialObjectiveValues->obj[parserData->numberOfObjValues]->idx = $3;
 };
 
 
-initobjvaluevalueatt: VALUEATT ATTRIBUTETEXT 
+initobjvaluevalueatt: VALUEATT ATTRIBUTETEXT
 {	if (parserData->valAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one objective value allowed");
 	parserData->valAttributePresent = true;
-	osoption->optimization->objectives->initialObjectiveValues->obj[parserData->numberOfObjValues]->value = strtod($2, NULL);  
+	osoption->optimization->objectives->initialObjectiveValues->obj[parserData->numberOfObjValues]->value = strtod($2, NULL);
 }
 QUOTE;
 
@@ -1719,9 +1812,8 @@ initobjvalueend: GREATERTHAN OBJEND | ENDOFELEMENT;
 initialobjectivebounds: | INITIALOBJECTIVEBOUNDSSTART numberofobjbounds GREATERTHAN
     objboundlist INITIALOBJECTIVEBOUNDSEND;
 
-numberofobjbounds: NUMBEROFOBJATT QUOTE INTEGER QUOTE 
-{	printf("\n$s$d\n","number of objective bounds: ",$3);
-	if ($3 <= 0) osolerror (NULL, osoption, parserData, "number of <obj> elements must be positive");
+numberofobjbounds: NUMBEROFOBJATT QUOTE INTEGER QUOTE
+{	if ($3 <= 0) osolerror (NULL, osoption, parserData, "number of <obj> elements must be positive");
 	osoption->optimization->objectives->initialObjectiveBounds = new InitObjectiveBounds();
 	osoption->optimization->objectives->initialObjectiveBounds->numberOfObj = $3;
 	osoption->optimization->objectives->initialObjectiveBounds->obj = new InitObjBound*[$3];
@@ -1740,7 +1832,7 @@ initobjbound: objboundstart initobjboundattlist initobjboundend
 	parserData->numberOfObjBounds++;
 };
 
-objboundstart: OBJSTART 
+objboundstart: OBJSTART
 {	if (parserData->numberOfObjBounds >= osoption->optimization->objectives->initialObjectiveBounds->numberOfObj)
 		osolerror(NULL, osoption, parserData, "too many initial objective bounds");
 };
@@ -1758,34 +1850,42 @@ initobjboundidxatt: IDXATT QUOTE INTEGER QUOTE
 	{	if (-$3 > parserData->numberOfObjectives)
 			osolerror (NULL, osoption, parserData, "objective index out of range");
 	};
-	osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->idx = $3;  
+	osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->idx = $3;
 };
 
-initobjvaluelowerboundatt: LBVALUEATT ATTRIBUTETEXT 
+initobjvaluelowerboundatt: LBVALUEATT ATTRIBUTETEXT
 {	if (parserData->lbvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one objective lower bound allowed");
 	parserData->lbvalAttributePresent = true;
-	osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->lbValue = strtod($2, NULL);  
+	osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->lbValue = strtod($2, NULL);
 }
 QUOTE;
 
-initobjvalueupperboundatt: UBVALUEATT ATTRIBUTETEXT 
+initobjvalueupperboundatt: UBVALUEATT ATTRIBUTETEXT
 {	if (parserData->ubvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one objective upper bound allowed");
 	parserData->ubvalAttributePresent = true;
-	osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->ubValue = strtod($2, NULL);  
+	osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->ubValue = strtod($2, NULL);
 }
 QUOTE;
 
 initobjboundend: GREATERTHAN OBJEND | ENDOFELEMENT;
 
 
-otherobjectiveoptions: | OTHERSTART otherobjectiveoptionsattlist restofotherobjectiveoptions;
+
+otherobjectiveoptionlist: | otherobjectiveoptionlist otherobjectiveoption;
+
+otherobjectiveoption: otherobjectiveoptionstart otherobjectiveoptionsattlist restofotherobjectiveoption;
+
+otherobjectiveoptionstart: OTHERSTART 
+{	if (parserData->numberOfOtherObjectiveOptions >= osoption->optimization->objectives->numberOfOtherObjectiveOptions)
+		osolerror(NULL, osoption, parserData, "too many <other> objective options");
+};
 
 otherobjectiveoptionsattlist: | otherobjectiveoptionsattlist otherobjectiveoptionsatt;
 
-otherobjectiveoptionsatt: 
-     otherobjectiveoptionnumberofvar 
+otherobjectiveoptionsatt:
+     otherobjectiveoptionnumberofvar
    | otherobjectiveoptionname
    | otherobjectiveoptionvalue
    | otherobjectiveoptionsolver
@@ -1794,68 +1894,162 @@ otherobjectiveoptionsatt:
    | otherobjectiveoptiondescription;
 
 otherobjectiveoptionnumberofvar: NUMBEROFOBJATT QUOTE INTEGER QUOTE
-{
+{ 	if (parserData->otherOptionNumberPresent)
+		osolerror (NULL, osoption, parserData, "only one numberOfObj attribute allowed");
+	parserData->otherOptionNumberPresent = true;
+	parserData->numberOfObj = 0;
+	if ($3 < 0) osolerror (NULL, osoption, parserData, "number of <other> objective options must be nonnegative");
+	osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->numberOfObj = $3;
+	osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->obj = new OtherObjOption*[$3];
+	for (int i = 0; i < $3; i++)
+	{	osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->obj[i] = new OtherObjOption();
+	}
+	osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->obj[0]->lbValue = "junk"; //!!!
 };
 
-otherobjectiveoptionname: NAMEATT ATTRIBUTETEXT QUOTE
-{
+otherobjectiveoptionname: NAMEATT ATTRIBUTETEXT 
+{	if (parserData->otherOptionNamePresent)
+		osolerror (NULL, osoption, parserData, "only one name attribute allowed");
+	parserData->otherOptionNamePresent = true;
+	osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->name = $2;
+}
+QUOTE;
+
+
+otherobjectiveoptionvalue: VALUEATT ATTRIBUTETEXT 
+{	if (parserData->otherOptionValuePresent)
+		osolerror (NULL, osoption, parserData, "only one value attribute allowed");
+	parserData->otherOptionValuePresent = true;
+	osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->value = $2;
+}
+QUOTE;
+
+
+otherobjectiveoptionsolver: SOLVERATT ATTRIBUTETEXT 
+{	if (parserData->otherOptionSolverPresent)
+		osolerror (NULL, osoption, parserData, "only one solver attribute allowed");
+	parserData->otherOptionSolverPresent = true;
+	osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->solver = $2;
+}
+QUOTE;
+
+
+otherobjectiveoptioncategory: CATEGORYATT ATTRIBUTETEXT 
+{	if (parserData->otherOptionCategoryPresent)
+		osolerror (NULL, osoption, parserData, "only one category attribute allowed");
+	parserData->otherOptionCategoryPresent = true;
+	osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->category = $2;
+}
+QUOTE;
+
+
+otherobjectiveoptiontype: TYPEATT ATTRIBUTETEXT 
+{	if (parserData->otherOptionTypePresent)
+		osolerror (NULL, osoption, parserData, "only one type attribute allowed");
+	parserData->otherOptionTypePresent = true;
+	osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->type = $2;
+}
+QUOTE;
+
+
+otherobjectiveoptiondescription: DESCRIPTIONATT ATTRIBUTETEXT 
+{	if (parserData->otherOptionDescriptionPresent)
+		osolerror (NULL, osoption, parserData, "only one description attribute allowed");
+	parserData->otherOptionDescriptionPresent = true;
+	osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->description = $2;
+}
+QUOTE;
+
+
+
+restofotherobjectiveoption: GREATERTHAN otherobjectiveoptionsvarlist OTHEREND
+{ 	if (parserData->numberOfVar < osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->numberOfObj)
+		osolerror(NULL, osoption, parserData, "not enough <obj> entries in <other> variable element");
+	if (!parserData->otherOptionNumberPresent)
+		osolerror (NULL, osoption, parserData, "number attribute required");
+	if (!parserData->otherOptionNamePresent)
+		osolerror (NULL, osoption, parserData, "name attribute required");
+	parserData->otherOptionNumberPresent = false;
+	parserData->otherOptionNamePresent = false;
+	parserData->otherOptionValuePresent = false;
+	parserData->otherOptionSolverPresent = false;
+	parserData->otherOptionCategoryPresent = false;
+	parserData->otherOptionTypePresent = false;
+	parserData->otherOptionDescriptionPresent = false;
+	parserData->numberOfOtherObjectiveOptions++;
 };
 
-otherobjectiveoptionvalue: VALUEATT ATTRIBUTETEXT QUOTE
-{
+otherobjectiveoptionsvarlist: | otherobjectiveoptionsvarlist otherobjectiveoptionsvar;
+
+otherobjectiveoptionsvar: otherobjectiveoptionsvarstart otherobjoptionattlist otherobjoptionend
+{	if (!parserData->idxAttributePresent)
+		osolerror(NULL, osoption, parserData, "required idx attribute was not found");
+	parserData->idxAttributePresent = false;
+	parserData->valAttributePresent = false;
+	parserData->lbvalAttributePresent = false;
+	parserData->ubvalAttributePresent = false;
+	parserData->numberOfObj++;
 };
 
-otherobjectiveoptionsolver: SOLVERATT ATTRIBUTETEXT QUOTE
-{
+otherobjectiveoptionsvarstart: OBJSTART 
+{	if (parserData->numberOfObj >= osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->numberOfObj)
+		osolerror(NULL, osoption, parserData, "too many <obj> entries in <other> objective element");
 };
-
-otherobjectiveoptioncategory: CATEGORYATT ATTRIBUTETEXT QUOTE
-{
-};
-
-otherobjectiveoptiontype: TYPEATT ATTRIBUTETEXT QUOTE
-{
-};
-
-otherobjectiveoptiondescription: DESCRIPTIONATT ATTRIBUTETEXT QUOTE
-{
-};
-
-
-restofotherobjectiveoptions: GREATERTHAN otherobjectiveoptionsvarlist OTHEREND;
-
-otherobjectiveoptionsvarlist: OBJSTART otherobjoptionattlist otherobjoptionend;
 
 otherobjoptionattlist: | otherobjoptionattlist otherobjoptionatt;
 
-otherobjoptionatt: 
+otherobjoptionatt:
      otherobjoptionidx
    | otherobjoptionvalue
    | otherobjoptionlbvalue
    | otherobjoptionubvalue;
 
-otherobjoptionidx: IDXATT ATTRIBUTETEXT QUOTE
-{	
+otherobjoptionidx: IDXATT QUOTE INTEGER QUOTE
+{	if (parserData->idxAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one objective index allowed");
+	parserData->idxAttributePresent = true;
+	if ($3 >= 0) osolerror (NULL, osoption, parserData, "objective index must be negative");
+	if (parserData->numberOfObjectivesPresent)
+	{	if (-$3 > parserData->numberOfObjectives)
+			osolerror (NULL, osoption, parserData, "objecive index exceeds upper limit");
+	};
+	osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->obj[parserData->numberOfObj]->idx = $3;
 };
 
-otherobjoptionvalue: VALUEATT ATTRIBUTETEXT QUOTE
-{
-};
 
-otherobjoptionlbvalue: LBVALUEATT ATTRIBUTETEXT QUOTE
-{
-};
+otherobjoptionvalue: VALUEATT ATTRIBUTETEXT 
+{	if (parserData->valAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one variable value allowed");
+	parserData->valAttributePresent = true;
+	osoption->optimization->objectives-> other[parserData->numberOfOtherObjectiveOptions]->obj[parserData->numberOfObj]->value = $2;
+}
+QUOTE;
 
-otherobjoptionubvalue: UBVALUEATT ATTRIBUTETEXT QUOTE
-{
-};
+
+otherobjoptionlbvalue: LBVALUEATT ATTRIBUTETEXT 
+{	if (parserData->lbvalAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one lower bound value allowed");
+	parserData->lbvalAttributePresent = true;
+	osoption->optimization->objectives-> other[parserData->numberOfOtherObjectiveOptions]->obj[parserData->numberOfObj]->lbValue = $2;
+}
+QUOTE;
+
+
+otherobjoptionubvalue: UBVALUEATT ATTRIBUTETEXT 
+{	if (parserData->ubvalAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one upper bound value allowed");
+	parserData->ubvalAttributePresent = true;
+	osoption->optimization->objectives-> other[parserData->numberOfOtherObjectiveOptions]->obj[parserData->numberOfObj]->ubValue = $2;
+}
+QUOTE;
+
 
 otherobjoptionend: GREATERTHAN VAREND | ENDOFELEMENT;
 
 
 constraints: | constraintsstart numberofotherconstraintsatt restofconstraints;
 
-constraintsstart: CONSTRAINTSSTART 
+constraintsstart: CONSTRAINTSSTART
 {	osoption->optimization->constraints = new ConstraintOption();
 };
 
@@ -1868,13 +2062,13 @@ numberofotherconstraintsatt: | NUMBEROFOTHERCONSTRAINTOPTIONSATT QUOTE INTEGER Q
 };
 
 restofconstraints: GREATERTHAN initialconstraintvalues initialdualvalues
-   otherconstraintoptions CONSTRAINTSEND
+   otherconstraintoptionlist CONSTRAINTSEND
    | ENDOFELEMENT;
 
-initialconstraintvalues: | INITIALCONSTRAINTVALUESSTART numberofconval GREATERTHAN 
+initialconstraintvalues: | INITIALCONSTRAINTVALUESSTART numberofconval GREATERTHAN
     conlist INITIALCONSTRAINTVALUESEND;
 
-numberofconval: NUMBEROFCONATT QUOTE INTEGER QUOTE 
+numberofconval: NUMBEROFCONATT QUOTE INTEGER QUOTE
 {	if ($3 <= 0) osolerror (NULL, osoption, parserData, "number of <con> elements must be positive");
 	osoption->optimization->constraints->initialConstraintValues = new InitConstraintValues();
 	osoption->optimization->constraints->initialConstraintValues->numberOfCon = $3;
@@ -1911,25 +2105,25 @@ initconvalueidxatt: IDXATT QUOTE INTEGER QUOTE
 	{	if ($3 > parserData->numberOfConstraints)
 			osolerror (NULL, osoption, parserData, "constraint index out of range");
 	};
-	osoption->optimization->constraints->initialConstraintValues->con[parserData->numberOfCon]->idx = $3;  
+	osoption->optimization->constraints->initialConstraintValues->con[parserData->numberOfCon]->idx = $3;
 };
 
 
-initconvaluevalueatt: VALUEATT ATTRIBUTETEXT 
+initconvaluevalueatt: VALUEATT ATTRIBUTETEXT
 {	if (parserData->valAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one constraint value allowed");
 	parserData->valAttributePresent = true;
-	osoption->optimization->constraints->initialConstraintValues->con[parserData->numberOfCon]->value = strtod($2, NULL);  
+	osoption->optimization->constraints->initialConstraintValues->con[parserData->numberOfCon]->value = strtod($2, NULL);
 }
 QUOTE;
 
 initconvalueend: GREATERTHAN CONEND | ENDOFELEMENT;
 
 
-initialdualvalues: | INITIALDUALVALUESSTART numberofduals GREATERTHAN 
+initialdualvalues: | INITIALDUALVALUESSTART numberofduals GREATERTHAN
     duallist INITIALDUALVALUESEND;
 
-numberofduals: NUMBEROFCONATT QUOTE INTEGER QUOTE 
+numberofduals: NUMBEROFCONATT QUOTE INTEGER QUOTE
 {	if ($3 <= 0) osolerror (NULL, osoption, parserData, "number of <con> elements must be positive");
 	osoption->optimization->constraints->initialDualValues = new InitDualVariableValues();
 	osoption->optimization->constraints->initialDualValues->numberOfCon = $3;
@@ -1949,7 +2143,7 @@ initdualvalue: dualstart initdualvalueattlist initdualvalueend
 	parserData->numberOfDuals++;
 };
 
-dualstart: CONSTART 
+dualstart: CONSTART
 {	if (parserData->numberOfDuals >= osoption->optimization->constraints->initialDualValues->numberOfCon)
 		osolerror(NULL, osoption, parserData, "too many initial dual variable bounds");
 };
@@ -1967,22 +2161,22 @@ initdualvalueidxatt: IDXATT QUOTE INTEGER QUOTE
 	{	if ($3 > parserData->numberOfConstraints)
 			osolerror (NULL, osoption, parserData, "constraint index out of range");
 	};
-	osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->idx = $3;  
+	osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->idx = $3;
 };
 
-initdualvaluelowerboundatt: LBVALUEATT ATTRIBUTETEXT 
+initdualvaluelowerboundatt: LBVALUEATT ATTRIBUTETEXT
 {	if (parserData->lbvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one dual variable lower bound allowed");
 	parserData->lbvalAttributePresent = true;
-	osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->lbValue = strtod($2, NULL);  
+	osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->lbValue = strtod($2, NULL);
 }
 QUOTE;
 
-initdualvalueupperboundatt: UBVALUEATT ATTRIBUTETEXT 
+initdualvalueupperboundatt: UBVALUEATT ATTRIBUTETEXT
 {	if (parserData->ubvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one dual variable upper bound allowed");
 	parserData->ubvalAttributePresent = true;
-	osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->ubValue = strtod($2, NULL);  
+	osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->ubValue = strtod($2, NULL);
 }
 QUOTE;
 
@@ -1990,12 +2184,19 @@ QUOTE;
 initdualvalueend: GREATERTHAN CONEND | ENDOFELEMENT;
 
 
-otherconstraintoptions: | OTHERSTART otherconstraintoptionsattlist restofotherconstraintoptions;
+otherconstraintoptionlist: | otherconstraintoptionlist otherconstraintoption;
+
+otherconstraintoption: otherconstraintoptionstart otherconstraintoptionsattlist restofotherconstraintoption;
+
+otherconstraintoptionstart: OTHERSTART
+{	if (parserData->numberOfOtherConstraintOptions >= osoption->optimization->constraints->numberOfOtherConstraintOptions)
+		osolerror(NULL, osoption, parserData, "too many <other> constraint options");
+};
 
 otherconstraintoptionsattlist: | otherconstraintoptionsattlist otherconstraintoptionsatt;
 
-otherconstraintoptionsatt: 
-     otherconstraintoptionnumberofvar 
+otherconstraintoptionsatt:
+     otherconstraintoptionnumberofvar
    | otherconstraintoptionname
    | otherconstraintoptionvalue
    | otherconstraintoptionsolver
@@ -2004,79 +2205,165 @@ otherconstraintoptionsatt:
    | otherconstraintoptiondescription;
 
 otherconstraintoptionnumberofvar: NUMBEROFCONATT QUOTE INTEGER QUOTE
-{
+{ 	if (parserData->otherOptionNumberPresent)
+		osolerror (NULL, osoption, parserData, "only one numberOfCon attribute allowed");
+	parserData->otherOptionNumberPresent = true;
+	parserData->numberOfCon = 0;
+	if ($3 < 0) osolerror (NULL, osoption, parserData, "number of <other> constraint options must be nonnegative");
+	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->numberOfCon = $3;
+	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->con = new OtherConOption*[$3];
+	for (int i = 0; i < $3; i++)
+	{	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->con[i] = new OtherConOption();
+	}
+	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->con[0]->lbValue = "junk"; //!!!
 };
 
-otherconstraintoptionname: NAMEATT ATTRIBUTETEXT QUOTE
-{
+otherconstraintoptionname: NAMEATT ATTRIBUTETEXT 
+{	if (parserData->otherOptionNamePresent)
+		osolerror (NULL, osoption, parserData, "only one name attribute allowed");
+	parserData->otherOptionNamePresent = true;
+	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->name = $2;
+}
+QUOTE;
+
+otherconstraintoptionvalue: VALUEATT ATTRIBUTETEXT 
+{	if (parserData->otherOptionValuePresent)
+		osolerror (NULL, osoption, parserData, "only one value attribute allowed");
+	parserData->otherOptionValuePresent = true;
+	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->value = $2;
+}
+QUOTE;
+
+otherconstraintoptionsolver: SOLVERATT ATTRIBUTETEXT 
+{	if (parserData->otherOptionSolverPresent)
+		osolerror (NULL, osoption, parserData, "only one solver attribute allowed");
+	parserData->otherOptionSolverPresent = true;
+	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->solver = $2;
+}
+QUOTE;
+
+otherconstraintoptioncategory: CATEGORYATT ATTRIBUTETEXT 
+{	if (parserData->otherOptionCategoryPresent)
+		osolerror (NULL, osoption, parserData, "only one category attribute allowed");
+	parserData->otherOptionCategoryPresent = true;
+	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->category = $2;
+}
+QUOTE;
+
+otherconstraintoptiontype: TYPEATT ATTRIBUTETEXT 
+{	if (parserData->otherOptionTypePresent)
+		osolerror (NULL, osoption, parserData, "only one type attribute allowed");
+	parserData->otherOptionTypePresent = true;
+	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->type = $2;
+}
+QUOTE;
+
+otherconstraintoptiondescription: DESCRIPTIONATT ATTRIBUTETEXT 
+{	if (parserData->otherOptionDescriptionPresent)
+		osolerror (NULL, osoption, parserData, "only one description attribute allowed");
+	parserData->otherOptionDescriptionPresent = true;
+	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->description = $2;
+}
+QUOTE;
+
+
+restofotherconstraintoption: GREATERTHAN otherconstraintoptionsvarlist OTHEREND
+{ 	if (parserData->numberOfCon < osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->numberOfCon)
+		osolerror(NULL, osoption, parserData, "not enough <con> entries in <other> constraint element");
+	if (!parserData->otherOptionNumberPresent)
+		osolerror (NULL, osoption, parserData, "number attribute required");
+	if (!parserData->otherOptionNamePresent)
+		osolerror (NULL, osoption, parserData, "name attribute required");
+	parserData->otherOptionNumberPresent = false;
+	parserData->otherOptionNamePresent = false;
+	parserData->otherOptionValuePresent = false;
+	parserData->otherOptionSolverPresent = false;
+	parserData->otherOptionCategoryPresent = false;
+	parserData->otherOptionTypePresent = false;
+	parserData->otherOptionDescriptionPresent = false;
+	parserData->numberOfOtherConstraintOptions++;
 };
 
-otherconstraintoptionvalue: VALUEATT ATTRIBUTETEXT QUOTE
-{
+otherconstraintoptionsvarlist: | otherconstraintoptionsvarlist otherconstraintoptionsvar;
+
+otherconstraintoptionsvar: otherconstraintoptionsvarstart otherconoptionattlist otherconoptionend
+{	if (!parserData->idxAttributePresent)
+		osolerror(NULL, osoption, parserData, "required idx attribute was not found");
+	parserData->idxAttributePresent = false;
+	parserData->valAttributePresent = false;
+	parserData->lbvalAttributePresent = false;
+	parserData->ubvalAttributePresent = false;
+	parserData->numberOfCon++;
 };
 
-otherconstraintoptionsolver: SOLVERATT ATTRIBUTETEXT QUOTE
-{
+otherconstraintoptionsvarstart: CONSTART 
+{	if (parserData->numberOfVar >= osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->numberOfVar)
+		osolerror(NULL, osoption, parserData, "too many <var> entries in <other> variable element");
 };
-
-otherconstraintoptioncategory: CATEGORYATT ATTRIBUTETEXT QUOTE
-{
-};
-
-otherconstraintoptiontype: TYPEATT ATTRIBUTETEXT QUOTE
-{
-};
-
-otherconstraintoptiondescription: DESCRIPTIONATT ATTRIBUTETEXT QUOTE
-{
-};
-
-
-restofotherconstraintoptions: GREATERTHAN otherconstraintoptionsvarlist OTHEREND;
-
-otherconstraintoptionsvarlist: CONSTART otherconoptionattlist otherconoptionend;
 
 otherconoptionattlist: | otherconoptionattlist otherconoptionatt;
 
-otherconoptionatt: 
+otherconoptionatt:
      otherconoptionidx
    | otherconoptionvalue
    | otherconoptionlbvalue
    | otherconoptionubvalue;
 
-otherconoptionidx: IDXATT ATTRIBUTETEXT QUOTE
-{	
+otherconoptionidx: IDXATT QUOTE INTEGER QUOTE
+{	if (parserData->idxAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one constraint index allowed");
+	parserData->idxAttributePresent = true;
+	if ($3 < 0) osolerror (NULL, osoption, parserData, "constraint index must be nonnegative");
+	if (parserData->numberOfConstraintsPresent)
+	{	if ($3 >= parserData->numberOfConstraints)
+			osolerror (NULL, osoption, parserData, "constraint index exceeds upper limit");
+	};
+	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->con[parserData->numberOfCon]->idx = $3;
 };
 
-otherconoptionvalue: VALUEATT ATTRIBUTETEXT QUOTE
-{
-};
 
-otherconoptionlbvalue: LBVALUEATT ATTRIBUTETEXT QUOTE
-{
-};
+otherconoptionvalue: VALUEATT ATTRIBUTETEXT 
+{	if (parserData->valAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one constraint value allowed");
+	parserData->valAttributePresent = true;
+	osoption->optimization->constraints-> other[parserData->numberOfOtherConstraintOptions]->con[parserData->numberOfCon]->value = $2;
+}
+QUOTE;
 
-otherconoptionubvalue: UBVALUEATT ATTRIBUTETEXT QUOTE
-{
-};
+
+otherconoptionlbvalue: LBVALUEATT ATTRIBUTETEXT 
+{	if (parserData->lbvalAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one lower bound value allowed");
+	parserData->lbvalAttributePresent = true;
+	osoption->optimization->constraints-> other[parserData->numberOfOtherConstraintOptions]->con[parserData->numberOfCon]->lbValue = $2;
+}
+QUOTE;
+
+otherconoptionubvalue: UBVALUEATT ATTRIBUTETEXT 
+{	if (parserData->ubvalAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one upper bound value allowed");
+	parserData->ubvalAttributePresent = true;
+	osoption->optimization->constraints-> other[parserData->numberOfOtherConstraintOptions]->con[parserData->numberOfCon]->ubValue = $2;
+}
+QUOTE;
 
 otherconoptionend: GREATERTHAN CONEND | ENDOFELEMENT;
 
 
 solveroptions: | solveroptionsstart numberofsolveroptionsatt GREATERTHAN solveroptionlist SOLVEROPTIONSEND
 {	if (parserData->numberOfSolverOptions != osoption->optimization->solverOptions->numberOfSolverOptions)
-		osolerror (NULL, osoption, parserData, "wrong number of solver options in <optimization> element"); 
+		osolerror (NULL, osoption, parserData, "wrong number of solver options in <optimization> element");
 };
 
-solveroptionsstart: SOLVEROPTIONSSTART 
+solveroptionsstart: SOLVEROPTIONSSTART
 {	if (parserData->solverOptionsPresent)
 	{	osolerror( NULL, osoption, parserData, "only one <solverOptions> element allowed");
 	}
 	else
 	{	parserData->solverOptionsPresent = true;
-		osoption->optimization->solverOptions = new SolverOptions();	
+		osoption->optimization->solverOptions = new SolverOptions();
 	}
-}; 
+};
 
 numberofsolveroptionsatt: NUMBEROFSOLVEROPTIONSATT QUOTE INTEGER QUOTE
 {	if ($3 < 0) osolerror (NULL, osoption, parserData, "number of solver options cannot be negative");
@@ -2087,11 +2374,11 @@ numberofsolveroptionsatt: NUMBEROFSOLVEROPTIONSATT QUOTE INTEGER QUOTE
 
 solveroptionlist: | solveroptionlist solveroption;
 
-solveroption: SOLVEROPTIONSTART 
+solveroption: SOLVEROPTIONSTART
 {	if (parserData->numberOfSolverOptions >= osoption->optimization->solverOptions->numberOfSolverOptions)
 	{	osolerror (NULL, osoption, parserData, "too many solver options in <optimization> element");
 	};
-} 
+}
 solveroptionattlist solveroptionend
 {	if (!parserData->solverOptionNamePresent)
 		osolerror (NULL, osoption, parserData, "name attribute must be present");
@@ -2107,7 +2394,7 @@ solveroptionattlist solveroptionend
 
 solveroptionattlist: | solveroptionattlist solveroptionatt;
 
-solveroptionatt: 
+solveroptionatt:
      solveroptionname
    | solveroptionvalue
    | solveroptionsolver
@@ -2116,68 +2403,68 @@ solveroptionatt:
    | solveroptiondescription;
 
 
-solveroptionname: NAMEATT ATTRIBUTETEXT 
+solveroptionname: NAMEATT ATTRIBUTETEXT
 {	if (parserData->solverOptionNamePresent)
 	{	osolerror( NULL, osoption, parserData, "only one name attribute allowed");
 	}
 	else
 	{	parserData->solverOptionNamePresent = true;
-		osoption->optimization->solverOptions->solverOption[parserData->numberOfSolverOptions]->name = $2;	
+		osoption->optimization->solverOptions->solverOption[parserData->numberOfSolverOptions]->name = $2;
 	}
 }
 QUOTE;
 
-solveroptionvalue: VALUEATT ATTRIBUTETEXT 
+solveroptionvalue: VALUEATT ATTRIBUTETEXT
 {	if (parserData->solverOptionValuePresent)
 	{	osolerror( NULL, osoption, parserData, "only one value attribute allowed");
 	}
 	else
 	{	parserData->solverOptionValuePresent = true;
-		osoption->optimization->solverOptions->solverOption[parserData->numberOfSolverOptions]->value = $2;	
+		osoption->optimization->solverOptions->solverOption[parserData->numberOfSolverOptions]->value = $2;
 	}
 }
 QUOTE;
 
-solveroptionsolver: SOLVERATT ATTRIBUTETEXT 
+solveroptionsolver: SOLVERATT ATTRIBUTETEXT
 {	if (parserData->solverOptionSolverPresent)
 	{	osolerror( NULL, osoption, parserData, "only one solver attribute allowed");
 	}
 	else
 	{	parserData->solverOptionSolverPresent = true;
-		osoption->optimization->solverOptions->solverOption[parserData->numberOfSolverOptions]->solver = $2;	
+		osoption->optimization->solverOptions->solverOption[parserData->numberOfSolverOptions]->solver = $2;
 	}
 }
 QUOTE;
 
-solveroptioncategory: CATEGORYATT ATTRIBUTETEXT 
+solveroptioncategory: CATEGORYATT ATTRIBUTETEXT
 {	if (parserData->solverOptionCategoryPresent)
 	{	osolerror( NULL, osoption, parserData, "only one category attribute allowed");
 	}
 	else
 	{	parserData->solverOptionCategoryPresent = true;
-		osoption->optimization->solverOptions->solverOption[parserData->numberOfSolverOptions]->category = $2;	
+		osoption->optimization->solverOptions->solverOption[parserData->numberOfSolverOptions]->category = $2;
 	}
 }
 QUOTE;
 
-solveroptiontype: TYPEATT ATTRIBUTETEXT 
+solveroptiontype: TYPEATT ATTRIBUTETEXT
 {	if (parserData->solverOptionTypePresent)
 	{	osolerror( NULL, osoption, parserData, "only one type attribute allowed");
 	}
 	else
 	{	parserData->solverOptionTypePresent = true;
-		osoption->optimization->solverOptions->solverOption[parserData->numberOfSolverOptions]->type = $2;	
+		osoption->optimization->solverOptions->solverOption[parserData->numberOfSolverOptions]->type = $2;
 	}
 }
 QUOTE;
 
-solveroptiondescription: DESCRIPTIONATT ATTRIBUTETEXT 
+solveroptiondescription: DESCRIPTIONATT ATTRIBUTETEXT
 {	if (parserData->solverOptionNamePresent)
 	{	osolerror( NULL, osoption, parserData, "only one name attribute allowed");
 	}
 	else
 	{	parserData->solverOptionNamePresent = true;
-		osoption->optimization->solverOptions->solverOption[parserData->numberOfSolverOptions]->name = $2;	
+		osoption->optimization->solverOptions->solverOption[parserData->numberOfSolverOptions]->name = $2;
 	}
 }
 QUOTE;
@@ -2189,14 +2476,14 @@ solveroptionend: GREATERTHAN SOLVEROPTIONEND | ENDOFELEMENT;
 
 //quote: xmlWhiteSpace QUOTE;
 //
-//xmlWhiteSpaceChar: ' ' 
+//xmlWhiteSpaceChar: ' '
 //				| '\t'
 //				| '\r'
 //				| '\n' ;
-//				
-//xmlWhiteSpace: 
+//
+//xmlWhiteSpace:
 //			| xmlWhiteSpace xmlWhiteSpaceChar ;
-			
+
 
 %%
 
@@ -2206,8 +2493,8 @@ void osolerror(YYLTYPE* mytype, OSOption *osoption, OSoLParserData* parserData, 
 	std::string error = errormsg;
 	error = "Input is either not valid or well formed: "  + error;
 	outStr << error << std::endl;
-	outStr << "See line number: " << osolget_lineno( scanner) << std::endl; 
-	outStr << "The offending text is: " << osolget_text ( scanner ) << std::endl; 
+	outStr << "See line number: " << osolget_lineno( scanner) << std::endl;
+	outStr << "The offending text is: " << osolget_text ( scanner ) << std::endl;
 	error = outStr.str();
 	//printf("THIS DID NOT GET DESTROYED:   %s\n", parserData->errorText);
 	//if( (parserData->errorText != NULL) &&  (strlen(parserData->errorText) > 0) ) free(  parserData->errorText);
@@ -2228,7 +2515,7 @@ void  yygetOSOption(const char *parsestring, OSOption *osoption, OSoLParserData 
 		 }
 	}
 	catch(const ErrorClass& eclass){
-		throw ErrorClass(  eclass.errormsg); 
+		throw ErrorClass(  eclass.errormsg);
 	}
 } //end yygetOSOption
 

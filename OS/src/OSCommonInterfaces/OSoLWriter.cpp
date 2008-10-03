@@ -374,7 +374,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 		if (m_OSOption->optimization->variables != NULL)
 		{	outStr << "<variables";
 			if (m_OSOption->optimization->variables->numberOfOtherVariableOptions > 0)
-				outStr << " numberOfOtherVariableOptions=\"" << m_OSOption->optimization->variables << "\"";
+				outStr << " numberOfOtherVariableOptions=\"" << m_OSOption->optimization->variables->numberOfOtherVariableOptions << "\"";
 			outStr << ">" << endl;
 			if (m_OSOption->optimization->variables->initialVariableValues != NULL)
 			{	outStr << "<initialVariableValues numberOfVar=\"";
@@ -398,6 +398,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				}
 				outStr << "</initialVariableValuesString>" << endl;
 			}
+	printf("\n%s%d\n","Number of other variable options: ",m_OSOption->optimization->variables->numberOfOtherVariableOptions);
 			if (m_OSOption->optimization->variables->numberOfOtherVariableOptions > 0)
 				for (int i=0; i < m_OSOption->optimization->variables->numberOfOtherVariableOptions; i++)
 				{	outStr << "<other name=\"" << m_OSOption->optimization->variables->other[i]->name << "\"";
@@ -425,6 +426,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 								outStr << " ubValue=\"" << m_OSOption->optimization->variables->other[i]->var[j]->ubValue << "\"";
 							outStr << "/>" << endl;
 						}
+					outStr << "</other>" << endl;
 				}
 
 			outStr << "</variables>" << endl;
@@ -432,7 +434,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 		if (m_OSOption->optimization->objectives != NULL)
 		{	outStr << "<objectives";
 			if (m_OSOption->optimization->objectives->numberOfOtherObjectiveOptions > 0)
-				outStr << " numberOfOtherObjectiveOptions=\"" << m_OSOption->optimization->objectives << "\"";
+				outStr << " numberOfOtherObjectiveOptions=\"" << m_OSOption->optimization->objectives->numberOfOtherObjectiveOptions << "\"";
 			outStr << ">" << endl;
 			if (m_OSOption->optimization->objectives->initialObjectiveValues != NULL)
 			{	outStr << "<initialObjectiveValues numberOfObj=\"";
@@ -480,13 +482,14 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 								outStr << " value=\"" << m_OSOption->optimization->objectives->other[i]->obj[j]->value << "\"";
 							outStr << "/>" << endl;
 						}
+					outStr << "</other>" << endl;
 				}
 			outStr << "</objectives>" << endl;
 		}
 		if (m_OSOption->optimization->constraints != NULL)
 		{	outStr << "<constraints";
 			if (m_OSOption->optimization->constraints->numberOfOtherConstraintOptions > 0)
-				outStr << " numberOfOtherConstraintOptions=\"" << m_OSOption->optimization->constraints << "\"";
+				outStr << " numberOfOtherConstraintOptions=\"" << m_OSOption->optimization->constraints->numberOfOtherConstraintOptions << "\"";
 			outStr << ">" << endl;
 			if (m_OSOption->optimization->constraints->initialConstraintValues != NULL)
 			{	outStr << "<initialConstraintValues numberOfCon=\"";

@@ -169,9 +169,15 @@ public:
 	int numberOfDuals;
 	int numberOfSolverOptions;
 
+	int numberOfObj;
+
 	/** attributes of <other> options */
+	bool otherOptionNumberPresent;
 	bool otherOptionNamePresent;
 	bool otherOptionValuePresent;
+	bool otherOptionSolverPresent;
+	bool otherOptionCategoryPresent;
+	bool otherOptionTypePresent;
 	bool otherOptionDescriptionPresent;
 
 	/** attributes of <solverOptions> element */

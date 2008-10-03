@@ -573,6 +573,7 @@ VariableOption::~VariableOption()
 		{	if (other[i] != NULL)
 				delete other[i];
 				other[i] = NULL;
+		
 		};
  		delete other;
 		other = NULL;
