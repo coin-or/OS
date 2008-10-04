@@ -96,7 +96,7 @@ OtherOptions::~OtherOptions()
 		{	delete other[i];
 			other[i] = NULL;
 		}
-		delete other;
+		delete[] other;
 		other = NULL;
 	}
 }//end OtherOptions destructor
@@ -328,7 +328,7 @@ PathPairs::~PathPairs()
 		{	delete pathPair[i];
 			pathPair[i] = NULL;
 		}
-		delete pathPair;
+		delete[] pathPair;
 		pathPair = NULL;
 	}
 }//end PathPairs destructor 
@@ -450,7 +450,7 @@ InitVariableValues::~InitVariableValues()
 		{	delete var[i];
 			var[i] = NULL;
 		}
-		delete var;
+		delete[] var;
 		var = NULL;
 	}
 }//end InitVariableValues destructor 
@@ -492,7 +492,7 @@ InitVariableValuesString::~InitVariableValuesString()
 		{	delete var[i];
 			var[i] = NULL;
 		}
-		delete var;
+		delete[] var;
 		var = NULL;
 	}
 }//end InitVariableValues destructor 
@@ -542,7 +542,7 @@ OtherVariableOption::~OtherVariableOption()
 		{	delete var[i];
 			var[i] = NULL;
 		}
-		delete var;
+		delete[] var;
 		var = NULL;
 	};
 }//end OtherVariableOption destructor 
@@ -575,7 +575,7 @@ VariableOption::~VariableOption()
 				other[i] = NULL;
 		
 		};
- 		delete other;
+ 		delete[] other;
 		other = NULL;
 	};
 }//end VariableOption destructor 
@@ -617,7 +617,7 @@ InitObjectiveValues::~InitObjectiveValues()
 		{	delete obj[i];
 			obj[i] = NULL;
 		}
-		delete obj;
+		delete[] obj;
 		obj = NULL;
 	};
 }//end InitObjectiveValues destructor 
@@ -660,7 +660,7 @@ InitObjectiveBounds::~InitObjectiveBounds()
 		{	delete obj[i];
 			obj[i] = NULL;
 		}
-		delete obj;
+		delete[] obj;
 		obj = NULL;
 	};
 }//end InitObjectiveBounds destructor 
@@ -781,7 +781,7 @@ InitConstraintValues::~InitConstraintValues()
 		{	delete con[i];
 			con[i] = NULL;
 		}
-		delete con;
+		delete[] con;
 		con = NULL;
 	};
 }//end InitConstraintValues destructor
@@ -824,7 +824,7 @@ InitDualVariableValues::~InitDualVariableValues()
 		{	delete con[i];
 			con[i] = NULL;
 		}
-		delete con;
+		delete[] con;
 		con = NULL;
 	};
 }//end InitDualVariableValues destructor
@@ -951,7 +951,7 @@ SolverOptions::~SolverOptions()
 		{	delete solverOption[i];
 			solverOption[i] = NULL;
 		}
-		delete solverOption;
+		delete[] solverOption;
 		solverOption = NULL;
 	}
 }//end SolverOptions destructor
