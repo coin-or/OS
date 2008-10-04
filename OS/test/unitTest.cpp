@@ -240,7 +240,7 @@ int main(int argC, char* argV[])
 	fileUtil = new FileUtil();
 	// 
 	unitTestResult << "HERE ARE THE UNIT TEST RESULTS:" << std::endl << std::endl;
-	
+
 	//first make sure we can read files
 	try{
 		osilFileName =  dataDir  + "osilFiles" + dirsep +  "parincLinearByRow.osil";
@@ -1606,7 +1606,6 @@ catch(const ErrorClass& eclass){
 	}
 
 
-
 	//
 	// Now test the OSoL parser
 	OSoLWriter *osolwriter = NULL;
@@ -1644,7 +1643,9 @@ catch(const ErrorClass& eclass){
 		osoption = osolreader->readOSoL( osol);
 		cout << "Write the content to a new file" <<endl;
 		tmpOSoL = osolwriter->writeOSoL( osoption);
-		cout << endl << endl << tmpOSoL << endl;
+//		cout << endl << "Here is tmpOSoL:" <<endl;
+//		cout << endl << endl << tmpOSoL << endl;
+//		cout << "-----------------------------------------" << endl << endl;
 		// make sure we can parse without error
 		delete osolreader;
 		osolreader = NULL;
