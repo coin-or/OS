@@ -23,6 +23,7 @@
 #include "OSConfig.h"
 #include <sstream>   
 #include <iostream>  
+#include <stdio.h>
 
 using std::cout;
 using std::endl;
