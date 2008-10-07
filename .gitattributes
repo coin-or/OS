@@ -199,6 +199,10 @@ OS/doc/osUsersManual_1.tex -text
 OS/doc/osUsersManual_1.toc -text
 OS/doc/usersManualAdditions.txt -text
 OS/examples/CppAD/Makefile.in -text
+OS/examples/Excel/OSWebServiceGUI.xlsm -text
+OS/examples/Excel/clsOSInstance.cls -text
+OS/examples/Excel/clsws_OSSolverServiceServic.cls -text
+OS/examples/Excel/parIncVBA.xlsm -text
 OS/examples/addCuts/Makefile.in -text
 OS/examples/addCuts/OSAddCuts.cpp -text
 OS/examples/algorithmicDiff/Makefile.in -text
