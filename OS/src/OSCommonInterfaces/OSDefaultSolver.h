@@ -21,6 +21,7 @@
 
 #include "OSInstance.h"
 #include "OSResult.h"
+#include "OSOption.h"
 
 #include <string>
 
@@ -59,7 +60,7 @@ public:
 
 	
 	/** osoption holds the solver options in-memory as an OSOption object */
-	//OSOption  *osoption;
+	OSOption  *osoption;
 	
 	/** osinsList holds the solution or result of the model */
 	std::string insList;
