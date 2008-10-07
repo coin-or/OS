@@ -749,7 +749,7 @@ starttimehead: SCHEDULEDSTARTTIMESTART
 
 starttimebody: ENDOFELEMENT
 	| GREATERTHAN SCHEDULEDSTARTTIMEEND
-	| GREATERTHAN ELEMENTTEXT {osoption->general->userName = $2;} SCHEDULEDSTARTTIMEEND;
+	| GREATERTHAN ELEMENTTEXT {osoption->job->scheduledStartTime = $2;} SCHEDULEDSTARTTIMEEND;
 
 dependencies: dependencieshead numberofjobidsatt GREATERTHAN dependencieslist DEPENDENCIESEND;
 
@@ -985,7 +985,7 @@ indirtomovemakecopyatt: MAKECOPYATT ATTRIBUTETEXT
 	else
 	{	parserData->pathPairMakeCopyPresent = true;
 		if ($2 == "true")
-			osoption->job->inputDirectoriesToMove->pathPair[parserData->numberOfInputDirectoriesToMove]->makeCopy = $2;
+			osoption->job->inputDirectoriesToMove->pathPair[parserData->numberOfInputDirectoriesToMove]->makeCopy = true;
 	}
 }
 QUOTE;
@@ -1066,7 +1066,7 @@ infilestomovemakecopyatt: MAKECOPYATT ATTRIBUTETEXT
 	else
 	{	parserData->pathPairMakeCopyPresent = true;
 		if ($2 == "true")
-			osoption->job->inputFilesToMove->pathPair[parserData->numberOfInputFilesToMove]->makeCopy = $2;
+			osoption->job->inputFilesToMove->pathPair[parserData->numberOfInputFilesToMove]->makeCopy = true;
 	}
 }
 QUOTE;
@@ -1148,7 +1148,7 @@ outdirtomovemakecopyatt: MAKECOPYATT ATTRIBUTETEXT
 	else
 	{	parserData->pathPairMakeCopyPresent = true;
 		if ($2 == "true")
-			osoption->job->outputDirectoriesToMove->pathPair[parserData->numberOfOutputDirectoriesToMove]->makeCopy = $2;
+			osoption->job->outputDirectoriesToMove->pathPair[parserData->numberOfOutputDirectoriesToMove]->makeCopy = true;
 	}
 }
 QUOTE;
@@ -1229,7 +1229,7 @@ outfilestomovemakecopyatt: MAKECOPYATT ATTRIBUTETEXT
 	else
 	{	parserData->pathPairMakeCopyPresent = true;
 		if ($2 == "true")
-			osoption->job->outputFilesToMove->pathPair[parserData->numberOfOutputFilesToMove]->makeCopy = $2;
+			osoption->job->outputFilesToMove->pathPair[parserData->numberOfOutputFilesToMove]->makeCopy = true;
 	}
 }
 QUOTE;
@@ -1601,9 +1601,7 @@ othervariableoptionnumberofvar: NUMBEROFVARATT QUOTE INTEGER QUOTE
 	osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->numberOfVar = $3;
 	osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->var = new OtherVarOption*[$3];
 	for (int i = 0; i < $3; i++)
-	{	osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->var[i] = new OtherVarOption();
-	}
-	osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->var[0]->lbValue = "junk"; //!!!
+		osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->var[i] = new OtherVarOption();	
 };
 
 othervariableoptionname: NAMEATT ATTRIBUTETEXT
@@ -1902,9 +1900,7 @@ otherobjectiveoptionnumberofvar: NUMBEROFOBJATT QUOTE INTEGER QUOTE
 	osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->numberOfObj = $3;
 	osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->obj = new OtherObjOption*[$3];
 	for (int i = 0; i < $3; i++)
-	{	osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->obj[i] = new OtherObjOption();
-	}
-	osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->obj[0]->lbValue = "junk"; //!!!
+		osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->obj[i] = new OtherObjOption();
 };
 
 otherobjectiveoptionname: NAMEATT ATTRIBUTETEXT 
@@ -2213,9 +2209,7 @@ otherconstraintoptionnumberofvar: NUMBEROFCONATT QUOTE INTEGER QUOTE
 	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->numberOfCon = $3;
 	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->con = new OtherConOption*[$3];
 	for (int i = 0; i < $3; i++)
-	{	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->con[i] = new OtherConOption();
-	}
-	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->con[0]->lbValue = "junk"; //!!!
+		osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->con[i] = new OtherConOption();
 };
 
 otherconstraintoptionname: NAMEATT ATTRIBUTETEXT 
