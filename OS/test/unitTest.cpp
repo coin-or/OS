@@ -1642,6 +1642,18 @@ catch(const ErrorClass& eclass){
 		cout << "PARSE THE OSOL STRING INTO AN OSOPTION OBJECT" << endl;
 		osoption = osolreader->readOSoL( osol);
 		cout << "Write the content to a new file" <<endl;
+		
+		std::cout << "number of solver options "  <<  osoption->getnumberOfSolverOptions() << std::endl;
+		std::vector<SolverOption*> optionsVector;
+		optionsVector = osoption->getSolverOptions( "ipopt");
+		int i;
+		int num_options = optionsVector.size();
+		for(i = 0; i < num_options; i++){
+			std::cout << "ipopt solver option  "  << optionsVector[ i]->name << std::endl;
+		}
+		//return 0;
+		
+		
 		tmpOSoL = osolwriter->writeOSoL( osoption);
 //		cout << endl << "Here is tmpOSoL:" <<endl;
 //		cout << endl << endl << tmpOSoL << endl;

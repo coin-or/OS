@@ -19,7 +19,7 @@
 //#define DEBUG
 #include <string>
 #include <vector> 
-
+#include <string>
 
 /*! \class InstanceLocationOption
  *  \brief the InstanceLocationOption class.
@@ -1577,7 +1577,11 @@ public:
 	 *
 	 * Class destructor. 
 	 */
-	~OptimizationOption();		
+	~OptimizationOption();	
+	
+private:
+	
+
 }; //OptimizationOption
 
 
@@ -1770,6 +1774,7 @@ public:
 	 * m_inumberOfSolverOptions holds the number of SolverOption objects. 
 	 */	
 	int m_inumberOfSolverOptions;
+	
 
 
 public: //Put the get() and set() methods...
@@ -1837,7 +1842,23 @@ public: //Put the get() and set() methods...
 //	 */
 //	bool setGeneralStatusType(std::string type);	
 	
-
+	/**
+	 * Get the number of solver options. 
+	 * 
+	 * @return the number of solver options. 
+	 */
+	int getnumberOfSolverOptions();
+	
+	/**
+	 * Get the options associated with a given solver
+	 * <p>
+	 * 
+	 * @param solver_name is the name of the solver whos options we want
+	 * @return a vector of pointers to SolverOptions objects that 
+	 * correspond to the solver named. 
+	 */
+	std::vector<SolverOption*> getSolverOptions( std::string solver_name);
+	
 
 };
 #endif

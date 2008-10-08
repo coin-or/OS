@@ -987,17 +987,19 @@ OptimizationOption::~OptimizationOption()
 }//end OptimizationOption destructor
 
 
-OSOption::OSOption() 
+OSOption::OSOption() :
 //(initializations)
+general( NULL),
+system( NULL),
+service( NULL),
+job( NULL),
+optimization( NULL),
+m_inumberOfSolverOptions( -1)
 {    
 	#ifdef DEBUG
 	cout << "Inside OSOption Constructor" << endl;
 	#endif
-	general = NULL;
-	system = NULL;
-	service = NULL;
-	job = NULL;
-	optimization = NULL;
+
 }// end OSOption constructor  
 
 OSOption::~OSOption()
@@ -1082,7 +1084,7 @@ OSOption::~OSOption()
 //	resultHeader->generalStatus->type = type;
 //	return true;
 //}//setGeneralStatusType
-
+  
 
 //bool OSResult::setSolutionNumber(int number){
 //	//if(getVariableNumber() <= 0) return false;
@@ -1102,4 +1104,28 @@ OSOption::~OSOption()
 //}//setSolutionNumber
 
 
+int OSOption::getnumberOfSolverOptions(){
+	if(m_inumberOfSolverOptions == -1){
+		if( (this->optimization != NULL) && (this->optimization->solverOptions != NULL) ) {
+			m_inumberOfSolverOptions = this->optimization->solverOptions->numberOfSolverOptions;
+		}
+	}
+	return m_inumberOfSolverOptions;
+}//getnumberOfSolverOptions
 
+
+std::vector<SolverOption*>  OSOption::getSolverOptions( std::string solver_name){
+	std::vector<SolverOption*> optionsVector;
+	if( (this->optimization != NULL) && (this->optimization->solverOptions != NULL) ) {
+		int i;
+		int num_options;
+		num_options = this->getnumberOfSolverOptions();
+		for(i = 0; i < num_options; i++){
+			if(solver_name == this->optimization->solverOptions->solverOption[ i]->solver){
+				optionsVector.push_back( this->optimization->solverOptions->solverOption[ i]);
+			}
+		}
+							
+	}
+	return optionsVector;
+}//getSolverOptiosn

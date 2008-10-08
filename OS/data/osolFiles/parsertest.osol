@@ -119,7 +119,7 @@
 		<solverOptions numberOfSolverOptions="5">
 			<solverOption name="zero" solver="ipopt" category="tol:model" value="1.e-5"></solverOption>
 			<solverOption name="zero" solver="ipopt" category="tol:general" value="1.e-5"></solverOption>
-			<solverOption name="pivot" solver="ipopt" category="tol:model" value="1.e-5"/>
+			<solverOption name="pivot" solver="clp" category="tol:model" value="1.e-5"/>
 			<solverOption name="tiny" solver="ipopt" category="tol:model:input" value="1.e-5"></solverOption>
 			<solverOption name="other" solver="ipopt" category="another" value="1.e-5"></solverOption>
 		</solverOptions>
