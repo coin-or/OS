@@ -1716,57 +1716,62 @@ public:
 	int m_inumberOfProcessesToKill;
 
 	/**
-	 * m_inumberOfInitVarValues holds the number of InitVarValues objects. 
+	 * m_inumberOfInitVarValues holds the number of InitVarValue objects. 
 	 */	
 	int m_inumberOfInitVarValues;
 
 	/**
-	 * m_inumberOfOtherVariableOptions holds the number of OtherVariableOptions objects. 
+	 * m_inumberOfInitVarValuesString holds the number of InitVarValueString objects. 
+	 */	
+	int m_inumberOfInitVarValuesString;
+
+	/**
+	 * m_inumberOfOtherVariableOptions holds the number of OtherVariableOption objects. 
 	 */	
 	int m_inumberOfOtherVariableOptions;
 
 	/**
-	 * m_inumberOfOtherVarOptions is an array for the number of OtherVarOptions objects. 
+	 * m_inumberOfOtherVarOptions is an array for the number of OtherVarOption objects. 
 	 */	
 	int *mm_inumberOfOtherVarOptions;
 
 	/**
-	 * m_inumberOfInitObjValues holds the number of InitObjValues objects. 
+	 * m_inumberOfInitObjValues holds the number of InitObjValue objects. 
 	 */	
 	int m_inumberOfInitObjValues;
 
 	/**
-	 * m_inumberOfInitObjBounds holds the number of InitObjBounds objects. 
+	 * m_inumberOfInitObjBounds holds the number of InitObjBound objects. 
 	 */	
 	int m_inumberOfInitObjBounds;
 
 	/**
-	 * m_inumberOfOtherObjectiveOptions holds the number of OtherObjectiveOptions objects. 
+	 * m_inumberOfOtherObjectiveOptions holds the number of OtherObjectiveOption objects. 
 	 */	
 	int m_inumberOfOtherObjectiveOptions;
 
 	/**
-	 * m_inumberOfOtherObjOptions is an array for the number of OtherObjOptions objects. 
+	 * m_inumberOfOtherObjOptions is an array for the number of OtherObjOption objects. 
 	 */	
 	int *mm_inumberOfOtherObjOptions;
 
 	/**
-	 * m_inumberOfInitConValues holds the number of InitConValues objects. 
+	 * m_inumberOfInitConValues holds the number of InitConValue objects. 
 	 */	
 	int m_inumberOfInitConValues;
 
 	/**
-	 * m_inumberOfInitDualVarValues holds the number of InitDualVarValues objects. 
+	 * m_inumberOfInitDualVarValues holds the number of InitDualVarValue objects. 
 	 */	
 	int m_inumberOfInitDualVarValues;
 
 	/**
-	 * m_inumberOfOtherConstraintOptions holds the number of OtherConstraintOptions objects. 
+	 * m_inumberOfOtherConstraintOptions holds the number of OtherConstraintOption objects. 
 	 */	
 	int m_inumberOfOtherConstraintOptions;
 
 	/**
-	 * m_inumberOfOtherConOptions is an array for the number of OtherConOptions objects. 
+	 * m_inumberOfOtherConOptions is an array for the number of OtherConOption objects. 
 	 */	
 	int *mm_inumberOfOtherConOptions;
 
@@ -1841,7 +1846,33 @@ public: //Put the get() and set() methods...
 //	 * @return whether the general status type is set successfully or not. 
 //	 */
 //	bool setGeneralStatusType(std::string type);	
-	
+
+
+	/**
+	 * Get the number of initial variable values. 
+	 * 
+	 * @return the number of initial variable values. 
+	 */
+	int getnumberOfInitVarValues();
+
+	/**
+	 * Get the initial values associated with the variables in sparse form
+	 * <p>
+	 * 
+	 * @return a vector of pointers to InitVarValue objects that 
+	 * hold inital values for (some of) the variables
+	 */
+	std::vector<InitVarValue*> getInitVarValuesSparse();
+
+	/**
+	 * Get the initial values associated with the variables in dense form
+	 * <p>
+	 * 
+	 * @return a vector of pointers to InitVarValue objects that 
+	 * hold inital values for (some of) the variables
+	 */
+	double *getInitVarValuesDense(int numberOfVariables);
+
 	/**
 	 * Get the number of solver options. 
 	 * 
@@ -1853,8 +1884,8 @@ public: //Put the get() and set() methods...
 	 * Get the options associated with a given solver
 	 * <p>
 	 * 
-	 * @param solver_name is the name of the solver whos options we want
-	 * @return a vector of pointers to SolverOptions objects that 
+	 * @param solver_name is the name of the solver whose options we want
+	 * @return a vector of pointers to SolverOption objects that 
 	 * correspond to the solver named. 
 	 */
 	std::vector<SolverOption*> getSolverOptions( std::string solver_name);

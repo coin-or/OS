@@ -994,7 +994,9 @@ system( NULL),
 service( NULL),
 job( NULL),
 optimization( NULL),
+m_inumberOfInitVarValues( -1),
 m_inumberOfSolverOptions( -1)
+
 {    
 	#ifdef DEBUG
 	cout << "Inside OSOption Constructor" << endl;
@@ -1104,28 +1106,81 @@ OSOption::~OSOption()
 //}//setSolutionNumber
 
 
+int OSOption::getnumberOfInitVarValues(){
+	if(m_inumberOfInitVarValues == -1){
+		if (this->optimization != NULL) {
+			if(this->optimization->variables != NULL) {
+				if(this->optimization->variables->initialVariableValues != NULL) {
+					m_inumberOfInitVarValues = this->optimization->variables->initialVariableValues->numberOfVar;
+				}
+			}
+		}
+	}
+	return m_inumberOfInitVarValues;
+}//getnumberOfInitVarValues
+
+std::vector<InitVarValue*>  OSOption::getInitVarValuesSparse(){
+	std::vector<InitVarValue*> initVarVector;
+	if (this->optimization != NULL) {
+		if(this->optimization->variables != NULL) {
+			if(this->optimization->variables->initialVariableValues != NULL) {
+			int i;
+			int num_var;
+			num_var = this->getnumberOfInitVarValues();
+			for(i = 0; i < num_var; i++){
+				initVarVector.push_back( this->optimization->variables->initialVariableValues->var[ i]);
+				}
+			}
+		}					
+	}
+	return initVarVector;
+}//getInitVarValuesSparse
+
+double *OSOption::getInitVarValuesDense(int numberOfVariables){
+	double *initVarVector;
+	initVarVector = new double[numberOfVariables];
+	for (int k = 0; k < numberOfVariables; k++) initVarVector[k] = OSNAN;
+	if (this->optimization != NULL) {
+		if(this->optimization->variables != NULL) {
+			if(this->optimization->variables->initialVariableValues != NULL) {
+			int i;
+			int num_var;
+			num_var = this->getnumberOfInitVarValues();
+			for(i = 0; i < num_var; i++){
+				initVarVector[this->optimization->variables->initialVariableValues->var[i]->idx] 
+				  = this->optimization->variables->initialVariableValues->var[i]->value;
+				}
+			}
+		}					
+	}
+	return initVarVector;
+}//getInitVarValuesDense
+
+
 int OSOption::getnumberOfSolverOptions(){
 	if(m_inumberOfSolverOptions == -1){
-		if( (this->optimization != NULL) && (this->optimization->solverOptions != NULL) ) {
-			m_inumberOfSolverOptions = this->optimization->solverOptions->numberOfSolverOptions;
+		if (this->optimization != NULL) {
+			if(this->optimization->solverOptions != NULL) {
+				m_inumberOfSolverOptions = this->optimization->solverOptions->numberOfSolverOptions;
+			}
 		}
 	}
 	return m_inumberOfSolverOptions;
 }//getnumberOfSolverOptions
 
-
 std::vector<SolverOption*>  OSOption::getSolverOptions( std::string solver_name){
 	std::vector<SolverOption*> optionsVector;
-	if( (this->optimization != NULL) && (this->optimization->solverOptions != NULL) ) {
-		int i;
-		int num_options;
-		num_options = this->getnumberOfSolverOptions();
-		for(i = 0; i < num_options; i++){
-			if(solver_name == this->optimization->solverOptions->solverOption[ i]->solver){
-				optionsVector.push_back( this->optimization->solverOptions->solverOption[ i]);
+	if (this->optimization != NULL) {
+		if (this->optimization->solverOptions != NULL) {
+			int i;
+			int num_options;
+			num_options = this->getnumberOfSolverOptions();
+			for(i = 0; i < num_options; i++){
+				if(solver_name == this->optimization->solverOptions->solverOption[ i]->solver){
+					optionsVector.push_back( this->optimization->solverOptions->solverOption[ i]);
+				}
 			}
-		}
-							
+		}					
 	}
 	return optionsVector;
-}//getSolverOptiosn
+}//getSolverOptions
