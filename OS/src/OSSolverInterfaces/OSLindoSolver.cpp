@@ -182,6 +182,21 @@ void LindoSolver::buildSolverInstance() throw (ErrorClass) {
 	}				
 }//end buildSolverInstance()
 
+
+
+void Lindo::setSolverOptions() throw (ErrorClass) {
+	try{
+		
+	}
+	catch(const ErrorClass& eclass){
+		std::cout << "THERE IS AN ERROR" << std::endl;
+		osresult->setGeneralMessage( eclass.errormsg);
+		osresult->setGeneralStatusType( "error");
+		osrl = osrlwriter->writeOSrL( osresult);
+		throw ErrorClass( osrl) ;
+	}				
+}//end setSolverOptions() 
+
  
 void LindoSolver::solve()  {
 	if( this->bCallbuildSolverInstance == false) buildSolverInstance();

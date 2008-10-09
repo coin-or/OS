@@ -71,9 +71,11 @@
 #include "OSResult.h" 
 #include "OSiLReader.h"        
 #include "OSiLWriter.h" 
+#include "OSoLReader.h"
 #include "OSrLReader.h"        
 #include "OSrLWriter.h"      
 #include "OSInstance.h"  
+#include "OSOption.h"
 #include "OSFileUtil.h"  
 #include "OSConfig.h"  
 #include "OSDefaultSolver.h"  
@@ -551,6 +553,15 @@ void solve(){
 				std::cout << "CREATING AN OSINSTANCE FROM AN OSIL FILE" << std::endl;
 				solverType->osinstance = osilreader->readOSiL( osoptions->osil );
 				solverType->buildSolverInstance();
+				// set solver options if there is an OSoL file  kippster
+				if(osoptions->osol != ""){
+					OSoLReader *osolreader = NULL;
+					osolreader = new OSoLReader();
+					solverType->osoption = osolreader->readOSoL( osoptions->osol);
+					solverType->setSolverOptions();
+					delete osolreader;
+					osolreader = NULL;
+				}
 				solverType->solve();
 				osrl = solverType->osrl;
 			}

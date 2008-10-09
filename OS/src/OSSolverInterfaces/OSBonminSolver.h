@@ -268,6 +268,12 @@ public:
 	 */	
 	virtual void  buildSolverInstance() throw(ErrorClass);
 	
+	/*! \fn void setSolverOptions() 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return void.
+	 */	
+	virtual void  setSolverOptions() throw(ErrorClass);
+	
    	/**
    	 * use this for debugging, print out the instance that
    	 * the solver thinks it has and compare this with the OSiL

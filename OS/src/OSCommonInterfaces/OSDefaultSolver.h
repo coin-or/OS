@@ -91,6 +91,12 @@ public:
 	 */ 
 	virtual void buildSolverInstance() = 0 ;	
 	
+	/** setSolverOptions is a virtual function -- the actual solvers will
+	 * implement their own setSolverOptions method  -- the solver instance is the instance
+	 * the individual solver sees in its api
+	 */ 
+	virtual void setSolverOptions() = 0 ;
+	
 	/**
 	 * default constructor.
 	 */

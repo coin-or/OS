@@ -207,11 +207,17 @@ public:
 	 * data structrues and optimized */ 
 	virtual void  solve() throw (ErrorClass) ;
 	
-	/*! \fn void CoinSolver::buildSolverInstance() 
+	/*! \fn void buildSolverInstance() 
 	 *  \brief The implementation of the virtual functions. 
 	 *  \return void.
 	 */	
 	virtual void  buildSolverInstance() throw(ErrorClass);
+	
+	/*! \fn void setSolverOptions() 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return void.
+	 */	
+	virtual void  setSolverOptions() throw(ErrorClass);
 	
    	/**
    	 * use this for debugging, print out the instance that

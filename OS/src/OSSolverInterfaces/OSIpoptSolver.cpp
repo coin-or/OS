@@ -516,6 +516,42 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 }
 
 
+void IpoptSolver::setSolverOptions() throw (ErrorClass) {
+	try{
+		if(osoption != NULL){
+			std::cout << "number of solver options "  <<  osoption->getnumberOfSolverOptions() << std::endl;
+			std::vector<SolverOption*> optionsVector;
+			optionsVector = osoption->getSolverOptions( "ipopt");
+			char *pEnd;
+			int i;
+			int num_ipopt_options = optionsVector.size();
+			for(i = 0; i < num_ipopt_options; i++){
+				std::cout << "ipopt solver option  "  << optionsVector[ i]->name << std::endl;
+				if(optionsVector[ i]->type == "numeric" ){
+					std::cout << "FOUND A NUMERIC OPTION  "  <<  os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) << std::endl;
+					app->Options()->SetNumericValue(optionsVector[ i]->name, os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) );	
+				}
+				else if(optionsVector[ i]->type == "integer" ){
+					std::cout << "FOUND AN INTEGER OPTION  "  << atoi( optionsVector[ i]->value.c_str() ) << std::endl;
+					app->Options()->SetIntegerValue(optionsVector[ i]->name, atoi( optionsVector[ i]->value.c_str() ) );
+				}
+				else if(optionsVector[ i]->type == "string" ){
+					app->Options()->SetStringValue(optionsVector[ i]->name, optionsVector[ i]->value);
+				}
+			}	
+		}
+	}
+	catch(const ErrorClass& eclass){
+		std::cout << "THERE IS AN ERROR" << std::endl;
+		osresult->setGeneralMessage( eclass.errormsg);
+		osresult->setGeneralStatusType( "error");
+		osrl = osrlwriter->writeOSrL( osresult);
+		throw ErrorClass( osrl) ;
+	}				
+}//end setSolverOptions() 
+
+
+
 void IpoptSolver::buildSolverInstance() throw (ErrorClass) {
 	try{
 		
@@ -527,6 +563,13 @@ void IpoptSolver::buildSolverInstance() throw (ErrorClass) {
 		// Create a new instance of your nlp 
 		nlp = new IpoptProblem( osinstance, osresult);
 		app = new IpoptApplication();
+		/* set the default options */
+		app->Options()->SetNumericValue("tol", 1e-9);
+		app->Options()->SetIntegerValue("print_level", 0);
+		app->Options()->SetIntegerValue("max_iter", 20000);
+		app->Options()->SetStringValue("mu_strategy", "adaptive");
+		app->Options()->SetStringValue("output_file", "ipopt.out");
+		app->Options()->SetStringValue("check_derivatives_for_naninf", "yes");
 		this->bCallbuildSolverInstance = true;
 	}
 	catch(const ErrorClass& eclass){
@@ -554,12 +597,6 @@ void IpoptSolver::solve() throw (ErrorClass) {
 		cout << "Parsing took (seconds): "<< duration << endl;
 		//dataEchoCheck();
 		/***************now the ipopt invokation*********************/
-		app->Options()->SetNumericValue("tol", 1e-9);
-		app->Options()->SetIntegerValue("print_level", 0);
-		app->Options()->SetIntegerValue("max_iter", 20000);
-		app->Options()->SetStringValue("mu_strategy", "adaptive");
-		app->Options()->SetStringValue("output_file", "ipopt.out");
-		app->Options()->SetStringValue("check_derivatives_for_naninf", "yes");
 		// see if we have a linear program
 		if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Ipopt NEEDS AN OBJECTIVE FUNCTION");
 		if( (osinstance->getNumberOfNonlinearExpressions() == 0) && (osinstance->getNumberOfQuadraticTerms() == 0) ) 

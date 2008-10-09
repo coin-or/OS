@@ -155,6 +155,12 @@ public:
 	 */	
 	virtual void  buildSolverInstance() throw(ErrorClass);
 	
+	/*! \fn void setSolverOptions() 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return void.
+	 */	
+	virtual void  setSolverOptions() throw(ErrorClass);
+	
 	/** solve results in an instance being read into the Knitro
 	 * data structrues and optimized */ 
 	virtual void  solve() throw (ErrorClass) ;

@@ -193,6 +193,21 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass) {
 }//end buildSolverInstance()
 
 
+
+void CoinSolver::setSolverOptions() throw (ErrorClass) {
+	try{
+		
+	}
+	catch(const ErrorClass& eclass){
+		std::cout << "THERE IS AN ERROR" << std::endl;
+		osresult->setGeneralMessage( eclass.errormsg);
+		osresult->setGeneralStatusType( "error");
+		osrl = osrlwriter->writeOSrL( osresult);
+		throw ErrorClass( osrl) ;
+	}				
+}//end setSolverOptions() 
+
+
 bool CoinSolver::setCoinPackedMatrix(){
 	bool columnMajor = osinstance->getLinearConstraintCoefficientMajor();
 	try{

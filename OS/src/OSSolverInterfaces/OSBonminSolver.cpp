@@ -598,6 +598,21 @@ void BonminSolver::buildSolverInstance() throw (ErrorClass) {
 }//end buildSolverInstance() 
 
 
+
+void BonminSolver::setSolverOptions() throw (ErrorClass) {
+	try{
+		
+	}
+	catch(const ErrorClass& eclass){
+		std::cout << "THERE IS AN ERROR" << std::endl;
+		osresult->setGeneralMessage( eclass.errormsg);
+		osresult->setGeneralStatusType( "error");
+		osrl = osrlwriter->writeOSrL( osresult);
+		throw ErrorClass( osrl) ;
+	}				
+}//end setSolverOptions() 
+
+
 //void BonminSolver::solve() throw (ErrorClass) {
 void BonminSolver::solve() throw (ErrorClass) {
 	if( this->bCallbuildSolverInstance == false) buildSolverInstance();
