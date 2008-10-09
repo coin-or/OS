@@ -1157,6 +1157,56 @@ double *OSOption::getInitVarValuesDense(int numberOfVariables){
 }//getInitVarValuesDense
 
 
+int OSOption::getnumberOfInitVarValuesString(){
+	if(m_inumberOfInitVarValuesString == -1){
+		if (this->optimization != NULL) {
+			if(this->optimization->variables != NULL) {
+				if(this->optimization->variables->initialVariableValuesString != NULL) {
+					m_inumberOfInitVarValues = this->optimization->variables->initialVariableValuesString->numberOfVar;
+				}
+			}
+		}
+	}
+	return m_inumberOfInitVarValuesString;
+}//getnumberOfInitVarValuesString
+
+std::vector<InitVarValueString*>  OSOption::getInitVarStringsSparse(){
+	std::vector<InitVarValueString*> initVarVector;
+	if (this->optimization != NULL) {
+		if(this->optimization->variables != NULL) {
+			if(this->optimization->variables->initialVariableValuesString != NULL) {
+			int i;
+			int num_var;
+			num_var = this->getnumberOfInitVarValuesString();
+			for(i = 0; i < num_var; i++){
+				initVarVector.push_back( this->optimization->variables->initialVariableValuesString->var[ i]);
+				}
+			}
+		}					
+	}
+	return initVarVector;
+}//getInitVarStringsSparse
+
+std::string *OSOption::getInitVarStringsDense(int numberOfVariables){
+	std::string *initVarVector;
+	initVarVector = new std::string[numberOfVariables];
+	for (int k = 0; k < numberOfVariables; k++) initVarVector[k] = "";
+	if (this->optimization != NULL) {
+		if(this->optimization->variables != NULL) {
+			if(this->optimization->variables->initialVariableValuesString != NULL) {
+			int i;
+			int num_var;
+			num_var = this->getnumberOfInitVarValuesString();
+			for(i = 0; i < num_var; i++){
+				initVarVector[this->optimization->variables->initialVariableValuesString->var[i]->idx] 
+				  = this->optimization->variables->initialVariableValuesString->var[i]->value;
+				}
+			}
+		}					
+	}
+	return initVarVector;
+}//getInitVarValuesDense
+
 int OSOption::getnumberOfSolverOptions(){
 	if(m_inumberOfSolverOptions == -1){
 		if (this->optimization != NULL) {

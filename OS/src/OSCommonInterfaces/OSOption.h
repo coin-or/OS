@@ -1868,10 +1868,35 @@ public: //Put the get() and set() methods...
 	 * Get the initial values associated with the variables in dense form
 	 * <p>
 	 * 
-	 * @return a vector of pointers to InitVarValue objects that 
-	 * hold inital values for (some of) the variables
+	 * @return a vector of double that 
+	 * hold inital values for all of the variables
 	 */
 	double *getInitVarValuesDense(int numberOfVariables);
+
+	/**
+	 * Get the number of initial variable strings. 
+	 * 
+	 * @return the number of initial variable strings. 
+	 */
+	int getnumberOfInitVarValuesString();
+
+	/**
+	 * Get the initial values associated with the variables in sparse form
+	 * <p>
+	 * 
+	 * @return a vector of strings that 
+	 * hold inital value strings for (some of) the variables
+	 */
+	std::vector<InitVarValueString*> getInitVarStringsSparse();
+
+	/**
+	 * Get the initial values associated with the variables in dense form
+	 * <p>
+	 * 
+	 * @return a vector of strings that 
+	 * hold inital value strings for all of the variables
+	 */
+	std::string *getInitVarStringsDense(int numberOfVariables);
 
 	/**
 	 * Get the number of solver options. 

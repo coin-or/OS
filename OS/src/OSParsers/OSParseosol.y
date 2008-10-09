@@ -1509,7 +1509,12 @@ initvarvaluevalueatt: VALUEATT ATTRIBUTETEXT
 {	if (parserData->valAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one variable value allowed");
 	parserData->valAttributePresent = true;
-	osoption->optimization->variables->initialVariableValues->var[parserData->numberOfVar]->value = strtod($2, NULL);
+	if ($2 == "INF")
+		osoption->optimization->variables->initialVariableValues->var[parserData->numberOfVar]->value = OSDBL_MAX;
+	else if ($2 == "-INF")
+		osoption->optimization->variables->initialVariableValues->var[parserData->numberOfVar]->value = -OSDBL_MAX;
+	else
+		osoption->optimization->variables->initialVariableValues->var[parserData->numberOfVar]->value = strtod($2, NULL);
 }
 QUOTE;
 
@@ -1800,7 +1805,12 @@ initobjvaluevalueatt: VALUEATT ATTRIBUTETEXT
 {	if (parserData->valAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one objective value allowed");
 	parserData->valAttributePresent = true;
-	osoption->optimization->objectives->initialObjectiveValues->obj[parserData->numberOfObjValues]->value = strtod($2, NULL);
+	if ($2 == "INF")
+		osoption->optimization->objectives->initialObjectiveValues->obj[parserData->numberOfObjValues]->value = OSDBL_MAX;
+	else if ($2 == "-INF")
+		osoption->optimization->objectives->initialObjectiveValues->obj[parserData->numberOfObjValues]->value = -OSDBL_MAX;
+	else
+		osoption->optimization->objectives->initialObjectiveValues->obj[parserData->numberOfObjValues]->value = strtod($2, NULL);
 }
 QUOTE;
 
@@ -1855,7 +1865,12 @@ initobjvaluelowerboundatt: LBVALUEATT ATTRIBUTETEXT
 {	if (parserData->lbvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one objective lower bound allowed");
 	parserData->lbvalAttributePresent = true;
-	osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->lbValue = strtod($2, NULL);
+	if ($2 == "INF")
+		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjValues]->lbValue = OSDBL_MAX;
+	else if ($2 == "-INF")
+		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjValues]->lbValue = -OSDBL_MAX;
+	else
+		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjValues]->lbValue = strtod($2, NULL);
 }
 QUOTE;
 
@@ -1863,7 +1878,12 @@ initobjvalueupperboundatt: UBVALUEATT ATTRIBUTETEXT
 {	if (parserData->ubvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one objective upper bound allowed");
 	parserData->ubvalAttributePresent = true;
-	osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->ubValue = strtod($2, NULL);
+	if ($2 == "INF")
+		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjValues]->ubValue = OSDBL_MAX;
+	else if ($2 == "-INF")
+		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjValues]->ubValue = -OSDBL_MAX;
+	else
+		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjValues]->ubValue = strtod($2, NULL);
 }
 QUOTE;
 
@@ -2109,7 +2129,12 @@ initconvaluevalueatt: VALUEATT ATTRIBUTETEXT
 {	if (parserData->valAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one constraint value allowed");
 	parserData->valAttributePresent = true;
-	osoption->optimization->constraints->initialConstraintValues->con[parserData->numberOfCon]->value = strtod($2, NULL);
+	if ($2 == "INF")
+		osoption->optimization->constraints->initialConstraintValues->con[parserData->numberOfCon]->value = OSDBL_MAX;
+	else if ($2 == "-INF")
+		osoption->optimization->constraints->initialConstraintValues->con[parserData->numberOfCon]->value = -OSDBL_MAX;
+	else
+		osoption->optimization->constraints->initialConstraintValues->con[parserData->numberOfCon]->value = strtod($2, NULL);
 }
 QUOTE;
 
@@ -2164,7 +2189,12 @@ initdualvaluelowerboundatt: LBVALUEATT ATTRIBUTETEXT
 {	if (parserData->lbvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one dual variable lower bound allowed");
 	parserData->lbvalAttributePresent = true;
-	osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->lbValue = strtod($2, NULL);
+	if ($2 == "INF")
+		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->lbValue = OSDBL_MAX;
+	else if ($2 == "-INF")
+		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->lbValue = -OSDBL_MAX;
+	else
+		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->lbValue = strtod($2, NULL);
 }
 QUOTE;
 
@@ -2172,7 +2202,12 @@ initdualvalueupperboundatt: UBVALUEATT ATTRIBUTETEXT
 {	if (parserData->ubvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one dual variable upper bound allowed");
 	parserData->ubvalAttributePresent = true;
-	osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->ubValue = strtod($2, NULL);
+	if ($2 == "INF")
+		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->ubValue = OSDBL_MAX;
+	else if ($2 == "-INF")
+		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->ubValue = -OSDBL_MAX;
+	else
+		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->ubValue = strtod($2, NULL);
 }
 QUOTE;
 
