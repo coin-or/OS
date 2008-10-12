@@ -380,7 +380,8 @@
 
 
 
-
+#include "OSDataStructures.h"
+#include "OSMathUtil.h"
 #include "OSParameters.h"
 #include "OSConfig.h"
 #include "OSErrorClass.h"
@@ -1031,62 +1032,62 @@ static const yytype_int16 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   127,   127,   128,   130,   131,   133,   135,   135,   137,
-     148,   149,   151,   151,   153,   153,   153,   153,   153,   154,
-     154,   154,   154,   154,   154,   157,   159,   168,   169,   170,
-     170,   173,   175,   184,   185,   186,   186,   189,   191,   200,
-     201,   202,   202,   205,   207,   217,   217,   217,   219,   220,
-     222,   222,   225,   227,   236,   237,   238,   238,   241,   243,
-     252,   253,   254,   254,   257,   259,   268,   269,   270,   270,
-     273,   275,   284,   285,   286,   286,   289,   291,   300,   301,
-     302,   302,   305,   307,   317,   317,   317,   319,   320,   322,
-     322,   325,   327,   337,   343,   348,   348,   351,   350,   366,
-     366,   368,   368,   368,   371,   370,   382,   381,   393,   392,
-     403,   403,   406,   406,   408,   419,   420,   422,   422,   424,
-     424,   424,   424,   424,   426,   428,   438,   438,   438,   440,
-     441,   442,   442,   443,   443,   446,   448,   458,   458,   458,
-     460,   461,   462,   462,   463,   463,   466,   468,   478,   478,
-     478,   480,   481,   482,   482,   483,   483,   486,   488,   497,
-     498,   499,   499,   502,   504,   514,   520,   525,   525,   528,
-     527,   542,   542,   544,   544,   544,   547,   546,   558,   557,
-     570,   569,   580,   580,   583,   583,   585,   596,   597,   599,
-     599,   601,   601,   603,   603,   605,   614,   615,   616,   616,
-     618,   620,   630,   636,   641,   641,   644,   643,   658,   658,
-     660,   660,   660,   663,   662,   674,   673,   685,   684,   695,
-     695,   698,   700,   710,   711,   713,   713,   715,   715,   715,
-     715,   715,   716,   716,   716,   716,   716,   717,   717,   717,
-     717,   717,   720,   722,   732,   732,   732,   734,   735,   736,
-     736,   737,   737,   739,   741,   750,   751,   752,   752,   754,
-     756,   766,   772,   772,   775,   774,   787,   790,   800,   805,
-     805,   807,   807,   819,   822,   832,   837,   837,   839,   839,
-     851,   854,   863,   868,   868,   871,   870,   882,   885,   895,
-     900,   900,   903,   902,   914,   917,   927,   935,   935,   937,
-     949,   955,   955,   957,   957,   957,   960,   959,   971,   970,
-     982,   981,   993,   993,   996,   999,  1009,  1016,  1016,  1018,
-    1030,  1036,  1036,  1038,  1038,  1038,  1041,  1040,  1052,  1051,
-    1063,  1062,  1074,  1074,  1077,  1080,  1090,  1098,  1098,  1100,
-    1112,  1118,  1118,  1120,  1120,  1120,  1123,  1122,  1134,  1133,
-    1145,  1144,  1156,  1156,  1159,  1162,  1172,  1179,  1179,  1181,
-    1193,  1199,  1199,  1201,  1201,  1201,  1204,  1203,  1215,  1214,
-    1226,  1225,  1237,  1237,  1240,  1243,  1253,  1258,  1258,  1261,
-    1260,  1272,  1275,  1285,  1290,  1290,  1293,  1292,  1304,  1308,
-    1318,  1323,  1323,  1326,  1325,  1337,  1339,  1349,  1355,  1360,
-    1360,  1363,  1362,  1377,  1377,  1379,  1379,  1379,  1382,  1381,
-    1393,  1392,  1404,  1403,  1414,  1414,  1417,  1417,  1419,  1429,
-    1429,  1431,  1431,  1431,  1433,  1437,  1441,  1445,  1445,  1447,
-    1449,  1449,  1451,  1455,  1455,  1463,  1464,  1466,  1466,  1468,
-    1477,  1477,  1479,  1487,  1492,  1492,  1494,  1494,  1496,  1509,
-    1508,  1522,  1522,  1525,  1525,  1528,  1537,  1537,  1539,  1547,
-    1552,  1552,  1554,  1554,  1556,  1569,  1568,  1576,  1576,  1581,
-    1581,  1583,  1585,  1590,  1590,  1593,  1594,  1595,  1596,  1597,
-    1598,  1599,  1601,  1614,  1613,  1622,  1621,  1630,  1629,  1638,
-    1637,  1646,  1645,  1654,  1653,  1662,  1679,  1679,  1681,  1691,
-    1696,  1696,  1699,  1700,  1701,  1702,  1704,  1717,  1716,  1725,
-    1724,  1733,  1732,  1740,  1740,  1744,  1744,  1746,  1750,  1750,
-    1758,  1759,  1761,  1761,  1764,  1773,  1773,  1775,  1783,  1788,
-    1788,  1790,  1790,  1792,  1806,  1805,  1819,  1819,  1822,  1822,
-    1825,  1834,  1834,  1836,  1845,  1850,  1850,  1852,  1852,  1852,
-    1854,  1867,  1866,  1881,  1880,  1894,  1894,  1898,  1898,  1900,
+       0,   128,   128,   129,   131,   132,   134,   136,   136,   138,
+     149,   150,   152,   152,   154,   154,   154,   154,   154,   155,
+     155,   155,   155,   155,   155,   158,   160,   169,   170,   171,
+     171,   174,   176,   185,   186,   187,   187,   190,   192,   201,
+     202,   203,   203,   206,   208,   218,   218,   218,   220,   221,
+     223,   223,   226,   228,   237,   238,   239,   239,   242,   244,
+     253,   254,   255,   255,   258,   260,   269,   270,   271,   271,
+     274,   276,   285,   286,   287,   287,   290,   292,   301,   302,
+     303,   303,   306,   308,   318,   318,   318,   320,   321,   323,
+     323,   326,   328,   338,   344,   349,   349,   352,   351,   367,
+     367,   369,   369,   369,   372,   371,   383,   382,   394,   393,
+     404,   404,   407,   407,   409,   420,   421,   423,   423,   425,
+     425,   425,   425,   425,   427,   429,   439,   439,   439,   441,
+     442,   443,   443,   444,   444,   447,   449,   459,   459,   459,
+     461,   462,   463,   463,   464,   464,   467,   469,   479,   479,
+     479,   481,   482,   483,   483,   484,   484,   487,   489,   498,
+     499,   500,   500,   503,   505,   515,   521,   526,   526,   529,
+     528,   543,   543,   545,   545,   545,   548,   547,   559,   558,
+     571,   570,   581,   581,   584,   584,   586,   597,   598,   600,
+     600,   602,   602,   604,   604,   606,   615,   616,   617,   617,
+     619,   621,   631,   637,   642,   642,   645,   644,   659,   659,
+     661,   661,   661,   664,   663,   675,   674,   686,   685,   696,
+     696,   699,   701,   711,   712,   714,   714,   716,   716,   716,
+     716,   716,   717,   717,   717,   717,   717,   718,   718,   718,
+     718,   718,   721,   723,   733,   733,   733,   735,   736,   737,
+     737,   738,   738,   740,   742,   751,   752,   753,   753,   755,
+     757,   767,   773,   773,   776,   775,   788,   791,   801,   806,
+     806,   808,   808,   820,   823,   833,   838,   838,   840,   840,
+     852,   855,   864,   869,   869,   872,   871,   883,   886,   896,
+     901,   901,   904,   903,   915,   918,   928,   936,   936,   938,
+     950,   956,   956,   958,   958,   958,   961,   960,   972,   971,
+     983,   982,   994,   994,   997,  1000,  1010,  1017,  1017,  1019,
+    1031,  1037,  1037,  1039,  1039,  1039,  1042,  1041,  1053,  1052,
+    1064,  1063,  1075,  1075,  1078,  1081,  1091,  1099,  1099,  1101,
+    1113,  1119,  1119,  1121,  1121,  1121,  1124,  1123,  1135,  1134,
+    1146,  1145,  1157,  1157,  1160,  1163,  1173,  1180,  1180,  1182,
+    1194,  1200,  1200,  1202,  1202,  1202,  1205,  1204,  1216,  1215,
+    1227,  1226,  1238,  1238,  1241,  1244,  1254,  1259,  1259,  1262,
+    1261,  1273,  1276,  1286,  1291,  1291,  1294,  1293,  1305,  1309,
+    1319,  1324,  1324,  1327,  1326,  1338,  1340,  1350,  1356,  1361,
+    1361,  1364,  1363,  1378,  1378,  1380,  1380,  1380,  1383,  1382,
+    1394,  1393,  1405,  1404,  1415,  1415,  1418,  1418,  1420,  1430,
+    1430,  1432,  1432,  1432,  1434,  1438,  1442,  1446,  1446,  1448,
+    1450,  1450,  1452,  1456,  1456,  1464,  1465,  1467,  1467,  1469,
+    1478,  1478,  1480,  1488,  1493,  1493,  1495,  1495,  1497,  1510,
+    1509,  1523,  1523,  1526,  1526,  1529,  1538,  1538,  1540,  1548,
+    1553,  1553,  1555,  1555,  1557,  1570,  1569,  1577,  1577,  1582,
+    1582,  1584,  1586,  1591,  1591,  1594,  1595,  1596,  1597,  1598,
+    1599,  1600,  1602,  1615,  1614,  1623,  1622,  1631,  1630,  1639,
+    1638,  1647,  1646,  1655,  1654,  1663,  1680,  1680,  1682,  1692,
+    1697,  1697,  1700,  1701,  1702,  1703,  1705,  1718,  1717,  1726,
+    1725,  1734,  1733,  1741,  1741,  1745,  1745,  1747,  1751,  1751,
+    1759,  1760,  1762,  1762,  1765,  1774,  1774,  1776,  1784,  1789,
+    1789,  1791,  1791,  1793,  1807,  1806,  1820,  1820,  1823,  1823,
+    1826,  1835,  1835,  1837,  1846,  1851,  1851,  1853,  1853,  1853,
+    1855,  1868,  1867,  1881,  1880,  1894,  1894,  1898,  1898,  1900,
     1902,  1907,  1907,  1910,  1911,  1912,  1913,  1914,  1915,  1916,
     1918,  1931,  1930,  1940,  1939,  1949,  1948,  1958,  1957,  1967,
     1966,  1976,  1975,  1985,  2002,  2002,  2004,  2014,  2019,  2019,
@@ -2993,7 +2994,7 @@ yyreduce:
 	{	parserData->osolgeneralPresent = true;
 		osoption->general = new GeneralOption();
 	}
-}
+;}
     break;
 
   case 26:
@@ -3004,12 +3005,12 @@ yyreduce:
 	else
 	{	parserData->serviceURIPresent = true;
 	}
-}
+;}
     break;
 
   case 29:
 
-    {osoption->general->serviceURI = (yyvsp[(2) - (2)].sval);}
+    {osoption->general->serviceURI = (yyvsp[(2) - (2)].sval);;}
     break;
 
   case 32:
@@ -3020,12 +3021,12 @@ yyreduce:
 	else
 	{	parserData->serviceNamePresent = true;
 	}
-}
+;}
     break;
 
   case 35:
 
-    {osoption->general->serviceName = (yyvsp[(2) - (2)].sval);}
+    {osoption->general->serviceName = (yyvsp[(2) - (2)].sval);;}
     break;
 
   case 38:
@@ -3036,12 +3037,12 @@ yyreduce:
 	else
 	{	parserData->instanceNamePresent = true;
 	}
-}
+;}
     break;
 
   case 41:
 
-    {osoption->general->instanceName = (yyvsp[(2) - (2)].sval);}
+    {osoption->general->instanceName = (yyvsp[(2) - (2)].sval);;}
     break;
 
   case 44:
@@ -3053,17 +3054,17 @@ yyreduce:
 	{	parserData->instanceLocationPresent = true;
 		osoption->general->instanceLocation = new InstanceLocationOption();
 	}
-}
+;}
     break;
 
   case 46:
 
-    {osoption->general->instanceLocation->locationType = (yyvsp[(2) - (2)].sval);}
+    {osoption->general->instanceLocation->locationType = (yyvsp[(2) - (2)].sval);;}
     break;
 
   case 51:
 
-    {osoption->general->instanceLocation->value = (yyvsp[(1) - (1)].sval);}
+    {osoption->general->instanceLocation->value = (yyvsp[(1) - (1)].sval);;}
     break;
 
   case 53:
@@ -3074,12 +3075,12 @@ yyreduce:
 	else
 	{	parserData->jobIDPresent = true;
 	}
-}
+;}
     break;
 
   case 56:
 
-    {osoption->general->jobID = (yyvsp[(2) - (2)].sval);}
+    {osoption->general->jobID = (yyvsp[(2) - (2)].sval);;}
     break;
 
   case 59:
@@ -3090,12 +3091,12 @@ yyreduce:
 	else
 	{	parserData->solverToInvokePresent = true;
 	}
-}
+;}
     break;
 
   case 62:
 
-    {osoption->general->solverToInvoke = (yyvsp[(2) - (2)].sval);}
+    {osoption->general->solverToInvoke = (yyvsp[(2) - (2)].sval);;}
     break;
 
   case 65:
@@ -3106,12 +3107,12 @@ yyreduce:
 	else
 	{	parserData->licensePresent = true;	
 	}
-}
+;}
     break;
 
   case 68:
 
-    {osoption->general->license = (yyvsp[(2) - (2)].sval);}
+    {osoption->general->license = (yyvsp[(2) - (2)].sval);;}
     break;
 
   case 71:
@@ -3122,12 +3123,12 @@ yyreduce:
 	else
 	{	parserData->usernamePresent = true;
 	}
-}
+;}
     break;
 
   case 74:
 
-    {osoption->general->userName = (yyvsp[(2) - (2)].sval);}
+    {osoption->general->userName = (yyvsp[(2) - (2)].sval);;}
     break;
 
   case 77:
@@ -3138,12 +3139,12 @@ yyreduce:
 	else
 	{	parserData->passwordPresent = true;
 	}
-}
+;}
     break;
 
   case 80:
 
-    {osoption->general->password = (yyvsp[(2) - (2)].sval);}
+    {osoption->general->password = (yyvsp[(2) - (2)].sval);;}
     break;
 
   case 83:
@@ -3155,17 +3156,17 @@ yyreduce:
 	{	parserData->contactPresent = true;
 		osoption->general->contact = new ContactOption();
 	}
-}
+;}
     break;
 
   case 85:
 
-    {osoption->general->contact->transportType = (yyvsp[(2) - (2)].sval);}
+    {osoption->general->contact->transportType = (yyvsp[(2) - (2)].sval);;}
     break;
 
   case 90:
 
-    {osoption->general->contact->value = (yyvsp[(1) - (1)].sval);}
+    {osoption->general->contact->value = (yyvsp[(1) - (1)].sval);;}
     break;
 
   case 92:
@@ -3177,7 +3178,7 @@ yyreduce:
 	{	parserData->otherGeneralOptionsPresent = true;
 		osoption->general->otherOptions = new OtherOptions();
 	}
-}
+;}
     break;
 
   case 93:
@@ -3185,14 +3186,14 @@ yyreduce:
     {	osoption->general->otherOptions->numberOfOtherOptions = (yyvsp[(3) - (4)].ival);
 	osoption->general->otherOptions->other = new OtherOption*[(yyvsp[(3) - (4)].ival)];
 	for (int i=0; i < (yyvsp[(3) - (4)].ival); i++) osoption->general->otherOptions->other[i] = new OtherOption();
-}
+;}
     break;
 
   case 94:
 
     {	if (parserData->numberOfOtherGeneralOptions != osoption->general->otherOptions->numberOfOtherOptions)
 		osolerror (NULL, osoption, parserData, "wrong number of other options in <general> element");
-}
+;}
     break;
 
   case 97:
@@ -3200,7 +3201,7 @@ yyreduce:
     {	if (parserData->numberOfOtherGeneralOptions >= osoption->general->otherOptions->numberOfOtherOptions)
 		{	osolerror (NULL, osoption, parserData, "too many other options in <general> element");
 		};
-	}
+	;}
     break;
 
   case 98:
@@ -3212,7 +3213,7 @@ yyreduce:
 	parserData->otherOptionValuePresent = false;
 	parserData->otherOptionDescriptionPresent = false;
 	parserData->numberOfOtherGeneralOptions++;
-}
+;}
     break;
 
   case 104:
@@ -3224,7 +3225,7 @@ yyreduce:
 	{	parserData->otherOptionNamePresent = true;
 		osoption->general->otherOptions->other[parserData->numberOfOtherGeneralOptions]->name = (yyvsp[(2) - (2)].sval);
 	}
-}
+;}
     break;
 
   case 106:
@@ -3236,7 +3237,7 @@ yyreduce:
 	{	parserData->otherOptionValuePresent = true;
 		osoption->general->otherOptions->other[parserData->numberOfOtherGeneralOptions]->value = (yyvsp[(2) - (2)].sval);
 	}
-}
+;}
     break;
 
   case 108:
@@ -3248,7 +3249,7 @@ yyreduce:
 	{	parserData->otherOptionDescriptionPresent = true;
 		osoption->general->otherOptions->other[parserData->numberOfOtherGeneralOptions]->description = (yyvsp[(2) - (2)].sval);
 	}
-}
+;}
     break;
 
   case 114:
@@ -3260,7 +3261,7 @@ yyreduce:
 	{	parserData->osolsystemPresent = true;
 		osoption->system = new SystemOption();
 	}
-}
+;}
     break;
 
   case 125:
@@ -3272,22 +3273,22 @@ yyreduce:
 	{	parserData-> minDiskSpacePresent = true;
 		osoption->system->minDiskSpace = new MinDiskSpace();
 	}
-}
+;}
     break;
 
   case 127:
 
-    {osoption->system->minDiskSpace->unit = (yyvsp[(2) - (2)].sval);}
+    {osoption->system->minDiskSpace->unit = (yyvsp[(2) - (2)].sval);;}
     break;
 
   case 131:
 
-    {osoption->system->minDiskSpace->value = (yyvsp[(2) - (2)].dval);}
+    {osoption->system->minDiskSpace->value = (yyvsp[(2) - (2)].dval);;}
     break;
 
   case 133:
 
-    {osoption->system->minDiskSpace->value = (yyvsp[(2) - (2)].ival);}
+    {osoption->system->minDiskSpace->value = (yyvsp[(2) - (2)].ival);;}
     break;
 
   case 136:
@@ -3299,22 +3300,22 @@ yyreduce:
 	{	parserData-> minMemorySizePresent = true;
 		osoption->system->minMemorySize = new MinMemorySize();
 	}
-}
+;}
     break;
 
   case 138:
 
-    {osoption->system->minMemorySize->unit = (yyvsp[(2) - (2)].sval);}
+    {osoption->system->minMemorySize->unit = (yyvsp[(2) - (2)].sval);;}
     break;
 
   case 142:
 
-    {osoption->system->minMemorySize->value = (yyvsp[(2) - (2)].dval);}
+    {osoption->system->minMemorySize->value = (yyvsp[(2) - (2)].dval);;}
     break;
 
   case 144:
 
-    {osoption->system->minMemorySize->value = (yyvsp[(2) - (2)].ival);}
+    {osoption->system->minMemorySize->value = (yyvsp[(2) - (2)].ival);;}
     break;
 
   case 147:
@@ -3326,22 +3327,22 @@ yyreduce:
 	{	parserData-> minCPUSpeedPresent = true;
 		osoption->system->minCPUSpeed = new MinCPUSpeed();
 	}
-}
+;}
     break;
 
   case 149:
 
-    {osoption->system->minCPUSpeed->unit = (yyvsp[(2) - (2)].sval);}
+    {osoption->system->minCPUSpeed->unit = (yyvsp[(2) - (2)].sval);;}
     break;
 
   case 153:
 
-    {osoption->system->minCPUSpeed->value = (yyvsp[(2) - (2)].dval);}
+    {osoption->system->minCPUSpeed->value = (yyvsp[(2) - (2)].dval);;}
     break;
 
   case 155:
 
-    {osoption->system->minCPUSpeed->value = (yyvsp[(2) - (2)].ival);}
+    {osoption->system->minCPUSpeed->value = (yyvsp[(2) - (2)].ival);;}
     break;
 
   case 158:
@@ -3352,12 +3353,12 @@ yyreduce:
 	else
 	{	parserData->minCPUNumberPresent = true;
 	}
-}
+;}
     break;
 
   case 161:
 
-    {osoption->system->minCPUNumber = (yyvsp[(2) - (2)].ival);}
+    {osoption->system->minCPUNumber = (yyvsp[(2) - (2)].ival);;}
     break;
 
   case 164:
@@ -3369,7 +3370,7 @@ yyreduce:
 	{	parserData->otherSystemOptionsPresent = true;
 		osoption->system->otherOptions = new OtherOptions();
 	}
-}
+;}
     break;
 
   case 165:
@@ -3377,14 +3378,14 @@ yyreduce:
     {	osoption->system->otherOptions->numberOfOtherOptions = (yyvsp[(3) - (4)].ival);
 	osoption->system->otherOptions->other = new OtherOption*[(yyvsp[(3) - (4)].ival)];
 	for (int i=0; i < (yyvsp[(3) - (4)].ival); i++) osoption->system->otherOptions->other[i] = new OtherOption();
-}
+;}
     break;
 
   case 166:
 
     {	if (parserData->numberOfOtherSystemOptions != osoption->system->otherOptions->numberOfOtherOptions)
 		osolerror (NULL, osoption, parserData, "wrong number of other options in <system> element");
-}
+;}
     break;
 
   case 169:
@@ -3392,7 +3393,7 @@ yyreduce:
     {	if (parserData->numberOfOtherSystemOptions >= osoption->system->otherOptions->numberOfOtherOptions)
 		{	osolerror (NULL, osoption, parserData, "too many other options in <system> element");
 		};
-	}
+	;}
     break;
 
   case 170:
@@ -3404,7 +3405,7 @@ yyreduce:
 	parserData->otherOptionValuePresent = false;
 	parserData->otherOptionDescriptionPresent = false;
 	parserData->numberOfOtherSystemOptions++;
-}
+;}
     break;
 
   case 176:
@@ -3416,7 +3417,7 @@ yyreduce:
 	{	parserData->otherOptionNamePresent = true;
 		osoption->system->otherOptions->other[parserData->numberOfOtherSystemOptions]->name = (yyvsp[(2) - (2)].sval);
 	}
-}
+;}
     break;
 
   case 178:
@@ -3428,7 +3429,7 @@ yyreduce:
 	{	parserData->otherOptionValuePresent = true;
 		osoption->system->otherOptions->other[parserData->numberOfOtherSystemOptions]->value = (yyvsp[(2) - (2)].sval);
 	}
-}
+;}
     break;
 
   case 180:
@@ -3440,7 +3441,7 @@ yyreduce:
 	{	parserData->otherOptionDescriptionPresent = true;
 		osoption->system->otherOptions->other[parserData->numberOfOtherSystemOptions]->description = (yyvsp[(2) - (2)].sval);
 	}
-}
+;}
     break;
 
   case 186:
@@ -3452,7 +3453,7 @@ yyreduce:
 	{	parserData->osolservicePresent = true;
 		osoption->service = new ServiceOption();
 	}
-}
+;}
     break;
 
   case 195:
@@ -3463,12 +3464,12 @@ yyreduce:
 	else
 	{	parserData->serviceTypePresent = true;
 	}
-}
+;}
     break;
 
   case 198:
 
-    {osoption->service->type = (yyvsp[(2) - (2)].ival);}
+    {osoption->service->type = (yyvsp[(2) - (2)].ival);;}
     break;
 
   case 201:
@@ -3480,7 +3481,7 @@ yyreduce:
 	{	parserData->otherServiceOptionsPresent = true;
 		osoption->service->otherOptions = new OtherOptions();
 	}
-}
+;}
     break;
 
   case 202:
@@ -3488,14 +3489,14 @@ yyreduce:
     {	osoption->service->otherOptions->numberOfOtherOptions = (yyvsp[(3) - (4)].ival);
 	osoption->service->otherOptions->other = new OtherOption*[(yyvsp[(3) - (4)].ival)];
 	for (int i=0; i < (yyvsp[(3) - (4)].ival); i++) osoption->service->otherOptions->other[i] = new OtherOption();
-}
+;}
     break;
 
   case 203:
 
     {	if (parserData->numberOfOtherServiceOptions != osoption->service->otherOptions->numberOfOtherOptions)
 		osolerror (NULL, osoption, parserData, "wrong number of other options in <service> element");
-}
+;}
     break;
 
   case 206:
@@ -3503,7 +3504,7 @@ yyreduce:
     {	if (parserData->numberOfOtherServiceOptions >= osoption->service->otherOptions->numberOfOtherOptions)
 		{	osolerror (NULL, osoption, parserData, "too many other options in <service> element");
 		};
-	}
+	;}
     break;
 
   case 207:
@@ -3515,7 +3516,7 @@ yyreduce:
 	parserData->otherOptionValuePresent = false;
 	parserData->otherOptionDescriptionPresent = false;
 	parserData->numberOfOtherServiceOptions++;
-}
+;}
     break;
 
   case 213:
@@ -3527,7 +3528,7 @@ yyreduce:
 	{	parserData->otherOptionNamePresent = true;
 		osoption->service->otherOptions->other[parserData->numberOfOtherServiceOptions]->name = (yyvsp[(2) - (2)].sval);
 	}
-}
+;}
     break;
 
   case 215:
@@ -3539,7 +3540,7 @@ yyreduce:
 	{	parserData->otherOptionValuePresent = true;
 		osoption->service->otherOptions->other[parserData->numberOfOtherServiceOptions]->value = (yyvsp[(2) - (2)].sval);
 	}
-}
+;}
     break;
 
   case 217:
@@ -3551,7 +3552,7 @@ yyreduce:
 	{	parserData->otherOptionDescriptionPresent = true;
 		osoption->service->otherOptions->other[parserData->numberOfOtherServiceOptions]->description = (yyvsp[(2) - (2)].sval);
 	}
-}
+;}
     break;
 
   case 222:
@@ -3563,7 +3564,7 @@ yyreduce:
 	{	parserData->osoljobPresent = true;
 		osoption->job = new JobOption();
 	}
-}
+;}
     break;
 
   case 243:
@@ -3575,22 +3576,22 @@ yyreduce:
 	{	parserData-> maxTimePresent = true;
 		osoption->job->maxTime = new MaxTime();
 	}
-}
+;}
     break;
 
   case 245:
 
-    {osoption->job->maxTime->unit = (yyvsp[(2) - (2)].sval);}
+    {osoption->job->maxTime->unit = (yyvsp[(2) - (2)].sval);;}
     break;
 
   case 249:
 
-    {osoption->job->maxTime->value = (yyvsp[(2) - (2)].dval);}
+    {osoption->job->maxTime->value = (yyvsp[(2) - (2)].dval);;}
     break;
 
   case 251:
 
-    {osoption->job->maxTime->value = (yyvsp[(2) - (2)].ival);}
+    {osoption->job->maxTime->value = (yyvsp[(2) - (2)].ival);;}
     break;
 
   case 254:
@@ -3601,12 +3602,12 @@ yyreduce:
 	else
 	{	parserData->scheduledStartTimePresent = true;
 	}
-}
+;}
     break;
 
   case 257:
 
-    {osoption->job->scheduledStartTime = (yyvsp[(2) - (2)].sval);}
+    {osoption->job->scheduledStartTime = (yyvsp[(2) - (2)].sval);;}
     break;
 
   case 260:
@@ -3618,14 +3619,14 @@ yyreduce:
 	{	parserData->dependenciesPresent = true;
 		osoption->job->dependencies = new JobDependencies();
 	}
-}
+;}
     break;
 
   case 261:
 
     {	osoption->job->dependencies->numberOfJobIDs = (yyvsp[(3) - (4)].ival);
 	osoption->job->dependencies->jobID = new std::string[(yyvsp[(3) - (4)].ival)];
-}
+;}
     break;
 
   case 264:
@@ -3638,7 +3639,7 @@ yyreduce:
 	{	osoption->job->dependencies->jobID[parserData->numberOfDependencies] = (yyvsp[(3) - (3)].sval);
 		parserData->numberOfDependencies++;
 	};
-}
+;}
     break;
 
   case 267:
@@ -3650,14 +3651,14 @@ yyreduce:
 	{	parserData->requiredDirectoriesPresent = true;
 		osoption->job->requiredDirectories = new DirectoriesAndFiles();
 	}
-}
+;}
     break;
 
   case 268:
 
     {	osoption->job->requiredDirectories->numberOfPaths = (yyvsp[(3) - (4)].ival);
 	osoption->job->requiredDirectories->path = new std::string[(yyvsp[(3) - (4)].ival)];
-}
+;}
     break;
 
   case 271:
@@ -3670,7 +3671,7 @@ yyreduce:
 	{	osoption->job->requiredDirectories->path[parserData->numberOfRequiredDirectories] = (yyvsp[(3) - (3)].sval);
 		parserData->numberOfRequiredDirectories++;
 	};
-}
+;}
     break;
 
   case 274:
@@ -3682,14 +3683,14 @@ yyreduce:
 	{	parserData->requiredFilesPresent = true;
 		osoption->job->requiredFiles = new DirectoriesAndFiles();
 	}
-}
+;}
     break;
 
   case 275:
 
     {	osoption->job->requiredFiles->numberOfPaths = (yyvsp[(3) - (4)].ival);
 	osoption->job->requiredFiles->path = new std::string[(yyvsp[(3) - (4)].ival)];
-}
+;}
     break;
 
   case 278:
@@ -3702,7 +3703,7 @@ yyreduce:
 	{	osoption->job->requiredFiles->path[parserData->numberOfRequiredFiles] = (yyvsp[(3) - (3)].sval);
 		parserData->numberOfRequiredFiles++;
 	};
-}
+;}
     break;
 
   case 281:
@@ -3714,14 +3715,14 @@ yyreduce:
 	{	parserData->directoriesToMakePresent = true;
 		osoption->job->directoriesToMake = new DirectoriesAndFiles();
 	}
-}
+;}
     break;
 
   case 282:
 
     {	osoption->job->directoriesToMake->numberOfPaths = (yyvsp[(3) - (4)].ival);
 	osoption->job->directoriesToMake->path = new std::string[(yyvsp[(3) - (4)].ival)];
-}
+;}
     break;
 
   case 285:
@@ -3733,7 +3734,7 @@ yyreduce:
 	{	osoption->job->directoriesToMake->path[parserData->numberOfDirectoriesToMake] = (yyvsp[(3) - (3)].sval);
 		parserData->numberOfDirectoriesToMake++;
 	};
-}
+;}
     break;
 
   case 288:
@@ -3745,14 +3746,14 @@ yyreduce:
 	{	parserData->filesToCreatePresent = true;
 		osoption->job->filesToCreate = new DirectoriesAndFiles();
 	}
-}
+;}
     break;
 
   case 289:
 
     {	osoption->job->filesToCreate->numberOfPaths = (yyvsp[(3) - (4)].ival);
 	osoption->job->filesToCreate->path = new std::string[(yyvsp[(3) - (4)].ival)];
-}
+;}
     break;
 
   case 292:
@@ -3764,7 +3765,7 @@ yyreduce:
 	{	osoption->job->filesToCreate->path[parserData->numberOfFilesToCreate] = (yyvsp[(3) - (3)].sval);
 		parserData->numberOfFilesToCreate++;
 	};
-}
+;}
     break;
 
   case 295:
@@ -3776,7 +3777,7 @@ yyreduce:
 	{	parserData->inputDirectoriesToMovePresent = true;
 		osoption->job->inputDirectoriesToMove = new PathPairs();
 	}
-}
+;}
     break;
 
   case 296:
@@ -3786,7 +3787,7 @@ yyreduce:
 	osoption->job->inputDirectoriesToMove->pathPair = new PathPair*[(yyvsp[(3) - (4)].ival)];
 	for (int i = 0; i < (yyvsp[(3) - (4)].ival); i++)
 		osoption->job->inputDirectoriesToMove->pathPair[i] = new PathPair();
-}
+;}
     break;
 
   case 299:
@@ -3800,7 +3801,7 @@ yyreduce:
 	parserData->pathPairToPresent= false;
 	parserData->pathPairMakeCopyPresent= false;
 	parserData->numberOfInputDirectoriesToMove++;
-}
+;}
     break;
 
   case 300:
@@ -3808,7 +3809,7 @@ yyreduce:
     {	if (parserData->numberOfInputDirectoriesToMove >= osoption->job->inputDirectoriesToMove->numberOfPathPairs)
 	{	osolerror (NULL, osoption, parserData, "too many path pairs in <inputDirectoriesToMove> element");
 	};
-}
+;}
     break;
 
   case 306:
@@ -3820,7 +3821,7 @@ yyreduce:
 	{	parserData->pathPairFromPresent = true;
 		osoption->job->inputDirectoriesToMove->pathPair[parserData->numberOfInputDirectoriesToMove]->from = (yyvsp[(2) - (2)].sval);
 	}
-}
+;}
     break;
 
   case 308:
@@ -3832,7 +3833,7 @@ yyreduce:
 	{	parserData->pathPairToPresent = true;
 		osoption->job->inputDirectoriesToMove->pathPair[parserData->numberOfInputDirectoriesToMove]->to = (yyvsp[(2) - (2)].sval);
 	}
-}
+;}
     break;
 
   case 310:
@@ -3845,7 +3846,7 @@ yyreduce:
 		if ((yyvsp[(2) - (2)].sval) == "true")
 			osoption->job->inputDirectoriesToMove->pathPair[parserData->numberOfInputDirectoriesToMove]->makeCopy = true;
 	}
-}
+;}
     break;
 
   case 315:
@@ -3857,7 +3858,7 @@ yyreduce:
 	{	parserData->inputFilesToMovePresent = true;
 		osoption->job->inputFilesToMove = new PathPairs();
 	}
-}
+;}
     break;
 
   case 316:
@@ -3866,7 +3867,7 @@ yyreduce:
 	osoption->job->inputFilesToMove->numberOfPathPairs = (yyvsp[(3) - (4)].ival);
 	osoption->job->inputFilesToMove->pathPair = new PathPair*[(yyvsp[(3) - (4)].ival)];
 	for (int i = 0; i < (yyvsp[(3) - (4)].ival); i++) osoption->job->inputFilesToMove->pathPair[i] = new PathPair();
-}
+;}
     break;
 
   case 319:
@@ -3880,7 +3881,7 @@ yyreduce:
 	parserData->pathPairToPresent= false;
 	parserData->pathPairMakeCopyPresent= false;
 	parserData->numberOfInputFilesToMove++;
-}
+;}
     break;
 
   case 320:
@@ -3888,7 +3889,7 @@ yyreduce:
     {	if (parserData->numberOfInputFilesToMove >= osoption->job->inputFilesToMove->numberOfPathPairs)
 	{	osolerror (NULL, osoption, parserData, "too many path pairs in <inputFilesToMove> element");
 	};
-}
+;}
     break;
 
   case 326:
@@ -3900,7 +3901,7 @@ yyreduce:
 	{	parserData->pathPairFromPresent = true;
 		osoption->job->inputFilesToMove->pathPair[parserData->numberOfInputFilesToMove]->from = (yyvsp[(2) - (2)].sval);
 	}
-}
+;}
     break;
 
   case 328:
@@ -3912,7 +3913,7 @@ yyreduce:
 	{	parserData->pathPairToPresent = true;
 		osoption->job->inputFilesToMove->pathPair[parserData->numberOfInputFilesToMove]->to = (yyvsp[(2) - (2)].sval);
 	}
-}
+;}
     break;
 
   case 330:
@@ -3925,7 +3926,7 @@ yyreduce:
 		if ((yyvsp[(2) - (2)].sval) == "true")
 			osoption->job->inputFilesToMove->pathPair[parserData->numberOfInputFilesToMove]->makeCopy = true;
 	}
-}
+;}
     break;
 
   case 335:
@@ -3937,7 +3938,7 @@ yyreduce:
 	{	parserData->outputDirectoriesToMovePresent = true;
 		osoption->job->outputDirectoriesToMove = new PathPairs();
 	}
-}
+;}
     break;
 
   case 336:
@@ -3947,7 +3948,7 @@ yyreduce:
 	osoption->job->outputDirectoriesToMove->pathPair = new PathPair*[(yyvsp[(3) - (4)].ival)];
 	for (int i = 0; i < (yyvsp[(3) - (4)].ival); i++)
 		osoption->job->outputDirectoriesToMove->pathPair[i] = new PathPair();
-}
+;}
     break;
 
   case 339:
@@ -3961,7 +3962,7 @@ yyreduce:
 	parserData->pathPairToPresent= false;
 	parserData->pathPairMakeCopyPresent= false;
 	parserData->numberOfOutputDirectoriesToMove++;
-}
+;}
     break;
 
   case 340:
@@ -3969,7 +3970,7 @@ yyreduce:
     {	if (parserData->numberOfOutputDirectoriesToMove >= osoption->job->outputDirectoriesToMove->numberOfPathPairs)
 	{	osolerror (NULL, osoption, parserData, "too many path pairs in <outputDirectoriesToMove> element");
 	};
-}
+;}
     break;
 
   case 346:
@@ -3981,7 +3982,7 @@ yyreduce:
 	{	parserData->pathPairFromPresent = true;
 		osoption->job->outputDirectoriesToMove->pathPair[parserData->numberOfOutputDirectoriesToMove]->from = (yyvsp[(2) - (2)].sval);
 	}
-}
+;}
     break;
 
   case 348:
@@ -3993,7 +3994,7 @@ yyreduce:
 	{	parserData->pathPairToPresent = true;
 		osoption->job->outputDirectoriesToMove->pathPair[parserData->numberOfOutputDirectoriesToMove]->to = (yyvsp[(2) - (2)].sval);
 	}
-}
+;}
     break;
 
   case 350:
@@ -4006,7 +4007,7 @@ yyreduce:
 		if ((yyvsp[(2) - (2)].sval) == "true")
 			osoption->job->outputDirectoriesToMove->pathPair[parserData->numberOfOutputDirectoriesToMove]->makeCopy = true;
 	}
-}
+;}
     break;
 
   case 355:
@@ -4018,7 +4019,7 @@ yyreduce:
 	{	parserData->outputFilesToMovePresent = true;
 		osoption->job->outputFilesToMove = new PathPairs();
 	}
-}
+;}
     break;
 
   case 356:
@@ -4027,7 +4028,7 @@ yyreduce:
 	osoption->job->outputFilesToMove->numberOfPathPairs = (yyvsp[(3) - (4)].ival);
 	osoption->job->outputFilesToMove->pathPair = new PathPair*[(yyvsp[(3) - (4)].ival)];
 	for (int i = 0; i < (yyvsp[(3) - (4)].ival); i++)
-		osoption->job->outputFilesToMove->pathPair[i] = new PathPair();}
+		osoption->job->outputFilesToMove->pathPair[i] = new PathPair();;}
     break;
 
   case 359:
@@ -4041,7 +4042,7 @@ yyreduce:
 	parserData->pathPairToPresent= false;
 	parserData->pathPairMakeCopyPresent= false;
 	parserData->numberOfOutputFilesToMove++;
-}
+;}
     break;
 
   case 360:
@@ -4049,7 +4050,7 @@ yyreduce:
     {	if (parserData->numberOfOutputFilesToMove >= osoption->job->outputFilesToMove->numberOfPathPairs)
 	{	osolerror (NULL, osoption, parserData, "too many path pairs in <outputFilesToMove> element");
 	};
-}
+;}
     break;
 
   case 366:
@@ -4061,7 +4062,7 @@ yyreduce:
 	{	parserData->pathPairFromPresent = true;
 		osoption->job->outputFilesToMove->pathPair[parserData->numberOfOutputFilesToMove]->from = (yyvsp[(2) - (2)].sval);
 	}
-}
+;}
     break;
 
   case 368:
@@ -4073,7 +4074,7 @@ yyreduce:
 	{	parserData->pathPairToPresent = true;
 		osoption->job->outputFilesToMove->pathPair[parserData->numberOfOutputFilesToMove]->to = (yyvsp[(2) - (2)].sval);
 	}
-}
+;}
     break;
 
   case 370:
@@ -4086,7 +4087,7 @@ yyreduce:
 		if ((yyvsp[(2) - (2)].sval) == "true")
 			osoption->job->outputFilesToMove->pathPair[parserData->numberOfOutputFilesToMove]->makeCopy = true;
 	}
-}
+;}
     break;
 
   case 375:
@@ -4098,14 +4099,14 @@ yyreduce:
 	{	parserData->filesToDeletePresent = true;
 		osoption->job->filesToDelete = new DirectoriesAndFiles();
 	}
-}
+;}
     break;
 
   case 376:
 
     {	osoption->job->filesToDelete->numberOfPaths = (yyvsp[(3) - (4)].ival);
 	osoption->job->filesToDelete->path = new std::string[(yyvsp[(3) - (4)].ival)];
-}
+;}
     break;
 
   case 379:
@@ -4117,7 +4118,7 @@ yyreduce:
 	{	osoption->job->filesToDelete->path[parserData->numberOfFilesToDelete] = (yyvsp[(3) - (3)].sval);
 		parserData->numberOfFilesToDelete++;
 	};
-}
+;}
     break;
 
   case 382:
@@ -4129,14 +4130,14 @@ yyreduce:
 	{	parserData->directoriesToDeletePresent = true;
 		osoption->job->directoriesToDelete = new DirectoriesAndFiles();
 	}
-}
+;}
     break;
 
   case 383:
 
     {	osoption->job->directoriesToDelete->numberOfPaths = (yyvsp[(3) - (4)].ival);
 	osoption->job->directoriesToDelete->path = new std::string[(yyvsp[(3) - (4)].ival)];
-}
+;}
     break;
 
   case 386:
@@ -4148,7 +4149,7 @@ yyreduce:
 	{	osoption->job->directoriesToDelete->path[parserData->numberOfDirectoriesToDelete] = (yyvsp[(3) - (3)].sval);
 		parserData->numberOfDirectoriesToDelete++;
 	};
-}
+;}
     break;
 
   case 389:
@@ -4160,14 +4161,14 @@ yyreduce:
 	{	parserData->processesToKillPresent = true;
 		osoption->job->processesToKill = new Processes();
 	}
-}
+;}
     break;
 
   case 390:
 
     {	osoption->job->processesToKill->numberOfProcesses = (yyvsp[(3) - (4)].ival);
 	osoption->job->processesToKill->process = new std::string[(yyvsp[(3) - (4)].ival)];
-}
+;}
     break;
 
   case 393:
@@ -4179,7 +4180,7 @@ yyreduce:
 	{	osoption->job->processesToKill->process[parserData->numberOfProcessesToKill] = (yyvsp[(3) - (3)].sval);
 		parserData->numberOfProcessesToKill++;
 	};
-}
+;}
     break;
 
   case 396:
@@ -4191,7 +4192,7 @@ yyreduce:
 	{	parserData->otherJobOptionsPresent = true;
 		osoption->job->otherOptions = new OtherOptions();
 	}
-}
+;}
     break;
 
   case 397:
@@ -4199,14 +4200,14 @@ yyreduce:
     {	osoption->job->otherOptions->numberOfOtherOptions = (yyvsp[(3) - (4)].ival);
 	osoption->job->otherOptions->other = new OtherOption*[(yyvsp[(3) - (4)].ival)];
 	for (int i=0; i < (yyvsp[(3) - (4)].ival); i++) osoption->job->otherOptions->other[i] = new OtherOption();
-}
+;}
     break;
 
   case 398:
 
     {	if (parserData->numberOfOtherJobOptions != osoption->job->otherOptions->numberOfOtherOptions)
 		osolerror (NULL, osoption, parserData, "wrong number of other options in <job> element");
-}
+;}
     break;
 
   case 401:
@@ -4214,7 +4215,7 @@ yyreduce:
     {	if (parserData->numberOfOtherJobOptions >= osoption->job->otherOptions->numberOfOtherOptions)
 		{	osolerror (NULL, osoption, parserData, "too many other options in <job> element");
 		};
-	}
+	;}
     break;
 
   case 402:
@@ -4226,7 +4227,7 @@ yyreduce:
 	parserData->otherOptionValuePresent = false;
 	parserData->otherOptionDescriptionPresent = false;
 	parserData->numberOfOtherJobOptions++;
-}
+;}
     break;
 
   case 408:
@@ -4238,7 +4239,7 @@ yyreduce:
 	{	parserData->otherOptionNamePresent = true;
 		osoption->job->otherOptions->other[parserData->numberOfOtherJobOptions]->name = (yyvsp[(2) - (2)].sval);
 	}
-}
+;}
     break;
 
   case 410:
@@ -4250,7 +4251,7 @@ yyreduce:
 	{	parserData->otherOptionValuePresent = true;
 		osoption->job->otherOptions->other[parserData->numberOfOtherJobOptions]->value = (yyvsp[(2) - (2)].sval);
 	}
-}
+;}
     break;
 
   case 412:
@@ -4262,7 +4263,7 @@ yyreduce:
 	{	parserData->otherOptionDescriptionPresent = true;
 		osoption->job->otherOptions->other[parserData->numberOfOtherJobOptions]->description = (yyvsp[(2) - (2)].sval);
 	}
-}
+;}
     break;
 
   case 418:
@@ -4274,31 +4275,31 @@ yyreduce:
 	{	parserData->osoloptimizationPresent = true;
 		osoption->optimization = new OptimizationOption();
 	}
-}
+;}
     break;
 
   case 424:
 
     {	osoption->optimization->numberOfVariables = (yyvsp[(3) - (4)].ival);
-}
+;}
     break;
 
   case 425:
 
     {	osoption->optimization->numberOfConstraints = (yyvsp[(3) - (4)].ival);
-}
+;}
     break;
 
   case 426:
 
     {	osoption->optimization->numberOfObjectives = (yyvsp[(3) - (4)].ival);
-}
+;}
     break;
 
   case 432:
 
     {	osoption->optimization->variables = new VariableOption();
-}
+;}
     break;
 
   case 434:
@@ -4308,7 +4309,7 @@ yyreduce:
 	osoption->optimization->variables->other = new OtherVariableOption*[(yyvsp[(3) - (4)].ival)];
 	for (int i= 0; i < (yyvsp[(3) - (4)].ival); i++)
 		osoption->optimization->variables->other[i] = new OtherVariableOption();
-}
+;}
     break;
 
   case 439:
@@ -4319,7 +4320,7 @@ yyreduce:
 	osoption->optimization->variables->initialVariableValues->var = new InitVarValue*[(yyvsp[(3) - (4)].ival)];
 	for (int i = 0; i < (yyvsp[(3) - (4)].ival); i++)
 		osoption->optimization->variables->initialVariableValues->var[i] = new InitVarValue();
-}
+;}
     break;
 
   case 442:
@@ -4329,14 +4330,14 @@ yyreduce:
 	parserData->idxAttributePresent = false;
 	parserData->valAttributePresent = false;
 	parserData->numberOfVar++;
-}
+;}
     break;
 
   case 443:
 
     {	if (parserData->numberOfVar >= osoption->optimization->variables->initialVariableValues->numberOfVar)
 		osolerror(NULL, osoption, parserData, "too many initial variable values");
-}
+;}
     break;
 
   case 448:
@@ -4350,7 +4351,7 @@ yyreduce:
 			osolerror (NULL, osoption, parserData, "variable index exceeds upper limit");
 	};
 	osoption->optimization->variables->initialVariableValues->var[parserData->numberOfVar]->idx = (yyvsp[(3) - (4)].ival);
-}
+;}
     break;
 
   case 449:
@@ -4358,14 +4359,14 @@ yyreduce:
     {	if (parserData->valAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one variable value allowed");
 	parserData->valAttributePresent = true;
-	/*if ($2 == "INF")
+	if ((yyvsp[(2) - (2)].sval) == "INF")
 		osoption->optimization->variables->initialVariableValues->var[parserData->numberOfVar]->value = OSDBL_MAX;
-	else if ($2 == "-INF")
+	else if ((yyvsp[(2) - (2)].sval) == "-INF")
 		osoption->optimization->variables->initialVariableValues->var[parserData->numberOfVar]->value = -OSDBL_MAX;
 	else
-		osoption->optimization->variables->initialVariableValues->var[parserData->numberOfVar]->value = strtod($2, NULL);
-		*/
-}
+		osoption->optimization->variables->initialVariableValues->var[parserData->numberOfVar]->value = os_strtod((yyvsp[(2) - (2)].sval), NULL);
+		
+;}
     break;
 
   case 455:
@@ -4376,7 +4377,7 @@ yyreduce:
 	osoption->optimization->variables->initialVariableValuesString->var = new InitVarValueString*[(yyvsp[(3) - (4)].ival)];
 	for (int i = 0; i < (yyvsp[(3) - (4)].ival); i++)
 		osoption->optimization->variables->initialVariableValuesString->var[i] = new InitVarValueString ();
-}
+;}
     break;
 
   case 458:
@@ -4386,14 +4387,14 @@ yyreduce:
 	parserData->idxAttributePresent = false;
 	parserData->valAttributePresent = false;
 	parserData->numberOfVarStr++;
-}
+;}
     break;
 
   case 459:
 
     {	if (parserData->numberOfVarStr >= osoption->optimization->variables->initialVariableValuesString->numberOfVar)
 		osolerror(NULL, osoption, parserData, "too many initial variable strings");
-}
+;}
     break;
 
   case 464:
@@ -4407,7 +4408,7 @@ yyreduce:
 			osolerror (NULL, osoption, parserData, "variable index exceeds upper limit");
 	};
 	osoption->optimization->variables->initialVariableValuesString->var[parserData->numberOfVarStr]->idx = (yyvsp[(3) - (4)].ival);
-}
+;}
     break;
 
   case 465:
@@ -4416,14 +4417,14 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "only one variable index allowed");
 	parserData->valAttributePresent = true;
 	osoption->optimization->variables->initialVariableValuesString->var[parserData->numberOfVarStr]->value = (yyvsp[(2) - (2)].sval);
-}
+;}
     break;
 
   case 472:
 
     {	if (parserData->numberOfOtherVariableOptions >= osoption->optimization->variables->numberOfOtherVariableOptions)
 		osolerror(NULL, osoption, parserData, "too many <other> variable options");
-}
+;}
     break;
 
   case 482:
@@ -4437,7 +4438,7 @@ yyreduce:
 	osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->var = new OtherVarOption*[(yyvsp[(3) - (4)].ival)];
 	for (int i = 0; i < (yyvsp[(3) - (4)].ival); i++)
 		osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->var[i] = new OtherVarOption();	
-}
+;}
     break;
 
   case 483:
@@ -4446,7 +4447,7 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "only one name attribute allowed");
 	parserData->otherOptionNamePresent = true;
 	osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->name = (yyvsp[(2) - (2)].sval);
-}
+;}
     break;
 
   case 485:
@@ -4455,7 +4456,7 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "only one value attribute allowed");
 	parserData->otherOptionValuePresent = true;
 	osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->value = (yyvsp[(2) - (2)].sval);
-}
+;}
     break;
 
   case 487:
@@ -4464,7 +4465,7 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "only one solver attribute allowed");
 	parserData->otherOptionSolverPresent = true;
 	osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->solver = (yyvsp[(2) - (2)].sval);
-}
+;}
     break;
 
   case 489:
@@ -4473,7 +4474,7 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "only one category attribute allowed");
 	parserData->otherOptionCategoryPresent = true;
 	osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->category = (yyvsp[(2) - (2)].sval);
-}
+;}
     break;
 
   case 491:
@@ -4482,7 +4483,7 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "only one type attribute allowed");
 	parserData->otherOptionTypePresent = true;
 	osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->type = (yyvsp[(2) - (2)].sval);
-}
+;}
     break;
 
   case 493:
@@ -4491,7 +4492,7 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "only one description attribute allowed");
 	parserData->otherOptionDescriptionPresent = true;
 	osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->description = (yyvsp[(2) - (2)].sval);
-}
+;}
     break;
 
   case 495:
@@ -4510,7 +4511,7 @@ yyreduce:
 	parserData->otherOptionTypePresent = false;
 	parserData->otherOptionDescriptionPresent = false;
 	parserData->numberOfOtherVariableOptions++;
-}
+;}
     break;
 
   case 498:
@@ -4522,14 +4523,14 @@ yyreduce:
 	parserData->lbvalAttributePresent = false;
 	parserData->ubvalAttributePresent = false;
 	parserData->numberOfVar++;
-}
+;}
     break;
 
   case 499:
 
     {	if (parserData->numberOfVar >= osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->numberOfVar)
 		osolerror(NULL, osoption, parserData, "too many <var> entries in <other> variable element");
-}
+;}
     break;
 
   case 506:
@@ -4543,7 +4544,7 @@ yyreduce:
 			osolerror (NULL, osoption, parserData, "variable index exceeds upper limit");
 	};
 	osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->var[parserData->numberOfVar]->idx = (yyvsp[(3) - (4)].ival);
-}
+;}
     break;
 
   case 507:
@@ -4552,7 +4553,7 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "only one variable value allowed");
 	parserData->valAttributePresent = true;
 	osoption->optimization->variables-> other[parserData->numberOfOtherVariableOptions]->var[parserData->numberOfVar]->value = (yyvsp[(2) - (2)].sval);
-}
+;}
     break;
 
   case 509:
@@ -4561,7 +4562,7 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "only one lower bound value allowed");
 	parserData->lbvalAttributePresent = true;
 	osoption->optimization->variables-> other[parserData->numberOfOtherVariableOptions]->var[parserData->numberOfVar]->lbValue = (yyvsp[(2) - (2)].sval);
-}
+;}
     break;
 
   case 511:
@@ -4570,13 +4571,13 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "only one upper bound value allowed");
 	parserData->ubvalAttributePresent = true;
 	osoption->optimization->variables-> other[parserData->numberOfOtherVariableOptions]->var[parserData->numberOfVar]->ubValue = (yyvsp[(2) - (2)].sval);
-}
+;}
     break;
 
   case 517:
 
     {	osoption->optimization->objectives = new ObjectiveOption();
-}
+;}
     break;
 
   case 519:
@@ -4586,7 +4587,7 @@ yyreduce:
 	osoption->optimization->objectives->other = new OtherObjectiveOption*[(yyvsp[(3) - (4)].ival)];
 	for (int i= 0; i < (yyvsp[(3) - (4)].ival); i++)
 		osoption->optimization->objectives->other[i] = new OtherObjectiveOption();
-}
+;}
     break;
 
   case 524:
@@ -4597,7 +4598,7 @@ yyreduce:
 	osoption->optimization->objectives->initialObjectiveValues->obj = new InitObjValue*[(yyvsp[(3) - (4)].ival)];
 	for (int i = 0; i < (yyvsp[(3) - (4)].ival); i++)
 		osoption->optimization->objectives->initialObjectiveValues->obj[i] = new InitObjValue();
-}
+;}
     break;
 
   case 527:
@@ -4607,14 +4608,14 @@ yyreduce:
 	parserData->idxAttributePresent = false;
 	parserData->valAttributePresent = false;
 	parserData->numberOfObjValues++;
-}
+;}
     break;
 
   case 528:
 
     {	if (parserData->numberOfObjValues >= osoption->optimization->objectives->initialObjectiveValues->numberOfObj)
 		osolerror(NULL, osoption, parserData, "too many initial objective values");
-}
+;}
     break;
 
   case 533:
@@ -4628,7 +4629,7 @@ yyreduce:
 			osolerror (NULL, osoption, parserData, "objective index out of range");
 	};
 	osoption->optimization->objectives->initialObjectiveValues->obj[parserData->numberOfObjValues]->idx = (yyvsp[(3) - (4)].ival);
-}
+;}
     break;
 
   case 534:
@@ -4641,9 +4642,9 @@ yyreduce:
 	else if ($2 == "-INF")
 		osoption->optimization->objectives->initialObjectiveValues->obj[parserData->numberOfObjValues]->value = -OSDBL_MAX;
 	else
-		osoption->optimization->objectives->initialObjectiveValues->obj[parserData->numberOfObjValues]->value = strtod($2, NULL);
+		osoption->optimization->objectives->initialObjectiveValues->obj[parserData->numberOfObjValues]->value = os_strtod($2, NULL);
 		*/
-}
+;}
     break;
 
   case 540:
@@ -4654,7 +4655,7 @@ yyreduce:
 	osoption->optimization->objectives->initialObjectiveBounds->obj = new InitObjBound*[(yyvsp[(3) - (4)].ival)];
 	for (int i = 0; i < (yyvsp[(3) - (4)].ival); i++)
 		osoption->optimization->objectives->initialObjectiveBounds->obj[i] = new InitObjBound ();
-}
+;}
     break;
 
   case 543:
@@ -4665,14 +4666,14 @@ yyreduce:
 	parserData->lbvalAttributePresent = false;
 	parserData->ubvalAttributePresent = false;
 	parserData->numberOfObjBounds++;
-}
+;}
     break;
 
   case 544:
 
     {	if (parserData->numberOfObjBounds >= osoption->optimization->objectives->initialObjectiveBounds->numberOfObj)
 		osolerror(NULL, osoption, parserData, "too many initial objective bounds");
-}
+;}
     break;
 
   case 550:
@@ -4686,7 +4687,7 @@ yyreduce:
 			osolerror (NULL, osoption, parserData, "objective index out of range");
 	};
 	osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->idx = (yyvsp[(3) - (4)].ival);
-}
+;}
     break;
 
   case 551:
@@ -4694,14 +4695,13 @@ yyreduce:
     {	if (parserData->lbvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one objective lower bound allowed");
 	parserData->lbvalAttributePresent = true;
-	/*if ($2 == "INF")
-		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjValues]->lbValue = OSDBL_MAX;
-	else if ($2 == "-INF")
-		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjValues]->lbValue = -OSDBL_MAX;
+	if ((yyvsp[(2) - (2)].sval) == "INF")
+		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->lbValue = OSDBL_MAX;
+	else if ((yyvsp[(2) - (2)].sval) == "-INF")
+		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->lbValue = -OSDBL_MAX;
 	else
-		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjValues]->lbValue = strtod($2, NULL);
-		*/
-}
+		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->lbValue = os_strtod((yyvsp[(2) - (2)].sval), NULL);
+;}
     break;
 
   case 553:
@@ -4709,21 +4709,21 @@ yyreduce:
     {	if (parserData->ubvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one objective upper bound allowed");
 	parserData->ubvalAttributePresent = true;
-	/*
-		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjValues]->ubValue = OSDBL_MAX;
-	else if ($2 == "-INF")
-		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjValues]->ubValue = -OSDBL_MAX;
+	if ((yyvsp[(2) - (2)].sval) == "INF")
+		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->ubValue = OSDBL_MAX;
+	else if ((yyvsp[(2) - (2)].sval) == "-INF")
+		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->ubValue = -OSDBL_MAX;
 	else
-		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjValues]->ubValue = strtod($2, NULL);
-		*/
-}
+		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->ubValue = os_strtod((yyvsp[(2) - (2)].sval), NULL);
+	
+;}
     break;
 
   case 560:
 
     {	if (parserData->numberOfOtherObjectiveOptions >= osoption->optimization->objectives->numberOfOtherObjectiveOptions)
 		osolerror(NULL, osoption, parserData, "too many <other> objective options");
-}
+;}
     break;
 
   case 570:
@@ -4737,7 +4737,7 @@ yyreduce:
 	osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->obj = new OtherObjOption*[(yyvsp[(3) - (4)].ival)];
 	for (int i = 0; i < (yyvsp[(3) - (4)].ival); i++)
 		osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->obj[i] = new OtherObjOption();
-}
+;}
     break;
 
   case 571:
@@ -4746,7 +4746,7 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "only one name attribute allowed");
 	parserData->otherOptionNamePresent = true;
 	osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->name = (yyvsp[(2) - (2)].sval);
-}
+;}
     break;
 
   case 573:
@@ -4755,7 +4755,7 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "only one value attribute allowed");
 	parserData->otherOptionValuePresent = true;
 	osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->value = (yyvsp[(2) - (2)].sval);
-}
+;}
     break;
 
   case 575:
@@ -4764,7 +4764,7 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "only one solver attribute allowed");
 	parserData->otherOptionSolverPresent = true;
 	osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->solver = (yyvsp[(2) - (2)].sval);
-}
+;}
     break;
 
   case 577:
@@ -4773,7 +4773,7 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "only one category attribute allowed");
 	parserData->otherOptionCategoryPresent = true;
 	osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->category = (yyvsp[(2) - (2)].sval);
-}
+;}
     break;
 
   case 579:
@@ -4782,7 +4782,7 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "only one type attribute allowed");
 	parserData->otherOptionTypePresent = true;
 	osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->type = (yyvsp[(2) - (2)].sval);
-}
+;}
     break;
 
   case 581:
@@ -4791,7 +4791,7 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "only one description attribute allowed");
 	parserData->otherOptionDescriptionPresent = true;
 	osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->description = (yyvsp[(2) - (2)].sval);
-}
+;}
     break;
 
   case 583:
@@ -4810,7 +4810,7 @@ yyreduce:
 	parserData->otherOptionTypePresent = false;
 	parserData->otherOptionDescriptionPresent = false;
 	parserData->numberOfOtherObjectiveOptions++;
-}
+;}
     break;
 
   case 586:
@@ -4822,14 +4822,14 @@ yyreduce:
 	parserData->lbvalAttributePresent = false;
 	parserData->ubvalAttributePresent = false;
 	parserData->numberOfObj++;
-}
+;}
     break;
 
   case 587:
 
     {	if (parserData->numberOfObj >= osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->numberOfObj)
 		osolerror(NULL, osoption, parserData, "too many <obj> entries in <other> objective element");
-}
+;}
     break;
 
   case 594:
@@ -4843,7 +4843,7 @@ yyreduce:
 			osolerror (NULL, osoption, parserData, "objecive index exceeds upper limit");
 	};
 	osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->obj[parserData->numberOfObj]->idx = (yyvsp[(3) - (4)].ival);
-}
+;}
     break;
 
   case 595:
@@ -4852,7 +4852,7 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "only one variable value allowed");
 	parserData->valAttributePresent = true;
 	osoption->optimization->objectives-> other[parserData->numberOfOtherObjectiveOptions]->obj[parserData->numberOfObj]->value = (yyvsp[(2) - (2)].sval);
-}
+;}
     break;
 
   case 597:
@@ -4861,7 +4861,7 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "only one lower bound value allowed");
 	parserData->lbvalAttributePresent = true;
 	osoption->optimization->objectives-> other[parserData->numberOfOtherObjectiveOptions]->obj[parserData->numberOfObj]->lbValue = (yyvsp[(2) - (2)].sval);
-}
+;}
     break;
 
   case 599:
@@ -4870,13 +4870,13 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "only one upper bound value allowed");
 	parserData->ubvalAttributePresent = true;
 	osoption->optimization->objectives-> other[parserData->numberOfOtherObjectiveOptions]->obj[parserData->numberOfObj]->ubValue = (yyvsp[(2) - (2)].sval);
-}
+;}
     break;
 
   case 605:
 
     {	osoption->optimization->constraints = new ConstraintOption();
-}
+;}
     break;
 
   case 607:
@@ -4886,7 +4886,7 @@ yyreduce:
 	osoption->optimization->constraints->other = new OtherConstraintOption*[(yyvsp[(3) - (4)].ival)];
 	for (int i= 0; i < (yyvsp[(3) - (4)].ival); i++)
 		osoption->optimization->constraints->other[i] = new OtherConstraintOption();
-}
+;}
     break;
 
   case 612:
@@ -4897,7 +4897,7 @@ yyreduce:
 	osoption->optimization->constraints->initialConstraintValues->con = new InitConValue*[(yyvsp[(3) - (4)].ival)];
 	for (int i = 0; i < (yyvsp[(3) - (4)].ival); i++)
 		osoption->optimization->constraints->initialConstraintValues->con[i] = new InitConValue();
-}
+;}
     break;
 
   case 615:
@@ -4907,14 +4907,14 @@ yyreduce:
 	parserData->idxAttributePresent = false;
 	parserData->valAttributePresent = false;
 	parserData->numberOfCon++;
-}
+;}
     break;
 
   case 616:
 
     {	if (parserData->numberOfCon >= osoption->optimization->constraints->initialConstraintValues->numberOfCon)
 		osolerror(NULL, osoption, parserData, "too many initial constraint values");
-}
+;}
     break;
 
   case 621:
@@ -4928,7 +4928,7 @@ yyreduce:
 			osolerror (NULL, osoption, parserData, "constraint index out of range");
 	};
 	osoption->optimization->constraints->initialConstraintValues->con[parserData->numberOfCon]->idx = (yyvsp[(3) - (4)].ival);
-}
+;}
     break;
 
   case 622:
@@ -4941,9 +4941,9 @@ yyreduce:
 	else if ($2 == "-INF")
 		osoption->optimization->constraints->initialConstraintValues->con[parserData->numberOfCon]->value = -OSDBL_MAX;
 	else
-		osoption->optimization->constraints->initialConstraintValues->con[parserData->numberOfCon]->value = strtod($2, NULL);
+		osoption->optimization->constraints->initialConstraintValues->con[parserData->numberOfCon]->value = os_strtod($2, NULL);
 		*/
-}
+;}
     break;
 
   case 628:
@@ -4954,7 +4954,7 @@ yyreduce:
 	osoption->optimization->constraints->initialDualValues->con = new InitDualVarValue*[(yyvsp[(3) - (4)].ival)];
 	for (int i = 0; i < (yyvsp[(3) - (4)].ival); i++)
 		osoption->optimization->constraints->initialDualValues->con[i] = new InitDualVarValue ();
-}
+;}
     break;
 
   case 631:
@@ -4965,14 +4965,14 @@ yyreduce:
 	parserData->lbvalAttributePresent = false;
 	parserData->ubvalAttributePresent = false;
 	parserData->numberOfDuals++;
-}
+;}
     break;
 
   case 632:
 
     {	if (parserData->numberOfDuals >= osoption->optimization->constraints->initialDualValues->numberOfCon)
 		osolerror(NULL, osoption, parserData, "too many initial dual variable bounds");
-}
+;}
     break;
 
   case 638:
@@ -4986,7 +4986,7 @@ yyreduce:
 			osolerror (NULL, osoption, parserData, "constraint index out of range");
 	};
 	osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->idx = (yyvsp[(3) - (4)].ival);
-}
+;}
     break;
 
   case 639:
@@ -4999,9 +4999,9 @@ yyreduce:
 	else if ($2 == "-INF")
 		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->lbValue = -OSDBL_MAX;
 	else
-		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->lbValue = strtod($2, NULL);
+		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->lbValue = os_strtod($2, NULL);
 		*/
-}
+;}
     break;
 
   case 641:
@@ -5014,16 +5014,16 @@ yyreduce:
 	else if ($2 == "-INF")
 		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->ubValue = -OSDBL_MAX;
 	else
-		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->ubValue = strtod($2, NULL);
+		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->ubValue = os_strtod($2, NULL);
 		*/
-}
+;}
     break;
 
   case 648:
 
     {	if (parserData->numberOfOtherConstraintOptions >= osoption->optimization->constraints->numberOfOtherConstraintOptions)
 		osolerror(NULL, osoption, parserData, "too many <other> constraint options");
-}
+;}
     break;
 
   case 658:
@@ -5037,7 +5037,7 @@ yyreduce:
 	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->con = new OtherConOption*[(yyvsp[(3) - (4)].ival)];
 	for (int i = 0; i < (yyvsp[(3) - (4)].ival); i++)
 		osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->con[i] = new OtherConOption();
-}
+;}
     break;
 
   case 659:
@@ -5046,7 +5046,7 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "only one name attribute allowed");
 	parserData->otherOptionNamePresent = true;
 	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->name = (yyvsp[(2) - (2)].sval);
-}
+;}
     break;
 
   case 661:
@@ -5055,7 +5055,7 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "only one value attribute allowed");
 	parserData->otherOptionValuePresent = true;
 	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->value = (yyvsp[(2) - (2)].sval);
-}
+;}
     break;
 
   case 663:
@@ -5064,7 +5064,7 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "only one solver attribute allowed");
 	parserData->otherOptionSolverPresent = true;
 	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->solver = (yyvsp[(2) - (2)].sval);
-}
+;}
     break;
 
   case 665:
@@ -5073,7 +5073,7 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "only one category attribute allowed");
 	parserData->otherOptionCategoryPresent = true;
 	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->category = (yyvsp[(2) - (2)].sval);
-}
+;}
     break;
 
   case 667:
@@ -5082,7 +5082,7 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "only one type attribute allowed");
 	parserData->otherOptionTypePresent = true;
 	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->type = (yyvsp[(2) - (2)].sval);
-}
+;}
     break;
 
   case 669:
@@ -5091,7 +5091,7 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "only one description attribute allowed");
 	parserData->otherOptionDescriptionPresent = true;
 	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->description = (yyvsp[(2) - (2)].sval);
-}
+;}
     break;
 
   case 671:
@@ -5110,7 +5110,7 @@ yyreduce:
 	parserData->otherOptionTypePresent = false;
 	parserData->otherOptionDescriptionPresent = false;
 	parserData->numberOfOtherConstraintOptions++;
-}
+;}
     break;
 
   case 674:
@@ -5122,14 +5122,14 @@ yyreduce:
 	parserData->lbvalAttributePresent = false;
 	parserData->ubvalAttributePresent = false;
 	parserData->numberOfCon++;
-}
+;}
     break;
 
   case 675:
 
     {	if (parserData->numberOfVar >= osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->numberOfVar)
 		osolerror(NULL, osoption, parserData, "too many <var> entries in <other> variable element");
-}
+;}
     break;
 
   case 682:
@@ -5143,7 +5143,7 @@ yyreduce:
 			osolerror (NULL, osoption, parserData, "constraint index exceeds upper limit");
 	};
 	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->con[parserData->numberOfCon]->idx = (yyvsp[(3) - (4)].ival);
-}
+;}
     break;
 
   case 683:
@@ -5152,7 +5152,7 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "only one constraint value allowed");
 	parserData->valAttributePresent = true;
 	osoption->optimization->constraints-> other[parserData->numberOfOtherConstraintOptions]->con[parserData->numberOfCon]->value = (yyvsp[(2) - (2)].sval);
-}
+;}
     break;
 
   case 685:
@@ -5161,7 +5161,7 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "only one lower bound value allowed");
 	parserData->lbvalAttributePresent = true;
 	osoption->optimization->constraints-> other[parserData->numberOfOtherConstraintOptions]->con[parserData->numberOfCon]->lbValue = (yyvsp[(2) - (2)].sval);
-}
+;}
     break;
 
   case 687:
@@ -5170,14 +5170,14 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "only one upper bound value allowed");
 	parserData->ubvalAttributePresent = true;
 	osoption->optimization->constraints-> other[parserData->numberOfOtherConstraintOptions]->con[parserData->numberOfCon]->ubValue = (yyvsp[(2) - (2)].sval);
-}
+;}
     break;
 
   case 692:
 
     {	if (parserData->numberOfSolverOptions != osoption->optimization->solverOptions->numberOfSolverOptions)
 		osolerror (NULL, osoption, parserData, "wrong number of solver options in <optimization> element");
-}
+;}
     break;
 
   case 693:
@@ -5189,7 +5189,7 @@ yyreduce:
 	{	parserData->solverOptionsPresent = true;
 		osoption->optimization->solverOptions = new SolverOptions();
 	}
-}
+;}
     break;
 
   case 694:
@@ -5198,7 +5198,7 @@ yyreduce:
 	osoption->optimization->solverOptions->numberOfSolverOptions = (yyvsp[(3) - (4)].ival);
 	osoption->optimization->solverOptions->solverOption = new SolverOption*[(yyvsp[(3) - (4)].ival)];
 	for (int i=0; i < (yyvsp[(3) - (4)].ival); i++) osoption->optimization->solverOptions->solverOption[i] = new SolverOption();
-}
+;}
     break;
 
   case 697:
@@ -5206,7 +5206,7 @@ yyreduce:
     {	if (parserData->numberOfSolverOptions >= osoption->optimization->solverOptions->numberOfSolverOptions)
 	{	osolerror (NULL, osoption, parserData, "too many solver options in <optimization> element");
 	};
-}
+;}
     break;
 
   case 698:
@@ -5221,7 +5221,7 @@ yyreduce:
 	parserData->solverOptionTypePresent = false;
 	parserData->solverOptionDescriptionPresent = false;
 	parserData->numberOfSolverOptions++;
-}
+;}
     break;
 
   case 707:
@@ -5233,7 +5233,7 @@ yyreduce:
 	{	parserData->solverOptionNamePresent = true;
 		osoption->optimization->solverOptions->solverOption[parserData->numberOfSolverOptions]->name = (yyvsp[(2) - (2)].sval);
 	}
-}
+;}
     break;
 
   case 709:
@@ -5245,7 +5245,7 @@ yyreduce:
 	{	parserData->solverOptionValuePresent = true;
 		osoption->optimization->solverOptions->solverOption[parserData->numberOfSolverOptions]->value = (yyvsp[(2) - (2)].sval);
 	}
-}
+;}
     break;
 
   case 711:
@@ -5257,7 +5257,7 @@ yyreduce:
 	{	parserData->solverOptionSolverPresent = true;
 		osoption->optimization->solverOptions->solverOption[parserData->numberOfSolverOptions]->solver = (yyvsp[(2) - (2)].sval);
 	}
-}
+;}
     break;
 
   case 713:
@@ -5269,7 +5269,7 @@ yyreduce:
 	{	parserData->solverOptionCategoryPresent = true;
 		osoption->optimization->solverOptions->solverOption[parserData->numberOfSolverOptions]->category = (yyvsp[(2) - (2)].sval);
 	}
-}
+;}
     break;
 
   case 715:
@@ -5281,7 +5281,7 @@ yyreduce:
 	{	parserData->solverOptionTypePresent = true;
 		osoption->optimization->solverOptions->solverOption[parserData->numberOfSolverOptions]->type = (yyvsp[(2) - (2)].sval);
 	}
-}
+;}
     break;
 
   case 717:
@@ -5293,7 +5293,7 @@ yyreduce:
 	{	parserData->solverOptionNamePresent = true;
 		osoption->optimization->solverOptions->solverOption[parserData->numberOfSolverOptions]->name = (yyvsp[(2) - (2)].sval);
 	}
-}
+;}
     break;
 
 

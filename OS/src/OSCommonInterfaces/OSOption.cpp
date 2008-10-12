@@ -1128,6 +1128,8 @@ std::vector<InitVarValue*>  OSOption::getInitVarValuesSparse(){
 			int num_var;
 			num_var = this->getnumberOfInitVarValues();
 			for(i = 0; i < num_var; i++){
+				printf("\n%d\n",this->optimization->variables->initialVariableValues->var[ i]->idx);
+				printf("\n%d\n",this->optimization->variables->initialVariableValues->var[ i]->value);
 				initVarVector.push_back( this->optimization->variables->initialVariableValues->var[ i]);
 				}
 			}

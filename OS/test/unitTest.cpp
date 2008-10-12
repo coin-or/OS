@@ -1641,7 +1641,6 @@ catch(const ErrorClass& eclass){
 		start = clock();
 		cout << "PARSE THE OSOL STRING INTO AN OSOPTION OBJECT" << endl;
 		osoption = osolreader->readOSoL( osol);
-		cout << "Write the content to a new file" <<endl;
 		
 		std::cout << "number of solver options "  <<  osoption->getnumberOfSolverOptions() << std::endl;
 		std::vector<SolverOption*> optionsVector;
@@ -1651,13 +1650,31 @@ catch(const ErrorClass& eclass){
 		for(i = 0; i < num_options; i++){
 			std::cout << "ipopt solver option  "  << optionsVector[ i]->name << std::endl;
 		}
+
+		std::cout << "number of variables initialed with double "  <<  osoption->getnumberOfInitVarValues() << std::endl;
+		std::vector<InitVarValue*> initVarVector;
+		initVarVector = osoption->getInitVarValuesSparse();
+		int num_var = initVarVector.size();
+		for(i = 0; i < num_var; i++){
+			std::cout << "initialize; var index "  << initVarVector[ i]->idx;
+			std::cout << ", value = "  << initVarVector[ i]->value << std::endl;
+		}
+
+		double* denseInitVarVector;
+		num_var = 5;
+		denseInitVarVector = osoption->getInitVarValuesDense(num_var);
+		for(i = 0; i < num_var; i++){
+			std::cout << "initialize; var index "  << i;
+			std::cout << ", value = "  << denseInitVarVector[ i] << std::endl;
+		}
 		//return 0;
 		
-		
+
+		cout << "Write the content to a new file" <<endl;		
 		tmpOSoL = osolwriter->writeOSoL( osoption);
-//		cout << endl << "Here is tmpOSoL:" <<endl;
-//		cout << endl << endl << tmpOSoL << endl;
-//		cout << "-----------------------------------------" << endl << endl;
+		cout << endl << "Here is tmpOSoL:" <<endl;
+		cout << endl << endl << tmpOSoL << endl;
+		cout << "-----------------------------------------" << endl << endl;
 		// make sure we can parse without error
 		delete osolreader;
 		osolreader = NULL;

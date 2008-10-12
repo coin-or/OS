@@ -21,8 +21,8 @@
 	<system>
 		<minDiskSpace unit="megabyte">0</minDiskSpace>
 		<minMemorySize>1.0</minMemorySize>
-        <minCPUNumber>0</minCPUNumber>
-   		<otherOptions numberOfOtherOptions="1">
+		<minCPUNumber>0</minCPUNumber>
+		<otherOptions numberOfOtherOptions="1">
 			<other name="test" value="5"></other>
 		</otherOptions>
 		<minCPUSpeed unit="teraflops">1.0</minCPUSpeed>
@@ -93,7 +93,7 @@
 			</initialVariableValuesString>
 				<other name="priority" numberOfVar="3" solver="Ipopt">
 					<var idx="0" value="1"/>
-					<var idx="1" value="2"/>
+					<var value="2" idx="1"/>
 					<var idx="2" value="3"/>
 				</other>
 				<other name="test" solver="hypothetical" numberOfVar="1" value="inverted">
