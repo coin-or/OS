@@ -732,8 +732,8 @@ int  main(){
 		//Vector s(m);
 		for(i = 0; i < m; i++)
 		e[i] = false;
-		e[ 0] = false;
-		e[ 1] = true;
+		e[ 0] = true;
+		e[ 1] = false;
 		std::vector<bool> h( n*n);
 		//Vector h(n * n);
 		std::cout << "Computing Sparse Hessian" << std::endl;
