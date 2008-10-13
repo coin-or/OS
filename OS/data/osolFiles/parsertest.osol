@@ -116,7 +116,7 @@
 				<con idx="1" lbValue="-10.0" ubValue="100."></con>
 			</initialDualValues>
 		</constraints>
-		<solverOptions numberOfSolverOptions="9">
+		<solverOptions numberOfSolverOptions="10">
 			<solverOption name="tol" solver="ipopt" type="numeric" value="1.e-9"></solverOption>
 			<solverOption name="print_level" solver="ipopt" type="integer" value="5"></solverOption>
 			<solverOption name="max_iter" solver="ipopt" type="integer" value="2000"></solverOption>
