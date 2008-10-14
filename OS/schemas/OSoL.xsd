@@ -177,6 +177,7 @@
 							<xs:enumeration value="megabyte"/>
 							<xs:enumeration value="gigabyte"/>
 							<xs:enumeration value="terabyte"/>
+							<xs:enumeration value="petabyte"/>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:attribute>
@@ -222,6 +223,7 @@
 							<xs:enumeration value="megaflops"/>
 							<xs:enumeration value="gigaflops"/>
 							<xs:enumeration value="teraflops"/>
+							<xs:enumeration value="petaflops"/>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:attribute>

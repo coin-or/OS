@@ -241,6 +241,9 @@ int main(int argC, char* argV[])
 	// 
 	unitTestResult << "HERE ARE THE UNIT TEST RESULTS:" << std::endl << std::endl;
 
+//#define OSOL_PARSER_DEBUG
+#ifndef OSOL_PARSER_DEBUG
+
 	//first make sure we can read files
 	try{
 		osilFileName =  dataDir  + "osilFiles" + dirsep +  "parincLinearByRow.osil";
@@ -1604,7 +1607,7 @@ catch(const ErrorClass& eclass){
 		unitTestResultFailure << eclass.errormsg << endl;
 		unitTestResultFailure << "There was a failure in the test for reading OSrL" << endl;
 	}
-
+#endif //OSOL_PARSER_DEBUG
 
 	//
 	// Now test the OSoL parser
@@ -1632,7 +1635,11 @@ catch(const ErrorClass& eclass){
 		//osoption = new OSOption(); 
 		cout << "TEST PARSING AN OSoL FILE" << endl;
 		cout << "FIRST READ THE OSoL FILE INTO A STRING" << endl;
+#ifdef OSOL_PARSERDEBUG
+		osolFileName = "C:\\datafiles\\research\\os\\os-trunk-test\\os\\data\\osolFiles\\parsertest.osol"; 
+#else
 		osolFileName = dataDir  + "osolFiles" + dirsep + "parsertest.osol"; 
+#endif
 		start = clock();
 		std::string osol = fileUtil->getFileAsString( osolFileName.c_str() );
 		finish = clock();

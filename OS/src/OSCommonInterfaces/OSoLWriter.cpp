@@ -179,7 +179,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 	if(m_OSOption->service != NULL)
 	{	outStr << "<service>" << endl;
 		if (m_OSOption->service->type != "")
-		{	outStr << "<type>" << m_OSOption->service->type << "</type>";
+		{	outStr << "<type>" << m_OSOption->service->type << "</type>" << endl;
 		};
 		if (m_OSOption->service->otherOptions != NULL)
 		{	if (m_OSOption->service->otherOptions->numberOfOtherOptions > 0)
@@ -291,19 +291,6 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				outStr << "</inputFilesToMove>" << endl;
 			}
 		}
-		if (m_OSOption->job->outputDirectoriesToMove != NULL)
-		{	if (m_OSOption->job->outputDirectoriesToMove->numberOfPathPairs > 0)
-			{	outStr << "<outputDirectoriesToMove numberOfPathPairs=\"";
-				outStr << m_OSOption->job->outputDirectoriesToMove->numberOfPathPairs << "\">" << endl; 
-				for (int i=0; i < m_OSOption->job->outputDirectoriesToMove->numberOfPathPairs; i++)
-				{	outStr << "<pathPair";
-					outStr << " from=\"" << m_OSOption->job->outputDirectoriesToMove->pathPair[i]->from << "\"";
-					outStr << " to=\"" << m_OSOption->job->outputDirectoriesToMove->pathPair[i]->to << "\"";
-					outStr << " makeCopy=\"" << m_OSOption->job->outputDirectoriesToMove->pathPair[i]->makeCopy << "\"/>";
-				}
-				outStr << "</outputDirectoriesToMove>" << endl;
-			}
-		}
 		if (m_OSOption->job->outputFilesToMove != NULL)
 		{	if (m_OSOption->job->outputFilesToMove->numberOfPathPairs > 0)
 			{	outStr << "<outputFilesToMove numberOfPathPairs=\"";
@@ -315,6 +302,19 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 					outStr << " makeCopy=\"" << m_OSOption->job->outputFilesToMove->pathPair[i]->makeCopy << "\"/>";
 				}
 				outStr << "</outputFilesToMove>" << endl;
+			}
+		}
+		if (m_OSOption->job->outputDirectoriesToMove != NULL)
+		{	if (m_OSOption->job->outputDirectoriesToMove->numberOfPathPairs > 0)
+			{	outStr << "<outputDirectoriesToMove numberOfPathPairs=\"";
+				outStr << m_OSOption->job->outputDirectoriesToMove->numberOfPathPairs << "\">" << endl; 
+				for (int i=0; i < m_OSOption->job->outputDirectoriesToMove->numberOfPathPairs; i++)
+				{	outStr << "<pathPair";
+					outStr << " from=\"" << m_OSOption->job->outputDirectoriesToMove->pathPair[i]->from << "\"";
+					outStr << " to=\"" << m_OSOption->job->outputDirectoriesToMove->pathPair[i]->to << "\"";
+					outStr << " makeCopy=\"" << m_OSOption->job->outputDirectoriesToMove->pathPair[i]->makeCopy << "\"/>";
+				}
+				outStr << "</outputDirectoriesToMove>" << endl;
 			}
 		}
 		if (m_OSOption->job->filesToDelete != NULL)
@@ -383,8 +383,14 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				for (int i=0; i < m_OSOption->optimization->variables->initialVariableValues->numberOfVar; i++)
 				{	outStr << "<var";
 					outStr << " idx=\"" << m_OSOption->optimization->variables->initialVariableValues->var[i]->idx << "\"";
-					outStr << " value=\"" << m_OSOption->optimization->variables->initialVariableValues->var[i]->value << "\"";
-					outStr << "/>" << endl;
+					outStr << " value=\"";
+					if (m_OSOption->optimization->variables->initialVariableValues->var[i]->value == OSDBL_MAX)
+						outStr << "INF";
+					else if (m_OSOption->optimization->variables->initialVariableValues->var[i]->value == -OSDBL_MAX)
+						outStr << "-INF";
+					else
+						outStr << m_OSOption->optimization->variables->initialVariableValues->var[i]->value;
+					outStr << "\"/>" << endl;
 				}
 				outStr << "</initialVariableValues>" << endl;
 			}
