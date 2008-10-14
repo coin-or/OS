@@ -1635,7 +1635,7 @@ catch(const ErrorClass& eclass){
 		//osoption = new OSOption(); 
 		cout << "TEST PARSING AN OSoL FILE" << endl;
 		cout << "FIRST READ THE OSoL FILE INTO A STRING" << endl;
-#ifdef OSOL_PARSERDEBUG
+#ifdef OSOL_PARSER_DEBUG
 		osolFileName = "C:\\datafiles\\research\\os\\os-trunk-test\\os\\data\\osolFiles\\parsertest.osol"; 
 #else
 		osolFileName = dataDir  + "osolFiles" + dirsep + "parsertest.osol"; 

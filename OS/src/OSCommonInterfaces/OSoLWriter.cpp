@@ -449,8 +449,14 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				for (int i=0; i < m_OSOption->optimization->objectives->initialObjectiveValues->numberOfObj; i++)
 				{	outStr << "<obj";
 					outStr << " idx=\"" << m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->idx << "\"";
-					outStr << " value=\"" << m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->value << "\"";
-					outStr << "/>" << endl;
+					outStr << " value=\"";
+					if (m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->value == OSDBL_MAX)
+						outStr << "INF";
+					else if (m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->value == -OSDBL_MAX)
+						outStr << "-INF";
+					else
+						outStr << m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->value;
+					outStr << "\"/>" << endl;
 				}
 				outStr << "</initialObjectiveValues>" << endl;
 			}
@@ -460,9 +466,21 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				for (int i=0; i < m_OSOption->optimization->objectives->initialObjectiveBounds->numberOfObj; i++)
 				{	outStr << "<obj";
 					outStr << " idx=\"" << m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->idx << "\"";
-					outStr << " lbValue=\"" << m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->lbValue << "\"";
-					outStr << " ubValue=\"" << m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->ubValue << "\"";
-					outStr << "/>" << endl;
+					outStr << " lbValue=\"";
+					if (m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->lbValue == OSDBL_MAX)
+						outStr << "INF";
+					else if (m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->lbValue == -OSDBL_MAX)
+						outStr << "-INF";
+					else
+						outStr << m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->lbValue;
+					outStr << "\" ubValue=\"";
+					if (m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->ubValue == OSDBL_MAX)
+						outStr << "INF";
+					else if (m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->ubValue == -OSDBL_MAX)
+						outStr << "-INF";
+					else
+						outStr << m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->ubValue;
+					outStr << "\"/>" << endl;
 				}
 				outStr << "</initialObjectiveBounds>" << endl;
 			}
@@ -504,8 +522,14 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				for (int i=0; i < m_OSOption->optimization->constraints->initialConstraintValues->numberOfCon; i++)
 				{	outStr << "<con";
 					outStr << " idx=\"" << m_OSOption->optimization->constraints->initialConstraintValues->con[i]->idx << "\"";
-					outStr << " value=\"" << m_OSOption->optimization->constraints->initialConstraintValues->con[i]->value << "\"";
-					outStr << "/>" << endl;
+					outStr << " value=\"";
+					if (m_OSOption->optimization->constraints->initialConstraintValues->con[i]->value == OSDBL_MAX)
+						outStr << "INF";
+					else if (m_OSOption->optimization->constraints->initialConstraintValues->con[i]->value == -OSDBL_MAX)
+						outStr << "-INF";
+					else
+						outStr << m_OSOption->optimization->constraints->initialConstraintValues->con[i]->value;
+					outStr << "\"/>" << endl;
 				}
 				outStr << "</initialConstraintValues>" << endl;
 			}
@@ -515,9 +539,21 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				for (int i=0; i < m_OSOption->optimization->constraints->initialDualValues->numberOfCon; i++)
 				{	outStr << "<con";
 					outStr << " idx=\"" << m_OSOption->optimization->constraints->initialDualValues->con[i]->idx << "\"";
-					outStr << " lbValue=\"" << m_OSOption->optimization->constraints->initialDualValues->con[i]->lbValue << "\"";
-					outStr << " ubValue=\"" << m_OSOption->optimization->constraints->initialDualValues->con[i]->ubValue << "\"";
-					outStr << "/>" << endl;
+					outStr << " lbValue=\"";
+					if (m_OSOption->optimization->constraints->initialDualValues->con[i]->lbValue == OSDBL_MAX)
+						outStr << "INF";
+					else if (m_OSOption->optimization->constraints->initialDualValues->con[i]->lbValue == -OSDBL_MAX)
+						outStr << "-INF";
+					else
+						outStr << m_OSOption->optimization->constraints->initialDualValues->con[i]->lbValue;
+					outStr << "\" ubValue=\"";
+					if (m_OSOption->optimization->constraints->initialDualValues->con[i]->ubValue == OSDBL_MAX)
+						outStr << "INF";
+					else if (m_OSOption->optimization->constraints->initialDualValues->con[i]->ubValue == -OSDBL_MAX)
+						outStr << "-INF";
+					else
+						outStr << m_OSOption->optimization->constraints->initialDualValues->con[i]->ubValue;
+					outStr << "\"/>" << endl;
 				}
 				outStr << "</initialDualValues>" << endl;
 			}

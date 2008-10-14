@@ -1510,22 +1510,12 @@ initvarvaluevalueatt: VALUEATT ATTRIBUTETEXT
 {	if (parserData->valAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one variable value allowed");
 	parserData->valAttributePresent = true;
-	printf("\nRead from file: %s\n",$2);
 	if (strncmp($2,"INF",3) == 0)
-	{	printf("\nMatched INF; OSDBL_MAX=%d\n",OSDBL_MAX);
 		osoption->optimization->variables->initialVariableValues->var[parserData->numberOfVar]->value = OSDBL_MAX;
-		printf("\nStored: %d\n",osoption->optimization->variables->initialVariableValues->var[parserData->numberOfVar]->value );
-	}
 	else if (strncmp($2,"-INF",4) == 0)
-	{	printf("\nMatched -INF; -OSDBL_MAX=%d\n",-OSDBL_MAX);
 		osoption->optimization->variables->initialVariableValues->var[parserData->numberOfVar]->value = -OSDBL_MAX;
-		printf("\nStored: %d\n",osoption->optimization->variables->initialVariableValues->var[parserData->numberOfVar]->value );
-	}
 	else
-	{	printf("\nMatched double; value=%d\n",os_strtod($2, NULL));
 		osoption->optimization->variables->initialVariableValues->var[parserData->numberOfVar]->value = os_strtod($2, NULL);
-		printf("\nStored: %d\n",osoption->optimization->variables->initialVariableValues->var[parserData->numberOfVar]->value );
-	}		
 }
 QUOTE;
 
@@ -1817,17 +1807,11 @@ initobjvaluevalueatt: VALUEATT ATTRIBUTETEXT
 		osolerror (NULL, osoption, parserData, "only one objective value allowed");
 	parserData->valAttributePresent = true;
 	if (strncmp($2,"INF",3) == 0)
-	{	printf("\nMatched INF\n");
 		osoption->optimization->objectives->initialObjectiveValues->obj[parserData->numberOfObjValues]->value = OSDBL_MAX;
-	}
 	else if (strncmp($2,"-INF",4) == 0)
-	{	printf("\nMatched -INF\n");
 		osoption->optimization->objectives->initialObjectiveValues->obj[parserData->numberOfObjValues]->value = -OSDBL_MAX;
-	}
 	else
-	{	printf("\nMatched double\n");
 		osoption->optimization->objectives->initialObjectiveValues->obj[parserData->numberOfObjValues]->value = os_strtod($2, NULL);
-	}
 }
 QUOTE;
 
@@ -1882,20 +1866,12 @@ initobjvaluelowerboundatt: LBVALUEATT ATTRIBUTETEXT
 {	if (parserData->lbvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one objective lower bound allowed");
 	parserData->lbvalAttributePresent = true;
-	printf("\nObjective lower bound read: %s\n",$2);
 	if (strncmp($2,"INF",3) == 0)
-	{	printf("\nMatched INF\n");
 		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->lbValue = OSDBL_MAX;
-	}
 	else if (strncmp($2,"-INF",4) == 0)
-	{	printf("\nMatched -INF\n");
 		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->lbValue = -OSDBL_MAX;
-	}
 	else
-	{	printf("\nMatched double\n");
 		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->lbValue = os_strtod($2, NULL);
-	}
-	printf("\nObjective lower bound stored: %d\n",osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->lbValue);
 }
 QUOTE;
 
@@ -1904,17 +1880,11 @@ initobjvalueupperboundatt: UBVALUEATT ATTRIBUTETEXT
 		osolerror (NULL, osoption, parserData, "only one objective upper bound allowed");
 	parserData->ubvalAttributePresent = true;
 	if (strncmp($2,"INF",3) == 0)
-	{	printf("\nMatched INF\n");
 		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->ubValue = OSDBL_MAX;
-	}
 	else if (strncmp($2,"-INF",4) == 0)
-	{	printf("\nMatched -INF\n");
 		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->ubValue = -OSDBL_MAX;
-	}
 	else
-	{	printf("\nMatched double\n");
 		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->ubValue = os_strtod($2, NULL);
-	}		
 }
 QUOTE;
 
@@ -2161,17 +2131,11 @@ initconvaluevalueatt: VALUEATT ATTRIBUTETEXT
 		osolerror (NULL, osoption, parserData, "only one constraint value allowed");
 	parserData->valAttributePresent = true;
 	if (strncmp($2,"INF",3) == 0)
-	{	printf("\nMatched INF\n");
 		osoption->optimization->constraints->initialConstraintValues->con[parserData->numberOfCon]->value = OSDBL_MAX;
-	}
 	else if (strncmp($2,"-INF",4) == 0)
-	{	printf("\nMatched -INF\n");
 		osoption->optimization->constraints->initialConstraintValues->con[parserData->numberOfCon]->value = -OSDBL_MAX;
-	}
 	else
-	{	printf("\nMatched double\n");
 		osoption->optimization->constraints->initialConstraintValues->con[parserData->numberOfCon]->value = os_strtod($2, NULL);
-	}		
 }
 QUOTE;
 
@@ -2227,17 +2191,11 @@ initdualvaluelowerboundatt: LBVALUEATT ATTRIBUTETEXT
 		osolerror (NULL, osoption, parserData, "only one dual variable lower bound allowed");
 	parserData->lbvalAttributePresent = true;
 	if (strncmp($2,"INF",3) == 0)
-	{	printf("\nMatched INF\n");
 		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->lbValue = OSDBL_MAX;
-	}
 	else if (strncmp($2,"-INF",4) == 0)
-	{	printf("\nMatched -INF\n");
 		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->lbValue = -OSDBL_MAX;
-	}
 	else
-	{	printf("\nMatched double\n");
 		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->lbValue = os_strtod($2, NULL);
-	}		
 }
 QUOTE;
 
@@ -2246,17 +2204,11 @@ initdualvalueupperboundatt: UBVALUEATT ATTRIBUTETEXT
 		osolerror (NULL, osoption, parserData, "only one dual variable upper bound allowed");
 	parserData->ubvalAttributePresent = true;
 	if (strncmp($2,"INF",3) == 0)
-	{	printf("\nMatched INF\n");
 		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->ubValue = OSDBL_MAX;
-	}
 	else if (strncmp($2,"-INF",4) == 0)
-	{	printf("\nMatched -INF\n");
 		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->ubValue = -OSDBL_MAX;
-	}
 	else
-	{	printf("\nMatched double\n");
 		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->ubValue = os_strtod($2, NULL);
-	}
 }
 QUOTE;
 

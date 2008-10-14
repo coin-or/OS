@@ -1076,33 +1076,33 @@ static const yytype_uint16 yyrline[] =
     1432,  1432,  1432,  1434,  1438,  1442,  1446,  1446,  1448,  1450,
     1450,  1452,  1456,  1456,  1464,  1465,  1467,  1467,  1469,  1478,
     1478,  1480,  1488,  1493,  1493,  1495,  1495,  1497,  1510,  1509,
-    1532,  1532,  1535,  1535,  1538,  1547,  1547,  1549,  1557,  1562,
-    1562,  1564,  1564,  1566,  1579,  1578,  1586,  1586,  1591,  1591,
-    1593,  1595,  1600,  1600,  1603,  1604,  1605,  1606,  1607,  1608,
-    1609,  1611,  1624,  1623,  1632,  1631,  1640,  1639,  1648,  1647,
-    1656,  1655,  1664,  1663,  1672,  1689,  1689,  1691,  1701,  1706,
-    1706,  1709,  1710,  1711,  1712,  1714,  1727,  1726,  1735,  1734,
-    1743,  1742,  1750,  1750,  1754,  1754,  1756,  1760,  1760,  1768,
-    1769,  1771,  1771,  1774,  1783,  1783,  1785,  1793,  1798,  1798,
-    1800,  1800,  1802,  1816,  1815,  1834,  1834,  1837,  1837,  1840,
-    1849,  1849,  1851,  1860,  1865,  1865,  1867,  1867,  1867,  1869,
-    1882,  1881,  1903,  1902,  1921,  1921,  1925,  1925,  1927,  1929,
-    1934,  1934,  1937,  1938,  1939,  1940,  1941,  1942,  1943,  1945,
-    1958,  1957,  1967,  1966,  1976,  1975,  1985,  1984,  1994,  1993,
-    2003,  2002,  2012,  2029,  2029,  2031,  2041,  2046,  2046,  2049,
-    2050,  2051,  2052,  2054,  2068,  2067,  2077,  2076,  2086,  2085,
-    2094,  2094,  2097,  2097,  2099,  2103,  2103,  2111,  2113,  2115,
-    2115,  2118,  2127,  2127,  2129,  2137,  2142,  2142,  2144,  2144,
-    2146,  2160,  2159,  2178,  2178,  2181,  2181,  2184,  2193,  2193,
-    2195,  2204,  2209,  2209,  2211,  2211,  2211,  2213,  2226,  2225,
-    2245,  2244,  2264,  2264,  2267,  2267,  2269,  2271,  2276,  2276,
-    2279,  2280,  2281,  2282,  2283,  2284,  2285,  2287,  2300,  2299,
-    2308,  2307,  2316,  2315,  2324,  2323,  2332,  2331,  2340,  2339,
-    2348,  2365,  2365,  2367,  2377,  2382,  2382,  2385,  2386,  2387,
-    2388,  2390,  2404,  2403,  2413,  2412,  2421,  2420,  2428,  2428,
-    2431,  2431,  2436,  2446,  2453,  2453,  2456,  2455,  2473,  2473,
-    2476,  2477,  2478,  2479,  2480,  2481,  2485,  2484,  2496,  2495,
-    2507,  2506,  2518,  2517,  2529,  2528,  2540,  2539,  2551,  2551
+    1522,  1522,  1525,  1525,  1528,  1537,  1537,  1539,  1547,  1552,
+    1552,  1554,  1554,  1556,  1569,  1568,  1576,  1576,  1581,  1581,
+    1583,  1585,  1590,  1590,  1593,  1594,  1595,  1596,  1597,  1598,
+    1599,  1601,  1614,  1613,  1622,  1621,  1630,  1629,  1638,  1637,
+    1646,  1645,  1654,  1653,  1662,  1679,  1679,  1681,  1691,  1696,
+    1696,  1699,  1700,  1701,  1702,  1704,  1717,  1716,  1725,  1724,
+    1733,  1732,  1740,  1740,  1744,  1744,  1746,  1750,  1750,  1758,
+    1759,  1761,  1761,  1764,  1773,  1773,  1775,  1783,  1788,  1788,
+    1790,  1790,  1792,  1806,  1805,  1818,  1818,  1821,  1821,  1824,
+    1833,  1833,  1835,  1844,  1849,  1849,  1851,  1851,  1851,  1853,
+    1866,  1865,  1879,  1878,  1891,  1891,  1895,  1895,  1897,  1899,
+    1904,  1904,  1907,  1908,  1909,  1910,  1911,  1912,  1913,  1915,
+    1928,  1927,  1937,  1936,  1946,  1945,  1955,  1954,  1964,  1963,
+    1973,  1972,  1982,  1999,  1999,  2001,  2011,  2016,  2016,  2019,
+    2020,  2021,  2022,  2024,  2038,  2037,  2047,  2046,  2056,  2055,
+    2064,  2064,  2067,  2067,  2069,  2073,  2073,  2081,  2083,  2085,
+    2085,  2088,  2097,  2097,  2099,  2107,  2112,  2112,  2114,  2114,
+    2116,  2130,  2129,  2142,  2142,  2145,  2145,  2148,  2157,  2157,
+    2159,  2168,  2173,  2173,  2175,  2175,  2175,  2177,  2190,  2189,
+    2203,  2202,  2216,  2216,  2219,  2219,  2221,  2223,  2228,  2228,
+    2231,  2232,  2233,  2234,  2235,  2236,  2237,  2239,  2252,  2251,
+    2260,  2259,  2268,  2267,  2276,  2275,  2284,  2283,  2292,  2291,
+    2300,  2317,  2317,  2319,  2329,  2334,  2334,  2337,  2338,  2339,
+    2340,  2342,  2356,  2355,  2365,  2364,  2373,  2372,  2380,  2380,
+    2383,  2383,  2388,  2398,  2405,  2405,  2408,  2407,  2425,  2425,
+    2428,  2429,  2430,  2431,  2432,  2433,  2437,  2436,  2448,  2447,
+    2459,  2458,  2470,  2469,  2481,  2480,  2492,  2491,  2503,  2503
 };
 #endif
 
@@ -4355,22 +4355,12 @@ yyreduce:
     {	if (parserData->valAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one variable value allowed");
 	parserData->valAttributePresent = true;
-	printf("\nRead from file: %s\n",(yyvsp[(2) - (2)].sval));
 	if (strncmp((yyvsp[(2) - (2)].sval),"INF",3) == 0)
-	{	printf("\nMatched INF; OSDBL_MAX=%d\n",OSDBL_MAX);
 		osoption->optimization->variables->initialVariableValues->var[parserData->numberOfVar]->value = OSDBL_MAX;
-		printf("\nStored: %d\n",osoption->optimization->variables->initialVariableValues->var[parserData->numberOfVar]->value );
-	}
 	else if (strncmp((yyvsp[(2) - (2)].sval),"-INF",4) == 0)
-	{	printf("\nMatched -INF; -OSDBL_MAX=%d\n",-OSDBL_MAX);
 		osoption->optimization->variables->initialVariableValues->var[parserData->numberOfVar]->value = -OSDBL_MAX;
-		printf("\nStored: %d\n",osoption->optimization->variables->initialVariableValues->var[parserData->numberOfVar]->value );
-	}
 	else
-	{	printf("\nMatched double; value=%d\n",os_strtod((yyvsp[(2) - (2)].sval), NULL));
 		osoption->optimization->variables->initialVariableValues->var[parserData->numberOfVar]->value = os_strtod((yyvsp[(2) - (2)].sval), NULL);
-		printf("\nStored: %d\n",osoption->optimization->variables->initialVariableValues->var[parserData->numberOfVar]->value );
-	}		
 ;}
     break;
 
@@ -4643,17 +4633,11 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "only one objective value allowed");
 	parserData->valAttributePresent = true;
 	if (strncmp((yyvsp[(2) - (2)].sval),"INF",3) == 0)
-	{	printf("\nMatched INF\n");
 		osoption->optimization->objectives->initialObjectiveValues->obj[parserData->numberOfObjValues]->value = OSDBL_MAX;
-	}
 	else if (strncmp((yyvsp[(2) - (2)].sval),"-INF",4) == 0)
-	{	printf("\nMatched -INF\n");
 		osoption->optimization->objectives->initialObjectiveValues->obj[parserData->numberOfObjValues]->value = -OSDBL_MAX;
-	}
 	else
-	{	printf("\nMatched double\n");
 		osoption->optimization->objectives->initialObjectiveValues->obj[parserData->numberOfObjValues]->value = os_strtod((yyvsp[(2) - (2)].sval), NULL);
-	}
 ;}
     break;
 
@@ -4705,20 +4689,12 @@ yyreduce:
     {	if (parserData->lbvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one objective lower bound allowed");
 	parserData->lbvalAttributePresent = true;
-	printf("\nObjective lower bound read: %s\n",(yyvsp[(2) - (2)].sval));
 	if (strncmp((yyvsp[(2) - (2)].sval),"INF",3) == 0)
-	{	printf("\nMatched INF\n");
 		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->lbValue = OSDBL_MAX;
-	}
 	else if (strncmp((yyvsp[(2) - (2)].sval),"-INF",4) == 0)
-	{	printf("\nMatched -INF\n");
 		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->lbValue = -OSDBL_MAX;
-	}
 	else
-	{	printf("\nMatched double\n");
 		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->lbValue = os_strtod((yyvsp[(2) - (2)].sval), NULL);
-	}
-	printf("\nObjective lower bound stored: %d\n",osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->lbValue);
 ;}
     break;
 
@@ -4728,17 +4704,11 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "only one objective upper bound allowed");
 	parserData->ubvalAttributePresent = true;
 	if (strncmp((yyvsp[(2) - (2)].sval),"INF",3) == 0)
-	{	printf("\nMatched INF\n");
 		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->ubValue = OSDBL_MAX;
-	}
 	else if (strncmp((yyvsp[(2) - (2)].sval),"-INF",4) == 0)
-	{	printf("\nMatched -INF\n");
 		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->ubValue = -OSDBL_MAX;
-	}
 	else
-	{	printf("\nMatched double\n");
 		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->ubValue = os_strtod((yyvsp[(2) - (2)].sval), NULL);
-	}		
 ;}
     break;
 
@@ -4960,17 +4930,11 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "only one constraint value allowed");
 	parserData->valAttributePresent = true;
 	if (strncmp((yyvsp[(2) - (2)].sval),"INF",3) == 0)
-	{	printf("\nMatched INF\n");
 		osoption->optimization->constraints->initialConstraintValues->con[parserData->numberOfCon]->value = OSDBL_MAX;
-	}
 	else if (strncmp((yyvsp[(2) - (2)].sval),"-INF",4) == 0)
-	{	printf("\nMatched -INF\n");
 		osoption->optimization->constraints->initialConstraintValues->con[parserData->numberOfCon]->value = -OSDBL_MAX;
-	}
 	else
-	{	printf("\nMatched double\n");
 		osoption->optimization->constraints->initialConstraintValues->con[parserData->numberOfCon]->value = os_strtod((yyvsp[(2) - (2)].sval), NULL);
-	}		
 ;}
     break;
 
@@ -5023,17 +4987,11 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "only one dual variable lower bound allowed");
 	parserData->lbvalAttributePresent = true;
 	if (strncmp((yyvsp[(2) - (2)].sval),"INF",3) == 0)
-	{	printf("\nMatched INF\n");
 		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->lbValue = OSDBL_MAX;
-	}
 	else if (strncmp((yyvsp[(2) - (2)].sval),"-INF",4) == 0)
-	{	printf("\nMatched -INF\n");
 		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->lbValue = -OSDBL_MAX;
-	}
 	else
-	{	printf("\nMatched double\n");
 		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->lbValue = os_strtod((yyvsp[(2) - (2)].sval), NULL);
-	}		
 ;}
     break;
 
@@ -5043,17 +5001,11 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "only one dual variable upper bound allowed");
 	parserData->ubvalAttributePresent = true;
 	if (strncmp((yyvsp[(2) - (2)].sval),"INF",3) == 0)
-	{	printf("\nMatched INF\n");
 		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->ubValue = OSDBL_MAX;
-	}
 	else if (strncmp((yyvsp[(2) - (2)].sval),"-INF",4) == 0)
-	{	printf("\nMatched -INF\n");
 		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->ubValue = -OSDBL_MAX;
-	}
 	else
-	{	printf("\nMatched double\n");
 		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->ubValue = os_strtod((yyvsp[(2) - (2)].sval), NULL);
-	}
 ;}
     break;
 
