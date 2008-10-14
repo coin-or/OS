@@ -106,11 +106,23 @@ AC_COIN_HAS_PROJECT(SYMPHONY)
 AC_COIN_HAS_PROJECT(DyLP)
 AC_COIN_HAS_PROJECT(Vol)
 AC_COIN_HAS_PROJECT(Ipopt)
+AC_COIN_HAS_PROJECT(Couenne)
 AC_COIN_HAS_PROJECT(Bonmin)
 AC_COIN_HAS_PROJECT(cppad)
 
 
 
+AC_ARG_WITH([boncouenne],
+            AC_HELP_STRING([--with-boncouenne],
+                           [Compile Bonmin with Couenne parallel version]),
+            [use_couenne="$withval"], [use_couenne=no])
+if test "$use_couenne" = yes; then
+  if test $m4_tolower(coin_has_$1) = unavailable ||
+     test $m4_tolower(coin_has_$1) = skipping; then
+     AC_MSG_ERROR([You specified --with-boncouenne, but Couenne is not available])
+  fi
+fi
+AM_CONDITIONAL(COMPILE_BONCOUENNE, test "$use_couenne" = yes)
   
   case $coin_has_cppad in
    unavailable|skipping)
@@ -271,6 +283,18 @@ if test $coin_has_ipopt != unavailable &&
 fi
 
 
+if test $coin_has_couenne != unavailable &&
+   test $coin_has_couenne != skipping; then
+  case $CXX in
+    cl*)
+       couennelib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libcouenne.lib';;
+     *)
+       couennelib="-L\$(INSTALLIBDIR) -lcouenne";;
+  esac
+  AC_SUBST(couennelib)  
+fi
+
+
 if test $coin_has_bonmin != unavailable &&
    test $coin_has_bonmin != skipping; then
   case $CXX in
@@ -283,16 +307,6 @@ if test $coin_has_bonmin != unavailable &&
 fi
 
 
-#if test $coin_has_asl != unavailable &&
-#   test $coin_has_asl != skipping; then
-  case $CXX in
-    cl*)
-       gail='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libbonmin.lib';;
-     *)
-       gail="-L\$(INSTALLIBDIR) -lbonmin";;
-  esac
-  AC_SUBST(gail)  
-#fi
 
 
 
