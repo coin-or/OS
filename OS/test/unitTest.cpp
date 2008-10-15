@@ -1674,6 +1674,8 @@ catch(const ErrorClass& eclass){
 			std::cout << "initialize; var index "  << i;
 			std::cout << ", value = "  << denseInitVarVector[ i] << std::endl;
 		}
+		delete[] denseInitVarVector;
+		denseInitVarVector = NULL;
 		//return 0;
 		
 
