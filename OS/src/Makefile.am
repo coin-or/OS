@@ -118,7 +118,8 @@ if COIN_HAS_CPX
  OSSolverService_DEPENDENCIES += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 endif
 
- LDADD += $(CBCOBJDIR)/src/libCbc.la 
+LDADD += $(CBCOBJDIR)/src/libCbcSolver.la 
+LDADD += $(CBCOBJDIR)/src/libCbc.la 
 ADDLIBS += `cat $(CBCOBJDIR)/cbc_addlibs.txt`
 OSSolverService_DEPENDENCIES += $(CBCOBJDIR)/src/libCbc.la
 

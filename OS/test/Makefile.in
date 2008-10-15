@@ -141,13 +141,14 @@ unitTest_DEPENDENCIES = $(OSOBJDIR)/src/libOS.la $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_2) $(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
 	$(am__DEPENDENCIES_3) $(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
 	$(am__DEPENDENCIES_4) $(am__DEPENDENCIES_5) \
-	$(am__DEPENDENCIES_6) $(CBCOBJDIR)/src/libCbc.la \
-	$(am__DEPENDENCIES_7) $(CGLOBJDIR)/src/libCgl.la \
-	$(OSIOBJDIR)/src/libOsi.la $(CLPOBJDIR)/src/libClp.la \
-	$(am__DEPENDENCIES_8) $(am__DEPENDENCIES_9) \
-	$(am__DEPENDENCIES_11) $(COINUTILSOBJDIR)/src/libCoinUtils.la \
-	$(am__DEPENDENCIES_10) $(am__DEPENDENCIES_12) \
-	$(am__DEPENDENCIES_13) $(am__DEPENDENCIES_14)
+	$(am__DEPENDENCIES_6) $(CBCOBJDIR)/src/libCbcSolver.la \
+	$(CBCOBJDIR)/src/libCbc.la $(am__DEPENDENCIES_7) \
+	$(CGLOBJDIR)/src/libCgl.la $(OSIOBJDIR)/src/libOsi.la \
+	$(CLPOBJDIR)/src/libClp.la $(am__DEPENDENCIES_8) \
+	$(am__DEPENDENCIES_9) $(am__DEPENDENCIES_11) \
+	$(COINUTILSOBJDIR)/src/libCoinUtils.la $(am__DEPENDENCIES_10) \
+	$(am__DEPENDENCIES_12) $(am__DEPENDENCIES_13) \
+	$(am__DEPENDENCIES_14)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
@@ -429,11 +430,12 @@ unitTest_LDADD = $(OSOBJDIR)/src/libOS.la $(am__append_1) \
 	$(am__append_2) $(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la \
 	$(am__append_4) $(OSIOBJDIR)/src/OsiClp/libOsiClp.la \
 	$(am__append_5) $(am__append_6) $(am__append_7) \
-	$(CBCOBJDIR)/src/libCbc.la $(am__append_8) \
-	$(CGLOBJDIR)/src/libCgl.la $(OSIOBJDIR)/src/libOsi.la \
-	$(CLPOBJDIR)/src/libClp.la $(am__append_9) $(am__append_10) \
-	$(am__append_11) $(COINUTILSOBJDIR)/src/libCoinUtils.la \
-	$(ADDLIBS) $(am__append_18) $(am__append_22) $(am__append_25)
+	$(CBCOBJDIR)/src/libCbcSolver.la $(CBCOBJDIR)/src/libCbc.la \
+	$(am__append_8) $(CGLOBJDIR)/src/libCgl.la \
+	$(OSIOBJDIR)/src/libOsi.la $(CLPOBJDIR)/src/libClp.la \
+	$(am__append_9) $(am__append_10) $(am__append_11) \
+	$(COINUTILSOBJDIR)/src/libCoinUtils.la $(ADDLIBS) \
+	$(am__append_18) $(am__append_22) $(am__append_25)
 
 # Now add the include paths for compilation
 

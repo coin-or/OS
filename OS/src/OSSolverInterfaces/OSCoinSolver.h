@@ -121,7 +121,7 @@ public:
 	 */		
 	OSiLReader *m_osilreader;
 	
- 
+	void writeResult(OsiSolverInterface *solver);
 	
 private:
 

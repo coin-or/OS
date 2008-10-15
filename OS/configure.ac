@@ -170,10 +170,10 @@ if test $coin_has_cbc != unavailable &&
    test $coin_has_cbc != skipping; then
   case $CXX in
     cl*)
-       cbclib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libCbc.lib'
+       cbclib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libCbcSolver.lib    `$(CYGPATH_W) $(INSTALLIBDIR)`\\libCbc.lib'
        osicbclib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOsiCbc.lib';;
      *)
-       cbclib="-L\$(INSTALLIBDIR) -lCbc"
+       cbclib="-L\$(INSTALLIBDIR) -lCbcSolver -lCbc"
        osicbclib="-L\$(INSTALLIBDIR) -lOsiCbc";;
   esac
   AC_SUBST(cbclib) 

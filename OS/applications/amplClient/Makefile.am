@@ -61,6 +61,7 @@ if COIN_HAS_CPX
  OSAmplClient_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 endif
 
+ OSAmplClient_LDADD += $(CBCOBJDIR)/src/libCbcSolver.la 
  OSAmplClient_LDADD += $(CBCOBJDIR)/src/libCbc.la 
 
 if COIN_HAS_SYMPHONY
