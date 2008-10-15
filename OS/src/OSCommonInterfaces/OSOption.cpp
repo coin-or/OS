@@ -20,6 +20,7 @@
 #include<iostream>
 #include<sstream>
 #include <limits>
+#include <cstdio>
 
 //#define DEBUG
 
