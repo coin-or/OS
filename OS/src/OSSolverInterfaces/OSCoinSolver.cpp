@@ -220,19 +220,19 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 	hintStrengthMap["OsiForceDo"] = OsiForceDo;
 	//
 	// the OsiStrParam Map
-	std::map<std::string, OsiStrParam> OsiStrParam;
-	OsiStrParam["OsiProbName"] = OsiProbName;
-	OsiStrParam["OsiSolverName"] = OsiSolverName;
-	OsiStrParam["OsiLastStrParam"] = OsiLastStrParam;
+	std::map<std::string, OsiStrParam> strParamMap;
+	strParamMap["OsiProbName"] = OsiProbName;
+	strParamMap["OsiSolverName"] = OsiSolverName;
+	strParamMap["OsiLastStrParam"] = OsiLastStrParam;
 	//
 	// the OsiDblParam Map
-	std::map<std::string, OsiStrParam> OsiStrParam;
-	OsiDblParam["OsiDualObjectiveLimit"] = OsiDualObjectiveLimit;
-	OsiDblParam["OsiPrimalObjectiveLimit"] = OsiPrimalObjectiveLimit;
-	OsiDblParam["OsiDualTolerance"] = OsiDualTolerance;	
-	OsiDblParam["OsiPrimalTolerance"] = OsiPrimalTolerance;
-	OsiDblParam["OsiObjOffset"] = OsiObjOffset;
-	OsiDblParam["OsiLastDblParam"] = OsiLastDblParam;
+	std::map<std::string, OsiDblParam>  dblParamMap;
+	dblParamMap["OsiDualObjectiveLimit"] = OsiDualObjectiveLimit;
+	dblParamMap["OsiPrimalObjectiveLimit"] = OsiPrimalObjectiveLimit;
+	dblParamMap["OsiDualTolerance"] = OsiDualTolerance;	
+	dblParamMap["OsiPrimalTolerance"] = OsiPrimalTolerance;
+	dblParamMap["OsiObjOffset"] = OsiObjOffset;
+	dblParamMap["OsiLastDblParam"] = OsiLastDblParam;
 
 	try{
 		if(osoption != NULL){
