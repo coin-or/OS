@@ -50,6 +50,7 @@
 #include <string>
 
 
+
 /*! \class CoinSolver class.h "CoinSolver.h"
  *  \brief Implements a solve method for the Coin solvers.
  *
@@ -122,7 +123,9 @@ public:
 	OSiLReader *m_osilreader;
 	
 	void writeResult(OsiSolverInterface *solver);
-	
+
+
+
 private:
 
 

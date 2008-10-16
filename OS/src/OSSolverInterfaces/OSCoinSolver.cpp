@@ -36,6 +36,8 @@
 #include "OSParameters.h" 
 #include "OSCommonUtil.h"
 #include "OSMathUtil.h"
+
+#include<map>
   
 #include <iostream>
 #ifdef HAVE_CTIME
@@ -197,8 +199,86 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass) {
 
 
 void CoinSolver::setSolverOptions() throw (ErrorClass) {
+	// the osi maps
+	// the OsiHintParamameter Map
+	std::map<std::string, OsiHintParam> hintParamMap;
+	hintParamMap["OsiDoPresolveInInitial"] = OsiDoPresolveInInitial;
+	hintParamMap["OsiDoDualInInitial"] = OsiDoDualInInitial;
+	hintParamMap["OsiDoPresolveInResolve"] = OsiDoPresolveInResolve;
+	hintParamMap["OsiDoDualInResolve"] = OsiDoDualInResolve;
+	hintParamMap["OsiDoScale"] = OsiDoScale;
+	hintParamMap["OsiDoCrash"] = OsiDoCrash;
+	hintParamMap["OsiDoReducePrint"] = OsiDoReducePrint;
+	hintParamMap["OsiDoInBranchAndCut"] =  OsiDoInBranchAndCut;
+	hintParamMap["OsiLastHintParam"] = OsiLastHintParam;
+	//
+	// the OsiHintStrength Map
+	std::map<std::string, OsiHintStrength> hintStrengthMap;
+	hintStrengthMap["OsiHintIgnore"] = OsiHintIgnore;
+	hintStrengthMap["OsiHintTry"] = OsiHintTry;
+	hintStrengthMap["OsiHintDo"] = OsiHintDo;
+	hintStrengthMap["OsiForceDo"] = OsiForceDo;
+	//
+	// the OsiStrParam Map
+	std::map<std::string, OsiStrParam> OsiStrParam;
+	OsiStrParam["OsiProbName"] = OsiProbName;
+	OsiStrParam["OsiSolverName"] = OsiSolverName;
+	OsiStrParam["OsiLastStrParam"] = OsiLastStrParam;
+	//
+	// the OsiDblParam Map
+	std::map<std::string, OsiStrParam> OsiStrParam;
+	OsiDblParam["OsiDualObjectiveLimit"] = OsiDualObjectiveLimit;
+	OsiDblParam["OsiPrimalObjectiveLimit"] = OsiPrimalObjectiveLimit;
+	OsiDblParam["OsiDualTolerance"] = OsiDualTolerance;	
+	OsiDblParam["OsiPrimalTolerance"] = OsiPrimalTolerance;
+	OsiDblParam["OsiObjOffset"] = OsiObjOffset;
+	OsiDblParam["OsiLastDblParam"] = OsiLastDblParam;
+
 	try{
+		if(osoption != NULL){
+			std::cout << "number of solver options "  <<  osoption->getnumberOfSolverOptions() << std::endl;
+			std::vector<SolverOption*> optionsVector;
+			//get the osi options
+			optionsVector = osoption->getSolverOptions( "osi");
+			int i;
+			bool yesNo;
+			
+			OsiHintStrength hintStrength = OsiHintTry;
+
+			int num_ipopt_options = optionsVector.size();
+			for(i = 0; i < num_ipopt_options; i++){
+				std::cout << "osi solver option  "  << optionsVector[ i]->name << std::endl;
+				
+				if (optionsVector[ i]->type == "OsiHintStrength" ){
+					if( hintStrengthMap.find( optionsVector[ i]->name ) != hintStrengthMap.end() ){
+						hintStrength = hintStrengthMap[ optionsVector[ i]->name] ;
+					}
+				}
+				else if (optionsVector[ i]->type == "OsiHintParam" ){
+					if( optionsVector[ i]->value == "true" ) {
+						yesNo = true;
+					}
+					else{
+						yesNo = false;
+					}	
+					if( hintParamMap.find( optionsVector[ i]->name ) != hintParamMap.end() ){
+						osiSolver->setHintParam( hintParamMap[ optionsVector[ i]->name] , yesNo, hintStrength);
+					}
+				}
+				else if(optionsVector[ i]->type == "OsiStrParam" ){
+					
+
+				}
+				else if(optionsVector[ i]->type == "OsiDblParam" ){
+					
+				}
+				else if(optionsVector[ i]->type == "OsiIntParam" ){
+					
+				}
+			}	
+		}		
 		
+		//osiSolver->setHintParam(OsiDoReducePrint, true, OsiHintTry);			
 	}
 	catch(const ErrorClass& eclass){
 		std::cout << "THERE IS AN ERROR" << std::endl;
@@ -296,19 +376,9 @@ void CoinSolver::solve() throw (ErrorClass) {
 			//pass the option on
 			if(num_proc.size() > 0) si->setSymParam("max_active_nodes", num_proc);	
 		}
-#endif
-		//
-		//
-		//
-		// now some other Osi options
-		osiSolver->setHintParam(OsiDoScale, false, OsiHintTry);
-		osiSolver->setHintParam(OsiDoReducePrint, true, OsiHintTry);
-		//OsiSolverInterface *m_OsiSolverPre = NULL;	
-		// try to catch Coin Solver errors
-		
+#endif	
 		try{
 			if( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0){
-				//cout << "CALL BRANCH AND BOUND " << endl;
 				// just use simple branch and bound for anything but cbc
 				if( sSolverName.find( "cbc") == std::string::npos) {
 					osiSolver->branchAndBound();	
@@ -316,17 +386,13 @@ void CoinSolver::solve() throw (ErrorClass) {
 				else{
 					CbcModel model(  *osiSolver);
 					CbcMain0(  model);
-					int which[3] = { 0, 1, 2 };
-					  
-					CbcObject* sosobject = new CbcSOS(&model, 3, which, NULL, 0, 1); 
-					  
+					int which[3] = { 0, 1, 2 };				  
+					CbcObject* sosobject = new CbcSOS(&model, 3, which, NULL, 0, 1); 				  
 					model.addObjects(1, &sosobject);
-					delete sosobject;
-					  
+					delete sosobject;					  
 					const char * argv3[]={"gamstest_sos1a", "-solve", "-quit"};
 					osiSolver->messageHandler()->setLogLevel( 0) ;
-					CbcMain1(3, argv3, model);
-					
+					CbcMain1(3, argv3, model);				
 					OsiSolverInterface *solver = model.solver();
 					writeResult( solver);
 					return ;
@@ -372,7 +438,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 	               */
 				}
 			}
-			else{
+			else{ // we have a linear program 
 				osiSolver->initialSolve();
 				
 			}
