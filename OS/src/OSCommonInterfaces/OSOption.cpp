@@ -1139,7 +1139,7 @@ std::vector<InitVarValue*>  OSOption::getInitVarValuesSparse(){
 	return initVarVector;
 }//getInitVarValuesSparse
 
-double *OSOption::getInitVarValuesDense(int numberOfVariables){
+double* OSOption::getInitVarValuesDense(int numberOfVariables){
 	double *initVarVector;
 	initVarVector = new double[numberOfVariables];
 	for (int k = 0; k < numberOfVariables; k++) initVarVector[k] = OSNAN;

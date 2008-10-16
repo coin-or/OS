@@ -1667,32 +1667,29 @@ catch(const ErrorClass& eclass){
 			std::cout << ", value = "  << initVarVector[ i]->value << std::endl;
 		}
 		double* denseInitVarVector;
-		num_var = 5;
-		//denseInitVarVector = osoption->getInitVarValuesDense(num_var);
-		//for(i = 0; i < num_var; i++){
-		//	std::cout << "initialize; var index "  << i;
-		//	std::cout << ", value = "  << denseInitVarVector[ i] << std::endl;
-		//}
-		
-		denseInitVarVector = NULL;
-		
-
+		num_var = 6;
+		denseInitVarVector = osoption->getInitVarValuesDense(num_var);
+		for(i = 0; i < num_var; i++){
+			std::cout << "initialize; var index "  << i;
+			std::cout << ", value = "  << denseInitVarVector[ i] << std::endl;
+		}
 		cout << "Write the content to a new file" <<endl;		
-		//tmpOSoL = osolwriter->writeOSoL( osoption);
-		//cout << endl << "Here is tmpOSoL:" <<endl;
-		//cout << endl << endl << tmpOSoL << endl;
+		tmpOSoL = osolwriter->writeOSoL( osoption);
+		cout << endl << "Here is tmpOSoL:" <<endl;
+		cout << endl << endl << tmpOSoL << endl;
 		cout << "-----------------------------------------" << endl << endl;
-		//delete[] denseInitVarVector;
+		delete[] denseInitVarVector;
+		denseInitVarVector = NULL;
 		// make sure we can parse without error
 		delete osolreader;
 		osolreader = NULL;
-		//osolreader = new OSoLReader();
-		//cout << "Read the string back" << endl;
-		//osolreader->readOSoL( tmpOSoL);
+		osolreader = new OSoLReader();
+		cout << "Read the string back" << endl;
+		osolreader->readOSoL( tmpOSoL);
 		delete osolwriter;
 		osolwriter = NULL;
-		//delete osolreader;
-		//osolreader = NULL;
+		delete osolreader;
+		osolreader = NULL;
 		unitTestResult << 
 		     "Successful test of OSoL parser on file parsertest.osol" 
 		      << std::endl;
