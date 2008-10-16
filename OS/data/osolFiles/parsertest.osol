@@ -119,7 +119,7 @@
 				<con idx="1" lbValue="-10.0" ubValue="100."></con>
 			</initialDualValues>
 		</constraints>
-		<solverOptions numberOfSolverOptions="10">
+		<solverOptions numberOfSolverOptions="12">
 			<solverOption name="tol" solver="ipopt" type="numeric" value="1.e-9"></solverOption>
 			<solverOption name="print_level" solver="ipopt" type="integer" value="5"></solverOption>
 			<solverOption name="max_iter" solver="ipopt" type="integer" value="2000"></solverOption>
@@ -130,6 +130,8 @@
 			<solverOption name="output_file" solver="ipopt" type="string" value="ipopt.out"></solverOption>
 			<solverOption name="LS_IPARAM_LP_PRINTLEVEL" solver="lindo" category="model"  type="integer" value="0"></solverOption>
 			<solverOption name="LS_IPARAM_LP_PRINTLEVEL" solver="lindo" category="environment" type="integer" value="1"></solverOption>
+			<solverOption name="OsiDoScale" solver="osi" category="OsiHintTry"   value="false"></solverOption>
+			<solverOption name="OsiDoReducePrint" solver="osi" category="OsiHintTry"   value="true"></solverOption>
 		</solverOptions>
 	</optimization>
 </osol>
