@@ -31,6 +31,7 @@ OS/MSVisualStudio/v8/OSExample-osTestCode/OSExample-osTestCode.vcproj -text
 OS/MSVisualStudio/v8/OSSolverService/OSSolverService.vcproj -text
 OS/MSVisualStudio/v8/OSTest/OSTest.vcproj -text
 OS/MSVisualStudio/v8/libOS/libOS.vcproj -text
+OS/MSVisualStudio/v8/libOS/libOSSolvers.vcproj -text
 OS/MSVisualStudio/v8/libOSCommon/libOSCommon.vcproj -text
 OS/MSVisualStudio/v8/libOSnl2OSiL/libOSnl2OSiL.vcproj -text
 OS/MSVisualStudio/v9/OS.sln -text
