@@ -17,8 +17,8 @@
 #include "OSOption.h"
 #include "OSParameters.h"
 #include "OSErrorClass.h"
-#include<iostream>
-#include<sstream>
+#include <iostream>
+#include <sstream>
 #include <limits>
 #include <cstdio>
 
@@ -235,7 +235,7 @@ ServiceOption::~ServiceOption()
 
 MaxTime::MaxTime():
 	unit ("second"),
-	value (std::numeric_limits<double>::infinity())
+	value (OSDBL_MAX)
 {
 	#ifdef DEBUG
 	cout << "Inside MaxTime Constructor" << endl;
@@ -1143,22 +1143,30 @@ double* OSOption::getInitVarValuesDense(int numberOfVariables){
 	double *initVarVector;
 	initVarVector = new double[numberOfVariables];
 	for (int k = 0; k < numberOfVariables; k++) initVarVector[k] = OSNAN;
-	if (this->optimization != NULL) {
-		if(this->optimization->variables != NULL) {
-			if(this->optimization->variables->initialVariableValues != NULL) {
-			int i;
-			int num_var;
-			num_var = this->getnumberOfInitVarValues();
-			for(i = 0; i < num_var; i++){
-				initVarVector[this->optimization->variables->initialVariableValues->var[i]->idx] 
-				  = this->optimization->variables->initialVariableValues->var[i]->value;
+	try
+	{	if (this->optimization != NULL) 
+		{	if(this->optimization->variables != NULL) 
+			{	if(this->optimization->variables->initialVariableValues != NULL) 
+				{	int i,j;
+					int num_var;
+					num_var = this->getnumberOfInitVarValues();
+					for(i = 0; i < num_var; i++)
+					{	j = this->optimization->variables->initialVariableValues->var[i]->idx;
+						if (j >= 0 && j < numberOfVariables)						
+							initVarVector[j] 
+							  = this->optimization->variables->initialVariableValues->var[i]->value;						
+						else
+							throw ErrorClass("Variable index out of range");
+					}
 				}
 			}
 		}					
 	}
+	catch(const ErrorClass& eclass)
+	{	throw ErrorClass(eclass.errormsg);
+	}
 	return initVarVector;
-}//getInitVarValuesDense
-
+}//getInitVarStringsDense
 
 int OSOption::getnumberOfInitVarValuesString(){
 	if(m_inumberOfInitVarValuesString == -1){
@@ -1194,21 +1202,31 @@ std::string *OSOption::getInitVarStringsDense(int numberOfVariables){
 	std::string *initVarVector;
 	initVarVector = new std::string[numberOfVariables];
 	for (int k = 0; k < numberOfVariables; k++) initVarVector[k] = "";
-	if (this->optimization != NULL) {
-		if(this->optimization->variables != NULL) {
-			if(this->optimization->variables->initialVariableValuesString != NULL) {
-			int i;
-			int num_var;
-			num_var = this->getnumberOfInitVarValuesString();
-			for(i = 0; i < num_var; i++){
-				initVarVector[this->optimization->variables->initialVariableValuesString->var[i]->idx] 
-				  = this->optimization->variables->initialVariableValuesString->var[i]->value;
+	try
+	{
+		if (this->optimization != NULL) 
+		{	if(this->optimization->variables != NULL) 
+			{	if(this->optimization->variables->initialVariableValuesString != NULL) 
+				{	int i,j;
+					int num_var;
+					num_var = this->getnumberOfInitVarValuesString();
+					for(i = 0; i < num_var; i++)
+					{	j = this->optimization->variables->initialVariableValuesString->var[i]->idx;
+						if (j >= 0 && j < numberOfVariables)
+							initVarVector[j] 
+							  = this->optimization->variables->initialVariableValuesString->var[i]->value;
+						else
+							throw ErrorClass("Variable index out of range");
+					}
 				}
 			}
 		}					
 	}
+	catch(const ErrorClass& eclass)
+	{	throw ErrorClass(eclass.errormsg);
+	}
 	return initVarVector;
-}//getInitVarValuesDense
+}//getInitVarStringsDense
 
 int OSOption::getnumberOfSolverOptions(){
 	if(m_inumberOfSolverOptions == -1){

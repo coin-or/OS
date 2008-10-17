@@ -15,7 +15,6 @@
  */
  
  
- 
 #include "OSoLWriter.h"
 #include "OSOption.h"
 #include "OSParameters.h"
@@ -209,9 +208,13 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 		{	if (m_OSOption->job->maxTime->unit == "")
 				m_OSOption->job->maxTime->unit = "second";
 			outStr << "<maxTime unit=\"" << m_OSOption->job->maxTime->unit << "\">";
-			outStr << m_OSOption->job->maxTime->value << "</maxTime>" << endl;
+			if (m_OSOption->job->maxTime->value == OSDBL_MAX)
+				outStr << "INF" << "</maxTime>" << endl;
+			else
+				outStr << m_OSOption->job->maxTime->value << "</maxTime>" << endl;
 		}
-		outStr << "<scheduledStartTime>" << m_OSOption->job->scheduledStartTime << "</scheduledStartTime>" << endl;
+		if (m_OSOption->job->scheduledStartTime != "")
+			outStr << "<scheduledStartTime>" << m_OSOption->job->scheduledStartTime << "</scheduledStartTime>" << endl;
 		cout << "Before <dependencies>" << endl;
 		if (m_OSOption->job->dependencies != NULL)
 		{	cout << "Starting <dependencies>" << endl;

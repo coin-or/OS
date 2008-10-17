@@ -212,10 +212,17 @@ instancelocationhead: INSTANCELOCATIONSTART
 	else
 	{	parserData->instanceLocationPresent = true;
 		osoption->general->instanceLocation = new InstanceLocationOption();
+		osoption->general->instanceLocation->locationType = "local";
 	}
 };
 
-locationtypeatt: | LOCATIONTYPEATT ATTRIBUTETEXT {osoption->general->instanceLocation->locationType = $2;} QUOTE;
+locationtypeatt: | LOCATIONTYPEATT ATTRIBUTETEXT 
+{	if ( (strncmp($2, "local", 5) == 0) || (strncmp($2, "http", 4) == 0) || (strncmp($2, "ftp", 3) == 0) )
+		osoption->general->instanceLocation->locationType = $2;
+	else
+		osolerror( NULL, osoption, parserData, "Not a valid locationType");
+} 
+QUOTE;
 
 instancelocationbody: ENDOFELEMENT
 	|   GREATERTHAN instancelocationtext INSTANCELOCATIONEND;
@@ -312,10 +319,18 @@ contacthead: CONTACTSTART
 	else
 	{	parserData->contactPresent = true;
 		osoption->general->contact = new ContactOption();
+		osoption->general->contact->transportType = "osp";
 	}
 };
 
-transporttypeatt: | TRANSPORTTYPEATT ATTRIBUTETEXT {osoption->general->contact->transportType = $2;} QUOTE;
+transporttypeatt: | TRANSPORTTYPEATT ATTRIBUTETEXT 
+{	if ( (strncmp($2,"osp",3) == 0) || (strncmp($2,"smtp",4) == 0) || (strncmp($2,"http", 4) == 0) || 
+						     (strncmp($2,"ftp", 3) == 0) || (strncmp($2,"other",5) == 0) )
+		osoption->general->contact->transportType = $2;
+	else
+		osolerror( NULL, osoption, parserData, "Not a valid transport type");
+} 
+QUOTE;
 
 contactbody: ENDOFELEMENT
 	|   GREATERTHAN contacttext CONTACTEND;
@@ -336,7 +351,9 @@ othergeneraloptionshead: OTHEROPTIONSSTART
 };
 
 numberofothergeneraloptions: NUMBEROFOTHEROPTIONSATT QUOTE INTEGER QUOTE
-{	osoption->general->otherOptions->numberOfOtherOptions = $3;
+{	if ($3 < 0)
+		osolerror( NULL, osoption, parserData, "Number of <other> elements cannot be negative");
+	osoption->general->otherOptions->numberOfOtherOptions = $3;
 	osoption->general->otherOptions->other = new OtherOption*[$3];
 	for (int i=0; i < $3; i++) osoption->general->otherOptions->other[i] = new OtherOption();
 };
@@ -433,17 +450,33 @@ mindiskspacehead: MINDISKSPACESTART
 	else
 	{	parserData-> minDiskSpacePresent = true;
 		osoption->system->minDiskSpace = new MinDiskSpace();
+		osoption->system->minDiskSpace->unit = "byte";
 	}
 };
 
-mindiskspaceunit: | UNITATT ATTRIBUTETEXT {osoption->system->minDiskSpace->unit = $2;} QUOTE;
+mindiskspaceunit: | UNITATT ATTRIBUTETEXT 
+{	if ( (strncmp($2,"byte",4) == 0) || (strncmp($2,"kilobyte",8) == 0) || (strncmp($2,"megabyte",8) == 0) || 
+						      (strncmp($2,"terabyte",8) == 0) || (strncmp($2,"petabyte",8) == 0) )
+		osoption->system->minDiskSpace->unit = $2;
+	else
+		osolerror( NULL, osoption, parserData, "Not a valid unit");
+} 
+QUOTE;
 
 mindiskspacebody: ENDOFELEMENT
 	| GREATERTHAN MINDISKSPACEEND
-	| GREATERTHAN DOUBLE  {osoption->system->minDiskSpace->value = $2;} MINDISKSPACEEND
-	| GREATERTHAN INTEGER {osoption->system->minDiskSpace->value = $2;} MINDISKSPACEEND;
+        | GREATERTHAN DOUBLE MINDISKSPACEEND
+{	if ($2 < 0)
+		osolerror( NULL, osoption, parserData, "minDiskSpace cannot be negative");
+	osoption->system->minDiskSpace->value = $2;
+}
+        | GREATERTHAN INTEGER MINDISKSPACEEND
+{	if ($2 < 0)
+		osolerror( NULL, osoption, parserData, "minDiskSpace cannot be negative");
+	osoption->system->minDiskSpace->value = $2;
+};
 
-
+ 
 minmemorysize: minmemorysizehead minmemoryunit minmemorysizebody;
 
 minmemorysizehead: MINMEMORYSIZESTART
@@ -453,15 +486,32 @@ minmemorysizehead: MINMEMORYSIZESTART
 	else
 	{	parserData-> minMemorySizePresent = true;
 		osoption->system->minMemorySize = new MinMemorySize();
+		osoption->system->minMemorySize->unit = "byte";
 	}
 };
 
-minmemoryunit: | UNITATT ATTRIBUTETEXT {osoption->system->minMemorySize->unit = $2;} QUOTE;
+minmemoryunit: | UNITATT ATTRIBUTETEXT 
+{	if ( (strncmp($2,"byte",4) == 0) || (strncmp($2,"kilobyte",8) == 0) || (strncmp($2,"megabyte",8) == 0) || 
+						      (strncmp($2,"terabyte",8) == 0) || (strncmp($2,"petabyte",8) == 0) )
+		osoption->system->minMemorySize->unit = $2;
+	else
+		osolerror( NULL, osoption, parserData, "Not a valid unit");
+} 
+QUOTE;
 
 minmemorysizebody: ENDOFELEMENT
 	| GREATERTHAN MINMEMORYSIZEEND
-	| GREATERTHAN DOUBLE  {osoption->system->minMemorySize->value = $2;} MINMEMORYSIZEEND
-	| GREATERTHAN INTEGER {osoption->system->minMemorySize->value = $2;} MINMEMORYSIZEEND;
+        | GREATERTHAN DOUBLE MINMEMORYSIZEEND
+{	if ($2 < 0)
+		osolerror( NULL, osoption, parserData, "minMemorySize cannot be negative");
+	osoption->system->minMemorySize->value = $2;
+}
+        | GREATERTHAN INTEGER MINMEMORYSIZEEND
+{	if ($2 < 0)
+		osolerror( NULL, osoption, parserData, "minMemorySize cannot be negative");
+	osoption->system->minMemorySize->value = $2;
+};
+
 
 
 mincpuspeed: mincpuspeedhead mincpuspeedunit mincpuspeedbody;
@@ -473,15 +523,34 @@ mincpuspeedhead: MINCPUSPEEDSTART
 	else
 	{	parserData-> minCPUSpeedPresent = true;
 		osoption->system->minCPUSpeed = new MinCPUSpeed();
+		osoption->system->minCPUSpeed->unit = "hertz";
 	}
 };
 
-mincpuspeedunit: | UNITATT ATTRIBUTETEXT {osoption->system->minCPUSpeed->unit = $2;} QUOTE;
+mincpuspeedunit: | UNITATT ATTRIBUTETEXT 
+{	if ( (strncmp($2,    "hertz",5) == 0) || (strncmp($2,"kilohertz",9) == 0) || (strncmp($2,"megahertz",9) == 0) || 
+	     (strncmp($2,"gigahertz",9) == 0) || (strncmp($2,"terahertz",9) == 0) || (strncmp($2,"petahertz",9) == 0) ||
+	     (strncmp($2,    "flops",5) == 0) || (strncmp($2,"kiloflops",9) == 0) || (strncmp($2,"megaflops",9) == 0) || 
+	     (strncmp($2,"gigaflops",9) == 0) || (strncmp($2,"teraflops",9) == 0) || (strncmp($2,"petahertz",9) == 0) ) 
+		osoption->system->minCPUSpeed->unit = $2;
+	else
+		osolerror( NULL, osoption, parserData, "Not a valid unit");
+} 
+QUOTE;
 
 mincpuspeedbody: ENDOFELEMENT
 	| GREATERTHAN MINCPUSPEEDEND
-	| GREATERTHAN DOUBLE  {osoption->system->minCPUSpeed->value = $2;} MINCPUSPEEDEND
-	| GREATERTHAN INTEGER {osoption->system->minCPUSpeed->value = $2;} MINCPUSPEEDEND;
+        | GREATERTHAN DOUBLE MINCPUSPEEDEND
+{	if ($2 < 0)
+		osolerror( NULL, osoption, parserData, "minCPUSpeed cannot be negative");
+	osoption->system->minCPUSpeed->value = $2;
+}
+        | GREATERTHAN INTEGER MINCPUSPEEDEND
+{	if ($2 < 0)
+		osolerror( NULL, osoption, parserData, "minCPUSpeed cannot be negative");
+	osoption->system->minCPUSpeed->value = $2;
+};
+
 
 
 mincpunumber: mincpunumberhead mincpunumberbody;
@@ -497,7 +566,12 @@ mincpunumberhead: MINCPUNUMBERSTART
 
 mincpunumberbody: ENDOFELEMENT
 	| GREATERTHAN MINCPUNUMBEREND
-	| GREATERTHAN INTEGER {osoption->system->minCPUNumber = $2;} MINCPUNUMBEREND;
+	| GREATERTHAN INTEGER 
+{	if ($2 < 0)
+		osolerror( NULL, osoption, parserData, "minCPUNumber cannot be negative");
+	osoption->system->minCPUNumber = $2;
+} 
+MINCPUNUMBEREND;
 
 
 othersystemoptions: othersystemoptionshead numberofothersystemoptions GREATERTHAN othersystemoptionsbody;
@@ -513,7 +587,9 @@ othersystemoptionshead: OTHEROPTIONSSTART
 };
 
 numberofothersystemoptions: NUMBEROFOTHEROPTIONSATT QUOTE INTEGER QUOTE
-{	osoption->system->otherOptions->numberOfOtherOptions = $3;
+{	if ($3 < 0)
+		osolerror( NULL, osoption, parserData, "Number of <other> elements cannot be negative");
+	osoption->system->otherOptions->numberOfOtherOptions = $3;
 	osoption->system->otherOptions->other = new OtherOption*[$3];
 	for (int i=0; i < $3; i++) osoption->system->otherOptions->other[i] = new OtherOption();
 };
@@ -609,12 +685,21 @@ servicetypehead: SERVICETYPESTART
 	}
 	else
 	{	parserData->serviceTypePresent = true;
+		osoption->service->type = "solver";
 	}
 };
 
 servicetypebody: ENDOFELEMENT
 	| GREATERTHAN SERVICETYPEEND
-	| GREATERTHAN ELEMENTTEXT {osoption->service->type = $2;} SERVICETYPEEND;
+	| GREATERTHAN ELEMENTTEXT 
+{	if ( (strncmp($2,"solver",6) == 0) || (strncmp($2,"analyzer",   8) == 0) || (strncmp($2,"scheduler",9) == 0) ||
+							  (strncmp($2,"simulation",10) == 0) || (strncmp($2,"registry", 8) == 0) ||
+							  (strncmp($2,"modeler",    7) == 0) || (strncmp($2,"agent",    5) == 0) ) 
+		osoption->service->type = $2;
+	else
+		osolerror( NULL, osoption, parserData, "Not a valid service type");
+} 
+SERVICETYPEEND;
 
 otherserviceoptions: otherserviceoptionshead numberofotherserviceoptions GREATERTHAN otherserviceoptionsbody;
 
@@ -629,7 +714,9 @@ otherserviceoptionshead: OTHEROPTIONSSTART
 };
 
 numberofotherserviceoptions: NUMBEROFOTHEROPTIONSATT QUOTE INTEGER QUOTE
-{	osoption->service->otherOptions->numberOfOtherOptions = $3;
+{	if ($3 < 0)
+		osolerror( NULL, osoption, parserData, "Number of <other> elements cannot be negative");
+	osoption->service->otherOptions->numberOfOtherOptions = $3;
 	osoption->service->otherOptions->other = new OtherOption*[$3];
 	for (int i=0; i < $3; i++) osoption->service->otherOptions->other[i] = new OtherOption();
 };
@@ -727,15 +814,33 @@ maxtimehead: MAXTIMESTART
 	else
 	{	parserData-> maxTimePresent = true;
 		osoption->job->maxTime = new MaxTime();
+		osoption->job->maxTime->unit = "second"; 
 	}
 };
 
-maxtimeunit: | UNITATT ATTRIBUTETEXT {osoption->job->maxTime->unit = $2;} QUOTE;
+maxtimeunit: | UNITATT ATTRIBUTETEXT 
+{	if ( (strncmp($2,"second",6) == 0) || (strncmp($2,"minute",6) == 0) || (strncmp($2,"hour",4) == 0) ||
+							  (strncmp($2,"day",   3) == 0) || (strncmp($2,"week",4) == 0) ||
+							  (strncmp($2,"month", 5) == 0) || (strncmp($2,"year",4) == 0) ) 
+                osoption->job->maxTime->unit = $2;
+	else
+		osolerror( NULL, osoption, parserData, "Not a valid time unit");
+} 
+QUOTE;
 
 maxtimebody: ENDOFELEMENT
 	| GREATERTHAN MAXTIMEEND
-	| GREATERTHAN DOUBLE  {osoption->job->maxTime->value = $2;} MAXTIMEEND
-	| GREATERTHAN INTEGER {osoption->job->maxTime->value = $2;} MAXTIMEEND;
+        | GREATERTHAN DOUBLE MAXTIMEEND
+{	if ($2 < 0)
+		osolerror( NULL, osoption, parserData, "maxTime cannot be negative");
+	osoption->job->maxTime->value = $2;
+}
+        | GREATERTHAN INTEGER MAXTIMEEND
+{	if ($2 < 0)
+		osolerror( NULL, osoption, parserData, "maxTime cannot be negative");
+	osoption->job->maxTime->value = $2;
+};
+
 
 scheduledstarttime: starttimehead starttimebody;
 
@@ -745,6 +850,7 @@ starttimehead: SCHEDULEDSTARTTIMESTART
 	}
 	else
 	{	parserData->scheduledStartTimePresent = true;
+		osoption->job->scheduledStartTime = "1970-01-01T00:00:00-00:00";
 	}
 };
 
@@ -765,10 +871,11 @@ dependencieshead: DEPENDENCIESSTART
 };
 
 numberofjobidsatt: NUMBEROFJOBIDSATT QUOTE INTEGER QUOTE
-{	osoption->job->dependencies->numberOfJobIDs = $3;
+{	if ($3 < 1)
+		osolerror( NULL, osoption, parserData, "Number of job IDs must be at least 1");
+	osoption->job->dependencies->numberOfJobIDs = $3;
 	osoption->job->dependencies->jobID = new std::string[$3];
-}
-;
+};
 
 dependencieslist: | dependencieslist dependencyjobid;
 
@@ -799,7 +906,9 @@ requireddirectorieshead: REQUIREDDIRECTORIESSTART
 };
 
 numberofreqdirpathsatt: NUMBEROFPATHSATT QUOTE INTEGER QUOTE
-{	osoption->job->requiredDirectories->numberOfPaths = $3;
+{	if ($3 < 1)
+		osolerror( NULL, osoption, parserData, "Number of paths must be at least 1");
+	osoption->job->requiredDirectories->numberOfPaths = $3;
 	osoption->job->requiredDirectories->path = new std::string[$3];
 };
 
@@ -831,7 +940,9 @@ requiredfileshead: REQUIREDFILESSTART
 };
 
 numberofreqfilespathsatt: NUMBEROFPATHSATT QUOTE INTEGER QUOTE
-{	osoption->job->requiredFiles->numberOfPaths = $3;
+{	if ($3 < 1)
+		osolerror( NULL, osoption, parserData, "Number of paths must be at least 1");
+	osoption->job->requiredFiles->numberOfPaths = $3;
 	osoption->job->requiredFiles->path = new std::string[$3];
 };
 
@@ -862,7 +973,9 @@ directoriestomakehead: DIRECTORIESTOMAKESTART
 	}
 };
 numberofdirtomakepathsatt: NUMBEROFPATHSATT QUOTE INTEGER QUOTE
-{	osoption->job->directoriesToMake->numberOfPaths = $3;
+{	if ($3 < 1)
+		osolerror( NULL, osoption, parserData, "Number of paths must be at least 1");
+	osoption->job->directoriesToMake->numberOfPaths = $3;
 	osoption->job->directoriesToMake->path = new std::string[$3];
 };
 
@@ -894,7 +1007,9 @@ filestocreatehead: FILESTOCREATESTART
 };
 
 numberoffilestomakepathsatt: NUMBEROFPATHSATT QUOTE INTEGER QUOTE
-{	osoption->job->filesToCreate->numberOfPaths = $3;
+{	if ($3 < 0)
+		osolerror( NULL, osoption, parserData, "Number of paths cannot be negative");
+	osoption->job->filesToCreate->numberOfPaths = $3;
 	osoption->job->filesToCreate->path = new std::string[$3];
 };
 
@@ -926,7 +1041,8 @@ inputdirectoriestomovehead: INPUTDIRECTORIESTOMOVESTART
 };
 
 numberofindirtomovepathpairsatt: NUMBEROFPATHPAIRSATT QUOTE INTEGER QUOTE
-{	if ($3 <= 0) osolerror (NULL, osoption, parserData, "Require positive number of directories to move");
+{	if ($3 <= 0)
+		osolerror (NULL, osoption, parserData, "Require positive number of directories to move");
 	osoption->job->inputDirectoriesToMove->numberOfPathPairs = $3;
 	osoption->job->inputDirectoriesToMove->pathPair = new PathPair*[$3];
 	for (int i = 0; i < $3; i++)
@@ -1008,7 +1124,8 @@ inputfilestomovehead: INPUTFILESTOMOVESTART
 };
 
 numberofinfilestomovepathpairsatt: NUMBEROFPATHPAIRSATT QUOTE INTEGER QUOTE
-{	if ($3 <= 0) osolerror (NULL, osoption, parserData, "Require positive number of files to move");
+{	if ($3 <= 0)
+		osolerror (NULL, osoption, parserData, "Require positive number of files to move");
 	osoption->job->inputFilesToMove->numberOfPathPairs = $3;
 	osoption->job->inputFilesToMove->pathPair = new PathPair*[$3];
 	for (int i = 0; i < $3; i++) osoption->job->inputFilesToMove->pathPair[i] = new PathPair();
@@ -1089,7 +1206,8 @@ outputdirectoriestomovehead: OUTPUTDIRECTORIESTOMOVESTART
 };
 
 numberofoutdirtomovepathpairsatt: NUMBEROFPATHPAIRSATT QUOTE INTEGER QUOTE
-{	if ($3 <= 0) osolerror (NULL, osoption, parserData, "Require positive number of directories to move");
+{	if ($3 <= 0)
+		osolerror (NULL, osoption, parserData, "Require positive number of directories to move");
 	osoption->job->outputDirectoriesToMove->numberOfPathPairs = $3;
 	osoption->job->outputDirectoriesToMove->pathPair = new PathPair*[$3];
 	for (int i = 0; i < $3; i++)
@@ -1171,7 +1289,8 @@ outputfilestomovehead: OUTPUTFILESTOMOVESTART
 };
 
 numberofoutfilestomovepathpairsatt: NUMBEROFPATHPAIRSATT QUOTE INTEGER QUOTE
-{	if ($3 <= 0) osolerror (NULL, osoption, parserData, "Require positive number of files to move");
+{	if ($3 <= 0)
+		osolerror (NULL, osoption, parserData, "Require positive number of files to move");
 	osoption->job->outputFilesToMove->numberOfPathPairs = $3;
 	osoption->job->outputFilesToMove->pathPair = new PathPair*[$3];
 	for (int i = 0; i < $3; i++)
@@ -1252,7 +1371,9 @@ filestodeletehead: FILESTODELETESTART
 };
 
 numberoffilestodeletepathsatt: NUMBEROFPATHSATT QUOTE INTEGER QUOTE
-{	osoption->job->filesToDelete->numberOfPaths = $3;
+{	if ($3 < 1)
+		osolerror( NULL, osoption, parserData, "Number of paths must be at least 1");
+	osoption->job->filesToDelete->numberOfPaths = $3;
 	osoption->job->filesToDelete->path = new std::string[$3];
 };
 
@@ -1284,7 +1405,9 @@ directoriestodeletehead: DIRECTORIESTODELETESTART
 };
 
 numberofdirtodeletepathsatt: NUMBEROFPATHSATT QUOTE INTEGER QUOTE
-{	osoption->job->directoriesToDelete->numberOfPaths = $3;
+{	if ($3 < 1)
+		osolerror( NULL, osoption, parserData, "Number of paths must be at least 1");
+	osoption->job->directoriesToDelete->numberOfPaths = $3;
 	osoption->job->directoriesToDelete->path = new std::string[$3];
 };
 
@@ -1317,7 +1440,9 @@ processestokillhead: PROCESSESTOKILLSTART
 };
 
 numberofprocesstokillatt: NUMBEROFPROCESSESATT QUOTE INTEGER QUOTE
-{	osoption->job->processesToKill->numberOfProcesses = $3;
+{	if ($3 < 1)
+		osolerror( NULL, osoption, parserData, "Number of job IDs must be at least 1");
+	osoption->job->processesToKill->numberOfProcesses = $3;
 	osoption->job->processesToKill->process = new std::string[$3];
 };
 
@@ -1348,7 +1473,9 @@ otherjoboptionshead: OTHEROPTIONSSTART
 };
 
 numberofotherjoboptions: NUMBEROFOTHEROPTIONSATT QUOTE INTEGER QUOTE
-{	osoption->job->otherOptions->numberOfOtherOptions = $3;
+{	if ($3 < 0)
+		osolerror( NULL, osoption, parserData, "Number of <other> elements cannot be negative");
+	osoption->job->otherOptions->numberOfOtherOptions = $3;
 	osoption->job->otherOptions->other = new OtherOption*[$3];
 	for (int i=0; i < $3; i++) osoption->job->otherOptions->other[i] = new OtherOption();
 };
@@ -1432,15 +1559,21 @@ optimizationattlist: | optimizationattlist optimizationatt;
 optimizationatt: optimizationnvar | optimizationncon | optimizationnobj;
 
 optimizationnvar: NUMBEROFVARIABLESATT QUOTE INTEGER QUOTE
-{	osoption->optimization->numberOfVariables = $3;
+{	if ($3 < 0)
+		osolerror( NULL, osoption, parserData, "Number of variables cannot be negative");
+	osoption->optimization->numberOfVariables = $3;
 };
 
 optimizationncon: NUMBEROFCONSTRAINTSATT QUOTE INTEGER QUOTE
-{	osoption->optimization->numberOfConstraints = $3;
+{	if ($3 < 0)
+		osolerror( NULL, osoption, parserData, "Number of constraints cannot be negative");
+	osoption->optimization->numberOfConstraints = $3;
 };
 
 optimizationnobj: NUMBEROFOBJECTIVESATT QUOTE INTEGER QUOTE
-{	osoption->optimization->numberOfObjectives = $3;
+{	if ($3 < 0)
+		osolerror( NULL, osoption, parserData, "Number of objectives cannot be negative");
+	osoption->optimization->numberOfObjectives = $3;
 };
 
 optimizationbody: GREATERTHAN optimizationcontent OPTIMIZATIONEND | ENDOFELEMENT;
@@ -1454,7 +1587,8 @@ variablesstart: VARIABLESSTART
 };
 
 numberofothervariablesatt: | NUMBEROFOTHERVARIABLEOPTIONSATT QUOTE INTEGER QUOTE
-{	if ($3 < 0) osolerror (NULL, osoption, parserData, "number of <other> variable options cannot be negative");
+{	if ($3 < 0)
+		osolerror (NULL, osoption, parserData, "number of <other> variable options cannot be negative");
 	osoption->optimization->variables->numberOfOtherVariableOptions = $3;
 	osoption->optimization->variables->other = new OtherVariableOption*[$3];
 	for (int i= 0; i < $3; i++)
@@ -1467,7 +1601,8 @@ restofvariables: GREATERTHAN initialvariablevalues initialvariablevaluesstring o
 initialvariablevalues: | INITIALVARIABLEVALUESSTART numberofvar GREATERTHAN varlist INITIALVARIABLEVALUESEND;
 
 numberofvar: NUMBEROFVARATT QUOTE INTEGER QUOTE
-{	if ($3 <= 0) osolerror (NULL, osoption, parserData, "number of <var> elements must be positive");
+{	if ($3 <= 0)
+		osolerror (NULL, osoption, parserData, "number of <var> elements must be positive");
 	osoption->optimization->variables->initialVariableValues = new InitVariableValues();
 	osoption->optimization->variables->initialVariableValues->numberOfVar = $3;
 	osoption->optimization->variables->initialVariableValues->var = new InitVarValue*[$3];
@@ -1498,7 +1633,8 @@ initvarvalueidxatt: IDXATT QUOTE INTEGER QUOTE
 {	if (parserData->idxAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one variable index allowed");
 	parserData->idxAttributePresent = true;
-	if ($3 < 0) osolerror (NULL, osoption, parserData, "variable index must be nonnegative");
+	if ($3 < 0)
+		osolerror (NULL, osoption, parserData, "variable index must be nonnegative");
 	if (parserData->numberOfVariablesPresent)
 	{	if ($3 >= parserData->numberOfVariables)
 			osolerror (NULL, osoption, parserData, "variable index exceeds upper limit");
@@ -1526,7 +1662,8 @@ initialvariablevaluesstring: | INITIALVARIABLEVALUESSTRINGSTART numberofvarstr G
     varstrlist INITIALVARIABLEVALUESSTRINGEND;
 
 numberofvarstr: NUMBEROFVARATT QUOTE INTEGER QUOTE
-{	if ($3 <= 0) osolerror (NULL, osoption, parserData, "number of <var> elements must be positive");
+{	if ($3 <= 0)
+		osolerror (NULL, osoption, parserData, "number of <var> elements must be positive");
 	osoption->optimization->variables->initialVariableValuesString = new InitVariableValuesString ();
 	osoption->optimization->variables->initialVariableValuesString->numberOfVar = $3;
 	osoption->optimization->variables->initialVariableValuesString->var = new InitVarValueString*[$3];
@@ -1557,7 +1694,8 @@ initvarstrvalueidxatt: IDXATT QUOTE INTEGER QUOTE
 {	if (parserData->idxAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one variable index allowed");
 	parserData->idxAttributePresent = true;
-	if ($3 < 0) osolerror (NULL, osoption, parserData, "variable index must be nonnegative");
+	if ($3 < 0)
+		osolerror (NULL, osoption, parserData, "variable index must be nonnegative");
 	if (parserData->numberOfVariablesPresent)
 	{	if ($3 >= parserData->numberOfVariables)
 			osolerror (NULL, osoption, parserData, "variable index exceeds upper limit");
@@ -1603,7 +1741,8 @@ othervariableoptionnumberofvar: NUMBEROFVARATT QUOTE INTEGER QUOTE
 		osolerror (NULL, osoption, parserData, "only one numberOfVar attribute allowed");
 	parserData->otherOptionNumberPresent = true;
 	parserData->numberOfVar = 0;
-	if ($3 < 0) osolerror (NULL, osoption, parserData, "number of <other> variable options must be nonnegative");
+	if ($3 < 0)
+		osolerror (NULL, osoption, parserData, "number of <other> variable options must be nonnegative");
 	osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->numberOfVar = $3;
 	osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->var = new OtherVarOption*[$3];
 	for (int i = 0; i < $3; i++)
@@ -1705,7 +1844,8 @@ othervaroptionidx: IDXATT QUOTE INTEGER QUOTE
 {	if (parserData->idxAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one variable index allowed");
 	parserData->idxAttributePresent = true;
-	if ($3 < 0) osolerror (NULL, osoption, parserData, "variable index must be nonnegative");
+	if ($3 < 0)
+		osolerror (NULL, osoption, parserData, "variable index must be nonnegative");
 	if (parserData->numberOfVariablesPresent)
 	{	if ($3 >= parserData->numberOfVariables)
 			osolerror (NULL, osoption, parserData, "variable index exceeds upper limit");
@@ -1748,8 +1888,9 @@ objectivesstart: OBJECTIVESSTART
 };
 
 numberofotherobjectivesatt: | NUMBEROFOTHEROBJECTIVEOPTIONSATT QUOTE INTEGER QUOTE
-{	if ($3 < 0) osolerror (NULL, osoption, parserData, "number of <other> objective options cannot be negative");
-        osoption->optimization->objectives->numberOfOtherObjectiveOptions = $3;
+{	if ($3 < 0)
+		osolerror (NULL, osoption, parserData, "number of <other> objective options cannot be negative");
+	osoption->optimization->objectives->numberOfOtherObjectiveOptions = $3;
 	osoption->optimization->objectives->other = new OtherObjectiveOption*[$3];
 	for (int i= 0; i < $3; i++)
 		osoption->optimization->objectives->other[i] = new OtherObjectiveOption();
@@ -1762,7 +1903,8 @@ initialobjectivevalues: | INITIALOBJECTIVEVALUESSTART numberofobjval GREATERTHAN
     objvaluelist INITIALOBJECTIVEVALUESEND;
 
 numberofobjval: NUMBEROFOBJATT QUOTE INTEGER QUOTE
-{	if ($3 <= 0) osolerror (NULL, osoption, parserData, "number of <obj> elements must be positive");
+{	if ($3 <= 0)
+		osolerror (NULL, osoption, parserData, "number of <obj> elements must be positive");
 	osoption->optimization->objectives->initialObjectiveValues = new InitObjectiveValues();
 	osoption->optimization->objectives->initialObjectiveValues->numberOfObj = $3;
 	osoption->optimization->objectives->initialObjectiveValues->obj = new InitObjValue*[$3];
@@ -1793,7 +1935,8 @@ initobjvalueidxatt: IDXATT QUOTE INTEGER QUOTE
 {	if (parserData->idxAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one objective index allowed");
 	parserData->idxAttributePresent = true;
-	if ($3 >= 0) osolerror (NULL, osoption, parserData, "objective index must be negative");
+	if ($3 >= 0)
+		osolerror (NULL, osoption, parserData, "objective index must be negative");
 	if (parserData->numberOfObjectivesPresent)
 	{	if (-$3 > parserData->numberOfObjectives)
 			osolerror (NULL, osoption, parserData, "objective index out of range");
@@ -1822,7 +1965,8 @@ initialobjectivebounds: | INITIALOBJECTIVEBOUNDSSTART numberofobjbounds GREATERT
     objboundlist INITIALOBJECTIVEBOUNDSEND;
 
 numberofobjbounds: NUMBEROFOBJATT QUOTE INTEGER QUOTE
-{	if ($3 <= 0) osolerror (NULL, osoption, parserData, "number of <obj> elements must be positive");
+{	if ($3 <= 0)
+		osolerror (NULL, osoption, parserData, "number of <obj> elements must be positive");
 	osoption->optimization->objectives->initialObjectiveBounds = new InitObjectiveBounds();
 	osoption->optimization->objectives->initialObjectiveBounds->numberOfObj = $3;
 	osoption->optimization->objectives->initialObjectiveBounds->obj = new InitObjBound*[$3];
@@ -1854,7 +1998,8 @@ initobjboundidxatt: IDXATT QUOTE INTEGER QUOTE
 {	if (parserData->idxAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one objective index allowed");
 	parserData->idxAttributePresent = true;
-	if ($3 >= 0) osolerror (NULL, osoption, parserData, "objective index must be negative");
+	if ($3 >= 0)
+		osolerror (NULL, osoption, parserData, "objective index must be negative");
 	if (parserData->numberOfObjectivesPresent)
 	{	if (-$3 > parserData->numberOfObjectives)
 			osolerror (NULL, osoption, parserData, "objective index out of range");
@@ -1917,7 +2062,8 @@ otherobjectiveoptionnumberofvar: NUMBEROFOBJATT QUOTE INTEGER QUOTE
 		osolerror (NULL, osoption, parserData, "only one numberOfObj attribute allowed");
 	parserData->otherOptionNumberPresent = true;
 	parserData->numberOfObj = 0;
-	if ($3 < 0) osolerror (NULL, osoption, parserData, "number of <other> objective options must be nonnegative");
+	if ($3 < 0)
+		osolerror (NULL, osoption, parserData, "number of <other> objective options must be nonnegative");
 	osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->numberOfObj = $3;
 	osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->obj = new OtherObjOption*[$3];
 	for (int i = 0; i < $3; i++)
@@ -2025,7 +2171,8 @@ otherobjoptionidx: IDXATT QUOTE INTEGER QUOTE
 {	if (parserData->idxAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one objective index allowed");
 	parserData->idxAttributePresent = true;
-	if ($3 >= 0) osolerror (NULL, osoption, parserData, "objective index must be negative");
+	if ($3 >= 0)
+		osolerror (NULL, osoption, parserData, "objective index must be negative");
 	if (parserData->numberOfObjectivesPresent)
 	{	if (-$3 > parserData->numberOfObjectives)
 			osolerror (NULL, osoption, parserData, "objecive index exceeds upper limit");
@@ -2071,7 +2218,8 @@ constraintsstart: CONSTRAINTSSTART
 };
 
 numberofotherconstraintsatt: | NUMBEROFOTHERCONSTRAINTOPTIONSATT QUOTE INTEGER QUOTE
-{	if ($3 < 0) osolerror (NULL, osoption, parserData, "number of <other> constraint options cannot be negative");
+{	if ($3 < 0)
+		osolerror (NULL, osoption, parserData, "number of <other> constraint options cannot be negative");
         osoption->optimization->constraints->numberOfOtherConstraintOptions = $3;
 	osoption->optimization->constraints->other = new OtherConstraintOption*[$3];
 	for (int i= 0; i < $3; i++)
@@ -2086,7 +2234,8 @@ initialconstraintvalues: | INITIALCONSTRAINTVALUESSTART numberofconval GREATERTH
     conlist INITIALCONSTRAINTVALUESEND;
 
 numberofconval: NUMBEROFCONATT QUOTE INTEGER QUOTE
-{	if ($3 <= 0) osolerror (NULL, osoption, parserData, "number of <con> elements must be positive");
+{	if ($3 <= 0)
+		osolerror (NULL, osoption, parserData, "number of <con> elements must be positive");
 	osoption->optimization->constraints->initialConstraintValues = new InitConstraintValues();
 	osoption->optimization->constraints->initialConstraintValues->numberOfCon = $3;
 	osoption->optimization->constraints->initialConstraintValues->con = new InitConValue*[$3];
@@ -2117,7 +2266,8 @@ initconvalueidxatt: IDXATT QUOTE INTEGER QUOTE
 {	if (parserData->idxAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one constraint index allowed");
 	parserData->idxAttributePresent = true;
-	if ($3 < 0) osolerror (NULL, osoption, parserData, "constraint index must be nonnegative");
+	if ($3 < 0)
+		osolerror (NULL, osoption, parserData, "constraint index must be nonnegative");
 	if (parserData->numberOfConstraintsPresent)
 	{	if ($3 > parserData->numberOfConstraints)
 			osolerror (NULL, osoption, parserData, "constraint index out of range");
@@ -2146,7 +2296,8 @@ initialdualvalues: | INITIALDUALVALUESSTART numberofduals GREATERTHAN
     duallist INITIALDUALVALUESEND;
 
 numberofduals: NUMBEROFCONATT QUOTE INTEGER QUOTE
-{	if ($3 <= 0) osolerror (NULL, osoption, parserData, "number of <con> elements must be positive");
+{	if ($3 <= 0)
+		osolerror (NULL, osoption, parserData, "number of <con> elements must be positive");
 	osoption->optimization->constraints->initialDualValues = new InitDualVariableValues();
 	osoption->optimization->constraints->initialDualValues->numberOfCon = $3;
 	osoption->optimization->constraints->initialDualValues->con = new InitDualVarValue*[$3];
@@ -2178,7 +2329,8 @@ initdualvalueidxatt: IDXATT QUOTE INTEGER QUOTE
 {	if (parserData->idxAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one constraint index allowed");
 	parserData->idxAttributePresent = true;
-	if ($3 < 0) osolerror (NULL, osoption, parserData, "constraint index must be nonnegative");
+	if ($3 < 0)
+		osolerror (NULL, osoption, parserData, "constraint index must be nonnegative");
 	if (parserData->numberOfConstraintsPresent)
 	{	if ($3 > parserData->numberOfConstraints)
 			osolerror (NULL, osoption, parserData, "constraint index out of range");
@@ -2241,7 +2393,8 @@ otherconstraintoptionnumberofvar: NUMBEROFCONATT QUOTE INTEGER QUOTE
 		osolerror (NULL, osoption, parserData, "only one numberOfCon attribute allowed");
 	parserData->otherOptionNumberPresent = true;
 	parserData->numberOfCon = 0;
-	if ($3 < 0) osolerror (NULL, osoption, parserData, "number of <other> constraint options must be nonnegative");
+	if ($3 < 0)
+		osolerror (NULL, osoption, parserData, "number of <other> constraint options must be nonnegative");
 	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->numberOfCon = $3;
 	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->con = new OtherConOption*[$3];
 	for (int i = 0; i < $3; i++)
@@ -2343,7 +2496,8 @@ otherconoptionidx: IDXATT QUOTE INTEGER QUOTE
 {	if (parserData->idxAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one constraint index allowed");
 	parserData->idxAttributePresent = true;
-	if ($3 < 0) osolerror (NULL, osoption, parserData, "constraint index must be nonnegative");
+	if ($3 < 0)
+		osolerror (NULL, osoption, parserData, "constraint index must be nonnegative");
 	if (parserData->numberOfConstraintsPresent)
 	{	if ($3 >= parserData->numberOfConstraints)
 			osolerror (NULL, osoption, parserData, "constraint index exceeds upper limit");
@@ -2396,7 +2550,8 @@ solveroptionsstart: SOLVEROPTIONSSTART
 };
 
 numberofsolveroptionsatt: NUMBEROFSOLVEROPTIONSATT QUOTE INTEGER QUOTE
-{	if ($3 < 0) osolerror (NULL, osoption, parserData, "number of solver options cannot be negative");
+{	if ($3 < 0)
+		osolerror (NULL, osoption, parserData, "number of solver options cannot be negative");
 	osoption->optimization->solverOptions->numberOfSolverOptions = $3;
 	osoption->optimization->solverOptions->solverOption = new SolverOption*[$3];
 	for (int i=0; i < $3; i++) osoption->optimization->solverOptions->solverOption[i] = new SolverOption();
