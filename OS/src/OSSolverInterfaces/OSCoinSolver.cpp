@@ -233,6 +233,16 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 	dblParamMap["OsiPrimalTolerance"] = OsiPrimalTolerance;
 	dblParamMap["OsiObjOffset"] = OsiObjOffset;
 	dblParamMap["OsiLastDblParam"] = OsiLastDblParam;
+	//
+	//
+	// the OsiIntParam Map
+	std::map<std::string, OsiIntParam>  intParamMap;
+	intParamMap["OsiMaxNumIteration"] = OsiMaxNumIteration;
+	intParamMap["OsiMaxNumIterationHotStart"] = OsiMaxNumIterationHotStart;
+	intParamMap["OsiNameDiscipline"] = OsiNameDiscipline;	
+	intParamMap["OsiLastIntParam"] = OsiLastIntParam;
+	//
+	//
 
 	try{
 		if(osoption != NULL){
@@ -240,21 +250,30 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 			std::vector<SolverOption*> optionsVector;
 			//get the osi options
 			optionsVector = osoption->getSolverOptions( "osi");
+			int num_ipopt_options = optionsVector.size();
 			int i;
+			char *pEnd;
 			bool yesNo;
 			
 			OsiHintStrength hintStrength = OsiHintTry;
+			/* now do one loop to see if there is a new setting
+			 * of OsiHintStrength -- if there is we go with the last one we 
+			 * find
+			 */
 
-			int num_ipopt_options = optionsVector.size();
 			for(i = 0; i < num_ipopt_options; i++){
 				std::cout << "osi solver option  "  << optionsVector[ i]->name << std::endl;
-				
 				if (optionsVector[ i]->type == "OsiHintStrength" ){
 					if( hintStrengthMap.find( optionsVector[ i]->name ) != hintStrengthMap.end() ){
 						hintStrength = hintStrengthMap[ optionsVector[ i]->name] ;
 					}
 				}
-				else if (optionsVector[ i]->type == "OsiHintParam" ){
+			}
+			for(i = 0; i < num_ipopt_options; i++){
+				std::cout << "osi solver option  "  << optionsVector[ i]->name << std::endl;
+
+				if (optionsVector[ i]->type == "OsiHintParam" ){
+					
 					if( optionsVector[ i]->value == "true" ) {
 						yesNo = true;
 					}
@@ -262,17 +281,34 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 						yesNo = false;
 					}	
 					if( hintParamMap.find( optionsVector[ i]->name ) != hintParamMap.end() ){
+						
 						osiSolver->setHintParam( hintParamMap[ optionsVector[ i]->name] , yesNo, hintStrength);
 					}
+					
 				}
 				else if(optionsVector[ i]->type == "OsiStrParam" ){
 					
+					if( strParamMap.find( optionsVector[ i]->name ) != strParamMap.end() ){
+						
+						osiSolver->setStrParam( strParamMap[ optionsVector[ i]->name] , optionsVector[ i]->value);
+					}	
 
 				}
 				else if(optionsVector[ i]->type == "OsiDblParam" ){
 					
+					if( dblParamMap.find( optionsVector[ i]->name ) != dblParamMap.end() ){
+						
+						osiSolver->setDblParam( dblParamMap[ optionsVector[ i]->name] , os_strtod( optionsVector[ i]->value.c_str(), &pEnd ));
+					}				
+					
 				}
 				else if(optionsVector[ i]->type == "OsiIntParam" ){
+					
+					
+					if( intParamMap.find( optionsVector[ i]->name ) != intParamMap.end() ){
+						
+						osiSolver->setIntParam( intParamMap[ optionsVector[ i]->name] , atoi( optionsVector[ i]->value.c_str() ) );
+					}						
 					
 				}
 			}	
@@ -386,14 +422,36 @@ void CoinSolver::solve() throw (ErrorClass) {
 				else{
 					CbcModel model(  *osiSolver);
 					CbcMain0(  model);
+					
+					//kipp -- why the heck is this necessary??
 					int which[3] = { 0, 1, 2 };				  
 					CbcObject* sosobject = new CbcSOS(&model, 3, which, NULL, 0, 1); 				  
 					model.addObjects(1, &sosobject);
-					delete sosobject;					  
-					const char * argv3[]={"gamstest_sos1a", "-solve", "-quit"};
-					osiSolver->messageHandler()->setLogLevel( 0) ;
-					CbcMain1(3, argv3, model);				
+					delete sosobject;	
+					//end of sosobject addition
+					
+					
+					const char * argv[]={"ostest_sos1a", "-log=0",  "-solve",  "-quit"};
+					
+					/*
+					const char **argv = NULL;
+					argv = new const char*[4];
+					argv[ 0] = "ostest_sos1a";
+					argv[ 1] = "-log=0";
+					argv[ 2] = "-solve";
+					argv[ 3] = "-quit";
+					*/
+					
+
 					OsiSolverInterface *solver = model.solver();
+					
+					solver->setHintParam(OsiDoReducePrint, true, OsiHintDo);
+					
+					solver->messageHandler()->setLogLevel( 0) ;
+					
+					
+					CbcMain1(4, argv, model);				
+					
 					writeResult( solver);
 					return ;
 					
