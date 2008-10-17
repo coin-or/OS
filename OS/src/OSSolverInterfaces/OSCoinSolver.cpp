@@ -58,7 +58,9 @@ using std::ostringstream;
 CoinSolver::CoinSolver() : 
 osiSolver(NULL),
 m_osilreader(NULL),
-m_CoinPackedMatrix(NULL)
+m_CoinPackedMatrix(NULL),
+cbc_argv( NULL),
+num_cbc_argv( 0)
 {
 osrlwriter = new OSrLWriter();
 }
@@ -77,6 +79,14 @@ CoinSolver::~CoinSolver() {
 	osrlwriter = NULL;
 	delete osresult;
 	osresult = NULL;
+	if(num_cbc_argv > 0){
+		int i;
+		for(i = 0; i < num_cbc_argv; i++){
+			delete[] cbc_argv[ i];
+		}
+		delete[] cbc_argv;
+		cbc_argv = NULL;
+	}
 	cout << "leaving CoinSolver destructor" << endl;
 }
 

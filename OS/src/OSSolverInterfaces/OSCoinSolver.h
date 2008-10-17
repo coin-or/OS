@@ -139,6 +139,15 @@ private:
 	
 	/** osrlwriter object used to write osrl from and OSResult object */
 	OSrLWriter  *osrlwriter;
+	
+	/** when Cbc is the solver, these are the arguments sent to
+	 * Cbc Solve
+	 */	
+	const char **cbc_argv;
+
+	/** the number of arguments in the argument list to the Cbc Solver
+	 */	
+	int num_cbc_argv;
 
 };
 #endif
