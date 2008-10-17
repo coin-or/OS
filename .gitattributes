@@ -33,6 +33,7 @@ OS/MSVisualStudio/v8/OSTest/OSTest.vcproj -text
 OS/MSVisualStudio/v8/libOS/libOS.vcproj -text
 OS/MSVisualStudio/v8/libOS/libOSSolvers.vcproj -text
 OS/MSVisualStudio/v8/libOSCommon/libOSCommon.vcproj -text
+OS/MSVisualStudio/v8/libOSSolvers/libOSSolvers.vcproj -text
 OS/MSVisualStudio/v8/libOSnl2OSiL/libOSnl2OSiL.vcproj -text
 OS/MSVisualStudio/v9/OS.sln -text
 OS/MSVisualStudio/v9/OSAmplClient/OSamplclient.vcproj -text
