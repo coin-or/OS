@@ -121,7 +121,7 @@
 				Name="VCCLCompilerTool"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="..\..\..\..\OS\src;..\..\..\..\OS\src\OSUtils;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\ThirdPartyASL;..\..\..\..;..\..\..\..\CppAD;..\..\..\..\CppAD\local;..\..\..\..\Osi\src;..\..\..\..\Osi\src\OsiCbc;..\..\..\..\Osi\src\OsiClp;..\..\..\..\Osi\src\OsiSym;..\..\..\..\Osi\src\OsiVol;..\..\..\..\Cbc\src;..\..\..\..\Clp\src;..\..\..\..\Vol\src;..\..\..\..\CoinUtils\src;..\..\..\..\BuildTools\headers;..\..\..\..\SYMPHONY\include"
-                                PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_LINDO_DLL_;COIN_HAS_SYMPHONY"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_LINDO_DLL_;COIN_HAS_SYMPHONY"
 				AssemblerListingLocation=".\$(ConfigurationName)\"
 				ObjectFile=".\$(ConfigurationName)\"
 				ProgramDataBaseFileName=".\$(ConfigurationName)\"
@@ -200,7 +200,7 @@
 				Name="VCCLCompilerTool"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="..\..\..\..\OS\src;..\..\..\..\OS\src\OSUtils;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\ThirdPartyASL;..\..\..\..;..\..\..\..\CppAD;..\..\..\..\CppAD\local;..\..\..\..\Osi\src;..\..\..\..\Osi\src\OsiCbc;..\..\..\..\Osi\src\OsiClp;..\..\..\..\Osi\src\OsiSym;..\..\..\..\Osi\src\OsiVol;..\..\..\..\Cbc\src;..\..\..\..\Clp\src;..\..\..\..\Vol\src;..\..\..\..\CoinUtils\src;..\..\..\..\BuildTools\headers;..\..\..\..\SYMPHONY\include"
-                                PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;WIN_;_LINDO_DLL_;COIN_HAS_SYMPHONY"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;WIN_;_LINDO_DLL_;COIN_HAS_SYMPHONY"
 				AssemblerListingLocation=".\$(ConfigurationName)\"
 				ObjectFile=".\$(ConfigurationName)\"
 				ProgramDataBaseFileName=".\$(ConfigurationName)\"
@@ -277,12 +277,6 @@
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
-			>
-		</Filter>
-		<Filter
-			Name="Resource Files"
-			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
-			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 		</Filter>
 	</Files>
