@@ -471,7 +471,6 @@ void CoinSolver::solve() throw (ErrorClass) {
 					model.addObjects(1, &sosobject);
 					delete sosobject;	
 					//end of sosobject addition
-					
 					// make sure we define cbc_argv if not done already
 					if(num_cbc_argv <= 0){
 						cbc_argv = new const char*[ 3];
