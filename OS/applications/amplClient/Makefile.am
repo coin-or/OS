@@ -103,6 +103,8 @@ AM_CPPFLAGS =\
 	-I`$(CYGPATH_W) $(CBCSRCDIR)/src` \
 	-I`$(CYGPATH_W) $(CBCSRCDIR)/inc` \
 	-I`$(CYGPATH_W) $(CBCOBJDIR)/inc` \
+	-I`$(CYGPATH_W) $(CGLSRCDIR)/src` \
+	-I`$(CYGPATH_W) $(CGLOBJDIR)/inc` \
 	-I`$(CYGPATH_W) $(CLPSRCDIR)/src` \
 	-I`$(CYGPATH_W) $(CLPSRCDIR)/inc` \
 	-I`$(CYGPATH_W) $(CLPOBJDIR)/inc` \

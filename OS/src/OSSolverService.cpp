@@ -89,6 +89,9 @@
 
 
 
+
+
+
 #ifdef COIN_HAS_KNITRO    
 #include "OSKnitroSolver.h"
 #endif 
@@ -133,7 +136,7 @@
 
 
 
-#ifdef COIN_HAS_BONMIN    
+#ifdef COIN_HAS_BONMIN   
 #include "OSBonminSolver.h"
 #endif 
 
