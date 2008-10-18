@@ -82,9 +82,9 @@ CoinSolver::~CoinSolver() {
 	if(num_cbc_argv > 0){
 		int i;
 		for(i = 0; i < num_cbc_argv; i++){
-			delete[] cbc_argv[ i];
+			//delete cbc_argv[ i];
 		}
-		delete[] cbc_argv;
+		//delete[] cbc_argv;
 		cbc_argv = NULL;
 	}
 	cout << "leaving CoinSolver destructor" << endl;
@@ -260,7 +260,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 			std::vector<SolverOption*> optionsVector;
 			//get the osi options
 			optionsVector = osoption->getSolverOptions( "osi");
-			int num_ipopt_options = optionsVector.size();
+			int num_osi_options = optionsVector.size();
 			int i;
 			char *pEnd;
 			bool yesNo;
@@ -271,7 +271,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 			 * find
 			 */
 
-			for(i = 0; i < num_ipopt_options; i++){
+			for(i = 0; i < num_osi_options; i++){
 				std::cout << "osi solver option  "  << optionsVector[ i]->name << std::endl;
 				if (optionsVector[ i]->type == "OsiHintStrength" ){
 					if( hintStrengthMap.find( optionsVector[ i]->name ) != hintStrengthMap.end() ){
@@ -279,7 +279,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 					}
 				}
 			}
-			for(i = 0; i < num_ipopt_options; i++){
+			for(i = 0; i < num_osi_options; i++){
 				std::cout << "osi solver option  "  << optionsVector[ i]->name << std::endl;
 
 				if (optionsVector[ i]->type == "OsiHintParam" ){
@@ -321,9 +321,40 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 					}						
 					
 				}
-			}	
-		}		
-		
+			}
+			
+			// treat Cbc separately to take advantage of CbcMain1()
+			
+			
+
+
+
+			//if(optionsVector.size() > 0) optionsVector.clear();
+			if( !optionsVector.empty() ) optionsVector.clear();	
+			
+			if( sSolverName.find( "cbc") != std::string::npos) {	
+				// get Cbc options		
+				optionsVector = osoption->getSolverOptions( "cbc");
+				int num_cbc_options = optionsVector.size();			
+				num_cbc_argv = optionsVector.size() + 3;
+				cbc_argv = new const char*[ num_cbc_argv];
+				cbc_argv[ 0] = "ostest_sos1a";
+				std::string cbc_option;
+				char *cstr;
+				for(i = 0; i < num_cbc_options; i++){
+					//cbc_opt = NULL;
+					std::cout << "cbc solver option  "  << optionsVector[ i]->name << std::endl;
+					std::cout << "cbc solver value  "  << optionsVector[ i]->value << std::endl;
+					cbc_option = "-" + optionsVector[ i]->name +"="+optionsVector[ i]->value;
+					cstr = new char [cbc_option.size() + 1];
+					strcpy (cstr, cbc_option.c_str());
+					cbc_argv[i +  1] = cstr;			
+				}
+				cbc_argv[ num_cbc_argv - 2] = "-solve";
+				cbc_argv[ num_cbc_argv - 1] = "-quit";
+			}
+		}	
+	
 		//osiSolver->setHintParam(OsiDoReducePrint, true, OsiHintTry);			
 	}
 	catch(const ErrorClass& eclass){
@@ -431,8 +462,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 				}
 				else{
 					CbcModel model(  *osiSolver);
-					CbcMain0(  model);
-					
+					CbcMain0(  model);		
 					//kipp -- why the heck is this necessary??
 					int which[3] = { 0, 1, 2 };				  
 					CbcObject* sosobject = new CbcSOS(&model, 3, which, NULL, 0, 1); 				  
@@ -440,31 +470,20 @@ void CoinSolver::solve() throw (ErrorClass) {
 					delete sosobject;	
 					//end of sosobject addition
 					
+					// make sure we define cbc_argv if not done already
+					if(num_cbc_argv <= 0){
+						cbc_argv = new const char*[ 3];
+						cbc_argv[ 0] = "ostest_sos1a";
+						cbc_argv[ 1] = "-solve";
+						cbc_argv[ 2] = "-quit";
+						num_cbc_argv = 3;			
+					}
+					CbcMain1(num_cbc_argv, cbc_argv, model);
 					
-					const char * argv[]={"ostest_sos1a", "-log=0",  "-solve",  "-quit"};
-					
-					/*
-					const char **argv = NULL;
-					argv = new const char*[4];
-					argv[ 0] = "ostest_sos1a";
-					argv[ 1] = "-log=0";
-					argv[ 2] = "-solve";
-					argv[ 3] = "-quit";
-					*/
-					
-
+					// create a solver 
 					OsiSolverInterface *solver = model.solver();
-					
-					solver->setHintParam(OsiDoReducePrint, true, OsiHintDo);
-					
-					solver->messageHandler()->setLogLevel( 0) ;
-					
-					
-					CbcMain1(4, argv, model);				
-					
 					writeResult( solver);
-					return ;
-					
+					return ;	
 					
 					/*
 					 * start old code

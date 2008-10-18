@@ -18,8 +18,6 @@
 
 
 #include "OSIpoptSolver.h"
-#include "OSCommonUtil.h"
-
 #include "OSDataStructures.h"
 #include "OSParameters.h" 
 #include "OSCommonUtil.h"
@@ -518,6 +516,14 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 
 void IpoptSolver::setSolverOptions() throw (ErrorClass) {
 	try{
+		/* set the default options */
+		app->Options()->SetNumericValue("tol", 1e-9);
+		app->Options()->SetIntegerValue("print_level", 0);
+		app->Options()->SetIntegerValue("max_iter", 20000);
+		app->Options()->SetStringValue("mu_strategy", "adaptive");
+		app->Options()->SetStringValue("output_file", "ipopt.out");
+		app->Options()->SetStringValue("check_derivatives_for_naninf", "yes");
+		/* end of the default options */
 		if(osoption != NULL){
 			std::cout << "number of solver options "  <<  osoption->getnumberOfSolverOptions() << std::endl;
 			std::vector<SolverOption*> optionsVector;
@@ -563,13 +569,6 @@ void IpoptSolver::buildSolverInstance() throw (ErrorClass) {
 		// Create a new instance of your nlp 
 		nlp = new IpoptProblem( osinstance, osresult);
 		app = new IpoptApplication();
-		/* set the default options */
-		app->Options()->SetNumericValue("tol", 1e-9);
-		app->Options()->SetIntegerValue("print_level", 0);
-		app->Options()->SetIntegerValue("max_iter", 20000);
-		app->Options()->SetStringValue("mu_strategy", "adaptive");
-		app->Options()->SetStringValue("output_file", "ipopt.out");
-		app->Options()->SetStringValue("check_derivatives_for_naninf", "yes");
 		this->bCallbuildSolverInstance = true;
 	}
 	catch(const ErrorClass& eclass){

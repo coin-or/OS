@@ -69,9 +69,11 @@
 
 
 #include "BonTMINLP.hpp"
+
+
+
 using namespace  Ipopt;
 using namespace Bonmin;
-
 
 
 
@@ -290,6 +292,7 @@ public:
 
 private:
 	OSrLWriter  *osrlwriter;
+
 
 
 	std::string bonminErrorMsg;

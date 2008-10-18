@@ -30,6 +30,9 @@ using std::ostringstream;
 
 
 
+BonminSetup bonmin;
+
+
 BonminSolver::BonminSolver() {
 	osrlwriter = new OSrLWriter();
 	osresult = new OSResult();
@@ -631,7 +634,7 @@ void BonminSolver::solve() throw (ErrorClass) {
 		
 		
 		
-		  BonminSetup bonmin;
+
 		  bonmin.initializeOptionsAndJournalist();
 		  //Register an additional option
 		  bonmin.roptions()->AddStringOption2("print_solution","Do we print the solution or not?",
@@ -661,7 +664,7 @@ void BonminSolver::solve() throw (ErrorClass) {
 		  }
 
 		  //Now initialize from tminlp
-		  bonmin.initialize(GetRawPtr(tminlp));
+		  bonmin.initialize( GetRawPtr(tminlp));
 
 
 
@@ -669,7 +672,7 @@ void BonminSolver::solve() throw (ErrorClass) {
 		  //double time1 = 0.0;
 		  try {
 		    Bab bb;
-		    bb(bonmin);//process parameter file using Ipopt and do branch and bound using Cbc
+		    bb(  bonmin);//process parameter file using Ipopt and do branch and bound using Cbc
 
 
 		  }
@@ -688,14 +691,7 @@ void BonminSolver::solve() throw (ErrorClass) {
 			     <<E.message()<<std::endl;
 		  }
 		
-		//dataEchoCheck();
-		/***************now the ipopt invokation*********************/
-		//app->Options()->SetNumericValue("tol", 1e-9);
-		//app->Options()->SetIntegerValue("print_level", 0);
-		//app->Options()->SetIntegerValue("max_iter", 20000);
-		//app->Options()->SetStringValue("mu_strategy", "adaptive");
-		//app->Options()->SetStringValue("output_file", "ipopt.out");
-		//app->Options()->SetStringValue("check_derivatives_for_naninf", "yes");
+
 		// see if we have a linear program
 		if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Bonmin NEEDS AN OBJECTIVE FUNCTION");
 		if( (osinstance->getNumberOfNonlinearExpressions() == 0) && (osinstance->getNumberOfQuadraticTerms() == 0) ) 
@@ -704,21 +700,11 @@ void BonminSolver::solve() throw (ErrorClass) {
 		if( osinstance->instanceData->objectives->obj[ 0]->maxOrMin.compare("min") != 0){
   			//app->Options()->SetStringValue("nlp_scaling_method", "user-scaling");
   		}
-		// Intialize the BonminApplication and process the options
-		std::cout << "Call Bonmin Initialize" << std::endl;
-		//app->Initialize();
-		std::cout << "Finished Bonmin Initialize" << std::endl;
-		//nlp->osinstance = this->osinstance;
-		// Ask Bonmin to solve the problem
-		std::cout << "Call Bonmin Optimize" << std::endl;
-		//ApplicationReturnStatus status = app->OptimizeTNLP( nlp);
+
 		std::cout << "Finish Bonmin Optimize" << std::endl;
 		osrl = osrlwriter->writeOSrL( osresult);
 		std::cout << "Finish writing the osrl" << std::endl;
-		//if (status != Solve_Succeeded) {
-		//if (status < -2) {
-		//	throw ErrorClass("Bonmin FAILED TO SOLVE THE PROBLEM: " + bonminErrorMsg);
-		//}	
+
 	}
 	catch(const ErrorClass& eclass){
 		osresult->setGeneralMessage( eclass.errormsg);
