@@ -478,11 +478,11 @@ void CoinSolver::solve() throw (ErrorClass) {
 						cbc_argv[ 2] = "-quit";
 						num_cbc_argv = 3;			
 					}
-					CbcMain1(num_cbc_argv, cbc_argv, model);
-					
+					CbcMain1(num_cbc_argv, cbc_argv, model);	
 					// create a solver 
 					OsiSolverInterface *solver = model.solver();
 					writeResult( solver);
+					delete[] cbc_argv;
 					return ;	
 					
 					/*
