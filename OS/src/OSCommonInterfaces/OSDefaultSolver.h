@@ -78,6 +78,13 @@ public:
 	 * been called	 
 	 */
 	bool bCallbuildSolverInstance;
+
+
+	/** 
+	 * bSetSolverOptions is set to true if setSolverOptions has
+	 * been called, false otherwise	 
+	 */
+	bool bSetSolverOptions;
 	
 
 	/** solve is a virtual function -- the actual solvers will

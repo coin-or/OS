@@ -256,6 +256,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 
 	try{
 		if(osoption != NULL){
+			this->bSetSolverOptions = false;
 			std::cout << "number of solver options "  <<  osoption->getnumberOfSolverOptions() << std::endl;
 			std::vector<SolverOption*> optionsVector;
 			//get the osi options
@@ -394,6 +395,7 @@ bool CoinSolver::setCoinPackedMatrix(){
 void CoinSolver::solve() throw (ErrorClass) {
 	// make sure the solver instance exists
 	if( this->bCallbuildSolverInstance == false) buildSolverInstance();
+	if( this->bSetSolverOptions == false) setSolverOptions();
 	// first check the various solvers and see if they are of the proper problem type
 	if( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0){
 		// throw an exception if we have a solver that cannot do integer programming

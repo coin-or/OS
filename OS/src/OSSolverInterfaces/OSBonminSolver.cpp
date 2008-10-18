@@ -17,8 +17,12 @@
  */
 #include <iostream>
 
-#include "OSCommonUtil.h"
+
 #include "OSBonminSolver.h"
+#include "OSDataStructures.h"
+#include "OSParameters.h" 
+#include "OSCommonUtil.h"
+#include "OSMathUtil.h"
 
 #include "BonOsiTMINLPInterface.hpp"
 #include "BonCbc.hpp"
@@ -601,9 +605,8 @@ void BonminSolver::buildSolverInstance() throw (ErrorClass) {
 
 void BonminSolver::setSolverOptions() throw (ErrorClass) {
 	try{
+		this->bSetSolverOptions = true;
 		bonmin.initializeOptionsAndJournalist();
-		
-		
 		//Register an additional option
 		bonmin.roptions()->AddStringOption2("print_solution","Do we print the solution or not?",
 		                                 "yes",
@@ -628,7 +631,32 @@ void BonminSolver::setSolverOptions() throw (ErrorClass) {
 		if(printSolution == 1){
 			tminlp->printSolutionAtEndOfAlgorithm();
 		}	
+		
+		if(osoption != NULL){
+			std::cout << "number of solver options "  <<  osoption->getnumberOfSolverOptions() << std::endl;
+			std::vector<SolverOption*> optionsVector;
+			optionsVector = osoption->getSolverOptions( "bonmin");
+			char *pEnd;
+			int i;
+			int num_bonmin_options = optionsVector.size();
+			for(i = 0; i < num_bonmin_options; i++){
+				std::cout << "bonmin solver option  "  << optionsVector[ i]->name << std::endl;
+				if(optionsVector[ i]->type == "numeric" ){
+					std::cout << "FOUND A NUMERIC OPTION  "  <<  os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) << std::endl;
+					bonmin.options()->SetNumericValue(optionsVector[ i]->name, os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) );	
+				}
+				else if(optionsVector[ i]->type == "integer" ){
+					std::cout << "FOUND AN INTEGER OPTION  "  << atoi( optionsVector[ i]->value.c_str() ) << std::endl;
+					bonmin.options()->SetIntegerValue(optionsVector[ i]->name, atoi( optionsVector[ i]->value.c_str() ) );
+				}
+				else if(optionsVector[ i]->type == "string" ){
+					bonmin.options()->SetStringValue(optionsVector[ i]->name, optionsVector[ i]->value);
+				}
+			}	
+		}
+		
 	}
+	
 	catch(const ErrorClass& eclass){
 		std::cout << "THERE IS AN ERROR" << std::endl;
 		osresult->setGeneralMessage( eclass.errormsg);
@@ -642,6 +670,7 @@ void BonminSolver::setSolverOptions() throw (ErrorClass) {
 //void BonminSolver::solve() throw (ErrorClass) {
 void BonminSolver::solve() throw (ErrorClass) {
 	if( this->bCallbuildSolverInstance == false) buildSolverInstance();
+	if( this->bSetSolverOptions == false) setSolverOptions();
 	try{
 		clock_t start, finish;
 		double duration;

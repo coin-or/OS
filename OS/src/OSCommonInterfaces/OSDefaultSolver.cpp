@@ -30,7 +30,8 @@ DefaultSolver::DefaultSolver():
 	osoption( NULL),
 	insList(""),
 	sSolverName(""),
-	bCallbuildSolverInstance( false)
+	bCallbuildSolverInstance( false),
+	bSetSolverOptions( false)
 
 { 
 

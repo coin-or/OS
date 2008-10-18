@@ -516,6 +516,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 
 void IpoptSolver::setSolverOptions() throw (ErrorClass) {
 	try{
+		this->bSetSolverOptions = true;
 		/* set the default options */
 		app->Options()->SetNumericValue("tol", 1e-9);
 		app->Options()->SetIntegerValue("print_level", 0);
@@ -584,6 +585,7 @@ void IpoptSolver::buildSolverInstance() throw (ErrorClass) {
 //void IpoptSolver::solve() throw (ErrorClass) {
 void IpoptSolver::solve() throw (ErrorClass) {
 	if( this->bCallbuildSolverInstance == false) buildSolverInstance();
+	if( this->bSetSolverOptions == false) setSolverOptions();
 	try{
 		clock_t start, finish;
 		double duration;
