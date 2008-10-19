@@ -258,7 +258,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 	//
 	try{
 		if(osoption != NULL){
-			this->bSetSolverOptions = false;
+			this->bSetSolverOptions = true;
 			std::cout << "number of solver options "  <<  osoption->getnumberOfSolverOptions() << std::endl;
 			std::vector<SolverOption*> optionsVector;
 			//get the osi options
@@ -339,23 +339,45 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 				// get Cbc options		
 				optionsVector = osoption->getSolverOptions( "cbc");
 				int num_cbc_options = optionsVector.size();	
+				char *cstr;
+				std::string cbc_option;
 				// we are going to add a log level option -- it can be overridden
 				num_cbc_argv = optionsVector.size() + 4;
 				cbc_argv = new const char*[ num_cbc_argv];
-				cbc_argv[ 0] = "ostest_sos1a";
-				cbc_argv[ 1] = "-log=0";
-				std::string cbc_option;
-				char *cstr;
+				
+				// the sos option
+				cbc_option = "ostest_sos1a";
+				cstr = new char [cbc_option.size() + 1];
+				strcpy (cstr, cbc_option.c_str());
+				cbc_argv[ 0] = cstr;
+				
+				// the log option
+				cbc_option = "-log=0";
+				cstr = new char [cbc_option.size() + 1];
+				strcpy (cstr, cbc_option.c_str());
+				cbc_argv[ 1] = cstr;
+				
 				for(i = 0; i < num_cbc_options; i++){
 					std::cout << "cbc solver option  "  << optionsVector[ i]->name << std::endl;
 					std::cout << "cbc solver value  "  << optionsVector[ i]->value << std::endl;
 					cbc_option = "-" + optionsVector[ i]->name +"="+optionsVector[ i]->value;
 					cstr = new char [cbc_option.size() + 1];
 					strcpy (cstr, cbc_option.c_str());
-					cbc_argv[i +  2] = cstr;			
+					cbc_argv[i +  2] = cstr;		
 				}
-				cbc_argv[ num_cbc_argv - 2] = "-solve";
-				cbc_argv[ num_cbc_argv - 1] = "-quit";
+				
+				// the solve option
+				cbc_option = "-solve";
+				cstr = new char [cbc_option.size() + 1];
+				strcpy (cstr, cbc_option.c_str());
+				cbc_argv[ num_cbc_argv - 2] = cstr;
+				
+				// the quit option
+				cbc_option = "-quit";
+				cstr = new char [cbc_option.size() + 1];
+				strcpy (cstr, cbc_option.c_str());
+				cbc_argv[ num_cbc_argv - 1] = cstr;
+
 			}
 		}			
 	}
@@ -472,21 +494,57 @@ void CoinSolver::solve() throw (ErrorClass) {
 					model.addObjects(1, &sosobject);
 					delete sosobject;	
 					//end of sosobject addition
+					
 					// make sure we define cbc_argv if not done already
 					if(num_cbc_argv <= 0){
+						char *cstr;
+						std::string cbc_option;
 						num_cbc_argv = 4;
 						cbc_argv = new const char*[ num_cbc_argv];
-						cbc_argv[ 0] = "ostest_sos1a";
-						cbc_argv[ 1] = "-log=0";
-						cbc_argv[ 2] = "-solve";
-						cbc_argv[ 3] = "-quit";
+				
+						// the sos option
+						cbc_option = "ostest_sos1a";
+						cstr = new char [cbc_option.size() + 1];
+						strcpy (cstr, cbc_option.c_str());
+						cbc_argv[ 0] = cstr;
+				
+						// the log option
+						cbc_option = "-log=0";
+						cstr = new char [cbc_option.size() + 1];
+						strcpy (cstr, cbc_option.c_str());
+						cbc_argv[ 1] = cstr;
+
+						// the solve option
+						cbc_option = "-solve";
+						cstr = new char [cbc_option.size() + 1];
+						strcpy (cstr, cbc_option.c_str());
+						cbc_argv[ 2] = cstr;
+				
+						// the quit option
+						cbc_option = "-quit";
+						cstr = new char [cbc_option.size() + 1];
+						strcpy (cstr, cbc_option.c_str());
+						cbc_argv[ 3] = cstr;
+
+
 									
 					}
 					CbcMain1(num_cbc_argv, cbc_argv, model);	
+					
+					//do the garbage collectioni on cbc_argv
+					int i;
+					for(i = 0; i < num_cbc_argv; i++){
+						delete[]  cbc_argv[i];	
+						cbc_argv[i] = NULL;
+					}
+					delete[] cbc_argv;
+					cbc_argv = NULL;
+					
+					
 					// create a solver 
 					OsiSolverInterface *solver = model.solver();
 					writeResult( solver);
-					delete[] cbc_argv;
+
 					return ;	
 					
 					/*
