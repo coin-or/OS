@@ -132,7 +132,7 @@
 			<solverOption name="LS_IPARAM_LP_PRINTLEVEL" solver="lindo" category="environment" type="integer" value="1"></solverOption>	
 			<solverOption name="OsiDoReducePrint" solver="osi" type="OsiHintParam"  value="true"></solverOption>
 			<solverOption name="OsiHintTry" solver="osi" type="OsiHintStrength"   ></solverOption>
-			<solverOption name="log" solver="cbc"  value="0" ></solverOption>
+			<solverOption name="log" solver="cbc"  value="1" ></solverOption>
 		</solverOptions>
 	</optimization>
 </osol>

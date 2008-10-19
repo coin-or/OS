@@ -253,7 +253,9 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 	intParamMap["OsiLastIntParam"] = OsiLastIntParam;
 	//
 	//
-
+	// initialize low level of printing
+	osiSolver->setHintParam(OsiDoReducePrint, true, OsiHintTry);	
+	//
 	try{
 		if(osoption != NULL){
 			this->bSetSolverOptions = false;
@@ -336,27 +338,26 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 			if( sSolverName.find( "cbc") != std::string::npos) {	
 				// get Cbc options		
 				optionsVector = osoption->getSolverOptions( "cbc");
-				int num_cbc_options = optionsVector.size();			
-				num_cbc_argv = optionsVector.size() + 3;
+				int num_cbc_options = optionsVector.size();	
+				// we are going to add a log level option -- it can be overridden
+				num_cbc_argv = optionsVector.size() + 4;
 				cbc_argv = new const char*[ num_cbc_argv];
 				cbc_argv[ 0] = "ostest_sos1a";
+				cbc_argv[ 1] = "-log=0";
 				std::string cbc_option;
 				char *cstr;
 				for(i = 0; i < num_cbc_options; i++){
-					//cbc_opt = NULL;
 					std::cout << "cbc solver option  "  << optionsVector[ i]->name << std::endl;
 					std::cout << "cbc solver value  "  << optionsVector[ i]->value << std::endl;
 					cbc_option = "-" + optionsVector[ i]->name +"="+optionsVector[ i]->value;
 					cstr = new char [cbc_option.size() + 1];
 					strcpy (cstr, cbc_option.c_str());
-					cbc_argv[i +  1] = cstr;			
+					cbc_argv[i +  2] = cstr;			
 				}
 				cbc_argv[ num_cbc_argv - 2] = "-solve";
 				cbc_argv[ num_cbc_argv - 1] = "-quit";
 			}
-		}	
-	
-		//osiSolver->setHintParam(OsiDoReducePrint, true, OsiHintTry);			
+		}			
 	}
 	catch(const ErrorClass& eclass){
 		std::cout << "THERE IS AN ERROR" << std::endl;
@@ -473,11 +474,13 @@ void CoinSolver::solve() throw (ErrorClass) {
 					//end of sosobject addition
 					// make sure we define cbc_argv if not done already
 					if(num_cbc_argv <= 0){
-						cbc_argv = new const char*[ 3];
+						num_cbc_argv = 4;
+						cbc_argv = new const char*[ num_cbc_argv];
 						cbc_argv[ 0] = "ostest_sos1a";
-						cbc_argv[ 1] = "-solve";
-						cbc_argv[ 2] = "-quit";
-						num_cbc_argv = 3;			
+						cbc_argv[ 1] = "-log=0";
+						cbc_argv[ 2] = "-solve";
+						cbc_argv[ 3] = "-quit";
+									
 					}
 					CbcMain1(num_cbc_argv, cbc_argv, model);	
 					// create a solver 
