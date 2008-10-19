@@ -95,7 +95,7 @@
 				<other name="priority" numberOfVar="3" solver="Ipopt">
 					<var idx="0" value="1"/>
 					<var value="2" idx="1"/>
-					<var idx="2" value="3"/>>
+					<var idx="2" value="3"/>
 				</other>
 				<other name="test" solver="hypothetical" numberOfVar="1" value="inverted">
 					<var idx="1"></var>
