@@ -209,6 +209,9 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass) {
 
 
 void CoinSolver::setSolverOptions() throw (ErrorClass) {
+
+	  
+
 	// the osi maps
 	// the OsiHintParamameter Map
 	std::map<std::string, OsiHintParam> hintParamMap;
@@ -380,13 +383,17 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 
 			}//end of cbc if
 			//now set initial values
-			/* not sure the following is correct 
+			/*
 			double* denseInitVarVector;
- 			denseInitVarVector = osoption->getInitVarValuesDense( osinstance->getVariableNumber() );
+ 			//denseInitVarVector = osoption->getInitVarValuesDense( osinstance->getVariableNumber() );
+ 			denseInitVarVector = new double[2];
+ 			denseInitVarVector[ 0] = 10000;
+ 			denseInitVarVector[ 1] = 10000;
  			int k;
  			for(k = 0; k < osinstance->getVariableNumber(); k++){
  				std::cout << "GAIL HONDA = " << denseInitVarVector[ k] << std::endl;
  			}
+
 			osiSolver->setColSolution( denseInitVarVector);
 			delete[] denseInitVarVector;
 			*/
