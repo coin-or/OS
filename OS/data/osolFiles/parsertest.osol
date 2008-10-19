@@ -85,18 +85,17 @@
 	<optimization numberOfObjectives="1" numberOfConstraints="2" numberOfVariables="6">
 		<variables numberOfOtherVariableOptions="2">
 			<initialVariableValues numberOfVar="3">
-				<var idx="0" value="1.0"></var>
-				<var value="2.0" idx="2"/>
-				<var idx="3" value="3"></var>
-
+					<var idx="0" value="1"/>
+					<var value="4.742999643577776" idx="1"/>
+					<var idx="3" value="1.379408293215363"/>
 			</initialVariableValues>
 			<initialVariableValuesString numberOfVar="1">
 				<var idx="1" value="blue"></var>
 			</initialVariableValuesString>
 				<other name="priority" numberOfVar="3" solver="Ipopt">
 					<var idx="0" value="1"/>
-					<var value="4.742999643577776" idx="1"/>
-					<var idx="3" value="1.379408293215363"/>
+					<var value="2" idx="1"/>
+					<var idx="2" value="3"/>>
 				</other>
 				<other name="test" solver="hypothetical" numberOfVar="1" value="inverted">
 					<var idx="1"></var>
