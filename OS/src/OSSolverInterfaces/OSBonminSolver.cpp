@@ -247,18 +247,24 @@ bool BonminProblem::get_starting_point(Index n, bool init_x, Number* x,
   	assert(init_x == true);
   	assert(init_z == false);
   	assert(init_lambda == false);
-  	int i;
+  	
+  	
   	//cout << "get initial values !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
- 	double *mdXInit = osinstance->getVariableInitialValues(); 
- 	if( mdXInit != NULL) {
+  	
+
+  	int i;
+ 	if( osoption != NULL) {
+ 		double* denseInitVarVector;
+ 		denseInitVarVector = osoption->getInitVarValuesDense( n);
  		for(i = 0; i < n; i++){
- 			if( CommonUtil::ISOSNAN( mdXInit[ i]) == true){ 
+ 			if( CommonUtil::ISOSNAN( denseInitVarVector[ i]) == true){ 
  				x[ i] = 1.7171; 
  				//std::cout << "INITIAL VALUE !!!!!!!!!!!!!!!!!!!!  " << x[ i] << std::endl;
  			}
- 			else x[ i] = mdXInit[ i];
+ 			else x[ i] = denseInitVarVector[ i];
  			//std::cout << "INITIAL VALUE !!!!!!!!!!!!!!!!!!!!  " << x[ i] << std::endl;	
  		}	
+ 		delete[] denseInitVarVector;
  	}
  	else{
  		for(i = 0; i < n; i++){
@@ -266,6 +272,10 @@ bool BonminProblem::get_starting_point(Index n, bool init_x, Number* x,
  		}
  	}
   	//cout << "got initial values !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
+  	
+  	
+  	
+  	
   	return true;
 }//get_starting_point
 
@@ -585,9 +595,7 @@ void BonminSolver::buildSolverInstance() throw (ErrorClass) {
 			osinstance = m_osilreader->readOSiL( osil);
 		}
 		// Create a new instance of your nlp 
-		tminlp = new BonminProblem( osinstance, osresult);
-		//tminlp = new BonminProblem( osinstance, osresult);
-		//app = new BonminApplication();
+		tminlp = new BonminProblem( osinstance, osoption, osresult);
 		this->bCallbuildSolverInstance = true;
 		//Now initialize from tminlp
 		bonmin.initialize( GetRawPtr(tminlp) );
@@ -788,8 +796,9 @@ void BonminSolver::dataEchoCheck(){
 } // end dataEchoCheck
 
 
-BonminProblem::BonminProblem(OSInstance *osinstance_,  OSResult *osresult_) {
+BonminProblem::BonminProblem(OSInstance *osinstance_,  OSOption *osoption_, OSResult *osresult_) {
 	osinstance = osinstance_;
+	osoption = osoption_;
 	osresult = osresult_;
 	printSol_ = false;
 }

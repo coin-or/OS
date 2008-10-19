@@ -390,6 +390,7 @@ int main(int argC, const char* argV[])
 void solve(){
 	std::string osrl = "";
 	OSiLReader *osilreader = NULL; 
+	OSoLReader *osolreader = NULL;
 	OSSolverAgent* osagent = NULL;
 	DefaultSolver *solverType  = NULL;
 	FileUtil *fileUtil = NULL;
@@ -555,18 +556,21 @@ void solve(){
 				osilreader = new OSiLReader();
 				std::cout << "CREATING AN OSINSTANCE FROM AN OSIL FILE" << std::endl;
 				solverType->osinstance = osilreader->readOSiL( osoptions->osil );
-				solverType->buildSolverInstance();
 				// set solver options if there is an OSoL file  kippster
 				if(osoptions->osol != ""){
-					OSoLReader *osolreader = NULL;
 					osolreader = new OSoLReader();
 					solverType->osoption = osolreader->readOSoL( osoptions->osol);
+					solverType->buildSolverInstance();
 					solverType->setSolverOptions();
-					delete osolreader;
-					osolreader = NULL;
+					solverType->solve();
+					osrl = solverType->osrl;
 				}
-				solverType->solve();
-				osrl = solverType->osrl;
+				else{
+					solverType->buildSolverInstance();
+					solverType->setSolverOptions();
+					solverType->solve();
+					osrl = solverType->osrl;
+				}
 			}
 			else{
 				//we better have an nl file present or mps file or osol file
@@ -639,6 +643,7 @@ void solve(){
 		}
 	}	
 	if(osilreader != NULL) delete osilreader;
+	if(osolreader != NULL) delete osolreader;
 	if(solverType != NULL) delete solverType;
 	delete fileUtil;
 	fileUtil = NULL;

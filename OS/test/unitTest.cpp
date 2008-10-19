@@ -1667,7 +1667,7 @@ catch(const ErrorClass& eclass){
 			std::cout << ", value = "  << initVarVector[ i]->value << std::endl;
 		}
 		double* denseInitVarVector;
-		num_var = 6;
+		num_var = 4;
 		denseInitVarVector = osoption->getInitVarValuesDense(num_var);
 		for(i = 0; i < num_var; i++){
 			std::cout << "initialize; var index "  << i;

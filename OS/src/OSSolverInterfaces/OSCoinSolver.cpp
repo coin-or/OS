@@ -378,9 +378,21 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 				strcpy (cstr, cbc_option.c_str());
 				cbc_argv[ num_cbc_argv - 1] = cstr;
 
-			}
-		}			
-	}
+			}//end of cbc if
+			//now set initial values
+			/* not sure the following is correct 
+			double* denseInitVarVector;
+ 			denseInitVarVector = osoption->getInitVarValuesDense( osinstance->getVariableNumber() );
+ 			int k;
+ 			for(k = 0; k < osinstance->getVariableNumber(); k++){
+ 				std::cout << "GAIL HONDA = " << denseInitVarVector[ k] << std::endl;
+ 			}
+			osiSolver->setColSolution( denseInitVarVector);
+			delete[] denseInitVarVector;
+			*/
+			
+		}// end of osopotion if			
+	}//end of try 
 	catch(const ErrorClass& eclass){
 		std::cout << "THERE IS AN ERROR" << std::endl;
 		osresult->setGeneralMessage( eclass.errormsg);

@@ -32,6 +32,7 @@
 
 #include "OSResult.h"
 #include "OSInstance.h"
+#include "OSOption.h"
 
 # include <cstddef>
 # include <cstdlib>
@@ -85,16 +86,20 @@ class BonminProblem : public TMINLP{
 public:
 	
 	/** the BonminProblemclass constructor */
-	BonminProblem(OSInstance *osinstance_ , OSResult *osresult_);
+	BonminProblem(OSInstance *osinstance_ , OSOption *osoption_, OSResult *osresult_);
 	
 	/** the BonminProblem class destructor */
 	virtual ~BonminProblem();
 	
-	OSResult *osresult;
+	
 	
 	OSInstance *osinstance;
+
+	OSOption *osoption;
 	
-	
+	OSResult *osresult;
+
+
 	/** now for some pure Bonmin methods */
 	
 	  

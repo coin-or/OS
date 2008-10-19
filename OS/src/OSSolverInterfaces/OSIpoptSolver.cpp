@@ -154,17 +154,20 @@ bool IpoptProblem::get_starting_point(Index n, bool init_x, Number* x,
   	assert(init_z == false);
   	assert(init_lambda == false);
   	int i;
-  	//cout << "get initial values !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
- 	double *mdXInit = osinstance->getVariableInitialValues(); 
- 	if( mdXInit != NULL) {
+  	cout << "get initial values !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
+ 	if( osoption != NULL) {
+ 		cout << " OSOPTION IS NOT NULL " << endl;
+ 		double* denseInitVarVector;
+ 		denseInitVarVector = osoption->getInitVarValuesDense( n);
  		for(i = 0; i < n; i++){
- 			if( CommonUtil::ISOSNAN( mdXInit[ i]) == true){ 
+ 			if( CommonUtil::ISOSNAN( denseInitVarVector[ i]) == true){ 
  				x[ i] = 1.7171; 
  				//std::cout << "INITIAL VALUE !!!!!!!!!!!!!!!!!!!!  " << x[ i] << std::endl;
  			}
- 			else x[ i] = mdXInit[ i];
- 			//std::cout << "INITIAL VALUE !!!!!!!!!!!!!!!!!!!!  " << x[ i] << std::endl;	
+ 			else x[ i] = denseInitVarVector[ i];
+ 			std::cout << "INITIAL VALUE !!!!!!!!!!!!!!!!!!!!  " << x[ i] << std::endl;	
  		}	
+ 		delete[] denseInitVarVector;
  	}
  	else{
  		for(i = 0; i < n; i++){
@@ -172,6 +175,8 @@ bool IpoptProblem::get_starting_point(Index n, bool init_x, Number* x,
  		}
  	}
   	//cout << "got initial values !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
+  	
+  	
   	return true;
 }//get_starting_point
 
@@ -568,7 +573,7 @@ void IpoptSolver::buildSolverInstance() throw (ErrorClass) {
 			osinstance = m_osilreader->readOSiL( osil);
 		}
 		// Create a new instance of your nlp 
-		nlp = new IpoptProblem( osinstance, osresult);
+		nlp = new IpoptProblem( osinstance, osoption, osresult);
 		app = new IpoptApplication();
 		this->bCallbuildSolverInstance = true;
 	}
@@ -582,7 +587,7 @@ void IpoptSolver::buildSolverInstance() throw (ErrorClass) {
 }//end buildSolverInstance() 
 
 
-//void IpoptSolver::solve() throw (ErrorClass) {
+
 void IpoptSolver::solve() throw (ErrorClass) {
 	if( this->bCallbuildSolverInstance == false) buildSolverInstance();
 	if( this->bSetSolverOptions == false) setSolverOptions();
@@ -692,8 +697,9 @@ void IpoptSolver::dataEchoCheck(){
 } // end dataEchoCheck
 
 
-IpoptProblem::IpoptProblem(OSInstance *osinstance_,  OSResult *osresult_) {
+IpoptProblem::IpoptProblem(OSInstance *osinstance_,  OSOption *osoption_, OSResult *osresult_) {
 	osinstance = osinstance_;
+	osoption = osoption_;
 	osresult = osresult_;
 }
 

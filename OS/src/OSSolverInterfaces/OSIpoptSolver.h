@@ -32,6 +32,7 @@
 
 #include "OSResult.h"
 #include "OSInstance.h"
+#include "OSOption.h"
 
 # include <cstddef>
 # include <cstdlib>
@@ -78,16 +79,17 @@ class IpoptProblem : public TNLP{
 public:
 	
 	/** the IpoptProblemclass constructor */
-	IpoptProblem(OSInstance *osinstance_ , OSResult *osresult_);
+	IpoptProblem(OSInstance *osinstance_ , OSOption *osoption_, OSResult *osresult_);
 	
 	/** the IpoptProblem class destructor */
 	virtual ~IpoptProblem();
 	
-	OSResult *osresult;
-	
+
 	OSInstance *osinstance;
 	
+	OSOption *osoption;
 
+	OSResult *osresult;
 	
 	/** IPOpt specific methods for defining the nlp problem */
 	virtual bool get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
