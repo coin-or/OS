@@ -117,7 +117,7 @@
 				<con idx="1" lbValue="-10.0" ubValue="100."></con>
 			</initialDualValues>
 		</constraints>
-		<solverOptions numberOfSolverOptions="13">
+		<solverOptions numberOfSolverOptions="17">
 			<solverOption name="tol" solver="ipopt" type="numeric" value="1.e-9"></solverOption>
 			<solverOption name="print_level" solver="ipopt" type="integer" value="5"></solverOption>
 			<solverOption name="max_iter" solver="ipopt" type="integer" value="2000"></solverOption>
@@ -126,11 +126,18 @@
 			<solverOption name="output_file" solver="ipopt" type="string" value="ipopt.out"></solverOption>
 			<solverOption name="check_derivatives_for_naninf" solver="ipopt" type="string" value="yes"></solverOption>
 			<solverOption name="output_file" solver="ipopt" type="string" value="ipopt.out"></solverOption>
+
 			<solverOption name="LS_IPARAM_LP_PRINTLEVEL" solver="lindo" category="model"  type="integer" value="0"></solverOption>
-			<solverOption name="LS_IPARAM_LP_PRINTLEVEL" solver="lindo" category="environment" type="integer" value="1"></solverOption>	
+			<solverOption name="LS_IPARAM_LP_PRINTLEVEL" solver="lindo" category="environment" type="integer" value="1"></solverOption>
 			<solverOption name="OsiDoReducePrint" solver="osi" type="OsiHintParam"  value="true"></solverOption>
-			<solverOption name="OsiHintIgnore" solver="osi" type="OsiHintStrength"   ></solverOption>
-			<solverOption name="log" solver="cbc"  value="1" ></solverOption>
+			<solverOption name="OsiHintTry" solver="osi" type="OsiHintStrength"   ></solverOption>
+
+			<solverOption name="slog" solver="cbc" value="5" ></solverOption>
+			<solverOption name="mess" solver="cbc" value="on" ></solverOption>
+			<solverOption name="cuts" solver="cbc" value="off" ></solverOption>
+			<solverOption name="barr" solver="cbc"  ></solverOption>
+			<solverOption name="max_active_nodes" solver="symphony"  value="2" ></solverOption>
+
 		</solverOptions>
 	</optimization>
 </osol>

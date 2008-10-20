@@ -257,7 +257,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 	//
 	//
 	// initialize low level of printing
-	osiSolver->setHintParam(OsiDoReducePrint, true, OsiHintTry);	
+	osiSolver->setHintParam(OsiDoReducePrint, true, OsiHintIgnore);	
 	//
 	try{
 		if(osoption != NULL){
@@ -271,11 +271,16 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 			char *pEnd;
 			bool yesNo;
 			
-			OsiHintStrength hintStrength = OsiHintTry;
-			/* now do one loop to see if there is a new setting
-			 * of OsiHintStrength -- if there is we go with the last one we 
-			 * find
-			 */
+			/* 
+			 * start default settings 
+			 * 
+			 * */
+			OsiHintStrength hintStrength = OsiHintTry; //don't want too much output
+			osiSolver->setDblParam(OsiObjOffset, osinstance->getObjectiveConstants()[0]);
+			/* 
+			 * end default settings 
+			 * 
+			 * */
 
 			for(i = 0; i < num_osi_options; i++){
 				std::cout << "osi solver option  "  << optionsVector[ i]->name << std::endl;
@@ -345,16 +350,16 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 				char *cstr;
 				std::string cbc_option;
 				// we are going to add a log level option -- it can be overridden
-				num_cbc_argv = optionsVector.size() + 4;
+				num_cbc_argv = optionsVector.size() + 3;
 				cbc_argv = new const char*[ num_cbc_argv];
 				
-				// the sos option
-				cbc_option = "ostest_sos1a";
+				// the first option
+				cbc_option = "OS";
 				cstr = new char [cbc_option.size() + 1];
 				strcpy (cstr, cbc_option.c_str());
 				cbc_argv[ 0] = cstr;
 				
-				// the log option
+				// the log option -- by default minimal printing
 				cbc_option = "-log=0";
 				cstr = new char [cbc_option.size() + 1];
 				strcpy (cstr, cbc_option.c_str());
@@ -363,17 +368,16 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 				for(i = 0; i < num_cbc_options; i++){
 					std::cout << "cbc solver option  "  << optionsVector[ i]->name << std::endl;
 					std::cout << "cbc solver value  "  << optionsVector[ i]->value << std::endl;
-					cbc_option = "-" + optionsVector[ i]->name +"="+optionsVector[ i]->value;
+					if(optionsVector[ i]->value.length() > 0){
+						cbc_option = "-" + optionsVector[ i]->name +"="+optionsVector[ i]->value;
+					}
+					else{
+						cbc_option = "-" + optionsVector[ i]->name ;
+					}
 					cstr = new char [cbc_option.size() + 1];
 					strcpy (cstr, cbc_option.c_str());
 					cbc_argv[i +  2] = cstr;		
 				}
-				
-				// the solve option
-				cbc_option = "-solve";
-				cstr = new char [cbc_option.size() + 1];
-				strcpy (cstr, cbc_option.c_str());
-				cbc_argv[ num_cbc_argv - 2] = cstr;
 				
 				// the quit option
 				cbc_option = "-quit";
@@ -382,23 +386,60 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 				cbc_argv[ num_cbc_argv - 1] = cstr;
 
 			}//end of cbc if
+			
+			// also need to treat SYMPHONY differently
+			
+			
+			// set some OSI options
+	#ifdef COIN_HAS_SYMPHONY
+			//first the number of processors -- applies only to SYMPHONY
+			if( sSolverName.find( "symphony") != std::string::npos) {
+				OsiSymSolverInterface * si =
+				dynamic_cast<OsiSymSolverInterface *>(osiSolver) ;
+				
+				optionsVector = osoption->getSolverOptions( "symphony");
+				int num_sym_options = optionsVector.size();
+				
+				
+				for(i = 0; i < num_sym_options; i++){
+					std::cout << "symphony solver option  "  << optionsVector[ i]->name << std::endl;
+					std::cout << "symphony solver value  "  << optionsVector[ i]->value << std::endl;
+					if( optionsVector[ i]->name  ==  "max_active_nodes"){
+						si->setSymParam("max_active_nodes",   optionsVector[ i]->value);
+					}
+					else{
+						//ignore for now
+					}	
+				}				
+			}
+	#endif	
+			
+			//symphony end
+			
+			
+			
 			//now set initial values
 			/*
 			double* denseInitVarVector;
- 			//denseInitVarVector = osoption->getInitVarValuesDense( osinstance->getVariableNumber() );
- 			denseInitVarVector = new double[2];
- 			denseInitVarVector[ 0] = 10000;
- 			denseInitVarVector[ 1] = 10000;
- 			int k;
- 			for(k = 0; k < osinstance->getVariableNumber(); k++){
- 				std::cout << "GAIL HONDA = " << denseInitVarVector[ k] << std::endl;
- 			}
+				//denseInitVarVector = osoption->getInitVarValuesDense( osinstance->getVariableNumber() );
+				denseInitVarVector = new double[2];
+				denseInitVarVector[ 0] = 1000;
+				denseInitVarVector[ 1] = 1000;
+				int k;
+				for(k = 0; k < osinstance->getVariableNumber(); k++){
+					std::cout << "GAIL HONDA = " << denseInitVarVector[ k] << std::endl;
+				}
 
 			osiSolver->setColSolution( denseInitVarVector);
 			delete[] denseInitVarVector;
 			*/
 			
-		}// end of osopotion if			
+		}// end of osopotion if	
+		
+		
+
+		
+		
 	}//end of try 
 	catch(const ErrorClass& eclass){
 		std::cout << "THERE IS AN ERROR" << std::endl;
@@ -438,6 +479,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 	// make sure the solver instance exists
 	if( this->bCallbuildSolverInstance == false) buildSolverInstance();
 	if( this->bSetSolverOptions == false) setSolverOptions();
+	
 	// first check the various solvers and see if they are of the proper problem type
 	if( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0){
 		// throw an exception if we have a solver that cannot do integer programming
@@ -472,143 +514,72 @@ void CoinSolver::solve() throw (ErrorClass) {
 		throw ErrorClass("OSResult error: setSolutionNumer");	
 	//
 	try{
-		osiSolver->setDblParam(OsiObjOffset, osinstance->getObjectiveConstants()[0]);
-		// set some OSI options
-#ifdef COIN_HAS_SYMPHONY
-		//first the number of processors -- applies only to SYMPHONY
-		if( sSolverName.find( "symphony") != std::string::npos) {
-			OsiSymSolverInterface * si =
-			dynamic_cast<OsiSymSolverInterface *>(osiSolver) ;
-			std::string num_proc = "";
-			string::size_type pos1 = this->osol.find("num_proc"); 
-			string::size_type pos2;
-			if(pos1 != std::string::npos){
-				// get the end of the other start element
-				pos1 = osol.find(">", pos1 + 1);
-				if(pos1 != std::string::npos){
-					// get the start of other end tag
-					pos2 = osol.find( "</other", pos1 + 1);
-					if( pos2 != std::string::npos){
-						// get the substring
-						num_proc = osol.substr( pos1 + 1, pos2 - pos1 - 1); 
-					}
-				}
-			}
-			//pass the option on
-			if(num_proc.size() > 0) si->setSymParam("max_active_nodes", num_proc);	
-		}
-#endif	
+		
 		try{
-			if( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0){
-				// just use simple branch and bound for anything but cbc
-				if( sSolverName.find( "cbc") == std::string::npos) {
-					osiSolver->branchAndBound();	
+			if( sSolverName.find( "cbc") != std::string::npos){
+			//if( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0){
+			// just use simple branch and bound for anything but cbc
+				CbcModel model(  *osiSolver);
+				CbcMain0(  model);		
+
+				
+				// make sure we define cbc_argv if not done already when reading options
+				if(num_cbc_argv <= 0){
+					char *cstr;
+					std::string cbc_option;
+					num_cbc_argv = 4;
+					cbc_argv = new const char*[ num_cbc_argv];
+			
+					// the first option
+					cbc_option = "OS";
+					cstr = new char [cbc_option.size() + 1];
+					strcpy (cstr, cbc_option.c_str());
+					cbc_argv[ 0] = cstr;
+					
+					
+					// the log option -- by default minimal printing
+					cbc_option = "-log=0";
+					cstr = new char [cbc_option.size() + 1];
+					strcpy (cstr, cbc_option.c_str());
+					cbc_argv[ 1] = cstr;
+					
+					
+					// the solve option
+					cbc_option = "-solve";
+					cstr = new char [cbc_option.size() + 1];
+					strcpy (cstr, cbc_option.c_str());
+					cbc_argv[ 2] = cstr;
+			
+					// the quit option
+					cbc_option = "-quit";
+					cstr = new char [cbc_option.size() + 1];
+					strcpy (cstr, cbc_option.c_str());
+					cbc_argv[ 3] = cstr;
+								
 				}
-				else{
-					CbcModel model(  *osiSolver);
-					CbcMain0(  model);		
-					//kipp -- why the heck is this necessary??
-					int which[3] = { 0, 1, 2 };				  
-					CbcObject* sosobject = new CbcSOS(&model, 3, which, NULL, 0, 1); 				  
-					model.addObjects(1, &sosobject);
-					delete sosobject;	
-					//end of sosobject addition
-					
-					// make sure we define cbc_argv if not done already
-					if(num_cbc_argv <= 0){
-						char *cstr;
-						std::string cbc_option;
-						num_cbc_argv = 4;
-						cbc_argv = new const char*[ num_cbc_argv];
-				
-						// the sos option
-						cbc_option = "ostest_sos1a";
-						cstr = new char [cbc_option.size() + 1];
-						strcpy (cstr, cbc_option.c_str());
-						cbc_argv[ 0] = cstr;
-				
-						// the log option
-						cbc_option = "-log=0";
-						cstr = new char [cbc_option.size() + 1];
-						strcpy (cstr, cbc_option.c_str());
-						cbc_argv[ 1] = cstr;
-
-						// the solve option
-						cbc_option = "-solve";
-						cstr = new char [cbc_option.size() + 1];
-						strcpy (cstr, cbc_option.c_str());
-						cbc_argv[ 2] = cstr;
-				
-						// the quit option
-						cbc_option = "-quit";
-						cstr = new char [cbc_option.size() + 1];
-						strcpy (cstr, cbc_option.c_str());
-						cbc_argv[ 3] = cstr;
-
-
-									
-					}
-					CbcMain1(num_cbc_argv, cbc_argv, model);	
-					
-					//do the garbage collectioni on cbc_argv
-					int i;
-					for(i = 0; i < num_cbc_argv; i++){
-						delete[]  cbc_argv[i];	
-						cbc_argv[i] = NULL;
-					}
-					delete[] cbc_argv;
-					cbc_argv = NULL;
-					
-					
-					// create a solver 
-					OsiSolverInterface *solver = model.solver();
-					writeResult( solver);
-
-					return ;	
-					
-					/*
-					 * start old code
-					 *
-					OsiSolverInterface *m_OsiSolverPre = NULL;
-					CglPreProcess process;
-					m_OsiSolverPre = process.preProcess(*osiSolver, false, 10);
-	                if (!osiSolver) {
-	                  throw ErrorClass("Pre-processing says infeasible");
-	                } else {
-	                	printf("processed model has %d rows and %d columns\n",
-	                		m_OsiSolverPre->getNumRows(), m_OsiSolverPre->getNumCols());
-	                } 
-	               osiSolver->setHintParam( OsiDoScale, true, OsiHintDo) ;
-	               
-	               CbcModel model( *m_OsiSolverPre);
-	       		   CglKnapsackCover cover;
-				   CglFlowCover flowcover;
-	       	       CglSimpleRounding round;  
-	       	       CglMixedIntegerRounding2 roundmixed; 
-	       		   CglGomory gomory;
-	       		
-	       	
-	       		   model.addCutGenerator(&gomory, 1, "Gomory");
-	       		   model.addCutGenerator(&cover, 1, "KnapsackCover");
-				   model.addCutGenerator(&flowcover, 1, "FlowCover");
-	       		   model.addCutGenerator(&round, 1, "Round");
-	       		   model.addCutGenerator(&roundmixed, 1, "MixedRound");
-	               model.setLogLevel( 1);
-	              
-				   model.branchAndBound();
-	               //CbcMain1(0, NULL, model);
-	               //osiSolver->messageHandler()->setLogLevel( 0) ;
-	               //m_OsiSolverPre->branchAndBound( ); 
-	               cout << "CALL POSTPROCESS " << endl;
-	               //process.postProcess( *m_OsiSolverPre);
-	               process.postProcess( *model.solver() );
-	               *  end old code
-	               */
+				std::cout << "CALLING THE CBC SOLVER CBCMAIN1()" << std::endl;
+				int i;
+				for(i = 0; i < num_cbc_argv; i++){
+					std::cout << "Cbc Option: "  << cbc_argv[ i]   <<  std::endl;
 				}
+				CbcMain1( num_cbc_argv, cbc_argv, model);	
+				
+				//do the garbage collectioni on cbc_argv
+				for(i = 0; i < num_cbc_argv; i++){
+					delete[]  cbc_argv[ i];	
+					cbc_argv[i] = NULL;
+				}
+				delete[] cbc_argv;
+				cbc_argv = NULL;
+				
+				
+				// create a solver 
+				OsiSolverInterface *solver = model.solver();
+				writeResult( solver);
 			}
-			else{ // we have a linear program 
+			else{ // use other solvers
 				osiSolver->initialSolve();
-				
+				writeResult( osiSolver);
 			}
 		}
 		catch(CoinError e){
@@ -617,72 +588,6 @@ void CoinSolver::solve() throw (ErrorClass) {
 				+ e.methodName() + " in class " + e.className();
 			throw ErrorClass( errmsg );
 		}
-		writeResult( osiSolver);
-		return;
-		/*
-		int solIdx = 0;
-		std::string description = "";
-		osresult->setGeneralStatusType("success");
-		if (osiSolver->isProvenOptimal() == true){
-			osresult->setSolutionStatus(solIdx, "optimal", description);
-			x = new double[osinstance->getVariableNumber() ];
-			y = new double[osinstance->getConstraintNumber() ];
-			z = new double[1];
-			rcost = new std::string[ osinstance->getVariableNumber()];
-			//
-			*(z + 0)  =  osiSolver->getObjValue();
-			osresult->setObjectiveValues(solIdx, z);
-			for(i=0; i < osinstance->getVariableNumber(); i++){
-				*(x + i) = osiSolver->getColSolution()[i];
-			}
-			osresult->setPrimalVariableValues(solIdx, x);
-			// Symphony does not get dual prices
-			if( sSolverName.find( "symphony") == std::string::npos && osinstance->getNumberOfIntegerVariables() == 0 && osinstance->getNumberOfBinaryVariables() == 0) {
-				for(i=0; i <  osinstance->getConstraintNumber(); i++){
-					*(y + i) = osiSolver->getRowPrice()[ i];
-				}
-				osresult->setDualVariableValues(solIdx, y);
-			}
-			//
-			//
-			// now put the reduced costs into the osrl
-			// Symphony does not get reduced costs
-			if( sSolverName.find( "symphony") == std::string::npos && osinstance->getNumberOfIntegerVariables() == 0 && osinstance->getNumberOfBinaryVariables() == 0){
-				int numberOfOtherVariableResult = 1;
-				int otherIdx = 0;
-				// first set the number of Other Variable Results
-				osresult->setNumberOfOtherVariableResult(solIdx, numberOfOtherVariableResult);
-				ostringstream outStr;
-				int numberOfVar =  osinstance->getVariableNumber();
-				for(i=0; i < numberOfVar; i++){
-					rcost[ i] = os_dtoa_format( osiSolver->getReducedCost()[ i]);
-				}
-				osresult->setAnOtherVariableResult(solIdx, otherIdx, "reduced costs", "the variable reduced costs", rcost);			
-				// end of settiing reduced costs
-			}					
-		}
-		else{ 
-			if(osiSolver->isProvenPrimalInfeasible() == true) 
-				osresult->setSolutionStatus(solIdx, "infeasible", description);
-			else
-				if(osiSolver->isProvenDualInfeasible() == true) 
-					osresult->setSolutionStatus(solIdx, "dualinfeasible", description);
-				else
-					osresult->setSolutionStatus(solIdx, "other", description);
-		}
-		osrl = osrlwriter->writeOSrL( osresult);
-		if(osinstance->getVariableNumber() > 0) delete[] x;
-		x = NULL;
-		if(osinstance->getConstraintNumber()) delete[] y;
-		y = NULL;
-		delete[] z;	
-		z = NULL;
-		if(osinstance->getVariableNumber() > 0){
-			delete[] rcost;
-			rcost = NULL;
-		}
-		cout << "DONE WITH COIN SOLVER WHICH IS NOT SOLVE" << endl;
-		*/
 	}
 	catch(const ErrorClass& eclass){
 		osresult->setGeneralMessage( eclass.errormsg);
