@@ -129,6 +129,8 @@
 
 			<solverOption name="LS_IPARAM_LP_PRINTLEVEL" solver="lindo" category="model"  type="integer" value="0"></solverOption>
 			<solverOption name="LS_IPARAM_LP_PRINTLEVEL" solver="lindo" category="environment" type="integer" value="1"></solverOption>
+
+
 			<solverOption name="OsiDoReducePrint" solver="osi" type="OsiHintParam"  value="true"></solverOption>
 			<solverOption name="OsiHintIgnore" solver="osi" type="OsiHintStrength"   ></solverOption>
 
