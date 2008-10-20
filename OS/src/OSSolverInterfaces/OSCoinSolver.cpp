@@ -257,7 +257,21 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 	//
 	//
 	// initialize low level of printing
-	osiSolver->setHintParam(OsiDoReducePrint, true, OsiHintIgnore);	
+	
+	
+	/* 
+	 * start default settings -- these get set
+	 * even when the OSOption object is NULL
+	 * 
+	 * */
+	OsiHintStrength hintStrength = OsiHintTry; //don't want too much output
+	osiSolver->setHintParam(OsiDoReducePrint, true, hintStrength);
+	osiSolver->setDblParam(OsiObjOffset, osinstance->getObjectiveConstants()[0]);
+	/* 
+	 * end default settings 
+	 * 
+	 * */
+	
 	//
 	try{
 		if(osoption != NULL){
@@ -270,17 +284,6 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 			int i;
 			char *pEnd;
 			bool yesNo;
-			
-			/* 
-			 * start default settings 
-			 * 
-			 * */
-			OsiHintStrength hintStrength = OsiHintTry; //don't want too much output
-			osiSolver->setDblParam(OsiObjOffset, osinstance->getObjectiveConstants()[0]);
-			/* 
-			 * end default settings 
-			 * 
-			 * */
 
 			for(i = 0; i < num_osi_options; i++){
 				std::cout << "osi solver option  "  << optionsVector[ i]->name << std::endl;
@@ -392,6 +395,8 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 			
 			// set some OSI options
 	#ifdef COIN_HAS_SYMPHONY
+			//if(optionsVector.size() > 0) optionsVector.clear();
+			if( !optionsVector.empty() ) optionsVector.clear();	
 			//first the number of processors -- applies only to SYMPHONY
 			if( sSolverName.find( "symphony") != std::string::npos) {
 				OsiSymSolverInterface * si =
@@ -414,10 +419,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 			}
 	#endif	
 			
-			//symphony end
-			
-			
-			
+			//symphony end		
 			//now set initial values
 			/*
 			double* denseInitVarVector;
@@ -435,9 +437,6 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 			*/
 			
 		}// end of osopotion if	
-		
-		
-
 		
 		
 	}//end of try 
