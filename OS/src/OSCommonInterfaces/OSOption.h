@@ -1881,7 +1881,7 @@ public: //Put the get() and set() methods...
 	int getnumberOfInitVarValuesString();
 
 	/**
-	 * Get the initial values associated with the variables in sparse form
+	 * Get the initial value strings associated with the variables in sparse form
 	 * <p>
 	 * 
 	 * @return a vector of strings that 
@@ -1890,13 +1890,134 @@ public: //Put the get() and set() methods...
 	std::vector<InitVarValueString*> getInitVarStringsSparse();
 
 	/**
-	 * Get the initial values associated with the variables in dense form
+	 * Get the initial value strings associated with the variables in dense form
 	 * <p>
 	 * 
 	 * @return a vector of strings that 
-	 * hold inital value strings for all of the variables
+	 * hold inital value strings (or OSNAN) for all of the variables
 	 */
 	std::string *getInitVarStringsDense(int numberOfVariables);
+
+	/**
+	 * Get the number of initial objective values. 
+	 * 
+	 * @return the number of initial objective values. 
+	 */
+	int getnumberOfInitObjValues();
+
+	/**
+	 * Get the initial values associated with the objectives in sparse form
+	 * <p>
+	 * 
+	 * @return a vector of pointers to InitObjValue objects that 
+	 * hold inital values for (some of) the objectives
+	 */
+	std::vector<InitObjValue*> getInitObjValuesSparse();
+
+	/**
+	 * Get the initial values associated with the objectives in dense form
+	 * <p>
+	 * 
+	 * @return a vector of double that 
+	 * hold inital values (or OSNAN) for all of the objectives
+	 */
+	double *getInitObjValuesDense(int numberOfObjectives);
+
+
+	/**
+	 * Get the number of initial objective bounds. 
+	 * 
+	 * @return the number of initial objective bound values. 
+	 */
+	int getnumberOfInitObjBounds();
+
+	/**
+	 * Get the initial bounds associated with the objectives in sparse form
+	 * <p>
+	 * 
+	 * @return a vector of pointers to InitObjBound objects that 
+	 * hold inital bounds for (some of) the objectives
+	 */
+	std::vector<InitObjBound*> getInitObjBoundsSparse();
+
+	/**
+	 * Get the initial lower bounds associated with the objectives in dense form
+	 * <p>
+	 * 
+	 * @return a vector of double that 
+	 * hold inital lower bounds (or OSNAN) for all of the objectives
+	 */
+	double *getInitObjLowerBoundsDense(int numberOfObjectives);
+
+	/**
+	 * Get the initial upper bounds associated with the objectives in dense form
+	 * <p>
+	 * 
+	 * @return a vector of double that 
+	 * hold inital upper bounds (or OSNAN) for all of the objectives
+	 */
+	double *getInitObjUpperBoundsDense(int numberOfObjectives);
+
+	/**
+	 * Get the number of initial constraint values. 
+	 * 
+	 * @return the number of initial constraint values. 
+	 */
+	int getnumberOfInitConValues();
+
+	/**
+	 * Get the initial values associated with the constraints in sparse form
+	 * <p>
+	 * 
+	 * @return a vector of pointers to InitConValue objects that 
+	 * hold inital values for (some of) the constraints
+	 */
+	std::vector<InitConValue*> getInitConValuesSparse();
+
+	/**
+	 * Get the initial values associated with the constraints in dense form
+	 * <p>
+	 * 
+	 * @return a vector of double that 
+	 * hold inital values for all of the constraints
+	 */
+	double *getInitConValuesDense(int numberOfConstraints);
+
+	/**
+	 * Get the number of initial dual variable values. 
+	 * 
+	 * @return the number of initial dual variable values. 
+	 */
+	int getnumberOfInitDualVarValues();
+
+	/**
+	 * Get the initial bounds associated with the dual variables in sparse form
+	 * <p>
+	 * 
+	 * @return a vector of pointers to InitDualVarValue objects that 
+	 * hold inital bounds for (some of) the dual variables
+	 */
+	std::vector<InitDualVarValue*> getInitDualVarValuesSparse();
+
+	/**
+	 * Get the initial lower bounds associated with the dual variables in dense form
+	 * <p>
+	 * 
+	 * @return a vector of double that 
+	 * hold initial lower bounds for all of the dual variables
+	 */
+	double *getInitDualVarLowerBoundsDense(int numberOfConstraints);
+
+
+	/**
+	 * Get the initial upper bounds associated with the dual variables in dense form
+	 * <p>
+	 * 
+	 * @return a vector of double that 
+	 * hold initial upper bounds for all of the dual variables
+	 */
+	double *getInitDualVarUpperBoundsDense(int numberOfConstraints);
+
 
 	/**
 	 * Get the number of solver options. 

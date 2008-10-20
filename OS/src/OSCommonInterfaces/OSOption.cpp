@@ -1166,7 +1166,7 @@ double* OSOption::getInitVarValuesDense(int numberOfVariables){
 	{	throw ErrorClass(eclass.errormsg);
 	}
 	return initVarVector;
-}//getInitVarStringsDense
+}//getInitVarValuesDense
 
 int OSOption::getnumberOfInitVarValuesString(){
 	if(m_inumberOfInitVarValuesString == -1){
@@ -1227,6 +1227,313 @@ std::string *OSOption::getInitVarStringsDense(int numberOfVariables){
 	}
 	return initVarVector;
 }//getInitVarStringsDense
+
+
+int OSOption::getnumberOfInitObjValues(){
+	if(m_inumberOfInitObjValues == -1){
+		if (this->optimization != NULL) {
+			if(this->optimization->objectives != NULL) {
+				if(this->optimization->objectives->initialObjectiveValues != NULL) {
+					m_inumberOfInitObjValues = this->optimization->objectives->initialObjectiveValues->numberOfObj;
+				}
+			}
+		}
+	}
+	return m_inumberOfInitObjValues;
+}//getnumberOfInitObjValues
+
+std::vector<InitObjValue*>  OSOption::getInitObjValuesSparse(){
+	std::vector<InitObjValue*> initObjVector;
+	if (this->optimization != NULL) {
+		if(this->optimization->objectives != NULL) {
+			if(this->optimization->objectives->initialObjectiveValues != NULL) {
+			int i;
+			int num_obj;
+			num_obj = this->getnumberOfInitObjValues();
+			for(i = 0; i < num_obj; i++){
+				printf("\n%d\n",this->optimization->objectives->initialObjectiveValues->obj[ i]->idx);
+				printf("\n%d\n",this->optimization->objectives->initialObjectiveValues->obj[ i]->value);
+				initObjVector.push_back( this->optimization->objectives->initialObjectiveValues->obj[ i]);
+				}
+			}
+		}					
+	}
+	return initObjVector;
+}//getInitObjValuesSparse
+
+double* OSOption::getInitObjValuesDense(int numberOfObjectives){
+	double *initObjVector;
+	initObjVector = new double[numberOfObjectives];
+	for (int k = 0; k < numberOfObjectives; k++) initObjVector[k] = OSNAN;
+	try
+	{	if (this->optimization != NULL) 
+		{	if(this->optimization->objectives != NULL) 
+			{	if(this->optimization->objectives->initialObjectiveValues != NULL) 
+				{	int i,j;
+					int num_obj;
+					num_obj = this->getnumberOfInitObjValues();
+					for(i = 0; i < num_obj; i++)
+					{	j = this->optimization->objectives->initialObjectiveValues->obj[i]->idx;
+						if (j < 0 && -j <= numberOfObjectives)						
+							initObjVector[j] 
+							  = this->optimization->objectives->initialObjectiveValues->obj[i]->value;						
+						else
+							throw ErrorClass("Objective index out of range");
+					}
+				}
+			}
+		}					
+	}
+	catch(const ErrorClass& eclass)
+	{	throw ErrorClass(eclass.errormsg);
+	}
+	return initObjVector;
+}//getInitObjValuesDense
+
+int OSOption::getnumberOfInitObjBounds(){
+	if(m_inumberOfInitObjBounds == -1){
+		if (this->optimization != NULL) {
+			if(this->optimization->objectives != NULL) {
+				if(this->optimization->objectives->initialObjectiveBounds != NULL) {
+					m_inumberOfInitObjBounds = this->optimization->objectives->initialObjectiveBounds->numberOfObj;
+				}
+			}
+		}
+	}
+	return m_inumberOfInitObjBounds;
+}//getnumberOfInitObjBounds
+
+std::vector<InitObjBound*>  OSOption::getInitObjBoundsSparse()
+{	std::vector<InitObjBound*> initObjBounds;
+	if (this->optimization != NULL) 
+	{	if(this->optimization->objectives != NULL) 
+		{	if(this->optimization->objectives->initialObjectiveBounds != NULL) 
+			{	int i;
+				int num_obj;
+				num_obj = this->getnumberOfInitObjBounds();
+				for(i = 0; i < num_obj; i++)
+				{	printf("\n%d\n",this->optimization->objectives->initialObjectiveBounds->obj[ i]->idx);
+					printf("\n%d\n",this->optimization->objectives->initialObjectiveBounds->obj[ i]->lbValue);
+					printf("\n%d\n",this->optimization->objectives->initialObjectiveBounds->obj[ i]->ubValue);
+					initObjBounds.push_back( this->optimization->objectives->initialObjectiveBounds->obj[ i]);
+				}
+			}
+		}					
+	}
+	return initObjBounds;
+}//getInitObjBoundsSparse
+
+double* OSOption::getInitObjLowerBoundsDense(int numberOfObjectives){
+	double *initObjBound;
+	initObjBound = new double[numberOfObjectives];
+	for (int k = 0; k < numberOfObjectives; k++) initObjBound[k] = OSNAN;
+	try
+	{	if (this->optimization != NULL) 
+		{	if(this->optimization->objectives != NULL) 
+			{	if(this->optimization->objectives->initialObjectiveBounds != NULL) 
+				{	int i,j;
+					int num_obj;
+					num_obj = this->getnumberOfInitObjBounds();
+					for(i = 0; i < num_obj; i++)
+					{	j = this->optimization->objectives->initialObjectiveBounds->obj[i]->idx;
+						if (j < 0 && -j <= numberOfObjectives)						
+							initObjBound[j] 
+							  = this->optimization->objectives->initialObjectiveBounds->obj[i]->lbValue;
+						else
+							throw ErrorClass("Objective index out of range");
+					}
+				}
+			}
+		}					
+	}
+	catch(const ErrorClass& eclass)
+	{	throw ErrorClass(eclass.errormsg);
+	}
+	return initObjBound;
+}//getInitObjLowerBoundsDense
+
+double* OSOption::getInitObjUpperBoundsDense(int numberOfObjectives){
+	double *initObjBound;
+	initObjBound = new double[numberOfObjectives];
+	for (int k = 0; k < numberOfObjectives; k++) initObjBound[k] = OSNAN;
+	try
+	{	if (this->optimization != NULL) 
+		{	if(this->optimization->objectives != NULL) 
+			{	if(this->optimization->objectives->initialObjectiveBounds != NULL) 
+				{	int i,j;
+					int num_obj;
+					num_obj = this->getnumberOfInitObjBounds();
+					for(i = 0; i < num_obj; i++)
+					{	j = this->optimization->objectives->initialObjectiveBounds->obj[i]->idx;
+						if (j < 0 && -j <= numberOfObjectives)						
+							initObjBound[j] 
+							  = this->optimization->objectives->initialObjectiveBounds->obj[i]->ubValue;
+						else
+							throw ErrorClass("Objective index out of range");
+					}
+				}
+			}
+		}					
+	}
+	catch(const ErrorClass& eclass)
+	{	throw ErrorClass(eclass.errormsg);
+	}
+	return initObjBound;
+}//getInitObjUpperBoundsDense
+
+
+int OSOption::getnumberOfInitConValues(){
+	if(m_inumberOfInitConValues == -1){
+		if (this->optimization != NULL) {
+			if(this->optimization->constraints != NULL) {
+				if(this->optimization->constraints->initialConstraintValues != NULL) {
+					m_inumberOfInitConValues = this->optimization->constraints->initialConstraintValues->numberOfCon;
+				}
+			}
+		}
+	}
+	return m_inumberOfInitConValues;
+}//getnumberOfInitConValues
+
+std::vector<InitConValue*>  OSOption::getInitConValuesSparse(){
+	std::vector<InitConValue*> initConVector;
+	if (this->optimization != NULL) {
+		if(this->optimization->constraints != NULL) {
+			if(this->optimization->constraints->initialConstraintValues != NULL) {
+			int i;
+			int num_con;
+			num_con = this->getnumberOfInitConValues();
+			for(i = 0; i < num_con; i++){
+				printf("\n%d\n",this->optimization->constraints->initialConstraintValues->con[ i]->idx);
+				printf("\n%d\n",this->optimization->constraints->initialConstraintValues->con[ i]->value);
+				initConVector.push_back( this->optimization->constraints->initialConstraintValues->con[ i]);
+				}
+			}
+		}					
+	}
+	return initConVector;
+}//getInitConValuesSparse
+
+double* OSOption::getInitConValuesDense(int numberOfConstraints){
+	double *initConVector;
+	initConVector = new double[numberOfConstraints];
+	for (int k = 0; k < numberOfConstraints; k++) initConVector[k] = OSNAN;
+	try
+	{	if (this->optimization != NULL) 
+		{	if(this->optimization->constraints != NULL) 
+			{	if(this->optimization->constraints->initialConstraintValues != NULL) 
+				{	int i,j;
+					int num_con;
+					num_con = this->getnumberOfInitConValues();
+					for(i = 0; i < num_con; i++)
+					{	j = this->optimization->constraints->initialConstraintValues->con[i]->idx;
+						if (j >= 0 && j < numberOfConstraints)						
+							initConVector[j] 
+							  = this->optimization->constraints->initialConstraintValues->con[i]->value;						
+						else
+							throw ErrorClass("Constraint index out of range");
+					}
+				}
+			}
+		}					
+	}
+	catch(const ErrorClass& eclass)
+	{	throw ErrorClass(eclass.errormsg);
+	}
+	return initConVector;
+}//getInitConValuesDense
+
+//-----------------------------------------
+int OSOption::getnumberOfInitDualVarValues(){
+	if(m_inumberOfInitDualVarValues == -1){
+		if (this->optimization != NULL) {
+			if(this->optimization->constraints != NULL) {
+				if(this->optimization->constraints->initialDualValues != NULL) {
+					m_inumberOfInitDualVarValues = this->optimization->constraints->initialDualValues->numberOfCon;
+				}
+			}
+		}
+	}
+	return m_inumberOfInitDualVarValues;
+}//getnumberOfInitDualVarValues
+
+std::vector<InitDualVarValue*>  OSOption::getInitDualVarValuesSparse(){
+	std::vector<InitDualVarValue*> initDualVector;
+	if (this->optimization != NULL) {
+		if(this->optimization->constraints != NULL) {
+			if(this->optimization->constraints->initialDualValues != NULL) {
+			int i;
+			int num_con;
+			num_con = this->getnumberOfInitDualVarValues();
+			for(i = 0; i < num_con; i++){
+				printf("\n%d\n",this->optimization->constraints->initialDualValues->con[ i]->idx);
+				printf("\n%d\n",this->optimization->constraints->initialDualValues->con[ i]->lbValue);
+				printf("\n%d\n",this->optimization->constraints->initialDualValues->con[ i]->ubValue);
+				initDualVector.push_back( this->optimization->constraints->initialDualValues->con[ i]);
+				}
+			}
+		}					
+	}
+	return initDualVector;
+}//getInitDualVarValuesSparse
+
+double* OSOption::getInitDualVarLowerBoundsDense(int numberOfConstraints){
+	double *initDualVector;
+	initDualVector = new double[numberOfConstraints];
+	for (int k = 0; k < numberOfConstraints; k++) initDualVector[k] = OSNAN;
+	try
+	{	if (this->optimization != NULL) 
+		{	if(this->optimization->constraints != NULL) 
+			{	if(this->optimization->constraints->initialDualValues != NULL) 
+				{	int i,j;
+					int num_con;
+					num_con = this->getnumberOfInitDualVarValues();
+					for(i = 0; i < num_con; i++)
+					{	j = this->optimization->constraints->initialDualValues->con[i]->idx;
+						if (j >= 0 && j < numberOfConstraints)						
+							initDualVector[j] 
+							  = this->optimization->constraints->initialDualValues->con[i]->lbValue;						
+						else
+							throw ErrorClass("Constraint index out of range");
+					}
+				}
+			}
+		}					
+	}
+	catch(const ErrorClass& eclass)
+	{	throw ErrorClass(eclass.errormsg);
+	}
+	return initDualVector;
+}//getInitDualVarLowerBoundsDense
+
+double* OSOption::getInitDualVarUpperBoundsDense(int numberOfConstraints){
+	double *initDualVector;
+	initDualVector = new double[numberOfConstraints];
+	for (int k = 0; k < numberOfConstraints; k++) initDualVector[k] = OSNAN;
+	try
+	{	if (this->optimization != NULL) 
+		{	if(this->optimization->constraints != NULL) 
+			{	if(this->optimization->constraints->initialDualValues != NULL) 
+				{	int i,j;
+					int num_con;
+					num_con = this->getnumberOfInitDualVarValues();
+					for(i = 0; i < num_con; i++)
+					{	j = this->optimization->constraints->initialDualValues->con[i]->idx;
+						if (j >= 0 && j < numberOfConstraints)						
+							initDualVector[j] 
+							  = this->optimization->constraints->initialDualValues->con[i]->ubValue;	
+						else
+							throw ErrorClass("Constraint index out of range");
+					}
+				}
+			}
+		}					
+	}
+	catch(const ErrorClass& eclass)
+	{	throw ErrorClass(eclass.errormsg);
+	}
+	return initDualVector;
+}//getInitDualVarUpperBoundsDense
 
 int OSOption::getnumberOfSolverOptions(){
 	if(m_inumberOfSolverOptions == -1){
