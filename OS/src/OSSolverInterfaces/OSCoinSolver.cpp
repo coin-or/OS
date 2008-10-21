@@ -577,7 +577,13 @@ void CoinSolver::solve() throw (ErrorClass) {
 				writeResult( solver);
 			}
 			else{ // use other solvers
-				osiSolver->initialSolve();
+				//if an LP just do initial solve
+				if( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0){
+					osiSolver->branchAndBound();
+				}
+				else{
+					osiSolver->initialSolve();
+				}
 				writeResult( osiSolver);
 			}
 		}
