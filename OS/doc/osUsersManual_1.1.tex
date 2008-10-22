@@ -4151,6 +4151,146 @@ may be empty because no options are required to get the JobID)
 \end{figure}
 
 
+\subsection{Passing Options to Solvers}
+
+The OSoL (Optimization Services option Language) protocol is used to pass options to solvers.   When using the {\tt OSSolverService} executable this will typically be done through an OSoL XML file by specifying the {\tt -osol} option followed by the location of the file.  However, it is also possible to write a custom application that links to the OS library and to build an OSOption object in-memory and then pass this to a solver. We next describe the  feature of the OSoL protocol that will be the most useful to the typical user.
+
+In the OSoL protocol there is an element {\tt <solverOptions>} that can have any number of {\tt <solverOption>} children. (See the file {\tt parsertest.osol} in OS/data/osolFiles.)  Each {\tt <solverOption>} child can have six attributes, all of which except one are optional. These attributes are:
+
+\begin{itemize}
+
+\item {\bf name:} this is the only required attribute and is the option name. It should be unique.
+
+\item {\bf value:}  the value of the option
+
+\item {\bf solver:} the name of the solver associated with the option
+
+\item {\bf type:} this will usually be a data type (such as integer, string, double, etc.) but this is not necessary
+
+\item {\bf category:} the same solver option may apply to multiple categories so it may be necessary to specify a category for solver. For example, in LINDO an option can apply to a specific model or to every model in an environment. Hence we might have
+
+\begin{verbatim}
+<solverOption name="LS_IPARAM_LP_PRINTLEVEL" 
+   solver="lindo" category="model"  type="integer" value="0"/>
+<solverOption name="LS_IPARAM_LP_PRINTLEVEL" 
+   solver="lindo" category="environment" type="integer" value="1"/>
+\end{verbatim}
+where we specify the print level for a specific model or the entire environment.   The category attribute should be separated by : if there is more than one  category or  additional subcategories.
+
+\item {\bf description:} a description of the option, typically this would not get passed to the solver.
+
+\end{itemize}
+
+As of, trunk version 2164 the reading of an OSoL file is implemented in the {\bf OSCoinSolver}, {\bf OSBonmin}, and {\bf OSIpopt} solver interfaces.   The  {\bf OSBonmin}, and {\bf OSIpopt} solvers have particularly easy interfaces. They have methods for integer, string, and numeric data types and then take options in format of {\tt (name, value)} pairs.   Below is an example of options for {\bf Ipopt}.
+
+
+\begin{verbatim}
+<solverOption name="mu_strategy" solver="ipopt" 
+     type="string" value="adaptive"/>
+<solverOption name="tol" solver="ipopt" 
+     type="numeric" value="1.e-9"/>
+<solverOption name="print_level" solver="ipopt" 
+     type="integer" value="5"/>
+<solverOption name="max_iter" solver="ipopt" 
+     type="integer" value="2000"/>
+\end{verbatim}
+
+We have also implemented the {\tt OSOption} class for the {\bf OSCoinSolver} interface. There are two ways this works. First, options can be set through the Osi Solver interface (the OSCoinSolver interface wraps around the Osi Solver interface).    We have implemented all of the options listed in {\bf OsiSolverParameters.hpp} in {\bf Osi} trunk version 1316.  In the Osi solver interface, in addition to string, double, and integer types  there is a {\tt type} called {\bf HintParam} and a {\tt type} called {\bf OsiHintParam}. The value of the {\bf OsiHintParam} is an {\bf OsiHintStrength} type, which is confusing. For example, to have the following Osi method called
+
+\begin{verbatim}
+setHintParam(OsiDoReducePrint, true, hintStrength);
+\end{verbatim}
+
+
+the user should set the following {\tt <solverOption>} tags:
+\begin{verbatim}
+<solverOption name="OsiDoReducePrint" solver="osi" 
+    type="OsiHintParam"  value="true" />
+<solverOption name="OsiHintIgnore" solver="osi" 
+     type="OsiHintStrength" />
+\end{verbatim}
+There should be only one {\tt <solverOption>} with type {\bf OsiHintStrength} and if there are more than one in the OSoL file (string) the last one is the one implemented. 
+
+In addition to setting options using the Osi  Solver interface, it is possible to pass options directly to the {\bf Cbc} solver. By default the following options are sent to the {\bf Cbc} solver,
+
+\begin{verbatim}
+-log=0  -solve 
+\end{verbatim}
+The {\tt -log=0} will keep the branch-and-bound output to a minimum.  These default options are overridden by putting in at least one {\tt <solverOption>} tag with the {\tt solver} attribute set to {\tt cbc}.    For example, the following sequence of options will limit the search to 100 nodes, cut generation turned off.
+
+\begin{verbatim}
+<solverOption name="maxN" solver="cbc" value="100" />
+<solverOption name="cuts" solver="cbc" value="off" />
+<solverOption name="solve" solver="cbc"  />
+\end{verbatim}
+
+Any option that {\bf Cbc} accepts at the command line be put into a {\tt <solverOption>} tag. We list  those below.
+
+{\small
+\begin{verbatim}
+Double parameters:
+  dualB(ound)  dualT(olerance)  primalT(olerance)  primalW(eight)  
+Branch and Cut double parameters:
+  allow(ableGap)  cuto(ff)  inc(rement)  inf(easibilityWeight)  integerT(olerance)  
+  preT(olerance)  ratio(Gap)  sec(onds)  
+Integer parameters:
+  cpp(Generate)  force(Solution)  idiot(Crash)  maxF(actor)  maxIt(erations)  
+  output(Format)  slog(Level)  sprint(Crash)  
+Branch and Cut integer parameters:
+  cutD(epth)  log(Level)  maxN(odes)  maxS(olutions)  passC(uts)  
+  passF(easibilityPump)  passT(reeCuts)  pumpT(une)  strat(egy)  strong(Branching)  
+  trust(PseudoCosts)  
+Keyword parameters:
+  chol(esky)  crash  cross(over)  direction  dualP(ivot)  
+  error(sAllowed)  keepN(ames)  mess(ages)  perturb(ation)  presolve  
+  primalP(ivot)  printi(ngOptions)  scal(ing)  
+Branch and Cut keyword parameters:
+  clique(Cuts)  combine(Solutions)  cost(Strategy)  cuts(OnOff)  Dins  
+  DivingS(ome)  DivingC(oefficient)  DivingF(ractional)  DivingG(uided)  DivingL(ineSearch)  
+  DivingP(seudoCost)  DivingV(ectorLength)  feas(ibilityPump)  flow(CoverCuts)  gomory(Cuts)  
+  greedy(Heuristic)  heur(isticsOnOff)  knapsack(Cuts)  lift(AndProjectCuts)  local(TreeSearch)  
+  mixed(IntegerRoundingCuts)  node(Strategy)  pivot(AndFix)  preprocess  probing(Cuts)  
+  rand(omizedRounding)  reduce(AndSplitCuts)  residual(CapacityCuts)  Rens  Rins  
+  round(ingHeuristic)  sos(Options)  two(MirCuts)  
+Actions or string parameters:
+  allS(lack)  barr(ier)  basisI(n)  basisO(ut)  directory  
+  dirSample  dirNetlib  dirMiplib  dualS(implex)  either(Simplex)  
+  end  exit  export  help  import  
+  initialS(olve)  max(imize)  min(imize)  netlib  netlibD(ual)  
+  netlibP(rimal)  netlibT(une)  primalS(implex)  printM(ask)  quit  
+  restore(Model)  saveM(odel)  saveS(olution)  solu(tion)  stat(istics)  
+  stop  unitTest  userClp  
+Branch and Cut actions:
+  branch(AndCut)  doH(euristic)  miplib  prio(rityIn)  solv(e)  
+  strengthen  userCbc  
+\end{verbatim}
+}
+
+
+The user may also wish to an initial starting solution. This is particularly useful with interior point methods.  This is accomplished by using the {\tt <initialVariableValues> tag.  Below we illustrate how to set the initial values for variables with an index of 0, 1, and 3.
+
+\begin{verbatim}
+<initialVariableValues numberOfVar="3">
+   <var idx="0" value="1"/>
+   <var idx="1" value="4.742999643577776" />
+   <var idx="3" value="1.379408293215363"/>
+</initialVariableValues>
+\end{verbatim}
+
+As of, trunk version 2164 the initial values for variables can be passed to the {\bf Bonmin} and {\bf Ipopt} solvers.
+
+
+When implementing solver options in-memory, the typical calling sequence is:
+
+\begin{verbatim}
+solver->buildSolverInstance();
+solver->setSolverOptions();
+solver->solve();
+\end{verbatim}
+
+
+
+
 
 
 \section{Setting up a Solver Service with Apache Tomcat}\label{section:tomcat}

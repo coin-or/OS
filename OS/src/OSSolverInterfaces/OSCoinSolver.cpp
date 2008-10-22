@@ -353,7 +353,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 				char *cstr;
 				std::string cbc_option;
 				// we are going to add a log level option -- it can be overridden
-				num_cbc_argv = optionsVector.size() + 3;
+				num_cbc_argv = optionsVector.size() + 2;
 				cbc_argv = new const char*[ num_cbc_argv];
 				
 				// the first option
@@ -362,11 +362,6 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 				strcpy (cstr, cbc_option.c_str());
 				cbc_argv[ 0] = cstr;
 				
-				// the log option -- by default minimal printing
-				cbc_option = "-log=0";
-				cstr = new char [cbc_option.size() + 1];
-				strcpy (cstr, cbc_option.c_str());
-				cbc_argv[ 1] = cstr;
 				
 				for(i = 0; i < num_cbc_options; i++){
 					std::cout << "cbc solver option  "  << optionsVector[ i]->name << std::endl;
@@ -379,7 +374,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 					}
 					cstr = new char [cbc_option.size() + 1];
 					strcpy (cstr, cbc_option.c_str());
-					cbc_argv[i +  2] = cstr;		
+					cbc_argv[i +  1] = cstr;		
 				}
 				
 				// the quit option
