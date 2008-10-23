@@ -98,82 +98,87 @@
 \newif\ifipopt  \ipopttrue      % change to \ipopttrue  once we get the build problems sorted out
 
 
-\begin{document}
-
-
 % We use a number of URLs that point to software downloads. These locations are forever changing,
 % and maintaining them is a nightmare. All the URLs are gathered here, so that we can at least
-% get away with making all the changes only once...
-%\newcommand{\URLampl}{http://www.ampl.com}
-%\newcommand{\URLamplSandia}{http://netlib.sandia.gov/ampl/}
-%\newcommand{\URLamplSolvers}{http://netlib.sandia.gov/cgi-bin/netlib/netlibfiles.tar?filename=netlib/ampl/solvers}
-%\newcommand{\URLapacheFileupload}{http://jakarta.apache.org/commons/fileupload/}
-%\newcommand{\URLblas}{ftp://www.netlib.org/blas/blas.tgz}
-%\newcommand{\URLbuildtools}{http://projects.coin-or.org\BuildTools}
-%\newcommand{\URLcbc}{http://projects.coin-or.org/Cbc}
-%\newcommand{\URLcgl}{http://projects.coin-or.org/Cgl}
-%\newcommand{\URLcl}{http://www.microsoft.com/express/download/\#webInstall}
-%\newcommand{\URLclp}{http://projects.coin-or.org/Clp}
-%\newcommand{\URLcoinConfig}{https://projects.coin-or.org/BuildTools/wiki/user-configure\#PreparingtheCompilation}
-%\newcommand{\URLcoinConfigure}{http://projects.coin-or.org/BuildTools/wiki/user-configure\#CommandLineArgumentsforconfigure}
-%\newcommand{\URLcoinDownload}{http://projects.coin-or.org/BuildTools/wiki/user-download\#DownloadingtheSourceCode}
-%\newcommand{\URLcoinNames}{https://projects.coin-or.org/CoinBinary/wiki/ArchiveNamingConventions}
-%\newcommand{\URLcoinProjects}{http://www.coin-or.org/projects/}
-%\newcommand{\URLcoinutils}{http://projects.coin-or.org/CoinUtils}
-%\newcommand{\URLcpl}{http://www.ibm.com/developerworks/library/os-cpl.html}
-%\newcommand{\URLcplex}{http://www.ilog.com/products/cplex/}
-%\newcommand{\URLcppad}{http://projects.coin-or.org/CppAD}
-%\newcommand{\URLcygwin}{http://projects.coin-or.org/BuildTools/wiki/current-issues}
-%\newcommand{\URLcygwinMake}{http://www.cmake.org/files/cygwin/make.exe}
-%\newcommand{\URLcygwinSetup}{http://www.cygwin.com/setup.exe}
-%\newcommand{\URLdylp}{http://projects.coin-or.org/DyLP}
-%\newcommand{\URLfToc}{http://www.netlib.org/f2c}
-%\newcommand{\URLfTocBin}{http://www.netlib.org/f2c/mswin/}
-%\newcommand{\URLfTocZip}{http://www.netlib.org/f2c/libf2c.zip}
-%\newcommand{\URLggs}{http://www.g95.org}
-%\newcommand{\URLgamslinks}{https://projects.coin-or.org/svn/GAMSlinks/trunk}
-%\newcommand{\URLgcc}{http://gcc.gnu.org}
-%\newcommand{\URLgfortran}{http://gcc.gnu.org/fortran/}
-%\newcommand{\URLglpk}{http://www.gnu.org/software/glpk/}
-%\newcommand{\URLglpkDownload}{ftp://ftp.gnu.org/gnu/glpk/glpk-4.32.tar.gz}
-%\newcommand{\URLhsl}{http://www.cse.scitech.ac.uk/nag/hsl/}
-%\newcommand{\URLipopt}{http://projects.coin-or.org/Ipopt}
-%\newcommand{\URLipoptDoc}{https://projects.coin-or.org/Ipopt/browser/stable/3.5/Ipopt/doc/documentation.pdf?format=raw}
-%\newcommand{\URLipoptDocxiii}{http://www.coin-or.org/Ipopt/documentation/node13.html}
-%\newcommand{\URLkippFileupload}{http://gsbkip.chicagogsb.edu/os/fileupload.html}
-%\newcommand{\URLknitro}{http://www.ziena.com/}
-%\newcommand{\URLknitroMan}{http://www.ziena.com/docs/knitroman.pdf}
-%\newcommand{\URLlapack}{ftp://www.netlib.org/lapack/lapack-lite-3.1.0.tgz}
-%\newcommand{\URLmingw}{http://downloads.sourceforge.net/mingw/MSYS-1.0.11.exe?modtime=1079444447\&big\_mirror=1\}
-%\newcommand{\URLmsys}{http://sourceforge.net/project/showfiles.php?group\_id=2435}
-%\newcommand{\URLmsysBinary}{http://downloads.sourceforge.net/mingw/bash-3.1-MSYS-1.0.11-1.tar.bz2?modtime=1195140582\&big\_mirror=1}
-%\newcommand{\URLnewticket}{http://projects.coin-or.org/OS/newticket}
-%\newcommand{\URLnightlybuild}{https://projects.coin-or.org/TestTools/wiki/NightlyBuildInAction}
-%\newcommand{\URLos}{http://www.optimizationservices.org}
-%\newcommand{\URLosBinaries}{http://www.coin-or.org/download/binary/OS/}
-%\newcommand{\URLosCommon}{https://projects.coin-or.org/svn/OS/branches/OScpp/OSCommon}
-%\newcommand{\URLosDoxygen}{http://www.coin-or.org/OS/doxydoc/html/index.html}
-%\newcommand{\URLosi}{http://projects.coin-or.org/Osi}
-%\newcommand{\URLosJava}{https://projects.coin-or.org/svn/OS/branches/OSjava}
-%\newcommand{\URLosRelease}{https://projects.coin-or.org/svn/OS/releases/1.1.1}
-%\newcommand{\URLosStable}{https://projects.coin-or.org/svn/OS/stable/1.1}
-%\newcommand{\URLosTarball}{http://www.coin-or.org/Tarballs/OS/}
-%\newcommand{\URLosWin}{https://projects.coin-or.org/CoinBinary/browser/binary/OS}
-%\newcommand{\URLparinclinear}{http://www.coin-or.org/OS/parincLinear.osil}
-%\newcommand{\URLsdk}{http://www.microsoft.com/downloads/details.aspx?FamilyID=E6E1C3DF-A74F-4207-8586-711EBE331CDC&displaylang=en}
-%\newcommand{\URLsvn}{http://subversion.tigris.org}
-%\newcommand{\URLsymphony}{http://projects.coin-or.org/SYMPHONY}
-%\newcommand{\URLtomcat}{http://tomcat.apache.org/}
-%\newcommand{\URLtrac}{http://projects.coin-or.org/OS}
-%\newcommand{\URLusingtrac}{http://www.coin-or.org/usingTrac.html}
-%\newcommand{\URLvol}{http://projects.coin-or.org/Vol}
-%\newcommand{\URLwget}{http://www.christopherlewis.com/WGet/WGetFiles.htm}
-%\newcommand{\URLwgetBinary}{http://www.christopherlewis.com/WGet/wget-1.11.4b.zip}
+% get away with making changes only once...
+\newcommand{\UrlAmpl}{http://www.ampl.com}
+\newcommand{\UrlAmplSandia}{http://netlib.sandia.gov/ampl/}
+\newcommand{\UrlAmplSolvers}{http://netlib.sandia.gov/cgi-bin/netlib/netlibfiles.tar?filename=netlib/ampl/solvers}
+\newcommand{\UrlApacheFileupload}{http://jakarta.apache.org/commons/fileupload/}
+\newcommand{\UrlBlas}{ftp://www.netlib.org/blas/blas.tgz}
+\newcommand{\UrlBuildtools}{http://projects.coin-or.org/BuildTools}
+\newcommand{\UrlCbc}{http://projects.coin-or.org/Cbc}
+\newcommand{\UrlCgl}{http://projects.coin-or.org/Cgl}
+\newcommand{\UrlCl}{http://www.microsoft.com/express/download/\#webInstall}
+\newcommand{\UrlClp}{http://projects.coin-or.org/Clp}
+\newcommand{\UrlCoinConfig}{https://projects.coin-or.org/BuildTools/wiki/user-configure\#PreparingtheCompilation}
+\newcommand{\UrlCoinConfigure}{http://projects.coin-or.org/BuildTools/wiki/user-configure\#CommandLineArgumentsforconfigure}
+\newcommand{\UrlCoinCygwin}{http://projects.coin-or.org/BuildTools/wiki/current-issues}
+\newcommand{\UrlCoinDownload}{http://projects.coin-or.org/BuildTools/wiki/user-download\#DownloadingtheSourceCode}
+\newcommand{\UrlCoinNames}{https://projects.coin-or.org/CoinBinary/wiki/ArchiveNamingConventions}
+\newcommand{\UrlCoinProjects}{http://www.coin-or.org/projects/}
+\newcommand{\UrlCoinUtils}{http://projects.coin-or.org/CoinUtils}
+\newcommand{\UrlCpl}{http://www.ibm.com/developerworks/library/os-cpl.html}
+\newcommand{\UrlCplex}{http://www.ilog.com/products/cplex/}
+\newcommand{\UrlCppad}{http://projects.coin-or.org/CppAD}
+\newcommand{\UrlCygwinMake}{http://www.cmake.org/files/cygwin/make.exe}
+\newcommand{\UrlCygwinSetup}{http://www.cygwin.com/setup.exe}
+\newcommand{\UrlDoxygen}{http://www.doxygen.org}
+\newcommand{\UrlDylp}{http://projects.coin-or.org/DyLP}
+\newcommand{\UrlFToC}{http://www.netlib.org/f2c}
+\newcommand{\UrlFToCBin}{http://www.netlib.org/f2c/mswin/}
+\newcommand{\UrlFToCZip}{http://www.netlib.org/f2c/libf2c.zip}
+\newcommand{\UrlGgs}{http://www.g95.org}
+\newcommand{\UrlGamslinks}{https://projects.coin-or.org/svn/GAMSlinks/trunk}
+\newcommand{\UrlGcc}{http://gcc.gnu.org}
+\newcommand{\UrlGfortran}{http://gcc.gnu.org/fortran/}
+\newcommand{\UrlGlpk}{http://www.gnu.org/software/glpk/}
+\newcommand{\UrlGlpkDownload}{ftp://ftp.gnu.org/gnu/glpk/glpk-4.32.tar.gz}
+\newcommand{\UrlHsl}{http://www.cse.scitech.ac.uk/nag/hsl/}
+\newcommand{\UrlIpopt}{http://projects.coin-or.org/Ipopt}
+\newcommand{\UrlIpoptDoc}{https://projects.coin-or.org/Ipopt/browser/stable/3.5/Ipopt/doc/documentation.pdf?format=raw}
+\newcommand{\UrlIpoptDocxiii}{http://www.coin-or.org/Ipopt/documentation/node13.html}
+\newcommand{\UrlKippFileupload}{http://gsbkip.chicagogsb.edu/os/fileupload.html}
+\newcommand{\UrlKnitro}{http://www.ziena.com/}
+\newcommand{\UrlKnitroMan}{http://www.ziena.com/docs/knitroman.pdf}
+\newcommand{\UrlLapack}{ftp://www.netlib.org/lapack/lapack-lite-3.1.0.tgz}
+\newcommand{\UrlMingw}{http://downloads.sourceforge.net/mingw/MSYS-1.0.11.exe?modtime=1079444447\&big\_mirror=1}
+\newcommand{\UrlMsys}{http://sourceforge.net/project/showfiles.php?group\_id=2435}
+\newcommand{\UrlMsysBinary}{http://downloads.sourceforge.net/mingw/bash-3.1-MSYS-1.0.11-1.tar.bz2?modtime=1195140582\&big\_mirror=1}
+\newcommand{\UrlMsysAddIns}{http://sourceforge.net/project/showfiles.php?group\_id=2435\&package\_id=67879}
+\newcommand{\UrlMsysBison}{bison-2.3-MSYS-1.0.11-1.tar.bz2}
+\newcommand{\UrlMsysFlex}{flex-2.5.33-MSYS-1.0.11-1.tar.bz2}
+\newcommand{\UrlMsysRegex}{regex-0.12-MSYS-1.0.11-1.tar.bz2}
+\newcommand{\UrlNewticket}{http://projects.coin-or.org/OS/newticket}
+\newcommand{\UrlNightlyBuild}{https://projects.coin-or.org/TestTools/wiki/NightlyBuildInAction}
+\newcommand{\UrlOs}{http://www.optimizationservices.org}
+\newcommand{\UrlOsBinaries}{http://www.coin-or.org/download/binary/OS/}
+\newcommand{\UrlOsCommon}{https://projects.coin-or.org/svn/OS/branches/OScpp/OSCommon}
+\newcommand{\UrlOsDoxygen}{http://www.coin-or.org/OS/doxydoc/html/index.html}
+\newcommand{\UrlOsi}{http://projects.coin-or.org/Osi}
+\newcommand{\UrlOsJava}{https://projects.coin-or.org/svn/OS/branches/OSjava}
+\newcommand{\UrlOsRelease}{https://projects.coin-or.org/svn/OS/releases/1.1.1}
+\newcommand{\UrlOsStable}{https://projects.coin-or.org/svn/OS/stable/1.1}
+\newcommand{\UrlOsTarball}{http://www.coin-or.org/Tarballs/OS/}
+\newcommand{\UrlOsWin}{https://projects.coin-or.org/CoinBinary/browser/binary/OS}
+\newcommand{\UrlParinclinear}{http://www.coin-or.org/OS/parincLinear.osil}
+\newcommand{\UrlSdk}{http://www.microsoft.com/downloads/details.aspx?FamilyID=E6E1C3DF-A74F-4207-8586-711EBE331CDC\&displaylang=en}
+\newcommand{\UrlSvn}{http://subversion.tigris.org}
+\newcommand{\UrlSymphony}{http://projects.coin-or.org/SYMPHONY}
+\newcommand{\UrlTomcat}{http://tomcat.apache.org/}
+\newcommand{\UrlTortoiseSvn}{http://tortoisesvn.tigris.org}
+\newcommand{\UrlTrac}{http://projects.coin-or.org/OS}
+\newcommand{\UrlUsingTrac}{http://www.coin-or.org/usingTrac.html}
+\newcommand{\UrlVol}{http://projects.coin-or.org/Vol}
+\newcommand{\UrlWget}{http://www.christopherlewis.com/WGet/WGetFiles.htm}
+\newcommand{\UrlWgetBinary}{http://www.christopherlewis.com/WGet/wget-1.11.4b.zip}
+
+% Current software versions
+\newcommand{\GlpkVer}{4.32}
 
 
 
-
-
+\begin{document}
 
 %Some cross-referencing indexes (to be expanded as needed)
 \index{ASL|see{AMPL Solver Library (ASL)}}
@@ -195,8 +200,7 @@ nonlinear and other types of optimization problems.   Also included is the C++ s
 executable {\tt OSSolverService}  for reading problem instances (OSiL format, nl format, MPS format) and
 calling a solver either locally or on a remote server.  Finally,  both Java source code and a Java {\tt war} file
 are provided for users who wish to set up a solver service on a server running Apache Tomcat\index{Apache Tomcat}.
-See the Optimization Services home page \url{http://www.optimizationservices.org} and the COIN-OR Trac page
-\url{https://projects.coin-or.org/OS} for more information.
+See the Optimization Services home page {\tt\UrlOs} and the COIN-OR Trac page {\tt\UrlTrac} for more information.
 \end{abstract}
 
 
@@ -217,10 +221,8 @@ See the Optimization Services home page \url{http://www.optimizationservices.org
 The objective of Optimization Services (OS) is to provide a general framework consisting of a set of standards
 for representing optimization instances, results, solver options, and communication between clients and solvers
 in a distributed environment using Web Services. This COIN-OR project provides source code for libraries and
-executable programs that implement OS standards.  See the COIN-OR Trac page \url{https://projects.coin-or.org/OS}%
-\index{COIN-OR}
-or the Optimization Services Home Page \url{http://www.optimizationservices.org}\index{Optimization Services}
-for more information.
+executable programs that implement OS standards.  See the COIN-OR Trac page {\tt\UrlTrac}\index{COIN-OR}
+or the Optimization Services Home Page {\tt\UrlOs}\index{Optimization Services} for more information.
 The OS project provides the following:
 
 \begin{enumerate}
@@ -239,7 +241,7 @@ problem instances. This is a very general API for linear, integer, and nonlinear
 Extensions for other major types of optimization problems are also in the works. Any modeling language that can
 produce OSiL can easily communicate with any solver that uses the OSInstance API.   The {\tt OSInstance} object
 is described in more detail in Section~\ref{section:osinstanceAPI}. The nonlinear part of the API is based on the
-COIN-OR project CppAD\index{CppAD@{\tt CppAD}} by Brad Bell (\url{ttps://projects.coin-or.org/CppAD}) but is written in a very general
+COIN-OR project CppAD\index{CppAD@{\tt CppAD}} by Brad Bell ({\tt\UrlCppad}) but is written in a very general
 manner and could be used with other algorithmic differentiation packages. More detail on algorithmic differentiation
 is provided in Section~\ref{section:ad}.
 
@@ -310,9 +312,9 @@ Section~\ref{section:ad}.
 \section{Downloading the OS Project}\label{section:download}
 
 The OS project is an open-source project  with source code under the Common Public License (CPL).
-See~\url{http://www.ibm.com/developerworks/library/os-cpl.html}.
-This project was initially created by Robert Fourer, Jun Ma, and Kipp Martin.
-The code has been written primarily by  Horand Gassmann,   Jun Ma,  and Kipp Martin.    Horand Gassmann,  Jun Ma,  and Kipp Martin are the COIN-OR project leaders and active developers for the OS project.
+See~{\tt\UrlCpl}.  This project was initially created by Robert Fourer, Jun Ma, and Kipp Martin.
+The code has been written primarily by  Horand Gassmann,   Jun Ma,  and Kipp Martin.    
+Horand Gassmann,  Jun Ma,  and Kipp Martin are the COIN-OR project leaders and active developers for the OS project.
 Below we describe different methods for obtaining the binaries and C++ source code.
 
 
@@ -321,8 +323,8 @@ Below we describe different methods for obtaining the binaries and C++ source co
 \subsection{Obtaining the Binaries}\label{section:obtainingbinaries}
 
 If the user does not wish to compile source code, the OS library, OSSolverService executable
-and Tomcat server software configuration are available at \url{http://www.coin-or.org/download/binary/OS/}%
-\index{Downloading!binaries}  in binary format.    The binary distribution for the OS library and executables follows the following naming convention:
+and Tomcat server software configuration are available at {\tt\UrlOsBinaries}\index{Downloading!binaries}  
+in binary format.    The binary distribution for the OS library and executables follows the following naming convention:
 \begin{verbatim}
 OS-version_number-platform-compiler-build_options.tgz (zip)
 \end{verbatim}
@@ -333,9 +335,7 @@ OS-1.1.0-linux-x86-icc9.1.tgz
 
 For more detail on the naming convention and examples see:
 
-\begin{verbatim}
-https://projects.coin-or.org/CoinBinary/wiki/ArchiveNamingConventions
-\end{verbatim}
+\noindent{\tt\UrlCoinNames}
 
 
 After unpacking the {\tt tgz} or {\tt zip} archives, the following folders are available.
@@ -393,8 +393,8 @@ and maintenance of the code.
 
 The Subversion\index{Subversion} version control package is used to obtain the C++ source code.
 Users with Unix operating systems will most likely have a command line svn client.  If an svn client is not present,
-see \url{http://subversion.tigris.org} to download an svn client.   For Windows users we recommend the
-SVN client  TortoiseSVN.  (See \url{tortoisesvn.tigris.org}.)  The TortoiseSVN client is integrated within the
+see~{\tt\UrlSvn} to download an svn client.   For Windows users we recommend the
+SVN client  TortoiseSVN.  (See~{\tt\UrlTortoiseSvn}.)  The TortoiseSVN client is integrated within the
 Windows  Explorer.
 
 \subsubsection{wget}\label{section:wget}
@@ -408,19 +408,22 @@ contained in the OS project distribution. Scripts are included to download this 
 %and makes it easy to download the software.
 A Windows version of {\tt wget} is available at
 
-\begin{verbatim}
-http://www.christopherlewis.com/WGet/WGetFiles.htm
-\end{verbatim}
+%\begin{verbatim}
+%http://www.christopherlewis.com/WGet/WGetFiles.htm
+%\end{verbatim}
 
-Windows users are advised to download only the binary found in
+\noindent{\tt\UrlWgetBinary}
 
-\begin{verbatim}
-http://www.christopherlewis.com/WGet/wget-1.10.2b.zip
-\end{verbatim}
-or the beta version of the new release at
-\begin{verbatim}
-http://www.christopherlewis.com/WGet/wget-1.11-beta-1b.zip
-\end{verbatim}
+%Windows users are advised to download only the binary found in
+%
+%\begin{verbatim}
+%http://www.christopherlewis.com/WGet/wget-1.10.2b.zip
+%\end{verbatim}
+%or the beta version of the new release at
+%\begin{verbatim}
+%http://www.christopherlewis.com/WGet/wget-1.11-beta-1b.zip
+%\end{verbatim}
+
 
 There is no need to rebuild the code locally, which relies on several levels of other software.
 
@@ -433,7 +436,7 @@ packages are included in the sections indicated.
 \subsubsection{C++ compiler}\label{section:cpp}
 A C++ compiler is needed to compile the OS source. This should be present under all unix installations.
 If no C++ compiler is available on the system, the free {\tt gcc} compiler can be downloaded from
-{\tt http://gcc.gnu.org}.
+{\tt\UrlGcc}.
 
 Microsoft Visual Studio can be configured with the Microsoft {\tt cl} compiler, which also works under MSYS.
 MinGW is normally configured with the Gnu compiler collection ({\tt gcc}), although it can also be used with
@@ -446,11 +449,11 @@ installation, MSYS, and the Microsoft {\tt cl} compiler.
 The COIN-OR project Ipopt (see section~\ref{section:ipopt}) and several of the third-party software
 described in section~\ref{section:otherthirdparty} include Fortran\index{Fortran} subroutines, which must be compiled
 with a Fortran compiler if the user wants to include these projects in the build. A free Fortran 95 compiler
-can be downloaded from {\tt http://www.g95.org}. For Fortran~77 code (which includes the Blas\index{Blas},
+can be downloaded from {\tt\UrlGgs}. For Fortran~77 code (which includes the Blas\index{Blas},
 HSL\index{Harwell Subroutine Library (HSL)} and Lapack\index{Lapack} projects --- but {\bf not} Mumps\index{Mumps}), it might be sufficient
 to download the {\tt f2c}\index{f2c@{\tt f2c}} translator
 which turns Fortran~77 code into code that can subsequently be fed into a C compiler.
-The {\tt f2c} translator and the {\tt f2c} runtime library can be downloaded from \url{http://www.netlib.org/f2c}.
+The {\tt f2c} translator and the {\tt f2c} runtime library can be downloaded from {\tt\UrlFToC}.
 Further details are available in the file {\tt BuildTools/compile\_f2c/INSTALL}, which is part of the OS distribution.
 
 \subsubsection{{\tt flex} and {\tt bison} }\label{section:flex}
@@ -458,21 +461,23 @@ Users who want to edit the source code in the parsers described in
 Section~\ref{section:osparsers} will need the additional  tools
 {\tt flex}\index{flex@{\tt flex}} and {\tt bison}\index{bison@{\tt bison}}.  These can be downloaded from
 
-\begin{verbatim}
-http://sourceforge.net/project/showfiles.php?group\_id=2435
-\end{verbatim}
-and are listed at the Web site as
+%\begin{verbatim}
+%http://sourceforge.net/project/showfiles.php?group\_id=2435
+%\end{verbatim}
+\noindent{\tt\UrlMsysAddIns}
+
+\noindent and are listed at the Web site as
 
 \begin{verbatim}
-bison-2.3-MSYS-1.0.11
-flex-2.5.33-MSYS-1.0.11
-regex-0.12-MSYS-1.0.11
+bison-2.3-MSYS-1.0.11-1
+flex-2.5.33-MSYS-1.0.11-1
+regex-0.12-MSYS-1.0.11-1
 \end{verbatim}
 The last one contains an important DLL, msys-regex-0.dll, without which flex
 will not start.
 
 \subsubsection{doxygen }\label{section:doxygen}
-Doxygen\index{Doxygen}  (\url{www.doxygen.org}) is a document production system that can be used to prepare documentation
+Doxygen\index{Doxygen}  ({\tt\UrlDoxygen}) is a document production system that can be used to prepare documentation
 for the OS project and related software. For details, see section~\ref{section:documentation}.
 
 
@@ -480,10 +485,11 @@ for the OS project and related software. For details, see section~\ref{section:d
 
 For Users on a Unix system\index{Downloading!subversion!unix} such as Linux, Solaris, Mac OS X, etc., the source code is obtained as follows. In a command window execute:
 
-\begin{verbatim}
-svn co https://projects.coin-or.org/svn/OS/releases/1.1.0 COIN-OS
-\end{verbatim}
+%\begin{verbatim}
+%svn co https://projects.coin-or.org/svn/OS/releases/1.1.0 COIN-OS
+%\end{verbatim}
 
+\noindent{\tt svn co \UrlOsRelease\ COIN-OS}
 
 It is possible that on some systems you may get a message such as:
 \begin{verbatim}
@@ -506,7 +512,7 @@ If so, select {\tt (p)} and you should not get this message again.
 On Windows\index{Downloading!subversion!Windows} with TortoiseSVN, create a directory {\tt COIN-OS}
 in the desired location and right-click on this directory. Select the menu item {\tt SVN Checkout ...}
 and in the textbox ``{\tt URL of Repository}'' give the URL for the version of the OS project you wish
-to check out, for instance, \url{https://projects.coin-or.org/svn/OS/stable/1.1}.
+to check out, for instance, {\tt\UrlOsStable}.
 
 
 Now build the project as described in  Section~\ref{section:build}.
@@ -527,12 +533,15 @@ external projects (COIN-OR or third-party) that the OS project depends on.
 \end{figure}
 
 For more information on downloading the OS project or other COIN-OR projects using SVN see
-\url{https://projects.coin-or.org/BuildTools/wiki/user-download#DownloadingtheSourceCode}.
+{\tt\UrlCoinDownload}.
 
 The Java source code for  setting up a solver service with Apache Tomcat\index{Apache Tomcat} is checked out as follows:
-\begin{verbatim}
-svn co https://projects.coin-or.org/svn/OS/branches/OSjava  OSJava
-\end{verbatim}
+%\begin{verbatim}
+%svn co https://projects.coin-or.org/svn/OS/branches/OSjava  OSJava
+%\end{verbatim}
+
+\noindent{\tt svn co \UrlOsJava\ OSJava}
+
 For more detail on running a Tomcat solver service  see  Section~\ref{section:tomcat}.
 
 
@@ -554,7 +563,7 @@ from a Tarball or Zip file do the following.
 \begin{enumerate}[{\bf Step 1:}]
 
 \item{}
-In a browser open the link \url{http://www.coin-or.org/Tarballs/OS/}.  Listed at this page are files in the format:
+In a browser open the link {\tt\UrlOsTarball}.  Listed at this page are files in the format:
 
 \begin{verbatim}
 OS-release_number.tgz
@@ -597,12 +606,18 @@ The OS project is very extensive and relies on many other COIN-OR projects.
 This may not be desirable for modeling language and solver developers who just wish to use the OS API
 in conjunction with their modeling language or solver.  Hence there is also an ``OS lite'' download
 that consists of all the code for the OS API and for reading and writing instance and solution files.
-We refer to this version of the project as {\tt OSCommon}\index{OSCommon@{\tt OSCommon}} and the code
-for this project is synched with the corresponding stable and release versions of the code.
-For example, to get Stable 1.1 of {\tt OSCommon} use the svn command
-\begin{verbatim}
-svn co https://projects.coin-or.org/svn/OS/stable/OSCommon1.1  OSCommon
-\end{verbatim}
+%
+%We refer to this version of the project as {\tt OSCommon}\index{OSCommon@{\tt OSCommon}} and the code
+%for this project is synched with the corresponding stable and release versions of the code.
+%For example, to get Stable 1.1 of {\tt OSCommon} use the svn command
+%\begin{verbatim}
+%svn co https://projects.coin-or.org/svn/OS/stable/OSCommon1.1  OSCommon
+%\end{verbatim}
+%
+We refer to this version of the project as {\tt OSCommon}\index{OSCommon@{\tt OSCommon}}. 
+To get the current version of {\tt OSCommon} use the svn command
+
+\noindent{\tt svn co \UrlOsCommon\ OSCommon}
 
 
 \section{Building and Testing the OS Project}\label{section:build}
@@ -655,9 +670,7 @@ by remembering and reusing the results of tests already performed.
 
 \item For more information and options on the {\tt ./configure} script see
 
-{\footnotesize
-\url{https://projects.coin-or.org/BuildTools/wiki/user-configure#PreparingtheCompilation}.
-}
+\noindent{\footnotesize {\tt\UrlCoinConfig}.}
 
 \item You  cannot apply  {\tt COIN\_SKIP\_PROJECTS}\index{COIN_SKIP_PROJECTS@{\tt COIN\_SKIP\_PROJECTS}}
 to {\tt Cbc}\index{Cbc@{\tt Cbc}}, {\tt Clp}\index{Clp@{\tt Clp}}, {\tt Cgl}\index{Cgl@{\tt Cgl}},
@@ -828,28 +841,16 @@ There are a number of options open to Windows users.   First, if you wish to wor
 downloading  the svn client, TortoiseSVN\index{TortoiseSVN}.  (See section~\ref{section:svn}.)  With TortoiseSVN
 in the Windows Explorer connect to the directory (e.g., COIN-OS) where you wish to put the OS code.
 Right-click on the directory and select {\tt SVN Checkout}.   In the textbox, {\tt URL of Repository}
-give the URL for the version of the OS project you wish to checkout, e.g.,
-\url{https://projects.coin-or.org/svn/OS/stable/1.1}.
+give the URL for the version of the OS project you wish to checkout, e.g.,~{\tt\UrlOsStable}.
 
 Also, if you plan to build any of the projects contained in {\tt ThirdParty}\index{Third-party software}
 (e.g., ASL)\index{AMPL Solver Library (ASL)} we recommend using {\tt wget}\index{wget@{\tt wget}}. (See section~\ref{section:wget}.)
-%The {\tt wget} executable is used by the scripts, {\tt get.ASL}, {\tt get.Blas},
-%etc.\ in the corresponding third-party subdirectories and makes it easy to download the software.  A Windows version of {\tt wget} is available at
-%
-%\begin{verbatim}
-%http://www.christopherlewis.com/WGet/WGetFiles.htm
-%\end{verbatim}
-
 
 
 \subsubsection{Microsoft Visual Studio (MSVS)} \label{section:msvs}
 
 
 Microsoft Visual Studio solution and project files are provided for users of Windows and the Microsoft Visual Studio IDE.
-%Care must be taken to distinguish different versions of MSVS.   Even though Microsoft  released Version~9 in November 2007,
-%we currently support only  Versions 7 and~8. To add to the confusion, these versions are also sometimes referred to by their
-%(approximate) release dates, which is 2008 for Version 9, 2005 for Version~8 and 2003 for Version~7.   In addition there is
-%a free version of the Visual Studio IDE C++ compiler,  called Visual C++ Express Edition.
 We currently support Versions 8 and~9. These versions are also sometimes referred to by their
 (approximate) release dates, which is 2008 for Version~9 and 2005 for Version~8.   In addition there is
 a free version of the Visual Studio IDE C++ compiler,  called Visual C++ Express Edition.
@@ -861,14 +862,14 @@ The following steps are necessary to build the OS project using the  Microsoft V
 installed,  go to  to Step~\ref{enumerate:winbuild2}.
 
 \item{} Download and install the Visual C++ Express Edition, which is available for free at Microsoft's web site.
-Version~9 is at \url{http://www.microsoft.com/express/download/#webInstall}.
+Version~9 is at {\tt\UrlCl}.
 This download contains the Microsoft {\tt cl} C++ compiler along with necessary libraries.
 
 \item{} \label{enumerate:winbuild2} The part of the OS library responsible for communication with a remote server depends on some
 underlying Windows socket header files and libraries. These files are part of the commercial for-pay version,
 but are not included in the Visual C++ Express download. If you have the Express Edition, it is necessary
 to also download and install the Windows Platform SDK\index{Windows Platform SDK}, which can be found at
-\url{http://www.microsoft.com/downloads/details.aspx?FamilyID=E6E1C3DF-A74F-4207-8586-711EBE331CDC&displaylang=en}.
+{\tt\UrlSdk}.
 
 \item{} In the COIN-OR/OS directory you will find the folder MSVisualStudio,
 which contains root directories organized by the version of Visual Studio.
@@ -909,7 +910,7 @@ the user must first download and process additional third-party software\index{T
 \subsubsection{Visual Studio Examples Distribution}\label{section:vsexamples}
 
 Many users will not be interested in actually building the OS project from source code.   At the link
-\url{https://projects.coin-or.org/CoinBinary/browser/binary/OS} are  binaries for using the OS project.
+{\tt\UrlOsWin} are  binaries for using the OS project.
 There are also Visual Studio project files for building applications that use the precompiled OS libraries.
 In particular, download and unpack the file
 
@@ -974,8 +975,7 @@ A number of key nonlinear operators are illustrated.
 \item[]  {\bf osRemoteTest --}  this project shows  how to call a remote solver using Web Services. {\bf Important:}
 This project links to {\tt wsock32.lib}, which is not part of the Visual Studio  Express Package.  It is necessary
 to also download and install the Windows Platform SDK\index{Windows Platform SDK}, which can be found at
-\url{http://www.microsoft.com/downloads/details.aspx?FamilyID=E6E1C3DF-A74F-4207-8586-711EBE331CDC&displaylang=en}.
-Refer to Section~\ref{section:msvs}.
+{\tt\UrlSdk}. Refer to Section~\ref{section:msvs}.
 
 \item[] {\bf osTestCode --} this provide yet another illustration of how to build an optimization instance using the
 {\tt OSInstance} class.  In addition, this project  shows how to build solver objects and use the solver object to
@@ -1001,10 +1001,10 @@ The user can simply replace what is currently in {\tt demoCode.cpp} with his or 
 
 \index{Cygwin|(}{\bf Using Cygwin with {\tt gcc}:}  With Cygwin and the corresponding {\tt gcc} compiler the OS project
 is built exactly as described in Section~\ref{section:unixbuilds}. If you have previously downloaded Cygwin with
-gnome make version 3.81-1,  you must obtain a fixed 3.81 version from \url{http://www.cmake.org/files/cygwin/make.exe}.
+gnome make version 3.81-1,  you must obtain a fixed 3.81 version from {\tt\UrlCygwinMake}.
 (See also
 %the Cygwin mailing list postings \url{http://cygwin.com/ml/cygwin/2006-09/msg00315.html} and \url{http://cygwin.com/ml/cygwin/2006-09/msg00153.html}) and
-the discussion at \url{https://projects.coin-or.org/BuildTools/wiki/current-issues}.)
+the discussion at {\tt\UrlCoinCygwin}.)
 
 
 \vskip 8pt
@@ -1013,19 +1013,19 @@ the discussion at \url{https://projects.coin-or.org/BuildTools/wiki/current-issu
 
 
 \begin{enumerate}[Step 1:]
-\item{}  Download {\tt Cygwin}  from \url{http://www.cygwin.com/setup.exe} and install.
+\item{}  Download {\tt Cygwin}  from {\tt\UrlCygwinSetup} and install.
 
 
 
 
-\item{}  Download  Visual Studio Express C++ at  \url{http://msdn2.microsoft.com/en-us/express/aa975050.aspx}.
+\item{}  Download  Visual Studio Express C++ at  {\tt\UrlCl}.
 
 
 \item{}  The part of the OS library responsible for communication with a remote server depends on some
 underlying Windows socket header files and libraries. Therefore it is necessary to also download and install
 the Windows Platform SDK\index{Windows Platform SDK}. Download the necessary files at
 
- \url{http://msdn2.microsoft.com/en-us/express/aa700755.aspx}
+{\tt\UrlSdk}
 
  and install.
 
@@ -1106,7 +1106,7 @@ The following is a work-around. (See also section~\ref{section:ipopt}.)
 \begin{enumerate}[Step a.]
 
 \item{}  Obtain one of the   Harwell Subroutine Library (HSL)\index{Harwell Subroutine Library (HSL)} routines
-{\tt ma27ad.f} or {\tt MA57ad.f}. See \url{http://www.cse.scitech.ac.uk/nag/hsl/}.  Put the Harwell code in the
+{\tt ma27ad.f} or {\tt MA57ad.f}. See {\tt\UrlHsl}.  Put the Harwell code in the
 directory {\tt ThirdParty/HSL}.
 
 
@@ -1179,16 +1179,14 @@ Execute the following steps to use the Microsoft C++ {\tt cl} compiler with MSYS
 \item{} Download {\tt MSYS} at
 
 {\small
-\begin{verbatim}
-http://downloads.sourceforge.net/mingw/MSYS-1.0.10.exe?modtime=1079444447&big_mirror=1\
-\end{verbatim}
+\noindent{\tt\UrlMingw}
 }
 
 and install.  Double clicking on the MSYS icon will open a Bourne shell window.
 
-\item{}  Download  Visual Studio Express C++ at
+\item{}  Download  Visual Studio Express C++ at 
 
- \url{http://www.microsoft.com/express/download/#webInstall}
+\noindent{\tt\UrlCl}
 
 and install.
 
@@ -1196,7 +1194,7 @@ and install.
 Windows socket header files and libraries. Therefore it is necessary to also download and install
 the Windows Platform SDK\index{Windows Platform SDK}. Download the necessary files at
 
- \url{http://www.microsoft.com/downloads/details.aspx?FamilyID=E6E1C3DF-A74F-4207-8586-711EBE331CDC&displaylang=en}
+\noindent{\tt\UrlSdk}
 
  and install.
 
@@ -1232,36 +1230,21 @@ The environment variables can be set using the {\tt System Properties} in the Wi
 
 
 Microsoft Windows users who wish to obtain MSYS for building the OS project can download
-the appropriate software at
-% replaced by \verbatim 18 February --- HIG
-%\url{http://sourceforge.net/project/showfiles.php?group_id=2435}.
-{\tt http://sourceforge.net/project/showfiles.php?group\_id=2435}.
+the appropriate software at {\tt UrlMsys}.
 The user may find this Web site confusing.
-It is only necessary to  download what is referred to as the {\bf MSYS Base System}.
+It is only necessary to download what is referred to as the {\bf MSYS Base System}.
 As of this writing the most recent version is MSYS-1.0.11.
 This file is listed as {\tt bash-3.1-MSYS-1.0.11} and the  binary download is
 
 {\footnotesize
-%\url{http://downloads.sourceforge.net/mingw/bash-3.1-MSYS-1.0.11-1.tar.bz2?modtime=1195140582&big_mirror=1}
-\begin{verbatim}
-http://downloads.sourceforge.net/mingw/bash-3.1-MSYS-1.0.11-1.tar.bz2?modtime=1195140582\&big\_mirror=1
-\end{verbatim}
+\noindent{\tt\UrlMsysBinary}
 }
 
 This will provide the necessary Bourne shell for executing the configure scripts.
 Users who want to edit the source code in the parsers described in
 Section~\ref{section:osparsers} will need the additional  tools
-{\bf flex}\index{flex@{\tt flex}} and {\bf bison}\index{bison@{\tt bison}} as described in section~\ref{section:flex}.%
-\index{MSYS|)}
-%These are listed at the Web site as
-%
-%\begin{verbatim}
-%bison-2.3-MSYS-1.0.11
-%flex-2.5.33-MSYS-1.0.11
-%regex-0.12-MSYS-1.0.11
-%\end{verbatim}
-%The last one contains an important DLL, msys-regex-0.dll, without which flex
-%will not start.
+{\bf flex}\index{flex@{\tt flex}} and {\bf bison}\index{bison@{\tt bison}} 
+as described in section~\ref{section:flex}\index{MSYS|)}.
 
 
 
@@ -1363,16 +1346,18 @@ This will also get the AMPL {\tt ASL}\index{AMPL Solver Library (ASL)} libraries
 What you do next depends upon whether or not a FORTRAN\index{Fortran} compiler is present, and if so, which version
 of FORTRAN.  There are several options. See also
 
-\begin{verbatim}
-http://www.coin-or.org/Ipopt/documentation/node13.html
-\end{verbatim}
+%\begin{verbatim}
+%http://www.coin-or.org/Ipopt/documentation/node13.html
+%\end{verbatim}
+
+\noindent{\tt\UrlIpoptDocxiii}
 
 
 \begin{enumerate}[{Option} 1.]
 
 \item{}   If you \ifipopt\else are building in a Unix-like environment and \fi have a Fortran 95 compiler that
-recognizes embedded preprocessor statements (such as {\tt gfortran} --- see~\url{http://gcc.gnu.org/fortran/}
-or {\tt g95} --- see~\url{http://www.g95.org/}), you can simply run the {\tt configure} script and the FORTRAN
+recognizes embedded preprocessor statements (such as {\tt gfortran} --- see~{\tt\UrlGfortran}
+or {\tt g95} --- see~{\tt\UrlGgs}), you can simply run the {\tt configure} script and the FORTRAN
 compiler will be detected and the {\tt Ipopt} and {\tt Bonmin} projects will be built.
 
 \item{}   If you have a Fortran 95 compiler that cannot deal with the preprocessor statements embedded in the
@@ -1382,7 +1367,7 @@ you may have to resort to manual edits before you can build Ipopt --- or see Opt
 \item{} \label{enumerate:ipopt3}
 If you have a FORTRAN 77 compiler, you can replace Mumps by one of the Harwell Subroutine Library (HSL)%
 \index{Harwell Subroutine Library (HSL)}
-routines {\tt ma27ad.f} or {\tt MA57ad.f}.  See \url{http://www.cse.scitech.ac.uk/nag/hsl/}.  You must obtain
+routines {\tt ma27ad.f} or {\tt MA57ad.f}.  See~{\tt\UrlHsl}.  You must obtain
 the Harwell code and put it
 in the directory {\tt \../ThirdParty/HSL}.  Now run the {\tt configure} script as described in Section~\ref{section:unixbuilds}.
 
@@ -1429,15 +1414,19 @@ you also need to obtain the {\tt f2c}\index{f2c@{\tt f2c}|(} Fortran to C transl
 
 \item{} From netlib, download the file
 
-\begin{verbatim}
-   http://www.netlib.org/f2c/libf2c.zip
-\end{verbatim}
+%\begin{verbatim}
+%   http://www.netlib.org/f2c/libf2c.zip
+%\end{verbatim}
+
+\noindent{\tt\UrlFToCZip}
 
    and extract it in
 
 \begin{verbatim}
    Ipopt\MSVisualStudio\v8
 \end{verbatim}
+
+
  which is a folder in the root directory (see figure~\ref{figure:osprojectrootdir}). Make sure that the files
 are extracted into the subfolder {\tt libf2c} directly, instead of the subfolder {\tt libf2c$\tt\backslash$libf2c}.
 One file created in this process should be
@@ -1472,12 +1461,12 @@ If this occurs, add
 
 at the end of line~9 of {\tt makefile.vc}.
 
-\item{} Download the executable {\tt f2c.exe} from \url{http://www.netlib.org/f2c/mswin/}
+\item{} Download the executable {\tt f2c.exe} from {\tt\UrlFToCBin}
 and put it somewhere into your path
    (e.g., {\tt C:$\backslash$Windows})
 
-\item{} Download the source code for Blas\index{Blas} (from \url{ftp://www.netlib.org/blas/blas.tgz}),
-Lapack\index{Lapack} (from \url{ftp://www.netlib.org/lapack/lapack-lite-3.1.0.tgz}),
+\item{} Download the source code for Blas\index{Blas} (from {\tt\UrlBlas}),
+Lapack\index{Lapack} (from {\tt\UrlLapack}),
 and HSL\index{Harwell Subroutine Library (HSL)} (see previous section).
 Install each download into the appropriate subdirectory in {\tt ThirdParty}.
 
@@ -1547,7 +1536,7 @@ The OS project distribution includes the COIN-OR projects  {\tt Bonmin}\index{Bo
 {\tt CoinUtils}\index{CoinUtils@{\tt CoinUtils}}, {\tt CppAD}\index{CppAD@{\tt CppAD}},
 {\tt DyLP}\index{DyLP@{\tt DyLP}},   {\tt Ipopt}\index{Ipopt@{\tt Ipopt}},
 {\tt Osi}\index{Osi@{\tt Osi}}, {\tt SYMPHONY}\index{SYMPHONY@{\tt SYMPHONY}}, and {\tt Vol}\index{Vol@{\tt Vol}}.
-(For details on any of these projects see \url{http://www.coin-or.org/projects/}.)
+(For details on any of these projects see {\tt\UrlCoinProjects}.)
 However, the project is also designed to work with  several other open source and commercial software projects.
 In the OS distribution directory structure (see Figure~\ref{figure:osprojectrootdir}), there is a {\tt ThirdParty}
 directory, which does not contain anything other than {\tt get.xxxx} scripts and other utilities.
@@ -1610,9 +1599,10 @@ It sets important global variables and will call all other necessary configure f
 You may also wish to view
 
 {\small
-\begin{verbatim}
-https://projects.coin-or.org/BuildTools/wiki/user-configure#CommandLineArgumentsforconfigure
-\end{verbatim}
+%\begin{verbatim}
+%https://projects.coin-or.org/BuildTools/wiki/user-configure#CommandLineArgumentsforconfigure
+%\end{verbatim}
+\noindent{\tt\UrlCoinConfigure}
 }
 for more information on command line arguments that are illustrated in the subsections below.%
 \index{Third-party software|)}
@@ -1623,7 +1613,7 @@ for more information on command line arguments that are illustrated in the subse
 \index{AMPL Solver Library (ASL)|(}%
 The OS library contains a class, {\tt OSnl2osil}\index{OSnl2osil@{\tt OSnl2osil}} (see Section~\ref{section:nl2osil}),
 and the program {\tt OSAmplClient}\index{OSAmplClient@{\tt OSAmplClient}} (see Section~\ref{section:amplclient}) that
-require the use of the AMPL Solver Library~(ASL). See \url{http://netlib.sandia.gov/ampl/}  and  \url{http://www.ampl.com}.
+require the use of the AMPL Solver Library~(ASL). See {\tt\UrlAmplSandia}  and  {\tt\UrlAmpl}.
 Users with a Unix\index{Unix} system should locate the {\tt ASL} folder that is part of the distribution.
 The {\tt ASL} folder is in the {\tt ThirdParty} folder
 which is in the distribution root folder. Locate and execute the {\tt get.ASL} script.  Do this prior to running
@@ -1631,9 +1621,13 @@ the {\tt configure} script. The {\tt configure} script will then build the corre
 
 Microsoft  Visual Studio\index{Microsoft Visual Studio} users will have to build the ASL library separately and
 then link it with the OS library in the OS project file.  The necessary source files are at
-\begin{verbatim}
-http://netlib.sandia.gov/cgi-bin/netlib/netlibfiles.tar?filename=netlib/ampl/solvers
-\end{verbatim}
+
+%\begin{verbatim}
+%http://netlib.sandia.gov/cgi-bin/netlib/netlibfiles.tar?filename=netlib/ampl/solvers
+%\end{verbatim}
+
+\noindent{\tt\UrlAmplSolvers}
+
 After unpacking the distribution you will have to create the file
 {\tt ThirdParty/ASL/details.c} by hand,
 as follows: Copy the file {\tt details.c0} to {\tt details.c} and replace the
@@ -1679,6 +1673,7 @@ nmake -f makefile.vc
 This produces the library file {\tt amplsolv.lib}, which is placed in the subfolder
 {\tt ThirdParty$\tt\backslash$ASL$\tt\backslash$solvers}.
 
+        
 \ifipopt
 Before you can use the {\tt Release-Plus}\index{Release-Plus@{\tt Release-Plus}} configuration in our solution file {\tt OS.sln},
 you must also prepare the source for the solver {\tt Ipopt}\index{Ipopt@{\tt Ipopt}}
@@ -1698,7 +1693,7 @@ in the Configuration Manager\index{Configuration Manager} (available from the Bu
 
 \index{GLPK@{\tt GLPK}|(}%
 {\tt GLPK} is a an open-source linear and integer-programming solver from the GNU organization.
-See \url{http://www.gnu.org/software/glpk/}.  In order to use GLPK with OS, either execute {\tt get.AllThirdParty}
+See {\tt\UrlGlpk}.  In order to use GLPK with OS, either execute {\tt get.AllThirdParty}
 (see Section~\ref{section:ipopt})
 or connect to {\tt ThirdParty/Glpk} and execute {\tt get.Glpk}. Once the source code has been downloaded,
 run {\tt configure}, followed by a {\tt make}, as explained in Section~\ref{section:unixbuilds} or Section~\ref{section:vpath}.
@@ -1708,16 +1703,18 @@ Users on MSVS\index{Microsoft Visual Studio} can download the source by anonymou
 ftp://ftp.gnu.org/gnu/glpk/glpk-version_number.tar.gz
 \end{verbatim}
 
-At the time of this writing, the most up-to-date version is 4.30, which can be found at
-\begin{verbatim}
-ftp://ftp.gnu.org/gnu/glpk/glpk-4.30.tar.gz
-\end{verbatim}
+At the time of this writing, the most up-to-date version is \GlpkVer, which can be found at
+%\begin{verbatim}
+%ftp://ftp.gnu.org/gnu/glpk/glpk-4.30.tar.gz
+%\end{verbatim}
 \index{GLPK@{\tt GLPK}|)}
+
+\noindent{\tt\UrlGlpkDownload}
 
 \subsubsection{Cplex}
 
 \index{cplex@{\tt cplex}|(}%
-Cplex is a linear, integer, and quadratic solver. See \url{http://www.ilog.com/products/cplex/}.
+Cplex is a linear, integer, and quadratic solver. See {\tt\UrlCplex}.
 Cplex does not provide source code and you can only download the platform dependent binaries.
 After installing the binaries and include files in an appropriate directory, run {\tt configure} to point to the
 include and library directory. An example is given below:
@@ -1746,7 +1743,7 @@ CLASSPATH=:/usr/local/ilog/cplex81/bin/i86_linux2_glibc2.3_gcc3.2:
 \subsubsection{Knitro}
 
 \index{Knitro|(}%
-Knitro is a nonlinear solver. See \url{http://www.ziena.com/}.  Ziena does not provide source code for Knitro.  You must download platform dependent binaries.   In order to use Knitro with the OS project, perform the following steps.
+Knitro is a nonlinear solver. See {\tt\UrlKnitro}.  Ziena does not provide source code for Knitro.  You must download platform dependent binaries.   In order to use Knitro with the OS project, perform the following steps.
 
 \begin{enumerate}[Step 1:]
 
@@ -1806,17 +1803,25 @@ location of the installed third-party libraries in the case that the libraries a
 \subsection{Bug Reporting}
 
 Bug reporting\index{Bug reporting} is done through the project Trac page. This is at
-\begin{verbatim}
-http://projects.coin-or.org/OS
-\end{verbatim}
+%\begin{verbatim}
+%http://projects.coin-or.org/OS
+%\end{verbatim}
+
+\noindent{\tt\UrlTrac}
+
 To report a bug, you must be a registered user.  For  instructions on  how to register, go to
-\begin{verbatim}
-http://www.coin-or.org/usingTrac.html
-\end{verbatim}
+%\begin{verbatim}
+%http://www.coin-or.org/usingTrac.html
+%\end{verbatim}
+
+\noindent{\tt\UrlUsingTrac}
+
 After registering, log in and then file a trouble ticket by going to
-\begin{verbatim}
-http://projects.coin-or.org/OS/newticket
-\end{verbatim}
+%\begin{verbatim}
+%http://projects.coin-or.org/OS/newticket
+%\end{verbatim}
+
+\noindent{\tt\UrlNewticket}
 
 
 \subsection{Documentation}\label{section:documentation}
@@ -1865,7 +1870,7 @@ The  {\tt gcc}/{\tt g++} and Microsoft {\tt cl} compiler have been tested.
 A number of solvers have also been tested with the OS library. For a list of tested solvers and platforms see
 Table~\ref{table:testedplatforms}.  More detail on the platforms listed in Table~\ref{table:testedplatforms}
 is given in Table~\ref{table:platformdescription}.  For a list of other  platforms testing the OS project
-see \url{https://projects.coin-or.org/TestTools/wiki/NightlyBuildInAction}.
+see {\tt\UrlNightlyBuild}.
 
 
 \begin{table}
@@ -1919,17 +1924,17 @@ The directories in the  project root  are outlined in Figure~\ref{figure:osproje
 
 If you download the OS package, you get these additional COIN-OR projects. The links to the project home pages are provided below and give more information on these projects.
 \begin{itemize}
-\item {\tt BuildTools}\index{BuildTools@{\tt BuildTools}} - \url{http://projects.coin-or.org\BuildTools}
-\item {\tt Cbc}\index{Cbc@{\tt Cbc}} - \url{http://projects.coin-or.org/Cbc}
-\item {\tt Cgl}\index{Cgl@{\tt Cgl}} - \url{http://projects.coin-or.org/Cgl}
-\item {\tt Clp}\index{Clp@{\tt Clp}} - \url{http://projects.coin-or.org/Clp}
-\item {\tt CoinUtils}\index{CoinUtils@{\tt CoinUtils}} - \url{http://projects.coin-or.org/CoinUtils}
-\item {\tt CppAD}\index{CppAD@{\tt CppAD}} - \url{http://projects.coin-or.org/CppAD}
-\item {\tt DyLP}\index{DyLP@{\tt DyLP}}  - \url{http://projects.coin-or.org/DyLP}
-\item {\tt Ipopt}\index{Ipopt@{\tt Ipopt}} - \url{http://projects.coin-or.org/Ipopt}
-\item {\tt Osi}\index{Osi@{\tt Osi}} - \url{http://projects.coin-or.org/Osi}
-\item {\tt SYMPHONY}\index{SYMPHONY@{\tt SYMPHONY}}   - \url{http://projects.coin-or.org/SYMPHONY}
-\item {\tt Vol}\index{Vol@{\tt Vol}} - \url{http://projects.coin-or.org/Vol}
+\item {\tt BuildTools}\index{BuildTools@{\tt BuildTools}} - {\tt\UrlBuildtools}
+\item {\tt Cbc}\index{Cbc@{\tt Cbc}} - {\tt\UrlCbc}
+\item {\tt Cgl}\index{Cgl@{\tt Cgl}} - {\tt\UrlCgl}
+\item {\tt Clp}\index{Clp@{\tt Clp}} - {\tt\UrlClp}
+\item {\tt CoinUtils}\index{CoinUtils@{\tt CoinUtils}} - {\tt\UrlCoinUtils}
+\item {\tt CppAD}\index{CppAD@{\tt CppAD}} - {\tt\UrlCppad}
+\item {\tt DyLP}\index{DyLP@{\tt DyLP}}  - {\tt\UrlDylp}
+\item {\tt Ipopt}\index{Ipopt@{\tt Ipopt}} - {\tt\UrlIpopt}
+\item {\tt Osi}\index{Osi@{\tt Osi}} - {\tt\UrlOsi}
+\item {\tt SYMPHONY}\index{SYMPHONY@{\tt SYMPHONY}}   - {\tt\UrlSymphony}
+\item {\tt Vol}\index{Vol@{\tt Vol}} - {\tt\UrlVol}
 \end{itemize}
 
 The following directories are also in the project root.
@@ -2334,7 +2339,7 @@ There is also a method, {\tt OSFileUpload}, in the OSAgentClass that is used to 
 The classes in the OSCommonInterfaces component of the OS library are used to read and write files and strings
 in the OSiL and OSrL protocols. See Section~\ref{section:schemadescriptions} for more detail on OSiL, OSrL,
 and other OS protocols. For a complete listing of all of the files in {\tt OSCommonInterfaces} see the Doxygen\index{Doxygen}
-documentation we deposited at {\tt http://www.coin-or.org/OS/doxydoc/html/index.html}. Users who have Doxygen installed on their system
+documentation we deposited at {\tt\UrlDoxygen}. Users who have Doxygen installed on their system
 can also create their own version of the documentation (see Section~\ref{section:documentation}). Below we highlight some key classes.
 
 
@@ -2737,10 +2742,10 @@ solver = new LindoSolver();
 \end{verbatim}
 
 Similarly for KNITRO and Ipopt. In the case of  KNITRO, the {\tt KnitroSolver} class inherits from both
-{\tt DefaultSolver} class and the KNITRO {\tt NlpProblemDef} class. See \url{http://www.ziena.com/docs/knitroman.pdf}
+{\tt DefaultSolver} class and the KNITRO {\tt NlpProblemDef} class. See {\tt\UrlKnitroMan}
 for more information on the KNITRO solver C++ implementation and the {\tt NlpProblemDef} class.
 Similarly, for Ipopt the {\tt IpoptSolver} class inherits from both the  {\tt DefaultSolver} class and the Ipopt
-{\tt TNLP} class.  See \url{https://projects.coin-or.org/Ipopt/browser/stable/3.2/Ipopt/doc/documentation.pdf?format=raw}
+{\tt TNLP} class.  See {\tt\UrlIpoptDoc}
 for more information on the Ipopt solver C++ implementation and the {\tt TNLP} class.
 
 \else
@@ -2754,8 +2759,7 @@ solver = new LindoSolver();
 \end{verbatim}
 
 A similar call is used for {\tt Ipopt}\index{Ipopt@{\tt Ipopt}}. In this case, the {\tt IpoptSolver} class inherits from both the
-{\tt DefaultSolver} class and the Ipopt {\tt TNLP} class.
-See \url{https://projects.coin-or.org/Ipopt/browser/stable/3.2/Ipopt/doc/documentation.pdf?format=raw}
+{\tt DefaultSolver} class and the Ipopt {\tt TNLP} class. See {\tt\UrlIpoptDoc}
 for more information on the Ipopt solver C++ implementation and the {\tt TNLP} class.
 \fi         %--------------------------------------------------------------------------
 
@@ -2868,7 +2872,7 @@ First and second derivative calculations are made using
 {\it algorithmic differentiation}\index{Algorithmic differentiation|(}.
 Here we provide a brief review of algorithmic differentiation.  For an excellent reference on algorithmic differentiation
 see Griewank\index{Griewank, A.@{\it Griewank, A.}}~\cite{griewank2000}.  The OS package uses the COIN-OR package CppAD\index{CppAD@{\tt CppAD}|(}
-(\url{http://www.coin-or.org/CppAD/}), which  is also an excellent resource with extensive  documentation and information
+({\tt\UrlCppad}), which  is also an excellent resource with extensive  documentation and information
 about algorithmic differentiation.
 See the documentation written by  Brad Bell\index{Bell, Bradley M.@{\it Bell, Bradley M.}}~\cite{bell2007}.    The development here is from the
 CppAD documentation.  Consider the function $f:X \rightarrow Y$ from $ \mathbb{R}^{n}$ to $ \mathbb{R}^{m}.$
@@ -3748,7 +3752,7 @@ The scenario is depicted in Figure~\ref{figure:ossolverservice2}.  The OSiL stri
 service is empty.  However, the OSoL element {\tt <instanceLocation>}  has an attribute {\tt locationType} equal to
 {\tt http}.  In this case, the text of the {\tt <instanceLoction>} element contains the URL of a third machine which
 has the problem instance {\tt parincLinear.osil}.  The solver service will contact the machine with URL
-{\tt http://www.coin-or.org/OS/parincLinear.osil} and download this test problem. So the {\tt OSSolverService} is
+{\tt\UrlParinclinear} and download this test problem. So the {\tt OSSolverService} is
 running on the server {\tt gsbkip.chicagogsb.edu} which contacts the server {\tt www.coin-or.org} for the model instance.
 \begin{verbatim}
 <?xml version="1.0" encoding="UTF-8"?>
@@ -4267,7 +4271,10 @@ Branch and Cut actions:
 }
 
 
-The user may also wish to an initial starting solution. This is particularly useful with interior point methods.  This is accomplished by using the {\tt <initialVariableValues> tag.  Below we illustrate how to set the initial values for variables with an index of 0, 1, and 3.
+The user may also wish to an initial starting solution. This is particularly
+useful with interior point methods.  This is accomplished by using the
+{\tt <initialVariableValues>} tag.  Below we illustrate how to set the
+initial values for variables with an index of 0, 1, and~3.
 
 \begin{verbatim}
 <initialVariableValues numberOfVar="3">
@@ -4277,7 +4284,8 @@ The user may also wish to an initial starting solution. This is particularly use
 </initialVariableValues>
 \end{verbatim}
 
-As of, trunk version 2164 the initial values for variables can be passed to the {\bf Bonmin} and {\bf Ipopt} solvers.
+As of trunk version 2164 the initial values for variables can be passed
+to the {\bf Bonmin} and {\bf Ipopt} solvers.
 
 
 When implementing solver options in-memory, the typical calling sequence is:
@@ -4377,7 +4385,7 @@ to the path to {\tt os-server-1.1}.
 
 \noindent {\bf Note:}
 There are many ways to start the Tomcat server and the exact way you choose may be different.
-See \url{http://tomcat.apache.org/} and check out Tomcat version~5.5 for more detail. But do remember to
+See {\tt\UrlTomcat} and check out Tomcat version~5.5 for more detail. But do remember to
 properly set the {\tt Tomcat Working Directory} to the path to {\tt os-server-1.1}. By default,
 if you start Tomcat on Windows, the {\tt Working Directory} is set to the Windows system folder,
 which will yield unpredictable results.
@@ -4544,7 +4552,7 @@ The user should build the GAMSlinks project as follows.
 
 \begin{enumerate}[1.]
 
-\item  Check out \url{https://projects.coin-or.org/svn/GAMSlinks/trunk} into a suitable folder. In the following we
+\item  Check out {\tt\UrlGamslinks} into a suitable folder. In the following we
 will refer to this GAMSLinks root directory as {\tt COIN-GAMSLINKS}.
 
 \item Open the file {\tt Externals} and make sure the projects {\tt cppad} and {\tt OS} are not commented.
@@ -4647,7 +4655,7 @@ This could be a problem for large instances. An alternative approach is to use t
 executable on the client end and the Java servlet {\tt OSFileUpload} on the server end.  The {\tt OSFileUpload}
 client executable is contained in the {\tt fileUpload}  directory inside the {\tt applications} directory.
 
-This servlet is based upon the Apache Commons FileUpload. See \url{http://jakarta.apache.org/commons/fileupload/}.
+This servlet is based upon the Apache Commons FileUpload. See {\tt\UrlApacheFileupload}.
 The {\tt OSFileUpload} Java class, {\tt OSFileUpload.class} is in the directory
 \begin{verbatim}
 webapps\os\WEB-INF\classes\org\optimizationservices\oscommon\util
@@ -4710,9 +4718,12 @@ and the {\tt osol} file is
 
 As an alternative to using the command line executable {\tt OSFileUpload}, there is also an html form
 {\tt fileupload.html} that can be used to upload files. For example, the URL
-\begin{verbatim}
-http://gsbkip.chicagogsb.edu/os/fileupload.html
-\end{verbatim}
+%\begin{verbatim}
+%http://gsbkip.chicagogsb.edu/os/fileupload.html
+%\end{verbatim}
+
+{\tt\UrlKippFileupload}
+
 will bring up the necessary form that allows the user to browse a directory and select the file to upload.
 This URL is based on the assumption that the {\tt OSJava} classes were deployed as described in
 Section~\ref{section:tomcat}. The file {\tt fileupload.html} is in the directory {\tt WebApps/os}.
