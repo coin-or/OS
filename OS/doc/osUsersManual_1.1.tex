@@ -4393,18 +4393,23 @@ solver->solve();
 \section{Setting up a Solver Service with Apache Tomcat}\label{section:tomcat}
 
 \index{Apache Tomcat|(}
-Download the Java binary distribution at
+The server side of the Java distribution is based on the Tomcat 5.5 implementation. 
+The first step of the installation procedure is to download the Java binary distribution at
 \begin{verbatim}
 OS-server-release_number.zip
 \end{verbatim}
 
 For example, the current release 1.0.0 is in {\tt OS-server-1.0.0.zip}.
+This zip archive contains all of the necessary files for a OS Solver Service. The installation depends on
+whether a Tomcat server is already installed on the user's machine and whether the machine is running
+under unix or Windows.
 
+After unpacking
+{\tt OS-server-release\_number.zip} you should see the  directory {\tt OS-server-1.0.0} and a single file {\tt os.war}.
 
-The server side of the Java distribution is based on the Tomcat 5.5 implementation. After unpacking
-{\tt OS-server-release\_number.zip} there is a directory {\tt OS-server-1.0.0} and a single file {\tt os.war}.
-For users who have not installed the Tomcat server,   {\tt OS-server-1.0.0} contains  all of the necessary files
-for a OS Solver Service.  If you do not have a Tomcat server running, do the following to setup a  Tomcat server
+%For users who have not installed the Tomcat server,   {\tt OS-server-1.0.0} contains  all of the necessary files
+%for a OS Solver Service.  
+If you do not have a Tomcat server running, do the following to set up a  Tomcat server
 with the OS Solver Service on a {\bf Unix system}:
 
 \begin{enumerate}[Step 1.]
@@ -4564,7 +4569,7 @@ contains executables and scripts to start and shutdown the Tomcat server.
 \section{Modeling Language Support}\label{section:modellang}
 
 Algebraic modeling languages can be used to generate model instances as input to an OS compliant solver.
-We describe two such hook-ups, {\tt OSAmplClient} for AMPL\index{AMPL}, and {\tt GAMSLinks} for GAMS\index{GAMS}.
+We describe two such hook-ups, {\tt OSAmplClient} for AMPL\index{AMPL}, and {\tt GAMSlinks} for GAMS\index{GAMS}.
 
 
 \subsection{AMPL Client:  Hooking AMPL to Solvers}\label{section:amplclient}
@@ -4625,16 +4630,16 @@ In this case it is necessary that the {\tt Ipopt}\index{Ipopt@{\tt Ipopt}|)} sol
 \index{OSAmplClient@{\tt OSAmplClient}|)}
 
 
-\subsection{GAMS link:  Hooking GAMS to Solvers}\label{section:gamslinks}
+\subsection{GAMSlinks:  Hooking GAMS to Solvers}\label{section:gamslinks}
 
 %Algebraic modeling languages can be used to generate model instances as input to an OS compliant solver.
 %We describe two such hook-ups,
 %The AMPL\index{AMPL} and GAMS modeling languages can be used to generate model instances as input  to an OS
 %compliant solver.
 %In Section \ref{section:amplclient} we described how to hook the AMPL modeling language to solvers using
-%{\tt OSAmplClient}.  It is also possible to use GAMS via the COIN-OR GAMSlinks\index{GAMSLinks|(} project.
+%{\tt OSAmplClient}.  It is also possible to use GAMS via the COIN-OR GAMSlinks\index{GAMSlinks|(} project.
 
-GAMSlinks\index{GAMSLinks|(}
+GAMSlinks\index{GAMSlinks|(}
 For instructions on downloading and building  the GAMSlinks project see \url{projects.coin-or.org/GAMSlinks}.
 In the following discussion we assume that the user has both GAMS and GAMSlinks on their machine.
 The user should build the GAMSlinks project as follows.
@@ -4642,7 +4647,7 @@ The user should build the GAMSlinks project as follows.
 \begin{enumerate}[1.]
 
 \item  Check out {\tt\UrlGamslinks} into a suitable folder. In the following we
-will refer to this GAMSLinks root directory as {\tt COIN-GAMSLINKS}.
+will refer to this GAMSlinks root directory as {\tt COIN-GAMSLINKS}.
 
 \item Open the file {\tt Externals} and make sure the projects {\tt cppad} and {\tt OS} are not commented.
 (These projects appear in line 9 and 10, respectively.)
@@ -4663,7 +4668,7 @@ svn propset svn:externals . -F Externals
 \end{verbatim}
 
 Note that the configuration of the {\tt GAMSlinks} project is completely separate from the OS installation process
-described in section~\ref{section:build}. The GAMSLinks configuration and make should be started from the
+described in section~\ref{section:build}. The GAMSlinks configuration and make should be started from the
 {\tt COIN-GAMSLINKS} directory.
 
 \item Run {\tt make}  and then {\tt make install}.
@@ -4725,7 +4730,7 @@ gams rbrock nlp=os optfile=1
 ./configure   --enable-os-solver CXXFLAGS=-DUSE_UNUSED_SYMBOLS
 \end{verbatim}
 
-\index{GAMSLinks|)}
+\index{GAMSlinks|)}
 
 
 
