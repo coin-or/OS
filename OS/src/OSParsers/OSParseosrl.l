@@ -14,8 +14,12 @@
  */
 %{
 
-#include <iostream>
+#include "OSDataStructures.h"
+#include "OSMathUtil.h"
 #include "OSConfig.h"
+
+#include <iostream>
+
 
 
 #ifdef HAVE_CSTDIO
@@ -98,7 +102,18 @@ endelementname (<\/[a-zA-Z][a-zA-Z0-9.:_]+)
 {quote} {YY_PRINT;  yylval->charval = yytext; return(QUOTE);}
 ({xmlwhitespace}*{greater_than}) {YY_PRINT;     return(GREATERTHAN);}
 -?[0-9]+  {YY_PRINT; yylval->ival = atoi( yytext); return(INTEGER);}
--?((([0-9]+)|([0-9]*\.[0-9]+))([eE][-+]?[0-9]+)?|INF) {YY_PRINT; yylval->dval = atof( yytext); return(DOUBLE);}
+-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF) {YY_PRINT; char *yytextEnd;
+yylval->dval = os_strtod_wrap( yytext, &yytextEnd);
+	if( (unsigned)(yytextEnd - yytext) != strlen( yytext)){
+		std::ostringstream outStr;
+		outStr << "encountered a spurious character in the lexer" << std::endl;
+		outStr << "The first character is: ";
+		outStr <<  yytext;
+		outStr << std::endl;
+		outStr << "See line number: " << yylineno << std::endl;  
+		throw ErrorClass( outStr.str());
+	} 
+return(DOUBLE);}
 ({xmlwhitespace}*\/>) {YY_PRINT;  return(ENDOFELEMENT);}
 
 
