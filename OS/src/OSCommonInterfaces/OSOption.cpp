@@ -1025,89 +1025,80 @@ OSOption::~OSOption()
 
 
 
-//
-// get methods
+/****************************************************************
+ * get() methods
+ */
 
-//GeneralStatus* OSResult::getGeneralStatus(){
-//	return resultHeader->generalStatus;
-//}//getGeneralStatus
+/** 
+ * get() methods for <general> element
+ */
 
+std::string  OSOption::getServiceURI()
+{	if (this->general != NULL) 
+		return this->general->serviceURI;
+}//getServiceURI
 
-//string OSResult::getGeneralStatusType(){
-//	if(resultHeader->generalStatus == NULL) return "";
-//	return resultHeader->generalStatus->type;
-//}//getGeneralStatusType
+std::string  OSOption::getServiceName()
+{	if (this->general != NULL) 
+		return this->general->serviceName;
+}//getServiceName
 
+std::string  OSOption::getInstanceName()
+{	if (this->general != NULL) 
+		return this->general->instanceName;
+}//getInstanceName
 
-//int OSResult::getVariableNumber(){
-//	if(m_iVariableNumber == -1){
-//		if(resultData->optimization == NULL) return -1;
-//		m_iVariableNumber = resultData->optimization->numberOfVariables;
-//	}
-//	return m_iVariableNumber;
-//}//getVariableNumber
+std::string  OSOption::getInstanceLocation()
+{	if (this->general != NULL) 
+		if (this->general->instanceLocation != NULL)
+			return this->general->instanceLocation->value;
+}//getInstanceLocation
 
+std::string  OSOption::getLocationType()
+{	if (this->general != NULL) 
+		if (this->general->instanceLocation != NULL)
+			return this->general->instanceLocation->locationType;
+}//getLocationType
 
+std::string  OSOption::getJobID()
+{	if (this->general != NULL) 
+		return this->general->jobID;
+}//getJobID
 
+std::string  OSOption::getSolverName()
+{	if (this->general != NULL) 
+		return this->general->solverToInvoke;
+}//getSolverName
 
+std::string  OSOption::getLicense()
+{	if (this->general != NULL) 
+		return this->general->license;
+}//getLicense
 
-//double* OSResult::getOptimalDualVariableValues(int objIdx){
-//	if(resultData->optimization == NULL || resultData->optimization->solution == NULL) return NULL;
-//	int iNumberOfConstraints = this->getConstraintNumber();
-//	if(iNumberOfConstraints <= 0) return NULL;
-//	int iSolutions = this->getSolutionNumber();
-//	for(int i = 0; i < iSolutions; i++){
-//		if(resultData->optimization->solution[i] == NULL) continue;
-//		if(resultData->optimization->solution[i]->objectiveIdx != objIdx) continue;
-//		if(resultData->optimization->solution[i]->constraints == NULL) continue;
-//		if(resultData->optimization->solution[i]->constraints->dualValues == NULL) continue;
-//		if((resultData->optimization->solution[i]->status->type.find("ptimal") != string::npos && m_mdDualValues == NULL) ||
-//			resultData->optimization->solution[i]->status->type.compare("globallyOptimal") == 0){						
-//			m_mdDualValues = new double[iNumberOfConstraints];
-//			for(int j = 0; j < iNumberOfConstraints; j++){
-//				m_mdDualValues[ j] = resultData->optimization->solution[i]->constraints->dualValues->con[j]->value;
-//			}
-//		}	
-//		if(resultData->optimization->solution[i]->status->type.compare("globallyOptimal")){
-//			return m_mdDualValues;
-//		}
-//	}
-//	return m_mdDualValues;		
-//}//getOptimalDualVariableValues
+std::string  OSOption::getUserName()
+{	if (this->general != NULL) 
+		return this->general->userName;
+}//getUserName
 
-// set methods
+std::string  OSOption::getPassword()
+{	if (this->general != NULL) 
+		return this->general->password;
+}//getPassword
 
-//bool OSResult::setGeneralStatus(GeneralStatus *status){
-//	resultHeader->generalStatus = status;
-//	return true;
-//}//setGeneralStatus
+std::string  OSOption::getContact()
+{	if (this->general != NULL) 
+	if (this->general->contact != NULL)
+		return this->general->contact->value;
+}//getContact
 
-//bool OSResult::setGeneralStatusType(string type){
-//	if(resultHeader->generalStatus == NULL) resultHeader->generalStatus = new GeneralStatus();
-//	resultHeader->generalStatus->type = type;
-//	return true;
-//}//setGeneralStatusType
-  
-
-//bool OSResult::setSolutionNumber(int number){
-//	//if(getVariableNumber() <= 0) return false;
-//	//if(getObjectiveNumber() < 0) return false;
-//	//if(getConstraintNumber() < 0) return false;
-//	if(number < 0) return false; 
-//	if(number == 0) return true;
-//	if(resultData->optimization == NULL) resultData->optimization = new OptimizationResult();
-//	resultData->optimization->numberOfSolutions = number;
-//	resultData->optimization->solution = new OptimizationSolution*[number];
-//	for(int i = 0; i < number; i++){
-//		std::cout << "CREATING A NEW OPTIMIZATION SOLUTION" << std::endl;
-//		resultData->optimization->solution[i] = new OptimizationSolution();
-//		std::cout << "DONE CREATING A NEW OPTIMIZATION SOLUTION" << std::endl;
-//	}
-//	return true;
-//}//setSolutionNumber
+std::string  OSOption::getTransportType()
+{	if (this->general != NULL) 
+	if (this->general->contact != NULL)
+		return this->general->contact->transportType;
+}//getTransportType
 
 
-int OSOption::getnumberOfInitVarValues(){
+int OSOption::getNumberOfInitVarValues(){
 	if(m_inumberOfInitVarValues == -1){
 		if (this->optimization != NULL) {
 			if(this->optimization->variables != NULL) {
@@ -1118,7 +1109,7 @@ int OSOption::getnumberOfInitVarValues(){
 		}
 	}
 	return m_inumberOfInitVarValues;
-}//getnumberOfInitVarValues
+}//getNumberOfInitVarValues
 
 std::vector<InitVarValue*>  OSOption::getInitVarValuesSparse(){
 	std::vector<InitVarValue*> initVarVector;
@@ -1127,7 +1118,7 @@ std::vector<InitVarValue*>  OSOption::getInitVarValuesSparse(){
 			if(this->optimization->variables->initialVariableValues != NULL) {
 			int i;
 			int num_var;
-			num_var = this->getnumberOfInitVarValues();
+			num_var = this->getNumberOfInitVarValues();
 			for(i = 0; i < num_var; i++){
 				printf("\n%d\n",this->optimization->variables->initialVariableValues->var[ i]->idx);
 				printf("\n%d\n",this->optimization->variables->initialVariableValues->var[ i]->value);
@@ -1149,7 +1140,7 @@ double* OSOption::getInitVarValuesDense(int numberOfVariables){
 			{	if(this->optimization->variables->initialVariableValues != NULL) 
 				{	int i,j;
 					int num_var;
-					num_var = this->getnumberOfInitVarValues();
+					num_var = this->getNumberOfInitVarValues();
 					for(i = 0; i < num_var; i++)
 					{	j = this->optimization->variables->initialVariableValues->var[i]->idx;
 						if (j >= 0 && j < numberOfVariables)						
@@ -1168,7 +1159,7 @@ double* OSOption::getInitVarValuesDense(int numberOfVariables){
 	return initVarVector;
 }//getInitVarValuesDense
 
-int OSOption::getnumberOfInitVarValuesString(){
+int OSOption::getNumberOfInitVarValuesString(){
 	if(m_inumberOfInitVarValuesString == -1){
 		if (this->optimization != NULL) {
 			if(this->optimization->variables != NULL) {
@@ -1179,7 +1170,7 @@ int OSOption::getnumberOfInitVarValuesString(){
 		}
 	}
 	return m_inumberOfInitVarValuesString;
-}//getnumberOfInitVarValuesString
+}//getNumberOfInitVarValuesString
 
 std::vector<InitVarValueString*>  OSOption::getInitVarStringsSparse(){
 	std::vector<InitVarValueString*> initVarVector;
@@ -1188,7 +1179,7 @@ std::vector<InitVarValueString*>  OSOption::getInitVarStringsSparse(){
 			if(this->optimization->variables->initialVariableValuesString != NULL) {
 			int i;
 			int num_var;
-			num_var = this->getnumberOfInitVarValuesString();
+			num_var = this->getNumberOfInitVarValuesString();
 			for(i = 0; i < num_var; i++){
 				initVarVector.push_back( this->optimization->variables->initialVariableValuesString->var[ i]);
 				}
@@ -1209,7 +1200,7 @@ std::string *OSOption::getInitVarStringsDense(int numberOfVariables){
 			{	if(this->optimization->variables->initialVariableValuesString != NULL) 
 				{	int i,j;
 					int num_var;
-					num_var = this->getnumberOfInitVarValuesString();
+					num_var = this->getNumberOfInitVarValuesString();
 					for(i = 0; i < num_var; i++)
 					{	j = this->optimization->variables->initialVariableValuesString->var[i]->idx;
 						if (j >= 0 && j < numberOfVariables)
@@ -1229,7 +1220,7 @@ std::string *OSOption::getInitVarStringsDense(int numberOfVariables){
 }//getInitVarStringsDense
 
 
-int OSOption::getnumberOfInitObjValues(){
+int OSOption::getNumberOfInitObjValues(){
 	if(m_inumberOfInitObjValues == -1){
 		if (this->optimization != NULL) {
 			if(this->optimization->objectives != NULL) {
@@ -1240,7 +1231,7 @@ int OSOption::getnumberOfInitObjValues(){
 		}
 	}
 	return m_inumberOfInitObjValues;
-}//getnumberOfInitObjValues
+}//getNumberOfInitObjValues
 
 std::vector<InitObjValue*>  OSOption::getInitObjValuesSparse(){
 	std::vector<InitObjValue*> initObjVector;
@@ -1249,7 +1240,7 @@ std::vector<InitObjValue*>  OSOption::getInitObjValuesSparse(){
 			if(this->optimization->objectives->initialObjectiveValues != NULL) {
 			int i;
 			int num_obj;
-			num_obj = this->getnumberOfInitObjValues();
+			num_obj = this->getNumberOfInitObjValues();
 			for(i = 0; i < num_obj; i++){
 				printf("\n%d\n",this->optimization->objectives->initialObjectiveValues->obj[ i]->idx);
 				printf("\n%d\n",this->optimization->objectives->initialObjectiveValues->obj[ i]->value);
@@ -1271,7 +1262,7 @@ double* OSOption::getInitObjValuesDense(int numberOfObjectives){
 			{	if(this->optimization->objectives->initialObjectiveValues != NULL) 
 				{	int i,j;
 					int num_obj;
-					num_obj = this->getnumberOfInitObjValues();
+					num_obj = this->getNumberOfInitObjValues();
 					for(i = 0; i < num_obj; i++)
 					{	j = this->optimization->objectives->initialObjectiveValues->obj[i]->idx;
 						if (j < 0 && -j <= numberOfObjectives)						
@@ -1290,7 +1281,7 @@ double* OSOption::getInitObjValuesDense(int numberOfObjectives){
 	return initObjVector;
 }//getInitObjValuesDense
 
-int OSOption::getnumberOfInitObjBounds(){
+int OSOption::getNumberOfInitObjBounds(){
 	if(m_inumberOfInitObjBounds == -1){
 		if (this->optimization != NULL) {
 			if(this->optimization->objectives != NULL) {
@@ -1301,7 +1292,7 @@ int OSOption::getnumberOfInitObjBounds(){
 		}
 	}
 	return m_inumberOfInitObjBounds;
-}//getnumberOfInitObjBounds
+}//getNumberOfInitObjBounds
 
 std::vector<InitObjBound*>  OSOption::getInitObjBoundsSparse()
 {	std::vector<InitObjBound*> initObjBounds;
@@ -1310,7 +1301,7 @@ std::vector<InitObjBound*>  OSOption::getInitObjBoundsSparse()
 		{	if(this->optimization->objectives->initialObjectiveBounds != NULL) 
 			{	int i;
 				int num_obj;
-				num_obj = this->getnumberOfInitObjBounds();
+				num_obj = this->getNumberOfInitObjBounds();
 				for(i = 0; i < num_obj; i++)
 				{	printf("\n%d\n",this->optimization->objectives->initialObjectiveBounds->obj[ i]->idx);
 					printf("\n%d\n",this->optimization->objectives->initialObjectiveBounds->obj[ i]->lbValue);
@@ -1333,7 +1324,7 @@ double* OSOption::getInitObjLowerBoundsDense(int numberOfObjectives){
 			{	if(this->optimization->objectives->initialObjectiveBounds != NULL) 
 				{	int i,j;
 					int num_obj;
-					num_obj = this->getnumberOfInitObjBounds();
+					num_obj = this->getNumberOfInitObjBounds();
 					for(i = 0; i < num_obj; i++)
 					{	j = this->optimization->objectives->initialObjectiveBounds->obj[i]->idx;
 						if (j < 0 && -j <= numberOfObjectives)						
@@ -1362,7 +1353,7 @@ double* OSOption::getInitObjUpperBoundsDense(int numberOfObjectives){
 			{	if(this->optimization->objectives->initialObjectiveBounds != NULL) 
 				{	int i,j;
 					int num_obj;
-					num_obj = this->getnumberOfInitObjBounds();
+					num_obj = this->getNumberOfInitObjBounds();
 					for(i = 0; i < num_obj; i++)
 					{	j = this->optimization->objectives->initialObjectiveBounds->obj[i]->idx;
 						if (j < 0 && -j <= numberOfObjectives)						
@@ -1382,7 +1373,7 @@ double* OSOption::getInitObjUpperBoundsDense(int numberOfObjectives){
 }//getInitObjUpperBoundsDense
 
 
-int OSOption::getnumberOfInitConValues(){
+int OSOption::getNumberOfInitConValues(){
 	if(m_inumberOfInitConValues == -1){
 		if (this->optimization != NULL) {
 			if(this->optimization->constraints != NULL) {
@@ -1393,7 +1384,7 @@ int OSOption::getnumberOfInitConValues(){
 		}
 	}
 	return m_inumberOfInitConValues;
-}//getnumberOfInitConValues
+}//getNumberOfInitConValues
 
 std::vector<InitConValue*>  OSOption::getInitConValuesSparse(){
 	std::vector<InitConValue*> initConVector;
@@ -1402,7 +1393,7 @@ std::vector<InitConValue*>  OSOption::getInitConValuesSparse(){
 			if(this->optimization->constraints->initialConstraintValues != NULL) {
 			int i;
 			int num_con;
-			num_con = this->getnumberOfInitConValues();
+			num_con = this->getNumberOfInitConValues();
 			for(i = 0; i < num_con; i++){
 				printf("\n%d\n",this->optimization->constraints->initialConstraintValues->con[ i]->idx);
 				printf("\n%d\n",this->optimization->constraints->initialConstraintValues->con[ i]->value);
@@ -1424,7 +1415,7 @@ double* OSOption::getInitConValuesDense(int numberOfConstraints){
 			{	if(this->optimization->constraints->initialConstraintValues != NULL) 
 				{	int i,j;
 					int num_con;
-					num_con = this->getnumberOfInitConValues();
+					num_con = this->getNumberOfInitConValues();
 					for(i = 0; i < num_con; i++)
 					{	j = this->optimization->constraints->initialConstraintValues->con[i]->idx;
 						if (j >= 0 && j < numberOfConstraints)						
@@ -1444,7 +1435,7 @@ double* OSOption::getInitConValuesDense(int numberOfConstraints){
 }//getInitConValuesDense
 
 //-----------------------------------------
-int OSOption::getnumberOfInitDualVarValues(){
+int OSOption::getNumberOfInitDualVarValues(){
 	if(m_inumberOfInitDualVarValues == -1){
 		if (this->optimization != NULL) {
 			if(this->optimization->constraints != NULL) {
@@ -1455,7 +1446,7 @@ int OSOption::getnumberOfInitDualVarValues(){
 		}
 	}
 	return m_inumberOfInitDualVarValues;
-}//getnumberOfInitDualVarValues
+}//getNumberOfInitDualVarValues
 
 std::vector<InitDualVarValue*>  OSOption::getInitDualVarValuesSparse(){
 	std::vector<InitDualVarValue*> initDualVector;
@@ -1464,7 +1455,7 @@ std::vector<InitDualVarValue*>  OSOption::getInitDualVarValuesSparse(){
 			if(this->optimization->constraints->initialDualValues != NULL) {
 			int i;
 			int num_con;
-			num_con = this->getnumberOfInitDualVarValues();
+			num_con = this->getNumberOfInitDualVarValues();
 			for(i = 0; i < num_con; i++){
 				printf("\n%d\n",this->optimization->constraints->initialDualValues->con[ i]->idx);
 				printf("\n%d\n",this->optimization->constraints->initialDualValues->con[ i]->lbValue);
@@ -1487,7 +1478,7 @@ double* OSOption::getInitDualVarLowerBoundsDense(int numberOfConstraints){
 			{	if(this->optimization->constraints->initialDualValues != NULL) 
 				{	int i,j;
 					int num_con;
-					num_con = this->getnumberOfInitDualVarValues();
+					num_con = this->getNumberOfInitDualVarValues();
 					for(i = 0; i < num_con; i++)
 					{	j = this->optimization->constraints->initialDualValues->con[i]->idx;
 						if (j >= 0 && j < numberOfConstraints)						
@@ -1516,7 +1507,7 @@ double* OSOption::getInitDualVarUpperBoundsDense(int numberOfConstraints){
 			{	if(this->optimization->constraints->initialDualValues != NULL) 
 				{	int i,j;
 					int num_con;
-					num_con = this->getnumberOfInitDualVarValues();
+					num_con = this->getNumberOfInitDualVarValues();
 					for(i = 0; i < num_con; i++)
 					{	j = this->optimization->constraints->initialDualValues->con[i]->idx;
 						if (j >= 0 && j < numberOfConstraints)						
@@ -1535,7 +1526,7 @@ double* OSOption::getInitDualVarUpperBoundsDense(int numberOfConstraints){
 	return initDualVector;
 }//getInitDualVarUpperBoundsDense
 
-int OSOption::getnumberOfSolverOptions(){
+int OSOption::getNumberOfSolverOptions(){
 	if(m_inumberOfSolverOptions == -1){
 		if (this->optimization != NULL) {
 			if(this->optimization->solverOptions != NULL) {
@@ -1544,7 +1535,7 @@ int OSOption::getnumberOfSolverOptions(){
 		}
 	}
 	return m_inumberOfSolverOptions;
-}//getnumberOfSolverOptions
+}//getNumberOfSolverOptions
 
 std::vector<SolverOption*>  OSOption::getSolverOptions( std::string solver_name){
 	std::vector<SolverOption*> optionsVector;
@@ -1552,7 +1543,7 @@ std::vector<SolverOption*>  OSOption::getSolverOptions( std::string solver_name)
 		if (this->optimization->solverOptions != NULL) {
 			int i;
 			int num_options;
-			num_options = this->getnumberOfSolverOptions();
+			num_options = this->getNumberOfSolverOptions();
 			for(i = 0; i < num_options; i++){
 				if(solver_name == this->optimization->solverOptions->solverOption[ i]->solver){
 					optionsVector.push_back( this->optimization->solverOptions->solverOption[ i]);
@@ -1562,3 +1553,22 @@ std::vector<SolverOption*>  OSOption::getSolverOptions( std::string solver_name)
 	}
 	return optionsVector;
 }//getSolverOptions
+
+
+
+bool OSOption::setServiceURI( std::string serviceURI)
+{	if (this->general == NULL) 
+		this->general = new GeneralOption();
+	this->general->serviceURI = serviceURI;
+	return true;
+}//setServiceURI
+
+
+bool OSOption::setMinCPUNumber( int minCPUNumber)
+{	if (this->system == NULL) 
+		this->system = new SystemOption();
+	this->system->minCPUNumber = minCPUNumber;
+	return true;
+}//setMinCPUNumber
+
+

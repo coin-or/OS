@@ -531,7 +531,7 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass) {
 		app->Options()->SetStringValue("check_derivatives_for_naninf", "yes");
 		/* end of the default options */
 		if(osoption != NULL){
-			std::cout << "number of solver options "  <<  osoption->getnumberOfSolverOptions() << std::endl;
+			std::cout << "number of solver options "  <<  osoption->getNumberOfSolverOptions() << std::endl;
 			std::vector<SolverOption*> optionsVector;
 			optionsVector = osoption->getSolverOptions( "ipopt");
 			char *pEnd;

@@ -276,7 +276,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 	try{
 		if(osoption != NULL){
 			this->bSetSolverOptions = true;
-			std::cout << "number of solver options "  <<  osoption->getnumberOfSolverOptions() << std::endl;
+			std::cout << "number of solver options "  <<  osoption->getNumberOfSolverOptions() << std::endl;
 			std::vector<SolverOption*> optionsVector;
 			//get the osi options
 			optionsVector = osoption->getSolverOptions( "osi");

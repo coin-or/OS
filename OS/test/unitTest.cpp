@@ -241,7 +241,7 @@ int main(int argC, char* argV[])
 	// 
 	unitTestResult << "HERE ARE THE UNIT TEST RESULTS:" << std::endl << std::endl;
 
-//#define OSOL_PARSER_DEBUG
+#define OSOL_PARSER_DEBUG
 #ifndef OSOL_PARSER_DEBUG
 
 	//first make sure we can read files
@@ -1649,7 +1649,7 @@ catch(const ErrorClass& eclass){
 		cout << "PARSE THE OSOL STRING INTO AN OSOPTION OBJECT" << endl;
 		osoption = osolreader->readOSoL( osol);
 		
-		std::cout << "number of solver options "  <<  osoption->getnumberOfSolverOptions() << std::endl;
+		std::cout << "number of solver options "  <<  osoption->getNumberOfSolverOptions() << std::endl;
 		std::vector<SolverOption*> optionsVector;
 		optionsVector = osoption->getSolverOptions( "ipopt");
 		int i;
@@ -1658,7 +1658,7 @@ catch(const ErrorClass& eclass){
 			std::cout << "ipopt solver option  "  << optionsVector[ i]->name << std::endl;
 		}
 
-		std::cout << "number of variables initialed with double "  <<  osoption->getnumberOfInitVarValues() << std::endl;
+		std::cout << "number of variables initialed with double "  <<  osoption->getNumberOfInitVarValues() << std::endl;
 		std::vector<InitVarValue*> initVarVector;
 		initVarVector = osoption->getInitVarValuesSparse();
 		int num_var = initVarVector.size();
@@ -1673,6 +1673,18 @@ catch(const ErrorClass& eclass){
 			std::cout << "initialize; var index "  << i;
 			std::cout << ", value = "  << denseInitVarVector[ i] << std::endl;
 		}
+
+		std::string tempStr;
+		tempStr = "http://myweb.dal.ca/gassmann";
+		ok &= osoption->setServiceURI(tempStr);
+		ok &= osoption->setMinCPUNumber(2);
+		std::cout << "serviceURI:" << osoption->general->serviceURI << std::endl;
+		tempStr = osoption->getServiceURI();
+		std::cout << "serviceURI:" << tempStr << std::endl;
+
+
+
+
 		cout << "Write the content to a new file" <<endl;		
 		tmpOSoL = osolwriter->writeOSoL( osoption);
 		cout << endl << "Here is tmpOSoL:" <<endl;
@@ -1690,6 +1702,8 @@ catch(const ErrorClass& eclass){
 		osolwriter = NULL;
 		delete osolreader;
 		osolreader = NULL;
+
+
 		unitTestResult << 
 		     "Successful test of OSoL parser on file parsertest.osol" 
 		      << std::endl;

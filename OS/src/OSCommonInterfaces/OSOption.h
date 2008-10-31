@@ -1782,78 +1782,466 @@ public:
 	
 
 
-public: //Put the get() and set() methods...
-
-//   	/**
-//	 * Get the general status.
-//	 * 
-//	 * @return the general status. 
-//	 */
-//	GeneralStatus* getGeneralStatus();
+public: 
 	
-//  	/**
-//	 * Get the general status type, which can be: 
-//	 * success, error, warning. 
-//	 * 
-//	 * @return the general status type, null if none. 
-//	 */
-//	std::string getGeneralStatusType();
-//	
-//   	/**
-//	 * Get the general status description. 
-//	 * 
-//	 * @return the general status description, null or empty std::string if none. 
-//	 */
-//	std::string getGeneralStatusDescription();
-
-//	/**
-//	 * Get one solution of optimal primal variable values. 
-//	 * 
-//	 * @param objIdx holds the objective index the optimal value corresponds to. 
-//	 * @return a double dense array of the optimal values, null if no optimal value. 
-//	 */
-//	double* getOptimalPrimalVariableValues(int objIdx);
-
-//	/**
-//	 * Get the [i]th optimization solution status, where i equals the given solution index.   
-//	 * The solution status includes the status type, optional descriptions and possibly substatuses.
-//	 *  
-//	 * @param solIdx holds the solution index to get the solution status. 
-//	 * @return the optimization solution status that corresponds to solIdx, null if none.
-//	 * @see org.optimizationservices.oscommon.datastructure.osresult.OptimizationSolutionStatus
-//	 */	
-//	OptimizationSolutionStatus* getSolutionStatus( int solIdx);
-
+	// get() methods...
 	
-	// set methods
-	//
-	
-	
-	
-//   	/**
-//	 * Set the general status
-//	 * 
-//	 * @param status holds the general status.
-//	 * @return whether the general status is set successfully. 
-//	 */
-//	bool setGeneralStatus(GeneralStatus *status);
-			
-//   	/**
-//	 * Set the general status type, which can be: 
-//	 * success, error, warning. 
-//	 * 
-//	 * @param type holds the general status type
-//	 * @return whether the general status type is set successfully or not. 
-//	 */
-//	bool setGeneralStatusType(std::string type);	
+	/**
+	 * Get the service URI
+	 */
+	std::string  OSOption::getServiceURI();
 
+	/**
+	 * Get the service name
+	 */
+	std::string  OSOption::getServiceName();
+
+	/**
+	 * Get the instance name
+	 */
+	std::string  OSOption::getInstanceName();
+
+	/**
+	 * Get the instance location
+	 */
+	std::string  OSOption::getInstanceLocation();
+
+	/**
+	 * Get the location type
+	 */
+	std::string  OSOption::getLocationType();
+
+	/**
+	 * Get the job ID
+	 */
+	std::string  OSOption::getJobID();
+
+	/**
+	 * Get the solver name
+	 */
+	std::string  OSOption::getSolverName();
+
+	/**
+	 * Get the license string
+	 */
+	std::string  OSOption::getLicense();
+
+	/**
+	 * Get the user name
+	 */
+	std::string  OSOption::getUserName();
+
+	/**
+	 * Get the password
+	 */
+	std::string  OSOption::getPassword();
+
+	/**
+	 * Get the conact information
+	 */
+	std::string  OSOption::getContact();
+
+	/**
+	 * Get the transport type
+	 */
+	std::string  OSOption::getTransportType();
+
+	/**
+	 * Get the disk space unit
+	 */
+	std::string  OSOption::getMinDiskSpaceUnit();
+
+	/**
+	 * Get the memory unit
+	 */
+	std::string  OSOption::getMinMemoryUnit();
+
+	/**
+	 * Get the CPU speed unit
+	 */
+	std::string  OSOption::getMinCPUSpeedUnit();
+
+	/**
+	 * Get the service type
+	 */
+	std::string  OSOption::getServiceType();
+
+	/**
+	 * Get the time unit
+	 */
+	std::string  OSOption::getMaxTimeUnit();
+
+	/**
+	 * Get the scheduled starting time
+	 */
+	std::string  OSOption::getScheduledStartTime();
+
+	/**
+	 * Get any of the string-valued options
+	 */
+	std::string  OSOption::getOptionStr(std::string optionName);
+
+	/**
+	 * Get the minimum required disk space
+	 */
+	double  OSOption::getMinDiskSpace();
+
+	/**
+	 * Get the minimum required memory
+	 */
+	double  OSOption::getMinMemory();
+
+	/**
+	 * Get the minimum required CPU speed
+	 */
+	double  OSOption::getMinCPUSpeed();
+
+	/**
+	 * Get the maximum allowed time
+	 */
+	double  OSOption::getMaxTime();
+
+	/**
+	 * Get any of the double-valued options
+	 */
+	double  OSOption::getOptionDbl(std::string optionName);
+
+	/**
+	 * Get the minimum required number of CPUs
+	 */
+	int  OSOption::getMinCPUNumber();
+
+	/**
+	 * Get the number of <other> options in the <general> element
+	 */
+	int  OSOption::getNumberOfOtherGeneralOptions();
+
+	/**
+	 * Get the number of <other> options in the <system> element
+	 */
+	int  OSOption::getNumberOfOtherSystemOptions();
+
+	/**
+	 * Get the number of <other> options in the <service> element
+	 */
+	int  OSOption::getNumberOfOtherServiceOptions();
+
+	/**
+	 * Get the number of <other> options in the <job> element
+	 */
+	int  OSOption::getNumberOfOtherJobOptions();
+
+	/**
+	 * Get the number of job dependencies
+	 */
+	int  OSOption::getNumberOfJobDependencies();
+
+	/**
+	 * Get the number of required directories
+	 */
+	int  OSOption::getNumberOfRequiredDirectories();
+
+	/**
+	 * Get the number of required files
+	 */
+	int  OSOption::getNumberOfRequiredFiles();
+
+	/**
+	 * Get the number of directories to make
+	 */
+	int  OSOption::getNumberOfDirectoriesToMake();
+
+	/**
+	 * Get the number of files to create
+	 */
+	int  OSOption::getNumberOfFilesToCreate();
+
+	/**
+	 * Get the number of input directories to move
+	 */
+	int  OSOption::getNumberOfInputDirectoriesToMove();
+
+	/**
+	 * Get the number of input files to move
+	 */
+	int  OSOption::getNumberOfInputFilesToMove();
+
+	/**
+	 * Get the number of output directories to move
+	 */
+	int  OSOption::getNumberOfOutputDirectoriesToMove();
+
+	/**
+	 * Get the number of output files to move
+	 */
+	int  OSOption::getNumberOfOutputFilesToMove();
+
+	/**
+	 * Get the number of files to delete
+	 */
+	int  OSOption::getNumberOfFilesToDelete();
+
+	/**
+	 * Get the number of directories to delete
+	 */
+	int  OSOption::getNumberOfDirectoriesToDelete();
+
+	/**
+	 * Get the number of processes to kill
+	 */
+	int  OSOption::getNumberOfProcessesToKill();
+
+	/**
+	 * Get the number of variables in the instance
+	 */
+	int  OSOption::getNumberOfVariables();
+
+	/**
+	 * Get the number of objectives in the instance
+	 */
+	int  OSOption::getNumberOfObjectives();
+
+	/**
+	 * Get the number of constraints in the instance
+	 */
+	int  OSOption::getNumberOfConstraints();
 
 	/**
 	 * Get the number of initial variable values. 
 	 * 
 	 * @return the number of initial variable values. 
 	 */
-	int getnumberOfInitVarValues();
+	int getNumberOfInitVarValues();
+
+	/**
+	 * Get the number of initial variable strings. 
+	 * 
+	 * @return the number of initial variable strings. 
+	 */
+	int getNumberOfInitVarValuesString();
+
+	/**
+	 * Get the number of other variable options
+	 * 
+	 * @return the number of other variable options. 
+	 */
+	int getNumberOfOtherVariableOptions();
+	
+	/**
+	 * Get the number of initial objective values. 
+	 * 
+	 * @return the number of initial objective values. 
+	 */
+	int getNumberOfInitObjValues();
+
+	/**
+	 * Get the number of initial objective bounds. 
+	 * 
+	 * @return the number of initial objective bound values. 
+	 */
+	int getNumberOfInitObjBounds();
+
+	/**
+	 * Get the number of other objective options
+	 * 
+	 * @return the number of other objective options. 
+	 */
+	int getNumberOfOtherObjectiveOptions();
+	
+	/**
+	 * Get the number of initial constraint values. 
+	 * 
+	 * @return the number of initial constraint values. 
+	 */
+	int getNumberOfInitConValues();
+
+	/**
+	 * Get the number of initial dual variable values. 
+	 * 
+	 * @return the number of initial dual variable values. 
+	 */
+	int getNumberOfInitDualVarValues();
+
+	/**
+	 * Get the number of other constraint options
+	 * 
+	 * @return the number of other constraint options. 
+	 */
+	int getNumberOfOtherConstraintOptions();
+	
+	/**
+	 * Get the number of solver options. 
+	 * 
+	 * @return the number of solver options. 
+	 */
+	int getNumberOfSolverOptions();
+	
+	/**
+	 * Get any of the integer-valued options
+	 */
+	int  OSOption::getOptionInt(std::string optionName);
+
+
+	/**
+	 * Get the array of other options associated with the <general> element
+	 * <p>
+	 * 
+	 * @return a vector of pointers to otherOptions objects  
+	 * associated with the <general> element
+	 */
+	std::vector<OtherOption*> getOtherGeneralOptions();
+
+	/**
+	 * Get the array of other options associated with the <system> element
+	 * <p>
+	 * 
+	 * @return a vector of pointers to otherOptions objects  
+	 * associated with the <system> element
+	 */
+	std::vector<OtherOption*> getOtherSystemOptions();
+
+	/**
+	 * Get the array of other options associated with the <service> element
+	 * <p>
+	 * 
+	 * @return a vector of pointers to otherOptions objects  
+	 * associated with the <service> element
+	 */
+	std::vector<OtherOption*> getOtherServiceOptions();
+
+	/**
+	 * Get the array of other options associated with the <job> element
+	 * <p>
+	 * 
+	 * @return a vector of pointers to otherOptions objects  
+	 * associated with the <job> element
+	 */
+	std::vector<OtherOption*> getOtherJobOptions();
+
+	/**
+	 * Get the array of other options associated with any element
+	 * <p>
+	 * 
+	 * @return a vector of pointers to otherOptions objects  
+	 * associated with the element whose name matches elementName
+	 */
+	std::vector<OtherOption*> getOtherOptions(std::string elementName);
+
+	/**
+	 * Get the array of all other options associated with the 
+	 ** <general>, <system>, <service> and <job> elements
+	 * <p>
+	 * 
+	 * @return a vector of pointers to all otherOptions objects  
+	 */
+	std::vector<OtherOption*> getAllOtherOptions();
+
+	/**
+	 * Get the array of job dependencies
+	 * <p>
+	 * 
+	 * @return a vector of pointers to JobDependencies objects  
+	 */
+	std::vector<JobDependencies*> getJobDependencies();
+
+	/**
+	 * Get the array of required directories
+	 * <p>
+	 * 
+	 * @return a vector of pointers to DirectoriesAndFiles objects  
+	 * giving the directories that are required by the current job
+	 */
+	std::vector<DirectoriesAndFiles*> getRequiredDirectories();
+
+	/**
+	 * Get the array of required files
+	 * <p>
+	 * 
+	 * @return a vector of pointers to DirectoriesAndFiles objects  
+	 * giving the files that are required by the current job
+	 */
+	std::vector<DirectoriesAndFiles*> getRequiredFiles();
+
+	/**
+	 * Get the array of directories to make
+	 * <p>
+	 * 
+	 * @return a vector of pointers to DirectoriesAndFiles objects  
+	 * giving the directories that must be created
+	 */
+	std::vector<DirectoriesAndFiles*> getDirectoriesToMake();
+
+	/**
+	 * Get the array of files to create
+	 * <p>
+	 * 
+	 * @return a vector of pointers to DirectoriesAndFiles objects  
+	 * giving the files that must be created
+	 */
+	std::vector<DirectoriesAndFiles*> getFilesToCreate();
+
+	/**
+	 * Get the array of input directories to move
+	 * <p>
+	 * 
+	 * @return a vector of pointers to PathPair objects  
+	 * giving the input directories that must be moved
+	 */
+	std::vector<PathPair*> getInputDirectoriesToMove();
+
+	/**
+	 * Get the array of input files to move
+	 * <p>
+	 * 
+	 * @return a vector of pointers to PathPair objects  
+	 * giving the input files that must be moved
+	 */
+	std::vector<PathPair*> getInputFilesToMove();
+
+	/**
+	 * Get the array of output directories to move
+	 * <p>
+	 * 
+	 * @return a vector of pointers to PathPair objects  
+	 * giving the output directories that must be moved
+	 */
+	std::vector<PathPair*> getOutputDirectoriesToMove();
+
+	/**
+	 * Get the array of output files to move
+	 * <p>
+	 * 
+	 * @return a vector of pointers to PathPair objects  
+	 * giving the output files that must be moved
+	 */
+	std::vector<PathPair*> getOutputFilesToMove();
+
+	/**
+	 * Get the array of directories to delete
+	 * <p>
+	 * 
+	 * @return a vector of pointers to DirectoriesAndFiles objects  
+	 * giving the directories that must be deleted
+	 */
+	std::vector<DirectoriesAndFiles*> getDirectoriesToDelete();
+
+	/**
+	 * Get the array of files to delete
+	 * <p>
+	 * 
+	 * @return a vector of pointers to DirectoriesAndFiles objects  
+	 * giving the files that must be deleted
+	 */
+	std::vector<DirectoriesAndFiles*> getFilesToDelete();
+
+	/**
+	 * Get the array of processes to kill
+	 * <p>
+	 * 
+	 * @return a vector of pointers to Processes objects  
+	 * giving the processes that must be killed
+	 */
+	std::vector<Processes*> getProcessesToKill();
 
 	/**
 	 * Get the initial values associated with the variables in sparse form
@@ -1874,13 +2262,6 @@ public: //Put the get() and set() methods...
 	double *getInitVarValuesDense(int numberOfVariables);
 
 	/**
-	 * Get the number of initial variable strings. 
-	 * 
-	 * @return the number of initial variable strings. 
-	 */
-	int getnumberOfInitVarValuesString();
-
-	/**
 	 * Get the initial value strings associated with the variables in sparse form
 	 * <p>
 	 * 
@@ -1899,11 +2280,12 @@ public: //Put the get() and set() methods...
 	std::string *getInitVarStringsDense(int numberOfVariables);
 
 	/**
-	 * Get the number of initial objective values. 
+	 * Get the array of other variable options
+	 * <p>
 	 * 
-	 * @return the number of initial objective values. 
+	 * @return a vector of pointers to OtherVariableOption objects  
 	 */
-	int getnumberOfInitObjValues();
+	std::vector<OtherVariableOption*> getOtherVariableOptions();
 
 	/**
 	 * Get the initial values associated with the objectives in sparse form
@@ -1922,14 +2304,6 @@ public: //Put the get() and set() methods...
 	 * hold inital values (or OSNAN) for all of the objectives
 	 */
 	double *getInitObjValuesDense(int numberOfObjectives);
-
-
-	/**
-	 * Get the number of initial objective bounds. 
-	 * 
-	 * @return the number of initial objective bound values. 
-	 */
-	int getnumberOfInitObjBounds();
 
 	/**
 	 * Get the initial bounds associated with the objectives in sparse form
@@ -1959,11 +2333,12 @@ public: //Put the get() and set() methods...
 	double *getInitObjUpperBoundsDense(int numberOfObjectives);
 
 	/**
-	 * Get the number of initial constraint values. 
+	 * Get the array of other objective options
+	 * <p>
 	 * 
-	 * @return the number of initial constraint values. 
+	 * @return a vector of pointers to OtherObjectiveOption objects  
 	 */
-	int getnumberOfInitConValues();
+	std::vector<OtherObjectiveOption*> getOtherObjectiveOptions();
 
 	/**
 	 * Get the initial values associated with the constraints in sparse form
@@ -1982,13 +2357,6 @@ public: //Put the get() and set() methods...
 	 * hold inital values for all of the constraints
 	 */
 	double *getInitConValuesDense(int numberOfConstraints);
-
-	/**
-	 * Get the number of initial dual variable values. 
-	 * 
-	 * @return the number of initial dual variable values. 
-	 */
-	int getnumberOfInitDualVarValues();
 
 	/**
 	 * Get the initial bounds associated with the dual variables in sparse form
@@ -2018,14 +2386,15 @@ public: //Put the get() and set() methods...
 	 */
 	double *getInitDualVarUpperBoundsDense(int numberOfConstraints);
 
-
 	/**
-	 * Get the number of solver options. 
+	 * Get the array of other constraint options
+	 * <p>
 	 * 
-	 * @return the number of solver options. 
+	 * @return a vector of pointers to OtherConstraintOption objects  
 	 */
-	int getnumberOfSolverOptions();
-	
+	std::vector<OtherConstraintOption*> getOtherConstraintOptions();
+
+
 	/**
 	 * Get the options associated with a given solver
 	 * <p>
@@ -2035,7 +2404,35 @@ public: //Put the get() and set() methods...
 	 * correspond to the solver named. 
 	 */
 	std::vector<SolverOption*> getSolverOptions( std::string solver_name);
-	
+
+//   	/**
+//	 * Set the general status
+//	 * 
+//	 * @param status holds the general status.
+//	 * @return whether the general status is set successfully. 
+//	 */
+//	bool setGeneralStatus(GeneralStatus *status);
+			
+//   	/**
+//	 * Set the general status type, which can be: 
+//	 * success, error, warning. 
+//	 * 
+//	 * @param type holds the general status type
+//	 * @return whether the general status type is set successfully or not. 
+//	 */
+//	bool setGeneralStatusType(std::string type);	
+
+
+
+	/**
+	 * Set the serviceURI
+	 */
+	bool setServiceURI( std::string serviceURI);
+
+	/**
+	 * Set the minimum number of CPUs that the system must provide
+	 */
+	bool setMinCPUNumber( int minCPUNumber);
 
 };
 #endif
