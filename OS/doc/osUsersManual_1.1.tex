@@ -180,10 +180,10 @@
 
 \begin{document}
 
-%Some cross-referencing indexes (to be expanded as needed)
+%Some cross-referencing index enries (to be expanded as needed)
 \index{ASL|see{AMPL Solver Library (ASL)}}
 \index{HSL|see{Harwell Subroutine Library (HSL)}}
-\index{nl files|see{AMPL nl files}}
+\index{nl files|see{AMPL nl format}}
 
 \title{Optimization Services 1.1 User's Manual }
 \vskip 2in
@@ -194,13 +194,15 @@
 This is the User's Manual for the Optimization Services (OS) project.  The objective of OS is to provide a
 general framework consisting of a set of standards for representing optimization instances, results,
 solver options, and communication between clients and solvers in a distributed environment using Web Services.
-This COIN-OR project provides C++ and Java source code for libraries and executable programs that implement
-OS standards.   The OS library includes a robust solver and modeling language interface (API) for linear,
+This COIN-OR\index{COIN-OR} project provides C++ and Java source code for libraries and executable programs that 
+implement OS standards.   The OS library includes a robust solver and modeling language interface (API) for linear,
 nonlinear and other types of optimization problems.   Also included is the C++ source code for a  command line
-executable {\tt OSSolverService}  for reading problem instances (OSiL format, nl format, MPS format) and
-calling a solver either locally or on a remote server.  Finally,  both Java source code and a Java {\tt war} file
-are provided for users who wish to set up a solver service on a server running Apache Tomcat\index{Apache Tomcat}.
-See the Optimization Services home page {\tt\UrlOs} and the COIN-OR Trac page {\tt\UrlTrac} for more information.
+executable {\tt OSSolverService}\index{OSSolverService@{\tt OSSolverService}}  for reading problem instances 
+(OSiL format\index{OSiL}, nl format\index{AMPL nl format}, MPS format\index{MPS format}) and
+calling a solver either locally or on a remote server.  Finally,  both Java\index{Java} source code and a Java {\tt war} 
+file are provided for users who wish to set up a solver service on a server running Apache Tomcat\index{Apache Tomcat}.
+See the Optimization Services home page {\tt\UrlOs} and the COIN-OR Trac page\index{Trac system} {\tt\UrlTrac} for 
+more information.
 \end{abstract}
 
 
@@ -221,14 +223,15 @@ See the Optimization Services home page {\tt\UrlOs} and the COIN-OR Trac page {\
 The objective of Optimization Services (OS) is to provide a general framework consisting of a set of standards
 for representing optimization instances, results, solver options, and communication between clients and solvers
 in a distributed environment using Web Services. This COIN-OR project provides source code for libraries and
-executable programs that implement OS standards.  See the COIN-OR Trac page {\tt\UrlTrac}\index{COIN-OR}
+executable programs that implement OS standards.  See the COIN-OR Trac page {\tt\UrlTrac}\index{Trac system}
 or the Optimization Services Home Page {\tt\UrlOs}\index{Optimization Services} for more information.
 The OS project provides the following:
 
 \begin{enumerate}
-\item{}  A set of XML based standards for representing optimization instances (OSiL), optimization results (OSrL),
-and optimization solver options (OSoL). There are other standards, but these are the main ones. The schemas for
-these standards are described in Section~\ref{section:schemadescriptions}.
+\item{}  A set of XML\index{XML} based standards for representing optimization instances (OSiL)\index{OSiL}, 
+optimization results (OSrL)\index{OSrL}, and optimization solver options (OSoL)\index{OSoL}. 
+There are other standards, but these are the main ones. 
+The schemas for these standards are described in Section~\ref{section:schemadescriptions}.
 
 
 \item{}  Open source libraries  that support and implement many of the standards.
@@ -239,7 +242,8 @@ Corresponding to the OSiL problem instance representation there is an in-memory 
 along with a collection of  {\tt get()},   {\tt set()}, and {\tt calculate()} methods for accessing and creating
 problem instances. This is a very general API for linear, integer, and nonlinear programs.
 Extensions for other major types of optimization problems are also in the works. Any modeling language that can
-produce OSiL can easily communicate with any solver that uses the OSInstance API.   The {\tt OSInstance} object
+produce OSiL can easily communicate with any solver that uses the OSInstance API.   
+The {\tt OSInstance}\index{OSInstance@{\tt OSInstance}} object
 is described in more detail in Section~\ref{section:osinstanceAPI}. The nonlinear part of the API is based on the
 COIN-OR project CppAD\index{CppAD@{\tt CppAD}} by Brad Bell ({\tt\UrlCppad}) but is written in a very general
 manner and could be used with other algorithmic differentiation packages. More detail on algorithmic differentiation
@@ -247,7 +251,8 @@ is provided in Section~\ref{section:ad}.
 
 
 \item{}  A  command line executable {\tt OSSolverService}\index{OSSolverService@{\tt OSSolverService}}  for reading
-problem instances (OSiL format, AMPL  nl format,  MPS format) and calling a solver either locally or on a remote server.
+problem instances (OSiL format\index{OSiL}, AMPL  nl format\index{AMPL nl format},  
+MPS format\index{MPS format}) and calling a solver either locally or on a remote server.
 This is described in Section~\ref{section:ossolverservice}.
 
 
@@ -257,14 +262,15 @@ This is described in Section~\ref{section:osmodelinterfaces}.
 
 \item{}  Standards that facilitate the communication between clients and optimization solvers using Web Services.
 In  Section~\ref{section:osagent} we describe the {\tt OSAgent}\index{OSAgent@{\tt OSAgent}} part of the OS library
-that is used to create Web Services SOAP\index{SOAP} packages with OSiL instances and contact a server for solution.
+that is used to create Web Services SOAP\index{SOAP protocol} packages with OSiL instances and contact a server for 
+solution.
 
 \item{}  An executable program {\tt OSAmplClient}\index{OSAmplClient@{\tt OSAmplClient}} that is designed to work with the
 AMPL\index{AMPL} modeling language. The {\tt OSAmplClient} appears as a ``solver'' to AMPL and, based on options given
 in AMPL, contacts solvers either remotely or locally to solve instances created in AMPL. This is described in
 Section~\ref{section:amplclient}.
 
-\item{}  Server software that works with Apache Tomcat\index{Apache Tomcat} and Apache Axis.
+\item{}  Server software that works with Apache Tomcat\index{Apache Tomcat} and Apache Axis\index{Apache Axis}.
 This software uses Web Services technology and acts as middleware between the client that creates the instance
 and the  solver on the server that optimizes the instance and returns the result. This is illustrated in
 Section~\ref{section:tomcat}.
@@ -289,21 +295,22 @@ If you want to:
 \item Use the OS library to build model instances or use solver APIs -- see Sections \ref{section:osmodelinterfaces},
 \ref{section:ossolverinterfaces} and~\ref{section:osinstanceAPI}.
 
-\item Use the OSSolverService to read files in nl, OSiL, or MPS format and call a solver locally or remotely -- see
-Section~\ref{section:ossolverservice}.
+\item Use the OSSolverService to read files in nl\index{AMPL nl format}, OSiL\index{OSiL}, 
+or MPS format\index{MPS format} and call a solver locally or remotely -- see Section~\ref{section:ossolverservice}.
 
 
-\item Use AMPL to solve problems either locally or remotely with a COIN-OR solver, Cplex, GLPK, \ifknitro Knitro, \fi
-or LINDO -- see Section~\ref{section:amplclient}.
+\item Use AMPL\index{AMPL} to solve problems either locally or remotely with a COIN-OR solver, Cplex\index{cplex@{\tt cplex}}, 
+GLPK\index{GLPK@{\tt GLPK}}, \ifknitro Knitro\index{knitro}, \fi
+or LINDO\index{LINDO} -- see Section~\ref{section:amplclient}.
 
 
-\item Build a remote solver service using Apache Tomcat -- see Section~\ref{section:tomcat}.
+\item Build a remote solver service using Apache Tomcat\index{Apache Tomcat} -- see Section~\ref{section:tomcat}.
 
-\item Use MATLAB to generate problem instances in OSiL format and call a solver either remotely or locally -- see
-Section~\ref{section:usingmatlab}.
+\item Use MATLAB\index{MATLAB} to generate problem instances in OSiL format and call a solver either remotely or locally
+ -- see Section~\ref{section:usingmatlab}.
 
-\item Use the OS library for algorithmic differentiation (in conjunction with COIN-OR CppAD) -- see
-Section~\ref{section:ad}.
+\item Use the OS library for algorithmic differentiation\index{Algorithmic differentiation} (in conjunction with 
+COIN-OR CppAD)\index{CppAD@{\tt CppAD}} -- see Section~\ref{section:ad}.
 
 \item Use modeling languages to generate model instances in OSiL format. See Section \ref{section:modellang}.
 \end{itemize}
@@ -311,7 +318,8 @@ Section~\ref{section:ad}.
 
 \section{Downloading the OS Project}\label{section:download}
 
-The OS project is an open-source project  with source code under the Common Public License (CPL).
+The OS project is an open-source project  with source code under the Common Public License~(CPL)%
+\index{Common Public License (CPL)}.
 See~{\tt\UrlCpl}.  This project was initially created by Robert Fourer, Jun Ma, and Kipp Martin.
 The code has been written primarily by  Horand Gassmann,   Jun Ma,  and Kipp Martin.    
 Horand Gassmann,  Jun Ma,  and Kipp Martin are the COIN-OR project leaders and active developers for the OS project.
@@ -342,7 +350,8 @@ For more detail on the naming convention and examples see:
 After unpacking the {\tt tgz} or {\tt zip} archives, the following folders are available.
 \begin{itemize}
 
-\item[] {\bf bin --} this directory has the executables {\tt OSSolverService} and {\tt OSAmplClient}.
+\item[] {\bf bin --} this directory has the executables {\tt OSSolverService}\index{OSSolverService@{\tt OSSolverService}} 
+and {\tt OSAmplClient}\index{OSAmplClient@{\tt OSAmplClient}}.
 
 \item[]  {\bf include --} the header files that are necessary necessary  in order to link against the OS library.
 
@@ -353,12 +362,12 @@ After unpacking the {\tt tgz} or {\tt zip} archives, the following folders are a
 
 
 
-Files are also provided for an Apache Tomcat \index{Apache Tomcat} Web server along with the associated Web service
+Files are also provided for an Apache Tomcat\index{Apache Tomcat} Web server along with the associated Web service
 that can
-read SOAP \index{SOAP protocol} envelopes with model instances in OSiL format and/or options in OSoL format,
-call the {\tt OSSolverService},
-and return the optimization result in OSrL format.
-The naming convention for the server binary is
+read SOAP \index{SOAP protocol} envelopes with model instances in OSiL\index{OSiL} format and/or options in 
+OSoL\index{OSoL} format, call the {\tt OSSolverService}\index{OSSolverService@{\tt OSSolverService}},
+and return the optimization result in OSrL\index{OSrL} format.
+The naming convention\index{file naming conventions} for the server binary is
 \begin{verbatim}
 OS-server-version_number.tgz (.zip)
 \end{verbatim}
@@ -375,7 +384,7 @@ The binary for this is named
 \begin{verbatim}
 OS-version_number-VisualStudio.zip
 \end{verbatim}
-For example, the necessary files associated with  OS  stable 1.1 are in the binary distribution
+For example, the necessary files associated with  OS  stable\index{OS!stable release} 1.1 are in the binary distribution
 \begin{verbatim}
 OS-1.1-VisualStudio.tgz
 \end{verbatim}
@@ -383,8 +392,8 @@ The binaries provided are based on Visual Studio Express 2008.  See Section \ref
 
 \subsection{Auxiliary Software for Working with the OS Project} \label{section:auxiliarydownloads}
 
-Compiling and modifying the OS project source code can be a daunting task,
-made somewhat easier by the inclusion of configure scripts and makefiles
+Compiling and modifying the OS project source\index{OS!source code} code can be a daunting task,
+made somewhat easier by the inclusion of configure scripts\index{configure!scripts} and makefiles
 in the distribution of the source. However, additional software packages are
 sometimes needed or convenient, especially on Windows.
 We collect in this section a number of recommended packages that we ourselves use in the development
@@ -392,7 +401,7 @@ and maintenance of the code.
 
 \subsubsection{Subversion (SVN)}\label{section:svn}
 
-The Subversion\index{Subversion} version control package is used to obtain the C++ source code.
+The Subversion\index{Subversion} version control package is used to obtain the C++ source code\index{OS!source code}.
 Users with Unix operating systems will most likely have a command line svn client.  If an svn client is not present,
 see~{\tt\UrlSvn} to download an svn client.   For Windows users we recommend the
 svn client  TortoiseSVN.  (See~{\tt\UrlTortoiseSvn}.)  The TortoiseSVN client is integrated within the
@@ -437,24 +446,25 @@ MinGW (Section~\ref{section:mingw}) and MSYS (Section~\ref{section:msys}). Downl
 packages are included in the sections indicated.
 
 \subsubsection{C++ compiler}\label{section:cpp}
-A C++ compiler is needed to compile the OS source. This should be present under all unix installations.
-If no C++ compiler is available on the system, the free {\tt gcc} compiler can be downloaded from
-{\tt\UrlGcc}.
+A C++ compiler\index{C++ compiler} is needed to compile the OS source\index{OS!source code}. This should be present 
+under all unix{\tt Unix} installations. If no C++ compiler is available on the system, the free {\tt gcc}\index{gcc} 
+compiler can be downloaded from {\tt\UrlGcc}.
 
-Microsoft Visual Studio can be configured with the Microsoft {\tt cl} compiler, which also works under MSYS.
-MinGW is normally configured with the Gnu compiler collection ({\tt gcc}), although it can also be used with
-the {\tt cl} compiler. However, extreme care is needed if the last option is followed. {\tt gcc} and {\tt cl}
-have very different header files, and it is important to set up the {\tt \$PATH} variable correctly in order
-not to confuse the header files. In our experience, best results are achieved with the minimal unix-like
-installation, MSYS, and the Microsoft {\tt cl} compiler.
+Microsoft Visual Studio can be configured with the Microsoft {\tt cl}\index{cl compiler@{\tt cl} compiler} compiler, which also 
+works under MSYS\index{MSYS}. MinGW\index{MinGW} is normally configured with the Gnu compiler collection ({\tt gcc}), 
+although it can also be used with the {\tt cl} compiler. However, extreme care is needed if the last option is followed. 
+{\tt gcc} and {\tt cl} have very different header files, and it is important to set up the {\tt \$PATH}%
+\index{PATH@{\tt \$PATH}} 
+variable correctly in order not to confuse the header files. In our experience, best results are achieved with the 
+minimal unix-like installation, MSYS, and the Microsoft {\tt cl} compiler.
 
 \subsubsection{Fortran Compiler}\label{section:fortran}
-The COIN-OR project Ipopt (see section~\ref{section:ipopt}) and several of the third-party software
-described in section~\ref{section:otherthirdparty} include Fortran\index{Fortran} subroutines, which must be compiled
-with a Fortran compiler if the user wants to include these projects in the build. A free Fortran 95 compiler
+The COIN-OR project Ipopt\index{Ipopt@{\tt Ipopt}} (see section~\ref{section:ipopt}) and several of the third-party 
+software described in section~\ref{section:otherthirdparty} include Fortran\index{Fortran} subroutines, which must be 
+compiled with a Fortran compiler if the user wants to include these projects in the build. A free Fortran 95 compiler
 can be downloaded from {\tt\UrlGgs}. For Fortran~77 code (which includes the Blas\index{Blas},
-HSL\index{Harwell Subroutine Library (HSL)} and Lapack\index{Lapack} projects --- but {\bf not} Mumps\index{Mumps}), it might be sufficient
-to download the {\tt f2c}\index{f2c@{\tt f2c}} translator
+HSL\index{Harwell Subroutine Library (HSL)} and Lapack\index{Lapack} projects --- but {\bf not} Mumps\index{Mumps}) ---, 
+it might be sufficient to download the {\tt f2c}\index{f2c@{\tt f2c}} translator
 which turns Fortran~77 code into code that can subsequently be fed into a C compiler.
 The {\tt f2c} translator and the {\tt f2c} runtime library can be downloaded from {\tt\UrlFToC}.
 Further details are available in the file {\tt BuildTools/compile\_f2c/INSTALL}, which is part of the OS distribution.
@@ -489,7 +499,8 @@ for the OS project and related software. For details, see section~\ref{section:d
 
 \subsection{Obtaining OS Source Code Using Subversion (SVN)}\label{section:downloadwithsvn}
 
-For Users on a Unix system\index{Downloading!subversion!unix} such as Linux, Solaris, Mac OS X, etc., the source code is obtained as follows. In a command window execute:
+For Users on a Unix system\index{Downloading!subversion!unix}\index{Unix} such as Linux, Solaris, Mac OS X, etc., 
+the source code is obtained as follows. In a command window execute:
 
 %\begin{verbatim}
 %svn co https://projects.coin-or.org/svn/OS/releases/1.1.0 COIN-OS
@@ -517,7 +528,8 @@ If so, select {\tt (p)} and you should not get this message again.
 
 \vskip 8pt
 
-On Windows\index{Downloading!subversion!Windows} with TortoiseSVN, create a directory {\tt COIN-OS}
+On Windows\index{Downloading!subversion!Windows}\index{Microsoft Windows} with TortoiseSVN\index{TortoiseSVN}, 
+create a directory {\tt COIN-OS}
 in the desired location and right-click on this directory. Select the menu item {\tt SVN Checkout ...}
 and in the textbox ``{\tt URL of Repository}'' give the URL for the version of the OS project you wish
 to check out, for instance, {\tt\UrlOsStable}.
@@ -526,7 +538,8 @@ to check out, for instance, {\tt\UrlOsStable}.
 Now build the project as described in  Section~\ref{section:build}.
 
 For the rest of this documentation, we assume that  {\tt COIN-OS} is the name of the root directory
-of the OS project distribution and that the user has defined an environment variable {\tt OS} that is the path to
+of the OS project\index{OS project!root directory} distribution and that the user has defined an environment 
+variable {\tt OS} that is the path to
 {\tt COIN-OS}.  The {\tt COIN-OS} directory structure is illustrated in Figure~\ref{figure:osprojectrootdir}.
 OS source code is mainly contained inside of the OS subdirectory. Other first level subdirectories are mostly
 external projects (COIN-OR or third-party) that the OS project depends on.
@@ -540,13 +553,14 @@ external projects (COIN-OR or third-party) that the OS project depends on.
 \label{figure:osprojectrootdir}
 \end{figure}
 
-For more information on downloading the OS project or other COIN-OR projects using SVN see
+For more information on downloading the OS project or other COIN-OR projects using SVN\index{SVN} see
 
 \medskip
 \noindent{\tt\UrlCoinDownload}.
 \medskip
 
-The Java source code for  setting up a solver service with Apache Tomcat\index{Apache Tomcat} is checked out as follows:
+The Java\index{Java} source code for  setting up a solver service with Apache Tomcat\index{Apache Tomcat} is 
+checked out as follows:
 %\begin{verbatim}
 %svn co https://projects.coin-or.org/svn/OS/branches/OSjava  OSJava
 %\end{verbatim}
@@ -615,7 +629,7 @@ Now build the project as described in  Section~\ref{section:build}.
 
 
 \subsection{Obtaining source for the OS Project API} \label{section:oslite}
-The OS project is very extensive and relies on many other COIN-OR projects.
+The OS project is very extensive and relies on many other COIN-OR projects\index{COIN-OR}.
 This may not be desirable for modeling language and solver developers who just wish to use the OS API
 in conjunction with their modeling language or solver.  Hence there is also an ``OS lite'' download
 that consists of all the code for the OS API and for reading and writing instance and solution files.
@@ -628,7 +642,7 @@ that consists of all the code for the OS API and for reading and writing instanc
 %\end{verbatim}
 %
 We refer to this version of the project as {\tt OSCommon}\index{OSCommon@{\tt OSCommon}}. 
-To get the current version of {\tt OSCommon} use the svn command
+To get the current version of {\tt OSCommon} use the svn\index{SVN} command
 
 \medskip
 \noindent{\tt svn co \UrlOsCommon\ OSCommon}
@@ -637,9 +651,10 @@ To get the current version of {\tt OSCommon} use the svn command
 \section{Building and Testing the OS Project}\label{section:build}
 
 
-Once the OS source code is obtained, the OS libraries, {\tt OSSolverService} executable, and test examples can be built.
-We describe how to do this on Unix/Linux systems (see Section~\ref{section:unixbuilds})
-and on Windows (see Section~\ref{section:windowsinstall}).
+Once the OS source code is obtained, the OS libraries, {\tt OSSolverService}\index{OSSolverService@{\tt OSSolverService}} 
+executable, and test examples can be built.
+We describe how to do this on Unix/Linux\index{Unix} systems (see Section~\ref{section:unixbuilds})
+and on Windows\index{Microsoft Windows} (see Section~\ref{section:windowsinstall}).
 
 \subsection{Building the OS Project on Unix/Linux Systems}\label{section:unixbuilds}
 
@@ -670,7 +685,8 @@ previously downloaded the third-party software packages {\tt BLAS}\index{Blas} a
 ./configure  COIN_SKIP_PROJECTS="Ipopt Bonmin"
 \end{verbatim}
 \index{COIN_SKIP_PROJECTS@{\tt COIN\_SKIP\_PROJECTS}}
-as COIN-OR's {\tt Ipopt}\index{Ipopt@{\tt Ipopt}} and {\tt Bonmin}\index{Bonmin@{\tt Bonmin}} projects currently use Fortran to compile some of its dependent libraries.
+as COIN-OR's {\tt Ipopt}\index{Ipopt@{\tt Ipopt}} and {\tt Bonmin}\index{Bonmin@{\tt Bonmin}} projects 
+currently use Fortran to compile some of its dependent libraries.
 
 \vskip 8pt
 \noindent {\bf Notes:}
@@ -708,8 +724,8 @@ make test
 
 \ifknitro
 Depending upon which third-party software you have installed, the result of running the {\tt unitTest} should look
-something like (we have included the third-party solvers LINDO and Knitro in the test results below; they are not
-part of the default build):
+something like (we have included the third-party solvers LINDO\index{LINDO} and Knitro\index{Knitro} in the test 
+results below; they are not part of the default build):
 
 
 {\small
@@ -750,8 +766,9 @@ All tests completed successfully
 \end{verbatim}
 }
 \else
-Depending upon which third-party software you have installed, the result of running the {\tt unitTest} should look
-something like (we have included the third-party solver LINDO in the test results below; it is not
+Depending upon which third-party software you have installed, the result of running the {\tt unitTest}\index{OS!unit test}
+should look
+something like (we have included the third-party solver LINDO\index{LINDO} in the test results below; it is not
 part of the default build):
 
 
@@ -815,13 +832,15 @@ This is described in Section~\ref{section:ossolverservice}. In addition {\tt clp
 {\tt cbc}\index{Cbc@{\tt Cbc}}, {\tt ipopt}\index{Ipopt@{\tt Ipopt}} and {\tt symphony}\index{SYMPHONY@{\tt SYMPHONY}}
 get installed  in the {\tt bin} directory.
 Necessary header files are installed in the {\tt include} directory.   In this case, {\tt bin}, {\tt lib}
-and {\tt include} are all subdirectories of where {\tt ./configure} is run.   If the user wants these files
+and {\tt include} are all subdirectories of where {\tt ./configure}\index{configure@{\tt configure}} is run.   
+If the user wants these files
 installed elsewhere, then {\tt configure} should specify the {\tt prefix} of these directories.  That is,
 
 
 \begin{verbatim}
 ./configure  --prefix=prefixDirectory  COIN_SKIP_PROJECTS="Ipopt Bonmin"
 \end{verbatim}
+\index{COIN_SKIP_PROJECTS@{\tt COIN\_SKIP\_PROJECTS}}
 
 For example, running
 
@@ -841,7 +860,8 @@ For example, running
 
 \vskip 8pt
 
-{\bf Run an Example!}  If {\tt make test} works, proceed to Section~\ref{section:ossolverservice} to run the key executable, {\tt OSSolverService}.
+{\bf Run an Example!}  If {\tt make test} works, proceed to Section~\ref{section:ossolverservice} 
+to run the key executable, {\tt OSSolverService}\index{OSSolverService@{\tt OSSolverService}}.
 
 
 
@@ -851,14 +871,16 @@ For example, running
 
 \subsection{Building the OS Project on Windows}\label{section:windowsinstall}
 
-There are a number of options open to Windows users.   First, if you wish to work with source code we recommend
-downloading  the svn client, TortoiseSVN\index{TortoiseSVN}.  (See section~\ref{section:svn}.)  With TortoiseSVN
+There are a number of options open to Windows users.   First, if you wish to work with source code\index{OS!source code}
+we recommend downloading  the svn client, TortoiseSVN\index{TortoiseSVN}.  (See section~\ref{section:svn}.)  
+With TortoiseSVN
 in the Windows Explorer connect to the directory (e.g., COIN-OS) where you wish to put the OS code.
 Right-click on the directory and select {\tt SVN Checkout}.   In the textbox, {\tt URL of Repository}
 give the URL for the version of the OS project you wish to checkout, e.g.,~{\tt\UrlOsStable}.
 
 Also, if you plan to build any of the projects contained in {\tt ThirdParty}\index{Third-party software}
-(e.g., ASL)\index{AMPL Solver Library (ASL)} we recommend using {\tt wget}\index{wget@{\tt wget}}. (See section~\ref{section:wget}.)
+(e.g., ASL)\index{AMPL Solver Library (ASL)} we recommend using {\tt wget}\index{wget@{\tt wget}}. 
+(See section~\ref{section:wget}.)
 
 
 \subsubsection{Microsoft Visual Studio (MSVS)} \label{section:msvs}
@@ -867,7 +889,7 @@ Also, if you plan to build any of the projects contained in {\tt ThirdParty}\ind
 Microsoft Visual Studio solution and project files are provided for users of Windows and the Microsoft Visual Studio IDE.
 We currently support Versions 8 and~9. These versions are also sometimes referred to by their
 (approximate) release dates, which is 2008 for Version~9 and 2005 for Version~8.   In addition there is
-a free version of the Visual Studio IDE C++ compiler,  called Visual C++ Express Edition.
+a free version of the Visual Studio IDE C++ compiler,  called Visual C++ Express Edition\index{C++ compiler}.
 
 The following steps are necessary to build the OS project using the  Microsoft Visual Studio IDE.
 
@@ -907,7 +929,8 @@ two projects {\tt libOSnl2OSiL}\index{libOSnl2OSiL@{\tt libOSnl2OSiL}}
 and {\tt OSAmplClient}\index{OSAmplClient@{\tt OSAmplClient}},
 which by default are not included in the build.
 
-\item{} Run the {\tt unitTest}. Connect to the directory {\tt COIN-OR/OS/test} and run either the release or debug version of the {\tt unitTest} executable.
+\item{} Run the {\tt unitTest}\index{unitTest@{\tt unitTest}}. Connect to the directory {\tt COIN-OR/OS/test} and run 
+either the release or debug version of the {\tt unitTest} executable.
 \end{enumerate}
 
 \ifipopt
@@ -915,12 +938,13 @@ which by default are not included in the build.
 %The former includes debug information, but both are configured without Ipopt
 %(see section~\ref{section:ipopt}) or any of the third-party software described in
 %section~\ref{section:otherthirdparty}.
-The solution file {\tt os.sln} contains three configurations, {\tt Debug} and {\tt Release}, both of which are
+The solution file {\tt os.sln} contains three configurations, 
+{\tt Debug}\index{Debug configuration} and {\tt Release}\index{Release configuration}, both of which are
 configured without Ipopt, as well as {\tt Release-Plus}\index{Release-Plus@{\tt Release-Plus}}, which can be used to
 add {\tt Ipopt}\index{Ipopt@{\tt Ipopt}}, {\tt Bonmin}\index{Bonmin@{\tt Bonmin}} and ASL\index{AMPL Solver Library (ASL)}
 (see section~\ref{section:ASL}). In order to build this section successfully,
-the user must first download and process additional third-party software\index{Third-party software} as explained in sections
-\ref{section:ipopt-msvs} and~\ref{section:ASL}.
+the user must first download and process additional third-party software\index{Third-party software} as explained in 
+sections \ref{section:ipopt-msvs} and~\ref{section:ASL}.
 \fi
 
 
@@ -934,6 +958,7 @@ In particular, download and unpack the file
 \begin{verbatim}
 OS-version_number-VisualStudio.zip
 \end{verbatim}
+\index{file naming conventions}
 
 This zip archive contains a  {\tt bin} directory that holds  the executable  {\tt OSSolverService.exe}.
 The {\tt OSSolverService.exe} is configured to run, out-of-the-box,   the following solvers.
@@ -1177,7 +1202,8 @@ It is an application that gives the user a Bourne shell that can run {\tt config
 No compilers come with MSYS.
 In the Cygwin\index{Cygwin}, MinGW\index{MinGW}, and MSYS\index{MSYS} hierarchy, it is at the bottom of the food chain in terms of tools provided.
 However, it is very easy to use and build the OS project with MSYS.    In this discussion we assume that the user
-has downloaded the OS source code (most likely  with TortoiseSVN)\index{TortoiseSVN} and that the {\tt cl} compiler is present.
+has downloaded the OS source code (most likely  with TortoiseSVN)\index{TortoiseSVN} 
+and that the {\tt cl} compiler\index{cl compiler@{\tt cl} compiler} is present.
 The project is built using the following steps.
 
 \vskip 8pt
@@ -1393,7 +1419,7 @@ If you have a FORTRAN 77 compiler, you can replace Mumps by one of the Harwell S
 You must obtain the Harwell code and put it in the directory {\tt \../ThirdParty/HSL}.  
 Now run the {\tt configure} script as described in Section~\ref{section:unixbuilds}.
 
-Note that the Harwell Subroutine Library is not governed by the Common Public License\index{Common Public License}. It is the user's responsibility
+Note that the Harwell Subroutine Library is not governed by the Common Public License\index{Common Public License (CPL)}. It is the user's responsibility
 to ensure adherence to appropriate copyright and distribution agreements.
 
 \item{} \label{enumerate:ipopt4}
@@ -1825,7 +1851,7 @@ location of the installed third-party libraries in the case that the libraries a
 
 \subsection{Bug Reporting}
 
-Bug reporting\index{Bug reporting} is done through the project Trac page. This is at
+Bug reporting\index{Bug reporting} is done through the project Trac\index{Trac system} page. This is at
 %\begin{verbatim}
 %http://projects.coin-or.org/OS
 %\end{verbatim}
@@ -1893,7 +1919,7 @@ This file can be edited, and any project for which documentation is desired, can
 
 \subsection{Platforms}
 
-The build process described in Section~\ref{section:unixbuilds} has been tested on Linux\index{Linux},
+The build process described in Section~\ref{section:unixbuilds} has been tested on Linux\index{Linux}\index{Unix},
 Mac OS X\index{Mac OS X}, and on Windows using  MinGW/MSYS\index{MinGW}\index{MSYS} and Cygwin\index{Cygwin}.
 The  {\tt gcc}/{\tt g++} and Microsoft {\tt cl} compiler have been tested.
 A number of solvers have also been tested with the OS library. For a list of tested solvers and platforms see
@@ -1970,7 +1996,9 @@ If you download the OS package, you get these additional COIN-OR projects. The l
 
 The following directories are also in the project root.
 \begin{itemize}
-\item {\tt bin} - after executing {\tt make install} the bin directory will contain {\tt OSSolverService}, {\tt clp}, {\tt cbc},  {\tt cbc-generic} and {\tt symphony}.
+\item {\tt bin} - after executing {\tt make install} the bin directory will contain 
+{\tt OSSolverService}\index{OSSolverService@{\tt OSSolverService}}, {\tt clp}, {\tt cbc},  
+{\tt cbc-generic} and {\tt symphony}.
 
 \item {\tt Data} - this directory contains numerous test problems that are used by the {\tt unitTest}s of
 the COIN-OR projects just mentioned.
@@ -2058,7 +2086,7 @@ to the current version of the OS project.
 
 
 \subsection{OSiL (Optimization Services instance Language)} \label{section:osilschema}
-OSiL\index{OSiL@{\tt OSiL}|(} is
+OSiL\index{OSiL|(} is
 an XML-based language for representing instances of large-scale
 optimization problems including linear programs, mixed-integer programs,
 quadratic programs, and very general nonlinear programs.
@@ -2252,7 +2280,7 @@ The nonlinear part of the problem is given in Figure~\ref{figure:roobjnlnode}.
 }
 
 The complete OSiL representation can be found in the Appendix (Section~\ref{section:rosenbrockXML}).%
-\index{OSiL@{\tt OSiL}|)}
+\index{OSiL|)}
 
 
 \subsection{OSrL (Optimization Services result Language)} \label{section:osrlschema}
@@ -2318,8 +2346,9 @@ Several examples of files in OSoL format are presented in Section~\ref{section:s
 \index{OSoL|)}
 
 \subsection{OSnL (Optimization Services nonlinear Language)} \label{section:osnlschema}
-The OSnL\index{OSnL|(} schema is imported by the OSiL schema and is used to represent the nonlinear part of an optimization
-instance. This is explained in greater detail in Section~\ref{section:osexpressiontreeclass}. Also refer to
+The OSnL\index{OSnL|(} schema is imported by the OSiL\index{OSiL} schema and is used 
+to represent the nonlinear part of an optimization instance. 
+This is explained in greater detail in Section~\ref{section:osexpressiontreeclass}. Also refer to
 Figure~\ref{figure:roobjnlnode} for an illustration of elements from the OSnL standard. This figure represents
 the nonlinear part of the objective in equation~(\ref{eq:roobj}), that is,
 %
@@ -2368,9 +2397,10 @@ There is also a method, {\tt OSFileUpload}, in the OSAgentClass that is used to 
 
 The classes in the OSCommonInterfaces component of the OS library are used to read and write files and strings
 in the OSiL and OSrL protocols. See Section~\ref{section:schemadescriptions} for more detail on OSiL, OSrL,
-and other OS protocols. For a complete listing of all of the files in {\tt OSCommonInterfaces} see the Doxygen\index{Doxygen}
-documentation we deposited at {\tt\UrlDoxygen}. Users who have Doxygen installed on their system
-can also create their own version of the documentation (see Section~\ref{section:documentation}). Below we highlight some key classes.
+and other OS protocols. For a complete listing of all of the files in {\tt OSCommonInterfaces} see the 
+Doxygen\index{Doxygen} documentation we deposited at {\tt\UrlDoxygen}. Users who have Doxygen installed on their system
+can also create their own version of the documentation (see Section~\ref{section:documentation}). Below we highlight 
+some key classes.
 
 
 
@@ -2383,7 +2413,7 @@ class for users of the OS project. This class has an API defined by a collection
 extracting various components (such as bounds and coefficients) from a problem instance, a collection of
 {\tt set()} methods for modifying or generating an optimization instance, and a collection of {\tt calculate()}
 methods for function, gradient, and Hessian evaluations.  See Section~\ref{section:osinstanceAPI}.
-We now describe how to create an {\tt OSInstance} object and the close relationship between the OSiL\index{OSiL@{\tt OSiL}} schema
+We now describe how to create an {\tt OSInstance} object and the close relationship between the OSiL\index{OSiL} schema
 and the {\tt OSInstance} class.
 
 \subsubsection{Creating an {\tt OSInstance} Object}
@@ -2527,7 +2557,7 @@ General nonlinear terms are stored in the data structure as {\tt OSExpressionTre
 \subsubsection{The OSExpressionTree OSnLNode Classes}\label{section:osexpressiontreeclass}
 
 The {\tt OSExpressionTree}\index{OSExpressionTree@{\tt OSExpressionTree}} class provides the in-memory representation
-of the nonlinear terms.  Our design goal is  to allow for efficient parsing of OSiL\index{OSiL@{\tt OSiL}} instances,
+of the nonlinear terms.  Our design goal is  to allow for efficient parsing of OSiL\index{OSiL} instances,
 while providing an API that meets the needs of diverse solvers.  Conceptually, any nonlinear expression in the
 objective or constraints is represented by a tree.  The expression tree for the nonlinear part of the
 objective function~(\ref{eq:roobj}), for example, has the form illustrated in Figure~\ref{figure:expressiontree}.
@@ -2612,7 +2642,7 @@ extracting various components (such as initial values for decision variables, so
 and a collection of {\tt set()} methods for modifying or generating an option instance. The relationship between
 in-memory classes and objects on one hand and complexTypes and elements of the OSoL schema follow the same mapping rules
 laid out in section~\ref{section:mappingrules}.
-
+\index{OSOption@{\tt OSOption}|)}
 
 \subsection{OSModelInterfaces}\label{section:osmodelinterfaces}
 
@@ -2622,7 +2652,7 @@ This part of the OS library is designed to help integrate the OS standards with 
 
 The MPS standard\index{MPS format|(} is still a popular format for representing linear and integer programming problems.
 In {\tt OSModelInterfaces,} there is a class {\tt OSmps2osil}\index{OSmps2osil@{\tt OSmps2osil}|(} that can be used
-to convert files in MPS format into the OSiL\index{OSiL@{\tt OSiL}} standard. It is used as follows.
+to convert files in MPS format into the OSiL\index{OSiL} standard. It is used as follows.
 
 \begin{verbatim}
 OSmps2osil *mps2osil = NULL;
@@ -2661,14 +2691,15 @@ The {\tt OSnl2osil} class works much like the {\tt OSmps2osil}\index{OSmps2osil@
 
 In Section~\ref{section:amplclient}  we describe the {\tt OSAmplClient}\index{OSAmplClient@{\tt OSAmplClient}}
 executable that acts as a ``solver'' for AMPL. The {\tt OSAmplClient} uses the {\tt OSnl2osil} class to convert
-the instance in nl format to OSiL\index{OSiL@{\tt OSiL}} format before calling a solver either locally or remotely.
+the instance in nl format to OSiL\index{OSiL} format before calling a solver either locally or remotely.
 \index{AMPL nl format|)}
 
 
 \subsection{OSParsers}\label{section:osparsers}
 
-The OSParsers component of the OS library contains reentrant parsers that  read OSiL\index{OSiL@{\tt OSiL}|(} and OSrL\index{OSrL}
-strings and build, respectively, in-memory OSInstance\index{OSInstance@{\tt OSInstance}} and OSResult\index{OSResult}  objects.
+The OSParsers component of the OS library contains reentrant parsers that  read OSiL\index{OSiL|(} and OSrL\index{OSrL}
+strings and build, respectively, in-memory OSInstance\index{OSInstance@{\tt OSInstance}} and 
+OSResult\index{OSResult@{\tt OSResult}}  objects.
 
 
 The OSiL parser is invoked through an {\tt OSiLReader} object as illustrated below. Assume {\tt osil} is a string with the problem instance.
@@ -2688,14 +2719,14 @@ The {\tt  readOSiL} method  has a single argument which is a pointer to a string
 <quadraticCoefficients>
 <nonlinearExpressions>
 \end{verbatim}
-There are other components in the OSiL schema, but they are not yet implemented.\index{OSiL@{\tt OSiL}|)}
+There are other components in the OSiL\index{OSiL|)} schema, but they are not yet implemented.
 In most large-scale applications the {\tt <variables>,} {\tt <objectives>}, {\tt <constraints>}, and {\tt <linearConstraintCoefficients>}
 will comprise the bulk of the instance memory.  Because of this, we have ``hard-coded'' the OSiL parser
 to read these specific elements very efficiently.
 The parsing of the {\tt <quadraticCoefficients>} and {\tt <nonlinearExpressions>} is done using code generated
-by {\tt flex}\index{flex@{\tt flex}} and {\tt bison}\index{bison@{\tt bison}}. In the {\tt OSParsers}  the file  {\tt OSParseosil.l}
-is used by {\tt flex}\index{flex@{\tt flex}} to generate {\tt OSParseosil.cpp} and the file {\tt OSParseosil.y} is used by
-{\tt bison}\index{bison@{\tt bison}} to generate {\tt OSParseosil.tab.cpp}.
+by {\tt flex}\index{flex@{\tt flex}} and {\tt bison}\index{bison@{\tt bison}}. In the {\tt OSParsers}  the file  
+{\tt OSParseosil.l} is used by {\tt flex}\index{flex@{\tt flex}} to generate {\tt OSParseosil.cpp} and the file 
+{\tt OSParseosil.y} is used by {\tt bison}\index{bison@{\tt bison}} to generate {\tt OSParseosil.tab.cpp}.
 In {\tt OSParseosil.l} we use the {\tt reentrant} option and in {\tt OSParseosil.y} we use the
 {\tt pure-parser} option to generate reentrant parsers. The {\tt OSParseosil.y} file  contains both our
 ``hard-coded'' parser and the grammar rules for the  {\tt <quadraticCoefficients>} and
@@ -2739,11 +2770,12 @@ There is also a lexer {\tt OSParseosss.l} for tokenizing the command line for th
 
 
 The {\tt OSSolverInterfaces} library is designed to facilitate linking the OS library with various solver APIs.
-We first describe how to take a problem instance in OSiL\index{OSiL@{\tt OSiL}} format and connect to a solver that has a COIN-OR OSI interface.
-See the OSI project \url{www.projects.coin-or.org/Osi}.
-We then describe hooking to the COIN-OR nonlinear code {\tt Ipopt}\index{Ipopt@{\tt Ipopt}}. See \url{www.projects.coin-or.org/Ipopt}.
+We first describe how to take a problem instance in OSiL\index{OSiL} format and connect to a solver 
+that has a COIN-OR OSI interface. See the OSI project \url{www.projects.coin-or.org/Osi}.
+We then describe hooking to the COIN-OR nonlinear code {\tt Ipopt}\index{Ipopt@{\tt Ipopt}}. 
+See \url{www.projects.coin-or.org/Ipopt}.
 \ifknitro
-Finally we describe hooking to two commercial solvers KNITRO\index{KNITRO} and LINDO\index{LINDO}.
+Finally we describe hooking to two commercial solvers Knitro\index{Knitro} and LINDO\index{LINDO}.
 \else
 Finally we describe hooking to the commercial solver LINDO\index{LINDO}.
 \fi
@@ -2795,16 +2827,16 @@ cout << solver->osrl << endl;
 \end{verbatim}
 
 \ifknitro   %--------------------------------------------------------------------------
-Even though LINDO and KNITRO are commercial solvers and do not have a COIN-OR {\tt Osi} interface, these solvers are
+Even though LINDO and Knitro are commercial solvers and do not have a COIN-OR {\tt Osi} interface, these solvers are
 used in exactly the same manner as a COIN-OR solver. For example, to invoke the LINDO solver we do the following.
 
 \begin{verbatim}
 solver = new LindoSolver();
 \end{verbatim}
 
-Similarly for KNITRO and Ipopt. In the case of  KNITRO, the {\tt KnitroSolver} class inherits from both
-{\tt DefaultSolver} class and the KNITRO {\tt NlpProblemDef} class. See {\tt\UrlKnitroMan} for more information 
-on the KNITRO solver C++ implementation and the {\tt NlpProblemDef} class.  Similarly, for Ipopt 
+Similarly for Knitro and Ipopt. In the case of  Knitro, the {\tt KnitroSolver} class inherits from both
+{\tt DefaultSolver} class and the Knitro {\tt NlpProblemDef} class. See {\tt\UrlKnitroMan} for more information 
+on the Knitro solver C++ implementation and the {\tt NlpProblemDef} class.  Similarly, for Ipopt 
 \else
 
 Commercial solvers like LINDO\index{LINDO} do not have a COIN-OR {\tt Osi} interface, but it is possible to
@@ -2936,8 +2968,9 @@ Here we provide a brief review of this topic.  An excellent reference on algorit
 is Griewank\index{Griewank, A.@{\it Griewank, A.}}~\cite{griewank2000}.  The OS package uses the COIN-OR project 
 CppAD\index{CppAD@{\tt CppAD}|(} ({\tt\UrlCppad}), which  is also an excellent resource with extensive  
 documentation and information about algorithmic differentiation.
-See the documentation written by  Brad Bell\index{Bell, Bradley M.@{\it Bell, Bradley M.}}~\cite{bell2007}.    The development here is from the
-CppAD documentation.  Consider the function $f:X \rightarrow Y$ from $ \mathbb{R}^{n}$ to $ \mathbb{R}^{m}.$
+See the documentation written by  Brad Bell\index{Bell, Bradley M.@{\it Bell, Bradley M.}}~\cite{bell2007}.    
+The development here is from the CppAD documentation.  
+Consider the function $f:X \rightarrow Y$ from $ \mathbb{R}^{n}$ to $ \mathbb{R}^{m}$.
 (That is, $Y = f(X).$)
 
 Express the input vector as a function of~$t$ by
@@ -3301,7 +3334,8 @@ The methods {\tt forwardAD} and {\tt reverseAD} are low-level calls and are not 
 
 \subsubsection{Sparsity Methods}
 
-Many solvers such as {\tt Ipopt}\index{Ipopt@{\tt Ipopt}} (\url{projects.coin-or.org/Ipopt}) \ifknitro or Knitro (\url{www.ziena.com}) \fi
+Many solvers such as {\tt Ipopt}\index{Ipopt@{\tt Ipopt}} (\url{projects.coin-or.org/Ipopt}) 
+\ifknitro or Knitro\index{Knitro} (\url{www.ziena.com}) \fi
 require the sparsity pattern of the Jacobian of the constraint matrix and the Hessian of the Lagrangian function.
 Note well that the constraint matrix of the example in Section~\ref{section:lowlevelADcalls}
 constitutes only the last two rows of (\ref{eq:definef}) but does include the linear terms.
@@ -3498,7 +3532,7 @@ SparseHessianMatrix *calculateHessian( double* x, int idx, bool new_x);
 \section{The OSSolverService}\label{section:ossolverservice}
 
 The {\tt OSSolverService}\index{OSSolverService@{\tt OSSolverService}|(} is a command line executable designed
-to pass problem instances in either  OSiL\index{OSiL@{\tt OSiL}}, AMPL nl\index{AMPL nl format}, or MPS format\index{MPS format}
+to pass problem instances in either  OSiL\index{OSiL}, AMPL nl\index{AMPL nl format}, or MPS format\index{MPS format}
 to solvers and get the optimization result back to be displayed either to standard output or a specified browser.
 The {\tt OSSolverService} can be used to invoke a solver locally or on a remote server. It can work either synchronously
 or asynchronously. At present six service methods are implemented, {\tt solve}\index{solve@{\tt solve}},
@@ -3516,7 +3550,7 @@ a problem instance location must be specified.
 \begin{itemize}
 
 \item[] {\bf -osil xxx.osil}\ \ This is the name of the file that contains the optimization instance in
-OSiL\index{OSiL@{\tt OSiL}}  format. It is assumed that this file is available in a directory on the
+OSiL\index{OSiL}  format. It is assumed that this file is available in a directory on the
 machine that is running {\tt OSSolverService}.
 If this option is not specified then the instance location must be specified in the OSoL\index{OSoL} solver options file.
 
@@ -3539,11 +3573,11 @@ value is {\tt solve}\index{solve@{\tt solve}|)}.
 
 \item[] {\bf -mps  xxx.mps}\ \ This is the name of the mps file if the problem instance is in mps format\index{MPS format}.
 It is assumed that this file is available in a directory on the machine that is running {\tt OSSolverService}.
-The default file format is OSiL\index{OSiL@{\tt OSiL}} so this option is not required.
+The default file format is OSiL\index{OSiL} so this option is not required.
 
 \item[] {\bf -nl  xxx.nl}\ \ This is the name of the AMPL nl file if the problem instance is in AMPL nl format%
 \index{AMPL nl format}. It is assumed that this file is available in a directory on the machine that is running
-{\tt OSSolverService}. The default file format is OSiL\index{OSiL@{\tt OSiL}} so this option is not required.
+{\tt OSSolverService}. The default file format is OSiL\index{OSiL} so this option is not required.
 
 \item[] {\bf -solver  solverName}\ \
 %Possible values for default OS installation are {\tt clp} (COIN-OR Clp),
@@ -3665,7 +3699,7 @@ will result in the LINDO\index{LINDO} solver being used even though Clp\index{Cl
 Generally, when solving a problem locally the user will use the {\tt solve}\index{solve@{\tt solve}} service method.
 The {\tt solve} method is invoked synchronously and waits for the solver to return the result.  This is illustrated
 in Figure~\ref{figure:ossolverservicelocal}. As illustrated, the {\tt OSSolverService} reads a file on the hard drive
-with the optimization instance, usually in OSiL\index{OSiL@{\tt OSiL}} format. The optimization instance is parsed into a string
+with the optimization instance, usually in OSiL\index{OSiL} format. The optimization instance is parsed into a string
 which is passed to the {\tt OSLibrary}\index{OSLibrary@{\tt OSLibrary}} which is linked with various solvers.
 The result of the optimization is passed back to the {\tt OSSolverService} as a string in OSrL\index{OSrL} format.
 
@@ -3743,8 +3777,8 @@ It is not necessary to use the Tomcat/Axis combination.
 See Figure~\ref{figure:ossolverservice} for an illustration of this process.
 The client machine uses {\tt OSSolverService} executable to call one of the
 six service methods, e.g., {\tt solve}\index{solve@{\tt solve}}. The  information such as the problem
-instance in OSiL\index{OSiL@{\tt OSiL}} format and solver options in OSoL\index{OSoL} format are packaged into
-a SOAP\index{SOAP} envelope and sent to the server. The server is running the Java Web
+instance in OSiL\index{OSiL} format and solver options in OSoL\index{OSoL} format are packaged into
+a SOAP\index{SOAP protocol} envelope and sent to the server. The server is running the Java Web
 Service {\tt OSSolverService.jws}. This Java program running in the Tomcat
 Java Servlet container implements the six service methods. If a {\tt solve}
 or {\tt send} request is sent to the server from the client, an optimization
@@ -3871,8 +3905,8 @@ where the {\tt testremoteSend.config} file is
 In this example the COIN-OR {\tt Ipopt}\index{Ipopt@{\tt Ipopt}} solver is specified. The input file {\tt hs71.nl}
 is in AMPL nl format\index{AMPL nl format|(}.
 Before sending this to the remote solver service the {\tt OSSolverService} executable converts  
-the nl format\index{AMPL nl format|)} into the OSiL\index{OSiL@{\tt OSiL}} XML format and packages this into the SOAP\index{SOAP}
-envelope used by Web Services.
+the nl format\index{AMPL nl format|)} into the OSiL\index{OSiL} XML format and packages this 
+into the SOAP\index{SOAP protocol} envelope used by Web Services.
 
 Since the {\tt send} method involves asynchronous communication the remote solver service must keep track of jobs.
 The {\tt send} method requires a {\tt JobID}\index{JobID@{\tt JobID}|(}. In the above example no {\tt JobID} was specified.
@@ -4132,7 +4166,7 @@ A test program illustrating the use of the methods is described in Section~\ref{
 
 \begin{itemize}
 
-\item Inputs: a string with the instance in OSiL\index{OSiL@{\tt OSiL}} format and an optional string with the solver options
+\item Inputs: a string with the instance in OSiL\index{OSiL} format and an optional string with the solver options
 in OSoL\index{OSoL} format
 
 \item Returns: a string with the solver solution in OSrL\index{OSrL} format
@@ -4147,7 +4181,7 @@ in OSoL\index{OSoL} format
 
 \begin{itemize}
 
-\item Inputs: a string with the instance in OSiL\index{OSiL@{\tt OSiL}} format and a string with the solver options
+\item Inputs: a string with the instance in OSiL\index{OSiL} format and a string with the solver options
 in OSoL\index{OSoL} format (same as in {\tt solve})
 
 \item Returns:  a boolean, true if the problem was successfully submitted, false otherwise
@@ -4579,7 +4613,7 @@ The {\tt OSAmplClient} executable (in {\tt COIN-OS/OS/applications/amplClient}) 
 (see \url{www.ampl.com}). The {\tt OSAmplClient} acts like an AMPL ``solver''. The {\tt OSAmplClient} is linked with the
 OS library and can be used to solve problems either locally or remotely. In both cases the {\tt OSAmplClient} uses the
 {\tt OSnl2osil}\index{OSnl2osil@{\tt OSnl2osil}} class to convert the AMPL generated nl file\index{AMPL nl format}
-(which represents the problem instance) into the corresponding instance representation in the OSiL\index{OSiL@{\tt OSiL}} format.
+(which represents the problem instance) into the corresponding instance representation in the OSiL\index{OSiL} format.
 
 In the following discussion we assume that the AMPL executable {\tt ampl}  (or {\tt ampl.exe} on Windows) obtained
 from {\tt www.ampl.com}, the {\tt OSAmplClient}, and the test problem {\tt hs71.mod} are all in the same directory.
@@ -4740,8 +4774,8 @@ gams rbrock nlp=os optfile=1
 
 \index{OSFileUpload@{\tt OSFileUpload}|(}
 When the {\tt OSAgent}\index{OSAgent@{\tt OSAgent}}  class methods {\tt solve}\index{solve@{\tt solve}} and
-{\tt send}\index{send@{\tt send}} are used, the problem instance in OSiL\index{OSiL@{\tt OSiL}} format is packaged into
-a SOAP\index{SOAP} envelope and communication with the server is done using Web Services (for example Tomcat
+{\tt send}\index{send@{\tt send}} are used, the problem instance in OSiL\index{OSiL} format is packaged into
+a SOAP\index{SOAP protocol} envelope and communication with the server is done using Web Services (for example Tomcat
 Axis)\index{Apache Tomcat}. However, packing an XML file into a SOAP envelope may add considerably to the
 size of the file (each {\tt $<$} is replaced with {\tt \&lt;}  and each {\tt $>$} is replaced with {\tt \&gt;}).
 Also, communicating with a Web Services servlet can further slow down the communication process.
@@ -4831,10 +4865,10 @@ As an alternative to using the command line executable {\tt OSFileUpload}, there
 \noindent will bring up the necessary form that allows the user to browse a directory and select the file to upload.
 This URL is based on the assumption that the {\tt OSJava} classes were deployed as described in
 Section~\ref{section:tomcat}. The file {\tt fileupload.html} is in the directory {\tt WebApps/os}.
-In our html form implementation, after you upload the OSiL\index{OSiL@{\tt OSiL}} file, it shows you the path of the
+In our html form implementation, after you upload the OSiL\index{OSiL} file, it shows you the path of the
 uploaded file that is saved on the server, so that you can put it in the corresponding {\tt osol} file.
-\index{OSFileUpload@{\tt OSFileUpload}|)}
 \fi
+\index{OSFileUpload@{\tt OSFileUpload}|)}
 
 
 
@@ -5311,7 +5345,7 @@ OSCallMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, VarType, ..
 
 \section{Appendix -- Sample OSiL files}\label{section:appendix}
 
-\index{OSiL@{\tt OSiL}|(}
+\index{OSiL|(}
 \subsection{OSiL representation for problem given in (\ref{eq:roobj})--(\ref{eq:ro3}) (p.\pageref{eq:roobj})}\label{section:rosenbrockXML}
 
 
@@ -5466,7 +5500,7 @@ OSCallMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, VarType, ..
     </instanceData>
 </osil>
 \end{verbatim}
-\index{OSiL@{\tt OSiL}|)}
+\index{OSiL|)}
 
 
 \addcontentsline{toc}{section}{Bibliography}
