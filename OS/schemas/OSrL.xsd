@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- edited with XMLSpy v2005 sp1 U (http://www.xmlspy.com) by oig_trade (oig) -->
+<!-- edited with XMLSpy v2007 rel. 3 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSrL.xsd: current version - 1.0.0-->
 	<!--include: since version 1.0.0-->
 	<xs:include schemaLocation="OSgL.xsd"/>
@@ -104,10 +104,10 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
-			<xs:element name="substatus" type="GeneralSubstatus" maxOccurs="unbounded"/>
+		<xs:sequence>
+			<xs:element name="substatus" type="GeneralSubstatus" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfSubstatuses" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfSubstatuses" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="type" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -164,16 +164,16 @@
 			<xs:element name="other" type="OtherOptimizationResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="objectiveIdx" type="xs:negativeInteger" use="optional"/>
-		<xs:attribute name="numberOfOtherResults" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfOtherResults" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="OptimizationSolutionStatus">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
-			<xs:element name="substatus" type="OptimizationSolutionSubstatus" maxOccurs="unbounded"/>
+		<xs:sequence>
+			<xs:element name="substatus" type="OptimizationSolutionSubstatus" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfSubstatuses" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfSubstatuses" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="type" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -212,7 +212,7 @@
 			<xs:element name="values" type="ObjectiveValues" minOccurs="0"/>
 			<xs:element name="other" type="OtherObjectiveResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfOtherObjectiveResult" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfOtherObjectiveResult" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ObjValue">
 		<xs:annotation>
@@ -228,8 +228,8 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
-			<xs:element name="obj" type="ObjValue" maxOccurs="unbounded"/>
+		<xs:sequence>
+			<xs:element name="obj" type="ObjValue" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -250,7 +250,7 @@
 		<xs:sequence>
 			<xs:element name="obj" type="OtherObjResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
@@ -270,7 +270,7 @@
 				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfOtherVariableResult" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfOtherVariableResult" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="VarValue">
 		<xs:annotation>
@@ -286,8 +286,8 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
-			<xs:element name="var" type="VarValue" default="0.0" maxOccurs="unbounded"/>
+		<xs:sequence>
+			<xs:element name="var" type="VarValue" default="0.0" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -305,8 +305,8 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
-			<xs:element name="var" type="VarStringValue" maxOccurs="unbounded"/>
+		<xs:sequence>
+			<xs:element name="var" type="VarStringValue" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -324,10 +324,10 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
-			<xs:element name="var" type="OtherVarResult" maxOccurs="unbounded"/>
+		<xs:sequence>
+			<xs:element name="var" type="OtherVarResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
@@ -340,7 +340,7 @@
 			<xs:element name="dualValues" type="DualVariableValues" minOccurs="0"/>
 			<xs:element name="other" type="OtherConstraintResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfOtherConstraintResult" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfOtherConstraintResult" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="DualVarValue">
 		<xs:annotation>
@@ -356,10 +356,10 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
-			<xs:element name="con" type="DualVarValue" default="0.0" maxOccurs="unbounded"/>
+		<xs:sequence>
+			<xs:element name="con" type="DualVarValue" default="0.0" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger"/>
+		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="OtherConResult">
 		<xs:annotation>
@@ -375,10 +375,10 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
-			<xs:element name="con" type="OtherConResult" maxOccurs="unbounded"/>
+		<xs:sequence>
+			<xs:element name="con" type="OtherConResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
