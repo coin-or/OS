@@ -1,7 +1,7 @@
 /** @file CoinSolver.cpp
  * 
  * \brief This file defines the CoinSolver class.
- * \detail Read an OSInstance object and convert in COIN data structures
+ * \detail Read an OSInstance object and convert to COIN data structures
  *
  * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
  * @version 1.0, 10/05/2005

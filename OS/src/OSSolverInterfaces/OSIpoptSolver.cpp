@@ -1,7 +1,7 @@
 /** @file IpoptSolver.cpp
  * 
  * \brief This file defines the IpoptSolver class.
- * \detail Read an OSInstance object and convert in Ipopt data structures
+ * \detail Read an OSInstance object and convert to Ipopt data structures
  *
  * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
  * @version 1.0, 10/05/2005
