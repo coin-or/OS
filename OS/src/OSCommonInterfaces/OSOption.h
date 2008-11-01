@@ -1789,222 +1789,222 @@ public:
 	/**
 	 * Get the service URI
 	 */
-	std::string  OSOption::getServiceURI();
+	std::string  getServiceURI();
 
 	/**
 	 * Get the service name
 	 */
-	std::string  OSOption::getServiceName();
+	std::string  getServiceName();
 
 	/**
 	 * Get the instance name
 	 */
-	std::string  OSOption::getInstanceName();
+	std::string  getInstanceName();
 
 	/**
 	 * Get the instance location
 	 */
-	std::string  OSOption::getInstanceLocation();
+	std::string  getInstanceLocation();
 
 	/**
 	 * Get the location type
 	 */
-	std::string  OSOption::getLocationType();
+	std::string  getLocationType();
 
 	/**
 	 * Get the job ID
 	 */
-	std::string  OSOption::getJobID();
+	std::string  getJobID();
 
 	/**
 	 * Get the solver name
 	 */
-	std::string  OSOption::getSolverName();
+	std::string  getSolverName();
 
 	/**
 	 * Get the license string
 	 */
-	std::string  OSOption::getLicense();
+	std::string  getLicense();
 
 	/**
 	 * Get the user name
 	 */
-	std::string  OSOption::getUserName();
+	std::string  getUserName();
 
 	/**
 	 * Get the password
 	 */
-	std::string  OSOption::getPassword();
+	std::string  getPassword();
 
 	/**
 	 * Get the conact information
 	 */
-	std::string  OSOption::getContact();
+	std::string  getContact();
 
 	/**
 	 * Get the transport type
 	 */
-	std::string  OSOption::getTransportType();
+	std::string  getTransportType();
 
 	/**
 	 * Get the disk space unit
 	 */
-	std::string  OSOption::getMinDiskSpaceUnit();
+	std::string  getMinDiskSpaceUnit();
 
 	/**
 	 * Get the memory unit
 	 */
-	std::string  OSOption::getMinMemoryUnit();
+	std::string  getMinMemoryUnit();
 
 	/**
 	 * Get the CPU speed unit
 	 */
-	std::string  OSOption::getMinCPUSpeedUnit();
+	std::string  getMinCPUSpeedUnit();
 
 	/**
 	 * Get the service type
 	 */
-	std::string  OSOption::getServiceType();
+	std::string  getServiceType();
 
 	/**
 	 * Get the time unit
 	 */
-	std::string  OSOption::getMaxTimeUnit();
+	std::string  getMaxTimeUnit();
 
 	/**
 	 * Get the scheduled starting time
 	 */
-	std::string  OSOption::getScheduledStartTime();
+	std::string  getScheduledStartTime();
 
 	/**
 	 * Get any of the string-valued options
 	 */
-	std::string  OSOption::getOptionStr(std::string optionName);
+	std::string  getOptionStr(std::string optionName);
 
 	/**
 	 * Get the minimum required disk space
 	 */
-	double  OSOption::getMinDiskSpace();
+	double  getMinDiskSpace();
 
 	/**
 	 * Get the minimum required memory
 	 */
-	double  OSOption::getMinMemory();
+	double  getMinMemory();
 
 	/**
 	 * Get the minimum required CPU speed
 	 */
-	double  OSOption::getMinCPUSpeed();
+	double  getMinCPUSpeed();
 
 	/**
 	 * Get the maximum allowed time
 	 */
-	double  OSOption::getMaxTime();
+	double  getMaxTime();
 
 	/**
 	 * Get any of the double-valued options
 	 */
-	double  OSOption::getOptionDbl(std::string optionName);
+	double  getOptionDbl(std::string optionName);
 
 	/**
 	 * Get the minimum required number of CPUs
 	 */
-	int  OSOption::getMinCPUNumber();
+	int  getMinCPUNumber();
 
 	/**
 	 * Get the number of <other> options in the <general> element
 	 */
-	int  OSOption::getNumberOfOtherGeneralOptions();
+	int  getNumberOfOtherGeneralOptions();
 
 	/**
 	 * Get the number of <other> options in the <system> element
 	 */
-	int  OSOption::getNumberOfOtherSystemOptions();
+	int  getNumberOfOtherSystemOptions();
 
 	/**
 	 * Get the number of <other> options in the <service> element
 	 */
-	int  OSOption::getNumberOfOtherServiceOptions();
+	int  getNumberOfOtherServiceOptions();
 
 	/**
 	 * Get the number of <other> options in the <job> element
 	 */
-	int  OSOption::getNumberOfOtherJobOptions();
+	int  getNumberOfOtherJobOptions();
 
 	/**
 	 * Get the number of job dependencies
 	 */
-	int  OSOption::getNumberOfJobDependencies();
+	int  getNumberOfJobDependencies();
 
 	/**
 	 * Get the number of required directories
 	 */
-	int  OSOption::getNumberOfRequiredDirectories();
+	int  getNumberOfRequiredDirectories();
 
 	/**
 	 * Get the number of required files
 	 */
-	int  OSOption::getNumberOfRequiredFiles();
+	int  getNumberOfRequiredFiles();
 
 	/**
 	 * Get the number of directories to make
 	 */
-	int  OSOption::getNumberOfDirectoriesToMake();
+	int  getNumberOfDirectoriesToMake();
 
 	/**
 	 * Get the number of files to create
 	 */
-	int  OSOption::getNumberOfFilesToCreate();
+	int  getNumberOfFilesToCreate();
 
 	/**
 	 * Get the number of input directories to move
 	 */
-	int  OSOption::getNumberOfInputDirectoriesToMove();
+	int  getNumberOfInputDirectoriesToMove();
 
 	/**
 	 * Get the number of input files to move
 	 */
-	int  OSOption::getNumberOfInputFilesToMove();
+	int  getNumberOfInputFilesToMove();
 
 	/**
 	 * Get the number of output directories to move
 	 */
-	int  OSOption::getNumberOfOutputDirectoriesToMove();
+	int  getNumberOfOutputDirectoriesToMove();
 
 	/**
 	 * Get the number of output files to move
 	 */
-	int  OSOption::getNumberOfOutputFilesToMove();
+	int  getNumberOfOutputFilesToMove();
 
 	/**
 	 * Get the number of files to delete
 	 */
-	int  OSOption::getNumberOfFilesToDelete();
+	int  getNumberOfFilesToDelete();
 
 	/**
 	 * Get the number of directories to delete
 	 */
-	int  OSOption::getNumberOfDirectoriesToDelete();
+	int  getNumberOfDirectoriesToDelete();
 
 	/**
 	 * Get the number of processes to kill
 	 */
-	int  OSOption::getNumberOfProcessesToKill();
+	int  getNumberOfProcessesToKill();
 
 	/**
 	 * Get the number of variables in the instance
 	 */
-	int  OSOption::getNumberOfVariables();
+	int  getNumberOfVariables();
 
 	/**
 	 * Get the number of objectives in the instance
 	 */
-	int  OSOption::getNumberOfObjectives();
+	int  getNumberOfObjectives();
 
 	/**
 	 * Get the number of constraints in the instance
 	 */
-	int  OSOption::getNumberOfConstraints();
+	int  getNumberOfConstraints();
 
 	/**
 	 * Get the number of initial variable values. 
@@ -2079,7 +2079,7 @@ public:
 	/**
 	 * Get any of the integer-valued options
 	 */
-	int  OSOption::getOptionInt(std::string optionName);
+	int getOptionInt(std::string optionName);
 
 
 	/**

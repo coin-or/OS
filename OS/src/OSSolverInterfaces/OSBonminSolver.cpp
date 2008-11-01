@@ -641,7 +641,7 @@ void BonminSolver::setSolverOptions() throw (ErrorClass) {
 		}	
 		
 		if(osoption != NULL){
-			std::cout << "number of solver options "  <<  osoption->getnumberOfSolverOptions() << std::endl;
+			std::cout << "number of solver options "  << osoption->getNumberOfSolverOptions() << std::endl;
 			std::vector<SolverOption*> optionsVector;
 			optionsVector = osoption->getSolverOptions( "bonmin");
 			char *pEnd;
