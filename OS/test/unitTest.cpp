@@ -241,7 +241,7 @@ int main(int argC, char* argV[])
 	// 
 	unitTestResult << "HERE ARE THE UNIT TEST RESULTS:" << std::endl << std::endl;
 
-#define OSOL_PARSER_DEBUG
+//#define OSOL_PARSER_DEBUG
 #ifndef OSOL_PARSER_DEBUG
 
 	//first make sure we can read files
