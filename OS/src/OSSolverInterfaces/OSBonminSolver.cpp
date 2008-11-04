@@ -3,13 +3,13 @@
  * \brief This file defines the BonminSolver class.
  * \detail Read an OSInstance object and convert in Ipopt data structures
  *
- * @author  Jun Ma, Guss Gassmann, Kipp Martin, 
- * @version 1.0, 07/05/2008
+ * @author  Jun Ma, Horand Gassmann, Kipp Martin, 
+ * @version 1.1, 11/04/2008
  * @since   OS1.0
  *
  * \remarks
- * Copyright (C) 2008, Jun Ma, Guss Gassmann, Kipp Martin,
- * Northwestern University, and the University of Chicago.
+ * Copyright (C) 2008, Jun Ma, Horand Gassmann, Kipp Martin,
+ * Northwestern University, Dalhousie University and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -641,7 +641,7 @@ void BonminSolver::setSolverOptions() throw (ErrorClass) {
 		}	
 		
 		if(osoption != NULL){
-			std::cout << "number of solver options "  << osoption->getNumberOfSolverOptions() << std::endl;
+			std::cout << "number of solver options "  <<  osoption->getNumberOfSolverOptions() << std::endl;
 			std::vector<SolverOption*> optionsVector;
 			optionsVector = osoption->getSolverOptions( "bonmin");
 			char *pEnd;

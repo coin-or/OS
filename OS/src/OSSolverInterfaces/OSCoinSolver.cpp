@@ -158,8 +158,7 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass) {
 					}
 				}
 			}
-			//
-			//
+
 			if(solverIsDefined == false) throw ErrorClass("a supported solver was not defined");
 			if(osinstance->getConstraintNumber() <= 0)throw ErrorClass("Coin solver Needs Constraints");
 			if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Coin solver requires decision variables");
@@ -705,10 +704,10 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 		// now put the reduced costs into the osrl
 		// Symphony does not get reduced costs
 		if( sSolverName.find( "symphony") == std::string::npos && osinstance->getNumberOfIntegerVariables() == 0 && osinstance->getNumberOfBinaryVariables() == 0){
-			int numberOfOtherVariableResult = 1;
+			int numberOfOtherVariableResults = 1;
 			int otherIdx = 0;
 			// first set the number of Other Variable Results
-			osresult->setNumberOfOtherVariableResult(solIdx, numberOfOtherVariableResult);
+			osresult->setNumberOfOtherVariableResults(solIdx, numberOfOtherVariableResults);
 			ostringstream outStr;
 			int numberOfVar =  osinstance->getVariableNumber();
 			for(i=0; i < numberOfVar; i++){

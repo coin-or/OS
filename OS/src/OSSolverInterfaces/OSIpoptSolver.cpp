@@ -35,7 +35,6 @@ IpoptSolver::IpoptSolver() {
 	osresult = new OSResult();
 	m_osilreader = NULL;
 	ipoptErrorMsg = "";
-
 } 
 
 IpoptSolver::~IpoptSolver() {
@@ -372,7 +371,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 	  printf("f(x*) = %e\n", obj_value);
 	  
   	int solIdx = 0;
-  	int numberOfOtherVariableResult;
+  	int numberOfOtherVariableResults;
   	int otherIdx;
 	ostringstream outStr;
 	
@@ -417,8 +416,8 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 				
 				// set other
 				
-				numberOfOtherVariableResult = 2;
-				osresult->setNumberOfOtherVariableResult(solIdx, numberOfOtherVariableResult);
+				numberOfOtherVariableResults = 2;
+				osresult->setNumberOfOtherVariableResults(solIdx, numberOfOtherVariableResults);
 				
 			
 				rcost = new std::string[ osinstance->getVariableNumber()];
