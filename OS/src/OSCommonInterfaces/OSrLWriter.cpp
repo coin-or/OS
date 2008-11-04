@@ -77,6 +77,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 	outStr << "<?xml-stylesheet type = \"text/xsl\" href = \"";
 	outStr << xsltDir;
 	outStr << "OSrL.xslt\"?>";
+	outStr << endl;
 	outStr << "<osrl xmlns=\"os.optimizationservices.org\"   xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/OSrL.xsd\" >" ;
 	outStr << endl;
 	outStr << "<resultHeader>" << endl;
@@ -178,8 +179,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 							outStr << "</values>" << endl;
 						}
 						if(m_OSResult->resultData->optimization->solution[i]->variables->other != NULL){
-							if(m_OSResult->resultData->optimization->solution[i]->variables->numberOfOtherVariableResult > 0){
-								for(int k = 0; k < m_OSResult->resultData->optimization->solution[i]->variables->numberOfOtherVariableResult; k++){
+							if(m_OSResult->resultData->optimization->solution[i]->variables->numberOfOtherVariableResults > 0){
+								for(int k = 0; k < m_OSResult->resultData->optimization->solution[i]->variables->numberOfOtherVariableResults; k++){
 									outStr << "<other" ;
 									outStr << " name=\"";
 									outStr << m_OSResult->resultData->optimization->solution[i]->variables->other[k]->name;
@@ -226,8 +227,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 							outStr << "</values>" << endl;
 						}
 						if(m_OSResult->resultData->optimization->solution[i]->objectives->other != NULL){
-							if(m_OSResult->resultData->optimization->solution[i]->objectives->numberOfOtherObjectiveResult > 0){
-								for(int k = 0; k < m_OSResult->resultData->optimization->solution[i]->objectives->numberOfOtherObjectiveResult; k++){
+							if(m_OSResult->resultData->optimization->solution[i]->objectives->numberOfOtherObjectiveResults > 0){
+								for(int k = 0; k < m_OSResult->resultData->optimization->solution[i]->objectives->numberOfOtherObjectiveResults; k++){
 									outStr << "<other" ;
 									outStr << " name=\"";\
 									outStr << m_OSResult->resultData->optimization->solution[i]->objectives->other[k]->name;
@@ -256,20 +257,6 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 					}
 					if(m_OSResult->resultData->optimization->solution[i]->constraints != NULL){
 						outStr << "<constraints>" << endl;
-						if(m_OSResult->resultData->optimization->solution[i]->constraints->values != NULL){
-							outStr << "<values>" << endl;
-							for(j = 0; j < m_OSResult->resultData->optimization->numberOfConstraints; j++){
-								if(m_OSResult->resultData->optimization->solution[i]->constraints->values->con[j] != NULL){
-									outStr << "<con";
-									outStr << " idx=\"";
-									outStr <<  j ;
-									outStr <<  "\">";
-									outStr <<  os_dtoa_format( m_OSResult->resultData->optimization->solution[i]->constraints->values->con[j]->value);
-									outStr << "</con>" << endl;
-								}
-							}
-							outStr << "</values>" << endl;
-						}
 						if(m_OSResult->resultData->optimization->solution[i]->constraints->dualValues != NULL){
 							outStr << "<dualValues>" << endl;
 							for(j = 0; j < m_OSResult->resultData->optimization->numberOfConstraints; j++){
@@ -278,15 +265,29 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 									outStr << " idx=\"";
 									outStr <<  j ;
 									outStr <<  "\">";
-									outStr <<  os_dtoa_format( m_OSResult->resultData->optimization->solution[i]->constraints->dualValues->con[j]->value );
+									outStr <<  os_dtoa_format( m_OSResult->resultData->optimization->solution[i]->constraints->dualValues->con[j]->value);
 									outStr << "</con>" << endl;
 								}
 							}
 							outStr << "</dualValues>" << endl;
 						}
+//						if(m_OSResult->resultData->optimization->solution[i]->constraints->dualValues != NULL){
+//							outStr << "<dualValues>" << endl;
+//							for(j = 0; j < m_OSResult->resultData->optimization->numberOfConstraints; j++){
+//								if(m_OSResult->resultData->optimization->solution[i]->constraints->dualValues->con[j] != NULL){
+//									outStr << "<con";
+//									outStr << " idx=\"";
+//									outStr <<  j ;
+//									outStr <<  "\">";
+//									outStr <<  os_dtoa_format( m_OSResult->resultData->optimization->solution[i]->constraints->dualValues->con[j]->value );
+//									outStr << "</con>" << endl;
+//								}
+//							}
+//							outStr << "</dualValues>" << endl;
+//						}
 						if(m_OSResult->resultData->optimization->solution[i]->constraints->other != NULL){
-							if(m_OSResult->resultData->optimization->solution[i]->constraints->numberOfOtherConstraintResult > 0){
-								for(int k = 0; k < m_OSResult->resultData->optimization->solution[i]->constraints->numberOfOtherConstraintResult; k++){
+							if(m_OSResult->resultData->optimization->solution[i]->constraints->numberOfOtherConstraintResults > 0){
+								for(int k = 0; k < m_OSResult->resultData->optimization->solution[i]->constraints->numberOfOtherConstraintResults; k++){
 									outStr << "<other" ;
 									outStr << " name=\"";\
 									outStr << m_OSResult->resultData->optimization->solution[i]->constraints->other[k]->name;

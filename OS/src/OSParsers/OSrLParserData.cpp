@@ -22,7 +22,7 @@
 			if(primalSolution[ i]  != NULL)   delete[] primalSolution[ i];
 			primalSolution[ i] = NULL;
 			// now delete other var
-			for(int k = 0; k < numberOfOtherVariableResult; k++){
+			for(int k = 0; k < numberOfOtherVariableResults; k++){
 				// the following delete gets rid of otherVarText in otherVarStruct
 				if( (otherVarVec[ k]  != NULL) && (otherVarVec[ k]->otherVarText != NULL) ) delete[] otherVarVec[ k]->otherVarText;
 				// the following should delete each of otherVarStruct created
@@ -57,7 +57,7 @@
 	numberOfConstraints(0),
 	numberOfObjectives(0),
 	kounter( 0),
-	numberOfOtherVariableResult( 0),
+	numberOfOtherVariableResults( 0),
 	solutionIdx( 0),
 	statusTypePresent( false),
 	generalStatusTypePresent( false),

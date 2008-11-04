@@ -108,8 +108,8 @@ osrldoc: osrlstart resultHeader resultData
 		for(int solIdx = 0; solIdx <  parserData->numberOfSolutions; solIdx++){
 			osresult->setSolutionStatus(solIdx, parserData->statusType, parserData->statusDescription);
 			osresult->setPrimalVariableValues(solIdx, parserData->primalSolution[ solIdx]);
-		    osresult->setNumberOfOtherVariableResult(solIdx, parserData->numberOfOtherVariableResult);
-			for(int k = 0; k < parserData->numberOfOtherVariableResult; k++){
+		    osresult->setNumberOfOtherVariableResults(solIdx, parserData->numberOfOtherVariableResults);
+			for(int k = 0; k < parserData->numberOfOtherVariableResults; k++){
 				osresult->setAnOtherVariableResult(solIdx, k, parserData->otherVarVec[ k]->name, parserData->otherVarVec[ k]->description, parserData->otherVarVec[ k]->otherVarText);				
 			}
 			if( (parserData->dualSolution != NULL) &&  (parserData->dualSolution[ solIdx] != NULL) )  osresult->setDualVariableValues(solIdx, parserData->dualSolution[ solIdx]);
@@ -275,11 +275,11 @@ otherVariables:
 | otherVariables otherVariableResult;
 
 otherVariableResult:  OTHERSTART {  
-   // parserData->numberOfOtherVariableResult++;
+   // parserData->numberOfOtherVariableResults++;
 	parserData->otherVarStruct = new OtherVariableResultStruct(); 
 	parserData->otherVarStruct->otherVarText = new std::string[parserData->numberOfVariables];} anotherotherVarATT GREATERTHAN {if(parserData->otherNamePresent == false) osrlerror(NULL, NULL, NULL, "other element requires name attribute"); 
 	parserData->otherNamePresent = false;  
-	}  othervar OTHEREND {parserData->otherVarVec.push_back( parserData->otherVarStruct); parserData->numberOfOtherVariableResult++; };
+	}  othervar OTHEREND {parserData->otherVarVec.push_back( parserData->otherVarStruct); parserData->numberOfOtherVariableResults++; };
  
 othervar: anotherothervar
 | othervar anotherothervar;

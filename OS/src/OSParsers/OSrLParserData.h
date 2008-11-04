@@ -95,7 +95,7 @@ public:
 	/** the number of types of variable results other
 	 * than the value of the variable
 	 */	
-	int numberOfOtherVariableResult;
+	int numberOfOtherVariableResults;
 	
 	/** and index on which solution we have found */
 	int solutionIdx;
