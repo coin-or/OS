@@ -435,6 +435,11 @@
 					<xs:documentation>since version 1.0.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="initialBasisStatus" type="InitialBasisStatus" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Experimental</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="other" type="OtherVariableOption" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>since version 1.0.0</xs:documentation>
@@ -461,6 +466,15 @@
 		</xs:sequence>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
+	<xs:complexType name="InitialBasisStatus">
+		<xs:annotation>
+			<xs:documentation>Experimental</xs:documentation>
+		</xs:annotation>
+		<xs:sequence minOccurs="0">
+			<xs:element name="var" type="InitBasStatus" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfVar" type="xs:positiveInteger" use="required"/>
+	</xs:complexType>
 	<xs:complexType name="InitVarValue">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
@@ -474,6 +488,20 @@
 		</xs:annotation>
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="InitBasStatus">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="value">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="unknown"/>
+					<xs:enumeration value="basic"/>
+					<xs:enumeration value="atLower"/>
+					<xs:enumeration value="atUpper"/>
+					<xs:enumeration value="superbasic"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="OtherVariableOption">
 		<xs:annotation>
