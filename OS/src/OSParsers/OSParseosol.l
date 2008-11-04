@@ -1,11 +1,11 @@
 /** @file parseosol.l
  * 
- * @author  Gus Gassmann, Jun Ma, Kipp Martin, 
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
  * @version 1.1, 10/07/2008
  * @since   OS1.1
  *
  * \remarks
- * Copyright (C) 2005-2008, Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2008, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, Dalhousie University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
@@ -28,7 +28,6 @@
 #  error "don't have header file for stdio"
 # endif
 #endif
-
 
 #ifdef HAVE_CTIME
 # include <ctime>
@@ -55,6 +54,8 @@
 #include "OSErrorClass.h"
 #include "OSParseosol.tab.hpp"
 #include "OSOption.h"
+
+#define PARSERDEBUG
 
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", yytext);

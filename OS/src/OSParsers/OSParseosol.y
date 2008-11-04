@@ -1,11 +1,11 @@
 /** @file parseosol.y
  *
- * @author  Gus Gassmann, Jun Ma, Kipp Martin,
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin,
  * @version 1.1, 10/07/2008
  * @since   OS1.1
  *
  * \remarks
- * Copyright (C) 2005-2008, Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2008, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, Dalhousie University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License.
@@ -131,7 +131,7 @@ osoldoc: osolstart GREATERTHAN osolcontent OSOLEND;
 osolstart:	OSOLSTART
 	| OSOLSTART OSOLATTRIBUTETEXT ;
 
-osolcontent: osolgeneral osolsystem osolservice osoljob osoloptimization ;
+osolcontent: osolgeneral osolsystem osolservice osoljob osoloptimization;
 
 osolgeneral: | generalhead generalbody;
 
@@ -217,7 +217,7 @@ instancelocationhead: INSTANCELOCATIONSTART
 };
 
 locationtypeatt: | LOCATIONTYPEATT ATTRIBUTETEXT 
-{	if ( (strncmp($2, "local", 5) == 0) || (strncmp($2, "http", 4) == 0) || (strncmp($2, "ftp", 3) == 0) )
+{	if ( (strcmp($2, "local") == 0) || (strcmp($2, "http") == 0) || (strcmp($2, "ftp") == 0) )
 		osoption->general->instanceLocation->locationType = $2;
 	else
 		osolerror( NULL, osoption, parserData, "Not a valid locationType");
@@ -324,8 +324,8 @@ contacthead: CONTACTSTART
 };
 
 transporttypeatt: | TRANSPORTTYPEATT ATTRIBUTETEXT 
-{	if ( (strncmp($2,"osp",3) == 0) || (strncmp($2,"smtp",4) == 0) || (strncmp($2,"http", 4) == 0) || 
-						     (strncmp($2,"ftp", 3) == 0) || (strncmp($2,"other",5) == 0) )
+{	if ( (strcmp($2,"osp") == 0) || (strcmp($2,"smtp") == 0) || (strcmp($2,"http")  == 0) || 
+						  (strcmp($2,"ftp")  == 0) || (strcmp($2,"other") == 0) )
 		osoption->general->contact->transportType = $2;
 	else
 		osolerror( NULL, osoption, parserData, "Not a valid transport type");
@@ -455,8 +455,8 @@ mindiskspacehead: MINDISKSPACESTART
 };
 
 mindiskspaceunit: | UNITATT ATTRIBUTETEXT 
-{	if ( (strncmp($2,"byte",4) == 0) || (strncmp($2,"kilobyte",8) == 0) || (strncmp($2,"megabyte",8) == 0) || 
-						      (strncmp($2,"terabyte",8) == 0) || (strncmp($2,"petabyte",8) == 0) )
+{	if ( (strcmp($2,"byte") == 0) || (strcmp($2,"kilobyte") == 0) || (strcmp($2,"megabyte") == 0) || 
+						   (strcmp($2,"terabyte") == 0) || (strcmp($2,"petabyte") == 0) )
 		osoption->system->minDiskSpace->unit = $2;
 	else
 		osolerror( NULL, osoption, parserData, "Not a valid unit");
@@ -491,8 +491,8 @@ minmemorysizehead: MINMEMORYSIZESTART
 };
 
 minmemoryunit: | UNITATT ATTRIBUTETEXT 
-{	if ( (strncmp($2,"byte",4) == 0) || (strncmp($2,"kilobyte",8) == 0) || (strncmp($2,"megabyte",8) == 0) || 
-						      (strncmp($2,"terabyte",8) == 0) || (strncmp($2,"petabyte",8) == 0) )
+{	if ( (strcmp($2,"byte") == 0) || (strcmp($2,"kilobyte") == 0) || (strcmp($2,"megabyte") == 0) || 
+						   (strcmp($2,"terabyte") == 0) || (strcmp($2,"petabyte") == 0) )
 		osoption->system->minMemorySize->unit = $2;
 	else
 		osolerror( NULL, osoption, parserData, "Not a valid unit");
@@ -528,10 +528,10 @@ mincpuspeedhead: MINCPUSPEEDSTART
 };
 
 mincpuspeedunit: | UNITATT ATTRIBUTETEXT 
-{	if ( (strncmp($2,    "hertz",5) == 0) || (strncmp($2,"kilohertz",9) == 0) || (strncmp($2,"megahertz",9) == 0) || 
-	     (strncmp($2,"gigahertz",9) == 0) || (strncmp($2,"terahertz",9) == 0) || (strncmp($2,"petahertz",9) == 0) ||
-	     (strncmp($2,    "flops",5) == 0) || (strncmp($2,"kiloflops",9) == 0) || (strncmp($2,"megaflops",9) == 0) || 
-	     (strncmp($2,"gigaflops",9) == 0) || (strncmp($2,"teraflops",9) == 0) || (strncmp($2,"petahertz",9) == 0) ) 
+{	if ( (strcmp($2,    "hertz") == 0) || (strcmp($2,"kilohertz") == 0) || (strcmp($2,"megahertz") == 0) || 
+	     (strcmp($2,"gigahertz") == 0) || (strcmp($2,"terahertz") == 0) || (strcmp($2,"petahertz") == 0) ||
+	     (strcmp($2,    "flops") == 0) || (strcmp($2,"kiloflops") == 0) || (strcmp($2,"megaflops") == 0) || 
+	     (strcmp($2,"gigaflops") == 0) || (strcmp($2,"teraflops") == 0) || (strcmp($2,"petahertz") == 0) ) 
 		osoption->system->minCPUSpeed->unit = $2;
 	else
 		osolerror( NULL, osoption, parserData, "Not a valid unit");
@@ -692,9 +692,9 @@ servicetypehead: SERVICETYPESTART
 servicetypebody: ENDOFELEMENT
 	| GREATERTHAN SERVICETYPEEND
 	| GREATERTHAN ELEMENTTEXT 
-{	if ( (strncmp($2,"solver",6) == 0) || (strncmp($2,"analyzer",   8) == 0) || (strncmp($2,"scheduler",9) == 0) ||
-							  (strncmp($2,"simulation",10) == 0) || (strncmp($2,"registry", 8) == 0) ||
-							  (strncmp($2,"modeler",    7) == 0) || (strncmp($2,"agent",    5) == 0) ) 
+{	if ( (strcmp($2,"solver") == 0) || (strcmp($2,"analyzer")   == 0) || (strcmp($2,"scheduler") == 0) ||
+						     (strcmp($2,"simulation") == 0) || (strcmp($2,"registry")  == 0) ||
+						     (strcmp($2,"modeler")    == 0) || (strcmp($2,"agent")     == 0) ) 
 		osoption->service->type = $2;
 	else
 		osolerror( NULL, osoption, parserData, "Not a valid service type");
@@ -819,9 +819,9 @@ maxtimehead: MAXTIMESTART
 };
 
 maxtimeunit: | UNITATT ATTRIBUTETEXT 
-{	if ( (strncmp($2,"second",6) == 0) || (strncmp($2,"minute",6) == 0) || (strncmp($2,"hour",4) == 0) ||
-							  (strncmp($2,"day",   3) == 0) || (strncmp($2,"week",4) == 0) ||
-							  (strncmp($2,"month", 5) == 0) || (strncmp($2,"year",4) == 0) ) 
+{	if ( (strcmp($2,"second") == 0) || (strcmp($2,"minute") == 0) || (strcmp($2,"hour") == 0) ||
+						     (strcmp($2,"day")    == 0) || (strcmp($2,"week") == 0) ||
+						     (strcmp($2,"month")  == 0) || (strcmp($2,"year") == 0) ) 
                 osoption->job->maxTime->unit = $2;
 	else
 		osolerror( NULL, osoption, parserData, "Not a valid time unit");
@@ -1646,9 +1646,9 @@ initvarvaluevalueatt: VALUEATT ATTRIBUTETEXT
 {	if (parserData->valAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one variable value allowed");
 	parserData->valAttributePresent = true;
-	if (strncmp($2,"INF",3) == 0)
+	if (strcmp($2,"INF") == 0)
 		osoption->optimization->variables->initialVariableValues->var[parserData->numberOfVar]->value = OSDBL_MAX;
-	else if (strncmp($2,"-INF",4) == 0)
+	else if (strcmp($2,"-INF") == 0)
 		osoption->optimization->variables->initialVariableValues->var[parserData->numberOfVar]->value = -OSDBL_MAX;
 	else
 		osoption->optimization->variables->initialVariableValues->var[parserData->numberOfVar]->value = os_strtod($2, NULL);
@@ -1949,9 +1949,9 @@ initobjvaluevalueatt: VALUEATT ATTRIBUTETEXT
 {	if (parserData->valAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one objective value allowed");
 	parserData->valAttributePresent = true;
-	if (strncmp($2,"INF",3) == 0)
+	if (strcmp($2,"INF") == 0)
 		osoption->optimization->objectives->initialObjectiveValues->obj[parserData->numberOfObjValues]->value = OSDBL_MAX;
-	else if (strncmp($2,"-INF",4) == 0)
+	else if (strcmp($2,"-INF") == 0)
 		osoption->optimization->objectives->initialObjectiveValues->obj[parserData->numberOfObjValues]->value = -OSDBL_MAX;
 	else
 		osoption->optimization->objectives->initialObjectiveValues->obj[parserData->numberOfObjValues]->value = os_strtod($2, NULL);
@@ -2011,9 +2011,9 @@ initobjvaluelowerboundatt: LBVALUEATT ATTRIBUTETEXT
 {	if (parserData->lbvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one objective lower bound allowed");
 	parserData->lbvalAttributePresent = true;
-	if (strncmp($2,"INF",3) == 0)
+	if (strcmp($2,"INF") == 0)
 		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->lbValue = OSDBL_MAX;
-	else if (strncmp($2,"-INF",4) == 0)
+	else if (strcmp($2,"-INF") == 0)
 		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->lbValue = -OSDBL_MAX;
 	else
 		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->lbValue = os_strtod($2, NULL);
@@ -2024,9 +2024,9 @@ initobjvalueupperboundatt: UBVALUEATT ATTRIBUTETEXT
 {	if (parserData->ubvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one objective upper bound allowed");
 	parserData->ubvalAttributePresent = true;
-	if (strncmp($2,"INF",3) == 0)
+	if (strcmp($2,"INF") == 0)
 		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->ubValue = OSDBL_MAX;
-	else if (strncmp($2,"-INF",4) == 0)
+	else if (strcmp($2,"-INF") == 0)
 		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->ubValue = -OSDBL_MAX;
 	else
 		osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->ubValue = os_strtod($2, NULL);
@@ -2280,9 +2280,9 @@ initconvaluevalueatt: VALUEATT ATTRIBUTETEXT
 {	if (parserData->valAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one constraint value allowed");
 	parserData->valAttributePresent = true;
-	if (strncmp($2,"INF",3) == 0)
+	if (strcmp($2,"INF") == 0)
 		osoption->optimization->constraints->initialConstraintValues->con[parserData->numberOfCon]->value = OSDBL_MAX;
-	else if (strncmp($2,"-INF",4) == 0)
+	else if (strcmp($2,"-INF") == 0)
 		osoption->optimization->constraints->initialConstraintValues->con[parserData->numberOfCon]->value = -OSDBL_MAX;
 	else
 		osoption->optimization->constraints->initialConstraintValues->con[parserData->numberOfCon]->value = os_strtod($2, NULL);
@@ -2342,9 +2342,9 @@ initdualvaluelowerboundatt: LBVALUEATT ATTRIBUTETEXT
 {	if (parserData->lbvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one dual variable lower bound allowed");
 	parserData->lbvalAttributePresent = true;
-	if (strncmp($2,"INF",3) == 0)
+	if (strcmp($2,"INF") == 0)
 		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->lbValue = OSDBL_MAX;
-	else if (strncmp($2,"-INF",4) == 0)
+	else if (strcmp($2,"-INF") == 0)
 		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->lbValue = -OSDBL_MAX;
 	else
 		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->lbValue = os_strtod($2, NULL);
@@ -2355,9 +2355,9 @@ initdualvalueupperboundatt: UBVALUEATT ATTRIBUTETEXT
 {	if (parserData->ubvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one dual variable upper bound allowed");
 	parserData->ubvalAttributePresent = true;
-	if (strncmp($2,"INF",3) == 0)
+	if (strcmp($2,"INF") == 0)
 		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->ubValue = OSDBL_MAX;
-	else if (strncmp($2,"-INF",4) == 0)
+	else if (strcmp($2,"-INF") == 0)
 		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->ubValue = -OSDBL_MAX;
 	else
 		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->ubValue = os_strtod($2, NULL);
