@@ -2,7 +2,7 @@
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSrL.xsd: current version - 1.0.0-->
 	<!--include: proposal-->
 	<xs:include schemaLocation="OSgL.xsd"/>
@@ -80,12 +80,12 @@
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="solver" type="xs:string" minOccurs="0">
+			<xs:element name="solverInvoked" type="xs:string" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="time" type="xs:dateTime" minOccurs="0">
+			<xs:element name="timeStamp" type="xs:dateTime" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
@@ -99,6 +99,11 @@
 	</xs:complexType>
 	<xs:complexType name="SystemResult">
 		<xs:all>
+			<xs:element name="systemInformation" type="xs:string" default="0.0" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="availableDiskSpace" type="DiskSpace" default="0.0" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
@@ -120,11 +125,6 @@
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="availableCPUSpeed" type="CPUSpeed" default="0.0" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="usedCPUSpeed" type="CPUSpeed" default="0.0" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
@@ -245,7 +245,6 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:all>
-		<xs:attribute name="jobID" type="xs:string" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="OptimizationResult">
 		<xs:annotation>
@@ -269,9 +268,9 @@
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfSolutions" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfVariables" type="xs:positiveInteger" use="required"/>
-		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfVariables" type="xs:positiveInteger" use="optional"/>
+		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OtherResults">
 		<xs:sequence minOccurs="0">
@@ -458,7 +457,6 @@
 			<xs:element name="constraints" type="ConstraintSolution" minOccurs="0"/>
 			<xs:element name="solutionResults" type="SolutionResults" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfOtherResults" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="targetObjectiveIdx" type="xs:negativeInteger" use="optional"/>
 		<xs:attribute name="mixedObjectives" type="xs:boolean" use="optional" default="false"/>
 	</xs:complexType>
@@ -512,7 +510,7 @@
 			<xs:element name="values" type="ObjectiveValues" minOccurs="0"/>
 			<xs:element name="other" type="OtherObjectiveResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfOtherObjectiveResults" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfOtherObjectiveResults" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="ObjValue">
 		<xs:annotation>
@@ -562,6 +560,11 @@
 		<xs:sequence>
 			<xs:element name="values" type="VariableValues" minOccurs="0"/>
 			<xs:element name="valuesString" type="VariableStringValues" minOccurs="0"/>
+			<xs:element name="basisStatus" type="BasisStatus" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Experimental</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="other" minOccurs="0" maxOccurs="unbounded">
 				<xs:complexType>
 					<xs:complexContent>
@@ -570,7 +573,7 @@
 				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfOtherVariableResults" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfOtherVariableResults" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="VarValue">
 		<xs:annotation>
@@ -610,6 +613,29 @@
 		</xs:sequence>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
+	<xs:complexType name="BasisStatus">
+		<xs:annotation>
+			<xs:documentation>Experimental</xs:documentation>
+		</xs:annotation>
+		<xs:sequence minOccurs="0">
+			<xs:element name="var" type="BasStatus" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="BasStatus">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="value">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="unknown"/>
+					<xs:enumeration value="basic"/>
+					<xs:enumeration value="atLower"/>
+					<xs:enumeration value="atUpper"/>
+					<xs:enumeration value="superbasic"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
 	<xs:complexType name="OtherVarResult">
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
@@ -640,7 +666,7 @@
 			<xs:element name="dualValues" type="DualVariableValues" minOccurs="0"/>
 			<xs:element name="other" type="OtherConstraintResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfOtherConstraintResults" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfOtherConstraintResults" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="DualVarValue">
 		<xs:annotation>
