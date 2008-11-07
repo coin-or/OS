@@ -105,6 +105,7 @@ public class OSoLReader extends OSgLReader{
 		if(!m_osOption.setInstanceLocationType(getInstanceLocationType())) throw new Exception("setInstanceLocationType Unsuccessful");		
 		if(!m_osOption.setInstanceAddress(getInstanceAddress())) throw new Exception("setInstanceAddress Unsuccessful");		
 		if(!m_osOption.setJobID(getJobID())) throw new Exception("setJobID Unsuccessful");		
+		if(!m_osOption.setSolverToInvoke(getSolverToInvoke())) throw new Exception("setSolverToInvoke Unsuccessful");		
 		if(!m_osOption.setLicense(getLicense())) throw new Exception("setLicense Unsuccessful");		
 		if(!m_osOption.setUserName(getUserName())) throw new Exception("setUserName Unsuccessful");		
 		if(!m_osOption.setPassword(getPassword())) throw new Exception("setPassword Unsuccessful");		
@@ -225,6 +226,18 @@ public class OSoLReader extends OSgLReader{
 		if(sJobID == null) return "";
 		return sJobID;			
 	}//getJobID
+
+	/**
+	 * get the solver to invoke
+	 * @return the solver to invoke
+	 */
+	public String getSolverToInvoke(){
+		Element eGeneral = (Element)XMLUtil.findChildNode(m_eRoot, "general");
+		if(eGeneral == null) return "";
+		String sSolverToInvoke = XMLUtil.getElementValueByName(eGeneral, "solverToInvoke");
+		if(sSolverToInvoke == null) return "";
+		return sSolverToInvoke;			
+	}//getSolverToInvoke
 
 	/**
 	 * Get license. 
@@ -1096,43 +1109,46 @@ public class OSoLReader extends OSgLReader{
 	 */
 	public static void main(String[] argv){
 		OSoLReader osolReader = new OSoLReader(false);
-		System.out.println(IOUtil.readStringFromFile(OSParameter.CODE_HOME + "OSRepository/test/osol/osol.osol"));
-		System.out.println(osolReader.readFile(OSParameter.CODE_HOME + "OSRepository/test/osol/osol.osol"));
+		//System.out.println(IOUtil.readStringFromFile(OSParameter.CODE_HOME + "OSRepository/test/osol/osol.osol"));
+		//System.out.println(osolReader.readFile(OSParameter.CODE_HOME + "OSRepository/test/osol/osol.osol"));
+		//System.out.println(IOUtil.readStringFromFile("c:/test.osol"));
+		System.out.println(osolReader.readFile("c:/test.osol"));
 		System.out.println(osolReader.getServiceName());
 		System.out.println(osolReader.getServiceURI());
 		System.out.println(osolReader.getInstanceName());		
 		System.out.println(osolReader.getJobID());		
-		System.out.println(osolReader.getLicense());		
-		System.out.println(osolReader.getUserName());		
-		System.out.println(osolReader.getPassword());		
-		System.out.println(osolReader.getContactTransportType());		
-		System.out.println(osolReader.getContactAddress());		
-		System.out.println(osolReader.getSystemMinDiskSpace());		
-		System.out.println(osolReader.getSystemMinMemorySize());		
-		System.out.println(osolReader.getSystemMinCPUSpeed());		
-		System.out.println(osolReader.getServiceType());		
-		System.out.println(osolReader.getJobMaxTime());		
-		System.out.println(XMLUtil.createXSDateTime(osolReader.getJobScheduledStartTime()));	
-		String[] msJobs = osolReader.getJobDependencies();
-		System.out.println(msJobs==null?"null":msJobs[0]);		
-		System.out.println(osolReader.getVariableNumber());		
-		System.out.println(osolReader.getObjectiveNumber());		
-		System.out.println(osolReader.getConstraintNumber());	
-		double[] mdInitValues = osolReader.getInitialVariableValues();
-		System.out.println(mdInitValues==null?"NULL":mdInitValues[0]+"");		
-
-		System.out.println(osolReader.getOtherOptionNumber());
-		String sValue = osolReader.getOtherOptionValueByName("ad");
-		if(sValue == null) System.out.println("null");
-		else System.out.println(sValue);
-		String sDescription = osolReader.getOtherOptionDescriptionByName("a");
-		System.out.println(sDescription);
-		for(int i=0;i<osolReader.getOtherOptionNumber();i++){
-			System.out.println(osolReader.getOtherOptionNames()[i]);
-			System.out.println(osolReader.getOtherOptionValues()[i]);
-			System.out.println(osolReader.getOtherOptionDescriptions()[i]);
-		}
-		osolReader.writeToStandardOutput();
+		System.out.println(osolReader.getSolverToInvoke());		
+//		System.out.println(osolReader.getLicense());		
+//		System.out.println(osolReader.getUserName());		
+//		System.out.println(osolReader.getPassword());		
+//		System.out.println(osolReader.getContactTransportType());		
+//		System.out.println(osolReader.getContactAddress());		
+//		System.out.println(osolReader.getSystemMinDiskSpace());		
+//		System.out.println(osolReader.getSystemMinMemorySize());		
+//		System.out.println(osolReader.getSystemMinCPUSpeed());		
+//		System.out.println(osolReader.getServiceType());		
+//		System.out.println(osolReader.getJobMaxTime());		
+//		System.out.println(XMLUtil.createXSDateTime(osolReader.getJobScheduledStartTime()));	
+//		String[] msJobs = osolReader.getJobDependencies();
+//		System.out.println(msJobs==null?"null":msJobs[0]);		
+//		System.out.println(osolReader.getVariableNumber());		
+//		System.out.println(osolReader.getObjectiveNumber());		
+//		System.out.println(osolReader.getConstraintNumber());	
+//		double[] mdInitValues = osolReader.getInitialVariableValues();
+//		System.out.println(mdInitValues==null?"NULL":mdInitValues[0]+"");		
+//
+//		System.out.println(osolReader.getOtherOptionNumber());
+//		String sValue = osolReader.getOtherOptionValueByName("ad");
+//		if(sValue == null) System.out.println("null");
+//		else System.out.println(sValue);
+//		String sDescription = osolReader.getOtherOptionDescriptionByName("a");
+//		System.out.println(sDescription);
+//		for(int i=0;i<osolReader.getOtherOptionNumber();i++){
+//			System.out.println(osolReader.getOtherOptionNames()[i]);
+//			System.out.println(osolReader.getOtherOptionValues()[i]);
+//			System.out.println(osolReader.getOtherOptionDescriptions()[i]);
+//		}
+//		osolReader.writeToStandardOutput();
 	}//main
 	
 }//class OSoLReader

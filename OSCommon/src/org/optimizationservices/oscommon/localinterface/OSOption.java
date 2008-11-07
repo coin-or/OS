@@ -20,6 +20,8 @@ import org.optimizationservices.oscommon.datastructure.osoption.JobOption;
 import org.optimizationservices.oscommon.datastructure.osoption.OptimizationOption;
 import org.optimizationservices.oscommon.datastructure.osoption.OtherOption;
 import org.optimizationservices.oscommon.datastructure.osoption.ServiceOption;
+import org.optimizationservices.oscommon.datastructure.osoption.SolverOption;
+import org.optimizationservices.oscommon.datastructure.osoption.SolverOptions;
 import org.optimizationservices.oscommon.datastructure.osoption.SystemOption;
 import org.optimizationservices.oscommon.datastructure.osoption.VariableOption;
 import org.optimizationservices.oscommon.representationparser.OSoLReader;
@@ -256,6 +258,26 @@ public class OSOption {
 	}//setJobID
 
 	/**
+	 * Get the solver to invoke. 
+	 * 
+	 * @return the solver to invoke, null or empty string if none. 
+	 */
+	public String getSolverToInvoke(){
+		return general.solverToInvoke;
+	}//getSolverToInvoke
+	
+	/**
+	 * Set jobID.
+	 * 
+	 * @param jobID holds the jobID.
+	 * @return whether the jobID is set successfully.
+	 */
+	public boolean setSolverToInvoke(String solverToInvoke){
+		general.solverToInvoke = solverToInvoke;
+		return true;
+	}//setSolverToInvoke
+
+	/**
 	 * Get license. 
 	 * 
 	 * @return the license, null or empty string if none. 
@@ -369,7 +391,7 @@ public class OSOption {
 	 * @return the system minimum disk space, 0.0 if none. 
 	 */
 	public double getSystemMinDiskSpace(){
-		return system.minDiskSpace;
+		return system.minDiskSpace.value;
 	}//getSystemMinDiskSpace
 	
 	/**
@@ -379,8 +401,8 @@ public class OSOption {
 	 * @return whether the minimum disk space is set successfully.
 	 */
 	public boolean setSystemMinDiskSpace(double minDiskSpace){
-		if(minDiskSpace < 0) system.minDiskSpace = 0;
-		else system.minDiskSpace = minDiskSpace;
+		if(minDiskSpace < 0) system.minDiskSpace.value = 0;
+		else system.minDiskSpace.value = minDiskSpace;
 		return true;
 	}//setSystemMinDiskSpace
 
@@ -390,7 +412,7 @@ public class OSOption {
 	 * @return the system minimum memory size, 0.0 if none. 
 	 */
 	public double getSystemMinMemorySize(){
-		return system.minMemory;
+		return system.minMemorySize.value;
 	}//getSystemMinMeorySize
 	
 	/**
@@ -400,8 +422,8 @@ public class OSOption {
 	 * @return whether the minimum memory size is set successfully.
 	 */
 	public boolean setSystemMinMemorySize(double minMemorySize){
-		if(minMemorySize < 0) system.minMemory = 0;
-		else system.minMemory = minMemorySize;
+		if(minMemorySize < 0) system.minMemorySize.value = 0;
+		else system.minMemorySize.value = minMemorySize;
 		return true;
 	}//setSystemMinMemorySize
 
@@ -411,7 +433,7 @@ public class OSOption {
 	 * @return the system minimum cpu speed, 0.0 if none. 
 	 */
 	public double getSystemMinCPUSpeed(){
-		return system.minCPUSpeed;
+		return system.minCPUSpeed.value;
 	}//getSystemMinCPUSpeed
 	
 	/**
@@ -421,8 +443,8 @@ public class OSOption {
 	 * @return whether the minimum cpu speed is set successfully.
 	 */
 	public boolean setSystemMinCPUSpeed(double minCPUSpeed){
-		if(minCPUSpeed < 0) system.minCPUSpeed = 0;
-		else system.minCPUSpeed = minCPUSpeed;
+		if(minCPUSpeed < 0) system.minCPUSpeed.value = 0;
+		else system.minCPUSpeed.value = minCPUSpeed;
 		return true;
 	}//setSystemMinCPUSpeed
 
@@ -462,7 +484,7 @@ public class OSOption {
 	 * @return the maximum time, Double.POSITIVE_INFINITY if none. 
 	 */
 	public double getJobMaxTime(){
-		return job.maxTime;
+		return job.maxTime.value;
 	}//getJobMaxTime
 	
 	/**
@@ -473,7 +495,7 @@ public class OSOption {
 	 */
 	public boolean setJobMaxTime(double maxTime){
 		if(maxTime <= 0) return false;
-		else job.maxTime = maxTime;
+		else job.maxTime.value = maxTime;
 		return true;
 	}//setJobMaxTime
 
@@ -597,8 +619,9 @@ public class OSOption {
 	 * @return a string array of file paths to copy from. 
 	 */
 	public String[] getInputFilesToCopyFrom(){
-		if(job.inputFilesToCopyFrom == null) return null;
-		return job.inputFilesToCopyFrom.path;
+		return null; //!!!!!!!!!!!!!!!!!!!!!!!
+//		if(job.inputFilesToCopyFrom == null) return null;
+//		return job.inputFilesToCopyFrom.path;
 	}//getInputFilesToCopyFrom
 
 	/**
@@ -608,9 +631,10 @@ public class OSOption {
 	 * @return whether the input files to copy from are set successfully.
 	 */
 	public boolean setInputFilesToCopyFrom(String[] paths){
-		if(job.inputFilesToCopyFrom == null) job.inputFilesToCopyFrom = new DirectoriesAndFiles();
-		job.inputFilesToCopyFrom.path = paths;
-		return true;
+		return true; //!!!!!!!!!!!!!!!!!!!!!!!
+//		if(job.inputFilesToCopyFrom == null) job.inputFilesToCopyFrom = new DirectoriesAndFiles();
+//		job.inputFilesToCopyFrom.path = paths;
+//		return true;
 	}//setInputFilesToCopyFrom
 
 	/**
@@ -620,8 +644,9 @@ public class OSOption {
 	 * @return a string array of file paths to copy to. 
 	 */
 	public String[] getInputFilesToCopyTo(){
-		if(job.inputFilesToCopyTo == null) return null;
-		return job.inputFilesToCopyTo.path;
+		return null; //!!!!!!!!!!!!!!!!!!!!!!!
+//		if(job.inputFilesToCopyTo == null) return null;
+//		return job.inputFilesToCopyTo.path;
 	}//getInputFilesToCopyTo
 
 	/**
@@ -631,9 +656,10 @@ public class OSOption {
 	 * @return whether the input files to copy to are set successfully.
 	 */
 	public boolean setInputFilesToCopyTo(String[] paths){
-		if(job.inputFilesToCopyTo == null) job.inputFilesToCopyTo = new DirectoriesAndFiles();
-		job.inputFilesToCopyTo.path = paths;
-		return true;
+		return true; //!!!!!!!!!!!!!!!!!!!!!!!
+//		if(job.inputFilesToCopyTo == null) job.inputFilesToCopyTo = new DirectoriesAndFiles();
+//		job.inputFilesToCopyTo.path = paths;
+//		return true;
 	}//setInputFilesToCopyTo
 
 	/**
@@ -643,8 +669,9 @@ public class OSOption {
 	 * @return a string array of file paths to move from. 
 	 */
 	public String[] getInputFilesToMoveFrom(){
-		if(job.inputFilesToMoveFrom == null) return null;
-		return job.inputFilesToMoveFrom.path;
+		return null; //!!!!!!!!!!!!!!!!!!!!!!!
+//		if(job.inputFilesToMoveFrom == null) return null;
+//		return job.inputFilesToMoveFrom.path;
 	}//getInputFilesToMoveFrom
 
 	/**
@@ -654,9 +681,10 @@ public class OSOption {
 	 * @return whether the input files to move from are set successfully.
 	 */
 	public boolean setInputFilesToMoveFrom(String[] paths){
-		if(job.inputFilesToMoveFrom == null) job.inputFilesToMoveFrom = new DirectoriesAndFiles();
-		job.inputFilesToMoveFrom.path = paths;
-		return true;
+		return true; //!!!!!!!!!!!!!!!!!!!!!!!
+//		if(job.inputFilesToMoveFrom == null) job.inputFilesToMoveFrom = new DirectoriesAndFiles();
+//		job.inputFilesToMoveFrom.path = paths;
+//		return true;
 	}//setInputFilesToMoveFrom
 
 	/**
@@ -666,8 +694,9 @@ public class OSOption {
 	 * @return a string array of file paths to move to. 
 	 */
 	public String[] getInputFilesToMoveTo(){
-		if(job.inputFilesToMoveTo == null) return null;
-		return job.inputFilesToMoveTo.path;
+		return null; //!!!!!!!!!!!!!!!!!!!!!!!
+//		if(job.inputFilesToMoveTo == null) return null;
+//		return job.inputFilesToMoveTo.path;
 	}//getInputFilesToMoveTo
 
 	/**
@@ -677,9 +706,10 @@ public class OSOption {
 	 * @return whether the input files to move to are set successfully.
 	 */
 	public boolean setInputFilesToMoveTo(String[] paths){
-		if(job.inputFilesToMoveTo == null) job.inputFilesToMoveTo = new DirectoriesAndFiles();
-		job.inputFilesToMoveTo.path = paths;
-		return true;
+		return true; //!!!!!!!!!!!!!!!!!!!!!!!
+//		if(job.inputFilesToMoveTo == null) job.inputFilesToMoveTo = new DirectoriesAndFiles();
+//		job.inputFilesToMoveTo.path = paths;
+//		return true;
 	}//setInputFilesToMoveTo
 
 	/**
@@ -689,8 +719,9 @@ public class OSOption {
 	 * @return a string array of file paths to copy from. 
 	 */
 	public String[] getOutputFilesToCopyFrom(){
-		if(job.outputFilesToCopyFrom == null) return null;
-		return job.outputFilesToCopyFrom.path;
+		return null; //!!!!!!!!!!!!!!!!!!!!!!!
+//		if(job.outputFilesToCopyFrom == null) return null;
+//		return job.outputFilesToCopyFrom.path;
 	}//getOutputFilesToCopyFrom
 
 	/**
@@ -700,9 +731,10 @@ public class OSOption {
 	 * @return whether the output files to copy from are set successfully.
 	 */
 	public boolean setOutputFilesToCopyFrom(String[] paths){
-		if(job.outputFilesToCopyFrom == null) job.outputFilesToCopyFrom = new DirectoriesAndFiles();
-		job.outputFilesToCopyFrom.path = paths;
-		return true;
+		return true; //!!!!!!!!!!!!!!!!!!!!!!!
+//		if(job.outputFilesToCopyFrom == null) job.outputFilesToCopyFrom = new DirectoriesAndFiles();
+//		job.outputFilesToCopyFrom.path = paths;
+//		return true;
 	}//setOutputFilesToCopyFrom
 
 	/**
@@ -712,8 +744,9 @@ public class OSOption {
 	 * @return a string array of file paths to copy to. 
 	 */
 	public String[] getOutputFilesToCopyTo(){
-		if(job.outputFilesToCopyTo == null) return null;
-		return job.outputFilesToCopyTo.path;
+		return null; //!!!!!!!!!!!!!!!!!!!!!!!
+//		if(job.outputFilesToCopyTo == null) return null;
+//		return job.outputFilesToCopyTo.path;
 	}//getOutputFilesToCopyTo
 
 	/**
@@ -723,9 +756,10 @@ public class OSOption {
 	 * @return whether the output files to copy to are set successfully.
 	 */
 	public boolean setOutputFilesToCopyTo(String[] paths){
-		if(job.outputFilesToCopyTo == null) job.outputFilesToCopyTo = new DirectoriesAndFiles();
-		job.outputFilesToCopyTo.path = paths;
-		return true;
+		return true; //!!!!!!!!!!!!!!!!!!!!!!!
+//		if(job.outputFilesToCopyTo == null) job.outputFilesToCopyTo = new DirectoriesAndFiles();
+//		job.outputFilesToCopyTo.path = paths;
+//		return true;
 	}//setOutputFilesToCopyTo
 
 	/**
@@ -735,8 +769,9 @@ public class OSOption {
 	 * @return a string array of file paths to move from. 
 	 */
 	public String[] getOutputFilesToMoveFrom(){
-		if(job.outputFilesToMoveFrom == null) return null;
-		return job.outputFilesToMoveFrom.path;
+		return null; //!!!!!!!!!!!!!!!!!!!!!!!
+//		if(job.outputFilesToMoveFrom == null) return null;
+//		return job.outputFilesToMoveFrom.path;
 	}//getOutputFilesToMoveFrom
 
 	/**
@@ -746,9 +781,10 @@ public class OSOption {
 	 * @return whether the output files to move from are set successfully.
 	 */
 	public boolean setOutputFilesToMoveFrom(String[] paths){
-		if(job.outputFilesToMoveFrom == null) job.outputFilesToMoveFrom = new DirectoriesAndFiles();
-		job.outputFilesToMoveFrom.path = paths;
-		return true;
+		return true; //!!!!!!!!!!!!!!!!!!!!!!!
+//		if(job.outputFilesToMoveFrom == null) job.outputFilesToMoveFrom = new DirectoriesAndFiles();
+//		job.outputFilesToMoveFrom.path = paths;
+//		return true;
 	}//setOutputFilesToMoveFrom
 
 	/**
@@ -758,8 +794,9 @@ public class OSOption {
 	 * @return a string array of file paths to move to. 
 	 */
 	public String[] getOutputFilesToMoveTo(){
-		if(job.outputFilesToMoveTo == null) return null;
-		return job.outputFilesToMoveTo.path;
+		return null; //!!!!!!!!!!!!!!!!!!!!!!!
+//		if(job.outputFilesToMoveTo == null) return null;
+//		return job.outputFilesToMoveTo.path;
 	}//getOutputFilesToMoveTo
 
 	/**
@@ -769,9 +806,10 @@ public class OSOption {
 	 * @return whether the output files to move to are set successfully.
 	 */
 	public boolean setOutputFilesToMoveTo(String[] paths){
-		if(job.outputFilesToMoveTo == null) job.outputFilesToMoveTo = new DirectoriesAndFiles();
-		job.outputFilesToMoveTo.path = paths;
-		return true;
+		return true; //!!!!!!!!!!!!!!!!!!!!!!!
+//		if(job.outputFilesToMoveTo == null) job.outputFilesToMoveTo = new DirectoriesAndFiles();
+//		job.outputFilesToMoveTo.path = paths;
+//		return true;
 	}//setOutputFilesToMoveTo
 
 	/**
@@ -996,12 +1034,13 @@ public class OSOption {
 	 */
 	public String[] getOtherOptimizationOptionNames(){
 		if(optimization == null) return null;
-		if(optimization.other == null) return null;
-		int n = optimization.other.length;
+		if(optimization.solverOptions == null) return null;
+		if(optimization.solverOptions.solverOption == null) return null;
+		int n = optimization.solverOptions.solverOption.length;
 		if(n <= 0) return null;
 		String[] otherOptimizationOptionNames = new String[n];
 		for(int i = 0; i < n; i++){
-			otherOptimizationOptionNames[i] = optimization.other[i].name;
+			otherOptimizationOptionNames[i] = optimization.solverOptions.solverOption[i].name;
 		}
 		return otherOptimizationOptionNames;
 	}//getOtherOptimizationOptionNames
@@ -1015,12 +1054,13 @@ public class OSOption {
 	 */
 	public Hashtable<String, String>  getOtherOptimizationOptionValues(){
 		if(optimization == null) return null;
-		if(optimization.other == null) return null;
-		int n = optimization.other.length;
+		if(optimization.solverOptions == null) return null;
+		if(optimization.solverOptions.solverOption == null) return null;
+		int n = optimization.solverOptions.solverOption.length;
 		if(n <= 0) return null;
 		Hashtable<String, String> otherOptimizationOptionValues = new Hashtable<String, String>();
 		for(int i = 0; i < n; i++){
-			otherOptimizationOptionValues.put(optimization.other[i].name, optimization.other[i].value);
+			otherOptimizationOptionValues.put(optimization.solverOptions.solverOption[i].name, optimization.solverOptions.solverOption[i].value);
 		}
 		return otherOptimizationOptionValues;
 	}//getOtherOptimizationOptionValues
@@ -1034,12 +1074,13 @@ public class OSOption {
 	 */
 	public Hashtable<String, String>  getOtherOptimizationOptionDescriptions(){
 		if(optimization == null) return null;
-		if(optimization.other == null) return null;
-		int n = optimization.other.length;
+		if(optimization.solverOptions == null) return null;
+		if(optimization.solverOptions.solverOption == null) return null;
+		int n = optimization.solverOptions.solverOption.length;
 		if(n <= 0) return null;
 		Hashtable<String, String> otherOptimizationOptionDescriptions = new Hashtable<String, String>();
 		for(int i = 0; i < n; i++){
-			otherOptimizationOptionDescriptions.put(optimization.other[i].name, optimization.other[i].description);
+			otherOptimizationOptionDescriptions.put(optimization.solverOptions.solverOption[i].name, optimization.solverOptions.solverOption[i].description);
 		}
 		return otherOptimizationOptionDescriptions;
 	}//otherOptimizationOptionDescriptions
@@ -1076,21 +1117,22 @@ public class OSOption {
 		int n = names.length;
 		
 		if(optimization == null) optimization = new OptimizationOption();
-		optimization.other = new OtherOption[n];
+		if(optimization.solverOptions == null) optimization.solverOptions = new SolverOptions();
+		optimization.solverOptions.solverOption = new SolverOption[n];
 		for(int i = 0; i < n; i++){
-			optimization.other[i] = new OtherOption();
+			optimization.solverOptions.solverOption[i] = new SolverOption();
 		}
 		for(int i = 0; i < n; i++){
-			optimization.other[i].name = names[i];
+			optimization.solverOptions.solverOption[i].name = names[i];
 		}
 		if(descriptions != null){
 			for(int i = 0; i < n; i++){
-				optimization.other[i].description = descriptions[i];
+				optimization.solverOptions.solverOption[i].description = descriptions[i];
 			}	
 		}
 		if(values != null){
 			for(int i = 0; i < n; i++){
-				optimization.other[i].value = values[i];
+				optimization.solverOptions.solverOption[i].value = values[i];
 			}	
 		}
 		return true;

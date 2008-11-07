@@ -19,6 +19,6 @@ public class MinCPUSpeed{
 	
 	public String unit = "hertz";
 	
-	public int value = 0;
+	public double value = 0;
 	
 }//class MinCPUSpeed
