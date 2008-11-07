@@ -14,11 +14,11 @@ package org.optimizationservices.oscommon.datastructure.osoption;
 * @version 1.0, 11/01/2008
 * @since OS 2.0
 */
-public class InitialVariableValues {
+public class InitialVariableValuesString {
 	
 	public int numberOfVar = 0;
 	
-	public InitVarValue[] var = null;
+	public InitVarValueString[] var = null;
 	
-}//InitialVariableValues
+}//VariableValues
 

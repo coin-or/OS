@@ -17,13 +17,13 @@ import org.optimizationservices.oscommon.datastructure.osgeneral.Processes;
  * <p>A data structure class that corresponds to an xml element in the OSoL schema.  
  *  
  * </p>
- * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
  * @since OS 1.0
 */
 public class JobOption{
 	
-	public double maxTime = Double.POSITIVE_INFINITY;
+	public MaxTime maxTime = new MaxTime();
 	
 	public GregorianCalendar scheduledStartTime = new GregorianCalendar(1970, 0, 1, 0, 0, 0);
 	
@@ -35,21 +35,13 @@ public class JobOption{
 
 	public DirectoriesAndFiles filesToCreate = null;
 
-	public DirectoriesAndFiles inputFilesToCopyFrom = null;
+	public PathPairs inputDirectoriesToMove = new PathPairs();
 
-	public DirectoriesAndFiles inputFilesToCopyTo = null;
+	public PathPairs inputFilesToMove = new PathPairs();
 
-	public DirectoriesAndFiles inputFilesToMoveFrom = null;
+	public PathPairs outputDirectoriesToMove = new PathPairs();
 
-	public DirectoriesAndFiles inputFilesToMoveTo = null;
-
-	public DirectoriesAndFiles outputFilesToCopyFrom = null;
-
-	public DirectoriesAndFiles outputFilesToCopyTo = null;
-
-	public DirectoriesAndFiles outputFilesToMoveFrom = null;
-
-	public DirectoriesAndFiles outputFilesToMoveTo = null;
+	public PathPairs outputFilesToMove = new PathPairs();
 
 	public DirectoriesAndFiles filesToDelete = null;
 
@@ -57,5 +49,6 @@ public class JobOption{
 
 	public Processes processesToKill = null;
 
+	public OtherOptions otherOptions = null;
 	
 }//class JobOption

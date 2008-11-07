@@ -11,7 +11,7 @@ package org.optimizationservices.oscommon.datastructure.osoption;
  * <p>A data structure class that corresponds to an xml element in the OSoL schema.  
  *  
  * </p>
- * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
  * @since OS 1.0
 */
@@ -26,6 +26,8 @@ public class GeneralOption{
 	public InstanceLocationOption instanceLocation = null;
 	
 	public String jobID = "";
+
+	public String solverToInvoke = "";
 	
 	public String license = "";
 	
@@ -35,5 +37,6 @@ public class GeneralOption{
 	
 	public ContactOption contact = null;
 	
+	public OtherOptions otherOptions = null;
 	
 }//class GeneralOption

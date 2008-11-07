@@ -1,5 +1,5 @@
 /**
- * @(#)InitialVariableValues 2.0 11/01/2008
+ * @(#)InitDualVarValue 2.0 11/01/2008
  *
  * Copyright (c) 2008
  */
@@ -11,14 +11,16 @@ package org.optimizationservices.oscommon.datastructure.osoption;
 *  
 * </p>
 * @author Gus Gassmann, Jun Ma, Kipp Martin
-* @version 1.0, 11/01/2008
+* @version 2.0, 11/01/2008
 * @since OS 2.0
 */
-public class InitialVariableValues {
+public class InitDualVarValue {
 	
-	public int numberOfVar = 0;
+	public int idx = -1;
 	
-	public InitVarValue[] var = null;
-	
-}//InitialVariableValues
+	public double lbValue = Double.NaN;
+
+	public double ubValue = Double.NaN;
+
+}//InitDualVarValue
 

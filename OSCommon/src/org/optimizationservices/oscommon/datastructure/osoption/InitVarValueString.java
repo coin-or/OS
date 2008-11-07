@@ -1,5 +1,5 @@
 /**
- * @(#)InitialVariableValues 2.0 11/01/2008
+ * @(#)InitVarValueString 2.0 11/01/2008
  *
  * Copyright (c) 2008
  */
@@ -14,11 +14,11 @@ package org.optimizationservices.oscommon.datastructure.osoption;
 * @version 1.0, 11/01/2008
 * @since OS 2.0
 */
-public class InitialVariableValues {
+public class InitVarValueString {
 	
-	public int numberOfVar = 0;
+	public int idx = -1;
 	
-	public InitVarValue[] var = null;
+	public String value = "";
 	
-}//InitialVariableValues
+}//InitVarValueString
 
