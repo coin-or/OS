@@ -92,15 +92,15 @@ public class OSoLWriter extends OSgLWriter{
 		if(!setObjectiveNumber(osOption.getObjectiveNumber())) throw new Exception("setObjectiveNumber Unsuccessful");		
 		if(!setConstraintNumber(osOption.getConstraintNumber())) throw new Exception("setConstraintNumber Unsuccessful");		
 		if(!setInitialVariableValues(osOption.getInitialVariableValues())) throw new Exception("setInitialVariableValues Unsuccessful");		
-		if(osOption.optimization != null && osOption.optimization.other != null && osOption.optimization.other.length > 0){
-			int n = osOption.optimization.other.length;
+		if(osOption.optimization != null && osOption.optimization.solverOptions != null && osOption.optimization.solverOptions != null && osOption.optimization.solverOptions.solverOption.length > 0){
+			int n = osOption.optimization.solverOptions.solverOption.length;
 			String[] msNames = new String[n];
 			String[] msValues = new String[n];
 			String[] msDescriptions = new String[n];
 			for(int i = 0; i < n; i++){
-				msNames[i] = osOption.optimization.other[i].name;
-				msValues[i] = osOption.optimization.other[i].value;
-				msDescriptions[i] = osOption.optimization.other[i].description;
+				msNames[i] = osOption.optimization.solverOptions.solverOption[i].name;
+				msValues[i] = osOption.optimization.solverOptions.solverOption[i].value;
+				msDescriptions[i] = osOption.optimization.solverOptions.solverOption[i].description;
 			}
 			if(!setOtherOptimizationOptions(msNames, msValues, msDescriptions)){
 				throw new Exception("setOtherOptimizationOption Info Unsuccessful");
