@@ -1546,9 +1546,8 @@ bool OSInstance::addVariable(int index, string name, double lowerBound, double u
 	instanceData->variables->var[index] = new Variable();
 	if(index < 0 || instanceData->variables->numberOfVariables <= 0 || index >= instanceData->variables->numberOfVariables) return false;
 	instanceData->variables->var[index]->name = name;
-	//if(lowerBound != -OSDBL_MAX && lowerBound != -OSDBL_MAX)instanceData->variables->var[index]->lb = lowerBound;
 	instanceData->variables->var[index]->lb = lowerBound;
-	if(upperBound != OSDBL_MAX && upperBound != OSDBL_MAX)instanceData->variables->var[index]->ub = upperBound;
+	instanceData->variables->var[index]->ub = upperBound;
 	instanceData->variables->var[index]->type = type;
 	if(init != OSNAN) instanceData->variables->var[index]->init = init;
 	instanceData->variables->var[index]->initString = initString;
