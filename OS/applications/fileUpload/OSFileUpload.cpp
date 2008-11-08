@@ -74,12 +74,11 @@ int main(int argC, char* argV[])
 		std::cout << "Read the file into a string" << std::endl; 
 		osil = fileUtil->getFileAsString( osilFileNameWithPath.c_str() ); 
 		OSSolverAgent* osagent = NULL;
-		//
 		// kipp-- you have changed the path name on the server
 		//
-		throw ErrorClass( "please go in and put in a valid server URL and recompile \n  see line 81" );
+		//throw ErrorClass( "please go in and put in a valid server URL and recompile \n  see line 81" );
 		// put in a valid URL below
-		osagent = new OSSolverAgent("http://***/os/servlet/OSFileUpload");
+		osagent = new OSSolverAgent("http://gsbkip.chicagogsb.edu/os/servlet/OSFileUpload");
 		// put in a valid URL above
 		//
 		//

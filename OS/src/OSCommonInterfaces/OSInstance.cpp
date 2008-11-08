@@ -1979,12 +1979,12 @@ bool OSInstance::setVariables(int number, string *names, double *lowerBounds,
 		}
 		if(lowerBounds != NULL){
 			for(i = 0; i < number; i++){
-				if(lowerBounds[i] != -OSDBL_MAX && lowerBounds[i] != -OSDBL_MAX)instanceData->variables->var[i]->lb = lowerBounds[i];  
+				instanceData->variables->var[i]->lb = lowerBounds[i];  
 			}
 		}
 		if(upperBounds != NULL){
 			for(i = 0; i < number; i++){
-				if(upperBounds[i] != OSDBL_MAX && upperBounds[i] != OSDBL_MAX)instanceData->variables->var[i]->ub = upperBounds[i]; 
+				instanceData->variables->var[i]->ub = upperBounds[i]; 
 			}
 		}
 		if(types != NULL){
