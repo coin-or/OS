@@ -363,13 +363,17 @@
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
-		<xs:choice minOccurs="0" maxOccurs="unbounded">
+		<xs:sequence minOccurs="0">
 			<xs:annotation>
 				<xs:documentation>Number of child elements must match numberOfSpecialOrderedSets
 				</xs:documentation>
 			</xs:annotation>
-			<xs:element name="sos" type="SOS"/>
-		</xs:choice>
+			<xs:element name="sos" type="SOS" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
 		<xs:attribute name="numberOSpecialOrderedSets" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="SOS">
@@ -382,26 +386,31 @@
 					<xs:documentation>Number of var elements must match numberOfVar after sequences have been accounted for appropriately</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="simplex" type="SOSSimplex" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="potentialNonzeroSets" type="SOSNonzeroSets" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>Only needed if order > 2. Number of simplex elements to match numberOfSimplices </xs:documentation>
+					<xs:documentation>Only needed if order > 2</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="order" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="convexityRow" type="xs:integer"/>
-		<xs:attribute name="numberOfSimplices" type="xs:positiveInteger"/>
 	</xs:complexType>
-	<xs:complexType name="SOSSimplex">
+	<xs:complexType name="SOSNonzeroSets">
 		<xs:sequence>
-			<xs:element name="var" type="SOSSimplexVar" maxOccurs="unbounded">
+			<xs:element name="set" type="SOSNonzeroSet" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>Number of var elements must equal dimension + 1</xs:documentation>
+					<xs:documentation>Number of sets must match numberOfSets</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="dimension" use="required"/>
+		<xs:attribute name="numberOfSets"/>
+	</xs:complexType>
+	<xs:complexType name="SOSNonzeroSet">
+		<xs:sequence>
+			<xs:element name="var" type="SOSSimplexVar" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfVar" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="SOSSimplexVar">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
@@ -449,9 +458,9 @@
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+		<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="SOS1Var">
 		<xs:annotation>
