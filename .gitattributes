@@ -138,6 +138,8 @@ OS/data/osilFiles/CppADTestLag.osil -text
 OS/data/osilFiles/HS071_NLP.osil -text
 OS/data/osilFiles/HS071_NLPMod.osil -text
 OS/data/osilFiles/SOS1.osil -text
+OS/data/osilFiles/SOS2a.osil -text
+OS/data/osilFiles/SOS2b.osil -text
 OS/data/osilFiles/SOS3.osil -text
 OS/data/osilFiles/avion2.osil -text
 OS/data/osilFiles/bonminEx1.osil -text
