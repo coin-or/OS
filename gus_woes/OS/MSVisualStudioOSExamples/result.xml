@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type = "text/xsl" href = "../stylesheets/OSrL.xslt"?><osrl xmlns="os.optimizationservices.org"   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/OSrL.xsd" >
+<resultHeader>
+<generalStatus type="success"/>
+<serviceName>Solved with Coin Solver: cbc</serviceName>
+</resultHeader>
+<resultData>
+<optimization numberOfSolutions="1" numberOfVariables="2" numberOfConstraints="4" numberOfObjectives="1">
+<solution objectiveIdx="-1">
+<status type="optimal"/>
+<variables>
+<values>
+<var idx="0">540</var>
+<var idx="1">252</var>
+</values>
+<other name="reduced costs" description="the variable reduced costs">
+<var idx="0">-0</var>
+<var idx="1">-0</var>
+</other>
+</variables>
+<objectives>
+<values>
+<obj idx="-1">7668</obj>
+</values>
+</objectives>
+<constraints>
+<dualValues>
+<con idx="0">4.375</con>
+<con idx="1">-0</con>
+<con idx="2">6.9375</con>
+<con idx="3">-0</con>
+</dualValues>
+</constraints>
+</solution>
+</optimization>
+</resultData>
+</osrl>

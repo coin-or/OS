@@ -1,0 +1,21 @@
+
+
+OSAgent/OSSolverAgent.cpp: add an #include <cstdlib> to get atoi
+OSParsers/parseosil.tab.cpp: add an #include <cstring> to get strstr
+
+
+
+
+kipp, maybe I need to add something to the compiler flags by myself for this, but when I try to link 
+
+
+
+For solaris do the following.
+
+
+
+OS on Solaris now, I get undefined references in WSUtil.o, e.g., gethostbyname
+
+-lsocket 
+
+-lnsl 

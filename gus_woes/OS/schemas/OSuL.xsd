@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" elementFormDefault="qualified">
+	<!--OSuLxsd: proposal-->
+	<xs:element name="osul" type="OSuL">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSuL">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:sequence minOccurs="0">
+			<xs:element name="uri" type="URI" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfURIs" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="URI">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:anyURI">
+				<xs:attribute name="serviceName" type="xs:string" use="optional"/>
+				<xs:attribute name="matchType" use="optional" default="exact">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="exact"/>
+							<xs:enumeration value="moreGeneral"/>
+							<xs:enumeration value="moreRestricted"/>
+							<xs:enumeration value="approximate"/>
+							<xs:enumeration value="guess"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="licenseRequired" type="xs:boolean" use="optional" default="false"/>
+				<xs:attribute name="userNameRequired" type="xs:boolean" use="optional" default="false"/>
+				<xs:attribute name="passwordRequired" type="xs:boolean" use="optional" default="false"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+</xs:schema>

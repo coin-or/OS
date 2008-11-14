@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org C:\DataFiles\RESEARCH\OS\OS-trunk-test\OS\schemas\OSiL.xsd">
+	<instanceHeader>
+	<description>
+	   This problem is based on a remark in E.M.J. Beale, "Advanced algorithmic features for general mathematical programming systems" in: J. Abadie (ed.), Integer and Nonlinear Programming, North-Holland, 1970, pp. 119-137. 
+It is an SOS1 without convexity row and amounts to the global optimization problem
+max f(x) - g(x) s.t. x in [a,b], where both f and g are given as piecewise linear functions.
+	</description>
+	</instanceHeader>
+	<instanceData>
+		<variables numberOfVariables="12">
+			<var name="x0"></var>
+			<var name="x1"></var>
+			<var name="x2"></var>
+			<var name="x3"></var>
+			<var name="x4"></var>
+			<var name="x5"></var>
+			<var name="y0"></var>
+			<var name="y1"></var>
+			<var name="y2"></var>
+			<var name="y3"></var>
+			<var name="y4"></var>
+			<var name="y5"></var>
+		</variables>
+		<objectives>
+			<obj maxOrMin="max" numberOfObjCoef="10">
+				<coef idx="1">8</coef>
+				<coef idx="2">4</coef>
+				<coef idx="3">5</coef>
+				<coef idx="4">5</coef>
+				<coef idx="5">3</coef>
+				<coef idx="7">2</coef>
+				<coef idx="8">4</coef>
+				<coef idx="9">5</coef>
+				<coef idx="10">8</coef>
+				<coef idx="11">20</coef>
+			</obj>
+		</objectives>
+		<constraints numberOfConstraints="1">
+			<con lb="0" ub="0"></con>
+		</constraints>
+		<linearConstraintCoefficients numberOfValues="">
+		</linearConstraintCoefficients>
+	</instanceData>
+</osil>

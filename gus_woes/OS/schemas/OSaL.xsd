@@ -1,0 +1,1001 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" elementFormDefault="qualified">
+	<!--OSaL.xsd: proposal-->
+	<!--include: proposal-->
+	<xs:include schemaLocation="OSgL.xsd"/>
+	<xs:element name="osal" type="OSaL">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSaL">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="analysisHeader" type="AnalysisHeader">
+				<xs:annotation>
+					<xs:documentation>Proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="analysisData" type="AnalysisData">
+				<xs:annotation>
+					<xs:documentation>Proposal</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<!--xs:element name="math" minOccurs="0"/-->
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AnalysisHeader">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="status" type="AnalysisStatus">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="serviceURI" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="serviceName" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="instanceName" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="jobID" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="time" type="xs:dateTime" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="message" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AnalysisData">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="instance" type="InstanceAnalysis" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="variables" type="VariableAnalysis" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="objectives" type="ObjectiveAnalysis" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="constraints" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="ConstraintAnalysis"/>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="linearConstraintCoefficients" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="LinearConstraintCoefficientAnalysis"/>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="quadraticCoefficients" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="QuadraticCoefficientAnalysis"/>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="nonlinearExpressions" type="NonlinearExpressionAnalysis" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="semidefiniteBlocks" type="SemidefiniteBlockAnalysis" minOccurs="0"/>
+			<xs:element name="cones" type="ConeAnalysis" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="disjunctiveInformation" type="DisjunctiveInformationAnalysis" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="stages" type="StageAnalysis" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="stochasticInformation" type="StochasticInformationAnalysis" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="userFunctions" type="UserFunctionAnalysis" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="simulations" type="SimulationAnalysis" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="realTimeData" type="RealTimeDataAnalysis" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="xmlData" type="XMLDataAnalysis" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="other" type="OtherAnalysis" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfVariables" type="xs:positiveInteger" use="required"/>
+		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="AnalysisStatus">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="substatus" type="AnslysisSubstatus" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="type" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="error"/>
+					<xs:enumeration value="warning"/>
+					<xs:enumeration value="success"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="AnslysisSubstatus">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="name" type="xs:string" use="optional"/>
+				<xs:attribute name="description" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="InstanceAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="solutionAvailable" type="xs:boolean" use="optional" default="false"/>
+	</xs:complexType>
+	<xs:complexType name="VariableAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="standardAnalysis" type="StandardVariableAnalysis" minOccurs="0"/>
+			<xs:element name="other" type="OtherVariableAnalysis" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="StandardVariableAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="var" type="StandardVarAnalysis" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="StandardVarAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="init" type="xs:double" use="optional"/>
+		<xs:attribute name="initString" type="xs:string" use="optional"/>
+		<xs:attribute name="type" use="optional" default="C">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="C"/>
+					<xs:enumeration value="B"/>
+					<xs:enumeration value="I"/>
+					<xs:enumeration value="S"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="lb" type="xs:double" use="optional" default="0"/>
+		<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
+		<xs:attribute name="priority" type="xs:int" use="optional"/>
+		<xs:attribute name="fixed" type="xs:boolean" use="optional" default="false"/>
+		<xs:attribute name="fixedValue" type="xs:double" use="optional"/>
+		<xs:attribute name="fixedValueString" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="OtherVariableAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="var" type="OtherVarAnalysis"/>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="OtherVarAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="lbValue" type="xs:string" use="optional"/>
+		<xs:attribute name="ubValue" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="ObjectiveAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="standard" type="StandardObjectiveAnalysis" minOccurs="0"/>
+			<xs:element name="other" type="OtherObjectiveAnalysis" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="StandardObjectiveAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="obj" type="StandardObjAnalysis" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="StandardObjAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="idx" type="xs:int" use="optional"/>
+		<xs:attribute name="lb" type="xs:double" use="optional"/>
+		<xs:attribute name="ub" type="xs:double" use="optional"/>
+		<xs:attribute name="shape" use="optional" default="linear">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="linear"/>
+					<xs:enumeration value="convex"/>
+					<xs:enumeration value="convexAlmostLinear"/>
+					<xs:enumeration value="almostConvex"/>
+					<xs:enumeration value="concave"/>
+					<xs:enumeration value="concaveAlmostLinear"/>
+					<xs:enumeration value="almostConcave"/>
+					<xs:enumeration value="convexAndConcave"/>
+					<xs:enumeration value="convexAndConcaveAlmostLinear"/>
+					<xs:enumeration value="unknown"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="steepness" type="xs:double" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="OtherObjectiveAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="obj" type="OtherObjAnalysis"/>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="OtherObjAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="idx" type="xs:negativeInteger" use="optional"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="ConstraintAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="standard" type="StandardConstraintAnalysis" minOccurs="0"/>
+			<xs:element name="constraintRegion" type="ConstraintRegionAnalysis" minOccurs="0"/>
+			<xs:element name="other" type="OtherConstraintAnalysis" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="StandardConstraintAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="con" type="StandardConAnalysis" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="StandardConAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="idx" type="xs:int" use="optional"/>
+		<xs:attribute name="lb" type="xs:double" use="optional"/>
+		<xs:attribute name="ub" type="xs:double" use="optional"/>
+		<xs:attribute name="type" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="geq"/>
+					<xs:enumeration value="leq"/>
+					<xs:enumeration value="eq"/>
+					<xs:enumeration value="leqGeq"/>
+					<xs:enumeration value="none"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="redundant" type="xs:boolean" use="optional" default="false"/>
+		<xs:attribute name="priority" type="xs:int" use="optional"/>
+		<xs:attribute name="shape" use="optional" default="linear">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="linear"/>
+					<xs:enumeration value="convex"/>
+					<xs:enumeration value="convexAlmostLinear"/>
+					<xs:enumeration value="almostConvex"/>
+					<xs:enumeration value="concave"/>
+					<xs:enumeration value="concaveAlmostLinear"/>
+					<xs:enumeration value="almostConcave"/>
+					<xs:enumeration value="convexAndConcave"/>
+					<xs:enumeration value="convexAndConcaveAlmostLinear"/>
+					<xs:enumeration value="unknown"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="linearity" use="optional" default="linear">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="linear"/>
+					<xs:enumeration value="quadratic"/>
+					<xs:enumeration value="nonlinear"/>
+					<xs:enumeration value="unknown"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="convexity" use="optional" default="linear">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="linear"/>
+					<xs:enumeration value="convex"/>
+					<xs:enumeration value="convexAlmostLinear"/>
+					<xs:enumeration value="almostConvex"/>
+					<xs:enumeration value="concave"/>
+					<xs:enumeration value="concaveAlmostLinear"/>
+					<xs:enumeration value="almostConcave"/>
+					<xs:enumeration value="convexAndConcave"/>
+					<xs:enumeration value="convexAndConcaveAlmostLinear"/>
+					<xs:enumeration value="unknown"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="regionEffect" use="optional" default="linear">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="linear"/>
+					<xs:enumeration value="convex"/>
+					<xs:enumeration value="almostConvex"/>
+					<xs:enumeration value="nonconvex"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="effectiveness" type="xs:string" use="optional"/>
+		<xs:attribute name="surface" type="xs:double" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="ConstraintRegionAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:all>
+			<xs:element name="convexity" minOccurs="0">
+				<xs:complexType>
+					<xs:attribute name="value" type="xs:double" use="optional" default="1"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="effectiveFraction" minOccurs="0">
+				<xs:complexType>
+					<xs:attribute name="value" use="optional" default="1">
+						<xs:simpleType>
+							<xs:restriction base="xs:double">
+								<xs:minInclusive value="0.0"/>
+								<xs:maxInclusive value="1.0"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="analyticalCenter" type="DoubleVector" minOccurs="0"/>
+			<xs:element name="feasiblePoints" type="FeasiblePoints" minOccurs="0"/>
+			<xs:element name="nearFeasiblePoints" type="NearFeasiblePoints" minOccurs="0"/>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="FeasiblePoints">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="feasiblePoint" type="DoubleVector" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="NearFeasiblePoints">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="nearFeasiblePoint" type="DoubleVector" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OtherConstraintAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="con" type="OtherConAnalysis"/>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="OtherConAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="lbValue" type="xs:string" use="optional"/>
+		<xs:attribute name="ubValue" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="LinearConstraintCoefficientAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="start" minOccurs="0"/>
+			<xs:choice minOccurs="0">
+				<xs:element name="rowIdx"/>
+				<xs:element name="colIdx"/>
+			</xs:choice>
+			<xs:element name="value" minOccurs="0"/>
+			<xs:element name="other" type="OtherAnalysis" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="number" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="density" use="optional" default="0">
+			<xs:simpleType>
+				<xs:restriction base="xs:double">
+					<xs:minInclusive value="0.0"/>
+					<xs:maxInclusive value="1.0"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="QuadraticCoefficientAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="other" type="OtherAnalysis" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="number" type="xs:nonNegativeInteger" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="NonlinearExpressionAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="nl" type="NlAnalysis" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="other" type="OtherAnalysis" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="NlAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="numberQuadratic" type="xs:nonNegativeInteger" default="0"/>
+			<xs:element name="numberTrigonometric" type="xs:nonNegativeInteger" default="0"/>
+			<xs:element name="numberStatistic" type="xs:nonNegativeInteger" default="0"/>
+			<xs:element name="numberProbability" type="xs:nonNegativeInteger" default="0"/>
+			<xs:element name="numberLogic" type="xs:nonNegativeInteger" default="0"/>
+			<xs:element name="numberRelational" type="xs:nonNegativeInteger" default="0"/>
+			<xs:element name="numberUserF" type="xs:nonNegativeInteger" default="0"/>
+			<xs:element name="numberSimulations" type="xs:nonNegativeInteger" default="0"/>
+			<xs:element name="numberComplementarity" type="xs:nonNegativeInteger" default="0"/>
+			<xs:element name="numberXPath" type="xs:nonNegativeInteger" default="0"/>
+			<xs:element name="other" type="OtherAnalysis" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="idx" type="xs:int" use="optional"/>
+		<xs:attribute name="linearity" use="optional" default="nonlinear">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="linear"/>
+					<xs:enumeration value="almostLinear"/>
+					<xs:enumeration value="quadratic"/>
+					<xs:enumeration value="nonlinear"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="convexity" use="optional" default="convex">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="convex"/>
+					<xs:enumeration value="almostConvex"/>
+					<xs:enumeration value="nonconvex"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="concavity" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="concave"/>
+					<xs:enumeration value="almostConcave"/>
+					<xs:enumeration value="nonconcave"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="SemidefiniteBlockAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+	</xs:complexType>
+	<xs:complexType name="ConeAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence maxOccurs="unbounded">
+			<xs:element name="rCone" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="el" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:simpleContent>
+									<xs:extension base="xs:nonNegativeInteger">
+										<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+										<xs:attribute name="incr" type="xs:int" use="optional"/>
+									</xs:extension>
+								</xs:simpleContent>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="startIndex" type="xs:nonNegativeInteger" use="optional"/>
+					<xs:attribute name="indIndex" type="xs:nonNegativeInteger" use="optional"/>
+					<xs:attribute name="numberVariables" type="xs:nonNegativeInteger" use="optional"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="quadCone" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="el" minOccurs="2" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:simpleContent>
+									<xs:extension base="xs:nonNegativeInteger">
+										<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+										<xs:attribute name="incr" type="xs:int" use="optional"/>
+									</xs:extension>
+								</xs:simpleContent>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="numberVariables" type="xs:nonNegativeInteger" use="optional"/>
+					<xs:attribute name="startIndex" type="xs:nonNegativeInteger" use="optional"/>
+					<xs:attribute name="indIndex" type="xs:nonNegativeInteger" use="optional"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="rotatedQuadCone" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="el" minOccurs="3" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:simpleContent>
+									<xs:extension base="xs:nonNegativeInteger">
+										<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+										<xs:attribute name="incr" type="xs:int" use="optional"/>
+									</xs:extension>
+								</xs:simpleContent>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="numberVariables" type="xs:nonNegativeInteger" use="optional"/>
+					<xs:attribute name="startIndex" type="xs:nonNegativeInteger" use="optional"/>
+					<xs:attribute name="indIndex" type="xs:nonNegativeInteger" use="optional"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="other" type="OtherAnalysis" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="DisjunctiveInformationAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+	</xs:complexType>
+	<xs:complexType name="StageAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="other" type="OtherAnalysis" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="number" type="xs:positiveInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="StochasticInformationAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:choice minOccurs="0">
+				<xs:element name="explicitScenario">
+					<xs:complexType>
+						<xs:choice>
+							<xs:element name="scenarioPaths">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="numberRandomElements">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="el" type="xs:nonNegativeInteger"/>
+													<xs:element name="bound" type="xs:nonNegativeInteger"/>
+													<xs:element name="num" type="xs:nonNegativeInteger"/>
+													<xs:element name="node" type="xs:nonNegativeInteger"/>
+													<xs:element name="arc" type="xs:nonNegativeInteger"/>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute name="numberPaths" type="xs:positiveInteger" use="required"/>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="scenarioTree">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="numberRandomElements">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="el" type="xs:nonNegativeInteger"/>
+													<xs:element name="bound" type="xs:nonNegativeInteger"/>
+													<xs:element name="num" type="xs:nonNegativeInteger"/>
+													<xs:element name="node" type="xs:nonNegativeInteger"/>
+													<xs:element name="arc" type="xs:nonNegativeInteger"/>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute name="numberNodes" type="xs:positiveInteger" use="required"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:choice>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="implicitScenario">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="distributions">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="numberDistributions">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="univariate" type="xs:nonNegativeInteger"/>
+													<xs:element name="multivariate" type="xs:nonNegativeInteger"/>
+													<xs:element name="userDefined" type="xs:nonNegativeInteger"/>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="stochasticElements">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="numberElementGroups">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="singleElements" type="xs:nonNegativeInteger"/>
+													<xs:element name="simpleLinearTransformations" type="xs:nonNegativeInteger"/>
+													<xs:element name="historyDependences" type="xs:nonNegativeInteger"/>
+												</xs:sequence>
+												<xs:attribute name="num" type="xs:nonNegativeInteger"/>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute name="rowIdx" use="optional">
+										<xs:simpleType>
+											<xs:restriction base="xs:int">
+												<xs:minInclusive value="-1"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+									<xs:attribute name="colIdx" use="optional">
+										<xs:simpleType>
+											<xs:restriction base="xs:int">
+												<xs:minInclusive value="-2"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+									<xs:attribute name="additiveConstant" type="xs:double" use="optional" default="0"/>
+									<xs:attribute name="processMode" use="optional" default="add">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:enumeration value="add"/>
+												<xs:enumeration value="multiply"/>
+												<xs:enumeration value="replace"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:choice>
+			<xs:element name="penalties" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="numberPenalties">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="simpleRecourse" type="xs:nonNegativeInteger"/>
+									<xs:element name="robustOptimization" type="xs:nonNegativeInteger"/>
+									<xs:element name="piecewiseLinearQuadratic" type="xs:nonNegativeInteger"/>
+									<xs:element name="userDefinedPenalty" type="xs:nonNegativeInteger"/>
+								</xs:sequence>
+								<xs:attribute name="num" type="xs:nonNegativeInteger"/>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="riskMeasures" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="numberRiskMeasures">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="simpleChance" type="xs:nonNegativeInteger"/>
+									<xs:element name="jointChance" type="xs:nonNegativeInteger"/>
+									<xs:element name="integratedChance" type="xs:nonNegativeInteger"/>
+								</xs:sequence>
+								<xs:attribute name="num" type="xs:nonNegativeInteger"/>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="UserFunctionAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="userFunction" type="UserFAnalysis" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="UserFAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="rowsIn" type="IntVector"/>
+			<xs:element name="other" type="OtherAnalysis" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SimulationAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="simulation" type="SimAnalysis" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SimAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="time" minOccurs="0">
+				<xs:complexType>
+					<xs:attribute name="average" type="xs:double" use="optional"/>
+					<xs:attribute name="deviation" type="xs:double" use="optional"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="rowsIn" type="IntVector" minOccurs="0"/>
+			<xs:element name="other" type="OtherAnalysis" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RealTimeDataAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="other" type="OtherAnalysis" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberData" type="xs:int"/>
+		<xs:attribute name="numberLevels"/>
+	</xs:complexType>
+	<xs:complexType name="XMLDataAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="other" type="OtherAnalysis" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberData" type="xs:int" use="optional"/>
+		<xs:attribute name="numberLevels" type="xs:int" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="OtherAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="name" type="xs:string" use="required"/>
+				<xs:attribute name="description" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="NetworkAndGraphAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="nodeProperties">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="property">
+							<xs:complexType>
+								<xs:attribute name="name" type="xs:ID" use="required"/>
+								<xs:attribute name="default" type="xs:string" use="optional"/>
+								<xs:attribute name="isVariable" type="xs:boolean" use="optional" default="false"/>
+								<xs:attribute name="variableType" use="optional" default="C">
+									<xs:simpleType>
+										<xs:restriction base="xs:string">
+											<xs:enumeration value="C"/>
+											<xs:enumeration value="B"/>
+											<xs:enumeration value="I"/>
+											<xs:enumeration value="S"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:attribute>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="arcProperties">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="property">
+							<xs:complexType>
+								<xs:attribute name="name" type="xs:ID" use="required"/>
+								<xs:attribute name="default" type="xs:string" use="optional"/>
+								<xs:attribute name="isVariable" type="xs:boolean" use="optional" default="false"/>
+								<xs:attribute name="variableType" use="optional" default="C">
+									<xs:simpleType>
+										<xs:restriction base="xs:string">
+											<xs:enumeration value="C"/>
+											<xs:enumeration value="B"/>
+											<xs:enumeration value="I"/>
+											<xs:enumeration value="S"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:attribute>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="nodes">
+				<xs:complexType>
+					<xs:attribute name="numberNodes" type="xs:nonNegativeInteger" use="required"/>
+					<xs:attribute name="declaration" use="optional" default="list">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="list"/>
+								<xs:enumeration value="positiveInteger"/>
+								<xs:enumeration value="declaredInArcs"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="axisType" use="optional" default="none">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="none"/>
+								<xs:enumeration value="explicit"/>
+								<xs:enumeration value="x"/>
+								<xs:enumeration value="xy"/>
+								<xs:enumeration value="xyz"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="arcs">
+				<xs:complexType>
+					<xs:attribute name="numberArcs" type="xs:nonNegativeInteger" use="required"/>
+					<xs:attribute name="declartion" use="optional" default="list">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="list"/>
+								<xs:enumeration value="positiveInteger"/>
+								<xs:enumeration value="betweenAllNodeParis"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="weightType" use="optional" default="none">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="none"/>
+								<xs:enumeration value="explicit"/>
+								<xs:enumeration value="euc2D"/>
+								<xs:enumeration value="euc3D"/>
+								<xs:enumeration value="max2D"/>
+								<xs:enumeration value="max3D"/>
+								<xs:enumeration value="man2D"/>
+								<xs:enumeration value="man3D"/>
+								<xs:enumeration value="ceil2D"/>
+								<xs:enumeration value="geo"/>
+								<xs:enumeration value="att"/>
+								<xs:enumeration value="xray1"/>
+								<xs:enumeration value="xray2"/>
+								<xs:enumeration value="special"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="specific" type="MapType" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="type" use="optional" default="undirected">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="undirected"/>
+					<xs:enumeration value="directed"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="hasVariableProperty" type="xs:boolean" use="optional" default="true"/>
+	</xs:complexType>
+</xs:schema>

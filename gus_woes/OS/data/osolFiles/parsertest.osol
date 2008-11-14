@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osol xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org C:\DataFiles\RESEARCH\OS\OS-trunk-test\OS\schemas\OSoL.xsd">
+	<general>
+		<solverToInvoke/>
+		<serviceURI>http://www.w3.org/2001/XMLSchema-instance</serviceURI>
+		<license></license>
+		<userName>gassmann</userName>
+		<password>a.n.other</password>
+		<contact transportType="ftp"></contact>
+		<serviceName></serviceName>
+		<instanceLocation locationType="http">http://myweb.dal.ca/gassmann</instanceLocation>
+		<otherOptions numberOfOtherOptions="4">
+			<other name="test" value="5"></other>
+			<other value="0" name="other"></other>
+			<other name="third"/>
+			<other description="'should be blank'" value="NaN" name="four"/>
+		</otherOptions>
+		<instanceName>My test</instanceName>
+		<jobID>X12345-6789</jobID>
+	</general>
+	<system>
+		<minDiskSpace unit="megabyte">0</minDiskSpace>
+		<minMemorySize>1.0</minMemorySize>
+		<minCPUNumber>0</minCPUNumber>
+		<otherOptions numberOfOtherOptions="1">
+			<other name="test" value="5"></other>
+		</otherOptions>
+		<minCPUSpeed unit="teraflops">1.0</minCPUSpeed>
+	</system>
+	<service>
+		<otherOptions numberOfOtherOptions="4">
+			<other name="test" value="5"></other>
+			<other value="0" name="other"></other>
+			<other name="third"/>
+			<other description="q" name="four"/>
+		</otherOptions>
+	</service>
+	<job>
+		<dependencies numberOfJobIDs="2">
+			<jobID>Job1</jobID>
+			<jobID>1234567890ABCD</jobID>
+		</dependencies>
+		<directoriesToMake numberOfPaths="1">
+			<path>C:\datafiles\research\OS\OS-trunk-test\OS\test\temp</path>
+		</directoriesToMake>
+		<filesToDelete numberOfPaths="1">
+			<path>output.tmp</path>
+		</filesToDelete>
+		<inputDirectoriesToMove numberOfPathPairs="1">
+			<pathPair to="C:\datafiles\research\OS\OS-trunk-test\OS\test\temp" 
+						from="C:\datafiles\research\mslip\data" makeCopy="true"></pathPair>
+		</inputDirectoriesToMove>
+		<inputFilesToMove numberOfPathPairs="1">
+			<pathPair to="C:\datafiles\research\OS\OS-trunk-test\OS\test\temp\input.mps" 
+						from="C:\datafiles\research\mslip\data\diet.mps" makeCopy="true"></pathPair>
+		</inputFilesToMove>
+		<filesToCreate numberOfPaths="1">
+			<path>output.tmp</path>
+		</filesToCreate>
+		<directoriesToDelete numberOfPaths="1">
+			<path>C:\temp</path>
+		</directoriesToDelete>
+		<outputFilesToMove numberOfPathPairs="1">
+			<pathPair from="C:\datafiles\research\mslip\data\diet.result" 
+							to="C:\datafiles\research\OS\OS-trunk-test\OS\test\temp\output.tmp"></pathPair>
+		</outputFilesToMove>
+		<maxTime unit="second">0.001</maxTime>
+		<requiredDirectories numberOfPaths="1">
+			<path>c:\temp</path>
+		</requiredDirectories>
+		<processesToKill numberOfProcesses="1">	
+			<process>XYZbb</process>
+		</processesToKill>
+		<scheduledStartTime>1970-01-01T00:00:00-00:00</scheduledStartTime>
+		<requiredFiles numberOfPaths="1">
+			<path>C:\DataFiles\RESEARCH\OS\OS-trunk-test\OS\data\osolfiles\parsertest.osol</path>
+		</requiredFiles>
+		<outputDirectoriesToMove numberOfPathPairs="1">
+			<pathPair to="C:\junk" from="C:\datafiles" makeCopy="false"></pathPair>
+		</outputDirectoriesToMove>
+		<otherOptions numberOfOtherOptions="1">
+			<other name="job-option-test" value="0"/>
+		</otherOptions>
+	</job>	
+	<optimization numberOfObjectives="1" numberOfConstraints="2" numberOfVariables="6">
+		<variables numberOfOtherVariableOptions="2">
+			<initialVariableValues numberOfVar="3">
+					<var idx="0" value="1"/>
+					<var value="4.742999643577776" idx="1"/>
+					<var idx="3" value="1.379408293215363"/>
+			</initialVariableValues>
+			<initialVariableValuesString numberOfVar="1">
+				<var idx="1" value="blue"></var>
+			</initialVariableValuesString>
+				<other name="priority" numberOfVar="3" solver="Ipopt">
+					<var idx="0" value="1"/>
+					<var value="2" idx="1"/>
+					<var idx="2" value="3"/>
+				</other>
+				<other name="test" solver="hypothetical" numberOfVar="1" value="inverted">
+					<var idx="1"></var>
+				</other>
+		</variables>	
+		<objectives>
+			<initialObjectiveValues numberOfObj="1">
+				<obj value="0.0" idx="-1"></obj>
+			</initialObjectiveValues>
+			<initialObjectiveBounds numberOfObj="1">
+				<obj idx="-1" lbValue="-INF" ubValue="INF"></obj>
+			</initialObjectiveBounds>
+		</objectives>
+		<constraints>
+			<initialConstraintValues numberOfCon="1">
+				<con idx="0" value="5.0"></con>
+			</initialConstraintValues>
+			<initialDualValues numberOfCon="1">
+				<con idx="1" lbValue="-10.0" ubValue="100."></con>
+			</initialDualValues>
+		</constraints>
+		<solverOptions numberOfSolverOptions="16">
+			<solverOption name="tol" solver="ipopt" type="numeric" value="1.e-9"/>
+			<solverOption name="print_level" solver="ipopt" type="integer" value="5"/>
+			<solverOption name="max_iter" solver="ipopt" type="integer" value="2000"/>
+			<solverOption name="pivot" solver="clp" category="tol:model" value="1.e-5"/>
+			<solverOption name="mu_strategy" solver="ipopt" type="string" value="adaptive"/>
+			<solverOption name="output_file" solver="ipopt" type="string" value="ipopt.out"/>
+			<solverOption name="check_derivatives_for_naninf" solver="ipopt" type="string" value="yes"/>
+			<solverOption name="output_file" solver="ipopt" type="string" value="ipopt.out"/>
+
+			<solverOption name="LS_IPARAM_LP_PRINTLEVEL" solver="lindo" category="model"  type="integer" value="0"/>
+			<solverOption name="LS_IPARAM_LP_PRINTLEVEL" solver="lindo" category="environment" type="integer" value="1"/>
+
+
+			<solverOption name="OsiDoReducePrint" solver="osi" type="OsiHintParam"  value="true"/>
+			<solverOption name="OsiHintIgnore" solver="osi" type="OsiHintStrength"   />
+
+		
+			<solverOption name="maxN" solver="cbc" value="100" />
+			<solverOption name="cuts" solver="cbc" value="off" />
+			<solverOption name="solve" solver="cbc"  />
+			<solverOption name="max_active_nodes" solver="symphony"  value="2" />
+
+		</solverOptions>
+	</optimization>
+</osol>

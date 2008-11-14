@@ -1,0 +1,5 @@
+#!/bin/sh
+
+for dir in ThirdParty/*; do
+  (cd $dir && ./get.*)
+done
