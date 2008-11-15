@@ -67,7 +67,9 @@ bin_PROGRAMS = OSSolverService
 OSSolverService_SOURCES = OSSolverService.cpp 
 
 
-
+if COIN_HAS_COUENNE
+     OSSolverService_SOURCES += $(COUENNESRCDIR)/src/main/BonCouenneInfo.cpp $(COUENNESRCDIR)/src/main/BonCouenneInfo.hpp
+endif
 
 
 # List all additionally required COIN libraries
@@ -85,7 +87,6 @@ endif
 if COIN_HAS_BONMIN
    LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la \
         $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la \
-	$(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la \
 	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la 
 #   OSSolverService_DEPENDENCIES +=  $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la
 endif
