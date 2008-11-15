@@ -1,5 +1,0 @@
-writeosil osil.xml
-writeosrl osrl.xml
-service http://gsbkip.chicagogsb.edu/os/OSSolverService.jws
-solver ipopt
-
