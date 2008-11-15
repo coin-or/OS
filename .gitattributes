@@ -327,6 +327,8 @@ OS/src/OSSolverInterfaces/OSBonminSolver.cpp -text
 OS/src/OSSolverInterfaces/OSBonminSolver.h -text
 OS/src/OSSolverInterfaces/OSCoinSolver.cpp -text
 OS/src/OSSolverInterfaces/OSCoinSolver.h -text
+OS/src/OSSolverInterfaces/OSCouenneSolver.cpp -text
+OS/src/OSSolverInterfaces/OSCouenneSolver.h -text
 OS/src/OSSolverInterfaces/OSIpoptSolver.cpp -text
 OS/src/OSSolverInterfaces/OSIpoptSolver.h -text
 OS/src/OSSolverInterfaces/OSKnitroSolver.cpp -text
