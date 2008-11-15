@@ -78,14 +78,24 @@ LDADD +=  \
 
 OSSolverService_DEPENDENCIES += libOS.la
 
+if COIN_HAS_COUENNE
+   LDADD += $(COUENNEOBJDIR)/src/libcouenne.la
+endif
+
 if COIN_HAS_BONMIN
-   LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la
+   LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la \
+        $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la \
+	$(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la \
+	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la 
 #   OSSolverService_DEPENDENCIES +=  $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la
 endif
 
 
 if COIN_HAS_IPOPT
-  LDADD += $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+  LDADD += $(IPOPTOBJDIR)/src/Interfaces/libipopt.la \
+        $(IPOPTOBJDIR)/src/Apps/AmplSolver/libamplinterface.la \
+        $(IPOPTOBJDIR)/src/Interfaces/libipopt.la \
+        $(IPOPTOBJDIR)/src/LinAlg/liblinalg.la
   ADDLIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
 endif
 
@@ -265,6 +275,23 @@ if COIN_HAS_BONMIN
 	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/Algorithms` \
 	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/CbcBonmin` \
 	-I`$(CYGPATH_W) $(BONMINOBJDIR)/inc`
+endif
+
+
+if COIN_HAS_COUENNE
+  AM_CPPFLAGS += \
+	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src/bound_tightening` \
+	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src/branch` \
+	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src/convex` \
+	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src/disjunctive` \
+	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src/expression` \
+	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src/main` \
+	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src/problem` \
+	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src/readnl` \
+	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src/standardize` \
+	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src/util` \
+	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src` \
+	-I`$(CYGPATH_W) $(COUENNEOBJDIR)/inc`
 endif
 
 if COIN_HAS_KNITRO
