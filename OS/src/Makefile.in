@@ -45,7 +45,7 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 bin_PROGRAMS = OSSolverService$(EXEEXT)
-@COIN_HAS_COUENNE_TRUE@am__append_1 = $(COUENNEOBJDIR)/src/libcouenne.la
+@COIN_HAS_COUENNE_TRUE@am__append_1 = $(COUENNEOBJDIR)/src/libCouenne.la
 @COIN_HAS_BONMIN_TRUE@am__append_2 = $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la \
 @COIN_HAS_BONMIN_TRUE@        $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la \
 @COIN_HAS_BONMIN_TRUE@	$(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la \
@@ -169,7 +169,7 @@ PROGRAMS = $(bin_PROGRAMS)
 am_OSSolverService_OBJECTS = OSSolverService.$(OBJEXT)
 OSSolverService_OBJECTS = $(am_OSSolverService_OBJECTS)
 @COIN_HAS_COUENNE_TRUE@am__DEPENDENCIES_1 =  \
-@COIN_HAS_COUENNE_TRUE@	$(COUENNEOBJDIR)/src/libcouenne.la
+@COIN_HAS_COUENNE_TRUE@	$(COUENNEOBJDIR)/src/libCouenne.la
 @COIN_HAS_BONMIN_TRUE@am__DEPENDENCIES_2 = $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la \
 @COIN_HAS_BONMIN_TRUE@	$(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la \
 @COIN_HAS_BONMIN_TRUE@	$(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la \
