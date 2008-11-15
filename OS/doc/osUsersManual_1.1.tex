@@ -184,6 +184,18 @@
 \index{ASL|see{AMPL Solver Library (ASL)}}
 \index{HSL|see{Harwell Subroutine Library (HSL)}}
 \index{nl files|see{AMPL nl format}}
+\index{Bonmin@{\tt Bonmin}|see{COIN-OR projects, {\tt Bonmin}}}
+\index{BuildTools@{\tt BuildTools}|see{COIN-OR projects, {\tt BuildTools}}}
+\index{Cbc@{\tt Cbc}|see{COIN-OR projects, {\tt Cbc}}}
+\index{Cgl@{\tt Cgl}|see{COIN-OR projects, {\tt Cgl}}}
+\index{Clp@{\tt Clp}|see{COIN-OR projects, {\tt Clp}}}
+\index{CppAD@{\tt CppAD}|see{COIN-OR projects, {\tt CppAD}}}
+\index{CoinUtils@{\tt CoinUtils}|see{COIN-OR projects, {\tt CoinUtils}}}
+\index{DyLP@{\tt DyLP}|see{COIN-OR projects, {\tt DyLP}}}
+\index{Ipopt@{\tt Ipopt}|see{COIN-OR projects, {\tt Ipopt}}}
+\index{Osi@{\tt Osi}|see{COIN-OR projects, {\tt Osi}}}
+\index{SYMPHONY@{\tt SYMPHONY}|see{COIN-OR projects, {\tt SYMPHONY}}}
+\index{Vol@{\tt Vol}|see{COIN-OR projects, {\tt Vol}}}
 
 \title{Optimization Services 1.1 User's Manual }
 \vskip 2in
@@ -245,7 +257,7 @@ Extensions for other major types of optimization problems are also in the works.
 produce OSiL can easily communicate with any solver that uses the OSInstance API.   
 The {\tt OSInstance}\index{OSInstance@{\tt OSInstance}} object
 is described in more detail in Section~\ref{section:osinstanceAPI}. The nonlinear part of the API is based on the
-COIN-OR project CppAD\index{CppAD@{\tt CppAD}} by Brad Bell ({\tt\UrlCppad}) but is written in a very general
+COIN-OR project CppAD\index{COIN-OR projects!CppAD@{\tt CppAD}} by Brad Bell ({\tt\UrlCppad}) but is written in a very general
 manner and could be used with other algorithmic differentiation packages. More detail on algorithmic differentiation
 is provided in Section~\ref{section:ad}.
 
@@ -310,7 +322,7 @@ or LINDO\index{LINDO} -- see Section~\ref{section:amplclient}.
  -- see Section~\ref{section:usingmatlab}.
 
 \item Use the OS library for algorithmic differentiation\index{Algorithmic differentiation} (in conjunction with 
-COIN-OR CppAD)\index{CppAD@{\tt CppAD}} -- see Section~\ref{section:ad}.
+COIN-OR CppAD)\index{COIN-OR projects!CppAD@{\tt CppAD}} -- see Section~\ref{section:ad}.
 
 \item Use modeling languages to generate model instances in OSiL format. See Section \ref{section:modellang}.
 \end{itemize}
@@ -459,7 +471,7 @@ variable correctly in order not to confuse the header files. In our experience, 
 minimal unix-like installation, MSYS, and the Microsoft {\tt cl} compiler.
 
 \subsubsection{Fortran Compiler}\label{section:fortran}
-The COIN-OR project Ipopt\index{Ipopt@{\tt Ipopt}} (see section~\ref{section:ipopt}) and several of the third-party 
+The COIN-OR project Ipopt\index{COIN-OR projects!Ipopt@{\tt Ipopt}} (see section~\ref{section:ipopt}) and several of the third-party 
 software described in section~\ref{section:otherthirdparty} include Fortran\index{Fortran} subroutines, which must be 
 compiled with a Fortran compiler if the user wants to include these projects in the build. A free Fortran 95 compiler
 can be downloaded from {\tt\UrlGgs}. For Fortran~77 code (which includes the Blas\index{Blas},
@@ -685,8 +697,9 @@ previously downloaded the third-party software packages {\tt BLAS}\index{Blas} a
 ./configure  COIN_SKIP_PROJECTS="Ipopt Bonmin"
 \end{verbatim}
 \index{COIN_SKIP_PROJECTS@{\tt COIN\_SKIP\_PROJECTS}}
-as COIN-OR's {\tt Ipopt}\index{Ipopt@{\tt Ipopt}} and {\tt Bonmin}\index{Bonmin@{\tt Bonmin}} projects 
-currently use Fortran to compile some of its dependent libraries.
+as COIN-OR's {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}} and
+{\tt Bonmin}\index{COIN-OR projects!Bonmin@{\tt Bonmin}}
+projects currently use Fortran to compile some of its dependent libraries.
 
 \vskip 8pt
 \noindent {\bf Notes:}
@@ -703,8 +716,8 @@ by remembering and reusing the results of tests already performed.
 \noindent{\footnotesize {\tt\UrlCoinConfig}.}
 
 \item You  cannot apply  {\tt COIN\_SKIP\_PROJECTS}\index{COIN_SKIP_PROJECTS@{\tt COIN\_SKIP\_PROJECTS}}
-to {\tt Cbc}\index{Cbc@{\tt Cbc}}, {\tt Clp}\index{Clp@{\tt Clp}}, {\tt Cgl}\index{Cgl@{\tt Cgl}},
-{\tt CoinUtils}\index{CoinUtils@{\tt CoinUtils}}, {\tt CppAD}\index{CppAD@{\tt CppAD}}, or {\tt Osi}\index{Osi@{\tt Osi}}.
+to {\tt Cbc}\index{COIN-OR projects!Cbc@{\tt Cbc}}, {\tt Clp}\index{COIN-OR projects!Clp@{\tt Clp}}, {\tt Cgl}\index{COIN-OR projects!Cgl@{\tt Cgl}},
+{\tt CoinUtils}\index{COIN-OR projects!CoinUtils@{\tt CoinUtils}}, {\tt CppAD}\index{COIN-OR projects!CppAD@{\tt CppAD}}, or {\tt Osi}\index{COIN-OR projects!Osi@{\tt Osi}}.
 These projects must be present.
 \end{itemize}
 
@@ -828,8 +841,8 @@ along with the libraries of the other COIN-OR projects  that download with the O
 in the {\tt lib} directory.  In addition the {\tt make install} command will install four executable programs in
 the {\tt bin} directory.  One of these binaries is {\tt OSSolverService}\index{OSSolverService@{\tt OSSolverService}}
 which is the main OS project executable.
-This is described in Section~\ref{section:ossolverservice}. In addition {\tt clp}\index{Clp@{\tt Clp}},
-{\tt cbc}\index{Cbc@{\tt Cbc}}, {\tt ipopt}\index{Ipopt@{\tt Ipopt}} and {\tt symphony}\index{SYMPHONY@{\tt SYMPHONY}}
+This is described in Section~\ref{section:ossolverservice}. In addition {\tt Clp}\index{COIN-OR projects!Clp@{\tt Clp}},
+{\tt Cbc}\index{COIN-OR projects!Cbc@{\tt Cbc}}, {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}} and {\tt SYMPHONY}\index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}}
 get installed  in the {\tt bin} directory.
 Necessary header files are installed in the {\tt include} directory.   In this case, {\tt bin}, {\tt lib}
 and {\tt include} are all subdirectories of where {\tt ./configure}\index{configure@{\tt configure}} is run.   
@@ -941,7 +954,7 @@ either the release or debug version of the {\tt unitTest} executable.
 The solution file {\tt os.sln} contains three configurations, 
 {\tt Debug}\index{Debug configuration} and {\tt Release}\index{Release configuration}, both of which are
 configured without Ipopt, as well as {\tt Release-Plus}\index{Release-Plus@{\tt Release-Plus}}, which can be used to
-add {\tt Ipopt}\index{Ipopt@{\tt Ipopt}}, {\tt Bonmin}\index{Bonmin@{\tt Bonmin}} and ASL\index{AMPL Solver Library (ASL)}
+add {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}}, {\tt Bonmin}\index{COIN-OR projects!Bonmin@{\tt Bonmin}} and ASL\index{AMPL Solver Library (ASL)}
 (see section~\ref{section:ASL}). In order to build this section successfully,
 the user must first download and process additional third-party software\index{Third-party software} as explained in 
 sections \ref{section:ipopt-msvs} and~\ref{section:ASL}.
@@ -971,12 +984,11 @@ The {\tt OSSolverService.exe} is configured to run, out-of-the-box,   the follow
 
 \item Cbc
 
-\item Dylp
+\item DyLP
 
 \item Ipopt
 
-
-\item  SYMPHONY
+\item SYMPHONY
 
 \end{itemize}
 The libraries necessary to run these solvers are included in the download.  {\it No additional software is necessary
@@ -1142,20 +1154,20 @@ library\index{AMPL Solver Library (ASL)}.
 
 
 \item{} Build the OS project (or any COIN-OR project). If you wish to avoid the FORTRAN\index{Fortran} related issues you should
-build without {\tt Ipopt}\index{Ipopt@{\tt Ipopt}} or {\tt Bonmin}\index{Bonmin@{\tt Bonmin}}. Issue the following command in the project root.
+build without {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}} or {\tt Bonmin}\index{COIN-OR projects!Bonmin@{\tt Bonmin}}. Issue the following command in the project root.
 \begin{verbatim}
 ./configure COIN_SKIP_PROJECTS="Ipopt Bonmin" --enable-doscompile=msvc
 \end{verbatim}
 \index{COIN_SKIP_PROJECTS@{\tt COIN\_SKIP\_PROJECTS}}
 
-If you wish to build with Ipopt or Bonmin, then FORTRAN is required --- and Visual Studio does not ship with a FORTRAN compiler.
+If you wish to build with {\tt Ipopt} or {\tt Bonmin}, then FORTRAN is required --- and Visual Studio does not ship with a FORTRAN compiler.
 The following is a work-around. (See also section~\ref{section:ipopt}.)
 
 \begin{enumerate}[Step a.]
 
 \item{}  Obtain one of the   Harwell Subroutine Library (HSL)\index{Harwell Subroutine Library (HSL)} routines
 {\tt ma27ad.f} or {\tt MA57ad.f}. See {\tt\UrlHsl}.  Put the Harwell code in the
-directory {\tt ThirdParty/HSL}.
+directory {\tt ThirdParty/HSL}. (Note the case in the file names, which is relevant in a unix-like environment.)
 
 
 
@@ -1351,7 +1363,7 @@ if you want to recreate the default configuration.%
 
 \subsection{Using Ipopt and Bonmin}\label{section:ipopt}
 
-\index{Ipopt@{\tt Ipopt}|(}\index{Bonmin@{\tt Bonmin}|(}%
+\index{COIN-OR projects!Ipopt@{\tt Ipopt}|(}\index{COIN-OR projects!Bonmin@{\tt Bonmin}|(}%
 Ipopt and Bonmin are COIN-OR projects (\url{projects.coin-or.org/Ipopt} and \url{projects.coin-or.org/Bonmin})
 and are included in the download with the OS project.
 However, unlike the other COIN-OR projects that download with OS, these two projects require third-party software
@@ -1412,7 +1424,8 @@ you may have to resort to manual edits before you can build Ipopt --- or see Opt
 
 \item{} \label{enumerate:ipopt3}
 If you have a FORTRAN 77 compiler, you can replace Mumps by one of the Harwell Subroutine Library (HSL)%
-\index{Harwell Subroutine Library (HSL)} routines {\tt ma27ad.f} or {\tt MA57ad.f}.  See
+\index{Harwell Subroutine Library (HSL)} routines {\tt ma27ad.f} or {\tt MA57ad.f}. 
+(Unix is case-sensitive, so note the file names carefully.) See
 
 {\tt\UrlHsl}.  
 
@@ -1446,7 +1459,7 @@ CFLAGS = -MTd -DUSE_CLOCK -DMSDOS -DNO_ONEXIT
 \end{verbatim}
 
 \end{itemize}
-\index{Ipopt@{\tt Ipopt}|)}\index{Bonmin@{\tt Bonmin}|)}
+\index{COIN-OR projects!Ipopt@{\tt Ipopt}|)}\index{COIN-OR projects!Bonmin@{\tt Bonmin}|)}
 
 \vskip 8pt
 
@@ -1562,7 +1575,7 @@ and set all projects to ``Build''
 Then select Build (or press F7).
 This will build all the necessary libraries for the
 {\tt OSSolverService}\index{OSSolverService@{\tt OSSolverService}} executable
-with the {\tt Ipopt} solver. The solution file for the {\tt Bonmin} solver will be
+with the {\tt Ipopt} solver. The solution file for the {\tt Bonmin}\index{COIN-OR projects!Bonmin@{\tt Bonmin}} solver will be
 available in a future release.
 
 A {\tt unitTest}\index{unitTest@{\tt unitTest}},
@@ -1579,11 +1592,11 @@ and~\ref{section:examples} are included in the build, as well.
 
 \index{Third-party software|(}%
 This section deals with other third-party software not available for download at \url{www.coin-or.org}.
-The OS project distribution includes the COIN-OR projects  {\tt Bonmin}\index{Bonmin@{\tt Bonmin}},
-{\tt Cbc}\index{Cbc@{\tt Cbc}}, {\tt Clp}\index{Clp@{\tt Clp}}, {\tt Cgl}\index{Cgl@{\tt Cgl}},
-{\tt CoinUtils}\index{CoinUtils@{\tt CoinUtils}}, {\tt CppAD}\index{CppAD@{\tt CppAD}},
-{\tt DyLP}\index{DyLP@{\tt DyLP}},   {\tt Ipopt}\index{Ipopt@{\tt Ipopt}},
-{\tt Osi}\index{Osi@{\tt Osi}}, {\tt SYMPHONY}\index{SYMPHONY@{\tt SYMPHONY}}, and {\tt Vol}\index{Vol@{\tt Vol}}.
+The OS project distribution includes the COIN-OR projects  {\tt Bonmin}\index{COIN-OR projects!Bonmin@{\tt Bonmin}},
+{\tt Cbc}\index{COIN-OR projects!Cbc@{\tt Cbc}}, {\tt Clp}\index{COIN-OR projects!Clp@{\tt Clp}}, {\tt Cgl}\index{COIN-OR projects!Cgl@{\tt Cgl}},
+{\tt CoinUtils}\index{COIN-OR projects!CoinUtils@{\tt CoinUtils}}, {\tt CppAD}\index{COIN-OR projects!CppAD@{\tt CppAD}},
+{\tt DyLP}\index{COIN-OR projects!DyLP@{\tt DyLP}},   {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}},
+{\tt Osi}\index{COIN-OR projects!Osi@{\tt Osi}}, {\tt SYMPHONY}\index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}}, and {\tt Vol}\index{COIN-OR projects!Vol@{\tt Vol}}.
 (For details on any of these projects see the COIN-OR web site at {\tt\UrlCoinProjects}.)
 However, the project is also designed to work with  several other open source and commercial software projects.
 In the OS distribution directory structure (see Figure~\ref{figure:osprojectrootdir}), there is a {\tt ThirdParty}
@@ -1725,7 +1738,7 @@ This produces the library file {\tt amplsolv.lib}, which is placed in the subfol
         
 \ifipopt
 Before you can use the {\tt Release-Plus}\index{Release-Plus@{\tt Release-Plus}} configuration in our solution file {\tt OS.sln},
-you must also prepare the source for the solver {\tt Ipopt}\index{Ipopt@{\tt Ipopt}}
+you must also prepare the source for the solver {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}}
 (see section~\ref{section:ipopt-msvs}). If you want to add other third-party software or include debug information,
 you may have to modify (or copy) this configuration and tailor it to your needs.
 \else
@@ -1981,17 +1994,17 @@ The directories in the  project root  are outlined in Figure~\ref{figure:osproje
 
 If you download the OS package, you get these additional COIN-OR projects. The links to the project home pages are provided below and give more information on these projects.
 \begin{itemize}
-\item {\tt BuildTools}\index{BuildTools@{\tt BuildTools}} - {\tt\UrlBuildtools}
-\item {\tt Cbc}\index{Cbc@{\tt Cbc}} - {\tt\UrlCbc}
-\item {\tt Cgl}\index{Cgl@{\tt Cgl}} - {\tt\UrlCgl}
-\item {\tt Clp}\index{Clp@{\tt Clp}} - {\tt\UrlClp}
-\item {\tt CoinUtils}\index{CoinUtils@{\tt CoinUtils}} - {\tt\UrlCoinUtils}
-\item {\tt CppAD}\index{CppAD@{\tt CppAD}} - {\tt\UrlCppad}
-\item {\tt DyLP}\index{DyLP@{\tt DyLP}}  - {\tt\UrlDylp}
-\item {\tt Ipopt}\index{Ipopt@{\tt Ipopt}} - {\tt\UrlIpopt}
-\item {\tt Osi}\index{Osi@{\tt Osi}} - {\tt\UrlOsi}
-\item {\tt SYMPHONY}\index{SYMPHONY@{\tt SYMPHONY}}   - {\tt\UrlSymphony}
-\item {\tt Vol}\index{Vol@{\tt Vol}} - {\tt\UrlVol}
+\item {\tt BuildTools}\index{COIN-OR projects!BuildTools@{\tt BuildTools}} - {\tt\UrlBuildtools}
+\item {\tt Cbc}\index{COIN-OR projects!Cbc@{\tt Cbc}} - {\tt\UrlCbc}
+\item {\tt Cgl}\index{COIN-OR projects!Cgl@{\tt Cgl}} - {\tt\UrlCgl}
+\item {\tt Clp}\index{COIN-OR projects!Clp@{\tt Clp}} - {\tt\UrlClp}
+\item {\tt CoinUtils}\index{COIN-OR projects!CoinUtils@{\tt CoinUtils}} - {\tt\UrlCoinUtils}
+\item {\tt CppAD}\index{COIN-OR projects!CppAD@{\tt CppAD}} - {\tt\UrlCppad}
+\item {\tt DyLP}\index{COIN-OR projects!DyLP@{\tt DyLP}}  - {\tt\UrlDylp}
+\item {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}} - {\tt\UrlIpopt}
+\item {\tt Osi}\index{COIN-OR projects!Osi@{\tt Osi}} - {\tt\UrlOsi}
+\item {\tt SYMPHONY}\index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}}   - {\tt\UrlSymphony}
+\item {\tt Vol}\index{COIN-OR projects!Vol@{\tt Vol}} - {\tt\UrlVol}
 \end{itemize}
 
 The following directories are also in the project root.
@@ -2665,7 +2678,9 @@ solver->osinstance = mps2osil->osinstance;
 solver->solve();
 \end{verbatim}
 
-The {\tt OSmps2osil} class constructor takes a string which should be the file name of the instance in MPS format. The constructor then uses the CoinUtils library to read and parse the MPS file.  The class method {\tt createOSInstance} then builds  an in-memory {\tt osinstance} object  that can be used by a solver.
+The {\tt OSmps2osil} class constructor takes a string which should be the
+file name of the instance in MPS format. The constructor then uses the
+{\tt CoinUtils}\index{COIN-OR projects!CoinUtils@{\tt CoinUtils}} library to read and parse the MPS file.  The class method {\tt createOSInstance} then builds  an in-memory {\tt osinstance} object  that can be used by a solver.
 \index{OSmps2osil@{\tt OSmps2osil}|)}\index{MPS format|)}
 
 \subsubsection{Converting AMPL nl Files}\label{section:nl2osil}
@@ -2772,7 +2787,7 @@ There is also a lexer {\tt OSParseosss.l} for tokenizing the command line for th
 The {\tt OSSolverInterfaces} library is designed to facilitate linking the OS library with various solver APIs.
 We first describe how to take a problem instance in OSiL\index{OSiL} format and connect to a solver 
 that has a COIN-OR OSI interface. See the OSI project \url{www.projects.coin-or.org/Osi}.
-We then describe hooking to the COIN-OR nonlinear code {\tt Ipopt}\index{Ipopt@{\tt Ipopt}}. 
+We then describe hooking to the COIN-OR nonlinear code {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}}. 
 See \url{www.projects.coin-or.org/Ipopt}.
 \ifknitro
 Finally we describe hooking to two commercial solvers Knitro\index{Knitro} and LINDO\index{LINDO}.
@@ -2791,7 +2806,8 @@ The OS library has been tested with the following solvers using the Osi Interfac
 \item Vol
 \end{itemize}
 
-In the {\tt OSSolverInterfaces} library there is an abstract class {\tt DefaultSolver} that has the following key members:
+In the {\tt OSSolverInterfaces} library there is an abstract class
+{\tt DefaultSolver} that has the following key members:
 
 \begin{verbatim}
 std::string osil;
@@ -2804,7 +2820,10 @@ and the pure virtual function
 \begin{verbatim}
 virtual void solve() = 0 ;
 \end{verbatim}
-In order to use a solver through the COIN-OR {\tt Osi} interface it is necessary to create an object in the {\tt CoinSolver} class which inherits from the {\tt DefaultSolver} class and implements the appropriate {\tt solve()} function.  We illustrate with the Clp solver.
+In order to use a solver through the COIN-OR {\tt Osi} interface it is
+necessary to create an object in the {\tt CoinSolver} class which inherits
+from the {\tt DefaultSolver} class and implements the appropriate
+{\tt solve()} function.  We illustrate with the {\tt Clp} solver.
 
 \begin{verbatim}
 DefaultSolver *solver  = NULL;
@@ -2812,7 +2831,9 @@ solver = new CoinSolver();
 solver->m_sSolverName = "clp";
 \end{verbatim}
 
-Assume that the data file containing the problem has been read into the string {\tt osil} and the solver options are in the string {\tt osol}. Then the {\tt Clp} solver is invoked as follows.
+Assume that the data file containing the problem has been read into
+the string {\tt osil} and the solver options are in the string {\tt osol}.
+Then the {\tt Clp} solver is invoked as follows.
 
 \begin{verbatim}
 solver->osil = osil;
@@ -2847,7 +2868,7 @@ LINDO\index{LINDO} solver we do the following.
 solver = new LindoSolver();
 \end{verbatim}
 
-A similar call is used for {\tt Ipopt}\index{Ipopt@{\tt Ipopt}}. In this case, 
+A similar call is used for {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}}. In this case, 
 \fi         %--------------------------------------------------------------------------
 the {\tt IpoptSolver} class inherits from both the {\tt DefaultSolver} class and the Ipopt {\tt TNLP} class. See 
 
@@ -2966,7 +2987,7 @@ First and second derivative calculations are made using
 {\it algorithmic differentiation}\index{Algorithmic differentiation|(}.
 Here we provide a brief review of this topic.  An excellent reference on algorithmic differentiation
 is Griewank\index{Griewank, A.@{\it Griewank, A.}}~\cite{griewank2000}.  The OS package uses the COIN-OR project 
-CppAD\index{CppAD@{\tt CppAD}|(} ({\tt\UrlCppad}), which  is also an excellent resource with extensive  
+CppAD\index{COIN-OR projects!CppAD@{\tt CppAD}|(} ({\tt\UrlCppad}), which  is also an excellent resource with extensive  
 documentation and information about algorithmic differentiation.
 See the documentation written by  Brad Bell\index{Bell, Bradley M.@{\it Bell, Bradley M.}}~\cite{bell2007}.    
 The development here is from the CppAD documentation.  
@@ -3022,7 +3043,7 @@ or, expressed in terms of the mixed partials,
   \DD{f_{k}(x^{(0)})}{x_{i}}{x_{j}}  = y_{k}^{(2)}  -  \frac{1}{2} \left( \DD{f_{k}(x^{(0)})}{x_{i}}{x_{i}}  
 +  \DD{f_{k}(x^{(0)})}{x_{j}}{x_{j}}  \right). \label{eq:forward2Resultc}
 \end{eqnarray}
-\index{Algorithmic differentiation|)}\index{CppAD@{\tt CppAD}|)}
+\index{Algorithmic differentiation|)}\index{COIN-OR projects!CppAD@{\tt CppAD}|)}
 
 
 
@@ -3334,7 +3355,7 @@ The methods {\tt forwardAD} and {\tt reverseAD} are low-level calls and are not 
 
 \subsubsection{Sparsity Methods}
 
-Many solvers such as {\tt Ipopt}\index{Ipopt@{\tt Ipopt}} (\url{projects.coin-or.org/Ipopt}) 
+Many solvers such as {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}} (\url{projects.coin-or.org/Ipopt}) 
 \ifknitro or Knitro\index{Knitro} (\url{www.ziena.com}) \fi
 require the sparsity pattern of the Jacobian of the constraint matrix and the Hessian of the Lagrangian function.
 Note well that the constraint matrix of the example in Section~\ref{section:lowlevelADcalls}
@@ -3586,10 +3607,10 @@ Possible values of this parameter depend on the installation. The default config
 Table~\ref{table:configurations}.
 Other solvers supported (if the necessary libraries are present) are {\tt cplex} (Cplex through COIN-OR Osi)%
 \index{cplex@{\tt cplex}},
-{\tt glpk} (GLPK\index{GLPK@{\tt GLPK}} through COIN-OR Osi\index{Osi@{\tt Osi}}),% {\tt ipopt} (COIN-OR Ipopt),
+{\tt glpk} (GLPK\index{GLPK@{\tt GLPK}} through COIN-OR Osi\index{COIN-OR projects!Osi@{\tt Osi}}),% {\tt ipopt} (COIN-OR Ipopt),
 \ifknitro{\tt knitro} (Knitro)\index{Knitro@{\tt Knitro},\fi and {\tt lindo} (LINDO)\index{LINDO}.
 If no value is specified for this parameter,
-then {\tt cbc}\index{Cbc@{\tt Cbc}} is the default value of this parameter if the {\tt solve}\index{solve@{\tt solve}}
+then {\tt cbc}\index{COIN-OR projects!Cbc@{\tt Cbc}} is the default value of this parameter if the {\tt solve}\index{solve@{\tt solve}}
 or {\tt send}\index{send@{\tt send}} service methods are used.
 
  \begin{table}
@@ -3603,11 +3624,11 @@ or {\tt send}\index{send@{\tt send}} service methods are used.
  & (Section~\ref{section:unixbuilds})
  & (Section~\ref{section:windowsinstall})\\ \hline
 Bonmin   & x & x$^1$ & --- \\
-cbc      & x & x     & x \\
-clp      & x & x     & x \\
+Cbc      & x & x     & x \\
+Clp      & x & x     & x \\
 DyLP     & x & x     & --- \\
 Ipopt    & x & x$^1$ & x$^{1,2}$ \\
-Symphony & x & x     & x \\
+SYMPHONY & x & x     & x \\
 Vol      & x & x     & x \\ \hline
 \end{tabular}
 \vskip 6pt
@@ -3633,7 +3654,7 @@ values.
 
 The input parameters to the {\tt OSSolverService} may be given entirely in the command line or in a configuration file.
 We first illustrate giving all the  parameters in the command line. The following command will invoke the
-{\tt Clp}\index{Clp@{\tt Clp}} solver on the local machine to solve the problem instance
+{\tt Clp}\index{COIN-OR projects!Clp@{\tt Clp}} solver on the local machine to solve the problem instance
 {\tt parincLinear.osil}\index{parincLinear.osil@{\tt parincLinear.osil}|(}.
 When invoking the commands below involving {\tt OSSolverService} we assume that
 1) the user is connected to the directory where the {\tt OSSolverService} executable is located, and
@@ -3646,7 +3667,9 @@ from this {\tt src} directory so that all that follows is correct in terms of pa
 ./OSSolverService -solver clp -osil ../data/osilFiles/parincLinear.osil
 \end{verbatim}
 
-Alternatively, these parameters can be put into a configuration file. Assume that the configuration file of interest is {\tt testlocalclp.config}. It would contain the two lines of information
+Alternatively, these parameters can be put into a configuration file.
+Assume that the configuration file of interest is {\tt testlocalclp.config}.
+It would contain the two lines of information
 \begin{verbatim}
 -osil ../data/osilFiles/parincLinear.osil
 -solver clp
@@ -3668,7 +3691,7 @@ or in the {\tt <instanceLocation>} element in the OSoL\index{OSoL} options file.
 \item{}  The default {\tt serviceMethod} is {\tt solve} if another service method is not specified.
 The service method cannot be specified in the OSoL options file.
 
-\item{}  If the {\tt solver} option is not specified, the COIN-OR solver {\tt Cbc}\index{Cbc@{\tt Cbc}} is the default
+\item{}  If the {\tt solver} option is not specified, the COIN-OR solver {\tt Cbc}\index{COIN-OR projects!Cbc@{\tt Cbc}} is the default
 solver used. In this case an error is thrown if the problem instance has quadratic or other nonlinear terms.
 
 \item{}  If the options {\tt send}\index{send@{\tt send}}, {\tt kill}\index{kill@{\tt kill}},
@@ -3689,7 +3712,7 @@ or
 \begin{verbatim}
 ./OSSolverService -solver lindo -config ../data/configFiles/testlocalclp.config
 \end{verbatim}
-will result in the LINDO\index{LINDO} solver being used even though Clp\index{Clp@{\tt Clp}} is specified in the
+will result in the LINDO\index{LINDO} solver being used even though {\tt Clp}\index{COIN-OR projects!Clp@{\tt Clp}} is specified in the
 {\tt testlocalclp} configure file.
 
 
@@ -3716,7 +3739,7 @@ The result of the optimization is passed back to the {\tt OSSolverService} as a 
 
 
 Here is an example of using a configure file,  {\tt testlocal.config}\index{testlocal.config@{\tt testlocal.config}|(},
-to invoke {\tt Ipopt}\index{Ipopt@{\tt Ipopt}} locally using the {\tt solve}\index{solve@{\tt solve}} command.
+to invoke {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}} locally using the {\tt solve}\index{solve@{\tt solve}} command.
 
 \begin{verbatim}
 -osil ../data/osilFiles/parincQuadratic.osil
@@ -3902,7 +3925,7 @@ where the {\tt testremoteSend.config} file is
 -serviceLocation http://gsbkip.chicagogsb.edu/os/OSSolverService.jws
 -serviceMethod send
 \end{verbatim}
-In this example the COIN-OR {\tt Ipopt}\index{Ipopt@{\tt Ipopt}} solver is specified. The input file {\tt hs71.nl}
+In this example the COIN-OR {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}} solver is specified. The input file {\tt hs71.nl}
 is in AMPL nl format\index{AMPL nl format|(}.
 Before sending this to the remote solver service the {\tt OSSolverService} executable converts  
 the nl format\index{AMPL nl format|)} into the OSiL\index{OSiL} XML format and packages this 
@@ -3973,7 +3996,7 @@ The remote Solver Service will send an email to the above address when the job i
 knowing when a job is complete is to use the {\tt knock}\index{knock@{\tt knock}} method.
 
 Note that in all of these examples we provided a value for the {\tt name} attribute in the {\tt <other>} element.
-The remote solver service will use Cbc if another solver is not specified.%
+The remote solver service will use {\tt Cbc} if another solver is not specified.%
 \index{send@{\tt send}|)}
 
 
@@ -4632,7 +4655,7 @@ It is also assumed that {\tt .}~(the current directory) is in the search path.
 
 The  problem instance, {\tt hs71.mod} is an AMPL model file included in the {\tt amplClient} directory.
 To solve this problem locally by calling the {\tt OSAmplClient} from AMPL first start AMPL and then
-execute the following commands. In this case we are testing  {\tt Ipopt}\index{Ipopt@{\tt Ipopt}|(} as the
+execute the following commands. In this case we are testing  {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}|(} as the
 local server and therefore it is necessary that {\tt Ipopt} be part of the local OS build. If it is not
 then another solver must be selected and a test problem used that is a linear or integer program.
 
@@ -4660,7 +4683,7 @@ set the solver {\tt service} option to  the address of the remote solver service
 \begin{verbatim}
 option ipopt_options "service http://gsbkip.chicagogsb.edu/os/OSSolverService.jws";
 \end{verbatim}
-In this case it is necessary that the {\tt Ipopt}\index{Ipopt@{\tt Ipopt}|)} solver be part of the OS build on the server.
+In this case it is necessary that the {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}|)} solver be part of the OS build on the server.
 \index{OSAmplClient@{\tt OSAmplClient}|)}
 
 
@@ -5035,7 +5058,7 @@ nlNodeVec[ 0]->createExpressionTreeFromPostfix( nlNodeVec);
 
 The {\tt osTestCode} folder holds the file {\tt osTestCode.cpp}. This is similar to the {\tt instanceGenerator} example.
 In this case, a simple linear program is generated. This example also illustrates calling a COIN-OR solver,
-in this case {\tt Clp}\index{Clp@{\tt Clp}}.
+in this case {\tt Clp}\index{COIN-OR projects!Clp@{\tt Clp}}.
 
 \subsection{osRemoteTest}\label{section:exampleOSRemoteTest}
 
@@ -5048,7 +5071,7 @@ yet finished.
 
 \subsection{OSAddCuts: Using the OSInstance API to Generate Cutting Planes}\label{section:exampleOSAddCuts}
 
-In this example, we show how to add cuts to tighten an LP using CGL (Cut Generation Library).
+In this example, we show how to add cuts to tighten an LP using {\tt Cgl} (Cut Generation Library)\index{COIN-OR projects!Cgl@{\tt Cgl}}.
 
 
 
@@ -5794,7 +5817,7 @@ work you definitely need:
 
 1.  BLAS (either you have it installed already on your system (e.g.,
 libblas on Linux) or you have the source code)
-2. one of: MA27, MA57, Pardiso, WSMP, MUMPS (only for MUMPS there is a
+2. one of: ma27, MA57, Pardiso, WSMP, MUMPS (only for MUMPS there is a
 get.Mumps script)
 
 What are you guys trying to accomplish?  Some automated procedure to see if

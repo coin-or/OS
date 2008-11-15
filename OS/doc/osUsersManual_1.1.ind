@@ -13,20 +13,34 @@
   \item {\it Bell, Bradley M.}, 48
   \item {\tt bison}, 9, 20, 43, 44
   \item Blas, 9, 12, 21, 23
-  \item {\tt Bonmin}, 13, 16, 18, 21--22, 24
+  \item {\tt Bonmin}, \see{COIN-OR projects, {\tt Bonmin}}{1}
   \item Bug reporting, 27
-  \item {\tt BuildTools}, 28
+  \item {\tt BuildTools}, \see{COIN-OR projects, {\tt BuildTools}}{1}
 
   \indexspace
 
   \item C++ compiler, 9, 15
-  \item {\tt Cbc}, 13, 14, 24, 30, 59, 60
-  \item {\tt Cgl}, 13, 24, 30
+  \item {\tt Cbc}, \see{COIN-OR projects, {\tt Cbc}}{1}
+  \item {\tt Cgl}, \see{COIN-OR projects, {\tt Cgl}}{1}
   \item {\tt cl} compiler, 9, 19
-  \item {\tt Clp}, 13, 14, 24, 30, 59, 60, 82
+  \item {\tt Clp}, \see{COIN-OR projects, {\tt Clp}}{1}
   \item COIN-OR, 1, 12
+  \item COIN-OR projects
+    \subitem {\tt Bonmin}, 13, 16, 18, 21--22, 24
+    \subitem {\tt BuildTools}, 28
+    \subitem {\tt Cbc}, 13, 14, 24, 30, 59, 60
+    \subitem {\tt Cgl}, 13, 24, 30, 82
+    \subitem {\tt Clp}, 13, 14, 24, 30, 59, 60, 82
+    \subitem {\tt CoinUtils}, 13, 24, 30, 42
+    \subitem {\tt CppAD}, 6, 7, 13, 24, 30, 48--49
+    \subitem {\tt DyLP}, 24, 30
+    \subitem {\tt Ipopt}, 9, 13, 14, 16, 18, 21--22, 24, 26, 30, 44, 46, 
+		54, 60, 64, 76
+    \subitem {\tt Osi}, 13, 24, 30, 59
+    \subitem {\tt SYMPHONY}, 14, 24, 30
+    \subitem {\tt Vol}, 24, 30
   \item {\tt COIN\_SKIP\_PROJECTS}, 13, 14, 18, 21, 24
-  \item {\tt CoinUtils}, 13, 24, 30
+  \item {\tt CoinUtils}, \see{COIN-OR projects, {\tt CoinUtils}}{1}
   \item Common Public License (CPL), 7, 22
   \item Configuration Manager, 15, 24
   \item configure
@@ -34,7 +48,7 @@
     \subitem scripts, 8
   \item {\tt configure}, 13, 14
   \item {\tt cplex}, 7, 26--27, 59
-  \item {\tt CppAD}, 6, 7, 13, 24, 30, 48--49
+  \item {\tt CppAD}, \see{COIN-OR projects, {\tt CppAD}}{1}
   \item Cygwin, 17--19, 28
 
   \indexspace
@@ -48,7 +62,7 @@
     \subitem tarball, 10
     \subitem zip file, 10
   \item Doxygen, 10, 28, 37
-  \item {\tt DyLP}, 24, 30
+  \item {\tt DyLP}, \see{COIN-OR projects, {\tt DyLP}}{1}
 
   \indexspace
 
@@ -73,8 +87,7 @@
 
   \indexspace
 
-  \item {\tt Ipopt}, 9, 13, 14, 16, 18, 21--22, 24, 26, 30, 44, 46, 54, 
-		60, 64, 76
+  \item {\tt Ipopt}, \see{COIN-OR projects, {\tt Ipopt}}{1}
 
   \indexspace
 
@@ -126,7 +139,7 @@
   \item {\tt OSCommon}, 6, 12
   \item {\tt OSExpressionTree}, 40
   \item {\tt OSFileUpload}, 78--79
-  \item {\tt Osi}, 13, 24, 30, 59
+  \item {\tt Osi}, \see{COIN-OR projects, {\tt Osi}}{1}
   \item OSiL, 1, 6--8, 32--34, 36, 37, 40, 42--44, 58--60, 62, 64, 69, 
 		76, 78, 87--90
   \item {\tt OSInstance}, 6, 37--43, 46, 50, 81
@@ -166,7 +179,7 @@
   \item {\tt solve}, 58--60, 62--63, 69, 78
   \item Subversion, 8
   \item SVN, 10, 12, 15
-  \item {\tt SYMPHONY}, 14, 24, 30
+  \item {\tt SYMPHONY}, \see{COIN-OR projects, {\tt SYMPHONY}}{1}
 
   \indexspace
 
@@ -183,7 +196,7 @@
 
   \indexspace
 
-  \item {\tt Vol}, 24, 30
+  \item {\tt Vol}, \see{COIN-OR projects, {\tt Vol}}{1}
   \item VPATH, 20--21, 25, 80, 82
 
   \indexspace
