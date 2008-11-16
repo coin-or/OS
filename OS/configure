@@ -24601,7 +24601,7 @@ if test $coin_has_couenne != unavailable &&
     cl*)
        couennelib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libcouenne.lib';;
      *)
-       couennelib="-L\$(INSTALLIBDIR) -lcouenne -lbonminampl";;
+       couennelib="-L\$(INSTALLIBDIR) -lCouenne -lbonminampl";;
   esac
 
 fi
