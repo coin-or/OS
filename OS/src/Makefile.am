@@ -86,15 +86,13 @@ endif
 
 if COIN_HAS_BONMIN
    LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la \
-        $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la \
+    $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la \
 	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la 
-#   OSSolverService_DEPENDENCIES +=  $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la
 endif
 
 
 if COIN_HAS_IPOPT
-  LDADD += $(IPOPTOBJDIR)/src/Interfaces/libipopt.la \
-        $(IPOPTOBJDIR)/src/Apps/AmplSolver/libamplinterface.la \
+  LDADD += $(IPOPTOBJDIR)/src/Apps/AmplSolver/libamplinterface.la \
         $(IPOPTOBJDIR)/src/Interfaces/libipopt.la \
         $(IPOPTOBJDIR)/src/LinAlg/liblinalg.la
   ADDLIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
