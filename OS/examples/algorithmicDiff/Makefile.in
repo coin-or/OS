@@ -68,7 +68,7 @@ exec_prefix = @exec_prefix@
 # Libraries necessary to link
 LIBS = @oslib@  
 
-
+@COIN_HAS_COUENNE_TRUE@LIBS += @couennelib@
 @COIN_HAS_BONMIN_TRUE@LIBS += @bonminlib@
 
 
