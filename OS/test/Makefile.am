@@ -26,16 +26,27 @@ unitTest_LDADD =  \
 	
 	
 	
+if COIN_HAS_COUENNE
+   unitTest_LDADD += $(COUENNEOBJDIR)/src/libCouenne.la
+endif
+
 if COIN_HAS_BONMIN
-  unitTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la
-#unitTest_DEPENDENCIES +=  $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la
+   unitTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la \
+    $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la \
+	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la 
 endif
 
 
 if COIN_HAS_IPOPT
-  unitTest_LDADD += $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+  unitTest_LDADD += $(IPOPTOBJDIR)/src/Apps/AmplSolver/libamplinterface.la \
+        $(IPOPTOBJDIR)/src/Interfaces/libipopt.la \
+        $(IPOPTOBJDIR)/src/LinAlg/liblinalg.la
   LIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
 endif
+	
+	
+	
+
 
 
 unitTest_LDADD +=  $(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la 

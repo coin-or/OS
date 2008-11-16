@@ -31,14 +31,28 @@ OSAmplClient_LDADD =  \
 	$(OSOBJDIR)/src/libOS.la 
 	
 	
+	
+	
+if COIN_HAS_COUENNE
+   OSAmplClient_LDADD += $(COUENNEOBJDIR)/src/libCouenne.la
+endif
+
 if COIN_HAS_BONMIN
-   OSAmplClient_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la
-endif	 
+   OSAmplClient_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la \
+    $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la \
+	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la 
+endif
+
 
 if COIN_HAS_IPOPT
-  OSAmplClient_LDADD += $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+  OSAmplClient_LDADD += $(IPOPTOBJDIR)/src/Apps/AmplSolver/libamplinterface.la \
+        $(IPOPTOBJDIR)/src/Interfaces/libipopt.la \
+        $(IPOPTOBJDIR)/src/LinAlg/liblinalg.la
   LIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
 endif
+	
+	
+	
 	
 OSAmplClient_LDADD += $(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la
 

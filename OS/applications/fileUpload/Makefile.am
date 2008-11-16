@@ -29,14 +29,25 @@ bin_PROGRAMS = OSFileUpload
 OSFileUpload_LDADD =  \
 	$(OSOBJDIR)/src/libOS.la 
 	 
-if COIN_HAS_BONMIN
-  OSFileUpload_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la
+
+if COIN_HAS_COUENNE
+   OSFileUpload_LDADD += $(COUENNEOBJDIR)/src/libCouenne.la
 endif
 
+if COIN_HAS_BONMIN
+   OSFileUpload_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la \
+    $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la \
+	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la 
+endif
+
+
 if COIN_HAS_IPOPT
-  OSFileUpload_LDADD += $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+  OSFileUpload_LDADD += $(IPOPTOBJDIR)/src/Apps/AmplSolver/libamplinterface.la \
+        $(IPOPTOBJDIR)/src/Interfaces/libipopt.la \
+        $(IPOPTOBJDIR)/src/LinAlg/liblinalg.la
   LIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
-endif	
+endif
+
 	
 OSFileUpload_LDADD += $(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la
 

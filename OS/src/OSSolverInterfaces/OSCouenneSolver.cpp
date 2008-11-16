@@ -32,6 +32,11 @@
 using namespace Bonmin;
 
 
+#include "BonminConfig.h"
+#include "BonCouenneInterface.hpp"
+#include "BonIpoptSolver.hpp"
+
+#include "BonCouenneSetup.hpp"
 
 
 
@@ -42,15 +47,15 @@ using std::ostringstream;
 
 
 CouenneSolver::CouenneSolver() {
-//using namespace  Ipopt;
-	//osrlwriter = new OSrLWriter();
-	//osresult = new OSResult();
-	//m_osilreader = NULL;
-	//couenneErrorMsg = "";
-	//    Bab bb;
-  //  bb.setUsingCouenne (true);
+using namespace  Ipopt;
+	osrlwriter = new OSrLWriter();
+	osresult = new OSResult();
+	m_osilreader = NULL;
+	couenneErrorMsg = "";
+	Bab bb;
+	bb.setUsingCouenne (true);
+	CouenneSetup bonmin;
 
-   // CouenneSetup bonmin;
 
 } 
 
