@@ -43,7 +43,7 @@
 		#undef PACKAGE_VERSION
 		#undef VERSION
 
-		#else /* HAVE_CONFIG_H */
+		#else /* HAVE_CONFIG_H  NOT DEFINED */
 
 		/* include the COIN-wide system specific configure header */
 		// kipp look at this later
@@ -75,10 +75,10 @@
 		/* Define to 1 if the Vol package is used */
 		#define COIN_HAS_VOL 1
 
-
+		
 
 		// needed for cygwin gcc 3.*,*
-	#endif /* HAVE_CONFIG_H */
+	#endif /* HAVE_CONFIG_H NOT DEFINED */
 #endif /*__OSCONFIG_H___*/
 //#ifdef WIN_
 //	#ifndef _SYS_UNISTD_H

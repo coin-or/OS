@@ -27,50 +27,52 @@
 
 #include "OSConfig.h"
 
-#ifdef HAVE_CMATH
-# include <cmath>
-#else
-# ifdef HAVE_MATH_H
-#  include <math.h>
-# else
-#  error "don't have header file for math"
-# endif
-#endif
-#ifdef HAVE_CFLOAT
-# include <cfloat>
-#else
-# ifdef HAVE_FLOAT_H
-#  include <float.h>
-# endif
-#endif
-#ifdef HAVE_CIEEEFP
-# include <cieeefp>
-#else
-# ifdef HAVE_IEEEFP_H
-#  include <ieeefp.h>
-# endif
-#endif
+	#ifdef HAVE_CONFIG_H
 
-#ifdef HAVE_CSTRING
-# include <cstring>
-#else
-# ifdef HAVE_STRING_H
-#  include <string.h>
-# else
-#  error "don't have header file for string"
-# endif
-#endif
+	#ifdef HAVE_CMATH
+	# include <cmath>
+	#else
+	# ifdef HAVE_MATH_H
+	#  include <math.h>
+	# else
+	#  error "don't have header file for math"
+	# endif
+	#endif
+	#ifdef HAVE_CFLOAT
+	# include <cfloat>
+	#else
+	# ifdef HAVE_FLOAT_H
+	#  include <float.h>
+	# endif
+	#endif
+	#ifdef HAVE_CIEEEFP
+	# include <cieeefp>
+	#else
+	# ifdef HAVE_IEEEFP_H
+	#  include <ieeefp.h>
+	# endif
+	#endif
 
-
-#ifdef HAVE_CSTDLIB
-# include <cstdlib>
-#else
-# ifdef HAVE_STDLIB_H
-#  include <stdlib.h>
-# endif
-#endif
+	#ifdef HAVE_CSTRING
+	# include <cstring>
+	#else
+	# ifdef HAVE_STRING_H
+	#  include <string.h>
+	# else
+	#  error "don't have header file for string"
+	# endif
+	#endif
 
 
+	#ifdef HAVE_CSTDLIB
+	# include <cstdlib>
+	#else
+	# ifdef HAVE_STDLIB_H
+	#  include <stdlib.h>
+	# endif
+	#endif
+
+#endif //end HAVE_CONFIG_H
 //#include <limits.h>
 //#ifdef INFINITY //This is the definition in the ISO C99 standard.
 //	#define OSINFINITY INFINITY
