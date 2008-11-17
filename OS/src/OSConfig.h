@@ -1,6 +1,3 @@
-#ifndef HAVE_CONFIG_H
-#define HAVE_CONFIG_H
-#endif
 /*
  * Include file for the configuration of OS.
  *
@@ -24,65 +21,65 @@
 
      
 #ifndef __OSCONFIG_H__
- 
+#define __COINUTILSCONFIG_H__ 
 
 
 
-#ifdef HAVE_CONFIG_H
-#include "config_os.h"
+	#ifdef HAVE_CONFIG_H
+		#include "config_os.h"
 
 
-//#ifndef MSVISUALSTUDIO 
-//#include "config_os.h"
-//#endif
+		//#ifndef MSVISUALSTUDIO 
+		//#include "config_os.h"
+		//#endif
 
-/* undefine macros that could conflict with those in other config.h
-   files */
-#undef PACKAGE
-#undef PACKAGE_BUGREPORT
-#undef PACKAGE_NAME
-#undef PACKAGE_STRING
-#undef PACKAGE_TARNAME
-#undef PACKAGE_VERSION
-#undef VERSION
+		/* undefine macros that could conflict with those in other config.h
+		   files */
+		#undef PACKAGE
+		#undef PACKAGE_BUGREPORT
+		#undef PACKAGE_NAME
+		#undef PACKAGE_STRING
+		#undef PACKAGE_TARNAME
+		#undef PACKAGE_VERSION
+		#undef VERSION
 
-#else /* HAVE_CONFIG_H */
+		#else /* HAVE_CONFIG_H */
 
-/* include the COIN-wide system specific configure header */
-// kipp look at this later
-//#include "configall_system.h"
+		/* include the COIN-wide system specific configure header */
+		// kipp look at this later
+		//#include "configall_system.h"
 
-/***************************************************************************/
-/*             HERE DEFINE THE CONFIGURATION SPECIFIC MACROS               */
-/***************************************************************************/
+		/***************************************************************************/
+		/*             HERE DEFINE THE CONFIGURATION SPECIFIC MACROS               */
+		/***************************************************************************/
 
-/* If defined, debug sanity checks are performed during runtime */
-/* #define COIN_DEBUG 1 */
+		/* If defined, debug sanity checks are performed during runtime */
+		/* #define COIN_DEBUG 1 */
 
-/* Define to 1 if the Clp package is used */
-#define COIN_HAS_CLP 1
+		/* Define to 1 if the Clp package is used */
+		#define COIN_HAS_CLP 1
 
-/* Define to 1 if the Cgl package is used */
-#define COIN_HAS_CGL 1
-
-
-/* Define to 1 if the CoinUtils package is used */
-#define COIN_HAS_COINUTILS 1
-
-/* Define to 1 if the CBC package is used */
-#define COIN_HAS_CBC 1
-
-/* Define to 1 if the OSI package is used */
-#define COIN_HAS_OSI 1
-
-/* Define to 1 if the Vol package is used */
-#define COIN_HAS_VOL 1
+		/* Define to 1 if the Cgl package is used */
+		#define COIN_HAS_CGL 1
 
 
+		/* Define to 1 if the CoinUtils package is used */
+		#define COIN_HAS_COINUTILS 1
 
-// needed for cygwin gcc 3.*,*
-#endif /* HAVE_CONFIG_H */
-#endif /*__HAVE_COINUTILS_CONFIG_H__*/
+		/* Define to 1 if the CBC package is used */
+		#define COIN_HAS_CBC 1
+
+		/* Define to 1 if the OSI package is used */
+		#define COIN_HAS_OSI 1
+
+		/* Define to 1 if the Vol package is used */
+		#define COIN_HAS_VOL 1
+
+
+
+		// needed for cygwin gcc 3.*,*
+	#endif /* HAVE_CONFIG_H */
+#endif /*__OSCONFIG_H___*/
 //#ifdef WIN_
 //	#ifndef _SYS_UNISTD_H
 //	#define _SYS_UNISTD_H
