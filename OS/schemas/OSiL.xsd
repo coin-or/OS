@@ -386,19 +386,19 @@
 					<xs:documentation>Number of var elements must match numberOfVar after sequences have been accounted for appropriately</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="potentialNonzeroSets" type="SOSNonzeroSets" minOccurs="0">
+			<xs:element name="adjacentVariableSets" type="SOSAdjacentVariableSets" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>Only needed if order > 2</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="order" type="xs:positiveInteger" use="required"/>
+		<xs:attribute name="type" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="convexityRow" type="xs:integer"/>
 	</xs:complexType>
-	<xs:complexType name="SOSNonzeroSets">
+	<xs:complexType name="SOSAdjacentVariableSets">
 		<xs:sequence>
-			<xs:element name="set" type="SOSNonzeroSet" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="set" type="SOSAdjacencySet" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>Number of sets must match numberOfSets</xs:documentation>
 				</xs:annotation>
@@ -406,7 +406,7 @@
 		</xs:sequence>
 		<xs:attribute name="numberOfSets"/>
 	</xs:complexType>
-	<xs:complexType name="SOSNonzeroSet">
+	<xs:complexType name="SOSAdjacencySet">
 		<xs:sequence>
 			<xs:element name="var" type="SOSSimplexVar" maxOccurs="unbounded"/>
 		</xs:sequence>
@@ -1359,7 +1359,7 @@
 		</xs:annotation>
 		<xs:sequence>
 			<xs:annotation>
-				<xs:documentation>Number of the qTerm child elements must agree with numberOfQuardraticTerms</xs:documentation>
+				<xs:documentation>Number of the qTerm child elements must agree with numberOfQuadraticTerms</xs:documentation>
 			</xs:annotation>
 			<xs:element name="qTerm" type="RealTimeDataQuadraticTerm" maxOccurs="unbounded"/>
 		</xs:sequence>
