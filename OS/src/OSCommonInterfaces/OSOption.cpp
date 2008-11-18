@@ -2608,9 +2608,17 @@ bool OSOption::setOtherSystemOptions(int numberOfOptions, OtherOption** other)
 		this->system = new SystemOption();
 	if (this->system->otherOptions == NULL) 
 		this->system->otherOptions = new OtherOptions();
-//	if (this->system->otherOptions->other == NULL) 
-//		this->system->otherOptions->other = new OtherOption[numberOfOptions];
-//needs more work
+	else
+		if (numberOfOptions != this->system->otherOptions->numberOfOtherOptions)
+			throw ErrorClass("Inconsistent size of <system> <other> element");
+	if (this->system->otherOptions->other == NULL) 
+	{	this->system->otherOptions->other = new OtherOption*[numberOfOptions];
+		for (int i = 0; i < numberOfOptions; i++)
+			this->system->otherOptions->other[i] = new OtherOption();
+	}
+	for (int i = 0; i < numberOfOptions; i++)
+		this->system->otherOptions->other[i] = other[i];
+
 	return true;
 }//setOtherSystemOptions
 
@@ -2619,11 +2627,26 @@ bool OSOption::setAnOtherSystemOption(OtherOption* optionValue)
 		this->system = new SystemOption();
 	if (this->system->otherOptions == NULL) 
 		this->system->otherOptions = new OtherOptions();
-//	if (this->system->otherOptions->other == NULL) 
-//		this->system->otherOptions->other = new OtherOption[numberOfOptions];
-//needs more work
+	int nopt;
+	if (this->system->otherOptions->other == NULL) 
+		nopt = 0;
+	else
+		nopt = this->system->otherOptions->numberOfOtherOptions;
+
+	OtherOption** temp = new OtherOption*[nopt+1];
+	for (int i = 0; i < nopt; i++)
+	{	temp[i] = new OtherOption();
+		temp[i] = this->system->otherOptions->other[i];
+		delete this->system->otherOptions->other[i];
+	}
+	temp[nopt] = new OtherOption();
+	temp[nopt] = optionValue;
+
+	this->system->otherOptions->other = temp;
+	this->system->otherOptions->numberOfOtherOptions = ++nopt;
 	return true;
 }//setAnOtherSystemOption
+
 
 /** 
  *  set() options in the <service> element
@@ -2650,9 +2673,17 @@ bool OSOption::setOtherServiceOptions(int numberOfOptions, OtherOption** other)
 		this->service = new ServiceOption();
 	if (this->service->otherOptions == NULL) 
 		this->service->otherOptions = new OtherOptions();
-//	if (this->service->otherOptions->other == NULL) 
-//		this->service->otherOptions->other = new OtherOption[numberOfOptions];
-//needs more work
+	else
+		if (numberOfOptions != this->service->otherOptions->numberOfOtherOptions)
+			throw ErrorClass("Inconsistent size of <service> <other> element");
+	if (this->service->otherOptions->other == NULL) 
+	{	this->service->otherOptions->other = new OtherOption*[numberOfOptions];
+		for (int i = 0; i < numberOfOptions; i++)
+			this->service->otherOptions->other[i] = new OtherOption();
+	}
+	for (int i = 0; i < numberOfOptions; i++)
+		this->service->otherOptions->other[i] = other[i];
+
 	return true;
 }//setOtherServiceOptions
 
@@ -2661,9 +2692,24 @@ bool OSOption::setAnOtherServiceOption(OtherOption* optionValue)
 		this->service = new ServiceOption();
 	if (this->service->otherOptions == NULL) 
 		this->service->otherOptions = new OtherOptions();
-//	if (this->service->otherOptions->other == NULL) 
-//		this->service->otherOptions->other = new OtherOption[numberOfOptions];
-//needs more work
+	int nopt;
+	if (this->service->otherOptions->other == NULL) 
+		nopt = 0;
+	else
+		nopt = this->service->otherOptions->numberOfOtherOptions;
+
+	OtherOption** temp = new OtherOption*[nopt+1];
+	for (int i = 0; i < nopt; i++)
+	{	temp[i] = new OtherOption();
+		temp[i] = this->service->otherOptions->other[i];
+		delete this->service->otherOptions->other[i];
+	}
+	temp[nopt] = new OtherOption();
+	temp[nopt] = optionValue;
+
+	this->service->otherOptions->other = temp;
+	this->service->otherOptions->numberOfOtherOptions = ++nopt;
+
 	return true;
 }//setAnOtherServiceOption
 
@@ -2695,6 +2741,1090 @@ bool OSOption::setScheduledStartTime(std::string time)
 	this->job->scheduledStartTime = time;
 	return true;
 }//setScheduledStartTime
+
+
+bool OSOption::setNumberOfJobDependencies(int numberOfObjects)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->dependencies == NULL) 
+		this->job->dependencies = new JobDependencies();
+	this->job->dependencies->numberOfJobIDs = numberOfObjects;
+	return true;
+}//setNumberOfJobDependencies
+
+bool OSOption::setJobDependencies(int numberOfDependencies, std::string* jobDependencies)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->dependencies == NULL) 
+		this->job->dependencies = new JobDependencies();
+	else
+		if (this->job->dependencies->numberOfJobIDs != numberOfDependencies)
+			throw ErrorClass("Inconsistent size of <job> <dependencies> element");
+	if (this->job->dependencies->jobID == NULL)
+		this->job->dependencies->jobID = new std::string[numberOfDependencies];
+	for (int i = 0; i < numberOfDependencies; i++)
+		this->job->dependencies->jobID[i] = jobDependencies[i];
+	this->job->dependencies->numberOfJobIDs = numberOfDependencies;
+	return true;
+}//setJobDependencies
+
+bool OSOption::setAnotherJobDependency(std::string jobID)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->dependencies == NULL) 
+		this->job->dependencies = new JobDependencies();
+
+	int nopt;
+	if (this->job->dependencies->jobID == NULL) 
+		nopt = 0;
+	else
+		nopt = this->job->dependencies->numberOfJobIDs;
+
+	std::string* temp = new std::string[nopt+1];
+	for (int i = 0; i < nopt; i++)
+		temp[i] = this->job->dependencies->jobID[i];
+	
+	temp[nopt] = jobID;
+	this->job->dependencies->jobID = temp;
+	this->job->dependencies->numberOfJobIDs = ++nopt;
+
+	return true;
+}//setAnotherJobDependency
+
+
+bool OSOption::setNumberOfRequiredDirectories(int numberOfObjects)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->requiredDirectories == NULL) 
+		this->job->requiredDirectories = new DirectoriesAndFiles();
+	this->job->requiredDirectories->numberOfPaths = numberOfObjects;
+	return true;
+}//setNumberOfRequiredDirectories
+
+bool OSOption::setRequiredDirectories(int numberOfPaths, std::string* paths)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->requiredDirectories == NULL) 
+		this->job->requiredDirectories = new DirectoriesAndFiles();
+	else
+		if (this->job->requiredDirectories->numberOfPaths != numberOfPaths)
+			throw ErrorClass("Inconsistent size of <job> <requiredDirectories> element");
+	if (this->job->requiredDirectories->path == NULL)
+		this->job->requiredDirectories->path = new std::string[numberOfPaths];
+	for (int i = 0; i < numberOfPaths; i++)
+		this->job->requiredDirectories->path[i] = paths[i];
+	this->job->requiredDirectories->numberOfPaths = numberOfPaths;
+	return true;
+}//setRequiredDirectories
+
+bool OSOption::setAnotherRequiredDirectory(std::string path)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->requiredDirectories == NULL) 
+		this->job->requiredDirectories = new DirectoriesAndFiles();
+
+	int nopt;
+	if (this->job->requiredDirectories->path == NULL) 
+		nopt = 0;
+	else
+		nopt = this->job->requiredDirectories->numberOfPaths;
+
+	std::string* temp = new std::string[nopt+1];
+	for (int i = 0; i < nopt; i++)
+		temp[i] = this->job->requiredDirectories->path[i];
+	
+	temp[nopt] = path;
+	this->job->requiredDirectories->path = temp;
+	this->job->requiredDirectories->numberOfPaths = ++nopt;
+
+	return true;
+}//setAnotherRequiredDirectory
+
+bool OSOption::setNumberOfRequiredFiles(int numberOfObjects)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->requiredFiles == NULL) 
+		this->job->requiredFiles = new DirectoriesAndFiles();
+	this->job->requiredFiles->numberOfPaths = numberOfObjects;
+	return true;
+}//setNumberOfRequiredFiles
+
+bool OSOption::setRequiredFiles(int numberOfPaths, std::string* paths)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->requiredFiles == NULL) 
+		this->job->requiredFiles = new DirectoriesAndFiles();
+	else
+		if (this->job->requiredFiles->numberOfPaths != numberOfPaths)
+			throw ErrorClass("Inconsistent size of <job> <requiredFiles> element");
+	if (this->job->requiredFiles->path == NULL)
+		this->job->requiredFiles->path = new std::string[numberOfPaths];
+	for (int i = 0; i < numberOfPaths; i++)
+		this->job->requiredFiles->path[i] = paths[i];
+	this->job->requiredFiles->numberOfPaths = numberOfPaths;
+	return true;
+}//setRequiredFiles
+
+bool OSOption::setAnotherRequiredFile(std::string path)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->requiredFiles == NULL) 
+		this->job->requiredFiles = new DirectoriesAndFiles();
+
+	int nopt;
+	if (this->job->requiredFiles->path == NULL) 
+		nopt = 0;
+	else
+		nopt = this->job->requiredFiles->numberOfPaths;
+
+	std::string* temp = new std::string[nopt+1];
+	for (int i = 0; i < nopt; i++)
+		temp[i] = this->job->requiredFiles->path[i];
+	
+	temp[nopt] = path;
+	this->job->requiredFiles->path = temp;
+	this->job->requiredFiles->numberOfPaths = ++nopt;
+
+	return true;
+}//setAnotherRequiredFile
+
+bool OSOption::setNumberOfDirectoriesToMake(int numberOfObjects)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->directoriesToMake == NULL) 
+		this->job->directoriesToMake = new DirectoriesAndFiles();
+	this->job->directoriesToMake->numberOfPaths = numberOfObjects;
+	return true;
+}//setNumberOfDirectoriesToMake
+
+bool OSOption::setDirectoriesToMake(int numberOfPaths, std::string* paths)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->directoriesToMake == NULL) 
+		this->job->directoriesToMake = new DirectoriesAndFiles();
+	else
+		if (this->job->directoriesToMake->numberOfPaths != numberOfPaths)
+			throw ErrorClass("Inconsistent size of <job> <directoriesToMake> element");
+	if (this->job->directoriesToMake->path == NULL)
+		this->job->directoriesToMake->path = new std::string[numberOfPaths];
+	for (int i = 0; i < numberOfPaths; i++)
+		this->job->directoriesToMake->path[i] = paths[i];
+	this->job->directoriesToMake->numberOfPaths = numberOfPaths;
+	return true;
+}//setDirectoriesToMake
+
+bool OSOption::setAnotherDirectoryToMake(std::string path)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->directoriesToMake == NULL) 
+		this->job->directoriesToMake = new DirectoriesAndFiles();
+
+	int nopt;
+	if (this->job->directoriesToMake->path == NULL) 
+		nopt = 0;
+	else
+		nopt = this->job->directoriesToMake->numberOfPaths;
+
+	std::string* temp = new std::string[nopt+1];
+	for (int i = 0; i < nopt; i++)
+		temp[i] = this->job->directoriesToMake->path[i];
+	
+	temp[nopt] = path;
+	this->job->directoriesToMake->path = temp;
+	this->job->directoriesToMake->numberOfPaths = ++nopt;
+
+	return true;
+}//setAnotherDirectoryToMake
+
+bool OSOption::setNumberOfFilesToCreate(int numberOfObjects)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->filesToCreate == NULL) 
+		this->job->filesToCreate = new DirectoriesAndFiles();
+	this->job->filesToCreate->numberOfPaths = numberOfObjects;
+	return true;
+}//setNumberOfFilesToCreate
+
+bool OSOption::setFilesToCreate(int numberOfPaths, std::string* paths)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->filesToCreate == NULL) 
+		this->job->filesToCreate = new DirectoriesAndFiles();
+	else
+		if (this->job->filesToCreate->numberOfPaths != numberOfPaths)
+			throw ErrorClass("Inconsistent size of <job> <filesToCreate> element");
+	if (this->job->filesToCreate->path == NULL)
+		this->job->filesToCreate->path = new std::string[numberOfPaths];
+	for (int i = 0; i < numberOfPaths; i++)
+		this->job->filesToCreate->path[i] = paths[i];
+	this->job->filesToCreate->numberOfPaths = numberOfPaths;
+	return true;
+}//setFilesToCreate
+
+bool OSOption::setAnotherFileToCreate(std::string path)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->filesToCreate == NULL) 
+		this->job->filesToCreate = new DirectoriesAndFiles();
+
+	int nopt;
+	if (this->job->filesToCreate->path == NULL) 
+		nopt = 0;
+	else
+		nopt = this->job->filesToCreate->numberOfPaths;
+
+	std::string* temp = new std::string[nopt+1];
+	for (int i = 0; i < nopt; i++)
+		temp[i] = this->job->filesToCreate->path[i];
+	
+	temp[nopt] = path;
+	this->job->filesToCreate->path = temp;
+	this->job->filesToCreate->numberOfPaths = ++nopt;
+
+	return true;
+}//setAnotherFileToCreate
+
+bool OSOption::setNumberOfInputDirectoriesToMove(int numberOfObjects)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->inputDirectoriesToMove == NULL) 
+		this->job->inputDirectoriesToMove = new PathPairs();
+	this->job->inputDirectoriesToMove->numberOfPathPairs = numberOfObjects;
+	return true;
+}//setNumberOfInputDirectoriesToMove
+
+bool OSOption::setInputDirectoriesToMove(int numberOfPathPairs, PathPair** pathPair)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->inputDirectoriesToMove == NULL) 
+		this->job->inputDirectoriesToMove = new PathPairs();
+	else
+		if (this->job->inputDirectoriesToMove->numberOfPathPairs != numberOfPathPairs)
+			throw ErrorClass("Inconsistent size of <job> <inputDirectoriesToMove> element");
+	if (this->job->inputDirectoriesToMove->pathPair == NULL)
+		this->job->inputDirectoriesToMove->pathPair = new PathPair*[numberOfPathPairs];
+	for (int i = 0; i < numberOfPathPairs; i++)
+	{	this->job->inputDirectoriesToMove->pathPair[i] = new PathPair();
+		this->job->inputDirectoriesToMove->pathPair[i] = pathPair[i];
+	}
+	this->job->inputDirectoriesToMove->numberOfPathPairs = numberOfPathPairs;
+	return true;
+}//setInputDirectoriesToMove
+
+bool OSOption::setAnotherInputDirectoryToMove(std::string fromPath, std::string toPath, bool makeCopy)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->inputDirectoriesToMove == NULL) 
+		this->job->inputDirectoriesToMove = new PathPairs();
+
+	int nopt;
+	if (this->job->inputDirectoriesToMove->pathPair == NULL) 
+		nopt = 0;
+	else
+		nopt = this->job->inputDirectoriesToMove->numberOfPathPairs;
+
+	PathPair** temp = new PathPair*[nopt+1];
+	for (int i = 0; i < nopt; i++)
+	{	temp[i] = new PathPair();
+		temp[i] = this->job->inputDirectoriesToMove->pathPair[i];
+		delete this->job->inputDirectoriesToMove->pathPair[i];
+	}
+	delete[] this->job->inputDirectoriesToMove->pathPair;
+	temp[nopt]->from = fromPath;
+	temp[nopt]->to = toPath;
+	temp[nopt]->makeCopy = makeCopy;
+
+	this->job->inputDirectoriesToMove->pathPair = temp;
+	this->job->inputDirectoriesToMove->numberOfPathPairs = ++nopt;
+
+	return true;
+}//setAnotherInputDirectoryToMove
+
+
+
+bool OSOption::setNumberOfInputFilesToMove(int numberOfObjects)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->inputFilesToMove == NULL) 
+		this->job->inputFilesToMove = new PathPairs();
+	this->job->inputFilesToMove->numberOfPathPairs = numberOfObjects;
+	return true;
+}//setNumberOfInputFilesToMove
+
+bool OSOption::setInputFilesToMove(int numberOfPathPairs, PathPair** pathPair)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->inputFilesToMove == NULL) 
+		this->job->inputFilesToMove = new PathPairs();
+	else
+		if (this->job->inputFilesToMove->numberOfPathPairs != numberOfPathPairs)
+			throw ErrorClass("Inconsistent size of <job> <inputFilesToMove> element");
+	if (this->job->inputFilesToMove->pathPair == NULL)
+		this->job->inputFilesToMove->pathPair = new PathPair*[numberOfPathPairs];
+	for (int i = 0; i < numberOfPathPairs; i++)
+	{	this->job->inputFilesToMove->pathPair[i] = new PathPair();
+		this->job->inputFilesToMove->pathPair[i] = pathPair[i];
+	}
+	this->job->inputFilesToMove->numberOfPathPairs = numberOfPathPairs;
+	return true;
+}//setInputFilesToMove
+
+bool OSOption::setAnotherInputFileToMove(std::string fromPath, std::string toPath, bool makeCopy)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->inputFilesToMove == NULL) 
+		this->job->inputFilesToMove = new PathPairs();
+
+	int nopt;
+	if (this->job->inputFilesToMove->pathPair == NULL) 
+		nopt = 0;
+	else
+		nopt = this->job->inputFilesToMove->numberOfPathPairs;
+
+	PathPair** temp = new PathPair*[nopt+1];
+	for (int i = 0; i < nopt; i++)
+	{	temp[i] = new PathPair();
+		temp[i] = this->job->inputFilesToMove->pathPair[i];
+		delete this->job->inputFilesToMove->pathPair[i];
+	}
+	delete[] this->job->inputFilesToMove->pathPair;
+	temp[nopt]->from = fromPath;
+	temp[nopt]->to = toPath;
+	temp[nopt]->makeCopy = makeCopy;
+
+	this->job->inputFilesToMove->pathPair = temp;
+	this->job->inputFilesToMove->numberOfPathPairs = ++nopt;
+
+	return true;
+}//setAnotherInputFileToMove
+
+
+bool OSOption::setNumberOfOutputFilesToMove(int numberOfObjects)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->outputFilesToMove == NULL) 
+		this->job->outputFilesToMove = new PathPairs();
+	this->job->outputFilesToMove->numberOfPathPairs = numberOfObjects;
+	return true;
+}//setNumberOfOutputFilesToMove
+
+bool OSOption::setOutputFilesToMove(int numberOfPathPairs, PathPair** pathPair)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->outputFilesToMove == NULL) 
+		this->job->outputFilesToMove = new PathPairs();
+	else
+		if (this->job->outputFilesToMove->numberOfPathPairs != numberOfPathPairs)
+			throw ErrorClass("Inconsistent size of <job> <outputFilesToMove> element");
+	if (this->job->outputFilesToMove->pathPair == NULL)
+		this->job->outputFilesToMove->pathPair = new PathPair*[numberOfPathPairs];
+	for (int i = 0; i < numberOfPathPairs; i++)
+	{	this->job->outputFilesToMove->pathPair[i] = new PathPair();
+		this->job->outputFilesToMove->pathPair[i] = pathPair[i];
+	}
+	this->job->outputFilesToMove->numberOfPathPairs = numberOfPathPairs;
+	return true;
+}//setOutputFilesToMove
+
+bool OSOption::setAnotherOutputFileToMove(std::string fromPath, std::string toPath, bool makeCopy)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->outputFilesToMove == NULL) 
+		this->job->outputFilesToMove = new PathPairs();
+
+	int nopt;
+	if (this->job->outputFilesToMove->pathPair == NULL) 
+		nopt = 0;
+	else
+		nopt = this->job->outputFilesToMove->numberOfPathPairs;
+
+	PathPair** temp = new PathPair*[nopt+1];
+	for (int i = 0; i < nopt; i++)
+	{	temp[i] = new PathPair();
+		temp[i] = this->job->outputFilesToMove->pathPair[i];
+		delete this->job->outputFilesToMove->pathPair[i];
+	}
+	delete[] this->job->outputFilesToMove->pathPair;
+	temp[nopt]->from = fromPath;
+	temp[nopt]->to = toPath;
+	temp[nopt]->makeCopy = makeCopy;
+
+	this->job->outputFilesToMove->pathPair = temp;
+	this->job->outputFilesToMove->numberOfPathPairs = ++nopt;
+
+	return true;
+}//setAnotherOutputFileToMove
+
+
+bool OSOption::setNumberOfOutputDirectoriesToMove(int numberOfObjects)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->outputDirectoriesToMove == NULL) 
+		this->job->outputDirectoriesToMove = new PathPairs();
+	this->job->outputDirectoriesToMove->numberOfPathPairs = numberOfObjects;
+	return true;
+}//setNumberOfOutputDirectoriesToMove
+
+bool OSOption::setOutputDirectoriesToMove(int numberOfPathPairs, PathPair** pathPair)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->outputDirectoriesToMove == NULL) 
+		this->job->outputDirectoriesToMove = new PathPairs();
+	else
+		if (this->job->outputDirectoriesToMove->numberOfPathPairs != numberOfPathPairs)
+			throw ErrorClass("Inconsistent size of <job> <outputDirectoriesToMove> element");
+	if (this->job->outputDirectoriesToMove->pathPair == NULL)
+		this->job->outputDirectoriesToMove->pathPair = new PathPair*[numberOfPathPairs];
+	for (int i = 0; i < numberOfPathPairs; i++)
+	{	this->job->outputDirectoriesToMove->pathPair[i] = new PathPair();
+		this->job->outputDirectoriesToMove->pathPair[i] = pathPair[i];
+	}
+	this->job->outputDirectoriesToMove->numberOfPathPairs = numberOfPathPairs;
+	return true;
+}//setOutputDirectoriesToMove
+
+bool OSOption::setAnotherOutputDirectoryToMove(std::string fromPath, std::string toPath, bool makeCopy)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->outputDirectoriesToMove == NULL) 
+		this->job->outputDirectoriesToMove = new PathPairs();
+
+	int nopt;
+	if (this->job->outputDirectoriesToMove->pathPair == NULL) 
+		nopt = 0;
+	else
+		nopt = this->job->outputDirectoriesToMove->numberOfPathPairs;
+
+	PathPair** temp = new PathPair*[nopt+1];
+	for (int i = 0; i < nopt; i++)
+	{	temp[i] = new PathPair();
+		temp[i] = this->job->outputDirectoriesToMove->pathPair[i];
+		delete this->job->outputDirectoriesToMove->pathPair[i];
+	}
+	delete[] this->job->outputDirectoriesToMove->pathPair;
+	temp[nopt]->from = fromPath;
+	temp[nopt]->to = toPath;
+	temp[nopt]->makeCopy = makeCopy;
+
+	this->job->outputDirectoriesToMove->pathPair = temp;
+	this->job->outputDirectoriesToMove->numberOfPathPairs = ++nopt;
+
+	return true;
+}//setAnotherOutputDirectoryToMove
+
+
+bool OSOption::setNumberOfFilesToDelete(int numberOfObjects)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->filesToDelete == NULL) 
+		this->job->filesToDelete = new DirectoriesAndFiles();
+	this->job->filesToDelete->numberOfPaths = numberOfObjects;
+	return true;
+}//setNumberOfFilesToDelete
+
+bool OSOption::setFilesToDelete(int numberOfPaths, std::string* paths)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->filesToDelete == NULL) 
+		this->job->filesToDelete = new DirectoriesAndFiles();
+	else
+		if (this->job->filesToDelete->numberOfPaths != numberOfPaths)
+			throw ErrorClass("Inconsistent size of <job> <filesToDelete> element");
+	if (this->job->filesToDelete->path == NULL)
+		this->job->filesToDelete->path = new std::string[numberOfPaths];
+	for (int i = 0; i < numberOfPaths; i++)
+		this->job->filesToDelete->path[i] = paths[i];
+	this->job->filesToDelete->numberOfPaths = numberOfPaths;
+	return true;
+}//setFilesToDelete
+
+bool OSOption::setAnotherFileToDelete(std::string path)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->filesToDelete == NULL) 
+		this->job->filesToDelete = new DirectoriesAndFiles();
+
+	int nopt;
+	if (this->job->filesToDelete->path == NULL) 
+		nopt = 0;
+	else
+		nopt = this->job->filesToDelete->numberOfPaths;
+
+	std::string* temp = new std::string[nopt+1];
+	for (int i = 0; i < nopt; i++)
+		temp[i] = this->job->filesToDelete->path[i];
+	
+	temp[nopt] = path;
+	this->job->filesToDelete->path = temp;
+	this->job->filesToDelete->numberOfPaths = ++nopt;
+
+	return true;
+}//setAnotherFileToDelete
+
+bool OSOption::setNumberOfDirectoriesToDelete(int numberOfObjects)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->directoriesToDelete == NULL) 
+		this->job->directoriesToDelete = new DirectoriesAndFiles();
+	this->job->directoriesToDelete->numberOfPaths = numberOfObjects;
+	return true;
+}//setNumberOfDirectoriesToDelete
+
+bool OSOption::setDirectoriesToDelete(int numberOfPaths, std::string* paths)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->directoriesToDelete == NULL) 
+		this->job->directoriesToDelete = new DirectoriesAndFiles();
+	else
+		if (this->job->directoriesToDelete->numberOfPaths != numberOfPaths)
+			throw ErrorClass("Inconsistent size of <job> <directoriesToDelete> element");
+	if (this->job->directoriesToDelete->path == NULL)
+		this->job->directoriesToDelete->path = new std::string[numberOfPaths];
+	for (int i = 0; i < numberOfPaths; i++)
+		this->job->directoriesToDelete->path[i] = paths[i];
+	this->job->directoriesToDelete->numberOfPaths = numberOfPaths;
+	return true;
+}//setDirectoriesToMake
+
+bool OSOption::setAnotherDirectoryToDelete(std::string path)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->directoriesToDelete == NULL) 
+		this->job->directoriesToDelete = new DirectoriesAndFiles();
+
+	int nopt;
+	if (this->job->directoriesToDelete->path == NULL) 
+		nopt = 0;
+	else
+		nopt = this->job->directoriesToDelete->numberOfPaths;
+
+	std::string* temp = new std::string[nopt+1];
+	for (int i = 0; i < nopt; i++)
+		temp[i] = this->job->directoriesToDelete->path[i];
+	
+	temp[nopt] = path;
+	this->job->directoriesToDelete->path = temp;
+	this->job->directoriesToDelete->numberOfPaths = ++nopt;
+
+	return true;
+}//setAnotherDirectoryToDelete
+
+bool OSOption::setNumberOfProcessesToKill(int numberOfObjects)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->processesToKill == NULL) 
+		this->job->processesToKill = new Processes();
+	this->job->processesToKill->numberOfProcesses = numberOfObjects;
+	return true;
+}//setNumberOfProcessesToKill
+
+bool OSOption::setProcessesToKill(int numberOfProcesses, std::string* processes)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->processesToKill == NULL) 
+		this->job->processesToKill = new Processes();
+	else
+		if (this->job->processesToKill->numberOfProcesses != numberOfProcesses)
+			throw ErrorClass("Inconsistent size of <job> <processesToKill> element");
+	if (this->job->processesToKill->process == NULL)
+		this->job->processesToKill->process = new std::string[numberOfProcesses];
+	for (int i = 0; i < numberOfProcesses; i++)
+		this->job->processesToKill->process[i] = processes[i];
+	this->job->processesToKill->numberOfProcesses = numberOfProcesses;
+	return true;
+}//setProcessesToKill
+
+bool OSOption::setAnotherProcessToKill(std::string process)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->processesToKill == NULL) 
+		this->job->processesToKill = new Processes();
+
+	int nopt;
+	if (this->job->processesToKill->process == NULL) 
+		nopt = 0;
+	else
+		nopt = this->job->processesToKill->numberOfProcesses;
+
+	std::string* temp = new std::string[nopt+1];
+	for (int i = 0; i < nopt; i++)
+		temp[i] = this->job->processesToKill->process[i];
+	
+	temp[nopt] = process;
+	this->job->processesToKill->process = temp;
+	this->job->processesToKill->numberOfProcesses = ++nopt;
+
+	return true;
+}//setAnotherProcessToKill
+
+bool OSOption::setNumberOfOtherJobOptions(int numberOfObjects)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->otherOptions == NULL) 
+		this->job->otherOptions = new OtherOptions();
+	this->job->otherOptions->numberOfOtherOptions = numberOfObjects;
+	return true;
+}//setNumberOfOtherJobOptions
+
+bool OSOption::setOtherJobOptions(int numberOfOptions, OtherOption** other)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->otherOptions == NULL) 
+		this->job->otherOptions = new OtherOptions();
+	else
+		if (numberOfOptions != this->job->otherOptions->numberOfOtherOptions)
+			throw ErrorClass("Inconsistent size of <job> <other> element");
+	if (this->job->otherOptions->other == NULL) 
+	{	this->job->otherOptions->other = new OtherOption*[numberOfOptions];
+		for (int i = 0; i < numberOfOptions; i++)
+			this->job->otherOptions->other[i] = new OtherOption();
+	}
+	for (int i = 0; i < numberOfOptions; i++)
+		this->job->otherOptions->other[i] = other[i];
+
+	return true;
+}//setOtherJobOptions
+
+bool OSOption::setAnOtherJobOption(OtherOption* optionValue)
+{	if (this->job == NULL) 
+		this->job = new JobOption();
+	if (this->job->otherOptions == NULL) 
+		this->job->otherOptions = new OtherOptions();
+	int nopt;
+	if (this->job->otherOptions->other == NULL) 
+		nopt = 0;
+	else
+		nopt = this->job->otherOptions->numberOfOtherOptions;
+
+	OtherOption** temp = new OtherOption*[nopt+1];
+	for (int i = 0; i < nopt; i++)
+	{	temp[i] = new OtherOption();
+		temp[i] = this->job->otherOptions->other[i];
+		delete this->job->otherOptions->other[i];
+	}
+	temp[nopt] = new OtherOption();
+	temp[nopt] = optionValue;
+
+	this->job->otherOptions->other = temp;
+	this->job->otherOptions->numberOfOtherOptions = ++nopt;
+
+	return true;
+}//setAnOtherJobOption
+
+
+
+bool OSOption::setNumberOfVariables(int numberOfObjects)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	this->optimization->numberOfVariables = numberOfObjects;
+	return true;
+}//setNumberOfVariables
+
+bool OSOption::setNumberOfObjectives(int numberOfObjects)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	this->optimization->numberOfObjectives = numberOfObjects;
+	return true;
+}//setNumberOfObjectives
+
+bool OSOption::setNumberOfConstraints(int numberOfObjects)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	this->optimization->numberOfConstraints = numberOfObjects;
+	return true;
+}//setNumberOfConstraints
+
+
+bool OSOption::setNumberOfInitVarValues(int numberOfObjects)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->variables == NULL) 
+		this->optimization->variables = new VariableOption();
+	if (this->optimization->variables->initialVariableValues == NULL) 
+		this->optimization->variables->initialVariableValues = new InitVariableValues();
+	this->optimization->variables->initialVariableValues->numberOfVar = numberOfObjects;
+	return true;
+}//setNumberOfInitVarValues
+
+bool OSOption::setInitVarValuesDense(int numberOfVar, int *idx, double *value)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->variables == NULL) 
+		this->optimization->variables = new VariableOption();
+	if (this->optimization->variables->initialVariableValues == NULL) 
+		this->optimization->variables->initialVariableValues = new InitVariableValues();
+	else
+		if (numberOfVar != this->optimization->variables->initialVariableValues->numberOfVar)
+			throw ErrorClass("Inconsistent size of <initialVariableValues> element");
+	if (this->optimization->variables->initialVariableValues->var == NULL) 
+	{	this->optimization->variables->initialVariableValues->var = new InitVarValue*[numberOfVar];
+		for (int i = 0; i < numberOfVar; i++)
+			this->optimization->variables->initialVariableValues->var[i] = new InitVarValue();
+		
+	}
+	for (int i = 0; i < numberOfVar; i++)
+	{	this->optimization->variables->initialVariableValues->var[i]->idx = idx[i];
+		this->optimization->variables->initialVariableValues->var[i]->value = value[i];
+	}
+
+		return true;
+}//setInitVarValuesDense
+
+bool OSOption::setInitVarValuesSparse(int numberOfVar, InitVarValue** var)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->variables == NULL) 
+		this->optimization->variables = new VariableOption();
+	if (this->optimization->variables->initialVariableValues == NULL) 
+		this->optimization->variables->initialVariableValues = new InitVariableValues();
+	else
+		if (numberOfVar != this->optimization->variables->initialVariableValues->numberOfVar)
+			throw ErrorClass("Inconsistent size of <initialVariableValues> element");
+	if (this->optimization->variables->initialVariableValues->var == NULL) 
+	{	this->optimization->variables->initialVariableValues->var = new InitVarValue*[numberOfVar];
+		for (int i = 0; i < numberOfVar; i++)
+			this->optimization->variables->initialVariableValues->var[i] = new InitVarValue();
+	}
+	for (int i = 0; i < numberOfVar; i++)
+		this->optimization->variables->initialVariableValues->var[i] = var[i];
+
+		return true;
+}//setInitVarValuesSparse
+
+bool OSOption::setAnotherInitVarValue(int idx, double value)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->variables == NULL) 
+		this->optimization->variables = new VariableOption();
+	if (this->optimization->variables->initialVariableValues == NULL) 
+		this->optimization->variables->initialVariableValues = new InitVariableValues();
+	int nvar;
+	if (this->optimization->variables->initialVariableValues->var == NULL) 
+		nvar = 0;
+	else
+		nvar = this->optimization->variables->initialVariableValues->numberOfVar;
+
+	InitVarValue** temp = new InitVarValue*[nvar+1];
+	for (int i = 0; i < nvar; i++)
+	{	temp[i] = new InitVarValue();
+		temp[i] = this->optimization->variables->initialVariableValues->var[i];
+		delete this->optimization->variables->initialVariableValues->var[i];
+	}
+	temp[nvar] = new InitVarValue();
+	temp[nvar]->idx = idx;
+	temp[nvar]->value = value;
+
+	this->optimization->variables->initialVariableValues->var = temp;
+	this->optimization->variables->initialVariableValues->numberOfVar = ++nvar;
+
+	return true;
+}//setAnotherInitVarValue
+
+
+bool OSOption::setNumberOfInitVarValuesString(int numberOfObjects)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->variables == NULL) 
+		this->optimization->variables = new VariableOption();
+	if (this->optimization->variables->initialVariableValuesString == NULL) 
+		this->optimization->variables->initialVariableValuesString = new InitVariableValuesString();
+	this->optimization->variables->initialVariableValuesString->numberOfVar = numberOfObjects;
+	return true;
+}//setNumberOfInitVarValuesString
+
+
+bool OSOption::setInitVarValuesStringDense(int numberOfVar, int *idx, std::string *value)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->variables == NULL) 
+		this->optimization->variables = new VariableOption();
+	if (this->optimization->variables->initialVariableValuesString == NULL) 
+		this->optimization->variables->initialVariableValuesString = new InitVariableValuesString();
+	else
+		if (numberOfVar != this->optimization->variables->initialVariableValuesString->numberOfVar)
+			throw ErrorClass("Inconsistent size of <initialVariableValuesString> element");
+	if (this->optimization->variables->initialVariableValuesString->var == NULL) 
+	{	this->optimization->variables->initialVariableValuesString->var = new InitVarValueString*[numberOfVar];
+		for (int i = 0; i < numberOfVar; i++)
+			this->optimization->variables->initialVariableValuesString->var[i] = new InitVarValueString();
+		
+	}
+	for (int i = 0; i < numberOfVar; i++)
+	{	this->optimization->variables->initialVariableValuesString->var[i]->idx = idx[i];
+		this->optimization->variables->initialVariableValuesString->var[i]->value = value[i];
+	}
+
+		return true;
+}//setInitVarValuesStringDense
+
+bool OSOption::setInitVarValuesStringSparse(int numberOfVar, InitVarValueString** var)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->variables == NULL) 
+		this->optimization->variables = new VariableOption();
+	if (this->optimization->variables->initialVariableValuesString == NULL) 
+		this->optimization->variables->initialVariableValuesString = new InitVariableValuesString();
+	else
+		if (numberOfVar != this->optimization->variables->initialVariableValuesString->numberOfVar)
+			throw ErrorClass("Inconsistent size of <initialVariableValuesString> element");
+	if (this->optimization->variables->initialVariableValuesString->var == NULL) 
+	{	this->optimization->variables->initialVariableValuesString->var = new InitVarValueString*[numberOfVar];
+		for (int i = 0; i < numberOfVar; i++)
+			this->optimization->variables->initialVariableValuesString->var[i] = new InitVarValueString();
+	}
+	for (int i = 0; i < numberOfVar; i++)
+		this->optimization->variables->initialVariableValuesString->var[i] = var[i];
+
+		return true;
+}//setInitVarValuesStringSparse
+
+bool OSOption::setAnotherInitVarValueString(int idx, std::string value)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->variables == NULL) 
+		this->optimization->variables = new VariableOption();
+	if (this->optimization->variables->initialVariableValuesString == NULL) 
+		this->optimization->variables->initialVariableValuesString = new InitVariableValuesString();
+	int nvar;
+	if (this->optimization->variables->initialVariableValuesString->var == NULL) 
+		nvar = 0;
+	else
+		nvar = this->optimization->variables->initialVariableValuesString->numberOfVar;
+
+	InitVarValueString** temp = new InitVarValueString*[nvar+1];
+	for (int i = 0; i < nvar; i++)
+	{	temp[i] = new InitVarValueString();
+		temp[i] = this->optimization->variables->initialVariableValuesString->var[i];
+		delete this->optimization->variables->initialVariableValuesString->var[i];
+	}
+	temp[nvar] = new InitVarValueString();
+	temp[nvar]->idx = idx;
+	temp[nvar]->value = value;
+
+	this->optimization->variables->initialVariableValuesString->var = temp;
+	this->optimization->variables->initialVariableValuesString->numberOfVar = ++nvar;
+
+	return true;
+}//setAnotherInitVarValueString
+
+
+
+bool OSOption::setNumberOfInitialBasisVariables(int numberOfObjects)
+{	if (this->optimization == NULL)
+		this->optimization = new OptimizationOption();
+	if (this->optimization->variables == NULL) 
+		this->optimization->variables = new VariableOption();
+	if (this->optimization->variables->initialBasisStatus == NULL) 
+		this->optimization->variables->initialBasisStatus = new InitialBasisStatus();
+	this->optimization->variables->initialBasisStatus ->numberOfVar = numberOfObjects;
+	return true;
+}//setNumberOfInitialBasisVariables
+
+bool OSOption::setInitBasisStatusDense(int numberOfVar, int *idx, std::string *value)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->variables == NULL) 
+		this->optimization->variables = new VariableOption();
+	if (this->optimization->variables->initialBasisStatus == NULL) 
+		this->optimization->variables->initialBasisStatus = new InitialBasisStatus();
+	else
+		if (numberOfVar != this->optimization->variables->initialBasisStatus->numberOfVar)
+			throw ErrorClass("Inconsistent size of <initialBasisStatus> element");
+	if (this->optimization->variables->initialBasisStatus->var == NULL) 
+	{	this->optimization->variables->initialBasisStatus->var = new InitBasStatus*[numberOfVar];
+		for (int i = 0; i < numberOfVar; i++)
+			this->optimization->variables->initialBasisStatus->var[i] = new InitBasStatus();
+		
+	}
+	for (int i = 0; i < numberOfVar; i++)
+	{	this->optimization->variables->initialBasisStatus->var[i]->idx = idx[i];
+		this->optimization->variables->initialBasisStatus->var[i]->value = value[i];
+	}
+
+		return true;
+}//setInitBasisStatusDense
+
+bool OSOption::setInitBasisStatusSparse(int numberOfVar, InitBasStatus** var)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->variables == NULL) 
+		this->optimization->variables = new VariableOption();
+	if (this->optimization->variables->initialBasisStatus == NULL) 
+		this->optimization->variables->initialBasisStatus = new InitialBasisStatus();
+	else
+		if (numberOfVar != this->optimization->variables->initialBasisStatus->numberOfVar)
+			throw ErrorClass("Inconsistent size of <initialBasisStatus> element");
+	if (this->optimization->variables->initialBasisStatus->var == NULL) 
+	{	this->optimization->variables->initialBasisStatus->var = new InitBasStatus*[numberOfVar];
+		for (int i = 0; i < numberOfVar; i++)
+			this->optimization->variables->initialBasisStatus->var[i] = new InitBasStatus();
+	}
+	for (int i = 0; i < numberOfVar; i++)
+		this->optimization->variables->initialBasisStatus->var[i] = var[i];
+
+		return true;
+}//setInitBasisStatusSparse
+
+bool OSOption::setAnotherInitBasisStatus(int idx, std::string value)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->variables == NULL) 
+		this->optimization->variables = new VariableOption();
+	if (this->optimization->variables->initialBasisStatus == NULL) 
+		this->optimization->variables->initialBasisStatus = new InitialBasisStatus();
+	int nvar;
+	if (this->optimization->variables->initialBasisStatus->var == NULL) 
+		nvar = 0;
+	else
+		nvar = this->optimization->variables->initialBasisStatus->numberOfVar;
+
+	InitBasStatus** temp = new InitBasStatus*[nvar+1];
+	for (int i = 0; i < nvar; i++)
+	{	temp[i] = new InitBasStatus();
+		temp[i] = this->optimization->variables->initialBasisStatus->var[i];
+		delete this->optimization->variables->initialBasisStatus->var[i];
+	}
+	temp[nvar] = new InitBasStatus();
+	temp[nvar]->idx = idx;
+	temp[nvar]->value = value;
+
+	this->optimization->variables->initialBasisStatus->var = temp;
+	this->optimization->variables->initialBasisStatus->numberOfVar = ++nvar;
+
+	return true;
+}//setAnotherInitBasisStatus
+
+
+bool OSOption::setNumberOfOtherVariableOptions(int numberOfObjects)
+{	if (this->optimization == NULL)
+		this->optimization = new OptimizationOption();
+	if (this->optimization->variables == NULL)
+		this->optimization->variables = new VariableOption();
+	this->optimization->variables->numberOfOtherVariableOptions = numberOfObjects;
+	return true;
+}//setNumberOfOtherVariableOptions
+
+bool OSOption::setOtherVariableOptions(int numberOfOptions, OtherVariableOption** other)
+{	if (this->optimization == NULL)
+		this->optimization = new OptimizationOption();
+	if (this->optimization->variables == NULL)
+		this->optimization->variables = new VariableOption();
+	else
+		if (numberOfOptions != this->optimization->variables->numberOfOtherVariableOptions)
+			throw ErrorClass("Inconsistent size of other variable option element");
+	if (this->optimization->variables->other == NULL) 
+	{	this->optimization->variables->other = new OtherVariableOption*[numberOfOptions];
+		for (int i = 0; i < numberOfOptions; i++)
+			this->optimization->variables->other[i] = new OtherVariableOption();
+	}
+	for (int i = 0; i < numberOfOptions; i++)
+		this->optimization->variables->other[i] = other[i];
+
+	return true;
+}//setOtherVariableOptions
+
+bool OSOption::setAnOtherVariableOption(OtherVariableOption* optionValue)
+{	if (this->optimization == NULL)
+		this->optimization = new OptimizationOption();
+	if (this->optimization->variables == NULL)
+		this->optimization->variables = new VariableOption();
+	int nopt;
+	if (this->optimization->variables->other == NULL) 
+		nopt = 0;
+	else
+		nopt = this->optimization->variables->numberOfOtherVariableOptions;
+
+	OtherVariableOption** temp = new OtherVariableOption*[nopt+1];
+	for (int i = 0; i < nopt; i++)
+	{	temp[i] = new OtherVariableOption();
+		temp[i] = this->optimization->variables->other[i];
+		delete this->optimization->variables->other[i];
+	}
+	temp[nopt] = new OtherVariableOption();
+	temp[nopt] = optionValue;
+
+	this->optimization->variables->other = temp;
+	this->optimization->variables->numberOfOtherVariableOptions = ++nopt;
+
+	return true;
+}//setAnOtherVariableOption
+
+
+
+bool OSOption::setNumberOfInitObjValues(int numberOfObjects)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->objectives == NULL) 
+		this->optimization->objectives = new ObjectiveOption();
+	if (this->optimization->objectives->initialObjectiveValues == NULL) 
+		this->optimization->objectives->initialObjectiveValues = new InitObjectiveValues();
+	this->optimization->objectives->initialObjectiveValues->numberOfObj = numberOfObjects;
+	return true;
+}//setNumberOfInitObjValues
+
+bool OSOption::setNumberOfInitObjBounds(int numberOfObjects)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->objectives == NULL) 
+		this->optimization->objectives = new ObjectiveOption();
+	if (this->optimization->objectives->initialObjectiveBounds == NULL) 
+		this->optimization->objectives->initialObjectiveBounds = new InitObjectiveBounds();
+	this->optimization->objectives->initialObjectiveBounds->numberOfObj = numberOfObjects;
+	return true;
+}//setNumberOfInitObjBounds
+
+bool OSOption::setNumberOfOtherObjectiveOptions(int numberOfObjects)
+{	if (this->optimization == NULL)
+		this->optimization = new OptimizationOption();
+	if (this->optimization->objectives == NULL) 
+		this->optimization->objectives = new ObjectiveOption();
+	this->optimization->objectives->numberOfOtherObjectiveOptions = numberOfObjects;
+	return true;
+}//setNumberOfOtherObjectiveOptions
+
+bool OSOption::setNumberOfInitConValues(int numberOfObjects)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->constraints == NULL) 
+		this->optimization->constraints = new ConstraintOption();
+	if (this->optimization->constraints->initialConstraintValues == NULL) 
+		this->optimization->constraints->initialConstraintValues = new InitConstraintValues();
+	this->optimization->constraints->initialConstraintValues->numberOfCon = numberOfObjects;
+	return true;
+}//setNumberOfInitConValues
+
+bool OSOption::setNumberOfInitDualVarValues(int numberOfObjects)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->constraints == NULL) 
+		this->optimization->constraints = new ConstraintOption();
+	if (this->optimization->constraints->initialDualValues == NULL) 
+		this->optimization->constraints->initialDualValues = new InitDualVariableValues();
+	this->optimization->constraints->initialDualValues->numberOfCon = numberOfObjects;
+	return true;
+}//setNumberOfInitDualVarValues
+
+bool OSOption::setNumberOfOtherConstraintOptions(int numberOfObjects)
+{	if (this->optimization == NULL)
+		this->optimization = new OptimizationOption();
+	if (this->optimization->constraints == NULL) 
+		this->optimization->constraints = new ConstraintOption();
+	this->optimization->constraints->numberOfOtherConstraintOptions = numberOfObjects;
+	return true;
+}//setNumberOfOtherConstraintOptions
+
+bool OSOption::setNumberOfSolverOptions(int numberOfObjects)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->solverOptions == NULL) 
+		this->optimization->solverOptions = new SolverOptions();
+	this->optimization->solverOptions->numberOfSolverOptions = numberOfObjects;
+	return true;
+}//setNumberOfSolverOptions
+
+
+
+
 
 
 bool OSOption::setOptionStr(std::string optionName, std::string optionValue)
@@ -2775,313 +3905,6 @@ bool OSOption::setOptionDbl(std::string optionName, double value)
 
 	return false;
 }//setOptionDbl
-
-
-
-bool OSOption::setNumberOfOtherJobOptions(int numberOfObjects)
-{	if (this->job == NULL) 
-		this->job = new JobOption();
-	if (this->job->otherOptions == NULL) 
-		this->job->otherOptions = new OtherOptions();
-	this->job->otherOptions->numberOfOtherOptions = numberOfObjects;
-	return true;
-}//setNumberOfOtherJobOptions
-
-bool OSOption::setNumberOfJobDependencies(int numberOfObjects)
-{	if (this->job != NULL) 
-		this->job = new JobOption();
-	if (this->job->dependencies == NULL) 
-		this->job->dependencies = new JobDependencies();
-	this->job->dependencies->numberOfJobIDs = numberOfObjects;
-	return true;
-}//setNumberOfJobDependencies
-
-bool OSOption::setJobDependencies(int numberOfDependencies, std::string* jobDependencies)
-{	cout << "Inside setJobDependencies" << endl;
-	if (this->job == NULL) 
-	{	cout << "JobOption needs to be allocated" << endl;
-		this->job = new JobOption();
-		cout << "JobOption allocated" << endl; }
-	cout << "JobOption exists" << endl;
-	if (this->job->dependencies == NULL) 
-		this->job->dependencies = new JobDependencies();
-	else
-		if (this->job->dependencies->numberOfJobIDs != numberOfDependencies)
-			throw ErrorClass("Inconsistent size of <job> <dependencies> element");
-	cout << "JobDependencies exists" << endl;
-	if (this->job->dependencies->jobID == NULL)
-		this->job->dependencies->jobID = new std::string[numberOfDependencies];
-	cout << "jobID exists" << endl;
-	for (int i = 0; i < numberOfDependencies; i++)
-		this->job->dependencies->jobID[i] = jobDependencies[i];
-	this->job->dependencies->numberOfJobIDs = numberOfDependencies;
-    cout << "jobID has been set" << endl;
-	return true;
-}//setJobDependencies
-
-bool OSOption::setAnotherJobDependency(std::string jobID)
-{	if (this->job == NULL) 
-		this->job = new JobOption();
-	if (this->job->dependencies == NULL) 
-		this->job->dependencies = new JobDependencies();
-
-	int nopt;
-	if (this->job->dependencies->jobID == NULL) 
-		nopt = 0;
-	else
-		nopt = this->job->dependencies->numberOfJobIDs;
-
-	std::string* temp = new std::string[nopt+1];
-	for (int i = 0; i < nopt; i++)
-		temp[i] = this->job->dependencies->jobID[i];
-	
-	temp[nopt] = jobID;
-	this->job->dependencies->jobID = temp;
-	this->job->dependencies->numberOfJobIDs = ++nopt;
-
-	return true;
-}//setAnotherJobDependency
-
-
-bool OSOption::setNumberOfRequiredDirectories(int numberOfObjects)
-{	if (this->job == NULL) 
-		this->job = new JobOption();
-	if (this->job->requiredDirectories == NULL) 
-		this->job->requiredDirectories = new DirectoriesAndFiles();
-	this->job->requiredDirectories->numberOfPaths = numberOfObjects;
-	return true;
-}//setNumberOfRequiredDirectories
-
-bool OSOption::setNumberOfRequiredFiles(int numberOfObjects)
-{	if (this->job == NULL) 
-		this->job = new JobOption();
-	if (this->job->requiredFiles == NULL) 
-		this->job->requiredFiles = new DirectoriesAndFiles();
-	this->job->requiredFiles->numberOfPaths = numberOfObjects;
-	return true;
-}//setNumberOfRequiredFiles
-
-bool OSOption::setNumberOfDirectoriesToMake(int numberOfObjects)
-{	if (this->job == NULL) 
-		this->job = new JobOption();
-	if (this->job->directoriesToMake == NULL) 
-		this->job->directoriesToMake = new DirectoriesAndFiles();
-	this->job->directoriesToMake->numberOfPaths = numberOfObjects;
-	return true;
-}//setNumberOfDirectoriesToMake
-
-bool OSOption::setNumberOfFilesToCreate(int numberOfObjects)
-{	if (this->job == NULL) 
-		this->job = new JobOption();
-	if (this->job->filesToCreate == NULL) 
-		this->job->filesToCreate = new DirectoriesAndFiles();
-	this->job->filesToCreate->numberOfPaths = numberOfObjects;
-	return true;
-}//setNumberOfFilesToCreate
-
-bool OSOption::setNumberOfInputDirectoriesToMove(int numberOfObjects)
-{	if (this->job == NULL) 
-		this->job = new JobOption();
-	if (this->job->inputDirectoriesToMove == NULL) 
-		this->job->inputDirectoriesToMove = new PathPairs();
-	this->job->inputDirectoriesToMove->numberOfPathPairs = numberOfObjects;
-	return true;
-}//setNumberOfInputDirectoriesToMove
-
-bool OSOption::setNumberOfInputFilesToMove(int numberOfObjects)
-{	if (this->job == NULL) 
-		this->job = new JobOption();
-	if (this->job->inputFilesToMove == NULL) 
-		this->job->inputFilesToMove = new PathPairs();
-	this->job->inputFilesToMove->numberOfPathPairs = numberOfObjects;
-	return true;
-}//setNumberOfInputFilesToMove
-
-bool OSOption::setNumberOfOutputFilesToMove(int numberOfObjects)
-{	if (this->job == NULL) 
-		this->job = new JobOption();
-	if (this->job->outputFilesToMove == NULL) 
-		this->job->outputFilesToMove = new PathPairs();
-	this->job->outputFilesToMove->numberOfPathPairs = numberOfObjects;
-	return true;
-}//setNumberOfOutputFilesToMove
-
-bool OSOption::setNumberOfOutputDirectoriesToMove(int numberOfObjects)
-{	if (this->job == NULL) 
-		this->job = new JobOption();
-	if (this->job->outputDirectoriesToMove == NULL) 
-		this->job->outputDirectoriesToMove = new PathPairs();
-	this->job->outputDirectoriesToMove->numberOfPathPairs = numberOfObjects;
-	return true;
-}//setNumberOfOutputDirectoriesToMove
-
-bool OSOption::setNumberOfFilesToDelete(int numberOfObjects)
-{	if (this->job == NULL) 
-		this->job = new JobOption();
-	if (this->job->filesToDelete == NULL) 
-		this->job->filesToDelete = new DirectoriesAndFiles();
-	this->job->filesToDelete->numberOfPaths = numberOfObjects;
-	return true;
-}//setNumberOfFilesToDelete
-
-bool OSOption::setNumberOfDirectoriesToDelete(int numberOfObjects)
-{	if (this->job == NULL) 
-		this->job = new JobOption();
-	if (this->job->directoriesToDelete == NULL) 
-		this->job->directoriesToDelete = new DirectoriesAndFiles();
-	this->job->directoriesToDelete->numberOfPaths = numberOfObjects;
-	return true;
-}//setNumberOfDirectoriesToDelete
-
-bool OSOption::setNumberOfProcessesToKill(int numberOfObjects)
-{	if (this->job == NULL) 
-		this->job = new JobOption();
-	if (this->job->processesToKill == NULL) 
-		this->job->processesToKill = new Processes();
-	this->job->processesToKill->numberOfProcesses = numberOfObjects;
-	return true;
-}//setNumberOfProcessesToKill
-
-//================got to here
-
-
-
-bool OSOption::setNumberOfVariables(int numberOfObjects)
-{	if (this->optimization == NULL) 
-		this->optimization = new OptimizationOption();
-	this->optimization->numberOfVariables = numberOfObjects;
-	return true;
-}//setNumberOfVariables
-
-bool OSOption::setNumberOfObjectives(int numberOfObjects)
-{	if (this->optimization == NULL) 
-		this->optimization = new OptimizationOption();
-	this->optimization->numberOfObjectives = numberOfObjects;
-	return true;
-}//setNumberOfObjectives
-
-bool OSOption::setNumberOfConstraints(int numberOfObjects)
-{	if (this->optimization == NULL) 
-		this->optimization = new OptimizationOption();
-	this->optimization->numberOfConstraints = numberOfObjects;
-	return true;
-}//setNumberOfConstraints
-
-
-bool OSOption::setNumberOfInitVarValues(int numberOfObjects)
-{	if (this->optimization == NULL) 
-		this->optimization = new OptimizationOption();
-	if (this->optimization->variables == NULL) 
-		this->optimization->variables = new VariableOption();
-	if (this->optimization->variables->initialVariableValues == NULL) 
-		this->optimization->variables->initialVariableValues = new InitVariableValues();
-	this->optimization->variables->initialVariableValues->numberOfVar = numberOfObjects;
-	return true;
-}//setNumberOfInitVarValues
-
-bool OSOption::setNumberOfInitVarValuesString(int numberOfObjects)
-{	if (this->optimization == NULL) 
-		this->optimization = new OptimizationOption();
-	if (this->optimization->variables == NULL) 
-		this->optimization->variables = new VariableOption();
-	if (this->optimization->variables->initialVariableValuesString == NULL) 
-		this->optimization->variables->initialVariableValuesString = new InitVariableValuesString();
-	this->optimization->variables->initialVariableValuesString->numberOfVar = numberOfObjects;
-	return true;
-}//setNumberOfInitVarValuesString
-
-bool OSOption::setNumberOfInitialBasisVariables(int numberOfObjects)
-{	if (this->optimization == NULL)
-		this->optimization = new OptimizationOption();
-	if (this->optimization->variables == NULL) 
-		this->optimization->variables = new VariableOption();
-	if (this->optimization->variables->initialBasisStatus == NULL) 
-		this->optimization->variables->initialBasisStatus = new InitialBasisStatus();
-	this->optimization->variables->initialBasisStatus ->numberOfVar = numberOfObjects;
-	return true;
-}//setNumberOfInitialBasisVariables
-
-
-bool OSOption::setNumberOfOtherVariableOptions(int numberOfObjects)
-{	if (this->optimization == NULL)
-		this->optimization = new OptimizationOption();
-	if (this->optimization->variables == NULL)
-		this->optimization->variables = new VariableOption();
-	this->optimization->variables->numberOfOtherVariableOptions = numberOfObjects;
-	return true;
-}//setNumberOfOtherVariableOptions
-
-bool OSOption::setNumberOfInitObjValues(int numberOfObjects)
-{	if (this->optimization == NULL) 
-		this->optimization = new OptimizationOption();
-	if (this->optimization->objectives == NULL) 
-		this->optimization->objectives = new ObjectiveOption();
-	if (this->optimization->objectives->initialObjectiveValues == NULL) 
-		this->optimization->objectives->initialObjectiveValues = new InitObjectiveValues();
-	this->optimization->objectives->initialObjectiveValues->numberOfObj = numberOfObjects;
-	return true;
-}//setNumberOfInitObjValues
-
-bool OSOption::setNumberOfInitObjBounds(int numberOfObjects)
-{	if (this->optimization == NULL) 
-		this->optimization = new OptimizationOption();
-	if (this->optimization->objectives == NULL) 
-		this->optimization->objectives = new ObjectiveOption();
-	if (this->optimization->objectives->initialObjectiveBounds == NULL) 
-		this->optimization->objectives->initialObjectiveBounds = new InitObjectiveBounds();
-	this->optimization->objectives->initialObjectiveBounds->numberOfObj = numberOfObjects;
-	return true;
-}//setNumberOfInitObjBounds
-
-bool OSOption::setNumberOfOtherObjectiveOptions(int numberOfObjects)
-{	if (this->optimization == NULL)
-		this->optimization = new OptimizationOption();
-	if (this->optimization->objectives == NULL) 
-		this->optimization->objectives = new ObjectiveOption();
-	this->optimization->objectives->numberOfOtherObjectiveOptions = numberOfObjects;
-	return true;
-}//setNumberOfOtherObjectiveOptions
-
-bool OSOption::setNumberOfInitConValues(int numberOfObjects)
-{	if (this->optimization == NULL) 
-		this->optimization = new OptimizationOption();
-	if (this->optimization->constraints == NULL) 
-		this->optimization->constraints = new ConstraintOption();
-	if (this->optimization->constraints->initialConstraintValues == NULL) 
-		this->optimization->constraints->initialConstraintValues = new InitConstraintValues();
-	this->optimization->constraints->initialConstraintValues->numberOfCon = numberOfObjects;
-	return true;
-}//setNumberOfInitConValues
-
-bool OSOption::setNumberOfInitDualVarValues(int numberOfObjects)
-{	if (this->optimization == NULL) 
-		this->optimization = new OptimizationOption();
-	if (this->optimization->constraints == NULL) 
-		this->optimization->constraints = new ConstraintOption();
-	if (this->optimization->constraints->initialDualValues == NULL) 
-		this->optimization->constraints->initialDualValues = new InitDualVariableValues();
-	this->optimization->constraints->initialDualValues->numberOfCon = numberOfObjects;
-	return true;
-}//setNumberOfInitDualVarValues
-
-bool OSOption::setNumberOfOtherConstraintOptions(int numberOfObjects)
-{	if (this->optimization == NULL)
-		this->optimization = new OptimizationOption();
-	if (this->optimization->constraints == NULL) 
-		this->optimization->constraints = new ConstraintOption();
-	this->optimization->constraints->numberOfOtherConstraintOptions = numberOfObjects;
-	return true;
-}//setNumberOfOtherConstraintOptions
-
-bool OSOption::setNumberOfSolverOptions(int numberOfObjects)
-{	if (this->optimization == NULL) 
-		this->optimization = new OptimizationOption();
-	if (this->optimization->solverOptions == NULL) 
-		this->optimization->solverOptions = new SolverOptions();
-	this->optimization->solverOptions->numberOfSolverOptions = numberOfObjects;
-	return true;
-}//setNumberOfSolverOptions
-
 
 
 bool OSOption::setOptionInt(std::string optionName, int optionValue)
@@ -3183,634 +4006,46 @@ bool OSOption::setOptionInt(std::string optionName, int optionValue)
 
 
 
-
-
-/** 
- * set() methods that populate arrays of various kinds
- */
-
-
-bool OSOption::setOtherOptions(std::string optionName)
-/*{	OtherOption** optionVector = NULL;
-	if (optionName == "general")
-		return this->setOtherGeneralOptions();
-
-	if (optionName == "system")
-		return this->setOtherSystemOptions();
-
-	if (optionName == "service")
-		return this->setOtherServiceOptions();
-
-	if (optionName == "job")
-		return this->setOtherJobOptions();
-
-}*/
-//setOtherOptions
-{return false;}
-
-bool OSOption::setAllOtherOptions()
-/*{	OtherOption** optionVector = NULL;
-	int prev_options[4];
-	int num_options[4];
-	int num_opt;
-	for (int i = 0; i < 4; i++)
-	{	prev_options[i] = 0;
-		num_options[i] = 0;
-	}
-	if (this->general != NULL) 
-	{	if (this->general->otherOptions != NULL)
-		{	num_opt = this->setNumberOfOtherGeneralOptions();
-			num_options[0] = num_opt;
-		}
-	}
-
-	if (this->system != NULL) 
-	{	if (this->system->otherOptions != NULL)
-		{	num_opt = this->setNumberOfOtherSystemOptions();
-			num_options[1] = num_opt;
-		}
-	}
-	prev_options[1] = prev_options[0] + num_options[0];
-
-	if (this->service != NULL) 
-	{	if (this->service->otherOptions != NULL)
-		{	num_opt = this->setNumberOfOtherServiceOptions();
-			num_options[2] = num_opt;
-		}
-	}
-	prev_options[2] = prev_options[1] + num_options[1];
-
-	if (this->job != NULL) 
-	{	if (this->job->otherOptions != NULL)
-		{	num_opt = this->setNumberOfOtherJobOptions();
-			num_options[3] = num_opt;
-		}
-	}
-	prev_options[3] = prev_options[2] + num_options[2];
-
-	num_opt = num_options[0] + num_options[1] + num_options[2] + num_options[3];
-	optionVector = new OtherOption*[num_opt];
-
-	int j;
-	if (num_options[0] > 0)
-	{	for(int i = 0; i < num_options[0]; i++)
-		{	optionVector[prev_options[0] + i] = this->general->otherOptions->other[i];
-		}
-	}
-
-	if (num_options[1] > 0)
-	{	for(int i = 0; i < num_options[1]; i++)
-		{	optionVector[prev_options[1] + i] = this->system->otherOptions->other[i];
-		}
-	}
-
-	if (num_options[2] > 0)
-	{	for(int i = 0; i < num_options[2]; i++)
-		{	optionVector[prev_options[2] + i] = this->service->otherOptions->other[i];
-		}
-	}
-
-	if (num_options[3] > 0)
-	{	for(int i = 0; i < num_options[3]; i++)
-		{	optionVector[prev_options[3] + i] = this->job->otherOptions->other[i];
-		}
-	}
-
-	return optionVector;
-}*/
-//setOtherJobOptions
-{return false;}
-
 /*
-std::string*  OSOption::setJobDependencies(){
-	std::string* dependenciesVector;
-	if (this->job != NULL) 
-	{	if (this->job->dependencies != NULL) 
-		{	int i;
-			int num_ID;
-			num_ID = this->setNumberOfJobDependencies();
-			dependenciesVector = new string[num_ID];
-			for(i = 0; i < num_ID; i++)
-				dependenciesVector[i] = this->job->dependencies->jobID[ i];
-		}					
-	}
-	return dependenciesVector;
-}//setJobDependencies
+	bool setOtherVariableOptions(int numberOfVar, OtherVarOption** var);
+	bool setAnOtherVariableOption(OtherVarOption* varOption);
 
-std::string*  OSOption::setRequiredDirectories(){
-	std::string* pathVector;
-	if (this->job != NULL) 
-	{	if (this->job->requiredDirectories != NULL) 
-		{	int i;
-			int num_paths;
-			num_paths = this->setNumberOfRequiredDirectories();
-			pathVector = new string[num_paths];
-			for(i = 0; i < num_paths; i++)
-				pathVector[i] = this->job->requiredDirectories->path[i];
-		}					
-	}
-	return pathVector;
-}//setRequiredDirectories
+	bool setNumberOfInitObjValues(int numberOfObjects);
+	bool setInitObjValuesSparse(int numberOfObj, InitObjValue** obj);
+	bool setInitObjValuesDense(int numberOfObj, double* obj);
+	bool setAnotherInitObjValue(int idx, double value);
 
-std::string*  OSOption::setDirectoriesToMake(){
-	std::string* pathVector;
-	if (this->job != NULL) 
-	{	if (this->job->directoriesToMake != NULL) 
-		{	int i;
-			int num_paths;
-			num_paths = this->setNumberOfDirectoriesToMake();
-			pathVector = new string[num_paths];
-			for(i = 0; i < num_paths; i++)
-				pathVector[i] = this->job->directoriesToMake->path[i];
-		}					
-	}
-	return pathVector;
-}//setDirectoriesToMake
+	bool setNumberOfInitObjBounds(int numberOfObjects);
+	bool setInitObjBoundsSparse(int numberOfObj, InitObjValue** obj);
+	bool setInitObjBoundsDense(int numberOfObj, double* lb, double* ub);
+	bool setAnotherInitObjBound(int idx, double lbValue, double ubValue);
 
-std::string*  OSOption::setFilesToCreate(){
-	std::string* pathVector;
-	if (this->job != NULL) 
-	{	if (this->job->filesToCreate != NULL) 
-		{	int i;
-			int num_paths;
-			num_paths = this->setNumberOfFilesToCreate();
-			pathVector = new string[num_paths];
-			for(i = 0; i < num_paths; i++)
-				pathVector[i] = this->job->filesToCreate->path[i];
-		}					
-	}
-	return pathVector;
-}//setFilesToCreate
+	bool setNumberOfOtherObjectiveOptions(int numberOfObjects);
+	bool setOtherObjectiveOptions(int numberOfObj, OtherObjOption** obj);
+	bool setAnOtherObjectiveOption(OtherObjOption* objOption);
 
-PathPair** OSOption::setInputDirectoriesToMove()
-{	PathPair** pathPairVector = NULL;
-	if (this->job != NULL) 
-	{	if(this->job->inputDirectoriesToMove != NULL) 
-		{	int num_pp;
-			num_pp = this->setNumberOfInputDirectoriesToMove();
-			pathPairVector = new PathPair*[num_pp];
-			for(int i = 0; i < num_pp; i++)
-				pathPairVector[i] = this->job->inputDirectoriesToMove->pathPair[ i];
-		}					
-	}
-	return pathPairVector;
-}//setInputDirectoriesToMove
+	bool setNumberOfInitConValues(int numberOfObjects);
+	bool setInitConValuesSparse(int numberOfCon, InitConValue** con);
+	bool setInitConValuesDense(int numberOfCon, double* con);
+	bool setAnotherInitConValue(int idx, double value);
 
-PathPair** OSOption::setInputFilesToMove()
-{	PathPair** pathPairVector = NULL;
-	if (this->job != NULL) 
-	{	if(this->job->inputFilesToMove != NULL) 
-		{	int num_pp;
-			num_pp = this->setNumberOfInputFilesToMove();
-			pathPairVector = new PathPair*[num_pp];
-			for(int i = 0; i < num_pp; i++)
-				pathPairVector[i] = this->job->inputFilesToMove->pathPair[ i];
-		}					
-	}
-	return pathPairVector;
-}//setInputFilesToMove
+	bool setNumberOfInitDualVarValues(int numberOfObjects);
+	bool setInitDualVarValuesSparse(int numberOfCon, InitDualVarValue** con);
+	bool setInitDualVarValuesDense(int numberOfCon, double* lb, double* ub);
+	bool setAnotherInitDualVarValue(int idx, double lbValue, double ubValue);
 
-PathPair** OSOption::setOutputFilesToMove()
-{	PathPair** pathPairVector = NULL;
-	if (this->job != NULL) 
-	{	if(this->job->outputFilesToMove != NULL) 
-		{	int num_pp;
-			num_pp = this->setNumberOfOutputFilesToMove();
-			pathPairVector = new PathPair*[num_pp];
-			for(int i = 0; i < num_pp; i++)
-				pathPairVector[i] = this->job->outputFilesToMove->pathPair[ i];
-		}					
-	}
-	return pathPairVector;
-}//setOutputFilesToMove
+	bool setNumberOfOtherConstraintOptions(int numberOfObjects);
+	bool setOtherConstraintOptions(int numberOfCon, OtherConOption** con);
+	bool setAnOtherConstraintOption(OtherConOption* conOption);
 
-PathPair** OSOption::setOutputDirectoriesToMove()
-{	PathPair** pathPairVector = NULL;
-	if (this->job != NULL) 
-	{	if(this->job->outputDirectoriesToMove != NULL) 
-		{	int num_pp;
-			num_pp = this->setNumberOfOutputDirectoriesToMove();
-			pathPairVector = new PathPair*[num_pp];
-			for(int i = 0; i < num_pp; i++)
-				pathPairVector[i] = this->job->outputDirectoriesToMove->pathPair[ i];
-		}					
-	}
-	return pathPairVector;
-}//setOutputDirectoriesToMove
+	bool setNumberOfSolverOptions(int numberOfObjects);
+	bool setSolverOptions(int numberOfSolverOptions, Solveroption** solverOption);
+	bool setAnotherSolverOption(Solveroption* solverOption);
 
-std::string*  OSOption::setFilesToDelete(){
-	std::string* pathVector;
-	if (this->job != NULL) 
-	{	if (this->job->filesToDelete != NULL) 
-		{	int num_paths;
-			num_paths = this->setNumberOfFilesToDelete();
-			pathVector = new string[num_paths];
-			for(int i = 0; i < num_paths; i++)
-				pathVector[i] = this->job->filesToDelete->path[i];
-		}					
-	}
-	return pathVector;
-}//setFilesToDelete
+	bool setOptionInt(std::string optionName, int optionValue);
 
-std::string*  OSOption::setDirectoriesToDelete(){
-	std::string* pathVector;
-	if (this->job != NULL) 
-	{	if (this->job->directoriesToDelete != NULL) 
-		{	int i;
-			int num_paths;
-			num_paths = this->setNumberOfDirectoriesToDelete();
-			pathVector = new string[num_paths];
-			for(i = 0; i < num_paths; i++)
-				pathVector[i] = this->job->directoriesToDelete->path[i];
-		}					
-	}
-	return pathVector;
-}//setDirectoriesToDelete
+	bool setOptionStr(std::string optionName, std::string optionValue);
 
-std::string*  OSOption::setProcessesToKill(){
-	std::string* pathVector;
-	if (this->job != NULL) 
-	{	if (this->job->processesToKill != NULL) 
-		{	int i;
-			int num_paths;
-			num_paths = this->setNumberOfProcessesToKill();
-			pathVector = new string[num_paths];
-			for(i = 0; i < num_paths; i++)
-				pathVector[i] = this->job->processesToKill->process[i];
-		}					
-	}
-	return pathVector;
-}//setProcessesToKill
+	bool setOptionDbl(std::string optionName, double value);
 
-
-
-std::vector<InitVarValue*>  OSOption::setInitVarValuesSparse(){
-	std::vector<InitVarValue*> initVarVector;
-	if (this->optimization != NULL) {
-		if(this->optimization->variables != NULL) {
-			if(this->optimization->variables->initialVariableValues != NULL) {
-			int i;
-			int num_var;
-			num_var = this->setNumberOfInitVarValues();
-			for(i = 0; i < num_var; i++){
-				printf("\n%d\n",this->optimization->variables->initialVariableValues->var[ i]->idx);
-				printf("\n%d\n",this->optimization->variables->initialVariableValues->var[ i]->value);
-				initVarVector.push_back( this->optimization->variables->initialVariableValues->var[ i]);
-				}
-			}
-		}					
-	}
-	return initVarVector;
-}//setInitVarValuesSparse
-
-double* OSOption::setInitVarValuesDense(int numberOfVariables){
-	double *initVarVector;
-	initVarVector = new double[numberOfVariables];
-	for (int k = 0; k < numberOfVariables; k++) initVarVector[k] = OSNAN;
-	try
-	{	if (this->optimization != NULL) 
-		{	if(this->optimization->variables != NULL) 
-			{	if(this->optimization->variables->initialVariableValues != NULL) 
-				{	int i,j;
-					int num_var;
-					num_var = this->setNumberOfInitVarValues();
-					for(i = 0; i < num_var; i++)
-					{	j = this->optimization->variables->initialVariableValues->var[i]->idx;
-						if (j >= 0 && j < numberOfVariables)						
-							initVarVector[j] 
-							  = this->optimization->variables->initialVariableValues->var[i]->value;						
-						else
-							throw ErrorClass("Variable index out of range");
-					}
-				}
-			}
-		}					
-	}
-	catch(const ErrorClass& eclass)
-	{	throw ErrorClass(eclass.errormsg);
-	}
-	return initVarVector;
-}//setInitVarValuesDense
-
-
-std::vector<InitVarValueString*>  OSOption::getInitVarStringsSparse(){
-	std::vector<InitVarValueString*> initVarVector;
-	if (this->optimization != NULL) {
-		if(this->optimization->variables != NULL) {
-			if(this->optimization->variables->initialVariableValuesString != NULL) {
-			int i;
-			int num_var;
-			num_var = this->getNumberOfInitVarValuesString();
-			for(i = 0; i < num_var; i++){
-				initVarVector.push_back( this->optimization->variables->initialVariableValuesString->var[ i]);
-				}
-			}
-		}					
-	}
-	return initVarVector;
-}//getInitVarStringsSparse
-
-std::string *OSOption::getInitVarStringsDense(int numberOfVariables){
-	std::string *initVarVector;
-	initVarVector = new std::string[numberOfVariables];
-	for (int k = 0; k < numberOfVariables; k++) initVarVector[k] = "";
-	try
-	{
-		if (this->optimization != NULL) 
-		{	if(this->optimization->variables != NULL) 
-			{	if(this->optimization->variables->initialVariableValuesString != NULL) 
-				{	int i,j;
-					int num_var;
-					num_var = this->getNumberOfInitVarValuesString();
-					for(i = 0; i < num_var; i++)
-					{	j = this->optimization->variables->initialVariableValuesString->var[i]->idx;
-						if (j >= 0 && j < numberOfVariables)
-							initVarVector[j] 
-							  = this->optimization->variables->initialVariableValuesString->var[i]->value;
-						else
-							throw ErrorClass("Variable index out of range");
-					}
-				}
-			}
-		}					
-	}
-	catch(const ErrorClass& eclass)
-	{	throw ErrorClass(eclass.errormsg);
-	}
-	return initVarVector;
-}//getInitVarStringsDense
-
-
-std::vector<InitObjValue*>  OSOption::getInitObjValuesSparse(){
-	std::vector<InitObjValue*> initObjVector;
-	if (this->optimization != NULL) {
-		if(this->optimization->objectives != NULL) {
-			if(this->optimization->objectives->initialObjectiveValues != NULL) {
-			int i;
-			int num_obj;
-			num_obj = this->getNumberOfInitObjValues();
-			for(i = 0; i < num_obj; i++){
-				printf("\n%d\n",this->optimization->objectives->initialObjectiveValues->obj[ i]->idx);
-				printf("\n%d\n",this->optimization->objectives->initialObjectiveValues->obj[ i]->value);
-				initObjVector.push_back( this->optimization->objectives->initialObjectiveValues->obj[ i]);
-				}
-			}
-		}					
-	}
-	return initObjVector;
-}//getInitObjValuesSparse
-
-double* OSOption::getInitObjValuesDense(int numberOfObjectives){
-	double *initObjVector;
-	initObjVector = new double[numberOfObjectives];
-	for (int k = 0; k < numberOfObjectives; k++) initObjVector[k] = OSNAN;
-	try
-	{	if (this->optimization != NULL) 
-		{	if(this->optimization->objectives != NULL) 
-			{	if(this->optimization->objectives->initialObjectiveValues != NULL) 
-				{	int i,j;
-					int num_obj;
-					num_obj = this->getNumberOfInitObjValues();
-					for(i = 0; i < num_obj; i++)
-					{	j = this->optimization->objectives->initialObjectiveValues->obj[i]->idx;
-						if (j < 0 && -j <= numberOfObjectives)						
-							initObjVector[j] 
-							  = this->optimization->objectives->initialObjectiveValues->obj[i]->value;						
-						else
-							throw ErrorClass("Objective index out of range");
-					}
-				}
-			}
-		}					
-	}
-	catch(const ErrorClass& eclass)
-	{	throw ErrorClass(eclass.errormsg);
-	}
-	return initObjVector;
-}//getInitObjValuesDense
-
-
-std::vector<InitObjBound*>  OSOption::getInitObjBoundsSparse()
-{	std::vector<InitObjBound*> initObjBounds;
-	if (this->optimization != NULL) 
-	{	if(this->optimization->objectives != NULL) 
-		{	if(this->optimization->objectives->initialObjectiveBounds != NULL) 
-			{	int i;
-				int num_obj;
-				num_obj = this->getNumberOfInitObjBounds();
-				for(i = 0; i < num_obj; i++)
-				{	printf("\n%d\n",this->optimization->objectives->initialObjectiveBounds->obj[ i]->idx);
-					printf("\n%d\n",this->optimization->objectives->initialObjectiveBounds->obj[ i]->lbValue);
-					printf("\n%d\n",this->optimization->objectives->initialObjectiveBounds->obj[ i]->ubValue);
-					initObjBounds.push_back( this->optimization->objectives->initialObjectiveBounds->obj[ i]);
-				}
-			}
-		}					
-	}
-	return initObjBounds;
-}//getInitObjBoundsSparse
-
-double* OSOption::getInitObjLowerBoundsDense(int numberOfObjectives){
-	double *initObjBound;
-	initObjBound = new double[numberOfObjectives];
-	for (int k = 0; k < numberOfObjectives; k++) initObjBound[k] = OSNAN;
-	try
-	{	if (this->optimization != NULL) 
-		{	if(this->optimization->objectives != NULL) 
-			{	if(this->optimization->objectives->initialObjectiveBounds != NULL) 
-				{	int i,j;
-					int num_obj;
-					num_obj = this->getNumberOfInitObjBounds();
-					for(i = 0; i < num_obj; i++)
-					{	j = this->optimization->objectives->initialObjectiveBounds->obj[i]->idx;
-						if (j < 0 && -j <= numberOfObjectives)						
-							initObjBound[j] 
-							  = this->optimization->objectives->initialObjectiveBounds->obj[i]->lbValue;
-						else
-							throw ErrorClass("Objective index out of range");
-					}
-				}
-			}
-		}					
-	}
-	catch(const ErrorClass& eclass)
-	{	throw ErrorClass(eclass.errormsg);
-	}
-	return initObjBound;
-}//getInitObjLowerBoundsDense
-
-double* OSOption::getInitObjUpperBoundsDense(int numberOfObjectives){
-	double *initObjBound;
-	initObjBound = new double[numberOfObjectives];
-	for (int k = 0; k < numberOfObjectives; k++) initObjBound[k] = OSNAN;
-	try
-	{	if (this->optimization != NULL) 
-		{	if(this->optimization->objectives != NULL) 
-			{	if(this->optimization->objectives->initialObjectiveBounds != NULL) 
-				{	int i,j;
-					int num_obj;
-					num_obj = this->getNumberOfInitObjBounds();
-					for(i = 0; i < num_obj; i++)
-					{	j = this->optimization->objectives->initialObjectiveBounds->obj[i]->idx;
-						if (j < 0 && -j <= numberOfObjectives)						
-							initObjBound[j] 
-							  = this->optimization->objectives->initialObjectiveBounds->obj[i]->ubValue;
-						else
-							throw ErrorClass("Objective index out of range");
-					}
-				}
-			}
-		}					
-	}
-	catch(const ErrorClass& eclass)
-	{	throw ErrorClass(eclass.errormsg);
-	}
-	return initObjBound;
-}//getInitObjUpperBoundsDense
-
-
-std::vector<InitConValue*>  OSOption::getInitConValuesSparse(){
-	std::vector<InitConValue*> initConVector;
-	if (this->optimization != NULL) {
-		if(this->optimization->constraints != NULL) {
-			if(this->optimization->constraints->initialConstraintValues != NULL) {
-			int i;
-			int num_con;
-			num_con = this->getNumberOfInitConValues();
-			for(i = 0; i < num_con; i++){
-				printf("\n%d\n",this->optimization->constraints->initialConstraintValues->con[ i]->idx);
-				printf("\n%d\n",this->optimization->constraints->initialConstraintValues->con[ i]->value);
-				initConVector.push_back( this->optimization->constraints->initialConstraintValues->con[ i]);
-				}
-			}
-		}					
-	}
-	return initConVector;
-}//getInitConValuesSparse
-
-double* OSOption::getInitConValuesDense(int numberOfConstraints){
-	double *initConVector;
-	initConVector = new double[numberOfConstraints];
-	for (int k = 0; k < numberOfConstraints; k++) initConVector[k] = OSNAN;
-	try
-	{	if (this->optimization != NULL) 
-		{	if(this->optimization->constraints != NULL) 
-			{	if(this->optimization->constraints->initialConstraintValues != NULL) 
-				{	int i,j;
-					int num_con;
-					num_con = this->getNumberOfInitConValues();
-					for(i = 0; i < num_con; i++)
-					{	j = this->optimization->constraints->initialConstraintValues->con[i]->idx;
-						if (j >= 0 && j < numberOfConstraints)						
-							initConVector[j] 
-							  = this->optimization->constraints->initialConstraintValues->con[i]->value;						
-						else
-							throw ErrorClass("Constraint index out of range");
-					}
-				}
-			}
-		}					
-	}
-	catch(const ErrorClass& eclass)
-	{	throw ErrorClass(eclass.errormsg);
-	}
-	return initConVector;
-}//getInitConValuesDense
-
-
-std::vector<InitDualVarValue*>  OSOption::getInitDualVarValuesSparse(){
-	std::vector<InitDualVarValue*> initDualVector;
-	if (this->optimization != NULL) {
-		if(this->optimization->constraints != NULL) {
-			if(this->optimization->constraints->initialDualValues != NULL) {
-			int i;
-			int num_con;
-			num_con = this->getNumberOfInitDualVarValues();
-			for(i = 0; i < num_con; i++){
-				printf("\n%d\n",this->optimization->constraints->initialDualValues->con[ i]->idx);
-				printf("\n%d\n",this->optimization->constraints->initialDualValues->con[ i]->lbValue);
-				printf("\n%d\n",this->optimization->constraints->initialDualValues->con[ i]->ubValue);
-				initDualVector.push_back( this->optimization->constraints->initialDualValues->con[ i]);
-				}
-			}
-		}					
-	}
-	return initDualVector;
-}//getInitDualVarValuesSparse
-
-double* OSOption::getInitDualVarLowerBoundsDense(int numberOfConstraints){
-	double *initDualVector;
-	initDualVector = new double[numberOfConstraints];
-	for (int k = 0; k < numberOfConstraints; k++) initDualVector[k] = OSNAN;
-	try
-	{	if (this->optimization != NULL) 
-		{	if(this->optimization->constraints != NULL) 
-			{	if(this->optimization->constraints->initialDualValues != NULL) 
-				{	int i,j;
-					int num_con;
-					num_con = this->getNumberOfInitDualVarValues();
-					for(i = 0; i < num_con; i++)
-					{	j = this->optimization->constraints->initialDualValues->con[i]->idx;
-						if (j >= 0 && j < numberOfConstraints)						
-							initDualVector[j] 
-							  = this->optimization->constraints->initialDualValues->con[i]->lbValue;						
-						else
-							throw ErrorClass("Constraint index out of range");
-					}
-				}
-			}
-		}					
-	}
-	catch(const ErrorClass& eclass)
-	{	throw ErrorClass(eclass.errormsg);
-	}
-	return initDualVector;
-}//getInitDualVarLowerBoundsDense
-
-double* OSOption::getInitDualVarUpperBoundsDense(int numberOfConstraints){
-	double *initDualVector;
-	initDualVector = new double[numberOfConstraints];
-	for (int k = 0; k < numberOfConstraints; k++) initDualVector[k] = OSNAN;
-	try
-	{	if (this->optimization != NULL) 
-		{	if(this->optimization->constraints != NULL) 
-			{	if(this->optimization->constraints->initialDualValues != NULL) 
-				{	int i,j;
-					int num_con;
-					num_con = this->getNumberOfInitDualVarValues();
-					for(i = 0; i < num_con; i++)
-					{	j = this->optimization->constraints->initialDualValues->con[i]->idx;
-						if (j >= 0 && j < numberOfConstraints)						
-							initDualVector[j] 
-							  = this->optimization->constraints->initialDualValues->con[i]->ubValue;	
-						else
-							throw ErrorClass("Constraint index out of range");
-					}
-				}
-			}
-		}					
-	}
-	catch(const ErrorClass& eclass)
-	{	throw ErrorClass(eclass.errormsg);
-	}
-	return initDualVector;
-}//getInitDualVarUpperBoundsDense
-
-
-std::vector<SolverOption*>  OSOption::setSolverOptions( std::string solver_name){
-	std::vector<SolverOption*> optionsVector;
-	if (this->optimization != NULL) {
-		if (this->optimization->solverOptions != NULL) {
-			int i;
-			int num_options;
-			num_options = this->getNumberOfSolverOptions();
-			for(i = 0; i < num_options; i++){
-				if(solver_name == this->optimization->solverOptions->solverOption[ i]->solver){
-					optionsVector.push_back( this->optimization->solverOptions->solverOption[ i]);
-				}
-			}
-		}					
-	}
-	return optionsVector;
-}//setSolverOptions
 */

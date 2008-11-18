@@ -1726,7 +1726,7 @@ numberofbasvar: NUMBEROFVARATT QUOTE INTEGER QUOTE
 	osoption->optimization->variables->initialBasisStatus->numberOfVar = $3;
 	osoption->optimization->variables->initialBasisStatus->var = new InitBasStatus*[$3];
 	for (int i = 0; i < $3; i++)
-		osoption->optimization->variables->initialBasisStatus->var[i] = new initialBasisStatus();
+		osoption->optimization->variables->initialBasisStatus->var[i] = new InitBasStatus();
 };
 
 basvarlist: | basvarlist initbasvalue;
