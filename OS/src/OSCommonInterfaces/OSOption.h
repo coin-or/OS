@@ -636,11 +636,11 @@ public:
 	/** input files to move or copy */
 	PathPairs *inputFilesToMove;
 
-	/** output directories to move or copy */
-	PathPairs *outputDirectoriesToMove;
-
 	/** output files to move or copy */
 	PathPairs *outputFilesToMove;
+
+	/** output directories to move or copy */
+	PathPairs *outputDirectoriesToMove;
 
 	/** files to delete upon completeion */
 	DirectoriesAndFiles *filesToDelete;
@@ -798,6 +798,71 @@ public:
 	~InitVariableValuesString();
 }; //InitVariableValuesString
 
+/*! \class InitBasStatus
+ *  \brief the InitBasStatus class.
+ * 
+ * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/07/2008
+ * @since OS 1.1
+ * 
+ * \remarks
+ * A data structure class that corresponds to an xml element in 
+ * the OSoL schema.  
+ */
+class InitBasStatus {
+
+public:
+	/** variable index */
+	int idx;
+
+	/** initial value */
+	std::string value;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	InitBasStatus();
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~InitBasStatus();		
+}; //InitBasStatus
+
+
+/*! \class InitialBasisStatus
+ *  \brief the InitialBasisStatus class.
+ * 
+ * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/07/2008
+ * @since OS 1.1
+ * 
+ * \remarks
+ * A data structure class that corresponds to an xml element in 
+ * the OSoL schema.  
+ */
+class InitialBasisStatus {
+
+public:
+	/** number of <var> children */
+	int numberOfVar;
+
+	/** initial value for each variable */
+	InitBasStatus **var;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	InitialBasisStatus();
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~InitialBasisStatus();
+}; //InitialBasisStatus
+
 
 /*! \class OtherVarOption
  *  \brief the OtherVarOption class.
@@ -911,6 +976,9 @@ public:
 
 	/** initial values for string-valued variables */
 	InitVariableValuesString *initialVariableValuesString;
+
+	/** initial basis */
+	InitialBasisStatus *initialBasisStatus;
 
 	/** other variable options */
 	OtherVariableOption **other;
@@ -1633,155 +1701,6 @@ public:
 	OptimizationOption *optimization;
 
 
-public:	
-
-	/**
-	 * m_inumberOfOtherGeneralOptions holds the number of other general option objects. 
-	 */	
-	int m_inumberOfOtherGeneralOptions;
-
-	/**
-	 * m_inumberOfOtherSystemOptions holds the number of other system option objects. 
-	 */	
-	int m_inumberOfOtherSystemOptions;
-
-	/**
-	 * m_inumberOfOtherServiceOptions holds the number of other service option objects. 
-	 */	
-	int m_inumberOfOtherServiceOptions;
-
-	/**
-	 * m_inumberOfOtherJobOptions holds the number of other job option objects. 
-	 */	
-	int m_inumberOfOtherJobOptions;
-
-	/**
-	 * m_inumberOfJobDependencies holds the number of JobDependencies objects. 
-	 */	
-	int m_inumberOfJobDependencies;
-
-	/**
-	 * m_inumberOfRequiredDirectories holds the number of RequiredDirectories objects. 
-	 */	
-	int m_inumberOfRequiredDirectories;
-
-	/**
-	 * m_inumberOfRequiredFiles holds the number of RequiredFiles objects. 
-	 */	
-	int m_inumberOfRequiredFiles;
-
-	/**
-	 * m_inumberOfDirectoriesToMake holds the number of DirectoriesToMake objects. 
-	 */	
-	int m_inumberOfDirectoriesToMake;
-
-	/**
-	 * m_inumberOfFilesToCreate holds the number of FilesToCreate objects. 
-	 */	
-	int m_inumberOfFilesToCreate;
-
-	/**
-	 * m_inumberOfInputDirectoriesToMove holds the number of input directories to move or copy. 
-	 */	
-	int m_inumberOfInputDirectoriesToMove;
-
-	/**
-	 * m_inumberOfInputFilesToMove holds the number of input files to move or copy. 
-	 */	
-	int m_inumberOfInputFilesToMove;
-
-	/**
-	 * m_inumberOfOutputDirectoriesToMove holds the number of output directories to move or copy. 
-	 */	
-	int m_inumberOfOutputDirectoriesToMove;
-
-	/**
-	 * m_inumberOfOutputFilesToMove holds the number of output files to move or copy. 
-	 */	
-	int m_inumberOfOutputFilesToMove;
-
-	/**
-	 * m_inumberOfFilesToDelete holds the number of FilesToDelete objects. 
-	 */	
-	int m_inumberOfFilesToDelete;
-
-	/**
-	 * m_inumberOfDirectoriesToDelete holds the number of DirectoriesToDelete objects. 
-	 */	
-	int m_inumberOfDirectoriesToDelete;
-
-	/**
-	 * m_inumberOfProcessesToKill holds the number of ProcessesToKill objects. 
-	 */	
-	int m_inumberOfProcessesToKill;
-
-	/**
-	 * m_inumberOfInitVarValues holds the number of InitVarValue objects. 
-	 */	
-	int m_inumberOfInitVarValues;
-
-	/**
-	 * m_inumberOfInitVarValuesString holds the number of InitVarValueString objects. 
-	 */	
-	int m_inumberOfInitVarValuesString;
-
-	/**
-	 * m_inumberOfOtherVariableOptions holds the number of OtherVariableOption objects. 
-	 */	
-	int m_inumberOfOtherVariableOptions;
-
-	/**
-	 * m_inumberOfOtherVarOptions is an array for the number of OtherVarOption objects. 
-	 */	
-	int *mm_inumberOfOtherVarOptions;
-
-	/**
-	 * m_inumberOfInitObjValues holds the number of InitObjValue objects. 
-	 */	
-	int m_inumberOfInitObjValues;
-
-	/**
-	 * m_inumberOfInitObjBounds holds the number of InitObjBound objects. 
-	 */	
-	int m_inumberOfInitObjBounds;
-
-	/**
-	 * m_inumberOfOtherObjectiveOptions holds the number of OtherObjectiveOption objects. 
-	 */	
-	int m_inumberOfOtherObjectiveOptions;
-
-	/**
-	 * m_inumberOfOtherObjOptions is an array for the number of OtherObjOption objects. 
-	 */	
-	int *mm_inumberOfOtherObjOptions;
-
-	/**
-	 * m_inumberOfInitConValues holds the number of InitConValue objects. 
-	 */	
-	int m_inumberOfInitConValues;
-
-	/**
-	 * m_inumberOfInitDualVarValues holds the number of InitDualVarValue objects. 
-	 */	
-	int m_inumberOfInitDualVarValues;
-
-	/**
-	 * m_inumberOfOtherConstraintOptions holds the number of OtherConstraintOption objects. 
-	 */	
-	int m_inumberOfOtherConstraintOptions;
-
-	/**
-	 * m_inumberOfOtherConOptions is an array for the number of OtherConOption objects. 
-	 */	
-	int *mm_inumberOfOtherConOptions;
-
-	/**
-	 * m_inumberOfSolverOptions holds the number of SolverOption objects. 
-	 */	
-	int m_inumberOfSolverOptions;
-	
-
-
 public: 
 	
 	// get() methods...
@@ -1889,7 +1808,7 @@ public:
 	/**
 	 * Get the minimum required memory
 	 */
-	double  getMinMemory();
+	double  getMinMemorySize();
 
 	/**
 	 * Get the minimum required CPU speed
@@ -2021,6 +1940,13 @@ public:
 	int getNumberOfInitVarValuesString();
 
 	/**
+	 * Get the number of variables for which initial basis information is provided. 
+	 * 
+	 * @return the number of variables. 
+	 */
+	int getNumberOfInitialBasisVariables();
+
+	/**
 	 * Get the number of other variable options
 	 * 
 	 * @return the number of other variable options. 
@@ -2089,7 +2015,7 @@ public:
 	 * @return a vector of pointers to otherOptions objects  
 	 * associated with the <general> element
 	 */
-	std::vector<OtherOption*> getOtherGeneralOptions();
+	OtherOption** getOtherGeneralOptions();
 
 	/**
 	 * Get the array of other options associated with the <system> element
@@ -2098,7 +2024,7 @@ public:
 	 * @return a vector of pointers to otherOptions objects  
 	 * associated with the <system> element
 	 */
-	std::vector<OtherOption*> getOtherSystemOptions();
+	OtherOption** getOtherSystemOptions();
 
 	/**
 	 * Get the array of other options associated with the <service> element
@@ -2107,7 +2033,7 @@ public:
 	 * @return a vector of pointers to otherOptions objects  
 	 * associated with the <service> element
 	 */
-	std::vector<OtherOption*> getOtherServiceOptions();
+	OtherOption** getOtherServiceOptions();
 
 	/**
 	 * Get the array of other options associated with the <job> element
@@ -2116,7 +2042,7 @@ public:
 	 * @return a vector of pointers to otherOptions objects  
 	 * associated with the <job> element
 	 */
-	std::vector<OtherOption*> getOtherJobOptions();
+	OtherOption** getOtherJobOptions();
 
 	/**
 	 * Get the array of other options associated with any element
@@ -2125,7 +2051,7 @@ public:
 	 * @return a vector of pointers to otherOptions objects  
 	 * associated with the element whose name matches elementName
 	 */
-	std::vector<OtherOption*> getOtherOptions(std::string elementName);
+	OtherOption** getOtherOptions(std::string elementName);
 
 	/**
 	 * Get the array of all other options associated with the 
@@ -2134,7 +2060,7 @@ public:
 	 * 
 	 * @return a vector of pointers to all otherOptions objects  
 	 */
-	std::vector<OtherOption*> getAllOtherOptions();
+	OtherOption** getAllOtherOptions();
 
 	/**
 	 * Get the array of job dependencies
@@ -2142,7 +2068,7 @@ public:
 	 * 
 	 * @return a vector of pointers to JobDependencies objects  
 	 */
-	std::vector<JobDependencies*> getJobDependencies();
+	std::string* getJobDependencies();
 
 	/**
 	 * Get the array of required directories
@@ -2151,7 +2077,7 @@ public:
 	 * @return a vector of pointers to DirectoriesAndFiles objects  
 	 * giving the directories that are required by the current job
 	 */
-	std::vector<DirectoriesAndFiles*> getRequiredDirectories();
+	std::string* getRequiredDirectories();
 
 	/**
 	 * Get the array of required files
@@ -2160,7 +2086,7 @@ public:
 	 * @return a vector of pointers to DirectoriesAndFiles objects  
 	 * giving the files that are required by the current job
 	 */
-	std::vector<DirectoriesAndFiles*> getRequiredFiles();
+	std::string* getRequiredFiles();
 
 	/**
 	 * Get the array of directories to make
@@ -2169,7 +2095,7 @@ public:
 	 * @return a vector of pointers to DirectoriesAndFiles objects  
 	 * giving the directories that must be created
 	 */
-	std::vector<DirectoriesAndFiles*> getDirectoriesToMake();
+	std::string* getDirectoriesToMake();
 
 	/**
 	 * Get the array of files to create
@@ -2178,7 +2104,7 @@ public:
 	 * @return a vector of pointers to DirectoriesAndFiles objects  
 	 * giving the files that must be created
 	 */
-	std::vector<DirectoriesAndFiles*> getFilesToCreate();
+	std::string* getFilesToCreate();
 
 	/**
 	 * Get the array of input directories to move
@@ -2187,7 +2113,7 @@ public:
 	 * @return a vector of pointers to PathPair objects  
 	 * giving the input directories that must be moved
 	 */
-	std::vector<PathPair*> getInputDirectoriesToMove();
+	PathPair** getInputDirectoriesToMove();
 
 	/**
 	 * Get the array of input files to move
@@ -2196,7 +2122,7 @@ public:
 	 * @return a vector of pointers to PathPair objects  
 	 * giving the input files that must be moved
 	 */
-	std::vector<PathPair*> getInputFilesToMove();
+	PathPair** getInputFilesToMove();
 
 	/**
 	 * Get the array of output directories to move
@@ -2205,7 +2131,7 @@ public:
 	 * @return a vector of pointers to PathPair objects  
 	 * giving the output directories that must be moved
 	 */
-	std::vector<PathPair*> getOutputDirectoriesToMove();
+	PathPair** getOutputDirectoriesToMove();
 
 	/**
 	 * Get the array of output files to move
@@ -2214,7 +2140,7 @@ public:
 	 * @return a vector of pointers to PathPair objects  
 	 * giving the output files that must be moved
 	 */
-	std::vector<PathPair*> getOutputFilesToMove();
+	PathPair** getOutputFilesToMove();
 
 	/**
 	 * Get the array of directories to delete
@@ -2223,7 +2149,7 @@ public:
 	 * @return a vector of pointers to DirectoriesAndFiles objects  
 	 * giving the directories that must be deleted
 	 */
-	std::vector<DirectoriesAndFiles*> getDirectoriesToDelete();
+	std::string* getDirectoriesToDelete();
 
 	/**
 	 * Get the array of files to delete
@@ -2232,7 +2158,7 @@ public:
 	 * @return a vector of pointers to DirectoriesAndFiles objects  
 	 * giving the files that must be deleted
 	 */
-	std::vector<DirectoriesAndFiles*> getFilesToDelete();
+	std::string* getFilesToDelete();
 
 	/**
 	 * Get the array of processes to kill
@@ -2241,7 +2167,7 @@ public:
 	 * @return a vector of pointers to Processes objects  
 	 * giving the processes that must be killed
 	 */
-	std::vector<Processes*> getProcessesToKill();
+	std::string* getProcessesToKill();
 
 	/**
 	 * Get the initial values associated with the variables in sparse form
@@ -2278,6 +2204,24 @@ public:
 	 * hold inital value strings (or OSNAN) for all of the variables
 	 */
 	std::string *getInitVarStringsDense(int numberOfVariables);
+
+	/**
+	 * Get the initial basis status in sparse form
+	 * <p>
+	 * 
+	 * @return a vector of strings that 
+	 * hold inital basis status for (some of) the variables
+	 */
+	std::vector<InitBasStatus*> getInitBasisStatusSparse();
+
+	/**
+	 * Get the initial basis status in dense form
+	 * <p>
+	 * 
+	 * @return a vector of strings that 
+	 * hold inital basis status (or "unknown") for all of the variables
+	 */
+	std::string *getInitBasisStatusDense(int numberOfVariables);
 
 	/**
 	 * Get the array of other variable options
@@ -2405,34 +2349,150 @@ public:
 	 */
 	std::vector<SolverOption*> getSolverOptions( std::string solver_name);
 
-//   	/**
-//	 * Set the general status
-//	 * 
-//	 * @param status holds the general status.
-//	 * @return whether the general status is set successfully. 
-//	 */
-//	bool setGeneralStatus(GeneralStatus *status);
-			
-//   	/**
-//	 * Set the general status type, which can be: 
-//	 * success, error, warning. 
-//	 * 
-//	 * @param type holds the general status type
-//	 * @return whether the general status type is set successfully or not. 
-//	 */
-//	bool setGeneralStatusType(std::string type);	
-
-
 
 	/**
 	 * Set the serviceURI
 	 */
 	bool setServiceURI( std::string serviceURI);
 
-	/**
-	 * Set the minimum number of CPUs that the system must provide
-	 */
-	bool setMinCPUNumber( int minCPUNumber);
+	bool setServiceName( std::string serviceName);
+
+	bool setInstanceName( std::string instanceName);
+
+	bool setInstanceLocation( std::string instanceLocation);
+
+	bool setLocationType( std::string locationType);
+
+	bool setJobID( std::string jobID);
+
+	bool setSolverToInvoke( std::string solverToInvoke);
+
+	bool setLicense( std::string license);
+
+	bool setUserName( std::string userName);
+
+	bool setPassword( std::string password);
+
+	bool setContact( std::string contact);
+
+	bool setTransportType( std::string transportType);
+
+	bool setNumberOfOtherGeneralOptions(int numberOfObjects);
+
+	bool setOtherGeneralOptions(int numberOfOptions, OtherOption** other);
+
+	bool setAnOtherGeneralOption(OtherOption* optionValue);
+
+
+	bool setMinDiskSpace(double value);
+
+	bool setMinDiskSpaceUnit(std::string unit);
+
+	bool setMinMemorySize(double value);
+
+	bool setMinMemoryUnit(std::string unit);
+
+	bool setMinCPUSpeed(double value);
+
+	bool setMinCPUSpeedUnit(std::string unit);
+
+	bool setMinCPUNumber( int number);
+
+	bool setNumberOfOtherSystemOptions(int numberOfObjects);
+
+	bool setOtherSystemOptions(int numberOfOptions, OtherOption** other);
+
+	bool setAnOtherSystemOption(OtherOption* optionValue);
+
+
+	bool setServiceType( std::string serviceType);
+
+	bool setNumberOfOtherServiceOptions(int numberOfObjects);
+
+	bool setOtherServiceOptions(int numberOfOptions, OtherOption** other);
+
+	bool setAnOtherServiceOption(OtherOption* optionValue);
+
+
+	bool setMaxTime(double value);
+
+	bool setMaxTimeUnit(std::string unit);
+
+	bool setScheduledStartTime(std::string time);
+
+//	-------------------
+	bool setNumberOfJobDependencies(int numberOfObjects);
+	bool setJobDependencies(int numberOfDependencies, std::string* jobDependencies);
+	bool setAnotherJobDependency(std::string jobID);
+
+	bool setNumberOfRequiredDirectories(int numberOfObjects);
+
+	bool setNumberOfRequiredFiles(int numberOfObjects);
+
+	bool setNumberOfDirectoriesToMake(int numberOfObjects);
+
+	bool setNumberOfFilesToCreate(int numberOfObjects);
+
+	bool setNumberOfInputDirectoriesToMove(int numberOfObjects);
+
+	bool setNumberOfInputFilesToMove(int numberOfObjects);
+
+	bool setNumberOfOutputFilesToMove(int numberOfObjects);
+
+	bool setNumberOfOutputDirectoriesToMove(int numberOfObjects);
+
+	bool setNumberOfFilesToDelete(int numberOfObjects);
+
+	bool setNumberOfDirectoriesToDelete(int numberOfObjects);
+
+	bool setNumberOfProcessesToKill(int numberOfObjects);
+
+//============================
+
+	bool setNumberOfOtherJobOptions(int numberOfObjects);
+
+	bool setOtherJobOptions(int numberOfOptions, OtherOption** other);
+
+	bool setAnOtherJobOption(OtherOption* optionValue);
+
+
+	bool setNumberOfVariables(int numberOfObjects);
+
+	bool setNumberOfObjectives(int numberOfObjects);
+
+	bool setNumberOfConstraints(int numberOfObjects);
+
+	bool setNumberOfInitVarValues(int numberOfObjects);
+
+	bool setNumberOfInitVarValuesString(int numberOfObjects);
+
+	bool setNumberOfInitialBasisVariables(int numberOfObjects);
+
+	bool setNumberOfOtherVariableOptions(int numberOfObjects);
+
+	bool setNumberOfInitObjValues(int numberOfObjects);
+
+	bool setNumberOfInitObjBounds(int numberOfObjects);
+
+	bool setNumberOfOtherObjectiveOptions(int numberOfObjects);
+
+	bool setNumberOfInitConValues(int numberOfObjects);
+
+	bool setNumberOfInitDualVarValues(int numberOfObjects);
+
+	bool setNumberOfOtherConstraintOptions(int numberOfObjects);
+
+	bool setNumberOfSolverOptions(int numberOfObjects);
+
+	bool setOptionInt(std::string optionName, int optionValue);
+
+	bool setOtherOptions(std::string optionName);
+
+	bool setAllOtherOptions();
+
+	bool setOptionStr(std::string optionName, std::string optionValue);
+
+	bool setOptionDbl(std::string optionName, double value);
 
 };
 #endif

@@ -157,6 +157,8 @@ public:
 	int numberOfVar;
 	bool initialVariableValuesStringPresent;
 	int numberOfVarStr;
+	bool initialBasisStatusPresent;
+	int numberOfBasVar;
 	int numberOfOtherObjectiveOptions;
 	bool initialObjectiveValuesPresent;
 	int numberOfObjValues;

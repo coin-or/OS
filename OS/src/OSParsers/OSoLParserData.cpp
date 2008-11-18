@@ -106,6 +106,8 @@
 	numberOfVar(0),
 	initialVariableValuesStringPresent(false),
 	numberOfVarStr(0),
+	initialBasisStatusPresent(false),
+	numberOfBasVar(0),
 	numberOfOtherObjectiveOptions(0),
 	initialObjectiveValuesPresent(false),
 	numberOfObjValues(0),

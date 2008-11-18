@@ -274,6 +274,8 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/initialVariableValues{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(INITIALVARIABLEVALUESEND);}
 {xmlwhitespace}*\<initialVariableValuesString {YY_PRINT; return(INITIALVARIABLEVALUESSTRINGSTART);}
 {xmlwhitespace}*\<\/initialVariableValuesString{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(INITIALVARIABLEVALUESSTRINGEND);}
+{xmlwhitespace}*\<initialBasisStatus {YY_PRINT; return(INITIALBASISSTATUSSTART);}
+{xmlwhitespace}*\<\/initialBasisStatus{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(INITIALBASISSTATUSEND);}
 {xmlwhitespace}*\<var {YY_PRINT; return(VARSTART);}
 {xmlwhitespace}*\<\/var{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(VAREND);}
 {xmlwhitespace}*\<objectives {YY_PRINT; return(OBJECTIVESSTART);}

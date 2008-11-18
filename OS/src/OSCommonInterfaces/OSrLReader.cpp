@@ -13,6 +13,7 @@
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */ 
+#define OSRLREADER_DEBUG
 
 #include "OSrLReader.h"
 
@@ -35,14 +36,28 @@ OSrLReader::OSrLReader( )  {
 
 OSrLReader::~OSrLReader(){
 	// delete the osresult object
+#ifdef OSRLREADER_DEBUG
+	std::cout << "delete m_osresult" << std::endl;
+#endif
 	if(m_osresult != NULL) delete m_osresult;
 	m_osresult = NULL;
+
 	// now delete the scanner that was initialized
+#ifdef OSRLREADER_DEBUG
+	std::cout << "delete scanner" << std::endl;
+#endif
 	osrllex_destroy(m_parserData->scanner );
+
 	// findally delete parser data
+#ifdef OSRLREADER_DEBUG
+	std::cout << "delete parser data" << std::endl;
+#endif
 	if( m_parserData != NULL) delete m_parserData;
 	m_parserData = NULL;
 	
+#ifdef OSRLREADER_DEBUG
+	std::cout << "success!" << std::endl;
+#endif
 } 
 
 OSResult* OSrLReader::readOSrL(const std::string& posrl) throw(ErrorClass){  	

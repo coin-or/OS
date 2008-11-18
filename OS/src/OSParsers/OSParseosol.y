@@ -112,6 +112,8 @@ int osollex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token VARIABLESSTART VARIABLESEND;
 %token INITIALVARIABLEVALUESSTART INITIALVARIABLEVALUESEND VARSTART VAREND;
 %token INITIALVARIABLEVALUESSTRINGSTART INITIALVARIABLEVALUESSTRINGEND;
+%token INITIALBASISSTATUSSTART INITIALBASISSTATUSEND;
+
 %token OBJECTIVESSTART OBJECTIVESEND;
 %token INITIALOBJECTIVEVALUESSTART INITIALOBJECTIVEVALUESEND OBJSTART OBJEND;
 %token INITIALOBJECTIVEBOUNDSSTART INITIALOBJECTIVEBOUNDSEND;
@@ -1595,7 +1597,7 @@ numberofothervariablesatt: | NUMBEROFOTHERVARIABLEOPTIONSATT QUOTE INTEGER QUOTE
 		osoption->optimization->variables->other[i] = new OtherVariableOption();
 };
 
-restofvariables: GREATERTHAN initialvariablevalues initialvariablevaluesstring othervariableoptionlist VARIABLESEND
+restofvariables: GREATERTHAN initialvariablevalues initialvariablevaluesstring initialbasisstatus othervariableoptionlist VARIABLESEND
    | ENDOFELEMENT;
 
 initialvariablevalues: | INITIALVARIABLEVALUESSTART numberofvar GREATERTHAN varlist INITIALVARIABLEVALUESEND;
@@ -1705,7 +1707,7 @@ initvarstrvalueidxatt: IDXATT QUOTE INTEGER QUOTE
 
 initvarstrvaluevalueatt: VALUEATT ATTRIBUTETEXT
 {	if (parserData->valAttributePresent)
-		osolerror (NULL, osoption, parserData, "only one variable index allowed");
+		osolerror (NULL, osoption, parserData, "only one variable string value allowed");
 	parserData->valAttributePresent = true;
 	osoption->optimization->variables->initialVariableValuesString->var[parserData->numberOfVarStr]->value = $2;
 }
@@ -1714,7 +1716,60 @@ QUOTE;
 initvarstrvalueend: GREATERTHAN VAREND | ENDOFELEMENT;
 
 
+initialbasisstatus: | INITIALBASISSTATUSSTART numberofbasvar GREATERTHAN
+    basvarlist INITIALBASISSTATUSEND;
 
+numberofbasvar: NUMBEROFVARATT QUOTE INTEGER QUOTE
+{	if ($3 <= 0)
+		osolerror (NULL, osoption, parserData, "number of <var> elements must be positive");
+	osoption->optimization->variables->initialBasisStatus = new InitialBasisStatus ();
+	osoption->optimization->variables->initialBasisStatus->numberOfVar = $3;
+	osoption->optimization->variables->initialBasisStatus->var = new InitBasStatus*[$3];
+	for (int i = 0; i < $3; i++)
+		osoption->optimization->variables->initialBasisStatus->var[i] = new initialBasisStatus();
+};
+
+basvarlist: | basvarlist initbasvalue;
+
+initbasvalue: basvarstart initbasvarvalueattlist initbasvarvalueend
+{	if (!parserData->idxAttributePresent)
+		osolerror (NULL, osoption, parserData, "variable index required");
+	parserData->idxAttributePresent = false;
+	parserData->valAttributePresent = false;
+	parserData->numberOfVarStr++;
+};
+
+basvarstart: VARSTART
+{	if (parserData->numberOfVarStr >= osoption->optimization->variables->initialBasisStatus->numberOfVar)
+		osolerror(NULL, osoption, parserData, "too many initial variable strings");
+};
+
+initbasvarvalueattlist: | initbasvarvalueattlist initbasvarvalueatt;
+
+initbasvarvalueatt: initbasvarvalueidxatt | initbasvarvaluevalueatt;
+
+initbasvarvalueidxatt: IDXATT QUOTE INTEGER QUOTE
+{	if (parserData->idxAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one variable index allowed");
+	parserData->idxAttributePresent = true;
+	if ($3 < 0)
+		osolerror (NULL, osoption, parserData, "variable index must be nonnegative");
+	if (parserData->numberOfVariablesPresent)
+	{	if ($3 >= parserData->numberOfVariables)
+			osolerror (NULL, osoption, parserData, "variable index exceeds upper limit");
+	};
+	osoption->optimization->variables->initialBasisStatus->var[parserData->numberOfBasVar]->idx = $3;
+};
+
+initbasvarvaluevalueatt: VALUEATT ATTRIBUTETEXT
+{	if (parserData->valAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one variable value allowed");
+	parserData->valAttributePresent = true;
+	osoption->optimization->variables->initialBasisStatus->var[parserData->numberOfBasVar]->value = $2;
+}
+QUOTE;
+
+initbasvarvalueend: GREATERTHAN VAREND | ENDOFELEMENT;
 
 othervariableoptionlist: | othervariableoptionlist othervariableoption;
 
