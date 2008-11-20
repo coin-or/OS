@@ -46,6 +46,7 @@ noinst_PROGRAMS = OSFileUpload$(EXEEXT)
 bin_PROGRAMS = OSFileUpload$(EXEEXT)
 @COIN_HAS_COUENNE_TRUE@am__append_1 = $(COUENNEOBJDIR)/src/libCouenne.la
 @COIN_HAS_BONMIN_TRUE@am__append_2 = $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la \
+@COIN_HAS_BONMIN_TRUE@	endif \
 @COIN_HAS_BONMIN_TRUE@	$(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la \
 @COIN_HAS_BONMIN_TRUE@	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la
 @COIN_HAS_IPOPT_TRUE@am__append_3 = $(IPOPTOBJDIR)/src/Apps/AmplSolver/libamplinterface.la \
@@ -126,6 +127,7 @@ OSFileUpload_OBJECTS = $(am_OSFileUpload_OBJECTS)
 @COIN_HAS_COUENNE_TRUE@am__DEPENDENCIES_1 =  \
 @COIN_HAS_COUENNE_TRUE@	$(COUENNEOBJDIR)/src/libCouenne.la
 @COIN_HAS_BONMIN_TRUE@am__DEPENDENCIES_2 = $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la \
+@COIN_HAS_BONMIN_TRUE@	endif \
 @COIN_HAS_BONMIN_TRUE@	$(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la \
 @COIN_HAS_BONMIN_TRUE@	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la
 @COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_3 = $(IPOPTOBJDIR)/src/Apps/AmplSolver/libamplinterface.la \
@@ -771,7 +773,6 @@ uninstall-am: uninstall-binPROGRAMS uninstall-info-am
 
 
 @COIN_HAS_BONMIN_TRUE@   if COIN_HAS_ASL
-@COIN_HAS_BONMIN_TRUE@   endif
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

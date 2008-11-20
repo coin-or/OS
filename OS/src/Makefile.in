@@ -48,6 +48,7 @@ bin_PROGRAMS = OSSolverService$(EXEEXT)
 @COIN_HAS_COUENNE_TRUE@am__append_1 = $(COUENNESRCDIR)/src/main/BonCouenneInfo.cpp $(COUENNESRCDIR)/src/main/BonCouenneInfo.hpp
 @COIN_HAS_COUENNE_TRUE@am__append_2 = $(COUENNEOBJDIR)/src/libCouenne.la
 @COIN_HAS_BONMIN_TRUE@am__append_3 = $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la \
+@COIN_HAS_BONMIN_TRUE@	endif \
 @COIN_HAS_BONMIN_TRUE@	$(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la \
 @COIN_HAS_BONMIN_TRUE@	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la
 @COIN_HAS_IPOPT_TRUE@am__append_4 = $(IPOPTOBJDIR)/src/Apps/AmplSolver/libamplinterface.la \
@@ -173,6 +174,7 @@ OSSolverService_OBJECTS = $(am_OSSolverService_OBJECTS)
 @COIN_HAS_COUENNE_TRUE@am__DEPENDENCIES_1 =  \
 @COIN_HAS_COUENNE_TRUE@	$(COUENNEOBJDIR)/src/libCouenne.la
 @COIN_HAS_BONMIN_TRUE@am__DEPENDENCIES_2 = $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la \
+@COIN_HAS_BONMIN_TRUE@	endif \
 @COIN_HAS_BONMIN_TRUE@	$(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la \
 @COIN_HAS_BONMIN_TRUE@	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la
 @COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_3 = $(IPOPTOBJDIR)/src/Apps/AmplSolver/libamplinterface.la \
@@ -1077,7 +1079,6 @@ uninstall-info: uninstall-info-recursive
 
 
 @COIN_HAS_BONMIN_TRUE@   if COIN_HAS_ASL
-@COIN_HAS_BONMIN_TRUE@   endif
 
 install-exec-local:
 	echo "#ifndef HAVE_CONFIG_H" >bla

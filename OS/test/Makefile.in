@@ -45,6 +45,7 @@ host_triplet = @host@
 noinst_PROGRAMS = unitTest$(EXEEXT)
 @COIN_HAS_COUENNE_TRUE@am__append_1 = $(COUENNEOBJDIR)/src/libCouenne.la
 @COIN_HAS_BONMIN_TRUE@am__append_2 = $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la \
+@COIN_HAS_BONMIN_TRUE@	endif \
 @COIN_HAS_BONMIN_TRUE@	$(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la \
 @COIN_HAS_BONMIN_TRUE@	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la
 @COIN_HAS_IPOPT_TRUE@am__append_3 = $(IPOPTOBJDIR)/src/Apps/AmplSolver/libamplinterface.la \
@@ -123,6 +124,7 @@ unitTest_OBJECTS = $(am_unitTest_OBJECTS)
 @COIN_HAS_COUENNE_TRUE@am__DEPENDENCIES_1 =  \
 @COIN_HAS_COUENNE_TRUE@	$(COUENNEOBJDIR)/src/libCouenne.la
 @COIN_HAS_BONMIN_TRUE@am__DEPENDENCIES_2 = $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la \
+@COIN_HAS_BONMIN_TRUE@	endif \
 @COIN_HAS_BONMIN_TRUE@	$(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la \
 @COIN_HAS_BONMIN_TRUE@	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la
 @COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_3 = $(IPOPTOBJDIR)/src/Apps/AmplSolver/libamplinterface.la \
@@ -738,7 +740,6 @@ uninstall-am: uninstall-info-am
 
 
 @COIN_HAS_BONMIN_TRUE@   if COIN_HAS_ASL
-@COIN_HAS_BONMIN_TRUE@   endif
 
 test: unitTest$(EXEEXT)
 	./unitTest$(EXEEXT)

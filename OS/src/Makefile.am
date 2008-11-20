@@ -86,7 +86,7 @@ endif
 
 if COIN_HAS_BONMIN
    if COIN_HAS_ASL
-     LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la 
+     LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la \
    endif
    LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la \
     	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la 
