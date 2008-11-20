@@ -1070,10 +1070,13 @@ OSOption::~OSOption()
  * get() methods
  */
 
-/** 
+/*********************************** 
  * get() methods that return strings
- */
+ ***********************************/
 
+/**
+ * get the service URI (in <general> element)
+ */
 std::string  OSOption::getServiceURI()
 {	if (this->general != NULL) 
 		return this->general->serviceURI;
@@ -1081,6 +1084,9 @@ std::string  OSOption::getServiceURI()
 	return "";
 }//getServiceURI
 
+/**
+ * get the service name (in <general> element)
+ */
 std::string  OSOption::getServiceName()
 {	if (this->general != NULL) 
 		return this->general->serviceName;
@@ -1088,6 +1094,9 @@ std::string  OSOption::getServiceName()
 	return "";
 }//getServiceName
 
+/**
+ * get the instance name (in <general> element)
+ */
 std::string  OSOption::getInstanceName()
 {	if (this->general != NULL) 
 		return this->general->instanceName;
@@ -1095,6 +1104,9 @@ std::string  OSOption::getInstanceName()
 	return "";
 }//getInstanceName
 
+/**
+ * get the instance location (in <general> element)
+ */
 std::string  OSOption::getInstanceLocation()
 {	if (this->general != NULL) 
 		if (this->general->instanceLocation != NULL)
@@ -1103,6 +1115,9 @@ std::string  OSOption::getInstanceLocation()
 	return "";
 }//getInstanceLocation
 
+/**
+ * get the instance location type (in <general> element)
+ */
 std::string  OSOption::getLocationType()
 {	if (this->general != NULL) 
 		if (this->general->instanceLocation != NULL)
@@ -1111,6 +1126,9 @@ std::string  OSOption::getLocationType()
 	return "";
 }//getLocationType
 
+/**
+ * get the job ID (in <general> element)
+ */
 std::string  OSOption::getJobID()
 {	if (this->general != NULL) 
 		return this->general->jobID;
@@ -1118,6 +1136,9 @@ std::string  OSOption::getJobID()
 	return "";
 }//getJobID
 
+/**
+ * get the name of the solver to be invoked (in <general> element)
+ */
 std::string  OSOption::getSolverName()
 {	if (this->general != NULL) 
 		return this->general->solverToInvoke;
@@ -1125,6 +1146,9 @@ std::string  OSOption::getSolverName()
 	return "";
 }//getSolverName
 
+/**
+ * get the license information (in <general> element)
+ */
 std::string  OSOption::getLicense()
 {	if (this->general != NULL) 
 		return this->general->license;
@@ -1132,6 +1156,9 @@ std::string  OSOption::getLicense()
 	return "";
 }//getLicense
 
+/**
+ * get the user name (in <general> element)
+ */
 std::string  OSOption::getUserName()
 {	if (this->general != NULL) 
 		return this->general->userName;
@@ -1139,6 +1166,9 @@ std::string  OSOption::getUserName()
 	return "";
 }//getUserName
 
+/**
+ * get the password (in <general> element)
+ */
 std::string  OSOption::getPassword()
 {	if (this->general != NULL) 
 		return this->general->password;
@@ -1146,6 +1176,9 @@ std::string  OSOption::getPassword()
 	return "";
 }//getPassword
 
+/**
+ * get the contact information (in <general> element)
+ */
 std::string  OSOption::getContact()
 {	if (this->general != NULL) 
 		if (this->general->contact != NULL)
@@ -1154,6 +1187,9 @@ std::string  OSOption::getContact()
 	return "";
 }//getContact
 
+/**
+ * get the transport type (in <general> element)
+ */
 std::string  OSOption::getTransportType()
 {	if (this->general != NULL) 
 		if (this->general->contact != NULL)
@@ -1162,6 +1198,9 @@ std::string  OSOption::getTransportType()
 	return "";
 }//getTransportType
 
+/**
+ * get the disk space units (in <system> element)
+ */
 std::string  OSOption::getMinDiskSpaceUnit()
 {	if (this->system != NULL) 
 		if (this->system->minDiskSpace != NULL)
@@ -1170,6 +1209,9 @@ std::string  OSOption::getMinDiskSpaceUnit()
 	return "";
 }//getMinDiskSpaceUnit
 
+/**
+ * get the memory units (in <system> element)
+ */
 std::string  OSOption::getMinMemoryUnit()
 {	if (this->system != NULL) 
 		if (this->system->minMemorySize != NULL)
@@ -1178,6 +1220,9 @@ std::string  OSOption::getMinMemoryUnit()
 	return "";
 }//getMinMemory
 
+/**
+ * get the CPU speed units (in <system> element)
+ */
 std::string  OSOption::getMinCPUSpeedUnit()
 {	if (this->system != NULL) 
 		if (this->system->minCPUSpeed != NULL)
@@ -1186,6 +1231,9 @@ std::string  OSOption::getMinCPUSpeedUnit()
 	return "";
 }//getMinCPUSpeed
 
+/**
+ * get the service type (in <service> element)
+ */
 std::string  OSOption::getServiceType()
 {	if (this->service != NULL) 
 		return this->service->type;
@@ -1193,6 +1241,9 @@ std::string  OSOption::getServiceType()
 	return "";
 }//getServiceType
 
+/**
+ * get the time unit (in <job> element)
+ */
 std::string  OSOption::getMaxTimeUnit()
 {	if (this->job != NULL) 
 		if (this->job->maxTime != NULL)
@@ -1201,6 +1252,9 @@ std::string  OSOption::getMaxTimeUnit()
 	return "";
 }//getMaxTimeUnit
 
+/**
+ * get the scheduled start time (in <job> element)
+ */
 std::string  OSOption::getScheduledStartTime()
 {	if (this->job != NULL) 
 		return this->job->scheduledStartTime;
@@ -1208,6 +1262,12 @@ std::string  OSOption::getScheduledStartTime()
 	return "";
 }//getScheduledStartTime
 
+/**
+ * get the value of a string-valued option
+ * @param optionName The name of the option
+ * @return the value of the option optionName
+ * @note This function returns the empty string "" if optionName is not found
+ */
 std::string  OSOption::getOptionStr(std::string optionName)
 {	if (optionName == "serviceURI") 
 		return this->getServiceURI();
@@ -1266,10 +1326,13 @@ std::string  OSOption::getOptionStr(std::string optionName)
 	return "";
 }//getOptionStr
 
-/** 
+/*********************************** 
  * get() methods that return doubles
- */
+ ***********************************/
 
+/**
+ * get the minimum disk space required (in <system> element)
+ */
 double  OSOption::getMinDiskSpace()
 {	if (this->system != NULL) 
 		if (this->system->minDiskSpace != NULL)
@@ -1278,6 +1341,9 @@ double  OSOption::getMinDiskSpace()
 	return 0;
 }//getMinDiskSpace
 
+/**
+ * get the minimum memory required (in <system> element)
+ */
 double  OSOption::getMinMemorySize()
 {	if (this->system != NULL) 
 		if (this->system->minMemorySize != NULL)
@@ -1286,6 +1352,9 @@ double  OSOption::getMinMemorySize()
 	return 0;
 }//getMinMemorySize
 
+/**
+ * get the minimum CPU speed required (in <system> element)
+ */
 double  OSOption::getMinCPUSpeed()
 {	if (this->system != NULL) 
 		if (this->system->minCPUSpeed != NULL)
@@ -1294,6 +1363,9 @@ double  OSOption::getMinCPUSpeed()
 	return 0;
 }//getMinCPUSpeed
 
+/**
+ * get the maximum time allowed (in <job> element)
+ */
 double  OSOption::getMaxTime()
 {	if (this->job != NULL) 
 		if (this->job->maxTime != NULL)
@@ -1302,6 +1374,12 @@ double  OSOption::getMaxTime()
 	return 0;
 }//getMaxTime
 
+/**
+ * get the value of a double-valued option
+ * @param optionName The name of the option
+ * @return the value of the option optionName
+ * @note returns 0 if optionName is not found
+ */
 double  OSOption::getOptionDbl(std::string optionName)
 {	if (optionName == "minDiskSpace") 
 		return this->getMinDiskSpace();
@@ -1322,6 +1400,9 @@ double  OSOption::getOptionDbl(std::string optionName)
  * get() methods that return integers
  */
 
+/**
+ * get the minimum number of CPUs required (in <system> element)
+ */
 int  OSOption::getMinCPUNumber()
 {	if (this->system != NULL) 
 		return this->system->minCPUNumber;
@@ -1329,6 +1410,9 @@ int  OSOption::getMinCPUNumber()
 	return 0;
 }//getMinCPUNumber
 
+/**
+ * get the number of other <general> options
+ */
 int  OSOption::getNumberOfOtherGeneralOptions()
 {	if (this->general != NULL) 
 		if (this->general->otherOptions != NULL) 
@@ -1337,6 +1421,9 @@ int  OSOption::getNumberOfOtherGeneralOptions()
 	return 0;
 }//getNumberOfOtherGeneralOptions
 
+/**
+ * get the number of other <system> options
+ */
 int  OSOption::getNumberOfOtherSystemOptions()
 {	if (this->system != NULL) 
 		if (this->system->otherOptions != NULL) 
@@ -1345,6 +1432,9 @@ int  OSOption::getNumberOfOtherSystemOptions()
 	return 0;
 }//getNumberOfOtherSystemOptions
 
+/**
+ * get the number of other <service> options
+ */
 int  OSOption::getNumberOfOtherServiceOptions()
 {	if (this->service != NULL) 
 		if (this->service->otherOptions != NULL) 
@@ -1353,6 +1443,9 @@ int  OSOption::getNumberOfOtherServiceOptions()
 	return 0;
 }//getNumberOfOtherServiceOptions
 
+/**
+ * get the number of other <job> options
+ */
 int  OSOption::getNumberOfOtherJobOptions()
 {	if (this->job != NULL) 
 		if (this->job->otherOptions != NULL) 
@@ -1361,6 +1454,9 @@ int  OSOption::getNumberOfOtherJobOptions()
 	return 0;
 }//getNumberOfOtherJobOptions
 
+/**
+ * get the number of job dependencies (in <job> element)
+ */
 int  OSOption::getNumberOfJobDependencies()
 {	if (this->job != NULL) 
 		if (this->job->dependencies != NULL) 
@@ -1369,6 +1465,9 @@ int  OSOption::getNumberOfJobDependencies()
 	return 0;
 }//getNumberOfJobDependencies
 
+/**
+ * get the number of required directories (in <job> element)
+ */
 int  OSOption::getNumberOfRequiredDirectories()
 {	if (this->job != NULL) 
 		if (this->job->requiredDirectories != NULL) 
@@ -1377,6 +1476,9 @@ int  OSOption::getNumberOfRequiredDirectories()
 	return 0;
 }//getNumberOfRequiredDirectories
 
+/**
+ * get the number of required files (in <job> element)
+ */
 int  OSOption::getNumberOfRequiredFiles()
 {	if (this->job != NULL) 
 		if (this->job->requiredFiles != NULL) 
@@ -1385,6 +1487,9 @@ int  OSOption::getNumberOfRequiredFiles()
 	return 0;
 }//getNumberOfRequiredFiles
 
+/**
+ * get the number of directories to make (in <job> element)
+ */
 int  OSOption::getNumberOfDirectoriesToMake()
 {	if (this->job != NULL) 
 		if (this->job->directoriesToMake != NULL) 
@@ -1393,6 +1498,9 @@ int  OSOption::getNumberOfDirectoriesToMake()
 	return 0;
 }//getNumberOfDirectoriesToMake
 
+/**
+ * get the number of files to create (in <job> element)
+ */
 int  OSOption::getNumberOfFilesToCreate()
 {	if (this->job != NULL) 
 		if (this->job->filesToCreate != NULL) 
@@ -1401,6 +1509,9 @@ int  OSOption::getNumberOfFilesToCreate()
 	return 0;
 }//getNumberOfFilesToCreate
 
+/**
+ * get the number of input directories to move or copy (in <job> element)
+ */
 int  OSOption::getNumberOfInputDirectoriesToMove()
 {	if (this->job != NULL) 
 		if (this->job->inputDirectoriesToMove != NULL) 
@@ -1409,6 +1520,9 @@ int  OSOption::getNumberOfInputDirectoriesToMove()
 	return 0;
 }//getNumberOfInputDirectoriesToMove
 
+/**
+ * get the number of input files to move or copy (in <job> element)
+ */
 int  OSOption::getNumberOfInputFilesToMove()
 {	if (this->job != NULL) 
 		if (this->job->inputFilesToMove != NULL) 
@@ -1417,6 +1531,9 @@ int  OSOption::getNumberOfInputFilesToMove()
 	return 0;
 }//getNumberOfInputFilesToMove
 
+/**
+ * get the number of output directories to move or copy (in <job> element)
+ */
 int  OSOption::getNumberOfOutputDirectoriesToMove()
 {	if (this->job != NULL) 
 		if (this->job->outputDirectoriesToMove != NULL) 
@@ -1425,6 +1542,9 @@ int  OSOption::getNumberOfOutputDirectoriesToMove()
 	return 0;
 }//getNumberOfOutputDirectoriesToMove
 
+/**
+ * get the number of output files to move or copy (in <job> element)
+ */
 int  OSOption::getNumberOfOutputFilesToMove()
 {	if (this->job != NULL) 
 		if (this->job->outputFilesToMove != NULL) 
@@ -1433,6 +1553,9 @@ int  OSOption::getNumberOfOutputFilesToMove()
 	return 0;
 }//getNumberOfOutputFilesToMove
 
+/**
+ * get the number of files to delete (in <job> element)
+ */
 int  OSOption::getNumberOfFilesToDelete()
 {	if (this->job != NULL) 
 		if (this->job->filesToDelete != NULL) 
@@ -1441,6 +1564,9 @@ int  OSOption::getNumberOfFilesToDelete()
 	return 0;
 }//getNumberOfFilesToDelete
 
+/**
+ * get the number of directories to delete (in <job> element)
+ */
 int  OSOption::getNumberOfDirectoriesToDelete()
 {	if (this->job != NULL) 
 		if (this->job->directoriesToDelete != NULL) 
@@ -1449,6 +1575,9 @@ int  OSOption::getNumberOfDirectoriesToDelete()
 	return 0;
 }//getNumberOfDirectoriesToDelete
 
+/**
+ * get the number of proceses to kill (in <job> element)
+ */
 int  OSOption::getNumberOfProcessesToKill()
 {	if (this->job != NULL) 
 		if (this->job->processesToKill != NULL) 
@@ -1457,6 +1586,9 @@ int  OSOption::getNumberOfProcessesToKill()
 	return 0;
 }//getNumberOfProcessesToKill
 
+/**
+ * get the number of variables (in <optimization> element)
+ */
 int  OSOption::getNumberOfVariables()
 {	if (this->optimization != NULL) 
 		return this->optimization->numberOfVariables;
@@ -1464,6 +1596,9 @@ int  OSOption::getNumberOfVariables()
 	return 0;
 }//getNumberOfVariables
 
+/**
+ * get the number of objectives (in <optimization> element)
+ */
 int  OSOption::getNumberOfObjectives()
 {	if (this->optimization != NULL) 
 		return this->optimization->numberOfObjectives;
@@ -1471,6 +1606,9 @@ int  OSOption::getNumberOfObjectives()
 	return 0;
 }//getNumberOfObjectives
 
+/**
+ * get the number of constraints (in <optimization> element)
+ */
 int  OSOption::getNumberOfConstraints()
 {	if (this->optimization != NULL) 
 		return this->optimization->numberOfConstraints;
@@ -1479,6 +1617,9 @@ int  OSOption::getNumberOfConstraints()
 }//getNumberOfConstraints
 
 
+/**
+ * get the numer of variables that have initial values (in <optimization> element)
+ */
 int OSOption::getNumberOfInitVarValues(){
 	if (this->optimization != NULL) {
 		if(this->optimization->variables != NULL) {
@@ -1490,6 +1631,9 @@ int OSOption::getNumberOfInitVarValues(){
 	return -1;
 }//getNumberOfInitVarValues
 
+/**
+ * get the number of string-valued variables that have initial values (in <optimization> element)
+ */
 int OSOption::getNumberOfInitVarValuesString(){
 	if (this->optimization != NULL) {
 		if(this->optimization->variables != NULL) {
@@ -1501,6 +1645,9 @@ int OSOption::getNumberOfInitVarValuesString(){
 	return -1;
 }//getNumberOfInitVarValuesString
 
+/**
+ * get the number of variables that are given initial basis status (in <optimization> element)
+ */
 int OSOption::getNumberOfInitialBasisVariables(){
 	if (this->optimization != NULL) {
 		if(this->optimization->variables != NULL) {
@@ -1513,6 +1660,9 @@ int OSOption::getNumberOfInitialBasisVariables(){
 }//getNumberOfInitialBasisVariables
 
 
+/**
+ * get the number of other variable options (in <optimization> element)
+ */
 int OSOption::getNumberOfOtherVariableOptions()
 {	if (this->optimization != NULL)
 		if (this->optimization->variables != NULL)
@@ -1521,6 +1671,9 @@ int OSOption::getNumberOfOtherVariableOptions()
 	return 0;
 }//getNumberOfOtherVariableOptions
 
+/**
+ * get the number of objectives for which initial values are given (in <optimization> element)
+ */
 int OSOption::getNumberOfInitObjValues(){
 	if (this->optimization != NULL) {
 		if(this->optimization->objectives != NULL) {
@@ -1532,6 +1685,9 @@ int OSOption::getNumberOfInitObjValues(){
 	return -1;
 }//getNumberOfInitObjValues
 
+/**
+ * get the number of objectives for which initial bounds are given (in <optimization> element)
+ */
 int OSOption::getNumberOfInitObjBounds(){
 	if (this->optimization != NULL) {
 		if(this->optimization->objectives != NULL) {
@@ -1543,6 +1699,9 @@ int OSOption::getNumberOfInitObjBounds(){
 	return -1;
 }//getNumberOfInitObjBounds
 
+/**
+ * get the number of other objective options (in <optimization> element)
+ */
 int OSOption::getNumberOfOtherObjectiveOptions()
 {	if (this->optimization != NULL)
 		if (this->optimization->objectives != NULL)
@@ -1551,6 +1710,9 @@ int OSOption::getNumberOfOtherObjectiveOptions()
 	return 0;
 }//getNumberOfOtherObjectiveOptions
 
+/**
+ * get the number of constraints for which initial values are given (in <optimization> element)
+ */
 int OSOption::getNumberOfInitConValues(){
 	if (this->optimization != NULL) {
 		if(this->optimization->constraints != NULL) {
@@ -1562,6 +1724,9 @@ int OSOption::getNumberOfInitConValues(){
 	return -1;
 }//getNumberOfInitConValues
 
+/**
+ * get the number of constraints for which initial dual values are given (in <optimization> element)
+ */
 int OSOption::getNumberOfInitDualVarValues(){
 	if (this->optimization != NULL) {
 		if(this->optimization->constraints != NULL) {
@@ -1573,6 +1738,9 @@ int OSOption::getNumberOfInitDualVarValues(){
 	return -1;
 }//getNumberOfInitDualVarValues
 
+/**
+ * get the number of other constraint options (in <optimization> element)
+ */
 int OSOption::getNumberOfOtherConstraintOptions()
 {	if (this->optimization != NULL)
 		if (this->optimization->constraints != NULL)
@@ -1581,6 +1749,9 @@ int OSOption::getNumberOfOtherConstraintOptions()
 	return -1;
 }//getNumberOfOtherConstraintOptions
 
+/**
+ * get the number of other solver options (in <optimization> element)
+ */
 int OSOption::getNumberOfSolverOptions(){
 	if (this->optimization != NULL) {
 		if(this->optimization->solverOptions != NULL) {
@@ -1590,6 +1761,12 @@ int OSOption::getNumberOfSolverOptions(){
 	return -1;
 }//getNumberOfSolverOptions
 
+/**
+ * get the value of an integer-valued option
+ * @param optionName The name of the option
+ * @return the value of the option optionName
+ * @note This function returns 0 if optionName is not found
+ */
 int  OSOption::getOptionInt(std::string optionName)
 {	if(optionName == "minCPUNumber")
 		this->getMinCPUNumber();
@@ -1688,13 +1865,13 @@ int  OSOption::getOptionInt(std::string optionName)
 }//getOptionInt
 
 
-
-
-
-/** 
+/**************************************************** 
  * get() methods that return arrays of various kinds
- */
+ ****************************************************/
 
+/**
+ * get the array of other <general> options
+ */
 OtherOption** OSOption::getOtherGeneralOptions()
 {	OtherOption** optionVector = NULL;
 	if (this->general != NULL) 
@@ -1709,6 +1886,9 @@ OtherOption** OSOption::getOtherGeneralOptions()
 	return optionVector;
 }//getOtherGeneralOptions
 
+/**
+ * get the array of other <system> options
+ */
 OtherOption** OSOption::getOtherSystemOptions()
 {	OtherOption** optionVector = NULL;
 	if (this->system != NULL) 
@@ -1723,6 +1903,9 @@ OtherOption** OSOption::getOtherSystemOptions()
 	return optionVector;
 }//getOtherSystemOptions
 
+/**
+ * get the array of other <service> options
+ */
 OtherOption** OSOption::getOtherServiceOptions()
 {	OtherOption** optionVector = NULL;
 	if (this->service != NULL) 
@@ -1737,6 +1920,9 @@ OtherOption** OSOption::getOtherServiceOptions()
 	return optionVector;
 }//getOtherServiceOptions
 
+/**
+ * get the array of other <job> options
+ */
 OtherOption** OSOption::getOtherJobOptions()
 {	OtherOption** optionVector = NULL;
 	if (this->job != NULL) 
@@ -1751,22 +1937,31 @@ OtherOption** OSOption::getOtherJobOptions()
 	return optionVector;
 }//getOtherJobOptions
 
-OtherOption** OSOption::getOtherOptions(std::string optionName)
-{	OtherOption** optionVector = NULL;
-	if (optionName == "general")
+/**
+ * get the array of other options associated with a category
+ * @param category - The name of the option category
+ * @return other options associated with the element <"category">
+ * @note This function returns NULL if category is not found
+ */
+OtherOption** OSOption::getOtherOptions(std::string category)
+{	if (category == "general")
 		return this->getOtherGeneralOptions();
 
-	if (optionName == "system")
+	if (category == "system")
 		return this->getOtherSystemOptions();
 
-	if (optionName == "service")
+	if (category == "service")
 		return this->getOtherServiceOptions();
 
-	if (optionName == "job")
+	if (category == "job")
 		return this->getOtherJobOptions();
-
+	
+	return NULL;
 }//getOtherOptions
 
+/**
+ * get the array of other options associated with all children of <osol>
+ */
 OtherOption** OSOption::getAllOtherOptions()
 {	OtherOption** optionVector = NULL;
 	int prev_options[4];
@@ -1810,7 +2005,6 @@ OtherOption** OSOption::getAllOtherOptions()
 	num_opt = num_options[0] + num_options[1] + num_options[2] + num_options[3];
 	optionVector = new OtherOption*[num_opt];
 
-	int j;
 	if (num_options[0] > 0)
 	{	for(int i = 0; i < num_options[0]; i++)
 		{	optionVector[prev_options[0] + i] = this->general->otherOptions->other[i];
@@ -1838,6 +2032,9 @@ OtherOption** OSOption::getAllOtherOptions()
 	return optionVector;
 }//getOtherJobOptions
 
+/**
+ * get the array of job dependencies
+ */
 std::string*  OSOption::getJobDependencies(){
 	std::string* dependenciesVector;
 	if (this->job != NULL) 
@@ -1853,6 +2050,9 @@ std::string*  OSOption::getJobDependencies(){
 	return dependenciesVector;
 }//getJobDependencies
 
+/**
+ * get the list of required directories
+ */
 std::string*  OSOption::getRequiredDirectories(){
 	std::string* pathVector;
 	if (this->job != NULL) 
@@ -1868,6 +2068,9 @@ std::string*  OSOption::getRequiredDirectories(){
 	return pathVector;
 }//getRequiredDirectories
 
+/**
+ * get the list of directories that need to be created
+ */
 std::string*  OSOption::getDirectoriesToMake(){
 	std::string* pathVector;
 	if (this->job != NULL) 
@@ -1883,6 +2086,9 @@ std::string*  OSOption::getDirectoriesToMake(){
 	return pathVector;
 }//getDirectoriesToMake
 
+/**
+ * get the list of files that need to be created
+ */
 std::string*  OSOption::getFilesToCreate(){
 	std::string* pathVector;
 	if (this->job != NULL) 
@@ -1898,6 +2104,9 @@ std::string*  OSOption::getFilesToCreate(){
 	return pathVector;
 }//getFilesToCreate
 
+/**
+ * get the list of input directories that need to be moved or copied
+ */
 PathPair** OSOption::getInputDirectoriesToMove()
 {	PathPair** pathPairVector = NULL;
 	if (this->job != NULL) 
@@ -1912,6 +2121,9 @@ PathPair** OSOption::getInputDirectoriesToMove()
 	return pathPairVector;
 }//getInputDirectoriesToMove
 
+/**
+ * get the list of input files that need to be moved or copied
+ */
 PathPair** OSOption::getInputFilesToMove()
 {	PathPair** pathPairVector = NULL;
 	if (this->job != NULL) 
@@ -1926,6 +2138,9 @@ PathPair** OSOption::getInputFilesToMove()
 	return pathPairVector;
 }//getInputFilesToMove
 
+/**
+ * get the list of output files that need to be moved or copied
+ */
 PathPair** OSOption::getOutputFilesToMove()
 {	PathPair** pathPairVector = NULL;
 	if (this->job != NULL) 
@@ -1940,6 +2155,9 @@ PathPair** OSOption::getOutputFilesToMove()
 	return pathPairVector;
 }//getOutputFilesToMove
 
+/**
+ * get the list of output directories that need to be moved or copied
+ */
 PathPair** OSOption::getOutputDirectoriesToMove()
 {	PathPair** pathPairVector = NULL;
 	if (this->job != NULL) 
@@ -1954,6 +2172,9 @@ PathPair** OSOption::getOutputDirectoriesToMove()
 	return pathPairVector;
 }//getOutputDirectoriesToMove
 
+/**
+ * get the list of files that need to be deleted
+ */
 std::string*  OSOption::getFilesToDelete(){
 	std::string* pathVector;
 	if (this->job != NULL) 
@@ -1968,6 +2189,9 @@ std::string*  OSOption::getFilesToDelete(){
 	return pathVector;
 }//getFilesToDelete
 
+/**
+ * get the list of directories that need to be deleted
+ */
 std::string*  OSOption::getDirectoriesToDelete(){
 	std::string* pathVector;
 	if (this->job != NULL) 
@@ -1983,6 +2207,9 @@ std::string*  OSOption::getDirectoriesToDelete(){
 	return pathVector;
 }//getDirectoriesToDelete
 
+/**
+ * get the list of processes that need to be killed
+ */
 std::string*  OSOption::getProcessesToKill(){
 	std::string* pathVector;
 	if (this->job != NULL) 
@@ -2000,6 +2227,10 @@ std::string*  OSOption::getProcessesToKill(){
 
 
 
+/**
+ * get the list of initial variable values in sparse form
+ * @return a list of index/value pairs
+ */
 std::vector<InitVarValue*>  OSOption::getInitVarValuesSparse(){
 	std::vector<InitVarValue*> initVarVector;
 	if (this->optimization != NULL) {
@@ -2009,8 +2240,6 @@ std::vector<InitVarValue*>  OSOption::getInitVarValuesSparse(){
 			int num_var;
 			num_var = this->getNumberOfInitVarValues();
 			for(i = 0; i < num_var; i++){
-				printf("\n%d\n",this->optimization->variables->initialVariableValues->var[ i]->idx);
-				printf("\n%d\n",this->optimization->variables->initialVariableValues->var[ i]->value);
 				initVarVector.push_back( this->optimization->variables->initialVariableValues->var[ i]);
 				}
 			}
@@ -2019,6 +2248,11 @@ std::vector<InitVarValue*>  OSOption::getInitVarValuesSparse(){
 	return initVarVector;
 }//getInitVarValuesSparse
 
+/**
+ * get the list of initial variable values in dense form
+ * @return an array of values
+ * @note return OSNAN for variables that are not initialed
+ */
 double* OSOption::getInitVarValuesDense(int numberOfVariables){
 	double *initVarVector;
 	initVarVector = new double[numberOfVariables];
@@ -2048,7 +2282,10 @@ double* OSOption::getInitVarValuesDense(int numberOfVariables){
 	return initVarVector;
 }//getInitVarValuesDense
 
-
+/**
+ * get the list of initial values for string-valued variables in sparse form
+ * @return a list of index/value pairs
+ */
 std::vector<InitVarValueString*>  OSOption::getInitVarStringsSparse(){
 	std::vector<InitVarValueString*> initVarVector;
 	if (this->optimization != NULL) {
@@ -2066,6 +2303,11 @@ std::vector<InitVarValueString*>  OSOption::getInitVarStringsSparse(){
 	return initVarVector;
 }//getInitVarStringsSparse
 
+/**
+ * get the list of initial values for string-valued variables in dense form
+ * @return an array of value strings
+ * @note return the empty string "" for variables that are not initialed
+ */
 std::string *OSOption::getInitVarStringsDense(int numberOfVariables){
 	std::string *initVarVector;
 	initVarVector = new std::string[numberOfVariables];
@@ -2097,6 +2339,10 @@ std::string *OSOption::getInitVarStringsDense(int numberOfVariables){
 }//getInitVarStringsDense
 
 
+/**
+ * get the list of initial objective values in sparse form
+ * @return a list of index/value pairs
+ */
 std::vector<InitObjValue*>  OSOption::getInitObjValuesSparse(){
 	std::vector<InitObjValue*> initObjVector;
 	if (this->optimization != NULL) {
@@ -2105,9 +2351,7 @@ std::vector<InitObjValue*>  OSOption::getInitObjValuesSparse(){
 			int i;
 			int num_obj;
 			num_obj = this->getNumberOfInitObjValues();
-			for(i = 0; i < num_obj; i++){
-				printf("\n%d\n",this->optimization->objectives->initialObjectiveValues->obj[ i]->idx);
-				printf("\n%d\n",this->optimization->objectives->initialObjectiveValues->obj[ i]->value);
+			for (i = 0; i < num_obj; i++){
 				initObjVector.push_back( this->optimization->objectives->initialObjectiveValues->obj[ i]);
 				}
 			}
@@ -2116,6 +2360,11 @@ std::vector<InitObjValue*>  OSOption::getInitObjValuesSparse(){
 	return initObjVector;
 }//getInitObjValuesSparse
 
+/**
+ * get the list of initial objective values in dense form
+ * @return an array of values
+ * @note return OSNAN for objectives that are not initialed
+ */
 double* OSOption::getInitObjValuesDense(int numberOfObjectives){
 	double *initObjVector;
 	initObjVector = new double[numberOfObjectives];
@@ -2146,6 +2395,10 @@ double* OSOption::getInitObjValuesDense(int numberOfObjectives){
 }//getInitObjValuesDense
 
 
+/**
+ * get the list of initial objective bounds in sparse form
+ * @return a list of index/value/value triples
+ */
 std::vector<InitObjBound*>  OSOption::getInitObjBoundsSparse()
 {	std::vector<InitObjBound*> initObjBounds;
 	if (this->optimization != NULL) 
@@ -2154,18 +2407,20 @@ std::vector<InitObjBound*>  OSOption::getInitObjBoundsSparse()
 			{	int i;
 				int num_obj;
 				num_obj = this->getNumberOfInitObjBounds();
-				for(i = 0; i < num_obj; i++)
-				{	printf("\n%d\n",this->optimization->objectives->initialObjectiveBounds->obj[ i]->idx);
-					printf("\n%d\n",this->optimization->objectives->initialObjectiveBounds->obj[ i]->lbValue);
-					printf("\n%d\n",this->optimization->objectives->initialObjectiveBounds->obj[ i]->ubValue);
+				for (i = 0; i < num_obj; i++)
 					initObjBounds.push_back( this->optimization->objectives->initialObjectiveBounds->obj[ i]);
-				}
+				
 			}
 		}					
 	}
 	return initObjBounds;
 }//getInitObjBoundsSparse
 
+/**
+ * get the list of initial objective lower bounds in dense form
+ * @return an array of values
+ * @note return OSNAN for objectives that are not initialed
+ */
 double* OSOption::getInitObjLowerBoundsDense(int numberOfObjectives){
 	double *initObjBound;
 	initObjBound = new double[numberOfObjectives];
@@ -2195,6 +2450,11 @@ double* OSOption::getInitObjLowerBoundsDense(int numberOfObjectives){
 	return initObjBound;
 }//getInitObjLowerBoundsDense
 
+/**
+ * get the list of initial objective upper bounds in dense form
+ * @return an array of values
+ * @note return OSNAN for objectives that are not initialed
+ */
 double* OSOption::getInitObjUpperBoundsDense(int numberOfObjectives){
 	double *initObjBound;
 	initObjBound = new double[numberOfObjectives];
@@ -2225,6 +2485,10 @@ double* OSOption::getInitObjUpperBoundsDense(int numberOfObjectives){
 }//getInitObjUpperBoundsDense
 
 
+/**
+ * get the list of initial constraint values in sparse form
+ * @return a list of index/value pairs
+ */
 std::vector<InitConValue*>  OSOption::getInitConValuesSparse(){
 	std::vector<InitConValue*> initConVector;
 	if (this->optimization != NULL) {
@@ -2234,8 +2498,6 @@ std::vector<InitConValue*>  OSOption::getInitConValuesSparse(){
 			int num_con;
 			num_con = this->getNumberOfInitConValues();
 			for(i = 0; i < num_con; i++){
-				printf("\n%d\n",this->optimization->constraints->initialConstraintValues->con[ i]->idx);
-				printf("\n%d\n",this->optimization->constraints->initialConstraintValues->con[ i]->value);
 				initConVector.push_back( this->optimization->constraints->initialConstraintValues->con[ i]);
 				}
 			}
@@ -2244,6 +2506,11 @@ std::vector<InitConValue*>  OSOption::getInitConValuesSparse(){
 	return initConVector;
 }//getInitConValuesSparse
 
+/**
+ * get the list of initial constraint values in dense form
+ * @return an array of values
+ * @note return OSNAN for constraints that are not initialed
+ */
 double* OSOption::getInitConValuesDense(int numberOfConstraints){
 	double *initConVector;
 	initConVector = new double[numberOfConstraints];
@@ -2274,6 +2541,10 @@ double* OSOption::getInitConValuesDense(int numberOfConstraints){
 }//getInitConValuesDense
 
 
+/**
+ * get the list of initial dual variable bounds in sparse form
+ * @return a list of index/value/value triples
+ */
 std::vector<InitDualVarValue*>  OSOption::getInitDualVarValuesSparse(){
 	std::vector<InitDualVarValue*> initDualVector;
 	if (this->optimization != NULL) {
@@ -2283,9 +2554,6 @@ std::vector<InitDualVarValue*>  OSOption::getInitDualVarValuesSparse(){
 			int num_con;
 			num_con = this->getNumberOfInitDualVarValues();
 			for(i = 0; i < num_con; i++){
-				printf("\n%d\n",this->optimization->constraints->initialDualValues->con[ i]->idx);
-				printf("\n%d\n",this->optimization->constraints->initialDualValues->con[ i]->lbValue);
-				printf("\n%d\n",this->optimization->constraints->initialDualValues->con[ i]->ubValue);
 				initDualVector.push_back( this->optimization->constraints->initialDualValues->con[ i]);
 				}
 			}
@@ -2294,6 +2562,11 @@ std::vector<InitDualVarValue*>  OSOption::getInitDualVarValuesSparse(){
 	return initDualVector;
 }//getInitDualVarValuesSparse
 
+/**
+ * get the list of initial dual variable lower bounds in dense form
+ * @return an array of values
+ * @note return OSNAN for dual variables that are not initialed
+ */
 double* OSOption::getInitDualVarLowerBoundsDense(int numberOfConstraints){
 	double *initDualVector;
 	initDualVector = new double[numberOfConstraints];
@@ -2323,6 +2596,11 @@ double* OSOption::getInitDualVarLowerBoundsDense(int numberOfConstraints){
 	return initDualVector;
 }//getInitDualVarLowerBoundsDense
 
+/**
+ * get the list of initial dual variable lower bounds in dense form
+ * @return an array of values
+ * @note return OSNAN for dual variables that are not initialed
+ */
 double* OSOption::getInitDualVarUpperBoundsDense(int numberOfConstraints){
 	double *initDualVector;
 	initDualVector = new double[numberOfConstraints];
@@ -2353,6 +2631,13 @@ double* OSOption::getInitDualVarUpperBoundsDense(int numberOfConstraints){
 }//getInitDualVarUpperBoundsDense
 
 
+
+
+/**
+ * get the array of solver options associated with a particular solver
+ * @param solver_name is the name of the solver
+ * @return an array of solver options associated with this solver
+ */
 std::vector<SolverOption*>  OSOption::getSolverOptions( std::string solver_name){
 	std::vector<SolverOption*> optionsVector;
 	if (this->optimization != NULL) {
@@ -4002,14 +4287,10 @@ bool OSOption::setOptionInt(std::string optionName, int optionValue)
 		return this->setNumberOfSolverOptions(optionValue);
 
 	return false;
-}//setOptionInt
 
 
 
 /*
-	bool setOtherVariableOptions(int numberOfVar, OtherVarOption** var);
-	bool setAnOtherVariableOption(OtherVarOption* varOption);
-
 	bool setNumberOfInitObjValues(int numberOfObjects);
 	bool setInitObjValuesSparse(int numberOfObj, InitObjValue** obj);
 	bool setInitObjValuesDense(int numberOfObj, double* obj);
@@ -4049,3 +4330,4 @@ bool OSOption::setOptionInt(std::string optionName, int optionValue)
 	bool setOptionDbl(std::string optionName, double value);
 
 */
+}//setOptionInt

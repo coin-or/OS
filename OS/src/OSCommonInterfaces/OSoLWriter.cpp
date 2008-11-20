@@ -58,7 +58,6 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 	xsltDir = dirsep == '/' ? "../stylesheets/" : "..\\stylesheets\\";
 	// always go with '/' -- it is a hypertext reference
 	xsltDir = "../stylesheets/";
-	int i, j;
 	if(m_OSOption == NULL)  return outStr.str(); 
 	outStr << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" ; 
 	outStr << "<?xml-stylesheet type = \"text/xsl\" href = \"";
