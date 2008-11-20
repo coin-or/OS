@@ -31,8 +31,10 @@ if COIN_HAS_COUENNE
 endif
 
 if COIN_HAS_BONMIN
+   if COIN_HAS_ASL
+      unitTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la 
+   endif
    unitTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la \
-    $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la \
 	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la 
 endif
 

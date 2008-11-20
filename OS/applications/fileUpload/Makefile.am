@@ -35,8 +35,10 @@ if COIN_HAS_COUENNE
 endif
 
 if COIN_HAS_BONMIN
+   if COIN_HAS_ASL
+     OSFileUpload_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la 
+   endif
    OSFileUpload_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la \
-    $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la \
 	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la 
 endif
 
