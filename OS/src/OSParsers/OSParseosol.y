@@ -104,7 +104,7 @@ int osollex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token DEPENDENCIESSTART DEPENDENCIESEND;
 %token REQUIREDDIRECTORIESSTART REQUIREDDIRECTORIESEND REQUIREDFILESSTART REQUIREDFILESEND;
 %token PATHSTART PATHEND PATHPAIRSTART PATHPAIREND;
-%token DIRECTORIESTOMAKESTART DIRECTORIESTOMAKEEND FILESTOCREATESTART FILESTOCREATEEND;
+%token DIRECTORIESTOMAKESTART DIRECTORIESTOMAKEEND FILESTOMAKESTART FILESTOMAKEEND;
 %token DIRECTORIESTODELETESTART DIRECTORIESTODELETEEND FILESTODELETESTART FILESTODELETEEND;
 %token  INPUTDIRECTORIESTOMOVESTART  INPUTDIRECTORIESTOMOVEEND  INPUTFILESTOMOVESTART  INPUTFILESTOMOVEEND;
 %token OUTPUTDIRECTORIESTOMOVESTART OUTPUTDIRECTORIESTOMOVEEND OUTPUTFILESTOMOVESTART OUTPUTFILESTOMOVEEND;
@@ -803,7 +803,7 @@ jobbody: GREATERTHAN jobcontent JOBEND
 jobcontent: | jobcontent joboption;
 
 joboption: maxtime | scheduledstarttime | dependencies | requireddirectories | requiredfiles
-| directoriestomake | filestocreate | inputdirectoriestomove | inputfilestomove | outputdirectoriestomove
+| directoriestomake | filestomake | inputdirectoriestomove | inputfilestomove | outputdirectoriestomove
 | outputfilestomove | filestodelete | directoriestodelete | processestokill | otherjoboptions;
 
 
@@ -995,35 +995,35 @@ dirtomakepath: PATHSTART GREATERTHAN ELEMENTTEXT
 PATHEND;
 
 
-filestocreate: filestocreatehead numberoffilestomakepathsatt GREATERTHAN filestomakepathlist
-   FILESTOCREATEEND;
+filestomake: filestomakehead numberoffilestomakepathsatt GREATERTHAN filestomakepathlist
+   FILESTOMAKEEND;
 
-filestocreatehead: FILESTOCREATESTART
-{	if (parserData->filesToCreatePresent)
-	{	osolerror( NULL, osoption, parserData, "only one <filesToCreate> element allowed");
+filestomakehead: FILESTOMAKESTART
+{	if (parserData->filesToMakePresent)
+	{	osolerror( NULL, osoption, parserData, "only one <filesToMake> element allowed");
 	}
 	else
-	{	parserData->filesToCreatePresent = true;
-		osoption->job->filesToCreate = new DirectoriesAndFiles();
+	{	parserData->filesToMakePresent = true;
+		osoption->job->filesToMake = new DirectoriesAndFiles();
 	}
 };
 
 numberoffilestomakepathsatt: NUMBEROFPATHSATT QUOTE INTEGER QUOTE
 {	if ($3 < 0)
 		osolerror( NULL, osoption, parserData, "Number of paths cannot be negative");
-	osoption->job->filesToCreate->numberOfPaths = $3;
-	osoption->job->filesToCreate->path = new std::string[$3];
+	osoption->job->filesToMake->numberOfPaths = $3;
+	osoption->job->filesToMake->path = new std::string[$3];
 };
 
 filestomakepathlist: | filestomakepathlist filestomakepath;
 
 filestomakepath: PATHSTART GREATERTHAN ELEMENTTEXT
-{	if (parserData->numberOfFilesToCreate >= osoption->job->filesToCreate->numberOfPaths)
-	{	osolerror (NULL, osoption, parserData, "too many job IDs in <filesToCreate> element");
+{	if (parserData->numberOfFilesToMake >= osoption->job->filesToMake->numberOfPaths)
+	{	osolerror (NULL, osoption, parserData, "too many job IDs in <filesToMake> element");
 	}
 	else
-	{	osoption->job->filesToCreate->path[parserData->numberOfFilesToCreate] = $3;
-		parserData->numberOfFilesToCreate++;
+	{	osoption->job->filesToMake->path[parserData->numberOfFilesToMake] = $3;
+		parserData->numberOfFilesToMake++;
 	};
 }
 PATHEND;

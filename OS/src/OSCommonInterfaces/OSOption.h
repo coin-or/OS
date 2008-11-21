@@ -628,7 +628,7 @@ public:
 	DirectoriesAndFiles *directoriesToMake;
 
 	/** files to make during the job */
-	DirectoriesAndFiles *filesToCreate;
+	DirectoriesAndFiles *filesToMake;
 
 	/** input directories to move or copy */
 	PathPairs *inputDirectoriesToMove;
@@ -1728,7 +1728,7 @@ public:
 	/**
 	 * Get the location type
 	 */
-	std::string  getLocationType();
+	std::string  getInstanceLocationType();
 
 	/**
 	 * Get the job ID
@@ -1738,7 +1738,7 @@ public:
 	/**
 	 * Get the solver name
 	 */
-	std::string  getSolverName();
+	std::string  getSolverToInvoke();
 
 	/**
 	 * Get the license string
@@ -1756,14 +1756,14 @@ public:
 	std::string  getPassword();
 
 	/**
-	 * Get the conact information
+	 * Get the contact information
 	 */
 	std::string  getContact();
 
 	/**
 	 * Get the transport type
 	 */
-	std::string  getTransportType();
+	std::string  getContactTransportType();
 
 	/**
 	 * Get the disk space unit
@@ -1871,9 +1871,9 @@ public:
 	int  getNumberOfDirectoriesToMake();
 
 	/**
-	 * Get the number of files to create
+	 * Get the number of files to make
 	 */
-	int  getNumberOfFilesToCreate();
+	int  getNumberOfFilesToMake();
 
 	/**
 	 * Get the number of input directories to move
@@ -2098,13 +2098,13 @@ public:
 	std::string* getDirectoriesToMake();
 
 	/**
-	 * Get the array of files to create
+	 * Get the array of files to make
 	 * <p>
 	 * 
 	 * @return a vector of pointers to DirectoriesAndFiles objects  
 	 * giving the files that must be created
 	 */
-	std::string* getFilesToCreate();
+	std::string* getFilesToMake();
 
 	/**
 	 * Get the array of input directories to move
@@ -2478,9 +2478,9 @@ public:
 	bool setDirectoriesToMake(int numberOfPaths, std::string* paths);
 	bool setAnotherDirectoryToMake(std::string path);
 
-	bool setNumberOfFilesToCreate(int numberOfObjects);
-	bool setFilesToCreate(int numberOfPaths, std::string* paths);
-	bool setAnotherFileToCreate(std::string path);
+	bool setNumberOfFilesToMake(int numberOfObjects);
+	bool setFilesToMake(int numberOfPaths, std::string* paths);
+	bool setAnotherFileToMake(std::string path);
 
 	bool setNumberOfInputDirectoriesToMove(int numberOfObjects);
 	bool setInputDirectoriesToMove(int numberOfPathPairs, PathPair** pathPair);

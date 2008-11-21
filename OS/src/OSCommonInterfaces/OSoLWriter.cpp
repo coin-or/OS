@@ -258,13 +258,13 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				outStr << "</directoriesToMake>" << endl;
 			}
 		}
-		if (m_OSOption->job->filesToCreate != NULL)
-		{	if (m_OSOption->job->filesToCreate->numberOfPaths > 0)
-			{	outStr << "<filesToCreate numberOfPaths=\"";
-				outStr << m_OSOption->job->filesToCreate->numberOfPaths << "\">" << endl; 
-				for (int i=0; i < m_OSOption->job->filesToCreate->numberOfPaths; i++)
-					outStr << "<path>" << m_OSOption->job->filesToCreate->path[i] << "</path>" << endl;
-				outStr << "</filesToCreate>" << endl;
+		if (m_OSOption->job->filesToMake != NULL)
+		{	if (m_OSOption->job->filesToMake->numberOfPaths > 0)
+			{	outStr << "<filesToMake numberOfPaths=\"";
+				outStr << m_OSOption->job->filesToMake->numberOfPaths << "\">" << endl; 
+				for (int i=0; i < m_OSOption->job->filesToMake->numberOfPaths; i++)
+					outStr << "<path>" << m_OSOption->job->filesToMake->path[i] << "</path>" << endl;
+				outStr << "</filesToMake>" << endl;
 			}
 		}
 		if (m_OSOption->job->inputDirectoriesToMove != NULL)

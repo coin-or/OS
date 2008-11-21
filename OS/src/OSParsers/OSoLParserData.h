@@ -106,8 +106,8 @@ public:
 	bool directoriesToMakePresent;
 	int numberOfDirectoriesToMake;
 
-	bool filesToCreatePresent;
-	int numberOfFilesToCreate;
+	bool filesToMakePresent;
+	int numberOfFilesToMake;
 
 	bool pathPairFromPresent;
 	bool pathPairToPresent;

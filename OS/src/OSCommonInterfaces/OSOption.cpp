@@ -368,7 +368,7 @@ JobOption::JobOption():
 	requiredDirectories = NULL;
 	requiredFiles = NULL;
 	directoriesToMake = NULL;
-	filesToCreate = NULL;
+	filesToMake = NULL;
 	inputDirectoriesToMove = NULL;
 	inputFilesToMove = NULL;
 	outputFilesToMove = NULL;
@@ -394,8 +394,8 @@ JobOption::~JobOption()
 	requiredFiles = NULL;
 	if (directoriesToMake != NULL) delete directoriesToMake;
 	directoriesToMake = NULL;
-	if (filesToCreate != NULL) delete filesToCreate;
-	filesToCreate = NULL;
+	if (filesToMake != NULL) delete filesToMake;
+	filesToMake = NULL;
 	if (inputDirectoriesToMove != NULL) delete inputDirectoriesToMove;
 	inputDirectoriesToMove = NULL;
 	if (inputFilesToMove != NULL) delete inputFilesToMove;
@@ -1118,7 +1118,7 @@ std::string  OSOption::getInstanceLocation()
 /**
  * get the instance location type (in <general> element)
  */
-std::string  OSOption::getLocationType()
+std::string  OSOption::getInstanceLocationType()
 {	if (this->general != NULL) 
 		if (this->general->instanceLocation != NULL)
 			return this->general->instanceLocation->locationType;
@@ -1139,7 +1139,7 @@ std::string  OSOption::getJobID()
 /**
  * get the name of the solver to be invoked (in <general> element)
  */
-std::string  OSOption::getSolverName()
+std::string  OSOption::getSolverToInvoke()
 {	if (this->general != NULL) 
 		return this->general->solverToInvoke;
 
@@ -1190,7 +1190,7 @@ std::string  OSOption::getContact()
 /**
  * get the transport type (in <general> element)
  */
-std::string  OSOption::getTransportType()
+std::string  OSOption::getContactTransportType()
 {	if (this->general != NULL) 
 		if (this->general->contact != NULL)
 			return this->general->contact->transportType;
@@ -1281,14 +1281,14 @@ std::string  OSOption::getOptionStr(std::string optionName)
 	if (optionName == "instanceLocation") 
 		return this->getInstanceLocation();
 
-	if (optionName == "locationType") 
-		return this->getLocationType();
+	if (optionName == "instanceLocationType") 
+		return this->getInstanceLocationType();
 
 	if (optionName == "jobID") 
 		return this->getJobID();
 
-	if (optionName == "solverName") 
-		return this->getSolverName();
+	if (optionName == "solverToInvoke") 
+		return this->getSolverToInvoke();
 
 	if (optionName == "license") 
 		return this->getLicense();
@@ -1302,8 +1302,8 @@ std::string  OSOption::getOptionStr(std::string optionName)
 	if (optionName == "contact") 
 		return this->getContact();
 
-	if (optionName == "transportType") 
-		return this->getTransportType();
+	if (optionName == "contactTransportType") 
+		return this->getContactTransportType();
 
 	if (optionName == "minDiskSpaceUnit") 
 		return this->getMinDiskSpaceUnit();
@@ -1501,13 +1501,13 @@ int  OSOption::getNumberOfDirectoriesToMake()
 /**
  * get the number of files to create (in <job> element)
  */
-int  OSOption::getNumberOfFilesToCreate()
+int  OSOption::getNumberOfFilesToMake()
 {	if (this->job != NULL) 
-		if (this->job->filesToCreate != NULL) 
-			return this->job->filesToCreate->numberOfPaths;
+		if (this->job->filesToMake != NULL) 
+			return this->job->filesToMake->numberOfPaths;
 
 	return 0;
-}//getNumberOfFilesToCreate
+}//getNumberOfFilesToMake
 
 /**
  * get the number of input directories to move or copy (in <job> element)
@@ -1795,8 +1795,8 @@ int  OSOption::getOptionInt(std::string optionName)
 	if(optionName == "numberOfDirectoriesToMake")
 		this->getNumberOfDirectoriesToMake();
 
-	if(optionName == "numberOfFilesToCreate")
-		this->getNumberOfFilesToCreate();
+	if(optionName == "numberOfFilesToMake")
+		this->getNumberOfFilesToMake();
 
 	if(optionName == "numberOfInputDirectoriesToMove")
 		this->getNumberOfInputDirectoriesToMove();
@@ -1873,17 +1873,11 @@ int  OSOption::getOptionInt(std::string optionName)
  * get the array of other <general> options
  */
 OtherOption** OSOption::getOtherGeneralOptions()
-{	OtherOption** optionVector = NULL;
-	if (this->general != NULL) 
+{	if (this->general != NULL) 
 	{	if (this->general->otherOptions != NULL)
-		{	int num_opt;
-			num_opt = this->getNumberOfOtherGeneralOptions();
-			optionVector = new OtherOption*[num_opt];
-			for(int i = 0; i < num_opt; i++)
-				optionVector[i] = this->general->otherOptions->other[ i];
-		}					
+			return this->general->otherOptions->other;
 	}
-	return optionVector;
+	return NULL;
 }//getOtherGeneralOptions
 
 /**
@@ -2089,20 +2083,20 @@ std::string*  OSOption::getDirectoriesToMake(){
 /**
  * get the list of files that need to be created
  */
-std::string*  OSOption::getFilesToCreate(){
+std::string*  OSOption::getFilesToMake(){
 	std::string* pathVector;
 	if (this->job != NULL) 
-	{	if (this->job->filesToCreate != NULL) 
+	{	if (this->job->filesToMake != NULL) 
 		{	int i;
 			int num_paths;
-			num_paths = this->getNumberOfFilesToCreate();
+			num_paths = this->getNumberOfFilesToMake();
 			pathVector = new string[num_paths];
 			for(i = 0; i < num_paths; i++)
-				pathVector[i] = this->job->filesToCreate->path[i];
+				pathVector[i] = this->job->filesToMake->path[i];
 		}					
 	}
 	return pathVector;
-}//getFilesToCreate
+}//getFilesToMake
 
 /**
  * get the list of input directories that need to be moved or copied
@@ -3221,53 +3215,53 @@ bool OSOption::setAnotherDirectoryToMake(std::string path)
 	return true;
 }//setAnotherDirectoryToMake
 
-bool OSOption::setNumberOfFilesToCreate(int numberOfObjects)
+bool OSOption::setNumberOfFilesToMake(int numberOfObjects)
 {	if (this->job == NULL) 
 		this->job = new JobOption();
-	if (this->job->filesToCreate == NULL) 
-		this->job->filesToCreate = new DirectoriesAndFiles();
-	this->job->filesToCreate->numberOfPaths = numberOfObjects;
+	if (this->job->filesToMake == NULL) 
+		this->job->filesToMake = new DirectoriesAndFiles();
+	this->job->filesToMake->numberOfPaths = numberOfObjects;
 	return true;
-}//setNumberOfFilesToCreate
+}//setNumberOfFilesToMake
 
-bool OSOption::setFilesToCreate(int numberOfPaths, std::string* paths)
+bool OSOption::setFilesToMake(int numberOfPaths, std::string* paths)
 {	if (this->job == NULL) 
 		this->job = new JobOption();
-	if (this->job->filesToCreate == NULL) 
-		this->job->filesToCreate = new DirectoriesAndFiles();
+	if (this->job->filesToMake == NULL) 
+		this->job->filesToMake = new DirectoriesAndFiles();
 	else
-		if (this->job->filesToCreate->numberOfPaths != numberOfPaths)
-			throw ErrorClass("Inconsistent size of <job> <filesToCreate> element");
-	if (this->job->filesToCreate->path == NULL)
-		this->job->filesToCreate->path = new std::string[numberOfPaths];
+		if (this->job->filesToMake->numberOfPaths != numberOfPaths)
+			throw ErrorClass("Inconsistent size of <job> <filesToMake> element");
+	if (this->job->filesToMake->path == NULL)
+		this->job->filesToMake->path = new std::string[numberOfPaths];
 	for (int i = 0; i < numberOfPaths; i++)
-		this->job->filesToCreate->path[i] = paths[i];
-	this->job->filesToCreate->numberOfPaths = numberOfPaths;
+		this->job->filesToMake->path[i] = paths[i];
+	this->job->filesToMake->numberOfPaths = numberOfPaths;
 	return true;
-}//setFilesToCreate
+}//setFilesToMake
 
-bool OSOption::setAnotherFileToCreate(std::string path)
+bool OSOption::setAnotherFileToMake(std::string path)
 {	if (this->job == NULL) 
 		this->job = new JobOption();
-	if (this->job->filesToCreate == NULL) 
-		this->job->filesToCreate = new DirectoriesAndFiles();
+	if (this->job->filesToMake == NULL) 
+		this->job->filesToMake = new DirectoriesAndFiles();
 
 	int nopt;
-	if (this->job->filesToCreate->path == NULL) 
+	if (this->job->filesToMake->path == NULL) 
 		nopt = 0;
 	else
-		nopt = this->job->filesToCreate->numberOfPaths;
+		nopt = this->job->filesToMake->numberOfPaths;
 
 	std::string* temp = new std::string[nopt+1];
 	for (int i = 0; i < nopt; i++)
-		temp[i] = this->job->filesToCreate->path[i];
+		temp[i] = this->job->filesToMake->path[i];
 	
 	temp[nopt] = path;
-	this->job->filesToCreate->path = temp;
-	this->job->filesToCreate->numberOfPaths = ++nopt;
+	this->job->filesToMake->path = temp;
+	this->job->filesToMake->numberOfPaths = ++nopt;
 
 	return true;
-}//setAnotherFileToCreate
+}//setAnotherFileToMake
 
 bool OSOption::setNumberOfInputDirectoriesToMove(int numberOfObjects)
 {	if (this->job == NULL) 
@@ -4220,8 +4214,8 @@ bool OSOption::setOptionInt(std::string optionName, int optionValue)
 	if(optionName == "numberOfDirectoriesToMake")
 		return this->setNumberOfDirectoriesToMake(optionValue);
 
-	if(optionName == "numberOfFilesToCreate")
-		return this->setNumberOfFilesToCreate(optionValue);
+	if(optionName == "numberOfFilesToMake")
+		return this->setNumberOfFilesToMake(optionValue);
 
 	if(optionName == "numberOfInputDirectoriesToMove")
 		return this->setNumberOfInputDirectoriesToMove(optionValue);

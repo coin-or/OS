@@ -174,8 +174,8 @@
      PATHPAIREND = 355,
      DIRECTORIESTOMAKESTART = 356,
      DIRECTORIESTOMAKEEND = 357,
-     FILESTOCREATESTART = 358,
-     FILESTOCREATEEND = 359,
+     FILESTOMAKESTART = 358,
+     FILESTOMAKEEND = 359,
      DIRECTORIESTODELETESTART = 360,
      DIRECTORIESTODELETEEND = 361,
      FILESTODELETESTART = 362,
@@ -326,8 +326,8 @@
 #define PATHPAIREND 355
 #define DIRECTORIESTOMAKESTART 356
 #define DIRECTORIESTOMAKEEND 357
-#define FILESTOCREATESTART 358
-#define FILESTOCREATEEND 359
+#define FILESTOMAKESTART 358
+#define FILESTOMAKEEND 359
 #define DIRECTORIESTODELETESTART 360
 #define DIRECTORIESTODELETEEND 361
 #define FILESTODELETESTART 362
@@ -1148,7 +1148,7 @@ static const char *const yytname[] =
   "DEPENDENCIESEND", "REQUIREDDIRECTORIESSTART", "REQUIREDDIRECTORIESEND",
   "REQUIREDFILESSTART", "REQUIREDFILESEND", "PATHSTART", "PATHEND",
   "PATHPAIRSTART", "PATHPAIREND", "DIRECTORIESTOMAKESTART",
-  "DIRECTORIESTOMAKEEND", "FILESTOCREATESTART", "FILESTOCREATEEND",
+  "DIRECTORIESTOMAKEEND", "FILESTOMAKESTART", "FILESTOMAKEEND",
   "DIRECTORIESTODELETESTART", "DIRECTORIESTODELETEEND",
   "FILESTODELETESTART", "FILESTODELETEEND", "INPUTDIRECTORIESTOMOVESTART",
   "INPUTDIRECTORIESTOMOVEEND", "INPUTFILESTOMOVESTART",
@@ -1213,7 +1213,7 @@ static const char *const yytname[] =
   "numberofreqfilespathsatt", "reqfilespathlist", "reqfilepath", "@32",
   "directoriestomake", "directoriestomakehead",
   "numberofdirtomakepathsatt", "dirtomakepathlist", "dirtomakepath", "@33",
-  "filestocreate", "filestocreatehead", "numberoffilestomakepathsatt",
+  "filestomake", "filestomakehead", "numberoffilestomakepathsatt",
   "filestomakepathlist", "filestomakepath", "@34",
   "inputdirectoriestomove", "inputdirectoriestomovehead",
   "numberofindirtomovepathpairsatt", "indirtomovepathpairlist",
@@ -3847,12 +3847,12 @@ yyreduce:
 
   case 279:
 
-    {	if (parserData->filesToCreatePresent)
-	{	osolerror( NULL, osoption, parserData, "only one <filesToCreate> element allowed");
+    {	if (parserData->filesToMakePresent)
+	{	osolerror( NULL, osoption, parserData, "only one <filesToMake> element allowed");
 	}
 	else
-	{	parserData->filesToCreatePresent = true;
-		osoption->job->filesToCreate = new DirectoriesAndFiles();
+	{	parserData->filesToMakePresent = true;
+		osoption->job->filesToMake = new DirectoriesAndFiles();
 	}
 ;}
     break;
@@ -3861,19 +3861,19 @@ yyreduce:
 
     {	if ((yyvsp[(3) - (4)].ival) < 0)
 		osolerror( NULL, osoption, parserData, "Number of paths cannot be negative");
-	osoption->job->filesToCreate->numberOfPaths = (yyvsp[(3) - (4)].ival);
-	osoption->job->filesToCreate->path = new std::string[(yyvsp[(3) - (4)].ival)];
+	osoption->job->filesToMake->numberOfPaths = (yyvsp[(3) - (4)].ival);
+	osoption->job->filesToMake->path = new std::string[(yyvsp[(3) - (4)].ival)];
 ;}
     break;
 
   case 283:
 
-    {	if (parserData->numberOfFilesToCreate >= osoption->job->filesToCreate->numberOfPaths)
-	{	osolerror (NULL, osoption, parserData, "too many job IDs in <filesToCreate> element");
+    {	if (parserData->numberOfFilesToMake >= osoption->job->filesToMake->numberOfPaths)
+	{	osolerror (NULL, osoption, parserData, "too many job IDs in <filesToMake> element");
 	}
 	else
-	{	osoption->job->filesToCreate->path[parserData->numberOfFilesToCreate] = (yyvsp[(3) - (3)].sval);
-		parserData->numberOfFilesToCreate++;
+	{	osoption->job->filesToMake->path[parserData->numberOfFilesToMake] = (yyvsp[(3) - (3)].sval);
+		parserData->numberOfFilesToMake++;
 	};
 ;}
     break;

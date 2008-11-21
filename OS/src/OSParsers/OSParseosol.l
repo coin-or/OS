@@ -246,8 +246,8 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/requiredFiles{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(REQUIREDFILESEND);}
 {xmlwhitespace}*\<directoriesToMake {YY_PRINT; return(DIRECTORIESTOMAKESTART);}
 {xmlwhitespace}*\<\/directoriesToMake{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(DIRECTORIESTOMAKEEND);}
-{xmlwhitespace}*\<filesToCreate {YY_PRINT; return(FILESTOCREATESTART);}
-{xmlwhitespace}*\<\/filesToCreate{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(FILESTOCREATEEND);}
+{xmlwhitespace}*\<filesToMake {YY_PRINT; return(FILESTOMAKESTART);}
+{xmlwhitespace}*\<\/filesToMake{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(FILESTOMAKEEND);}
 {xmlwhitespace}*\<inputDirectoriesToMove {YY_PRINT; return(INPUTDIRECTORIESTOMOVESTART);}
 {xmlwhitespace}*\<\/inputDirectoriesToMove{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(INPUTDIRECTORIESTOMOVEEND);}
 {xmlwhitespace}*\<inputFilesToMove {YY_PRINT; return(INPUTFILESTOMOVESTART);}
