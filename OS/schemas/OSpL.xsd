@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- edited with XMLSpy v2007 rel. 3 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" elementFormDefault="qualified">
 	<!--OSpL.xsd: current version - 1.0.0-->
 	<!--include: since version 1.0.0-->
 	<xs:include schemaLocation="OSrL.xsd"/>
@@ -233,7 +233,8 @@
 			<xs:element name="duration" type="xs:double" default="-1" minOccurs="0"/>
 			<xs:element name="scheduledStartTime" type="xs:dateTime" default="1970-01-01T00:00:00-00:00" minOccurs="0"/>
 			<xs:element name="dependencies" type="JobDependencies" minOccurs="0"/>
-			<xs:element name="requiredDirectoriesAndFiles" type="DirectoriesAndFiles" minOccurs="0"/>
+			<xs:element name="requiredDirectories" type="DirectoriesAndFiles" minOccurs="0"/>
+			<xs:element name="requiredFiles" type="DirectoriesAndFiles" minOccurs="0"/>
 		</xs:all>
 		<xs:attribute name="jobID" type="xs:string" use="required"/>
 	</xs:complexType>
