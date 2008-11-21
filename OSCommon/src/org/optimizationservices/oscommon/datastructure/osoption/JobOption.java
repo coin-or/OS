@@ -29,11 +29,13 @@ public class JobOption{
 	
 	public JobDependencies dependencies = null;
 	
-	public DirectoriesAndFiles requiredDirectoriesAndFiles = null;
+	public DirectoriesAndFiles requiredDirectories = null;
+
+	public DirectoriesAndFiles requiredFiles = null;
 
 	public DirectoriesAndFiles directoriesToMake = null;
 
-	public DirectoriesAndFiles filesToCreate = null;
+	public DirectoriesAndFiles filesToMake = null;
 
 	public PathPairs inputDirectoriesToMove = new PathPairs();
 

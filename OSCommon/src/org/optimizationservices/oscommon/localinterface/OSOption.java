@@ -19,6 +19,7 @@ import org.optimizationservices.oscommon.datastructure.osoption.InstanceLocation
 import org.optimizationservices.oscommon.datastructure.osoption.JobOption;
 import org.optimizationservices.oscommon.datastructure.osoption.OptimizationOption;
 import org.optimizationservices.oscommon.datastructure.osoption.OtherOption;
+import org.optimizationservices.oscommon.datastructure.osoption.PathPair;
 import org.optimizationservices.oscommon.datastructure.osoption.ServiceOption;
 import org.optimizationservices.oscommon.datastructure.osoption.SolverOption;
 import org.optimizationservices.oscommon.datastructure.osoption.SolverOptions;
@@ -544,27 +545,51 @@ public class OSOption {
 	}//setJobDependencies
 
 	/**
-	 * Get the required directories and files to run the job, which is 
+	 * Get the required directories to run the job, which is 
 	 * a string array of paths. 
 	 * 
-	 * @return a string array of direcotry/file paths required to run the job. 
+	 * @return a string array of direcotry paths required to run the job. 
 	 */
-	public String[] getRequiredDirectoriesAndFiles(){
-		if(job.requiredDirectoriesAndFiles == null) return null;
-		return job.requiredDirectoriesAndFiles.path;
+	public String[] getRequiredDirectories(){
+		if(job.requiredDirectories == null) return null;
+		return job.requiredDirectories.path;
 	}//getRequiredDirectoriesAndFiles
 
 	/**
-	 * Set the required directories and files to run the job, which is 
+	 * Set the required directories to run the job, which is 
 	 * a string array of paths. 
-	 * @param paths holds a string array of directory/file paths required to run the job. 
-	 * @return whether the required directories and files are set successfully.
+	 * @param paths holds a string array of directory paths required to run the job. 
+	 * @return whether the required directories are set successfully.
 	 */
-	public boolean setRequiredDirectoriesAndFiles(String[] paths){
-		if(job.requiredDirectoriesAndFiles == null) job.requiredDirectoriesAndFiles = new DirectoriesAndFiles();
-		job.requiredDirectoriesAndFiles.path = paths;
+	public boolean setRequiredDirectories(String[] paths){
+		if(job.requiredDirectories == null) job.requiredDirectories = new DirectoriesAndFiles();
+		job.requiredDirectories.path = paths;
 		return true;
-	}//setRequiredDirectoriesAndFiles
+	}//setRequiredDirectories
+
+	/**
+	 * Get the required files to run the job, which is 
+	 * a string array of paths. 
+	 * 
+	 * @return a string array of file paths required to run the job. 
+	 */
+	public String[] getRequiredFiles(){
+		if(job.requiredFiles == null) return null;
+		return job.requiredFiles.path;
+	}//getRequiredFiles
+
+	/**
+	 * Set the required files to run the job, which is 
+	 * a string array of paths. 
+	 * @param paths holds a string array of file paths required to run the job. 
+	 * @return whether the required files are set successfully.
+	 */
+	public boolean setRequiredFiles(String[] paths){
+		if(job.requiredFiles == null) job.requiredFiles = new DirectoriesAndFiles();
+		job.requiredFiles.path = paths;
+		return true;
+	}//setRequiredFiles
+
 
 	/**
 	 * Get the directories to make before running the job, which is 
@@ -590,27 +615,27 @@ public class OSOption {
 	}//setDirectoriesToMake
 
 	/**
-	 * Get the files to create before running the job, which is 
+	 * Get the files to make before running the job, which is 
 	 * a string array of paths. 
 	 * 
-	 * @return a string array of file paths to create. 
+	 * @return a string array of file paths to make. 
 	 */
-	public String[] getFilesToCreate(){
-		if(job.filesToCreate == null) return null;
-		return job.filesToCreate.path;
-	}//getFilesToCreate
+	public String[] getFilesToMake(){
+		if(job.filesToMake == null) return null;
+		return job.filesToMake.path;
+	}//getFilesToMake
 
 	/**
-	 * Set the files to create before running the job, which is 
+	 * Set the files to make before running the job, which is 
 	 * a string array of paths. 
-	 * @param paths holds a string array of files to create before running the job. 
-	 * @return whether the files to create are set successfully.
+	 * @param paths holds a string array of files to make before running the job. 
+	 * @return whether the files to make are set successfully.
 	 */
-	public boolean setFilesToCreate(String[] paths){
-		if(job.filesToCreate == null) job.filesToCreate = new DirectoriesAndFiles();
-		job.filesToCreate.path = paths;
+	public boolean setFilesToMake(String[] paths){
+		if(job.filesToMake == null) job.filesToMake = new DirectoriesAndFiles();
+		job.filesToMake.path = paths;
 		return true;
-	}//setFilesToCreate
+	}//setFilesToMake
 
 	/**
 	 * Get the input files to copy from before running the job, which is 
@@ -618,7 +643,7 @@ public class OSOption {
 	 * 
 	 * @return a string array of file paths to copy from. 
 	 */
-	public String[] getInputFilesToCopyFrom(){
+	public PathPair[] getInputDirectoriesToMove(){
 		return null; //!!!!!!!!!!!!!!!!!!!!!!!
 //		if(job.inputFilesToCopyFrom == null) return null;
 //		return job.inputFilesToCopyFrom.path;
@@ -630,187 +655,36 @@ public class OSOption {
 	 * @param paths holds a string array of input files to copy from before running the job. 
 	 * @return whether the input files to copy from are set successfully.
 	 */
-	public boolean setInputFilesToCopyFrom(String[] paths){
+	public boolean setInputDirectoriesToMove(PathPair[] pathPairs){
 		return true; //!!!!!!!!!!!!!!!!!!!!!!!
 //		if(job.inputFilesToCopyFrom == null) job.inputFilesToCopyFrom = new DirectoriesAndFiles();
 //		job.inputFilesToCopyFrom.path = paths;
 //		return true;
-	}//setInputFilesToCopyFrom
+	}//setInputDirectoriesToMove
 
-	/**
-	 * Get the input files to copy to before running the job, which is 
-	 * a string array of paths. 
-	 * 
-	 * @return a string array of file paths to copy to. 
-	 */
-	public String[] getInputFilesToCopyTo(){
-		return null; //!!!!!!!!!!!!!!!!!!!!!!!
-//		if(job.inputFilesToCopyTo == null) return null;
-//		return job.inputFilesToCopyTo.path;
-	}//getInputFilesToCopyTo
+	public PathPair[] getInputFilesToMove(){
+		return null;
+	}
 
-	/**
-	 * Set the input files to copy to before running the job, which is 
-	 * a string array of paths. 
-	 * @param paths holds a string array of input files to copy to before running the job. 
-	 * @return whether the input files to copy to are set successfully.
-	 */
-	public boolean setInputFilesToCopyTo(String[] paths){
-		return true; //!!!!!!!!!!!!!!!!!!!!!!!
-//		if(job.inputFilesToCopyTo == null) job.inputFilesToCopyTo = new DirectoriesAndFiles();
-//		job.inputFilesToCopyTo.path = paths;
-//		return true;
-	}//setInputFilesToCopyTo
+	public boolean setInputFilesToMove(PathPair[] pathPair){
+		return false;
+	}
 
-	/**
-	 * Get the input files to move from before running the job, which is 
-	 * a string array of paths. 
-	 * 
-	 * @return a string array of file paths to move from. 
-	 */
-	public String[] getInputFilesToMoveFrom(){
-		return null; //!!!!!!!!!!!!!!!!!!!!!!!
-//		if(job.inputFilesToMoveFrom == null) return null;
-//		return job.inputFilesToMoveFrom.path;
-	}//getInputFilesToMoveFrom
+	public PathPair[] getOutputDirectoriesToMove(){
+		return null;
+	}
 
-	/**
-	 * Set the input files to move from before running the job, which is 
-	 * a string array of paths. 
-	 * @param paths holds a string array of input files to move from before running the job. 
-	 * @return whether the input files to move from are set successfully.
-	 */
-	public boolean setInputFilesToMoveFrom(String[] paths){
-		return true; //!!!!!!!!!!!!!!!!!!!!!!!
-//		if(job.inputFilesToMoveFrom == null) job.inputFilesToMoveFrom = new DirectoriesAndFiles();
-//		job.inputFilesToMoveFrom.path = paths;
-//		return true;
-	}//setInputFilesToMoveFrom
+	public boolean setOutputDirectoriesToMove(PathPair[] pathPair){
+		return false;
+	}
 
-	/**
-	 * Get the input files to move to before running the job, which is 
-	 * a string array of paths. 
-	 * 
-	 * @return a string array of file paths to move to. 
-	 */
-	public String[] getInputFilesToMoveTo(){
-		return null; //!!!!!!!!!!!!!!!!!!!!!!!
-//		if(job.inputFilesToMoveTo == null) return null;
-//		return job.inputFilesToMoveTo.path;
-	}//getInputFilesToMoveTo
+	public PathPair[] getOutputFilesToMove(){
+		return null;
+	}
 
-	/**
-	 * Set the input files to move to before running the job, which is 
-	 * a string array of paths. 
-	 * @param paths holds a string array of input files to move to before running the job. 
-	 * @return whether the input files to move to are set successfully.
-	 */
-	public boolean setInputFilesToMoveTo(String[] paths){
-		return true; //!!!!!!!!!!!!!!!!!!!!!!!
-//		if(job.inputFilesToMoveTo == null) job.inputFilesToMoveTo = new DirectoriesAndFiles();
-//		job.inputFilesToMoveTo.path = paths;
-//		return true;
-	}//setInputFilesToMoveTo
-
-	/**
-	 * Get the output files to copy from before running the job, which is 
-	 * a string array of paths. 
-	 * 
-	 * @return a string array of file paths to copy from. 
-	 */
-	public String[] getOutputFilesToCopyFrom(){
-		return null; //!!!!!!!!!!!!!!!!!!!!!!!
-//		if(job.outputFilesToCopyFrom == null) return null;
-//		return job.outputFilesToCopyFrom.path;
-	}//getOutputFilesToCopyFrom
-
-	/**
-	 * Set the output files to copy from before running the job, which is 
-	 * a string array of paths. 
-	 * @param paths holds a string array of output files to copy from before running the job. 
-	 * @return whether the output files to copy from are set successfully.
-	 */
-	public boolean setOutputFilesToCopyFrom(String[] paths){
-		return true; //!!!!!!!!!!!!!!!!!!!!!!!
-//		if(job.outputFilesToCopyFrom == null) job.outputFilesToCopyFrom = new DirectoriesAndFiles();
-//		job.outputFilesToCopyFrom.path = paths;
-//		return true;
-	}//setOutputFilesToCopyFrom
-
-	/**
-	 * Get the output files to copy to before running the job, which is 
-	 * a string array of paths. 
-	 * 
-	 * @return a string array of file paths to copy to. 
-	 */
-	public String[] getOutputFilesToCopyTo(){
-		return null; //!!!!!!!!!!!!!!!!!!!!!!!
-//		if(job.outputFilesToCopyTo == null) return null;
-//		return job.outputFilesToCopyTo.path;
-	}//getOutputFilesToCopyTo
-
-	/**
-	 * Set the output files to copy to before running the job, which is 
-	 * a string array of paths. 
-	 * @param paths holds a string array of output files to copy to before running the job. 
-	 * @return whether the output files to copy to are set successfully.
-	 */
-	public boolean setOutputFilesToCopyTo(String[] paths){
-		return true; //!!!!!!!!!!!!!!!!!!!!!!!
-//		if(job.outputFilesToCopyTo == null) job.outputFilesToCopyTo = new DirectoriesAndFiles();
-//		job.outputFilesToCopyTo.path = paths;
-//		return true;
-	}//setOutputFilesToCopyTo
-
-	/**
-	 * Get the output files to move from before running the job, which is 
-	 * a string array of paths. 
-	 * 
-	 * @return a string array of file paths to move from. 
-	 */
-	public String[] getOutputFilesToMoveFrom(){
-		return null; //!!!!!!!!!!!!!!!!!!!!!!!
-//		if(job.outputFilesToMoveFrom == null) return null;
-//		return job.outputFilesToMoveFrom.path;
-	}//getOutputFilesToMoveFrom
-
-	/**
-	 * Set the output files to move from before running the job, which is 
-	 * a string array of paths. 
-	 * @param paths holds a string array of output files to move from before running the job. 
-	 * @return whether the output files to move from are set successfully.
-	 */
-	public boolean setOutputFilesToMoveFrom(String[] paths){
-		return true; //!!!!!!!!!!!!!!!!!!!!!!!
-//		if(job.outputFilesToMoveFrom == null) job.outputFilesToMoveFrom = new DirectoriesAndFiles();
-//		job.outputFilesToMoveFrom.path = paths;
-//		return true;
-	}//setOutputFilesToMoveFrom
-
-	/**
-	 * Get the output files to move to before running the job, which is 
-	 * a string array of paths. 
-	 * 
-	 * @return a string array of file paths to move to. 
-	 */
-	public String[] getOutputFilesToMoveTo(){
-		return null; //!!!!!!!!!!!!!!!!!!!!!!!
-//		if(job.outputFilesToMoveTo == null) return null;
-//		return job.outputFilesToMoveTo.path;
-	}//getOutputFilesToMoveTo
-
-	/**
-	 * Set the output files to move to before running the job, which is 
-	 * a string array of paths. 
-	 * @param paths holds a string array of output files to move to before running the job. 
-	 * @return whether the output files to move to are set successfully.
-	 */
-	public boolean setOutputFilesToMoveTo(String[] paths){
-		return true; //!!!!!!!!!!!!!!!!!!!!!!!
-//		if(job.outputFilesToMoveTo == null) job.outputFilesToMoveTo = new DirectoriesAndFiles();
-//		job.outputFilesToMoveTo.path = paths;
-//		return true;
-	}//setOutputFilesToMoveTo
+	public boolean setOutputFilesToMove(PathPair[] pathPair){
+		return false;
+	}
 
 	/**
 	 * Get the files to delete after running the job, which is 
@@ -1100,6 +974,10 @@ public class OSOption {
 			return null;
 		}
 	}//getOtherOptimizationOptionValueByName
+	
+	public boolean setSolverOptions(SolverOption[] solverOptions){
+		return false;
+	}
 	
 	/**
 	 * set other optimization options, with their names (required), descriptions (optional) and values (optional). 

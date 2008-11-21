@@ -830,7 +830,7 @@ public class DefaultRegistry {
 				if(m_sContactTransportType == null || m_sContactTransportType.length() > 0){
 					m_sContactTransportType = "osp";
 				}
-				m_sContactAddress = m_osolReader.getContactAddress();
+				m_sContactAddress = m_osolReader.getContact();
 				
 				sServiceURIInOSoL = m_osolReader.getServiceURI();
 			} 

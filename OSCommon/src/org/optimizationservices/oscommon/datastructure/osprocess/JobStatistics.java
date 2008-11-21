@@ -75,9 +75,14 @@ public class JobStatistics {
 	public JobDependencies dependencies = null; 
 	
 	/**
-	 * requiredDirectoriesAndFiles holds the required files and directories to run the job.
+	 * requiredDirectories holds the required directories to run the job.
 	 */
-	public DirectoriesAndFiles requiredDirectoriesAndFiles = null;
+	public DirectoriesAndFiles requiredDirectories = null;
+
+	/**
+	 * requiredFiles holds the required files to run the job.
+	 */
+	public DirectoriesAndFiles requiredFiles = null;
 
 	/**
 	 *

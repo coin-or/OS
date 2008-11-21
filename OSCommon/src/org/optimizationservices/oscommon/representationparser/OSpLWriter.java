@@ -547,15 +547,25 @@ public class OSpLWriter extends OSgLWriter{
 						}						
 						eJob.appendChild(eDependencies);
 					}
-					if(job.requiredDirectoriesAndFiles != null && job.requiredDirectoriesAndFiles.path != null && job.requiredDirectoriesAndFiles.path.length > 0){
-						Element eRequiredDirectoriesAndFiles = m_document.createElement("requiredDirectoriesAndFiles");
-						int iPaths = processStatistics.jobs.job[i].requiredDirectoriesAndFiles.path.length;
+					if(job.requiredDirectories != null && job.requiredDirectories.path != null && job.requiredDirectories.path.length > 0){
+						Element eRequiredDirectories = m_document.createElement("requiredDirectories");
+						int iPaths = processStatistics.jobs.job[i].requiredDirectories.path.length;
 						for(int j = 0; j < iPaths; j++){
 							Element ePath = m_document.createElement("path");
-							ePath.appendChild(m_document.createTextNode(job.requiredDirectoriesAndFiles.path[j]));	
-							eRequiredDirectoriesAndFiles.appendChild(ePath);
+							ePath.appendChild(m_document.createTextNode(job.requiredDirectories.path[j]));	
+							eRequiredDirectories.appendChild(ePath);
 						}						
-						eJob.appendChild(eRequiredDirectoriesAndFiles);
+						eJob.appendChild(eRequiredDirectories);
+					}
+					if(job.requiredFiles != null && job.requiredFiles.path != null && job.requiredFiles.path.length > 0){
+						Element eRequiredFiles = m_document.createElement("requiredFiles");
+						int iPaths = processStatistics.jobs.job[i].requiredFiles.path.length;
+						for(int j = 0; j < iPaths; j++){
+							Element ePath = m_document.createElement("path");
+							ePath.appendChild(m_document.createTextNode(job.requiredFiles.path[j]));	
+							eRequiredFiles.appendChild(ePath);
+						}						
+						eJob.appendChild(eRequiredFiles);
 					}
 					eJobs.appendChild(eJob);
 				}
@@ -923,15 +933,25 @@ public class OSpLWriter extends OSgLWriter{
 						}						
 						eJob.appendChild(eDependencies);
 					}
-					if(jobStatistics[i].requiredDirectoriesAndFiles != null && jobStatistics[i].requiredDirectoriesAndFiles.path != null && jobStatistics[i].requiredDirectoriesAndFiles.path.length > 0){
-						Element eRequiredDirectoriesAndFiles = m_document.createElement("requiredDirectoriesAndFiles");
-						int iPaths = jobStatistics[i].requiredDirectoriesAndFiles.path.length;
+					if(jobStatistics[i].requiredDirectories != null && jobStatistics[i].requiredDirectories.path != null && jobStatistics[i].requiredDirectories.path.length > 0){
+						Element eRequiredDirectories = m_document.createElement("requiredDirectories");
+						int iPaths = jobStatistics[i].requiredDirectories.path.length;
 						for(int j = 0; j < iPaths; j++){
 							Element ePath = m_document.createElement("path");
-							ePath.appendChild(m_document.createTextNode(jobStatistics[i].requiredDirectoriesAndFiles.path[j]));	
-							eRequiredDirectoriesAndFiles.appendChild(ePath);
+							ePath.appendChild(m_document.createTextNode(jobStatistics[i].requiredDirectories.path[j]));	
+							eRequiredDirectories.appendChild(ePath);
 						}						
-						eJob.appendChild(eRequiredDirectoriesAndFiles);
+						eJob.appendChild(eRequiredDirectories);
+					}
+					if(jobStatistics[i].requiredFiles != null && jobStatistics[i].requiredFiles.path != null && jobStatistics[i].requiredFiles.path.length > 0){
+						Element eRequiredFiles = m_document.createElement("requiredFiles");
+						int iPaths = jobStatistics[i].requiredFiles.path.length;
+						for(int j = 0; j < iPaths; j++){
+							Element ePath = m_document.createElement("path");
+							ePath.appendChild(m_document.createTextNode(jobStatistics[i].requiredFiles.path[j]));	
+							eRequiredFiles.appendChild(ePath);
+						}						
+						eJob.appendChild(eRequiredFiles);
 					}
 
 					eJobs.appendChild(eJob);

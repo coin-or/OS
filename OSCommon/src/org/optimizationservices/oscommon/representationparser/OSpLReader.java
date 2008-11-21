@@ -422,16 +422,29 @@ public class OSpLReader extends OSgLReader{
 					}				
 				}
 			}
-			Element eRequiredDirectoriesAndFiles = (Element)XMLUtil.findChildNode(eJob, "requiredDirectoriesAndFiles");			
-			if(eRequiredDirectoriesAndFiles != null){
-				NodeList pathList = eRequiredDirectoriesAndFiles.getElementsByTagName("path");
+			Element eRequiredDirectories = (Element)XMLUtil.findChildNode(eJob, "requiredDirectories");			
+			if(eRequiredDirectories != null){
+				NodeList pathList = eRequiredDirectories.getElementsByTagName("path");
 				if(pathList != null && pathList.getLength() > 0){
 					int iPaths = pathList.getLength();
-					processStatistics.jobs.job[i].requiredDirectoriesAndFiles = new DirectoriesAndFiles();
-					processStatistics.jobs.job[i].requiredDirectoriesAndFiles.path = new String[iPaths];
+					processStatistics.jobs.job[i].requiredDirectories = new DirectoriesAndFiles();
+					processStatistics.jobs.job[i].requiredDirectories.path = new String[iPaths];
 					for(int j = 0; j < iPaths; j++){
 						Element ePath = (Element)pathList.item(j);
-						processStatistics.jobs.job[i].requiredDirectoriesAndFiles.path[j] =  XMLUtil.getElementValue(ePath);
+						processStatistics.jobs.job[i].requiredDirectories.path[j] =  XMLUtil.getElementValue(ePath);
+					}				
+				}
+			}
+			Element eRequiredFiles = (Element)XMLUtil.findChildNode(eJob, "requiredFiles");			
+			if(eRequiredFiles != null){
+				NodeList pathList = eRequiredFiles.getElementsByTagName("path");
+				if(pathList != null && pathList.getLength() > 0){
+					int iPaths = pathList.getLength();
+					processStatistics.jobs.job[i].requiredFiles = new DirectoriesAndFiles();
+					processStatistics.jobs.job[i].requiredFiles.path = new String[iPaths];
+					for(int j = 0; j < iPaths; j++){
+						Element ePath = (Element)pathList.item(j);
+						processStatistics.jobs.job[i].requiredFiles.path[j] =  XMLUtil.getElementValue(ePath);
 					}				
 				}
 			}
@@ -751,17 +764,29 @@ public class OSpLReader extends OSgLReader{
 					}
 				}
 			}
-
-			Element eRequiredDirectoriesAndFiles = (Element)XMLUtil.findChildNode(eJob, "requiredDirectoriesAndFiles");			
-			if(eRequiredDirectoriesAndFiles != null){
-				NodeList pathList = eRequiredDirectoriesAndFiles.getElementsByTagName("path");
+			Element eRequiredDirectories = (Element)XMLUtil.findChildNode(eJob, "requiredDirectories");			
+			if(eRequiredDirectories != null){
+				NodeList pathList = eRequiredDirectories.getElementsByTagName("path");
 				if(pathList != null && pathList.getLength() > 0){
 					int iPaths = pathList.getLength();
-					jobs.job[i].requiredDirectoriesAndFiles = new DirectoriesAndFiles();
-					jobs.job[i].requiredDirectoriesAndFiles.path = new String[iPaths];
+					jobs.job[i].requiredDirectories = new DirectoriesAndFiles();
+					jobs.job[i].requiredDirectories.path = new String[iPaths];
 					for(int j = 0; j < iPaths; j++){
 						Element ePath = (Element)pathList.item(j);
-						jobs.job[i].requiredDirectoriesAndFiles.path[j] =  XMLUtil.getElementValue(ePath);
+						jobs.job[i].requiredDirectories.path[j] =  XMLUtil.getElementValue(ePath);
+					}				
+				}
+			}
+			Element eRequiredFiles = (Element)XMLUtil.findChildNode(eJob, "requiredFiles");			
+			if(eRequiredFiles != null){
+				NodeList pathList = eRequiredFiles.getElementsByTagName("path");
+				if(pathList != null && pathList.getLength() > 0){
+					int iPaths = pathList.getLength();
+					jobs.job[i].requiredFiles = new DirectoriesAndFiles();
+					jobs.job[i].requiredFiles.path = new String[iPaths];
+					for(int j = 0; j < iPaths; j++){
+						Element ePath = (Element)pathList.item(j);
+						jobs.job[i].requiredFiles.path[j] =  XMLUtil.getElementValue(ePath);
 					}				
 				}
 			}

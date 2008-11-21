@@ -8,6 +8,7 @@ package org.optimizationservices.oscommon.representationparser;
 import java.util.GregorianCalendar;
 import java.util.Vector;
 
+import org.optimizationservices.oscommon.datastructure.osoption.PathPair;
 import org.optimizationservices.oscommon.localinterface.OSOption;
 import org.optimizationservices.oscommon.util.OSParameter;
 import org.optimizationservices.oscommon.util.XMLUtil;
@@ -20,7 +21,7 @@ import org.w3c.dom.ProcessingInstruction;
  * the OSoL format. 
  * </p>
  *
- * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
  * @since OS 1.0
  */
@@ -73,17 +74,14 @@ public class OSoLWriter extends OSgLWriter{
 		if(!setJobMaxTime(osOption.getJobMaxTime())) throw new Exception("setJobMaxTime Unsuccessful");		
 		if(!setJobScheduledStartTime(osOption.getJobScheduledStartTime())) throw new Exception("setJobScheduledStartTime Unsuccessful");		
 		if(!setJobDependencies(osOption.getJobDependencies())) throw new Exception("setJobDependencies Unsuccessful");		
-		if(!setRequiredDirectoriesAndFiles(osOption.getRequiredDirectoriesAndFiles())) throw new Exception("setRequiredDirectoriesAndFiles Unsuccessful");		
+		if(!setRequiredDirectories(osOption.getRequiredDirectories())) throw new Exception("setRequiredDirectories Unsuccessful");		
+		if(!setRequiredFiles(osOption.getRequiredFiles())) throw new Exception("setRequiredFiles Unsuccessful");		
 		if(!setDirectoriesToMake(osOption.getDirectoriesToMake())) throw new Exception("setDirectoriesToMake Unsuccessful");		
-		if(!setFilesToCreate(osOption.getFilesToCreate())) throw new Exception("setFilesToCreate Unsuccessful");		
-		if(!setInputFilesToCopyFrom(osOption.getInputFilesToCopyFrom())) throw new Exception("setInputFilesToCopyFrom Unsuccessful");		
-		if(!setInputFilesToCopyTo(osOption.getInputFilesToCopyTo())) throw new Exception("setInputFilesToCopyTo Unsuccessful");		
-		if(!setInputFilesToMoveFrom(osOption.getInputFilesToMoveFrom())) throw new Exception("setInputFilesToMoveFrom Unsuccessful");		
-		if(!setInputFilesToMoveTo(osOption.getInputFilesToMoveTo())) throw new Exception("setInputFilesToMoveTo Unsuccessful");		
-		if(!setOutputFilesToCopyFrom(osOption.getOutputFilesToCopyFrom())) throw new Exception("setOutputFilesToCopyFrom Unsuccessful");		
-		if(!setOutputFilesToCopyTo(osOption.getOutputFilesToCopyTo())) throw new Exception("setOutputFilesToCopyTo Unsuccessful");		
-		if(!setOutputFilesToMoveFrom(osOption.getOutputFilesToMoveFrom())) throw new Exception("setOutputFilesToMoveFrom Unsuccessful");		
-		if(!setOutputFilesToMoveTo(osOption.getOutputFilesToMoveTo())) throw new Exception("setOutputFilesToMoveTo Unsuccessful");		
+		if(!setFilesToMake(osOption.getFilesToMake())) throw new Exception("setFilesToMake Unsuccessful");		
+		if(!setInputDirectoriesToMove(osOption.getInputFilesToMove())) throw new Exception("setInputFilesToMove Unsuccessful");		
+		if(!setInputFilesToMove(osOption.getInputFilesToMove())) throw new Exception("setInputFilesToMove Unsuccessful");		
+		if(!setOutputDirectoriesToMove(osOption.getInputFilesToMove())) throw new Exception("setOutputDirectoriesToMove Unsuccessful");		
+		if(!setOutputFilesToMove(osOption.getInputFilesToMove())) throw new Exception("setOutputFilesToMove Unsuccessful");		
 		if(!setFilesToDelete(osOption.getFilesToDelete())) throw new Exception("setFilesToDelete Unsuccessful");		
 		if(!setDirectoriesToDelete(osOption.getDirectoriesToDelete())) throw new Exception("setDirectoriesToDelete Unsuccessful");		
 		if(!setProcessesToKill(osOption.getProcessesToKill())) throw new Exception("setProcessesToKill Unsuccessful");		
@@ -887,12 +885,12 @@ public class OSoLWriter extends OSgLWriter{
 	}//setJobDependencies
 
 	/**
-	 * Set the required directories and files to run the job, which is 
+	 * Set the required directories to run the job, which is 
 	 * a string array of paths. 
-	 * @param paths holds a string array of directory/file paths required to run the job. 
-	 * @return whether the required directories and files are set successfully.
+	 * @param paths holds a string array of directory paths required to run the job. 
+	 * @return whether the required directories are set successfully.
 	 */
-	public boolean setRequiredDirectoriesAndFiles(String[] paths){
+	public boolean setRequiredDirectories(String[] paths){
 		Node nodeRef = null;
 		try{
 			Element eJob = (Element)XMLUtil.findChildNode(m_eOSoL, "job");
@@ -919,23 +917,23 @@ public class OSoLWriter extends OSgLWriter{
 				}
 			}
 			if(paths != null && paths.length > 0){
-				Element eRequiredDirectoriesAndFiles = (Element)XMLUtil.findChildNode(eJob, "requiredDirectoriesAndFiles");
-				if(eRequiredDirectoriesAndFiles == null){
-					eRequiredDirectoriesAndFiles = m_document.createElement("requiredDirectoriesAndFiles");	
-					eJob.appendChild(eRequiredDirectoriesAndFiles);									
+				Element eRequiredDirectories = (Element)XMLUtil.findChildNode(eJob, "requiredDirectories");
+				if(eRequiredDirectories == null){
+					eRequiredDirectories = m_document.createElement("requiredDirectories");	
+					eJob.appendChild(eRequiredDirectories);									
 				}
-				XMLUtil.removeAllChildren(eRequiredDirectoriesAndFiles);
+				XMLUtil.removeAllChildren(eRequiredDirectories);
 				int iPaths = paths.length;
 				for(int i = 0; i < iPaths; i++){
 					if(paths[i] != null && paths[i].length() > 0){
 						Element ePath = m_document.createElement("path");	
 						ePath.appendChild(m_document.createTextNode(paths[i]));
-						eRequiredDirectoriesAndFiles.appendChild(ePath);				
+						eRequiredDirectories.appendChild(ePath);				
 					}
 				}
 			}
 			else{
-				XMLUtil.removeChildrenByName(eJob, "requiredDirectoriesAndFiles");
+				XMLUtil.removeChildrenByName(eJob, "requiredDirectories");
 			}
 		}
 		catch(Exception e){
@@ -943,7 +941,66 @@ public class OSoLWriter extends OSgLWriter{
 			return false;
 		}
 		return true;
-	}//setRequiredDirectoriesAndFilesjob
+	}//setRequiredDirectoriesjob
+
+	/**
+	 * Set the required files to run the job, which is 
+	 * a string array of paths. 
+	 * @param paths holds a string array of file paths required to run the job. 
+	 * @return whether the required files are set successfully.
+	 */
+	public boolean setRequiredFiles(String[] paths){
+		Node nodeRef = null;
+		try{
+			Element eJob = (Element)XMLUtil.findChildNode(m_eOSoL, "job");
+			if(eJob == null){
+				eJob = m_document.createElement("job");
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
+					if(nodeRef != null){
+						m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+						if(nodeRef != null){
+							m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
+						}
+						else{
+							m_eOSoL.insertBefore(eJob, m_eOSoL.getFirstChild());
+						}		
+					}		
+				}
+			}
+			if(paths != null && paths.length > 0){
+				Element eRequiredFiles = (Element)XMLUtil.findChildNode(eJob, "requiredFiles");
+				if(eRequiredFiles == null){
+					eRequiredFiles = m_document.createElement("requiredFiles");	
+					eJob.appendChild(eRequiredFiles);									
+				}
+				XMLUtil.removeAllChildren(eRequiredFiles);
+				int iPaths = paths.length;
+				for(int i = 0; i < iPaths; i++){
+					if(paths[i] != null && paths[i].length() > 0){
+						Element ePath = m_document.createElement("path");	
+						ePath.appendChild(m_document.createTextNode(paths[i]));
+						eRequiredFiles.appendChild(ePath);				
+					}
+				}
+			}
+			else{
+				XMLUtil.removeChildrenByName(eJob, "requiredFiles");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setRequiredFilesjob
 
 	/**
 	 * Set the directories to make before running the job, which is 
@@ -1006,12 +1063,12 @@ public class OSoLWriter extends OSgLWriter{
 	}//setDirectoriesToMake
 
 	/**
-	 * Set the files to create before running the job, which is 
+	 * Set the files to make before running the job, which is 
 	 * a string array of paths. 
-	 * @param paths holds a string array of files to create before running the job. 
-	 * @return whether the files to create are set successfully.
+	 * @param paths holds a string array of files to make before running the job. 
+	 * @return whether the files to make are set successfully.
 	 */
-	public boolean setFilesToCreate(String[] paths){
+	public boolean setFilesToMake(String[] paths){
 		Node nodeRef = null;
 		try{
 			Element eJob = (Element)XMLUtil.findChildNode(m_eOSoL, "job");
@@ -1038,23 +1095,23 @@ public class OSoLWriter extends OSgLWriter{
 				}
 			}
 			if(paths != null && paths.length > 0){
-				Element eFilesToCreate = (Element)XMLUtil.findChildNode(eJob, "filesToCreate");
-				if(eFilesToCreate == null){
-					eFilesToCreate = m_document.createElement("filesToCreate");	
-					eJob.appendChild(eFilesToCreate);									
+				Element eFilesToMake = (Element)XMLUtil.findChildNode(eJob, "filesToMake");
+				if(eFilesToMake == null){
+					eFilesToMake = m_document.createElement("filesToMake");	
+					eJob.appendChild(eFilesToMake);									
 				}
-				XMLUtil.removeAllChildren(eFilesToCreate);
+				XMLUtil.removeAllChildren(eFilesToMake);
 				int iPaths = paths.length;
 				for(int i = 0; i < iPaths; i++){
 					if(paths[i] != null && paths[i].length() > 0){
 						Element ePath = m_document.createElement("path");	
 						ePath.appendChild(m_document.createTextNode(paths[i]));
-						eFilesToCreate.appendChild(ePath);				
+						eFilesToMake.appendChild(ePath);				
 					}
 				}
 			}
 			else{
-				XMLUtil.removeChildrenByName(eJob, "filesToCreate");
+				XMLUtil.removeChildrenByName(eJob, "filesToMake");
 			}
 		}
 		catch(Exception e){
@@ -1063,7 +1120,20 @@ public class OSoLWriter extends OSgLWriter{
 		}
 		return true;
 
-	}//setFilesToCreate
+	}//setFilesToMake
+
+	public boolean setInputDirectoriesToMove(PathPair[] pathPairs){
+		return false;
+	}
+	public boolean setInputFilesToMove(PathPair[] pathPairs){
+		return false;
+	}
+	public boolean setOutputDirectoriesToMove(PathPair[] pathPairs){
+		return false;
+	}
+	public boolean setOutputFilesToMove(PathPair[] pathPairs){
+		return false;
+	}
 
 
 	/**
@@ -2136,7 +2206,8 @@ public class OSoLWriter extends OSgLWriter{
 		String[] jobDependencies = {"a1", "b3"};
 		if(!osolWriter.setJobDependencies(jobDependencies)) System.out.println("setJobDependencies Unsuccessful");		
 		String[] paths = {"p1", "p3"};
-		if(!osolWriter.setRequiredDirectoriesAndFiles(paths)) System.out.println("setRequiredDirectoriesAndFiles Unsuccessful");		
+		if(!osolWriter.setRequiredDirectories(paths)) System.out.println("setRequiredDirectories Unsuccessful");		
+		if(!osolWriter.setRequiredFiles(paths)) System.out.println("setRequiredFiles Unsuccessful");		
 		if(!osolWriter.setVariableNumber(3)) System.out.println("setVariableNumber Unsuccessful");		
 		if(!osolWriter.setObjectiveNumber(3)) System.out.println("setObjectiveNumber Unsuccessful");		
 		if(!osolWriter.setConstraintNumber(2)) System.out.println("setConstraintNumber Unsuccessful");		

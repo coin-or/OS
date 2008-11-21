@@ -23,6 +23,7 @@ import org.optimizationservices.oscommon.communicationagent.OSRegistryAgent;
 import org.optimizationservices.oscommon.communicationagent.OSSolverAgent;
 import org.optimizationservices.oscommon.datastructure.osgeneral.DirectoriesAndFiles;
 import org.optimizationservices.oscommon.datastructure.osgeneral.JobDependencies;
+import org.optimizationservices.oscommon.datastructure.osoption.PathPair;
 import org.optimizationservices.oscommon.datastructure.osprocess.JobStatistics;
 import org.optimizationservices.oscommon.datastructure.osprocess.OptimizationProcess;
 import org.optimizationservices.oscommon.datastructure.osprocess.ProcessStatistics;
@@ -58,12 +59,12 @@ import org.optimizationservices.oscommon.representationparser.OSuLWriter;
  * @since OS 1.0 
  */
 public class OSServiceUtil{// implements OShL{
-	
+
 	/**
 	 * m_sSystemPassword holds the password used for communication between system components.
 	 */
 	private static String m_sSystemPassword = "";
-	
+
 	/**
 	 * m_bSendEmailOnLowDiskSpace holds whether an email has been sent on low disk space warning. 
 	 */
@@ -73,37 +74,37 @@ public class OSServiceUtil{// implements OShL{
 	 *  m_bValidate holds whether the parser should be validating against the xml schema or not
 	 */
 	protected boolean m_bValidate = OSParameter.VALIDATE; 
-	
+
 	/**
 	 * serviceURI holds the service uri. 
 	 */
 	public String serviceURI = OSParameter.SERVICE_URI;
-	
+
 	/**
 	 * serviceName holds the service name. 
 	 */
 	public String serviceName = OSParameter.SERVICE_NAME;
-	
+
 	/**
 	 * serviceType holds the service type. 
 	 */
 	public String serviceType = OSParameter.SERVICE_TYPE;
-	
+
 	/**
 	 * m_sServiceURIInOSoL holds the service uri in osol. 
 	 */
 	public String m_sServiceURIInOSoL = "";
-	
+
 	/**
 	 * m_sServiceNameInOSoL holds the service name in osol. 
 	 */
 	public String m_sServiceNameInOSoL = "";
-	
+
 	/**
 	 * m_sInstanceName holds the name of the instance being solved.
 	 */
 	protected String m_sInstanceName = "";
-	
+
 	/**
 	 * m_sInstanceLocationType holds the instance location type. 
 	 */
@@ -118,7 +119,7 @@ public class OSServiceUtil{// implements OShL{
 	 * m_sJobID holds the job ID;
 	 */
 	protected String m_sJobID = "";
-	
+
 	/**
 	 * m_sLicense holds the license. 
 	 */
@@ -133,7 +134,7 @@ public class OSServiceUtil{// implements OShL{
 	 * m_sPassword holds the password. 
 	 */
 	protected String m_sPassword = "";
-	
+
 	/**
 	 * m_sContactTransportType holds the constact transport type. 
 	 */
@@ -143,7 +144,7 @@ public class OSServiceUtil{// implements OShL{
 	 * m_sContactAddress holds the contact address. 
 	 */
 	protected String m_sContactAddress = "";
-	
+
 	/**
 	 * m_dMinDiskSpace holds the minimum disk sapce required by the job. 
 	 */
@@ -163,12 +164,12 @@ public class OSServiceUtil{// implements OShL{
 	 * m_sServiceTypeInOSoL holds the service type in the osol
 	 */
 	protected String m_sServiceTypeInOSoL = "";
-	
+
 	/**
 	 * m_dJobMaxTime holds the maximum time allowed for the job. 
 	 */
 	protected double m_dJobMaxTime = OSParameter.JOB_MAX_TIME;
-	
+
 	/**
 	 * m_jobScheduledStartTime holds the job's scheduled start time.
 	 */
@@ -178,18 +179,23 @@ public class OSServiceUtil{// implements OShL{
 	 * m_msJobDependencies holds a string array of jobIDs the the current job depends on.
 	 */
 	protected String[] m_msJobDependencies = null;
-	
+
 	/**
-	 * m_msRequiredDirectoriesAndFiles holds a list of file and directory names needed to run the job. 
+	 * m_msRequiredDirectories holds a list of directory names needed to run the job. 
 	 */
-	protected String[] m_msRequiredDirectoriesAndFiles = null;
-	
+	protected String[] m_msRequiredDirectories = null;
+
+	/**
+	 * m_msRequiredFiles holds a list of file names needed to run the job. 
+	 */
+	protected String[] m_msRequiredFiles = null;
+
 	/**
 	 * m_sCurrentState holds the current state of the service: which can be: 
 	 * busy, busyButAccepting, idle, idleButNotAccepting, noResponse. 
 	 */
 	protected static String m_sCurrentState = "idle";
-	
+
 	/**
 	 * m_dAvailableDiskSpace holds the available disk space. 
 	 */
@@ -199,12 +205,12 @@ public class OSServiceUtil{// implements OShL{
 	 * m_dAvailableMemory holds the available memory. 
 	 */
 	protected static double m_dAvailableMemory = Double.POSITIVE_INFINITY;
-	
+
 	/**
 	 * m_iCurrentJobCount holds the current number of active jobs. 
 	 */
 	protected static int m_iCurrentJobCount = 0;
-	
+
 	/**
 	 * m_iTotalJobsSoFar holds the number of jobs so far recieved. 
 	 */
@@ -219,7 +225,7 @@ public class OSServiceUtil{// implements OShL{
 	 * m_lLastJobTook holds the time the last job took in millisecond.  
 	 */
 	protected static long m_lLastJobTook = -1;
-	
+
 	/**
 	 * m_lTimeServiceStarted holds the service start time (in millisecond since 1970 UTC).    
 	 */
@@ -229,17 +235,17 @@ public class OSServiceUtil{// implements OShL{
 	 * m_dServiceUtilization holds the service utilization (time solving jobs / total time since start)
 	 */
 	protected static double m_dServiceUtilization = 0; //TODO may be inapproriate for the scheduler
-	
+
 	/**
 	 * m_lTotalBusyTime holds the total busy time (solving jobs) since service start. 
 	 */
 	protected static long m_lTotalBusyTime = 0;
-	
+
 	/**
 	 * m_sJobState holds the job state, which can be waiting, running, killed, finished or unknown.  
 	 */
 	protected String m_sJobState= "unknown";
-	
+
 	/**
 	 * m_sUserName holds the user name. 
 	 */
@@ -249,17 +255,17 @@ public class OSServiceUtil{// implements OShL{
 	 * m_lJobSubmitTime holds the job submit time (in millisecond since 1970 UTC).  
 	 */
 	protected long m_lJobSubmitTime = -1;
-	
+
 	/**
 	 * m_lJobStartTime holds the job start time. 
 	 */
 	protected long m_lJobStartTime = -1;
-	
+
 	/**
 	 * m_lJobScheduledStartTime holds the job scheduled start time. 
 	 */
 	protected long m_lJobScheduledStartTime = -1;
-	
+
 	/**
 	 * m_lJobEndTime holds the job end time. 
 	 */
@@ -269,7 +275,7 @@ public class OSServiceUtil{// implements OShL{
 	 * m_lJobDuration holds the time the job took in millisecond. 
 	 */
 	protected long m_lJobDuration = -1;
-	
+
 	/**
 	 * m_jobScheduledStartTime holds the job's scheduled start time.
 	 */
@@ -279,12 +285,12 @@ public class OSServiceUtil{// implements OShL{
 	 * m_msJobDependencies holds a string array of jobIDs the the current job depends on.
 	 */
 	//protected String[] m_msJobDependencies = null;
-	
+
 	/**
 	 * m_msRequiredDirectoriesAndFiles holds a list of file and directory names needed to run the job. 
 	 */
 	//protected String[] m_msRequiredDirectoriesAndFiles = null;
-	
+
 	/**
 	 * solver holds the solver engine
 	 */
@@ -294,7 +300,7 @@ public class OSServiceUtil{// implements OShL{
 	 * m_solverThread holds the solver thread. 
 	 */
 	protected SolverThread m_solverThread = null;
-	
+
 	/**
 	 * simulation holds the simulation engine
 	 */
@@ -310,7 +316,7 @@ public class OSServiceUtil{// implements OShL{
 	 */
 	protected static Timer timer  = null;
 
-	
+
 	/**
 	 * m_osilReader holds the OSiL reader.
 	 */
@@ -335,7 +341,7 @@ public class OSServiceUtil{// implements OShL{
 	 * m_osslReader holds the OSsL reader.
 	 */
 	protected OSsLReader m_osslReader = null;
-	
+
 	/**
 	 * m_osrlReader holds the OSrL reader.
 	 */
@@ -345,17 +351,17 @@ public class OSServiceUtil{// implements OShL{
 	 * m_osplReader holds the OSpL reader.
 	 */
 	protected OSpLReader m_osplReader = null;
-	
+
 	/**
 	 * m_osqlReader holds the OSqL reader.
 	 */
 	protected OSqLReader m_osqlReader = null;
-	
+
 	/**
 	 * m_osulReader holds the OSuL reader.
 	 */
 	protected OSuLReader m_osulReader = null;
-	
+
 	/**
 	 * m_osilWriter holds the OSiL writer.
 	 */
@@ -365,7 +371,7 @@ public class OSServiceUtil{// implements OShL{
 	 * m_osolWriter holds the OSoL writer.
 	 */
 	protected OSoLWriter m_osolWriter = null;
-	
+
 	/**
 	 * m_osslWriter holds the OSsL writer.
 	 */
@@ -380,17 +386,17 @@ public class OSServiceUtil{// implements OShL{
 	 * m_osplWriter holds the OSpL writer.
 	 */
 	protected OSpLWriter m_osplWriter = null;
-	
+
 	/**
 	 * m_osqlWriter holds the OSqL writer.
 	 */
 	protected OSqLWriter m_osqlWriter = null;
-	
+
 	/**
 	 * m_osulWriter holds the OSuL writer.
 	 */
 	protected OSuLWriter m_osulWriter = null;
-		
+
 	/**
 	 * m_solverThreadHashTable holds the solverThread instance that will be launched by a separate thread. 
 	 */
@@ -414,18 +420,18 @@ public class OSServiceUtil{// implements OShL{
 	 * submitted, with the first one being the earliest. 
 	 */
 	protected static Vector<String> m_vCurrentJobIDs = new Vector<String>();
-	
+
 	/**
 	 * m_vWaitingJobIDs holds a sequence of waiting jobIDs. 
 	 */
 	protected static Vector<String> m_vWaitingJobIDs = new Vector<String>();
-	
+
 	/**
 	 * m_vFinishedJobIDs holds a sequence of finished (or killed) jobIDs according to the time the jobs are
 	 * finished, with the first one being the earliest. 
 	 */
 	protected static Vector<String> m_vFinishedJobIDs = new Vector<String>();
-		
+
 	/**
 	 * m_userJobCountTable holds the number of jobs currently run by a user. 
 	 */
@@ -443,13 +449,13 @@ public class OSServiceUtil{// implements OShL{
 	 */
 	public static Hashtable<String, Vector<Process>> processsHashTable = new Hashtable<String, Vector<Process>>();
 
-	
+
 	/**
 	 * Default constructor. 
 	 */
 	public OSServiceUtil(){
 		serviceName = OSParameter.SERVICE_NAME;
-	    serviceURI = OSParameter.SERVICE_URI;
+		serviceURI = OSParameter.SERVICE_URI;
 		serviceType = OSParameter.SERVICE_TYPE;
 		try {
 			String sClassName = OSParameter.SOLVER_CLASS_NAME; //"org.optimizationservices.oscommon.util.StandardSolver";
@@ -460,7 +466,7 @@ public class OSServiceUtil{// implements OShL{
 			IOUtil.log(IOUtil.exceptionStackToString(e), null);
 		}
 	}//constructor
-	
+
 	/**
 	 * Get a unique job id from a service, before calling the service to solve a problem. This method call is always
 	 * required before an asynchronous send call. It may be or may not be used before a synchronous solve call. 
@@ -472,7 +478,7 @@ public class OSServiceUtil{// implements OShL{
 		if(osol == null) osol = "";
 		return CommonUtil.getJobID(osol);
 	}//getJobID
-	
+
 	/**
 	 * read and parse the osol string. 
 	 * 
@@ -496,7 +502,7 @@ public class OSServiceUtil{// implements OShL{
 				m_osOption = new OSOption();
 				throw new Exception("Invalid OSoL option");
 			}
-			
+
 			//get general options
 			m_sServiceURIInOSoL = m_osOption.getServiceURI();
 			m_sServiceNameInOSoL = m_osOption.getServiceName();
@@ -523,7 +529,7 @@ public class OSServiceUtil{// implements OShL{
 
 			//get service related options
 			m_sServiceTypeInOSoL = m_osOption.getServiceType();
-			
+
 			//get job related options
 			double dJobMaxTime = m_osOption.getJobMaxTime();
 			if(dJobMaxTime != Double.POSITIVE_INFINITY && dJobMaxTime < OSParameter.JOB_MAX_TIME && dJobMaxTime > 0){
@@ -536,8 +542,9 @@ public class OSServiceUtil{// implements OShL{
 			}
 
 			m_msJobDependencies = m_osOption.getJobDependencies();
-			m_msRequiredDirectoriesAndFiles = m_osOption.getRequiredDirectoriesAndFiles();
-			
+			m_msRequiredDirectories = m_osOption.getRequiredDirectories();
+			m_msRequiredFiles = m_osOption.getRequiredFiles();
+
 			m_bReadOSoL = true;
 			return true;
 		}
@@ -546,7 +553,7 @@ public class OSServiceUtil{// implements OShL{
 			return false;
 		}
 	}//readOSoL
-	
+
 	/**
 	 * check if the job is permitted. 
 	 * 
@@ -616,7 +623,7 @@ public class OSServiceUtil{// implements OShL{
 			}
 			throw new Exception(sMessage);
 		}
-		
+
 		//check if memory size is enough
 		try{
 			m_dAvailableMemory = ProcessUtil.getFreeMemory();	
@@ -673,13 +680,13 @@ public class OSServiceUtil{// implements OShL{
 				sMessage = "System warning: the server cannot meet the cpu space requirement for the job";				
 			}			
 		}
-		
+
 		if(sMessage != null && sMessage.length() > 0){
 			throw new Exception(sMessage);
 		}
 		return bCheck;
 	}//checkSystemRequirement
-	
+
 	/**
 	 * initialize statistics. 
 	 *
@@ -691,7 +698,7 @@ public class OSServiceUtil{// implements OShL{
 			jobStatistics.jobID = m_sJobID;
 			m_jobStatisticsTable.put(m_sJobID, jobStatistics);
 			m_iTotalJobsSoFar++;
-			
+
 			if(m_sUserName == null) m_sUserName = "";
 			String sCount = m_userJobCountTable.get(m_sUserName);
 			int iCount;
@@ -711,12 +718,12 @@ public class OSServiceUtil{// implements OShL{
 			m_userJobCountTable.remove(m_sUserName);
 			m_userJobCountTable.put(m_sUserName, iCount+"");			
 		}
-		
+
 		m_vWaitingJobIDs.remove(m_sJobID);
 		m_vCurrentJobIDs.remove(m_sJobID);
 		m_vCurrentJobIDs.add(m_sJobID);
 		m_iCurrentJobCount = m_vCurrentJobIDs.size();
-		
+
 		if(m_iCurrentJobCount >= OSParameter.MAX_JOB_NUMBERS){
 			m_sCurrentState = "busy";
 		}
@@ -755,14 +762,18 @@ public class OSServiceUtil{// implements OShL{
 			jobStatistics.dependencies = new JobDependencies();
 			jobStatistics.dependencies.jobID = m_msJobDependencies;
 		}		
-		if(m_msRequiredDirectoriesAndFiles != null && m_msRequiredDirectoriesAndFiles.length > 0){
-			jobStatistics.requiredDirectoriesAndFiles = new DirectoriesAndFiles();
-			jobStatistics.requiredDirectoriesAndFiles.path = m_msRequiredDirectoriesAndFiles;
+		if(m_msRequiredDirectories != null && m_msRequiredDirectories.length > 0){
+			jobStatistics.requiredDirectories = new DirectoriesAndFiles();
+			jobStatistics.requiredDirectories.path = m_msRequiredDirectories;
+		}	
+		if(m_msRequiredFiles != null && m_msRequiredFiles.length > 0){
+			jobStatistics.requiredFiles = new DirectoriesAndFiles();
+			jobStatistics.requiredFiles.path = m_msRequiredFiles;
 		}	
 		//save ospl
 		saveOSpL();		
 	}//initializeStatistics
-	
+
 	/**
 	 * check if the job should wait: scheduled Time, job dependencies, required files/directories, solver availability
 	 *  
@@ -782,7 +793,7 @@ public class OSServiceUtil{// implements OShL{
 		String sMessage = "";
 		//check job scheduling
 		if(m_lJobScheduledStartTime > 0){
-			
+
 			long lNow = new GregorianCalendar().getTimeInMillis();
 			if(m_lJobScheduledStartTime > lNow){				
 				bWait = true;
@@ -810,11 +821,21 @@ public class OSServiceUtil{// implements OShL{
 				}
 			}
 		}
-		//check required directories or files
-		if(!bWait && m_msRequiredDirectoriesAndFiles != null && m_msRequiredDirectoriesAndFiles.length > 0){
-			int iRequiredDirectoriesAndFiles = m_msRequiredDirectoriesAndFiles.length;
-			for(int i = 0; i < iRequiredDirectoriesAndFiles; i++){				
-				if(!IOUtil.existsFileOrDir(m_msRequiredDirectoriesAndFiles[i])){
+		//check required directories
+		if(!bWait && m_msRequiredDirectories != null && m_msRequiredDirectories.length > 0){
+			int iRequiredDirectories = m_msRequiredDirectories.length;
+			for(int i = 0; i < iRequiredDirectories; i++){				
+				if(!IOUtil.existsFileOrDir(m_msRequiredDirectories[i])){
+					bWait = true;
+					break;
+				}
+			}
+		}
+		//check required files
+		if(!bWait && m_msRequiredFiles != null && m_msRequiredFiles.length > 0){
+			int iRequiredFiles = m_msRequiredFiles.length;
+			for(int i = 0; i < iRequiredFiles; i++){				
+				if(!IOUtil.existsFileOrDir(m_msRequiredFiles[i])){
 					bWait = true;
 					break;
 				}
@@ -829,7 +850,7 @@ public class OSServiceUtil{// implements OShL{
 				standardQuery.serviceType = "solver";
 				m_osqlWriter.setStandardQuery(standardQuery);
 				String sOSqL = m_osqlWriter.writeToString();
-				
+
 				m_osolWriter = new OSoLWriter();
 				m_osolWriter.setServiceURI(OSParameter.SERVICE_URI);
 				m_osolWriter.setServiceName(OSParameter.SERVICE_NAME);
@@ -838,7 +859,7 @@ public class OSServiceUtil{// implements OShL{
 				m_osolWriter.setPassword(OSParameter.getSystemPassword());
 				m_osolWriter.setServiceType("scheduler");
 				String sOSoL = m_osolWriter.writeToString();
-				
+
 				String sOSuL = "";
 				try{
 					FindThread findThread = new FindThread();
@@ -856,7 +877,7 @@ public class OSServiceUtil{// implements OShL{
 					}
 					findThread.m_sOSqL= sOSqL;
 					findThread.m_sOSoL = sOSoL;
-										
+
 					Thread thread = new Thread(findThread);	
 					thread.start();
 
@@ -913,7 +934,7 @@ public class OSServiceUtil{// implements OShL{
 			m_vWaitingJobIDs.remove(m_sJobID);
 			m_vWaitingJobIDs.add(m_sJobID);			
 			m_iCurrentJobCount = m_vCurrentJobIDs.size();
-			
+
 			if(m_iCurrentJobCount >= OSParameter.MAX_JOB_NUMBERS){
 				m_sCurrentState = "busy";
 			}
@@ -923,7 +944,7 @@ public class OSServiceUtil{// implements OShL{
 			else {
 				m_sCurrentState = "idle";
 			}
-			
+
 			jobStatistics.jobID = m_sJobID;
 			jobStatistics.state = "waiting";
 			m_sJobState = jobStatistics.state;			
@@ -957,13 +978,17 @@ public class OSServiceUtil{// implements OShL{
 				jobStatistics.dependencies = new JobDependencies();
 				jobStatistics.dependencies.jobID = m_msJobDependencies;
 			}
-			if(m_msRequiredDirectoriesAndFiles != null && m_msRequiredDirectoriesAndFiles.length > 0){
-				jobStatistics.requiredDirectoriesAndFiles = new DirectoriesAndFiles();
-				jobStatistics.requiredDirectoriesAndFiles.path = m_msRequiredDirectoriesAndFiles;
+			if(m_msRequiredDirectories != null && m_msRequiredDirectories.length > 0){
+				jobStatistics.requiredDirectories = new DirectoriesAndFiles();
+				jobStatistics.requiredDirectories.path = m_msRequiredDirectories;
+			}	
+			if(m_msRequiredFiles != null && m_msRequiredFiles.length > 0){
+				jobStatistics.requiredFiles = new DirectoriesAndFiles();
+				jobStatistics.requiredFiles.path = m_msRequiredFiles;
 			}	
 			//save ospl
 			saveOSpL();			
-			
+
 			boolean bRemoveWaitingJob = false;
 			if(m_vWaitingJobIDs.size() > OSParameter.MAX_WAITING_NUMBERS){
 				sMessage = "Waiting error: maximum waiting number reached";
@@ -1003,8 +1028,8 @@ public class OSServiceUtil{// implements OShL{
 		}		
 		return bWait;
 	}//checkWaiting
-		
-	
+
+
 	/**
 	 * postprocess after the solve or send method. 
 	 * 
@@ -1033,14 +1058,14 @@ public class OSServiceUtil{// implements OShL{
 			processsHashTable.remove(m_sJobID);
 		}
 		Thread thread = (Thread)m_threadHashTable.get(m_sJobID);
-		
+
 		JobStatistics jobStatistics  = m_jobStatisticsTable.get(m_sJobID);
 		if(jobStatistics == null){
 			jobStatistics = new JobStatistics();
 			jobStatistics.jobID = m_sJobID;
 			m_jobStatisticsTable.put(m_sJobID, jobStatistics);
 		}
-		
+
 		if(m_sUserName == null) m_sUserName = "";
 		String sCount = m_userJobCountTable.get(m_sUserName);
 		int iCount;
@@ -1063,7 +1088,7 @@ public class OSServiceUtil{// implements OShL{
 		}		
 		m_userJobCountTable.remove(m_sUserName);
 		m_userJobCountTable.put(m_sUserName, iCount+"");
-		
+
 		m_threadHashTable.remove(m_sJobID);
 		m_solverThreadHashTable.remove(m_sJobID);
 		processsHashTable.remove(m_sJobID);
@@ -1072,7 +1097,7 @@ public class OSServiceUtil{// implements OShL{
 		m_vFinishedJobIDs.remove(m_sJobID);
 		m_vFinishedJobIDs.add(m_sJobID);
 		m_iCurrentJobCount = m_vCurrentJobIDs.size();
-				
+
 		try{
 			m_dAvailableDiskSpace = IOUtil.getFreeDiskSpace(OSParameter.CODE_DRIVE);	
 		}
@@ -1089,7 +1114,7 @@ public class OSServiceUtil{// implements OShL{
 			m_dAvailableMemory = Double.POSITIVE_INFINITY;
 		}
 		if(m_dAvailableDiskSpace <= OSParameter.MINIMUM_DISKSPACE_TRIGGER ||
-				   m_dAvailableMemory <= ((double)OSParameter.MINIMUM_MEMORY_TRIGGER)){
+				m_dAvailableMemory <= ((double)OSParameter.MINIMUM_MEMORY_TRIGGER)){
 			if(m_iCurrentJobCount > 0){
 				m_sCurrentState = "busy";				
 			}
@@ -1108,7 +1133,7 @@ public class OSServiceUtil{// implements OShL{
 				m_sCurrentState = "busyButAccepting";
 			}
 		}
-				
+
 		jobStatistics.jobID = m_sJobID;
 		jobStatistics.state = kill?"killed":"finished";
 		m_sJobState = jobStatistics.state;
@@ -1138,7 +1163,7 @@ public class OSServiceUtil{// implements OShL{
 			m_lLastJobTook = -1;
 		}
 		m_dServiceUtilization = ((double)m_lTotalBusyTime/(m_lJobEndTime - m_lTimeServiceStarted));			
-		
+
 		//contact registry
 		updateRegistry(false);
 
@@ -1150,7 +1175,7 @@ public class OSServiceUtil{// implements OShL{
 
 		//request job at scheduler
 		requestJob();
-		
+
 		if(kill){
 			if(thread != null){
 				try{
@@ -1220,7 +1245,7 @@ public class OSServiceUtil{// implements OShL{
 			}
 			knockRegistryThread.m_sOSpLInput = sProcessInput;
 			knockRegistryThread.m_sOSoL = sOption;
-								
+
 			Thread thread = new Thread(knockRegistryThread);
 			thread.start();
 			if(wait){
@@ -1233,7 +1258,7 @@ public class OSServiceUtil{// implements OShL{
 			return false;
 		}
 	}//updateRegistry
-	
+
 	/**
 	 * contact the sender
 	 * 
@@ -1272,7 +1297,7 @@ public class OSServiceUtil{// implements OShL{
 					String sServiceType = (serviceType==null||serviceType.length() <= 0)?"solver":serviceType;
 					m_osolWriter.setServiceType(sServiceType);
 					String sOption = m_osolWriter.writeToString();
-					
+
 					if(m_sContactAddress != null && m_sContactAddress.length() > 0 && m_sContactTransportType.equals("osp")){
 						if(!(serviceType.equals("scheduler") && m_sContactAddress.equals(OSParameter.OS_SCHEDULER_SITE))){
 							KnockSolverThread knockSolverThread1 = new KnockSolverThread();
@@ -1280,22 +1305,22 @@ public class OSServiceUtil{// implements OShL{
 							knockSolverThread1.m_osSolverAgent = osSolverAgent1;
 							knockSolverThread1.m_osplInput = sProcessInput;
 							knockSolverThread1.m_osol = sOption;
-												
+
 							Thread thread1 = new Thread(knockSolverThread1);	
 							thread1.start();						
 						}
 					}
-					
+
 					if(((m_sContactAddress == null || m_sContactAddress.length() <= 0) || 
-					   (m_sContactAddress != null && !m_sContactAddress.equals(OSParameter.OS_SCHEDULER_SITE))) && 
-					   ((m_sServiceTypeInOSoL != null && m_sServiceTypeInOSoL.equals("scheduler")))){
+							(m_sContactAddress != null && !m_sContactAddress.equals(OSParameter.OS_SCHEDULER_SITE))) && 
+							((m_sServiceTypeInOSoL != null && m_sServiceTypeInOSoL.equals("scheduler")))){
 						if(!serviceType.equals("scheduler")){
 							KnockSolverThread knockSolverThread2 = new KnockSolverThread();
 							OSSolverAgent osSolverAgent2 = new OSSolverAgent(OSParameter.OS_SCHEDULER_SITE);
 							knockSolverThread2.m_osSolverAgent = osSolverAgent2;
 							knockSolverThread2.m_osplInput = sProcessInput;
 							knockSolverThread2.m_osol = sOption;
-							
+
 							Thread thread2 = new Thread(knockSolverThread2);	
 							thread2.start();									
 						}
@@ -1310,7 +1335,7 @@ public class OSServiceUtil{// implements OShL{
 		}
 		return true;
 	}//contactSender
-	
+
 	/**
 	 * request job at scheduler
 	 * 
@@ -1328,7 +1353,7 @@ public class OSServiceUtil{// implements OShL{
 				m_osplWriter.setProcessTime(new GregorianCalendar());
 				m_osplWriter.setProcessMessage(sMessage);
 				String sProcessInput = m_osplWriter.writeToString();
-				
+
 				m_osolWriter = new OSoLWriter();
 				m_osolWriter.setServiceURI(OSParameter.SERVICE_URI);
 				m_osolWriter.setServiceName(OSParameter.SERVICE_NAME);
@@ -1345,7 +1370,7 @@ public class OSServiceUtil{// implements OShL{
 				knockSolverThread.m_osSolverAgent = osSolverAgent;
 				knockSolverThread.m_osplInput = sProcessInput;
 				knockSolverThread.m_osol = sOption;
-									
+
 				Thread thread = new Thread(knockSolverThread);	
 				thread.start();
 				return true;
@@ -1357,7 +1382,7 @@ public class OSServiceUtil{// implements OShL{
 		}	
 		return true;
 	}//requestJob
-	
+
 	/**
 	 * presolve handles prerequisites before invoking the solve method.
 	 * 
@@ -1368,7 +1393,7 @@ public class OSServiceUtil{// implements OShL{
 	protected boolean presolve(String osil, String osol){
 		if(osil == null) osil = "";
 		if(osol == null) osol = "";
-		
+
 		//from OSParameter
 		if(OSParameter.DIRECTORIES_TO_MAKE !=null && OSParameter.DIRECTORIES_TO_MAKE.length > 0){
 			for(int i = 0; i < OSParameter.DIRECTORIES_TO_MAKE.length; i++){
@@ -1382,7 +1407,7 @@ public class OSServiceUtil{// implements OShL{
 			for(int i = 0; i < OSParameter.FILES_TO_CREATE.length; i++){
 				boolean bSuccess = IOUtil.createFile(OSParameter.FILES_TO_CREATE[i]);
 				if(! bSuccess){
-					IOUtil.log("not able to create file " + OSParameter.FILES_TO_CREATE[i], null);	
+					IOUtil.log("not able to make file " + OSParameter.FILES_TO_CREATE[i], null);	
 				}
 			}
 		}
@@ -1423,7 +1448,7 @@ public class OSServiceUtil{// implements OShL{
 			}
 		}
 		if((OSParameter.INPUT_FILES_TO_MOVE_FROM != null && OSParameter.INPUT_FILES_TO_MOVE_FROM.length > 0) ||
-			(OSParameter.INPUT_FILES_TO_MOVE_TO !=null && OSParameter.INPUT_FILES_TO_MOVE_TO.length > 0)){
+				(OSParameter.INPUT_FILES_TO_MOVE_TO !=null && OSParameter.INPUT_FILES_TO_MOVE_TO.length > 0)){
 			int m = OSParameter.INPUT_FILES_TO_MOVE_FROM==null?0:OSParameter.INPUT_FILES_TO_MOVE_FROM.length;
 			int n = OSParameter.INPUT_FILES_TO_MOVE_TO==null?0:OSParameter.INPUT_FILES_TO_MOVE_TO.length;
 			if(m != n){
@@ -1438,7 +1463,7 @@ public class OSServiceUtil{// implements OShL{
 				}
 			}
 		}		
-		
+
 		//from OSoL	
 		if(OSParameter.ALLOW_IO_OPERATIONS_BY_USERS){
 			String[] msDirectoriesToMake = m_osOption.getDirectoriesToMake();
@@ -1450,55 +1475,51 @@ public class OSServiceUtil{// implements OShL{
 					}
 				}
 			}
-			String[] msFilesToCreate = m_osOption.getFilesToCreate();
+			String[] msFilesToCreate = m_osOption.getFilesToMake();
 			if(msFilesToCreate !=null && msFilesToCreate.length > 0){
 				for(int i = 0; i < msFilesToCreate.length; i++){
 					boolean bSuccess = IOUtil.createFile(msFilesToCreate[i]);
 					if(! bSuccess){
-						IOUtil.log("not able to create file " + msFilesToCreate[i], null);	
+						IOUtil.log("not able to make file " + msFilesToCreate[i], null);	
 					}
 				}
 			}
-			String[] msInputFilesToCopyFrom = m_osOption.getInputFilesToCopyFrom();
-			String[] msInputFilesToCopyTo = m_osOption.getInputFilesToCopyTo();
-			if((msInputFilesToCopyFrom != null && msInputFilesToCopyFrom.length > 0) ||
-					(msInputFilesToCopyTo !=null && msInputFilesToCopyTo.length > 0)){
-				int m = msInputFilesToCopyFrom==null?0:msInputFilesToCopyFrom.length;
-				int n = msInputFilesToCopyTo==null?0:msInputFilesToCopyTo.length;
-				if(m != n){
-					IOUtil.log("number of INPUT_FILES_TO_COPY_FROM not equal to number of INPUT_FILES_TO_COPY_TO", null);
-				}
-				else{
-					for(int i = 0; i < m; i++){
-						boolean bSuccess  = IOUtil.copyFile(msInputFilesToCopyFrom[i], msInputFilesToCopyTo[i]);
-						if(! bSuccess){
-							IOUtil.log("not able to copy file from " + msInputFilesToCopyFrom[i] + " to " +  msInputFilesToCopyTo[i], null);	
-						}
+			PathPair[] mInputDirectoriesToMove = m_osOption.getInputDirectoriesToMove();
+			if(mInputDirectoriesToMove != null && mInputDirectoriesToMove.length > 0){
+				int n = mInputDirectoriesToMove.length;
+				for(int i = 0; i < n; i++){
+					boolean bSuccess;  
+					if(mInputDirectoriesToMove[i].makeCopy){
+						bSuccess = IOUtil.copyDir(mInputDirectoriesToMove[i].from, mInputDirectoriesToMove[i].to);
+					}
+					else{
+						bSuccess = IOUtil.moveDir(mInputDirectoriesToMove[i].from, mInputDirectoriesToMove[i].to);
+					}
+					if(! bSuccess){
+						IOUtil.log("not able to movedirectory from " + mInputDirectoriesToMove[i].from + " to " +  mInputDirectoriesToMove[i].to, null);	
 					}
 				}
 			}
-			String[] msInputFilesToMoveFrom = m_osOption.getInputFilesToMoveFrom();
-			String[] msInputFilesToMoveTo = m_osOption.getInputFilesToMoveTo();
-			if((msInputFilesToMoveFrom != null && msInputFilesToMoveFrom.length > 0) ||
-				(msInputFilesToMoveTo !=null && msInputFilesToMoveTo.length > 0)){
-				int m = msInputFilesToMoveFrom==null?0:msInputFilesToMoveFrom.length;
-				int n = msInputFilesToMoveTo==null?0:msInputFilesToMoveTo.length;
-				if(m != n){
-					IOUtil.log("number of INPUT_FILES_TO_MOVE_FROM not equal to number of INPUT_FILES_TO_MOVE_TO", null);
-				}
-				else{
-					for(int i = 0; i < m; i++){
-						boolean bSuccess  = IOUtil.moveFile(msInputFilesToMoveFrom[i], msInputFilesToMoveTo[i]);
-						if(! bSuccess){
-							IOUtil.log("not able to move file from " + msInputFilesToMoveFrom[i] + " to " +  msInputFilesToMoveTo[i], null);	
-						}
+			PathPair[] mInputFilesToMove = m_osOption.getInputFilesToMove();
+			if(mInputFilesToMove != null && mInputFilesToMove.length > 0){
+				int n = mInputFilesToMove.length;
+				for(int i = 0; i < n; i++){
+					boolean bSuccess;  
+					if(mInputFilesToMove[i].makeCopy){
+						bSuccess = IOUtil.copyFile(mInputFilesToMove[i].from, mInputFilesToMove[i].to);
+					}
+					else{
+						bSuccess = IOUtil.moveFile(mInputFilesToMove[i].from, mInputFilesToMove[i].to);
+					}
+					if(! bSuccess){
+						IOUtil.log("not able to file file from " + mInputFilesToMove[i].from + " to " +  mInputFilesToMove[i].to, null);	
 					}
 				}
 			}				
 		}
 		return true;
 	}//presolve
-	
+
 	/**
 	 * postsolve handles works after invoking the solve method.
 	 * 
@@ -1524,7 +1545,7 @@ public class OSServiceUtil{// implements OShL{
 				}
 			}
 			if((OSParameter.OUTPUT_FILES_TO_MOVE_FROM != null && OSParameter.OUTPUT_FILES_TO_MOVE_FROM.length > 0) ||
-				(OSParameter.OUTPUT_FILES_TO_MOVE_TO != null && OSParameter.OUTPUT_FILES_TO_MOVE_TO.length > 0)){
+					(OSParameter.OUTPUT_FILES_TO_MOVE_TO != null && OSParameter.OUTPUT_FILES_TO_MOVE_TO.length > 0)){
 				int m = OSParameter.OUTPUT_FILES_TO_MOVE_FROM==null?0:OSParameter.OUTPUT_FILES_TO_MOVE_FROM.length;
 				int n = OSParameter.OUTPUT_FILES_TO_MOVE_TO==null?0:OSParameter.OUTPUT_FILES_TO_MOVE_TO.length;
 				if(m != n){
@@ -1555,7 +1576,7 @@ public class OSServiceUtil{// implements OShL{
 					}
 				}
 			}
-			
+
 			if(OSParameter.PROCESSES_TO_KILL != null && OSParameter.PROCESSES_TO_KILL.length > 0){
 				for(int i = 0; i < OSParameter.PROCESSES_TO_KILL.length; i++){
 					boolean bSuccess = ProcessUtil.killProcessByName(OSParameter.PROCESSES_TO_KILL[i]);
@@ -1567,43 +1588,38 @@ public class OSServiceUtil{// implements OShL{
 		}
 		//from osol
 		if(OSParameter.ALLOW_IO_OPERATIONS_BY_USERS){
-			String[] msOutputFilesToCopyFrom = m_osOption.getOutputFilesToCopyFrom();
-			String[] msOutputFilesToCopyTo = m_osOption.getOutputFilesToCopyTo();
-			if((msOutputFilesToCopyFrom != null && msOutputFilesToCopyFrom.length > 0) ||
-					(msOutputFilesToCopyTo !=null && msOutputFilesToCopyTo.length > 0)){
-				int m = msOutputFilesToCopyFrom==null?0:msOutputFilesToCopyFrom.length;
-				int n = msOutputFilesToCopyTo==null?0:msOutputFilesToCopyTo.length;
-				if(m != n){
-					IOUtil.log("number of OUTPUT_FILES_TO_COPY_FROM not equal to number of OUTPUT_FILES_TO_COPY_TO", null);
-				}
-				else{
-					for(int i = 0; i < m; i++){
-						boolean bSuccess  = IOUtil.copyFile(msOutputFilesToCopyFrom[i], msOutputFilesToCopyTo[i]);
-						if(! bSuccess){
-							IOUtil.log("not able to copy file from " + msOutputFilesToCopyFrom[i] + " to " +  msOutputFilesToCopyTo[i], null);	
-						}
+			PathPair[] mOutputDirectoriesToMove = m_osOption.getOutputDirectoriesToMove();
+			if(mOutputDirectoriesToMove != null && mOutputDirectoriesToMove.length > 0){
+				int n = mOutputDirectoriesToMove.length;
+				for(int i = 0; i < n; i++){
+					boolean bSuccess;  
+					if(mOutputDirectoriesToMove[i].makeCopy){
+						bSuccess = IOUtil.copyDir(mOutputDirectoriesToMove[i].from, mOutputDirectoriesToMove[i].to);
+					}
+					else{
+						bSuccess = IOUtil.moveDir(mOutputDirectoriesToMove[i].from, mOutputDirectoriesToMove[i].to);
+					}
+					if(! bSuccess){
+						IOUtil.log("not able to movedirectory from " + mOutputDirectoriesToMove[i].from + " to " +  mOutputDirectoriesToMove[i].to, null);	
 					}
 				}
 			}
-			String[] msOutputFilesToMoveFrom = m_osOption.getOutputFilesToMoveFrom();
-			String[] msOutputFilesToMoveTo = m_osOption.getOutputFilesToMoveTo();
-			if((msOutputFilesToMoveFrom != null && msOutputFilesToMoveFrom.length > 0) ||
-				(msOutputFilesToMoveTo !=null && msOutputFilesToMoveTo.length > 0)){
-				int m = msOutputFilesToMoveFrom==null?0:msOutputFilesToMoveFrom.length;
-				int n = msOutputFilesToMoveTo==null?0:msOutputFilesToMoveTo.length;
-				if(m != n){
-					IOUtil.log("number of OUTPUT_FILES_TO_MOVE_FROM not equal to number of OUTPUT_FILES_TO_MOVE_TO", null);
-				}
-				else{
-					for(int i = 0; i < m; i++){
-						boolean bSuccess  = IOUtil.moveFile(msOutputFilesToMoveFrom[i], msOutputFilesToMoveTo[i]);
-						if(! bSuccess){
-							IOUtil.log("not able to move file from " + msOutputFilesToMoveFrom[i] + " to " +  msOutputFilesToMoveTo[i], null);	
-						}
+			PathPair[] mOutputFilesToMove = m_osOption.getOutputFilesToMove();
+			if(mOutputFilesToMove != null && mOutputFilesToMove.length > 0){
+				int n = mOutputFilesToMove.length;
+				for(int i = 0; i < n; i++){
+					boolean bSuccess;  
+					if(mOutputFilesToMove[i].makeCopy){
+						bSuccess = IOUtil.copyFile(mOutputFilesToMove[i].from, mOutputFilesToMove[i].to);
+					}
+					else{
+						bSuccess = IOUtil.moveFile(mOutputFilesToMove[i].from, mOutputFilesToMove[i].to);
+					}
+					if(! bSuccess){
+						IOUtil.log("not able to file file from " + mOutputFilesToMove[i].from + " to " +  mOutputFilesToMove[i].to, null);	
 					}
 				}
-			}
-
+			}				
 			String[] msFilesToDelete = m_osOption.getFilesToDelete();
 			if(msFilesToDelete !=null && msFilesToDelete.length > 0){
 				for(int i = 0; i < msFilesToDelete.length; i++){
@@ -1634,7 +1650,7 @@ public class OSServiceUtil{// implements OShL{
 		}
 		return true;
 	}//postsolve
-	
+
 	/**
 	 * Call a solver or analyzer service whose input is given by a string following 
 	 * the OSiL schema and returns the result in a string that follows OSrL schema. 
@@ -1650,7 +1666,7 @@ public class OSServiceUtil{// implements OShL{
 		m_osrlWriter.setServiceURI(OSParameter.SERVICE_URI);
 		m_osrlWriter.setServiceName(OSParameter.SERVICE_NAME);
 		m_osrlWriter.setResultTime(new GregorianCalendar());
-		
+
 		//read osol
 		if(osol != null && osol.length() > 0){
 			if(!readOSoL(osol)){
@@ -1661,7 +1677,7 @@ public class OSServiceUtil{// implements OShL{
 			}
 		}
 		if(m_osOption == null) m_osOption = new OSOption();
-			
+
 		//check permission
 		try {
 			if(!checkPermision()){
@@ -1678,7 +1694,7 @@ public class OSServiceUtil{// implements OShL{
 			sOSrL = m_osrlWriter.writeToString();
 			return sOSrL;
 		}
-		
+
 		//if no jobID exists, automatically create one and establish job statistics 
 		if(m_sJobID == null || m_sJobID.length() <= 0 ){
 			m_sJobID = "AUTOJOBID_" + CommonUtil.getJobID(null);
@@ -1687,7 +1703,7 @@ public class OSServiceUtil{// implements OShL{
 		m_osrlWriter.setJobID(m_sJobID);
 		String sTime = XMLUtil.createXSDateTime(new GregorianCalendar());
 		IOUtil.log("job ID: "+m_sJobID+":" + sTime, null);
-		
+
 		//see if the job is resubmit
 		JobStatistics jobStatistics = m_jobStatisticsTable.get(m_sJobID);
 		if(jobStatistics != null){
@@ -1710,7 +1726,7 @@ public class OSServiceUtil{// implements OShL{
 				return sOSrL;
 			}
 		}
-		
+
 		//check system requirement
 		try {
 			if(!checkSystemRequirement()) {
@@ -1727,7 +1743,7 @@ public class OSServiceUtil{// implements OShL{
 			sOSrL = m_osrlWriter.writeToString();
 			return sOSrL;
 		}
-		
+
 		String osol2 = osol; 
 		try {
 			osol2 = m_osOption.writeOSoL();
@@ -1740,13 +1756,13 @@ public class OSServiceUtil{// implements OShL{
 			sOSrL = m_osrlWriter.writeToString();
 			return sOSrL;
 		}
-		
+
 		//check waiting: scheduleTime, jobdependencies, required files/directories, solver availability
 		if(m_solverThread == null){
 			m_solverThread = new SolverThread();	
 		}
 		if((m_sServiceTypeInOSoL != null && !m_sServiceTypeInOSoL.equals("scheduler")) || m_sServiceTypeInOSoL == null || 
-			(serviceType != null && serviceType.equals("scheduler"))){
+				(serviceType != null && serviceType.equals("scheduler"))){
 			try {		
 				if(checkWaiting(osil, osol2, serviceType.equals("scheduler"), false)){
 					m_osrlWriter.setGeneralStatusType("warning");
@@ -1764,29 +1780,29 @@ public class OSServiceUtil{// implements OShL{
 				return sOSrL;			
 			}			
 		}
-		
+
 		//initializeStatistics
 		initializeStatistics();
-				
+
 		//launch solver thread
 		try{
 			m_solverThread.m_sOSiL = osil;
 			m_solverThread.m_sOSoL = osol2;
 			m_solverThread.m_osOption = m_osOption;
 			m_solverThread.m_bCalledFromSend = false;
-			
+
 			m_osrlWriter.setGeneralStatusType("warning");
 			m_osrlWriter.setGeneralStatusDescription("No result returned or no result yet.");
 			m_solverThread.m_sOSrL = m_osrlWriter.writeToString();
-			
+
 			Thread thread = new Thread(m_solverThread);
 			thread.setName(m_sJobID);			
-			
+
 			m_solverThreadHashTable.remove(m_sJobID);
 			m_solverThreadHashTable.put(m_sJobID, m_solverThread);
 			m_threadHashTable.remove(m_sJobID);
 			m_threadHashTable.put(m_sJobID, thread);
-			
+
 			thread.start();
 
 			long lTimeSpan = (long)m_dJobMaxTime*1000;
@@ -1856,7 +1872,7 @@ public class OSServiceUtil{// implements OShL{
 		}
 		return sOSrL;
 	}//solve
-	
+
 	/**
 	 * Send (or asynchronously solve) an instance to a solver, analyzer or scheduler service
 	 * whose input is given by a string following the OSiL schema and returns the result
@@ -1870,7 +1886,7 @@ public class OSServiceUtil{// implements OShL{
 		if(osil == null) osil = "";
 		if(osol == null) osol = "";
 		m_osrlWriter = new OSrLWriter();
-		
+
 		//check osol
 		if(osol == null || osol.length() <= 0){
 			IOUtil.log("Empty osol string for the send method", null);
@@ -1887,7 +1903,7 @@ public class OSServiceUtil{// implements OShL{
 			IOUtil.log(e.getMessage(), null);
 			return false;
 		}
-		
+
 		//check if jobID exists 
 		if(m_sJobID == null || m_sJobID.length() <= 0 ){
 			IOUtil.log("No jobID in OSoL", null);
@@ -1924,7 +1940,7 @@ public class OSServiceUtil{// implements OShL{
 
 		//initializeStatistics
 		initializeStatistics();
-		
+
 		if(m_solverThread == null){
 			m_solverThread = new SolverThread();	
 		}	
@@ -1962,12 +1978,12 @@ public class OSServiceUtil{// implements OShL{
 
 			Thread thread = new Thread(m_solverThread);
 			thread.setName(m_sJobID);
-			
+
 			m_solverThreadHashTable.remove(m_sJobID);
 			m_solverThreadHashTable.put(m_sJobID, m_solverThread);
 			m_threadHashTable.remove(m_sJobID);
 			m_threadHashTable.put(m_sJobID, thread);
-			
+
 			thread.start();
 		}
 		catch(Exception e){
@@ -2012,7 +2028,7 @@ public class OSServiceUtil{// implements OShL{
 				m_osrlWriter.setGeneralMessage(IOUtil.exceptionStackToString(e));
 				String sOSrL = m_osrlWriter.writeToString();
 				IOUtil.writeStringToFile(sOSrL, sResultFile);	
-								
+
 				try {
 					postprocess(false);				
 				} 
@@ -2081,7 +2097,7 @@ public class OSServiceUtil{// implements OShL{
 			}
 		}	
 		//may also need to check if the user name matches the job's user name
-				
+
 		//check jobID
 		if(m_sJobID == null || m_sJobID.length() <= 0 ){
 			m_osrlWriter.setGeneralStatusType("error");
@@ -2090,7 +2106,7 @@ public class OSServiceUtil{// implements OShL{
 			return sOSrL;
 		}
 		m_osrlWriter.setJobID(m_sJobID);
-		
+
 		//retrieve
 		try {
 			sOSrL = IOUtil.readStringFromFile(OSParameter.TEMP_FILE_FOLDER+m_sJobID+".osrl");
@@ -2100,7 +2116,7 @@ public class OSServiceUtil{// implements OShL{
 		} 
 		catch (Exception e) {
 		}
-		
+
 		//check if there is the job
 		JobStatistics jobStatistics = m_jobStatisticsTable.get(m_sJobID);
 		if(jobStatistics == null && (sOSrL == null || sOSrL.length() <= 0)){
@@ -2160,7 +2176,7 @@ public class OSServiceUtil{// implements OShL{
 		}
 
 		if(m_vFinishedJobIDs.contains(m_sJobID)) return sOSrL;
-		
+
 		Thread thread = (Thread)m_threadHashTable.get(m_sJobID);
 		if(thread != null){
 			try{
@@ -2181,7 +2197,7 @@ public class OSServiceUtil{// implements OShL{
 		if(jobStatistics.userName == null || jobStatistics.userName.length() <= 0){
 			jobStatistics.userName = m_sUserName;
 		}		
-		
+
 		String sUserName = jobStatistics.userName;
 		if(sUserName == null) sUserName = "";
 		String sCount = m_userJobCountTable.get(sUserName);
@@ -2213,7 +2229,7 @@ public class OSServiceUtil{// implements OShL{
 		m_vFinishedJobIDs.remove(m_sJobID);
 		m_vFinishedJobIDs.add(m_sJobID);
 		m_iCurrentJobCount = m_vCurrentJobIDs.size();
-		
+
 		if(jobStatistics.jobID == null || jobStatistics.jobID.length() <= 0){
 			jobStatistics.jobID = m_sJobID;
 		}
@@ -2240,7 +2256,7 @@ public class OSServiceUtil{// implements OShL{
 					osplWriter.setServiceURI(OSParameter.OS_SCHEDULER_SITE);
 					osplWriter.setProcessTime(new GregorianCalendar());
 					String sOSpLInput = osplWriter.writeToString();
-		
+
 					OSoLWriter osolWriter = new OSoLWriter();
 					osolWriter.setServiceName(OSParameter.SERVICE_NAME);
 					osolWriter.setServiceURI(OSParameter.OS_SCHEDULER_SITE);
@@ -2290,7 +2306,7 @@ public class OSServiceUtil{// implements OShL{
 		}		
 		//save ospl
 		saveOSpL();
-		
+
 		return sOSrL;
 	}//retrieve
 
@@ -2345,7 +2361,7 @@ public class OSServiceUtil{// implements OShL{
 			}
 		}
 		//may also need to check if the user name matches the job's user name
-				
+
 		//check jobID
 		if(m_sJobID == null || m_sJobID.length() <= 0 ){
 			m_osplWriter.setResponseStatus("error");
@@ -2362,7 +2378,7 @@ public class OSServiceUtil{// implements OShL{
 			sOSpL = m_osplWriter.writeToString();
 			return sOSpL;
 		}
-		
+
 		//check if already finished or killed
 		if(jobStatistics.state != null && (jobStatistics.state.equals("finished"))){
 			m_osplWriter.setResponseStatus("success");
@@ -2380,7 +2396,7 @@ public class OSServiceUtil{// implements OShL{
 		//kill
 		OSServiceUtil osServiceUtil = new OSServiceUtil();
 		osServiceUtil.m_sJobID = m_sJobID;
-		
+
 		String sError = "";
 		//call specific solver's extra kill implemenation		
 		if(solver != null){
@@ -2412,7 +2428,7 @@ public class OSServiceUtil{// implements OShL{
 			}
 			processsHashTable.remove(m_sJobID);
 		}
-		
+
 		Thread thread = (Thread)m_threadHashTable.get(m_sJobID);
 		if(thread != null){
 			try{
@@ -2425,10 +2441,10 @@ public class OSServiceUtil{// implements OShL{
 			}
 		}
 		if(serviceType.equals("scheduler") && 
-		   jobStatistics != null && 
-		   jobStatistics.serviceURI != null && 
-		   !jobStatistics.serviceURI.equals(OSParameter.OS_SCHEDULER_SITE)){
-			
+				jobStatistics != null && 
+				jobStatistics.serviceURI != null && 
+				!jobStatistics.serviceURI.equals(OSParameter.OS_SCHEDULER_SITE)){
+
 			OSSolverAgent solverAgent = new OSSolverAgent();
 			solverAgent.solverAddress = jobStatistics.serviceURI; 
 			if(solverAgent.solverAddress != null && solverAgent.solverAddress.length() > 0){
@@ -2469,12 +2485,12 @@ public class OSServiceUtil{// implements OShL{
 				}
 			}
 		}
-		
+
 		//postprocess
 		if(osServiceUtil.m_sJobID == null || osServiceUtil.m_sJobID.length() <= 0){
 			osServiceUtil.m_sJobID = m_sJobID;
 		}
-		
+
 		try{
 			osServiceUtil.postprocess(true);  
 		}
@@ -2495,7 +2511,7 @@ public class OSServiceUtil{// implements OShL{
 		sOSpL = m_osplWriter.writeToString();
 		return sOSpL;					
 	}//kill
-	
+
 	/**
 	 * Set (push) and/or get (pull) runtime dynamic process information to and/or from the service.
 	 * 
@@ -2509,7 +2525,7 @@ public class OSServiceUtil{// implements OShL{
 		if(serviceType != null && serviceType.equals("scheduler")){
 			IOUtil.log(m_userJobCountTable.toString(), null);
 		}
-		*/
+		 */
 
 		if(osplInput == null) osplInput = "";
 		if(osol == null) osol = "";
@@ -2560,7 +2576,7 @@ public class OSServiceUtil{// implements OShL{
 			ProcessStatistics processStatistics = null;
 			JobStatistics[] mJobStatistics = null;
 			OptimizationProcess optimizationProcess = null;
-					
+
 			if(osplInput == null || osplInput.length() == 0){
 				m_osplWriter.setResponseStatus("error");
 				m_osplWriter.setResponseDescription("ospl string is empty");
@@ -2584,21 +2600,21 @@ public class OSServiceUtil{// implements OShL{
 						return sOSpLOutput;
 					}
 					else if(!sAction.equals("ping") &&
-						    !sAction.equals("notifyJobCompletion") &&
-						    !sAction.equals("requestJob") &&
-						    !sAction.equals("getServiceStatistics") &&
-						    !sAction.equals("setServiceStatistics") &&
-						    !sAction.equals("getJobStatistics") &&
-						    !sAction.equals("setJobStatistics") &&
-						    !sAction.equals("getOptimization") &&
-						    !sAction.equals("setOptimization") &&
-						    !sAction.equals("getAll") &&
-						    !sAction.equals("setAll")){
+							!sAction.equals("notifyJobCompletion") &&
+							!sAction.equals("requestJob") &&
+							!sAction.equals("getServiceStatistics") &&
+							!sAction.equals("setServiceStatistics") &&
+							!sAction.equals("getJobStatistics") &&
+							!sAction.equals("setJobStatistics") &&
+							!sAction.equals("getOptimization") &&
+							!sAction.equals("setOptimization") &&
+							!sAction.equals("getAll") &&
+							!sAction.equals("setAll")){
 						m_osplWriter.setResponseStatus("error");
 						m_osplWriter.setResponseDescription("request action specified in ospl has to one of the following values: " +
 								"ping, notifyJobCompletion, requestJob, " +
 								"getServiceStatistics, setServiceStatistics, " +
-								"getJobStatistics, setJobStatistics, getOptimization, setOptimization, getAll, setAll");
+						"getJobStatistics, setJobStatistics, getOptimization, setOptimization, getAll, setAll");
 						sOSpLOutput = m_osplWriter.writeToString();
 						return sOSpLOutput;
 					}
@@ -2667,14 +2683,14 @@ public class OSServiceUtil{// implements OShL{
 						m_osolWriter.setPassword(m_sSystemPassword);
 						m_osolWriter.setServiceType("scheduler");
 						String sOSoLInput = m_osolWriter.writeToString();					
-						
+
 						RetrieveThread retrieveThread = new RetrieveThread();
 						OSSolverAgent osSolverAgent = new OSSolverAgent(sServiceURI);
 						retrieveThread.m_osSolverAgent = osSolverAgent;
 						retrieveThread.m_sOSoL = sOSoLInput;
 						String sResultFile = OSParameter.TEMP_FILE_FOLDER+m_sJobID+".osrl";
 						retrieveThread.m_sResultFile = sResultFile;
-						
+
 						Thread thread = new Thread(retrieveThread);
 						thread.start();
 					}	
@@ -2699,9 +2715,9 @@ public class OSServiceUtil{// implements OShL{
 							boolean bRead = osolReader.readString(sOSoL);
 							if(!bRead) throw new Exception("Invalid OSoL option");
 							String sContactTransportType = osolReader.getContactTransportType();
-							String sContactAddress = osolReader.getContactAddress();								
+							String sContactAddress = osolReader.getContact();								
 							if(sContactAddress != null && sContactAddress.length() > 0 && 
-							   !sContactAddress.equals(OSParameter.OS_SCHEDULER_SITE)){
+									!sContactAddress.equals(OSParameter.OS_SCHEDULER_SITE)){
 								if(sContactTransportType == null || sContactTransportType.length() <= 0){
 									sContactTransportType = "osp";
 								}
@@ -2730,13 +2746,13 @@ public class OSServiceUtil{// implements OShL{
 										String sServiceType = serviceType;
 										m_osolWriter.setServiceType(sServiceType);
 										String sOption = m_osolWriter.writeToString();
-										
+
 										KnockSolverThread knockSolverThread = new KnockSolverThread();
 										OSSolverAgent osSolverAgent = new OSSolverAgent(sContactAddress);
 										knockSolverThread.m_osSolverAgent = osSolverAgent;
 										knockSolverThread.m_osplInput = sProcessInput;
 										knockSolverThread.m_osol = sOption;
-															
+
 										Thread thread = new Thread(knockSolverThread);
 										thread.start();
 									}
@@ -2756,9 +2772,9 @@ public class OSServiceUtil{// implements OShL{
 					int iJobs = mJobStatistics==null?0:mJobStatistics.length;
 					for(int i = 0; i < iJobs; i++){
 						if(mJobStatistics[i] != null && 
-						   mJobStatistics[i].jobID != null && mJobStatistics[i].jobID.length() > 0 && 
-						   mJobStatistics[i].state != null && 
-						  (mJobStatistics[i].state.equals("killed") || mJobStatistics[i].state.equals("finished"))){
+								mJobStatistics[i].jobID != null && mJobStatistics[i].jobID.length() > 0 && 
+								mJobStatistics[i].state != null && 
+								(mJobStatistics[i].state.equals("killed") || mJobStatistics[i].state.equals("finished"))){
 							Thread thread = (Thread)m_threadHashTable.get(mJobStatistics[i].jobID);
 							if(thread != null){
 								try{
@@ -2794,7 +2810,7 @@ public class OSServiceUtil{// implements OShL{
 								m_userJobCountTable.remove(sUserName);
 								m_userJobCountTable.put(sUserName, iCount+"");
 							}
-							
+
 							m_solverThreadHashTable.remove(mJobStatistics[i].jobID);
 							m_threadHashTable.remove(mJobStatistics[i].jobID);							
 							m_vCurrentJobIDs.remove(mJobStatistics[i].jobID);
@@ -2802,7 +2818,7 @@ public class OSServiceUtil{// implements OShL{
 							m_vFinishedJobIDs.remove(mJobStatistics[i].jobID);
 							m_vFinishedJobIDs.add(mJobStatistics[i].jobID);	
 							m_iCurrentJobCount = m_vCurrentJobIDs.size();
-							
+
 							JobStatistics jobStatistics = m_jobStatisticsTable.get(mJobStatistics[i].jobID);
 							if(jobStatistics == null){
 								m_jobStatisticsTable.put(mJobStatistics[i].jobID, mJobStatistics[i]);
@@ -2826,7 +2842,7 @@ public class OSServiceUtil{// implements OShL{
 									jobStatistics.duration = mJobStatistics[i].duration;
 								}
 								if(mJobStatistics[i].endTime != null && mJobStatistics[i].endTime.get(Calendar.YEAR) > 1970 &&
-								   mJobStatistics[i].startTime != null && mJobStatistics[i].startTime.get(Calendar.YEAR) > 1970	){
+										mJobStatistics[i].startTime != null && mJobStatistics[i].startTime.get(Calendar.YEAR) > 1970	){
 									jobStatistics.duration = (mJobStatistics[i].endTime.getTimeInMillis() - mJobStatistics[i].startTime.getTimeInMillis())/1000.0;
 								}
 								if(jobStatistics.serviceURI != null &&  jobStatistics.serviceURI.length() > 0){
@@ -2850,8 +2866,11 @@ public class OSServiceUtil{// implements OShL{
 								if(jobStatistics.dependencies == null || jobStatistics.dependencies.jobID == null || jobStatistics.dependencies.jobID.length <= 0){
 									jobStatistics.dependencies = mJobStatistics[i].dependencies;
 								}
-								if(jobStatistics.requiredDirectoriesAndFiles == null || jobStatistics.requiredDirectoriesAndFiles.path == null || jobStatistics.requiredDirectoriesAndFiles.path.length <= 0){
-									jobStatistics.requiredDirectoriesAndFiles = mJobStatistics[i].requiredDirectoriesAndFiles;
+								if(jobStatistics.requiredDirectories == null || jobStatistics.requiredDirectories.path == null || jobStatistics.requiredDirectories.path.length <= 0){
+									jobStatistics.requiredDirectories = mJobStatistics[i].requiredDirectories;
+								}
+								if(jobStatistics.requiredFiles == null || jobStatistics.requiredFiles.path == null || jobStatistics.requiredFiles.path.length <= 0){
+									jobStatistics.requiredFiles = mJobStatistics[i].requiredFiles;
 								}
 							}
 						}
@@ -2872,7 +2891,7 @@ public class OSServiceUtil{// implements OShL{
 						jobStatistics1.jobID = m_sJobID;
 						m_jobStatisticsTable.put(m_sJobID, jobStatistics1);
 					}
-					
+
 					if(jobStatistics1.userName == null || jobStatistics1.userName.length() <= 0){
 						jobStatistics1.userName = m_sUserName;
 					}
@@ -2899,14 +2918,14 @@ public class OSServiceUtil{// implements OShL{
 					}
 					m_userJobCountTable.remove(sUserName1);
 					m_userJobCountTable.put(sUserName1, iCount1+"");
-					
+
 					m_solverThreadHashTable.remove(m_sJobID);
 					m_threadHashTable.remove(m_sJobID);
 					m_vCurrentJobIDs.remove(m_sJobID);
 					m_vWaitingJobIDs.remove(m_sJobID);
 					m_vFinishedJobIDs.remove(m_sJobID);
 					m_vFinishedJobIDs.add(m_sJobID);
-					
+
 					jobStatistics1.jobID = m_sJobID;
 					if((jobStatistics1.serviceURI == null ||  jobStatistics1.serviceURI.length() <= 0) && !sServiceURI.equals(OSParameter.OS_SCHEDULER_SITE)){
 						jobStatistics1.serviceURI = sServiceURI;
@@ -2940,7 +2959,7 @@ public class OSServiceUtil{// implements OShL{
 				}
 				//save ospl
 				saveOSpL();
-				
+
 				//prepare result
 				if(sWarningDescription.length() <= 0){
 					m_osplWriter.setResponseStatus("success");
@@ -3014,7 +3033,7 @@ public class OSServiceUtil{// implements OShL{
 						m_dAvailableMemory = Double.POSITIVE_INFINITY;
 					}
 					if(m_dAvailableDiskSpace <= OSParameter.MINIMUM_DISKSPACE_TRIGGER ||
-					   m_dAvailableMemory <= ((double)OSParameter.MINIMUM_MEMORY_TRIGGER)){
+							m_dAvailableMemory <= ((double)OSParameter.MINIMUM_MEMORY_TRIGGER)){
 						if(m_iCurrentJobCount > 0){
 							m_sCurrentState = "busy";				
 						}
@@ -3047,7 +3066,7 @@ public class OSServiceUtil{// implements OShL{
 					}
 					m_osplWriter.setTimeServiceStarted(CommonUtil.createNativeDateTime(m_lTimeServiceStarted));
 					m_osplWriter.setServiceUtilization(m_dServiceUtilization);
-					
+
 					String sCurrentJobIDs = "";
 					int iCurrentJobIDs = m_vCurrentJobIDs.size();
 					String[] msCurrentJobIDs = new String[iCurrentJobIDs];
@@ -3059,7 +3078,7 @@ public class OSServiceUtil{// implements OShL{
 							msCurrentJobIDs[i] = "";
 						}
 					}
-					
+
 					if(iCurrentJobIDs > 0){
 						if(msCurrentJobIDs[0] != null && msCurrentJobIDs[0].length() > 0){
 							sCurrentJobIDs += msCurrentJobIDs[0];							
@@ -3074,7 +3093,7 @@ public class OSServiceUtil{// implements OShL{
 					if(sCurrentJobIDs != null && sCurrentJobIDs.length() > 0){
 						m_osplWriter.addOtherProcess("currentJobIDs", sCurrentJobIDs, "jobs that are currently running");
 					}
-					
+
 					Enumeration enumeration = processsHashTable.keys();
 					String sProcesses = "";
 					while(enumeration.hasMoreElements()){
@@ -3095,10 +3114,10 @@ public class OSServiceUtil{// implements OShL{
 					if(sProcesses.length() > 0){
 						m_osplWriter.addOtherProcess("processes", sProcesses, "processes launched by the current jobs");					
 					}
-					
+
 					//save ospl
 					saveOSpL();
-					
+
 					if(!sAction.equals("getAll")){
 						m_osplWriter.setResponseStatus("success");					
 						m_osplWriter.setResponseDescription("The service statistics has been obtained. (No Job Statistics are included. To get job statistics, use action \"getJobStatistics\")");
@@ -3136,7 +3155,7 @@ public class OSServiceUtil{// implements OShL{
 						int iCurrentJobs = m_vCurrentJobIDs.size();
 						int iWaitingJobs = m_vWaitingJobIDs.size();
 						int iFinishedJobs = m_vFinishedJobIDs.size();
-						
+
 						int iJobs =  iCurrentJobs + iWaitingJobs + iFinishedJobs;
 						mAllJobStatistics = new JobStatistics[iJobs];
 						int j = 0;
@@ -3234,13 +3253,13 @@ public class OSServiceUtil{// implements OShL{
 			//log
 			Calendar calendar = new GregorianCalendar();
 			String sTime = ((calendar.get(Calendar.MONTH)+1) + "." + 
-					   calendar.get(Calendar.DAY_OF_MONTH) + "." +
-					   calendar.get(Calendar.YEAR) + "." + 
-					   calendar.get(Calendar.DAY_OF_WEEK) + "." + 
-					   calendar.get(Calendar.HOUR_OF_DAY) + "." + 
-					   calendar.get(Calendar.MINUTE) + "." + 
-					   calendar.get(Calendar.SECOND) + "." + 
-					   calendar.get(Calendar.MILLISECOND)  + OSConstant.JODID_DELIMITER);
+					calendar.get(Calendar.DAY_OF_MONTH) + "." +
+					calendar.get(Calendar.YEAR) + "." + 
+					calendar.get(Calendar.DAY_OF_WEEK) + "." + 
+					calendar.get(Calendar.HOUR_OF_DAY) + "." + 
+					calendar.get(Calendar.MINUTE) + "." + 
+					calendar.get(Calendar.SECOND) + "." + 
+					calendar.get(Calendar.MILLISECOND)  + OSConstant.JODID_DELIMITER);
 
 			IOUtil.log("knock:"+sTime, OSParameter.REGISTRY_LOG_FILE);
 			//set input
@@ -3287,7 +3306,7 @@ public class OSServiceUtil{// implements OShL{
 			return sOSpLOutput;
 		}
 	}//knock 
-	
+
 	/**
 	 * Discover an Optimization Service whose instance is given by a string following 
 	 * the Optimization Services query Language (OSqL) schema and returns the location information
@@ -3344,7 +3363,7 @@ public class OSServiceUtil{// implements OShL{
 		}
 		return sOSuL;
 	}//find
-	
+
 	/**
 	 * register an Optimization Service whose instance is given by a string following 
 	 * the Optimization Services entity Language (OSeL) schema and returns a string that contains 
@@ -3478,14 +3497,14 @@ public class OSServiceUtil{// implements OShL{
 			simulationThread.m_simulation = this.simulation;
 			simulationThread.m_sOSsLInput = osslInput;
 			simulationThread.m_sOSoL = osol;
-		
+
 			//launch simulation thread
 			Thread thread = new Thread(simulationThread);
 			thread.start();
 
 			long lTimeSpan = (long)m_dJobMaxTime*1000;
 			thread.join(lTimeSpan);
-			
+
 			//get output
 			sOSsLOutput = simulationThread.m_sOSsLOutput;	
 			return sOSsLOutput;
@@ -3504,17 +3523,17 @@ public class OSServiceUtil{// implements OShL{
 		 * osServiceUtil holds the interface to call the local solve method. 
 		 */
 		protected OSServiceUtil m_osServiceUtil = null;
-		
+
 		/**
 		 * m_osSolverAgent holds the agent to call the remote solve method. 
 		 */
 		protected OSSolverAgent m_osSolverAgent = null;
-		
+
 		/**
 		 * m_sOSiL holds the osil input for the solve method. 
 		 */
 		protected String m_sOSiL = "";
-		
+
 		/**
 		 * m_sOSoL holds the osol input for the solve method. 
 		 */
@@ -3525,7 +3544,7 @@ public class OSServiceUtil{// implements OShL{
 		 */
 		protected String m_sOSrL = "";
 
-		
+
 		/**
 		 * A solve method is implemented here. 
 		 */
@@ -3542,7 +3561,7 @@ public class OSServiceUtil{// implements OShL{
 				IOUtil.log(IOUtil.exceptionStackToString(e), null);
 			}
 		}//run
-		
+
 	}//SolveThread
 
 	/**
@@ -3553,17 +3572,17 @@ public class OSServiceUtil{// implements OShL{
 		 * osServiceUtil holds the interface to call the local send method. 
 		 */
 		protected OSServiceUtil m_osServiceUtil = null;
-		
+
 		/**
 		 * m_osSolverAgent holds the agent to call the remote send method. 
 		 */
 		protected OSSolverAgent m_osSolverAgent = null;
-		
+
 		/**
 		 * m_sOSiL holds the osil input for the send method. 
 		 */
 		protected String m_sOSiL = "";
-		
+
 		/**
 		 * m_sOSoL holds the osol input for the send method. 
 		 */
@@ -3573,7 +3592,7 @@ public class OSServiceUtil{// implements OShL{
 		 * m_bSend holds the boolean output for the send method. 
 		 */
 		protected boolean m_bSend = false;
-		
+
 		/**
 		 * A send method is implemented here. 
 		 */
@@ -3590,7 +3609,7 @@ public class OSServiceUtil{// implements OShL{
 				IOUtil.log(IOUtil.exceptionStackToString(e), null);
 			}
 		}//run
-		
+
 	}//SendThread
 
 	/**
@@ -3601,12 +3620,12 @@ public class OSServiceUtil{// implements OShL{
 		 * osServiceUtil holds the interface to call the local retrieve method. 
 		 */
 		protected OSServiceUtil m_osServiceUtil = null;
-		
+
 		/**
 		 * m_osSolverAgent holds the agent to call the remote retrieve method. 
 		 */
 		protected OSSolverAgent m_osSolverAgent = null;
-				
+
 		/**
 		 * m_sOSoL holds the osol input for the retrieve method. 
 		 */
@@ -3621,7 +3640,7 @@ public class OSServiceUtil{// implements OShL{
 		 * m_sResultFile holds the result file name.  
 		 */
 		protected String m_sResultFile = "";
-		
+
 		/**
 		 * A retrieve method is implemented here. 
 		 */
@@ -3658,9 +3677,9 @@ public class OSServiceUtil{// implements OShL{
 				IOUtil.log(IOUtil.exceptionStackToString(e), null);
 				return;
 			}
-			
+
 			if(m_sResultFile == null || m_sResultFile.length() <= 0) return;
-			
+
 			if(m_sOSrL != null && m_sOSrL.length() > 0){
 				OSrLReader osrlReader = new OSrLReader();
 				try {
@@ -3690,12 +3709,12 @@ public class OSServiceUtil{// implements OShL{
 		 * osServiceUtil holds the interface to call the local kill method. 
 		 */
 		protected OSServiceUtil m_osServiceUtil = null;
-		
+
 		/**
 		 * m_osSolverAgent holds the agent to call the remote kill method. 
 		 */
 		protected OSSolverAgent m_osSolverAgent = null;
-				
+
 		/**
 		 * m_sOSoL holds the osol input for the kill method. 
 		 */
@@ -3706,7 +3725,7 @@ public class OSServiceUtil{// implements OShL{
 		 */
 		protected String m_sOSpL = "";
 
-		
+
 		/**
 		 * A kill method is implemented here. 
 		 */
@@ -3723,7 +3742,7 @@ public class OSServiceUtil{// implements OShL{
 				IOUtil.log(IOUtil.exceptionStackToString(e), null);
 			}
 		}//run
-		
+
 	}//KillThread
 
 	/**
@@ -3734,7 +3753,7 @@ public class OSServiceUtil{// implements OShL{
 		 * osServiceUtil holds the interface to call the local knock method. 
 		 */
 		protected OSServiceUtil m_osServiceUtil = null;
-		
+
 		/**
 		 * m_osSolverAgent holds the agent to call the remote knock method. 
 		 */
@@ -3755,7 +3774,7 @@ public class OSServiceUtil{// implements OShL{
 		 */
 		protected String m_osplOutput = "";
 
-		
+
 		/**
 		 * A knock method is implemented here. 
 		 */
@@ -3772,7 +3791,7 @@ public class OSServiceUtil{// implements OShL{
 				IOUtil.log(IOUtil.exceptionStackToString(e), null);
 			}
 		}//run
-		
+
 	}//KnockSolverThread
 
 	/**
@@ -3783,7 +3802,7 @@ public class OSServiceUtil{// implements OShL{
 		 * osServiceUtil holds the interface to call the local knock method. 
 		 */
 		protected OSServiceUtil m_osServiceUtil = null;
-		
+
 		/**
 		 * m_osRegistryAgent holds the agent to call the remote knock method. 
 		 */
@@ -3804,7 +3823,7 @@ public class OSServiceUtil{// implements OShL{
 		 */
 		protected String m_sOSpLOutput = "";
 
-		
+
 		/**
 		 * A knock method is implemented here. 
 		 */
@@ -3831,7 +3850,7 @@ public class OSServiceUtil{// implements OShL{
 		 * osServiceUtil holds the interface to call the local find method. 
 		 */
 		protected OSServiceUtil m_osServiceUtil = null;
-		
+
 		/**
 		 * m_osRegistryAgent holds the agent to call the remote find method. 
 		 */
@@ -3852,7 +3871,7 @@ public class OSServiceUtil{// implements OShL{
 		 */
 		protected String m_sOSuL = "";
 
-		
+
 		/**
 		 * A find method is implemented here. 
 		 */
@@ -3893,14 +3912,14 @@ public class OSServiceUtil{// implements OShL{
 				IOUtil.log(sException, null);
 			}
 		}
-		
+
 		JobStatistics jobStatistics  = m_jobStatisticsTable.get(jobID);
 		if(jobStatistics == null){
 			jobStatistics = new JobStatistics();
 			jobStatistics.jobID = jobID;
 			m_jobStatisticsTable.put(jobID, jobStatistics);
 		}
-		
+
 		String sUserName = jobStatistics.userName;
 		if(sUserName == null) sUserName = "";
 		String sCount = m_userJobCountTable.get(sUserName);
@@ -3941,13 +3960,13 @@ public class OSServiceUtil{// implements OShL{
 		m_lTimeLastJobEnded = jobStatistics.endTime.getTimeInMillis();
 		jobStatistics.duration = 0;			
 		m_dServiceUtilization = ((double)m_lTotalBusyTime/(m_lTimeLastJobEnded - m_lTimeServiceStarted));
-		
+
 		//save ospl
 		saveOSpL();
 
 		return true;
 	}//removeWaitingJob
-	
+
 	/**
 	 * <P>The <code>ProcessJobRequestThread</code> class is an internal thread controlled by <code>OSServiceUtil</code> 
 	 * to process job request. 
@@ -3957,7 +3976,7 @@ public class OSServiceUtil{// implements OShL{
 		 * m_sRequestingServiceURI holds the serviceURI of the requesting service. 
 		 */
 		protected String m_sRequestingServiceURI = "";
-		
+
 		/**
 		 * The job request process is implemented here. 
 		 */
@@ -4044,7 +4063,7 @@ public class OSServiceUtil{// implements OShL{
 			}
 		}//run		
 	}//ProcessJobRequestThread
-	
+
 	/**
 	 * <P>The <code>ProcessWaitingJobsThread</code> class is an internal thread controlled by <code>OSServiceUtil</code> 
 	 * to process waiting jobs. 
@@ -4147,7 +4166,7 @@ public class OSServiceUtil{// implements OShL{
 			}
 		}//run		
 	}//ProcessWaitingJobsThread
-	
+
 	/**
 	 * <P>The <code>CheckSchedulerCurrentJobsThread</code> class is an internal thread controlled by <code>OSServiceUtil</code> 
 	 * to process current jobs in the scheduler 
@@ -4157,8 +4176,8 @@ public class OSServiceUtil{// implements OShL{
 		 * m_sCurrentJobID holds the jobID of the current Job. 
 		 */
 		protected String m_sCurrentJobID = "";
-		
-		
+
+
 		/**
 		 * The current scheculer jobs processing are implemented here. 
 		 */
@@ -4209,7 +4228,7 @@ public class OSServiceUtil{// implements OShL{
 				}
 				JobStatistics[] mJobStatistics = null;
 				OSpLReader osplReader = new OSpLReader(OSParameter.VALIDATE);
-				
+
 				try {
 					osplReader.readString(sOSpLOutput);
 					mJobStatistics = osplReader.getJobStatistics();					
@@ -4245,18 +4264,18 @@ public class OSServiceUtil{// implements OShL{
 					mJobStatistics1[0] = newJobStatistics;
 					osplWriter.setJobStatistics(mJobStatistics1);
 					String sProcessInput = osplWriter.writeToString();
-					
+
 					osolWriter = new OSoLWriter();
 					osolWriter.setServiceURI(sServiceURI);
 					osolWriter.setJobID(m_sCurrentJobID);
 					osolWriter.setPassword(OSParameter.getSystemPassword());			
 					osolWriter.setServiceType("solver");
 					String sOption = osolWriter.writeToString();
-					
+
 					OSServiceUtil osServiceUtil = new OSServiceUtil();						
 					osServiceUtil.m_sJobID = m_sCurrentJobID;
 					osServiceUtil.knock(sProcessInput, sOption);
-					
+
 					/* The following does partially what the osServiceUtil.knock (action="notifyJobCompletion") does.  
 					if(jobStatistics.userName == null || jobStatistics.userName.length() <= 0){
 						jobStatistics.userName = newJobStatistics.userName;
@@ -4301,7 +4320,7 @@ public class OSServiceUtil{// implements OShL{
 					m_vFinishedJobIDs.remove(m_sCurrentJobID);
 					m_vFinishedJobIDs.add(m_sCurrentJobID);
 					m_iCurrentJobCount = m_vCurrentJobIDs.size();
-					
+
 					jobStatistics.state = newJobStatistics.state;
 					if(jobStatistics.submitTime == null || jobStatistics.submitTime.get(Calendar.YEAR) <= 1970){
 						jobStatistics.submitTime = newJobStatistics.submitTime;
@@ -4325,7 +4344,7 @@ public class OSServiceUtil{// implements OShL{
 						osolWriter2.setPassword(m_sSystemPassword);
 						osolWriter2.setServiceType("scheduler");
 						String sOSoLInput = osolWriter2.writeToString();					
-						
+
 						OSServiceUtil osServiceUtil = new OSServiceUtil();
 						RetrieveThread retrieveThread = osServiceUtil.new RetrieveThread();
 						OSSolverAgent osSolverAgent = new OSSolverAgent(sServiceURI);
@@ -4333,14 +4352,14 @@ public class OSServiceUtil{// implements OShL{
 						retrieveThread.m_sOSoL = sOSoLInput;
 						String sResultFile = OSParameter.TEMP_FILE_FOLDER+m_sCurrentJobID+".osrl";
 						retrieveThread.m_sResultFile = sResultFile;
-						
+
 						Thread thread2 = new Thread(retrieveThread);
 						thread2.start();
 					}	
 					catch (Exception e){
 						IOUtil.log(IOUtil.exceptionStackToString(e),null);
 					}	
-					*/				
+					 */				
 				}
 			} 
 			catch (Exception e) {
@@ -4374,8 +4393,8 @@ public class OSServiceUtil{// implements OShL{
 			}
 			osplWriter.setTimeServiceStarted(CommonUtil.createNativeDateTime(m_lTimeServiceStarted));
 			osplWriter.setServiceUtilization(m_dServiceUtilization);
-			
-			
+
+
 			int iCurrentJobs = m_vCurrentJobIDs.size();
 			int iWaitingJobs = m_vWaitingJobIDs.size();
 			int iFinishedJobs = m_vFinishedJobIDs.size();
@@ -4418,7 +4437,7 @@ public class OSServiceUtil{// implements OShL{
 			return false;
 		}		
 	}//saveOSpL 
-	
+
 	/**
 	 * clear up jobs from the three queues in memory and also files from the disk.
 	 * 
@@ -4445,7 +4464,7 @@ public class OSServiceUtil{// implements OShL{
 			}
 			OSServiceUtil osServiceUtil = new OSServiceUtil();						
 			osServiceUtil.m_sJobID = sJobID;
-			
+
 			long lNow = new GregorianCalendar().getTimeInMillis();	
 			JobStatistics jobStatistics = (JobStatistics)m_jobStatisticsTable.get(sJobID);
 			if(jobStatistics == null){
@@ -4514,7 +4533,7 @@ public class OSServiceUtil{// implements OShL{
 		}		
 		m_iCurrentJobCount = m_vCurrentJobIDs.size();
 
-		
+
 		while(m_vWaitingJobIDs.size() > OSParameter.MAX_WAITING_NUMBERS){
 			try {
 				String sJobID = m_vWaitingJobIDs.elementAt(0);
@@ -4550,10 +4569,10 @@ public class OSServiceUtil{// implements OShL{
 				IOUtil.log(IOUtil.exceptionStackToString(e), null);
 			}
 		}
-		
+
 		return true;
 	}//clearUpJobs
-	
+
 	/**
 	 * update process statistics 
 	 * 
@@ -4576,7 +4595,7 @@ public class OSServiceUtil{// implements OShL{
 				}
 				//make sure all jobStatistics have jobIDs
 				jobStatistics.jobID = sJobID;
-				
+
 				//make sure serviceURI is correct
 				if(jobStatistics.serviceURI == null){
 					jobStatistics.serviceURI = "";
@@ -4584,7 +4603,7 @@ public class OSServiceUtil{// implements OShL{
 				if(jobStatistics.serviceURI.equals(OSParameter.OS_SCHEDULER_SITE)){
 					jobStatistics.serviceURI = "";
 				}
-				
+
 				//make sure all jobStatistics have states: waiting, running, finished/killed
 				if(jobStatistics.state == null || jobStatistics.state.length() <= 0 || jobStatistics.state.equals("unknown")){
 					if(m_vFinishedJobIDs.contains(sJobID)){
@@ -4645,7 +4664,7 @@ public class OSServiceUtil{// implements OShL{
 			}
 		}
 		m_iCurrentJobCount = m_vCurrentJobIDs.size();
-		
+
 		//make sure each job is only in one queue. 
 		//make sure that all jobs have a corresponding job statistics
 		//make sure running jobs are in thread table.
@@ -4829,7 +4848,7 @@ public class OSServiceUtil{// implements OShL{
 
 			}
 		}
-		
+
 		//update stats
 		GregorianCalendar now = new GregorianCalendar();
 		m_dServiceUtilization = ((double)m_lTotalBusyTime/(now.getTimeInMillis() - m_lTimeServiceStarted));
@@ -4848,9 +4867,9 @@ public class OSServiceUtil{// implements OShL{
 			IOUtil.log(IOUtil.exceptionStackToString(e), null);
 			m_dAvailableMemory = Double.POSITIVE_INFINITY;
 		}
-		
+
 		if(m_dAvailableDiskSpace <= OSParameter.MINIMUM_DISKSPACE_TRIGGER ||
-				   m_dAvailableMemory <= ((double)OSParameter.MINIMUM_MEMORY_TRIGGER)){
+				m_dAvailableMemory <= ((double)OSParameter.MINIMUM_MEMORY_TRIGGER)){
 			if(m_iCurrentJobCount > 0){
 				m_sCurrentState = "busy";				
 			}
@@ -4872,7 +4891,7 @@ public class OSServiceUtil{// implements OShL{
 
 		return true;
 	}//updateProcessStatistics
-		
+
 	/**
 	 * main for test purposes.
 	 *
@@ -4881,24 +4900,24 @@ public class OSServiceUtil{// implements OShL{
 	 * @param argv command line arguments.
 	 */
 	public static void main(String[] args){
-		
+
 	}//main
 
 	/**
 	 * <P>The <code>SolverThread</code> class is an internal thread controlled by <code>OSServiceUtil</code>.
 	 */
 	protected class SolverThread implements Runnable{
-		
+
 		/**
 		 * m_bCalledFromSend holds whether the SolverThread is called from solve or send. 
 		 */
 		protected boolean m_bCalledFromSend = false; 
-		
+
 		/**
 		 * m_msURIs holds the found service URIs. 
 		 */
 		protected String[] m_msURIs = null;
-		
+
 		/**
 		 * m_sOSiL holds the osil string.
 		 */
@@ -4908,17 +4927,17 @@ public class OSServiceUtil{// implements OShL{
 		 * m_sOSoL holds the osol string.
 		 */
 		protected String m_sOSoL = null;
-		
+
 		/**
 		 * m_osOption holds the parsed OSOption data structure read from the OSoL string.
 		 */
 		protected OSOption m_osOption = null;
-		
+
 		/**
 		 * m_sOSrL holds osrl string.
 		 */
 		protected String m_sOSrL = null;
- 
+
 		/**
 		 * default constructor.
 		 */
@@ -4936,7 +4955,7 @@ public class OSServiceUtil{// implements OShL{
 
 			//updateRegistry
 			updateRegistry(true);
-			
+
 			//save ospl
 			saveOSpL();
 			//solver
@@ -5015,7 +5034,7 @@ public class OSServiceUtil{// implements OShL{
 									IOUtil.log(IOUtil.exceptionStackToString(e), null);
 								}
 							}
-							****end wait simulation****/
+							 ****end wait simulation****/
 
 							solver.solve();
 
@@ -5029,8 +5048,8 @@ public class OSServiceUtil{// implements OShL{
 						if(i < OSParameter.MAXIMUM_TRIAL_NUMBER_FOR_SOLVE - 1){
 							try {
 								Thread.sleep((long)(Math.random()*
-								(OSParameter.MAXIMUM_WAIT_TIME_BEFORE_NEXT_TRIAL-OSParameter.MINIMUM_WAIT_TIME_BEFORE_NEXT_TRIAL)
-								+OSParameter.MINIMUM_WAIT_TIME_BEFORE_NEXT_TRIAL));
+										(OSParameter.MAXIMUM_WAIT_TIME_BEFORE_NEXT_TRIAL-OSParameter.MINIMUM_WAIT_TIME_BEFORE_NEXT_TRIAL)
+										+OSParameter.MINIMUM_WAIT_TIME_BEFORE_NEXT_TRIAL));
 							} 
 							catch (InterruptedException e){}
 							catch (Exception e){}
@@ -5099,7 +5118,7 @@ public class OSServiceUtil{// implements OShL{
 					postprocess(true);							
 				}
 			}//solver
-			
+
 			//scheduler
 			else{
 				int iURI = (m_msURIs == null)?0:m_msURIs.length;
@@ -5145,7 +5164,7 @@ public class OSServiceUtil{// implements OShL{
 							m_osOption.setContactTransportType(sContactTransportType);
 							m_osOption.setContactAddress(sContactAddress);
 
-							
+
 							OSSolverAgent solverAgent = new OSSolverAgent();
 							solverAgent.solverAddress = m_msURIs[i];
 							jobStatistics.serviceURI = m_msURIs[i];
@@ -5169,7 +5188,7 @@ public class OSServiceUtil{// implements OShL{
 						m_vCurrentJobIDs.remove(m_sJobID);
 						m_vCurrentJobIDs.add(m_sJobID);						
 						m_iCurrentJobCount = m_vCurrentJobIDs.size();
-						
+
 						if(m_iCurrentJobCount >= OSParameter.MAX_JOB_NUMBERS){
 							m_sCurrentState = "busy";
 						}
@@ -5209,7 +5228,7 @@ public class OSServiceUtil{// implements OShL{
 						m_vWaitingJobIDs.remove(m_sJobID);
 						m_vWaitingJobIDs.add(m_sJobID);		
 						m_iCurrentJobCount = m_vCurrentJobIDs.size();
-						
+
 						if(m_iCurrentJobCount >= OSParameter.MAX_JOB_NUMBERS){
 							m_sCurrentState = "busy";
 						}
@@ -5241,14 +5260,14 @@ public class OSServiceUtil{// implements OShL{
 						jobStatistics.duration = Double.NaN;
 						m_lJobDuration = -1;
 					}
-					
+
 					//save ospl
 					saveOSpL();
 
-					
+
 					//updateRegistry
 					updateRegistry(true);
-					
+
 				}
 				//called from solve
 				else{
@@ -5303,7 +5322,7 @@ public class OSServiceUtil{// implements OShL{
 						OSSolverAgent osSolverAgent = new OSSolverAgent(m_msURIs[i]);
 						killThread.m_osSolverAgent = osSolverAgent;
 						killThread.m_sOSoL = m_sOSoL;
-						
+
 						Thread thread0 = new Thread(killThread);	
 						thread0.start();
 					}
@@ -5329,12 +5348,12 @@ public class OSServiceUtil{// implements OShL{
 					postprocess(false);
 				}
 			}//scheduler		
-			
+
 			//Monitor.Pulse(this);
 			//Monitor.Exit(this);	
 		}//run
 	}//class SolverThread
-	
+
 	/**
 	 * <P>The <code>SimulationThread</code> class is an internal thread controlled by <code>OSServiceUtil</code>.
 	 */
@@ -5344,7 +5363,7 @@ public class OSServiceUtil{// implements OShL{
 		 * m_sOSsLInput holds the ossl input string.
 		 */
 		protected String m_sOSsLInput = null;
-	
+
 		/**
 		 * m_sOSoL holds the osol string.
 		 */
@@ -5359,14 +5378,14 @@ public class OSServiceUtil{// implements OShL{
 		 * m_simulation holds the simulation engine.
 		 */
 		protected DefaultSimulation m_simulation = null;
- 
+
 		/**
 		 * default constructor.
 		 *
 		 */
 		protected SimulationThread(){
 		}//constructor
-		
+
 		/**
 		 * A synchronous simulation call method is implemented here. 
 		 * @throws Exception 
@@ -5400,14 +5419,14 @@ public class OSServiceUtil{// implements OShL{
 			catch(Exception e){
 				IOUtil.log(IOUtil.exceptionStackToString(e), null);
 			}
-			
+
 			try{
 				m_simulation.call();
 			}
 			catch(Exception e){
 				IOUtil.log(IOUtil.exceptionStackToString(e), null);
 			}
-			
+
 			try{
 				if(m_simulation.osslOutput != null){
 					m_sOSsLOutput = m_simulation.osslOutput;
@@ -5432,17 +5451,17 @@ public class OSServiceUtil{// implements OShL{
 	 * timer task class called by <code>OSServiceUtil</code>.
 	 * It is carried out in short intervals periodically.  
 	 */
-    protected static class ServiceTask1 extends TimerTask { 
-    	/**
-    	 * Specifies the task to run. 
-    	 */
-        public void run() {
-    		//process waiting jobs
-	    	ProcessWaitingJobsThread processWaitingJobsThread = new ProcessWaitingJobsThread();	
-	    	Thread thread = new Thread(processWaitingJobsThread);	
-	    	thread.start();	
-	    	
-	    	//send periodic warning
+	protected static class ServiceTask1 extends TimerTask { 
+		/**
+		 * Specifies the task to run. 
+		 */
+		public void run() {
+			//process waiting jobs
+			ProcessWaitingJobsThread processWaitingJobsThread = new ProcessWaitingJobsThread();	
+			Thread thread = new Thread(processWaitingJobsThread);	
+			thread.start();	
+
+			//send periodic warning
 			if(m_dAvailableDiskSpace <= OSParameter.MINIMUM_DISKSPACE_TRIGGER ){
 				if(!m_bSendEmailOnLowDiskSpace){
 					String sMessage = "System warning: service (" + (OSParameter.SERVICE_URI) +") is running low on disk space (" + m_dAvailableDiskSpace + ")";
@@ -5454,79 +5473,79 @@ public class OSServiceUtil{// implements OShL{
 				m_bSendEmailOnLowDiskSpace = false;
 			}
 
-        	//save ospl
+			//save ospl
 			saveOSpL();
-          }//run
-    }//class ServiceTask1
-    
+		}//run
+	}//class ServiceTask1
+
 	/**
 	 * <P>The <code>ServiceTask3</code> class is an internal 
 	 * timer task class called by <code>OSServiceUtil</code>.
 	 * It is carried out periodically in intervals that are neither too short nor too long. 
 	 */
-    protected static class ServiceTask2 extends TimerTask {
-    	/**
-    	 * Specifies the task to run. 
-    	 */
-        public void run() {     
-        	//when idle periodically request job from solver to scheduler?
-        	//periodically check registry against the accepting solver table?
-        	
-        	
+	protected static class ServiceTask2 extends TimerTask {
+		/**
+		 * Specifies the task to run. 
+		 */
+		public void run() {     
+			//when idle periodically request job from solver to scheduler?
+			//periodically check registry against the accepting solver table?
+
+
 			//update process statistics
 			updateProcessStatistics();
 
-        	//clear up jobs (from memory and disks)
-        	//remove and kill long waiting and running jobs
-        	clearUpJobs();
+			//clear up jobs (from memory and disks)
+			//remove and kill long waiting and running jobs
+			clearUpJobs();
 
 
-        	//clean up disk
-            IOUtil.cleanUpDisk();
+			//clean up disk
+			IOUtil.cleanUpDisk();
 
-            //save ospl
-            saveOSpL();
+			//save ospl
+			saveOSpL();
 
-            //check scheduler's current jobs statistics
-            if(OSParameter.SERVICE_TYPE != null && OSParameter.SERVICE_TYPE.equals("scheduler")){
-            	int iCurrentJobs = (m_vCurrentJobIDs==null?0:m_vCurrentJobIDs.size());
-            	String[] msCurrentJobIDs = new String[iCurrentJobs];
-            	for(int i = iCurrentJobs-1; i >= 0; i--){
-            		try{
-            			msCurrentJobIDs[i] = m_vCurrentJobIDs.elementAt(i);
-            		}
-            		catch(Exception e){
-            			msCurrentJobIDs[i] = "";
-            		}
-            	}
-	    		for(int i = 0; i < iCurrentJobs; i++){
-	    			String sJobID = msCurrentJobIDs[i];
-	    			if(sJobID == null || sJobID.length() <= 0){
-	    				continue;
-	    			}
-	    			if(!m_vCurrentJobIDs.contains(sJobID)){
-	    				continue;
-	    			}  
-		            CheckSchedulerCurrentJobsThread checkSchedulerCurrentJobsThread = new CheckSchedulerCurrentJobsThread();	
-		            checkSchedulerCurrentJobsThread.m_sCurrentJobID = sJobID;
-			    	Thread thread = new Thread(checkSchedulerCurrentJobsThread);	
-			    	thread.start();	
-	    		}
-            }
-        }//run
-    }//class ServiceTask2
-    
+			//check scheduler's current jobs statistics
+			if(OSParameter.SERVICE_TYPE != null && OSParameter.SERVICE_TYPE.equals("scheduler")){
+				int iCurrentJobs = (m_vCurrentJobIDs==null?0:m_vCurrentJobIDs.size());
+				String[] msCurrentJobIDs = new String[iCurrentJobs];
+				for(int i = iCurrentJobs-1; i >= 0; i--){
+					try{
+						msCurrentJobIDs[i] = m_vCurrentJobIDs.elementAt(i);
+					}
+					catch(Exception e){
+						msCurrentJobIDs[i] = "";
+					}
+				}
+				for(int i = 0; i < iCurrentJobs; i++){
+					String sJobID = msCurrentJobIDs[i];
+					if(sJobID == null || sJobID.length() <= 0){
+						continue;
+					}
+					if(!m_vCurrentJobIDs.contains(sJobID)){
+						continue;
+					}  
+					CheckSchedulerCurrentJobsThread checkSchedulerCurrentJobsThread = new CheckSchedulerCurrentJobsThread();	
+					checkSchedulerCurrentJobsThread.m_sCurrentJobID = sJobID;
+					Thread thread = new Thread(checkSchedulerCurrentJobsThread);	
+					thread.start();	
+				}
+			}
+		}//run
+	}//class ServiceTask2
+
 
 	/**
 	 * <P>The <code>ServiceTask3</code> class is an internal 
 	 * timer task class called by <code>OSServiceUtil</code>.
 	 * It is carried out periodically in long intervals. 
 	 */
-    protected static class ServiceTask3 extends TimerTask {
-    	/**
-    	 * Specifies the task to run. 
-    	 */
-        public void run(){
+	protected static class ServiceTask3 extends TimerTask {
+		/**
+		 * Specifies the task to run. 
+		 */
+		public void run(){
 			try{
 				m_dAvailableDiskSpace = IOUtil.getFreeDiskSpace(OSParameter.CODE_DRIVE);	
 			}
@@ -5540,8 +5559,8 @@ public class OSServiceUtil{// implements OShL{
 			catch(Exception e){
 				m_dAvailableMemory = Double.POSITIVE_INFINITY;
 			}
-        	saveOSpL();
-        	//send process info to admin. 
+			saveOSpL();
+			//send process info to admin. 
 			String sSubject = "Service Status [" + OSParameter.SERVICE_URI + "]";
 			String sProcessFileName = OSParameter.PROCESS_FILE+"_backup";
 			String sMessage = IOUtil.readStringFromFile(sProcessFileName);
@@ -5550,9 +5569,9 @@ public class OSServiceUtil{// implements OShL{
 			}
 			MailUtil.sendInThread(OSParameter.FROM_EMAIL, OSParameter.TO_EMAIL, null, null, sSubject, sMessage, null );					
 
-        }//run
-    }//class ServiceTask3
-    
+		}//run
+	}//class ServiceTask3
+
 
 	/**
 	 * static constructor
@@ -5560,7 +5579,7 @@ public class OSServiceUtil{// implements OShL{
 	static {//TODO coordinate with registry
 		if(OSParameter.SERVICE_TYPE == null || !OSParameter.SERVICE_TYPE.equals("registry")){
 			m_sSystemPassword = OSParameter.getSystemPassword();
-	
+
 			m_lTimeServiceStarted = System.currentTimeMillis();
 			try{
 				m_dAvailableDiskSpace = IOUtil.getFreeDiskSpace(OSParameter.CODE_DRIVE);	
@@ -5590,10 +5609,10 @@ public class OSServiceUtil{// implements OShL{
 					if(bRead){
 						ProcessStatistics processStatistics = osplReader.getProcessStatistics();
 						JobStatistics[] mJobStatistics = (processStatistics==null || processStatistics.jobs==null)?null:processStatistics.jobs.job;
-						
+
 						int iJobs = mJobStatistics==null?0:mJobStatistics.length;
-						
-						
+
+
 						for(int i = iJobs-1; i >= 0; i--){						
 							if(mJobStatistics[i] != null && mJobStatistics[i].jobID != null && mJobStatistics[i].jobID.length() > 0){
 								if(m_jobStatisticsTable.containsKey(mJobStatistics[i].jobID)){
@@ -5672,11 +5691,11 @@ public class OSServiceUtil{// implements OShL{
 			catch (Exception e) {
 				IOUtil.log(IOUtil.exceptionStackToString(e), null);
 			}
-			
+
 			saveOSpL();
-			
+
 			new OSServiceUtil().updateRegistry(false);
-			
+
 			timer = new Timer();
 			timer.schedule(new ServiceTask1(), 0, OSParameter.SERVICE_POLLING_INTERVAL_SHORT);
 			timer.schedule(new ServiceTask2(), 1, OSParameter.SERVICE_POLLING_INTERVAL_MEDIUM);
