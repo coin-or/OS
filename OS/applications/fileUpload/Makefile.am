@@ -44,8 +44,10 @@ endif
 
 
 if COIN_HAS_IPOPT
-  OSFileUpload_LDADD += $(IPOPTOBJDIR)/src/Apps/AmplSolver/libamplinterface.la \
-        $(IPOPTOBJDIR)/src/Interfaces/libipopt.la \
+if COIN_HAS_ASL
+      OSFileUpload_LDADD += $(IPOPTOBJDIR)/src/Apps/AmplSolver/libamplinterface.la 
+endif
+  OSFileUpload_LDADD += $(IPOPTOBJDIR)/src/Interfaces/libipopt.la \
         $(IPOPTOBJDIR)/src/LinAlg/liblinalg.la
   LIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
 endif

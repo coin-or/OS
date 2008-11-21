@@ -94,8 +94,10 @@ endif
 
 
 if COIN_HAS_IPOPT
-  LDADD += $(IPOPTOBJDIR)/src/Apps/AmplSolver/libamplinterface.la \
-        $(IPOPTOBJDIR)/src/Interfaces/libipopt.la \
+if COIN_HAS_ASL
+      LDADD += $(IPOPTOBJDIR)/src/Apps/AmplSolver/libamplinterface.la 
+endif
+  LDADD += $(IPOPTOBJDIR)/src/Interfaces/libipopt.la \
         $(IPOPTOBJDIR)/src/LinAlg/liblinalg.la
   ADDLIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
 endif
