@@ -54,9 +54,9 @@
 			<pathPair to="C:\datafiles\research\OS\OS-trunk-test\OS\test\temp\input.mps" 
 						from="C:\datafiles\research\mslip\data\diet.mps" makeCopy="true"></pathPair>
 		</inputFilesToMove>
-		<filesToCreate numberOfPaths="1">
+		<filesToMake numberOfPaths="1">
 			<path>output.tmp</path>
-		</filesToCreate>
+		</filesToMake>
 		<directoriesToDelete numberOfPaths="1">
 			<path>C:\temp</path>
 		</directoriesToDelete>
