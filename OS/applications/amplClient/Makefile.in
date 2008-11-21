@@ -46,8 +46,7 @@ noinst_PROGRAMS = OSAmplClient$(EXEEXT)
 bin_PROGRAMS = OSAmplClient$(EXEEXT)
 @COIN_HAS_COUENNE_TRUE@am__append_1 = $(COUENNEOBJDIR)/src/libCouenne.la
 @COIN_HAS_ASL_TRUE@@COIN_HAS_BONMIN_TRUE@am__append_2 = $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la    
-@COIN_HAS_BONMIN_TRUE@am__append_3 = $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la \
-@COIN_HAS_BONMIN_TRUE@   OSAmplClient_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la \
+@COIN_HAS_BONMIN_TRUE@am__append_3 = $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la \
 @COIN_HAS_BONMIN_TRUE@	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la 
 
 @COIN_HAS_ASL_TRUE@@COIN_HAS_IPOPT_TRUE@am__append_4 = $(IPOPTOBJDIR)/src/Apps/AmplSolver/libamplinterface.la 
@@ -128,9 +127,7 @@ OSAmplClient_OBJECTS = $(am_OSAmplClient_OBJECTS)
 @COIN_HAS_COUENNE_TRUE@am__DEPENDENCIES_1 =  \
 @COIN_HAS_COUENNE_TRUE@	$(COUENNEOBJDIR)/src/libCouenne.la
 @COIN_HAS_ASL_TRUE@@COIN_HAS_BONMIN_TRUE@am__DEPENDENCIES_2 = $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la
-@COIN_HAS_BONMIN_TRUE@am__DEPENDENCIES_3 = $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la \
-@COIN_HAS_BONMIN_TRUE@	OSAmplClient_LDADD += \
-@COIN_HAS_BONMIN_TRUE@	$(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la \
+@COIN_HAS_BONMIN_TRUE@am__DEPENDENCIES_3 = $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la \
 @COIN_HAS_BONMIN_TRUE@	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la
 @COIN_HAS_ASL_TRUE@@COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_4 = $(IPOPTOBJDIR)/src/Apps/AmplSolver/libamplinterface.la
 @COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_5 = $(IPOPTOBJDIR)/src/Interfaces/libipopt.la \

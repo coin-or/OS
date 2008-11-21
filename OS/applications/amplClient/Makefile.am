@@ -31,17 +31,16 @@ OSAmplClient_LDADD =  \
 	$(OSOBJDIR)/src/libOS.la 
 	
 	
-	
+	  
 	
 if COIN_HAS_COUENNE
    OSAmplClient_LDADD += $(COUENNEOBJDIR)/src/libCouenne.la
 endif
 
 if COIN_HAS_BONMIN
-if COIN_HAS_ASL
+if COIN_HAS_ASL 
 OSAmplClient_LDADD +=$(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la    
 endif
-     OSAmplClient_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la
    OSAmplClient_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la \
 	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la 
 endif
