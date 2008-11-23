@@ -77,28 +77,100 @@ CouenneSolver::~CouenneSolver() {
 }
 
 
-
-
-
-
-
-
-
-
-
 void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 	try{
 	/*		
-		if(osil.length() == 0 && osinstance == NULL) throw ErrorClass("there is no instance");
-		if(osinstance == NULL){
-			m_osilreader = new OSiLReader();
-			osinstance = m_osilreader->readOSiL( osil);
+	Ipopt::Journalist* jnlst = new Ipopt::Journalist();
+	jnlst->AddFileJournal("console", "stdout", J_STRONGWARNING);
+	couenne = new CouenneProblem(NULL, NULL, jnlst);
+
+  // create room for problem's variables and bounds
+  CouNumber
+    *x_ = (CouNumber *) malloc ((n_allvars) * sizeof (CouNumber)),
+    *lb = (CouNumber *) malloc ((n_allvars) * sizeof (CouNumber)),
+    *ub = (CouNumber *) malloc ((n_allvars) * sizeof (CouNumber));
+	for (int i = 0; i < n_allvars; ++i)
+	{
+		couenne->addVariable(SCIPvarGetType(allvars[i]) <
+SCIP_VARTYPE_CONTINUOUS, couenne->domain());
+		x_[i] = 0.;
+		lb[i] = -COUENNE_INFINITY;
+    ub[i] =  COUENNE_INFINITY;
+	}
+
+  couenne->domain()->push(n_allvars, x_, lb, ub);
+
+  free(x_); free(lb); free(ub);
+	
+	couenne->addObjective(new exprConst(0.), "min"); // dummy objective
+	
+	SCIP_CONSDATA* consdata;
+	for (int i = 0; i < nconss; ++i)
+	{
+		consdata = SCIPconsGetData(conss[i]);
+		LaGO::MINLPData::Constraint&
+con(lagodata->getConstraint(consdata->lagoindex));
+		G2DFunction* g2dfunc = (G2DFunction*)GetRawPtr(con.origfuncNL);
+		expression* body =
+g2dfunc->getAsCouenneExpression(couenne->Variables(), couenne->domain());
+		assert(body);
+		
+		if (consdata->n_lincoeff)
+		{
+			exprGroup::lincoeff lin(consdata->n_lincoeff);
+			for (int i = 0; i < consdata->n_lincoeff; ++i)
+			{
+				lin[i].second = consdata->lincoeff[i];
+				lin[i].first = couenne->Var(var2index[consdata->linvar[i]]);
+			}
+			
+			expression** nl = new expression*[1];
+			nl[0] = body;
+			body = new exprGroup(0., lin, nl, 1);
 		}
-		// Create a new instance of your nlp 
-		tminlp = new BonminProblem( osinstance, osoption, osresult);
-		this->bCallbuildSolverInstance = true;
-		//Now initialize from tminlp
-		bonmin.initialize( GetRawPtr(tminlp) );
+		
+		if (con.lower == con.upper)
+		{
+			couenne->addEQConstraint(body, new exprConst(con.upper));
+		}
+		else if (con.lower == -LaGO::getInfinity())
+		{
+			assert(con.upper != LaGO::getInfinity());
+			couenne->addLEConstraint(body, new exprConst(con.upper));
+		}
+		else if (con.upper == LaGO::getInfinity())
+		{
+			assert(con.lower != LaGO::getInfinity());
+			couenne->addGEConstraint(body, new exprConst(con.lower));			
+		}
+		else
+			couenne->addRNGConstraint(body, new exprConst(con.lower), new
+exprConst(con.upper));			
+	}
+	
+	for (int i = 0; i < n_allvars; ++i)
+	{
+		couenne->Var(i)->linkDomain(couenne->domain());
+		couenne->Lb(i) = SCIPisInfinity(scip, -SCIPvarGetLbGlobal(allvars[i]))
+? -COUENNE_INFINITY : SCIPvarGetLbGlobal(allvars[i]);
+		couenne->Ub(i) = SCIPisInfinity(scip,  SCIPvarGetUbGlobal(allvars[i]))
+?  COUENNE_INFINITY : SCIPvarGetUbGlobal(allvars[i]);
+	}
+	couenne->print();
+
+	couenne->AuxSet() = new std::set <exprAux *, compExpr>;
+
+  // reformulation
+  couenne->standardize();
+
+  // give a value to all auxiliary variables
+  couenne->initAuxs();
+
+  // clear all spurious variables pointers not referring to the
+variables_ vector
+//  couenne->realign ();
+
+	couenne->print();
 		*/
 	}
 	catch(const ErrorClass& eclass){
