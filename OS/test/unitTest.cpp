@@ -114,7 +114,7 @@
 #include "OSrLWriter.h"      
 #include "OSInstance.h"  
 #include "OSFileUtil.h"  
-#include "OSConfig.h" 
+// #include "OSConfig.h"   !!!duplicate
 #include "CoinError.hpp"
 
 #include "OSDefaultSolver.h"  
@@ -122,7 +122,7 @@
 #include "OSSolverAgent.h"   
 #include "OShL.h"     
 #include "OSErrorClass.h"
-#include "OSmps2osil.h"   
+// #include "OSmps2osil.h"   !!! duplicate
 #include "OSBase64.h"
 #include "OSCommonUtil.h"
 
@@ -613,14 +613,20 @@ int main(int argC, char* argV[])
 		if(ok == false) throw ErrorClass(" Fail unit test with clp on parincLinear");
 		// parse the osrl file
 		osrlreader =  new OSrLReader();
+		cout << "First osrl file\n" << solver->osrl << endl;
 		osrlreader->readOSrL( solver->osrl);
+		cout << "read successfully" << endl;
 		delete osilreader;
+		cout << "osilreader successfully deleted" << endl;
 		osilreader = NULL;	
 		delete solver;
+		cout << "solver successfully deleted" << endl;
 		solver = NULL;
 		delete osilwriter;
+		cout << "osilwriter successfully deleted" << endl;
 		osilwriter = NULL;
 		delete osrlreader;
+		cout << "osrlreader successfully deleted" << endl;
 		osrlreader = NULL;
 		unitTestResult << "Solved problem parincLinearByRow.osil with Clp" << std::endl;
 
@@ -779,8 +785,9 @@ int main(int argC, char* argV[])
 		solver->osil = osil;
 		solver->osol = osol;  
 		solver->osinstance = NULL; 
-		cout << "call the COIN - SYMPHONY Solver for p0033" << endl;
+		cout << "build the solver instance for COIN - SYMPHONY" << endl;
 		solver->buildSolverInstance();
+		cout << "call the COIN - SYMPHONY Solver for p0033" << endl;
 		solver->solve();
 		cout << "Here is the COIN SYMPHONY solver solution for p0033" << endl;
 		cout << solver->osrl << endl;
@@ -1559,14 +1566,18 @@ catch(const ErrorClass& eclass){
 		finish = clock();
 		duration = (double) (finish - start) / CLOCKS_PER_SEC;
 		cout << "Reading the file into a string took (seconds): "<< duration << endl;
+		cout << osrl << endl;
 		start = clock();
 		cout << "PARSE THE OSRL STRING INTO AN OSRESULT OBJECT" << endl;
 		osresult = osrlreader->readOSrL( osrl);
+		cout << "Finished read; write OSResult object to temporary string" << endl;
 		tmpOSrL = osrlwriter->writeOSrL( osresult) ;
+		cout << tmpOSrL << endl;
 		// make sure we can parse without error
 		delete osrlreader;
 		osrlreader = NULL;
 		osrlreader = new OSrLReader();
+		cout << "Parse temporary string" << endl;
 		osrlreader->readOSrL( tmpOSrL);
 		delete osrlwriter;
 		osrlwriter = NULL;
@@ -1703,12 +1714,36 @@ catch(const ErrorClass& eclass){
 		delete osolreader;
 		osolreader = NULL;
 
-
+		OSOption *another_osoption = new OSOption();
+		std::string** jobID;
+		jobID = new std::string*[ 2];
+		jobID[0] = new std::string( "ABC123");
+		jobID[1] = new std::string(  "1234567890");
+		int ndep;
+	
+		cout << "test set() and get() methods" << endl;
+		ok = another_osoption->setJobDependencies(2, jobID);
+		cout << "setJobDependencies: " << ok << endl;
+		
+		
+		ndep = another_osoption->getNumberOfJobDependencies();
+		cout << "number of dependencies: " << ndep << endl;
+		//ok = another_osoption->setAnotherJobDependency("test");
+		//cout << "setAnotherJobDependency: " << ok << endl;
+		ndep = another_osoption->getNumberOfJobDependencies();
+		cout << "number of dependencies: " << ndep << endl;
+		std::string** tJobID = another_osoption->getJobDependencies();
+		for (int i = 0; i < ndep; i++) cout << "  jobID: " << *tJobID[i] << endl;
+		// IMPORTANT!!!! -- jobID gets deleted by deleting another_option
+		delete another_osoption;
+		
+		
 		unitTestResult << 
 		     "Successful test of OSoL parser on file parsertest.osol" 
 		      << std::endl;
 
 	}	
+	
 		catch(const ErrorClass& eclass){
 		cout << endl << endl << endl;
 		if(osolwriter != NULL) delete osolwriter;

@@ -264,8 +264,12 @@ JobDependencies::~JobDependencies()
 	#ifdef DEBUG
 	cout << "JobDependencies Destructor Called" << endl;
 	#endif
-	if (jobID != NULL) 
-	{	delete []jobID;
+	int i;
+	if (jobID != NULL) {
+		for(i = 0; i < numberOfJobIDs; i++){
+			delete jobID[ i];
+		}
+		delete []jobID;
 		jobID = NULL;
 	}
 }//end JobDependencies destructor 
@@ -2029,14 +2033,16 @@ OtherOption** OSOption::getAllOtherOptions()
 /**
  * get the array of job dependencies
  */
-std::string*  OSOption::getJobDependencies(){
-	std::string* dependenciesVector;
+std::string**  OSOption::getJobDependencies(){
+	std::string** dependenciesVector = NULL;
 	if (this->job != NULL) 
 	{	if (this->job->dependencies != NULL) 
 		{	int i;
 			int num_ID;
+			// gus -- why isn't this number of Job IDs
 			num_ID = this->getNumberOfJobDependencies();
-			dependenciesVector = new string[num_ID];
+			//dependenciesVector = new std::string*[num_ID];
+			dependenciesVector = this->job->dependencies->jobID;
 			for(i = 0; i < num_ID; i++)
 				dependenciesVector[i] = this->job->dependencies->jobID[ i];
 		}					
@@ -3031,24 +3037,33 @@ bool OSOption::setNumberOfJobDependencies(int numberOfObjects)
 	return true;
 }//setNumberOfJobDependencies
 
-bool OSOption::setJobDependencies(int numberOfDependencies, std::string* jobDependencies)
+bool OSOption::setJobDependencies(int numberOfDependencies, std::string** jobDependencies)
 {	if (this->job == NULL) 
 		this->job = new JobOption();
 	if (this->job->dependencies == NULL) 
 		this->job->dependencies = new JobDependencies();
-	else
-		if (this->job->dependencies->numberOfJobIDs != numberOfDependencies)
-			throw ErrorClass("Inconsistent size of <job> <dependencies> element");
-	if (this->job->dependencies->jobID == NULL)
-		this->job->dependencies->jobID = new std::string[numberOfDependencies];
-	for (int i = 0; i < numberOfDependencies; i++)
-		this->job->dependencies->jobID[i] = jobDependencies[i];
+	//else
+	//	if (this->job->dependencies->numberOfJobIDs != numberOfDependencies)
+	//		throw ErrorClass("Inconsistent size of <job> <dependencies> element");
+	//if (this->job->dependencies->jobID == NULL)
+		//this->job->dependencies->jobID = new std::string*[numberOfDependencies];
+		this->job->dependencies->numberOfJobIDs = numberOfDependencies;
+		
+		if(jobDependencies != NULL){
+			this->job->dependencies->jobID = jobDependencies;
+			for (int i = 0; i < numberOfDependencies; i++)
+				if(jobDependencies[i] != NULL){
+					this->job->dependencies->jobID[i] = jobDependencies[i];
+				}
+		}
+
 	this->job->dependencies->numberOfJobIDs = numberOfDependencies;
 	return true;
 }//setJobDependencies
 
-bool OSOption::setAnotherJobDependency(std::string jobID)
-{	if (this->job == NULL) 
+bool OSOption::setAnotherJobDependency(std::string jobID){
+/*
+	if (this->job == NULL) 
 		this->job = new JobOption();
 	if (this->job->dependencies == NULL) 
 		this->job->dependencies = new JobDependencies();
@@ -3059,14 +3074,14 @@ bool OSOption::setAnotherJobDependency(std::string jobID)
 	else
 		nopt = this->job->dependencies->numberOfJobIDs;
 
-	std::string* temp = new std::string[nopt+1];
+	std::string** temp = new std::string*[nopt+1];
 	for (int i = 0; i < nopt; i++)
 		temp[i] = this->job->dependencies->jobID[i];
 	
 	temp[nopt] = jobID;
 	this->job->dependencies->jobID = temp;
 	this->job->dependencies->numberOfJobIDs = ++nopt;
-
+*/
 	return true;
 }//setAnotherJobDependency
 
