@@ -1728,14 +1728,15 @@ catch(const ErrorClass& eclass){
 		
 		ndep = another_osoption->getNumberOfJobDependencies();
 		cout << "number of dependencies: " << ndep << endl;
-		//ok = another_osoption->setAnotherJobDependency("test");
-		//cout << "setAnotherJobDependency: " << ok << endl;
+		ok = another_osoption->setAnotherJobDependency("test");
+		cout << "setAnotherJobDependency: " << ok << endl;
 		ndep = another_osoption->getNumberOfJobDependencies();
 		cout << "number of dependencies: " << ndep << endl;
 		std::string** tJobID = another_osoption->getJobDependencies();
 		for (int i = 0; i < ndep; i++) cout << "  jobID: " << *tJobID[i] << endl;
 		// IMPORTANT!!!! -- jobID gets deleted by deleting another_option
 		delete another_osoption;
+	
 		
 		
 		unitTestResult << 
