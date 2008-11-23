@@ -443,7 +443,7 @@ public:
 	int numberOfJobIDs;
 
 	/** the list of job IDs */
-	std::string **jobID;
+	std::string *jobID;
 
 	/**
 	 *
@@ -2068,7 +2068,7 @@ public:
 	 * 
 	 * @return a vector of pointers to JobDependencies objects  
 	 */
-	std::string** getJobDependencies();
+	std::string* getJobDependencies();
 
 	/**
 	 * Get the array of required directories
@@ -2463,7 +2463,7 @@ public:
 	bool setScheduledStartTime(std::string time);
 
 	bool setNumberOfJobDependencies(int numberOfObjects);
-	bool setJobDependencies(int numberOfDependencies, std::string** jobDependencies);
+	bool setJobDependencies(int numberOfDependencies, std::string* jobDependencies);
 	bool setAnotherJobDependency(std::string jobID);
 
 	bool setNumberOfRequiredDirectories(int numberOfObjects);

@@ -876,7 +876,7 @@ numberofjobidsatt: NUMBEROFJOBIDSATT QUOTE INTEGER QUOTE
 {	if ($3 < 1)
 		osolerror( NULL, osoption, parserData, "Number of job IDs must be at least 1");
 	osoption->job->dependencies->numberOfJobIDs = $3;
-	osoption->job->dependencies->jobID = new std::string*[$3];
+	osoption->job->dependencies->jobID = new std::string[$3];
 };
 
 dependencieslist: | dependencieslist dependencyjobid;
@@ -887,7 +887,7 @@ dependencyjobid: JOBIDSTART GREATERTHAN ELEMENTTEXT
 	{	osolerror (NULL, osoption, parserData, "too many job IDs in <dependencies> element");
 	}
 	else
-	{	osoption->job->dependencies->jobID[parserData->numberOfDependencies] = new std::string( $3);
+	{	osoption->job->dependencies->jobID[parserData->numberOfDependencies] = $3;
 		parserData->numberOfDependencies++;
 	};
 }

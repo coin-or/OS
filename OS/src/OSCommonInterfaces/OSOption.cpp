@@ -264,12 +264,9 @@ JobDependencies::~JobDependencies()
 	#ifdef DEBUG
 	cout << "JobDependencies Destructor Called" << endl;
 	#endif
-	int i;
+
 	if (jobID != NULL) {
-		for(i = 0; i < numberOfJobIDs; i++){
-			delete jobID[ i];
-		}
-		delete []jobID;
+		delete[] jobID;
 		jobID = NULL;
 	}
 }//end JobDependencies destructor 
@@ -2033,18 +2030,18 @@ OtherOption** OSOption::getAllOtherOptions()
 /**
  * get the array of job dependencies
  */
-std::string**  OSOption::getJobDependencies(){
-	std::string** dependenciesVector = NULL;
+std::string*  OSOption::getJobDependencies(){
+	std::string* dependenciesVector = NULL;
 	if (this->job != NULL) 
 	{	if (this->job->dependencies != NULL) 
-		{	int i;
+		{	//int i;
 			int num_ID;
 			// gus -- why isn't this number of Job IDs
 			num_ID = this->getNumberOfJobDependencies();
 			//dependenciesVector = new std::string*[num_ID];
 			dependenciesVector = this->job->dependencies->jobID;
-			for(i = 0; i < num_ID; i++)
-				dependenciesVector[i] = this->job->dependencies->jobID[ i];
+			//for(i = 0; i < num_ID; i++)
+			//	dependenciesVector[i] = this->job->dependencies->jobID[ i];
 		}					
 	}
 	return dependenciesVector;
@@ -3037,7 +3034,7 @@ bool OSOption::setNumberOfJobDependencies(int numberOfObjects)
 	return true;
 }//setNumberOfJobDependencies
 
-bool OSOption::setJobDependencies(int numberOfDependencies, std::string** jobDependencies)
+bool OSOption::setJobDependencies(int numberOfDependencies, std::string* jobDependencies)
 {	if (this->job == NULL) 
 		this->job = new JobOption();
 	if (this->job->dependencies == NULL) 
@@ -3052,9 +3049,7 @@ bool OSOption::setJobDependencies(int numberOfDependencies, std::string** jobDep
 		if(jobDependencies != NULL){
 			this->job->dependencies->jobID = jobDependencies;
 			for (int i = 0; i < numberOfDependencies; i++)
-				if(jobDependencies[i] != NULL){
 					this->job->dependencies->jobID[i] = jobDependencies[i];
-				}
 		}
 
 	this->job->dependencies->numberOfJobIDs = numberOfDependencies;
@@ -3062,7 +3057,7 @@ bool OSOption::setJobDependencies(int numberOfDependencies, std::string** jobDep
 }//setJobDependencies
 
 bool OSOption::setAnotherJobDependency(std::string jobID){
-
+	/*
 	if (this->job == NULL) 
 		this->job = new JobOption();
 	if (this->job->dependencies == NULL) 
@@ -3087,6 +3082,7 @@ bool OSOption::setAnotherJobDependency(std::string jobID){
 		this->job->dependencies->jobID[i] = temp[i] ;
 	}
 	this->job->dependencies->numberOfJobIDs = ++nopt;
+	*/
 	return true;
 }//setAnotherJobDependency
 

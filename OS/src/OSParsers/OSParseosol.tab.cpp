@@ -3727,7 +3727,7 @@ yyreduce:
     {	if ((yyvsp[(3) - (4)].ival) < 1)
 		osolerror( NULL, osoption, parserData, "Number of job IDs must be at least 1");
 	osoption->job->dependencies->numberOfJobIDs = (yyvsp[(3) - (4)].ival);
-	osoption->job->dependencies->jobID = new std::string*[(yyvsp[(3) - (4)].ival)];
+	osoption->job->dependencies->jobID = new std::string[(yyvsp[(3) - (4)].ival)];
 }
     break;
 
@@ -3738,7 +3738,7 @@ yyreduce:
 	{	osolerror (NULL, osoption, parserData, "too many job IDs in <dependencies> element");
 	}
 	else
-	{	osoption->job->dependencies->jobID[parserData->numberOfDependencies] = new std::string( (yyvsp[(3) - (3)].sval));
+	{	osoption->job->dependencies->jobID[parserData->numberOfDependencies] = (yyvsp[(3) - (3)].sval);
 		parserData->numberOfDependencies++;
 	};
 }

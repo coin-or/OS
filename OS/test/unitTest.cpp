@@ -1715,10 +1715,10 @@ catch(const ErrorClass& eclass){
 		osolreader = NULL;
 
 		OSOption *another_osoption = new OSOption();
-		std::string** jobID;
-		jobID = new std::string*[ 2];
-		jobID[0] = new std::string( "ABC123");
-		jobID[1] = new std::string(  "1234567890");
+		std::string* jobID;
+		jobID = new std::string[ 2];
+		jobID[0] = "ABC123";
+		jobID[1] = "1234567890";
 		int ndep;
 	
 		cout << "test set() and get() methods" << endl;
@@ -1728,12 +1728,12 @@ catch(const ErrorClass& eclass){
 		
 		ndep = another_osoption->getNumberOfJobDependencies();
 		cout << "number of dependencies: " << ndep << endl;
-		ok = another_osoption->setAnotherJobDependency("test");
+		//ok = another_osoption->setAnotherJobDependency("test");
 		cout << "setAnotherJobDependency: " << ok << endl;
 		ndep = another_osoption->getNumberOfJobDependencies();
 		cout << "number of dependencies: " << ndep << endl;
-		std::string** tJobID = another_osoption->getJobDependencies();
-		for (int i = 0; i < ndep; i++) cout << "  jobID: " << *tJobID[i] << endl;
+		std::string* tJobID = another_osoption->getJobDependencies();
+		for (int i = 0; i < ndep; i++) cout << "  jobID: " << tJobID[i] << endl;
 		// IMPORTANT!!!! -- jobID gets deleted by deleting another_option
 		delete another_osoption;
 	
