@@ -1728,7 +1728,7 @@ catch(const ErrorClass& eclass){
 		
 		ndep = another_osoption->getNumberOfJobDependencies();
 		cout << "number of dependencies: " << ndep << endl;
-		//ok = another_osoption->setAnotherJobDependency("test");
+		ok = another_osoption->setAnotherJobDependency("test");
 		cout << "setAnotherJobDependency: " << ok << endl;
 		ndep = another_osoption->getNumberOfJobDependencies();
 		cout << "number of dependencies: " << ndep << endl;
@@ -1736,8 +1736,6 @@ catch(const ErrorClass& eclass){
 		for (int i = 0; i < ndep; i++) cout << "  jobID: " << tJobID[i] << endl;
 		// IMPORTANT!!!! -- jobID gets deleted by deleting another_option
 		delete another_osoption;
-	
-		
 		
 		unitTestResult << 
 		     "Successful test of OSoL parser on file parsertest.osol" 

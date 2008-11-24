@@ -3057,7 +3057,6 @@ bool OSOption::setJobDependencies(int numberOfDependencies, std::string* jobDepe
 }//setJobDependencies
 
 bool OSOption::setAnotherJobDependency(std::string jobID){
-	/*
 	if (this->job == NULL) 
 		this->job = new JobOption();
 	if (this->job->dependencies == NULL) 
@@ -3069,20 +3068,16 @@ bool OSOption::setAnotherJobDependency(std::string jobID){
 	else
 		nopt = this->job->dependencies->numberOfJobIDs;
 
-	std::string** temp = new std::string*[nopt+1];
+	std::string* temp = new std::string[nopt+1];
 	for (int i = 0; i < nopt; i++){
-		temp[i] = new std::string( *this->job->dependencies->jobID[i]); // create the new
-		delete this->job->dependencies->jobID[i];
+		temp[i] = this->job->dependencies->jobID[i]; // create the new
 	}
 	delete[] this->job->dependencies->jobID;
-	temp[nopt] = new std::string( jobID) ;
+	this->job->dependencies->jobID = NULL;
+	temp[nopt] = jobID ;
 	// fill everything back in
 	this->job->dependencies->jobID = temp;
-	for (int i = 0; i < nopt; i++){
-		this->job->dependencies->jobID[i] = temp[i] ;
-	}
 	this->job->dependencies->numberOfJobIDs = ++nopt;
-	*/
 	return true;
 }//setAnotherJobDependency
 
