@@ -38,7 +38,7 @@ using namespace Bonmin;
 
 #include "BonCouenneSetup.hpp"
 
-
+#include "CouenneJournalist.hpp"
 
 
 using std::cout; 
@@ -79,28 +79,53 @@ CouenneSolver::~CouenneSolver() {
 
 void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 	try{
-	/*		
-	Ipopt::Journalist* jnlst = new Ipopt::Journalist();
-	jnlst->AddFileJournal("console", "stdout", J_STRONGWARNING);
-	couenne = new CouenneProblem(NULL, NULL, jnlst);
+		int i;
+		
+		if(osil.length() == 0 && osinstance == NULL) throw ErrorClass("there is no instance");
+		if(osinstance == NULL){
+			m_osilreader = new OSiLReader();
+			osinstance = m_osilreader->readOSiL( osil);
+		}	
+		
+		CouenneProblem *couenne;
+		Ipopt::Journalist* jnlst = new Ipopt::Journalist();
+		jnlst->AddFileJournal("console", "stdout", J_STRONGWARNING);
+		couenne = new CouenneProblem(NULL, NULL, jnlst);
+		int n_allvars = osinstance->getConstraintNumber();
+		if( n_allvars <= 0 )throw ErrorClass("Couenne solver Needs Constraints");
+		
+		//if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Couenne solver requires decision variables");
+		//if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Couenne solver needs an objective function");
 
-  // create room for problem's variables and bounds
-  CouNumber
-    *x_ = (CouNumber *) malloc ((n_allvars) * sizeof (CouNumber)),
-    *lb = (CouNumber *) malloc ((n_allvars) * sizeof (CouNumber)),
-    *ub = (CouNumber *) malloc ((n_allvars) * sizeof (CouNumber));
-	for (int i = 0; i < n_allvars; ++i)
-	{
-		couenne->addVariable(SCIPvarGetType(allvars[i]) <
-SCIP_VARTYPE_CONTINUOUS, couenne->domain());
-		x_[i] = 0.;
-		lb[i] = -COUENNE_INFINITY;
-    ub[i] =  COUENNE_INFINITY;
-	}
+		// create room for problem's variables and bounds
+		CouNumber
+			*x_ = (CouNumber *) malloc ((n_allvars) * sizeof (CouNumber)),
+			*lb = (CouNumber *) malloc ((n_allvars) * sizeof (CouNumber)),
+			*ub = (CouNumber *) malloc ((n_allvars) * sizeof (CouNumber));
+	
+		// now get variable upper and lower bounds
+		ub = osinstance->getVariableUpperBounds();
+		lb = osinstance->getVariableLowerBounds();
+		
+		//declare the variable types
+		char *varType;
+		varType = osinstance->getVariableTypes();
+		for (i = 0; i < n_allvars; ++i) {
+			if( (varType[i] == 'B') || (varType[i]) == 'I' ) {
+				couenne->addVariable(true, couenne->domain() );
+			}
+			else{
+				couenne->addVariable(true, couenne->domain() );
+			}
 
-  couenne->domain()->push(n_allvars, x_, lb, ub);
+			x_[i] = 0.;
+		}
 
-  free(x_); free(lb); free(ub);
+		couenne->domain()->push(n_allvars, x_, lb, ub);
+
+		free(x_); free(lb); free(ub);
+  
+  /*
 	
 	couenne->addObjective(new exprConst(0.), "min"); // dummy objective
 	

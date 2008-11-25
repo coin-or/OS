@@ -124,12 +124,7 @@ public:
 	
 	
 
-	
-	//SmartPtr<BonminProblem> tminlp = new BonminProblem;
-	
-	//SmartPtr<BonminProblem> tminlp;
-	
-	//SmartPtr<IpoptApplication> app;
+
 	
 	
 	/** solve results in an instance being read into the Couenne
