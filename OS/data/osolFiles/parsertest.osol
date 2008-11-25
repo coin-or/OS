@@ -52,7 +52,8 @@
 		</inputDirectoriesToMove>
 		<inputFilesToMove numberOfPathPairs="1">
 			<pathPair to="C:\datafiles\research\OS\OS-trunk-test\OS\test\temp\input.mps" 
-						from="C:\datafiles\research\mslip\data\diet.mps" makeCopy="true"></pathPair>
+						from="C:\datafiles\research\mslip\data\diet.mps" makeCopy="true">
+			</pathPair>
 		</inputFilesToMove>
 		<filesToMake numberOfPaths="1">
 			<path>output.tmp</path>
