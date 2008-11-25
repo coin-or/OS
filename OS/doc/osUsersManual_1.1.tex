@@ -159,7 +159,7 @@
 \newcommand{\UrlOsJava}{https://projects.coin-or.org/svn/OS/branches/OSjava}
 \newcommand{\UrlOsRelease}{https://projects.coin-or.org/svn/OS/releases/1.1.1}
 \newcommand{\UrlOsStable}{https://projects.coin-or.org/svn/OS/stable/1.1}
-\newcommand{\UrlOsTarball}{http://www.coin-or.org/Tarballs/OS/}
+\newcommand{\UrlOsTarball}{http://www.coin-or.org/download/source/OS/}
 \newcommand{\UrlOsWin}{https://projects.coin-or.org/CoinBinary/browser/binary/OS}
 \newcommand{\UrlParinclinear}{http://www.coin-or.org/OS/parincLinear.osil}
 \newcommand{\UrlSdk}{http://www.microsoft.com/downloads/details.aspx?FamilyID=E6E1C3DF-A74F-4207-8586-711EBE331CDC\&displaylang=en}
@@ -175,12 +175,15 @@
 
 % Current software versions
 \newcommand{\GlpkVer}{4.32}
+\newcommand{\OSstable}{1.1}
+\newcommand{\OSrelease}{1.1.1}
+\newcommand{\OStrunk}{2093}
 
 
 
 \begin{document}
 
-%Some cross-referencing index enries (to be expanded as needed)
+%Some cross-referencing index entries (to be expanded as needed)
 \index{ASL|see{AMPL Solver Library (ASL)}}
 \index{HSL|see{Harwell Subroutine Library (HSL)}}
 \index{nl files|see{AMPL nl format}}
@@ -189,15 +192,19 @@
 \index{Cbc@{\tt Cbc}|see{COIN-OR projects, {\tt Cbc}}}
 \index{Cgl@{\tt Cgl}|see{COIN-OR projects, {\tt Cgl}}}
 \index{Clp@{\tt Clp}|see{COIN-OR projects, {\tt Clp}}}
+\index{Configuration Manager|see{Microsoft Visual Studio, Configuration Manager}}
 \index{CppAD@{\tt CppAD}|see{COIN-OR projects, {\tt CppAD}}}
 \index{CoinUtils@{\tt CoinUtils}|see{COIN-OR projects, {\tt CoinUtils}}}
+\index{Debug configuration|see{Microsoft Visual Studio, {\tt Debug} configuration}}
 \index{DyLP@{\tt DyLP}|see{COIN-OR projects, {\tt DyLP}}}
 \index{Ipopt@{\tt Ipopt}|see{COIN-OR projects, {\tt Ipopt}}}
 \index{Osi@{\tt Osi}|see{COIN-OR projects, {\tt Osi}}}
+\index{Release configuration|see{Microsoft Visual Studio, {\tt Release} configuration}}
+\index{Release-plus configuration|see{Microsoft Visual Studio, {\tt Release-plus} configuration}}
 \index{SYMPHONY@{\tt SYMPHONY}|see{COIN-OR projects, {\tt SYMPHONY}}}
 \index{Vol@{\tt Vol}|see{COIN-OR projects, {\tt Vol}}}
 
-\title{Optimization Services 1.1 User's Manual }
+\title{Optimization Services \OSstable\ User's Manual }
 \vskip 2in
 \author{Robert Fourer, Horand Gassmann, Jun Ma,  Kipp Martin, Wayne Sheng}
 \maketitle
@@ -237,6 +244,11 @@ for representing optimization instances, results, solver options, and communicat
 in a distributed environment using Web Services. This COIN-OR project provides source code for libraries and
 executable programs that implement OS standards.  See the COIN-OR Trac page {\tt\UrlTrac}\index{Trac system}
 or the Optimization Services Home Page {\tt\UrlOs}\index{Optimization Services} for more information.
+
+Like other COIN-OR projects, OS has a versioning system that ensures end users some degree of stability and a stable upgrade path as 
+project development continues. The current stable version of OS is \OSstable, and the current stable release is \OSrelease\index{OS!stable release}, 
+based on trunk version~\OStrunk.
+
 The OS project provides the following:
 
 \begin{enumerate}
@@ -324,7 +336,7 @@ or LINDO\index{LINDO} -- see Section~\ref{section:amplclient}.
 \item Use the OS library for algorithmic differentiation\index{Algorithmic differentiation} (in conjunction with 
 COIN-OR CppAD)\index{COIN-OR projects!CppAD@{\tt CppAD}} -- see Section~\ref{section:ad}.
 
-\item Use modeling languages to generate model instances in OSiL format. See Section \ref{section:modellang}.
+\item Use modeling languages to generate model instances in OSiL format -- see Section \ref{section:modellang}.
 \end{itemize}
 
 
@@ -335,7 +347,10 @@ The OS project is an open-source project  with source code under the Common Publ
 See~{\tt\UrlCpl}.  This project was initially created by Robert Fourer, Jun Ma, and Kipp Martin.
 The code has been written primarily by  Horand Gassmann,   Jun Ma,  and Kipp Martin.    
 Horand Gassmann,  Jun Ma,  and Kipp Martin are the COIN-OR project leaders and active developers for the OS project.
-Below we describe different methods for obtaining the binaries and C++ source code.
+%Below we describe different methods for obtaining the binaries and C++ source code.
+Most users will only be interested in the obtaining the binaries, which we describe 
+in section~\ref{section:obtainingbinaries}. The remaining sections of this chapter deal with obtaining the 
+source code for the project, which will be of interest mostly to developers.
 
 
 
@@ -396,9 +411,9 @@ The binary for this is named
 \begin{verbatim}
 OS-version_number-VisualStudio.zip
 \end{verbatim}
-For example, the necessary files associated with  OS  stable\index{OS!stable release} 1.1 are in the binary distribution
+For example, the necessary files associated with  OS  stable\index{OS!stable release} \OSstable\ are in the binary distribution
 \begin{verbatim}
-OS-1.1-VisualStudio.tgz
+OS-1.1-VisualStudio.zip
 \end{verbatim}
 The binaries provided are based on Visual Studio Express 2008.  See Section \ref{section:vsexamples} for more detail.
 
@@ -459,7 +474,7 @@ packages are included in the sections indicated.
 
 \subsubsection{C++ compiler}\label{section:cpp}
 A C++ compiler\index{C++ compiler} is needed to compile the OS source\index{OS!source code}. This should be present 
-under all unix{\tt Unix} installations. If no C++ compiler is available on the system, the free {\tt gcc}\index{gcc} 
+under all unix\index{Unix} installations. If no C++ compiler is available on the system, the free {\tt gcc}\index{gcc} 
 compiler can be downloaded from {\tt\UrlGcc}.
 
 Microsoft Visual Studio can be configured with the Microsoft {\tt cl}\index{cl compiler@{\tt cl} compiler} compiler, which also 
@@ -475,7 +490,7 @@ The COIN-OR project Ipopt\index{COIN-OR projects!Ipopt@{\tt Ipopt}} (see section
 software described in section~\ref{section:otherthirdparty} include Fortran\index{Fortran} subroutines, which must be 
 compiled with a Fortran compiler if the user wants to include these projects in the build. A free Fortran 95 compiler
 can be downloaded from {\tt\UrlGgs}. For Fortran~77 code (which includes the Blas\index{Blas},
-HSL\index{Harwell Subroutine Library (HSL)} and Lapack\index{Lapack} projects --- but {\bf not} Mumps\index{Mumps}) ---, 
+HSL\index{Harwell Subroutine Library (HSL)} and Lapack\index{Lapack} projects --- but {\bf not} Mumps\index{Mumps}) 
 it might be sufficient to download the {\tt f2c}\index{f2c@{\tt f2c}} translator
 which turns Fortran~77 code into code that can subsequently be fed into a C compiler.
 The {\tt f2c} translator and the {\tt f2c} runtime library can be downloaded from {\tt\UrlFToC}.
@@ -511,6 +526,23 @@ for the OS project and related software. For details, see section~\ref{section:d
 
 \subsection{Obtaining OS Source Code Using Subversion (SVN)}\label{section:downloadwithsvn}
 
+For the rest of this documentation, we assume that  the name of the root directory
+of the OS project\index{OS project!root directory} distribution is {\tt COIN-OS}.  
+The {\tt COIN-OS} directory structure is illustrated in Figure~\ref{figure:osprojectrootdir}.
+OS source code is mainly contained inside of the OS subdirectory. Other first level subdirectories are mostly
+external projects (COIN-OR or third-party) that the OS project depends on.
+
+
+\begin{figure}
+\centering
+%\includegraphics[scale=0.7]{\figurepath/OSProjectRootDirectory.png}
+\includegraphics[scale=0.7]{./figures/OSProjectRootDirectory.png}
+\caption{The OS distribution root directory.}
+\label{figure:osprojectrootdir}
+\end{figure}
+
+\medskip
+
 For Users on a Unix system\index{Downloading!subversion!unix}\index{Unix} such as Linux, Solaris, Mac OS X, etc., 
 the source code is obtained as follows. In a command window execute:
 
@@ -538,37 +570,29 @@ Scottsdale, Arizona, US
 
 If so, select {\tt (p)} and you should not get this message again.
 
+\medskip
+
+For more information on downloading the OS project or other COIN-OR projects using SVN\index{SVN} see
+
+\medskip
+\noindent{\tt\UrlCoinDownload}.
+\medskip
+
 \vskip 8pt
 
 On Windows\index{Downloading!subversion!Windows}\index{Microsoft Windows} with TortoiseSVN\index{TortoiseSVN}, 
 create a directory {\tt COIN-OS}
 in the desired location and right-click on this directory. Select the menu item {\tt SVN Checkout ...}
 and in the textbox ``{\tt URL of Repository}'' give the URL for the version of the OS project you wish
-to check out, for instance, {\tt\UrlOsStable}.
+to check out, for instance, 
+
+\medskip
+\noindent{\tt\UrlOsStable}.
+\medskip
 
 
 Now build the project as described in  Section~\ref{section:build}.
 
-For the rest of this documentation, we assume that  {\tt COIN-OS} is the name of the root directory
-of the OS project\index{OS project!root directory} distribution and that the user has defined an environment 
-variable {\tt OS} that is the path to
-{\tt COIN-OS}.  The {\tt COIN-OS} directory structure is illustrated in Figure~\ref{figure:osprojectrootdir}.
-OS source code is mainly contained inside of the OS subdirectory. Other first level subdirectories are mostly
-external projects (COIN-OR or third-party) that the OS project depends on.
-
-
-\begin{figure}
-\centering
-%\includegraphics[scale=0.7]{\figurepath/OSProjectRootDirectory.png}
-\includegraphics[scale=0.7]{./figures/OSProjectRootDirectory.png}
-\caption{The OS distribution root directory.}
-\label{figure:osprojectrootdir}
-\end{figure}
-
-For more information on downloading the OS project or other COIN-OR projects using SVN\index{SVN} see
-
-\medskip
-\noindent{\tt\UrlCoinDownload}.
 \medskip
 
 The Java\index{Java} source code for  setting up a solver service with Apache Tomcat\index{Apache Tomcat} is 
@@ -628,7 +652,7 @@ Windows users should be  able to double click on the file {\tt OS-release\_numbe
 \vskip 8pt
 
 \item{}
-Rename {\tt OS-release\_number} to {\tt COIN-OS}.
+(optional) Move the folder {\tt OS-release\_number} to the desired location and rename it to {\tt COIN-OS}.
 \end{enumerate}
 
 
@@ -889,7 +913,11 @@ we recommend downloading  the svn client, TortoiseSVN\index{TortoiseSVN}.  (See 
 With TortoiseSVN
 in the Windows Explorer connect to the directory (e.g., COIN-OS) where you wish to put the OS code.
 Right-click on the directory and select {\tt SVN Checkout}.   In the textbox, {\tt URL of Repository}
-give the URL for the version of the OS project you wish to checkout, e.g.,~{\tt\UrlOsStable}.
+give the URL for the version of the OS project you wish to checkout, e.g.,
+
+\medskip
+\noindent{\tt\UrlOsStable}.
+\medskip
 
 Also, if you plan to build any of the projects contained in {\tt ThirdParty}\index{Third-party software}
 (e.g., ASL)\index{AMPL Solver Library (ASL)} we recommend using {\tt wget}\index{wget@{\tt wget}}. 
@@ -920,13 +948,13 @@ but are not included in the Visual C++ Express download. If you have the Express
 to also download and install the Windows Platform SDK\index{Windows Platform SDK}, which can be found at
 
 \medskip
-\noindent{\tt\UrlSdk}.
+\noindent{\scriptsize\tt\UrlSdk}.
 \medskip
 
 \item{} In the COIN-OR/OS directory you will find the folder MSVisualStudio,
 which contains root directories organized by the version of Visual Studio.
 We currently provide solution files for Version~8 and Version~9.
-Each contains the file {\tt OS.sln}\index{OS.sln@{\tt OS.sln}} and project files
+Each contains the file {\tt OS.sln}\index{OS sln@{\tt OS.sln}} and project files
 for building the unitTest\index{unitTest@{\tt unitTest}} ({\tt OSTest.vcproj}\index{OSTest.vcproj@{\tt OSTest.vcproj}}),
 the OSSolverService ({\tt OSSolverService.vcproj}\index{OSSolverService.vcproj@{\tt OSSolverService.vcproj}}) and
 the OS library ({\tt libOS.vcproj}\index{libOS.vcproj@{\tt libOS.vcproj}}).
@@ -937,7 +965,7 @@ Open the solution file or the individual project files (for instance by double c
 on them in Windows Explorer)  and select Build from the menu bar.
 If you have ASL\index{AMPL Solver Library (ASL)} (see Section~\ref{section:ASL}) downloaded,
 you can also build the {\tt OSAmplClient}\index{OSAmplClient@{\tt OSAmplClient}} (see Section~\ref{section:amplclient}
-by modifying the Configuration Manager\index{Configuration Manager} and selecting the
+by modifying the Configuration Manager\index{Microsoft Visual Studio!Configuration Manager} and selecting the
 two projects {\tt libOSnl2OSiL}\index{libOSnl2OSiL@{\tt libOSnl2OSiL}}
 and {\tt OSAmplClient}\index{OSAmplClient@{\tt OSAmplClient}},
 which by default are not included in the build.
@@ -951,10 +979,13 @@ either the release or debug version of the {\tt unitTest} executable.
 %The former includes debug information, but both are configured without Ipopt
 %(see section~\ref{section:ipopt}) or any of the third-party software described in
 %section~\ref{section:otherthirdparty}.
-The solution file {\tt os.sln} contains three configurations, 
-{\tt Debug}\index{Debug configuration} and {\tt Release}\index{Release configuration}, both of which are
-configured without Ipopt, as well as {\tt Release-Plus}\index{Release-Plus@{\tt Release-Plus}}, which can be used to
-add {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}}, {\tt Bonmin}\index{COIN-OR projects!Bonmin@{\tt Bonmin}} and ASL\index{AMPL Solver Library (ASL)}
+The solution file {\tt OS.sln}\index{OS sln@{\tt OS.sln}} contains three configurations, 
+{\tt Debug}\index{Microsoft Visual Studio!{\tt Debug} configuration} and 
+{\tt Release}\index{Microsoft Visual Studio!{\tt Release} configuration}, 
+both of which are configured without {\tt Ipopt}, as well as 
+{\tt Release-Plus}\index{Microsoft Visual Studio!{\tt Release-Plus} configuration},
+which can be used to add {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}}, 
+{\tt Bonmin}\index{COIN-OR projects!Bonmin@{\tt Bonmin}} and ASL\index{AMPL Solver Library (ASL)}
 (see section~\ref{section:ASL}). In order to build this section successfully,
 the user must first download and process additional third-party software\index{Third-party software} as explained in 
 sections \ref{section:ipopt-msvs} and~\ref{section:ASL}.
@@ -1031,7 +1062,7 @@ This project links to {\tt wsock32.lib}, which is not part of the Visual Studio 
 to also download and install the Windows Platform SDK\index{Windows Platform SDK}, which can be found at
 
 \medskip
-\noindent{\tt\UrlSdk}. 
+\noindent{\scriptsize\tt\UrlSdk}. 
 \medskip
 \noindent Refer to Section~\ref{section:msvs}.
 
@@ -1253,7 +1284,7 @@ and install.
 Windows socket header files and libraries. Therefore it is necessary to also download and install
 the Windows Platform SDK\index{Windows Platform SDK}. Download the necessary files at
 
-\noindent{\tt\UrlSdk}
+\noindent{\scriptsize\tt\UrlSdk}
 
  and install.
 
@@ -1568,8 +1599,8 @@ Now you can open the solution file
    OS\MSVisualStudio\v8\OS.sln
 \end{verbatim}
 
-and select the configuration {\tt Release-Plus}\index{Release-Plus@{\tt Release-Plus}}.
-Open the Configuration Manager\index{Configuration Manager} (in the Build menu)
+and select the configuration {\tt Release-Plus}\index{Microsoft Visual Studio!{\tt Release-Plus} configuration}.
+Open the Configuration Manager\index{Microsoft Visual Studio!Configuration Manager} (in the Build menu)
 and set all projects to ``Build''
 (by clicking the check-box next to the project name).
 Then select Build (or press F7).
@@ -1737,15 +1768,17 @@ This produces the library file {\tt amplsolv.lib}, which is placed in the subfol
 
         
 \ifipopt
-Before you can use the {\tt Release-Plus}\index{Release-Plus@{\tt Release-Plus}} configuration in our solution file {\tt OS.sln},
+Before you can use the {\tt Release-Plus}\index{Microsoft Visual Studio!{\tt Release-Plus} configuration} 
+configuration in our solution file {\tt OS.sln}\index{OS sln@{\tt OS.sln}},
 you must also prepare the source for the solver {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}}
 (see section~\ref{section:ipopt-msvs}). If you want to add other third-party software or include debug information,
 you may have to modify (or copy) this configuration and tailor it to your needs.
 \else
-Now you are ready to use MSVS. Both the {\tt Debug} and {\tt Release} configurations
-contain two projects, {\tt libOSnl2OSiL} and {\tt OSAmplClient}, which use the ASL library
-and are normally deactivated. Activate these projects
-in the Configuration Manager\index{Configuration Manager} (available from the Build menu), then select Build.
+Now you are ready to use MSVS. Both the {\tt Debug}\index{Microsoft Visual Studio!{\tt Debug} configuration} and 
+{\tt Release}\index{Microsoft Visual Studio!{\tt Release} configuration} configurations contain two projects, 
+{\tt libOSnl2OSiL} and {\tt OSAmplClient}, which use the ASL library and are normally deactivated. 
+Activate these projects in the Configuration Manager\index{Microsoft Visual Studio!Configuration Manager} 
+(available from the Build menu), then select Build.
 %If you want to add other third-party software or include debug information, you may have to modify
 %(or copy) this configuration and tailor it to your needs.
 \fi
@@ -1895,18 +1928,22 @@ After registering, log in and then file a trouble ticket by going to
 \subsection{Documentation}\label{section:documentation}
 
 \index{Doxygen|(}%
-If you have Doxygen  (\url{www.doxygen.org}) available (the executable {\tt doxygen} should be in the {\tt path} command) then executing
+If you have Doxygen  (\url{www.doxygen.org}) available (the executable {\tt doxygen} should be in the {\tt path} command) 
+then executing
 \begin{verbatim}
 make doxydoc
 \end{verbatim}
-in the project root directory will result in the Doxygen documentation being generated and stored in the {\tt doxydoc} folder in the project root.
+in the project root directory will result in the Doxygen documentation being generated and stored in the {\tt doxydoc} 
+folder in the project root.
 
 In order to view the documentation, open a browser and open the file
 \begin{verbatim}
 projectroot/doxydoc/html/index.html
 \end{verbatim}
 
-By default, running Doxygen will generate documentation for only the  OS project.  Documentation will not be generated for the other COIN-OR projects in the project root. In the {\tt doxydoc}  folder is a configuration file {\tt doxygen.conf}.  This configuration file contains the {\tt EXCLUDE} parameter
+By default, running Doxygen will generate documentation for only the  OS project.  Documentation will not be generated 
+for the other COIN-OR projects in the project root. In the {\tt doxydoc}  folder is a configuration file 
+{\tt doxygen.conf}.  This configuration file contains the {\tt EXCLUDE} parameter
 
 \begin{verbatim}
 EXCLUDE =  Bonmin \
@@ -4311,15 +4348,17 @@ separated by a colon (`:') if there is more than one  category or  additional su
 as in the following hypothetical example.
 \begin{verbatim}
 <solverOption name="hypothetical" 
-   solver="SOLVER" category="cat1:subcat2:subsubcat3" type="string" value="illustration"/>
+   solver="SOLVER" category="cat1:subcat2:subsubcat3" 
+      type="string" value="illustration"/>
 \end{verbatim}
 
 \item {\bf description:} a description of the option, typically this would not get passed to the solver.
 
 \end{itemize}
 
-As of trunk version 2164 the reading of an OSoL file is implemented in the {\tt OSCoinSolver}, {\tt OSBonmin}, 
-and {\tt OSIpopt} solver interfaces.   The  {\tt OSBonmin}, and {\tt OSIpopt} solvers have particularly easy interfaces. 
+As of trunk version 2164\index{OS!trunk version} the reading of an OSoL file is implemented in the {\tt OSCoinSolver}, 
+{\tt OSBonmin}, and {\tt OSIpopt} solver interfaces.   The  {\tt OSBonmin}, and {\tt OSIpopt} solvers have 
+particularly easy interfaces. 
 They have methods for integer, string, and numeric data types and then take options in format of {\tt (name, value)} pairs.
 Below is an example of options for {\tt Ipopt}.
 
@@ -4430,7 +4469,7 @@ initial values for variables with an index of 0, 1, and~3.
 </initialVariableValues>
 \end{verbatim}
 
-As of trunk version 2164 the initial values for variables can be passed
+As of trunk version 2164\index{OS!trunk version} the initial values for variables can be passed
 to the {\tt Bonmin} and {\tt Ipopt} solvers.
 
 
@@ -4570,7 +4609,7 @@ contains the OS Web application. All directories and files outside of this folde
 \begin{verbatim}
 OS-server-1.0.0/webapps/os/WEB-INF
 \end{verbatim}
-contains private and important os configuration, library, class and executable files to run the Optimization Service.
+contains private and important configuration, library, class and executable files to run the Optimization Service.
 All files and directories outside of this folder but within the {\tt /os} Web application folder are publicly viewable (e.g., Web pages).
 \item
 \begin{verbatim}
@@ -4979,7 +5018,8 @@ prefix = /Users/kmartin/Documents/files/code/cpp/OScpp/vpath
 Developers can use the Makefiles as a starting point for building applications that use the OS project libraries.
 
 \medskip
-Users of Microsoft Visual Studio can obtain the executables by opening the solution file {\tt OS.sln} in
+Users of Microsoft Visual Studio can obtain the executables by opening the solution file 
+{\tt OS.sln}\index{OS sln@{\tt OS.sln}} in
 Visual Studio (or by double-clicking on the file in Windows Explorer). Once the file is opened, select the
 Configuration Manager from the Build menu and select the projects you desire to be built. Then select
 Build Solution from the Build menu (or press F7). 
@@ -5121,11 +5161,13 @@ CXXLIBS="$MLIBS -lstdc++
     -lSym -lCoinUtils  -lm"
 \end{verbatim}
 
-For a UNIX system the {\tt mexopts.sh} file  is typically  found in a directory with the release name in {\tt  $\sim$/.matlab}. For example,
-{\tt $\sim$/.matlab/R14SP3}.  It may also be in the {\tt bin} directory in the MATLAB application root folder.
+For a UNIX system the {\tt mexopts.sh} file  is typically  found in a directory with the release name in 
+{\tt  $\sim$/.matlab}. For example, {\tt $\sim$/.matlab/R14SP3}.  It may also be in the {\tt bin} directory 
+in the MATLAB application root folder.
 
 
-On a Windows system, the {\tt  mexopts.bat} file will usually be in a directory with the release name in {\tt C:$\backslash$Documents and Settings$\backslash$Username$\backslash$Application Data$\backslash$Mathworks$\backslash$MATLAB}
+On a Windows system, the {\tt  mexopts.bat} file will usually be in a directory with the release name in 
+{\tt C:$\backslash$Documents and Settings$\backslash$Username$\backslash$Application Data$\backslash$Mathworks$\backslash$MATLAB}
 
 
 \item{}  Build the MATLAB executable file. Start MATLAB and in the MATLAB command window connect to the directory {\tt OS/examples/matlab} which  contains the file {\tt OSmatlabSolver.cpp}.    Execute the command:
@@ -5840,7 +5882,8 @@ I have the Mac Intel Lindo API working. A bit of a kludge, but I created a direc
 
 /opt/intel/cc/9.1.037/lib
 
-Then I copied libimf.dylib and libirc.dylib into this directory.  I built the OS project using the GNU build tools with
+Then I copied libimf.dylib and libirc.dylib into this directory.  
+I built the OS project using the GNU build tools with
 
 
 
@@ -5852,11 +5895,17 @@ Kipp Martin wrote:
 > Hi Ted:
 >
 >>
->> By the way, I would suggest you make sure that configuration fails for OS whenever cppad is not present, since it appears that OS will not build without it (right?). I tried to configure it without cppad and it
+>> By the way, I would suggest you make sure that configuration fails for OS whenever cppad is not present, 
+> since it appears that OS will not build without it (right?). I tried to configure it without cppad and it
 >
-> The more I think about the above, the less I understand it. True, OS will not build without CppAD but CppAD is in the Externals file. Same is true for CoinUtils. OS will not build without CoinUtils, but it is in the Externals file so I don't check for it.  Why should I treat CppAD different than any other COIN-OR project?
+> The more I think about the above, the less I understand it. True, OS will not build without CppAD but CppAD 
+> is in the Externals file. Same is true for CoinUtils. OS will not build without CoinUtils, but it is in the 
+> Externals file so I don't check for it.  Why should I treat CppAD different than any other COIN-OR project?
 
-Actually, I'm pretty sure that none of the projects are actually doing this 100% right. What I think should happen is that for required external projects, the configure script should check for their existence and fail if they are not present. For optional projects, your code should use the symbols defined for you by autoconf to make sure that the code compiles properly when the optional module is not present, i.e., there should be blocks like
+Actually, I'm pretty sure that none of the projects are actually doing this 100% right. What I think should happen 
+is that for required external projects, the configure script should check for their existence and fail if they are 
+not present. For optional projects, your code should use the symbols defined for you by autoconf to make sure that 
+the code compiles properly when the optional module is not present, i.e., there should be blocks like
 
 #ifdef COIN_HAS_XXX
 
@@ -5866,17 +5915,31 @@ that are skipped whenever XXX is not present. In your configure.ac, the line
 
 AC_COIN_MAIN_SUBDIRS(CoinUtils)
 
-does actually check for the existence of other COIN projects, but it is up to you to figure out what to do if something is not present. Take a look at the configure.ac for Ipopt to see how this works.
+does actually check for the existence of other COIN projects, but it is up to you to figure out what to do 
+if something is not present. Take a look at the configure.ac for Ipopt to see how this works.
 
-Ideally, your code would never fail to compile because something is not present. Either the configuration should fail or the code should be able to deal with the lack of presence of some module. So you actually *do* check for the presence of other COIN projects. However, as far as I know, there is no implemented test for cppad, presumably since it does not use the autotools like the other projects. Currently, if you add
+Ideally, your code would never fail to compile because something is not present. Either the configuration 
+should fail or the code should be able to deal with the lack of presence of some module. So you actually 
+*do* check for the presence of other COIN projects. However, as far as I know, there is no implemented test for cppad, 
+presumably since it does not use the autotools like the other projects. Currently, if you add
 
 AC_COIN_MAIN_SUBDIRS(CoinUtils)
 
-it doesn't correctly detect its presence. You have this line in your configure.ac, but if you check the logs, it probably says that cppad is not present. I think this is probably because it does not have its own configure script. In that sense, it probably needs to be treated like third-party source code.
+it doesn't correctly detect its presence. You have this line in your configure.ac, but if you check the logs, 
+it probably says that cppad is not present. I think this is probably because it does not have its own configure script. 
+In that sense, it probably needs to be treated like third-party source code.
 
-The reason for making sure that your configuration fails when something is not present, even though it is in your externals, is because your externals aren't used when other projects pull in your project (as I am doing with CoinAll). I don't really have any way of knowing which things  in your externals are required for me to build your project with the default options. Hence, I didn't include cppad at first. When I could not get Ipopt to build, I actually tried to build CoinAll without Ipopt and again, OS configured just fine, but failed to build because Ipopt was not present. By the way, is it really true that you need Ipopt to use OS? What if I am only interested in using Clp through OS and don't care about Ipopt? Shouldn't I be able to build it without Ipopt? I'm guessing that this is possible, but it doesn't happen automatically whenever Ipopt is not present, as it should.
+The reason for making sure that your configuration fails when something is not present, even though it is in 
+your externals, is because your externals aren't used when other projects pull in your project (as I am doing 
+with CoinAll). I don't really have any way of knowing which things  in your externals are required for me to build 
+your project with the default options. Hence, I didn't include cppad at first. When I could not get Ipopt to build, 
+I actually tried to build CoinAll without Ipopt and again, OS configured just fine, but failed to build because Ipopt 
+was not present. By the way, is it really true that you need Ipopt to use OS? What if I am only interested in using 
+Clp through OS and don't care about Ipopt? Shouldn't I be able to build it without Ipopt? I'm guessing that this is 
+possible, but it doesn't happen automatically whenever Ipopt is not present, as it should.
 
-So the bottom line is that all the COIN projects *should* actually be treated that same way as I've described cppad should be treated. However, it's easier to do this for the projects that use autoconf.
+So the bottom line is that all the COIN projects *should* actually be treated that same way as I've described cppad 
+should be treated. However, it's easier to do this for the projects that use autoconf.
 
 I hope this makes sense. Andreas can correct me if I've misspoken anywhere :) .
 
@@ -5925,9 +5988,13 @@ esac
 
 Sorry, I didn't read your message well.
 
-You are right, AC_COIN_MAIN_SUBDIRS(cppad) tells us that the cppad project is not available, since there is no configure script - and therefore the base directory configure script can't and shouldn't recurse into the cppad subdirectory.  There is actually no need for "AC_COIN_MAIN_SUBDIRS(cppad)" to appear in the configure.ac of OS' base directory.
+You are right, AC_COIN_MAIN_SUBDIRS(cppad) tells us that the cppad project is not available, since there is no 
+configure script - and therefore the base directory configure script can't and shouldn't recurse into the cppad 
+subdirectory.  There is actually no need for "AC_COIN_MAIN_SUBDIRS(cppad)" to appear in the configure.ac of OS' 
+base directory.
 
-However, the AC_COIN_HAS_PROJECT(cppad) test is independent from that, and that seems to do that right thing in OS (that was what I meant in my other messages).
+However, the AC_COIN_HAS_PROJECT(cppad) test is independent from that, and that seems to do that right thing 
+in OS (that was what I meant in my other messages).
 
 Sorry for the confusion.
 
@@ -5969,7 +6036,10 @@ other licenses such as the CPL and GPL.
 
 Gus and msys
 
-> Bob -- I am ccing you on all this discussion about parsers since when you implement the David Gay stuff the reading of the numbers into text is done in parseosil.y and many of Gus' questions are relevant.  I think he also has msys and through a fair amount of pain has installed flex and bison so perhaps you can leverage off of him.
+> Bob -- I am ccing you on all this discussion about parsers since when you implement the David Gay stuff the 
+reading of the numbers into text is done in parseosil.y and many of Gus' questions are relevant.  
+I think he also has msys and through a fair amount of pain has installed flex and bison so perhaps you can 
+leverage off of him.
 
 Hi Bob,
 
@@ -6152,13 +6222,19 @@ The patch for mumps
 
 Hi Kipp and Andreas,
 
-To try and bring a conclusion to the saga of building Ipopt with Mumps in Msys, here is a patch file for the changes I had to make to Mumps to get it to compile with gfortran 4.2 in Msys. I've included a version of the get.Mumps script that will automatically download the source and apply the necessary patch. Andreas, it seems this is the easiest of the solutions we discussed and it seems to work fine. Do you think we can just check in the patch and the new version of the script?
+To try and bring a conclusion to the saga of building Ipopt with Mumps in Msys, 
+here is a patch file for the changes I had to make to Mumps to get it to compile 
+with gfortran 4.2 in Msys. I've included a version of the get.Mumps script that 
+will automatically download the source and apply the necessary patch. Andreas, 
+it seems this is the easiest of the solutions we discussed and it seems to work fine. 
+Do you think we can just check in the patch and the new version of the script?
 
 Kipp, if you want to apply the patch to already downloaded code, please execute
 
 patch -p0 < mumps.gcc.patch
 
-in the ThirdParty/Mumps directory. I'm a little confused as to why you seem to be having different compilation issues than I did, but try this patch and see if it works.
+in the ThirdParty/Mumps directory. I'm a little confused as to why you seem to be 
+having different compilation issues than I did, but try this patch and see if it works.
 
 Cheers,
 
@@ -6225,9 +6301,13 @@ What to do is to:
 3. Patch Ipopt-shared/libtool
 4. In Ipopt-shared (or in its ThirdParty/HSL subdir) call make.
 
-Now the gfortran call that builds the libhsl.dylib should next to the -dynamiclib argument also have a -single_module argument. If that is not sufficient, then one need to add also ADD_FFLAGS="-fno-common" to the configure call in step 2. I have not figures this out.
+Now the gfortran call that builds the libhsl.dylib should next to the -dynamiclib 
+argument also have a -single_module argument. If that is not sufficient, 
+then one need to add also ADD_FFLAGS="-fno-common" to the configure call in step 2. 
+I have not figures this out.
 
-It should also be possible to run only the configure in ThirdParty/HSL, but then one need to give a lot of options for prefix or subdir... (see beginning of ThirdParty/HSL/config.log).
+It should also be possible to run only the configure in ThirdParty/HSL, but then one 
+need to give a lot of options for prefix or subdir... (see beginning of ThirdParty/HSL/config.log).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -6323,7 +6403,10 @@ Quoting Kipp Martin <Kipp.Martin@ChicagoGSB.edu>:
 >>
 >> Any thoughts?
 >
-> That seems to have worked in terms of VS recognizing that the project is there. However, when I now open OS.sln in v9 inside Visual Studio it says: "the solution or project you are opening was created in a different version of Visual Studio ..." Then it wants to go through a conversion process.  So something is now wrong with the solution file in  v9.
+> That seems to have worked in terms of VS recognizing that the project is there. 
+> However, when I now open OS.sln in v9 inside Visual Studio it says: "the solution or 
+> project you are opening was created in a different version of Visual Studio ..." 
+> Then it wants to go through a conversion process.  So something is now wrong with the solution file in  v9.
 
 I don't have v9 running on this machine, but the conversion process is trivial.
 If you do not want to let MSVS do the conversion for you, just edit the file
@@ -6331,9 +6414,13 @@ If you do not want to let MSVS do the conversion for you, just edit the file
 Visual Studio 2008. I go in the opposite direction, changing the version to
 9.00 and the title year to 2005.
 
-> Was the osRemoteTest project you committed created in v8? Are you able to open OS.sln in v9 from Visual Studio without it asking to convert?
+> Was the osRemoteTest project you committed created in v8? Are you able to open 
+> OS.sln in v9 from Visual Studio without it asking to convert?
 >
-> Also, how do you turn on/off a project so that is is/is not built from vcbuild?  I don't see how to do that so I can't test the Windows Popup blocker issue.  I am pretty stumped, especially since the WindowsErrorPopupBlocker(); code is in unitTest and unitTest works from vcbuild.
+> Also, how do you turn on/off a project so that is is/is not built from vcbuild?  
+> I don't see how to do that so I can't test the Windows Popup blocker issue.  
+> I am pretty stumped, especially since the WindowsErrorPopupBlocker(); code is in 
+> unitTest and unitTest works from vcbuild.
 
 Again there are two ways to do it. In MSVS you select the configuration you
 want, and then select Configuration Manager from the build menu. Just click on
@@ -6347,7 +6434,7 @@ the end of the file a bunch of lines that have project numbers and blah blah
 blah Activecfg = ...
 These lines tell MSVS which projects are included in which configurations. There
 are also lines with ...Build.0 = ... These lines tell MSVS which projects
-should be built by default. If you want to change that, yo can simply add or
+should be built by default. If you want to change that, you can simply add or
 delete the appropriate entries.
 
 Hope that helps
@@ -6357,9 +6444,13 @@ gus
 
 > Hi Gus:
 >
-> Okay, for v9 I went into Configuration Manager (the debug tab was selected) and I turned on fileupload and all of the examples including your new osRemoteTest. Then I saved the OS.sln file. Then went to the command line and ran vcbuild OS.sln. All of the projects built with no problem!
+> Okay, for v9 I went into Configuration Manager (the debug tab was selected) 
+> and I turned on fileupload and all of the examples including your new osRemoteTest. 
+> Then I saved the OS.sln file. Then went to the command line and ran vcbuild OS.sln. 
+> All of the projects built with no problem!
 >
-> I think you said not to change the tab in the Configuration Manager so how do I turn these guys on in both release and debug mode?
+> I think you said not to change the tab in the Configuration Manager so how do 
+> I turn these guys on in both release and debug mode?
 
 You should have a list box on the tool bar that shows the currently active
 configuration. If you select Release from there and then go back into the
@@ -6373,7 +6464,7 @@ Suppose you have Debug as your active configuration and open the Configuration
 Manager. If you then click Release inside the Configuration Manager and turn
 on, say, osTest, you tell MSVS to build Release with the Debug information
 turned on, that is, osTest --- and possibly all the other projects, can't
-remember for sure --- will have entries in the .sln files changes from
+remember for sure --- will have entries in the .sln files changed from
 
 {project number}.Release.ActiveCfg = Release|Win32 (or something close to that)
 
@@ -6396,12 +6487,15 @@ New improvement from stefan
 
 Hi,
 
-I just managed to build the CoinAll system (from BSP) on a Windows system with cl, f2c, no fortran 90 compiler, and user given mumps libraries without having to patch the Ipopt configure scripts.
+I just managed to build the CoinAll system (from BSP) on a Windows system 
+with cl, f2c, no fortran 90 compiler, and user given mumps libraries without 
+having to patch the Ipopt configure scripts.
 I have put all files that I used at
 
 http://www.gams.com/~svigerske/mumps/
 
-(Kipp, this are essentially the same as you used before for the same thing, just reduced to the essential ones.)
+(Kipp, this are essentially the same as you used before for the same thing, 
+just reduced to the essential ones.)
 
 The readme.txt just says that i used the following site script:
 
@@ -6515,7 +6609,9 @@ extern "C" {
 }
 
 
-I've committed these lines into the repository now too, but you have to activate them by adding a -DUSE_UNUSED_SYMBOLS (I know, I'm very bad in naming) to the CXXFLAGS, see https://projects.coin-or.org/GAMSlinks/changeset/540
+I've committed these lines into the repository now too, but you have to activate 
+them by adding a -DUSE_UNUSED_SYMBOLS (I know, I'm very bad in naming) to the 
+CXXFLAGS, see https://projects.coin-or.org/GAMSlinks/changeset/540
 I am not convinced yet that this is not some bug in the compiler you use.
 
 %%%%%%%%%%%%%%%%%%%%%%%
