@@ -1720,12 +1720,9 @@ catch(const ErrorClass& eclass){
 		jobID[0] = "ABC123";
 		jobID[1] = "1234567890";
 		int ndep;
-	
 		cout << "test set() and get() methods" << endl;
 		ok = another_osoption->setJobDependencies(2, jobID);
 		cout << "setJobDependencies: " << ok << endl;
-		
-		
 		ndep = another_osoption->getNumberOfJobDependencies();
 		cout << "number of dependencies: " << ndep << endl;
 		ok = another_osoption->setAnotherJobDependency("test");
@@ -1733,14 +1730,45 @@ catch(const ErrorClass& eclass){
 		ndep = another_osoption->getNumberOfJobDependencies();
 		cout << "number of dependencies: " << ndep << endl;
 		std::string* tJobID = another_osoption->getJobDependencies();
-		for (int i = 0; i < ndep; i++) cout << "  jobID: " << tJobID[i] << endl;
+		for (i = 0; i < ndep; i++) cout << "  jobID: " << tJobID[i] << endl;
 		// IMPORTANT!!!! -- jobID gets deleted by deleting another_option
 		delete another_osoption;
 		//return 0;
 		
+		
+		// another test
+		another_osoption = new OSOption();
+		OtherOption **otherOpts = NULL;
+		otherOpts = new OtherOption*[2];
+		otherOpts[ 0] = new OtherOption();
+		otherOpts[ 1] = new OtherOption();
+		otherOpts[ 0]->name = "name0";
+		otherOpts[ 0]->value = "value0";
+		otherOpts[ 1]->name = "name1";
+		otherOpts[ 1]->value = "value1";
+		
+		another_osoption->setOtherGeneralOptions(2,  otherOpts);
+		
+		OtherOption *other = new OtherOption();
+		
+		other->name = "name2";
+		other->value = "value2";
+		
+		another_osoption->setAnOtherGeneralOption( other);
+		
+		OtherOption **newOtherOpts = another_osoption->getOtherGeneralOptions();
+		
+		for(i = 0; i < 3; i++){
+			std::cout  << newOtherOpts[i]->name << std::endl;
+			std::cout  << newOtherOpts[i]->value << std::endl;
+		}
+		
+		delete another_osoption;
+		
 		unitTestResult << 
 		     "Successful test of OSoL parser on file parsertest.osol" 
 		      << std::endl;
+	
 
 	}	
 	

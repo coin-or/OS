@@ -1,7 +1,7 @@
 /** @file OSOption.cpp
  * 
  *
- * @author  Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin, 
+ * @author Gus Gassmann, Jun Ma, Kipp Martin, 
  * @version 1.0, 29/Aug/2008
  * @since   OS1.1
  *
@@ -79,7 +79,8 @@ OtherOption::~OtherOption()
 
 
 OtherOptions::OtherOptions(): 
-	numberOfOtherOptions(0)
+	numberOfOtherOptions(0),
+	other( NULL)
 {    
 	#ifdef DEBUG
 	cout << "Inside OtherOptions Constructor" << endl;
@@ -92,9 +93,9 @@ OtherOptions::~OtherOptions()
 	#ifdef DEBUG
 	cout << "OtherOptions Destructor Called" << endl;
 	#endif
-	if (other != NULL)
-	{	for ( int i=0; i<numberOfOtherOptions; i++)
-		{	delete other[i];
+	if (other != NULL){
+		for ( int i=0; i<numberOfOtherOptions; i++){
+			delete other[i];
 			other[i] = NULL;
 		}
 		delete[] other;
@@ -111,7 +112,8 @@ GeneralOption::GeneralOption():
 	solverToInvoke (""),
 	license (""),
 	userName (""),
-	password ("")
+	password (""),
+	otherOptions(NULL)
 {    
 	#ifdef DEBUG
 	cout << "Inside GeneralOption Constructor" << endl;
@@ -2758,29 +2760,21 @@ bool OSOption::setNumberOfOtherGeneralOptions(int numberOfObjects)
 	return true;
 }//setNumberOfOtherGeneralOptions
 
-bool OSOption::setOtherGeneralOptions(int numberOfOptions, OtherOption** other)
-{	if (this->general == NULL) 
+bool OSOption::setOtherGeneralOptions(int numberOfOptions, OtherOption** other){
+	if (this->general == NULL) 
 		this->general = new GeneralOption();
 	if (this->general->otherOptions == NULL) 
 		this->general->otherOptions = new OtherOptions();
 	else
 		if (numberOfOptions != this->general->otherOptions->numberOfOtherOptions)
 			throw ErrorClass("Inconsistent size of <general> <other> element");
-
-	if (this->general->otherOptions->other == NULL) 
-	{	this->general->otherOptions->other = new OtherOption*[numberOfOptions];
-		for (int i = 0; i < numberOfOptions; i++)
-			this->general->otherOptions->other[i] = new OtherOption();
-	}
-
-	for (int i = 0; i < numberOfOptions; i++)
-		this->general->otherOptions->other[i] = other[i];
-
+	this->general->otherOptions->other = other;
+	this->general->otherOptions->numberOfOtherOptions = numberOfOptions;
 	return true;
 }//setOtherGeneralOptions
 
-bool OSOption::setAnOtherGeneralOption(OtherOption* optionValue)
-{	if (this->general == NULL) 
+bool OSOption::setAnOtherGeneralOption(OtherOption* optionValue){
+	if (this->general == NULL) 
 		this->general = new GeneralOption();
 	if (this->general->otherOptions == NULL) 
 		this->general->otherOptions = new OtherOptions();
@@ -2790,16 +2784,24 @@ bool OSOption::setAnOtherGeneralOption(OtherOption* optionValue)
 		nopt = 0;
 	else
 		nopt = this->general->otherOptions->numberOfOtherOptions;
-
+	std::cout << "NUMBER OF OPTIONS ==  "  <<  nopt << std::endl;
 	OtherOption** temp = new OtherOption*[nopt+1];
-	for (int i = 0; i < nopt; i++)
-	{	temp[i] = new OtherOption();
-		temp[i] = this->general->otherOptions->other[i];
+	for (int i = 0; i < nopt; i++){
+		temp[i] = new OtherOption();
+		temp[i]->name = this->general->otherOptions->other[i]->name;
+		temp[i]->value = this->general->otherOptions->other[i]->value;
+		temp[i]->description = this->general->otherOptions->other[i]->description;
 		delete this->general->otherOptions->other[i];
 	}
-	temp[nopt] = new OtherOption();
-	temp[nopt] = optionValue;
+	
+	delete[] this->general->otherOptions->other;
+	temp[ nopt] = new OtherOption();
+	temp[ nopt]->name = optionValue->name;
+	temp[ nopt]->value = optionValue->value;
+	temp[ nopt]->description = optionValue->description;
 
+	delete optionValue;
+	
 	this->general->otherOptions->other = temp;
 	this->general->otherOptions->numberOfOtherOptions = ++nopt;
 
@@ -3050,7 +3052,6 @@ bool OSOption::setAnotherJobDependency(std::string jobID){
 		nopt = 0;
 	else
 		nopt = this->job->dependencies->numberOfJobIDs;
-
 	std::string* temp = new std::string[nopt+1];
 	for (int i = 0; i < nopt; i++){
 		temp[i] = this->job->dependencies->jobID[i]; // create the new
