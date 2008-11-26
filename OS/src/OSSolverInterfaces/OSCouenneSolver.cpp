@@ -24,10 +24,12 @@
 #include "OSCommonUtil.h"
 #include "OSMathUtil.h"
 
-//#include "BonOsiTMINLPInterface.hpp"
-//#include "BonCbc.hpp"
-
 #include "OSCouenneSolver.h"
+#include "CouenneTypes.hpp"
+#include "exprSum.hpp"
+#include "exprMul.hpp"
+#include "exprClone.hpp"
+#include "exprGroup.hpp"
 
 using namespace Bonmin;
 
@@ -125,10 +127,39 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 
 		free(x_); free(lb); free(ub);
   
-  /*
+
+		// now for the objective function -- assume just one for now
+		//just worry about linear coefficients
 	
-	couenne->addObjective(new exprConst(0.), "min"); // dummy objective
+		expression *body = NULL;
+		
+		SparseVector** sv = osinstance->getObjectiveCoefficients();
+		
+		int nterms = sv[ 0]->number;
+		
+		int *indexL = new int [nterms+1];
+		CouNumber *coeff  = new CouNumber [nterms];
+
+		
+		exprGroup::lincoeff lin( nterms);
+		
+		
+		for ( i = 0; i < nterms; ++i){
 	
+			lin[i].first = couenne->Var( indexL[ i] );
+			lin[i].second = coeff[ i];
+
+		}
+		
+		
+		expression** nl = new expression*[1];
+		nl[0] = body;
+		body = new exprGroup(0., lin, nl, 1);	 
+	
+		couenne->addObjective(body, "min"); 
+		/*
+
+
 	SCIP_CONSDATA* consdata;
 	for (int i = 0; i < nconss; ++i)
 	{

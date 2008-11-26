@@ -178,6 +178,8 @@ if COIN_HAS_COUENNE
 	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src/convex` \
 	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src/disjunctive` \
 	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src/expression` \
+        -I`$(CYGPATH_W) $(COUENNESRCDIR)/src/expression/operators` \
+        -I`$(CYGPATH_W) $(COUENNESRCDIR)/src/expression/simplify` \
 	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src/main` \
 	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src/problem` \
 	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src/readnl` \
