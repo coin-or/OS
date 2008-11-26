@@ -2784,7 +2784,7 @@ bool OSOption::setAnOtherGeneralOption(OtherOption* optionValue){
 		nopt = 0;
 	else
 		nopt = this->general->otherOptions->numberOfOtherOptions;
-	std::cout << "NUMBER OF OPTIONS ==  "  <<  nopt << std::endl;
+	
 	OtherOption** temp = new OtherOption*[nopt+1];
 	for (int i = 0; i < nopt; i++){
 		temp[i] = new OtherOption();
