@@ -251,7 +251,8 @@ MaxTime::~MaxTime()
 
 
 JobDependencies::JobDependencies():
-	numberOfJobIDs (0)
+	numberOfJobIDs (0),
+	jobID( NULL)
 {    
 	#ifdef DEBUG
 	cout << "Inside JobDependencies Constructor" << endl;
@@ -2032,17 +2033,11 @@ OtherOption** OSOption::getAllOtherOptions()
  */
 std::string*  OSOption::getJobDependencies(){
 	std::string* dependenciesVector = NULL;
-	if (this->job != NULL) 
-	{	if (this->job->dependencies != NULL) 
-		{	//int i;
-			int num_ID;
-			// gus -- why isn't this number of Job IDs
-			num_ID = this->getNumberOfJobDependencies();
-			//dependenciesVector = new std::string*[num_ID];
-			dependenciesVector = this->job->dependencies->jobID;
-			//for(i = 0; i < num_ID; i++)
-			//	dependenciesVector[i] = this->job->dependencies->jobID[ i];
-		}					
+	if (this->job != NULL) {
+		dependenciesVector = this->job->dependencies->jobID;				
+	}
+	else{
+		throw ErrorClass("a job object should be defined before getting the jobIDs");
 	}
 	return dependenciesVector;
 }//getJobDependencies
@@ -3039,11 +3034,6 @@ bool OSOption::setJobDependencies(int numberOfDependencies, std::string* jobDepe
 		this->job = new JobOption();
 	if (this->job->dependencies == NULL) 
 		this->job->dependencies = new JobDependencies();
-	//else
-	//	if (this->job->dependencies->numberOfJobIDs != numberOfDependencies)
-	//		throw ErrorClass("Inconsistent size of <job> <dependencies> element");
-	//if (this->job->dependencies->jobID == NULL)
-		//this->job->dependencies->jobID = new std::string*[numberOfDependencies];
 		this->job->dependencies->numberOfJobIDs = numberOfDependencies;
 		this->job->dependencies->jobID = jobDependencies;
 	return true;

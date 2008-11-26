@@ -1736,6 +1736,7 @@ catch(const ErrorClass& eclass){
 		for (int i = 0; i < ndep; i++) cout << "  jobID: " << tJobID[i] << endl;
 		// IMPORTANT!!!! -- jobID gets deleted by deleting another_option
 		delete another_osoption;
+		return 0;
 		
 		unitTestResult << 
 		     "Successful test of OSoL parser on file parsertest.osol" 
