@@ -155,6 +155,10 @@
 #ifdef COIN_HAS_BONMIN    
 #include "OSBonminSolver.h"
 #endif 
+
+#ifdef COIN_HAS_COUENNE    
+//#include "OSCouenneSolver.h"
+#endif
  
 
 
@@ -824,7 +828,7 @@ try{
 	cout << "call the COIN - Bonmin Solver for bonminEx1" << endl;
 	solver->buildSolverInstance();
 	solver->solve();
-	cout << "Here is the COIN SYMPHONY solver solution for bonminEx1" << endl;
+	cout << "Here is the Bonmin solver solution for bonminEx1" << endl;
 	cout << solver->osrl << endl;
 	check = -1.70711;
 	//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
@@ -863,6 +867,53 @@ catch(const ErrorClass& eclass){
 	unitTestResultFailure  << "Sorry Unit Test Failed Testing the Bonmin Solver:"  + eclass.errormsg << endl;
 }	
 #endif
+//
+//
+//
+//
+
+#ifdef COIN_HAS_COUENNE
+try{
+	
+	/*
+	OSiLReader *osilreader = NULL;
+	osilreader = new OSiLReader(); 
+	ok = true; 
+	osilFileName = dataDir  + "osilFiles" + dirsep + "parincLinear.osil";
+	osil = fileUtil->getFileAsString( osilFileName.c_str());
+	solver = new CouenneSolver();
+	//solver->sSolverName = "bonmin";
+	solver->osinstance = osilreader->readOSiL( osil);
+	//solver->osil = osil;
+	solver->osol = osol;  
+	cout << "call the COIN - Couenne Solver for bonminEx1" << endl;
+	solver->buildSolverInstance();
+	
+	
+	solver->solve();
+	cout << "Here is the Couenne solver solution for bonminEx1" << endl;
+	cout << solver->osrl << endl;
+	check = -1.70711;
+	//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+	ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+	if(ok == false) throw ErrorClass(" Fail unit test with Bonmin on bonminEx1.osil");
+	
+	
+	
+	delete solver;
+	solver = NULL;
+	unitTestResult << "Solved problem bonminEx1.osil with Bonmin" << std::endl;
+	delete osilreader;
+	osilreader = NULL;
+	*/
+}
+catch(const ErrorClass& eclass){
+	cout << "OSrL =  " <<  solver->osrl <<  endl;
+	cout << endl << endl << endl;
+	unitTestResultFailure  << "Sorry Unit Test Failed Testing the Bonmin Solver:"  + eclass.errormsg << endl;
+}	
+#endif
+
 //
 //
 //
