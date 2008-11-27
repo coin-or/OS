@@ -21,48 +21,17 @@
 #include "OSrLWriter.h"
 #include "OSInstance.h"
 #include "OSParameters.h"
-#include "OSnLNode.h"
 #include "OSiLReader.h"
-#include "OSInstance.h"
 #include "OSExpressionTree.h"
 #include "OSnLNode.h"
 #include "OSDataStructures.h"
 #include "OSFileUtil.h"  
 #include "OSErrorClass.h"
-
 #include "OSResult.h"
-#include "OSInstance.h"
 #include "OSOption.h"
 
 //Couenne stuff
 
-
-#include "CoinTime.hpp"
-#include "BonminConfig.h"
-#include "BonCouenneInterface.hpp"
-#include "BonIpoptSolver.hpp"
-
-#include "BonCouenneSetup.hpp"
-
-#include "BonCbc.hpp"
-#ifdef COIN_HAS_FILTERSQP
-#include "BonFilterSolver.hpp"
-#endif
-
-#include "CbcCutGenerator.hpp"
-#include "CouenneProblem.hpp"
-#include "CouenneCutGenerator.hpp"
-
-// end Couenne stuff
-
-# include <cstddef>
-# include <cstdlib>
-# include <cctype>
-# include <cassert>
-# include <stack>
-#include <string>
-# include <cppad/cppad.hpp>
-#include<iostream>
 
 #ifdef HAVE_CTIME
 # include <ctime>
@@ -87,11 +56,6 @@
 #include<vector>
 #include <map>  
 
-
-
-
-//#include "BonTMINLP.hpp"
-//#include "BonBonminSetup.hpp"
 
 
 

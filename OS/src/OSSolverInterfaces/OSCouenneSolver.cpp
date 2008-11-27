@@ -18,31 +18,41 @@
 #include <iostream>
 
 
-
+//OS stuff
 #include "OSDataStructures.h"
 #include "OSParameters.h" 
 #include "OSCommonUtil.h"
 #include "OSMathUtil.h"
-
 #include "OSCouenneSolver.h"
+# include <cppad/cppad.hpp>
+//end OS stuff
+
+
+// Couenne stuff
+#include "BonCouenneInterface.hpp"
+#include "BonCouenneSetup.hpp"
+#include "BonCbc.hpp"
+#include "CouenneProblem.hpp"
 #include "CouenneTypes.hpp"
 #include "exprSum.hpp"
 #include "exprMul.hpp"
 #include "exprClone.hpp"
 #include "exprGroup.hpp"
+#include "CouenneJournalist.hpp"
+// end Couenne stuff
+
+
+# include <cstddef>
+# include <cstdlib>
+# include <cctype>
+# include <cassert>
+# include <stack>
+#include <string>
+#include<iostream>
+
+
 
 using namespace Bonmin;
-
-
-#include "BonminConfig.h"
-#include "BonCouenneInterface.hpp"
-#include "BonIpoptSolver.hpp"
-
-#include "BonCouenneSetup.hpp"
-
-#include "CouenneJournalist.hpp"
-
-
 using std::cout; 
 using std::endl; 
 using std::ostringstream;
@@ -125,7 +135,7 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 
 		couenne->domain()->push(n_allvars, x_, lb, ub);
 
-		free(x_); free(lb); free(ub);
+		
   
 
 		// now for the objective function -- assume just one for now
@@ -157,6 +167,8 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 		body = new exprGroup(0., lin, nl, 1);	 
 	
 		couenne->addObjective(body, "min"); 
+		
+		//free(x_); free(lb); free(ub);
 		/*
 
 
