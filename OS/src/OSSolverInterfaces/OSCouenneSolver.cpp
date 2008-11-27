@@ -169,9 +169,14 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 
 		}
 		
-		expression** nl = new expression*[1];
-		nl[0] = body;
-		body = new exprGroup(0., lin, nl, 0);	 
+		OSExpressionTree* exptree = osinstance->getNonlinearExpressionTree(-1);
+		if (exptree) {
+			expression** nl = new expression*[1];
+			nl[0] = createCouenneExpression(exptree->m_treeRoot);
+			body = new exprGroup(0., lin, nl, 1);
+		} else {
+			body = new exprGroup(0., lin, NULL, 0);			
+		}
 	
 		couenne->addObjective(body, "min"); 
 		
@@ -203,11 +208,17 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 						kount++;
 
 					}
+				}
 			}
-			expression** nl = new expression*[1];
-			nl[0] = body;
-			body = new exprGroup(0., lin, nl, 0);
-		}
+			
+			OSExpressionTree* exptree = osinstance->getNonlinearExpressionTree(i);
+			if (exptree) {
+				expression** nl = new expression*[1];
+				nl[0] = createCouenneExpression(exptree->m_treeRoot);
+				body = new exprGroup(0., lin, nl, 1);
+			} else {
+				body = new exprGroup(0., lin, NULL, 0);			
+			}
 		
 		if (rowlb[ i] == rowub[ i])
 		{
@@ -288,7 +299,11 @@ expression* CouenneSolver::createCouenneExpression(OSnLNode* node) {
     	 else
     		 return new exprDiv(createCouenneExpression(node->m_mChildren[0]), createCouenneExpression(node->m_mChildren[1]));
      case OS_POWER :
-    	 return new exprPow(createCouenneExpression(node->m_mChildren[0]), createCouenneExpression(node->m_mChildren[1]));
+    	 // couenne does not like expressions of the form exp1 ^ exp2 with exp2 not a constant, so we write them as exp(log(exp1)*exp2)
+    	 if (node->m_mChildren[1]->inodeInt != OS_NUMBER)
+    		 return new exprExp(new exprMul(new exprLog(createCouenneExpression(node->m_mChildren[0])), createCouenneExpression(node->m_mChildren[1])));
+    	 else
+    		 return new exprPow(createCouenneExpression(node->m_mChildren[0]), createCouenneExpression(node->m_mChildren[1]));
      case OS_PRODUCT:
     	 switch (node->inumberOfChildren==0) {
     		 case 0:
