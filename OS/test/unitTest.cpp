@@ -899,19 +899,19 @@ try{
 	ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 	if(ok == false) throw ErrorClass(" Fail unit test with Bonmin on bonminEx1.osil");
 	*/
-	
-	
 	delete solver;
 	solver = NULL;
-	unitTestResult << "Solved problem bonminEx1.osil with Bonmin" << std::endl;
+	unitTestResult << "Solved problem bonminEx1.osil with Couenne" << std::endl;
 	delete osilreader;
 	osilreader = NULL;
+	
 	
 }
 catch(const ErrorClass& eclass){
 	cout << "OSrL =  " <<  solver->osrl <<  endl;
 	cout << endl << endl << endl;
-	unitTestResultFailure  << "Sorry Unit Test Failed Testing the Bonmin Solver:"  + eclass.errormsg << endl;
+	unitTestResultFailure  << "Sorry Unit Test Failed Testing the Couenne Solver:"  + eclass.errormsg << endl;
+	
 }	
 #endif
 

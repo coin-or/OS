@@ -31,7 +31,7 @@
 #include "OSOption.h"
 
 //Couenne stuff
-
+#include "CouenneProblem.hpp"
 
 #ifdef HAVE_CTIME
 # include <ctime>
@@ -119,6 +119,9 @@ public:
 	 * osil string if needed	 
 	 */		
 	OSiLReader *m_osilreader;
+	
+	
+	CouenneProblem *couenne;
 
 
 private:

@@ -29,10 +29,7 @@
 
 
 // Couenne stuff
-#include "BonCouenneInterface.hpp"
-#include "BonCouenneSetup.hpp"
-#include "BonCbc.hpp"
-#include "CouenneProblem.hpp"
+
 #include "CouenneTypes.hpp"
 #include "exprSum.hpp"
 #include "exprMul.hpp"
@@ -64,17 +61,21 @@ using namespace  Ipopt;
 	osresult = new OSResult();
 	m_osilreader = NULL;
 	couenneErrorMsg = "";
-	Bab bb;
-	bb.setUsingCouenne (true);
-	CouenneSetup bonmin;
+	couenne = NULL;
 
 
 } 
 
 CouenneSolver::~CouenneSolver() {
 	#ifdef DEBUG
-	cout << "inside BonminSolver destructor" << endl;
+	cout << "inside CouenneSolver destructor" << endl;
 	#endif
+	cout << "inside CouenneSolver destructor" << endl;
+	if(couenne != NULL){
+		cout << "BEFORE DELETE COUENNE" << endl;
+		//delete couenne;
+		cout << "AFTER DELETE COUENNE" << endl;
+	}
 	if(m_osilreader != NULL) delete m_osilreader;
 	m_osilreader = NULL;
 	delete osresult;
@@ -84,14 +85,15 @@ CouenneSolver::~CouenneSolver() {
 	//delete osinstance;
 	//osinstance = NULL;
 	#ifdef DEBUG
-	cout << "leaving BonminSolver destructor" << endl;
+	cout << "leaving CouenneSolver destructor" << endl;
 	#endif
 }
 
 
 void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
+	// Much of the following is taken from Stefan Vigerske
 	try{
-		int i;
+		int i, j;
 		
 		if(osil.length() == 0 && osinstance == NULL) throw ErrorClass("there is no instance");
 		if(osinstance == NULL){
@@ -99,21 +101,17 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 			osinstance = m_osilreader->readOSiL( osil);
 		}	
 		
-		CouenneProblem *couenne;
+
 		Ipopt::Journalist* jnlst = new Ipopt::Journalist();
 		jnlst->AddFileJournal("console", "stdout", J_STRONGWARNING);
 		couenne = new CouenneProblem(NULL, NULL, jnlst);
-		int n_allvars = osinstance->getConstraintNumber();
-		if( n_allvars <= 0 )throw ErrorClass("Couenne solver Needs Constraints");
-		
-		//if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Couenne solver requires decision variables");
-		//if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Couenne solver needs an objective function");
-
+		int n_allvars = osinstance->getVariableNumber();
+		if( n_allvars <= 0 )throw ErrorClass("Couenne solver Needs Variables");
+		std::cout << "NUMBER OF VARIABLES = " <<  n_allvars <<  std::endl;
+	
 		// create room for problem's variables and bounds
-		CouNumber
-			*x_ = (CouNumber *) malloc ((n_allvars) * sizeof (CouNumber)),
-			*lb = (CouNumber *) malloc ((n_allvars) * sizeof (CouNumber)),
-			*ub = (CouNumber *) malloc ((n_allvars) * sizeof (CouNumber));
+		CouNumber *x_ = (CouNumber *) malloc ((n_allvars) * sizeof (CouNumber));
+		CouNumber	*lb = NULL, *ub = NULL;
 	
 		// now get variable upper and lower bounds
 		ub = osinstance->getVariableUpperBounds();
@@ -127,40 +125,35 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 				couenne->addVariable(true, couenne->domain() );
 			}
 			else{
-				couenne->addVariable(true, couenne->domain() );
+				
+				couenne->addVariable(false, couenne->domain() );
+				
 			}
 
 			x_[i] = 0.;
 		}
-
-		couenne->domain()->push(n_allvars, x_, lb, ub);
-
 		
-  
-
+		couenne->domain()->push(n_allvars, x_, lb, ub);
+  		free(x_);
+	
 		// now for the objective function -- assume just one for now
 		//just worry about linear coefficients
 	
 		expression *body = NULL;
 		
-		SparseVector** sv = osinstance->getObjectiveCoefficients();
+		SparseVector* sv = osinstance->getObjectiveCoefficients()[ 0];
 		
-		int nterms = sv[ 0]->number;
-		
-		int *indexL = new int [nterms+1];
-		CouNumber *coeff  = new CouNumber [nterms];
-
+		int nterms = sv->number;
 		
 		exprGroup::lincoeff lin( nterms);
 		
 		
 		for ( i = 0; i < nterms; ++i){
 	
-			lin[i].first = couenne->Var( indexL[ i] );
-			lin[i].second = coeff[ i];
+			lin[i].first = couenne->Var( sv->indexes[ i] );
+			lin[i].second = sv->values[ i];
 
 		}
-		
 		
 		expression** nl = new expression*[1];
 		nl[0] = body;
@@ -168,78 +161,74 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 	
 		couenne->addObjective(body, "min"); 
 		
-		//free(x_); free(lb); free(ub);
-		/*
-
-
-	SCIP_CONSDATA* consdata;
-	for (int i = 0; i < nconss; ++i)
-	{
-		consdata = SCIPconsGetData(conss[i]);
-		LaGO::MINLPData::Constraint&
-con(lagodata->getConstraint(consdata->lagoindex));
-		G2DFunction* g2dfunc = (G2DFunction*)GetRawPtr(con.origfuncNL);
-		expression* body =
-g2dfunc->getAsCouenneExpression(couenne->Variables(), couenne->domain());
-		assert(body);
+		// get the constraints in row format
 		
-		if (consdata->n_lincoeff)
-		{
-			exprGroup::lincoeff lin(consdata->n_lincoeff);
-			for (int i = 0; i < consdata->n_lincoeff; ++i)
-			{
-				lin[i].second = consdata->lincoeff[i];
-				lin[i].first = couenne->Var(var2index[consdata->linvar[i]]);
-			}
-			
+		SparseMatrix* sm =  osinstance->getLinearConstraintCoefficientsInRowMajor();
+		
+		sm->isColumnMajor = false;		
+		
+		int nconss = osinstance->getConstraintNumber();		
+		int row_nonz = 0;
+		int kount = 0;
+		
+		double *rowlb = osinstance->getConstraintLowerBounds();
+		double *rowub = osinstance->getConstraintUpperBounds();
+		
+		for (i = 0; i < nconss; ++i) {
+			body = NULL;
+			row_nonz = sm->starts[ i +1] - sm->starts[ i];
+			if ( row_nonz  > 0){  // test for nonzeros in row i
+				exprGroup::lincoeff lin( row_nonz);
+				for (j = 0; j  <  row_nonz;  ++j){
+					
+					lin[j].first = couenne->Var( sm->indexes[ kount] );
+					lin[j].second = sm->values[ kount];
+					
+					kount++;
+					
+				}
 			expression** nl = new expression*[1];
 			nl[0] = body;
 			body = new exprGroup(0., lin, nl, 1);
 		}
 		
-		if (con.lower == con.upper)
+		if (rowlb[ i] == rowub[ i])
 		{
-			couenne->addEQConstraint(body, new exprConst(con.upper));
+			couenne->addEQConstraint(body, new exprConst( rowub[ i] ));
 		}
-		else if (con.lower == -LaGO::getInfinity())
+		else if (rowlb[ i]  ==  -OSDBL_MAX)
 		{
-			assert(con.upper != LaGO::getInfinity());
-			couenne->addLEConstraint(body, new exprConst(con.upper));
+			assert(rowub[ i]  !=  -OSDBL_MAX);
+			couenne->addLEConstraint(body, new exprConst( rowub[ i] ));
 		}
-		else if (con.upper == LaGO::getInfinity())
+		else if (rowub[ i] ==  OSDBL_MAX)
 		{
-			assert(con.lower != LaGO::getInfinity());
-			couenne->addGEConstraint(body, new exprConst(con.lower));			
+			assert(rowlb[ i]  != OSDBL_MAX);
+			couenne->addGEConstraint(body, new exprConst( rowlb[ i] ));			
 		}
 		else
-			couenne->addRNGConstraint(body, new exprConst(con.lower), new
-exprConst(con.upper));			
+			couenne->addRNGConstraint(body, new exprConst( rowlb[ i]), new
+				exprConst( rowub[ i] ));		
+			
 	}
-	
-	for (int i = 0; i < n_allvars; ++i)
-	{
-		couenne->Var(i)->linkDomain(couenne->domain());
-		couenne->Lb(i) = SCIPisInfinity(scip, -SCIPvarGetLbGlobal(allvars[i]))
-? -COUENNE_INFINITY : SCIPvarGetLbGlobal(allvars[i]);
-		couenne->Ub(i) = SCIPisInfinity(scip,  SCIPvarGetUbGlobal(allvars[i]))
-?  COUENNE_INFINITY : SCIPvarGetUbGlobal(allvars[i]);
-	}
-	couenne->print();
 
-	couenne->AuxSet() = new std::set <exprAux *, compExpr>;
 
-  // reformulation
-  couenne->standardize();
+	//couenne->print();
 
-  // give a value to all auxiliary variables
-  couenne->initAuxs();
+	//couenne->AuxSet() = new std::set <exprAux *, compExpr>;
 
-  // clear all spurious variables pointers not referring to the
-variables_ vector
-//  couenne->realign ();
+  	// reformulation
+  	//couenne->standardize();
 
-	couenne->print();
-		*/
+  	// give a value to all auxiliary variables
+  	//couenne->initAuxs();
+
+  	// clear all spurious variables pointers not referring to the
+	//variables_ vector
+	//  couenne->realign ();
+
+	//couenne->print();
+
 	}
 	catch(const ErrorClass& eclass){
 		std::cout << "THERE IS AN ERROR" << std::endl;
