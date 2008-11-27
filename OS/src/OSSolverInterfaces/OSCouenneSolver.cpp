@@ -73,7 +73,7 @@ CouenneSolver::~CouenneSolver() {
 	cout << "inside CouenneSolver destructor" << endl;
 	if(couenne != NULL){
 		cout << "BEFORE DELETE COUENNE" << endl;
-		//delete couenne;
+		delete couenne;
 		cout << "AFTER DELETE COUENNE" << endl;
 	}
 	if(m_osilreader != NULL) delete m_osilreader;
@@ -157,7 +157,7 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 		
 		expression** nl = new expression*[1];
 		nl[0] = body;
-		body = new exprGroup(0., lin, nl, 1);	 
+		body = new exprGroup(0., lin, nl, 0);	 
 	
 		couenne->addObjective(body, "min"); 
 		
@@ -165,7 +165,8 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 		
 		SparseMatrix* sm =  osinstance->getLinearConstraintCoefficientsInRowMajor();
 		
-		sm->isColumnMajor = false;		
+		if (sm)
+			sm->isColumnMajor = false;		
 		
 		int nconss = osinstance->getConstraintNumber();		
 		int row_nonz = 0;
@@ -176,20 +177,22 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 		
 		for (i = 0; i < nconss; ++i) {
 			body = NULL;
-			row_nonz = sm->starts[ i +1] - sm->starts[ i];
-			if ( row_nonz  > 0){  // test for nonzeros in row i
-				exprGroup::lincoeff lin( row_nonz);
-				for (j = 0; j  <  row_nonz;  ++j){
-					
-					lin[j].first = couenne->Var( sm->indexes[ kount] );
-					lin[j].second = sm->values[ kount];
-					
-					kount++;
-					
-				}
+			if (sm) {
+				row_nonz = sm->starts[ i +1] - sm->starts[ i];
+				if ( row_nonz  > 0){  // test for nonzeros in row i
+					exprGroup::lincoeff lin( row_nonz);
+					for (j = 0; j  <  row_nonz;  ++j){
+
+						lin[j].first = couenne->Var( sm->indexes[ kount] );
+						lin[j].second = sm->values[ kount];
+
+						kount++;
+
+					}
+			}
 			expression** nl = new expression*[1];
 			nl[0] = body;
-			body = new exprGroup(0., lin, nl, 1);
+			body = new exprGroup(0., lin, nl, 0);
 		}
 		
 		if (rowlb[ i] == rowub[ i])
@@ -213,21 +216,21 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 	}
 
 
-	//couenne->print();
+	couenne->print();
 
-	//couenne->AuxSet() = new std::set <exprAux *, compExpr>;
+	couenne->AuxSet() = new std::set <exprAux *, compExpr>;
 
   	// reformulation
-  	//couenne->standardize();
+  	couenne->standardize();
 
   	// give a value to all auxiliary variables
-  	//couenne->initAuxs();
+  	couenne->initAuxs();
 
   	// clear all spurious variables pointers not referring to the
 	//variables_ vector
-	//  couenne->realign ();
+//	  couenne->realign ();
 
-	//couenne->print();
+	couenne->print();
 
 	}
 	catch(const ErrorClass& eclass){

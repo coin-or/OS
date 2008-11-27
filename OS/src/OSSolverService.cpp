@@ -140,6 +140,10 @@
 #include "OSBonminSolver.h"
 #endif 
 
+#ifdef COIN_HAS_COUENNE
+#include "OSCouenneSolver.h"
+#endif 
+
 
 #include "OSOptionsStruc.h"  
 
@@ -537,9 +541,19 @@ void solve(){
 													solverType = new BonminSolver();	
 													#endif												
 												}
-												else{ //cbc is the default
-													solverType = new CoinSolver();
-													solverType->sSolverName = "cbc";
+												else{
+													if(osoptions->solverName.find( "couenne") != std::string::npos){
+														// we are requesting the Couenne solver
+														bool bCouenneIsPresent = false;
+														#ifdef COIN_HAS_COUENNE
+														bCouenneIsPresent = true;
+														solverType = new CouenneSolver();	
+														#endif												
+													}
+													else{ //cbc is the default
+														solverType = new CoinSolver();
+														solverType->sSolverName = "cbc";
+													}
 												}
 											}
 										}									
@@ -1067,12 +1081,13 @@ std::string get_help(){
 	helpMsg << endl;
 
 	helpMsg << "-solver  solverName  Possible values for default OS installation  " << endl;
-	helpMsg << "are  bonmn(COIN-OR Bonmin), clp (COIN-OR Clp), cbc (COIN-OR Cbc), " << endl;
-	helpMsg << "dylp (COIN-OR DyLP), and symphony (COIN-OR SYMPHONY). Other solvers supported  " << endl;
-	helpMsg << "(if the necessary libraries are present) are cplex (Cplex through COIN-OR Osi),   " << endl;
-	helpMsg << "glpk (glpk through COIN-OR Osi), ipopt (COIN-OR Ipopt),   " << endl;
-	helpMsg << "knitro (Knitro), and lindo (LINDO). If no value is specified for this  " << endl;
-	helpMsg << "parameter, then cbc is the default value of this parameter.  " << endl; 
+	helpMsg << "are  bonmin(COIN-OR Bonmin), couenne (COIN-OR Couenne), clp (COIN-OR Clp)," << endl;
+	helpMsg << "cbc (COIN-OR Cbc), dylp (COIN-OR DyLP), ipopt (COIN-OR Ipopt)," << endl;
+	helpMsg << "and symphony (COIN-OR SYMPHONY). Other solvers supported" << endl;
+	helpMsg << "(if the necessary libraries are present) are cplex (Cplex through COIN-OR Osi)," << endl;
+	helpMsg << "glpk (glpk through COIN-OR Osi), knitro (Knitro), and lindo (LINDO)." << endl;
+	helpMsg << "If no value is specified for this parameter," << endl;
+	helpMsg << "then cbc is the default value of this parameter." << endl; 
 	
 	helpMsg << endl;
 
