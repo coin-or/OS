@@ -31,10 +31,24 @@
 // Couenne stuff
 
 #include "CouenneTypes.hpp"
-#include "exprSum.hpp"
-#include "exprMul.hpp"
 #include "exprClone.hpp"
 #include "exprGroup.hpp"
+#include "exprAbs.hpp"
+#include "exprConst.hpp"
+#include "exprCos.hpp"
+#include "exprDiv.hpp"
+#include "exprExp.hpp"
+#include "exprInv.hpp"
+#include "exprLog.hpp"
+#include "exprMax.hpp"
+#include "exprMin.hpp"
+#include "exprMul.hpp"
+#include "exprOpp.hpp"
+#include "exprPow.hpp"
+#include "exprSin.hpp"
+#include "exprSub.hpp"
+#include "exprSum.hpp"
+#include "exprVar.hpp"
 #include "CouenneJournalist.hpp"
 // end Couenne stuff
 
@@ -242,6 +256,118 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 	}				
 }//end buildSolverInstance() 
 
+
+expression* CouenneSolver::createCouenneExpression(OSnLNode* node) {
+  switch (node->inodeInt) {
+     case OS_PLUS :
+    	 return new exprSum(createCouenneExpression(node->m_mChildren[0]), createCouenneExpression(node->m_mChildren[1]));
+     case OS_SUM :
+    	 switch (node->inumberOfChildren==0) {
+    		 case 0:
+    			 return new exprConst(0.);
+    		 case 1:
+    			 return createCouenneExpression(node->m_mChildren[0]);
+    		 default:
+    			 expression** args = new expression*[node->inumberOfChildren];
+           for(int i=1;i<node->inumberOfChildren;i++)
+          	 args[i] = createCouenneExpression(node->m_mChildren[i]);
+           expression* base = new exprSum(args, node->inumberOfChildren);
+           delete[] args;
+           return base;
+        }
+     case OS_MINUS :
+    	 return new exprSub(createCouenneExpression(node->m_mChildren[0]), createCouenneExpression(node->m_mChildren[1]));
+     case OS_NEGATE :
+    	 return new exprOpp(createCouenneExpression(node->m_mChildren[0]));
+     case OS_TIMES :
+    	 return new exprMul(createCouenneExpression(node->m_mChildren[0]), createCouenneExpression(node->m_mChildren[1]));
+     case OS_DIVIDE :
+    	 // couenne does not like expressions of the form exp1/exp2 with exp1 a constant, so we write them as exp1 * 1/exp2
+    	 if (node->m_mChildren[1]->inodeInt == OS_NUMBER)
+      	 return new exprMul(createCouenneExpression(node->m_mChildren[0]), new exprInv(createCouenneExpression(node->m_mChildren[1])));
+    	 else
+    		 return new exprDiv(createCouenneExpression(node->m_mChildren[0]), createCouenneExpression(node->m_mChildren[1]));
+     case OS_POWER :
+    	 return new exprPow(createCouenneExpression(node->m_mChildren[0]), createCouenneExpression(node->m_mChildren[1]));
+     case OS_PRODUCT:
+    	 switch (node->inumberOfChildren==0) {
+    		 case 0:
+    			 return new exprConst(1.);
+    		 case 1:
+    			 return createCouenneExpression(node->m_mChildren[0]);
+    		 default:
+    			 expression** args = new expression*[node->inumberOfChildren];
+           for(int i=1;i<node->inumberOfChildren;i++)
+          	 args[i] = createCouenneExpression(node->m_mChildren[i]);
+           expression* base = new exprMul(args, node->inumberOfChildren);
+           delete[] args;
+           return base;
+        }
+     case OS_ABS :
+    	 return new exprAbs(createCouenneExpression(node->m_mChildren[0]));
+     case OS_SQUARE :
+    	 return new exprPow(createCouenneExpression(node->m_mChildren[0]), new exprConst(2.));
+     case OS_SQRT :
+    	 return new exprPow(createCouenneExpression(node->m_mChildren[0]), new exprConst(0.5));
+     case OS_LN :
+    	 return new exprLog(createCouenneExpression(node->m_mChildren[0]));
+     case OS_EXP :
+    	 return new exprExp(createCouenneExpression(node->m_mChildren[0]));
+     case OS_SIN :
+    	 return new exprSin(createCouenneExpression(node->m_mChildren[0]));
+     case OS_COS :
+    	 return new exprCos(createCouenneExpression(node->m_mChildren[0]));
+     case OS_MIN :
+    	 switch (node->inumberOfChildren==0) {
+    		 case 0:
+    			 return new exprConst(0.);
+    		 case 1:
+    			 return createCouenneExpression(node->m_mChildren[0]);
+    		 default:
+    			 expression** args = new expression*[node->inumberOfChildren];
+           for(int i=1;i<node->inumberOfChildren;i++)
+          	 args[i] = createCouenneExpression(node->m_mChildren[i]);
+           expression* base = new exprMin(args, node->inumberOfChildren);
+           delete[] args;
+           return base;
+        }
+     case OS_MAX :
+    	 switch (node->inumberOfChildren==0) {
+    		 case 0:
+    			 return new exprConst(0.);
+    		 case 1:
+    			 return createCouenneExpression(node->m_mChildren[0]);
+    		 default:
+    			 expression** args = new expression*[node->inumberOfChildren];
+           for(int i=1;i<node->inumberOfChildren;i++)
+          	 args[i] = createCouenneExpression(node->m_mChildren[i]);
+           expression* base = new exprMax(args, node->inumberOfChildren);
+           delete[] args;
+           return base;
+        }
+     case OS_NUMBER :
+    	 return new exprConst(((OSnLNodeNumber*)node)->value);
+     case OS_PI :
+    	 assert(false);
+    	 //TODO
+//    	 return new exprConst(PI);
+     case OS_VARIABLE : {
+        OSnLNodeVariable* varnode = (OSnLNodeVariable*)node;
+        if (varnode->coef == 0.)
+       		return new exprConst(0.);
+        if (varnode->coef == 1.)
+       		return couenne->Variables()[varnode->idx]->clone(couenne->domain());
+        if (varnode->coef == -1.)
+       		return new exprOpp(couenne->Variables()[varnode->idx]->clone(couenne->domain()));
+     		return new exprMul(new exprConst(varnode->coef), couenne->Variables()[varnode->idx]->clone(couenne->domain()));
+     }
+     default:
+        cout << node->snodeName << " NOT IMPLEMENTED!!" << endl;
+        break;
+  }
+	
+	return NULL;
+}
 
 
 void CouenneSolver::setSolverOptions() throw (ErrorClass) {

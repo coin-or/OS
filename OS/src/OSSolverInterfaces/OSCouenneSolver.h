@@ -130,6 +130,8 @@ private:
 	//CouenneSetup couenne;
 
 	std::string couenneErrorMsg;
+
+	expression* createCouenneExpression(OSnLNode* node);
 };
 
 
