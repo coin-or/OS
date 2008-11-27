@@ -525,13 +525,13 @@
 	</xs:complexType>
 	<xs:complexType name="SOSVariableBranchingWeights">
 		<xs:sequence minOccurs="0">
-			<xs:element name="sosWeights" type="SOSWeights" maxOccurs="unbounded">
+			<xs:element name="sos" type="SOSWeights" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>number must agree with numberOfSets</xs:documentation>
+					<xs:documentation>number must agree with numberOfSOS</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfSets" type="xs:positiveInteger" use="required"/>
+		<xs:attribute name="numberOfSOS" type="xs:positiveInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="SOSWeights">
 		<xs:sequence minOccurs="0">
