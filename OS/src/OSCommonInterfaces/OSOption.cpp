@@ -3036,6 +3036,8 @@ bool OSOption::setJobDependencies(int numberOfDependencies, std::string* jobDepe
 		this->job = new JobOption();
 	if (this->job->dependencies == NULL) 
 		this->job->dependencies = new JobDependencies();
+		if( this->job->dependencies->jobID != NULL) 
+			delete[] this->job->dependencies->jobID ;
 		this->job->dependencies->numberOfJobIDs = numberOfDependencies;
 		this->job->dependencies->jobID = jobDependencies;
 	return true;

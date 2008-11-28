@@ -876,7 +876,7 @@ catch(const ErrorClass& eclass){
 #ifdef COIN_HAS_COUENNE
 try{
 	
-
+	/*
 	OSiLReader *osilreader = NULL;
 	osilreader = new OSiLReader(); 
 	ok = true; 
@@ -890,7 +890,7 @@ try{
 	cout << "call the COIN - Couenne Solver for bonminEx1" << endl;
 	solver->buildSolverInstance();
 	
-	/*
+	
 	solver->solve();
 	cout << "Here is the Couenne solver solution for bonminEx1" << endl;
 	cout << solver->osrl << endl;
@@ -898,12 +898,13 @@ try{
 	//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
 	ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 	if(ok == false) throw ErrorClass(" Fail unit test with Bonmin on bonminEx1.osil");
-	*/
+	
 	delete solver;
 	solver = NULL;
 	unitTestResult << "Solved problem bonminEx1.osil with Couenne" << std::endl;
 	delete osilreader;
 	osilreader = NULL;
+	*/
 	
 	
 }
@@ -1774,6 +1775,14 @@ catch(const ErrorClass& eclass){
 		int ndep;
 		cout << "test set() and get() methods" << endl;
 		ok = another_osoption->setJobDependencies(2, jobID);
+		
+		//test garbage collection, do it again,
+		std::string* jobID2;
+		jobID2 = new std::string[ 2];
+		jobID2[0] = "xyz123";
+		jobID2[1] = "0987654321";
+		ok = another_osoption->setJobDependencies(2, jobID2);	
+		
 		cout << "setJobDependencies: " << ok << endl;
 		ndep = another_osoption->getNumberOfJobDependencies();
 		cout << "number of dependencies: " << ndep << endl;
