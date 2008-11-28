@@ -18,6 +18,7 @@
 
 #include "OSConfig.h" 
 #include "OSDefaultSolver.h"
+#include "OSBonminSolver.h"
 #include "OSrLWriter.h"
 #include "OSInstance.h"
 #include "OSParameters.h"
@@ -32,7 +33,7 @@
 
 //Couenne stuff
 #include "CouenneProblem.hpp"
-#include "BonCouenneSetup.hpp"
+//#include "BonCouenneSetup.hpp"
 
 #ifdef HAVE_CTIME
 # include <ctime>
@@ -123,6 +124,9 @@ public:
 	
 	
 	CouenneProblem *couenne;
+	
+	
+	SmartPtr<BonminProblem> tminlp;
 
 
 private:
@@ -130,7 +134,7 @@ private:
 
 	//CouenneSetup couenne;
 	
-	CouenneSetup bonmin_couenne;
+	BonminSetup bonmin_couenne;
 
 	std::string couenneErrorMsg;
 

@@ -53,6 +53,31 @@
 // end Couenne stuff
 
 
+//Bonmin stuff
+
+#include "BonOsiTMINLPInterface.hpp"
+
+
+
+
+
+#include "CoinTime.hpp"
+#include "BonminConfig.h"
+#include "BonCouenneInterface.hpp"
+#include "BonIpoptSolver.hpp"
+
+#include "BonCouenneSetup.hpp"
+
+#include "BonCbc.hpp"
+#ifdef COIN_HAS_FILTERSQP
+#include "BonFilterSolver.hpp"
+#endif
+
+#include "CbcCutGenerator.hpp"
+#include "CouenneProblem.hpp"
+#include "CouenneCutGenerator.hpp"
+
+
 # include <cstddef>
 # include <cstdlib>
 # include <cctype>
@@ -421,10 +446,38 @@ void CouenneSolver::setSolverOptions() throw (ErrorClass) {
 
 
 void CouenneSolver::solve() throw (ErrorClass) {
-	if( this->bCallbuildSolverInstance == false) buildSolverInstance();
-	if( this->bSetSolverOptions == false) setSolverOptions();
+	//if( this->bCallbuildSolverInstance == false) buildSolverInstance();
+	//if( this->bSetSolverOptions == false) setSolverOptions();
 	try{
-		
+		using namespace Ipopt;
+
+		Bab bb;
+
+    	bb.setUsingCouenne (true);
+
+		//using namespace Ipopt;
+		tminlp = new BonminProblem( osinstance, osoption, osresult);
+
+		//this->bCallbuildSolverInstance = true;
+		//Now initialize from tminlp
+		bonmin_couenne.initialize( GetRawPtr( tminlp) );	
+
+    	
+   		bb ( bonmin_couenne); // do branch and bound
+   		
+   		// this at least works for calling bonmin and getting the right answer
+    	 
+    	/*
+    	CouenneCutGenerator *cg = NULL;
+
+    	if (bb.model (). cutGenerators ())
+      	cg = dynamic_cast <CouenneCutGenerator *> 
+			(bb.model (). cutGenerators () [0] -> generator ());
+			
+			
+		cg->problem_ = couenne;  // no can do -- protected
+		*/
+    	
 		
 	}
 	catch(const ErrorClass& eclass){

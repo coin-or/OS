@@ -880,7 +880,7 @@ try{
 	OSiLReader *osilreader = NULL;
 	osilreader = new OSiLReader(); 
 	ok = true; 
-	osilFileName = dataDir  + "osilFiles" + dirsep + "rosenbrockmod.osil";
+	osilFileName = dataDir  + "osilFiles" + dirsep + "bonminEx1.osil";
 	osil = fileUtil->getFileAsString( osilFileName.c_str());
 	solver = new CouenneSolver();
 	//solver->sSolverName = "bonmin";
@@ -890,8 +890,11 @@ try{
 	cout << "call the COIN - Couenne Solver for bonminEx1" << endl;
 	solver->buildSolverInstance();
 	
-	/*
+	
 	solver->solve();
+	//return 0;
+	
+	/*
 	cout << "Here is the Couenne solver solution for bonminEx1" << endl;
 	cout << solver->osrl << endl;
 	check = -1.70711;
