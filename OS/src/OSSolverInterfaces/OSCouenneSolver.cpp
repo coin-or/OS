@@ -107,6 +107,11 @@ CouenneSolver::~CouenneSolver() {
 void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 	// Much of the following is taken from Stefan Vigerske
 	try{
+		
+		// do some initialization
+		
+		osinstance->initializeNonLinearStructures( );
+		
 		int i, j;
 		
 		if(osil.length() == 0 && osinstance == NULL) throw ErrorClass("there is no instance");
@@ -178,14 +183,21 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 			body = new exprGroup(0., lin, NULL, 0);			
 		}
 	
-		couenne->addObjective(body, "min"); 
+		if( osinstance->getObjectiveMaxOrMins()[0] == "min"){
+			couenne->addObjective(body, "min");
+		}
+		else{
+			throw ErrorClass( "Problem must be minimimization and not maximization");
+		} 
 		
 		// get the constraints in row format
 		
 		SparseMatrix* sm =  osinstance->getLinearConstraintCoefficientsInRowMajor();
 		
-		if (sm)
-			sm->isColumnMajor = false;		
+		if( sm){
+			sm->isColumnMajor = false;
+			 sm->bDeleteArrays = true;
+		}		
 		
 		int nconss = osinstance->getConstraintNumber();		
 		int row_nonz = 0;
@@ -193,54 +205,61 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 		
 		double *rowlb = osinstance->getConstraintLowerBounds();
 		double *rowub = osinstance->getConstraintUpperBounds();
-		
+		expression *con_body = NULL;
 		for (i = 0; i < nconss; ++i) {
-			body = NULL;
-			if (sm) {
+			row_nonz = 0;
+			if( sm)
 				row_nonz = sm->starts[ i +1] - sm->starts[ i];
-				if ( row_nonz  > 0){  // test for nonzeros in row i
-					exprGroup::lincoeff lin( row_nonz);
-					for (j = 0; j  <  row_nonz;  ++j){
+			exprGroup::lincoeff con_lin( row_nonz);
+			con_body = NULL;
 
-						lin[j].first = couenne->Var( sm->indexes[ kount] );
-						lin[j].second = sm->values[ kount];
+			if ( row_nonz  > 0){  // test for nonzeros in row i
+				
+				for (j = 0; j  <  row_nonz;  ++j){
 
-						kount++;
+					con_lin[j].first = couenne->Var( sm->indexes[ kount] );
+					con_lin[j].second = sm->values[ kount];
+					std::cout << "lin[j].first  " << sm->indexes[ kount]  << std::endl;
+					std::cout << "lin[j].second  " << con_lin[j].second  << std::endl;
+					kount++;
 
-					}
 				}
 			}
+	
 			
 			OSExpressionTree* exptree = osinstance->getNonlinearExpressionTree(i);
 			if (exptree) {
 				expression** nl = new expression*[1];
 				nl[0] = createCouenneExpression(exptree->m_treeRoot);
-				body = new exprGroup(0., lin, nl, 1);
+				con_body = new exprGroup(0., con_lin, nl, 1);
 			} else {
-				body = new exprGroup(0., lin, NULL, 0);			
+				std::cout << " THERE WERE NO NONLINEAR TERMS " << std::endl;
+				con_body = new exprGroup(0., con_lin, NULL, 0);			
 			}
 		
-		if (rowlb[ i] == rowub[ i])
-		{
-			couenne->addEQConstraint(body, new exprConst( rowub[ i] ));
-		}
-		else if (rowlb[ i]  ==  -OSDBL_MAX)
-		{
-			assert(rowub[ i]  !=  -OSDBL_MAX);
-			couenne->addLEConstraint(body, new exprConst( rowub[ i] ));
-		}
-		else if (rowub[ i] ==  OSDBL_MAX)
-		{
-			assert(rowlb[ i]  != OSDBL_MAX);
-			couenne->addGEConstraint(body, new exprConst( rowlb[ i] ));			
-		}
-		else
-			couenne->addRNGConstraint(body, new exprConst( rowlb[ i]), new
-				exprConst( rowub[ i] ));		
+			if (rowlb[ i] == rowub[ i])
+			{
+				couenne->addEQConstraint(con_body, new exprConst( rowub[ i] ));
+			}
+			else if (rowlb[ i]  ==  -OSDBL_MAX)
+			{
+				assert(rowub[ i]  !=  -OSDBL_MAX);
+				couenne->addLEConstraint(con_body, new exprConst( rowub[ i] ));
+			}
+			else if (rowub[ i] ==  OSDBL_MAX)
+			{
+				assert(rowlb[ i]  != OSDBL_MAX);
+				couenne->addGEConstraint(con_body, new exprConst( rowlb[ i] ));			
+			}
+			else
+				couenne->addRNGConstraint(con_body, new exprConst( rowlb[ i]), new
+					exprConst( rowub[ i] ));	
 			
+			//garbage collection
+				
 	}
 
-
+	if (sm) delete sm;
 	couenne->print();
 
 	couenne->AuxSet() = new std::set <exprAux *, compExpr>;
@@ -405,7 +424,9 @@ void CouenneSolver::solve() throw (ErrorClass) {
 	if( this->bCallbuildSolverInstance == false) buildSolverInstance();
 	if( this->bSetSolverOptions == false) setSolverOptions();
 	try{
-		}
+		
+		
+	}
 	catch(const ErrorClass& eclass){
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
