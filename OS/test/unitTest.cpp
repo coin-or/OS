@@ -906,7 +906,7 @@ try{
 	unitTestResult << "Solved problem bonminEx1.osil with Couenne" << std::endl;
 	delete osilreader;
 	osilreader = NULL;
-	return 0;
+	//return 0;
 	
 	
 	

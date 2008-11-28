@@ -32,6 +32,7 @@
 
 //Couenne stuff
 #include "CouenneProblem.hpp"
+#include "BonCouenneSetup.hpp"
 
 #ifdef HAVE_CTIME
 # include <ctime>
@@ -74,7 +75,7 @@
  * 
  */
 
-
+using namespace Bonmin;
 class CouenneSolver : public DefaultSolver{ 	
 public:
 	
@@ -128,6 +129,8 @@ private:
 	OSrLWriter  *osrlwriter;
 
 	//CouenneSetup couenne;
+	
+	CouenneSetup bonmin_couenne;
 
 	std::string couenneErrorMsg;
 
