@@ -863,6 +863,142 @@ public:
 	~InitialBasisStatus();
 }; //InitialBasisStatus
 
+/*! \class BranchingWeight
+ *  \brief the BranchingWeight class.
+ * 
+ * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/11/2008
+ * @since OS 1.1
+ * 
+ * \remarks
+ * A data structure class that corresponds to an xml element in 
+ * the OSoL schema.  
+ */
+class BranchingWeight {
+
+public:
+	/** index of the variable */
+	int idx;
+
+	/** branching weight */
+	double value;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	BranchingWeight();
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~BranchingWeight();
+}; //BranchingWeight
+
+
+
+/*! \class IntegerVariableBranchingWeights
+ *  \brief the IntegerVariableBranchingWeights class.
+ * 
+ * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/11/2008
+ * @since OS 1.1
+ * 
+ * \remarks
+ * A data structure class that corresponds to an xml element in 
+ * the OSoL schema.  
+ */
+class IntegerVariableBranchingWeights {
+
+public:
+	/** number of <var> children */
+	int numberOfVar;
+
+	/** branching weight for each variable */
+	BranchingWeight **var;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	IntegerVariableBranchingWeights();
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~IntegerVariableBranchingWeights();
+}; //IntegerVariableBranchingWeights
+
+/*! \class SOSWeights
+ *  \brief the SOSWeights class.
+ * 
+ * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/11/2008
+ * @since OS 1.1
+ * 
+ * \remarks
+ * A data structure class that corresponds to an xml element in 
+ * the OSoL schema.  
+ */
+class SOSWeights {
+
+public:
+	/** index of the SOS (to match the OSiL file) */
+	int sosIdx;
+
+	/** branching weight for the entire SOS */
+	double groupWeight;
+
+	/** number of <var> children */
+	int numberOfVar;
+
+	/** branching weights for individual variables */
+	BranchingWeight **var;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	SOSWeights();
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~SOSWeights();
+}; //SOSWeights
+
+
+/*! \class SOSVariableBranchingWeights
+ *  \brief the SOSVariableBranchingWeights class.
+ * 
+ * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/11/2008
+ * @since OS 1.1
+ * 
+ * \remarks
+ * A data structure class that corresponds to an xml element in 
+ * the OSoL schema.  
+ */
+class SOSVariableBranchingWeights {
+
+public:
+	/** number of <sos> children */
+	int numberOfSOS;
+
+	/** branching weights for the SOS */
+	SOSWeights **sos;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	SOSVariableBranchingWeights();
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~SOSVariableBranchingWeights();
+}; //SOSVariableBranchingWeights
 
 /*! \class OtherVarOption
  *  \brief the OtherVarOption class.
@@ -977,8 +1113,14 @@ public:
 	/** initial values for string-valued variables */
 	InitVariableValuesString *initialVariableValuesString;
 
-	/** initial basis */
+	/** initial basis information*/
 	InitialBasisStatus *initialBasisStatus;
+
+	/** branching weights for integer variables */
+	IntegerVariableBranchingWeights *integerVariableBranchingWeights;
+
+	/** branching weights for SOS variables and groups */
+	SOSVariableBranchingWeights *sosVariableBranchingWeights;
 
 	/** other variable options */
 	OtherVariableOption **other;
@@ -2176,7 +2318,7 @@ public:
 	 * @return a vector of pointers to InitVarValue objects that 
 	 * hold inital values for (some of) the variables
 	 */
-	std::vector<InitVarValue*> getInitVarValuesSparse();
+	InitVarValue** getInitVarValuesSparse();
 
 	/**
 	 * Get the initial values associated with the variables in dense form
@@ -2194,7 +2336,7 @@ public:
 	 * @return a vector of strings that 
 	 * hold inital value strings for (some of) the variables
 	 */
-	std::vector<InitVarValueString*> getInitVarStringsSparse();
+	InitVarValueString** getInitVarStringsSparse();
 
 	/**
 	 * Get the initial value strings associated with the variables in dense form
@@ -2212,7 +2354,7 @@ public:
 	 * @return a vector of strings that 
 	 * hold inital basis status for (some of) the variables
 	 */
-	std::vector<InitBasStatus*> getInitBasisStatusSparse();
+	InitBasStatus** getInitBasisStatusSparse();
 
 	/**
 	 * Get the initial basis status in dense form
@@ -2223,13 +2365,20 @@ public:
 	 */
 	std::string *getInitBasisStatusDense(int numberOfVariables);
 
+	/*
+	getIntegerVariableBranchingWeightsSparse();
+	getIntegerVariableBranchingWeightsDense(int numberOfVariables);
+	getSOSVariableBranchingWeightsSparse(); // ?
+	getSOSVariableBranchingWeightsDense(int numberOfVariables); // ?
+	 */
+
 	/**
 	 * Get the array of other variable options
 	 * <p>
 	 * 
 	 * @return a vector of pointers to OtherVariableOption objects  
 	 */
-	std::vector<OtherVariableOption*> getOtherVariableOptions();
+	//std::vector<OtherVariableOption*> getOtherVariableOptions();
 
 	/**
 	 * Get the initial values associated with the objectives in sparse form
@@ -2238,7 +2387,7 @@ public:
 	 * @return a vector of pointers to InitObjValue objects that 
 	 * hold inital values for (some of) the objectives
 	 */
-	std::vector<InitObjValue*> getInitObjValuesSparse();
+	InitObjValue** getInitObjValuesSparse();
 
 	/**
 	 * Get the initial values associated with the objectives in dense form
@@ -2256,7 +2405,7 @@ public:
 	 * @return a vector of pointers to InitObjBound objects that 
 	 * hold inital bounds for (some of) the objectives
 	 */
-	std::vector<InitObjBound*> getInitObjBoundsSparse();
+	InitObjBound** getInitObjBoundsSparse();
 
 	/**
 	 * Get the initial lower bounds associated with the objectives in dense form
@@ -2282,7 +2431,7 @@ public:
 	 * 
 	 * @return a vector of pointers to OtherObjectiveOption objects  
 	 */
-	std::vector<OtherObjectiveOption*> getOtherObjectiveOptions();
+	//std::vector<OtherObjectiveOption*> getOtherObjectiveOptions();
 
 	/**
 	 * Get the initial values associated with the constraints in sparse form
@@ -2291,7 +2440,7 @@ public:
 	 * @return a vector of pointers to InitConValue objects that 
 	 * hold inital values for (some of) the constraints
 	 */
-	std::vector<InitConValue*> getInitConValuesSparse();
+	InitConValue** getInitConValuesSparse();
 
 	/**
 	 * Get the initial values associated with the constraints in dense form
@@ -2309,7 +2458,7 @@ public:
 	 * @return a vector of pointers to InitDualVarValue objects that 
 	 * hold inital bounds for (some of) the dual variables
 	 */
-	std::vector<InitDualVarValue*> getInitDualVarValuesSparse();
+	InitDualVarValue** getInitDualVarValuesSparse();
 
 	/**
 	 * Get the initial lower bounds associated with the dual variables in dense form
@@ -2336,7 +2485,7 @@ public:
 	 * 
 	 * @return a vector of pointers to OtherConstraintOption objects  
 	 */
-	std::vector<OtherConstraintOption*> getOtherConstraintOptions();
+	//std::vector<OtherConstraintOption*> getOtherConstraintOptions();
 
 
 	/**

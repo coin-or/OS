@@ -407,7 +407,47 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				}
 				outStr << "</initialVariableValuesString>" << endl;
 			}
-	printf("\n%s%d\n","Number of other variable options: ",m_OSOption->optimization->variables->numberOfOtherVariableOptions);
+			if (m_OSOption->optimization->variables->initialBasisStatus != NULL)
+			{	outStr << "<initialBasisStatus numberOfVar=\"";
+				outStr << m_OSOption->optimization->variables->initialBasisStatus->numberOfVar << "\">" << endl;
+				for (int i=0; i < m_OSOption->optimization->variables->initialBasisStatus->numberOfVar; i++)
+				{	outStr << "<var";
+					outStr << " idx=\"" << m_OSOption->optimization->variables->initialBasisStatus->var[i]->idx << "\"";
+					outStr << " value=\"" << m_OSOption->optimization->variables->initialBasisStatus->var[i]->value << "\"";
+					outStr << "/>" << endl;
+				}
+				outStr << "</initialBasisStatus>" << endl;
+			}
+			if (m_OSOption->optimization->variables->integerVariableBranchingWeights != NULL)
+			{	outStr << "<integerVariableBranchingWeights numberOfVar=\"";
+				outStr << m_OSOption->optimization->variables->integerVariableBranchingWeights->numberOfVar << "\">" << endl;
+				for (int i=0; i < m_OSOption->optimization->variables->integerVariableBranchingWeights->numberOfVar; i++)
+				{	outStr << "<var";
+					outStr << " idx=\"" << m_OSOption->optimization->variables->integerVariableBranchingWeights->var[i]->idx << "\">";
+					outStr << m_OSOption->optimization->variables->integerVariableBranchingWeights->var[i]->value;
+					outStr << "</var>" << endl;
+				}
+				outStr << "</integerVariableBranchingWeights>" << endl;
+			}
+			if (m_OSOption->optimization->variables->sosVariableBranchingWeights != NULL)
+			{	outStr << "<sosVariableBranchingWeights numberOfSOS=\"";
+				outStr << m_OSOption->optimization->variables->sosVariableBranchingWeights->numberOfSOS << "\">" << endl;
+				for (int i=0; i < m_OSOption->optimization->variables->sosVariableBranchingWeights->numberOfSOS; i++)
+				{	outStr << "<sos";
+					outStr << " sosIdx=\"" << m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->sosIdx << "\"";
+					outStr << " numberOfVar=\"" << m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->numberOfVar << "\"";
+					outStr << " groupWeight=\"" << m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->groupWeight << "\">" << endl;
+					for (int j=0; j < m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->numberOfVar; j++)
+					{	outStr << "<var";
+						outStr << " idx=\"" << m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->var[j]->idx << "\">";
+						outStr << m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->var[j]->value;
+						outStr << "</var>" << endl;
+					}
+					outStr << "</sos>" << endl;
+				}
+				outStr << "</sosVariableBranchingWeights>" << endl;
+			}
+			printf("\n%s%d\n","Number of other variable options: ",m_OSOption->optimization->variables->numberOfOtherVariableOptions);
 			if (m_OSOption->optimization->variables->numberOfOtherVariableOptions > 0)
 				for (int i=0; i < m_OSOption->optimization->variables->numberOfOtherVariableOptions; i++)
 				{	outStr << "<other name=\"" << m_OSOption->optimization->variables->other[i]->name << "\"";
@@ -437,7 +477,6 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 						}
 					outStr << "</other>" << endl;
 				}
-
 			outStr << "</variables>" << endl;
 		}
 		if (m_OSOption->optimization->objectives != NULL)

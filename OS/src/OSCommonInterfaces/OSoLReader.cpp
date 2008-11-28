@@ -6,13 +6,15 @@
  * @since   OS1.1
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2008, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, Dalhousie University and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */ 
+
+#define OSOL_READER_DEBUG
 
 #include "OSoLReader.h"
 
@@ -26,11 +28,27 @@ void osolset_extra (OSoLParserData* parserData , void* yyscanner );
 
 
 OSoLReader::OSoLReader( ) {
+#ifdef OSOL_READER_DEBUG
+	printf("new OSOption\n");
+#endif
 	m_osoption = new OSOption();
+#ifdef OSOL_READER_DEBUG
+	printf("new OSoLParserData\n");
+#endif
 	m_parserData = new OSoLParserData();
 	// initialize the lexer and set yyextra
+#ifdef OSOL_READER_DEBUG
+	printf("call osollex_init\n");
+#endif
+
 	osollex_init( &(m_parserData->scanner) );
+#ifdef OSOL_READER_DEBUG
+	printf("call osollex_extra\n");
+#endif
 	osolset_extra (m_parserData ,   m_parserData->scanner);
+#ifdef OSOL_READER_DEBUG
+	printf("success\n");
+#endif
 }
 
 OSoLReader::~OSoLReader(){

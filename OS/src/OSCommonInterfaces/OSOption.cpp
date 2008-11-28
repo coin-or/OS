@@ -22,7 +22,7 @@
 #include <limits>
 #include <cstdio>
 
-//#define DEBUG
+#define DEBUG
 
 using namespace std;
 
@@ -79,8 +79,7 @@ OtherOption::~OtherOption()
 
 
 OtherOptions::OtherOptions(): 
-	numberOfOtherOptions(0),
-	other( NULL)
+	numberOfOtherOptions(0)
 {    
 	#ifdef DEBUG
 	cout << "Inside OtherOptions Constructor" << endl;
@@ -112,8 +111,7 @@ GeneralOption::GeneralOption():
 	solverToInvoke (""),
 	license (""),
 	userName (""),
-	password (""),
-	otherOptions(NULL)
+	password ("")
 {    
 	#ifdef DEBUG
 	cout << "Inside GeneralOption Constructor" << endl;
@@ -253,8 +251,7 @@ MaxTime::~MaxTime()
 
 
 JobDependencies::JobDependencies():
-	numberOfJobIDs (0),
-	jobID( NULL)
+	numberOfJobIDs (0)
 {    
 	#ifdef DEBUG
 	cout << "Inside JobDependencies Constructor" << endl;
@@ -543,6 +540,96 @@ InitialBasisStatus::~InitialBasisStatus()
 	}
 }//end InitialBasisStatus destructor 
 
+BranchingWeight::BranchingWeight(): 
+	idx (-1),
+	value (0.0)
+{    
+	#ifdef DEBUG
+	cout << "Inside BranchingWeight Constructor" << endl;
+	#endif
+}// end BranchingWeight constructor  
+
+BranchingWeight::~BranchingWeight()
+{    
+	#ifdef DEBUG
+	cout << "BranchingWeight Destructor Called" << endl;
+	#endif
+}//end BranchingWeight destructor 
+
+
+IntegerVariableBranchingWeights::IntegerVariableBranchingWeights():
+	numberOfVar (0)
+{    
+	#ifdef DEBUG
+	cout << "Inside IntegerVariableBranchingWeights Constructor" << endl;
+	#endif
+	var = NULL;
+}// end IntegerVariableBranchingWeights constructor  
+
+IntegerVariableBranchingWeights::~IntegerVariableBranchingWeights()
+{    
+	#ifdef DEBUG
+	cout << "IntegerVariableBranchingWeights Destructor Called" << endl;
+	#endif
+	if (var != NULL) 
+	{	for (int i=0; i < numberOfVar; i++)
+		{	delete var[i];
+			var[i] = NULL;
+		}
+		delete[] var;
+		var = NULL;
+	}
+}//end IntegerVariableBranchingWeights destructor 
+
+SOSWeights::SOSWeights():
+	sosIdx (-1),
+	groupWeight (0.0),
+	numberOfVar (0)
+{    
+	#ifdef DEBUG
+	cout << "Inside SOSWeights Constructor" << endl;
+	#endif
+	var = NULL;
+}// end SOSWeights constructor  
+
+SOSWeights::~SOSWeights()
+{    
+	#ifdef DEBUG
+	cout << "SOSWeights Destructor Called" << endl;
+	#endif
+	if (var != NULL) 
+	{	for (int i=0; i < numberOfVar; i++)
+		{	delete var[i];
+			var[i] = NULL;
+		}
+		delete[] var;
+		var = NULL;
+	}
+}//end SOSWeights destructor 
+
+SOSVariableBranchingWeights::SOSVariableBranchingWeights():
+	numberOfSOS (0)
+{    
+	#ifdef DEBUG
+	cout << "Inside SOSVariableBranchingWeights Constructor" << endl;
+	#endif
+	sos = NULL;
+}// end SOSVariableBranchingWeights constructor  
+
+SOSVariableBranchingWeights::~SOSVariableBranchingWeights()
+{    
+	#ifdef DEBUG
+	cout << "SOSVariableBranchingWeights Destructor Called" << endl;
+	#endif
+	if (sos != NULL) 
+	{	for (int i=0; i < numberOfSOS; i++)
+		{	delete sos[i];
+			sos[i] = NULL;
+		}
+		delete[] sos;
+		sos = NULL;
+	}
+}//end SOSVariableBranchingWeights destructor 
 
 OtherVarOption::OtherVarOption(): 
 	idx (0),
@@ -1036,18 +1123,18 @@ OptimizationOption::~OptimizationOption()
 }//end OptimizationOption destructor
 
 
-OSOption::OSOption() :
+OSOption::OSOption() 
 //(initializations)
-	general( NULL),
-	system( NULL),
-	service( NULL),
-	job( NULL),
-	optimization( NULL)
 {    
 	#ifdef DEBUG
 	cout << "Inside OSOption Constructor" << endl;
 	#endif
 
+	general = NULL;
+	system = NULL;
+	service = NULL;
+	job = NULL;
+	optimization = NULL;
 }// end OSOption constructor  
 
 OSOption::~OSOption()
@@ -1622,7 +1709,7 @@ int  OSOption::getNumberOfConstraints()
 
 
 /**
- * get the numer of variables that have initial values (in <optimization> element)
+ * get the number of variables that have initial values (in <optimization> element)
  */
 int OSOption::getNumberOfInitVarValues(){
 	if (this->optimization != NULL) {
@@ -1888,51 +1975,33 @@ OtherOption** OSOption::getOtherGeneralOptions()
  * get the array of other <system> options
  */
 OtherOption** OSOption::getOtherSystemOptions()
-{	OtherOption** optionVector = NULL;
-	if (this->system != NULL) 
+{	if (this->system != NULL) 
 	{	if (this->system->otherOptions != NULL)
-		{	int num_opt;
-			num_opt = this->getNumberOfOtherSystemOptions();
-			optionVector = new OtherOption*[num_opt];
-			for(int i = 0; i < num_opt; i++)
-				optionVector[i] = this->system->otherOptions->other[ i];
-		}					
+			return this->system->otherOptions->other;
 	}
-	return optionVector;
+	return NULL;
 }//getOtherSystemOptions
 
 /**
  * get the array of other <service> options
  */
 OtherOption** OSOption::getOtherServiceOptions()
-{	OtherOption** optionVector = NULL;
-	if (this->service != NULL) 
+{	if (this->service != NULL) 
 	{	if (this->service->otherOptions != NULL)
-		{	int num_opt;
-			num_opt = this->getNumberOfOtherServiceOptions();
-			optionVector = new OtherOption*[num_opt];
-			for(int i = 0; i < num_opt; i++)
-				optionVector[i] = this->service->otherOptions->other[ i];
-		}					
+			return this->service->otherOptions->other;
 	}
-	return optionVector;
+	return NULL;
 }//getOtherServiceOptions
 
 /**
  * get the array of other <job> options
  */
 OtherOption** OSOption::getOtherJobOptions()
-{	OtherOption** optionVector = NULL;
-	if (this->job != NULL) 
+{	if (this->job != NULL) 
 	{	if (this->job->otherOptions != NULL)
-		{	int num_opt;
-			num_opt = this->getNumberOfOtherJobOptions();
-			optionVector = new OtherOption*[num_opt];
-			for(int i = 0; i < num_opt; i++)
-				optionVector[i] = this->job->otherOptions->other[ i];
-		}					
+			return this->job->otherOptions->other;
 	}
-	return optionVector;
+	return NULL;
 }//getOtherJobOptions
 
 /**
@@ -2035,12 +2104,15 @@ OtherOption** OSOption::getAllOtherOptions()
  */
 std::string*  OSOption::getJobDependencies(){
 	std::string* dependenciesVector = NULL;
-	if (this->job != NULL) {
-		dependenciesVector = this->job->dependencies->jobID;				
+	if (this->job != NULL) 
+	{	if (this->job->dependencies != NULL) 
+			dependenciesVector = this->job->dependencies->jobID;				
+		else
+			throw ErrorClass("<dependencies> object must be defined before getting the jobIDs");
 	}
-	else{
-		throw ErrorClass("a job object should be defined before getting the jobIDs");
-	}
+	else
+		throw ErrorClass("<job> object must be defined before getting the jobIDs");
+
 	return dependenciesVector;
 }//getJobDependencies
 
@@ -2048,17 +2120,15 @@ std::string*  OSOption::getJobDependencies(){
  * get the list of required directories
  */
 std::string*  OSOption::getRequiredDirectories(){
-	std::string* pathVector;
+	std::string* pathVector = NULL;
 	if (this->job != NULL) 
 	{	if (this->job->requiredDirectories != NULL) 
-		{	int i;
-			int num_paths;
-			num_paths = this->getNumberOfRequiredDirectories();
-			pathVector = new string[num_paths];
-			for(i = 0; i < num_paths; i++)
-				pathVector[i] = this->job->requiredDirectories->path[i];
-		}					
+			pathVector = this->job->requiredDirectories->path;				
+		else
+			throw ErrorClass("<requiredDirectories> object must be defined before getting the paths");
 	}
+	else
+		throw ErrorClass("<job> object must be defined before getting the paths");
 	return pathVector;
 }//getRequiredDirectories
 
@@ -2066,17 +2136,15 @@ std::string*  OSOption::getRequiredDirectories(){
  * get the list of directories that need to be created
  */
 std::string*  OSOption::getDirectoriesToMake(){
-	std::string* pathVector;
+	std::string* pathVector = NULL;
 	if (this->job != NULL) 
 	{	if (this->job->directoriesToMake != NULL) 
-		{	int i;
-			int num_paths;
-			num_paths = this->getNumberOfDirectoriesToMake();
-			pathVector = new string[num_paths];
-			for(i = 0; i < num_paths; i++)
-				pathVector[i] = this->job->directoriesToMake->path[i];
-		}					
+			pathVector = this->job->directoriesToMake->path;				
+		else
+			throw ErrorClass("<directoriesToMake> object must be defined before getting the paths");
 	}
+	else
+		throw ErrorClass("<job> object must be defined before getting the paths");
 	return pathVector;
 }//getDirectoriesToMake
 
@@ -2084,17 +2152,15 @@ std::string*  OSOption::getDirectoriesToMake(){
  * get the list of files that need to be created
  */
 std::string*  OSOption::getFilesToMake(){
-	std::string* pathVector;
+	std::string* pathVector = NULL;
 	if (this->job != NULL) 
 	{	if (this->job->filesToMake != NULL) 
-		{	int i;
-			int num_paths;
-			num_paths = this->getNumberOfFilesToMake();
-			pathVector = new string[num_paths];
-			for(i = 0; i < num_paths; i++)
-				pathVector[i] = this->job->filesToMake->path[i];
-		}					
+			pathVector = this->job->filesToMake->path;				
+		else
+			throw ErrorClass("<filesToMake> object must be defined before getting the paths");
 	}
+	else
+		throw ErrorClass("<job> object must be defined before getting the paths");
 	return pathVector;
 }//getFilesToMake
 
@@ -2105,13 +2171,12 @@ PathPair** OSOption::getInputDirectoriesToMove()
 {	PathPair** pathPairVector = NULL;
 	if (this->job != NULL) 
 	{	if(this->job->inputDirectoriesToMove != NULL) 
-		{	int num_pp;
-			num_pp = this->getNumberOfInputDirectoriesToMove();
-			pathPairVector = new PathPair*[num_pp];
-			for(int i = 0; i < num_pp; i++)
-				pathPairVector[i] = this->job->inputDirectoriesToMove->pathPair[ i];
-		}					
+			pathPairVector = this->job->inputDirectoriesToMove->pathPair;				
+		else
+			throw ErrorClass("<inputDirectoriesToMove> object must be defined before getting the paths");
 	}
+	else
+		throw ErrorClass("<job> object must be defined before getting the paths");
 	return pathPairVector;
 }//getInputDirectoriesToMove
 
@@ -2122,13 +2187,12 @@ PathPair** OSOption::getInputFilesToMove()
 {	PathPair** pathPairVector = NULL;
 	if (this->job != NULL) 
 	{	if(this->job->inputFilesToMove != NULL) 
-		{	int num_pp;
-			num_pp = this->getNumberOfInputFilesToMove();
-			pathPairVector = new PathPair*[num_pp];
-			for(int i = 0; i < num_pp; i++)
-				pathPairVector[i] = this->job->inputFilesToMove->pathPair[ i];
-		}					
+			pathPairVector = this->job->inputFilesToMove->pathPair;				
+		else
+			throw ErrorClass("<inputFilesToMove> object must be defined before getting the paths");
 	}
+	else
+		throw ErrorClass("<job> object must be defined before getting the paths");
 	return pathPairVector;
 }//getInputFilesToMove
 
@@ -2139,13 +2203,12 @@ PathPair** OSOption::getOutputFilesToMove()
 {	PathPair** pathPairVector = NULL;
 	if (this->job != NULL) 
 	{	if(this->job->outputFilesToMove != NULL) 
-		{	int num_pp;
-			num_pp = this->getNumberOfOutputFilesToMove();
-			pathPairVector = new PathPair*[num_pp];
-			for(int i = 0; i < num_pp; i++)
-				pathPairVector[i] = this->job->outputFilesToMove->pathPair[ i];
-		}					
+			pathPairVector = this->job->outputFilesToMove->pathPair;				
+		else
+			throw ErrorClass("<outputFilesToMove> object must be defined before getting the paths");
 	}
+	else
+		throw ErrorClass("<job> object must be defined before getting the paths");
 	return pathPairVector;
 }//getOutputFilesToMove
 
@@ -2156,13 +2219,12 @@ PathPair** OSOption::getOutputDirectoriesToMove()
 {	PathPair** pathPairVector = NULL;
 	if (this->job != NULL) 
 	{	if(this->job->outputDirectoriesToMove != NULL) 
-		{	int num_pp;
-			num_pp = this->getNumberOfOutputDirectoriesToMove();
-			pathPairVector = new PathPair*[num_pp];
-			for(int i = 0; i < num_pp; i++)
-				pathPairVector[i] = this->job->outputDirectoriesToMove->pathPair[ i];
-		}					
+			pathPairVector = this->job->outputDirectoriesToMove->pathPair;				
+		else
+			throw ErrorClass("<outputDirectoriesToMove> object must be defined before getting the paths");
 	}
+	else
+		throw ErrorClass("<job> object must be defined before getting the paths");
 	return pathPairVector;
 }//getOutputDirectoriesToMove
 
@@ -2170,16 +2232,15 @@ PathPair** OSOption::getOutputDirectoriesToMove()
  * get the list of files that need to be deleted
  */
 std::string*  OSOption::getFilesToDelete(){
-	std::string* pathVector;
+	std::string* pathVector = NULL;
 	if (this->job != NULL) 
 	{	if (this->job->filesToDelete != NULL) 
-		{	int num_paths;
-			num_paths = this->getNumberOfFilesToDelete();
-			pathVector = new string[num_paths];
-			for(int i = 0; i < num_paths; i++)
-				pathVector[i] = this->job->filesToDelete->path[i];
-		}					
+			pathVector = this->job->filesToDelete->path;				
+		else
+			throw ErrorClass("<filesToDelete> object must be defined before getting the paths");
 	}
+	else
+		throw ErrorClass("<job> object must be defined before getting the paths");
 	return pathVector;
 }//getFilesToDelete
 
@@ -2187,17 +2248,15 @@ std::string*  OSOption::getFilesToDelete(){
  * get the list of directories that need to be deleted
  */
 std::string*  OSOption::getDirectoriesToDelete(){
-	std::string* pathVector;
+	std::string* pathVector = NULL;
 	if (this->job != NULL) 
 	{	if (this->job->directoriesToDelete != NULL) 
-		{	int i;
-			int num_paths;
-			num_paths = this->getNumberOfDirectoriesToDelete();
-			pathVector = new string[num_paths];
-			for(i = 0; i < num_paths; i++)
-				pathVector[i] = this->job->directoriesToDelete->path[i];
-		}					
+			pathVector = this->job->directoriesToDelete->path;				
+		else
+			throw ErrorClass("<directoriesToDelete> object must be defined before getting the paths");
 	}
+	else
+		throw ErrorClass("<job> object must be defined before getting the paths");
 	return pathVector;
 }//getDirectoriesToDelete
 
@@ -2205,18 +2264,16 @@ std::string*  OSOption::getDirectoriesToDelete(){
  * get the list of processes that need to be killed
  */
 std::string*  OSOption::getProcessesToKill(){
-	std::string* pathVector;
+	std::string* processes = NULL;
 	if (this->job != NULL) 
 	{	if (this->job->processesToKill != NULL) 
-		{	int i;
-			int num_paths;
-			num_paths = this->getNumberOfProcessesToKill();
-			pathVector = new string[num_paths];
-			for(i = 0; i < num_paths; i++)
-				pathVector[i] = this->job->processesToKill->process[i];
-		}					
+			processes = this->job->processesToKill->process;
+		else
+			throw ErrorClass("<processesToKill> object must be defined before getting the processes");
 	}
-	return pathVector;
+	else
+		throw ErrorClass("<job> object must be defined before getting the processes");
+	return processes;
 }//getProcessesToKill
 
 
@@ -2225,20 +2282,20 @@ std::string*  OSOption::getProcessesToKill(){
  * get the list of initial variable values in sparse form
  * @return a list of index/value pairs
  */
-std::vector<InitVarValue*>  OSOption::getInitVarValuesSparse(){
-	std::vector<InitVarValue*> initVarVector;
-	if (this->optimization != NULL) {
-		if(this->optimization->variables != NULL) {
-			if(this->optimization->variables->initialVariableValues != NULL) {
-			int i;
-			int num_var;
-			num_var = this->getNumberOfInitVarValues();
-			for(i = 0; i < num_var; i++){
-				initVarVector.push_back( this->optimization->variables->initialVariableValues->var[ i]);
-				}
-			}
-		}					
+InitVarValue**  OSOption::getInitVarValuesSparse()
+{	InitVarValue**  initVarVector;
+	if (this->optimization != NULL) 
+	{	if (this->optimization->variables != NULL) 
+		{	if (this->optimization->variables->initialVariableValues != NULL) 
+				initVarVector = this->optimization->variables->initialVariableValues->var;
+			else
+				throw ErrorClass("<initialVariableValues> object must be defined before getting the data");
+		}
+		else
+			throw ErrorClass("<variables> object must be defined before getting the data");
 	}
+	else
+		throw ErrorClass("<optimization> object must be defined before getting the data");
 	return initVarVector;
 }//getInitVarValuesSparse
 
@@ -2280,20 +2337,20 @@ double* OSOption::getInitVarValuesDense(int numberOfVariables){
  * get the list of initial values for string-valued variables in sparse form
  * @return a list of index/value pairs
  */
-std::vector<InitVarValueString*>  OSOption::getInitVarStringsSparse(){
-	std::vector<InitVarValueString*> initVarVector;
-	if (this->optimization != NULL) {
-		if(this->optimization->variables != NULL) {
-			if(this->optimization->variables->initialVariableValuesString != NULL) {
-			int i;
-			int num_var;
-			num_var = this->getNumberOfInitVarValuesString();
-			for(i = 0; i < num_var; i++){
-				initVarVector.push_back( this->optimization->variables->initialVariableValuesString->var[ i]);
-				}
-			}
-		}					
+InitVarValueString**  OSOption::getInitVarStringsSparse()
+{	InitVarValueString** initVarVector;
+	if (this->optimization != NULL) 
+	{	if (this->optimization->variables != NULL) 
+		{	if (this->optimization->variables->initialVariableValuesString != NULL) 
+				initVarVector = this->optimization->variables->initialVariableValuesString->var;
+			else
+				throw ErrorClass("<initialVariableValuesString> object must be defined before getting the data");
+		}
+		else
+			throw ErrorClass("<variables> object must be defined before getting the data");
 	}
+	else
+		throw ErrorClass("<optimization> object must be defined before getting the data");
 	return initVarVector;
 }//getInitVarStringsSparse
 
@@ -2332,25 +2389,86 @@ std::string *OSOption::getInitVarStringsDense(int numberOfVariables){
 	return initVarVector;
 }//getInitVarStringsDense
 
-
 /**
- * get the list of initial objective values in sparse form
+ * get the list of initial basic and nonbasic variables in sparse form
  * @return a list of index/value pairs
  */
-std::vector<InitObjValue*>  OSOption::getInitObjValuesSparse(){
-	std::vector<InitObjValue*> initObjVector;
-	if (this->optimization != NULL) {
-		if(this->optimization->objectives != NULL) {
-			if(this->optimization->objectives->initialObjectiveValues != NULL) {
-			int i;
-			int num_obj;
-			num_obj = this->getNumberOfInitObjValues();
-			for (i = 0; i < num_obj; i++){
-				initObjVector.push_back( this->optimization->objectives->initialObjectiveValues->obj[ i]);
+InitBasStatus**  OSOption::getInitBasisStatusSparse()
+{	InitBasStatus** initBasVector;
+	if (this->optimization != NULL) 
+	{	if (this->optimization->variables != NULL) 
+		{	if (this->optimization->variables->initialBasisStatus != NULL)
+				initBasVector = this->optimization->variables->initialBasisStatus->var;
+			else
+				throw ErrorClass("<initialBasisStatus> object must be defined before getting the data");
+		}
+		else
+			throw ErrorClass("<variables> object must be defined before getting the data");
+	}
+	else
+		throw ErrorClass("<optimization> object must be defined before getting the data");
+	return initBasVector;
+}//getInitVarStringsSparse
+
+/**
+ * get the list of initial basic and nonbasic variables in dense form
+ * @return an array of value strings
+ * @note return the empty string "" for variables that are not initialed
+ */
+std::string *OSOption::getInitBasisStatusDense(int numberOfVariables){
+	std::string *initBasVector;
+	initBasVector = new std::string[numberOfVariables];
+	for (int k = 0; k < numberOfVariables; k++) initBasVector[k] = "";
+	try
+	{
+		if (this->optimization != NULL) 
+		{	if (this->optimization->variables != NULL) 
+			{	if (this->optimization->variables->initialBasisStatus != NULL) 
+				{	int i,j;
+					int num_var;
+					num_var = this->getNumberOfInitVarValuesString();
+					for(i = 0; i < num_var; i++)
+					{	j = this->optimization->variables->initialVariableValuesString->var[i]->idx;
+						if (j >= 0 && j < numberOfVariables)
+							initBasVector[j] 
+							  = this->optimization->variables->initialVariableValuesString->var[i]->value;
+						else
+							throw ErrorClass("Variable index out of range");
+					}
 				}
 			}
 		}					
 	}
+	catch(const ErrorClass& eclass)
+	{	throw ErrorClass(eclass.errormsg);
+	}
+	return initBasVector;
+}//getInitBasisStatusDense
+
+//-----------------------------------
+/*
+get integervariableselectionweights sparse
+get integervariableselectionweights dense
+*/
+//++++++++++++++++++++++++++++++++++++
+/**
+ * get the list of initial objective values in sparse form
+ * @return a list of index/value pairs
+ */
+InitObjValue**  OSOption::getInitObjValuesSparse()
+{	InitObjValue** initObjVector;
+	if (this->optimization != NULL) 
+	{	if (this->optimization->objectives != NULL) 
+		{	if (this->optimization->objectives->initialObjectiveValues != NULL) 
+				initObjVector = this->optimization->objectives->initialObjectiveValues->obj;			
+			else
+				throw ErrorClass("<initialObjectiveValues> object must be defined before getting the data");
+		}
+		else
+			throw ErrorClass("<objectives> object must be defined before getting the data");
+	}
+	else
+		throw ErrorClass("<optimization> object must be defined before getting the data");
 	return initObjVector;
 }//getInitObjValuesSparse
 
@@ -2393,20 +2511,19 @@ double* OSOption::getInitObjValuesDense(int numberOfObjectives){
  * get the list of initial objective bounds in sparse form
  * @return a list of index/value/value triples
  */
-std::vector<InitObjBound*>  OSOption::getInitObjBoundsSparse()
-{	std::vector<InitObjBound*> initObjBounds;
+InitObjBound**  OSOption::getInitObjBoundsSparse()
+{	InitObjBound** initObjBounds;
 	if (this->optimization != NULL) 
-	{	if(this->optimization->objectives != NULL) 
-		{	if(this->optimization->objectives->initialObjectiveBounds != NULL) 
-			{	int i;
-				int num_obj;
-				num_obj = this->getNumberOfInitObjBounds();
-				for (i = 0; i < num_obj; i++)
-					initObjBounds.push_back( this->optimization->objectives->initialObjectiveBounds->obj[ i]);
-				
-			}
-		}					
+	{	if (this->optimization->objectives != NULL) 
+		{	if (this->optimization->objectives->initialObjectiveBounds != NULL) 
+				initObjBounds = this->optimization->objectives->initialObjectiveBounds->obj;			else
+				throw ErrorClass("<initialObjectiveBounds> object must be defined before getting the data");
+		}
+		else
+			throw ErrorClass("<objectives> object must be defined before getting the data");
 	}
+	else
+		throw ErrorClass("<optimization> object must be defined before getting the data");
 	return initObjBounds;
 }//getInitObjBoundsSparse
 
@@ -2483,20 +2600,20 @@ double* OSOption::getInitObjUpperBoundsDense(int numberOfObjectives){
  * get the list of initial constraint values in sparse form
  * @return a list of index/value pairs
  */
-std::vector<InitConValue*>  OSOption::getInitConValuesSparse(){
-	std::vector<InitConValue*> initConVector;
-	if (this->optimization != NULL) {
-		if(this->optimization->constraints != NULL) {
-			if(this->optimization->constraints->initialConstraintValues != NULL) {
-			int i;
-			int num_con;
-			num_con = this->getNumberOfInitConValues();
-			for(i = 0; i < num_con; i++){
-				initConVector.push_back( this->optimization->constraints->initialConstraintValues->con[ i]);
-				}
-			}
-		}					
+InitConValue**  OSOption::getInitConValuesSparse()
+{	InitConValue** initConVector;
+	if (this->optimization != NULL) 
+	{	if (this->optimization->constraints != NULL) 
+		{	if (this->optimization->constraints->initialConstraintValues != NULL) 
+				initConVector = this->optimization->constraints->initialConstraintValues->con;			
+			else
+				throw ErrorClass("<initialConstraintValues> object must be defined before getting the data");
+		}
+		else
+			throw ErrorClass("<constraints> object must be defined before getting the data");
 	}
+	else
+		throw ErrorClass("<optimization> object must be defined before getting the data");
 	return initConVector;
 }//getInitConValuesSparse
 
@@ -2539,20 +2656,20 @@ double* OSOption::getInitConValuesDense(int numberOfConstraints){
  * get the list of initial dual variable bounds in sparse form
  * @return a list of index/value/value triples
  */
-std::vector<InitDualVarValue*>  OSOption::getInitDualVarValuesSparse(){
-	std::vector<InitDualVarValue*> initDualVector;
-	if (this->optimization != NULL) {
-		if(this->optimization->constraints != NULL) {
-			if(this->optimization->constraints->initialDualValues != NULL) {
-			int i;
-			int num_con;
-			num_con = this->getNumberOfInitDualVarValues();
-			for(i = 0; i < num_con; i++){
-				initDualVector.push_back( this->optimization->constraints->initialDualValues->con[ i]);
-				}
-			}
-		}					
+InitDualVarValue**  OSOption::getInitDualVarValuesSparse()
+{	InitDualVarValue** initDualVector;
+	if (this->optimization != NULL) 
+	{	if (this->optimization->constraints != NULL) 
+		{	if (this->optimization->constraints->initialDualValues != NULL) 
+				initDualVector = this->optimization->constraints->initialDualValues->con;			
+			else
+				throw ErrorClass("<initialDualValues> object must be defined before getting the data");
+		}
+		else
+			throw ErrorClass("<constraints> object must be defined before getting the data");
 	}
+	else
+		throw ErrorClass("<optimization> object must be defined before getting the data");
 	return initDualVector;
 }//getInitDualVarValuesSparse
 
@@ -3036,10 +3153,10 @@ bool OSOption::setJobDependencies(int numberOfDependencies, std::string* jobDepe
 		this->job = new JobOption();
 	if (this->job->dependencies == NULL) 
 		this->job->dependencies = new JobDependencies();
-		if( this->job->dependencies->jobID != NULL) 
-			delete[] this->job->dependencies->jobID ;
-		this->job->dependencies->numberOfJobIDs = numberOfDependencies;
-		this->job->dependencies->jobID = jobDependencies;
+	else 
+		delete[] this->job->dependencies->jobID;
+	this->job->dependencies->numberOfJobIDs = numberOfDependencies;
+	this->job->dependencies->jobID = jobDependencies;
 	return true;
 }//setJobDependencies
 
@@ -3083,13 +3200,9 @@ bool OSOption::setRequiredDirectories(int numberOfPaths, std::string* paths)
 	if (this->job->requiredDirectories == NULL) 
 		this->job->requiredDirectories = new DirectoriesAndFiles();
 	else
-		if (this->job->requiredDirectories->numberOfPaths != numberOfPaths)
-			throw ErrorClass("Inconsistent size of <job> <requiredDirectories> element");
-	if (this->job->requiredDirectories->path == NULL)
-		this->job->requiredDirectories->path = new std::string[numberOfPaths];
-	for (int i = 0; i < numberOfPaths; i++)
-		this->job->requiredDirectories->path[i] = paths[i];
+		delete[] this->job->requiredDirectories->path;
 	this->job->requiredDirectories->numberOfPaths = numberOfPaths;
+	this->job->requiredDirectories->path = paths;
 	return true;
 }//setRequiredDirectories
 
@@ -3131,13 +3244,9 @@ bool OSOption::setRequiredFiles(int numberOfPaths, std::string* paths)
 	if (this->job->requiredFiles == NULL) 
 		this->job->requiredFiles = new DirectoriesAndFiles();
 	else
-		if (this->job->requiredFiles->numberOfPaths != numberOfPaths)
-			throw ErrorClass("Inconsistent size of <job> <requiredFiles> element");
-	if (this->job->requiredFiles->path == NULL)
-		this->job->requiredFiles->path = new std::string[numberOfPaths];
-	for (int i = 0; i < numberOfPaths; i++)
-		this->job->requiredFiles->path[i] = paths[i];
+		delete[] this->job->requiredFiles->path;
 	this->job->requiredFiles->numberOfPaths = numberOfPaths;
+	this->job->requiredFiles->path = paths;
 	return true;
 }//setRequiredFiles
 
@@ -3179,13 +3288,9 @@ bool OSOption::setDirectoriesToMake(int numberOfPaths, std::string* paths)
 	if (this->job->directoriesToMake == NULL) 
 		this->job->directoriesToMake = new DirectoriesAndFiles();
 	else
-		if (this->job->directoriesToMake->numberOfPaths != numberOfPaths)
-			throw ErrorClass("Inconsistent size of <job> <directoriesToMake> element");
-	if (this->job->directoriesToMake->path == NULL)
-		this->job->directoriesToMake->path = new std::string[numberOfPaths];
-	for (int i = 0; i < numberOfPaths; i++)
-		this->job->directoriesToMake->path[i] = paths[i];
+		delete[] this->job->directoriesToMake->path;
 	this->job->directoriesToMake->numberOfPaths = numberOfPaths;
+	this->job->directoriesToMake->path = paths;
 	return true;
 }//setDirectoriesToMake
 
@@ -3227,13 +3332,9 @@ bool OSOption::setFilesToMake(int numberOfPaths, std::string* paths)
 	if (this->job->filesToMake == NULL) 
 		this->job->filesToMake = new DirectoriesAndFiles();
 	else
-		if (this->job->filesToMake->numberOfPaths != numberOfPaths)
-			throw ErrorClass("Inconsistent size of <job> <filesToMake> element");
-	if (this->job->filesToMake->path == NULL)
-		this->job->filesToMake->path = new std::string[numberOfPaths];
-	for (int i = 0; i < numberOfPaths; i++)
-		this->job->filesToMake->path[i] = paths[i];
+		delete[] this->job->filesToMake->path;
 	this->job->filesToMake->numberOfPaths = numberOfPaths;
+	this->job->filesToMake->path = paths;
 	return true;
 }//setFilesToMake
 
@@ -3275,15 +3376,9 @@ bool OSOption::setInputDirectoriesToMove(int numberOfPathPairs, PathPair** pathP
 	if (this->job->inputDirectoriesToMove == NULL) 
 		this->job->inputDirectoriesToMove = new PathPairs();
 	else
-		if (this->job->inputDirectoriesToMove->numberOfPathPairs != numberOfPathPairs)
-			throw ErrorClass("Inconsistent size of <job> <inputDirectoriesToMove> element");
-	if (this->job->inputDirectoriesToMove->pathPair == NULL)
-		this->job->inputDirectoriesToMove->pathPair = new PathPair*[numberOfPathPairs];
-	for (int i = 0; i < numberOfPathPairs; i++)
-	{	this->job->inputDirectoriesToMove->pathPair[i] = new PathPair();
-		this->job->inputDirectoriesToMove->pathPair[i] = pathPair[i];
-	}
+		delete[] this->job->inputDirectoriesToMove->pathPair;
 	this->job->inputDirectoriesToMove->numberOfPathPairs = numberOfPathPairs;
+	this->job->inputDirectoriesToMove->pathPair = pathPair;
 	return true;
 }//setInputDirectoriesToMove
 
@@ -3333,15 +3428,9 @@ bool OSOption::setInputFilesToMove(int numberOfPathPairs, PathPair** pathPair)
 	if (this->job->inputFilesToMove == NULL) 
 		this->job->inputFilesToMove = new PathPairs();
 	else
-		if (this->job->inputFilesToMove->numberOfPathPairs != numberOfPathPairs)
-			throw ErrorClass("Inconsistent size of <job> <inputFilesToMove> element");
-	if (this->job->inputFilesToMove->pathPair == NULL)
-		this->job->inputFilesToMove->pathPair = new PathPair*[numberOfPathPairs];
-	for (int i = 0; i < numberOfPathPairs; i++)
-	{	this->job->inputFilesToMove->pathPair[i] = new PathPair();
-		this->job->inputFilesToMove->pathPair[i] = pathPair[i];
-	}
+		delete[] this->job->inputFilesToMove->pathPair;
 	this->job->inputFilesToMove->numberOfPathPairs = numberOfPathPairs;
+	this->job->inputFilesToMove->pathPair = pathPair;
 	return true;
 }//setInputFilesToMove
 
@@ -3390,15 +3479,9 @@ bool OSOption::setOutputFilesToMove(int numberOfPathPairs, PathPair** pathPair)
 	if (this->job->outputFilesToMove == NULL) 
 		this->job->outputFilesToMove = new PathPairs();
 	else
-		if (this->job->outputFilesToMove->numberOfPathPairs != numberOfPathPairs)
-			throw ErrorClass("Inconsistent size of <job> <outputFilesToMove> element");
-	if (this->job->outputFilesToMove->pathPair == NULL)
-		this->job->outputFilesToMove->pathPair = new PathPair*[numberOfPathPairs];
-	for (int i = 0; i < numberOfPathPairs; i++)
-	{	this->job->outputFilesToMove->pathPair[i] = new PathPair();
-		this->job->outputFilesToMove->pathPair[i] = pathPair[i];
-	}
+		delete[] this->job->outputFilesToMove->pathPair;
 	this->job->outputFilesToMove->numberOfPathPairs = numberOfPathPairs;
+	this->job->outputFilesToMove->pathPair = pathPair;
 	return true;
 }//setOutputFilesToMove
 
@@ -3447,15 +3530,9 @@ bool OSOption::setOutputDirectoriesToMove(int numberOfPathPairs, PathPair** path
 	if (this->job->outputDirectoriesToMove == NULL) 
 		this->job->outputDirectoriesToMove = new PathPairs();
 	else
-		if (this->job->outputDirectoriesToMove->numberOfPathPairs != numberOfPathPairs)
-			throw ErrorClass("Inconsistent size of <job> <outputDirectoriesToMove> element");
-	if (this->job->outputDirectoriesToMove->pathPair == NULL)
-		this->job->outputDirectoriesToMove->pathPair = new PathPair*[numberOfPathPairs];
-	for (int i = 0; i < numberOfPathPairs; i++)
-	{	this->job->outputDirectoriesToMove->pathPair[i] = new PathPair();
-		this->job->outputDirectoriesToMove->pathPair[i] = pathPair[i];
-	}
+		delete[] this->job->outputDirectoriesToMove->pathPair;
 	this->job->outputDirectoriesToMove->numberOfPathPairs = numberOfPathPairs;
+	this->job->outputDirectoriesToMove->pathPair = pathPair;
 	return true;
 }//setOutputDirectoriesToMove
 
@@ -3504,13 +3581,9 @@ bool OSOption::setFilesToDelete(int numberOfPaths, std::string* paths)
 	if (this->job->filesToDelete == NULL) 
 		this->job->filesToDelete = new DirectoriesAndFiles();
 	else
-		if (this->job->filesToDelete->numberOfPaths != numberOfPaths)
-			throw ErrorClass("Inconsistent size of <job> <filesToDelete> element");
-	if (this->job->filesToDelete->path == NULL)
-		this->job->filesToDelete->path = new std::string[numberOfPaths];
-	for (int i = 0; i < numberOfPaths; i++)
-		this->job->filesToDelete->path[i] = paths[i];
+		delete[] this->job->filesToDelete->path;
 	this->job->filesToDelete->numberOfPaths = numberOfPaths;
+	this->job->filesToDelete->path = paths;
 	return true;
 }//setFilesToDelete
 
@@ -3552,13 +3625,9 @@ bool OSOption::setDirectoriesToDelete(int numberOfPaths, std::string* paths)
 	if (this->job->directoriesToDelete == NULL) 
 		this->job->directoriesToDelete = new DirectoriesAndFiles();
 	else
-		if (this->job->directoriesToDelete->numberOfPaths != numberOfPaths)
-			throw ErrorClass("Inconsistent size of <job> <directoriesToDelete> element");
-	if (this->job->directoriesToDelete->path == NULL)
-		this->job->directoriesToDelete->path = new std::string[numberOfPaths];
-	for (int i = 0; i < numberOfPaths; i++)
-		this->job->directoriesToDelete->path[i] = paths[i];
+		delete[] this->job->directoriesToDelete->path;
 	this->job->directoriesToDelete->numberOfPaths = numberOfPaths;
+	this->job->directoriesToDelete->path = paths;
 	return true;
 }//setDirectoriesToMake
 
@@ -3600,13 +3669,9 @@ bool OSOption::setProcessesToKill(int numberOfProcesses, std::string* processes)
 	if (this->job->processesToKill == NULL) 
 		this->job->processesToKill = new Processes();
 	else
-		if (this->job->processesToKill->numberOfProcesses != numberOfProcesses)
-			throw ErrorClass("Inconsistent size of <job> <processesToKill> element");
-	if (this->job->processesToKill->process == NULL)
-		this->job->processesToKill->process = new std::string[numberOfProcesses];
-	for (int i = 0; i < numberOfProcesses; i++)
-		this->job->processesToKill->process[i] = processes[i];
+		delete[] this->job->processesToKill->process;
 	this->job->processesToKill->numberOfProcesses = numberOfProcesses;
+	this->job->processesToKill->process = processes;
 	return true;
 }//setProcessesToKill
 

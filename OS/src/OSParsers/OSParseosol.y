@@ -83,13 +83,13 @@ int osollex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 
 %token LOCATIONTYPEATT TRANSPORTTYPEATT NUMBEROFOTHEROPTIONSATT;
 %token NUMBEROFJOBIDSATT NUMBEROFPATHSATT NUMBEROFPATHPAIRSATT;
-%token FROMATT TOATT MAKECOPYATT SOLVERATT CATEGORYATT TYPEATT;
-%token NUMBEROFPROCESSESATT NUMBEROFSOLVEROPTIONSATT;
+%token FROMATT TOATT MAKECOPYATT SOLVERATT CATEGORYATT TYPEATT GROUPWEIGHTATT;
+%token NUMBEROFPROCESSESATT NUMBEROFSOLVEROPTIONSATT NUMBEROFSOSATT;
 %token NUMBEROFVARIABLESATT NUMBEROFOBJECTIVESATT NUMBEROFCONSTRAINTSATT;
 %token NUMBEROFOTHERVARIABLEOPTIONSATT NUMBEROFOTHEROBJECTIVEOPTIONSATT;
 %token NUMBEROFOTHERCONSTRAINTOPTIONSATT;
 %token NUMBEROFVARATT NUMBEROFOBJATT NUMBEROFCONATT;
-%token NAMEATT IDXATT VALUEATT UNITATT DESCRIPTIONATT LBVALUEATT UBVALUEATT;
+%token NAMEATT IDXATT SOSIDXATT VALUEATT UNITATT DESCRIPTIONATT LBVALUEATT UBVALUEATT;
 
 %token GENERALSTART GENERALEND SYSTEMSTART SYSTEMEND SERVICESTART SERVICEEND;
 %token JOBSTART JOBEND OPTIMIZATIONSTART OPTIMIZATIONEND;
@@ -113,6 +113,9 @@ int osollex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token INITIALVARIABLEVALUESSTART INITIALVARIABLEVALUESEND VARSTART VAREND;
 %token INITIALVARIABLEVALUESSTRINGSTART INITIALVARIABLEVALUESSTRINGEND;
 %token INITIALBASISSTATUSSTART INITIALBASISSTATUSEND;
+%token INTEGERVARIABLEBRANCHINGWEIGHTSSTART INTEGERVARIABLEBRANCHINGWEIGHTSEND
+%token SOSVARIABLEBRANCHINGWEIGHTSSTART SOSVARIABLEBRANCHINGWEIGHTSEND
+%token SOSSTART SOSEND
 
 %token OBJECTIVESSTART OBJECTIVESEND;
 %token INITIALOBJECTIVEVALUESSTART INITIALOBJECTIVEVALUESEND OBJSTART OBJEND;
@@ -1597,7 +1600,8 @@ numberofothervariablesatt: | NUMBEROFOTHERVARIABLEOPTIONSATT QUOTE INTEGER QUOTE
 		osoption->optimization->variables->other[i] = new OtherVariableOption();
 };
 
-restofvariables: GREATERTHAN initialvariablevalues initialvariablevaluesstring initialbasisstatus othervariableoptionlist VARIABLESEND
+restofvariables: GREATERTHAN initialvariablevalues initialvariablevaluesstring initialbasisstatus 
+   integervariablebranchingweights sosvariablebranchingweights othervariableoptionlist VARIABLESEND
    | ENDOFELEMENT;
 
 initialvariablevalues: | INITIALVARIABLEVALUESSTART numberofvar GREATERTHAN varlist INITIALVARIABLEVALUESEND;
@@ -1666,7 +1670,7 @@ initialvariablevaluesstring: | INITIALVARIABLEVALUESSTRINGSTART numberofvarstr G
 numberofvarstr: NUMBEROFVARATT QUOTE INTEGER QUOTE
 {	if ($3 <= 0)
 		osolerror (NULL, osoption, parserData, "number of <var> elements must be positive");
-	osoption->optimization->variables->initialVariableValuesString = new InitVariableValuesString ();
+	osoption->optimization->variables->initialVariableValuesString = new InitVariableValuesString();
 	osoption->optimization->variables->initialVariableValuesString->numberOfVar = $3;
 	osoption->optimization->variables->initialVariableValuesString->var = new InitVarValueString*[$3];
 	for (int i = 0; i < $3; i++)
@@ -1716,13 +1720,13 @@ QUOTE;
 initvarstrvalueend: GREATERTHAN VAREND | ENDOFELEMENT;
 
 
-initialbasisstatus: | INITIALBASISSTATUSSTART numberofbasvar GREATERTHAN
+initialbasisstatus: {printf("initial basis empty\n");} | INITIALBASISSTATUSSTART numberofbasvar GREATERTHAN
     basvarlist INITIALBASISSTATUSEND;
 
 numberofbasvar: NUMBEROFVARATT QUOTE INTEGER QUOTE
 {	if ($3 <= 0)
 		osolerror (NULL, osoption, parserData, "number of <var> elements must be positive");
-	osoption->optimization->variables->initialBasisStatus = new InitialBasisStatus ();
+	osoption->optimization->variables->initialBasisStatus = new InitialBasisStatus();
 	osoption->optimization->variables->initialBasisStatus->numberOfVar = $3;
 	osoption->optimization->variables->initialBasisStatus->var = new InitBasStatus*[$3];
 	for (int i = 0; i < $3; i++)
@@ -1736,12 +1740,12 @@ initbasvalue: basvarstart initbasvarvalueattlist initbasvarvalueend
 		osolerror (NULL, osoption, parserData, "variable index required");
 	parserData->idxAttributePresent = false;
 	parserData->valAttributePresent = false;
-	parserData->numberOfVarStr++;
+	parserData->numberOfBasVar++;
 };
 
 basvarstart: VARSTART
-{	if (parserData->numberOfVarStr >= osoption->optimization->variables->initialBasisStatus->numberOfVar)
-		osolerror(NULL, osoption, parserData, "too many initial variable strings");
+{	if (parserData->numberOfBasVar >= osoption->optimization->variables->initialBasisStatus->numberOfVar)
+		osolerror(NULL, osoption, parserData, "too many initial basis variables");
 };
 
 initbasvarvalueattlist: | initbasvarvalueattlist initbasvarvalueatt;
@@ -1770,6 +1774,165 @@ initbasvarvaluevalueatt: VALUEATT ATTRIBUTETEXT
 QUOTE;
 
 initbasvarvalueend: GREATERTHAN VAREND | ENDOFELEMENT;
+
+
+integervariablebranchingweights: {printf("integer weights empty\n");} | INTEGERVARIABLEBRANCHINGWEIGHTSSTART numberofintegerweights
+   GREATERTHAN intweightlist INTEGERVARIABLEBRANCHINGWEIGHTSEND;
+
+numberofintegerweights: NUMBEROFVARATT QUOTE INTEGER QUOTE
+{	if ($3 <= 0)
+		osolerror (NULL, osoption, parserData, "number of <var> elements must be positive");
+	osoption->optimization->variables->integerVariableBranchingWeights = new IntegerVariableBranchingWeights();
+	osoption->optimization->variables->integerVariableBranchingWeights->numberOfVar = $3;
+	osoption->optimization->variables->integerVariableBranchingWeights->var = new BranchingWeight*[$3];
+	for (int i = 0; i < $3; i++)
+		osoption->optimization->variables->integerVariableBranchingWeights->var[i] = new BranchingWeight();
+};
+
+intweightlist: | intweightlist intweight;
+
+intweight: intweightstart intweightidxatt intweightend
+{	if (!parserData->idxAttributePresent)
+		osolerror (NULL, osoption, parserData, "variable index required");
+	parserData->idxAttributePresent = false;
+	parserData->valAttributePresent = false;
+	parserData->numberOfIntWt++;
+};
+
+intweightstart: VARSTART 
+{	if (parserData->numberOfIntWt >= osoption->optimization->variables->integerVariableBranchingWeights->numberOfVar)
+		osolerror(NULL, osoption, parserData, "too many integer branching weights");
+};
+
+intweightidxatt: IDXATT QUOTE INTEGER QUOTE
+{	if (parserData->idxAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one variable index allowed");
+	parserData->idxAttributePresent = true;
+	if ($3 < 0)
+		osolerror (NULL, osoption, parserData, "variable index must be nonnegative");
+	if (parserData->numberOfVariablesPresent)
+	{	if ($3 >= parserData->numberOfVariables)
+			osolerror (NULL, osoption, parserData, "variable index exceeds upper limit");
+	};
+	osoption->optimization->variables->integerVariableBranchingWeights->var[parserData->numberOfIntWt]->idx = $3;
+	printf("processed weight attributes\n");
+};
+ 
+intweightend: 
+    GREATERTHAN DOUBLE  {osoption->optimization->variables->integerVariableBranchingWeights->var[parserData->numberOfIntWt]->value = $2;} VAREND;
+  | GREATERTHAN INTEGER {osoption->optimization->variables->integerVariableBranchingWeights->var[parserData->numberOfIntWt]->value = $2;} VAREND;
+    
+
+sosvariablebranchingweights: {printf("sos weights empty\n");} | SOSVARIABLEBRANCHINGWEIGHTSSTART numberofsosweightgroups
+   GREATERTHAN sosweightgrouplist SOSVARIABLEBRANCHINGWEIGHTSEND;
+
+numberofsosweightgroups: NUMBEROFSOSATT QUOTE INTEGER QUOTE   
+{	if ($3 <= 0)
+		osolerror (NULL, osoption, parserData, "number of <sos> elements must be positive");
+	osoption->optimization->variables->sosVariableBranchingWeights = new SOSVariableBranchingWeights();
+	osoption->optimization->variables->sosVariableBranchingWeights->numberOfSOS = $3;
+	osoption->optimization->variables->sosVariableBranchingWeights->sos = new SOSWeights*[$3];
+	for (int i = 0; i < $3; i++)
+		osoption->optimization->variables->sosVariableBranchingWeights->sos[i] = new SOSWeights();
+};
+
+
+sosweightgrouplist: | sosweightgrouplist sosweightgroup;
+
+sosweightgroup: sosweightgroupstart sosweightgroupattlist sosweightgroupcontent
+{	if (!parserData->sosIdxAttributePresent)
+		osolerror (NULL, osoption, parserData, "SOS index required");
+	if (!parserData->sosIdxAttributePresent)
+		osolerror (NULL, osoption, parserData, "numberOfVar required");
+	parserData->sosIdxAttributePresent = false;
+	parserData->grpWgtAttributePresent = false;
+	parserData->nOfVarAttributePresent = false;
+	parserData->numberOfSOS++;
+};
+
+
+sosweightgroupstart: SOSSTART
+{	if (parserData->numberOfSOS >= osoption->optimization->variables->sosVariableBranchingWeights->numberOfSOS)
+		osolerror(NULL, osoption, parserData, "too many SOS branching weights");
+};
+
+sosweightgroupattlist: | sosweightgroupattlist sosweightgroupatt; 
+
+sosweightgroupatt: sosweightgroupidxatt | sosweightgroupnvaratt	| sosweightgroupweightatt;
+
+sosweightgroupidxatt: SOSIDXATT QUOTE INTEGER QUOTE
+{	if (parserData->sosIdxAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one SOS index allowed");
+	parserData->sosIdxAttributePresent = true;
+	printf("SOS index found:%d\n",$3);
+	if ($3 < 0)
+		osolerror (NULL, osoption, parserData, "SOS index must be nonnegative");
+	printf("store into %d:%d\n",parserData->numberOfSOS,$3);
+	osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->sosIdx = $3;
+	printf(" Check:%d\n",osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->sosIdx);
+};
+ 
+sosweightgroupweightatt: 
+	  GROUPWEIGHTATT QUOTE DOUBLE QUOTE
+{	if (parserData->grpWgtAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one group weight allowed");
+	parserData->grpWgtAttributePresent = true;
+	osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->groupWeight = $3;
+}
+
+	| GROUPWEIGHTATT QUOTE INTEGER QUOTE
+{	if (parserData->grpWgtAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one group weight allowed");
+	parserData->grpWgtAttributePresent = true;
+	osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->groupWeight = $3;
+};
+
+sosweightgroupnvaratt: NUMBEROFVARATT QUOTE INTEGER QUOTE
+{	if ($3 < 0)
+		osolerror (NULL, osoption, parserData, "number of <var> elements must be nonnegative");
+//	osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS] = new SOSWeights();
+	osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->numberOfVar = $3;
+	osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->var = new BranchingWeight*[$3];
+	for (int i = 0; i < $3; i++)
+		osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->var[i] = new BranchingWeight();
+};
+
+sosweightgroupcontent:
+      GREATERTHAN sosweightgroupvars SOSEND
+    | ENDOFELEMENT;
+
+sosweightgroupvars: | sosweightgroupvars sosweightvar;
+
+sosweightvar: sosweightvarstart sosweightvaridxatt sosweightvarend
+{	if (!parserData->idxAttributePresent)
+		osolerror (NULL, osoption, parserData, "variable index required");
+	parserData->idxAttributePresent = false;
+	parserData->valAttributePresent = false;
+	parserData->numberOfSOSVar++;
+};
+
+sosweightvarstart: VARSTART 
+{	if (parserData->numberOfSOSVar >= osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->numberOfVar)
+		osolerror(NULL, osoption, parserData, "too many variable branching weights");
+};
+
+sosweightvaridxatt: IDXATT QUOTE INTEGER QUOTE
+{	if (parserData->idxAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one variable index allowed");
+	parserData->idxAttributePresent = true;
+	if ($3 < 0)
+		osolerror (NULL, osoption, parserData, "variable index must be nonnegative");
+	if (parserData->numberOfVariablesPresent)
+	{	if ($3 >= parserData->numberOfVariables)
+			osolerror (NULL, osoption, parserData, "variable index exceeds upper limit");
+	};
+	osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->var[parserData->numberOfSOSVar]->idx = $3;
+}; 
+
+sosweightvarend: 
+     GREATERTHAN DOUBLE  {osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->var[parserData->numberOfSOSVar]->value = $2;} VAREND;
+   | GREATERTHAN INTEGER {osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->var[parserData->numberOfSOSVar]->value = $2;} VAREND;
+
 
 othervariableoptionlist: | othervariableoptionlist othervariableoption;
 
