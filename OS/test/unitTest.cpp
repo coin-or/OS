@@ -114,7 +114,6 @@
 #include "OSrLWriter.h"      
 #include "OSInstance.h"  
 #include "OSFileUtil.h"  
-// #include "OSConfig.h"   !!!duplicate
 #include "CoinError.hpp"
 
 #include "OSDefaultSolver.h"  
@@ -122,7 +121,6 @@
 #include "OSSolverAgent.h"   
 #include "OShL.h"     
 #include "OSErrorClass.h"
-// #include "OSmps2osil.h"   !!! duplicate
 #include "OSBase64.h"
 #include "OSCommonUtil.h"
 
@@ -1729,9 +1727,9 @@ catch(const ErrorClass& eclass){
 		}
 
 		std::cout << "number of variables initialed with double "  <<  osoption->getNumberOfInitVarValues() << std::endl;
-		std::vector<InitVarValue*> initVarVector;
+		InitVarValue** initVarVector;
 		initVarVector = osoption->getInitVarValuesSparse();
-		int num_var = initVarVector.size();
+		int num_var = osoption->getNumberOfInitVarValues();
 		for(i = 0; i < num_var; i++){
 			std::cout << "initialize; var index "  << initVarVector[ i]->idx;
 			std::cout << ", value = "  << initVarVector[ i]->value << std::endl;
@@ -1751,9 +1749,6 @@ catch(const ErrorClass& eclass){
 		std::cout << "serviceURI:" << osoption->general->serviceURI << std::endl;
 		tempStr = osoption->getServiceURI();
 		std::cout << "serviceURI:" << tempStr << std::endl;
-
-
-
 
 		cout << "Write the content to a new file" <<endl;		
 		tmpOSoL = osolwriter->writeOSoL( osoption);
