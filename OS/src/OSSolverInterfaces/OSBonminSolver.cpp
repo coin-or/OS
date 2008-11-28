@@ -585,7 +585,7 @@ BonminProblem::finalize_solution(TMINLP::SolverReturn status,
 }
 
 
-
+   
 
 void BonminSolver::buildSolverInstance() throw (ErrorClass) {
 	try{		
