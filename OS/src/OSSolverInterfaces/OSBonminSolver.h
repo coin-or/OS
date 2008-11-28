@@ -82,6 +82,7 @@ using namespace Bonmin;
 // for Stefan
 class BonminProblem : public TMINLP{  
 
+
 	
 public:
 	

@@ -33,7 +33,7 @@
 
 //Couenne stuff
 #include "CouenneProblem.hpp"
-//#include "BonCouenneSetup.hpp"
+#include "BonCouenneSetup.hpp"
 
 #ifdef HAVE_CTIME
 # include <ctime>
@@ -134,7 +134,7 @@ private:
 
 	//CouenneSetup couenne;
 	
-	BonminSetup bonmin_couenne;
+	CouenneSetup bonmin_couenne;
 
 	std::string couenneErrorMsg;
 

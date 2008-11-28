@@ -450,9 +450,12 @@ void CouenneSolver::solve() throw (ErrorClass) {
 	//if( this->bSetSolverOptions == false) setSolverOptions();
 	try{
 		using namespace Ipopt;
+		
+		return;
+		
+		char **argv = NULL;
 
 		Bab bb;
-
     	bb.setUsingCouenne (true);
 
 		//using namespace Ipopt;
@@ -460,12 +463,21 @@ void CouenneSolver::solve() throw (ErrorClass) {
 
 		//this->bCallbuildSolverInstance = true;
 		//Now initialize from tminlp
-		bonmin_couenne.initialize( GetRawPtr( tminlp) );	
+		
+		CouenneInterface *ci = NULL;
+		
+		//OsiTMINLPInterface * nonlinearSolver_;
+		
+		ci = new CouenneInterface;
+		
 
-    	
+		
+		bonmin_couenne.InitializeCouenne(argv, ci);	
+
+    	CouenneCutGenerator *couennePtr = bonmin_couenne.couennePtr ();
+  
    		bb ( bonmin_couenne); // do branch and bound
    		
-   		// this at least works for calling bonmin and getting the right answer
     	 
     	/*
     	CouenneCutGenerator *cg = NULL;
