@@ -158,8 +158,8 @@ bool BonminProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 	n = osinstance->getVariableNumber();
 	// number of constraints
 	m = osinstance->getConstraintNumber();
-	cout << "number variables  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << n << endl;
-	cout << "number constraints  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << m << endl;
+	cout << "Bonmin number variables  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << n << endl;
+	cout << "Bonmin number constraints  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << m << endl;
 	try{
 		osinstance->initForAlgDiff( );
 	}

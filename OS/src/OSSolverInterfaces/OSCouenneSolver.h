@@ -19,6 +19,7 @@
 #include "OSConfig.h" 
 #include "OSDefaultSolver.h"
 #include "OSBonminSolver.h"
+#include "OSIpoptSolver.h"
 #include "OSrLWriter.h"
 #include "OSInstance.h"
 #include "OSParameters.h"
@@ -127,7 +128,10 @@ public:
 	
 	
 	SmartPtr<BonminProblem> tminlp;
-
+	
+	
+	Ipopt::SmartPtr<TMINLP> tminlp_;
+	
 
 private:
 	OSrLWriter  *osrlwriter;

@@ -285,7 +285,7 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 	}
 
 	if (sm) delete sm;
-	couenne->print();
+
 
 	couenne->AuxSet() = new std::set <exprAux *, compExpr>;
 
@@ -296,10 +296,8 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
   	couenne->initAuxs();
 
   	// clear all spurious variables pointers not referring to the
-	//variables_ vector
-//	  couenne->realign ();
 
-	couenne->print();
+	//couenne->print();
 
 	}
 	catch(const ErrorClass& eclass){
@@ -444,14 +442,16 @@ void CouenneSolver::setSolverOptions() throw (ErrorClass) {
 }//end setSolverOptions() 
 
 
+using namespace Ipopt;
+	
 
 void CouenneSolver::solve() throw (ErrorClass) {
 	//if( this->bCallbuildSolverInstance == false) buildSolverInstance();
 	//if( this->bSetSolverOptions == false) setSolverOptions();
 	try{
-		using namespace Ipopt;
 		
-		return;
+		
+		couenne->print();
 		
 		char **argv = NULL;
 
@@ -459,25 +459,32 @@ void CouenneSolver::solve() throw (ErrorClass) {
     	bb.setUsingCouenne (true);
 
 		//using namespace Ipopt;
-		tminlp = new BonminProblem( osinstance, osoption, osresult);
+		
+		
+		tminlp_ = new BonminProblem( osinstance, osoption, osresult);
+		
+		//nlp = new BonminProblem( osinstance, osoption, osresult);
+		//app = new IpoptApplication();
 
 		//this->bCallbuildSolverInstance = true;
 		//Now initialize from tminlp
 		
 		CouenneInterface *ci = NULL;
 		
-		//OsiTMINLPInterface * nonlinearSolver_;
-		
-		ci = new CouenneInterface;
+		ci = new CouenneInterface();
 		
 
 		
-		bonmin_couenne.InitializeCouenne(argv, ci);	
-
-    	CouenneCutGenerator *couennePtr = bonmin_couenne.couennePtr ();
+		ci->setModel( GetRawPtr( tminlp_) );
+		
+		
+		std::cout << "INITIALIZE COUENNE " << std::endl;
+		bonmin_couenne.InitializeCouenne(argv, couenne, ci);	
+		std::cout << " CALL BB " << std::endl;
+    	
   
    		bb ( bonmin_couenne); // do branch and bound
-   		
+   		std::cout << " END BB " << std::endl;
     	 
     	/*
     	CouenneCutGenerator *cg = NULL;
