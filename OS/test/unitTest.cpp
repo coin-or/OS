@@ -888,9 +888,9 @@ try{
 	cout << "call the COIN - Couenne Solver for bonminEx1" << endl;
 	solver->buildSolverInstance();
 	
-	
-	solver->solve();
-	//return 0;
+	std::cout << " CALL SOLVE " << std::endl;
+	//solver->solve();
+
 	
 	/*
 	cout << "Here is the Couenne solver solution for bonminEx1" << endl;
@@ -902,11 +902,11 @@ try{
 	*/
 	
 	
-	delete solver;
-	solver = NULL;
-	unitTestResult << "Solved problem bonminEx1.osil with Couenne" << std::endl;
-	delete osilreader;
-	osilreader = NULL;
+	//delete solver;
+	//solver = NULL;
+	//unitTestResult << "Solved problem bonminEx1.osil with Couenne" << std::endl;
+	//delete osilreader;
+	//osilreader = NULL;
 	//return 0;
 	
 	

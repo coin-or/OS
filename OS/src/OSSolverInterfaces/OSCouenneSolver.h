@@ -127,10 +127,12 @@ public:
 	CouenneProblem *couenne;
 	
 	
-	SmartPtr<BonminProblem> tminlp;
-	
 	
 	Ipopt::SmartPtr<TMINLP> tminlp_;
+	
+	
+	//Ipopt::SmartPtr<TNLPSolver> app;
+	Ipopt::SmartPtr<TMINLP> app;
 	
 
 private:

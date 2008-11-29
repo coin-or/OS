@@ -214,8 +214,8 @@ bool  BonminProblem::get_bounds_info(Index n, Number* x_l, Number* x_u,
 	for(i = 0; i < n; i++){
 		x_l[ i] = mdVarLB[ i];
 		x_u[ i] = mdVarUB[ i];
-		//cout << "x_l !!!!!!!!!!!!!!!!!!!!!!!!!!!" << x_l[i] << endl;
-		//cout << "x_u !!!!!!!!!!!!!!!!!!!!!!!!!!!" << x_u[i] << endl;
+		cout << "x_l !!!!!!!!!!!!!!!!!!!!!!!!!!!" << x_l[i] << endl;
+		cout << "x_u !!!!!!!!!!!!!!!!!!!!!!!!!!!" << x_u[i] << endl;
 	}
 	// Bonmin interprets any number greater than nlp_upper_bound_inf as
 	// infinity. The default value of nlp_upper_bound_inf and nlp_lower_bound_inf
@@ -230,8 +230,8 @@ bool  BonminProblem::get_bounds_info(Index n, Number* x_l, Number* x_u,
 	for(int i = 0; i < m; i++){
 		g_l[ i] = mdConLB[ i];
 		g_u[ i] = mdConUB[ i];
-		//cout << "lower !!!!!!!!!!!!!!!!!!!!!!!!!!!" << g_l[i] << endl;
-		//cout << "upper !!!!!!!!!!!!!!!!!!!!!!!!!!!" << g_u[i] << endl;
+		cout << "lower !!!!!!!!!!!!!!!!!!!!!!!!!!!" << g_l[i] << endl;
+		cout << "upper !!!!!!!!!!!!!!!!!!!!!!!!!!!" << g_u[i] << endl;
 	}  
   	return true;
 }//get_bounds_info
@@ -249,7 +249,7 @@ bool BonminProblem::get_starting_point(Index n, bool init_x, Number* x,
   	assert(init_lambda == false);
   	
   	
-  	//cout << "get initial values !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
+  	cout << "get initial values !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
   	
 
   	int i;
@@ -271,7 +271,7 @@ bool BonminProblem::get_starting_point(Index n, bool init_x, Number* x,
  			x[ i] = 1.7171;
  		}
  	}
-  	//cout << "got initial values !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
+  	cout << "got initial values !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
   	
   	
   	
@@ -309,7 +309,7 @@ bool BonminProblem::eval_grad_f(Index n, const Number* x, bool new_x, Number* gr
   		grad_f[ i]  = objGrad[ i];
   		//std::cout << grad_f[ i]  << std::endl;
   	}
-  	//std::cout << "DONE WITH Calculate Objective function gradient " << std::endl;
+  	std::cout << "DONE WITH Calculate Objective function gradient " << std::endl;
   	return true;
 }//eval_grad_f
 

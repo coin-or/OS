@@ -463,11 +463,16 @@ void CouenneSolver::solve() throw (ErrorClass) {
 		
 		tminlp_ = new BonminProblem( osinstance, osoption, osresult);
 		
+		//app = new BonMinApplication();
+		
 		//nlp = new BonminProblem( osinstance, osoption, osresult);
 		//app = new IpoptApplication();
 
 		//this->bCallbuildSolverInstance = true;
 		//Now initialize from tminlp
+		
+		
+
 		
 		CouenneInterface *ci = NULL;
 		
@@ -476,14 +481,12 @@ void CouenneSolver::solve() throw (ErrorClass) {
 
 		
 		ci->setModel( GetRawPtr( tminlp_) );
-		
-		
+			
 		std::cout << "INITIALIZE COUENNE " << std::endl;
 		bonmin_couenne.InitializeCouenne(argv, couenne, ci);	
 		std::cout << " CALL BB " << std::endl;
-    	
-  
-   		bb ( bonmin_couenne); // do branch and bound
+		
+   		//bb ( bonmin_couenne); // do branch and bound
    		std::cout << " END BB " << std::endl;
     	 
     	/*
@@ -492,12 +495,7 @@ void CouenneSolver::solve() throw (ErrorClass) {
     	if (bb.model (). cutGenerators ())
       	cg = dynamic_cast <CouenneCutGenerator *> 
 			(bb.model (). cutGenerators () [0] -> generator ());
-			
-			
-		cg->problem_ = couenne;  // no can do -- protected
 		*/
-    	
-		
 	}
 	catch(const ErrorClass& eclass){
 		osresult->setGeneralMessage( eclass.errormsg);
