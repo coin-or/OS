@@ -1,12 +1,12 @@
 /** @file OSOption.cpp
  * 
  *
- * @author Gus Gassmann, Jun Ma, Kipp Martin, 
- * @version 1.0, 29/Aug/2008
+ * @author Horand Gassmann, Jun Ma, Kipp Martin, 
+ * @version 1.0, 29/Nov/2008
  * @since   OS1.1
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, Dalhousie University and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
@@ -22,7 +22,7 @@
 #include <limits>
 #include <cstdio>
 
-#define DEBUG
+//#define DEBUG
 
 using namespace std;
 
@@ -690,6 +690,8 @@ VariableOption::VariableOption():
 	initialVariableValues = NULL;
 	initialVariableValuesString = NULL;
 	initialBasisStatus = NULL;
+	integerVariableBranchingWeights = NULL;
+	sosVariableBranchingWeights = NULL;
 	other = NULL;
 }// end VariableOption constructor  
 
@@ -703,6 +705,10 @@ VariableOption::~VariableOption()
 	if (initialVariableValuesString != NULL) delete initialVariableValuesString;
 	initialVariableValuesString = NULL;
 	if (initialBasisStatus != NULL) delete initialBasisStatus;
+	integerVariableBranchingWeights = NULL;
+	if (integerVariableBranchingWeights != NULL) delete integerVariableBranchingWeights;
+	sosVariableBranchingWeights = NULL;
+	if (sosVariableBranchingWeights != NULL) delete sosVariableBranchingWeights;
 	initialBasisStatus = NULL;
 	if (other != NULL) 
 	{   for (int i=0; i < numberOfOtherVariableOptions; i++)
@@ -2883,10 +2889,9 @@ bool OSOption::setOtherGeneralOptions(int numberOfOptions, OtherOption** other){
 	if (this->general->otherOptions == NULL) 
 		this->general->otherOptions = new OtherOptions();
 	else
-		if (numberOfOptions != this->general->otherOptions->numberOfOtherOptions)
-			throw ErrorClass("Inconsistent size of <general> <other> element");
-	this->general->otherOptions->other = other;
+		delete this->general->otherOptions->other;
 	this->general->otherOptions->numberOfOtherOptions = numberOfOptions;
+	this->general->otherOptions->other = other;
 	return true;
 }//setOtherGeneralOptions
 
@@ -2904,26 +2909,32 @@ bool OSOption::setAnOtherGeneralOption(OtherOption* optionValue){
 	
 	OtherOption** temp = new OtherOption*[nopt+1];
 	for (int i = 0; i < nopt; i++){
-		temp[i] = new OtherOption();
-		temp[i]->name = this->general->otherOptions->other[i]->name;
-		temp[i]->value = this->general->otherOptions->other[i]->value;
-		temp[i]->description = this->general->otherOptions->other[i]->description;
-		delete this->general->otherOptions->other[i];
+//		temp[i] = new OtherOption();
+//		temp[i]->name = this->general->otherOptions->other[i]->name;
+//		temp[i]->value = this->general->otherOptions->other[i]->value;
+//		temp[i]->description = this->general->otherOptions->other[i]->description;
+//		delete this->general->otherOptions->other[i];
+		temp[i] = this->general->otherOptions->other[i];
 	}
 	
-	delete[] this->general->otherOptions->other;
-	temp[ nopt] = new OtherOption();
-	temp[ nopt]->name = optionValue->name;
-	temp[ nopt]->value = optionValue->value;
-	temp[ nopt]->description = optionValue->description;
 
-	delete optionValue;
+	temp[ nopt] = optionValue;
+//	temp[ nopt] = new OtherOption();
+//	temp[ nopt]->name = optionValue->name;
+//	temp[ nopt]->value = optionValue->value;
+//	temp[ nopt]->description = optionValue->description;
+
+//	delete optionValue;
+
+	delete[] this->general->otherOptions->other;
 	
 	this->general->otherOptions->other = temp;
 	this->general->otherOptions->numberOfOtherOptions = ++nopt;
 
 	return true;
 }//setAnOtherGeneralOption
+
+
 
 /** 
  *  set() options in the <system> element
@@ -3005,16 +3016,9 @@ bool OSOption::setOtherSystemOptions(int numberOfOptions, OtherOption** other)
 	if (this->system->otherOptions == NULL) 
 		this->system->otherOptions = new OtherOptions();
 	else
-		if (numberOfOptions != this->system->otherOptions->numberOfOtherOptions)
-			throw ErrorClass("Inconsistent size of <system> <other> element");
-	if (this->system->otherOptions->other == NULL) 
-	{	this->system->otherOptions->other = new OtherOption*[numberOfOptions];
-		for (int i = 0; i < numberOfOptions; i++)
-			this->system->otherOptions->other[i] = new OtherOption();
-	}
-	for (int i = 0; i < numberOfOptions; i++)
-		this->system->otherOptions->other[i] = other[i];
-
+		delete this->system->otherOptions->other;
+	this->system->otherOptions->numberOfOtherOptions = numberOfOptions;
+	this->system->otherOptions->other = other;
 	return true;
 }//setOtherSystemOptions
 
@@ -3070,16 +3074,9 @@ bool OSOption::setOtherServiceOptions(int numberOfOptions, OtherOption** other)
 	if (this->service->otherOptions == NULL) 
 		this->service->otherOptions = new OtherOptions();
 	else
-		if (numberOfOptions != this->service->otherOptions->numberOfOtherOptions)
-			throw ErrorClass("Inconsistent size of <service> <other> element");
-	if (this->service->otherOptions->other == NULL) 
-	{	this->service->otherOptions->other = new OtherOption*[numberOfOptions];
-		for (int i = 0; i < numberOfOptions; i++)
-			this->service->otherOptions->other[i] = new OtherOption();
-	}
-	for (int i = 0; i < numberOfOptions; i++)
-		this->service->otherOptions->other[i] = other[i];
-
+		delete this->service->otherOptions->other;
+	this->service->otherOptions->numberOfOtherOptions = numberOfOptions;
+	this->service->otherOptions->other = other;
 	return true;
 }//setOtherServiceOptions
 
@@ -3713,16 +3710,9 @@ bool OSOption::setOtherJobOptions(int numberOfOptions, OtherOption** other)
 	if (this->job->otherOptions == NULL) 
 		this->job->otherOptions = new OtherOptions();
 	else
-		if (numberOfOptions != this->job->otherOptions->numberOfOtherOptions)
-			throw ErrorClass("Inconsistent size of <job> <other> element");
-	if (this->job->otherOptions->other == NULL) 
-	{	this->job->otherOptions->other = new OtherOption*[numberOfOptions];
-		for (int i = 0; i < numberOfOptions; i++)
-			this->job->otherOptions->other[i] = new OtherOption();
-	}
-	for (int i = 0; i < numberOfOptions; i++)
-		this->job->otherOptions->other[i] = other[i];
-
+		delete this->job->otherOptions->other;
+	this->job->otherOptions->numberOfOtherOptions = numberOfOptions;
+	this->job->otherOptions->other = other;
 	return true;
 }//setOtherJobOptions
 
@@ -3787,30 +3777,6 @@ bool OSOption::setNumberOfInitVarValues(int numberOfObjects)
 	return true;
 }//setNumberOfInitVarValues
 
-bool OSOption::setInitVarValuesDense(int numberOfVar, int *idx, double *value)
-{	if (this->optimization == NULL) 
-		this->optimization = new OptimizationOption();
-	if (this->optimization->variables == NULL) 
-		this->optimization->variables = new VariableOption();
-	if (this->optimization->variables->initialVariableValues == NULL) 
-		this->optimization->variables->initialVariableValues = new InitVariableValues();
-	else
-		if (numberOfVar != this->optimization->variables->initialVariableValues->numberOfVar)
-			throw ErrorClass("Inconsistent size of <initialVariableValues> element");
-	if (this->optimization->variables->initialVariableValues->var == NULL) 
-	{	this->optimization->variables->initialVariableValues->var = new InitVarValue*[numberOfVar];
-		for (int i = 0; i < numberOfVar; i++)
-			this->optimization->variables->initialVariableValues->var[i] = new InitVarValue();
-		
-	}
-	for (int i = 0; i < numberOfVar; i++)
-	{	this->optimization->variables->initialVariableValues->var[i]->idx = idx[i];
-		this->optimization->variables->initialVariableValues->var[i]->value = value[i];
-	}
-
-		return true;
-}//setInitVarValuesDense
-
 bool OSOption::setInitVarValuesSparse(int numberOfVar, InitVarValue** var)
 {	if (this->optimization == NULL) 
 		this->optimization = new OptimizationOption();
@@ -3819,18 +3785,31 @@ bool OSOption::setInitVarValuesSparse(int numberOfVar, InitVarValue** var)
 	if (this->optimization->variables->initialVariableValues == NULL) 
 		this->optimization->variables->initialVariableValues = new InitVariableValues();
 	else
-		if (numberOfVar != this->optimization->variables->initialVariableValues->numberOfVar)
-			throw ErrorClass("Inconsistent size of <initialVariableValues> element");
-	if (this->optimization->variables->initialVariableValues->var == NULL) 
-	{	this->optimization->variables->initialVariableValues->var = new InitVarValue*[numberOfVar];
-		for (int i = 0; i < numberOfVar; i++)
-			this->optimization->variables->initialVariableValues->var[i] = new InitVarValue();
-	}
-	for (int i = 0; i < numberOfVar; i++)
-		this->optimization->variables->initialVariableValues->var[i] = var[i];
-
+		delete[] this->optimization->variables->initialVariableValues->var;
+	this->optimization->variables->initialVariableValues->numberOfVar = numberOfVar;
+	this->optimization->variables->initialVariableValues->var = var;
 		return true;
 }//setInitVarValuesSparse
+
+bool OSOption::setInitVarValuesDense(int numberOfVar, int *idx, double *value)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->variables == NULL) 
+		this->optimization->variables = new VariableOption();
+	if (this->optimization->variables->initialVariableValues == NULL) 
+		this->optimization->variables->initialVariableValues = new InitVariableValues();
+	else
+	{	delete[] this->optimization->variables->initialVariableValues->var;
+		delete   this->optimization->variables->initialVariableValues->var;
+	}
+		this->optimization->variables->initialVariableValues->var = new InitVarValue*[numberOfVar];
+	for (int i = 0; i < numberOfVar; i++)
+	{	this->optimization->variables->initialVariableValues->var[i] = new InitVarValue();
+		this->optimization->variables->initialVariableValues->var[i]->idx = idx[i];
+		this->optimization->variables->initialVariableValues->var[i]->value = value[i];
+	}
+		return true;
+}//setInitVarValuesDense
 
 bool OSOption::setAnotherInitVarValue(int idx, double value)
 {	if (this->optimization == NULL) 
@@ -4103,6 +4082,10 @@ bool OSOption::setNumberOfInitObjValues(int numberOfObjects)
 	return true;
 }//setNumberOfInitObjValues
 
+//	bool setInitObjValuesSparse(int numberOfObj, InitObjValue** obj);
+//	bool setInitObjValuesDense(int numberOfObj, double* obj);
+//	bool setAnotherInitObjValue(int idx, double value);
+
 bool OSOption::setNumberOfInitObjBounds(int numberOfObjects)
 {	if (this->optimization == NULL) 
 		this->optimization = new OptimizationOption();
@@ -4114,6 +4097,11 @@ bool OSOption::setNumberOfInitObjBounds(int numberOfObjects)
 	return true;
 }//setNumberOfInitObjBounds
 
+
+//	bool setInitObjBoundsSparse(int numberOfObj, InitObjValue** obj);
+//	bool setInitObjBoundsDense(int numberOfObj, double* lb, double* ub);
+//	bool setAnotherInitObjBound(int idx, double lbValue, double ubValue);
+
 bool OSOption::setNumberOfOtherObjectiveOptions(int numberOfObjects)
 {	if (this->optimization == NULL)
 		this->optimization = new OptimizationOption();
@@ -4122,6 +4110,10 @@ bool OSOption::setNumberOfOtherObjectiveOptions(int numberOfObjects)
 	this->optimization->objectives->numberOfOtherObjectiveOptions = numberOfObjects;
 	return true;
 }//setNumberOfOtherObjectiveOptions
+
+
+//	bool setOtherObjectiveOptions(int numberOfObj, OtherObjOption** obj);
+//	bool setAnOtherObjectiveOption(OtherObjOption* objOption);
 
 bool OSOption::setNumberOfInitConValues(int numberOfObjects)
 {	if (this->optimization == NULL) 
@@ -4134,6 +4126,11 @@ bool OSOption::setNumberOfInitConValues(int numberOfObjects)
 	return true;
 }//setNumberOfInitConValues
 
+
+//	bool setInitConValuesSparse(int numberOfCon, InitConValue** con);
+//	bool setInitConValuesDense(int numberOfCon, double* con);
+//	bool setAnotherInitConValue(int idx, double value);
+
 bool OSOption::setNumberOfInitDualVarValues(int numberOfObjects)
 {	if (this->optimization == NULL) 
 		this->optimization = new OptimizationOption();
@@ -4145,6 +4142,11 @@ bool OSOption::setNumberOfInitDualVarValues(int numberOfObjects)
 	return true;
 }//setNumberOfInitDualVarValues
 
+
+//	bool setInitDualVarValuesSparse(int numberOfCon, InitDualVarValue** con);
+//	bool setInitDualVarValuesDense(int numberOfCon, double* lb, double* ub);
+//	bool setAnotherInitDualVarValue(int idx, double lbValue, double ubValue);
+
 bool OSOption::setNumberOfOtherConstraintOptions(int numberOfObjects)
 {	if (this->optimization == NULL)
 		this->optimization = new OptimizationOption();
@@ -4154,6 +4156,11 @@ bool OSOption::setNumberOfOtherConstraintOptions(int numberOfObjects)
 	return true;
 }//setNumberOfOtherConstraintOptions
 
+
+//	bool setOtherConstraintOptions(int numberOfCon, OtherConOption** con);
+//	bool setAnOtherConstraintOption(OtherConOption* conOption);
+
+
 bool OSOption::setNumberOfSolverOptions(int numberOfObjects)
 {	if (this->optimization == NULL) 
 		this->optimization = new OptimizationOption();
@@ -4162,6 +4169,13 @@ bool OSOption::setNumberOfSolverOptions(int numberOfObjects)
 	this->optimization->solverOptions->numberOfSolverOptions = numberOfObjects;
 	return true;
 }//setNumberOfSolverOptions
+
+
+
+
+
+//	bool setSolverOptions(int numberOfSolverOptions, Solveroption** solverOption);
+//	bool setAnotherSolverOption(Solveroption* solverOption);
 
 
 
@@ -4343,47 +4357,4 @@ bool OSOption::setOptionInt(std::string optionName, int optionValue)
 		return this->setNumberOfSolverOptions(optionValue);
 
 	return false;
-
-
-
-/*
-	bool setNumberOfInitObjValues(int numberOfObjects);
-	bool setInitObjValuesSparse(int numberOfObj, InitObjValue** obj);
-	bool setInitObjValuesDense(int numberOfObj, double* obj);
-	bool setAnotherInitObjValue(int idx, double value);
-
-	bool setNumberOfInitObjBounds(int numberOfObjects);
-	bool setInitObjBoundsSparse(int numberOfObj, InitObjValue** obj);
-	bool setInitObjBoundsDense(int numberOfObj, double* lb, double* ub);
-	bool setAnotherInitObjBound(int idx, double lbValue, double ubValue);
-
-	bool setNumberOfOtherObjectiveOptions(int numberOfObjects);
-	bool setOtherObjectiveOptions(int numberOfObj, OtherObjOption** obj);
-	bool setAnOtherObjectiveOption(OtherObjOption* objOption);
-
-	bool setNumberOfInitConValues(int numberOfObjects);
-	bool setInitConValuesSparse(int numberOfCon, InitConValue** con);
-	bool setInitConValuesDense(int numberOfCon, double* con);
-	bool setAnotherInitConValue(int idx, double value);
-
-	bool setNumberOfInitDualVarValues(int numberOfObjects);
-	bool setInitDualVarValuesSparse(int numberOfCon, InitDualVarValue** con);
-	bool setInitDualVarValuesDense(int numberOfCon, double* lb, double* ub);
-	bool setAnotherInitDualVarValue(int idx, double lbValue, double ubValue);
-
-	bool setNumberOfOtherConstraintOptions(int numberOfObjects);
-	bool setOtherConstraintOptions(int numberOfCon, OtherConOption** con);
-	bool setAnOtherConstraintOption(OtherConOption* conOption);
-
-	bool setNumberOfSolverOptions(int numberOfObjects);
-	bool setSolverOptions(int numberOfSolverOptions, Solveroption** solverOption);
-	bool setAnotherSolverOption(Solveroption* solverOption);
-
-	bool setOptionInt(std::string optionName, int optionValue);
-
-	bool setOptionStr(std::string optionName, std::string optionValue);
-
-	bool setOptionDbl(std::string optionName, double value);
-
-*/
 }//setOptionInt
