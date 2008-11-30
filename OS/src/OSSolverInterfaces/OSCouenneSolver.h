@@ -130,9 +130,8 @@ public:
 	
 	Ipopt::SmartPtr<TMINLP> tminlp_;
 	
-	
-	//Ipopt::SmartPtr<TNLPSolver> app;
-	Ipopt::SmartPtr<TMINLP> app;
+	Ipopt::SmartPtr<TNLPSolver> app_ ;
+
 	
 
 private:

@@ -479,8 +479,50 @@ void CouenneSolver::solve() throw (ErrorClass) {
 		ci = new CouenneInterface();
 		
 
+ 
 		
+/***
+ * 
+ * 
+ * 	OsiTMINLPInterface::initialize(Ipopt::SmartPtr<Bonmin::RegisteredOptions> roptions,
+369 	                               Ipopt::SmartPtr<Ipopt::OptionsList> options,
+370 	                               Ipopt::SmartPtr<Ipopt::Journalist> journalist,
+371 	                               const std::string & prefix,
+372 	                               Ipopt::SmartPtr<TMINLP> tminlp)
+ */
+ 
+ 		Ipopt::SmartPtr<Bonmin::RegisteredOptions> roptions;
+ 		Ipopt::SmartPtr<Ipopt::OptionsList> options;
+ 		Ipopt::SmartPtr<Ipopt::Journalist> jnlst;
+ 		
+ 		roptions = new Bonmin::RegisteredOptions();
+ 		roptions->AddStringOption2("print_solution","Do we print the solution or not?",
+		                                 "yes",
+		                                 "no", "No, we don't.",
+		                                 "yes", "Yes, we do.",
+		                                 "A longer comment can be put here");
+		                                 
+		options = new Ipopt::OptionsList();                                
+  		options->SetStringValue("bonmin.algorithm", "B-Couenne", true, true);
+  		options->SetIntegerValue("bonmin.filmint_ecp_cuts", 1, true, true);		 
+ 
+ 		jnlst = new Ipopt::Journalist();
+ 		jnlst->AddFileJournal("console", "stdout", J_STRONGWARNING);
+ 		
+ 		
+ 		const std::string  prefix="bonmin.";
+ 		
+ 		
+ 		
+ 		app_ = new Bonmin::IpoptSolver(roptions, options, jnlst, prefix);
+ 		
+ 		
+		//ci->initialize(  GetRawPtr(roptions),  GetRawPtr( options), 
+		//	 GetRawPtr(jnlst),  prefix, GetRawPtr( tminlp_));	
+	      	
+	      	
 		ci->setModel( GetRawPtr( tminlp_) );
+		ci->setSolver( GetRawPtr( app_) );
 			
 		std::cout << "INITIALIZE COUENNE " << std::endl;
 		bonmin_couenne.InitializeCouenne(argv, couenne, ci);	
