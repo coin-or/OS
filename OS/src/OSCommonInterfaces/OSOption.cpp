@@ -2907,18 +2907,18 @@ bool OSOption::setAnOtherGeneralOption(OtherOption* optionValue){
 	else
 		nopt = this->general->otherOptions->numberOfOtherOptions;
 	
-	OtherOption** temp = new OtherOption*[nopt+1];
+	OtherOption** temp = new OtherOption*[nopt+1];  //Allocate the new pointers
 	for (int i = 0; i < nopt; i++){
 //		temp[i] = new OtherOption();
 //		temp[i]->name = this->general->otherOptions->other[i]->name;
 //		temp[i]->value = this->general->otherOptions->other[i]->value;
 //		temp[i]->description = this->general->otherOptions->other[i]->description;
 //		delete this->general->otherOptions->other[i];
-		temp[i] = this->general->otherOptions->other[i];
+		temp[i] = this->general->otherOptions->other[i];  //copy the pointers
 	}
 	
 
-	temp[ nopt] = optionValue;
+	temp[ nopt] = optionValue;          //add in the new element
 //	temp[ nopt] = new OtherOption();
 //	temp[ nopt]->name = optionValue->name;
 //	temp[ nopt]->value = optionValue->value;
@@ -2926,9 +2926,9 @@ bool OSOption::setAnOtherGeneralOption(OtherOption* optionValue){
 
 //	delete optionValue;
 
-	delete[] this->general->otherOptions->other;
+	delete[] this->general->otherOptions->other; //delete old pointers
 	
-	this->general->otherOptions->other = temp;
+	this->general->otherOptions->other = temp;   //hook the new pointers into the data structure
 	this->general->otherOptions->numberOfOtherOptions = ++nopt;
 
 	return true;
