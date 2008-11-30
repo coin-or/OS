@@ -705,11 +705,11 @@ VariableOption::~VariableOption()
 	if (initialVariableValuesString != NULL) delete initialVariableValuesString;
 	initialVariableValuesString = NULL;
 	if (initialBasisStatus != NULL) delete initialBasisStatus;
-	integerVariableBranchingWeights = NULL;
-	if (integerVariableBranchingWeights != NULL) delete integerVariableBranchingWeights;
-	sosVariableBranchingWeights = NULL;
-	if (sosVariableBranchingWeights != NULL) delete sosVariableBranchingWeights;
 	initialBasisStatus = NULL;
+	if (integerVariableBranchingWeights != NULL) delete integerVariableBranchingWeights;
+	integerVariableBranchingWeights = NULL;
+	if (sosVariableBranchingWeights != NULL) delete sosVariableBranchingWeights;
+	sosVariableBranchingWeights = NULL;
 	if (other != NULL) 
 	{   for (int i=0; i < numberOfOtherVariableOptions; i++)
 		{	if (other[i] != NULL)
