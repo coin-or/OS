@@ -13,6 +13,7 @@
  * 
  */ 
  
+#define HAVE_CMATH    // Added 17-Nov-2008 HIG
 
 
 #include <cppad/cppad.hpp> 
