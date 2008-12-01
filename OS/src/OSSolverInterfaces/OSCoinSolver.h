@@ -150,6 +150,8 @@ private:
 	/** the number of arguments in the argument list to the Cbc Solver
 	 */	
 	int num_cbc_argv;
+	
+	double cpuTime;
 
 };
 #endif

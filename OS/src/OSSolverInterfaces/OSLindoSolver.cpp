@@ -95,7 +95,8 @@ LindoSolver::LindoSolver():
 	m_msConName( NULL),
 	m_mcVarType( NULL),
 	m_mdObjConstant( 0),
-	osrlwriter( NULL)
+	osrlwriter( NULL),
+	cpuTime( 0)
 	
 {
 #ifdef DEBUG
@@ -201,9 +202,11 @@ void Lindo::setSolverOptions() throw (ErrorClass) {
 void LindoSolver::solve()  {
 	if( this->bCallbuildSolverInstance == false) buildSolverInstance();
 	try{
-
+		clock_t start, finish;
+		start = clock();
 		if( optimize() != true) throw ErrorClass("problem optimizing model");
-
+		finish = clock();
+		cpuTime = (double) (finish - start) / CLOCKS_PER_SEC;
 	}
 	catch(const ErrorClass& eclass){
 		osresult->setGeneralMessage( eclass.errormsg);
@@ -467,6 +470,7 @@ bool LindoSolver::optimize(){
 	// resultHeader infomration
 	if(osresult->setServiceName( "Solved using a LINDO service") != true)
 		throw ErrorClass("OSResult error: setServiceName");
+	osresult->resultHeader->time = os_dtoa_format(  cpuTime);
 	if(osresult->setInstanceName(  osinstance->getInstanceName()) != true)
 		throw ErrorClass("OSResult error: setInstanceName");
 	//if(osresult->setJobID( osresultdata->jobID) != true)

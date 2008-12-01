@@ -213,6 +213,8 @@ private:
 	/** osrlwriter object used to write osrl from and OSResult object */
 	OSrLWriter  *osrlwriter;
 	
+	double cpuTime;
+	
 	protected:
 	 /**
 	  * Lindo's generalized error Reporting function

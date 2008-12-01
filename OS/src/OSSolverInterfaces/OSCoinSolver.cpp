@@ -60,7 +60,9 @@ osiSolver(NULL),
 m_osilreader(NULL),
 m_CoinPackedMatrix(NULL),
 cbc_argv( NULL),
-num_cbc_argv( 0)
+num_cbc_argv( 0),
+cpuTime( 0)
+
 {
 osrlwriter = new OSrLWriter();
 }
@@ -102,7 +104,7 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass) {
 				m_osilreader = new OSiLReader();
 				osinstance = m_osilreader->readOSiL( osil);
 			}
-					finish = clock();
+			finish = clock();
 			duration = (double) (finish - start) / CLOCKS_PER_SEC;
 			cout << "Parsing took (seconds): "<< duration << endl;
 				cout << "Start Solve with a Coin Solver" << endl;
@@ -507,7 +509,8 @@ void CoinSolver::solve() throw (ErrorClass) {
 		throw ErrorClass("OSResult error: setSolutionNumer");	
 	//
 	try{
-		
+		clock_t start, finish;
+		start = clock();		
 		try{
 			if( sSolverName.find( "cbc") != std::string::npos){
 			//if( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0){
@@ -568,6 +571,9 @@ void CoinSolver::solve() throw (ErrorClass) {
 				
 				// create a solver 
 				OsiSolverInterface *solver = model.solver();
+				finish = clock();
+				cpuTime = (double) (finish - start) / CLOCKS_PER_SEC;
+
 				writeResult( solver);
 			}
 			else{ // use other solvers
@@ -578,8 +584,13 @@ void CoinSolver::solve() throw (ErrorClass) {
 				else{
 					osiSolver->initialSolve();
 				}
+				finish = clock();
+				cpuTime = (double) (finish - start) / CLOCKS_PER_SEC;
+			
 				writeResult( osiSolver);
 			}
+			
+
 		}
 		catch(CoinError e){
 			std::string errmsg;
@@ -587,6 +598,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 				+ e.methodName() + " in class " + e.className();
 			throw ErrorClass( errmsg );
 		}
+
 	}
 	catch(const ErrorClass& eclass){
 		osresult->setGeneralMessage( eclass.errormsg);
@@ -678,6 +690,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 	int solIdx = 0;
 	std::string description = "";
 	osresult->setGeneralStatusType("success");
+	osresult->resultHeader->time = os_dtoa_format(  cpuTime);
 	if (solver->isProvenOptimal() == true){
 		osresult->setSolutionStatus(solIdx, "optimal", description);
 		/* Retrieve the solution */
