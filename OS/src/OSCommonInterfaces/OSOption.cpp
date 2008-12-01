@@ -1717,45 +1717,71 @@ int  OSOption::getNumberOfConstraints()
 /**
  * get the number of variables that have initial values (in <optimization> element)
  */
-int OSOption::getNumberOfInitVarValues(){
-	if (this->optimization != NULL) {
-		if(this->optimization->variables != NULL) {
-			if(this->optimization->variables->initialVariableValues != NULL) {
+int OSOption::getNumberOfInitVarValues()
+{	if (this->optimization != NULL) 
+		if(this->optimization->variables != NULL) 
+			if(this->optimization->variables->initialVariableValues != NULL) 
 				return this->optimization->variables->initialVariableValues->numberOfVar;
-			}
-		}
-	}
 	return -1;
 }//getNumberOfInitVarValues
 
 /**
  * get the number of string-valued variables that have initial values (in <optimization> element)
  */
-int OSOption::getNumberOfInitVarValuesString(){
-	if (this->optimization != NULL) {
-		if(this->optimization->variables != NULL) {
-			if(this->optimization->variables->initialVariableValuesString != NULL) {
+int OSOption::getNumberOfInitVarValuesString()
+{	if (this->optimization != NULL) 
+		if(this->optimization->variables != NULL) 
+			if(this->optimization->variables->initialVariableValuesString != NULL) 
 				return this->optimization->variables->initialVariableValuesString->numberOfVar;
-			}
-		}
-	}
 	return -1;
 }//getNumberOfInitVarValuesString
 
 /**
  * get the number of variables that are given initial basis status (in <optimization> element)
  */
-int OSOption::getNumberOfInitialBasisVariables(){
-	if (this->optimization != NULL) {
-		if(this->optimization->variables != NULL) {
-			if(this->optimization->variables->initialBasisStatus != NULL) {
-				return this->optimization->variables->initialBasisStatus ->numberOfVar;
-			}
-		}
-	}
+int OSOption::getNumberOfInitialBasisVariables()
+{	if (this->optimization != NULL) 
+		if (this->optimization->variables != NULL) 
+			if (this->optimization->variables->initialBasisStatus != NULL) 
+				return this->optimization->variables->initialBasisStatus->numberOfVar;
 	return -1;
 }//getNumberOfInitialBasisVariables
 
+/**
+ * get the number of variables that are given integer branching weights (in <optimization> element)
+ */
+int OSOption::getNumberOfIntegerBranchingWeights()
+{	if (this->optimization != NULL) 
+		if (this->optimization->variables != NULL) 
+			if (this->optimization->variables->integerVariableBranchingWeights != NULL) 
+				return this->optimization->variables->integerVariableBranchingWeights->numberOfVar;
+	return -1;
+}//getNumberOfIntegerBranchingWeights
+
+/**
+ * get the number of SOS that are given branching weights (in <optimization> element)
+ */
+int OSOption::getNumberOfSOSWeights()
+{	if (this->optimization != NULL) 
+		if (this->optimization->variables != NULL) 
+			if (this->optimization->variables->sosVariableBranchingWeights != NULL) 
+				return this->optimization->variables->sosVariableBranchingWeights->numberOfSOS;
+	return -1;
+}//getNumberOfSOSWeights
+
+/**
+ * get the number of variables that are given integer branching weights (in <optimization> element)
+ */
+int OSOption::getNumberOfSOSVarBranchingWeights(int iSOS)
+{	if (this->optimization != NULL) 
+		if (this->optimization->variables != NULL) 
+			if (this->optimization->variables->sosVariableBranchingWeights != NULL) 
+			{	if (iSOS >= 0 && iSOS < this->optimization->variables->sosVariableBranchingWeights->numberOfSOS)
+					if (this->optimization->variables->sosVariableBranchingWeights->sos[iSOS] != NULL) 
+						return this->optimization->variables->sosVariableBranchingWeights->sos[iSOS]->numberOfVar;
+			}
+	return -1;
+}//getNumberOfSOSVarBranchingWeights
 
 /**
  * get the number of other variable options (in <optimization> element)
@@ -1771,28 +1797,22 @@ int OSOption::getNumberOfOtherVariableOptions()
 /**
  * get the number of objectives for which initial values are given (in <optimization> element)
  */
-int OSOption::getNumberOfInitObjValues(){
-	if (this->optimization != NULL) {
-		if(this->optimization->objectives != NULL) {
-			if(this->optimization->objectives->initialObjectiveValues != NULL) {
-				return this->optimization->objectives->initialObjectiveValues->numberOfObj;
-			}
-		}
-	}
+int OSOption::getNumberOfInitObjValues()
+{	if (this->optimization != NULL) 
+		if (this->optimization->objectives != NULL) 
+			if (this->optimization->objectives->initialObjectiveValues != NULL) 
+
 	return -1;
 }//getNumberOfInitObjValues
 
 /**
  * get the number of objectives for which initial bounds are given (in <optimization> element)
  */
-int OSOption::getNumberOfInitObjBounds(){
-	if (this->optimization != NULL) {
-		if(this->optimization->objectives != NULL) {
-			if(this->optimization->objectives->initialObjectiveBounds != NULL) {
+int OSOption::getNumberOfInitObjBounds()
+{	if (this->optimization != NULL) 
+		if(this->optimization->objectives != NULL) 
+			if(this->optimization->objectives->initialObjectiveBounds != NULL) 
 				return this->optimization->objectives->initialObjectiveBounds->numberOfObj;
-			}
-		}
-	}
 	return -1;
 }//getNumberOfInitObjBounds
 
@@ -1810,28 +1830,24 @@ int OSOption::getNumberOfOtherObjectiveOptions()
 /**
  * get the number of constraints for which initial values are given (in <optimization> element)
  */
-int OSOption::getNumberOfInitConValues(){
-	if (this->optimization != NULL) {
-		if(this->optimization->constraints != NULL) {
-			if(this->optimization->constraints->initialConstraintValues != NULL) {
+int OSOption::getNumberOfInitConValues()
+{	if (this->optimization != NULL) 
+		if(this->optimization->constraints != NULL) 
+			if(this->optimization->constraints->initialConstraintValues != NULL) 
 				return this->optimization->constraints->initialConstraintValues->numberOfCon;
-			}
-		}
-	}
+
 	return -1;
 }//getNumberOfInitConValues
 
 /**
  * get the number of constraints for which initial dual values are given (in <optimization> element)
  */
-int OSOption::getNumberOfInitDualVarValues(){
-	if (this->optimization != NULL) {
-		if(this->optimization->constraints != NULL) {
-			if(this->optimization->constraints->initialDualValues != NULL) {
+int OSOption::getNumberOfInitDualVarValues()
+{	if (this->optimization != NULL) 
+		if(this->optimization->constraints != NULL) 
+			if(this->optimization->constraints->initialDualValues != NULL) 
 				return this->optimization->constraints->initialDualValues->numberOfCon;
-			}
-		}
-	}
+
 	return -1;
 }//getNumberOfInitDualVarValues
 
@@ -1933,6 +1949,12 @@ int  OSOption::getOptionInt(std::string optionName)
 
 	if(optionName == "numberOfInitialBasisVariables")
 		this->getNumberOfInitialBasisVariables();
+
+	if(optionName == "numberOfIntegerBranchingWeights")
+		this->getNumberOfIntegerBranchingWeights();
+
+	if(optionName == "numberOfSOSWeights")
+		this->getNumberOfSOSWeights();
 
 	if(optionName == "numberOfOtherVariableOptions")
 		this->getNumberOfOtherVariableOptions();
@@ -2908,26 +2930,15 @@ bool OSOption::setAnOtherGeneralOption(OtherOption* optionValue){
 		nopt = this->general->otherOptions->numberOfOtherOptions;
 	
 	OtherOption** temp = new OtherOption*[nopt+1];  //Allocate the new pointers
-	for (int i = 0; i < nopt; i++){
-//		temp[i] = new OtherOption();
-//		temp[i]->name = this->general->otherOptions->other[i]->name;
-//		temp[i]->value = this->general->otherOptions->other[i]->value;
-//		temp[i]->description = this->general->otherOptions->other[i]->description;
-//		delete this->general->otherOptions->other[i];
+	for (int i = 0; i < nopt; i++)
 		temp[i] = this->general->otherOptions->other[i];  //copy the pointers
-	}
-	
-
-	temp[ nopt] = optionValue;          //add in the new element
-//	temp[ nopt] = new OtherOption();
-//	temp[ nopt]->name = optionValue->name;
-//	temp[ nopt]->value = optionValue->value;
-//	temp[ nopt]->description = optionValue->description;
-
-//	delete optionValue;
 
 	delete[] this->general->otherOptions->other; //delete old pointers
 	
+//	add in the new element
+	temp[ nopt] = new OtherOption();
+	temp[ nopt] = optionValue;
+
 	this->general->otherOptions->other = temp;   //hook the new pointers into the data structure
 	this->general->otherOptions->numberOfOtherOptions = ++nopt;
 
@@ -3035,15 +3046,17 @@ bool OSOption::setAnOtherSystemOption(OtherOption* optionValue)
 
 	OtherOption** temp = new OtherOption*[nopt+1];
 	for (int i = 0; i < nopt; i++)
-	{	temp[i] = new OtherOption();
 		temp[i] = this->system->otherOptions->other[i];
-		delete this->system->otherOptions->other[i];
-	}
-	temp[nopt] = new OtherOption();
-	temp[nopt] = optionValue;
+		
+	delete[] this->system->otherOptions->other; //delete old pointers
+
+//	add in the new element
+	temp[ nopt] = new OtherOption();
+	temp[ nopt] = optionValue;
 
 	this->system->otherOptions->other = temp;
 	this->system->otherOptions->numberOfOtherOptions = ++nopt;
+
 	return true;
 }//setAnOtherSystemOption
 
@@ -3093,12 +3106,12 @@ bool OSOption::setAnOtherServiceOption(OtherOption* optionValue)
 
 	OtherOption** temp = new OtherOption*[nopt+1];
 	for (int i = 0; i < nopt; i++)
-	{	temp[i] = new OtherOption();
 		temp[i] = this->service->otherOptions->other[i];
-		delete this->service->otherOptions->other[i];
-	}
-	temp[nopt] = new OtherOption();
-	temp[nopt] = optionValue;
+
+	delete[] this->service->otherOptions->other;
+
+	temp[ nopt] = new OtherOption();
+	temp[ nopt] = optionValue;
 
 	this->service->otherOptions->other = temp;
 	this->service->otherOptions->numberOfOtherOptions = ++nopt;
@@ -3173,7 +3186,6 @@ bool OSOption::setAnotherJobDependency(std::string jobID){
 		temp[i] = this->job->dependencies->jobID[i]; // create the new
 	}
 	delete[] this->job->dependencies->jobID;
-	this->job->dependencies->jobID = NULL;
 	temp[nopt] = jobID ;
 	// fill everything back in
 	this->job->dependencies->jobID = temp;
@@ -3219,6 +3231,8 @@ bool OSOption::setAnotherRequiredDirectory(std::string path)
 	for (int i = 0; i < nopt; i++)
 		temp[i] = this->job->requiredDirectories->path[i];
 	
+	delete[] this->job->requiredDirectories->path;
+
 	temp[nopt] = path;
 	this->job->requiredDirectories->path = temp;
 	this->job->requiredDirectories->numberOfPaths = ++nopt;
@@ -3263,6 +3277,8 @@ bool OSOption::setAnotherRequiredFile(std::string path)
 	for (int i = 0; i < nopt; i++)
 		temp[i] = this->job->requiredFiles->path[i];
 	
+	delete[] this->job->requiredFiles->path;
+
 	temp[nopt] = path;
 	this->job->requiredFiles->path = temp;
 	this->job->requiredFiles->numberOfPaths = ++nopt;
@@ -3307,6 +3323,8 @@ bool OSOption::setAnotherDirectoryToMake(std::string path)
 	for (int i = 0; i < nopt; i++)
 		temp[i] = this->job->directoriesToMake->path[i];
 	
+	delete[] this->job->directoriesToMake->path;
+
 	temp[nopt] = path;
 	this->job->directoriesToMake->path = temp;
 	this->job->directoriesToMake->numberOfPaths = ++nopt;
@@ -3351,6 +3369,8 @@ bool OSOption::setAnotherFileToMake(std::string path)
 	for (int i = 0; i < nopt; i++)
 		temp[i] = this->job->filesToMake->path[i];
 	
+	delete[] this->job->filesToMake->path;
+
 	temp[nopt] = path;
 	this->job->filesToMake->path = temp;
 	this->job->filesToMake->numberOfPaths = ++nopt;
@@ -3393,11 +3413,11 @@ bool OSOption::setAnotherInputDirectoryToMove(std::string fromPath, std::string 
 
 	PathPair** temp = new PathPair*[nopt+1];
 	for (int i = 0; i < nopt; i++)
-	{	temp[i] = new PathPair();
 		temp[i] = this->job->inputDirectoriesToMove->pathPair[i];
-		delete this->job->inputDirectoriesToMove->pathPair[i];
-	}
+	
 	delete[] this->job->inputDirectoriesToMove->pathPair;
+
+	temp[nopt] = new PathPair();
 	temp[nopt]->from = fromPath;
 	temp[nopt]->to = toPath;
 	temp[nopt]->makeCopy = makeCopy;
@@ -3445,11 +3465,11 @@ bool OSOption::setAnotherInputFileToMove(std::string fromPath, std::string toPat
 
 	PathPair** temp = new PathPair*[nopt+1];
 	for (int i = 0; i < nopt; i++)
-	{	temp[i] = new PathPair();
 		temp[i] = this->job->inputFilesToMove->pathPair[i];
-		delete this->job->inputFilesToMove->pathPair[i];
-	}
+	
 	delete[] this->job->inputFilesToMove->pathPair;
+
+	temp[nopt] = new PathPair();
 	temp[nopt]->from = fromPath;
 	temp[nopt]->to = toPath;
 	temp[nopt]->makeCopy = makeCopy;
@@ -3496,11 +3516,11 @@ bool OSOption::setAnotherOutputFileToMove(std::string fromPath, std::string toPa
 
 	PathPair** temp = new PathPair*[nopt+1];
 	for (int i = 0; i < nopt; i++)
-	{	temp[i] = new PathPair();
 		temp[i] = this->job->outputFilesToMove->pathPair[i];
-		delete this->job->outputFilesToMove->pathPair[i];
-	}
+	
 	delete[] this->job->outputFilesToMove->pathPair;
+
+	temp[nopt] = new PathPair();
 	temp[nopt]->from = fromPath;
 	temp[nopt]->to = toPath;
 	temp[nopt]->makeCopy = makeCopy;
@@ -3547,11 +3567,11 @@ bool OSOption::setAnotherOutputDirectoryToMove(std::string fromPath, std::string
 
 	PathPair** temp = new PathPair*[nopt+1];
 	for (int i = 0; i < nopt; i++)
-	{	temp[i] = new PathPair();
 		temp[i] = this->job->outputDirectoriesToMove->pathPair[i];
-		delete this->job->outputDirectoriesToMove->pathPair[i];
-	}
+	
 	delete[] this->job->outputDirectoriesToMove->pathPair;
+
+	temp[nopt] = new PathPair();
 	temp[nopt]->from = fromPath;
 	temp[nopt]->to = toPath;
 	temp[nopt]->makeCopy = makeCopy;
@@ -3600,6 +3620,8 @@ bool OSOption::setAnotherFileToDelete(std::string path)
 	for (int i = 0; i < nopt; i++)
 		temp[i] = this->job->filesToDelete->path[i];
 	
+	delete[] this->job->filesToDelete->path;
+
 	temp[nopt] = path;
 	this->job->filesToDelete->path = temp;
 	this->job->filesToDelete->numberOfPaths = ++nopt;
@@ -3644,6 +3666,8 @@ bool OSOption::setAnotherDirectoryToDelete(std::string path)
 	for (int i = 0; i < nopt; i++)
 		temp[i] = this->job->directoriesToDelete->path[i];
 	
+	delete[] this->job->directoriesToDelete->path;
+
 	temp[nopt] = path;
 	this->job->directoriesToDelete->path = temp;
 	this->job->directoriesToDelete->numberOfPaths = ++nopt;
@@ -3688,6 +3712,8 @@ bool OSOption::setAnotherProcessToKill(std::string process)
 	for (int i = 0; i < nopt; i++)
 		temp[i] = this->job->processesToKill->process[i];
 	
+	delete[] this->job->processesToKill->process;
+
 	temp[nopt] = process;
 	this->job->processesToKill->process = temp;
 	this->job->processesToKill->numberOfProcesses = ++nopt;
@@ -3729,12 +3755,12 @@ bool OSOption::setAnOtherJobOption(OtherOption* optionValue)
 
 	OtherOption** temp = new OtherOption*[nopt+1];
 	for (int i = 0; i < nopt; i++)
-	{	temp[i] = new OtherOption();
 		temp[i] = this->job->otherOptions->other[i];
-		delete this->job->otherOptions->other[i];
-	}
-	temp[nopt] = new OtherOption();
-	temp[nopt] = optionValue;
+
+	delete[] this->job->otherOptions->other;
+
+	temp[ nopt] = new OtherOption();
+	temp[ nopt] = optionValue;
 
 	this->job->otherOptions->other = temp;
 	this->job->otherOptions->numberOfOtherOptions = ++nopt;
@@ -3826,10 +3852,10 @@ bool OSOption::setAnotherInitVarValue(int idx, double value)
 
 	InitVarValue** temp = new InitVarValue*[nvar+1];
 	for (int i = 0; i < nvar; i++)
-	{	temp[i] = new InitVarValue();
 		temp[i] = this->optimization->variables->initialVariableValues->var[i];
-		delete this->optimization->variables->initialVariableValues->var[i];
-	}
+	
+	delete[] this->optimization->variables->initialVariableValues->var;
+	
 	temp[nvar] = new InitVarValue();
 	temp[nvar]->idx = idx;
 	temp[nvar]->value = value;
@@ -3913,10 +3939,10 @@ bool OSOption::setAnotherInitVarValueString(int idx, std::string value)
 
 	InitVarValueString** temp = new InitVarValueString*[nvar+1];
 	for (int i = 0; i < nvar; i++)
-	{	temp[i] = new InitVarValueString();
 		temp[i] = this->optimization->variables->initialVariableValuesString->var[i];
-		delete this->optimization->variables->initialVariableValuesString->var[i];
-	}
+
+	delete[] this->optimization->variables->initialVariableValuesString->var;
+	
 	temp[nvar] = new InitVarValueString();
 	temp[nvar]->idx = idx;
 	temp[nvar]->value = value;
@@ -4000,10 +4026,10 @@ bool OSOption::setAnotherInitBasisStatus(int idx, std::string value)
 
 	InitBasStatus** temp = new InitBasStatus*[nvar+1];
 	for (int i = 0; i < nvar; i++)
-	{	temp[i] = new InitBasStatus();
 		temp[i] = this->optimization->variables->initialBasisStatus->var[i];
-		delete this->optimization->variables->initialBasisStatus->var[i];
-	}
+
+	delete[] this->optimization->variables->initialBasisStatus->var;
+	
 	temp[nvar] = new InitBasStatus();
 	temp[nvar]->idx = idx;
 	temp[nvar]->value = value;
@@ -4056,10 +4082,10 @@ bool OSOption::setAnOtherVariableOption(OtherVariableOption* optionValue)
 
 	OtherVariableOption** temp = new OtherVariableOption*[nopt+1];
 	for (int i = 0; i < nopt; i++)
-	{	temp[i] = new OtherVariableOption();
 		temp[i] = this->optimization->variables->other[i];
-		delete this->optimization->variables->other[i];
-	}
+
+	delete[] this->optimization->variables->other;
+	
 	temp[nopt] = new OtherVariableOption();
 	temp[nopt] = optionValue;
 

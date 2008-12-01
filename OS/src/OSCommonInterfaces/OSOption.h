@@ -2089,6 +2089,27 @@ public:
 	int getNumberOfInitialBasisVariables();
 
 	/**
+	 * Get the number of variables for which integer branching weights are provided. 
+	 * 
+	 * @return the number of variables. 
+	 */
+	int getNumberOfIntegerBranchingWeights();
+
+	/**
+	 * Get the number of special ordered sets for which branching weights are provided. 
+	 * 
+	 * @return the number of variables. 
+	 */
+	int getNumberOfSOSWeights();
+
+	/**
+	 * Get the number of variables for which branching weights are provided in a particular SOS.  
+	 * @param iSOS the number of the SOS
+	 * @return the number of variables. 
+	 */
+	int getNumberOfSOSVarBranchingWeights(int iSOS);
+
+	/**
 	 * Get the number of other variable options
 	 * 
 	 * @return the number of other variable options. 
