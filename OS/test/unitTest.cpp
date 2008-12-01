@@ -874,7 +874,7 @@ catch(const ErrorClass& eclass){
 #ifdef COIN_HAS_COUENNE
 try{
 	
-
+	
 	OSiLReader *osilreader = NULL;
 	osilreader = new OSiLReader(); 
 	ok = true; 
@@ -889,7 +889,7 @@ try{
 	solver->buildSolverInstance();
 	
 	std::cout << " CALL SOLVE " << std::endl;
-	//solver->solve();
+	solver->solve();
 
 	
 	/*
@@ -905,7 +905,7 @@ try{
 	//delete solver;
 	//solver = NULL;
 	//unitTestResult << "Solved problem bonminEx1.osil with Couenne" << std::endl;
-	//delete osilreader;
+	delete osilreader;
 	//osilreader = NULL;
 	//return 0;
 	

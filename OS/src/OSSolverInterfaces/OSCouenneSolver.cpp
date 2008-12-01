@@ -287,13 +287,13 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 	if (sm) delete sm;
 
 
-	couenne->AuxSet() = new std::set <exprAux *, compExpr>;
+	//couenne->AuxSet() = new std::set <exprAux *, compExpr>;
 
   	// reformulation
-  	couenne->standardize();
+  	//couenne->standardize();
 
   	// give a value to all auxiliary variables
-  	couenne->initAuxs();
+  	//couenne->initAuxs();
 
   	// clear all spurious variables pointers not referring to the
 
@@ -446,8 +446,9 @@ using namespace Ipopt;
 	
 
 void CouenneSolver::solve() throw (ErrorClass) {
-	//if( this->bCallbuildSolverInstance == false) buildSolverInstance();
-	//if( this->bSetSolverOptions == false) setSolverOptions();
+#define PRINTED_PRECISION 1e-5
+	const int infeasible = 1;
+	double time_start = CoinCpuTime();
 	try{
 		
 		
@@ -495,31 +496,20 @@ void CouenneSolver::solve() throw (ErrorClass) {
  		Ipopt::SmartPtr<Ipopt::OptionsList> options;
  		Ipopt::SmartPtr<Ipopt::Journalist> jnlst;
  		
- 		roptions = new Bonmin::RegisteredOptions();
- 		roptions->AddStringOption2("print_solution","Do we print the solution or not?",
-		                                 "yes",
-		                                 "no", "No, we don't.",
-		                                 "yes", "Yes, we do.",
-		                                 "A longer comment can be put here");
-		                                 
-		options = new Ipopt::OptionsList();                                
-  		options->SetStringValue("bonmin.algorithm", "B-Couenne", true, true);
-  		options->SetIntegerValue("bonmin.filmint_ecp_cuts", 1, true, true);		 
- 
- 		jnlst = new Ipopt::Journalist();
- 		jnlst->AddFileJournal("console", "stdout", J_STRONGWARNING);
- 		
- 		
  		const std::string  prefix="bonmin.";
  		
- 		
- 		
- 		app_ = new Bonmin::IpoptSolver(roptions, options, jnlst, prefix);
- 		
- 		
-		//ci->initialize(  GetRawPtr(roptions),  GetRawPtr( options), 
-		//	 GetRawPtr(jnlst),  prefix, GetRawPtr( tminlp_));	
+		std::cout << "INITIALIZE COUENNE " << std::endl;
+		bonmin_couenne.initializeOptionsAndJournalist();
+		ci->initialize (bonmin_couenne.roptions(),//GetRawPtr(roptions),  
+				bonmin_couenne.options(),//GetRawPtr( options), 
+				bonmin_couenne.journalist(),//GetRawPtr(jnlst),  
+				prefix, GetRawPtr( tminlp_));	
 	      	
+ 		app_ = new Bonmin::IpoptSolver(bonmin_couenne.roptions(),//GetRawPtr(roptions),  
+					       bonmin_couenne.options(),//GetRawPtr( options), 					       
+					       bonmin_couenne.journalist(),//GetRawPtr(jnlst),  
+					       prefix); 		
+ 	
 	      	
 		ci->setModel( GetRawPtr( tminlp_) );
 		ci->setSolver( GetRawPtr( app_) );
@@ -528,24 +518,127 @@ void CouenneSolver::solve() throw (ErrorClass) {
 		bonmin_couenne.InitializeCouenne(argv, couenne, ci);	
 		std::cout << " CALL BB " << std::endl;
 		
-   		//bb ( bonmin_couenne); // do branch and bound
+   		bb ( bonmin_couenne); // do branch and bound
    		std::cout << " END BB " << std::endl;
     	 
-    	/*
-    	CouenneCutGenerator *cg = NULL;
+	// Pietro's stuff!
+	
+    //////////////////////////////////
 
-    	if (bb.model (). cutGenerators ())
-      	cg = dynamic_cast <CouenneCutGenerator *> 
-			(bb.model (). cutGenerators () [0] -> generator ());
-		*/
-	}
+    std::cout.precision (10);
+
+    //////////////////////////////
+    CouenneCutGenerator *cg = NULL;
+
+    if (bb.model (). cutGenerators ())
+      cg = dynamic_cast <CouenneCutGenerator *> 
+	(bb.model (). cutGenerators () [0] -> generator ());
+
+    ////////////////////////////////
+    int nr=-1, nt=-1;
+    double st=-1;
+
+    if (cg){
+    	 cg -> getStats (nr, nt, st);
+    	 std::cout << "Cut Generator Created for Solution Report "   << std::endl; 
+    }
+    else printf ("Warning, could not get pointer to CouenneCutGenerator\n");
+
+    CouenneProblem *cp = cg ? cg -> Problem () : NULL;
+
+    // retrieve test value to check
+    double global_opt;
+    bonmin_couenne.options () -> GetNumericValue ("couenne_check", global_opt, "couenne.");
+    
+    std::cout << "Couenne Global Optimum Value = " << global_opt  << std::endl; 
+    std::cout << "GET BEST POSSIBLE OBJ VALUE =  " << bb.model (). getBestPossibleObjValue ()  << std::endl;
+    std::cout << "GET OBJ VALUE   =  " << bb.model (). getObjValue () << std::endl;
+    std::cout << "Display Stats Value   " <<  bonmin_couenne.displayStats () << std::endl;
+ 
+    
+
+    if (global_opt < COUENNE_INFINITY) { // some value found in couenne.opt
+
+      double opt = bb.model (). getBestPossibleObjValue ();
+
+      printf ("Global Optimum Test on %-40s %s\n", 
+	      cp ? cp -> problemName ().c_str () : "unknown", 
+	      (fabs (opt - global_opt) / 
+	       (1. + CoinMax (fabs (opt), fabs (global_opt))) <  PRINTED_PRECISION) ? 
+	      (const char *) "OK" : (const char *) "FAILED");
+	      //opt, global_opt,
+	      //fabs (opt - global_opt));
+
+    } else // good old statistics
+
+    if (bonmin_couenne.displayStats ()) { // print statistics
+
+      // CAUTION: assuming first cut generator is our CouenneCutGenerator
+
+      if (cg && !cp) printf ("Warning, could not get pointer to problem\n");
+      else
+	printf ("Stats: %-15s %4d [var] %4d [int] %4d [con] %4d [aux] "
+		"%6d [root] %8d [tot] %6g [sep] %8g [time] %8g [bb] "
+		"%20e [lower] %20e [upper] %7d [nodes]\n",// %s %s\n",
+		cp ? cp -> problemName ().c_str () : "unknown",
+		(cp) ? cp -> nOrigVars     () : -1, 
+		(cp) ? cp -> nOrigIntVars  () : -1, 
+		(cp) ? cp -> nOrigCons     () : -1,
+		(cp) ? (cp -> nVars     () - 
+			cp -> nOrigVars ()): -1,
+		nr, nt, st, 
+		CoinCpuTime () - time_start,
+		cg ? (CoinCpuTime () - cg -> rootTime ()) : CoinCpuTime (),
+		bb.model (). getBestPossibleObjValue (),
+		bb.model (). getObjValue (),
+		//bb.bestBound (),
+		//bb.bestObj (),
+		bb.numNodes ());
+		//bb.iterationCount ());
+		//status.c_str (), message.c_str ());	
+
+
+	} 
+	
+	} //end try
+	
 	catch(const ErrorClass& eclass){
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
 		osrl = osrlwriter->writeOSrL( osresult);
 		throw ErrorClass( osrl) ;
 	}
-}//solve
+	
+	// Pietro's catch
+	
+	  catch(TNLPSolver::UnsolvedError *E) {
+	     E->writeDiffFiles();
+	     E->printError(std::cerr);
+	    //There has been a failure to solve a problem with Ipopt.
+	    //And we will output file with information on what has been changed in the problem to make it fail.
+	    //Now depending on what algorithm has been called (B-BB or other) the failed problem may be at different place.
+	    //    const OsiSolverInterface &si1 = (algo > 0) ? nlpSolver : *model.solver();
+	  }
+	  catch(OsiTMINLPInterface::SimpleError &E) {
+	    std::cerr<<E.className()<<"::"<<E.methodName()
+		     <<std::endl
+		     <<E.message()<<std::endl;
+	  }
+	  catch(CoinError &E) {
+	    std::cerr<<E.className()<<"::"<<E.methodName()
+		     <<std::endl
+		     <<E.message()<<std::endl;
+	  }
+	  catch (Ipopt::OPTION_INVALID &E)
+	  {
+	   std::cerr<<"Ipopt exception : "<<E.Message()<<std::endl;
+	  }
+	  catch (int generic_error) {
+	    if (generic_error == infeasible)
+	      printf ("problem infeasible\n");
+	  }
+
+}  //solve
 
 
 
