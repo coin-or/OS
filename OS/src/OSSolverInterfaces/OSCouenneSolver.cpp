@@ -112,7 +112,7 @@ CouenneSolver::~CouenneSolver() {
 	cout << "inside CouenneSolver destructor" << endl;
 	if(couenne != NULL){
 		cout << "BEFORE DELETE COUENNE" << endl;
-		delete couenne;
+		//delete couenne;
 		cout << "AFTER DELETE COUENNE" << endl;
 	}
 	if(m_osilreader != NULL) delete m_osilreader;
@@ -230,13 +230,13 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 		
 		double *rowlb = osinstance->getConstraintLowerBounds();
 		double *rowub = osinstance->getConstraintUpperBounds();
-		expression *con_body = NULL;
+		
 		for (i = 0; i < nconss; ++i) {
 			row_nonz = 0;
 			if( sm)
 				row_nonz = sm->starts[ i +1] - sm->starts[ i];
 			exprGroup::lincoeff con_lin( row_nonz);
-			con_body = NULL;
+			
 
 			if ( row_nonz  > 0){  // test for nonzeros in row i
 				
@@ -251,7 +251,7 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 				}
 			}
 	
-			
+			expression *con_body = NULL;
 			OSExpressionTree* exptree = osinstance->getNonlinearExpressionTree(i);
 			if (exptree) {
 				expression** nl = new expression*[1];

@@ -880,6 +880,7 @@ try{
 	ok = true; 
 	osilFileName = dataDir  + "osilFiles" + dirsep + "bonminEx1.osil";
 	osil = fileUtil->getFileAsString( osilFileName.c_str());
+	//CouenneSolver *solver = NULL;
 	solver = new CouenneSolver();
 	//solver->sSolverName = "bonmin";
 	solver->osinstance = osilreader->readOSiL( osil);
@@ -901,13 +902,15 @@ try{
 	if(ok == false) throw ErrorClass(" Fail unit test with Bonmin on bonminEx1.osil");
 	*/
 	
-	
+	//delete solver->couenne;
 	//delete solver;
 	//solver = NULL;
 	//unitTestResult << "Solved problem bonminEx1.osil with Couenne" << std::endl;
 	delete osilreader;
-	//osilreader = NULL;
+	
 	//return 0;
+	//osilreader = NULL;
+	return 0;
 	
 	
 	
