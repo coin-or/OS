@@ -25,6 +25,8 @@
  * </p>
  */
 
+#define MY_C_FINITE  // Added 17-Nov-2008 HIG
+
 //#include "OSResult.h"
 //#include "OSiLReader.h"
 //#include "OSiLWriter.h"
