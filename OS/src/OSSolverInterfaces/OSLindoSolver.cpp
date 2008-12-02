@@ -212,6 +212,8 @@ void LindoSolver::solve()  {
 		if( optimize() != true) throw ErrorClass("problem optimizing model");
 		finish = clock();
 		cpuTime = (double) (finish - start) / CLOCKS_PER_SEC;
+		osresult->resultHeader->time = os_dtoa_format(  cpuTime);
+		osrl = osrlwriter->writeOSrL( osresult);
 	}
 	catch(const ErrorClass& eclass){
 		osresult->setGeneralMessage( eclass.errormsg);
@@ -475,7 +477,7 @@ bool LindoSolver::optimize(){
 	// resultHeader infomration
 	if(osresult->setServiceName( "Solved using a LINDO service") != true)
 		throw ErrorClass("OSResult error: setServiceName");
-	osresult->resultHeader->time = os_dtoa_format(  cpuTime);
+
 	if(osresult->setInstanceName(  osinstance->getInstanceName()) != true)
 		throw ErrorClass("OSResult error: setInstanceName");
 	//if(osresult->setJobID( osresultdata->jobID) != true)
@@ -614,7 +616,7 @@ bool LindoSolver::optimize(){
 			default:
 				osresult->setSolutionStatus(solIdx,  "other", description);
 		}
-		osrl = osrlwriter->writeOSrL( osresult);
+
 		delete[] x;
 		delete[] y;
 		delete[] z;
@@ -629,7 +631,7 @@ bool LindoSolver::optimize(){
 		osrl = osrlwriter->writeOSrL( osresult);
 		throw ;
 	}
-} //end solve
+} //end optimize
 
 
 bool LindoSolver::processQuadraticTerms(){
