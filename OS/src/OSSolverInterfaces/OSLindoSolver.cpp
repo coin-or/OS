@@ -20,6 +20,11 @@
 #include "OSFileUtil.h"
 #include "OSErrorClass.h"
 
+#include "OSDataStructures.h"
+#include "OSParameters.h" 
+#include "OSCommonUtil.h"
+#include "OSMathUtil.h"
+
 
 
 #ifdef HAVE_CTIME
@@ -185,7 +190,7 @@ void LindoSolver::buildSolverInstance() throw (ErrorClass) {
 
 
 
-void Lindo::setSolverOptions() throw (ErrorClass) {
+void LindoSolver::setSolverOptions() throw (ErrorClass) {
 	try{
 		
 	}
@@ -580,7 +585,7 @@ bool LindoSolver::optimize(){
 					int numberOfOtherVariableResult = 1;
 					int otherIdx = 0;
 					// first set the number of Other Variable Results
-					osresult->setNumberOfOtherVariableResult(solIdx, numberOfOtherVariableResult);
+					osresult->setNumberOfOtherVariableResults(solIdx, numberOfOtherVariableResult);
 					for(int i = 0; i <  osinstance->getVariableNumber() + m_iNumberNewSlacks; i++){
 						outStr << drcost[i];
 						srcost[ i] = outStr.str();
