@@ -82,6 +82,7 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token SERVICENAMESTARTANDEND SERVICENAMESTART SERVICENAMEEND
 %token INSTANCENAMESTARTANDEND INSTANCENAMESTART INSTANCENAMEEND
 %token JOBIDSTARTANDEND JOBIDSTART JOBIDEND
+%token TIMESTARTANDEND TIMESTART TIMEEND
 %token RESULTDATASTART RESULTDATAEND RESULTDATASTARTANDEND
 %token OPTIMIZATIONSTART OPTIMIZATIONEND
 %token SOLUTIONSTART SOLUTIONEND  VALUESSTART VALUESEND 
@@ -125,7 +126,7 @@ osrlstart:	OSRLSTART  GREATERTHAN
 
 
 
-resultHeader: RESULTHEADERSTART generalStatus serviceURI serviceName instanceName jobID headerMessage RESULTHEADEREND  ; 
+resultHeader: RESULTHEADERSTART generalStatus serviceURI serviceName instanceName jobID time headerMessage RESULTHEADEREND  ; 
    
 generalStatus: GENERALSTATUSSTART anotherGeneralStatusATT GREATERTHAN GENERALSTATUSEND {if(parserData->generalStatusTypePresent == false) osrlerror(NULL, NULL, NULL, "a type attribute required for generalStatus element");}
 | GENERALSTATUSSTART anotherGeneralStatusATT ENDOFELEMENT {if(parserData->generalStatusTypePresent == false) osrlerror(NULL, NULL, NULL, "a type attribute required for generalStatus element"); parserData->generalStatusTypePresent = false;};
@@ -157,6 +158,12 @@ jobID:
 | JOBIDSTARTANDEND
 | JOBIDSTART ELEMENTTEXT JOBIDEND {osresult->setJobID( $2);  free($2);  parserData->errorText = NULL;}
 | JOBIDSTART JOBIDEND ;
+
+
+time: 
+| TIMESTARTANDEND
+| TIMESTART DOUBLE TIMEEND {osresult->setTime( $2);    parserData->errorText = NULL;}
+| TIMESTART TIMEEND ;
 
 headerMessage: 
 | MESSAGESTARTANDEND

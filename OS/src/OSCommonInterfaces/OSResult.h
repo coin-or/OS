@@ -1437,7 +1437,7 @@ public:
 	 * @param time holds the time. 
 	 * @return whether the time is set successfully. 
 	 */
-	bool setTime(std::string time);
+	bool setTime(double time);
 		
 	
 	/**

@@ -135,6 +135,11 @@ return(DOUBLE);}
 {xmlwhitespace}*\<jobID{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(JOBIDSTART);}
 {xmlwhitespace}*\<jobID{xmlwhitespace}*\>\< {YY_PRINT; unput('<'); return(JOBIDSTART);}
 {xmlwhitespace}*\<\/jobID{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(JOBIDEND);}
+
+{xmlwhitespace}*\<time{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(TIMESTART);}
+{xmlwhitespace}*\<time{xmlwhitespace}*\>\< {YY_PRINT; unput('<'); return(TIMESTART);}
+{xmlwhitespace}*\<\/time{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(TIMEEND);}
+
 {xmlwhitespace}*\<message{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MESSAGESTART);}
 {xmlwhitespace}*\<message{xmlwhitespace}*\>\< {YY_PRINT; unput('<'); return(MESSAGESTART);}
 {xmlwhitespace}*\<\/message{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MESSAGEEND);}
@@ -193,6 +198,7 @@ return(DOUBLE);}
 (\<serviceName{xmlwhitespace}*\/>) {YY_PRINT;  return(SERVICENAMESTARTANDEND);}
 (\<instanceName{xmlwhitespace}*\/>) {YY_PRINT;  return(INSTANCENAMESTARTANDEND);}
 (\<jobID{xmlwhitespace}*\/>) {YY_PRINT;  return(JOBIDSTARTANDEND);}
+(\<time{xmlwhitespace}*\/>) {YY_PRINT;  return(TIMESTARTANDEND);}
 (\<message{xmlwhitespace}*\/>) {YY_PRINT;  return(MESSAGESTARTANDEND);}
 (\<resultData{xmlwhitespace}*\/>) {YY_PRINT;  return(RESULTDATASTARTANDEND);}
 

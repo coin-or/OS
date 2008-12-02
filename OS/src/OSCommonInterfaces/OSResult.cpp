@@ -17,6 +17,13 @@
 #include "OSResult.h"
 #include "OSParameters.h"
 #include "OSErrorClass.h"
+
+
+#include "OSDataStructures.h"
+#include "OSParameters.h" 
+#include "OSCommonUtil.h"
+#include "OSMathUtil.h"
+
 #include<iostream>
 #include<sstream>
 //#define DEBUG
@@ -743,8 +750,8 @@ bool OSResult::setJobID(string jobID){
 	return true;
 }//setJobID
 
-bool OSResult::setTime(string time){
-	resultHeader->time = time;
+bool OSResult::setTime(double time){
+	resultHeader->time = os_dtoa_format( time);
 	return true;
 }//setTime
 
