@@ -27,6 +27,7 @@
 #include "BonOsiTMINLPInterface.hpp"
 #include "BonCbc.hpp"
 
+#include "CoinTime.hpp"
 
 using std::cout; 
 using std::endl; 
@@ -415,7 +416,7 @@ bool BonminProblem::eval_h(Index n, const Number* x, bool new_x,
 		double* objMultipliers = new double[1];
 		objMultipliers[0] = obj_factor;
 		try{
-			sparseHessian = osinstance->calculateLagrangianHessian( const_cast<double*>(x), objMultipliers, (double*)lambda ,  new_x, 2);
+			sparseHessian = osinstance->calculateLagrangianHessian( const_cast<double*>(x), objMultipliers, const_cast<double*>(lambda) ,  new_x, 2);
 		delete[]  objMultipliers;
 		}
 		catch(const ErrorClass& eclass){
@@ -680,14 +681,11 @@ void BonminSolver::solve() throw (ErrorClass) {
 	if( this->bCallbuildSolverInstance == false) buildSolverInstance();
 	if( this->bSetSolverOptions == false) setSolverOptions();
 	try{
-		clock_t start, finish;
-		double duration;
-		start = clock();
+		double start = CoinCpuTime();
 		//OSiLWriter osilwriter;
 		//cout << osilwriter.writeOSiL( osinstance) << endl;
 		if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Bonmin requires decision variables");
-		finish = clock();
-		duration = (double) (finish - start) / CLOCKS_PER_SEC;
+		double duration = CoinCpuTime() - start;
 		cout << "Parsing took (seconds): "<< duration << endl;
 
 		  try {

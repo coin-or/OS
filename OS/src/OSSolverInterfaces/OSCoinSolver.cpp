@@ -22,6 +22,7 @@
 #include "OSCoinSolver.h"
 #include "OSInstance.h"
 #include "OSFileUtil.h"
+#include "CoinTime.hpp"
 #include "CglPreProcess.hpp"
 #include "CglGomory.hpp"
 #include "CglSimpleRounding.hpp"
@@ -509,8 +510,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 		throw ErrorClass("OSResult error: setSolutionNumer");	
 	//
 	try{
-		clock_t start, finish;
-		start = clock();		
+		double start = CoinCpuTime();
 		try{
 			if( sSolverName.find( "cbc") != std::string::npos){
 			//if( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0){
@@ -571,8 +571,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 				
 				// create a solver 
 				OsiSolverInterface *solver = model.solver();
-				finish = clock();
-				cpuTime = (double) (finish - start) / CLOCKS_PER_SEC;
+				cpuTime = CoinCpuTime() - start;
 
 				writeResult( solver);
 			}
@@ -584,8 +583,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 				else{
 					osiSolver->initialSolve();
 				}
-				finish = clock();
-				cpuTime = (double) (finish - start) / CLOCKS_PER_SEC;
+				cpuTime = CoinCpuTime() - start;
 			
 				writeResult( osiSolver);
 			}

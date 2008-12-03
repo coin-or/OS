@@ -25,6 +25,7 @@
 #include "OSCommonUtil.h"
 #include "OSMathUtil.h"
 
+#include "CoinTime.hpp"
 
 
 #ifdef HAVE_CTIME
@@ -207,11 +208,9 @@ void LindoSolver::setSolverOptions() throw (ErrorClass) {
 void LindoSolver::solve()  {
 	if( this->bCallbuildSolverInstance == false) buildSolverInstance();
 	try{
-		clock_t start, finish;
-		start = clock();
+		double start = CoinCpuTime();
 		if( optimize() != true) throw ErrorClass("problem optimizing model");
-		finish = clock();
-		cpuTime = (double) (finish - start) / CLOCKS_PER_SEC;
+		cpuTime = CoinCpuTime() - start;
 		osresult->resultHeader->time = os_dtoa_format(  cpuTime);
 		osrl = osrlwriter->writeOSrL( osresult);
 	}
