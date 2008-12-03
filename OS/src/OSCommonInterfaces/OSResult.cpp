@@ -84,7 +84,7 @@ ResultHeader::ResultHeader():
 	serviceName(""),
 	instanceName(""),
 	jobID(""),
-	time(""),
+	time("0.0"),
 	message("")
 { 
 	#ifdef DEBUG
