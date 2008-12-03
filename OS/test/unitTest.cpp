@@ -610,6 +610,8 @@ int main(int argC, char* argV[])
 		solver->solve();
 		cout << "Here is the COIN clp solver solution for parincLinearByRow" << endl;
 		cout << solver->osrl << endl;
+		
+	
 		check = 7668;
 		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-1 , 1e-1);

@@ -162,7 +162,8 @@ jobID:
 
 time: 
 | TIMESTARTANDEND
-| TIMESTART DOUBLE TIMEEND {osresult->setTime( $2);    parserData->errorText = NULL;}
+| TIMESTART DOUBLE TIMEEND {osresult->setTime( $2);   }
+| TIMESTART INTEGER TIMEEND {osresult->setTime( $2);    }
 | TIMESTART TIMEEND ;
 
 headerMessage: 
