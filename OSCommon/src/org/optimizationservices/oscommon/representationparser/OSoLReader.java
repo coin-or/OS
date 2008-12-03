@@ -1967,7 +1967,7 @@ public class OSoLReader extends OSgLReader{
 	 * get the list of initial variable basis status in sparse form
 	 * @return a list of index/value pairs.
 	 */
-	public InitBasStatus[] getInitialBasisStatusSparse(){
+	public InitBasStatus[] getInitBasisStatusSparse(){
 		InitBasStatus[] mVar = null;
 		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
 		if(eOptimization == null) return null;
@@ -1990,13 +1990,13 @@ public class OSoLReader extends OSgLReader{
 			}
 		}
 		return mVar;
-	}//getInitialBasisStatusSparse
+	}//getInitBasisStatusSparse
 
 	/**
 	 * get the list of initial basis status for string-valued variables in dense form
 	 * @return an array of value strings
 	 */
-	public String[] getInitialBasisStatusDense(){
+	public String[] getInitBasisStatusDense(){
 		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
 		if(eOptimization == null) return null;
 		Element eVariables = (Element)XMLUtil.findChildNode(eOptimization, "variables");
@@ -2019,8 +2019,15 @@ public class OSoLReader extends OSgLReader{
 			}
 		}
 		return msValues;
-	}//getInitialBasisStatusDense
+	}//getInitBasisStatusDense
 
+//	-----------------------------------
+	/*
+	get integervariableselectionweights sparse
+	get integervariableselectionweights dense
+	*/
+//	++++++++++++++++++++++++++++++++++++
+	
 	/**
 	 * get initial objective values (double[]). 
 	 * @return a double array of the initial objective values, null if none. 
@@ -2415,9 +2422,9 @@ public class OSoLReader extends OSgLReader{
 //		System.out.println(iNumberOfOtherGeneralOptions);
 //		OtherOption[] mOtherGeneralOptions = osolReader.getOtherGeneralOptions();
 //		for(int i = 0; i < iNumberOfOtherGeneralOptions; i++){
-//		System.out.println(mOtherGeneralOptions[i].name);		
-//		System.out.println(mOtherGeneralOptions[i].value);		
-//		System.out.println(mOtherGeneralOptions[i].description);		
+//			System.out.println(mOtherGeneralOptions[i].name);		
+//			System.out.println(mOtherGeneralOptions[i].value);		
+//			System.out.println(mOtherGeneralOptions[i].description);		
 //		}
 
 //		System.out.println(osolReader.getMinDiskSpace());		
@@ -2431,9 +2438,9 @@ public class OSoLReader extends OSgLReader{
 //		System.out.println(iNumberOfOtherSystemOptions);
 //		OtherOption[] mOtherSystemOptions = osolReader.getOtherSystemOptions();
 //		for(int i = 0; i < iNumberOfOtherSystemOptions; i++){
-//		System.out.println(mOtherSystemOptions[i].name);		
-//		System.out.println(mOtherSystemOptions[i].value);		
-//		System.out.println(mOtherSystemOptions[i].description);		
+//			System.out.println(mOtherSystemOptions[i].name);		
+//			System.out.println(mOtherSystemOptions[i].value);		
+//			System.out.println(mOtherSystemOptions[i].description);		
 //		}
 
 //		System.out.println(osolReader.getServiceType());	
@@ -2449,7 +2456,6 @@ public class OSoLReader extends OSgLReader{
 //		System.out.println(osolReader.getMaxTime());		
 //		System.out.println(osolReader.getMaxTimeUnit());		
 //		System.out.println(XMLUtil.createXSDateTime(osolReader.getScheduledStartTime()));
-
 //		int iNumberOfJobDependencies = osolReader.getNumberOfJobDependencies();
 //		System.out.println(iNumberOfJobDependencies);
 //		String[] msJobs = osolReader.getJobDependencies();
@@ -2479,27 +2485,27 @@ public class OSoLReader extends OSgLReader{
 //		System.out.println(iNumberOfInputDirectoriesToMove);
 //		PathPair[] mInputDirectoriesToMove = osolReader.getInputDirectoriesToMove();
 //		for(int i = 0; i < iNumberOfInputDirectoriesToMove; i++){
-//		System.out.println(mInputDirectoriesToMove[i].from);		
-//		System.out.println(mInputDirectoriesToMove[i].to);		
-//		System.out.println(mInputDirectoriesToMove[i].makeCopy);		
+//			System.out.println(mInputDirectoriesToMove[i].from);		
+//			System.out.println(mInputDirectoriesToMove[i].to);		
+//			System.out.println(mInputDirectoriesToMove[i].makeCopy);		
 //		}
 
 //		int iNumberOfInputFilesToMove = osolReader.getNumberOfInputFilesToMove();
 //		System.out.println(iNumberOfInputFilesToMove);
 //		PathPair[] mInputFilesToMove = osolReader.getInputFilesToMove();
 //		for(int i = 0; i < iNumberOfInputFilesToMove; i++){
-//		System.out.println(mInputFilesToMove[i].from);		
-//		System.out.println(mInputFilesToMove[i].to);		
-//		System.out.println(mInputFilesToMove[i].makeCopy);		
+//			System.out.println(mInputFilesToMove[i].from);		
+//			System.out.println(mInputFilesToMove[i].to);		
+//			System.out.println(mInputFilesToMove[i].makeCopy);		
 //		}
 
 //		int iNumberOfOutputDirectoriesToMove = osolReader.getNumberOfOutputDirectoriesToMove();
 //		System.out.println(iNumberOfOutputDirectoriesToMove);
 //		PathPair[] mOutputDirectoriesToMove = osolReader.getOutputDirectoriesToMove();
 //		for(int i = 0; i < iNumberOfOutputDirectoriesToMove; i++){
-//		System.out.println(mOutputDirectoriesToMove[i].from);		
-//		System.out.println(mOutputDirectoriesToMove[i].to);		
-//		System.out.println(mOutputDirectoriesToMove[i].makeCopy);		
+//			System.out.println(mOutputDirectoriesToMove[i].from);		
+//			System.out.println(mOutputDirectoriesToMove[i].to);		
+//			System.out.println(mOutputDirectoriesToMove[i].makeCopy);		
 //		}
 
 //		int iNumberOfOutputFilesToMove = osolReader.getNumberOfOutputFilesToMove();
@@ -2531,18 +2537,18 @@ public class OSoLReader extends OSgLReader{
 //		System.out.println(iNumberOfOtherJobOptions);
 //		OtherOption[] mOtherJobOptions = osolReader.getOtherJobOptions();
 //		for(int i = 0; i < iNumberOfOtherJobOptions; i++){
-//		System.out.println(mOtherJobOptions[i].name);		
-//		System.out.println(mOtherJobOptions[i].value);		
-//		System.out.println(mOtherJobOptions[i].description);		
+//			System.out.println(mOtherJobOptions[i].name);		
+//			System.out.println(mOtherJobOptions[i].value);		
+//			System.out.println(mOtherJobOptions[i].description);		
 //		}
 
 //		int iNumberOfOtherOptions = osolReader.getNumberOfOtherOptions("general");
 //		System.out.println(iNumberOfOtherOptions);
 //		OtherOption[] mOtherOptions = osolReader.getOtherOptions("job");
 //		for(int i = 0; i < iNumberOfOtherOptions; i++){
-//		System.out.println(mOtherOptions[i].name);		
-//		System.out.println(mOtherOptions[i].value);		
-//		System.out.println(mOtherOptions[i].description);		
+//			System.out.println(mOtherOptions[i].name);		
+//			System.out.println(mOtherOptions[i].value);		
+//			System.out.println(mOtherOptions[i].description);		
 //		}
 
 		/*********************optimization*****************************/
@@ -2560,28 +2566,28 @@ public class OSoLReader extends OSgLReader{
 
 //		double[] mdInitValues = osolReader.getInitVarValuesDense();
 //		for(int i=0; i < osolReader.getNumberOfVariables(); i++)
-//		System.out.println(mdInitValues==null?"NULL":mdInitValues[i]+"");		
+//			System.out.println(mdInitValues==null?"NULL":mdInitValues[i]+"");		
 
 //		InitVarValue[] mdVar = osolReader.getInitVarValuesSparse();
 //		for(int i=0; i < osolReader.getNumberOfInitVarValues(); i++)
-//		System.out.println(mdVar[i].idx+": " + mdVar[i].value);		
+//			System.out.println(mdVar[i].idx+": " + mdVar[i].value);		
 
 
 //		String[] msInitValues = osolReader.getInitVarStringsDense();
 //		for(int i=0; i < osolReader.getNumberOfVariables(); i++)
-//		System.out.println(msInitValues==null?"NULL":msInitValues[i]+"");		
+//			System.out.println(msInitValues==null?"NULL":msInitValues[i]+"");		
 
 //		InitVarValueString[] msVar = osolReader.getInitVarStringsSparse();
 //		for(int i=0; i < osolReader.getNumberOfInitVarValues(); i++)
-//		System.out.println(msVar[i].idx+": " + msVar[i].value);		
+//			System.out.println(msVar[i].idx+": " + msVar[i].value);		
 
-//		String[] msInitValues = osolReader.getInitialBasisStatusDense();
+//		String[] msInitValues = osolReader.getInitBasisStatusDense();
 //		for(int i=0; i < osolReader.getNumberOfVariables(); i++)
-//		System.out.println(msInitValues==null?"NULL":msInitValues[i]+"");		
+//			System.out.println(msInitValues==null?"NULL":msInitValues[i]+"");		
 
-//		InitBasStatus[] msVar = osolReader.getInitialBasisStatusSparse();
+//		InitBasStatus[] msVar = osolReader.getInitBasisStatusSparse();
 //		for(int i=0; i < osolReader.getNumberOfInitVarValues(); i++)
-//		System.out.println(msVar[i].idx+": " + msVar[i].value);		
+//			System.out.println(msVar[i].idx+": " + msVar[i].value);		
 
 //		System.out.println(osolReader.getNumberOfOtherObjectiveOptions());	
 //		System.out.println(osolReader.getNumberOfInitObjValues());	
@@ -2589,26 +2595,26 @@ public class OSoLReader extends OSgLReader{
 
 //		double[] mdInitValues = osolReader.getInitObjValuesDense();
 //		for(int i=0; i < osolReader.getNumberOfObjectives(); i++)
-//		System.out.println(mdInitValues==null?"NULL":mdInitValues[i]+"");		
+//			System.out.println(mdInitValues==null?"NULL":mdInitValues[i]+"");		
 
 //		System.out.println();
 //		InitObjValue[] mdObj = osolReader.getInitObjValuesSparse();
 //		for(int i=0; i < osolReader.getNumberOfInitObjValues(); i++)
-//		System.out.println(mdObj[i].idx+": " + mdObj[i].value);		
+//			System.out.println(mdObj[i].idx+": " + mdObj[i].value);		
 
 
 //		double[] mdInitLBBounds = osolReader.getInitObjLowerBoundsDense();
 //		for(int i=0; i < osolReader.getNumberOfObjectives(); i++)
-//		System.out.println(mdInitLBBounds==null?"NULL":mdInitLBBounds[i]+"");		
+//			System.out.println(mdInitLBBounds==null?"NULL":mdInitLBBounds[i]+"");		
 
 //		double[] mdInitUBBounds = osolReader.getInitObjUpperBoundsDense();
 //		for(int i=0; i < osolReader.getNumberOfObjectives(); i++)
-//		System.out.println(mdInitUBBounds==null?"NULL":mdInitUBBounds[i]+"");		
+//			System.out.println(mdInitUBBounds==null?"NULL":mdInitUBBounds[i]+"");		
 
 //		System.out.println();
 //		InitObjBound[] mdObj = osolReader.getInitObjBoundsSparse();
 //		for(int i=0; i < osolReader.getNumberOfInitObjBounds(); i++)
-//		System.out.println(mdObj[i].idx+": " + mdObj[i].lbValue+": " + mdObj[i].ubValue);				
+//			System.out.println(mdObj[i].idx+": " + mdObj[i].lbValue+": " + mdObj[i].ubValue);				
 
 
 
@@ -2617,7 +2623,7 @@ public class OSoLReader extends OSgLReader{
 //		System.out.println(osolReader.getNumberOfInitDualVarValues());	
 //		double[] mdInitLBBounds = osolReader.getInitDualVarLowerBoundsDense();
 //		for(int i=0; i < osolReader.getNumberOfConstraints(); i++)
-//		System.out.println(mdInitLBBounds==null?"NULL":mdInitLBBounds[i]+"");		
+//			System.out.println(mdInitLBBounds==null?"NULL":mdInitLBBounds[i]+"");		
 
 //		double[] mdInitUBBounds = osolReader.getInitDualVarUpperBoundsDense();
 //		for(int i=0; i < osolReader.getNumberOfConstraints(); i++)
@@ -2625,13 +2631,13 @@ public class OSoLReader extends OSgLReader{
 
 //		InitDualVarValue[] mdCon = osolReader.getInitDualVarValuesSparse();
 //		for(int i=0; i < osolReader.getNumberOfInitDualVarValues(); i++)
-//		System.out.println(mdCon[i].idx+": " + mdCon[i].lbValue+": " + mdCon[i].ubValue);				
+//			System.out.println(mdCon[i].idx+": " + mdCon[i].lbValue+": " + mdCon[i].ubValue);				
 
 //		System.out.println(osolReader.getNumberOfSolverOptions());	
 //		SolverOption[] mSolverOptions = osolReader.getSolverOptions("solver2");
 //		int nSolverOptions = mSolverOptions==null?0:mSolverOptions.length;
 //		for(int i=0; i < nSolverOptions; i++)
-//		System.out.println(mSolverOptions[i].name+": "+mSolverOptions[i].value+": "+mSolverOptions[i].solver+": "+mSolverOptions[i].type+": "+mSolverOptions[i].category+": "+mSolverOptions[i].description+": "+mSolverOptions[i].value);				
+//			System.out.println(mSolverOptions[i].name+": "+mSolverOptions[i].value+": "+mSolverOptions[i].solver+": "+mSolverOptions[i].type+": "+mSolverOptions[i].category+": "+mSolverOptions[i].description+": "+mSolverOptions[i].value);				
 
 //		osolReader.writeToStandardOutput();
 	}//main
