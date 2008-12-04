@@ -371,7 +371,7 @@
 	</xs:complexType>
 	<xs:complexType name="PathPairs">
 		<xs:sequence>
-			<xs:element name="pathPair" type="PathPair" maxOccurs="unbounded"/>
+			<xs:element name="pathPair" type="PathPair" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfPathPairs" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -389,8 +389,8 @@
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OtherOptions">
-		<xs:sequence minOccurs="0">
-			<xs:element name="other" type="OtherOption" maxOccurs="unbounded"/>
+		<xs:sequence>
+			<xs:element name="other" type="OtherOption" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfOtherOptions" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -404,10 +404,15 @@
 					<xs:documentation>since version 1.0.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="objectives" type="ObjectiveOption" minOccurs="0">
+			<xs:element name="objectives" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>since version 1.0.0</xs:documentation>
 				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="ObjectiveOption"/>
+					</xs:complexContent>
+				</xs:complexType>
 			</xs:element>
 			<xs:element name="constraints" type="ConstraintOption" minOccurs="0">
 				<xs:annotation>
@@ -456,14 +461,14 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfOtherVariableOptions" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfOtherVariableOptions" type="xs:nonNegativeInteger" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="InitVariableValues">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
-			<xs:element name="var" type="InitVarValue" maxOccurs="unbounded"/>
+		<xs:sequence>
+			<xs:element name="var" type="InitVarValue" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -471,8 +476,8 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
-			<xs:element name="var" type="InitVarValueString" maxOccurs="unbounded"/>
+		<xs:sequence>
+			<xs:element name="var" type="InitVarValueString" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -480,8 +485,8 @@
 		<xs:annotation>
 			<xs:documentation>Experimental</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
-			<xs:element name="var" type="InitBasStatus" maxOccurs="unbounded"/>
+		<xs:sequence>
+			<xs:element name="var" type="InitBasStatus" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -514,18 +519,18 @@
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="IntegerVariableBranchingWeights">
-		<xs:sequence minOccurs="0">
-			<xs:element name="var" type="BranchingWeight" maxOccurs="unbounded">
+		<xs:sequence>
+			<xs:element name="var" type="BranchingWeight" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>number must agree with numerOfVar</xs:documentation>
+					<xs:documentation>number must agree with numberOfVar</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfVar" type="xs:positiveInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="SOSVariableBranchingWeights">
-		<xs:sequence minOccurs="0">
-			<xs:element name="sos" type="SOSWeights" maxOccurs="unbounded">
+		<xs:sequence>
+			<xs:element name="sos" type="SOSWeights" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>number must agree with numberOfSOS</xs:documentation>
 				</xs:annotation>
@@ -534,7 +539,7 @@
 		<xs:attribute name="numberOfSOS" type="xs:positiveInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="SOSWeights">
-		<xs:sequence minOccurs="0">
+		<xs:sequence>
 			<xs:element name="var" type="BranchingWeight" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>number must agree with numberOfVar</xs:documentation>
@@ -556,7 +561,7 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
+		<xs:sequence>
 			<xs:element name="var" type="OtherVarOption" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
@@ -606,14 +611,14 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfOtherObjectiveOptions" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfOtherObjectiveOptions" type="xs:nonNegativeInteger" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="InitObjectiveValues">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
-			<xs:element name="obj" type="InitObjValue" maxOccurs="unbounded"/>
+		<xs:sequence>
+			<xs:element name="obj" type="InitObjValue" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -628,8 +633,8 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
-			<xs:element name="obj" type="InitObjBound" maxOccurs="unbounded"/>
+		<xs:sequence>
+			<xs:element name="obj" type="InitObjBound" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -645,7 +650,7 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
+		<xs:sequence>
 			<xs:element name="obj" type="OtherObjOption" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="required"/>
@@ -695,14 +700,14 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfOtherConstraintOptions" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfOtherConstraintOptions" type="xs:nonNegativeInteger" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="InitConstraintValues">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
-			<xs:element name="con" type="InitConValue" maxOccurs="unbounded"/>
+		<xs:sequence>
+			<xs:element name="con" type="InitConValue" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -717,8 +722,8 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
-			<xs:element name="con" type="InitDualVarValue" maxOccurs="unbounded"/>
+		<xs:sequence>
+			<xs:element name="con" type="InitDualVarValue" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -742,7 +747,7 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
+		<xs:sequence>
 			<xs:element name="con" type="OtherConOption" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
@@ -783,8 +788,8 @@
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="SolverOptions">
-		<xs:sequence minOccurs="0">
-			<xs:element name="solverOption" type="SolverOption" maxOccurs="unbounded"/>
+		<xs:sequence>
+			<xs:element name="solverOption" type="SolverOption" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfSolverOptions" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>

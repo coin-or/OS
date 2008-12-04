@@ -163,11 +163,11 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
+		<xs:sequence>
 			<xs:annotation>
 				<xs:documentation>Number of the var child elements must agree with numberOfVariables (after "mult" has been considered)</xs:documentation>
 			</xs:annotation>
-			<xs:element name="var" type="Variable" maxOccurs="unbounded">
+			<xs:element name="var" type="Variable" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>since version 1.0.0</xs:documentation>
 				</xs:annotation>
@@ -199,11 +199,11 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
+		<xs:sequence>
 			<xs:annotation>
 				<xs:documentation>Number of the obj child elements must agree with numberOfObjectives (after "mult" has been considered)</xs:documentation>
 			</xs:annotation>
-			<xs:element name="obj" type="Objective" maxOccurs="unbounded">
+			<xs:element name="obj" type="Objective" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>since version 1.0.0</xs:documentation>
 				</xs:annotation>
@@ -215,11 +215,11 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
+		<xs:sequence>
 			<xs:annotation>
 				<xs:documentation>number of coef child elements must match numberOfObjCoef (after "mult" has been considered)</xs:documentation>
 			</xs:annotation>
-			<xs:element name="coef" type="ObjCoef" maxOccurs="unbounded"/>
+			<xs:element name="coef" type="ObjCoef" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="maxOrMin" use="required">
@@ -250,11 +250,11 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
+		<xs:sequence>
 			<xs:annotation>
 				<xs:documentation>Number of the con child elements must agree with numberOfConstraints (after "mult" has been considered)</xs:documentation>
 			</xs:annotation>
-			<xs:element name="con" type="Constraint" maxOccurs="unbounded">
+			<xs:element name="con" type="Constraint" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>since version 1.0.0</xs:documentation>
 				</xs:annotation>
@@ -311,11 +311,11 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
+		<xs:sequence>
 			<xs:annotation>
 				<xs:documentation>Number of the qTerm child elements must agree with numberOfQuadraticTerms </xs:documentation>
 			</xs:annotation>
-			<xs:element name="qTerm" type="QuadraticTerm" maxOccurs="unbounded">
+			<xs:element name="qTerm" type="QuadraticTerm" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>since version 1.0.0</xs:documentation>
 				</xs:annotation>
@@ -337,11 +337,11 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
+		<xs:sequence>
 			<xs:annotation>
 				<xs:documentation>Number of the child nl elements must agree with numberOfNonlinearExpressions</xs:documentation>
 			</xs:annotation>
-			<xs:element name="nl" type="Nl" maxOccurs="unbounded">
+			<xs:element name="nl" type="Nl" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>since version 1.0.0</xs:documentation>
 				</xs:annotation>
@@ -363,12 +363,12 @@
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
+		<xs:sequence>
 			<xs:annotation>
 				<xs:documentation>Number of child elements must match numberOfSpecialOrderedSets
 				</xs:documentation>
 			</xs:annotation>
-			<xs:element name="sos" type="SOS" maxOccurs="unbounded">
+			<xs:element name="sos" type="SOS" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
@@ -380,7 +380,7 @@
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
+		<xs:sequence>
 			<xs:element name="var" type="SOSVar" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>Number of var elements must match numberOfVar after sequences have been accounted for appropriately</xs:documentation>
@@ -408,9 +408,9 @@
 	</xs:complexType>
 	<xs:complexType name="SOSAdjacencySet">
 		<xs:sequence>
-			<xs:element name="var" type="SOSSimplexVar" maxOccurs="unbounded"/>
+			<xs:element name="var" type="SOSSimplexVar" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfVar" use="required"/>
+		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="SOSSimplexVar">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
@@ -614,7 +614,7 @@
 				</xs:annotation>
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="param" maxOccurs="unbounded"/>
+						<xs:element name="param" minOccurs="0" maxOccurs="unbounded"/>
 					</xs:sequence>
 					<xs:attribute name="numberOfParameters" type="xs:nonNegativeInteger" use="required"/>
 					<xs:attribute name="modificationType" type="ModificationType" use="optional"/>
@@ -626,7 +626,7 @@
 				</xs:annotation>
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="var" maxOccurs="unbounded"/>
+						<xs:element name="var" minOccurs="0" maxOccurs="unbounded"/>
 					</xs:sequence>
 					<xs:attribute name="numberOfVariables" type="xs:nonNegativeInteger" use="required"/>
 					<xs:attribute name="modificationType" type="ModificationType" use="optional"/>
@@ -638,9 +638,9 @@
 				</xs:annotation>
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="obj" maxOccurs="unbounded"/>
+						<xs:element name="obj" minOccurs="0" maxOccurs="unbounded"/>
 					</xs:sequence>
-					<xs:attribute name="numberOfVariables" type="xs:nonNegativeInteger" use="required"/>
+					<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="required"/>
 					<xs:attribute name="modificationType" type="ModificationType" use="optional"/>
 				</xs:complexType>
 			</xs:element>
@@ -650,7 +650,7 @@
 				</xs:annotation>
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="con" maxOccurs="unbounded"/>
+						<xs:element name="con" minOccurs="0" maxOccurs="unbounded"/>
 					</xs:sequence>
 					<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="required"/>
 					<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
@@ -662,7 +662,7 @@
 				</xs:annotation>
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="el" maxOccurs="unbounded"/>
+						<xs:element name="el" minOccurs="0" maxOccurs="unbounded"/>
 					</xs:sequence>
 					<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
 					<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
@@ -674,7 +674,7 @@
 				</xs:annotation>
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="qTerm" maxOccurs="unbounded"/>
+						<xs:element name="qTerm" minOccurs="0" maxOccurs="unbounded"/>
 					</xs:sequence>
 					<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="required"/>
 					<xs:attribute name="modificationType" type="ModificationType" use="optional" default="update"/>
@@ -685,7 +685,7 @@
 					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 				<xs:complexType>
-					<xs:choice maxOccurs="unbounded">
+					<xs:choice minOccurs="0" maxOccurs="unbounded">
 						<xs:element name="number" type="xs:string"/>
 						<xs:element name="string" type="xs:string"/>
 						<xs:element name="nl">
@@ -720,11 +720,11 @@
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
+		<xs:sequence>
 			<xs:annotation>
 				<xs:documentation>Number of the disjunctiveSet child elements must agree with numberOfDisjunctiveSets</xs:documentation>
 			</xs:annotation>
-			<xs:element name="disjunctiveSet" type="DisjunctiveSet" maxOccurs="unbounded">
+			<xs:element name="disjunctiveSet" type="DisjunctiveSet" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
@@ -964,11 +964,11 @@
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
+		<xs:sequence>
 			<xs:annotation>
 				<xs:documentation>Number of the param child elements must agree with numberOfParameters</xs:documentation>
 			</xs:annotation>
-			<xs:element name="param" type="Param" maxOccurs="unbounded">
+			<xs:element name="param" type="Param" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
@@ -1085,8 +1085,8 @@
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
-			<xs:element name="disjunctiveSet" type="ParamDisjunctiveSet" maxOccurs="unbounded"/>
+		<xs:sequence>
+			<xs:element name="disjunctiveSet" type="ParamDisjunctiveSet" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfDisjunctiveSets" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -1203,7 +1203,7 @@
 			<xs:annotation>
 				<xs:documentation>Number of the url child elements must agree with numberOfURIAliases</xs:documentation>
 			</xs:annotation>
-			<xs:element name="uri" type="RealTimeDataURI" maxOccurs="unbounded"/>
+			<xs:element name="uri" type="RealTimeDataURI" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfURIAliases" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -1233,7 +1233,7 @@
 			<xs:annotation>
 				<xs:documentation>Number of the param child elements must agree with numberOfParameters</xs:documentation>
 			</xs:annotation>
-			<xs:element name="param" type="RealTimeDataParam" maxOccurs="unbounded"/>
+			<xs:element name="param" type="RealTimeDataParam" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfParameters" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -1263,7 +1263,7 @@
 			<xs:annotation>
 				<xs:documentation>Number of the var child elements must agree with numberOfVariables</xs:documentation>
 			</xs:annotation>
-			<xs:element name="var" type="RealTimeDataVar" maxOccurs="unbounded"/>
+			<xs:element name="var" type="RealTimeDataVar" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfVariables" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -1294,7 +1294,7 @@
 			<xs:annotation>
 				<xs:documentation>Number of the con child elements must agree with numberOfConstraints</xs:documentation>
 			</xs:annotation>
-			<xs:element name="con" type="RealTimeDataCon" maxOccurs="unbounded"/>
+			<xs:element name="con" type="RealTimeDataCon" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -1326,7 +1326,7 @@
 			<xs:annotation>
 				<xs:documentation>Number of the obj child elements must agree with numberOfObjectives</xs:documentation>
 			</xs:annotation>
-			<xs:element name="obj" type="RealTimeDataObj" maxOccurs="unbounded"/>
+			<xs:element name="obj" type="RealTimeDataObj" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -1349,7 +1349,7 @@
 			<xs:annotation>
 				<xs:documentation>Number of the el child elements must agree with numberOfValues</xs:documentation>
 			</xs:annotation>
-			<xs:element name="el" type="RealTimeDataLinearConstraintCoefficientElement" maxOccurs="unbounded"/>
+			<xs:element name="el" type="RealTimeDataLinearConstraintCoefficientElement" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -1361,7 +1361,7 @@
 			<xs:annotation>
 				<xs:documentation>Number of the qTerm child elements must agree with numberOfQuadraticTerms</xs:documentation>
 			</xs:annotation>
-			<xs:element name="qTerm" type="RealTimeDataQuadraticTerm" maxOccurs="unbounded"/>
+			<xs:element name="qTerm" type="RealTimeDataQuadraticTerm" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfQuadraticTerms" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -1401,7 +1401,7 @@
 		<xs:annotation>
 			<xs:documentation>recommendation</xs:documentation>
 		</xs:annotation>
-		<xs:choice maxOccurs="unbounded">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:annotation>
 				<xs:documentation>Number of the number and string child elements must agree with numberOfNonlinearNumbersAndStrings</xs:documentation>
 			</xs:annotation>
@@ -1435,7 +1435,7 @@
 			<xs:annotation>
 				<xs:documentation>Number of the row child elements must agree with numberOfRows</xs:documentation>
 			</xs:annotation>
-			<xs:element name="row" type="AmbiguityResolutionRow" maxOccurs="unbounded"/>
+			<xs:element name="row" type="AmbiguityResolutionRow" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -1525,7 +1525,7 @@
 			<xs:annotation>
 				<xs:documentation>List must be empty if startIdx is used and must match numberOfVariables otherwise</xs:documentation>
 			</xs:annotation>
-			<xs:element name="var" type="TimeDomainStageVar" maxOccurs="unbounded"/>
+			<xs:element name="var" type="TimeDomainStageVar" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfVariables" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="startIdx" type="xs:nonNegativeInteger" use="optional"/>
@@ -1548,7 +1548,7 @@
 			<xs:annotation>
 				<xs:documentation>List must be empty if startIdx is used and must match numberOfConstraints otherwise</xs:documentation>
 			</xs:annotation>
-			<xs:element name="con" type="TimeDomainStageCon" maxOccurs="unbounded"/>
+			<xs:element name="con" type="TimeDomainStageCon" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="startIdx" type="xs:nonNegativeInteger" use="optional"/>
@@ -1571,7 +1571,7 @@
 			<xs:annotation>
 				<xs:documentation>List must be empty if startIdx is used and must match numberOfObjectives otherwise</xs:documentation>
 			</xs:annotation>
-			<xs:element name="obj" type="TimeDomainStageObj" maxOccurs="unbounded"/>
+			<xs:element name="obj" type="TimeDomainStageObj" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="startIdx" type="xs:negativeInteger" use="optional"/>
@@ -1595,8 +1595,8 @@
 			</xs:element>
 			<xs:element name="uncertaintySets" minOccurs="0">
 				<xs:complexType>
-					<xs:sequence minOccurs="0" maxOccurs="unbounded">
-						<xs:element name="uncertaintySet" type="ParameterSets">
+					<xs:sequence>
+						<xs:element name="uncertaintySet" type="ParameterSets" minOccurs="0" maxOccurs="unbounded">
 							<xs:annotation>
 								<xs:documentation>proposal</xs:documentation>
 							</xs:annotation>
@@ -1761,7 +1761,7 @@
 								<xs:annotation>
 									<xs:documentation>Number of row child elements must match numberOfRows</xs:documentation>
 								</xs:annotation>
-								<xs:element name="row" type="StochasticRowModifier" maxOccurs="unbounded"/>
+								<xs:element name="row" type="StochasticRowModifier" minOccurs="0" maxOccurs="unbounded"/>
 							</xs:sequence>
 						</xs:extension>
 					</xs:complexContent>
@@ -1815,7 +1815,7 @@
 			<xs:annotation>
 				<xs:documentation>Number must match numberOfRandomFunctions</xs:documentation>
 			</xs:annotation>
-			<xs:element name="randomFunction" maxOccurs="unbounded">
+			<xs:element name="randomFunction" minOccurs="0" maxOccurs="unbounded">
 				<xs:complexType>
 					<xs:complexContent>
 						<xs:extension base="StochasticRandomFunction">
@@ -1835,7 +1835,7 @@
 			<xs:annotation>
 				<xs:documentation>Number of distr child elements must match numberOfDistributions</xs:documentation>
 			</xs:annotation>
-			<xs:element name="distr" type="StochasticDistribution" maxOccurs="unbounded"/>
+			<xs:element name="distr" type="StochasticDistribution" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfDistributions" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -1917,7 +1917,7 @@
 			<xs:annotation>
 				<xs:documentation>Number must match numberOfNonlinearTransformations</xs:documentation>
 			</xs:annotation>
-			<xs:element name="nonlinearTransformation" type="StochasticNonlinearTransformation" maxOccurs="unbounded"/>
+			<xs:element name="nonlinearTransformation" type="StochasticNonlinearTransformation" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfNonlinearTransformations" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -2136,7 +2136,7 @@
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:choice maxOccurs="unbounded">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:annotation>
 				<xs:documentation>number must match numberOfParameters</xs:documentation>
 			</xs:annotation>
@@ -2149,7 +2149,7 @@
 			<xs:element name="nlNumber" type="StochasticNumberNonlinearExpressionsNumber"/>
 			<xs:element name="coneVar" type="StochasticNumberConeVar"/>
 		</xs:choice>
-		<xs:attribute name="numberOfParameters" use="required"/>
+		<xs:attribute name="numberOfParameters" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="StochasticRandomFunction">
 		<xs:annotation>
@@ -2196,7 +2196,7 @@
 			<xs:annotation>
 				<xs:documentation>number must match numberOfValues</xs:documentation>
 			</xs:annotation>
-			<xs:element name="param" type="StochasticNumberParam" maxOccurs="unbounded"/>
+			<xs:element name="param" type="StochasticNumberParam" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -2218,7 +2218,7 @@
 			<xs:annotation>
 				<xs:documentation>number must match numberOfValues</xs:documentation>
 			</xs:annotation>
-			<xs:element name="st" type="StochasticNumberStochasticElement" maxOccurs="unbounded"/>
+			<xs:element name="st" type="StochasticNumberStochasticElement" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -2240,7 +2240,7 @@
 			<xs:annotation>
 				<xs:documentation>number must match numberOfValues</xs:documentation>
 			</xs:annotation>
-			<xs:element name="var" type="StochasticNumberVar" maxOccurs="unbounded"/>
+			<xs:element name="var" type="StochasticNumberVar" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -2272,7 +2272,7 @@
 			<xs:annotation>
 				<xs:documentation>number must match numberOfValues</xs:documentation>
 			</xs:annotation>
-			<xs:element name="obj" type="StochasticNumberObj" maxOccurs="unbounded"/>
+			<xs:element name="obj" type="StochasticNumberObj" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -2304,7 +2304,7 @@
 			<xs:annotation>
 				<xs:documentation>number must match numberOfValues</xs:documentation>
 			</xs:annotation>
-			<xs:element name="con" type="StochasticNumberCon" maxOccurs="unbounded"/>
+			<xs:element name="con" type="StochasticNumberCon" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -2336,7 +2336,7 @@
 			<xs:annotation>
 				<xs:documentation>number must match numberOfValues</xs:documentation>
 			</xs:annotation>
-			<xs:element name="el" type="StochasticNumberLinearConstraintCoefficientsEl" maxOccurs="unbounded"/>
+			<xs:element name="el" type="StochasticNumberLinearConstraintCoefficientsEl" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -2359,7 +2359,7 @@
 			<xs:annotation>
 				<xs:documentation>number must match numberOfValues</xs:documentation>
 			</xs:annotation>
-			<xs:element name="qTerm" type="StochasticNumberQuadraticCoefficientsQTerm" maxOccurs="unbounded"/>
+			<xs:element name="qTerm" type="StochasticNumberQuadraticCoefficientsQTerm" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -2383,7 +2383,7 @@
 			<xs:annotation>
 				<xs:documentation>number must match numberOfValues</xs:documentation>
 			</xs:annotation>
-			<xs:element name="number" type="StochasticNumberNonlinearExpressionsNumber" maxOccurs="unbounded"/>
+			<xs:element name="number" type="StochasticNumberNonlinearExpressionsNumber" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -2518,7 +2518,7 @@
 			<xs:annotation>
 				<xs:documentation>Number of the row child elements must match numberOfPenalties</xs:documentation>
 			</xs:annotation>
-			<xs:element name="row" type="SoftConstraintsPenaltiesRow" maxOccurs="unbounded"/>
+			<xs:element name="row" type="SoftConstraintsPenaltiesRow" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfPenalties" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -2620,7 +2620,7 @@
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:choice maxOccurs="unbounded">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:annotation>
 				<xs:documentation>Number of the probabilisticObjective child elements (simple or joint) must match numberOfProbabilisticObjectives</xs:documentation>
 			</xs:annotation>
@@ -2678,7 +2678,7 @@
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:choice maxOccurs="unbounded">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:annotation>
 				<xs:documentation>Number of the chanceConstraint child elements (simple or joint) must match numberOfChanceConstraints</xs:documentation>
 			</xs:annotation>
@@ -2717,7 +2717,7 @@
 			<xs:annotation>
 				<xs:documentation>Number of the row child elements must match numberOfRows</xs:documentation>
 			</xs:annotation>
-			<xs:element name="row" type="SoftConstraintsConstraintRow" maxOccurs="unbounded"/>
+			<xs:element name="row" type="SoftConstraintsConstraintRow" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="lb" use="optional" default="0.0">
@@ -2753,7 +2753,7 @@
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:choice maxOccurs="unbounded">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:annotation>
 				<xs:documentation>Number of the integratedChanceConstraint child elements (simple or joint) must match numberOfIntegratedChanceConstraints</xs:documentation>
 			</xs:annotation>
@@ -2778,7 +2778,7 @@
 			<xs:annotation>
 				<xs:documentation>Number of the row child elements must match numberOfRows</xs:documentation>
 			</xs:annotation>
-			<xs:element name="row" type="SoftConstraintsConstraintRow" maxOccurs="unbounded"/>
+			<xs:element name="row" type="SoftConstraintsConstraintRow" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="lb" type="xs:double" use="optional" default="0"/>
@@ -2799,7 +2799,7 @@
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:choice maxOccurs="unbounded">
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:annotation>
 				<xs:documentation>Number of the userDefinedRiskMeasure child elements (simple or joint) must match numberOfUserDefinedRiskMeasures</xs:documentation>
 			</xs:annotation>
@@ -2827,7 +2827,7 @@
 			<xs:annotation>
 				<xs:documentation>Number of the row child elements must match numberOfRows</xs:documentation>
 			</xs:annotation>
-			<xs:element name="row" type="SoftConstraintsJointUserDefinedRiskMeasureRow" maxOccurs="unbounded"/>
+			<xs:element name="row" type="SoftConstraintsJointUserDefinedRiskMeasureRow" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="lb" type="xs:double" use="optional" default="0"/>

@@ -2,7 +2,7 @@
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSrL.xsd: current version - 1.0.0-->
 	<!--include: proposal-->
 	<xs:include schemaLocation="OSgL.xsd"/>
@@ -219,7 +219,7 @@
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="elapseTime" type="Time" default="-1" minOccurs="0">
+			<xs:element name="elapsedTime" type="Time" default="-1" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
@@ -283,8 +283,8 @@
 		<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OtherResults">
-		<xs:sequence minOccurs="0">
-			<xs:element name="other" type="OtherResult" maxOccurs="unbounded"/>
+		<xs:sequence>
+			<xs:element name="other" type="OtherResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfOtherResults" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -479,8 +479,8 @@
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
-			<xs:element name="substatus" type="OptimizationSolutionSubstatus" maxOccurs="unbounded"/>
+		<xs:sequence>
+			<xs:element name="substatus" type="OptimizationSolutionSubstatus" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfSubstatuses" type="xs:nonNegativeInteger">
 			<xs:annotation>
@@ -541,8 +541,8 @@
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
-			<xs:element name="obj" type="ObjValue" maxOccurs="unbounded"/>
+		<xs:sequence>
+			<xs:element name="obj" type="ObjValue" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -560,7 +560,7 @@
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
+		<xs:sequence>
 			<xs:element name="obj" type="OtherObjResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="required"/>
@@ -604,8 +604,8 @@
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
-			<xs:element name="var" type="VarValue" default="0.0" maxOccurs="unbounded"/>
+		<xs:sequence>
+			<xs:element name="var" type="VarValue" default="0.0" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -623,8 +623,8 @@
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
-			<xs:element name="var" type="VarStringValue" maxOccurs="unbounded"/>
+		<xs:sequence>
+			<xs:element name="var" type="VarStringValue" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -632,8 +632,8 @@
 		<xs:annotation>
 			<xs:documentation>Experimental</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
-			<xs:element name="var" type="BasStatus" maxOccurs="unbounded"/>
+		<xs:sequence>
+			<xs:element name="var" type="BasStatus" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -665,7 +665,7 @@
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
+		<xs:sequence>
 			<xs:element name="var" type="OtherVarResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
@@ -697,8 +697,8 @@
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
-			<xs:element name="con" type="DualVarValue" default="0.0" maxOccurs="unbounded"/>
+		<xs:sequence>
+			<xs:element name="con" type="DualVarValue" default="0.0" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -716,7 +716,7 @@
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
+		<xs:sequence>
 			<xs:element name="con" type="OtherConResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
@@ -746,8 +746,8 @@
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="SolverResults">
-		<xs:sequence minOccurs="0">
-			<xs:element name="solverResult" type="SolverResult" maxOccurs="unbounded"/>
+		<xs:sequence>
+			<xs:element name="solverResult" type="SolverResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfSolverResults" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -762,8 +762,8 @@
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="SolutionResults">
-		<xs:sequence minOccurs="0">
-			<xs:element name="otherSolutionResult" type="SolutionResult" maxOccurs="unbounded"/>
+		<xs:sequence>
+			<xs:element name="otherSolutionResult" type="SolutionResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfSolutionResults" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>

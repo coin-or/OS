@@ -272,11 +272,11 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
+		<xs:sequence>
 			<xs:annotation>
 				<xs:documentation>Number of the userFunction child elements must match numberOfUserFunctions</xs:documentation>
 			</xs:annotation>
-			<xs:element name="userFunction" maxOccurs="unbounded">
+			<xs:element name="userFunction" minOccurs="0" maxOccurs="unbounded">
 				<xs:complexType>
 					<xs:sequence>
 						<xs:element ref="OSnLNode"/>
@@ -315,8 +315,8 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
-			<xs:element name="jobID" type="xs:string" maxOccurs="unbounded"/>
+		<xs:sequence>
+			<xs:element name="jobID" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfJobIDs" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -324,8 +324,8 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
-			<xs:element name="path" type="xs:string" maxOccurs="unbounded"/>
+		<xs:sequence>
+			<xs:element name="path" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfPaths" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -333,8 +333,8 @@
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
-			<xs:element name="process" type="xs:string" maxOccurs="unbounded"/>
+		<xs:sequence>
+			<xs:element name="process" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfProcesses" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
