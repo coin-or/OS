@@ -8,6 +8,13 @@ package org.optimizationservices.oscommon.representationparser;
 import java.util.GregorianCalendar;
 import java.util.Vector;
 
+import org.optimizationservices.oscommon.datastructure.osoption.InitBasStatus;
+import org.optimizationservices.oscommon.datastructure.osoption.InitConValue;
+import org.optimizationservices.oscommon.datastructure.osoption.InitDualVarValue;
+import org.optimizationservices.oscommon.datastructure.osoption.InitObjBound;
+import org.optimizationservices.oscommon.datastructure.osoption.InitObjValue;
+import org.optimizationservices.oscommon.datastructure.osoption.InitVarValue;
+import org.optimizationservices.oscommon.datastructure.osoption.InitVarValueString;
 import org.optimizationservices.oscommon.datastructure.osoption.PathPair;
 import org.optimizationservices.oscommon.localinterface.OSOption;
 import org.optimizationservices.oscommon.util.OSParameter;
@@ -69,11 +76,11 @@ public class OSoLWriter extends OSgLWriter{
 		if(!setContactTransportType(osOption.getContactTransportType())) throw new Exception("setContactTransportType Unsuccessful");		
 		if(!setContact(osOption.getContactAddress())) throw new Exception("setContactAddress Unsuccessful");		
 		if(!setMinDiskSpace(osOption.getSystemMinDiskSpace())) throw new Exception("setSystemMinDiskSpace Unsuccessful");		
-		if(!setSystemMinMemorySize(osOption.getSystemMinMemorySize())) throw new Exception("setSystemMinMemorySize Unsuccessful");		
-		if(!setSystemMinCPUSpeed(osOption.getSystemMinCPUSpeed())) throw new Exception("setSystemMinCPUSpeed Unsuccessful");		
+		if(!setMinMemorySize(osOption.getSystemMinMemorySize())) throw new Exception("setSystemMinMemorySize Unsuccessful");		
+		if(!setMinCPUSpeed(osOption.getSystemMinCPUSpeed())) throw new Exception("setSystemMinCPUSpeed Unsuccessful");		
 		if(!setServiceType(osOption.getServiceType())) throw new Exception("setServiceType Unsuccessful");		
-		if(!setJobMaxTime(osOption.getJobMaxTime())) throw new Exception("setJobMaxTime Unsuccessful");		
-		if(!setJobScheduledStartTime(osOption.getJobScheduledStartTime())) throw new Exception("setJobScheduledStartTime Unsuccessful");		
+		if(!setMaxTime(osOption.getJobMaxTime())) throw new Exception("setJobMaxTime Unsuccessful");		
+		if(!setScheduledStartTime(osOption.getJobScheduledStartTime())) throw new Exception("setJobScheduledStartTime Unsuccessful");		
 		if(!setJobDependencies(osOption.getJobDependencies())) throw new Exception("setJobDependencies Unsuccessful");		
 		if(!setRequiredDirectories(osOption.getRequiredDirectories())) throw new Exception("setRequiredDirectories Unsuccessful");		
 		if(!setRequiredFiles(osOption.getRequiredFiles())) throw new Exception("setRequiredFiles Unsuccessful");		
@@ -90,33 +97,25 @@ public class OSoLWriter extends OSgLWriter{
 		if(!setVariableNumber(osOption.getVariableNumber())) throw new Exception("setVariableNumber Unsuccessful");		
 		if(!setObjectiveNumber(osOption.getObjectiveNumber())) throw new Exception("setObjectiveNumber Unsuccessful");		
 		if(!setConstraintNumber(osOption.getConstraintNumber())) throw new Exception("setConstraintNumber Unsuccessful");		
-		if(!setInitialVariableValues(osOption.getInitialVariableValues())) throw new Exception("setInitialVariableValues Unsuccessful");		
+		if(!setInitVarValuesDense(osOption.getInitialVariableValues())) throw new Exception("setInitialVariableValues Unsuccessful");		
 		if(osOption.optimization != null && osOption.optimization.solverOptions != null && osOption.optimization.solverOptions != null && osOption.optimization.solverOptions.solverOption.length > 0){
 			int n = osOption.optimization.solverOptions.solverOption.length;
 			String[] msNames = new String[n];
 			String[] msValues = new String[n];
 			String[] msDescriptions = new String[n];
+			String[] msSolvers = new String[n];
+			String[] msCategories = new String[n];
+			String[] msTypes = new String[n];
 			for(int i = 0; i < n; i++){
 				msNames[i] = osOption.optimization.solverOptions.solverOption[i].name;
 				msValues[i] = osOption.optimization.solverOptions.solverOption[i].value;
 				msDescriptions[i] = osOption.optimization.solverOptions.solverOption[i].description;
+				msSolvers[i] = osOption.optimization.solverOptions.solverOption[i].solver;
+				msCategories[i] = osOption.optimization.solverOptions.solverOption[i].category;
+				msTypes[i] = osOption.optimization.solverOptions.solverOption[i].type;
 			}
-			if(!setOtherOptimizationOptions(msNames, msValues, msDescriptions)){
+			if(!setSolverOptions(msNames, msValues, msDescriptions, msSolvers, msCategories, msTypes)){
 				throw new Exception("setOtherOptimizationOption Info Unsuccessful");
-			}			
-		}
-		if(osOption.other != null && osOption.other.length > 0){
-			int n = osOption.other.length;
-			String[] msNames = new String[n];
-			String[] msValues = new String[n];
-			String[] msDescriptions = new String[n];
-			for(int i = 0; i < n; i++){
-				msNames[i] = osOption.other[i].name;
-				msValues[i] = osOption.other[i].value;
-				msDescriptions[i] = osOption.other[i].description;
-			}
-			if(!setOtherOptions(msNames, msValues, msDescriptions)){
-				throw new Exception("setOtherOption Info Unsuccessful");
 			}			
 		}
 		return true;
@@ -649,7 +648,7 @@ public class OSoLWriter extends OSgLWriter{
 				}
 				eOther = createOther(name, value, description);
 				eOtherOptions.appendChild(eOther);
-				
+
 				eOtherOptions.setAttribute("numberOfOtherOptions", (iNls+1)+"");
 
 			}
@@ -663,7 +662,7 @@ public class OSoLWriter extends OSgLWriter{
 			return false;
 		}
 		return true;
-	}//addOtherOptimizationOption
+	}//addOtherGeneralOption
 
 	/**
 	 * Set the the system minimum disk space required to solve the job.
@@ -708,12 +707,49 @@ public class OSoLWriter extends OSgLWriter{
 	}//setMinDiskSpace
 
 	/**
+	 * Set the unit of the system minimum disk space required to solve the job.
+	 * 
+	 * @param unit holds the unit of the disk space.
+	 * @return whether the unit of the minimum disk space is set successfully.
+	 */
+	public boolean setMinDiskSpaceUnit(String unit){
+		Node nodeRef = null;
+		if(unit == null || unit.length() <=0 || unit.equalsIgnoreCase("byte")){
+			return true;
+		}
+		try{
+			Element eSystem = (Element)XMLUtil.findChildNode(m_eOSoL, "system");
+			if(eSystem == null){
+				eSystem = m_document.createElement("system");
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eSystem, nodeRef.getNextSibling());			
+				}
+				else{
+					m_eOSoL.insertBefore(eSystem, m_eOSoL.getFirstChild());
+				}		
+			}
+			Element eMinDiskSpace = (Element)XMLUtil.findChildNode(eSystem, "minDiskSpace");
+			if(eMinDiskSpace == null){
+				eMinDiskSpace = m_document.createElement("minDiskSpace");	
+				eSystem.appendChild(eMinDiskSpace);				
+			}
+			eMinDiskSpace.setAttribute("unit", unit);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setMinDiskSpaceUnit
+
+	/**
 	 * Set the the system minimum memory size required to solve the job.
 	 * 
 	 * @param minMemorySize holds the  minimum memory size required to solve the job. 
 	 * @return whether the minimum memory size is set successfully.
 	 */
-	public boolean setSystemMinMemorySize(double minMemorySize){
+	public boolean setMinMemorySize(double minMemorySize){
 		Node nodeRef = null;
 		try{
 			Element eSystem = (Element)XMLUtil.findChildNode(m_eOSoL, "system");
@@ -747,8 +783,44 @@ public class OSoLWriter extends OSgLWriter{
 			return false;
 		}
 		return true;
-	}//setSystemMinMemorySize
+	}//setMinMemorySize
 
+	/**
+	 * Set the unit of the system minimum memory size required to solve the job.
+	 * 
+	 * @param unit holds the unit of the memory size.
+	 * @return whether the unit of the minimum memory size is set successfully.
+	 */
+	public boolean setMinMemorySizeUnit(String unit){
+		Node nodeRef = null;
+		if(unit == null || unit.length() <=0 || unit.equalsIgnoreCase("byte")){
+			return true;
+		}
+		try{
+			Element eSystem = (Element)XMLUtil.findChildNode(m_eOSoL, "system");
+			if(eSystem == null){
+				eSystem = m_document.createElement("system");
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eSystem, nodeRef.getNextSibling());			
+				}
+				else{
+					m_eOSoL.insertBefore(eSystem, m_eOSoL.getFirstChild());
+				}		
+			}
+			Element eMinMemorySize = (Element)XMLUtil.findChildNode(eSystem, "minMemorySize");
+			if(eMinMemorySize == null){
+				eMinMemorySize = m_document.createElement("minMemorySize");	
+				eSystem.appendChild(eMinMemorySize);				
+			}
+			eMinMemorySize.setAttribute("unit", unit);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setMinMemorySizeUnit
 
 	/**
 	 * Set the the system minimum cpu speed required to solve the job.
@@ -756,7 +828,7 @@ public class OSoLWriter extends OSgLWriter{
 	 * @param minCPUSpeed holds the  minimum cpu speed required to solve the job. 
 	 * @return whether the minimum cpu speed is set successfully.
 	 */
-	public boolean setSystemMinCPUSpeed(double minCPUSpeed){
+	public boolean setMinCPUSpeed(double minCPUSpeed){
 		Node nodeRef = null;
 		try{
 			Element eSystem = (Element)XMLUtil.findChildNode(m_eOSoL, "system");
@@ -790,7 +862,201 @@ public class OSoLWriter extends OSgLWriter{
 			return false;
 		}
 		return true;
-	}//setSystemMinCPUSpeed
+	}//setMinCPUSpeed
+
+	/**
+	 * Set the unit of the system cpu speed required to solve the job.
+	 * 
+	 * @param unit holds the unit of the cpu speed.
+	 * @return whether the unit of the minimum cpu speed is set successfully.
+	 */
+	public boolean setMinCPUSpeedUnit(String unit){
+		Node nodeRef = null;
+		if(unit == null || unit.length() <=0 || unit.equalsIgnoreCase("hertz")){
+			return true;
+		}
+		try{
+			Element eSystem = (Element)XMLUtil.findChildNode(m_eOSoL, "system");
+			if(eSystem == null){
+				eSystem = m_document.createElement("system");
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eSystem, nodeRef.getNextSibling());			
+				}
+				else{
+					m_eOSoL.insertBefore(eSystem, m_eOSoL.getFirstChild());
+				}		
+			}
+			Element eMinCPUSpeed = (Element)XMLUtil.findChildNode(eSystem, "minCPUSpeed");
+			if(eMinCPUSpeed == null){
+				eMinCPUSpeed = m_document.createElement("minCPUSpeed");	
+				eSystem.appendChild(eMinCPUSpeed);				
+			}
+			eMinCPUSpeed.setAttribute("unit", unit);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setMinCPUSpeedUnit
+
+	/**
+	 * Set the the system minimum cpu number required to solve the job.
+	 * 
+	 * @param minCPUNumber holds the  minimum cpu number required to solve the job. 
+	 * @return whether the minimum cpu number is set successfully.
+	 */
+	public boolean setMinCPUNumber(int minCPUNumber){
+		Node nodeRef = null;
+		try{
+			Element eSystem = (Element)XMLUtil.findChildNode(m_eOSoL, "system");
+			if(eSystem == null){
+				eSystem = m_document.createElement("system");
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eSystem, nodeRef.getNextSibling());			
+				}
+				else{
+					m_eOSoL.insertBefore(eSystem, m_eOSoL.getFirstChild());
+				}		
+			}
+			if(minCPUNumber >= 0){
+				Element eMinCPUNumber = (Element)XMLUtil.findChildNode(eSystem, "minCPUNumber");
+				if(eMinCPUNumber == null){
+					eMinCPUNumber = m_document.createElement("minCPUNumber");	
+					eMinCPUNumber.appendChild(m_document.createTextNode(minCPUNumber+""));
+					eSystem.appendChild(eMinCPUNumber);				
+				}
+				else{
+					XMLUtil.setElementValue(eMinCPUNumber, minCPUNumber+"");
+				}
+			}
+			else{
+				XMLUtil.removeChildrenByName(eSystem, "minCPUNumber");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setMinCPUNumber
+
+	/**
+	 * Set the number of other system options. 
+	 * 
+	 * @param numberOfOtherSystemOptions holds the number of other system options
+	 * @return whether the number is set successfully or not. 
+	 */
+	public boolean setNumberOfOtherSystemOptions(int numberOfOtherSystemOptions){
+		Node nodeRef = null;
+		if(numberOfOtherSystemOptions < 0){
+			return true;
+		}
+		Element eSystem = (Element)XMLUtil.findChildNode(m_eOSoL, "system");
+		if(eSystem == null){
+			eSystem = m_document.createElement("system");
+			nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+			if(nodeRef != null){
+				m_eOSoL.insertBefore(eSystem, nodeRef.getNextSibling());			
+			}
+			else{
+				m_eOSoL.insertBefore(eSystem, m_eOSoL.getFirstChild());
+			}		
+		}		
+		Element eOtherOptions = (Element)XMLUtil.findChildNode(eSystem, "otherOptions");
+		if(eOtherOptions == null){
+			eOtherOptions = m_document.createElement("otherOptions");	
+			eSystem.appendChild(eOtherOptions);				
+		}
+		try{
+			eOtherOptions.setAttribute("numberOfOtherOptions", numberOfOtherSystemOptions+"");
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;	
+	}//setNumberOfOtherSystemOptions
+
+	/**
+	 * Set the other system options. 
+	 * 
+	 * @param names holds the names of the other options. It is required. 
+	 * @param values holds the values of the other options, empty string "" or null if no value for an option.
+	 * @param descriptions holds the descriptions of the other options, empty string "" or null if no value for an option, null for
+	 * the entire array if none of the options have descriptions.
+	 * @return whether the other options element construction is successful.
+	 */
+	public boolean setOtherSystemOptions(String[] names, String[] values, String[] descriptions){
+		if(names == null) return false;
+		if(values == null) return false;
+		if(names.length != values.length) return false;
+		if(descriptions != null && names.length != descriptions.length) return false;
+		for(int i = 0; i < names.length; i++){
+			addOtherSystemOption(names[i], values[i], (descriptions==null)?"":descriptions[i]);
+		}
+		return true;
+	}//setOtherSystemOptions
+
+	/**
+	 * Add an other system option element. 
+	 * 
+	 * @param name holds the name of the other option element. It is required.
+	 * @param value holds the value of the other option element, empty string "" or null if none. 
+	 * @param description holds the description of the other option element, empty string "" or null if none. 
+	 * @return whether the other option element is added successfully.
+	 */
+	public boolean addOtherSystemOption(String name, String value, String description){
+		Node nodeRef = null;
+		if(name == null || name.trim().length() <= 0) return false;
+		try{
+			Element eSystem = (Element)XMLUtil.findChildNode(m_eOSoL, "system");
+			if(eSystem == null){
+				eSystem = m_document.createElement("system");
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eSystem, nodeRef.getNextSibling());			
+				}
+				else{
+					m_eOSoL.insertBefore(eSystem, m_eOSoL.getFirstChild());
+				}		
+			}		
+			Element eOtherOptions = (Element)XMLUtil.findChildNode(eSystem, "otherOptions");
+			if(eOtherOptions == null){
+				eOtherOptions = m_document.createElement("otherOptions");	
+				eSystem.appendChild(eOtherOptions);				
+			}
+			try{
+				Vector<Element> vElements = XMLUtil.getChildElementsByTagName(eOtherOptions, "other");
+				Element eOther;
+				int iNls = vElements==null?0:vElements.size();
+				for(int i = 0; i < iNls; i++){
+					eOther = (Element)vElements.elementAt(i);
+					if(eOther.getAttribute("name").equals(name)){
+						eOtherOptions.removeChild(eOther);
+						iNls--;
+						break;
+					}
+				}
+				eOther = createOther(name, value, description);
+				eOtherOptions.appendChild(eOther);
+
+				eOtherOptions.setAttribute("numberOfOtherOptions", (iNls+1)+"");
+
+			}
+			catch(Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//addOtherSystemOption
 
 
 	/**
@@ -850,6 +1116,132 @@ public class OSoLWriter extends OSgLWriter{
 		return true;
 	}//setServiceType
 
+	/**
+	 * Set the number of other service options. 
+	 * 
+	 * @param numberOfOtherServiceOptions holds the number of other service options
+	 * @return whether the number is set successfully or not. 
+	 */
+	public boolean setNumberOfOtherServiceOptions(int numberOfOtherServiceOptions){
+		Node nodeRef = null;
+		if(numberOfOtherServiceOptions < 0){
+			return true;
+		}
+		Element eService = (Element)XMLUtil.findChildNode(m_eOSoL, "service");
+		if(eService == null){
+			eService = m_document.createElement("service");
+			nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
+			if(nodeRef != null){
+				m_eOSoL.insertBefore(eService, nodeRef.getNextSibling());			
+			}
+			else{
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eService, nodeRef.getNextSibling());			
+				}
+				else{
+					m_eOSoL.insertBefore(eService, m_eOSoL.getFirstChild());
+				}		
+			}		
+		}		
+		Element eOtherOptions = (Element)XMLUtil.findChildNode(eService, "otherOptions");
+		if(eOtherOptions == null){
+			eOtherOptions = m_document.createElement("otherOptions");	
+			eService.appendChild(eOtherOptions);				
+		}
+		try{
+			eOtherOptions.setAttribute("numberOfOtherOptions", numberOfOtherServiceOptions+"");
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;	
+	}//setNumberOfOtherServiceOptions
+
+	/**
+	 * Set the other service options. 
+	 * 
+	 * @param names holds the names of the other options. It is required. 
+	 * @param values holds the values of the other options, empty string "" or null if no value for an option.
+	 * @param descriptions holds the descriptions of the other options, empty string "" or null if no value for an option, null for
+	 * the entire array if none of the options have descriptions.
+	 * @return whether the other options element construction is successful.
+	 */
+	public boolean setOtherServiceOptions(String[] names, String[] values, String[] descriptions){
+		if(names == null) return false;
+		if(values == null) return false;
+		if(names.length != values.length) return false;
+		if(descriptions != null && names.length != descriptions.length) return false;
+		for(int i = 0; i < names.length; i++){
+			addOtherServiceOption(names[i], values[i], (descriptions==null)?"":descriptions[i]);
+		}
+		return true;
+	}//setOtherServiceOptions
+
+	/**
+	 * Add an other service option element. 
+	 * 
+	 * @param name holds the name of the other option element. It is required.
+	 * @param value holds the value of the other option element, empty string "" or null if none. 
+	 * @param description holds the description of the other option element, empty string "" or null if none. 
+	 * @return whether the other option element is added successfully.
+	 */
+	public boolean addOtherServiceOption(String name, String value, String description){
+		Node nodeRef = null;
+		if(name == null || name.trim().length() <= 0) return false;
+		try{
+			Element eService = (Element)XMLUtil.findChildNode(m_eOSoL, "service");
+			if(eService == null){
+				eService = m_document.createElement("service");
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eService, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+					if(nodeRef != null){
+						m_eOSoL.insertBefore(eService, nodeRef.getNextSibling());			
+					}
+					else{
+						m_eOSoL.insertBefore(eService, m_eOSoL.getFirstChild());
+					}		
+				}		
+			}			
+			Element eOtherOptions = (Element)XMLUtil.findChildNode(eService, "otherOptions");
+			if(eOtherOptions == null){
+				eOtherOptions = m_document.createElement("otherOptions");	
+				eService.appendChild(eOtherOptions);				
+			}
+			try{
+				Vector<Element> vElements = XMLUtil.getChildElementsByTagName(eOtherOptions, "other");
+				Element eOther;
+				int iNls = vElements==null?0:vElements.size();
+				for(int i = 0; i < iNls; i++){
+					eOther = (Element)vElements.elementAt(i);
+					if(eOther.getAttribute("name").equals(name)){
+						eOtherOptions.removeChild(eOther);
+						iNls--;
+						break;
+					}
+				}
+				eOther = createOther(name, value, description);
+				eOtherOptions.appendChild(eOther);
+
+				eOtherOptions.setAttribute("numberOfOtherOptions", (iNls+1)+"");
+
+			}
+			catch(Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//addOtherServiceOption
 
 	/**
 	 * Set the maximum time before the job is terminated.  
@@ -857,7 +1249,7 @@ public class OSoLWriter extends OSgLWriter{
 	 * @param maxTime holds the maximum time in seconds. 
 	 * @return whether the maximum time is set successfully.
 	 */
-	public boolean setJobMaxTime(double maxTime){
+	public boolean setMaxTime(double maxTime){
 		if(maxTime <= 0) return false;
 		Node nodeRef = null;
 		try{
@@ -904,8 +1296,57 @@ public class OSoLWriter extends OSgLWriter{
 			return false;
 		}
 		return true;
-	}//setJobMaxTime
+	}//setMaxTime
 
+	/**
+	 * Set the unit of the maximum time before the job is terminated.  
+	 * 
+	 * @param maxTime holds the maximum time in seconds. 
+	 * @return whether the maximum time is set successfully.
+	 */
+	public boolean setMaxTimeUnit(String unit){
+		Node nodeRef = null;
+		if(unit == null || unit.length() <=0 || unit.equalsIgnoreCase("second")){
+			return true;
+		}
+		try{
+			Element eJob = (Element)XMLUtil.findChildNode(m_eOSoL, "job");
+			if(eJob == null){
+				eJob = m_document.createElement("job");
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
+					if(nodeRef != null){
+						m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+						if(nodeRef != null){
+							m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
+						}
+						else{
+							m_eOSoL.insertBefore(eJob, m_eOSoL.getFirstChild());
+						}		
+					}		
+				}
+			}
+			Element eMaxTime = (Element)XMLUtil.findChildNode(eJob, "maxTime");
+			if(eMaxTime == null){
+				eMaxTime = m_document.createElement("maxTime");	
+				eJob.appendChild(eMaxTime);				
+			}
+			eMaxTime.setAttribute("unit", unit);
+
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setMaxTimeUnit
 
 	/**
 	 * Set the scheduled start time for the job.   
@@ -913,7 +1354,7 @@ public class OSoLWriter extends OSgLWriter{
 	 * @param scheduledStartTime holds the scheduled start time for the job.   
 	 * @return whether the scheduled start time is set successfully.
 	 */
-	public boolean setJobScheduledStartTime(GregorianCalendar scheduledStartTime){
+	public boolean setScheduledStartTime(GregorianCalendar scheduledStartTime){
 		Node nodeRef = null;
 		try{
 			Element eJob = (Element)XMLUtil.findChildNode(m_eOSoL, "job");
@@ -959,7 +1400,7 @@ public class OSoLWriter extends OSgLWriter{
 			return false;
 		}
 		return true;
-	}//setJobScheduledStartTime
+	}//setScheduledStartTime
 
 
 	/**
@@ -1002,6 +1443,7 @@ public class OSoLWriter extends OSgLWriter{
 				}
 				XMLUtil.removeAllChildren(eDependencies);
 				int iJobIDs = jobIDs.length;
+				eDependencies.setAttribute("numberOfJobIDs", iJobIDs+"");
 				for(int i = 0; i < iJobIDs; i++){
 					if(jobIDs[i] != null && jobIDs[i].length() > 0){
 						Element eJobID = m_document.createElement("jobID");	
@@ -1061,6 +1503,7 @@ public class OSoLWriter extends OSgLWriter{
 				}
 				XMLUtil.removeAllChildren(eRequiredDirectories);
 				int iPaths = paths.length;
+				eRequiredDirectories.setAttribute("numberOfPaths", iPaths+"");
 				for(int i = 0; i < iPaths; i++){
 					if(paths[i] != null && paths[i].length() > 0){
 						Element ePath = m_document.createElement("path");	
@@ -1120,6 +1563,7 @@ public class OSoLWriter extends OSgLWriter{
 				}
 				XMLUtil.removeAllChildren(eRequiredFiles);
 				int iPaths = paths.length;
+				eRequiredFiles.setAttribute("numberOfPaths", iPaths+"");
 				for(int i = 0; i < iPaths; i++){
 					if(paths[i] != null && paths[i].length() > 0){
 						Element ePath = m_document.createElement("path");	
@@ -1137,7 +1581,7 @@ public class OSoLWriter extends OSgLWriter{
 			return false;
 		}
 		return true;
-	}//setRequiredFilesjob
+	}//setRequiredFiles
 
 	/**
 	 * Set the directories to make before running the job, which is 
@@ -1179,6 +1623,7 @@ public class OSoLWriter extends OSgLWriter{
 				}
 				XMLUtil.removeAllChildren(eDirectoriesToMake);
 				int iPaths = paths.length;
+				eDirectoriesToMake.setAttribute("numberOfPaths", iPaths+"");
 				for(int i = 0; i < iPaths; i++){
 					if(paths[i] != null && paths[i].length() > 0){
 						Element ePath = m_document.createElement("path");	
@@ -1239,6 +1684,7 @@ public class OSoLWriter extends OSgLWriter{
 				}
 				XMLUtil.removeAllChildren(eFilesToMake);
 				int iPaths = paths.length;
+				eFilesToMake.setAttribute("numberOfPaths", iPaths+"");
 				for(int i = 0; i < iPaths; i++){
 					if(paths[i] != null && paths[i].length() > 0){
 						Element ePath = m_document.createElement("path");	
@@ -1259,27 +1705,214 @@ public class OSoLWriter extends OSgLWriter{
 
 	}//setFilesToMake
 
+	/**
+	 * Set the list of input directories that need to be moved or copied
+	 * 
+	 * @param pathPairs hold an array of path pair to move or copy
+	 * @return whether the path pairs are set successfully. 
+	 */
 	public boolean setInputDirectoriesToMove(PathPair[] pathPairs){
-		return false;
-	}
+		Node nodeRef = null;
+		try{
+			Element eJob = (Element)XMLUtil.findChildNode(m_eOSoL, "job");
+			if(eJob == null){
+				eJob = m_document.createElement("job");
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
+					if(nodeRef != null){
+						m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+						if(nodeRef != null){
+							m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
+						}
+						else{
+							m_eOSoL.insertBefore(eJob, m_eOSoL.getFirstChild());
+						}		
+					}		
+				}
+			}
+			if(pathPairs != null && pathPairs.length > 0){
+				Element eInputDirectoriesToMove = (Element)XMLUtil.findChildNode(eJob, "inputDirectoriesToMove");
+				if(eInputDirectoriesToMove == null){
+					eInputDirectoriesToMove = m_document.createElement("inputDirectoriesToMove");	
+					eJob.appendChild(eInputDirectoriesToMove);									
+				}
+				XMLUtil.removeAllChildren(eInputDirectoriesToMove);
+				int iPathPairs = pathPairs.length;
+				int nPairs = 0;
+				for(int i = 0; i < iPathPairs; i++){
+					if(pathPairs[i] != null && 
+							pathPairs[i].from != null && pathPairs[i].from.length() > 0 &&
+							pathPairs[i].to != null && pathPairs[i].to.length() > 0){
+						nPairs++;
+						Element ePathPair = m_document.createElement("pathPair");	
+						ePathPair.setAttribute("from", pathPairs[i].from);
+						ePathPair.setAttribute("to", pathPairs[i].to);
+						if(pathPairs[i].makeCopy) ePathPair.setAttribute("makeCopy", "true");
+						eInputDirectoriesToMove.appendChild(ePathPair);				
+					}
+				}
+				eInputDirectoriesToMove.setAttribute("numberOfPathPairs", nPairs+"");
+			}
+			else{
+				XMLUtil.removeChildrenByName(eJob, "inputDirectoriesToMove");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+
+	}//setInputDirectoriesToMove
+
+	/**
+	 * Set the list of input files that need to be moved or copied
+	 * 
+	 * @param pathPairs hold an array of path pair to move or copy
+	 * @return whether the path pairs are set successfully. 
+	 */
 	public boolean setInputFilesToMove(PathPair[] pathPairs){
-		return false;
-	}
+		Node nodeRef = null;
+		try{
+			Element eJob = (Element)XMLUtil.findChildNode(m_eOSoL, "job");
+			if(eJob == null){
+				eJob = m_document.createElement("job");
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
+					if(nodeRef != null){
+						m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+						if(nodeRef != null){
+							m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
+						}
+						else{
+							m_eOSoL.insertBefore(eJob, m_eOSoL.getFirstChild());
+						}		
+					}		
+				}
+			}
+			if(pathPairs != null && pathPairs.length > 0){
+				Element eInputFilesToMove = (Element)XMLUtil.findChildNode(eJob, "inputFilesToMove");
+				if(eInputFilesToMove == null){
+					eInputFilesToMove = m_document.createElement("inputFilesToMove");	
+					eJob.appendChild(eInputFilesToMove);									
+				}
+				XMLUtil.removeAllChildren(eInputFilesToMove);
+				int iPathPairs = pathPairs.length;
+				int nPairs = 0;
+				for(int i = 0; i < iPathPairs; i++){
+					if(pathPairs[i] != null && 
+							pathPairs[i].from != null && pathPairs[i].from.length() > 0 &&
+							pathPairs[i].to != null && pathPairs[i].to.length() > 0){
+						nPairs++;
+						Element ePathPair = m_document.createElement("pathPair");	
+						ePathPair.setAttribute("from", pathPairs[i].from);
+						ePathPair.setAttribute("to", pathPairs[i].to);
+						if(pathPairs[i].makeCopy) ePathPair.setAttribute("makeCopy", "true");
+						eInputFilesToMove.appendChild(ePathPair);				
+					}
+				}
+				eInputFilesToMove.setAttribute("numberOfPathPairs", nPairs+"");
+			}
+			else{
+				XMLUtil.removeChildrenByName(eJob, "inputFilesToMove");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+
+	}//setInputFilesToMove
+
+	/**
+	 * Set the list of output directories that need to be moved or copied
+	 * 
+	 * @param pathPairs hold an array of path pair to move or copy
+	 * @return whether the path pairs are set successfully. 
+	 */
 	public boolean setOutputDirectoriesToMove(PathPair[] pathPairs){
-		return false;
-	}
+		Node nodeRef = null;
+		try{
+			Element eJob = (Element)XMLUtil.findChildNode(m_eOSoL, "job");
+			if(eJob == null){
+				eJob = m_document.createElement("job");
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
+					if(nodeRef != null){
+						m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+						if(nodeRef != null){
+							m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
+						}
+						else{
+							m_eOSoL.insertBefore(eJob, m_eOSoL.getFirstChild());
+						}		
+					}		
+				}
+			}
+			if(pathPairs != null && pathPairs.length > 0){
+				Element eOutputDirectoriesToMove = (Element)XMLUtil.findChildNode(eJob, "outputDirectoriesToMove");
+				if(eOutputDirectoriesToMove == null){
+					eOutputDirectoriesToMove = m_document.createElement("outputDirectoriesToMove");	
+					eJob.appendChild(eOutputDirectoriesToMove);									
+				}
+				XMLUtil.removeAllChildren(eOutputDirectoriesToMove);
+				int iPathPairs = pathPairs.length;
+				int nPairs = 0;
+				for(int i = 0; i < iPathPairs; i++){
+					if(pathPairs[i] != null && 
+							pathPairs[i].from != null && pathPairs[i].from.length() > 0 &&
+							pathPairs[i].to != null && pathPairs[i].to.length() > 0){
+						nPairs++;
+						Element ePathPair = m_document.createElement("pathPair");	
+						ePathPair.setAttribute("from", pathPairs[i].from);
+						ePathPair.setAttribute("to", pathPairs[i].to);
+						if(pathPairs[i].makeCopy) ePathPair.setAttribute("makeCopy", "true");
+						eOutputDirectoriesToMove.appendChild(ePathPair);				
+					}
+				}
+				eOutputDirectoriesToMove.setAttribute("numberOfPathPairs", nPairs+"");
+			}
+			else{
+				XMLUtil.removeChildrenByName(eJob, "outputDirectoriesToMove");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+
+	}//setOutputDirectoriesToMove
+
+	/**
+	 * Set the list of output files that need to be moved or copied
+	 * 
+	 * @param pathPairs hold an array of path pair to move or copy
+	 * @return whether the path pairs are set successfully. 
+	 */
 	public boolean setOutputFilesToMove(PathPair[] pathPairs){
-		return false;
-	}
-
-
-	/**
-	 * Set the input files to copy from before running the job, which is 
-	 * a string array of paths. 
-	 * @param paths holds a string array of input files to copy from before running the job. 
-	 * @return whether the input files to copy from are set successfully.
-	 */
-	public boolean setInputFilesToCopyFrom(String[] paths){
 		Node nodeRef = null;
 		try{
 			Element eJob = (Element)XMLUtil.findChildNode(m_eOSoL, "job");
@@ -1305,24 +1938,31 @@ public class OSoLWriter extends OSgLWriter{
 					}		
 				}
 			}
-			if(paths != null && paths.length > 0){
-				Element eInputFilesToCopyFrom = (Element)XMLUtil.findChildNode(eJob, "inputFilesToCopyFrom");
-				if(eInputFilesToCopyFrom == null){
-					eInputFilesToCopyFrom = m_document.createElement("inputFilesToCopyFrom");	
-					eJob.appendChild(eInputFilesToCopyFrom);									
+			if(pathPairs != null && pathPairs.length > 0){
+				Element eOutputFilesToMove = (Element)XMLUtil.findChildNode(eJob, "outputFilesToMove");
+				if(eOutputFilesToMove == null){
+					eOutputFilesToMove = m_document.createElement("outputFilesToMove");	
+					eJob.appendChild(eOutputFilesToMove);									
 				}
-				XMLUtil.removeAllChildren(eInputFilesToCopyFrom);
-				int iPaths = paths.length;
-				for(int i = 0; i < iPaths; i++){
-					if(paths[i] != null && paths[i].length() > 0){
-						Element ePath = m_document.createElement("path");	
-						ePath.appendChild(m_document.createTextNode(paths[i]));
-						eInputFilesToCopyFrom.appendChild(ePath);				
+				XMLUtil.removeAllChildren(eOutputFilesToMove);
+				int iPathPairs = pathPairs.length;
+				int nPairs = 0;
+				for(int i = 0; i < iPathPairs; i++){
+					if(pathPairs[i] != null && 
+							pathPairs[i].from != null && pathPairs[i].from.length() > 0 &&
+							pathPairs[i].to != null && pathPairs[i].to.length() > 0){
+						nPairs++;
+						Element ePathPair = m_document.createElement("pathPair");	
+						ePathPair.setAttribute("from", pathPairs[i].from);
+						ePathPair.setAttribute("to", pathPairs[i].to);
+						if(pathPairs[i].makeCopy) ePathPair.setAttribute("makeCopy", "true");
+						eOutputFilesToMove.appendChild(ePathPair);				
 					}
 				}
+				eOutputFilesToMove.setAttribute("numberOfPathPairs", nPairs+"");
 			}
 			else{
-				XMLUtil.removeChildrenByName(eJob, "inputFilesToCopyFrom");
+				XMLUtil.removeChildrenByName(eJob, "outputFilesToMove");
 			}
 		}
 		catch(Exception e){
@@ -1331,427 +1971,67 @@ public class OSoLWriter extends OSgLWriter{
 		}
 		return true;
 
-	}//setInputFilesToCopyFrom
+	}//setOutputFilesToMove
 
-	/**
-	 * Set the input files to copy to before running the job, which is 
-	 * a string array of paths. 
-	 * @param paths holds a string array of input files to copy to before running the job. 
-	 * @return whether the input files to copy to are set successfully.
-	 */
-	public boolean setInputFilesToCopyTo(String[] paths){
-		Node nodeRef = null;
-		try{
-			Element eJob = (Element)XMLUtil.findChildNode(m_eOSoL, "job");
-			if(eJob == null){
-				eJob = m_document.createElement("job");
-				nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
-				if(nodeRef != null){
-					m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
-				}
-				else{
-					nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
-					if(nodeRef != null){
-						m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
-					}
-					else{
-						nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
-						if(nodeRef != null){
-							m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
-						}
-						else{
-							m_eOSoL.insertBefore(eJob, m_eOSoL.getFirstChild());
-						}		
-					}		
-				}
-			}
-			if(paths != null && paths.length > 0){
-				Element eInputFilesToCopyTo = (Element)XMLUtil.findChildNode(eJob, "inputFilesToCopyTo");
-				if(eInputFilesToCopyTo == null){
-					eInputFilesToCopyTo = m_document.createElement("inputFilesToCopyTo");	
-					eJob.appendChild(eInputFilesToCopyTo);									
-				}
-				XMLUtil.removeAllChildren(eInputFilesToCopyTo);
-				int iPaths = paths.length;
-				for(int i = 0; i < iPaths; i++){
-					if(paths[i] != null && paths[i].length() > 0){
-						Element ePath = m_document.createElement("path");	
-						ePath.appendChild(m_document.createTextNode(paths[i]));
-						eInputFilesToCopyTo.appendChild(ePath);				
-					}
-				}
-			}
-			else{
-				XMLUtil.removeChildrenByName(eJob, "inputFilesToCopyTo");
-			}
-		}
-		catch(Exception e){
-			e.printStackTrace();
-			return false;
-		}
-		return true;
+//	/**
+//	* Set the output files to move to before running the job, which is 
+//	* a string array of paths. 
+//	* @param paths holds a string array of output files to move to before running the job. 
+//	* @return whether the output files to move to are set successfully.
+//	*/
+//	public boolean setOutputFilesToMoveTo(String[] paths){
+//	Node nodeRef = null;
+//	try{
+//	Element eJob = (Element)XMLUtil.findChildNode(m_eOSoL, "job");
+//	if(eJob == null){
+//	eJob = m_document.createElement("job");
+//	nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
+//	if(nodeRef != null){
+//	m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
+//	}
+//	else{
+//	nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
+//	if(nodeRef != null){
+//	m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
+//	}
+//	else{
+//	nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+//	if(nodeRef != null){
+//	m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
+//	}
+//	else{
+//	m_eOSoL.insertBefore(eJob, m_eOSoL.getFirstChild());
+//	}		
+//	}		
+//	}
+//	}
+//	if(paths != null && paths.length > 0){
+//	Element eOutputFilesToMoveTo = (Element)XMLUtil.findChildNode(eJob, "outputFilesToMoveTo");
+//	if(eOutputFilesToMoveTo == null){
+//	eOutputFilesToMoveTo = m_document.createElement("outputFilesToMoveTo");	
+//	eJob.appendChild(eOutputFilesToMoveTo);									
+//	}
+//	XMLUtil.removeAllChildren(eOutputFilesToMoveTo);
+//	int iPaths = paths.length;
+//	for(int i = 0; i < iPaths; i++){
+//	if(paths[i] != null && paths[i].length() > 0){
+//	Element ePath = m_document.createElement("path");	
+//	ePath.appendChild(m_document.createTextNode(paths[i]));
+//	eOutputFilesToMoveTo.appendChild(ePath);				
+//	}
+//	}
+//	}
+//	else{
+//	XMLUtil.removeChildrenByName(eJob, "outputFilesToMoveTo");
+//	}
+//	}
+//	catch(Exception e){
+//	e.printStackTrace();
+//	return false;
+//	}
+//	return true;
 
-	}//setInputFilesToCopyTo
-
-	/**
-	 * Set the input files to move from before running the job, which is 
-	 * a string array of paths. 
-	 * @param paths holds a string array of input files to move from before running the job. 
-	 * @return whether the input files to move from are set successfully.
-	 */
-	public boolean setInputFilesToMoveFrom(String[] paths){
-		Node nodeRef = null;
-		try{
-			Element eJob = (Element)XMLUtil.findChildNode(m_eOSoL, "job");
-			if(eJob == null){
-				eJob = m_document.createElement("job");
-				nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
-				if(nodeRef != null){
-					m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
-				}
-				else{
-					nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
-					if(nodeRef != null){
-						m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
-					}
-					else{
-						nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
-						if(nodeRef != null){
-							m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
-						}
-						else{
-							m_eOSoL.insertBefore(eJob, m_eOSoL.getFirstChild());
-						}		
-					}		
-				}
-			}
-			if(paths != null && paths.length > 0){
-				Element eInputFilesToMoveFrom = (Element)XMLUtil.findChildNode(eJob, "inputFilesToMoveFrom");
-				if(eInputFilesToMoveFrom == null){
-					eInputFilesToMoveFrom = m_document.createElement("inputFilesToMoveFrom");	
-					eJob.appendChild(eInputFilesToMoveFrom);									
-				}
-				XMLUtil.removeAllChildren(eInputFilesToMoveFrom);
-				int iPaths = paths.length;
-				for(int i = 0; i < iPaths; i++){
-					if(paths[i] != null && paths[i].length() > 0){
-						Element ePath = m_document.createElement("path");	
-						ePath.appendChild(m_document.createTextNode(paths[i]));
-						eInputFilesToMoveFrom.appendChild(ePath);				
-					}
-				}
-			}
-			else{
-				XMLUtil.removeChildrenByName(eJob, "inputFilesToMoveFrom");
-			}
-		}
-		catch(Exception e){
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-
-	}//setInputFilesToMoveFrom
-
-	/**
-	 * Set the input files to move to before running the job, which is 
-	 * a string array of paths. 
-	 * @param paths holds a string array of input files to move to before running the job. 
-	 * @return whether the input files to move to are set successfully.
-	 */
-	public boolean setInputFilesToMoveTo(String[] paths){
-		Node nodeRef = null;
-		try{
-			Element eJob = (Element)XMLUtil.findChildNode(m_eOSoL, "job");
-			if(eJob == null){
-				eJob = m_document.createElement("job");
-				nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
-				if(nodeRef != null){
-					m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
-				}
-				else{
-					nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
-					if(nodeRef != null){
-						m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
-					}
-					else{
-						nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
-						if(nodeRef != null){
-							m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
-						}
-						else{
-							m_eOSoL.insertBefore(eJob, m_eOSoL.getFirstChild());
-						}		
-					}		
-				}
-			}
-			if(paths != null && paths.length > 0){
-				Element eInputFilesToMoveTo = (Element)XMLUtil.findChildNode(eJob, "inputFilesToMoveTo");
-				if(eInputFilesToMoveTo == null){
-					eInputFilesToMoveTo = m_document.createElement("inputFilesToMoveTo");	
-					eJob.appendChild(eInputFilesToMoveTo);									
-				}
-				XMLUtil.removeAllChildren(eInputFilesToMoveTo);
-				int iPaths = paths.length;
-				for(int i = 0; i < iPaths; i++){
-					if(paths[i] != null && paths[i].length() > 0){
-						Element ePath = m_document.createElement("path");	
-						ePath.appendChild(m_document.createTextNode(paths[i]));
-						eInputFilesToMoveTo.appendChild(ePath);				
-					}
-				}
-			}
-			else{
-				XMLUtil.removeChildrenByName(eJob, "inputFilesToMoveTo");
-			}
-		}
-		catch(Exception e){
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-
-	}//setInputFilesToMoveTo
-
-	/**
-	 * Set the output files to copy from before running the job, which is 
-	 * a string array of paths. 
-	 * @param paths holds a string array of output files to copy from before running the job. 
-	 * @return whether the output files to copy from are set successfully.
-	 */
-	public boolean setOutputFilesToCopyFrom(String[] paths){
-		Node nodeRef = null;
-		try{
-			Element eJob = (Element)XMLUtil.findChildNode(m_eOSoL, "job");
-			if(eJob == null){
-				eJob = m_document.createElement("job");
-				nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
-				if(nodeRef != null){
-					m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
-				}
-				else{
-					nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
-					if(nodeRef != null){
-						m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
-					}
-					else{
-						nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
-						if(nodeRef != null){
-							m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
-						}
-						else{
-							m_eOSoL.insertBefore(eJob, m_eOSoL.getFirstChild());
-						}		
-					}		
-				}
-			}
-			if(paths != null && paths.length > 0){
-				Element eOutputFilesToCopyFrom = (Element)XMLUtil.findChildNode(eJob, "outputFilesToCopyFrom");
-				if(eOutputFilesToCopyFrom == null){
-					eOutputFilesToCopyFrom = m_document.createElement("outputFilesToCopyFrom");	
-					eJob.appendChild(eOutputFilesToCopyFrom);									
-				}
-				XMLUtil.removeAllChildren(eOutputFilesToCopyFrom);
-				int iPaths = paths.length;
-				for(int i = 0; i < iPaths; i++){
-					if(paths[i] != null && paths[i].length() > 0){
-						Element ePath = m_document.createElement("path");	
-						ePath.appendChild(m_document.createTextNode(paths[i]));
-						eOutputFilesToCopyFrom.appendChild(ePath);				
-					}
-				}
-			}
-			else{
-				XMLUtil.removeChildrenByName(eJob, "outputFilesToCopyFrom");
-			}
-		}
-		catch(Exception e){
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-
-	}//setOutputFilesToCopyFrom
-
-	/**
-	 * Set the output files to copy to before running the job, which is 
-	 * a string array of paths. 
-	 * @param paths holds a string array of output files to copy to before running the job. 
-	 * @return whether the output files to copy to are set successfully.
-	 */
-	public boolean setOutputFilesToCopyTo(String[] paths){
-		Node nodeRef = null;
-		try{
-			Element eJob = (Element)XMLUtil.findChildNode(m_eOSoL, "job");
-			if(eJob == null){
-				eJob = m_document.createElement("job");
-				nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
-				if(nodeRef != null){
-					m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
-				}
-				else{
-					nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
-					if(nodeRef != null){
-						m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
-					}
-					else{
-						nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
-						if(nodeRef != null){
-							m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
-						}
-						else{
-							m_eOSoL.insertBefore(eJob, m_eOSoL.getFirstChild());
-						}		
-					}		
-				}
-			}
-			if(paths != null && paths.length > 0){
-				Element eOutputFilesToCopyTo = (Element)XMLUtil.findChildNode(eJob, "outputFilesToCopyTo");
-				if(eOutputFilesToCopyTo == null){
-					eOutputFilesToCopyTo = m_document.createElement("outputFilesToCopyTo");	
-					eJob.appendChild(eOutputFilesToCopyTo);									
-				}
-				XMLUtil.removeAllChildren(eOutputFilesToCopyTo);
-				int iPaths = paths.length;
-				for(int i = 0; i < iPaths; i++){
-					if(paths[i] != null && paths[i].length() > 0){
-						Element ePath = m_document.createElement("path");	
-						ePath.appendChild(m_document.createTextNode(paths[i]));
-						eOutputFilesToCopyTo.appendChild(ePath);				
-					}
-				}
-			}
-			else{
-				XMLUtil.removeChildrenByName(eJob, "outputFilesToCopyTo");
-			}
-		}
-		catch(Exception e){
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-
-	}//setOutputFilesToCopyTo
-
-	/**
-	 * Set the output files to move from before running the job, which is 
-	 * a string array of paths. 
-	 * @param paths holds a string array of output files to move from before running the job. 
-	 * @return whether the output files to move from are set successfully.
-	 */
-	public boolean setOutputFilesToMoveFrom(String[] paths){
-		Node nodeRef = null;
-		try{
-			Element eJob = (Element)XMLUtil.findChildNode(m_eOSoL, "job");
-			if(eJob == null){
-				eJob = m_document.createElement("job");
-				nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
-				if(nodeRef != null){
-					m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
-				}
-				else{
-					nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
-					if(nodeRef != null){
-						m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
-					}
-					else{
-						nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
-						if(nodeRef != null){
-							m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
-						}
-						else{
-							m_eOSoL.insertBefore(eJob, m_eOSoL.getFirstChild());
-						}		
-					}		
-				}
-			}
-			if(paths != null && paths.length > 0){
-				Element eOutputFilesToMoveFrom = (Element)XMLUtil.findChildNode(eJob, "outputFilesToMoveFrom");
-				if(eOutputFilesToMoveFrom == null){
-					eOutputFilesToMoveFrom = m_document.createElement("outputFilesToMoveFrom");	
-					eJob.appendChild(eOutputFilesToMoveFrom);									
-				}
-				XMLUtil.removeAllChildren(eOutputFilesToMoveFrom);
-				int iPaths = paths.length;
-				for(int i = 0; i < iPaths; i++){
-					if(paths[i] != null && paths[i].length() > 0){
-						Element ePath = m_document.createElement("path");	
-						ePath.appendChild(m_document.createTextNode(paths[i]));
-						eOutputFilesToMoveFrom.appendChild(ePath);				
-					}
-				}
-			}
-			else{
-				XMLUtil.removeChildrenByName(eJob, "outputFilesToMoveFrom");
-			}
-		}
-		catch(Exception e){
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-
-	}//setOutputFilesToMoveFrom
-
-	/**
-	 * Set the output files to move to before running the job, which is 
-	 * a string array of paths. 
-	 * @param paths holds a string array of output files to move to before running the job. 
-	 * @return whether the output files to move to are set successfully.
-	 */
-	public boolean setOutputFilesToMoveTo(String[] paths){
-		Node nodeRef = null;
-		try{
-			Element eJob = (Element)XMLUtil.findChildNode(m_eOSoL, "job");
-			if(eJob == null){
-				eJob = m_document.createElement("job");
-				nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
-				if(nodeRef != null){
-					m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
-				}
-				else{
-					nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
-					if(nodeRef != null){
-						m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
-					}
-					else{
-						nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
-						if(nodeRef != null){
-							m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
-						}
-						else{
-							m_eOSoL.insertBefore(eJob, m_eOSoL.getFirstChild());
-						}		
-					}		
-				}
-			}
-			if(paths != null && paths.length > 0){
-				Element eOutputFilesToMoveTo = (Element)XMLUtil.findChildNode(eJob, "outputFilesToMoveTo");
-				if(eOutputFilesToMoveTo == null){
-					eOutputFilesToMoveTo = m_document.createElement("outputFilesToMoveTo");	
-					eJob.appendChild(eOutputFilesToMoveTo);									
-				}
-				XMLUtil.removeAllChildren(eOutputFilesToMoveTo);
-				int iPaths = paths.length;
-				for(int i = 0; i < iPaths; i++){
-					if(paths[i] != null && paths[i].length() > 0){
-						Element ePath = m_document.createElement("path");	
-						ePath.appendChild(m_document.createTextNode(paths[i]));
-						eOutputFilesToMoveTo.appendChild(ePath);				
-					}
-				}
-			}
-			else{
-				XMLUtil.removeChildrenByName(eJob, "outputFilesToMoveTo");
-			}
-		}
-		catch(Exception e){
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-
-	}//setOutputFilesToMoveTo
+//	}//setOutputFilesToMoveTo
 
 	/**
 	 * Set the files to delete after running the job, which is 
@@ -1793,6 +2073,7 @@ public class OSoLWriter extends OSgLWriter{
 				}
 				XMLUtil.removeAllChildren(eFilesToDelete);
 				int iPaths = paths.length;
+				eFilesToDelete.setAttribute("numberOfPaths", iPaths+"");
 				for(int i = 0; i < iPaths; i++){
 					if(paths[i] != null && paths[i].length() > 0){
 						Element ePath = m_document.createElement("path");	
@@ -1853,6 +2134,7 @@ public class OSoLWriter extends OSgLWriter{
 				}
 				XMLUtil.removeAllChildren(eDirectoriesToDelete);
 				int iPaths = paths.length;
+				eDirectoriesToDelete.setAttribute("numberOfPaths", iPaths+"");
 				for(int i = 0; i < iPaths; i++){
 					if(paths[i] != null && paths[i].length() > 0){
 						Element ePath = m_document.createElement("path");	
@@ -1914,6 +2196,7 @@ public class OSoLWriter extends OSgLWriter{
 				}
 				XMLUtil.removeAllChildren(eProcessesToKill);
 				int iProcesses = processNames.length;
+				eProcessesToKill.setAttribute("numberOfProcesses", iProcesses+"");
 				for(int i = 0; i < iProcesses; i++){
 					if(processNames[i] != null && processNames[i].length() > 0){
 						Element eProcess = m_document.createElement("process");	
@@ -1933,6 +2216,145 @@ public class OSoLWriter extends OSgLWriter{
 		return true;
 
 	}//setProcessesToKill
+
+	/**
+	 * Set the number of other job options. 
+	 * 
+	 * @param numberOfOtherJobOptions holds the number of other job options
+	 * @return whether the number is set successfully or not. 
+	 */
+	public boolean setNumberOfOtherJobOptions(int numberOfOtherJobOptions){
+		Node nodeRef = null;
+		if(numberOfOtherJobOptions < 0){
+			return true;
+		}
+		Element eJob = (Element)XMLUtil.findChildNode(m_eOSoL, "job");
+		if(eJob == null){
+			eJob = m_document.createElement("job");
+			nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
+			if(nodeRef != null){
+				m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
+			}
+			else{
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+					if(nodeRef != null){
+						m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
+					}
+					else{
+						m_eOSoL.insertBefore(eJob, m_eOSoL.getFirstChild());
+					}		
+				}		
+			}
+		}
+		Element eOtherOptions = (Element)XMLUtil.findChildNode(eJob, "otherOptions");
+		if(eOtherOptions == null){
+			eOtherOptions = m_document.createElement("otherOptions");	
+			eJob.appendChild(eOtherOptions);				
+		}
+		try{
+			eOtherOptions.setAttribute("numberOfOtherOptions", numberOfOtherJobOptions+"");
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;	
+	}//setNumberOfOtherJobOptions
+
+	/**
+	 * Set the other job options. 
+	 * 
+	 * @param names holds the names of the other options. It is required. 
+	 * @param values holds the values of the other options, empty string "" or null if no value for an option.
+	 * @param descriptions holds the descriptions of the other options, empty string "" or null if no value for an option, null for
+	 * the entire array if none of the options have descriptions.
+	 * @return whether the other options element construction is successful.
+	 */
+	public boolean setOtherJobOptions(String[] names, String[] values, String[] descriptions){
+		if(names == null) return false;
+		if(values == null) return false;
+		if(names.length != values.length) return false;
+		if(descriptions != null && names.length != descriptions.length) return false;
+		for(int i = 0; i < names.length; i++){
+			addOtherJobOption(names[i], values[i], (descriptions==null)?"":descriptions[i]);
+		}
+		return true;
+	}//setOtherJobOptions
+
+	/**
+	 * Add an other job option element. 
+	 * 
+	 * @param name holds the name of the other option element. It is required.
+	 * @param value holds the value of the other option element, empty string "" or null if none. 
+	 * @param description holds the description of the other option element, empty string "" or null if none. 
+	 * @return whether the other option element is added successfully.
+	 */
+	public boolean addOtherJobOption(String name, String value, String description){
+		Node nodeRef = null;
+		if(name == null || name.trim().length() <= 0) return false;
+		try{
+			Element eJob = (Element)XMLUtil.findChildNode(m_eOSoL, "job");
+			if(eJob == null){
+				eJob = m_document.createElement("job");
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
+					if(nodeRef != null){
+						m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+						if(nodeRef != null){
+							m_eOSoL.insertBefore(eJob, nodeRef.getNextSibling());			
+						}
+						else{
+							m_eOSoL.insertBefore(eJob, m_eOSoL.getFirstChild());
+						}		
+					}		
+				}
+			}
+			Element eOtherOptions = (Element)XMLUtil.findChildNode(eJob, "otherOptions");
+			if(eOtherOptions == null){
+				eOtherOptions = m_document.createElement("otherOptions");	
+				eJob.appendChild(eOtherOptions);				
+			}
+			try{
+				Vector<Element> vElements = XMLUtil.getChildElementsByTagName(eOtherOptions, "other");
+				Element eOther;
+				int iNls = vElements==null?0:vElements.size();
+				for(int i = 0; i < iNls; i++){
+					eOther = (Element)vElements.elementAt(i);
+					if(eOther.getAttribute("name").equals(name)){
+						eOtherOptions.removeChild(eOther);
+						iNls--;
+						break;
+					}
+				}
+				eOther = createOther(name, value, description);
+				eOtherOptions.appendChild(eOther);
+
+				eOtherOptions.setAttribute("numberOfOtherOptions", (iNls+1)+"");
+
+			}
+			catch(Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//addOtherJobOption
 
 	/**
 	 * Set the variable number. 
@@ -2091,7 +2513,7 @@ public class OSoLWriter extends OSgLWriter{
 	 * @param initialVariableValues holds a double array of initial variable values. 
 	 * @return whether the initial variable values are set successfully or not. 
 	 */
-	public boolean setInitialVariableValues(double[] initialVariableValues){
+	public boolean setInitVarValuesDense(double[] initialVariableValues){
 		Node nodeRef = null;
 		try{
 			Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSoL, "optimization");
@@ -2142,50 +2564,32 @@ public class OSoLWriter extends OSgLWriter{
 			XMLUtil.removeAllChildren(eInitialVariableValues);
 			int iVars = initialVariableValues==null?0:initialVariableValues.length;
 			if(iVars == 0) return true;
+			int nVar = 0;
 			for(int i = 0; i < iVars; i++){
+				if(initialVariableValues[i]==0) continue;
 				Element eVar = m_document.createElement("var");	
 				eVar.setAttribute("idx", i+"");
 				eVar.setAttribute("value", initialVariableValues[i]+"");
 				eInitialVariableValues.appendChild(eVar);				
+				nVar++;
 			}
+			eInitialVariableValues.setAttribute("numberOfVar", nVar+"");
 		}
 		catch(Exception e){
 			e.printStackTrace();
 			return false;
 		}
 		return true;
-	}//setInitialVariableValues
+	}//setInitVarValuesDense
 
 	/**
-	 * Set the other optimization options related elements. 
-	 * 
-	 * @param names holds the names of the other optimization options. It is required. 
-	 * @param values holds the values of the other optimization options, empty string "" or null if no value for an option.
-	 * @param descriptions holds the descriptions of the other optimization options, empty string "" or null if no value for an option, null for
-	 * the entire array if none of the options have descriptions.
-	 * @return whether the other optimization options element construction is successful.
+	 * Set initial variable values (InitVarValue[]). 
+	 * Before this method is called, the setVariable(int), setObjective(int), setConstraint(int)
+	 * methods are recommended  to be called first. 
+	 * @param initialVariableValues holds the initial variable values in sparse form (InitVarValue[]). 
+	 * @return whether the initial variable values are set successfully or not. 
 	 */
-	public boolean setOtherOptimizationOptions(String[] names, String[] values, String[] descriptions){
-		if(names == null) return false;
-		if(values == null) return false;
-		if(names.length != values.length) return false;
-		if(descriptions != null && names.length != descriptions.length) return false;
-		for(int i = 0; i < names.length; i++){
-			addOtherOptimizationOption(names[i], values[i], (descriptions==null)?"":descriptions[i]);
-		}
-		return true;
-	}//setOtherOptimizationOptions
-
-	/**
-	 * Add an other optimization option element. 
-	 * 
-	 * @param name holds the name of the other optimization option element. It is required.
-	 * @param value holds the value of the other optimization option element, empty string "" or null if none. 
-	 * @param description holds the description of the other optimization option element, empty string "" or null if none. 
-	 * @return whether the other optimization option element is added successfully.
-	 */
-	public boolean addOtherOptimizationOption(String name, String value, String description){
-		if(name == null || name.trim().length() <= 0) return false;
+	public boolean setInitVarValuesSparse(InitVarValue[] initialVariableValues){
 		Node nodeRef = null;
 		try{
 			Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSoL, "optimization");
@@ -2216,73 +2620,1449 @@ public class OSoLWriter extends OSgLWriter{
 						}		
 					}
 				}
-			}			
-			Vector<Element> vElements = XMLUtil.getChildElementsByTagName(eOptimization, "other");
-			Element eOther;
-			int iNls = vElements==null?0:vElements.size();
-			for(int i = 0; i < iNls; i++){
-				eOther = (Element)vElements.elementAt(i);
-				if(eOther.getAttribute("name").equals(name)){
-					eOptimization.removeChild(eOther);
-					break;
-				}
 			}
-			eOther = createOther(name, value, description);
-			eOptimization.appendChild(eOther);
+			Element eVariables = (Element)XMLUtil.findChildNode(eOptimization, "variables");
+			if(eVariables == null){
+				if(initialVariableValues == null || initialVariableValues.length <= 0){
+					return true;
+				}
+				eVariables = m_document.createElement("variables");	
+				eOptimization.insertBefore(eVariables, eOptimization.getFirstChild());									
+			}
+			Element eInitialVariableValues = (Element)XMLUtil.findChildNode(eVariables, "initialVariableValues");
+			if(eInitialVariableValues == null){
+				if(initialVariableValues == null || initialVariableValues.length <= 0){
+					return true;
+				}
+				eInitialVariableValues = m_document.createElement("initialVariableValues");	
+				eVariables.insertBefore(eInitialVariableValues, eVariables.getFirstChild());									
+			}
+			XMLUtil.removeAllChildren(eInitialVariableValues);
+			int iVars = initialVariableValues==null?0:initialVariableValues.length;
+			if(iVars == 0) return true;
+			int nVar = 0;
+			for(int i = 0; i < iVars; i++){
+				if(initialVariableValues[i].value==0) continue;
+				Element eVar = m_document.createElement("var");	
+				eVar.setAttribute("idx", initialVariableValues[i].idx+"");
+				eVar.setAttribute("value", initialVariableValues[i].value+"");
+				eInitialVariableValues.appendChild(eVar);				
+				nVar++;
+			}
+			eInitialVariableValues.setAttribute("numberOfVar", nVar+"");
 		}
 		catch(Exception e){
 			e.printStackTrace();
 			return false;
 		}
 		return true;
-	}//addOtherOptimizationOption
+	}//setInitVarValuesSparse
 
 	/**
-	 * Set the other options related elements. 
-	 * 
-	 * @param names holds the names of the other options. It is required. 
-	 * @param values holds the values of the other options, empty string "" or null if no value for an option.
-	 * @param descriptions holds the descriptions of the other options, empty string "" or null if no value for an option, null for
-	 * the entire array if none of the options have descriptions.
-	 * @return whether the other options element construction is successful.
+	 * Set initial variable values (string[]). 
+	 * Before this method is called, the setVariable(int), setObjective(int), setConstraint(int)
+	 * methods are recommended  to be called first. 
+	 * @param initialVariableValues holds a double array of initial variable values. 
+	 * @return whether the initial variable values string are set successfully or not. 
 	 */
-	public boolean setOtherOptions(String[] names, String[] values, String[] descriptions){
+	public boolean setInitVarValuesStringDense(String[] initialVariableValuesString){
+		Node nodeRef = null;
+		try{
+			Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSoL, "optimization");
+			if(eOptimization == null){
+				eOptimization = m_document.createElement("optimization");
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "job");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
+					if(nodeRef != null){
+						m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
+						if(nodeRef != null){
+							m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+						}
+						else{
+							nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+							if(nodeRef != null){
+								m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+							}
+							else{
+								m_eOSoL.insertBefore(eOptimization, m_eOSoL.getFirstChild());
+							}		
+						}		
+					}
+				}
+			}
+			Element eVariables = (Element)XMLUtil.findChildNode(eOptimization, "variables");
+			if(eVariables == null){
+				if(initialVariableValuesString == null || initialVariableValuesString.length <= 0){
+					return true;
+				}
+				eVariables = m_document.createElement("variables");	
+				eOptimization.insertBefore(eVariables, eOptimization.getFirstChild());									
+			}
+			Element eInitialVariableValues = (Element)XMLUtil.findChildNode(eVariables, "initialVariableValuesString");
+			if(eInitialVariableValues == null){
+				if(initialVariableValuesString == null || initialVariableValuesString.length <= 0){
+					return true;
+				}
+				eInitialVariableValues = m_document.createElement("initialVariableValuesString");	
+				Node nodeRef2 = XMLUtil.findChildNode(eVariables, "initialVariableValues");
+				if(nodeRef2 != null){
+					eVariables.insertBefore(eInitialVariableValues, nodeRef2.getNextSibling());			
+				}
+				else{
+					eVariables.insertBefore(eInitialVariableValues, eVariables.getFirstChild());									
+				}
+			}
+			XMLUtil.removeAllChildren(eInitialVariableValues);
+			int iVars = initialVariableValuesString==null?0:initialVariableValuesString.length;
+			if(iVars == 0) return true;
+			int nVar = 0;
+			for(int i = 0; i < iVars; i++){
+				Element eVar = m_document.createElement("var");	
+				eVar.setAttribute("idx", i+"");
+				eVar.setAttribute("value", initialVariableValuesString[i]);
+				eInitialVariableValues.appendChild(eVar);				
+				nVar++;
+			}
+			eInitialVariableValues.setAttribute("numberOfVar", nVar+"");
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setInitVarValuesStringDense
+
+	/**
+	 * Set initial variable values (InitVarValueString[]). 
+	 * Before this method is called, the setVariable(int), setObjective(int), setConstraint(int)
+	 * methods are recommended  to be called first. 
+	 * @param initialVariableValues holds the initial variable values in sparse form (InitVarValue[]). 
+	 * @return whether the initial variable values string are set successfully or not. 
+	 */
+	public boolean setInitVarValuesStringSparse(InitVarValueString[] initialVariableValuesString){
+		Node nodeRef = null;
+		try{
+			Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSoL, "optimization");
+			if(eOptimization == null){
+				eOptimization = m_document.createElement("optimization");
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "job");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
+					if(nodeRef != null){
+						m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
+						if(nodeRef != null){
+							m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+						}
+						else{
+							nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+							if(nodeRef != null){
+								m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+							}
+							else{
+								m_eOSoL.insertBefore(eOptimization, m_eOSoL.getFirstChild());
+							}		
+						}		
+					}
+				}
+			}
+			Element eVariables = (Element)XMLUtil.findChildNode(eOptimization, "variables");
+			if(eVariables == null){
+				if(initialVariableValuesString == null || initialVariableValuesString.length <= 0){
+					return true;
+				}
+				eVariables = m_document.createElement("variables");	
+				eOptimization.insertBefore(eVariables, eOptimization.getFirstChild());									
+			}
+			Element eInitialVariableValues = (Element)XMLUtil.findChildNode(eVariables, "initialVariableValuesString");
+			if(eInitialVariableValues == null){
+				if(initialVariableValuesString == null || initialVariableValuesString.length <= 0){
+					return true;
+				}
+				eInitialVariableValues = m_document.createElement("initialVariableValuesString");	
+				Node nodeRef2 = XMLUtil.findChildNode(eVariables, "initialVariableValues");
+				if(nodeRef2 != null){
+					eVariables.insertBefore(eInitialVariableValues, nodeRef2.getNextSibling());			
+				}
+				else{
+					eVariables.insertBefore(eInitialVariableValues, eVariables.getFirstChild());									
+				}
+			}
+			XMLUtil.removeAllChildren(eInitialVariableValues);
+			int iVars = initialVariableValuesString==null?0:initialVariableValuesString.length;
+			if(iVars == 0) return true;
+			int nVar = 0;
+			for(int i = 0; i < iVars; i++){
+				Element eVar = m_document.createElement("var");	
+				eVar.setAttribute("idx", initialVariableValuesString[i].idx+"");
+				eVar.setAttribute("value", initialVariableValuesString[i].value);
+				eInitialVariableValues.appendChild(eVar);				
+				nVar++;
+			}
+			eInitialVariableValues.setAttribute("numberOfVar", nVar+"");
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setInitVarValuesStringSparse
+
+	/**
+	 * Set initial basis status (string[]). 
+	 * Before this method is called, the setVariable(int), setObjective(int), setConstraint(int)
+	 * methods are recommended  to be called first. 
+	 * @param initialBasisStatus holds a double array of initial basis status. 
+	 * @return whether the initial basis status are set successfully or not. 
+	 */
+	public boolean setInitBasisStatusDense(String[] initialBasisStatus){
+		Node nodeRef = null;
+		try{
+			Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSoL, "optimization");
+			if(eOptimization == null){
+				eOptimization = m_document.createElement("optimization");
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "job");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
+					if(nodeRef != null){
+						m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
+						if(nodeRef != null){
+							m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+						}
+						else{
+							nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+							if(nodeRef != null){
+								m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+							}
+							else{
+								m_eOSoL.insertBefore(eOptimization, m_eOSoL.getFirstChild());
+							}		
+						}		
+					}
+				}
+			}
+			Element eVariables = (Element)XMLUtil.findChildNode(eOptimization, "variables");
+			if(eVariables == null){
+				if(initialBasisStatus == null || initialBasisStatus.length <= 0){
+					return true;
+				}
+				eVariables = m_document.createElement("variables");	
+				eOptimization.insertBefore(eVariables, eOptimization.getFirstChild());									
+			}
+			Element eInitialBasisStatus = (Element)XMLUtil.findChildNode(eVariables, "initialBasisStatus");
+			if(eInitialBasisStatus == null){
+				if(initialBasisStatus == null || initialBasisStatus.length <= 0){
+					return true;
+				}
+				eInitialBasisStatus = m_document.createElement("initialBasisStatus");	
+				Node nodeRef2 = XMLUtil.findChildNode(eVariables, "initialVariableValuesString");
+				if(nodeRef2 != null){
+					eVariables.insertBefore(eInitialBasisStatus, nodeRef2.getNextSibling());			
+				}
+				else{
+					nodeRef2 = XMLUtil.findChildNode(eVariables, "initialVariableValues");
+					if(nodeRef2 != null){
+						eVariables.insertBefore(eInitialBasisStatus, nodeRef2.getNextSibling());			
+					}
+					else{
+						eVariables.insertBefore(eInitialBasisStatus, eVariables.getFirstChild());									
+					}				
+				}
+			}
+			XMLUtil.removeAllChildren(eInitialBasisStatus);
+			int iVars = initialBasisStatus==null?0:initialBasisStatus.length;
+			if(iVars == 0) return true;
+			int nVar = 0;
+			for(int i = 0; i < iVars; i++){
+				Element eVar = m_document.createElement("var");	
+				eVar.setAttribute("idx", i+"");
+				eVar.setAttribute("value", initialBasisStatus[i]);
+				eInitialBasisStatus.appendChild(eVar);				
+				nVar++;
+			}
+			eInitialBasisStatus.setAttribute("numberOfVar", nVar+"");
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setInitBasisStatusDense
+
+	/**
+	 * Set initial basis status (InitBasStatus[]). 
+	 * Before this method is called, the setVariable(int), setObjective(int), setConstraint(int)
+	 * methods are recommended  to be called first. 
+	 * @param initialVariableValues holds the initial basis status in sparse form (InitBasStatus[]). 
+	 * @return whether the initial basis status are set successfully or not. 
+	 */
+	public boolean setInitBasisStatusSparse(InitBasStatus[] initialBasisStatus){
+		Node nodeRef = null;
+		try{
+			Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSoL, "optimization");
+			if(eOptimization == null){
+				eOptimization = m_document.createElement("optimization");
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "job");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
+					if(nodeRef != null){
+						m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
+						if(nodeRef != null){
+							m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+						}
+						else{
+							nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+							if(nodeRef != null){
+								m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+							}
+							else{
+								m_eOSoL.insertBefore(eOptimization, m_eOSoL.getFirstChild());
+							}		
+						}		
+					}
+				}
+			}
+			Element eVariables = (Element)XMLUtil.findChildNode(eOptimization, "variables");
+			if(eVariables == null){
+				if(initialBasisStatus == null || initialBasisStatus.length <= 0){
+					return true;
+				}
+				eVariables = m_document.createElement("variables");	
+				eOptimization.insertBefore(eVariables, eOptimization.getFirstChild());									
+			}
+			Element eInitialBasisStatus = (Element)XMLUtil.findChildNode(eVariables, "initialBasisStatus");
+			if(eInitialBasisStatus == null){
+				if(initialBasisStatus == null || initialBasisStatus.length <= 0){
+					return true;
+				}
+				eInitialBasisStatus = m_document.createElement("initialBasisStatus");	
+				Node nodeRef2 = XMLUtil.findChildNode(eVariables, "initialVariableValuesString");
+				if(nodeRef2 != null){
+					eVariables.insertBefore(eInitialBasisStatus, nodeRef2.getNextSibling());			
+				}
+				else{
+					nodeRef2 = XMLUtil.findChildNode(eVariables, "initialVariableValues");
+					if(nodeRef2 != null){
+						eVariables.insertBefore(eInitialBasisStatus, nodeRef2.getNextSibling());			
+					}
+					else{
+						eVariables.insertBefore(eInitialBasisStatus, eVariables.getFirstChild());									
+					}				
+				}
+			}
+			XMLUtil.removeAllChildren(eInitialBasisStatus);
+			int iVars = initialBasisStatus==null?0:initialBasisStatus.length;
+			if(iVars == 0) return true;
+			int nVar = 0;
+			for(int i = 0; i < iVars; i++){
+				Element eVar = m_document.createElement("var");	
+				eVar.setAttribute("idx", initialBasisStatus[i].idx+"");
+				eVar.setAttribute("value", initialBasisStatus[i].value);
+				eInitialBasisStatus.appendChild(eVar);				
+				nVar++;
+			}
+			eInitialBasisStatus.setAttribute("numberOfVar", nVar+"");
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setInitBasisStatusSparse
+
+
+	/**
+	 * Set the number of other variable options. 
+	 * 
+	 * @param numberOfOtherVariableOptions holds the number of other variable options
+	 * @return whether the number is set successfully or not. 
+	 */
+	public boolean setNumberOfOtherVariableOptions(int numberOfOtherVariableOptions){
+		Node nodeRef = null;
+		if(numberOfOtherVariableOptions < 0){
+			return true;
+		}
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSoL, "optimization");
+		if(eOptimization == null){
+			eOptimization = m_document.createElement("optimization");
+			nodeRef = XMLUtil.findChildNode(m_eOSoL, "job");
+			if(nodeRef != null){
+				m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+			}
+			else{
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
+					if(nodeRef != null){
+						m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+						if(nodeRef != null){
+							m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+						}
+						else{
+							m_eOSoL.insertBefore(eOptimization, m_eOSoL.getFirstChild());
+						}		
+					}		
+				}
+			}
+		}
+		Element eVariables = (Element)XMLUtil.findChildNode(eOptimization, "variables");
+		if(eVariables == null){
+			eVariables = m_document.createElement("variables");	
+			eOptimization.insertBefore(eVariables, eOptimization.getFirstChild());									
+		}
+		try{
+			eVariables.setAttribute("numberOfOtherVariableOptions", numberOfOtherVariableOptions+"");
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;	
+	}//setNumberOfOtherVariableOptions
+
+	/**
+	 * Set initial objective values (double[]). 
+	 * Before this method is called, the setVariable(int), setObjective(int), setConstraint(int)
+	 * methods are recommended  to be called first. 
+	 * @param initialObjectiveValues holds a double array of initial objective values. 
+	 * @return whether the initial objective values are set successfully or not. 
+	 */
+	public boolean setInitObjValuesDense(double[] initialObjectiveValues){
+		Node nodeRef = null;
+		try{
+			Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSoL, "optimization");
+			if(eOptimization == null){
+				eOptimization = m_document.createElement("optimization");
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "job");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
+					if(nodeRef != null){
+						m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
+						if(nodeRef != null){
+							m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+						}
+						else{
+							nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+							if(nodeRef != null){
+								m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+							}
+							else{
+								m_eOSoL.insertBefore(eOptimization, m_eOSoL.getFirstChild());
+							}		
+						}		
+					}
+				}
+			}
+			Element eObjectives = (Element)XMLUtil.findChildNode(eOptimization, "objectives");
+			if(eObjectives == null){
+				if(initialObjectiveValues == null || initialObjectiveValues.length <= 0){
+					return true;
+				}
+				eObjectives = m_document.createElement("objectives");	
+				Node nodeRef2 = null;
+				nodeRef2 = XMLUtil.findChildNode(eOptimization, "variables");
+				if(nodeRef2 != null){
+					eOptimization.insertBefore(eObjectives, nodeRef2.getNextSibling());			
+				}
+				else{
+					eOptimization.insertBefore(eObjectives, eOptimization.getFirstChild());		
+				}
+			}
+			Element eInitialObjectiveValues = (Element)XMLUtil.findChildNode(eObjectives, "initialObjectiveValues");
+			if(eInitialObjectiveValues == null){
+				if(initialObjectiveValues == null || initialObjectiveValues.length <= 0){
+					return true;
+				}
+				eInitialObjectiveValues = m_document.createElement("initialObjectiveValues");	
+				eObjectives.insertBefore(eInitialObjectiveValues, eObjectives.getFirstChild());									
+			}
+			XMLUtil.removeAllChildren(eInitialObjectiveValues);
+			int iObjs = initialObjectiveValues==null?0:initialObjectiveValues.length;
+			if(iObjs == 0) return true;
+			int nObj = 0;
+			for(int i = 0; i < iObjs; i++){
+				if(initialObjectiveValues[i]==0) continue;
+				Element eObj = m_document.createElement("obj");	
+				eObj.setAttribute("idx", (-i-1)+"");
+				eObj.setAttribute("value", initialObjectiveValues[i]+"");
+				eInitialObjectiveValues.appendChild(eObj);				
+				nObj++;
+			}
+			eInitialObjectiveValues.setAttribute("numberOfObj", nObj+"");
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setInitObjValuesDense
+
+	/**
+	 * Set initial objective values (InitObjValue[]). 
+	 * Before this method is called, the setVariable(int), setObjective(int), setConstraint(int)
+	 * methods are recommended  to be called first. 
+	 * @param initialObjectiveValues holds the initial objective values in sparse form (InitObjValue[]). 
+	 * @return whether the initial objective values are set successfully or not. 
+	 */
+	public boolean setInitObjValuesSparse(InitObjValue[] initialObjectiveValues){
+		Node nodeRef = null;
+		try{
+			Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSoL, "optimization");
+			if(eOptimization == null){
+				eOptimization = m_document.createElement("optimization");
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "job");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
+					if(nodeRef != null){
+						m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
+						if(nodeRef != null){
+							m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+						}
+						else{
+							nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+							if(nodeRef != null){
+								m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+							}
+							else{
+								m_eOSoL.insertBefore(eOptimization, m_eOSoL.getFirstChild());
+							}		
+						}		
+					}
+				}
+			}
+			Element eObjectives = (Element)XMLUtil.findChildNode(eOptimization, "objectives");
+			if(eObjectives == null){
+				if(initialObjectiveValues == null || initialObjectiveValues.length <= 0){
+					return true;
+				}
+				eObjectives = m_document.createElement("objectives");	
+				Node nodeRef2 = null;
+				nodeRef2 = XMLUtil.findChildNode(eOptimization, "variables");
+				if(nodeRef2 != null){
+					eOptimization.insertBefore(eObjectives, nodeRef2.getNextSibling());			
+				}
+				else{
+					eOptimization.insertBefore(eObjectives, eOptimization.getFirstChild());		
+				}
+			}
+			Element eInitialObjectiveValues = (Element)XMLUtil.findChildNode(eObjectives, "initialObjectiveValues");
+			if(eInitialObjectiveValues == null){
+				if(initialObjectiveValues == null || initialObjectiveValues.length <= 0){
+					return true;
+				}
+				eInitialObjectiveValues = m_document.createElement("initialObjectiveValues");	
+				eObjectives.insertBefore(eInitialObjectiveValues, eObjectives.getFirstChild());									
+			}
+			XMLUtil.removeAllChildren(eInitialObjectiveValues);
+			int iObjs = initialObjectiveValues==null?0:initialObjectiveValues.length;
+			if(iObjs == 0) return true;
+			int nObj = 0;
+			for(int i = 0; i < iObjs; i++){
+				if(initialObjectiveValues[i].value==0) continue;
+				Element eObj = m_document.createElement("obj");	
+				eObj.setAttribute("idx", initialObjectiveValues[i].idx+"");
+				eObj.setAttribute("value", initialObjectiveValues[i].value+"");
+				eInitialObjectiveValues.appendChild(eObj);				
+				nObj++;
+			}
+			eInitialObjectiveValues.setAttribute("numberOfObj", nObj+"");
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setInitObjValuesSparse
+
+	/**
+	 * Set initial objective bounds (double[]). 
+	 * Before this method is called, the setVariable(int), setObjective(int), setConstraint(int)
+	 * methods are recommended  to be called first. 
+	 * @param initialObjectiveLowerBounds holds the initial objective lower bounds in sparse form (InitObjBound[]). 
+	 * @param initialObjectiveUpperBounds holds the initial objective upper bounds in sparse form (InitObjBound[]). 
+	 * @return whether the initial objective bounds are set successfully or not. 
+	 */
+	public boolean setInitObjBoundsDense(double[] initialObjectiveLowerBounds, double[] initialObjectiveUpperBounds){
+		if(initialObjectiveLowerBounds == null && initialObjectiveUpperBounds == null ){
+			return true;
+		}
+		if(initialObjectiveLowerBounds != null && initialObjectiveUpperBounds != null
+				&& initialObjectiveLowerBounds.length != initialObjectiveUpperBounds.length){
+			return false;
+		}
+		Node nodeRef = null;
+		try{
+			Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSoL, "optimization");
+			if(eOptimization == null){
+				eOptimization = m_document.createElement("optimization");
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "job");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
+					if(nodeRef != null){
+						m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
+						if(nodeRef != null){
+							m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+						}
+						else{
+							nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+							if(nodeRef != null){
+								m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+							}
+							else{
+								m_eOSoL.insertBefore(eOptimization, m_eOSoL.getFirstChild());
+							}		
+						}		
+					}
+				}
+			}
+			Element eObjectives = (Element)XMLUtil.findChildNode(eOptimization, "objectives");
+			if(eObjectives == null){
+				eObjectives = m_document.createElement("objectives");	
+				Node nodeRef2 = null;
+				nodeRef2 = XMLUtil.findChildNode(eOptimization, "variables");
+				if(nodeRef2 != null){
+					eOptimization.insertBefore(eObjectives, nodeRef2.getNextSibling());			
+				}
+				else{
+					eOptimization.insertBefore(eObjectives, eOptimization.getFirstChild());		
+				}
+			}
+			Element eInitialObjectiveBounds = (Element)XMLUtil.findChildNode(eObjectives, "initialObjectiveBounds");
+			if(eInitialObjectiveBounds == null){
+				eInitialObjectiveBounds = m_document.createElement("initialObjectiveBounds");	
+				Node nodeRef3 = null;
+				nodeRef3 = XMLUtil.findChildNode(eObjectives, "initialObjectiveValues");
+				if(nodeRef3 != null){
+					eObjectives.insertBefore(eInitialObjectiveBounds, nodeRef3.getNextSibling());			
+				}
+				else{
+					eObjectives.insertBefore(eInitialObjectiveBounds, eObjectives.getFirstChild());	
+				}
+			}
+			XMLUtil.removeAllChildren(eInitialObjectiveBounds);
+			int iObjs = initialObjectiveLowerBounds==null?0:initialObjectiveLowerBounds.length;
+			if(iObjs <= 0) iObjs = initialObjectiveUpperBounds==null?0:initialObjectiveUpperBounds.length;
+			if(iObjs == 0) return true;
+			int nObj = 0;
+			for(int i = 0; i < iObjs; i++){
+				Element eObj = m_document.createElement("obj");	
+				eObj.setAttribute("idx", (-i-1)+"");
+				eObj.setAttribute("lbValue", initialObjectiveLowerBounds[i]+"");
+				eObj.setAttribute("ubValue", initialObjectiveUpperBounds[i]+"");
+				eInitialObjectiveBounds.appendChild(eObj);				
+				nObj++;
+			}
+			eInitialObjectiveBounds.setAttribute("numberOfObj", nObj+"");
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setInitObjBoundsDense
+
+	/**
+	 * Set initial objective bounds (InitObjBound[]). 
+	 * Before this method is called, the setVariable(int), setObjective(int), setConstraint(int)
+	 * methods are recommended  to be called first. 
+	 * @param initialObjectiveBounds holds the initial objective bounds in sparse form (InitObjBound[]). 
+	 * @return whether the initial objective bounds are set successfully or not. 
+	 */
+	public boolean setInitObjBoundsSparse(InitObjBound[] initialObjectiveBounds){
+		Node nodeRef = null;
+		try{
+			Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSoL, "optimization");
+			if(eOptimization == null){
+				eOptimization = m_document.createElement("optimization");
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "job");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
+					if(nodeRef != null){
+						m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
+						if(nodeRef != null){
+							m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+						}
+						else{
+							nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+							if(nodeRef != null){
+								m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+							}
+							else{
+								m_eOSoL.insertBefore(eOptimization, m_eOSoL.getFirstChild());
+							}		
+						}		
+					}
+				}
+			}
+			Element eObjectives = (Element)XMLUtil.findChildNode(eOptimization, "objectives");
+			if(eObjectives == null){
+				if(initialObjectiveBounds == null || initialObjectiveBounds.length <= 0){
+					return true;
+				}
+				eObjectives = m_document.createElement("objectives");	
+				Node nodeRef2 = null;
+				nodeRef2 = XMLUtil.findChildNode(eOptimization, "variables");
+				if(nodeRef2 != null){
+					eOptimization.insertBefore(eObjectives, nodeRef2.getNextSibling());			
+				}
+				else{
+					eOptimization.insertBefore(eObjectives, eOptimization.getFirstChild());		
+				}
+			}
+			Element eInitialObjectiveBounds = (Element)XMLUtil.findChildNode(eObjectives, "initialObjectiveBounds");
+			if(eInitialObjectiveBounds == null){
+				if(initialObjectiveBounds == null || initialObjectiveBounds.length <= 0){
+					return true;
+				}
+				eInitialObjectiveBounds = m_document.createElement("initialObjectiveBounds");	
+				Node nodeRef3 = null;
+				nodeRef3 = XMLUtil.findChildNode(eObjectives, "initialObjectiveValues");
+				if(nodeRef3 != null){
+					eObjectives.insertBefore(eInitialObjectiveBounds, nodeRef3.getNextSibling());			
+				}
+				else{
+					eObjectives.insertBefore(eInitialObjectiveBounds, eObjectives.getFirstChild());	
+				}
+			}
+			XMLUtil.removeAllChildren(eInitialObjectiveBounds);
+			int iObjs = initialObjectiveBounds==null?0:initialObjectiveBounds.length;
+			if(iObjs == 0) return true;
+			int nObj = 0;
+			for(int i = 0; i < iObjs; i++){
+				if(initialObjectiveBounds[i] == null) continue;
+				Element eObj = m_document.createElement("obj");	
+				eObj.setAttribute("idx", initialObjectiveBounds[i].idx+"");
+				eObj.setAttribute("lbValue", initialObjectiveBounds[i].lbValue+"");
+				eObj.setAttribute("ubValue", initialObjectiveBounds[i].ubValue+"");
+				eInitialObjectiveBounds.appendChild(eObj);				
+				nObj++;
+			}
+			eInitialObjectiveBounds.setAttribute("numberOfObj", nObj+"");
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setInitObjBoundsSparse
+
+	/**
+	 * Set the number of other objective options. 
+	 * 
+	 * @param numberOfOtherObjectiveOptions holds the number of other objective options
+	 * @return whether the number is set successfully or not. 
+	 */
+	public boolean setNumberOfOtherObjectiveOptions(int numberOfOtherObjectiveOptions){
+		Node nodeRef = null;
+		if(numberOfOtherObjectiveOptions < 0){
+			return true;
+		}
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSoL, "optimization");
+		if(eOptimization == null){
+			eOptimization = m_document.createElement("optimization");
+			nodeRef = XMLUtil.findChildNode(m_eOSoL, "job");
+			if(nodeRef != null){
+				m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+			}
+			else{
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
+					if(nodeRef != null){
+						m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+						if(nodeRef != null){
+							m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+						}
+						else{
+							m_eOSoL.insertBefore(eOptimization, m_eOSoL.getFirstChild());
+						}		
+					}		
+				}
+			}
+		}
+		Element eObjectives = (Element)XMLUtil.findChildNode(eOptimization, "objectives");
+		if(eObjectives == null){
+			eObjectives = m_document.createElement("objectives");	
+			Node nodeRef2 = null;
+			nodeRef2 = XMLUtil.findChildNode(eOptimization, "variables");
+			if(nodeRef2 != null){
+				eOptimization.insertBefore(eObjectives, nodeRef2.getNextSibling());			
+			}
+			else{
+				eOptimization.insertBefore(eObjectives, eOptimization.getFirstChild());									
+			}
+		}
+		try{
+			eObjectives.setAttribute("numberOfOtherObjectiveOptions", numberOfOtherObjectiveOptions+"");
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;	
+	}//setNumberOfOtherObjectiveOptions
+
+	/**
+	 * Set initial constraint values (double[]). 
+	 * Before this method is called, the setVariable(int), setObjective(int), setConstraint(int)
+	 * methods are recommended  to be called first. 
+	 * @param initialConstraintValues holds a double array of initial constraint values. 
+	 * @return whether the initial constraint values are set successfully or not. 
+	 */
+	public boolean setInitConValuesDense(double[] initialConstraintValues){
+		Node nodeRef = null;
+		try{
+			Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSoL, "optimization");
+			if(eOptimization == null){
+				eOptimization = m_document.createElement("optimization");
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "job");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
+					if(nodeRef != null){
+						m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
+						if(nodeRef != null){
+							m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+						}
+						else{
+							nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+							if(nodeRef != null){
+								m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+							}
+							else{
+								m_eOSoL.insertBefore(eOptimization, m_eOSoL.getFirstChild());
+							}		
+						}		
+					}
+				}
+			}
+			Element eConstraints = (Element)XMLUtil.findChildNode(eOptimization, "constraints");
+			if(eConstraints == null){
+				if(initialConstraintValues == null || initialConstraintValues.length <= 0){
+					return true;
+				}
+				eConstraints = m_document.createElement("constraints");	
+				Node nodeRef2 = null;
+				nodeRef2 = XMLUtil.findChildNode(eOptimization, "objectives");
+				if(nodeRef2 != null){
+					eOptimization.insertBefore(eConstraints, nodeRef2.getNextSibling());			
+				}
+				else{
+					nodeRef2 = XMLUtil.findChildNode(eOptimization, "variables");
+					if(nodeRef2 != null){
+						eOptimization.insertBefore(eConstraints, nodeRef2.getNextSibling());			
+					}
+					else{
+						eOptimization.insertBefore(eConstraints, eOptimization.getFirstChild());		
+					}	
+				}
+			}
+			Element eInitialConstraintValues = (Element)XMLUtil.findChildNode(eConstraints, "initialConstraintValues");
+			if(eInitialConstraintValues == null){
+				if(initialConstraintValues == null || initialConstraintValues.length <= 0){
+					return true;
+				}
+				eInitialConstraintValues = m_document.createElement("initialConstraintValues");	
+				eConstraints.insertBefore(eInitialConstraintValues, eConstraints.getFirstChild());									
+			}
+			XMLUtil.removeAllChildren(eInitialConstraintValues);
+			int iCons = initialConstraintValues==null?0:initialConstraintValues.length;
+			if(iCons == 0) return true;
+			int nCon = 0;
+			for(int i = 0; i < iCons; i++){
+				if(initialConstraintValues[i]==0) continue;
+				Element eCon = m_document.createElement("con");	
+				eCon.setAttribute("idx", i+"");
+				eCon.setAttribute("value", initialConstraintValues[i]+"");
+				eInitialConstraintValues.appendChild(eCon);				
+				nCon++;
+			}
+			eInitialConstraintValues.setAttribute("numberOfCon", nCon+"");
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setInitConValuesDense
+
+	/**
+	 * Set initial constraint values (InitConValue[]). 
+	 * Before this method is called, the setVariable(int), setConective(int), setConstraint(int)
+	 * methods are recommended  to be called first. 
+	 * @param initialConstraintValues holds the initial constraint values in sparse form (InitConValue[]). 
+	 * @return whether the initial constraint values are set successfully or not. 
+	 */
+	public boolean setInitConValuesSparse(InitConValue[] initialConstraintValues){
+		Node nodeRef = null;
+		try{
+			Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSoL, "optimization");
+			if(eOptimization == null){
+				eOptimization = m_document.createElement("optimization");
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "job");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
+					if(nodeRef != null){
+						m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
+						if(nodeRef != null){
+							m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+						}
+						else{
+							nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+							if(nodeRef != null){
+								m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+							}
+							else{
+								m_eOSoL.insertBefore(eOptimization, m_eOSoL.getFirstChild());
+							}		
+						}		
+					}
+				}
+			}
+			Element eConstraints = (Element)XMLUtil.findChildNode(eOptimization, "constraints");
+			if(eConstraints == null){
+				if(initialConstraintValues == null || initialConstraintValues.length <= 0){
+					return true;
+				}
+				eConstraints = m_document.createElement("constraints");	
+				Node nodeRef2 = null;
+				nodeRef2 = XMLUtil.findChildNode(eOptimization, "objectives");
+				if(nodeRef2 != null){
+					eOptimization.insertBefore(eConstraints, nodeRef2.getNextSibling());			
+				}
+				else{
+					nodeRef2 = XMLUtil.findChildNode(eOptimization, "variables");
+					if(nodeRef2 != null){
+						eOptimization.insertBefore(eConstraints, nodeRef2.getNextSibling());			
+					}
+					else{
+						eOptimization.insertBefore(eConstraints, eOptimization.getFirstChild());		
+					}	
+				}
+			}
+			Element eInitialConstraintValues = (Element)XMLUtil.findChildNode(eConstraints, "initialConstraintValues");
+			if(eInitialConstraintValues == null){
+				if(initialConstraintValues == null || initialConstraintValues.length <= 0){
+					return true;
+				}
+				eInitialConstraintValues = m_document.createElement("initialConstraintValues");	
+				eConstraints.insertBefore(eInitialConstraintValues, eConstraints.getFirstChild());									
+			}
+			XMLUtil.removeAllChildren(eInitialConstraintValues);
+			int iCons = initialConstraintValues==null?0:initialConstraintValues.length;
+			if(iCons == 0) return true;
+			int nCon = 0;
+			for(int i = 0; i < iCons; i++){
+				if(initialConstraintValues[i].value==0) continue;
+				Element eCon = m_document.createElement("con");	
+				eCon.setAttribute("idx", initialConstraintValues[i].idx+"");
+				eCon.setAttribute("value", initialConstraintValues[i].value+"");
+				eInitialConstraintValues.appendChild(eCon);				
+				nCon++;
+			}
+			eInitialConstraintValues.setAttribute("numberOfCon", nCon+"");
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setInitConValuesSparse
+
+	/**
+	 * Set initial dual values (double[]). 
+	 * Before this method is called, the setVariable(int), setObjective(int), setConstraint(int)
+	 * methods are recommended  to be called first. 
+	 * @param initialLbDualValues holds the initial dual value at lower bounds.
+	 * @param initialUbDualValues holds the initial dual value at upper bounds. 
+	 * @return whether the initial dual values are set successfully or not. 
+	 */
+	public boolean setInitDualValuesDense(double[] initialLbDualValues, double[] initialUbDualValues){
+		if(initialLbDualValues == null && initialUbDualValues == null ){
+			return true;
+		}
+		if(initialLbDualValues != null && initialUbDualValues != null
+				&& initialLbDualValues.length != initialUbDualValues.length){
+			return false;
+		}
+		Node nodeRef = null;
+		try{
+			Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSoL, "optimization");
+			if(eOptimization == null){
+				eOptimization = m_document.createElement("optimization");
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "job");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
+					if(nodeRef != null){
+						m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
+						if(nodeRef != null){
+							m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+						}
+						else{
+							nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+							if(nodeRef != null){
+								m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+							}
+							else{
+								m_eOSoL.insertBefore(eOptimization, m_eOSoL.getFirstChild());
+							}		
+						}		
+					}
+				}
+			}
+			Element eConstraints = (Element)XMLUtil.findChildNode(eOptimization, "constraints");
+			if(eConstraints == null){
+				eConstraints = m_document.createElement("constraints");	
+				Node nodeRef2 = null;
+				nodeRef2 = XMLUtil.findChildNode(eOptimization, "objectives");
+				if(nodeRef2 != null){
+					eOptimization.insertBefore(eConstraints, nodeRef2.getNextSibling());			
+				}
+				else{
+					nodeRef2 = XMLUtil.findChildNode(eOptimization, "variables");
+					if(nodeRef2 != null){
+						eOptimization.insertBefore(eConstraints, nodeRef2.getNextSibling());			
+					}
+					else{
+						eOptimization.insertBefore(eConstraints, eOptimization.getFirstChild());		
+					}	
+				}
+			}
+			Element eInitialDualValues = (Element)XMLUtil.findChildNode(eConstraints, "initialDualValues");
+			if(eInitialDualValues == null){
+				eInitialDualValues = m_document.createElement("initialDualValues");	
+				Node nodeRef3 = null;
+				nodeRef3 = XMLUtil.findChildNode(eConstraints, "initialConstraintValues");
+				if(nodeRef3 != null){
+					eConstraints.insertBefore(eInitialDualValues, nodeRef3.getNextSibling());			
+				}
+				else{
+					eConstraints.insertBefore(eInitialDualValues, eConstraints.getFirstChild());	
+				}
+			}
+			XMLUtil.removeAllChildren(eInitialDualValues);
+			int iCons = initialLbDualValues==null?0:initialLbDualValues.length;
+			if(iCons <= 0) iCons = initialUbDualValues==null?0:initialUbDualValues.length;
+			if(iCons == 0) return true;
+			int nCon = 0;
+			for(int i = 0; i < iCons; i++){
+				Element eCon = m_document.createElement("con");	
+				eCon.setAttribute("idx", i+"");
+				eCon.setAttribute("lbValue", initialLbDualValues[i]+"");
+				eCon.setAttribute("ubValue", initialUbDualValues[i]+"");
+				eInitialDualValues.appendChild(eCon);				
+				nCon++;
+			}
+			eInitialDualValues.setAttribute("numberOfCon", nCon+"");
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setInitDualValuesDense
+
+	/**
+	 * Set initial dual values (InitDualVarValue[]). 
+	 * Before this method is called, the setVariable(int), setObjective(int), setConstraint(int)
+	 * methods are recommended  to be called first. 
+	 * @param initialDualValues holds the initial dual values in sparse form (InitDualVarValue[]). 
+	 * @return whether the initial dual values are set successfully or not. 
+	 */
+	public boolean setInitDualValuesSparse(InitDualVarValue[] initialDualValues){
+		Node nodeRef = null;
+		try{
+			Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSoL, "optimization");
+			if(eOptimization == null){
+				eOptimization = m_document.createElement("optimization");
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "job");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
+					if(nodeRef != null){
+						m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
+						if(nodeRef != null){
+							m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+						}
+						else{
+							nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+							if(nodeRef != null){
+								m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+							}
+							else{
+								m_eOSoL.insertBefore(eOptimization, m_eOSoL.getFirstChild());
+							}		
+						}		
+					}
+				}
+			}
+			Element eConstraints = (Element)XMLUtil.findChildNode(eOptimization, "constraints");
+			if(eConstraints == null){
+				if(initialDualValues == null || initialDualValues.length <= 0){
+					return true;
+				}
+				eConstraints = m_document.createElement("constraints");	
+				Node nodeRef2 = null;
+				nodeRef2 = XMLUtil.findChildNode(eOptimization, "objectives");
+				if(nodeRef2 != null){
+					eOptimization.insertBefore(eConstraints, nodeRef2.getNextSibling());			
+				}
+				else{
+					nodeRef2 = XMLUtil.findChildNode(eOptimization, "variables");
+					if(nodeRef2 != null){
+						eOptimization.insertBefore(eConstraints, nodeRef2.getNextSibling());			
+					}
+					else{
+						eOptimization.insertBefore(eConstraints, eOptimization.getFirstChild());		
+					}	
+				}
+			}
+			Element eInitialDualValues = (Element)XMLUtil.findChildNode(eConstraints, "initialDualValues");
+			if(eInitialDualValues == null){
+				if(initialDualValues == null || initialDualValues.length <= 0){
+					return true;
+				}
+				eInitialDualValues = m_document.createElement("initialDualValues");	
+				Node nodeRef3 = null;
+				nodeRef3 = XMLUtil.findChildNode(eConstraints, "initialConstraintValues");
+				if(nodeRef3 != null){
+					eConstraints.insertBefore(eInitialDualValues, nodeRef3.getNextSibling());			
+				}
+				else{
+					eConstraints.insertBefore(eInitialDualValues, eConstraints.getFirstChild());	
+				}
+			}
+			XMLUtil.removeAllChildren(eInitialDualValues);
+			int iCons = initialDualValues==null?0:initialDualValues.length;
+			if(iCons == 0) return true;
+			int nCon = 0;
+			for(int i = 0; i < iCons; i++){
+				if(initialDualValues[i] == null) continue;
+				Element eCon = m_document.createElement("con");	
+				eCon.setAttribute("idx", initialDualValues[i].idx+"");
+				eCon.setAttribute("lbValue", initialDualValues[i].lbValue+"");
+				eCon.setAttribute("ubValue", initialDualValues[i].ubValue+"");
+				eInitialDualValues.appendChild(eCon);				
+				nCon++;
+			}
+			eInitialDualValues.setAttribute("numberOfCon", nCon+"");
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setInitDualValuesSparse
+	
+	/**
+	 * Set the number of other constraint options. 
+	 * 
+	 * @param numberOfOtherConstraintOptions holds the number of other constraint options
+	 * @return whether the number is set successfully or not. 
+	 */
+	public boolean setNumberOfOtherConstraintOptions(int numberOfOtherConstraintOptions){
+		Node nodeRef = null;
+		if(numberOfOtherConstraintOptions < 0){
+			return true;
+		}
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSoL, "optimization");
+		if(eOptimization == null){
+			eOptimization = m_document.createElement("optimization");
+			nodeRef = XMLUtil.findChildNode(m_eOSoL, "job");
+			if(nodeRef != null){
+				m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+			}
+			else{
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
+					if(nodeRef != null){
+						m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+						if(nodeRef != null){
+							m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+						}
+						else{
+							m_eOSoL.insertBefore(eOptimization, m_eOSoL.getFirstChild());
+						}		
+					}		
+				}
+			}
+		}
+		Element eConstraints = (Element)XMLUtil.findChildNode(eOptimization, "constraints");
+		if(eConstraints == null){
+			eConstraints = m_document.createElement("constraints");	
+			Node nodeRef2 = null;
+			nodeRef2 = XMLUtil.findChildNode(eOptimization, "objectives");
+			if(nodeRef2 != null){
+				eOptimization.insertBefore(eConstraints, nodeRef2.getNextSibling());			
+			}
+			else{
+				nodeRef2 = XMLUtil.findChildNode(eOptimization, "variables");
+				if(nodeRef2 != null){
+					eOptimization.insertBefore(eConstraints, nodeRef2.getNextSibling());			
+				}
+				else{
+					eOptimization.insertBefore(eConstraints, eOptimization.getFirstChild());									
+				}
+			}
+		}
+		try{
+			eConstraints.setAttribute("numberOfOtherConstraintOptions", numberOfOtherConstraintOptions+"");
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;	
+	}//setNumberOfOtherConstraintOptions
+
+	/**
+	 * Set the number of other solver options. 
+	 * 
+	 * @param numberOfOtherSolverOptions holds the number of other solver options
+	 * @return whether the number is set successfully or not. 
+	 */
+	public boolean setNumberOfSolverOptions(int numberOfSolverOptions){
+		Node nodeRef = null;
+		if(numberOfSolverOptions < 0){
+			return true;
+		}
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSoL, "optimization");
+		if(eOptimization == null){
+			eOptimization = m_document.createElement("optimization");
+			nodeRef = XMLUtil.findChildNode(m_eOSoL, "job");
+			if(nodeRef != null){
+				m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+			}
+			else{
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
+					if(nodeRef != null){
+						m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+						if(nodeRef != null){
+							m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+						}
+						else{
+							m_eOSoL.insertBefore(eOptimization, m_eOSoL.getFirstChild());
+						}		
+					}		
+				}
+			}
+		}
+		Element eSolverOptions = (Element)XMLUtil.findChildNode(eOptimization, "solverOptions");
+		if(eSolverOptions == null){
+			eSolverOptions = m_document.createElement("solverOptions");	
+			eOptimization.appendChild(eSolverOptions);				
+		}
+		try{
+			eSolverOptions.setAttribute("numberOfSolverOptions", numberOfSolverOptions+"");
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;	
+	}//setNumberOfSolverOptions
+
+	/**
+	 * Set the solver options. 
+	 * 
+	 * @param names holds the names of the solver options. It is required. 
+	 * @param values holds the values of the solver options, empty string "" or null if no value for an option.
+	 * @param descriptions holds the descriptions of the solver options, empty string "" or null if no value for an option, null for
+	 * the entire array if none of the options have descriptions.
+	 * @param solvers holds the solvers of the solver options, empty string "" or null if no value for an option, null for
+	 * the entire array if none of the options have solvers.
+	 * @param categories holds the categories of the solver options, empty string "" or null if no value for an option, null for
+	 * the entire array if none of the options have categories.
+	 * @param types holds the types of the solver options, empty string "" or null if no value for an option, null for
+	 * the entire array if none of the options have types.
+	 * @return whether the solver options element construction is successful.
+	 */
+	public boolean setSolverOptions(String[] names, String[] values, String[] descriptions, String[] solvers, String[] categories, String[] types){
 		if(names == null) return false;
 		if(values == null) return false;
 		if(names.length != values.length) return false;
 		if(descriptions != null && names.length != descriptions.length) return false;
 		for(int i = 0; i < names.length; i++){
-			addOtherOption(names[i], values[i], (descriptions==null)?"":descriptions[i]);
+			addSolverOption(names[i], values[i], (descriptions==null)?"":descriptions[i], (solvers==null)?"":solvers[i], (categories==null)?"":categories[i], (types==null)?"":types[i]);
 		}
 		return true;
-	}//setOtherOptions
+	}//setSolverOptions
 
 	/**
-	 * Add an other option element. 
+	 * Add a solver option element. 
 	 * 
-	 * @param name holds the name of the other option element. It is required.
-	 * @param value holds the value of the other option element, empty string "" or null if none. 
-	 * @param description holds the description of the other option element, empty string "" or null if none. 
-	 * @return whether the other option element is added successfully.
+	 * @param name holds the name of the solver option element. It is required.
+	 * @param value holds the value of the solver option element, empty string "" or null if none. 
+	 * @param description holds the description of the solver option element, empty string "" or null if none. 
+	 * @param solver holds the solver of the solverOption element, empty string "" or null if no value. 
+	 * @param category holds the category of the solverOption element, empty string "" or null if no value. 
+	 * @param type holds the type of the solverOption element, empty string "" or null if no value. 
+	 * @return whether the solver option element is added successfully.
 	 */
-	public boolean addOtherOption(String name, String value, String description){
+	public boolean addSolverOption(String name, String value, String description, String solver, String category, String type){
+		Node nodeRef = null;
 		if(name == null || name.trim().length() <= 0) return false;
+		try{
+			Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSoL, "optimization");
+			if(eOptimization == null){
+				eOptimization = m_document.createElement("optimization");
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "job");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
+					if(nodeRef != null){
+						m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
+						if(nodeRef != null){
+							m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+						}
+						else{
+							nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+							if(nodeRef != null){
+								m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+							}
+							else{
+								m_eOSoL.insertBefore(eOptimization, m_eOSoL.getFirstChild());
+							}		
+						}		
+					}
+				}
+			}
+			Element eSolverOptions = (Element)XMLUtil.findChildNode(eOptimization, "solverOptions");
+			if(eSolverOptions == null){
+				eSolverOptions = m_document.createElement("solverOptions");	
+				eOptimization.appendChild(eSolverOptions);				
+			}
+			try{
+				Vector<Element> vElements = XMLUtil.getChildElementsByTagName(eSolverOptions, "solverOption");
+				Element eSolverOption;
+				int iNls = vElements==null?0:vElements.size();
+				for(int i = 0; i < iNls; i++){
+					eSolverOption = (Element)vElements.elementAt(i);
+					if(eSolverOption.getAttribute("name").equals(name)){
+						eSolverOptions.removeChild(eSolverOption);
+						iNls--;
+						break;
+					}
+				}
+				eSolverOption = createSolverOption(name, value, description, solver, category, type);
+				eSolverOptions.appendChild(eSolverOption);
 
-		Vector<Element> vElements = XMLUtil.getChildElementsByTagName(m_eOSoL, "other");
-		Element eOther;
-		int iNls = vElements==null?0:vElements.size();
-		for(int i = 0; i < iNls; i++){
-			eOther = (Element)vElements.elementAt(i);
-			if(eOther.getAttribute("name").equals(name)){
-				m_eOSoL.removeChild(eOther);
-				break;
+				eSolverOptions.setAttribute("numberOfSolverOptions", (iNls+1)+"");
+
+			}
+			catch(Exception e){
+				e.printStackTrace();
+				return false;
 			}
 		}
-		eOther = createOther(name, value, description);
-		m_eOSoL.appendChild(eOther);
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
 		return true;
-	}//addOtherOption
-
+	}//addSolverOption
 
 	/**
 	 * Create the OSoL root element and its most basic required structure.
@@ -2314,6 +4094,37 @@ public class OSoLWriter extends OSgLWriter{
 		return eOther;
 	}//createOther
 
+	/**
+	 * Create the solverOption element and its most basic required structure.
+	 * 
+	 * @param name the name of the solverOption element. 
+	 * @param value the value of the solverOption element, empty string "" or null if no value. 
+	 * @param description holds the description of the solverOption element, empty string "" or null if none. 
+	 * @param solver holds the solver of the solverOption element, empty string "" or null if no value. 
+	 * @param category holds the category of the solverOption element, empty string "" or null if no value. 
+	 * @param type holds the type of the solverOption element, empty string "" or null if no value. 
+	 * @return the solverOption element.
+	 */
+	protected Element createSolverOption(String name, String value, String description, String solver, String category, String type){
+		Element eSolverOption = m_document.createElement("solverOption");
+		eSolverOption.setAttribute("name", name);
+		if(value != null && value.length() > 0){
+			eSolverOption.setAttribute("value", value);
+		}
+		if(description != null && description.length() > 0){
+			eSolverOption.setAttribute("description", description);
+		}
+		if(solver != null && solver.length() > 0){
+			eSolverOption.setAttribute("solver", solver);
+		}
+		if(category != null && category.length() > 0){
+			eSolverOption.setAttribute("category", category);
+		}
+		if(type != null && type.length() > 0){
+			eSolverOption.setAttribute("type", type);
+		}
+		return eSolverOption;
+	}//createSolverOption
 
 	/**
 	 * main for test purposes.
@@ -2337,41 +4148,167 @@ public class OSoLWriter extends OSgLWriter{
 //		if(!osolWriter.setUserName("userName")) System.out.println("setUserName Unsuccessful");		
 //		if(!osolWriter.setPassword("password")) System.out.println("setPassword Unsuccessful");		
 //		if(!osolWriter.setContactTransportType("smtp")) System.out.println("setContactTransportType Unsuccessful");		
-		if(!osolWriter.setContact("contactAddress")) System.out.println("setContactAddress Unsuccessful");		
-		if(!osolWriter.setNumberOfOtherGeneralOptions(0)) System.out.println("setNumberOfOtherGeneralOptions");		
-		if(!osolWriter.addOtherGeneralOption("gname0", null, "")) System.out.println("addOtherGeneralOption");		
-		String[] msNames = {"gname1", "gname2"};
-		String[] msValues = {"gvalue1", "gvalue2"};
-		String[] msDescs = {"gdesc1", "gdesc2"};
-		if(!osolWriter.setOtherGeneralOptions(msNames, msValues, msDescs)) System.out.println("setOtherGeneralOptions");		
-		if(!osolWriter.setOtherGeneralOptions(msNames, msValues, null)) System.out.println("setOtherGeneralOptions");		
-		if(!osolWriter.addOtherGeneralOption("gname1", null, "")) System.out.println("addOtherGeneralOption");		
-		
-		if(!osolWriter.setMinDiskSpace(10)) System.out.println("setMinDiskSpace Unsuccessful");		
-//		if(!osolWriter.setSystemMinMemorySize(20)) System.out.println("setSystemMinMemorySize Unsuccessful");		
-//		if(!osolWriter.setSystemMinCPUSpeed(30)) System.out.println("setSystemMinCPUSpeed Unsuccessful");		
+//		if(!osolWriter.setContact("contactAddress")) System.out.println("setContactAddress Unsuccessful");		
+//		if(!osolWriter.setNumberOfOtherGeneralOptions(0)) System.out.println("setNumberOfOtherGeneralOptions");		
+//		if(!osolWriter.addOtherGeneralOption("gname0", null, "")) System.out.println("addOtherGeneralOption");		
+//		String[] msNames = {"gname1", "gname2"};
+//		String[] msValues = {"gvalue1", "gvalue2"};
+//		String[] msDescs = {"gdesc1", "gdesc2"};
+//		if(!osolWriter.setOtherGeneralOptions(msNames, msValues, msDescs)) System.out.println("setOtherGeneralOptions");		
+//		if(!osolWriter.setOtherGeneralOptions(msNames, msValues, null)) System.out.println("setOtherGeneralOptions");		
+//		if(!osolWriter.addOtherGeneralOption("gname1", null, "")) System.out.println("addOtherGeneralOption");		
+
+//		if(!osolWriter.setMinDiskSpace(10)) System.out.println("setMinDiskSpace Unsuccessful");		
+//		if(!osolWriter.setMinDiskSpaceUnit("kilobyte")) System.out.println("setMinDiskSpaceUnit Unsuccessful");		
+//		if(!osolWriter.setMinMemorySize(20)) System.out.println("setMinMemorySize Unsuccessful");		
+//		if(!osolWriter.setMinMemorySizeUnit("megabyte")) System.out.println("setMinMemorySizeUnit Unsuccessful");		
+//		if(!osolWriter.setMinCPUSpeed(30)) System.out.println("setMinCPUSpeed Unsuccessful");		
+//		if(!osolWriter.setMinCPUSpeedUnit("hertz")) System.out.println("setMinCPUSpeedUnit Unsuccessful");		
+//		if(!osolWriter.setMinCPUNumber(1)) System.out.println("setMinCPUNumber Unsuccessful");		
+//		if(!osolWriter.setNumberOfOtherSystemOptions(0)) System.out.println("setNumberOfOtherSystemOptions");		
+//		if(!osolWriter.addOtherSystemOption("sname0", null, "")) System.out.println("addOtherSystemOption");		
+//		String[] msNames = {"sname1", "sname2"};
+//		String[] msValues = {"svalue1", "svalue2"};
+//		String[] msDescs = {"sdesc1", "sdesc2"};
+//		if(!osolWriter.setOtherSystemOptions(msNames, msValues, msDescs)) System.out.println("setOtherSystemOptions");		
+//		if(!osolWriter.setOtherSystemOptions(msNames, msValues, null)) System.out.println("setOtherSystemOptions");		
+//		if(!osolWriter.addOtherSystemOption("sname1", null, "")) System.out.println("addOtherSystemOption");		
+
 //		if(!osolWriter.setServiceType("solver")) System.out.println("setServiceType Unsuccessful");		
-//		if(!osolWriter.setJobMaxTime(9999)) System.out.println("setJobMaxTime Unsuccessful");		
-//		if(!osolWriter.setJobScheduledStartTime(new GregorianCalendar(1970, 0, 1, 0, 0, 0))) System.out.println("setJobScheduledStartTime Unsuccessful");		
+//		if(!osolWriter.setNumberOfOtherServiceOptions(0)) System.out.println("setNumberOfOtherServiceOptions");		
+//		if(!osolWriter.addOtherServiceOption("sname0", null, "")) System.out.println("addOtherServiceOption");		
+//		String[] msNames = {"sname1", "sname2"};
+//		String[] msValues = {"svalue1", "svalue2"};
+//		String[] msDescs = {"sdesc1", "sdesc2"};
+//		if(!osolWriter.setOtherServiceOptions(msNames, msValues, msDescs)) System.out.println("setOtherServiceOptions");		
+//		if(!osolWriter.setOtherServiceOptions(msNames, msValues, null)) System.out.println("setOtherServiceOptions");		
+//		if(!osolWriter.addOtherServiceOption("sname1", null, "")) System.out.println("addOtherServiceOption");		
+
+//		if(!osolWriter.setMaxTime(9999)) System.out.println("setJobMaxTime Unsuccessful");		
+//		if(!osolWriter.setMaxTimeUnit("second")) System.out.println("setMaxTimeUnit Unsuccessful");		
+//		if(!osolWriter.setScheduledStartTime(new GregorianCalendar(1970, 0, 1, 0, 0, 0))) System.out.println("setJobScheduledStartTime Unsuccessful");		
 //		String[] jobDependencies = {"a1", "b3"};
 //		if(!osolWriter.setJobDependencies(jobDependencies)) System.out.println("setJobDependencies Unsuccessful");		
-//		String[] paths = {"p1", "p3"};
-//		if(!osolWriter.setRequiredDirectories(paths)) System.out.println("setRequiredDirectories Unsuccessful");		
-//		if(!osolWriter.setRequiredFiles(paths)) System.out.println("setRequiredFiles Unsuccessful");		
-//		if(!osolWriter.setVariableNumber(3)) System.out.println("setVariableNumber Unsuccessful");		
-//		if(!osolWriter.setObjectiveNumber(3)) System.out.println("setObjectiveNumber Unsuccessful");		
-//		if(!osolWriter.setConstraintNumber(2)) System.out.println("setConstraintNumber Unsuccessful");		
-//		double[] initialVariableValues = {1, 2, 3};
-//		if(!osolWriter.setInitialVariableValues(initialVariableValues)) System.out.println("setInitialVariableValues Unsuccessful");		
+//		String[] mDirpaths = {"dp1", "dp3"};
+//		if(!osolWriter.setRequiredDirectories(mDirpaths)) System.out.println("setRequiredDirectories Unsuccessful");		
+//		String[] mFilepaths = {"fp1", "fp3"};
+//		if(!osolWriter.setRequiredFiles(mFilepaths)) System.out.println("setRequiredFiles Unsuccessful");		
+//		String[] mDirpaths = {"dp2", "dp4"};
+//		if(!osolWriter.setDirectoriesToMake(mDirpaths)) System.out.println("setDirectoriesToMake Unsuccessful");		
+//		String[] mFilepaths = {"fp2", "fp4"};
+//		if(!osolWriter.setFilesToMake(mFilepaths)) System.out.println("setFilesToMake Unsuccessful");		
+//		PathPair[] pathPairs = new PathPair[2];
+//		pathPairs[0] = new PathPair(); pathPairs[0].from = "from1"; pathPairs[0].to = "to1"; pathPairs[0].makeCopy=false;
+//		pathPairs[1] = new PathPair();pathPairs[1].from = "from2"; pathPairs[1].to = "to2"; pathPairs[1].makeCopy=true;
+//		if(!osolWriter.setInputDirectoriesToMove(pathPairs)) System.out.println("setInputDirectoriesToMove Unsuccessful");		
+//		if(!osolWriter.setInputFilesToMove(pathPairs)) System.out.println("setInputFilesToMove Unsuccessful");		
+//		if(!osolWriter.setOutputDirectoriesToMove(pathPairs)) System.out.println("setOutputDirectoriesToMove Unsuccessful");		
+//		if(!osolWriter.setOutputFilesToMove(pathPairs)) System.out.println("setOutputFilesToMove Unsuccessful");		
+//		String[] mDirpaths = {"dp7", "dp8"};
+//		if(!osolWriter.setDirectoriesToDelete(mDirpaths)) System.out.println("setDirectoriesToDelete Unsuccessful");		
+//		String[] mFilepaths = {"fp7", "fp8"};
+//		if(!osolWriter.setFilesToDelete(mFilepaths)) System.out.println("setFilesToDelete Unsuccessful");		
+//		String[] mProcesses = {"proc1", "proc2"};
+//		if(!osolWriter.setProcessesToKill(mProcesses)) System.out.println("setProcessesToKill Unsuccessful");		
+//		if(!osolWriter.setNumberOfOtherJobOptions(0)) System.out.println("setNumberOfOtherJobOptions");		
+//		if(!osolWriter.addOtherJobOption("jname0", null, "")) System.out.println("addOtherJobOption");		
+//		String[] msNames = {"jname1", "jname2"};
+//		String[] msValues = {"jvalue1", "jvalue2"};
+//		String[] msDescs = {"jdesc1", "jdesc2"};
+//		if(!osolWriter.setOtherJobOptions(msNames, msValues, msDescs)) System.out.println("setOtherJobOptions");		
+//		if(!osolWriter.setOtherJobOptions(msNames, msValues, null)) System.out.println("setOtherJobOptions");		
+//		if(!osolWriter.addOtherJobOption("jname1", null, "")) System.out.println("addOtherJobOption");		
 
 
+		if(!osolWriter.setVariableNumber(3)) System.out.println("setVariableNumber Unsuccessful");		
+		if(!osolWriter.setObjectiveNumber(3)) System.out.println("setObjectiveNumber Unsuccessful");		
+		if(!osolWriter.setConstraintNumber(2)) System.out.println("setConstraintNumber Unsuccessful");		
+//		double[] initialVariableValues = {1, 0, 3};
+//		if(!osolWriter.setInitVarValuesDense(initialVariableValues)) System.out.println("setInitVarValuesDense Unsuccessful");		
 
-//		String[] msOtherOptionNames = {"other name 0", "other name 1"};
-//		String[] msOtherOptionValues = {"other value 0", "other value 1"};
-//		if(!osolWriter.setOtherOptions(msOtherOptionNames, msOtherOptionValues, null)) System.out.println("set other!");
+//		InitVarValue[] var = new InitVarValue[3];
+//		var[0]= new InitVarValue(); var[0].idx=0; var[0].value=0.1;
+//		var[1]= new InitVarValue(); var[1].idx=1; var[1].value=1.1;
+//		var[2]= new InitVarValue(); var[2].idx=2; var[2].value=2.2;
+//		if(!osolWriter.setInitVarValuesSparse(var)) System.out.println("setInitVarValuesSparse Unsuccessful");		
 
-//		if(!osolWriter.addOtherOption("other name 2", "other value 2", null)) System.out.println("add other!");
-//		if(!osolWriter.addOtherOption("other name 3", "other value 3", "other description 3")) System.out.println("add other!");
+//		String[] initialVariableValuesString = {"1", "0", "3"};
+//		if(!osolWriter.setInitVarValuesStringDense(initialVariableValuesString)) System.out.println("setInitVarValuesStringDense Unsuccessful");		
+
+//		InitVarValueString[] var = new InitVarValueString[3];
+//		var[0]= new InitVarValueString(); var[0].idx=0; var[0].value="0.1";
+//		var[1]= new InitVarValueString(); var[1].idx=1; var[1].value="1.1";
+//		var[2]= new InitVarValueString(); var[2].idx=2; var[2].value="2.2";
+//		if(!osolWriter.setInitVarValuesStringSparse(var)) System.out.println("setInitVarValuesStringSparse Unsuccessful");		
+
+//		String[] initialBasisStatus = {"basic", "unknown", "atLower"};
+//		if(!osolWriter.setInitBasisStatusDense(initialBasisStatus)) System.out.println("setInitBasisStatusDense Unsuccessful");		
+
+//		InitBasStatus[] var = new InitBasStatus[3];
+//		var[0]= new InitBasStatus(); var[0].idx=0; var[0].value="unknown";
+//		var[1]= new InitBasStatus(); var[1].idx=1; var[1].value="basic";
+//		var[2]= new InitBasStatus(); var[2].idx=2; var[2].value="atLower";
+//		if(!osolWriter.setInitBasisStatusSparse(var)) System.out.println("setInitBasisStatusSparse Unsuccessful");		
+//		if(!osolWriter.setNumberOfOtherVariableOptions(1)) System.out.println("setNumberOfOtherVariableOptions");		
+
+//		if(!osolWriter.setNumberOfOtherObjectiveOptions(2)) System.out.println("setNumberOfOtherObjectiveOptions");		
+//		double[] initialObjectiveValues = {1, 0, 3};
+//		if(!osolWriter.setInitObjValuesDense(initialObjectiveValues)) System.out.println("setInitObjValuesDense Unsuccessful");		
+
+//		InitObjValue[] obj = new InitObjValue[3];
+//		obj[0]= new InitObjValue(); obj[0].idx=-1; obj[0].value=0.0;
+//		obj[1]= new InitObjValue(); obj[1].idx=-2; obj[1].value=1.1;
+//		obj[2]= new InitObjValue(); obj[2].idx=-3; obj[2].value=2.2;
+//		if(!osolWriter.setInitObjValuesSparse(obj)) System.out.println("setInitObjValuesSparse Unsuccessful");		
+
+//		double[] initialObjectiveLbBounds = {1, 0, 3};
+//		double[] initialObjectiveUbBounds = {1.1, 0.1, 3.1};
+//		if(!osolWriter.setInitObjBoundsDense(initialObjectiveLbBounds, initialObjectiveUbBounds)) System.out.println("setInitObjBoundsDense Unsuccessful");		
+
+//		InitObjBound[] obj = new InitObjBound[3];
+//		obj[0]= new InitObjBound(); obj[0].idx=-1; obj[0].lbValue=0.0; obj[0].ubValue=0.1;
+//		obj[1]= new InitObjBound(); obj[1].idx=-2; obj[1].lbValue=1.0;obj[1].ubValue=1.1;
+//		obj[2]= new InitObjBound(); obj[2].idx=-3; obj[2].lbValue=2.0;obj[2].ubValue=2.1;
+//		if(!osolWriter.setInitObjBoundsSparse(obj)) System.out.println("setInitObjBoundsSparse Unsuccessful");		
+		
+		
+		double[] initialConstraintValues = {1, 0, 3};
+		if(!osolWriter.setInitConValuesDense(initialConstraintValues)) System.out.println("setInitConValuesDense Unsuccessful");		
+
+//		InitConValue[] con = new InitConValue[3];
+//		con[0]= new InitConValue(); con[0].idx=0; con[0].value=0.0;
+//		con[1]= new InitConValue(); con[1].idx=1; con[1].value=1.1;
+//		con[2]= new InitConValue(); con[2].idx=2; con[2].value=2.2;
+//		if(!osolWriter.setInitConValuesSparse(con)) System.out.println("setInitConValuesSparse Unsuccessful");		
+
+//		double[] initialLbDualBounds = {1, 0, 3};
+//		double[] initialUbDualBounds = {1.1, 0.1, 3.1};
+//		if(!osolWriter.setInitDualValuesDense(initialLbDualBounds, initialUbDualBounds)) System.out.println("setInitDualValuesDense Unsuccessful");		
+
+		InitDualVarValue[] con = new InitDualVarValue[3];
+		con[0]= new InitDualVarValue(); con[0].idx=0; con[0].lbValue=0.0; con[0].ubValue=0.1;
+		con[1]= new InitDualVarValue(); con[1].idx=1; con[1].lbValue=1.0;con[1].ubValue=1.1;
+		con[2]= new InitDualVarValue(); con[2].idx=2; con[2].lbValue=2.0;con[2].ubValue=2.1;
+		if(!osolWriter.setInitDualValuesSparse(con)) System.out.println("setInitDualValuesSparse Unsuccessful");		
+
+		
+		
+		
+		
+		if(!osolWriter.setNumberOfOtherConstraintOptions(3)) System.out.println("setNumberOfOtherConstraintOptions");		
+
+		if(!osolWriter.setNumberOfSolverOptions(4)) System.out.println("setNumberOfSolverOptions");		
+//		if(!osolWriter.addSolverOption("sname0", null, "", "solver0", "category0", "type0")) System.out.println("addSolverOption");		
+//		String[] msNames = {"sname1", "sname2"};
+//		String[] msValues = {"svalue1", "svalue2"};
+//		String[] msDescs = {"sdesc1", "sdesc2"};
+//		String[] msSolvers = {"ssolver1", "ssolver2"};
+//		String[] msCats = {"scat1", "scat2"};
+//		String[] msTypes = {"stype1", "stype2"};
+//		if(!osolWriter.setSolverOptions(msNames, msValues, msDescs, msSolvers, msCats, msTypes)) System.out.println("setSolverOptions");		
+//		if(!osolWriter.setSolverOptions(msNames, msValues, null, msSolvers, msCats, msTypes)) System.out.println("setSolverOptions");		
+//		if(!osolWriter.addSolverOption("sname3", null, "", "solver1", "category1", "type1")) System.out.println("addSolverOption");		
+
 
 		////////////////////
 
