@@ -97,6 +97,7 @@ AC_CHECK_SIZEOF( long)
 #############################################################################
 
 AC_COIN_HAS_PROJECT(OS)
+AC_COIN_HAS_PROJECT(Bcp)
 AC_COIN_HAS_PROJECT(CoinUtils)
 AC_COIN_HAS_PROJECT(Osi)
 AC_COIN_HAS_PROJECT(Clp)
@@ -223,6 +224,9 @@ if test $coin_has_dylp != unavailable &&
 fi
 
 
+
+
+
 if test $coin_has_dylp != unavailable &&
    test $coin_has_dylp != skipping; then
   case $CXX in
@@ -248,8 +252,20 @@ if test $coin_has_vol != unavailable &&
        vollib="-L\$(INSTALLIBDIR) -lVol"
        osivollib="-L\$(INSTALLIBDIR) -lOsiVol";;
   esac
-  AC_SUBST(vollib)
-  AC_SUBST(osivollib)  
+  AC_SUBST(vollib) 
+  AC_SUBST(osivollib) 
+fi
+
+
+if test $coin_has_bcp != unavailable &&
+   test $coin_has_bcp != skipping; then
+  case $CXX in
+    cl*)
+       bcplib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libbcp.lib';;
+     *)
+       bcplib="-L\$(INSTALLIBDIR) -lBcp";;
+  esac
+  AC_SUBST(bcplib)
 fi
 
 
@@ -746,6 +762,7 @@ AC_CONFIG_FILES([Makefile
           examples/osRemoteTest/Makefile
           examples/template/Makefile
           examples/CppAD/Makefile
+          examples/branchCutPrice/Makefile
           CoinAllExamples/instanceGenerator/Makefile
           CoinAllExamples/osTestCode/Makefile
           CoinAllExamples/addCuts/Makefile

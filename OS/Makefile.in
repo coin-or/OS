@@ -71,6 +71,7 @@ DIST_COMMON = README $(am__configure_deps) \
 	$(top_srcdir)/examples/CppAD/Makefile.in \
 	$(top_srcdir)/examples/addCuts/Makefile.in \
 	$(top_srcdir)/examples/algorithmicDiff/Makefile.in \
+	$(top_srcdir)/examples/branchCutPrice/Makefile.in \
 	$(top_srcdir)/examples/instanceGenerator/Makefile.in \
 	$(top_srcdir)/examples/osRemoteTest/Makefile.in \
 	$(top_srcdir)/examples/osTestCode/Makefile.in \
@@ -92,6 +93,7 @@ CONFIG_CLEAN_FILES = examples/instanceGenerator/Makefile \
 	examples/osTestCode/Makefile examples/algorithmicDiff/Makefile \
 	examples/addCuts/Makefile examples/osRemoteTest/Makefile \
 	examples/template/Makefile examples/CppAD/Makefile \
+	examples/branchCutPrice/Makefile \
 	CoinAllExamples/instanceGenerator/Makefile \
 	CoinAllExamples/osTestCode/Makefile \
 	CoinAllExamples/addCuts/Makefile \
@@ -137,6 +139,9 @@ AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AUX_DIR = @AUX_DIR@
 AWK = @AWK@
+BCPDOCDIR = @BCPDOCDIR@
+BCPOBJDIR = @BCPOBJDIR@
+BCPSRCDIR = @BCPSRCDIR@
 BONMINDOCDIR = @BONMINDOCDIR@
 BONMINOBJDIR = @BONMINOBJDIR@
 BONMINSRCDIR = @BONMINSRCDIR@
@@ -161,6 +166,8 @@ COIN_BUILD_GLPK_FALSE = @COIN_BUILD_GLPK_FALSE@
 COIN_BUILD_GLPK_TRUE = @COIN_BUILD_GLPK_TRUE@
 COIN_HAS_ASL_FALSE = @COIN_HAS_ASL_FALSE@
 COIN_HAS_ASL_TRUE = @COIN_HAS_ASL_TRUE@
+COIN_HAS_BCP_FALSE = @COIN_HAS_BCP_FALSE@
+COIN_HAS_BCP_TRUE = @COIN_HAS_BCP_TRUE@
 COIN_HAS_BONMIN_FALSE = @COIN_HAS_BONMIN_FALSE@
 COIN_HAS_BONMIN_TRUE = @COIN_HAS_BONMIN_TRUE@
 COIN_HAS_CBC_FALSE = @COIN_HAS_CBC_FALSE@
@@ -322,6 +329,7 @@ am__leading_dot = @am__leading_dot@
 am__quote = @am__quote@
 am__tar = @am__tar@
 am__untar = @am__untar@
+bcplib = @bcplib@
 bindir = @bindir@
 bonminlib = @bonminlib@
 build = @build@
@@ -466,6 +474,8 @@ examples/osRemoteTest/Makefile: $(top_builddir)/config.status $(top_srcdir)/exam
 examples/template/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/template/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 examples/CppAD/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/CppAD/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+examples/branchCutPrice/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/branchCutPrice/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 CoinAllExamples/instanceGenerator/Makefile: $(top_builddir)/config.status $(top_srcdir)/CoinAllExamples/instanceGenerator/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
@@ -625,7 +635,7 @@ distclean-tags:
 distdir: $(DISTFILES)
 	$(am__remove_distdir)
 	mkdir $(distdir)
-	$(mkdir_p) $(distdir)/. $(distdir)/.. $(distdir)/../BuildTools $(distdir)/CoinAllExamples/CppAD $(distdir)/CoinAllExamples/addCuts $(distdir)/CoinAllExamples/instanceGenerator $(distdir)/CoinAllExamples/osTestCode $(distdir)/CoinAllExamples/template $(distdir)/examples/CppAD $(distdir)/examples/addCuts $(distdir)/examples/algorithmicDiff $(distdir)/examples/instanceGenerator $(distdir)/examples/osRemoteTest $(distdir)/examples/osTestCode $(distdir)/examples/template $(distdir)/inc $(distdir)/m4
+	$(mkdir_p) $(distdir)/. $(distdir)/.. $(distdir)/../BuildTools $(distdir)/CoinAllExamples/CppAD $(distdir)/CoinAllExamples/addCuts $(distdir)/CoinAllExamples/instanceGenerator $(distdir)/CoinAllExamples/osTestCode $(distdir)/CoinAllExamples/template $(distdir)/examples/CppAD $(distdir)/examples/addCuts $(distdir)/examples/algorithmicDiff $(distdir)/examples/branchCutPrice $(distdir)/examples/instanceGenerator $(distdir)/examples/osRemoteTest $(distdir)/examples/osTestCode $(distdir)/examples/template $(distdir)/inc $(distdir)/m4
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
