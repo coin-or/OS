@@ -305,7 +305,7 @@ if test $coin_has_couenne != unavailable &&
     cl*)
        couennelib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libcouenne.lib';;
      *)
-       couennelib="-L\$(INSTALLIBDIR) -lCouenne -lbonminampl -lbamplinterface";;
+       couennelib="-L\$(INSTALLIBDIR) -lCouenne -lbonminampl -lamplinterface";;
   esac
   AC_SUBST(couennelib)  
 fi
