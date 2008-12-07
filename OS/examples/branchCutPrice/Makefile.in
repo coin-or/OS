@@ -15,14 +15,14 @@ EXE = bcp@EXEEXT@
 # CHANGEME: Here is the name of all object files corresponding to the source
 #           code that you wrote in order to define the problem statement
 OBJS = \
-   ./TM/OS_tm.@OBJEXT@ \
-   ./LP/OS_lp.@OBJEXT@ \
-   ./Member/OS_user_data.@OBJEXT@ \
-   ./Member/OS_init.@OBJEXT@ \
-   ./Member/OS_packer.@OBJEXT@ \
-   ./Member/OS.@OBJEXT@ \
-   ./Member/OS_cut.@OBJEXT@ \
-   ./Member/OS_var.@OBJEXT@
+   $(SRCDIR)/TM/OS_tm.o \
+   $(SRCDIR)/LP/OS_lp.o \
+   $(SRCDIR)/Member/OS_user_data.o \
+   $(SRCDIR)/Member/OS_init.o \
+   $(SRCDIR)/Member/OS_packer.o \
+   $(SRCDIR)/Member/OS.o \
+   $(SRCDIR)/Member/OS_cut.o \
+   $(SRCDIR)/Member/OS_var.o
 
 
 
@@ -31,7 +31,7 @@ ADDLIBS =
 
 
 # CHANGEME: Additional flags for compilation (e.g., include flags)
-ADDINCFLAGS =  -I${prefix}/include
+ADDINCFLAGS =  -I${prefix}/include   -I$(SRCDIR)/include
 
 # CHANGEME: SRCDIR and VPATH should be the path to the source code. It is assumed
 # that the lib directory is in prefix/lib and the header files are in
@@ -77,6 +77,9 @@ exec_prefix = @exec_prefix@
 
 # Libraries necessary to link
 LIBS = @oslib@   
+
+@COIN_HAS_COUENNE_TRUE@LIBS += @couennelib@
+
 
 @COIN_HAS_BONMIN_TRUE@LIBS += @bonminlib@
 

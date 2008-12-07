@@ -50,7 +50,7 @@ OS_init::tm_init(BCP_tm_prob& p,
   OS_tm* tm = new OS_tm;
 
   if(argnum > 1) {
-	  std::cout << "ARGNUM = " << argnum << std::endl;
+	  //std::cout << "ARGNUM = " << argnum << std::endl;
     tm->readInput( arglist[1]);
   }
   else {

@@ -96,7 +96,7 @@ void OS_lp::initialize_new_search_tree_node(const BCP_vec<BCP_var*>& vars,
 	//this->getLpProblemPointer()->par.set_entry(BCP_lp_par::IneffectiveBeforeDelete, 10000); 
   	
   	// turn off strong branching
-  	this->getLpProblemPointer()->par.set_entry(BCP_lp_par::MaxPresolveIter, -1);
+  	//this->getLpProblemPointer()->par.set_entry(BCP_lp_par::MaxPresolveIter, -1);
   	
 
 #ifdef USER_DATA

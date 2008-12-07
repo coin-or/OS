@@ -69,7 +69,7 @@ void OS_tm::readInput(const char* filename){
 	const char dirsep =  CoinFindDirSeparator();
  	// Set directory containing mps data files.
  	std::string dataDir;
- 	dataDir = dirsep == '/' ? "./data/" : ".\\data\\";
+ 	dataDir = dirsep == '/' ? "../../data/" : "..\\..\\data\\";
 	cout << "Start Building the Model" << endl;	
 	
 	try{
@@ -80,9 +80,9 @@ void OS_tm::readInput(const char* filename){
 		std::cout << "Try to read a sample file" << std::endl;
 		std::cout << "The file is: " ;
 		std::cout << filename << std::endl;
-		//std::string osil = fileUtil->getFileAsString( osilFileName.c_str() );
-		if(filename == NULL) throw ErrorClass("put file name on command line");
-		std::string osil = fileUtil->getFileAsString( filename );
+		std::string osil = fileUtil->getFileAsString( osilFileName.c_str() );
+		//if(filename == NULL) throw ErrorClass("put file name on command line");
+		//osil = fileUtil->getFileAsString( osilFileName);
 		os_prob.osilreader = new OSiLReader();
 		os_prob.osinstance = os_prob.osilreader->readOSiL( osil);
 		delete fileUtil;
