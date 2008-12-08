@@ -23,8 +23,7 @@ BCP_lp_user *OS_init::lp_init(BCP_lp_prob& p) {
 }
 
 /****************************************************************************/
-BCP_tm_user *
-OS_init::tm_init(BCP_tm_prob& p,
+BCP_tm_user*  OS_init::tm_init(BCP_tm_prob& p,
 		 const int argnum, const char * const * arglist)
 {
 	
@@ -47,7 +46,7 @@ OS_init::tm_init(BCP_tm_prob& p,
   cout << endl << endl;
   
   
-  OS_tm* tm = new OS_tm;
+  tm = new OS_tm;
 
   if(argnum > 1) {
 	  //std::cout << "ARGNUM = " << argnum << std::endl;

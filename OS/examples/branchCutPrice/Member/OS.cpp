@@ -14,9 +14,6 @@ OS_prob::OS_prob() :
 /****************************************************************************/
 OS_prob::~OS_prob()
 {
-	
-	std::cout << "Garbage Collection" << std::endl;
-
-	delete osilreader;  // this deletes the osinstance
+	std::cout << "inside OS_prob destructor" << std::cout;
 
 }

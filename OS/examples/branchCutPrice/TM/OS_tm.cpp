@@ -28,7 +28,7 @@
 #include <CoinHelperFunctions.hpp>
 #include <CoinFileIO.hpp>
 #include <OsiClpSolverInterface.hpp>
-
+#include <cassert>
 
 #include "OS_init.hpp"
 #include "BCP_tm.hpp"
@@ -45,9 +45,10 @@ using namespace std;
 int main(int argc, char* argv[]) {
 	WindowsErrorPopupBlocker();
 	OS_init os_init;
-	return bcp_main(argc, argv, &os_init);
-	
-	
+	int retCode;
+	retCode = bcp_main(argc, argv, &os_init);
+	std::cout << "Return from call to bcp_main  "<< retCode << std::endl;
+	delete os_init.tm;
 }
 
 /*************************************************************************/
@@ -232,5 +233,21 @@ void  OS_tm::display_feasible_solution(const BCP_solution *soln) {
 	//kipp:  -- later write the OSiL file from here
 	std::cout << "Default BCP display of the feasible solution:" << std::endl << std::endl;
 	BCP_tm_user::display_feasible_solution(  soln);
+	
 }
 
+
+/*************************************************************************/
+
+OS_tm::OS_tm(){
+
+}
+
+
+
+/*************************************************************************/
+
+OS_tm::~OS_tm(){
+	std::cout << "Garbage collection" << std::endl;
+	delete os_prob.osilreader;
+}

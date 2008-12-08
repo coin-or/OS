@@ -5,10 +5,13 @@
 #define _OS_INIT_H
 
 #include "BCP_USER.hpp"
+#include "OS_tm.hpp"
 
 class OS_init : public USER_initialize {
 
 public:
+
+   OS_tm* tm;
 
    virtual BCP_tm_user * tm_init(BCP_tm_prob& p,
 				 const int argnum,

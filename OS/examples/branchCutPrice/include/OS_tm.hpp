@@ -42,10 +42,13 @@ public:
   /**@name Constructors and destructors */
   //@{
   /// Default constructor 
-  OS_tm() {}
+  OS_tm() ;
 
   /// Default destructor
-  virtual ~OS_tm() {}
+  virtual ~OS_tm() ;
+  
+  
+
   //@}
 
   /// Read input and set up data in class OS_prob
