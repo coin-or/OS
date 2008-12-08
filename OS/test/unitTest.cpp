@@ -1834,7 +1834,7 @@ catch(const ErrorClass& eclass){
 		delete another_osoption;
 		
 		//delete other;
-		return 0;
+		//return 0;
 		unitTestResult << 
 		     "Successful test of OSoL parser on file parsertest.osol" 
 		      << std::endl;
