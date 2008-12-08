@@ -599,7 +599,10 @@ void CouenneSolver::solve() throw (ErrorClass) {
 
 
 	} 
-	
+		delete ci;
+		ci = NULL;
+		delete couenne;
+		couenne = NULL;
 	} //end try
 	
 	catch(const ErrorClass& eclass){

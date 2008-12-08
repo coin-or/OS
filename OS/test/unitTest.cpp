@@ -286,7 +286,7 @@ int main(int argC, char* argV[])
 		const  double *rowub = si->getRowUpper();		
 		//the Coin packed matrix
 		const CoinPackedMatrix *m_CoinPackedMatrix =  si->getMatrixByCol();		
-		//finally the objective function coefficients		
+		//finally the objective function coefficieCnts		
 		const double *objcoef = si->getObjCoefficients();
 		//delete si;
 		si2 = new OsiCbcSolverInterface;
@@ -876,7 +876,7 @@ catch(const ErrorClass& eclass){
 #ifdef COIN_HAS_COUENNE
 try{
 	
-	/*
+	#if 0
 	OSiLReader *osilreader = NULL;
 	osilreader = new OSiLReader(); 
 	ok = true; 
@@ -893,7 +893,7 @@ try{
 	
 	std::cout << " CALL SOLVE " << std::endl;
 	solver->solve();
-	*/
+	
 	
 	/*
 	cout << "Here is the Couenne solver solution for bonminEx1" << endl;
@@ -903,14 +903,13 @@ try{
 	ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 	if(ok == false) throw ErrorClass(" Fail unit test with Bonmin on bonminEx1.osil");
 	*/
-	
-	//delete solver->couenne;
 	//delete solver;
 	//solver = NULL;
 	//unitTestResult << "Solved problem bonminEx1.osil with Couenne" << std::endl;
 	
 	
-	//delete osilreader;
+	delete osilreader;
+	#endif
 	
 	//return 0;
 	//osilreader = NULL;
@@ -1834,6 +1833,8 @@ catch(const ErrorClass& eclass){
 		
 		delete another_osoption;
 		
+		//delete other;
+		return 0;
 		unitTestResult << 
 		     "Successful test of OSoL parser on file parsertest.osol" 
 		      << std::endl;
