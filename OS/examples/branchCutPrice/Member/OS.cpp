@@ -14,6 +14,6 @@ OS_prob::OS_prob() :
 /****************************************************************************/
 OS_prob::~OS_prob()
 {
-	std::cout << "inside OS_prob destructor" << std::cout;
+	std::cout << "inside OS_prob destructor" << std::endl;
 
 }

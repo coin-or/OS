@@ -44,6 +44,7 @@ OS_lp::unpack_module_data(BCP_buffer& buf)
   
   std::cout << "number of variables " << os_prob->osinstance->getVariableNumber() << std::endl;
 
+
   
 }
 
@@ -72,7 +73,6 @@ void OS_lp::initialize_new_search_tree_node(const BCP_vec<BCP_var*>& vars,
 
 {
   in_strong = 0;
-  
   
   	//BCP_lp_param.hpp for a list of parameters
   	//lets get a parameter -- should be true by default
@@ -411,6 +411,10 @@ void OS_lp::process_lp_result(const BCP_lp_result& lpres,
 	    }	
 		    
 		generated_cuts = (algo_cuts.size() > 0);
+		for(i = 0; i < ncuts; i++){
+			//delete newRowCuts[ i];
+		}
+		delete[] newRowCuts;
 	}// end Cgl cut generation scope
 	
 #endif
