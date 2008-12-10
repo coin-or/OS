@@ -153,6 +153,23 @@ public:
 	 * Class destructor. 
 	 */
 	~OtherOptions();
+
+	/**
+	 *
+	 * A function to set an array of OtherOption elements
+	 * @param numberOfOptions: number of OtherOption elements to be copied
+	 * @param other: the array of OtherOption elements to be copied
+	 */
+	bool setOtherOptions(int numberOfOptions, OtherOption** other);
+
+	/**
+	 *
+	 * A function to add an OtherOption element
+	 * @param name: the name of the OtherOption element to be copied (required)
+	 * @param value: the value of the OtherOption element to be copied (optional)
+	 * @param description: a description of the OtherOption element (optional)
+	 */
+	bool setAnOtherOption(std::string name, std::string value, std::string description);
 }; //OtherOptions
 
 
@@ -2093,7 +2110,7 @@ public:
 	 * 
 	 * @return the number of variables. 
 	 */
-	int getNumberOfIntegerBranchingWeights();
+	int getNumberOfIntegerVariableBranchingWeights();
 
 	/**
 	 * Get the number of special ordered sets for which branching weights are provided. 
@@ -2386,9 +2403,26 @@ public:
 	 */
 	std::string *getInitBasisStatusDense(int numberOfVariables);
 
+	/**
+	 * Get the integer branching weights in sparse form
+	 * <p>
+	 * 
+	 * @return a vector of double that 
+	 * holds branching weights for (some of) the integer-valued variables
+	 */
+	BranchingWeight**  getIntegerVariableBranchingWeightsSparse();
+
+
+	/**
+	 * Get the integer branching weights in dense form
+	 * <p>
+	 * 
+	 * @return a vector of double that 
+	 * hold inital values for all of the variables
+	 */
+	double* OSOption::getIntegerVariableBranchingWeightsDense(int numberOfVariables);
+
 	/*
-	getIntegerVariableBranchingWeightsSparse();
-	getIntegerVariableBranchingWeightsDense(int numberOfVariables);
 	getSOSVariableBranchingWeightsSparse(); // ?
 	getSOSVariableBranchingWeightsDense(int numberOfVariables); // ?
 	 */
@@ -2591,9 +2625,9 @@ public:
 	bool setOtherGeneralOptions(int numberOfOptions, OtherOption** other);
 
 	/**
-	 * Add another general option to the general option array
+	 * Add another general option to the general <other> option array
 	 */
-	bool setAnOtherGeneralOption(OtherOption* optionValue);
+	bool setAnOtherGeneralOption(std::string name, std::string value, std::string description);
 
 
 	bool setMinDiskSpace(double value);

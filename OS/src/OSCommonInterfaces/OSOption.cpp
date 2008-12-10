@@ -92,8 +92,10 @@ OtherOptions::~OtherOptions()
 	#ifdef DEBUG
 	cout << "OtherOptions Destructor Called" << endl;
 	#endif
+
 	if (other != NULL){
 		for ( int i=0; i<numberOfOtherOptions; i++){
+			cout << "delete other general option " << i << endl;
 			delete other[i];
 			other[i] = NULL;
 		}
@@ -1719,8 +1721,8 @@ int  OSOption::getNumberOfConstraints()
  */
 int OSOption::getNumberOfInitVarValues()
 {	if (this->optimization != NULL) 
-		if(this->optimization->variables != NULL) 
-			if(this->optimization->variables->initialVariableValues != NULL) 
+		if (this->optimization->variables != NULL) 
+			if (this->optimization->variables->initialVariableValues != NULL) 
 				return this->optimization->variables->initialVariableValues->numberOfVar;
 	return -1;
 }//getNumberOfInitVarValues
@@ -1730,8 +1732,8 @@ int OSOption::getNumberOfInitVarValues()
  */
 int OSOption::getNumberOfInitVarValuesString()
 {	if (this->optimization != NULL) 
-		if(this->optimization->variables != NULL) 
-			if(this->optimization->variables->initialVariableValuesString != NULL) 
+		if (this->optimization->variables != NULL) 
+			if (this->optimization->variables->initialVariableValuesString != NULL) 
 				return this->optimization->variables->initialVariableValuesString->numberOfVar;
 	return -1;
 }//getNumberOfInitVarValuesString
@@ -1750,7 +1752,7 @@ int OSOption::getNumberOfInitialBasisVariables()
 /**
  * get the number of variables that are given integer branching weights (in <optimization> element)
  */
-int OSOption::getNumberOfIntegerBranchingWeights()
+int OSOption::getNumberOfIntegerVariableBranchingWeights()
 {	if (this->optimization != NULL) 
 		if (this->optimization->variables != NULL) 
 			if (this->optimization->variables->integerVariableBranchingWeights != NULL) 
@@ -1810,8 +1812,8 @@ int OSOption::getNumberOfInitObjValues()
  */
 int OSOption::getNumberOfInitObjBounds()
 {	if (this->optimization != NULL) 
-		if(this->optimization->objectives != NULL) 
-			if(this->optimization->objectives->initialObjectiveBounds != NULL) 
+		if (this->optimization->objectives != NULL) 
+			if (this->optimization->objectives->initialObjectiveBounds != NULL) 
 				return this->optimization->objectives->initialObjectiveBounds->numberOfObj;
 	return -1;
 }//getNumberOfInitObjBounds
@@ -1832,8 +1834,8 @@ int OSOption::getNumberOfOtherObjectiveOptions()
  */
 int OSOption::getNumberOfInitConValues()
 {	if (this->optimization != NULL) 
-		if(this->optimization->constraints != NULL) 
-			if(this->optimization->constraints->initialConstraintValues != NULL) 
+		if (this->optimization->constraints != NULL) 
+			if (this->optimization->constraints->initialConstraintValues != NULL) 
 				return this->optimization->constraints->initialConstraintValues->numberOfCon;
 
 	return -1;
@@ -1844,8 +1846,8 @@ int OSOption::getNumberOfInitConValues()
  */
 int OSOption::getNumberOfInitDualVarValues()
 {	if (this->optimization != NULL) 
-		if(this->optimization->constraints != NULL) 
-			if(this->optimization->constraints->initialDualValues != NULL) 
+		if (this->optimization->constraints != NULL) 
+			if (this->optimization->constraints->initialDualValues != NULL) 
 				return this->optimization->constraints->initialDualValues->numberOfCon;
 
 	return -1;
@@ -1867,7 +1869,7 @@ int OSOption::getNumberOfOtherConstraintOptions()
  */
 int OSOption::getNumberOfSolverOptions(){
 	if (this->optimization != NULL) {
-		if(this->optimization->solverOptions != NULL) {
+		if (this->optimization->solverOptions != NULL) {
 			return this->optimization->solverOptions->numberOfSolverOptions;
 		}
 	}
@@ -1881,103 +1883,103 @@ int OSOption::getNumberOfSolverOptions(){
  * @note This function returns 0 if optionName is not found
  */
 int  OSOption::getOptionInt(std::string optionName)
-{	if(optionName == "minCPUNumber")
+{	if (optionName == "minCPUNumber")
 		this->getMinCPUNumber();
 
-	if(optionName == "numberOfOtherGeneralOptions")
+	if (optionName == "numberOfOtherGeneralOptions")
 		this->getNumberOfOtherGeneralOptions();
 
-	if(optionName == "numberOfOtherSystemOptions")
+	if (optionName == "numberOfOtherSystemOptions")
 		this->getNumberOfOtherSystemOptions();
 
-	if(optionName == "numberOfOtherServiceOptions")
+	if (optionName == "numberOfOtherServiceOptions")
 		this->getNumberOfOtherServiceOptions();
 
-	if(optionName == "numberOfOtherJobOptions")
+	if (optionName == "numberOfOtherJobOptions")
 		this->getNumberOfOtherJobOptions();
 
-	if(optionName == "numberOfJobDependencies")
+	if (optionName == "numberOfJobDependencies")
 		this->getNumberOfJobDependencies();
 
-	if(optionName == "numberOfRequiredDirectories")
+	if (optionName == "numberOfRequiredDirectories")
 		this->getNumberOfRequiredDirectories();
 
-	if(optionName == "numberOfRequiredFiles")
+	if (optionName == "numberOfRequiredFiles")
 		this->getNumberOfRequiredFiles();
 
-	if(optionName == "numberOfDirectoriesToMake")
+	if (optionName == "numberOfDirectoriesToMake")
 		this->getNumberOfDirectoriesToMake();
 
-	if(optionName == "numberOfFilesToMake")
+	if (optionName == "numberOfFilesToMake")
 		this->getNumberOfFilesToMake();
 
-	if(optionName == "numberOfInputDirectoriesToMove")
+	if (optionName == "numberOfInputDirectoriesToMove")
 		this->getNumberOfInputDirectoriesToMove();
 
-	if(optionName == "numberOfInputFilesToMove")
+	if (optionName == "numberOfInputFilesToMove")
 		this->getNumberOfInputFilesToMove();
 
-	if(optionName == "numberOfOutputDirectoriesToMove")
+	if (optionName == "numberOfOutputDirectoriesToMove")
 		this->getNumberOfOutputDirectoriesToMove();
 
-	if(optionName == "numberOfOutputFilesToMove")
+	if (optionName == "numberOfOutputFilesToMove")
 		this->getNumberOfOutputFilesToMove();
 
-	if(optionName == "numberOfFilesToDelete")
+	if (optionName == "numberOfFilesToDelete")
 		this->getNumberOfFilesToDelete();
 
-	if(optionName == "numberOfDirectoriesToDelete")
+	if (optionName == "numberOfDirectoriesToDelete")
 		this->getNumberOfDirectoriesToDelete();
 
-	if(optionName == "numberOfProcessesToKill")
+	if (optionName == "numberOfProcessesToKill")
 		this->getNumberOfProcessesToKill();
 
-	if(optionName == "numberOfVariables")
+	if (optionName == "numberOfVariables")
 		this->getNumberOfVariables();
 
-	if(optionName == "numberOfObjectives")
+	if (optionName == "numberOfObjectives")
 		this->getNumberOfObjectives();
 
-	if(optionName == "numberOfConstraints")
+	if (optionName == "numberOfConstraints")
 		this->getNumberOfConstraints();
 
-	if(optionName == "numberOfInitVarValues")
+	if (optionName == "numberOfInitVarValues")
 		this->getNumberOfInitVarValues();
 
-	if(optionName == "numberOfInitVarValuesString")
+	if (optionName == "numberOfInitVarValuesString")
 		this->getNumberOfInitVarValuesString();
 
-	if(optionName == "numberOfInitialBasisVariables")
+	if (optionName == "numberOfInitialBasisVariables")
 		this->getNumberOfInitialBasisVariables();
 
-	if(optionName == "numberOfIntegerBranchingWeights")
-		this->getNumberOfIntegerBranchingWeights();
+	if (optionName == "numberOfIntegerVariableBranchingWeights")
+		this->getNumberOfIntegerVariableBranchingWeights();
 
-	if(optionName == "numberOfSOSWeights")
+	if (optionName == "numberOfSOSWeights")
 		this->getNumberOfSOSWeights();
 
-	if(optionName == "numberOfOtherVariableOptions")
+	if (optionName == "numberOfOtherVariableOptions")
 		this->getNumberOfOtherVariableOptions();
 
-	if(optionName == "numberOfInitObjValues")
+	if (optionName == "numberOfInitObjValues")
 		this->getNumberOfInitObjValues();
 
-	if(optionName == "numberOfInitObjBounds")
+	if (optionName == "numberOfInitObjBounds")
 		this->getNumberOfInitObjBounds();
 
-	if(optionName == "numberOfOtherObjectiveOptions")
+	if (optionName == "numberOfOtherObjectiveOptions")
 		this->getNumberOfOtherObjectiveOptions();
 
-	if(optionName == "numberOfInitConValues")
+	if (optionName == "numberOfInitConValues")
 		this->getNumberOfInitConValues();
 
-	if(optionName == "numberOfInitDualVarValues")
+	if (optionName == "numberOfInitDualVarValues")
 		this->getNumberOfInitDualVarValues();
 
-	if(optionName == "numberOfOtherConstraintOptions")
+	if (optionName == "numberOfOtherConstraintOptions")
 		this->getNumberOfOtherConstraintOptions();
 
-	if(optionName == "numberOfSolverOptions")
+	if (optionName == "numberOfSolverOptions")
 		this->getNumberOfSolverOptions();
 
 	return 0;
@@ -2198,7 +2200,7 @@ std::string*  OSOption::getFilesToMake(){
 PathPair** OSOption::getInputDirectoriesToMove()
 {	PathPair** pathPairVector = NULL;
 	if (this->job != NULL) 
-	{	if(this->job->inputDirectoriesToMove != NULL) 
+	{	if (this->job->inputDirectoriesToMove != NULL) 
 			pathPairVector = this->job->inputDirectoriesToMove->pathPair;				
 		else
 			throw ErrorClass("<inputDirectoriesToMove> object must be defined before getting the paths");
@@ -2214,7 +2216,7 @@ PathPair** OSOption::getInputDirectoriesToMove()
 PathPair** OSOption::getInputFilesToMove()
 {	PathPair** pathPairVector = NULL;
 	if (this->job != NULL) 
-	{	if(this->job->inputFilesToMove != NULL) 
+	{	if (this->job->inputFilesToMove != NULL) 
 			pathPairVector = this->job->inputFilesToMove->pathPair;				
 		else
 			throw ErrorClass("<inputFilesToMove> object must be defined before getting the paths");
@@ -2230,7 +2232,7 @@ PathPair** OSOption::getInputFilesToMove()
 PathPair** OSOption::getOutputFilesToMove()
 {	PathPair** pathPairVector = NULL;
 	if (this->job != NULL) 
-	{	if(this->job->outputFilesToMove != NULL) 
+	{	if (this->job->outputFilesToMove != NULL) 
 			pathPairVector = this->job->outputFilesToMove->pathPair;				
 		else
 			throw ErrorClass("<outputFilesToMove> object must be defined before getting the paths");
@@ -2246,7 +2248,7 @@ PathPair** OSOption::getOutputFilesToMove()
 PathPair** OSOption::getOutputDirectoriesToMove()
 {	PathPair** pathPairVector = NULL;
 	if (this->job != NULL) 
-	{	if(this->job->outputDirectoriesToMove != NULL) 
+	{	if (this->job->outputDirectoriesToMove != NULL) 
 			pathPairVector = this->job->outputDirectoriesToMove->pathPair;				
 		else
 			throw ErrorClass("<outputDirectoriesToMove> object must be defined before getting the paths");
@@ -2338,8 +2340,8 @@ double* OSOption::getInitVarValuesDense(int numberOfVariables){
 	for (int k = 0; k < numberOfVariables; k++) initVarVector[k] = OSNAN;
 	try
 	{	if (this->optimization != NULL) 
-		{	if(this->optimization->variables != NULL) 
-			{	if(this->optimization->variables->initialVariableValues != NULL) 
+		{	if (this->optimization->variables != NULL) 
+			{	if (this->optimization->variables->initialVariableValues != NULL) 
 				{	int i,j;
 					int num_var;
 					num_var = this->getNumberOfInitVarValues();
@@ -2394,8 +2396,8 @@ std::string *OSOption::getInitVarStringsDense(int numberOfVariables){
 	try
 	{
 		if (this->optimization != NULL) 
-		{	if(this->optimization->variables != NULL) 
-			{	if(this->optimization->variables->initialVariableValuesString != NULL) 
+		{	if (this->optimization->variables != NULL) 
+			{	if (this->optimization->variables->initialVariableValuesString != NULL) 
 				{	int i,j;
 					int num_var;
 					num_var = this->getNumberOfInitVarValuesString();
@@ -2473,12 +2475,61 @@ std::string *OSOption::getInitBasisStatusDense(int numberOfVariables){
 	return initBasVector;
 }//getInitBasisStatusDense
 
-//-----------------------------------
-/*
-get integervariableselectionweights sparse
-get integervariableselectionweights dense
-*/
-//++++++++++++++++++++++++++++++++++++
+/**
+ * get a list of branching weights for integer variables in sparse form
+ * @return a list of index/value pairs
+ */
+BranchingWeight**  OSOption::getIntegerVariableBranchingWeightsSparse()
+{	BranchingWeight** intVarVector;
+	if (this->optimization != NULL) 
+	{	if (this->optimization->variables != NULL) 
+		{	if (this->optimization->variables->integerVariableBranchingWeights != NULL)
+				intVarVector = this->optimization->variables->integerVariableBranchingWeights->var;
+			else
+				throw ErrorClass("<integerVariableBranchingWeights> object must be defined before getting the data");
+		}
+		else
+			throw ErrorClass("<variables> object must be defined before getting the data");
+	}
+	else
+		throw ErrorClass("<optimization> object must be defined before getting the data");
+	return intVarVector;
+}//getIntegerVariableBranchingWeightsSparse
+/**
+ * get a list of branching weights for integer variables in sparse form
+ * @return an array of values
+ * @note return OSNAN for variables that are not initialed
+ */
+double* OSOption::getIntegerVariableBranchingWeightsDense(int numberOfVariables)
+{	double *intVarVector;
+	intVarVector = new double[numberOfVariables];
+	for (int k = 0; k < numberOfVariables; k++) intVarVector[k] = OSNAN;
+	try
+	{	if (this->optimization != NULL) 
+		{	if (this->optimization->variables != NULL) 
+			{	if (this->optimization->variables->integerVariableBranchingWeights != NULL) 
+				{	int i,j;
+					int num_var;
+					num_var = this->getNumberOfIntegerVariableBranchingWeights();
+					for(i = 0; i < num_var; i++)
+					{	j = this->optimization->variables->integerVariableBranchingWeights->var[i]->idx;
+						if (j >= 0 && j < numberOfVariables)						
+							intVarVector[j] 
+							  = this->optimization->variables->integerVariableBranchingWeights->var[i]->value;						
+						else
+							throw ErrorClass("Variable index out of range");
+					}
+				}
+			}
+		}					
+	}
+	catch(const ErrorClass& eclass)
+	{	throw ErrorClass(eclass.errormsg);
+	}
+	return intVarVector;
+
+}//getIntegerVariableBranchingWeightsDense
+
 /**
  * get the list of initial objective values in sparse form
  * @return a list of index/value pairs
@@ -2511,8 +2562,8 @@ double* OSOption::getInitObjValuesDense(int numberOfObjectives){
 	for (int k = 0; k < numberOfObjectives; k++) initObjVector[k] = OSNAN;
 	try
 	{	if (this->optimization != NULL) 
-		{	if(this->optimization->objectives != NULL) 
-			{	if(this->optimization->objectives->initialObjectiveValues != NULL) 
+		{	if (this->optimization->objectives != NULL) 
+			{	if (this->optimization->objectives->initialObjectiveValues != NULL) 
 				{	int i,j;
 					int num_obj;
 					num_obj = this->getNumberOfInitObjValues();
@@ -2566,8 +2617,8 @@ double* OSOption::getInitObjLowerBoundsDense(int numberOfObjectives){
 	for (int k = 0; k < numberOfObjectives; k++) initObjBound[k] = OSNAN;
 	try
 	{	if (this->optimization != NULL) 
-		{	if(this->optimization->objectives != NULL) 
-			{	if(this->optimization->objectives->initialObjectiveBounds != NULL) 
+		{	if (this->optimization->objectives != NULL) 
+			{	if (this->optimization->objectives->initialObjectiveBounds != NULL) 
 				{	int i,j;
 					int num_obj;
 					num_obj = this->getNumberOfInitObjBounds();
@@ -2600,8 +2651,8 @@ double* OSOption::getInitObjUpperBoundsDense(int numberOfObjectives){
 	for (int k = 0; k < numberOfObjectives; k++) initObjBound[k] = OSNAN;
 	try
 	{	if (this->optimization != NULL) 
-		{	if(this->optimization->objectives != NULL) 
-			{	if(this->optimization->objectives->initialObjectiveBounds != NULL) 
+		{	if (this->optimization->objectives != NULL) 
+			{	if (this->optimization->objectives->initialObjectiveBounds != NULL) 
 				{	int i,j;
 					int num_obj;
 					num_obj = this->getNumberOfInitObjBounds();
@@ -2656,8 +2707,8 @@ double* OSOption::getInitConValuesDense(int numberOfConstraints){
 	for (int k = 0; k < numberOfConstraints; k++) initConVector[k] = OSNAN;
 	try
 	{	if (this->optimization != NULL) 
-		{	if(this->optimization->constraints != NULL) 
-			{	if(this->optimization->constraints->initialConstraintValues != NULL) 
+		{	if (this->optimization->constraints != NULL) 
+			{	if (this->optimization->constraints->initialConstraintValues != NULL) 
 				{	int i,j;
 					int num_con;
 					num_con = this->getNumberOfInitConValues();
@@ -2712,8 +2763,8 @@ double* OSOption::getInitDualVarLowerBoundsDense(int numberOfConstraints){
 	for (int k = 0; k < numberOfConstraints; k++) initDualVector[k] = OSNAN;
 	try
 	{	if (this->optimization != NULL) 
-		{	if(this->optimization->constraints != NULL) 
-			{	if(this->optimization->constraints->initialDualValues != NULL) 
+		{	if (this->optimization->constraints != NULL) 
+			{	if (this->optimization->constraints->initialDualValues != NULL) 
 				{	int i,j;
 					int num_con;
 					num_con = this->getNumberOfInitDualVarValues();
@@ -2746,8 +2797,8 @@ double* OSOption::getInitDualVarUpperBoundsDense(int numberOfConstraints){
 	for (int k = 0; k < numberOfConstraints; k++) initDualVector[k] = OSNAN;
 	try
 	{	if (this->optimization != NULL) 
-		{	if(this->optimization->constraints != NULL) 
-			{	if(this->optimization->constraints->initialDualValues != NULL) 
+		{	if (this->optimization->constraints != NULL) 
+			{	if (this->optimization->constraints->initialDualValues != NULL) 
 				{	int i,j;
 					int num_con;
 					num_con = this->getNumberOfInitDualVarValues();
@@ -2785,7 +2836,7 @@ std::vector<SolverOption*>  OSOption::getSolverOptions( std::string solver_name)
 			int num_options;
 			num_options = this->getNumberOfSolverOptions();
 			for(i = 0; i < num_options; i++){
-				if(solver_name == this->optimization->solverOptions->solverOption[ i]->solver){
+				if (solver_name == this->optimization->solverOptions->solverOption[ i]->solver){
 					optionsVector.push_back( this->optimization->solverOptions->solverOption[ i]);
 				}
 			}
@@ -2800,6 +2851,71 @@ std::vector<SolverOption*>  OSOption::getSolverOptions( std::string solver_name)
  *  ---------------------------------------------------------
  */
 
+/** setOtherOptions()
+ *  this function is used for <other> element in <general>, <system>, <service> and <job>
+ */
+bool OtherOptions::setOtherOptions(int numberOfOptions, OtherOption** other)
+{	try
+	{	if (this->other != NULL)
+			throw 99;
+
+		this->numberOfOtherOptions = numberOfOptions;
+		this->other = new OtherOption*[numberOfOptions];
+	
+		for (int i = 0; i < numberOfOptions; i++)
+		{	this->other[i] = new OtherOption();
+			this->other[i] = other[i];
+		}
+		return true;
+	}
+	catch (int i)
+	{	cout << "otherOptions array previously used." << endl;
+		return false;
+	}
+}//setOtherOptions
+
+/** setAnOtherOption()
+ *  used to add an <other> element in <general>, <system>, <service> and <job>
+ */
+bool OtherOptions::setAnOtherOption(std::string name, std::string value, std::string description)
+{	try
+	{
+		int nopt;
+		if (this->other == NULL) 
+			nopt = 0;
+		else
+			nopt = this->numberOfOtherOptions;
+	
+		OtherOption** temp = new OtherOption*[nopt+1];  //Allocate the new pointers
+		for (int i = 0; i < nopt; i++)
+			temp[i] = this->other[i];  //copy the pointers
+
+		delete[] this->other; //delete old pointers
+	
+//	add in the new element
+		temp[ nopt] = new OtherOption();
+//		if (name == "" || name == NULL)
+		if (name.empty() )
+			throw 98;
+
+		temp[ nopt]->name = name;
+		temp[ nopt]->value = value;
+		temp[ nopt]->description = description;
+
+		this->other = temp;   //hook the new pointers into the data structure
+		this->numberOfOtherOptions = ++nopt;
+
+		return true;
+	}
+
+	catch (int i)
+	{	cout << "the name of an option cannot be empty." << endl;
+		return false;
+	}
+}//setAnOtherOption
+
+	
+	
 /** 
  *  set() options in the <general> element
  */
@@ -2911,38 +3027,21 @@ bool OSOption::setOtherGeneralOptions(int numberOfOptions, OtherOption** other){
 	if (this->general->otherOptions == NULL) 
 		this->general->otherOptions = new OtherOptions();
 	else
-		delete this->general->otherOptions->other;
-	this->general->otherOptions->numberOfOtherOptions = numberOfOptions;
-	this->general->otherOptions->other = other;
-	return true;
+	{	for (int i = 0; i < this->general->otherOptions->numberOfOtherOptions; i++)
+			delete this->general->otherOptions->other[i];
+		delete[] this->general->otherOptions->other;
+		this->general->otherOptions->other = NULL;
+	}
+	return this->general->otherOptions->setOtherOptions(numberOfOptions, other);
 }//setOtherGeneralOptions
 
-bool OSOption::setAnOtherGeneralOption(OtherOption* optionValue){
+
+bool OSOption::setAnOtherGeneralOption(std::string name, std::string value, std::string description){
 	if (this->general == NULL) 
 		this->general = new GeneralOption();
 	if (this->general->otherOptions == NULL) 
 		this->general->otherOptions = new OtherOptions();
-
-	int nopt;
-	if (this->general->otherOptions->other == NULL) 
-		nopt = 0;
-	else
-		nopt = this->general->otherOptions->numberOfOtherOptions;
-	
-	OtherOption** temp = new OtherOption*[nopt+1];  //Allocate the new pointers
-	for (int i = 0; i < nopt; i++)
-		temp[i] = this->general->otherOptions->other[i];  //copy the pointers
-
-	delete[] this->general->otherOptions->other; //delete old pointers
-	
-//	add in the new element
-	temp[ nopt] = new OtherOption();
-	temp[ nopt] = optionValue;
-
-	this->general->otherOptions->other = temp;   //hook the new pointers into the data structure
-	this->general->otherOptions->numberOfOtherOptions = ++nopt;
-
-	return true;
+	return this->general->otherOptions->setAnOtherOption(name, value, description);
 }//setAnOtherGeneralOption
 
 
@@ -4289,97 +4388,97 @@ bool OSOption::setOptionDbl(std::string optionName, double value)
 
 
 bool OSOption::setOptionInt(std::string optionName, int optionValue)
-{	if(optionName == "minCPUNumber")
+{	if (optionName == "minCPUNumber")
 		return this->setMinCPUNumber(optionValue);
 
-	if(optionName == "numberOfOtherGeneralOptions")
+	if (optionName == "numberOfOtherGeneralOptions")
 		return this->setNumberOfOtherGeneralOptions(optionValue);
 
-	if(optionName == "numberOfOtherSystemOptions")
+	if (optionName == "numberOfOtherSystemOptions")
 		return this->setNumberOfOtherSystemOptions(optionValue);
 
-	if(optionName == "numberOfOtherServiceOptions")
+	if (optionName == "numberOfOtherServiceOptions")
 		return this->setNumberOfOtherServiceOptions(optionValue);
 
-	if(optionName == "numberOfOtherJobOptions")
+	if (optionName == "numberOfOtherJobOptions")
 		return this->setNumberOfOtherJobOptions(optionValue);
 
-	if(optionName == "numberOfJobDependencies")
+	if (optionName == "numberOfJobDependencies")
 		return this->setNumberOfJobDependencies(optionValue);
 
-	if(optionName == "numberOfRequiredDirectories")
+	if (optionName == "numberOfRequiredDirectories")
 		return this->setNumberOfRequiredDirectories(optionValue);
 
-	if(optionName == "numberOfRequiredFiles")
+	if (optionName == "numberOfRequiredFiles")
 		return this->setNumberOfRequiredFiles(optionValue);
 
-	if(optionName == "numberOfDirectoriesToMake")
+	if (optionName == "numberOfDirectoriesToMake")
 		return this->setNumberOfDirectoriesToMake(optionValue);
 
-	if(optionName == "numberOfFilesToMake")
+	if (optionName == "numberOfFilesToMake")
 		return this->setNumberOfFilesToMake(optionValue);
 
-	if(optionName == "numberOfInputDirectoriesToMove")
+	if (optionName == "numberOfInputDirectoriesToMove")
 		return this->setNumberOfInputDirectoriesToMove(optionValue);
 
-	if(optionName == "numberOfInputFilesToMove")
+	if (optionName == "numberOfInputFilesToMove")
 		return this->setNumberOfInputFilesToMove(optionValue);
 
-	if(optionName == "numberOfOutputDirectoriesToMove")
+	if (optionName == "numberOfOutputDirectoriesToMove")
 		return this->setNumberOfOutputDirectoriesToMove(optionValue);
 
-	if(optionName == "numberOfOutputFilesToMove")
+	if (optionName == "numberOfOutputFilesToMove")
 		return this->setNumberOfOutputFilesToMove(optionValue);
 
-	if(optionName == "numberOfFilesToDelete")
+	if (optionName == "numberOfFilesToDelete")
 		return this->setNumberOfFilesToDelete(optionValue);
 
-	if(optionName == "numberOfDirectoriesToDelete")
+	if (optionName == "numberOfDirectoriesToDelete")
 		return this->setNumberOfDirectoriesToDelete(optionValue);
 
-	if(optionName == "numberOfProcessesToKill")
+	if (optionName == "numberOfProcessesToKill")
 		return this->setNumberOfProcessesToKill(optionValue);
 
-	if(optionName == "numberOfVariables")
+	if (optionName == "numberOfVariables")
 		return this->setNumberOfVariables(optionValue);
 
-	if(optionName == "numberOfObjectives")
+	if (optionName == "numberOfObjectives")
 		return this->setNumberOfObjectives(optionValue);
 
-	if(optionName == "numberOfConstraints")
+	if (optionName == "numberOfConstraints")
 		return this->setNumberOfConstraints(optionValue);
 
-	if(optionName == "numberOfInitVarValues")
+	if (optionName == "numberOfInitVarValues")
 		return this->setNumberOfInitVarValues(optionValue);
 
-	if(optionName == "numberOfInitVarValuesString")
+	if (optionName == "numberOfInitVarValuesString")
 		return this->setNumberOfInitVarValuesString(optionValue);
 
-	if(optionName == "numberOfInitialBasisVariables")
+	if (optionName == "numberOfInitialBasisVariables")
 		return this->setNumberOfInitialBasisVariables(optionValue);
 
-	if(optionName == "numberOfOtherVariableOptions")
+	if (optionName == "numberOfOtherVariableOptions")
 		return this->setNumberOfOtherVariableOptions(optionValue);
 
-	if(optionName == "numberOfInitObjValues")
+	if (optionName == "numberOfInitObjValues")
 		return this->setNumberOfInitObjValues(optionValue);
 
-	if(optionName == "numberOfInitObjBounds")
+	if (optionName == "numberOfInitObjBounds")
 		return this->setNumberOfInitObjBounds(optionValue);
 
-	if(optionName == "numberOfOtherObjectiveOptions")
+	if (optionName == "numberOfOtherObjectiveOptions")
 		return this->setNumberOfOtherObjectiveOptions(optionValue);
 
-	if(optionName == "numberOfInitConValues")
+	if (optionName == "numberOfInitConValues")
 		return this->setNumberOfInitConValues(optionValue);
 
-	if(optionName == "numberOfInitDualVarValues")
+	if (optionName == "numberOfInitDualVarValues")
 		return this->setNumberOfInitDualVarValues(optionValue);
 
-	if(optionName == "numberOfOtherConstraintOptions")
+	if (optionName == "numberOfOtherConstraintOptions")
 		return this->setNumberOfOtherConstraintOptions(optionValue);
 
-	if(optionName == "numberOfSolverOptions")
+	if (optionName == "numberOfSolverOptions")
 		return this->setNumberOfSolverOptions(optionValue);
 
 	return false;

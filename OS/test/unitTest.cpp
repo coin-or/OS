@@ -1817,16 +1817,24 @@ catch(const ErrorClass& eclass){
 		
 		another_osoption->setOtherGeneralOptions(2,  otherOpts);
 		
-		OtherOption *other = new OtherOption();
+		delete otherOpts;
+
+//		OtherOption *other = new OtherOption();
 		
-		other->name = "name2";
-		other->value = "value2";
-		
-		another_osoption->setAnOtherGeneralOption( other);
-		
+//		other->name = "name2";
+//		other->value = "value2";
+
+//		another_osoption->setAnOtherGeneralOption( "name2", "value2", "");
+
+		std::string name = "name2";
+		std::string value = "value2";
+		std::string description = "";
+
+		another_osoption->setAnOtherGeneralOption( name, value, description);
 		OtherOption **newOtherOpts = another_osoption->getOtherGeneralOptions();
 		
-		for(i = 0; i < 3; i++){
+		int nopt = another_osoption->getNumberOfOtherGeneralOptions();
+		for(i = 0; i < nopt; i++){
 			std::cout  << newOtherOpts[i]->name << std::endl;
 			std::cout  << newOtherOpts[i]->value << std::endl;
 		}
