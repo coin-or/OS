@@ -2420,7 +2420,7 @@ public:
 	 * @return a vector of double that 
 	 * hold inital values for all of the variables
 	 */
-	double* OSOption::getIntegerVariableBranchingWeightsDense(int numberOfVariables);
+	double* getIntegerVariableBranchingWeightsDense(int numberOfVariables);
 
 	/*
 	getSOSVariableBranchingWeightsSparse(); // ?
