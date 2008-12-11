@@ -47,7 +47,7 @@
 
 		/* include the COIN-wide system specific configure header */
 		// kipp look at this later
-		//#include "configall_system.h"
+		#include "configall_system.h"
 
 		/***************************************************************************/
 		/*             HERE DEFINE THE CONFIGURATION SPECIFIC MACROS               */
