@@ -1823,11 +1823,6 @@ catch(const ErrorClass& eclass){
 		
 		delete[] otherOpts;
 
-//		OtherOption *other = new OtherOption();
-		
-//		other->name = "name2";
-//		other->value = "value2";
-
 //		another_osoption->setAnOtherGeneralOption( "name2", "value2", "");
 
 		std::string name = "name2";
@@ -1842,7 +1837,31 @@ catch(const ErrorClass& eclass){
 			std::cout  << newOtherOpts[i]->name << std::endl;
 			std::cout  << newOtherOpts[i]->value << std::endl;
 		}
-		
+
+		cout << "define and set paths" << endl;
+		std::string path[2];
+
+		path[0] = "C:\\temp\\dir0";
+		path[1] = "C:\\temp\\dir1";
+
+		cout << "set paths into DirectoriesToMake" << endl;
+
+		another_osoption->setDirectoriesToMake(2, path);
+
+		cout << "add another directory to the list" << endl;
+
+		another_osoption->setAnotherDirectoryToMake("C:\\temp\\dir2");
+
+		cout << "Now retrieve the information" << endl;
+
+		int npaths = another_osoption->getNumberOfDirectoriesToMake();
+		std::string *directorylist = another_osoption->getDirectoriesToMake();
+
+		for(i = 0; i < npaths; i++){
+			std::cout  << directorylist[i] << std::endl;
+		}
+ 
+
 		delete another_osoption;
 		
 		//delete other;
