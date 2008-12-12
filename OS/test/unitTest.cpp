@@ -1817,7 +1817,11 @@ catch(const ErrorClass& eclass){
 		
 		another_osoption->setOtherGeneralOptions(2,  otherOpts);
 		
-		delete otherOpts;
+		
+		delete otherOpts[ 0];
+		delete otherOpts[ 1];
+		
+		delete[] otherOpts;
 
 //		OtherOption *other = new OtherOption();
 		

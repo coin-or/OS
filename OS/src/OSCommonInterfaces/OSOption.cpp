@@ -2862,14 +2862,14 @@ bool OtherOptions::setOtherOptions(int numberOfOptions, OtherOption** other)
 		this->numberOfOtherOptions = numberOfOptions;
 		this->other = new OtherOption*[numberOfOptions];
 	
-		for (int i = 0; i < numberOfOptions; i++)
-		{	this->other[i] = new OtherOption();
-			this->other[i] = other[i];
+		for (int i = 0; i < numberOfOptions; i++){
+			this->other[i] = new OtherOption();
+			*this->other[i] = *other[i];
 		}
 		return true;
 	}
-	catch (int i)
-	{	cout << "otherOptions array previously used." << endl;
+	catch (int i){
+		cout << "otherOptions array previously used." << endl;
 		return false;
 	}
 }//setOtherOptions
@@ -2877,8 +2877,8 @@ bool OtherOptions::setOtherOptions(int numberOfOptions, OtherOption** other)
 /** setAnOtherOption()
  *  used to add an <other> element in <general>, <system>, <service> and <job>
  */
-bool OtherOptions::setAnOtherOption(std::string name, std::string value, std::string description)
-{	try
+bool OtherOptions::setAnOtherOption(std::string name, std::string value, std::string description){	
+	try
 	{
 		int nopt;
 		if (this->other == NULL) 
