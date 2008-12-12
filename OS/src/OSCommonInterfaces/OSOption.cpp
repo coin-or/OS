@@ -2852,24 +2852,24 @@ std::vector<SolverOption*>  OSOption::getSolverOptions( std::string solver_name)
  */
 
 /** setOtherOptions()
- *  this function is used for <other> element in <general>, <system>, <service> and <job>
+ *  set an array of <other> elements in <general>, <system>, <service> and <job>
  */
 bool OtherOptions::setOtherOptions(int numberOfOptions, OtherOption** other)
 {	try
 	{	if (this->other != NULL)
-			throw 99;
-
+			throw ErrorClass( "otherOptions array previously used.");
+		
 		this->numberOfOtherOptions = numberOfOptions;
 		this->other = new OtherOption*[numberOfOptions];
 	
 		for (int i = 0; i < numberOfOptions; i++){
-			this->other[i] = new OtherOption();
+			 this->other[i] = new OtherOption();
 			*this->other[i] = *other[i];
 		}
 		return true;
 	}
-	catch (int i){
-		cout << "otherOptions array previously used." << endl;
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
 		return false;
 	}
 }//setOtherOptions
@@ -2896,7 +2896,7 @@ bool OtherOptions::setAnOtherOption(std::string name, std::string value, std::st
 		temp[ nopt] = new OtherOption();
 //		if (name == "" || name == NULL)
 		if (name.empty() )
-			throw 98;
+			throw ErrorClass( "the name of an option cannot be empty." );
 
 		temp[ nopt]->name = name;
 		temp[ nopt]->value = value;
@@ -2908,8 +2908,8 @@ bool OtherOptions::setAnOtherOption(std::string name, std::string value, std::st
 		return true;
 	}
 
-	catch (int i)
-	{	cout << "the name of an option cannot be empty." << endl;
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
 		return false;
 	}
 }//setAnOtherOption
@@ -3126,37 +3126,20 @@ bool OSOption::setOtherSystemOptions(int numberOfOptions, OtherOption** other)
 	if (this->system->otherOptions == NULL) 
 		this->system->otherOptions = new OtherOptions();
 	else
-		delete this->system->otherOptions->other;
-	this->system->otherOptions->numberOfOtherOptions = numberOfOptions;
-	this->system->otherOptions->other = other;
-	return true;
+	{	for (int i = 0; i < this->system->otherOptions->numberOfOtherOptions; i++)
+			delete this->system->otherOptions->other[i];
+		delete[] this->system->otherOptions->other;
+		this->system->otherOptions->other = NULL;
+	}
+	return this->system->otherOptions->setOtherOptions(numberOfOptions, other);
 }//setOtherSystemOptions
 
-bool OSOption::setAnOtherSystemOption(OtherOption* optionValue)
+bool OSOption::setAnOtherSystemOption(std::string name, std::string value, std::string description)
 {	if (this->system == NULL) 
 		this->system = new SystemOption();
 	if (this->system->otherOptions == NULL) 
 		this->system->otherOptions = new OtherOptions();
-	int nopt;
-	if (this->system->otherOptions->other == NULL) 
-		nopt = 0;
-	else
-		nopt = this->system->otherOptions->numberOfOtherOptions;
-
-	OtherOption** temp = new OtherOption*[nopt+1];
-	for (int i = 0; i < nopt; i++)
-		temp[i] = this->system->otherOptions->other[i];
-		
-	delete[] this->system->otherOptions->other; //delete old pointers
-
-//	add in the new element
-	temp[ nopt] = new OtherOption();
-	temp[ nopt] = optionValue;
-
-	this->system->otherOptions->other = temp;
-	this->system->otherOptions->numberOfOtherOptions = ++nopt;
-
-	return true;
+	return this->system->otherOptions->setAnOtherOption(name, value, description);
 }//setAnOtherSystemOption
 
 
@@ -3186,36 +3169,20 @@ bool OSOption::setOtherServiceOptions(int numberOfOptions, OtherOption** other)
 	if (this->service->otherOptions == NULL) 
 		this->service->otherOptions = new OtherOptions();
 	else
-		delete this->service->otherOptions->other;
-	this->service->otherOptions->numberOfOtherOptions = numberOfOptions;
-	this->service->otherOptions->other = other;
-	return true;
+	{	for (int i = 0; i < this->service->otherOptions->numberOfOtherOptions; i++)
+			delete this->service->otherOptions->other[i];
+		delete[] this->service->otherOptions->other;
+		this->service->otherOptions->other = NULL;
+	}
+	return this->service->otherOptions->setOtherOptions(numberOfOptions, other);
 }//setOtherServiceOptions
 
-bool OSOption::setAnOtherServiceOption(OtherOption* optionValue)
+bool OSOption::setAnOtherServiceOption(std::string name, std::string value, std::string description)
 {	if (this->service == NULL) 
 		this->service = new ServiceOption();
 	if (this->service->otherOptions == NULL) 
 		this->service->otherOptions = new OtherOptions();
-	int nopt;
-	if (this->service->otherOptions->other == NULL) 
-		nopt = 0;
-	else
-		nopt = this->service->otherOptions->numberOfOtherOptions;
-
-	OtherOption** temp = new OtherOption*[nopt+1];
-	for (int i = 0; i < nopt; i++)
-		temp[i] = this->service->otherOptions->other[i];
-
-	delete[] this->service->otherOptions->other;
-
-	temp[ nopt] = new OtherOption();
-	temp[ nopt] = optionValue;
-
-	this->service->otherOptions->other = temp;
-	this->service->otherOptions->numberOfOtherOptions = ++nopt;
-
-	return true;
+	return this->service->otherOptions->setAnOtherOption(name, value, description);
 }//setAnOtherServiceOption
 
 /** 
@@ -3282,10 +3249,11 @@ bool OSOption::setAnotherJobDependency(std::string jobID){
 		nopt = this->job->dependencies->numberOfJobIDs;
 	std::string* temp = new std::string[nopt+1];
 	for (int i = 0; i < nopt; i++){
-		temp[i] = this->job->dependencies->jobID[i]; // create the new
+		temp[i] = this->job->dependencies->jobID[i]; // create the new jobID
 	}
+	cout << "delete old dependencies list" << endl;
 	delete[] this->job->dependencies->jobID;
-	temp[nopt] = jobID ;
+	temp[nopt] = jobID;
 	// fill everything back in
 	this->job->dependencies->jobID = temp;
 	this->job->dependencies->numberOfJobIDs = ++nopt;
@@ -3419,15 +3387,26 @@ bool OSOption::setAnotherDirectoryToMake(std::string path)
 		nopt = this->job->directoriesToMake->numberOfPaths;
 
 	std::string* temp = new std::string[nopt+1];
+
+	cout << "copy old directory list" << endl;
+
 	for (int i = 0; i < nopt; i++)
 		temp[i] = this->job->directoriesToMake->path[i];
 	
-	delete[] this->job->directoriesToMake->path;
+	cout << "delete old list" << endl;
+
+	//delete[] this->job->directoriesToMake->path; //Why does this not work?
+
+	cout << "point to the new list" << endl;
 
 	temp[nopt] = path;
+
+	cout << "add new path" << endl;
+
 	this->job->directoriesToMake->path = temp;
 	this->job->directoriesToMake->numberOfPaths = ++nopt;
 
+	cout << "finished" << endl;
 	return true;
 }//setAnotherDirectoryToMake
 
@@ -3747,7 +3726,7 @@ bool OSOption::setDirectoriesToDelete(int numberOfPaths, std::string* paths)
 	this->job->directoriesToDelete->numberOfPaths = numberOfPaths;
 	this->job->directoriesToDelete->path = paths;
 	return true;
-}//setDirectoriesToMake
+}//setDirectoriesToDelete
 
 bool OSOption::setAnotherDirectoryToDelete(std::string path)
 {	if (this->job == NULL) 
@@ -3835,36 +3814,20 @@ bool OSOption::setOtherJobOptions(int numberOfOptions, OtherOption** other)
 	if (this->job->otherOptions == NULL) 
 		this->job->otherOptions = new OtherOptions();
 	else
-		delete this->job->otherOptions->other;
-	this->job->otherOptions->numberOfOtherOptions = numberOfOptions;
-	this->job->otherOptions->other = other;
-	return true;
+	{	for (int i = 0; i < this->job->otherOptions->numberOfOtherOptions; i++)
+			delete this->job->otherOptions->other[i];
+		delete[] this->job->otherOptions->other;
+		this->job->otherOptions->other = NULL;
+	}
+	return this->job->otherOptions->setOtherOptions(numberOfOptions, other);
 }//setOtherJobOptions
 
-bool OSOption::setAnOtherJobOption(OtherOption* optionValue)
+bool OSOption::setAnOtherJobOption(std::string name, std::string value, std::string description)
 {	if (this->job == NULL) 
 		this->job = new JobOption();
 	if (this->job->otherOptions == NULL) 
 		this->job->otherOptions = new OtherOptions();
-	int nopt;
-	if (this->job->otherOptions->other == NULL) 
-		nopt = 0;
-	else
-		nopt = this->job->otherOptions->numberOfOtherOptions;
-
-	OtherOption** temp = new OtherOption*[nopt+1];
-	for (int i = 0; i < nopt; i++)
-		temp[i] = this->job->otherOptions->other[i];
-
-	delete[] this->job->otherOptions->other;
-
-	temp[ nopt] = new OtherOption();
-	temp[ nopt] = optionValue;
-
-	this->job->otherOptions->other = temp;
-	this->job->otherOptions->numberOfOtherOptions = ++nopt;
-
-	return true;
+	return this->job->otherOptions->setAnOtherOption(name, value, description);
 }//setAnOtherJobOption
 
 

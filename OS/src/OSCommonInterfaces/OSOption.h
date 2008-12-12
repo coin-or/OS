@@ -19,7 +19,6 @@
 //#define DEBUG
 #include <string>
 #include <vector> 
-#include <string>
 
 /*! \class InstanceLocationOption
  *  \brief the InstanceLocationOption class.
@@ -2648,7 +2647,7 @@ public:
 
 	bool setOtherSystemOptions(int numberOfOptions, OtherOption** other);
 
-	bool setAnOtherSystemOption(OtherOption* optionValue);
+	bool setAnOtherSystemOption(std::string name, std::string value, std::string description);
 
 
 	bool setServiceType( std::string serviceType);
@@ -2657,7 +2656,7 @@ public:
 
 	bool setOtherServiceOptions(int numberOfOptions, OtherOption** other);
 
-	bool setAnOtherServiceOption(OtherOption* optionValue);
+	bool setAnOtherServiceOption(std::string name, std::string value, std::string description);
 
 
 	bool setMaxTime(double value);
@@ -2718,7 +2717,7 @@ public:
 
 	bool setOtherJobOptions(int numberOfOptions, OtherOption** other);
 
-	bool setAnOtherJobOption(OtherOption* optionValue);
+	bool setAnOtherJobOption(std::string name, std::string value, std::string description);
 
 
 	bool setNumberOfVariables(int numberOfObjects);
