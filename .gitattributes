@@ -47,6 +47,7 @@ OS/MSVisualStudio/v9/OSSolverService/OSSolverService.vcproj -text
 OS/MSVisualStudio/v9/OSTest/OSTest.vcproj -text
 OS/MSVisualStudio/v9/libOS/libOS.vcproj -text
 OS/MSVisualStudio/v9/libOSCommon/libOSCommon.vcproj -text
+OS/MSVisualStudio/v9/libOSSolvers/libOSSolvers.vcproj -text
 OS/MSVisualStudio/v9/libOSnl2OSiL/libOSnl2OSiL.vcproj -text
 OS/MSVisualStudioOSExamples/addCuts/Release/BuildLog.htm -text
 OS/MSVisualStudioOSExamples/addCuts/addCuts.vcproj -text
