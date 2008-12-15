@@ -1489,6 +1489,7 @@ catch(const ErrorClass& eclass){
 		nelem = new int[4];
 		startIdx = new int[4];
 		VI = new int*[4];
+		int i;
 		for (i = 0; i < 4; i++)
 		{	nelem[i] = 2;
 			startIdx[i] = 2*i;
