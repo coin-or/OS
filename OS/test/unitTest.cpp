@@ -1768,7 +1768,7 @@ catch(const ErrorClass& eclass){
 		osolreader = NULL;
 		osolreader = new OSoLReader();
 		cout << "Read the string back" << endl;
-		//osolreader->readOSoL( tmpOSoL);
+		osolreader->readOSoL( tmpOSoL);
 		delete osolwriter;
 		osolwriter = NULL;
 		delete osolreader;
