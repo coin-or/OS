@@ -1776,7 +1776,7 @@ QUOTE;
 initbasvarvalueend: GREATERTHAN VAREND | ENDOFELEMENT;
 
 
-integervariablebranchingweights: {printf("integer weights empty\n");} | INTEGERVARIABLEBRANCHINGWEIGHTSSTART numberofintegerweights
+integervariablebranchingweights:  | INTEGERVARIABLEBRANCHINGWEIGHTSSTART numberofintegerweights
    GREATERTHAN intweightlist INTEGERVARIABLEBRANCHINGWEIGHTSEND;
 
 numberofintegerweights: NUMBEROFVARATT QUOTE INTEGER QUOTE
@@ -1791,7 +1791,7 @@ numberofintegerweights: NUMBEROFVARATT QUOTE INTEGER QUOTE
 
 intweightlist: | intweightlist intweight;
 
-intweight: intweightstart intweightidxatt intweightend
+intweight: intweightstart intweightattlist intweightend
 {	if (!parserData->idxAttributePresent)
 		osolerror (NULL, osoption, parserData, "variable index required");
 	parserData->idxAttributePresent = false;
@@ -1804,6 +1804,10 @@ intweightstart: VARSTART
 		osolerror(NULL, osoption, parserData, "too many integer branching weights");
 };
 
+intweightattlist: | intweightattlist intweightatt;
+
+intweightatt: intweightidxatt | intweightvalueatt;
+
 intweightidxatt: IDXATT QUOTE INTEGER QUOTE
 {	if (parserData->idxAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one variable index allowed");
@@ -1815,15 +1819,25 @@ intweightidxatt: IDXATT QUOTE INTEGER QUOTE
 			osolerror (NULL, osoption, parserData, "variable index exceeds upper limit");
 	};
 	osoption->optimization->variables->integerVariableBranchingWeights->var[parserData->numberOfIntWt]->idx = $3;
-	printf("processed weight attributes\n");
 };
- 
-intweightend: 
-    GREATERTHAN DOUBLE  {osoption->optimization->variables->integerVariableBranchingWeights->var[parserData->numberOfIntWt]->value = $2;} VAREND;
-  | GREATERTHAN INTEGER {osoption->optimization->variables->integerVariableBranchingWeights->var[parserData->numberOfIntWt]->value = $2;} VAREND;
+
+intweightvalueatt: VALUEATT ATTRIBUTETEXT
+{	if (parserData->valAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one branching weight allowed");
+	parserData->valAttributePresent = true;
+	if (strcmp($2,"INF") == 0)
+		osoption->optimization->variables->integerVariableBranchingWeights->var[parserData->numberOfIntWt]->value = OSDBL_MAX;
+	else if (strcmp($2,"-INF") == 0)
+		osoption->optimization->variables->integerVariableBranchingWeights->var[parserData->numberOfIntWt]->value = -OSDBL_MAX;
+	else
+		osoption->optimization->variables->integerVariableBranchingWeights->var[parserData->numberOfIntWt]->value = os_strtod($2, NULL);
+}
+QUOTE;
+                   
+intweightend: GREATERTHAN  VAREND | ENDOFELEMENT;
     
 
-sosvariablebranchingweights: {printf("sos weights empty\n");} | SOSVARIABLEBRANCHINGWEIGHTSSTART numberofsosweightgroups
+sosvariablebranchingweights: | SOSVARIABLEBRANCHINGWEIGHTSSTART numberofsosweightgroups
    GREATERTHAN sosweightgrouplist SOSVARIABLEBRANCHINGWEIGHTSEND;
 
 numberofsosweightgroups: NUMBEROFSOSATT QUOTE INTEGER QUOTE   
@@ -1903,7 +1917,7 @@ sosweightgroupcontent:
 
 sosweightgroupvars: | sosweightgroupvars sosweightvar;
 
-sosweightvar: sosweightvarstart sosweightvaridxatt sosweightvarend
+sosweightvar: sosweightvarstart sosweightvarattlist sosweightvarend
 {	if (!parserData->idxAttributePresent)
 		osolerror (NULL, osoption, parserData, "variable index required");
 	parserData->idxAttributePresent = false;
@@ -1915,6 +1929,10 @@ sosweightvarstart: VARSTART
 {	if (parserData->numberOfSOSVar >= osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->numberOfVar)
 		osolerror(NULL, osoption, parserData, "too many variable branching weights");
 };
+
+sosweightvarattlist: | sosweightvarattlist sosweightvaratt;
+
+sosweightvaratt: sosweightvaridxatt | sosweightvarvalueatt;
 
 sosweightvaridxatt: IDXATT QUOTE INTEGER QUOTE
 {	if (parserData->idxAttributePresent)
@@ -1929,9 +1947,20 @@ sosweightvaridxatt: IDXATT QUOTE INTEGER QUOTE
 	osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->var[parserData->numberOfSOSVar]->idx = $3;
 }; 
 
-sosweightvarend: 
-     GREATERTHAN DOUBLE  {osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->var[parserData->numberOfSOSVar]->value = $2;} VAREND;
-   | GREATERTHAN INTEGER {osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->var[parserData->numberOfSOSVar]->value = $2;} VAREND;
+sosweightvarvalueatt: VALUEATT ATTRIBUTETEXT
+{	if (parserData->valAttributePresent)
+		osolerror (NULL, osoption, parserData, "only one variable weight allowed");
+	parserData->valAttributePresent = true;
+	if (strcmp($2,"INF") == 0)
+		osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->var[parserData->numberOfSOSVar]->value = OSDBL_MAX;
+	else if (strcmp($2,"-INF") == 0)
+		osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->var[parserData->numberOfSOSVar]->value = -OSDBL_MAX;
+	else
+		osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->var[parserData->numberOfSOSVar]->value = os_strtod($2, NULL);
+}
+QUOTE;
+	
+sosweightvarend: GREATERTHAN VAREND | ENDOFELEMENT;
 
 
 othervariableoptionlist: | othervariableoptionlist othervariableoption;
