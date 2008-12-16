@@ -1731,8 +1731,7 @@ catch(const ErrorClass& eclass){
 		int num_options = optionsVector.size();
 		for(i = 0; i < num_options; i++){
 			std::cout << "ipopt solver option  "  << optionsVector[ i]->name << std::endl;
-		}
-
+		}	
 		std::cout << "number of variables initialed with double "  <<  osoption->getNumberOfInitVarValues() << std::endl;
 		InitVarValue** initVarVector;
 		initVarVector = osoption->getInitVarValuesSparse();
@@ -1769,7 +1768,7 @@ catch(const ErrorClass& eclass){
 		osolreader = NULL;
 		osolreader = new OSoLReader();
 		cout << "Read the string back" << endl;
-		osolreader->readOSoL( tmpOSoL);
+		//osolreader->readOSoL( tmpOSoL);
 		delete osolwriter;
 		osolwriter = NULL;
 		delete osolreader;
@@ -1840,8 +1839,9 @@ catch(const ErrorClass& eclass){
 		}
 
 		cout << "define and set paths" << endl;
-		std::string path[2];
-
+		//std::string path[2];
+		std::string* path;
+		path = new std::string[ 2];
 		path[0] = "C:\\temp\\dir0";
 		path[1] = "C:\\temp\\dir1";
 

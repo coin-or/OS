@@ -3395,7 +3395,7 @@ bool OSOption::setAnotherDirectoryToMake(std::string path)
 	
 	cout << "delete old list" << endl;
 
-	//delete[] this->job->directoriesToMake->path; //Why does this not work?
+	delete[] this->job->directoriesToMake->path; 
 
 	cout << "point to the new list" << endl;
 
