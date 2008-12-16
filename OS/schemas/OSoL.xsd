@@ -468,7 +468,11 @@
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="var" type="InitVarValue" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="var" type="InitVarValue" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfVar</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -477,7 +481,11 @@
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="var" type="InitVarValueString" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="var" type="InitVarValueString" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfVar</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -486,7 +494,11 @@
 			<xs:documentation>Experimental</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="var" type="InitBasStatus" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="var" type="InitBasStatus" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfVar</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -551,11 +563,8 @@
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="BranchingWeight">
-		<xs:simpleContent>
-			<xs:extension base="xs:double">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-			</xs:extension>
-		</xs:simpleContent>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="value" type="xs:double"/>
 	</xs:complexType>
 	<xs:complexType name="OtherVariableOption">
 		<xs:annotation>
