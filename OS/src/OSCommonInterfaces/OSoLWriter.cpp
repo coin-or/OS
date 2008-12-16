@@ -424,8 +424,8 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				for (int i=0; i < m_OSOption->optimization->variables->integerVariableBranchingWeights->numberOfVar; i++)
 				{	outStr << "<var";
 					outStr << " idx=\"" << m_OSOption->optimization->variables->integerVariableBranchingWeights->var[i]->idx << "\"";
-					outStr << " value=\"" << m_OSOption->optimization->variables->integerVariableBranchingWeights->var[i]->value  << "\"" ;
-					outStr << " />" << endl;
+					outStr << " value=\"" << m_OSOption->optimization->variables->integerVariableBranchingWeights->var[i]->value << "\"";
+					outStr << "/>" << endl;
 				}
 				outStr << "</integerVariableBranchingWeights>" << endl;
 			}
@@ -440,7 +440,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 					for (int j=0; j < m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->numberOfVar; j++)
 					{	outStr << "<var";
 						outStr << " idx=\"" << m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->var[j]->idx << "\"";
-						outStr << " value=\"" <<  m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->var[j]->value << "\"";
+						outStr << " value=\"" << m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->var[j]->value << "\"";
 						outStr << "/>" << endl;
 					}
 					outStr << "</sos>" << endl;
