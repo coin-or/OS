@@ -3909,20 +3909,18 @@ on the remote machine that is hosting the {\tt OSSolverService} and not on the c
 ./OSSolverService -osol ../data/osolFiles/remoteSolve1.osol
      -serviceLocation  http://gsbkip.chicagogsb.edu/os/OSSolverService.jws
 \end{verbatim}
-where the {\tt remoteSolve1.osol} file is\index{remoteSolve1.osol@{\tt remoteSolve1.osol}|)}
+where the {\tt remoteSolve1.osol} file is
 \begin{verbatim}
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org">
     <general>
-         <instanceLocation locationType="local">c:\parincLinear.osil</instanceLocation>
-         <contact transportType="smtp">kipp.martin@chicagogsb.edu</contact>
+        <instanceLocation locationType="local">c:\parincLinear.osil</instanceLocation>
+        <contact transportType="smtp">kipp.martin@chicagogsb.edu</contact>
+        <solverToInvoke>ipopt</solverToInvoke>      
     </general>
-    <optimization>
-        <other name="os_solver">ipopt</other>
-    </optimization>
 </osol>
 \end{verbatim}
-
+\index{remoteSolve1.osol@{\tt remoteSolve1.osol}|)}
 
 If we were to change the {\tt locationType} attribute in the {\tt <instanceLocation>} element to {\tt http} then we
 could specify the instance location on yet another machine. This is illustrated below  for {\tt remoteSolve2.osol}.
@@ -3936,13 +3934,11 @@ running on the server {\tt gsbkip.chicagogsb.edu} which contacts the server {\tt
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org">
     <general>
-         <instanceLocation locationType="http">
-    http://www.coin-or.org/OS/parincLinear.osil
-     </instanceLocation>
+        <instanceLocation locationType="http">
+            http://www.coin-or.org/OS/parincLinear.osil
+        </instanceLocation>
+        <solverToInvoke>ipopt</solverToInvoke>      
     </general>
-    <optimization>
-        <other name="os_solver">ipopt</other>
-    </optimization>
 </osol>
 \end{verbatim}
 
@@ -3997,12 +3993,10 @@ This is illustrated below,
 <osol xmlns="os.optimizationservices.org">
     <general>
         <jobID>
-        gsbrkm4__127.0.0.1__2007-06-16T15.46.46.075-05.00149771253
+            gsbrkm4__127.0.0.1__2007-06-16T15.46.46.075-05.00149771253
         </jobID>
+        <solverToInvoke>ipopt</solverToInvoke>      
     </general>
-    <optimization>
-        <other name="os_solver">ipopt</other>
-    </optimization>
 </osol>
 \end{verbatim}
 
@@ -4015,10 +4009,8 @@ be specified in a configuration file or on the command line.
 <osol xmlns="os.optimizationservices.org">
     <general>
         <jobID>123456abcd</jobID>
+        <solverToInvoke>ipopt</solverToInvoke>      
     </general>
-    <optimization>
-        <other name="os_solver">ipopt</other>
-    </optimization>
 </osol>
 \end{verbatim}
 
@@ -4038,17 +4030,15 @@ email when the job is complete. Below is an example of the {\tt OSoL} that uses 
         <contact transportType="smtp">
             kipp.martin@chicagogsb.edu
         </contact>
+        <solverToInvoke>ipopt</solverToInvoke>      
     </general>
-    <optimization>
-        <other name="os_solver">lindo</other>
-    </optimization>
 </osol>
 \end{verbatim}
 
 The remote Solver Service will send an email to the above address when the job is complete. A second option for
 knowing when a job is complete is to use the {\tt knock}\index{knock@{\tt knock}} method.
 
-Note that in all of these examples we provided a value for the {\tt name} attribute in the {\tt <other>} element.
+Note that in all of these examples we provided a value for the {\tt <solverToInvoke>} element.
 The remote solver service will use {\tt Cbc} if another solver is not specified.%
 \index{send@{\tt send}|)}
 
@@ -4335,9 +4325,16 @@ may be empty because no options are required to get the JobID)
 
 \subsection{Passing Options to Solvers}
 
-The OSoL (Optimization Services option Language) protocol is used to pass options to solvers.   When using the {\tt OSSolverService} executable this will typically be done through an OSoL XML file by specifying the {\tt -osol} option followed by the location of the file.  However, it is also possible to write a custom application that links to the OS library and to build an OSOption object in-memory and then pass this to a solver. We next describe the  feature of the OSoL protocol that will be the most useful to the typical user.
+The OSoL (Optimization Services option Language) protocol is used to pass options to solvers.   
+When using the {\tt OSSolverService} executable this will typically be done through an OSoL XML file 
+by specifying the {\tt -osol} option followed by the location of the file.  However, it is also possible 
+to write a custom application that links to the OS library and to build an OSOption object in-memory 
+and then pass this to a solver. We next describe the  feature of the OSoL protocol that will be the most 
+useful to the typical user.
 
-In the OSoL protocol there is an element {\tt <solverOptions>} that can have any number of {\tt <solverOption>} children. (See the file {\tt parsertest.osol} in OS/data/osolFiles.)  Each {\tt <solverOption>} child can have six attributes, all of which except one are optional. These attributes are:
+In the OSoL protocol there is an element {\tt <solverOptions>} that can have any number of {\tt <solverOption>} 
+children. (See the file {\tt parsertest.osol} in OS/data/osolFiles.)  Each {\tt <solverOption>} child can have 
+six attributes, all of which except one are optional. These attributes are:
 
 \begin{itemize}
 
@@ -4922,10 +4919,8 @@ and the {\tt osol} file is
          <instanceLocation locationType="local">
              /home/kmartin/temp/parincQuadratic.osil
          </instanceLocation>
+        <solverToInvoke>ipopt</solverToInvoke>      
     </general>
-    <optimization>
-        <other name="os_solver">ipopt</other>
-    </optimization>
 </osol>
 \end{verbatim}
 

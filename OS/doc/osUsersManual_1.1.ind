@@ -177,15 +177,15 @@
   \item Release-plus configuration, 
 		\see{Microsoft Visual Studio, {\tt Release-plus} configuration}{1}
   \item {\tt remoteSolve1.osol}, 63
-  \item {\tt retrieve}, 58, 60, 66, 69
+  \item {\tt retrieve}, 58, 60, 65--66, 69
   \item {\it Rosenbrock, H.H.}, 33
 
   \indexspace
 
-  \item {\tt send}, 58--60, 64--66, 78
+  \item {\tt send}, 58--60, 63--66, 78
   \item {\tt serviceLocation}, 60
   \item SOAP protocol, 6, 8, 62, 64, 78
-  \item {\tt solve}, 58--60, 62--63, 69, 78
+  \item {\tt solve}, 58--60, 62--63, 68, 69, 78
   \item Subversion, 9
   \item SVN, 10, 12, 16
   \item {\tt SYMPHONY}, \see{COIN-OR projects, {\tt SYMPHONY}}{1}
