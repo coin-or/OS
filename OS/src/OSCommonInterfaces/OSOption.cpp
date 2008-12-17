@@ -4398,15 +4398,6 @@ bool OSOption::setTransportType( std::string transportType)
 	return true;
 }//setTransportType
 
-bool OSOption::setNumberOfOtherGeneralOptions(int numberOfObjects)
-{	if (this->general == NULL) 
-		this->general = new GeneralOption();
-	if (this->general->otherOptions == NULL) 
-		this->general->otherOptions = new OtherOptions();
-	this->general->otherOptions->numberOfOtherOptions = numberOfObjects;
-	return true;
-}//setNumberOfOtherGeneralOptions
-
 bool OSOption::setOtherGeneralOptions(int numberOfOptions, OtherOption** other)
 {	if (this->general == NULL) 
 		this->general = new GeneralOption();
@@ -4496,15 +4487,6 @@ bool OSOption::setMinCPUNumber(int number)
 	return true;
 }//setMinCPUNumber
 
-bool OSOption::setNumberOfOtherSystemOptions(int numberOfObjects)
-{	if (this->system == NULL) 
-		this->system = new SystemOption();
-	if (this->system->otherOptions == NULL) 
-		this->system->otherOptions = new OtherOptions();
-	this->system->otherOptions->numberOfOtherOptions = numberOfObjects;
-	return true;
-}//setNumberOfOtherSystemOptions
-
 bool OSOption::setOtherSystemOptions(int numberOfOptions, OtherOption** other)
 {	if (this->system == NULL) 
 		this->system = new SystemOption();
@@ -4539,14 +4521,6 @@ bool OSOption::setServiceType( std::string serviceType)
 	return true;
 }//setServiceType
 
-bool OSOption::setNumberOfOtherServiceOptions(int numberOfObjects)
-{	if (this->service == NULL) 
-		this->service = new ServiceOption();
-	if (this->service->otherOptions == NULL) 
-		this->service->otherOptions = new OtherOptions();
-	this->service->otherOptions->numberOfOtherOptions = numberOfObjects;
-	return true;
-}//setNumberOfOtherServiceOptions
 
 bool OSOption::setOtherServiceOptions(int numberOfOptions, OtherOption** other)
 {	if (this->service == NULL) 
@@ -4600,15 +4574,6 @@ bool OSOption::setScheduledStartTime(std::string time)
 }//setScheduledStartTime
 
 
-bool OSOption::setNumberOfJobDependencies(int numberOfObjects)
-{	if (this->job == NULL) 
-		this->job = new JobOption();
-	if (this->job->dependencies == NULL) 
-		this->job->dependencies = new JobDependencies();
-	this->job->dependencies->numberOfJobIDs = numberOfObjects;
-	return true;
-}//setNumberOfJobDependencies
-
 bool OSOption::setJobDependencies(int numberOfDependencies, std::string* jobDependencies)
 {	if (this->job == NULL) 
 		this->job = new JobOption();
@@ -4626,34 +4591,8 @@ bool OSOption::setAnotherJobDependency(std::string jobID)
 	if (this->job->dependencies == NULL) 
 		this->job->dependencies = new JobDependencies();
 	return this->job->dependencies->addJobID(jobID);
-
-//	int nopt;
-//	if (this->job->dependencies->jobID == NULL) 
-//		nopt = 0;
-//	else
-//		nopt = this->job->dependencies->numberOfJobIDs;
-//	std::string* temp = new std::string[nopt+1];
-//	for (int i = 0; i < nopt; i++){
-//		temp[i] = this->job->dependencies->jobID[i]; // create the new jobID
-//	}
-//	cout << "delete old dependencies list" << endl;
-//	delete[] this->job->dependencies->jobID;
-//	temp[nopt] = jobID;
-//	// fill everything back in
-//	this->job->dependencies->jobID = temp;
-//	this->job->dependencies->numberOfJobIDs = ++nopt;
-//	return true;
 }//setAnotherJobDependency
 
-
-bool OSOption::setNumberOfRequiredDirectories(int numberOfObjects)
-{	if (this->job == NULL) 
-		this->job = new JobOption();
-	if (this->job->requiredDirectories == NULL) 
-		this->job->requiredDirectories = new DirectoriesAndFiles();
-	this->job->requiredDirectories->numberOfPaths = numberOfObjects;
-	return true;
-}//setNumberOfRequiredDirectories
 
 bool OSOption::setRequiredDirectories(int numberOfPaths, std::string* paths)
 {	if (this->job == NULL) 
@@ -4674,14 +4613,6 @@ bool OSOption::setAnotherRequiredDirectory(std::string path)
 	return this->job->requiredDirectories->addPath(path);
 }//setAnotherRequiredDirectory
 
-bool OSOption::setNumberOfRequiredFiles(int numberOfObjects)
-{	if (this->job == NULL) 
-		this->job = new JobOption();
-	if (this->job->requiredFiles == NULL) 
-		this->job->requiredFiles = new DirectoriesAndFiles();
-	this->job->requiredFiles->numberOfPaths = numberOfObjects;
-	return true;
-}//setNumberOfRequiredFiles
 
 bool OSOption::setRequiredFiles(int numberOfPaths, std::string* paths)
 {	if (this->job == NULL) 
@@ -4702,14 +4633,6 @@ bool OSOption::setAnotherRequiredFile(std::string path)
 	return this->job->requiredFiles->addPath(path);
 }//setAnotherRequiredFile
 
-bool OSOption::setNumberOfDirectoriesToMake(int numberOfObjects)
-{	if (this->job == NULL) 
-		this->job = new JobOption();
-	if (this->job->directoriesToMake == NULL) 
-		this->job->directoriesToMake = new DirectoriesAndFiles();
-	this->job->directoriesToMake->numberOfPaths = numberOfObjects;
-	return true;
-}//setNumberOfDirectoriesToMake
 
 bool OSOption::setDirectoriesToMake(int numberOfPaths, std::string* paths)
 {	if (this->job == NULL) 
@@ -4730,14 +4653,6 @@ bool OSOption::setAnotherDirectoryToMake(std::string path)
 	return this->job->directoriesToMake->addPath(path);
 }//setAnotherDirectoryToMake
 
-bool OSOption::setNumberOfFilesToMake(int numberOfObjects)
-{	if (this->job == NULL) 
-		this->job = new JobOption();
-	if (this->job->filesToMake == NULL) 
-		this->job->filesToMake = new DirectoriesAndFiles();
-	this->job->filesToMake->numberOfPaths = numberOfObjects;
-	return true;
-}//setNumberOfFilesToMake
 
 bool OSOption::setFilesToMake(int numberOfPaths, std::string* paths)
 {	if (this->job == NULL) 
@@ -4758,14 +4673,6 @@ bool OSOption::setAnotherFileToMake(std::string path)
 	return this->job->filesToMake->addPath(path);
 }//setAnotherFileToMake
 
-bool OSOption::setNumberOfInputDirectoriesToMove(int numberOfObjects)
-{	if (this->job == NULL) 
-		this->job = new JobOption();
-	if (this->job->inputDirectoriesToMove == NULL) 
-		this->job->inputDirectoriesToMove = new PathPairs();
-	this->job->inputDirectoriesToMove->numberOfPathPairs = numberOfObjects;
-	return true;
-}//setNumberOfInputDirectoriesToMove
 
 bool OSOption::setInputDirectoriesToMove(int numberOfPathPairs, PathPair** pathPair)
 {	if (this->job == NULL) 
@@ -4786,14 +4693,6 @@ bool OSOption::setAnotherInputDirectoryToMove(std::string fromPath, std::string 
 	return this->job->inputDirectoriesToMove->addPathPair(fromPath, toPath, makeCopy);
 }//setAnotherInputDirectoryToMove
 
-bool OSOption::setNumberOfInputFilesToMove(int numberOfObjects)
-{	if (this->job == NULL) 
-		this->job = new JobOption();
-	if (this->job->inputFilesToMove == NULL) 
-		this->job->inputFilesToMove = new PathPairs();
-	this->job->inputFilesToMove->numberOfPathPairs = numberOfObjects;
-	return true;
-}//setNumberOfInputFilesToMove
 
 bool OSOption::setInputFilesToMove(int numberOfPathPairs, PathPair** pathPair)
 {	if (this->job == NULL) 
@@ -4815,15 +4714,6 @@ bool OSOption::setAnotherInputFileToMove(std::string fromPath, std::string toPat
 }//setAnotherInputFileToMove
 
 
-bool OSOption::setNumberOfOutputFilesToMove(int numberOfObjects)
-{	if (this->job == NULL) 
-		this->job = new JobOption();
-	if (this->job->outputFilesToMove == NULL) 
-		this->job->outputFilesToMove = new PathPairs();
-	this->job->outputFilesToMove->numberOfPathPairs = numberOfObjects;
-	return true;
-}//setNumberOfOutputFilesToMove
-
 bool OSOption::setOutputFilesToMove(int numberOfPathPairs, PathPair** pathPair)
 {	if (this->job == NULL) 
 		this->job = new JobOption();
@@ -4843,15 +4733,6 @@ bool OSOption::setAnotherOutputFileToMove(std::string fromPath, std::string toPa
 	return this->job->outputFilesToMove->addPathPair(fromPath, toPath, makeCopy);
 }//setAnotherOutputFileToMove
 
-
-bool OSOption::setNumberOfOutputDirectoriesToMove(int numberOfObjects)
-{	if (this->job == NULL) 
-		this->job = new JobOption();
-	if (this->job->outputDirectoriesToMove == NULL) 
-		this->job->outputDirectoriesToMove = new PathPairs();
-	this->job->outputDirectoriesToMove->numberOfPathPairs = numberOfObjects;
-	return true;
-}//setNumberOfOutputDirectoriesToMove
 
 bool OSOption::setOutputDirectoriesToMove(int numberOfPathPairs, PathPair** pathPair)
 {	if (this->job == NULL) 
@@ -4873,15 +4754,6 @@ bool OSOption::setAnotherOutputDirectoryToMove(std::string fromPath, std::string
 }//setAnotherOutputDirectoryToMove
 
 
-bool OSOption::setNumberOfFilesToDelete(int numberOfObjects)
-{	if (this->job == NULL) 
-		this->job = new JobOption();
-	if (this->job->filesToDelete == NULL) 
-		this->job->filesToDelete = new DirectoriesAndFiles();
-	this->job->filesToDelete->numberOfPaths = numberOfObjects;
-	return true;
-}//setNumberOfFilesToDelete
-
 bool OSOption::setFilesToDelete(int numberOfPaths, std::string* paths)
 {	if (this->job == NULL) 
 		this->job = new JobOption();
@@ -4901,14 +4773,6 @@ bool OSOption::setAnotherFileToDelete(std::string path)
 	return this->job->filesToDelete->addPath(path);
 }//setAnotherFileToDelete
 
-bool OSOption::setNumberOfDirectoriesToDelete(int numberOfObjects)
-{	if (this->job == NULL) 
-		this->job = new JobOption();
-	if (this->job->directoriesToDelete == NULL) 
-		this->job->directoriesToDelete = new DirectoriesAndFiles();
-	this->job->directoriesToDelete->numberOfPaths = numberOfObjects;
-	return true;
-}//setNumberOfDirectoriesToDelete
 
 bool OSOption::setDirectoriesToDelete(int numberOfPaths, std::string* paths)
 {	if (this->job == NULL) 
@@ -4929,14 +4793,6 @@ bool OSOption::setAnotherDirectoryToDelete(std::string path)
 	return this->job->directoriesToDelete->addPath(path);
 }//setAnotherDirectoryToDelete
 
-bool OSOption::setNumberOfProcessesToKill(int numberOfObjects)
-{	if (this->job == NULL) 
-		this->job = new JobOption();
-	if (this->job->processesToKill == NULL) 
-		this->job->processesToKill = new Processes();
-	this->job->processesToKill->numberOfProcesses = numberOfObjects;
-	return true;
-}//setNumberOfProcessesToKill
 
 bool OSOption::setProcessesToKill(int numberOfProcesses, std::string* processes)
 {	if (this->job == NULL) 
@@ -4957,14 +4813,6 @@ bool OSOption::setAnotherProcessToKill(std::string process)
 	return this->job->processesToKill->addProcess(process);
 }//setAnotherProcessToKill
 
-bool OSOption::setNumberOfOtherJobOptions(int numberOfObjects)
-{	if (this->job == NULL) 
-		this->job = new JobOption();
-	if (this->job->otherOptions == NULL) 
-		this->job->otherOptions = new OtherOptions();
-	this->job->otherOptions->numberOfOtherOptions = numberOfObjects;
-	return true;
-}//setNumberOfOtherJobOptions
 
 bool OSOption::setOtherJobOptions(int numberOfOptions, OtherOption** other)
 {	if (this->job == NULL) 
@@ -5012,17 +4860,6 @@ bool OSOption::setNumberOfConstraints(int numberOfObjects)
 }//setNumberOfConstraints
 
 
-bool OSOption::setNumberOfInitVarValues(int numberOfObjects)
-{	if (this->optimization == NULL) 
-		this->optimization = new OptimizationOption();
-	if (this->optimization->variables == NULL) 
-		this->optimization->variables = new VariableOption();
-	if (this->optimization->variables->initialVariableValues == NULL) 
-		this->optimization->variables->initialVariableValues = new InitVariableValues();
-	this->optimization->variables->initialVariableValues->numberOfVar = numberOfObjects;
-	return true;
-}//setNumberOfInitVarValues
-
 bool OSOption::setInitVarValuesSparse(int numberOfVar, InitVarValue** var)
 {	if (this->optimization == NULL) 
 		this->optimization = new OptimizationOption();
@@ -5067,18 +4904,6 @@ bool OSOption::setAnotherInitVarValue(int idx, double value)
 		this->optimization->variables->initialVariableValues = new InitVariableValues();
 	return this->optimization->variables->initialVariableValues->addVar(idx, value);
 }//setAnotherInitVarValue
-
-
-bool OSOption::setNumberOfInitVarValuesString(int numberOfObjects)
-{	if (this->optimization == NULL) 
-		this->optimization = new OptimizationOption();
-	if (this->optimization->variables == NULL) 
-		this->optimization->variables = new VariableOption();
-	if (this->optimization->variables->initialVariableValuesString == NULL) 
-		this->optimization->variables->initialVariableValuesString = new InitVariableValuesString();
-	this->optimization->variables->initialVariableValuesString->numberOfVar = numberOfObjects;
-	return true;
-}//setNumberOfInitVarValuesString
 
 
 bool OSOption::setInitVarValuesStringSparse(int numberOfVar, InitVarValueString** var)
@@ -5126,18 +4951,6 @@ bool OSOption::setAnotherInitVarValueString(int idx, std::string value)
 }//setAnotherInitVarValueString
 
 
-
-bool OSOption::setNumberOfInitialBasisVariables(int numberOfObjects)
-{	if (this->optimization == NULL)
-		this->optimization = new OptimizationOption();
-	if (this->optimization->variables == NULL) 
-		this->optimization->variables = new VariableOption();
-	if (this->optimization->variables->initialBasisStatus == NULL) 
-		this->optimization->variables->initialBasisStatus = new InitialBasisStatus();
-	this->optimization->variables->initialBasisStatus ->numberOfVar = numberOfObjects;
-	return true;
-}//setNumberOfInitialBasisVariables
-
 bool OSOption::setInitBasisStatusSparse(int numberOfVar, InitBasStatus** var)
 {	if (this->optimization == NULL) 
 		this->optimization = new OptimizationOption();
@@ -5184,16 +4997,6 @@ bool OSOption::setAnotherInitBasisStatus(int idx, std::string value)
 	return this->optimization->variables->initialBasisStatus->addVar(idx, value);
 }//setAnotherInitBasisStatus
 
-bool OSOption::setNumberOfIntegerVariableBranchingWeights(int numberOfObjects)
-{	if (this->optimization == NULL) 
-		this->optimization = new OptimizationOption();
-	if (this->optimization->variables == NULL) 
-		this->optimization->variables = new VariableOption();
-	if (this->optimization->variables->integerVariableBranchingWeights == NULL) 
-		this->optimization->variables->integerVariableBranchingWeights = new IntegerVariableBranchingWeights();
-	this->optimization->variables->integerVariableBranchingWeights->numberOfVar = numberOfObjects;
-	return true;
-}//setNumberOfIntegerVariableBranchingWeights
 
 bool OSOption::setIntegerVariableBranchingWeightsSparse(int numberOfVar, BranchingWeight** var)
 {	if (this->optimization == NULL) 
@@ -5240,16 +5043,6 @@ bool OSOption::setAnotherIntegerVariableBranchingWeight(int idx, double value)
 	return this->optimization->variables->integerVariableBranchingWeights->addVar(idx, value);
 }//setAnotherIntegerVariableBranchingWeight
 
-bool OSOption::setNumberOfSOSVariableBranchingWeights(int numberOfObjects)
-{	if (this->optimization == NULL) 
-		this->optimization = new OptimizationOption();
-	if (this->optimization->variables == NULL) 
-		this->optimization->variables = new VariableOption();
-	if (this->optimization->variables->sosVariableBranchingWeights == NULL) 
-		this->optimization->variables->sosVariableBranchingWeights = new SOSVariableBranchingWeights();
-	this->optimization->variables->sosVariableBranchingWeights->numberOfSOS = numberOfObjects;
-	return true;
-}//setNumberOfSOSVariableBranchingWeights
 
 bool OSOption::setSOSVariableBranchingWeights(int numberOfSOS, SOSWeights** sos)
 {	if (this->optimization == NULL) 
@@ -5278,17 +5071,6 @@ bool OSOption::setAnotherSOSVariableBranchingWeight(int sosIdx, int nvar, double
 }//setAnotherSOSVariableBranchingWeight
 
 
-
-
-bool OSOption::setNumberOfOtherVariableOptions(int numberOfObjects)
-{	if (this->optimization == NULL)
-		this->optimization = new OptimizationOption();
-	if (this->optimization->variables == NULL)
-		this->optimization->variables = new VariableOption();
-	this->optimization->variables->numberOfOtherVariableOptions = numberOfObjects;
-	return true;
-}//setNumberOfOtherVariableOptions
-
 bool OSOption::setOtherVariableOptions(int numberOfOptions, OtherVariableOption** other)
 {	if (this->optimization == NULL)
 		this->optimization = new OptimizationOption();
@@ -5311,18 +5093,6 @@ bool OSOption::setAnOtherVariableOption(OtherVariableOption* optionValue)
 	return this->optimization->variables->addOther(optionValue);
 }//setAnOtherVariableOption
 
-
-
-bool OSOption::setNumberOfInitObjValues(int numberOfObjects)
-{	if (this->optimization == NULL) 
-		this->optimization = new OptimizationOption();
-	if (this->optimization->objectives == NULL) 
-		this->optimization->objectives = new ObjectiveOption();
-	if (this->optimization->objectives->initialObjectiveValues == NULL) 
-		this->optimization->objectives->initialObjectiveValues = new InitObjectiveValues();
-	this->optimization->objectives->initialObjectiveValues->numberOfObj = numberOfObjects;
-	return true;
-}//setNumberOfInitObjValues
 
 bool OSOption::setInitObjValuesSparse(int numberOfObj, InitObjValue** obj)
 {	if (this->optimization == NULL) 
@@ -5369,17 +5139,6 @@ bool OSOption::setAnotherInitObjValue(int idx, double value)
 	return this->optimization->objectives->initialObjectiveValues->addObj(idx, value);
 }//setAnotherInitObjValue
 
-bool OSOption::setNumberOfInitObjBounds(int numberOfObjects)
-{	if (this->optimization == NULL) 
-		this->optimization = new OptimizationOption();
-	if (this->optimization->objectives == NULL) 
-		this->optimization->objectives = new ObjectiveOption();
-	if (this->optimization->objectives->initialObjectiveBounds == NULL) 
-		this->optimization->objectives->initialObjectiveBounds = new InitObjectiveBounds();
-	this->optimization->objectives->initialObjectiveBounds->numberOfObj = numberOfObjects;
-	return true;
-}//setNumberOfInitObjBounds
-
 
 bool OSOption::setInitObjBoundsSparse(int numberOfObj, InitObjBound** obj)
 {	if (this->optimization == NULL) 
@@ -5425,15 +5184,6 @@ bool OSOption::setAnotherInitObjBound(int idx, double lb, double ub)
 	return this->optimization->objectives->initialObjectiveBounds->addObj(idx, lb, ub);
 }//setAnotherInitObjBound
 
-bool OSOption::setNumberOfOtherObjectiveOptions(int numberOfObjects)
-{	if (this->optimization == NULL)
-		this->optimization = new OptimizationOption();
-	if (this->optimization->objectives == NULL) 
-		this->optimization->objectives = new ObjectiveOption();
-	this->optimization->objectives->numberOfOtherObjectiveOptions = numberOfObjects;
-	return true;
-}//setNumberOfOtherObjectiveOptions
-
 
 bool OSOption::setOtherObjectiveOptions(int numberOfOptions, OtherObjectiveOption** other)
 {	if (this->optimization == NULL)
@@ -5456,17 +5206,6 @@ bool OSOption::setAnOtherObjectiveOption(OtherObjectiveOption* optionValue)
 		this->optimization->objectives = new ObjectiveOption();
 	return this->optimization->objectives->addOther(optionValue);
 }//setAnOtherVariableOption
-
-bool OSOption::setNumberOfInitConValues(int numberOfObjects)
-{	if (this->optimization == NULL) 
-		this->optimization = new OptimizationOption();
-	if (this->optimization->constraints == NULL) 
-		this->optimization->constraints = new ConstraintOption();
-	if (this->optimization->constraints->initialConstraintValues == NULL) 
-		this->optimization->constraints->initialConstraintValues = new InitConstraintValues();
-	this->optimization->constraints->initialConstraintValues->numberOfCon = numberOfObjects;
-	return true;
-}//setNumberOfInitConValues
 
 
 bool OSOption::setInitConValuesSparse(int numberOfCon, InitConValue** con)
@@ -5514,17 +5253,6 @@ bool OSOption::setAnotherInitConValue(int idx, double value)
 	return this->optimization->constraints->initialConstraintValues->addCon(idx, value);
 }//setAnotherInitConValue
 
-bool OSOption::setNumberOfInitDualVarValues(int numberOfObjects)
-{	if (this->optimization == NULL) 
-		this->optimization = new OptimizationOption();
-	if (this->optimization->constraints == NULL) 
-		this->optimization->constraints = new ConstraintOption();
-	if (this->optimization->constraints->initialDualValues == NULL) 
-		this->optimization->constraints->initialDualValues = new InitDualVariableValues();
-	this->optimization->constraints->initialDualValues->numberOfCon = numberOfObjects;
-	return true;
-}//setNumberOfInitDualVarValues
-
 
 bool OSOption::setInitDualVarValuesSparse(int numberOfCon, InitDualVarValue** con)
 {	if (this->optimization == NULL) 
@@ -5571,16 +5299,6 @@ bool OSOption::setAnotherInitDualVarValue(int idx, double lbValue, double ubValu
 }//setAnotherInitConValue
 
 
-bool OSOption::setNumberOfOtherConstraintOptions(int numberOfObjects)
-{	if (this->optimization == NULL)
-		this->optimization = new OptimizationOption();
-	if (this->optimization->constraints == NULL) 
-		this->optimization->constraints = new ConstraintOption();
-	this->optimization->constraints->numberOfOtherConstraintOptions = numberOfObjects;
-	return true;
-}//setNumberOfOtherConstraintOptions
-
-
 bool OSOption::setOtherConstraintOptions(int numberOfOptions, OtherConstraintOption** other)
 {	if (this->optimization == NULL)
 		this->optimization = new OptimizationOption();
@@ -5602,16 +5320,6 @@ bool OSOption::setAnOtherConstraintOption(OtherConstraintOption* optionValue)
 		this->optimization->constraints = new ConstraintOption();
 	return this->optimization->constraints->addOther(optionValue);
 }//setAnOtherConstraintOption
-
-
-bool OSOption::setNumberOfSolverOptions(int numberOfObjects)
-{	if (this->optimization == NULL) 
-		this->optimization = new OptimizationOption();
-	if (this->optimization->solverOptions == NULL) 
-		this->optimization->solverOptions = new SolverOptions();
-	this->optimization->solverOptions->numberOfSolverOptions = numberOfObjects;
-	return true;
-}//setNumberOfSolverOptions
 
 
 bool OSOption::setSolverOptions(int numberOfSolverOptions, SolverOption** solverOption)
@@ -5725,96 +5433,6 @@ bool OSOption::setOptionDbl(std::string optionName, double value)
 bool OSOption::setOptionInt(std::string optionName, int optionValue)
 {	if (optionName == "minCPUNumber")
 		return this->setMinCPUNumber(optionValue);
-
-	if (optionName == "numberOfOtherGeneralOptions")
-		return this->setNumberOfOtherGeneralOptions(optionValue);
-
-	if (optionName == "numberOfOtherSystemOptions")
-		return this->setNumberOfOtherSystemOptions(optionValue);
-
-	if (optionName == "numberOfOtherServiceOptions")
-		return this->setNumberOfOtherServiceOptions(optionValue);
-
-	if (optionName == "numberOfOtherJobOptions")
-		return this->setNumberOfOtherJobOptions(optionValue);
-
-	if (optionName == "numberOfJobDependencies")
-		return this->setNumberOfJobDependencies(optionValue);
-
-	if (optionName == "numberOfRequiredDirectories")
-		return this->setNumberOfRequiredDirectories(optionValue);
-
-	if (optionName == "numberOfRequiredFiles")
-		return this->setNumberOfRequiredFiles(optionValue);
-
-	if (optionName == "numberOfDirectoriesToMake")
-		return this->setNumberOfDirectoriesToMake(optionValue);
-
-	if (optionName == "numberOfFilesToMake")
-		return this->setNumberOfFilesToMake(optionValue);
-
-	if (optionName == "numberOfInputDirectoriesToMove")
-		return this->setNumberOfInputDirectoriesToMove(optionValue);
-
-	if (optionName == "numberOfInputFilesToMove")
-		return this->setNumberOfInputFilesToMove(optionValue);
-
-	if (optionName == "numberOfOutputDirectoriesToMove")
-		return this->setNumberOfOutputDirectoriesToMove(optionValue);
-
-	if (optionName == "numberOfOutputFilesToMove")
-		return this->setNumberOfOutputFilesToMove(optionValue);
-
-	if (optionName == "numberOfFilesToDelete")
-		return this->setNumberOfFilesToDelete(optionValue);
-
-	if (optionName == "numberOfDirectoriesToDelete")
-		return this->setNumberOfDirectoriesToDelete(optionValue);
-
-	if (optionName == "numberOfProcessesToKill")
-		return this->setNumberOfProcessesToKill(optionValue);
-
-	if (optionName == "numberOfVariables")
-		return this->setNumberOfVariables(optionValue);
-
-	if (optionName == "numberOfObjectives")
-		return this->setNumberOfObjectives(optionValue);
-
-	if (optionName == "numberOfConstraints")
-		return this->setNumberOfConstraints(optionValue);
-
-	if (optionName == "numberOfInitVarValues")
-		return this->setNumberOfInitVarValues(optionValue);
-
-	if (optionName == "numberOfInitVarValuesString")
-		return this->setNumberOfInitVarValuesString(optionValue);
-
-	if (optionName == "numberOfInitialBasisVariables")
-		return this->setNumberOfInitialBasisVariables(optionValue);
-
-	if (optionName == "numberOfOtherVariableOptions")
-		return this->setNumberOfOtherVariableOptions(optionValue);
-
-	if (optionName == "numberOfInitObjValues")
-		return this->setNumberOfInitObjValues(optionValue);
-
-	if (optionName == "numberOfInitObjBounds")
-		return this->setNumberOfInitObjBounds(optionValue);
-
-	if (optionName == "numberOfOtherObjectiveOptions")
-		return this->setNumberOfOtherObjectiveOptions(optionValue);
-
-	if (optionName == "numberOfInitConValues")
-		return this->setNumberOfInitConValues(optionValue);
-
-	if (optionName == "numberOfInitDualVarValues")
-		return this->setNumberOfInitDualVarValues(optionValue);
-
-	if (optionName == "numberOfOtherConstraintOptions")
-		return this->setNumberOfOtherConstraintOptions(optionValue);
-
-	if (optionName == "numberOfSolverOptions")
-		return this->setNumberOfSolverOptions(optionValue);
 
 	return false;
 }//setOptionInt

@@ -2855,6 +2855,9 @@ public:
 	 */
 	std::vector<SolverOption*> getSolverOptions( std::string solver_name);
 
+/* --------------------------------------------------
+ *  set() methods
+ * -------------------------------------------------- */
 
 	/**
 	 * Set the serviceURI
@@ -2917,11 +2920,6 @@ public:
 	bool setTransportType( std::string transportType);
 
 	/**
-	 * Set the number of other general options
-	 */
-	bool setNumberOfOtherGeneralOptions(int numberOfObjects);
-
-	/**
 	 * Set the other general options as an entire array
 	 */
 	bool setOtherGeneralOptions(int numberOfOptions, OtherOption** other);
@@ -2946,16 +2944,12 @@ public:
 
 	bool setMinCPUNumber( int number);
 
-	bool setNumberOfOtherSystemOptions(int numberOfObjects);
-
 	bool setOtherSystemOptions(int numberOfOptions, OtherOption** other);
 
 	bool setAnOtherSystemOption(std::string name, std::string value, std::string description);
 
 
 	bool setServiceType( std::string serviceType);
-
-	bool setNumberOfOtherServiceOptions(int numberOfObjects);
 
 	bool setOtherServiceOptions(int numberOfOptions, OtherOption** other);
 
@@ -2968,58 +2962,43 @@ public:
 
 	bool setScheduledStartTime(std::string time);
 
-	bool setNumberOfJobDependencies(int numberOfObjects);
 	bool setJobDependencies(int numberOfDependencies, std::string* jobDependencies);
 	bool setAnotherJobDependency(std::string jobID);
 
-	bool setNumberOfRequiredDirectories(int numberOfObjects);
 	bool setRequiredDirectories(int numberOfPaths, std::string* paths);
 	bool setAnotherRequiredDirectory(std::string path);
 
-	bool setNumberOfRequiredFiles(int numberOfObjects);
 	bool setRequiredFiles(int numberOfPaths, std::string* paths);
 	bool setAnotherRequiredFile(std::string path);
 
-	bool setNumberOfDirectoriesToMake(int numberOfObjects);
 	bool setDirectoriesToMake(int numberOfPaths, std::string* paths);
 	bool setAnotherDirectoryToMake(std::string path);
 
-	bool setNumberOfFilesToMake(int numberOfObjects);
 	bool setFilesToMake(int numberOfPaths, std::string* paths);
 	bool setAnotherFileToMake(std::string path);
 
-	bool setNumberOfInputDirectoriesToMove(int numberOfObjects);
 	bool setInputDirectoriesToMove(int numberOfPathPairs, PathPair** pathPair);
 	bool setAnotherInputDirectoryToMove(std::string fromPath, std::string toPath, bool makeCopy);
 
-	bool setNumberOfInputFilesToMove(int numberOfObjects);
 	bool setInputFilesToMove(int numberOfPathPairs, PathPair** pathPair);
 	bool setAnotherInputFileToMove(std::string fromPath, std::string toPath, bool makeCopy);
 
-	bool setNumberOfOutputFilesToMove(int numberOfObjects);
 	bool setOutputFilesToMove(int numberOfPathPairs, PathPair** pathPair);
 	bool setAnotherOutputFileToMove(std::string fromPath, std::string toPath, bool makeCopy);
 
-	bool setNumberOfOutputDirectoriesToMove(int numberOfObjects);
 	bool setOutputDirectoriesToMove(int numberOfPathPairs, PathPair** pathPair);
 	bool setAnotherOutputDirectoryToMove(std::string fromPath, std::string toPath, bool makeCopy);
 
-	bool setNumberOfFilesToDelete(int numberOfObjects);
 	bool setFilesToDelete(int numberOfPaths, std::string* paths);
 	bool setAnotherFileToDelete(std::string path);
 
-	bool setNumberOfDirectoriesToDelete(int numberOfObjects);
 	bool setDirectoriesToDelete(int numberOfPaths, std::string* paths);
 	bool setAnotherDirectoryToDelete(std::string path);
 
-	bool setNumberOfProcessesToKill(int numberOfObjects);
 	bool setProcessesToKill(int numberOfProcesses, std::string* processes);
 	bool setAnotherProcessToKill(std::string process);
 
-	bool setNumberOfOtherJobOptions(int numberOfObjects);
-
 	bool setOtherJobOptions(int numberOfOptions, OtherOption** other);
-
 	bool setAnOtherJobOption(std::string name, std::string value, std::string description);
 
 
@@ -3029,63 +3008,50 @@ public:
 
 	bool setNumberOfConstraints(int numberOfObjects);
 
-	bool setNumberOfInitVarValues(int numberOfObjects);
 	bool setInitVarValuesSparse(int numberOfVar, InitVarValue** var);
 	bool setInitVarValuesDense(int numberOfVar, int *idx, double *value);
 	bool setAnotherInitVarValue(int idx, double value);
 
-	bool setNumberOfInitVarValuesString(int numberOfObjects);
 	bool setInitVarValuesStringSparse(int numberOfVar, InitVarValueString** var);
 	bool setInitVarValuesStringDense(int numberOfVar, int *idx, std::string *value);
 	bool setAnotherInitVarValueString(int idx, std::string value);
 
-	bool setNumberOfInitialBasisVariables(int numberOfObjects);
 	bool setInitBasisStatusSparse(int numberOfVar, InitBasStatus** var);
 	bool setInitBasisStatusDense(int numberOfVar, int *idx, std::string *var);
 	bool setAnotherInitBasisStatus(int idx, std::string value);
 
-	bool setNumberOfIntegerVariableBranchingWeights(int numberOfObjects);
 	bool setIntegerVariableBranchingWeightsSparse(int numberOfVar, BranchingWeight** var);
 	bool setIntegerVariableBranchingWeightsDense(int numberOfVar, int *idx, double *value);
 	bool setAnotherIntegerVariableBranchingWeight(int idx, double value);
 
-	bool setNumberOfSOSVariableBranchingWeights(int numberOfObjects);
 	bool setSOSVariableBranchingWeights(int numberOfSOS, SOSWeights** sos);
 	bool setAnotherSOSVariableBranchingWeight(int sosIdx, int nvar, double weight, int* idx, int* value);
 
-	bool setNumberOfOtherVariableOptions(int numberOfObjects);
 	bool setOtherVariableOptions(int numberOfVar, OtherVariableOption** var);
 	bool setAnOtherVariableOption(OtherVariableOption* varOption);
 
-	bool setNumberOfInitObjValues(int numberOfObjects);
 	bool setInitObjValuesSparse(int numberOfObj, InitObjValue** obj);
 	bool setInitObjValuesDense(int numberOfObj, int *idx, double *value);
 	bool setAnotherInitObjValue(int idx, double value);
 
-	bool setNumberOfInitObjBounds(int numberOfObjects);
 	bool setInitObjBoundsSparse(int numberOfObj, InitObjBound** obj);
 	bool setInitObjBoundsDense(int numberOfObj, int *idx, double *lb, double *ub);
 	bool setAnotherInitObjBound(int idx, double lbValue, double ubValue);
 
-	bool setNumberOfOtherObjectiveOptions(int numberOfObjects);
 	bool setOtherObjectiveOptions(int numberOfObj, OtherObjectiveOption** obj);
 	bool setAnOtherObjectiveOption(OtherObjectiveOption* objOption);
 
-	bool setNumberOfInitConValues(int numberOfObjects);
 	bool setInitConValuesSparse(int numberOfCon, InitConValue** con);
 	bool setInitConValuesDense(int numberOfCon, int *idx, double *value);
 	bool setAnotherInitConValue(int idx, double value);
 
-	bool setNumberOfInitDualVarValues(int numberOfObjects);
 	bool setInitDualVarValuesSparse(int numberOfCon, InitDualVarValue** con);
 	bool setInitDualVarValuesDense(int numberOfCon, int *idx, double *lb, double *ub);
 	bool setAnotherInitDualVarValue(int idx, double lbValue, double ubValue);
 
-	bool setNumberOfOtherConstraintOptions(int numberOfObjects);
 	bool setOtherConstraintOptions(int numberOfOptions, OtherConstraintOption** other);
 	bool setAnOtherConstraintOption(OtherConstraintOption* optionValue);
 
-	bool setNumberOfSolverOptions(int numberOfObjects);
 	bool setSolverOptions(int numberOfSolverOptions, SolverOption** solverOption);
 	bool setAnotherSolverOption(std::string name, std::string value, std::string solver, 
 		 std::string category, std::string type, std::string description);
