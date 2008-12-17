@@ -206,7 +206,7 @@ public class OSoLReader extends OSgLReader{
 	 * @return the value of the option optionName
 	 * @note returns Double.NaN if optionName is not found
 	 */
-	double  getOptionDbl(String optionName){	
+	public double  getOptionDbl(String optionName){	
 		if (optionName.equals("minDiskSpace")){ 
 			return getMinDiskSpace();
 		}
@@ -844,7 +844,7 @@ public class OSoLReader extends OSgLReader{
 	 * 
 	 * @return the number of job dependencies (in <job> element)
 	 */
-	int  getNumberOfJobDependencies(){
+	public int  getNumberOfJobDependencies(){
 		Element eJob = (Element)XMLUtil.findChildNode(m_eRoot, "job");
 		if(eJob == null) return 0;
 		Element eDependencies = (Element)XMLUtil.findChildNode(eJob, "dependencies");
@@ -886,7 +886,7 @@ public class OSoLReader extends OSgLReader{
 	 * 
 	 * @return the number of required directories (in <job> element)
 	 */
-	int  getNumberOfRequiredDirectories(){
+	public int  getNumberOfRequiredDirectories(){
 		Element eJob = (Element)XMLUtil.findChildNode(m_eRoot, "job");
 		if(eJob == null) return 0;
 		Element eDependencies = (Element)XMLUtil.findChildNode(eJob, "requiredDirectories");
@@ -928,7 +928,7 @@ public class OSoLReader extends OSgLReader{
 	 * 
 	 * @return the number of required files (in <job> element)
 	 */
-	int  getNumberOfRequiredFiles(){
+	public int  getNumberOfRequiredFiles(){
 		Element eJob = (Element)XMLUtil.findChildNode(m_eRoot, "job");
 		if(eJob == null) return 0;
 		Element eDependencies = (Element)XMLUtil.findChildNode(eJob, "requiredFiles");
@@ -970,7 +970,7 @@ public class OSoLReader extends OSgLReader{
 	 * 
 	 * @return the number of directories to make (in <job> element)
 	 */
-	int  getNumberOfDirectoriesToMake(){
+	public int  getNumberOfDirectoriesToMake(){
 		Element eJob = (Element)XMLUtil.findChildNode(m_eRoot, "job");
 		if(eJob == null) return 0;
 		Element eDirectoriesToMake = (Element)XMLUtil.findChildNode(eJob, "directoriesToMake");
@@ -1013,7 +1013,7 @@ public class OSoLReader extends OSgLReader{
 	 * 
 	 * @return the number of files to make (in <job> element)
 	 */
-	int  getNumberOfFilesToMake(){
+	public int  getNumberOfFilesToMake(){
 		Element eJob = (Element)XMLUtil.findChildNode(m_eRoot, "job");
 		if(eJob == null) return 0;
 		Element eFilesToMake = (Element)XMLUtil.findChildNode(eJob, "filesToMake");
@@ -1056,7 +1056,7 @@ public class OSoLReader extends OSgLReader{
 	 * 
 	 * @return the number of input directories to move or copy (in <job> element)
 	 */
-	int  getNumberOfInputDirectoriesToMove(){
+	public int  getNumberOfInputDirectoriesToMove(){
 		Element eJob = (Element)XMLUtil.findChildNode(m_eRoot, "job");
 		if(eJob == null) return 0;
 		Element eInputDirectoriesToMove = (Element)XMLUtil.findChildNode(eJob, "inputDirectoriesToMove");
@@ -1104,7 +1104,7 @@ public class OSoLReader extends OSgLReader{
 	 * 
 	 * @return the number of input files to move or copy (in <job> element)
 	 */
-	int  getNumberOfInputFilesToMove(){
+	public int  getNumberOfInputFilesToMove(){
 		Element eJob = (Element)XMLUtil.findChildNode(m_eRoot, "job");
 		if(eJob == null) return 0;
 		Element eInputFilesToMove = (Element)XMLUtil.findChildNode(eJob, "inputFilesToMove");
@@ -1152,7 +1152,7 @@ public class OSoLReader extends OSgLReader{
 	 * 
 	 * @return the number of output directories to move or copy (in <job> element)
 	 */
-	int  getNumberOfOutputDirectoriesToMove(){
+	public int  getNumberOfOutputDirectoriesToMove(){
 		Element eJob = (Element)XMLUtil.findChildNode(m_eRoot, "job");
 		if(eJob == null) return 0;
 		Element eOutputDirectoriesToMove = (Element)XMLUtil.findChildNode(eJob, "outputDirectoriesToMove");
@@ -1200,7 +1200,7 @@ public class OSoLReader extends OSgLReader{
 	 * 
 	 * @return the number of output files to move or copy (in <job> element)
 	 */
-	int  getNumberOfOutputFilesToMove(){
+	public int  getNumberOfOutputFilesToMove(){
 		Element eJob = (Element)XMLUtil.findChildNode(m_eRoot, "job");
 		if(eJob == null) return 0;
 		Element eOutputFilesToMove = (Element)XMLUtil.findChildNode(eJob, "outputFilesToMove");
@@ -1248,7 +1248,7 @@ public class OSoLReader extends OSgLReader{
 	 * 
 	 * @return the number of files to delete (in <job> element)
 	 */
-	int  getNumberOfFilesToDelete(){
+	public int  getNumberOfFilesToDelete(){
 		Element eJob = (Element)XMLUtil.findChildNode(m_eRoot, "job");
 		if(eJob == null) return 0;
 		Element eFilesToDelete = (Element)XMLUtil.findChildNode(eJob, "filesToDelete");
@@ -1291,7 +1291,7 @@ public class OSoLReader extends OSgLReader{
 	 * 
 	 * @return the number of directories to delete (in <job> element)
 	 */
-	int  getNumberOfDirectoriesToDelete(){
+	public int  getNumberOfDirectoriesToDelete(){
 		Element eJob = (Element)XMLUtil.findChildNode(m_eRoot, "job");
 		if(eJob == null) return 0;
 		Element eDirectoriesToDelete = (Element)XMLUtil.findChildNode(eJob, "directoriesToDelete");
@@ -1334,7 +1334,7 @@ public class OSoLReader extends OSgLReader{
 	 * 
 	 * @return the number of processes to kill (in <job> element)
 	 */
-	int  getNumberOfProcessesToKill(){
+	public int  getNumberOfProcessesToKill(){
 		Element eJob = (Element)XMLUtil.findChildNode(m_eRoot, "job");
 		if(eJob == null) return 0;
 		Element eProcessesToKill = (Element)XMLUtil.findChildNode(eJob, "processesToKill");
