@@ -258,7 +258,7 @@ public class OSoLReader extends OSgLReader{
 		else if(optionName.equals("numberOfDirectoriesToMake")){
 			return getNumberOfDirectoriesToMake();
 		}
-		else if(optionName.equals("numberOfFilesToCreate")){
+		else if(optionName.equals("numberOfFilesToMake")){
 			return getNumberOfFilesToMake();
 		}
 		else if(optionName.equals("numberOfInputDirectoriesToMove")){
@@ -300,8 +300,8 @@ public class OSoLReader extends OSgLReader{
 		else if(optionName.equals("numberOfInitialBasisVariables")){
 			return getNumberOfInitialBasisVariables();
 		}
-		else if(optionName.equals("numberOfIntegerBranchingWeights")){
-			return getNumberOfIntegerBranchingWeights();
+		else if(optionName.equals("numberOfIntegerVariableBranchingWeights")){
+			return getNumberOfIntegerVariableBranchingWeights();
 		}
 		else if(optionName.equals("numberOfSOSWeights")){
 			return getNumberOfSOSWeights();
@@ -1468,6 +1468,11 @@ public class OSoLReader extends OSgLReader{
 		}
 	}//getOtherOptions
 
+	public OtherOption[] getAllOtherOptions() throws Exception{
+		//implemented in C++, but not here in Java.
+		throw new Exception("Not implemented in Java");
+	}//getAllOtherOptions
+	
 	/**
 	 * Get variable number. 
 	 * 
@@ -1615,7 +1620,7 @@ public class OSoLReader extends OSgLReader{
 	 * get the number of variables that are given integer variable selection weights (in <optimization> element)
 	 * @return the number of variables that are given integer variable selection weights (in <optimization> element)
 	 */
-	public int getNumberOfIntegerBranchingWeights(){
+	public int getNumberOfIntegerVariableBranchingWeights(){
 		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
 		if(eOptimization == null) return -1;
 		Element eVariables = (Element)XMLUtil.findChildNode(eOptimization, "variables");
@@ -1630,7 +1635,7 @@ public class OSoLReader extends OSgLReader{
 		catch (Exception e) {
 			return -1;
 		}
-	}//getNumberOfIntegerBranchingWeights
+	}//getNumberOfIntegerVariableBranchingWeights
 
 	/**
 	 * get the number of SOS that are given branching weights (in <optimization> element)
@@ -2023,8 +2028,9 @@ public class OSoLReader extends OSgLReader{
 
 //	-----------------------------------
 	/*
-	get integervariableselectionweights sparse
-	get integervariableselectionweights dense
+	 //TODO
+	getIntegerVariableBranchingWeightsSparse
+	getIntegerVariableBranchingWeightsDense
 	*/
 //	++++++++++++++++++++++++++++++++++++
 	
@@ -2560,7 +2566,7 @@ public class OSoLReader extends OSgLReader{
 //		System.out.println(osolReader.getNumberOfInitVarValues());	
 //		System.out.println(osolReader.getNumberOfInitVarValuesString());	
 //		System.out.println(osolReader.getNumberOfInitialBasisVariables());	
-//		System.out.println(osolReader.getNumberOfIntegerBranchingWeights());	
+//		System.out.println(osolReader.getNumberOfIntegerVariableBranchingWeights());	
 //		System.out.println(osolReader.getNumberOfSOSWeights());	
 //		System.out.println(osolReader.getNumberOfOtherVariableOptions());
 
