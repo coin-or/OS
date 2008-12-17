@@ -43,39 +43,51 @@
 		#undef PACKAGE_VERSION
 		#undef VERSION
 
-		#else /* HAVE_CONFIG_H  NOT DEFINED */
+	#else /* HAVE_CONFIG_H  NOT DEFINED */
 
 		/* include the COIN-wide system specific configure header */
 		// kipp look at this later
 		#include "configall_system.h"
 
+		#ifdef _MSC_VER   /* for MicroSoft Visual Studio */
+
 		/***************************************************************************/
 		/*             HERE DEFINE THE CONFIGURATION SPECIFIC MACROS               */
 		/***************************************************************************/
+				
+			/* If defined, debug sanity checks are performed during runtime */
+			/* #define COIN_DEBUG 1 */
 
-		/* If defined, debug sanity checks are performed during runtime */
-		/* #define COIN_DEBUG 1 */
+			/* Define to 1 if the Clp package is used */
+			#define COIN_HAS_CLP 1
 
-		/* Define to 1 if the Clp package is used */
-		#define COIN_HAS_CLP 1
+			/* Define to 1 if the Cgl package is used */
+			#define COIN_HAS_CGL 1
 
-		/* Define to 1 if the Cgl package is used */
-		#define COIN_HAS_CGL 1
+			/* Define to 1 if the CoinUtils package is used */
+			#define COIN_HAS_COINUTILS 1
 
+			/* Define to 1 if the OSI package is used */
+			#define COIN_HAS_OSI 1
 
-		/* Define to 1 if the CoinUtils package is used */
-		#define COIN_HAS_COINUTILS 1
+			/* Define to 1 if the DyLP package is used */
+//			#define COIN_HAS_DYLP 1
 
-		/* Define to 1 if the CBC package is used */
-		#define COIN_HAS_CBC 1
+			/* Define to 1 if the OSI package is used */
+			#define COIN_HAS_OSI 1
 
-		/* Define to 1 if the OSI package is used */
-		#define COIN_HAS_OSI 1
+			/* Define to 1 if the SYMPHONY package is used */
+			#define COIN_HAS_SYMPHONY 1
 
-		/* Define to 1 if the Vol package is used */
-		#define COIN_HAS_VOL 1
+			/* Define to 1 if the Vol package is used */
+			#define COIN_HAS_VOL 1
+	
+			/* Needed for OSFileUpload */
+			#ifndef MY_C_FINITE
+			#define MY_C_FINITE _finite
+			#endif
 
-		
+		#endif	
 
 		// needed for cygwin gcc 3.*,*
 	#endif /* HAVE_CONFIG_H NOT DEFINED */

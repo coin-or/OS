@@ -247,7 +247,7 @@
 				AdditionalDependencies="wsock32.lib winmm.lib libIpopt.lib amplsolv.lib libCoinBlas.lib libCoinHSL.lib libCoinLapack.lib vcf2c.lib"
 				OutputFile="$(ConfigurationName)\$(ProjectName).exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;;&quot;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;;..\..\..\..\ThirdParty\ASL;..\..\..\..\\Ipopt\MSVisualStudio\v8\libIpopt\Release;..\..\..\..\\Ipopt\MSVisualStudio\v8\libCoinBlas\Release;..\..\..\..\\Ipopt\MSVisualStudio\v8\libCoinHSL\Release;..\..\..\..\\Ipopt\MSVisualStudio\v8\libCoinLapack\Release;..\..\..\..\Ipopt\MSVisualStudio\v8\libf2c;&quot;..\libOSnl2OSiL\Release-Ipopt&quot;;..\..\..\..\ThirdParty\ASL\solvers"
+				AdditionalLibraryDirectories="&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;;&quot;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;;&quot;..\libOSnl2OSiL\Release-Ipopt&quot;;..\..\..\..\ThirdParty\ASL;..\..\..\..\\Ipopt\MSVisualStudio\v8\libIpopt\Release;..\..\..\..\\Ipopt\MSVisualStudio\v8\libCoinBlas\Release;..\..\..\..\\Ipopt\MSVisualStudio\v8\libCoinHSL\Release;..\..\..\..\\Ipopt\MSVisualStudio\v8\libCoinLapack\Release;..\..\..\..\Ipopt\MSVisualStudio\v8\libf2c;..\..\..\..\ThirdParty\ASL\solvers"
 				GenerateManifest="false"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="false"
