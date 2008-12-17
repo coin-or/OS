@@ -760,13 +760,13 @@ public class OSOption {
 	 * 
 	 * @return variable number, -1 if no information. 
 	 */
-	public int getVariableNumber(){
+	public int getNumberOfVariables(){
 		if(m_iVariableNumber == -1){
 			if(optimization == null) return -1;
 			m_iVariableNumber = optimization.numberOfVariables;
 		}
 		return m_iVariableNumber;
-	}//getVariableNumber
+	}//getNumberOfVariables
 
 	/**
 	 * Set the variable number. 
@@ -774,7 +774,7 @@ public class OSOption {
 	 * @param variableNumber holds the number of variables
 	 * @return whether the variable number is set successfully or not. 
 	 */
-	public boolean setVariableNumber(int variableNumber){
+	public boolean setNumberOfVariables(int variableNumber){
 		if(variableNumber < 0){
 			return true;
 		}
@@ -782,20 +782,20 @@ public class OSOption {
 		m_iVariableNumber = variableNumber;
 		optimization.numberOfVariables = variableNumber;
 		return true;
-	}//setVariableNumber
+	}//setNumberOfVariables
 	
 	/**
 	 * Get objective number. 
 	 * 
 	 * @return objective number, -1 if no information. 
 	 */
-	public int getObjectiveNumber(){
+	public int getNumberOfObjectives(){
 		if(m_iObjectiveNumber == -1){
 			if(optimization == null) return -1;
 			m_iObjectiveNumber = optimization.numberOfObjectives;
 		}
 		return m_iObjectiveNumber;
-	}//getObjectiveNumber
+	}//getNumberOfObjectives
 	
 	/**
 	 * Set the objective number. 
@@ -803,7 +803,7 @@ public class OSOption {
 	 * @param objectiveNumber holds the number of objectives
 	 * @return whether the objective number is set successfully or not. 
 	 */
-	public boolean setObjectiveNumber(int objectiveNumber){
+	public boolean setNumberOfObjectives(int objectiveNumber){
 		if(objectiveNumber < 0){
 			return true;
 		}
@@ -811,20 +811,20 @@ public class OSOption {
 		m_iObjectiveNumber = objectiveNumber;
 		optimization.numberOfObjectives = objectiveNumber;
 		return true;
-	}//setObjectiveNumber
+	}//setNumberOfObjectives
 	
 	/**
 	 * Get constraint number. 
 	 * 
 	 * @return constraint number, -1 if no information. 
 	 */
-	public int getConstraintNumber(){
+	public int getNumberOfConstraints(){
 		if(m_iConstraintNumber == -1){
 			if(optimization == null) return -1;
 			m_iConstraintNumber = optimization.numberOfConstraints;
 		}
 		return m_iConstraintNumber;
-	}//getConstraintNumber
+	}//getNumberOfConstraints
 
 	/**
 	 * Set the constraint number. 
@@ -832,7 +832,7 @@ public class OSOption {
 	 * @param constraintNumber holds the number of constraints
 	 * @return whether the constraint number is set successfully or not. 
 	 */
-	public boolean setConstraintNumber(int constraintNumber){
+	public boolean setNumberOfConstraints(int constraintNumber){
 		if(constraintNumber < 0){
 			return true;
 		}
@@ -840,7 +840,7 @@ public class OSOption {
 		m_iConstraintNumber = constraintNumber;
 		optimization.numberOfConstraints = constraintNumber;
 		return true;
-	}//setConstraintNumber
+	}//setNumberOfConstraints
 	
 	/**
 	 * get initial variable values (double[]). 
@@ -848,7 +848,7 @@ public class OSOption {
 	 */
 	public double[] getInitialVariableValues(){
 		if(optimization == null) return null;
-		int iNumberOfVariables = this.getVariableNumber();
+		int iNumberOfVariables = this.getNumberOfVariables();
 		if(iNumberOfVariables <= 0) return null;
 		if(optimization.variables == null) return null;
 		if(optimization.variables.initialVariableValues == null) return null;
@@ -869,7 +869,7 @@ public class OSOption {
 	 * @return whether the initial variable values are set successfully or not. 
 	 */
 	public boolean setInitialVariableValues(double[] initialVariableValues){//TODO
-		int iNumberOfVariables = this.getVariableNumber();
+		int iNumberOfVariables = this.getNumberOfVariables();
 		if(iNumberOfVariables <= 0) return true;
 		if(initialVariableValues != null && initialVariableValues.length != iNumberOfVariables) return false;
 		if(optimization == null) optimization = new OptimizationOption();

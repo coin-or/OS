@@ -122,9 +122,9 @@ public class OSoLReader extends OSgLReader{
 		if(!m_osOption.setFilesToDelete(getFilesToDelete())) throw new Exception("setFilesToDelete Unsuccessful");		
 		if(!m_osOption.setDirectoriesToDelete(getDirectoriesToDelete())) throw new Exception("setDirectoriesToDelete Unsuccessful");		
 		if(!m_osOption.setProcessesToKill(getProcessesToKill())) throw new Exception("setProcessesToKill Unsuccessful");		
-		if(!m_osOption.setVariableNumber(getNumberOfVariables())) throw new Exception("setVariableNumber Unsuccessful");		
-		if(!m_osOption.setObjectiveNumber(getNumberOfObjectives())) throw new Exception("setObjectiveNumber Unsuccessful");		
-		if(!m_osOption.setConstraintNumber(getNumberOfConstraints())) throw new Exception("setConstraintNumber Unsuccessful");		
+		if(!m_osOption.setNumberOfVariables(getNumberOfVariables())) throw new Exception("setVariableNumber Unsuccessful");		
+		if(!m_osOption.setNumberOfObjectives(getNumberOfObjectives())) throw new Exception("setObjectiveNumber Unsuccessful");		
+		if(!m_osOption.setNumberOfConstraints(getNumberOfConstraints())) throw new Exception("setConstraintNumber Unsuccessful");		
 		if(!m_osOption.setInitialVariableValues(getInitVarValuesDense())) throw new Exception("setInitialVariableValues Unsuccessful");		
 		if(!m_osOption.setSolverOptions(getSolverOptions(""))) throw new Exception("setSolverOptions Unsuccessful");
 		return m_osOption;
@@ -1470,6 +1470,7 @@ public class OSoLReader extends OSgLReader{
 
 	public OtherOption[] getAllOtherOptions() throws Exception{
 		//implemented in C++, but not here in Java.
+		//TODO
 		throw new Exception("Not implemented in Java");
 	}//getAllOtherOptions
 	

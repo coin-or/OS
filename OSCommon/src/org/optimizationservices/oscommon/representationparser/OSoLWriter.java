@@ -15,6 +15,7 @@ import org.optimizationservices.oscommon.datastructure.osoption.InitObjBound;
 import org.optimizationservices.oscommon.datastructure.osoption.InitObjValue;
 import org.optimizationservices.oscommon.datastructure.osoption.InitVarValue;
 import org.optimizationservices.oscommon.datastructure.osoption.InitVarValueString;
+import org.optimizationservices.oscommon.datastructure.osoption.OtherOption;
 import org.optimizationservices.oscommon.datastructure.osoption.PathPair;
 import org.optimizationservices.oscommon.localinterface.OSOption;
 import org.optimizationservices.oscommon.util.OSParameter;
@@ -94,9 +95,9 @@ public class OSoLWriter extends OSgLWriter{
 		if(!setDirectoriesToDelete(osOption.getDirectoriesToDelete())) throw new Exception("setDirectoriesToDelete Unsuccessful");		
 		if(!setProcessesToKill(osOption.getProcessesToKill())) throw new Exception("setProcessesToKill Unsuccessful");		
 
-		if(!setVariableNumber(osOption.getVariableNumber())) throw new Exception("setVariableNumber Unsuccessful");		
-		if(!setObjectiveNumber(osOption.getObjectiveNumber())) throw new Exception("setObjectiveNumber Unsuccessful");		
-		if(!setConstraintNumber(osOption.getConstraintNumber())) throw new Exception("setConstraintNumber Unsuccessful");		
+		if(!setNumberOfVariables(osOption.getNumberOfVariables())) throw new Exception("setNumberOfVariables Unsuccessful");		
+		if(!setNumberOfObjectives(osOption.getNumberOfObjectives())) throw new Exception("setNumberOfObjectives Unsuccessful");		
+		if(!setNumberOfConstraints(osOption.getNumberOfConstraints())) throw new Exception("setNumberOfConstraints Unsuccessful");		
 		if(!setInitVarValuesDense(osOption.getInitialVariableValues())) throw new Exception("setInitialVariableValues Unsuccessful");		
 		if(osOption.optimization != null && osOption.optimization.solverOptions != null && osOption.optimization.solverOptions != null && osOption.optimization.solverOptions.solverOption.length > 0){
 			int n = osOption.optimization.solverOptions.solverOption.length;
@@ -121,7 +122,36 @@ public class OSoLWriter extends OSgLWriter{
 		return true;
 	}//setOSOption
 
-
+	public OtherOption[] setOtherOptions() throws Exception{
+		//implemented in C++, but not here in Java.
+		//TODO
+		throw new Exception("Not implemented in Java");
+	}//setOtherOptions
+	
+	public OtherOption[] addOtherOption() throws Exception{
+		//implemented in C++, but not here in Java.
+		//TODO
+		throw new Exception("Not implemented in Java");
+	}//addOtherOption
+	
+	public boolean setOptionStr() throws Exception{
+		//implemented in C++, but not here in Java.
+		//TODO
+		throw new Exception("Not implemented in Java");
+	}//setOptionStr
+	
+	public boolean setOptionDbl() throws Exception{
+		//implemented in C++, but not here in Java.
+		//TODO
+		throw new Exception("Not implemented in Java");
+	}//setOptionDbl
+	
+	public boolean setOptionInt() throws Exception{
+		//implemented in C++, but not here in Java.
+		//TODO
+		throw new Exception("Not implemented in Java");
+	}//setOptionInt
+	
 	/**
 	 * Set service uri.
 	 * 
@@ -2362,7 +2392,7 @@ public class OSoLWriter extends OSgLWriter{
 	 * @param variableNumber holds the number of variables
 	 * @return whether the variable number is set successfully or not. 
 	 */
-	public boolean setVariableNumber(int variableNumber){
+	public boolean setNumberOfVariables(int variableNumber){
 		if(variableNumber < 0){
 			return true;
 		}
@@ -2404,7 +2434,7 @@ public class OSoLWriter extends OSgLWriter{
 			return false;
 		}
 		return true;	
-	}//setVariableNumber
+	}//setNumberOfVariables
 
 	/**
 	 * Set the objective number. 
@@ -2412,7 +2442,7 @@ public class OSoLWriter extends OSgLWriter{
 	 * @param objectiveNumber holds the number of objectives
 	 * @return whether the objective number is set successfully or not. 
 	 */
-	public boolean setObjectiveNumber(int objectiveNumber){
+	public boolean setNumberOfObjectives(int objectiveNumber){
 		if(objectiveNumber < 0){
 			return true;
 		}
@@ -2454,7 +2484,7 @@ public class OSoLWriter extends OSgLWriter{
 			return false;
 		}
 		return true;
-	}//setObjectiveNumber
+	}//setNumberOfObjectives
 
 	/**
 	 * Set the constraint number. 
@@ -2462,7 +2492,7 @@ public class OSoLWriter extends OSgLWriter{
 	 * @param constraintNumber holds the number of constraints
 	 * @return whether the constraint number is set successfully or not. 
 	 */
-	public boolean setConstraintNumber(int constraintNumber){
+	public boolean setNumberOfConstraints(int constraintNumber){
 		if(constraintNumber < 0){
 			return true;
 		}
@@ -2504,7 +2534,7 @@ public class OSoLWriter extends OSgLWriter{
 			return false;
 		}
 		return true;	
-	}//setConstraintNumber
+	}//setNumberOfConstraints
 
 	/**
 	 * Set initial variable values (double[]). 
@@ -3050,6 +3080,18 @@ public class OSoLWriter extends OSgLWriter{
 		return true;	
 	}//setNumberOfOtherVariableOptions
 
+	public boolean setOtherVariableOptions() throws Exception{
+		//implemented in C++, but not here in Java.
+		//TODO
+		throw new Exception("Not implemented in Java");
+	}//setOtherVariableOptions
+	
+	public boolean addOtherVariableOptions() throws Exception{
+		//implemented in C++, but not here in Java.
+		//TODO
+		throw new Exception("Not implemented in Java");
+	}//addOtherVariableOptions
+	
 	/**
 	 * Set initial objective values (double[]). 
 	 * Before this method is called, the setVariable(int), setObjective(int), setConstraint(int)
@@ -3461,7 +3503,19 @@ public class OSoLWriter extends OSgLWriter{
 		}
 		return true;	
 	}//setNumberOfOtherObjectiveOptions
-
+	
+	public boolean setOtherObjectiveOptions() throws Exception{
+		//implemented in C++, but not here in Java.
+		//TODO
+		throw new Exception("Not implemented in Java");
+	}//setOtherObjectiveOptions
+	
+	public boolean addOtherObjectiveOptions() throws Exception{
+		//implemented in C++, but not here in Java.
+		//TODO
+		throw new Exception("Not implemented in Java");
+	}//addOtherObjectiveOptions
+	
 	/**
 	 * Set initial constraint values (double[]). 
 	 * Before this method is called, the setVariable(int), setObjective(int), setConstraint(int)
@@ -3904,6 +3958,18 @@ public class OSoLWriter extends OSgLWriter{
 		return true;	
 	}//setNumberOfOtherConstraintOptions
 
+	public boolean setOtherConstraintOptions() throws Exception{
+		//implemented in C++, but not here in Java.
+		//TODO
+		throw new Exception("Not implemented in Java");
+	}//setOtherConstraintOptions
+	
+	public boolean addOtherConstraintOptions() throws Exception{
+		//implemented in C++, but not here in Java.
+		//TODO
+		throw new Exception("Not implemented in Java");
+	}//addOtherConstraintOptions
+	
 	/**
 	 * Set the number of other solver options. 
 	 * 
@@ -4220,9 +4286,9 @@ public class OSoLWriter extends OSgLWriter{
 //		if(!osolWriter.addOtherJobOption("jname1", null, "")) System.out.println("addOtherJobOption");		
 
 
-		if(!osolWriter.setVariableNumber(3)) System.out.println("setVariableNumber Unsuccessful");		
-		if(!osolWriter.setObjectiveNumber(3)) System.out.println("setObjectiveNumber Unsuccessful");		
-		if(!osolWriter.setConstraintNumber(2)) System.out.println("setConstraintNumber Unsuccessful");		
+		if(!osolWriter.setNumberOfVariables(3)) System.out.println("setNumberOfVariables Unsuccessful");		
+		if(!osolWriter.setNumberOfObjectives(3)) System.out.println("setNumberOfObjectives Unsuccessful");		
+		if(!osolWriter.setNumberOfConstraints(2)) System.out.println("setNumberOfConstraints Unsuccessful");		
 //		double[] initialVariableValues = {1, 0, 3};
 //		if(!osolWriter.setInitVarValuesDense(initialVariableValues)) System.out.println("setInitVarValuesDense Unsuccessful");		
 
