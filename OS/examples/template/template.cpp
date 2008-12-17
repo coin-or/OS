@@ -13,21 +13,10 @@
  * 
  */ 
  
-
-
 #include <cppad/cppad.hpp> 
 #include "OSConfig.h"
 #include "OSCoinSolver.h"
-
-#ifdef COIN_HAS_IPOPT  
-	#ifndef COIN_HAS_ASL
-		#include "OSIpoptSolver.h"
-		#undef COIN_HAS_ASL
-	#else
-		#include "OSIpoptSolver.h"
-	#endif
-#endif
-
+#include "OSIpoptSolver.h"
 #include "OSResult.h" 
 #include "OSiLReader.h"        
 #include "OSiLWriter.h"   
@@ -35,9 +24,7 @@
 #include "OSrLWriter.h"      
 #include "OSInstance.h"  
 #include "OSFileUtil.h"   
-#include "OSDefaultSolver.h"  
-#include "OSWSUtil.h" 
-#include "OSSolverAgent.h"   
+#include "OSDefaultSolver.h"     
 #include "OShL.h"     
 #include "OSErrorClass.h"
 #include "OSmps2osil.h"   
@@ -46,15 +33,21 @@
 #include "OSErrorClass.h"
 #include "OSMathUtil.h"
 
-
-
 #include<iostream> 
 using std::cout;   
 using std::endl;
 
 //int main(int argC, char* argV[]){
 int main( ){
+	/** some AMPL insanity -- the fileUtil must be built in order to avoid
+	 * an ASL error - on the Mac only
+	 */
+	FileUtil *fileUtil = NULL; 
+	fileUtil = new FileUtil();
+	cout << "Start Building the Model" << endl;
 	std::cout << "Hello World" << std::endl;
+	delete fileUtil;
+	fileUtil = NULL;
 
 }// end main
 

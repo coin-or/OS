@@ -44,6 +44,7 @@ using std::endl;
 //int main(int argC, char* argV[]){
 int main( ){
 // test OS code samples here
+
 	FileUtil *fileUtil = NULL; 
 	fileUtil = new FileUtil();
 	cout << "Start Building the Model" << endl;
@@ -161,11 +162,11 @@ int main( ){
 		solver->solve();
 		std::cout << solver->osrl << std::endl;
 		// write the answer to a file
-		fileUtil->writeFileFromString("../result.xml", solver->osrl);
+		//fileUtil->writeFileFromString("../result.xml", solver->osrl);
 		// work with the OSResult object
-		OSResult *result = NULL;
-		result = solver->osresult;
-		std::cout << result->resultData->optimization->solution[0]->objectives->values->obj[0]->value << std::endl;
+		//OSResult *result = NULL;
+		//result = solver->osresult;
+		//std::cout << result->resultData->optimization->solution[0]->objectives->values->obj[0]->value << std::endl;
 		// do garbage collection
 		delete osinstance;
 		osinstance = NULL;
