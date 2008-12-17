@@ -4,9 +4,7 @@
  		<jobID>xyz123Aug3010AM</jobID>
  		<contact transportType="smtp">
  			kipp.martin@chicagogsb.edu
- 		</contact>       
+ 		</contact> 
+ 		<solverToInvoke>ipopt</solverToInvoke>      
 	</general>
-    <optimization>
-    	<other name="os_solver">ipopt</other>
-    </optimization>
 </osol>

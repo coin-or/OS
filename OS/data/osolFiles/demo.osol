@@ -3,12 +3,11 @@
 xmlns:xs="http://www.w3.org/2001/XMLSchema"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:schemaLocation="os.optimizationservices.org 
-http://www.optimizationservices.org/schemas/OSoL.xsd">
+http://www.optimizationservices.org/schemas/2.0/OSoL.xsd">
   <general>         
        <instanceLocation locationType="local">
-       ../data/osilFiles/parincLinear.osil
+		   ../data/osilFiles/parincLinear.osil
        </instanceLocation>
        <contact transportType="smtp">kipp.martin@chicagogsb.edu</contact>
-
   </general>
 </osol>

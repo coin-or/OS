@@ -5,8 +5,6 @@
     <general>
          <instanceLocation locationType="local">c:\parincLinear.osil</instanceLocation>
          <contact transportType="smtp">kipp.martin@uc.edu</contact>   
-    </general>
-    <optimization>
-    	<other name="os_solver">ipopt</other>
-    </optimization>
+  		<solverToInvoke>ipopt</solverToInvoke>      
+   </general>
 </osol>
