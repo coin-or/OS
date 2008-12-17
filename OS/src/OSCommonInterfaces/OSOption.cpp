@@ -327,8 +327,9 @@ PathPairs::~PathPairs()
 	#ifdef DEBUG
 	cout << "PathPairs Destructor Called" << endl;
 	#endif
+	int i;
 	if (pathPair != NULL) 
-	{	for (int i=0; i < numberOfPathPairs; i++)	
+	{	for (i=0; i < numberOfPathPairs; i++)	
 		{	delete pathPair[i];
 			pathPair[i] = NULL;
 		}
@@ -449,8 +450,9 @@ InitVariableValues::~InitVariableValues()
 	#ifdef DEBUG
 	cout << "InitVariableValues Destructor Called" << endl;
 	#endif
+	int i;
 	if (var != NULL) 
-	{	for (int i=0; i < numberOfVar; i++)
+	{	for (i=0; i < numberOfVar; i++)
 		{	delete var[i];
 			var[i] = NULL;
 		}
@@ -491,8 +493,9 @@ InitVariableValuesString::~InitVariableValuesString()
 	#ifdef DEBUG
 	cout << "InitVariableValuesString Destructor Called" << endl;
 	#endif
+	int i;
 	if (var != NULL) 
-	{	for (int i=0; i < numberOfVar; i++)
+	{	for (i=0; i < numberOfVar; i++)
 		{	delete var[i];
 			var[i] = NULL;
 		}
@@ -1803,8 +1806,9 @@ int OSOption::getNumberOfInitObjValues()
 {	if (this->optimization != NULL) 
 		if (this->optimization->objectives != NULL) 
 			if (this->optimization->objectives->initialObjectiveValues != NULL) 
+				return this->optimization->objectives->initialObjectiveValues->numberOfObj;
 
-	return -1;
+return -1;
 }//getNumberOfInitObjValues
 
 /**
@@ -2494,9 +2498,10 @@ BranchingWeight**  OSOption::getIntegerVariableBranchingWeightsSparse()
 	else
 		throw ErrorClass("<optimization> object must be defined before getting the data");
 	return intVarVector;
+
 }//getIntegerVariableBranchingWeightsSparse
 /**
- * get a list of branching weights for integer variables in sparse form
+ * get a list of branching weights for integer variables in dense form
  * @return an array of values
  * @note return OSNAN for variables that are not initialed
  */
@@ -2527,7 +2532,6 @@ double* OSOption::getIntegerVariableBranchingWeightsDense(int numberOfVariables)
 	{	throw ErrorClass(eclass.errormsg);
 	}
 	return intVarVector;
-
 }//getIntegerVariableBranchingWeightsDense
 
 /**
@@ -2821,8 +2825,6 @@ double* OSOption::getInitDualVarUpperBoundsDense(int numberOfConstraints){
 }//getInitDualVarUpperBoundsDense
 
 
-
-
 /**
  * get the array of solver options associated with a particular solver
  * @param solver_name is the name of the solver
@@ -2846,24 +2848,32 @@ std::vector<SolverOption*>  OSOption::getSolverOptions( std::string solver_name)
 }//getSolverOptions
 
 
-/** ---------------------------------------------------------
+/** 
+ *  ---------------------------------------------------------
  *      set() options
  *  ---------------------------------------------------------
  */
 
-/** setOtherOptions()
+/* ----------------------------------------------------------
+ * Start with a number of set() and add() methods for arrays 
+ * used in various subelements.
+ * These have been put here in order of appearance
+ * ----------------------------------------------------------*/
+
+/** setOther()
  *  set an array of <other> elements in <general>, <system>, <service> and <job>
  */
-bool OtherOptions::setOtherOptions(int numberOfOptions, OtherOption** other)
+bool OtherOptions::setOther(int numberOfOptions, OtherOption** other)
 {	try
 	{	if (this->other != NULL)
 			throw ErrorClass( "otherOptions array previously used.");
 		
 		this->numberOfOtherOptions = numberOfOptions;
 		this->other = new OtherOption*[numberOfOptions];
-	
-		for (int i = 0; i < numberOfOptions; i++){
-			 this->other[i] = new OtherOption();
+	 
+		int  i;
+		for (i = 0; i < numberOfOptions; i++)
+		{	 this->other[i] = new OtherOption();
 			*this->other[i] = *other[i];
 		}
 		return true;
@@ -2872,29 +2882,27 @@ bool OtherOptions::setOtherOptions(int numberOfOptions, OtherOption** other)
 	{	cout << eclass.errormsg << endl;
 		return false;
 	}
-}//setOtherOptions
+}//setOther
 
-/** setAnOtherOption()
+/** addOther()
  *  used to add an <other> element in <general>, <system>, <service> and <job>
  */
-bool OtherOptions::setAnOtherOption(std::string name, std::string value, std::string description){	
+bool OtherOptions::addOther(std::string name, std::string value, std::string description){	
 	try
-	{
-		int nopt;
+	{	int nopt; int i;
 		if (this->other == NULL) 
 			nopt = 0;
 		else
 			nopt = this->numberOfOtherOptions;
 	
 		OtherOption** temp = new OtherOption*[nopt+1];  //Allocate the new pointers
-		for (int i = 0; i < nopt; i++)
+		for (i = 0; i < nopt; i++)
 			temp[i] = this->other[i];  //copy the pointers
 
 		delete[] this->other; //delete old pointers
 	
 //	add in the new element
 		temp[ nopt] = new OtherOption();
-//		if (name == "" || name == NULL)
 		if (name.empty() )
 			throw ErrorClass( "the name of an option cannot be empty." );
 
@@ -2912,7 +2920,1385 @@ bool OtherOptions::setAnOtherOption(std::string name, std::string value, std::st
 	{	cout << eclass.errormsg << endl;
 		return false;
 	}
-}//setAnOtherOption
+}//addOther
+
+
+/**
+ * A function to set an array of <jobID> elements
+ * @param numberOfJobIDs: number of <jobID> elements to be set
+ * @param jobID: the array of <jobID> elements that are to be set
+ */
+bool JobDependencies::setJobID(int numberOfJobIDs, std::string *jobID)
+{	try
+	{	if (this->jobID != NULL)
+			throw ErrorClass( "jobID array previously used.");
+
+		this->numberOfJobIDs = numberOfJobIDs;
+		this->jobID = new std::string[numberOfJobIDs];
+		for (int i = 0; i < numberOfJobIDs; i++)
+			this->jobID[i] = jobID[i];
+		
+		return true;
+	}
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//setJobID
+
+/**
+ *
+ * A function to add an <jobID> element
+ * @param jobID: the name of the <jobID> element to be added 
+ */
+bool JobDependencies::addJobID(std::string jobID)
+{	int nopt;
+	if (this->jobID == NULL) 
+		nopt = 0;
+	else
+		nopt = this->numberOfJobIDs;
+
+	std::string* temp = new std::string[nopt+1];
+	for (int i = 0; i < nopt; i++)
+		temp[i] = this->jobID[i]; // create the new jobID
+
+	delete[] this->jobID;
+		
+	temp[nopt] = jobID;
+
+	this->jobID = temp;
+	this->numberOfJobIDs = ++nopt;
+	return true;
+}//addJobID
+
+/**
+ *
+ * A function to set an array of <path> elements
+ * @param numberOfPaths: number of <path> elements to be set
+ * @param path: the array of <path> elements that are to be set
+ */
+bool DirectoriesAndFiles::setPath(int numberOfPaths, std::string *path)
+{	try
+	{	if (this->path != NULL)
+			throw ErrorClass( "path array previously used.");
+
+		this->numberOfPaths = numberOfPaths;
+		this->path = new std::string[numberOfPaths];
+		for (int i = 0; i < numberOfPaths; i++)
+			this->path[i] = path[i];
+		
+		return true;
+	}
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//setPath
+
+/**
+ *
+ * A function to add a <path> element
+ * @param path: the path to be added 
+ */
+bool DirectoriesAndFiles::addPath(std::string path)
+{	int nopt;
+	if (this->path == NULL) 
+		nopt = 0;
+	else
+		nopt = this->numberOfPaths;
+
+	std::string* temp = new std::string[nopt+1];
+	for (int i = 0; i < nopt; i++)
+		temp[i] = this->path[i]; // create the new path
+
+	delete[] this->path;
+		
+	temp[nopt] = path;
+
+	this->path = temp;
+	this->numberOfPaths = ++nopt;
+	return true;
+}//addPath
+
+
+/**
+ *
+ * A function to set an array of <pathPair> elements
+ * @param numberOfPathPairs: number of <pathPair> elements to be set
+ * @param path: the array of <pathPair> elements that are to be set
+ */
+bool PathPairs::setPathPair(int numberOfPathPairs, PathPair **pathPair)
+{	try
+	{	if (this->pathPair != NULL)
+			throw ErrorClass( "pathPair array previously used.");
+		
+		this->numberOfPathPairs = numberOfPathPairs;
+		this->pathPair = new PathPair*[numberOfPathPairs];
+	 
+		int  i;
+		for (i = 0; i < numberOfPathPairs; i++)
+		{	 this->pathPair[i] = new PathPair();
+			*this->pathPair[i] = *pathPair[i];
+		}
+		return true;
+	}
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//setPathPair
+
+
+/**
+ *
+ * A function to add a <pathPair> element
+ * @param fromPath: the path from which to copy or move
+ * @param toPath: the path to which to copy or move
+ * @param makecopy: tracks whether a copy is to be made
+ */
+bool PathPairs::addPathPair(std::string fromPath, std::string toPath, bool makeCopy)
+{	try
+	{	int nopt; int i;
+		if (this->pathPair == NULL) 
+			nopt = 0;
+		else
+			nopt = this->numberOfPathPairs;
+	
+		PathPair** temp = new PathPair*[nopt+1];  //Allocate the new pointers
+		for (i = 0; i < nopt; i++)
+			temp[i] = this->pathPair[i];  //copy the pointers
+
+		delete[] this->pathPair; //delete old pointers
+	
+//	add in the new element
+		temp[ nopt] = new PathPair();
+		if (fromPath.empty() )
+			throw ErrorClass( "the \"from\" path cannot be empty." );
+		if (toPath.empty() )
+			throw ErrorClass( "the \"to\" path cannot be empty." );
+
+		temp[ nopt]->from = fromPath;
+		temp[ nopt]->to = toPath;
+		temp[ nopt]->makeCopy = makeCopy;
+
+		this->pathPair = temp;   //hook the new pointers into the data structure
+		this->numberOfPathPairs = ++nopt;
+
+		return true;
+	}
+
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//addPathPair
+
+/**
+ *
+ * A function to set an array of <process> elements
+ * @param numberOfProcesses: number of <process> elements to be set
+ * @param path: the array of <process> elements that are to be set
+ */
+bool Processes::setProcess(int numberOfProcesses, std::string *process)
+{	try
+	{	if (this->process != NULL)
+			throw ErrorClass( "process array previously used.");
+
+		this->numberOfProcesses= numberOfProcesses;
+		this->process = new std::string[numberOfProcesses];
+		for (int i = 0; i < numberOfProcesses; i++){
+			this->process[i] = process[i];
+		}
+		return true;
+	}
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//setProcess
+
+/**
+ *
+ * A function to add a <process> element
+ * @param process: the ID of the process to be added 
+ */
+bool Processes::addProcess(std::string process)
+{	int nopt;
+	if (this->process == NULL) 
+		nopt = 0;
+	else
+		nopt = this->numberOfProcesses;
+
+	std::string* temp = new std::string[nopt+1];
+	for (int i = 0; i < nopt; i++)
+		temp[i] = this->process[i]; // create the new jobID
+
+	delete[] this->process;
+		
+	temp[nopt] = process;
+
+	this->process = temp;
+	this->numberOfProcesses = ++nopt;
+	return true;
+}//addProcess
+
+/**
+ *
+ * A function to set an array of <var> elements 
+ * @param numberOfVar: number of <var> elements to be set
+ * @param var: the array of <var> elements that are to be set
+ */
+bool InitVariableValues::setVar(int numberOfVar, InitVarValue **var)
+{	try
+	{	if (this->var != NULL)
+			throw ErrorClass( "InitVarValue array previously used.");
+		
+		this->numberOfVar = numberOfVar;
+		this->var = new InitVarValue*[numberOfVar];
+	 
+		int  i;
+		for (i = 0; i < numberOfVar; i++)
+		{	 this->var[i] = new InitVarValue();
+			*this->var[i] = *var[i];
+		}
+		return true;
+	}
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//setVar
+
+/**
+ *
+ * A function to add a <var> element
+ * @param idx: the index of the variable to be given an initial value
+ * @param value: the initial variable value to be added 
+ */
+bool InitVariableValues::addVar(int idx, double value)
+{	try
+	{	int nopt; int i;
+		if (this->var == NULL) 
+			nopt = 0;
+		else
+			nopt = this->numberOfVar;
+	
+		InitVarValue** temp = new InitVarValue*[nopt+1];  //Allocate the new pointers
+		for (i = 0; i < nopt; i++)
+			temp[i] = this->var[i];  //copy the pointers
+
+		delete[] this->var; //delete old pointers
+	
+//	add in the new element
+		temp[ nopt] = new InitVarValue();
+		if (idx < 0)
+			throw ErrorClass( "the index of a variable cannot be negative." );
+
+		temp[ nopt]->idx = idx;
+		temp[ nopt]->value = value;
+
+		this->var = temp;   //hook the new pointers into the data structure
+		this->numberOfVar = ++nopt;
+
+		return true;
+	}
+
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//addVar
+
+/**
+ *
+ * A function to set an array of <var> elements 
+ * @param numberOfVar: number of <var> elements to be set
+ * @param var: the array of <var> elements that are to be set
+ */
+bool InitVariableValuesString::setVar(int numberOfVar, InitVarValueString **var)
+{	try
+	{	if (this->var != NULL)
+			throw ErrorClass( "InitVarValueString array previously used.");
+		
+		this->numberOfVar = numberOfVar;
+		this->var = new InitVarValueString*[numberOfVar];
+	 
+		int  i;
+		for (i = 0; i < numberOfVar; i++)
+		{	 this->var[i] = new InitVarValueString();
+			*this->var[i] = *var[i];
+		}
+		return true;
+	}
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//setVar
+
+/**
+ *
+ * A function to add a <var> element
+ * @param idx: the index of the variable to be given an initial value
+ * @param value: the initial string value to be added 
+ */
+bool InitVariableValuesString::addVar(int idx, std::string value)
+{	try
+	{	int nopt; int i;
+		if (this->var == NULL) 
+			nopt = 0;
+		else
+			nopt = this->numberOfVar;
+	
+		InitVarValueString** temp = new InitVarValueString*[nopt+1];  //Allocate the new pointers
+		for (i = 0; i < nopt; i++)
+			temp[i] = this->var[i];  //copy the pointers
+
+		delete[] this->var; //delete old pointers
+	
+//	add in the new element
+		temp[ nopt] = new InitVarValueString();
+		if (idx < 0)
+			throw ErrorClass( "the index of a variable cannot be negative." );
+
+		temp[ nopt]->idx = idx;
+		temp[ nopt]->value = value;
+
+		this->var = temp;   //hook the new pointers into the data structure
+		this->numberOfVar = ++nopt;
+
+		return true;
+	}
+
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//addVar
+
+/**
+ *
+ * A function to set an array of <var> elements 
+ * @param numberOfVar: number of <var> elements to be set
+ * @param var: the array of <var> elements to be that are to be set
+ */
+bool InitialBasisStatus::setVar(int numberOfVar, InitBasStatus **var)
+{	try
+	{	if (this->var != NULL)
+			throw ErrorClass( "InitBasStatus array previously used.");
+		
+		this->numberOfVar = numberOfVar;
+		this->var = new InitBasStatus*[numberOfVar];
+	 
+		int  i;
+		for (i = 0; i < numberOfVar; i++)
+		{	 this->var[i] = new InitBasStatus();
+			*this->var[i] = *var[i];
+		}
+		return true;
+	}
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//setVar
+
+/**
+ *
+ * A function to add a <var> element
+ * @param idx: the index of the variable to be given an initial basis status
+ * @param value: the initial basis status to be added 
+ */
+bool InitialBasisStatus::addVar(int idx, std::string value)
+{	try
+	{	int nopt; int i;
+		if (this->var == NULL) 
+			nopt = 0;
+		else
+			nopt = this->numberOfVar;
+	
+		InitBasStatus** temp = new InitBasStatus*[nopt+1];  //Allocate the new pointers
+		for (i = 0; i < nopt; i++)
+			temp[i] = this->var[i];  //copy the pointers
+
+		delete[] this->var; //delete old pointers
+	
+//	add in the new element
+		temp[ nopt] = new InitBasStatus();
+		if (idx < 0)
+			throw ErrorClass( "the index of a variable cannot be negative." );
+
+		temp[ nopt]->idx = idx;
+		temp[ nopt]->value = value;
+
+		this->var = temp;   //hook the new pointers into the data structure
+		this->numberOfVar = ++nopt;
+
+		return true;
+	}
+
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//addVar
+
+/**
+ *
+ * A function to set an array of <var> elements 
+ * @param numberOfVar: number of <var> elements to be set
+ * @param var: the array of <var> elements to be that are to be set
+ */
+bool IntegerVariableBranchingWeights::setVar(int numberOfVar, BranchingWeight **var)
+{	try
+	{	if (this->var != NULL)
+			throw ErrorClass( "BranchingWeight array previously used.");
+		
+		this->numberOfVar = numberOfVar;
+		this->var = new BranchingWeight*[numberOfVar];
+	 
+		int  i;
+		for (i = 0; i < numberOfVar; i++)
+		{	 this->var[i] = new BranchingWeight();
+			*this->var[i] = *var[i];
+		}
+		return true;
+	}
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//setVar
+
+/**
+ *
+ * A function to add a <var> element
+ * @param idx: the index of the variable to be given a branching weight 
+ * @param value: the branching weight to be added 
+ */
+bool IntegerVariableBranchingWeights::addVar(int idx, double value)
+{	try
+	{	int nopt; int i;
+		if (this->var == NULL) 
+			nopt = 0;
+		else
+			nopt = this->numberOfVar;
+	
+		BranchingWeight** temp = new BranchingWeight*[nopt+1];  //Allocate the new pointers
+		for (i = 0; i < nopt; i++)
+			temp[i] = this->var[i];  //copy the pointers
+
+		delete[] this->var; //delete old pointers
+	
+//	add in the new element
+		temp[ nopt] = new BranchingWeight();
+		if (idx < 0)
+			throw ErrorClass( "the index of a variable cannot be negative." );
+
+		temp[ nopt]->idx = idx;
+		temp[ nopt]->value = value;
+
+		this->var = temp;   //hook the new pointers into the data structure
+		this->numberOfVar = ++nopt;
+
+		return true;
+	}
+
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//addVar
+
+/**
+ *
+ * A function to set an array of <var> elements 
+ * @param numberOfVar: number of <var> elements to be set
+ * @param var: the array of <var> elements that are to be set
+ */
+bool SOSWeights::setVar(int numberOfVar, BranchingWeight **var)
+{	try
+	{	if (this->var != NULL)
+			throw ErrorClass( "BranchingWeight array previously used.");
+		
+		this->numberOfVar = numberOfVar;
+		this->var = new BranchingWeight*[numberOfVar];
+	 
+		int  i;
+		for (i = 0; i < numberOfVar; i++)
+		{	 this->var[i] = new BranchingWeight();
+			*this->var[i] = *var[i];
+		}
+		return true;
+	}
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//setVar
+
+/**
+ *
+ * A function to add a <var> element
+ * @param idx: the index of the variable to be given a branching weight 
+ * @param value: the branching weight to be added 
+ */
+bool SOSWeights::addVar(int idx, double value)
+{	try
+	{	int nopt; int i;
+		if (this->var == NULL) 
+			nopt = 0;
+		else
+			nopt = this->numberOfVar;
+	
+		BranchingWeight** temp = new BranchingWeight*[nopt+1];  //Allocate the new pointers
+		for (i = 0; i < nopt; i++)
+			temp[i] = this->var[i];  //copy the pointers
+
+		delete[] this->var; //delete old pointers
+	
+//	add in the new element
+		temp[ nopt] = new BranchingWeight();
+		if (idx < 0)
+			throw ErrorClass( "the index of a variable cannot be negative." );
+
+		temp[ nopt]->idx = idx;
+		temp[ nopt]->value = value;
+
+		this->var = temp;   //hook the new pointers into the data structure
+		this->numberOfVar = ++nopt;
+
+		return true;
+	}
+
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//addVar
+
+
+/**
+ *
+ * A function to set an array of <sos> elements 
+ * @param numberOfSOS: number of <sos> elements to be set
+ * @param sos: the array of <sos> elements that are to be set
+ */
+bool SOSVariableBranchingWeights::setSOS(int numberOfSOS, SOSWeights **sos)
+{	try
+	{	if (this->sos != NULL)
+			throw ErrorClass( "SOS array previously used.");
+		
+		this->numberOfSOS = numberOfSOS;
+		this->sos = new SOSWeights*[numberOfSOS];
+	 
+		int  i;
+		for (i = 0; i < numberOfSOS; i++)
+		{	 this->sos[i] = new SOSWeights();
+			*this->sos[i] = *sos[i];
+		}
+		return true;
+	}
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//setSOS
+
+/**
+ *
+ * A function to add an <sos> element
+ * @param sos: the content of the <sos> element that is to be added 
+ */
+bool SOSVariableBranchingWeights::addSOS(int sosIdx, int nvar, double weight, int* idx, int* value)
+{	try
+	{	int nopt; int i;
+		if (this->sos  == NULL) 
+			nopt = 0;
+		else
+			nopt = this->numberOfSOS;
+	
+		SOSWeights** temp = new SOSWeights*[nopt+1];  //Allocate the new pointers
+		for (i = 0; i < nopt; i++)
+			temp[i] = this->sos[i];  //copy the pointers
+
+		delete[] this->sos; //delete old pointers
+	
+//	add in the new element
+		temp[ nopt] = new SOSWeights();
+
+		temp[ nopt]->sosIdx = sosIdx;
+		temp[ nopt]->groupWeight = weight;
+		temp[ nopt]->numberOfVar = nvar;
+		temp[ nopt]->var = new BranchingWeight*[nvar];
+		for (i = 0; i < nvar; i++)
+		{	temp[nopt]->var[i] = new BranchingWeight();
+			temp[nopt]->var[i]->idx = idx[i];
+			temp[nopt]->var[i]->value = value[i];
+		}
+
+		this->sos  = temp;   //hook the new pointers into the data structure
+		this->numberOfSOS = ++nopt;
+
+		return true;
+	}
+
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//addSOS
+
+/**
+ *
+ * A function to set an array of <var> elements 
+ * @param numberOfVar: number of <var> elements to be set
+ * @param var: the array of <var> elements that are to be set
+ */
+bool OtherVariableOption::setVar(int numberOfVar, OtherVarOption **var)
+{	try
+	{	if (this->var != NULL)
+			throw ErrorClass( "OtherVarOption array previously used.");
+		
+		this->numberOfVar = numberOfVar;
+		this->var = new OtherVarOption*[numberOfVar];
+	 
+		int  i;
+		for (i = 0; i < numberOfVar; i++)
+		{	 this->var[i] = new OtherVarOption();
+			*this->var[i] = *var[i];
+		}
+		return true;
+	}
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//setVar
+
+
+/**
+ *
+ * A function to add a <var> element
+ * @param idx: the index of the variable  
+ * @param value: the value associated with this variable 
+ * @param lbValue: a lower bound associated with this variable 
+ * @param ubValue: an upper bound associated with this variable 
+ */
+bool OtherVariableOption::addVar(int idx, std::string value, std::string lbValue, std::string ubValue)
+{	try
+	{	int nopt; int i;
+		if (this->var == NULL) 
+			nopt = 0;
+		else
+			nopt = this->numberOfVar;
+	
+		OtherVarOption** temp = new OtherVarOption*[nopt+1];  //Allocate the new pointers
+		for (i = 0; i < nopt; i++)
+			temp[i] = this->var[i];  //copy the pointers
+
+		delete[] this->var; //delete old pointers
+	
+//	add in the new element
+		temp[ nopt] = new OtherVarOption();
+		if (idx < 0)
+			throw ErrorClass( "the index of a variable cannot be negative." );
+
+		temp[ nopt]->idx = idx;
+		temp[ nopt]->value = value;
+		temp[ nopt]->lbValue = lbValue;
+		temp[ nopt]->ubValue = ubValue;
+
+		this->var = temp;   //hook the new pointers into the data structure
+		this->numberOfVar = ++nopt;
+
+		return true;
+	}
+
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//addVar
+
+/**
+ *
+ * A function to set an array of <other> elements
+ * @param numberOfOptions: number of <other> elements to be set
+ * @param other: the array of <other> elements that are to be set
+ */
+bool VariableOption::setOther(int numberOfOptions, OtherVariableOption  **other)
+{	try
+	{	if (this->other != NULL)
+			throw ErrorClass( "otherOptions array previously used.");
+		
+		this->numberOfOtherVariableOptions = numberOfOptions;
+		this->other = new OtherVariableOption*[numberOfOptions];
+	 
+		int  i;
+		for (i = 0; i < numberOfOptions; i++)
+		{	 this->other[i] = new OtherVariableOption();
+			*this->other[i] = *other[i];
+		}
+		return true;
+	}
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//setOther
+
+/**
+ *
+ * A function to add an <other> element
+ * @param other: the content of the <other> element to be added
+ */
+bool VariableOption::addOther(OtherVariableOption *other)
+{	try
+	{	int nopt; int i;
+		if (this->other == NULL) 
+			nopt = 0;
+		else
+			nopt = this->numberOfOtherVariableOptions;
+	
+		OtherVariableOption** temp = new OtherVariableOption*[nopt+1];  //Allocate the new pointers
+		for (i = 0; i < nopt; i++)
+			temp[i] = this->other[i];  //copy the pointers
+
+		delete[] this->other; //delete old pointers
+	
+//	add in the new element
+		 temp[ nopt] = new OtherVariableOption();
+		*temp[ nopt] = *other;
+
+		this->other = temp;   //hook the new pointers into the data structure
+		this->numberOfOtherVariableOptions = ++nopt;
+
+		return true;
+	}
+
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//addOther
+
+/**
+ *
+ * A function to set an array of <obj> elements 
+ * @param numberOfObj: number of <obj> elements to be set
+ * @param obj: the array of <obj> elements that are to be set
+ */
+bool InitObjectiveValues::setObj(int numberOfObj, InitObjValue **obj)
+{	try
+	{	if (this->obj != NULL)
+			throw ErrorClass( "InitObjValue array previously used.");
+		
+		this->numberOfObj = numberOfObj;
+		this->obj = new InitObjValue*[numberOfObj];
+	 
+		int  i;
+		for (i = 0; i < numberOfObj; i++)
+		{	 this->obj[i] = new InitObjValue();
+			*this->obj[i] = *obj[i];
+		}
+		return true;
+	}
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//setObj
+
+/**
+ *
+ * A function to add a <obj> element
+ * @param idx: the index of the objective to be given an initial value
+ * @param value: the inital value to be added 
+ */
+bool InitObjectiveValues::addObj(int idx, double value)
+{	try
+	{	int nopt; int i;
+		if (this->obj == NULL) 
+			nopt = 0;
+		else
+			nopt = this->numberOfObj;
+	
+		InitObjValue** temp = new InitObjValue*[nopt+1];  //Allocate the new pointers
+		for (i = 0; i < nopt; i++)
+			temp[i] = this->obj[i];  //copy the pointers
+
+		delete[] this->obj; //delete old pointers
+	
+//	add in the new element
+		temp[ nopt] = new InitObjValue();
+		if (idx >= 0)
+			throw ErrorClass( "the index of an objective must be negative." );
+
+		temp[ nopt]->idx = idx;
+		temp[ nopt]->value = value;
+
+		this->obj = temp;   //hook the new pointers into the data structure
+		this->numberOfObj = ++nopt;
+
+		return true;
+	}
+
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//addObj
+
+/**
+ *
+ * A function to set an array of <obj> elements 
+ * @param numberOfObj: number of <obj> elements to be set
+ * @param obj: the array of <obj> elements that are to be set
+ */
+bool InitObjectiveBounds::setObj(int numberOfObj, InitObjBound **obj)
+{	try
+	{	if (this->obj != NULL)
+			throw ErrorClass( "InitObjBound array previously used.");
+		
+		this->numberOfObj = numberOfObj;
+		this->obj = new InitObjBound*[numberOfObj];
+	 
+		int  i;
+		for (i = 0; i < numberOfObj; i++)
+		{	 this->obj[i] = new InitObjBound();
+			*this->obj[i] = *obj[i];
+		}
+		return true;
+	}
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//setObj
+
+
+/**
+ *
+ * A function to add a <obj> element
+ * @param idx: the index of the objective to be given initial bounds
+ * @param lbValue: the initial lower bound for the objective
+ * @param ubValue: the initial upper bound for the objective
+ */
+bool InitObjectiveBounds::addObj(int idx, double lbValue, double ubValue)
+{	try
+	{	int nopt; int i;
+		if (this->obj == NULL) 
+			nopt = 0;
+		else
+			nopt = this->numberOfObj;
+	
+		InitObjBound** temp = new InitObjBound*[nopt+1];  //Allocate the new pointers
+		for (i = 0; i < nopt; i++)
+			temp[i] = this->obj[i];  //copy the pointers
+
+		delete[] this->obj; //delete old pointers
+	
+//	add in the new element
+		temp[ nopt] = new InitObjBound();
+		if (idx >= 0)
+			throw ErrorClass( "the index of an objective must be negative." );
+
+		temp[ nopt]->idx = idx;
+		temp[ nopt]->lbValue = lbValue;
+		temp[ nopt]->ubValue = ubValue;
+
+		this->obj = temp;   //hook the new pointers into the data structure
+		this->numberOfObj = ++nopt;
+
+		return true;
+	}
+
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//addObj
+
+/**
+ *
+ * A function to set an array of <obj> elements 
+ * @param numberOfObj: number of <obj> elements to be set
+ * @param obj: the array of <obj> elements that are to be set
+ */
+bool OtherObjectiveOption::setObj(int numberOfObj, OtherObjOption **obj)
+{	try
+	{	if (this->obj != NULL)
+			throw ErrorClass( "OtherVarOption array previously used.");
+		
+		this->numberOfObj= numberOfObj;
+		this->obj = new OtherObjOption*[numberOfObj];
+	 
+		int  i;
+		for (i = 0; i < numberOfObj; i++)
+		{	 this->obj[i] = new OtherObjOption();
+			*this->obj[i] = *obj[i];
+		}
+		return true;
+	}
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//setObj
+
+/**
+ *
+ * A function to add a <obj> element
+ * @param idx: the index of the objective 
+ * @param value: the value associated with this objective 
+ * @param lbValue: a lower bound associated with this objective 
+ * @param ubValue: an upper bound associated with this objective 
+ */
+bool OtherObjectiveOption::addObj(int idx, std::string value, std::string lbValue, std::string ubValue)
+{	try
+	{	int nopt; int i;
+		if (this->obj == NULL) 
+			nopt = 0;
+		else
+			nopt = this->numberOfObj;
+	
+		OtherObjOption** temp = new OtherObjOption*[nopt+1];  //Allocate the new pointers
+		for (i = 0; i < nopt; i++)
+			temp[i] = this->obj[i];  //copy the pointers
+
+		delete[] this->obj; //delete old pointers
+	
+//	add in the new element
+		temp[ nopt] = new OtherObjOption();
+		if (idx >= 0)
+			throw ErrorClass( "the index of an objective must be negative." );
+
+		temp[ nopt]->idx = idx;
+		temp[ nopt]->value = value;
+		temp[ nopt]->lbValue = lbValue;
+		temp[ nopt]->ubValue = ubValue;
+
+		this->obj = temp;   //hook the new pointers into the data structure
+		this->numberOfObj = ++nopt;
+
+		return true;
+	}
+
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//addObj
+
+/**
+ *
+ * A function to set an array of <other> elements
+ * @param numberOfOptions: number of <other> elements to be set
+ * @param other: the array of <other> elements that are to be set
+ */
+bool ObjectiveOption::setOther(int numberOfOptions, OtherObjectiveOption  **other)
+{	try
+	{	if (this->other != NULL)
+			throw ErrorClass( "otherObjectiveOptions array previously used.");
+		
+		this->numberOfOtherObjectiveOptions = numberOfOptions;
+		this->other = new OtherObjectiveOption*[numberOfOptions];
+	 
+		int  i;
+		for (i = 0; i < numberOfOptions; i++)
+		{	 this->other[i] = new OtherObjectiveOption();
+			*this->other[i] = *other[i];
+		}
+		return true;
+	}
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//setOther
+
+/**
+ *
+ * A function to add an <other> element
+ * @param other: the content of the <other> element to be added
+ */
+bool ObjectiveOption::addOther(OtherObjectiveOption *other)
+{	try
+	{	int nopt; int i;
+		if (this->other == NULL) 
+			nopt = 0;
+		else
+			nopt = this->numberOfOtherObjectiveOptions;
+	
+		OtherObjectiveOption** temp = new OtherObjectiveOption*[nopt+1];  //Allocate the new pointers
+		for (i = 0; i < nopt; i++)
+			temp[i] = this->other[i];  //copy the pointers
+
+		delete[] this->other; //delete old pointers
+	
+//	add in the new element
+		 temp[ nopt] = new OtherObjectiveOption();
+		*temp[ nopt] = *other;
+
+		this->other = temp;   //hook the new pointers into the data structure
+		this->numberOfOtherObjectiveOptions = ++nopt;
+
+		return true;
+	}
+
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//addOther
+
+/**
+ *
+ * A function to set an array of <con> elements 
+ * @param numberOfCon: number of <con> elements to be set
+ * @param con: the array of <con> elements that are to be set
+ */
+bool InitConstraintValues::setCon(int numberOfCon, InitConValue **con)
+{	try
+	{	if (this->con != NULL)
+			throw ErrorClass( "InitConValue array previously used.");
+		
+		this->numberOfCon = numberOfCon;
+		this->con = new InitConValue*[numberOfCon];
+	 
+		int  i;
+		for (i = 0; i < numberOfCon; i++)
+		{	 this->con[i] = new InitConValue();
+			*this->con[i] = *con[i];
+		}
+		return true;
+	}
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//setCon
+
+/**
+ *
+ * A function to add a <con> element
+ * @param idx: the index of the constraint to be given an inital value 
+ * @param value: the initial value to be added 
+ */
+bool InitConstraintValues::addCon(int idx, double value)
+{	try
+	{	int nopt; int i;
+		if (this->con == NULL) 
+			nopt = 0;
+		else
+			nopt = this->numberOfCon;
+	
+		InitConValue** temp = new InitConValue*[nopt+1];  //Allocate the new pointers
+		for (i = 0; i < nopt; i++)
+			temp[i] = this->con[i];  //copy the pointers
+
+		delete[] this->con; //delete old pointers
+	
+//	add in the new element
+		temp[ nopt] = new InitConValue();
+		if (idx < 0)
+			throw ErrorClass( "the index of a constraint cannot be negative." );
+
+		temp[ nopt]->idx = idx;
+		temp[ nopt]->value = value;
+
+		this->con = temp;   //hook the new pointers into the data structure
+		this->numberOfCon = ++nopt;
+
+		return true;
+	}
+
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//addCon
+
+/**
+ *
+ * A function to set an array of <con> elements 
+ * @param numberOfCon: number of <con> elements to be set
+ * @param con: the array of <con> elements that are to be set
+ */
+bool InitDualVariableValues::setCon(int numberOfCon, InitDualVarValue **con)
+{	try
+	{	if (this->con != NULL)
+			throw ErrorClass( "InitDualVarValue array previously used.");
+		
+		this->numberOfCon = numberOfCon;
+		this->con = new InitDualVarValue*[numberOfCon];
+	 
+		int  i;
+		for (i = 0; i < numberOfCon; i++)
+		{	 this->con[i] = new InitDualVarValue();
+			*this->con[i] = *con[i];
+		}
+		return true;
+	}
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//setCon
+
+/**
+ *
+ * A function to add a <con> element
+ * @param idx: the index of the constraint to be given initial dual variable bounds 
+ * @param lbValue: an initial lower bound for the dual variable 
+ * @param ubValue: an initial upper bound for the dual variable 
+ */
+bool InitDualVariableValues::addCon(int idx, double lbValue, double ubValue)
+{	try
+	{	int nopt; int i;
+		if (this->con == NULL) 
+			nopt = 0;
+		else
+			nopt = this->numberOfCon;
+	
+		InitDualVarValue** temp = new InitDualVarValue*[nopt+1];  //Allocate the new pointers
+		for (i = 0; i < nopt; i++)
+			temp[i] = this->con[i];  //copy the pointers
+
+		delete[] this->con; //delete old pointers
+	
+//	add in the new element
+		temp[ nopt] = new InitDualVarValue();
+		if (idx < 0)
+			throw ErrorClass( "the index of a constraint cannot be negative." );
+
+		temp[ nopt]->idx = idx;
+		temp[ nopt]->lbValue = lbValue;
+		temp[ nopt]->ubValue = ubValue;
+
+		this->con = temp;   //hook the new pointers into the data structure
+		this->numberOfCon = ++nopt;
+
+		return true;
+	}
+
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//addCon
+
+/**
+ *
+ * A function to set an array of <con> elements 
+ * @param numberOfCon: number of <con> elements to be set
+ * @param obj: the array of <con> elements that are to be set
+ */
+bool OtherConstraintOption::setCon(int numberOfCon, OtherConOption **con)
+{	try
+	{	if (this->con != NULL)
+			throw ErrorClass( "OtherConOption array previously used.");
+		
+		this->numberOfCon = numberOfCon;
+		this->con = new OtherConOption*[numberOfCon];
+	 
+		int  i;
+		for (i = 0; i < numberOfCon; i++)
+		{	 this->con[i] = new OtherConOption();
+			*this->con[i] = *con[i];
+		}
+		return true;
+	}
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//setVar
+
+/**
+ *
+ * A function to add a <con> element
+ * @param idx: the index of the constraint 
+ * @param value: the value associated with this constraint 
+ * @param lbValue: a lower bound associated with this constraint 
+ * @param ubValue: an upper bound associated with this constraint 
+ */
+bool OtherConstraintOption::addCon(int idx, std::string value, std::string lbValue, std::string ubValue)
+{	try
+	{	int nopt; int i;
+		if (this->con == NULL) 
+			nopt = 0;
+		else
+			nopt = this->numberOfCon;
+	
+		OtherConOption** temp = new OtherConOption*[nopt+1];  //Allocate the new pointers
+		for (i = 0; i < nopt; i++)
+			temp[i] = this->con[i];  //copy the pointers
+
+		delete[] this->con; //delete old pointers
+	
+//	add in the new element
+		temp[ nopt] = new OtherConOption();
+		if (idx < 0)
+			throw ErrorClass( "the index of a variable cannot be negative." );
+
+		temp[ nopt]->idx = idx;
+		temp[ nopt]->value = value;
+		temp[ nopt]->lbValue = lbValue;
+		temp[ nopt]->ubValue = ubValue;
+
+		this->con = temp;   //hook the new pointers into the data structure
+		this->numberOfCon = ++nopt;
+
+		return true;
+	}
+
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//addCon
+
+/**
+ *
+ * A function to set an array of <other> elements
+ * @param numberOfOptions: number of <other> elements to be set
+ * @param other: the array of <other> elements that are to be set
+ */
+bool ConstraintOption::setOther(int numberOfOptions, OtherConstraintOption  **other)
+{	try
+	{	if (this->other != NULL)
+			throw ErrorClass( "otherOptions array previously used.");
+		
+		this->numberOfOtherConstraintOptions = numberOfOptions;
+		this->other = new OtherConstraintOption*[numberOfOptions];
+	 
+		int  i;
+		for (i = 0; i < numberOfOptions; i++)
+		{	 this->other[i] = new OtherConstraintOption();
+			*this->other[i] = *other[i];
+		}
+		return true;
+	}
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//setOther
+
+/**
+ *
+ * A function to add an <other> element
+ * @param other: the content of the <other> element to be added
+ */
+bool ConstraintOption::addOther(OtherConstraintOption *other)
+{	try
+	{	int nopt; int i;
+		if (this->other == NULL) 
+			nopt = 0;
+		else
+			nopt = this->numberOfOtherConstraintOptions;
+	
+		OtherConstraintOption** temp = new OtherConstraintOption*[nopt+1];  //Allocate the new pointers
+		for (i = 0; i < nopt; i++)
+			temp[i] = this->other[i];  //copy the pointers
+
+		delete[] this->other; //delete old pointers
+	
+//	add in the new element
+		 temp[ nopt] = new OtherConstraintOption();
+		*temp[ nopt] = *other;
+
+		this->other = temp;   //hook the new pointers into the data structure
+		this->numberOfOtherConstraintOptions = ++nopt;
+
+		return true;
+	}
+
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//addOther
+
+/**
+ *
+ * A function to set an array of solver options
+ * @param numberOfOptions: number of solver options to be set
+ * @param solverOption: the array of solver options that are to be set
+ */
+bool SolverOptions::setSolverOptions(int numberOfOptions, SolverOption **solverOption)
+{	try
+	{	if (this->solverOption != NULL)
+			throw ErrorClass( "solverOptions array previously used.");
+		
+		this->numberOfSolverOptions = numberOfOptions;
+		this->solverOption = new SolverOption*[numberOfOptions];
+	 
+		int  i;
+		for (i = 0; i < numberOfOptions; i++)
+		{	 this->solverOption[i] = new SolverOption();
+			*this->solverOption[i] = *solverOption[i];
+		}
+		return true;
+	}
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//setSolverOption
+
+/**
+ *
+ * A function to add a solver option
+ * @param name: the name of the solver option (required) 
+ * @param value: a value associated with the option (optional) 
+ * @param solver: the solver to which the option applies (optional) 
+ * @param category: the category (and subcategories) of the option (optional) 
+ * @param type: the type of the option (optional) 
+ * @param description: a description associated with the option (optional) 
+ */
+bool SolverOptions::addSolverOption(std::string name, std::string value, std::string solver, 
+		 std::string category, std::string type, std::string description)
+{	try
+	{	int nopt; int i;
+		if (this->solverOption == NULL) 
+			nopt = 0;
+		else
+			nopt = this->numberOfSolverOptions;
+	
+		SolverOption** temp = new SolverOption*[nopt+1];  //Allocate the new pointers
+		for (i = 0; i < nopt; i++)
+			temp[i] = this->solverOption[i];  //copy the pointers
+
+		delete[] this->solverOption; //delete old pointers
+	
+//	add in the new element
+		temp[ nopt] = new SolverOption();
+		if (name.empty() )
+			throw ErrorClass( "the name of a solver option cannot be empty." );
+
+		temp[ nopt]->name = name;
+		temp[ nopt]->value = value;
+		temp[ nopt]->solver = solver;
+		temp[ nopt]->type = type;
+		temp[ nopt]->category = category;
+		temp[ nopt]->description = description;
+
+		this->solverOption = temp;   //hook the new pointers into the data structure
+		this->numberOfSolverOptions = ++nopt;
+
+		return true;
+	}
+
+	catch(const ErrorClass& eclass)
+	{	cout << eclass.errormsg << endl;
+		return false;
+	}
+}//addSolverOption
+
+
 
 	
 	
@@ -3021,8 +4407,8 @@ bool OSOption::setNumberOfOtherGeneralOptions(int numberOfObjects)
 	return true;
 }//setNumberOfOtherGeneralOptions
 
-bool OSOption::setOtherGeneralOptions(int numberOfOptions, OtherOption** other){
-	if (this->general == NULL) 
+bool OSOption::setOtherGeneralOptions(int numberOfOptions, OtherOption** other)
+{	if (this->general == NULL) 
 		this->general = new GeneralOption();
 	if (this->general->otherOptions == NULL) 
 		this->general->otherOptions = new OtherOptions();
@@ -3032,16 +4418,15 @@ bool OSOption::setOtherGeneralOptions(int numberOfOptions, OtherOption** other){
 		delete[] this->general->otherOptions->other;
 		this->general->otherOptions->other = NULL;
 	}
-	return this->general->otherOptions->setOtherOptions(numberOfOptions, other);
+	return this->general->otherOptions->setOther(numberOfOptions, other);
 }//setOtherGeneralOptions
 
-
-bool OSOption::setAnOtherGeneralOption(std::string name, std::string value, std::string description){
-	if (this->general == NULL) 
+bool OSOption::setAnOtherGeneralOption(std::string name, std::string value, std::string description)
+{	if (this->general == NULL) 
 		this->general = new GeneralOption();
 	if (this->general->otherOptions == NULL) 
 		this->general->otherOptions = new OtherOptions();
-	return this->general->otherOptions->setAnOtherOption(name, value, description);
+	return this->general->otherOptions->addOther(name, value, description);
 }//setAnOtherGeneralOption
 
 
@@ -3131,7 +4516,7 @@ bool OSOption::setOtherSystemOptions(int numberOfOptions, OtherOption** other)
 		delete[] this->system->otherOptions->other;
 		this->system->otherOptions->other = NULL;
 	}
-	return this->system->otherOptions->setOtherOptions(numberOfOptions, other);
+	return this->system->otherOptions->setOther(numberOfOptions, other);
 }//setOtherSystemOptions
 
 bool OSOption::setAnOtherSystemOption(std::string name, std::string value, std::string description)
@@ -3139,7 +4524,7 @@ bool OSOption::setAnOtherSystemOption(std::string name, std::string value, std::
 		this->system = new SystemOption();
 	if (this->system->otherOptions == NULL) 
 		this->system->otherOptions = new OtherOptions();
-	return this->system->otherOptions->setAnOtherOption(name, value, description);
+	return this->system->otherOptions->addOther(name, value, description);
 }//setAnOtherSystemOption
 
 
@@ -3174,7 +4559,7 @@ bool OSOption::setOtherServiceOptions(int numberOfOptions, OtherOption** other)
 		delete[] this->service->otherOptions->other;
 		this->service->otherOptions->other = NULL;
 	}
-	return this->service->otherOptions->setOtherOptions(numberOfOptions, other);
+	return this->service->otherOptions->setOther(numberOfOptions, other);
 }//setOtherServiceOptions
 
 bool OSOption::setAnOtherServiceOption(std::string name, std::string value, std::string description)
@@ -3182,7 +4567,7 @@ bool OSOption::setAnOtherServiceOption(std::string name, std::string value, std:
 		this->service = new ServiceOption();
 	if (this->service->otherOptions == NULL) 
 		this->service->otherOptions = new OtherOptions();
-	return this->service->otherOptions->setAnOtherOption(name, value, description);
+	return this->service->otherOptions->addOther(name, value, description);
 }//setAnOtherServiceOption
 
 /** 
@@ -3231,33 +4616,33 @@ bool OSOption::setJobDependencies(int numberOfDependencies, std::string* jobDepe
 		this->job->dependencies = new JobDependencies();
 	else 
 		delete[] this->job->dependencies->jobID;
-	this->job->dependencies->numberOfJobIDs = numberOfDependencies;
-	this->job->dependencies->jobID = jobDependencies;
-	return true;
+	this->job->dependencies->jobID = NULL;
+	return this->job->dependencies->setJobID(numberOfDependencies, jobDependencies);
 }//setJobDependencies
 
-bool OSOption::setAnotherJobDependency(std::string jobID){
-	if (this->job == NULL) 
+bool OSOption::setAnotherJobDependency(std::string jobID)
+{	if (this->job == NULL) 
 		this->job = new JobOption();
 	if (this->job->dependencies == NULL) 
 		this->job->dependencies = new JobDependencies();
+	return this->job->dependencies->addJobID(jobID);
 
-	int nopt;
-	if (this->job->dependencies->jobID == NULL) 
-		nopt = 0;
-	else
-		nopt = this->job->dependencies->numberOfJobIDs;
-	std::string* temp = new std::string[nopt+1];
-	for (int i = 0; i < nopt; i++){
-		temp[i] = this->job->dependencies->jobID[i]; // create the new jobID
-	}
-	cout << "delete old dependencies list" << endl;
-	delete[] this->job->dependencies->jobID;
-	temp[nopt] = jobID;
-	// fill everything back in
-	this->job->dependencies->jobID = temp;
-	this->job->dependencies->numberOfJobIDs = ++nopt;
-	return true;
+//	int nopt;
+//	if (this->job->dependencies->jobID == NULL) 
+//		nopt = 0;
+//	else
+//		nopt = this->job->dependencies->numberOfJobIDs;
+//	std::string* temp = new std::string[nopt+1];
+//	for (int i = 0; i < nopt; i++){
+//		temp[i] = this->job->dependencies->jobID[i]; // create the new jobID
+//	}
+//	cout << "delete old dependencies list" << endl;
+//	delete[] this->job->dependencies->jobID;
+//	temp[nopt] = jobID;
+//	// fill everything back in
+//	this->job->dependencies->jobID = temp;
+//	this->job->dependencies->numberOfJobIDs = ++nopt;
+//	return true;
 }//setAnotherJobDependency
 
 
@@ -3277,9 +4662,8 @@ bool OSOption::setRequiredDirectories(int numberOfPaths, std::string* paths)
 		this->job->requiredDirectories = new DirectoriesAndFiles();
 	else
 		delete[] this->job->requiredDirectories->path;
-	this->job->requiredDirectories->numberOfPaths = numberOfPaths;
-	this->job->requiredDirectories->path = paths;
-	return true;
+	this->job->requiredDirectories->path = NULL;
+	return this->job->requiredDirectories->setPath(numberOfPaths, paths);
 }//setRequiredDirectories
 
 bool OSOption::setAnotherRequiredDirectory(std::string path)
@@ -3287,24 +4671,7 @@ bool OSOption::setAnotherRequiredDirectory(std::string path)
 		this->job = new JobOption();
 	if (this->job->requiredDirectories == NULL) 
 		this->job->requiredDirectories = new DirectoriesAndFiles();
-
-	int nopt;
-	if (this->job->requiredDirectories->path == NULL) 
-		nopt = 0;
-	else
-		nopt = this->job->requiredDirectories->numberOfPaths;
-
-	std::string* temp = new std::string[nopt+1];
-	for (int i = 0; i < nopt; i++)
-		temp[i] = this->job->requiredDirectories->path[i];
-	
-	delete[] this->job->requiredDirectories->path;
-
-	temp[nopt] = path;
-	this->job->requiredDirectories->path = temp;
-	this->job->requiredDirectories->numberOfPaths = ++nopt;
-
-	return true;
+	return this->job->requiredDirectories->addPath(path);
 }//setAnotherRequiredDirectory
 
 bool OSOption::setNumberOfRequiredFiles(int numberOfObjects)
@@ -3323,9 +4690,8 @@ bool OSOption::setRequiredFiles(int numberOfPaths, std::string* paths)
 		this->job->requiredFiles = new DirectoriesAndFiles();
 	else
 		delete[] this->job->requiredFiles->path;
-	this->job->requiredFiles->numberOfPaths = numberOfPaths;
-	this->job->requiredFiles->path = paths;
-	return true;
+	this->job->requiredFiles->path = NULL;
+	return this->job->requiredFiles->setPath(numberOfPaths, paths);
 }//setRequiredFiles
 
 bool OSOption::setAnotherRequiredFile(std::string path)
@@ -3333,24 +4699,7 @@ bool OSOption::setAnotherRequiredFile(std::string path)
 		this->job = new JobOption();
 	if (this->job->requiredFiles == NULL) 
 		this->job->requiredFiles = new DirectoriesAndFiles();
-
-	int nopt;
-	if (this->job->requiredFiles->path == NULL) 
-		nopt = 0;
-	else
-		nopt = this->job->requiredFiles->numberOfPaths;
-
-	std::string* temp = new std::string[nopt+1];
-	for (int i = 0; i < nopt; i++)
-		temp[i] = this->job->requiredFiles->path[i];
-	
-	delete[] this->job->requiredFiles->path;
-
-	temp[nopt] = path;
-	this->job->requiredFiles->path = temp;
-	this->job->requiredFiles->numberOfPaths = ++nopt;
-
-	return true;
+	return this->job->requiredFiles->addPath(path);
 }//setAnotherRequiredFile
 
 bool OSOption::setNumberOfDirectoriesToMake(int numberOfObjects)
@@ -3369,9 +4718,8 @@ bool OSOption::setDirectoriesToMake(int numberOfPaths, std::string* paths)
 		this->job->directoriesToMake = new DirectoriesAndFiles();
 	else
 		delete[] this->job->directoriesToMake->path;
-	this->job->directoriesToMake->numberOfPaths = numberOfPaths;
-	this->job->directoriesToMake->path = paths;
-	return true;
+	this->job->directoriesToMake->path = NULL;
+	return this->job->directoriesToMake->setPath(numberOfPaths, paths);
 }//setDirectoriesToMake
 
 bool OSOption::setAnotherDirectoryToMake(std::string path)
@@ -3379,35 +4727,7 @@ bool OSOption::setAnotherDirectoryToMake(std::string path)
 		this->job = new JobOption();
 	if (this->job->directoriesToMake == NULL) 
 		this->job->directoriesToMake = new DirectoriesAndFiles();
-
-	int nopt;
-	if (this->job->directoriesToMake->path == NULL) 
-		nopt = 0;
-	else
-		nopt = this->job->directoriesToMake->numberOfPaths;
-
-	std::string* temp = new std::string[nopt+1];
-
-	cout << "copy old directory list" << endl;
-
-	for (int i = 0; i < nopt; i++)
-		temp[i] = this->job->directoriesToMake->path[i];
-	
-	cout << "delete old list" << endl;
-
-	delete[] this->job->directoriesToMake->path; 
-
-	cout << "point to the new list" << endl;
-
-	temp[nopt] = path;
-
-	cout << "add new path" << endl;
-
-	this->job->directoriesToMake->path = temp;
-	this->job->directoriesToMake->numberOfPaths = ++nopt;
-
-	cout << "finished" << endl;
-	return true;
+	return this->job->directoriesToMake->addPath(path);
 }//setAnotherDirectoryToMake
 
 bool OSOption::setNumberOfFilesToMake(int numberOfObjects)
@@ -3426,9 +4746,8 @@ bool OSOption::setFilesToMake(int numberOfPaths, std::string* paths)
 		this->job->filesToMake = new DirectoriesAndFiles();
 	else
 		delete[] this->job->filesToMake->path;
-	this->job->filesToMake->numberOfPaths = numberOfPaths;
-	this->job->filesToMake->path = paths;
-	return true;
+	this->job->filesToMake->path = NULL;
+	return this->job->filesToMake->setPath(numberOfPaths, paths);
 }//setFilesToMake
 
 bool OSOption::setAnotherFileToMake(std::string path)
@@ -3436,24 +4755,7 @@ bool OSOption::setAnotherFileToMake(std::string path)
 		this->job = new JobOption();
 	if (this->job->filesToMake == NULL) 
 		this->job->filesToMake = new DirectoriesAndFiles();
-
-	int nopt;
-	if (this->job->filesToMake->path == NULL) 
-		nopt = 0;
-	else
-		nopt = this->job->filesToMake->numberOfPaths;
-
-	std::string* temp = new std::string[nopt+1];
-	for (int i = 0; i < nopt; i++)
-		temp[i] = this->job->filesToMake->path[i];
-	
-	delete[] this->job->filesToMake->path;
-
-	temp[nopt] = path;
-	this->job->filesToMake->path = temp;
-	this->job->filesToMake->numberOfPaths = ++nopt;
-
-	return true;
+	return this->job->filesToMake->addPath(path);
 }//setAnotherFileToMake
 
 bool OSOption::setNumberOfInputDirectoriesToMove(int numberOfObjects)
@@ -3472,9 +4774,8 @@ bool OSOption::setInputDirectoriesToMove(int numberOfPathPairs, PathPair** pathP
 		this->job->inputDirectoriesToMove = new PathPairs();
 	else
 		delete[] this->job->inputDirectoriesToMove->pathPair;
-	this->job->inputDirectoriesToMove->numberOfPathPairs = numberOfPathPairs;
-	this->job->inputDirectoriesToMove->pathPair = pathPair;
-	return true;
+	this->job->inputDirectoriesToMove->pathPair = NULL;
+	return this->job->inputDirectoriesToMove->setPathPair(numberOfPathPairs, pathPair);
 }//setInputDirectoriesToMove
 
 bool OSOption::setAnotherInputDirectoryToMove(std::string fromPath, std::string toPath, bool makeCopy)
@@ -3482,31 +4783,8 @@ bool OSOption::setAnotherInputDirectoryToMove(std::string fromPath, std::string 
 		this->job = new JobOption();
 	if (this->job->inputDirectoriesToMove == NULL) 
 		this->job->inputDirectoriesToMove = new PathPairs();
-
-	int nopt;
-	if (this->job->inputDirectoriesToMove->pathPair == NULL) 
-		nopt = 0;
-	else
-		nopt = this->job->inputDirectoriesToMove->numberOfPathPairs;
-
-	PathPair** temp = new PathPair*[nopt+1];
-	for (int i = 0; i < nopt; i++)
-		temp[i] = this->job->inputDirectoriesToMove->pathPair[i];
-	
-	delete[] this->job->inputDirectoriesToMove->pathPair;
-
-	temp[nopt] = new PathPair();
-	temp[nopt]->from = fromPath;
-	temp[nopt]->to = toPath;
-	temp[nopt]->makeCopy = makeCopy;
-
-	this->job->inputDirectoriesToMove->pathPair = temp;
-	this->job->inputDirectoriesToMove->numberOfPathPairs = ++nopt;
-
-	return true;
+	return this->job->inputDirectoriesToMove->addPathPair(fromPath, toPath, makeCopy);
 }//setAnotherInputDirectoryToMove
-
-
 
 bool OSOption::setNumberOfInputFilesToMove(int numberOfObjects)
 {	if (this->job == NULL) 
@@ -3524,9 +4802,8 @@ bool OSOption::setInputFilesToMove(int numberOfPathPairs, PathPair** pathPair)
 		this->job->inputFilesToMove = new PathPairs();
 	else
 		delete[] this->job->inputFilesToMove->pathPair;
-	this->job->inputFilesToMove->numberOfPathPairs = numberOfPathPairs;
-	this->job->inputFilesToMove->pathPair = pathPair;
-	return true;
+	this->job->inputFilesToMove->pathPair = NULL;
+	return this->job->inputFilesToMove->setPathPair(numberOfPathPairs, pathPair);
 }//setInputFilesToMove
 
 bool OSOption::setAnotherInputFileToMove(std::string fromPath, std::string toPath, bool makeCopy)
@@ -3534,28 +4811,7 @@ bool OSOption::setAnotherInputFileToMove(std::string fromPath, std::string toPat
 		this->job = new JobOption();
 	if (this->job->inputFilesToMove == NULL) 
 		this->job->inputFilesToMove = new PathPairs();
-
-	int nopt;
-	if (this->job->inputFilesToMove->pathPair == NULL) 
-		nopt = 0;
-	else
-		nopt = this->job->inputFilesToMove->numberOfPathPairs;
-
-	PathPair** temp = new PathPair*[nopt+1];
-	for (int i = 0; i < nopt; i++)
-		temp[i] = this->job->inputFilesToMove->pathPair[i];
-	
-	delete[] this->job->inputFilesToMove->pathPair;
-
-	temp[nopt] = new PathPair();
-	temp[nopt]->from = fromPath;
-	temp[nopt]->to = toPath;
-	temp[nopt]->makeCopy = makeCopy;
-
-	this->job->inputFilesToMove->pathPair = temp;
-	this->job->inputFilesToMove->numberOfPathPairs = ++nopt;
-
-	return true;
+	return this->job->inputFilesToMove->addPathPair(fromPath, toPath, makeCopy);
 }//setAnotherInputFileToMove
 
 
@@ -3575,9 +4831,8 @@ bool OSOption::setOutputFilesToMove(int numberOfPathPairs, PathPair** pathPair)
 		this->job->outputFilesToMove = new PathPairs();
 	else
 		delete[] this->job->outputFilesToMove->pathPair;
-	this->job->outputFilesToMove->numberOfPathPairs = numberOfPathPairs;
-	this->job->outputFilesToMove->pathPair = pathPair;
-	return true;
+	this->job->outputFilesToMove->pathPair = NULL;
+	return this->job->outputFilesToMove->setPathPair(numberOfPathPairs, pathPair);
 }//setOutputFilesToMove
 
 bool OSOption::setAnotherOutputFileToMove(std::string fromPath, std::string toPath, bool makeCopy)
@@ -3585,28 +4840,7 @@ bool OSOption::setAnotherOutputFileToMove(std::string fromPath, std::string toPa
 		this->job = new JobOption();
 	if (this->job->outputFilesToMove == NULL) 
 		this->job->outputFilesToMove = new PathPairs();
-
-	int nopt;
-	if (this->job->outputFilesToMove->pathPair == NULL) 
-		nopt = 0;
-	else
-		nopt = this->job->outputFilesToMove->numberOfPathPairs;
-
-	PathPair** temp = new PathPair*[nopt+1];
-	for (int i = 0; i < nopt; i++)
-		temp[i] = this->job->outputFilesToMove->pathPair[i];
-	
-	delete[] this->job->outputFilesToMove->pathPair;
-
-	temp[nopt] = new PathPair();
-	temp[nopt]->from = fromPath;
-	temp[nopt]->to = toPath;
-	temp[nopt]->makeCopy = makeCopy;
-
-	this->job->outputFilesToMove->pathPair = temp;
-	this->job->outputFilesToMove->numberOfPathPairs = ++nopt;
-
-	return true;
+	return this->job->outputFilesToMove->addPathPair(fromPath, toPath, makeCopy);
 }//setAnotherOutputFileToMove
 
 
@@ -3626,9 +4860,8 @@ bool OSOption::setOutputDirectoriesToMove(int numberOfPathPairs, PathPair** path
 		this->job->outputDirectoriesToMove = new PathPairs();
 	else
 		delete[] this->job->outputDirectoriesToMove->pathPair;
-	this->job->outputDirectoriesToMove->numberOfPathPairs = numberOfPathPairs;
-	this->job->outputDirectoriesToMove->pathPair = pathPair;
-	return true;
+	this->job->outputDirectoriesToMove->pathPair = NULL;
+	return this->job->outputDirectoriesToMove->setPathPair(numberOfPathPairs, pathPair);
 }//setOutputDirectoriesToMove
 
 bool OSOption::setAnotherOutputDirectoryToMove(std::string fromPath, std::string toPath, bool makeCopy)
@@ -3636,28 +4869,7 @@ bool OSOption::setAnotherOutputDirectoryToMove(std::string fromPath, std::string
 		this->job = new JobOption();
 	if (this->job->outputDirectoriesToMove == NULL) 
 		this->job->outputDirectoriesToMove = new PathPairs();
-
-	int nopt;
-	if (this->job->outputDirectoriesToMove->pathPair == NULL) 
-		nopt = 0;
-	else
-		nopt = this->job->outputDirectoriesToMove->numberOfPathPairs;
-
-	PathPair** temp = new PathPair*[nopt+1];
-	for (int i = 0; i < nopt; i++)
-		temp[i] = this->job->outputDirectoriesToMove->pathPair[i];
-	
-	delete[] this->job->outputDirectoriesToMove->pathPair;
-
-	temp[nopt] = new PathPair();
-	temp[nopt]->from = fromPath;
-	temp[nopt]->to = toPath;
-	temp[nopt]->makeCopy = makeCopy;
-
-	this->job->outputDirectoriesToMove->pathPair = temp;
-	this->job->outputDirectoriesToMove->numberOfPathPairs = ++nopt;
-
-	return true;
+	return this->job->outputDirectoriesToMove->addPathPair(fromPath, toPath, makeCopy);
 }//setAnotherOutputDirectoryToMove
 
 
@@ -3677,9 +4889,8 @@ bool OSOption::setFilesToDelete(int numberOfPaths, std::string* paths)
 		this->job->filesToDelete = new DirectoriesAndFiles();
 	else
 		delete[] this->job->filesToDelete->path;
-	this->job->filesToDelete->numberOfPaths = numberOfPaths;
-	this->job->filesToDelete->path = paths;
-	return true;
+	this->job->filesToDelete->path = NULL;
+	return this->job->filesToDelete->setPath(numberOfPaths, paths);
 }//setFilesToDelete
 
 bool OSOption::setAnotherFileToDelete(std::string path)
@@ -3687,24 +4898,7 @@ bool OSOption::setAnotherFileToDelete(std::string path)
 		this->job = new JobOption();
 	if (this->job->filesToDelete == NULL) 
 		this->job->filesToDelete = new DirectoriesAndFiles();
-
-	int nopt;
-	if (this->job->filesToDelete->path == NULL) 
-		nopt = 0;
-	else
-		nopt = this->job->filesToDelete->numberOfPaths;
-
-	std::string* temp = new std::string[nopt+1];
-	for (int i = 0; i < nopt; i++)
-		temp[i] = this->job->filesToDelete->path[i];
-	
-	delete[] this->job->filesToDelete->path;
-
-	temp[nopt] = path;
-	this->job->filesToDelete->path = temp;
-	this->job->filesToDelete->numberOfPaths = ++nopt;
-
-	return true;
+	return this->job->filesToDelete->addPath(path);
 }//setAnotherFileToDelete
 
 bool OSOption::setNumberOfDirectoriesToDelete(int numberOfObjects)
@@ -3723,9 +4917,8 @@ bool OSOption::setDirectoriesToDelete(int numberOfPaths, std::string* paths)
 		this->job->directoriesToDelete = new DirectoriesAndFiles();
 	else
 		delete[] this->job->directoriesToDelete->path;
-	this->job->directoriesToDelete->numberOfPaths = numberOfPaths;
-	this->job->directoriesToDelete->path = paths;
-	return true;
+	this->job->directoriesToDelete->path = NULL;
+	return this->job->directoriesToDelete->setPath(numberOfPaths, paths);
 }//setDirectoriesToDelete
 
 bool OSOption::setAnotherDirectoryToDelete(std::string path)
@@ -3733,24 +4926,7 @@ bool OSOption::setAnotherDirectoryToDelete(std::string path)
 		this->job = new JobOption();
 	if (this->job->directoriesToDelete == NULL) 
 		this->job->directoriesToDelete = new DirectoriesAndFiles();
-
-	int nopt;
-	if (this->job->directoriesToDelete->path == NULL) 
-		nopt = 0;
-	else
-		nopt = this->job->directoriesToDelete->numberOfPaths;
-
-	std::string* temp = new std::string[nopt+1];
-	for (int i = 0; i < nopt; i++)
-		temp[i] = this->job->directoriesToDelete->path[i];
-	
-	delete[] this->job->directoriesToDelete->path;
-
-	temp[nopt] = path;
-	this->job->directoriesToDelete->path = temp;
-	this->job->directoriesToDelete->numberOfPaths = ++nopt;
-
-	return true;
+	return this->job->directoriesToDelete->addPath(path);
 }//setAnotherDirectoryToDelete
 
 bool OSOption::setNumberOfProcessesToKill(int numberOfObjects)
@@ -3769,9 +4945,8 @@ bool OSOption::setProcessesToKill(int numberOfProcesses, std::string* processes)
 		this->job->processesToKill = new Processes();
 	else
 		delete[] this->job->processesToKill->process;
-	this->job->processesToKill->numberOfProcesses = numberOfProcesses;
-	this->job->processesToKill->process = processes;
-	return true;
+	this->job->processesToKill->process = NULL;
+	return this->job->processesToKill->setProcess(numberOfProcesses, processes);
 }//setProcessesToKill
 
 bool OSOption::setAnotherProcessToKill(std::string process)
@@ -3779,24 +4954,7 @@ bool OSOption::setAnotherProcessToKill(std::string process)
 		this->job = new JobOption();
 	if (this->job->processesToKill == NULL) 
 		this->job->processesToKill = new Processes();
-
-	int nopt;
-	if (this->job->processesToKill->process == NULL) 
-		nopt = 0;
-	else
-		nopt = this->job->processesToKill->numberOfProcesses;
-
-	std::string* temp = new std::string[nopt+1];
-	for (int i = 0; i < nopt; i++)
-		temp[i] = this->job->processesToKill->process[i];
-	
-	delete[] this->job->processesToKill->process;
-
-	temp[nopt] = process;
-	this->job->processesToKill->process = temp;
-	this->job->processesToKill->numberOfProcesses = ++nopt;
-
-	return true;
+	return this->job->processesToKill->addProcess(process);
 }//setAnotherProcessToKill
 
 bool OSOption::setNumberOfOtherJobOptions(int numberOfObjects)
@@ -3819,7 +4977,7 @@ bool OSOption::setOtherJobOptions(int numberOfOptions, OtherOption** other)
 		delete[] this->job->otherOptions->other;
 		this->job->otherOptions->other = NULL;
 	}
-	return this->job->otherOptions->setOtherOptions(numberOfOptions, other);
+	return this->job->otherOptions->setOther(numberOfOptions, other);
 }//setOtherJobOptions
 
 bool OSOption::setAnOtherJobOption(std::string name, std::string value, std::string description)
@@ -3827,7 +4985,7 @@ bool OSOption::setAnOtherJobOption(std::string name, std::string value, std::str
 		this->job = new JobOption();
 	if (this->job->otherOptions == NULL) 
 		this->job->otherOptions = new OtherOptions();
-	return this->job->otherOptions->setAnOtherOption(name, value, description);
+	return this->job->otherOptions->addOther(name, value, description);
 }//setAnOtherJobOption
 
 
@@ -3873,10 +5031,12 @@ bool OSOption::setInitVarValuesSparse(int numberOfVar, InitVarValue** var)
 	if (this->optimization->variables->initialVariableValues == NULL) 
 		this->optimization->variables->initialVariableValues = new InitVariableValues();
 	else
+	{	for (int i = 0; i < this->optimization->variables->initialVariableValues->numberOfVar; i++)
+			delete this->optimization->variables->initialVariableValues->var[i];
 		delete[] this->optimization->variables->initialVariableValues->var;
-	this->optimization->variables->initialVariableValues->numberOfVar = numberOfVar;
-	this->optimization->variables->initialVariableValues->var = var;
-		return true;
+		this->optimization->variables->initialVariableValues->var = NULL;
+	}
+	return this->optimization->variables->initialVariableValues->setVar(numberOfVar, var);
 }//setInitVarValuesSparse
 
 bool OSOption::setInitVarValuesDense(int numberOfVar, int *idx, double *value)
@@ -3888,15 +5048,14 @@ bool OSOption::setInitVarValuesDense(int numberOfVar, int *idx, double *value)
 		this->optimization->variables->initialVariableValues = new InitVariableValues();
 	else
 	{	delete[] this->optimization->variables->initialVariableValues->var;
-		delete   this->optimization->variables->initialVariableValues->var;
+		this->optimization->variables->initialVariableValues->var = NULL;
 	}
-		this->optimization->variables->initialVariableValues->var = new InitVarValue*[numberOfVar];
 	for (int i = 0; i < numberOfVar; i++)
-	{	this->optimization->variables->initialVariableValues->var[i] = new InitVarValue();
-		this->optimization->variables->initialVariableValues->var[i]->idx = idx[i];
-		this->optimization->variables->initialVariableValues->var[i]->value = value[i];
+	{	if (value[i] != OSNAN)
+			if (!this->optimization->variables->initialVariableValues->addVar(idx[i], value[i]))
+				return false;
 	}
-		return true;
+	return true;
 }//setInitVarValuesDense
 
 bool OSOption::setAnotherInitVarValue(int idx, double value)
@@ -3906,26 +5065,7 @@ bool OSOption::setAnotherInitVarValue(int idx, double value)
 		this->optimization->variables = new VariableOption();
 	if (this->optimization->variables->initialVariableValues == NULL) 
 		this->optimization->variables->initialVariableValues = new InitVariableValues();
-	int nvar;
-	if (this->optimization->variables->initialVariableValues->var == NULL) 
-		nvar = 0;
-	else
-		nvar = this->optimization->variables->initialVariableValues->numberOfVar;
-
-	InitVarValue** temp = new InitVarValue*[nvar+1];
-	for (int i = 0; i < nvar; i++)
-		temp[i] = this->optimization->variables->initialVariableValues->var[i];
-	
-	delete[] this->optimization->variables->initialVariableValues->var;
-	
-	temp[nvar] = new InitVarValue();
-	temp[nvar]->idx = idx;
-	temp[nvar]->value = value;
-
-	this->optimization->variables->initialVariableValues->var = temp;
-	this->optimization->variables->initialVariableValues->numberOfVar = ++nvar;
-
-	return true;
+	return this->optimization->variables->initialVariableValues->addVar(idx, value);
 }//setAnotherInitVarValue
 
 
@@ -3941,30 +5081,6 @@ bool OSOption::setNumberOfInitVarValuesString(int numberOfObjects)
 }//setNumberOfInitVarValuesString
 
 
-bool OSOption::setInitVarValuesStringDense(int numberOfVar, int *idx, std::string *value)
-{	if (this->optimization == NULL) 
-		this->optimization = new OptimizationOption();
-	if (this->optimization->variables == NULL) 
-		this->optimization->variables = new VariableOption();
-	if (this->optimization->variables->initialVariableValuesString == NULL) 
-		this->optimization->variables->initialVariableValuesString = new InitVariableValuesString();
-	else
-		if (numberOfVar != this->optimization->variables->initialVariableValuesString->numberOfVar)
-			throw ErrorClass("Inconsistent size of <initialVariableValuesString> element");
-	if (this->optimization->variables->initialVariableValuesString->var == NULL) 
-	{	this->optimization->variables->initialVariableValuesString->var = new InitVarValueString*[numberOfVar];
-		for (int i = 0; i < numberOfVar; i++)
-			this->optimization->variables->initialVariableValuesString->var[i] = new InitVarValueString();
-		
-	}
-	for (int i = 0; i < numberOfVar; i++)
-	{	this->optimization->variables->initialVariableValuesString->var[i]->idx = idx[i];
-		this->optimization->variables->initialVariableValuesString->var[i]->value = value[i];
-	}
-
-		return true;
-}//setInitVarValuesStringDense
-
 bool OSOption::setInitVarValuesStringSparse(int numberOfVar, InitVarValueString** var)
 {	if (this->optimization == NULL) 
 		this->optimization = new OptimizationOption();
@@ -3973,18 +5089,31 @@ bool OSOption::setInitVarValuesStringSparse(int numberOfVar, InitVarValueString*
 	if (this->optimization->variables->initialVariableValuesString == NULL) 
 		this->optimization->variables->initialVariableValuesString = new InitVariableValuesString();
 	else
-		if (numberOfVar != this->optimization->variables->initialVariableValuesString->numberOfVar)
-			throw ErrorClass("Inconsistent size of <initialVariableValuesString> element");
-	if (this->optimization->variables->initialVariableValuesString->var == NULL) 
-	{	this->optimization->variables->initialVariableValuesString->var = new InitVarValueString*[numberOfVar];
-		for (int i = 0; i < numberOfVar; i++)
-			this->optimization->variables->initialVariableValuesString->var[i] = new InitVarValueString();
+	{	for (int i = 0; i < this->optimization->variables->initialVariableValuesString->numberOfVar; i++)
+			delete this->optimization->variables->initialVariableValuesString->var[i];
+		delete[] this->optimization->variables->initialVariableValuesString->var;
+		this->optimization->variables->initialVariableValuesString->var = NULL;
+	}
+	return this->optimization->variables->initialVariableValuesString->setVar(numberOfVar, var);
+}//setInitVarValuesStringSparse
+
+bool OSOption::setInitVarValuesStringDense(int numberOfVar, int *idx, std::string *value)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->variables == NULL) 
+		this->optimization->variables = new VariableOption();
+	if (this->optimization->variables->initialVariableValuesString == NULL) 
+		this->optimization->variables->initialVariableValuesString = new InitVariableValuesString();
+	else
+	{	delete[] this->optimization->variables->initialVariableValuesString->var;
+		this->optimization->variables->initialVariableValuesString->var = NULL;
 	}
 	for (int i = 0; i < numberOfVar; i++)
-		this->optimization->variables->initialVariableValuesString->var[i] = var[i];
-
+	{	if (!this->optimization->variables->initialVariableValuesString->addVar(idx[i], value[i]))
+			return false;
+	}
 		return true;
-}//setInitVarValuesStringSparse
+}//setInitVarValuesStringDense
 
 bool OSOption::setAnotherInitVarValueString(int idx, std::string value)
 {	if (this->optimization == NULL) 
@@ -3993,26 +5122,7 @@ bool OSOption::setAnotherInitVarValueString(int idx, std::string value)
 		this->optimization->variables = new VariableOption();
 	if (this->optimization->variables->initialVariableValuesString == NULL) 
 		this->optimization->variables->initialVariableValuesString = new InitVariableValuesString();
-	int nvar;
-	if (this->optimization->variables->initialVariableValuesString->var == NULL) 
-		nvar = 0;
-	else
-		nvar = this->optimization->variables->initialVariableValuesString->numberOfVar;
-
-	InitVarValueString** temp = new InitVarValueString*[nvar+1];
-	for (int i = 0; i < nvar; i++)
-		temp[i] = this->optimization->variables->initialVariableValuesString->var[i];
-
-	delete[] this->optimization->variables->initialVariableValuesString->var;
-	
-	temp[nvar] = new InitVarValueString();
-	temp[nvar]->idx = idx;
-	temp[nvar]->value = value;
-
-	this->optimization->variables->initialVariableValuesString->var = temp;
-	this->optimization->variables->initialVariableValuesString->numberOfVar = ++nvar;
-
-	return true;
+	return this->optimization->variables->initialVariableValuesString->addVar(idx, value);
 }//setAnotherInitVarValueString
 
 
@@ -4028,30 +5138,6 @@ bool OSOption::setNumberOfInitialBasisVariables(int numberOfObjects)
 	return true;
 }//setNumberOfInitialBasisVariables
 
-bool OSOption::setInitBasisStatusDense(int numberOfVar, int *idx, std::string *value)
-{	if (this->optimization == NULL) 
-		this->optimization = new OptimizationOption();
-	if (this->optimization->variables == NULL) 
-		this->optimization->variables = new VariableOption();
-	if (this->optimization->variables->initialBasisStatus == NULL) 
-		this->optimization->variables->initialBasisStatus = new InitialBasisStatus();
-	else
-		if (numberOfVar != this->optimization->variables->initialBasisStatus->numberOfVar)
-			throw ErrorClass("Inconsistent size of <initialBasisStatus> element");
-	if (this->optimization->variables->initialBasisStatus->var == NULL) 
-	{	this->optimization->variables->initialBasisStatus->var = new InitBasStatus*[numberOfVar];
-		for (int i = 0; i < numberOfVar; i++)
-			this->optimization->variables->initialBasisStatus->var[i] = new InitBasStatus();
-		
-	}
-	for (int i = 0; i < numberOfVar; i++)
-	{	this->optimization->variables->initialBasisStatus->var[i]->idx = idx[i];
-		this->optimization->variables->initialBasisStatus->var[i]->value = value[i];
-	}
-
-		return true;
-}//setInitBasisStatusDense
-
 bool OSOption::setInitBasisStatusSparse(int numberOfVar, InitBasStatus** var)
 {	if (this->optimization == NULL) 
 		this->optimization = new OptimizationOption();
@@ -4060,18 +5146,33 @@ bool OSOption::setInitBasisStatusSparse(int numberOfVar, InitBasStatus** var)
 	if (this->optimization->variables->initialBasisStatus == NULL) 
 		this->optimization->variables->initialBasisStatus = new InitialBasisStatus();
 	else
-		if (numberOfVar != this->optimization->variables->initialBasisStatus->numberOfVar)
-			throw ErrorClass("Inconsistent size of <initialBasisStatus> element");
-	if (this->optimization->variables->initialBasisStatus->var == NULL) 
-	{	this->optimization->variables->initialBasisStatus->var = new InitBasStatus*[numberOfVar];
-		for (int i = 0; i < numberOfVar; i++)
-			this->optimization->variables->initialBasisStatus->var[i] = new InitBasStatus();
+	{	for (int i = 0; i < this->optimization->variables->initialBasisStatus->numberOfVar; i++)
+			delete this->optimization->variables->initialBasisStatus->var[i];
+		delete[] this->optimization->variables->initialBasisStatus->var;
+		this->optimization->variables->initialBasisStatus->var = NULL;
+	}
+	return this->optimization->variables->initialBasisStatus->setVar(numberOfVar, var);
+}//setInitBasisStatusSparse
+
+bool OSOption::setInitBasisStatusDense(int numberOfVar, int *idx, std::string *value)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->variables == NULL) 
+		this->optimization->variables = new VariableOption();
+	if (this->optimization->variables->initialBasisStatus == NULL) 
+		this->optimization->variables->initialBasisStatus = new InitialBasisStatus();
+	else
+	{	delete[] this->optimization->variables->initialBasisStatus->var;
+		this->optimization->variables->initialBasisStatus->var = NULL;
 	}
 	for (int i = 0; i < numberOfVar; i++)
-		this->optimization->variables->initialBasisStatus->var[i] = var[i];
-
-		return true;
-}//setInitBasisStatusSparse
+	{	if ((value[i] != "superbasic") && (value[i] != "atLower") && (value[i] != "basic")
+	                                   && (value[i] != "atUpper") && (value[i] != "unknown"))
+			if (!this->optimization->variables->initialBasisStatus->addVar(idx[i], value[i]))
+				return false;
+	}
+	return true;
+}//setInitBasisStatusDense
 
 bool OSOption::setAnotherInitBasisStatus(int idx, std::string value)
 {	if (this->optimization == NULL) 
@@ -4080,27 +5181,103 @@ bool OSOption::setAnotherInitBasisStatus(int idx, std::string value)
 		this->optimization->variables = new VariableOption();
 	if (this->optimization->variables->initialBasisStatus == NULL) 
 		this->optimization->variables->initialBasisStatus = new InitialBasisStatus();
-	int nvar;
-	if (this->optimization->variables->initialBasisStatus->var == NULL) 
-		nvar = 0;
-	else
-		nvar = this->optimization->variables->initialBasisStatus->numberOfVar;
-
-	InitBasStatus** temp = new InitBasStatus*[nvar+1];
-	for (int i = 0; i < nvar; i++)
-		temp[i] = this->optimization->variables->initialBasisStatus->var[i];
-
-	delete[] this->optimization->variables->initialBasisStatus->var;
-	
-	temp[nvar] = new InitBasStatus();
-	temp[nvar]->idx = idx;
-	temp[nvar]->value = value;
-
-	this->optimization->variables->initialBasisStatus->var = temp;
-	this->optimization->variables->initialBasisStatus->numberOfVar = ++nvar;
-
-	return true;
+	return this->optimization->variables->initialBasisStatus->addVar(idx, value);
 }//setAnotherInitBasisStatus
+
+bool OSOption::setNumberOfIntegerVariableBranchingWeights(int numberOfObjects)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->variables == NULL) 
+		this->optimization->variables = new VariableOption();
+	if (this->optimization->variables->integerVariableBranchingWeights == NULL) 
+		this->optimization->variables->integerVariableBranchingWeights = new IntegerVariableBranchingWeights();
+	this->optimization->variables->integerVariableBranchingWeights->numberOfVar = numberOfObjects;
+	return true;
+}//setNumberOfIntegerVariableBranchingWeights
+
+bool OSOption::setIntegerVariableBranchingWeightsSparse(int numberOfVar, BranchingWeight** var)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->variables == NULL) 
+		this->optimization->variables = new VariableOption();
+	if (this->optimization->variables->integerVariableBranchingWeights == NULL) 
+		this->optimization->variables->integerVariableBranchingWeights = new IntegerVariableBranchingWeights();
+	else
+	{	for (int i = 0; i < this->optimization->variables->integerVariableBranchingWeights->numberOfVar; i++)
+			delete this->optimization->variables->integerVariableBranchingWeights->var[i];
+		delete[] this->optimization->variables->integerVariableBranchingWeights->var;
+		this->optimization->variables->integerVariableBranchingWeights->var = NULL;
+	}
+	return this->optimization->variables->integerVariableBranchingWeights->setVar(numberOfVar, var);
+}//setIntegerVariableBranchingWeightsSparse
+
+bool OSOption::setIntegerVariableBranchingWeightsDense(int numberOfVar, int *idx, double *value)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->variables == NULL) 
+		this->optimization->variables = new VariableOption();
+	if (this->optimization->variables->integerVariableBranchingWeights == NULL) 
+		this->optimization->variables->integerVariableBranchingWeights = new IntegerVariableBranchingWeights();
+	else
+	{	delete[] this->optimization->variables->integerVariableBranchingWeights->var;
+		this->optimization->variables->integerVariableBranchingWeights->var = NULL;
+	}
+	for (int i = 0; i < numberOfVar; i++)
+	{	if (value[i] != OSNAN)
+			if (!this->optimization->variables->integerVariableBranchingWeights->addVar(idx[i], value[i]))
+				return false;
+	}
+	return true;
+}//setIntegerVariableBranchingWeightsDense
+
+bool OSOption::setAnotherIntegerVariableBranchingWeight(int idx, double value)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->variables == NULL) 
+		this->optimization->variables = new VariableOption();
+	if (this->optimization->variables->integerVariableBranchingWeights == NULL) 
+		this->optimization->variables->integerVariableBranchingWeights = new IntegerVariableBranchingWeights();
+	return this->optimization->variables->integerVariableBranchingWeights->addVar(idx, value);
+}//setAnotherIntegerVariableBranchingWeight
+
+bool OSOption::setNumberOfSOSVariableBranchingWeights(int numberOfObjects)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->variables == NULL) 
+		this->optimization->variables = new VariableOption();
+	if (this->optimization->variables->sosVariableBranchingWeights == NULL) 
+		this->optimization->variables->sosVariableBranchingWeights = new SOSVariableBranchingWeights();
+	this->optimization->variables->sosVariableBranchingWeights->numberOfSOS = numberOfObjects;
+	return true;
+}//setNumberOfSOSVariableBranchingWeights
+
+bool OSOption::setSOSVariableBranchingWeights(int numberOfSOS, SOSWeights** sos)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->variables == NULL) 
+		this->optimization->variables = new VariableOption();
+	if (this->optimization->variables->sosVariableBranchingWeights == NULL) 
+		this->optimization->variables->sosVariableBranchingWeights = new SOSVariableBranchingWeights();
+	else
+	{	for (int i = 0; i < this->optimization->variables->sosVariableBranchingWeights->numberOfSOS; i++)
+			delete this->optimization->variables->sosVariableBranchingWeights->sos[i];
+		delete[] this->optimization->variables->sosVariableBranchingWeights->sos;
+		this->optimization->variables->sosVariableBranchingWeights->sos = NULL;
+	}
+	return this->optimization->variables->sosVariableBranchingWeights->setSOS(numberOfSOS, sos);
+}//setSOSVariableBranchingWeights
+
+bool OSOption::setAnotherSOSVariableBranchingWeight(int sosIdx, int nvar, double weight, int* idx, int* value)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->variables == NULL) 
+		this->optimization->variables = new VariableOption();
+	if (this->optimization->variables->sosVariableBranchingWeights == NULL) 
+		this->optimization->variables->sosVariableBranchingWeights = new SOSVariableBranchingWeights();
+	return this->optimization->variables->sosVariableBranchingWeights->addSOS(sosIdx, nvar, weight, idx, value);
+}//setAnotherSOSVariableBranchingWeight
+
+
 
 
 bool OSOption::setNumberOfOtherVariableOptions(int numberOfObjects)
@@ -4118,17 +5295,12 @@ bool OSOption::setOtherVariableOptions(int numberOfOptions, OtherVariableOption*
 	if (this->optimization->variables == NULL)
 		this->optimization->variables = new VariableOption();
 	else
-		if (numberOfOptions != this->optimization->variables->numberOfOtherVariableOptions)
-			throw ErrorClass("Inconsistent size of other variable option element");
-	if (this->optimization->variables->other == NULL) 
-	{	this->optimization->variables->other = new OtherVariableOption*[numberOfOptions];
-		for (int i = 0; i < numberOfOptions; i++)
-			this->optimization->variables->other[i] = new OtherVariableOption();
+	{	for (int i = 0; i < this->optimization->variables->numberOfOtherVariableOptions; i++)
+			delete this->optimization->variables->other[i];
+		delete[] this->optimization->variables->other;
+		this->optimization->variables->other = NULL;
 	}
-	for (int i = 0; i < numberOfOptions; i++)
-		this->optimization->variables->other[i] = other[i];
-
-	return true;
+	return this->optimization->variables->setOther(numberOfOptions, other);
 }//setOtherVariableOptions
 
 bool OSOption::setAnOtherVariableOption(OtherVariableOption* optionValue)
@@ -4136,25 +5308,7 @@ bool OSOption::setAnOtherVariableOption(OtherVariableOption* optionValue)
 		this->optimization = new OptimizationOption();
 	if (this->optimization->variables == NULL)
 		this->optimization->variables = new VariableOption();
-	int nopt;
-	if (this->optimization->variables->other == NULL) 
-		nopt = 0;
-	else
-		nopt = this->optimization->variables->numberOfOtherVariableOptions;
-
-	OtherVariableOption** temp = new OtherVariableOption*[nopt+1];
-	for (int i = 0; i < nopt; i++)
-		temp[i] = this->optimization->variables->other[i];
-
-	delete[] this->optimization->variables->other;
-	
-	temp[nopt] = new OtherVariableOption();
-	temp[nopt] = optionValue;
-
-	this->optimization->variables->other = temp;
-	this->optimization->variables->numberOfOtherVariableOptions = ++nopt;
-
-	return true;
+	return this->optimization->variables->addOther(optionValue);
 }//setAnOtherVariableOption
 
 
@@ -4170,9 +5324,50 @@ bool OSOption::setNumberOfInitObjValues(int numberOfObjects)
 	return true;
 }//setNumberOfInitObjValues
 
-//	bool setInitObjValuesSparse(int numberOfObj, InitObjValue** obj);
-//	bool setInitObjValuesDense(int numberOfObj, double* obj);
-//	bool setAnotherInitObjValue(int idx, double value);
+bool OSOption::setInitObjValuesSparse(int numberOfObj, InitObjValue** obj)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->objectives == NULL) 
+		this->optimization->objectives = new ObjectiveOption();
+	if (this->optimization->objectives->initialObjectiveValues == NULL) 
+		this->optimization->objectives->initialObjectiveValues = new InitObjectiveValues();
+	else
+	{	for (int i = 0; i < this->optimization->objectives->initialObjectiveValues->numberOfObj; i++)
+			delete this->optimization->objectives->initialObjectiveValues->obj[i];
+		delete[] this->optimization->objectives->initialObjectiveValues->obj;
+		this->optimization->objectives->initialObjectiveValues->obj = NULL;
+	}
+	return this->optimization->objectives->initialObjectiveValues->setObj(numberOfObj, obj);
+}//setInitObjValuesSparse
+
+bool OSOption::setInitObjValuesDense(int numberOfObj, int *idx, double *value)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->objectives == NULL) 
+		this->optimization->objectives = new ObjectiveOption();
+	if (this->optimization->objectives->initialObjectiveValues == NULL) 
+		this->optimization->objectives->initialObjectiveValues = new InitObjectiveValues();
+	else
+	{	delete[] this->optimization->objectives->initialObjectiveValues->obj;
+		this->optimization->objectives->initialObjectiveValues->obj = NULL;
+	}
+	for (int i = 0; i < numberOfObj; i++)
+	{	if (value[i] != OSNAN)
+			if (!this->optimization->objectives->initialObjectiveValues->addObj(idx[i], value[i]))
+				return false;
+	}
+	return true;
+}//setInitObjValuesDense
+
+bool OSOption::setAnotherInitObjValue(int idx, double value)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->objectives == NULL) 
+		this->optimization->objectives = new ObjectiveOption();
+	if (this->optimization->objectives->initialObjectiveValues == NULL) 
+		this->optimization->objectives->initialObjectiveValues = new InitObjectiveValues();
+	return this->optimization->objectives->initialObjectiveValues->addObj(idx, value);
+}//setAnotherInitObjValue
 
 bool OSOption::setNumberOfInitObjBounds(int numberOfObjects)
 {	if (this->optimization == NULL) 
@@ -4186,9 +5381,49 @@ bool OSOption::setNumberOfInitObjBounds(int numberOfObjects)
 }//setNumberOfInitObjBounds
 
 
-//	bool setInitObjBoundsSparse(int numberOfObj, InitObjValue** obj);
-//	bool setInitObjBoundsDense(int numberOfObj, double* lb, double* ub);
-//	bool setAnotherInitObjBound(int idx, double lbValue, double ubValue);
+bool OSOption::setInitObjBoundsSparse(int numberOfObj, InitObjBound** obj)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->objectives == NULL) 
+		this->optimization->objectives = new ObjectiveOption();
+	if (this->optimization->objectives->initialObjectiveBounds == NULL) 
+		this->optimization->objectives->initialObjectiveBounds = new InitObjectiveBounds();
+	else
+	{	for (int i = 0; i < this->optimization->objectives->initialObjectiveBounds->numberOfObj; i++)
+			delete this->optimization->objectives->initialObjectiveBounds->obj[i];
+		delete[] this->optimization->objectives->initialObjectiveBounds->obj;
+		this->optimization->objectives->initialObjectiveBounds->obj = NULL;
+	}
+	return this->optimization->objectives->initialObjectiveBounds->setObj(numberOfObj, obj);
+}//setInitObjBoundsSparse
+
+bool OSOption::setInitObjBoundsDense(int numberOfObj, int* idx, double* lb, double* ub)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->objectives == NULL) 
+		this->optimization->objectives = new ObjectiveOption();
+	if (this->optimization->objectives->initialObjectiveBounds == NULL) 
+		this->optimization->objectives->initialObjectiveBounds = new InitObjectiveBounds();
+	else
+	{	delete[] this->optimization->objectives->initialObjectiveBounds->obj;
+		this->optimization->objectives->initialObjectiveBounds->obj = NULL;
+	}
+	for (int i = 0; i < numberOfObj; i++)
+	{	if (!this->optimization->objectives->initialObjectiveBounds->addObj(idx[i], lb[i], ub[i]))
+			return false;
+	}
+	return true;
+}//setInitObjBoundsDense
+
+bool OSOption::setAnotherInitObjBound(int idx, double lb, double ub)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->objectives == NULL) 
+		this->optimization->objectives = new ObjectiveOption();
+	if (this->optimization->objectives->initialObjectiveBounds == NULL) 
+		this->optimization->objectives->initialObjectiveBounds = new InitObjectiveBounds();
+	return this->optimization->objectives->initialObjectiveBounds->addObj(idx, lb, ub);
+}//setAnotherInitObjBound
 
 bool OSOption::setNumberOfOtherObjectiveOptions(int numberOfObjects)
 {	if (this->optimization == NULL)
@@ -4200,8 +5435,27 @@ bool OSOption::setNumberOfOtherObjectiveOptions(int numberOfObjects)
 }//setNumberOfOtherObjectiveOptions
 
 
-//	bool setOtherObjectiveOptions(int numberOfObj, OtherObjOption** obj);
-//	bool setAnOtherObjectiveOption(OtherObjOption* objOption);
+bool OSOption::setOtherObjectiveOptions(int numberOfOptions, OtherObjectiveOption** other)
+{	if (this->optimization == NULL)
+		this->optimization = new OptimizationOption();
+	if (this->optimization->objectives == NULL)
+		this->optimization->objectives = new ObjectiveOption();
+	else
+	{	for (int i = 0; i < this->optimization->objectives->numberOfOtherObjectiveOptions; i++)
+			delete this->optimization->objectives->other[i];
+		delete[] this->optimization->objectives->other;
+		this->optimization->objectives->other = NULL;
+	}
+	return this->optimization->objectives->setOther(numberOfOptions, other);
+}//setOtherObjectiveOptions
+
+bool OSOption::setAnOtherObjectiveOption(OtherObjectiveOption* optionValue)
+{	if (this->optimization == NULL)
+		this->optimization = new OptimizationOption();
+	if (this->optimization->objectives == NULL)
+		this->optimization->objectives = new ObjectiveOption();
+	return this->optimization->objectives->addOther(optionValue);
+}//setAnOtherVariableOption
 
 bool OSOption::setNumberOfInitConValues(int numberOfObjects)
 {	if (this->optimization == NULL) 
@@ -4215,9 +5469,50 @@ bool OSOption::setNumberOfInitConValues(int numberOfObjects)
 }//setNumberOfInitConValues
 
 
-//	bool setInitConValuesSparse(int numberOfCon, InitConValue** con);
-//	bool setInitConValuesDense(int numberOfCon, double* con);
-//	bool setAnotherInitConValue(int idx, double value);
+bool OSOption::setInitConValuesSparse(int numberOfCon, InitConValue** con)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->constraints == NULL) 
+		this->optimization->constraints = new ConstraintOption();
+	if (this->optimization->constraints->initialConstraintValues == NULL) 
+		this->optimization->constraints->initialConstraintValues = new InitConstraintValues();
+	else
+	{	for (int i = 0; i < this->optimization->constraints->initialConstraintValues->numberOfCon; i++)
+			delete this->optimization->constraints->initialConstraintValues->con[i];
+		delete[] this->optimization->constraints->initialConstraintValues->con;
+		this->optimization->constraints->initialConstraintValues->con = NULL;
+	}
+	return this->optimization->constraints->initialConstraintValues->setCon(numberOfCon, con);
+}//setInitConValuesSparse
+
+bool OSOption::setInitConValuesDense(int numberOfCon, int *idx, double *value)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->constraints == NULL) 
+		this->optimization->constraints = new ConstraintOption();
+	if (this->optimization->constraints->initialConstraintValues == NULL) 
+		this->optimization->constraints->initialConstraintValues = new InitConstraintValues();
+	else
+	{	delete[] this->optimization->constraints->initialConstraintValues->con;
+		this->optimization->constraints->initialConstraintValues->con = NULL;
+	}
+	for (int i = 0; i < numberOfCon; i++)
+	{	if (value[i] != OSNAN)
+			if (!this->optimization->constraints->initialConstraintValues->addCon(idx[i], value[i]))
+				return false;
+	}
+	return true;
+}//setInitConValuesDense
+
+bool OSOption::setAnotherInitConValue(int idx, double value)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->constraints == NULL) 
+		this->optimization->constraints = new ConstraintOption();
+	if (this->optimization->constraints->initialConstraintValues == NULL) 
+		this->optimization->constraints->initialConstraintValues = new InitConstraintValues();
+	return this->optimization->constraints->initialConstraintValues->addCon(idx, value);
+}//setAnotherInitConValue
 
 bool OSOption::setNumberOfInitDualVarValues(int numberOfObjects)
 {	if (this->optimization == NULL) 
@@ -4231,9 +5526,50 @@ bool OSOption::setNumberOfInitDualVarValues(int numberOfObjects)
 }//setNumberOfInitDualVarValues
 
 
-//	bool setInitDualVarValuesSparse(int numberOfCon, InitDualVarValue** con);
-//	bool setInitDualVarValuesDense(int numberOfCon, double* lb, double* ub);
-//	bool setAnotherInitDualVarValue(int idx, double lbValue, double ubValue);
+bool OSOption::setInitDualVarValuesSparse(int numberOfCon, InitDualVarValue** con)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->constraints == NULL) 
+		this->optimization->constraints = new ConstraintOption();
+	if (this->optimization->constraints->initialDualValues == NULL) 
+		this->optimization->constraints->initialDualValues = new InitDualVariableValues();
+	else
+	{	for (int i = 0; i < this->optimization->constraints->initialDualValues->numberOfCon; i++)
+			delete this->optimization->constraints->initialDualValues->con[i];
+		delete[] this->optimization->constraints->initialDualValues->con;
+		this->optimization->constraints->initialDualValues->con = NULL;
+	}
+	return this->optimization->constraints->initialDualValues->setCon(numberOfCon, con);
+}//setInitDualVarValuesSparse
+
+bool OSOption::setInitDualVarValuesDense(int numberOfCon, int* idx, double* lb, double* ub)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->constraints == NULL) 
+		this->optimization->constraints = new ConstraintOption();
+	if (this->optimization->constraints->initialDualValues == NULL) 
+		this->optimization->constraints->initialDualValues = new InitDualVariableValues();
+	else
+	{	delete[] this->optimization->constraints->initialDualValues->con;
+		this->optimization->constraints->initialDualValues->con = NULL;
+	}
+	for (int i = 0; i < numberOfCon; i++)
+	{	if (!this->optimization->constraints->initialDualValues->addCon(idx[i], lb[i], ub[i]))
+			return false;
+	}
+	return true;
+}//setInitDualVarValuesDense
+
+bool OSOption::setAnotherInitDualVarValue(int idx, double lbValue, double ubValue)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->constraints == NULL) 
+		this->optimization->constraints = new ConstraintOption();
+	if (this->optimization->constraints->initialDualValues == NULL) 
+		this->optimization->constraints->initialDualValues = new InitDualVariableValues();
+	return this->optimization->constraints->initialDualValues->addCon(idx, lbValue, ubValue);
+}//setAnotherInitConValue
+
 
 bool OSOption::setNumberOfOtherConstraintOptions(int numberOfObjects)
 {	if (this->optimization == NULL)
@@ -4245,8 +5581,27 @@ bool OSOption::setNumberOfOtherConstraintOptions(int numberOfObjects)
 }//setNumberOfOtherConstraintOptions
 
 
-//	bool setOtherConstraintOptions(int numberOfCon, OtherConOption** con);
-//	bool setAnOtherConstraintOption(OtherConOption* conOption);
+bool OSOption::setOtherConstraintOptions(int numberOfOptions, OtherConstraintOption** other)
+{	if (this->optimization == NULL)
+		this->optimization = new OptimizationOption();
+	if (this->optimization->constraints == NULL)
+		this->optimization->constraints = new ConstraintOption();
+	else
+	{	for (int i = 0; i < this->optimization->constraints->numberOfOtherConstraintOptions; i++)
+			delete this->optimization->constraints->other[i];
+		delete[] this->optimization->constraints->other;
+		this->optimization->constraints->other = NULL;
+	}
+	return this->optimization->constraints->setOther(numberOfOptions, other);
+}//setOtherConstraintOptions
+
+bool OSOption::setAnOtherConstraintOption(OtherConstraintOption* optionValue)
+{	if (this->optimization == NULL)
+		this->optimization = new OptimizationOption();
+	if (this->optimization->constraints == NULL)
+		this->optimization->constraints = new ConstraintOption();
+	return this->optimization->constraints->addOther(optionValue);
+}//setAnOtherConstraintOption
 
 
 bool OSOption::setNumberOfSolverOptions(int numberOfObjects)
@@ -4259,11 +5614,28 @@ bool OSOption::setNumberOfSolverOptions(int numberOfObjects)
 }//setNumberOfSolverOptions
 
 
+bool OSOption::setSolverOptions(int numberOfSolverOptions, SolverOption** solverOption)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->solverOptions == NULL) 
+		this->optimization->solverOptions = new SolverOptions();
+	else
+	{	for (int i = 0; i < this->optimization->solverOptions->numberOfSolverOptions; i++)
+			delete this->optimization->solverOptions->solverOption[i];
+		delete[] this->optimization->solverOptions->solverOption;
+		this->optimization->solverOptions->solverOption = NULL;
+	}
+	return this->optimization->solverOptions->setSolverOptions(numberOfSolverOptions, solverOption);
+}//setSolverOptions
 
-
-
-//	bool setSolverOptions(int numberOfSolverOptions, Solveroption** solverOption);
-//	bool setAnotherSolverOption(Solveroption* solverOption);
+bool OSOption::setAnotherSolverOption(std::string name, std::string value, std::string solver, 
+		 std::string category, std::string type, std::string description)
+{	if (this->optimization == NULL) 
+		this->optimization = new OptimizationOption();
+	if (this->optimization->solverOptions == NULL) 
+		this->optimization->solverOptions = new SolverOptions();
+	return this->optimization->solverOptions->addSolverOption(name, value, solver, category, type, description);
+}//setAnotherSolverOption
 
 
 

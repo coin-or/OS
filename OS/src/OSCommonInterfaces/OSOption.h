@@ -152,23 +152,21 @@ public:
 	 * Class destructor. 
 	 */
 	~OtherOptions();
-
 	/**
 	 *
-	 * A function to set an array of OtherOption elements
-	 * @param numberOfOptions: number of OtherOption elements to be copied
-	 * @param other: the array of OtherOption elements to be copied
+	 * A function to set an array of <other> elements
+	 * @param numberOfOptions: number of <other> elements to be set
+	 * @param other: the array of <other> elements that are to be set
 	 */
-	bool setOtherOptions(int numberOfOptions, OtherOption** other);
-
+	bool setOther(int numberOfOptions, OtherOption** other);
 	/**
 	 *
-	 * A function to add an OtherOption element
-	 * @param name: the name of the OtherOption element to be copied (required)
-	 * @param value: the value of the OtherOption element to be copied (optional)
-	 * @param description: a description of the OtherOption element (optional)
+	 * A function to add an <other> element
+	 * @param name: the name of the <other> element to be added (required)
+	 * @param value: the value of the <other> element to be added (optional)
+	 * @param description: a description of the <other> element (optional)
 	 */
-	bool setAnOtherOption(std::string name, std::string value, std::string description);
+	bool addOther(std::string name, std::string value, std::string description);
 }; //OtherOptions
 
 
@@ -471,6 +469,19 @@ public:
 	 * Class destructor. 
 	 */
 	~JobDependencies();
+	/**
+	 *
+	 * A function to set an array of <jobID> elements
+	 * @param numberOfJobIDs: number of <jobID> elements to be set
+	 * @param jobID: the array of <jobID> elements that are to be set
+	 */
+	bool setJobID(int numberOfJobIDs, std::string *jobID);
+	/**
+	 *
+	 * A function to add an <jobID> element
+	 * @param jobID: the name of the <jobID> element to be added 
+	 */
+	bool addJobID(std::string jobID);
 }; //JobDependencies
 
 
@@ -504,6 +515,19 @@ public:
 	 * Class destructor. 
 	 */
 	~DirectoriesAndFiles();
+	/**
+	 *
+	 * A function to set an array of <path> elements
+	 * @param numberOfPaths: number of <path> elements to be set
+	 * @param path: the array of <path> elements that are to be set
+	 */
+	bool setPath(int numberOfPaths, std::string *path);
+	/**
+	 *
+	 * A function to add a <path> element
+	 * @param path: the path to be added 
+	 */
+	bool addPath(std::string path);
 }; //DirectoriesAndFiles
 
 
@@ -575,6 +599,21 @@ public:
 	 * Class destructor. 
 	 */
 	~PathPairs();
+	/**
+	 *
+	 * A function to set an array of <pathPair> elements
+	 * @param numberOfPathPairs: number of <pathPair> elements to be set
+	 * @param path: the array of <pathPair> elements that are to be set
+	 */
+	bool setPathPair(int numberOfPathPairs, PathPair **pathPair);
+	/**
+	 *
+	 * A function to add a <pathPair> element
+	 * @param fromPath: the path from which to copy or move
+	 * @param toPath: the path to which to copy or move
+	 * @param makecopy: tracks whether a copy is to be made
+	 */
+	bool addPathPair(std::string fromPath, std::string toPath, bool makeCopy);
 }; //PathPairs
 
 
@@ -608,6 +647,19 @@ public:
 	 * Class destructor. 
 	 */
 	~Processes();		
+	/**
+	 *
+	 * A function to set an array of <process> elements
+	 * @param numberOfProcesses: number of <process> elements to be set
+	 * @param path: the array of <process> elements that are to be set
+	 */
+	bool setProcess(int numberOfProcesses, std::string *process);
+	/**
+	 *
+	 * A function to add a <process> element
+	 * @param process: the ID of the process to be added 
+	 */
+	bool addProcess(std::string process);
 }; //Processes
 
 
@@ -746,6 +798,20 @@ public:
 	 * Class destructor. 
 	 */
 	~InitVariableValues();
+	/**
+	 *
+	 * A function to set an array of <var> elements 
+	 * @param numberOfVar: number of <var> elements to be set
+	 * @param var: the array of <var> elements that are to be set
+	 */
+	bool setVar(int numberOfVar, InitVarValue **var);
+	/**
+	 *
+	 * A function to add a <var> element
+	 * @param idx: the index of the variable to be given an initial value
+	 * @param value: the initial variable value to be added 
+	 */
+	bool addVar(int idx, double value);
 }; //InitVariableValues
 
 
@@ -812,6 +878,20 @@ public:
 	 * Class destructor. 
 	 */
 	~InitVariableValuesString();
+	/**
+	 *
+	 * A function to set an array of <var> elements 
+	 * @param numberOfVar: number of <var> elements to be set
+	 * @param var: the array of <var> elements that are to be set
+	 */
+	bool setVar(int numberOfVar, InitVarValueString **var);
+	/**
+	 *
+	 * A function to add a <var> element
+	 * @param idx: the index of the variable to be given an initial value
+	 * @param value: the initial string value to be added 
+	 */
+	bool addVar(int idx, std::string value);
 }; //InitVariableValuesString
 
 /*! \class InitBasStatus
@@ -877,6 +957,20 @@ public:
 	 * Class destructor. 
 	 */
 	~InitialBasisStatus();
+	/**
+	 *
+	 * A function to set an array of <var> elements 
+	 * @param numberOfVar: number of <var> elements to be set
+	 * @param var: the array of <var> elements to be that are to be set
+	 */
+	bool setVar(int numberOfVar, InitBasStatus **var);
+	/**
+	 *
+	 * A function to add a <var> element
+	 * @param idx: the index of the variable to be given an initial basis status
+	 * @param value: the initial basis status to be added 
+	 */
+	bool addVar(int idx, std::string value);
 }; //InitialBasisStatus
 
 /*! \class BranchingWeight
@@ -943,6 +1037,20 @@ public:
 	 * Class destructor. 
 	 */
 	~IntegerVariableBranchingWeights();
+	/**
+	 *
+	 * A function to set an array of <var> elements 
+	 * @param numberOfVar: number of <var> elements to be set
+	 * @param var: the array of <var> elements to be that are to be set
+	 */
+	bool setVar(int numberOfVar, BranchingWeight **var);
+	/**
+	 *
+	 * A function to add a <var> element
+	 * @param idx: the index of the variable to be given a branching weight 
+	 * @param value: the branching weight to be added 
+	 */
+	bool addVar(int idx, double value);
 }; //IntegerVariableBranchingWeights
 
 /*! \class SOSWeights
@@ -981,6 +1089,20 @@ public:
 	 * Class destructor. 
 	 */
 	~SOSWeights();
+	/**
+	 *
+	 * A function to set an array of <var> elements 
+	 * @param numberOfVar: number of <var> elements to be set
+	 * @param var: the array of <var> elements that are to be set
+	 */
+	bool setVar(int numberOfVar, BranchingWeight **var);
+	/**
+	 *
+	 * A function to add a <var> element
+	 * @param idx: the index of the variable to be given a branching weight 
+	 * @param value: the branching weight to be added 
+	 */
+	bool addVar(int idx, double value);
 }; //SOSWeights
 
 
@@ -1014,6 +1136,23 @@ public:
 	 * Class destructor. 
 	 */
 	~SOSVariableBranchingWeights();
+	/**
+	 *
+	 * A function to set an array of <sos> elements 
+	 * @param numberOfSOS: number of <sos> elements to be set
+	 * @param sos: the array of <sos> elements that are to be set
+	 */
+	bool setSOS(int numberOfSOS, SOSWeights **sos);
+	/**
+	 *
+	 * A function to add an <sos> element
+	 * @param sosIdx: the index of the SOS that is to be added (refer back to OSiL file)
+	 * @param nvar: the number of variables in this SOS that are to be given weights
+	 * @param weight: a selection weight for the entire group of variables
+	 * @param idx: an array of variable indices
+	 * @param value: the array of corresponding selection weights
+	 */
+	bool addSOS(int sosIdx, int nvar, double weight, int* idx, int* value);
 }; //SOSVariableBranchingWeights
 
 /*! \class OtherVarOption
@@ -1103,6 +1242,22 @@ public:
 	 * Class destructor. 
 	 */
 	~OtherVariableOption();		
+	/**
+	 *
+	 * A function to set an array of <var> elements 
+	 * @param numberOfVar: number of <var> elements to be set
+	 * @param var: the array of <var> elements that are to be set
+	 */
+	bool setVar(int numberOfVar, OtherVarOption **var);
+	/**
+	 *
+	 * A function to add a <var> element
+	 * @param idx: the index of the variable  
+	 * @param value: the value associated with this variable 
+	 * @param lbValue: a lower bound associated with this variable 
+	 * @param ubValue: an upper bound associated with this variable 
+	 */
+	bool addVar(int idx, std::string value, std::string lbValue, std::string ubValue);
 }; //OtherVariableOption
 
 
@@ -1151,6 +1306,19 @@ public:
 	 * Class destructor. 
 	 */
 	~VariableOption();		
+	/**
+	 *
+	 * A function to set an array of <other> elements
+	 * @param numberOfOptions: number of <other> elements to be set
+	 * @param other: the array of <other> elements that are to be set
+	 */
+	bool setOther(int numberOfOptions, OtherVariableOption  **other);
+	/**
+	 *
+	 * A function to add an <other> element
+	 * @param other: the content of the <other> element to be added
+	 */
+	bool addOther(OtherVariableOption *other);
 }; //VariableOption
 
 
@@ -1217,6 +1385,20 @@ public:
 	 * Class destructor. 
 	 */
 	~InitObjectiveValues();		
+	/**
+	 *
+	 * A function to set an array of <obj> elements 
+	 * @param numberOfObj: number of <obj> elements to be set
+	 * @param obj: the array of <obj> elements that are to be set
+	 */
+	bool setObj(int numberOfObj, InitObjValue **obj);
+	/**
+	 *
+	 * A function to add a <obj> element
+	 * @param idx: the index of the objective to be given an initial value
+	 * @param value: the inital value to be added 
+	 */
+	bool addObj(int idx, double value);
 }; //InitObjectiveValues
 
 
@@ -1286,6 +1468,21 @@ public:
 	 * Class destructor. 
 	 */
 	~InitObjectiveBounds();		
+	/**
+	 *
+	 * A function to set an array of <obj> elements 
+	 * @param numberOfObj: number of <obj> elements to be set
+	 * @param obj: the array of <obj> elements that are to be set
+	 */
+	bool setObj(int numberOfObj, InitObjBound **obj);
+	/**
+	 *
+	 * A function to add a <obj> element
+	 * @param idx: the index of the objective to be given initial bounds
+	 * @param lbValue: the initial lower bound for the objective
+	 * @param ubValue: the initial upper bound for the objective
+	 */
+	bool addObj(int idx, double lbValue, double ubValue);
 }; //InitObjectiveBounds
 
 
@@ -1376,6 +1573,22 @@ public:
 	 * Class destructor. 
 	 */
 	~OtherObjectiveOption();		
+	/**
+	 *
+	 * A function to set an array of <obj> elements 
+	 * @param numberOfObj: number of <obj> elements to be set
+	 * @param obj: the array of <obj> elements that are to be set
+	 */
+	bool setObj(int numberOfObj, OtherObjOption **obj);
+	/**
+	 *
+	 * A function to add a <obj> element
+	 * @param idx: the index of the objective 
+	 * @param value: the value associated with this objective 
+	 * @param lbValue: a lower bound associated with this objective 
+	 * @param ubValue: an upper bound associated with this objective 
+	 */
+	bool addObj(int idx, std::string value, std::string lbValue, std::string ubValue);
 }; //OtherObjectiveOption
 
 
@@ -1415,6 +1628,19 @@ public:
 	 * Class destructor. 
 	 */
 	~ObjectiveOption();		
+	/**
+	 *
+	 * A function to set an array of <other> elements
+	 * @param numberOfOptions: number of <other> elements to be set
+	 * @param other: the array of <other> elements that are to be set
+	 */
+	bool setOther(int numberOfOptions, OtherObjectiveOption  **other);
+	/**
+	 *
+	 * A function to add an <other> element
+	 * @param other: the content of the <other> element to be added
+	 */
+	bool addOther(OtherObjectiveOption *other);
 }; //ObjectiveOption
 
 
@@ -1481,6 +1707,20 @@ public:
 	 * Class destructor. 
 	 */
 	~InitConstraintValues();		
+	/**
+	 *
+	 * A function to set an array of <con> elements 
+	 * @param numberOfCon: number of <con> elements to be set
+	 * @param con: the array of <con> elements that are to be set
+	 */
+	bool setCon(int numberOfCon, InitConValue **con);
+	/**
+	 *
+	 * A function to add a <con> element
+	 * @param idx: the index of the constraint to be given an inital value 
+	 * @param value: the initial value to be added 
+	 */
+	bool addCon(int idx, double value);
 }; //InitConstraintValues
 
 
@@ -1550,6 +1790,21 @@ public:
 	 * Class destructor. 
 	 */
 	~InitDualVariableValues();		
+	/**
+	 *
+	 * A function to set an array of <con> elements 
+	 * @param numberOfCon: number of <con> elements to be set
+	 * @param con: the array of <con> elements that are to be set
+	 */
+	bool setCon(int numberOfCon, InitDualVarValue **con);
+	/**
+	 *
+	 * A function to add a <con> element
+	 * @param idx: the index of the constraint to be given initial dual variable bounds 
+	 * @param lbValue: an initial lower bound for the dual variable 
+	 * @param ubValue: an initial upper bound for the dual variable 
+	 */
+	bool addCon(int idx, double lbValue, double ubValue);
 }; //InitDualVariableValues
 
 
@@ -1640,6 +1895,22 @@ public:
 	 * Class destructor. 
 	 */
 	~OtherConstraintOption();		
+	/**
+	 *
+	 * A function to set an array of <con> elements 
+	 * @param numberOfCon: number of <con> elements to be set
+	 * @param obj: the array of <con> elements that are to be set
+	 */
+	bool setCon(int numberOfCon, OtherConOption **con);
+	/**
+	 *
+	 * A function to add a <con> element
+	 * @param idx: the index of the constraint 
+	 * @param value: the value associated with this constraint 
+	 * @param lbValue: a lower bound associated with this constraint 
+	 * @param ubValue: an upper bound associated with this constraint 
+	 */
+	bool addCon(int idx, std::string value, std::string lbValue, std::string ubValue);
 }; //OtherConstraintOption
 
 
@@ -1679,6 +1950,19 @@ public:
 	 * Class destructor. 
 	 */
 	~ConstraintOption();		
+	/**
+	 *
+	 * A function to set an array of <other> elements
+	 * @param numberOfOptions: number of <other> elements to be set
+	 * @param other: the array of <other> elements that are to be set
+	 */
+	bool setOther(int numberOfOptions, OtherConstraintOption  **other);
+	/**
+	 *
+	 * A function to add an <other> element
+	 * @param other: the content of the <other> element to be added
+	 */
+	bool addOther(OtherConstraintOption *other);
 }; //ConstraintOption
 
 
@@ -1757,6 +2041,25 @@ public:
 	 * Class destructor. 
 	 */
 	~SolverOptions();		
+	/**
+	 *
+	 * A function to set an array of solver options
+	 * @param numberOfOptions: number of solver options to be set
+	 * @param solverOption: the array of solver options that are to be set
+	 */
+	bool setSolverOptions(int numberOfOptions, SolverOption **solverOption);
+	/**
+	 *
+	 * A function to add a solver option
+	 * @param name: the name of the solver option (required) 
+	 * @param value: a value associated with the option (optional) 
+	 * @param solver: the solver to which the option applies (optional) 
+	 * @param category: the category (and subcategories) of the option (optional) 
+	 * @param type: the type of the option (optional) 
+	 * @param description: a description associated with the option (optional) 
+	 */
+	bool addSolverOption(std::string name, std::string value, std::string solver, 
+		 std::string category, std::string type, std::string description);
 }; //SolverOptions
 
 
@@ -2727,8 +3030,8 @@ public:
 	bool setNumberOfConstraints(int numberOfObjects);
 
 	bool setNumberOfInitVarValues(int numberOfObjects);
-	bool setInitVarValuesDense(int numberOfVar, int *idx, double *value);
 	bool setInitVarValuesSparse(int numberOfVar, InitVarValue** var);
+	bool setInitVarValuesDense(int numberOfVar, int *idx, double *value);
 	bool setAnotherInitVarValue(int idx, double value);
 
 	bool setNumberOfInitVarValuesString(int numberOfObjects);
@@ -2741,41 +3044,51 @@ public:
 	bool setInitBasisStatusDense(int numberOfVar, int *idx, std::string *var);
 	bool setAnotherInitBasisStatus(int idx, std::string value);
 
+	bool setNumberOfIntegerVariableBranchingWeights(int numberOfObjects);
+	bool setIntegerVariableBranchingWeightsSparse(int numberOfVar, BranchingWeight** var);
+	bool setIntegerVariableBranchingWeightsDense(int numberOfVar, int *idx, double *value);
+	bool setAnotherIntegerVariableBranchingWeight(int idx, double value);
+
+	bool setNumberOfSOSVariableBranchingWeights(int numberOfObjects);
+	bool setSOSVariableBranchingWeights(int numberOfSOS, SOSWeights** sos);
+	bool setAnotherSOSVariableBranchingWeight(int sosIdx, int nvar, double weight, int* idx, int* value);
+
 	bool setNumberOfOtherVariableOptions(int numberOfObjects);
 	bool setOtherVariableOptions(int numberOfVar, OtherVariableOption** var);
 	bool setAnOtherVariableOption(OtherVariableOption* varOption);
 
 	bool setNumberOfInitObjValues(int numberOfObjects);
 	bool setInitObjValuesSparse(int numberOfObj, InitObjValue** obj);
-	bool setInitObjValuesDense(int numberOfObj, double* obj);
+	bool setInitObjValuesDense(int numberOfObj, int *idx, double *value);
 	bool setAnotherInitObjValue(int idx, double value);
 
 	bool setNumberOfInitObjBounds(int numberOfObjects);
-	bool setInitObjBoundsSparse(int numberOfObj, InitObjValue** obj);
-	bool setInitObjBoundsDense(int numberOfObj, double* lb, double* ub);
+	bool setInitObjBoundsSparse(int numberOfObj, InitObjBound** obj);
+	bool setInitObjBoundsDense(int numberOfObj, int *idx, double *lb, double *ub);
 	bool setAnotherInitObjBound(int idx, double lbValue, double ubValue);
 
 	bool setNumberOfOtherObjectiveOptions(int numberOfObjects);
-	bool setOtherObjectiveOptions(int numberOfObj, OtherObjOption** obj);
-	bool setAnOtherObjectiveOption(OtherObjOption* objOption);
+	bool setOtherObjectiveOptions(int numberOfObj, OtherObjectiveOption** obj);
+	bool setAnOtherObjectiveOption(OtherObjectiveOption* objOption);
 
 	bool setNumberOfInitConValues(int numberOfObjects);
 	bool setInitConValuesSparse(int numberOfCon, InitConValue** con);
-	bool setInitConValuesDense(int numberOfCon, double* con);
+	bool setInitConValuesDense(int numberOfCon, int *idx, double *value);
 	bool setAnotherInitConValue(int idx, double value);
 
 	bool setNumberOfInitDualVarValues(int numberOfObjects);
 	bool setInitDualVarValuesSparse(int numberOfCon, InitDualVarValue** con);
-	bool setInitDualVarValuesDense(int numberOfCon, double* lb, double* ub);
+	bool setInitDualVarValuesDense(int numberOfCon, int *idx, double *lb, double *ub);
 	bool setAnotherInitDualVarValue(int idx, double lbValue, double ubValue);
 
 	bool setNumberOfOtherConstraintOptions(int numberOfObjects);
-	bool setOtherConstraintOptions(int numberOfCon, OtherConOption** con);
-	bool setAnOtherConstraintOption(OtherConOption* conOption);
+	bool setOtherConstraintOptions(int numberOfOptions, OtherConstraintOption** other);
+	bool setAnOtherConstraintOption(OtherConstraintOption* optionValue);
 
 	bool setNumberOfSolverOptions(int numberOfObjects);
 	bool setSolverOptions(int numberOfSolverOptions, SolverOption** solverOption);
-	bool setAnotherSolverOption(SolverOption* solverOption);
+	bool setAnotherSolverOption(std::string name, std::string value, std::string solver, 
+		 std::string category, std::string type, std::string description);
 
 	bool setOptionInt(std::string optionName, int optionValue);
 
