@@ -178,6 +178,8 @@
 \newcommand{\OSstable}{1.1}
 \newcommand{\OSrelease}{1.1.1}
 \newcommand{\OStrunk}{2093}
+\newcommand{\MsysVer}{1.0.11}
+\newcommand{\MsysFile}{bash-3.1-MSYS-1.0.11}
 
 
 
@@ -715,7 +717,7 @@ previously downloaded the third-party software packages {\tt BLAS}\index{Blas} a
 \end{verbatim}
 \index{configure@{\tt configure}}
 
-\noindent otherwise for now use
+\noindent otherwise use
 
 \begin{verbatim}
 ./configure  COIN_SKIP_PROJECTS="Ipopt Bonmin"
@@ -1320,11 +1322,11 @@ The environment variables can be set using the {\tt System Properties} in the Wi
 
 
 Microsoft Windows users who wish to obtain MSYS for building the OS project can download
-the appropriate software at {\tt UrlMsys}.
+the appropriate software at {\tt \UrlMsys}.
 The user may find this Web site confusing.
 It is only necessary to download what is referred to as the {\bf MSYS Base System}.
-As of this writing the most recent version is MSYS-1.0.11.
-This file is listed as {\tt bash-3.1-MSYS-1.0.11} and the  binary download is
+As of this writing the most recent version is MSYS-\MsysVer.
+This file is listed as {\tt \MsysFile} and the  binary download is
 
 \noindent{\footnotesize\tt\UrlMsysBinary}
 
@@ -1369,7 +1371,10 @@ and all of  the libraries created will be in their respective directories
 inside {\tt vpath-debug} and not {\tt ../COIN-OS}.
 
 \vskip 8pt
-\noindent {\bf Note:} If you have already run the {\tt configure} script
+\noindent {\bf Notes:} 
+\index{configure|(}
+\begin{enumerate}
+\item{} If you have already run the {\tt configure} script
 inside the {\tt ../COIN-OS} directory, you cannot do a {\tt VPATH} build
 until you have run
 %
@@ -1379,9 +1384,9 @@ make distclean
 %
 in the {\tt ../COIN-OS} directory.
 
-Note also that {\tt configure} automatically detects the presence of third-party software and prepares
+\item{}Note also that {\tt configure} automatically detects the presence of third-party software and prepares
 the configuration and make files accordingly. Once you have downloaded, e.g., Blas\index{Blas}, you must specify
-
+%
 \begin{verbatim}
 configure COIN_SKIP_PROJECTS="ThirdParty/Blas"
 \end{verbatim}
@@ -1390,7 +1395,18 @@ configure COIN_SKIP_PROJECTS="ThirdParty/Blas"
 if you want to recreate the default configuration.%
 \index{VPATH|)}
 
-
+\item{}If you work with the trunk\index{OS!trunk version} version of OS, it is possible that files are added to
+and removed from the distribution due to development activities. These files are not recognized properly
+by the system unless it is reconfigured by running
+\begin{verbatim}
+make distclean
+\end{verbatim}
+followed by 
+\begin{verbatim}
+./configure
+\end{verbatim}
+\end{enumerate}
+\index{configure|)}
 
 \subsection{Using Ipopt and Bonmin}\label{section:ipopt}
 
@@ -1461,7 +1477,7 @@ If you have a FORTRAN 77 compiler, you can replace Mumps by one of the Harwell S
 {\tt\UrlHsl}.  
 
 You must obtain the Harwell code and put it in the directory {\tt \../ThirdParty/HSL}.  
-Now run the {\tt configure} script as described in Section~\ref{section:unixbuilds}.
+Now run the {\tt configure}\index{configure} script as described in Section~\ref{section:unixbuilds}.
 
 Note that the Harwell Subroutine Library is not governed by the Common Public License\index{Common Public License (CPL)}. It is the user's responsibility
 to ensure adherence to appropriate copyright and distribution agreements.
@@ -1483,7 +1499,7 @@ BuildTools/compile_f2c
 \item Option~\ref{enumerate:ipopt4} also requires that one of the Harwell Subroutine Library (HSL) routines
 {\tt ma27ad.f} or {\tt MA57ad.f} be present in the HSL directory.
 
-\item If you run configure with the {\tt --enable-debug} option on Windows, then when building the {\tt vcf2c.lib}, use the command line
+\item If you run {\tt configure}\index{configure} with the {\tt --enable-debug} option on Windows, then when building the {\tt vcf2c.lib}, use the command line
 
 \begin{verbatim}
 CFLAGS = -MTd -DUSE_CLOCK -DMSDOS -DNO_ONEXIT
@@ -1633,7 +1649,7 @@ However, the project is also designed to work with  several other open source an
 In the OS distribution directory structure (see Figure~\ref{figure:osprojectrootdir}), there is a {\tt ThirdParty}
 directory, which does not contain anything other than {\tt get.xxxx} scripts and other utilities.
 The source code for any of these packages must be downloaded separately using the {\tt get.xxxx} scripts,
-as {\tt configure} will not build these projects without the source code being present. After the download,
+as {\tt configure}\index{configure|(} will not build these projects without the source code being present. After the download,
 {\tt configure} will recognize the presence of these files and will configure the makefiles accordingly.
 
 If the user wants to exclude these projects from the build after they have been downloaded and detected,
@@ -1688,7 +1704,7 @@ Make sure to run {\tt configure} after you have downloaded the required
 source code, in order to modify the makefiles appropriately. It is {\bf important to note} that even though there are
 multiple files named {\tt configure} in various subdirectories, you should only ever run the master configure in the
 distribution root directory, possibly accessed from a {\tt VPATH}\index{VPATH} as in Section~\ref{section:vpath}.
-It sets important global variables and will call all other necessary configure files in turn.
+It sets important global variables and will call all other necessary configure files in turn.\index{configure|)}
 You may also wish to view
 
 {\small
@@ -1710,7 +1726,7 @@ require the use of the AMPL Solver Library~(ASL). See {\tt\UrlAmplSandia}  and  
 Users with a Unix\index{Unix} system should locate the {\tt ASL} folder that is part of the distribution.
 The {\tt ASL} folder is in the {\tt ThirdParty} folder
 which is in the distribution root folder. Locate and execute the {\tt get.ASL} script.  Do this prior to running
-the {\tt configure} script. The {\tt configure} script will then build the correct ASL library.
+the {\tt configure} script\index{configure}. The {\tt configure} script will then build the correct ASL library.
 
 Microsoft  Visual Studio\index{Microsoft Visual Studio} users will have to build the ASL library separately and
 then link it with the OS library in the OS project file.  The necessary source files are at
@@ -4893,7 +4909,7 @@ Once the file is on the server, invoke the local {\tt OSSolverService} by
 ./OSSolverService -config ../data/configFiles/testremote.config
 \end{verbatim}
 where the {\tt config} file is as follows. Notice there is no {\tt -osil}  option as the OSiL file has already
-been uploaded and its instance location ("local" to the server) is specified in the {\tt osol} file.
+been uploaded and its instance location (``local'' to the server) is specified in the {\tt osol} file.
 \begin{verbatim}
 -osol ../data/osolFiles/remoteSolve2.osol
 -serviceLocation http://gsbkip.chicagogsb.edu/os/OSSolverService.jws
@@ -5771,7 +5787,13 @@ Andreas bug report:
 I'm trying to compile on AIX (IBM's xlC compiler).
 </p>
 <p>
-The first set of problems comes in because CppAD is using the identifiers "isfinite" and "isnan", which on AIX is the name of preprocessor macros, defined in /usr/include/math.h.  I got around this problem buy renaming "isfinite" and "isnan" in CppAD's near_equal.hpp and nan.hpp.  But maybe the issue is related that you use &lt;math.h&gt; in C++ code, whereas the C++ standard says you should use &lt;cmath&gt;.  In Ipopt, I check for each C header if the C++ version is there, and if not, if the C version is there, and include the files accordingly.  There is macro for testing in coin.m4.  In Ipopt's configure.ac I use:
+The first set of problems comes in because CppAD is using the identifiers "isfinite" and "isnan", 
+which on AIX is the name of preprocessor macros, defined in /usr/include/math.h.  I got around this 
+problem buy renaming "isfinite" and "isnan" in CppAD's near_equal.hpp and nan.hpp.  But maybe the 
+issue is related that you use &lt;math.h&gt; in C++ code, whereas the C++ standard says you should 
+use &lt;cmath&gt;.  In Ipopt, I check for each C header if the C++ version is there, and if not, 
+if the C version is there, and include the files accordingly.  There is macro for testing in coin.m4.  
+In Ipopt's configure.ac I use:
 </p>
 
 <pre class="wiki">AC_COIN_CHECK_CXX_CHEADER(math)

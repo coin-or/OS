@@ -3,7 +3,7 @@
   \item Algorithmic differentiation, 7, 48--49, 81--82
   \item AMPL, 6, 7, 30, 75
   \item AMPL nl format, 1, 6, 7, 43, 58, 59, 64, 76
-  \item AMPL Solver Library (ASL), 15, 16, 18, 22, 24, 26
+  \item AMPL Solver Library (ASL), 15, 16, 18, 22, 24, 26--27
   \item Apache Axis, 6, 62
   \item Apache Tomcat, 1, 6--8, 12, 62, 73--75, 78
   \item ASL, \see{AMPL Solver Library (ASL)}{1}
@@ -11,7 +11,7 @@
   \indexspace
 
   \item {\it Bell, Bradley M.}, 48
-  \item {\tt bison}, 10, 20, 43, 44
+  \item {\tt bison}, 10, 20, 44
   \item Blas, 9, 13, 21, 24
   \item {\tt Bonmin}, \see{COIN-OR projects, {\tt Bonmin}}{1}
   \item Bug reporting, 28
@@ -26,25 +26,25 @@
   \item {\tt Clp}, \see{COIN-OR projects, {\tt Clp}}{1}
   \item COIN-OR, 1, 12
   \item COIN-OR projects
-    \subitem {\tt Bonmin}, 13, 16, 18, 21--24
-    \subitem {\tt BuildTools}, 29
-    \subitem {\tt Cbc}, 13, 14, 24, 29, 59, 60
-    \subitem {\tt Cgl}, 13, 24, 30, 82
-    \subitem {\tt Clp}, 13, 14, 24, 30, 59, 60, 82
-    \subitem {\tt CoinUtils}, 13, 24, 30, 42
-    \subitem {\tt CppAD}, 6, 7, 13, 24, 30, 48--49
-    \subitem {\tt DyLP}, 24, 30
-    \subitem {\tt Ipopt}, 9, 13, 14, 16, 18, 21--24, 26, 30, 44, 46, 54, 
-		60, 64, 76
-    \subitem {\tt Osi}, 13, 24, 30, 59
-    \subitem {\tt SYMPHONY}, 14, 24, 30
-    \subitem {\tt Vol}, 24, 30
+    \subitem {\tt Bonmin}, 13, 16, 18, 22--25
+    \subitem {\tt BuildTools}, 30
+    \subitem {\tt Cbc}, 13, 14, 25, 30, 59, 60
+    \subitem {\tt Cgl}, 13, 25, 30, 82
+    \subitem {\tt Clp}, 13, 14, 25, 30, 59, 60, 82
+    \subitem {\tt CoinUtils}, 13, 25, 30, 43
+    \subitem {\tt CppAD}, 6, 7, 13, 25, 30, 48--49
+    \subitem {\tt DyLP}, 25, 30
+    \subitem {\tt Ipopt}, 9, 13, 14, 16, 18, 22--23, 25, 27, 30, 45, 46, 
+		54, 60, 64, 76
+    \subitem {\tt Osi}, 13, 25, 30, 59
+    \subitem {\tt SYMPHONY}, 14, 25, 30
+    \subitem {\tt Vol}, 25, 30
   \item {\tt COIN\_SKIP\_PROJECTS}, 13, 15, 19, 21, 25
   \item {\tt CoinUtils}, \see{COIN-OR projects, {\tt CoinUtils}}{1}
   \item Common Public License (CPL), 7, 22
   \item Configuration Manager, 
 		\see{Microsoft Visual Studio, Configuration Manager}{1}
-  \item configure
+  \item configure, 21--23, 25--26
     \subitem cache file, 13
     \subitem scripts, 8
   \item {\tt configure}, 13, 14
@@ -63,15 +63,15 @@
       \subsubitem Windows, 12
     \subitem tarball, 12
     \subitem zip file, 12
-  \item Doxygen, 10, 28, 37
+  \item Doxygen, 10, 28--29, 37
   \item {\tt DyLP}, \see{COIN-OR projects, {\tt DyLP}}{1}
 
   \indexspace
 
-  \item {\tt f2c}, 9, 19, 22--24
+  \item {\tt f2c}, 9, 19, 23--24
   \item file naming conventions, 8, 16
-  \item {\tt flex}, 10, 20, 43, 44
-  \item Fortran, 9, 13, 18, 21, 22, 25
+  \item {\tt flex}, 10, 20, 44
+  \item Fortran, 9, 13, 18, 22, 25
 
   \indexspace
 
@@ -107,22 +107,22 @@
   \item {\tt LibOS}, 14
   \item {\tt libOS.vcproj}, 16
   \item {\tt libOSnl2OSiL}, 16
-  \item LINDO, 7, 13, 27, 44, 45, 59, 60
+  \item LINDO, 7, 13, 27--28, 45, 59, 60
   \item linker errors, 26
   \item Linux, 29
 
   \indexspace
 
   \item Mac OS X, 29
-  \item MATLAB, 7, 27, 82--86
+  \item MATLAB, 7, 28, 82--86
   \item Microsoft Visual Studio, 8, 26, 27, 32
     \subitem {\tt Debug} configuration, 16
-    \subitem {\tt Release-Plus} configuration, 16, 24, 26
+    \subitem {\tt Release-Plus} configuration, 16, 24, 27
     \subitem {\tt Release} configuration, 16
     \subitem Configuration Manager, 16, 24
   \item Microsoft Windows, 12, 13
   \item MinGW, 9, 19, 29
-  \item MPS format, 1, 6, 7, 42, 58, 59
+  \item MPS format, 1, 6, 7, 42--43, 58, 59
   \item MSYS, 9, 19--20, 29
   \item Mumps, 9, 13, 22
 
@@ -136,31 +136,31 @@
   \item OS
     \subitem source code, 8, 9, 15
     \subitem stable release, 6, 8
-    \subitem trunk version, 71, 73
+    \subitem trunk version, 21, 71, 73
     \subitem unit test, 13
   \item OS project
     \subitem root directory, 10
-  \item {\tt OS.sln}, 16, 26, 80
+  \item {\tt OS.sln}, 16, 27, 80
   \item {\tt OSAgent}, 6, 37, 78
   \item {\tt OSAmplClient}, 6, 8, 16, 24, 26, 30, 43, 76
   \item {\tt OSCommon}, 7, 12
-  \item {\tt OSExpressionTree}, 40
+  \item {\tt OSExpressionTree}, 39
   \item {\tt OSFileUpload}, 78--79
   \item {\tt Osi}, \see{COIN-OR projects, {\tt Osi}}{1}
-  \item OSiL, 1, 6--8, 32--34, 36, 37, 40, 42--44, 58--60, 62, 64, 69, 
+  \item OSiL, 1, 6--8, 32--34, 36, 38, 39, 42--44, 58--60, 62, 64, 69, 
 		76, 78, 87--90
   \item {\tt OSInstance}, 6, 37--43, 46, 50, 81
   \item {\tt OSLibrary}, 60
   \item {\tt OSmps2osil}, 42--43, 82
-  \item OSnL, 36
+  \item OSnL, 36--37
   \item {\tt OSnl2osil}, 26, 43, 76, 82
-  \item OSoL, 6, 8, 35--36, 58, 60--62, 64--66, 69
+  \item OSoL, 6, 8, 36, 58, 60--62, 64--66, 69
   \item {\tt OSOption}, 42
-  \item OSpL, 36, 67--69
+  \item OSpL, 37, 67--69
   \item {\tt OSResult}, 43
-  \item OSrL, 6, 8, 34--35, 43, 59--61, 69, 76
+  \item OSrL, 6, 8, 34--36, 43, 59--61, 69, 76
   \item {\tt OSSolverAgent}, 37
-  \item {\tt OSSolverService}, 1, 6, 8, 13--15, 24, 30, 58--69
+  \item {\tt OSSolverService}, 1, 6, 8, 13--15, 24, 30, 32, 58--69
   \item {\tt OSSolverService.jws}, 62
   \item {\tt OSSolverService.vcproj}, 16
   \item {\tt OSTest.vcproj}, 16
@@ -178,7 +178,7 @@
 		\see{Microsoft Visual Studio, {\tt Release-plus} configuration}{1}
   \item {\tt remoteSolve1.osol}, 63
   \item {\tt retrieve}, 58, 60, 66, 69
-  \item {\it Rosenbrock, H.H.}, 32
+  \item {\it Rosenbrock, H.H.}, 33
 
   \indexspace
 
@@ -194,19 +194,19 @@
 
   \item {\tt testlocal.config}, 60--61
   \item {\tt testremote.config}, 62--63
-  \item Third-party software, 15, 16, 22, 24--25
+  \item Third-party software, 15, 16, 22, 25--26
   \item TortoiseSVN, 12, 15, 19
   \item Trac system, 1, 6, 28
 
   \indexspace
 
-  \item {\tt unitTest}, 13, 16, 24, 30
+  \item {\tt unitTest}, 13, 16, 24, 32
   \item Unix, 9, 10, 13, 26, 29
 
   \indexspace
 
   \item {\tt Vol}, \see{COIN-OR projects, {\tt Vol}}{1}
-  \item VPATH, 21, 25, 80, 82
+  \item VPATH, 21, 26, 80, 82
 
   \indexspace
 
