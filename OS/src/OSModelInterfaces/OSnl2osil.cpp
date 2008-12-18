@@ -383,9 +383,7 @@ bool OSnl2osil::createOSInstance(){
 	//
 	// get the variable information
 	//
-	std::string initString;
 	std::string colName;
-	double init = OSNAN;
 	char vartype = 'C';
 	osinstance->setVariableNumber( n_var);
 	int firstBinaryVar = n_var - nbv - niv;
@@ -397,7 +395,7 @@ bool OSnl2osil::createOSInstance(){
 		osinstance->addVariable(i, var_name(i), 
 			LUv[2*i] > -OSDBL_MAX  ? LUv[2*i] : -OSDBL_MAX, 
 			LUv[2*i+1] < OSDBL_MAX ? LUv[2*i+1] : OSDBL_MAX, 
-			vartype, OSNAN, initString);
+			vartype);
 	}	
 	//
 	//

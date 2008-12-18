@@ -47,8 +47,8 @@ OSInstance::OSInstance():
 	m_bNonlinearExpressionTreeModIndexesProcessed( false),
 	m_miNonlinearExpressionTreeModIndexes( NULL),		
 	m_msVariableNames(NULL),
-	m_mdVariableInitialValues(NULL),
-	m_msVariableInitialStringValues(NULL),
+	//m_mdVariableInitialValues(NULL), -- deprecated
+	//m_msVariableInitialStringValues(NULL), -- deprecated
 	m_mcVariableTypes(NULL),
 	m_mdVariableLowerBounds(NULL),
 	m_mdVariableUpperBounds(NULL),
@@ -140,10 +140,10 @@ OSInstance::~OSInstance(){
 	// delete  the temporary arrays
 	delete[] m_msVariableNames;
 	m_msVariableNames = NULL;
-	delete[] m_mdVariableInitialValues;
-	m_mdVariableInitialValues = NULL ;
-	delete[] m_msVariableInitialStringValues;
-	m_msVariableInitialStringValues = NULL;
+	//delete[] m_mdVariableInitialValues;
+	//m_mdVariableInitialValues = NULL ;
+	//delete[] m_msVariableInitialStringValues;
+	//m_msVariableInitialStringValues = NULL;
 	delete[] m_mcVariableTypes;
 	m_mcVariableTypes = NULL;
 	/**
@@ -383,10 +383,10 @@ InstanceHeader::~InstanceHeader(){
 Variable::Variable():
 	lb(0.0),
 	ub(OSDBL_MAX),
-	init(OSNAN), 
+	//init(OSNAN),  deprecated
 	type('C'), 
-	name(""),
-	initString("")
+	name("")
+	//initString("") deprecated
 {  
 	#ifdef DEBUG
 	cout << "Inside the Variable Constructor" << endl;
@@ -972,6 +972,7 @@ bool OSInstance::processVariables() {
 			m_msVariableNames = new string[n];
 			for(i = 0; i < n; i++) m_msVariableNames[i] = instanceData->variables->var[i]->name;
 		} 
+		/*
 			m_mdVariableInitialValues = new double[n];
 			for(i = 0; i < n; i++){
 				if(CommonUtil::ISOSNAN(instanceData->variables->var[ 0]->init) == true ){				
@@ -986,6 +987,7 @@ bool OSInstance::processVariables() {
 			m_msVariableInitialStringValues = new string[n];
 			for(i = 0; i < n; i++) m_msVariableInitialStringValues[i] = instanceData->variables->var[i]->initString;
 		}
+		*/
 		m_mcVariableTypes = new char[n];
 		m_mdVariableLowerBounds = new double[n];
 		m_mdVariableUpperBounds = new double[n];
@@ -1009,6 +1011,7 @@ string* OSInstance::getVariableNames() {
 	return m_msVariableNames;
 }//getVariableNames	
 
+/*
 double* OSInstance::getVariableInitialValues() {
 	processVariables();
 	return m_mdVariableInitialValues;
@@ -1018,6 +1021,7 @@ string* OSInstance::getVariableInitialStringValues() {
 	processVariables();
 	return m_msVariableInitialStringValues;
 }//getVariableInitialStringValues
+*/
 
 char* OSInstance::getVariableTypes() {
 	processVariables();
@@ -1945,21 +1949,21 @@ bool OSInstance::setVariableNumber(int number){
 }//setVariableNumber
 
 
-bool OSInstance::addVariable(int index, string name, double lowerBound, double upperBound, char type, double init, string initString){
+bool OSInstance::addVariable(int index, string name, double lowerBound, double upperBound, char type){
 	instanceData->variables->var[index] = new Variable();
 	if(index < 0 || instanceData->variables->numberOfVariables <= 0 || index >= instanceData->variables->numberOfVariables) return false;
 	instanceData->variables->var[index]->name = name;
 	instanceData->variables->var[index]->lb = lowerBound;
 	instanceData->variables->var[index]->ub = upperBound;
 	instanceData->variables->var[index]->type = type;
-	if(init != OSNAN) instanceData->variables->var[index]->init = init;
-	instanceData->variables->var[index]->initString = initString;
+	//if(init != OSNAN) instanceData->variables->var[index]->init = init;
+	//instanceData->variables->var[index]->initString = initString;
 	return true;
 }//addVariable
 
 
 bool OSInstance::setVariables(int number, string *names, double *lowerBounds, 
-	double *upperBounds, char *types, double *inits, string *initsString){
+	double *upperBounds, char *types){
 	if(number <= 0) return false;
 	try{
 		if(instanceData->variables == NULL){
@@ -1992,12 +1996,14 @@ bool OSInstance::setVariables(int number, string *names, double *lowerBounds,
 				if(types[i] != 'C' && types[i] != 'B' && types[i] != 'I' && types[i] != 'S') types[i] = 'C';
 			} 
 		}
+		/*
 		if(inits != NULL){
 			for(i = 0; i < number; i++) instanceData->variables->var[i]->init = inits[i];   			
 		}
 		if(initsString != NULL){
 			for(i = 0; i < number; i++) instanceData->variables->var[i]->initString = initsString[i];   			
 		}
+		*/
 		return true;
 	}
 	catch(const ErrorClass& eclass){

@@ -3593,7 +3593,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 	// the attributes
 	char *attText = NULL;
 	const char *name = "name";
-	const char *initString = "initString";
+	//const char *initString = "initString";
 	const char *type = "type";
 	const char *mult = "mult";
 	// others
@@ -3605,8 +3605,8 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 	bool varubattON = false ;
 	bool vartypeattON  = false;
 	bool varnameattON = false ;
-	bool varinitattON = false ;
-	bool varinitStringattON = false ;
+	//bool varinitattON = false ;
+	//bool varinitStringattON = false ;
 	bool varmultattON = false;
 	bool foundVar = false;
 	//
@@ -3652,8 +3652,8 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 		varubattON = false ;
 		vartypeattON  = false;
 		varnameattON = false ;
-		varinitattON = false ; 
-		varinitStringattON = false ;
+		//varinitattON = false ; 
+		//varinitStringattON = false ;
 		varmultattON = false;
 		foundVar = false;
 		// assume we are pointing to the first character after the r in <var
@@ -3673,6 +3673,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 				delete [] attText;
 				//printf("ATTRIBUTE = %s\n", attText);
 				break;
+				/*
 			case 'i':
 				*p = ch;
 				while(*initString++  == *ch) ch++;
@@ -3699,6 +3700,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 					initString -= 11;
 				}
 				break;
+				*/
 			case 't':
 				*p = ch;
 				while(*type++  == *ch) ch++;

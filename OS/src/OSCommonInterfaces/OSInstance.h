@@ -89,9 +89,9 @@ public:
 	double ub;
 	
 	/** init corresponds to the optional attribute that holds the variable initial value,
-	 * the default value is OSNAN 
+	 * the default value is OSNAN  -- now deprecated
 	 */
-	double init;
+	//double init;
 	
 	/** type corresponds to the attribute that holds the variable type: C (Continuous),
 	 * B (binary), I (general integer), or S (string). The default is C
@@ -103,8 +103,10 @@ public:
 	 */ 
 	std::string name;
 	
-	/** initString corresponds to the optional attribute that holds the name std::string */
-	std::string initString;
+	/** initString corresponds to the optional attribute that holds the name std::string 
+	 * -- now deprecated
+	 */
+	//std::string initString;
 }; // class Variable
 
 
@@ -841,14 +843,16 @@ private:
 	std::string* m_msVariableNames;
 	
 	/**
-	 * m_mdVariableInitialValues holds a double array of the initial variable values. 
+	 * m_mdVariableInitialValues holds a double array of the initial variable values.
+	 * -- now deprecated 
 	 */
-	double* m_mdVariableInitialValues ;
+	//double* m_mdVariableInitialValues ;
 
 	/**
-	 * m_msVariableInitialStringValues holds a std::string array of the initial variable values. 
+	 * m_msVariableInitialStringValues holds a std::string array of the initial variable values.
+	 * -- now deprecated 
 	 */
-	std::string* m_msVariableInitialStringValues;
+	//std::string* m_msVariableInitialStringValues;
 
 	/**
 	 * m_mcVariableTypes holds a char array of variable types (default = 'C').
@@ -1418,16 +1422,18 @@ public:
 	 * 
 	 * @return a double array of variable initial values, null if no initial variable values.
 	 * @throws Exception if the elements in variables are logically inconsistent. 
+	 * -- now deprecated
 	 */
-	double* getVariableInitialValues();
+	//double* getVariableInitialValues();
 	
 	/**
 	 * Get variable initial std::string values. 
 	 * 
 	 * @return a std::string array of variable initial values, null if no initial variable std::string values.
 	 * @throws Exception if the elements in variables are logically inconsistent. 
+	 * -- now deprecated
 	 */
-	std::string* getVariableInitialStringValues();
+	//std::string* getVariableInitialStringValues();
 	
 	/**
 	 * Get variable types. 
@@ -1891,11 +1897,12 @@ public:
    	 * @param lowerBound holds the variable lower bound; use Double.NEGATIVE_INFINITY if no lower bound. 
    	 * @param upperBound holds the variable upper bound; use Double.POSITIVE_INFINITY if no upper bound. 
    	 * @param type holds the variable type character, B for Binary, I for Integer, S for String, C or any other char for Continuous)
-   	 * @param init holds the double variable initial value; use Double.NaN if no initial value. 
-   	 * @param initString holds the std::string variable initial value; use null or empty std::string ("") if no initial std::string value.  
+   	 * @param init holds the double variable initial value; use Double.NaN if no initial value -- deprecated
+   	 * @param initString holds the std::string variable initial value; use null or empty std::string ("") 
+   	 * if no initial std::string value -- deprecated
    	 * @return whether the variable is added successfully. 
    	 */
-   	bool addVariable(int index, std::string name, double lowerBound, double upperBound, char type, double init, std::string initString);
+   	bool addVariable(int index, std::string name, double lowerBound, double upperBound, char type);
 	
    	/**
    	 * set all the variable related elements. All the previous variable-related elements will be deleted. 
@@ -1910,12 +1917,13 @@ public:
 	 *  use Double.POSITIVE_INFINITY if no upper bound for a specific variable in the array. 
    	 * @param types holds a char array of variable types; use null if all variables are continuous; 
    	 * for a specfic variable in the array use B for Binary, I for Integer, S for String, C or any other char for Continuous,)  
-   	 * @param inits holds a double array of varible initial values; use null if no initial values. 
-   	 * @param initsString holds a std::string array of varible initial values; use null if no initial std::string values.  
+   	 * @param inits holds a double array of varible initial values; use null if no initial values. -- deprecated
+   	 * @param initsString holds a std::string array of varible initial values; use null
+   	 *  if no initial std::string values.  -- deprecated
    	 * @return whether the variables are set successfully. 
    	 */
    	bool setVariables(int number, std::string* names, double* lowerBounds, 
-		double* upperBounds, char* types, double* inits, std::string* initsString);
+		double* upperBounds, char* types);
 
    	/**
    	 * set the objective number. 
