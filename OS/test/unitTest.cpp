@@ -1820,8 +1820,10 @@ catch(const ErrorClass& eclass){
 		
 		delete otherOpts[ 0];
 		delete otherOpts[ 1];
-		
 		delete[] otherOpts;
+		
+		delete[] jobID;
+		delete[] jobID2;
 
 //		another_osoption->setAnOtherGeneralOption( "name2", "value2", "");
 
@@ -1864,6 +1866,7 @@ catch(const ErrorClass& eclass){
  
 
 		delete another_osoption;
+		delete[] path;
 		
 		//delete other;
 		//return 0;
