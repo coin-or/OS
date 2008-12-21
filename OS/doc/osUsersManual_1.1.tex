@@ -904,8 +904,43 @@ to run the key executable, {\tt OSSolverService}\index{OSSolverService@{\tt OSSo
 
 
 
+\subsubsection{Building the OS Project on Mac OS X}\label{section:unixmacbuilds}
+
+When building OS on Mac OS X 10.5.x (Leopard)   it may be necessary  to add the following to the configure line
 
 
+\begin{verbatim}
+ADD_CXXFLAGS="-mmacosx-version-min=10.4" 
+ADD_CFLAGS="-mmacosx-version-min=10.4" 
+ADD_FFLAGS="-mmacosx-version-min=10.4"
+LDFLAGS="-flat_namespace"
+\end{verbatim}
+
+Also, the Mac OS X operating system does not come configured with the gcc compiler. Users wanting to build the OS project on the Mac should do the following:
+
+\begin{itemize}
+\item Install the Xcode developer tools.  These are available on the install DVD that comes with the machine or at the Apple developer site. See
+
+\url{http://developer.apple.com/technology/xcode.html}
+
+\item Install a Fortran compiler.  We have had good luck with the GNU {\bf gfortran} compiler. Platform specific binaries for the various Mac platforms (Leopard and Tiger, Intel and Power PC) are obtained at
+
+\url{http://hpc.sourceforge.net/}
+
+We followed the instructions and installed the binary using the command
+
+
+\begin{verbatim}
+sudo tar -xvf gcc-bin.tar -C /
+\end{verbatim}
+
+\end{itemize}
+
+We have also successfully used the fink project, see
+
+\url{http://www.finkproject.org/}
+
+to download and build gcc/g++/gfortran compilers from source code. 
 
 
 \subsection{Building the OS Project on Windows}\label{section:windowsinstall}
