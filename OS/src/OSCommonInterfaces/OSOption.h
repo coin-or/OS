@@ -50,6 +50,11 @@ public:
 	 * Class destructor. 
 	 */
 	~InstanceLocationOption();
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(InstanceLocationOption *that);
 }; //InstanceLocationOption
 
 
@@ -83,6 +88,11 @@ public:
 	 * Class destructor. 
 	 */
 	~ContactOption();		
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(ContactOption *that);
 }; //ContactOption
 
 
@@ -119,6 +129,11 @@ public:
 	 * Class destructor. 
 	 */
 	~OtherOption();
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(OtherOption *that);
 }; //OtherOption
 
 
@@ -152,6 +167,11 @@ public:
 	 * Class destructor. 
 	 */
 	~OtherOptions();
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(OtherOptions *that);
 	/**
 	 *
 	 * A function to set an array of <other> elements
@@ -228,6 +248,11 @@ public:
 	 * Class destructor. 
 	 */
 	~GeneralOption();		
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(GeneralOption *that);
 };//GeneralOption
 
 /*! \class MinDiskSpace
@@ -261,6 +286,11 @@ public:
 	 * Class destructor. 
 	 */
 	~MinDiskSpace();
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(MinDiskSpace *that);
 }; //MinDiskSpace
 
 /*! \class MinMemorySize
@@ -294,6 +324,11 @@ public:
 	 * Class destructor. 
 	 */
 	~MinMemorySize();
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(MinMemorySize *that);
 }; //MinMemorySize
 
 /*! \class MinCPUSpeed
@@ -327,6 +362,11 @@ public:
 	 * Class destructor. 
 	 */
 	~MinCPUSpeed();
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(MinCPUSpeed *that);
 }; //MinCPUSpeed
 
 
@@ -369,6 +409,11 @@ public:
 	 * Class destructor. 
 	 */
 	~SystemOption();
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(SystemOption *that);
 }; //SystemOption
 
 
@@ -402,6 +447,11 @@ public:
 	 * Class destructor. 
 	 */
 	~ServiceOption();
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(ServiceOption *that);
 }; //ServiceOption
 
 
@@ -436,6 +486,11 @@ public:
 	 * Class destructor. 
 	 */
 	~MaxTime();
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(MaxTime *that);
 }; //MaxTime
 
 
@@ -469,6 +524,11 @@ public:
 	 * Class destructor. 
 	 */
 	~JobDependencies();
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(JobDependencies *that);
 	/**
 	 *
 	 * A function to set an array of <jobID> elements
@@ -515,6 +575,11 @@ public:
 	 * Class destructor. 
 	 */
 	~DirectoriesAndFiles();
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(DirectoriesAndFiles *that);
 	/**
 	 *
 	 * A function to set an array of <path> elements
@@ -565,8 +630,12 @@ public:
 	 * Class destructor. 
 	 */
 	~PathPair();
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(PathPair *that);
 }; //PathPair
-
 
 
 /*! \class PathPairs
@@ -599,6 +668,11 @@ public:
 	 * Class destructor. 
 	 */
 	~PathPairs();
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(PathPairs *that);
 	/**
 	 *
 	 * A function to set an array of <pathPair> elements
@@ -647,6 +721,11 @@ public:
 	 * Class destructor. 
 	 */
 	~Processes();		
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(Processes *that);
 	/**
 	 *
 	 * A function to set an array of <process> elements
@@ -710,7 +789,7 @@ public:
 	/** output directories to move or copy */
 	PathPairs *outputDirectoriesToMove;
 
-	/** files to delete upon completeion */
+	/** files to delete upon completion */
 	DirectoriesAndFiles *filesToDelete;
 
 	/** directories to delete upon completion */
@@ -731,7 +810,12 @@ public:
 	 *
 	 * Class destructor. 
 	 */
-	~JobOption();		
+	~JobOption();	
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(JobOption *that);
 }; //JobOption
 
 
@@ -765,6 +849,11 @@ public:
 	 * Class destructor. 
 	 */
 	~InitVarValue();		
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(InitVarValue *that);
 }; //InitVarValue
 
 
@@ -798,6 +887,11 @@ public:
 	 * Class destructor. 
 	 */
 	~InitVariableValues();
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(InitVariableValues *that);
 	/**
 	 *
 	 * A function to set an array of <var> elements 
@@ -845,6 +939,11 @@ public:
 	 * Class destructor. 
 	 */
 	~InitVarValueString();		
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(InitVarValueString *that);
 }; //InitVarValueString
 
 
@@ -878,6 +977,11 @@ public:
 	 * Class destructor. 
 	 */
 	~InitVariableValuesString();
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(InitVariableValuesString *that);
 	/**
 	 *
 	 * A function to set an array of <var> elements 
@@ -924,6 +1028,11 @@ public:
 	 * Class destructor. 
 	 */
 	~InitBasStatus();		
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(InitBasStatus *that);
 }; //InitBasStatus
 
 
@@ -957,6 +1066,11 @@ public:
 	 * Class destructor. 
 	 */
 	~InitialBasisStatus();
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(InitialBasisStatus *that);
 	/**
 	 *
 	 * A function to set an array of <var> elements 
@@ -1003,6 +1117,11 @@ public:
 	 * Class destructor. 
 	 */
 	~BranchingWeight();
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(BranchingWeight *that);
 }; //BranchingWeight
 
 
@@ -1037,6 +1156,11 @@ public:
 	 * Class destructor. 
 	 */
 	~IntegerVariableBranchingWeights();
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(IntegerVariableBranchingWeights *that);
 	/**
 	 *
 	 * A function to set an array of <var> elements 
@@ -1091,6 +1215,11 @@ public:
 	~SOSWeights();
 	/**
 	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(SOSWeights *that);
+	/**
+	 *
 	 * A function to set an array of <var> elements 
 	 * @param numberOfVar: number of <var> elements to be set
 	 * @param var: the array of <var> elements that are to be set
@@ -1136,6 +1265,11 @@ public:
 	 * Class destructor. 
 	 */
 	~SOSVariableBranchingWeights();
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(SOSVariableBranchingWeights *that);
 	/**
 	 *
 	 * A function to set an array of <sos> elements 
@@ -1191,6 +1325,11 @@ public:
 	 * Class destructor. 
 	 */
 	~OtherVarOption();		
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(OtherVarOption *that);
 }; //OtherVarOption
 
 
@@ -1242,6 +1381,11 @@ public:
 	 * Class destructor. 
 	 */
 	~OtherVariableOption();		
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(OtherVariableOption *that);
 	/**
 	 *
 	 * A function to set an array of <var> elements 
@@ -1308,6 +1452,11 @@ public:
 	~VariableOption();		
 	/**
 	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(VariableOption *that);
+	/**
+	 *
 	 * A function to set an array of <other> elements
 	 * @param numberOfOptions: number of <other> elements to be set
 	 * @param other: the array of <other> elements that are to be set
@@ -1352,6 +1501,11 @@ public:
 	 * Class destructor. 
 	 */
 	~InitObjValue();		
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(InitObjValue *that);
 }; //InitObjValue
 
 
@@ -1385,6 +1539,11 @@ public:
 	 * Class destructor. 
 	 */
 	~InitObjectiveValues();		
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(InitObjectiveValues *that);
 	/**
 	 *
 	 * A function to set an array of <obj> elements 
@@ -1435,6 +1594,11 @@ public:
 	 * Class destructor. 
 	 */
 	~InitObjBound();		
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(InitObjBound *that);
 }; //InitObjBound
 
 
@@ -1468,6 +1632,11 @@ public:
 	 * Class destructor. 
 	 */
 	~InitObjectiveBounds();		
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(InitObjectiveBounds *that);
 	/**
 	 *
 	 * A function to set an array of <obj> elements 
@@ -1522,6 +1691,11 @@ public:
 	 * Class destructor. 
 	 */
 	~OtherObjOption();		
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(OtherObjOption *that);
 }; //OtherObjOption
 
 
@@ -1573,6 +1747,11 @@ public:
 	 * Class destructor. 
 	 */
 	~OtherObjectiveOption();		
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(OtherObjectiveOption *that);
 	/**
 	 *
 	 * A function to set an array of <obj> elements 
@@ -1630,6 +1809,11 @@ public:
 	~ObjectiveOption();		
 	/**
 	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(ObjectiveOption *that);
+	/**
+	 *
 	 * A function to set an array of <other> elements
 	 * @param numberOfOptions: number of <other> elements to be set
 	 * @param other: the array of <other> elements that are to be set
@@ -1674,6 +1858,11 @@ public:
 	 * Class destructor. 
 	 */
 	~InitConValue();		
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(InitConValue *that);
 }; //InitConValue
 
 
@@ -1707,6 +1896,11 @@ public:
 	 * Class destructor. 
 	 */
 	~InitConstraintValues();		
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(InitConstraintValues *that);
 	/**
 	 *
 	 * A function to set an array of <con> elements 
@@ -1757,6 +1951,11 @@ public:
 	 * Class destructor. 
 	 */
 	~InitDualVarValue();		
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(InitDualVarValue *that);
 }; //InitDualVarValue
 
 
@@ -1790,6 +1989,11 @@ public:
 	 * Class destructor. 
 	 */
 	~InitDualVariableValues();		
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(InitDualVariableValues *that);
 	/**
 	 *
 	 * A function to set an array of <con> elements 
@@ -1844,6 +2048,11 @@ public:
 	 * Class destructor. 
 	 */
 	~OtherConOption();		
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(OtherConOption *that);
 }; //OtherConOption
 
 
@@ -1895,6 +2104,11 @@ public:
 	 * Class destructor. 
 	 */
 	~OtherConstraintOption();		
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(OtherConstraintOption *that);
 	/**
 	 *
 	 * A function to set an array of <con> elements 
@@ -1950,6 +2164,11 @@ public:
 	 * Class destructor. 
 	 */
 	~ConstraintOption();		
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(ConstraintOption *that);
 	/**
 	 *
 	 * A function to set an array of <other> elements
@@ -2008,6 +2227,11 @@ public:
 	 * Class destructor. 
 	 */
 	~SolverOption();		
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(SolverOption *that);
 }; //SolverOption
 
 
@@ -2041,6 +2265,11 @@ public:
 	 * Class destructor. 
 	 */
 	~SolverOptions();		
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(SolverOptions *that);
 	/**
 	 *
 	 * A function to set an array of solver options
@@ -2107,10 +2336,11 @@ public:
 	 * Class destructor. 
 	 */
 	~OptimizationOption();	
-	
-private:
-	
-
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(OptimizationOption *that);
 }; //OptimizationOption
 
 
@@ -2127,16 +2357,6 @@ private:
 class OSOption{
 
 public:
-	/**
-	 *
-	 * Default constructor. 
-	 */
-	OSOption(); 
-	/**
-	 *
-	 * Class destructor. 
-	 */
-	~OSOption();
 
 	/** 
 	 * OSOption has five children: general, system, service, job, and optimization.
@@ -2161,6 +2381,21 @@ public:
 	 */
 	OptimizationOption *optimization;
 
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	OSOption(); 
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~OSOption();
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(OSOption *that);
 
 public: 
 	
@@ -3062,5 +3297,5 @@ public:
 
 	bool setOptionDbl(std::string optionName, double value);
 
-};
+};//OSOption
 #endif

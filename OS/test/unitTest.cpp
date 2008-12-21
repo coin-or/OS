@@ -1697,8 +1697,12 @@ catch(const ErrorClass& eclass){
 		 * 1) read an OSoL string from a file
 		 * 2) create an OSOption object from the string
 		 * 3) write a new OSoL string from the in-memory OSOption object
-		 * 4) read the string back again to make sure nothing was lost
-		 *    in translation
+		 * 4) read the string back again into a second OSOption object
+		 * 5) add options to various array-valued elements
+		 * 6) retrieve pieces of the OSOption object with get() methods
+		 * 7) insert these pieces into a third OSOption object with set() methods
+		 * 8) compare the second and third OSOption objects to make sure 
+		 *    nothing was lost in translation
 		 */
 		cout << endl;
 		std::string tmpOSoL;
@@ -1723,7 +1727,7 @@ catch(const ErrorClass& eclass){
 		start = clock();
 		cout << "PARSE THE OSOL STRING INTO AN OSOPTION OBJECT" << endl;
 		osoption = osolreader->readOSoL( osol);
-		
+
 		std::cout << "number of solver options "  <<  osoption->getNumberOfSolverOptions() << std::endl;
 		std::vector<SolverOption*> optionsVector;
 		optionsVector = osoption->getSolverOptions( "ipopt");
@@ -1763,9 +1767,10 @@ catch(const ErrorClass& eclass){
 		cout << "-----------------------------------------" << endl << endl;
 		delete[] denseInitVarVector;
 		denseInitVarVector = NULL;
-		// make sure we can parse without error
 		delete osolreader;
 		osolreader = NULL;
+
+		// make sure we can parse without error
 		osolreader = new OSoLReader();
 		cout << "Read the string back" << endl;
 		osolreader->readOSoL( tmpOSoL);
@@ -1774,22 +1779,23 @@ catch(const ErrorClass& eclass){
 		delete osolreader;
 		osolreader = NULL;
 
+		cout << "test set() and get() methods" << endl;
+
 		OSOption *another_osoption = new OSOption();
 		std::string* jobID;
 		jobID = new std::string[ 2];
 		jobID[0] = "ABC123";
 		jobID[1] = "1234567890";
 		int ndep;
-		cout << "test set() and get() methods" << endl;
 		ok = another_osoption->setJobDependencies(2, jobID);
-		
-		//test garbage collection, do it again,
-		std::string* jobID2;
-		jobID2 = new std::string[ 2];
+		delete[] jobID;
+
+		//test garbage collection, do it again, this time without newing
+		std::string jobID2[2];
 		jobID2[0] = "xyz123";
 		jobID2[1] = "0987654321";
 		ok = another_osoption->setJobDependencies(2, jobID2);	
-		
+
 		cout << "setJobDependencies: " << ok << endl;
 		ndep = another_osoption->getNumberOfJobDependencies();
 		cout << "number of dependencies: " << ndep << endl;
@@ -1799,7 +1805,6 @@ catch(const ErrorClass& eclass){
 		cout << "number of dependencies: " << ndep << endl;
 		std::string* tJobID = another_osoption->getJobDependencies();
 		for (i = 0; i < ndep; i++) cout << "  jobID: " << tJobID[i] << endl;
-		// IMPORTANT!!!! -- jobID gets deleted by deleting another_option
 		delete another_osoption;
 		//return 0;
 		
@@ -1817,21 +1822,13 @@ catch(const ErrorClass& eclass){
 		
 		another_osoption->setOtherGeneralOptions(2,  otherOpts);
 		
-		
 		delete otherOpts[ 0];
 		delete otherOpts[ 1];
 		delete[] otherOpts;
 		
-		delete[] jobID;
-		delete[] jobID2;
 
-//		another_osoption->setAnOtherGeneralOption( "name2", "value2", "");
+		another_osoption->setAnOtherGeneralOption( "name2", "value2", "");
 
-		std::string name = "name2";
-		std::string value = "value2";
-		std::string description = "";
-
-		another_osoption->setAnOtherGeneralOption( name, value, description);
 		OtherOption **newOtherOpts = another_osoption->getOtherGeneralOptions();
 		
 		int nopt = another_osoption->getNumberOfOtherGeneralOptions();
@@ -1873,7 +1870,7 @@ catch(const ErrorClass& eclass){
 		unitTestResult << 
 		     "Successful test of OSoL parser on file parsertest.osol" 
 		      << std::endl;
-	
+
 
 	}	
 	
