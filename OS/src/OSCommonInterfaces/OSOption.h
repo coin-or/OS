@@ -1286,7 +1286,7 @@ public:
 	 * @param idx: an array of variable indices
 	 * @param value: the array of corresponding selection weights
 	 */
-	bool addSOS(int sosIdx, int nvar, double weight, int* idx, int* value);
+	bool addSOS(int sosIdx, int nvar, double weight, int* idx, double* value);
 }; //SOSVariableBranchingWeights
 
 /*! \class OtherVarOption
@@ -3260,7 +3260,7 @@ public:
 	bool setAnotherIntegerVariableBranchingWeight(int idx, double value);
 
 	bool setSOSVariableBranchingWeights(int numberOfSOS, SOSWeights** sos);
-	bool setAnotherSOSVariableBranchingWeight(int sosIdx, int nvar, double weight, int* idx, int* value);
+	bool setAnotherSOSVariableBranchingWeight(int sosIdx, int nvar, double weight, int* idx, double* value);
 
 	bool setOtherVariableOptions(int numberOfVar, OtherVariableOption** var);
 	bool setAnOtherVariableOption(OtherVariableOption* varOption);

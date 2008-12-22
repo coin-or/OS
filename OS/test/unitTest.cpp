@@ -1728,6 +1728,137 @@ catch(const ErrorClass& eclass){
 		cout << "PARSE THE OSOL STRING INTO AN OSOPTION OBJECT" << endl;
 		osoption = osolreader->readOSoL( osol);
 
+		//Pad all the arrays
+		cout << endl << "Test the add() methods" << endl;
+
+		cout << "Add OtherGeneralOption...";
+		osoption->setAnOtherGeneralOption("testing","one","two  three");
+		cout << "done" << endl;
+		cout << "Delete OtherSystemOption...";
+		osoption->setOtherSystemOptions(0,NULL);
+		cout << "done" << endl;
+		cout << "Add OtherSystemOption...";
+		osoption->setAnOtherSystemOption("Ho Ho Ho","","");
+		cout << "done" << endl;
+		cout << "OtherServiceOption...";
+		osoption->setAnOtherServiceOption("OneMore","Option","To Go");
+		cout << "done" << endl;
+		cout << "JobDependency...";
+		osoption->setAnotherJobDependency("DoReMi");
+		cout << "done" << endl;
+		cout << "Required Directory...";
+		osoption->setAnotherRequiredDirectory("C:\\MSYS");
+		cout << "done" << endl;
+		cout << "Required File...";
+		osoption->setAnotherRequiredFile("C:\\MSYS\\junk.tmp");
+		cout << "done" << endl;
+		cout << "Directory to Make...";
+		osoption->setAnotherDirectoryToMake("C:\\tempdir");
+		cout << "done" << endl;
+		cout << "File to make...";
+		osoption->setAnotherFileToMake("C:\\tempdir\\temp.tmp");
+		cout << "done" << endl;
+		cout << "input directory to move...";
+		osoption->setAnotherInputDirectoryToMove("C:\\tempdir","C:\\OS\\calc",true);
+		cout << "done" << endl;
+		cout << "input file to move...";
+		osoption->setAnotherInputFileToMove("C:\\OS\\parinc.osil","C:\\OS\\calc\\input.osil",true);
+		cout << "done" << endl;
+		cout << "output file to move...";
+		osoption->setAnotherOutputFileToMove("C:\\OS\\calc\\putput.osrl","C:\\OS\\parinc.osol",false);
+		cout << "done" << endl;
+		cout << "output directory to move...";
+		osoption->setAnotherOutputDirectoryToMove("C:\\OS\\calc","C:\\OS\\save",false);
+		cout << "done" << endl;
+		cout << "file to delete...";
+		osoption->setAnotherFileToDelete("C:\\OS\\calc\\input.osil");
+		cout << "done" << endl;
+		cout << "directory to delete...";
+		osoption->setAnotherDirectoryToDelete("C:\\tempdir");
+		cout << "done" << endl;
+		cout << "process to kill...";
+		osoption->setAnotherProcessToKill("ABC123");
+		cout << "done" << endl;
+		cout << "OtherJobOption...";
+		osoption->setAnOtherJobOption("DoReMi","ABC","One Two Three");
+		cout << "done" << endl;
+		cout << "Other initial variable value...";
+		osoption->setAnotherInitVarValue(5,12.3);
+		cout << "done" << endl;
+		cout << "Other string-valued variable...";
+		osoption->setAnotherInitVarValueString(6,"BLUE");
+		cout << "done" << endl;
+		cout << "Other inital basis status...";
+		osoption->setAnotherInitBasisStatus(5,"unknown");
+		cout << "done" << endl;
+		cout << "Other integer selection weight...";
+		osoption->setAnotherIntegerVariableBranchingWeight(5,100.);
+		cout << "done" << endl;
+
+		cout << "set data structure for SOS branching weight" << endl;
+		int SOS3idx[2];
+		double SOS3val[2];
+		SOS3idx[0] = 6;
+		SOS3idx[1] = 9;
+		SOS3val[0] = 1.0;
+		SOS3val[1] = 2.0;
+		cout << "SOS branching weight...";
+		osoption->setAnotherSOSVariableBranchingWeight(3,2,OSNAN,SOS3idx,SOS3val);
+		cout << "done" << endl;
+
+		OtherVariableOption *varopt;
+		varopt = new OtherVariableOption;
+		varopt->name = "testVarOpt";
+		varopt->numberOfVar = 0;
+
+		cout << "OtherVariableOption...";
+		osoption->setAnOtherVariableOption(varopt);
+		cout << "done" << endl;
+
+		cout << "Other initial objective value...";
+		osoption->setAnotherInitObjValue(-1,5.0);
+		cout << "done" << endl;
+		cout << "Other initial objective bound...";
+		osoption->setAnotherInitObjBound(-1,0.0,DBL_MAX);
+		cout << "done" << endl;
+
+		cout << "OtherObjectiveOption...";
+		OtherObjectiveOption *objopt;
+		objopt = new OtherObjectiveOption;
+		objopt->name = "testObjOpt";
+		objopt->numberOfObj = 0;
+		osoption->setAnOtherObjectiveOption(objopt);
+		cout << "done" << endl;
+
+		cout << "Other initial constraint value...";
+		osoption->setAnotherInitConValue(2,17.0);
+		cout << "done" << endl;
+		cout << "Other dual variable...";
+		osoption->setAnotherInitDualVarValue(2,0.0,DBL_MAX);
+		cout << "done" << endl;
+
+		cout << "OtherConstraintOption: prepare...";
+		OtherConstraintOption *conopt;
+		conopt = new OtherConstraintOption();
+		conopt->name = "testObjOpt";
+		conopt->numberOfCon = 2;
+		conopt->con = new OtherConOption*[2];
+		conopt->con[0] = new OtherConOption();
+		conopt->con[0]->idx = 0;
+		conopt->con[0]->value = "3.0";
+		conopt->con[1] = new OtherConOption();
+		conopt->con[1]->idx = 1;
+		conopt->con[1]->lbValue = "0.0";
+		conopt->con[1]->ubValue = "10.0";
+		cout << "call...";
+		osoption->setAnOtherConstraintOption(conopt);
+		cout << "done" << endl;
+
+		cout << "OtherSolverOption...";
+		osoption->setAnotherSolverOption("HoHum","gus","PhoNY","","test","");
+		cout << "done" << endl;
+
+#if 0
 		std::cout << "number of solver options "  <<  osoption->getNumberOfSolverOptions() << std::endl;
 		std::vector<SolverOption*> optionsVector;
 		optionsVector = osoption->getSolverOptions( "ipopt");
@@ -1864,9 +1995,8 @@ catch(const ErrorClass& eclass){
 
 		delete another_osoption;
 		delete[] path;
-		
-		//delete other;
-		//return 0;
+#endif
+
 		unitTestResult << 
 		     "Successful test of OSoL parser on file parsertest.osol" 
 		      << std::endl;

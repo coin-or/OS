@@ -3643,7 +3643,7 @@ bool SOSVariableBranchingWeights::setSOS(int numberOfSOS, SOSWeights **sos)
  * A function to add an <sos> element
  * @param sos: the content of the <sos> element that is to be added 
  */
-bool SOSVariableBranchingWeights::addSOS(int sosIdx, int nvar, double weight, int* idx, int* value)
+bool SOSVariableBranchingWeights::addSOS(int sosIdx, int nvar, double weight, int* idx, double* value)
 {	try
 	{	int nopt; int i;
 		if (sosIdx < 0)
@@ -4756,6 +4756,8 @@ bool OSOption::setOtherSystemOptions(int numberOfOptions, OtherOption** other)
 			delete this->system->otherOptions->other[i];
 		delete[] this->system->otherOptions->other;
 		this->system->otherOptions->other = NULL;
+		this->system->otherOptions->numberOfOtherOptions = 0;     //!!!
+		cout << "OtherSystemOption deleted" << endl;
 	}
 	return this->system->otherOptions->setOther(numberOfOptions, other);
 }//setOtherSystemOptions
@@ -5355,7 +5357,7 @@ bool OSOption::setSOSVariableBranchingWeights(int numberOfSOS, SOSWeights** sos)
 	return this->optimization->variables->sosVariableBranchingWeights->setSOS(numberOfSOS, sos);
 }//setSOSVariableBranchingWeights
 
-bool OSOption::setAnotherSOSVariableBranchingWeight(int sosIdx, int nvar, double weight, int* idx, int* value)
+bool OSOption::setAnotherSOSVariableBranchingWeight(int sosIdx, int nvar, double weight, int* idx, double* value)
 {	if (this->optimization == NULL) 
 		this->optimization = new OptimizationOption();
 	if (this->optimization->variables == NULL) 
