@@ -1807,7 +1807,7 @@ catch(const ErrorClass& eclass){
 		cout << "done" << endl;
 
 		OtherVariableOption *varopt;
-		varopt = new OtherVariableOption;
+		varopt = new OtherVariableOption();
 		varopt->name = "testVarOpt";
 		varopt->numberOfVar = 0;
 
@@ -1824,7 +1824,7 @@ catch(const ErrorClass& eclass){
 
 		cout << "OtherObjectiveOption...";
 		OtherObjectiveOption *objopt;
-		objopt = new OtherObjectiveOption;
+		objopt = new OtherObjectiveOption();
 		objopt->name = "testObjOpt";
 		objopt->numberOfObj = 0;
 		osoption->setAnOtherObjectiveOption(objopt);
@@ -1857,6 +1857,37 @@ catch(const ErrorClass& eclass){
 		cout << "OtherSolverOption...";
 		osoption->setAnotherSolverOption("HoHum","gus","PhoNY","","test","");
 		cout << "done" << endl;
+
+		//Now transfer to another osoption using get() and set() methods
+		std::string optionstring;
+		OSOption* osoption2 = new OSOption();
+
+		cout << endl << "transfer osoption to another OSOption object" << endl;
+
+		cout << "serviceURI...";
+		optionstring = osoption->getServiceURI();
+		ok = osoption2->setServiceURI(optionstring);
+		cout << ok << endl;
+
+		cout << "serviceName...";
+		optionstring = osoption->getServiceName();
+		ok = osoption2->setServiceName(optionstring);
+		cout << ok << endl;
+
+		cout << "instanceName...";
+		optionstring = osoption->getInstanceName();
+		ok = osoption2->setInstanceName(optionstring);
+		cout << ok << endl;
+
+		cout << "instanceLocation...";
+		optionstring = osoption->getInstanceLocation();
+		ok = osoption2->setInstanceLocation(optionstring);
+		cout << ok << endl;
+
+		cout << "instanceLocationType...";
+		optionstring = osoption->getInstanceLocationType();
+		ok = osoption2->setInstanceLocationType(optionstring);
+		cout << ok << endl;
 
 #if 0
 		std::cout << "number of solver options "  <<  osoption->getNumberOfSolverOptions() << std::endl;
@@ -1996,6 +2027,10 @@ catch(const ErrorClass& eclass){
 		delete another_osoption;
 		delete[] path;
 #endif
+//		delete osoption;
+		delete osoption2;
+		delete osolreader;
+		osolreader = NULL;
 
 		unitTestResult << 
 		     "Successful test of OSoL parser on file parsertest.osol" 

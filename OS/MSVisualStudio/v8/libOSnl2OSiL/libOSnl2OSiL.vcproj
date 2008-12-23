@@ -5,7 +5,6 @@
 	Name="libOSnl2OSiL"
 	ProjectGUID="{208CFD6F-447B-41A3-84D5-6D7E20D90464}"
 	RootNamespace="libOSnl2OSiL"
-	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
 		<Platform
@@ -113,7 +112,7 @@
 				AdditionalOptions="-DWIN_ -D_WIN32 -DMSVISUALSTUDIO -DHAVE_MATH_H -DHAVE_STRING_H -DHAVE_STDIO_H -DHAVE_TIME_H"
 				Optimization="2"
 				AdditionalIncludeDirectories="..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSUtils;..\..\..\..\OS\src;..\..\..\..\CppAd;..\..\..\..\CppAd\local;..\..\..\..\ThirdParty\ASL;..\..\..\..\ThirdParty\ASL\solvers"
-                                PreprocessorDefinitions="NDEBUG;WIN32;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;WIN_;_LINDO_DLL_;OSROOT_DIR;USE_DTOA"
+				PreprocessorDefinitions="NDEBUG;WIN32;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;WIN_;_LINDO_DLL_;OSROOT_DIR;USE_DTOA"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="0"
@@ -182,8 +181,8 @@
 				AdditionalOptions="-DWIN_ -D_WIN32 -DMSVISUALSTUDIO -DHAVE_MATH_H -DHAVE_STRING_H -DHAVE_STDIO_H -DHAVE_TIME_H"
 				Optimization="2"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSUtils;..\..\..\..\OS\src;..\..\..\..\CppAd;..\..\..\..\CppAd\local;..\..\..\..\ThirdParty\ASL;..\..\..\..\ThirdParty\ASL\solvers"
-                                PreprocessorDefinitions="NDEBUG;WIN32;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;WIN_;_LINDO_DLL_;OSROOT_DIR;USE_DTOA"
+				AdditionalIncludeDirectories="..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSUtils;..\..\..\..\OS\src;..\..\..\..\CppAd;..\..\..\..\CppAd\local;..\..\..\..\ThirdParty\ASL;..\..\..\..\ThirdParty\ASL\solvers;..\..\..\..\BuildTools\headers"
+				PreprocessorDefinitions="NDEBUG;WIN32;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;WIN_;_LINDO_DLL_;OSROOT_DIR;USE_DTOA"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="0"

@@ -4537,7 +4537,7 @@ bool OSOption::setInstanceLocation( std::string instanceLocation)
 	return true;
 }//setInstanceLocation
 
-bool OSOption::setLocationType( std::string locationType)
+bool OSOption::setInstanceLocationType( std::string locationType)
 {	try
 	{	if (this->general == NULL) 
 			this->general = new GeneralOption();
@@ -5669,7 +5669,7 @@ bool OSOption::setOptionStr(std::string optionName, std::string optionValue)
 		return this->setInstanceLocation(optionValue);
 
 	if (optionName == "locationType") 
-		return this->setLocationType(optionValue);
+		return this->setInstanceLocationType(optionValue);
 
 	if (optionName == "jobID") 
 		return this->setJobID(optionValue);

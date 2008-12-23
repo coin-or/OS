@@ -3117,7 +3117,7 @@ public:
 	/**
 	 * Set the instance location type
 	 */
-	bool setLocationType( std::string locationType);
+	bool setInstanceLocationType( std::string locationType);
 
 	/**
 	 * Set the job ID
