@@ -82,8 +82,8 @@ int main( ){
 		osinstance->setVariableNumber( 2);   
 		//addVariable(int index, string name, double lowerBound, double upperBound, char type, double init, string initString);
 		// we could use setVariables() and add all the variable with one method call -- below is easier
-		osinstance->addVariable(0, "x0", 0, OSDBL_MAX, 'C', OSNAN, "");
-		osinstance->addVariable(1, "x1", 0, OSDBL_MAX, 'C', OSNAN, "");
+		osinstance->addVariable(0, "x0", 0, OSDBL_MAX, 'C');
+		osinstance->addVariable(1, "x1", 0, OSDBL_MAX, 'C');
 		//
 		// now add the objective function
 		osinstance->setObjectiveNumber( 1);
