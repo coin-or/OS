@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.Vector;
 
+import org.optimizationservices.oscommon.datastructure.osoption.BranchingWeight;
 import org.optimizationservices.oscommon.datastructure.osoption.InitBasStatus;
 import org.optimizationservices.oscommon.datastructure.osoption.InitConValue;
 import org.optimizationservices.oscommon.datastructure.osoption.InitDualVarValue;
@@ -1470,7 +1471,6 @@ public class OSoLReader extends OSgLReader{
 
 	public OtherOption[] getAllOtherOptions() throws Exception{
 		//implemented in C++, but not here in Java.
-		//TODO
 		throw new Exception("Not implemented in Java");
 	}//getAllOtherOptions
 	
@@ -2027,14 +2027,77 @@ public class OSoLReader extends OSgLReader{
 		return msValues;
 	}//getInitBasisStatusDense
 
-//	-----------------------------------
-	/*
-	 //TODO
-	getIntegerVariableBranchingWeightsSparse
-	getIntegerVariableBranchingWeightsDense
-	*/
-//	++++++++++++++++++++++++++++++++++++
+	/**
+	 * get a list of branching weights for integer variables in sparse form
+	 * @return a list of index/value pairs
+	 */
+	public BranchingWeight[] getIntegerVariableBranchingWeightsSparse(){	
+		BranchingWeight[] mVar = null;
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
+		if(eOptimization == null) return null;
+		Element eVariables = (Element)XMLUtil.findChildNode(eOptimization, "variables");
+		if(eVariables == null) return null;
+		Element eIntegerVariableBranchingWeights = (Element)XMLUtil.findChildNode(eVariables, "integerVariableBranchingWeights");
+		if(eIntegerVariableBranchingWeights == null) return null;
+		NodeList vars = eIntegerVariableBranchingWeights.getElementsByTagName("var");
+		if(vars == null || vars.getLength() <= 0) return null;
+		int iVars = vars.getLength();
+		mVar = new BranchingWeight[iVars];
+		for(int i = 0; i < iVars; i++){
+			try{
+				mVar[i] = new BranchingWeight();
+				mVar[i].idx = Integer.parseInt(((Element)vars.item(i)).getAttribute("idx"));
+				double dValue = Double.NaN;
+				try {
+					dValue = Double.parseDouble(((Element)vars.item(i)).getAttribute("value"));
+				} 
+				catch (Exception e2) {
+				}
+				mVar[i].value = dValue;
+			}
+			catch(Exception e){
+				return null;
+			}
+		}
+		return mVar;
+	}//getIntegerVariableBranchingWeightsSparse
+
 	
+	/**
+	 * get a list of branching weights for integer variables in dense form
+	 * @return an array of values
+	 * @note return Double.NaN for variables that are not initialed
+	 */
+	public double[] getIntegerVariableBranchingWeightsDense(){
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
+		if(eOptimization == null) return null;
+		Element eVariables = (Element)XMLUtil.findChildNode(eOptimization, "variables");
+		if(eVariables == null) return null;
+		Element eIntegerVariableBranchingWeights = (Element)XMLUtil.findChildNode(eVariables, "integerVariableBranchingWeights");
+		if(eIntegerVariableBranchingWeights == null) return null;
+		NodeList vars = eIntegerVariableBranchingWeights.getElementsByTagName("var");
+		if(vars == null || vars.getLength() <= 0) return null;
+		int iVars = vars.getLength();
+		int iNumberVariables = this.getNumberOfVariables();
+		double[] mdValues = new double[iNumberVariables];
+		for(int i = 0; i < iVars; i++){
+			try{
+				int iIndex = Integer.parseInt(((Element)vars.item(i)).getAttribute("idx"));
+				double dValue = Double.NaN;
+				try {
+					dValue = Double.parseDouble(((Element)vars.item(i)).getAttribute("value"));
+				} 
+				catch (Exception e2) {
+				}
+				mdValues[iIndex] = dValue;
+			}
+			catch(Exception e){
+				return null;
+			}
+		}
+		return mdValues;
+	}//getIntegerVariableBranchingWeightsDense
+
 	/**
 	 * get initial objective values (double[]). 
 	 * @return a double array of the initial objective values, null if none. 
@@ -2595,6 +2658,14 @@ public class OSoLReader extends OSgLReader{
 //		InitBasStatus[] msVar = osolReader.getInitBasisStatusSparse();
 //		for(int i=0; i < osolReader.getNumberOfInitVarValues(); i++)
 //			System.out.println(msVar[i].idx+": " + msVar[i].value);		
+
+		double[] mdWeightValues = osolReader.getIntegerVariableBranchingWeightsDense();
+		for(int i=0; i < osolReader.getNumberOfVariables(); i++)
+			System.out.println(mdWeightValues==null?"NULL":mdWeightValues[i]+"");		
+
+		BranchingWeight[] mWeightValues = osolReader.getIntegerVariableBranchingWeightsSparse();
+		for(int i=0; i < osolReader.getNumberOfIntegerVariableBranchingWeights(); i++)
+			System.out.println(mWeightValues[i].idx+": " + mWeightValues[i].value);		
 
 //		System.out.println(osolReader.getNumberOfOtherObjectiveOptions());	
 //		System.out.println(osolReader.getNumberOfInitObjValues());	
