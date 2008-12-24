@@ -525,7 +525,7 @@
 					<xs:enumeration value="basic"/>
 					<xs:enumeration value="atLower"/>
 					<xs:enumeration value="atUpper"/>
-					<xs:enumeration value="superBasic"/>
+					<xs:enumeration value="superbasic"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
