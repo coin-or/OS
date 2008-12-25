@@ -184,6 +184,10 @@ return(DOUBLE);}
 ({xmlwhitespace}+ubValue{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(UBVALUEATT);}
 ({xmlwhitespace}+ubValue{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(UBVALUEATT);}
 
+({xmlwhitespace}+valueAtLb{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(VALUEATLBATT);}
+({xmlwhitespace}+valueAtLb{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(VALUEATLBATT);}
+({xmlwhitespace}+valueAtUb{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(VALUEATUBATT);}
+({xmlwhitespace}+valueAtUb{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(VALUEATUBATT);}
 
 {xmlwhitespace}*\<osol{xmlwhitespace}+ {YY_PRINT; BEGIN osolattributetext;  return(OSOLSTART);}
 {xmlwhitespace}*\<\/osol{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OSOLEND);}

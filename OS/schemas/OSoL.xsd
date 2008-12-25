@@ -652,8 +652,8 @@
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="idx" type="xs:negativeInteger" use="optional" default="-1"/>
-		<xs:attribute name="lbValue" type="xs:double" use="optional"/>
-		<xs:attribute name="ubValue" type="xs:double" use="optional"/>
+		<xs:attribute name="lbValue" type="xs:double" use="optional" default="-INF"/>
+		<xs:attribute name="ubValue" type="xs:double" use="optional" default="INF"/>
 	</xs:complexType>
 	<xs:complexType name="OtherObjectiveOption">
 		<xs:annotation>
@@ -741,12 +741,12 @@
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="lbValue" use="optional" default="0.0">
+		<xs:attribute name="valueAtLb" use="optional" default="0.0">
 			<xs:simpleType>
 				<xs:restriction base="xs:double"/>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="ubValue" use="optional" default="0.0">
+		<xs:attribute name="valueAtUb" use="optional" default="0.0">
 			<xs:simpleType>
 				<xs:restriction base="xs:double"/>
 			</xs:simpleType>

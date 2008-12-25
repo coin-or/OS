@@ -951,8 +951,8 @@ InitConstraintValues::~InitConstraintValues()
 
 InitDualVarValue::InitDualVarValue(): 
 	idx (0),
-	lbValue (0.0),
-	ubValue (0.0)
+	valueAtLb (0.0),
+	valueAtUb (0.0)
 {    
 	#ifdef DEBUG
 	cout << "Inside InitDualVarValue Constructor" << endl;
@@ -1317,7 +1317,7 @@ std::string  OSOption::getContactTransportType()
 			return this->general->contact->transportType;
 
 	return "";
-}//getTransportType
+}//getContactTransportType
 
 /**
  * get the disk space units (in <system> element)
@@ -1697,7 +1697,7 @@ int  OSOption::getNumberOfDirectoriesToDelete()
 }//getNumberOfDirectoriesToDelete
 
 /**
- * get the number of proceses to kill (in <job> element)
+ * get the number of processes to kill (in <job> element)
  */
 int  OSOption::getNumberOfProcessesToKill()
 {	if (this->job != NULL) 
@@ -1714,7 +1714,7 @@ int  OSOption::getNumberOfVariables()
 {	if (this->optimization != NULL) 
 		return this->optimization->numberOfVariables;
 
-	return 0;
+	return -1;
 }//getNumberOfVariables
 
 /**
@@ -1724,7 +1724,7 @@ int  OSOption::getNumberOfObjectives()
 {	if (this->optimization != NULL) 
 		return this->optimization->numberOfObjectives;
 
-	return 0;
+	return -1;
 }//getNumberOfObjectives
 
 /**
@@ -1734,7 +1734,7 @@ int  OSOption::getNumberOfConstraints()
 {	if (this->optimization != NULL) 
 		return this->optimization->numberOfConstraints;
 
-	return 0;
+	return -1;
 }//getNumberOfConstraints
 
 
@@ -1902,109 +1902,109 @@ int OSOption::getNumberOfSolverOptions()
  * get the value of an integer-valued option
  * @param optionName The name of the option
  * @return the value of the option optionName
- * @note This function returns 0 if optionName is not found
+ * @note This function returns -1 if optionName is not found
  */
 int  OSOption::getOptionInt(std::string optionName)
 {	if (optionName == "minCPUNumber")
-		this->getMinCPUNumber();
+		return this->getMinCPUNumber();
 
 	if (optionName == "numberOfOtherGeneralOptions")
-		this->getNumberOfOtherGeneralOptions();
+		return this->getNumberOfOtherGeneralOptions();
 
 	if (optionName == "numberOfOtherSystemOptions")
-		this->getNumberOfOtherSystemOptions();
+		return this->getNumberOfOtherSystemOptions();
 
 	if (optionName == "numberOfOtherServiceOptions")
-		this->getNumberOfOtherServiceOptions();
+		return this->getNumberOfOtherServiceOptions();
 
 	if (optionName == "numberOfOtherJobOptions")
-		this->getNumberOfOtherJobOptions();
+		return this->getNumberOfOtherJobOptions();
 
 	if (optionName == "numberOfJobDependencies")
-		this->getNumberOfJobDependencies();
+		return this->getNumberOfJobDependencies();
 
 	if (optionName == "numberOfRequiredDirectories")
-		this->getNumberOfRequiredDirectories();
+		return this->getNumberOfRequiredDirectories();
 
 	if (optionName == "numberOfRequiredFiles")
-		this->getNumberOfRequiredFiles();
+		return this->getNumberOfRequiredFiles();
 
 	if (optionName == "numberOfDirectoriesToMake")
-		this->getNumberOfDirectoriesToMake();
+		return this->getNumberOfDirectoriesToMake();
 
 	if (optionName == "numberOfFilesToMake")
-		this->getNumberOfFilesToMake();
+		return this->getNumberOfFilesToMake();
 
 	if (optionName == "numberOfInputDirectoriesToMove")
-		this->getNumberOfInputDirectoriesToMove();
+		return this->getNumberOfInputDirectoriesToMove();
 
 	if (optionName == "numberOfInputFilesToMove")
-		this->getNumberOfInputFilesToMove();
+		return this->getNumberOfInputFilesToMove();
 
 	if (optionName == "numberOfOutputDirectoriesToMove")
-		this->getNumberOfOutputDirectoriesToMove();
+		return this->getNumberOfOutputDirectoriesToMove();
 
 	if (optionName == "numberOfOutputFilesToMove")
-		this->getNumberOfOutputFilesToMove();
+		return this->getNumberOfOutputFilesToMove();
 
 	if (optionName == "numberOfFilesToDelete")
-		this->getNumberOfFilesToDelete();
+		return this->getNumberOfFilesToDelete();
 
 	if (optionName == "numberOfDirectoriesToDelete")
-		this->getNumberOfDirectoriesToDelete();
+		return this->getNumberOfDirectoriesToDelete();
 
 	if (optionName == "numberOfProcessesToKill")
-		this->getNumberOfProcessesToKill();
+		return this->getNumberOfProcessesToKill();
 
 	if (optionName == "numberOfVariables")
-		this->getNumberOfVariables();
+		return this->getNumberOfVariables();
 
 	if (optionName == "numberOfObjectives")
-		this->getNumberOfObjectives();
+		return this->getNumberOfObjectives();
 
 	if (optionName == "numberOfConstraints")
-		this->getNumberOfConstraints();
+		return this->getNumberOfConstraints();
 
 	if (optionName == "numberOfInitVarValues")
-		this->getNumberOfInitVarValues();
+		return this->getNumberOfInitVarValues();
 
 	if (optionName == "numberOfInitVarValuesString")
-		this->getNumberOfInitVarValuesString();
+		return this->getNumberOfInitVarValuesString();
 
 	if (optionName == "numberOfInitialBasisVariables")
-		this->getNumberOfInitialBasisVariables();
+		return this->getNumberOfInitialBasisVariables();
 
 	if (optionName == "numberOfIntegerVariableBranchingWeights")
-		this->getNumberOfIntegerVariableBranchingWeights();
+		return this->getNumberOfIntegerVariableBranchingWeights();
 
 	if (optionName == "numberOfSOSWeights")
-		this->getNumberOfSOSWeights();
+		return this->getNumberOfSOSWeights();
 
 	if (optionName == "numberOfOtherVariableOptions")
-		this->getNumberOfOtherVariableOptions();
+		return this->getNumberOfOtherVariableOptions();
 
 	if (optionName == "numberOfInitObjValues")
-		this->getNumberOfInitObjValues();
+		return this->getNumberOfInitObjValues();
 
 	if (optionName == "numberOfInitObjBounds")
-		this->getNumberOfInitObjBounds();
+		return this->getNumberOfInitObjBounds();
 
 	if (optionName == "numberOfOtherObjectiveOptions")
-		this->getNumberOfOtherObjectiveOptions();
+		return this->getNumberOfOtherObjectiveOptions();
 
 	if (optionName == "numberOfInitConValues")
-		this->getNumberOfInitConValues();
+		return this->getNumberOfInitConValues();
 
 	if (optionName == "numberOfInitDualVarValues")
-		this->getNumberOfInitDualVarValues();
+		return this->getNumberOfInitDualVarValues();
 
 	if (optionName == "numberOfOtherConstraintOptions")
-		this->getNumberOfOtherConstraintOptions();
+		return this->getNumberOfOtherConstraintOptions();
 
 	if (optionName == "numberOfSolverOptions")
-		this->getNumberOfSolverOptions();
+		return this->getNumberOfSolverOptions();
 
-	return 0;
+	return -1;
 }//getOptionInt
 
 
@@ -2188,6 +2188,22 @@ std::string*  OSOption::getRequiredDirectories()
 }//getRequiredDirectories
 
 /**
+ * get the list of required files
+ */
+std::string*  OSOption::getRequiredFiles()
+{	std::string* pathVector = NULL;
+	if (this->job != NULL) 
+	{	if (this->job->requiredFiles != NULL) 
+			pathVector = this->job->requiredFiles->path;				
+		else
+			throw ErrorClass("<requiredFiles> object must be defined before getting the paths");
+	}
+	else
+		throw ErrorClass("<job> object must be defined before getting the paths");
+	return pathVector;
+}//getRequiredFiles
+
+/**
  * get the list of directories that need to be created
  */
 std::string*  OSOption::getDirectoriesToMake()
@@ -2360,17 +2376,22 @@ InitVarValue**  OSOption::getInitVarValuesSparse()
  * @note return OSNAN for variables that are not initialed
  */
 double* OSOption::getInitVarValuesDense(int numberOfVariables)
-{	double *initVarVector;
-	initVarVector = new double[numberOfVariables];
-	int k;
-	for (k = 0; k < numberOfVariables; k++) initVarVector[k] = OSNAN;
-	try
-	{	if (this->optimization != NULL) 
+{	try
+	{	numberOfVariables = this->getNumberOfVariables();
+		if (numberOfVariables < 0)
+			throw ErrorClass("\"numberOfVariables\" must be present to use dense methods");		
+
+		if (this->optimization != NULL) 
 		{	if (this->optimization->variables != NULL) 
 			{	if (this->optimization->variables->initialVariableValues != NULL) 
-				{	int i,j;
+				{	int i,j,k;
 					int num_var;
 					num_var = this->getNumberOfInitVarValues();
+
+					double *initVarVector;
+					initVarVector = new double[numberOfVariables];
+					for (k = 0; k < numberOfVariables; k++) initVarVector[k] = OSNAN;
+
 					for (i = 0; i < num_var; i++)
 					{	j = this->optimization->variables->initialVariableValues->var[i]->idx;
 						if (j >= 0 && j < numberOfVariables)						
@@ -2379,6 +2400,7 @@ double* OSOption::getInitVarValuesDense(int numberOfVariables)
 						else
 							throw ErrorClass("Variable index out of range");
 					}
+					return initVarVector;
 				}
 			}
 		}					
@@ -2386,7 +2408,7 @@ double* OSOption::getInitVarValuesDense(int numberOfVariables)
 	catch(const ErrorClass& eclass)
 	{	throw ErrorClass(eclass.errormsg);
 	}
-	return initVarVector;
+	return NULL;
 }//getInitVarValuesDense
 
 /**
@@ -2416,18 +2438,22 @@ InitVarValueString**  OSOption::getInitVarStringsSparse()
  * @note return the empty string "" for variables that are not initialed
  */
 std::string *OSOption::getInitVarStringsDense(int numberOfVariables)
-{	std::string *initVarVector;
-	initVarVector = new std::string[numberOfVariables];
-	int k;
-	for (k = 0; k < numberOfVariables; k++) initVarVector[k] = "";
-	try
-	{
+{	try
+	{	numberOfVariables = this->getNumberOfVariables();
+		if (numberOfVariables < 0)
+			throw ErrorClass("\"numberOfVariables\" must be present to use dense methods");		
+
 		if (this->optimization != NULL) 
 		{	if (this->optimization->variables != NULL) 
 			{	if (this->optimization->variables->initialVariableValuesString != NULL) 
-				{	int i,j;
+				{	int i,j,k;
 					int num_var;
 					num_var = this->getNumberOfInitVarValuesString();
+
+					std::string *initVarVector;
+					initVarVector = new std::string[numberOfVariables];
+					for (k = 0; k < numberOfVariables; k++) initVarVector[k] = "";
+		
 					for (i = 0; i < num_var; i++)
 					{	j = this->optimization->variables->initialVariableValuesString->var[i]->idx;
 						if (j >= 0 && j < numberOfVariables)
@@ -2436,6 +2462,7 @@ std::string *OSOption::getInitVarStringsDense(int numberOfVariables)
 						else
 							throw ErrorClass("Variable index out of range");
 					}
+					return initVarVector;
 				}
 			}
 		}					
@@ -2443,7 +2470,7 @@ std::string *OSOption::getInitVarStringsDense(int numberOfVariables)
 	catch(const ErrorClass& eclass)
 	{	throw ErrorClass(eclass.errormsg);
 	}
-	return initVarVector;
+	return NULL;
 }//getInitVarStringsDense
 
 /**
@@ -2473,26 +2500,31 @@ InitBasStatus**  OSOption::getInitBasisStatusSparse()
  * @note return the empty string "" for variables that are not initialed
  */
 std::string *OSOption::getInitBasisStatusDense(int numberOfVariables)
-{	std::string *initBasVector;
-	initBasVector = new std::string[numberOfVariables];
-	int k;
-	for (k = 0; k < numberOfVariables; k++) initBasVector[k] = "";
-	try
-	{
+{	try
+	{	numberOfVariables = this->getNumberOfVariables();
+		if (numberOfVariables < 0)
+			throw ErrorClass("\"numberOfVariables\" must be present to use dense methods");		
+
 		if (this->optimization != NULL) 
 		{	if (this->optimization->variables != NULL) 
 			{	if (this->optimization->variables->initialBasisStatus != NULL) 
-				{	int i,j;
+				{	int i,j,k;
 					int num_var;
-					num_var = this->getNumberOfInitVarValuesString();
+					num_var = this->getNumberOfInitialBasisVariables();
+
+					std::string *initBasVector;
+					initBasVector = new std::string[numberOfVariables];
+					for (k = 0; k < numberOfVariables; k++) initBasVector[k] = "";
+		
 					for (i = 0; i < num_var; i++)
-					{	j = this->optimization->variables->initialVariableValuesString->var[i]->idx;
+					{	j = this->optimization->variables->initialBasisStatus->var[i]->idx;
 						if (j >= 0 && j < numberOfVariables)
 							initBasVector[j] 
-							  = this->optimization->variables->initialVariableValuesString->var[i]->value;
+							  = this->optimization->variables->initialBasisStatus->var[i]->value;
 						else
 							throw ErrorClass("Variable index out of range");
 					}
+					return initBasVector;
 				}
 			}
 		}					
@@ -2500,7 +2532,7 @@ std::string *OSOption::getInitBasisStatusDense(int numberOfVariables)
 	catch(const ErrorClass& eclass)
 	{	throw ErrorClass(eclass.errormsg);
 	}
-	return initBasVector;
+	return NULL;
 }//getInitBasisStatusDense
 
 /**
@@ -2530,17 +2562,22 @@ BranchingWeight**  OSOption::getIntegerVariableBranchingWeightsSparse()
  * @note return OSNAN for variables that are not initialed
  */
 double* OSOption::getIntegerVariableBranchingWeightsDense(int numberOfVariables)
-{	double *intVarVector;
-	intVarVector = new double[numberOfVariables];
-	int k;
-	for (k = 0; k < numberOfVariables; k++) intVarVector[k] = OSNAN;
-	try
-	{	if (this->optimization != NULL) 
+{	try
+	{	numberOfVariables = this->getNumberOfVariables();
+		if (numberOfVariables < 0)
+			throw ErrorClass("\"numberOfVariables\" must be present to use dense methods");		
+
+		if (this->optimization != NULL) 
 		{	if (this->optimization->variables != NULL) 
 			{	if (this->optimization->variables->integerVariableBranchingWeights != NULL) 
-				{	int i,j;
+				{	int i,j,k;
 					int num_var;
 					num_var = this->getNumberOfIntegerVariableBranchingWeights();
+
+					double *intVarVector;
+					intVarVector = new double[numberOfVariables];
+					for (k = 0; k < numberOfVariables; k++) intVarVector[k] = OSNAN;
+
 					for (i = 0; i < num_var; i++)
 					{	j = this->optimization->variables->integerVariableBranchingWeights->var[i]->idx;
 						if (j >= 0 && j < numberOfVariables)						
@@ -2549,6 +2586,7 @@ double* OSOption::getIntegerVariableBranchingWeightsDense(int numberOfVariables)
 						else
 							throw ErrorClass("Variable index out of range");
 					}
+					return intVarVector;
 				}
 			}
 		}					
@@ -2556,7 +2594,7 @@ double* OSOption::getIntegerVariableBranchingWeightsDense(int numberOfVariables)
 	catch(const ErrorClass& eclass)
 	{	throw ErrorClass(eclass.errormsg);
 	}
-	return intVarVector;
+	return NULL;
 }//getIntegerVariableBranchingWeightsDense
 
 /**
@@ -2586,17 +2624,22 @@ InitObjValue**  OSOption::getInitObjValuesSparse()
  * @note return OSNAN for objectives that are not initialed
  */
 double* OSOption::getInitObjValuesDense(int numberOfObjectives)
-{	double *initObjVector;
-	initObjVector = new double[numberOfObjectives];
-	int k;
-	for (k = 0; k < numberOfObjectives; k++) initObjVector[k] = OSNAN;
-	try
-	{	if (this->optimization != NULL) 
+{	try
+	{	numberOfObjectives = this->getNumberOfObjectives();
+		if (numberOfObjectives < 0)
+			throw ErrorClass("\"numberOfObjectives\" must be present to use dense methods");		
+
+		if (this->optimization != NULL) 
 		{	if (this->optimization->objectives != NULL) 
 			{	if (this->optimization->objectives->initialObjectiveValues != NULL) 
-				{	int i,j;
+				{	int i,j,k;
 					int num_obj;
 					num_obj = this->getNumberOfInitObjValues();
+
+					double *initObjVector;
+					initObjVector = new double[numberOfObjectives];
+					for (k = 0; k < numberOfObjectives; k++) initObjVector[k] = OSNAN;
+	
 					for (i = 0; i < num_obj; i++)
 					{	j = this->optimization->objectives->initialObjectiveValues->obj[i]->idx;
 						if (j < 0 && -j <= numberOfObjectives)						
@@ -2605,6 +2648,7 @@ double* OSOption::getInitObjValuesDense(int numberOfObjectives)
 						else
 							throw ErrorClass("Objective index out of range");
 					}
+					return initObjVector;
 				}
 			}
 		}					
@@ -2612,7 +2656,7 @@ double* OSOption::getInitObjValuesDense(int numberOfObjectives)
 	catch(const ErrorClass& eclass)
 	{	throw ErrorClass(eclass.errormsg);
 	}
-	return initObjVector;
+	return NULL;
 }//getInitObjValuesDense
 
 
@@ -2642,17 +2686,22 @@ InitObjBound**  OSOption::getInitObjBoundsSparse()
  * @note return OSNAN for objectives that are not initialed
  */
 double* OSOption::getInitObjLowerBoundsDense(int numberOfObjectives)
-{	double *initObjBound;
-	initObjBound = new double[numberOfObjectives];
-	int k;
-	for (k = 0; k < numberOfObjectives; k++) initObjBound[k] = OSNAN;
-	try
-	{	if (this->optimization != NULL) 
+{	try
+	{	numberOfObjectives = this->getNumberOfObjectives();
+		if (numberOfObjectives < 0)
+			throw ErrorClass("\"numberOfObjectives\" must be present to use dense methods");		
+
+		if (this->optimization != NULL) 
 		{	if (this->optimization->objectives != NULL) 
 			{	if (this->optimization->objectives->initialObjectiveBounds != NULL) 
-				{	int i,j;
+				{	int i,j,k;
 					int num_obj;
 					num_obj = this->getNumberOfInitObjBounds();
+
+					double *initObjBound;
+					initObjBound = new double[numberOfObjectives];
+					for (k = 0; k < numberOfObjectives; k++) initObjBound[k] = OSNAN;
+
 					for (i = 0; i < num_obj; i++)
 					{	j = this->optimization->objectives->initialObjectiveBounds->obj[i]->idx;
 						if (j < 0 && -j <= numberOfObjectives)						
@@ -2661,6 +2710,7 @@ double* OSOption::getInitObjLowerBoundsDense(int numberOfObjectives)
 						else
 							throw ErrorClass("Objective index out of range");
 					}
+					return initObjBound;
 				}
 			}
 		}					
@@ -2668,7 +2718,7 @@ double* OSOption::getInitObjLowerBoundsDense(int numberOfObjectives)
 	catch(const ErrorClass& eclass)
 	{	throw ErrorClass(eclass.errormsg);
 	}
-	return initObjBound;
+	return NULL;
 }//getInitObjLowerBoundsDense
 
 /**
@@ -2677,17 +2727,22 @@ double* OSOption::getInitObjLowerBoundsDense(int numberOfObjectives)
  * @note return OSNAN for objectives that are not initialed
  */
 double* OSOption::getInitObjUpperBoundsDense(int numberOfObjectives)
-{	double *initObjBound;
-	initObjBound = new double[numberOfObjectives];
-	int k;
-	for (k = 0; k < numberOfObjectives; k++) initObjBound[k] = OSNAN;
-	try
-	{	if (this->optimization != NULL) 
+{	try
+	{	numberOfObjectives = this->getNumberOfObjectives();
+		if (numberOfObjectives < 0)
+			throw ErrorClass("\"numberOfObjectives\" must be present to use dense methods");		
+
+		if (this->optimization != NULL) 
 		{	if (this->optimization->objectives != NULL) 
 			{	if (this->optimization->objectives->initialObjectiveBounds != NULL) 
-				{	int i,j;
+				{	int i,j,k;
 					int num_obj;
 					num_obj = this->getNumberOfInitObjBounds();
+
+					double *initObjBound;
+					initObjBound = new double[numberOfObjectives];
+					for (k = 0; k < numberOfObjectives; k++) initObjBound[k] = OSNAN;
+					
 					for (i = 0; i < num_obj; i++)
 					{	j = this->optimization->objectives->initialObjectiveBounds->obj[i]->idx;
 						if (j < 0 && -j <= numberOfObjectives)						
@@ -2696,6 +2751,7 @@ double* OSOption::getInitObjUpperBoundsDense(int numberOfObjectives)
 						else
 							throw ErrorClass("Objective index out of range");
 					}
+					return initObjBound;
 				}
 			}
 		}					
@@ -2703,7 +2759,7 @@ double* OSOption::getInitObjUpperBoundsDense(int numberOfObjectives)
 	catch(const ErrorClass& eclass)
 	{	throw ErrorClass(eclass.errormsg);
 	}
-	return initObjBound;
+	return NULL;
 }//getInitObjUpperBoundsDense
 
 
@@ -2734,17 +2790,22 @@ InitConValue**  OSOption::getInitConValuesSparse()
  * @note return OSNAN for constraints that are not initialed
  */
 double* OSOption::getInitConValuesDense(int numberOfConstraints)
-{	double *initConVector;
-	initConVector = new double[numberOfConstraints];
-	int k;
-	for (k = 0; k < numberOfConstraints; k++) initConVector[k] = OSNAN;
-	try
-	{	if (this->optimization != NULL) 
+{	try
+	{	numberOfConstraints = this->getNumberOfConstraints();
+		if (numberOfConstraints < 0)
+			throw ErrorClass("\"numberOfConstraints\" must be present to use dense methods");		
+
+		if (this->optimization != NULL) 
 		{	if (this->optimization->constraints != NULL) 
 			{	if (this->optimization->constraints->initialConstraintValues != NULL) 
-				{	int i,j;
+				{	int i,j,k;
 					int num_con;
 					num_con = this->getNumberOfInitConValues();
+
+					double *initConVector;
+					initConVector = new double[numberOfConstraints];
+					for (k = 0; k < numberOfConstraints; k++) initConVector[k] = OSNAN;
+
 					for (i = 0; i < num_con; i++)
 					{	j = this->optimization->constraints->initialConstraintValues->con[i]->idx;
 						if (j >= 0 && j < numberOfConstraints)						
@@ -2753,6 +2814,7 @@ double* OSOption::getInitConValuesDense(int numberOfConstraints)
 						else
 							throw ErrorClass("Constraint index out of range");
 					}
+				return initConVector;
 				}
 			}
 		}					
@@ -2760,12 +2822,12 @@ double* OSOption::getInitConValuesDense(int numberOfConstraints)
 	catch(const ErrorClass& eclass)
 	{	throw ErrorClass(eclass.errormsg);
 	}
-	return initConVector;
+	return NULL;
 }//getInitConValuesDense
 
 
 /**
- * get the list of initial dual variable bounds in sparse form
+ * get the list of initial dual variables in sparse form
  * @return a list of index/value/value triples
  */
 InitDualVarValue**  OSOption::getInitDualVarValuesSparse()
@@ -2786,30 +2848,36 @@ InitDualVarValue**  OSOption::getInitDualVarValuesSparse()
 }//getInitDualVarValuesSparse
 
 /**
- * get the list of initial dual variable lower bounds in dense form
+ * get the list of initial dual variables associated with the lower bounds in dense form
  * @return an array of values
  * @note return OSNAN for dual variables that are not initialed
  */
 double* OSOption::getInitDualVarLowerBoundsDense(int numberOfConstraints)
-{	double *initDualVector;
-	initDualVector = new double[numberOfConstraints];
-	int k;
-	for (k = 0; k < numberOfConstraints; k++) initDualVector[k] = OSNAN;
-	try
-	{	if (this->optimization != NULL) 
+{	try
+	{	numberOfConstraints = this->getNumberOfConstraints();
+		if (numberOfConstraints < 0)
+			throw ErrorClass("\"numberOfConstraints\" must be present to use dense methods");		
+
+		if (this->optimization != NULL) 
 		{	if (this->optimization->constraints != NULL) 
 			{	if (this->optimization->constraints->initialDualValues != NULL) 
-				{	int i,j;
+				{	int i,j,k;
 					int num_con;
 					num_con = this->getNumberOfInitDualVarValues();
+
+					double *initDualVector;
+					initDualVector = new double[numberOfConstraints];
+					for (k = 0; k < numberOfConstraints; k++) initDualVector[k] = OSNAN;
+
 					for (i = 0; i < num_con; i++)
 					{	j = this->optimization->constraints->initialDualValues->con[i]->idx;
 						if (j >= 0 && j < numberOfConstraints)						
 							initDualVector[j] 
-							  = this->optimization->constraints->initialDualValues->con[i]->lbValue;						
+							  = this->optimization->constraints->initialDualValues->con[i]->valueAtLb;						
 						else
 							throw ErrorClass("Constraint index out of range");
 					}
+					return initDualVector;
 				}
 			}
 		}					
@@ -2817,34 +2885,41 @@ double* OSOption::getInitDualVarLowerBoundsDense(int numberOfConstraints)
 	catch(const ErrorClass& eclass)
 	{	throw ErrorClass(eclass.errormsg);
 	}
-	return initDualVector;
+	return NULL;
 }//getInitDualVarLowerBoundsDense
 
 /**
- * get the list of initial dual variable lower bounds in dense form
+ * get the list of initial dual variables associated with the upper bounds in dense form
  * @return an array of values
  * @note return OSNAN for dual variables that are not initialed
  */
 double* OSOption::getInitDualVarUpperBoundsDense(int numberOfConstraints)
-{	double *initDualVector;
-	initDualVector = new double[numberOfConstraints];
-	int k;
-	for (k = 0; k < numberOfConstraints; k++) initDualVector[k] = OSNAN;
-	try
-	{	if (this->optimization != NULL) 
+{	try
+	{	numberOfConstraints = this->getNumberOfConstraints();
+		if (numberOfConstraints < 0)
+			throw ErrorClass("\"numberOfConstraints\" must be present to use dense methods");		
+
+		if (this->optimization != NULL) 
 		{	if (this->optimization->constraints != NULL) 
 			{	if (this->optimization->constraints->initialDualValues != NULL) 
-				{	int i,j;
+				{	int i,j,k;
 					int num_con;
 					num_con = this->getNumberOfInitDualVarValues();
+					numberOfConstraints = this->getNumberOfConstraints();
+
+					double *initDualVector;
+					initDualVector = new double[numberOfConstraints];
+					for (k = 0; k < numberOfConstraints; k++) initDualVector[k] = OSNAN;
+
 					for (i = 0; i < num_con; i++)
 					{	j = this->optimization->constraints->initialDualValues->con[i]->idx;
 						if (j >= 0 && j < numberOfConstraints)						
 							initDualVector[j] 
-							  = this->optimization->constraints->initialDualValues->con[i]->ubValue;	
+							  = this->optimization->constraints->initialDualValues->con[i]->valueAtUb;	
 						else
 							throw ErrorClass("Constraint index out of range");
 					}
+					return initDualVector;
 				}
 			}
 		}					
@@ -2852,7 +2927,7 @@ double* OSOption::getInitDualVarUpperBoundsDense(int numberOfConstraints)
 	catch(const ErrorClass& eclass)
 	{	throw ErrorClass(eclass.errormsg);
 	}
-	return initDualVector;
+	return NULL;
 }//getInitDualVarUpperBoundsDense
 
 
@@ -4237,7 +4312,7 @@ bool InitDualVariableValues::setCon(int numberOfCon, InitDualVarValue **con)
  * @param lbValue: an initial lower bound for the dual variable 
  * @param ubValue: an initial upper bound for the dual variable 
  */
-bool InitDualVariableValues::addCon(int idx, double lbValue, double ubValue)
+bool InitDualVariableValues::addCon(int idx, double valueAtLb, double valueAtUb)
 {	try
 	{	int nopt; int i;
 		if (idx < 0)
@@ -4258,8 +4333,8 @@ bool InitDualVariableValues::addCon(int idx, double lbValue, double ubValue)
 		temp[ nopt] = new InitDualVarValue();
 
 		temp[ nopt]->idx = idx;
-		temp[ nopt]->lbValue = lbValue;
-		temp[ nopt]->ubValue = ubValue;
+		temp[ nopt]->valueAtLb = valueAtLb;
+		temp[ nopt]->valueAtUb = valueAtUb;
 
 		this->con = temp;   //hook the new pointers into the data structure
 		this->numberOfCon = ++nopt;
@@ -4600,7 +4675,7 @@ bool OSOption::setContact( std::string contact)
 	return true;
 }//setContact
 
-bool OSOption::setTransportType( std::string transportType)
+bool OSOption::setContactTransportType( std::string transportType)
 {	try
 	{	if (this->general == NULL) 
 			this->general = new GeneralOption();
@@ -4618,7 +4693,7 @@ bool OSOption::setTransportType( std::string transportType)
 	{	cout << eclass.errormsg << endl;
 		return false;
 	}
-}//setTransportType
+}//setContactTransportType
 
 bool OSOption::setOtherGeneralOptions(int numberOfOptions, OtherOption** other)
 {	if (this->general == NULL) 
@@ -5165,7 +5240,7 @@ bool OSOption::setInitVarValuesSparse(int numberOfVar, InitVarValue** var)
 	return this->optimization->variables->initialVariableValues->setVar(numberOfVar, var);
 }//setInitVarValuesSparse
 
-bool OSOption::setInitVarValuesDense(int numberOfVar, int *idx, double *value)
+bool OSOption::setInitVarValuesDense(int numberOfVar, double *value)
 {	if (this->optimization == NULL) 
 		this->optimization = new OptimizationOption();
 	if (this->optimization->variables == NULL) 
@@ -5176,10 +5251,13 @@ bool OSOption::setInitVarValuesDense(int numberOfVar, int *idx, double *value)
 	{	delete[] this->optimization->variables->initialVariableValues->var;
 		this->optimization->variables->initialVariableValues->var = NULL;
 	}
+	cout << "Now process " << numberOfVar << " variables" << endl;
 	int i;
 	for (i = 0; i < numberOfVar; i++)
-	{	if (value[i] != OSNAN)
-			if (!this->optimization->variables->initialVariableValues->addVar(idx[i], value[i]))
+	{	cout << "variable " << i << " value ";
+		cout << value[i] << endl;
+		if (value[i] != OSNAN)
+			if (!this->optimization->variables->initialVariableValues->addVar(i, value[i]))
 				return false;
 	}
 	return true;
@@ -5213,7 +5291,7 @@ bool OSOption::setInitVarValuesStringSparse(int numberOfVar, InitVarValueString*
 	return this->optimization->variables->initialVariableValuesString->setVar(numberOfVar, var);
 }//setInitVarValuesStringSparse
 
-bool OSOption::setInitVarValuesStringDense(int numberOfVar, int *idx, std::string *value)
+bool OSOption::setInitVarValuesStringDense(int numberOfVar, std::string *value)
 {	if (this->optimization == NULL) 
 		this->optimization = new OptimizationOption();
 	if (this->optimization->variables == NULL) 
@@ -5226,7 +5304,7 @@ bool OSOption::setInitVarValuesStringDense(int numberOfVar, int *idx, std::strin
 	}
 	int i;
 	for (i = 0; i < numberOfVar; i++)
-	{	if (!this->optimization->variables->initialVariableValuesString->addVar(idx[i], value[i]))
+	{	if (!this->optimization->variables->initialVariableValuesString->addVar(i, value[i]))
 			return false;
 	}
 		return true;
@@ -5260,7 +5338,7 @@ bool OSOption::setInitBasisStatusSparse(int numberOfVar, InitBasStatus** var)
 	return this->optimization->variables->initialBasisStatus->setVar(numberOfVar, var);
 }//setInitBasisStatusSparse
 
-bool OSOption::setInitBasisStatusDense(int numberOfVar, int *idx, std::string *value)
+bool OSOption::setInitBasisStatusDense(int numberOfVar, std::string *value)
 {	if (this->optimization == NULL) 
 		this->optimization = new OptimizationOption();
 	if (this->optimization->variables == NULL) 
@@ -5275,7 +5353,7 @@ bool OSOption::setInitBasisStatusDense(int numberOfVar, int *idx, std::string *v
 	for (i = 0; i < numberOfVar; i++)
 	{	if ((value[i] != "superbasic") && (value[i] != "atLower") && (value[i] != "basic")
 	                                   && (value[i] != "atUpper") && (value[i] != "unknown"))
-			if (!this->optimization->variables->initialBasisStatus->addVar(idx[i], value[i]))
+			if (!this->optimization->variables->initialBasisStatus->addVar(i, value[i]))
 				return false;
 	}
 	return true;
@@ -5309,7 +5387,7 @@ bool OSOption::setIntegerVariableBranchingWeightsSparse(int numberOfVar, Branchi
 	return this->optimization->variables->integerVariableBranchingWeights->setVar(numberOfVar, var);
 }//setIntegerVariableBranchingWeightsSparse
 
-bool OSOption::setIntegerVariableBranchingWeightsDense(int numberOfVar, int *idx, double *value)
+bool OSOption::setIntegerVariableBranchingWeightsDense(int numberOfVar, double *value)
 {	if (this->optimization == NULL) 
 		this->optimization = new OptimizationOption();
 	if (this->optimization->variables == NULL) 
@@ -5323,7 +5401,7 @@ bool OSOption::setIntegerVariableBranchingWeightsDense(int numberOfVar, int *idx
 	int i;
 	for (i = 0; i < numberOfVar; i++)
 	{	if (value[i] != OSNAN)
-			if (!this->optimization->variables->integerVariableBranchingWeights->addVar(idx[i], value[i]))
+			if (!this->optimization->variables->integerVariableBranchingWeights->addVar(i, value[i]))
 				return false;
 	}
 	return true;
@@ -5409,7 +5487,7 @@ bool OSOption::setInitObjValuesSparse(int numberOfObj, InitObjValue** obj)
 	return this->optimization->objectives->initialObjectiveValues->setObj(numberOfObj, obj);
 }//setInitObjValuesSparse
 
-bool OSOption::setInitObjValuesDense(int numberOfObj, int *idx, double *value)
+bool OSOption::setInitObjValuesDense(int numberOfObj, double *value)
 {	if (this->optimization == NULL) 
 		this->optimization = new OptimizationOption();
 	if (this->optimization->objectives == NULL) 
@@ -5423,7 +5501,7 @@ bool OSOption::setInitObjValuesDense(int numberOfObj, int *idx, double *value)
 	int i;
 	for (i = 0; i < numberOfObj; i++)
 	{	if (value[i] != OSNAN)
-			if (!this->optimization->objectives->initialObjectiveValues->addObj(idx[i], value[i]))
+			if (!this->optimization->objectives->initialObjectiveValues->addObj(i, value[i]))
 				return false;
 	}
 	return true;
@@ -5457,7 +5535,7 @@ bool OSOption::setInitObjBoundsSparse(int numberOfObj, InitObjBound** obj)
 	return this->optimization->objectives->initialObjectiveBounds->setObj(numberOfObj, obj);
 }//setInitObjBoundsSparse
 
-bool OSOption::setInitObjBoundsDense(int numberOfObj, int* idx, double* lb, double* ub)
+bool OSOption::setInitObjBoundsDense(int numberOfObj, double* lb, double* ub)
 {	if (this->optimization == NULL) 
 		this->optimization = new OptimizationOption();
 	if (this->optimization->objectives == NULL) 
@@ -5470,7 +5548,7 @@ bool OSOption::setInitObjBoundsDense(int numberOfObj, int* idx, double* lb, doub
 	}
 	int i;
 	for (i = 0; i < numberOfObj; i++)
-	{	if (!this->optimization->objectives->initialObjectiveBounds->addObj(idx[i], lb[i], ub[i]))
+	{	if (!this->optimization->objectives->initialObjectiveBounds->addObj(i, lb[i], ub[i]))
 			return false;
 	}
 	return true;
@@ -5528,7 +5606,7 @@ bool OSOption::setInitConValuesSparse(int numberOfCon, InitConValue** con)
 	return this->optimization->constraints->initialConstraintValues->setCon(numberOfCon, con);
 }//setInitConValuesSparse
 
-bool OSOption::setInitConValuesDense(int numberOfCon, int *idx, double *value)
+bool OSOption::setInitConValuesDense(int numberOfCon, double *value)
 {	if (this->optimization == NULL) 
 		this->optimization = new OptimizationOption();
 	if (this->optimization->constraints == NULL) 
@@ -5542,7 +5620,7 @@ bool OSOption::setInitConValuesDense(int numberOfCon, int *idx, double *value)
 	int i;
 	for (i = 0; i < numberOfCon; i++)
 	{	if (value[i] != OSNAN)
-			if (!this->optimization->constraints->initialConstraintValues->addCon(idx[i], value[i]))
+			if (!this->optimization->constraints->initialConstraintValues->addCon(i, value[i]))
 				return false;
 	}
 	return true;
@@ -5576,7 +5654,7 @@ bool OSOption::setInitDualVarValuesSparse(int numberOfCon, InitDualVarValue** co
 	return this->optimization->constraints->initialDualValues->setCon(numberOfCon, con);
 }//setInitDualVarValuesSparse
 
-bool OSOption::setInitDualVarValuesDense(int numberOfCon, int* idx, double* lb, double* ub)
+bool OSOption::setInitDualVarValuesDense(int numberOfCon, double* lb, double* ub)
 {	if (this->optimization == NULL) 
 		this->optimization = new OptimizationOption();
 	if (this->optimization->constraints == NULL) 
@@ -5589,7 +5667,7 @@ bool OSOption::setInitDualVarValuesDense(int numberOfCon, int* idx, double* lb, 
 	}
 	int i;
 	for (i = 0; i < numberOfCon; i++)
-	{	if (!this->optimization->constraints->initialDualValues->addCon(idx[i], lb[i], ub[i]))
+	{	if (!this->optimization->constraints->initialDualValues->addCon(i, lb[i], ub[i]))
 			return false;
 	}
 	return true;
@@ -5693,7 +5771,7 @@ bool OSOption::setOptionStr(std::string optionName, std::string optionValue)
 		return this->setContact(optionValue);
 
 	if (optionName == "transportType") 
-		return this->setTransportType(optionValue);
+		return this->setContactTransportType(optionValue);
 
 	if (optionName == "minDiskSpaceUnit") 
 		return this->setMinDiskSpaceUnit(optionValue);
@@ -6933,8 +7011,8 @@ bool InitDualVarValue::IsEqual(InitDualVarValue *that)
 	{	if (that == NULL)
 			return false;
 		else	
-		{	if ((this->idx != that->idx) || (this->lbValue != that->lbValue) ||
-				(this->ubValue != that->ubValue))
+		{	if ((this->idx != that->idx) || (this->valueAtLb != that->valueAtLb) ||
+				(this->valueAtUb != that->valueAtUb))
 				return false;
 			return true;
 		}

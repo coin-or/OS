@@ -89,7 +89,8 @@ int osollex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token NUMBEROFOTHERVARIABLEOPTIONSATT NUMBEROFOTHEROBJECTIVEOPTIONSATT;
 %token NUMBEROFOTHERCONSTRAINTOPTIONSATT;
 %token NUMBEROFVARATT NUMBEROFOBJATT NUMBEROFCONATT;
-%token NAMEATT IDXATT SOSIDXATT VALUEATT UNITATT DESCRIPTIONATT LBVALUEATT UBVALUEATT;
+%token NAMEATT IDXATT SOSIDXATT VALUEATT UNITATT DESCRIPTIONATT;
+%token LBVALUEATT UBVALUEATT VALUEATLBATT VALUEATUBATT;
 
 %token GENERALSTART GENERALEND SYSTEMSTART SYSTEMEND SERVICESTART SERVICEEND;
 %token JOBSTART JOBEND OPTIMIZATIONSTART OPTIMIZATIONEND;
@@ -2585,29 +2586,29 @@ initdualvalueidxatt: IDXATT QUOTE INTEGER QUOTE
 	osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->idx = $3;
 };
 
-initdualvaluelowerboundatt: LBVALUEATT ATTRIBUTETEXT
+initdualvaluelowerboundatt: VALUEATLBATT ATTRIBUTETEXT
 {	if (parserData->lbvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one dual variable lower bound allowed");
 	parserData->lbvalAttributePresent = true;
 	if (strcmp($2,"INF") == 0)
-		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->lbValue = OSDBL_MAX;
+		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->valueAtLb = OSDBL_MAX;
 	else if (strcmp($2,"-INF") == 0)
-		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->lbValue = -OSDBL_MAX;
+		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->valueAtLb = -OSDBL_MAX;
 	else
-		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->lbValue = os_strtod($2, NULL);
+		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->valueAtLb = os_strtod($2, NULL);
 }
 QUOTE;
 
-initdualvalueupperboundatt: UBVALUEATT ATTRIBUTETEXT
+initdualvalueupperboundatt: VALUEATUBATT ATTRIBUTETEXT
 {	if (parserData->ubvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one dual variable upper bound allowed");
 	parserData->ubvalAttributePresent = true;
 	if (strcmp($2,"INF") == 0)
-		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->ubValue = OSDBL_MAX;
+		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->valueAtUb = OSDBL_MAX;
 	else if (strcmp($2,"-INF") == 0)
-		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->ubValue = -OSDBL_MAX;
+		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->valueAtUb = -OSDBL_MAX;
 	else
-		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->ubValue = os_strtod($2, NULL);
+		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->valueAtUb = os_strtod($2, NULL);
 }
 QUOTE;
 

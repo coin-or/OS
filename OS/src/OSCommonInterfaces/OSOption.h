@@ -1936,10 +1936,10 @@ public:
 	int idx;
 
 	/** initial lower bound */
-	double lbValue;
+	double valueAtLb;
 
 	/** initial upper bound */
-	double ubValue;
+	double valueAtUb;
 
 	/**
 	 *
@@ -2004,11 +2004,11 @@ public:
 	/**
 	 *
 	 * A function to add a <con> element
-	 * @param idx: the index of the constraint to be given initial dual variable bounds 
-	 * @param lbValue: an initial lower bound for the dual variable 
-	 * @param ubValue: an initial upper bound for the dual variable 
+	 * @param idx: the index of the constraint to be given initial dual variables 
+	 * @param valueAtLb: an initial value for the dual variable associated with the lower bound
+	 * @param valueAtUb: an initial value for the dual variable associated with the upper bound 
 	 */
-	bool addCon(int idx, double lbValue, double ubValue);
+	bool addCon(int idx, double valueAtLb, double valueAtUb);
 }; //InitDualVariableValues
 
 
@@ -2900,9 +2900,10 @@ public:
 	 * <p>
 	 * 
 	 * @return a vector of double that 
-	 * hold inital values for all of the variables
+	 * holds initial values (or OSNAN) for all of the variables
+	 * @param nvar is the number of variables
 	 */
-	double *getInitVarValuesDense(int numberOfVariables);
+	double* getInitVarValuesDense(int nvar);
 
 	/**
 	 * Get the initial value strings associated with the variables in sparse form
@@ -2918,9 +2919,10 @@ public:
 	 * <p>
 	 * 
 	 * @return a vector of strings that 
-	 * hold inital value strings (or OSNAN) for all of the variables
+	 * holds initial value strings (or "") for all of the variables
+	 * @param nvar is the number of variables
 	 */
-	std::string *getInitVarStringsDense(int numberOfVariables);
+	std::string *getInitVarStringsDense(int nvar);
 
 	/**
 	 * Get the initial basis status in sparse form
@@ -2936,9 +2938,10 @@ public:
 	 * <p>
 	 * 
 	 * @return a vector of strings that 
-	 * hold inital basis status (or "unknown") for all of the variables
+	 * holds initial basis status (or "unknown") for all of the variables
+	 * @param nvar is the number of variables
 	 */
-	std::string *getInitBasisStatusDense(int numberOfVariables);
+	std::string *getInitBasisStatusDense(int nvar);
 
 	/**
 	 * Get the integer branching weights in sparse form
@@ -2955,9 +2958,10 @@ public:
 	 * <p>
 	 * 
 	 * @return a vector of double that 
-	 * hold inital values for all of the variables
+	 * hold initial values for all of the variables
+	 * @param nvar is the number of variables
 	 */
-	double* getIntegerVariableBranchingWeightsDense(int numberOfVariables);
+	double* getIntegerVariableBranchingWeightsDense(int nvar);
 
 	/*
 	getSOSVariableBranchingWeightsSparse(); // ?
@@ -2986,9 +2990,10 @@ public:
 	 * <p>
 	 * 
 	 * @return a vector of double that 
-	 * hold inital values (or OSNAN) for all of the objectives
+	 * hold initial values (or OSNAN) for all of the objectives
+	 * @param nobj is the number of objectives
 	 */
-	double *getInitObjValuesDense(int numberOfObjectives);
+	double *getInitObjValuesDense(int nobj);
 
 	/**
 	 * Get the initial bounds associated with the objectives in sparse form
@@ -3004,18 +3009,20 @@ public:
 	 * <p>
 	 * 
 	 * @return a vector of double that 
-	 * hold inital lower bounds (or OSNAN) for all of the objectives
+	 * hold initial lower bounds (or OSNAN) for all of the objectives
+	 * @param nobj is the number of objectives
 	 */
-	double *getInitObjLowerBoundsDense(int numberOfObjectives);
+	double *getInitObjLowerBoundsDense(int nobj);
 
 	/**
 	 * Get the initial upper bounds associated with the objectives in dense form
 	 * <p>
 	 * 
 	 * @return a vector of double that 
-	 * hold inital upper bounds (or OSNAN) for all of the objectives
+	 * hold initial upper bounds (or OSNAN) for all of the objectives
+	 * @param nobj is the number of objectives
 	 */
-	double *getInitObjUpperBoundsDense(int numberOfObjectives);
+	double *getInitObjUpperBoundsDense(int nobj);
 
 	/**
 	 * Get the array of other objective options
@@ -3023,7 +3030,7 @@ public:
 	 * 
 	 * @return a vector of pointers to OtherObjectiveOption objects  
 	 */
-	//std::vector<OtherObjectiveOption*> getOtherObjectiveOptions();
+	OtherObjectiveOption** getOtherObjectiveOptions();
 
 	/**
 	 * Get the initial values associated with the constraints in sparse form
@@ -3039,9 +3046,10 @@ public:
 	 * <p>
 	 * 
 	 * @return a vector of double that 
-	 * hold inital values for all of the constraints
+	 * hold initial values for all of the constraints
+	 * @param ncon is the number of constraints
 	 */
-	double *getInitConValuesDense(int numberOfConstraints);
+	double *getInitConValuesDense(int ncon);
 
 	/**
 	 * Get the initial bounds associated with the dual variables in sparse form
@@ -3053,23 +3061,25 @@ public:
 	InitDualVarValue** getInitDualVarValuesSparse();
 
 	/**
-	 * Get the initial lower bounds associated with the dual variables in dense form
+	 * Get the initial dual variables associated with the lower bounds in dense form
 	 * <p>
 	 * 
 	 * @return a vector of double that 
 	 * hold initial lower bounds for all of the dual variables
+	 * @param ncon is the number of constraints
 	 */
-	double *getInitDualVarLowerBoundsDense(int numberOfConstraints);
+	double *getInitDualVarLowerBoundsDense(int ncon);
 
 
 	/**
-	 * Get the initial upper bounds associated with the dual variables in dense form
+	 * Get the initial dual variables associated with the upper bounds in dense form
 	 * <p>
 	 * 
 	 * @return a vector of double that 
 	 * hold initial upper bounds for all of the dual variables
+	 * @param ncon is the number of constraints
 	 */
-	double *getInitDualVarUpperBoundsDense(int numberOfConstraints);
+	double *getInitDualVarUpperBoundsDense(int ncon);
 
 	/**
 	 * Get the array of other constraint options
@@ -3152,7 +3162,7 @@ public:
 	/**
 	 * Set the transport type for contact
 	 */
-	bool setTransportType( std::string transportType);
+	bool setContactTransportType( std::string transportType);
 
 	/**
 	 * Set the other general options as an entire array
@@ -3244,19 +3254,19 @@ public:
 	bool setNumberOfConstraints(int numberOfObjects);
 
 	bool setInitVarValuesSparse(int numberOfVar, InitVarValue** var);
-	bool setInitVarValuesDense(int numberOfVar, int *idx, double *value);
+	bool setInitVarValuesDense(int numberOfVar, double *value);
 	bool setAnotherInitVarValue(int idx, double value);
 
 	bool setInitVarValuesStringSparse(int numberOfVar, InitVarValueString** var);
-	bool setInitVarValuesStringDense(int numberOfVar, int *idx, std::string *value);
+	bool setInitVarValuesStringDense(int numberOfVar, std::string *value);
 	bool setAnotherInitVarValueString(int idx, std::string value);
 
 	bool setInitBasisStatusSparse(int numberOfVar, InitBasStatus** var);
-	bool setInitBasisStatusDense(int numberOfVar, int *idx, std::string *var);
+	bool setInitBasisStatusDense(int numberOfVar, std::string *var);
 	bool setAnotherInitBasisStatus(int idx, std::string value);
 
 	bool setIntegerVariableBranchingWeightsSparse(int numberOfVar, BranchingWeight** var);
-	bool setIntegerVariableBranchingWeightsDense(int numberOfVar, int *idx, double *value);
+	bool setIntegerVariableBranchingWeightsDense(int numberOfVar, double *value);
 	bool setAnotherIntegerVariableBranchingWeight(int idx, double value);
 
 	bool setSOSVariableBranchingWeights(int numberOfSOS, SOSWeights** sos);
@@ -3266,22 +3276,22 @@ public:
 	bool setAnOtherVariableOption(OtherVariableOption* varOption);
 
 	bool setInitObjValuesSparse(int numberOfObj, InitObjValue** obj);
-	bool setInitObjValuesDense(int numberOfObj, int *idx, double *value);
+	bool setInitObjValuesDense(int numberOfObj, double *value);
 	bool setAnotherInitObjValue(int idx, double value);
 
 	bool setInitObjBoundsSparse(int numberOfObj, InitObjBound** obj);
-	bool setInitObjBoundsDense(int numberOfObj, int *idx, double *lb, double *ub);
+	bool setInitObjBoundsDense(int numberOfObj, double *lb, double *ub);
 	bool setAnotherInitObjBound(int idx, double lbValue, double ubValue);
 
 	bool setOtherObjectiveOptions(int numberOfObj, OtherObjectiveOption** obj);
 	bool setAnOtherObjectiveOption(OtherObjectiveOption* objOption);
 
 	bool setInitConValuesSparse(int numberOfCon, InitConValue** con);
-	bool setInitConValuesDense(int numberOfCon, int *idx, double *value);
+	bool setInitConValuesDense(int numberOfCon, double *value);
 	bool setAnotherInitConValue(int idx, double value);
 
 	bool setInitDualVarValuesSparse(int numberOfCon, InitDualVarValue** con);
-	bool setInitDualVarValuesDense(int numberOfCon, int *idx, double *lb, double *ub);
+	bool setInitDualVarValuesDense(int numberOfCon, double *lb, double *ub);
 	bool setAnotherInitDualVarValue(int idx, double lbValue, double ubValue);
 
 	bool setOtherConstraintOptions(int numberOfOptions, OtherConstraintOption** other);

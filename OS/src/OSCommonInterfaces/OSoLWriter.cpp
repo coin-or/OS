@@ -580,20 +580,20 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				for (int i=0; i < m_OSOption->optimization->constraints->initialDualValues->numberOfCon; i++)
 				{	outStr << "<con";
 					outStr << " idx=\"" << m_OSOption->optimization->constraints->initialDualValues->con[i]->idx << "\"";
-					outStr << " lbValue=\"";
-					if (m_OSOption->optimization->constraints->initialDualValues->con[i]->lbValue == OSDBL_MAX)
+					outStr << " valueAtLb=\"";
+					if (m_OSOption->optimization->constraints->initialDualValues->con[i]->valueAtLb == OSDBL_MAX)
 						outStr << "INF";
-					else if (m_OSOption->optimization->constraints->initialDualValues->con[i]->lbValue == -OSDBL_MAX)
+					else if (m_OSOption->optimization->constraints->initialDualValues->con[i]->valueAtLb == -OSDBL_MAX)
 						outStr << "-INF";
 					else
-						outStr << m_OSOption->optimization->constraints->initialDualValues->con[i]->lbValue;
-					outStr << "\" ubValue=\"";
-					if (m_OSOption->optimization->constraints->initialDualValues->con[i]->ubValue == OSDBL_MAX)
+						outStr << m_OSOption->optimization->constraints->initialDualValues->con[i]->valueAtLb;
+					outStr << "\" valueAtUb=\"";
+					if (m_OSOption->optimization->constraints->initialDualValues->con[i]->valueAtUb == OSDBL_MAX)
 						outStr << "INF";
-					else if (m_OSOption->optimization->constraints->initialDualValues->con[i]->ubValue == -OSDBL_MAX)
+					else if (m_OSOption->optimization->constraints->initialDualValues->con[i]->valueAtUb == -OSDBL_MAX)
 						outStr << "-INF";
 					else
-						outStr << m_OSOption->optimization->constraints->initialDualValues->con[i]->ubValue;
+						outStr << m_OSOption->optimization->constraints->initialDualValues->con[i]->valueAtUb;
 					outStr << "\"/>" << endl;
 				}
 				outStr << "</initialDualValues>" << endl;

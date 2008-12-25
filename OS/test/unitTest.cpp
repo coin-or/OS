@@ -1860,34 +1860,254 @@ catch(const ErrorClass& eclass){
 
 		//Now transfer to another osoption using get() and set() methods
 		std::string optionstring;
+		int option_i;
+		double option_d;
 		OSOption* osoption2 = new OSOption();
 
 		cout << endl << "transfer osoption to another OSOption object" << endl;
 
-		cout << "serviceURI...";
+		cout << "ServiceURI...";
 		optionstring = osoption->getServiceURI();
 		ok = osoption2->setServiceURI(optionstring);
 		cout << ok << endl;
 
-		cout << "serviceName...";
+		cout << "ServiceName...";
 		optionstring = osoption->getServiceName();
 		ok = osoption2->setServiceName(optionstring);
 		cout << ok << endl;
 
-		cout << "instanceName...";
+		cout << "InstanceName...";
 		optionstring = osoption->getInstanceName();
 		ok = osoption2->setInstanceName(optionstring);
 		cout << ok << endl;
 
-		cout << "instanceLocation...";
+		cout << "InstanceLocation...";
 		optionstring = osoption->getInstanceLocation();
 		ok = osoption2->setInstanceLocation(optionstring);
 		cout << ok << endl;
 
-		cout << "instanceLocationType...";
+		cout << "InstanceLocationType...";
 		optionstring = osoption->getInstanceLocationType();
 		ok = osoption2->setInstanceLocationType(optionstring);
 		cout << ok << endl;
+
+		cout << "JobID...";
+		optionstring = osoption->getJobID();
+		ok = osoption2->setJobID(optionstring);
+		cout << ok << endl;
+
+		cout << "SolverToInvoke...";
+		optionstring = osoption->getSolverToInvoke();
+		ok = osoption2->setSolverToInvoke(optionstring);
+		cout << ok << endl;
+
+		cout << "License...";
+		optionstring = osoption->getInstanceLocationType();
+		ok = osoption2->setInstanceLocationType(optionstring);
+		cout << ok << endl;
+
+		cout << "UserName...";
+		optionstring = osoption->getUserName();
+		ok = osoption2->setUserName(optionstring);
+		cout << ok << endl;
+
+		cout << "Password...";
+		optionstring = osoption->getPassword();
+		ok = osoption2->setPassword(optionstring);
+		cout << ok << endl;
+
+		cout << "Contact...";
+		optionstring = osoption->getContact();
+		ok = osoption2->setContact(optionstring);
+		cout << ok << endl;
+		
+		cout << "TransportType...";
+		optionstring = osoption->getContactTransportType();
+		ok = osoption2->setContactTransportType(optionstring);
+		cout << ok << endl;
+
+		int nopt;
+		OtherOption** otherOpt;
+		cout << "Other general options...";
+		nopt = osoption->getNumberOfOtherGeneralOptions();
+		otherOpt = osoption->getOtherGeneralOptions();
+		ok = osoption2->setOtherGeneralOptions(nopt, otherOpt);
+		cout << ok << endl;
+
+//		cout << "garbage collection. Delete otherOpt...";
+//		delete otherOpt;
+//		cout << "done" << endl;
+
+		cout << "MinDiskSpace...";
+		option_d = osoption->getMinDiskSpace();
+		ok = osoption2->setMinDiskSpace(option_d);
+		cout << ok << endl;
+
+		cout << "MinDiskSpaceUnit...";
+		optionstring = osoption->getMinDiskSpaceUnit();
+		ok = osoption2->setMinDiskSpaceUnit(optionstring);
+		cout << ok << endl;
+
+		cout << "MinMemorySize...";
+		option_d = osoption->getMinMemorySize();
+		ok = osoption2->setMinMemorySize(option_d);
+		cout << ok << endl;
+
+		cout << "MinMemoryUnit...";
+		optionstring = osoption->getMinMemoryUnit();
+		ok = osoption2->setMinMemoryUnit(optionstring);
+		cout << ok << endl;
+
+		cout << "MinCPUSpeed...";
+		option_d = osoption->getMinCPUSpeed();
+		ok = osoption2->setMinCPUSpeed(option_d);
+		cout << ok << endl;
+
+		cout << "MinCPUSpeedUnit...";
+		optionstring = osoption->getMinCPUSpeedUnit();
+		ok = osoption2->setMinCPUSpeedUnit(optionstring);
+		cout << ok << endl;
+
+		cout << "MinCPUNumber...";
+		option_i = osoption->getMinCPUNumber();
+		ok = osoption2->setMinCPUNumber(option_i);
+		cout << ok << endl;
+
+		OtherOption** otherOpt2;
+		cout << "Other system options...";
+		nopt = osoption->getNumberOfOtherSystemOptions();
+		otherOpt2 = osoption->getOtherSystemOptions();
+		ok = osoption2->setOtherSystemOptions(nopt, otherOpt2);
+		cout << ok << endl;
+
+
+		cout << "ServiceType...";
+		optionstring = osoption->getServiceType();
+		ok = osoption2->setServiceType(optionstring);
+		cout << ok << endl;
+
+		OtherOption** otherOpt3;
+		cout << "Other service options...";
+		nopt = osoption->getNumberOfOtherServiceOptions();
+		otherOpt3 = osoption->getOtherServiceOptions();
+		ok = osoption2->setOtherServiceOptions(nopt, otherOpt3);
+		cout << ok << endl;
+
+
+
+		cout << "MaxTime...";
+		option_d = osoption->getMaxTime();
+		ok = osoption2->setMaxTime(option_d);
+		cout << ok << endl;
+
+		cout << "MaxTimeUnit...";
+		optionstring = osoption->getMaxTimeUnit();
+		ok = osoption2->setMaxTimeUnit(optionstring);
+		cout << ok << endl;
+
+		cout << "ScheduledStartTime...";
+		optionstring = osoption->getScheduledStartTime();
+		ok = osoption2->setScheduledStartTime(optionstring);
+		cout << ok << endl;
+
+		cout << "Dependencies...";
+		nopt = osoption->getNumberOfJobDependencies();
+		std::string* tJobID = osoption->getJobDependencies();
+		ok = osoption2->setJobDependencies(nopt, tJobID);
+		cout << ok << endl;
+
+		cout << "RequiredDirectories...";
+		nopt = osoption->getNumberOfRequiredDirectories();
+		std::string* reqDir = osoption->getRequiredDirectories();
+		ok = osoption2->setRequiredDirectories(nopt, reqDir);
+		cout << ok << endl;
+
+		cout << "RequiredFiles...";
+		nopt = osoption->getNumberOfRequiredFiles();
+		std::string* reqFil = osoption->getRequiredFiles();
+		ok = osoption2->setRequiredFiles(nopt, reqFil);
+		cout << ok << endl;
+
+		cout << "DirectoriesToMake...";
+		nopt = osoption->getNumberOfDirectoriesToMake();
+		std::string* mkDir = osoption->getDirectoriesToMake();
+		ok = osoption2->setDirectoriesToMake(nopt, mkDir);
+		cout << ok << endl;
+
+		cout << "FilesToMake...";
+		nopt = osoption->getNumberOfFilesToMake();
+		std::string* mkFil = osoption->getFilesToMake();
+		ok = osoption2->setFilesToMake(nopt, mkFil);
+		cout << ok << endl;
+
+
+		cout << "InputDirectoriesToMove...";
+		nopt = osoption->getNumberOfInputDirectoriesToMove();
+		PathPair** inDMv = osoption->getInputDirectoriesToMove();
+		ok = osoption2->setInputDirectoriesToMove(nopt, inDMv);
+		cout << ok << endl;
+
+		cout << "InputFilesToMove...";
+		nopt = osoption->getNumberOfInputFilesToMove();
+		PathPair** inFMv = osoption->getInputFilesToMove();
+		ok = osoption2->setInputFilesToMove(nopt, inFMv);
+		cout << ok << endl;
+
+		cout << "OutputFilesToMove...";
+		nopt = osoption->getNumberOfOutputFilesToMove();
+		PathPair** outFMv = osoption->getOutputFilesToMove();
+		ok = osoption2->setOutputFilesToMove(nopt, outFMv);
+		cout << ok << endl;
+
+		cout << "OutputDirectoriesToMove...";
+		nopt = osoption->getNumberOfOutputDirectoriesToMove();
+		PathPair** outDMv = osoption->getOutputDirectoriesToMove();
+		ok = osoption2->setOutputDirectoriesToMove(nopt, outDMv);
+		cout << ok << endl;
+
+		cout << "FilesToDelete...";
+		nopt = osoption->getNumberOfFilesToDelete();
+		std::string* rmFil = osoption->getFilesToDelete();
+		ok = osoption2->setFilesToDelete(nopt, rmFil);
+		cout << ok << endl;
+
+		cout << "DirectoriesToDelete...";
+		nopt = osoption->getNumberOfDirectoriesToDelete();
+		std::string* rmDir = osoption->getDirectoriesToDelete();
+		ok = osoption2->setDirectoriesToDelete(nopt, rmDir);
+		cout << ok << endl;
+
+		cout << "ProcessesToKill...";
+		nopt = osoption->getNumberOfProcessesToKill();
+		std::string* rmProc = osoption->getProcessesToKill();
+		ok = osoption2->setProcessesToKill(nopt, rmProc);
+		cout << ok << endl;
+
+		OtherOption** otherOpt4;
+		cout << "Other job options...";
+		nopt = osoption->getNumberOfOtherJobOptions();
+		otherOpt4 = osoption->getOtherJobOptions();
+		ok = osoption2->setOtherJobOptions(nopt, otherOpt4);
+		cout << ok << endl;
+
+		cout << "Problem dimensions...";
+		nopt = osoption->getOptionInt("numberOfVariables");
+		ok = osoption2->setNumberOfVariables(nopt);
+		nopt = osoption->getOptionInt("numberOfObjectives");
+		ok = osoption2->setNumberOfObjectives(nopt);
+		nopt = osoption->getOptionInt("numberOfConstraints");
+		ok = osoption2->setNumberOfConstraints(nopt);
+		cout << ok << endl;
+		
+		cout << "InitialVariableValues...";
+		double* IVV;
+		IVV = osoption->getInitVarValuesDense(nopt);
+		for (int i=0; i < nopt; i++)
+			cout << "IVV: " << IVV[i] << endl;
+		cout << "nopt:" << nopt;
+		ok = osoption2->setInitVarValuesDense(nopt, IVV);		
+		cout << ok << endl;
+
 
 #if 0
 		std::cout << "number of solver options "  <<  osoption->getNumberOfSolverOptions() << std::endl;
@@ -2028,8 +2248,11 @@ catch(const ErrorClass& eclass){
 		delete[] path;
 #endif
 //		delete osoption;
+		cout << "delete osoption2" << endl;
 		delete osoption2;
+		cout << "delete osolreader" << endl;
 		delete osolreader;
+		cout << "cleanup done" << endl;
 		osolreader = NULL;
 
 		unitTestResult << 
