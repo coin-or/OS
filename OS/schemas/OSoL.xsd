@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSoL.xsd: current version - 1.0.0 -->
 	<!--include: since version 1.0.0-->
 	<!--OSoL: proposal (The entire schema)-->
@@ -421,9 +421,21 @@
 			</xs:element>
 			<xs:element name="solverOptions" type="SolverOptions" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfVariables" type="xs:positiveInteger" use="optional"/>
-		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="numberOfVariables" type="xs:positiveInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>Required if any children use "var" list</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="optional" default="1">
+			<xs:annotation>
+				<xs:documentation>Required if any children use "obj" list </xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>Required if any children use "con" list</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="VariableOption">
 		<xs:annotation>
