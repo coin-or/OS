@@ -18,9 +18,9 @@ public class InitDualVarValue {
 	
 	public int idx = -1;
 	
-	public double lbValue = Double.NaN;
+	public double lbDualValue = 0.0;
 
-	public double ubValue = Double.NaN;
+	public double ubDualValue = 0.0;
 
 }//InitDualVarValue
 

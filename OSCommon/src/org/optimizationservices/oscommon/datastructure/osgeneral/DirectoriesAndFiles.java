@@ -18,5 +18,7 @@ package org.optimizationservices.oscommon.datastructure.osgeneral;
 public class DirectoriesAndFiles{
 	
 	public String[] path = null;
+	
+	public int numberOfPaths = 0;
 		
 }//class DirectoriesAndFiles

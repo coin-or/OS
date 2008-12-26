@@ -511,7 +511,7 @@ public class OSServiceUtil{// implements OShL{
 			if(m_sInstanceLocationType == null || m_sInstanceLocationType.length() <= 0){
 				m_sInstanceLocationType = "local";
 			}
-			m_sInstanceAddress = m_osOption.getInstanceAddress();					
+			m_sInstanceAddress = m_osOption.getInstanceLocation();					
 			m_sJobID = m_osOption.getJobID();
 			m_sLicense = m_osOption.getLicense();
 			m_sUserName = m_osOption.getUserName();
@@ -521,21 +521,21 @@ public class OSServiceUtil{// implements OShL{
 			if(m_sContactTransportType == null || m_sContactTransportType.length() <= 0){
 				m_sContactTransportType = "osp";
 			}
-			m_sContactAddress = m_osOption.getContactAddress();			
+			m_sContactAddress = m_osOption.getContact();			
 			//get system related options
-			m_dMinDiskSpace = m_osOption.getSystemMinDiskSpace();
-			m_dMinMemorySize = m_osOption.getSystemMinMemorySize();
-			m_dMinCPUSpeed = m_osOption.getSystemMinCPUSpeed();
+			m_dMinDiskSpace = m_osOption.getMinDiskSpace();
+			m_dMinMemorySize = m_osOption.getMinMemorySize();
+			m_dMinCPUSpeed = m_osOption.getMinCPUSpeed();
 
 			//get service related options
 			m_sServiceTypeInOSoL = m_osOption.getServiceType();
 
 			//get job related options
-			double dJobMaxTime = m_osOption.getJobMaxTime();
+			double dJobMaxTime = m_osOption.getMaxTime();
 			if(dJobMaxTime != Double.POSITIVE_INFINITY && dJobMaxTime < OSParameter.JOB_MAX_TIME && dJobMaxTime > 0){
 				m_dJobMaxTime  = dJobMaxTime;
 			}
-			GregorianCalendar jobScheduledStartTime = m_osOption.getJobScheduledStartTime();
+			GregorianCalendar jobScheduledStartTime = m_osOption.getScheduledStartTime();
 			if(jobScheduledStartTime != null && jobScheduledStartTime.get(GregorianCalendar.YEAR) > 1970){
 				m_jobScheduledStartTime  = jobScheduledStartTime;
 				m_lJobScheduledStartTime = m_jobScheduledStartTime.getTimeInMillis();
@@ -5026,7 +5026,7 @@ public class OSServiceUtil{// implements OShL{
 					for(int i = 0; i < OSParameter.MAXIMUM_TRIAL_NUMBER_FOR_SOLVE; i++){
 						try{
 							/****for wait simulation****
-							String sWait = m_osOption.getOtherOptionValues().get("wait");;
+							String sWait = m_osOption.getOtherGeneraalOptionValues().get("wait");;
 							if(sWait != null && sWait.equalsIgnoreCase("true")){
 								try {
 									Thread.sleep(15000); 
@@ -5155,14 +5155,14 @@ public class OSServiceUtil{// implements OShL{
 						try {
 							String sServiceType = m_osOption.getServiceType();
 							String sContactTransportType = m_osOption.getServiceType();
-							String sContactAddress = m_osOption.getContactAddress();
+							String sContactAddress = m_osOption.getContact();
 							m_osOption.setServiceType("scheduler");	
 							m_osOption.setContactTransportType("osp");
-							m_osOption.setContactAddress(OSParameter.SERVICE_URI);
+							m_osOption.setContact(OSParameter.SERVICE_URI);
 							String sOSoL = m_osOption.writeOSoL();
 							m_osOption.setServiceType(sServiceType);	
 							m_osOption.setContactTransportType(sContactTransportType);
-							m_osOption.setContactAddress(sContactAddress);
+							m_osOption.setContact(sContactAddress);
 
 
 							OSSolverAgent solverAgent = new OSSolverAgent();
@@ -5277,14 +5277,14 @@ public class OSServiceUtil{// implements OShL{
 						try {
 							String sServiceType = m_osOption.getServiceType();
 							String sContactTransportType = m_osOption.getServiceType();
-							String sContactAddress = m_osOption.getContactAddress();
+							String sContactAddress = m_osOption.getContact();
 							m_osOption.setServiceType("scheduler");	
 							m_osOption.setContactTransportType("osp");
-							m_osOption.setContactAddress(OSParameter.SERVICE_URI);
+							m_osOption.setContact(OSParameter.SERVICE_URI);
 							String sOSoL = m_osOption.writeOSoL();
 							m_osOption.setServiceType(sServiceType);	
 							m_osOption.setContactTransportType(sContactTransportType);
-							m_osOption.setContactAddress(sContactAddress);
+							m_osOption.setContact(sContactAddress);
 
 
 							OSSolverAgent solverAgent = new OSSolverAgent();

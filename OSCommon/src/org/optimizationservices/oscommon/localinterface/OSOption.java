@@ -19,7 +19,9 @@ import org.optimizationservices.oscommon.datastructure.osoption.InstanceLocation
 import org.optimizationservices.oscommon.datastructure.osoption.JobOption;
 import org.optimizationservices.oscommon.datastructure.osoption.OptimizationOption;
 import org.optimizationservices.oscommon.datastructure.osoption.OtherOption;
+import org.optimizationservices.oscommon.datastructure.osoption.OtherOptions;
 import org.optimizationservices.oscommon.datastructure.osoption.PathPair;
+import org.optimizationservices.oscommon.datastructure.osoption.PathPairs;
 import org.optimizationservices.oscommon.datastructure.osoption.ServiceOption;
 import org.optimizationservices.oscommon.datastructure.osoption.SolverOption;
 import org.optimizationservices.oscommon.datastructure.osoption.SolverOptions;
@@ -85,11 +87,6 @@ public class OSOption {
 	 * optimization holds the optimization option specified by the OSoL Schema. 
 	 */
 	public OptimizationOption optimization = new OptimizationOption();
-
-	/**
-	 * other holds an array of all other options specified by the OSoL Schema. 
-	 */
-	public OtherOption[] other = null;
 
 	/**
 	 *
@@ -192,6 +189,28 @@ public class OSOption {
 		general.instanceName = instanceName;
 		return true;
 	}//setInstanceName
+	
+	/**
+	 * Get the instance address to get the instance. 
+	 * 
+	 * @return the instance address, null or empty string if none. 
+	 */
+	public String getInstanceLocation(){
+		if(general.instanceLocation == null) general.instanceLocation = new InstanceLocationOption();
+		return general.instanceLocation.value;
+	}//getInstanceLocation
+	
+	/**
+	 * Set the instance address to get the instance. 
+	 * 
+	 * @param address holds the instance address. 
+	 * @return whether the instance address is set successfully.
+	 */
+	public boolean setInstanceLocation(String address){
+		if(general.instanceLocation == null) general.instanceLocation = new InstanceLocationOption();
+		general.instanceLocation.value = address;
+		return true;
+	}//setInstanceLocation
 
 	/**
 	 * Get the instance location type to get the instance. 
@@ -215,28 +234,6 @@ public class OSOption {
 		general.instanceLocation.locationType = locationType;
 		return true;
 	}//setInstanceLocationType
-	
-	/**
-	 * Get the instance address to get the instance. 
-	 * 
-	 * @return the instance address, null or empty string if none. 
-	 */
-	public String getInstanceAddress(){
-		if(general.instanceLocation == null) general.instanceLocation = new InstanceLocationOption();
-		return general.instanceLocation.value;
-	}//getInstanceAddress
-	
-	/**
-	 * Set the instance address to get the instance. 
-	 * 
-	 * @param address holds the instance address. 
-	 * @return whether the instance address is set successfully.
-	 */
-	public boolean setInstanceAddress(String address){
-		if(general.instanceLocation == null) general.instanceLocation = new InstanceLocationOption();
-		general.instanceLocation.value = address;
-		return true;
-	}//setInstanceAddress
 
 	/**
 	 * Get job ID. 
@@ -339,6 +336,30 @@ public class OSOption {
 	}//setPassword
 	
 	/**
+	 * Get the contact address to respond to the requester. 
+	 * For example it can be an email address if the contact transport type is smtp
+	 * or a http uri if the contact transport type is osp (for knocking back on the requester), etc.
+	 * 
+	 * @return the contact trasport address, null or empty string if none. 
+	 */
+	public String getContact(){
+		return general.contact.value;
+	}//getContact
+	
+	/**
+	 * Set the contact address to respond to the requester. 
+	 * For example it can be an email address if the contact transport type is smtp
+	 * or a http uri if the contact transport type is osp (for knocking back on the requester), etc.
+	 * 
+	 * @param address holds the contact address. 
+	 * @return whether the contact address is set successfully.
+	 */
+	public boolean setContact(String address){
+		general.contact.value = address;
+		return true;
+	}//setContact
+	
+	/**
 	 * Get the contact transport type to respond to the requester,
 	 * smtp (for email), osp (for knocking back on the requester), etc.
 	 * 
@@ -363,37 +384,99 @@ public class OSOption {
 	}//setContactTransportType
 	
 	/**
-	 * Get the contact address to respond to the requester. 
-	 * For example it can be an email address if the contact transport type is smtp
-	 * or a http uri if the contact transport type is osp (for knocking back on the requester), etc.
+	 * get the number of other <general> options
 	 * 
-	 * @return the contact trasport address, null or empty string if none. 
+	 * @return the number of other <general> options
 	 */
-	public String getContactAddress(){
-		return general.contact.value;
-	}//getContactAddress
+	public int  getNumberOfOtherGeneralOptions(){
+		if(general.otherOptions == null) return 0;
+		else return general.otherOptions.numberOfOtherOptions;
+	}//getNumberOfOtherGeneralOptions
 	
 	/**
-	 * Set the contact address to respond to the requester. 
-	 * For example it can be an email address if the contact transport type is smtp
-	 * or a http uri if the contact transport type is osp (for knocking back on the requester), etc.
+	 * Set the number of other general options. 
 	 * 
-	 * @param address holds the contact address. 
-	 * @return whether the contact address is set successfully.
+	 * @param numberOfOtherGeneralOptions holds the number of other general options
+	 * @return whether the number is set successfully or not. 
 	 */
-	public boolean setContactAddress(String address){
-		general.contact.value = address;
+	public boolean setNumberOfOtherGeneralOptions(int numberOfOtherGeneralOptions){
+		if(numberOfOtherGeneralOptions < 0) return false;
+		if(general.otherOptions == null) general.otherOptions = new OtherOptions();
+		general.otherOptions.numberOfOtherOptions = numberOfOtherGeneralOptions;
 		return true;
-	}//setContactAddress
+	}//setNumberOfOtherGeneralOptions
+	
+	/**
+	 * get the array of other <general> options
+	 * 
+	 * @return the array of other <general> options
+	 */
+	public OtherOption[] getOtherGeneralOptions(){
+		if(general.otherOptions == null) return null;
+		else return general.otherOptions.other;
+	}//getOtherGeneralOptions
+	
+	
+	/**
+	 * set the array of other <general> options
+	 * 
+	 * @return  whether the other options element construction is successful.
+	 */
+	public boolean setOtherGeneralOptions(OtherOption[] other){
+		if(general.otherOptions == null) general.otherOptions = new OtherOptions();
+		int n = other==null?0:other.length;
+		general.otherOptions.numberOfOtherOptions = n; 
+		general.otherOptions.other = other;
+		return true;
+	}//setOtherGeneralOptions
+	
+	/**
+	 * Set the other general options. 
+	 * 
+	 * @param names holds the names of the other options. It is required. 
+	 * @param values holds the values of the other options, empty string "" or null if no value for an option.
+	 * @param descriptions holds the descriptions of the other options, empty string "" or null if no value for an option, null for
+	 * the entire array if none of the options have descriptions.
+	 * @return whether the other options element construction is successful.
+	 */
+	public boolean setOtherGeneralOptions(String[] names, String[] values, String[] descriptions){
+		if(names == null) return false;
+		if(descriptions != null && descriptions.length != names.length) return false;
+		if(values != null && values.length != names.length) return false;		
+		
+		int n = names.length;
+		
+		if(general.otherOptions == null) general.otherOptions = new OtherOptions();
+		general.otherOptions.numberOfOtherOptions = n;
+		general.otherOptions.other = new OtherOption[n];
+		
+		for(int i = 0; i < n; i++){
+			general.otherOptions.other[i] = new OtherOption();
+		}
+		for(int i = 0; i < n; i++){
+			general.otherOptions.other[i].name = names[i];
+		}
+		if(descriptions != null){
+			for(int i = 0; i < n; i++){
+				general.otherOptions.other[i].description = descriptions[i];
+			}	
+		}
+		if(values != null){
+			for(int i = 0; i < n; i++){
+				general.otherOptions.other[i].value = values[i];
+			}	
+		}
+		return true;
+	}//setOtherGeneralOptions
 	
 	/**
 	 * Get the system minimum disk space required to solve the job. 
 	 * 
 	 * @return the system minimum disk space, 0.0 if none. 
 	 */
-	public double getSystemMinDiskSpace(){
+	public double getMinDiskSpace(){
 		return system.minDiskSpace.value;
-	}//getSystemMinDiskSpace
+	}//getMinDiskSpace
 	
 	/**
 	 * Set the the system minimum disk space required to solve the job.
@@ -401,20 +484,40 @@ public class OSOption {
 	 * @param minDiskSpace holds the  minimum disk space required to solve the job. 
 	 * @return whether the minimum disk space is set successfully.
 	 */
-	public boolean setSystemMinDiskSpace(double minDiskSpace){
+	public boolean setMinDiskSpace(double minDiskSpace){
 		if(minDiskSpace < 0) system.minDiskSpace.value = 0;
 		else system.minDiskSpace.value = minDiskSpace;
 		return true;
-	}//setSystemMinDiskSpace
+	}//setMinDiskSpace
 
+	/**
+	 * Get the unit of the system minimum disk space required to solve the job. 
+	 * 
+	 * @return the unit of the system minimum disk space, byte if none. 
+	 */
+	public String getMinDiskSpaceUnit(){
+		return system.minDiskSpace.unit;
+	}//getMinDiskSpaceUnit
+	
+	/**
+	 * Set the unit of the system minimum disk space required to solve the job.
+	 * 
+	 * @param unit holds the unit of the disk space.
+	 * @return whether the unit of the minimum disk space is set successfully.
+	 */
+	public boolean setMinDiskSpaceUnit(String unit){
+		system.minDiskSpace.unit = unit;
+		return true;
+	}//setMinDiskSpaceUnit
+	
 	/**
 	 * Get the system minimum memory size required to solve the job. 
 	 * 
 	 * @return the system minimum memory size, 0.0 if none. 
 	 */
-	public double getSystemMinMemorySize(){
+	public double getMinMemorySize(){
 		return system.minMemorySize.value;
-	}//getSystemMinMeorySize
+	}//getMinMemorySize
 	
 	/**
 	 * Set the the system minimum memory size required to solve the job.
@@ -422,20 +525,40 @@ public class OSOption {
 	 * @param minMemorySize holds the  minimum memory size required to solve the job. 
 	 * @return whether the minimum memory size is set successfully.
 	 */
-	public boolean setSystemMinMemorySize(double minMemorySize){
+	public boolean setMinMemorySize(double minMemorySize){
 		if(minMemorySize < 0) system.minMemorySize.value = 0;
 		else system.minMemorySize.value = minMemorySize;
 		return true;
-	}//setSystemMinMemorySize
+	}//setMinMemorySize
 
+	/**
+	 * Get the unit of the system minimum memory size required to solve the job. 
+	 * 
+	 * @return the unit of the system minimum memory size, byte if none. 
+	 */
+	public String getMinMemorySizeUnit(){
+		return system.minMemorySize.unit;
+	}//getMinMemorySizeUnit
+	
+	/**
+	 * Set the unit of the system minimum memory size required to solve the job.
+	 * 
+	 * @param unit holds the unit of the memory size.
+	 * @return whether the unit of the minimum memory size is set successfully.
+	 */
+	public boolean setMinMemorySizeUnit(String unit){
+		system.minMemorySize.unit = unit;
+		return true;
+	}//setMinMemorySize
+	
 	/**
 	 * Get the system minimum cpu speed required to solve the job. 
 	 * 
 	 * @return the system minimum cpu speed, 0.0 if none. 
 	 */
-	public double getSystemMinCPUSpeed(){
+	public double getMinCPUSpeed(){
 		return system.minCPUSpeed.value;
-	}//getSystemMinCPUSpeed
+	}//getMinCPUSpeed
 	
 	/**
 	 * Set the the system minimum cpu speed required to solve the job.
@@ -443,12 +566,139 @@ public class OSOption {
 	 * @param minCPUSpeed holds the  minimum cpu speed required to solve the job. 
 	 * @return whether the minimum cpu speed is set successfully.
 	 */
-	public boolean setSystemMinCPUSpeed(double minCPUSpeed){
+	public boolean setMinCPUSpeed(double minCPUSpeed){
 		if(minCPUSpeed < 0) system.minCPUSpeed.value = 0;
 		else system.minCPUSpeed.value = minCPUSpeed;
 		return true;
-	}//setSystemMinCPUSpeed
+	}//setMinCPUSpeed
 
+	/**
+	 * Get the unit of the system minimum cpu speed required to solve the job. 
+	 * 
+	 * @return the unit of the system minimum cpu speed, 0.0 if none. 
+	 */
+	public String getMinCPUSpeedUnit(){
+		return system.minCPUSpeed.unit;
+	}//getMinCPUSpeedUnit
+	
+	/**
+	 * Set the unit of the system cpu speed required to solve the job.
+	 * 
+	 * @param unit holds the unit of the cpu speed.
+	 * @return whether the unit of the minimum cpu speed is set successfully.
+	 */
+	public boolean setMinCPUSpeedUnit(String unit){
+		system.minCPUSpeed.unit = unit;
+		return true;
+	}//setMinCPUSpeedUnit
+	
+	/**
+	 * Get the system minimum cpu number required to solve the job. 
+	 * 
+	 * @return the system minimum cpu number, 0 if none. 
+	 */
+	public int getMinCPUNumber(){
+		return system.minCPUNumber;
+	}//getMinCPUNumber
+	
+
+	/**
+	 * Set the the system minimum cpu number required to solve the job.
+	 * 
+	 * @param minCPUNumber holds the  minimum cpu number required to solve the job. 
+	 * @return whether the minimum cpu number is set successfully.
+	 */
+	public boolean setMinCPUNumber(int minCPUNumber){
+		system.minCPUNumber = minCPUNumber;
+		return true;
+	}//setMinCPUNumber
+	
+	/**
+	 * get the number of other <system> options
+	 * 
+	 * @return the number of other <system> options
+	 */
+	public int  getNumberOfOtherSystemOptions(){
+		if(system.otherOptions == null) return 0;
+		else return system.otherOptions.numberOfOtherOptions;
+	}//getNumberOfOtherSystemOptions
+	
+	/**
+	 * Set the number of other system options. 
+	 * 
+	 * @param numberOfOtherSystemOptions holds the number of other system options
+	 * @return whether the number is set successfully or not. 
+	 */
+	public boolean setNumberOfOtherSystemOptions(int numberOfOtherSystemOptions){
+		if(numberOfOtherSystemOptions < 0) return false;
+		if(system.otherOptions == null) system.otherOptions = new OtherOptions();
+		system.otherOptions.numberOfOtherOptions = numberOfOtherSystemOptions;
+		return true;
+	}//setNumberOfOtherSystemOptions
+	
+	/**
+	 * get the array of other <system> options
+	 * 
+	 * @return the array of other <system> options
+	 */
+	public OtherOption[] getOtherSystemOptions(){
+		if(system.otherOptions == null) return null;
+		else return system.otherOptions.other;
+	}//getOtherSystemOptions
+	
+	
+	/**
+	 * set the array of other <system> options
+	 * 
+	 * @return  whether the other options element construction is successful.
+	 */
+	public boolean setOtherSystemOptions(OtherOption[] other){
+		if(system.otherOptions == null) system.otherOptions = new OtherOptions();
+		int n = other==null?0:other.length;
+		system.otherOptions.numberOfOtherOptions = n; 
+		system.otherOptions.other = other;
+		return true;
+	}//setOtherSystemOptions
+	
+	/**
+	 * Set the other system options. 
+	 * 
+	 * @param names holds the names of the other options. It is required. 
+	 * @param values holds the values of the other options, empty string "" or null if no value for an option.
+	 * @param descriptions holds the descriptions of the other options, empty string "" or null if no value for an option, null for
+	 * the entire array if none of the options have descriptions.
+	 * @return whether the other options element construction is successful.
+	 */
+	public boolean setOtherSystemOptions(String[] names, String[] values, String[] descriptions){
+		if(names == null) return false;
+		if(descriptions != null && descriptions.length != names.length) return false;
+		if(values != null && values.length != names.length) return false;		
+		
+		int n = names.length;
+		
+		if(system.otherOptions == null) system.otherOptions = new OtherOptions();
+		system.otherOptions.numberOfOtherOptions = n;
+		system.otherOptions.other = new OtherOption[n];
+		
+		for(int i = 0; i < n; i++){
+			system.otherOptions.other[i] = new OtherOption();
+		}
+		for(int i = 0; i < n; i++){
+			system.otherOptions.other[i].name = names[i];
+		}
+		if(descriptions != null){
+			for(int i = 0; i < n; i++){
+				system.otherOptions.other[i].description = descriptions[i];
+			}	
+		}
+		if(values != null){
+			for(int i = 0; i < n; i++){
+				system.otherOptions.other[i].value = values[i];
+			}	
+		}
+		return true;
+	}//setOtherSystemOptions
+	
 	/**
 	 * Get the service type, which can be: 
 	 * solver, analyzer, scheduler, simulation, registry, modeler, agent 
@@ -480,13 +730,99 @@ public class OSOption {
 	}//setServiceType
 
 	/**
+	 * get the number of other <service> options
+	 * 
+	 * @return the number of other <service> options
+	 */
+	public int  getNumberOfOtherServiceOptions(){
+		if(service.otherOptions == null) return 0;
+		else return service.otherOptions.numberOfOtherOptions;
+	}//getNumberOfOtherServiceOptions
+	
+	/**
+	 * Set the number of other service options. 
+	 * 
+	 * @param numberOfOtherServiceOptions holds the number of other service options
+	 * @return whether the number is set successfully or not. 
+	 */
+	public boolean setNumberOfOtherServiceOptions(int numberOfOtherServiceOptions){
+		if(numberOfOtherServiceOptions < 0) return false;
+		if(service.otherOptions == null) service.otherOptions = new OtherOptions();
+		service.otherOptions.numberOfOtherOptions = numberOfOtherServiceOptions;
+		return true;
+	}//setNumberOfOtherServiceOptions
+	
+	/**
+	 * get the array of other <service> options
+	 * 
+	 * @return the array of other <service> options
+	 */
+	public OtherOption[] getOtherServiceOptions(){
+		if(service.otherOptions == null) return null;
+		else return service.otherOptions.other;
+	}//getOtherServiceOptions
+	
+	
+	/**
+	 * set the array of other <service> options
+	 * 
+	 * @return  whether the other options element construction is successful.
+	 */
+	public boolean setOtherServiceOptions(OtherOption[] other){
+		if(service.otherOptions == null) service.otherOptions = new OtherOptions();
+		int n = other==null?0:other.length;
+		service.otherOptions.numberOfOtherOptions = n; 
+		service.otherOptions.other = other;
+		return true;
+	}//setOtherServiceOptions
+	
+	/**
+	 * Set the other service options. 
+	 * 
+	 * @param names holds the names of the other options. It is required. 
+	 * @param values holds the values of the other options, empty string "" or null if no value for an option.
+	 * @param descriptions holds the descriptions of the other options, empty string "" or null if no value for an option, null for
+	 * the entire array if none of the options have descriptions.
+	 * @return whether the other options element construction is successful.
+	 */
+	public boolean setOtherServiceOptions(String[] names, String[] values, String[] descriptions){
+		if(names == null) return false;
+		if(descriptions != null && descriptions.length != names.length) return false;
+		if(values != null && values.length != names.length) return false;		
+		
+		int n = names.length;
+		
+		if(service.otherOptions == null) service.otherOptions = new OtherOptions();
+		service.otherOptions.numberOfOtherOptions = n;
+		service.otherOptions.other = new OtherOption[n];
+		
+		for(int i = 0; i < n; i++){
+			service.otherOptions.other[i] = new OtherOption();
+		}
+		for(int i = 0; i < n; i++){
+			service.otherOptions.other[i].name = names[i];
+		}
+		if(descriptions != null){
+			for(int i = 0; i < n; i++){
+				service.otherOptions.other[i].description = descriptions[i];
+			}	
+		}
+		if(values != null){
+			for(int i = 0; i < n; i++){
+				service.otherOptions.other[i].value = values[i];
+			}	
+		}
+		return true;
+	}//setOtherServiceOptions
+	
+	/**
 	 * Get the maximum time (in seconds) before the job is terminated.  
 	 * 
 	 * @return the maximum time, Double.POSITIVE_INFINITY if none. 
 	 */
-	public double getJobMaxTime(){
+	public double getMaxTime(){
 		return job.maxTime.value;
-	}//getJobMaxTime
+	}//getMaxTime
 	
 	/**
 	 * Set the maximum time before the job is terminated.  
@@ -494,20 +830,40 @@ public class OSOption {
 	 * @param maxTime holds the maximum time in seconds. 
 	 * @return whether the maximum time is set successfully.
 	 */
-	public boolean setJobMaxTime(double maxTime){
+	public boolean setMaxTime(double maxTime){
 		if(maxTime <= 0) return false;
 		else job.maxTime.value = maxTime;
 		return true;
-	}//setJobMaxTime
+	}//setMaxTime
 
+	/**
+	 * Get the unit of the job max time required to solve the job. 
+	 * 
+	 * @return the unit of the system minimum cpu speed, 0.0 if none. 
+	 */
+	public String getMaxTimeUnit(){
+		return job.maxTime.unit;
+	}//getMaxTimeUnit
+	
+	/**
+	 * Set the unit of the maximum time before the job is terminated.  
+	 * 
+	 * @param maxTime holds the maximum time in seconds. 
+	 * @return whether the maximum time is set successfully.
+	 */
+	public boolean setMaxTimeUnit(String unit){
+		job.maxTime.unit = unit;
+		return true;
+	}//setMaxTimeUnit
+	
 	/**
 	 * Get the scheduled start time for the job.   
 	 * 
 	 * @return the scheduled start time for the job, null or UNIX time (1970/1/1) if none. 
 	 */
-	public GregorianCalendar getJobScheduledStartTime(){ 
+	public GregorianCalendar getScheduledStartTime(){ 
 		return job.scheduledStartTime;
-	}//getJobScheduledStartTime
+	}//getScheduledStartTime
 	
 	/**
 	 * Set the scheduled start time for the job.   
@@ -515,11 +871,21 @@ public class OSOption {
 	 * @param scheduledStartTime holds the scheduled start time for the job.   
 	 * @return whether the scheduled start time is set successfully.
 	 */
-	public boolean setJobScheduledStartTime(GregorianCalendar scheduledStartTime){
+	public boolean setScheduledStartTime(GregorianCalendar scheduledStartTime){
 		if(scheduledStartTime.getTimeInMillis() <= 0) job.scheduledStartTime = new GregorianCalendar(1970, 0, 1, 0, 0, 0);
 		else job.scheduledStartTime = scheduledStartTime;
 		return true;
-	}//setJobScheduledStartTime
+	}//setScheduledStartTime
+	
+	/**
+	 * get the number of job dependencies (in <job> element)
+	 * 
+	 * @return the number of job dependencies (in <job> element)
+	 */
+	public int  getNumberOfJobDependencies(){
+		if(job.dependencies == null) return 0;
+		return job.dependencies.numberOfJobIDs;
+	}//getNumberOfJobDependencies
 	
 	/**
 	 * Get the dependencies of the current job, which is 
@@ -541,9 +907,21 @@ public class OSOption {
 	public boolean setJobDependencies(String[] jobIDs){
 		if(job.dependencies == null) job.dependencies = new JobDependencies();
 		job.dependencies.jobID = jobIDs;
+		int n = (jobIDs==null?0:jobIDs.length);
+		job.dependencies.numberOfJobIDs = n;
 		return true;
 	}//setJobDependencies
 
+	/**
+	 * get the number of required directories (in <job> element)
+	 * 
+	 * @return the number of required directories (in <job> element)
+	 */
+	public int  getNumberOfRequiredDirectories(){
+		if(job.requiredDirectories == null) return 0;
+		return job.requiredDirectories.numberOfPaths;
+	}//getNumberOfRequiredDirectories
+	
 	/**
 	 * Get the required directories to run the job, which is 
 	 * a string array of paths. 
@@ -564,9 +942,21 @@ public class OSOption {
 	public boolean setRequiredDirectories(String[] paths){
 		if(job.requiredDirectories == null) job.requiredDirectories = new DirectoriesAndFiles();
 		job.requiredDirectories.path = paths;
+		int n = (paths==null?0:paths.length);
+		job.requiredDirectories.numberOfPaths = n;
 		return true;
 	}//setRequiredDirectories
 
+	/**
+	 * get the number of required files (in <job> element)
+	 * 
+	 * @return the number of required files (in <job> element)
+	 */
+	public int  getNumberOfRequiredFiles(){
+		if(job.requiredFiles == null) return 0;
+		return job.requiredFiles.numberOfPaths;
+	}//getNumberOfRequiredFiles
+	
 	/**
 	 * Get the required files to run the job, which is 
 	 * a string array of paths. 
@@ -587,9 +977,20 @@ public class OSOption {
 	public boolean setRequiredFiles(String[] paths){
 		if(job.requiredFiles == null) job.requiredFiles = new DirectoriesAndFiles();
 		job.requiredFiles.path = paths;
+		int n = (paths==null?0:paths.length);
+		job.requiredFiles.numberOfPaths = n;
 		return true;
 	}//setRequiredFiles
 
+	/**
+	 * get the number of directories to make (in <job> element)
+	 * 
+	 * @return the number of directories to make (in <job> element)
+	 */
+	public int  getNumberOfDirectoriesToMake(){
+		if(job.directoriesToMake == null) return 0;
+		return job.directoriesToMake.numberOfPaths;
+	}//getNumberOfDirectoriesToMake
 
 	/**
 	 * Get the directories to make before running the job, which is 
@@ -611,9 +1012,21 @@ public class OSOption {
 	public boolean setDirectoriesToMake(String[] paths){
 		if(job.directoriesToMake == null) job.directoriesToMake = new DirectoriesAndFiles();
 		job.directoriesToMake.path = paths;
+		int n = (paths==null?0:paths.length);
+		job.directoriesToMake.numberOfPaths = n;
 		return true;
 	}//setDirectoriesToMake
 
+	/**
+	 * get the number of files to make (in <job> element)
+	 * 
+	 * @return the number of files to make (in <job> element)
+	 */
+	public int  getNumberOfFilesToMake(){
+		if(job.filesToMake == null) return 0;
+		return job.filesToMake.numberOfPaths;
+	}//getNumberOfFilesToMake
+	
 	/**
 	 * Get the files to make before running the job, which is 
 	 * a string array of paths. 
@@ -634,19 +1047,65 @@ public class OSOption {
 	public boolean setFilesToMake(String[] paths){
 		if(job.filesToMake == null) job.filesToMake = new DirectoriesAndFiles();
 		job.filesToMake.path = paths;
+		int n = (paths==null?0:paths.length);
+		job.filesToMake.numberOfPaths = n;
 		return true;
 	}//setFilesToMake
 
+	/**
+	 * get the number of input directories to move or copy (in <job> element)
+	 * 
+	 * @return the number of input directories to move or copy (in <job> element)
+	 */
+	public int  getNumberOfInputDirectoriesToMove(){
+		if(job.inputDirectoriesToMove == null) return 0;
+		return job.inputDirectoriesToMove.numberOfPathPairs;
+	}//getNumberOfInputDirectoriesToMove
+	
+	/**
+	 * Get the input directories to copy from before running the job, which is 
+	 * a string array of paths. 
+	 * 
+	 * @return a string array of directory paths to copy from. 
+	 */
+	public PathPair[] getInputDirectoriesToMove(){
+		if(job.inputDirectoriesToMove == null) return null;
+		return job.inputDirectoriesToMove.pathPair;
+	}//getInputDirectoriesToCopyFrom
+
+	/**
+	 * Set the input directories to copy from before running the job, which is 
+	 * a string array of paths. 
+	 * @param paths holds a string array of input directories to copy from before running the job. 
+	 * @return whether the input directories to copy from are set successfully.
+	 */
+	public boolean setInputDirectoriesToMove(PathPair[] pathPairs){
+		if(job.inputDirectoriesToMove == null) job.inputDirectoriesToMove = new PathPairs();
+		job.inputDirectoriesToMove.pathPair = pathPairs;
+		int n = (pathPairs==null?0:pathPairs.length);
+		job.inputDirectoriesToMove.numberOfPathPairs = n;
+		return true;
+	}//setInputDirectoriesToMove
+
+	/**
+	 * get the number of input files to move or copy (in <job> element)
+	 * 
+	 * @return the number of input file to move or copy (in <job> element)
+	 */
+	public int  getNumberOfInputFilesToMove(){
+		if(job.inputFilesToMove == null) return 0;
+		return job.inputFilesToMove.numberOfPathPairs;
+	}//getNumberOfInputFilesToMove
+	
 	/**
 	 * Get the input files to copy from before running the job, which is 
 	 * a string array of paths. 
 	 * 
 	 * @return a string array of file paths to copy from. 
 	 */
-	public PathPair[] getInputDirectoriesToMove(){
-		return null; //!!!!!!!!!!!!!!!!!!!!!!!
-//		if(job.inputFilesToCopyFrom == null) return null;
-//		return job.inputFilesToCopyFrom.path;
+	public PathPair[] getInputFilesToMove(){
+		if(job.inputFilesToMove == null) return null;
+		return job.inputFilesToMove.pathPair;
 	}//getInputFilesToCopyFrom
 
 	/**
@@ -655,37 +1114,93 @@ public class OSOption {
 	 * @param paths holds a string array of input files to copy from before running the job. 
 	 * @return whether the input files to copy from are set successfully.
 	 */
-	public boolean setInputDirectoriesToMove(PathPair[] pathPairs){
-		return true; //!!!!!!!!!!!!!!!!!!!!!!!
-//		if(job.inputFilesToCopyFrom == null) job.inputFilesToCopyFrom = new DirectoriesAndFiles();
-//		job.inputFilesToCopyFrom.path = paths;
-//		return true;
-	}//setInputDirectoriesToMove
-
-	public PathPair[] getInputFilesToMove(){
-		return null;
-	}
-
-	public boolean setInputFilesToMove(PathPair[] pathPair){
-		return false;
-	}
-
+	public boolean setInputFilesToMove(PathPair[] pathPairs){
+		if(job.inputFilesToMove == null) job.inputFilesToMove = new PathPairs();
+		job.inputFilesToMove.pathPair = pathPairs;
+		int n = (pathPairs==null?0:pathPairs.length);
+		job.inputFilesToMove.numberOfPathPairs = n;
+		return true;
+	}//setInputFilesToMove
+	
+	/**
+	 * get the number of output directories to move or copy (in <job> element)
+	 * 
+	 * @return the number of output directories to move or copy (in <job> element)
+	 */
+	public int  getNumberOfOutputDirectoriesToMove(){
+		if(job.outputDirectoriesToMove == null) return 0;
+		return job.outputDirectoriesToMove.numberOfPathPairs;
+	}//getNumberOfOutputDirectoriesToMove
+	
+	/**
+	 * Get the output directories to copy from before running the job, which is 
+	 * a string array of paths. 
+	 * 
+	 * @return a string array of directory paths to copy from. 
+	 */
 	public PathPair[] getOutputDirectoriesToMove(){
-		return null;
-	}
+		if(job.outputDirectoriesToMove == null) return null;
+		return job.outputDirectoriesToMove.pathPair;
+	}//getOutputDirectoriesToCopyFrom
 
-	public boolean setOutputDirectoriesToMove(PathPair[] pathPair){
-		return false;
-	}
+	/**
+	 * Set the output directories to copy from before running the job, which is 
+	 * a string array of paths. 
+	 * @param paths holds a string array of output directories to copy from before running the job. 
+	 * @return whether the output directories to copy from are set successfully.
+	 */
+	public boolean setOutputDirectoriesToMove(PathPair[] pathPairs){
+		if(job.outputDirectoriesToMove == null) job.outputDirectoriesToMove = new PathPairs();
+		job.outputDirectoriesToMove.pathPair = pathPairs;
+		int n = (pathPairs==null?0:pathPairs.length);
+		job.outputDirectoriesToMove.numberOfPathPairs = n;
+		return true;
+	}//setOutputDirectoriesToMove
 
+	/**
+	 * get the number of output files to move or copy (in <job> element)
+	 * 
+	 * @return the number of output file to move or copy (in <job> element)
+	 */
+	public int  getNumberOfOutputFilesToMove(){
+		if(job.outputFilesToMove == null) return 0;
+		return job.outputFilesToMove.numberOfPathPairs;
+	}//getNumberOfOutputFilesToMove
+	
+	/**
+	 * Get the output files to copy from before running the job, which is 
+	 * a string array of paths. 
+	 * 
+	 * @return a string array of file paths to copy from. 
+	 */
 	public PathPair[] getOutputFilesToMove(){
-		return null;
-	}
+		if(job.outputFilesToMove == null) return null;
+		return job.outputFilesToMove.pathPair;
+	}//getOutputFilesToCopyFrom
 
-	public boolean setOutputFilesToMove(PathPair[] pathPair){
-		return false;
-	}
-
+	/**
+	 * Set the output files to copy from before running the job, which is 
+	 * a string array of paths. 
+	 * @param paths holds a string array of output files to copy from before running the job. 
+	 * @return whether the output files to copy from are set successfully.
+	 */
+	public boolean setOutputFilesToMove(PathPair[] pathPairs){
+		if(job.outputFilesToMove == null) job.outputFilesToMove = new PathPairs();
+		job.outputFilesToMove.pathPair = pathPairs;
+		int n = (pathPairs==null?0:pathPairs.length);
+		job.outputFilesToMove.numberOfPathPairs = n;
+		return true;
+	}//setOutputFilesToMove
+	/**
+	 * get the number of files to delete (in <job> element)
+	 * 
+	 * @return the number of files to delete (in <job> element)
+	 */
+	public int  getNumberOfFilesToDelete(){
+		if(job.filesToDelete == null) return 0;
+		return job.filesToDelete.numberOfPaths;
+	}//getNumberOfFilesToDelete
+	
 	/**
 	 * Get the files to delete after running the job, which is 
 	 * a string array of paths. 
@@ -706,9 +1221,21 @@ public class OSOption {
 	public boolean setFilesToDelete(String[] paths){
 		if(job.filesToDelete == null) job.filesToDelete = new DirectoriesAndFiles();
 		job.filesToDelete.path = paths;
+		int n = (paths==null?0:paths.length);
+		job.filesToDelete.numberOfPaths = n;
 		return true;
 	}//setFilesToDelete
 
+	/**
+	 * get the number of directories to delete (in <job> element)
+	 * 
+	 * @return the number of directories to delete (in <job> element)
+	 */
+	public int  getNumberOfDirectoriesToDelete(){
+		if(job.directoriesToDelete == null) return 0;
+		return job.directoriesToDelete.numberOfPaths;
+	}//getNumberOfDirectoriesToDelete
+	
 	/**
 	 * Get the directories to delete after running the job, which is 
 	 * a string array of paths. 
@@ -729,9 +1256,21 @@ public class OSOption {
 	public boolean setDirectoriesToDelete(String[] paths){
 		if(job.directoriesToDelete == null) job.directoriesToDelete = new DirectoriesAndFiles();
 		job.directoriesToDelete.path = paths;
+		int n = (paths==null?0:paths.length);
+		job.directoriesToDelete.numberOfPaths = n;
 		return true;
 	}//setDirectoriesToDelete
 
+	/**
+	 * get the number of processes to kill (in <job> element)
+	 * 
+	 * @return the number of processes to kill (in <job> element)
+	 */
+	public int  getNumberOfProcessesToKill(){
+		if(job.processesToKill == null) return 0;
+		return job.processesToKill.numberOfProcesses;
+	}//getNumberOfProcessesToKill
+	
 	/**
 	 * Get the processes to kill after running the job, which is 
 	 * a string array of process names. 
@@ -752,8 +1291,96 @@ public class OSOption {
 	public boolean setProcessesToKill(String[] processNames){
 		if(job.processesToKill == null) job.processesToKill = new Processes();
 		job.processesToKill.process = processNames;
+		int n = (processNames==null?0:processNames.length);
+		job.processesToKill.numberOfProcesses = n;
 		return true;
 	}//setProcessesToKill
+	
+	/**
+	 * get the number of other <job> options
+	 * 
+	 * @return the number of other <job> options
+	 */
+	public int  getNumberOfOtherJobOptions(){
+		if(job.otherOptions == null) return 0;
+		else return job.otherOptions.numberOfOtherOptions;
+	}//getNumberOfOtherJobOptions
+	
+	/**
+	 * Set the number of other job options. 
+	 * 
+	 * @param numberOfOtherJobOptions holds the number of other job options
+	 * @return whether the number is set successfully or not. 
+	 */
+	public boolean setNumberOfOtherJobOptions(int numberOfOtherJobOptions){
+		if(numberOfOtherJobOptions < 0) return false;
+		if(job.otherOptions == null) job.otherOptions = new OtherOptions();
+		job.otherOptions.numberOfOtherOptions = numberOfOtherJobOptions;
+		return true;
+	}//setNumberOfOtherJobOptions
+	
+	/**
+	 * get the array of other <job> options
+	 * 
+	 * @return the array of other <job> options
+	 */
+	public OtherOption[] getOtherJobOptions(){
+		if(job.otherOptions == null) return null;
+		else return job.otherOptions.other;
+	}//getOtherJobOptions
+	
+	
+	/**
+	 * set the array of other <job> options
+	 * 
+	 * @return  whether the other options element construction is successful.
+	 */
+	public boolean setOtherJobOptions(OtherOption[] other){
+		if(job.otherOptions == null) job.otherOptions = new OtherOptions();
+		int n = other==null?0:other.length;
+		job.otherOptions.numberOfOtherOptions = n; 
+		job.otherOptions.other = other;
+		return true;
+	}//setOtherJobOptions
+	
+	/**
+	 * Set the other job options. 
+	 * 
+	 * @param names holds the names of the other options. It is required. 
+	 * @param values holds the values of the other options, empty string "" or null if no value for an option.
+	 * @param descriptions holds the descriptions of the other options, empty string "" or null if no value for an option, null for
+	 * the entire array if none of the options have descriptions.
+	 * @return whether the other options element construction is successful.
+	 */
+	public boolean setOtherJobOptions(String[] names, String[] values, String[] descriptions){
+		if(names == null) return false;
+		if(descriptions != null && descriptions.length != names.length) return false;
+		if(values != null && values.length != names.length) return false;		
+		
+		int n = names.length;
+		
+		if(job.otherOptions == null) job.otherOptions = new OtherOptions();
+		job.otherOptions.numberOfOtherOptions = n;
+		job.otherOptions.other = new OtherOption[n];
+		
+		for(int i = 0; i < n; i++){
+			job.otherOptions.other[i] = new OtherOption();
+		}
+		for(int i = 0; i < n; i++){
+			job.otherOptions.other[i].name = names[i];
+		}
+		if(descriptions != null){
+			for(int i = 0; i < n; i++){
+				job.otherOptions.other[i].description = descriptions[i];
+			}	
+		}
+		if(values != null){
+			for(int i = 0; i < n; i++){
+				job.otherOptions.other[i].value = values[i];
+			}	
+		}
+		return true;
+	}//setOtherJobOptions
 	
 	/**
 	 * Get variable number. 
@@ -842,11 +1469,23 @@ public class OSOption {
 		return true;
 	}//setNumberOfConstraints
 	
+
+	/**
+	 * get the numer of variables that have initial values (in <optimization> element)
+	 * @return the numer of variables that have initial values (in <optimization> element)
+	 */
+	public int getNumberOfInitVarValues(){
+		if(optimization == null) return 0;
+		if(optimization.variables == null) return 0;
+		if(optimization.variables.initialVariableValues == null) return 0;
+		return optimization.variables.initialVariableValues.numberOfVar;
+	}//getNumberOfInitVarValues
+	
 	/**
 	 * get initial variable values (double[]). 
 	 * @return a double array of the initial variable values, null if none. 
 	 */
-	public double[] getInitialVariableValues(){
+	public double[] getInitVarValuesDense(){
 		if(optimization == null) return null;
 		int iNumberOfVariables = this.getNumberOfVariables();
 		if(iNumberOfVariables <= 0) return null;
@@ -859,7 +1498,7 @@ public class OSOption {
 			mdValues[var[i].idx] = var[i].value;
 		}
 		return mdValues;		
-	}//getInitialVariableValues
+	}//getInitVarValuesDense
 	
 	/**
 	 * Set initial variable values (double[]). 
@@ -868,7 +1507,7 @@ public class OSOption {
 	 * @param initialVariableValues holds a double array of initial variable values. 
 	 * @return whether the initial variable values are set successfully or not. 
 	 */
-	public boolean setInitialVariableValues(double[] initialVariableValues){//TODO
+	public boolean setInitVarValuesDense(double[] initialVariableValues){
 		int iNumberOfVariables = this.getNumberOfVariables();
 		if(iNumberOfVariables <= 0) return true;
 		if(initialVariableValues != null && initialVariableValues.length != iNumberOfVariables) return false;
@@ -887,6 +1526,7 @@ public class OSOption {
 		for(int i = 0; i < initialVariableValues.length; i++){
 			if(initialVariableValues[i] != 0) iVars++;
 		}
+		optimization.variables.initialVariableValues.numberOfVar = iVars;
 		optimization.variables.initialVariableValues.var = new InitVarValue[iVars];
 		InitVarValue[] var = optimization.variables.initialVariableValues.var;
 		for(int i = 0; i < iVars; i++) var[i] = new InitVarValue();
@@ -899,98 +1539,108 @@ public class OSOption {
 			}
 		}
 		return true; 
-	}//setInitialVariableValues
+	}//setInitVarValuesDense
+
+	/**
+	 * get the list of initial variable values in sparse form
+	 * @return a list of index/value pairs.
+	 */
+	public InitVarValue[] getInitVarValuesSparse(){
+		if(optimization == null) return null;
+		if(optimization.variables == null) return null;
+		if(optimization.variables.initialVariableValues == null) return null;
+		return optimization.variables.initialVariableValues.var; 
+	}//getInitVarValuesSparse
 	
 	/**
-	 * get a string array of names of other optimization options. 
-	 * 
-	 * @return a string array of names of other options, null if no optimization other options.  
+	 * Set initial variable values (InitVarValue[]). 
+	 * Before this method is called, the setVariable(int), setObjective(int), setConstraint(int)
+	 * methods are recommended  to be called first. 
+	 * @param initialVariableValues holds the initial variable values in sparse form (InitVarValue[]). 
+	 * @return whether the initial variable values are set successfully or not. 
 	 */
-	public String[] getOtherOptimizationOptionNames(){
+	public boolean setInitVarValuesSparse(InitVarValue[] initialVariableValues){
+		if(optimization == null) optimization = new OptimizationOption();
+		if(optimization.variables == null) optimization.variables = new VariableOption();
+		if(optimization.variables.initialVariableValues == null) optimization.variables.initialVariableValues = new InitialVariableValues();
+		if(initialVariableValues == null)optimization.variables.initialVariableValues.var = null;
+		else optimization.variables.initialVariableValues.var = initialVariableValues;
+		int n = initialVariableValues==null?0:initialVariableValues.length;
+		optimization.variables.initialVariableValues.numberOfVar = n;
+		return true;
+	}//setInitVarValuesSparse
+	
+	/**
+	 * get the number of other solver options (in <optimization> element)
+	 * @return the number of other solver options (in <optimization> element)
+	 */
+	public int getNumberOfSolverOptions(){
+		if(optimization == null) return 0;
+		if(optimization.solverOptions == null) return 0;
+		return optimization.solverOptions.numberOfSolverOptions;
+	}//getNumberOfSolverOptions
+	
+	/**
+	 * Set the number of other solver options. 
+	 * 
+	 * @param numberOfOtherSolverOptions holds the number of other solver options
+	 * @return whether the number is set successfully or not. 
+	 */
+	public boolean setNumberOfSolverOptions(int numberOfSolverOptions){
+		if(numberOfSolverOptions < 0) return false;
+		if(optimization == null) optimization = new OptimizationOption();
+		if(optimization.solverOptions == null) optimization.solverOptions = new SolverOptions();
+		optimization.solverOptions.numberOfSolverOptions = numberOfSolverOptions;
+		return true;
+	}//setNumberOfSolverOptions
+
+	
+	/**
+	 * get the array of solver options associated with a particular solver
+	 * @param solver_name is the name of the solver
+	 * 
+	 * @return an array of solver options associated with this solver
+	 */
+	public SolverOption[] getSolverOptions(){
 		if(optimization == null) return null;
 		if(optimization.solverOptions == null) return null;
-		if(optimization.solverOptions.solverOption == null) return null;
-		int n = optimization.solverOptions.solverOption.length;
-		if(n <= 0) return null;
-		String[] otherOptimizationOptionNames = new String[n];
-		for(int i = 0; i < n; i++){
-			otherOptimizationOptionNames[i] = optimization.solverOptions.solverOption[i].name;
-		}
-		return otherOptimizationOptionNames;
-	}//getOtherOptimizationOptionNames
+		return optimization.solverOptions.solverOption;
+	}//getSolverOptions
 	
-	/**
-	 * get a hashmap of other optimization option values. 
-	 * The keys of the hashmap are the option names, and 
-	 * the values of the hashmap are the option values.  
-	 * 
-	 * @return a hashmap of other optimization option values, null if no other options. 
-	 */
-	public Hashtable<String, String>  getOtherOptimizationOptionValues(){
-		if(optimization == null) return null;
-		if(optimization.solverOptions == null) return null;
-		if(optimization.solverOptions.solverOption == null) return null;
-		int n = optimization.solverOptions.solverOption.length;
-		if(n <= 0) return null;
-		Hashtable<String, String> otherOptimizationOptionValues = new Hashtable<String, String>();
-		for(int i = 0; i < n; i++){
-			otherOptimizationOptionValues.put(optimization.solverOptions.solverOption[i].name, optimization.solverOptions.solverOption[i].value);
-		}
-		return otherOptimizationOptionValues;
-	}//getOtherOptimizationOptionValues
-	
-	/**
-	 * get a hashmap of other optimization option descriptions. 
-	 * The keys of the hashmap are the option names, and 
-	 * the values of the hashmap are the option descriptions.  
-	 * 
-	 * @return a hashmap of other optimization option descriptions, null if no other options. 
-	 */
-	public Hashtable<String, String>  getOtherOptimizationOptionDescriptions(){
-		if(optimization == null) return null;
-		if(optimization.solverOptions == null) return null;
-		if(optimization.solverOptions.solverOption == null) return null;
-		int n = optimization.solverOptions.solverOption.length;
-		if(n <= 0) return null;
-		Hashtable<String, String> otherOptimizationOptionDescriptions = new Hashtable<String, String>();
-		for(int i = 0; i < n; i++){
-			otherOptimizationOptionDescriptions.put(optimization.solverOptions.solverOption[i].name, optimization.solverOptions.solverOption[i].description);
-		}
-		return otherOptimizationOptionDescriptions;
-	}//otherOptimizationOptionDescriptions
-	
-	/**
-	 * Get the string value from the other optimization option hash map. 
-	 * 
-	 * @param name holds the name of optimization option to get.
-	 * @return string value from the other optimization option hash map, null if none. 
-	 */
-	public String getOtherOptimizationOptionValueByName(String name){
-		Hashtable<String, String> otherOptimizationOptionValues = getOtherOptimizationOptionValues();
-		if(name != null && name.trim().length() > 0 && otherOptimizationOptionValues != null && otherOptimizationOptionValues.containsKey(name)){
-			return (String)otherOptimizationOptionValues.get(name);
-		}
-		else{ 
-			return null;
-		}
-	}//getOtherOptimizationOptionValueByName
+
 	
 	public boolean setSolverOptions(SolverOption[] solverOptions){
-		return false;
-	}
+		if(optimization == null) optimization = new OptimizationOption();
+		if(optimization.solverOptions == null) optimization.solverOptions = new SolverOptions();
+		if(solverOptions == null)optimization.solverOptions.solverOption = null;
+		else optimization.solverOptions.solverOption = solverOptions;
+		int n = solverOptions==null?0:solverOptions.length;
+		optimization.solverOptions.numberOfSolverOptions = n;
+		return true;
+	}//setSolverOptions
 	
 	/**
-	 * set other optimization options, with their names (required), descriptions (optional) and values (optional). 
+	 * Set the solver options. 
 	 * 
-	 * @param names holds the names of the other optimization options; it is required.  
-	 * @param descriptions holds the descriptions of the other optimization options; null if none. 
-	 * @param values holds the values of the other optimization options; null if none. 
-	 * @return whether the other optimization information is set successfully. 
+	 * @param names holds the names of the solver options. It is required. 
+	 * @param values holds the values of the solver options, empty string "" or null if no value for an option.
+	 * @param descriptions holds the descriptions of the solver options, empty string "" or null if no value for an option, null for
+	 * the entire array if none of the options have descriptions.
+	 * @param solvers holds the solvers of the solver options, empty string "" or null if no value for an option, null for
+	 * the entire array if none of the options have solvers.
+	 * @param categories holds the categories of the solver options, empty string "" or null if no value for an option, null for
+	 * the entire array if none of the options have categories.
+	 * @param types holds the types of the solver options, empty string "" or null if no value for an option, null for
+	 * the entire array if none of the options have types.
+	 * @return whether the solver options element construction is successful.
 	 */
-	public boolean setOtherOptimizationOptions(String[] names, String[] descriptions, String[] values){
+	public boolean setSolverOptions(String[] names, String[] values, String[] descriptions, String[] solvers, String[] categories, String[] types){
 		if(names == null) return false;
 		if(descriptions != null && descriptions.length != names.length) return false;
 		if(values != null && values.length != names.length) return false;		
+		if(solvers != null && solvers.length != names.length) return false;		
+		if(categories != null && categories.length != names.length) return false;		
+		if(types != null && types.length != names.length) return false;		
 		
 		int n = names.length;
 		
@@ -1013,109 +1663,24 @@ public class OSOption {
 				optimization.solverOptions.solverOption[i].value = values[i];
 			}	
 		}
-		return true;
-	}//setOtherOptimizationOptions
-
-	/**
-	 * get a string array of names of other options. 
-	 * 
-	 * @return a string array of names of other options, null if no other options.  
-	 */
-	public String[] getOtherOptionNames(){
-		if(other == null) return null;
-		int n = other.length;
-		if(n <= 0) return null;
-		String[] otherOptionNames = new String[n];
-		for(int i = 0; i < n; i++){
-			otherOptionNames[i] = other[i].name;
-		}
-		return otherOptionNames;
-	}//getOtherOptionNames
-	
-	/**
-	 * get a hashmap of other option descriptions. 
-	 * The keys of the hashmap are the option names, and 
-	 * the values of the hashmap are the option descriptions.  
-	 * 
-	 * @return a hashmap of other option descriptions, null if no other options. 
-	 */
-	public Hashtable<String, String>  getOtherOptionDescriptions(){
-		if(other == null) return null;
-		int n = other.length;
-		if(n <= 0) return null;
-		Hashtable<String, String> otherOptionDescriptions = new Hashtable<String, String>();
-		for(int i = 0; i < n; i++){
-			otherOptionDescriptions.put(other[i].name, other[i].description);
-		}
-		return otherOptionDescriptions;
-	}//getOtherOptionDescriptions
-
-	/**
-	 * get a hashmap of other option values. 
-	 * The keys of the hashmap are the option names, and 
-	 * the values of the hashmap are the option values.  
-	 * 
-	 * @return a hashmap of other option values, null if no other options. 
-	 */
-	public Hashtable<String, String>  getOtherOptionValues(){
-		if(other == null) return null;
-		int n = other.length;
-		if(n <= 0) return null;
-		Hashtable<String, String> otherOptionValues = new Hashtable<String, String>();
-		for(int i = 0; i < n; i++){
-			otherOptionValues.put(other[i].name, other[i].value);
-		}
-		return otherOptionValues;
-	}//getOtherOptionValues
-
-	/**
-	 * Get the string value from the other option hash map. 
-	 * 
-	 * @param name holds the name of the other option to get.
-	 * @return string value from the other option hash map, null if none. 
-	 */
-	public String getOtherOptionValueByName(String name){
-		Hashtable<String, String> otherOptionValues = getOtherOptionValues();
-		if(name != null && name.trim().length() > 0 && otherOptionValues != null && otherOptionValues.containsKey(name)){
-			return (String)otherOptionValues.get(name);
-		}
-		else{ 
-			return null;
-		}
-	}//getOtherOptionValueByName
-	
-	/**
-	 * set other options, with their names (required), descriptions (optional) and values (optional). 
-	 * 
-	 * @param names holds the names of the other options; it is required.  
-	 * @param descriptions holds the descriptions of the other options; null if none. 
-	 * @param values holds the values of the other options; null if none. 
-	 * @return whether the other  information is set successfully. 
-	 */
-	public boolean setOtherOptions(String[] names, String[] descriptions, String[] values){
-		if(names == null) return false;
-		if(descriptions != null && descriptions.length != names.length) return false;
-		if(values != null && values.length != names.length) return false;
-		int n = names.length;
-		other = new OtherOption[n];
-		for(int i = 0; i < n; i++){
-			other[i] = new OtherOption();
-		}
-		for(int i = 0; i < n; i++){
-			other[i].name = names[i];
-		}
-		if(descriptions != null){
+		if(solvers != null){
 			for(int i = 0; i < n; i++){
-				other[i].description = descriptions[i];
+				optimization.solverOptions.solverOption[i].value = solvers[i];
 			}	
 		}
-		if(values != null){
+		if(categories != null){
 			for(int i = 0; i < n; i++){
-				other[i].value = values[i];
+				optimization.solverOptions.solverOption[i].category = categories[i];
+			}	
+		}
+		if(types != null){
+			for(int i = 0; i < n; i++){
+				optimization.solverOptions.solverOption[i].type = types[i];
 			}	
 		}
 		return true;
-	}//setOtherOptions
+	}//setSolverOptions
+
 	
 	/**
 	 * main for test purposes.

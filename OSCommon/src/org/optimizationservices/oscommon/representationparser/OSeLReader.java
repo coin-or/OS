@@ -1146,7 +1146,7 @@ public class OSeLReader extends OSgLReader{
 		OSOption osOption = oselReader.getDefaultOptionNamesAndValues();
 		if(osOption != null){
 			System.out.println(osOption.getNumberOfConstraints());
-			System.out.println(osOption.getJobMaxTime());			
+			System.out.println(osOption.getMaxTime());			
 		}
 		System.out.println("**************option***************");
 		System.out.println(oselReader.getOptimizationDescription());

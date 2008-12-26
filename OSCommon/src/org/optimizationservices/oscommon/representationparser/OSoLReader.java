@@ -104,20 +104,20 @@ public class OSoLReader extends OSgLReader{
 		if(!m_osOption.setServiceName(getServiceName())) throw new Exception("setServiceName Unsuccessful");		
 		if(!m_osOption.setInstanceName(getInstanceName())) throw new Exception("setInstanceName Unsuccessful");		
 		if(!m_osOption.setInstanceLocationType(getInstanceLocationType())) throw new Exception("setInstanceLocationType Unsuccessful");		
-		if(!m_osOption.setInstanceAddress(getInstanceLocation())) throw new Exception("setInstanceAddress Unsuccessful");		
+		if(!m_osOption.setInstanceLocation(getInstanceLocation())) throw new Exception("setInstanceAddress Unsuccessful");		
 		if(!m_osOption.setJobID(getJobID())) throw new Exception("setJobID Unsuccessful");		
 		if(!m_osOption.setSolverToInvoke(getSolverToInvoke())) throw new Exception("setSolverToInvoke Unsuccessful");		
 		if(!m_osOption.setLicense(getLicense())) throw new Exception("setLicense Unsuccessful");		
 		if(!m_osOption.setUserName(getUserName())) throw new Exception("setUserName Unsuccessful");		
 		if(!m_osOption.setPassword(getPassword())) throw new Exception("setPassword Unsuccessful");		
 		if(!m_osOption.setContactTransportType(getContactTransportType())) throw new Exception("setContactTransportType Unsuccessful");		
-		if(!m_osOption.setContactAddress(getContact())) throw new Exception("setContactAddress Unsuccessful");		
-		if(!m_osOption.setSystemMinDiskSpace(getMinDiskSpace())) throw new Exception("setSystemMinDiskSpace Unsuccessful");		
-		if(!m_osOption.setSystemMinMemorySize(getMinMemorySize())) throw new Exception("setSystemMinMemorySize Unsuccessful");		
-		if(!m_osOption.setSystemMinCPUSpeed(getMinCPUSpeed())) throw new Exception("setSystemMinCPUSpeed Unsuccessful");		
+		if(!m_osOption.setContact(getContact())) throw new Exception("setContactAddress Unsuccessful");		
+		if(!m_osOption.setMinDiskSpace(getMinDiskSpace())) throw new Exception("setSystemMinDiskSpace Unsuccessful");		
+		if(!m_osOption.setMinMemorySize(getMinMemorySize())) throw new Exception("setSystemMinMemorySize Unsuccessful");		
+		if(!m_osOption.setMinCPUSpeed(getMinCPUSpeed())) throw new Exception("setSystemMinCPUSpeed Unsuccessful");		
 		if(!m_osOption.setServiceType(getServiceType())) throw new Exception("setServiceType Unsuccessful");		
-		if(!m_osOption.setJobMaxTime(getMaxTime())) throw new Exception("setJobMaxTime Unsuccessful");		
-		if(!m_osOption.setJobScheduledStartTime(getScheduledStartTime())) throw new Exception("setJobScheduledStartTime Unsuccessful");		
+		if(!m_osOption.setMaxTime(getMaxTime())) throw new Exception("setJobMaxTime Unsuccessful");		
+		if(!m_osOption.setScheduledStartTime(getScheduledStartTime())) throw new Exception("setJobScheduledStartTime Unsuccessful");		
 		if(!m_osOption.setJobDependencies(getJobDependencies())) throw new Exception("setJobDependencies Unsuccessful");		
 		if(!m_osOption.setRequiredDirectories(getRequiredDirectories())) throw new Exception("setRequiredDirectories Unsuccessful");		
 		if(!m_osOption.setRequiredFiles(getRequiredFiles())) throw new Exception("setRequiredFiles Unsuccessful");		
@@ -133,7 +133,7 @@ public class OSoLReader extends OSgLReader{
 		if(!m_osOption.setNumberOfVariables(getNumberOfVariables())) throw new Exception("setVariableNumber Unsuccessful");		
 		if(!m_osOption.setNumberOfObjectives(getNumberOfObjectives())) throw new Exception("setObjectiveNumber Unsuccessful");		
 		if(!m_osOption.setNumberOfConstraints(getNumberOfConstraints())) throw new Exception("setConstraintNumber Unsuccessful");		
-		if(!m_osOption.setInitialVariableValues(getInitVarValuesDense())) throw new Exception("setInitialVariableValues Unsuccessful");		
+		if(!m_osOption.setInitVarValuesDense(getInitVarValuesDense())) throw new Exception("setInitialVariableValues Unsuccessful");		
 		if(!m_osOption.setSolverOptions(getSolverOptions(""))) throw new Exception("setSolverOptions Unsuccessful");
 		return m_osOption;
 	}//getOSOption
@@ -2683,8 +2683,8 @@ public class OSoLReader extends OSgLReader{
 				catch (Exception e) {
 				}
 
-				mCon[i].lbValue = dLBBound;
-				mCon[i].ubValue = dUBBound;
+				mCon[i].lbDualValue = dLBBound;
+				mCon[i].ubDualValue = dUBBound;
 			}
 			catch(Exception e){
 				return null;

@@ -18,5 +18,7 @@ package org.optimizationservices.oscommon.datastructure.osgeneral;
 public class JobDependencies{
 	
 	public String[] jobID = null;
+	
+	public int numberOfJobIDs = 0;
 		
 }//class JobDependencies

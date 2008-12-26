@@ -71,22 +71,22 @@ public class OSoLWriter extends OSgLWriter{
 		if(!setServiceName(osOption.getServiceName())) throw new Exception("setServiceName Unsuccessful");		
 		if(!setInstanceName(osOption.getInstanceName())) throw new Exception("setInstanceName Unsuccessful");		
 		if(!setContactTransportType(osOption.getContactTransportType())) throw new Exception("setContactTransportType Unsuccessful");		
-		if(!setInstanceLocation(osOption.getInstanceAddress())) throw new Exception("setInstanceAddress Unsuccessful");		
+		if(!setInstanceLocation(osOption.getInstanceLocation())) throw new Exception("setInstanceAddress Unsuccessful");		
 		if(!setInstanceLocationType(osOption.getInstanceLocationType())) throw new Exception("setInstanceLocationType Unsuccessful");		
-		if(!setContact(osOption.getContactAddress())) throw new Exception("setContactAddress Unsuccessful");		
+		if(!setContact(osOption.getContact())) throw new Exception("setContactAddress Unsuccessful");		
 		if(!setJobID(osOption.getJobID())) throw new Exception("setJobID Unsuccessful");		
 		if(!setSolverToInvoke(osOption.getSolverToInvoke())) throw new Exception("setSolverToInvoke Unsuccessful");		
 		if(!setLicense(osOption.getLicense())) throw new Exception("setLicense Unsuccessful");		
 		if(!setUserName(osOption.getUserName())) throw new Exception("setUserName Unsuccessful");		
 		if(!setPassword(osOption.getPassword())) throw new Exception("setPassword Unsuccessful");		
 		if(!setContactTransportType(osOption.getContactTransportType())) throw new Exception("setContactTransportType Unsuccessful");		
-		if(!setContact(osOption.getContactAddress())) throw new Exception("setContactAddress Unsuccessful");		
-		if(!setMinDiskSpace(osOption.getSystemMinDiskSpace())) throw new Exception("setSystemMinDiskSpace Unsuccessful");		
-		if(!setMinMemorySize(osOption.getSystemMinMemorySize())) throw new Exception("setSystemMinMemorySize Unsuccessful");		
-		if(!setMinCPUSpeed(osOption.getSystemMinCPUSpeed())) throw new Exception("setSystemMinCPUSpeed Unsuccessful");		
+		if(!setContact(osOption.getContact())) throw new Exception("setContactAddress Unsuccessful");		
+		if(!setMinDiskSpace(osOption.getMinDiskSpace())) throw new Exception("setSystemMinDiskSpace Unsuccessful");		
+		if(!setMinMemorySize(osOption.getMinMemorySize())) throw new Exception("setSystemMinMemorySize Unsuccessful");		
+		if(!setMinCPUSpeed(osOption.getMinCPUSpeed())) throw new Exception("setSystemMinCPUSpeed Unsuccessful");		
 		if(!setServiceType(osOption.getServiceType())) throw new Exception("setServiceType Unsuccessful");		
-		if(!setMaxTime(osOption.getJobMaxTime())) throw new Exception("setJobMaxTime Unsuccessful");		
-		if(!setScheduledStartTime(osOption.getJobScheduledStartTime())) throw new Exception("setJobScheduledStartTime Unsuccessful");		
+		if(!setMaxTime(osOption.getMaxTime())) throw new Exception("setJobMaxTime Unsuccessful");		
+		if(!setScheduledStartTime(osOption.getScheduledStartTime())) throw new Exception("setJobScheduledStartTime Unsuccessful");		
 		if(!setJobDependencies(osOption.getJobDependencies())) throw new Exception("setJobDependencies Unsuccessful");		
 		if(!setRequiredDirectories(osOption.getRequiredDirectories())) throw new Exception("setRequiredDirectories Unsuccessful");		
 		if(!setRequiredFiles(osOption.getRequiredFiles())) throw new Exception("setRequiredFiles Unsuccessful");		
@@ -103,7 +103,7 @@ public class OSoLWriter extends OSgLWriter{
 		if(!setNumberOfVariables(osOption.getNumberOfVariables())) throw new Exception("setNumberOfVariables Unsuccessful");		
 		if(!setNumberOfObjectives(osOption.getNumberOfObjectives())) throw new Exception("setNumberOfObjectives Unsuccessful");		
 		if(!setNumberOfConstraints(osOption.getNumberOfConstraints())) throw new Exception("setNumberOfConstraints Unsuccessful");		
-		if(!setInitVarValuesDense(osOption.getInitialVariableValues())) throw new Exception("setInitialVariableValues Unsuccessful");		
+		if(!setInitVarValuesDense(osOption.getInitVarValuesDense())) throw new Exception("setInitialVariableValues Unsuccessful");		
 		if(osOption.optimization != null && osOption.optimization.solverOptions != null && osOption.optimization.solverOptions != null && osOption.optimization.solverOptions.solverOption.length > 0){
 			int n = osOption.optimization.solverOptions.solverOption.length;
 			String[] msNames = new String[n];
@@ -4421,8 +4421,8 @@ public class OSoLWriter extends OSgLWriter{
 				if(initialDualValues[i] == null) continue;
 				Element eCon = m_document.createElement("con");	
 				eCon.setAttribute("idx", initialDualValues[i].idx+"");
-				eCon.setAttribute("lbDualValue", initialDualValues[i].lbValue+"");
-				eCon.setAttribute("ubDualValue", initialDualValues[i].ubValue+"");
+				eCon.setAttribute("lbDualValue", initialDualValues[i].lbDualValue+"");
+				eCon.setAttribute("ubDualValue", initialDualValues[i].ubDualValue+"");
 				eInitialDualValues.appendChild(eCon);				
 				nCon++;
 			}

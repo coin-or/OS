@@ -25,6 +25,10 @@ public class VariableOption{
 
 	public InitialBasisStatus initialBasisStatus = null;
 	
+	public IntegerVariableBranchingWeights integerVariableBranchingWeights = null;
+	
+	public SOSVariableBranchingWeights sosVariableBranchingWeights = null;
+	
 	public OtherVariableOption[] other = null;
 
 }//class VariableOption

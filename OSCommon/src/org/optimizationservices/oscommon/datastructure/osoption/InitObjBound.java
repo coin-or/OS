@@ -18,9 +18,9 @@ public class InitObjBound {
 	
 	public int idx = -1;
 	
-	public double lbValue = Double.NaN;
+	public double lbValue = Double.NEGATIVE_INFINITY;
 
-	public double ubValue = Double.NaN;
+	public double ubValue = Double.POSITIVE_INFINITY;
 	
 }//InitObjBound
 

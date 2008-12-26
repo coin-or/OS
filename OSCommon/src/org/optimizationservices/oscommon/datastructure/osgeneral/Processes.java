@@ -19,4 +19,6 @@ public class Processes{
 	
 	public String[] process = null;
 		
+	public int numberOfProcesses = 0;
+	
 }//class Processes

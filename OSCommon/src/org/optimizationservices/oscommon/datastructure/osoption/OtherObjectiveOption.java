@@ -26,7 +26,7 @@ public class OtherObjectiveOption {
 
 	public String category = "";
 
-	public String type = "";
+	public String type = "string";
 
 	public String description = "";	
 	

@@ -17,7 +17,7 @@ package org.optimizationservices.oscommon.datastructure.osoption;
 */
 public class ServiceOption{
 	
-	public String type = "";
+	public String type = "solver";
 	
 	public OtherOptions otherOptions = null;
 
