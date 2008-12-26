@@ -927,6 +927,7 @@ OSCommon/src/org/optimizationservices/oscommon/datastructure/osinstance/Quadrati
 OSCommon/src/org/optimizationservices/oscommon/datastructure/osinstance/Variable.java -text
 OSCommon/src/org/optimizationservices/oscommon/datastructure/osinstance/Variables.java -text
 OSCommon/src/org/optimizationservices/oscommon/datastructure/osinstance/XMLData.java -text
+OSCommon/src/org/optimizationservices/oscommon/datastructure/osoption/BranchingWeight.java -text
 OSCommon/src/org/optimizationservices/oscommon/datastructure/osoption/ConstraintOption.java -text
 OSCommon/src/org/optimizationservices/oscommon/datastructure/osoption/ContactOption.java -text
 OSCommon/src/org/optimizationservices/oscommon/datastructure/osoption/GeneralOption.java -text
@@ -945,6 +946,7 @@ OSCommon/src/org/optimizationservices/oscommon/datastructure/osoption/InitialObj
 OSCommon/src/org/optimizationservices/oscommon/datastructure/osoption/InitialVariableValues.java -text
 OSCommon/src/org/optimizationservices/oscommon/datastructure/osoption/InitialVariableValuesString.java -text
 OSCommon/src/org/optimizationservices/oscommon/datastructure/osoption/InstanceLocationOption.java -text
+OSCommon/src/org/optimizationservices/oscommon/datastructure/osoption/IntegerVariableBranchingWeights.java -text
 OSCommon/src/org/optimizationservices/oscommon/datastructure/osoption/JobOption.java -text
 OSCommon/src/org/optimizationservices/oscommon/datastructure/osoption/MaxTime.java -text
 OSCommon/src/org/optimizationservices/oscommon/datastructure/osoption/MinCPUSpeed.java -text
@@ -962,6 +964,8 @@ OSCommon/src/org/optimizationservices/oscommon/datastructure/osoption/OtherVarOp
 OSCommon/src/org/optimizationservices/oscommon/datastructure/osoption/OtherVariableOption.java -text
 OSCommon/src/org/optimizationservices/oscommon/datastructure/osoption/PathPair.java -text
 OSCommon/src/org/optimizationservices/oscommon/datastructure/osoption/PathPairs.java -text
+OSCommon/src/org/optimizationservices/oscommon/datastructure/osoption/SOSVariableBranchingWeights.java -text
+OSCommon/src/org/optimizationservices/oscommon/datastructure/osoption/SOSWeights.java -text
 OSCommon/src/org/optimizationservices/oscommon/datastructure/osoption/ServiceOption.java -text
 OSCommon/src/org/optimizationservices/oscommon/datastructure/osoption/SolverOption.java -text
 OSCommon/src/org/optimizationservices/oscommon/datastructure/osoption/SolverOptions.java -text
