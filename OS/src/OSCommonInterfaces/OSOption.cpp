@@ -951,8 +951,8 @@ InitConstraintValues::~InitConstraintValues()
 
 InitDualVarValue::InitDualVarValue(): 
 	idx (0),
-	valueAtLb (0.0),
-	valueAtUb (0.0)
+	lbDualValue (0.0),
+	ubDualValue (0.0)
 {    
 	#ifdef DEBUG
 	cout << "Inside InitDualVarValue Constructor" << endl;
@@ -2415,7 +2415,7 @@ double* OSOption::getInitVarValuesDense(int numberOfVariables)
  * get the list of initial values for string-valued variables in sparse form
  * @return a list of index/value pairs
  */
-InitVarValueString**  OSOption::getInitVarStringsSparse()
+InitVarValueString**  OSOption::getInitVarValuesStringSparse()
 {	InitVarValueString** initVarVector;
 	if (this->optimization != NULL) 
 	{	if (this->optimization->variables != NULL) 
@@ -2430,14 +2430,14 @@ InitVarValueString**  OSOption::getInitVarStringsSparse()
 	else
 		throw ErrorClass("<optimization> object must be defined before getting the data");
 	return initVarVector;
-}//getInitVarStringsSparse
+}//getInitVarValuesStringSparse
 
 /**
  * get the list of initial values for string-valued variables in dense form
  * @return an array of value strings
  * @note return the empty string "" for variables that are not initialed
  */
-std::string *OSOption::getInitVarStringsDense(int numberOfVariables)
+std::string *OSOption::getInitVarValuesStringDense(int numberOfVariables)
 {	try
 	{	numberOfVariables = this->getNumberOfVariables();
 		if (numberOfVariables < 0)
@@ -2471,7 +2471,7 @@ std::string *OSOption::getInitVarStringsDense(int numberOfVariables)
 	{	throw ErrorClass(eclass.errormsg);
 	}
 	return NULL;
-}//getInitVarStringsDense
+}//getInitVarValuesStringDense
 
 /**
  * get the list of initial basic and nonbasic variables in sparse form
@@ -2873,7 +2873,7 @@ double* OSOption::getInitDualVarLowerBoundsDense(int numberOfConstraints)
 					{	j = this->optimization->constraints->initialDualValues->con[i]->idx;
 						if (j >= 0 && j < numberOfConstraints)						
 							initDualVector[j] 
-							  = this->optimization->constraints->initialDualValues->con[i]->valueAtLb;						
+							  = this->optimization->constraints->initialDualValues->con[i]->lbDualValue;						
 						else
 							throw ErrorClass("Constraint index out of range");
 					}
@@ -2915,7 +2915,7 @@ double* OSOption::getInitDualVarUpperBoundsDense(int numberOfConstraints)
 					{	j = this->optimization->constraints->initialDualValues->con[i]->idx;
 						if (j >= 0 && j < numberOfConstraints)						
 							initDualVector[j] 
-							  = this->optimization->constraints->initialDualValues->con[i]->valueAtUb;	
+							  = this->optimization->constraints->initialDualValues->con[i]->ubDualValue;	
 						else
 							throw ErrorClass("Constraint index out of range");
 					}
@@ -4312,7 +4312,7 @@ bool InitDualVariableValues::setCon(int numberOfCon, InitDualVarValue **con)
  * @param lbValue: an initial lower bound for the dual variable 
  * @param ubValue: an initial upper bound for the dual variable 
  */
-bool InitDualVariableValues::addCon(int idx, double valueAtLb, double valueAtUb)
+bool InitDualVariableValues::addCon(int idx, double lbDualValue, double ubDualValue)
 {	try
 	{	int nopt; int i;
 		if (idx < 0)
@@ -4333,8 +4333,8 @@ bool InitDualVariableValues::addCon(int idx, double valueAtLb, double valueAtUb)
 		temp[ nopt] = new InitDualVarValue();
 
 		temp[ nopt]->idx = idx;
-		temp[ nopt]->valueAtLb = valueAtLb;
-		temp[ nopt]->valueAtUb = valueAtUb;
+		temp[ nopt]->lbDualValue = lbDualValue;
+		temp[ nopt]->ubDualValue = ubDualValue;
 
 		this->con = temp;   //hook the new pointers into the data structure
 		this->numberOfCon = ++nopt;
@@ -7011,8 +7011,8 @@ bool InitDualVarValue::IsEqual(InitDualVarValue *that)
 	{	if (that == NULL)
 			return false;
 		else	
-		{	if ((this->idx != that->idx) || (this->valueAtLb != that->valueAtLb) ||
-				(this->valueAtUb != that->valueAtUb))
+		{	if ((this->idx != that->idx) || (this->lbDualValue != that->lbDualValue) ||
+				(this->ubDualValue != that->ubDualValue))
 				return false;
 			return true;
 		}

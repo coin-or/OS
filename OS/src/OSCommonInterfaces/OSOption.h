@@ -1936,10 +1936,10 @@ public:
 	int idx;
 
 	/** initial lower bound */
-	double valueAtLb;
+	double lbDualValue;
 
 	/** initial upper bound */
-	double valueAtUb;
+	double ubDualValue;
 
 	/**
 	 *
@@ -2005,10 +2005,10 @@ public:
 	 *
 	 * A function to add a <con> element
 	 * @param idx: the index of the constraint to be given initial dual variables 
-	 * @param valueAtLb: an initial value for the dual variable associated with the lower bound
-	 * @param valueAtUb: an initial value for the dual variable associated with the upper bound 
+	 * @param lbDualValue: an initial value for the dual variable associated with the lower bound
+	 * @param ubDualValue: an initial value for the dual variable associated with the upper bound 
 	 */
-	bool addCon(int idx, double valueAtLb, double valueAtUb);
+	bool addCon(int idx, double lbDualValue, double ubDualValue);
 }; //InitDualVariableValues
 
 
@@ -2912,7 +2912,7 @@ public:
 	 * @return a vector of strings that 
 	 * hold inital value strings for (some of) the variables
 	 */
-	InitVarValueString** getInitVarStringsSparse();
+	InitVarValueString** getInitVarValuesStringSparse();
 
 	/**
 	 * Get the initial value strings associated with the variables in dense form
@@ -2922,7 +2922,7 @@ public:
 	 * holds initial value strings (or "") for all of the variables
 	 * @param nvar is the number of variables
 	 */
-	std::string *getInitVarStringsDense(int nvar);
+	std::string *getInitVarValuesStringDense(int nvar);
 
 	/**
 	 * Get the initial basis status in sparse form

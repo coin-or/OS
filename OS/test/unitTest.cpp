@@ -2108,6 +2108,52 @@ catch(const ErrorClass& eclass){
 		ok = osoption2->setInitVarValuesDense(nopt, IVV);		
 		cout << ok << endl;
 
+		cout << "InitialVariableValuesString...";
+		std::string*  IVV2;
+		IVV2 = osoption->getInitVarValuesStringDense(nopt);
+		for (int i=0; i < nopt; i++)
+			cout << "IVV2: " << IVV2[i] << endl;
+		cout << "nopt:" << nopt;
+		ok = osoption2->setInitVarValuesStringDense(nopt, IVV2);		
+		cout << ok << endl;
+
+		cout << "InitialBasisStatus...";
+		std::string*  IBS;
+		IBS = osoption->getInitBasisStatusDense(nopt);
+		for (int i=0; i < nopt; i++)
+			cout << "IBS: " << IBS[i] << endl;
+		cout << "nopt:" << nopt;
+		ok = osoption2->setInitBasisStatusDense(nopt, IBS);		
+		cout << ok << endl;
+
+		cout << "IntegerVariableBranchingWeights...";
+		double* IVBW;
+		IVBW = osoption->getIntegerVariableBranchingWeightsDense(nopt);
+		for (int i=0; i < nopt; i++)
+			cout << "IVBW: " << IVBW[i] << endl;
+		cout << "nopt:" << nopt;
+		ok = osoption2->setIntegerVariableBranchingWeightsDense(nopt, IVBW);		
+		cout << ok << endl;
+
+		cout << "InitObjValues...";
+		double* IOV;
+		IOV = osoption->getInitObjValuesDense(nopt);
+		for (int i=0; i < nopt; i++)
+			cout << "IOV: " << IOV[i] << endl;
+		cout << "nopt:" << nopt;
+		ok = osoption2->setInitObjValuesDense(nopt, IOV);		
+		cout << ok << endl;
+
+		cout << "InitObjBounds...";
+		double *IOBL, *IOBU;
+		IOBL = osoption->getInitObjLowerBoundsDense(nopt);
+		IOBU = osoption->getInitObjUpperBoundsDense(nopt);
+		for (int i=0; i < nopt; i++)
+			cout << "IOBL: " << IOBL[i] << endl << "IOBU: " << IOBU[i] << endl;
+		cout << "nopt:" << nopt;
+		ok = osoption2->setInitObjBoundsDense(nopt, IOBL, IOBU);		
+		cout << ok << endl;
+
 
 #if 0
 		std::cout << "number of solver options "  <<  osoption->getNumberOfSolverOptions() << std::endl;

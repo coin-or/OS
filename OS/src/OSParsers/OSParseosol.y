@@ -90,7 +90,7 @@ int osollex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token NUMBEROFOTHERCONSTRAINTOPTIONSATT;
 %token NUMBEROFVARATT NUMBEROFOBJATT NUMBEROFCONATT;
 %token NAMEATT IDXATT SOSIDXATT VALUEATT UNITATT DESCRIPTIONATT;
-%token LBVALUEATT UBVALUEATT VALUEATLBATT VALUEATUBATT;
+%token LBVALUEATT UBVALUEATT LBDUALVALUEATT UBDUALVALUEATT;
 
 %token GENERALSTART GENERALEND SYSTEMSTART SYSTEMEND SERVICESTART SERVICEEND;
 %token JOBSTART JOBEND OPTIMIZATIONSTART OPTIMIZATIONEND;
@@ -2586,29 +2586,29 @@ initdualvalueidxatt: IDXATT QUOTE INTEGER QUOTE
 	osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->idx = $3;
 };
 
-initdualvaluelowerboundatt: VALUEATLBATT ATTRIBUTETEXT
+initdualvaluelowerboundatt: LBDUALVALUEATT ATTRIBUTETEXT
 {	if (parserData->lbvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one dual variable lower bound allowed");
 	parserData->lbvalAttributePresent = true;
 	if (strcmp($2,"INF") == 0)
-		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->valueAtLb = OSDBL_MAX;
+		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->lbDualValue = OSDBL_MAX;
 	else if (strcmp($2,"-INF") == 0)
-		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->valueAtLb = -OSDBL_MAX;
+		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->lbDualValue = -OSDBL_MAX;
 	else
-		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->valueAtLb = os_strtod($2, NULL);
+		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->lbDualValue = os_strtod($2, NULL);
 }
 QUOTE;
 
-initdualvalueupperboundatt: VALUEATUBATT ATTRIBUTETEXT
+initdualvalueupperboundatt: UBDUALVALUEATT ATTRIBUTETEXT
 {	if (parserData->ubvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one dual variable upper bound allowed");
 	parserData->ubvalAttributePresent = true;
 	if (strcmp($2,"INF") == 0)
-		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->valueAtUb = OSDBL_MAX;
+		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->ubDualValue = OSDBL_MAX;
 	else if (strcmp($2,"-INF") == 0)
-		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->valueAtUb = -OSDBL_MAX;
+		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->ubDualValue = -OSDBL_MAX;
 	else
-		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->valueAtUb = os_strtod($2, NULL);
+		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->ubDualValue = os_strtod($2, NULL);
 }
 QUOTE;
 

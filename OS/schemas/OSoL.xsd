@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSoL.xsd: current version - 1.0.0 -->
 	<!--include: since version 1.0.0-->
 	<!--OSoL: proposal (The entire schema)-->
@@ -741,12 +741,12 @@
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="valueAtLb" use="optional" default="0.0">
+		<xs:attribute name="lbDualValue" use="optional" default="0.0">
 			<xs:simpleType>
 				<xs:restriction base="xs:double"/>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="valueAtUb" use="optional" default="0.0">
+		<xs:attribute name="ubDualValue" use="optional" default="0.0">
 			<xs:simpleType>
 				<xs:restriction base="xs:double"/>
 			</xs:simpleType>

@@ -117,8 +117,8 @@
      DESCRIPTIONATT = 298,
      LBVALUEATT = 299,
      UBVALUEATT = 300,
-     VALUEATLBATT = 301,
-     VALUEATUBATT = 302,
+     LBDUALVALUEATT = 301,
+     UBDUALVALUEATT = 302,
      GENERALSTART = 303,
      GENERALEND = 304,
      SYSTEMSTART = 305,
@@ -280,8 +280,8 @@
 #define DESCRIPTIONATT 298
 #define LBVALUEATT 299
 #define UBVALUEATT 300
-#define VALUEATLBATT 301
-#define VALUEATUBATT 302
+#define LBDUALVALUEATT 301
+#define UBDUALVALUEATT 302
 #define GENERALSTART 303
 #define GENERALEND 304
 #define SYSTEMSTART 305
@@ -1178,17 +1178,17 @@ static const char *const yytname[] =
   "NUMBEROFOTHERVARIABLEOPTIONSATT", "NUMBEROFOTHEROBJECTIVEOPTIONSATT",
   "NUMBEROFOTHERCONSTRAINTOPTIONSATT", "NUMBEROFVARATT", "NUMBEROFOBJATT",
   "NUMBEROFCONATT", "NAMEATT", "IDXATT", "SOSIDXATT", "VALUEATT",
-  "UNITATT", "DESCRIPTIONATT", "LBVALUEATT", "UBVALUEATT", "VALUEATLBATT",
-  "VALUEATUBATT", "GENERALSTART", "GENERALEND", "SYSTEMSTART", "SYSTEMEND",
-  "SERVICESTART", "SERVICEEND", "JOBSTART", "JOBEND", "OPTIMIZATIONSTART",
-  "OPTIMIZATIONEND", "SERVICEURISTART", "SERVICEURIEND",
-  "SERVICENAMESTART", "SERVICENAMEEND", "INSTANCENAMESTART",
-  "INSTANCENAMEEND", "INSTANCELOCATIONSTART", "INSTANCELOCATIONEND",
-  "JOBIDSTART", "JOBIDEND", "SOLVERTOINVOKESTART", "SOLVERTOINVOKEEND",
-  "LICENSESTART", "LICENSEEND", "USERNAMESTART", "USERNAMEEND",
-  "PASSWORDSTART", "PASSWORDEND", "CONTACTSTART", "CONTACTEND",
-  "OTHEROPTIONSSTART", "OTHEROPTIONSEND", "OTHERSTART", "OTHEREND",
-  "MINDISKSPACESTART", "MINDISKSPACEEND", "MINMEMORYSIZESTART",
+  "UNITATT", "DESCRIPTIONATT", "LBVALUEATT", "UBVALUEATT",
+  "LBDUALVALUEATT", "UBDUALVALUEATT", "GENERALSTART", "GENERALEND",
+  "SYSTEMSTART", "SYSTEMEND", "SERVICESTART", "SERVICEEND", "JOBSTART",
+  "JOBEND", "OPTIMIZATIONSTART", "OPTIMIZATIONEND", "SERVICEURISTART",
+  "SERVICEURIEND", "SERVICENAMESTART", "SERVICENAMEEND",
+  "INSTANCENAMESTART", "INSTANCENAMEEND", "INSTANCELOCATIONSTART",
+  "INSTANCELOCATIONEND", "JOBIDSTART", "JOBIDEND", "SOLVERTOINVOKESTART",
+  "SOLVERTOINVOKEEND", "LICENSESTART", "LICENSEEND", "USERNAMESTART",
+  "USERNAMEEND", "PASSWORDSTART", "PASSWORDEND", "CONTACTSTART",
+  "CONTACTEND", "OTHEROPTIONSSTART", "OTHEROPTIONSEND", "OTHERSTART",
+  "OTHEREND", "MINDISKSPACESTART", "MINDISKSPACEEND", "MINMEMORYSIZESTART",
   "MINMEMORYSIZEEND", "MINCPUSPEEDSTART", "MINCPUSPEEDEND",
   "MINCPUNUMBERSTART", "MINCPUNUMBEREND", "SERVICETYPESTART",
   "SERVICETYPEEND", "MAXTIMESTART", "MAXTIMEEND",
@@ -5490,11 +5490,11 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "only one dual variable lower bound allowed");
 	parserData->lbvalAttributePresent = true;
 	if (strcmp((yyvsp[(2) - (2)].sval),"INF") == 0)
-		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->valueAtLb = OSDBL_MAX;
+		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->lbDualValue = OSDBL_MAX;
 	else if (strcmp((yyvsp[(2) - (2)].sval),"-INF") == 0)
-		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->valueAtLb = -OSDBL_MAX;
+		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->lbDualValue = -OSDBL_MAX;
 	else
-		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->valueAtLb = os_strtod((yyvsp[(2) - (2)].sval), NULL);
+		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->lbDualValue = os_strtod((yyvsp[(2) - (2)].sval), NULL);
 ;}
     break;
 
@@ -5504,11 +5504,11 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "only one dual variable upper bound allowed");
 	parserData->ubvalAttributePresent = true;
 	if (strcmp((yyvsp[(2) - (2)].sval),"INF") == 0)
-		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->valueAtUb = OSDBL_MAX;
+		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->ubDualValue = OSDBL_MAX;
 	else if (strcmp((yyvsp[(2) - (2)].sval),"-INF") == 0)
-		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->valueAtUb = -OSDBL_MAX;
+		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->ubDualValue = -OSDBL_MAX;
 	else
-		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->valueAtUb = os_strtod((yyvsp[(2) - (2)].sval), NULL);
+		osoption->optimization->constraints->initialDualValues->con[parserData->numberOfDuals]->ubDualValue = os_strtod((yyvsp[(2) - (2)].sval), NULL);
 ;}
     break;
 

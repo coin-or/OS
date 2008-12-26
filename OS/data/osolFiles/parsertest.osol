@@ -82,7 +82,7 @@
 			<other name="job-option-test" value="0"/>
 		</otherOptions>
 	</job>	
-	<optimization numberOfObjectives="1" numberOfConstraints="2" numberOfVariables="6">
+	<optimization numberOfObjectives="1" numberOfConstraints="2" numberOfVariables="10">
 		<variables numberOfOtherVariableOptions="2">
 			<initialVariableValues numberOfVar="3">
 					<var idx="0" value="1"/>
@@ -131,7 +131,7 @@
 				<con idx="0" value="5.0"></con>
 			</initialConstraintValues>
 			<initialDualValues numberOfCon="1">
-                                <con idx="1" valueAtLb="-10.0" valueAtUb="100."></con>
+                                <con idx="1" lbDualValue="-10.0" ubDualValue="100."></con>
 			</initialDualValues>
 		</constraints>
 		<solverOptions numberOfSolverOptions="16">
