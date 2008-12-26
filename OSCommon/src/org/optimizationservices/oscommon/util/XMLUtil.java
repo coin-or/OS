@@ -603,7 +603,7 @@ public class XMLUtil {
 		else if(sSchemaName.equalsIgnoreCase("osrepository")){
 			sSchemaName = "OSRepository";
 		}
-		eOSxL.setAttribute("xsi:schemaLocation", OSConstant.OS_NAMESPACE+" " + OSParameter.OS_SCHEMA_SITE + sSchemaName + ".xsd");
+		eOSxL.setAttribute("xsi:schemaLocation", OSConstant.OS_NAMESPACE+" " + OSParameter.OS_SCHEMA_SITE + "2.0/" +sSchemaName + ".xsd");
 		return eOSxL;
 	}//createOSxLRootElement
 	

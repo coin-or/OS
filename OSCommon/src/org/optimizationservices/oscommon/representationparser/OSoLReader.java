@@ -19,8 +19,15 @@ import org.optimizationservices.oscommon.datastructure.osoption.InitObjBound;
 import org.optimizationservices.oscommon.datastructure.osoption.InitObjValue;
 import org.optimizationservices.oscommon.datastructure.osoption.InitVarValue;
 import org.optimizationservices.oscommon.datastructure.osoption.InitVarValueString;
+import org.optimizationservices.oscommon.datastructure.osoption.OtherConOption;
+import org.optimizationservices.oscommon.datastructure.osoption.OtherConstraintOption;
+import org.optimizationservices.oscommon.datastructure.osoption.OtherObjOption;
+import org.optimizationservices.oscommon.datastructure.osoption.OtherObjectiveOption;
 import org.optimizationservices.oscommon.datastructure.osoption.OtherOption;
+import org.optimizationservices.oscommon.datastructure.osoption.OtherVarOption;
+import org.optimizationservices.oscommon.datastructure.osoption.OtherVariableOption;
 import org.optimizationservices.oscommon.datastructure.osoption.PathPair;
+import org.optimizationservices.oscommon.datastructure.osoption.SOSWeights;
 import org.optimizationservices.oscommon.datastructure.osoption.SolverOption;
 import org.optimizationservices.oscommon.localinterface.OSOption;
 import org.optimizationservices.oscommon.util.XMLUtil;
@@ -178,7 +185,7 @@ public class OSoLReader extends OSgLReader{
 			return getMinDiskSpaceUnit();
 		}
 		else if (optionName.equals("minMemoryUnit")){ 
-			return getMinMemoryUnit();
+			return getMinMemorySizeUnit();
 		}
 		else if (optionName.equals("minCPUSpeedUnit")){ 
 			return getMinCPUSpeedUnit();
@@ -612,7 +619,7 @@ public class OSoLReader extends OSgLReader{
 	 * 
 	 * @return the unit of the system minimum memory size, byte if none. 
 	 */
-	public String getMinMemoryUnit(){
+	public String getMinMemorySizeUnit(){
 		Element eSystem = (Element)XMLUtil.findChildNode(m_eRoot, "system");
 		if(eSystem == null) return "byte";
 		Element eMinMemorySize = (Element)XMLUtil.findChildNode(eSystem, "minMemorySize");
@@ -620,7 +627,7 @@ public class OSoLReader extends OSgLReader{
 		String sMinMemoryUnit = eMinMemorySize.getAttribute("unit");
 		if(sMinMemoryUnit == null || sMinMemoryUnit.length() <= 0) return "byte";
 		else return sMinMemoryUnit;
-	}//getMinMemoryUnit
+	}//getMinMemorySizeUnit
 
 	/**
 	 * Get the system minimum cpu speed required to solve the job. 
@@ -1469,11 +1476,6 @@ public class OSoLReader extends OSgLReader{
 		}
 	}//getOtherOptions
 
-	public OtherOption[] getAllOtherOptions() throws Exception{
-		//implemented in C++, but not here in Java.
-		throw new Exception("Not implemented in Java");
-	}//getAllOtherOptions
-	
 	/**
 	 * Get variable number. 
 	 * 
@@ -1534,26 +1536,6 @@ public class OSoLReader extends OSgLReader{
 		return m_iConstraintNumber;
 	}//getNumberOfConstraints
 
-
-	/**
-	 * get the number of other variable options (in <optimization> element)
-	 * @return the number of other variable options (in <optimization> element)
-	 */
-	public int getNumberOfOtherVariableOptions(){
-		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
-		if(eOptimization == null) return 0;
-		Element eVariables = (Element)XMLUtil.findChildNode(eOptimization, "variables");
-		if(eVariables == null) return 0;
-		String sNumber =  eVariables.getAttribute("numberOfOtherVariableOptions");
-		try {
-			int iNumber = Integer.parseInt(sNumber);
-			return iNumber;
-		} 
-		catch (Exception e) {
-			return 0;
-		}
-	}//getNumberOfOtherVariableOptions
-
 	/**
 	 * get the numer of variables that have initial values (in <optimization> element)
 	 * @return the numer of variables that have initial values (in <optimization> element)
@@ -1576,282 +1558,6 @@ public class OSoLReader extends OSgLReader{
 	}//getNumberOfInitVarValues
 
 	/**
-	 * get the number of string-valued variables that have initial values (in <optimization> element)
-	 * @return the number of string-valued variables that have initial values (in <optimization> element)
-	 */
-	public int getNumberOfInitVarValuesString(){
-		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
-		if(eOptimization == null) return -1;
-		Element eVariables = (Element)XMLUtil.findChildNode(eOptimization, "variables");
-		if(eVariables == null) return -1;
-		Element eInitialVariableValuesString = (Element)XMLUtil.findChildNode(eVariables, "initialVariableValuesString");
-		if(eInitialVariableValuesString == null) return -1;
-		String sNumber =  eInitialVariableValuesString.getAttribute("numberOfVar");
-		try {
-			int iNumber = Integer.parseInt(sNumber);
-			return iNumber;
-		} 
-		catch (Exception e) {
-			return -1;
-		}
-	}//getNumberOfInitVarValuesString
-
-	/**
-	 * get the number of variables that are given initial basis status (in <optimization> element)
-	 * @return the number of variables that are given initial basis status (in <optimization> element)
-	 */
-	public int getNumberOfInitialBasisVariables(){
-		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
-		if(eOptimization == null) return -1;
-		Element eVariables = (Element)XMLUtil.findChildNode(eOptimization, "variables");
-		if(eVariables == null) return -1;
-		Element eInitialBasisStatus = (Element)XMLUtil.findChildNode(eVariables, "initialBasisStatus");
-		if(eInitialBasisStatus == null) return -1;
-		String sNumber =  eInitialBasisStatus.getAttribute("numberOfVar");
-		try {
-			int iNumber = Integer.parseInt(sNumber);
-			return iNumber;
-		} 
-		catch (Exception e) {
-			return -1;
-		}
-	}//getNumberOfInitialBasisVariables
-
-	/**
-	 * get the number of variables that are given integer variable selection weights (in <optimization> element)
-	 * @return the number of variables that are given integer variable selection weights (in <optimization> element)
-	 */
-	public int getNumberOfIntegerVariableBranchingWeights(){
-		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
-		if(eOptimization == null) return -1;
-		Element eVariables = (Element)XMLUtil.findChildNode(eOptimization, "variables");
-		if(eVariables == null) return -1;
-		Element eIntegerVariableBranchingWeights = (Element)XMLUtil.findChildNode(eVariables, "integerVariableBranchingWeights");
-		if(eIntegerVariableBranchingWeights == null) return -1;
-		String sNumber =  eIntegerVariableBranchingWeights.getAttribute("numberOfVar");
-		try {
-			int iNumber = Integer.parseInt(sNumber);
-			return iNumber;
-		} 
-		catch (Exception e) {
-			return -1;
-		}
-	}//getNumberOfIntegerVariableBranchingWeights
-
-	/**
-	 * get the number of SOS that are given branching weights (in <optimization> element)
-	 * @return the number of SOS that are given branching weights (in <optimization> element)
-	 */
-	public int getNumberOfSOSWeights(){
-		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
-		if(eOptimization == null) return -1;
-		Element eVariables = (Element)XMLUtil.findChildNode(eOptimization, "variables");
-		if(eVariables == null) return -1;
-		Element eSOSVariableBranchingWeights = (Element)XMLUtil.findChildNode(eVariables, "sosVariableBranchingWeights");
-		if(eSOSVariableBranchingWeights == null) return -1;
-		String sNumber =  eSOSVariableBranchingWeights.getAttribute("numberOfSOS");
-		try {
-			int iNumber = Integer.parseInt(sNumber);
-			return iNumber;
-		} 
-		catch (Exception e) {
-			return -1;
-		}
-	}//getNumberOfSOSWeights
-
-	/**
-	 * get the number of variables that are given integer branching weights (in <optimization> element)
-	 * 
-	 * @param iSOS
-	 * return the number of variables that are given integer branching weights (in <optimization> element)
-	 */
-	public int getNumberOfSOSVarBranchingWeights(int iSOS){
-		if(iSOS < 0 || iSOS >= this.getNumberOfSOSWeights()){
-			return -1;
-		}
-		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
-		if(eOptimization == null) return -1;
-		Element eVariables = (Element)XMLUtil.findChildNode(eOptimization, "variables");
-		if(eVariables == null) return -1;
-		Element eSOSVariableBranchingWeights = (Element)XMLUtil.findChildNode(eVariables, "sosVariableBranchingWeights");
-		if(eSOSVariableBranchingWeights == null) return -1;
-		Vector<Element> vSOS = XMLUtil.getChildElementsByTagName(eSOSVariableBranchingWeights, "sos");
-		if(vSOS == null){
-			return -1;
-		}
-		if(iSOS >= vSOS.size()){
-			return -1;
-		}
-		Element eSOS = vSOS.elementAt(iSOS);	
-		String sNumber =  eSOS.getAttribute("numberOfVar");
-		try {
-			int iNumber = Integer.parseInt(sNumber);
-			return iNumber;
-		} 
-		catch (Exception e) {
-			return -1;
-		}
-
-//		for(int i = 0; i < vSOS.size(); i++){
-//		Element eSOS = vSOS.elementAt(i);			
-//		String sNumber =  eSOS.getAttribute("numberOfVar");
-//		try {
-//		int iNumber = Integer.parseInt(sNumber);
-//		if(iNumber == iSOS){
-//		return iNumber;
-//		}
-//		} 
-//		catch (Exception e) {
-//		return -1;
-//		}
-//		}
-//		return -1;
-
-	}//getNumberOfSOSVarBranchingWeights
-
-	/**
-	 * get the number of other objective options (in <optimization> element)
-	 * @return the number of other objective options (in <optimization> element)
-	 */
-	public int getNumberOfOtherObjectiveOptions(){
-		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
-		if(eOptimization == null) return 0;
-		Element eObjectives = (Element)XMLUtil.findChildNode(eOptimization, "objectives");
-		if(eObjectives == null) return 0;
-		String sNumber =  eObjectives.getAttribute("numberOfOtherObjectiveOptions");
-		try {
-			int iNumber = Integer.parseInt(sNumber);
-			return iNumber;
-		} 
-		catch (Exception e) {
-			return 0;
-		}
-	}//getNumberOfOtherObjectiveOptions
-
-	/**
-	 * get the numer of objectives that have initial values (in <optimization> element)
-	 * @return the numer of objectives that have initial values (in <optimization> element)
-	 */
-	public int getNumberOfInitObjValues(){
-		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
-		if(eOptimization == null) return -1;
-		Element eObjectives = (Element)XMLUtil.findChildNode(eOptimization, "objectives");
-		if(eObjectives == null) return -1;
-		Element eInitialObjectiveValues = (Element)XMLUtil.findChildNode(eObjectives, "initialObjectiveValues");
-		if(eInitialObjectiveValues == null) return -1;
-		String sNumber =  eInitialObjectiveValues.getAttribute("numberOfObj");
-		try {
-			int iNumber = Integer.parseInt(sNumber);
-			return iNumber;
-		} 
-		catch (Exception e) {
-			return -1;
-		}
-	}//getNumberOfInitObjectiveValues
-
-	/**
-	 * get the numer of objectives that have initial bounds (in <optimization> element)
-	 * @return the numer of objectives that have initial bounds (in <optimization> element)
-	 */
-	public int getNumberOfInitObjBounds(){
-		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
-		if(eOptimization == null) return -1;
-		Element eObjectives = (Element)XMLUtil.findChildNode(eOptimization, "objectives");
-		if(eObjectives == null) return -1;
-		Element eInitialObjectiveBounds = (Element)XMLUtil.findChildNode(eObjectives, "initialObjectiveBounds");
-		if(eInitialObjectiveBounds == null) return -1;
-		String sNumber =  eInitialObjectiveBounds.getAttribute("numberOfObj");
-		try {
-			int iNumber = Integer.parseInt(sNumber);
-			return iNumber;
-		} 
-		catch (Exception e) {
-			return -1;
-		}
-	}//getNumberOfInitObjectiveBounds
-
-	/**
-	 * get the number of other constraint options (in <optimization> element)
-	 * @return the number of other constraint options (in <optimization> element)
-	 */
-	public int getNumberOfOtherConstraintOptions(){
-		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
-		if(eOptimization == null) return 0;
-		Element eConstraints = (Element)XMLUtil.findChildNode(eOptimization, "constraints");
-		if(eConstraints == null) return 0;
-		String sNumber =  eConstraints.getAttribute("numberOfOtherConstraintOptions");
-		try {
-			int iNumber = Integer.parseInt(sNumber);
-			return iNumber;
-		} 
-		catch (Exception e) {
-			return 0;
-		}
-	}//getNumberOfOtherConstraintOptions
-
-	/**
-	 * get the numer of constraints that have initial values (in <optimization> element)
-	 * @return the numer of constraints that have initial values (in <optimization> element)
-	 */
-	public int getNumberOfInitConValues(){
-		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
-		if(eOptimization == null) return -1;
-		Element eConstraints = (Element)XMLUtil.findChildNode(eOptimization, "constraints");
-		if(eConstraints == null) return -1;
-		Element eInitialConstraintValues = (Element)XMLUtil.findChildNode(eConstraints, "initialConstraintValues");
-		if(eInitialConstraintValues == null) return -1;
-		String sNumber =  eInitialConstraintValues.getAttribute("numberOfCon");
-		try {
-			int iNumber = Integer.parseInt(sNumber);
-			return iNumber;
-		} 
-		catch (Exception e) {
-			return -1;
-		}
-	}//getNumberOfInitConstraintValues
-
-	/**
-	 * get the numer of constraints that have initial dual values (in <optimization> element)
-	 * @return the numer of constraints that have initial dual values (in <optimization> element)
-	 */
-	public int getNumberOfInitDualVarValues(){
-		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
-		if(eOptimization == null) return -1;
-		Element eConstraints = (Element)XMLUtil.findChildNode(eOptimization, "constraints");
-		if(eConstraints == null) return -1;
-		Element eInitialConstraintValues = (Element)XMLUtil.findChildNode(eConstraints, "initialDualValues");
-		if(eInitialConstraintValues == null) return -1;
-		String sNumber =  eInitialConstraintValues.getAttribute("numberOfCon");
-		try {
-			int iNumber = Integer.parseInt(sNumber);
-			return iNumber;
-		} 
-		catch (Exception e) {
-			return -1;
-		}
-	}//getNumberOfInitDualVarValues
-
-	/**
-	 * get the number of other solver options (in <optimization> element)
-	 * @return the number of other solver options (in <optimization> element)
-	 */
-	public int getNumberOfSolverOptions(){
-		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
-		if(eOptimization == null) return 0;
-		Element eSolverOptions = (Element)XMLUtil.findChildNode(eOptimization, "solverOptions");
-		if(eSolverOptions == null) return 0;
-		String sNumber =  eSolverOptions.getAttribute("numberOfSolverOptions");
-		try {
-			int iNumber = Integer.parseInt(sNumber);
-			return iNumber;
-		} 
-		catch (Exception e) {
-			return 0;
-		}
-	}//getNumberOfSolverOptions
-
-
-	/**
 	 * get initial variable values (double[]). 
 	 * @return a double array of the initial variable values, null if none. 
 	 */
@@ -1870,7 +1576,13 @@ public class OSoLReader extends OSgLReader{
 		for(int i = 0; i < iVars; i++){
 			try{
 				int iIndex = Integer.parseInt(((Element)vars.item(i)).getAttribute("idx"));
-				double dValue = Double.parseDouble(((Element)vars.item(i)).getAttribute("value"));
+				double dValue = Double.NaN;
+				try {
+					dValue = Double.parseDouble(((Element)vars.item(i)).getAttribute("value"));
+
+				} 
+				catch (Exception e) {
+				}
 				mdValues[iIndex] = dValue;
 			}
 			catch(Exception e){
@@ -1900,7 +1612,14 @@ public class OSoLReader extends OSgLReader{
 			try{
 				mVar[i] = new InitVarValue();
 				mVar[i].idx = Integer.parseInt(((Element)vars.item(i)).getAttribute("idx"));
-				mVar[i].value = Double.parseDouble(((Element)vars.item(i)).getAttribute("value"));
+				double dValue = Double.NaN;
+				try {
+					dValue = Double.parseDouble(((Element)vars.item(i)).getAttribute("value"));
+
+				} 
+				catch (Exception e) {
+				}
+				mVar[i].value = dValue;
 			}
 			catch(Exception e){
 				return null;
@@ -1908,6 +1627,27 @@ public class OSoLReader extends OSgLReader{
 		}
 		return mVar;
 	}//getInitVarValuesSparse
+
+	/**
+	 * get the number of string-valued variables that have initial values (in <optimization> element)
+	 * @return the number of string-valued variables that have initial values (in <optimization> element)
+	 */
+	public int getNumberOfInitVarValuesString(){
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
+		if(eOptimization == null) return -1;
+		Element eVariables = (Element)XMLUtil.findChildNode(eOptimization, "variables");
+		if(eVariables == null) return -1;
+		Element eInitialVariableValuesString = (Element)XMLUtil.findChildNode(eVariables, "initialVariableValuesString");
+		if(eInitialVariableValuesString == null) return -1;
+		String sNumber =  eInitialVariableValuesString.getAttribute("numberOfVar");
+		try {
+			int iNumber = Integer.parseInt(sNumber);
+			return iNumber;
+		} 
+		catch (Exception e) {
+			return -1;
+		}
+	}//getNumberOfInitVarValuesString
 
 	/**
 	 * get the list of initial values for string-valued variables in dense form
@@ -1939,7 +1679,6 @@ public class OSoLReader extends OSgLReader{
 		return msValues;
 	}//getInitVarStringsDense
 
-
 	/**
 	 * get the list of initial values for string-valued variables in sparse form
 	 * @return a list of index/value pairs
@@ -1968,6 +1707,28 @@ public class OSoLReader extends OSgLReader{
 		}
 		return mVar;
 	}//getInitVarStringsSparse
+
+	/**
+	 * get the number of variables that are given initial basis status (in <optimization> element)
+	 * @return the number of variables that are given initial basis status (in <optimization> element)
+	 */
+	public int getNumberOfInitialBasisVariables(){
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
+		if(eOptimization == null) return -1;
+		Element eVariables = (Element)XMLUtil.findChildNode(eOptimization, "variables");
+		if(eVariables == null) return -1;
+		Element eInitialBasisStatus = (Element)XMLUtil.findChildNode(eVariables, "initialBasisStatus");
+		if(eInitialBasisStatus == null) return -1;
+		String sNumber =  eInitialBasisStatus.getAttribute("numberOfVar");
+		try {
+			int iNumber = Integer.parseInt(sNumber);
+			return iNumber;
+		} 
+		catch (Exception e) {
+			return -1;
+		}
+	}//getNumberOfInitialBasisVariables
+
 
 	/**
 	 * get the list of initial variable basis status in sparse form
@@ -2028,6 +1789,28 @@ public class OSoLReader extends OSgLReader{
 	}//getInitBasisStatusDense
 
 	/**
+	 * get the number of variables that are given integer variable selection weights (in <optimization> element)
+	 * @return the number of variables that are given integer variable selection weights (in <optimization> element)
+	 */
+	public int getNumberOfIntegerVariableBranchingWeights(){
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
+		if(eOptimization == null) return -1;
+		Element eVariables = (Element)XMLUtil.findChildNode(eOptimization, "variables");
+		if(eVariables == null) return -1;
+		Element eIntegerVariableBranchingWeights = (Element)XMLUtil.findChildNode(eVariables, "integerVariableBranchingWeights");
+		if(eIntegerVariableBranchingWeights == null) return -1;
+		String sNumber =  eIntegerVariableBranchingWeights.getAttribute("numberOfVar");
+		try {
+			int iNumber = Integer.parseInt(sNumber);
+			return iNumber;
+		} 
+		catch (Exception e) {
+			return -1;
+		}
+	}//getNumberOfIntegerVariableBranchingWeights
+
+
+	/**
 	 * get a list of branching weights for integer variables in sparse form
 	 * @return a list of index/value pairs
 	 */
@@ -2062,7 +1845,7 @@ public class OSoLReader extends OSgLReader{
 		return mVar;
 	}//getIntegerVariableBranchingWeightsSparse
 
-	
+
 	/**
 	 * get a list of branching weights for integer variables in dense form
 	 * @return an array of values
@@ -2097,6 +1880,304 @@ public class OSoLReader extends OSgLReader{
 		}
 		return mdValues;
 	}//getIntegerVariableBranchingWeightsDense
+
+	/**
+	 * get the number of SOS that are given branching weights (in <optimization> element)
+	 * @return the number of SOS that are given branching weights (in <optimization> element)
+	 */
+	public int getNumberOfSOSWeights(){
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
+		if(eOptimization == null) return -1;
+		Element eVariables = (Element)XMLUtil.findChildNode(eOptimization, "variables");
+		if(eVariables == null) return -1;
+		Element eSOSVariableBranchingWeights = (Element)XMLUtil.findChildNode(eVariables, "sosVariableBranchingWeights");
+		if(eSOSVariableBranchingWeights == null) return -1;
+		String sNumber =  eSOSVariableBranchingWeights.getAttribute("numberOfSOS");
+		try {
+			int iNumber = Integer.parseInt(sNumber);
+			return iNumber;
+		} 
+		catch (Exception e) {
+			return -1;
+		}
+	}//getNumberOfSOSWeights
+
+	/**
+	 * get an array of SOS branching weights (in <optimization> element)
+	 * @return an array of SOS branching weights (in <optimization> element)
+	 */
+	public SOSWeights[] getSOSWeights(){
+		SOSWeights[] sosWeights = null;
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
+		if(eOptimization == null) return null;
+		Element eVariables = (Element)XMLUtil.findChildNode(eOptimization, "variables");
+		if(eVariables == null) return null;
+		Element eSOSVariableBranchingWeights = (Element)XMLUtil.findChildNode(eVariables, "sosVariableBranchingWeights");
+		if(eSOSVariableBranchingWeights == null) return null;
+		Vector<Element> vSOS = XMLUtil.getChildElementsByTagName(eSOSVariableBranchingWeights, "sos");
+		int iSOS = vSOS==null?0:vSOS.size();
+		sosWeights = new SOSWeights[iSOS];
+		try{
+			for(int i=0; i<iSOS; i++){
+				Element eSOS = vSOS.elementAt(i);
+				sosWeights[i] = new SOSWeights();
+				sosWeights[i].numberOfVar = Integer.parseInt(eSOS.getAttribute("numberOfVar"));
+				sosWeights[i].sosIdx = Integer.parseInt(eSOS.getAttribute("sosIdx"));
+				String sGroupWeight = eSOS.getAttribute("groupWeight");
+				if(sGroupWeight != null && sGroupWeight.length() > 0){
+					sosWeights[i].groupWeight = Double.parseDouble(sGroupWeight);
+				}
+				else{
+					sosWeights[i].groupWeight  = 1.0;
+				}
+				Vector<Element> vVar = XMLUtil.getChildElementsByTagName(eSOS, "var");
+				int iVar = vVar==null?0:vVar.size();
+				sosWeights[i].var = new BranchingWeight[iVar];
+				for(int j=0; j<iVar; j++){
+					Element eVar = vVar.elementAt(j);
+					sosWeights[i].var[j] = new BranchingWeight();
+					sosWeights[i].var[j].idx = Integer.parseInt(eVar.getAttribute("idx"));
+					sosWeights[i].var[j].value = Double.parseDouble(eVar.getAttribute("value"));
+				}
+			}
+			return sosWeights;
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}//getSOSWeights
+
+	/**
+	 * get the number of variables that are given integer branching weights (in <optimization> element)
+	 * 
+	 * @param idx
+	 * return the number of variables that are given integer branching weights (in <optimization> element)
+	 */
+	public int getNumberOfSOSVarBranchingWeights(int idx){
+		if(idx < 0 || idx >= this.getNumberOfSOSWeights()){
+			return -1;
+		}
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
+		if(eOptimization == null) return -1;
+		Element eVariables = (Element)XMLUtil.findChildNode(eOptimization, "variables");
+		if(eVariables == null) return -1;
+		Element eSOSVariableBranchingWeights = (Element)XMLUtil.findChildNode(eVariables, "sosVariableBranchingWeights");
+		if(eSOSVariableBranchingWeights == null) return -1;
+		Vector<Element> vSOS = XMLUtil.getChildElementsByTagName(eSOSVariableBranchingWeights, "sos");
+		if(vSOS == null){
+			return -1;
+		}
+		if(idx >= vSOS.size()){
+			return -1;
+		}
+		Element eSOS = vSOS.elementAt(idx);	
+		String sNumber =  eSOS.getAttribute("numberOfVar");
+		try {
+			int iNumber = Integer.parseInt(sNumber);
+			return iNumber;
+		} 
+		catch (Exception e) {
+			return -1;
+		}
+
+//		for(int i = 0; i < vSOS.size(); i++){
+//		Element eSOS = vSOS.elementAt(i);			
+//		String sNumber =  eSOS.getAttribute("numberOfVar");
+//		try {
+//		int iNumber = Integer.parseInt(sNumber);
+//		if(iNumber == iSOS){
+//		return iNumber;
+//		}
+//		} 
+//		catch (Exception e) {
+//		return -1;
+//		}
+//		}
+//		return -1;
+
+	}//getNumberOfSOSVarBranchingWeights
+
+	/**
+	 * get the SOS branching weights for one SOS given an index (in <optimization> element)
+	 * 
+	 * @param idx
+	 * @return the SOS branching weights for one SOS given an index (in <optimization> element)
+	 */
+	public SOSWeights getSOSVarBranchingWeights(int idx){
+		SOSWeights sosWeights = null;
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
+		if(eOptimization == null) return null;
+		Element eVariables = (Element)XMLUtil.findChildNode(eOptimization, "variables");
+		if(eVariables == null) return null;
+		Element eSOSVariableBranchingWeights = (Element)XMLUtil.findChildNode(eVariables, "sosVariableBranchingWeights");
+		if(eSOSVariableBranchingWeights == null) return null;
+		Vector<Element> vSOS = XMLUtil.getChildElementsByTagName(eSOSVariableBranchingWeights, "sos");
+		int iSOS = vSOS==null?0:vSOS.size();
+		if(idx <0 || idx >= iSOS) return null;
+		try{
+			Element eSOS = vSOS.elementAt(idx);
+			sosWeights = new SOSWeights();
+			sosWeights.numberOfVar = Integer.parseInt(eSOS.getAttribute("numberOfVar"));
+			sosWeights.sosIdx = Integer.parseInt(eSOS.getAttribute("sosIdx"));
+			String sGroupWeight = eSOS.getAttribute("groupWeight");
+			if(sGroupWeight != null && sGroupWeight.length() > 0){
+				sosWeights.groupWeight = Double.parseDouble(sGroupWeight);
+			}
+			else{
+				sosWeights.groupWeight  = 1.0;
+			}
+			Vector<Element> vVar = XMLUtil.getChildElementsByTagName(eSOS, "var");
+			int iVar = vVar==null?0:vVar.size();
+			sosWeights.var = new BranchingWeight[iVar];
+			for(int j=0; j<iVar; j++){
+				Element eVar = vVar.elementAt(j);
+				sosWeights.var[j] = new BranchingWeight();
+				sosWeights.var[j].idx = Integer.parseInt(eVar.getAttribute("idx"));
+				sosWeights.var[j].value = Double.parseDouble(eVar.getAttribute("value"));
+			}
+			return sosWeights;
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}//getSOSVarBranchingWeights
+
+	/**
+	 * get the number of other variable options (in <optimization> element)
+	 * @return the number of other variable options (in <optimization> element)
+	 */
+	public int getNumberOfOtherVariableOptions(){
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
+		if(eOptimization == null) return 0;
+		Element eVariables = (Element)XMLUtil.findChildNode(eOptimization, "variables");
+		if(eVariables == null) return 0;
+		String sNumber =  eVariables.getAttribute("numberOfOtherVariableOptions");
+		try {
+			int iNumber = Integer.parseInt(sNumber);
+			return iNumber;
+		} 
+		catch (Exception e) {
+			return 0;
+		}
+	}//getNumberOfOtherVariableOptions
+
+	/**
+	 * get a list of other variable options
+	 * @return an array of other variable options
+	 */
+	public OtherVariableOption[] getOtherVariableOptions(String solverName){
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
+		if(eOptimization == null) return null;
+		Element eVariables = (Element)XMLUtil.findChildNode(eOptimization, "variables");
+		if(eVariables == null) return null;
+		Vector<Element> vElements = XMLUtil.getChildElementsByTagName(eVariables, "other");
+		int iNls	= vElements==null?0:vElements.size();
+		Vector<OtherVariableOption> vVariableOptions = new Vector<OtherVariableOption>();
+		for(int i = 0; i < iNls; i++){
+			Element eOther = (Element)(vElements.elementAt(i));
+			NamedNodeMap	attributes =  eOther.getAttributes();
+			int n =attributes.getLength();
+			int iNumberOfVar = 0;
+			String sName = "";
+			String sValue = "";
+			String sSolver = "";
+			String sCategory = "";
+			String sType = "";
+			String sDescription = "";
+			for (int j = 0; j < n; j++){
+				Node	attr = attributes.item(j);
+				String sAttributeName  = attr.getNodeName();
+				String sAttributeValue = attr.getNodeValue();
+				if (sAttributeName.equals("numberOfVar")){
+					try {
+						iNumberOfVar = Integer.parseInt(sAttributeValue);
+					}
+					catch (Exception e) {
+						iNumberOfVar = 0;
+					}
+				}
+				if (sAttributeName.equals("name")){
+					sName = sAttributeValue;
+				}
+				else if (sAttributeName.equals("value")){
+					sValue = sAttributeValue;
+				}
+				else if (sAttributeName.equals("solver")){
+					sSolver = sAttributeValue;
+				}
+				else if (sAttributeName.equals("category")){
+					sCategory = sAttributeValue;
+				}
+				else if (sAttributeName.equals("type")){
+					sType = sAttributeValue;
+				}
+				else if (sAttributeName.equals("description")){
+					sDescription = sAttributeValue;
+				}
+			}
+			OtherVariableOption varOption = new OtherVariableOption();
+			varOption.numberOfVar = iNumberOfVar;
+			varOption.name = sName;
+			varOption.value = sValue;
+			varOption.solver = sSolver;
+			varOption.category = sCategory;
+			if(!sType.equalsIgnoreCase("double") && 
+					!sType.equalsIgnoreCase("integer") &&
+					!sType.equalsIgnoreCase("boolean") &&
+					!sType.equalsIgnoreCase("string")){
+				varOption.type = "string";
+			}
+			else{
+				varOption.type = sType.toLowerCase();				
+			}
+			varOption.description = sDescription;
+
+			Vector<Element> vVarElements = XMLUtil.getChildElementsByTagName(eOther, "var");
+			int iVarNls	= vVarElements==null?0:vVarElements.size();
+			varOption.var = new OtherVarOption[iVarNls];			
+			for(int j = 0; j < iVarNls; j++){
+				Element eVar = (Element)(vVarElements.elementAt(j));
+				varOption.var[j] = new OtherVarOption();
+				varOption.var[j].idx = Integer.parseInt(eVar.getAttribute("idx"));
+				varOption.var[j].lbValue = eVar.getAttribute("lbValue");
+				varOption.var[j].ubValue = eVar.getAttribute("ubValue");
+				varOption.var[j].value = eVar.getAttribute("value");
+			}
+
+			if(solverName == null || solverName.length() <= 0 || solverName.equals(sSolver) ){
+				vVariableOptions.add(varOption);
+			}
+		}
+		int nSize = vVariableOptions.size();
+		OtherVariableOption[] mOtherVariableOption = new OtherVariableOption[nSize];
+		for(int i = 0; i < nSize; i++){
+			mOtherVariableOption[i] = vVariableOptions.elementAt(i);
+		}
+		return mOtherVariableOption;
+	}//getOtherVariableOptions
+
+	/**
+	 * get the numer of objectives that have initial values (in <optimization> element)
+	 * @return the numer of objectives that have initial values (in <optimization> element)
+	 */
+	public int getNumberOfInitObjValues(){
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
+		if(eOptimization == null) return -1;
+		Element eObjectives = (Element)XMLUtil.findChildNode(eOptimization, "objectives");
+		if(eObjectives == null) return -1;
+		Element eInitialObjectiveValues = (Element)XMLUtil.findChildNode(eObjectives, "initialObjectiveValues");
+		if(eInitialObjectiveValues == null) return -1;
+		String sNumber =  eInitialObjectiveValues.getAttribute("numberOfObj");
+		try {
+			int iNumber = Integer.parseInt(sNumber);
+			return iNumber;
+		} 
+		catch (Exception e) {
+			return -1;
+		}
+	}//getNumberOfInitObjectiveValues
 
 	/**
 	 * get initial objective values (double[]). 
@@ -2157,6 +2238,27 @@ public class OSoLReader extends OSgLReader{
 	}//getInitObjValuesSparse
 
 	/**
+	 * get the numer of objectives that have initial bounds (in <optimization> element)
+	 * @return the numer of objectives that have initial bounds (in <optimization> element)
+	 */
+	public int getNumberOfInitObjBounds(){
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
+		if(eOptimization == null) return -1;
+		Element eObjectives = (Element)XMLUtil.findChildNode(eOptimization, "objectives");
+		if(eObjectives == null) return -1;
+		Element eInitialObjectiveBounds = (Element)XMLUtil.findChildNode(eObjectives, "initialObjectiveBounds");
+		if(eInitialObjectiveBounds == null) return -1;
+		String sNumber =  eInitialObjectiveBounds.getAttribute("numberOfObj");
+		try {
+			int iNumber = Integer.parseInt(sNumber);
+			return iNumber;
+		} 
+		catch (Exception e) {
+			return -1;
+		}
+	}//getNumberOfInitObjectiveBounds
+
+	/**
 	 * get initial objective lower bounds (double[]). 
 	 * @return a double array of the initial objective lower bounds, null if none. 
 	 */
@@ -2175,7 +2277,12 @@ public class OSoLReader extends OSgLReader{
 		for(int i = 0; i < iObjs; i++){
 			try{
 				int iIndex = Integer.parseInt(((Element)objs.item(i)).getAttribute("idx"));
-				double dBound = Double.parseDouble(((Element)objs.item(i)).getAttribute("lbValue"));
+				double dBound = Double.NEGATIVE_INFINITY;
+				try {
+					dBound = Double.parseDouble(((Element)objs.item(i)).getAttribute("lbValue"));					
+				} 
+				catch (Exception e) {
+				}
 				mdBounds[Math.abs(iIndex)-1] = dBound;
 			}
 			catch(Exception e){
@@ -2204,7 +2311,12 @@ public class OSoLReader extends OSgLReader{
 		for(int i = 0; i < iObjs; i++){
 			try{
 				int iIndex = Integer.parseInt(((Element)objs.item(i)).getAttribute("idx"));
-				double dBound = Double.parseDouble(((Element)objs.item(i)).getAttribute("ubValue"));
+				double dBound = Double.POSITIVE_INFINITY;
+				try {
+					dBound = Double.parseDouble(((Element)objs.item(i)).getAttribute("ubValue"));					
+				} 
+				catch (Exception e) {
+				}
 				mdBounds[Math.abs(iIndex)-1] = dBound;
 			}
 			catch(Exception e){
@@ -2234,8 +2346,20 @@ public class OSoLReader extends OSgLReader{
 			try{
 				mObj[i] = new InitObjBound();
 				mObj[i].idx = Integer.parseInt(((Element)objs.item(i)).getAttribute("idx"));
-				mObj[i].lbValue = Double.parseDouble(((Element)objs.item(i)).getAttribute("lbValue"));
-				mObj[i].ubValue = Double.parseDouble(((Element)objs.item(i)).getAttribute("ubValue"));
+				double dLBBound = Double.NEGATIVE_INFINITY;
+				double dUBBound = Double.POSITIVE_INFINITY;
+				try {
+					dLBBound = Double.parseDouble(((Element)objs.item(i)).getAttribute("lbValue"));					
+				} 
+				catch (Exception e) {
+				}
+				try {
+					dUBBound = Double.parseDouble(((Element)objs.item(i)).getAttribute("ubValue"));					
+				} 
+				catch (Exception e) {
+				}
+				mObj[i].lbValue = dLBBound;
+				mObj[i].ubValue = dUBBound;
 			}
 			catch(Exception e){
 				return null;
@@ -2243,6 +2367,141 @@ public class OSoLReader extends OSgLReader{
 		}
 		return mObj;
 	}//getInitObjValuesSparse
+
+	/**
+	 * get the number of other objective options (in <optimization> element)
+	 * @return the number of other objective options (in <optimization> element)
+	 */
+	public int getNumberOfOtherObjectiveOptions(){
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
+		if(eOptimization == null) return 0;
+		Element eObjectives = (Element)XMLUtil.findChildNode(eOptimization, "objectives");
+		if(eObjectives == null) return 0;
+		String sNumber =  eObjectives.getAttribute("numberOfOtherObjectiveOptions");
+		try {
+			int iNumber = Integer.parseInt(sNumber);
+			return iNumber;
+		} 
+		catch (Exception e) {
+			return 0;
+		}
+	}//getNumberOfOtherObjectiveOptions
+
+	/**
+	 * get a list of other objective options
+	 * @return an array of other objective options
+	 */
+	public OtherObjectiveOption[] getOtherObjectiveOptions(String solverName){
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
+		if(eOptimization == null) return null;
+		Element eObjectives = (Element)XMLUtil.findChildNode(eOptimization, "objectives");
+		if(eObjectives == null) return null;
+		Vector<Element> vElements = XMLUtil.getChildElementsByTagName(eObjectives, "other");
+		int iNls	= vElements==null?0:vElements.size();
+		Vector<OtherObjectiveOption> vObjectiveOptions = new Vector<OtherObjectiveOption>();
+		for(int i = 0; i < iNls; i++){
+			Element eOther = (Element)(vElements.elementAt(i));
+			NamedNodeMap	attributes =  eOther.getAttributes();
+			int n =attributes.getLength();
+			int iNumberOfObj = 0;
+			String sName = "";
+			String sValue = "";
+			String sSolver = "";
+			String sCategory = "";
+			String sType = "";
+			String sDescription = "";
+			for (int j = 0; j < n; j++){
+				Node	attr = attributes.item(j);
+				String sAttributeName  = attr.getNodeName();
+				String sAttributeValue = attr.getNodeValue();
+				if (sAttributeName.equals("numberOfObj")){
+					try {
+						iNumberOfObj = Integer.parseInt(sAttributeValue);
+					}
+					catch (Exception e) {
+						iNumberOfObj = 0;
+					}
+				}
+				if (sAttributeName.equals("name")){
+					sName = sAttributeValue;
+				}
+				else if (sAttributeName.equals("value")){
+					sValue = sAttributeValue;
+				}
+				else if (sAttributeName.equals("solver")){
+					sSolver = sAttributeValue;
+				}
+				else if (sAttributeName.equals("category")){
+					sCategory = sAttributeValue;
+				}
+				else if (sAttributeName.equals("type")){
+					sType = sAttributeValue;
+				}
+				else if (sAttributeName.equals("description")){
+					sDescription = sAttributeValue;
+				}
+			}
+			OtherObjectiveOption objOption = new OtherObjectiveOption();
+			objOption.numberOfObj = iNumberOfObj;
+			objOption.name = sName;
+			objOption.value = sValue;
+			objOption.solver = sSolver;
+			objOption.category = sCategory;
+			if(!sType.equalsIgnoreCase("double") && 
+					!sType.equalsIgnoreCase("integer") &&
+					!sType.equalsIgnoreCase("boolean") &&
+					!sType.equalsIgnoreCase("string")){
+				objOption.type = "string";
+			}
+			else{
+				objOption.type = sType.toLowerCase();				
+			}
+			objOption.description = sDescription;
+
+			Vector<Element> vObjElements = XMLUtil.getChildElementsByTagName(eOther, "obj");
+			int iObjNls	= vObjElements==null?0:vObjElements.size();
+			objOption.obj = new OtherObjOption[iObjNls];			
+			for(int j = 0; j < iObjNls; j++){
+				Element eObj = (Element)(vObjElements.elementAt(j));
+				objOption.obj[j] = new OtherObjOption();
+				objOption.obj[j].idx = Integer.parseInt(eObj.getAttribute("idx"));
+				objOption.obj[j].lbValue = eObj.getAttribute("lbValue");
+				objOption.obj[j].ubValue = eObj.getAttribute("ubValue");
+				objOption.obj[j].value = eObj.getAttribute("value");
+			}
+
+			if(solverName == null || solverName.length() <= 0 || solverName.equals(sSolver) ){
+				vObjectiveOptions.add(objOption);
+			}
+		}
+		int nSize = vObjectiveOptions.size();
+		OtherObjectiveOption[] mOtherObjectiveOption = new OtherObjectiveOption[nSize];
+		for(int i = 0; i < nSize; i++){
+			mOtherObjectiveOption[i] = vObjectiveOptions.elementAt(i);
+		}
+		return mOtherObjectiveOption;
+	}//getOtherObjectiveOptions
+
+	/**
+	 * get the numer of constraints that have initial values (in <optimization> element)
+	 * @return the numer of constraints that have initial values (in <optimization> element)
+	 */
+	public int getNumberOfInitConValues(){
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
+		if(eOptimization == null) return -1;
+		Element eConstraints = (Element)XMLUtil.findChildNode(eOptimization, "constraints");
+		if(eConstraints == null) return -1;
+		Element eInitialConstraintValues = (Element)XMLUtil.findChildNode(eConstraints, "initialConstraintValues");
+		if(eInitialConstraintValues == null) return -1;
+		String sNumber =  eInitialConstraintValues.getAttribute("numberOfCon");
+		try {
+			int iNumber = Integer.parseInt(sNumber);
+			return iNumber;
+		} 
+		catch (Exception e) {
+			return -1;
+		}
+	}//getNumberOfInitConstraintValues
 
 	/**
 	 * get initial constraint values (double[]). 
@@ -2264,7 +2523,7 @@ public class OSoLReader extends OSgLReader{
 			try{
 				int iIndex = Integer.parseInt(((Element)cons.item(i)).getAttribute("idx"));
 				double dValue = Double.parseDouble(((Element)cons.item(i)).getAttribute("value"));
-				mdValues[Math.abs(iIndex)-1] = dValue;
+				mdValues[iIndex] = dValue;
 			}
 			catch(Exception e){
 				return null;
@@ -2303,6 +2562,27 @@ public class OSoLReader extends OSgLReader{
 	}//getInitConValuesSparse
 
 	/**
+	 * get the numer of constraints that have initial dual values (in <optimization> element)
+	 * @return the numer of constraints that have initial dual values (in <optimization> element)
+	 */
+	public int getNumberOfInitDualVarValues(){
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
+		if(eOptimization == null) return -1;
+		Element eConstraints = (Element)XMLUtil.findChildNode(eOptimization, "constraints");
+		if(eConstraints == null) return -1;
+		Element eInitialConstraintValues = (Element)XMLUtil.findChildNode(eConstraints, "initialDualValues");
+		if(eInitialConstraintValues == null) return -1;
+		String sNumber =  eInitialConstraintValues.getAttribute("numberOfCon");
+		try {
+			int iNumber = Integer.parseInt(sNumber);
+			return iNumber;
+		} 
+		catch (Exception e) {
+			return -1;
+		}
+	}//getNumberOfInitDualVarValues
+
+	/**
 	 * get initial dual variable lower bounds (double[]). 
 	 * @return a double array of the initial dual variable lower bounds, null if none. 
 	 */
@@ -2321,7 +2601,12 @@ public class OSoLReader extends OSgLReader{
 		for(int i = 0; i < iCons; i++){
 			try{
 				int iIndex = Integer.parseInt(((Element)cons.item(i)).getAttribute("idx"));
-				double dBound = Double.parseDouble(((Element)cons.item(i)).getAttribute("lbValue"));
+				double dBound = 0;
+				try {
+					dBound = Double.parseDouble(((Element)cons.item(i)).getAttribute("lbDualValue"));
+				} 
+				catch (Exception e) {
+				}
 				mdBounds[iIndex] = dBound;
 			}
 			catch(Exception e){
@@ -2350,7 +2635,12 @@ public class OSoLReader extends OSgLReader{
 		for(int i = 0; i < iCons; i++){
 			try{
 				int iIndex = Integer.parseInt(((Element)cons.item(i)).getAttribute("idx"));
-				double dBound = Double.parseDouble(((Element)cons.item(i)).getAttribute("ubValue"));
+				double dBound = 0;
+				try {
+					dBound = Double.parseDouble(((Element)cons.item(i)).getAttribute("ubDualValue"));
+				} 
+				catch (Exception e) {
+				}
 				mdBounds[iIndex] = dBound;
 			}
 			catch(Exception e){
@@ -2380,8 +2670,21 @@ public class OSoLReader extends OSgLReader{
 			try{
 				mCon[i] = new InitDualVarValue();
 				mCon[i].idx = Integer.parseInt(((Element)cons.item(i)).getAttribute("idx"));
-				mCon[i].lbValue = Double.parseDouble(((Element)cons.item(i)).getAttribute("lbValue"));
-				mCon[i].ubValue = Double.parseDouble(((Element)cons.item(i)).getAttribute("ubValue"));
+				double dLBBound = 0;
+				double dUBBound = 0;
+				try {
+					dLBBound = Double.parseDouble(((Element)cons.item(i)).getAttribute("lbDualValue"));				
+				} 
+				catch (Exception e) {
+				}
+				try {
+					dUBBound = Double.parseDouble(((Element)cons.item(i)).getAttribute("ubDualValue"));				
+				} 
+				catch (Exception e) {
+				}
+
+				mCon[i].lbValue = dLBBound;
+				mCon[i].ubValue = dUBBound;
 			}
 			catch(Exception e){
 				return null;
@@ -2390,6 +2693,138 @@ public class OSoLReader extends OSgLReader{
 		return mCon;
 	}//getInitDualVarValuesSparse
 
+
+	/**
+	 * get the number of other constraint options (in <optimization> element)
+	 * @return the number of other constraint options (in <optimization> element)
+	 */
+	public int getNumberOfOtherConstraintOptions(){
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
+		if(eOptimization == null) return 0;
+		Element eConstraints = (Element)XMLUtil.findChildNode(eOptimization, "constraints");
+		if(eConstraints == null) return 0;
+		String sNumber =  eConstraints.getAttribute("numberOfOtherConstraintOptions");
+		try {
+			int iNumber = Integer.parseInt(sNumber);
+			return iNumber;
+		} 
+		catch (Exception e) {
+			return 0;
+		}
+	}//getNumberOfOtherConstraintOptions
+
+	/**
+	 * get a list of other constraint options
+	 * @return an array of other constraint options
+	 */
+	public OtherConstraintOption[] getOtherConstraintOptions(String solverName){
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
+		if(eOptimization == null) return null;
+		Element eConstraints = (Element)XMLUtil.findChildNode(eOptimization, "constraints");
+		if(eConstraints == null) return null;
+		Vector<Element> vElements = XMLUtil.getChildElementsByTagName(eConstraints, "other");
+		int iNls	= vElements==null?0:vElements.size();
+		Vector<OtherConstraintOption> vConstraintOptions = new Vector<OtherConstraintOption>();
+		for(int i = 0; i < iNls; i++){
+			Element eOther = (Element)(vElements.elementAt(i));
+			NamedNodeMap	attributes =  eOther.getAttributes();
+			int n =attributes.getLength();
+			int iNumberOfCon = 0;
+			String sName = "";
+			String sValue = "";
+			String sSolver = "";
+			String sCategory = "";
+			String sType = "";
+			String sDescription = "";
+			for (int j = 0; j < n; j++){
+				Node	attr = attributes.item(j);
+				String sAttributeName  = attr.getNodeName();
+				String sAttributeValue = attr.getNodeValue();
+				if (sAttributeName.equals("numberOfCon")){
+					try {
+						iNumberOfCon = Integer.parseInt(sAttributeValue);
+					}
+					catch (Exception e) {
+						iNumberOfCon = 0;
+					}
+				}
+				if (sAttributeName.equals("name")){
+					sName = sAttributeValue;
+				}
+				else if (sAttributeName.equals("value")){
+					sValue = sAttributeValue;
+				}
+				else if (sAttributeName.equals("solver")){
+					sSolver = sAttributeValue;
+				}
+				else if (sAttributeName.equals("category")){
+					sCategory = sAttributeValue;
+				}
+				else if (sAttributeName.equals("type")){
+					sType = sAttributeValue;
+				}
+				else if (sAttributeName.equals("description")){
+					sDescription = sAttributeValue;
+				}
+			}
+			OtherConstraintOption conOption = new OtherConstraintOption();
+			conOption.numberOfCon = iNumberOfCon;
+			conOption.name = sName;
+			conOption.value = sValue;
+			conOption.solver = sSolver;
+			conOption.category = sCategory;
+			if(!sType.equalsIgnoreCase("double") && 
+					!sType.equalsIgnoreCase("integer") &&
+					!sType.equalsIgnoreCase("boolean") &&
+					!sType.equalsIgnoreCase("string")){
+				conOption.type = "string";
+			}
+			else{
+				conOption.type = sType.toLowerCase();
+			}
+			conOption.description = sDescription;
+			Vector<Element> vConElements = XMLUtil.getChildElementsByTagName(eOther, "con");
+			int iConNls	= vConElements==null?0:vConElements.size();
+			conOption.con = new OtherConOption[iConNls];			
+			for(int j = 0; j < iConNls; j++){
+				Element eCon = (Element)(vConElements.elementAt(j));
+				conOption.con[j] = new OtherConOption();
+				conOption.con[j].idx = Integer.parseInt(eCon.getAttribute("idx"));
+				conOption.con[j].lbValue = eCon.getAttribute("lbValue");
+				conOption.con[j].ubValue = eCon.getAttribute("ubValue");
+				conOption.con[j].value = eCon.getAttribute("value");
+			}
+
+			if(solverName == null || solverName.length() <= 0 || solverName.equals(sSolver) ){
+				vConstraintOptions.add(conOption);
+			}
+		}
+		int nSize = vConstraintOptions.size();
+		OtherConstraintOption[] mOtherConstraintOption = new OtherConstraintOption[nSize];
+		for(int i = 0; i < nSize; i++){
+			mOtherConstraintOption[i] = vConstraintOptions.elementAt(i);
+		}
+		return mOtherConstraintOption;
+	}//getOtherConstraintOptions
+
+	/**
+	 * get the number of other solver options (in <optimization> element)
+	 * @return the number of other solver options (in <optimization> element)
+	 */
+	public int getNumberOfSolverOptions(){
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
+		if(eOptimization == null) return 0;
+		Element eSolverOptions = (Element)XMLUtil.findChildNode(eOptimization, "solverOptions");
+		if(eSolverOptions == null) return 0;
+		String sNumber =  eSolverOptions.getAttribute("numberOfSolverOptions");
+		try {
+			int iNumber = Integer.parseInt(sNumber);
+			return iNumber;
+		} 
+		catch (Exception e) {
+			return 0;
+		}
+	}//getNumberOfSolverOptions
 
 	/**
 	 * get the array of solver options associated with a particular solver
@@ -2445,7 +2880,16 @@ public class OSoLReader extends OSgLReader{
 			solverOption.value = sValue;
 			solverOption.solver = sSolver;
 			solverOption.category = sCategory;
-			solverOption.type = sType;
+			if(!sType.equalsIgnoreCase("double") && 
+					!sType.equalsIgnoreCase("integer") &&
+					!sType.equalsIgnoreCase("boolean") &&
+					!sType.equalsIgnoreCase("string")){
+				solverOption.type = "string";
+			}
+			else{
+				solverOption.type = sType.toLowerCase();
+
+			}
 			solverOption.description = sDescription;
 			m_solverOptionHashMap.put(sName, solverOption);
 			if(solverName == null || solverName.length() <= 0 || solverName.equals(sSolver) ){
@@ -2472,10 +2916,13 @@ public class OSoLReader extends OSgLReader{
 		//System.out.println(IOUtil.readStringFromFile(OSParameter.CODE_HOME + "OSRepository/test/osol/osol.osol"));
 		//System.out.println(osolReader.readFile(OSParameter.CODE_HOME + "OSRepository/test/osol/osol.osol"));
 		//System.out.println(IOUtil.readStringFromFile("c:/test.osol"));
-		System.out.println(osolReader.readFile("c:/test.osol"));
+//		System.out.println(osolReader.readFile("c:/test.osol"));
+		System.out.println(osolReader.readFile("c:/parsertest.osol"));
+
 //		System.out.println(osolReader.getOptionStr("scheduledStartTime"));
 //		System.out.println(osolReader.getOptionDbl("minMemorySize"));
-//		System.out.println(osolReader.getOptionInt("minCPUNumber"));
+//		System.out.println(osolReader.getOptionInt("minCPUNumber"));		
+
 //		System.out.println(osolReader.getServiceURI());
 //		System.out.println(osolReader.getServiceName());
 //		System.out.println(osolReader.getInstanceName());		
@@ -2494,13 +2941,14 @@ public class OSoLReader extends OSgLReader{
 //		for(int i = 0; i < iNumberOfOtherGeneralOptions; i++){
 //			System.out.println(mOtherGeneralOptions[i].name);		
 //			System.out.println(mOtherGeneralOptions[i].value);		
-//			System.out.println(mOtherGeneralOptions[i].description);		
+//			System.out.println(mOtherGeneralOptions[i].description);	
+//			System.out.println("------------------------------");
 //		}
 
 //		System.out.println(osolReader.getMinDiskSpace());		
 //		System.out.println(osolReader.getMinDiskSpaceUnit());		
 //		System.out.println(osolReader.getMinMemorySize());		
-//		System.out.println(osolReader.getMinMemoryUnit());		
+//		System.out.println(osolReader.getMinMemorySizeUnit());		
 //		System.out.println(osolReader.getMinCPUSpeed());		
 //		System.out.println(osolReader.getMinCPUSpeedUnit());		
 //		System.out.println(osolReader.getMinCPUNumber());	
@@ -2518,14 +2966,15 @@ public class OSoLReader extends OSgLReader{
 //		System.out.println(iNumberOfOtherServiceOptions);
 //		OtherOption[] mOtherServiceOptions = osolReader.getOtherServiceOptions();
 //		for(int i = 0; i < iNumberOfOtherServiceOptions; i++){
-//		System.out.println(mOtherServiceOptions[i].name);		
-//		System.out.println(mOtherServiceOptions[i].value);		
-//		System.out.println(mOtherServiceOptions[i].description);		
+//			System.out.println(mOtherServiceOptions[i].name);		
+//			System.out.println(mOtherServiceOptions[i].value);		
+//			System.out.println(mOtherServiceOptions[i].description);		
 //		}
 
 //		System.out.println(osolReader.getMaxTime());		
 //		System.out.println(osolReader.getMaxTimeUnit());		
 //		System.out.println(XMLUtil.createXSDateTime(osolReader.getScheduledStartTime()));
+		
 //		int iNumberOfJobDependencies = osolReader.getNumberOfJobDependencies();
 //		System.out.println(iNumberOfJobDependencies);
 //		String[] msJobs = osolReader.getJobDependencies();
@@ -2582,9 +3031,9 @@ public class OSoLReader extends OSgLReader{
 //		System.out.println(iNumberOfOutputFilesToMove);
 //		PathPair[] mOutputFilesToMove = osolReader.getOutputFilesToMove();
 //		for(int i = 0; i < iNumberOfOutputFilesToMove; i++){
-//		System.out.println(mOutputFilesToMove[i].from);		
-//		System.out.println(mOutputFilesToMove[i].to);		
-//		System.out.println(mOutputFilesToMove[i].makeCopy);		
+//			System.out.println(mOutputFilesToMove[i].from);		
+//			System.out.println(mOutputFilesToMove[i].to);		
+//			System.out.println(mOutputFilesToMove[i].makeCopy);		
 //		}
 
 
@@ -2612,7 +3061,7 @@ public class OSoLReader extends OSgLReader{
 //			System.out.println(mOtherJobOptions[i].description);		
 //		}
 
-//		int iNumberOfOtherOptions = osolReader.getNumberOfOtherOptions("general");
+//		int iNumberOfOtherOptions = osolReader.getNumberOfOtherOptions("job");
 //		System.out.println(iNumberOfOtherOptions);
 //		OtherOption[] mOtherOptions = osolReader.getOtherOptions("job");
 //		for(int i = 0; i < iNumberOfOtherOptions; i++){
@@ -2626,93 +3075,173 @@ public class OSoLReader extends OSgLReader{
 //		System.out.println(osolReader.getNumberOfObjectives());		
 //		System.out.println(osolReader.getNumberOfConstraints());	
 
-//		System.out.println(osolReader.getNumberOfOtherVariableOptions());	
 //		System.out.println(osolReader.getNumberOfInitVarValues());	
-//		System.out.println(osolReader.getNumberOfInitVarValuesString());	
-//		System.out.println(osolReader.getNumberOfInitialBasisVariables());	
-//		System.out.println(osolReader.getNumberOfIntegerVariableBranchingWeights());	
-//		System.out.println(osolReader.getNumberOfSOSWeights());	
-//		System.out.println(osolReader.getNumberOfOtherVariableOptions());
-
 //		double[] mdInitValues = osolReader.getInitVarValuesDense();
 //		for(int i=0; i < osolReader.getNumberOfVariables(); i++)
-//			System.out.println(mdInitValues==null?"NULL":mdInitValues[i]+"");		
+//		System.out.println(mdInitValues==null?"NULL":mdInitValues[i]+"");		
 
 //		InitVarValue[] mdVar = osolReader.getInitVarValuesSparse();
 //		for(int i=0; i < osolReader.getNumberOfInitVarValues(); i++)
-//			System.out.println(mdVar[i].idx+": " + mdVar[i].value);		
+//		System.out.println(mdVar[i].idx+": " + mdVar[i].value);		
 
 
+//		System.out.println(osolReader.getNumberOfInitVarValuesString());	
 //		String[] msInitValues = osolReader.getInitVarStringsDense();
 //		for(int i=0; i < osolReader.getNumberOfVariables(); i++)
-//			System.out.println(msInitValues==null?"NULL":msInitValues[i]+"");		
+//		System.out.println(msInitValues==null?"NULL":msInitValues[i]+"");		
 
 //		InitVarValueString[] msVar = osolReader.getInitVarStringsSparse();
-//		for(int i=0; i < osolReader.getNumberOfInitVarValues(); i++)
-//			System.out.println(msVar[i].idx+": " + msVar[i].value);		
+//		for(int i=0; i < osolReader.getNumberOfInitVarValuesString(); i++)
+//		System.out.println(msVar[i].idx+": " + msVar[i].value);		
 
+//		System.out.println(osolReader.getNumberOfInitialBasisVariables());	
 //		String[] msInitValues = osolReader.getInitBasisStatusDense();
 //		for(int i=0; i < osolReader.getNumberOfVariables(); i++)
-//			System.out.println(msInitValues==null?"NULL":msInitValues[i]+"");		
+//		System.out.println(msInitValues==null?"NULL":msInitValues[i]+"");		
 
 //		InitBasStatus[] msVar = osolReader.getInitBasisStatusSparse();
-//		for(int i=0; i < osolReader.getNumberOfInitVarValues(); i++)
-//			System.out.println(msVar[i].idx+": " + msVar[i].value);		
+//		for(int i=0; i < osolReader.getNumberOfInitialBasisVariables(); i++)
+//		System.out.println(msVar[i].idx+": " + msVar[i].value);		
 
-		double[] mdWeightValues = osolReader.getIntegerVariableBranchingWeightsDense();
-		for(int i=0; i < osolReader.getNumberOfVariables(); i++)
-			System.out.println(mdWeightValues==null?"NULL":mdWeightValues[i]+"");		
+//		System.out.println(osolReader.getNumberOfIntegerVariableBranchingWeights());	
+//		double[] mdWeightValues = osolReader.getIntegerVariableBranchingWeightsDense();
+//		for(int i=0; i < osolReader.getNumberOfVariables(); i++)
+//		System.out.println(mdWeightValues==null?"NULL":mdWeightValues[i]+"");		
 
-		BranchingWeight[] mWeightValues = osolReader.getIntegerVariableBranchingWeightsSparse();
-		for(int i=0; i < osolReader.getNumberOfIntegerVariableBranchingWeights(); i++)
-			System.out.println(mWeightValues[i].idx+": " + mWeightValues[i].value);		
+//		BranchingWeight[] mWeightValues = osolReader.getIntegerVariableBranchingWeightsSparse();
+//		for(int i=0; i < osolReader.getNumberOfIntegerVariableBranchingWeights(); i++)
+//		System.out.println(mWeightValues[i].idx+": " + mWeightValues[i].value);		
 
-//		System.out.println(osolReader.getNumberOfOtherObjectiveOptions());	
+//		System.out.println(osolReader.getNumberOfSOSWeights());	
+//		SOSWeights[] mSOSWeights = osolReader.getSOSWeights();
+//		int nSOSWeights = mSOSWeights==null?0:mSOSWeights.length;
+//		for(int i =0; i<nSOSWeights; i++){
+//			System.out.println(mSOSWeights[i].numberOfVar);
+//			System.out.println(mSOSWeights[i].groupWeight);
+//			System.out.println(mSOSWeights[i].sosIdx);
+//			System.out.println(mSOSWeights[i].var.length);
+//			System.out.println(mSOSWeights[i].var[0].idx);
+//			System.out.println(mSOSWeights[i].var[0].value);
+//			System.out.println(mSOSWeights[i].var[1].idx);
+//			System.out.println(mSOSWeights[i].var[1].value);
+//			System.out.println("------------------------");
+//		}
+
+//		SOSWeights sosSWeights = osolReader.getSOSVarBranchingWeights(0);
+//		System.out.println(sosSWeights.numberOfVar);
+//		System.out.println(sosSWeights.groupWeight);
+//		System.out.println(sosSWeights.sosIdx);
+//		System.out.println(sosSWeights.var.length);
+//		System.out.println(sosSWeights.var[0].idx);
+//		System.out.println(sosSWeights.var[0].value);
+//		System.out.println(sosSWeights.var[1].idx);
+//		System.out.println(sosSWeights.var[1].value);
+		
+//		System.out.println(osolReader.getNumberOfOtherVariableOptions());	
+//		OtherVariableOption[] otherOptions = osolReader.getOtherVariableOptions("Ipopt");
+//		for(int i = 0; i < otherOptions.length; i++){
+//			OtherVariableOption other = otherOptions[i];
+//			System.out.println(other.name);
+//			System.out.println(other.description);
+//			System.out.println(other.category);
+//			System.out.println(other.numberOfVar);
+//			System.out.println(other.solver);
+//			System.out.println(other.type);
+//			System.out.println(other.value);
+//			System.out.println(other.var.length);
+//			System.out.println(other.var[2].idx);
+//			System.out.println(other.var[2].value);
+//			System.out.println(other.var[2].lbValue);
+//			System.out.println(other.var[2].ubValue);
+//			System.out.println("--------------------------");
+//		}
+
 //		System.out.println(osolReader.getNumberOfInitObjValues());	
-//		System.out.println(osolReader.getNumberOfInitObjBounds());			
-
 //		double[] mdInitValues = osolReader.getInitObjValuesDense();
 //		for(int i=0; i < osolReader.getNumberOfObjectives(); i++)
 //			System.out.println(mdInitValues==null?"NULL":mdInitValues[i]+"");		
 
-//		System.out.println();
 //		InitObjValue[] mdObj = osolReader.getInitObjValuesSparse();
 //		for(int i=0; i < osolReader.getNumberOfInitObjValues(); i++)
 //			System.out.println(mdObj[i].idx+": " + mdObj[i].value);		
 
 
+//		System.out.println(osolReader.getNumberOfInitObjBounds());			
 //		double[] mdInitLBBounds = osolReader.getInitObjLowerBoundsDense();
 //		for(int i=0; i < osolReader.getNumberOfObjectives(); i++)
 //			System.out.println(mdInitLBBounds==null?"NULL":mdInitLBBounds[i]+"");		
 
 //		double[] mdInitUBBounds = osolReader.getInitObjUpperBoundsDense();
 //		for(int i=0; i < osolReader.getNumberOfObjectives(); i++)
-//			System.out.println(mdInitUBBounds==null?"NULL":mdInitUBBounds[i]+"");		
+//		System.out.println(mdInitUBBounds==null?"NULL":mdInitUBBounds[i]+"");		
 
-//		System.out.println();
 //		InitObjBound[] mdObj = osolReader.getInitObjBoundsSparse();
 //		for(int i=0; i < osolReader.getNumberOfInitObjBounds(); i++)
-//			System.out.println(mdObj[i].idx+": " + mdObj[i].lbValue+": " + mdObj[i].ubValue);				
+//		System.out.println(mdObj[i].idx+": " + mdObj[i].lbValue+": " + mdObj[i].ubValue);				
 
+//		System.out.println(osolReader.getNumberOfOtherObjectiveOptions());	
+//		OtherObjectiveOption[] otherOptions = osolReader.getOtherObjectiveOptions("");
+//		for(int i = 0; i < otherOptions.length; i++){
+//			OtherObjectiveOption other = otherOptions[i];
+//			System.out.println(other.name);
+//			System.out.println(other.description);
+//			System.out.println(other.category);
+//			System.out.println(other.numberOfObj);
+//			System.out.println(other.solver);
+//			System.out.println(other.type);
+//			System.out.println(other.value);
+//			System.out.println(other.obj.length);
+//			System.out.println(other.obj[2].idx);
+//			System.out.println(other.obj[2].value);
+//			System.out.println(other.obj[2].lbValue);
+//			System.out.println(other.obj[2].ubValue);
+//			System.out.println("--------------------------");
+//		}
 
-
-//		System.out.println(osolReader.getNumberOfOtherConstraintOptions());	
 //		System.out.println(osolReader.getNumberOfInitConValues());	
+//		double[] mdConValues = osolReader.getInitConValuesDense();
+//		for(int i=0; i < osolReader.getNumberOfConstraints(); i++)
+//		System.out.println(mdConValues==null?"NULL":mdConValues[i]+"");		
+
+//		InitConValue[] mdCon = osolReader.getInitConValuesSparse();
+//		for(int i=0; i < osolReader.getNumberOfInitConValues(); i++)
+//			System.out.println(mdCon[i].idx+": " + mdCon[i].value);	
+		
 //		System.out.println(osolReader.getNumberOfInitDualVarValues());	
 //		double[] mdInitLBBounds = osolReader.getInitDualVarLowerBoundsDense();
 //		for(int i=0; i < osolReader.getNumberOfConstraints(); i++)
-//			System.out.println(mdInitLBBounds==null?"NULL":mdInitLBBounds[i]+"");		
+//		System.out.println(mdInitLBBounds==null?"NULL":mdInitLBBounds[i]+"");		
 
 //		double[] mdInitUBBounds = osolReader.getInitDualVarUpperBoundsDense();
 //		for(int i=0; i < osolReader.getNumberOfConstraints(); i++)
 //		System.out.println(mdInitUBBounds==null?"NULL":mdInitUBBounds[i]+"");		
-
+					
 //		InitDualVarValue[] mdCon = osolReader.getInitDualVarValuesSparse();
 //		for(int i=0; i < osolReader.getNumberOfInitDualVarValues(); i++)
 //			System.out.println(mdCon[i].idx+": " + mdCon[i].lbValue+": " + mdCon[i].ubValue);				
 
+//		System.out.println(osolReader.getNumberOfOtherConstraintOptions());	
+//		OtherConstraintOption[] otherOptions = osolReader.getOtherConstraintOptions("");
+//		for(int i = 0; i < otherOptions.length; i++){
+//			OtherConstraintOption other = otherOptions[i];
+//			System.out.println(other.name);
+//			System.out.println(other.description);
+//			System.out.println(other.category);
+//			System.out.println(other.numberOfCon);
+//			System.out.println(other.solver);
+//			System.out.println(other.type);
+//			System.out.println(other.value);
+//			System.out.println(other.con.length);
+//			System.out.println(other.con[2].idx);
+//			System.out.println(other.con[2].value);
+//			System.out.println(other.con[2].lbValue);
+//			System.out.println(other.con[2].ubValue);
+//			System.out.println("--------------------------");
+//		}
+
+
 //		System.out.println(osolReader.getNumberOfSolverOptions());	
-//		SolverOption[] mSolverOptions = osolReader.getSolverOptions("solver2");
+//		SolverOption[] mSolverOptions = osolReader.getSolverOptions("ipopt");
 //		int nSolverOptions = mSolverOptions==null?0:mSolverOptions.length;
 //		for(int i=0; i < nSolverOptions; i++)
 //			System.out.println(mSolverOptions[i].name+": "+mSolverOptions[i].value+": "+mSolverOptions[i].solver+": "+mSolverOptions[i].type+": "+mSolverOptions[i].category+": "+mSolverOptions[i].description+": "+mSolverOptions[i].value);				

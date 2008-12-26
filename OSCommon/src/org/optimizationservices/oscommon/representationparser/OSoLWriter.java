@@ -8,6 +8,7 @@ package org.optimizationservices.oscommon.representationparser;
 import java.util.GregorianCalendar;
 import java.util.Vector;
 
+import org.optimizationservices.oscommon.datastructure.osoption.BranchingWeight;
 import org.optimizationservices.oscommon.datastructure.osoption.InitBasStatus;
 import org.optimizationservices.oscommon.datastructure.osoption.InitConValue;
 import org.optimizationservices.oscommon.datastructure.osoption.InitDualVarValue;
@@ -15,9 +16,13 @@ import org.optimizationservices.oscommon.datastructure.osoption.InitObjBound;
 import org.optimizationservices.oscommon.datastructure.osoption.InitObjValue;
 import org.optimizationservices.oscommon.datastructure.osoption.InitVarValue;
 import org.optimizationservices.oscommon.datastructure.osoption.InitVarValueString;
+import org.optimizationservices.oscommon.datastructure.osoption.OtherConOption;
+import org.optimizationservices.oscommon.datastructure.osoption.OtherObjOption;
 import org.optimizationservices.oscommon.datastructure.osoption.OtherOption;
+import org.optimizationservices.oscommon.datastructure.osoption.OtherVarOption;
 import org.optimizationservices.oscommon.datastructure.osoption.PathPair;
 import org.optimizationservices.oscommon.localinterface.OSOption;
+import org.optimizationservices.oscommon.util.CommonUtil;
 import org.optimizationservices.oscommon.util.OSParameter;
 import org.optimizationservices.oscommon.util.XMLUtil;
 import org.w3c.dom.Element;
@@ -51,7 +56,7 @@ public class OSoLWriter extends OSgLWriter{
 					"type=\"text/xsl\" href = \"" + OSParameter.XSLT_LOCATION + "OSoL.xslt\"");
 			m_document.appendChild(xsltPI);     
 		}
-		m_eOSoL = createOSoLRoot();
+		m_eOSoL = XMLUtil.createOSxLRootElement(m_document, "osol");
 		m_document.appendChild(m_eOSoL);
 	}//constructor
 
@@ -122,36 +127,90 @@ public class OSoLWriter extends OSgLWriter{
 		return true;
 	}//setOSOption
 
-	public OtherOption[] setOtherOptions() throws Exception{
-		//implemented in C++, but not here in Java.
-		//TODO
-		throw new Exception("Not implemented in Java");
-	}//setOtherOptions
-	
-	public OtherOption[] addOtherOption() throws Exception{
-		//implemented in C++, but not here in Java.
-		//TODO
-		throw new Exception("Not implemented in Java");
-	}//addOtherOption
-	
-	public boolean setOptionStr() throws Exception{
-		//implemented in C++, but not here in Java.
-		//TODO
-		throw new Exception("Not implemented in Java");
+	public boolean setOptionStr(String optionName, String optionValue){
+		if (optionName.equalsIgnoreCase("serviceURI")){ 
+			return this.setServiceURI(optionValue);
+		}
+		if (optionName.equalsIgnoreCase("serviceName") ){
+			return this.setServiceName(optionValue);
+		}
+		if (optionName.equalsIgnoreCase("instanceName") ){
+			return this.setInstanceName(optionValue);
+		}
+		if (optionName.equalsIgnoreCase("instanceLocation") ){
+			return this.setInstanceLocation(optionValue);
+		}
+		if (optionName.equalsIgnoreCase("locationType") ){
+			return this.setInstanceLocationType(optionValue);
+		}
+		if (optionName.equalsIgnoreCase("jobID") ){
+			return this.setJobID(optionValue);
+		}
+		if (optionName.equalsIgnoreCase("solverName") ){
+			return this.setSolverToInvoke(optionValue);
+		}
+		if (optionName.equalsIgnoreCase("solverToInvoke") ){
+			return this.setSolverToInvoke(optionValue);
+		}
+		if (optionName.equalsIgnoreCase("license") ){
+			return this.setLicense(optionValue);
+		}
+		if (optionName.equalsIgnoreCase("userName") ){
+			return this.setUserName(optionValue);
+		}
+		if (optionName.equalsIgnoreCase("password") ){
+			return this.setPassword(optionValue);
+		}
+		if (optionName.equalsIgnoreCase("contact") ){
+			return this.setContact(optionValue);
+		}
+		if (optionName.equalsIgnoreCase("transportType") ){
+			return this.setContactTransportType(optionValue);
+		}
+		if (optionName.equalsIgnoreCase("minDiskSpaceUnit") ){
+			return this.setMinDiskSpaceUnit(optionValue);
+		}
+		if (optionName.equalsIgnoreCase("minMemoryUnit") ){
+			return this.setMinMemorySizeUnit(optionValue);
+		}
+		if (optionName.equalsIgnoreCase("minCPUSpeedUnit") ){
+			return this.setMinCPUSpeedUnit(optionValue);
+		}
+		if (optionName.equalsIgnoreCase("serviceType") ){
+			return this.setServiceType(optionValue);
+		}
+		if (optionName.equalsIgnoreCase("maxTimeUnit") ){
+			return this.setMaxTimeUnit(optionValue);
+		}
+		if (optionName.equalsIgnoreCase("scheduledStartTime") ){
+			return this.setScheduledStartTime(XMLUtil.createNativeDateTime(optionValue));
+		}
+		return false;
 	}//setOptionStr
-	
-	public boolean setOptionDbl() throws Exception{
-		//implemented in C++, but not here in Java.
-		//TODO
-		throw new Exception("Not implemented in Java");
+
+	public boolean setOptionDbl(String optionName, double optionValue){
+		if (optionName.equalsIgnoreCase("minDiskSpace")){ 
+			return this.setMinDiskSpace(optionValue);
+		}
+		if (optionName.equalsIgnoreCase("minMemory")){ 
+			return this.setMinMemorySize(optionValue);
+		}
+		if (optionName.equalsIgnoreCase("minCPUSpeed")){ 
+			return this.setMinCPUSpeed(optionValue);
+		}
+		if (optionName.equalsIgnoreCase("maxTime")){ 
+			return this.setMaxTime(optionValue);
+		}
+		return false;
 	}//setOptionDbl
-	
-	public boolean setOptionInt() throws Exception{
-		//implemented in C++, but not here in Java.
-		//TODO
-		throw new Exception("Not implemented in Java");
+
+	public boolean setOptionInt(String optionName, int optionValue){
+		if (optionName.equalsIgnoreCase("minCPUNumber")){
+			return this.setMinCPUNumber(optionValue);
+		}
+		return false;
 	}//setOptionInt
-	
+
 	/**
 	 * Set service uri.
 	 * 
@@ -259,45 +318,6 @@ public class OSoLWriter extends OSgLWriter{
 	}//setInstanceName
 
 	/**
-	 * Set the instance location type to get the instance. 
-	 * 
-	 * @param locationType holds the instance location type, e.g. local, http, ftp.
-	 * @return whether the instance location type is set successfully.
-	 */
-	public boolean setInstanceLocationType(String locationType){
-		try{
-			Element eGeneral = (Element)XMLUtil.findChildNode(m_eOSoL, "general");
-			if(eGeneral == null){
-				eGeneral = m_document.createElement("general");
-				m_eOSoL.insertBefore(eGeneral, m_eOSoL.getFirstChild());
-			}
-			Element eInstanceLocation = (Element)XMLUtil.findChildNode(eGeneral, "instanceLocation");
-			if(locationType == null || locationType.length() <= 0){
-				if(eInstanceLocation == null){
-					return true;
-				}
-				else{
-					eInstanceLocation.removeAttribute("locationType");
-					return true;
-				}
-			}
-			if(eInstanceLocation == null){
-				eInstanceLocation = m_document.createElement("instanceLocation");	
-				eInstanceLocation.setAttribute("locationType", locationType);
-				eGeneral.appendChild(eInstanceLocation);
-			}
-			else{
-				eInstanceLocation.setAttribute("locationType", locationType);
-			}
-		}
-		catch(Exception e){
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}//setInstanceLocationType
-
-	/**
 	 * Set the instance address to get the instance. 
 	 * 
 	 * @param instanceLocation holds the instance address. 
@@ -335,6 +355,45 @@ public class OSoLWriter extends OSgLWriter{
 		}
 		return true;
 	}//setInstanceLocation
+
+	/**
+	 * Set the instance location type to get the instance. 
+	 * 
+	 * @param locationType holds the instance location type, e.g. local, http, ftp.
+	 * @return whether the instance location type is set successfully.
+	 */
+	public boolean setInstanceLocationType(String locationType){
+		try{
+			Element eGeneral = (Element)XMLUtil.findChildNode(m_eOSoL, "general");
+			if(eGeneral == null){
+				eGeneral = m_document.createElement("general");
+				m_eOSoL.insertBefore(eGeneral, m_eOSoL.getFirstChild());
+			}
+			Element eInstanceLocation = (Element)XMLUtil.findChildNode(eGeneral, "instanceLocation");
+			if(locationType == null || locationType.length() <= 0){
+				if(eInstanceLocation == null){
+					return true;
+				}
+				else{
+					eInstanceLocation.removeAttribute("locationType");
+					return true;
+				}
+			}
+			if(eInstanceLocation == null){
+				eInstanceLocation = m_document.createElement("instanceLocation");	
+				eInstanceLocation.setAttribute("locationType", locationType);
+				eGeneral.appendChild(eInstanceLocation);
+			}
+			else{
+				eInstanceLocation.setAttribute("locationType", locationType);
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setInstanceLocationType
 
 	/**
 	 * Set jobID.
@@ -513,46 +572,6 @@ public class OSoLWriter extends OSgLWriter{
 	}//setPassword
 
 	/**
-	 * Set the contact transport type to respond to the requester,
-	 * smtp (for email), osp (for knocking back on the requester), etc.
-	 * 
-	 * @param transportType holds the contact transport type. 
-	 * @return whether the contact transport type is set successfully.
-	 */
-	public boolean setContactTransportType(String transportType){
-		try{
-			Element eGeneral = (Element)XMLUtil.findChildNode(m_eOSoL, "general");
-			if(eGeneral == null){
-				eGeneral = m_document.createElement("general");
-				m_eOSoL.insertBefore(eGeneral, m_eOSoL.getFirstChild());
-			}
-			Element eContact = (Element)XMLUtil.findChildNode(eGeneral, "contact");
-			if(transportType == null || transportType.length() <= 0){
-				if(eContact == null){
-					return true;
-				}
-				else{
-					eContact.removeAttribute("transportType");
-					return true;
-				}
-			}
-			if(eContact == null){
-				eContact = m_document.createElement("contact");	
-				eContact.setAttribute("transportType", transportType);
-				eGeneral.appendChild(eContact);				
-			}
-			else{
-				eContact.setAttribute("transportType", transportType);
-			}
-		}
-		catch(Exception e){
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}//setContactTransportType
-
-	/**
 	 * Set the contact address to respond to the requester. 
 	 * For example it can be an email address if the contact transport type is smtp
 	 * or a http uri if the contact transport type is osp (for knocking back on the requester), etc.
@@ -592,6 +611,46 @@ public class OSoLWriter extends OSgLWriter{
 		}
 		return true;
 	}//setContact
+
+	/**
+	 * Set the contact transport type to respond to the requester,
+	 * smtp (for email), osp (for knocking back on the requester), etc.
+	 * 
+	 * @param transportType holds the contact transport type. 
+	 * @return whether the contact transport type is set successfully.
+	 */
+	public boolean setContactTransportType(String transportType){
+		try{
+			Element eGeneral = (Element)XMLUtil.findChildNode(m_eOSoL, "general");
+			if(eGeneral == null){
+				eGeneral = m_document.createElement("general");
+				m_eOSoL.insertBefore(eGeneral, m_eOSoL.getFirstChild());
+			}
+			Element eContact = (Element)XMLUtil.findChildNode(eGeneral, "contact");
+			if(transportType == null || transportType.length() <= 0){
+				if(eContact == null){
+					return true;
+				}
+				else{
+					eContact.removeAttribute("transportType");
+					return true;
+				}
+			}
+			if(eContact == null){
+				eContact = m_document.createElement("contact");	
+				eContact.setAttribute("transportType", transportType);
+				eGeneral.appendChild(eContact);				
+			}
+			else{
+				eContact.setAttribute("transportType", transportType);
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setContactTransportType
 
 	/**
 	 * Set the number of other general options. 
@@ -676,7 +735,14 @@ public class OSoLWriter extends OSgLWriter{
 						break;
 					}
 				}
-				eOther = createOther(name, value, description);
+				eOther = m_document.createElement("other");
+				eOther.setAttribute("name", name);
+				if(value != null && value.length() > 0){
+					eOther.setAttribute("value", value);
+				}
+				if(description != null && description.length() > 0){
+					eOther.setAttribute("description", description);
+				}
 				eOtherOptions.appendChild(eOther);
 
 				eOtherOptions.setAttribute("numberOfOtherOptions", (iNls+1)+"");
@@ -1070,7 +1136,14 @@ public class OSoLWriter extends OSgLWriter{
 						break;
 					}
 				}
-				eOther = createOther(name, value, description);
+				eOther = m_document.createElement("other");
+				eOther.setAttribute("name", name);
+				if(value != null && value.length() > 0){
+					eOther.setAttribute("value", value);
+				}
+				if(description != null && description.length() > 0){
+					eOther.setAttribute("description", description);
+				}
 				eOtherOptions.appendChild(eOther);
 
 				eOtherOptions.setAttribute("numberOfOtherOptions", (iNls+1)+"");
@@ -1255,7 +1328,14 @@ public class OSoLWriter extends OSgLWriter{
 						break;
 					}
 				}
-				eOther = createOther(name, value, description);
+				eOther = m_document.createElement("other");
+				eOther.setAttribute("name", name);
+				if(value != null && value.length() > 0){
+					eOther.setAttribute("value", value);
+				}
+				if(description != null && description.length() > 0){
+					eOther.setAttribute("description", description);
+				}
 				eOtherOptions.appendChild(eOther);
 
 				eOtherOptions.setAttribute("numberOfOtherOptions", (iNls+1)+"");
@@ -2368,7 +2448,14 @@ public class OSoLWriter extends OSgLWriter{
 						break;
 					}
 				}
-				eOther = createOther(name, value, description);
+				eOther = m_document.createElement("other");
+				eOther.setAttribute("name", name);
+				if(value != null && value.length() > 0){
+					eOther.setAttribute("value", value);
+				}
+				if(description != null && description.length() > 0){
+					eOther.setAttribute("description", description);
+				}
 				eOtherOptions.appendChild(eOther);
 
 				eOtherOptions.setAttribute("numberOfOtherOptions", (iNls+1)+"");
@@ -2854,7 +2941,7 @@ public class OSoLWriter extends OSgLWriter{
 	 * Set initial basis status (string[]). 
 	 * Before this method is called, the setVariable(int), setObjective(int), setConstraint(int)
 	 * methods are recommended  to be called first. 
-	 * @param initialBasisStatus holds a double array of initial basis status. 
+	 * @param initialBasisStatus holds a string array of initial basis status. 
 	 * @return whether the initial basis status are set successfully or not. 
 	 */
 	public boolean setInitBasisStatusDense(String[] initialBasisStatus){
@@ -3024,6 +3111,261 @@ public class OSoLWriter extends OSgLWriter{
 		return true;
 	}//setInitBasisStatusSparse
 
+	/**
+	 * Set integer variable branching weights (double[]). 
+	 * Before this method is called, the setVariable(int), setObjective(int), setConstraint(int)
+	 * methods are recommended  to be called first. 
+	 * @param integerVariableBranchingWeights holds a double array of integer variable branching weights. 
+	 * @return whether the integer variable branching weights are set successfully or not. 
+	 */
+	public boolean setIntegerVariableBranchingWeightsDense(double[] integerVariableBranchingWeights){
+		Node nodeRef = null;
+		try{
+			Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSoL, "optimization");
+			if(eOptimization == null){
+				eOptimization = m_document.createElement("optimization");
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "job");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
+					if(nodeRef != null){
+						m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
+						if(nodeRef != null){
+							m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+						}
+						else{
+							nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+							if(nodeRef != null){
+								m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+							}
+							else{
+								m_eOSoL.insertBefore(eOptimization, m_eOSoL.getFirstChild());
+							}		
+						}		
+					}
+				}
+			}
+			Element eVariables = (Element)XMLUtil.findChildNode(eOptimization, "variables");
+			if(eVariables == null){
+				if(integerVariableBranchingWeights == null || integerVariableBranchingWeights.length <= 0){
+					return true;
+				}
+				eVariables = m_document.createElement("variables");	
+				eOptimization.insertBefore(eVariables, eOptimization.getFirstChild());									
+			}
+			Element eIntegerVariableBranchingWeights = (Element)XMLUtil.findChildNode(eVariables, "integerVariableBranchingWeights");
+			if(eIntegerVariableBranchingWeights == null){
+				if(integerVariableBranchingWeights == null || integerVariableBranchingWeights.length <= 0){
+					return true;
+				}
+				eIntegerVariableBranchingWeights = m_document.createElement("integerVariableBranchingWeights");	
+				Node nodeRef2 = XMLUtil.findChildNode(eVariables, "sosVariableBranchingWeights");
+				if(nodeRef2 != null){
+					eVariables.insertBefore(eIntegerVariableBranchingWeights, nodeRef2);			
+				}
+				else{
+					nodeRef2 = XMLUtil.findChildNode(eVariables, "other");
+					eVariables.insertBefore(eIntegerVariableBranchingWeights, nodeRef2);			
+				}
+			}
+			XMLUtil.removeAllChildren(eIntegerVariableBranchingWeights);
+			int iVars = integerVariableBranchingWeights==null?0:integerVariableBranchingWeights.length;
+			if(iVars == 0) return true;
+			int nVar = 0;
+			for(int i = 0; i < iVars; i++){
+				Element eVar = m_document.createElement("var");	
+				eVar.setAttribute("idx", i+"");
+				eVar.setAttribute("value", integerVariableBranchingWeights[i]+"");
+				eIntegerVariableBranchingWeights.appendChild(eVar);				
+				nVar++;
+			}
+			eIntegerVariableBranchingWeights.setAttribute("numberOfVar", nVar+"");
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setIntegerVariableBranchingWeightsDense
+
+
+	/**
+	 * Set  integer variable branching weights  (InitBasStatus[]). 
+	 * Before this method is called, the setVariable(int), setObjective(int), setConstraint(int)
+	 * methods are recommended  to be called first. 
+	 * @param integerVariableBranchingWeights holds integer variable branching weights in sparse form (BranchingWeight[]). 
+	 * @return whether the integer variable branching weights are set successfully or not. 
+	 */
+	public boolean setIntegerVariableBranchingWeightsSparse(BranchingWeight[] integerVariableBranchingWeights){
+		Node nodeRef = null;
+		try{
+			Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSoL, "optimization");
+			if(eOptimization == null){
+				eOptimization = m_document.createElement("optimization");
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "job");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
+					if(nodeRef != null){
+						m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
+						if(nodeRef != null){
+							m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+						}
+						else{
+							nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+							if(nodeRef != null){
+								m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+							}
+							else{
+								m_eOSoL.insertBefore(eOptimization, m_eOSoL.getFirstChild());
+							}		
+						}		
+					}
+				}
+			}
+			Element eVariables = (Element)XMLUtil.findChildNode(eOptimization, "variables");
+			if(eVariables == null){
+				if(integerVariableBranchingWeights == null || integerVariableBranchingWeights.length <= 0){
+					return true;
+				}
+				eVariables = m_document.createElement("variables");	
+				eOptimization.insertBefore(eVariables, eOptimization.getFirstChild());									
+			}
+			Element eIintegerVariableBranchingWeights = (Element)XMLUtil.findChildNode(eVariables, "integerVariableBranchingWeights");
+			if(eIintegerVariableBranchingWeights == null){
+				if(integerVariableBranchingWeights == null || integerVariableBranchingWeights.length <= 0){
+					return true;
+				}
+				eIintegerVariableBranchingWeights = m_document.createElement("integerVariableBranchingWeights");	
+				Node nodeRef2 = XMLUtil.findChildNode(eVariables, "sosVariableBranchingWeights");
+				if(nodeRef2 != null){
+					eVariables.insertBefore(eIintegerVariableBranchingWeights, nodeRef2);			
+				}
+				else{
+					nodeRef2 = XMLUtil.findChildNode(eVariables, "other");
+					eVariables.insertBefore(eIintegerVariableBranchingWeights, nodeRef2);			
+				}
+			}
+			XMLUtil.removeAllChildren(eIintegerVariableBranchingWeights);
+			int iVars = integerVariableBranchingWeights==null?0:integerVariableBranchingWeights.length;
+			if(iVars == 0) return true;
+			int nVar = 0;
+			for(int i = 0; i < iVars; i++){
+				Element eVar = m_document.createElement("var");	
+				eVar.setAttribute("idx", integerVariableBranchingWeights[i].idx+"");
+				eVar.setAttribute("value", integerVariableBranchingWeights[i].value+"");
+				eIintegerVariableBranchingWeights.appendChild(eVar);				
+				nVar++;
+			}
+			eIintegerVariableBranchingWeights.setAttribute("numberOfVar", nVar+"");
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setIntegerVariableBranchingWeightsSparse
+
+	/**
+	 * add variable branching weights for one SOS  (InitBasStatus[]). 
+	 * Before this method is called, the setVariable(int), setObjective(int), setConstraint(int)
+	 * methods are recommended  to be called first.
+	 * @param sosIdx
+	 * @param groupWeight
+	 * @param branchingWeights holds sos branching weights in sparse form (BranchingWeight[]). 
+	 * @return whether the sos branching weights are set successfully or not. 
+	 */
+	public boolean addSOSVariableBranchingWeightsForOneSOS(int sosIdx, double groupWeight, BranchingWeight[] branchingWeights){
+		Node nodeRef = null;
+		try{
+			Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSoL, "optimization");
+			if(eOptimization == null){
+				eOptimization = m_document.createElement("optimization");
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "job");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
+					if(nodeRef != null){
+						m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
+						if(nodeRef != null){
+							m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+						}
+						else{
+							nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+							if(nodeRef != null){
+								m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+							}
+							else{
+								m_eOSoL.insertBefore(eOptimization, m_eOSoL.getFirstChild());
+							}		
+						}		
+					}
+				}
+			}
+			Element eVariables = (Element)XMLUtil.findChildNode(eOptimization, "variables");
+			if(eVariables == null){
+				if(branchingWeights == null || branchingWeights.length <= 0 || sosIdx <0){
+					return true;
+				}
+				eVariables = m_document.createElement("variables");	
+				eOptimization.insertBefore(eVariables, eOptimization.getFirstChild());									
+			}
+			Element eSOSVariableBranchingWeights = (Element)XMLUtil.findChildNode(eVariables, "sosVariableBranchingWeights");
+			if(eSOSVariableBranchingWeights == null){
+				if(branchingWeights == null || branchingWeights.length <= 0 || sosIdx < 0){
+					return true;
+				}
+				eSOSVariableBranchingWeights = m_document.createElement("sosVariableBranchingWeights");	
+				Node nodeRef2 = XMLUtil.findChildNode(eVariables, "other");
+				eVariables.insertBefore(eSOSVariableBranchingWeights, nodeRef2);			
+			}
+			String sNumberOfSOS = eSOSVariableBranchingWeights.getAttribute("numberOfSOS");
+			int iNumberOfSOS = 1;
+			if(sNumberOfSOS != null && sNumberOfSOS.length()>0){
+				try {
+					iNumberOfSOS=Integer.parseInt(sNumberOfSOS);
+					iNumberOfSOS++;
+				}
+				catch (Exception e) {
+					iNumberOfSOS=1;
+				}
+			}
+			eSOSVariableBranchingWeights.setAttribute("numberOfSOS", iNumberOfSOS+"");
+			Element eSOS = m_document.createElement("sos");
+			eSOSVariableBranchingWeights.appendChild(eSOS);
+			int iVars = branchingWeights==null?0:branchingWeights.length;
+			eSOS.setAttribute("sosIdx", sosIdx+"");
+			if(groupWeight != 1.0) eSOS.setAttribute("groupWeight", groupWeight+"");
+			eSOS.setAttribute("numberOfVar", iVars+"");
+			if(iVars == 0) return true;
+			for(int i = 0; i < iVars; i++){
+				Element eVar = m_document.createElement("var");	
+				eVar.setAttribute("idx", branchingWeights[i].idx+"");
+				eVar.setAttribute("value", branchingWeights[i].value+"");
+				eSOS.appendChild(eVar);				
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//addSOSVariableBranchingWeightsForOneSOS
 
 	/**
 	 * Set the number of other variable options. 
@@ -3080,18 +3422,116 @@ public class OSoLWriter extends OSgLWriter{
 		return true;	
 	}//setNumberOfOtherVariableOptions
 
-	public boolean setOtherVariableOptions() throws Exception{
-		//implemented in C++, but not here in Java.
-		//TODO
-		throw new Exception("Not implemented in Java");
-	}//setOtherVariableOptions
-	
-	public boolean addOtherVariableOptions() throws Exception{
-		//implemented in C++, but not here in Java.
-		//TODO
-		throw new Exception("Not implemented in Java");
-	}//addOtherVariableOptions
-	
+	/**
+	 * Add another variable option element. 
+	 * 
+	 * @param name holds the name of the option element. It is required.
+	 * @param value holds the value of the option element, empty string "" or null if none. 
+	 * @param description holds the description of the option element, empty string "" or null if none. 
+	 * @param solver holds the solver of the option element, empty string "" or null if no value. 
+	 * @param category holds the category of the option element, empty string "" or null if no value. 
+	 * @param type holds the type of the option element, empty string "" or null if no value. 
+	 * @param vars holds an array of var options
+	 * @return whether the other variable option element is added successfully.
+	 */
+	public boolean addOtherVariableOption(String name, String value, String description, String solver, String category, String type, OtherVarOption[] vars){
+		Node nodeRef = null;
+		try{
+			Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSoL, "optimization");
+			if(eOptimization == null){
+				eOptimization = m_document.createElement("optimization");
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "job");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
+					if(nodeRef != null){
+						m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
+						if(nodeRef != null){
+							m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+						}
+						else{
+							nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+							if(nodeRef != null){
+								m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+							}
+							else{
+								m_eOSoL.insertBefore(eOptimization, m_eOSoL.getFirstChild());
+							}		
+						}		
+					}
+				}
+			}
+			Element eVariables = (Element)XMLUtil.findChildNode(eOptimization, "variables");
+			if(eVariables == null){
+				if(name == null || name.length() <= 0){
+					return false;
+				}
+				eVariables = m_document.createElement("variables");	
+				eOptimization.insertBefore(eVariables, eOptimization.getFirstChild());									
+			}
+			Element eOtherOption = m_document.createElement("other");	
+			eOtherOption.setAttribute("name", name);
+			if(value != null && value.length() > 0){
+				eOtherOption.setAttribute("value", value);
+			}
+			if(description != null && description.length() > 0){
+				eOtherOption.setAttribute("description", description);
+			}
+			if(solver != null && solver.length() > 0){
+				eOtherOption.setAttribute("solver", solver);
+			}
+			if(category != null && category.length() > 0){
+				eOtherOption.setAttribute("category", category);
+			}
+			if(type != null && type.length() > 0){
+				if(type.equalsIgnoreCase("double") || type.equalsIgnoreCase("integer") || 
+						type.equalsIgnoreCase("boolean") || type.equalsIgnoreCase("string")){
+					eOtherOption.setAttribute("type",type.toLowerCase());
+				}
+				else eOtherOption.setAttribute("type","string");
+			}
+			int iVars = vars==null?0:vars.length;
+			eOtherOption.setAttribute("numberOfVar", iVars+"");
+			for(int i = 0; i < iVars; i++){
+				Element eVar = m_document.createElement("var");	
+				eVar.setAttribute("idx", vars[i].idx+"");
+				if(vars[i].value != null && vars[i].value.length() > 0) eVar.setAttribute("value", vars[i].value+"");
+				if(vars[i].lbValue != null && vars[i].lbValue.length() > 0) eVar.setAttribute("lbValue", vars[i].lbValue+"");
+				if(vars[i].ubValue != null && vars[i].ubValue.length() > 0) eVar.setAttribute("ubValue", vars[i].ubValue+"");
+				eOtherOption.appendChild(eVar);				
+			}
+			try{
+				Vector<Element> vElements = XMLUtil.getChildElementsByTagName(eVariables, "other");
+				Element eOther;
+				int iNls = vElements==null?0:vElements.size();
+				for(int i = 0; i < iNls; i++){
+					eOther = (Element)vElements.elementAt(i);
+					if(eOther.getAttribute("name").equals(name)){
+						eVariables.removeChild(eOther);
+						iNls--;
+					}
+				}
+				eVariables.appendChild(eOtherOption);			
+				eVariables.setAttribute("numberOfOtherVariableOptions", (iNls+1)+"");
+
+			}
+			catch(Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//addOtherVariableOption
+
 	/**
 	 * Set initial objective values (double[]). 
 	 * Before this method is called, the setVariable(int), setObjective(int), setConstraint(int)
@@ -3503,19 +3943,124 @@ public class OSoLWriter extends OSgLWriter{
 		}
 		return true;	
 	}//setNumberOfOtherObjectiveOptions
-	
-	public boolean setOtherObjectiveOptions() throws Exception{
-		//implemented in C++, but not here in Java.
-		//TODO
-		throw new Exception("Not implemented in Java");
-	}//setOtherObjectiveOptions
-	
-	public boolean addOtherObjectiveOptions() throws Exception{
-		//implemented in C++, but not here in Java.
-		//TODO
-		throw new Exception("Not implemented in Java");
-	}//addOtherObjectiveOptions
-	
+
+	/**
+	 * Add another objective option element. 
+	 * 
+	 * @param name holds the name of the option element. It is required.
+	 * @param value holds the value of the option element, empty string "" or null if none. 
+	 * @param description holds the description of the option element, empty string "" or null if none. 
+	 * @param solver holds the solver of the option element, empty string "" or null if no value. 
+	 * @param category holds the category of the option element, empty string "" or null if no value. 
+	 * @param type holds the type of the option element, empty string "" or null if no value. 
+	 * @param objs holds an array of obj options
+	 * @return whether the other objective option element is added successfully.
+	 */
+	public boolean addOtherObjectiveOption(String name, String value, String description, String solver, String category, String type, OtherObjOption[] objs){
+		Node nodeRef = null;
+		try{
+			Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSoL, "optimization");
+			if(eOptimization == null){
+				eOptimization = m_document.createElement("optimization");
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "job");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
+					if(nodeRef != null){
+						m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
+						if(nodeRef != null){
+							m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+						}
+						else{
+							nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+							if(nodeRef != null){
+								m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+							}
+							else{
+								m_eOSoL.insertBefore(eOptimization, m_eOSoL.getFirstChild());
+							}		
+						}		
+					}
+				}
+			}
+			Element eObjectives = (Element)XMLUtil.findChildNode(eOptimization, "objectives");
+			if(eObjectives == null){
+				if(name == null || name.length() <= 0){
+					return false;
+				}
+				eObjectives = m_document.createElement("objectives");	
+				Node nodeRef2 = null;
+				nodeRef2 = XMLUtil.findChildNode(eOptimization, "variables");
+				if(nodeRef2 != null){
+					eOptimization.insertBefore(eObjectives, nodeRef2.getNextSibling());			
+				}
+				else{
+					eOptimization.insertBefore(eObjectives, eOptimization.getFirstChild());		
+				}
+			}
+			Element eOtherOption = m_document.createElement("other");	
+			eOtherOption.setAttribute("name", name);
+			if(value != null && value.length() > 0){
+				eOtherOption.setAttribute("value", value);
+			}
+			if(description != null && description.length() > 0){
+				eOtherOption.setAttribute("description", description);
+			}
+			if(solver != null && solver.length() > 0){
+				eOtherOption.setAttribute("solver", solver);
+			}
+			if(category != null && category.length() > 0){
+				eOtherOption.setAttribute("category", category);
+			}
+			if(type != null && type.length() > 0){
+				if(type.equalsIgnoreCase("double") || type.equalsIgnoreCase("integer") || 
+						type.equalsIgnoreCase("boolean") || type.equalsIgnoreCase("string")){
+					eOtherOption.setAttribute("type",type.toLowerCase());
+				}
+				else eOtherOption.setAttribute("type","string");
+			}
+			int iObjs = objs==null?0:objs.length;
+			eOtherOption.setAttribute("numberOfObj", iObjs+"");
+			for(int i = 0; i < iObjs; i++){
+				Element eObj = m_document.createElement("obj");	
+				eObj.setAttribute("idx", objs[i].idx+"");
+				if(objs[i].value != null && objs[i].value.length() > 0) eObj.setAttribute("value", objs[i].value+"");
+				if(objs[i].lbValue != null && objs[i].lbValue.length() > 0) eObj.setAttribute("lbValue", objs[i].lbValue+"");
+				if(objs[i].ubValue != null && objs[i].ubValue.length() > 0) eObj.setAttribute("ubValue", objs[i].ubValue+"");
+				eOtherOption.appendChild(eObj);				
+			}
+			try{
+				Vector<Element> vElements = XMLUtil.getChildElementsByTagName(eObjectives, "other");
+				Element eOther;
+				int iNls = vElements==null?0:vElements.size();
+				for(int i = 0; i < iNls; i++){
+					eOther = (Element)vElements.elementAt(i);
+					if(eOther.getAttribute("name").equals(name)){
+						eObjectives.removeChild(eOther);
+						iNls--;
+					}
+				}
+				eObjectives.appendChild(eOtherOption);			
+				eObjectives.setAttribute("numberOfOtherObjectiveOptions", (iNls+1)+"");
+
+			}
+			catch(Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//addOtherObjectiveOption	
+
 	/**
 	 * Set initial constraint values (double[]). 
 	 * Before this method is called, the setVariable(int), setObjective(int), setConstraint(int)
@@ -3779,8 +4324,8 @@ public class OSoLWriter extends OSgLWriter{
 			for(int i = 0; i < iCons; i++){
 				Element eCon = m_document.createElement("con");	
 				eCon.setAttribute("idx", i+"");
-				eCon.setAttribute("lbValue", initialLbDualValues[i]+"");
-				eCon.setAttribute("ubValue", initialUbDualValues[i]+"");
+				eCon.setAttribute("lbDualValue", initialLbDualValues[i]+"");
+				eCon.setAttribute("ubDualValue", initialUbDualValues[i]+"");
 				eInitialDualValues.appendChild(eCon);				
 				nCon++;
 			}
@@ -3876,8 +4421,8 @@ public class OSoLWriter extends OSgLWriter{
 				if(initialDualValues[i] == null) continue;
 				Element eCon = m_document.createElement("con");	
 				eCon.setAttribute("idx", initialDualValues[i].idx+"");
-				eCon.setAttribute("lbValue", initialDualValues[i].lbValue+"");
-				eCon.setAttribute("ubValue", initialDualValues[i].ubValue+"");
+				eCon.setAttribute("lbDualValue", initialDualValues[i].lbValue+"");
+				eCon.setAttribute("ubDualValue", initialDualValues[i].ubValue+"");
 				eInitialDualValues.appendChild(eCon);				
 				nCon++;
 			}
@@ -3889,7 +4434,7 @@ public class OSoLWriter extends OSgLWriter{
 		}
 		return true;
 	}//setInitDualValuesSparse
-	
+
 	/**
 	 * Set the number of other constraint options. 
 	 * 
@@ -3958,18 +4503,129 @@ public class OSoLWriter extends OSgLWriter{
 		return true;	
 	}//setNumberOfOtherConstraintOptions
 
-	public boolean setOtherConstraintOptions() throws Exception{
-		//implemented in C++, but not here in Java.
-		//TODO
-		throw new Exception("Not implemented in Java");
-	}//setOtherConstraintOptions
-	
-	public boolean addOtherConstraintOptions() throws Exception{
-		//implemented in C++, but not here in Java.
-		//TODO
-		throw new Exception("Not implemented in Java");
-	}//addOtherConstraintOptions
-	
+	/**
+	 * Add another constraint option element. 
+	 * 
+	 * @param name holds the name of the option element. It is required.
+	 * @param value holds the value of the option element, empty string "" or null if none. 
+	 * @param description holds the description of the option element, empty string "" or null if none. 
+	 * @param solver holds the solver of the option element, empty string "" or null if no value. 
+	 * @param category holds the category of the option element, empty string "" or null if no value. 
+	 * @param type holds the type of the option element, empty string "" or null if no value. 
+	 * @param cons holds an array of con options
+	 * @return whether the other constraint option element is added successfully.
+	 */
+	public boolean addOtherConstraintOption(String name, String value, String description, String solver, String category, String type, OtherConOption[] cons){
+		Node nodeRef = null;
+		try{
+			Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSoL, "optimization");
+			if(eOptimization == null){
+				eOptimization = m_document.createElement("optimization");
+				nodeRef = XMLUtil.findChildNode(m_eOSoL, "job");
+				if(nodeRef != null){
+					m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSoL, "service");
+					if(nodeRef != null){
+						m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSoL, "system");
+						if(nodeRef != null){
+							m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+						}
+						else{
+							nodeRef = XMLUtil.findChildNode(m_eOSoL, "general");
+							if(nodeRef != null){
+								m_eOSoL.insertBefore(eOptimization, nodeRef.getNextSibling());			
+							}
+							else{
+								m_eOSoL.insertBefore(eOptimization, m_eOSoL.getFirstChild());
+							}		
+						}		
+					}
+				}
+			}
+			Element eConstraints = (Element)XMLUtil.findChildNode(eOptimization, "constraints");
+			if(eConstraints == null){
+				if(name == null || name.length() <= 0){
+					return true;
+				}
+				eConstraints = m_document.createElement("constraints");	
+				Node nodeRef2 = null;
+				nodeRef2 = XMLUtil.findChildNode(eOptimization, "objectives");
+				if(nodeRef2 != null){
+					eOptimization.insertBefore(eConstraints, nodeRef2.getNextSibling());			
+				}
+				else{
+					nodeRef2 = XMLUtil.findChildNode(eOptimization, "variables");
+					if(nodeRef2 != null){
+						eOptimization.insertBefore(eConstraints, nodeRef2.getNextSibling());			
+					}
+					else{
+						eOptimization.insertBefore(eConstraints, eOptimization.getFirstChild());		
+					}	
+				}
+			}
+			Element eOtherOption = m_document.createElement("other");	
+			eOtherOption.setAttribute("name", name);
+			if(value != null && value.length() > 0){
+				eOtherOption.setAttribute("value", value);
+			}
+			if(description != null && description.length() > 0){
+				eOtherOption.setAttribute("description", description);
+			}
+			if(solver != null && solver.length() > 0){
+				eOtherOption.setAttribute("solver", solver);
+			}
+			if(category != null && category.length() > 0){
+				eOtherOption.setAttribute("category", category);
+			}
+			if(type != null && type.length() > 0){
+				if(type.equalsIgnoreCase("double") || type.equalsIgnoreCase("integer") || 
+						type.equalsIgnoreCase("boolean") || type.equalsIgnoreCase("string")){
+					eOtherOption.setAttribute("type",type.toLowerCase());
+				}
+				else eOtherOption.setAttribute("type","string");
+			}
+			int iCons = cons==null?0:cons.length;
+			eOtherOption.setAttribute("numberOfCon", iCons+"");
+			for(int i = 0; i < iCons; i++){
+				Element eCon = m_document.createElement("con");	
+				eCon.setAttribute("idx", cons[i].idx+"");
+				if(cons[i].value != null && cons[i].value.length() > 0) eCon.setAttribute("value", cons[i].value+"");
+				if(cons[i].lbValue != null && cons[i].lbValue.length() > 0) eCon.setAttribute("lbValue", cons[i].lbValue+"");
+				if(cons[i].ubValue != null && cons[i].ubValue.length() > 0) eCon.setAttribute("ubValue", cons[i].ubValue+"");
+				eOtherOption.appendChild(eCon);				
+			}
+			try{
+				Vector<Element> vElements = XMLUtil.getChildElementsByTagName(eConstraints, "other");
+				Element eOther;
+				int iNls = vElements==null?0:vElements.size();
+				for(int i = 0; i < iNls; i++){
+					eOther = (Element)vElements.elementAt(i);
+					if(eOther.getAttribute("name").equals(name)){
+						eConstraints.removeChild(eOther);
+						iNls--;
+					}
+				}
+				eConstraints.appendChild(eOtherOption);			
+				eConstraints.setAttribute("numberOfOtherConstraintOptions", (iNls+1)+"");
+
+			}
+			catch(Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//addOtherConstraintOption	
+
 	/**
 	 * Set the number of other solver options. 
 	 * 
@@ -4112,7 +4768,27 @@ public class OSoLWriter extends OSgLWriter{
 						break;
 					}
 				}
-				eSolverOption = createSolverOption(name, value, description, solver, category, type);
+				eSolverOption = m_document.createElement("solverOption");
+				eSolverOption.setAttribute("name", name);
+				if(value != null && value.length() > 0){
+					eSolverOption.setAttribute("value", value);
+				}
+				if(description != null && description.length() > 0){
+					eSolverOption.setAttribute("description", description);
+				}
+				if(solver != null && solver.length() > 0){
+					eSolverOption.setAttribute("solver", solver);
+				}
+				if(category != null && category.length() > 0){
+					eSolverOption.setAttribute("category", category);
+				}
+				if(type != null && type.length() > 0){
+					if(type.equalsIgnoreCase("double") || type.equalsIgnoreCase("integer") || 
+							type.equalsIgnoreCase("boolean") || type.equalsIgnoreCase("string")){
+						eSolverOption.setAttribute("type",type.toLowerCase());
+					}
+					else eSolverOption.setAttribute("type","string");
+				}				
 				eSolverOptions.appendChild(eSolverOption);
 
 				eSolverOptions.setAttribute("numberOfSolverOptions", (iNls+1)+"");
@@ -4129,68 +4805,6 @@ public class OSoLWriter extends OSgLWriter{
 		}
 		return true;
 	}//addSolverOption
-
-	/**
-	 * Create the OSoL root element and its most basic required structure.
-	 * 
-	 * @return the OSoL element.
-	 */
-	protected Element createOSoLRoot(){
-		Element eOSoL = XMLUtil.createOSxLRootElement(m_document, "osol");
-		return eOSoL;
-	}//createOSoLRoot
-
-	/**
-	 * Create the other element and its most basic required structure.
-	 * 
-	 * @param name the name of the other element. 
-	 * @param value the value of the other element, empty string "" or null if no value. 
-	 * @param description holds the description of the other option element, empty string "" or null if none. 
-	 * @return the other element.
-	 */
-	protected Element createOther(String name, String value, String description){
-		Element eOther = m_document.createElement("other");
-		eOther.setAttribute("name", name);
-		if(value != null && value.length() > 0){
-			eOther.setAttribute("value", value);
-		}
-		if(description != null && description.length() > 0){
-			eOther.setAttribute("description", description);
-		}
-		return eOther;
-	}//createOther
-
-	/**
-	 * Create the solverOption element and its most basic required structure.
-	 * 
-	 * @param name the name of the solverOption element. 
-	 * @param value the value of the solverOption element, empty string "" or null if no value. 
-	 * @param description holds the description of the solverOption element, empty string "" or null if none. 
-	 * @param solver holds the solver of the solverOption element, empty string "" or null if no value. 
-	 * @param category holds the category of the solverOption element, empty string "" or null if no value. 
-	 * @param type holds the type of the solverOption element, empty string "" or null if no value. 
-	 * @return the solverOption element.
-	 */
-	protected Element createSolverOption(String name, String value, String description, String solver, String category, String type){
-		Element eSolverOption = m_document.createElement("solverOption");
-		eSolverOption.setAttribute("name", name);
-		if(value != null && value.length() > 0){
-			eSolverOption.setAttribute("value", value);
-		}
-		if(description != null && description.length() > 0){
-			eSolverOption.setAttribute("description", description);
-		}
-		if(solver != null && solver.length() > 0){
-			eSolverOption.setAttribute("solver", solver);
-		}
-		if(category != null && category.length() > 0){
-			eSolverOption.setAttribute("category", category);
-		}
-		if(type != null && type.length() > 0){
-			eSolverOption.setAttribute("type", type);
-		}
-		return eSolverOption;
-	}//createSolverOption
 
 	/**
 	 * main for test purposes.
@@ -4285,10 +4899,10 @@ public class OSoLWriter extends OSgLWriter{
 //		if(!osolWriter.setOtherJobOptions(msNames, msValues, null)) System.out.println("setOtherJobOptions");		
 //		if(!osolWriter.addOtherJobOption("jname1", null, "")) System.out.println("addOtherJobOption");		
 
+//		if(!osolWriter.setNumberOfVariables(3)) System.out.println("setNumberOfVariables Unsuccessful");		
+//		if(!osolWriter.setNumberOfObjectives(3)) System.out.println("setNumberOfObjectives Unsuccessful");		
+//		if(!osolWriter.setNumberOfConstraints(2)) System.out.println("setNumberOfConstraints Unsuccessful");		
 
-		if(!osolWriter.setNumberOfVariables(3)) System.out.println("setNumberOfVariables Unsuccessful");		
-		if(!osolWriter.setNumberOfObjectives(3)) System.out.println("setNumberOfObjectives Unsuccessful");		
-		if(!osolWriter.setNumberOfConstraints(2)) System.out.println("setNumberOfConstraints Unsuccessful");		
 //		double[] initialVariableValues = {1, 0, 3};
 //		if(!osolWriter.setInitVarValuesDense(initialVariableValues)) System.out.println("setInitVarValuesDense Unsuccessful");		
 
@@ -4317,6 +4931,30 @@ public class OSoLWriter extends OSgLWriter{
 //		if(!osolWriter.setInitBasisStatusSparse(var)) System.out.println("setInitBasisStatusSparse Unsuccessful");		
 //		if(!osolWriter.setNumberOfOtherVariableOptions(1)) System.out.println("setNumberOfOtherVariableOptions");		
 
+//		double[] integerVariableBranchingWeights = {1.0, 0, 3.0};
+//		if(!osolWriter.setIntegerVariableBranchingWeightsDense(integerVariableBranchingWeights)) System.out.println("setIntegerVariableBranchingWeightsDense Unsuccessful");		
+
+//		BranchingWeight[] var = new BranchingWeight[3];
+//		var[0]= new BranchingWeight(); var[0].idx=0; var[0].value=0.1;
+//		var[1]= new BranchingWeight(); var[1].idx=1; var[1].value=1.1;
+//		var[2]= new BranchingWeight(); var[2].idx=2; var[2].value=2.2;
+//		if(!osolWriter.setIntegerVariableBranchingWeightsSparse(var)) System.out.println("setIntegerVariableBranchingWeightsSparse Unsuccessful");		
+
+//		BranchingWeight[] var = new BranchingWeight[3];
+//		var[0]= new BranchingWeight(); var[0].idx=0; var[0].value=0.1;
+//		var[1]= new BranchingWeight(); var[1].idx=1; var[1].value=1.1;
+//		var[2]= new BranchingWeight(); var[2].idx=2; var[2].value=2.2;
+//		if(!osolWriter.addSOSVariableBranchingWeightsForOneSOS(1, 2.0, var)) System.out.println("addSOSVariableBranchingWeightsForOneSOS Unsuccessful");		
+//		if(!osolWriter.addSOSVariableBranchingWeightsForOneSOS(2, 1.0, var)) System.out.println("addSOSVariableBranchingWeightsForOneSOS Unsuccessful");		
+
+//		OtherVarOption[] vars = new OtherVarOption[3];
+//		vars[0]= new OtherVarOption(); vars[0].idx=0; vars[0].value="0.1"; vars[0].lbValue="0.1L";  vars[0].ubValue="0.1U";
+//		vars[1]= new OtherVarOption(); vars[1].idx=1; vars[1].value="1.1"; vars[0].lbValue="0.1L";  vars[0].ubValue="0.1U";
+//		vars[2]= new OtherVarOption(); vars[2].idx=2; vars[2].value="2.2"; vars[0].lbValue="0.1L";  vars[0].ubValue="0.1U";
+//		if(!osolWriter.addOtherVariableOption("ovname0", null, "", "solver0", "category0", "double", vars)) System.out.println("addOtherVariableOption");		
+//		if(!osolWriter.addOtherVariableOption("ovname1", null, "", "solver0", "category0", "Boolean", vars)) System.out.println("addOtherVariableOption");		
+//		if(!osolWriter.addOtherVariableOption("ovname0", null, "", "solver0", "category0", "Boolean", null)) System.out.println("addOtherVariableOption");		
+
 //		if(!osolWriter.setNumberOfOtherObjectiveOptions(2)) System.out.println("setNumberOfOtherObjectiveOptions");		
 //		double[] initialObjectiveValues = {1, 0, 3};
 //		if(!osolWriter.setInitObjValuesDense(initialObjectiveValues)) System.out.println("setInitObjValuesDense Unsuccessful");		
@@ -4336,10 +4974,17 @@ public class OSoLWriter extends OSgLWriter{
 //		obj[1]= new InitObjBound(); obj[1].idx=-2; obj[1].lbValue=1.0;obj[1].ubValue=1.1;
 //		obj[2]= new InitObjBound(); obj[2].idx=-3; obj[2].lbValue=2.0;obj[2].ubValue=2.1;
 //		if(!osolWriter.setInitObjBoundsSparse(obj)) System.out.println("setInitObjBoundsSparse Unsuccessful");		
-		
-		
-		double[] initialConstraintValues = {1, 0, 3};
-		if(!osolWriter.setInitConValuesDense(initialConstraintValues)) System.out.println("setInitConValuesDense Unsuccessful");		
+
+//		OtherObjOption[] objs = new OtherObjOption[3];
+//		objs[0]= new OtherObjOption(); objs[0].idx=-1; objs[0].value="0.1"; objs[0].lbValue="0.1L";  objs[0].ubValue="0.1U";
+//		objs[1]= new OtherObjOption(); objs[1].idx=-2; objs[1].value="1.1"; objs[0].lbValue="0.1L";  objs[0].ubValue="0.1U";
+//		objs[2]= new OtherObjOption(); objs[2].idx=-3; objs[2].value="2.2"; objs[0].lbValue="0.1L";  objs[0].ubValue="0.1U";
+//		if(!osolWriter.addOtherObjectiveOption("obname0", null, "", "solver0", "category0", "double", objs)) System.out.println("addOtherObjectiveOption");		
+//		if(!osolWriter.addOtherObjectiveOption("obname1", null, "", "solver0", "category0", "Boolean", objs)) System.out.println("addOtherObjectiveOption");		
+//		if(!osolWriter.addOtherObjectiveOption("obname0", null, "", "solver0", "category0", "Boolean", null)) System.out.println("addOtherObjectiveOption");		
+
+//		double[] initialConstraintValues = {1, 0, 3};
+//		if(!osolWriter.setInitConValuesDense(initialConstraintValues)) System.out.println("setInitConValuesDense Unsuccessful");		
 
 //		InitConValue[] con = new InitConValue[3];
 //		con[0]= new InitConValue(); con[0].idx=0; con[0].value=0.0;
@@ -4351,19 +4996,22 @@ public class OSoLWriter extends OSgLWriter{
 //		double[] initialUbDualBounds = {1.1, 0.1, 3.1};
 //		if(!osolWriter.setInitDualValuesDense(initialLbDualBounds, initialUbDualBounds)) System.out.println("setInitDualValuesDense Unsuccessful");		
 
-		InitDualVarValue[] con = new InitDualVarValue[3];
-		con[0]= new InitDualVarValue(); con[0].idx=0; con[0].lbValue=0.0; con[0].ubValue=0.1;
-		con[1]= new InitDualVarValue(); con[1].idx=1; con[1].lbValue=1.0;con[1].ubValue=1.1;
-		con[2]= new InitDualVarValue(); con[2].idx=2; con[2].lbValue=2.0;con[2].ubValue=2.1;
-		if(!osolWriter.setInitDualValuesSparse(con)) System.out.println("setInitDualValuesSparse Unsuccessful");		
+//		InitDualVarValue[] con = new InitDualVarValue[3];
+//		con[0]= new InitDualVarValue(); con[0].idx=0; con[0].lbValue=0.0; con[0].ubValue=0.1;
+//		con[1]= new InitDualVarValue(); con[1].idx=1; con[1].lbValue=1.0;con[1].ubValue=1.1;
+//		con[2]= new InitDualVarValue(); con[2].idx=2; con[2].lbValue=2.0;con[2].ubValue=2.1;
+//		if(!osolWriter.setInitDualValuesSparse(con)) System.out.println("setInitDualValuesSparse Unsuccessful");		
 
-		
-		
-		
-		
-		if(!osolWriter.setNumberOfOtherConstraintOptions(3)) System.out.println("setNumberOfOtherConstraintOptions");		
+//		if(!osolWriter.setNumberOfOtherConstraintOptions(3)) System.out.println("setNumberOfOtherConstraintOptions");		
+//		OtherConOption[] cons = new OtherConOption[3];
+//		cons[0]= new OtherConOption(); cons[0].idx=1; cons[0].value="0.1"; cons[0].lbValue="0.1L";  cons[0].ubValue="0.1U";
+//		cons[1]= new OtherConOption(); cons[1].idx=2; cons[1].value="1.1"; cons[0].lbValue="0.1L";  cons[0].ubValue="0.1U";
+//		cons[2]= new OtherConOption(); cons[2].idx=3; cons[2].value="2.2"; cons[0].lbValue="0.1L";  cons[0].ubValue="0.1U";
+//		if(!osolWriter.addOtherConstraintOption("ocname0", null, "", "solver0", "category0", "double", cons)) System.out.println("addOtherObjectiveOption");		
+//		if(!osolWriter.addOtherConstraintOption("ocname1", null, "", "solver0", "category0", "Boolean", cons)) System.out.println("addOtherObjectiveOption");		
+//		if(!osolWriter.addOtherConstraintOption("ocname0", null, "", "solver0", "category0", "Boolean", null)) System.out.println("addOtherObjectiveOption");		
 
-		if(!osolWriter.setNumberOfSolverOptions(4)) System.out.println("setNumberOfSolverOptions");		
+//		if(!osolWriter.setNumberOfSolverOptions(4)) System.out.println("setNumberOfSolverOptions");		
 //		if(!osolWriter.addSolverOption("sname0", null, "", "solver0", "category0", "type0")) System.out.println("addSolverOption");		
 //		String[] msNames = {"sname1", "sname2"};
 //		String[] msValues = {"svalue1", "svalue2"};
@@ -4391,7 +5039,6 @@ public class OSoLWriter extends OSgLWriter{
 
 		////////////////////
 
-		//osolWriter.writeToStandardOutput();
 		System.out.println(osolWriter.writeToString());
 	}//main
 
