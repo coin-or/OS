@@ -1799,7 +1799,7 @@ catch(const ErrorClass& eclass){
 		int SOS3idx[2];
 		double SOS3val[2];
 		SOS3idx[0] = 6;
-		SOS3idx[1] = 9;
+		SOS3idx[1] = 3;
 		SOS3val[0] = 1.0;
 		SOS3val[1] = 2.0;
 		cout << "SOS branching weight...";
@@ -2152,6 +2152,26 @@ catch(const ErrorClass& eclass){
 			cout << "IOBL: " << IOBL[i] << endl << "IOBU: " << IOBU[i] << endl;
 		cout << "nopt:" << nopt;
 		ok = osoption2->setInitObjBoundsDense(nopt, IOBL, IOBU);		
+		cout << ok << endl;
+
+		
+		cout << "InitConValues...";
+		double* ICV;
+		ICV = osoption->getInitConValuesDense(nopt);
+		for (int i=0; i < nopt; i++)
+			cout << "ICV: " << ICV[i] << endl;
+		cout << "nopt:" << nopt;
+		ok = osoption2->setInitConValuesDense(nopt, ICV);		
+		cout << ok << endl;
+		
+		cout << "InitDualVarValues...";
+		double *IDVL, *IDVU;
+		IDVL = osoption->getInitDualVarLowerBoundsDense(nopt);
+		IDVU = osoption->getInitDualVarUpperBoundsDense(nopt);
+		for (int i=0; i < nopt; i++)
+			cout << "IDVL: " << IDVL[i] << endl << "IDVU: " << IDVU[i] << endl;
+		cout << "nopt:" << nopt;
+		ok = osoption2->setInitDualVarValuesDense(nopt, IDVL, IDVU);		
 		cout << ok << endl;
 
 
