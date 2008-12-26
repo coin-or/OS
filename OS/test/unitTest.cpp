@@ -1704,6 +1704,7 @@ catch(const ErrorClass& eclass){
 		 * 8) compare the second and third OSOption objects to make sure 
 		 *    nothing was lost in translation
 		 */
+#if 0
 		cout << endl;
 		std::string tmpOSoL;
 		clock_t start, finish;
@@ -2173,6 +2174,7 @@ catch(const ErrorClass& eclass){
 		cout << "nopt:" << nopt;
 		ok = osoption2->setInitDualVarValuesDense(nopt, IDVL, IDVU);		
 		cout << ok << endl;
+#endif
 
 
 #if 0
@@ -2312,7 +2314,7 @@ catch(const ErrorClass& eclass){
 
 		delete another_osoption;
 		delete[] path;
-#endif
+
 //		delete osoption;
 		cout << "delete osoption2" << endl;
 		delete osoption2;
@@ -2324,7 +2326,7 @@ catch(const ErrorClass& eclass){
 		unitTestResult << 
 		     "Successful test of OSoL parser on file parsertest.osol" 
 		      << std::endl;
-
+#endif
 
 	}	
 	
