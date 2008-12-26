@@ -141,7 +141,7 @@ public class OSmLGUI {
 		m_mapServiceAddress.put("localglpk", m_sLocalGLPKSolverServiceAddress);
 		
 		m_osolWriter.setContactTransportType("smtp");
-		m_osolWriter.setContactAddress("kipp.martin@chicagogsb.edu");		
+		m_osolWriter.setContact("kipp.martin@chicagogsb.edu");		
 		m_osolWriter.setJobID(m_sJobID);
 		m_osolWriter.setInstanceName(m_sJobID+".osil");
 
@@ -490,7 +490,7 @@ public class OSmLGUI {
 
 					String sOption = osolText.getText();
 					if(sOption.equalsIgnoreCase("wait")){
-						m_osolWriter.addOtherOption("wait", "true", "let the solver wait for testing purpose");
+						m_osolWriter.addOtherGeneralOption("wait", "true", "let the solver wait for testing purpose");
 					}
 					m_sJobID = jobIDText.getText();
 					if(m_sJobID != null && m_sJobID.length() > 0){
@@ -531,7 +531,7 @@ public class OSmLGUI {
 			public void handleEvent(Event event) {
 				try{
 					//initializeInput(); 
-					m_osolWriter.addOtherOption("subSolver", "clp", "sub solver of coin like clp or glpk");
+					m_osolWriter.addSolverOption("subSolver", "clp", "sub solver of coin like clp or glpk", "", "", "");
 					String sOSoL = m_osolWriter.writeToString();
 					//m_osSolverAgent.solverAddress = m_sCOINSolverServiceAddress;
 					m_osSolverAgent.solverAddress = m_sCLPSolverServiceAddress;
@@ -552,7 +552,7 @@ public class OSmLGUI {
 			public void handleEvent(Event event) {
 				try{
 					//initializeInput(); 
-					m_osolWriter.addOtherOption("subSolver", "cbc", "sub solver of coin like cbc or glpk");
+					m_osolWriter.addSolverOption("subSolver", "cbc", "sub solver of coin like cbc or glpk", "", "", "");
 					String sOSoL = m_osolWriter.writeToString();
 					//m_osSolverAgent.solverAddress = m_sCOINSolverServiceAddress;
 					m_osSolverAgent.solverAddress = m_sCBCSolverServiceAddress;
@@ -573,7 +573,7 @@ public class OSmLGUI {
 			public void handleEvent(Event event) {
 				try{
 					//initializeInput(); 
-					m_osolWriter.addOtherOption("subSolver", "glpk", "sub solver of coin like clp, cbc or glpk");
+					m_osolWriter.addSolverOption("subSolver", "glpk", "sub solver of coin like clp, cbc or glpk", "", "", "");
 					String sOSoL = m_osolWriter.writeToString();
 					m_osSolverAgent.solverAddress = m_sCOINSolverServiceAddress;
 					m_sOSiL = osilText.getText();
