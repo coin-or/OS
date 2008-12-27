@@ -984,11 +984,11 @@ InitDualVariableValues::~InitDualVariableValues()
 	if (con != NULL) 
 	{	int i;
 		for (i=0; i < numberOfCon; i++)
-		{	delete con[i];
-			con[i] = NULL;
+		{	//delete con[i];
+			//con[i] = NULL;
 		}
-		delete[] con;
-		con = NULL;
+		//delete[] con;
+		//con = NULL;
 	};
 }//end InitDualVariableValues destructor
 
