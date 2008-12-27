@@ -17,12 +17,16 @@ import org.optimizationservices.oscommon.datastructure.osoption.InitObjValue;
 import org.optimizationservices.oscommon.datastructure.osoption.InitVarValue;
 import org.optimizationservices.oscommon.datastructure.osoption.InitVarValueString;
 import org.optimizationservices.oscommon.datastructure.osoption.OtherConOption;
+import org.optimizationservices.oscommon.datastructure.osoption.OtherConstraintOption;
 import org.optimizationservices.oscommon.datastructure.osoption.OtherObjOption;
+import org.optimizationservices.oscommon.datastructure.osoption.OtherObjectiveOption;
 import org.optimizationservices.oscommon.datastructure.osoption.OtherOption;
 import org.optimizationservices.oscommon.datastructure.osoption.OtherVarOption;
+import org.optimizationservices.oscommon.datastructure.osoption.OtherVariableOption;
 import org.optimizationservices.oscommon.datastructure.osoption.PathPair;
+import org.optimizationservices.oscommon.datastructure.osoption.SOSWeights;
+import org.optimizationservices.oscommon.datastructure.osoption.SolverOption;
 import org.optimizationservices.oscommon.localinterface.OSOption;
-import org.optimizationservices.oscommon.util.CommonUtil;
 import org.optimizationservices.oscommon.util.OSParameter;
 import org.optimizationservices.oscommon.util.XMLUtil;
 import org.w3c.dom.Element;
@@ -70,23 +74,49 @@ public class OSoLWriter extends OSgLWriter{
 		if(!setServiceURI(osOption.getServiceURI()))throw new Exception("setServiceURI Unsuccessful");
 		if(!setServiceName(osOption.getServiceName())) throw new Exception("setServiceName Unsuccessful");		
 		if(!setInstanceName(osOption.getInstanceName())) throw new Exception("setInstanceName Unsuccessful");		
-		if(!setContactTransportType(osOption.getContactTransportType())) throw new Exception("setContactTransportType Unsuccessful");		
-		if(!setInstanceLocation(osOption.getInstanceLocation())) throw new Exception("setInstanceAddress Unsuccessful");		
+		if(!setInstanceLocation(osOption.getInstanceLocation())) throw new Exception("setInstanceLocation Unsuccessful");		
 		if(!setInstanceLocationType(osOption.getInstanceLocationType())) throw new Exception("setInstanceLocationType Unsuccessful");		
-		if(!setContact(osOption.getContact())) throw new Exception("setContactAddress Unsuccessful");		
 		if(!setJobID(osOption.getJobID())) throw new Exception("setJobID Unsuccessful");		
 		if(!setSolverToInvoke(osOption.getSolverToInvoke())) throw new Exception("setSolverToInvoke Unsuccessful");		
 		if(!setLicense(osOption.getLicense())) throw new Exception("setLicense Unsuccessful");		
 		if(!setUserName(osOption.getUserName())) throw new Exception("setUserName Unsuccessful");		
 		if(!setPassword(osOption.getPassword())) throw new Exception("setPassword Unsuccessful");		
 		if(!setContactTransportType(osOption.getContactTransportType())) throw new Exception("setContactTransportType Unsuccessful");		
-		if(!setContact(osOption.getContact())) throw new Exception("setContactAddress Unsuccessful");		
-		if(!setMinDiskSpace(osOption.getMinDiskSpace())) throw new Exception("setSystemMinDiskSpace Unsuccessful");		
-		if(!setMinMemorySize(osOption.getMinMemorySize())) throw new Exception("setSystemMinMemorySize Unsuccessful");		
-		if(!setMinCPUSpeed(osOption.getMinCPUSpeed())) throw new Exception("setSystemMinCPUSpeed Unsuccessful");		
+		if(!setContact(osOption.getContact())) throw new Exception("setContact Unsuccessful");		
+		OtherOption[] otherGeneralOptions = osOption.getOtherGeneralOptions();
+		int nOtherGeneralOptions = otherGeneralOptions==null?0:otherGeneralOptions.length;
+		for(int i = 0; i < nOtherGeneralOptions; i++){ 
+			if(!addOtherGeneralOption(otherGeneralOptions[i].name, otherGeneralOptions[i].value, otherGeneralOptions[i].description)){
+				throw new Exception("addOtherGeneralOption Unsuccessful");	
+			}
+		}
+		
+		if(!setMinDiskSpace(osOption.getMinDiskSpace())) throw new Exception("setMinDiskSpace Unsuccessful");		
+		if(!setMinDiskSpaceUnit(osOption.getMinDiskSpaceUnit())) throw new Exception("setMinDiskSpaceUnit Unsuccessful");		
+		if(!setMinMemorySize(osOption.getMinMemorySize())) throw new Exception("setMinMemorySize Unsuccessful");		
+		if(!setMinMemorySizeUnit(osOption.getMinMemorySizeUnit())) throw new Exception("setMinMemorySizeUnit Unsuccessful");		
+		if(!setMinCPUSpeed(osOption.getMinCPUSpeed())) throw new Exception("setMinCPUSpeed Unsuccessful");		
+		if(!setMinCPUSpeedUnit(osOption.getMinCPUSpeedUnit())) throw new Exception("setMinCPUSpeedUnit Unsuccessful");		
+		if(!setMinCPUNumber(osOption.getMinCPUNumber())) throw new Exception("setMinCPUNumber Unsuccessful");		
+		OtherOption[] otherSystemOptions = osOption.getOtherSystemOptions();
+		int nOtherSystemOptions = otherSystemOptions==null?0:otherSystemOptions.length;
+		for(int i = 0; i < nOtherSystemOptions; i++){ 
+			if(!addOtherSystemOption(otherSystemOptions[i].name, otherSystemOptions[i].value, otherSystemOptions[i].description)){
+				throw new Exception("addOtherSystemOption Unsuccessful");	
+			}
+		}
+
 		if(!setServiceType(osOption.getServiceType())) throw new Exception("setServiceType Unsuccessful");		
-		if(!setMaxTime(osOption.getMaxTime())) throw new Exception("setJobMaxTime Unsuccessful");		
-		if(!setScheduledStartTime(osOption.getScheduledStartTime())) throw new Exception("setJobScheduledStartTime Unsuccessful");		
+		OtherOption[] otherServiceOptions = osOption.getOtherServiceOptions();
+		int nOtherServiceOptions = otherServiceOptions==null?0:otherServiceOptions.length;
+		for(int i = 0; i < nOtherServiceOptions; i++){ 
+			if(!addOtherServiceOption(otherServiceOptions[i].name, otherServiceOptions[i].value, otherServiceOptions[i].description)){
+				throw new Exception("addOtherServiceOption Unsuccessful");	
+			}
+		}
+
+		if(!setMaxTime(osOption.getMaxTime())) throw new Exception("setMaxTime Unsuccessful");		
+		if(!setScheduledStartTime(osOption.getScheduledStartTime())) throw new Exception("setScheduledStartTime Unsuccessful");		
 		if(!setJobDependencies(osOption.getJobDependencies())) throw new Exception("setJobDependencies Unsuccessful");		
 		if(!setRequiredDirectories(osOption.getRequiredDirectories())) throw new Exception("setRequiredDirectories Unsuccessful");		
 		if(!setRequiredFiles(osOption.getRequiredFiles())) throw new Exception("setRequiredFiles Unsuccessful");		
@@ -99,30 +129,67 @@ public class OSoLWriter extends OSgLWriter{
 		if(!setFilesToDelete(osOption.getFilesToDelete())) throw new Exception("setFilesToDelete Unsuccessful");		
 		if(!setDirectoriesToDelete(osOption.getDirectoriesToDelete())) throw new Exception("setDirectoriesToDelete Unsuccessful");		
 		if(!setProcessesToKill(osOption.getProcessesToKill())) throw new Exception("setProcessesToKill Unsuccessful");		
+		OtherOption[] otherJobOptions = osOption.getOtherJobOptions();
+		int nOtherJobOptions = otherJobOptions==null?0:otherJobOptions.length;
+		for(int i = 0; i < nOtherJobOptions; i++){ 
+			if(!addOtherJobOption(otherJobOptions[i].name, otherJobOptions[i].value, otherJobOptions[i].description)){
+				throw new Exception("addOtherJobOption Unsuccessful");	
+			}
+		}
 
 		if(!setNumberOfVariables(osOption.getNumberOfVariables())) throw new Exception("setNumberOfVariables Unsuccessful");		
 		if(!setNumberOfObjectives(osOption.getNumberOfObjectives())) throw new Exception("setNumberOfObjectives Unsuccessful");		
 		if(!setNumberOfConstraints(osOption.getNumberOfConstraints())) throw new Exception("setNumberOfConstraints Unsuccessful");		
-		if(!setInitVarValuesDense(osOption.getInitVarValuesDense())) throw new Exception("setInitialVariableValues Unsuccessful");		
-		if(osOption.optimization != null && osOption.optimization.solverOptions != null && osOption.optimization.solverOptions != null && osOption.optimization.solverOptions.solverOption.length > 0){
-			int n = osOption.optimization.solverOptions.solverOption.length;
-			String[] msNames = new String[n];
-			String[] msValues = new String[n];
-			String[] msDescriptions = new String[n];
-			String[] msSolvers = new String[n];
-			String[] msCategories = new String[n];
-			String[] msTypes = new String[n];
-			for(int i = 0; i < n; i++){
-				msNames[i] = osOption.optimization.solverOptions.solverOption[i].name;
-				msValues[i] = osOption.optimization.solverOptions.solverOption[i].value;
-				msDescriptions[i] = osOption.optimization.solverOptions.solverOption[i].description;
-				msSolvers[i] = osOption.optimization.solverOptions.solverOption[i].solver;
-				msCategories[i] = osOption.optimization.solverOptions.solverOption[i].category;
-				msTypes[i] = osOption.optimization.solverOptions.solverOption[i].type;
+		
+		if(!setInitVarValuesSparse(osOption.getInitVarValuesSparse())) throw new Exception("setInitVarValuesSparse Unsuccessful");		
+		if(!setInitVarValuesStringSparse(osOption.getInitVarStringsSparse())) throw new Exception("setInitVarValuesStringSparse Unsuccessful");		
+		if(!setInitBasisStatusSparse(osOption.getInitBasisStatusSparse())) throw new Exception("setInitBasisStatusSparse Unsuccessful");		
+		if(!setIntegerVariableBranchingWeightsSparse(osOption.getIntegerVariableBranchingWeightsSparse())) throw new Exception("setIntegerVariableBranchingWeightsSparse Unsuccessful");		
+		SOSWeights[] sosWeights = osOption.getSOSWeights();
+		int nSOS = sosWeights==null?0:sosWeights.length;
+		for(int i = 0; i < nSOS; i++){ 
+			if(!addSOSVariableBranchingWeightsForOneSOS(sosWeights[i].sosIdx, sosWeights[i].groupWeight, sosWeights[i].var)){
+				throw new Exception("addSOSVariableBranchingWeightsForOneSOS Unsuccessful");	
 			}
-			if(!setSolverOptions(msNames, msValues, msDescriptions, msSolvers, msCategories, msTypes)){
-				throw new Exception("setOtherOptimizationOption Info Unsuccessful");
-			}			
+		}
+		OtherVariableOption[] otherVariableOption = osOption.getOtherVariableOptions("");
+		int nOtherVariableOptions = otherVariableOption==null?0:otherVariableOption.length;
+		for(int i = 0; i < nOtherVariableOptions; i++){ 
+			if(!addOtherVariableOption(otherVariableOption[i].name, otherVariableOption[i].value, otherVariableOption[i].description, 
+					otherVariableOption[i].solver, otherVariableOption[i].category, otherVariableOption[i].type, otherVariableOption[i].var)){
+				throw new Exception("addOtherVariableOption Unsuccessful");	
+			}
+		}
+
+		if(!setInitObjValuesSparse(osOption.getInitObjValuesSparse())) throw new Exception("setInitObjValuesSparse Unsuccessful");		
+		if(!setInitObjBoundsSparse(osOption.getInitObjBoundsSparse())) throw new Exception("setInitObjBoundsSparse Unsuccessful");		
+		OtherObjectiveOption[] otherObjectiveOption = osOption.getOtherObjectiveOptions("");
+		int nOtherObjectiveOptions = otherObjectiveOption==null?0:otherObjectiveOption.length;
+		for(int i = 0; i < nOtherObjectiveOptions; i++){ 
+			if(!addOtherObjectiveOption(otherObjectiveOption[i].name, otherObjectiveOption[i].value, otherObjectiveOption[i].description, 
+					otherVariableOption[i].solver, otherObjectiveOption[i].category, otherObjectiveOption[i].type, otherObjectiveOption[i].obj)){
+				throw new Exception("addOtherObjectiveOption Unsuccessful");	
+			}
+		}
+
+		if(!setInitConValuesSparse(osOption.getInitConValuesSparse())) throw new Exception("setInitConValuesSparse Unsuccessful");		
+		if(!setInitDualValuesSparse(osOption.getInitDualVarValuesSparse())) throw new Exception("setInitDualValuesSparse Unsuccessful");		
+		OtherConstraintOption[] otherConstraintOption = osOption.getOtherConstraintOptions("");
+		int nOtherConstraintOptions = otherConstraintOption==null?0:otherConstraintOption.length;
+		for(int i = 0; i < nOtherConstraintOptions; i++){ 
+			if(!addOtherConstraintOption(otherConstraintOption[i].name, otherConstraintOption[i].value, otherConstraintOption[i].description, 
+					otherConstraintOption[i].solver, otherConstraintOption[i].category, otherConstraintOption[i].type, otherConstraintOption[i].con)){
+				throw new Exception("addOtherConstraintOption Unsuccessful");	
+			}
+		}
+
+		SolverOption[] solverOptions = osOption.getSolverOptions("");
+		int nSolverOptions = solverOptions==null?0:solverOptions.length;
+		for(int i = 0; i < nSolverOptions; i++){ 
+			if(!addSolverOption(solverOptions[i].name, solverOptions[i].value, solverOptions[i].description, 
+					solverOptions[i].solver, solverOptions[i].category, solverOptions[i].type)){
+				throw new Exception("addSolverOption Unsuccessful");	
+			}
 		}
 		return true;
 	}//setOSOption

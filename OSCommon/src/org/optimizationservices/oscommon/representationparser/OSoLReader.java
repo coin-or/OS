@@ -5,10 +5,8 @@
  */
 package org.optimizationservices.oscommon.representationparser;
 
-import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.Set;
 import java.util.Vector;
 
 import org.optimizationservices.oscommon.datastructure.osoption.BranchingWeight;
@@ -103,21 +101,32 @@ public class OSoLReader extends OSgLReader{
 		if(!m_osOption.setServiceURI(getServiceURI())) throw new Exception("setServiceURI Unsuccessful");		
 		if(!m_osOption.setServiceName(getServiceName())) throw new Exception("setServiceName Unsuccessful");		
 		if(!m_osOption.setInstanceName(getInstanceName())) throw new Exception("setInstanceName Unsuccessful");		
+		if(!m_osOption.setInstanceLocation(getInstanceLocation())) throw new Exception("setInstanceLocation Unsuccessful");		
 		if(!m_osOption.setInstanceLocationType(getInstanceLocationType())) throw new Exception("setInstanceLocationType Unsuccessful");		
-		if(!m_osOption.setInstanceLocation(getInstanceLocation())) throw new Exception("setInstanceAddress Unsuccessful");		
 		if(!m_osOption.setJobID(getJobID())) throw new Exception("setJobID Unsuccessful");		
 		if(!m_osOption.setSolverToInvoke(getSolverToInvoke())) throw new Exception("setSolverToInvoke Unsuccessful");		
 		if(!m_osOption.setLicense(getLicense())) throw new Exception("setLicense Unsuccessful");		
 		if(!m_osOption.setUserName(getUserName())) throw new Exception("setUserName Unsuccessful");		
 		if(!m_osOption.setPassword(getPassword())) throw new Exception("setPassword Unsuccessful");		
+		if(!m_osOption.setContact(getContact())) throw new Exception("setContact Unsuccessful");		
 		if(!m_osOption.setContactTransportType(getContactTransportType())) throw new Exception("setContactTransportType Unsuccessful");		
-		if(!m_osOption.setContact(getContact())) throw new Exception("setContactAddress Unsuccessful");		
+		if(!m_osOption.setOtherGeneralOptions(getOtherGeneralOptions()))throw new Exception("setOtherGeneralOptions Unsuccessful");
+
 		if(!m_osOption.setMinDiskSpace(getMinDiskSpace())) throw new Exception("setSystemMinDiskSpace Unsuccessful");		
+		if(!m_osOption.setMinDiskSpaceUnit(getMinDiskSpaceUnit())) throw new Exception("setMinDiskSpaceUnit Unsuccessful");		
 		if(!m_osOption.setMinMemorySize(getMinMemorySize())) throw new Exception("setSystemMinMemorySize Unsuccessful");		
-		if(!m_osOption.setMinCPUSpeed(getMinCPUSpeed())) throw new Exception("setSystemMinCPUSpeed Unsuccessful");		
-		if(!m_osOption.setServiceType(getServiceType())) throw new Exception("setServiceType Unsuccessful");		
-		if(!m_osOption.setMaxTime(getMaxTime())) throw new Exception("setJobMaxTime Unsuccessful");		
-		if(!m_osOption.setScheduledStartTime(getScheduledStartTime())) throw new Exception("setJobScheduledStartTime Unsuccessful");		
+		if(!m_osOption.setMinMemorySizeUnit(getMinMemorySizeUnit())) throw new Exception("setSystemMinMemorySizeUnit Unsuccessful");		
+		if(!m_osOption.setMinCPUSpeed(getMinCPUSpeed())) throw new Exception("setSystemMinCPUSpeed Unsuccessful");	
+		if(!m_osOption.setMinCPUSpeedUnit(getMinCPUSpeedUnit())) throw new Exception("setSystemMinCPUSpeedUnit Unsuccessful");	
+		if(!m_osOption.setMinCPUNumber(getMinCPUNumber())) throw new Exception("setSystemMinCPUNumber Unsuccessful");	
+		if(!m_osOption.setOtherSystemOptions(getOtherSystemOptions()))throw new Exception("setOtherSystemOptions Unsuccessful");
+		
+		
+		if(!m_osOption.setServiceType(getServiceType())) throw new Exception("setServiceType Unsuccessful");	
+		if(!m_osOption.setOtherServiceOptions(getOtherServiceOptions()))throw new Exception("setOtherServiceOptions Unsuccessful");
+		
+		if(!m_osOption.setMaxTime(getMaxTime())) throw new Exception("setMaxTime Unsuccessful");		
+		if(!m_osOption.setScheduledStartTime(getScheduledStartTime())) throw new Exception("setScheduledStartTime Unsuccessful");		
 		if(!m_osOption.setJobDependencies(getJobDependencies())) throw new Exception("setJobDependencies Unsuccessful");		
 		if(!m_osOption.setRequiredDirectories(getRequiredDirectories())) throw new Exception("setRequiredDirectories Unsuccessful");		
 		if(!m_osOption.setRequiredFiles(getRequiredFiles())) throw new Exception("setRequiredFiles Unsuccessful");		
@@ -130,10 +139,50 @@ public class OSoLReader extends OSgLReader{
 		if(!m_osOption.setFilesToDelete(getFilesToDelete())) throw new Exception("setFilesToDelete Unsuccessful");		
 		if(!m_osOption.setDirectoriesToDelete(getDirectoriesToDelete())) throw new Exception("setDirectoriesToDelete Unsuccessful");		
 		if(!m_osOption.setProcessesToKill(getProcessesToKill())) throw new Exception("setProcessesToKill Unsuccessful");		
-		if(!m_osOption.setNumberOfVariables(getNumberOfVariables())) throw new Exception("setVariableNumber Unsuccessful");		
-		if(!m_osOption.setNumberOfObjectives(getNumberOfObjectives())) throw new Exception("setObjectiveNumber Unsuccessful");		
-		if(!m_osOption.setNumberOfConstraints(getNumberOfConstraints())) throw new Exception("setConstraintNumber Unsuccessful");		
-		if(!m_osOption.setInitVarValuesDense(getInitVarValuesDense())) throw new Exception("setInitialVariableValues Unsuccessful");		
+		if(!m_osOption.setOtherJobOptions(getOtherJobOptions()))throw new Exception("setOtherJobOptions Unsuccessful");
+
+		if(!m_osOption.setNumberOfVariables(getNumberOfVariables())) throw new Exception("setNumberOfVariables Unsuccessful");		
+		if(!m_osOption.setNumberOfObjectives(getNumberOfObjectives())) throw new Exception("setNumberOfObjectives Unsuccessful");		
+		if(!m_osOption.setNumberOfConstraints(getNumberOfConstraints())) throw new Exception("setNumberOfConstraints Unsuccessful");		
+
+		if(!m_osOption.setInitVarValuesSparse(getInitVarValuesSparse())) throw new Exception("setInitVarValuesSparse Unsuccessful");		
+		if(!m_osOption.setInitVarValuesStringSparse(getInitVarStringsSparse())) throw new Exception("setInitVarValuesStringSparse Unsuccessful");		
+		if(!m_osOption.setInitBasisStatusSparse(getInitBasisStatusSparse())) throw new Exception("setInitBasisStatusSparse Unsuccessful");		
+		if(!m_osOption.setIntegerVariableBranchingWeightsSparse(getIntegerVariableBranchingWeightsSparse())) throw new Exception("setIntegerVariableBranchingWeightsSparse Unsuccessful");		
+		SOSWeights[] SOSWeights = getSOSWeights();
+		int nSOS = SOSWeights==null?0:SOSWeights.length;
+		for(int i = 0; i < nSOS; i++){ 
+			if(!m_osOption.addSOSVariableBranchingWeightsForOneSOS(SOSWeights[i].sosIdx, SOSWeights[i].groupWeight, SOSWeights[i].var))
+				throw new Exception("addSOSVariableBranchingWeightsForOneSOS Unsuccessful");
+		}
+		OtherVariableOption[] otherVariableOption = getOtherVariableOptions("");
+		int nOtherVarOptions = otherVariableOption==null?0:otherVariableOption.length;
+		for(int i = 0; i < nOtherVarOptions; i++){ 
+			if(!m_osOption.addOtherVariableOption(otherVariableOption[i].name, otherVariableOption[i].value, otherVariableOption[i].description, 
+					otherVariableOption[i].solver, otherVariableOption[i].category, otherVariableOption[i].type, otherVariableOption[i].var))
+				throw new Exception("addOtherVariableOption Unsuccessful");
+		}
+		
+		if(!m_osOption.setInitObjValuesSparse(getInitObjValuesSparse())) throw new Exception("setInitObjValuesSparse Unsuccessful");		
+		if(!m_osOption.setInitObjBoundsSparse(getInitObjBoundsSparse())) throw new Exception("setInitObjBoundsSparse Unsuccessful");		
+		OtherObjectiveOption[] otherObjectiveOption = getOtherObjectiveOptions("");
+		int nOtherObjOptions = otherObjectiveOption==null?0:otherObjectiveOption.length;
+		for(int i = 0; i < nOtherObjOptions; i++){ 
+			if(!m_osOption.addOtherObjectiveOption(otherObjectiveOption[i].name, otherObjectiveOption[i].value, otherObjectiveOption[i].description, 
+					otherObjectiveOption[i].solver, otherObjectiveOption[i].category, otherObjectiveOption[i].type, otherObjectiveOption[i].obj))
+				throw new Exception("addOtherObjectiveOption Unsuccessful");
+		}
+
+		if(!m_osOption.setInitConValuesSparse(getInitConValuesSparse())) throw new Exception("setInitConValuesSparse Unsuccessful");		
+		if(!m_osOption.setInitDualValuesSparse(getInitDualVarValuesSparse())) throw new Exception("setInitDualValuesSparse Unsuccessful");		
+		OtherConstraintOption[] otherConstraintOption = getOtherConstraintOptions("");
+		int nOtherConOptions = otherConstraintOption==null?0:otherConstraintOption.length;
+		for(int i = 0; i < nOtherConOptions; i++){ 
+			if(!m_osOption.addOtherConstraintOption(otherConstraintOption[i].name, otherConstraintOption[i].value, otherConstraintOption[i].description, 
+					otherConstraintOption[i].solver, otherConstraintOption[i].category, otherConstraintOption[i].type, otherConstraintOption[i].con))
+				throw new Exception("addOtherConstraintOption Unsuccessful");
+		}
+
 		if(!m_osOption.setSolverOptions(getSolverOptions(""))) throw new Exception("setSolverOptions Unsuccessful");
 		return m_osOption;
 	}//getOSOption
@@ -1729,6 +1778,35 @@ public class OSoLReader extends OSgLReader{
 		}
 	}//getNumberOfInitialBasisVariables
 
+	/**
+	 * get the list of initial basis status for string-valued variables in dense form
+	 * @return an array of value strings
+	 */
+	public String[] getInitBasisStatusDense(){
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
+		if(eOptimization == null) return null;
+		Element eVariables = (Element)XMLUtil.findChildNode(eOptimization, "variables");
+		if(eVariables == null) return null;
+		Element eInitialVariableValues = (Element)XMLUtil.findChildNode(eVariables, "initialBasisStatus");
+		if(eInitialVariableValues == null) return null;
+		NodeList vars = eInitialVariableValues.getElementsByTagName("var");
+		if(vars == null || vars.getLength() <= 0) return null;
+		int iVars = vars.getLength();
+		int iNumberVariables = this.getNumberOfVariables();
+		String[] msValues = new String[iNumberVariables];
+		for(int i = 0; i < iVars; i++){
+			try{
+				int iIndex = Integer.parseInt(((Element)vars.item(i)).getAttribute("idx"));
+				String sValue = ((Element)vars.item(i)).getAttribute("value");
+				msValues[iIndex] = sValue;
+			}
+			catch(Exception e){
+				return null;
+			}
+		}
+		return msValues;
+	}//getInitBasisStatusDense
+
 
 	/**
 	 * get the list of initial variable basis status in sparse form
@@ -1760,35 +1838,6 @@ public class OSoLReader extends OSgLReader{
 	}//getInitBasisStatusSparse
 
 	/**
-	 * get the list of initial basis status for string-valued variables in dense form
-	 * @return an array of value strings
-	 */
-	public String[] getInitBasisStatusDense(){
-		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
-		if(eOptimization == null) return null;
-		Element eVariables = (Element)XMLUtil.findChildNode(eOptimization, "variables");
-		if(eVariables == null) return null;
-		Element eInitialVariableValues = (Element)XMLUtil.findChildNode(eVariables, "initialBasisStatus");
-		if(eInitialVariableValues == null) return null;
-		NodeList vars = eInitialVariableValues.getElementsByTagName("var");
-		if(vars == null || vars.getLength() <= 0) return null;
-		int iVars = vars.getLength();
-		int iNumberVariables = this.getNumberOfVariables();
-		String[] msValues = new String[iNumberVariables];
-		for(int i = 0; i < iVars; i++){
-			try{
-				int iIndex = Integer.parseInt(((Element)vars.item(i)).getAttribute("idx"));
-				String sValue = ((Element)vars.item(i)).getAttribute("value");
-				msValues[iIndex] = sValue;
-			}
-			catch(Exception e){
-				return null;
-			}
-		}
-		return msValues;
-	}//getInitBasisStatusDense
-
-	/**
 	 * get the number of variables that are given integer variable selection weights (in <optimization> element)
 	 * @return the number of variables that are given integer variable selection weights (in <optimization> element)
 	 */
@@ -1809,41 +1858,6 @@ public class OSoLReader extends OSgLReader{
 		}
 	}//getNumberOfIntegerVariableBranchingWeights
 
-
-	/**
-	 * get a list of branching weights for integer variables in sparse form
-	 * @return a list of index/value pairs
-	 */
-	public BranchingWeight[] getIntegerVariableBranchingWeightsSparse(){	
-		BranchingWeight[] mVar = null;
-		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
-		if(eOptimization == null) return null;
-		Element eVariables = (Element)XMLUtil.findChildNode(eOptimization, "variables");
-		if(eVariables == null) return null;
-		Element eIntegerVariableBranchingWeights = (Element)XMLUtil.findChildNode(eVariables, "integerVariableBranchingWeights");
-		if(eIntegerVariableBranchingWeights == null) return null;
-		NodeList vars = eIntegerVariableBranchingWeights.getElementsByTagName("var");
-		if(vars == null || vars.getLength() <= 0) return null;
-		int iVars = vars.getLength();
-		mVar = new BranchingWeight[iVars];
-		for(int i = 0; i < iVars; i++){
-			try{
-				mVar[i] = new BranchingWeight();
-				mVar[i].idx = Integer.parseInt(((Element)vars.item(i)).getAttribute("idx"));
-				double dValue = Double.NaN;
-				try {
-					dValue = Double.parseDouble(((Element)vars.item(i)).getAttribute("value"));
-				} 
-				catch (Exception e2) {
-				}
-				mVar[i].value = dValue;
-			}
-			catch(Exception e){
-				return null;
-			}
-		}
-		return mVar;
-	}//getIntegerVariableBranchingWeightsSparse
 
 
 	/**
@@ -1879,7 +1893,41 @@ public class OSoLReader extends OSgLReader{
 			}
 		}
 		return mdValues;
-	}//getIntegerVariableBranchingWeightsDense
+	}//getIntegerVariableBranchingWeightsDen
+	/**
+	 * get a list of branching weights for integer variables in sparse form
+	 * @return a list of index/value pairs
+	 */
+	public BranchingWeight[] getIntegerVariableBranchingWeightsSparse(){	
+		BranchingWeight[] mVar = null;
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
+		if(eOptimization == null) return null;
+		Element eVariables = (Element)XMLUtil.findChildNode(eOptimization, "variables");
+		if(eVariables == null) return null;
+		Element eIntegerVariableBranchingWeights = (Element)XMLUtil.findChildNode(eVariables, "integerVariableBranchingWeights");
+		if(eIntegerVariableBranchingWeights == null) return null;
+		NodeList vars = eIntegerVariableBranchingWeights.getElementsByTagName("var");
+		if(vars == null || vars.getLength() <= 0) return null;
+		int iVars = vars.getLength();
+		mVar = new BranchingWeight[iVars];
+		for(int i = 0; i < iVars; i++){
+			try{
+				mVar[i] = new BranchingWeight();
+				mVar[i].idx = Integer.parseInt(((Element)vars.item(i)).getAttribute("idx"));
+				double dValue = Double.NaN;
+				try {
+					dValue = Double.parseDouble(((Element)vars.item(i)).getAttribute("value"));
+				} 
+				catch (Exception e2) {
+				}
+				mVar[i].value = dValue;
+			}
+			catch(Exception e){
+				return null;
+			}
+		}
+		return mVar;
+	}//getIntegerVariableBranchingWeightsSparse
 
 	/**
 	 * get the number of SOS that are given branching weights (in <optimization> element)
@@ -2840,7 +2888,7 @@ public class OSoLReader extends OSgLReader{
 		if(eSolverOptions == null) return null;
 		Vector<Element> vElements = XMLUtil.getChildElementsByTagName(eSolverOptions, "solverOption");
 		int iNls	= vElements==null?0:vElements.size();
-		int nSolverOptions = getNumberOfSolverOptions();
+		//int nSolverOptions = getNumberOfSolverOptions();
 		Vector<SolverOption> vSolverOptions = new Vector<SolverOption>();
 		for(int i = 0; i < iNls; i++){
 			Element eSolverOption = (Element)(vElements.elementAt(i));
@@ -2939,10 +2987,10 @@ public class OSoLReader extends OSgLReader{
 //		System.out.println(iNumberOfOtherGeneralOptions);
 //		OtherOption[] mOtherGeneralOptions = osolReader.getOtherGeneralOptions();
 //		for(int i = 0; i < iNumberOfOtherGeneralOptions; i++){
-//			System.out.println(mOtherGeneralOptions[i].name);		
-//			System.out.println(mOtherGeneralOptions[i].value);		
-//			System.out.println(mOtherGeneralOptions[i].description);	
-//			System.out.println("------------------------------");
+//		System.out.println(mOtherGeneralOptions[i].name);		
+//		System.out.println(mOtherGeneralOptions[i].value);		
+//		System.out.println(mOtherGeneralOptions[i].description);	
+//		System.out.println("------------------------------");
 //		}
 
 //		System.out.println(osolReader.getMinDiskSpace());		
@@ -2956,9 +3004,9 @@ public class OSoLReader extends OSgLReader{
 //		System.out.println(iNumberOfOtherSystemOptions);
 //		OtherOption[] mOtherSystemOptions = osolReader.getOtherSystemOptions();
 //		for(int i = 0; i < iNumberOfOtherSystemOptions; i++){
-//			System.out.println(mOtherSystemOptions[i].name);		
-//			System.out.println(mOtherSystemOptions[i].value);		
-//			System.out.println(mOtherSystemOptions[i].description);		
+//		System.out.println(mOtherSystemOptions[i].name);		
+//		System.out.println(mOtherSystemOptions[i].value);		
+//		System.out.println(mOtherSystemOptions[i].description);		
 //		}
 
 //		System.out.println(osolReader.getServiceType());	
@@ -2966,15 +3014,15 @@ public class OSoLReader extends OSgLReader{
 //		System.out.println(iNumberOfOtherServiceOptions);
 //		OtherOption[] mOtherServiceOptions = osolReader.getOtherServiceOptions();
 //		for(int i = 0; i < iNumberOfOtherServiceOptions; i++){
-//			System.out.println(mOtherServiceOptions[i].name);		
-//			System.out.println(mOtherServiceOptions[i].value);		
-//			System.out.println(mOtherServiceOptions[i].description);		
+//		System.out.println(mOtherServiceOptions[i].name);		
+//		System.out.println(mOtherServiceOptions[i].value);		
+//		System.out.println(mOtherServiceOptions[i].description);		
 //		}
 
 //		System.out.println(osolReader.getMaxTime());		
 //		System.out.println(osolReader.getMaxTimeUnit());		
 //		System.out.println(XMLUtil.createXSDateTime(osolReader.getScheduledStartTime()));
-		
+
 //		int iNumberOfJobDependencies = osolReader.getNumberOfJobDependencies();
 //		System.out.println(iNumberOfJobDependencies);
 //		String[] msJobs = osolReader.getJobDependencies();
@@ -3004,36 +3052,36 @@ public class OSoLReader extends OSgLReader{
 //		System.out.println(iNumberOfInputDirectoriesToMove);
 //		PathPair[] mInputDirectoriesToMove = osolReader.getInputDirectoriesToMove();
 //		for(int i = 0; i < iNumberOfInputDirectoriesToMove; i++){
-//			System.out.println(mInputDirectoriesToMove[i].from);		
-//			System.out.println(mInputDirectoriesToMove[i].to);		
-//			System.out.println(mInputDirectoriesToMove[i].makeCopy);		
+//		System.out.println(mInputDirectoriesToMove[i].from);		
+//		System.out.println(mInputDirectoriesToMove[i].to);		
+//		System.out.println(mInputDirectoriesToMove[i].makeCopy);		
 //		}
 
 //		int iNumberOfInputFilesToMove = osolReader.getNumberOfInputFilesToMove();
 //		System.out.println(iNumberOfInputFilesToMove);
 //		PathPair[] mInputFilesToMove = osolReader.getInputFilesToMove();
 //		for(int i = 0; i < iNumberOfInputFilesToMove; i++){
-//			System.out.println(mInputFilesToMove[i].from);		
-//			System.out.println(mInputFilesToMove[i].to);		
-//			System.out.println(mInputFilesToMove[i].makeCopy);		
+//		System.out.println(mInputFilesToMove[i].from);		
+//		System.out.println(mInputFilesToMove[i].to);		
+//		System.out.println(mInputFilesToMove[i].makeCopy);		
 //		}
 
 //		int iNumberOfOutputDirectoriesToMove = osolReader.getNumberOfOutputDirectoriesToMove();
 //		System.out.println(iNumberOfOutputDirectoriesToMove);
 //		PathPair[] mOutputDirectoriesToMove = osolReader.getOutputDirectoriesToMove();
 //		for(int i = 0; i < iNumberOfOutputDirectoriesToMove; i++){
-//			System.out.println(mOutputDirectoriesToMove[i].from);		
-//			System.out.println(mOutputDirectoriesToMove[i].to);		
-//			System.out.println(mOutputDirectoriesToMove[i].makeCopy);		
+//		System.out.println(mOutputDirectoriesToMove[i].from);		
+//		System.out.println(mOutputDirectoriesToMove[i].to);		
+//		System.out.println(mOutputDirectoriesToMove[i].makeCopy);		
 //		}
 
 //		int iNumberOfOutputFilesToMove = osolReader.getNumberOfOutputFilesToMove();
 //		System.out.println(iNumberOfOutputFilesToMove);
 //		PathPair[] mOutputFilesToMove = osolReader.getOutputFilesToMove();
 //		for(int i = 0; i < iNumberOfOutputFilesToMove; i++){
-//			System.out.println(mOutputFilesToMove[i].from);		
-//			System.out.println(mOutputFilesToMove[i].to);		
-//			System.out.println(mOutputFilesToMove[i].makeCopy);		
+//		System.out.println(mOutputFilesToMove[i].from);		
+//		System.out.println(mOutputFilesToMove[i].to);		
+//		System.out.println(mOutputFilesToMove[i].makeCopy);		
 //		}
 
 
@@ -3056,18 +3104,18 @@ public class OSoLReader extends OSgLReader{
 //		System.out.println(iNumberOfOtherJobOptions);
 //		OtherOption[] mOtherJobOptions = osolReader.getOtherJobOptions();
 //		for(int i = 0; i < iNumberOfOtherJobOptions; i++){
-//			System.out.println(mOtherJobOptions[i].name);		
-//			System.out.println(mOtherJobOptions[i].value);		
-//			System.out.println(mOtherJobOptions[i].description);		
+//		System.out.println(mOtherJobOptions[i].name);		
+//		System.out.println(mOtherJobOptions[i].value);		
+//		System.out.println(mOtherJobOptions[i].description);		
 //		}
 
 //		int iNumberOfOtherOptions = osolReader.getNumberOfOtherOptions("job");
 //		System.out.println(iNumberOfOtherOptions);
 //		OtherOption[] mOtherOptions = osolReader.getOtherOptions("job");
 //		for(int i = 0; i < iNumberOfOtherOptions; i++){
-//			System.out.println(mOtherOptions[i].name);		
-//			System.out.println(mOtherOptions[i].value);		
-//			System.out.println(mOtherOptions[i].description);		
+//		System.out.println(mOtherOptions[i].name);		
+//		System.out.println(mOtherOptions[i].value);		
+//		System.out.println(mOtherOptions[i].description);		
 //		}
 
 		/*********************optimization*****************************/
@@ -3116,15 +3164,15 @@ public class OSoLReader extends OSgLReader{
 //		SOSWeights[] mSOSWeights = osolReader.getSOSWeights();
 //		int nSOSWeights = mSOSWeights==null?0:mSOSWeights.length;
 //		for(int i =0; i<nSOSWeights; i++){
-//			System.out.println(mSOSWeights[i].numberOfVar);
-//			System.out.println(mSOSWeights[i].groupWeight);
-//			System.out.println(mSOSWeights[i].sosIdx);
-//			System.out.println(mSOSWeights[i].var.length);
-//			System.out.println(mSOSWeights[i].var[0].idx);
-//			System.out.println(mSOSWeights[i].var[0].value);
-//			System.out.println(mSOSWeights[i].var[1].idx);
-//			System.out.println(mSOSWeights[i].var[1].value);
-//			System.out.println("------------------------");
+//		System.out.println(mSOSWeights[i].numberOfVar);
+//		System.out.println(mSOSWeights[i].groupWeight);
+//		System.out.println(mSOSWeights[i].sosIdx);
+//		System.out.println(mSOSWeights[i].var.length);
+//		System.out.println(mSOSWeights[i].var[0].idx);
+//		System.out.println(mSOSWeights[i].var[0].value);
+//		System.out.println(mSOSWeights[i].var[1].idx);
+//		System.out.println(mSOSWeights[i].var[1].value);
+//		System.out.println("------------------------");
 //		}
 
 //		SOSWeights sosSWeights = osolReader.getSOSVarBranchingWeights(0);
@@ -3136,40 +3184,40 @@ public class OSoLReader extends OSgLReader{
 //		System.out.println(sosSWeights.var[0].value);
 //		System.out.println(sosSWeights.var[1].idx);
 //		System.out.println(sosSWeights.var[1].value);
-		
+
 //		System.out.println(osolReader.getNumberOfOtherVariableOptions());	
 //		OtherVariableOption[] otherOptions = osolReader.getOtherVariableOptions("Ipopt");
 //		for(int i = 0; i < otherOptions.length; i++){
-//			OtherVariableOption other = otherOptions[i];
-//			System.out.println(other.name);
-//			System.out.println(other.description);
-//			System.out.println(other.category);
-//			System.out.println(other.numberOfVar);
-//			System.out.println(other.solver);
-//			System.out.println(other.type);
-//			System.out.println(other.value);
-//			System.out.println(other.var.length);
-//			System.out.println(other.var[2].idx);
-//			System.out.println(other.var[2].value);
-//			System.out.println(other.var[2].lbValue);
-//			System.out.println(other.var[2].ubValue);
-//			System.out.println("--------------------------");
+//		OtherVariableOption other = otherOptions[i];
+//		System.out.println(other.name);
+//		System.out.println(other.description);
+//		System.out.println(other.category);
+//		System.out.println(other.numberOfVar);
+//		System.out.println(other.solver);
+//		System.out.println(other.type);
+//		System.out.println(other.value);
+//		System.out.println(other.var.length);
+//		System.out.println(other.var[2].idx);
+//		System.out.println(other.var[2].value);
+//		System.out.println(other.var[2].lbValue);
+//		System.out.println(other.var[2].ubValue);
+//		System.out.println("--------------------------");
 //		}
 
 //		System.out.println(osolReader.getNumberOfInitObjValues());	
 //		double[] mdInitValues = osolReader.getInitObjValuesDense();
 //		for(int i=0; i < osolReader.getNumberOfObjectives(); i++)
-//			System.out.println(mdInitValues==null?"NULL":mdInitValues[i]+"");		
+//		System.out.println(mdInitValues==null?"NULL":mdInitValues[i]+"");		
 
 //		InitObjValue[] mdObj = osolReader.getInitObjValuesSparse();
 //		for(int i=0; i < osolReader.getNumberOfInitObjValues(); i++)
-//			System.out.println(mdObj[i].idx+": " + mdObj[i].value);		
+//		System.out.println(mdObj[i].idx+": " + mdObj[i].value);		
 
 
 //		System.out.println(osolReader.getNumberOfInitObjBounds());			
 //		double[] mdInitLBBounds = osolReader.getInitObjLowerBoundsDense();
 //		for(int i=0; i < osolReader.getNumberOfObjectives(); i++)
-//			System.out.println(mdInitLBBounds==null?"NULL":mdInitLBBounds[i]+"");		
+//		System.out.println(mdInitLBBounds==null?"NULL":mdInitLBBounds[i]+"");		
 
 //		double[] mdInitUBBounds = osolReader.getInitObjUpperBoundsDense();
 //		for(int i=0; i < osolReader.getNumberOfObjectives(); i++)
@@ -3182,20 +3230,20 @@ public class OSoLReader extends OSgLReader{
 //		System.out.println(osolReader.getNumberOfOtherObjectiveOptions());	
 //		OtherObjectiveOption[] otherOptions = osolReader.getOtherObjectiveOptions("");
 //		for(int i = 0; i < otherOptions.length; i++){
-//			OtherObjectiveOption other = otherOptions[i];
-//			System.out.println(other.name);
-//			System.out.println(other.description);
-//			System.out.println(other.category);
-//			System.out.println(other.numberOfObj);
-//			System.out.println(other.solver);
-//			System.out.println(other.type);
-//			System.out.println(other.value);
-//			System.out.println(other.obj.length);
-//			System.out.println(other.obj[2].idx);
-//			System.out.println(other.obj[2].value);
-//			System.out.println(other.obj[2].lbValue);
-//			System.out.println(other.obj[2].ubValue);
-//			System.out.println("--------------------------");
+//		OtherObjectiveOption other = otherOptions[i];
+//		System.out.println(other.name);
+//		System.out.println(other.description);
+//		System.out.println(other.category);
+//		System.out.println(other.numberOfObj);
+//		System.out.println(other.solver);
+//		System.out.println(other.type);
+//		System.out.println(other.value);
+//		System.out.println(other.obj.length);
+//		System.out.println(other.obj[2].idx);
+//		System.out.println(other.obj[2].value);
+//		System.out.println(other.obj[2].lbValue);
+//		System.out.println(other.obj[2].ubValue);
+//		System.out.println("--------------------------");
 //		}
 
 //		System.out.println(osolReader.getNumberOfInitConValues());	
@@ -3205,8 +3253,8 @@ public class OSoLReader extends OSgLReader{
 
 //		InitConValue[] mdCon = osolReader.getInitConValuesSparse();
 //		for(int i=0; i < osolReader.getNumberOfInitConValues(); i++)
-//			System.out.println(mdCon[i].idx+": " + mdCon[i].value);	
-		
+//		System.out.println(mdCon[i].idx+": " + mdCon[i].value);	
+
 //		System.out.println(osolReader.getNumberOfInitDualVarValues());	
 //		double[] mdInitLBBounds = osolReader.getInitDualVarLowerBoundsDense();
 //		for(int i=0; i < osolReader.getNumberOfConstraints(); i++)
@@ -3215,28 +3263,28 @@ public class OSoLReader extends OSgLReader{
 //		double[] mdInitUBBounds = osolReader.getInitDualVarUpperBoundsDense();
 //		for(int i=0; i < osolReader.getNumberOfConstraints(); i++)
 //		System.out.println(mdInitUBBounds==null?"NULL":mdInitUBBounds[i]+"");		
-					
+
 //		InitDualVarValue[] mdCon = osolReader.getInitDualVarValuesSparse();
 //		for(int i=0; i < osolReader.getNumberOfInitDualVarValues(); i++)
-//			System.out.println(mdCon[i].idx+": " + mdCon[i].lbValue+": " + mdCon[i].ubValue);				
+//		System.out.println(mdCon[i].idx+": " + mdCon[i].lbValue+": " + mdCon[i].ubValue);				
 
 //		System.out.println(osolReader.getNumberOfOtherConstraintOptions());	
 //		OtherConstraintOption[] otherOptions = osolReader.getOtherConstraintOptions("");
 //		for(int i = 0; i < otherOptions.length; i++){
-//			OtherConstraintOption other = otherOptions[i];
-//			System.out.println(other.name);
-//			System.out.println(other.description);
-//			System.out.println(other.category);
-//			System.out.println(other.numberOfCon);
-//			System.out.println(other.solver);
-//			System.out.println(other.type);
-//			System.out.println(other.value);
-//			System.out.println(other.con.length);
-//			System.out.println(other.con[2].idx);
-//			System.out.println(other.con[2].value);
-//			System.out.println(other.con[2].lbValue);
-//			System.out.println(other.con[2].ubValue);
-//			System.out.println("--------------------------");
+//		OtherConstraintOption other = otherOptions[i];
+//		System.out.println(other.name);
+//		System.out.println(other.description);
+//		System.out.println(other.category);
+//		System.out.println(other.numberOfCon);
+//		System.out.println(other.solver);
+//		System.out.println(other.type);
+//		System.out.println(other.value);
+//		System.out.println(other.con.length);
+//		System.out.println(other.con[2].idx);
+//		System.out.println(other.con[2].value);
+//		System.out.println(other.con[2].lbValue);
+//		System.out.println(other.con[2].ubValue);
+//		System.out.println("--------------------------");
 //		}
 
 
@@ -3244,7 +3292,7 @@ public class OSoLReader extends OSgLReader{
 //		SolverOption[] mSolverOptions = osolReader.getSolverOptions("ipopt");
 //		int nSolverOptions = mSolverOptions==null?0:mSolverOptions.length;
 //		for(int i=0; i < nSolverOptions; i++)
-//			System.out.println(mSolverOptions[i].name+": "+mSolverOptions[i].value+": "+mSolverOptions[i].solver+": "+mSolverOptions[i].type+": "+mSolverOptions[i].category+": "+mSolverOptions[i].description+": "+mSolverOptions[i].value);				
+//		System.out.println(mSolverOptions[i].name+": "+mSolverOptions[i].value+": "+mSolverOptions[i].solver+": "+mSolverOptions[i].type+": "+mSolverOptions[i].category+": "+mSolverOptions[i].description+": "+mSolverOptions[i].value);				
 
 //		osolReader.writeToStandardOutput();
 	}//main
