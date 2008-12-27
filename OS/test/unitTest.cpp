@@ -1704,7 +1704,7 @@ catch(const ErrorClass& eclass){
 		 * 8) compare the second and third OSOption objects to make sure 
 		 *    nothing was lost in translation
 		 */
-#if 1
+#if 0
 		cout << endl;
 		std::string tmpOSoL;
 		clock_t start, finish;
@@ -2317,9 +2317,9 @@ catch(const ErrorClass& eclass){
 #endif
 //		delete osoption;
 		cout << "delete osoption2" << endl;
-		//delete osoption2;
+		//delete osoption2;  // kipp uncomment
 		cout << "delete osolreader" << endl;
-		//delete osolreader;
+		//delete osolreader; //kipp uncomment
 		cout << "cleanup done" << endl;
 		osolreader = NULL;
 
