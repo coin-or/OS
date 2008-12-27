@@ -584,11 +584,11 @@ IntegerVariableBranchingWeights::~IntegerVariableBranchingWeights()
 	if (var != NULL) 
 	{	int i;
 		for (i=0; i < numberOfVar; i++)
-		{	//delete var[i];
-			//var[i] = NULL;
+		{	delete var[i];
+			var[i] = NULL;
 		}
-		//delete[] var;
-		//var = NULL;
+		delete[] var;
+		var = NULL;
 	}
 }//end IntegerVariableBranchingWeights destructor 
 
@@ -611,11 +611,11 @@ SOSWeights::~SOSWeights()
 	if (var != NULL) 
 	{	int i;
 		for (i=0; i < numberOfVar; i++)
-		{	//delete var[i];
-			//var[i] = NULL;
+		{	delete var[i];
+			var[i] = NULL;
 		}
-		//delete[] var;
-		//var = NULL;
+		delete[] var;
+		var = NULL;
 	}
 }//end SOSWeights destructor 
 
@@ -636,11 +636,11 @@ SOSVariableBranchingWeights::~SOSVariableBranchingWeights()
 	if (sos != NULL) 
 	{	int i;
 		for (i=0; i < numberOfSOS; i++)
-		{	//delete sos[i];
-			//sos[i] = NULL;
+		{	delete sos[i];
+			sos[i] = NULL;
 		}
-		//delete[] sos;
-		//sos = NULL;
+		delete[] sos;
+		sos = NULL;
 	}
 }//end SOSVariableBranchingWeights destructor 
 
@@ -984,11 +984,11 @@ InitDualVariableValues::~InitDualVariableValues()
 	if (con != NULL) 
 	{	int i;
 		for (i=0; i < numberOfCon; i++)
-		{	//delete con[i];
-			//con[i] = NULL;
+		{	delete con[i];
+			con[i] = NULL;
 		}
-		//delete[] con;
-		//con = NULL;
+		delete[] con;
+		con = NULL;
 	};
 }//end InitDualVariableValues destructor
 
