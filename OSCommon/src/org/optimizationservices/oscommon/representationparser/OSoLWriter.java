@@ -116,16 +116,17 @@ public class OSoLWriter extends OSgLWriter{
 		}
 
 		if(!setMaxTime(osOption.getMaxTime())) throw new Exception("setMaxTime Unsuccessful");		
+		if(!setMaxTimeUnit(osOption.getMaxTimeUnit())) throw new Exception("setMaxTimeUnit Unsuccessful");		
 		if(!setScheduledStartTime(osOption.getScheduledStartTime())) throw new Exception("setScheduledStartTime Unsuccessful");		
 		if(!setJobDependencies(osOption.getJobDependencies())) throw new Exception("setJobDependencies Unsuccessful");		
 		if(!setRequiredDirectories(osOption.getRequiredDirectories())) throw new Exception("setRequiredDirectories Unsuccessful");		
 		if(!setRequiredFiles(osOption.getRequiredFiles())) throw new Exception("setRequiredFiles Unsuccessful");		
 		if(!setDirectoriesToMake(osOption.getDirectoriesToMake())) throw new Exception("setDirectoriesToMake Unsuccessful");		
 		if(!setFilesToMake(osOption.getFilesToMake())) throw new Exception("setFilesToMake Unsuccessful");		
-		if(!setInputDirectoriesToMove(osOption.getInputFilesToMove())) throw new Exception("setInputFilesToMove Unsuccessful");		
+		if(!setInputDirectoriesToMove(osOption.getInputDirectoriesToMove())) throw new Exception("setInputFilesToMove Unsuccessful");		
 		if(!setInputFilesToMove(osOption.getInputFilesToMove())) throw new Exception("setInputFilesToMove Unsuccessful");		
-		if(!setOutputDirectoriesToMove(osOption.getInputFilesToMove())) throw new Exception("setOutputDirectoriesToMove Unsuccessful");		
-		if(!setOutputFilesToMove(osOption.getInputFilesToMove())) throw new Exception("setOutputFilesToMove Unsuccessful");		
+		if(!setOutputDirectoriesToMove(osOption.getOutputDirectoriesToMove())) throw new Exception("setOutputDirectoriesToMove Unsuccessful");		
+		if(!setOutputFilesToMove(osOption.getOutputFilesToMove())) throw new Exception("setOutputFilesToMove Unsuccessful");		
 		if(!setFilesToDelete(osOption.getFilesToDelete())) throw new Exception("setFilesToDelete Unsuccessful");		
 		if(!setDirectoriesToDelete(osOption.getDirectoriesToDelete())) throw new Exception("setDirectoriesToDelete Unsuccessful");		
 		if(!setProcessesToKill(osOption.getProcessesToKill())) throw new Exception("setProcessesToKill Unsuccessful");		
@@ -848,14 +849,19 @@ public class OSoLWriter extends OSgLWriter{
 				}		
 			}
 			if(minDiskSpace >= 0){
+				String sValue = "";
+				if(Double.isInfinite(minDiskSpace) && minDiskSpace < 0) sValue = "-INF";
+				else if(Double.isInfinite(minDiskSpace) && minDiskSpace > 0) sValue = "INF";
+				else sValue = minDiskSpace+"";
+
 				Element eMinDiskSpace = (Element)XMLUtil.findChildNode(eSystem, "minDiskSpace");
 				if(eMinDiskSpace == null){
 					eMinDiskSpace = m_document.createElement("minDiskSpace");	
-					eMinDiskSpace.appendChild(m_document.createTextNode(minDiskSpace+""));
+					eMinDiskSpace.appendChild(m_document.createTextNode(sValue));
 					eSystem.appendChild(eMinDiskSpace);				
 				}
 				else{
-					XMLUtil.setElementValue(eMinDiskSpace, minDiskSpace+"");
+					XMLUtil.setElementValue(eMinDiskSpace, sValue);
 				}
 			}
 			else{
@@ -927,14 +933,19 @@ public class OSoLWriter extends OSgLWriter{
 				}		
 			}
 			if(minMemorySize >= 0){
+				String sValue = "";
+				if(Double.isInfinite(minMemorySize) && minMemorySize < 0) sValue = "-INF";
+				else if(Double.isInfinite(minMemorySize) && minMemorySize > 0) sValue = "INF";
+				else sValue = minMemorySize+"";
+
 				Element eMinMemorySize = (Element)XMLUtil.findChildNode(eSystem, "minMemorySize");
 				if(eMinMemorySize == null){
 					eMinMemorySize = m_document.createElement("minMemorySize");	
-					eMinMemorySize.appendChild(m_document.createTextNode(minMemorySize+""));
+					eMinMemorySize.appendChild(m_document.createTextNode(sValue+""));
 					eSystem.appendChild(eMinMemorySize);				
 				}
 				else{
-					XMLUtil.setElementValue(eMinMemorySize, minMemorySize+"");
+					XMLUtil.setElementValue(eMinMemorySize, sValue+"");
 				}
 			}
 			else{
@@ -1006,14 +1017,19 @@ public class OSoLWriter extends OSgLWriter{
 				}		
 			}
 			if(minCPUSpeed >= 0){
+				String sValue = "";
+				if(Double.isInfinite(minCPUSpeed) && minCPUSpeed < 0) sValue = "-INF";
+				else if(Double.isInfinite(minCPUSpeed) && minCPUSpeed > 0) sValue = "INF";
+				else sValue = minCPUSpeed+"";
+
 				Element eMinCPUSpeed = (Element)XMLUtil.findChildNode(eSystem, "minCPUSpeed");
 				if(eMinCPUSpeed == null){
 					eMinCPUSpeed = m_document.createElement("minCPUSpeed");	
-					eMinCPUSpeed.appendChild(m_document.createTextNode(minCPUSpeed+""));
+					eMinCPUSpeed.appendChild(m_document.createTextNode(sValue));
 					eSystem.appendChild(eMinCPUSpeed);				
 				}
 				else{
-					XMLUtil.setElementValue(eMinCPUSpeed, minCPUSpeed+"");
+					XMLUtil.setElementValue(eMinCPUSpeed, sValue);
 				}
 			}
 			else{
@@ -2750,10 +2766,15 @@ public class OSoLWriter extends OSgLWriter{
 			if(iVars == 0) return true;
 			int nVar = 0;
 			for(int i = 0; i < iVars; i++){
+				String sValue = "";
+				if(Double.isInfinite(initialVariableValues[i]) && initialVariableValues[i] < 0) sValue = "-INF";
+				else if(Double.isInfinite(initialVariableValues[i]) && initialVariableValues[i] > 0) sValue = "INF";
+				else sValue = initialVariableValues[i]+"";
+
 				if(initialVariableValues[i]==0) continue;
 				Element eVar = m_document.createElement("var");	
 				eVar.setAttribute("idx", i+"");
-				eVar.setAttribute("value", initialVariableValues[i]+"");
+				eVar.setAttribute("value", sValue);
 				eInitialVariableValues.appendChild(eVar);				
 				nVar++;
 			}
@@ -2826,10 +2847,15 @@ public class OSoLWriter extends OSgLWriter{
 			if(iVars == 0) return true;
 			int nVar = 0;
 			for(int i = 0; i < iVars; i++){
+				String sValue = "";
+				if(Double.isInfinite(initialVariableValues[i].value) && initialVariableValues[i].value < 0) sValue = "-INF";
+				else if(Double.isInfinite(initialVariableValues[i].value) && initialVariableValues[i].value > 0) sValue = "INF";
+				else sValue = initialVariableValues[i].value+"";
+
 				if(initialVariableValues[i].value==0) continue;
 				Element eVar = m_document.createElement("var");	
 				eVar.setAttribute("idx", initialVariableValues[i].idx+"");
-				eVar.setAttribute("value", initialVariableValues[i].value+"");
+				eVar.setAttribute("value", sValue);
 				eInitialVariableValues.appendChild(eVar);				
 				nVar++;
 			}
@@ -3245,9 +3271,14 @@ public class OSoLWriter extends OSgLWriter{
 			if(iVars == 0) return true;
 			int nVar = 0;
 			for(int i = 0; i < iVars; i++){
+				String sValue = "";
+				if(Double.isInfinite(integerVariableBranchingWeights[i]) && integerVariableBranchingWeights[i] < 0) sValue = "-INF";
+				else if(Double.isInfinite(integerVariableBranchingWeights[i]) && integerVariableBranchingWeights[i] > 0) sValue = "INF";
+				else sValue = integerVariableBranchingWeights[i]+"";
+				
 				Element eVar = m_document.createElement("var");	
 				eVar.setAttribute("idx", i+"");
-				eVar.setAttribute("value", integerVariableBranchingWeights[i]+"");
+				eVar.setAttribute("value", sValue);
 				eIntegerVariableBranchingWeights.appendChild(eVar);				
 				nVar++;
 			}
@@ -3328,9 +3359,14 @@ public class OSoLWriter extends OSgLWriter{
 			if(iVars == 0) return true;
 			int nVar = 0;
 			for(int i = 0; i < iVars; i++){
+				String sValue = "";
+				if(Double.isInfinite(integerVariableBranchingWeights[i].value) && integerVariableBranchingWeights[i].value < 0) sValue = "-INF";
+				else if(Double.isInfinite(integerVariableBranchingWeights[i].value) && integerVariableBranchingWeights[i].value > 0) sValue = "INF";
+				else sValue = integerVariableBranchingWeights[i].value+"";
+
 				Element eVar = m_document.createElement("var");	
 				eVar.setAttribute("idx", integerVariableBranchingWeights[i].idx+"");
-				eVar.setAttribute("value", integerVariableBranchingWeights[i].value+"");
+				eVar.setAttribute("value", sValue);
 				eIintegerVariableBranchingWeights.appendChild(eVar);				
 				nVar++;
 			}
@@ -3386,7 +3422,7 @@ public class OSoLWriter extends OSgLWriter{
 			}
 			Element eVariables = (Element)XMLUtil.findChildNode(eOptimization, "variables");
 			if(eVariables == null){
-				if(branchingWeights == null || branchingWeights.length <= 0 || sosIdx <0){
+				if(sosIdx <0){
 					return true;
 				}
 				eVariables = m_document.createElement("variables");	
@@ -3394,7 +3430,7 @@ public class OSoLWriter extends OSgLWriter{
 			}
 			Element eSOSVariableBranchingWeights = (Element)XMLUtil.findChildNode(eVariables, "sosVariableBranchingWeights");
 			if(eSOSVariableBranchingWeights == null){
-				if(branchingWeights == null || branchingWeights.length <= 0 || sosIdx < 0){
+				if(sosIdx < 0){
 					return true;
 				}
 				eSOSVariableBranchingWeights = m_document.createElement("sosVariableBranchingWeights");	
@@ -3421,9 +3457,14 @@ public class OSoLWriter extends OSgLWriter{
 			eSOS.setAttribute("numberOfVar", iVars+"");
 			if(iVars == 0) return true;
 			for(int i = 0; i < iVars; i++){
+				String sValue = "";
+				if(Double.isInfinite(branchingWeights[i].value) && branchingWeights[i].value < 0) sValue = "-INF";
+				else if(Double.isInfinite(branchingWeights[i].value) && branchingWeights[i].value > 0) sValue = "INF";
+				else sValue = branchingWeights[i].value+"";
+
 				Element eVar = m_document.createElement("var");	
 				eVar.setAttribute("idx", branchingWeights[i].idx+"");
-				eVar.setAttribute("value", branchingWeights[i].value+"");
+				eVar.setAttribute("value", sValue);
 				eSOS.appendChild(eVar);				
 			}
 		}
@@ -3567,9 +3608,9 @@ public class OSoLWriter extends OSgLWriter{
 			for(int i = 0; i < iVars; i++){
 				Element eVar = m_document.createElement("var");	
 				eVar.setAttribute("idx", vars[i].idx+"");
-				if(vars[i].value != null && vars[i].value.length() > 0) eVar.setAttribute("value", vars[i].value+"");
-				if(vars[i].lbValue != null && vars[i].lbValue.length() > 0) eVar.setAttribute("lbValue", vars[i].lbValue+"");
-				if(vars[i].ubValue != null && vars[i].ubValue.length() > 0) eVar.setAttribute("ubValue", vars[i].ubValue+"");
+				if(vars[i].value != null && vars[i].value.length() > 0) eVar.setAttribute("value", vars[i].value);
+				if(vars[i].lbValue != null && vars[i].lbValue.length() > 0) eVar.setAttribute("lbValue", vars[i].lbValue);
+				if(vars[i].ubValue != null && vars[i].ubValue.length() > 0) eVar.setAttribute("ubValue", vars[i].ubValue);
 				eOtherOption.appendChild(eVar);				
 			}
 			try{
@@ -3667,9 +3708,13 @@ public class OSoLWriter extends OSgLWriter{
 			int nObj = 0;
 			for(int i = 0; i < iObjs; i++){
 				if(initialObjectiveValues[i]==0) continue;
+				String sValue = "";
+				if(Double.isInfinite(initialObjectiveValues[i]) && initialObjectiveValues[i] < 0) sValue = "-INF";
+				else if(Double.isInfinite(initialObjectiveValues[i]) && initialObjectiveValues[i] > 0) sValue = "INF";
+				else sValue = initialObjectiveValues[i]+"";
 				Element eObj = m_document.createElement("obj");	
 				eObj.setAttribute("idx", (-i-1)+"");
-				eObj.setAttribute("value", initialObjectiveValues[i]+"");
+				eObj.setAttribute("value", sValue);
 				eInitialObjectiveValues.appendChild(eObj);				
 				nObj++;
 			}
@@ -3750,9 +3795,13 @@ public class OSoLWriter extends OSgLWriter{
 			int nObj = 0;
 			for(int i = 0; i < iObjs; i++){
 				if(initialObjectiveValues[i].value==0) continue;
+				String sValue = "";
+				if(Double.isInfinite(initialObjectiveValues[i].value) && initialObjectiveValues[i].value < 0) sValue = "-INF";
+				else if(Double.isInfinite(initialObjectiveValues[i].value) && initialObjectiveValues[i].value > 0) sValue = "INF";
+				else sValue = initialObjectiveValues[i].value+"";
 				Element eObj = m_document.createElement("obj");	
 				eObj.setAttribute("idx", initialObjectiveValues[i].idx+"");
-				eObj.setAttribute("value", initialObjectiveValues[i].value+"");
+				eObj.setAttribute("value", sValue);
 				eInitialObjectiveValues.appendChild(eObj);				
 				nObj++;
 			}
@@ -3842,10 +3891,20 @@ public class OSoLWriter extends OSgLWriter{
 			if(iObjs == 0) return true;
 			int nObj = 0;
 			for(int i = 0; i < iObjs; i++){
+				String sLBValue = "";
+				if(Double.isInfinite(initialObjectiveLowerBounds[i]) && initialObjectiveLowerBounds[i] < 0) sLBValue = "-INF";
+				else if(Double.isInfinite(initialObjectiveLowerBounds[i]) && initialObjectiveLowerBounds[i] > 0) sLBValue = "INF";
+				else sLBValue = initialObjectiveLowerBounds[i]+"";
+
+				String sUBValue = "";
+				if(Double.isInfinite(initialObjectiveUpperBounds[i]) && initialObjectiveUpperBounds[i] < 0) sUBValue = "-INF";
+				else if(Double.isInfinite(initialObjectiveUpperBounds[i]) && initialObjectiveUpperBounds[i] > 0) sUBValue = "INF";
+				else sUBValue = initialObjectiveUpperBounds[i]+"";
+
 				Element eObj = m_document.createElement("obj");	
 				eObj.setAttribute("idx", (-i-1)+"");
-				eObj.setAttribute("lbValue", initialObjectiveLowerBounds[i]+"");
-				eObj.setAttribute("ubValue", initialObjectiveUpperBounds[i]+"");
+				eObj.setAttribute("lbValue", sLBValue);
+				eObj.setAttribute("ubValue", sUBValue+"");
 				eInitialObjectiveBounds.appendChild(eObj);				
 				nObj++;
 			}
@@ -3933,10 +3992,20 @@ public class OSoLWriter extends OSgLWriter{
 			int nObj = 0;
 			for(int i = 0; i < iObjs; i++){
 				if(initialObjectiveBounds[i] == null) continue;
+				String sLBValue = "";
+				if(Double.isInfinite(initialObjectiveBounds[i].lbValue) && initialObjectiveBounds[i].lbValue < 0) sLBValue = "-INF";
+				else if(Double.isInfinite(initialObjectiveBounds[i].lbValue) && initialObjectiveBounds[i].lbValue > 0) sLBValue = "INF";
+				else sLBValue = initialObjectiveBounds[i].lbValue+"";
+
+				String sUBValue = "";
+				if(Double.isInfinite(initialObjectiveBounds[i].ubValue) && initialObjectiveBounds[i].ubValue < 0) sUBValue = "-INF";
+				else if(Double.isInfinite(initialObjectiveBounds[i].ubValue) && initialObjectiveBounds[i].ubValue > 0) sUBValue = "INF";
+				else sUBValue = initialObjectiveBounds[i].ubValue+"";
+
 				Element eObj = m_document.createElement("obj");	
 				eObj.setAttribute("idx", initialObjectiveBounds[i].idx+"");
-				eObj.setAttribute("lbValue", initialObjectiveBounds[i].lbValue+"");
-				eObj.setAttribute("ubValue", initialObjectiveBounds[i].ubValue+"");
+				eObj.setAttribute("lbValue", sLBValue);
+				eObj.setAttribute("ubValue", sUBValue);
 				eInitialObjectiveBounds.appendChild(eObj);				
 				nObj++;
 			}
@@ -4096,9 +4165,9 @@ public class OSoLWriter extends OSgLWriter{
 			for(int i = 0; i < iObjs; i++){
 				Element eObj = m_document.createElement("obj");	
 				eObj.setAttribute("idx", objs[i].idx+"");
-				if(objs[i].value != null && objs[i].value.length() > 0) eObj.setAttribute("value", objs[i].value+"");
-				if(objs[i].lbValue != null && objs[i].lbValue.length() > 0) eObj.setAttribute("lbValue", objs[i].lbValue+"");
-				if(objs[i].ubValue != null && objs[i].ubValue.length() > 0) eObj.setAttribute("ubValue", objs[i].ubValue+"");
+				if(objs[i].value != null && objs[i].value.length() > 0) eObj.setAttribute("value", objs[i].value);
+				if(objs[i].lbValue != null && objs[i].lbValue.length() > 0) eObj.setAttribute("lbValue", objs[i].lbValue);
+				if(objs[i].ubValue != null && objs[i].ubValue.length() > 0) eObj.setAttribute("ubValue", objs[i].ubValue);
 				eOtherOption.appendChild(eObj);				
 			}
 			try{
@@ -4201,10 +4270,14 @@ public class OSoLWriter extends OSgLWriter{
 			if(iCons == 0) return true;
 			int nCon = 0;
 			for(int i = 0; i < iCons; i++){
+				String sValue = "";
+				if(Double.isInfinite(initialConstraintValues[i]) && initialConstraintValues[i] < 0) sValue = "-INF";
+				else if(Double.isInfinite(initialConstraintValues[i]) && initialConstraintValues[i] > 0) sValue = "INF";
+				else sValue = initialConstraintValues[i]+"";
 				if(initialConstraintValues[i]==0) continue;
 				Element eCon = m_document.createElement("con");	
 				eCon.setAttribute("idx", i+"");
-				eCon.setAttribute("value", initialConstraintValues[i]+"");
+				eCon.setAttribute("value", sValue);
 				eInitialConstraintValues.appendChild(eCon);				
 				nCon++;
 			}
@@ -4290,10 +4363,15 @@ public class OSoLWriter extends OSgLWriter{
 			if(iCons == 0) return true;
 			int nCon = 0;
 			for(int i = 0; i < iCons; i++){
+				String sValue = "";
+				if(Double.isInfinite(initialConstraintValues[i].value) && initialConstraintValues[i].value < 0) sValue = "-INF";
+				else if(Double.isInfinite(initialConstraintValues[i].value) && initialConstraintValues[i].value > 0) sValue = "INF";
+				else sValue = initialConstraintValues[i].value+"";
+
 				if(initialConstraintValues[i].value==0) continue;
 				Element eCon = m_document.createElement("con");	
 				eCon.setAttribute("idx", initialConstraintValues[i].idx+"");
-				eCon.setAttribute("value", initialConstraintValues[i].value+"");
+				eCon.setAttribute("value", sValue);
 				eInitialConstraintValues.appendChild(eCon);				
 				nCon++;
 			}
@@ -4389,10 +4467,20 @@ public class OSoLWriter extends OSgLWriter{
 			if(iCons == 0) return true;
 			int nCon = 0;
 			for(int i = 0; i < iCons; i++){
+				String sLBValue = "";
+				if(Double.isInfinite(initialLbDualValues[i]) && initialLbDualValues[i] < 0) sLBValue = "-INF";
+				else if(Double.isInfinite(initialLbDualValues[i]) && initialLbDualValues[i] > 0) sLBValue = "INF";
+				else sLBValue = initialLbDualValues[i]+"";
+
+				String sUBValue = "";
+				if(Double.isInfinite(initialUbDualValues[i]) && initialUbDualValues[i] < 0) sUBValue = "-INF";
+				else if(Double.isInfinite(initialUbDualValues[i]) && initialUbDualValues[i] > 0) sUBValue = "INF";
+				else sUBValue = initialUbDualValues[i]+"";
+
 				Element eCon = m_document.createElement("con");	
 				eCon.setAttribute("idx", i+"");
-				eCon.setAttribute("lbDualValue", initialLbDualValues[i]+"");
-				eCon.setAttribute("ubDualValue", initialUbDualValues[i]+"");
+				eCon.setAttribute("lbDualValue", sLBValue);
+				eCon.setAttribute("ubDualValue", sUBValue);
 				eInitialDualValues.appendChild(eCon);				
 				nCon++;
 			}
@@ -4486,10 +4574,20 @@ public class OSoLWriter extends OSgLWriter{
 			int nCon = 0;
 			for(int i = 0; i < iCons; i++){
 				if(initialDualValues[i] == null) continue;
+				String sLBValue = "";
+				if(Double.isInfinite(initialDualValues[i].lbDualValue) && initialDualValues[i].lbDualValue < 0) sLBValue = "-INF";
+				else if(Double.isInfinite(initialDualValues[i].lbDualValue) && initialDualValues[i].lbDualValue > 0) sLBValue = "INF";
+				else sLBValue = initialDualValues[i].lbDualValue+"";
+
+				String sUBValue = "";
+				if(Double.isInfinite(initialDualValues[i].ubDualValue) && initialDualValues[i].ubDualValue < 0) sUBValue = "-INF";
+				else if(Double.isInfinite(initialDualValues[i].ubDualValue) && initialDualValues[i].ubDualValue > 0) sUBValue = "INF";
+				else sUBValue = initialDualValues[i].ubDualValue+"";
+
 				Element eCon = m_document.createElement("con");	
 				eCon.setAttribute("idx", initialDualValues[i].idx+"");
-				eCon.setAttribute("lbDualValue", initialDualValues[i].lbDualValue+"");
-				eCon.setAttribute("ubDualValue", initialDualValues[i].ubDualValue+"");
+				eCon.setAttribute("lbDualValue", sLBValue);
+				eCon.setAttribute("ubDualValue", sUBValue);
 				eInitialDualValues.appendChild(eCon);				
 				nCon++;
 			}
@@ -4661,9 +4759,9 @@ public class OSoLWriter extends OSgLWriter{
 			for(int i = 0; i < iCons; i++){
 				Element eCon = m_document.createElement("con");	
 				eCon.setAttribute("idx", cons[i].idx+"");
-				if(cons[i].value != null && cons[i].value.length() > 0) eCon.setAttribute("value", cons[i].value+"");
-				if(cons[i].lbValue != null && cons[i].lbValue.length() > 0) eCon.setAttribute("lbValue", cons[i].lbValue+"");
-				if(cons[i].ubValue != null && cons[i].ubValue.length() > 0) eCon.setAttribute("ubValue", cons[i].ubValue+"");
+				if(cons[i].value != null && cons[i].value.length() > 0) eCon.setAttribute("value", cons[i].value);
+				if(cons[i].lbValue != null && cons[i].lbValue.length() > 0) eCon.setAttribute("lbValue", cons[i].lbValue);
+				if(cons[i].ubValue != null && cons[i].ubValue.length() > 0) eCon.setAttribute("ubValue", cons[i].ubValue);
 				eOtherOption.appendChild(eCon);				
 			}
 			try{
@@ -4850,11 +4948,7 @@ public class OSoLWriter extends OSgLWriter{
 					eSolverOption.setAttribute("category", category);
 				}
 				if(type != null && type.length() > 0){
-					if(type.equalsIgnoreCase("double") || type.equalsIgnoreCase("integer") || 
-							type.equalsIgnoreCase("boolean") || type.equalsIgnoreCase("string")){
-						eSolverOption.setAttribute("type",type.toLowerCase());
-					}
-					else eSolverOption.setAttribute("type","string");
+					eSolverOption.setAttribute("type", type);
 				}				
 				eSolverOptions.appendChild(eSolverOption);
 
@@ -4884,6 +4978,7 @@ public class OSoLWriter extends OSgLWriter{
 		OSoLWriter osolWriter = new OSoLWriter();
 //		String sFileName = OSParameter.CODE_HOME + "OSRepository/test/osol/osol.osol";
 //		String sFileName = "c:/test.osol";
+		String sFileName = "c:/parsertest.osol";
 //		if(!osolWriter.setServiceName("my service name")) System.out.println("service name");
 //		if(!osolWriter.setServiceURI("my service uri")) System.out.println("uri");
 //		if(!osolWriter.setInstanceName("instanceName")) System.out.println("setInstanceName Unsuccessful");		
@@ -5093,16 +5188,16 @@ public class OSoLWriter extends OSgLWriter{
 
 		////////////////////
 
-//		OSoLReader osolReader = new OSoLReader(false);
-//		if(!osolReader.readFile(sFileName)) System.out.println("reading");
-//		OSOption osOption;
-//		try {
-//		osOption = osolReader.getOSOption();
-//		if(!osolWriter.setOSOption(osOption)) System.out.println("set osOption");
-//		} 
-//		catch (Exception e) {
-//		e.printStackTrace();
-//		}
+		OSoLReader osolReader = new OSoLReader(false);
+		if(!osolReader.readFile(sFileName)) System.out.println("reading");
+		OSOption osOption;
+		try {
+		osOption = osolReader.getOSOption();
+		if(!osolWriter.setOSOption(osOption)) System.out.println("set osOption");
+		} 
+		catch (Exception e) {
+		e.printStackTrace();
+		}
 
 		////////////////////
 

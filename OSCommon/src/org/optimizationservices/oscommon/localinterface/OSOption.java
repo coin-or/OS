@@ -366,6 +366,7 @@ public class OSOption {
 	 * @return the contact trasport address, null or empty string if none. 
 	 */
 	public String getContact(){
+		if(general.contact == null) return null;
 		return general.contact.value;
 	}//getContact
 
@@ -378,6 +379,7 @@ public class OSOption {
 	 * @return whether the contact address is set successfully.
 	 */
 	public boolean setContact(String address){
+		if(general.contact == null) general.contact = new ContactOption();
 		general.contact.value = address;
 		return true;
 	}//setContact
@@ -2126,8 +2128,8 @@ public class OSOption {
 	 * @return whether the sos branching weights are set successfully or not. 
 	 */
 	public boolean addSOSVariableBranchingWeightsForOneSOS(int sosIdx, double groupWeight, BranchingWeight[] branchingWeights){
-		if(branchingWeights == null || branchingWeights.length <= 0 || sosIdx <0){
-			return false;
+		if(sosIdx <0){
+			return true;
 		}
 		if(optimization == null) optimization = new OptimizationOption();
 		if(optimization.variables == null) optimization.variables = new VariableOption();
@@ -2252,6 +2254,7 @@ public class OSOption {
 			for(int i = 0; i < n-1; i++){
 				mOtherOptions[i] = optimization.variables.other[i];
 			}
+			mOtherOptions[n-1]= new OtherVariableOption();
 			mOtherOptions[n-1].name = name;
 			mOtherOptions[n-1].value = value;
 			mOtherOptions[n-1].description = description;
@@ -2329,7 +2332,7 @@ public class OSOption {
 		int j = 0;
 		for(int i = 0; i < initialObjectiveValues.length; i++){
 			if(initialObjectiveValues[i] != 0){
-				obj[j].idx = i;
+				obj[j].idx = -i-1;
 				obj[j].value = initialObjectiveValues[i];
 				j++;
 			}
@@ -2455,7 +2458,7 @@ public class OSOption {
 		for(int i = 0; i < nBounds; i++){
 			if((initialObjectiveLowerBounds != null && initialObjectiveLowerBounds[i] != 0) 
 					|| (initialObjectiveUpperBounds != null && initialObjectiveUpperBounds[i] != 0)) {
-				obj[j].idx = i;
+				obj[j].idx = -i-1;
 				obj[j].lbValue = initialObjectiveLowerBounds==null?0:initialObjectiveLowerBounds[i];
 				obj[j].ubValue = initialObjectiveUpperBounds==null?0:initialObjectiveUpperBounds[i];
 				j++;
@@ -2580,6 +2583,7 @@ public class OSOption {
 			for(int i = 0; i < n-1; i++){
 				mOtherOptions[i] = optimization.objectives.other[i];
 			}
+			mOtherOptions[n-1]= new OtherObjectiveOption();
 			mOtherOptions[n-1].name = name;
 			mOtherOptions[n-1].value = value;
 			mOtherOptions[n-1].description = description;
@@ -2909,6 +2913,7 @@ public class OSOption {
 			for(int i = 0; i < n-1; i++){
 				mOtherOptions[i] = optimization.constraints.other[i];
 			}
+			mOtherOptions[n-1]= new OtherConstraintOption();
 			mOtherOptions[n-1].name = name;
 			mOtherOptions[n-1].value = value;
 			mOtherOptions[n-1].description = description;

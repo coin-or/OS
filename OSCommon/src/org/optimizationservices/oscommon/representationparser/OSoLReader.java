@@ -120,12 +120,13 @@ public class OSoLReader extends OSgLReader{
 		if(!m_osOption.setMinCPUSpeedUnit(getMinCPUSpeedUnit())) throw new Exception("setSystemMinCPUSpeedUnit Unsuccessful");	
 		if(!m_osOption.setMinCPUNumber(getMinCPUNumber())) throw new Exception("setSystemMinCPUNumber Unsuccessful");	
 		if(!m_osOption.setOtherSystemOptions(getOtherSystemOptions()))throw new Exception("setOtherSystemOptions Unsuccessful");
-		
-		
+
+
 		if(!m_osOption.setServiceType(getServiceType())) throw new Exception("setServiceType Unsuccessful");	
 		if(!m_osOption.setOtherServiceOptions(getOtherServiceOptions()))throw new Exception("setOtherServiceOptions Unsuccessful");
-		
+
 		if(!m_osOption.setMaxTime(getMaxTime())) throw new Exception("setMaxTime Unsuccessful");		
+		if(!m_osOption.setMaxTimeUnit(getMaxTimeUnit())) throw new Exception("setMaxTimeUnit Unsuccessful");		
 		if(!m_osOption.setScheduledStartTime(getScheduledStartTime())) throw new Exception("setScheduledStartTime Unsuccessful");		
 		if(!m_osOption.setJobDependencies(getJobDependencies())) throw new Exception("setJobDependencies Unsuccessful");		
 		if(!m_osOption.setRequiredDirectories(getRequiredDirectories())) throw new Exception("setRequiredDirectories Unsuccessful");		
@@ -145,10 +146,10 @@ public class OSoLReader extends OSgLReader{
 		if(!m_osOption.setNumberOfObjectives(getNumberOfObjectives())) throw new Exception("setNumberOfObjectives Unsuccessful");		
 		if(!m_osOption.setNumberOfConstraints(getNumberOfConstraints())) throw new Exception("setNumberOfConstraints Unsuccessful");		
 
-		if(!m_osOption.setInitVarValuesSparse(getInitVarValuesSparse())) throw new Exception("setInitVarValuesSparse Unsuccessful");		
-		if(!m_osOption.setInitVarValuesStringSparse(getInitVarStringsSparse())) throw new Exception("setInitVarValuesStringSparse Unsuccessful");		
-		if(!m_osOption.setInitBasisStatusSparse(getInitBasisStatusSparse())) throw new Exception("setInitBasisStatusSparse Unsuccessful");		
-		if(!m_osOption.setIntegerVariableBranchingWeightsSparse(getIntegerVariableBranchingWeightsSparse())) throw new Exception("setIntegerVariableBranchingWeightsSparse Unsuccessful");		
+		if(!m_osOption.setInitVarValuesDense(getInitVarValuesDense())) throw new Exception("setInitVarValuesSparse Unsuccessful");		
+		if(!m_osOption.setInitVarValuesStringDense(getInitVarStringsDense())) throw new Exception("setInitVarValuesStringSparse Unsuccessful");		
+		if(!m_osOption.setInitBasisStatusDense(getInitBasisStatusDense())) throw new Exception("setInitBasisStatusSparse Unsuccessful");		
+		if(!m_osOption.setIntegerVariableBranchingWeightsDense(getIntegerVariableBranchingWeightsDense())) throw new Exception("setIntegerVariableBranchingWeightsSparse Unsuccessful");		
 		SOSWeights[] SOSWeights = getSOSWeights();
 		int nSOS = SOSWeights==null?0:SOSWeights.length;
 		for(int i = 0; i < nSOS; i++){ 
@@ -162,9 +163,9 @@ public class OSoLReader extends OSgLReader{
 					otherVariableOption[i].solver, otherVariableOption[i].category, otherVariableOption[i].type, otherVariableOption[i].var))
 				throw new Exception("addOtherVariableOption Unsuccessful");
 		}
-		
-		if(!m_osOption.setInitObjValuesSparse(getInitObjValuesSparse())) throw new Exception("setInitObjValuesSparse Unsuccessful");		
-		if(!m_osOption.setInitObjBoundsSparse(getInitObjBoundsSparse())) throw new Exception("setInitObjBoundsSparse Unsuccessful");		
+
+		if(!m_osOption.setInitObjValuesDense(getInitObjValuesDense())) throw new Exception("setInitObjValuesSparse Unsuccessful");		
+		if(!m_osOption.setInitObjBoundsDense(getInitObjLowerBoundsDense(), getInitObjUpperBoundsDense())) throw new Exception("setInitObjBoundsSparse Unsuccessful");		
 		OtherObjectiveOption[] otherObjectiveOption = getOtherObjectiveOptions("");
 		int nOtherObjOptions = otherObjectiveOption==null?0:otherObjectiveOption.length;
 		for(int i = 0; i < nOtherObjOptions; i++){ 
@@ -173,8 +174,8 @@ public class OSoLReader extends OSgLReader{
 				throw new Exception("addOtherObjectiveOption Unsuccessful");
 		}
 
-		if(!m_osOption.setInitConValuesSparse(getInitConValuesSparse())) throw new Exception("setInitConValuesSparse Unsuccessful");		
-		if(!m_osOption.setInitDualValuesSparse(getInitDualVarValuesSparse())) throw new Exception("setInitDualValuesSparse Unsuccessful");		
+		if(!m_osOption.setInitConValuesDense(getInitConValuesDense())) throw new Exception("setInitConValuesSparse Unsuccessful");		
+		if(!m_osOption.setInitDualValuesDense(getInitDualVarLowerBoundsDense(), getInitDualVarUpperBoundsDense())) throw new Exception("setInitDualValuesSparse Unsuccessful");		
 		OtherConstraintOption[] otherConstraintOption = getOtherConstraintOptions("");
 		int nOtherConOptions = otherConstraintOption==null?0:otherConstraintOption.length;
 		for(int i = 0; i < nOtherConOptions; i++){ 
@@ -621,6 +622,9 @@ public class OSoLReader extends OSgLReader{
 		String sMinDiskSpace = XMLUtil.getElementValueByName(eSystem, "minDiskSpace");
 		if(sMinDiskSpace == null || sMinDiskSpace.length() <= 0) return 0.0;
 		try{
+			if(sMinDiskSpace.equals("INF")) return Double.POSITIVE_INFINITY;
+			if(sMinDiskSpace.equals("-INF")) return Double.NEGATIVE_INFINITY;
+			if(sMinDiskSpace.equals("NaN") || sMinDiskSpace.equals("-NaN")) return Double.NaN;			
 			double dMinDiskSpace = Double.parseDouble(sMinDiskSpace);
 			return dMinDiskSpace;
 		}
@@ -655,6 +659,9 @@ public class OSoLReader extends OSgLReader{
 		String sMinMemorySize = XMLUtil.getElementValueByName(eSystem, "minMemorySize");
 		if(sMinMemorySize == null || sMinMemorySize.length() <= 0) return 0.0;
 		try{
+			if(sMinMemorySize.equals("INF")) return Double.POSITIVE_INFINITY;
+			if(sMinMemorySize.equals("-INF")) return Double.NEGATIVE_INFINITY;
+			if(sMinMemorySize.equals("NaN") || sMinMemorySize.equals("-NaN")) return Double.NaN;			
 			double dMinMemorySize = Double.parseDouble(sMinMemorySize);
 			return dMinMemorySize;
 		}
@@ -689,6 +696,9 @@ public class OSoLReader extends OSgLReader{
 		String sMinCPUSpeed = XMLUtil.getElementValueByName(eSystem, "minCPUSpeed");
 		if(sMinCPUSpeed == null || sMinCPUSpeed.length() <= 0) return 0.0;
 		try{
+			if(sMinCPUSpeed.equals("INF")) return Double.POSITIVE_INFINITY;
+			if(sMinCPUSpeed.equals("-INF")) return Double.NEGATIVE_INFINITY;
+			if(sMinCPUSpeed.equals("NaN") || sMinCPUSpeed.equals("-NaN")) return Double.NaN;			
 			double dMinCPUSpeed = Double.parseDouble(sMinCPUSpeed);
 			return dMinCPUSpeed;
 		}
@@ -854,6 +864,9 @@ public class OSoLReader extends OSgLReader{
 		String sJobMaxTime = XMLUtil.getElementValueByName(eJob, "maxTime");
 		if(sJobMaxTime == null || sJobMaxTime.length() <= 0) return Double.POSITIVE_INFINITY;
 		try{
+			if(sJobMaxTime.equals("INF")) return Double.POSITIVE_INFINITY;
+			if(sJobMaxTime.equals("-INF")) return Double.NEGATIVE_INFINITY;
+			if(sJobMaxTime.equals("NaN") || sJobMaxTime.equals("-NaN")) return Double.NaN;			
 			double dJobMaxTime = Double.parseDouble(sJobMaxTime);
 			return dJobMaxTime;
 		}
@@ -1627,8 +1640,12 @@ public class OSoLReader extends OSgLReader{
 				int iIndex = Integer.parseInt(((Element)vars.item(i)).getAttribute("idx"));
 				double dValue = Double.NaN;
 				try {
-					dValue = Double.parseDouble(((Element)vars.item(i)).getAttribute("value"));
-
+					String sValue = ((Element)vars.item(i)).getAttribute("value");
+					if(sValue == null || sValue.length() <= 0) dValue = Double.NaN;
+					if(sValue.equals("INF")) dValue = Double.POSITIVE_INFINITY;
+					else if(sValue.equals("-INF")) dValue = Double.NEGATIVE_INFINITY;
+					else if(sValue.equals("NaN") || sValue.equals("-NaN")) dValue = Double.NaN;			
+					else dValue = Double.parseDouble(sValue);
 				} 
 				catch (Exception e) {
 				}
@@ -1663,8 +1680,12 @@ public class OSoLReader extends OSgLReader{
 				mVar[i].idx = Integer.parseInt(((Element)vars.item(i)).getAttribute("idx"));
 				double dValue = Double.NaN;
 				try {
-					dValue = Double.parseDouble(((Element)vars.item(i)).getAttribute("value"));
-
+					String sValue = ((Element)vars.item(i)).getAttribute("value");
+					if(sValue == null || sValue.length() <= 0) dValue = Double.NaN;
+					if(sValue.equals("INF")) dValue = Double.POSITIVE_INFINITY;
+					else if(sValue.equals("-INF")) dValue = Double.NEGATIVE_INFINITY;
+					else if(sValue.equals("NaN") || sValue.equals("-NaN")) dValue = Double.NaN;			
+					else dValue = Double.parseDouble(sValue);
 				} 
 				catch (Exception e) {
 				}
@@ -1882,7 +1903,12 @@ public class OSoLReader extends OSgLReader{
 				int iIndex = Integer.parseInt(((Element)vars.item(i)).getAttribute("idx"));
 				double dValue = Double.NaN;
 				try {
-					dValue = Double.parseDouble(((Element)vars.item(i)).getAttribute("value"));
+					String sValue = ((Element)vars.item(i)).getAttribute("value");
+					if(sValue == null || sValue.length() <= 0) dValue = Double.NaN;
+					if(sValue.equals("INF")) dValue = Double.POSITIVE_INFINITY;
+					else if(sValue.equals("-INF")) dValue = Double.NEGATIVE_INFINITY;
+					else if(sValue.equals("NaN") || sValue.equals("-NaN")) dValue = Double.NaN;			
+					else dValue = Double.parseDouble(sValue);
 				} 
 				catch (Exception e2) {
 				}
@@ -1893,7 +1919,8 @@ public class OSoLReader extends OSgLReader{
 			}
 		}
 		return mdValues;
-	}//getIntegerVariableBranchingWeightsDen
+	}//getIntegerVariableBranchingWeightsDense
+	
 	/**
 	 * get a list of branching weights for integer variables in sparse form
 	 * @return a list of index/value pairs
@@ -1916,7 +1943,12 @@ public class OSoLReader extends OSgLReader{
 				mVar[i].idx = Integer.parseInt(((Element)vars.item(i)).getAttribute("idx"));
 				double dValue = Double.NaN;
 				try {
-					dValue = Double.parseDouble(((Element)vars.item(i)).getAttribute("value"));
+					String sValue = ((Element)vars.item(i)).getAttribute("value");
+					if(sValue == null || sValue.length() <= 0) dValue = Double.NaN;
+					if(sValue.equals("INF")) dValue = Double.POSITIVE_INFINITY;
+					else if(sValue.equals("-INF")) dValue = Double.NEGATIVE_INFINITY;
+					else if(sValue.equals("NaN") || sValue.equals("-NaN")) dValue = Double.NaN;			
+					else dValue = Double.parseDouble(sValue);
 				} 
 				catch (Exception e2) {
 				}
@@ -1973,7 +2005,14 @@ public class OSoLReader extends OSgLReader{
 				sosWeights[i].sosIdx = Integer.parseInt(eSOS.getAttribute("sosIdx"));
 				String sGroupWeight = eSOS.getAttribute("groupWeight");
 				if(sGroupWeight != null && sGroupWeight.length() > 0){
-					sosWeights[i].groupWeight = Double.parseDouble(sGroupWeight);
+					String sValue = sGroupWeight;
+					double dValue = 1.0;
+					if(sValue == null || sValue.length() <= 0) dValue = Double.NaN;
+					if(sValue.equals("INF")) dValue = Double.POSITIVE_INFINITY;
+					else if(sValue.equals("-INF")) dValue = Double.NEGATIVE_INFINITY;
+					else if(sValue.equals("NaN") || sValue.equals("-NaN")) dValue = Double.NaN;			
+					else dValue = Double.parseDouble(sValue);
+					sosWeights[i].groupWeight = dValue;
 				}
 				else{
 					sosWeights[i].groupWeight  = 1.0;
@@ -1985,7 +2024,15 @@ public class OSoLReader extends OSgLReader{
 					Element eVar = vVar.elementAt(j);
 					sosWeights[i].var[j] = new BranchingWeight();
 					sosWeights[i].var[j].idx = Integer.parseInt(eVar.getAttribute("idx"));
-					sosWeights[i].var[j].value = Double.parseDouble(eVar.getAttribute("value"));
+					
+					String sValue = eVar.getAttribute("value");
+					double dValue = Double.NaN;
+					if(sValue == null || sValue.length() <= 0) dValue = Double.NaN;
+					if(sValue.equals("INF")) dValue = Double.POSITIVE_INFINITY;
+					else if(sValue.equals("-INF")) dValue = Double.NEGATIVE_INFINITY;
+					else if(sValue.equals("NaN") || sValue.equals("-NaN")) dValue = Double.NaN;			
+					else dValue = Double.parseDouble(sValue);
+					sosWeights[i].var[j].value = dValue;
 				}
 			}
 			return sosWeights;
@@ -2070,7 +2117,14 @@ public class OSoLReader extends OSgLReader{
 			sosWeights.sosIdx = Integer.parseInt(eSOS.getAttribute("sosIdx"));
 			String sGroupWeight = eSOS.getAttribute("groupWeight");
 			if(sGroupWeight != null && sGroupWeight.length() > 0){
-				sosWeights.groupWeight = Double.parseDouble(sGroupWeight);
+				String sValue = sGroupWeight;
+				double dValue = 1.0;
+				if(sValue == null || sValue.length() <= 0) dValue = Double.NaN;
+				if(sValue.equals("INF")) dValue = Double.POSITIVE_INFINITY;
+				else if(sValue.equals("-INF")) dValue = Double.NEGATIVE_INFINITY;
+				else if(sValue.equals("NaN") || sValue.equals("-NaN")) dValue = Double.NaN;			
+				else dValue = Double.parseDouble(sValue);
+				sosWeights.groupWeight = dValue;
 			}
 			else{
 				sosWeights.groupWeight  = 1.0;
@@ -2082,7 +2136,15 @@ public class OSoLReader extends OSgLReader{
 				Element eVar = vVar.elementAt(j);
 				sosWeights.var[j] = new BranchingWeight();
 				sosWeights.var[j].idx = Integer.parseInt(eVar.getAttribute("idx"));
-				sosWeights.var[j].value = Double.parseDouble(eVar.getAttribute("value"));
+				
+				String sValue = eVar.getAttribute("value");
+				double dValue = Double.NaN;
+				if(sValue == null || sValue.length() <= 0) dValue = Double.NaN;
+				if(sValue.equals("INF")) dValue = Double.POSITIVE_INFINITY;
+				else if(sValue.equals("-INF")) dValue = Double.NEGATIVE_INFINITY;
+				else if(sValue.equals("NaN") || sValue.equals("-NaN")) dValue = Double.NaN;			
+				else dValue = Double.parseDouble(sValue);
+				sosWeights.var[j].value = dValue;
 			}
 			return sosWeights;
 		}
@@ -2246,7 +2308,13 @@ public class OSoLReader extends OSgLReader{
 		for(int i = 0; i < iObjs; i++){
 			try{
 				int iIndex = Integer.parseInt(((Element)objs.item(i)).getAttribute("idx"));
-				double dValue = Double.parseDouble(((Element)objs.item(i)).getAttribute("value"));
+				String sValue = ((Element)objs.item(i)).getAttribute("value");
+				double dValue = Double.NaN;
+				if(sValue == null || sValue.length() <= 0) dValue = Double.NaN;
+				if(sValue.equals("INF")) dValue = Double.POSITIVE_INFINITY;
+				else if(sValue.equals("-INF")) dValue = Double.NEGATIVE_INFINITY;
+				else if(sValue.equals("NaN") || sValue.equals("-NaN")) dValue = Double.NaN;			
+				else dValue = Double.parseDouble(sValue);
 				mdValues[Math.abs(iIndex)-1] = dValue;
 			}
 			catch(Exception e){
@@ -2276,7 +2344,15 @@ public class OSoLReader extends OSgLReader{
 			try{
 				mObj[i] = new InitObjValue();
 				mObj[i].idx = Integer.parseInt(((Element)objs.item(i)).getAttribute("idx"));
-				mObj[i].value = Double.parseDouble(((Element)objs.item(i)).getAttribute("value"));
+				
+				String sValue = ((Element)objs.item(i)).getAttribute("value");
+				double dValue = Double.NaN;
+				if(sValue == null || sValue.length() <= 0) dValue = Double.NaN;
+				if(sValue.equals("INF")) dValue = Double.POSITIVE_INFINITY;
+				else if(sValue.equals("-INF")) dValue = Double.NEGATIVE_INFINITY;
+				else if(sValue.equals("NaN") || sValue.equals("-NaN")) dValue = Double.NaN;			
+				else dValue = Double.parseDouble(sValue);
+				mObj[i].value = dValue;
 			}
 			catch(Exception e){
 				return null;
@@ -2327,7 +2403,12 @@ public class OSoLReader extends OSgLReader{
 				int iIndex = Integer.parseInt(((Element)objs.item(i)).getAttribute("idx"));
 				double dBound = Double.NEGATIVE_INFINITY;
 				try {
-					dBound = Double.parseDouble(((Element)objs.item(i)).getAttribute("lbValue"));					
+					String sValue = ((Element)objs.item(i)).getAttribute("lbValue");
+					if(sValue == null || sValue.length() <= 0) dBound = Double.NEGATIVE_INFINITY;
+					if(sValue.equals("INF")) dBound = Double.POSITIVE_INFINITY;
+					else if(sValue.equals("-INF")) dBound = Double.NEGATIVE_INFINITY;
+					else if(sValue.equals("NaN") || sValue.equals("-NaN")) dBound = Double.NaN;			
+					else dBound = Double.parseDouble(sValue);
 				} 
 				catch (Exception e) {
 				}
@@ -2361,7 +2442,12 @@ public class OSoLReader extends OSgLReader{
 				int iIndex = Integer.parseInt(((Element)objs.item(i)).getAttribute("idx"));
 				double dBound = Double.POSITIVE_INFINITY;
 				try {
-					dBound = Double.parseDouble(((Element)objs.item(i)).getAttribute("ubValue"));					
+					String sValue = ((Element)objs.item(i)).getAttribute("ubValue");
+					if(sValue == null || sValue.length() <= 0) dBound = Double.POSITIVE_INFINITY;
+					if(sValue.equals("INF")) dBound = Double.POSITIVE_INFINITY;
+					else if(sValue.equals("-INF")) dBound = Double.NEGATIVE_INFINITY;
+					else if(sValue.equals("NaN") || sValue.equals("-NaN")) dBound = Double.NaN;			
+					else dBound = Double.parseDouble(sValue);
 				} 
 				catch (Exception e) {
 				}
@@ -2397,12 +2483,22 @@ public class OSoLReader extends OSgLReader{
 				double dLBBound = Double.NEGATIVE_INFINITY;
 				double dUBBound = Double.POSITIVE_INFINITY;
 				try {
-					dLBBound = Double.parseDouble(((Element)objs.item(i)).getAttribute("lbValue"));					
+					String sValue = ((Element)objs.item(i)).getAttribute("lbValue");
+					if(sValue == null || sValue.length() <= 0) dLBBound = Double.NEGATIVE_INFINITY;
+					if(sValue.equals("INF")) dLBBound = Double.POSITIVE_INFINITY;
+					else if(sValue.equals("-INF")) dLBBound = Double.NEGATIVE_INFINITY;
+					else if(sValue.equals("NaN") || sValue.equals("-NaN")) dLBBound = Double.NaN;			
+					else dLBBound = Double.parseDouble(sValue);
 				} 
 				catch (Exception e) {
 				}
 				try {
-					dUBBound = Double.parseDouble(((Element)objs.item(i)).getAttribute("ubValue"));					
+					String sValue = ((Element)objs.item(i)).getAttribute("ubValue");
+					if(sValue == null || sValue.length() <= 0) dUBBound = Double.POSITIVE_INFINITY;
+					if(sValue.equals("INF")) dUBBound = Double.POSITIVE_INFINITY;
+					else if(sValue.equals("-INF")) dUBBound = Double.NEGATIVE_INFINITY;
+					else if(sValue.equals("NaN") || sValue.equals("-NaN")) dUBBound = Double.NaN;			
+					else dUBBound = Double.parseDouble(sValue);
 				} 
 				catch (Exception e) {
 				}
@@ -2569,8 +2665,14 @@ public class OSoLReader extends OSgLReader{
 		double[] mdValues = new double[iNumberConstraints];
 		for(int i = 0; i < iCons; i++){
 			try{
-				int iIndex = Integer.parseInt(((Element)cons.item(i)).getAttribute("idx"));
-				double dValue = Double.parseDouble(((Element)cons.item(i)).getAttribute("value"));
+				int iIndex = Integer.parseInt(((Element)cons.item(i)).getAttribute("idx"));				
+				String sValue = ((Element)cons.item(i)).getAttribute("value");
+				double dValue = Double.NaN;
+				if(sValue == null || sValue.length() <= 0) dValue = Double.NaN;
+				if(sValue.equals("INF")) dValue = Double.POSITIVE_INFINITY;
+				else if(sValue.equals("-INF")) dValue = Double.NEGATIVE_INFINITY;
+				else if(sValue.equals("NaN") || sValue.equals("-NaN")) dValue = Double.NaN;			
+				else dValue = Double.parseDouble(sValue);
 				mdValues[iIndex] = dValue;
 			}
 			catch(Exception e){
@@ -2600,7 +2702,14 @@ public class OSoLReader extends OSgLReader{
 			try{
 				mCon[i] = new InitConValue();
 				mCon[i].idx = Integer.parseInt(((Element)cons.item(i)).getAttribute("idx"));
-				mCon[i].value = Double.parseDouble(((Element)cons.item(i)).getAttribute("value"));
+				String sValue = ((Element)cons.item(i)).getAttribute("value");
+				double dValue = Double.NaN;
+				if(sValue == null || sValue.length() <= 0) dValue = Double.NaN;
+				if(sValue.equals("INF")) dValue = Double.POSITIVE_INFINITY;
+				else if(sValue.equals("-INF")) dValue = Double.NEGATIVE_INFINITY;
+				else if(sValue.equals("NaN") || sValue.equals("-NaN")) dValue = Double.NaN;			
+				else dValue = Double.parseDouble(sValue);
+				mCon[i].value = dValue;
 			}
 			catch(Exception e){
 				return null;
@@ -2651,7 +2760,12 @@ public class OSoLReader extends OSgLReader{
 				int iIndex = Integer.parseInt(((Element)cons.item(i)).getAttribute("idx"));
 				double dBound = 0;
 				try {
-					dBound = Double.parseDouble(((Element)cons.item(i)).getAttribute("lbDualValue"));
+					String sValue = ((Element)cons.item(i)).getAttribute("lbDualValue");
+					if(sValue == null || sValue.length() <= 0) dBound = 0.0;
+					if(sValue.equals("INF")) dBound = Double.POSITIVE_INFINITY;
+					else if(sValue.equals("-INF")) dBound = Double.NEGATIVE_INFINITY;
+					else if(sValue.equals("NaN") || sValue.equals("-NaN")) dBound = Double.NaN;			
+					else dBound = Double.parseDouble(sValue);
 				} 
 				catch (Exception e) {
 				}
@@ -2685,7 +2799,12 @@ public class OSoLReader extends OSgLReader{
 				int iIndex = Integer.parseInt(((Element)cons.item(i)).getAttribute("idx"));
 				double dBound = 0;
 				try {
-					dBound = Double.parseDouble(((Element)cons.item(i)).getAttribute("ubDualValue"));
+					String sValue = ((Element)cons.item(i)).getAttribute("ubDualValue");
+					if(sValue == null || sValue.length() <= 0) dBound = 0.0;
+					if(sValue.equals("INF")) dBound = Double.POSITIVE_INFINITY;
+					else if(sValue.equals("-INF")) dBound = Double.NEGATIVE_INFINITY;
+					else if(sValue.equals("NaN") || sValue.equals("-NaN")) dBound = Double.NaN;			
+					else dBound = Double.parseDouble(sValue);
 				} 
 				catch (Exception e) {
 				}
@@ -2721,12 +2840,22 @@ public class OSoLReader extends OSgLReader{
 				double dLBBound = 0;
 				double dUBBound = 0;
 				try {
-					dLBBound = Double.parseDouble(((Element)cons.item(i)).getAttribute("lbDualValue"));				
+					String sValue = ((Element)cons.item(i)).getAttribute("lbDualValue");
+					if(sValue == null || sValue.length() <= 0) dLBBound = 0.0;
+					if(sValue.equals("INF")) dLBBound = Double.POSITIVE_INFINITY;
+					else if(sValue.equals("-INF")) dLBBound = Double.NEGATIVE_INFINITY;
+					else if(sValue.equals("NaN") || sValue.equals("-NaN")) dLBBound = Double.NaN;			
+					else dLBBound = Double.parseDouble(sValue);
 				} 
 				catch (Exception e) {
 				}
 				try {
-					dUBBound = Double.parseDouble(((Element)cons.item(i)).getAttribute("ubDualValue"));				
+					String sValue = ((Element)cons.item(i)).getAttribute("ubDualValue");
+					if(sValue == null || sValue.length() <= 0) dUBBound = 0.0;
+					if(sValue.equals("INF")) dUBBound = Double.POSITIVE_INFINITY;
+					else if(sValue.equals("-INF")) dUBBound = Double.NEGATIVE_INFINITY;
+					else if(sValue.equals("NaN") || sValue.equals("-NaN")) dUBBound = Double.NaN;			
+					else dUBBound = Double.parseDouble(sValue);
 				} 
 				catch (Exception e) {
 				}
@@ -2928,16 +3057,7 @@ public class OSoLReader extends OSgLReader{
 			solverOption.value = sValue;
 			solverOption.solver = sSolver;
 			solverOption.category = sCategory;
-			if(!sType.equalsIgnoreCase("double") && 
-					!sType.equalsIgnoreCase("integer") &&
-					!sType.equalsIgnoreCase("boolean") &&
-					!sType.equalsIgnoreCase("string")){
-				solverOption.type = "string";
-			}
-			else{
-				solverOption.type = sType.toLowerCase();
-
-			}
+			solverOption.type = sType;
 			solverOption.description = sDescription;
 			m_solverOptionHashMap.put(sName, solverOption);
 			if(solverName == null || solverName.length() <= 0 || solverName.equals(sSolver) ){
@@ -2964,8 +3084,8 @@ public class OSoLReader extends OSgLReader{
 		//System.out.println(IOUtil.readStringFromFile(OSParameter.CODE_HOME + "OSRepository/test/osol/osol.osol"));
 		//System.out.println(osolReader.readFile(OSParameter.CODE_HOME + "OSRepository/test/osol/osol.osol"));
 		//System.out.println(IOUtil.readStringFromFile("c:/test.osol"));
-//		System.out.println(osolReader.readFile("c:/test.osol"));
-		System.out.println(osolReader.readFile("c:/parsertest.osol"));
+		osolReader.readFile("c:/test.osol");
+		//osolReader.readFile("c:/parsertest.osol");
 
 //		System.out.println(osolReader.getOptionStr("scheduledStartTime"));
 //		System.out.println(osolReader.getOptionDbl("minMemorySize"));
@@ -3287,6 +3407,18 @@ public class OSoLReader extends OSgLReader{
 //		System.out.println("--------------------------");
 //		}
 
+		////////////////////
+
+
+		try {
+			OSOption osOption = osolReader.getOSOption();
+			System.out.println(osOption.writeOSoL());;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		////////////////////
 
 //		System.out.println(osolReader.getNumberOfSolverOptions());	
 //		SolverOption[] mSolverOptions = osolReader.getSolverOptions("ipopt");
