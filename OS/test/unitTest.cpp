@@ -2317,9 +2317,9 @@ catch(const ErrorClass& eclass){
 #endif
 //		delete osoption;
 		cout << "delete osoption2" << endl;
-		delete osoption2;
+		//delete osoption2;
 		cout << "delete osolreader" << endl;
-		delete osolreader;
+		//delete osolreader;
 		cout << "cleanup done" << endl;
 		osolreader = NULL;
 
