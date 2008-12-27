@@ -636,10 +636,10 @@ SOSVariableBranchingWeights::~SOSVariableBranchingWeights()
 	if (sos != NULL) 
 	{	int i;
 		for (i=0; i < numberOfSOS; i++)
-		{	delete sos[i];
+		{	//delete sos[i];
 			sos[i] = NULL;
 		}
-		delete[] sos;
+		//delete[] sos;
 		sos = NULL;
 	}
 }//end SOSVariableBranchingWeights destructor 
