@@ -584,11 +584,11 @@ IntegerVariableBranchingWeights::~IntegerVariableBranchingWeights()
 	if (var != NULL) 
 	{	int i;
 		for (i=0; i < numberOfVar; i++)
-		{	delete var[i];
-			var[i] = NULL;
+		{	//delete var[i];
+			//var[i] = NULL;
 		}
-		delete[] var;
-		var = NULL;
+		//delete[] var;
+		//var = NULL;
 	}
 }//end IntegerVariableBranchingWeights destructor 
 
@@ -611,11 +611,11 @@ SOSWeights::~SOSWeights()
 	if (var != NULL) 
 	{	int i;
 		for (i=0; i < numberOfVar; i++)
-		{	delete var[i];
-			var[i] = NULL;
+		{	//delete var[i];
+			//var[i] = NULL;
 		}
-		delete[] var;
-		var = NULL;
+		//delete[] var;
+		//var = NULL;
 	}
 }//end SOSWeights destructor 
 
@@ -637,10 +637,10 @@ SOSVariableBranchingWeights::~SOSVariableBranchingWeights()
 	{	int i;
 		for (i=0; i < numberOfSOS; i++)
 		{	//delete sos[i];
-			sos[i] = NULL;
+			//sos[i] = NULL;
 		}
 		//delete[] sos;
-		sos = NULL;
+		//sos = NULL;
 	}
 }//end SOSVariableBranchingWeights destructor 
 
