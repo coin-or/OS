@@ -83,7 +83,7 @@ public class StandardOSSolver extends DefaultSolver{
 			" -osil " + sInstanceFile + 
 			" -osol " + sOptionFile +
 			" -osrl " + sResultFile + 
-			" -solver" + sOSSolver; 
+			" -solver " + sOSSolver; 
 		
 		String[] msCommandLine = {
 				sSolverPath, 
