@@ -579,7 +579,7 @@ IntegerVariableBranchingWeights::IntegerVariableBranchingWeights():
 IntegerVariableBranchingWeights::~IntegerVariableBranchingWeights()
 {    
 	#ifdef DEBUG
-	cout << "IntegerVariableBranchingWeights Destructor Called" << endl;
+	cout << "IntegerVariableBranchingWeights Destructor Called; numberOfVar=" << numberOfVar << endl;
 	#endif
 	if (var != NULL) 
 	{	int i;
@@ -2554,8 +2554,30 @@ BranchingWeight**  OSOption::getIntegerVariableBranchingWeightsSparse()
 	else
 		throw ErrorClass("<optimization> object must be defined before getting the data");
 	return intVarVector;
-
 }//getIntegerVariableBranchingWeightsSparse
+
+
+/**
+ * get a list of branching weights for SOS variables in sparse form
+ * @return a list of SOSWeights objects
+ */
+SOSWeights**  OSOption::getSOSVariableBranchingWeightsSparse()
+{	SOSWeights** sosVarVector;
+	if (this->optimization != NULL) 
+	{	if (this->optimization->variables != NULL) 
+		{	if (this->optimization->variables->sosVariableBranchingWeights != NULL)
+				sosVarVector = this->optimization->variables->sosVariableBranchingWeights->sos;
+			else
+				throw ErrorClass("<sosVariableBranchingWeights> object must be defined before getting the data");
+		}
+		else
+			throw ErrorClass("<variables> object must be defined before getting the data");
+	}
+	else
+		throw ErrorClass("<optimization> object must be defined before getting the data");
+	return sosVarVector;
+}//getSOSVariableBranchingWeightsSparse
+
 /**
  * get a list of branching weights for integer variables in dense form
  * @return an array of values
@@ -2596,6 +2618,30 @@ double* OSOption::getIntegerVariableBranchingWeightsDense(int numberOfVariables)
 	}
 	return NULL;
 }//getIntegerVariableBranchingWeightsDense
+
+/**
+ * get the array of other variable options associated with a particular solver
+ * @param solver_name is the name of the solver
+ * @return an array of other variable options associated with this solver
+ */
+std::vector<OtherVariableOption*>  OSOption::getOtherVariableOptions( std::string solver_name)
+{	std::vector<OtherVariableOption*> optionsVector;
+	if (this->optimization != NULL) 
+	{	if (this->optimization->variables != NULL) 
+		{	int i;
+			int num_options;
+			num_options = this->getNumberOfOtherVariableOptions();
+			for(i = 0; i < num_options; i++)
+				if (solver_name == this->optimization->variables->other[ i]->solver)
+					optionsVector.push_back( this->optimization->variables->other[ i]);
+		}					
+		else
+			throw ErrorClass("<variables> object must be defined before getting the data");
+	}
+	else
+		throw ErrorClass("<optimization> object must be defined before getting the data");
+	return optionsVector;
+}//getOtherVariableOptions
 
 /**
  * get the list of initial objective values in sparse form
@@ -2761,6 +2807,30 @@ double* OSOption::getInitObjUpperBoundsDense(int numberOfObjectives)
 	}
 	return NULL;
 }//getInitObjUpperBoundsDense
+
+/**
+ * get the array of other objective options associated with a particular solver
+ * @param solver_name is the name of the solver
+ * @return an array of other objective options associated with this solver
+ */
+std::vector<OtherObjectiveOption*>  OSOption::getOtherObjectiveOptions( std::string solver_name)
+{	std::vector<OtherObjectiveOption*> optionsVector;
+	if (this->optimization != NULL) 
+	{	if (this->optimization->variables != NULL) 
+		{	int i;
+			int num_options;
+			num_options = this->getNumberOfOtherObjectiveOptions();
+			for(i = 0; i < num_options; i++)
+				if (solver_name == this->optimization->objectives->other[ i]->solver)
+					optionsVector.push_back( this->optimization->objectives->other[ i]);
+		}					
+		else
+			throw ErrorClass("<objectives> object must be defined before getting the data");
+	}
+	else
+		throw ErrorClass("<optimization> object must be defined before getting the data");
+	return optionsVector;
+}//getOtherObjectiveOptions
 
 
 /**
@@ -2929,6 +2999,31 @@ double* OSOption::getInitDualVarUpperBoundsDense(int numberOfConstraints)
 	}
 	return NULL;
 }//getInitDualVarUpperBoundsDense
+
+/**
+ * get the array of other constraint options associated with a particular solver
+ * @param solver_name is the name of the solver
+ * @return an array of other constraint options associated with this solver
+ */
+std::vector<OtherConstraintOption*>  OSOption::getOtherConstraintOptions( std::string solver_name)
+{	std::vector<OtherConstraintOption*> optionsVector;
+	if (this->optimization != NULL) 
+	{	if (this->optimization->constraints != NULL) 
+		{	int i;
+			int num_options;
+			num_options = this->getNumberOfOtherConstraintOptions();
+			for(i = 0; i < num_options; i++)
+				if (solver_name == this->optimization->constraints->other[ i]->solver)
+					optionsVector.push_back( this->optimization->constraints->other[ i]);
+		}					
+		else
+			throw ErrorClass("<constraints> object must be defined before getting the data");
+	}
+	else
+		throw ErrorClass("<optimization> object must be defined before getting the data");
+	return optionsVector;
+}//getOtherConstraintOptions
+
 
 
 /**

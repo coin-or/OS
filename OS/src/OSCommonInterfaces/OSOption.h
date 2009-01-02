@@ -2909,7 +2909,7 @@ public:
 	 * Get the initial value strings associated with the variables in sparse form
 	 * <p>
 	 * 
-	 * @return a vector of strings that 
+	 * @return a vector of pointers to InitVarValueString objects that 
 	 * hold inital value strings for (some of) the variables
 	 */
 	InitVarValueString** getInitVarValuesStringSparse();
@@ -2928,7 +2928,7 @@ public:
 	 * Get the initial basis status in sparse form
 	 * <p>
 	 * 
-	 * @return a vector of strings that 
+	 * @return a vector of pointers to InitBasStatus objects that 
 	 * hold inital basis status for (some of) the variables
 	 */
 	InitBasStatus** getInitBasisStatusSparse();
@@ -2939,42 +2939,51 @@ public:
 	 * 
 	 * @return a vector of strings that 
 	 * holds initial basis status (or "unknown") for all of the variables
-	 * @param nvar is the number of variables
+	 * @param nvar is the number of variables for which basis status is avaiable
 	 */
 	std::string *getInitBasisStatusDense(int nvar);
+
 
 	/**
 	 * Get the integer branching weights in sparse form
 	 * <p>
 	 * 
-	 * @return a vector of double that 
-	 * holds branching weights for (some of) the integer-valued variables
+	 * @return a vector of pointers to BranchingWeight objects that 
+	 * hold branching weights for (some of) the variables
 	 */
 	BranchingWeight**  getIntegerVariableBranchingWeightsSparse();
-
 
 	/**
 	 * Get the integer branching weights in dense form
 	 * <p>
 	 * 
 	 * @return a vector of double that 
-	 * hold initial values for all of the variables
+	 * holds branching weights (or OSNAN) for all the variables
 	 * @param nvar is the number of variables
 	 */
 	double* getIntegerVariableBranchingWeightsDense(int nvar);
 
-	/*
-	getSOSVariableBranchingWeightsSparse(); // ?
-	getSOSVariableBranchingWeightsDense(int numberOfVariables); // ?
-	 */
-
 	/**
-	 * Get the array of other variable options
+	 * Get the SOS branching weights in sparse form
 	 * <p>
 	 * 
-	 * @return a vector of pointers to OtherVariableOption objects  
+	 * @return a vector of double that 
+	 * @return a vector of pointers to SOSWeights objects that 
+	 * hold branching weights for (some of) the variables in special ordered sets
 	 */
-	//std::vector<OtherVariableOption*> getOtherVariableOptions();
+	SOSWeights** getSOSVariableBranchingWeightsSparse(); 
+//	getSOSVariableBranchingWeightsDense(int numberOfVariables);
+
+
+	/**
+	 * Get the <other> variable options associated with a particular solver
+	 * <p>
+	 * 
+	 * @param solver_name is the name of the solver whose options we want
+	 * @return a vector of pointers to OtherVariableOption objects  
+	 * that correspond to the solver named. 
+	 */
+	std::vector<OtherVariableOption*> getOtherVariableOptions(std::string solver_name);
 
 	/**
 	 * Get the initial values associated with the objectives in sparse form
@@ -3028,9 +3037,10 @@ public:
 	 * Get the array of other objective options
 	 * <p>
 	 * 
-	 * @return a vector of pointers to OtherObjectiveOption objects  
+	 * @param solver_name is the name of the solver whose options we want
+	 * @return a vector of pointers to OtherConstraintOption objects  
 	 */
-	OtherObjectiveOption** getOtherObjectiveOptions();
+	std::vector<OtherObjectiveOption*> getOtherObjectiveOptions(std::string solver_name);
 
 	/**
 	 * Get the initial values associated with the constraints in sparse form
@@ -3085,9 +3095,10 @@ public:
 	 * Get the array of other constraint options
 	 * <p>
 	 * 
+	 * @param solver_name is the name of the solver whose options we want
 	 * @return a vector of pointers to OtherConstraintOption objects  
 	 */
-	//std::vector<OtherConstraintOption*> getOtherConstraintOptions();
+	std::vector<OtherConstraintOption*> getOtherConstraintOptions(std::string solver_name);
 
 
 	/**
