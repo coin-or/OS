@@ -221,7 +221,7 @@ SystemOption::~SystemOption()
 
 
 ServiceOption::ServiceOption(): 
-	type ("")
+	type ("solver")
 {    
 	#ifdef DEBUG
 	cout << "Inside ServiceOption Constructor" << endl;
@@ -594,7 +594,7 @@ IntegerVariableBranchingWeights::~IntegerVariableBranchingWeights()
 
 SOSWeights::SOSWeights():
 	sosIdx (-1),
-	groupWeight (0.0),
+	groupWeight (1.0),
 	numberOfVar (0)
 {    
 	#ifdef DEBUG
@@ -669,7 +669,7 @@ OtherVariableOption::OtherVariableOption():
 	value (""),
 	solver(""),
 	category (""),
-	type (""),
+	type ("string"),
 	description ("")
 {    
 	#ifdef DEBUG
@@ -739,7 +739,7 @@ VariableOption::~VariableOption()
 
 
 InitObjValue::InitObjValue(): 
-	idx (0),
+	idx (-1),
 	value (0.0)
 {    
 	#ifdef DEBUG
@@ -782,9 +782,9 @@ InitObjectiveValues::~InitObjectiveValues()
 
 
 InitObjBound::InitObjBound(): 
-	idx (0),
-	lbValue (0.0),
-	ubValue (0.0)
+	idx (-1),
+	lbValue (-OSDBL_MAX),
+	ubValue ( OSDBL_MAX)
 {    
 	#ifdef DEBUG
 	cout << "Inside InitObjBound Constructor" << endl;
@@ -826,7 +826,7 @@ InitObjectiveBounds::~InitObjectiveBounds()
 
 
 OtherObjOption::OtherObjOption(): 
-	idx (0),
+	idx (-1),
 	value ("")
 {    
 	#ifdef DEBUG
@@ -848,7 +848,7 @@ OtherObjectiveOption::OtherObjectiveOption():
 	value (""),
 	solver(""),
 	category (""),
-	type (""),
+	type ("string"),
 	description ("")
 {    
 	#ifdef DEBUG
@@ -1018,7 +1018,7 @@ OtherConstraintOption::OtherConstraintOption():
 	value (""),
 	solver(""),
 	category (""),
-	type (""),
+	type ("string"),
 	description ("")
 {    
 	#ifdef DEBUG
@@ -1125,7 +1125,7 @@ SolverOptions::~SolverOptions()
 
 OptimizationOption::OptimizationOption(): 
 	numberOfVariables (0),
-	numberOfObjectives (0),
+	numberOfObjectives (1),
 	numberOfConstraints (0)
 {    
 	#ifdef DEBUG
