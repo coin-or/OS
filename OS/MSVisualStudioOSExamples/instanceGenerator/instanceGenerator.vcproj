@@ -139,6 +139,7 @@
 				OutputFile="$(ProjectName).exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\lib;..\..\lib\ifort"
+				GenerateManifest="false"
 				GenerateDebugInformation="false"
 				SubSystem="1"
 				OptimizeReferences="2"
