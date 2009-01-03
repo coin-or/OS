@@ -385,13 +385,15 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				for (int i=0; i < m_OSOption->optimization->variables->initialVariableValues->numberOfVar; i++)
 				{	outStr << "<var";
 					outStr << " idx=\"" << m_OSOption->optimization->variables->initialVariableValues->var[i]->idx << "\"";
-					outStr << " value=\"";
-					if (m_OSOption->optimization->variables->initialVariableValues->var[i]->value == OSDBL_MAX)
-						outStr << "INF";
-					else if (m_OSOption->optimization->variables->initialVariableValues->var[i]->value == -OSDBL_MAX)
-						outStr << "-INF";
-					else
-						outStr << m_OSOption->optimization->variables->initialVariableValues->var[i]->value;
+					if (m_OSOption->optimization->variables->initialVariableValues->var[i]->value != OSNAN)
+					{	outStr << " value=\"";
+						if (m_OSOption->optimization->variables->initialVariableValues->var[i]->value == OSDBL_MAX)
+							outStr << "INF";
+						else if (m_OSOption->optimization->variables->initialVariableValues->var[i]->value == -OSDBL_MAX)
+							outStr << "-INF";
+						else
+							outStr << m_OSOption->optimization->variables->initialVariableValues->var[i]->value;
+					}
 					outStr << "\"/>" << endl;
 				}
 				outStr << "</initialVariableValues>" << endl;
@@ -490,13 +492,15 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				for (int i=0; i < m_OSOption->optimization->objectives->initialObjectiveValues->numberOfObj; i++)
 				{	outStr << "<obj";
 					outStr << " idx=\"" << m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->idx << "\"";
-					outStr << " value=\"";
-					if (m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->value == OSDBL_MAX)
-						outStr << "INF";
-					else if (m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->value == -OSDBL_MAX)
-						outStr << "-INF";
-					else
-						outStr << m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->value;
+					if (m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->value != OSNAN)
+					{	outStr << " value=\"";
+						if (m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->value == OSDBL_MAX)
+							outStr << "INF";
+						else if (m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->value == -OSDBL_MAX)
+							outStr << "-INF";
+						else
+							outStr << m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->value;
+					}
 					outStr << "\"/>" << endl;
 				}
 				outStr << "</initialObjectiveValues>" << endl;
@@ -563,13 +567,15 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				for (int i=0; i < m_OSOption->optimization->constraints->initialConstraintValues->numberOfCon; i++)
 				{	outStr << "<con";
 					outStr << " idx=\"" << m_OSOption->optimization->constraints->initialConstraintValues->con[i]->idx << "\"";
-					outStr << " value=\"";
-					if (m_OSOption->optimization->constraints->initialConstraintValues->con[i]->value == OSDBL_MAX)
-						outStr << "INF";
-					else if (m_OSOption->optimization->constraints->initialConstraintValues->con[i]->value == -OSDBL_MAX)
-						outStr << "-INF";
-					else
-						outStr << m_OSOption->optimization->constraints->initialConstraintValues->con[i]->value;
+					if (m_OSOption->optimization->constraints->initialConstraintValues->con[i]->value != OSNAN)
+					{	outStr << " value=\"";
+						if (m_OSOption->optimization->constraints->initialConstraintValues->con[i]->value == OSDBL_MAX)
+							outStr << "INF";
+						else if (m_OSOption->optimization->constraints->initialConstraintValues->con[i]->value == -OSDBL_MAX)
+							outStr << "-INF";
+						else
+							outStr << m_OSOption->optimization->constraints->initialConstraintValues->con[i]->value;
+					}
 					outStr << "\"/>" << endl;
 				}
 				outStr << "</initialConstraintValues>" << endl;

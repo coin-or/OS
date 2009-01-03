@@ -510,7 +510,7 @@ InitVariableValuesString::~InitVariableValuesString()
 
 InitBasStatus::InitBasStatus(): 
 	idx (-1),
-	value ("")
+	value ("unknown")
 {    
 	#ifdef DEBUG
 	cout << "Inside InitBasStatus Constructor" << endl;
@@ -740,7 +740,7 @@ VariableOption::~VariableOption()
 
 InitObjValue::InitObjValue(): 
 	idx (-1),
-	value (0.0)
+	value (OSNAN)
 {    
 	#ifdef DEBUG
 	cout << "Inside InitObjValue Constructor" << endl;
@@ -827,7 +827,9 @@ InitObjectiveBounds::~InitObjectiveBounds()
 
 OtherObjOption::OtherObjOption(): 
 	idx (-1),
-	value ("")
+	value (""),
+	lbValue (""),
+	ubValue ("")
 {    
 	#ifdef DEBUG
 	cout << "Inside OtherObjOption Constructor" << endl;
@@ -908,7 +910,7 @@ ObjectiveOption::~ObjectiveOption()
 
 InitConValue::InitConValue(): 
 	idx (0),
-	value (0.0)
+	value (OSNAN)
 {    
 	#ifdef DEBUG
 	cout << "Inside InitConValue Constructor" << endl;

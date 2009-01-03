@@ -131,7 +131,7 @@
 				<con idx="0" value="5.0"></con>
 			</initialConstraintValues>
 			<initialDualValues numberOfCon="1">
-                                <con idx="1" lbDualValue="-10.0" ubDualValue="100."></con>
+				<con idx="1" lbDualValue="-10.0" ubDualValue="100."></con>
 			</initialDualValues>
 		</constraints>
 		<solverOptions numberOfSolverOptions="16">
