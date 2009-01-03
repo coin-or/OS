@@ -451,7 +451,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 			if (m_OSOption->optimization->variables->numberOfOtherVariableOptions > 0)
 				for (int i=0; i < m_OSOption->optimization->variables->numberOfOtherVariableOptions; i++)
 				{	outStr << "<other name=\"" << m_OSOption->optimization->variables->other[i]->name << "\"";
-					if (m_OSOption->optimization->variables->other[i]->numberOfVar > 0)
+//					if (m_OSOption->optimization->variables->other[i]->numberOfVar > 0)
 						outStr << " numberOfVar=\"" << m_OSOption->optimization->variables->other[i]->numberOfVar << "\"";
 					if (m_OSOption->optimization->variables->other[i]->value != "")
 						outStr << " value=\"" << m_OSOption->optimization->variables->other[i]->value << "\"";
@@ -528,7 +528,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 			if (m_OSOption->optimization->objectives->numberOfOtherObjectiveOptions > 0)
 				for (int i=0; i < m_OSOption->optimization->objectives->numberOfOtherObjectiveOptions; i++)
 				{	outStr << "<other name=\"" << m_OSOption->optimization->objectives->other[i]->name << "\"";
-					if (m_OSOption->optimization->objectives->other[i]->numberOfObj > 0)
+//					if (m_OSOption->optimization->objectives->other[i]->numberOfObj > 0)
 						outStr << " numberOfObj=\"" << m_OSOption->optimization->objectives->other[i]->numberOfObj << "\"";
 					if (m_OSOption->optimization->objectives->other[i]->value != "")
 						outStr << " value=\"" << m_OSOption->optimization->objectives->other[i]->value << "\"";
@@ -601,7 +601,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 			if (m_OSOption->optimization->constraints->numberOfOtherConstraintOptions > 0)
 				for (int i=0; i < m_OSOption->optimization->constraints->numberOfOtherConstraintOptions; i++)
 				{	outStr << "<other name=\"" << m_OSOption->optimization->constraints->other[i]->name << "\"";
-					if (m_OSOption->optimization->constraints->other[i]->numberOfCon > 0)
+//					if (m_OSOption->optimization->constraints->other[i]->numberOfCon > 0)
 						outStr << " numberOfCon=\"" << m_OSOption->optimization->constraints->other[i]->numberOfCon << "\"";
 					if (m_OSOption->optimization->constraints->other[i]->value != "")
 						outStr << " value=\"" << m_OSOption->optimization->constraints->other[i]->value << "\"";

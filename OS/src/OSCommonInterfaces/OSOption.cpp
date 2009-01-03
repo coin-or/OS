@@ -2643,6 +2643,24 @@ std::vector<OtherVariableOption*>  OSOption::getOtherVariableOptions( std::strin
 	return optionsVector;
 }//getOtherVariableOptions
 
+
+/**
+ * get the array of all other variable options
+ * @return an array of other variable options associated with this solver
+ */
+OtherVariableOption** OSOption::getAllOtherVariableOptions()
+{	OtherVariableOption** optionsVector;
+	if (this->optimization != NULL) 
+	{	if (this->optimization->variables != NULL) 
+			optionsVector = this->optimization->variables->other;
+		else
+			throw ErrorClass("<variables> object must be defined before getting the data");
+	}
+	else
+		throw ErrorClass("<optimization> object must be defined before getting the data");
+	return optionsVector;
+}//getAllOtherVariableOptions
+
 /**
  * get the list of initial objective values in sparse form
  * @return a list of index/value pairs
@@ -2831,6 +2849,23 @@ std::vector<OtherObjectiveOption*>  OSOption::getOtherObjectiveOptions( std::str
 		throw ErrorClass("<optimization> object must be defined before getting the data");
 	return optionsVector;
 }//getOtherObjectiveOptions
+
+/**
+ * get the array of all other objective options
+ * @return an array of other objective options associated with this solver
+ */
+OtherObjectiveOption** OSOption::getAllOtherObjectiveOptions()
+{	OtherObjectiveOption** optionsVector;
+	if (this->optimization != NULL) 
+	{	if (this->optimization->objectives != NULL) 
+			optionsVector = this->optimization->objectives->other;
+		else
+			throw ErrorClass("<objectives> object must be defined before getting the data");
+	}
+	else
+		throw ErrorClass("<optimization> object must be defined before getting the data");
+	return optionsVector;
+}//getAllOtherObjectiveOptions
 
 
 /**
@@ -3024,6 +3059,22 @@ std::vector<OtherConstraintOption*>  OSOption::getOtherConstraintOptions( std::s
 	return optionsVector;
 }//getOtherConstraintOptions
 
+/**
+ * get the array of all other constraint options
+ * @return an array of other constraint options associated with this solver
+ */
+OtherConstraintOption** OSOption::getAllOtherConstraintOptions()
+{	OtherConstraintOption** optionsVector;
+	if (this->optimization != NULL) 
+	{	if (this->optimization->constraints != NULL) 
+			optionsVector = this->optimization->constraints->other;
+		else
+			throw ErrorClass("<constraints> object must be defined before getting the data");
+	}
+	else
+		throw ErrorClass("<optimization> object must be defined before getting the data");
+	return optionsVector;
+}//getAllOtherConstraintOptions
 
 
 /**
@@ -3049,6 +3100,24 @@ std::vector<SolverOption*>  OSOption::getSolverOptions( std::string solver_name)
 		throw ErrorClass("<optimization> object must be defined before getting the data");
 	return optionsVector;
 }//getSolverOptions
+
+/**
+ * get the array of all solver options
+ * @return an array of other constraint options associated with this solver
+ */
+SolverOption** OSOption::getAllSolverOptions()
+{	SolverOption** optionsVector;
+	if (this->optimization != NULL) 
+	{	if (this->optimization->solverOptions != NULL) 
+			optionsVector = this->optimization->solverOptions->solverOption;
+		else
+			throw ErrorClass("<solverOptions> object must be defined before getting the data");
+	}
+	else
+		throw ErrorClass("<optimization> object must be defined before getting the data");
+	return optionsVector;
+}//getAllOtherConstraintOptions
+
 
 
 /** 

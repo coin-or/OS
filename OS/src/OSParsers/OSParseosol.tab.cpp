@@ -1130,35 +1130,35 @@ static const yytype_uint16 yyrline[] =
     1724,  1724,  1727,  1737,  1737,  1739,  1747,  1752,  1752,  1754,
     1754,  1756,  1770,  1769,  1777,  1777,  1780,  1780,  1783,  1793,
     1793,  1795,  1803,  1808,  1808,  1810,  1810,  1812,  1826,  1825,
-    1838,  1838,  1841,  1841,  1844,  1855,  1855,  1857,  1869,  1874,
-    1874,  1876,  1876,  1876,  1878,  1891,  1898,  1905,  1916,  1917,
-    1919,  1919,  1921,  1929,  1934,  1934,  1936,  1936,  1938,  1952,
-    1951,  1964,  1964,  1967,  1967,  1969,  1971,  1976,  1976,  1979,
-    1980,  1981,  1982,  1983,  1984,  1985,  1987,  2001,  2000,  2009,
-    2008,  2017,  2016,  2025,  2024,  2033,  2032,  2041,  2040,  2049,
-    2066,  2066,  2068,  2078,  2083,  2083,  2086,  2087,  2088,  2089,
-    2091,  2105,  2104,  2113,  2112,  2121,  2120,  2128,  2128,  2132,
-    2132,  2134,  2138,  2138,  2147,  2148,  2150,  2150,  2153,  2163,
-    2163,  2165,  2173,  2178,  2178,  2180,  2180,  2182,  2197,  2196,
-    2209,  2209,  2212,  2212,  2215,  2225,  2225,  2227,  2236,  2241,
-    2241,  2243,  2243,  2243,  2245,  2259,  2258,  2272,  2271,  2284,
-    2284,  2288,  2288,  2290,  2292,  2297,  2297,  2300,  2301,  2302,
-    2303,  2304,  2305,  2306,  2308,  2322,  2321,  2331,  2330,  2340,
-    2339,  2349,  2348,  2358,  2357,  2367,  2366,  2376,  2393,  2393,
-    2395,  2405,  2410,  2410,  2413,  2414,  2415,  2416,  2418,  2433,
-    2432,  2442,  2441,  2451,  2450,  2459,  2459,  2462,  2462,  2464,
-    2468,  2468,  2477,  2479,  2481,  2481,  2484,  2494,  2494,  2496,
-    2504,  2509,  2509,  2511,  2511,  2513,  2528,  2527,  2540,  2540,
-    2543,  2543,  2546,  2556,  2556,  2558,  2567,  2572,  2572,  2574,
-    2574,  2574,  2576,  2590,  2589,  2603,  2602,  2616,  2616,  2619,
-    2619,  2621,  2623,  2628,  2628,  2631,  2632,  2633,  2634,  2635,
-    2636,  2637,  2639,  2653,  2652,  2661,  2660,  2669,  2668,  2677,
-    2676,  2685,  2684,  2693,  2692,  2701,  2718,  2718,  2720,  2730,
-    2735,  2735,  2738,  2739,  2740,  2741,  2743,  2758,  2757,  2767,
-    2766,  2775,  2774,  2782,  2782,  2785,  2785,  2790,  2800,  2808,
-    2808,  2811,  2810,  2828,  2828,  2831,  2832,  2833,  2834,  2835,
-    2836,  2840,  2839,  2851,  2850,  2862,  2861,  2873,  2872,  2884,
-    2883,  2895,  2894,  2906,  2906
+    1838,  1838,  1841,  1841,  1844,  1855,  1855,  1857,  1870,  1876,
+    1876,  1878,  1878,  1878,  1880,  1893,  1900,  1907,  1918,  1919,
+    1921,  1921,  1923,  1931,  1938,  1938,  1940,  1940,  1942,  1956,
+    1955,  1968,  1968,  1971,  1971,  1973,  1975,  1980,  1980,  1983,
+    1984,  1985,  1986,  1987,  1988,  1989,  1991,  2005,  2004,  2013,
+    2012,  2021,  2020,  2029,  2028,  2037,  2036,  2045,  2044,  2053,
+    2070,  2070,  2072,  2082,  2087,  2087,  2090,  2091,  2092,  2093,
+    2095,  2109,  2108,  2117,  2116,  2125,  2124,  2132,  2132,  2136,
+    2136,  2138,  2142,  2142,  2151,  2152,  2154,  2154,  2157,  2167,
+    2167,  2169,  2177,  2182,  2182,  2184,  2184,  2186,  2201,  2200,
+    2213,  2213,  2216,  2216,  2219,  2229,  2229,  2231,  2240,  2245,
+    2245,  2247,  2247,  2247,  2249,  2263,  2262,  2276,  2275,  2288,
+    2288,  2292,  2292,  2294,  2296,  2301,  2301,  2304,  2305,  2306,
+    2307,  2308,  2309,  2310,  2312,  2326,  2325,  2335,  2334,  2344,
+    2343,  2353,  2352,  2362,  2361,  2371,  2370,  2380,  2397,  2397,
+    2399,  2409,  2414,  2414,  2417,  2418,  2419,  2420,  2422,  2437,
+    2436,  2446,  2445,  2455,  2454,  2463,  2463,  2466,  2466,  2468,
+    2472,  2472,  2481,  2483,  2485,  2485,  2488,  2498,  2498,  2500,
+    2508,  2513,  2513,  2515,  2515,  2517,  2532,  2531,  2544,  2544,
+    2547,  2547,  2550,  2560,  2560,  2562,  2571,  2576,  2576,  2578,
+    2578,  2578,  2580,  2594,  2593,  2607,  2606,  2620,  2620,  2623,
+    2623,  2625,  2627,  2632,  2632,  2635,  2636,  2637,  2638,  2639,
+    2640,  2641,  2643,  2657,  2656,  2665,  2664,  2673,  2672,  2681,
+    2680,  2689,  2688,  2697,  2696,  2705,  2722,  2722,  2724,  2734,
+    2741,  2741,  2744,  2745,  2746,  2747,  2749,  2765,  2764,  2775,
+    2774,  2784,  2783,  2792,  2792,  2795,  2795,  2800,  2810,  2818,
+    2818,  2821,  2820,  2838,  2838,  2841,  2842,  2843,  2844,  2845,
+    2846,  2850,  2849,  2861,  2860,  2872,  2871,  2883,  2882,  2894,
+    2893,  2905,  2904,  2916,  2916
 };
 #endif
 
@@ -1346,13 +1346,13 @@ static const char *const yytname[] =
   "@69", "initobjvalueupperboundatt", "@70", "initobjboundend",
   "otherobjectiveoptionlist", "otherobjectiveoption",
   "otherobjectiveoptionstart", "otherobjectiveoptionsattlist",
-  "otherobjectiveoptionsatt", "otherobjectiveoptionnumberofvar",
+  "otherobjectiveoptionsatt", "otherobjectiveoptionnumberofobj",
   "otherobjectiveoptionname", "@71", "otherobjectiveoptionvalue", "@72",
   "otherobjectiveoptionsolver", "@73", "otherobjectiveoptioncategory",
   "@74", "otherobjectiveoptiontype", "@75",
   "otherobjectiveoptiondescription", "@76", "restofotherobjectiveoption",
-  "otherobjectiveoptionsvarlist", "otherobjectiveoptionsvar",
-  "otherobjectiveoptionsvarstart", "otherobjoptionattlist",
+  "otherobjectiveoptionsobjlist", "otherobjectiveoptionsobj",
+  "otherobjectiveoptionsobjstart", "otherobjoptionattlist",
   "otherobjoptionatt", "otherobjoptionidx", "otherobjoptionvalue", "@77",
   "otherobjoptionlbvalue", "@78", "otherobjoptionubvalue", "@79",
   "otherobjoptionend", "constraints", "constraintsstart",
@@ -1366,13 +1366,13 @@ static const char *const yytname[] =
   "initdualvalueupperboundatt", "@82", "initdualvalueend",
   "otherconstraintoptionlist", "otherconstraintoption",
   "otherconstraintoptionstart", "otherconstraintoptionsattlist",
-  "otherconstraintoptionsatt", "otherconstraintoptionnumberofvar",
+  "otherconstraintoptionsatt", "otherconstraintoptionnumberofcon",
   "otherconstraintoptionname", "@83", "otherconstraintoptionvalue", "@84",
   "otherconstraintoptionsolver", "@85", "otherconstraintoptioncategory",
   "@86", "otherconstraintoptiontype", "@87",
   "otherconstraintoptiondescription", "@88", "restofotherconstraintoption",
-  "otherconstraintoptionsvarlist", "otherconstraintoptionsvar",
-  "otherconstraintoptionsvarstart", "otherconoptionattlist",
+  "otherconstraintoptionsconlist", "otherconstraintoptionscon",
+  "otherconstraintoptionsconstart", "otherconoptionattlist",
   "otherconoptionatt", "otherconoptionidx", "otherconoptionvalue", "@89",
   "otherconoptionlbvalue", "@90", "otherconoptionubvalue", "@91",
   "otherconoptionend", "solveroptions", "solveroptionsstart",
@@ -3418,7 +3418,7 @@ yyreduce:
 	{	osolerror( NULL, osoption, parserData, "only one <minDiskSpace> element allowed");
 	}
 	else
-	{	parserData-> minDiskSpacePresent = true;
+	{	parserData->minDiskSpacePresent = true;
 		osoption->system->minDiskSpace = new MinDiskSpace();
 		osoption->system->minDiskSpace->unit = "byte";
 	}
@@ -3457,7 +3457,7 @@ yyreduce:
 	{	osolerror( NULL, osoption, parserData, "only one <minMemorySize> element allowed");
 	}
 	else
-	{	parserData-> minMemorySizePresent = true;
+	{	parserData->minMemorySizePresent = true;
 		osoption->system->minMemorySize = new MinMemorySize();
 		osoption->system->minMemorySize->unit = "byte";
 	}
@@ -3496,7 +3496,7 @@ yyreduce:
 	{	osolerror( NULL, osoption, parserData, "only one <minCPUSpeed> element allowed");
 	}
 	else
-	{	parserData-> minCPUSpeedPresent = true;
+	{	parserData->minCPUSpeedPresent = true;
 		osoption->system->minCPUSpeed = new MinCPUSpeed();
 		osoption->system->minCPUSpeed->unit = "hertz";
 	}
@@ -3773,7 +3773,7 @@ yyreduce:
 	{	osolerror( NULL, osoption, parserData, "only one <maxTime> element allowed");
 	}
 	else
-	{	parserData-> maxTimePresent = true;
+	{	parserData->maxTimePresent = true;
 		osoption->job->maxTime = new MaxTime();
 		osoption->job->maxTime->unit = "second"; 
 	}
@@ -4804,6 +4804,7 @@ yyreduce:
 	parserData->grpWgtAttributePresent = false;
 	parserData->nOfVarAttributePresent = false;
 	parserData->numberOfSOS++;
+	printf("Increment parserData->numberOfSOS to %d",parserData->numberOfSOS);
 ;}
     break;
 
@@ -4811,6 +4812,7 @@ yyreduce:
 
     {	if (parserData->numberOfSOS >= osoption->optimization->variables->sosVariableBranchingWeights->numberOfSOS)
 		osolerror(NULL, osoption, parserData, "too many SOS branching weights");
+	printf("Reset parserData->numberOfSOSVar (to 0)\n"); parserData->numberOfSOSVar = 0;
 ;}
     break;
 
@@ -4870,7 +4872,9 @@ yyreduce:
 
   case 513:
 
-    {	if (parserData->numberOfSOSVar >= osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->numberOfVar)
+    {	printf("numberOfSOSVar:%d, numberOfVar in this SOS:%d",parserData->numberOfSOSVar,
+		osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->numberOfVar);
+	if (parserData->numberOfSOSVar >= osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->numberOfVar)
 		osolerror(NULL, osoption, parserData, "too many variable branching weights");
 ;}
     break;
@@ -5038,7 +5042,7 @@ yyreduce:
     {	if (parserData->valAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one variable value allowed");
 	parserData->valAttributePresent = true;
-	osoption->optimization->variables-> other[parserData->numberOfOtherVariableOptions]->var[parserData->numberOfVar]->value = (yyvsp[(2) - (2)].sval);
+	osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->var[parserData->numberOfVar]->value = (yyvsp[(2) - (2)].sval);
 ;}
     break;
 
@@ -5047,7 +5051,7 @@ yyreduce:
     {	if (parserData->lbvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one lower bound value allowed");
 	parserData->lbvalAttributePresent = true;
-	osoption->optimization->variables-> other[parserData->numberOfOtherVariableOptions]->var[parserData->numberOfVar]->lbValue = (yyvsp[(2) - (2)].sval);
+	osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->var[parserData->numberOfVar]->lbValue = (yyvsp[(2) - (2)].sval);
 ;}
     break;
 
@@ -5056,7 +5060,7 @@ yyreduce:
     {	if (parserData->ubvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one upper bound value allowed");
 	parserData->ubvalAttributePresent = true;
-	osoption->optimization->variables-> other[parserData->numberOfOtherVariableOptions]->var[parserData->numberOfVar]->ubValue = (yyvsp[(2) - (2)].sval);
+	osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->var[parserData->numberOfVar]->ubValue = (yyvsp[(2) - (2)].sval);
 ;}
     break;
 
@@ -5286,7 +5290,7 @@ yyreduce:
 
   case 637:
 
-    { 	if (parserData->numberOfVar < osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->numberOfObj)
+    { 	if (parserData->numberOfObj < osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->numberOfObj)
 		osolerror(NULL, osoption, parserData, "not enough <obj> entries in <other> variable element");
 	if (!parserData->otherOptionNumberPresent)
 		osolerror (NULL, osoption, parserData, "number attribute required");
@@ -5331,7 +5335,7 @@ yyreduce:
 		osolerror (NULL, osoption, parserData, "objective index must be negative");
 	if (parserData->numberOfObjectivesPresent)
 	{	if (-(yyvsp[(3) - (4)].ival) > parserData->numberOfObjectives)
-			osolerror (NULL, osoption, parserData, "objecive index exceeds upper limit");
+			osolerror (NULL, osoption, parserData, "objective index exceeds upper limit");
 	};
 	osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->obj[parserData->numberOfObj]->idx = (yyvsp[(3) - (4)].ival);
 ;}
@@ -5342,7 +5346,7 @@ yyreduce:
     {	if (parserData->valAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one variable value allowed");
 	parserData->valAttributePresent = true;
-	osoption->optimization->objectives-> other[parserData->numberOfOtherObjectiveOptions]->obj[parserData->numberOfObj]->value = (yyvsp[(2) - (2)].sval);
+	osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->obj[parserData->numberOfObj]->value = (yyvsp[(2) - (2)].sval);
 ;}
     break;
 
@@ -5351,7 +5355,7 @@ yyreduce:
     {	if (parserData->lbvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one lower bound value allowed");
 	parserData->lbvalAttributePresent = true;
-	osoption->optimization->objectives-> other[parserData->numberOfOtherObjectiveOptions]->obj[parserData->numberOfObj]->lbValue = (yyvsp[(2) - (2)].sval);
+	osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->obj[parserData->numberOfObj]->lbValue = (yyvsp[(2) - (2)].sval);
 ;}
     break;
 
@@ -5360,7 +5364,7 @@ yyreduce:
     {	if (parserData->ubvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one upper bound value allowed");
 	parserData->ubvalAttributePresent = true;
-	osoption->optimization->objectives-> other[parserData->numberOfOtherObjectiveOptions]->obj[parserData->numberOfObj]->ubValue = (yyvsp[(2) - (2)].sval);
+	osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->obj[parserData->numberOfObj]->ubValue = (yyvsp[(2) - (2)].sval);
 ;}
     break;
 
@@ -5621,8 +5625,10 @@ yyreduce:
 
   case 729:
 
-    {	if (parserData->numberOfVar >= osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->numberOfVar)
-		osolerror(NULL, osoption, parserData, "too many <var> entries in <other> variable element");
+    {	printf("Found <con>; number %d out of %d\n",parserData->numberOfCon,
+		osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->numberOfCon);
+	if (parserData->numberOfCon >= osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->numberOfCon)
+		osolerror(NULL, osoption, parserData, "too many <con> entries in <other> constraint element");
 ;}
     break;
 
@@ -5637,6 +5643,7 @@ yyreduce:
 	{	if ((yyvsp[(3) - (4)].ival) >= parserData->numberOfConstraints)
 			osolerror (NULL, osoption, parserData, "constraint index exceeds upper limit");
 	};
+	printf("idx = %d\n",(yyvsp[(3) - (4)].ival));
 	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->con[parserData->numberOfCon]->idx = (yyvsp[(3) - (4)].ival);
 ;}
     break;
@@ -5646,7 +5653,8 @@ yyreduce:
     {	if (parserData->valAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one constraint value allowed");
 	parserData->valAttributePresent = true;
-	osoption->optimization->constraints-> other[parserData->numberOfOtherConstraintOptions]->con[parserData->numberOfCon]->value = (yyvsp[(2) - (2)].sval);
+	printf("Value attribute read\n");
+	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->con[parserData->numberOfCon]->value = (yyvsp[(2) - (2)].sval);
 ;}
     break;
 
@@ -5655,7 +5663,8 @@ yyreduce:
     {	if (parserData->lbvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one lower bound value allowed");
 	parserData->lbvalAttributePresent = true;
-	osoption->optimization->constraints-> other[parserData->numberOfOtherConstraintOptions]->con[parserData->numberOfCon]->lbValue = (yyvsp[(2) - (2)].sval);
+	printf("lbValue attribute read\n");
+	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->con[parserData->numberOfCon]->lbValue = (yyvsp[(2) - (2)].sval);
 ;}
     break;
 
@@ -5664,7 +5673,8 @@ yyreduce:
     {	if (parserData->ubvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one upper bound value allowed");
 	parserData->ubvalAttributePresent = true;
-	osoption->optimization->constraints-> other[parserData->numberOfOtherConstraintOptions]->con[parserData->numberOfCon]->ubValue = (yyvsp[(2) - (2)].sval);
+	printf("ubValue attribute read\n");
+	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->con[parserData->numberOfCon]->ubValue = (yyvsp[(2) - (2)].sval);
 ;}
     break;
 

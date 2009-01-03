@@ -39,7 +39,7 @@
 	contactPresent(false),
 	transportTypeattON(false),
 	otherGeneralOptionsPresent(false),
-      numberOfOtherGeneralOptions(0),
+	numberOfOtherGeneralOptions(0),
 
 	minDiskSpacePresent(false),
 	minDiskSpaceUnitPresent(false),
@@ -49,10 +49,10 @@
 	minCPUSpeedUnitPresent(false),
 	minCPUNumberPresent(false),
 	otherSystemOptionsPresent(false),
-      numberOfOtherSystemOptions(0),
+	numberOfOtherSystemOptions(0),
 	serviceTypePresent(false),
 	otherServiceOptionsPresent(false),
-      numberOfOtherServiceOptions(0),
+	numberOfOtherServiceOptions(0),
 
 	maxTimePresent(false),
 	maxTimeUnitPresent(false),
@@ -85,7 +85,7 @@
 	processesToKillPresent(false),
 	numberOfProcessesToKill(0),
 	otherJobOptionsPresent(false),
-      numberOfOtherJobOptions(0),
+	numberOfOtherJobOptions(0),
 
 	numberOfVariables(0),
 	numberOfVariablesPresent(false),

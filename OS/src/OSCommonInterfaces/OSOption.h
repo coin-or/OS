@@ -2967,13 +2967,10 @@ public:
 	 * Get the SOS branching weights in sparse form
 	 * <p>
 	 * 
-	 * @return a vector of double that 
 	 * @return a vector of pointers to SOSWeights objects that 
-	 * hold branching weights for (some of) the variables in special ordered sets
+	 * hold branching weights for (some of) the variables contained in special ordered sets
 	 */
 	SOSWeights** getSOSVariableBranchingWeightsSparse(); 
-//	getSOSVariableBranchingWeightsDense(int numberOfVariables);
-
 
 	/**
 	 * Get the <other> variable options associated with a particular solver
@@ -2984,6 +2981,14 @@ public:
 	 * that correspond to the solver named. 
 	 */
 	std::vector<OtherVariableOption*> getOtherVariableOptions(std::string solver_name);
+
+	/**
+	 * Get all <other> variable options 
+	 * <p>
+	 * 
+	 * @return a pointer to an array of OtherVariableOption objects  
+	 */
+	OtherVariableOption** getAllOtherVariableOptions();
 
 	/**
 	 * Get the initial values associated with the objectives in sparse form
@@ -3041,6 +3046,14 @@ public:
 	 * @return a vector of pointers to OtherConstraintOption objects  
 	 */
 	std::vector<OtherObjectiveOption*> getOtherObjectiveOptions(std::string solver_name);
+
+	/**
+	 * Get all <other> objective options 
+	 * <p>
+	 * 
+	 * @return a pointer to an array of OtherObjectiveOption objects  
+	 */
+	OtherObjectiveOption** getAllOtherObjectiveOptions();
 
 	/**
 	 * Get the initial values associated with the constraints in sparse form
@@ -3102,6 +3115,14 @@ public:
 
 
 	/**
+	 * Get all <other> constraint options 
+	 * <p>
+	 * 
+	 * @return a pointer to an array of OtherConstraintOption objects  
+	 */
+	OtherConstraintOption** getAllOtherConstraintOptions();
+
+	/**
 	 * Get the options associated with a given solver
 	 * <p>
 	 * 
@@ -3111,7 +3132,15 @@ public:
 	 */
 	std::vector<SolverOption*> getSolverOptions( std::string solver_name);
 
-/* --------------------------------------------------
+	/**
+	 * Get all solver options
+	 * <p>
+	 * 
+	 * @return a pointer to an array SolverOption objects
+	 */
+	SolverOption** getAllSolverOptions();
+
+	/* --------------------------------------------------
  *  set() methods
  * -------------------------------------------------- */
 

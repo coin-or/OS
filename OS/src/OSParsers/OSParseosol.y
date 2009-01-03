@@ -454,7 +454,7 @@ mindiskspacehead: MINDISKSPACESTART
 	{	osolerror( NULL, osoption, parserData, "only one <minDiskSpace> element allowed");
 	}
 	else
-	{	parserData-> minDiskSpacePresent = true;
+	{	parserData->minDiskSpacePresent = true;
 		osoption->system->minDiskSpace = new MinDiskSpace();
 		osoption->system->minDiskSpace->unit = "byte";
 	}
@@ -490,7 +490,7 @@ minmemorysizehead: MINMEMORYSIZESTART
 	{	osolerror( NULL, osoption, parserData, "only one <minMemorySize> element allowed");
 	}
 	else
-	{	parserData-> minMemorySizePresent = true;
+	{	parserData->minMemorySizePresent = true;
 		osoption->system->minMemorySize = new MinMemorySize();
 		osoption->system->minMemorySize->unit = "byte";
 	}
@@ -527,7 +527,7 @@ mincpuspeedhead: MINCPUSPEEDSTART
 	{	osolerror( NULL, osoption, parserData, "only one <minCPUSpeed> element allowed");
 	}
 	else
-	{	parserData-> minCPUSpeedPresent = true;
+	{	parserData->minCPUSpeedPresent = true;
 		osoption->system->minCPUSpeed = new MinCPUSpeed();
 		osoption->system->minCPUSpeed->unit = "hertz";
 	}
@@ -818,7 +818,7 @@ maxtimehead: MAXTIMESTART
 	{	osolerror( NULL, osoption, parserData, "only one <maxTime> element allowed");
 	}
 	else
-	{	parserData-> maxTimePresent = true;
+	{	parserData->maxTimePresent = true;
 		osoption->job->maxTime = new MaxTime();
 		osoption->job->maxTime->unit = "second"; 
 	}
@@ -1863,12 +1863,14 @@ sosweightgroup: sosweightgroupstart sosweightgroupattlist sosweightgroupcontent
 	parserData->grpWgtAttributePresent = false;
 	parserData->nOfVarAttributePresent = false;
 	parserData->numberOfSOS++;
+	printf("Increment parserData->numberOfSOS to %d",parserData->numberOfSOS);
 };
 
 
 sosweightgroupstart: SOSSTART
 {	if (parserData->numberOfSOS >= osoption->optimization->variables->sosVariableBranchingWeights->numberOfSOS)
 		osolerror(NULL, osoption, parserData, "too many SOS branching weights");
+	printf("Reset parserData->numberOfSOSVar (to 0)\n"); parserData->numberOfSOSVar = 0;
 };
 
 sosweightgroupattlist: | sosweightgroupattlist sosweightgroupatt; 
@@ -1927,7 +1929,9 @@ sosweightvar: sosweightvarstart sosweightvarattlist sosweightvarend
 };
 
 sosweightvarstart: VARSTART 
-{	if (parserData->numberOfSOSVar >= osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->numberOfVar)
+{	printf("numberOfSOSVar:%d, numberOfVar in this SOS:%d",parserData->numberOfSOSVar,
+		osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->numberOfVar);
+	if (parserData->numberOfSOSVar >= osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->numberOfVar)
 		osolerror(NULL, osoption, parserData, "too many variable branching weights");
 };
 
@@ -2105,7 +2109,7 @@ othervaroptionvalue: VALUEATT ATTRIBUTETEXT
 {	if (parserData->valAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one variable value allowed");
 	parserData->valAttributePresent = true;
-	osoption->optimization->variables-> other[parserData->numberOfOtherVariableOptions]->var[parserData->numberOfVar]->value = $2;
+	osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->var[parserData->numberOfVar]->value = $2;
 }
 QUOTE;
 
@@ -2113,7 +2117,7 @@ othervaroptionlbvalue: LBVALUEATT ATTRIBUTETEXT
 {	if (parserData->lbvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one lower bound value allowed");
 	parserData->lbvalAttributePresent = true;
-	osoption->optimization->variables-> other[parserData->numberOfOtherVariableOptions]->var[parserData->numberOfVar]->lbValue = $2;
+	osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->var[parserData->numberOfVar]->lbValue = $2;
 }
 QUOTE;
 
@@ -2121,7 +2125,7 @@ othervaroptionubvalue: UBVALUEATT ATTRIBUTETEXT
 {	if (parserData->ubvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one upper bound value allowed");
 	parserData->ubvalAttributePresent = true;
-	osoption->optimization->variables-> other[parserData->numberOfOtherVariableOptions]->var[parserData->numberOfVar]->ubValue = $2;
+	osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->var[parserData->numberOfVar]->ubValue = $2;
 }
 QUOTE;
 
@@ -2297,7 +2301,7 @@ otherobjectiveoptionstart: OTHERSTART
 otherobjectiveoptionsattlist: | otherobjectiveoptionsattlist otherobjectiveoptionsatt;
 
 otherobjectiveoptionsatt:
-     otherobjectiveoptionnumberofvar
+     otherobjectiveoptionnumberofobj
    | otherobjectiveoptionname
    | otherobjectiveoptionvalue
    | otherobjectiveoptionsolver
@@ -2305,7 +2309,7 @@ otherobjectiveoptionsatt:
    | otherobjectiveoptiontype
    | otherobjectiveoptiondescription;
 
-otherobjectiveoptionnumberofvar: NUMBEROFOBJATT QUOTE INTEGER QUOTE
+otherobjectiveoptionnumberofobj: NUMBEROFOBJATT QUOTE INTEGER QUOTE
 { 	if (parserData->otherOptionNumberPresent)
 		osolerror (NULL, osoption, parserData, "only one numberOfObj attribute allowed");
 	parserData->otherOptionNumberPresent = true;
@@ -2373,8 +2377,8 @@ QUOTE;
 
 
 
-restofotherobjectiveoption: GREATERTHAN otherobjectiveoptionsvarlist OTHEREND
-{ 	if (parserData->numberOfVar < osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->numberOfObj)
+restofotherobjectiveoption: GREATERTHAN otherobjectiveoptionsobjlist OTHEREND
+{ 	if (parserData->numberOfObj < osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->numberOfObj)
 		osolerror(NULL, osoption, parserData, "not enough <obj> entries in <other> variable element");
 	if (!parserData->otherOptionNumberPresent)
 		osolerror (NULL, osoption, parserData, "number attribute required");
@@ -2390,9 +2394,9 @@ restofotherobjectiveoption: GREATERTHAN otherobjectiveoptionsvarlist OTHEREND
 	parserData->numberOfOtherObjectiveOptions++;
 };
 
-otherobjectiveoptionsvarlist: | otherobjectiveoptionsvarlist otherobjectiveoptionsvar;
+otherobjectiveoptionsobjlist: | otherobjectiveoptionsobjlist otherobjectiveoptionsobj;
 
-otherobjectiveoptionsvar: otherobjectiveoptionsvarstart otherobjoptionattlist otherobjoptionend
+otherobjectiveoptionsobj: otherobjectiveoptionsobjstart otherobjoptionattlist otherobjoptionend
 {	if (!parserData->idxAttributePresent)
 		osolerror(NULL, osoption, parserData, "required idx attribute was not found");
 	parserData->idxAttributePresent = false;
@@ -2402,7 +2406,7 @@ otherobjectiveoptionsvar: otherobjectiveoptionsvarstart otherobjoptionattlist ot
 	parserData->numberOfObj++;
 };
 
-otherobjectiveoptionsvarstart: OBJSTART 
+otherobjectiveoptionsobjstart: OBJSTART 
 {	if (parserData->numberOfObj >= osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->numberOfObj)
 		osolerror(NULL, osoption, parserData, "too many <obj> entries in <other> objective element");
 };
@@ -2423,7 +2427,7 @@ otherobjoptionidx: IDXATT QUOTE INTEGER QUOTE
 		osolerror (NULL, osoption, parserData, "objective index must be negative");
 	if (parserData->numberOfObjectivesPresent)
 	{	if (-$3 > parserData->numberOfObjectives)
-			osolerror (NULL, osoption, parserData, "objecive index exceeds upper limit");
+			osolerror (NULL, osoption, parserData, "objective index exceeds upper limit");
 	};
 	osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->obj[parserData->numberOfObj]->idx = $3;
 };
@@ -2433,7 +2437,7 @@ otherobjoptionvalue: VALUEATT ATTRIBUTETEXT
 {	if (parserData->valAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one variable value allowed");
 	parserData->valAttributePresent = true;
-	osoption->optimization->objectives-> other[parserData->numberOfOtherObjectiveOptions]->obj[parserData->numberOfObj]->value = $2;
+	osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->obj[parserData->numberOfObj]->value = $2;
 }
 QUOTE;
 
@@ -2442,7 +2446,7 @@ otherobjoptionlbvalue: LBVALUEATT ATTRIBUTETEXT
 {	if (parserData->lbvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one lower bound value allowed");
 	parserData->lbvalAttributePresent = true;
-	osoption->optimization->objectives-> other[parserData->numberOfOtherObjectiveOptions]->obj[parserData->numberOfObj]->lbValue = $2;
+	osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->obj[parserData->numberOfObj]->lbValue = $2;
 }
 QUOTE;
 
@@ -2451,7 +2455,7 @@ otherobjoptionubvalue: UBVALUEATT ATTRIBUTETEXT
 {	if (parserData->ubvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one upper bound value allowed");
 	parserData->ubvalAttributePresent = true;
-	osoption->optimization->objectives-> other[parserData->numberOfOtherObjectiveOptions]->obj[parserData->numberOfObj]->ubValue = $2;
+	osoption->optimization->objectives->other[parserData->numberOfOtherObjectiveOptions]->obj[parserData->numberOfObj]->ubValue = $2;
 }
 QUOTE;
 
@@ -2628,7 +2632,7 @@ otherconstraintoptionstart: OTHERSTART
 otherconstraintoptionsattlist: | otherconstraintoptionsattlist otherconstraintoptionsatt;
 
 otherconstraintoptionsatt:
-     otherconstraintoptionnumberofvar
+     otherconstraintoptionnumberofcon 
    | otherconstraintoptionname
    | otherconstraintoptionvalue
    | otherconstraintoptionsolver
@@ -2636,7 +2640,7 @@ otherconstraintoptionsatt:
    | otherconstraintoptiontype
    | otherconstraintoptiondescription;
 
-otherconstraintoptionnumberofvar: NUMBEROFCONATT QUOTE INTEGER QUOTE
+otherconstraintoptionnumberofcon: NUMBEROFCONATT QUOTE INTEGER QUOTE 
 { 	if (parserData->otherOptionNumberPresent)
 		osolerror (NULL, osoption, parserData, "only one numberOfCon attribute allowed");
 	parserData->otherOptionNumberPresent = true;
@@ -2698,7 +2702,7 @@ otherconstraintoptiondescription: DESCRIPTIONATT ATTRIBUTETEXT
 QUOTE;
 
 
-restofotherconstraintoption: GREATERTHAN otherconstraintoptionsvarlist OTHEREND
+restofotherconstraintoption: GREATERTHAN otherconstraintoptionsconlist OTHEREND
 { 	if (parserData->numberOfCon < osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->numberOfCon)
 		osolerror(NULL, osoption, parserData, "not enough <con> entries in <other> constraint element");
 	if (!parserData->otherOptionNumberPresent)
@@ -2715,9 +2719,9 @@ restofotherconstraintoption: GREATERTHAN otherconstraintoptionsvarlist OTHEREND
 	parserData->numberOfOtherConstraintOptions++;
 };
 
-otherconstraintoptionsvarlist: | otherconstraintoptionsvarlist otherconstraintoptionsvar;
+otherconstraintoptionsconlist: | otherconstraintoptionsconlist otherconstraintoptionscon;
 
-otherconstraintoptionsvar: otherconstraintoptionsvarstart otherconoptionattlist otherconoptionend
+otherconstraintoptionscon: otherconstraintoptionsconstart otherconoptionattlist otherconoptionend
 {	if (!parserData->idxAttributePresent)
 		osolerror(NULL, osoption, parserData, "required idx attribute was not found");
 	parserData->idxAttributePresent = false;
@@ -2727,9 +2731,11 @@ otherconstraintoptionsvar: otherconstraintoptionsvarstart otherconoptionattlist 
 	parserData->numberOfCon++;
 };
 
-otherconstraintoptionsvarstart: CONSTART 
-{	if (parserData->numberOfVar >= osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->numberOfVar)
-		osolerror(NULL, osoption, parserData, "too many <var> entries in <other> variable element");
+otherconstraintoptionsconstart: CONSTART 
+{	printf("Found <con>; number %d out of %d\n",parserData->numberOfCon,
+		osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->numberOfCon);
+	if (parserData->numberOfCon >= osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->numberOfCon)
+		osolerror(NULL, osoption, parserData, "too many <con> entries in <other> constraint element");
 };
 
 otherconoptionattlist: | otherconoptionattlist otherconoptionatt;
@@ -2750,6 +2756,7 @@ otherconoptionidx: IDXATT QUOTE INTEGER QUOTE
 	{	if ($3 >= parserData->numberOfConstraints)
 			osolerror (NULL, osoption, parserData, "constraint index exceeds upper limit");
 	};
+	printf("idx = %d\n",$3);
 	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->con[parserData->numberOfCon]->idx = $3;
 };
 
@@ -2758,7 +2765,8 @@ otherconoptionvalue: VALUEATT ATTRIBUTETEXT
 {	if (parserData->valAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one constraint value allowed");
 	parserData->valAttributePresent = true;
-	osoption->optimization->constraints-> other[parserData->numberOfOtherConstraintOptions]->con[parserData->numberOfCon]->value = $2;
+	printf("Value attribute read\n");
+	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->con[parserData->numberOfCon]->value = $2;
 }
 QUOTE;
 
@@ -2767,7 +2775,8 @@ otherconoptionlbvalue: LBVALUEATT ATTRIBUTETEXT
 {	if (parserData->lbvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one lower bound value allowed");
 	parserData->lbvalAttributePresent = true;
-	osoption->optimization->constraints-> other[parserData->numberOfOtherConstraintOptions]->con[parserData->numberOfCon]->lbValue = $2;
+	printf("lbValue attribute read\n");
+	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->con[parserData->numberOfCon]->lbValue = $2;
 }
 QUOTE;
 
@@ -2775,7 +2784,8 @@ otherconoptionubvalue: UBVALUEATT ATTRIBUTETEXT
 {	if (parserData->ubvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one upper bound value allowed");
 	parserData->ubvalAttributePresent = true;
-	osoption->optimization->constraints-> other[parserData->numberOfOtherConstraintOptions]->con[parserData->numberOfCon]->ubValue = $2;
+	printf("ubValue attribute read\n");
+	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->con[parserData->numberOfCon]->ubValue = $2;
 }
 QUOTE;
 
