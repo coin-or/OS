@@ -667,7 +667,7 @@ public class IOUtil implements Serializable{
 			return true;
 		}
 		catch(Exception e){
-			e.printStackTrace();
+			//e.printStackTrace();
 			return false;
 		}		
 	}//log
