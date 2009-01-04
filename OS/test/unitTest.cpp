@@ -1704,7 +1704,7 @@ catch(const ErrorClass& eclass){
 		 * 8) compare the second and third OSOption objects to make sure 
 		 *    nothing was lost in translation
 		 */
-//#if 0
+#if 0
 		cout << endl;
 		std::string tmpOSoL;
 		clock_t start, finish;
@@ -2230,7 +2230,7 @@ catch(const ErrorClass& eclass){
 		delete osolreader;
 		osolreader = NULL;
 
-//#endif
+#endif
 
 
 #if 0
