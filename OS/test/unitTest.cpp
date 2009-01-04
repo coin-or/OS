@@ -1704,7 +1704,7 @@ catch(const ErrorClass& eclass){
 		 * 8) compare the second and third OSOption objects to make sure 
 		 *    nothing was lost in translation
 		 */
-#if 0
+//#if 0
 		cout << endl;
 		std::string tmpOSoL;
 		clock_t start, finish;
@@ -1716,7 +1716,7 @@ catch(const ErrorClass& eclass){
 		cout << "TEST PARSING AN OSoL FILE" << endl;
 		cout << "FIRST READ THE OSoL FILE INTO A STRING" << endl;
 #ifdef OSOL_PARSER_DEBUG
-		osolFileName = "C:\\datafiles\\research\\os\\os-trunk-test\\os\\data\\osolFiles\\parsertest.osol"; 
+		osolFileName = "C:\\datafiles\\research\\os\\os-trunk-work\\os\\data\\osolFiles\\parsertest.osol"; 
 #else
 		osolFileName = dataDir  + "osolFiles" + dirsep + "parsertest.osol"; 
 #endif
@@ -1793,7 +1793,9 @@ catch(const ErrorClass& eclass){
 		osoption->setAnotherInitBasisStatus(5,"unknown");
 		cout << "done" << endl;
 		cout << "Other integer selection weight...";
+		cout << "nopt=" << osoption->optimization->variables->integerVariableBranchingWeights->numberOfVar << endl;
 		osoption->setAnotherIntegerVariableBranchingWeight(5,100.);
+		cout << "nopt=" << osoption->optimization->variables->integerVariableBranchingWeights->numberOfVar << endl;
 		cout << "done" << endl;
 
 		cout << "set data structure for SOS branching weight" << endl;
@@ -1804,7 +1806,8 @@ catch(const ErrorClass& eclass){
 		SOS3val[0] = 1.0;
 		SOS3val[1] = 2.0;
 		cout << "SOS branching weight...";
-		osoption->setAnotherSOSVariableBranchingWeight(3,2,OSNAN,SOS3idx,SOS3val);
+		osoption->setAnotherSOSVariableBranchingWeight(3,2,1.0,SOS3idx,SOS3val);
+		cout << "nopt=" << osoption->optimization->variables->integerVariableBranchingWeights->numberOfVar << endl;
 		cout << "done" << endl;
 
 		OtherVariableOption *varopt;
@@ -1935,10 +1938,6 @@ catch(const ErrorClass& eclass){
 		ok = osoption2->setOtherGeneralOptions(nopt, otherOpt);
 		cout << ok << endl;
 
-//		cout << "garbage collection. Delete otherOpt...";
-//		delete otherOpt;
-//		cout << "done" << endl;
-
 		cout << "MinDiskSpace...";
 		option_d = osoption->getMinDiskSpace();
 		ok = osoption2->setMinDiskSpace(option_d);
@@ -1995,7 +1994,6 @@ catch(const ErrorClass& eclass){
 		cout << ok << endl;
 
 
-
 		cout << "MaxTime...";
 		option_d = osoption->getMaxTime();
 		ok = osoption2->setMaxTime(option_d);
@@ -2040,7 +2038,6 @@ catch(const ErrorClass& eclass){
 		std::string* mkFil = osoption->getFilesToMake();
 		ok = osoption2->setFilesToMake(nopt, mkFil);
 		cout << ok << endl;
-
 
 		cout << "InputDirectoriesToMove...";
 		nopt = osoption->getNumberOfInputDirectoriesToMove();
@@ -2091,6 +2088,7 @@ catch(const ErrorClass& eclass){
 		ok = osoption2->setOtherJobOptions(nopt, otherOpt4);
 		cout << ok << endl;
 
+
 		cout << "Problem dimensions...";
 		nopt = osoption->getOptionInt("numberOfVariables");
 		ok = osoption2->setNumberOfVariables(nopt);
@@ -2136,6 +2134,20 @@ catch(const ErrorClass& eclass){
 		ok = osoption2->setIntegerVariableBranchingWeightsDense(nopt, IVBW);		
 		cout << ok << endl;
 
+		cout << "SOSVariableBranchingWeights...";
+		SOSWeights** sos;
+		sos = osoption->getSOSVariableBranchingWeightsSparse();
+		nopt = osoption->getNumberOfSOSWeights();
+		ok = osoption2->setSOSVariableBranchingWeights(nopt, sos);
+		cout << ok << endl;
+
+		cout << "OtherVariableOptions...";
+		OtherVariableOption** otherV;
+		otherV = osoption->getAllOtherVariableOptions();
+		nopt = osoption->getNumberOfOtherVariableOptions();
+		ok = osoption2->setOtherVariableOptions(nopt, otherV);
+		cout << ok << endl;
+
 		cout << "InitObjValues...";
 		double* IOV;
 		IOV = osoption->getInitObjValuesDense(nopt);
@@ -2153,6 +2165,13 @@ catch(const ErrorClass& eclass){
 			cout << "IOBL: " << IOBL[i] << endl << "IOBU: " << IOBU[i] << endl;
 		cout << "nopt:" << nopt;
 		ok = osoption2->setInitObjBoundsDense(nopt, IOBL, IOBU);		
+		cout << ok << endl;
+
+		cout << "OtherObjectiveOptions...";
+		OtherObjectiveOption** otherO;
+		otherO = osoption->getAllOtherObjectiveOptions();
+		nopt = osoption->getNumberOfOtherObjectiveOptions();
+		ok = osoption2->setOtherObjectiveOptions(nopt, otherO);
 		cout << ok << endl;
 
 		
@@ -2174,7 +2193,44 @@ catch(const ErrorClass& eclass){
 		cout << "nopt:" << nopt;
 		ok = osoption2->setInitDualVarValuesDense(nopt, IDVL, IDVU);		
 		cout << ok << endl;
-#endif
+
+		cout << "OtherConstraintOptions...";
+		OtherConstraintOption** otherC;
+		otherC = osoption->getAllOtherConstraintOptions();
+		nopt = osoption->getNumberOfOtherConstraintOptions();
+		ok = osoption2->setOtherConstraintOptions(nopt, otherC);
+		cout << ok << endl;
+
+		cout << "SolverOptions...";
+		SolverOption** SO;
+		SO = osoption->getAllSolverOptions();
+		nopt = osoption->getNumberOfSolverOptions();
+		ok = osoption2->setSolverOptions(nopt, SO);
+		cout << ok << endl;
+
+		cout << "Compare original osoption and copy...";
+		ok = osoption->IsEqual(osoption2);
+		cout << ok << endl;
+
+
+		cout << "Write the content to a new file" <<endl;		
+		tmpOSoL = osolwriter->writeOSoL( osoption);
+		cout << endl << "Here is tmpOSoL:" <<endl;
+		cout << endl << endl << tmpOSoL << endl;
+		cout << "-----------------------------------------" << endl << endl;
+		delete osolreader;
+		osolreader = NULL;
+
+		// make sure we can parse without error
+		osolreader = new OSoLReader();
+		cout << "Read the string back" << endl;
+		osolreader->readOSoL( tmpOSoL);
+		delete osolwriter;
+		osolwriter = NULL;
+		delete osolreader;
+		osolreader = NULL;
+
+//#endif
 
 
 #if 0

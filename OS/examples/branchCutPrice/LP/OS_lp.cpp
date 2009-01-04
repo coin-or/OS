@@ -351,7 +351,7 @@ void OS_lp::process_lp_result(const BCP_lp_result& lpres,
 	generated_vars = false;
 	
 
-#if 1
+#if 0
 	
 	{/// Cgl cut addition scope
 
@@ -419,7 +419,7 @@ void OS_lp::process_lp_result(const BCP_lp_result& lpres,
 	
 #endif
 	
-#if 0
+#if 1
 	
 	{/// user cut addition scope
 		int i;
@@ -464,7 +464,7 @@ void OS_lp::process_lp_result(const BCP_lp_result& lpres,
 	
 #endif	
 	
-#if 0
+#if 1
 	{ // variable generation scope
 		const double* pi = lpres.pi();
 		int numNonz = 4;
