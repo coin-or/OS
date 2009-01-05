@@ -789,7 +789,7 @@ QUOTE;
 otherserviceoptionsend: ENDOFELEMENT | GREATERTHAN OTHEREND;
 
 
-osoljob: jobhead jobbody;
+osoljob: | jobhead jobbody;
 
 jobhead: JOBSTART
 {	if (parserData->osoljobPresent)
