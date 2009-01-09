@@ -293,7 +293,7 @@ DirectoriesAndFiles::~DirectoriesAndFiles()
 	cout << "DirectoriesAndFiles Destructor Called" << endl;
 	#endif
 	if (path != NULL) 
-	{	delete []path;
+	{	delete[] path;
 		path = NULL;
 	}
 }//end DirectoriesAndFiles destructor 
@@ -359,7 +359,7 @@ Processes::~Processes()
 	cout << "Processes Destructor Called" << endl;
 	#endif
 	if (process != NULL) 
-	{	delete []process;
+	{	delete[] process;
 		process = NULL;
 	}
 }//end Processes destructor 
@@ -2377,9 +2377,11 @@ InitVarValue**  OSOption::getInitVarValuesSparse()
  * @return an array of values
  * @note return OSNAN for variables that are not initialed
  */
-double* OSOption::getInitVarValuesDense(int numberOfVariables)
+double* OSOption::getInitVarValuesDense()
 {	try
-	{	numberOfVariables = this->getNumberOfVariables();
+	{	int numberOfVariables;
+		numberOfVariables = this->getNumberOfVariables();
+		cout << "numberOfVariables: " << numberOfVariables << endl;
 		if (numberOfVariables < 0)
 			throw ErrorClass("\"numberOfVariables\" must be present to use dense methods");		
 
@@ -2402,6 +2404,7 @@ double* OSOption::getInitVarValuesDense(int numberOfVariables)
 						else
 							throw ErrorClass("Variable index out of range");
 					}
+		cout << "numberOfVariables: " << numberOfVariables << endl;
 					return initVarVector;
 				}
 			}
@@ -2439,9 +2442,10 @@ InitVarValueString**  OSOption::getInitVarValuesStringSparse()
  * @return an array of value strings
  * @note return the empty string "" for variables that are not initialed
  */
-std::string *OSOption::getInitVarValuesStringDense(int numberOfVariables)
+std::string *OSOption::getInitVarValuesStringDense()
 {	try
-	{	numberOfVariables = this->getNumberOfVariables();
+	{	int numberOfVariables;
+		numberOfVariables = this->getNumberOfVariables();
 		if (numberOfVariables < 0)
 			throw ErrorClass("\"numberOfVariables\" must be present to use dense methods");		
 
@@ -2501,9 +2505,10 @@ InitBasStatus**  OSOption::getInitBasisStatusSparse()
  * @return an array of value strings
  * @note return the empty string "" for variables that are not initialed
  */
-std::string *OSOption::getInitBasisStatusDense(int numberOfVariables)
+std::string *OSOption::getInitBasisStatusDense()
 {	try
-	{	numberOfVariables = this->getNumberOfVariables();
+	{	int numberOfVariables;
+		numberOfVariables = this->getNumberOfVariables();
 		if (numberOfVariables < 0)
 			throw ErrorClass("\"numberOfVariables\" must be present to use dense methods");		
 
@@ -2585,9 +2590,10 @@ SOSWeights**  OSOption::getSOSVariableBranchingWeightsSparse()
  * @return an array of values
  * @note return OSNAN for variables that are not initialed
  */
-double* OSOption::getIntegerVariableBranchingWeightsDense(int numberOfVariables)
+double* OSOption::getIntegerVariableBranchingWeightsDense()
 {	try
-	{	numberOfVariables = this->getNumberOfVariables();
+	{	int numberOfVariables;
+		numberOfVariables = this->getNumberOfVariables();
 		if (numberOfVariables < 0)
 			throw ErrorClass("\"numberOfVariables\" must be present to use dense methods");		
 
@@ -2689,9 +2695,10 @@ InitObjValue**  OSOption::getInitObjValuesSparse()
  * @return an array of values
  * @note return OSNAN for objectives that are not initialed
  */
-double* OSOption::getInitObjValuesDense(int numberOfObjectives)
+double* OSOption::getInitObjValuesDense()
 {	try
-	{	numberOfObjectives = this->getNumberOfObjectives();
+	{	int numberOfObjectives;
+		numberOfObjectives = this->getNumberOfObjectives();
 		if (numberOfObjectives < 0)
 			throw ErrorClass("\"numberOfObjectives\" must be present to use dense methods");		
 
@@ -2709,7 +2716,7 @@ double* OSOption::getInitObjValuesDense(int numberOfObjectives)
 					for (i = 0; i < num_obj; i++)
 					{	j = this->optimization->objectives->initialObjectiveValues->obj[i]->idx;
 						if (j < 0 && -j <= numberOfObjectives)						
-							initObjVector[j] 
+							initObjVector[-1-j] 
 							  = this->optimization->objectives->initialObjectiveValues->obj[i]->value;						
 						else
 							throw ErrorClass("Objective index out of range");
@@ -2751,9 +2758,10 @@ InitObjBound**  OSOption::getInitObjBoundsSparse()
  * @return an array of values
  * @note return OSNAN for objectives that are not initialed
  */
-double* OSOption::getInitObjLowerBoundsDense(int numberOfObjectives)
+double* OSOption::getInitObjLowerBoundsDense()
 {	try
-	{	numberOfObjectives = this->getNumberOfObjectives();
+	{	int numberOfObjectives;
+		numberOfObjectives = this->getNumberOfObjectives();
 		if (numberOfObjectives < 0)
 			throw ErrorClass("\"numberOfObjectives\" must be present to use dense methods");		
 
@@ -2771,7 +2779,7 @@ double* OSOption::getInitObjLowerBoundsDense(int numberOfObjectives)
 					for (i = 0; i < num_obj; i++)
 					{	j = this->optimization->objectives->initialObjectiveBounds->obj[i]->idx;
 						if (j < 0 && -j <= numberOfObjectives)						
-							initObjBound[j] 
+							initObjBound[-1-j] 
 							  = this->optimization->objectives->initialObjectiveBounds->obj[i]->lbValue;
 						else
 							throw ErrorClass("Objective index out of range");
@@ -2792,9 +2800,10 @@ double* OSOption::getInitObjLowerBoundsDense(int numberOfObjectives)
  * @return an array of values
  * @note return OSNAN for objectives that are not initialed
  */
-double* OSOption::getInitObjUpperBoundsDense(int numberOfObjectives)
+double* OSOption::getInitObjUpperBoundsDense()
 {	try
-	{	numberOfObjectives = this->getNumberOfObjectives();
+	{	int numberOfObjectives;
+		numberOfObjectives = this->getNumberOfObjectives();
 		if (numberOfObjectives < 0)
 			throw ErrorClass("\"numberOfObjectives\" must be present to use dense methods");		
 
@@ -2812,7 +2821,7 @@ double* OSOption::getInitObjUpperBoundsDense(int numberOfObjectives)
 					for (i = 0; i < num_obj; i++)
 					{	j = this->optimization->objectives->initialObjectiveBounds->obj[i]->idx;
 						if (j < 0 && -j <= numberOfObjectives)						
-							initObjBound[j] 
+							initObjBound[-1-j] 
 							  = this->optimization->objectives->initialObjectiveBounds->obj[i]->ubValue;
 						else
 							throw ErrorClass("Objective index out of range");
@@ -2896,9 +2905,10 @@ InitConValue**  OSOption::getInitConValuesSparse()
  * @return an array of values
  * @note return OSNAN for constraints that are not initialed
  */
-double* OSOption::getInitConValuesDense(int numberOfConstraints)
+double* OSOption::getInitConValuesDense()
 {	try
-	{	numberOfConstraints = this->getNumberOfConstraints();
+	{	int numberOfConstraints;
+		numberOfConstraints = this->getNumberOfConstraints();
 		if (numberOfConstraints < 0)
 			throw ErrorClass("\"numberOfConstraints\" must be present to use dense methods");		
 
@@ -2959,9 +2969,10 @@ InitDualVarValue**  OSOption::getInitDualVarValuesSparse()
  * @return an array of values
  * @note return OSNAN for dual variables that are not initialed
  */
-double* OSOption::getInitDualVarLowerBoundsDense(int numberOfConstraints)
+double* OSOption::getInitDualVarLowerBoundsDense()
 {	try
-	{	numberOfConstraints = this->getNumberOfConstraints();
+	{	int numberOfConstraints;
+		numberOfConstraints = this->getNumberOfConstraints();
 		if (numberOfConstraints < 0)
 			throw ErrorClass("\"numberOfConstraints\" must be present to use dense methods");		
 
@@ -2974,7 +2985,7 @@ double* OSOption::getInitDualVarLowerBoundsDense(int numberOfConstraints)
 
 					double *initDualVector;
 					initDualVector = new double[numberOfConstraints];
-					for (k = 0; k < numberOfConstraints; k++) initDualVector[k] = OSNAN;
+					for (k = 0; k < numberOfConstraints; k++) initDualVector[k] = 0.0;
 
 					for (i = 0; i < num_con; i++)
 					{	j = this->optimization->constraints->initialDualValues->con[i]->idx;
@@ -3000,9 +3011,10 @@ double* OSOption::getInitDualVarLowerBoundsDense(int numberOfConstraints)
  * @return an array of values
  * @note return OSNAN for dual variables that are not initialed
  */
-double* OSOption::getInitDualVarUpperBoundsDense(int numberOfConstraints)
+double* OSOption::getInitDualVarUpperBoundsDense()
 {	try
-	{	numberOfConstraints = this->getNumberOfConstraints();
+	{	int numberOfConstraints;
+		numberOfConstraints = this->getNumberOfConstraints();
 		if (numberOfConstraints < 0)
 			throw ErrorClass("\"numberOfConstraints\" must be present to use dense methods");		
 
@@ -3016,7 +3028,7 @@ double* OSOption::getInitDualVarUpperBoundsDense(int numberOfConstraints)
 
 					double *initDualVector;
 					initDualVector = new double[numberOfConstraints];
-					for (k = 0; k < numberOfConstraints; k++) initDualVector[k] = OSNAN;
+					for (k = 0; k < numberOfConstraints; k++) initDualVector[k] = 0.0;
 
 					for (i = 0; i < num_con; i++)
 					{	j = this->optimization->constraints->initialDualValues->con[i]->idx;
@@ -5470,8 +5482,9 @@ bool OSOption::setInitVarValuesStringDense(int numberOfVar, std::string *value)
 	}
 	int i;
 	for (i = 0; i < numberOfVar; i++)
-	{	if (!this->optimization->variables->initialVariableValuesString->addVar(i, value[i]))
-			return false;
+	{	if (value[i] != "")
+			if (!this->optimization->variables->initialVariableValuesString->addVar(i, value[i]))
+				return false;
 	}
 		return true;
 }//setInitVarValuesStringDense
@@ -5517,8 +5530,8 @@ bool OSOption::setInitBasisStatusDense(int numberOfVar, std::string *value)
 	}
 	int i;
 	for (i = 0; i < numberOfVar; i++)
-	{	if ((value[i] != "superbasic") && (value[i] != "atLower") && (value[i] != "basic")
-	                                   && (value[i] != "atUpper") && (value[i] != "unknown"))
+	{	if ((value[i] == "superbasic") || (value[i] == "atLower") || (value[i] == "basic")
+	                                   || (value[i] == "atUpper") || (value[i] == "unknown"))
 			if (!this->optimization->variables->initialBasisStatus->addVar(i, value[i]))
 				return false;
 	}
@@ -5666,8 +5679,9 @@ bool OSOption::setInitObjValuesDense(int numberOfObj, double *value)
 	}
 	int i;
 	for (i = 0; i < numberOfObj; i++)
-	{	if (value[i] != OSNAN)
-			if (!this->optimization->objectives->initialObjectiveValues->addObj(i, value[i]))
+	{	cout << "processing " << i << " of " << numberOfObj << " value = " << value[i] << endl;		
+		if (value[i] != OSNAN)
+			if (!this->optimization->objectives->initialObjectiveValues->addObj(-1-i, value[i]))
 				return false;
 	}
 	return true;
@@ -5714,7 +5728,7 @@ bool OSOption::setInitObjBoundsDense(int numberOfObj, double* lb, double* ub)
 	}
 	int i;
 	for (i = 0; i < numberOfObj; i++)
-	{	if (!this->optimization->objectives->initialObjectiveBounds->addObj(i, lb[i], ub[i]))
+	{	if (!this->optimization->objectives->initialObjectiveBounds->addObj(-1-i, lb[i], ub[i]))
 			return false;
 	}
 	return true;
@@ -5833,8 +5847,11 @@ bool OSOption::setInitDualVarValuesDense(int numberOfCon, double* lb, double* ub
 	}
 	int i;
 	for (i = 0; i < numberOfCon; i++)
-	{	if (!this->optimization->constraints->initialDualValues->addCon(i, lb[i], ub[i]))
-			return false;
+	{	if ((lb[i] != 0.0) || (ub[i] != 0.0))
+	{	cout << "copy duals for " << i << " " << lb[i] << " " << ub[i] << endl;
+			if (!this->optimization->constraints->initialDualValues->addCon(i, lb[i], ub[i]))
+				return false;
+	}
 	}
 	return true;
 }//setInitDualVarValuesDense
@@ -5990,19 +6007,29 @@ bool OSOption::setOptionDbl(std::string optionName, double value)
  * or their components are equal to each other
  ***************************************************/
 bool OSOption::IsEqual(OSOption *that)
-{	
-#ifdef DEBUG
-	cout << "Start comparing in OSOption" << endl;
-#endif
+{
+	#ifdef DEBUG
+		cout << "Start comparing in OSOption" << endl;
+	#endif
 	if (this == NULL)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if (!this->general->IsEqual(that->general))
 				return false;
@@ -6029,11 +6056,21 @@ bool GeneralOption::IsEqual(GeneralOption *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	bool same;
 			same =  (this->serviceURI     == that->serviceURI);
@@ -6044,8 +6081,20 @@ bool GeneralOption::IsEqual(GeneralOption *that)
 			same = ((this->license        == that->license )       && same);
 			same = ((this->userName       == that->userName )      && same);
 			same = ((this->password       == that->password )      && same);
-			if (!same) return false;
-
+			if (!same) 
+			{
+				#ifdef DEBUG
+				cout << "serviceURI:    " << this->serviceURI     << " vs. " << that->serviceURI     << endl;
+				cout << "serviceName:   " << this->serviceName    << " vs. " << that->serviceName    << endl;
+				cout << "instanceName:  " << this->instanceName   << " vs. " << that->instanceName   << endl;
+				cout << "jobID:         " << this->jobID          << " vs. " << that->jobID          << endl;
+				cout << "solverToInvoke:" << this->solverToInvoke << " vs. " << that->solverToInvoke << endl;
+				cout << "license:       " << this->license        << " vs. " << that->license        << endl;
+				cout << "userName:      " << this->userName       << " vs. " << that->userName       << endl;
+				cout << "password:      " << this->password       << " vs. " << that->password       << endl;
+				#endif
+				return false;
+			}
 			if (!this->instanceLocation->IsEqual(that->instanceLocation))
 				return false;
 			if (!this->contact->IsEqual(that->contact))
@@ -6067,14 +6116,29 @@ bool SystemOption::IsEqual(SystemOption *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if (this->minCPUNumber != that->minCPUNumber)
+			{
+				#ifdef DEBUG
+				cout << "minCPUNumber: " << this->minCPUNumber << " vs. " << that->minCPUNumber << endl;
+				#endif
 				return false;
+			}
 
 			if (!this->minDiskSpace->IsEqual(that->minDiskSpace))
 				return false;
@@ -6099,14 +6163,29 @@ bool ServiceOption::IsEqual(ServiceOption *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else
 		{	if (this->type != that->type)
+			{
+				#ifdef DEBUG
+				cout << "service type: " << this->type << " vs. " << that->type << endl;
+				#endif
 				return false;
+			}
 
 			if (!this->otherOptions->IsEqual(that->otherOptions))
 				return false;
@@ -6125,14 +6204,29 @@ bool JobOption::IsEqual(JobOption *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if (this->scheduledStartTime != that->scheduledStartTime)
+			{
+				#ifdef DEBUG
+				cout << "scheduledStartTime: " << this->scheduledStartTime << " vs. " << that->scheduledStartTime << endl;
+				#endif
 				return false;
+			}
 
 			if (!this->maxTime->IsEqual(that->maxTime))
 				return false;
@@ -6178,21 +6272,49 @@ bool OptimizationOption::IsEqual(OptimizationOption *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if ((this->numberOfVariables != that->numberOfVariables) && 
 				(this->numberOfVariables *  that->numberOfVariables) != 0)
+			{
+				#ifdef DEBUG
+				cout << "numberOfVariables: " 
+					 << this->numberOfVariables << " vs. " << that->numberOfVariables << endl;
+				#endif
 				return false;
+			}
 			if ((this->numberOfObjectives != that->numberOfObjectives) && 
 				(this->numberOfObjectives *  that->numberOfObjectives) != 0)
+			{
+				#ifdef DEBUG
+				cout << "numberOfObjectives: " 
+					 << this->numberOfObjectives << " vs. " << that->numberOfObjectives << endl;
+				#endif
 				return false;
+			}
 			if ((this->numberOfConstraints != that->numberOfConstraints) && 
 				(this->numberOfConstraints *  that->numberOfConstraints) != 0)
+			{
+				#ifdef DEBUG
+				cout << "numberOfConstraints: " 
+					 << this->numberOfConstraints << " vs. " << that->numberOfConstraints << endl;
+				#endif
 				return false;
+			}
 
 			if (!this->variables->IsEqual(that->variables))
 				return false;
@@ -6216,14 +6338,30 @@ bool InstanceLocationOption::IsEqual(InstanceLocationOption *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
-		{	if ((this->locationType != that->locationType) || 
-				(this->value != that->value) ) return false;
+		{	if ((this->locationType != that->locationType) || (this->value != that->value)) 
+			{	
+				#ifdef DEBUG
+				cout << "location type: " << this->locationType << " vs. " << that->locationType << endl;
+				cout << "value: "         << this->value        << " vs. " << that->value        << endl;
+				#endif
+				return false;
+			}
 			return true;
 		}
 	}
@@ -6238,14 +6376,30 @@ bool ContactOption::IsEqual(ContactOption *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
-		{	if ((this->transportType != that->transportType) || 
-				(this->value != that->value) ) return false;
+		{	if ((this->transportType != that->transportType) || (this->value != that->value)) 
+			{	
+				#ifdef DEBUG
+				cout << "transport type: " << this->transportType << " vs. " << that->transportType << endl;
+				cout << "value: "          << this->value         << " vs. " << that->value         << endl;
+				#endif
+				return false;
+			}
 			return true;
 		}
 	}
@@ -6260,14 +6414,29 @@ bool OtherOptions::IsEqual(OtherOptions *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if (this->numberOfOtherOptions  != that->numberOfOtherOptions) 
+			{
+				#ifdef DEBUG
+				cout << "numberOfOtherOptions: " << this->numberOfOtherOptions << " vs. " << that->numberOfOtherOptions << endl;
+				#endif
 				return false;
+			}
 			int i;
 			for (i = 0; i < this->numberOfOtherOptions; i++)
 				if (!this->other[i]->IsEqual(that->other[i]))
@@ -6287,15 +6456,33 @@ bool OtherOption::IsEqual(OtherOption *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if ((this->name  != that->name)  || 
 				(this->value != that->value) || 
-				(this->description != that->description) ) return false;
+				(this->description != that->description) ) 
+			{
+				#ifdef DEBUG
+				cout << "name: "        << this->name        << " vs. " << that->name        << endl;
+				cout << "value: "       << this->value       << " vs. " << that->value       << endl;
+				cout << "description: " << this->description << " vs. " << that->description << endl;
+				#endif
+				return false;
+			}
 			return true;
 		}
 	}
@@ -6310,14 +6497,31 @@ bool MinDiskSpace::IsEqual(MinDiskSpace *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if ((this->unit  != that->unit)  || 
-				(this->value != that->value) ) return false;
+				(this->value != that->value) ) 
+			{	
+#ifdef DEBUG
+				cout << "unit: "  << this->unit  << " vs. " << that->unit  << endl;
+				cout << "value: " << this->value << " vs. " << that->value << endl;
+#endif	
+				return false;
+			}
 			return true;
 		}
 	}
@@ -6332,14 +6536,31 @@ bool MinMemorySize::IsEqual(MinMemorySize *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if ((this->unit  != that->unit)  || 
-				(this->value != that->value) ) return false;
+				(this->value != that->value) ) 
+			{
+#ifdef DEBUG
+				cout << "unit: "  << this->unit  << " vs. " << that->unit  << endl;
+				cout << "value: " << this->value << " vs. " << that->value << endl;
+#endif	
+				return false;
+			}
 			return true;
 		}
 	}
@@ -6355,14 +6576,31 @@ bool MaxTime::IsEqual(MaxTime *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if ((this->unit  != that->unit)  || 
-				(this->value != that->value) ) return false;
+				(this->value != that->value) ) 
+			{
+#ifdef DEBUG
+				cout << "unit: "  << this->unit  << " vs. " << that->unit  << endl;
+				cout << "value: " << this->value << " vs. " << that->value << endl;
+#endif	
+				return false;
+			}
 			return true;
 		}
 	}
@@ -6377,14 +6615,31 @@ bool MinCPUSpeed::IsEqual(MinCPUSpeed *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if ((this->unit  != that->unit)  || 
-				(this->value != that->value) ) return false;
+				(this->value != that->value) ) 
+			{
+#ifdef DEBUG
+				cout << "unit: "  << this->unit  << " vs. " << that->unit  << endl;
+				cout << "value: " << this->value << " vs. " << that->value << endl;
+#endif	
+				return false;
+			}
 			return true;
 		}
 	}
@@ -6400,18 +6655,38 @@ bool JobDependencies::IsEqual(JobDependencies *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if (this->numberOfJobIDs != that->numberOfJobIDs)  
+			{
+#ifdef DEBUG
+				cout << "numberOfJobIDs: " << this->numberOfJobIDs << " vs. " << that->numberOfJobIDs << endl;
+#endif	
 				return false;
+			}
 			int i;
 			for (i = 0; i < numberOfJobIDs; i++)
 				if (this->jobID[i] != that->jobID[i])
+				{
+#ifdef DEBUG
+					cout << "jobID[" << i << "]: " << this->jobID[i] << " vs. " << that->jobID[i] << endl;
+#endif	
 					return false;
+				}
 			return true;
 		}
 	}
@@ -6426,18 +6701,38 @@ bool DirectoriesAndFiles::IsEqual(DirectoriesAndFiles *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if (this->numberOfPaths != that->numberOfPaths)  
+			{
+#ifdef DEBUG
+				cout << "numberOfPaths: " << this->numberOfPaths << " vs. " << that->numberOfPaths << endl;
+#endif	
 				return false;
+			}
 			int i;
 			for (i = 0; i < numberOfPaths; i++)
 				if (this->path[i] != that->path[i])
+				{
+#ifdef DEBUG
+					cout << "path[" << i << "]: " << this->path[i] << " vs. " << that->path[i] << endl;
+#endif	
 					return false;
+				}
 			return true;
 		}
 	}
@@ -6452,14 +6747,29 @@ bool PathPairs::IsEqual(PathPairs *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if (this->numberOfPathPairs != that->numberOfPathPairs)  
+			{
+#ifdef DEBUG
+				cout << "numberOfPathPairs: " << this->numberOfPathPairs << " vs. " << that->numberOfPathPairs << endl;
+#endif	
 				return false;
+			}
 			int i;
 			for (i = 0; i < numberOfPathPairs; i++)
 				if (!this->pathPair[i]->IsEqual(that->pathPair[i]))
@@ -6479,15 +6789,32 @@ bool PathPair::IsEqual(PathPair *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if ((this->from != that->from) || (this->to != that->to) || 
 				(this->makeCopy != that->makeCopy))  
+			{
+#ifdef DEBUG
+				cout << "from: "     << this->from     << " vs. " << that->from     << endl;
+				cout << "to: "       << this->to       << " vs. " << that->to       << endl;
+				cout << "makeCopy: " << this->makeCopy << " vs. " << that->makeCopy << endl;
+#endif	
 				return false;
+			}
 			return true;
 		}
 	}
@@ -6502,18 +6829,38 @@ bool Processes::IsEqual(Processes *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if (this->numberOfProcesses != that->numberOfProcesses)  
+			{
+#ifdef DEBUG
+				cout << "numberOfProcesses: " << this->numberOfProcesses << " vs. " << that->numberOfProcesses << endl;
+#endif	
 				return false;
+			}
 			int i;
 			for (i = 0; i < numberOfProcesses; i++)
 				if (this->process[i] != that->process[i])
+				{
+#ifdef DEBUG
+					cout << "process[" << i << "]: " << this->process[i] << " vs. " << that->process[i] << endl;
+#endif	
 					return false;
+				}
 			return true;
 		}
 	}
@@ -6529,11 +6876,21 @@ bool VariableOption::IsEqual(VariableOption *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	
 			if (!this->initialVariableValues->IsEqual(that->initialVariableValues))
@@ -6548,11 +6905,22 @@ bool VariableOption::IsEqual(VariableOption *that)
 				return false;
 
 			if (this->numberOfOtherVariableOptions != that->numberOfOtherVariableOptions)  
+			{
+#ifdef DEBUG
+				cout << "numberOfOtherVariableOptions: " << this->numberOfOtherVariableOptions << " vs. " << that->numberOfOtherVariableOptions << endl;
+#endif	
 				return false;
+			}
+
 			int i;
 			for (i = 0; i < numberOfOtherVariableOptions; i++)
 				if (!this->other[i]->IsEqual(that->other[i]))
+				{
+#ifdef DEBUG
+					cout << "other[" << i << "]: " << this->other[i] << " vs. " << that->other[i] << endl;
+#endif	
 					return false;
+				}
 
 			return true;
 		}
@@ -6568,14 +6936,29 @@ bool InitVariableValues::IsEqual(InitVariableValues *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if (this->numberOfVar != that->numberOfVar)  
+			{
+#ifdef DEBUG
+				cout << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
+#endif	
 				return false;
+			}
 			int i;
 			for (i = 0; i < numberOfVar; i++)
 				if (!this->var[i]->IsEqual(that->var[i]))
@@ -6594,14 +6977,30 @@ bool InitVarValue::IsEqual(InitVarValue *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if ((this->idx != that->idx) || (this->value != that->value))
+			{
+#ifdef DEBUG
+				cout << "idx: "   << this->idx   << " vs. " << that->idx   << endl;
+				cout << "value: " << this->value << " vs. " << that->value << endl;
+#endif	
 				return false;
+			}
 			return true;
 		}
 	}
@@ -6617,14 +7016,29 @@ bool InitVariableValuesString::IsEqual(InitVariableValuesString *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if (this->numberOfVar != that->numberOfVar)  
+			{
+#ifdef DEBUG
+				cout << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
+#endif	
 				return false;
+			}
 			int i;
 			for (i = 0; i < numberOfVar; i++)
 				if (!this->var[i]->IsEqual(that->var[i]))
@@ -6643,14 +7057,30 @@ bool InitVarValueString::IsEqual(InitVarValueString *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if ((this->idx != that->idx) || (this->value != that->value))
+			{
+#ifdef DEBUG
+				cout << "idx: "   << this->idx   << " vs. " << that->idx   << endl;
+				cout << "value: " << this->value << " vs. " << that->value << endl;
+#endif	
 				return false;
+			}
 			return true;
 		}
 	}
@@ -6665,14 +7095,29 @@ bool InitialBasisStatus::IsEqual(InitialBasisStatus *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if (this->numberOfVar != that->numberOfVar)  
+			{
+#ifdef DEBUG
+				cout << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
+#endif	
 				return false;
+			}
 			int i;
 			for (i = 0; i < numberOfVar; i++)
 				if (!this->var[i]->IsEqual(that->var[i]))
@@ -6691,14 +7136,32 @@ bool InitBasStatus::IsEqual(InitBasStatus *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if ((this->idx != that->idx) || (this->value != that->value))
+			if ((this->value != "unknown" && that->value != "") ||
+				(that->value != "unknown" && this->value != "") )
+			{
+#ifdef DEBUG
+				cout << "idx: "   << this->idx   << " vs. " << that->idx   << endl;
+				cout << "value: " << this->value << " vs. " << that->value << endl;
+#endif	
 				return false;
+			}
 			return true;
 		}
 	}
@@ -6714,14 +7177,29 @@ bool IntegerVariableBranchingWeights::IsEqual(IntegerVariableBranchingWeights *t
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if (this->numberOfVar != that->numberOfVar)  
+			{
+#ifdef DEBUG
+				cout << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
+#endif	
 				return false;
+			}
 			int i;
 			for (i = 0; i < numberOfVar; i++)
 				if (!this->var[i]->IsEqual(that->var[i]))
@@ -6740,14 +7218,29 @@ bool SOSVariableBranchingWeights::IsEqual(SOSVariableBranchingWeights *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if (this->numberOfSOS != that->numberOfSOS)  
+			{
+#ifdef DEBUG
+				cout << "numberOfSOS: " << this->numberOfSOS << " vs. " << that->numberOfSOS << endl;
+#endif	
 				return false;
+			}
 			int i;
 			for (i = 0; i < numberOfSOS; i++)
 				if (!this->sos[i]->IsEqual(that->sos[i]))
@@ -6767,18 +7260,39 @@ bool SOSWeights::IsEqual(SOSWeights *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if ((this->sosIdx != that->sosIdx) ||
 				(this->groupWeight != that->groupWeight))  
+			{
+#ifdef DEBUG
+				cout << "sosIdx: "      << this->sosIdx      << " vs. " << that->sosIdx      << endl;
+				cout << "groupWeight: " << this->groupWeight << " vs. " << that->groupWeight << endl;
+#endif	
 				return false;
+			}
 
 			if (this->numberOfVar != that->numberOfVar)  
+			{
+#ifdef DEBUG
+				cout << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
+#endif	
 				return false;
+			}
 			int i;
 			for (i = 0; i < numberOfVar; i++)
 				if (!this->var[i]->IsEqual(that->var[i]))
@@ -6798,14 +7312,30 @@ bool BranchingWeight::IsEqual(BranchingWeight *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if ((this->idx != that->idx) || (this->value != that->value))
+			{
+#ifdef DEBUG
+				cout << "idx: "   << this->idx   << " vs. " << that->idx   << endl;
+				cout << "value: " << this->value << " vs. " << that->value << endl;
+#endif	
 				return false;
+			}
 			return true;
 		}
 	}
@@ -6820,11 +7350,21 @@ bool OtherVariableOption::IsEqual(OtherVariableOption *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if ((this->name        != that->name)     ||
 				(this->value       != that->value)    ||
@@ -6832,10 +7372,25 @@ bool OtherVariableOption::IsEqual(OtherVariableOption *that)
 				(this->category    != that->category) ||
 				(this->type        != that->type)     ||
 				(this->description != that->description))  
+			{
+#ifdef DEBUG
+				cout << "name: "        << this->name        << " vs. " << that->name        << endl;
+				cout << "value: "       << this->value       << " vs. " << that->value       << endl;
+				cout << "solver: "      << this->solver      << " vs. " << that->solver      << endl;
+				cout << "category: "    << this->category    << " vs. " << that->category    << endl;
+				cout << "type: "        << this->type        << " vs. " << that->type        << endl;
+				cout << "description: " << this->description << " vs. " << that->description << endl;
+#endif	
 				return false;
+			}
 
 			if (this->numberOfVar != that->numberOfVar)  
+			{
+#ifdef DEBUG
+				cout << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
+#endif	
 				return false;
+			}
 			int i;
 			for (i = 0; i < numberOfVar; i++)
 				if (!this->var[i]->IsEqual(that->var[i]))
@@ -6854,15 +7409,33 @@ bool OtherVarOption::IsEqual(OtherVarOption *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if ((this->idx     != that->idx)     || (this->value   != that->value) ||
 				(this->lbValue != that->lbValue) || (this->ubValue != that->ubValue))
+			{
+#ifdef DEBUG
+				cout << "idx: "     << this->idx     << " vs. " << that->idx     << endl;
+				cout << "value: "   << this->value   << " vs. " << that->value   << endl;
+				cout << "lbValue: " << this->lbValue << " vs. " << that->lbValue << endl;
+				cout << "ubValue: " << this->ubValue << " vs. " << that->ubValue << endl;
+#endif	
 				return false;
+			}
 			return true;
 		}
 	}
@@ -6877,11 +7450,21 @@ bool ObjectiveOption::IsEqual(ObjectiveOption *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	
 			if (!this->initialObjectiveValues->IsEqual(that->initialObjectiveValues))
@@ -6890,10 +7473,15 @@ bool ObjectiveOption::IsEqual(ObjectiveOption *that)
 				return false;
 
 			if (this->numberOfOtherObjectiveOptions != that->numberOfOtherObjectiveOptions)  
+			{
+#ifdef DEBUG
+				cout << "numberOfOtherObjectiveOptions: " << this->numberOfOtherObjectiveOptions << " vs. " << that->numberOfOtherObjectiveOptions << endl;
+#endif	
 				return false;
+			}
 			int i;
 			for (i = 0; i < numberOfOtherObjectiveOptions; i++)
-				if (this->other[i] != that->other[i])
+				if (!this->other[i]->IsEqual(that->other[i]))
 					return false;
 
 			return true;
@@ -6910,14 +7498,29 @@ bool InitObjectiveValues::IsEqual(InitObjectiveValues *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if (this->numberOfObj != that->numberOfObj)  
+			{
+#ifdef DEBUG
+				cout << "numberOfObj: " << this->numberOfObj << " vs. " << that->numberOfObj << endl;
+#endif	
 				return false;
+			}
 			int i;
 			for (i = 0; i < numberOfObj; i++)
 				if (!this->obj[i]->IsEqual(that->obj[i]))
@@ -6936,14 +7539,30 @@ bool InitObjValue::IsEqual(InitObjValue *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if ((this->idx != that->idx) || (this->value != that->value))
+			{
+#ifdef DEBUG
+				cout << "idx: "   << this->idx   << " vs. " << that->idx   << endl;
+				cout << "value: " << this->value << " vs. " << that->value << endl;
+#endif	
 				return false;
+			}
 			return true;
 		}
 	}
@@ -6958,14 +7577,29 @@ bool InitObjectiveBounds::IsEqual(InitObjectiveBounds *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if (this->numberOfObj != that->numberOfObj)  
+			{
+#ifdef DEBUG
+				cout << "numberOfObj: " << this->numberOfObj << " vs. " << that->numberOfObj << endl;
+#endif	
 				return false;
+			}
 			int i;
 			for (i = 0; i < numberOfObj; i++)
 				if (!this->obj[i]->IsEqual(that->obj[i]))
@@ -6984,15 +7618,32 @@ bool InitObjBound::IsEqual(InitObjBound *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if ((this->idx     != that->idx)    || (this->lbValue != that->lbValue) || 
-				(this->lbValue != that->lbValue) )
+				(this->ubValue != that->ubValue) )
+			{
+#ifdef DEBUG
+				cout << "idx: "     << this->idx     << " vs. " << that->idx     << endl;
+				cout << "lbValue: " << this->lbValue << " vs. " << that->lbValue << endl;
+				cout << "ubValue: " << this->ubValue << " vs. " << that->ubValue << endl;
+#endif	
 				return false;
+			}
 			return true;
 		}
 	}
@@ -7007,11 +7658,21 @@ bool OtherObjectiveOption::IsEqual(OtherObjectiveOption *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if ((this->name        != that->name)     ||
 				(this->value       != that->value)    ||
@@ -7019,10 +7680,25 @@ bool OtherObjectiveOption::IsEqual(OtherObjectiveOption *that)
 				(this->category    != that->category) ||
 				(this->type        != that->type)     ||
 				(this->description != that->description))  
+			{
+#ifdef DEBUG
+				cout << "name: "        << this->name        << " vs. " << that->name        << endl;
+				cout << "value: "       << this->value       << " vs. " << that->value       << endl;
+				cout << "solver: "      << this->solver      << " vs. " << that->solver      << endl;
+				cout << "category: "    << this->category    << " vs. " << that->category    << endl;
+				cout << "type: "        << this->type        << " vs. " << that->type        << endl;
+				cout << "description: " << this->description << " vs. " << that->description << endl;
+#endif	
 				return false;
+			}
 
 			if (this->numberOfObj != that->numberOfObj)  
+			{
+#ifdef DEBUG
+				cout << "numberOfObj: " << this->numberOfObj << " vs. " << that->numberOfObj << endl;
+#endif	
 				return false;
+			}
 			int i;
 			for (i = 0; i < numberOfObj; i++)
 				if (!this->obj[i]->IsEqual(that->obj[i]))
@@ -7041,15 +7717,33 @@ bool OtherObjOption::IsEqual(OtherObjOption *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if ((this->idx     != that->idx)     || (this->value   != that->value) ||
 				(this->lbValue != that->lbValue) || (this->ubValue != that->ubValue))
+			{
+#ifdef DEBUG
+				cout << "idx: "     << this->idx     << " vs. " << that->idx     << endl;
+				cout << "value: "   << this->value   << " vs. " << that->value   << endl;
+				cout << "lbValue: " << this->lbValue << " vs. " << that->lbValue << endl;
+				cout << "ubValue: " << this->ubValue << " vs. " << that->ubValue << endl;
+#endif	
 				return false;
+			}
 			return true;
 		}
 	}
@@ -7064,11 +7758,21 @@ bool ConstraintOption::IsEqual(ConstraintOption *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	
 			if (!this->initialConstraintValues->IsEqual(that->initialConstraintValues))
@@ -7077,10 +7781,15 @@ bool ConstraintOption::IsEqual(ConstraintOption *that)
 				return false;
 
 			if (this->numberOfOtherConstraintOptions != that->numberOfOtherConstraintOptions)  
+			{
+#ifdef DEBUG
+				cout << "numberOfOtherConstraintOptions: " << this->numberOfOtherConstraintOptions << " vs. " << that->numberOfOtherConstraintOptions << endl;
+#endif	
 				return false;
+			}
 			int i;
 			for (i = 0; i < numberOfOtherConstraintOptions; i++)
-				if (this->other[i] != that->other[i])
+				if (!this->other[i]->IsEqual(that->other[i]))
 					return false;
 
 			return true;
@@ -7097,14 +7806,29 @@ bool InitConstraintValues::IsEqual(InitConstraintValues *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if (this->numberOfCon != that->numberOfCon)  
+			{
+#ifdef DEBUG
+				cout << "numberOfCon: " << this->numberOfCon << " vs. " << that->numberOfCon << endl;
+#endif	
 				return false;
+			}
 			int i;
 			for (i = 0; i < numberOfCon; i++)
 				if (!this->con[i]->IsEqual(that->con[i]))
@@ -7123,14 +7847,30 @@ bool InitConValue::IsEqual(InitConValue *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if ((this->idx != that->idx) || (this->value != that->value))
+			{
+#ifdef DEBUG
+				cout << "idx: "   << this->idx   << " vs. " << that->idx   << endl;
+				cout << "value: " << this->value << " vs. " << that->value << endl;
+#endif	
 				return false;
+			}
 			return true;
 		}
 	}
@@ -7145,14 +7885,29 @@ bool InitDualVariableValues::IsEqual(InitDualVariableValues *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if (this->numberOfCon != that->numberOfCon)  
+			{
+#ifdef DEBUG
+				cout << "numberOfCon: " << this->numberOfCon << " vs. " << that->numberOfCon << endl;
+#endif	
 				return false;
+			}
 			int i;
 			for (i = 0; i < numberOfCon; i++)
 				if (!this->con[i]->IsEqual(that->con[i]))
@@ -7171,15 +7926,32 @@ bool InitDualVarValue::IsEqual(InitDualVarValue *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if ((this->idx != that->idx) || (this->lbDualValue != that->lbDualValue) ||
 				(this->ubDualValue != that->ubDualValue))
+			{
+#ifdef DEBUG
+				cout << "idx: "         << this->idx         << " vs. " << that->idx         << endl;
+				cout << "lbDualValue: " << this->lbDualValue << " vs. " << that->lbDualValue << endl;
+				cout << "ubDualValue: " << this->ubDualValue << " vs. " << that->ubDualValue << endl;
+#endif	
 				return false;
+			}
 			return true;
 		}
 	}
@@ -7194,11 +7966,21 @@ bool OtherConstraintOption::IsEqual(OtherConstraintOption *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if ((this->name        != that->name)     ||
 				(this->value       != that->value)    ||
@@ -7206,10 +7988,25 @@ bool OtherConstraintOption::IsEqual(OtherConstraintOption *that)
 				(this->category    != that->category) ||
 				(this->type        != that->type)     ||
 				(this->description != that->description))  
+			{
+#ifdef DEBUG
+				cout << "name: "        << this->name        << " vs. " << that->name        << endl;
+				cout << "value: "       << this->value       << " vs. " << that->value       << endl;
+				cout << "solver: "      << this->solver      << " vs. " << that->solver      << endl;
+				cout << "category: "    << this->category    << " vs. " << that->category    << endl;
+				cout << "type: "        << this->type        << " vs. " << that->type        << endl;
+				cout << "description: " << this->description << " vs. " << that->description << endl;
+#endif	
 				return false;
+			}
 
 			if (this->numberOfCon != that->numberOfCon)  
+			{
+#ifdef DEBUG
+				cout << "numberOfCon: " << this->numberOfCon << " vs. " << that->numberOfCon << endl;
+#endif	
 				return false;
+			}
 			int i;
 			for (i = 0; i < numberOfCon; i++)
 				if (!this->con[i]->IsEqual(that->con[i]))
@@ -7228,15 +8025,33 @@ bool OtherConOption::IsEqual(OtherConOption *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if ((this->idx     != that->idx)     || (this->value   != that->value) ||
 				(this->lbValue != that->lbValue) || (this->ubValue != that->ubValue))
+			{
+#ifdef DEBUG
+				cout << "idx: "     << this->idx     << " vs. " << that->idx     << endl;
+				cout << "value: "   << this->value   << " vs. " << that->value   << endl;
+				cout << "lbValue: " << this->lbValue << " vs. " << that->lbValue << endl;
+				cout << "ubValue: " << this->ubValue << " vs. " << that->ubValue << endl;
+#endif	
 				return false;
+			}
 			return true;
 		}
 	}
@@ -7250,26 +8065,32 @@ bool SolverOptions::IsEqual(SolverOptions *that)
 #endif
 	if (this == NULL)
 	{	if (that == NULL)
-		{   cout << "SolverOptions 1 is null, 2 is not " << endl;
 			return true;
-		}
 		else
-		{   cout << "Both SolverOptions are null " << endl;
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
 		}
 	}
 	else 
 	{	if (that == NULL)
-		{   cout << "SolverOptions 1 is not null, but 2 is " << endl;
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
 		}
 		else	
-		{   cout << "Both SolverOptions are not null " << endl;	
-			if (this->numberOfSolverOptions != that->numberOfSolverOptions)  
-			{	cout << "number of solver options: " << this->numberOfSolverOptions << " vs. " << that->numberOfSolverOptions << endl;
+		{   if (this->numberOfSolverOptions != that->numberOfSolverOptions)  
+			{
+#ifdef DEBUG
+				cout << "numberOfSolverOptions: " << this->numberOfSolverOptions << " vs. " << that->numberOfSolverOptions << endl;
+#endif	
 				return false;
 			}
-			cout << "number of solver options: " << this->numberOfSolverOptions << " vs. " << that->numberOfSolverOptions << endl;
+
 			int i;
 			for (i = 0; i < numberOfSolverOptions; i++)
 				if (!this->solverOption[i]->IsEqual(that->solverOption[i]))
@@ -7289,11 +8110,21 @@ bool SolverOption::IsEqual(SolverOption *that)
 	{	if (that == NULL)
 			return true;
 		else
+		{
+			#ifdef DEBUG
+				cout << "First object is NULL, second is not" << endl;
+			#endif
 			return false;
+		}
 	}
 	else 
 	{	if (that == NULL)
+		{
+			#ifdef DEBUG
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
 			return false;
+		}
 		else	
 		{	if ((this->name        != that->name)     ||
 				(this->value       != that->value)    ||
@@ -7301,7 +8132,17 @@ bool SolverOption::IsEqual(SolverOption *that)
 				(this->category    != that->category) ||
 				(this->type        != that->type)     ||
 				(this->description != that->description))  
+			{
+#ifdef DEBUG
+				cout << "name: "        << this->name        << " vs. " << that->name        << endl;
+				cout << "value: "       << this->value       << " vs. " << that->value       << endl;
+				cout << "solver: "      << this->solver      << " vs. " << that->solver      << endl;
+				cout << "category: "    << this->category    << " vs. " << that->category    << endl;
+				cout << "type: "        << this->type        << " vs. " << that->type        << endl;
+				cout << "description: " << this->description << " vs. " << that->description << endl;
+#endif	
 				return false;
+			}
 			return true;
 		}
 	}

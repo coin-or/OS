@@ -99,8 +99,8 @@
 				<var idx="5" value="basic"></var>
 			</initialBasisStatus>
 			<integerVariableBranchingWeights numberOfVar="2">
-				<var idx="4" value="1"></var>
-				<var value="2.5" idx="2"/>
+				<var idx="2" value="1"></var>
+				<var value="2.5" idx="4"/>
 			</integerVariableBranchingWeights>
 			<sosVariableBranchingWeights numberOfSOS="2">
 				<sos sosIdx="0" numberOfVar="2">

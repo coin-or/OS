@@ -157,7 +157,8 @@ bool IpoptProblem::get_starting_point(Index n, bool init_x, Number* x,
  	if( osoption != NULL) {
  		cout << " OSOPTION IS NOT NULL " << endl;
  		double* denseInitVarVector;
- 		denseInitVarVector = osoption->getInitVarValuesDense( n);
+ 		denseInitVarVector = osoption->getInitVarValuesDense();
+		n = osoption->getNumberOfVariables();
  		for(i = 0; i < n; i++){
  			if( CommonUtil::ISOSNAN( denseInitVarVector[ i]) == true){ 
  				x[ i] = 1.7171; 

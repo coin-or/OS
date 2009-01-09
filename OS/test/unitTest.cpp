@@ -1704,7 +1704,7 @@ catch(const ErrorClass& eclass){
 		 * 8) compare the second and third OSOption objects to make sure 
 		 *    nothing was lost in translation
 		 */
-#if 0
+//#if 0
 		cout << endl;
 		std::string tmpOSoL;
 		clock_t start, finish;
@@ -1790,7 +1790,7 @@ catch(const ErrorClass& eclass){
 		osoption->setAnotherInitVarValueString(6,"BLUE");
 		cout << "done" << endl;
 		cout << "Other inital basis status...";
-		osoption->setAnotherInitBasisStatus(5,"unknown");
+		osoption->setAnotherInitBasisStatus(6,"unknown");
 		cout << "done" << endl;
 		cout << "Other integer selection weight...";
 		cout << "nopt=" << osoption->optimization->variables->integerVariableBranchingWeights->numberOfVar << endl;
@@ -1801,8 +1801,8 @@ catch(const ErrorClass& eclass){
 		cout << "set data structure for SOS branching weight" << endl;
 		int SOS3idx[2];
 		double SOS3val[2];
-		SOS3idx[0] = 6;
-		SOS3idx[1] = 3;
+		SOS3idx[0] = 3;
+		SOS3idx[1] = 6;
 		SOS3val[0] = 1.0;
 		SOS3val[1] = 2.0;
 		cout << "SOS branching weight...";
@@ -1817,13 +1817,6 @@ catch(const ErrorClass& eclass){
 
 		cout << "OtherVariableOption...";
 		osoption->setAnOtherVariableOption(varopt);
-		cout << "done" << endl;
-
-		cout << "Other initial objective value...";
-		osoption->setAnotherInitObjValue(-1,5.0);
-		cout << "done" << endl;
-		cout << "Other initial objective bound...";
-		osoption->setAnotherInitObjBound(-1,0.0,DBL_MAX);
 		cout << "done" << endl;
 
 		cout << "OtherObjectiveOption...";
@@ -2098,39 +2091,28 @@ catch(const ErrorClass& eclass){
 		ok = osoption2->setNumberOfConstraints(nopt);
 		cout << ok << endl;
 		
+		nopt = osoption->getNumberOfVariables();
 		cout << "InitialVariableValues...";
 		double* IVV;
-		IVV = osoption->getInitVarValuesDense(nopt);
-		for (int i=0; i < nopt; i++)
-			cout << "IVV: " << IVV[i] << endl;
-		cout << "nopt:" << nopt;
+		IVV = osoption->getInitVarValuesDense();
 		ok = osoption2->setInitVarValuesDense(nopt, IVV);		
 		cout << ok << endl;
 
 		cout << "InitialVariableValuesString...";
 		std::string*  IVV2;
-		IVV2 = osoption->getInitVarValuesStringDense(nopt);
-		for (int i=0; i < nopt; i++)
-			cout << "IVV2: " << IVV2[i] << endl;
-		cout << "nopt:" << nopt;
+		IVV2 = osoption->getInitVarValuesStringDense();
 		ok = osoption2->setInitVarValuesStringDense(nopt, IVV2);		
 		cout << ok << endl;
 
 		cout << "InitialBasisStatus...";
 		std::string*  IBS;
-		IBS = osoption->getInitBasisStatusDense(nopt);
-		for (int i=0; i < nopt; i++)
-			cout << "IBS: " << IBS[i] << endl;
-		cout << "nopt:" << nopt;
+		IBS = osoption->getInitBasisStatusDense();
 		ok = osoption2->setInitBasisStatusDense(nopt, IBS);		
 		cout << ok << endl;
 
 		cout << "IntegerVariableBranchingWeights...";
 		double* IVBW;
-		IVBW = osoption->getIntegerVariableBranchingWeightsDense(nopt);
-		for (int i=0; i < nopt; i++)
-			cout << "IVBW: " << IVBW[i] << endl;
-		cout << "nopt:" << nopt;
+		IVBW = osoption->getIntegerVariableBranchingWeightsDense();
 		ok = osoption2->setIntegerVariableBranchingWeightsDense(nopt, IVBW);		
 		cout << ok << endl;
 
@@ -2148,22 +2130,17 @@ catch(const ErrorClass& eclass){
 		ok = osoption2->setOtherVariableOptions(nopt, otherV);
 		cout << ok << endl;
 
+		nopt = osoption->getNumberOfObjectives();
 		cout << "InitObjValues...";
 		double* IOV;
-		IOV = osoption->getInitObjValuesDense(nopt);
-		for (int i=0; i < nopt; i++)
-			cout << "IOV: " << IOV[i] << endl;
-		cout << "nopt:" << nopt;
+		IOV = osoption->getInitObjValuesDense();
 		ok = osoption2->setInitObjValuesDense(nopt, IOV);		
 		cout << ok << endl;
 
 		cout << "InitObjBounds...";
 		double *IOBL, *IOBU;
-		IOBL = osoption->getInitObjLowerBoundsDense(nopt);
-		IOBU = osoption->getInitObjUpperBoundsDense(nopt);
-		for (int i=0; i < nopt; i++)
-			cout << "IOBL: " << IOBL[i] << endl << "IOBU: " << IOBU[i] << endl;
-		cout << "nopt:" << nopt;
+		IOBL = osoption->getInitObjLowerBoundsDense();
+		IOBU = osoption->getInitObjUpperBoundsDense();
 		ok = osoption2->setInitObjBoundsDense(nopt, IOBL, IOBU);		
 		cout << ok << endl;
 
@@ -2175,22 +2152,17 @@ catch(const ErrorClass& eclass){
 		cout << ok << endl;
 
 		
+		nopt = osoption->getNumberOfConstraints();
 		cout << "InitConValues...";
 		double* ICV;
-		ICV = osoption->getInitConValuesDense(nopt);
-		for (int i=0; i < nopt; i++)
-			cout << "ICV: " << ICV[i] << endl;
-		cout << "nopt:" << nopt;
+		ICV = osoption->getInitConValuesDense();
 		ok = osoption2->setInitConValuesDense(nopt, ICV);		
 		cout << ok << endl;
 		
 		cout << "InitDualVarValues...";
 		double *IDVL, *IDVU;
-		IDVL = osoption->getInitDualVarLowerBoundsDense(nopt);
-		IDVU = osoption->getInitDualVarUpperBoundsDense(nopt);
-		for (int i=0; i < nopt; i++)
-			cout << "IDVL: " << IDVL[i] << endl << "IDVU: " << IDVU[i] << endl;
-		cout << "nopt:" << nopt;
+		IDVL = osoption->getInitDualVarLowerBoundsDense();
+		IDVU = osoption->getInitDualVarUpperBoundsDense();
 		ok = osoption2->setInitDualVarValuesDense(nopt, IDVL, IDVU);		
 		cout << ok << endl;
 
@@ -2208,10 +2180,17 @@ catch(const ErrorClass& eclass){
 		ok = osoption2->setSolverOptions(nopt, SO);
 		cout << ok << endl;
 
-		cout << "Compare original osoption and copy...";
+		cout << "Compare original osoption to osoption2" << endl;
 		ok = osoption->IsEqual(osoption2);
-		cout << ok << endl;
-
+		if (ok)
+			cout << "osoption and osoption2 are equal." << endl;
+		else
+		{	cout << "osoption and osoption2 are NOT equal." << endl << endl;
+			tmpOSoL = osolwriter->writeOSoL( osoption);
+			cout << "osoption:" << endl << endl << tmpOSoL << endl;
+			tmpOSoL = osolwriter->writeOSoL( osoption2);
+			cout << "osoption2:" << endl << endl << tmpOSoL << endl;
+		}
 
 		cout << "Write the content to a new file" <<endl;		
 		tmpOSoL = osolwriter->writeOSoL( osoption);
@@ -2230,7 +2209,7 @@ catch(const ErrorClass& eclass){
 		delete osolreader;
 		osolreader = NULL;
 
-#endif
+//#endif
 
 
 #if 0

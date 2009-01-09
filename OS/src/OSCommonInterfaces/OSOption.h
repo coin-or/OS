@@ -2901,9 +2901,8 @@ public:
 	 * 
 	 * @return a vector of double that 
 	 * holds initial values (or OSNAN) for all of the variables
-	 * @param nvar is the number of variables
 	 */
-	double* getInitVarValuesDense(int nvar);
+	double* getInitVarValuesDense();
 
 	/**
 	 * Get the initial value strings associated with the variables in sparse form
@@ -2920,9 +2919,8 @@ public:
 	 * 
 	 * @return a vector of strings that 
 	 * holds initial value strings (or "") for all of the variables
-	 * @param nvar is the number of variables
 	 */
-	std::string *getInitVarValuesStringDense(int nvar);
+	std::string *getInitVarValuesStringDense();
 
 	/**
 	 * Get the initial basis status in sparse form
@@ -2939,9 +2937,8 @@ public:
 	 * 
 	 * @return a vector of strings that 
 	 * holds initial basis status (or "unknown") for all of the variables
-	 * @param nvar is the number of variables for which basis status is avaiable
 	 */
-	std::string *getInitBasisStatusDense(int nvar);
+	std::string *getInitBasisStatusDense();
 
 
 	/**
@@ -2959,9 +2956,8 @@ public:
 	 * 
 	 * @return a vector of double that 
 	 * holds branching weights (or OSNAN) for all the variables
-	 * @param nvar is the number of variables
 	 */
-	double* getIntegerVariableBranchingWeightsDense(int nvar);
+	double* getIntegerVariableBranchingWeightsDense();
 
 	/**
 	 * Get the SOS branching weights in sparse form
@@ -3005,9 +3001,8 @@ public:
 	 * 
 	 * @return a vector of double that 
 	 * hold initial values (or OSNAN) for all of the objectives
-	 * @param nobj is the number of objectives
 	 */
-	double *getInitObjValuesDense(int nobj);
+	double *getInitObjValuesDense();
 
 	/**
 	 * Get the initial bounds associated with the objectives in sparse form
@@ -3024,9 +3019,8 @@ public:
 	 * 
 	 * @return a vector of double that 
 	 * hold initial lower bounds (or OSNAN) for all of the objectives
-	 * @param nobj is the number of objectives
 	 */
-	double *getInitObjLowerBoundsDense(int nobj);
+	double *getInitObjLowerBoundsDense();
 
 	/**
 	 * Get the initial upper bounds associated with the objectives in dense form
@@ -3034,9 +3028,8 @@ public:
 	 * 
 	 * @return a vector of double that 
 	 * hold initial upper bounds (or OSNAN) for all of the objectives
-	 * @param nobj is the number of objectives
 	 */
-	double *getInitObjUpperBoundsDense(int nobj);
+	double *getInitObjUpperBoundsDense();
 
 	/**
 	 * Get the array of other objective options
@@ -3070,9 +3063,8 @@ public:
 	 * 
 	 * @return a vector of double that 
 	 * hold initial values for all of the constraints
-	 * @param ncon is the number of constraints
 	 */
-	double *getInitConValuesDense(int ncon);
+	double *getInitConValuesDense();
 
 	/**
 	 * Get the initial bounds associated with the dual variables in sparse form
@@ -3089,9 +3081,8 @@ public:
 	 * 
 	 * @return a vector of double that 
 	 * hold initial lower bounds for all of the dual variables
-	 * @param ncon is the number of constraints
 	 */
-	double *getInitDualVarLowerBoundsDense(int ncon);
+	double *getInitDualVarLowerBoundsDense();
 
 
 	/**
@@ -3100,9 +3091,8 @@ public:
 	 * 
 	 * @return a vector of double that 
 	 * hold initial upper bounds for all of the dual variables
-	 * @param ncon is the number of constraints
 	 */
-	double *getInitDualVarUpperBoundsDense(int ncon);
+	double *getInitDualVarUpperBoundsDense();
 
 	/**
 	 * Get the array of other constraint options
