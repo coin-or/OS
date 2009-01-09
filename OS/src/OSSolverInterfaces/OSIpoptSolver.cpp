@@ -154,11 +154,22 @@ bool IpoptProblem::get_starting_point(Index n, bool init_x, Number* x,
   	assert(init_lambda == false);
   	int i;
   	cout << "get initial values !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
+  	
+		for(i = 0; i < n; i++){
+			x[ i] = 1.7171;
+		}
+		
+		return true;
+  	
  	if( osoption != NULL) {
  		cout << " OSOPTION IS NOT NULL " << endl;
  		double* denseInitVarVector;
+ 		// not working -- fix
  		denseInitVarVector = osoption->getInitVarValuesDense();
-		n = osoption->getNumberOfVariables();
+ 		
+		//n = osoption->getNumberOfVariables();
+ 	
+		cout << " OSOPTION IS NOT NULL "  << n << endl;
  		for(i = 0; i < n; i++){
  			if( CommonUtil::ISOSNAN( denseInitVarVector[ i]) == true){ 
  				x[ i] = 1.7171; 
@@ -521,8 +532,10 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 
 void IpoptSolver::setSolverOptions() throw (ErrorClass) {
 	try{
-		this->bSetSolverOptions = true;
+
 		/* set the default options */
+		
+		this->bSetSolverOptions = true;
 		app->Options()->SetNumericValue("tol", 1e-9);
 		app->Options()->SetIntegerValue("print_level", 0);
 		app->Options()->SetIntegerValue("max_iter", 20000);
@@ -530,7 +543,8 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass) {
 		app->Options()->SetStringValue("output_file", "ipopt.out");
 		app->Options()->SetStringValue("check_derivatives_for_naninf", "yes");
 		/* end of the default options */
-		if(osoption != NULL){
+		//if( osoption->getNumberOfSolverOptions() <= 0) return;
+		if( osoption != NULL  &&  osoption->getNumberOfSolverOptions() > 0 ){
 			std::cout << "number of solver options "  <<  osoption->getNumberOfSolverOptions() << std::endl;
 			std::vector<SolverOption*> optionsVector;
 			optionsVector = osoption->getSolverOptions( "ipopt");
