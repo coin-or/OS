@@ -1696,15 +1696,16 @@ catch(const ErrorClass& eclass){
 		 * in this part of the unitTest we
 		 * 1) read an OSoL string from a file
 		 * 2) create an OSOption object from the string
-		 * 3) write a new OSoL string from the in-memory OSOption object
-		 * 4) read the string back again into a second OSOption object
-		 * 5) add options to various array-valued elements
-		 * 6) retrieve pieces of the OSOption object with get() methods
-		 * 7) insert these pieces into a third OSOption object with set() methods
-		 * 8) compare the second and third OSOption objects to make sure 
-		 *    nothing was lost in translation
+		 * 3) add options to various array-valued elements
+		 * 4) retrieve pieces of the OSOption object with get() methods
+		 * 5) insert these pieces into a second OSOption object with set() methods
+		 * 6) compare the two OSOption objects to make sure they are equal
+		 * 7) write a new OSoL string from the in-memory OSOption object
+		 * 8) read the string back again into a third OSOption object
+		 * 9) compare to the original OSOption object
+		 *10) read two more OSoL strings from different files
 		 */
-#if 0
+//#if 0
 		cout << endl;
 		std::string tmpOSoL;
 		clock_t start, finish;
@@ -1731,110 +1732,52 @@ catch(const ErrorClass& eclass){
 
 		//Pad all the arrays
 		cout << endl << "Test the add() methods" << endl;
+		
+		ok = osoption->setAnOtherGeneralOption("testing","one","two  three");
+		ok = osoption->setOtherSystemOptions(0,NULL) && ok; 
+		ok = osoption->setAnOtherSystemOption("Ho Ho Ho","","") && ok;
+		ok = osoption->setAnOtherServiceOption("OneMore","Option","To Go") && ok;
+		ok = osoption->setAnotherJobDependency("DoReMi") && ok;
+		ok = osoption->setAnotherRequiredDirectory("C:\\MSYS") && ok;
+		ok = osoption->setAnotherRequiredFile("C:\\MSYS\\junk.tmp") && ok;
+		ok = osoption->setAnotherDirectoryToMake("C:\\tempdir") && ok;
+		ok = osoption->setAnotherFileToMake("C:\\tempdir\\temp.tmp") && ok;
+		ok = osoption->setAnotherInputDirectoryToMove("C:\\tempdir","C:\\OS\\calc",true) && ok;
+		ok = osoption->setAnotherInputFileToMove("C:\\OS\\parinc.osil","C:\\OS\\calc\\input.osil",true) && ok;
+		ok = osoption->setAnotherOutputFileToMove("C:\\OS\\calc\\putput.osrl","C:\\OS\\parinc.osol",false) && ok;
+		ok = osoption->setAnotherOutputDirectoryToMove("C:\\OS\\calc","C:\\OS\\save",false) && ok;
+		ok = osoption->setAnotherFileToDelete("C:\\OS\\calc\\input.osil") && ok;
+		ok = osoption->setAnotherDirectoryToDelete("C:\\tempdir") && ok;
+		ok = osoption->setAnotherProcessToKill("ABC123") && ok;
+		ok = osoption->setAnOtherJobOption("DoReMi","ABC","One Two Three") && ok;
+		ok = osoption->setAnotherInitVarValue(5,12.3) && ok;
+		ok = osoption->setAnotherInitVarValueString(6,"BLUE") && ok;
+		ok = osoption->setAnotherInitBasisStatus(6,"unknown") && ok;
+		ok = osoption->setAnotherIntegerVariableBranchingWeight(5,100.) && ok;
 
-		cout << "Add OtherGeneralOption...";
-		osoption->setAnOtherGeneralOption("testing","one","two  three");
-		cout << "done" << endl;
-		cout << "Delete OtherSystemOption...";
-		osoption->setOtherSystemOptions(0,NULL);
-		cout << "done" << endl;
-		cout << "Add OtherSystemOption...";
-		osoption->setAnOtherSystemOption("Ho Ho Ho","","");
-		cout << "done" << endl;
-		cout << "OtherServiceOption...";
-		osoption->setAnOtherServiceOption("OneMore","Option","To Go");
-		cout << "done" << endl;
-		cout << "JobDependency...";
-		osoption->setAnotherJobDependency("DoReMi");
-		cout << "done" << endl;
-		cout << "Required Directory...";
-		osoption->setAnotherRequiredDirectory("C:\\MSYS");
-		cout << "done" << endl;
-		cout << "Required File...";
-		osoption->setAnotherRequiredFile("C:\\MSYS\\junk.tmp");
-		cout << "done" << endl;
-		cout << "Directory to Make...";
-		osoption->setAnotherDirectoryToMake("C:\\tempdir");
-		cout << "done" << endl;
-		cout << "File to make...";
-		osoption->setAnotherFileToMake("C:\\tempdir\\temp.tmp");
-		cout << "done" << endl;
-		cout << "input directory to move...";
-		osoption->setAnotherInputDirectoryToMove("C:\\tempdir","C:\\OS\\calc",true);
-		cout << "done" << endl;
-		cout << "input file to move...";
-		osoption->setAnotherInputFileToMove("C:\\OS\\parinc.osil","C:\\OS\\calc\\input.osil",true);
-		cout << "done" << endl;
-		cout << "output file to move...";
-		osoption->setAnotherOutputFileToMove("C:\\OS\\calc\\putput.osrl","C:\\OS\\parinc.osol",false);
-		cout << "done" << endl;
-		cout << "output directory to move...";
-		osoption->setAnotherOutputDirectoryToMove("C:\\OS\\calc","C:\\OS\\save",false);
-		cout << "done" << endl;
-		cout << "file to delete...";
-		osoption->setAnotherFileToDelete("C:\\OS\\calc\\input.osil");
-		cout << "done" << endl;
-		cout << "directory to delete...";
-		osoption->setAnotherDirectoryToDelete("C:\\tempdir");
-		cout << "done" << endl;
-		cout << "process to kill...";
-		osoption->setAnotherProcessToKill("ABC123");
-		cout << "done" << endl;
-		cout << "OtherJobOption...";
-		osoption->setAnOtherJobOption("DoReMi","ABC","One Two Three");
-		cout << "done" << endl;
-		cout << "Other initial variable value...";
-		osoption->setAnotherInitVarValue(5,12.3);
-		cout << "done" << endl;
-		cout << "Other string-valued variable...";
-		osoption->setAnotherInitVarValueString(6,"BLUE");
-		cout << "done" << endl;
-		cout << "Other inital basis status...";
-		osoption->setAnotherInitBasisStatus(6,"unknown");
-		cout << "done" << endl;
-		cout << "Other integer selection weight...";
-		cout << "nopt=" << osoption->optimization->variables->integerVariableBranchingWeights->numberOfVar << endl;
-		osoption->setAnotherIntegerVariableBranchingWeight(5,100.);
-		cout << "nopt=" << osoption->optimization->variables->integerVariableBranchingWeights->numberOfVar << endl;
-		cout << "done" << endl;
-
-		cout << "set data structure for SOS branching weight" << endl;
 		int SOS3idx[2];
 		double SOS3val[2];
 		SOS3idx[0] = 3;
 		SOS3idx[1] = 6;
 		SOS3val[0] = 1.0;
 		SOS3val[1] = 2.0;
-		cout << "SOS branching weight...";
-		osoption->setAnotherSOSVariableBranchingWeight(3,2,1.0,SOS3idx,SOS3val);
-		cout << "nopt=" << osoption->optimization->variables->integerVariableBranchingWeights->numberOfVar << endl;
-		cout << "done" << endl;
+		ok = osoption->setAnotherSOSVariableBranchingWeight(3,2,1.0,SOS3idx,SOS3val) && ok;
 
 		OtherVariableOption *varopt;
 		varopt = new OtherVariableOption();
 		varopt->name = "testVarOpt";
 		varopt->numberOfVar = 0;
+		ok = osoption->setAnOtherVariableOption(varopt) && ok;
 
-		cout << "OtherVariableOption...";
-		osoption->setAnOtherVariableOption(varopt);
-		cout << "done" << endl;
-
-		cout << "OtherObjectiveOption...";
 		OtherObjectiveOption *objopt;
 		objopt = new OtherObjectiveOption();
 		objopt->name = "testObjOpt";
 		objopt->numberOfObj = 0;
-		osoption->setAnOtherObjectiveOption(objopt);
-		cout << "done" << endl;
+		ok = osoption->setAnOtherObjectiveOption(objopt) && ok;
 
-		cout << "Other initial constraint value...";
-		osoption->setAnotherInitConValue(2,17.0);
-		cout << "done" << endl;
-		cout << "Other dual variable...";
-		osoption->setAnotherInitDualVarValue(2,0.0,DBL_MAX);
-		cout << "done" << endl;
+		ok = osoption->setAnotherInitConValue(2,17.0) && ok;
+		ok = osoption->setAnotherInitDualVarValue(2,0.0,DBL_MAX) && ok;
 
-		cout << "OtherConstraintOption: prepare...";
 		OtherConstraintOption *conopt;
 		conopt = new OtherConstraintOption();
 		conopt->name = "testObjOpt";
@@ -1847,13 +1790,12 @@ catch(const ErrorClass& eclass){
 		conopt->con[1]->idx = 1;
 		conopt->con[1]->lbValue = "0.0";
 		conopt->con[1]->ubValue = "10.0";
-		cout << "call...";
-		osoption->setAnOtherConstraintOption(conopt);
-		cout << "done" << endl;
+		ok = osoption->setAnOtherConstraintOption(conopt) && ok;
 
-		cout << "OtherSolverOption...";
-		osoption->setAnotherSolverOption("HoHum","gus","PhoNY","","test","");
-		cout << "done" << endl;
+		ok = osoption->setAnotherSolverOption("HoHum","gus","PhoNY","","test","") && ok;
+
+		if (!ok)
+			throw ErrorClass(" Could not add to osoption data structure");
 
 		//Now transfer to another osoption using get() and set() methods
 		std::string optionstring;
@@ -1863,334 +1805,220 @@ catch(const ErrorClass& eclass){
 
 		cout << endl << "transfer osoption to another OSOption object" << endl;
 
-		cout << "ServiceURI...";
 		optionstring = osoption->getServiceURI();
 		ok = osoption2->setServiceURI(optionstring);
-		cout << ok << endl;
 
-		cout << "ServiceName...";
 		optionstring = osoption->getServiceName();
-		ok = osoption2->setServiceName(optionstring);
-		cout << ok << endl;
+		ok = osoption2->setServiceName(optionstring) && ok;
 
-		cout << "InstanceName...";
 		optionstring = osoption->getInstanceName();
-		ok = osoption2->setInstanceName(optionstring);
-		cout << ok << endl;
+		ok = osoption2->setInstanceName(optionstring) && ok;
 
-		cout << "InstanceLocation...";
 		optionstring = osoption->getInstanceLocation();
-		ok = osoption2->setInstanceLocation(optionstring);
-		cout << ok << endl;
+		ok = osoption2->setInstanceLocation(optionstring) && ok;
 
-		cout << "InstanceLocationType...";
 		optionstring = osoption->getInstanceLocationType();
-		ok = osoption2->setInstanceLocationType(optionstring);
-		cout << ok << endl;
+		ok = osoption2->setInstanceLocationType(optionstring) && ok;
 
-		cout << "JobID...";
 		optionstring = osoption->getJobID();
-		ok = osoption2->setJobID(optionstring);
-		cout << ok << endl;
+		ok = osoption2->setJobID(optionstring) && ok;
 
-		cout << "SolverToInvoke...";
 		optionstring = osoption->getSolverToInvoke();
-		ok = osoption2->setSolverToInvoke(optionstring);
-		cout << ok << endl;
+		ok = osoption2->setSolverToInvoke(optionstring) && ok;
 
-		cout << "License...";
 		optionstring = osoption->getInstanceLocationType();
-		ok = osoption2->setInstanceLocationType(optionstring);
-		cout << ok << endl;
+		ok = osoption2->setInstanceLocationType(optionstring) && ok;
 
-		cout << "UserName...";
 		optionstring = osoption->getUserName();
-		ok = osoption2->setUserName(optionstring);
-		cout << ok << endl;
+		ok = osoption2->setUserName(optionstring) && ok;
 
-		cout << "Password...";
 		optionstring = osoption->getPassword();
-		ok = osoption2->setPassword(optionstring);
-		cout << ok << endl;
+		ok = osoption2->setPassword(optionstring) && ok;
 
-		cout << "Contact...";
 		optionstring = osoption->getContact();
-		ok = osoption2->setContact(optionstring);
-		cout << ok << endl;
+		ok = osoption2->setContact(optionstring) && ok;
 		
-		cout << "TransportType...";
 		optionstring = osoption->getContactTransportType();
-		ok = osoption2->setContactTransportType(optionstring);
-		cout << ok << endl;
+		ok = osoption2->setContactTransportType(optionstring) && ok;
 
 		int nopt;
 		OtherOption** otherOpt;
-		cout << "Other general options...";
 		nopt = osoption->getNumberOfOtherGeneralOptions();
 		otherOpt = osoption->getOtherGeneralOptions();
-		ok = osoption2->setOtherGeneralOptions(nopt, otherOpt);
-		cout << ok << endl;
+		ok = osoption2->setOtherGeneralOptions(nopt, otherOpt) && ok;
 
-		cout << "MinDiskSpace...";
 		option_d = osoption->getMinDiskSpace();
-		ok = osoption2->setMinDiskSpace(option_d);
-		cout << ok << endl;
+		ok = osoption2->setMinDiskSpace(option_d) && ok;
 
-		cout << "MinDiskSpaceUnit...";
 		optionstring = osoption->getMinDiskSpaceUnit();
-		ok = osoption2->setMinDiskSpaceUnit(optionstring);
-		cout << ok << endl;
+		ok = osoption2->setMinDiskSpaceUnit(optionstring) && ok;
 
-		cout << "MinMemorySize...";
 		option_d = osoption->getMinMemorySize();
-		ok = osoption2->setMinMemorySize(option_d);
-		cout << ok << endl;
+		ok = osoption2->setMinMemorySize(option_d) && ok;
 
-		cout << "MinMemoryUnit...";
 		optionstring = osoption->getMinMemoryUnit();
-		ok = osoption2->setMinMemoryUnit(optionstring);
-		cout << ok << endl;
+		ok = osoption2->setMinMemoryUnit(optionstring) && ok;
 
-		cout << "MinCPUSpeed...";
 		option_d = osoption->getMinCPUSpeed();
-		ok = osoption2->setMinCPUSpeed(option_d);
-		cout << ok << endl;
+		ok = osoption2->setMinCPUSpeed(option_d) && ok;
 
-		cout << "MinCPUSpeedUnit...";
 		optionstring = osoption->getMinCPUSpeedUnit();
-		ok = osoption2->setMinCPUSpeedUnit(optionstring);
-		cout << ok << endl;
+		ok = osoption2->setMinCPUSpeedUnit(optionstring) && ok;
 
-		cout << "MinCPUNumber...";
 		option_i = osoption->getMinCPUNumber();
-		ok = osoption2->setMinCPUNumber(option_i);
-		cout << ok << endl;
+		ok = osoption2->setMinCPUNumber(option_i) && ok;
 
 		OtherOption** otherOpt2;
-		cout << "Other system options...";
 		nopt = osoption->getNumberOfOtherSystemOptions();
 		otherOpt2 = osoption->getOtherSystemOptions();
-		ok = osoption2->setOtherSystemOptions(nopt, otherOpt2);
-		cout << ok << endl;
+		ok = osoption2->setOtherSystemOptions(nopt, otherOpt2) && ok;
 
 
-		cout << "ServiceType...";
 		optionstring = osoption->getServiceType();
-		ok = osoption2->setServiceType(optionstring);
-		cout << ok << endl;
+		ok = osoption2->setServiceType(optionstring) && ok;
 
 		OtherOption** otherOpt3;
-		cout << "Other service options...";
 		nopt = osoption->getNumberOfOtherServiceOptions();
 		otherOpt3 = osoption->getOtherServiceOptions();
-		ok = osoption2->setOtherServiceOptions(nopt, otherOpt3);
-		cout << ok << endl;
+		ok = osoption2->setOtherServiceOptions(nopt, otherOpt3) && ok;
 
 
-		cout << "MaxTime...";
 		option_d = osoption->getMaxTime();
-		ok = osoption2->setMaxTime(option_d);
-		cout << ok << endl;
+		ok = osoption2->setMaxTime(option_d) && ok;
 
-		cout << "MaxTimeUnit...";
 		optionstring = osoption->getMaxTimeUnit();
-		ok = osoption2->setMaxTimeUnit(optionstring);
-		cout << ok << endl;
+		ok = osoption2->setMaxTimeUnit(optionstring) && ok;
 
-		cout << "ScheduledStartTime...";
 		optionstring = osoption->getScheduledStartTime();
-		ok = osoption2->setScheduledStartTime(optionstring);
-		cout << ok << endl;
+		ok = osoption2->setScheduledStartTime(optionstring) && ok;
 
-		cout << "Dependencies...";
 		nopt = osoption->getNumberOfJobDependencies();
 		std::string* tJobID = osoption->getJobDependencies();
-		ok = osoption2->setJobDependencies(nopt, tJobID);
-		cout << ok << endl;
+		ok = osoption2->setJobDependencies(nopt, tJobID) && ok;
 
-		cout << "RequiredDirectories...";
 		nopt = osoption->getNumberOfRequiredDirectories();
 		std::string* reqDir = osoption->getRequiredDirectories();
-		ok = osoption2->setRequiredDirectories(nopt, reqDir);
-		cout << ok << endl;
+		ok = osoption2->setRequiredDirectories(nopt, reqDir) && ok;
 
-		cout << "RequiredFiles...";
 		nopt = osoption->getNumberOfRequiredFiles();
 		std::string* reqFil = osoption->getRequiredFiles();
-		ok = osoption2->setRequiredFiles(nopt, reqFil);
-		cout << ok << endl;
+		ok = osoption2->setRequiredFiles(nopt, reqFil) && ok;
 
-		cout << "DirectoriesToMake...";
 		nopt = osoption->getNumberOfDirectoriesToMake();
 		std::string* mkDir = osoption->getDirectoriesToMake();
-		ok = osoption2->setDirectoriesToMake(nopt, mkDir);
-		cout << ok << endl;
+		ok = osoption2->setDirectoriesToMake(nopt, mkDir) && ok;
 
-		cout << "FilesToMake...";
 		nopt = osoption->getNumberOfFilesToMake();
 		std::string* mkFil = osoption->getFilesToMake();
-		ok = osoption2->setFilesToMake(nopt, mkFil);
-		cout << ok << endl;
+		ok = osoption2->setFilesToMake(nopt, mkFil) && ok;
 
-		cout << "InputDirectoriesToMove...";
 		nopt = osoption->getNumberOfInputDirectoriesToMove();
 		PathPair** inDMv = osoption->getInputDirectoriesToMove();
-		ok = osoption2->setInputDirectoriesToMove(nopt, inDMv);
-		cout << ok << endl;
+		ok = osoption2->setInputDirectoriesToMove(nopt, inDMv) && ok;
 
-		cout << "InputFilesToMove...";
 		nopt = osoption->getNumberOfInputFilesToMove();
 		PathPair** inFMv = osoption->getInputFilesToMove();
-		ok = osoption2->setInputFilesToMove(nopt, inFMv);
-		cout << ok << endl;
+		ok = osoption2->setInputFilesToMove(nopt, inFMv) && ok;
 
-		cout << "OutputFilesToMove...";
 		nopt = osoption->getNumberOfOutputFilesToMove();
 		PathPair** outFMv = osoption->getOutputFilesToMove();
-		ok = osoption2->setOutputFilesToMove(nopt, outFMv);
-		cout << ok << endl;
+		ok = osoption2->setOutputFilesToMove(nopt, outFMv) && ok;
 
-		cout << "OutputDirectoriesToMove...";
 		nopt = osoption->getNumberOfOutputDirectoriesToMove();
 		PathPair** outDMv = osoption->getOutputDirectoriesToMove();
-		ok = osoption2->setOutputDirectoriesToMove(nopt, outDMv);
-		cout << ok << endl;
+		ok = osoption2->setOutputDirectoriesToMove(nopt, outDMv) && ok;
 
-		cout << "FilesToDelete...";
 		nopt = osoption->getNumberOfFilesToDelete();
 		std::string* rmFil = osoption->getFilesToDelete();
-		ok = osoption2->setFilesToDelete(nopt, rmFil);
-		cout << ok << endl;
+		ok = osoption2->setFilesToDelete(nopt, rmFil) && ok;
 
-		cout << "DirectoriesToDelete...";
 		nopt = osoption->getNumberOfDirectoriesToDelete();
 		std::string* rmDir = osoption->getDirectoriesToDelete();
-		ok = osoption2->setDirectoriesToDelete(nopt, rmDir);
-		cout << ok << endl;
+		ok = osoption2->setDirectoriesToDelete(nopt, rmDir) && ok;
 
-		cout << "ProcessesToKill...";
 		nopt = osoption->getNumberOfProcessesToKill();
 		std::string* rmProc = osoption->getProcessesToKill();
-		ok = osoption2->setProcessesToKill(nopt, rmProc);
-		cout << ok << endl;
+		ok = osoption2->setProcessesToKill(nopt, rmProc) && ok;
 
 		OtherOption** otherOpt4;
-		cout << "Other job options...";
 		nopt = osoption->getNumberOfOtherJobOptions();
 		otherOpt4 = osoption->getOtherJobOptions();
-		ok = osoption2->setOtherJobOptions(nopt, otherOpt4);
-		cout << ok << endl;
+		ok = osoption2->setOtherJobOptions(nopt, otherOpt4) && ok;
 
-
-		cout << "Problem dimensions...";
-		nopt = osoption->getOptionInt("numberOfVariables");
-		ok = osoption2->setNumberOfVariables(nopt);
-		nopt = osoption->getOptionInt("numberOfObjectives");
-		ok = osoption2->setNumberOfObjectives(nopt);
-		nopt = osoption->getOptionInt("numberOfConstraints");
-		ok = osoption2->setNumberOfConstraints(nopt);
-		cout << ok << endl;
-		
-		nopt = osoption->getNumberOfVariables();
-		cout << "InitialVariableValues...";
+		int nvar, nobj, ncon;
+		nvar = osoption->getOptionInt("numberOfVariables");
+		ok = osoption2->setNumberOfVariables(nvar) && ok;
+		nobj = osoption->getOptionInt("numberOfObjectives");
+		ok = osoption2->setNumberOfObjectives(nobj) && ok;
+		ncon = osoption->getOptionInt("numberOfConstraints");
+		ok = osoption2->setNumberOfConstraints(ncon) && ok;
+ 
+// for the variables, objectives and constraints use a mixture of dense and sparse methods
 		double* IVV;
 		IVV = osoption->getInitVarValuesDense();
-		ok = osoption2->setInitVarValuesDense(nopt, IVV);		
-		cout << ok << endl;
+		ok = osoption2->setInitVarValuesDense(nvar, IVV) && ok;		
 
-		cout << "InitialVariableValuesString...";
-		std::string*  IVV2;
-		IVV2 = osoption->getInitVarValuesStringDense();
-		ok = osoption2->setInitVarValuesStringDense(nopt, IVV2);		
-		cout << ok << endl;
+		nopt = osoption->getNumberOfInitVarValuesString();
+		InitVarValueString** IVV2;
+		IVV2 = osoption->getInitVarValuesStringSparse();
+		ok = osoption2->setInitVarValuesStringSparse(nopt, IVV2) && ok;		
 
-		cout << "InitialBasisStatus...";
 		std::string*  IBS;
 		IBS = osoption->getInitBasisStatusDense();
-		ok = osoption2->setInitBasisStatusDense(nopt, IBS);		
-		cout << ok << endl;
+		ok = osoption2->setInitBasisStatusDense(nvar, IBS) && ok;		
 
-		cout << "IntegerVariableBranchingWeights...";
 		double* IVBW;
 		IVBW = osoption->getIntegerVariableBranchingWeightsDense();
-		ok = osoption2->setIntegerVariableBranchingWeightsDense(nopt, IVBW);		
-		cout << ok << endl;
+		ok = osoption2->setIntegerVariableBranchingWeightsDense(nvar, IVBW) && ok;		
 
-		cout << "SOSVariableBranchingWeights...";
 		SOSWeights** sos;
 		sos = osoption->getSOSVariableBranchingWeightsSparse();
 		nopt = osoption->getNumberOfSOSWeights();
-		ok = osoption2->setSOSVariableBranchingWeights(nopt, sos);
-		cout << ok << endl;
+		ok = osoption2->setSOSVariableBranchingWeights(nopt, sos) && ok;
 
-		cout << "OtherVariableOptions...";
 		OtherVariableOption** otherV;
 		otherV = osoption->getAllOtherVariableOptions();
 		nopt = osoption->getNumberOfOtherVariableOptions();
-		ok = osoption2->setOtherVariableOptions(nopt, otherV);
-		cout << ok << endl;
+		ok = osoption2->setOtherVariableOptions(nopt, otherV) && ok;
 
-		nopt = osoption->getNumberOfObjectives();
-		cout << "InitObjValues...";
+
 		double* IOV;
 		IOV = osoption->getInitObjValuesDense();
-		ok = osoption2->setInitObjValuesDense(nopt, IOV);		
-		cout << ok << endl;
+		ok = osoption2->setInitObjValuesDense(nobj, IOV) && ok;		
 
-		cout << "InitObjBounds...";
-		double *IOBL, *IOBU;
-		IOBL = osoption->getInitObjLowerBoundsDense();
-		IOBU = osoption->getInitObjUpperBoundsDense();
-		ok = osoption2->setInitObjBoundsDense(nopt, IOBL, IOBU);		
-		cout << ok << endl;
+		nopt = osoption->getNumberOfInitObjBounds();
+		InitObjBound** IOB;
+		IOB = osoption->getInitObjBoundsSparse();
+		ok = osoption2->setInitObjBoundsSparse(nopt, IOB) && ok;		
 
-		cout << "OtherObjectiveOptions...";
 		OtherObjectiveOption** otherO;
 		otherO = osoption->getAllOtherObjectiveOptions();
 		nopt = osoption->getNumberOfOtherObjectiveOptions();
-		ok = osoption2->setOtherObjectiveOptions(nopt, otherO);
-		cout << ok << endl;
+		ok = osoption2->setOtherObjectiveOptions(nopt, otherO) && ok;
 
 		
-		nopt = osoption->getNumberOfConstraints();
-		cout << "InitConValues...";
 		double* ICV;
 		ICV = osoption->getInitConValuesDense();
-		ok = osoption2->setInitConValuesDense(nopt, ICV);		
-		cout << ok << endl;
-		
-		cout << "InitDualVarValues...";
-		double *IDVL, *IDVU;
-		IDVL = osoption->getInitDualVarLowerBoundsDense();
-		IDVU = osoption->getInitDualVarUpperBoundsDense();
-		ok = osoption2->setInitDualVarValuesDense(nopt, IDVL, IDVU);		
-		cout << ok << endl;
+		ok = osoption2->setInitConValuesDense(ncon, ICV) && ok;		
 
-		cout << "OtherConstraintOptions...";
+		nopt = osoption->getNumberOfInitDualVarValues();
+		InitDualVarValue** IDV;
+		IDV = osoption->getInitDualVarValuesSparse();
+		ok = osoption2->setInitDualVarValuesSparse(nopt, IDV) && ok;		
+
 		OtherConstraintOption** otherC;
 		otherC = osoption->getAllOtherConstraintOptions();
 		nopt = osoption->getNumberOfOtherConstraintOptions();
-		ok = osoption2->setOtherConstraintOptions(nopt, otherC);
-		cout << ok << endl;
+		ok = osoption2->setOtherConstraintOptions(nopt, otherC) && ok;
 
-		cout << "SolverOptions...";
 		SolverOption** SO;
 		SO = osoption->getAllSolverOptions();
 		nopt = osoption->getNumberOfSolverOptions();
-		ok = osoption2->setSolverOptions(nopt, SO);
-		cout << ok << endl;
+		ok = osoption2->setSolverOptions(nopt, SO) && ok;
 
-		cout << "Compare original osoption to osoption2" << endl;
-		ok = osoption->IsEqual(osoption2);
-		if (ok)
-			cout << "osoption and osoption2 are equal." << endl;
-		else
-		{	cout << "osoption and osoption2 are NOT equal." << endl << endl;
-			tmpOSoL = osolwriter->writeOSoL( osoption);
-			cout << "osoption:" << endl << endl << tmpOSoL << endl;
-			tmpOSoL = osolwriter->writeOSoL( osoption2);
-			cout << "osoption2:" << endl << endl << tmpOSoL << endl;
-		}
+		ok = osoption->IsEqual(osoption2) && ok;
+		if (!ok)
+			throw ErrorClass(" OSOption get() and  set() methods do not work correctly");
 
 		cout << "Write the content to a new file" <<endl;		
 		tmpOSoL = osolwriter->writeOSoL( osoption);
@@ -2203,160 +2031,66 @@ catch(const ErrorClass& eclass){
 		// make sure we can parse without error
 		osolreader = new OSoLReader();
 		cout << "Read the string back" << endl;
-		osolreader->readOSoL( tmpOSoL);
+
+		OSOption *osoption3 = NULL;
+		osoption3 = osolreader->readOSoL( tmpOSoL);
+
+		ok = osoption->IsEqual(osoption3);
+		if (!ok)
+			throw ErrorClass(" Loss of information in OSoL write/read");
+
 		delete osolwriter;
 		osolwriter = NULL;
 		delete osolreader;
 		osolreader = NULL;
 
-#endif
 
-
-#if 0
-		std::cout << "number of solver options "  <<  osoption->getNumberOfSolverOptions() << std::endl;
-		std::vector<SolverOption*> optionsVector;
-		optionsVector = osoption->getSolverOptions( "ipopt");
-		int i;
-		int num_options = optionsVector.size();
-		for(i = 0; i < num_options; i++){
-			std::cout << "ipopt solver option  "  << optionsVector[ i]->name << std::endl;
-		}	
-		std::cout << "number of variables initialed with double "  <<  osoption->getNumberOfInitVarValues() << std::endl;
-		InitVarValue** initVarVector;
-		initVarVector = osoption->getInitVarValuesSparse();
-		int num_var = osoption->getNumberOfInitVarValues();
-		for(i = 0; i < num_var; i++){
-			std::cout << "initialize; var index "  << initVarVector[ i]->idx;
-			std::cout << ", value = "  << initVarVector[ i]->value << std::endl;
-		}
-		double* denseInitVarVector;
-		num_var = 4;
-		denseInitVarVector = osoption->getInitVarValuesDense(num_var);
-		for(i = 0; i < num_var; i++){
-			std::cout << "initialize; var index "  << i;
-			std::cout << ", value = "  << denseInitVarVector[ i] << std::endl;
-		}
-
-		std::string tempStr;
-		tempStr = "http://myweb.dal.ca/gassmann";
-		ok &= osoption->setServiceURI(tempStr);
-		ok &= osoption->setMinCPUNumber(2);
-		std::cout << "serviceURI:" << osoption->general->serviceURI << std::endl;
-		tempStr = osoption->getServiceURI();
-		std::cout << "serviceURI:" << tempStr << std::endl;
-
-		cout << "Write the content to a new file" <<endl;		
-		tmpOSoL = osolwriter->writeOSoL( osoption);
-		cout << endl << "Here is tmpOSoL:" <<endl;
-		cout << endl << endl << tmpOSoL << endl;
-		cout << "-----------------------------------------" << endl << endl;
-		delete[] denseInitVarVector;
-		denseInitVarVector = NULL;
-		delete osolreader;
-		osolreader = NULL;
-
-		// make sure we can parse without error
+		// now a second example
+		cout << "Test parsing another OSoL file" << endl;
+		osolwriter = new OSoLWriter();
 		osolreader = new OSoLReader();
-		cout << "Read the string back" << endl;
+		cout << "First read the OSoL file into a string" << endl;
+		osolFileName = dataDir  + "osolFiles" + dirsep + "parsertest2.osol"; 
+		osol = fileUtil->getFileAsString( osolFileName.c_str() );
+		finish = clock();
+		duration = (double) (finish - start) / CLOCKS_PER_SEC;
+		cout << "Reading the file into a string took (seconds): "<< duration << endl;
+		cout << "Parse the OSoL string into an OSOption object" << endl;
+		osoption = osolreader->readOSoL( osol);
+		tmpOSoL = osolwriter->writeOSoL( osoption) ;
+		delete osolreader;
+		osolreader = NULL;
+		osolreader = new OSoLReader();
 		osolreader->readOSoL( tmpOSoL);
 		delete osolwriter;
 		osolwriter = NULL;
 		delete osolreader;
 		osolreader = NULL;
 
-		cout << "test set() and get() methods" << endl;
-
-		OSOption *another_osoption = new OSOption();
-		std::string* jobID;
-		jobID = new std::string[ 2];
-		jobID[0] = "ABC123";
-		jobID[1] = "1234567890";
-		int ndep;
-		ok = another_osoption->setJobDependencies(2, jobID);
-		delete[] jobID;
-
-		//test garbage collection, do it again, this time without newing
-		std::string jobID2[2];
-		jobID2[0] = "xyz123";
-		jobID2[1] = "0987654321";
-		ok = another_osoption->setJobDependencies(2, jobID2);	
-
-		cout << "setJobDependencies: " << ok << endl;
-		ndep = another_osoption->getNumberOfJobDependencies();
-		cout << "number of dependencies: " << ndep << endl;
-		ok = another_osoption->setAnotherJobDependency("test");
-		cout << "setAnotherJobDependency: " << ok << endl;
-		ndep = another_osoption->getNumberOfJobDependencies();
-		cout << "number of dependencies: " << ndep << endl;
-		std::string* tJobID = another_osoption->getJobDependencies();
-		for (i = 0; i < ndep; i++) cout << "  jobID: " << tJobID[i] << endl;
-		delete another_osoption;
-		//return 0;
-		
-		
-		// another test
-		another_osoption = new OSOption();
-		OtherOption **otherOpts = NULL;
-		otherOpts = new OtherOption*[2];
-		otherOpts[ 0] = new OtherOption();
-		otherOpts[ 1] = new OtherOption();
-		otherOpts[ 0]->name = "name0";
-		otherOpts[ 0]->value = "value0";
-		otherOpts[ 1]->name = "name1";
-		otherOpts[ 1]->value = "value1";
-		
-		another_osoption->setOtherGeneralOptions(2,  otherOpts);
-		
-		delete otherOpts[ 0];
-		delete otherOpts[ 1];
-		delete[] otherOpts;
-		
-
-		another_osoption->setAnOtherGeneralOption( "name2", "value2", "");
-
-		OtherOption **newOtherOpts = another_osoption->getOtherGeneralOptions();
-		
-		int nopt = another_osoption->getNumberOfOtherGeneralOptions();
-		for(i = 0; i < nopt; i++){
-			std::cout  << newOtherOpts[i]->name << std::endl;
-			std::cout  << newOtherOpts[i]->value << std::endl;
-		}
-
-		cout << "define and set paths" << endl;
-		//std::string path[2];
-		std::string* path;
-		path = new std::string[ 2];
-		path[0] = "C:\\temp\\dir0";
-		path[1] = "C:\\temp\\dir1";
-
-		cout << "set paths into DirectoriesToMake" << endl;
-
-		another_osoption->setDirectoriesToMake(2, path);
-
-		cout << "add another directory to the list" << endl;
-
-		another_osoption->setAnotherDirectoryToMake("C:\\temp\\dir2");
-
-		cout << "Now retrieve the information" << endl;
-
-		int npaths = another_osoption->getNumberOfDirectoriesToMake();
-		std::string *directorylist = another_osoption->getDirectoriesToMake();
-
-		for(i = 0; i < npaths; i++){
-			std::cout  << directorylist[i] << std::endl;
-		}
- 
-
-		delete another_osoption;
-		delete[] path;
-#endif
-//		delete osoption;
-		cout << "delete osoption2" << endl;
-		//delete osoption2;  // kipp uncomment
-		cout << "delete osolreader" << endl;
-		//delete osolreader; //kipp uncomment
-		cout << "cleanup done" << endl;
+		// and a third example
+		cout << "Test parsing another OSoL file" << endl;
+		osolwriter = new OSoLWriter();
+		osolreader = new OSoLReader();
+		cout << "First read the OSoL file into a string" << endl;
+		osolFileName = dataDir  + "osolFiles" + dirsep + "parsertest3.osol"; 
+		osol = fileUtil->getFileAsString( osolFileName.c_str() );
+		finish = clock();
+		duration = (double) (finish - start) / CLOCKS_PER_SEC;
+		cout << "Reading the file into a string took (seconds): "<< duration << endl;
+		cout << "Parse the OSoL string into an OSOption object" << endl;
+		osoption = osolreader->readOSoL( osol);
+		tmpOSoL = osolwriter->writeOSoL( osoption) ;
+		delete osolreader;
 		osolreader = NULL;
+		osolreader = new OSoLReader();
+		osolreader->readOSoL( tmpOSoL);
+		delete osolwriter;
+		osolwriter = NULL;
+		delete osolreader;
+		osolreader = NULL;
+
+//#endif
+
 
 		unitTestResult << 
 		     "Successful test of OSoL parser on file parsertest.osol" 

@@ -1721,7 +1721,7 @@ QUOTE;
 initvarstrvalueend: GREATERTHAN VAREND | ENDOFELEMENT;
 
 
-initialbasisstatus: {printf("initial basis empty\n");} | INITIALBASISSTATUSSTART numberofbasvar GREATERTHAN
+initialbasisstatus: | INITIALBASISSTATUSSTART numberofbasvar GREATERTHAN
     basvarlist INITIALBASISSTATUSEND;
 
 numberofbasvar: NUMBEROFVARATT QUOTE INTEGER QUOTE
@@ -1863,14 +1863,13 @@ sosweightgroup: sosweightgroupstart sosweightgroupattlist sosweightgroupcontent
 	parserData->grpWgtAttributePresent = false;
 	parserData->nOfVarAttributePresent = false;
 	parserData->numberOfSOS++;
-	printf("Increment parserData->numberOfSOS to %d",parserData->numberOfSOS);
 };
 
 
 sosweightgroupstart: SOSSTART
 {	if (parserData->numberOfSOS >= osoption->optimization->variables->sosVariableBranchingWeights->numberOfSOS)
 		osolerror(NULL, osoption, parserData, "too many SOS branching weights");
-	printf("Reset parserData->numberOfSOSVar (to 0)\n"); parserData->numberOfSOSVar = 0;
+	parserData->numberOfSOSVar = 0;
 };
 
 sosweightgroupattlist: | sosweightgroupattlist sosweightgroupatt; 
@@ -1881,12 +1880,9 @@ sosweightgroupidxatt: SOSIDXATT QUOTE INTEGER QUOTE
 {	if (parserData->sosIdxAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one SOS index allowed");
 	parserData->sosIdxAttributePresent = true;
-	printf("SOS index found:%d\n",$3);
 	if ($3 < 0)
 		osolerror (NULL, osoption, parserData, "SOS index must be nonnegative");
-	printf("store into %d:%d\n",parserData->numberOfSOS,$3);
 	osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->sosIdx = $3;
-	printf(" Check:%d\n",osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->sosIdx);
 };
  
 sosweightgroupweightatt: 
@@ -1929,9 +1925,7 @@ sosweightvar: sosweightvarstart sosweightvarattlist sosweightvarend
 };
 
 sosweightvarstart: VARSTART 
-{	printf("numberOfSOSVar:%d, numberOfVar in this SOS:%d",parserData->numberOfSOSVar,
-		osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->numberOfVar);
-	if (parserData->numberOfSOSVar >= osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->numberOfVar)
+{	if (parserData->numberOfSOSVar >= osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->numberOfVar)
 		osolerror(NULL, osoption, parserData, "too many variable branching weights");
 };
 
@@ -2732,9 +2726,7 @@ otherconstraintoptionscon: otherconstraintoptionsconstart otherconoptionattlist 
 };
 
 otherconstraintoptionsconstart: CONSTART 
-{	printf("Found <con>; number %d out of %d\n",parserData->numberOfCon,
-		osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->numberOfCon);
-	if (parserData->numberOfCon >= osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->numberOfCon)
+{	if (parserData->numberOfCon >= osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->numberOfCon)
 		osolerror(NULL, osoption, parserData, "too many <con> entries in <other> constraint element");
 };
 
@@ -2756,7 +2748,6 @@ otherconoptionidx: IDXATT QUOTE INTEGER QUOTE
 	{	if ($3 >= parserData->numberOfConstraints)
 			osolerror (NULL, osoption, parserData, "constraint index exceeds upper limit");
 	};
-	printf("idx = %d\n",$3);
 	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->con[parserData->numberOfCon]->idx = $3;
 };
 
@@ -2765,7 +2756,6 @@ otherconoptionvalue: VALUEATT ATTRIBUTETEXT
 {	if (parserData->valAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one constraint value allowed");
 	parserData->valAttributePresent = true;
-	printf("Value attribute read\n");
 	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->con[parserData->numberOfCon]->value = $2;
 }
 QUOTE;
@@ -2775,7 +2765,6 @@ otherconoptionlbvalue: LBVALUEATT ATTRIBUTETEXT
 {	if (parserData->lbvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one lower bound value allowed");
 	parserData->lbvalAttributePresent = true;
-	printf("lbValue attribute read\n");
 	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->con[parserData->numberOfCon]->lbValue = $2;
 }
 QUOTE;
@@ -2784,7 +2773,6 @@ otherconoptionubvalue: UBVALUEATT ATTRIBUTETEXT
 {	if (parserData->ubvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one upper bound value allowed");
 	parserData->ubvalAttributePresent = true;
-	printf("ubValue attribute read\n");
 	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->con[parserData->numberOfCon]->ubValue = $2;
 }
 QUOTE;

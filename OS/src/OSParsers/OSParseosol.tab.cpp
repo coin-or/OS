@@ -1130,35 +1130,35 @@ static const yytype_uint16 yyrline[] =
     1721,  1724,  1724,  1727,  1737,  1737,  1739,  1747,  1752,  1752,
     1754,  1754,  1756,  1770,  1769,  1777,  1777,  1780,  1780,  1783,
     1793,  1793,  1795,  1803,  1808,  1808,  1810,  1810,  1812,  1826,
-    1825,  1838,  1838,  1841,  1841,  1844,  1855,  1855,  1857,  1870,
-    1876,  1876,  1878,  1878,  1878,  1880,  1893,  1900,  1907,  1918,
-    1919,  1921,  1921,  1923,  1931,  1938,  1938,  1940,  1940,  1942,
-    1956,  1955,  1968,  1968,  1971,  1971,  1973,  1975,  1980,  1980,
-    1983,  1984,  1985,  1986,  1987,  1988,  1989,  1991,  2005,  2004,
-    2013,  2012,  2021,  2020,  2029,  2028,  2037,  2036,  2045,  2044,
-    2053,  2070,  2070,  2072,  2082,  2087,  2087,  2090,  2091,  2092,
-    2093,  2095,  2109,  2108,  2117,  2116,  2125,  2124,  2132,  2132,
-    2136,  2136,  2138,  2142,  2142,  2151,  2152,  2154,  2154,  2157,
-    2167,  2167,  2169,  2177,  2182,  2182,  2184,  2184,  2186,  2201,
-    2200,  2213,  2213,  2216,  2216,  2219,  2229,  2229,  2231,  2240,
-    2245,  2245,  2247,  2247,  2247,  2249,  2263,  2262,  2276,  2275,
-    2288,  2288,  2292,  2292,  2294,  2296,  2301,  2301,  2304,  2305,
-    2306,  2307,  2308,  2309,  2310,  2312,  2326,  2325,  2335,  2334,
-    2344,  2343,  2353,  2352,  2362,  2361,  2371,  2370,  2380,  2397,
-    2397,  2399,  2409,  2414,  2414,  2417,  2418,  2419,  2420,  2422,
-    2437,  2436,  2446,  2445,  2455,  2454,  2463,  2463,  2466,  2466,
-    2468,  2472,  2472,  2481,  2483,  2485,  2485,  2488,  2498,  2498,
-    2500,  2508,  2513,  2513,  2515,  2515,  2517,  2532,  2531,  2544,
-    2544,  2547,  2547,  2550,  2560,  2560,  2562,  2571,  2576,  2576,
-    2578,  2578,  2578,  2580,  2594,  2593,  2607,  2606,  2620,  2620,
-    2623,  2623,  2625,  2627,  2632,  2632,  2635,  2636,  2637,  2638,
-    2639,  2640,  2641,  2643,  2657,  2656,  2665,  2664,  2673,  2672,
-    2681,  2680,  2689,  2688,  2697,  2696,  2705,  2722,  2722,  2724,
-    2734,  2741,  2741,  2744,  2745,  2746,  2747,  2749,  2765,  2764,
-    2775,  2774,  2784,  2783,  2792,  2792,  2795,  2795,  2800,  2810,
-    2818,  2818,  2821,  2820,  2838,  2838,  2841,  2842,  2843,  2844,
-    2845,  2846,  2850,  2849,  2861,  2860,  2872,  2871,  2883,  2882,
-    2894,  2893,  2905,  2904,  2916,  2916
+    1825,  1838,  1838,  1841,  1841,  1844,  1855,  1855,  1857,  1869,
+    1875,  1875,  1877,  1877,  1877,  1879,  1889,  1896,  1903,  1914,
+    1915,  1917,  1917,  1919,  1927,  1932,  1932,  1934,  1934,  1936,
+    1950,  1949,  1962,  1962,  1965,  1965,  1967,  1969,  1974,  1974,
+    1977,  1978,  1979,  1980,  1981,  1982,  1983,  1985,  1999,  1998,
+    2007,  2006,  2015,  2014,  2023,  2022,  2031,  2030,  2039,  2038,
+    2047,  2064,  2064,  2066,  2076,  2081,  2081,  2084,  2085,  2086,
+    2087,  2089,  2103,  2102,  2111,  2110,  2119,  2118,  2126,  2126,
+    2130,  2130,  2132,  2136,  2136,  2145,  2146,  2148,  2148,  2151,
+    2161,  2161,  2163,  2171,  2176,  2176,  2178,  2178,  2180,  2195,
+    2194,  2207,  2207,  2210,  2210,  2213,  2223,  2223,  2225,  2234,
+    2239,  2239,  2241,  2241,  2241,  2243,  2257,  2256,  2270,  2269,
+    2282,  2282,  2286,  2286,  2288,  2290,  2295,  2295,  2298,  2299,
+    2300,  2301,  2302,  2303,  2304,  2306,  2320,  2319,  2329,  2328,
+    2338,  2337,  2347,  2346,  2356,  2355,  2365,  2364,  2374,  2391,
+    2391,  2393,  2403,  2408,  2408,  2411,  2412,  2413,  2414,  2416,
+    2431,  2430,  2440,  2439,  2449,  2448,  2457,  2457,  2460,  2460,
+    2462,  2466,  2466,  2475,  2477,  2479,  2479,  2482,  2492,  2492,
+    2494,  2502,  2507,  2507,  2509,  2509,  2511,  2526,  2525,  2538,
+    2538,  2541,  2541,  2544,  2554,  2554,  2556,  2565,  2570,  2570,
+    2572,  2572,  2572,  2574,  2588,  2587,  2601,  2600,  2614,  2614,
+    2617,  2617,  2619,  2621,  2626,  2626,  2629,  2630,  2631,  2632,
+    2633,  2634,  2635,  2637,  2651,  2650,  2659,  2658,  2667,  2666,
+    2675,  2674,  2683,  2682,  2691,  2690,  2699,  2716,  2716,  2718,
+    2728,  2733,  2733,  2736,  2737,  2738,  2739,  2741,  2756,  2755,
+    2765,  2764,  2773,  2772,  2780,  2780,  2783,  2783,  2788,  2798,
+    2806,  2806,  2809,  2808,  2826,  2826,  2829,  2830,  2831,  2832,
+    2833,  2834,  2838,  2837,  2849,  2848,  2860,  2859,  2871,  2870,
+    2882,  2881,  2893,  2892,  2904,  2904
 };
 #endif
 
@@ -4666,11 +4666,6 @@ yyreduce:
 ;}
     break;
 
-  case 461:
-
-    {printf("initial basis empty\n");;}
-    break;
-
   case 463:
 
     {	if ((yyvsp[(3) - (4)].ival) <= 0)
@@ -4804,7 +4799,6 @@ yyreduce:
 	parserData->grpWgtAttributePresent = false;
 	parserData->nOfVarAttributePresent = false;
 	parserData->numberOfSOS++;
-	printf("Increment parserData->numberOfSOS to %d",parserData->numberOfSOS);
 ;}
     break;
 
@@ -4812,7 +4806,7 @@ yyreduce:
 
     {	if (parserData->numberOfSOS >= osoption->optimization->variables->sosVariableBranchingWeights->numberOfSOS)
 		osolerror(NULL, osoption, parserData, "too many SOS branching weights");
-	printf("Reset parserData->numberOfSOSVar (to 0)\n"); parserData->numberOfSOSVar = 0;
+	parserData->numberOfSOSVar = 0;
 ;}
     break;
 
@@ -4821,12 +4815,9 @@ yyreduce:
     {	if (parserData->sosIdxAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one SOS index allowed");
 	parserData->sosIdxAttributePresent = true;
-	printf("SOS index found:%d\n",(yyvsp[(3) - (4)].ival));
 	if ((yyvsp[(3) - (4)].ival) < 0)
 		osolerror (NULL, osoption, parserData, "SOS index must be nonnegative");
-	printf("store into %d:%d\n",parserData->numberOfSOS,(yyvsp[(3) - (4)].ival));
 	osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->sosIdx = (yyvsp[(3) - (4)].ival);
-	printf(" Check:%d\n",osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->sosIdx);
 ;}
     break;
 
@@ -4872,9 +4863,7 @@ yyreduce:
 
   case 514:
 
-    {	printf("numberOfSOSVar:%d, numberOfVar in this SOS:%d",parserData->numberOfSOSVar,
-		osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->numberOfVar);
-	if (parserData->numberOfSOSVar >= osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->numberOfVar)
+    {	if (parserData->numberOfSOSVar >= osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->numberOfVar)
 		osolerror(NULL, osoption, parserData, "too many variable branching weights");
 ;}
     break;
@@ -5625,9 +5614,7 @@ yyreduce:
 
   case 730:
 
-    {	printf("Found <con>; number %d out of %d\n",parserData->numberOfCon,
-		osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->numberOfCon);
-	if (parserData->numberOfCon >= osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->numberOfCon)
+    {	if (parserData->numberOfCon >= osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->numberOfCon)
 		osolerror(NULL, osoption, parserData, "too many <con> entries in <other> constraint element");
 ;}
     break;
@@ -5643,7 +5630,6 @@ yyreduce:
 	{	if ((yyvsp[(3) - (4)].ival) >= parserData->numberOfConstraints)
 			osolerror (NULL, osoption, parserData, "constraint index exceeds upper limit");
 	};
-	printf("idx = %d\n",(yyvsp[(3) - (4)].ival));
 	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->con[parserData->numberOfCon]->idx = (yyvsp[(3) - (4)].ival);
 ;}
     break;
@@ -5653,7 +5639,6 @@ yyreduce:
     {	if (parserData->valAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one constraint value allowed");
 	parserData->valAttributePresent = true;
-	printf("Value attribute read\n");
 	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->con[parserData->numberOfCon]->value = (yyvsp[(2) - (2)].sval);
 ;}
     break;
@@ -5663,7 +5648,6 @@ yyreduce:
     {	if (parserData->lbvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one lower bound value allowed");
 	parserData->lbvalAttributePresent = true;
-	printf("lbValue attribute read\n");
 	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->con[parserData->numberOfCon]->lbValue = (yyvsp[(2) - (2)].sval);
 ;}
     break;
@@ -5673,7 +5657,6 @@ yyreduce:
     {	if (parserData->ubvalAttributePresent)
 		osolerror (NULL, osoption, parserData, "only one upper bound value allowed");
 	parserData->ubvalAttributePresent = true;
-	printf("ubValue attribute read\n");
 	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->con[parserData->numberOfCon]->ubValue = (yyvsp[(2) - (2)].sval);
 ;}
     break;

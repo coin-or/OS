@@ -99,7 +99,7 @@ OtherOptions::~OtherOptions()
 	if (other != NULL)
 	{	int i;
 		for (i=0; i<numberOfOtherOptions; i++)
-		{	cout << "delete other general option " << i << endl;
+		{	//cout << "delete other general option " << i << endl;
 			delete other[i];
 			other[i] = NULL;
 		}
@@ -2381,7 +2381,6 @@ double* OSOption::getInitVarValuesDense()
 {	try
 	{	int numberOfVariables;
 		numberOfVariables = this->getNumberOfVariables();
-		cout << "numberOfVariables: " << numberOfVariables << endl;
 		if (numberOfVariables < 0)
 			throw ErrorClass("\"numberOfVariables\" must be present to use dense methods");		
 
@@ -2404,7 +2403,6 @@ double* OSOption::getInitVarValuesDense()
 						else
 							throw ErrorClass("Variable index out of range");
 					}
-		cout << "numberOfVariables: " << numberOfVariables << endl;
 					return initVarVector;
 				}
 			}
@@ -5009,8 +5007,7 @@ bool OSOption::setOtherSystemOptions(int numberOfOptions, OtherOption** other)
 			delete this->system->otherOptions->other[i];
 		delete[] this->system->otherOptions->other;
 		this->system->otherOptions->other = NULL;
-		this->system->otherOptions->numberOfOtherOptions = 0;     //!!!
-		cout << "OtherSystemOption deleted" << endl;
+		this->system->otherOptions->numberOfOtherOptions = 0;
 	}
 	return this->system->otherOptions->setOther(numberOfOptions, other);
 }//setOtherSystemOptions
@@ -5429,12 +5426,10 @@ bool OSOption::setInitVarValuesDense(int numberOfVar, double *value)
 	{	delete[] this->optimization->variables->initialVariableValues->var;
 		this->optimization->variables->initialVariableValues->var = NULL;
 	}
-	cout << "Now process " << numberOfVar << " variables" << endl;
+
 	int i;
 	for (i = 0; i < numberOfVar; i++)
-	{	cout << "variable " << i << " value ";
-		cout << value[i] << endl;
-		if (value[i] != OSNAN)
+	{	if (value[i] != OSNAN)
 			if (!this->optimization->variables->initialVariableValues->addVar(i, value[i]))
 				return false;
 	}
@@ -5679,8 +5674,7 @@ bool OSOption::setInitObjValuesDense(int numberOfObj, double *value)
 	}
 	int i;
 	for (i = 0; i < numberOfObj; i++)
-	{	cout << "processing " << i << " of " << numberOfObj << " value = " << value[i] << endl;		
-		if (value[i] != OSNAN)
+	{	if (value[i] != OSNAN)
 			if (!this->optimization->objectives->initialObjectiveValues->addObj(-1-i, value[i]))
 				return false;
 	}
@@ -5848,10 +5842,8 @@ bool OSOption::setInitDualVarValuesDense(int numberOfCon, double* lb, double* ub
 	int i;
 	for (i = 0; i < numberOfCon; i++)
 	{	if ((lb[i] != 0.0) || (ub[i] != 0.0))
-	{	cout << "copy duals for " << i << " " << lb[i] << " " << ub[i] << endl;
 			if (!this->optimization->constraints->initialDualValues->addCon(i, lb[i], ub[i]))
-				return false;
-	}
+				return false;	
 	}
 	return true;
 }//setInitDualVarValuesDense
