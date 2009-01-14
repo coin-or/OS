@@ -1797,6 +1797,8 @@ catch(const ErrorClass& eclass){
 		if (!ok)
 			throw ErrorClass(" Could not add to osoption data structure");
 
+#if 0
+
 		//Now transfer to another osoption using get() and set() methods
 		std::string optionstring;
 		int option_i;
@@ -1807,143 +1809,299 @@ catch(const ErrorClass& eclass){
 
 		optionstring = osoption->getServiceURI();
 		ok = osoption2->setServiceURI(optionstring);
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set ServiceURI");
+#endif
 
 		optionstring = osoption->getServiceName();
 		ok = osoption2->setServiceName(optionstring) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set ServiceName");
+#endif
 
 		optionstring = osoption->getInstanceName();
 		ok = osoption2->setInstanceName(optionstring) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set InstanceName");
+#endif
 
 		optionstring = osoption->getInstanceLocation();
 		ok = osoption2->setInstanceLocation(optionstring) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set InstanceLocation");
+#endif
 
 		optionstring = osoption->getInstanceLocationType();
 		ok = osoption2->setInstanceLocationType(optionstring) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set InstanceLocationtype");
+#endif
 
 		optionstring = osoption->getJobID();
 		ok = osoption2->setJobID(optionstring) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set JobID");
+#endif
 
 		optionstring = osoption->getSolverToInvoke();
 		ok = osoption2->setSolverToInvoke(optionstring) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set SolverToInvoke");
+#endif
 
 		optionstring = osoption->getInstanceLocationType();
 		ok = osoption2->setInstanceLocationType(optionstring) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set InstanceLocationType");
+#endif
 
 		optionstring = osoption->getUserName();
 		ok = osoption2->setUserName(optionstring) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set UserName");
+#endif
 
 		optionstring = osoption->getPassword();
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set Password");
+#endif
 		ok = osoption2->setPassword(optionstring) && ok;
 
 		optionstring = osoption->getContact();
 		ok = osoption2->setContact(optionstring) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set Contact");
+#endif
 		
 		optionstring = osoption->getContactTransportType();
 		ok = osoption2->setContactTransportType(optionstring) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set TransportType");
+#endif
 
 		int nopt;
 		OtherOption** otherOpt;
 		nopt = osoption->getNumberOfOtherGeneralOptions();
 		otherOpt = osoption->getOtherGeneralOptions();
 		ok = osoption2->setOtherGeneralOptions(nopt, otherOpt) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set OtherGeneralOption");
+#endif
 
 		option_d = osoption->getMinDiskSpace();
 		ok = osoption2->setMinDiskSpace(option_d) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set MinDiskSpace");
+#endif
 
 		optionstring = osoption->getMinDiskSpaceUnit();
 		ok = osoption2->setMinDiskSpaceUnit(optionstring) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set MinDiskSpaceUnit");
+#endif
 
 		option_d = osoption->getMinMemorySize();
 		ok = osoption2->setMinMemorySize(option_d) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set MinMemorySize");
+#endif
 
 		optionstring = osoption->getMinMemoryUnit();
 		ok = osoption2->setMinMemoryUnit(optionstring) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set MinMemoryUnit");
+#endif
 
 		option_d = osoption->getMinCPUSpeed();
 		ok = osoption2->setMinCPUSpeed(option_d) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set MinCPUSpeed");
+#endif
 
 		optionstring = osoption->getMinCPUSpeedUnit();
 		ok = osoption2->setMinCPUSpeedUnit(optionstring) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set MinCPUSpeedUnit");
+#endif
 
 		option_i = osoption->getMinCPUNumber();
 		ok = osoption2->setMinCPUNumber(option_i) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set MinCPUNumber");
+#endif
 
 		OtherOption** otherOpt2;
 		nopt = osoption->getNumberOfOtherSystemOptions();
 		otherOpt2 = osoption->getOtherSystemOptions();
 		ok = osoption2->setOtherSystemOptions(nopt, otherOpt2) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set OtherSystemOptions");
+#endif
 
 
 		optionstring = osoption->getServiceType();
 		ok = osoption2->setServiceType(optionstring) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set ServiceType");
+#endif
 
 		OtherOption** otherOpt3;
 		nopt = osoption->getNumberOfOtherServiceOptions();
 		otherOpt3 = osoption->getOtherServiceOptions();
 		ok = osoption2->setOtherServiceOptions(nopt, otherOpt3) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set OtherServiceOptions");
+#endif
 
 
 		option_d = osoption->getMaxTime();
 		ok = osoption2->setMaxTime(option_d) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set MaxTime");
+#endif
 
 		optionstring = osoption->getMaxTimeUnit();
 		ok = osoption2->setMaxTimeUnit(optionstring) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set MaxTimeUnit");
+#endif
 
 		optionstring = osoption->getScheduledStartTime();
 		ok = osoption2->setScheduledStartTime(optionstring) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set ScheduledStartTime");
+#endif
 
 		nopt = osoption->getNumberOfJobDependencies();
 		std::string* tJobID = osoption->getJobDependencies();
 		ok = osoption2->setJobDependencies(nopt, tJobID) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set JobDependencies");
+#endif
 
 		nopt = osoption->getNumberOfRequiredDirectories();
 		std::string* reqDir = osoption->getRequiredDirectories();
 		ok = osoption2->setRequiredDirectories(nopt, reqDir) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set RequiredDirectories");
+#endif
 
 		nopt = osoption->getNumberOfRequiredFiles();
 		std::string* reqFil = osoption->getRequiredFiles();
 		ok = osoption2->setRequiredFiles(nopt, reqFil) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set RequiredFiles");
+#endif
 
 		nopt = osoption->getNumberOfDirectoriesToMake();
 		std::string* mkDir = osoption->getDirectoriesToMake();
 		ok = osoption2->setDirectoriesToMake(nopt, mkDir) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set DirectoriesToMake");
+#endif
 
 		nopt = osoption->getNumberOfFilesToMake();
 		std::string* mkFil = osoption->getFilesToMake();
 		ok = osoption2->setFilesToMake(nopt, mkFil) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set FilesToMake");
+#endif
 
 		nopt = osoption->getNumberOfInputDirectoriesToMove();
 		PathPair** inDMv = osoption->getInputDirectoriesToMove();
 		ok = osoption2->setInputDirectoriesToMove(nopt, inDMv) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set InputDirectoriesToMove");
+#endif
 
 		nopt = osoption->getNumberOfInputFilesToMove();
 		PathPair** inFMv = osoption->getInputFilesToMove();
 		ok = osoption2->setInputFilesToMove(nopt, inFMv) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set InputFilesToMove");
+#endif
 
 		nopt = osoption->getNumberOfOutputFilesToMove();
 		PathPair** outFMv = osoption->getOutputFilesToMove();
 		ok = osoption2->setOutputFilesToMove(nopt, outFMv) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set OutputFilesToMove");
+#endif
 
 		nopt = osoption->getNumberOfOutputDirectoriesToMove();
 		PathPair** outDMv = osoption->getOutputDirectoriesToMove();
 		ok = osoption2->setOutputDirectoriesToMove(nopt, outDMv) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set OutputDirectoriesToMove");
+#endif
 
 		nopt = osoption->getNumberOfFilesToDelete();
 		std::string* rmFil = osoption->getFilesToDelete();
 		ok = osoption2->setFilesToDelete(nopt, rmFil) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set FilesToDelete");
+#endif
 
 		nopt = osoption->getNumberOfDirectoriesToDelete();
 		std::string* rmDir = osoption->getDirectoriesToDelete();
 		ok = osoption2->setDirectoriesToDelete(nopt, rmDir) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set DirectoriesToDelete");
+#endif
 
 		nopt = osoption->getNumberOfProcessesToKill();
 		std::string* rmProc = osoption->getProcessesToKill();
 		ok = osoption2->setProcessesToKill(nopt, rmProc) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set ProcessesToKill");
+#endif
 
 		OtherOption** otherOpt4;
 		nopt = osoption->getNumberOfOtherJobOptions();
 		otherOpt4 = osoption->getOtherJobOptions();
 		ok = osoption2->setOtherJobOptions(nopt, otherOpt4) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set OtherJobOptions");
+#endif
 
 		int nvar, nobj, ncon;
 		nvar = osoption->getOptionInt("numberOfVariables");
@@ -1952,69 +2110,125 @@ catch(const ErrorClass& eclass){
 		ok = osoption2->setNumberOfObjectives(nobj) && ok;
 		ncon = osoption->getOptionInt("numberOfConstraints");
 		ok = osoption2->setNumberOfConstraints(ncon) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set problem dimensions");
+#endif
  
 // for the variables, objectives and constraints use a mixture of dense and sparse methods
 		double* IVV;
 		IVV = osoption->getInitVarValuesDense();
 		ok = osoption2->setInitVarValuesDense(nvar, IVV) && ok;		
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set InitVarValues");
+#endif
 
 		nopt = osoption->getNumberOfInitVarValuesString();
 		InitVarValueString** IVV2;
 		IVV2 = osoption->getInitVarValuesStringSparse();
 		ok = osoption2->setInitVarValuesStringSparse(nopt, IVV2) && ok;		
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set InitVarValuesString");
+#endif
 
 		std::string*  IBS;
 		IBS = osoption->getInitBasisStatusDense();
 		ok = osoption2->setInitBasisStatusDense(nvar, IBS) && ok;		
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set InitBasisStatus");
+#endif
 
 		double* IVBW;
 		IVBW = osoption->getIntegerVariableBranchingWeightsDense();
 		ok = osoption2->setIntegerVariableBranchingWeightsDense(nvar, IVBW) && ok;		
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set IntegerVariableBranchingWeights");
+#endif
 
 		SOSWeights** sos;
 		sos = osoption->getSOSVariableBranchingWeightsSparse();
 		nopt = osoption->getNumberOfSOSWeights();
 		ok = osoption2->setSOSVariableBranchingWeights(nopt, sos) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set SOSVariableBranchingWeights");
+#endif
 
 		OtherVariableOption** otherV;
 		otherV = osoption->getAllOtherVariableOptions();
 		nopt = osoption->getNumberOfOtherVariableOptions();
 		ok = osoption2->setOtherVariableOptions(nopt, otherV) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set OtherVariableOptions");
+#endif
 
 
 		double* IOV;
 		IOV = osoption->getInitObjValuesDense();
 		ok = osoption2->setInitObjValuesDense(nobj, IOV) && ok;		
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set InitObjValues");
+#endif
 
 		nopt = osoption->getNumberOfInitObjBounds();
 		InitObjBound** IOB;
 		IOB = osoption->getInitObjBoundsSparse();
 		ok = osoption2->setInitObjBoundsSparse(nopt, IOB) && ok;		
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set InitObjBounds");
+#endif
 
 		OtherObjectiveOption** otherO;
 		otherO = osoption->getAllOtherObjectiveOptions();
 		nopt = osoption->getNumberOfOtherObjectiveOptions();
 		ok = osoption2->setOtherObjectiveOptions(nopt, otherO) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set OtherObjectiveOptions");
+#endif
 
 		
 		double* ICV;
 		ICV = osoption->getInitConValuesDense();
 		ok = osoption2->setInitConValuesDense(ncon, ICV) && ok;		
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set InitConValues");
+#endif
 
 		nopt = osoption->getNumberOfInitDualVarValues();
 		InitDualVarValue** IDV;
 		IDV = osoption->getInitDualVarValuesSparse();
 		ok = osoption2->setInitDualVarValuesSparse(nopt, IDV) && ok;		
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set InitDualVarValues");
+#endif
 
 		OtherConstraintOption** otherC;
 		otherC = osoption->getAllOtherConstraintOptions();
 		nopt = osoption->getNumberOfOtherConstraintOptions();
 		ok = osoption2->setOtherConstraintOptions(nopt, otherC) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set OtherConstraintOptions");
+#endif
 
 		SolverOption** SO;
 		SO = osoption->getAllSolverOptions();
 		nopt = osoption->getNumberOfSolverOptions();
 		ok = osoption2->setSolverOptions(nopt, SO) && ok;
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set SolverOptions");
+#endif
 
 		ok = osoption->IsEqual(osoption2) && ok;
 		if (!ok)
@@ -2089,7 +2303,7 @@ catch(const ErrorClass& eclass){
 		delete osolreader;
 		osolreader = NULL;
 
-//#endif
+#endif
 
 
 		unitTestResult << 
