@@ -1383,7 +1383,7 @@ build several versions (e.g., debug and non-debug versions, or versions with
 availability of various combinations of third-party software) of the OS
 project from a single copy of the source code.
 
-For  example, assume you wish to build a debug version of the OS project in
+For  example, assume you wish to build a debug version\index{debug version, MSYS|(} of the OS project in
 the directory {\tt vpath-debug} and that {\tt ../COIN-OS} is the path to the
 root of the OS project distribution.  Create the {\tt vpath-debug} directory,
 leaving it empty for the moment.
@@ -1403,7 +1403,7 @@ make
 \end{verbatim}
 %
 and all of  the libraries created will be in their respective directories
-inside {\tt vpath-debug} and not {\tt ../COIN-OS}.
+inside {\tt vpath-debug} and not {\tt ../COIN-OS}.\index{debug version, MSYS|)}
 
 \vskip 8pt
 \noindent {\bf Notes:} 
@@ -2465,1179 +2465,6 @@ The string returned from the {\tt knock} method is in the OSpL format. See the e
 \index{OSpL|)}
 
 
-
-
-\section{The OS Library Components}\label{section:oslibrary}
-
-\subsection{OSAgent}\label{section:osagent}
-
-The {\tt OSAgent}\index{OSAgent@{\tt OSAgent}|(}  part of the library is used to facilitate communication
-with remote solvers. It is not used if the solver is invoked locally (i.e., on the same machine).
-There are two key classes in the {\tt OSAgent} component of the OS library. The two classes are
-{\tt OSSolverAgent}\index{OSSolverAgent@{\tt OSSolverAgent}} and {\tt WSUtil}\index{WSUtil@{\tt WSUtil}}.
-
-The {\tt OSSolverAgent} class is used to contact a remote solver service.  For example, assume that {\tt sOSiL}
-is a string with a problem instance and {\tt sOSoL} is a string with solver options. Then the following code
-will call a solver service and invoke the {\tt solve} method.
-\begin{verbatim}
-OSSolverAgent *osagent;
-string serviceLocation = http://gsbkip.chicagogsb.edu/os/OSSolverService.jws
-osagent = new OSSolverAgent(  serviceLocation );
-string sOSrL = osagent->solve(sOSiL, sOSoL);
-\end{verbatim}
-Other methods in the {\tt OSSolverAgent} class are {\tt send}, {\tt retrieve}, {\tt getJobID}, {\tt knock}, and {\tt kill}.  The use of these methods is described in Section~\ref{section:servicemethods}.
-
-
-
-The methods in the {\tt OSSolverAgent} class call methods in the {\tt WSUtil} class that perform such tasks as creating and parsing SOAP messages and making low level socket calls to the server running the solver service. The average user will not use methods in the {\tt WSUtil} class, but they are available to anyone wanting to make socket calls or create SOAP messages.
-
-There is also a method, {\tt OSFileUpload}, in the OSAgentClass that is used to upload files from the hard drive of a client to the server. It is very fast and does not involve SOAP or Web Services. The {\tt OSFileUpload}  method is illustrated and described in the example code {\tt OSFileUpload.cpp} described in Section~\ref{section:fileupload}.
-\index{OSAgent@{\tt OSAgent}|)}
-
-\subsection{OSCommonInterfaces}
-
-The classes in the OSCommonInterfaces component of the OS library are used to read and write files and strings
-in the OSiL and OSrL protocols. See Section~\ref{section:schemadescriptions} for more detail on OSiL, OSrL,
-and other OS protocols. For a complete listing of all of the files in {\tt OSCommonInterfaces} see the 
-Doxygen\index{Doxygen} documentation we deposited at {\tt\UrlDoxygen}. Users who have Doxygen installed on their system
-can also create their own version of the documentation (see Section~\ref{section:documentation}). Below we highlight 
-some key classes.
-
-
-
-
-
-\subsubsection{The OSInstance Class}\label{section:osinstanceclass}
-
-The OSInstance\index{OSInstance@{\tt OSInstance}|(} class is the in-memory representation of an optimization instance and is a key
-class for users of the OS project. This class has an API defined by a collection of {\tt get()} methods for
-extracting various components (such as bounds and coefficients) from a problem instance, a collection of
-{\tt set()} methods for modifying or generating an optimization instance, and a collection of {\tt calculate()}
-methods for function, gradient, and Hessian evaluations.  See Section~\ref{section:osinstanceAPI}.
-We now describe how to create an {\tt OSInstance} object and the close relationship between the OSiL\index{OSiL} schema
-and the {\tt OSInstance} class.
-
-\subsubsection{Creating an {\tt OSInstance} Object}
-
-The OSCommonInterfaces component contains an {\tt OSiLReader}  class for reading an instance in an OSiL string and
-creating an in-memory {\tt OSInstance} object.  Assume that {\tt sOSiL} is a string that will hold the instance in OSiL format. Creating an {\tt OSInstance} object is illustrated in Figure~\ref{figure:creatingosinstanceobject}.
-
-\begin{figure}[ht]
-\centering
-   \small {\obeyspaces\let =\
-\fbox{\tt\begin{tabular}{@{}l@{}}
-OSiLReader *osilreader = NULL;\\[\Sb]
-OSInstance *osinstance = NULL;\\[\Sb]
-osilreader = new OSiLReader();\\[\Sb]
-osinstance = osilreader->readOSiL( sOSiL);\\[\Sb]
-\end{tabular} }} \bigskip
-\caption{Creating an {\tt OSInstance} Object} \label{figure:creatingosinstanceobject}
-\end{figure}
-
-\subsubsection{Mapping Rules}\label{section:mappingrules}
-
-The {\tt OSInstance} class has two member classes, {\tt InstanceHeader} and {\tt InstanceData}.  These correspond to the OSiL schema's complexTypes {\tt InstanceHeader} and {\tt InstanceData}, and to the XML elements {\tt <instanceHeader>} and {\tt <instanceData>}.
-
-    Moving down one level, Figure~\ref{figure:instancedata} shows that the {\tt InstanceData} class has in turn the member classes {\tt Variables}, {\tt Objectives}, {\tt Constraints}, {\tt LinearConstraintCoefficients}, {\tt QuadraticCoefficients}, and {\tt NonlinearExpressions}, corresponding to the respective elements in the OSiL schema with the same name.
-
-
-\begin{figure}[ht]
-\centering
-   \small {\obeyspaces\let =\
-\fbox{\tt\begin{tabular}{@{}l@{}}
-class OSInstance\{\\[\Sb]
-public:\\[\Sb]
-     OSInstance(); \\[\Sb]
-     InstanceHeader *instanceHeader;\\[\Sb]
-     InstanceData *instanceData;    \\[\Sb]
-\}; //class OSInstance\\[\Sb]
-\end{tabular} }} \bigskip
-\caption{The {\tt OSInstance} class} \label{figure:osinstance}
-\end{figure}
-
-
-\begin{figure}[ht]
-\centering
-   \small {\obeyspaces\let =\
-\fbox{\tt\begin{tabular}{@{}l@{}}
-class InstanceData\{\\[\Sb]
-public:\\[\Sb]
-     InstanceData();\\[\Sb]
-     Variables *variables;\\[\Sb]
-     Objectives *objectives;\\[\Sb]
-     Constraints *constraints;\\[\Sb]
-     LinearConstraintCoefficients *linearConstraintCoefficients;\\[\Sb]
-     QuadraticCoefficients *quadraticCoefficients;\\[\Sb]
-     NonlinearExpressions *nonlinearExpressions;\\[\Sb]
-\}; // class InstanceData
-\end{tabular} }} \bigskip
-\caption{The {\tt InstanceData} class} \label{figure:instancedata}
-\end{figure}
-
-
-\begin{figure}[hb]
-%\includegraphics[scale=0.8]{../../figures/paradigm1.eps}
-\centering
-   \scriptsize {\obeyspaces\let =\
-\fbox{\tt\begin{tabular}{@{}l@{}}
-\textsf{\textbf{Schema complexType  \hspace{3.64in}  In-memory class}}\\[\Sa]
-<xs:complexType name="Variables">  <-------------------------------------------->  class Variables\{\\[\Sb]
-                                                                                   public:\\[\Sb]
-  <xs:sequence>                                                                      Variables();\\[\Sb]
-    <xs:element name="var" type="Variable" maxOccurs="unbounded"/>  <----------->    Variable *var;\\[\Sb]
-  </xs:sequence>                                                                   \\[\Sb]
-  <xs:attribute name="numberOfVariables" type="xs:positiveInteger"                 \\[\Sb]
-                use="required"/>  <--------------------------------------------->    int numberOfVariables;\\[\Sb]
-</xs:complexType>                                                                  \}; // class Variables\\[\Sb]
- \\[\Sb]
- \\[\Sb]
-<xs:complexType name="Variable">  <--------------------------------------------->  class Variable\{\\[\Sb]
-                                                                                   public:\\[\Sb]
-                                                                                     Variable();\\[\Sb]
-  <xs:attribute name="name" type="xs:string" use="optional"/>  <---------------->    string name;\\[\Sb]
-  <xs:attribute name="init" type="xs:double" use="optional"/>  <---------------->    double init;\\[\Sb]
-  <xs:attribute name="initString" type="xs:string" use="optional"/>  <---------->    string initString;\\[\Sb]
-  <xs:attribute name="type" use="optional" default="C">  <---------------------->    char type;\\[\Sb]
-    <xs:simpleType>\\[\Sb]
-      <xs:restriction base="xs:string">\\[\Sb]
-        <xs:enumeration value="C"/>\\[\Sb]
-        <xs:enumeration value="B"/>\\[\Sb]
-        <xs:enumeration value="I"/>\\[\Sb]
-        <xs:enumeration value="S"/>\\[\Sb]
-      </xs:restriction>\\[\Sb]
-    </xs:simpleType>\\[\Sb]
-  </xs:attribute>\\[\Sb]
-  <xs:attribute name="lb" type="xs:double" use="optional" default="0"/>  <------>    double lb;\\[\Sb]
-  <xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>  <---->    double ub;\\[\Sb]
-</xs:complexType>                                                                  \}; // class Variable\\[\Sb]
- \\[\Sb]
- \\[\Sb]
-\textsf{\textbf{OSiL elements          \hspace{1.97in}  In-memory objects}}\\[\Sa]
-<variables numberOfVariables="2">                   OSInstance osinstance;\\[\Sb]
-   <var lb="0" name="x0" type="C"/>                 osinstance.instanceData.variables.numberOfVariables=2;\\[\Sb]
-   <var lb="0" name="x1" type="C"/>                 osinstance.instanceData.variables.var=new Var[2];\\[\Sb]
-</variables>                                        osinstance.instanceData.variables.var[0].lb=0;\\[\Sb]
-                                                    osinstance.instanceData.variables.var[0].name=x0;\\[\Sb]
-                                                    osinstance.instanceData.variables.var[0].type=C;\\[\Sb]
-                                                    osinstance.instanceData.variables.var[1].lb=0;\\[\Sb]
-                                                    osinstance.instanceData.variables.var[1].name=x1;\\[\Sb]
-                                                    osinstance.instanceData.variables.var[1].type=C;
-\end{tabular} }} \medskip\\[\Sb]
-\caption{The {\tt <variables>} element as an {\tt OSInstance} object} \label{figure:osinstancevariables}
-\end{figure}
-
-
-Figure~\ref{figure:osinstancevariables} uses the {\tt Variables} class to provide a closer look at the correspondence 
-between schema and class. On the right, the {\tt Variables} class contains the data member {\tt numberOfVariables} 
-and a sequence of {\tt var} objects of class {\tt Variable}. The {\tt Variable} class has {\tt lb} (double), 
-{\tt ub} (double), {\tt name} (string), {\tt init} (double), and {\tt type} (char) data members. On the left the 
-corresponding XML complexTypes are shown, with arrows indicating the correspondences. The following rules describe 
-the mapping between the OSiL schema and the {\tt OSInstance} class.
-%
-\begin{itemize}
-
-\Titem  Each complexType in an OSiL schema corresponds to a class in {\tt OSInstance.}
-Thus the OSiL schema's complexType {\tt Variables} corresponds to {\tt OSInstance}'s class {\tt Variables}.
-Elements in an actual XML file then correspond to objects in {\tt OSInstance};
-for example, the {\tt <variables>} element that is of type {\tt Variables} in an OSiL file
-corresponds to a {\tt variables} object in class {\tt Variables} of {\tt OSInstance}.
-
-\Titem An attribute or element used in the definition of a {\tt complexType} is a member of the corresponding {\tt OSInstance} class, and the type of the attribute or element matches the type of the member.  In Figure~\ref{figure:osinstancevariables}, for example, {\tt lb} is an attribute of the OSiL {\tt complexType} named {\tt Variable}, and {\tt lb} is a member of the {\tt OSInstance} class {\tt Variable}; both have type {\tt double}.  Similarly, {\tt var} is an element in the definition of the OSiL {\tt complexType} named {\tt Variables}, and {\tt var} is a member of the {\tt OSInstance} class {\tt Variables}; the {\tt var} element has type {\tt Variable} and the {\tt var} member is a {\tt Variable} object.
-
-\Titem A schema sequence corresponds to an array. For example, in Figure~\ref{figure:osinstancevariables} the complexType {\tt Variables} has a sequence of {\tt <var>} elements that are of type {\tt Variable}, and the corresponding {\tt Variables} class has a member that is an array of type {\tt Variable}.
-
-\end{itemize}
-%
-General nonlinear terms are stored in the data structure as {\tt OSExpressionTree} objects, which are the subject of the next section.
-
-     The {\tt OSInstance} class has a collection of {\tt get()}, {\tt set()}, and {\tt calculate()} methods that act as an API for the optimization instance and described in Section~\ref{section:osinstanceAPI}.
-
-
-
-
-\subsubsection{The OSExpressionTree OSnLNode Classes}\label{section:osexpressiontreeclass}
-
-The {\tt OSExpressionTree}\index{OSExpressionTree@{\tt OSExpressionTree}} class provides the in-memory representation
-of the nonlinear terms.  Our design goal is  to allow for efficient parsing of OSiL\index{OSiL} instances,
-while providing an API that meets the needs of diverse solvers.  Conceptually, any nonlinear expression in the
-objective or constraints is represented by a tree.  The expression tree for the nonlinear part of the
-objective function~(\ref{eq:roobj}), for example, has the form illustrated in Figure~\ref{figure:expressiontree}.
-The choice of a data structure to store such a tree --- along with the associated methods of an API --- is a key aspect
-in the design of the {\tt OSInstance} class.
-
-\begin{figure}[ht]
-\centering
-%\includegraphics[scale=0.38]{\figurepath/expressiontree.png}
-\includegraphics[scale=0.38]{./figures/expressiontree.png}
-\caption{Conceptual expression tree for the nonlinear part of the objective (\ref{eq:roobj}).} \label{figure:expressiontree}
-\end{figure}
-
-
-A base abstract class {\tt OSnLNode} is defined and  all of an OSiL file's
-operator and operand elements used in defining a
-nonlinear expression are extensions of the base element type {\tt OSnLNode}. There is an element type {\tt OSnLNodePlus}, for example, that
-extends {\tt OSnLNode}; then in an OSiL instance
-file, there are {\tt <plus>} elements that are of type {\tt
-OSnLNodePlus}.   Each {\tt OSExpressionTree} object contains a pointer to an {\tt OSnLNode} object that is the root of the corresponding expression tree.  To every element that extends the {\tt OSnLNode} type in an OSiL instance file, there corresponds a class that derives from the {\tt OSnLNode} class in an {\tt OSInstance} data structure.  Thus we can construct an expression tree of homogenous nodes, and methods that operate on the expression tree to calculate function values, derivatives, postfix notation, and the like do not require switches or complicated logic.
-
-
-\begin{figure}[ht]
-\centering
-   \small {\obeyspaces\let =\
-\fbox{\tt\begin{tabular}{@{}l@{}}
-   double OSnLNodePlus::calculateFunction(double *x)\{\\[\Sb]
-      m\_dFunctionValue = \\[\Sb]
-         m\_mChildren[0]->calculateFunction(x) +\\[\Sb]
-         m\_mChildren[1]->calculateFunction(x);\\[\Sb]
-      return m\_dFunctionValue;\\[\Sb]
-   \} //calculateFunction\\[\Sb]
-\end{tabular} }} \medskip
-\caption{The function calculation method for the {\tt plus} node class with polymorphism}
-   \vspace{-8pt} \label{figure:calcfunction}
-\end{figure}
-
-
-    The {\tt OSInstance} class has a variety of {\tt calculate()} methods, based on two pure virtual functions in the {\tt OSInstance} class.  The first of these, {\tt calculateFunction()}, takes an array of {\tt double} values corresponding to decision variables, and evaluates the expression tree for those values.  Every class
-that extends {\tt OSnLNode} must implement this method.  As an example, the {\tt calculateFunction} method for the {\tt OSnLNodePlus} class is shown in Figure~\ref{figure:calcfunction}.  Because the OSiL instance file must be validated against its schema, and in the schema each {\tt <OSnLNodePlus>} element is specified to have exactly two child elements, this {\tt calculateFunction} method can assume that there are
-exactly two children of the node that it is operating on.  The use of polymorphism and recursion makes adding new operator elements easy; it is simply a matter of adding a new class and implementing the {\tt
-calculateFunction()} method for it.
-
-
-
-Although in the OSnL schema, there are 200+ nonlinear operators, only the following {\tt  OSnLNode} classes are currently supported in our implementation.
-
-\begin{itemize}
-\item OSnLNodeVariable
-\item OSnLNodeTimes
-\item OSnLNodePlus
-\item OSnLNodeSum
-\item OSnLNodeMinus
-\item OSnLNodeNegate
-\item OSnLNodeDivide
-\item OSnLNodePower
-\item OSnLNodeProduct
-\item OSnLNodeLn
-\item OSnLNodeSqrt
-\item OSnLNodeSquare
-\item OSnLNodeSin
-\item OSnLNodeCos
-\item OSnLNodeExp
-\item OSnLNodeIf
-\item OSnLNodeAbs
-\item OSnLNodeMax
-\item OSnLNodeMin
-\item OSnLNodeE
-\item OSnLNodePI
-\item OSnLNodeAllDiff
-\end{itemize}
-\index{OSInstance@{\tt OSInstance}|)}
-
-
-
-\subsubsection{The OSOption Class}\label{section:osoptionclass}
-
-The OSOption\index{OSOption@{\tt OSOption}|(} class is the in-memory representation of the options associated with a
-particular optimization task. It is another key
-class for users of the OS project. This class has an API defined by a collection of {\tt get()} methods for
-extracting various components (such as initial values for decision variables, solver options, job parameters, etc.), 
-and a collection of {\tt set()} methods for modifying or generating an option instance. The relationship between
-in-memory classes and objects on one hand and complexTypes and elements of the OSoL schema follow the same mapping rules
-laid out in section~\ref{section:mappingrules}.
-\index{OSOption@{\tt OSOption}|)}
-
-\subsection{OSModelInterfaces}\label{section:osmodelinterfaces}
-
-This part of the OS library is designed to help integrate the OS standards with other standards and modeling systems.
-
-\subsubsection{Converting MPS Files}
-
-The MPS standard\index{MPS format|(} is still a popular format for representing linear and integer programming problems.
-In {\tt OSModelInterfaces,} there is a class {\tt OSmps2osil}\index{OSmps2osil@{\tt OSmps2osil}|(} that can be used
-to convert files in MPS format into the OSiL\index{OSiL} standard. It is used as follows.
-
-\begin{verbatim}
-OSmps2osil *mps2osil = NULL;
-DefaultSolver *solver  = NULL;
-solver = new CoinSolver();
-solver->sSolverName = "cbc";
-mps2osil = new OSmps2osil(  mpsFileName);
-mps2osil->createOSInstance() ;
-solver->osinstance = mps2osil->osinstance;
-solver->solve();
-\end{verbatim}
-
-The {\tt OSmps2osil} class constructor takes a string which should be the
-file name of the instance in MPS format. The constructor then uses the
-{\tt CoinUtils}\index{COIN-OR projects!CoinUtils@{\tt CoinUtils}} library to read and parse the MPS file.  The class method {\tt createOSInstance} then builds  an in-memory {\tt osinstance} object  that can be used by a solver.
-\index{OSmps2osil@{\tt OSmps2osil}|)}\index{MPS format|)}
-
-\subsubsection{Converting AMPL nl Files}\label{section:nl2osil}
-
-AMPL is a popular modeling language that saves  model instances in the AMPL nl format\index{AMPL nl format|(}.
-The {\tt OSModelInterfaces} library provides a class, {\tt OSnl2osil}\index{OSnl2osil@{\tt OSnl2osil}} for reading
-in an nl file and creating a
-corresponding in-memory  {\tt osinstance}\index{OSInstance@{\tt OSInstance}} object. It is used as follows.
-
-\begin{verbatim}
-OSnl2osil *nl2osil = NULL;
-DefaultSolver *solver  = NULL;
-solver = new LindoSolver();
-nl2osil = new OSnl2osil( nlFileName);
-nl2osil->createOSInstance() ;
-solver->osinstance = nl2osil->osinstance;
-solver->solve();
-\end{verbatim}
-
-
-The {\tt OSnl2osil} class works much like the {\tt OSmps2osil}\index{OSmps2osil@{\tt OSmps2osil}} class. The
-{\tt OSnl2osil} class constructor takes a string which should be the file name of the instance in nl format. The constructor then uses the AMPL ASL library routines to read and parse the nl file. The class method {\tt createOSInstance} then builds  an in-memory {\tt osinstance} object  that can be used by a solver.
-
-In Section~\ref{section:amplclient}  we describe the {\tt OSAmplClient}\index{OSAmplClient@{\tt OSAmplClient}}
-executable that acts as a ``solver'' for AMPL. The {\tt OSAmplClient} uses the {\tt OSnl2osil} class to convert
-the instance in nl format to OSiL\index{OSiL} format before calling a solver either locally or remotely.
-\index{AMPL nl format|)}
-
-
-\subsection{OSParsers}\label{section:osparsers}
-
-The OSParsers component of the OS library contains reentrant parsers that  read OSiL\index{OSiL|(} and OSrL\index{OSrL}
-strings and build, respectively, in-memory OSInstance\index{OSInstance@{\tt OSInstance}} and 
-OSResult\index{OSResult@{\tt OSResult}}  objects.
-
-
-The OSiL parser is invoked through an {\tt OSiLReader} object as illustrated below. Assume {\tt osil} is a string with the problem instance.
-\begin{verbatim}
-OSiLReader *osilreader = NULL;
-OSInstance *osinstance = NULL;
-osilreader = new OSiLReader();
-osinstance = osilreader->readOSiL( &osil);
-\end{verbatim}
-The {\tt  readOSiL} method  has a single argument which is a pointer to a string. The {\tt  readOSiL} method then calls an underlying method {\tt yygetOSInstance} that parses the OSiL string. The major components of the OSiL schema  recognized by the parser are
-\begin{verbatim}
-<instanceHeader>
-<variables>
-<objectives>
-<constraints>
-<linearConstraintCoefficients>
-<quadraticCoefficients>
-<nonlinearExpressions>
-\end{verbatim}
-There are other components in the OSiL\index{OSiL|)} schema, but they are not yet implemented.
-In most large-scale applications the {\tt <variables>,} {\tt <objectives>}, {\tt <constraints>}, and {\tt <linearConstraintCoefficients>}
-will comprise the bulk of the instance memory.  Because of this, we have ``hard-coded'' the OSiL parser
-to read these specific elements very efficiently.
-The parsing of the {\tt <quadraticCoefficients>} and {\tt <nonlinearExpressions>} is done using code generated
-by {\tt flex}\index{flex@{\tt flex}} and {\tt bison}\index{bison@{\tt bison}}. In the {\tt OSParsers}  the file  
-{\tt OSParseosil.l} is used by {\tt flex}\index{flex@{\tt flex}} to generate {\tt OSParseosil.cpp} and the file 
-{\tt OSParseosil.y} is used by {\tt bison}\index{bison@{\tt bison}} to generate {\tt OSParseosil.tab.cpp}.
-In {\tt OSParseosil.l} we use the {\tt reentrant} option and in {\tt OSParseosil.y} we use the
-{\tt pure-parser} option to generate reentrant parsers. The {\tt OSParseosil.y} file  contains both our
-``hard-coded'' parser and the grammar rules for the  {\tt <quadraticCoefficients>} and
-{\tt <nonlinearExpressions>} sections.
-We are currently using GNU Bison version 3.2 and {\tt flex} 2.5.33.
-
-The typical OS user will have no need to edit either {\tt OSParseosil.l} or {\tt OSParseosil.y} and therefore will not have to worry about running either {\tt flex} or {\tt bison} to generate the parsers. The generated parser code from {\tt flex} and {\tt bison} is distributed with the project and works on all of the platforms listed in Table~\ref{table:testedplatforms}.  If the user does edit either {\tt parseosil.l} or {\tt parseosil.y} then {\tt parseosil.cpp} and {\tt parseosil.tab.cpp} need to be regenerated with {\tt flex} and {\tt bison}. If these programs are present, in the OS directory  execute
-\begin{verbatim}
-make  run_parsers
-\end{verbatim}
-
-The files {\tt OSParseosrl.l} and {\tt OSParseosrl.y} are used by {\tt flex} and {\tt bison} to  generate the code 
-{\tt OSParseosrl.cpp} and {\tt OSParseosrl.tab.cpp} for parsing strings in OSrL format. The comments made above about the 
-OSiL parser apply to the OSrL parser. The OSrL parser, like the OSiL parser, is invoked using an {\tt OSrL} reading object.
-This is illustrated below ({\tt osrl} is a string in OSrL format).
-\begin{verbatim}
-OSrLReader *osrlreader = NULL;
-osrlreader = new OSrLReader();
-OSResult *osresult = NULL;
-osresult = osrlreader->readOSrL( osrl);
-\end{verbatim}
-
-The OSoL parser follows the same layout and rules.
-The files {\tt OSParseosol.l} and {\tt OSParseosol.y} are used by {\tt flex} and {\tt bison} to  generate the code 
-{\tt OSParseosol.cpp} and {\tt OSParseosol.tab.cpp} for parsing strings in OSoL format. The OSoL parser
-is invoked using an {\tt OSoL} reading object.
-This is illustrated below ({\tt osol} is a string in OSoL format).
-\begin{verbatim}
-OSoLReader *osolreader = NULL;
-osolreader = new OSoLReader();
-OSOption *osoption = NULL;
-osoption = osolreader->readOSoL( osol);
-\end{verbatim}
-
-
-There is also a lexer {\tt OSParseosss.l} for tokenizing the command line for the OSSolverService executable described in Section~\ref{section:ossolverservice}.
-
-
-
-\subsection{OSSolverInterfaces}\label{section:ossolverinterfaces}
-
-
-The {\tt OSSolverInterfaces} library is designed to facilitate linking the OS library with various solver APIs.
-We first describe how to take a problem instance in OSiL\index{OSiL} format and connect to a solver 
-that has a COIN-OR OSI interface. See the OSI project \url{www.projects.coin-or.org/Osi}.
-We then describe hooking to the COIN-OR nonlinear code {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}}. 
-See \url{www.projects.coin-or.org/Ipopt}.
-\ifknitro
-Finally we describe hooking to two commercial solvers Knitro\index{Knitro} and LINDO\index{LINDO}.
-\else
-Finally we describe hooking to the commercial solver LINDO\index{LINDO}.
-\fi
-The OS library has been tested with the following solvers using the Osi Interface.
-
-\begin{itemize}
-\item Cbc
-\item Clp
-\item Cplex
-\item DyLP
-\item Glpk
-\item SYMPHONY
-\item Vol
-\end{itemize}
-
-In the {\tt OSSolverInterfaces} library there is an abstract class
-{\tt DefaultSolver} that has the following key members:
-
-\begin{verbatim}
-std::string osil;
-std::string osol;
-std::string osrl;
-OSInstance *osinstance;
-OSResult  *osresult;
-\end{verbatim}
-and the pure virtual function
-\begin{verbatim}
-virtual void solve() = 0 ;
-\end{verbatim}
-In order to use a solver through the COIN-OR {\tt Osi} interface it is
-necessary to create an object in the {\tt CoinSolver} class which inherits
-from the {\tt DefaultSolver} class and implements the appropriate
-{\tt solve()} function.  We illustrate with the {\tt Clp} solver.
-
-\begin{verbatim}
-DefaultSolver *solver  = NULL;
-solver = new CoinSolver();
-solver->m_sSolverName = "clp";
-\end{verbatim}
-
-Assume that the data file containing the problem has been read into
-the string {\tt osil} and the solver options are in the string {\tt osol}.
-Then the {\tt Clp} solver is invoked as follows.
-
-\begin{verbatim}
-solver->osil = osil;
-solver->osol = osol;
-solver->solve();
-\end{verbatim}
-
-Finally, get the solution in {\tt OSrL} format as follows
-
-\begin{verbatim}
-cout << solver->osrl << endl;
-\end{verbatim}
-
-\ifknitro   %--------------------------------------------------------------------------
-Even though LINDO and Knitro are commercial solvers and do not have a COIN-OR {\tt Osi} interface, these solvers are
-used in exactly the same manner as a COIN-OR solver. For example, to invoke the LINDO solver we do the following.
-
-\begin{verbatim}
-solver = new LindoSolver();
-\end{verbatim}
-
-Similarly for Knitro and Ipopt. In the case of  Knitro, the {\tt KnitroSolver} class inherits from both
-{\tt DefaultSolver} class and the Knitro {\tt NlpProblemDef} class. See {\tt\UrlKnitroMan} for more information 
-on the Knitro solver C++ implementation and the {\tt NlpProblemDef} class.  Similarly, for Ipopt 
-\else
-
-Commercial solvers like LINDO\index{LINDO} do not have a COIN-OR {\tt Osi} interface, but it is possible to
-write wrappers so that they can be used in exactly the same manner as a COIN-OR solver. For example, to invoke the
-LINDO\index{LINDO} solver we do the following.
-
-\begin{verbatim}
-solver = new LindoSolver();
-\end{verbatim}
-
-A similar call is used for {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}}. In this case, 
-\fi         %--------------------------------------------------------------------------
-the {\tt IpoptSolver} class inherits from both the {\tt DefaultSolver} class and the Ipopt {\tt TNLP} class. See 
-
-\medskip
-\noindent{\tt\UrlIpoptDoc}
-\medskip
-
-\noindent for more information on the Ipopt solver C++ implementation and the {\tt TNLP} class.
-
-
-In the examples above,  the problem instance was assumed to be read from a file into the string {\tt osil}
-and then into the class member {\tt solver->osil.} However, everything can be done entirely in memory.
-For example, it is possible to use the {\tt OSInstance}\index{OSInstance@{\tt OSInstance}} class to create
-an in-memory problem representation and give this representation directly to a solver class that inherits
-from {\tt DefaultSolver}. The class member to use is {\tt osinstance.} This is illustrated in the example
-given in Section~\ref{section:exampleOSInstanceGeneration}.
-
-
-\subsection{OSUtils}
-
-The OSUtils component of the OS library contains utility codes. For example, the {\tt FileUtil} class contains
-useful methods for reading files into {\tt string} or {\tt char*} and writing files from {\tt string} and {\tt char*}.
-The {\tt OSDataStructures} class holds other classes for things such as sparse vectors, sparse Jacobians, and sparse
-Hessians. The {\tt MathUtil} class contains a method for converting between sparse matrices in row and column major form.
-
-
-\section{The  OSInstance API}\label{section:osinstanceAPI}
-
-The OSInstance API can be used to:
-
-\begin{itemize}
-
-\item  get information about model parameters, or convert the {\tt OSExpressionTree} into a prefix or postfix
-representation through a collection  of {\tt get} methods,
-
-\item modify, or even create an instance from scratch, using a number of {\tt set} methods,
-
-\item provide information to solvers that require function evaluations, Jacobian and Hessian sparsity patters,  function gradient evaluations, and Hessian evaluations.
-
-\end{itemize}
-
-
-
-\subsection{Get Methods}
-
-The {\tt get()} methods are used by other classes to access data in an existing {\tt OSInstance} object or get an expression tree representation of an instance in postfix or prefix format.   Assume {\tt osinstance} is an object in the {\tt OSInstance} class created as illustrated in Figure~\ref{figure:creatingosinstanceobject}. Then, for example,
-\begin{verbatim}
-osinstance->getVariableNumber();
-\end{verbatim}
-will return an integer which is the number of variables in the problem,
-\begin{verbatim}
-osinstance->getVariableTypes();
-\end{verbatim}
-will return a {\tt char} pointer to the variable types ({\tt C} for continuous, {\tt B} for binary, and {\tt I} for general integer),
-\begin{verbatim}
-getVariableLowerBounds();
-\end{verbatim}
-will  return a {\tt double} pointer to the lower bound on each variable. There are similar {\tt get} methods for the constraints. There are numerous {\tt get} methods for the data in the {\tt <linearConstraintCoefficients>}  element, the {\tt <quadraticCoefficients>} element, and the {\tt <nonlinearExpressions>} element.
-
-When an {\tt osinstance} object is created, it is stored as an expression tree in an {\tt OSExpressionTree} object. However, some solver APIs (e.g., LINDO) may take the data in a different format such as postfix and prefix. There are methods to return the data in either postfix or prefix format.
-
-First define a {\tt vector} of pointers to {\tt OSnLNode} objects.
-\begin{verbatim}
-std::vector<OSnLNode*> postfixVec;
-\end{verbatim}
-then get the expression tree for the objective function (index = -1) as a postfix vector of nodes.
-\begin{verbatim}
-postfixVec = osinstance->getNonlinearExpressionTreeInPostfix( -1);
-\end{verbatim}
-If, for example, the {\tt osinstance} object was the in-memory representation of   the instance illustrated in  Section~\ref{section:rosenbrockXML} then the code
-\begin{verbatim}
-for (i = 0 ; i < n; i++){
-    cout << postfixVec[i]->snodeName << endl;
-}
-\end{verbatim}
-will produce
-\begin{verbatim}
-number
-variable
-minus
-number
-power
-number
-variable
-variable
-number
-power
-minus
-number
-power
-times
-plus
-\end{verbatim}
-The method, {\tt processNonlinearExpressions()} in the {\tt LindoSolver} class in the {\tt OSSolverInterfaces} library component illustrates using a postfix vector of {\tt OSnLNode} objects to build a Lindo model instance.
-
-
-\subsection{Set Methods}
-
-The {\tt set} methods can be used to build an in-memory {\tt OSInstance}
- object. A code example of how to do this is in Section~\ref{section:exampleOSInstanceGeneration}.
-
-\subsection{Calculate Methods}
-
-The calculate methods are described in Section~\ref{section:ad}.
-
-\section{The OS Algorithmic Differentiation Implementation}\label{section:ad}
-
-The OS library provides a set of {\tt calculate} methods for calculating  function values, gradients, and Hessians.
-The {\tt calculate} methods are part of the {\tt OSInstance} class and are designed to work with solver APIs.
-
-
-
-\subsection{Algorithmic Differentiation:  Brief Review}\label{section:adtheory}
-
-First and second derivative calculations are made using 
-{\it algorithmic differentiation}\index{Algorithmic differentiation|(}.
-Here we provide a brief review of this topic.  An excellent reference on algorithmic differentiation
-is Griewank\index{Griewank, A.@{\it Griewank, A.}}~\cite{griewank2000}.  The OS package uses the COIN-OR project 
-CppAD\index{COIN-OR projects!CppAD@{\tt CppAD}|(} ({\tt\UrlCppad}), which  is also an excellent resource with extensive  
-documentation and information about algorithmic differentiation.
-See the documentation written by  Brad Bell\index{Bell, Bradley M.@{\it Bell, Bradley M.}}~\cite{bell2007}.    
-The development here is from the CppAD documentation.  
-Consider the function $f:X \rightarrow Y$ from $ \mathbb{R}^{n}$ to $ \mathbb{R}^{m}$.
-(That is, $Y = f(X).$)
-
-Express the input vector as a function of~$t$ by
-\begin{eqnarray}
-X(t) = x^{(0)} +  x^{(1)} t +  x^{(2)} t^{2}
-\end{eqnarray}
-where $ x^{(0)},$ $x^{(1)},$ and $x^{(2)}$ are vectors in $ \mathbb{R}^{n}$  and $t$ is a scalar.  By judiciously choosing $x^{(0)}, x^{(1)},$ and $x^{(2)}$ we will be able to derive many different expressions of interest.  Note first that
-\begin{eqnarray*}
-X(0) &=& x^{(0)}, \\
-X^{\prime}(0) &=& x^{(1)}, \\
-X^{\prime \prime }(0) &=& 2 x^{(2)}.
-\end{eqnarray*}
-In general,  $x^{(k)}$ corresponds to the $kth$ order Taylor coefficient, i.e.,
-\begin{eqnarray}
-x^{(k)} = \frac{1}{k!}X^{(k)}(0), \quad k = 0, 1, 2.  \label{eq:xTaylorCoeff}
-\end{eqnarray}
-Then $Y(t) = f(X(t))$ is a function from $ \mathbb{R}^{1}$ to $ \mathbb{R}^{m}$ and it is expressed in terms of its Taylor series expansion as
-\begin{eqnarray}
-Y(t)  = y^{(0)} +  y^{(1)} t +  y^{(2)} t^{2} + o(t^{3}),
-\end{eqnarray}
-where
-\begin{eqnarray}
-y^{(k)} = \frac{1}{k!} Y^{(k)}(0), \quad k = 0, 1, 2.  \label{eq:yTaylorCoeff}
-\end{eqnarray}
-
-
-
-The following are shown in Bell~\cite{bell2007}.
-\begin{eqnarray}
-y^{(0)} = f(x^{(0)}). \label{eq:forward0Result}
-\end{eqnarray}
-Let $e^{(i)}$ denote the $ith$ unit vector.  If $x^{(1)} = e^{(i)}$ then $y^{(1)}$ is equal to the $ith$ column of the Jacobian matrix of $f(x)$ evaluated at $x^{(0)}.$ That is
-\begin{eqnarray}
-y^{(1)} = \D{f}{x_{i}}(x^{(0)}).  \label{eq:forward1Result}
-\end{eqnarray}
-
-In addition, if $x^{(1)} = e^{(i)}$ and $x^{(2)} = 0$ then for function $f_{k}(x),$ (the $kth$ component of $f$)
-\begin{eqnarray}
-y^{(2)}_{k} =  \frac{1}{2} \DD{f_{k}(x^{(0)})}{x_{i}}{x_{i}}.  \label{eq:forward2Resulta}
-\end{eqnarray}
-
-In order to evaluate the mixed partial derivatives, one can instead set $x^{(1)} = e^{(i)} + e^{(j)}$ and $x^{(2)} = 0.$    This gives for function $f_{k}(x),$
-\begin{eqnarray}
-y^{(2)}_{k} =  \frac{1}{2} \left( \DD{f_{k}(x^{(0)})}{x_{i}}{x_{i}}  +   \DD{f_{k}(x^{(0)})}{x_{i}}{x_{j}} 
-+  \DD{f_{k}(x^{(0)})}{x_{j}}{x_{i}} +  \DD{f_{k}(x^{(0)})}{x_{j}}{x_{j}}  \right), \label{eq:forward2Resultb}
-\end{eqnarray}
-or, expressed in terms of the mixed partials,
-\begin{eqnarray}
-  \DD{f_{k}(x^{(0)})}{x_{i}}{x_{j}}  = y_{k}^{(2)}  -  \frac{1}{2} \left( \DD{f_{k}(x^{(0)})}{x_{i}}{x_{i}}  
-+  \DD{f_{k}(x^{(0)})}{x_{j}}{x_{j}}  \right). \label{eq:forward2Resultc}
-\end{eqnarray}
-\index{Algorithmic differentiation|)}\index{COIN-OR projects!CppAD@{\tt CppAD}|)}
-
-
-
-
-\subsection{Using OSInstance Methods: Low Level Calls}\label{section:lowlevelADcalls}
-
-  The code snippets used in this section  are from the example code {\tt algorithmicDiffTest.cpp} in the
-{\tt algorithmicDiffTest} folder in the {\tt examples} folder.  The  code is based on the following example.
-
-\begin{alignat}{2}
-& \mbox{Minimize} & \quad  x_{0}^{2} + 9x_{1} \label{eq:adobj}\\
-& \mbox{s.t.} & 33 - 105 + 1.37 x_{1} + 2x_{3} + 5 x_{1} &\le 10  \label{eq:adeq0}\\
-& & \ln(x_{0} x_{3}) + 7x_{2} &\ge 10 \label{eq:adeq1} \\
-& & x_{0}, x_{1}, x_{2}, x_{3} &\ge 0 \label{eq:adeq2}
-\end{alignat}
-
-The OSiL representation of the instance  (\ref{eq:adobj})--(\ref{eq:adeq2}) is given in Appendix~\ref{section:adexample}.
-This example is designed to illustrate several features of OSiL. Note that in constraint  (\ref{eq:adeq0}) the
-constant~33 appears in the {\tt <con>} element corresponding to this constraint
-and the constant~105 appears as a {\tt <number>} OSnL node in the {\tt <nonlinearExpressions>} section.
-This distinction is important, as it will lead to different treatment by the code as documented below.
-%There are no nonlinear terms in the instance that involve variable $x_{1}.$
-Variables $x_{1}$ and $x_{2}$  do not appear in any nonlinear terms.
-The terms $5x_{1}$ in  (\ref{eq:adeq0}) and $7 x_{2}$ in (\ref{eq:adeq1}) are expressed in the
-{\tt <objectives>} and {\tt <linearConstraintCoefficients>} sections, respectively, and will again
-receive special treatment by the code. However, the term $1.37x_1$ in (\ref{eq:adeq0}),
-along with the term $2x_3$, is expressed in the {\tt <nonlinearExpressions>} section,
-%Variables $x_{1}$ and $x_{2}$  do not appear in any nonlinear terms.
-%However, in the OSInstance API, variable $x_{1}$  appears in the   {\tt <nonlinearExpressions>} section;
-hence $x_1$  is treated as a nonlinear variable for purposes of algorithmic differentiation.
-Variable $x_{2}$ never appears in the  {\tt <nonlinearExpressions>} section and is therefore treated as a linear variable and not used  in any algorithmic differentiation calculations.
-Variables that do not appear in the {\tt <nonlinearExpressions>} are never part of the algorithmic differentiation calculations.
-
-Ignoring the nonnegativity constraints, instance (\ref{eq:adobj})--(\ref{eq:adeq2})  defines a mapping  
-from $ \mathbb{R}^{4}$ to~$\mathbb{R}^{3}$:
-
-
-
-
-\begin{eqnarray}
-    \left[
-        \begin{array}{r}
-            x_0^2+9x_1 \\
-            33 - 105 + 1.37x_1 + 2x_3 + 5x_1 \\
-            \ln (x_0x_3) + 7x_2
-        \end{array}
-    \right]
-&=&
-    \left[
-        \begin{array}{r}
-            9x_1 \\
-            33 + 5x_1 \\
-            7x_2
-        \end{array}
-    \right]
-+
-    \left[
-        \begin{array}{r}
-            x_0^2 \\
-            - 105 + 1.37x_1 + 2x_3  \\
-            \ln (x_0x_3)
-        \end{array}
-    \right]
-  \nonumber  \\
-  &=&  \left[
-        \begin{array}{r}
-            9x_1 \\
-            33 + 5x_1 \\
-            7x_2
-        \end{array}
-    \right]
-+
-    \left[
-        \begin{array}{r}
-            f_1(x) \\
-            f_2(x) \\
-            f_3(x)
-        \end{array}  \label{eq:definef1}
-    \right],
-\end{eqnarray}
-
-\begin{eqnarray}
-\hbox{\rm where}\ f(x) :=
-%
-    \left[
-        \begin{array}{r}
-            f_1(x) \\
-            f_2(x) \\
-            f_3(x)
-        \end{array}   \label{eq:definef}
-    \right].
-\end{eqnarray}
-
-
-The OSiL representation for the instance  in  (\ref{eq:adobj})--(\ref{eq:adeq2})  is read into an in-memory
-OSInstance object as follows (we assume that {\tt osil} is a {\tt string} containing the OSiL instance)
-\begin{verbatim}
-osilreader = new OSiLReader();
-osinstance = osilreader->readOSiL( &osil);
-\end{verbatim}
-There is a method in the {\tt OSInstance} class, {\tt initForAlgDiff()} that is used to initialize the nonlinear data structures.  A call to this method
-\begin{verbatim}
-osinstance->initForAlgDiff( );
-\end{verbatim}
-will generate a map of the indices of the nonlinear variables. This is critical because the algorithmic differentiation only operates on variables that appear in the {\tt <nonlinearExpressions>} section.  An example of this map follows.
-\begin{verbatim}
-std::map<int, int> varIndexMap;
-std::map<int, int>::iterator posVarIndexMap;
-varIndexMap = osinstance->getAllNonlinearVariablesIndexMap( );
-for(posVarIndexMap = varIndexMap.begin(); posVarIndexMap
-    != varIndexMap.end(); ++posVarIndexMap){
-    std::cout <<  "Variable Index = "   << posVarIndexMap->first  << std::endl ;
-}
-\end{verbatim}
-The variable indices listed are 0, 1, and~3. Variable~2 does not appear in the {\tt <nonlinearExpressions>} section and
-is not included in {\tt varIndexMap}. That is, the function $f$ in~(\ref{eq:definef}) will be considered as a map from 
-$\mathbb{R}^{3}$ to~$\mathbb{R}^{3}$.
-
-Once the nonlinear structures are initialized it is possible to take derivatives using algorithmic differentiation.
-Algorithmic differentiation is done using either a forward or reverse sweep through an expression tree (or operation
-sequence) representation of~$f$.  The two key {\tt public} algorithmic differentiation  methods in the {\tt OSInstance}%
-\index{OSInstance@{\tt OSInstance}} class are {\tt forwardAD} and {\tt reverseAD}.
-These are actually  generic ``wrappers'' around the corresponding CppAD methods with the same signature.
-This keeps the OS API  public methods independent of any underlying algorithmic differentiation package.
-
-The {\tt forwardAD} signature is
-\begin{verbatim}
-std::vector<double> forwardAD(int k, std::vector<double> vdX);
-\end{verbatim}
-where {\tt k} is the highest order Taylor coefficient of $f$ to be returned,  $\tt vdX$ is a vector of doubles in 
-$ \mathbb{R}^{n},$ and the function return is a vector of doubles in~$\mathbb{R}^{m}.$  Thus, {\tt k} corresponds 
-to the $k$ in Equations  (\ref{eq:xTaylorCoeff}) and (\ref{eq:yTaylorCoeff}),  where {\tt vdX} corresponds to the $x^{(k)}$ in Equation (\ref{eq:xTaylorCoeff}), and the $y^{(k)}$ in Equation (\ref{eq:yTaylorCoeff}) is the vector in range space returned by the call to {\tt  forwardAD}.    For example, by  Equation (\ref{eq:forward0Result}) the following call will evaluate each component function defined in (\ref{eq:definef}) corresponding only to the nonlinear part of (\ref{eq:definef1}) -- the part denoted by $f(x)$.
-\begin{verbatim}
-funVals = osinstance->forwardAD(0, x0);
-\end{verbatim}
-Since there are three components in the vector defined by  (\ref{eq:definef}), the return value  {\tt funVals} will have three components. For an input vector,
-\begin{verbatim}
-x0[0] = 1; // the value for variable x0 in function f
-x0[1] = 5; // the value for variable x1 in function f
-x0[2] = 5; // the value for variable x3 in function f
-\end{verbatim}
-the values returned by {\tt osinstance->forwardAD(0, x0)}  are 1, -63.15, and 1.6094, respectively.
-The Jacobian of the example in (\ref{eq:definef}) is
-
-\begin{eqnarray}
-J =
-\left[
-\begin{array}{rrrr}
-2x_{0} &9.00&0.00&0.00   \\
-0.00&6.37&0.00&2.00 \\
-1/x_{0}&0.00&7.00&1/x_{3}
-\end{array}
-\right] \label{eq:jac}
-\end{eqnarray}
-and the Jacobian $J_f$ of the nonlinear part is
-%
-\begin{equation}
-    J_f = \left[
-        \begin{array}{ccc}
-            2x_0 & 0.00 & 0.00 \\
-            0.00  & 1.37 & 2.00 \\
-            1/x_0 & 0.00 & 1/x_3
-        \end{array}
-    \right].  \label{eq:jac2}
-\end{equation}
-When $x_{0} = 1,$ $x_{1} = 5,$ $x_{2} = 10,$ and $x_{3} = 5$ the Jacobian $J_f$ is
-\begin{eqnarray}
-    J_f = \left[
-        \begin{array}{ccc}
-            2.00 & 0.00 & 0.00 \\
-            0.00 & 1.37 & 2.00 \\
-            1.00 & 0.00 & 0.20
-        \end{array}
-    \right]. \label{eq:jac3}
-\end{eqnarray}
-A forward sweep with $k = 1$ will calculate the Jacobian column-wise.  See~(\ref{eq:forward1Result}).  
-The following code will return column 3 of the Jacobian (\ref{eq:jac3}) which corresponds to the nonlinear variable~$x_{3}$.
-\begin{verbatim}
-x1[0] = 0;
-x1[1] = 0;
-x1[2] = 1;
-osinstance->forwardAD(1, x1);
-\end{verbatim}
-
-Now calculate second derivatives.  To illustrate we use the results in (\ref{eq:forward2Resulta})-(\ref{eq:forward2Resultc}) and calculate
-\begin{eqnarray*}
-\DD{f_{k}(x^{(0)})}{x_{0}}{x_{3}} \quad k = 1, 2, 3.
-\end{eqnarray*}
-Variables $x_{0}$ and $x_{3}$ are the first and third nonlinear variables so by  (\ref{eq:forward2Resultb}) the $x^{(1)}$ should be the sum of the $e^{(1)}$ and $e^{(3)}$ unit vectors and used in the  first-order forward sweep calculation.
-\begin{verbatim}
-x1[0] = 1;
-x1[1] = 0;
-x1[2] = 1;
-osinstance->forwardAD(1, x1);
-\end{verbatim}
-Next set $x^{(2)} = 0$ and do a second-order forward sweep.
-\begin{verbatim}
-std::vector<double> x2( n);
-x2[0] = 0;
-x2[1] = 0;
-x2[2] = 0;
-osinstance->forwardAD(2, x2);
-\end{verbatim}
-This call returns the vector of  values
-\begin{eqnarray*}
-y_{1}^{(2)}  = 1, \quad y_{2}^{(2)}  = 0, \quad y_{3}^{(2)} = -0.52.
-\end{eqnarray*}
-By inspection of (\ref{eq:definef1}) (or by appropriate calls to {\tt osinstance->forwardAD} --- not shown here),
-\begin{eqnarray*}
-\DD{f_{1}(x^{(0)})}{x_{0}}{x_{0}} &=&  2, \\
-\DD{f_{2}(x^{(0)})}{x_{0}}{x_{0}} &=&  0, \\
-\DD{f_{3}(x^{(0)})}{x_{0}}{x_{0}} &=& -1, \\
-\DD{f_{1}(x^{(0)})}{x_{3}}{x_{3}} &=&  0, \\
-\DD{f_{2}(x^{(0)})}{x_{3}}{x_{3}} &=&  0, \\
-\DD{f_{3}(x^{(0)})}{x_{3}}{x_{3}} &=& -0.04.
-\end{eqnarray*}
-Then by (\ref{eq:forward2Resultc}),
-\begin{eqnarray*}
-\DD{f_{1}(x^{(0)})}{x_{0}}{x_{3}} &=&  y_{1}^{(2)}  -  \frac{1}{2} \left( \DD{f_{1}(x^{(0)})}{x_{0}}{x_{0}}  +  \DD{f_{k}(x^{(0)})}{x_{3}}{x_{3}}  \right) = 1   -    \frac{1}{2}(2 +  0) = 0, \\
-\DD{f_{2}(x^{(0)})}{x_{0}}{x_{3}} &=&  y_{2}^{(2)}  -  \frac{1}{2} \left( \DD{f_{2}(x^{(0)})}{x_{0}}{x_{0}}  +  \DD{f_{k}(x^{(0)})}{x_{3}}{x_{3}}  \right) = 0   -    \frac{1}{2}(0 +  0) = 0, \\
-\DD{f_{3}(x^{(0)})}{x_{0}}{x_{3}} &=&  y_{3}^{(2)}  -  \frac{1}{2} \left( \DD{f_{3}(x^{(0)})}{x_{0}}{x_{0}}  +  \DD{f_{k}(x^{(0)})}{x_{3}}{x_{3}}  \right) = -0.52 -  \frac{1}{2}(-1 - 0.04) = 0.
-\end{eqnarray*}
-Making all of the first and second derivative calculations using forward sweeps is most effective when the number of rows exceeds the number of variables.
-
-
-The {\tt reverseAD} signature is
-\begin{verbatim}
-std::vector<double> reverseAD(int k, std::vector<double> vdlambda);
-\end{verbatim}
-where {\tt vdlambda} is a vector of Lagrange multipliers.  This method returns a vector in the range space. If a reverse sweep of order $k$ is called, a forward sweep of all orders  through  $k -1$ must have been made prior to the call.
-
-\subsubsection{First Derivative Reverse Sweep Calculations}
-
-In order to calculate first derivatives execute the following sequence of calls.
-\begin{verbatim}
-x0[0] = 1;
-x0[1] = 5;
-x0[2] = 5;
-std::vector<double> vlambda(3);
-vlambda[0] = 0;
-vlambda[1] = 0;
-vlambda[2] = 1;
-osinstance->forwardAD(0, x0);
-osinstance->reverseAD(1, vlambda);
-\end{verbatim}
-Since {\tt vlambda} only includes
-the third function $f_3$, this sequence of calls will produce the third row of the
-Jacobian $J_f$, i.e.,
-$$
-\D{f_{3}(x^{(0)})}{x_{0}}  = 1,  \quad \D{f_{3}(x^{(0)})}{x_{1}}  = 0, \quad  \D{f_{3}(x^{(0)})}{x_{3}}  = 0.2.
-$$
-
-\subsubsection{Second Derivative Reverse Sweep Calculations}
-
-In order to calculate second derivatives using {\tt reverseAD} forward sweeps of order 0 and 1 must have been completed.  The call to {\tt reverseAD(2, vlambda)} will return a vector of dimension $2n$ where $n$ is the number of variables.  If the zero-order forward sweep is {\tt forward(0,x0)} and the first-order forward sweep is {\tt forwardAD(1, x1)} where {\tt x1} $= e^{(i)},$ then the return vector {\tt z = reverseAD(2,  vlambda)} is
-\begin{eqnarray}
-z[2j - 2]  = \D{L (x^{(0)}, \lambda^{(0)})}{x_{j}}, \quad j = 1, \ldots, n
-\end{eqnarray}
-\begin{eqnarray}
-z[2j - 1]  = \DD{L(x^{(0)}, \lambda^{(0)})}{x_{i}}{x_{j}}, \quad j = 1, \ldots, n
-\end{eqnarray}
-where
-\begin{eqnarray}
-L (x, \lambda) = \sum_{k = 1}^{m} \lambda_{k} f_{k}(x).
-\end{eqnarray}
-
-
-
-For example, the  following calls will calculate the third row (column) of the Hessian of the Lagrangian.
-\begin{verbatim}
-x0[0] = 1;
-x0[1] = 5;
-x0[2] = 5;
-osinstance->forwardAD(0, x0);
-x1[0] = 0;
-x1[1] = 0;
-x1[2] = 1;
-osinstance->forwardAD(1, x1);
-vlambda[0] = 1;
-vlambda[1] = 2;
-vlambda[2] = 1;
-osinstance->reverseAD(2, vlambda);
-\end{verbatim}
-This returns
-\begin{eqnarray*}
-\D{L (x^{(0)}, \lambda^{(0)})}{x_{0}} = 3, \quad  \D{L (x^{(0)}, \lambda^{(0)})}{x_{1}} = 2.74, \quad  \D{L (x^{(0)}, \lambda^{(0)})}{x_{3}} = 4.2
-\end{eqnarray*}
-\begin{eqnarray*}
-\DD{L(x^{(0)}, \lambda^{(0)})}{x_{3}}{x_{0}} =0, \quad  \DD{L(x^{(0)}, \lambda^{(0)})}{x_{3}}{x_{0}} = 0, \quad   \DD{L(x^{(0)}, \lambda^{(0)})}{x_{3}}{x_{3}} =  -.04
-\end{eqnarray*}
-
-The reason why
-$$
-\D{L (x^{(0)}, \lambda^{(0)})}{x_{1}} = 2 \times 1.37 = 2.74
-$$
-and not
-$$
-\D{L (x^{(0)}, \lambda^{(0)})}{x_{1}} = 1 \times  9 + 2 \times 6.37 = 9 + 12.74 = 21.74
-$$
-is that the terms $9x_1$ in the objective and $5x_1$ in the first constraint
-are captured in the linear section of the OSiL input and therefore do not appear as nonlinear terms
-in {\tt  <nonlinearExpressions>}. Again, {\tt forwardAD} and {\tt reverseAD} only operate on variables and terms
-in either the {\tt <quadraticCoefficients>} or {\tt <nonlinearExpressions>} sections.
-
-\subsection{Using OSInstance Methods: High Level Calls}
-
-The methods {\tt forwardAD} and {\tt reverseAD} are low-level calls and are not designed to work directly with solver APIs. The {\tt OSInstance} API has other methods that most users will want to invoke when linking with solver APIs.  We describe these now.
-
-
-\subsubsection{Sparsity Methods}
-
-Many solvers such as {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}} (\url{projects.coin-or.org/Ipopt}) 
-\ifknitro or Knitro\index{Knitro} (\url{www.ziena.com}) \fi
-require the sparsity pattern of the Jacobian of the constraint matrix and the Hessian of the Lagrangian function.
-Note well that the constraint matrix of the example in Section~\ref{section:lowlevelADcalls}
-constitutes only the last two rows of (\ref{eq:definef}) but does include the linear terms.
-The following code illustrates how to get the sparsity pattern of the constraint Jacobian matrix
-
-\begin{verbatim}
-SparseJacobianMatrix *sparseJac;
-sparseJac = osinstance->getJacobianSparsityPattern();
-for(idx = 0; idx < sparseJac->startSize; idx++){
-    std::cout << "number constant terms in constraint "   <<  idx << " is "
-    << *(sparseJac->conVals + idx)  << std::endl;
-    for(k = *(sparseJac->starts + idx); k < *(sparseJac->starts + idx + 1); k++){
-        std::cout << "row idx = " << idx <<  "
-        col idx = "<< *(sparseJac->indexes + k) << std::endl;
-    }
-}
-\end{verbatim}
-
-For the example problem this will produce
-
-\begin{verbatim}
-JACOBIAN SPARSITY PATTERN
-number constant terms in constraint 0 is 0
-row idx = 0  col idx = 1
-row idx = 0  col idx = 3
-number constant terms in constraint 1 is 1
-row idx = 1  col idx = 2
-row idx = 1  col idx = 0
-row idx = 1  col idx = 3
-\end{verbatim}
-
-The   constant term in constraint 1 corresponds to the linear term $7x_2$,
-which is added after the algorithmic differentiation has taken place.
-However, the linear  term $5x_1$ in equation 0 does not
-contribute a nonzero in the Jacobian, as it is combined with the
-term $1.37x_1$ that is treated as a nonlinear term and
-therefore accounted for explicitly.
-The {\tt SparseJacobianMatrix} object has a data member {\tt starts}
-which is the index of the start of each constraint row.
-The {\tt int} data member {\tt indexes}  gives  is the variable index
-of every potentially nonzero derivative. There is also a {\tt double} data member
-{\tt values} that will the value of the partial derivative of the corresponding
-index at each iteration. Finally, there is an {\tt int} data member
-{\tt conVals} that is the number of constant terms in each gradient.
-A constant term is a partial derivative that cannot change at an iteration.
-A variable is considered to have a constant derivative
-if it appears in the {\tt <linearConstraintCoefficients>} section
-but not in the {\tt <nonlinearExpressions>}.  For a row indexed by {\tt idx}
-the variable indices are in the  {\tt indexes} array between the elements
-{\tt sparseJac->starts + idx} and {\tt sparseJac->starts + idx + 1}.
-The first  {\tt sparseJac->conVals + idx} variables listed are indices
-of  variables with constant derivatives. In this example, when {\tt idx} is 1,
-there is one  variable with a constant derivative and it is variable $x_{2}$.
-(Actually variable $x_{1}$ has a constant derivative but the code does not check
-to see if variables that appear in the {\tt <nonlinearExpressions>} section
-have constant derivative.) The  variables with constant derivatives
-never appear in the AD evaluation.
-
-The following code illustrates how to get the sparsity pattern of the Hessian of the Lagrangian.
-\begin{verbatim}
-SparseHessianMatrix *sparseHessian;
-sparseHessian = osinstance->getLagrangianHessianSparsityPattern( );
-for(idx = 0; idx < sparseHessian->hessDimension; idx++){
-    std::cout <<  "Row Index = " << *(sparseHessian->hessRowIdx + idx) ;
-    std::cout <<  "  Column Index = " << *(sparseHessian->hessColIdx + idx);
-}
-\end{verbatim}
-The {\tt SparseHessianMatrix} class has the {\tt int} data members {\tt hessRowIdx} and {\tt hessColIdx} for indexing  potential nonzero elements in the Hessian matrix. The {\tt double} data member {\tt hessValues} holds the value of the respective second derivative at each iteration.   The data member {\tt hessDimension} is the number of nonzero elements in the Hessian.
-
-
-\subsubsection{Function Evaluation Methods}
-
-There are several overloaded methods for calculating objective and constraint values.  The method
-\begin{verbatim}
-double *calculateAllConstraintFunctionValues(double* x, bool new_x)
-\end{verbatim}
-will return a {\tt double} pointer to an array of constraint function values evaluated at {\tt x.}  If the value of {\tt x} has not changed since the last function call, then {\tt new\_x} should be set to {\tt false} and the most recent function values are returned.  When using this method, with this signature,  all function values are calculated in {\tt double} using an {\tt OSExpressionTree} object.
-
-A second signature for the {\tt calculateAllConstraintFunctionValues} is
-\begin{verbatim}
-double *calculateAllConstraintFunctionValues(double* x, double *objLambda,
-    double *conLambda, bool new_x, int highestOrder)
-\end{verbatim}
-In this  signature, {\tt x} is a pointer to the current primal values, {\tt objLambda} is a vector of dual multipliers, {\tt conLambda} is a vector of dual multipliers on the constraints,  {\tt new\_x} is true if any components of {\tt x} have changed since the last evaluation, and {\tt highestOrder} is the highest order of derivative to be calculated at this iteration. The following code snippet illustrates defining a set of variable values for the example we are using and then the function call.
-\begin{verbatim}
-double* x = new double[4]; //primal variables
-double* z = new double[2]; //Lagrange multipliers on constraints
-double* w = new double[1]; //Lagrange multiplier on objective
-x[ 0] = 1;    // primal variable 0
-x[ 1] = 5;    // primal variable 1
-x[ 2] = 10;   // primal variable 2
-x[ 3] = 5;    // primal variable 3
-z[ 0] = 2;    // Lagrange multiplier on constraint 0
-z[ 1] = 1;    // Lagrange multiplier on constraint 1
-w[ 0] = 1;    // Lagrange multiplier on the objective function
-calculateAllConstraintFunctionValues(x, w, z,  true, 0);
-\end{verbatim}
-When making all high level calls for function, gradient, and Hessian evaluations we pass all the primal variables in the {\tt x} argument, not just the nonlinear variables. Underneath the call, the nonlinear variables are identified and used in AD function calls.
-
-The use of the parameters  {\tt new\_x} and {\tt highestOrder}  is important and requires further explanation.    The parameter  {\tt highestOrder}  is an integer variable that will take on the value 0, 1, or 2 (actually higher values if we want third derivatives etc.).  The value of this variable is the highest order derivative that is required of the current iterate. For example, if  a callback requires a function evaluation and {\tt highestOrder = 0} then only the function is evaluated at the current iterate.  However,  if {\tt highestOrder = 2} then the function call
-\begin{verbatim}
-calculateAllConstraintFunctionValues(x, w, z, true, 2)
-\end{verbatim}
-will trigger  first and second derivative evaluations in addition to the function evaluations.
-
-In the {\tt OSInstance} class code,  every time a forward ({\tt forwardAD}) or reverse sweep ({\tt reverseAD}) is executed a private  member, {\tt m\_iHighestOrderEvaluated}  is  set to the order of the sweep. For example, {\tt forwardAD(1, x)} will result in {\tt  m\_iHighestOrderEvaluated = 1}.  Just knowing the value  of  {\tt new\_x} alone is not sufficient. It is also necessary  to know {\tt highestOrder} and compare it with {\tt m\_iHighestOrderEvaluated.}  For example, if  {\tt new\_x}  is  false,  but {\tt m\_iHighestOrderEvaluated = 0},  and   the callback requires a Hessian calculation, then it is necessary to calculate the first and second derivatives at the current iterate.
-
-There are {\it  exactly two} conditions that  require a new function or derivative evaluation.   A new evaluation is required if and only if
-
-\begin{enumerate}
-\item{}   The value of {\tt new\_x} is  true
-
-\begin{center}
- --OR--
-\end{center}
-
-
-\item{} For the callback function the value of the input parameter {\tt highestOrder} is strictly greater than the current value  of    {\tt m\_iHhighestOrderEvaluated.}
-\end{enumerate}
-
-For an efficient implementation of AD it is important to be able to get the Lagrange multipliers and highest order derivative that is required from inside {\it any} callback -- not just the Hessian evaluation callback. For example, in {\tt Ipopt,} if  {\tt eval\_g}  or {\tt eval\_f} are called, and  for the current iterate, {\tt eval\_jac} and {\tt eval\_hess} are also going to be called, then  a more efficient AD implementation is possible if the Lagrange multipliers are available for {\tt eval\_g} and {\tt eval\_f}.
-
-Currently, whenever {\tt new\_x = true} in the underlying AD implementation we do not retape (record into the CppAD data structure)  the function. This is because we currently throw an exception if there are any logical operators involved in the AD calculations. This may change in a future implementation.
-
-
-There are also similar methods for objective function evaluations.  The method
-\begin{verbatim}
-double calculateFunctionValue(int idx, double* x, bool new_x);
-\end{verbatim}
- will return the value of any constraint or objective function indexed by {\tt idx}. This method works strictly with {\tt double} data using an {\tt OSExpressionTree} object.
-
-There is also a public variable, {\tt bUseExpTreeForFunEval} that, if set to {\tt true}, will cause the method
-\begin{verbatim}
-calculateAllConstraintFunctionValues(x, objLambda,  conLambda, true, highestOrder)
-\end{verbatim}
-to also use the OS expression tree for function evaluations when {\tt highestOrder = 0} rather than use the operator overloading in the CppAD tape.
-
-\subsubsection{Gradient Evaluation Methods}
-
-One {\tt OSInstance} method for gradient calculations is
-\begin{verbatim}
-SparseJacobianMatrix *calculateAllConstraintFunctionGradients(double* x, double *objLambda,
-     double *conLambda, bool new_x, int highestOrder)
-\end{verbatim}
-If a call has been placed to {\tt calculateAllConstraintFunctionValues} with {\tt highestOrder = 0}, then the appropriate call to get gradient evaluations is
-\begin{verbatim}
-calculateAllConstraintFunctionGradients( x, NULL, NULL,  false, 1);
-\end{verbatim}
-Note that in this function call {\tt new\_x = false}. This prevents a call to {\tt forwardAD()} with order 0 to get the function values.
-
-
-If, at the current iterate, the Hessian of the Lagrangian function is also desired then an appropriate call is
-\begin{verbatim}
-calculateAllConstraintFunctionGradients(x, objLambda, conLambda, false, 2);
-\end{verbatim}
-In this case, if there was a prior call
-\begin{verbatim}
-calculateAllConstraintFunctionValues(x, w, z,  true, 0);
-\end{verbatim}
-then only first and second derivatives are calculated, not function values.
-
-When calculating the gradients, if the number of nonlinear variables exceeds or is equal  to the number of rows,  a {\tt forwardAD(0, x)} sweep is used to get the function values,  and   a {\tt reverseAD(1, $e^{k}$)}  sweep for each unit vector  $e^{k}$ in the row space  is used to get the vector of first order partials for each row in the constraint Jacobian.  If the number of nonlinear variables is less then the number of rows then a {\tt forwardAD(0, x)} sweep  is used to get the function values and a {\tt forwardAD(1,  $e^{i}$)}  sweep for each unit vector  $e^{i}$ in the column space is used to get the vector of first order partials for each column in the constraint Jacobian.
-
-Two other gradient methods are
-\begin{verbatim}
-SparseVector *calculateConstraintFunctionGradient(double* x,
-    double *objLambda, double *conLambda,  int idx, bool new_x, int highestOrder);
-\end{verbatim}
-and
-\begin{verbatim}
-SparseVector *calculateConstraintFunctionGradient(double* x, int idx,
-    bool new_x );
-\end{verbatim}
-
-Similar methods are available for the objective function; however, the objective function gradient methods treat the gradient of each objective function as a dense vector.
-
-
-\subsubsection{Hessian Evaluation Methods}
-
-There are two methods for Hessian calculations.  The first method has the signature
-\begin{verbatim}
-SparseHessianMatrix *calculateLagrangianHessian( double* x,
-    double *objLambda, double *conLambda, bool new_x, int highestOrder);
-\end{verbatim}
-so if either function or first derivatives have been calculated an appropriate call is
-\begin{verbatim}
-calculateLagrangianHessian( x, w, z, false, 2);
-\end{verbatim}
-If the Hessian of a single row or objective function is desired the following method is available
-\begin{verbatim}
-SparseHessianMatrix *calculateHessian( double* x, int idx, bool new_x);
-\end{verbatim}
-
 \section{The OSSolverService}\label{section:ossolverservice}
 
 The {\tt OSSolverService}\index{OSSolverService@{\tt OSSolverService}|(} is a command line executable designed
@@ -3815,7 +2642,8 @@ Generally, when solving a problem locally the user will use the {\tt solve}\inde
 The {\tt solve} method is invoked synchronously and waits for the solver to return the result.  This is illustrated
 in Figure~\ref{figure:ossolverservicelocal}. As illustrated, the {\tt OSSolverService} reads a file on the hard drive
 with the optimization instance, usually in OSiL\index{OSiL} format. The optimization instance is parsed into a string
-which is passed to the {\tt OSLibrary}\index{OSLibrary@{\tt OSLibrary}} which is linked with various solvers.
+which is passed to the {\tt OSLibrary}\index{OSLibrary@{\tt OSLibrary}} (see~\ref{section:oslibrary}),
+which is linked with various solvers.
 The result of the optimization is passed back to the {\tt OSSolverService} as a string in OSrL\index{OSrL} format.
 
 
@@ -4541,7 +3369,9 @@ solver->solve();
 \section{Setting up a Solver Service with Apache Tomcat}\label{section:tomcat}
 
 \index{Apache Tomcat|(}
-The server side of the Java distribution is based on the Tomcat 5.5 implementation. 
+This section explains how to download and use the java implementation of the remote solver service 
+described in section~\ref{section:servicemethods}.
+The server side of the Java distribution is based on the Tomcat~5.5 implementation. 
 The first step of the installation procedure is to download the Java binary distribution at
 \begin{verbatim}
 OS-server-release_number.zip
@@ -4711,280 +3541,6 @@ contains executables and scripts to start and shutdown the Tomcat server.
 \end{itemize}
 \index{Apache Tomcat|)}
 
-
-
-
-\section{Modeling Language Support}\label{section:modellang}
-
-Algebraic modeling languages can be used to generate model instances as input to an OS compliant solver.
-We describe two such hook-ups, {\tt OSAmplClient} for AMPL\index{AMPL}, and {\tt GAMSlinks} for GAMS\index{GAMS}.
-
-
-\subsection{AMPL Client:  Hooking AMPL to Solvers}\label{section:amplclient}
-
-\index{OSAmplClient@{\tt OSAmplClient}|(}
-The {\tt OSAmplClient} executable (in {\tt COIN-OS/OS/applications/amplClient}) is designed to work with the AMPL program
-(see \url{www.ampl.com}). The {\tt OSAmplClient} acts like an AMPL ``solver''. The {\tt OSAmplClient} is linked with the
-OS library and can be used to solve problems either locally or remotely. In both cases the {\tt OSAmplClient} uses the
-{\tt OSnl2osil}\index{OSnl2osil@{\tt OSnl2osil}} class to convert the AMPL generated nl file\index{AMPL nl format}
-(which represents the problem instance) into the corresponding instance representation in the OSiL\index{OSiL} format.
-
-In the following discussion we assume that the AMPL executable {\tt ampl}  (or {\tt ampl.exe} on Windows) obtained
-from {\tt www.ampl.com}, the {\tt OSAmplClient}, and the test problem {\tt hs71.mod} are all in the same directory.
-At first, the user may wish to run everything in the directory
-
-\begin{verbatim}
-COIN-OS/OS/applications/amplClient
-\end{verbatim}
-which is where {\tt OSAmplClient} is located when the OS project is built. The user must obtain {\tt ampl} and put
-it in this directory.  The test problem {\tt hs71.mod} can be copied from
-
-\begin{verbatim}
-COIN-OS/OS/data/amplFiles
-\end{verbatim}
-It is also assumed that {\tt .}~(the current directory) is in the search path.
-
-The  problem instance, {\tt hs71.mod} is an AMPL model file included in the {\tt amplClient} directory.
-To solve this problem locally by calling the {\tt OSAmplClient} from AMPL first start AMPL and then
-execute the following commands. In this case we are testing  {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}|(} as the
-local server and therefore it is necessary that {\tt Ipopt} be part of the local OS build. If it is not
-then another solver must be selected and a test problem used that is a linear or integer program.
-
-\begin{verbatim}
-# take in problem 71 in Hock and Schittkowski
-# assume the problem is in the AMPL directory
-model hs71.mod;
-# tell AMPL that the solver is OSAmplClient
-option solver OSAmplClient;
-# now tell OSAmplClient to use Ipopt
-option OSAmplClient_options "solver ipopt";
-# the name of the nl file (this is optional)
-write gtestfile;
-# now solve the problem
-solve;
-\end{verbatim}
-
-This will invoke {\tt Ipopt} locally and the result in OSrL\index{OSrL} format will be displayed on the screen.
-
-In order to call a remote solver service, after the command
-\begin{verbatim}
-option OSAmplClient_options "solver ipopt";
-\end{verbatim}
-set the solver {\tt service} option to  the address of the remote solver service.
-\begin{verbatim}
-option ipopt_options "service http://gsbkip.chicagogsb.edu/os/OSSolverService.jws";
-\end{verbatim}
-In this case it is necessary that the {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}|)} solver be part of the OS build on the server.
-\index{OSAmplClient@{\tt OSAmplClient}|)}
-
-
-\subsection{GAMSlinks:  Hooking GAMS to Solvers}\label{section:gamslinks}
-
-%Algebraic modeling languages can be used to generate model instances as input to an OS compliant solver.
-%We describe two such hook-ups,
-%The AMPL\index{AMPL} and GAMS modeling languages can be used to generate model instances as input  to an OS
-%compliant solver.
-%In Section \ref{section:amplclient} we described how to hook the AMPL modeling language to solvers using
-%{\tt OSAmplClient}.  It is also possible to use GAMS via the COIN-OR GAMSlinks\index{GAMSlinks|(} project.
-
-GAMSlinks\index{GAMSlinks|(}
-For instructions on downloading and building  the GAMSlinks project see \url{projects.coin-or.org/GAMSlinks}.
-In the following discussion we assume that the user has both GAMS and GAMSlinks on their machine.
-The user should build the GAMSlinks project as follows.
-
-\begin{enumerate}[1.]
-
-\item  Check out {\tt\UrlGamslinks} into a suitable folder. In the following we
-will refer to this GAMSlinks root directory as {\tt COIN-GAMSLINKS}.
-
-\item Open the file {\tt Externals} and make sure the projects {\tt cppad} and {\tt OS} are not commented.
-(These projects appear in line 9 and 10, respectively.)
-
-\item Execute the command
-
-\begin{verbatim}
-svn propset svn:externals . -F Externals
-\end{verbatim}
-
-
-\item  Do an {\bf svn update}
-
-\item Run {\tt configure} with
-
-\begin{verbatim}
-./configure   --enable-os-solver
-\end{verbatim}
-
-Note that the configuration of the {\tt GAMSlinks} project is completely separate from the OS installation process
-described in section~\ref{section:build}. The GAMSlinks configuration and make should be started from the
-{\tt COIN-GAMSLINKS} directory.
-
-\item Run {\tt make}  and then {\tt make install}.
-
-
-\end{enumerate}
-
-After successfully running the {\tt make install} you should have in the folder {\tt GAMSlinks/bin} the following files:
-\begin{verbatim}
-gmsbm_.zip
-gmscc_.zip
-gmsip_.zip
-gmsos_.zip
-\end{verbatim}
-
-Copy these  files into your GAMS root folder (where you keep the GAMS system).  Then run {\tt gamsinst}.   You can now solve  a wide variety of  problems either locally or remotely.
-
-
-In {\tt OS/data/gamsFiles} directory are several test problems in GAMS model format.
- For example, to solve the test problem {\tt rbrockmod.gms} copy this file into the GAMS root folder and execute the following command.
-
-\begin{verbatim}
-gams rbrockmod nlp=os
-\end{verbatim}
-
-It is also possible to have GAMSlinks generate the instance OSiL file and write the solution  OSrL file.
-This is done by giving GAMS an options file. One such file, {\tt os.opt}, is illustrated below. In addition,
-the options file specifies a service address ({\tt dummyaddress}) and a solver ({\tt Ipopt}) to call.
-The {\bf os.opt} file is:
-
-\begin{verbatim}
-writeosil osil.xml
-writeosrl osrl.xml
-service dummyaddress
-solver ipopt
-\end{verbatim}
-
-%The numbering system for the GAMS option files works as follows:
-GAMS options files follow specific naming conventions as set out below:
-
-\begin{verbatim}
-optfile=1 corresponds to <solver>.opt
-optfile=2 corresponds to <solver>.op2
-...
-optfile=99 corresponds to <solver>.op99
-\end{verbatim}
-
-For example, in order to solve the Rosenbrock test problem using the  options file  {\tt os.opt}
-execute the command
-
-\begin{verbatim}
-gams rbrock nlp=os optfile=1
-\end{verbatim}
-
-
-\noindent {\bf Note:} On Mac OS X add   {\tt -DUSE\_UNUSED\_SYMBOLS} to {\tt CXXFLAGS} so the configure line is
-
-\begin{verbatim}
-./configure   --enable-os-solver CXXFLAGS=-DUSE_UNUSED_SYMBOLS
-\end{verbatim}
-
-\index{GAMSlinks|)}
-
-
-
-
-
-\section{File Upload:  Using a File Upload Package}\label{section:fileupload}
-
-\index{OSFileUpload@{\tt OSFileUpload}|(}
-When the {\tt OSAgent}\index{OSAgent@{\tt OSAgent}}  class methods {\tt solve}\index{solve@{\tt solve}} and
-{\tt send}\index{send@{\tt send}} are used, the problem instance in OSiL\index{OSiL} format is packaged into
-a SOAP\index{SOAP protocol} envelope and communication with the server is done using Web Services (for example Tomcat
-Axis)\index{Apache Tomcat}. However, packing an XML file into a SOAP envelope may add considerably to the
-size of the file (each {\tt $<$} is replaced with {\tt \&lt;}  and each {\tt $>$} is replaced with {\tt \&gt;}).
-Also, communicating with a Web Services servlet can further slow down the communication process.
-This could be a problem for large instances. An alternative approach is to use the {\tt OSFileUpload}
-executable on the client end and the Java servlet {\tt OSFileUpload} on the server end.  The {\tt OSFileUpload}
-client executable is contained in the {\tt fileUpload}  directory inside the {\tt applications} directory.
-
-This servlet is based upon the Apache Commons FileUpload. See 
-
-\medskip
-\noindent{\tt\UrlApacheFileupload}.
-\medskip
-
-The {\tt OSFileUpload} Java class, {\tt OSFileUpload.class} is in the directory
-\begin{verbatim}
-webapps\os\WEB-INF\classes\org\optimizationservices\oscommon\util
-\end{verbatim}
-relative to the Web server root.  The source code {\tt OSFileUpload.class} is in the directory
-\begin{verbatim}
-COIN-OS/OS/applications/fileUpload
-\end{verbatim}
-
-Before you can use OSFileUpload, you must give a valid URL for the location of the server.
-This information must be provided in line 82 of the source code {\tt OSFileUpload.cpp} before 
-issuing the {\tt make command} (in a unix environment) or the build (under MS VisualStudio).
-
-The {\tt OSFileUpload} client executable (see {\tt OS/applications/fileUpload}) takes one argument on the command line,
-which is the location of the file on the local directory to upload to the server. For example,
-\begin{verbatim}
-OSFileUpload ../../data/osilFiles/parincQuadratic.osil
-\end{verbatim}
-The {\tt OSFileUpload} executable first creates an {\tt OSAgent} object.
-\begin{verbatim}
-OSSolverAgent* osagent = NULL;
-osagent = new OSSolverAgent("http://gsbkip.chicagogsb.edu/fileupload/servlet/OSFileUpload");
-\end{verbatim}
-The {\tt OSAgent}  has a method {\tt OSFileUpload} with the signature
-\begin{verbatim}
-std::string OSFileUpload(std::string osilFileName, std::string osil);
-\end{verbatim}
-where {\tt osilFileName} is  the name of the OSiL problem instance to be written on the server and {\tt osil}
-is the string with the actual instance. Then
-\begin{verbatim}
-osagent->OSFileUpload(osilFileName, osil);
-\end{verbatim}
-will place a call to the server, upload the problem instance in the {\tt osil} string, and cause the server
-to write a file on its hard drive named {\tt osilFileName}. In our implementation, the uploaded file
-({\tt parincQuadratic.osil}) is saved to the {\tt/home/kmartin/temp/parincQuadratic.osil} on the server hard drive.
-This location is used in the {\tt osol} file as shown below.
-
-Once the file is on the server, invoke the local {\tt OSSolverService} by
-\begin{verbatim}
-./OSSolverService -config ../data/configFiles/testremote.config
-\end{verbatim}
-where the {\tt config} file is as follows. Notice there is no {\tt -osil}  option as the OSiL file has already
-been uploaded and its instance location (``local'' to the server) is specified in the {\tt osol} file.
-\begin{verbatim}
--osol ../data/osolFiles/remoteSolve2.osol
--serviceLocation http://gsbkip.chicagogsb.edu/os/OSSolverService.jws
--serviceMethod solve
-\end{verbatim}
-and the {\tt osol} file is
-\begin{verbatim}
-<osol>
-    <general>
-         <instanceLocation locationType="local">
-             /home/kmartin/temp/parincQuadratic.osil
-         </instanceLocation>
-        <solverToInvoke>ipopt</solverToInvoke>      
-    </general>
-</osol>
-\end{verbatim}
-
-\iffalse   %this needs more work...
-As an alternative to using the command line executable {\tt OSFileUpload}, there is also an html form
-{\tt fileupload.html} that can be used to upload files. For example, the URL
-%\begin{verbatim}
-%http://gsbkip.chicagogsb.edu/os/fileupload.html
-%\end{verbatim}
-
-\medskip
-\noindent{\tt\UrlKippFileupload}
-\medskip
-
-\noindent will bring up the necessary form that allows the user to browse a directory and select the file to upload.
-This URL is based on the assumption that the {\tt OSJava} classes were deployed as described in
-Section~\ref{section:tomcat}. The file {\tt fileupload.html} is in the directory {\tt WebApps/os}.
-In our html form implementation, after you upload the OSiL\index{OSiL} file, it shows you the path of the
-uploaded file that is saved on the server, so that you can put it in the corresponding {\tt osol} file.
-\fi
-\index{OSFileUpload@{\tt OSFileUpload}|)}
-
-
-
-%\section{Examples}\label{section:examples}
 \section{Code samples to illustrate the OS Project}\label{section:examples}
 
 The example executable files are not built by running {\tt configure} and {\tt make}.  In order to build the examples
@@ -5162,6 +3718,173 @@ yet finished.
 \subsection{OSAddCuts: Using the OSInstance API to Generate Cutting Planes}\label{section:exampleOSAddCuts}
 
 In this example, we show how to add cuts to tighten an LP using {\tt Cgl} (Cut Generation Library)\index{COIN-OR projects!Cgl@{\tt Cgl}}.
+
+
+\section{OS Support for Modeling Languages, Spreadsheets and Numerical Computing Software}\label{section:modellang}
+
+Algebraic modeling languages can be used to generate model instances as input to an OS compliant solver.
+We describe two such hook-ups, {\tt OSAmplClient} for AMPL\index{AMPL}, and {\tt GAMSlinks} for GAMS\index{GAMS}.
+
+
+\subsection{AMPL Client:  Hooking AMPL to Solvers}\label{section:amplclient}
+
+\index{OSAmplClient@{\tt OSAmplClient}|(}
+The {\tt OSAmplClient} executable (in {\tt COIN-OS/OS/applications/amplClient}) is designed to work with the AMPL program
+(see \url{www.ampl.com}). The {\tt OSAmplClient} acts like an AMPL ``solver''. The {\tt OSAmplClient} is linked with the
+OS library and can be used to solve problems either locally or remotely. In both cases the {\tt OSAmplClient} uses the
+{\tt OSnl2osil}\index{OSnl2osil@{\tt OSnl2osil}} class to convert the AMPL generated nl file\index{AMPL nl format}
+(which represents the problem instance) into the corresponding instance representation in the OSiL\index{OSiL} format.
+
+In the following discussion we assume that the AMPL executable {\tt ampl}  (or {\tt ampl.exe} on Windows) obtained
+from {\tt www.ampl.com}, the {\tt OSAmplClient}, and the test problem {\tt hs71.mod} are all in the same directory.
+At first, the user may wish to run everything in the directory
+
+\begin{verbatim}
+COIN-OS/OS/applications/amplClient
+\end{verbatim}
+which is where {\tt OSAmplClient} is located when the OS project is built. The user must obtain {\tt ampl} and put
+it in this directory.  The test problem {\tt hs71.mod} can be copied from
+
+\begin{verbatim}
+COIN-OS/OS/data/amplFiles
+\end{verbatim}
+It is also assumed that {\tt .}~(the current directory) is in the search path.
+
+The  problem instance, {\tt hs71.mod} is an AMPL model file included in the {\tt amplClient} directory.
+To solve this problem locally by calling the {\tt OSAmplClient} from AMPL first start AMPL and then
+execute the following commands. In this case we are testing  {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}|(} as the
+local server and therefore it is necessary that {\tt Ipopt} be part of the local OS build. If it is not
+then another solver must be selected and a test problem used that is a linear or integer program.
+
+\begin{verbatim}
+# take in problem 71 in Hock and Schittkowski
+# assume the problem is in the AMPL directory
+model hs71.mod;
+# tell AMPL that the solver is OSAmplClient
+option solver OSAmplClient;
+# now tell OSAmplClient to use Ipopt
+option OSAmplClient_options "solver ipopt";
+# the name of the nl file (this is optional)
+write gtestfile;
+# now solve the problem
+solve;
+\end{verbatim}
+
+This will invoke {\tt Ipopt} locally and the result in OSrL\index{OSrL} format will be displayed on the screen.
+
+In order to call a remote solver service, after the command
+\begin{verbatim}
+option OSAmplClient_options "solver ipopt";
+\end{verbatim}
+set the solver {\tt service} option to  the address of the remote solver service.
+\begin{verbatim}
+option ipopt_options "service http://gsbkip.chicagogsb.edu/os/OSSolverService.jws";
+\end{verbatim}
+In this case it is necessary that the {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}|)} solver be part of the OS build on the server.
+\index{OSAmplClient@{\tt OSAmplClient}|)}
+
+
+\subsection{GAMSlinks:  Hooking GAMS to Solvers}\label{section:gamslinks}
+
+%Algebraic modeling languages can be used to generate model instances as input to an OS compliant solver.
+%We describe two such hook-ups,
+%The AMPL\index{AMPL} and GAMS modeling languages can be used to generate model instances as input  to an OS
+%compliant solver.
+%In Section \ref{section:amplclient} we described how to hook the AMPL modeling language to solvers using
+%{\tt OSAmplClient}.  It is also possible to use GAMS via the COIN-OR GAMSlinks\index{GAMSlinks|(} project.
+
+GAMSlinks\index{GAMSlinks|(}
+For instructions on downloading and building  the GAMSlinks project see \url{projects.coin-or.org/GAMSlinks}.
+In the following discussion we assume that the user has both GAMS and GAMSlinks on their machine.
+The user should build the GAMSlinks project as follows.
+
+\begin{enumerate}[1.]
+
+\item  Check out {\tt\UrlGamslinks} into a suitable folder. In the following we
+will refer to this GAMSlinks root directory as {\tt COIN-GAMSLINKS}.
+
+\item Open the file {\tt Externals} and make sure the projects {\tt cppad} and {\tt OS} are not commented.
+(These projects appear in line 9 and 10, respectively.)
+
+\item Execute the command
+
+\begin{verbatim}
+svn propset svn:externals . -F Externals
+\end{verbatim}
+
+
+\item  Do an {\bf svn update}
+
+\item Run {\tt configure} with
+
+\begin{verbatim}
+./configure   --enable-os-solver
+\end{verbatim}
+
+Note that the configuration of the {\tt GAMSlinks} project is completely separate from the OS installation process
+described in section~\ref{section:build}. The GAMSlinks configuration and make should be started from the
+{\tt COIN-GAMSLINKS} directory.
+
+\item Run {\tt make}  and then {\tt make install}.
+
+
+\end{enumerate}
+
+After successfully running the {\tt make install} you should have in the folder {\tt GAMSlinks/bin} the following files:
+\begin{verbatim}
+gmsbm_.zip
+gmscc_.zip
+gmsip_.zip
+gmsos_.zip
+\end{verbatim}
+
+Copy these  files into your GAMS root folder (where you keep the GAMS system).  Then run {\tt gamsinst}.   You can now solve  a wide variety of  problems either locally or remotely.
+
+
+In {\tt OS/data/gamsFiles} directory are several test problems in GAMS model format.
+ For example, to solve the test problem {\tt rbrockmod.gms} copy this file into the GAMS root folder and execute the following command.
+
+\begin{verbatim}
+gams rbrockmod nlp=os
+\end{verbatim}
+
+It is also possible to have GAMSlinks generate the instance OSiL file and write the solution  OSrL file.
+This is done by giving GAMS an options file. One such file, {\tt os.opt}, is illustrated below. In addition,
+the options file specifies a service address ({\tt dummyaddress}) and a solver ({\tt Ipopt}) to call.
+The {\bf os.opt} file is:
+
+\begin{verbatim}
+writeosil osil.xml
+writeosrl osrl.xml
+service dummyaddress
+solver ipopt
+\end{verbatim}
+
+%The numbering system for the GAMS option files works as follows:
+GAMS options files follow specific naming conventions as set out below:
+
+\begin{verbatim}
+optfile=1 corresponds to <solver>.opt
+optfile=2 corresponds to <solver>.op2
+...
+optfile=99 corresponds to <solver>.op99
+\end{verbatim}
+
+For example, in order to solve the Rosenbrock test problem using the  options file  {\tt os.opt}
+execute the command
+
+\begin{verbatim}
+gams rbrock nlp=os optfile=1
+\end{verbatim}
+
+
+\noindent {\bf Note:} On Mac OS X add   {\tt -DUSE\_UNUSED\_SYMBOLS} to {\tt CXXFLAGS} so the configure line is
+
+\begin{verbatim}
+./configure   --enable-os-solver CXXFLAGS=-DUSE_UNUSED_SYMBOLS
+\end{verbatim}
+
+\index{GAMSlinks|)}
 
 
 
@@ -5456,6 +4179,1293 @@ OSCallMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, VarType, ..
      Q, prob_name, password, solverName, serviceAddress)
 \end{verbatim}
 \index{MATLAB|)}
+
+
+
+\section{The OS Library Components}\label{section:oslibrary}\index{OSLibrary@{\tt OSLibrary}|(} 
+
+\subsection{OSAgent}\label{section:osagent}
+
+The {\tt OSAgent}\index{OSAgent@{\tt OSAgent}|(}  part of the library is used to facilitate communication
+with remote solvers. It is not used if the solver is invoked locally (i.e., on the same machine).
+There are two key classes in the {\tt OSAgent} component of the OS library. The two classes are
+{\tt OSSolverAgent}\index{OSSolverAgent@{\tt OSSolverAgent}} and {\tt WSUtil}\index{WSUtil@{\tt WSUtil}}.
+
+The {\tt OSSolverAgent} class is used to contact a remote solver service.  For example, assume that {\tt sOSiL}
+is a string with a problem instance and {\tt sOSoL} is a string with solver options. Then the following code
+will call a solver service and invoke the {\tt solve} method.
+\begin{verbatim}
+OSSolverAgent *osagent;
+string serviceLocation = http://gsbkip.chicagogsb.edu/os/OSSolverService.jws
+osagent = new OSSolverAgent(  serviceLocation );
+string sOSrL = osagent->solve(sOSiL, sOSoL);
+\end{verbatim}
+Other methods in the {\tt OSSolverAgent} class are {\tt send}, {\tt retrieve}, {\tt getJobID}, {\tt knock}, and {\tt kill}.  The use of these methods is described in Section~\ref{section:servicemethods}.
+
+
+
+The methods in the {\tt OSSolverAgent} class call methods in the {\tt WSUtil} class that perform such tasks as creating and parsing SOAP messages and making low level socket calls to the server running the solver service. The average user will not use methods in the {\tt WSUtil} class, but they are available to anyone wanting to make socket calls or create SOAP messages.
+
+There is also a method, {\tt OSFileUpload}, in the OSAgentClass that is used to upload files from the hard drive of a client to the server. It is very fast and does not involve SOAP or Web Services. The {\tt OSFileUpload}  method is illustrated and described in the example code {\tt OSFileUpload.cpp} described in Section~\ref{section:fileupload}.
+\index{OSAgent@{\tt OSAgent}|)}
+
+\subsection{OSCommonInterfaces}
+
+The classes in the OSCommonInterfaces component of the OS library are used to read and write files and strings
+in the OSiL and OSrL protocols. See Section~\ref{section:schemadescriptions} for more detail on OSiL, OSrL,
+and other OS protocols. For a complete listing of all of the files in {\tt OSCommonInterfaces} see the 
+Doxygen\index{Doxygen} documentation we deposited at {\tt\UrlDoxygen}. Users who have Doxygen installed on their system
+can also create their own version of the documentation (see Section~\ref{section:documentation}). Below we highlight 
+some key classes.
+
+
+
+
+
+\subsubsection{The OSInstance Class}\label{section:osinstanceclass}
+
+The OSInstance\index{OSInstance@{\tt OSInstance}|(} class is the in-memory representation of an optimization instance and is a key
+class for users of the OS project. This class has an API defined by a collection of {\tt get()} methods for
+extracting various components (such as bounds and coefficients) from a problem instance, a collection of
+{\tt set()} methods for modifying or generating an optimization instance, and a collection of {\tt calculate()}
+methods for function, gradient, and Hessian evaluations.  See Section~\ref{section:osinstanceAPI}.
+We now describe how to create an {\tt OSInstance} object and the close relationship between the OSiL\index{OSiL} schema
+and the {\tt OSInstance} class.
+
+\subsubsection{Creating an {\tt OSInstance} Object}
+
+The OSCommonInterfaces component contains an {\tt OSiLReader}  class for reading an instance in an OSiL string and
+creating an in-memory {\tt OSInstance} object.  Assume that {\tt sOSiL} is a string that will hold the instance in OSiL format. Creating an {\tt OSInstance} object is illustrated in Figure~\ref{figure:creatingosinstanceobject}.
+
+\begin{figure}[ht]
+\centering
+   \small {\obeyspaces\let =\
+\fbox{\tt\begin{tabular}{@{}l@{}}
+OSiLReader *osilreader = NULL;\\[\Sb]
+OSInstance *osinstance = NULL;\\[\Sb]
+osilreader = new OSiLReader();\\[\Sb]
+osinstance = osilreader->readOSiL( sOSiL);\\[\Sb]
+\end{tabular} }} \bigskip
+\caption{Creating an {\tt OSInstance} Object} \label{figure:creatingosinstanceobject}
+\end{figure}
+
+\subsubsection{Mapping Rules}\label{section:mappingrules}
+
+The {\tt OSInstance} class has two member classes, {\tt InstanceHeader} and {\tt InstanceData}.  These correspond to the OSiL schema's complexTypes {\tt InstanceHeader} and {\tt InstanceData}, and to the XML elements {\tt <instanceHeader>} and {\tt <instanceData>}.
+
+    Moving down one level, Figure~\ref{figure:instancedata} shows that the {\tt InstanceData} class has in turn the member classes {\tt Variables}, {\tt Objectives}, {\tt Constraints}, {\tt LinearConstraintCoefficients}, {\tt QuadraticCoefficients}, and {\tt NonlinearExpressions}, corresponding to the respective elements in the OSiL schema with the same name.
+
+
+\begin{figure}[ht]
+\centering
+   \small {\obeyspaces\let =\
+\fbox{\tt\begin{tabular}{@{}l@{}}
+class OSInstance\{\\[\Sb]
+public:\\[\Sb]
+     OSInstance(); \\[\Sb]
+     InstanceHeader *instanceHeader;\\[\Sb]
+     InstanceData *instanceData;    \\[\Sb]
+\}; //class OSInstance\\[\Sb]
+\end{tabular} }} \bigskip
+\caption{The {\tt OSInstance} class} \label{figure:osinstance}
+\end{figure}
+
+
+\begin{figure}[ht]
+\centering
+   \small {\obeyspaces\let =\
+\fbox{\tt\begin{tabular}{@{}l@{}}
+class InstanceData\{\\[\Sb]
+public:\\[\Sb]
+     InstanceData();\\[\Sb]
+     Variables *variables;\\[\Sb]
+     Objectives *objectives;\\[\Sb]
+     Constraints *constraints;\\[\Sb]
+     LinearConstraintCoefficients *linearConstraintCoefficients;\\[\Sb]
+     QuadraticCoefficients *quadraticCoefficients;\\[\Sb]
+     NonlinearExpressions *nonlinearExpressions;\\[\Sb]
+\}; // class InstanceData
+\end{tabular} }} \bigskip
+\caption{The {\tt InstanceData} class} \label{figure:instancedata}
+\end{figure}
+
+
+\begin{figure}[hb]
+%\includegraphics[scale=0.8]{../../figures/paradigm1.eps}
+\centering
+   \scriptsize {\obeyspaces\let =\
+\fbox{\tt\begin{tabular}{@{}l@{}}
+\textsf{\textbf{Schema complexType  \hspace{3.64in}  In-memory class}}\\[\Sa]
+<xs:complexType name="Variables">  <-------------------------------------------->  class Variables\{\\[\Sb]
+                                                                                   public:\\[\Sb]
+  <xs:sequence>                                                                      Variables();\\[\Sb]
+    <xs:element name="var" type="Variable" maxOccurs="unbounded"/>  <----------->    Variable *var;\\[\Sb]
+  </xs:sequence>                                                                   \\[\Sb]
+  <xs:attribute name="numberOfVariables" type="xs:positiveInteger"                 \\[\Sb]
+                use="required"/>  <--------------------------------------------->    int numberOfVariables;\\[\Sb]
+</xs:complexType>                                                                  \}; // class Variables\\[\Sb]
+ \\[\Sb]
+ \\[\Sb]
+<xs:complexType name="Variable">  <--------------------------------------------->  class Variable\{\\[\Sb]
+                                                                                   public:\\[\Sb]
+                                                                                     Variable();\\[\Sb]
+  <xs:attribute name="name" type="xs:string" use="optional"/>  <---------------->    string name;\\[\Sb]
+  <xs:attribute name="init" type="xs:double" use="optional"/>  <---------------->    double init;\\[\Sb]
+  <xs:attribute name="initString" type="xs:string" use="optional"/>  <---------->    string initString;\\[\Sb]
+  <xs:attribute name="type" use="optional" default="C">  <---------------------->    char type;\\[\Sb]
+    <xs:simpleType>\\[\Sb]
+      <xs:restriction base="xs:string">\\[\Sb]
+        <xs:enumeration value="C"/>\\[\Sb]
+        <xs:enumeration value="B"/>\\[\Sb]
+        <xs:enumeration value="I"/>\\[\Sb]
+        <xs:enumeration value="S"/>\\[\Sb]
+      </xs:restriction>\\[\Sb]
+    </xs:simpleType>\\[\Sb]
+  </xs:attribute>\\[\Sb]
+  <xs:attribute name="lb" type="xs:double" use="optional" default="0"/>  <------>    double lb;\\[\Sb]
+  <xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>  <---->    double ub;\\[\Sb]
+</xs:complexType>                                                                  \}; // class Variable\\[\Sb]
+ \\[\Sb]
+ \\[\Sb]
+\textsf{\textbf{OSiL elements          \hspace{1.97in}  In-memory objects}}\\[\Sa]
+<variables numberOfVariables="2">                   OSInstance osinstance;\\[\Sb]
+   <var lb="0" name="x0" type="C"/>                 osinstance.instanceData.variables.numberOfVariables=2;\\[\Sb]
+   <var lb="0" name="x1" type="C"/>                 osinstance.instanceData.variables.var=new Var[2];\\[\Sb]
+</variables>                                        osinstance.instanceData.variables.var[0].lb=0;\\[\Sb]
+                                                    osinstance.instanceData.variables.var[0].name=x0;\\[\Sb]
+                                                    osinstance.instanceData.variables.var[0].type=C;\\[\Sb]
+                                                    osinstance.instanceData.variables.var[1].lb=0;\\[\Sb]
+                                                    osinstance.instanceData.variables.var[1].name=x1;\\[\Sb]
+                                                    osinstance.instanceData.variables.var[1].type=C;
+\end{tabular} }} \medskip\\[\Sb]
+\caption{The {\tt <variables>} element as an {\tt OSInstance} object} \label{figure:osinstancevariables}
+\end{figure}
+
+
+Figure~\ref{figure:osinstancevariables} uses the {\tt Variables} class to provide a closer look at the correspondence 
+between schema and class. On the right, the {\tt Variables} class contains the data member {\tt numberOfVariables} 
+and a sequence of {\tt var} objects of class {\tt Variable}. The {\tt Variable} class has {\tt lb} (double), 
+{\tt ub} (double), {\tt name} (string), {\tt init} (double), and {\tt type} (char) data members. On the left the 
+corresponding XML complexTypes are shown, with arrows indicating the correspondences. The following rules describe 
+the mapping between the OSiL schema and the {\tt OSInstance} class.
+%
+\begin{itemize}
+
+\Titem  Each complexType in an OSiL schema corresponds to a class in {\tt OSInstance.}
+Thus the OSiL schema's complexType {\tt Variables} corresponds to {\tt OSInstance}'s class {\tt Variables}.
+Elements in an actual XML file then correspond to objects in {\tt OSInstance};
+for example, the {\tt <variables>} element that is of type {\tt Variables} in an OSiL file
+corresponds to a {\tt variables} object in class {\tt Variables} of {\tt OSInstance}.
+
+\Titem An attribute or element used in the definition of a {\tt complexType} is a member of the corresponding {\tt OSInstance} class, and the type of the attribute or element matches the type of the member.  In Figure~\ref{figure:osinstancevariables}, for example, {\tt lb} is an attribute of the OSiL {\tt complexType} named {\tt Variable}, and {\tt lb} is a member of the {\tt OSInstance} class {\tt Variable}; both have type {\tt double}.  Similarly, {\tt var} is an element in the definition of the OSiL {\tt complexType} named {\tt Variables}, and {\tt var} is a member of the {\tt OSInstance} class {\tt Variables}; the {\tt var} element has type {\tt Variable} and the {\tt var} member is a {\tt Variable} object.
+
+\Titem A schema sequence corresponds to an array. For example, in Figure~\ref{figure:osinstancevariables} the complexType {\tt Variables} has a sequence of {\tt <var>} elements that are of type {\tt Variable}, and the corresponding {\tt Variables} class has a member that is an array of type {\tt Variable}.
+
+\end{itemize}
+%
+General nonlinear terms are stored in the data structure as {\tt OSExpressionTree} objects, which are the subject of the next section.
+
+     The {\tt OSInstance} class has a collection of {\tt get()}, {\tt set()}, and {\tt calculate()} methods that act as an API for the optimization instance and described in Section~\ref{section:osinstanceAPI}.
+
+
+
+
+\subsubsection{The OSExpressionTree OSnLNode Classes}\label{section:osexpressiontreeclass}
+
+The {\tt OSExpressionTree}\index{OSExpressionTree@{\tt OSExpressionTree}} class provides the in-memory representation
+of the nonlinear terms.  Our design goal is  to allow for efficient parsing of OSiL\index{OSiL} instances,
+while providing an API that meets the needs of diverse solvers.  Conceptually, any nonlinear expression in the
+objective or constraints is represented by a tree.  The expression tree for the nonlinear part of the
+objective function~(\ref{eq:roobj}), for example, has the form illustrated in Figure~\ref{figure:expressiontree}.
+The choice of a data structure to store such a tree --- along with the associated methods of an API --- is a key aspect
+in the design of the {\tt OSInstance} class.
+
+\begin{figure}[ht]
+\centering
+%\includegraphics[scale=0.38]{\figurepath/expressiontree.png}
+\includegraphics[scale=0.38]{./figures/expressiontree.png}
+\caption{Conceptual expression tree for the nonlinear part of the objective (\ref{eq:roobj}).} \label{figure:expressiontree}
+\end{figure}
+
+
+A base abstract class {\tt OSnLNode} is defined and  all of an OSiL file's
+operator and operand elements used in defining a
+nonlinear expression are extensions of the base element type {\tt OSnLNode}. There is an element type {\tt OSnLNodePlus}, for example, that
+extends {\tt OSnLNode}; then in an OSiL instance
+file, there are {\tt <plus>} elements that are of type {\tt
+OSnLNodePlus}.   Each {\tt OSExpressionTree} object contains a pointer to an {\tt OSnLNode} object that is the root of the corresponding expression tree.  To every element that extends the {\tt OSnLNode} type in an OSiL instance file, there corresponds a class that derives from the {\tt OSnLNode} class in an {\tt OSInstance} data structure.  Thus we can construct an expression tree of homogenous nodes, and methods that operate on the expression tree to calculate function values, derivatives, postfix notation, and the like do not require switches or complicated logic.
+
+
+\begin{figure}[ht]
+\centering
+   \small {\obeyspaces\let =\
+\fbox{\tt\begin{tabular}{@{}l@{}}
+   double OSnLNodePlus::calculateFunction(double *x)\{\\[\Sb]
+      m\_dFunctionValue = \\[\Sb]
+         m\_mChildren[0]->calculateFunction(x) +\\[\Sb]
+         m\_mChildren[1]->calculateFunction(x);\\[\Sb]
+      return m\_dFunctionValue;\\[\Sb]
+   \} //calculateFunction\\[\Sb]
+\end{tabular} }} \medskip
+\caption{The function calculation method for the {\tt plus} node class with polymorphism}
+   \vspace{-8pt} \label{figure:calcfunction}
+\end{figure}
+
+
+    The {\tt OSInstance} class has a variety of {\tt calculate()} methods, based on two pure virtual functions in the {\tt OSInstance} class.  The first of these, {\tt calculateFunction()}, takes an array of {\tt double} values corresponding to decision variables, and evaluates the expression tree for those values.  Every class
+that extends {\tt OSnLNode} must implement this method.  As an example, the {\tt calculateFunction} method for the {\tt OSnLNodePlus} class is shown in Figure~\ref{figure:calcfunction}.  Because the OSiL instance file must be validated against its schema, and in the schema each {\tt <OSnLNodePlus>} element is specified to have exactly two child elements, this {\tt calculateFunction} method can assume that there are
+exactly two children of the node that it is operating on.  The use of polymorphism and recursion makes adding new operator elements easy; it is simply a matter of adding a new class and implementing the {\tt
+calculateFunction()} method for it.
+
+
+
+Although in the OSnL schema, there are 200+ nonlinear operators, only the following {\tt  OSnLNode} classes are currently supported in our implementation.
+
+\begin{itemize}
+\item OSnLNodeVariable
+\item OSnLNodeTimes
+\item OSnLNodePlus
+\item OSnLNodeSum
+\item OSnLNodeMinus
+\item OSnLNodeNegate
+\item OSnLNodeDivide
+\item OSnLNodePower
+\item OSnLNodeProduct
+\item OSnLNodeLn
+\item OSnLNodeSqrt
+\item OSnLNodeSquare
+\item OSnLNodeSin
+\item OSnLNodeCos
+\item OSnLNodeExp
+\item OSnLNodeIf
+\item OSnLNodeAbs
+\item OSnLNodeMax
+\item OSnLNodeMin
+\item OSnLNodeE
+\item OSnLNodePI
+\item OSnLNodeAllDiff
+\end{itemize}
+\index{OSInstance@{\tt OSInstance}|)}
+
+
+
+\subsubsection{The OSOption Class}\label{section:osoptionclass}
+
+The OSOption\index{OSOption@{\tt OSOption}|(} class is the in-memory representation of the options associated with a
+particular optimization task. It is another key
+class for users of the OS project. This class has an API defined by a collection of {\tt get()} methods for
+extracting various components (such as initial values for decision variables, solver options, job parameters, etc.), 
+and a collection of {\tt set()} methods for modifying or generating an option instance. The relationship between
+in-memory classes and objects on one hand and complexTypes and elements of the OSoL schema follow the same mapping rules
+laid out in section~\ref{section:mappingrules}.
+\index{OSOption@{\tt OSOption}|)}
+
+\subsection{OSModelInterfaces}\label{section:osmodelinterfaces}
+
+This part of the OS library is designed to help integrate the OS standards with other standards and modeling systems.
+
+\subsubsection{Converting MPS Files}
+
+The MPS standard\index{MPS format|(} is still a popular format for representing linear and integer programming problems.
+In {\tt OSModelInterfaces,} there is a class {\tt OSmps2osil}\index{OSmps2osil@{\tt OSmps2osil}|(} that can be used
+to convert files in MPS format into the OSiL\index{OSiL} standard. It is used as follows.
+
+\begin{verbatim}
+OSmps2osil *mps2osil = NULL;
+DefaultSolver *solver  = NULL;
+solver = new CoinSolver();
+solver->sSolverName = "cbc";
+mps2osil = new OSmps2osil(  mpsFileName);
+mps2osil->createOSInstance() ;
+solver->osinstance = mps2osil->osinstance;
+solver->solve();
+\end{verbatim}
+
+The {\tt OSmps2osil} class constructor takes a string which should be the
+file name of the instance in MPS format. The constructor then uses the
+{\tt CoinUtils}\index{COIN-OR projects!CoinUtils@{\tt CoinUtils}} library to read and parse the MPS file.  The class method {\tt createOSInstance} then builds  an in-memory {\tt osinstance} object  that can be used by a solver.
+\index{OSmps2osil@{\tt OSmps2osil}|)}\index{MPS format|)}
+
+\subsubsection{Converting AMPL nl Files}\label{section:nl2osil}
+
+AMPL is a popular modeling language that saves  model instances in the AMPL nl format\index{AMPL nl format|(}.
+The {\tt OSModelInterfaces} library provides a class, {\tt OSnl2osil}\index{OSnl2osil@{\tt OSnl2osil}} for reading
+in an nl file and creating a
+corresponding in-memory  {\tt osinstance}\index{OSInstance@{\tt OSInstance}} object. It is used as follows.
+
+\begin{verbatim}
+OSnl2osil *nl2osil = NULL;
+DefaultSolver *solver  = NULL;
+solver = new LindoSolver();
+nl2osil = new OSnl2osil( nlFileName);
+nl2osil->createOSInstance() ;
+solver->osinstance = nl2osil->osinstance;
+solver->solve();
+\end{verbatim}
+
+
+The {\tt OSnl2osil} class works much like the {\tt OSmps2osil}\index{OSmps2osil@{\tt OSmps2osil}} class. The
+{\tt OSnl2osil} class constructor takes a string which should be the file name of the instance in nl format. The constructor then uses the AMPL ASL library routines to read and parse the nl file. The class method {\tt createOSInstance} then builds  an in-memory {\tt osinstance} object  that can be used by a solver.
+
+In Section~\ref{section:amplclient}  we describe the {\tt OSAmplClient}\index{OSAmplClient@{\tt OSAmplClient}}
+executable that acts as a ``solver'' for AMPL. The {\tt OSAmplClient} uses the {\tt OSnl2osil} class to convert
+the instance in nl format to OSiL\index{OSiL} format before calling a solver either locally or remotely.
+\index{AMPL nl format|)}
+
+
+\subsection{OSParsers}\label{section:osparsers}
+
+The OSParsers component of the OS library contains reentrant parsers that  read OSiL\index{OSiL|(} and OSrL\index{OSrL}
+strings and build, respectively, in-memory OSInstance\index{OSInstance@{\tt OSInstance}} and 
+OSResult\index{OSResult@{\tt OSResult}}  objects.
+
+
+The OSiL parser is invoked through an {\tt OSiLReader} object as illustrated below. Assume {\tt osil} is a string with the problem instance.
+\begin{verbatim}
+OSiLReader *osilreader = NULL;
+OSInstance *osinstance = NULL;
+osilreader = new OSiLReader();
+osinstance = osilreader->readOSiL( &osil);
+\end{verbatim}
+The {\tt  readOSiL} method  has a single argument which is a pointer to a string. The {\tt  readOSiL} method then calls an underlying method {\tt yygetOSInstance} that parses the OSiL string. The major components of the OSiL schema  recognized by the parser are
+\begin{verbatim}
+<instanceHeader>
+<variables>
+<objectives>
+<constraints>
+<linearConstraintCoefficients>
+<quadraticCoefficients>
+<nonlinearExpressions>
+\end{verbatim}
+There are other components in the OSiL\index{OSiL|)} schema, but they are not yet implemented.
+In most large-scale applications the {\tt <variables>,} {\tt <objectives>}, {\tt <constraints>}, and {\tt <linearConstraintCoefficients>}
+will comprise the bulk of the instance memory.  Because of this, we have ``hard-coded'' the OSiL parser
+to read these specific elements very efficiently.
+The parsing of the {\tt <quadraticCoefficients>} and {\tt <nonlinearExpressions>} is done using code generated
+by {\tt flex}\index{flex@{\tt flex}} and {\tt bison}\index{bison@{\tt bison}}. In the {\tt OSParsers}  the file  
+{\tt OSParseosil.l} is used by {\tt flex}\index{flex@{\tt flex}} to generate {\tt OSParseosil.cpp} and the file 
+{\tt OSParseosil.y} is used by {\tt bison}\index{bison@{\tt bison}} to generate {\tt OSParseosil.tab.cpp}.
+In {\tt OSParseosil.l} we use the {\tt reentrant} option and in {\tt OSParseosil.y} we use the
+{\tt pure-parser} option to generate reentrant parsers. The {\tt OSParseosil.y} file  contains both our
+``hard-coded'' parser and the grammar rules for the  {\tt <quadraticCoefficients>} and
+{\tt <nonlinearExpressions>} sections.
+We are currently using GNU Bison version 3.2 and {\tt flex} 2.5.33.
+
+The typical OS user will have no need to edit either {\tt OSParseosil.l} or {\tt OSParseosil.y} and therefore will not have to worry about running either {\tt flex} or {\tt bison} to generate the parsers. The generated parser code from {\tt flex} and {\tt bison} is distributed with the project and works on all of the platforms listed in Table~\ref{table:testedplatforms}.  If the user does edit either {\tt parseosil.l} or {\tt parseosil.y} then {\tt parseosil.cpp} and {\tt parseosil.tab.cpp} need to be regenerated with {\tt flex} and {\tt bison}. If these programs are present, in the OS directory  execute
+\begin{verbatim}
+make  run_parsers
+\end{verbatim}
+
+The files {\tt OSParseosrl.l} and {\tt OSParseosrl.y} are used by {\tt flex} and {\tt bison} to  generate the code 
+{\tt OSParseosrl.cpp} and {\tt OSParseosrl.tab.cpp} for parsing strings in OSrL format. The comments made above about the 
+OSiL parser apply to the OSrL parser. The OSrL parser, like the OSiL parser, is invoked using an {\tt OSrL} reading object.
+This is illustrated below ({\tt osrl} is a string in OSrL format).
+\begin{verbatim}
+OSrLReader *osrlreader = NULL;
+osrlreader = new OSrLReader();
+OSResult *osresult = NULL;
+osresult = osrlreader->readOSrL( osrl);
+\end{verbatim}
+
+The OSoL parser follows the same layout and rules.
+The files {\tt OSParseosol.l} and {\tt OSParseosol.y} are used by {\tt flex} and {\tt bison} to  generate the code 
+{\tt OSParseosol.cpp} and {\tt OSParseosol.tab.cpp} for parsing strings in OSoL format. The OSoL parser
+is invoked using an {\tt OSoL} reading object.
+This is illustrated below ({\tt osol} is a string in OSoL format).
+\begin{verbatim}
+OSoLReader *osolreader = NULL;
+osolreader = new OSoLReader();
+OSOption *osoption = NULL;
+osoption = osolreader->readOSoL( osol);
+\end{verbatim}
+
+
+There is also a lexer {\tt OSParseosss.l} for tokenizing the command line for the OSSolverService executable described in Section~\ref{section:ossolverservice}.
+
+
+
+\subsection{OSSolverInterfaces}\label{section:ossolverinterfaces}
+
+
+The {\tt OSSolverInterfaces} library is designed to facilitate linking the OS library with various solver APIs.
+We first describe how to take a problem instance in OSiL\index{OSiL} format and connect to a solver 
+that has a COIN-OR OSI interface. See the OSI project \url{www.projects.coin-or.org/Osi}.
+We then describe hooking to the COIN-OR nonlinear code {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}}. 
+See \url{www.projects.coin-or.org/Ipopt}.
+\ifknitro
+Finally we describe hooking to two commercial solvers Knitro\index{Knitro} and LINDO\index{LINDO}.
+\else
+Finally we describe hooking to the commercial solver LINDO\index{LINDO}.
+\fi
+The OS library has been tested with the following solvers using the Osi Interface.
+
+\begin{itemize}
+\item Cbc
+\item Clp
+\item Cplex
+\item DyLP
+\item Glpk
+\item SYMPHONY
+\item Vol
+\end{itemize}
+
+In the {\tt OSSolverInterfaces} library there is an abstract class
+{\tt DefaultSolver} that has the following key members:
+
+\begin{verbatim}
+std::string osil;
+std::string osol;
+std::string osrl;
+OSInstance *osinstance;
+OSResult  *osresult;
+\end{verbatim}
+and the pure virtual function
+\begin{verbatim}
+virtual void solve() = 0 ;
+\end{verbatim}
+In order to use a solver through the COIN-OR {\tt Osi} interface it is
+necessary to create an object in the {\tt CoinSolver} class which inherits
+from the {\tt DefaultSolver} class and implements the appropriate
+{\tt solve()} function.  We illustrate with the {\tt Clp} solver.
+
+\begin{verbatim}
+DefaultSolver *solver  = NULL;
+solver = new CoinSolver();
+solver->m_sSolverName = "clp";
+\end{verbatim}
+
+Assume that the data file containing the problem has been read into
+the string {\tt osil} and the solver options are in the string {\tt osol}.
+Then the {\tt Clp} solver is invoked as follows.
+
+\begin{verbatim}
+solver->osil = osil;
+solver->osol = osol;
+solver->solve();
+\end{verbatim}
+
+Finally, get the solution in {\tt OSrL} format as follows
+
+\begin{verbatim}
+cout << solver->osrl << endl;
+\end{verbatim}
+
+\ifknitro   %--------------------------------------------------------------------------
+Even though LINDO and Knitro are commercial solvers and do not have a COIN-OR {\tt Osi} interface, these solvers are
+used in exactly the same manner as a COIN-OR solver. For example, to invoke the LINDO solver we do the following.
+
+\begin{verbatim}
+solver = new LindoSolver();
+\end{verbatim}
+
+Similarly for Knitro and Ipopt. In the case of  Knitro, the {\tt KnitroSolver} class inherits from both
+{\tt DefaultSolver} class and the Knitro {\tt NlpProblemDef} class. See {\tt\UrlKnitroMan} for more information 
+on the Knitro solver C++ implementation and the {\tt NlpProblemDef} class.  Similarly, for Ipopt 
+\else
+
+Commercial solvers like LINDO\index{LINDO} do not have a COIN-OR {\tt Osi} interface, but it is possible to
+write wrappers so that they can be used in exactly the same manner as a COIN-OR solver. For example, to invoke the
+LINDO\index{LINDO} solver we do the following.
+
+\begin{verbatim}
+solver = new LindoSolver();
+\end{verbatim}
+
+A similar call is used for {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}}. In this case, 
+\fi         %--------------------------------------------------------------------------
+the {\tt IpoptSolver} class inherits from both the {\tt DefaultSolver} class and the Ipopt {\tt TNLP} class. See 
+
+\medskip
+\noindent{\tt\UrlIpoptDoc}
+\medskip
+
+\noindent for more information on the Ipopt solver C++ implementation and the {\tt TNLP} class.
+
+
+In the examples above,  the problem instance was assumed to be read from a file into the string {\tt osil}
+and then into the class member {\tt solver->osil.} However, everything can be done entirely in memory.
+For example, it is possible to use the {\tt OSInstance}\index{OSInstance@{\tt OSInstance}} class to create
+an in-memory problem representation and give this representation directly to a solver class that inherits
+from {\tt DefaultSolver}. The class member to use is {\tt osinstance.} This is illustrated in the example
+given in Section~\ref{section:exampleOSInstanceGeneration}.
+
+
+\subsection{OSUtils}
+
+The OSUtils component of the OS library contains utility codes. For example, the {\tt FileUtil} class contains
+useful methods for reading files into {\tt string} or {\tt char*} and writing files from {\tt string} and {\tt char*}.
+The {\tt OSDataStructures} class holds other classes for things such as sparse vectors, sparse Jacobians, and sparse
+Hessians. The {\tt MathUtil} class contains a method for converting between sparse matrices in row and column major form.%
+\index{OSLibrary@{\tt OSLibrary}|)}
+
+
+\section{The  OSInstance API}\label{section:osinstanceAPI}
+
+The OSInstance API can be used to:
+
+\begin{itemize}
+
+\item  get information about model parameters, or convert the {\tt OSExpressionTree} into a prefix or postfix
+representation through a collection  of {\tt get} methods,
+
+\item modify, or even create an instance from scratch, using a number of {\tt set} methods,
+
+\item provide information to solvers that require function evaluations, Jacobian and Hessian sparsity patters,  function gradient evaluations, and Hessian evaluations.
+
+\end{itemize}
+
+
+
+\subsection{Get Methods}
+
+The {\tt get()} methods are used by other classes to access data in an existing {\tt OSInstance} object or get an expression tree representation of an instance in postfix or prefix format.   Assume {\tt osinstance} is an object in the {\tt OSInstance} class created as illustrated in Figure~\ref{figure:creatingosinstanceobject}. Then, for example,
+\begin{verbatim}
+osinstance->getVariableNumber();
+\end{verbatim}
+will return an integer which is the number of variables in the problem,
+\begin{verbatim}
+osinstance->getVariableTypes();
+\end{verbatim}
+will return a {\tt char} pointer to the variable types ({\tt C} for continuous, {\tt B} for binary, and {\tt I} for general integer),
+\begin{verbatim}
+getVariableLowerBounds();
+\end{verbatim}
+will  return a {\tt double} pointer to the lower bound on each variable. There are similar {\tt get} methods for the constraints. There are numerous {\tt get} methods for the data in the {\tt <linearConstraintCoefficients>}  element, the {\tt <quadraticCoefficients>} element, and the {\tt <nonlinearExpressions>} element.
+
+When an {\tt osinstance} object is created, it is stored as an expression tree in an {\tt OSExpressionTree} object. However, some solver APIs (e.g., LINDO) may take the data in a different format such as postfix and prefix. There are methods to return the data in either postfix or prefix format.
+
+First define a {\tt vector} of pointers to {\tt OSnLNode} objects.
+\begin{verbatim}
+std::vector<OSnLNode*> postfixVec;
+\end{verbatim}
+then get the expression tree for the objective function (index = -1) as a postfix vector of nodes.
+\begin{verbatim}
+postfixVec = osinstance->getNonlinearExpressionTreeInPostfix( -1);
+\end{verbatim}
+If, for example, the {\tt osinstance} object was the in-memory representation of   the instance illustrated in  Section~\ref{section:rosenbrockXML} then the code
+\begin{verbatim}
+for (i = 0 ; i < n; i++){
+    cout << postfixVec[i]->snodeName << endl;
+}
+\end{verbatim}
+will produce
+\begin{verbatim}
+number
+variable
+minus
+number
+power
+number
+variable
+variable
+number
+power
+minus
+number
+power
+times
+plus
+\end{verbatim}
+The method, {\tt processNonlinearExpressions()} in the {\tt LindoSolver} class in the {\tt OSSolverInterfaces} library component illustrates using a postfix vector of {\tt OSnLNode} objects to build a Lindo model instance.
+
+
+\subsection{Set Methods}
+
+The {\tt set} methods can be used to build an in-memory {\tt OSInstance}
+ object. A code example of how to do this is in Section~\ref{section:exampleOSInstanceGeneration}.
+
+\subsection{Calculate Methods}
+
+The calculate methods are described in Section~\ref{section:ad}.
+
+\section{The OS Algorithmic Differentiation Implementation}\label{section:ad}
+
+The OS library provides a set of {\tt calculate} methods for calculating  function values, gradients, and Hessians.
+The {\tt calculate} methods are part of the {\tt OSInstance} class and are designed to work with solver APIs.
+
+
+
+\subsection{Algorithmic Differentiation:  Brief Review}\label{section:adtheory}
+
+First and second derivative calculations are made using 
+{\it algorithmic differentiation}\index{Algorithmic differentiation|(}.
+Here we provide a brief review of this topic.  An excellent reference on algorithmic differentiation
+is Griewank\index{Griewank, A.@{\it Griewank, A.}}~\cite{griewank2000}.  The OS package uses the COIN-OR project 
+CppAD\index{COIN-OR projects!CppAD@{\tt CppAD}|(} ({\tt\UrlCppad}), which  is also an excellent resource with extensive  
+documentation and information about algorithmic differentiation.
+See the documentation written by  Brad Bell\index{Bell, Bradley M.@{\it Bell, Bradley M.}}~\cite{bell2007}.    
+The development here is from the CppAD documentation.  
+Consider the function $f:X \rightarrow Y$ from $ \mathbb{R}^{n}$ to $ \mathbb{R}^{m}$.
+(That is, $Y = f(X).$)
+
+Express the input vector as a function of~$t$ by
+\begin{eqnarray}
+X(t) = x^{(0)} +  x^{(1)} t +  x^{(2)} t^{2}
+\end{eqnarray}
+where $ x^{(0)},$ $x^{(1)},$ and $x^{(2)}$ are vectors in $ \mathbb{R}^{n}$  and $t$ is a scalar.  By judiciously choosing $x^{(0)}, x^{(1)},$ and $x^{(2)}$ we will be able to derive many different expressions of interest.  Note first that
+\begin{eqnarray*}
+X(0) &=& x^{(0)}, \\
+X^{\prime}(0) &=& x^{(1)}, \\
+X^{\prime \prime }(0) &=& 2 x^{(2)}.
+\end{eqnarray*}
+In general,  $x^{(k)}$ corresponds to the $kth$ order Taylor coefficient, i.e.,
+\begin{eqnarray}
+x^{(k)} = \frac{1}{k!}X^{(k)}(0), \quad k = 0, 1, 2.  \label{eq:xTaylorCoeff}
+\end{eqnarray}
+Then $Y(t) = f(X(t))$ is a function from $ \mathbb{R}^{1}$ to $ \mathbb{R}^{m}$ and it is expressed in terms of its Taylor series expansion as
+\begin{eqnarray}
+Y(t)  = y^{(0)} +  y^{(1)} t +  y^{(2)} t^{2} + o(t^{3}),
+\end{eqnarray}
+where
+\begin{eqnarray}
+y^{(k)} = \frac{1}{k!} Y^{(k)}(0), \quad k = 0, 1, 2.  \label{eq:yTaylorCoeff}
+\end{eqnarray}
+
+
+
+The following are shown in Bell~\cite{bell2007}.
+\begin{eqnarray}
+y^{(0)} = f(x^{(0)}). \label{eq:forward0Result}
+\end{eqnarray}
+Let $e^{(i)}$ denote the $ith$ unit vector.  If $x^{(1)} = e^{(i)}$ then $y^{(1)}$ is equal to the $ith$ column of the Jacobian matrix of $f(x)$ evaluated at $x^{(0)}.$ That is
+\begin{eqnarray}
+y^{(1)} = \D{f}{x_{i}}(x^{(0)}).  \label{eq:forward1Result}
+\end{eqnarray}
+
+In addition, if $x^{(1)} = e^{(i)}$ and $x^{(2)} = 0$ then for function $f_{k}(x),$ (the $kth$ component of $f$)
+\begin{eqnarray}
+y^{(2)}_{k} =  \frac{1}{2} \DD{f_{k}(x^{(0)})}{x_{i}}{x_{i}}.  \label{eq:forward2Resulta}
+\end{eqnarray}
+
+In order to evaluate the mixed partial derivatives, one can instead set $x^{(1)} = e^{(i)} + e^{(j)}$ and $x^{(2)} = 0.$    This gives for function $f_{k}(x),$
+\begin{eqnarray}
+y^{(2)}_{k} =  \frac{1}{2} \left( \DD{f_{k}(x^{(0)})}{x_{i}}{x_{i}}  +   \DD{f_{k}(x^{(0)})}{x_{i}}{x_{j}} 
++  \DD{f_{k}(x^{(0)})}{x_{j}}{x_{i}} +  \DD{f_{k}(x^{(0)})}{x_{j}}{x_{j}}  \right), \label{eq:forward2Resultb}
+\end{eqnarray}
+or, expressed in terms of the mixed partials,
+\begin{eqnarray}
+  \DD{f_{k}(x^{(0)})}{x_{i}}{x_{j}}  = y_{k}^{(2)}  -  \frac{1}{2} \left( \DD{f_{k}(x^{(0)})}{x_{i}}{x_{i}}  
++  \DD{f_{k}(x^{(0)})}{x_{j}}{x_{j}}  \right). \label{eq:forward2Resultc}
+\end{eqnarray}
+\index{Algorithmic differentiation|)}\index{COIN-OR projects!CppAD@{\tt CppAD}|)}
+
+
+
+
+\subsection{Using OSInstance Methods: Low Level Calls}\label{section:lowlevelADcalls}
+
+  The code snippets used in this section  are from the example code {\tt algorithmicDiffTest.cpp} in the
+{\tt algorithmicDiffTest} folder in the {\tt examples} folder.  The  code is based on the following example.
+
+\begin{alignat}{2}
+& \mbox{Minimize} & \quad  x_{0}^{2} + 9x_{1} \label{eq:adobj}\\
+& \mbox{s.t.} & 33 - 105 + 1.37 x_{1} + 2x_{3} + 5 x_{1} &\le 10  \label{eq:adeq0}\\
+& & \ln(x_{0} x_{3}) + 7x_{2} &\ge 10 \label{eq:adeq1} \\
+& & x_{0}, x_{1}, x_{2}, x_{3} &\ge 0 \label{eq:adeq2}
+\end{alignat}
+
+The OSiL representation of the instance  (\ref{eq:adobj})--(\ref{eq:adeq2}) is given in Appendix~\ref{section:adexample}.
+This example is designed to illustrate several features of OSiL. Note that in constraint  (\ref{eq:adeq0}) the
+constant~33 appears in the {\tt <con>} element corresponding to this constraint
+and the constant~105 appears as a {\tt <number>} OSnL node in the {\tt <nonlinearExpressions>} section.
+This distinction is important, as it will lead to different treatment by the code as documented below.
+%There are no nonlinear terms in the instance that involve variable $x_{1}.$
+Variables $x_{1}$ and $x_{2}$  do not appear in any nonlinear terms.
+The terms $5x_{1}$ in  (\ref{eq:adeq0}) and $7 x_{2}$ in (\ref{eq:adeq1}) are expressed in the
+{\tt <objectives>} and {\tt <linearConstraintCoefficients>} sections, respectively, and will again
+receive special treatment by the code. However, the term $1.37x_1$ in (\ref{eq:adeq0}),
+along with the term $2x_3$, is expressed in the {\tt <nonlinearExpressions>} section,
+%Variables $x_{1}$ and $x_{2}$  do not appear in any nonlinear terms.
+%However, in the OSInstance API, variable $x_{1}$  appears in the   {\tt <nonlinearExpressions>} section;
+hence $x_1$  is treated as a nonlinear variable for purposes of algorithmic differentiation.
+Variable $x_{2}$ never appears in the  {\tt <nonlinearExpressions>} section and is therefore treated as a linear variable and not used  in any algorithmic differentiation calculations.
+Variables that do not appear in the {\tt <nonlinearExpressions>} are never part of the algorithmic differentiation calculations.
+
+Ignoring the nonnegativity constraints, instance (\ref{eq:adobj})--(\ref{eq:adeq2})  defines a mapping  
+from $ \mathbb{R}^{4}$ to~$\mathbb{R}^{3}$:
+
+
+
+
+\begin{eqnarray}
+    \left[
+        \begin{array}{r}
+            x_0^2+9x_1 \\
+            33 - 105 + 1.37x_1 + 2x_3 + 5x_1 \\
+            \ln (x_0x_3) + 7x_2
+        \end{array}
+    \right]
+&=&
+    \left[
+        \begin{array}{r}
+            9x_1 \\
+            33 + 5x_1 \\
+            7x_2
+        \end{array}
+    \right]
++
+    \left[
+        \begin{array}{r}
+            x_0^2 \\
+            - 105 + 1.37x_1 + 2x_3  \\
+            \ln (x_0x_3)
+        \end{array}
+    \right]
+  \nonumber  \\
+  &=&  \left[
+        \begin{array}{r}
+            9x_1 \\
+            33 + 5x_1 \\
+            7x_2
+        \end{array}
+    \right]
++
+    \left[
+        \begin{array}{r}
+            f_1(x) \\
+            f_2(x) \\
+            f_3(x)
+        \end{array}  \label{eq:definef1}
+    \right],
+\end{eqnarray}
+
+\begin{eqnarray}
+\hbox{\rm where}\ f(x) :=
+%
+    \left[
+        \begin{array}{r}
+            f_1(x) \\
+            f_2(x) \\
+            f_3(x)
+        \end{array}   \label{eq:definef}
+    \right].
+\end{eqnarray}
+
+
+The OSiL representation for the instance  in  (\ref{eq:adobj})--(\ref{eq:adeq2})  is read into an in-memory
+OSInstance object as follows (we assume that {\tt osil} is a {\tt string} containing the OSiL instance)
+\begin{verbatim}
+osilreader = new OSiLReader();
+osinstance = osilreader->readOSiL( &osil);
+\end{verbatim}
+There is a method in the {\tt OSInstance} class, {\tt initForAlgDiff()} that is used to initialize the nonlinear data structures.  A call to this method
+\begin{verbatim}
+osinstance->initForAlgDiff( );
+\end{verbatim}
+will generate a map of the indices of the nonlinear variables. This is critical because the algorithmic differentiation only operates on variables that appear in the {\tt <nonlinearExpressions>} section.  An example of this map follows.
+\begin{verbatim}
+std::map<int, int> varIndexMap;
+std::map<int, int>::iterator posVarIndexMap;
+varIndexMap = osinstance->getAllNonlinearVariablesIndexMap( );
+for(posVarIndexMap = varIndexMap.begin(); posVarIndexMap
+    != varIndexMap.end(); ++posVarIndexMap){
+    std::cout <<  "Variable Index = "   << posVarIndexMap->first  << std::endl ;
+}
+\end{verbatim}
+The variable indices listed are 0, 1, and~3. Variable~2 does not appear in the {\tt <nonlinearExpressions>} section and
+is not included in {\tt varIndexMap}. That is, the function $f$ in~(\ref{eq:definef}) will be considered as a map from 
+$\mathbb{R}^{3}$ to~$\mathbb{R}^{3}$.
+
+Once the nonlinear structures are initialized it is possible to take derivatives using algorithmic differentiation.
+Algorithmic differentiation is done using either a forward or reverse sweep through an expression tree (or operation
+sequence) representation of~$f$.  The two key {\tt public} algorithmic differentiation  methods in the {\tt OSInstance}%
+\index{OSInstance@{\tt OSInstance}} class are {\tt forwardAD} and {\tt reverseAD}.
+These are actually  generic ``wrappers'' around the corresponding CppAD methods with the same signature.
+This keeps the OS API  public methods independent of any underlying algorithmic differentiation package.
+
+The {\tt forwardAD} signature is
+\begin{verbatim}
+std::vector<double> forwardAD(int k, std::vector<double> vdX);
+\end{verbatim}
+where {\tt k} is the highest order Taylor coefficient of $f$ to be returned,  $\tt vdX$ is a vector of doubles in 
+$ \mathbb{R}^{n},$ and the function return is a vector of doubles in~$\mathbb{R}^{m}.$  Thus, {\tt k} corresponds 
+to the $k$ in Equations  (\ref{eq:xTaylorCoeff}) and (\ref{eq:yTaylorCoeff}),  where {\tt vdX} corresponds to the $x^{(k)}$ in Equation (\ref{eq:xTaylorCoeff}), and the $y^{(k)}$ in Equation (\ref{eq:yTaylorCoeff}) is the vector in range space returned by the call to {\tt  forwardAD}.    For example, by  Equation (\ref{eq:forward0Result}) the following call will evaluate each component function defined in (\ref{eq:definef}) corresponding only to the nonlinear part of (\ref{eq:definef1}) -- the part denoted by $f(x)$.
+\begin{verbatim}
+funVals = osinstance->forwardAD(0, x0);
+\end{verbatim}
+Since there are three components in the vector defined by  (\ref{eq:definef}), the return value  {\tt funVals} will have three components. For an input vector,
+\begin{verbatim}
+x0[0] = 1; // the value for variable x0 in function f
+x0[1] = 5; // the value for variable x1 in function f
+x0[2] = 5; // the value for variable x3 in function f
+\end{verbatim}
+the values returned by {\tt osinstance->forwardAD(0, x0)}  are 1, -63.15, and 1.6094, respectively.
+The Jacobian of the example in (\ref{eq:definef}) is
+
+\begin{eqnarray}
+J =
+\left[
+\begin{array}{rrrr}
+2x_{0} &9.00&0.00&0.00   \\
+0.00&6.37&0.00&2.00 \\
+1/x_{0}&0.00&7.00&1/x_{3}
+\end{array}
+\right] \label{eq:jac}
+\end{eqnarray}
+and the Jacobian $J_f$ of the nonlinear part is
+%
+\begin{equation}
+    J_f = \left[
+        \begin{array}{ccc}
+            2x_0 & 0.00 & 0.00 \\
+            0.00  & 1.37 & 2.00 \\
+            1/x_0 & 0.00 & 1/x_3
+        \end{array}
+    \right].  \label{eq:jac2}
+\end{equation}
+When $x_{0} = 1,$ $x_{1} = 5,$ $x_{2} = 10,$ and $x_{3} = 5$ the Jacobian $J_f$ is
+\begin{eqnarray}
+    J_f = \left[
+        \begin{array}{ccc}
+            2.00 & 0.00 & 0.00 \\
+            0.00 & 1.37 & 2.00 \\
+            1.00 & 0.00 & 0.20
+        \end{array}
+    \right]. \label{eq:jac3}
+\end{eqnarray}
+A forward sweep with $k = 1$ will calculate the Jacobian column-wise.  See~(\ref{eq:forward1Result}).  
+The following code will return column 3 of the Jacobian (\ref{eq:jac3}) which corresponds to the nonlinear variable~$x_{3}$.
+\begin{verbatim}
+x1[0] = 0;
+x1[1] = 0;
+x1[2] = 1;
+osinstance->forwardAD(1, x1);
+\end{verbatim}
+
+Now calculate second derivatives.  To illustrate we use the results in (\ref{eq:forward2Resulta})-(\ref{eq:forward2Resultc}) and calculate
+\begin{eqnarray*}
+\DD{f_{k}(x^{(0)})}{x_{0}}{x_{3}} \quad k = 1, 2, 3.
+\end{eqnarray*}
+Variables $x_{0}$ and $x_{3}$ are the first and third nonlinear variables so by  (\ref{eq:forward2Resultb}) the $x^{(1)}$ should be the sum of the $e^{(1)}$ and $e^{(3)}$ unit vectors and used in the  first-order forward sweep calculation.
+\begin{verbatim}
+x1[0] = 1;
+x1[1] = 0;
+x1[2] = 1;
+osinstance->forwardAD(1, x1);
+\end{verbatim}
+Next set $x^{(2)} = 0$ and do a second-order forward sweep.
+\begin{verbatim}
+std::vector<double> x2( n);
+x2[0] = 0;
+x2[1] = 0;
+x2[2] = 0;
+osinstance->forwardAD(2, x2);
+\end{verbatim}
+This call returns the vector of  values
+\begin{eqnarray*}
+y_{1}^{(2)}  = 1, \quad y_{2}^{(2)}  = 0, \quad y_{3}^{(2)} = -0.52.
+\end{eqnarray*}
+By inspection of (\ref{eq:definef1}) (or by appropriate calls to {\tt osinstance->forwardAD} --- not shown here),
+\begin{eqnarray*}
+\DD{f_{1}(x^{(0)})}{x_{0}}{x_{0}} &=&  2, \\
+\DD{f_{2}(x^{(0)})}{x_{0}}{x_{0}} &=&  0, \\
+\DD{f_{3}(x^{(0)})}{x_{0}}{x_{0}} &=& -1, \\
+\DD{f_{1}(x^{(0)})}{x_{3}}{x_{3}} &=&  0, \\
+\DD{f_{2}(x^{(0)})}{x_{3}}{x_{3}} &=&  0, \\
+\DD{f_{3}(x^{(0)})}{x_{3}}{x_{3}} &=& -0.04.
+\end{eqnarray*}
+Then by (\ref{eq:forward2Resultc}),
+\begin{eqnarray*}
+\DD{f_{1}(x^{(0)})}{x_{0}}{x_{3}} &=&  y_{1}^{(2)}  -  \frac{1}{2} \left( \DD{f_{1}(x^{(0)})}{x_{0}}{x_{0}}  +  \DD{f_{k}(x^{(0)})}{x_{3}}{x_{3}}  \right) = 1   -    \frac{1}{2}(2 +  0) = 0, \\
+\DD{f_{2}(x^{(0)})}{x_{0}}{x_{3}} &=&  y_{2}^{(2)}  -  \frac{1}{2} \left( \DD{f_{2}(x^{(0)})}{x_{0}}{x_{0}}  +  \DD{f_{k}(x^{(0)})}{x_{3}}{x_{3}}  \right) = 0   -    \frac{1}{2}(0 +  0) = 0, \\
+\DD{f_{3}(x^{(0)})}{x_{0}}{x_{3}} &=&  y_{3}^{(2)}  -  \frac{1}{2} \left( \DD{f_{3}(x^{(0)})}{x_{0}}{x_{0}}  +  \DD{f_{k}(x^{(0)})}{x_{3}}{x_{3}}  \right) = -0.52 -  \frac{1}{2}(-1 - 0.04) = 0.
+\end{eqnarray*}
+Making all of the first and second derivative calculations using forward sweeps is most effective when the number of rows exceeds the number of variables.
+
+
+The {\tt reverseAD} signature is
+\begin{verbatim}
+std::vector<double> reverseAD(int k, std::vector<double> vdlambda);
+\end{verbatim}
+where {\tt vdlambda} is a vector of Lagrange multipliers.  This method returns a vector in the range space. If a reverse sweep of order $k$ is called, a forward sweep of all orders  through  $k -1$ must have been made prior to the call.
+
+\subsubsection{First Derivative Reverse Sweep Calculations}
+
+In order to calculate first derivatives execute the following sequence of calls.
+\begin{verbatim}
+x0[0] = 1;
+x0[1] = 5;
+x0[2] = 5;
+std::vector<double> vlambda(3);
+vlambda[0] = 0;
+vlambda[1] = 0;
+vlambda[2] = 1;
+osinstance->forwardAD(0, x0);
+osinstance->reverseAD(1, vlambda);
+\end{verbatim}
+Since {\tt vlambda} only includes
+the third function $f_3$, this sequence of calls will produce the third row of the
+Jacobian $J_f$, i.e.,
+$$
+\D{f_{3}(x^{(0)})}{x_{0}}  = 1,  \quad \D{f_{3}(x^{(0)})}{x_{1}}  = 0, \quad  \D{f_{3}(x^{(0)})}{x_{3}}  = 0.2.
+$$
+
+\subsubsection{Second Derivative Reverse Sweep Calculations}
+
+In order to calculate second derivatives using {\tt reverseAD} forward sweeps of order 0 and 1 must have been completed.  The call to {\tt reverseAD(2, vlambda)} will return a vector of dimension $2n$ where $n$ is the number of variables.  If the zero-order forward sweep is {\tt forward(0,x0)} and the first-order forward sweep is {\tt forwardAD(1, x1)} where {\tt x1} $= e^{(i)},$ then the return vector {\tt z = reverseAD(2,  vlambda)} is
+\begin{eqnarray}
+z[2j - 2]  = \D{L (x^{(0)}, \lambda^{(0)})}{x_{j}}, \quad j = 1, \ldots, n
+\end{eqnarray}
+\begin{eqnarray}
+z[2j - 1]  = \DD{L(x^{(0)}, \lambda^{(0)})}{x_{i}}{x_{j}}, \quad j = 1, \ldots, n
+\end{eqnarray}
+where
+\begin{eqnarray}
+L (x, \lambda) = \sum_{k = 1}^{m} \lambda_{k} f_{k}(x).
+\end{eqnarray}
+
+
+
+For example, the  following calls will calculate the third row (column) of the Hessian of the Lagrangian.
+\begin{verbatim}
+x0[0] = 1;
+x0[1] = 5;
+x0[2] = 5;
+osinstance->forwardAD(0, x0);
+x1[0] = 0;
+x1[1] = 0;
+x1[2] = 1;
+osinstance->forwardAD(1, x1);
+vlambda[0] = 1;
+vlambda[1] = 2;
+vlambda[2] = 1;
+osinstance->reverseAD(2, vlambda);
+\end{verbatim}
+This returns
+\begin{eqnarray*}
+\D{L (x^{(0)}, \lambda^{(0)})}{x_{0}} = 3, \quad  \D{L (x^{(0)}, \lambda^{(0)})}{x_{1}} = 2.74, \quad  \D{L (x^{(0)}, \lambda^{(0)})}{x_{3}} = 4.2
+\end{eqnarray*}
+\begin{eqnarray*}
+\DD{L(x^{(0)}, \lambda^{(0)})}{x_{3}}{x_{0}} =0, \quad  \DD{L(x^{(0)}, \lambda^{(0)})}{x_{3}}{x_{0}} = 0, \quad   \DD{L(x^{(0)}, \lambda^{(0)})}{x_{3}}{x_{3}} =  -.04
+\end{eqnarray*}
+
+The reason why
+$$
+\D{L (x^{(0)}, \lambda^{(0)})}{x_{1}} = 2 \times 1.37 = 2.74
+$$
+and not
+$$
+\D{L (x^{(0)}, \lambda^{(0)})}{x_{1}} = 1 \times  9 + 2 \times 6.37 = 9 + 12.74 = 21.74
+$$
+is that the terms $9x_1$ in the objective and $5x_1$ in the first constraint
+are captured in the linear section of the OSiL input and therefore do not appear as nonlinear terms
+in {\tt  <nonlinearExpressions>}. Again, {\tt forwardAD} and {\tt reverseAD} only operate on variables and terms
+in either the {\tt <quadraticCoefficients>} or {\tt <nonlinearExpressions>} sections.
+
+\subsection{Using OSInstance Methods: High Level Calls}
+
+The methods {\tt forwardAD} and {\tt reverseAD} are low-level calls and are not designed to work directly with solver APIs. The {\tt OSInstance} API has other methods that most users will want to invoke when linking with solver APIs.  We describe these now.
+
+
+\subsubsection{Sparsity Methods}
+
+Many solvers such as {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}} (\url{projects.coin-or.org/Ipopt}) 
+\ifknitro or Knitro\index{Knitro} (\url{www.ziena.com}) \fi
+require the sparsity pattern of the Jacobian of the constraint matrix and the Hessian of the Lagrangian function.
+Note well that the constraint matrix of the example in Section~\ref{section:lowlevelADcalls}
+constitutes only the last two rows of (\ref{eq:definef}) but does include the linear terms.
+The following code illustrates how to get the sparsity pattern of the constraint Jacobian matrix
+
+\begin{verbatim}
+SparseJacobianMatrix *sparseJac;
+sparseJac = osinstance->getJacobianSparsityPattern();
+for(idx = 0; idx < sparseJac->startSize; idx++){
+    std::cout << "number constant terms in constraint "   <<  idx << " is "
+    << *(sparseJac->conVals + idx)  << std::endl;
+    for(k = *(sparseJac->starts + idx); k < *(sparseJac->starts + idx + 1); k++){
+        std::cout << "row idx = " << idx <<  "
+        col idx = "<< *(sparseJac->indexes + k) << std::endl;
+    }
+}
+\end{verbatim}
+
+For the example problem this will produce
+
+\begin{verbatim}
+JACOBIAN SPARSITY PATTERN
+number constant terms in constraint 0 is 0
+row idx = 0  col idx = 1
+row idx = 0  col idx = 3
+number constant terms in constraint 1 is 1
+row idx = 1  col idx = 2
+row idx = 1  col idx = 0
+row idx = 1  col idx = 3
+\end{verbatim}
+
+The   constant term in constraint 1 corresponds to the linear term $7x_2$,
+which is added after the algorithmic differentiation has taken place.
+However, the linear  term $5x_1$ in equation 0 does not
+contribute a nonzero in the Jacobian, as it is combined with the
+term $1.37x_1$ that is treated as a nonlinear term and
+therefore accounted for explicitly.
+The {\tt SparseJacobianMatrix} object has a data member {\tt starts}
+which is the index of the start of each constraint row.
+The {\tt int} data member {\tt indexes}  gives  is the variable index
+of every potentially nonzero derivative. There is also a {\tt double} data member
+{\tt values} that will the value of the partial derivative of the corresponding
+index at each iteration. Finally, there is an {\tt int} data member
+{\tt conVals} that is the number of constant terms in each gradient.
+A constant term is a partial derivative that cannot change at an iteration.
+A variable is considered to have a constant derivative
+if it appears in the {\tt <linearConstraintCoefficients>} section
+but not in the {\tt <nonlinearExpressions>}.  For a row indexed by {\tt idx}
+the variable indices are in the  {\tt indexes} array between the elements
+{\tt sparseJac->starts + idx} and {\tt sparseJac->starts + idx + 1}.
+The first  {\tt sparseJac->conVals + idx} variables listed are indices
+of  variables with constant derivatives. In this example, when {\tt idx} is 1,
+there is one  variable with a constant derivative and it is variable $x_{2}$.
+(Actually variable $x_{1}$ has a constant derivative but the code does not check
+to see if variables that appear in the {\tt <nonlinearExpressions>} section
+have constant derivative.) The  variables with constant derivatives
+never appear in the AD evaluation.
+
+The following code illustrates how to get the sparsity pattern of the Hessian of the Lagrangian.
+\begin{verbatim}
+SparseHessianMatrix *sparseHessian;
+sparseHessian = osinstance->getLagrangianHessianSparsityPattern( );
+for(idx = 0; idx < sparseHessian->hessDimension; idx++){
+    std::cout <<  "Row Index = " << *(sparseHessian->hessRowIdx + idx) ;
+    std::cout <<  "  Column Index = " << *(sparseHessian->hessColIdx + idx);
+}
+\end{verbatim}
+The {\tt SparseHessianMatrix} class has the {\tt int} data members {\tt hessRowIdx} and {\tt hessColIdx} for indexing  potential nonzero elements in the Hessian matrix. The {\tt double} data member {\tt hessValues} holds the value of the respective second derivative at each iteration.   The data member {\tt hessDimension} is the number of nonzero elements in the Hessian.
+
+
+\subsubsection{Function Evaluation Methods}
+
+There are several overloaded methods for calculating objective and constraint values.  The method
+\begin{verbatim}
+double *calculateAllConstraintFunctionValues(double* x, bool new_x)
+\end{verbatim}
+will return a {\tt double} pointer to an array of constraint function values evaluated at {\tt x.}  If the value of {\tt x} has not changed since the last function call, then {\tt new\_x} should be set to {\tt false} and the most recent function values are returned.  When using this method, with this signature,  all function values are calculated in {\tt double} using an {\tt OSExpressionTree} object.
+
+A second signature for the {\tt calculateAllConstraintFunctionValues} is
+\begin{verbatim}
+double *calculateAllConstraintFunctionValues(double* x, double *objLambda,
+    double *conLambda, bool new_x, int highestOrder)
+\end{verbatim}
+In this  signature, {\tt x} is a pointer to the current primal values, {\tt objLambda} is a vector of dual multipliers, {\tt conLambda} is a vector of dual multipliers on the constraints,  {\tt new\_x} is true if any components of {\tt x} have changed since the last evaluation, and {\tt highestOrder} is the highest order of derivative to be calculated at this iteration. The following code snippet illustrates defining a set of variable values for the example we are using and then the function call.
+\begin{verbatim}
+double* x = new double[4]; //primal variables
+double* z = new double[2]; //Lagrange multipliers on constraints
+double* w = new double[1]; //Lagrange multiplier on objective
+x[ 0] = 1;    // primal variable 0
+x[ 1] = 5;    // primal variable 1
+x[ 2] = 10;   // primal variable 2
+x[ 3] = 5;    // primal variable 3
+z[ 0] = 2;    // Lagrange multiplier on constraint 0
+z[ 1] = 1;    // Lagrange multiplier on constraint 1
+w[ 0] = 1;    // Lagrange multiplier on the objective function
+calculateAllConstraintFunctionValues(x, w, z,  true, 0);
+\end{verbatim}
+When making all high level calls for function, gradient, and Hessian evaluations we pass all the primal variables in the {\tt x} argument, not just the nonlinear variables. Underneath the call, the nonlinear variables are identified and used in AD function calls.
+
+The use of the parameters  {\tt new\_x} and {\tt highestOrder}  is important and requires further explanation.    The parameter  {\tt highestOrder}  is an integer variable that will take on the value 0, 1, or 2 (actually higher values if we want third derivatives etc.).  The value of this variable is the highest order derivative that is required of the current iterate. For example, if  a callback requires a function evaluation and {\tt highestOrder = 0} then only the function is evaluated at the current iterate.  However,  if {\tt highestOrder = 2} then the function call
+\begin{verbatim}
+calculateAllConstraintFunctionValues(x, w, z, true, 2)
+\end{verbatim}
+will trigger  first and second derivative evaluations in addition to the function evaluations.
+
+In the {\tt OSInstance} class code,  every time a forward ({\tt forwardAD}) or reverse sweep ({\tt reverseAD}) is executed a private  member, {\tt m\_iHighestOrderEvaluated}  is  set to the order of the sweep. For example, {\tt forwardAD(1, x)} will result in {\tt  m\_iHighestOrderEvaluated = 1}.  Just knowing the value  of  {\tt new\_x} alone is not sufficient. It is also necessary  to know {\tt highestOrder} and compare it with {\tt m\_iHighestOrderEvaluated.}  For example, if  {\tt new\_x}  is  false,  but {\tt m\_iHighestOrderEvaluated = 0},  and   the callback requires a Hessian calculation, then it is necessary to calculate the first and second derivatives at the current iterate.
+
+There are {\it  exactly two} conditions that  require a new function or derivative evaluation.   A new evaluation is required if and only if
+
+\begin{enumerate}
+\item{}   The value of {\tt new\_x} is  true
+
+\begin{center}
+ --OR--
+\end{center}
+
+
+\item{} For the callback function the value of the input parameter {\tt highestOrder} is strictly greater than the current value  of    {\tt m\_iHhighestOrderEvaluated.}
+\end{enumerate}
+
+For an efficient implementation of AD it is important to be able to get the Lagrange multipliers and highest order derivative that is required from inside {\it any} callback -- not just the Hessian evaluation callback. For example, in {\tt Ipopt,} if  {\tt eval\_g}  or {\tt eval\_f} are called, and  for the current iterate, {\tt eval\_jac} and {\tt eval\_hess} are also going to be called, then  a more efficient AD implementation is possible if the Lagrange multipliers are available for {\tt eval\_g} and {\tt eval\_f}.
+
+Currently, whenever {\tt new\_x = true} in the underlying AD implementation we do not retape (record into the CppAD data structure)  the function. This is because we currently throw an exception if there are any logical operators involved in the AD calculations. This may change in a future implementation.
+
+
+There are also similar methods for objective function evaluations.  The method
+\begin{verbatim}
+double calculateFunctionValue(int idx, double* x, bool new_x);
+\end{verbatim}
+ will return the value of any constraint or objective function indexed by {\tt idx}. This method works strictly with {\tt double} data using an {\tt OSExpressionTree} object.
+
+There is also a public variable, {\tt bUseExpTreeForFunEval} that, if set to {\tt true}, will cause the method
+\begin{verbatim}
+calculateAllConstraintFunctionValues(x, objLambda,  conLambda, true, highestOrder)
+\end{verbatim}
+to also use the OS expression tree for function evaluations when {\tt highestOrder = 0} rather than use the operator overloading in the CppAD tape.
+
+\subsubsection{Gradient Evaluation Methods}
+
+One {\tt OSInstance} method for gradient calculations is
+\begin{verbatim}
+SparseJacobianMatrix *calculateAllConstraintFunctionGradients(double* x, double *objLambda,
+     double *conLambda, bool new_x, int highestOrder)
+\end{verbatim}
+If a call has been placed to {\tt calculateAllConstraintFunctionValues} with {\tt highestOrder = 0}, then the appropriate call to get gradient evaluations is
+\begin{verbatim}
+calculateAllConstraintFunctionGradients( x, NULL, NULL,  false, 1);
+\end{verbatim}
+Note that in this function call {\tt new\_x = false}. This prevents a call to {\tt forwardAD()} with order 0 to get the function values.
+
+
+If, at the current iterate, the Hessian of the Lagrangian function is also desired then an appropriate call is
+\begin{verbatim}
+calculateAllConstraintFunctionGradients(x, objLambda, conLambda, false, 2);
+\end{verbatim}
+In this case, if there was a prior call
+\begin{verbatim}
+calculateAllConstraintFunctionValues(x, w, z,  true, 0);
+\end{verbatim}
+then only first and second derivatives are calculated, not function values.
+
+When calculating the gradients, if the number of nonlinear variables exceeds or is equal  to the number of rows,  a {\tt forwardAD(0, x)} sweep is used to get the function values,  and   a {\tt reverseAD(1, $e^{k}$)}  sweep for each unit vector  $e^{k}$ in the row space  is used to get the vector of first order partials for each row in the constraint Jacobian.  If the number of nonlinear variables is less then the number of rows then a {\tt forwardAD(0, x)} sweep  is used to get the function values and a {\tt forwardAD(1,  $e^{i}$)}  sweep for each unit vector  $e^{i}$ in the column space is used to get the vector of first order partials for each column in the constraint Jacobian.
+
+Two other gradient methods are
+\begin{verbatim}
+SparseVector *calculateConstraintFunctionGradient(double* x,
+    double *objLambda, double *conLambda,  int idx, bool new_x, int highestOrder);
+\end{verbatim}
+and
+\begin{verbatim}
+SparseVector *calculateConstraintFunctionGradient(double* x, int idx,
+    bool new_x );
+\end{verbatim}
+
+Similar methods are available for the objective function; however, the objective function gradient methods treat the gradient of each objective function as a dense vector.
+
+
+\subsubsection{Hessian Evaluation Methods}
+
+There are two methods for Hessian calculations.  The first method has the signature
+\begin{verbatim}
+SparseHessianMatrix *calculateLagrangianHessian( double* x,
+    double *objLambda, double *conLambda, bool new_x, int highestOrder);
+\end{verbatim}
+so if either function or first derivatives have been calculated an appropriate call is
+\begin{verbatim}
+calculateLagrangianHessian( x, w, z, false, 2);
+\end{verbatim}
+If the Hessian of a single row or objective function is desired the following method is available
+\begin{verbatim}
+SparseHessianMatrix *calculateHessian( double* x, int idx, bool new_x);
+\end{verbatim}
+
+
+
+
+
+
+
+
+
+
+
+\section{File Upload:  Using a File Upload Package}\label{section:fileupload}
+
+\index{OSFileUpload@{\tt OSFileUpload}|(}
+When the {\tt OSAgent}\index{OSAgent@{\tt OSAgent}}  class methods {\tt solve}\index{solve@{\tt solve}} and
+{\tt send}\index{send@{\tt send}} are used, the problem instance in OSiL\index{OSiL} format is packaged into
+a SOAP\index{SOAP protocol} envelope and communication with the server is done using Web Services (for example Tomcat
+Axis)\index{Apache Tomcat}. However, packing an XML file into a SOAP envelope may add considerably to the
+size of the file (each {\tt $<$} is replaced with {\tt \&lt;}  and each {\tt $>$} is replaced with {\tt \&gt;}).
+Also, communicating with a Web Services servlet can further slow down the communication process.
+This could be a problem for large instances. An alternative approach is to use the {\tt OSFileUpload}
+executable on the client end and the Java servlet {\tt OSFileUpload} on the server end.  The {\tt OSFileUpload}
+client executable is contained in the {\tt fileUpload}  directory inside the {\tt applications} directory.
+
+This servlet is based upon the Apache Commons FileUpload. See 
+
+\medskip
+\noindent{\tt\UrlApacheFileupload}.
+\medskip
+
+The {\tt OSFileUpload} Java class, {\tt OSFileUpload.class} is in the directory
+\begin{verbatim}
+webapps\os\WEB-INF\classes\org\optimizationservices\oscommon\util
+\end{verbatim}
+relative to the Web server root.  The source code {\tt OSFileUpload.class} is in the directory
+\begin{verbatim}
+COIN-OS/OS/applications/fileUpload
+\end{verbatim}
+
+Before you can use OSFileUpload, you must give a valid URL for the location of the server.
+This information must be provided in line 82 of the source code {\tt OSFileUpload.cpp} before 
+issuing the {\tt make command} (in a unix environment) or the build (under MS VisualStudio).
+
+The {\tt OSFileUpload} client executable (see {\tt OS/applications/fileUpload}) takes one argument on the command line,
+which is the location of the file on the local directory to upload to the server. For example,
+\begin{verbatim}
+OSFileUpload ../../data/osilFiles/parincQuadratic.osil
+\end{verbatim}
+The {\tt OSFileUpload} executable first creates an {\tt OSAgent} object.
+\begin{verbatim}
+OSSolverAgent* osagent = NULL;
+osagent = new OSSolverAgent("http://gsbkip.chicagogsb.edu/fileupload/servlet/OSFileUpload");
+\end{verbatim}
+The {\tt OSAgent}  has a method {\tt OSFileUpload} with the signature
+\begin{verbatim}
+std::string OSFileUpload(std::string osilFileName, std::string osil);
+\end{verbatim}
+where {\tt osilFileName} is  the name of the OSiL problem instance to be written on the server and {\tt osil}
+is the string with the actual instance. Then
+\begin{verbatim}
+osagent->OSFileUpload(osilFileName, osil);
+\end{verbatim}
+will place a call to the server, upload the problem instance in the {\tt osil} string, and cause the server
+to write a file on its hard drive named {\tt osilFileName}. In our implementation, the uploaded file
+({\tt parincQuadratic.osil}) is saved to the {\tt/home/kmartin/temp/parincQuadratic.osil} on the server hard drive.
+This location is used in the {\tt osol} file as shown below.
+
+Once the file is on the server, invoke the local {\tt OSSolverService} by
+\begin{verbatim}
+./OSSolverService -config ../data/configFiles/testremote.config
+\end{verbatim}
+where the {\tt config} file is as follows. Notice there is no {\tt -osil}  option as the OSiL file has already
+been uploaded and its instance location (``local'' to the server) is specified in the {\tt osol} file.
+\begin{verbatim}
+-osol ../data/osolFiles/remoteSolve2.osol
+-serviceLocation http://gsbkip.chicagogsb.edu/os/OSSolverService.jws
+-serviceMethod solve
+\end{verbatim}
+and the {\tt osol} file is
+\begin{verbatim}
+<osol>
+    <general>
+         <instanceLocation locationType="local">
+             /home/kmartin/temp/parincQuadratic.osil
+         </instanceLocation>
+        <solverToInvoke>ipopt</solverToInvoke>      
+    </general>
+</osol>
+\end{verbatim}
+
+\iffalse   %this needs more work...
+As an alternative to using the command line executable {\tt OSFileUpload}, there is also an html form
+{\tt fileupload.html} that can be used to upload files. For example, the URL
+%\begin{verbatim}
+%http://gsbkip.chicagogsb.edu/os/fileupload.html
+%\end{verbatim}
+
+\medskip
+\noindent{\tt\UrlKippFileupload}
+\medskip
+
+\noindent will bring up the necessary form that allows the user to browse a directory and select the file to upload.
+This URL is based on the assumption that the {\tt OSJava} classes were deployed as described in
+Section~\ref{section:tomcat}. The file {\tt fileupload.html} is in the directory {\tt WebApps/os}.
+In our html form implementation, after you upload the OSiL\index{OSiL} file, it shows you the path of the
+uploaded file that is saved on the server, so that you can put it in the corresponding {\tt osol} file.
+\fi
+\index{OSFileUpload@{\tt OSFileUpload}|)}
+
+
+
+
+
 
 
 \section{Appendix -- Sample OSiL files}\label{section:appendix}
@@ -6684,6 +6694,7 @@ PS: btw, the way to revert the changes is really simple:
   svn merge -r2088:2087 https://projects.coin-or.org/svn/OS/stable/1.1
   svn commit
 Once you know it it's really logical.
+
 
 
 
