@@ -1482,44 +1482,34 @@ int OSInstance::getNumberOfNonlinearObjectives(){
 OSExpressionTree* OSInstance::getNonlinearExpressionTree(int rowIdx){
 	if( m_bProcessExpressionTrees == false ){
 		getAllNonlinearExpressionTrees();
-		return m_mapExpressionTrees[ rowIdx];
 	} 
-	else{
-		//if( m_mapExpressionTrees.find( rowIdx) != m_mapExpressionTrees.end()) return NULL;
-		//else return m_mapExpressionTrees[ rowIdx];
-		if( m_mapExpressionTrees.find( rowIdx) != m_mapExpressionTrees.end()) return m_mapExpressionTrees[ rowIdx];
-		else return NULL ;
-		// check to make sure rowIdx has a nonlinear term and is in the map
-		/** define an iterator for the expression trees map allExpTrees */
-		//std::map<int, OSExpressionTree*>::iterator pos;
-		///for(pos = m_mapExpressionTrees.begin(); pos != m_mapExpressionTrees.end(); ++pos){
-		//	if(pos->first == rowIdx)return m_mapExpressionTrees[ rowIdx];
-		//}
-		// if we are rowIdx has no nonlinar terms so return a null
-		//return NULL;
-	}     
+	if( m_mapExpressionTrees.find( rowIdx) != m_mapExpressionTrees.end()) return m_mapExpressionTrees[ rowIdx];
+	else return NULL ;
+	// check to make sure rowIdx has a nonlinear term and is in the map
+	/** define an iterator for the expression trees map allExpTrees */
+	//std::map<int, OSExpressionTree*>::iterator pos;
+	///for(pos = m_mapExpressionTrees.begin(); pos != m_mapExpressionTrees.end(); ++pos){
+	//	if(pos->first == rowIdx)return m_mapExpressionTrees[ rowIdx];
+	//}
+	// if we are rowIdx has no nonlinar terms so return a null
+	//return NULL;
 }// getNonlinearExpressionTree for a specific index   
 
 
 OSExpressionTree* OSInstance::getNonlinearExpressionTreeMod(int rowIdx){
 	if( m_bProcessExpressionTreesMod == false ){
 		getAllNonlinearExpressionTreesMod();
-		return m_mapExpressionTreesMod[ rowIdx];
 	} 
-	else{
-		//if( m_mapExpressionTrees.find( rowIdx) != m_mapExpressionTrees.end()) return NULL;
-		//else return m_mapExpressionTrees[ rowIdx];
-		if( m_mapExpressionTreesMod.find( rowIdx) != m_mapExpressionTreesMod.end()) return m_mapExpressionTreesMod[ rowIdx];
-		else return NULL ;
-		// check to make sure rowIdx has a nonlinear term and is in the map
-		/** define an iterator for the expression trees map allExpTrees */
-		//std::map<int, OSExpressionTree*>::iterator pos;
-		///for(pos = m_mapExpressionTrees.begin(); pos != m_mapExpressionTrees.end(); ++pos){
-		//	if(pos->first == rowIdx)return m_mapExpressionTrees[ rowIdx];
-		//}
-		// if we are rowIdx has no nonlinar terms so return a null
-		//return NULL;
-	}     
+	if( m_mapExpressionTreesMod.find( rowIdx) != m_mapExpressionTreesMod.end()) return m_mapExpressionTreesMod[ rowIdx];
+	else return NULL ;
+	// check to make sure rowIdx has a nonlinear term and is in the map
+	/** define an iterator for the expression trees map allExpTrees */
+	//std::map<int, OSExpressionTree*>::iterator pos;
+	///for(pos = m_mapExpressionTrees.begin(); pos != m_mapExpressionTrees.end(); ++pos){
+	//	if(pos->first == rowIdx)return m_mapExpressionTrees[ rowIdx];
+	//}
+	// if we are rowIdx has no nonlinar terms so return a null
+	//return NULL;
 }// getNonlinearExpressionTreeMod for a specific index 
 
 
@@ -3664,7 +3654,7 @@ bool OSInstance::getSecondOrderResults(double *x, double *objLambda, double *con
 		}			
 		// now calculate the Hessian
 		if( m_mapExpressionTreesMod.size() > 0){   
-			m_vdw = reverseAD(2, m_vdLambda);   // derivtative of partial
+			m_vdw = reverseAD(2, m_vdLambda);   // derivative of partial
 		}
 		for(j = i; j < m_iNumberOfNonlinearVariables; j++){
 			if( m_vbLagHessNonz[i*m_iNumberOfNonlinearVariables + j] == true){
