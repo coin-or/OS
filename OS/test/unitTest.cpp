@@ -1797,7 +1797,7 @@ catch(const ErrorClass& eclass){
 		if (!ok)
 			throw ErrorClass(" Could not add to osoption data structure");
 
-#if 0
+//#if 0
 
 		//Now transfer to another osoption using get() and set() methods
 		std::string optionstring;
@@ -2298,12 +2298,13 @@ catch(const ErrorClass& eclass){
 		osolreader = NULL;
 		osolreader = new OSoLReader();
 		osolreader->readOSoL( tmpOSoL);
+//#endif
+
 		delete osolwriter;
 		osolwriter = NULL;
 		delete osolreader;
 		osolreader = NULL;
 
-#endif
 
 
 		unitTestResult << 
