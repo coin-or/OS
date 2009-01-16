@@ -3608,9 +3608,11 @@ bool OSInstance::getSecondOrderResults(double *x, double *objLambda, double *con
 		int jstart,  idx;
 		OSExpressionTree *expTree = NULL;
 		int hessValuesIdx = 0;	
+		if( m_bLagrangianSparseHessianCreated == false) getLagrangianHessianSparsityPattern( );
 		std::map<int, OSExpressionTree*>::iterator posMapExpTree;
 		std::map<int, int>::iterator posVarIndexMap;
-		if( conMultipliers == NULL) throw ErrorClass("cannot have a null vector of lagrange multipliers when calculating Hessian of Lagrangian");
+		if( objLambda == NULL) throw ErrorClass("must have a multiplier for the objective function even if zero when calling getSecondOrderResults");
+		if( conMultipliers == NULL) throw ErrorClass("cannot have a null vector of lagrange multipliers when calling getSecondOrderResults -- okay if  zero");
 		if( m_vdLambda.size() > 0) m_vdLambda.clear();
 		for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){	
 			if( posMapExpTree->first >= 0){
