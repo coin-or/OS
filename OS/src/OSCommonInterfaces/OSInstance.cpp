@@ -2637,7 +2637,7 @@ SparseVector *OSInstance::calculateConstraintFunctionGradient(double* x, double 
 
 SparseVector *OSInstance::calculateConstraintFunctionGradient(double* x, int idx, bool new_x){
 	try{
-		if(idx > instanceData->variables->numberOfVariables ) 
+		if(idx > instanceData->variables->numberOfVariables || idx < 0) 
 			throw ErrorClass("invalid index passed to calculateConstraintFunctionGrad");
 		SparseVector *sp;
 		sp = new SparseVector();
@@ -2818,7 +2818,7 @@ SparseHessianMatrix *OSInstance::calculateHessian(double* x, int idx, bool new_x
 		}
 		if( new_x == true || (2 > m_iHighestOrderEvaluated)  ) {
 			getIterateResults(x, objLambda, conLambda, new_x,  2);
-			std::cout  << "CALL getIterateResults() FROM calculateHessian" << std::endl;
+//			std::cout  << "CALL getIterateResults() FROM calculateHessian" << std::endl;
 		}
 		delete[] objLambda;
 		delete[] conLambda;
