@@ -63,8 +63,10 @@ bool IpoptProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 	n = osinstance->getVariableNumber();
 	// number of constraints
 	m = osinstance->getConstraintNumber();
+#ifdef DEBUG
 	cout << "number variables  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << n << endl;
 	cout << "number constraints  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << m << endl;
+#endif
 	try{
 		osinstance->initForAlgDiff( );
 	}
@@ -85,11 +87,15 @@ bool IpoptProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 	}
 	//std::cout << "Done calling sparse jacobian" << std::endl;
 	nnz_jac_g = sparseJacobian->valueSize;
+#ifdef DEBUG
 	cout << "nnz_jac_g  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_jac_g << endl;	
+#endif
 	// nonzeros in upper hessian
 	
 	if( (osinstance->getNumberOfNonlinearExpressions() == 0) && (osinstance->getNumberOfQuadraticTerms() == 0) ) {
+#ifdef DEBUG
 		cout << "This is a linear program"  << endl;
+#endif
 		nnz_h_lag = 0;
 	}
 	else{
@@ -98,7 +104,9 @@ bool IpoptProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 		//std::cout << "Done Getting Lagrangain Hessian Sparsity Pattern " << std::endl;
 		nnz_h_lag = sparseHessian->hessDimension;
 	}
+#ifdef DEBUG
 	cout << "nnz_h_lag  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_h_lag << endl;	
+#endif
 	// use the C style indexing (0-based)
 	index_style = TNLP::C_STYLE;
   
@@ -153,7 +161,9 @@ bool IpoptProblem::get_starting_point(Index n, bool init_x, Number* x,
   	assert(init_z == false);
   	assert(init_lambda == false);
   	int i;
+#ifdef DEBUG
   	cout << "get initial values !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
+#endif
   	
 		for(i = 0; i < n; i++){
 			x[ i] = 1.7171;
@@ -379,8 +389,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 	    printf("z_U[%d] = %e\n", i, z_U[i]);
 	  }
 #endif
-	  printf("\n\nObjective value\n");
-	  printf("f(x*) = %e\n", obj_value);
+	  printf("\nObjective value f(x*) = %e\n", obj_value);
 	  
   	int solIdx = 0;
   	int numberOfOtherVariableResults;
