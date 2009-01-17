@@ -336,7 +336,7 @@ expression* CouenneSolver::createCouenneExpression(OSnLNode* node) {
     	 return new exprMul(createCouenneExpression(node->m_mChildren[0]), createCouenneExpression(node->m_mChildren[1]));
      case OS_DIVIDE :
     	 // couenne does not like expressions of the form exp1/exp2 with exp1 a constant, so we write them as exp1 * 1/exp2
-    	 if (node->m_mChildren[1]->inodeInt == OS_NUMBER)
+    	 if (node->m_mChildren[0]->inodeInt == OS_NUMBER)
       	 return new exprMul(createCouenneExpression(node->m_mChildren[0]), new exprInv(createCouenneExpression(node->m_mChildren[1])));
     	 else
     		 return new exprDiv(createCouenneExpression(node->m_mChildren[0]), createCouenneExpression(node->m_mChildren[1]));
