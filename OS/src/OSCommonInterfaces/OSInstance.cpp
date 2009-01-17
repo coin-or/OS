@@ -2612,7 +2612,7 @@ SparseVector *OSInstance::calculateConstraintFunctionGradient(double* x, double 
 		int idx, bool new_x, int highestOrder){
 	try{
 		if(highestOrder < 1 ) throw ErrorClass("When calling calculateConstraintFunctionGradient highestOrder should be 1 or 2");
-		if(idx > instanceData->variables->numberOfVariables ) 
+		if(idx < 0 || idx >= instanceData->constraints->numberOfConstraints ) 
 			throw ErrorClass("invalid index passed to calculateConstraintFunctionGrad");
 		SparseVector *sp;
 		sp = new SparseVector();
@@ -2637,7 +2637,7 @@ SparseVector *OSInstance::calculateConstraintFunctionGradient(double* x, double 
 
 SparseVector *OSInstance::calculateConstraintFunctionGradient(double* x, int idx, bool new_x){
 	try{
-		if(idx > instanceData->variables->numberOfVariables || idx < 0) 
+		if(idx < 0 || idx >= instanceData->constraints->numberOfConstraints ) 
 			throw ErrorClass("invalid index passed to calculateConstraintFunctionGrad");
 		SparseVector *sp;
 		sp = new SparseVector();
@@ -2794,7 +2794,7 @@ SparseHessianMatrix *OSInstance::calculateLagrangianHessian( double* x, double *
 
 SparseHessianMatrix *OSInstance::calculateHessian(double* x, int idx, bool new_x){
 	try{
-		if(idx > instanceData->variables->numberOfVariables ) 
+		if(idx < -instanceData->objectives->numberOfObjectives || idx >= instanceData->constraints->numberOfConstraints ) 
 			throw ErrorClass("invalid index passed to calculateHessian");
 		double *objLambda = new double[ getObjectiveNumber() ];
 		double *conLambda = new double[ getConstraintNumber() ];
