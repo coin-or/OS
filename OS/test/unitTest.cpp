@@ -200,6 +200,11 @@ using std::cout;
 using std::endl;
 using std::ostringstream; 
 
+
+
+#ifndef DEBUG
+#define DEBUG 
+
 int main(int argC, char* argV[])
 {
 //#ifdef HAVE_WINDOWS_H
