@@ -202,7 +202,7 @@ using std::ostringstream;
 
 
 
-#ifndef DEBUG
+
 #define DEBUG 
 
 int main(int argC, char* argV[])
