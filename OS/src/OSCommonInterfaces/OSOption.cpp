@@ -17,6 +17,7 @@
 #ifndef DEBUG
 #define DEBUG
 #endif
+
 #include "OSOption.h"
 #include "OSParameters.h"
 #include "OSErrorClass.h"
@@ -24,8 +25,6 @@
 #include <sstream>
 #include <limits>
 #include <cstdio>
-
-//#define DEBUG
 
 using namespace std;
 

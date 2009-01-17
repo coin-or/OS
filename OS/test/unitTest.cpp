@@ -128,7 +128,11 @@
 #include <CoinMpsIO.hpp>
 #include <CoinPackedMatrix.hpp>
     
- 
+#ifndef DEBUG
+#define DEBUG
+#endif
+
+
 #ifdef COIN_HAS_KNITRO    
 #include "OSKnitroSolver.h"
 #endif 
@@ -146,9 +150,11 @@
 #ifdef COIN_HAS_ASL
 #include "OSnl2osil.h"
 #endif
+
 #ifdef COIN_HAS_LINDO    
 #include "OSLindoSolver.h"
 #endif  
+
 #ifdef COIN_HAS_IPOPT    
 #include "OSIpoptSolver.h"
 #endif 
@@ -158,7 +164,6 @@
 #endif 
 
 
- 
 
 
 #ifdef HAVE_CTIME
@@ -1802,7 +1807,7 @@ catch(const ErrorClass& eclass){
 		if (!ok)
 			throw ErrorClass(" Could not add to osoption data structure");
 
-//#if 0
+#if 0   //skip the test of get() and set() methods for the time being
 
 		//Now transfer to another osoption using get() and set() methods
 		std::string optionstring;
@@ -2258,6 +2263,8 @@ catch(const ErrorClass& eclass){
 		if (!ok)
 			throw ErrorClass(" Loss of information in OSoL write/read");
 
+#endif //end test of get() and set() methods
+
 		delete osolwriter;
 		osolwriter = NULL;
 		delete osolreader;
@@ -2303,7 +2310,6 @@ catch(const ErrorClass& eclass){
 		osolreader = NULL;
 		osolreader = new OSoLReader();
 		osolreader->readOSoL( tmpOSoL);
-//#endif
 
 		delete osolwriter;
 		osolwriter = NULL;
