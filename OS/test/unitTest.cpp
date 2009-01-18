@@ -320,7 +320,7 @@ int main(int argC, char* argV[])
 		OSInstance *osinstance1 = mps2osil->osinstance;
 		std::string sOSiL = osilwriter.writeOSiL( osinstance1  );
 		//cout << sOSiL << endl;
-		//fileUtil->writeFileFromString("p0201.osil", sOSiL);
+		///fileUtil->writeFileFromString("p0201.osil", sOSiL);
 		// now create a second object
 		osilreader = new OSiLReader();
 		OSInstance *osinstance2 = osilreader->readOSiL( sOSiL);

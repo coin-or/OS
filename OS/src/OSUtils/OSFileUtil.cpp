@@ -111,7 +111,8 @@ char* FileUtil::getFileAsChar(const  char* fname){
 
 
 bool FileUtil::writeFileFromString(char* fname, std::string sname){
-	std::ofstream outFile;
+	//std::ofstream outFile;
+	std::fstream outFile;
 	outFile.open( fname);
 	if(!outFile.is_open()){
 		return false;
@@ -122,7 +123,8 @@ bool FileUtil::writeFileFromString(char* fname, std::string sname){
 } // end writeFileFromString
 
 bool FileUtil::writeFileFromString(std::string  fname, std::string sname){
-	std::ofstream outFile;
+	//std::ofstream outFile;
+	std::fstream outFile;
 	outFile.open( fname.c_str()  );
 	if(!outFile.is_open()){
 		return false;
@@ -133,7 +135,8 @@ bool FileUtil::writeFileFromString(std::string  fname, std::string sname){
 } // end writeFileFromString
 
 bool FileUtil::writeFileFromChar(char* fname, char* ch){
-	std::ofstream outFile;
+	//std::ofstream outFile;
+	std::fstream outFile;
 	outFile.open( fname);
 	if(!outFile.is_open()){
 		return false;
