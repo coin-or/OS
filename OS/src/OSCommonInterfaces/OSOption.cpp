@@ -901,7 +901,7 @@ ObjectiveOption::~ObjectiveOption()
 		{	delete other[i];
 			other[i] = NULL;
 		}
-		delete other;
+		delete[] other;
 		other = NULL;
 	}
 }//end ObjectiveOption destructor 
@@ -1039,7 +1039,7 @@ OtherConstraintOption::~OtherConstraintOption()
 		{	delete con[i];
 			con[i] = NULL;
 		}
-		delete con;
+		delete[] con;
 		con = NULL;
 	};
 }//end OtherConstraintOption destructor
@@ -1071,7 +1071,7 @@ ConstraintOption::~ConstraintOption()
 		{	delete other[i];
 			other[i] = NULL;
 		}
-		delete other;
+		delete[] other;
 		other = NULL;
 	}
 }//end ConstraintOption destructor
