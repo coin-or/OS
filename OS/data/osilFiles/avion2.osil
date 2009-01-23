@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="os.optimizationservices.org ../schemas/OSiL.xsd">
+    xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
     <instanceHeader>
         <description>Generated from AMPL nl file</description>
     </instanceHeader>
@@ -449,9 +449,9 @@
                             </minus>
                             <times>
                                 <number value="-12" type="real"/>
-                                <sqrt>
+                                <squareRoot>
                                     <variable idx="17" coef="1"/>
-                                </sqrt>
+                                </squareRoot>
                             </times>
                         </plus>
                         <number value="2" type="real"/>
@@ -489,15 +489,15 @@
                                             <number value="2.4" type="real"/>
                                             <variable idx="3" coef="1"/>
                                         </times>
-                                        <sqrt>
+                                        <squareRoot>
                                             <variable idx="3" coef="1"/>
-                                        </sqrt>
+                                        </squareRoot>
                                     </times>
                                     <variable idx="32" coef="1"/>
                                 </times>
-                                <sqrt>
+                                <squareRoot>
                                     <variable idx="4" coef="1"/>
-                                </sqrt>
+                                </squareRoot>
                             </divide>
                         </minus>
                         <number value="2" type="real"/>

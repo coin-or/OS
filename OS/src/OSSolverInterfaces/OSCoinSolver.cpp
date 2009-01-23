@@ -492,7 +492,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 	}
 	// if we are throw an exception if the problem is nonlinear
 
-	// resultHeader infomration
+	// resultHeader information
 	if(osresult->setServiceName("Solved with Coin Solver: " + sSolverName) != true)
 		throw ErrorClass("OSResult error: setServiceName");
 	if(osresult->setInstanceName(  osinstance->getInstanceName()) != true)
@@ -562,7 +562,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 				}
 				CbcMain1( num_cbc_argv, cbc_argv, model);	
 				
-				//do the garbage collectioni on cbc_argv
+				//do the garbage collection on cbc_argv
 				for(i = 0; i < num_cbc_argv; i++){
 					delete[]  cbc_argv[ i];	
 					cbc_argv[i] = NULL;

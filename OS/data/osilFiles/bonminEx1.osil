@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<osil xmlns="os.optimizationservices.org">
+<osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
 	<instanceHeader>
 		<name>Bonmin Example</name>
 		<source>Bonmin example folder</source>
@@ -45,7 +46,7 @@
 				<el>1.0</el>
 				<el>1.0</el>
 			</value>
-</linearConstraintCoefficients>
+		</linearConstraintCoefficients>
 		<nonlinearExpressions numberOfNonlinearExpressions="1">
 			<nl idx="0"> 
 				<plus>

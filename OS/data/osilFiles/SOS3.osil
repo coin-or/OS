@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org C:\DataFiles\RESEARCH\OS\OS-trunk-test\OS\schemas\OSiL.xsd">
+<osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
 	<instanceHeader>
 		<source>
 			J.A. Tomlin, "A suggested extension of special ordered sets to non-separable non-convex programming problems", in: P. Hansen (ed.) Studies on Graphs and Discrete programing, North-Holland (1981) 359-370.
@@ -118,7 +119,7 @@
 		</value>
 		</linearConstraintCoefficients>
 		<specialOrderedSets numberOSpecialOrderedSets="1">
-			<sos numberOfVar="9" order="3" convexityRow="2">
+			<sos numberOfVar="9" type="3" convexityRow="2">
 				<var idx="2"></var>
 				<var idx="3"></var>
 				<var idx="4"></var>
@@ -128,7 +129,7 @@
 				<var idx="8"></var>
 				<var idx="9"></var>
 				<var idx="10"></var>
-				<potentialNonzeroSets numberOfSets="8">
+				<adjacentVariableSets numberOfSets="8">
 					<set numberOfVar="3"><var idx="2"></var><var idx="3"></var><var idx="6"></var></set>
 					<set numberOfVar="3"><var idx="2"></var><var idx="5"></var><var idx="6"></var></set>
 					<set numberOfVar="3"><var idx="3"></var><var idx="4"></var><var idx="7"></var></set>
@@ -137,7 +138,7 @@
 					<set numberOfVar="3"><var idx="5"></var><var idx="8"></var><var idx="9"></var></set>
 					<set numberOfVar="3"><var idx="6"></var><var idx="7"></var><var idx="10"></var></set>
 					<set numberOfVar="3"><var idx="6"></var><var idx="9"></var><var idx="10"></var></set>
-				</potentialNonzeroSets>
+				</adjacentVariableSets>
 			</sos>
 		</specialOrderedSets>
 	</instanceData>

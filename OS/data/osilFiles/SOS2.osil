@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org C:\DataFiles\RESEARCH\OS\OS-trunk-test\OS\schemas\OSiL.xsd">
+<osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
 	<instanceHeader>
 	<description>
 	   This problem represents the global optimization problem
@@ -104,7 +105,7 @@ It uses two SOS2 constructs.
 		</value>
 		</linearConstraintCoefficients>
 		<specialOrderedSets numberOSpecialOrderedSets="2">
-			<sos numberOfVar="6" order="2" convexityRow="1">
+			<sos numberOfVar="6" type="2" convexityRow="1">
 				<var idx="0"></var>
 				<var idx="1"></var>
 				<var idx="2"></var>
@@ -112,7 +113,7 @@ It uses two SOS2 constructs.
 				<var idx="4"></var>
 				<var idx="5"></var>
 			</sos>
-			<sos numberOfVar="6" order="2" convexityRow="2">
+			<sos numberOfVar="6" type="2" convexityRow="2">
 				<var idx="6"></var>
 				<var idx="7"></var>
 				<var idx="8"></var>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/OSiL.xsd">
+    xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
 	<instanceHeader>
 		<name>callBackTest.osil</name>
 		<description> 
@@ -50,7 +50,7 @@
 				<el>-1</el><el>1250</el><el>-2500</el>
 				<el>1</el><el>25</el><el>1</el>
 			</value>
-</linearConstraintCoefficients>
+		</linearConstraintCoefficients>
 		<quadraticCoefficients numberOfQuadraticTerms="2">
 			<qTerm idx="3"  idxOne="1" idxTwo="5"  coef="-1"/>
 			<qTerm idx="4"  idxOne="2" idxTwo="3"  coef="1"/>

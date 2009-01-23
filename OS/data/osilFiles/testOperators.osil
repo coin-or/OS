@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<osil xmlns="os.optimizationservices.org">
+<osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
 	<instanceHeader>
 		<name>Test Operators</name>
 		<description>The purpose of this file is to test the operators </description>
@@ -99,11 +100,11 @@
 						</sin>
 					</sum>
 					<plus>
-						<sqrt>
+						<squareRoot>
 							<square>
 								<variable coef="1.0" idx="1"/>
 							</square>
-						</sqrt>
+						</squareRoot>
 						<times>
 							<divide>
 								<variable coef="1.0" idx="1"/>

@@ -50,7 +50,7 @@ int main( ){
 	const char dirsep =  CoinFindDirSeparator();
  	// Set directory containing mps data files.
  	std::string dataDir;
-   dataDir = dirsep == '/' ? "../../data/" : "..\\..\\data\\";
+	dataDir = dirsep == '/' ? "../../data/" : "..\\..\\data\\";
 	cout << "Start Building the Model" << endl;
 	try{
 		// get the p0033 problem

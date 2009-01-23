@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org C:\DataFiles\RESEARCH\OS\OS-trunk-test\OS\schemas\OSiL.xsd">
+<osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
 	<instanceHeader>
 	<source>
 		W.C. Healy,Jr., "Multiple Choice Pogramming", Operations Research 12 (1964) 122-138
@@ -136,22 +137,22 @@
 			</value>
 		</linearConstraintCoefficients>
 		<specialOrderedSets numberOSpecialOrderedSets="4">
-			<sos numberOfVar="4" order="1" convexityRow="0">
+			<sos numberOfVar="4" type="1" convexityRow="0">
 				<var idx="0"></var>				
 				<var idx="1"></var>
 				<var idx="2"></var>
 			</sos>
-			<sos numberOfVar="4" order="1" convexityRow="1">
+			<sos numberOfVar="4" type="1" convexityRow="1">
 				<var idx="3"></var>
 				<var idx="4"></var>
 				<var idx="5"></var>
 			</sos>
-			<sos numberOfVar="4" order="1" convexityRow="2">
+			<sos numberOfVar="4" type="1" convexityRow="2">
 				<var idx="6"></var>
 				<var idx="7"></var>
 				<var idx="8"></var>
 			</sos>
-			<sos numberOfVar="4" order="1" convexityRow="3">
+			<sos numberOfVar="4" type="1" convexityRow="3">
 				<var idx="9"></var>
 				<var idx="10"></var>
 				<var idx="11"></var>

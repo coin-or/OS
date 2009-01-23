@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="os.optimizationservices.org ../schemas/OSiL.xsd">
+    xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
 	<instanceHeader>
 		<source>Lindo API Samples directory Example ex_addins.c</source>
 		<description>Optimal solution is x0  = -100, x1 = 1, obj val = 99</description>

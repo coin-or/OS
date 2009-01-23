@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/OSiL.xsd">
+    xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
 	<instanceHeader>
 		<name>volumeTest </name>
 		<source>Kipp Martin</source>
@@ -35,6 +35,6 @@
 			<el>1</el>
 				<el>1</el>
 			</value>
-	</linearConstraintCoefficients>
+		</linearConstraintCoefficients>
 	</instanceData>
 </osil>

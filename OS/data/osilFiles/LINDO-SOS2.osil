@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org C:\DataFiles\RESEARCH\OS\OS-trunk-test\OS\schemas\OSiL.xsd">
+<osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/OSiL.xsd">
 	<instanceHeader>
 	<description>
 	   This problem is a transcription of an example in the LINDO documentation.
@@ -90,7 +91,7 @@
 			</value>
 		</linearConstraintCoefficients>
 		<specialOrderedSets numberOSpecialOrderedSets="1">
-			<sos numberOfVar="5" order="2" convexityRow="0">
+			<sos numberOfVar="5" type="2" convexityRow="0">
 				<var idx="4"></var>
 				<var idx="5"></var>
 				<var idx="6"></var>
