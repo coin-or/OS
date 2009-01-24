@@ -450,7 +450,7 @@ int main(int argC, char* argV[])
 		delete ipoptSolver;
 		ipoptSolver = NULL;
 		unitTestResult << "Solved problem avion2.osil with Ipopt" << std::endl;
-		cout << "TEST 3" Completed successfully" << endl << endl;
+		cout << "TEST 3 Completed successfully" << endl << endl;
 #endif
 
 		// solve another problem
