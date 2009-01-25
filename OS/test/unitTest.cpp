@@ -224,6 +224,7 @@ int main(int argC, char* argV[])
 	
 	//return 0;
 	cout << "START UNIT TEST" << endl;
+	int nOfTest = 0;
 	// define the classes
 	FileUtil *fileUtil = NULL;  
 	#ifdef COIN_HAS_ASL
@@ -252,14 +253,14 @@ int main(int argC, char* argV[])
 	mpsFileName =  dataDir + "mpsFiles" + dirsep + "parinc.mps";
 	fileUtil = new FileUtil();
 	// 
-	unitTestResult << "HERE ARE THE UNIT TEST RESULTS:" << std::endl << std::endl;
+//	unitTestResult << "HERE ARE THE UNIT TEST RESULTS:" << std::endl << std::endl;
 
 //#define OSOL_PARSER_DEBUG
 #ifndef OSOL_PARSER_DEBUG
 
 	//first make sure we can read files
 	try{
-		std::cout << endl << "TEST 1: Try to read a sample file" << endl << endl;
+		std::cout << endl << "TEST " << ++nOfTest << ": Try to read a sample file" << endl << endl;
 		osilFileName =  dataDir  + "osilFiles" + dirsep +  "parincLinearByRow.osil";
 		//osilFileName =  dataDir  + "osilFiles" + dirsep +  "parincLinear.osil";
 		std::cout << "The file is: " ;
@@ -271,7 +272,7 @@ int main(int argC, char* argV[])
 		//OSInstance *osinstance = osilreader->readOSiL( osil);
 		//osinstance->initForAlgDiff();
 		unitTestResult << "Reading files successfully" << std::endl;
-		cout << endl << "TEST 1: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 		OSiLWriter osilwriter;
 		osilwriter.m_bWhiteSpace = true;
 		//std::cout << osilwriter.writeOSiL( osinstance) << std::endl;
@@ -311,7 +312,7 @@ int main(int argC, char* argV[])
 		*/
 		
 		
-		cout << endl << "TEST 2: Lossless I/O" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": Lossless I/O" << endl << endl;
 		//mpsFileName =  dataDir + "mpsFiles" + dirsep + "testfile2.mps";
 		mpsFileName =  dataDir + "mpsFiles" + dirsep + "parinc.mps";
 		mps2osil = new OSmps2osil( mpsFileName);
@@ -343,8 +344,8 @@ int main(int argC, char* argV[])
 		std::cout << "MAXIMUM DIFF INDEX  = " << theIndex << std::endl;
 		if(theMax > 0) unitTestResult << "WARNING:  you do not have lossless IO" << std::endl;
 		else 
-		{	unitTestResult << "passed lossless IO test" << std::endl;
-			cout << endl << "TEST 2: Completed successfully" << endl << endl;
+		{	unitTestResult << "Passed lossless IO test" << std::endl;
+			cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 		}
 		delete mps2osil;
 		delete osilreader;
@@ -423,7 +424,7 @@ int main(int argC, char* argV[])
 	#ifdef COIN_HAS_IPOPT
 	IpoptSolver *ipoptSolver  =  NULL;	
 	try{
-		cout << endl << "TEST 3: Ipopt solver with avion2.osil" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver with avion2.osil" << endl << endl;
 	    ipoptSolver  = new IpoptSolver();
 		cout << "create a new IPOPT Solver for OSiL string solution" << endl;
 		ok = true;
@@ -452,11 +453,11 @@ int main(int argC, char* argV[])
 		delete ipoptSolver;
 		ipoptSolver = NULL;
 		unitTestResult << "Solved problem avion2.osil with Ipopt" << std::endl;
-		cout << endl << "TEST 3: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 #endif
 
 		// solve another problem
-		cout << endl << "TEST 4: Ipopt solver with HS071_NLPMod.osil" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver with HS071_NLPMod.osil" << endl << endl;
 		cout << "create a new IPOPT Solver for OSiL string solution" << endl;
 		ipoptSolver  = new IpoptSolver();
 		// a problem with all nonlinear terms no linear terms
@@ -481,9 +482,9 @@ int main(int argC, char* argV[])
 		unitTestResult << "Solved problem HS071.osil with Ipopt" << std::endl;
 		delete ipoptSolver;
 		ipoptSolver = NULL;
-		cout << endl << "TEST 4: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
-		cout << endl << "TEST 5: Ipopt solver on rosenbrockmod.osil" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on rosenbrockmod.osil" << endl << endl;
 		cout << "create a new IPOPT Solver for OSiL string solution" << endl;
 		ipoptSolver  = new IpoptSolver();
 		// solve another problem
@@ -509,9 +510,9 @@ int main(int argC, char* argV[])
 		unitTestResult << "Solved problem rosenbrockmod.osil with Ipopt" << std::endl;
 		delete ipoptSolver;
 		ipoptSolver = NULL;
-		cout << endl << "TEST 5: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
-		cout << endl << "TEST 6: Ipopt solver on parincQuadratic.osil" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on parincQuadratic.osil" << endl << endl;
 		cout << "create a new IPOPT Solver for OSiL string solution" << endl;
 		ipoptSolver  = new IpoptSolver();
 		// solve another problem
@@ -538,9 +539,9 @@ int main(int argC, char* argV[])
 		unitTestResult << "Solved problem parincQuadratic.osil with Ipopt" << std::endl;
 		delete ipoptSolver;
 		ipoptSolver = NULL;
-		cout << endl << "TEST 6: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
-		cout << endl << "TEST 7: Ipopt solver on parincLinear.osil" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on parincLinear.osil" << endl << endl;
 		cout << "create a new IPOPT Solver for OSiL string solution" << endl;
 		ipoptSolver  = new IpoptSolver();
 		// solve another problem
@@ -567,9 +568,9 @@ int main(int argC, char* argV[])
 		unitTestResult << "Solved problem parincLinear.osil with Ipopt" << std::endl;
 		delete ipoptSolver;
 		ipoptSolver = NULL;
-		cout << endl << "TEST 7: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
-		cout << endl << "TEST 8: Ipopt solver on callBackTest.osil" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on callBackTest.osil" << endl << endl;
 		cout << "create a new IPOPT Solver for OSiL string solution" << endl;
 		ipoptSolver  = new IpoptSolver();
 		// solve another problem
@@ -599,9 +600,9 @@ int main(int argC, char* argV[])
 		unitTestResult << "Solved problem callBackTest.osil with Ipopt" << std::endl;	
 		delete ipoptSolver;
 		ipoptSolver = NULL;
-		cout << endl << "TEST 8: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
-		cout << endl << "TEST 9: Ipopt solver on callBackTestRowMajor.osil" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on callBackTestRowMajor.osil" << endl << endl;
 		cout << "create a new IPOPT Solver for OSiL string solution" << endl;
 		ipoptSolver  = new IpoptSolver();
 		// solve another problem
@@ -631,14 +632,14 @@ int main(int argC, char* argV[])
 		delete ipoptSolver;
 		ipoptSolver = NULL;	
 		unitTestResult << "Solved problem callBackRowMajor.osil with Ipopt" << std::endl;
-		cout << endl << "TEST 9: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
 	catch(const ErrorClass& eclass){
 		unitTestResultFailure << "Sorry Unit Test Failed Testing the Ipopt Solver:"  + eclass.errormsg<< endl; 
 	}
 	#endif
 	try{
-		cout << endl << "TEST 10: Clp solver on parincLinearByRow.osil" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": Clp solver on parincLinearByRow.osil" << endl << endl;
 		ok = true; 
 		std::cout << "create a new COIN Clp for OSiL string solution" << std::endl;
 		osilFileName = dataDir  + "osilFiles" + dirsep + "parincLinearByRow.osil";
@@ -695,7 +696,7 @@ int main(int argC, char* argV[])
 		cout << "osrlreader successfully deleted" << endl;
 		osrlreader = NULL;
 		unitTestResult << "Solved problem parincLinearByRow.osil with Clp" << std::endl;
-		cout << endl << "TEST 10: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
 	catch(const ErrorClass& eclass){
 		unitTestResultFailure << "Sorry Unit Test Failed Testing Clp Solver:"  + eclass.errormsg<< endl;
@@ -703,7 +704,7 @@ int main(int argC, char* argV[])
 
 	// now solve another problem -- try an integer program
 	try{
-		cout << endl << "TEST 11: Cbc solver on p0033.osil" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": Cbc solver on p0033.osil" << endl << endl;
 		std::cout << "create a new COIN Cbc for OSiL string solution" << std::endl;
 		ok = true;
 		osilFileName = dataDir  + "osilFiles" + dirsep + "p0033.osil";
@@ -728,11 +729,11 @@ int main(int argC, char* argV[])
 		delete solver;
 		solver = NULL;
 		unitTestResult << "Solved problem p0033.osil with Cbc" << std::endl;
-		cout << endl << "TEST 11: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
 		// now test p0201.osil
 		/*
-		cout << endl << "TEST 12: Cbc solver on p0201.osil" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": Cbc solver on p0201.osil" << endl << endl;
 		ok = true;
 		osilFileName = dataDir  + "osilFiles" + dirsep + "p0201.osil";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
@@ -754,7 +755,7 @@ int main(int argC, char* argV[])
 		delete solver;
 		solver = NULL;
 		unitTestResult << "Solved problem p0201.osil with Cbc" << std::endl;
-		cout << endl << "TEST 12: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 		*/
 	}
 	catch(const ErrorClass& eclass){
@@ -765,7 +766,7 @@ int main(int argC, char* argV[])
 	//
 	#ifdef COIN_HAS_KNITRO
 	try{
-		cout << endl << "TEST 13: knitro solver on rosenbrockmod.osil" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": knitro solver on rosenbrockmod.osil" << endl << endl;
 		ok = true; 
 		osilFileName = dataDir  + "osilFiles" + dirsep + "rosenbrockmod.osil";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
@@ -788,11 +789,11 @@ int main(int argC, char* argV[])
 		delete solver;
 		solver = NULL;
 		unitTestResult << "Solved problem rosenbrockmod.osil with Knitro" << std::endl;
-		cout << endl << "TEST 13: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
 		//
 		// now solve callBackTest.osil
-		cout << endl << "TEST 14: knitro solver on callBackTest.osil" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": knitro solver on callBackTest.osil" << endl << endl;
 		osilFileName = dataDir  + "osilFiles" + dirsep + "callBackTest.osil";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		solver = new KnitroSolver();
@@ -813,10 +814,10 @@ int main(int argC, char* argV[])
 		delete solver;
 		solver = NULL;  
 		unitTestResult << "Solved problem callBackTest.osil with Knitro" << std::endl;		
-		cout << endl << "TEST 14: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 		//
 		// now solve a pure quadratic
-		cout << endl << "TEST 15: knitro solver on parincQuadratic.osil" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": knitro solver on parincQuadratic.osil" << endl << endl;
 		osilFileName = dataDir  + "osilFiles" + dirsep + "parincQuadratic.osil";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		solver = new KnitroSolver();	
@@ -837,10 +838,10 @@ int main(int argC, char* argV[])
 		delete solver;
 		solver = NULL;
 		unitTestResult << "Solved problem parincQuadratic.osil with Knitro" << std::endl;
-		cout << endl << "TEST 15: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 		//
 		// now solve a HS071_NLP.osil
-		cout << endl << "TEST 16: knitro solver on HS071_NLP.osil" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": knitro solver on HS071_NLP.osil" << endl << endl;
 		osilFileName = dataDir  + "osilFiles" + dirsep + "HS071_NLP.osil";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		solver = new KnitroSolver();	
@@ -861,7 +862,7 @@ int main(int argC, char* argV[])
 		delete solver;
 		solver = NULL;
 		unitTestResult << "Solved problem HS071_NLP.osil with Knitro" << std::endl;
-		cout << endl << "TEST 16: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  solver->osrl <<  endl;		
@@ -876,7 +877,7 @@ int main(int argC, char* argV[])
 	//
 	#ifdef COIN_HAS_SYMPHONY
 	try{
-		cout << endl << "TEST 17: SYMPHONY solver on p0033.osil" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": SYMPHONY solver on p0033.osil" << endl << endl;
 		ok = true; 
 		osilFileName = dataDir  + "osilFiles" + dirsep + "p0033.osil";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
@@ -901,7 +902,7 @@ int main(int argC, char* argV[])
 		delete solver;
 		solver = NULL;
 		unitTestResult << "Solved problem p0033.osil with SYMPHONY" << std::endl;
-		cout << endl << "TEST 17: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  solver->osrl <<  endl;
@@ -915,7 +916,7 @@ int main(int argC, char* argV[])
 	//
 	#ifdef COIN_HAS_BONMIN
 	try{
-		cout << endl << "TEST 18: Bonmin solver on bonminEx1.osil" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": Bonmin solver on bonminEx1.osil" << endl << endl;
 		OSiLReader *osilreader = NULL;
 		osilreader = new OSiLReader(); 
 		ok = true; 
@@ -943,9 +944,9 @@ int main(int argC, char* argV[])
 		unitTestResult << "Solved problem bonminEx1.osil with Bonmin" << std::endl;
 		delete osilreader;
 		osilreader = NULL;
-		cout << endl << "TEST 18: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
-		cout << endl << "TEST 19: Bonmin solver on wayneQuadratic.osil" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": Bonmin solver on wayneQuadratic.osil" << endl << endl;
 		ok = true;
 		osilFileName = dataDir  + "osilFiles" + dirsep + "wayneQuadratic.osil";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
@@ -971,9 +972,9 @@ int main(int argC, char* argV[])
 		delete solver;
 		solver = NULL;
 		unitTestResult << "Solved problem wayneQuadratic.osil with Bonmin" << std::endl;
-		cout << endl << "TEST 19: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
-		cout << endl << "TEST 19: Bonmin solver on wayneQuadratic.osil" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": Bonmin solver on wayneQuadratic.osil" << endl << endl;
 		ok = true;
 		osilFileName = dataDir  + "osilFiles" + dirsep + "wayneQuadratic.osil";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
@@ -999,7 +1000,7 @@ int main(int argC, char* argV[])
 		delete solver;
 		solver = NULL;
 		unitTestResult << "Solved problem wayneQuadratic.osil with Bonmin" << std::endl;
-		cout << endl << "TEST 19: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  solver->osrl <<  endl;
@@ -1014,7 +1015,7 @@ int main(int argC, char* argV[])
 
 	#ifdef COIN_HAS_COUENNE
 	try{
-		cout << endl << "TEST 20: Couenne solver on bonminEx1.osil" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": Couenne solver on bonminEx1.osil" << endl << endl;
 		#if 0
 		OSiLReader *osilreader = NULL;
 		osilreader = new OSiLReader(); 
@@ -1051,7 +1052,7 @@ int main(int argC, char* argV[])
 	
 	
 		delete osilreader;
-		cout << endl << "TEST 20: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	#endif
 	
 	//return 0;
@@ -1075,7 +1076,7 @@ int main(int argC, char* argV[])
 	//
 	#ifdef COIN_HAS_DYLP
 	try{
-		cout << endl << "TEST 21: DyLP solver on parincLinear.osil" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": DyLP solver on parincLinear.osil" << endl << endl;
 		ok = true; 
 		osilFileName = dataDir  + "osilFiles" + dirsep + "parincLinear.osil";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
@@ -1099,7 +1100,7 @@ int main(int argC, char* argV[])
 		delete solver;
 		solver = NULL;
 		unitTestResult << "Solved problem parincLinear.osil with DyLP" << std::endl;
-		cout << endl << "TEST 21: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  solver->osrl <<  endl;
@@ -1113,7 +1114,7 @@ int main(int argC, char* argV[])
 	
 	#ifdef COIN_HAS_VOL
 	try{
-		cout << endl << "TEST 22: Vol solver on volumeTest.osil" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": Vol solver on volumeTest.osil" << endl << endl;
 		ok = true; 
 		osilFileName = dataDir  + "osilFiles" + dirsep + "volumeTest.osil";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
@@ -1137,7 +1138,7 @@ int main(int argC, char* argV[])
 		delete solver;
 		solver = NULL;
 		unitTestResult << "Solved problem volumeTest.osil with Vol" << std::endl;
-		cout << endl << "TEST 22: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  solver->osrl <<  endl;
@@ -1151,7 +1152,7 @@ int main(int argC, char* argV[])
 	//
 	#ifdef COIN_HAS_GLPK
 	try{
-		cout << endl << "TEST 23: GLPK solver on p0033.osil" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": GLPK solver on p0033.osil" << endl << endl;
 		ok = true; 
 		osilFileName = dataDir  + "osilFiles" + dirsep + "p0033.osil";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
@@ -1175,7 +1176,7 @@ int main(int argC, char* argV[])
 		delete solver;
 		solver = NULL;
 		unitTestResult << "Solved problem p0033.osil with GLPK" << std::endl;
-		cout << endl << "TEST 23: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  solver->osrl <<  endl;
@@ -1188,7 +1189,7 @@ int main(int argC, char* argV[])
 	//
 	#ifdef COIN_HAS_CPX
 	try{
-		cout << endl << "TEST 24: Cplex solver on p0033.osil" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": Cplex solver on p0033.osil" << endl << endl;
 		ok = true; 
 		osilFileName = dataDir  + "osilFiles" + dirsep + "p0033.osil";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
@@ -1212,7 +1213,7 @@ int main(int argC, char* argV[])
 		delete solver;
 		solver = NULL;
 		unitTestResult << "Solved problem p0033.osil with CPLEX" << std::endl;
-		cout << endl << "TEST 24: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  solver->osrl <<  endl;
@@ -1224,7 +1225,7 @@ int main(int argC, char* argV[])
 	//
 	#ifdef COIN_HAS_LINDO
 	try{
-		cout << endl << "TEST 25: Lindo solver on lindoapiaddins.osil" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": Lindo solver on lindoapiaddins.osil" << endl << endl;
 		ok = true;
 		osilFileName = dataDir  + "osilFiles" + dirsep + "lindoapiaddins.osil";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
@@ -1249,10 +1250,10 @@ int main(int argC, char* argV[])
 		delete solver;
 		solver = NULL;
 		unitTestResult << "Solved problem lindoapiaddins.osil with Lindo" << std::endl;
-		cout << endl << "TEST 25: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
 		// now solve the rosenbrock problem from the OSiL paper
-		cout << endl << "TEST 26: Lindo solver on rosenbrockmod.osil" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": Lindo solver on rosenbrockmod.osil" << endl << endl;
 		osilFileName = dataDir  + "osilFiles" + dirsep + "rosenbrockmod.osil";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		solver = new LindoSolver();	
@@ -1275,10 +1276,10 @@ int main(int argC, char* argV[])
 		delete solver;
 		solver = NULL;
 		unitTestResult << "Solved problem rosenbrockmod.osil with Lindo" << std::endl;
-		cout << endl << "TEST 26: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
 		// now solve a pure quadratic
-		cout << endl << "TEST 27: Lindo solver on parincQuadratic.osil" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": Lindo solver on parincQuadratic.osil" << endl << endl;
 		osilFileName = dataDir  + "osilFiles" + dirsep + "parincQuadratic.osil";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		solver = new LindoSolver();	
@@ -1300,12 +1301,12 @@ int main(int argC, char* argV[])
 		delete solver;
 		solver = NULL;
 		unitTestResult << "Solved problem parincQuadratic.osil with Lindo" << std::endl;
-		cout << endl << "TEST 27: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
 		// now solve a quadratic binary problem
 		// wayneQuadratic.osil
 		/*
-		cout << endl << "TEST 28: Lindo solver on wayneQuadratic.osil" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": Lindo solver on wayneQuadratic.osil" << endl << endl;
 		osilFileName = dataDir  + "osilFiles" + dirsep + "wayneQuadratic.osil";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		solver = new LindoSolver();	
@@ -1329,7 +1330,7 @@ int main(int argC, char* argV[])
 		delete solver;
 		solver = NULL;
 		unitTestResult << "Solved problem wayneQuadratic.osil with Lindo" << std::endl;
-		cout << endl << "TEST 28: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 		*/
 		
 	}
@@ -1342,7 +1343,7 @@ int main(int argC, char* argV[])
 	// end solving using the osil file
 	// now solve with an OSInstance created from an MPS file
 	try{
-		cout << endl << "TEST 29: Cbc solver using MPS file" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": Cbc solver using MPS file" << endl << endl;
 		ok = true;
 //		cout << endl;
 //		cout << "START MPS TESTING" << endl << endl;
@@ -1367,10 +1368,10 @@ int main(int argC, char* argV[])
 		solver = NULL;
 		delete mps2osil; 
 		mps2osil = NULL;
-		cout << endl;
-		cout << "DONE WITH MPS TESTING" << endl;
+//		cout << endl;
+//		cout << "DONE WITH MPS TESTING" << endl;
 		unitTestResult << "Test the MPS -> OSiL converter on parinc.mps using Cbc" << std::endl;
-		cout << endl << "TEST 29: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  solver->osrl <<  endl;
@@ -1380,9 +1381,8 @@ int main(int argC, char* argV[])
 	// now solve with an OSInstance created from an AMPL nl file
 	try{
 #ifdef COIN_HAS_ASL
-		cout << endl << "TEST 30: AMPL solver interface" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": AMPL solver interface" << endl << endl;
 		ok = true;
-		cout << endl;
 		cout << "create a cbc Solver for AMPL nl - OSInstance solution" << endl;
 		solver = new CoinSolver();
 		solver->sSolverName = "cbc";
@@ -1407,7 +1407,7 @@ int main(int argC, char* argV[])
 		delete nl2osil;
 		nl2osil = NULL;	
 		unitTestResult << "Test the AMPL nl -> OSiL converter on parinc.nl using Cbc" << std::endl; 
-		cout << endl << "TEST 30: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 #endif
 	}	
 		catch(const ErrorClass& eclass){
@@ -1419,12 +1419,12 @@ int main(int argC, char* argV[])
 	// Now test the mps feature
 	//
 	try{
-		cout << endl << "TEST 31: b64 operations" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": b64 operations" << endl << endl;
 		ok = true;
 //		cout << endl;
 //		cout << endl;
 //		cout << "TESTING b64 OPERATIONS WITH A COIN SOLVER"<< endl;
-		cout << endl;
+//		cout << endl;
 		OSiLWriter osilwriter;
 		osilwriter.m_bWriteBase64 = true;
 		solver = new CoinSolver();
@@ -1451,7 +1451,7 @@ int main(int argC, char* argV[])
 		delete mps2osil;
 		mps2osil = NULL;
 		unitTestResult << "Test a problem written in b64 and then converted to OSInstance" << std::endl;
-		cout << endl << "TEST 31: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}	
 	catch(const ErrorClass& eclass){
 		cout << endl << endl;
@@ -1464,8 +1464,7 @@ int main(int argC, char* argV[])
 	//
 	// Now just test the OSiL parser
 	try{ 
-		cout << endl << "TEST 32:  OSiL parser" << endl << endl;
-		cout << endl;
+		cout << endl << "TEST " << ++nOfTest << ":  OSiL parser" << endl << endl;
 		clock_t start, finish;
 		double duration;
 		OSiLWriter *osilwriter = NULL;
@@ -1495,7 +1494,7 @@ int main(int argC, char* argV[])
 		duration = (double) (finish - start) / CLOCKS_PER_SEC;
 		cout << "Parsing took (seconds): "<< duration << endl;
 		unitTestResult << "Successful test of OSiL parser on problem parincLinear.osil" << std::endl;
-		cout << endl << "TEST 32: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}	
 		catch(const ErrorClass& eclass){
 		cout << endl << endl << endl;
@@ -1509,7 +1508,7 @@ int main(int argC, char* argV[])
 
 #ifdef STRESSTEST
 	try{ 
-		cout << endl << "TEST 33: Stochastic extensions to OSiL" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": Stochastic extensions to OSiL" << endl << endl;
 		cout << endl;
 		clock_t start, finish;
 		double duration;
@@ -1789,7 +1788,7 @@ int main(int argC, char* argV[])
 		delete [] VI;
 		VI = NULL;
 		unitTestResult << "Successful test of osinstance get() and set() methods" << std::endl;
-		cout << endl << "TEST 33: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}	
 	catch(const ErrorClass& eclass){
 		cout << endl << endl << endl;
@@ -1810,8 +1809,7 @@ int main(int argC, char* argV[])
 		 * 4) read the string back again to make sure nothing was lost
 		 *    in translation
 		 */
-		cout << endl << "TEST 34: OSrL parser" << endl << endl;
-		cout << endl;
+		cout << endl << "TEST " << ++nOfTest << ": OSrL parser" << endl << endl;
 		std::string tmpOSrL;
 		clock_t start, finish;
 		double duration;
@@ -1845,7 +1843,7 @@ int main(int argC, char* argV[])
 		delete osrlreader;
 		osrlreader = NULL;
 		// now a second example
-		cout << "TEST PARSING AN OSrL FILE" << endl;
+		cout << endl << "TEST PARSING ANOTHER OSrL FILE" << endl;
 		osrlwriter = new OSrLWriter();
 		osrlreader = new OSrLReader();
 		cout << "FIRST READ THE OSrL FILE INTO A STRING" << endl;
@@ -1869,7 +1867,7 @@ int main(int argC, char* argV[])
 		unitTestResult << 
 		     "Successful test of OSrL parser on problems parincLinear.osrl and errorExample.osrl" 
 		      << std::endl;
-		cout << endl << "TEST 34: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}	
 		catch(const ErrorClass& eclass){
 		cout << endl << endl << endl;
@@ -1903,8 +1901,7 @@ int main(int argC, char* argV[])
 		 *10) read two more OSoL strings from different files
 		 */
 //#if 0
-		cout << endl << "TEST 35: OSoL parser" << endl << endl;
-		cout << endl;
+		cout << endl << "TEST " << ++nOfTest << ": OSoL parser" << endl << endl;
 		std::string tmpOSoL;
 		clock_t start, finish;
 		double duration;
@@ -2457,11 +2454,11 @@ int main(int argC, char* argV[])
 		osolwriter = NULL;
 		delete osolreader;
 		osolreader = NULL;
-		cout << endl << "TEST 35: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
 
 		// now a second example
-		cout << endl << "TEST 36: Parse another .osol file" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": Parse another .osol file" << endl << endl;
 		osolwriter = new OSoLWriter();
 		osolreader = new OSoLReader();
 		cout << "First read the OSoL file into a string" << endl;
@@ -2510,7 +2507,7 @@ int main(int argC, char* argV[])
 		unitTestResult << 
 		     "Successful test of OSoL parser on file parsertest.osol" 
 		      << std::endl;
-		cout << endl << "TEST 36: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
 
 	}	
@@ -2527,7 +2524,7 @@ int main(int argC, char* argV[])
 
 	// now test postfix and prefix routines
 	try{
-		cout << endl << "TEST 37: postfix and prefix routines" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": postfix and prefix routines" << endl << endl;
 		std::string expTreeTest =  dataDir  + "osilFiles" + dirsep + "rosenbrockmod.osil";
 		osil = fileUtil->getFileAsString( expTreeTest.c_str() ) ;
 		OSInstance *osinstance = NULL;
@@ -2581,7 +2578,7 @@ int main(int argC, char* argV[])
 		osilreader = NULL;
 		osinstance = NULL;		
 		unitTestResult << "Successful test of prefix and postfix conversion routines on problem rosenbrockmod.osil" << std::endl;
-		cout << endl << "TEST 37: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 		
 	}
 	catch(const ErrorClass& eclass){
@@ -2590,7 +2587,7 @@ int main(int argC, char* argV[])
 	}
 	// now test the nonlinear operators	
 	try{
-		cout << endl << "TEST 38: nonlinear operators" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": nonlinear operators" << endl << endl;
 		ok = true;
 //		std::cout << "Test nonlinear operators" << std::endl;
 		std::string operatorTest =  dataDir  + "osilFiles" + dirsep + "testOperators.osil";
@@ -2635,7 +2632,7 @@ int main(int argC, char* argV[])
 		osinstance = NULL;
 		//create an osinstance
 		unitTestResult << "Successful test of all of the nonlinear operators on file testOperators.osil" << std::endl;
-		cout << endl << "TEST 38: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
 	catch(const ErrorClass& eclass){
 		cout << endl << endl << endl;
@@ -2645,7 +2642,7 @@ int main(int argC, char* argV[])
 	// now solve on a remote server
 	/*
 	try{
-		cout << endl << "TEST 39: Test remote solver" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": Test remote solver" << endl << endl;
 		//return 0;
 		OSSolverAgent* osagent = NULL;
 		//osagent = new OSSolverAgent("128.135.130.17/axis/OSSolverService");
@@ -2679,14 +2676,14 @@ int main(int argC, char* argV[])
 		nl2osil = NULL;
 		delete osilwriter;
 		osilwriter = NULL;
-		cout << endl << "TEST 39: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}	
 		catch(const ErrorClass& eclass){
 		cout <<  eclass.errormsg <<  endl;
 	}	
 	*/
 	try{
-		cout << endl << "TEST 40: Automatic differentiation" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": Automatic differentiation" << endl << endl;
 //		std::cout << std::endl << std::endl;
 //		std::cout << "Testing AD Features " << std::endl;
 		std::string expTreeTest =  dataDir  + "osilFiles" + dirsep + "CppADTestLag.osil";
@@ -2754,7 +2751,7 @@ int main(int argC, char* argV[])
 		delete[] x;
 		delete osilreader;
 		osilreader = NULL;
-		cout << endl << "TEST 40: Completed successfully" << endl << endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}	
 	catch(const ErrorClass& eclass){
 		cout << endl << endl << endl;
@@ -2764,15 +2761,15 @@ int main(int argC, char* argV[])
 	fileUtil = NULL;
 	    
 	if(unitTestResultFailure.str().length() > 0){
-		cout << "The unitTest passed the following" << endl << endl;
+		cout << endl << "THE UNIT TEST PASSED THE FOLLOWING:" << endl << endl;
 		cout << unitTestResult.str() << endl << endl;
-		cout << "Unfortunately, you failed on the following:" << endl << endl;
+		cout << "UNFORTUNATELY, YOU FAILED ON THE FOLLOWING:" << endl << endl;
 		cout << unitTestResultFailure.str() << endl << endl;
 		cout << "Conclusion: FAILURE" << endl;
 		return 1;
 	}
 	else{
-		cout << "The unitTest passed the following" << endl << endl;
+		cout << endl << "THE UNIT TEST PASSED THE FOLLOWING:" << endl << endl;
 		cout << unitTestResult.str() << endl << endl;
 		cout << "All tests completed successfully" <<  endl <<  endl;
 		return 0;
