@@ -3,7 +3,7 @@
 	<general>
 	</general>
 	<optimization>
-		<variables numberOfOtherVariableOptions="2">
+		<variables numberOfOtherVariableOptions="0">
 			<initialVariableValues numberOfVar="0">
 			</initialVariableValues>
 			<initialBasisStatus numberOfVar="0">

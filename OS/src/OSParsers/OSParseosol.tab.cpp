@@ -4006,8 +4006,8 @@ yyreduce:
 
   case 288:
 
-    {	if ((yyvsp[(3) - (4)].ival) <= 0)
-		osolerror (NULL, osoption, parserData, "Require positive number of directories to move");
+    {	if ((yyvsp[(3) - (4)].ival) < 0)
+		osolerror (NULL, osoption, parserData, "Require nonnegative number of directories to move");
 	osoption->job->inputDirectoriesToMove->numberOfPathPairs = (yyvsp[(3) - (4)].ival);
 	osoption->job->inputDirectoriesToMove->pathPair = new PathPair*[(yyvsp[(3) - (4)].ival)];
 	for (int i = 0; i < (yyvsp[(3) - (4)].ival); i++)
@@ -4088,8 +4088,8 @@ yyreduce:
 
   case 308:
 
-    {	if ((yyvsp[(3) - (4)].ival) <= 0)
-		osolerror (NULL, osoption, parserData, "Require positive number of files to move");
+    {	if ((yyvsp[(3) - (4)].ival) < 0)
+		osolerror (NULL, osoption, parserData, "Require nonnegative number of files to move");
 	osoption->job->inputFilesToMove->numberOfPathPairs = (yyvsp[(3) - (4)].ival);
 	osoption->job->inputFilesToMove->pathPair = new PathPair*[(yyvsp[(3) - (4)].ival)];
 	for (int i = 0; i < (yyvsp[(3) - (4)].ival); i++) osoption->job->inputFilesToMove->pathPair[i] = new PathPair();
@@ -4169,8 +4169,8 @@ yyreduce:
 
   case 328:
 
-    {	if ((yyvsp[(3) - (4)].ival) <= 0)
-		osolerror (NULL, osoption, parserData, "Require positive number of directories to move");
+    {	if ((yyvsp[(3) - (4)].ival) < 0)
+		osolerror (NULL, osoption, parserData, "Require nonnegative number of directories to move");
 	osoption->job->outputDirectoriesToMove->numberOfPathPairs = (yyvsp[(3) - (4)].ival);
 	osoption->job->outputDirectoriesToMove->pathPair = new PathPair*[(yyvsp[(3) - (4)].ival)];
 	for (int i = 0; i < (yyvsp[(3) - (4)].ival); i++)
@@ -4251,8 +4251,8 @@ yyreduce:
 
   case 348:
 
-    {	if ((yyvsp[(3) - (4)].ival) <= 0)
-		osolerror (NULL, osoption, parserData, "Require positive number of files to move");
+    {	if ((yyvsp[(3) - (4)].ival) < 0)
+		osolerror (NULL, osoption, parserData, "Require nonnegative number of files to move");
 	osoption->job->outputFilesToMove->numberOfPathPairs = (yyvsp[(3) - (4)].ival);
 	osoption->job->outputFilesToMove->pathPair = new PathPair*[(yyvsp[(3) - (4)].ival)];
 	for (int i = 0; i < (yyvsp[(3) - (4)].ival); i++)
@@ -4557,8 +4557,8 @@ yyreduce:
 
   case 431:
 
-    {	if ((yyvsp[(3) - (4)].ival) <= 0)
-		osolerror (NULL, osoption, parserData, "number of <var> elements must be positive");
+    {	if ((yyvsp[(3) - (4)].ival) < 0)
+		osolerror (NULL, osoption, parserData, "number of <var> elements must be nonnegative");
 	osoption->optimization->variables->initialVariableValues = new InitVariableValues();
 	osoption->optimization->variables->initialVariableValues->numberOfVar = (yyvsp[(3) - (4)].ival);
 	osoption->optimization->variables->initialVariableValues->var = new InitVarValue*[(yyvsp[(3) - (4)].ival)];
@@ -4615,8 +4615,8 @@ yyreduce:
 
   case 447:
 
-    {	if ((yyvsp[(3) - (4)].ival) <= 0)
-		osolerror (NULL, osoption, parserData, "number of <var> elements must be positive");
+    {	if ((yyvsp[(3) - (4)].ival) < 0)
+		osolerror (NULL, osoption, parserData, "number of <var> elements must be nonnegative");
 	osoption->optimization->variables->initialVariableValuesString = new InitVariableValuesString();
 	osoption->optimization->variables->initialVariableValuesString->numberOfVar = (yyvsp[(3) - (4)].ival);
 	osoption->optimization->variables->initialVariableValuesString->var = new InitVarValueString*[(yyvsp[(3) - (4)].ival)];
@@ -4668,8 +4668,8 @@ yyreduce:
 
   case 463:
 
-    {	if ((yyvsp[(3) - (4)].ival) <= 0)
-		osolerror (NULL, osoption, parserData, "number of <var> elements must be positive");
+    {	if ((yyvsp[(3) - (4)].ival) < 0)
+		osolerror (NULL, osoption, parserData, "number of <var> elements must be nonnegative");
 	osoption->optimization->variables->initialBasisStatus = new InitialBasisStatus();
 	osoption->optimization->variables->initialBasisStatus->numberOfVar = (yyvsp[(3) - (4)].ival);
 	osoption->optimization->variables->initialBasisStatus->var = new InitBasStatus*[(yyvsp[(3) - (4)].ival)];
@@ -4721,8 +4721,8 @@ yyreduce:
 
   case 479:
 
-    {	if ((yyvsp[(3) - (4)].ival) <= 0)
-		osolerror (NULL, osoption, parserData, "number of <var> elements must be positive");
+    {	if ((yyvsp[(3) - (4)].ival) < 0)
+		osolerror (NULL, osoption, parserData, "number of <var> elements must be nonnegative");
 	osoption->optimization->variables->integerVariableBranchingWeights = new IntegerVariableBranchingWeights();
 	osoption->optimization->variables->integerVariableBranchingWeights->numberOfVar = (yyvsp[(3) - (4)].ival);
 	osoption->optimization->variables->integerVariableBranchingWeights->var = new BranchingWeight*[(yyvsp[(3) - (4)].ival)];
@@ -4779,8 +4779,8 @@ yyreduce:
 
   case 495:
 
-    {	if ((yyvsp[(3) - (4)].ival) <= 0)
-		osolerror (NULL, osoption, parserData, "number of <sos> elements must be positive");
+    {	if ((yyvsp[(3) - (4)].ival) < 0)
+		osolerror (NULL, osoption, parserData, "number of <sos> elements must be nonnegative");
 	osoption->optimization->variables->sosVariableBranchingWeights = new SOSVariableBranchingWeights();
 	osoption->optimization->variables->sosVariableBranchingWeights->numberOfSOS = (yyvsp[(3) - (4)].ival);
 	osoption->optimization->variables->sosVariableBranchingWeights->sos = new SOSWeights*[(yyvsp[(3) - (4)].ival)];
@@ -5072,8 +5072,8 @@ yyreduce:
 
   case 579:
 
-    {	if ((yyvsp[(3) - (4)].ival) <= 0)
-		osolerror (NULL, osoption, parserData, "number of <obj> elements must be positive");
+    {	if ((yyvsp[(3) - (4)].ival) < 0)
+		osolerror (NULL, osoption, parserData, "number of <obj> elements must be nonnegative");
 	osoption->optimization->objectives->initialObjectiveValues = new InitObjectiveValues();
 	osoption->optimization->objectives->initialObjectiveValues->numberOfObj = (yyvsp[(3) - (4)].ival);
 	osoption->optimization->objectives->initialObjectiveValues->obj = new InitObjValue*[(yyvsp[(3) - (4)].ival)];
@@ -5130,8 +5130,8 @@ yyreduce:
 
   case 595:
 
-    {	if ((yyvsp[(3) - (4)].ival) <= 0)
-		osolerror (NULL, osoption, parserData, "number of <obj> elements must be positive");
+    {	if ((yyvsp[(3) - (4)].ival) < 0)
+		osolerror (NULL, osoption, parserData, "number of <obj> elements must be nonnegative");
 	osoption->optimization->objectives->initialObjectiveBounds = new InitObjectiveBounds();
 	osoption->optimization->objectives->initialObjectiveBounds->numberOfObj = (yyvsp[(3) - (4)].ival);
 	osoption->optimization->objectives->initialObjectiveBounds->obj = new InitObjBound*[(yyvsp[(3) - (4)].ival)];
@@ -5376,8 +5376,8 @@ yyreduce:
 
   case 667:
 
-    {	if ((yyvsp[(3) - (4)].ival) <= 0)
-		osolerror (NULL, osoption, parserData, "number of <con> elements must be positive");
+    {	if ((yyvsp[(3) - (4)].ival) < 0)
+		osolerror (NULL, osoption, parserData, "number of <con> elements must be nonnegative");
 	osoption->optimization->constraints->initialConstraintValues = new InitConstraintValues();
 	osoption->optimization->constraints->initialConstraintValues->numberOfCon = (yyvsp[(3) - (4)].ival);
 	osoption->optimization->constraints->initialConstraintValues->con = new InitConValue*[(yyvsp[(3) - (4)].ival)];
@@ -5434,8 +5434,8 @@ yyreduce:
 
   case 683:
 
-    {	if ((yyvsp[(3) - (4)].ival) <= 0)
-		osolerror (NULL, osoption, parserData, "number of <con> elements must be positive");
+    {	if ((yyvsp[(3) - (4)].ival) < 0)
+		osolerror (NULL, osoption, parserData, "number of <con> elements must be nonnegative");
 	osoption->optimization->constraints->initialDualValues = new InitDualVariableValues();
 	osoption->optimization->constraints->initialDualValues->numberOfCon = (yyvsp[(3) - (4)].ival);
 	osoption->optimization->constraints->initialDualValues->con = new InitDualVarValue*[(yyvsp[(3) - (4)].ival)];

@@ -1047,8 +1047,8 @@ inputdirectoriestomovehead: INPUTDIRECTORIESTOMOVESTART
 };
 
 numberofindirtomovepathpairsatt: NUMBEROFPATHPAIRSATT QUOTE INTEGER QUOTE
-{	if ($3 <= 0)
-		osolerror (NULL, osoption, parserData, "Require positive number of directories to move");
+{	if ($3 < 0)
+		osolerror (NULL, osoption, parserData, "Require nonnegative number of directories to move");
 	osoption->job->inputDirectoriesToMove->numberOfPathPairs = $3;
 	osoption->job->inputDirectoriesToMove->pathPair = new PathPair*[$3];
 	for (int i = 0; i < $3; i++)
@@ -1130,8 +1130,8 @@ inputfilestomovehead: INPUTFILESTOMOVESTART
 };
 
 numberofinfilestomovepathpairsatt: NUMBEROFPATHPAIRSATT QUOTE INTEGER QUOTE
-{	if ($3 <= 0)
-		osolerror (NULL, osoption, parserData, "Require positive number of files to move");
+{	if ($3 < 0)
+		osolerror (NULL, osoption, parserData, "Require nonnegative number of files to move");
 	osoption->job->inputFilesToMove->numberOfPathPairs = $3;
 	osoption->job->inputFilesToMove->pathPair = new PathPair*[$3];
 	for (int i = 0; i < $3; i++) osoption->job->inputFilesToMove->pathPair[i] = new PathPair();
@@ -1212,8 +1212,8 @@ outputdirectoriestomovehead: OUTPUTDIRECTORIESTOMOVESTART
 };
 
 numberofoutdirtomovepathpairsatt: NUMBEROFPATHPAIRSATT QUOTE INTEGER QUOTE
-{	if ($3 <= 0)
-		osolerror (NULL, osoption, parserData, "Require positive number of directories to move");
+{	if ($3 < 0)
+		osolerror (NULL, osoption, parserData, "Require nonnegative number of directories to move");
 	osoption->job->outputDirectoriesToMove->numberOfPathPairs = $3;
 	osoption->job->outputDirectoriesToMove->pathPair = new PathPair*[$3];
 	for (int i = 0; i < $3; i++)
@@ -1295,8 +1295,8 @@ outputfilestomovehead: OUTPUTFILESTOMOVESTART
 };
 
 numberofoutfilestomovepathpairsatt: NUMBEROFPATHPAIRSATT QUOTE INTEGER QUOTE
-{	if ($3 <= 0)
-		osolerror (NULL, osoption, parserData, "Require positive number of files to move");
+{	if ($3 < 0)
+		osolerror (NULL, osoption, parserData, "Require nonnegative number of files to move");
 	osoption->job->outputFilesToMove->numberOfPathPairs = $3;
 	osoption->job->outputFilesToMove->pathPair = new PathPair*[$3];
 	for (int i = 0; i < $3; i++)
@@ -1608,8 +1608,8 @@ restofvariables: GREATERTHAN initialvariablevalues initialvariablevaluesstring i
 initialvariablevalues: | INITIALVARIABLEVALUESSTART numberofvar GREATERTHAN varlist INITIALVARIABLEVALUESEND;
 
 numberofvar: NUMBEROFVARATT QUOTE INTEGER QUOTE
-{	if ($3 <= 0)
-		osolerror (NULL, osoption, parserData, "number of <var> elements must be positive");
+{	if ($3 < 0)
+		osolerror (NULL, osoption, parserData, "number of <var> elements must be nonnegative");
 	osoption->optimization->variables->initialVariableValues = new InitVariableValues();
 	osoption->optimization->variables->initialVariableValues->numberOfVar = $3;
 	osoption->optimization->variables->initialVariableValues->var = new InitVarValue*[$3];
@@ -1669,8 +1669,8 @@ initialvariablevaluesstring: | INITIALVARIABLEVALUESSTRINGSTART numberofvarstr G
     varstrlist INITIALVARIABLEVALUESSTRINGEND;
 
 numberofvarstr: NUMBEROFVARATT QUOTE INTEGER QUOTE
-{	if ($3 <= 0)
-		osolerror (NULL, osoption, parserData, "number of <var> elements must be positive");
+{	if ($3 < 0)
+		osolerror (NULL, osoption, parserData, "number of <var> elements must be nonnegative");
 	osoption->optimization->variables->initialVariableValuesString = new InitVariableValuesString();
 	osoption->optimization->variables->initialVariableValuesString->numberOfVar = $3;
 	osoption->optimization->variables->initialVariableValuesString->var = new InitVarValueString*[$3];
@@ -1725,8 +1725,8 @@ initialbasisstatus: | INITIALBASISSTATUSSTART numberofbasvar GREATERTHAN
     basvarlist INITIALBASISSTATUSEND;
 
 numberofbasvar: NUMBEROFVARATT QUOTE INTEGER QUOTE
-{	if ($3 <= 0)
-		osolerror (NULL, osoption, parserData, "number of <var> elements must be positive");
+{	if ($3 < 0)
+		osolerror (NULL, osoption, parserData, "number of <var> elements must be nonnegative");
 	osoption->optimization->variables->initialBasisStatus = new InitialBasisStatus();
 	osoption->optimization->variables->initialBasisStatus->numberOfVar = $3;
 	osoption->optimization->variables->initialBasisStatus->var = new InitBasStatus*[$3];
@@ -1781,8 +1781,8 @@ integervariablebranchingweights:  | INTEGERVARIABLEBRANCHINGWEIGHTSSTART numbero
    GREATERTHAN intweightlist INTEGERVARIABLEBRANCHINGWEIGHTSEND;
 
 numberofintegerweights: NUMBEROFVARATT QUOTE INTEGER QUOTE
-{	if ($3 <= 0)
-		osolerror (NULL, osoption, parserData, "number of <var> elements must be positive");
+{	if ($3 < 0)
+		osolerror (NULL, osoption, parserData, "number of <var> elements must be nonnegative");
 	osoption->optimization->variables->integerVariableBranchingWeights = new IntegerVariableBranchingWeights();
 	osoption->optimization->variables->integerVariableBranchingWeights->numberOfVar = $3;
 	osoption->optimization->variables->integerVariableBranchingWeights->var = new BranchingWeight*[$3];
@@ -1842,8 +1842,8 @@ sosvariablebranchingweights: | SOSVARIABLEBRANCHINGWEIGHTSSTART numberofsosweigh
    GREATERTHAN sosweightgrouplist SOSVARIABLEBRANCHINGWEIGHTSEND;
 
 numberofsosweightgroups: NUMBEROFSOSATT QUOTE INTEGER QUOTE   
-{	if ($3 <= 0)
-		osolerror (NULL, osoption, parserData, "number of <sos> elements must be positive");
+{	if ($3 < 0)
+		osolerror (NULL, osoption, parserData, "number of <sos> elements must be nonnegative");
 	osoption->optimization->variables->sosVariableBranchingWeights = new SOSVariableBranchingWeights();
 	osoption->optimization->variables->sosVariableBranchingWeights->numberOfSOS = $3;
 	osoption->optimization->variables->sosVariableBranchingWeights->sos = new SOSWeights*[$3];
@@ -2149,8 +2149,8 @@ initialobjectivevalues: | INITIALOBJECTIVEVALUESSTART numberofobjval GREATERTHAN
     objvaluelist INITIALOBJECTIVEVALUESEND;
 
 numberofobjval: NUMBEROFOBJATT QUOTE INTEGER QUOTE
-{	if ($3 <= 0)
-		osolerror (NULL, osoption, parserData, "number of <obj> elements must be positive");
+{	if ($3 < 0)
+		osolerror (NULL, osoption, parserData, "number of <obj> elements must be nonnegative");
 	osoption->optimization->objectives->initialObjectiveValues = new InitObjectiveValues();
 	osoption->optimization->objectives->initialObjectiveValues->numberOfObj = $3;
 	osoption->optimization->objectives->initialObjectiveValues->obj = new InitObjValue*[$3];
@@ -2211,8 +2211,8 @@ initialobjectivebounds: | INITIALOBJECTIVEBOUNDSSTART numberofobjbounds GREATERT
     objboundlist INITIALOBJECTIVEBOUNDSEND;
 
 numberofobjbounds: NUMBEROFOBJATT QUOTE INTEGER QUOTE
-{	if ($3 <= 0)
-		osolerror (NULL, osoption, parserData, "number of <obj> elements must be positive");
+{	if ($3 < 0)
+		osolerror (NULL, osoption, parserData, "number of <obj> elements must be nonnegative");
 	osoption->optimization->objectives->initialObjectiveBounds = new InitObjectiveBounds();
 	osoption->optimization->objectives->initialObjectiveBounds->numberOfObj = $3;
 	osoption->optimization->objectives->initialObjectiveBounds->obj = new InitObjBound*[$3];
@@ -2480,8 +2480,8 @@ initialconstraintvalues: | INITIALCONSTRAINTVALUESSTART numberofconval GREATERTH
     conlist INITIALCONSTRAINTVALUESEND;
 
 numberofconval: NUMBEROFCONATT QUOTE INTEGER QUOTE
-{	if ($3 <= 0)
-		osolerror (NULL, osoption, parserData, "number of <con> elements must be positive");
+{	if ($3 < 0)
+		osolerror (NULL, osoption, parserData, "number of <con> elements must be nonnegative");
 	osoption->optimization->constraints->initialConstraintValues = new InitConstraintValues();
 	osoption->optimization->constraints->initialConstraintValues->numberOfCon = $3;
 	osoption->optimization->constraints->initialConstraintValues->con = new InitConValue*[$3];
@@ -2542,8 +2542,8 @@ initialdualvalues: | INITIALDUALVALUESSTART numberofduals GREATERTHAN
     duallist INITIALDUALVALUESEND;
 
 numberofduals: NUMBEROFCONATT QUOTE INTEGER QUOTE
-{	if ($3 <= 0)
-		osolerror (NULL, osoption, parserData, "number of <con> elements must be positive");
+{	if ($3 < 0)
+		osolerror (NULL, osoption, parserData, "number of <con> elements must be nonnegative");
 	osoption->optimization->constraints->initialDualValues = new InitDualVariableValues();
 	osoption->optimization->constraints->initialDualValues->numberOfCon = $3;
 	osoption->optimization->constraints->initialDualValues->con = new InitDualVarValue*[$3];

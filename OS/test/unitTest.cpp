@@ -123,21 +123,17 @@
 #include "OSErrorClass.h"
 #include "OSBase64.h"
 #include "OSCommonUtil.h"
+#include "OSMathUtil.h"
 
 
 #include <CoinMpsIO.hpp>
 #include <CoinPackedMatrix.hpp>
     
-#ifndef DEBUG
-#define DEBUG
-#endif
 
 
 #ifdef COIN_HAS_KNITRO    
 #include "OSKnitroSolver.h"
 #endif 
-
-#include "OSMathUtil.h"
 
 #ifdef COIN_HAS_GLPK
 #include <OsiGlpkSolverInterface.hpp>
@@ -232,6 +228,8 @@ int main(int argC, char* argV[])
 	#endif 
 	OSmps2osil *mps2osil = NULL;
 	DefaultSolver *solver  = NULL;
+	OSiLReader *osilreader = NULL;
+	OSoLReader *osolreader = NULL;
 	OSrLWriter *osrlwriter = NULL;
 	OSrLReader *osrlreader = NULL;
 	// end classes    
@@ -241,7 +239,7 @@ int main(int argC, char* argV[])
 	std::string nlFileName; 
 	std::string mpsFileName;     
 	std::string osil;
-	std::string osol; // = "<osol></osol>";
+	std::string osol; 
 	ostringstream unitTestResult;
 	ostringstream unitTestResultFailure;
 	// get the input files
@@ -267,7 +265,6 @@ int main(int argC, char* argV[])
 		std::cout <<  osilFileName << std::endl;
 		osil = fileUtil->getFileAsString( osilFileName.c_str() );
 		std::cout << "Done reading the test file" << std::endl;
-		OSiLReader *osilreader = NULL;
 		osilreader = new OSiLReader(); 
 		//OSInstance *osinstance = osilreader->readOSiL( osil);
 		//osinstance->initForAlgDiff();
@@ -349,6 +346,7 @@ int main(int argC, char* argV[])
 		}
 		delete mps2osil;
 		delete osilreader;
+		osilreader = NULL;
 
 
 		//nl2osil = new OSnl2osil( nlFileName);
@@ -428,7 +426,8 @@ int main(int argC, char* argV[])
 	    ipoptSolver  = new IpoptSolver();
 		cout << "create a new IPOPT Solver for OSiL string solution" << endl;
 		ok = true;
-		OSiLReader *osilreader = NULL;
+//		OSiLReader *osilreader = NULL;
+//		OSoLReader *osolreader = NULL;
 		// avion does not work with Mumps on AIX xlC compiler
 #ifndef XLC_
 		osilFileName =  dataDir  + "osilFiles" + dirsep +  "avion2.osil";
@@ -439,7 +438,9 @@ int main(int argC, char* argV[])
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
 		ipoptSolver->osol = osol;
 		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
 		ipoptSolver->osinstance = osilreader->readOSiL( osil);
+		ipoptSolver->osoption   = osolreader->readOSoL( osol);
 		cout << "call the IPOPT Solver" << endl;	
 		ipoptSolver->buildSolverInstance();
 		ipoptSolver->solve();
@@ -450,6 +451,8 @@ int main(int argC, char* argV[])
 		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on avion2.osil");
 		delete osilreader;
 		osilreader = NULL;
+		delete osolreader;
+		osolreader = NULL;
 		delete ipoptSolver;
 		ipoptSolver = NULL;
 		unitTestResult << "Solved problem avion2.osil with Ipopt" << std::endl;
@@ -469,19 +472,23 @@ int main(int argC, char* argV[])
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
 		ipoptSolver->osol = osol;
 		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
 		ipoptSolver->osinstance = osilreader->readOSiL( osil);
+		ipoptSolver->osoption   = osolreader->readOSoL( osol);
 		ipoptSolver->buildSolverInstance();
 		ipoptSolver->solve();
 		cout << "Here is the IPOPT solver solution for HS071_NLP" << endl;
 		check = 17.014;
 		//ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-10 , 1e-10);
 		ok = ( fabs(check - getObjVal( ipoptSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on HS071_NLP.osil");
 		delete osilreader;
 		osilreader = NULL;
-		unitTestResult << "Solved problem HS071.osil with Ipopt" << std::endl;
+		delete osolreader;
+		osolreader = NULL;
 		delete ipoptSolver;
 		ipoptSolver = NULL;
+		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on HS071_NLP.osil");
+		unitTestResult << "Solved problem HS071.osil with Ipopt" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
 		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on rosenbrockmod.osil" << endl << endl;
@@ -497,7 +504,9 @@ int main(int argC, char* argV[])
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
 		ipoptSolver->osol = osol;
 		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
 		ipoptSolver->osinstance = osilreader->readOSiL( osil);
+		ipoptSolver->osoption   = osolreader->readOSoL( osol);
 		cout << "call the IPOPT Solver" << endl;
 		ipoptSolver->buildSolverInstance();
 		ipoptSolver->solve();
@@ -507,6 +516,8 @@ int main(int argC, char* argV[])
 		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on rosenbrockmod.osil");
 		delete osilreader;
 		osilreader = NULL;
+		delete osolreader;
+		osolreader = NULL;
 		unitTestResult << "Solved problem rosenbrockmod.osil with Ipopt" << std::endl;
 		delete ipoptSolver;
 		ipoptSolver = NULL;
@@ -525,7 +536,9 @@ int main(int argC, char* argV[])
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
 		ipoptSolver->osol = osol;
 		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
 		ipoptSolver->osinstance = osilreader->readOSiL( osil);
+		ipoptSolver->osoption   = osolreader->readOSoL( osol);
 		cout << "call the IPOPT Solver" << endl;
 		ipoptSolver->buildSolverInstance();
 		ipoptSolver->solve();
@@ -536,6 +549,8 @@ int main(int argC, char* argV[])
 		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on parincQuadradic.osil");
 		delete osilreader;
 		osilreader = NULL;	
+		delete osolreader;
+		osolreader = NULL;	
 		unitTestResult << "Solved problem parincQuadratic.osil with Ipopt" << std::endl;
 		delete ipoptSolver;
 		ipoptSolver = NULL;
@@ -554,6 +569,7 @@ int main(int argC, char* argV[])
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
 		ipoptSolver->osol = osol; 
 		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
 		ipoptSolver->osinstance = osilreader->readOSiL( osil);
 		cout << "call the IPOPT Solver" << endl;
 		ipoptSolver->buildSolverInstance();
@@ -563,9 +579,11 @@ int main(int argC, char* argV[])
 		//ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-1 , 1e-1);
 		ok = ( fabs(check - getObjVal( ipoptSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on parincLinear.osil");
+		unitTestResult << "Solved problem parincLinear.osil with Ipopt" << std::endl;
 		delete osilreader;
 		osilreader = NULL;	
-		unitTestResult << "Solved problem parincLinear.osil with Ipopt" << std::endl;
+		delete osolreader;
+		osolreader = NULL;	
 		delete ipoptSolver;
 		ipoptSolver = NULL;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
@@ -583,7 +601,9 @@ int main(int argC, char* argV[])
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
 		ipoptSolver->osol = osol;
 		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
 		ipoptSolver->osinstance = osilreader->readOSiL( osil);
+		ipoptSolver->osoption   = osolreader->readOSoL( osol);
 		//OSiLWriter osilwriter;
 		//cout << osilwriter.writeOSiL( ipoptSolver->osinstance) << endl;
 		//return 0;
@@ -595,9 +615,11 @@ int main(int argC, char* argV[])
 		//ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-10 , 1e-10);
 		ok = ( fabs(check - getObjVal( ipoptSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on callBackTest.osil");
+		unitTestResult << "Solved problem callBackTest.osil with Ipopt" << std::endl;	
 		delete osilreader;
 		osilreader = NULL;	
-		unitTestResult << "Solved problem callBackTest.osil with Ipopt" << std::endl;	
+		delete osolreader;
+		osolreader = NULL;	
 		delete ipoptSolver;
 		ipoptSolver = NULL;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
@@ -615,7 +637,9 @@ int main(int argC, char* argV[])
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
 		ipoptSolver->osol = osol;
 		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
 		ipoptSolver->osinstance = osilreader->readOSiL( osil);
+		ipoptSolver->osoption   = osolreader->readOSoL( osol);
 		//OSiLWriter osilwriter;
 		//cout << osilwriter.writeOSiL( ipoptSolver->osinstance) << endl;
 		//return 0;
@@ -629,6 +653,8 @@ int main(int argC, char* argV[])
 		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on callBackTestRowMajor.osil");
 		delete osilreader;
 		osilreader = NULL;	
+		delete osolreader;
+		osolreader = NULL;	
 		delete ipoptSolver;
 		ipoptSolver = NULL;	
 		unitTestResult << "Solved problem callBackRowMajor.osil with Ipopt" << std::endl;
@@ -645,8 +671,9 @@ int main(int argC, char* argV[])
 		osilFileName = dataDir  + "osilFiles" + dirsep + "parincLinearByRow.osil";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		std::cout << "create a new Solver object" << std::endl;
-		OSiLReader *osilreader = NULL;
+//		OSiLReader *osilreader = NULL;
 		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
 		//std::cout <<  osil  << std::endl;
 		OSInstance *osinstance = osilreader->readOSiL( osil);
 		std::cout << " Done reading the OSiL" << std::endl;
@@ -1882,7 +1909,7 @@ int main(int argC, char* argV[])
 	//
 	// Now test the OSoL parser
 	OSoLWriter *osolwriter = NULL;
-	OSoLReader *osolreader = NULL;
+//	OSoLReader *osolreader = NULL;
 	//osolwriter = new OSoLWriter();
 	//osolreader = new OSoLReader();
 
@@ -2577,7 +2604,7 @@ int main(int argC, char* argV[])
 		delete osilreader;
 		osilreader = NULL;
 		osinstance = NULL;		
-		unitTestResult << "Successful test of prefix and postfix conversion routines on problem rosenbrockmod.osil" << std::endl;
+		unitTestResult << "Successful test of prefix and postfix conversion routines" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 		
 	}
@@ -2631,7 +2658,7 @@ int main(int argC, char* argV[])
 		osilwriter = NULL;
 		osinstance = NULL;
 		//create an osinstance
-		unitTestResult << "Successful test of all of the nonlinear operators on file testOperators.osil" << std::endl;
+		unitTestResult << "Successful test of nonlinear operators using file testOperators.osil" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
 	catch(const ErrorClass& eclass){
@@ -2747,7 +2774,7 @@ int main(int argC, char* argV[])
 		//ok &= NearEqual( sh->hessValues[ 2], 0., 1e-10, 1e-10);
 		ok = ( fabs(0. - sh->hessValues[2] )/(0. + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail testing Hessian calculation");
-		unitTestResult << "Successful test of AD gradient and Hessian calculations on problem CppADTestLag.osil" << std::endl;
+		unitTestResult << "Successful test of AD gradient and Hessian calculations" << std::endl;
 		delete[] x;
 		delete osilreader;
 		osilreader = NULL;

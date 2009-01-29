@@ -541,9 +541,8 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 
 void IpoptSolver::setSolverOptions() throw (ErrorClass) {
 	try{
-
-		/* set the default options */
-		
+		std::cout << "in Ipopt setSolverOptions()" << std::endl;
+		/* set the default options */		
 		this->bSetSolverOptions = true;
 		app->Options()->SetNumericValue("tol", 1e-9);
 		app->Options()->SetIntegerValue("print_level", 0);
@@ -552,6 +551,7 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass) {
 		app->Options()->SetStringValue("output_file", "ipopt.out");
 		app->Options()->SetStringValue("check_derivatives_for_naninf", "yes");
 		/* end of the default options */
+		
 		//if( osoption->getNumberOfSolverOptions() <= 0) return;
 		if( osoption != NULL  &&  osoption->getNumberOfSolverOptions() > 0 ){
 			std::cout << "number of solver options "  <<  osoption->getNumberOfSolverOptions() << std::endl;
@@ -623,7 +623,7 @@ void IpoptSolver::solve() throw (ErrorClass) {
 		if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Ipopt requires decision variables");
 		finish = clock();
 		duration = (double) (finish - start) / CLOCKS_PER_SEC;
-		cout << "Parsing took (seconds): "<< duration << endl;
+		cout << "Parsing took (seconds): " << duration << endl; 
 		//dataEchoCheck();
 		/***************now the ipopt invokation*********************/
 		// see if we have a linear program
