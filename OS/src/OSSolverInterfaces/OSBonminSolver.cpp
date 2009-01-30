@@ -641,6 +641,12 @@ void BonminSolver::setSolverOptions() throw (ErrorClass) {
 			tminlp->printSolutionAtEndOfAlgorithm();
 		}	
 		
+		if(osoption == NULL && osol.length() > 0)
+		{
+			m_osolreader = new OSoLReader();
+			osoption = m_osolreader->readOSoL( osol);
+		}
+
 		if(osoption != NULL){
 			std::cout << "number of solver options "  <<  osoption->getNumberOfSolverOptions() << std::endl;
 			std::vector<SolverOption*> optionsVector;

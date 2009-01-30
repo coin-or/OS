@@ -34,6 +34,7 @@ IpoptSolver::IpoptSolver() {
 	osrlwriter = new OSrLWriter();
 	osresult = new OSResult();
 	m_osilreader = NULL;
+	m_osolreader = NULL;
 	ipoptErrorMsg = "";
 } 
 
@@ -43,6 +44,8 @@ IpoptSolver::~IpoptSolver() {
 	#endif
 	if(m_osilreader != NULL) delete m_osilreader;
 	m_osilreader = NULL;
+	if(m_osolreader != NULL) delete m_osolreader;
+	m_osolreader = NULL;
 	delete osresult;
 	osresult = NULL;
 	delete osrlwriter;
@@ -541,7 +544,6 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 
 void IpoptSolver::setSolverOptions() throw (ErrorClass) {
 	try{
-		std::cout << "in Ipopt setSolverOptions()" << std::endl;
 		/* set the default options */		
 		this->bSetSolverOptions = true;
 		app->Options()->SetNumericValue("tol", 1e-9);
@@ -552,7 +554,12 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass) {
 		app->Options()->SetStringValue("check_derivatives_for_naninf", "yes");
 		/* end of the default options */
 		
-		//if( osoption->getNumberOfSolverOptions() <= 0) return;
+		if(osoption == NULL && osol.length() > 0)
+		{
+			m_osolreader = new OSoLReader();
+			osoption = m_osolreader->readOSoL( osol);
+		}
+
 		if( osoption != NULL  &&  osoption->getNumberOfSolverOptions() > 0 ){
 			std::cout << "number of solver options "  <<  osoption->getNumberOfSolverOptions() << std::endl;
 			std::vector<SolverOption*> optionsVector;

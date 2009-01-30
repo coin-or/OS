@@ -13,7 +13,7 @@
 					<var idx="3" value="0.25"/>
 			</initialVariableValues>
 		</variables>	
-		<solverOptions numberOfSolverOptions="16">
+		<solverOptions numberOfSolverOptions="17">
 			<solverOption name="tol" solver="ipopt" type="numeric" value="1.e-9"/>
 			<solverOption name="print_level" solver="ipopt" type="integer" value="5"/>
 			<solverOption name="max_iter" solver="ipopt" type="integer" value="2000"/>
