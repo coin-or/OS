@@ -26,6 +26,7 @@
 #include "OSrLWriter.h"
 #include "OSErrorClass.h"
 #include "OSiLReader.h"
+#include "OSoLReader.h"
 
 
 
@@ -124,6 +125,13 @@ public:
 	 */		
 	OSiLReader *m_osilreader;
 	
+	/** 
+	 * m_osolreader is an OSoLReader object used to create an osoption from an
+	 * osol string if needed	 
+	 */		
+	OSoLReader *m_osolreader;
+
+
 	void writeResult(OsiSolverInterface *solver);
 
 

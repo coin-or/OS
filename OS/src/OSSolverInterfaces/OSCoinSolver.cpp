@@ -59,6 +59,7 @@ using std::ostringstream;
 CoinSolver::CoinSolver() : 
 osiSolver(NULL),
 m_osilreader(NULL),
+m_osolreader(NULL),
 m_CoinPackedMatrix(NULL),
 cbc_argv( NULL),
 num_cbc_argv( 0),
@@ -74,6 +75,8 @@ CoinSolver::~CoinSolver() {
 	#endif
 	if(m_osilreader != NULL) delete m_osilreader;
 	m_osilreader = NULL;
+	if(m_osolreader != NULL) delete m_osolreader;
+	m_osolreader = NULL;
 	delete m_CoinPackedMatrix;
 	m_CoinPackedMatrix = NULL;
 	delete osiSolver;
@@ -276,6 +279,12 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 	
 	//
 	try{
+		if(osoption == NULL && osol.length() > 0)
+		{
+			m_osolreader = new OSoLReader();
+			osoption = m_osolreader->readOSoL( osol);
+		}
+
 		if(osoption != NULL){
 
 			std::cout << "number of solver options "  <<  osoption->getNumberOfSolverOptions() << std::endl;
