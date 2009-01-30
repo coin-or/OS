@@ -6,7 +6,7 @@
 	</job>	
 	<optimization numberOfVariables="2">
 		<variables numberOfOtherVariableOptions="0">
-			<initialVariableValues numberOfVar="2">
+			<initialVariableValues numberOfVar="8">
 					<var idx="0" value="0.25"/>
 					<var idx="1" value="0.25"/>
 					<var idx="2" value="0.25"/>

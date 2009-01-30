@@ -23,6 +23,7 @@
 #include "OSParameters.h"
 #include "OSnLNode.h"
 #include "OSiLReader.h"
+#include "OSoLReader.h"
 #include "OSInstance.h"
 #include "OSExpressionTree.h"
 #include "OSnLNode.h"
@@ -294,6 +295,12 @@ public:
 	 * osil string if needed	 
 	 */		
 	OSiLReader *m_osilreader;
+
+	/** 
+	 * m_osolreader is an OSoLReader object used to create an osoption from an
+	 * osol string if needed	 
+	 */		
+	OSoLReader *m_osolreader;
 
 
 private:
