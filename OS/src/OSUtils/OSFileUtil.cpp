@@ -21,6 +21,7 @@
 using std::cout;
 using std::endl;
 
+
 FileUtil::FileUtil(){
 } // end constructor
 
@@ -112,26 +113,60 @@ char* FileUtil::getFileAsChar(const  char* fname){
 
 bool FileUtil::writeFileFromString(char* fname, std::string sname){
 	//std::ofstream outFile;
-	std::fstream outFile;
-	outFile.open( fname);
-	if(!outFile.is_open()){
-		return false;
+	//std::fstream outFile;
+	//outFile.open( fname);
+	//if(!outFile.is_open()){
+	//	return false;
+	//}
+	//outFile << sname;
+	//outFile.close();
+	//return true;
+	
+	FILE *ft ;
+	try{
+		ft = fopen ( fname, "w") ;
+	    if ( ft == NULL ) {
+	    	throw ErrorClass(" There was a problem opening the file");
+	    }
+		char *cstr;
+		cstr = new char [sname.size() + 1];
+		strcpy (cstr, sname.c_str());
+	    size_t i;
+	    for(i = 0; i < sname.size() + 1; i++){
+	        fputc ( cstr[ i], ft )  ;   	
+	    }
+	    fputc( '\n', ft);
+	    fclose ( ft);
+		return true;
 	}
-	outFile << sname;
-	outFile.close();
-	return true;
+	catch(const ErrorClass& eclass){
+		throw ErrorClass( eclass.errormsg) ;
+	}
 } // end writeFileFromString
 
+
 bool FileUtil::writeFileFromString(std::string  fname, std::string sname){
-	//std::ofstream outFile;
-	std::fstream outFile;
-	outFile.open( fname.c_str()  );
-	if(!outFile.is_open()){
-		return false;
+	
+	FILE *ft ;
+	try{
+		ft = fopen ( fname.c_str(), "w") ;
+	    if ( ft == NULL ) {
+	    	throw ErrorClass(" There was a problem opening the file");
+	    }
+		char *cstr;
+		cstr = new char [sname.size() + 1];
+		strcpy (cstr, sname.c_str());
+	    size_t i;
+	    for(i = 0; i < sname.size() + 1; i++){
+	        fputc ( cstr[ i], ft )  ;   	
+	    }
+	    fputc( '\n', ft);
+	    fclose ( ft);
+		return true;
 	}
-	outFile << sname;
-	outFile.close();
-	return true;
+	catch(const ErrorClass& eclass){
+		throw ErrorClass( eclass.errormsg) ;
+	}
 } // end writeFileFromString
 
 bool FileUtil::writeFileFromChar(char* fname, char* ch){
