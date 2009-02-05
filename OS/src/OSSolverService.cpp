@@ -1003,16 +1003,23 @@ string getInstanceLocation( std::string osol){
 	else return "";
 }//getInstanceLocation
 
-string getSolverName( std::string osol){
+std::string getSolverName( std::string osol){
+	OSOption *osoption = NULL;
+	OSoLReader *osolreader = NULL;
+	osolreader = new OSoLReader();
+	osoption = osolreader->readOSoL( osol);
+	std::string optionstring = osoption->getSolverToInvoke();
+	return optionstring;
+	/*
 	if(osol == "") return osol;
 	string::size_type pos2;
-	string::size_type pos1 = osol.find( "os_solver");
+	string::size_type pos1 = osol.find( "solverToInvoke");
 	if(pos1 != std::string::npos){
 		// get the end of the instanceLocation start tag
 		pos1 = osol.find(">", pos1 + 1);
 		if(pos1 != std::string::npos){
 			// get the start of instanceLocation end tag
-			pos2 = osol.find( "</other", pos1 + 1);
+			pos2 = osol.find( "</solverToInvoke", pos1 + 1);
 			if( pos2 != std::string::npos){
 				// get the substring
 				return osol.substr( pos1 + 1, pos2 - pos1 - 1); 
@@ -1022,6 +1029,7 @@ string getSolverName( std::string osol){
 		else return "";
 	}
 	else return "";
+	*/
 }//getSolverName
 
 std::string get_help(){
