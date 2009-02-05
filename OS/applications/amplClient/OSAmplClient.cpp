@@ -339,7 +339,7 @@ int main(int argc, char **argv)
 			string::size_type iStringpos;
 			iStringpos = osol.find("</osol");
 			//std::cout <<  solverType->sSolverName << std::endl;
-			std::string solverInput = "<general><solverToInvoke name=\"" + sSolverName + "\">"
+			std::string solverInput = "<general><solverToInvoke>" + sSolverName 
 				 + "</solverToInvoke></general>";
 			osol.insert(iStringpos, solverInput);
 			cout << "Place remote synchronous call: " + sURL << endl << endl << endl;

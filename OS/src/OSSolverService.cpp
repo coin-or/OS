@@ -317,7 +317,10 @@ int main(int argC, const char* argV[])
 		try{	
 			if(osoptions->insListFile != "") osoptions->insList = fileUtil->getFileAsChar( (osoptions->insListFile).c_str() );
 			if(osoptions->osolFile != ""){
+			
 				osoptions->osol = fileUtil->getFileAsString( (osoptions->osolFile).c_str() );
+				
+				
 			}
 			if(osoptions->serviceLocation != ""){
 				 cout << "Service Location = " << osoptions->serviceLocation << endl;
@@ -343,7 +346,10 @@ int main(int argC, const char* argV[])
 			}
 			else{
 				if(osoptions->osol != ""){
-				osoptions->solverName  =    getSolverName( osoptions->osolFile.c_str()  );
+				
+				//osoptions->solverName  =    getSolverName( osoptions->osolFile.c_str()  );
+				osoptions->solverName  =    getSolverName(  osoptions->osol );
+				
 				}
 			}
 			//if(osoptions->osplInputFile != "") osoptions->osplInput = fileUtil->getFileAsChar( (osoptions->osplInputFile).c_str()  );
@@ -1004,11 +1010,17 @@ string getInstanceLocation( std::string osol){
 }//getInstanceLocation
 
 std::string getSolverName( std::string osol){
+	std::cout << "inside getSovlerName" << std::endl;
+	std::cout <<  osol << std::endl;
+	std::cout << "done with osol" << std::endl;
 	OSOption *osoption = NULL;
 	OSoLReader *osolreader = NULL;
 	osolreader = new OSoLReader();
+
 	osoption = osolreader->readOSoL( osol);
+	std::cout <<  "invoke getSolverToInvokde" << std::endl;
 	std::string optionstring = osoption->getSolverToInvoke();
+	std::cout <<  "done with invoke getSolverToInvokde" << std::endl;
 	return optionstring;
 	/*
 	if(osol == "") return osol;
