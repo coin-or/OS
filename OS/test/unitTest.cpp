@@ -101,10 +101,10 @@
  * We test the get() and set() methods for osinstance.
  */ 
 
-#define INSTALLATION_TEST
-#define THOROUGH
-#define COMPONENT_DEBUG
-#define DEBUG 
+#define DEBUG       
+#define INSTALLATION_TEST   // minimal functionality test
+//#define THOROUGH            // multiple problems for some solvers
+//#define COMPONENT_DEBUG     // program logic, especially parser testing
 
 
 #include <cppad/cppad.hpp> 
