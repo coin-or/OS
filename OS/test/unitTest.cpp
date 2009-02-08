@@ -6,7 +6,6 @@
  * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
  * @version 1.1, 05/Feb/2008
  * @since   OS1.0
- *    stresstest
  *
  * \remarks
  * Copyright (C) 2005-2008, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
@@ -20,6 +19,10 @@
  * 
  * Solvers:
  * 
+ * COIN-Clp tested on parincLinearByRow.osil
+ * 
+ * COIN-Cbc tested on p0033.osil
+ * 
  * COIN-Ipopt tested on:
  * <ol>
  * <li> avion2.osil  </li>
@@ -31,18 +34,6 @@
  * <li> callBackTestRowMajor.osil </li>
  * </ol>
  *
- * COIN-Clp tested on parincLinearByRow.osil
- * 
- * COIN-Cbc tested on p0033.osil
- * 
- * Knitro tested on:
- * <ol>
- * <li> rosenbrockmod.osil </li>
- * <li> callBackTest.osil </li>
- * <li> parincQuadratic.osil </li>
- * <li> HS071_NLP </li>
- * </ol>
- * 
  * COIN-SYMPHONY test on p0033.osil
  * COIN-BONMIN test on bonminEx1.osil and wayneQuadratic
  * 
@@ -74,12 +65,18 @@
  * osil string and then set m_bWriteBase64 = true. We then
  * write a new instance in base 64 format and solve it.
  * 
- * We next test the parsers. We test parsing the osil file
- * parincLinear.osil, finplan1.osil, the osrl file parincLinear.osrl
- * and the osol file osolTest.osol.
- * We test the get() and set() methods for osinstance.
- * 
- * Next we test the prefix and postfix routines. For the
+ * In addition there are a number of tests concerning th logic of many
+ * of the components of the OS project. These tests have little in common
+ * with the installation and functionality tests, but they are useful for
+ * debugging and to give a thorough workout to the program logic.
+ * These tests can be added selectively using several conditional variables:
+ * <ol>
+ * <li> INSTALLATION_TEST. This turns the installation and solver tests on and off </li>
+ * <li> THOROUGH.          To test more than one test problem for each solver </li>
+ * <li> COMPONENT_DEBUG.   This turns the tests of the program logic an and off </li>
+ * </ol>
+ *
+ * The first logic test concerns the prefix and postfix routines. For the
  * test problem rosenbrockmod.osil create an <b>OSExpressionTree</b>
  * from the objective function. Then invoke the <b>getPostfix()</b> method
  * and get a postfix vector representation of the expression tree. Then
@@ -95,9 +92,20 @@
  * <b>expTree->m_treeRoot->calculateFunction</b> to make sure the operators are 
  * evaluated correctly.
  * 
- * Finally test CppAD. Read in CppADTestLag.osil and make sure gradient
+ * Next test CppAD. Read in CppADTestLag.osil and make sure gradient
  * and Hessian calculations are working correctly.
+ *
+ * We next test the parsers. We test parsing the osil file
+ * parincLinear.osil, finplan1.osil, the osrl file parincLinear.osrl
+ * and the osol file osolTest.osol.
+ * We test the get() and set() methods for osinstance.
  */ 
+
+#define INSTALLATION_TEST
+#define THOROUGH
+#define COMPONENT_DEBUG
+#define DEBUG 
+
 
 #include <cppad/cppad.hpp> 
 //#include "CoinUtilsConfig.h"
@@ -131,9 +139,6 @@
     
 
 
-#ifdef COIN_HAS_KNITRO    
-#include "OSKnitroSolver.h"
-#endif 
 
 #ifdef COIN_HAS_GLPK
 #include <OsiGlpkSolverInterface.hpp>
@@ -204,8 +209,6 @@ using std::ostringstream;
 
 
 
-#define DEBUG 
-
 int main(int argC, char* argV[])
 {
 //#ifdef HAVE_WINDOWS_H
@@ -253,8 +256,7 @@ int main(int argC, char* argV[])
 	// 
 //	unitTestResult << "HERE ARE THE UNIT TEST RESULTS:" << std::endl << std::endl;
 
-//#define OSOL_PARSER_DEBUG
-#ifndef OSOL_PARSER_DEBUG
+#ifdef INSTALLATION_TEST
 
 	//first make sure we can read files
 	try{
@@ -405,10 +407,6 @@ int main(int argC, char* argV[])
     	if(d1 == DBL_MAX )std::cout <<  "SUCCESS" << endl;
     	else std::cout <<  "FAILURE" << endl;
     	*/
-    	//nl2osil = new OSnl2osil( nlFileName);
-		//cout << "All tests completed successfully" <<  endl <<  endl;
-	    //return 0;
-    
 	}
 	catch(const ErrorClass& eclass){
 		unitTestResultFailure << "Sorry Unit Test Failed Reading a file: "  + eclass.errormsg<< endl; 
@@ -418,8 +416,153 @@ int main(int argC, char* argV[])
 		cout << "Conclusion: FAILURE" << endl;
 		return 1;
 	}	
-	// solve using the osil file
-	#ifdef COIN_HAS_IPOPT
+
+	try{
+		cout << endl << "TEST " << ++nOfTest << ": Clp solver on parincLinearByRow.osil" << endl << endl;
+		ok = true; 
+		std::cout << "create a new COIN Clp for OSiL string solution" << std::endl;
+		osilFileName = dataDir  + "osilFiles" + dirsep + "parincLinearByRow.osil";
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
+		std::cout << "create a new Solver object" << std::endl;
+//		OSiLReader *osilreader = NULL;
+		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
+		//std::cout <<  osil  << std::endl;
+		OSInstance *osinstance = osilreader->readOSiL( osil);
+		std::cout << " Done reading the OSiL" << std::endl;
+		// now write it again as a string
+		OSiLWriter *osilwriter;
+		osilwriter = new OSiLWriter();
+		osilwriter->m_bWhiteSpace = true;
+		std::cout << " Write the OSiL" << std::endl;
+		osil = osilwriter->writeOSiL( osinstance) ;
+		//std::cout <<  osil  << std::endl;
+		std::cout << " Done writing the OSiL" << std::endl;
+		solver = new CoinSolver();
+		solver->sSolverName = "clp";
+		solver->osil = osil;
+//		osol = "<osol></osol>";
+		osolFileName = dataDir  + "osolFiles" + dirsep + "parincLinearByRow_clp.osol";
+		osol = fileUtil->getFileAsString( osolFileName.c_str());
+//		cout << endl << endl << "pass to clp solver:" << endl << osil << endl << osol << endl;
+		solver->osol = osol;  
+		solver->osinstance = NULL; 
+		cout << "call the COIN - clp Solver for parincLinearbyRow" << endl;
+		//solver->buildSolverInstance();
+		solver->solve();
+		cout << "Here is the COIN clp solver solution for parincLinearByRow" << endl;
+		cout << solver->osrl << endl;
+		
+	
+		check = 7668;
+		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-1 , 1e-1);
+		if(ok == false) throw ErrorClass(" Fail unit test with clp on parincLinearByRow.osil");
+		// parse the osrl file
+		osrlreader =  new OSrLReader();
+		cout << "First osrl file\n" << solver->osrl << endl;
+		osrlreader->readOSrL( solver->osrl);
+		cout << "read successfully" << endl;
+		delete osilreader;
+		cout << "osilreader successfully deleted" << endl;
+		osilreader = NULL;	
+		delete osolreader;
+		cout << "osolreader successfully deleted" << endl;
+		osolreader = NULL;	
+		delete solver;
+		cout << "solver successfully deleted" << endl;
+		solver = NULL;
+		delete osilwriter;
+		cout << "osilwriter successfully deleted" << endl;
+		osilwriter = NULL;
+		delete osrlreader;
+		cout << "osrlreader successfully deleted" << endl;
+		osrlreader = NULL;
+		unitTestResult << "Solved problem parincLinearByRow.osil with Clp" << std::endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+	}
+	catch(const ErrorClass& eclass){
+		unitTestResultFailure << "Sorry Unit Test Failed Testing Clp Solver:"  + eclass.errormsg<< endl;
+	}
+
+	// now solve another problem -- try an integer program
+	try{
+		cout << endl << "TEST " << ++nOfTest << ": Cbc solver on p0033.osil" << endl << endl;
+		std::cout << "create a new COIN Cbc for OSiL string solution" << std::endl;
+		ok = true;
+		osilFileName = dataDir  + "osilFiles" + dirsep + "p0033.osil";
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
+		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
+		solver = new CoinSolver();
+		solver->sSolverName ="cbc";
+		solver->osil = osil;
+//		osol = "<osol></osol>";
+		osolFileName = dataDir  + "osolFiles" + dirsep + "p0033_cbc.osol";
+		osol = fileUtil->getFileAsString( osolFileName.c_str());
+		solver->osol = osol;  
+		solver->osinstance = NULL; 
+		cout << "call the COIN - Cbc Solver for p0033" << endl;
+		solver->buildSolverInstance();
+		solver->solve();
+		cout << "Here is the COIN Cbc solver solution for p0033" << endl;
+		//cout << solver->osrl << endl;
+		check = 3089;
+		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if(ok == false) throw ErrorClass(" Fail unit test with Cbc on p0033.osil");
+		delete solver;
+		solver = NULL;
+		delete osilreader;
+		osilreader = NULL;
+		delete osolreader;
+		osolreader = NULL;
+		unitTestResult << "Solved problem p0033.osil with Cbc" << std::endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+	}
+	catch(const ErrorClass& eclass){
+		unitTestResultFailure << "Sorry Unit Test Failed Testing Cbc Solver:"  + eclass.errormsg<< endl;
+	}
+
+#ifdef THOROUGH
+	// now test p0201.osil
+	try{
+		cout << endl << "TEST " << ++nOfTest << ": Cbc solver on p0201.osil" << endl << endl;
+		ok = true;
+		osilFileName = dataDir  + "osilFiles" + dirsep + "p0201.osil";
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
+		solver = new CoinSolver();
+		solver->sSolverName ="cbc";
+		solver->osil = osil;
+		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
+//		osol = "<osol></osol>";
+		osolFileName = dataDir  + "osolFiles" + dirsep + "p0201_cbc.osol";
+		osol = fileUtil->getFileAsString( osolFileName.c_str());
+		solver->osol = osol;  
+		solver->osinstance = NULL; 
+		cout << "call the COIN - Cbc Solver for p0201" << endl;
+		solver->solve();
+		cout << "Here is the COIN Cbc solver solution for p0201" << endl;
+		check = 7615;
+		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if(ok == false) throw ErrorClass(" Fail unit test with Cbc on p0201.osil");
+		delete solver;
+		solver = NULL;
+		delete osilreader;
+		osilreader = NULL;
+		delete osolreader;
+		osolreader = NULL;
+		unitTestResult << "Solved problem p0201.osil with Cbc" << std::endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+	}
+	catch(const ErrorClass& eclass){
+		unitTestResultFailure << "Sorry Unit Test Failed Testing Cbc Solver:"  + eclass.errormsg<< endl;
+	}
+#endif	
+
+#ifdef COIN_HAS_IPOPT
 	IpoptSolver *ipoptSolver  =  NULL;	
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver with avion2.osil" << endl << endl;
@@ -459,6 +602,7 @@ int main(int argC, char* argV[])
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 #endif
 
+#ifdef THOROUGH
 		// solve another problem
 		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver with HS071_NLPMod.osil" << endl << endl;
 		cout << "create a new IPOPT Solver for OSiL string solution" << endl;
@@ -659,274 +803,16 @@ int main(int argC, char* argV[])
 		ipoptSolver = NULL;	
 		unitTestResult << "Solved problem callBackRowMajor.osil with Ipopt" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+#endif
 	}
 	catch(const ErrorClass& eclass){
 		unitTestResultFailure << "Sorry Unit Test Failed Testing the Ipopt Solver:"  + eclass.errormsg<< endl; 
 	}
-	#endif
-	try{
-		cout << endl << "TEST " << ++nOfTest << ": Clp solver on parincLinearByRow.osil" << endl << endl;
-		ok = true; 
-		std::cout << "create a new COIN Clp for OSiL string solution" << std::endl;
-		osilFileName = dataDir  + "osilFiles" + dirsep + "parincLinearByRow.osil";
-		osil = fileUtil->getFileAsString( osilFileName.c_str());
-		std::cout << "create a new Solver object" << std::endl;
-//		OSiLReader *osilreader = NULL;
-		osilreader = new OSiLReader(); 
-		osolreader = new OSoLReader(); 
-		//std::cout <<  osil  << std::endl;
-		OSInstance *osinstance = osilreader->readOSiL( osil);
-		std::cout << " Done reading the OSiL" << std::endl;
-		// now write it again as a string
-		OSiLWriter *osilwriter;
-		osilwriter = new OSiLWriter();
-		osilwriter->m_bWhiteSpace = true;
-		std::cout << " Write the OSiL" << std::endl;
-		osil = osilwriter->writeOSiL( osinstance) ;
-		//std::cout <<  osil  << std::endl;
-		std::cout << " Done writing the OSiL" << std::endl;
-		solver = new CoinSolver();
-		solver->sSolverName = "clp";
-		solver->osil = osil;
-//		osol = "<osol></osol>";
-		osolFileName = dataDir  + "osolFiles" + dirsep + "parincLinearByRow_clp.osol";
-		osol = fileUtil->getFileAsString( osolFileName.c_str());
-//		cout << endl << endl << "pass to clp solver:" << endl << osil << endl << osol << endl;
-		solver->osol = osol;  
-		solver->osinstance = NULL; 
-		cout << "call the COIN - clp Solver for parincLinearbyRow" << endl;
-		//solver->buildSolverInstance();
-		solver->solve();
-		cout << "Here is the COIN clp solver solution for parincLinearByRow" << endl;
-		cout << solver->osrl << endl;
-		
-	
-		check = 7668;
-		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-1 , 1e-1);
-		if(ok == false) throw ErrorClass(" Fail unit test with clp on parincLinearByRow.osil");
-		// parse the osrl file
-		osrlreader =  new OSrLReader();
-		cout << "First osrl file\n" << solver->osrl << endl;
-		osrlreader->readOSrL( solver->osrl);
-		cout << "read successfully" << endl;
-		delete osilreader;
-		cout << "osilreader successfully deleted" << endl;
-		osilreader = NULL;	
-		delete osolreader;
-		cout << "osolreader successfully deleted" << endl;
-		osolreader = NULL;	
-		delete solver;
-		cout << "solver successfully deleted" << endl;
-		solver = NULL;
-		delete osilwriter;
-		cout << "osilwriter successfully deleted" << endl;
-		osilwriter = NULL;
-		delete osrlreader;
-		cout << "osrlreader successfully deleted" << endl;
-		osrlreader = NULL;
-		unitTestResult << "Solved problem parincLinearByRow.osil with Clp" << std::endl;
-		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
-	}
-	catch(const ErrorClass& eclass){
-		unitTestResultFailure << "Sorry Unit Test Failed Testing Clp Solver:"  + eclass.errormsg<< endl;
-	}
-
-	// now solve another problem -- try an integer program
-	try{
-		cout << endl << "TEST " << ++nOfTest << ": Cbc solver on p0033.osil" << endl << endl;
-		std::cout << "create a new COIN Cbc for OSiL string solution" << std::endl;
-		ok = true;
-		osilFileName = dataDir  + "osilFiles" + dirsep + "p0033.osil";
-		osil = fileUtil->getFileAsString( osilFileName.c_str());
-		osilreader = new OSiLReader(); 
-		osolreader = new OSoLReader(); 
-		solver = new CoinSolver();
-		solver->sSolverName ="cbc";
-		solver->osil = osil;
-//		osol = "<osol></osol>";
-		osolFileName = dataDir  + "osolFiles" + dirsep + "p0033_cbc.osol";
-		osol = fileUtil->getFileAsString( osolFileName.c_str());
-		solver->osol = osol;  
-		solver->osinstance = NULL; 
-		cout << "call the COIN - Cbc Solver for p0033" << endl;
-		solver->buildSolverInstance();
-		solver->solve();
-		cout << "Here is the COIN Cbc solver solution for p0033" << endl;
-		//cout << solver->osrl << endl;
-		check = 3089;
-		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
-		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-		if(ok == false) throw ErrorClass(" Fail unit test with Cbc on p0033.osil");
-		delete solver;
-		solver = NULL;
-		delete osilreader;
-		osilreader = NULL;
-		delete osolreader;
-		osolreader = NULL;
-		unitTestResult << "Solved problem p0033.osil with Cbc" << std::endl;
-		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
-
-		// now test p0201.osil
-		/*
-		cout << endl << "TEST " << ++nOfTest << ": Cbc solver on p0201.osil" << endl << endl;
-		ok = true;
-		osilFileName = dataDir  + "osilFiles" + dirsep + "p0201.osil";
-		osil = fileUtil->getFileAsString( osilFileName.c_str());
-		solver = new CoinSolver();
-		solver->sSolverName ="cbc";
-		solver->osil = osil;
-		osilreader = new OSiLReader(); 
-		osolreader = new OSoLReader(); 
-//		osol = "<osol></osol>";
-		osolFileName = dataDir  + "osolFiles" + dirsep + "p0201_cbc.osol";
-		osol = fileUtil->getFileAsString( osolFileName.c_str());
-		solver->osol = osol;  
-		solver->osinstance = NULL; 
-		cout << "call the COIN - Cbc Solver for p0201" << endl;
-		solver->solve();
-		cout << "Here is the COIN Cbc solver solution for p0201" << endl;
-		check = 7615;
-		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
-		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-		if(ok == false) throw ErrorClass(" Fail unit test with Cbc on p0201.osil");
-		delete solver;
-		solver = NULL;
-		delete osilreader;
-		osilreader = NULL;
-		delete osolreader;
-		osolreader = NULL;
-		unitTestResult << "Solved problem p0201.osil with Cbc" << std::endl;
-		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
-		*/
-	}
-	catch(const ErrorClass& eclass){
-		unitTestResultFailure << "Sorry Unit Test Failed Testing Cbc Solver:"  + eclass.errormsg<< endl;
-	}
-	
-	//
-	//
-	#ifdef COIN_HAS_KNITRO
-	try{
-		cout << endl << "TEST " << ++nOfTest << ": knitro solver on rosenbrockmod.osil" << endl << endl;
-		ok = true; 
-		osilFileName = dataDir  + "osilFiles" + dirsep + "rosenbrockmod.osil";
-		osil = fileUtil->getFileAsString( osilFileName.c_str());
-		solver = new KnitroSolver();
-		solver->osrl = "";	
-		solver->osil = osil;
-		osilreader = new OSiLReader(); 
-		osolreader = new OSoLReader(); 
-//		osol = "<osol></osol>";
-		osolFileName = dataDir  + "osolFiles" + dirsep + "rosenbrockmod_knitro.osol";
-		osol = fileUtil->getFileAsString( osolFileName.c_str());
-		solver->osol = osol;
-		solver->osinstance = NULL;
-		cout << "call the KNITRO Solver" << endl;
-		solver->solve();
-		cout << "Here is the KNITRO solver solution" << endl;	
-		check = 6.7279;
-		cout << solver->osrl << endl;
-		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
-		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-		if(ok == false) throw ErrorClass(" Fail unit test with Knitro on rosenbrockmod.osil");
-		delete osilreader;
-		osilreader = NULL;
-		delete osolreader;
-		osolreader = NULL;
-		delete solver;
-		solver = NULL;
-		unitTestResult << "Solved problem rosenbrockmod.osil with Knitro" << std::endl;
-		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
-
-		//
-		// now solve callBackTest.osil
-		cout << endl << "TEST " << ++nOfTest << ": knitro solver on callBackTest.osil" << endl << endl;
-		osilFileName = dataDir  + "osilFiles" + dirsep + "callBackTest.osil";
-		osil = fileUtil->getFileAsString( osilFileName.c_str());
-		solver = new KnitroSolver();
-		solver->osrl = "";		
-		solver->osil = osil;		
-		osilreader = new OSiLReader(); 
-		osolreader = new OSoLReader(); 
-//		osol = "<osol></osol>";
-		osolFileName = dataDir  + "osolFiles" + dirsep + "callBackTest_knitro.osol";
-		osol = fileUtil->getFileAsString( osolFileName.c_str());
-		solver->osol = osol;
-		cout << "call the KNITRO Solver" << endl;
-		solver->solve();
-		cout << "Here is the KNITRO solver solution" << endl;
-		check = 1.00045e+06; 
-		cout << solver->osrl << endl;
-		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
-		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-		if(ok == false) throw ErrorClass(" Fail unit test with Knitro callBackTest.osil");
-		delete osilreader;
-		osilreader = NULL;
-		delete osolreader;
-		osolreader = NULL;
-		delete solver;
-		solver = NULL;  
-		unitTestResult << "Solved problem callBackTest.osil with Knitro" << std::endl;		
-		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
-
-		// now solve a pure quadratic
-		cout << endl << "TEST " << ++nOfTest << ": knitro solver on parincQuadratic.osil" << endl << endl;
-		osilFileName = dataDir  + "osilFiles" + dirsep + "parincQuadratic.osil";
-		osil = fileUtil->getFileAsString( osilFileName.c_str());
-		solver = new KnitroSolver();	
-		solver->osil = osil;
-//		osol = "<osol></osol>";
-		osolFileName = dataDir  + "osolFiles" + dirsep + "parincQuadratic_knitro.osol";
-		osol = fileUtil->getFileAsString( osolFileName.c_str());
-		solver->osol = osol;
-		solver->osinstance = NULL;
-		cout << "call the Knitro Solver" << endl;
-		solver->solve();
-		cout << "Here is the Knitro solver solution" << endl;
-		cout << solver->osrl << endl;
-		check = 49920.5;
-		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
-		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-		if(ok == false) throw ErrorClass(" Fail unit test with Knitro on parincQuadratic.osil");
-		delete solver;
-		solver = NULL;
-		unitTestResult << "Solved problem parincQuadratic.osil with Knitro" << std::endl;
-		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
-
-		// now solve HS071_NLP.osil
-		cout << endl << "TEST " << ++nOfTest << ": knitro solver on HS071_NLP.osil" << endl << endl;
-		osilFileName = dataDir  + "osilFiles" + dirsep + "HS071_NLP.osil";
-		osil = fileUtil->getFileAsString( osilFileName.c_str());
-		solver = new KnitroSolver();	
-		solver->osil = osil;
-//		osol = "<osol></osol>";
-		osolFileName = dataDir  + "osolFiles" + dirsep + "HS071_NLP_knitro.osol";
-		osol = fileUtil->getFileAsString( osolFileName.c_str());
-		solver->osol = osol;
-		solver->osinstance = NULL;
-		cout << "call the Knitro Solver" << endl;
-		solver->solve();		
-		cout << "Here is the Knitro solver solution" << endl;
-		cout << solver->osrl << endl;
-		check = 17.014;
-		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
-		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-		if(ok == false) throw ErrorClass(" Fail unit test with Knitro on HS071_NLP.osil");
-		delete solver;
-		solver = NULL;
-		unitTestResult << "Solved problem HS071_NLP.osil with Knitro" << std::endl;
-		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
-	}
-	catch(const ErrorClass& eclass){
-		cout << "OSrL =  " <<  solver->osrl <<  endl;		
-		cout << endl << endl << endl;
-		unitTestResultFailure  << "Sorry Unit Test Failed Testing the Knitro Solver: "  + eclass.errormsg << endl;
-	}	
-	#endif
+#endif
 
 
-	#ifdef COIN_HAS_SYMPHONY
+
+#ifdef COIN_HAS_SYMPHONY
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": SYMPHONY solver on p0033.osil" << endl << endl;
 		ok = true; 
@@ -960,10 +846,10 @@ int main(int argC, char* argV[])
 		cout << endl << endl << endl;
 		unitTestResultFailure  << "Sorry Unit Test Failed Testing the SYMPHONY Solver:"  + eclass.errormsg << endl;
 	}	
-	#endif
+#endif
 	
 
-	#ifdef COIN_HAS_BONMIN
+#ifdef COIN_HAS_BONMIN
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Bonmin solver on bonminEx1.osil" << endl << endl;
 //		OSiLReader *osilreader = NULL;
@@ -998,6 +884,7 @@ int main(int argC, char* argV[])
 		osolreader = NULL;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
+#ifdef THOROUGH
 		cout << endl << "TEST " << ++nOfTest << ": Bonmin solver on wayneQuadratic.osil" << endl << endl;
 		ok = true;
 		osilFileName = dataDir  + "osilFiles" + dirsep + "wayneQuadratic.osil";
@@ -1053,6 +940,7 @@ int main(int argC, char* argV[])
 		solver = NULL;
 		unitTestResult << "Solved problem wayneQuadratic.osil with Bonmin" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+#endif
 	}
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  solver->osrl <<  endl;
@@ -1062,7 +950,7 @@ int main(int argC, char* argV[])
 	#endif
 
 
-	#ifdef COIN_HAS_COUENNE
+#ifdef COIN_HAS_COUENNE
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Couenne solver on bonminEx1.osil" << endl << endl;
 		#if 0
@@ -1115,10 +1003,10 @@ int main(int argC, char* argV[])
 		unitTestResultFailure  << "Sorry Unit Test Failed Testing the Couenne Solver:"  + eclass.errormsg << endl;
 	
 	}	
-	#endif
+#endif
 
 
-	#ifdef COIN_HAS_DYLP
+#ifdef COIN_HAS_DYLP
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": DyLP solver on parincLinear.osil" << endl << endl;
 		ok = true; 
@@ -1154,7 +1042,7 @@ int main(int argC, char* argV[])
 	#endif
 	
 
-	#ifdef COIN_HAS_VOL
+#ifdef COIN_HAS_VOL
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Vol solver on volumeTest.osil" << endl << endl;
 		ok = true; 
@@ -1187,10 +1075,10 @@ int main(int argC, char* argV[])
 		cout << endl << endl << endl;
 		unitTestResultFailure  <<"Sorry Unit Test Failed Testing the Vol Solver:"  + eclass.errormsg << endl;
 	}	
-	#endif
+#endif
 	
 
-	#ifdef COIN_HAS_GLPK
+#ifdef COIN_HAS_GLPK
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": GLPK solver on p0033.osil" << endl << endl;
 		ok = true; 
@@ -1227,7 +1115,7 @@ int main(int argC, char* argV[])
 	
 
 
-	#ifdef COIN_HAS_CPX
+#ifdef COIN_HAS_CPX
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Cplex solver on p0033.osil" << endl << endl;
 		ok = true; 
@@ -1260,10 +1148,10 @@ int main(int argC, char* argV[])
 		cout << endl << endl << endl;
 		unitTestResultFailure  <<"Sorry Unit Test Failed Testing the Cplex Solver:"  + eclass.errormsg << endl;
 	}	
-	#endif
+#endif
 	
 	
-	#ifdef COIN_HAS_LINDO
+#ifdef COIN_HAS_LINDO
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Lindo solver on lindoapiaddins.osil" << endl << endl;
 		ok = true;
@@ -1292,6 +1180,7 @@ int main(int argC, char* argV[])
 		unitTestResult << "Solved problem lindoapiaddins.osil with Lindo" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
+#ifdef THOUROUGH
 		// now solve the rosenbrock problem from the OSiL paper
 		cout << endl << "TEST " << ++nOfTest << ": Lindo solver on rosenbrockmod.osil" << endl << endl;
 		osilFileName = dataDir  + "osilFiles" + dirsep + "rosenbrockmod.osil";
@@ -1372,19 +1261,19 @@ int main(int argC, char* argV[])
 		unitTestResult << "Solved problem wayneQuadratic.osil with Lindo" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 		*/
-		
+#endif		
 	}
 	catch(const ErrorClass& eclass){
 		//cout << "OSrL =  " <<  solver->osrl <<  endl;
 		cout << endl << endl << endl;
 		unitTestResultFailure  <<"Sorry Unit Test Failed Testing the LINDO Solver:"  + eclass.errormsg << endl << endl;
 	}
-	#endif
-	// end solving using the osil file
+#endif
+// end solving using the osil file
 
 
 
-	// now solve with an OSInstance created from an MPS file
+// now solve with an OSInstance created from an MPS file
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Cbc solver using MPS file" << endl << endl;
 		ok = true;
@@ -1421,7 +1310,8 @@ int main(int argC, char* argV[])
 		cout << endl << endl << endl;
 		unitTestResultFailure  <<"Sorry Unit Test Failed Testing the MPS converter:"  + eclass.errormsg << endl;
 	}
-	// now solve with an OSInstance created from an AMPL nl file
+
+// now solve with an OSInstance created from an AMPL nl file
 	try{
 #ifdef COIN_HAS_ASL
 		cout << endl << "TEST " << ++nOfTest << ": AMPL solver interface" << endl << endl;
@@ -1458,16 +1348,13 @@ int main(int argC, char* argV[])
 		cout << endl << endl << endl;
 		unitTestResultFailure  <<"Sorry Unit Test Failed Testing AMPL:"  + eclass.errormsg << endl;
 	}
+
 	//
 	// Now test the mps feature
 	//
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": b64 operations" << endl << endl;
 		ok = true;
-//		cout << endl;
-//		cout << endl;
-//		cout << "TESTING b64 OPERATIONS WITH A COIN SOLVER"<< endl;
-//		cout << endl;
 		OSiLWriter osilwriter;
 		osilwriter.m_bWriteBase64 = true;
 		solver = new CoinSolver();
@@ -1504,6 +1391,203 @@ int main(int argC, char* argV[])
 		unitTestResultFailure   << "Sorry Unit Test Failed Testing Use of Base 64" << endl;
 
 	}  
+#endif      //INSTALLATION_TEST
+
+
+#ifdef COMPONENT_DEBUG
+
+	// now test postfix and prefix routines
+	try{
+		cout << endl << "TEST " << ++nOfTest << ": postfix and prefix routines" << endl << endl;
+		std::string expTreeTest =  dataDir  + "osilFiles" + dirsep + "rosenbrockmod.osil";
+		osil = fileUtil->getFileAsString( expTreeTest.c_str() ) ;
+		OSInstance *osinstance = NULL;
+		//osinstance = new OSInstance();
+		OSiLReader *osilreader = NULL;
+		osilreader = new OSiLReader();
+		//create an osinstance
+		osinstance = osilreader->readOSiL( osil);
+		OSExpressionTree* expTree = osinstance->getNonlinearExpressionTree( -1);
+		if(expTree == NULL) throw ErrorClass(" Null expression tree when testing prefix and postfix routines");
+		std::vector<OSnLNode*> postfixVec;
+		//postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();
+		postfixVec = osinstance->getNonlinearExpressionTreeInPostfix( -1);
+	
+		unsigned int n = postfixVec.size();
+		unsigned int i;
+		std::string *nodeNames1 = new std::string[ n];
+		std::string *nodeNames2 = new std::string[ n];
+		for (i = 0 ; i < n; i++){
+			std::cout << postfixVec[i]->snodeName << std::endl;
+			nodeNames1[i] = postfixVec[i]->snodeName;
+		}
+		
+		// now create back the expression tree 
+		expTree->m_treeRoot = postfixVec[ n - 1]->createExpressionTreeFromPostfix( postfixVec);
+	
+		// now get in prefix
+		std::vector<OSnLNode*> prefixVec;
+		//prefixVec = expTree->m_treeRoot->getPrefixFromExpressionTree();
+		prefixVec = osinstance->getNonlinearExpressionTreeInPrefix( -1);
+		
+		// now create back the expression tree
+		expTree->m_treeRoot = prefixVec[ 0]->createExpressionTreeFromPrefix( prefixVec);
+		
+		// now get postfix vector again and compare with original
+		postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();
+		//postfixVec = osinstance->getNonlinearExpressionTreeInPostfix( -1);
+		if(postfixVec.size() != n) throw ErrorClass(" Problem with creating expression trees");
+		std::cout << std::endl << std::endl;
+		for (i = 0 ; i < n; i++){
+			//std::cout << postfixVec[i]->snodeName << std::endl;
+			nodeNames2[i] = postfixVec[i]->snodeName;
+			if( nodeNames1[i] != nodeNames2[ i]) throw ErrorClass(" Problem with creating expression trees");
+		}	
+		
+		//delete osinstance;
+		delete[] nodeNames1;
+		delete[] nodeNames2; 
+
+		delete osilreader;
+		osilreader = NULL;
+		osinstance = NULL;		
+		unitTestResult << "Successful test of prefix and postfix conversion routines" << std::endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+		
+	}
+	catch(const ErrorClass& eclass){
+		cout << endl << endl << endl;
+		unitTestResultFailure << eclass.errormsg << endl;
+	}
+	// now test the nonlinear operators	
+	try{
+		cout << endl << "TEST " << ++nOfTest << ": nonlinear operators" << endl << endl;
+		ok = true;
+//		std::cout << "Test nonlinear operators" << std::endl;
+		std::string operatorTest =  dataDir  + "osilFiles" + dirsep + "testOperators.osil";
+		osil = fileUtil->getFileAsString( operatorTest.c_str() );
+		OSInstance *osinstance = NULL;
+		//osinstance = new OSInstance();
+		OSiLReader *osilreader = NULL;
+		osilreader = new OSiLReader();
+		OSiLWriter *osilwriter = NULL;
+		osilwriter = new OSiLWriter();
+//		cout << "Read testOperators.osil...";
+		osinstance = osilreader->readOSiL( osil);
+//		cout << "Done" << endl;
+		OSExpressionTree* expTree = osinstance->getNonlinearExpressionTree( -1);
+		std::vector<OSnLNode*> postfixVec;
+		postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();
+		int n = postfixVec.size();
+		std::string *nodeNames1 = new std::string[ n];
+		for (int i = 0 ; i < n; i++){
+			std::cout << postfixVec[i]->snodeName << std::endl;
+			nodeNames1[i] = postfixVec[i]->snodeName;
+		}
+		std::cout << std::endl << std::endl;
+		std::cout << osilwriter->writeOSiL( osinstance) << std::endl;
+		// now test value
+		double *x = NULL;
+		x = new double[2];
+		x[0] = 1;
+		x[1] = 2;
+		double parserTestVal = expTree->m_treeRoot->calculateFunction( x);
+		std::cout << "ParserTest Val = " << parserTestVal << std::endl;
+		check = 11;
+		//ok &= NearEqual(expTree->m_treeRoot->calculateFunction( x) , check,  1e-10 , 1e-10);
+		ok = ( fabs(check -  expTree->m_treeRoot->calculateFunction( x))/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if(ok == false) throw ErrorClass(" Problem evaluating expression tree");
+		delete[] x;
+		delete[] nodeNames1;
+		delete osilreader;
+		osilreader = NULL;
+		delete osilwriter;
+		osilwriter = NULL;
+		osinstance = NULL;
+		//create an osinstance
+		unitTestResult << "Successful test of nonlinear operators using file testOperators.osil" << std::endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+	}
+	catch(const ErrorClass& eclass){
+		cout << endl << endl << endl;
+		unitTestResultFailure << eclass.errormsg << endl;
+	}
+// Automatic differentiation
+	try{
+		cout << endl << "TEST " << ++nOfTest << ": Automatic differentiation" << endl << endl;
+//		std::cout << std::endl << std::endl;
+//		std::cout << "Testing AD Features " << std::endl;
+		std::string expTreeTest =  dataDir  + "osilFiles" + dirsep + "CppADTestLag.osil";
+		/*
+		min x0^2 + 9*x1   -- w[0]
+		s.t. 
+		33 - 105 + 1.37*x1 + 2*x3 + 5*x1 <= 10  -- y[0]
+		ln(x0*x3)  + 7*x2 >= 10  -- y[1]
+		Note: in the first constraint 33 is a constant term and 105 
+		is part of the nl node
+		*/
+		osil = fileUtil->getFileAsString( expTreeTest.c_str() );
+		OSInstance *osinstance = NULL;
+		//osinstance = new OSInstance();
+		OSiLReader *osilreader = NULL;
+		osilreader = new OSiLReader();
+		//create an osinstance
+		osinstance = osilreader->readOSiL( osil);
+		double *x;
+		x = new double[ 4];
+		x[0] = 1;
+		x[1] = 5;
+		x[2] = 10;
+		x[3] = 5;
+		SparseVector *sp;
+		// get the gradient for constraint 1
+		osinstance->getJacobianSparsityPattern();
+		sp = osinstance->calculateConstraintFunctionGradient(x, 1, true);
+		int i;
+		for(i = 0; i < sp->number; i++){
+			std::cout << "gradient value " << sp->values[i] << std::endl;
+		}
+		ok = true;
+		//check gradient for constraint with index 1
+		double checkPartial2Con1 = 7.0 ;
+		//ok &= NearEqual( sp->values[ 0], checkPartial2Con1, 1e-10, 1e-10); 
+		ok = ( fabs(checkPartial2Con1 - sp->values[ 0] )/(fabs( checkPartial2Con1) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if(ok == false) throw ErrorClass(" Fail testing gradient calculation");
+		double checkPartial0Con1 = (1./x[0])  ;
+		//ok &= NearEqual(sp->values[ 1], checkPartial0Con1, 1e-10, 1e-10); 
+		ok = ( fabs(checkPartial0Con1 - sp->values[ 1] )/(fabs( checkPartial0Con1) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if(ok == false) throw ErrorClass(" Fail testing gradient calculation");
+		double checkPartial3Con1 = (1./x[3]) ;
+		//ok &= NearEqual( sp->values[ 2], checkPartial3Con1, 1e-10, 1e-10); 
+		ok = ( fabs(checkPartial3Con1 - sp->values[ 2] )/(fabs( checkPartial3Con1) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if(ok == false) throw ErrorClass(" Fail testing gradient calculation");
+		delete sp;
+		SparseHessianMatrix *sh;
+		// calcuate Hessian of objective function (index = -1)
+		osinstance->getLagrangianHessianSparsityPattern( );
+		sh = osinstance->calculateHessian(x, -1, true);
+		for(i = 0; i < sh->hessDimension; i++){
+			std::cout << "Hessian value " << sh->hessValues[i] << std::endl;
+		}
+		//ok &= NearEqual( sh->hessValues[ 0], 2., 1e-10, 1e-10);
+		ok = ( fabs(2. - sh->hessValues[0] )/(2. + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if(ok == false) throw ErrorClass(" Fail testing Hessian calculation"); 
+		//ok &= NearEqual( sh->hessValues[ 1], 0., 1e-10, 1e-10);
+		ok = ( fabs(0. - sh->hessValues[ 1] )/(0. + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if(ok == false) throw ErrorClass(" Fail testing Hessian calculation");
+		//ok &= NearEqual( sh->hessValues[ 2], 0., 1e-10, 1e-10);
+		ok = ( fabs(0. - sh->hessValues[2] )/(0. + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if(ok == false) throw ErrorClass(" Fail testing Hessian calculation");
+		unitTestResult << "Successful test of AD gradient and Hessian calculations" << std::endl;
+		delete[] x;
+		delete osilreader;
+		osilreader = NULL;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+	}	
+	catch(const ErrorClass& eclass){
+		cout << endl << endl << endl;
+		unitTestResultFailure << eclass.errormsg << endl;
+	}
 	//
 	// Now just test the OSiL parser
 	try{ 
@@ -1549,7 +1633,7 @@ int main(int argC, char* argV[])
 	//
 	// Now test the extensions to the OSiL format: <timeDomain>, etc.
 
-#ifdef STRESSTEST
+//#ifdef STRESSTEST
 	try{ 
 		cout << endl << "TEST " << ++nOfTest << ": Stochastic extensions to OSiL" << endl << endl;
 		cout << endl;
@@ -1838,7 +1922,7 @@ int main(int argC, char* argV[])
 		cout << eclass.errormsg << endl;
 		unitTestResultFailure << "Sorry Unit Test Failed osinstance get() and set() Methods" << endl;		
 	}	
-#endif
+//#endif
 
 
 	//
@@ -1920,7 +2004,7 @@ int main(int argC, char* argV[])
 		unitTestResultFailure << eclass.errormsg << endl;
 		unitTestResultFailure << "There was a failure in the test for reading OSrL" << endl;
 	}
-#endif //OSOL_PARSER_DEBUG
+//#endif //OSOL_PARSER_DEBUG
 
 	//
 	// Now test the OSoL parser
@@ -2035,7 +2119,7 @@ int main(int argC, char* argV[])
 		if (!ok)
 			throw ErrorClass(" Could not add to osoption data structure");
 
-#if 0   //skip the test of get() and set() methods for the time being
+//#if 0   //skip the test of get() and set() methods for the time being
 
 		//Now transfer to another osoption using get() and set() methods
 		std::string optionstring;
@@ -2491,7 +2575,7 @@ int main(int argC, char* argV[])
 		if (!ok)
 			throw ErrorClass(" Loss of information in OSoL write/read");
 
-#endif //end test of get() and set() methods
+//#endif //end test of get() and set() methods
 
 		delete osolwriter;
 		osolwriter = NULL;
@@ -2571,243 +2655,13 @@ int main(int argC, char* argV[])
 		unitTestResultFailure << eclass.errormsg << endl;
 		unitTestResultFailure << "There was a failure in the test for reading OSoL" << endl;
 	}
+#endif
 
-
-	// now test postfix and prefix routines
-	try{
-		cout << endl << "TEST " << ++nOfTest << ": postfix and prefix routines" << endl << endl;
-		std::string expTreeTest =  dataDir  + "osilFiles" + dirsep + "rosenbrockmod.osil";
-		osil = fileUtil->getFileAsString( expTreeTest.c_str() ) ;
-		OSInstance *osinstance = NULL;
-		//osinstance = new OSInstance();
-		OSiLReader *osilreader = NULL;
-		osilreader = new OSiLReader();
-		//create an osinstance
-		osinstance = osilreader->readOSiL( osil);
-		OSExpressionTree* expTree = osinstance->getNonlinearExpressionTree( -1);
-		if(expTree == NULL) throw ErrorClass(" Null expression tree when testing prefix and postfix routines");
-		std::vector<OSnLNode*> postfixVec;
-		//postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();
-		postfixVec = osinstance->getNonlinearExpressionTreeInPostfix( -1);
-	
-		unsigned int n = postfixVec.size();
-		unsigned int i;
-		std::string *nodeNames1 = new std::string[ n];
-		std::string *nodeNames2 = new std::string[ n];
-		for (i = 0 ; i < n; i++){
-			std::cout << postfixVec[i]->snodeName << std::endl;
-			nodeNames1[i] = postfixVec[i]->snodeName;
-		}
 		
-		// now create back the expression tree 
-		expTree->m_treeRoot = postfixVec[ n - 1]->createExpressionTreeFromPostfix( postfixVec);
-	
-		// now get in prefix
-		std::vector<OSnLNode*> prefixVec;
-		//prefixVec = expTree->m_treeRoot->getPrefixFromExpressionTree();
-		prefixVec = osinstance->getNonlinearExpressionTreeInPrefix( -1);
 		
-		// now create back the expression tree
-		expTree->m_treeRoot = prefixVec[ 0]->createExpressionTreeFromPrefix( prefixVec);
 		
-		// now get postfix vector again and compare with original
-		postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();
-		//postfixVec = osinstance->getNonlinearExpressionTreeInPostfix( -1);
-		if(postfixVec.size() != n) throw ErrorClass(" Problem with creating expression trees");
-		std::cout << std::endl << std::endl;
-		for (i = 0 ; i < n; i++){
-			//std::cout << postfixVec[i]->snodeName << std::endl;
-			nodeNames2[i] = postfixVec[i]->snodeName;
-			if( nodeNames1[i] != nodeNames2[ i]) throw ErrorClass(" Problem with creating expression trees");
-		}	
 		
-		//delete osinstance;
-		delete[] nodeNames1;
-		delete[] nodeNames2; 
-
-		delete osilreader;
-		osilreader = NULL;
-		osinstance = NULL;		
-		unitTestResult << "Successful test of prefix and postfix conversion routines" << std::endl;
-		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
-		
-	}
-	catch(const ErrorClass& eclass){
-		cout << endl << endl << endl;
-		unitTestResultFailure << eclass.errormsg << endl;
-	}
-	// now test the nonlinear operators	
-	try{
-		cout << endl << "TEST " << ++nOfTest << ": nonlinear operators" << endl << endl;
-		ok = true;
-//		std::cout << "Test nonlinear operators" << std::endl;
-		std::string operatorTest =  dataDir  + "osilFiles" + dirsep + "testOperators.osil";
-		osil = fileUtil->getFileAsString( operatorTest.c_str() );
-		OSInstance *osinstance = NULL;
-		//osinstance = new OSInstance();
-		OSiLReader *osilreader = NULL;
-		osilreader = new OSiLReader();
-		OSiLWriter *osilwriter = NULL;
-		osilwriter = new OSiLWriter();
-//		cout << "Read testOperators.osil...";
-		osinstance = osilreader->readOSiL( osil);
-//		cout << "Done" << endl;
-		OSExpressionTree* expTree = osinstance->getNonlinearExpressionTree( -1);
-		std::vector<OSnLNode*> postfixVec;
-		postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();
-		int n = postfixVec.size();
-		std::string *nodeNames1 = new std::string[ n];
-		for (int i = 0 ; i < n; i++){
-			std::cout << postfixVec[i]->snodeName << std::endl;
-			nodeNames1[i] = postfixVec[i]->snodeName;
-		}
-		std::cout << std::endl << std::endl;
-		std::cout << osilwriter->writeOSiL( osinstance) << std::endl;
-		// now test value
-		double *x = NULL;
-		x = new double[2];
-		x[0] = 1;
-		x[1] = 2;
-		double parserTestVal = expTree->m_treeRoot->calculateFunction( x);
-		std::cout << "ParserTest Val = " << parserTestVal << std::endl;
-		check = 11;
-		//ok &= NearEqual(expTree->m_treeRoot->calculateFunction( x) , check,  1e-10 , 1e-10);
-		ok = ( fabs(check -  expTree->m_treeRoot->calculateFunction( x))/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-		if(ok == false) throw ErrorClass(" Problem evaluating expression tree");
-		delete[] x;
-		delete[] nodeNames1;
-		delete osilreader;
-		osilreader = NULL;
-		delete osilwriter;
-		osilwriter = NULL;
-		osinstance = NULL;
-		//create an osinstance
-		unitTestResult << "Successful test of nonlinear operators using file testOperators.osil" << std::endl;
-		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
-	}
-	catch(const ErrorClass& eclass){
-		cout << endl << endl << endl;
-		unitTestResultFailure << eclass.errormsg << endl;
-	}
-	// 
-	// now solve on a remote server
-	/*
-	try{
-		cout << endl << "TEST " << ++nOfTest << ": Test remote solver" << endl << endl;
-		//return 0;
-		OSSolverAgent* osagent = NULL;
-		//osagent = new OSSolverAgent("128.135.130.17/axis/OSSolverService");
-		//osagent = new OSSolverAgent("gsbkip.chicagogsb.edu:80/os/ossolver/COINSolverService.jws");
-		//osagent = new OSSolverAgent("localhost/os/ossolver/COINSolverService.jws");
-		//osagent = new OSSolverAgent("localhost/axis/OSSolverService");
-		osagent = new OSSolverAgent("http://127.0.0.1:8080/os/ossolver/CoinSolverService.jws");
-		//osagent = new OSSolverAgent("128.135.130.17:8080/os/ossolver/CoinSolverService.jws");
-		//osagent = new OSSolverAgent("127.0.0.1:8080/web-services-examples/ted/VrptsSolverService.jws");
-		cout << "Place remote synchronous call" << endl;
-		nl2osil = new OSnl2osil( nlFileName);
-		nl2osil->createOSInstance() ;
-		OSiLWriter *osilwriter = NULL;
-		osilwriter = new OSiLWriter();
-		osil = osilwriter->writeOSiL( nl2osil->osinstance) ;
-		string osrl = osagent->solve(osil, osol);
-		cout << "READ THE OSrL and WRITE IT AGAIN" << endl;
-		cout << osrl  << endl;
-		OSrLReader *osrlreader = NULL;
-		OSResult *osresult = NULL;
-		osrlreader = new OSrLReader();
-		osresult = osrlreader->readOSrL( osrl);
-		OSrLWriter *osrlwriter;
-		if(osresult != NULL){
-			osrlwriter = new OSrLWriter();
-			osrl = osrlwriter->writeOSrL( osresult);
-		}
-		cout << osrl << endl;
-		//
-		delete nl2osil;
-		nl2osil = NULL;
-		delete osilwriter;
-		osilwriter = NULL;
-		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
-	}	
-		catch(const ErrorClass& eclass){
-		cout <<  eclass.errormsg <<  endl;
-	}	
-	*/
-	try{
-		cout << endl << "TEST " << ++nOfTest << ": Automatic differentiation" << endl << endl;
-//		std::cout << std::endl << std::endl;
-//		std::cout << "Testing AD Features " << std::endl;
-		std::string expTreeTest =  dataDir  + "osilFiles" + dirsep + "CppADTestLag.osil";
-		/*
-		min x0^2 + 9*x1   -- w[0]
-		s.t. 
-		33 - 105 + 1.37*x1 + 2*x3 + 5*x1 <= 10  -- y[0]
-		ln(x0*x3)  + 7*x2 >= 10  -- y[1]
-		Note: in the first constraint 33 is a constant term and 105 
-		is part of the nl node
-		*/
-		osil = fileUtil->getFileAsString( expTreeTest.c_str() );
-		OSInstance *osinstance = NULL;
-		//osinstance = new OSInstance();
-		OSiLReader *osilreader = NULL;
-		osilreader = new OSiLReader();
-		//create an osinstance
-		osinstance = osilreader->readOSiL( osil);
-		double *x;
-		x = new double[ 4];
-		x[0] = 1;
-		x[1] = 5;
-		x[2] = 10;
-		x[3] = 5;
-		SparseVector *sp;
-		// get the gradient for constraint 1
-		osinstance->getJacobianSparsityPattern();
-		sp = osinstance->calculateConstraintFunctionGradient(x, 1, true);
-		int i;
-		for(i = 0; i < sp->number; i++){
-			std::cout << "gradient value " << sp->values[i] << std::endl;
-		}
-		ok = true;
-		//check gradient for constraint with index 1
-		double checkPartial2Con1 = 7.0 ;
-		//ok &= NearEqual( sp->values[ 0], checkPartial2Con1, 1e-10, 1e-10); 
-		ok = ( fabs(checkPartial2Con1 - sp->values[ 0] )/(fabs( checkPartial2Con1) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-		if(ok == false) throw ErrorClass(" Fail testing gradient calculation");
-		double checkPartial0Con1 = (1./x[0])  ;
-		//ok &= NearEqual(sp->values[ 1], checkPartial0Con1, 1e-10, 1e-10); 
-		ok = ( fabs(checkPartial0Con1 - sp->values[ 1] )/(fabs( checkPartial0Con1) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-		if(ok == false) throw ErrorClass(" Fail testing gradient calculation");
-		double checkPartial3Con1 = (1./x[3]) ;
-		//ok &= NearEqual( sp->values[ 2], checkPartial3Con1, 1e-10, 1e-10); 
-		ok = ( fabs(checkPartial3Con1 - sp->values[ 2] )/(fabs( checkPartial3Con1) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-		if(ok == false) throw ErrorClass(" Fail testing gradient calculation");
-		delete sp;
-		SparseHessianMatrix *sh;
-		// calcuate Hessian of objective function (index = -1)
-		osinstance->getLagrangianHessianSparsityPattern( );
-		sh = osinstance->calculateHessian(x, -1, true);
-		for(i = 0; i < sh->hessDimension; i++){
-			std::cout << "Hessian value " << sh->hessValues[i] << std::endl;
-		}
-		//ok &= NearEqual( sh->hessValues[ 0], 2., 1e-10, 1e-10);
-		ok = ( fabs(2. - sh->hessValues[0] )/(2. + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-		if(ok == false) throw ErrorClass(" Fail testing Hessian calculation"); 
-		//ok &= NearEqual( sh->hessValues[ 1], 0., 1e-10, 1e-10);
-		ok = ( fabs(0. - sh->hessValues[ 1] )/(0. + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-		if(ok == false) throw ErrorClass(" Fail testing Hessian calculation");
-		//ok &= NearEqual( sh->hessValues[ 2], 0., 1e-10, 1e-10);
-		ok = ( fabs(0. - sh->hessValues[2] )/(0. + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-		if(ok == false) throw ErrorClass(" Fail testing Hessian calculation");
-		unitTestResult << "Successful test of AD gradient and Hessian calculations" << std::endl;
-		delete[] x;
-		delete osilreader;
-		osilreader = NULL;
-		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
-	}	
-	catch(const ErrorClass& eclass){
-		cout << endl << endl << endl;
-		unitTestResultFailure << eclass.errormsg << endl;
-	}
+// 
 	delete fileUtil;
 	fileUtil = NULL;
 	    
