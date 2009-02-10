@@ -1021,7 +1021,7 @@ std::string getSolverName( std::string osol){
 	std::cout <<  "invoke getSolverToInvokde" << std::endl;
 	std::string optionstring = osoption->getSolverToInvoke();
 	std::cout <<  "done with invoke getSolverToInvokde" << std::endl;
-	delete osoption;
+	//delete osoption;
 	delete osolreader;
 	return optionstring;
 	/*
