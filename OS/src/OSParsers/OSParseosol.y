@@ -77,7 +77,7 @@ int osollex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token <sval> QUOTE
 
 %token GREATERTHAN ENDOFELEMENT
-%token OSOLSTART OSOLATTRIBUTETEXT OSOLEND
+%token OSOLSTART OSOLSTARTEMPTY OSOLATTRIBUTETEXT OSOLEND
 
 
 %token LOCATIONTYPEATT TRANSPORTTYPEATT NUMBEROFOTHEROPTIONSATT;
@@ -130,13 +130,15 @@ int osollex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %%
 
 
-osoldoc: osolstart GREATERTHAN osolcontent OSOLEND;
-	| osolstart ENDOFELEMENT;
+osoldoc: osolstart   GREATERTHAN osolcontent OSOLEND
+	| osolstart   ENDOFELEMENT
+	| OSOLSTARTEMPTY   osolcontent   OSOLEND;
 
 osolstart:	OSOLSTART 
 	| OSOLSTART OSOLATTRIBUTETEXT ;
 
-osolcontent: osolgeneral osolsystem osolservice osoljob osoloptimization;
+osolcontent: 
+    | osolgeneral osolsystem osolservice osoljob osoloptimization;
 
 osolgeneral: | generalhead generalbody;
 

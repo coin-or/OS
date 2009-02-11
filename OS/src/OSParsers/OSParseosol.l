@@ -55,8 +55,8 @@
 #include "OSParseosol.tab.hpp"
 #include "OSOption.h"
 
-#define PARSERDEBUG
 
+#define YY_PRINT  printf("%s", yytext);
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", yytext);
 #else     
@@ -189,7 +189,10 @@ return(DOUBLE);}
 ({xmlwhitespace}+ubDualValue{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(UBDUALVALUEATT);}
 ({xmlwhitespace}+ubDualValue{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(UBDUALVALUEATT);}
 
+
+{xmlwhitespace}*\<osol{xmlwhitespace}*\> {return(OSOLSTARTEMPTY);}
 {xmlwhitespace}*\<osol{xmlwhitespace}+ {YY_PRINT; BEGIN osolattributetext;  return(OSOLSTART);}
+
 {xmlwhitespace}*\<\/osol{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OSOLEND);}
 {xmlwhitespace}*\<general {YY_PRINT; return(GENERALSTART);}
 {xmlwhitespace}*\<\/general{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(GENERALEND);}
@@ -329,7 +332,7 @@ return(DOUBLE);}
 
 <doublequoteattributetext>[^\"]* {YY_PRINT;  BEGIN 0; /*yylval->sval = strdup(yytext);*/   yylval->sval = yytext; return(ATTRIBUTETEXT);}
 <singlequoteattributetext>[^\']* {YY_PRINT;  BEGIN 0; /*yylval->sval = strdup(yytext);*/   yylval->sval = yytext;  return(ATTRIBUTETEXT);}
-<osolattributetext>([^>])* {YY_PRINT;  BEGIN 0; /*yylval->sval = strdup(yytext);*/   yylval->sval = yytext;   return(OSOLATTRIBUTETEXT);}
+<osolattributetext>([^>])* {YY_PRINT;  BEGIN 0;  /*yylval->sval = strdup(yytext);*/   yylval->sval = yytext;   return(OSOLATTRIBUTETEXT);}
 
 . {  
 	std::string error;
