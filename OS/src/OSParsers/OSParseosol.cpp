@@ -1845,7 +1845,7 @@ static yyconst flex_int32_t yy_rule_can_match_eol[189] =
 #include "OSOption.h"
 
 
-#define YY_PRINT  printf("%s", yytext);
+
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", yytext);
 #else     

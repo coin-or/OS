@@ -56,7 +56,7 @@
 #include "OSOption.h"
 
 
-#define YY_PRINT  printf("%s", yytext);
+
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", yytext);
 #else     
