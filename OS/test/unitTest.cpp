@@ -102,9 +102,9 @@
  */ 
 
 #define DEBUG       
-#define INSTALLATION_TEST   // minimal functionality test
+//#define INSTALLATION_TEST   // minimal functionality test
 //#define THOROUGH            // multiple problems for some solvers
-//#define COMPONENT_DEBUG     // program logic, especially parser testing
+#define COMPONENT_DEBUG     // program logic, especially parser testing
 
 
 #include <cppad/cppad.hpp> 
@@ -219,7 +219,6 @@ int main(int argC, char* argV[])
 	//using CppAD::NearEqual;
 	bool ok;
 	double check;
-	
 	
 	//return 0;
 	cout << "START UNIT TEST" << endl;
@@ -1361,7 +1360,7 @@ int main(int argC, char* argV[])
 		solver->sSolverName = "cbc";
 		mps2osil = new OSmps2osil( mpsFileName);
 		solver->osinstance = NULL;
-		osol = "<osol t></osol>";
+		osol = "<osol></osol>";
 		solver->osol = osol;
 		mps2osil->createOSInstance() ;
 		solver->osil = osilwriter.writeOSiL( mps2osil->osinstance) ;
@@ -1417,7 +1416,7 @@ int main(int argC, char* argV[])
 		unsigned int i;
 		std::string *nodeNames1 = new std::string[ n];
 		std::string *nodeNames2 = new std::string[ n];
-		for (i = 0 ; i < n; i++){
+		for (int i = 0 ; i < n; i++){
 			std::cout << postfixVec[i]->snodeName << std::endl;
 			nodeNames1[i] = postfixVec[i]->snodeName;
 		}
@@ -1438,7 +1437,7 @@ int main(int argC, char* argV[])
 		//postfixVec = osinstance->getNonlinearExpressionTreeInPostfix( -1);
 		if(postfixVec.size() != n) throw ErrorClass(" Problem with creating expression trees");
 		std::cout << std::endl << std::endl;
-		for (i = 0 ; i < n; i++){
+		for (int i = 0 ; i < n; i++){
 			//std::cout << postfixVec[i]->snodeName << std::endl;
 			nodeNames2[i] = postfixVec[i]->snodeName;
 			if( nodeNames1[i] != nodeNames2[ i]) throw ErrorClass(" Problem with creating expression trees");
@@ -1543,8 +1542,7 @@ int main(int argC, char* argV[])
 		// get the gradient for constraint 1
 		osinstance->getJacobianSparsityPattern();
 		sp = osinstance->calculateConstraintFunctionGradient(x, 1, true);
-		int i;
-		for(i = 0; i < sp->number; i++){
+		for(int i = 0; i < sp->number; i++){
 			std::cout << "gradient value " << sp->values[i] << std::endl;
 		}
 		ok = true;
@@ -1566,7 +1564,7 @@ int main(int argC, char* argV[])
 		// calcuate Hessian of objective function (index = -1)
 		osinstance->getLagrangianHessianSparsityPattern( );
 		sh = osinstance->calculateHessian(x, -1, true);
-		for(i = 0; i < sh->hessDimension; i++){
+		for(int i = 0; i < sh->hessDimension; i++){
 			std::cout << "Hessian value " << sh->hessValues[i] << std::endl;
 		}
 		//ok &= NearEqual( sh->hessValues[ 0], 2., 1e-10, 1e-10);
@@ -1810,8 +1808,7 @@ int main(int argC, char* argV[])
 		nelem = new int[4];
 		startIdx = new int[4];
 		VI = new int*[4];
-		int i;
-		for (i = 0; i < 4; i++)
+		for (int i = 0; i < 4; i++)
 		{	nelem[i] = 2;
 			startIdx[i] = 2*i;
 			VI[i] = new int[2];
@@ -1820,13 +1817,13 @@ int main(int argC, char* argV[])
 		};
 		ok &= osinstance->setTimeDomainStageVariablesUnordered(4,nelem,VI);
 
-		for (i = 0; i < 4; i++)
+		for (int i = 0; i < 4; i++)
 		{	nelem[i] = 1;
 			startIdx[i] = i;
 		};
 		ok &= osinstance->setTimeDomainStageConstraintsOrdered(4,nelem,startIdx);
 
-		for (i = 0; i < 4; i++)
+		for (int i = 0; i < 4; i++)
 		{	nelem[i] = 1;
 			startIdx[i] = -1;
 		};
@@ -2004,7 +2001,6 @@ int main(int argC, char* argV[])
 		unitTestResultFailure << eclass.errormsg << endl;
 		unitTestResultFailure << "There was a failure in the test for reading OSrL" << endl;
 	}
-//#endif //OSOL_PARSER_DEBUG
 
 	//
 	// Now test the OSoL parser
@@ -2038,11 +2034,7 @@ int main(int argC, char* argV[])
 		//osoption = new OSOption(); 
 		cout << "TEST PARSING AN OSoL FILE" << endl;
 		cout << "FIRST READ THE OSoL FILE INTO A STRING" << endl;
-#ifdef OSOL_PARSER_DEBUG
-		osolFileName = "C:\\datafiles\\research\\os\\os-trunk-work\\os\\data\\osolFiles\\parsertest.osol"; 
-#else
 		osolFileName = dataDir  + "osolFiles" + dirsep + "parsertest.osol"; 
-#endif
 		start = clock();
 		std::string osol = fileUtil->getFileAsString( osolFileName.c_str() );
 		finish = clock();
@@ -2561,19 +2553,23 @@ int main(int argC, char* argV[])
 		cout << endl << "Here is tmpOSoL:" <<endl;
 		cout << endl << endl << tmpOSoL << endl;
 		cout << "-----------------------------------------" << endl << endl;
-		delete osolreader;
-		osolreader = NULL;
+//		delete osolreader;
+//		osolreader = NULL;
 
 		// make sure we can parse without error
-		osolreader = new OSoLReader();
+		OSoLReader *osolreader2;
+		osolreader2 = new OSoLReader();
 		cout << "Read the string back" << endl;
 
 		OSOption *osoption3 = NULL;
-		osoption3 = osolreader->readOSoL( tmpOSoL);
+		osoption3 = osolreader2->readOSoL( tmpOSoL);
 
 		ok = osoption->IsEqual(osoption3);
 		if (!ok)
 			throw ErrorClass(" Loss of information in OSoL write/read");
+		delete osolreader2;
+		osolreader2 = NULL;
+
 
 //#endif //end test of get() and set() methods
 
@@ -2655,7 +2651,7 @@ int main(int argC, char* argV[])
 		unitTestResultFailure << eclass.errormsg << endl;
 		unitTestResultFailure << "There was a failure in the test for reading OSoL" << endl;
 	}
-#endif
+#endif       // COMPONENT_DEBUG
 
 		
 		

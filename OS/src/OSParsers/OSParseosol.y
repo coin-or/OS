@@ -130,15 +130,14 @@ int osollex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %%
 
 
-osoldoc: osolstart   GREATERTHAN osolcontent OSOLEND
-	| osolstart   ENDOFELEMENT
-	| OSOLSTARTEMPTY   osolcontent   OSOLEND;
+osoldoc: osolstart  osolcontent OSOLEND
+	| osolstart   ENDOFELEMENT;
 
-osolstart:	OSOLSTART 
-	| OSOLSTART OSOLATTRIBUTETEXT ;
+osolstart:	OSOLSTARTEMPTY   
+	| OSOLSTART OSOLATTRIBUTETEXT  GREATERTHAN ;
 
 osolcontent: 
-    | osolgeneral osolsystem osolservice osoljob osoloptimization;
+     osolgeneral osolsystem osolservice osoljob osoloptimization;
 
 osolgeneral: | generalhead generalbody;
 
@@ -1108,7 +1107,7 @@ indirtomovemakecopyatt: MAKECOPYATT ATTRIBUTETEXT
 	}
 	else
 	{	parserData->pathPairMakeCopyPresent = true;
-		if ($2 == "true")
+		if (strcmp($2,"true") == 0)
 			osoption->job->inputDirectoriesToMove->pathPair[parserData->numberOfInputDirectoriesToMove]->makeCopy = true;
 	}
 }
@@ -1190,7 +1189,7 @@ infilestomovemakecopyatt: MAKECOPYATT ATTRIBUTETEXT
 	}
 	else
 	{	parserData->pathPairMakeCopyPresent = true;
-		if ($2 == "true")
+		if (strcmp($2,"true") == 0)
 			osoption->job->inputFilesToMove->pathPair[parserData->numberOfInputFilesToMove]->makeCopy = true;
 	}
 }
@@ -1273,7 +1272,7 @@ outdirtomovemakecopyatt: MAKECOPYATT ATTRIBUTETEXT
 	}
 	else
 	{	parserData->pathPairMakeCopyPresent = true;
-		if ($2 == "true")
+		if (strcmp($2,"true") == 0)
 			osoption->job->outputDirectoriesToMove->pathPair[parserData->numberOfOutputDirectoriesToMove]->makeCopy = true;
 	}
 }
@@ -1355,7 +1354,7 @@ outfilestomovemakecopyatt: MAKECOPYATT ATTRIBUTETEXT
 	}
 	else
 	{	parserData->pathPairMakeCopyPresent = true;
-		if ($2 == "true")
+		if (strcmp($2,"true") == 0)
 			osoption->job->outputFilesToMove->pathPair[parserData->numberOfOutputFilesToMove]->makeCopy = true;
 	}
 }

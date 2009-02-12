@@ -48,6 +48,8 @@ BonminSolver::~BonminSolver() {
 	#endif
 	if(m_osilreader != NULL) delete m_osilreader;
 	m_osilreader = NULL;
+	if(m_osolreader != NULL) delete m_osolreader;
+	m_osolreader = NULL;
 	delete osresult;
 	osresult = NULL;
 	delete osrlwriter;
@@ -478,7 +480,7 @@ BonminProblem::finalize_solution(TMINLP::SolverReturn status,
 	std::string solutionDescription = "";	
 
 	try{
-		// resultHeader infomration
+		// resultHeader information
 		if(osresult->setServiceName( "Bonmin solver service") != true)
 			throw ErrorClass("OSResult error: setServiceName");
 		if(osresult->setInstanceName(  osinstance->getInstanceName()) != true)

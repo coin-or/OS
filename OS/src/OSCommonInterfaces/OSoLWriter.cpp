@@ -20,6 +20,8 @@
 #include "OSParameters.h"
 #include "OSCommonUtil.h"
 #include "OSConfig.h"
+#include "OSBase64.h"
+#include "OSMathUtil.h"
 #include <sstream>   
 #include <iostream>  
 #include <stdio.h>
@@ -135,21 +137,21 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 		{	if (m_OSOption->system->minDiskSpace->unit == "")
 				m_OSOption->system->minDiskSpace->unit = "byte";
 			outStr << "<minDiskSpace unit=\"" << m_OSOption->system->minDiskSpace->unit << "\">";
-			outStr << m_OSOption->system->minDiskSpace->value << "</minDiskSpace>" << endl;
+			outStr << os_dtoa_format(m_OSOption->system->minDiskSpace->value) << "</minDiskSpace>" << endl;
 		}
 		if (m_OSOption->system->minMemorySize != NULL)
 		{	if (m_OSOption->system->minMemorySize->unit == "")
 				m_OSOption->system->minMemorySize->unit = "byte";
 			outStr << "<minMemorySize unit=\"" << m_OSOption->system->minMemorySize->unit << "\">";
-			outStr << m_OSOption->system->minMemorySize->value << "</minMemorySize>" << endl;
+			outStr << os_dtoa_format(m_OSOption->system->minMemorySize->value) << "</minMemorySize>" << endl;
 		}
 		if (m_OSOption->system->minCPUSpeed != NULL)
 		{	if (m_OSOption->system->minCPUSpeed->unit == "")
 				m_OSOption->system->minCPUSpeed->unit = "hertz";
 			outStr << "<minCPUSpeed unit=\"" << m_OSOption->system->minCPUSpeed->unit << "\">";
-			outStr << m_OSOption->system->minCPUSpeed->value << "</minCPUSpeed>" << endl;
+			outStr << os_dtoa_format(m_OSOption->system->minCPUSpeed->value) << "</minCPUSpeed>" << endl;
 		}
-		if (m_OSOption->system->minCPUNumber > 0.0)
+		if (m_OSOption->system->minCPUNumber != 1.0)
 		{	outStr << "<minCPUNumber>" << m_OSOption->system->minCPUNumber << "</minCPUNumber>";
 		};
 		if (m_OSOption->system->otherOptions != NULL)
@@ -210,7 +212,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 			if (m_OSOption->job->maxTime->value == OSDBL_MAX)
 				outStr << "INF" << "</maxTime>" << endl;
 			else
-				outStr << m_OSOption->job->maxTime->value << "</maxTime>" << endl;
+				outStr << os_dtoa_format(m_OSOption->job->maxTime->value) << "</maxTime>" << endl;
 		}
 		if (m_OSOption->job->scheduledStartTime != "")
 			outStr << "<scheduledStartTime>" << m_OSOption->job->scheduledStartTime << "</scheduledStartTime>" << endl;
@@ -275,7 +277,9 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				{	outStr << "<pathPair";
 					outStr << " from=\"" << m_OSOption->job->inputDirectoriesToMove->pathPair[i]->from << "\"";
 					outStr << " to=\"" << m_OSOption->job->inputDirectoriesToMove->pathPair[i]->to << "\"";
-					outStr << " makeCopy=\"" << m_OSOption->job->inputDirectoriesToMove->pathPair[i]->makeCopy << "\"/>";
+					if (m_OSOption->job->inputDirectoriesToMove->pathPair[i]->makeCopy)
+						outStr << " makeCopy=\"true\""; 
+					outStr << "/>" << endl;
 				}
 				outStr << "</inputDirectoriesToMove>" << endl;
 			}
@@ -288,7 +292,9 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				{	outStr << "<pathPair";
 					outStr << " from=\"" << m_OSOption->job->inputFilesToMove->pathPair[i]->from << "\"";
 					outStr << " to=\"" << m_OSOption->job->inputFilesToMove->pathPair[i]->to << "\"";
-					outStr << " makeCopy=\"" << m_OSOption->job->inputFilesToMove->pathPair[i]->makeCopy << "\"/>";
+					if (m_OSOption->job->inputFilesToMove->pathPair[i]->makeCopy)
+						outStr << " makeCopy=\"true\""; 
+					outStr << "/>" << endl;
 				}
 				outStr << "</inputFilesToMove>" << endl;
 			}
@@ -301,7 +307,9 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				{	outStr << "<pathPair";
 					outStr << " from=\"" << m_OSOption->job->outputFilesToMove->pathPair[i]->from << "\"";
 					outStr << " to=\"" << m_OSOption->job->outputFilesToMove->pathPair[i]->to << "\"";
-					outStr << " makeCopy=\"" << m_OSOption->job->outputFilesToMove->pathPair[i]->makeCopy << "\"/>";
+					if (m_OSOption->job->outputFilesToMove->pathPair[i]->makeCopy)
+						outStr << " makeCopy=\"true\""; 
+					outStr << "/>" << endl;
 				}
 				outStr << "</outputFilesToMove>" << endl;
 			}
@@ -314,7 +322,9 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				{	outStr << "<pathPair";
 					outStr << " from=\"" << m_OSOption->job->outputDirectoriesToMove->pathPair[i]->from << "\"";
 					outStr << " to=\"" << m_OSOption->job->outputDirectoriesToMove->pathPair[i]->to << "\"";
-					outStr << " makeCopy=\"" << m_OSOption->job->outputDirectoriesToMove->pathPair[i]->makeCopy << "\"/>";
+					if (m_OSOption->job->outputDirectoriesToMove->pathPair[i]->makeCopy)
+						outStr << " makeCopy=\"true\""; 
+					outStr << "/>" << endl;
 				}
 				outStr << "</outputDirectoriesToMove>" << endl;
 			}
@@ -392,7 +402,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 						else if (m_OSOption->optimization->variables->initialVariableValues->var[i]->value == -OSDBL_MAX)
 							outStr << "-INF";
 						else
-							outStr << m_OSOption->optimization->variables->initialVariableValues->var[i]->value;
+							outStr << os_dtoa_format(m_OSOption->optimization->variables->initialVariableValues->var[i]->value);
 					}
 					outStr << "\"/>" << endl;
 				}
@@ -426,7 +436,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				for (int i=0; i < m_OSOption->optimization->variables->integerVariableBranchingWeights->numberOfVar; i++)
 				{	outStr << "<var";
 					outStr << " idx=\"" << m_OSOption->optimization->variables->integerVariableBranchingWeights->var[i]->idx << "\"";
-					outStr << " value=\"" << m_OSOption->optimization->variables->integerVariableBranchingWeights->var[i]->value << "\"";
+					outStr << " value=\"" << os_dtoa_format(m_OSOption->optimization->variables->integerVariableBranchingWeights->var[i]->value) << "\"";
 					outStr << "/>" << endl;
 				}
 				outStr << "</integerVariableBranchingWeights>" << endl;
@@ -438,11 +448,11 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				{	outStr << "<sos";
 					outStr << " sosIdx=\"" << m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->sosIdx << "\"";
 					outStr << " numberOfVar=\"" << m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->numberOfVar << "\"";
-					outStr << " groupWeight=\"" << m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->groupWeight << "\">" << endl;
+					outStr << " groupWeight=\"" << os_dtoa_format(m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->groupWeight) << "\">" << endl;
 					for (int j=0; j < m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->numberOfVar; j++)
 					{	outStr << "<var";
 						outStr << " idx=\"" << m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->var[j]->idx << "\"";
-						outStr << " value=\"" << m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->var[j]->value << "\"";
+						outStr << " value=\"" << os_dtoa_format(m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->var[j]->value) << "\"";
 						outStr << "/>" << endl;
 					}
 					outStr << "</sos>" << endl;
@@ -499,7 +509,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 						else if (m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->value == -OSDBL_MAX)
 							outStr << "-INF";
 						else
-							outStr << m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->value;
+							outStr << os_dtoa_format(m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->value);
 					}
 					outStr << "\"/>" << endl;
 				}
@@ -517,14 +527,14 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 					else if (m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->lbValue == -OSDBL_MAX)
 						outStr << "-INF";
 					else
-						outStr << m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->lbValue;
+						outStr << os_dtoa_format(m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->lbValue);
 					outStr << "\" ubValue=\"";
 					if (m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->ubValue == OSDBL_MAX)
 						outStr << "INF";
 					else if (m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->ubValue == -OSDBL_MAX)
 						outStr << "-INF";
 					else
-						outStr << m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->ubValue;
+						outStr << os_dtoa_format(m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->ubValue);
 					outStr << "\"/>" << endl;
 				}
 				outStr << "</initialObjectiveBounds>" << endl;
@@ -574,7 +584,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 						else if (m_OSOption->optimization->constraints->initialConstraintValues->con[i]->value == -OSDBL_MAX)
 							outStr << "-INF";
 						else
-							outStr << m_OSOption->optimization->constraints->initialConstraintValues->con[i]->value;
+							outStr << os_dtoa_format(m_OSOption->optimization->constraints->initialConstraintValues->con[i]->value);
 					}
 					outStr << "\"/>" << endl;
 				}
@@ -592,14 +602,14 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 					else if (m_OSOption->optimization->constraints->initialDualValues->con[i]->lbDualValue == -OSDBL_MAX)
 						outStr << "-INF";
 					else
-						outStr << m_OSOption->optimization->constraints->initialDualValues->con[i]->lbDualValue;
+						outStr << os_dtoa_format(m_OSOption->optimization->constraints->initialDualValues->con[i]->lbDualValue);
 					outStr << "\" ubDualValue=\"";
 					if (m_OSOption->optimization->constraints->initialDualValues->con[i]->ubDualValue == OSDBL_MAX)
 						outStr << "INF";
 					else if (m_OSOption->optimization->constraints->initialDualValues->con[i]->ubDualValue == -OSDBL_MAX)
 						outStr << "-INF";
 					else
-						outStr << m_OSOption->optimization->constraints->initialDualValues->con[i]->ubDualValue;
+						outStr << os_dtoa_format(m_OSOption->optimization->constraints->initialDualValues->con[i]->ubDualValue);
 					outStr << "\"/>" << endl;
 				}
 				outStr << "</initialDualValues>" << endl;

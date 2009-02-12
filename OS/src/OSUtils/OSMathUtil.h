@@ -24,6 +24,7 @@
 #include "OSParameters.h"
 #include "OSdtoa.h"
 #include "OSErrorClass.h"
+#include "OSDataStructures.h"
 
 
 #include <sstream>  

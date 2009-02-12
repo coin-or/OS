@@ -6720,7 +6720,7 @@ bool DirectoriesAndFiles::IsEqual(DirectoriesAndFiles *that)
 				if (this->path[i] != that->path[i])
 				{
 #ifdef DEBUG
-					cout << "path[" << i << "]: " << this->path[i] << " vs. " << that->path[i] << endl;
+					cout << "path[" << i << "]: \'" << this->path[i] << "\' vs. \'" << that->path[i] << "\'" << endl;
 #endif	
 					return false;
 				}
