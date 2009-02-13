@@ -21,6 +21,7 @@
 #include "OSOption.h"
 #include "OSParameters.h"
 #include "OSErrorClass.h"
+#include "OSCommonUtil.h"
 #include <iostream>
 #include <sstream>
 #include <limits>
@@ -5428,7 +5429,7 @@ bool OSOption::setInitVarValuesDense(int numberOfVar, double *value)
 
 	int i;
 	for (i = 0; i < numberOfVar; i++)
-	{	if (value[i] != OSNAN)
+	{	if (!CommonUtil::ISOSNAN(value[i]))
 			if (!this->optimization->variables->initialVariableValues->addVar(i, value[i]))
 				return false;
 	}
@@ -5573,7 +5574,7 @@ bool OSOption::setIntegerVariableBranchingWeightsDense(int numberOfVar, double *
 	}
 	int i;
 	for (i = 0; i < numberOfVar; i++)
-	{	if (value[i] != OSNAN)
+	{	if (!CommonUtil::ISOSNAN(value[i]))
 			if (!this->optimization->variables->integerVariableBranchingWeights->addVar(i, value[i]))
 				return false;
 	}
@@ -5673,7 +5674,7 @@ bool OSOption::setInitObjValuesDense(int numberOfObj, double *value)
 	}
 	int i;
 	for (i = 0; i < numberOfObj; i++)
-	{	if (value[i] != OSNAN)
+	{	if (!CommonUtil::ISOSNAN(value[i]))
 			if (!this->optimization->objectives->initialObjectiveValues->addObj(-1-i, value[i]))
 				return false;
 	}
