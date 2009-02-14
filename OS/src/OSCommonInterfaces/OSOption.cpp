@@ -5793,7 +5793,7 @@ bool OSOption::setInitConValuesDense(int numberOfCon, double *value)
 	}
 	int i;
 	for (i = 0; i < numberOfCon; i++)
-	{	if (value[i] != OSNAN)
+	{	if (!CommonUtil::ISOSNAN(value[i]))
 			if (!this->optimization->constraints->initialConstraintValues->addCon(i, value[i]))
 				return false;
 	}
