@@ -33,7 +33,9 @@
 #include "OSOption.h"
 
 //Couenne stuff
-#include "CouenneProblem.hpp"
+//#include "CouenneProblem.hpp"
+class CouenneProblem;
+class expression;
 #include "BonCouenneSetup.hpp"
 
 #ifdef HAVE_CTIME
