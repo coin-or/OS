@@ -147,9 +147,9 @@ Public Sub OSinitModel()
     'osNamespace.Text = "os.optimizationservices.org"
     Set schemaLocation = osinstance.createAttribute("xsi:schemaLocation")
     'local validationo
-    schemaLocation.Text = "os.optimizationservices.org C:\schemas\OSiL.xsd"
+    'schemaLocation.Text = "os.optimizationservices.org C:\schemas\OSiL.xsd"
     ' remote validation  -- does notwork on my machine
-    'schemaLocation.Text = "os.optimizationservices.org http://www.optimizationservices.org/schemas/OSiL.xsd"
+    schemaLocation.Text = "os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSiL.xsd"
     
     Set xsiNamespace = osinstance.createAttribute("xmlns:xsi")
     xsiNamespace.Text = "http://www.w3.org/2001/XMLSchema-instance"
