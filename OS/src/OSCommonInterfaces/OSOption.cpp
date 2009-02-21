@@ -99,8 +99,7 @@ OtherOptions::~OtherOptions()
 	if (other != NULL)
 	{	int i;
 		for (i=0; i<numberOfOtherOptions; i++)
-		{	//cout << "delete other general option " << i << endl;
-			delete other[i];
+		{	delete other[i];
 			other[i] = NULL;
 		}
 		delete[] other;
@@ -1787,13 +1786,13 @@ int OSOption::getNumberOfIntegerVariableBranchingWeights()
 /**
  * get the number of SOS that are given branching weights (in <optimization> element)
  */
-int OSOption::getNumberOfSOSWeights()
+int OSOption::getNumberOfSOS()
 {	if (this->optimization != NULL) 
 		if (this->optimization->variables != NULL) 
 			if (this->optimization->variables->sosVariableBranchingWeights != NULL) 
 				return this->optimization->variables->sosVariableBranchingWeights->numberOfSOS;
 	return -1;
-}//getNumberOfSOSWeights
+}//getNumberOfSOS
 
 /**
  * get the number of variables that are given integer branching weights (in <optimization> element)
@@ -1979,8 +1978,8 @@ int  OSOption::getOptionInt(std::string optionName)
 	if (optionName == "numberOfIntegerVariableBranchingWeights")
 		return this->getNumberOfIntegerVariableBranchingWeights();
 
-	if (optionName == "numberOfSOSWeights")
-		return this->getNumberOfSOSWeights();
+	if (optionName == "numberOfSOS")
+		return this->getNumberOfSOS();
 
 	if (optionName == "numberOfOtherVariableOptions")
 		return this->getNumberOfOtherVariableOptions();
@@ -2563,27 +2562,6 @@ BranchingWeight**  OSOption::getIntegerVariableBranchingWeightsSparse()
 
 
 /**
- * get a list of branching weights for SOS variables in sparse form
- * @return a list of SOSWeights objects
- */
-SOSWeights**  OSOption::getSOSVariableBranchingWeightsSparse()
-{	SOSWeights** sosVarVector;
-	if (this->optimization != NULL) 
-	{	if (this->optimization->variables != NULL) 
-		{	if (this->optimization->variables->sosVariableBranchingWeights != NULL)
-				sosVarVector = this->optimization->variables->sosVariableBranchingWeights->sos;
-			else
-				throw ErrorClass("<sosVariableBranchingWeights> object must be defined before getting the data");
-		}
-		else
-			throw ErrorClass("<variables> object must be defined before getting the data");
-	}
-	else
-		throw ErrorClass("<optimization> object must be defined before getting the data");
-	return sosVarVector;
-}//getSOSVariableBranchingWeightsSparse
-
-/**
  * get a list of branching weights for integer variables in dense form
  * @return an array of values
  * @note return OSNAN for variables that are not initialed
@@ -2624,6 +2602,29 @@ double* OSOption::getIntegerVariableBranchingWeightsDense()
 	}
 	return NULL;
 }//getIntegerVariableBranchingWeightsDense
+
+
+/**
+ * get a list of branching weights for SOS variables in sparse form
+ * @return a list of SOSWeights objects
+ */
+SOSWeights**  OSOption::getSOSVariableBranchingWeightsSparse()
+{	SOSWeights** sosVarVector;
+	if (this->optimization != NULL) 
+	{	if (this->optimization->variables != NULL) 
+		{	if (this->optimization->variables->sosVariableBranchingWeights != NULL)
+				sosVarVector = this->optimization->variables->sosVariableBranchingWeights->sos;
+			else
+				throw ErrorClass("<sosVariableBranchingWeights> object must be defined before getting the data");
+		}
+		else
+			throw ErrorClass("<variables> object must be defined before getting the data");
+	}
+	else
+		throw ErrorClass("<optimization> object must be defined before getting the data");
+	return sosVarVector;
+}//getSOSVariableBranchingWeightsSparse
+
 
 /**
  * get the array of other variable options associated with a particular solver
@@ -2740,7 +2741,8 @@ InitObjBound**  OSOption::getInitObjBoundsSparse()
 	if (this->optimization != NULL) 
 	{	if (this->optimization->objectives != NULL) 
 		{	if (this->optimization->objectives->initialObjectiveBounds != NULL) 
-				initObjBounds = this->optimization->objectives->initialObjectiveBounds->obj;			else
+				initObjBounds = this->optimization->objectives->initialObjectiveBounds->obj;
+			else
 				throw ErrorClass("<initialObjectiveBounds> object must be defined before getting the data");
 		}
 		else
@@ -3152,12 +3154,13 @@ bool OtherOptions::setOther(int numberOfOptions, OtherOption** other)
 	{	if (this->other != NULL)
 			throw ErrorClass( "otherOptions array previously used.");
 		
-		if (numberOfOptions == 0)
-			return true;
-		else if (numberOfOptions < 0)
+		if (numberOfOptions < 0)
 			throw ErrorClass( "length of otherOptions array cannot be negative.");
 
 		this->numberOfOtherOptions = numberOfOptions;
+		if (numberOfOptions == 0)
+			return true;
+
 		this->other = new OtherOption*[numberOfOptions];
 	 
 		int  i;
@@ -3223,12 +3226,13 @@ bool JobDependencies::setJobID(int numberOfJobIDs, std::string *jobID)
 	{	if (this->jobID != NULL)
 			throw ErrorClass( "jobID array previously used.");
 
-		if (numberOfJobIDs == 0)
-			return true;
-		else if (numberOfJobIDs < 0)
+		if (numberOfJobIDs < 0)
 			throw ErrorClass( "length of jobID array cannot be negative.");
 
 		this->numberOfJobIDs = numberOfJobIDs;
+		if (numberOfJobIDs == 0)
+			return true;
+
 		this->jobID = new std::string[numberOfJobIDs];
 		int i;
 		for (i = 0; i < numberOfJobIDs; i++)
@@ -3289,12 +3293,13 @@ bool DirectoriesAndFiles::setPath(int numberOfPaths, std::string *path)
 	{	if (this->path != NULL)
 			throw ErrorClass( "path array previously used.");
 
-		if (numberOfPaths == 0)
-			return true;
-		else if (numberOfPaths < 0)
+		if (numberOfPaths < 0)
 			throw ErrorClass( "length of path array cannot be negative.");
 
 		this->numberOfPaths = numberOfPaths;
+		if (numberOfPaths == 0)
+			return true;
+
 		this->path = new std::string[numberOfPaths];
 		int i;
 		for (i = 0; i < numberOfPaths; i++)
@@ -3356,12 +3361,13 @@ bool PathPairs::setPathPair(int numberOfPathPairs, PathPair **pathPair)
 	{	if (this->pathPair != NULL)
 			throw ErrorClass( "pathPair array previously used.");
 		
-		if (numberOfPathPairs == 0)
-			return true;
-		else if (numberOfPathPairs < 0)
+		if (numberOfPathPairs < 0)
 			throw ErrorClass( "length of pathPair array cannot be negative.");
 
 		this->numberOfPathPairs = numberOfPathPairs;
+		if (numberOfPathPairs == 0)
+			return true;
+
 		this->pathPair = new PathPair*[numberOfPathPairs];
 	 
 		int  i;
@@ -3434,12 +3440,13 @@ bool Processes::setProcess(int numberOfProcesses, std::string *process)
 	{	if (this->process != NULL)
 			throw ErrorClass( "process array previously used.");
 
-		if (numberOfProcesses == 0)
-			return true;
-		else if (numberOfProcesses < 0)
+		if (numberOfProcesses < 0)
 			throw ErrorClass( "length of process array cannot be negative.");
 
 		this->numberOfProcesses= numberOfProcesses;
+		if (numberOfProcesses == 0)
+			return true;
+
 		this->process = new std::string[numberOfProcesses];
 		int i;
 		for (i = 0; i < numberOfProcesses; i++)
@@ -3499,12 +3506,13 @@ bool InitVariableValues::setVar(int numberOfVar, InitVarValue **var)
 	{	if (this->var != NULL)
 			throw ErrorClass( "InitVarValue array previously used.");
 		
-		if (numberOfVar == 0)
-			return true;
-		else if (numberOfVar < 0)
+		if (numberOfVar < 0)
 			throw ErrorClass( "length of var array cannot be negative.");
 
 		this->numberOfVar = numberOfVar;
+		if (numberOfVar == 0)
+			return true;
+
 		this->var = new InitVarValue*[numberOfVar];
 	 
 		int  i;
@@ -3572,12 +3580,13 @@ bool InitVariableValuesString::setVar(int numberOfVar, InitVarValueString **var)
 	{	if (this->var != NULL)
 			throw ErrorClass( "InitVarValueString array previously used.");
 		
-		if (numberOfVar == 0)
-			return true;
-		else if (numberOfVar < 0)
+		if (numberOfVar < 0)
 			throw ErrorClass( "length of var array cannot be negative.");
 
 		this->numberOfVar = numberOfVar;
+		if (numberOfVar == 0)
+			return true;
+
 		this->var = new InitVarValueString*[numberOfVar];
 	 
 		int  i;
@@ -3645,12 +3654,13 @@ bool InitialBasisStatus::setVar(int numberOfVar, InitBasStatus **var)
 	{	if (this->var != NULL)
 			throw ErrorClass( "InitBasStatus array previously used.");
 		
-		if (numberOfVar == 0)
-			return true;
-		else if (numberOfVar < 0)
+		if (numberOfVar < 0)
 			throw ErrorClass( "length of var array cannot be negative.");
 
 		this->numberOfVar = numberOfVar;
+		if (numberOfVar == 0)
+			return true;
+
 		this->var = new InitBasStatus*[numberOfVar];
 	 
 		int  i;
@@ -3721,12 +3731,13 @@ bool IntegerVariableBranchingWeights::setVar(int numberOfVar, BranchingWeight **
 	{	if (this->var != NULL)
 			throw ErrorClass( "BranchingWeight array previously used.");
 		
-		if (numberOfVar == 0)
-			return true;
-		else if (numberOfVar < 0)
+		if (numberOfVar < 0)
 			throw ErrorClass( "length of var array cannot be negative.");
 
 		this->numberOfVar = numberOfVar;
+		if (numberOfVar == 0)
+			return true;
+
 		this->var = new BranchingWeight*[numberOfVar];
 	 
 		int  i;
@@ -3794,12 +3805,13 @@ bool SOSWeights::setVar(int numberOfVar, BranchingWeight **var)
 	{	if (this->var != NULL)
 			throw ErrorClass( "BranchingWeight array previously used.");
 		
-		if (numberOfVar == 0)
-			return true;
-		else if (numberOfVar < 0)
+		if (numberOfVar < 0)
 			throw ErrorClass( "length of var array cannot be negative.");
 
 		this->numberOfVar = numberOfVar;
+		if (numberOfVar == 0)
+			return true;
+
 		this->var = new BranchingWeight*[numberOfVar];
 	 
 		int  i;
@@ -3868,18 +3880,32 @@ bool SOSVariableBranchingWeights::setSOS(int numberOfSOS, SOSWeights **sos)
 	{	if (this->sos != NULL)
 			throw ErrorClass( "SOS array previously used.");
 		
-		if (numberOfSOS == 0)
-			return true;
-		else if (numberOfSOS < 0)
+		if (numberOfSOS < 0)
 			throw ErrorClass( "length of sos array cannot be negative.");
-
+		
 		this->numberOfSOS = numberOfSOS;
+		if (numberOfSOS == 0) return true;
+
 		this->sos = new SOSWeights*[numberOfSOS];
 	 
-		int  i;
+		int  i, j;
 		for (i = 0; i < numberOfSOS; i++)
-		{	 this->sos[i] = new SOSWeights();
-			*this->sos[i] = *sos[i];
+		{	this->sos[i] = new SOSWeights();
+			this->sos[i]->sosIdx      = sos[i]->sosIdx;
+			this->sos[i]->groupWeight = sos[i]->groupWeight;
+
+			if (sos[i]->numberOfVar < 0)
+				throw ErrorClass( "the number of variables in the SOS cannot be negative.");
+
+			this->sos[i]->numberOfVar = sos[i]->numberOfVar;
+
+			if (sos[i]->numberOfVar > 0) 
+			{	this->sos[i]->var = new BranchingWeight*[sos[i]->numberOfVar];
+				for (j = 0; j < sos[i]->numberOfVar; j++)
+				{	 this->sos[i]->var[j] = new BranchingWeight();
+					*this->sos[i]->var[j] = *sos[i]->var[j];
+				}
+			}
 		}
 		return true;
 	}
@@ -3922,7 +3948,7 @@ bool SOSVariableBranchingWeights::addSOS(int sosIdx, int nvar, double weight, in
 		temp[ nopt]->var = new BranchingWeight*[nvar];
 		for (i = 0; i < nvar; i++)
 		{	temp[nopt]->var[i] = new BranchingWeight();
-			temp[nopt]->var[i]->idx = idx[i];
+			temp[nopt]->var[i]->idx   = idx[i];
 			temp[nopt]->var[i]->value = value[i];
 		}
 
@@ -3949,12 +3975,12 @@ bool OtherVariableOption::setVar(int numberOfVar, OtherVarOption **var)
 	{	if (this->var != NULL)
 			throw ErrorClass( "OtherVarOption array previously used.");
 		
-		if (numberOfVar == 0)
-			return true;
-		else if (numberOfVar < 0)
-			throw ErrorClass( "length of var array cannot be negative.");
+		if (numberOfVar < 0)
+			throw ErrorClass( "length of <var> array cannot be negative.");
 
 		this->numberOfVar = numberOfVar;
+		if (numberOfVar == 0) return true;
+
 		this->var = new OtherVarOption*[numberOfVar];
 	 
 		int  i;
@@ -4025,20 +4051,39 @@ bool OtherVariableOption::addVar(int idx, std::string value, std::string lbValue
 bool VariableOption::setOther(int numberOfOptions, OtherVariableOption  **other)
 {	try
 	{	if (this->other != NULL)
-			throw ErrorClass( "otherOptions array previously used.");
+			throw ErrorClass( "otherVariableOptions array previously used.");
 		
-		if (numberOfOptions == 0)
-			return true;
-		else if (numberOfOptions < 0)
-			throw ErrorClass( "length of otherVariableOptions array cannot be negative.");
+		if (numberOfOptions < 0)
+			throw ErrorClass( "length of <other> array cannot be negative.");
 
 		this->numberOfOtherVariableOptions = numberOfOptions;
+		if (numberOfOptions == 0) return true;
+
 		this->other = new OtherVariableOption*[numberOfOptions];
 	 
-		int  i;
+		int  i, j;
 		for (i = 0; i < numberOfOptions; i++)
-		{	 this->other[i] = new OtherVariableOption();
-			*this->other[i] = *other[i];
+		{	this->other[i] = new OtherVariableOption();
+			this->other[i]->name        = other[i]->name;
+			this->other[i]->value       = other[i]->value;
+			this->other[i]->solver      = other[i]->solver;
+			this->other[i]->category    = other[i]->category;
+			this->other[i]->type        = other[i]->type;
+			this->other[i]->description = other[i]->description;
+
+			if (other[i]->numberOfVar < 0)
+				throw ErrorClass( "the number of variables in otherVariableOption cannot be negative.");
+
+			this->other[i]->numberOfVar = other[i]->numberOfVar;
+
+			if (other[i]->numberOfVar > 0) 
+			{
+				this->other[i]->var = new OtherVarOption*[other[i]->numberOfVar];
+				for (j = 0; j < other[i]->numberOfVar; j++)
+				{	 this->other[i]->var[j] = new OtherVarOption();
+					*this->other[i]->var[j] = *other[i]->var[j];
+				}
+			}
 		}
 		return true;
 	}
@@ -4055,7 +4100,7 @@ bool VariableOption::setOther(int numberOfOptions, OtherVariableOption  **other)
  */
 bool VariableOption::addOther(OtherVariableOption *other)
 {	try
-	{	int nopt; int i;
+	{	int nopt, i, j;
 		if (this->other == NULL) 
 			nopt = 0;
 		else
@@ -4068,8 +4113,27 @@ bool VariableOption::addOther(OtherVariableOption *other)
 		delete[] this->other; //delete old pointers
 	
 //	add in the new element
-		 temp[ nopt] = new OtherVariableOption();
-		*temp[ nopt] = *other;
+		temp[ nopt] = new OtherVariableOption();
+		temp[ nopt]->name        = other->name;
+		temp[ nopt]->value       = other->value;
+		temp[ nopt]->solver      = other->solver;
+		temp[ nopt]->category    = other->category;
+		temp[ nopt]->type        = other->type;
+		temp[ nopt]->description = other->description;
+
+		if (other->numberOfVar < 0)
+			throw ErrorClass( "the number of variables in otherVariableOption cannot be negative.");
+
+		temp[ nopt]->numberOfVar = other->numberOfVar;
+
+		if (other->numberOfVar > 0)
+		{	
+			temp[ nopt]->var = new OtherVarOption*[other->numberOfVar];
+			for (j = 0; j < other->numberOfVar; j++)
+			{	 temp[ nopt]->var[j] = new OtherVarOption();
+				*temp[ nopt]->var[j] = *other->var[j];
+			}
+		}
 
 		this->other = temp;   //hook the new pointers into the data structure
 		this->numberOfOtherVariableOptions = ++nopt;
@@ -4094,12 +4158,13 @@ bool InitObjectiveValues::setObj(int numberOfObj, InitObjValue **obj)
 	{	if (this->obj != NULL)
 			throw ErrorClass( "InitObjValue array previously used.");
 		
-		if (numberOfObj == 0)
-			return true;
-		else if (numberOfObj < 0)
+		if (numberOfObj < 0)
 			throw ErrorClass( "length of obj array cannot be negative.");
 
 		this->numberOfObj = numberOfObj;
+		if (numberOfObj == 0)
+			return true;
+
 		this->obj = new InitObjValue*[numberOfObj];
 	 
 		int  i;
@@ -4167,12 +4232,13 @@ bool InitObjectiveBounds::setObj(int numberOfObj, InitObjBound **obj)
 	{	if (this->obj != NULL)
 			throw ErrorClass( "InitObjBound array previously used.");
 		
-		if (numberOfObj == 0)
-			return true;
-		else if (numberOfObj < 0)
+		if (numberOfObj < 0)
 			throw ErrorClass( "length of obj array cannot be negative.");
 
 		this->numberOfObj = numberOfObj;
+		if (numberOfObj == 0)
+			return true;
+
 		this->obj = new InitObjBound*[numberOfObj];
 	 
 		int  i;
@@ -4241,14 +4307,15 @@ bool InitObjectiveBounds::addObj(int idx, double lbValue, double ubValue)
 bool OtherObjectiveOption::setObj(int numberOfObj, OtherObjOption **obj)
 {	try
 	{	if (this->obj != NULL)
-			throw ErrorClass( "OtherVarOption array previously used.");
+			throw ErrorClass( "OtherObjOption array previously used.");
 		
-		if (numberOfObj == 0)
-			return true;
-		else if (numberOfObj < 0)
-			throw ErrorClass( "length of obj array cannot be negative.");
+		if (numberOfObj < 0)
+			throw ErrorClass( "length of <obj> array cannot be negative.");
 
 		this->numberOfObj= numberOfObj;
+		if (numberOfObj == 0)
+			return true;
+
 		this->obj = new OtherObjOption*[numberOfObj];
 	 
 		int  i;
@@ -4320,18 +4387,37 @@ bool ObjectiveOption::setOther(int numberOfOptions, OtherObjectiveOption  **othe
 	{	if (this->other != NULL)
 			throw ErrorClass( "otherObjectiveOptions array previously used.");
 		
-		if (numberOfOptions == 0)
-			return true;
-		else if (numberOfOptions < 0)
+		if (numberOfOptions < 0)
 			throw ErrorClass( "length of <other> array cannot be negative.");
 
 		this->numberOfOtherObjectiveOptions = numberOfOptions;
+		if (numberOfOptions == 0) return true;
+
 		this->other = new OtherObjectiveOption*[numberOfOptions];
 	 
-		int  i;
+		int  i, j;
 		for (i = 0; i < numberOfOptions; i++)
-		{	 this->other[i] = new OtherObjectiveOption();
-			*this->other[i] = *other[i];
+		{	this->other[i] = new OtherObjectiveOption();
+			this->other[i]->name        = other[i]->name;
+			this->other[i]->value       = other[i]->value;
+			this->other[i]->solver      = other[i]->solver;
+			this->other[i]->category    = other[i]->category;
+			this->other[i]->type        = other[i]->type;
+			this->other[i]->description = other[i]->description;
+
+			if (other[i]->numberOfObj < 0)
+				throw ErrorClass( "the number of objectives in otherObjectiveOption cannot be negative.");
+
+			this->other[i]->numberOfObj = other[i]->numberOfObj;
+
+			if (other[i]->numberOfObj > 0) 
+			{
+				this->other[i]->obj = new OtherObjOption*[other[i]->numberOfObj];
+				for (j = 0; j < other[i]->numberOfObj; j++)
+				{	 this->other[i]->obj[j] = new OtherObjOption();
+					*this->other[i]->obj[j] = *other[i]->obj[j];
+				}
+			}
 		}
 		return true;
 	}
@@ -4348,7 +4434,7 @@ bool ObjectiveOption::setOther(int numberOfOptions, OtherObjectiveOption  **othe
  */
 bool ObjectiveOption::addOther(OtherObjectiveOption *other)
 {	try
-	{	int nopt; int i;
+	{	int nopt, i, j;
 		if (this->other == NULL) 
 			nopt = 0;
 		else
@@ -4361,8 +4447,27 @@ bool ObjectiveOption::addOther(OtherObjectiveOption *other)
 		delete[] this->other; //delete old pointers
 	
 //	add in the new element
-		 temp[ nopt] = new OtherObjectiveOption();
-		*temp[ nopt] = *other;
+		temp[ nopt] = new OtherObjectiveOption();
+		temp[ nopt]->name        = other->name;
+		temp[ nopt]->value       = other->value;
+		temp[ nopt]->solver      = other->solver;
+		temp[ nopt]->category    = other->category;
+		temp[ nopt]->type        = other->type;
+		temp[ nopt]->description = other->description;
+
+		if (other->numberOfObj < 0)
+			throw ErrorClass( "the number of objectives in otherObjectiveOption cannot be negative.");
+
+		temp[ nopt]->numberOfObj = other->numberOfObj;
+
+		if (other->numberOfObj > 0) 
+		{	
+			temp[ nopt]->obj = new OtherObjOption*[other->numberOfObj];
+			for (j = 0; j < other->numberOfObj; j++)
+			{	 temp[ nopt]->obj[j] = new OtherObjOption();
+				*temp[ nopt]->obj[j] = *other->obj[j];
+			}
+		}
 
 		this->other = temp;   //hook the new pointers into the data structure
 		this->numberOfOtherObjectiveOptions = ++nopt;
@@ -4387,12 +4492,13 @@ bool InitConstraintValues::setCon(int numberOfCon, InitConValue **con)
 	{	if (this->con != NULL)
 			throw ErrorClass( "InitConValue array previously used.");
 		
-		if (numberOfCon == 0)
-			return true;
-		else if (numberOfCon < 0)
+		if (numberOfCon < 0)
 			throw ErrorClass( "length of con array cannot be negative.");
 
 		this->numberOfCon = numberOfCon;
+		if (numberOfCon == 0)
+			return true;
+
 		this->con = new InitConValue*[numberOfCon];
 	 
 		int  i;
@@ -4460,12 +4566,13 @@ bool InitDualVariableValues::setCon(int numberOfCon, InitDualVarValue **con)
 	{	if (this->con != NULL)
 			throw ErrorClass( "InitDualVarValue array previously used.");
 		
-		if (numberOfCon == 0)
-			return true;
-		else if (numberOfCon < 0)
+		if (numberOfCon < 0)
 			throw ErrorClass( "length of con array cannot be negative.");
 
 		this->numberOfCon = numberOfCon;
+		if (numberOfCon == 0)
+			return true;
+
 		this->con = new InitDualVarValue*[numberOfCon];
 	 
 		int  i;
@@ -4535,12 +4642,13 @@ bool OtherConstraintOption::setCon(int numberOfCon, OtherConOption **con)
 	{	if (this->con != NULL)
 			throw ErrorClass( "OtherConOption array previously used.");
 		
-		if (numberOfCon == 0)
-			return true;
-		else if (numberOfCon < 0)
-			throw ErrorClass( "length of con array cannot be negative.");
+		if (numberOfCon < 0)
+			throw ErrorClass( "length of <con> array cannot be negative.");
 
 		this->numberOfCon = numberOfCon;
+		if (numberOfCon == 0)
+			return true;
+
 		this->con = new OtherConOption*[numberOfCon];
 	 
 		int  i;
@@ -4610,20 +4718,40 @@ bool OtherConstraintOption::addCon(int idx, std::string value, std::string lbVal
 bool ConstraintOption::setOther(int numberOfOptions, OtherConstraintOption  **other)
 {	try
 	{	if (this->other != NULL)
-			throw ErrorClass( "otherOptions array previously used.");
+			throw ErrorClass( "otherConstraintOptions array previously used.");
 		
-		if (numberOfOptions == 0)
-			return true;
-		else if (numberOfOptions < 0)
+		if (numberOfOptions < 0)
 			throw ErrorClass( "length of <other> array cannot be negative.");
 
 		this->numberOfOtherConstraintOptions = numberOfOptions;
+		if (numberOfOptions == 0)
+			return true;
+
 		this->other = new OtherConstraintOption*[numberOfOptions];
 	 
-		int  i;
+		int  i, j;
 		for (i = 0; i < numberOfOptions; i++)
 		{	 this->other[i] = new OtherConstraintOption();
-			*this->other[i] = *other[i];
+			this->other[i]->name        = other[i]->name;
+			this->other[i]->value       = other[i]->value;
+			this->other[i]->solver      = other[i]->solver;
+			this->other[i]->category    = other[i]->category;
+			this->other[i]->type        = other[i]->type;
+			this->other[i]->description = other[i]->description;
+
+			if (other[i]->numberOfCon < 0)
+				throw ErrorClass( "the number of constraints in otherConstraintOption cannot be negative.");
+
+			this->other[i]->numberOfCon = other[i]->numberOfCon;
+
+			if (other[i]->numberOfCon > 0) 
+			{
+				this->other[i]->con = new OtherConOption*[other[i]->numberOfCon];
+				for (j = 0; j < other[i]->numberOfCon; j++)
+				{	 this->other[i]->con[j] = new OtherConOption();
+					*this->other[i]->con[j] = *other[i]->con[j];
+				}
+			}
 		}
 		return true;
 	}
@@ -4679,12 +4807,13 @@ bool SolverOptions::setSolverOptions(int numberOfOptions, SolverOption **solverO
 	{	if (this->solverOption != NULL)
 			throw ErrorClass( "solverOptions array previously used.");
 		
-		if (numberOfOptions == 0)
-			return true;
-		else if (numberOfOptions < 0)
+		if (numberOfOptions < 0)
 			throw ErrorClass( "length of <solverOption> array cannot be negative.");
 
 		this->numberOfSolverOptions = numberOfOptions;
+		if (numberOfOptions == 0)
+			return true;
+
 		this->solverOption = new SolverOption*[numberOfOptions];
 	 
 		int  i;
@@ -7235,8 +7364,10 @@ bool SOSVariableBranchingWeights::IsEqual(SOSVariableBranchingWeights *that)
 			}
 			int i;
 			for (i = 0; i < numberOfSOS; i++)
+			{	cout << "SOS " << i << " of " << numberOfSOS << endl;
 				if (!this->sos[i]->IsEqual(that->sos[i]))
 					return false;
+			}
 			return true;
 		}
 	}
@@ -7287,8 +7418,10 @@ bool SOSWeights::IsEqual(SOSWeights *that)
 			}
 			int i;
 			for (i = 0; i < numberOfVar; i++)
+			{	cout << "var[" << i << "] of " << numberOfVar << endl;
 				if (!this->var[i]->IsEqual(that->var[i]))
 					return false;
+			}
 			return true;
 		}
 	}

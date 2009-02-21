@@ -13,7 +13,8 @@
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
- 
+
+#define DEBUG
  
 #include "OSoLWriter.h"
 #include "OSOption.h"
@@ -378,7 +379,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 /**
  * 	Put the <optimization> element
  */
-	if(m_OSOption->optimization != NULL)
+	if (m_OSOption->optimization != NULL)
 	{	outStr << "<optimization";
 		outStr << " numberOfVariables=\"" << m_OSOption->optimization->numberOfVariables << "\" ";
 		outStr << " numberOfObjectives=\"" << m_OSOption->optimization->numberOfObjectives << "\" ";
@@ -389,6 +390,9 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 			if (m_OSOption->optimization->variables->numberOfOtherVariableOptions > 0)
 				outStr << " numberOfOtherVariableOptions=\"" << m_OSOption->optimization->variables->numberOfOtherVariableOptions << "\"";
 			outStr << ">" << endl;
+#ifdef DEBUG
+			cout << "initialVariableValues: " << (m_OSOption->optimization->variables->initialVariableValues != NULL) << endl;
+#endif
 			if (m_OSOption->optimization->variables->initialVariableValues != NULL)
 			{	outStr << "<initialVariableValues numberOfVar=\"";
 				outStr << m_OSOption->optimization->variables->initialVariableValues->numberOfVar << "\">" << endl;
@@ -408,6 +412,9 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				}
 				outStr << "</initialVariableValues>" << endl;
 			}
+#ifdef DEBUG
+			cout << "initialVariableValuesString: " << (m_OSOption->optimization->variables->initialVariableValuesString != NULL) << endl;
+#endif
 			if (m_OSOption->optimization->variables->initialVariableValuesString != NULL)
 			{	outStr << "<initialVariableValuesString numberOfVar=\"";
 				outStr << m_OSOption->optimization->variables->initialVariableValuesString->numberOfVar << "\">" << endl;
@@ -419,6 +426,9 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				}
 				outStr << "</initialVariableValuesString>" << endl;
 			}
+#ifdef DEBUG
+			cout << "initialBasisStatus: " << (m_OSOption->optimization->variables->initialBasisStatus != NULL) << endl;
+#endif
 			if (m_OSOption->optimization->variables->initialBasisStatus != NULL)
 			{	outStr << "<initialBasisStatus numberOfVar=\"";
 				outStr << m_OSOption->optimization->variables->initialBasisStatus->numberOfVar << "\">" << endl;
@@ -430,6 +440,9 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				}
 				outStr << "</initialBasisStatus>" << endl;
 			}
+#ifdef DEBUG
+			cout << "integerVariableBranchingWeights: " << (m_OSOption->optimization->variables->integerVariableBranchingWeights != NULL) << endl;
+#endif
 			if (m_OSOption->optimization->variables->integerVariableBranchingWeights != NULL)
 			{	outStr << "<integerVariableBranchingWeights numberOfVar=\"";
 				outStr << m_OSOption->optimization->variables->integerVariableBranchingWeights->numberOfVar << "\">" << endl;
@@ -441,16 +454,28 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				}
 				outStr << "</integerVariableBranchingWeights>" << endl;
 			}
+#ifdef DEBUG
+			cout << "sosVariableBranchingWeights: " << (m_OSOption->optimization->variables->sosVariableBranchingWeights != NULL) << endl;
+#endif
 			if (m_OSOption->optimization->variables->sosVariableBranchingWeights != NULL)
 			{	outStr << "<sosVariableBranchingWeights numberOfSOS=\"";
+#ifdef DEBUG
+				cout << "start: numberOfSOS" << endl;
+#endif
 				outStr << m_OSOption->optimization->variables->sosVariableBranchingWeights->numberOfSOS << "\">" << endl;
 				for (int i=0; i < m_OSOption->optimization->variables->sosVariableBranchingWeights->numberOfSOS; i++)
 				{	outStr << "<sos";
+#ifdef DEBUG
+				cout << "sosIdx - nvar: " << m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->numberOfVar << endl;
+#endif
 					outStr << " sosIdx=\"" << m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->sosIdx << "\"";
 					outStr << " numberOfVar=\"" << m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->numberOfVar << "\"";
 					outStr << " groupWeight=\"" << os_dtoa_format(m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->groupWeight) << "\">" << endl;
 					for (int j=0; j < m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->numberOfVar; j++)
 					{	outStr << "<var";
+#ifdef DEBUG
+				cout << "idx" << endl;
+#endif
 						outStr << " idx=\"" << m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->var[j]->idx << "\"";
 						outStr << " value=\"" << os_dtoa_format(m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->var[j]->value) << "\"";
 						outStr << "/>" << endl;
@@ -459,10 +484,21 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				}
 				outStr << "</sosVariableBranchingWeights>" << endl;
 			}
+#ifdef DEBUG
 			printf("\n%s%d\n","Number of other variable options: ",m_OSOption->optimization->variables->numberOfOtherVariableOptions);
+#endif
 			if (m_OSOption->optimization->variables->numberOfOtherVariableOptions > 0)
 				for (int i=0; i < m_OSOption->optimization->variables->numberOfOtherVariableOptions; i++)
 				{	outStr << "<other name=\"" << m_OSOption->optimization->variables->other[i]->name << "\"";
+#ifdef DEBUG
+			cout << "option " << i << ":" << endl;
+			cout << "   numberOfVar \'" << m_OSOption->optimization->variables->other[i]->numberOfVar << "\'" << endl;
+			cout << "   value       \'" << m_OSOption->optimization->variables->other[i]->value << "\'" << endl;
+			cout << "   solver      \'" << m_OSOption->optimization->variables->other[i]->solver << "\'" << endl;
+			cout << "   category    \'" << m_OSOption->optimization->variables->other[i]->category << "\'" << endl;
+			cout << "   type        \'" << m_OSOption->optimization->variables->other[i]->type << "\'" << endl;
+			cout << "   description \'" << m_OSOption->optimization->variables->other[i]->description << "\'" << endl;
+#endif
 //					if (m_OSOption->optimization->variables->other[i]->numberOfVar > 0)
 						outStr << " numberOfVar=\"" << m_OSOption->optimization->variables->other[i]->numberOfVar << "\"";
 					if (m_OSOption->optimization->variables->other[i]->value != "")
@@ -539,9 +575,22 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				}
 				outStr << "</initialObjectiveBounds>" << endl;
 			}
+#ifdef DEBUG
+			printf("\n%s%d\n","Number of other objective options: ",m_OSOption->optimization->objectives->numberOfOtherObjectiveOptions);
+#endif
 			if (m_OSOption->optimization->objectives->numberOfOtherObjectiveOptions > 0)
 				for (int i=0; i < m_OSOption->optimization->objectives->numberOfOtherObjectiveOptions; i++)
 				{	outStr << "<other name=\"" << m_OSOption->optimization->objectives->other[i]->name << "\"";
+#ifdef DEBUG
+			cout << "option " << i << ":" << endl;
+			cout << "   numberOfObj \'" << m_OSOption->optimization->objectives->other[i]->numberOfObj << "\'" << endl;
+			cout << "   value       \'" << m_OSOption->optimization->objectives->other[i]->value << "\'" << endl;
+			cout << "   solver      \'" << m_OSOption->optimization->objectives->other[i]->solver << "\'" << endl;
+			cout << "   category    \'" << m_OSOption->optimization->objectives->other[i]->category << "\'" << endl;
+			cout << "   type        \'" << m_OSOption->optimization->objectives->other[i]->type << "\'" << endl;
+			cout << "   description \'" << m_OSOption->optimization->objectives->other[i]->description << "\'" << endl;
+#endif
+
 //					if (m_OSOption->optimization->objectives->other[i]->numberOfObj > 0)
 						outStr << " numberOfObj=\"" << m_OSOption->optimization->objectives->other[i]->numberOfObj << "\"";
 					if (m_OSOption->optimization->objectives->other[i]->value != "")
@@ -614,9 +663,22 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				}
 				outStr << "</initialDualValues>" << endl;
 			}
+#ifdef DEBUG
+			printf("\n%s%d\n","Number of other constraint options: ",m_OSOption->optimization->constraints->numberOfOtherConstraintOptions);
+#endif
 			if (m_OSOption->optimization->constraints->numberOfOtherConstraintOptions > 0)
 				for (int i=0; i < m_OSOption->optimization->constraints->numberOfOtherConstraintOptions; i++)
 				{	outStr << "<other name=\"" << m_OSOption->optimization->constraints->other[i]->name << "\"";
+#ifdef DEBUG
+			cout << "option " << i << ":" << endl;
+			cout << "   numberOfCon \'" << m_OSOption->optimization->constraints->other[i]->numberOfCon << "\'" << endl;
+			cout << "   value       \'" << m_OSOption->optimization->constraints->other[i]->value << "\'" << endl;
+			cout << "   solver      \'" << m_OSOption->optimization->constraints->other[i]->solver << "\'" << endl;
+			cout << "   category    \'" << m_OSOption->optimization->constraints->other[i]->category << "\'" << endl;
+			cout << "   type        \'" << m_OSOption->optimization->constraints->other[i]->type << "\'" << endl;
+			cout << "   description \'" << m_OSOption->optimization->constraints->other[i]->description << "\'" << endl;
+#endif
+
 //					if (m_OSOption->optimization->constraints->other[i]->numberOfCon > 0)
 						outStr << " numberOfCon=\"" << m_OSOption->optimization->constraints->other[i]->numberOfCon << "\"";
 					if (m_OSOption->optimization->constraints->other[i]->value != "")

@@ -104,7 +104,7 @@
 #define DEBUG       
 #define INSTALLATION_TEST   // minimal functionality test
 //#define THOROUGH            // multiple problems for some solvers
-//#define COMPONENT_DEBUG     // program logic, especially parser testing
+#define COMPONENT_DEBUG     // program logic, especially parser testing
 
 
 #include <cppad/cppad.hpp> 
@@ -1462,7 +1462,6 @@ int main(int argC, char* argV[])
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": nonlinear operators" << endl << endl;
 		ok = true;
-//		std::cout << "Test nonlinear operators" << std::endl;
 		std::string operatorTest =  dataDir  + "osilFiles" + dirsep + "testOperators.osil";
 		osil = fileUtil->getFileAsString( operatorTest.c_str() );
 		OSInstance *osinstance = NULL;
@@ -2000,7 +1999,16 @@ int main(int argC, char* argV[])
 		SOS3idx[1] = 6;
 		SOS3val[0] = 1.0;
 		SOS3val[1] = 2.0;
+		int tnvar = osoption->getNumberOfSOS(); //!!!
 		ok = osoption->setAnotherSOSVariableBranchingWeight(3,2,1.0,SOS3idx,SOS3val) && ok;
+		assert (osoption->getNumberOfSOS() == (tnvar + 1));
+		assert (osoption->optimization->variables->sosVariableBranchingWeights->sos[tnvar]->var[0]->idx == 3);
+		assert (osoption->optimization->variables->sosVariableBranchingWeights->sos[tnvar]->var[1]->idx == 6);
+		assert (osoption->optimization->variables->sosVariableBranchingWeights->sos[tnvar]->var[0]->value == 1.0);
+		assert (osoption->optimization->variables->sosVariableBranchingWeights->sos[tnvar]->var[1]->value == 2.0);
+#ifdef DEBUG
+		cout << endl << "another SOS has been added" << endl << endl;
+#endif
 
 		OtherVariableOption *varopt;
 		varopt = new OtherVariableOption();
@@ -2035,8 +2043,6 @@ int main(int argC, char* argV[])
 
 		if (!ok)
 			throw ErrorClass(" Could not add to osoption data structure");
-
-//#if 0   //skip the test of get() and set() methods for the time being
 
 		//Now transfer to another osoption using get() and set() methods
 		std::string optionstring;
@@ -2390,7 +2396,7 @@ int main(int argC, char* argV[])
 
 		SOSWeights** sos;
 		sos = osoption->getSOSVariableBranchingWeightsSparse();
-		nopt = osoption->getNumberOfSOSWeights();
+		nopt = osoption->getNumberOfSOS();
 		ok = osoption2->setSOSVariableBranchingWeights(nopt, sos) && ok;
 #ifdef DEBUG
 		if (!ok)
@@ -2405,7 +2411,6 @@ int main(int argC, char* argV[])
 		if (!ok)
 			throw ErrorClass(" error in get/set OtherVariableOptions");
 #endif
-
 
 		double* IOV;
 		IOV = osoption->getInitObjValuesDense();
@@ -2469,14 +2474,14 @@ int main(int argC, char* argV[])
 			throw ErrorClass(" error in get/set SolverOptions");
 #endif
 
-		cout << "Just checking:" << endl;
-		cout << osoption->optimization->variables->initialVariableValues->numberOfVar;
-		cout << " vs. ";
-		cout << osoption2->optimization->variables->initialVariableValues->numberOfVar << endl;
-
 		ok = osoption->IsEqual(osoption2) && ok;
 		if (!ok)
 			throw ErrorClass(" OSOption get() and  set() methods do not work correctly");
+
+		cout << endl << "delete osoption2" << endl;
+		delete osoption2;
+		osoption2 = NULL;
+		cout << "osoption2 deleted" << endl << endl;
 
 		cout << "Write the content to a new file" <<endl;		
 		tmpOSoL = osolwriter->writeOSoL( osoption);
@@ -2500,8 +2505,6 @@ int main(int argC, char* argV[])
 		delete osolreader2;
 		osolreader2 = NULL;
 
-
-//#endif //end test of get() and set() methods
 
 		delete osolwriter;
 		osolwriter = NULL;

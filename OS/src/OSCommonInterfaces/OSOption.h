@@ -2654,7 +2654,7 @@ public:
 	 * 
 	 * @return the number of variables. 
 	 */
-	int getNumberOfSOSWeights();
+	int getNumberOfSOS();
 
 	/**
 	 * Get the number of variables for which branching weights are provided in a particular SOS.  
