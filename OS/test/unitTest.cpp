@@ -1413,7 +1413,7 @@ int main(int argC, char* argV[])
 		postfixVec = osinstance->getNonlinearExpressionTreeInPostfix( -1);
 	
 		unsigned int n = postfixVec.size();
-		unsigned int i;
+		//unsigned int i;
 		std::string *nodeNames1 = new std::string[ n];
 		std::string *nodeNames2 = new std::string[ n];
 		for (int i = 0 ; i < n; i++){
@@ -1917,6 +1917,7 @@ int main(int argC, char* argV[])
 		};
 		delete [] VI;
 		VI = NULL;
+		delete osilreader;
 		unitTestResult << "Successful test of osinstance get() and set() methods" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}	
