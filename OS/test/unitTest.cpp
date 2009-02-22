@@ -104,7 +104,7 @@
 #define DEBUG       
 #define INSTALLATION_TEST   // minimal functionality test
 //#define THOROUGH            // multiple problems for some solvers
-#define COMPONENT_DEBUG     // program logic, especially parser testing
+//#define COMPONENT_DEBUG     // program logic, especially parser testing
 
 
 #include <cppad/cppad.hpp> 
