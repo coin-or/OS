@@ -1166,6 +1166,16 @@ OSOption::OSOption()
 	service = NULL;
 	job = NULL;
 	optimization = NULL;
+	m_mdInitVarValuesDense = NULL;
+	m_mdInitVarValuesStringDense = NULL;
+	m_mdInitBasisStatusDense = NULL;
+	m_mdIntegerVariableBranchingWeightsDense = NULL;
+	m_mdInitObjValuesDense = NULL;
+	m_mdInitObjLowerBoundsDense = NULL;
+	m_mdInitObjUpperBoundsDense = NULL;
+	m_mdInitConValuesDense = NULL;
+	m_mdInitDualVarLowerBoundsDense = NULL;
+	m_mdInitDualVarUpperBoundsDense = NULL;
 }// end OSOption constructor  
 
 OSOption::~OSOption()
@@ -1183,6 +1193,46 @@ OSOption::~OSOption()
 	job = NULL;
 	if (optimization != NULL) delete optimization;
 	optimization = NULL;
+
+	if (m_mdInitVarValuesDense != NULL) 
+		delete[] m_mdInitVarValuesDense;
+	m_mdInitVarValuesDense = NULL;
+
+	if (m_mdInitVarValuesStringDense != NULL) 
+		delete[] m_mdInitVarValuesStringDense;
+	m_mdInitVarValuesStringDense = NULL;
+
+	if (m_mdInitBasisStatusDense != NULL) 
+		delete[] m_mdInitBasisStatusDense;
+	m_mdInitBasisStatusDense = NULL;
+
+	if (m_mdIntegerVariableBranchingWeightsDense != NULL) 
+		delete[] m_mdIntegerVariableBranchingWeightsDense;
+	m_mdIntegerVariableBranchingWeightsDense = NULL;
+
+	if (m_mdInitObjValuesDense != NULL) 
+		delete[] m_mdInitObjValuesDense;
+	m_mdInitObjValuesDense = NULL;
+
+	if (m_mdInitObjLowerBoundsDense != NULL) 
+		delete[] m_mdInitObjLowerBoundsDense;
+	m_mdInitObjLowerBoundsDense = NULL;
+
+	if (m_mdInitObjUpperBoundsDense != NULL) 
+		delete[] m_mdInitObjUpperBoundsDense;
+	m_mdInitObjUpperBoundsDense = NULL;
+
+	if (m_mdInitConValuesDense != NULL) 
+		delete[] m_mdInitConValuesDense;
+	m_mdInitConValuesDense = NULL;
+
+	if (m_mdInitDualVarLowerBoundsDense != NULL) 
+		delete[] m_mdInitDualVarLowerBoundsDense;
+	m_mdInitDualVarLowerBoundsDense = NULL;
+
+	if (m_mdInitDualVarUpperBoundsDense != NULL) 
+		delete[] m_mdInitDualVarUpperBoundsDense;
+	m_mdInitDualVarUpperBoundsDense = NULL;
 }//end OSOption destructor
 
 
@@ -2390,19 +2440,20 @@ double* OSOption::getInitVarValuesDense()
 					int num_var;
 					num_var = this->getNumberOfInitVarValues();
 
-					double *initVarVector;
-					initVarVector = new double[numberOfVariables];
-					for (k = 0; k < numberOfVariables; k++) initVarVector[k] = OSNAN;
+					if (m_mdInitVarValuesDense != NULL)
+						delete [] m_mdInitVarValuesDense;
+					m_mdInitVarValuesDense = new double[numberOfVariables];
+					for (k = 0; k < numberOfVariables; k++) m_mdInitVarValuesDense[k] = OSNAN;
 
 					for (i = 0; i < num_var; i++)
 					{	j = this->optimization->variables->initialVariableValues->var[i]->idx;
 						if (j >= 0 && j < numberOfVariables)						
-							initVarVector[j] 
+							m_mdInitVarValuesDense[j] 
 							  = this->optimization->variables->initialVariableValues->var[i]->value;						
 						else
 							throw ErrorClass("Variable index out of range");
 					}
-					return initVarVector;
+					return m_mdInitVarValuesDense;
 				}
 			}
 		}					
@@ -2453,19 +2504,20 @@ std::string *OSOption::getInitVarValuesStringDense()
 					int num_var;
 					num_var = this->getNumberOfInitVarValuesString();
 
-					std::string *initVarVector;
-					initVarVector = new std::string[numberOfVariables];
-					for (k = 0; k < numberOfVariables; k++) initVarVector[k] = "";
+					if (m_mdInitVarValuesStringDense != NULL)
+						delete [] m_mdInitVarValuesStringDense;
+					m_mdInitVarValuesStringDense = new std::string[numberOfVariables];
+					for (k = 0; k < numberOfVariables; k++) m_mdInitVarValuesStringDense[k] = "";
 		
 					for (i = 0; i < num_var; i++)
 					{	j = this->optimization->variables->initialVariableValuesString->var[i]->idx;
 						if (j >= 0 && j < numberOfVariables)
-							initVarVector[j] 
+							m_mdInitVarValuesStringDense[j] 
 							  = this->optimization->variables->initialVariableValuesString->var[i]->value;
 						else
 							throw ErrorClass("Variable index out of range");
 					}
-					return initVarVector;
+					return m_mdInitVarValuesStringDense;
 				}
 			}
 		}					
@@ -2516,19 +2568,20 @@ std::string *OSOption::getInitBasisStatusDense()
 					int num_var;
 					num_var = this->getNumberOfInitialBasisVariables();
 
-					std::string *initBasVector;
-					initBasVector = new std::string[numberOfVariables];
-					for (k = 0; k < numberOfVariables; k++) initBasVector[k] = "";
+					if (m_mdInitBasisStatusDense != NULL)
+						delete [] m_mdInitBasisStatusDense;
+					m_mdInitBasisStatusDense = new std::string[numberOfVariables];
+					for (k = 0; k < numberOfVariables; k++) m_mdInitBasisStatusDense[k] = "";
 		
 					for (i = 0; i < num_var; i++)
 					{	j = this->optimization->variables->initialBasisStatus->var[i]->idx;
 						if (j >= 0 && j < numberOfVariables)
-							initBasVector[j] 
+							m_mdInitBasisStatusDense[j] 
 							  = this->optimization->variables->initialBasisStatus->var[i]->value;
 						else
 							throw ErrorClass("Variable index out of range");
 					}
-					return initBasVector;
+					return m_mdInitBasisStatusDense;
 				}
 			}
 		}					
@@ -2580,19 +2633,20 @@ double* OSOption::getIntegerVariableBranchingWeightsDense()
 					int num_var;
 					num_var = this->getNumberOfIntegerVariableBranchingWeights();
 
-					double *intVarVector;
-					intVarVector = new double[numberOfVariables];
-					for (k = 0; k < numberOfVariables; k++) intVarVector[k] = OSNAN;
+					if (m_mdIntegerVariableBranchingWeightsDense != NULL)
+						delete [] m_mdIntegerVariableBranchingWeightsDense;
+					m_mdIntegerVariableBranchingWeightsDense = new double[numberOfVariables];
+					for (k = 0; k < numberOfVariables; k++) m_mdIntegerVariableBranchingWeightsDense[k] = OSNAN;
 
 					for (i = 0; i < num_var; i++)
 					{	j = this->optimization->variables->integerVariableBranchingWeights->var[i]->idx;
 						if (j >= 0 && j < numberOfVariables)						
-							intVarVector[j] 
+							m_mdIntegerVariableBranchingWeightsDense[j] 
 							  = this->optimization->variables->integerVariableBranchingWeights->var[i]->value;						
 						else
 							throw ErrorClass("Variable index out of range");
 					}
-					return intVarVector;
+					return m_mdIntegerVariableBranchingWeightsDense;
 				}
 			}
 		}					
@@ -2708,19 +2762,20 @@ double* OSOption::getInitObjValuesDense()
 					int num_obj;
 					num_obj = this->getNumberOfInitObjValues();
 
-					double *initObjVector;
-					initObjVector = new double[numberOfObjectives];
-					for (k = 0; k < numberOfObjectives; k++) initObjVector[k] = OSNAN;
+					if (m_mdInitObjValuesDense != NULL)
+						delete [] m_mdInitObjValuesDense;
+					m_mdInitObjValuesDense = new double[numberOfObjectives];
+					for (k = 0; k < numberOfObjectives; k++) m_mdInitObjValuesDense[k] = OSNAN;
 	
 					for (i = 0; i < num_obj; i++)
 					{	j = this->optimization->objectives->initialObjectiveValues->obj[i]->idx;
 						if (j < 0 && -j <= numberOfObjectives)						
-							initObjVector[-1-j] 
+							m_mdInitObjValuesDense[-1-j] 
 							  = this->optimization->objectives->initialObjectiveValues->obj[i]->value;						
 						else
 							throw ErrorClass("Objective index out of range");
 					}
-					return initObjVector;
+					return m_mdInitObjValuesDense;
 				}
 			}
 		}					
@@ -2772,19 +2827,20 @@ double* OSOption::getInitObjLowerBoundsDense()
 					int num_obj;
 					num_obj = this->getNumberOfInitObjBounds();
 
-					double *initObjBound;
-					initObjBound = new double[numberOfObjectives];
-					for (k = 0; k < numberOfObjectives; k++) initObjBound[k] = OSNAN;
+					if (m_mdInitObjLowerBoundsDense != NULL)
+						delete [] m_mdInitObjLowerBoundsDense;
+					m_mdInitObjLowerBoundsDense = new double[numberOfObjectives];
+					for (k = 0; k < numberOfObjectives; k++) m_mdInitObjLowerBoundsDense[k] = OSNAN;
 
 					for (i = 0; i < num_obj; i++)
 					{	j = this->optimization->objectives->initialObjectiveBounds->obj[i]->idx;
 						if (j < 0 && -j <= numberOfObjectives)						
-							initObjBound[-1-j] 
+							m_mdInitObjLowerBoundsDense[-1-j] 
 							  = this->optimization->objectives->initialObjectiveBounds->obj[i]->lbValue;
 						else
 							throw ErrorClass("Objective index out of range");
 					}
-					return initObjBound;
+					return m_mdInitObjLowerBoundsDense;
 				}
 			}
 		}					
@@ -2814,19 +2870,20 @@ double* OSOption::getInitObjUpperBoundsDense()
 					int num_obj;
 					num_obj = this->getNumberOfInitObjBounds();
 
-					double *initObjBound;
-					initObjBound = new double[numberOfObjectives];
-					for (k = 0; k < numberOfObjectives; k++) initObjBound[k] = OSNAN;
+					if (m_mdInitObjUpperBoundsDense != NULL)
+						delete [] m_mdInitObjUpperBoundsDense;
+					m_mdInitObjUpperBoundsDense = new double[numberOfObjectives];
+					for (k = 0; k < numberOfObjectives; k++) m_mdInitObjUpperBoundsDense[k] = OSNAN;
 					
 					for (i = 0; i < num_obj; i++)
 					{	j = this->optimization->objectives->initialObjectiveBounds->obj[i]->idx;
 						if (j < 0 && -j <= numberOfObjectives)						
-							initObjBound[-1-j] 
+							m_mdInitObjUpperBoundsDense[-1-j] 
 							  = this->optimization->objectives->initialObjectiveBounds->obj[i]->ubValue;
 						else
 							throw ErrorClass("Objective index out of range");
 					}
-					return initObjBound;
+					return m_mdInitObjUpperBoundsDense;
 				}
 			}
 		}					
@@ -2919,19 +2976,20 @@ double* OSOption::getInitConValuesDense()
 					int num_con;
 					num_con = this->getNumberOfInitConValues();
 
-					double *initConVector;
-					initConVector = new double[numberOfConstraints];
-					for (k = 0; k < numberOfConstraints; k++) initConVector[k] = OSNAN;
+					if (m_mdInitConValuesDense != NULL)
+						delete [] m_mdInitConValuesDense;
+					m_mdInitConValuesDense = new double[numberOfConstraints];
+					for (k = 0; k < numberOfConstraints; k++) m_mdInitConValuesDense[k] = OSNAN;
 
 					for (i = 0; i < num_con; i++)
 					{	j = this->optimization->constraints->initialConstraintValues->con[i]->idx;
 						if (j >= 0 && j < numberOfConstraints)						
-							initConVector[j] 
+							m_mdInitConValuesDense[j] 
 							  = this->optimization->constraints->initialConstraintValues->con[i]->value;						
 						else
 							throw ErrorClass("Constraint index out of range");
 					}
-				return initConVector;
+				return m_mdInitConValuesDense;
 				}
 			}
 		}					
@@ -2983,19 +3041,20 @@ double* OSOption::getInitDualVarLowerBoundsDense()
 					int num_con;
 					num_con = this->getNumberOfInitDualVarValues();
 
-					double *initDualVector;
-					initDualVector = new double[numberOfConstraints];
-					for (k = 0; k < numberOfConstraints; k++) initDualVector[k] = 0.0;
+					if (m_mdInitDualVarLowerBoundsDense != NULL)
+						delete [] m_mdInitDualVarLowerBoundsDense;
+					m_mdInitDualVarLowerBoundsDense = new double[numberOfConstraints];
+					for (k = 0; k < numberOfConstraints; k++) m_mdInitDualVarLowerBoundsDense[k] = 0.0;
 
 					for (i = 0; i < num_con; i++)
 					{	j = this->optimization->constraints->initialDualValues->con[i]->idx;
 						if (j >= 0 && j < numberOfConstraints)						
-							initDualVector[j] 
+							m_mdInitDualVarLowerBoundsDense[j] 
 							  = this->optimization->constraints->initialDualValues->con[i]->lbDualValue;						
 						else
 							throw ErrorClass("Constraint index out of range");
 					}
-					return initDualVector;
+					return m_mdInitDualVarLowerBoundsDense;
 				}
 			}
 		}					
@@ -3026,19 +3085,20 @@ double* OSOption::getInitDualVarUpperBoundsDense()
 					num_con = this->getNumberOfInitDualVarValues();
 					numberOfConstraints = this->getNumberOfConstraints();
 
-					double *initDualVector;
-					initDualVector = new double[numberOfConstraints];
-					for (k = 0; k < numberOfConstraints; k++) initDualVector[k] = 0.0;
+					if (m_mdInitDualVarUpperBoundsDense != NULL)
+						delete [] m_mdInitDualVarUpperBoundsDense;
+					m_mdInitDualVarUpperBoundsDense = new double[numberOfConstraints];
+					for (k = 0; k < numberOfConstraints; k++) m_mdInitDualVarUpperBoundsDense[k] = 0.0;
 
 					for (i = 0; i < num_con; i++)
 					{	j = this->optimization->constraints->initialDualValues->con[i]->idx;
 						if (j >= 0 && j < numberOfConstraints)						
-							initDualVector[j] 
+							m_mdInitDualVarUpperBoundsDense[j] 
 							  = this->optimization->constraints->initialDualValues->con[i]->ubDualValue;	
 						else
 							throw ErrorClass("Constraint index out of range");
 					}
-					return initDualVector;
+					return m_mdInitDualVarUpperBoundsDense;
 				}
 			}
 		}					
@@ -4731,7 +4791,7 @@ bool ConstraintOption::setOther(int numberOfOptions, OtherConstraintOption  **ot
 	 
 		int  i, j;
 		for (i = 0; i < numberOfOptions; i++)
-		{	 this->other[i] = new OtherConstraintOption();
+		{	this->other[i] = new OtherConstraintOption();
 			this->other[i]->name        = other[i]->name;
 			this->other[i]->value       = other[i]->value;
 			this->other[i]->solver      = other[i]->solver;
@@ -4768,7 +4828,7 @@ bool ConstraintOption::setOther(int numberOfOptions, OtherConstraintOption  **ot
  */
 bool ConstraintOption::addOther(OtherConstraintOption *other)
 {	try
-	{	int nopt; int i;
+	{	int nopt, i, j;
 		if (this->other == NULL) 
 			nopt = 0;
 		else
@@ -4781,8 +4841,27 @@ bool ConstraintOption::addOther(OtherConstraintOption *other)
 		delete[] this->other; //delete old pointers
 	
 //	add in the new element
-		 temp[ nopt] = new OtherConstraintOption();
-		*temp[ nopt] = *other;
+	 temp[ nopt] = new OtherConstraintOption();
+		temp[ nopt]->name        = other->name;
+		temp[ nopt]->value       = other->value;
+		temp[ nopt]->solver      = other->solver;
+		temp[ nopt]->category    = other->category;
+		temp[ nopt]->type        = other->type;
+		temp[ nopt]->description = other->description;
+
+		if (other->numberOfCon < 0)
+			throw ErrorClass( "the number of constraints in otherConstraintOption cannot be negative.");
+
+		temp[ nopt]->numberOfCon = other->numberOfCon;
+
+		if (other->numberOfCon > 0)
+		{	
+			temp[ nopt]->con = new OtherConOption*[other->numberOfCon];
+			for (j = 0; j < other->numberOfCon; j++)
+			{	 temp[ nopt]->con[j] = new OtherConOption();
+				*temp[ nopt]->con[j] = *other->con[j];
+			}
+		}
 
 		this->other = temp;   //hook the new pointers into the data structure
 		this->numberOfOtherConstraintOptions = ++nopt;

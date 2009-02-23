@@ -1630,7 +1630,6 @@ int main(int argC, char* argV[])
 	//
 	// Now test the extensions to the OSiL format: <timeDomain>, etc.
 
-//#ifdef STRESSTEST
 	try{ 
 		cout << endl << "TEST " << ++nOfTest << ": Stochastic extensions to OSiL" << endl << endl;
 		clock_t start, finish;
@@ -1948,7 +1947,6 @@ int main(int argC, char* argV[])
 		 * 9) compare to the original OSOption object
 		 *10) read two more OSoL strings from different files
 		 */
-//#if 0
 		cout << endl << "TEST " << ++nOfTest << ": OSoL parser" << endl << endl;
 		std::string tmpOSoL;
 		clock_t start, finish;
@@ -2016,12 +2014,16 @@ int main(int argC, char* argV[])
 		varopt->name = "testVarOpt";
 		varopt->numberOfVar = 0;
 		ok = osoption->setAnOtherVariableOption(varopt) && ok;
+		delete varopt;
+		varopt = NULL;
 
 		OtherObjectiveOption *objopt;
 		objopt = new OtherObjectiveOption();
 		objopt->name = "testObjOpt";
 		objopt->numberOfObj = 0;
 		ok = osoption->setAnOtherObjectiveOption(objopt) && ok;
+		delete objopt;
+		objopt = NULL;
 
 		ok = osoption->setAnotherInitConValue(2,17.0) && ok;
 		ok = osoption->setAnotherInitDualVarValue(2,0.0,DBL_MAX) && ok;
@@ -2039,6 +2041,8 @@ int main(int argC, char* argV[])
 		conopt->con[1]->lbValue = "0.0";
 		conopt->con[1]->ubValue = "10.0";
 		ok = osoption->setAnOtherConstraintOption(conopt) && ok;
+		delete conopt;
+		conopt = NULL;
 
 		ok = osoption->setAnotherSolverOption("HoHum","gus","PhoNY","","test","") && ok;
 
@@ -2364,7 +2368,7 @@ int main(int argC, char* argV[])
 // for the variables, objectives and constraints use a mixture of dense and sparse methods
 		double* IVV;
 		IVV = osoption->getInitVarValuesDense();
-		ok = osoption2->setInitVarValuesDense(nvar, IVV) && ok;		
+		ok = osoption2->setInitVarValuesDense(nvar, IVV) && ok;
 #ifdef DEBUG
 		if (!ok)
 			throw ErrorClass(" error in get/set InitVarValues");

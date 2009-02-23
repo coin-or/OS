@@ -2391,6 +2391,60 @@ public:
 	 * Class destructor. 
 	 */
 	~OSOption();
+
+private:
+	/**
+	 *  m_mdInitVarValuesDense holds the initial variable values in dense form
+	 */
+	double* m_mdInitVarValuesDense;
+
+	/**
+	 *  m_mdInitVarValuesStringDense holds the initial values for string-valued variables
+	 */
+	std::string* m_mdInitVarValuesStringDense;
+
+	/**
+	 *  m_mdInitBasisStatusDense holds the initial basis status in dense form
+	 */
+	std::string* m_mdInitBasisStatusDense;
+
+	/**
+	 *  m_mdIntegerVariableBranchingWeightsDense holds the branching weights for integer variables
+	 */
+	double* m_mdIntegerVariableBranchingWeightsDense;
+
+	/**
+	 *  m_mdInitObjValuesDense holds initial objective values in dense form
+	 */
+	double* m_mdInitObjValuesDense;
+
+	/**
+	 *  m_mdInitObjLowerBoundsDense holds initial lower bounds for the objectives in dense form
+	 */
+	double* m_mdInitObjLowerBoundsDense;
+
+	/**
+	 *  m_mdInitObjUpperBoundsDense holds initial upper bounds for the objectives in dense form
+	 */
+	double* m_mdInitObjUpperBoundsDense;
+
+	/**
+	 *  m_mdInitConValuesDense holds initial constraint values in dense form
+	 */
+	double* m_mdInitConValuesDense;
+
+	/**
+	 *  m_mdInitDualVarLowerBoundsDense holds initial dual values for the 
+	 *  lower bound of the constraints in dense form
+	 */
+	double* m_mdInitDualVarLowerBoundsDense;
+
+	/**
+	 *  m_mdInitDualVarUpperBoundsDense holds initial dual values for the 
+	 *  upper bound of the constraints in dense form
+	 */
+	double* m_mdInitDualVarUpperBoundsDense;
+public:
 	/**
 	 *
 	 * A function to check for the equality of two objects

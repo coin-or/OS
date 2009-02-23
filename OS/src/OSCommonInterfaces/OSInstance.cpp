@@ -274,7 +274,7 @@ OSInstance::~OSInstance(){
 		delete m_quadraticTerms;
 		m_quadraticTerms = NULL;
 	}
-	if( (instanceData->quadraticCoefficients->qTerm != NULL)  && (m_bQuadraticRowIndexesProcessed == true) ){
+	if( (instanceData->quadraticCoefficients->qTerm != NULL) && (m_bQuadraticRowIndexesProcessed == true) ){
 		delete[] m_miQuadRowIndexes;
 		m_miQuadRowIndexes = NULL;
 	}
@@ -319,37 +319,37 @@ OSInstance::~OSInstance(){
 //	}
 
 	if (m_msTimeDomainStageNames != NULL) {
-		delete m_msTimeDomainStageNames;
+		delete[] m_msTimeDomainStageNames;
 		m_msTimeDomainStageNames = NULL;
 	}
 
 	if (m_miTimeDomainStageVariableNumber != NULL) {
-		delete m_miTimeDomainStageVariableNumber;
+		delete[] m_miTimeDomainStageVariableNumber;
 		m_miTimeDomainStageVariableNumber = NULL;
 	}
 
 	if (m_mmiTimeDomainStageVarList != NULL) {
-		delete m_mmiTimeDomainStageVarList;
+		delete[] m_mmiTimeDomainStageVarList;
 		m_mmiTimeDomainStageVarList = NULL;
 	}
 
 	if (m_miTimeDomainStageConstraintNumber != NULL) {
-		delete m_miTimeDomainStageConstraintNumber;
+		delete[] m_miTimeDomainStageConstraintNumber;
 		m_miTimeDomainStageConstraintNumber = NULL;
 	}
 
 	if (m_mmiTimeDomainStageConList != NULL) {
-		delete m_mmiTimeDomainStageConList;
+		delete[] m_mmiTimeDomainStageConList;
 		m_mmiTimeDomainStageConList = NULL;
 	}
 
 	if (m_miTimeDomainStageObjectiveNumber != NULL) {
-		delete m_miTimeDomainStageObjectiveNumber;
+		delete[] m_miTimeDomainStageObjectiveNumber;
 		m_miTimeDomainStageObjectiveNumber = NULL;
 	}
 
 	if (m_mmiTimeDomainStageObjList != NULL) {
-		delete m_mmiTimeDomainStageObjList;
+		delete[] m_mmiTimeDomainStageObjList;
 		m_mmiTimeDomainStageObjList = NULL;
 	}
 
@@ -1707,7 +1707,7 @@ std::string* OSInstance::getTimeDomainStageNames()
 		delete [] m_msTimeDomainStageNames;
 	if (instanceData->timeDomain->stages->numberOfStages == 0)
 		return NULL;
-	m_msTimeDomainStageNames = new std::string[instanceData->timeDomain->stages->numberOfStages];
+	m_msTimeDomainStageNames = new std::string[instanceData->timeDomain->stages->numberOfStages]; 
 	for (int i = 0; i < instanceData->timeDomain->stages->numberOfStages; i++)
 		m_msTimeDomainStageNames[i] = instanceData->timeDomain->stages->stage[i]->name;
 	return m_msTimeDomainStageNames;
