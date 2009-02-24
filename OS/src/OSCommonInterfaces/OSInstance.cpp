@@ -329,6 +329,8 @@ OSInstance::~OSInstance(){
 	}
 
 	if (m_mmiTimeDomainStageVarList != NULL) {
+		for (int i = 0; i < m_iNumberOfTimeStages; i ++) 
+			delete[] m_mmiTimeDomainStageVarList[i];
 		delete[] m_mmiTimeDomainStageVarList;
 		m_mmiTimeDomainStageVarList = NULL;
 	}
@@ -339,6 +341,8 @@ OSInstance::~OSInstance(){
 	}
 
 	if (m_mmiTimeDomainStageConList != NULL) {
+		for (int i = 0; i < m_iNumberOfTimeStages; i ++) 
+			delete[] m_mmiTimeDomainStageConList[i];
 		delete[] m_mmiTimeDomainStageConList;
 		m_mmiTimeDomainStageConList = NULL;
 	}
@@ -349,6 +353,8 @@ OSInstance::~OSInstance(){
 	}
 
 	if (m_mmiTimeDomainStageObjList != NULL) {
+		for (int i = 0; i < m_iNumberOfTimeStages; i ++) 
+			delete[] m_mmiTimeDomainStageObjList[i];
 		delete[] m_mmiTimeDomainStageObjList;
 		m_mmiTimeDomainStageObjList = NULL;
 	}
@@ -1797,6 +1803,7 @@ int** OSInstance::getTimeDomainStageVarList()
 		delete [] m_mmiTimeDomainStageVarList;
 	if (instanceData->timeDomain->stages->numberOfStages == 0)
 		return NULL;
+	m_iNumberOfTimeStages = instanceData->timeDomain->stages->numberOfStages;
 	m_mmiTimeDomainStageVarList = new int*[instanceData->timeDomain->stages->numberOfStages];
 	for (int i = 0; i < instanceData->timeDomain->stages->numberOfStages; i++)
 	{	m_mmiTimeDomainStageVarList[i] = new int[m_miTimeDomainStageVariableNumber[i]];
@@ -1828,6 +1835,7 @@ int** OSInstance::getTimeDomainStageConList()
 		delete [] m_mmiTimeDomainStageConList;
 	if (instanceData->timeDomain->stages->numberOfStages == 0)
 		return NULL;
+	m_iNumberOfTimeStages = instanceData->timeDomain->stages->numberOfStages;
 	m_mmiTimeDomainStageConList = new int*[instanceData->timeDomain->stages->numberOfStages];
 	for (int i = 0; i < instanceData->timeDomain->stages->numberOfStages; i++)
 	{	m_mmiTimeDomainStageConList[i] = new int[m_miTimeDomainStageConstraintNumber[i]];
@@ -1858,6 +1866,7 @@ int** OSInstance::getTimeDomainStageObjList()
 		delete [] m_mmiTimeDomainStageObjList;
 	if (instanceData->timeDomain->stages->numberOfStages == 0)
 		return NULL;
+	m_iNumberOfTimeStages = instanceData->timeDomain->stages->numberOfStages;
 	m_mmiTimeDomainStageObjList = new int*[instanceData->timeDomain->stages->numberOfStages];
 	for (int i = 0; i < instanceData->timeDomain->stages->numberOfStages; i++)
 	{	m_mmiTimeDomainStageObjList[i] = new int[m_miTimeDomainStageObjectiveNumber[i]];

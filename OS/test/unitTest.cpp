@@ -104,7 +104,7 @@
 #define DEBUG       
 #define INSTALLATION_TEST   // minimal functionality test
 //#define THOROUGH            // multiple problems for some solvers
-//#define COMPONENT_DEBUG     // program logic, especially parser testing
+#define COMPONENT_DEBUG     // program logic, especially parser testing
 
 
 #include <cppad/cppad.hpp> 
@@ -1655,6 +1655,8 @@ int main(int argC, char* argV[])
 		//cout << osilwriter->writeOSiL( osilreader->readOSiL( &osil)) << endl;
 		delete osilreader;
 		osilreader = 0;
+		delete osilwriter;
+		osilwriter = NULL;
 		finish = clock();
 		duration = (double) (finish - start) / CLOCKS_PER_SEC;
 		cout << "Parsing took (seconds): "<< duration << endl;
