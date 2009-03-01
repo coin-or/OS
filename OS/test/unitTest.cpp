@@ -1903,11 +1903,11 @@ int main(int argC, char* argV[])
 		lo1 = NULL;
 		delete [] sn1;
 		sn1 = NULL;
-		delete nv1;
+		delete[] nv1;
 		nv1 = NULL;
-		delete nc1;
+		delete[] nc1;
 		nc1 = NULL;
-		delete no1;
+		delete[] no1;
 		no1 = NULL;
 		delete [] nelem;
 		nelem = NULL;

@@ -869,7 +869,7 @@ OtherObjectiveOption::~OtherObjectiveOption()
 		{	delete obj[i];
 			obj[i] = NULL;
 		}
-		delete obj;
+		delete[] obj;
 		obj = NULL;
 	};
 }//end OtherObjectiveOption destructor 
