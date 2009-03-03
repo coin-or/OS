@@ -78,7 +78,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 	outStr << xsltDir;
 	outStr << "OSrL.xslt\"?>";
 	outStr << endl;
-	outStr << "<osrl xmlns=\"os.optimizationservices.org\"   xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/OSrL.xsd\" >" ;
+	outStr << "<osrl xmlns=\"os.optimizationservices.org\"   xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSrL.xsd\" >" ;
 	outStr << endl;
 	outStr << "<resultHeader>" << endl;
 	if(m_OSResult->resultHeader != NULL){
