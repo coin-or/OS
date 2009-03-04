@@ -321,7 +321,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 		}
 		outStr << "</resultData>" << endl ;
 	} // end instanceData if
-	outStr << "</osrl>" << endl;
+	outStr << "</osrl>"
 	return outStr.str();
 }// end writeOSrL
 
