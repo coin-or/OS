@@ -136,7 +136,7 @@ bool FileUtil::writeFileFromString(char* fname, std::string sname){
 	    for(i = 0; i < sname.size() + 1; i++){
 	        fputc ( cstr[ i], ft )  ;   	
 	    }
-	    fputc( '\n', ft);
+//	    fputc( '\n', ft);
 	    fclose ( ft);
 		return true;
 	}
@@ -161,7 +161,7 @@ bool FileUtil::writeFileFromString(std::string  fname, std::string sname){
 	    for(i = 0; i < sname.size() + 1; i++){
 	        fputc ( cstr[ i], ft )  ;   	
 	    }
-	    fputc( '\n', ft);
+//	    fputc( '\n', ft);
 	    fclose ( ft);
 		return true;
 	}
