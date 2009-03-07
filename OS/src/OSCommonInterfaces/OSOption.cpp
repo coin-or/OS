@@ -1110,7 +1110,7 @@ SolverOptions::SolverOptions():
 SolverOptions::~SolverOptions()
 {    
 	#ifdef DEBUG
-	cout << "SolverOptions Destructor Called" << endl;
+	cout << "SolverOptions Destructor Called; numberOfSolverOptions=" << numberOfSolverOptions << endl;
 	#endif
 	if (solverOption != NULL)
 	{	int i;
@@ -1118,8 +1118,10 @@ SolverOptions::~SolverOptions()
 		{	delete solverOption[i];
 			solverOption[i] = NULL;
 		}
+		cout << "loop completed" << endl;
 		delete[] solverOption;
 		solverOption = NULL;
+		cout << "SolverOptions destructor completed" << endl;
 	}
 }//end SolverOptions destructor
 
@@ -1793,10 +1795,18 @@ int  OSOption::getNumberOfConstraints()
  * get the number of variables that have initial values (in <optimization> element)
  */
 int OSOption::getNumberOfInitVarValues()
-{	if (this->optimization != NULL) 
+{	cout << "step through getNumberOfInitVarValues" << endl;
+	if (this->optimization != NULL) 
+	{	cout << "optimization is not NULL" << endl;
 		if (this->optimization->variables != NULL) 
+		{	cout << "variables is not NULL" << endl;
 			if (this->optimization->variables->initialVariableValues != NULL) 
+			{	cout << "initialVariableValues is not NULL: ";
+				cout << this->optimization->variables->initialVariableValues->numberOfVar << endl;
 				return this->optimization->variables->initialVariableValues->numberOfVar;
+			}
+		}
+	}
 	return -1;
 }//getNumberOfInitVarValues
 

@@ -357,7 +357,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 
 
 			//if(optionsVector.size() > 0) optionsVector.clear();
-			if( !optionsVector.empty() ) optionsVector.clear();	
+//			if( !optionsVector.empty() ) optionsVector.clear();	//HIG: This must eventually come out
 			
 			if( sSolverName.find( "cbc") != std::string::npos) {	
 				// get Cbc options		
@@ -425,26 +425,105 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 					}	
 				}				
 			}
-	#endif	
+	#endif	   //symphony end		
 			
-			//symphony end		
+			
 			//now set initial values
-			/*
-			double* denseInitVarVector;
-				//denseInitVarVector = osoption->getInitVarValuesDense( osinstance->getVariableNumber() );
-				denseInitVarVector = new double[2];
-				denseInitVarVector[ 0] = 1000;
-				denseInitVarVector[ 1] = 1000;
-				int k;
-				for(k = 0; k < osinstance->getVariableNumber(); k++){
-					std::cout << "GAIL HONDA = " << denseInitVarVector[ k] << std::endl;
+			int n,m,k;
+			m = osoption->getNumberOfInitVarValues();
+#ifdef DEBUG
+			cout << "number of variables initialed: " << m << endl;
+#endif
+
+			if (m > 0)
+			{
+#ifdef DEBUG
+			cout << "get initial values " << endl;
+#endif
+				n = osinstance->getVariableNumber();
+				double* denseInitVarVector;
+				denseInitVarVector = new double[n];
+				bool* initialed;
+				initialed = new bool[n];
+
+				for(k = 0; k < n; k++)
+					initialed[k] = false;
+
+				InitVarValue**  initVarVector = osoption->getInitVarValuesSparse();
+#ifdef DEBUG
+				cout << "done " << endl;
+#endif
+
+				double initval;
+				for(k = 0; k < m; k++)
+				{	cout << "process component " << k << " -- index " << initVarVector[k]->idx << endl;
+					i = initVarVector[k]->idx;
+					if (initVarVector[k]->idx > n)
+						throw ErrorClass ("Illegal index value in variable initialization");
+
+						initval = initVarVector[k]->value;
+						if (osinstance->instanceData->variables->var[k]->ub == OSDBL_MAX)
+						{	if (osinstance->instanceData->variables->var[k]->lb > initval)
+								throw ErrorClass ("Initial value outside of bounds");
+						}
+						else
+							if (osinstance->instanceData->variables->var[k]->lb == -OSDBL_MAX)
+							{	if (osinstance->instanceData->variables->var[k]->ub < initval)
+									throw ErrorClass ("Initial value outside of bounds");
+							}
+							else
+							{	if ((osinstance->instanceData->variables->var[k]->lb > initval) ||
+									(osinstance->instanceData->variables->var[k]->ub < initval))
+									throw ErrorClass ("Initial value outside of bounds");
+							}
+
+					denseInitVarVector[initVarVector[k]->idx] = initval;
+					initialed[initVarVector[k]->idx] = true;
 				}
 
-			osiSolver->setColSolution( denseInitVarVector);
-			delete[] denseInitVarVector;
-			*/
-			
-		}// end of osopotion if	
+				double default_initval;
+				default_initval = 0.0;
+
+				for(k = 0; k < n; k++)
+				{	cout << "verify component " << k << endl;
+					if (!initialed[k])
+						if (osinstance->instanceData->variables->var[k]->ub == OSDBL_MAX)
+							if (osinstance->instanceData->variables->var[k]->lb <= default_initval)
+								denseInitVarVector[k] = default_initval;
+							else
+								denseInitVarVector[k] = osinstance->instanceData->variables->var[k]->lb;
+						else
+							if (osinstance->instanceData->variables->var[k]->lb == -OSDBL_MAX)
+								if (osinstance->instanceData->variables->var[k]->ub >= default_initval)
+									denseInitVarVector[k] = default_initval;
+								else
+									denseInitVarVector[k] = osinstance->instanceData->variables->var[k]->ub;
+							else
+								if ((osinstance->instanceData->variables->var[k]->lb <= default_initval) && 
+									(osinstance->instanceData->variables->var[k]->ub >= default_initval))
+									denseInitVarVector[k] = default_initval;
+								else
+									if (osinstance->instanceData->variables->var[k]->lb > default_initval)
+										denseInitVarVector[k] = osinstance->instanceData->variables->var[k]->lb;
+									else
+										denseInitVarVector[k] = osinstance->instanceData->variables->var[k]->ub;
+									denseInitVarVector[k] = default_initval;
+									denseInitVarVector[k] = osinstance->instanceData->variables->var[k]->lb;
+				}
+#ifdef DEBUG
+				cout << "set initial values: " << endl;
+				for (k=0; k < n; k++)
+					cout << "  " << k << ": " << denseInitVarVector[k] << endl;	
+#endif
+				osiSolver->setColSolution( denseInitVarVector);
+				delete[] denseInitVarVector;
+				delete[] initialed;
+#ifdef DEBUG
+			cout << "done " << endl;
+#endif
+
+			}  //  end if (m > 0)		
+		}// end of osoption if	
 		
 		
 	}//end of try 

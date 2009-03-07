@@ -146,6 +146,7 @@ OS/data/osilFiles/markowitz.osil -text
 OS/data/osilFiles/markowitzMatlab.osil -text
 OS/data/osilFiles/p0033.osil -text
 OS/data/osilFiles/p0201.osil -text
+OS/data/osilFiles/parincInteger.osil -text
 OS/data/osilFiles/parincLinear.osil -text
 OS/data/osilFiles/parincLinearByRow.osil -text
 OS/data/osilFiles/parincQuadratic.osil -text
@@ -173,6 +174,7 @@ OS/data/osolFiles/p0033_cpx.osol -text
 OS/data/osolFiles/p0033_glpk.osol -text
 OS/data/osolFiles/p0033_sym.osol -text
 OS/data/osolFiles/p0201_cbc.osol -text
+OS/data/osolFiles/parincInteger_cbc.osol -text
 OS/data/osolFiles/parincLinearByRow_clp.osol -text
 OS/data/osolFiles/parincLinear_dylp.osol -text
 OS/data/osolFiles/parincLinear_ipopt.osol -text

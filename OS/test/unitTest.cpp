@@ -103,7 +103,7 @@
 
 #define DEBUG       
 #define INSTALLATION_TEST   // minimal functionality test
-//#define THOROUGH            // multiple problems for some solvers
+#define THOROUGH            // multiple problems for some solvers
 #define COMPONENT_DEBUG     // program logic, especially parser testing
 
 
@@ -559,6 +559,39 @@ int main(int argC, char* argV[])
 	catch(const ErrorClass& eclass){
 		unitTestResultFailure << "Sorry Unit Test Failed Testing Cbc Solver:"  + eclass.errormsg<< endl;
 	}
+
+		cout << endl << "TEST " << ++nOfTest << ": Cbc solver on parincInteger.osil" << endl << endl;
+		ok = true;
+		osilFileName =  dataDir  + "osilFiles" + dirsep + "parincInteger.osil";
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
+		solver = new CoinSolver();
+		solver->sSolverName ="cbc";
+		solver->osil = osil;
+		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
+		osolFileName = dataDir  + "osolFiles" + dirsep + "parincInteger_cbc.osol";
+		osol = fileUtil->getFileAsString( osolFileName.c_str());
+		solver->osol = osol; 
+//		solver->osinstance = osilreader->readOSiL( osil);
+		solver->osinstance = NULL;
+		cout << "call the COIN - Cbc Solver for parincInteger" << endl;
+//		solver->buildSolverInstance();
+		solver->solve();
+		cout << "Here is the Cbc solver solution for parincInteger" << endl;
+		check = 7668;
+		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-1 , 1e-1);
+		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if(ok == false) throw ErrorClass(" Fail unit test with Cbc on parincInteger.osil");
+		unitTestResult << "Solved problem parincInteger.osil with Cbc" << std::endl;
+		delete osilreader;
+		osilreader = NULL;	
+		delete osolreader;
+		osolreader = NULL;	
+		delete solver;
+		solver = NULL;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+
+
 #endif	
 
 #ifdef COIN_HAS_IPOPT
@@ -656,7 +689,8 @@ int main(int argC, char* argV[])
 		check = 6.7279;
 		//ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-10 , 1e-10);
 		ok = ( fabs(check - getObjVal( ipoptSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on rosenbrockmod.osil");
+		if(ok == false) 
+			throw ErrorClass(" Fail unit test with Ipopt on rosenbrockmod.osil");
 		delete osilreader;
 		osilreader = NULL;
 		delete osolreader;
@@ -714,6 +748,7 @@ int main(int argC, char* argV[])
 		osilreader = new OSiLReader(); 
 		osolreader = new OSoLReader(); 
 		ipoptSolver->osinstance = osilreader->readOSiL( osil);
+		ipoptSolver->osoption   = osolreader->readOSoL( osol);  //!!! HIG: check if this is necessary
 		cout << "call the IPOPT Solver" << endl;
 		ipoptSolver->buildSolverInstance();
 		ipoptSolver->solve();
