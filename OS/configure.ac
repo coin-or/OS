@@ -641,25 +641,26 @@ AC_SUBST(USE_ASL_LIB)
 ##
 ## osil test files
 ##
+AC_COIN_VPATH_LINK(data/osilFiles/avion2.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/bonminEx1.osil)
+AC_COIN_VPATH_LINK(data/osilFiles/callBackTest.osil)
+AC_COIN_VPATH_LINK(data/osilFiles/callBackTestRowMajor.osil)
+AC_COIN_VPATH_LINK(data/osilFiles/CppADTestLag.osil)
+AC_COIN_VPATH_LINK(data/osilFiles/finplan1.osil)
+AC_COIN_VPATH_LINK(data/osilFiles/gamstrnsport.osil)
+AC_COIN_VPATH_LINK(data/osilFiles/HS071_NLP.osil)
+AC_COIN_VPATH_LINK(data/osilFiles/HS071_NLPMod.osil)
+AC_COIN_VPATH_LINK(data/osilFiles/lindoapiaddins.osil)
+AC_COIN_VPATH_LINK(data/osilFiles/parincInteger.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/parincLinear.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/parincLinearByRow.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/parincQuadratic.osil)
-AC_COIN_VPATH_LINK(data/osilFiles/HS071_NLP.osil)
-AC_COIN_VPATH_LINK(data/osilFiles/HS071_NLPMod.osil)
-AC_COIN_VPATH_LINK(data/osilFiles/rosenbrockmod.osil)
-AC_COIN_VPATH_LINK(data/osilFiles/avion2.osil)
-AC_COIN_VPATH_LINK(data/osilFiles/finplan1.osil)
-AC_COIN_VPATH_LINK(data/osilFiles/gamstrnsport.osil)
-AC_COIN_VPATH_LINK(data/osilFiles/lindoapiaddins.osil)
-AC_COIN_VPATH_LINK(data/osilFiles/volumeTest.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/p0033.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/p0201.osil)
-AC_COIN_VPATH_LINK(data/osilFiles/CppADTestLag.osil)
+AC_COIN_VPATH_LINK(data/osilFiles/rosenbrockmod.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/testOperators.osil)
+AC_COIN_VPATH_LINK(data/osilFiles/volumeTest.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/wayneQuadratic.osil)
-AC_COIN_VPATH_LINK(data/osilFiles/callBackTest.osil)
-AC_COIN_VPATH_LINK(data/osilFiles/callBackTestRowMajor.osil)
 ##
 ## osol test files
 ##
@@ -688,6 +689,7 @@ AC_COIN_VPATH_LINK(data/osolFiles/callBackTest_knitro.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/HS071_NLPMod_ipopt.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/HS071_NLP_knitro.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/lindoapiaddins_lindo.osol)
+AC_COIN_VPATH_LINK(data/osolFiles/parincInteger_cbc.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/p0033_cbc.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/p0033_cpx.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/p0033_glpk.osol)
@@ -706,6 +708,7 @@ AC_COIN_VPATH_LINK(data/osolFiles/volumeTest_vol.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/wayneQuadratic_Bonmin1.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/wayneQuadratic_Bonmin2.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/wayneQuadratic_lindo.osol)
+
 ##
 ## ospl test files
 ##

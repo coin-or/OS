@@ -30162,7 +30162,57 @@ echo "${ECHO_T}$coin_vpath_config" >&6
 
 
 if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/avion2.osil"
+fi
+
+
+if test $coin_vpath_config = yes; then
   coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/bonminEx1.osil"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/callBackTest.osil"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/callBackTestRowMajor.osil"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/CppADTestLag.osil"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/finplan1.osil"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/gamstrnsport.osil"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/HS071_NLP.osil"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/HS071_NLPMod.osil"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/lindoapiaddins.osil"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/parincInteger.osil"
 fi
 
 
@@ -30182,46 +30232,6 @@ fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/HS071_NLP.osil"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/HS071_NLPMod.osil"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/rosenbrockmod.osil"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/avion2.osil"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/finplan1.osil"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/gamstrnsport.osil"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/lindoapiaddins.osil"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/volumeTest.osil"
-fi
-
-
-if test $coin_vpath_config = yes; then
   coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/p0033.osil"
 fi
 
@@ -30232,7 +30242,7 @@ fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/CppADTestLag.osil"
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/rosenbrockmod.osil"
 fi
 
 
@@ -30242,17 +30252,12 @@ fi
 
 
 if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/volumeTest.osil"
+fi
+
+
+if test $coin_vpath_config = yes; then
   coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/wayneQuadratic.osil"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/callBackTest.osil"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/callBackTestRowMajor.osil"
 fi
 
 ##
@@ -30385,6 +30390,11 @@ fi
 
 
 if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/osolFiles/parincInteger_cbc.osol"
+fi
+
+
+if test $coin_vpath_config = yes; then
   coin_vpath_link_files="$coin_vpath_link_files data/osolFiles/p0033_cbc.osol"
 fi
 
@@ -30472,6 +30482,7 @@ fi
 if test $coin_vpath_config = yes; then
   coin_vpath_link_files="$coin_vpath_link_files data/osolFiles/wayneQuadratic_lindo.osol"
 fi
+
 
 ##
 ## ospl test files
