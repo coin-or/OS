@@ -1106,7 +1106,6 @@ int main(int argC, char* argV[])
 	}	
 #endif
 	
-#undef COIN_HAS_GLPK
 #ifdef COIN_HAS_GLPK
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": GLPK solver on p0033.osil" << endl << endl;
@@ -1115,6 +1114,7 @@ int main(int argC, char* argV[])
 		osolFileName = dataDir  + "osolFiles" + dirsep + "p0033_glpk.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
+		osilreader = new OSiLReader(); 
 		osolreader = new OSoLReader(); 
 		solver = new CoinSolver();
 		solver->sSolverName = "glpk";
@@ -1131,6 +1131,8 @@ int main(int argC, char* argV[])
 		if(ok == false) throw ErrorClass(" Fail unit test with GLPK on p0033.osil");
 		delete solver;
 		solver = NULL;
+		delete osilreader;
+		osilreader = NULL;	
 		delete osolreader;
 		osolreader = NULL;	
 		unitTestResult << "Solved problem p0033.osil with GLPK" << std::endl;
@@ -1188,6 +1190,7 @@ int main(int argC, char* argV[])
 		osolFileName = dataDir  + "osolFiles" + dirsep + "lindoapiaddins_lindo.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
+		osilreader = new OSiLReader(); 
 		cout << "create a new LINDO Solver for OSiL string solution" << endl;
 		solver = new LindoSolver();	
 		solver->osinstance = osilreader->readOSiL( osil);
@@ -1204,6 +1207,8 @@ int main(int argC, char* argV[])
 		solver->osinstance = NULL;
 		delete solver;
 		solver = NULL;
+		osilreader = NULL;	
+		delete osolreader;
 		unitTestResult << "Solved problem lindoapiaddins.osil with Lindo" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
@@ -1269,6 +1274,7 @@ int main(int argC, char* argV[])
 		osolFileName = dataDir  + "osolFiles" + dirsep + "wayneQuadratic_lindo.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
+		osilreader = new OSiLReader(); 
 		solver = new LindoSolver();	
 		solver->osil = osil;
 		solver->osol = osol;
@@ -1286,6 +1292,8 @@ int main(int argC, char* argV[])
 		if(ok == false) throw ErrorClass(" Fail unit test with LINDO on wayneQuadratic.osil");
 		delete solver;
 		solver = NULL;
+		osilreader = NULL;	
+		delete osolreader;
 		unitTestResult << "Solved problem wayneQuadratic.osil with Lindo" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 		*/
