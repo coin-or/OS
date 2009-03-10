@@ -176,7 +176,10 @@ bool IpoptProblem::get_starting_point(Index n, bool init_x, Number* x,
 	cout << "Is osoption = NULL? " << (osoption == NULL) << endl;
 #endif
 	int k;
-	m1 = osoption->getNumberOfInitVarValues();
+	if (osoption != NULL)
+		m1 = osoption->getNumberOfInitVarValues();
+	else
+		m1 = 0;
 #ifdef DEBUG
 	cout << "number of variables initialed: " << m1 << endl;
 #endif
@@ -258,34 +261,6 @@ bool IpoptProblem::get_starting_point(Index n, bool init_x, Number* x,
 							x[k] = osinstance->instanceData->variables->var[k]->ub;
 	}
 
-/*
- 	if( osoption != NULL) {
- 		cout << " OSOPTION IS NOT NULL " << endl;
- 		double* denseInitVarVector;
- 		// not working -- fix
- 		denseInitVarVector = osoption->getInitVarValuesDense();
- 		
-		n = osoption->getNumberOfVariables();
- 	
-		cout << " OSOPTION IS NOT NULL "  << n << endl;
- 		for(i = 0; i < n; i++){
- 			if( CommonUtil::ISOSNAN( denseInitVarVector[ i]) == true){ 
- 				x[ i] = 1.7171; 
- 				//std::cout << "INITIAL VALUE !!!!!!!!!!!!!!!!!!!!  " << x[ i] << std::endl;
- 			}
- 			else x[ i] = denseInitVarVector[ i];
- 			std::cout << "INITIAL VALUE !!!!!!!!!!!!!!!!!!!!  " << x[ i] << std::endl;	
- 		}	
-// 		delete[] denseInitVarVector;    //HIG: We don't new, so we don't dDelete
- 	}
- 	else{
- 		for(i = 0; i < n; i++){
- 			x[ i] = 1.7171;
- 		}
- 	}
-  	//cout << "got initial values !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
-  	
-*/
  	for(i = 0; i < n1; i++){
  		std::cout << "INITIAL VALUE !!!!!!!!!!!!!!!!!!!!  " << x[ i] << std::endl;
  	}

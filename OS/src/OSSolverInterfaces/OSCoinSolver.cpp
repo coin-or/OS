@@ -430,7 +430,10 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 			
 			//now set initial values
 			int n,m,k;
-			m = osoption->getNumberOfInitVarValues();
+			if (osoption != NULL)
+				m = osoption->getNumberOfInitVarValues();
+			else
+				m = 0;
 #ifdef DEBUG
 			cout << "number of variables initialed: " << m << endl;
 #endif

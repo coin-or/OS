@@ -38,6 +38,7 @@ BonminSolver::BonminSolver() {
 	osrlwriter = new OSrLWriter();
 	osresult = new OSResult();
 	m_osilreader = NULL;
+	m_osolreader = NULL;
 	bonminErrorMsg = "";
 
 } 
@@ -250,34 +251,109 @@ bool BonminProblem::get_starting_point(Index n, bool init_x, Number* x,
   	assert(init_x == true);
   	assert(init_z == false);
   	assert(init_lambda == false);
-  	
-  	
-  	cout << "get initial values !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
-  	
+  	int i, m1, n1;
 
-  	int i;
- 	if( osoption != NULL) {
- 		double* denseInitVarVector;
- 		denseInitVarVector = osoption->getInitVarValuesDense();
- 		for(i = 0; i < n; i++){
- 			if( CommonUtil::ISOSNAN( denseInitVarVector[ i]) == true){ 
- 				x[ i] = 1.7171; 
- 				//std::cout << "INITIAL VALUE !!!!!!!!!!!!!!!!!!!!  " << x[ i] << std::endl;
- 			}
- 			else x[ i] = denseInitVarVector[ i];
- 			//std::cout << "INITIAL VALUE !!!!!!!!!!!!!!!!!!!!  " << x[ i] << std::endl;	
- 		}	
- 		delete[] denseInitVarVector;
+#ifdef DEBUG
+  	cout << "get initial values !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
+#endif
+  	
+	//now set initial values
+#ifdef DEBUG
+  	cout << "get number of initial values !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
+	cout << "Is osoption = NULL? " << (osoption == NULL) << endl;
+#endif
+	int k;
+	if (osoption != NULL)
+		m1 = osoption->getNumberOfInitVarValues();
+	else
+		m1 = 0;
+#ifdef DEBUG
+	cout << "number of variables initialed: " << m1 << endl;
+#endif
+
+	n1 = osinstance->getVariableNumber();
+	bool* initialed;
+	initialed = new bool[n1];
+#ifdef DEBUG
+	cout << "number of variables in total: " << n1 << endl;
+#endif
+
+
+	for(k = 0; k < n1; k++)
+		initialed[k] = false;
+
+	if (m1 > 0)
+	{
+#ifdef DEBUG
+			cout << "get initial values " << endl;
+#endif
+
+		InitVarValue**  initVarVector = osoption->getInitVarValuesSparse();
+#ifdef DEBUG
+		cout << "done " << endl;
+#endif
+
+		double initval;
+		for(k = 0; k < m1; k++)
+		{	cout << "process component " << k << " -- index " << initVarVector[k]->idx << endl;
+			i = initVarVector[k]->idx;
+			if (initVarVector[k]->idx > n1)
+				throw ErrorClass ("Illegal index value in variable initialization");
+
+				initval = initVarVector[k]->value;
+				if (osinstance->instanceData->variables->var[k]->ub == OSDBL_MAX)
+				{	if (osinstance->instanceData->variables->var[k]->lb > initval)
+						throw ErrorClass ("Initial value outside of bounds");
+				}
+				else
+					if (osinstance->instanceData->variables->var[k]->lb == -OSDBL_MAX)
+					{	if (osinstance->instanceData->variables->var[k]->ub < initval)
+							throw ErrorClass ("Initial value outside of bounds");
+					}
+					else
+					{	if ((osinstance->instanceData->variables->var[k]->lb > initval) ||
+							(osinstance->instanceData->variables->var[k]->ub < initval))
+							throw ErrorClass ("Initial value outside of bounds");
+					}
+
+			x[initVarVector[k]->idx] = initval;
+			initialed[initVarVector[k]->idx] = true;
+		}
+	}  //  end if (m1 > 0)		
+
+	double default_initval;
+	default_initval = 1.7171;
+
+	for(k = 0; k < n1; k++)
+	{	cout << "verify component " << k << endl;
+		if (!initialed[k])
+			if (osinstance->instanceData->variables->var[k]->ub == OSDBL_MAX)
+				if (osinstance->instanceData->variables->var[k]->lb <= default_initval)
+					x[k] = default_initval;
+				else
+					x[k] = osinstance->instanceData->variables->var[k]->lb;
+			else
+				if (osinstance->instanceData->variables->var[k]->lb == -OSDBL_MAX)
+					if (osinstance->instanceData->variables->var[k]->ub >= default_initval)
+						x[k] = default_initval;
+					else
+						x[k] = osinstance->instanceData->variables->var[k]->ub;
+				else
+					if ((osinstance->instanceData->variables->var[k]->lb <= default_initval) && 
+						(osinstance->instanceData->variables->var[k]->ub >= default_initval))
+						x[k] = default_initval;
+					else
+						if (osinstance->instanceData->variables->var[k]->lb > default_initval)
+							x[k] = osinstance->instanceData->variables->var[k]->lb;
+						else
+							x[k] = osinstance->instanceData->variables->var[k]->ub;
+	}
+ 	for(i = 0; i < n1; i++){
+ 		std::cout << "INITIAL VALUE !!!!!!!!!!!!!!!!!!!!  " << x[ i] << std::endl;
  	}
- 	else{
- 		for(i = 0; i < n; i++){
- 			x[ i] = 1.7171;
- 		}
- 	}
-  	cout << "got initial values !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
-  	
-  	
-  	
+ 
+
+	delete[] initialed;
   	
   	return true;
 }//get_starting_point
