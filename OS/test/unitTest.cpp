@@ -1106,7 +1106,7 @@ int main(int argC, char* argV[])
 	}	
 #endif
 	
-
+#undef COIN_HAS_GLPK
 #ifdef COIN_HAS_GLPK
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": GLPK solver on p0033.osil" << endl << endl;
