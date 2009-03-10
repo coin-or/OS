@@ -428,30 +428,24 @@ int main(int argC, char* argV[])
 		std::cout << "create a new Solver object" << std::endl;
 		osilreader = new OSiLReader(); 
 		osolreader = new OSoLReader(); 
-
-		OSInstance *osinstance = osilreader->readOSiL( osil);
+		solver = new CoinSolver();
+		solver->sSolverName = "clp";
+		solver->osinstance = osilreader->readOSiL( osil);
 		std::cout << " Done reading the OSiL" << std::endl;
 		// now write it again as a string
 		OSiLWriter *osilwriter;
 		osilwriter = new OSiLWriter();
 		osilwriter->m_bWhiteSpace = true;
 		std::cout << " Write the OSiL" << std::endl;
-		osil = osilwriter->writeOSiL( osinstance) ;
+		osil = osilwriter->writeOSiL( solver->osinstance) ;
 		//std::cout <<  osil  << std::endl;
 		std::cout << " Done writing the OSiL" << std::endl;
-
-		solver = new CoinSolver();
-		solver->sSolverName = "clp";
-		solver->osinstance = osilreader->readOSiL( osil);
 		solver->osoption   = osolreader->readOSoL( osol);
-
 		cout << "call the COIN - clp Solver for parincLinearbyRow" << endl;
 		//solver->buildSolverInstance();
 		solver->solve();
 		cout << "Here is the COIN clp solver solution for parincLinearByRow" << endl;
 		cout << solver->osrl << endl;
-		
-	
 		check = 7668;
 		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-1 , 1e-1);
