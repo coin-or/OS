@@ -135,7 +135,7 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 		
 		// do some initialization
 		
-		osinstance->initializeNonLinearStructures( );
+
 		
 		int i, j;
 		
@@ -145,7 +145,7 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 			osinstance = m_osilreader->readOSiL( osil);
 		}	
 		
-
+		osinstance->initializeNonLinearStructures( );
 		Ipopt::Journalist* jnlst = new Ipopt::Journalist();
 		jnlst->AddFileJournal("console", "stdout", J_STRONGWARNING);
 		couenne = new CouenneProblem(NULL, NULL, jnlst);
