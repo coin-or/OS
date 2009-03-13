@@ -125,6 +125,12 @@ public:
 	 */		
 	OSiLReader *m_osilreader;
 	
+	/** 
+	 * m_osolreader is an OSoLReader object used to create an osoption from an
+	 * osol string if needed	 
+	 */		
+	OSoLReader *m_osolreader;
+	
 	
 	CouenneProblem *couenne;
 	

@@ -15,7 +15,7 @@
  */
  
  
- 
+//#define DEBUG
 
 
 
@@ -72,6 +72,9 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
     // always go with '/' -- it is a hypertext reference
     xsltDir = "../stylesheets/";
 	int i, j;
+#ifdef DEBUG
+	cout << "in OSrLWriter" << endl;
+#endif
 	if(m_OSResult == NULL)  return outStr.str(); 
 	outStr << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" ; 
 	outStr << "<?xml-stylesheet type = \"text/xsl\" href = \"";
@@ -80,6 +83,9 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 	outStr << endl;
 	outStr << "<osrl xmlns=\"os.optimizationservices.org\"   xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSrL.xsd\" >" ;
 	outStr << endl;
+#ifdef DEBUG
+	cout << "output resultHeader" << endl;
+#endif
 	outStr << "<resultHeader>" << endl;
 	if(m_OSResult->resultHeader != NULL){
 		if(m_OSResult->resultHeader->generalStatus != NULL){
@@ -118,6 +124,9 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 		}
 	}
 	outStr << "</resultHeader>" << endl;
+#ifdef DEBUG
+	cout << "output resultData" << endl;
+#endif
 	if(m_OSResult->resultData != NULL){
 		outStr << "<resultData>" << endl;
 		if(m_OSResult->resultData->optimization != NULL && m_OSResult->resultData->optimization->numberOfSolutions > 0){
@@ -320,7 +329,10 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 			outStr << "</optimization>" << endl;
 		}
 		outStr << "</resultData>" << endl ;
-	} // end instanceData if
+	} // end resultData if
+#ifdef DEBUG
+	cout << "done" << endl;
+#endif
 	outStr << "</osrl>" << endl ;
 	return outStr.str();
 }// end writeOSrL

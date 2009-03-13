@@ -974,7 +974,6 @@ int main(int argC, char* argV[])
 #ifdef COIN_HAS_COUENNE
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Couenne solver on bonminEx1.osil" << endl << endl;
-		#if 0
 //		OSiLReader *osilreader = NULL;
 		osilreader = new OSiLReader(); 
 		osolreader = new OSoLReader(); 
@@ -987,7 +986,8 @@ int main(int argC, char* argV[])
 		solver = new CouenneSolver();
 		solver->sSolverName = "bonmin";
 		solver->osil = osil;
-		solver->osol = "";  
+		solver->osol = osol; 
+		solver->osol = "";  //HIG: restore when Couenne solver debugged
 //		solver->osinstance = osilreader->readOSiL( osil);
 //		solver->osoption   = osolreader->readOSoL( osol);
 		cout << "call the COIN - Couenne Solver for bonminEx1" << endl;
@@ -996,18 +996,22 @@ int main(int argC, char* argV[])
 		std::cout << " CALL SOLVE " << std::endl;
 		solver->solve();
 	
-	
-		/*
 		cout << "Here is the Couenne solver solution for bonminEx1" << endl;
-		cout << solver->osrl << endl;
+
+		OSrLWriter *tmp_writer;
+		tmp_writer = new OSrLWriter();
+		solver->osrl = tmp_writer->writeOSrL(solver->osresult);
+		delete tmp_writer;
+		tmp_writer = NULL;
+
 		check = -1.70711;
 		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
 		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail unit test with Couenne on bonminEx1.osil");
-		*/
-		//delete solver;
-		//solver = NULL;
-		//unitTestResult << "Solved problem bonminEx1.osil with Couenne" << std::endl;
+
+		delete solver;
+		solver = NULL;
+		unitTestResult << "Solved problem bonminEx1.osil with Couenne" << std::endl;
 	
 	
 		delete osilreader;
@@ -1015,7 +1019,6 @@ int main(int argC, char* argV[])
 		delete osolreader;
 		osolreader = NULL;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
-		#endif //#if 0
 	}
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  solver->osrl <<  endl;

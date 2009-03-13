@@ -99,6 +99,7 @@ using namespace  Ipopt;
 	osrlwriter = new OSrLWriter();
 	osresult = new OSResult();
 	m_osilreader = NULL;
+	m_osolreader = NULL;
 	couenneErrorMsg = "";
 	couenne = NULL;
 
@@ -117,6 +118,8 @@ CouenneSolver::~CouenneSolver() {
 	}
 	if(m_osilreader != NULL) delete m_osilreader;
 	m_osilreader = NULL;
+	if(m_osolreader != NULL) delete m_osolreader;
+	m_osolreader = NULL;
 	delete osresult;
 	osresult = NULL;
 	delete osrlwriter;
@@ -135,8 +138,6 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 	try{
 		
 		// do some initialization
-		
-
 		
 		int i, j;
 		
@@ -175,7 +176,7 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 				
 			}
 
-			x_[i] = 0.;
+			x_[i] = 0.;     //HIG: This sets initial values?
 		}
 		
 		couenne->domain()->push(n_allvars, x_, lb, ub);
@@ -461,8 +462,13 @@ void CouenneSolver::solve() throw (ErrorClass) {
     	bb.setUsingCouenne (true);
 
 		//using namespace Ipopt;
-		
-		
+
+		if(osoption == NULL  && osol.length() > 0){
+			m_osolreader = new OSoLReader();
+			osoption = m_osolreader->readOSoL( osol);
+		}	
+
+
 		tminlp_ = new BonminProblem( osinstance, osoption, osresult);
 		
 		//app = new BonMinApplication();
@@ -480,8 +486,6 @@ void CouenneSolver::solve() throw (ErrorClass) {
 		
 		ci = new CouenneInterface();
 		
-
- 
 		
 /***
  * 
@@ -601,7 +605,6 @@ void CouenneSolver::solve() throw (ErrorClass) {
 
 
 	} 
-    	osrl = osrlwriter->writeOSrL( osresult);
     	// temporarily delete
 		//delete ci;
 		//ci = NULL;
