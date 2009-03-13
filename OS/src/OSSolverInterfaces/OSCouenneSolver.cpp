@@ -126,6 +126,7 @@ CouenneSolver::~CouenneSolver() {
 	#ifdef DEBUG
 	cout << "leaving CouenneSolver destructor" << endl;
 	#endif
+	cout << "leaving CouenneSolver destructor" << endl;
 }
 
 
@@ -595,14 +596,17 @@ void CouenneSolver::solve() throw (ErrorClass) {
 		//bb.bestObj (),
 		bb.numNodes ());
 		//bb.iterationCount ());
-		//status.c_str (), message.c_str ());	
+		//status.c_str (), message.c_str ());
+      
 
 
 	} 
-		delete ci;
-		ci = NULL;
-		delete couenne;
-		couenne = NULL;
+    	osrl = osrlwriter->writeOSrL( osresult);
+    	// temporarily delete
+		//delete ci;
+		//ci = NULL;
+		//delete couenne;
+		//couenne = NULL;
 	} //end try
 	
 	catch(const ErrorClass& eclass){
