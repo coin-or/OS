@@ -763,7 +763,10 @@ void BonminSolver::setSolverOptions() throw (ErrorClass) {
 //void BonminSolver::solve() throw (ErrorClass) {
 void BonminSolver::solve() throw (ErrorClass) {
 	if( this->bCallbuildSolverInstance == false) buildSolverInstance();
+	std::cout << "set Solver Options for Gus" << std::endl;
 	if( this->bSetSolverOptions == false) setSolverOptions();
+	std::cout << "done setting set Solver Options for Gus" << std::endl;
+	//exit(  1);
 	try{
 		double start = CoinCpuTime();
 		//OSiLWriter osilwriter;
