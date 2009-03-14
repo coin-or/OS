@@ -605,6 +605,7 @@ void CouenneSolver::solve() throw (ErrorClass) {
 
 
 	} 
+    osrl = osrlwriter->writeOSrL( osresult); 
     	// temporarily delete
 		//delete ci;
 		//ci = NULL;
