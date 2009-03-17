@@ -210,6 +210,7 @@ bool BonminProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 bool  BonminProblem::get_bounds_info(Index n, Number* x_l, Number* x_u,
                                 Index m, Number* g_l, Number* g_u){
  	int i; 
+
 	double * mdVarLB = osinstance->getVariableLowerBounds();
 	//std::cout << "GET BOUNDS INFORMATION FOR BONMIN !!!!!!!!!!!!!!!!!" << std::endl;
 	// variables upper bounds
@@ -564,6 +565,7 @@ BonminProblem::finalize_solution(TMINLP::SolverReturn status,
 	std::string solutionDescription = "";	
 
 	try{
+		
 		// resultHeader information
 		if(osresult->setServiceName( "Bonmin solver service") != true)
 			throw ErrorClass("OSResult error: setServiceName");
@@ -700,6 +702,7 @@ void BonminSolver::buildSolverInstance() throw (ErrorClass) {
 
 void BonminSolver::setSolverOptions() throw (ErrorClass) {
 	try{
+
 		this->bSetSolverOptions = true;
 		bonmin.initializeOptionsAndJournalist();
 		//Register an additional option
@@ -774,7 +777,7 @@ void BonminSolver::solve() throw (ErrorClass) {
 	std::cout << "set Solver Options for Gus" << std::endl;
 	if( this->bSetSolverOptions == false) setSolverOptions();
 	std::cout << "done setting set Solver Options for Gus" << std::endl;
-	//exit(  1);
+
 	try{
 		double start = CoinCpuTime();
 		//OSiLWriter osilwriter;
@@ -817,6 +820,7 @@ void BonminSolver::solve() throw (ErrorClass) {
 		std::cout << "Finish Bonmin Optimize" << std::endl;
 		osrl = osrlwriter->writeOSrL( osresult);
 		std::cout << "Finish writing the osrl" << std::endl;
+
 
 	}
 	catch(const ErrorClass& eclass){

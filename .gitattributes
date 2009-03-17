@@ -146,6 +146,7 @@ OS/data/osilFiles/gamstrnsport.osil -text
 OS/data/osilFiles/lindoapiaddins.osil -text
 OS/data/osilFiles/markowitz.osil -text
 OS/data/osilFiles/markowitzMatlab.osil -text
+OS/data/osilFiles/nonconvex.osil -text
 OS/data/osilFiles/p0033.osil -text
 OS/data/osilFiles/p0201.osil -text
 OS/data/osilFiles/parincInteger.osil -text
