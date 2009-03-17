@@ -981,13 +981,12 @@ int main(int argC, char* argV[])
 		osilFileName = dataDir  + "osilFiles" + dirsep + "bonminEx1.osil";
 		osolFileName = dataDir  + "osolFiles" + dirsep + "bonminEx1_Couenne.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
-//		osol = fileUtil->getFileAsString( osolFileName.c_str());
+		osol = fileUtil->getFileAsString( osolFileName.c_str());
 		CouenneSolver *solver = NULL;
 		solver = new CouenneSolver();
 		solver->sSolverName = "bonmin";
 		solver->osil = osil;
 		solver->osol = osol; 
-		solver->osol = "";  //HIG: restore when Couenne solver debugged
 //		solver->osinstance = osilreader->readOSiL( osil);
 //		solver->osoption   = osolreader->readOSoL( osol);
 		cout << "call the COIN - Couenne Solver for bonminEx1" << endl;

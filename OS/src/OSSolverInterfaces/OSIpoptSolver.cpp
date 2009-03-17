@@ -204,33 +204,39 @@ bool IpoptProblem::get_starting_point(Index n, bool init_x, Number* x,
 #ifdef DEBUG
 		cout << "done " << endl;
 #endif
+		try
+		{
+			double initval;
+			for(k = 0; k < m1; k++)
+			{	cout << "process component " << k << " -- index " << initVarVector[k]->idx << endl;
+				i = initVarVector[k]->idx;
+				if (initVarVector[k]->idx > n1)
+					throw ErrorClass ("Illegal index value in variable initialization");
 
-		double initval;
-		for(k = 0; k < m1; k++)
-		{	cout << "process component " << k << " -- index " << initVarVector[k]->idx << endl;
-			i = initVarVector[k]->idx;
-			if (initVarVector[k]->idx > n1)
-				throw ErrorClass ("Illegal index value in variable initialization");
-
-				initval = initVarVector[k]->value;
-				if (osinstance->instanceData->variables->var[k]->ub == OSDBL_MAX)
-				{	if (osinstance->instanceData->variables->var[k]->lb > initval)
-						throw ErrorClass ("Initial value outside of bounds");
-				}
-				else
-					if (osinstance->instanceData->variables->var[k]->lb == -OSDBL_MAX)
-					{	if (osinstance->instanceData->variables->var[k]->ub < initval)
+					initval = initVarVector[k]->value;
+					if (osinstance->instanceData->variables->var[k]->ub == OSDBL_MAX)
+					{	if (osinstance->instanceData->variables->var[k]->lb > initval)
 							throw ErrorClass ("Initial value outside of bounds");
 					}
 					else
-					{	if ((osinstance->instanceData->variables->var[k]->lb > initval) ||
-							(osinstance->instanceData->variables->var[k]->ub < initval))
-							throw ErrorClass ("Initial value outside of bounds");
-					}
+						if (osinstance->instanceData->variables->var[k]->lb == -OSDBL_MAX)
+						{	if (osinstance->instanceData->variables->var[k]->ub < initval)
+								throw ErrorClass ("Initial value outside of bounds");
+						}
+						else
+						{	if ((osinstance->instanceData->variables->var[k]->lb > initval) ||
+								(osinstance->instanceData->variables->var[k]->ub < initval))
+								throw ErrorClass ("Initial value outside of bounds");
+						}
 
-			x[initVarVector[k]->idx] = initval;
-			initialed[initVarVector[k]->idx] = true;
+				x[initVarVector[k]->idx] = initval;
+				initialed[initVarVector[k]->idx] = true;
+			}
 		}
+		catch(const ErrorClass& eclass)
+		{	cout << "Error in IpoptProblem::get_starting_point (OSIpoptSolver.cpp)";
+			cout << endl << endl << endl;
+		}	
 	}  //  end if (m1 > 0)		
 
 	double default_initval;

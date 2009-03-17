@@ -468,6 +468,8 @@ void CouenneSolver::solve() throw (ErrorClass) {
 			osoption = m_osolreader->readOSoL( osol);
 		}	
 
+		cout << "osoption = NULL? " << (osoption == NULL)   << endl;
+		cout << "osol length zero?" << (osol.length() == 0) << endl;
 
 		tminlp_ = new BonminProblem( osinstance, osoption, osresult);
 		
@@ -503,20 +505,25 @@ void CouenneSolver::solve() throw (ErrorClass) {
  		
  		const std::string  prefix="bonmin.";
  		
-		std::cout << "INITIALIZE COUENNE " << std::endl;
+		std::cout << "INITIALIZE COUENNE JOURNALIST " << std::endl;
 		bonmin_couenne.initializeOptionsAndJournalist();
+
+		std::cout << "INITIALIZE COUENNE INTERFACE" << std::endl;
 		ci->initialize (bonmin_couenne.roptions(),//GetRawPtr(roptions),  
 				bonmin_couenne.options(),//GetRawPtr( options), 
 				bonmin_couenne.journalist(),//GetRawPtr(jnlst),  
 				prefix, GetRawPtr( tminlp_));	
 	      	
+		std::cout << "INITIALIZE IPOPT SOLVER " << std::endl;
  		app_ = new Bonmin::IpoptSolver(bonmin_couenne.roptions(),//GetRawPtr(roptions),  
 					       bonmin_couenne.options(),//GetRawPtr( options), 					       
 					       bonmin_couenne.journalist(),//GetRawPtr(jnlst),  
 					       prefix); 		
  	
 	      	
+		std::cout << "INITIALIZE COUENNE MODEL" << std::endl;
 		ci->setModel( GetRawPtr( tminlp_) );
+		std::cout << "INITIALIZE COUENNE SOLVER" << std::endl;
 		ci->setSolver( GetRawPtr( app_) );
 			
 		std::cout << "INITIALIZE COUENNE " << std::endl;

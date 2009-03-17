@@ -294,38 +294,45 @@ bool BonminProblem::get_starting_point(Index n, bool init_x, Number* x,
 #endif
 
 		double initval;
-		for(k = 0; k < m1; k++)
-		{	cout << "process component " << k << " -- index " << initVarVector[k]->idx << endl;
-			i = initVarVector[k]->idx;
-			if (initVarVector[k]->idx > n1)
-				throw ErrorClass ("Illegal index value in variable initialization");
+		try 
+		{
+			for(k = 0; k < m1; k++)
+			{	
+				i = initVarVector[k]->idx;
+				if (initVarVector[k]->idx > n1)
+					throw ErrorClass ("Illegal index value in variable initialization");
 
 				initval = initVarVector[k]->value;
-				if (osinstance->instanceData->variables->var[k]->ub == OSDBL_MAX)
-				{	if (osinstance->instanceData->variables->var[k]->lb > initval)
+				if (osinstance->instanceData->variables->var[i]->ub == OSDBL_MAX)
+				{	if (osinstance->instanceData->variables->var[i]->lb > initval)
 						throw ErrorClass ("Initial value outside of bounds");
 				}
 				else
-					if (osinstance->instanceData->variables->var[k]->lb == -OSDBL_MAX)
-					{	if (osinstance->instanceData->variables->var[k]->ub < initval)
+					if (osinstance->instanceData->variables->var[i]->lb == -OSDBL_MAX)
+					{	if (osinstance->instanceData->variables->var[i]->ub < initval)
 							throw ErrorClass ("Initial value outside of bounds");
 					}
 					else
-					{	if ((osinstance->instanceData->variables->var[k]->lb > initval) ||
-							(osinstance->instanceData->variables->var[k]->ub < initval))
+					{	if ((osinstance->instanceData->variables->var[i]->lb > initval) ||
+							(osinstance->instanceData->variables->var[i]->ub < initval))
 							throw ErrorClass ("Initial value outside of bounds");
 					}
 
-			x[initVarVector[k]->idx] = initval;
-			initialed[initVarVector[k]->idx] = true;
+				x[initVarVector[k]->idx] = initval;
+				initialed[initVarVector[k]->idx] = true;
+			}
 		}
+		catch(const ErrorClass& eclass)
+		{	cout << "Error in BonminProblem::get_starting_point (OSBonminSolver.cpp)";
+			cout << endl << endl << endl;
+		}	
 	}  //  end if (m1 > 0)		
 
 	double default_initval;
 	default_initval = 1.7171;
 
 	for(k = 0; k < n1; k++)
-	{	cout << "verify component " << k << endl;
+	{
 		if (!initialed[k])
 			if (osinstance->instanceData->variables->var[k]->ub == OSDBL_MAX)
 				if (osinstance->instanceData->variables->var[k]->lb <= default_initval)
@@ -357,6 +364,7 @@ bool BonminProblem::get_starting_point(Index n, bool init_x, Number* x,
   	
   	return true;
 }//get_starting_point
+
 
 // returns the value of the objective function
 bool BonminProblem::eval_f(Index n, const Number* x, bool new_x, Number& obj_value){
