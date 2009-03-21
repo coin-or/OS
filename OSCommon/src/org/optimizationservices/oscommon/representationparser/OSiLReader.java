@@ -227,12 +227,12 @@ public class OSiLReader extends OSgLReader{
 	/**
 	 * m_mdInit holds an array of variable initial values in doubles.
 	 */
-	protected double[] m_mdInit = null;
+//	protected double[] m_mdInit = null;
 
 	/**
 	 * m_msInit holds an array of variable initial values (value kept in strings).
 	 */
-	protected String[] m_msInit = null;
+//	protected String[] m_msInit = null;
 	
 	/**
 	 * m_mdLb holds an array of variable lower bounds.
@@ -359,9 +359,9 @@ public class OSiLReader extends OSgLReader{
 		double[] mdVarLbs = getVariableLowerBounds();
 		double[] mdVarUbs = getVariableUpperBounds();
 		char[] mcVarTypes = getVariableTypes();
-		double[] mdVarIits = getVariableInitialValues();
-		String[] msVarInitsString = getVariableInitialStringValues();
-		if(!m_osInstance.setVariables(nVar, msVarNames, mdVarLbs, mdVarUbs, mcVarTypes, mdVarIits, msVarInitsString))
+//		double[] mdVarIits = getVariableInitialValues();
+//		String[] msVarInitsString = getVariableInitialStringValues();
+		if(!m_osInstance.setVariables(nVar, msVarNames, mdVarLbs, mdVarUbs, mcVarTypes/*, mdVarIits, msVarInitsString*/))
 			throw new Exception("setVariables Unsuccessful");
 		
 		//set objectives
@@ -755,8 +755,8 @@ public class OSiLReader extends OSgLReader{
 		int iVariableCount = getVariableNumber();
 		int iVarIndex = 0;
 		m_msVarName = new String[iVariableCount];
-		m_mdInit = new double[iVariableCount];
-		m_msInit = new String[iVariableCount];
+//		m_mdInit = new double[iVariableCount];
+//		m_msInit = new String[iVariableCount];
 		m_mcVarType = new char[iVariableCount];
 		m_mdLb = new double[iVariableCount];
 		m_mdUb =new double[iVariableCount];
@@ -767,8 +767,8 @@ public class OSiLReader extends OSgLReader{
 			NamedNodeMap attributes =  eVar.getAttributes();
 			int n =attributes.getLength();
 			String sName = "";
-			double dInit = Double.NaN;
-			String sInit = "";
+//			double dInit = Double.NaN;
+//			String sInit = "";
 			char cType = 'C';
 			double dUb = Double.POSITIVE_INFINITY;
 			double dLb = 0.0;
@@ -780,16 +780,16 @@ public class OSiLReader extends OSgLReader{
 				if (sLocalName.equals("name")){
 					sName = sValue;
 				}
-				else if (sLocalName.equals("init")){
-					if(CommonUtil.isPostiveInfinity(sValue)) dInit = Double.POSITIVE_INFINITY;
-					else if(CommonUtil.isNegativeInfinity(sValue)) dInit = Double.NEGATIVE_INFINITY;
-					else dInit = Double.parseDouble(sValue);
-				}
-				else if (sLocalName.equals("initString")){
-					if(CommonUtil.isPostiveInfinity(sValue)) sInit = Double.POSITIVE_INFINITY + "";
-					else if(CommonUtil.isNegativeInfinity(sValue)) sInit = Double.NEGATIVE_INFINITY + "";
-					else sInit = sValue;
-				}
+//				else if (sLocalName.equals("init")){
+//					if(CommonUtil.isPostiveInfinity(sValue)) dInit = Double.POSITIVE_INFINITY;
+//					else if(CommonUtil.isNegativeInfinity(sValue)) dInit = Double.NEGATIVE_INFINITY;
+//					else dInit = Double.parseDouble(sValue);
+//				}
+//				else if (sLocalName.equals("initString")){
+//					if(CommonUtil.isPostiveInfinity(sValue)) sInit = Double.POSITIVE_INFINITY + "";
+//					else if(CommonUtil.isNegativeInfinity(sValue)) sInit = Double.NEGATIVE_INFINITY + "";
+//					else sInit = sValue;
+//				}
 				else if (sLocalName.equals("type")){
 					cType = sValue.charAt(0);
 				}
@@ -809,8 +809,8 @@ public class OSiLReader extends OSgLReader{
 			}
 			for (j = 0; j < iMult; j++){
 				m_msVarName[iVarIndex] = sName;
-				m_mdInit[iVarIndex] = dInit;
-				m_msInit[iVarIndex] = sInit;
+//				m_mdInit[iVarIndex] = dInit;
+//				m_msInit[iVarIndex] = sInit;
 				m_mcVarType[iVarIndex] = cType;
 				m_mdLb[iVarIndex] = dLb;
 				m_mdUb[iVarIndex] = dUb;
@@ -831,23 +831,23 @@ public class OSiLReader extends OSgLReader{
 		}
 		if(bSetToNull) m_msVarName = null;
 
-		bSetToNull = true;
-		for(i = 0; i <iVariableCount; i++){
-			if(!Double.isNaN(m_mdInit[i])){
-				bSetToNull = false;
-				break;
-			}
-		}
-		if(bSetToNull) m_mdInit = null;
+//		bSetToNull = true;
+//		for(i = 0; i <iVariableCount; i++){
+//			if(!Double.isNaN(m_mdInit[i])){
+//				bSetToNull = false;
+//				break;
+//			}
+//		}
+//		if(bSetToNull) m_mdInit = null;
 
-		bSetToNull = true;
-		for(i = 0; i <iVariableCount; i++){
-			if(m_msInit[i].length() > 0){
-				bSetToNull = false;
-				break;
-			}
-		}
-		if(bSetToNull) m_msInit = null;
+//		bSetToNull = true;
+//		for(i = 0; i <iVariableCount; i++){
+//			if(m_msInit[i].length() > 0){
+//				bSetToNull = false;
+//				break;
+//			}
+//		}
+//		if(bSetToNull) m_msInit = null;
 
 		/*
 		bSetToNull = true;
@@ -902,10 +902,10 @@ public class OSiLReader extends OSgLReader{
 	 *
 	 * @return a double array of variable initial values in the OSiL instance.
 	 */
-	public double[] getVariableInitialValues(){
-		processVariables();
-		return m_mdInit;
-	}//getVariableInitialValues
+//	public double[] getVariableInitialValues(){
+//		processVariables();
+//		return m_mdInit;
+//	}//getVariableInitialValues
 	
 	/**
 	 * Get the values of all variable initial string values in the OSiL instance.
@@ -914,10 +914,10 @@ public class OSiLReader extends OSgLReader{
 	 *
 	 * @return a String array of variable initial values in the OSiL instance.
 	 */
-	public String[] getVariableInitialStringValues(){
-		processVariables();
-		return m_msInit;
-	}//getVariableInitialStringValues
+//	public String[] getVariableInitialStringValues(){
+//		processVariables();
+//		return m_msInit;
+//	}//getVariableInitialStringValues
 
 
 	/**
@@ -3085,7 +3085,7 @@ public class OSiLReader extends OSgLReader{
 		 	System.out.println("getConstraintLBs: "+(osilReader.getConstraintLowerBounds())[i]);
 		 	System.out.println("getConstraintUBs: "+(osilReader.getConstraintUpperBounds())[i]);
 		 	System.out.println("getVariableNames: "+(osilReader.getVariableNames())[i]);
-		 	System.out.println("getVariableInits: "+(osilReader.getVariableInitialStringValues())[i]);
+//		 	System.out.println("getVariableInits: "+(osilReader.getVariableInitialStringValues())[i]);
 		}
 		 for(int i=0; i<(osilReader.getFirstObjectiveNonzeroCoefficientValues()).length; i++)
 		 	System.out.println("getFirstObjectiveCoefficientValues: "+(osilReader.getFirstObjectiveNonzeroCoefficientValues())[i]);

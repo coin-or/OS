@@ -109,12 +109,12 @@ public class OSInstance {
 	/**
 	 * m_mdVariableInitialValues holds a double array of the initial variable values. 
 	 */
-	protected double[] m_mdVariableInitialValues = null;
+	//protected double[] m_mdVariableInitialValues = null;
 
 	/**
 	 * m_msVariableInitialStringValues holds a string array of the initial variable values. 
 	 */
-	protected String[] m_msVariableInitialStringValues = null;
+	//protected String[] m_msVariableInitialStringValues = null;
 
 	/**
 	 * m_mcVariableTypes holds a char array of variable types (default = 'C').
@@ -446,14 +446,14 @@ public class OSInstance {
 			m_msVariableNames = new String[n];
 			for(i = 0; i < n; i++) m_msVariableNames[i] = var[i].name;
 		}
-		if(!Double.isNaN(var[0].init)){
-			m_mdVariableInitialValues = new double[n];
-			for(i = 0; i < n; i++) m_mdVariableInitialValues[i] = var[i].init;
-		}
-		if((var[0].initString != null && var[0].initString.length() > 0)){
-			m_msVariableInitialStringValues = new String[n];
-			for(i = 0; i < n; i++) m_msVariableInitialStringValues[i] = var[i].initString;
-		}
+//		if(!Double.isNaN(var[0].init)){
+//			m_mdVariableInitialValues = new double[n];
+//			for(i = 0; i < n; i++) m_mdVariableInitialValues[i] = var[i].init;
+//		}
+//		if((var[0].initString != null && var[0].initString.length() > 0)){
+//			m_msVariableInitialStringValues = new String[n];
+//			for(i = 0; i < n; i++) m_msVariableInitialStringValues[i] = var[i].initString;
+//		}
 		m_mcVariableTypes = new char[n];
 		m_mdVariableLowerBounds = new double[n];
 		m_mdVariableUpperBounds = new double[n];
@@ -484,10 +484,10 @@ public class OSInstance {
 	 * @return a double array of variable initial values, null if no initial variable values.
 	 * @throws Exception if the elements in variables are logically inconsistent. 
 	 */
-	public double[] getVariableInitialValues() throws Exception{
-		processVariables();
-		return m_mdVariableInitialValues;
-	}//getVariableInitialValues
+//	public double[] getVariableInitialValues() throws Exception{
+//		processVariables();
+//		return m_mdVariableInitialValues;
+//	}//getVariableInitialValues
 	
 	/**
 	 * Get variable initial string values. 
@@ -495,10 +495,10 @@ public class OSInstance {
 	 * @return a string array of variable initial values, null if no initial variable string values.
 	 * @throws Exception if the elements in variables are logically inconsistent. 
 	 */
-	public String[] getVariableInitialStringValues() throws Exception{
-		processVariables();
-		return m_msVariableInitialStringValues;
-	}//getVariableInitialStringValues
+//	public String[] getVariableInitialStringValues() throws Exception{
+//		processVariables();
+//		return m_msVariableInitialStringValues;
+//	}//getVariableInitialStringValues
 
 	/**
 	 * Get variable types. 
@@ -1962,19 +1962,17 @@ public class OSInstance {
    	 * @param lowerBound holds the variable lower bound; use Double.NEGATIVE_INFINITY if no lower bound. 
    	 * @param upperBound holds the variable upper bound; use Double.POSITIVE_INFINITY if no upper bound. 
    	 * @param type holds the variable type character, B for Binary, I for Integer, S for String, C or any other char for Continuous)
-   	 * @param init holds the double variable initial value; use Double.NaN if no initial value. 
-   	 * @param initString holds the string variable initial value; use null or empty string ("") if no initial string value.  
    	 * @return whether the variable is added successfully. 
    	 */
-   	public boolean addVariable(int index, String name, double lowerBound, double upperBound, char type, double init, String initString){
+   	public boolean addVariable(int index, String name, double lowerBound, double upperBound, char type/*, double init, String initString*/){
    		Variable[] var = instanceData.variables.var;
    		if(index < 0 || instanceData.variables.numberOfVariables <= 0 || index >= instanceData.variables.numberOfVariables) return false;
    		var[index].name = name;
    		var[index].lb = lowerBound;
    		var[index].ub = upperBound;
    		var[index].type = type;
-   		var[index].init = init;
-   		var[index].initString = initString;
+   		//var[index].init = init;
+   		//var[index].initString = initString;
    		return true;
    	}//addVariable
    	
@@ -1989,18 +1987,17 @@ public class OSInstance {
    	 * @param upperBounds holds a double array of variable upper bounds; use null if no upper bounds; use Double.POSITIVE_INFINITY if no upper bound for a specific variable in the array. 
    	 * @param types holds a char array of variable types; use null if all variables are continuous; 
    	 * for a specfic variable in the array use B for Binary, I for Integer, S for String, C or any other char for Continuous,)  
-   	 * @param inits holds a double array of varible initial values; use null if no initial values. 
-   	 * @param initsString holds a string array of varible initial values; use null if no initial string values.  
    	 * @return whether the variables are set successfully. 
    	 */
-   	public boolean setVariables(int number, String[] names, double[] lowerBounds, double[] upperBounds, char[] types, double[] inits, String[] initsString){
+   	public boolean setVariables(int number, String[] names, double[] lowerBounds, double[] upperBounds, char[] types/*, double[] inits, String[] initsString*/){
    		if(number <= 0) return false;
    		if((names != null && names.length != number) ||
    		   (lowerBounds != null && lowerBounds.length != number) ||
    		   (upperBounds != null && upperBounds.length != number) ||
-   		   (types != null && types.length != number) ||
-   		   (inits != null && inits.length != number) ||
-   		   (initsString != null && initsString.length != number)) return false;
+   		   (types != null && types.length != number) 
+   		   //||(inits != null && inits.length != number) ||
+   		   //(initsString != null && initsString.length != number)
+   		   ) return false;
    		instanceData.variables.numberOfVariables = number;
    		instanceData.variables.var = new Variable[number];
    		int i = 0;
@@ -2023,12 +2020,12 @@ public class OSInstance {
    	   			if(types[i] != 'C' && types[i] != 'B' && types[i] != 'I' && types[i] != 'S') types[i] = 'C';
    	   		}
    		}
-   		if(inits != null){
-   	   		for(i = 0; i < number; i++) var[i].init = inits[i];   			
-   		}
-   		if(initsString != null){
-   	   		for(i = 0; i < number; i++) var[i].initString = initsString[i];   			
-   		}
+//   		if(inits != null){
+//   	   		for(i = 0; i < number; i++) var[i].init = inits[i];   			
+//   		}
+//   		if(initsString != null){
+//   	   		for(i = 0; i < number; i++) var[i].initString = initsString[i];   			
+//   		}
    		return true;
    	}//setVariables
 
@@ -2523,9 +2520,9 @@ public class OSInstance {
 		double[] varLbs = null;//{-100, -200};
 		double[] varUbs = null;//{100, 200};
 		char[] varTypes = null;//{'C', 'B'};
-		double[] varInits = null;// {1.1, 2.2};
-		String[] varInitsString = null;// {"1.1a", "2.2a"};
-		if(!p.setVariables(2, varNames, varLbs, varUbs, varTypes, varInits, varInitsString)) System.out.println("setVariables ERROR");
+//		double[] varInits = null;// {1.1, 2.2};
+//		String[] varInitsString = null;// {"1.1a", "2.2a"};
+//		if(!p.setVariables(2, varNames, varLbs, varUbs, varTypes, varInits, varInitsString)) System.out.println("setVariables ERROR");
 		//if(!p.addVariable(0, "var00", -100, -200, 'C', 1.1, "1.1a")) System.out.println("addVariable ERROR");
 		//if(!p.addVariable(1, "var11", -100, 200, 'B', 2.2, "2.2a")) System.out.println("addVariable ERROR");
 		int nVar = p.getVariableNumber();
@@ -2539,16 +2536,16 @@ public class OSInstance {
 			for(i = 0; i < (ms==null?0:ms.length); i++){
 				System.out.println(ms[i]);
 			}
-			System.out.println("variable inits");
-			md = p.getVariableInitialValues();
-			for(i = 0; i < (md==null?0:md.length); i++){
-				System.out.println(md[i]);
-			}
-			System.out.println("variable initsString");
-			ms = p.getVariableInitialStringValues();
-			for(i = 0; i < (ms==null?0:ms.length); i++){
-				System.out.println(ms[i]);
-			}
+//			System.out.println("variable inits");
+//			md = p.getVariableInitialValues();
+//			for(i = 0; i < (md==null?0:md.length); i++){
+//				System.out.println(md[i]);
+//			}
+//			System.out.println("variable initsString");
+//			ms = p.getVariableInitialStringValues();
+//			for(i = 0; i < (ms==null?0:ms.length); i++){
+//				System.out.println(ms[i]);
+//			}
 			System.out.println("variable lbs");
 			md = p.getVariableLowerBounds();
 			for(i = 0; i < (md==null?0:md.length); i++){

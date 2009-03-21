@@ -497,7 +497,7 @@ public class FMLReader{
 		 OSiLWriter osilWriter = new OSiLWriter();
 		 try {
 			 osilWriter.setInstanceHeader(null, getSource(), null);
-			 osilWriter.setVariables(getVariableCount(), getVariableNames(), getVariableLbs(), getVariableUbs(), getVariableDomains(), null, null);
+			 osilWriter.setVariables(getVariableCount(), getVariableNames(), getVariableLbs(), getVariableUbs(), getVariableDomains()/*, null, null*/);
 			 double[] mdCoef = getObjectiveCoefficients();
 			 int[] miCoefIndex = new int[mdCoef.length];
 			 for(int i = 0; i < miCoefIndex.length; i++) miCoefIndex[i] = i;

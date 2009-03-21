@@ -395,7 +395,7 @@ extends DefaultHandler {
 			if(sVarName.length() <= 0)
 				throw new SAXException("Variable number " + m_iVarIdx + " requires a name!");
 			//System.out.println( sVarName);
-			m_osilWriter.addVariable(sVarName, dVarLb, dVarUb, cDomain, dInit, null);
+			m_osilWriter.addVariable(sVarName, dVarLb, dVarUb, cDomain/*, dInit, null*/);
 		}
 		else if (localName.equals("sum")){
 			m_bSum = true;
@@ -723,7 +723,7 @@ extends DefaultHandler {
 		 * NOT in listed in an attribute in the <columns> tags in OSmL
 		 */
 		for(int i = 0; i < InfixParser.variableNames.size(); i++){
-			m_osilWriter.addVariable((String)InfixParser.variableNames.get( i), 0.0, Double.POSITIVE_INFINITY, 'C', Double.NaN, null);
+			m_osilWriter.addVariable((String)InfixParser.variableNames.get( i), 0.0, Double.POSITIVE_INFINITY, 'C'/*, Double.NaN, null*/);
 		}
 		m_osilWriter.setInstanceHeader(m_sName, m_sSource, m_sDescription);
 		/* if we had a linear objective function, add the coefficients to column arrays */

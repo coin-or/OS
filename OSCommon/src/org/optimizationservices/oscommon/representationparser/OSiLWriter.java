@@ -110,9 +110,9 @@ public class OSiLWriter extends OSgLWriter{
    				osInstance.getVariableNames(), 
    				osInstance.getVariableLowerBounds(), 
    				osInstance.getVariableUpperBounds(),
-   				osInstance.getVariableTypes(),
+   				osInstance.getVariableTypes()/*,
    				osInstance.getVariableInitialValues(),
-   				osInstance.getVariableInitialStringValues())) 
+   				osInstance.getVariableInitialStringValues()*/)) 
    			throw new Exception("setVariables Unsuccessful");
 
    		//set objectives
@@ -239,24 +239,22 @@ public class OSiLWriter extends OSgLWriter{
 	 * @param variableUbs holds the values of upper bounds for the variables. It may be empty.
 	 * @param variableTypes holds the types of all the variables, (e.g. 'C' for continuous
 	 * type, 'I' for integer type, and 'B' for binary type). It may be empty.
-	 * @param initialValues holds the initial double values of the variables. It may be empty.
-	 * @param initialStringValues holds the initial string values of the variables. It may be empty.
 	 * @return whether variable construction is successful.
 	 */
 	public boolean setVariables(int numberVariables, String[] variableNames, double[] variableLbs, double[] variableUbs,
-			char[] variableTypes, double[] initialValues, String[] initialStringValues){
+			char[] variableTypes/*, double[] initialValues, String[] initialStringValues*/){
 		try{
 			if((variableNames != null && variableNames.length != numberVariables)
 			|| (variableLbs != null && variableLbs.length != numberVariables)
 			|| (variableUbs != null && variableUbs.length != numberVariables)
-			|| (initialValues != null && initialValues.length != numberVariables)
-			|| (initialStringValues != null && initialStringValues.length != numberVariables)
+//			|| (initialValues != null && initialValues.length != numberVariables)
+//			|| (initialStringValues != null && initialStringValues.length != numberVariables)
 			|| (variableTypes != null && variableTypes.length != numberVariables)){
 				return false;
 			}
 			Element eVariables = (Element)XMLUtil.findChildNode(m_eInstanceData, "variables");
 			XMLUtil.removeAllChildren(eVariables);
-			if(variableNames == null && variableLbs == null && variableUbs == null && variableTypes == null && initialValues == null){
+			if(variableNames == null && variableLbs == null && variableUbs == null && variableTypes == null /*&& initialValues == null*/){
 				Element eVar = createVar();
 				eVariables.appendChild(eVar);
 				eVariables.setAttribute("numberOfVariables", numberVariables + "");
@@ -290,12 +288,12 @@ public class OSiLWriter extends OSgLWriter{
 						eVar.setAttribute("type", variableTypes[i]+"");
 					}
 				}
-				if(initialValues != null && !Double.isNaN(initialValues[i])){
-					eVar.setAttribute("init", initialValues[i]+"");
-				}
-				if(initialStringValues != null && initialStringValues[i] != null && initialStringValues[i].length() > 0){
-					eVar.setAttribute("initString", initialStringValues[i]+"");
-				}
+//				if(initialValues != null && !Double.isNaN(initialValues[i])){
+//					eVar.setAttribute("init", initialValues[i]+"");
+//				}
+//				if(initialStringValues != null && initialStringValues[i] != null && initialStringValues[i].length() > 0){
+//					eVar.setAttribute("initString", initialStringValues[i]+"");
+//				}
 				//mult is not set (or by default = 1). For future developement, may want to check multiplicity.
 			}
 			eVariables.setAttribute("numberOfVariables", numberVariables+"");
@@ -315,11 +313,9 @@ public class OSiLWriter extends OSgLWriter{
 	 * @param variableUb holds the value of the upper bound for the variables. 
 	 * @param variableType holds the type of the variable, (e.g. 'C' for continuous
 	 * type, 'I' for integer type, and 'B' for binary type).
-	 * @param initialValue holds the initial value of the variables. It may be NaN, i.e. Double.NaN.
-	 * @param initialStringValue holds the initial string value of the variables. It may be null. 
 	 * @return whether variable addition is successful.
 	 */
-	public boolean addVariable(String variableName, double variableLb, double variableUb, char variableType, double initialValue, String initialStringValue){
+	public boolean addVariable(String variableName, double variableLb, double variableUb, char variableType/*, double initialValue, String initialStringValue*/){
 		try{
 			Element eVariables = (Element)XMLUtil.findChildNode(m_eInstanceData, "variables");
 			Element eVar = createVar();
@@ -341,12 +337,12 @@ public class OSiLWriter extends OSgLWriter{
 			if("IBS".indexOf(variableType+"") != -1){
 				eVar.setAttribute("type", variableType+"");
 			}
-			if(!Double.isNaN(initialValue)){
-				eVar.setAttribute("init", initialValue+"");
-			}
-			if(initialStringValue != null && initialStringValue.length() > 0){
-				eVar.setAttribute("initString", initialStringValue);
-			}
+//			if(!Double.isNaN(initialValue)){
+//				eVar.setAttribute("init", initialValue+"");
+//			}
+//			if(initialStringValue != null && initialStringValue.length() > 0){
+//				eVar.setAttribute("initString", initialStringValue);
+//			}
 			int iVariables = eVariables.getElementsByTagName("var").getLength();
 			eVariables.setAttribute("numberOfVariables", iVariables+"");			
 		}
@@ -1734,12 +1730,12 @@ public class OSiLWriter extends OSgLWriter{
 		double[] mdVariableLbs1 = {0.0, 1.0};
 		double[] mdVariableUbs1 = {10.0, 20.0};
 		char[] mcVariableTypes1 = {'C', 'I'};
-		if(!osilWriter.setVariables(2, msVariableNames1, mdVariableLbs1, mdVariableUbs1, mcVariableTypes1, null, null)) System.out.println(5);
+		if(!osilWriter.setVariables(2, msVariableNames1, mdVariableLbs1, mdVariableUbs1, mcVariableTypes1/*, null, null*/)) System.out.println(5);
 		//String[] msVariableNames2 = {"v3", "v4", "v5"};
 		double[] mdVariableLbs2 = {2.0, 3.0, 4.0};
 		double[] mdVariableUbs2 = {30.0, 40.0, 50.0};
 		char[] mcVariableTypes2 = {'B', 'C', 'I'};
-		if(!osilWriter.setVariables(3, null, mdVariableLbs2, mdVariableUbs2, mcVariableTypes2, null, null))System.out.println(6);
+		if(!osilWriter.setVariables(3, null, mdVariableLbs2, mdVariableUbs2, mcVariableTypes2/*, null, null*/))System.out.println(6);
 		
 		double[] mdNonz1 = {1.0, 2.0};
 		int[] miNonzIdx1 = {1, 2};
@@ -1778,7 +1774,7 @@ public class OSiLWriter extends OSgLWriter{
 		if(!osilWriter.addObjective("name2", true, 2, 2, mdObjectiveCoefValues2, mdObjectiveCoefIndexes2)) System.out.println(12);
 
 		if(!osilWriter.addConstraint("addCon1", Double.NEGATIVE_INFINITY, 8, 0)) System.out.println(13);
-		if(!osilWriter.addVariable("addVar1", 0, 8, 'C', 3, null)) System.out.println(13);
+		if(!osilWriter.addVariable("addVar1", 0, 8, 'C'/*, 3, null*/)) System.out.println(13);
 		Vector<String> vToken = new Vector<String>();
 		vToken.add("2"); vToken.add("plus"); vToken.add("3");
 		if(!osilWriter.addNlNode(vToken, "infix", 0, 0, vToken.size()-1)) System.out.println(14);

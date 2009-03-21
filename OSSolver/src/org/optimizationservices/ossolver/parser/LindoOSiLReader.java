@@ -182,18 +182,18 @@ public class LindoOSiLReader{
 		sBuffer.append("\n");
 		sBuffer2.append(" :vector of variable ubs\n");
 		//vector of variable starting points
-		double[] mdInit = osilReader.getVariableInitialValues();
-		for(i = 0; i < osilReader.getVariableNumber(); i++){
-			try{
-				s = mdInit[i] + "";
-				Double.parseDouble(s);
-			}
-			catch(Exception e){
-				s = "0";
-			}
-			sBuffer.append( s + " ");
-			sBuffer2.append(s + " ");
-		}
+//		double[] mdInit = osilReader.getVariableInitialValues();
+//		for(i = 0; i < osilReader.getVariableNumber(); i++){
+//			try{
+//				s = mdInit[i] + "";
+//				Double.parseDouble(s);
+//			}
+//			catch(Exception e){
+//				s = "0";
+//			}
+//			sBuffer.append( s + " ");
+//			sBuffer2.append(s + " ");
+//		}
 		sBuffer.append("\n");
 		sBuffer2.append(" :vector of variable starting points\n");
 		//vector of variable types

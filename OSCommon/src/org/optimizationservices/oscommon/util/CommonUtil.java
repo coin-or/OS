@@ -629,7 +629,7 @@ public class CommonUtil{
 		OSiLWriter osilWriter = new OSiLWriter();
 		
 		osilWriter.setInstanceHeader(instanceName, instanceSource, instanceDescription);
-		osilWriter.setVariables(iNumberVariables, msVarName, mdVarLb, mdVarUb, mcVarType, null, null);
+		osilWriter.setVariables(iNumberVariables, msVarName, mdVarLb, mdVarUb, mcVarType/*, null, null*/);
 		osilWriter.setConstraints(iNumberConstrains, msConName, mdConLb, mdConUb, null);
 		osilWriter.addObjective(sObjectiveName, true, dObjectiveConstant, 1, mdObjCoef, miObjCoefIndex);
 		osilWriter.setLinearConstraintCoefficients(iNumberCoefMatrixValues, true, mdValue, miRowIdx, miStart);

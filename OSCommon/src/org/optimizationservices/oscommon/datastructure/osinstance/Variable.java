@@ -20,7 +20,7 @@ public class Variable{
 	
 	public String name = "";
 	
-	public double init = Double.NaN;
+	//public double init = Double.NaN;
 	
 	public String initString = "";
 	

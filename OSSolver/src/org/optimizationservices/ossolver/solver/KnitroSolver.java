@@ -233,11 +233,11 @@ public class KnitroSolver {
 			sResult += ("ctype" + i + "]: " + ctype[i] + "\n");
 		}
 		
-		double[] mdX = m_osilReader.getVariableInitialValues();
-		if(mdX == null) mdX = new double[numvar];
-		for (i = 0; i < numvar; i++) {
-			sResult += ("x[" + i + "]: " + mdX[i] + "\n");
-		}
+//		double[] mdX = m_osilReader.getVariableInitialValues();
+//		if(mdX == null) mdX = new double[numvar];
+//		for (i = 0; i < numvar; i++) {
+//			sResult += ("x[" + i + "]: " + mdX[i] + "\n");
+//		}
 
 		indvar = new int[nnzj];
 		indfun = new int[nnzj];
