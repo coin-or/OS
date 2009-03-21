@@ -2,7 +2,7 @@
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSrL.xsd: current version - 1.0.0-->
 	<!--include: proposal-->
 	<xs:include schemaLocation="OSgL.xsd"/>
@@ -30,7 +30,7 @@
 			</xs:element>
 			<xs:element name="service" type="ServiceResult" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
+					<xs:documentation>proposa. Note: this is mainly the output from the OS service.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="job" type="JobResult" minOccurs="0">
@@ -40,7 +40,7 @@
 			</xs:element>
 			<xs:element name="optimization" type="OptimizationResult" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
+					<xs:documentation>proposa. Note: this is mainly the output from the solver.l</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -60,19 +60,19 @@
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="serviceURI" minOccurs="0">
+			<xs:element name="serviceURI" type="xs:string" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="serviceName" minOccurs="0">
+			<xs:element name="serviceName" type="xs:string" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="instanceName" type="xs:string" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
+					<xs:documentation>proposal. Note: if present, should match the instance name in the instanceHeader of the input OSiL</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="jobID" type="xs:string" minOccurs="0">
@@ -219,16 +219,7 @@
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="elapsedTime" type="Time" default="-1" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="cpuTime" type="Time" default="-1" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
-				</xs:annotation>
-			</xs:element>
+			<xs:element name="timingInformation" type="TimingInformation" minOccurs="0"/>
 			<xs:element name="usedCPUSpeed" type="CPUSpeed" default="0.0" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
@@ -317,7 +308,7 @@
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="error"/>
 					<xs:enumeration value="warning"/>
-					<xs:enumeration value="success"/>
+					<xs:enumeration value="normal"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
@@ -352,7 +343,7 @@
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:attribute>
-				<xs:attribute name="description" type="xs:string"/>
+				<xs:attribute name="description" type="xs:string" use="optional"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -373,7 +364,7 @@
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:attribute>
-				<xs:attribute name="description" type="xs:string"/>
+				<xs:attribute name="description" type="xs:string" use="optional"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -400,7 +391,7 @@
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:attribute>
-				<xs:attribute name="description" type="xs:string"/>
+				<xs:attribute name="description" type="xs:string" use="optional"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -410,30 +401,7 @@
 		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:int">
-				<xs:attribute name="description" type="xs:string"/>
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType>
-	<xs:complexType name="Time">
-		<xs:annotation>
-			<xs:documentation>proposal</xs:documentation>
-		</xs:annotation>
-		<xs:simpleContent>
-			<xs:extension base="xs:double">
-				<xs:attribute name="unit" use="optional" default="second">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="millisecond"/>
-							<xs:enumeration value="second"/>
-							<xs:enumeration value="minute"/>
-							<xs:enumeration value="hour"/>
-							<xs:enumeration value="day"/>
-							<xs:enumeration value="week"/>
-							<xs:enumeration value="month"/>
-							<xs:enumeration value="year"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:attribute>
+				<xs:attribute name="description" type="xs:string" use="optional"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -457,6 +425,65 @@
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="TimingInformation">
+		<xs:all>
+			<xs:element name="time" minOccurs="0">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="Time"/>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:all>
+		<xs:attribute name="numberOfTime" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="Time">
+		<xs:annotation>
+			<xs:documentation>proposal</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:double">
+				<xs:attribute name="type" use="optional" default="elapsedTime">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="cpuTime"/>
+							<xs:enumeration value="elapsedTime"/>
+							<xs:enumeration value="other"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="category" use="optional" default="total">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="total"/>
+							<xs:enumeration value="input"/>
+							<xs:enumeration value="preprocessing"/>
+							<xs:enumeration value="optimization"/>
+							<xs:enumeration value="postprocessing"/>
+							<xs:enumeration value="output"/>
+							<xs:enumeration value="other"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="unit" use="optional" default="second">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="tick"/>
+							<xs:enumeration value="millisecond"/>
+							<xs:enumeration value="second"/>
+							<xs:enumeration value="minute"/>
+							<xs:enumeration value="hour"/>
+							<xs:enumeration value="day"/>
+							<xs:enumeration value="week"/>
+							<xs:enumeration value="month"/>
+							<xs:enumeration value="year"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="description" type="xs:string" use="optional"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -497,7 +524,6 @@
 					<xs:enumeration value="bestSoFar"/>
 					<xs:enumeration value="feasible"/>
 					<xs:enumeration value="infeasible"/>
-					<xs:enumeration value="stoppedByLimit"/>
 					<xs:enumeration value="unsure"/>
 					<xs:enumeration value="error"/>
 					<xs:enumeration value="other"/>
@@ -512,7 +538,15 @@
 		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
-				<xs:attribute name="name" type="xs:string" use="required"/>
+				<xs:attribute name="type" use="required">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="stoppedByLimit"/>
+							<xs:enumeration value="stoppedByBounds"/>
+							<xs:enumeration value="other"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
 				<xs:attribute name="description" type="xs:string" use="optional"/>
 			</xs:extension>
 		</xs:simpleContent>
