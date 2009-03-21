@@ -535,7 +535,7 @@ public class OSServiceUtil{// implements OShL{
 			if(dJobMaxTime != Double.POSITIVE_INFINITY && dJobMaxTime < OSParameter.JOB_MAX_TIME && dJobMaxTime > 0){
 				m_dJobMaxTime  = dJobMaxTime;
 			}
-			GregorianCalendar jobScheduledStartTime = m_osOption.getScheduledStartTime();
+			GregorianCalendar jobScheduledStartTime = m_osOption.getRequestedStartTime();
 			if(jobScheduledStartTime != null && jobScheduledStartTime.get(GregorianCalendar.YEAR) > 1970){
 				m_jobScheduledStartTime  = jobScheduledStartTime;
 				m_lJobScheduledStartTime = m_jobScheduledStartTime.getTimeInMillis();

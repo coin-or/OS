@@ -127,7 +127,7 @@ public class OSoLReader extends OSgLReader{
 
 		if(!m_osOption.setMaxTime(getMaxTime())) throw new Exception("setMaxTime Unsuccessful");		
 		if(!m_osOption.setMaxTimeUnit(getMaxTimeUnit())) throw new Exception("setMaxTimeUnit Unsuccessful");		
-		if(!m_osOption.setScheduledStartTime(getScheduledStartTime())) throw new Exception("setScheduledStartTime Unsuccessful");		
+		if(!m_osOption.setRequestedStartTime(getRequestedStartTime())) throw new Exception("setRequestedStartTime Unsuccessful");		
 		if(!m_osOption.setJobDependencies(getJobDependencies())) throw new Exception("setJobDependencies Unsuccessful");		
 		if(!m_osOption.setRequiredDirectories(getRequiredDirectories())) throw new Exception("setRequiredDirectories Unsuccessful");		
 		if(!m_osOption.setRequiredFiles(getRequiredFiles())) throw new Exception("setRequiredFiles Unsuccessful");		
@@ -246,12 +246,12 @@ public class OSoLReader extends OSgLReader{
 		else if (optionName.equals("maxTimeUnit")){ 
 			return getMaxTimeUnit();
 		}
-		else if (optionName.equals("scheduledStartTime")){ 
+		else if (optionName.equals("requestedStartTime")){ 
 			Element eJob = (Element)XMLUtil.findChildNode(m_eRoot, "job");
 			if(eJob == null) return "1970-01-01T00:00:00-00:00";
-			String sJobScheduledStartTime = XMLUtil.getElementValueByName(eJob, "scheduledStartTime");
-			if(sJobScheduledStartTime == null || sJobScheduledStartTime.length() <= 0) return "1970-01-01T00:00:00-00:00";
-			return sJobScheduledStartTime;
+			String sJobRequestedStartTime = XMLUtil.getElementValueByName(eJob, "requestedStartTime");
+			if(sJobRequestedStartTime == null || sJobRequestedStartTime.length() <= 0) return "1970-01-01T00:00:00-00:00";
+			return sJobRequestedStartTime;
 		}
 		else{
 			return "";
@@ -891,23 +891,23 @@ public class OSoLReader extends OSgLReader{
 	}//getMaxTimeUnit
 
 	/**
-	 * Get the scheduled start time for the job.   
+	 * Get the requested start time for the job.   
 	 * 
-	 * @return the scheduled start time for the job, null or UNIX time (1970/1/1) if none. 
+	 * @return the requested start time for the job, null or UNIX time (1970/1/1) if none. 
 	 */
-	public GregorianCalendar getScheduledStartTime(){ 
+	public GregorianCalendar getRequestedStartTime(){ 
 		Element eJob = (Element)XMLUtil.findChildNode(m_eRoot, "job");
 		if(eJob == null) return new GregorianCalendar(1970, 0, 1, 0, 0, 0);
-		String sJobScheduledStartTime = XMLUtil.getElementValueByName(eJob, "scheduledStartTime");
-		if(sJobScheduledStartTime == null || sJobScheduledStartTime.length() <= 0) return new GregorianCalendar(1970, 0, 1, 0, 0, 0);
+		String sJobRequestedStartTime = XMLUtil.getElementValueByName(eJob, "requestedStartTime");
+		if(sJobRequestedStartTime == null || sJobRequestedStartTime.length() <= 0) return new GregorianCalendar(1970, 0, 1, 0, 0, 0);
 		try{
-			GregorianCalendar jobScheduledStartTime = XMLUtil.createNativeDateTime(sJobScheduledStartTime);
-			return jobScheduledStartTime;
+			GregorianCalendar jobRequestedStartTime = XMLUtil.createNativeDateTime(sJobRequestedStartTime);
+			return jobRequestedStartTime;
 		}
 		catch(Exception e){
 			return new GregorianCalendar(1970, 0, 1, 0, 0, 0);
 		}
-	}//getScheduledStartTime
+	}//getRequestedStartTime
 
 	/**
 	 * get the number of job dependencies (in <job> element)
@@ -3084,10 +3084,11 @@ public class OSoLReader extends OSgLReader{
 		//System.out.println(IOUtil.readStringFromFile(OSParameter.CODE_HOME + "OSRepository/test/osol/osol.osol"));
 		//System.out.println(osolReader.readFile(OSParameter.CODE_HOME + "OSRepository/test/osol/osol.osol"));
 		//System.out.println(IOUtil.readStringFromFile("c:/test.osol"));
-		osolReader.readFile("c:/test.osol");
+		osolReader.readFile("c:/parsertest.osol");
+		System.out.println(osolReader.getOtherGeneralOptions()[3].description);
 		//osolReader.readFile("c:/parsertest.osol");
 
-//		System.out.println(osolReader.getOptionStr("scheduledStartTime"));
+//		System.out.println(osolReader.getOptionStr("requestedStartTime"));
 //		System.out.println(osolReader.getOptionDbl("minMemorySize"));
 //		System.out.println(osolReader.getOptionInt("minCPUNumber"));		
 
@@ -3141,7 +3142,7 @@ public class OSoLReader extends OSgLReader{
 
 //		System.out.println(osolReader.getMaxTime());		
 //		System.out.println(osolReader.getMaxTimeUnit());		
-//		System.out.println(XMLUtil.createXSDateTime(osolReader.getScheduledStartTime()));
+//		System.out.println(XMLUtil.createXSDateTime(osolReader.getRequestedStartTime()));
 
 //		int iNumberOfJobDependencies = osolReader.getNumberOfJobDependencies();
 //		System.out.println(iNumberOfJobDependencies);
@@ -3409,7 +3410,7 @@ public class OSoLReader extends OSgLReader{
 
 		////////////////////
 
-
+/*
 		try {
 			OSOption osOption = osolReader.getOSOption();
 			System.out.println(osOption.writeOSoL());;
@@ -3417,7 +3418,7 @@ public class OSoLReader extends OSgLReader{
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-
+*/
 		////////////////////
 
 //		System.out.println(osolReader.getNumberOfSolverOptions());	

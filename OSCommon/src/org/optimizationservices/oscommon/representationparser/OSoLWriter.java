@@ -117,7 +117,7 @@ public class OSoLWriter extends OSgLWriter{
 
 		if(!setMaxTime(osOption.getMaxTime())) throw new Exception("setMaxTime Unsuccessful");		
 		if(!setMaxTimeUnit(osOption.getMaxTimeUnit())) throw new Exception("setMaxTimeUnit Unsuccessful");		
-		if(!setScheduledStartTime(osOption.getScheduledStartTime())) throw new Exception("setScheduledStartTime Unsuccessful");		
+		if(!setRequestedStartTime(osOption.getRequestedStartTime())) throw new Exception("setRequestedStartTime Unsuccessful");		
 		if(!setJobDependencies(osOption.getJobDependencies())) throw new Exception("setJobDependencies Unsuccessful");		
 		if(!setRequiredDirectories(osOption.getRequiredDirectories())) throw new Exception("setRequiredDirectories Unsuccessful");		
 		if(!setRequiredFiles(osOption.getRequiredFiles())) throw new Exception("setRequiredFiles Unsuccessful");		
@@ -250,8 +250,8 @@ public class OSoLWriter extends OSgLWriter{
 		if (optionName.equalsIgnoreCase("maxTimeUnit") ){
 			return this.setMaxTimeUnit(optionValue);
 		}
-		if (optionName.equalsIgnoreCase("scheduledStartTime") ){
-			return this.setScheduledStartTime(XMLUtil.createNativeDateTime(optionValue));
+		if (optionName.equalsIgnoreCase("requestedStartTime") ){
+			return this.setRequestedStartTime(XMLUtil.createNativeDateTime(optionValue));
 		}
 		return false;
 	}//setOptionStr
@@ -1542,12 +1542,12 @@ public class OSoLWriter extends OSgLWriter{
 	}//setMaxTimeUnit
 
 	/**
-	 * Set the scheduled start time for the job.   
+	 * Set the requested start time for the job.   
 	 * 
-	 * @param scheduledStartTime holds the scheduled start time for the job.   
-	 * @return whether the scheduled start time is set successfully.
+	 * @param requestedStartTime holds the requested start time for the job.   
+	 * @return whether the requested start time is set successfully.
 	 */
-	public boolean setScheduledStartTime(GregorianCalendar scheduledStartTime){
+	public boolean setRequestedStartTime(GregorianCalendar requestedStartTime){
 		Node nodeRef = null;
 		try{
 			Element eJob = (Element)XMLUtil.findChildNode(m_eOSoL, "job");
@@ -1573,19 +1573,19 @@ public class OSoLWriter extends OSgLWriter{
 					}		
 				}
 			}
-			if(scheduledStartTime != null && scheduledStartTime.get(GregorianCalendar.YEAR) > 1970){
-				Element eScheduledStartTime = (Element)XMLUtil.findChildNode(eJob, "scheduledStartTime");
-				if(eScheduledStartTime == null){
-					eScheduledStartTime = m_document.createElement("scheduledStartTime");	
-					eScheduledStartTime.appendChild(m_document.createTextNode(XMLUtil.createXSDateTime(scheduledStartTime)));
-					eJob.appendChild(eScheduledStartTime);				
+			if(requestedStartTime != null && requestedStartTime.get(GregorianCalendar.YEAR) > 1970){
+				Element eRequestedStartTime = (Element)XMLUtil.findChildNode(eJob, "requestedStartTime");
+				if(eRequestedStartTime == null){
+					eRequestedStartTime = m_document.createElement("requestedStartTime");	
+					eRequestedStartTime.appendChild(m_document.createTextNode(XMLUtil.createXSDateTime(requestedStartTime)));
+					eJob.appendChild(eRequestedStartTime);				
 				}
 				else{
-					XMLUtil.setElementValue(eScheduledStartTime, XMLUtil.createXSDateTime(scheduledStartTime));
+					XMLUtil.setElementValue(eRequestedStartTime, XMLUtil.createXSDateTime(requestedStartTime));
 				}
 			}
 			else{
-				XMLUtil.removeChildrenByName(eJob, "scheduledStartTime");
+				XMLUtil.removeChildrenByName(eJob, "requestedStartTime");
 			}
 		}
 		catch(Exception e){
@@ -1593,7 +1593,7 @@ public class OSoLWriter extends OSgLWriter{
 			return false;
 		}
 		return true;
-	}//setScheduledStartTime
+	}//setRequestedStartTime
 
 
 	/**
@@ -5028,7 +5028,7 @@ public class OSoLWriter extends OSgLWriter{
 
 //		if(!osolWriter.setMaxTime(9999)) System.out.println("setJobMaxTime Unsuccessful");		
 //		if(!osolWriter.setMaxTimeUnit("second")) System.out.println("setMaxTimeUnit Unsuccessful");		
-//		if(!osolWriter.setScheduledStartTime(new GregorianCalendar(1970, 0, 1, 0, 0, 0))) System.out.println("setJobScheduledStartTime Unsuccessful");		
+//		if(!osolWriter.setRequestedStartTime(new GregorianCalendar(1970, 0, 1, 0, 0, 0))) System.out.println("setJobRequestedStartTime Unsuccessful");		
 //		String[] jobDependencies = {"a1", "b3"};
 //		if(!osolWriter.setJobDependencies(jobDependencies)) System.out.println("setJobDependencies Unsuccessful");		
 //		String[] mDirpaths = {"dp1", "dp3"};

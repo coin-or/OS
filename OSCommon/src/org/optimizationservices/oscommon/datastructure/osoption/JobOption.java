@@ -25,7 +25,7 @@ public class JobOption{
 	
 	public MaxTime maxTime = new MaxTime();
 	
-	public GregorianCalendar scheduledStartTime = new GregorianCalendar(1970, 0, 1, 0, 0, 0);
+	public GregorianCalendar requestedStartTime = new GregorianCalendar(1970, 0, 1, 0, 0, 0);
 	
 	public JobDependencies dependencies = null;
 	

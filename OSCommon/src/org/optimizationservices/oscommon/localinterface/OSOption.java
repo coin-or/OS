@@ -1005,25 +1005,25 @@ public class OSOption {
 	}//setMaxTimeUnit
 
 	/**
-	 * Get the scheduled start time for the job.   
+	 * Get the requested start time for the job.   
 	 * 
-	 * @return the scheduled start time for the job, null or UNIX time (1970/1/1) if none. 
+	 * @return the requested start time for the job, null or UNIX time (1970/1/1) if none. 
 	 */
-	public GregorianCalendar getScheduledStartTime(){ 
-		return job.scheduledStartTime;
-	}//getScheduledStartTime
+	public GregorianCalendar getRequestedStartTime(){ 
+		return job.requestedStartTime;
+	}//getRequestedStartTime
 
 	/**
-	 * Set the scheduled start time for the job.   
+	 * Set the requested start time for the job.   
 	 * 
-	 * @param scheduledStartTime holds the scheduled start time for the job.   
-	 * @return whether the scheduled start time is set successfully.
+	 * @param requestedStartTime holds the requested start time for the job.   
+	 * @return whether the requested start time is set successfully.
 	 */
-	public boolean setScheduledStartTime(GregorianCalendar scheduledStartTime){
-		if(scheduledStartTime.getTimeInMillis() <= 0) job.scheduledStartTime = new GregorianCalendar(1970, 0, 1, 0, 0, 0);
-		else job.scheduledStartTime = scheduledStartTime;
+	public boolean setRequestedStartTime(GregorianCalendar requestedStartTime){
+		if(requestedStartTime.getTimeInMillis() <= 0) job.requestedStartTime = new GregorianCalendar(1970, 0, 1, 0, 0, 0);
+		else job.requestedStartTime = requestedStartTime;
 		return true;
-	}//setScheduledStartTime
+	}//setRequestedStartTime
 
 	/**
 	 * get the number of job dependencies (in <job> element)
