@@ -244,8 +244,8 @@ return(DOUBLE);}
 
 {xmlwhitespace}*\<maxTime {YY_PRINT; return(MAXTIMESTART);}
 {xmlwhitespace}*\<\/maxTime{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MAXTIMEEND);}
-{xmlwhitespace}*\<scheduledStartTime {YY_PRINT; return(SCHEDULEDSTARTTIMESTART);}
-{xmlwhitespace}*\<\/scheduledStartTime{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(SCHEDULEDSTARTTIMEEND);}
+{xmlwhitespace}*\<requestedStartTime {YY_PRINT; return(REQUESTEDSTARTTIMESTART);}
+{xmlwhitespace}*\<\/requestedStartTime{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(REQUESTEDSTARTTIMEEND);}
 {xmlwhitespace}*\<dependencies {YY_PRINT; return(DEPENDENCIESSTART);}
 {xmlwhitespace}*\<\/dependencies{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(DEPENDENCIESEND);}
 {xmlwhitespace}*\<requiredDirectories {YY_PRINT; return(REQUIREDDIRECTORIESSTART);}

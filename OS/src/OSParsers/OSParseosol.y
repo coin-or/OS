@@ -100,7 +100,7 @@ int osollex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token CONTACTSTART CONTACTEND OTHEROPTIONSSTART OTHEROPTIONSEND OTHERSTART OTHEREND;
 %token MINDISKSPACESTART MINDISKSPACEEND MINMEMORYSIZESTART MINMEMORYSIZEEND MINCPUSPEEDSTART MINCPUSPEEDEND;
 %token MINCPUNUMBERSTART MINCPUNUMBEREND SERVICETYPESTART SERVICETYPEEND;
-%token MAXTIMESTART MAXTIMEEND SCHEDULEDSTARTTIMESTART SCHEDULEDSTARTTIMEEND;
+%token MAXTIMESTART MAXTIMEEND REQUESTEDSTARTTIMESTART REQUESTEDSTARTTIMEEND;
 %token DEPENDENCIESSTART DEPENDENCIESEND;
 %token REQUIREDDIRECTORIESSTART REQUIREDDIRECTORIESEND REQUIREDFILESSTART REQUIREDFILESEND;
 %token PATHSTART PATHEND PATHPAIRSTART PATHPAIREND;
@@ -806,7 +806,7 @@ jobbody: GREATERTHAN jobcontent JOBEND
 
 jobcontent: | jobcontent joboption;
 
-joboption: maxtime | scheduledstarttime | dependencies | requireddirectories | requiredfiles
+joboption: maxtime | requestedstarttime | dependencies | requireddirectories | requiredfiles
 | directoriestomake | filestomake | inputdirectoriestomove | inputfilestomove | outputdirectoriestomove
 | outputfilestomove | filestodelete | directoriestodelete | processestokill | otherjoboptions;
 
@@ -848,21 +848,21 @@ maxtimebody: ENDOFELEMENT
 };
 
 
-scheduledstarttime: starttimehead starttimebody;
+requestedstarttime: starttimehead starttimebody;
 
-starttimehead: SCHEDULEDSTARTTIMESTART
-{	if (parserData->scheduledStartTimePresent)
-	{	osolerror( NULL, osoption, parserData, "only one <scheduledStartTime> element allowed");
+starttimehead: REQUESTEDSTARTTIMESTART
+{	if (parserData->requestedStartTimePresent)
+	{	osolerror( NULL, osoption, parserData, "only one <requestedStartTime> element allowed");
 	}
 	else
-	{	parserData->scheduledStartTimePresent = true;
-		osoption->job->scheduledStartTime = "1970-01-01T00:00:00-00:00";
+	{	parserData->requestedStartTimePresent = true;
+		osoption->job->requestedStartTime = "1970-01-01T00:00:00-00:00";
 	}
 };
 
 starttimebody: ENDOFELEMENT
-	| GREATERTHAN SCHEDULEDSTARTTIMEEND
-	| GREATERTHAN ELEMENTTEXT {osoption->job->scheduledStartTime = $2;} SCHEDULEDSTARTTIMEEND;
+	| GREATERTHAN REQUESTEDSTARTTIMEEND
+	| GREATERTHAN ELEMENTTEXT {osoption->job->requestedStartTime = $2;} REQUESTEDSTARTTIMEEND;
 
 dependencies: dependencieshead numberofjobidsatt GREATERTHAN dependencieslist DEPENDENCIESEND;
 

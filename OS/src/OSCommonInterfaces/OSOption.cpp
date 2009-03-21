@@ -365,7 +365,7 @@ Processes::~Processes()
 
 
 JobOption::JobOption():
-	scheduledStartTime("")
+	requestedStartTime("")
 {    
 	#ifdef DEBUG
 	cout << "Inside JobOption Constructor" << endl;
@@ -1427,14 +1427,14 @@ std::string  OSOption::getMaxTimeUnit()
 }//getMaxTimeUnit
 
 /**
- * get the scheduled start time (in <job> element)
+ * get the requested start time (in <job> element)
  */
-std::string  OSOption::getScheduledStartTime()
+std::string  OSOption::getRequestedStartTime()
 {	if (this->job != NULL) 
-		return this->job->scheduledStartTime;
+		return this->job->requestedStartTime;
 
 	return "";
-}//getScheduledStartTime
+}//getRequestedStartTime
 
 /**
  * get the value of a string-valued option
@@ -1494,8 +1494,8 @@ std::string  OSOption::getOptionStr(std::string optionName)
 	if (optionName == "maxTimeUnit") 
 		return this->getMaxTimeUnit();
 
-	if (optionName == "scheduledStartTime") 
-		return this->getScheduledStartTime();
+	if (optionName == "requestedStartTime") 
+		return this->getRequestedStartTime();
 
 	return "";
 }//getOptionStr
@@ -5321,12 +5321,12 @@ bool OSOption::setMaxTimeUnit(std::string unit)
 	}
 }//setMaxTimeUnit
 
-bool OSOption::setScheduledStartTime(std::string time)
+bool OSOption::setRequestedStartTime(std::string time)
 {	if (this->job == NULL) 
 		this->job = new JobOption();
-	this->job->scheduledStartTime = time;
+	this->job->requestedStartTime = time;
 	return true;
-}//setScheduledStartTime
+}//setRequestedStartTime
 
 
 bool OSOption::setJobDependencies(int numberOfDependencies, std::string* jobDependencies)
@@ -6181,8 +6181,8 @@ bool OSOption::setOptionStr(std::string optionName, std::string optionValue)
 	if (optionName == "maxTimeUnit") 
 		return this->setMaxTimeUnit(optionValue);
 
-	if (optionName == "scheduledStartTime") 
-		return this->setScheduledStartTime(optionValue);
+	if (optionName == "requestedStartTime") 
+		return this->setRequestedStartTime(optionValue);
 
 	return false;
 }//setOptionStr
@@ -6430,10 +6430,10 @@ bool JobOption::IsEqual(JobOption *that)
 			return false;
 		}
 		else	
-		{	if (this->scheduledStartTime != that->scheduledStartTime)
+		{	if (this->requestedStartTime != that->requestedStartTime)
 			{
 				#ifdef DEBUG
-				cout << "scheduledStartTime: " << this->scheduledStartTime << " vs. " << that->scheduledStartTime << endl;
+				cout << "requestedStartTime: " << this->requestedStartTime << " vs. " << that->requestedStartTime << endl;
 				#endif
 				return false;
 			}

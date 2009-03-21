@@ -759,8 +759,8 @@ public:
 	/** the maximum time allowed */
 	MaxTime *maxTime;
 
-	/** the scheduled time to start the job */
-	std::string scheduledStartTime;
+	/** the requested time to start the job */
+	std::string requestedStartTime;
 
 	/** the dependency set */
 	JobDependencies *dependencies;
@@ -2541,9 +2541,9 @@ public:
 	std::string  getMaxTimeUnit();
 
 	/**
-	 * Get the scheduled starting time
+	 * Get the requested starting time
 	 */
-	std::string  getScheduledStartTime();
+	std::string  getRequestedStartTime();
 
 	/**
 	 * Get any of the string-valued options
@@ -3289,7 +3289,7 @@ public:
 
 	bool setMaxTimeUnit(std::string unit);
 
-	bool setScheduledStartTime(std::string time);
+	bool setRequestedStartTime(std::string time);
 
 	bool setJobDependencies(int numberOfDependencies, std::string* jobDependencies);
 	bool setAnotherJobDependency(std::string jobID);

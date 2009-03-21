@@ -91,8 +91,8 @@ public:
 	bool maxTimeUnitPresent;
 	double maxTimeValue;
 
-	bool scheduledStartTimePresent;
-	std::string scheduledStartTime;
+	bool requestedStartTimePresent;
+	std::string requestedStartTime;
 
 	bool dependenciesPresent;
 	int numberOfDependencies;

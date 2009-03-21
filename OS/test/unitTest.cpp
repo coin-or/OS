@@ -232,8 +232,9 @@ int main(int argC, char* argV[])
 	DefaultSolver *solver  = NULL;
 	OSiLReader *osilreader = NULL;
 	OSoLReader *osolreader = NULL;
-	OSrLWriter *osrlwriter = NULL;
 	OSrLReader *osrlreader = NULL;
+	OSrLWriter *osrlwriter = NULL;
+	OSrLWriter *tmp_writer = NULL;
 	// end classes    
 	std::string osilFileName;
 	std::string osolFileName;
@@ -817,6 +818,153 @@ int main(int argC, char* argV[])
 		ipoptSolver = NULL;	
 		unitTestResult << "Solved problem callBackRowMajor.osil with Ipopt" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+
+		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on nonconvex.osil" << endl << endl;
+//		OSiLReader *osilreader = NULL;
+		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
+		ok = true; 
+		osilFileName = dataDir  + "osilFiles" + dirsep + "nonconvex.osil";
+//		osolFileName = dataDir  + "osolFiles" + dirsep + "bonminEx1_Couenne.osol";
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
+//		osol = fileUtil->getFileAsString( osolFileName.c_str());
+		osol = "";
+		solver = new IpoptSolver();
+		solver->sSolverName = "ipopt";
+		solver->osil = osil;
+		solver->osol = osol; 
+//		solver->osinstance = osilreader->readOSiL( osil);
+//		solver->osoption   = osolreader->readOSoL( osol);
+		cout << "call the COIN - Ipopt Solver for nonconvex.osil" << endl;
+		solver->buildSolverInstance();
+	
+		std::cout << " CALL SOLVE " << std::endl;
+		solver->solve();
+	
+		cout << "Here is the Ipopt solver solution for nonconvex.osil" << endl;
+
+//		OSrLWriter *tmp_writer;
+		tmp_writer = new OSrLWriter();
+		solver->osrl = tmp_writer->writeOSrL(solver->osresult);
+		delete tmp_writer;
+		tmp_writer = NULL;
+
+		cout << solver->osrl << endl << endl;
+
+//		check = -1.70711;
+//		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+//		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+//		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on nonconvex.osil");
+
+		delete solver;
+		solver = NULL;
+		unitTestResult << "Solved problem nonconvex.osil with Ipopt" << std::endl;
+	
+	
+		delete osilreader;
+		osilreader = NULL;
+		delete osolreader;
+		osolreader = NULL;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+
+		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on rosenbrockorig.osil" << endl << endl;
+//		OSiLReader *osilreader = NULL;
+		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
+		ok = true; 
+		osilFileName = dataDir  + "osilFiles" + dirsep + "rosenbrockorig.osil";
+//		osolFileName = dataDir  + "osolFiles" + dirsep + "rosenbrockorig_Ipopt.osol";
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
+//		osol = fileUtil->getFileAsString( osolFileName.c_str());
+		osol = "";
+		solver = new IpoptSolver();
+		solver->sSolverName = "ipopt";
+		solver->osil = osil;
+		solver->osol = osol; 
+//		solver->osinstance = osilreader->readOSiL( osil);
+//		solver->osoption   = osolreader->readOSoL( osol);
+		cout << "call the COIN - Ipopt Solver for rosenbrockorig" << endl;
+		solver->buildSolverInstance();
+	
+		std::cout << " CALL SOLVE " << std::endl;
+		solver->solve();
+	
+		cout << "Here is the Ipopt solver solution for rosenbrockorig" << endl;
+
+//		OSrLWriter *tmp_writer;
+		tmp_writer = new OSrLWriter();
+		solver->osrl = tmp_writer->writeOSrL(solver->osresult);
+		delete tmp_writer;
+		tmp_writer = NULL;
+
+		cout << solver->osrl << endl << endl;
+
+//		check = -1.70711;
+//		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+//		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+//		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on rosenbrockorig.osil");
+
+		delete solver;
+		solver = NULL;
+		unitTestResult << "Solved problem rosenbrockorig.osil with Ipopt" << std::endl;
+	
+	
+		delete osilreader;
+		osilreader = NULL;
+		delete osolreader;
+		osolreader = NULL;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+
+		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on HS071_feas.osil" << endl << endl;
+//		OSiLReader *osilreader = NULL;
+		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
+		ok = true; 
+		osilFileName = dataDir  + "osilFiles" + dirsep + "HS071_feas.osil";
+//		osolFileName = dataDir  + "osolFiles" + dirsep + "HS071_feas_Ipopt.osol";
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
+//		osol = fileUtil->getFileAsString( osolFileName.c_str());
+		osol = "";
+		solver = new IpoptSolver();
+		solver->sSolverName = "ipopt";
+		solver->osil = osil;
+		solver->osol = osol; 
+//		solver->osinstance = osilreader->readOSiL( osil);
+//		solver->osoption   = osolreader->readOSoL( osol);
+		cout << "call the COIN - Ipopt Solver for HS071_feas.osil" << endl;
+		solver->buildSolverInstance();
+	
+		std::cout << " CALL SOLVE " << std::endl;
+		solver->solve();
+	
+		cout << "Here is the Ipopt solver solution for HS071_feas" << endl;
+
+//		OSrLWriter *tmp_writer;
+		tmp_writer = new OSrLWriter();
+		solver->osrl = tmp_writer->writeOSrL(solver->osresult);
+		delete tmp_writer;
+		tmp_writer = NULL;
+
+		cout << solver->osrl << endl << endl;
+
+//		check = -1.70711;
+//		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+//		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+//		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on HS071_feas.osil");
+
+		delete solver;
+		solver = NULL;
+		unitTestResult << "Solved problem HS071_feas with Ipopt" << std::endl;
+	
+	
+		delete osilreader;
+		osilreader = NULL;
+		delete osolreader;
+		osolreader = NULL;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+//================================================================
+
+
 #endif
 	}
 	catch(const ErrorClass& eclass){
@@ -968,12 +1116,14 @@ int main(int argC, char* argV[])
 		cout << endl << endl << endl;
 		unitTestResultFailure  << "Sorry Unit Test Failed Testing the Bonmin Solver:"  + eclass.errormsg << endl;
 	}	
-	#endif
+#endif
 
 
 #ifdef COIN_HAS_COUENNE
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Couenne solver on bonminEx1.osil" << endl << endl;
+		CouenneSolver *solver = NULL;
+
 //		OSiLReader *osilreader = NULL;
 		osilreader = new OSiLReader(); 
 		osolreader = new OSoLReader(); 
@@ -982,7 +1132,6 @@ int main(int argC, char* argV[])
 		osolFileName = dataDir  + "osolFiles" + dirsep + "bonminEx1_Couenne.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
-		CouenneSolver *solver = NULL;
 		solver = new CouenneSolver();
 		solver->sSolverName = "bonmin";
 		solver->osil = osil;
@@ -997,7 +1146,6 @@ int main(int argC, char* argV[])
 	
 		cout << "Here is the Couenne solver solution for bonminEx1" << endl;
 
-		OSrLWriter *tmp_writer;
 		tmp_writer = new OSrLWriter();
 		solver->osrl = tmp_writer->writeOSrL(solver->osresult);
 		delete tmp_writer;
@@ -1018,6 +1166,203 @@ int main(int argC, char* argV[])
 		delete osolreader;
 		osolreader = NULL;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+
+#ifdef THOROUGH   
+		cout << endl << "TEST " << ++nOfTest << ": Couenne solver on bonminEx1_Nonlinear.osil" << endl << endl;
+//		OSiLReader *osilreader = NULL;
+		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
+		ok = true; 
+		osilFileName = dataDir  + "osilFiles" + dirsep + "bonminEx1_Nonlinear.osil";
+//		osolFileName = dataDir  + "osolFiles" + dirsep + "bonminEx1_Couenne.osol";
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
+//		osol = fileUtil->getFileAsString( osolFileName.c_str());
+		osol = "";
+		solver = new CouenneSolver();
+		solver->sSolverName = "bonmin";
+		solver->osil = osil;
+		solver->osol = osol; 
+//		solver->osinstance = osilreader->readOSiL( osil);
+//		solver->osoption   = osolreader->readOSoL( osol);
+		cout << "call the COIN - Couenne Solver for bonminEx1_Nonlinear" << endl;
+		solver->buildSolverInstance();
+	
+		std::cout << " CALL SOLVE " << std::endl;
+		solver->solve();
+	
+		cout << "Here is the Couenne solver solution for bonminEx1_Nonlinear.osil" << endl;
+
+//		OSrLWriter *tmp_writer;
+		tmp_writer = new OSrLWriter();
+		solver->osrl = tmp_writer->writeOSrL(solver->osresult);
+		delete tmp_writer;
+		tmp_writer = NULL;
+
+		cout << solver->osrl << endl << endl;
+
+//		check = -1.70711;
+//		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+//		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+//		if(ok == false) throw ErrorClass(" Fail unit test with Couenne on bonminEx1_Nonlinear.osil");
+
+		delete solver;
+		solver = NULL;
+		unitTestResult << "Solved problem bonminEx1_Nonlinear with Couenne" << std::endl;
+	
+	
+		delete osilreader;
+		osilreader = NULL;
+		delete osolreader;
+		osolreader = NULL;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+
+
+		cout << endl << "TEST " << ++nOfTest << ": Couenne solver on nonconvex.osil" << endl << endl;
+//		OSiLReader *osilreader = NULL;
+		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
+		ok = true; 
+		osilFileName = dataDir  + "osilFiles" + dirsep + "nonconvex.osil";
+//		osolFileName = dataDir  + "osolFiles" + dirsep + "bonminEx1_Couenne.osol";
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
+//		osol = fileUtil->getFileAsString( osolFileName.c_str());
+		osol = "";
+		solver = new CouenneSolver();
+		solver->sSolverName = "bonmin";
+		solver->osil = osil;
+		solver->osol = osol; 
+//		solver->osinstance = osilreader->readOSiL( osil);
+//		solver->osoption   = osolreader->readOSoL( osol);
+		cout << "call the COIN - Couenne Solver for nonconvex.osil" << endl;
+		solver->buildSolverInstance();
+	
+		std::cout << " CALL SOLVE " << std::endl;
+		solver->solve();
+	
+		cout << "Here is the Couenne solver solution for nonconvex.osil" << endl;
+
+//		OSrLWriter *tmp_writer;
+		tmp_writer = new OSrLWriter();
+		solver->osrl = tmp_writer->writeOSrL(solver->osresult);
+		delete tmp_writer;
+		tmp_writer = NULL;
+
+		cout << solver->osrl << endl << endl;
+
+//		check = -1.70711;
+//		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+//		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+//		if(ok == false) throw ErrorClass(" Fail unit test with Couenne on nonconvex.osil");
+
+		delete solver;
+		solver = NULL;
+		unitTestResult << "Solved problem nonconvex.osil with Couenne" << std::endl;
+	
+	
+		delete osilreader;
+		osilreader = NULL;
+		delete osolreader;
+		osolreader = NULL;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+
+		cout << endl << "TEST " << ++nOfTest << ": Couenne solver on rosenbrockorig.osil" << endl << endl;
+//		OSiLReader *osilreader = NULL;
+		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
+		ok = true; 
+		osilFileName = dataDir  + "osilFiles" + dirsep + "rosenbrockorig.osil";
+//		osolFileName = dataDir  + "osolFiles" + dirsep + "rosenbrockorig_Couenne.osol";
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
+//		osol = fileUtil->getFileAsString( osolFileName.c_str());
+		osol = "";
+		solver = new CouenneSolver();
+		solver->sSolverName = "bonmin";
+		solver->osil = osil;
+		solver->osol = osol; 
+//		solver->osinstance = osilreader->readOSiL( osil);
+//		solver->osoption   = osolreader->readOSoL( osol);
+		cout << "call the COIN - Couenne Solver for rosenbrockorig" << endl;
+		solver->buildSolverInstance();
+	
+		std::cout << " CALL SOLVE " << std::endl;
+		solver->solve();
+	
+		cout << "Here is the Couenne solver solution for rosenbrockorig" << endl;
+
+//		OSrLWriter *tmp_writer;
+		tmp_writer = new OSrLWriter();
+		solver->osrl = tmp_writer->writeOSrL(solver->osresult);
+		delete tmp_writer;
+		tmp_writer = NULL;
+
+		cout << solver->osrl << endl << endl;
+
+//		check = -1.70711;
+//		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+//		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+//		if(ok == false) throw ErrorClass(" Fail unit test with Couenne on rosenbrockorig.osil");
+
+		delete solver;
+		solver = NULL;
+		unitTestResult << "Solved problem rosenbrockorig.osil with Couenne" << std::endl;
+	
+	
+		delete osilreader;
+		osilreader = NULL;
+		delete osolreader;
+		osolreader = NULL;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+
+		cout << endl << "TEST " << ++nOfTest << ": Couenne solver on HS071_feas.osil" << endl << endl;
+//		OSiLReader *osilreader = NULL;
+		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
+		ok = true; 
+		osilFileName = dataDir  + "osilFiles" + dirsep + "HS071_feas.osil";
+//		osolFileName = dataDir  + "osolFiles" + dirsep + "HS071_feas_Couenne.osol";
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
+//		osol = fileUtil->getFileAsString( osolFileName.c_str());
+		osol = "";
+		solver = new CouenneSolver();
+		solver->sSolverName = "bonmin";
+		solver->osil = osil;
+		solver->osol = osol; 
+//		solver->osinstance = osilreader->readOSiL( osil);
+//		solver->osoption   = osolreader->readOSoL( osol);
+		cout << "call the COIN - Couenne Solver for HS071_feas.osil" << endl;
+		solver->buildSolverInstance();
+	
+		std::cout << " CALL SOLVE " << std::endl;
+		solver->solve();
+	
+		cout << "Here is the Couenne solver solution for HS071_feas" << endl;
+
+//		OSrLWriter *tmp_writer;
+		tmp_writer = new OSrLWriter();
+		solver->osrl = tmp_writer->writeOSrL(solver->osresult);
+		delete tmp_writer;
+		tmp_writer = NULL;
+
+		cout << solver->osrl << endl << endl;
+
+//		check = -1.70711;
+//		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+//		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+//		if(ok == false) throw ErrorClass(" Fail unit test with Couenne on HS071_feas.osil");
+
+		delete solver;
+		solver = NULL;
+		unitTestResult << "Solved problem HS071_feas with Couenne" << std::endl;
+	
+	
+		delete osilreader;
+		osilreader = NULL;
+		delete osolreader;
+		osolreader = NULL;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+
+#endif
+
 	}
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  solver->osrl <<  endl;
@@ -2276,11 +2621,11 @@ int main(int argC, char* argV[])
 			throw ErrorClass(" error in get/set MaxTimeUnit");
 #endif
 
-		optionstring = osoption->getScheduledStartTime();
-		ok = osoption2->setScheduledStartTime(optionstring) && ok;
+		optionstring = osoption->getRequestedStartTime();
+		ok = osoption2->setRequestedStartTime(optionstring) && ok;
 #ifdef DEBUG
 		if (!ok)
-			throw ErrorClass(" error in get/set ScheduledStartTime");
+			throw ErrorClass(" error in get/set RequestedStartTime");
 #endif
 
 		nopt = osoption->getNumberOfJobDependencies();

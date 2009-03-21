@@ -215,8 +215,8 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 			else
 				outStr << os_dtoa_format(m_OSOption->job->maxTime->value) << "</maxTime>" << endl;
 		}
-		if (m_OSOption->job->scheduledStartTime != "")
-			outStr << "<scheduledStartTime>" << m_OSOption->job->scheduledStartTime << "</scheduledStartTime>" << endl;
+		if (m_OSOption->job->requestedStartTime != "")
+			outStr << "<requestedStartTime>" << m_OSOption->job->requestedStartTime << "</requestedStartTime>" << endl;
 		cout << "Before <dependencies>" << endl;
 		if (m_OSOption->job->dependencies != NULL)
 		{	cout << "Starting <dependencies>" << endl;

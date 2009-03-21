@@ -23,7 +23,7 @@
 		<requiredDirectories numberOfPaths="1">
 			<path>c:\temp</path>
 		</requiredDirectories>
-		<scheduledStartTime>1970-01-01T00:00:00-00:00</scheduledStartTime>
+                <requestedStartTime>1970-01-01T00:00:00-00:00</requestedStartTime>
 		<outputDirectoriesToMove numberOfPathPairs="1">
 			<pathPair to="C:\junk" from="C:\datafiles" makeCopy="false"></pathPair>
 		</outputDirectoriesToMove>

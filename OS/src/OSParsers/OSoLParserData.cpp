@@ -56,7 +56,7 @@
 
 	maxTimePresent(false),
 	maxTimeUnitPresent(false),
-	scheduledStartTimePresent(false),
+	requestedStartTimePresent(false),
 	dependenciesPresent(false),
 	numberOfDependencies(0),
 	requiredDirectoriesPresent(false),

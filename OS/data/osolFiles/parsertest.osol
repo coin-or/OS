@@ -71,7 +71,7 @@
 		<processesToKill numberOfProcesses="1">	
 			<process>XYZbb</process>
 		</processesToKill>
-		<scheduledStartTime>1970-01-01T00:00:00-00:00</scheduledStartTime>
+                <requestedStartTime>1970-01-01T00:00:00-00:00</requestedStartTime>
 		<requiredFiles numberOfPaths="1">
 			<path>C:\DataFiles\RESEARCH\OS\OS-trunk-test\OS\data\osolfiles\parsertest.osol</path>
 		</requiredFiles>
