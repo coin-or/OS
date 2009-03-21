@@ -403,6 +403,15 @@ OS/stylesheets/OSrL.xslt -text
 OS/test/Makefile.am -text
 OS/test/Makefile.in -text
 OS/test/unitTest.cpp -text
+OS/wsdl/1.0/OScL.wsdl -text
+OS/wsdl/1.0/OSdL.wsdl -text
+OS/wsdl/1.0/OShL.wsdl -text
+OS/wsdl/1.5/OScL.wsdl -text
+OS/wsdl/1.5/OSdL.wsdl -text
+OS/wsdl/1.5/OShL.wsdl -text
+OS/wsdl/2.0/OScL.wsdl -text
+OS/wsdl/2.0/OSdL.wsdl -text
+OS/wsdl/2.0/OShL.wsdl -text
 OS/wsdl/OScL.wsdl -text
 OS/wsdl/OSdL.wsdl -text
 OS/wsdl/OShL.wsdl -text
