@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" elementFormDefault="qualified">
+	<!--OSParameter:  version - 1.5.0 -->
+	<xs:element name="osParameter" type="OSParameter">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSParameter">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="param" type="Param" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Param" mixed="false">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="name" type="xs:string" use="required"/>
+				<xs:attribute name="description" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+</xs:schema>
