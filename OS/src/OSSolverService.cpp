@@ -1056,10 +1056,13 @@ std::string setSolverName( std::string osol, std::string solverName){
 	osoption = osolreader->readOSoL( osol);
 	std::cout <<  "invoke getSolverToInvoke" << std::endl;
 	osoption->setSolverToInvoke( solverName);
+	std::cout <<  "Solver Name =  " << solverName << std::endl;
 	std::cout <<  "done with invoke getSolverToInvoke" << std::endl;
 	OSoLWriter *osolwriter = NULL;
 	osolwriter = new OSoLWriter();
 	std::string newOSoL = osolwriter->writeOSoL( osoption);
+	std::cout << "NEW OSOL" << std::endl;
+	std::cout << newOSoL << std::endl;
 //	delete osoption;
 	delete osolreader;
 	delete osolwriter;
