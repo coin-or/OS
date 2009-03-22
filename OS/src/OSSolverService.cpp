@@ -76,6 +76,7 @@
 #include "OSrLWriter.h"      
 #include "OSInstance.h"  
 #include "OSOption.h"
+#include "OSoLWriter.h"
 #include "OSFileUtil.h"  
 #include "OSConfig.h"  
 #include "OSDefaultSolver.h"  
@@ -183,9 +184,10 @@ void knock();
 // additional methods
 void getOSiLFromNl(); 
 void getOSiLFromMps();
-string getServiceURI( std::string osol);
-string getInstanceLocation( std::string osol);
-string getSolverName( std::string osol);
+std::string getServiceURI( std::string osol);
+std::string getInstanceLocation( std::string osol);
+std::string getSolverName( std::string osol);
+std::string setSolverName( std::string osol, std::string solverName);
 
 //options structure
 // this is the only global variable but 
@@ -432,18 +434,16 @@ void solve(){
 				//see if there is an osol file
 				if(osoptions->osol != ""){// we have an osol string
 					// see if a solver is listed, if so don't do anything
-					iStringpos = osoptions->osol.find("os_solver");
+					iStringpos = osoptions->osol.find("solverToInvoke");					
 					if(iStringpos == std::string::npos) { //don't have a solver specify, we must do so
-						iStringpos = osoptions->osol.find("</osol");
-							osoptions->osol.insert(iStringpos, "<other name=\"os_solver\">"
-							+ osoptions->solverName  + "</other>");
+						osoptions->osol = setSolverName(osoptions->osol, osoptions->solverName);
 					}
 				}
 				else{// no osol string
-					osoptions->osol = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/OSoL.xsd\"><other> </other></osol>";	
+					osoptions->osol = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSoL.xsd\"><other> </other></osol>";	
 					iStringpos = osoptions->osol.find("</osol");
-					osoptions->osol.insert(iStringpos, "<other name=\"os_solver\">"
-							+ osoptions->solverName  + "</other>");
+					osoptions->osol.insert(iStringpos, "<general><solverToInvoke>"
+							+ osoptions->solverName  + "</solverToInvoke></general>");
 				}
 			}
 			std::cout  << std::endl;
@@ -1045,6 +1045,26 @@ std::string getSolverName( std::string osol){
 	else return "";
 	*/
 }//getSolverName
+
+
+
+std::string setSolverName( std::string osol, std::string solverName){
+	std::cout << "inside setSolverName" << std::endl;
+	OSOption *osoption = NULL;
+	OSoLReader *osolreader = NULL;
+	osolreader = new OSoLReader();
+	osoption = osolreader->readOSoL( osol);
+	std::cout <<  "invoke getSolverToInvoke" << std::endl;
+	osoption->setSolverToInvoke( solverName);
+	std::cout <<  "done with invoke getSolverToInvoke" << std::endl;
+	OSoLWriter *osolwriter = NULL;
+	osolwriter = new OSoLWriter();
+	std::string newOSoL = osolwriter->writeOSoL( osoption);
+//	delete osoption;
+	delete osolreader;
+	delete osolwriter;
+	return newOSoL;
+}//setSolverName
 
 std::string get_help(){
 
