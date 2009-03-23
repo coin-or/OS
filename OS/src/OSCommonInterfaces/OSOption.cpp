@@ -6,7 +6,7 @@
  * @since   OS1.1
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2009, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, Dalhousie University and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
@@ -14,8 +14,8 @@
  * 
  */
 
-#ifndef DEBUG
-#define DEBUG
+#ifdef  DEBUG
+#define DEBUG_OSOPTION
 #endif
 
 #include "OSOption.h"
@@ -33,14 +33,14 @@ InstanceLocationOption::InstanceLocationOption():
 	locationType ("local"),
 	value ("")
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside InstanceLocationOption Constructor" << endl;
 	#endif
 }// end InstanceLocationOption constructor  
 
 InstanceLocationOption::~InstanceLocationOption()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "InstanceLocationOption Destructor Called" << endl;
 	#endif
 }//end InstanceLocationOption destructor 
@@ -50,14 +50,14 @@ ContactOption::ContactOption():
 	transportType ("osp"),
 	value ("")
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside ContactOption Constructor" << endl;
 	#endif
 }// end ContactOption constructor 
 
 ContactOption::~ContactOption()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "ContactOption Destructor Called" << endl;
 	#endif
 }//end ContactOption destructor
@@ -68,14 +68,14 @@ OtherOption::OtherOption():
 	value (""),
 	description ("")
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside OtherOption Constructor" << endl;
 	#endif
 }// end OtherOption constructor 
 
 OtherOption::~OtherOption()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "OtherOption Destructor Called" << endl;
 	#endif
 }//end OtherOption destructor
@@ -84,7 +84,7 @@ OtherOption::~OtherOption()
 OtherOptions::OtherOptions(): 
 	numberOfOtherOptions(0)
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside OtherOptions Constructor" << endl;
 	#endif
 	other = NULL;
@@ -92,7 +92,7 @@ OtherOptions::OtherOptions():
 
 OtherOptions::~OtherOptions()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "OtherOptions Destructor Called" << endl;
 	#endif
 
@@ -118,7 +118,7 @@ GeneralOption::GeneralOption():
 	userName (""),
 	password ("")
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside GeneralOption Constructor" << endl;
 	#endif
 	instanceLocation = NULL;
@@ -128,7 +128,7 @@ GeneralOption::GeneralOption():
 
 GeneralOption::~GeneralOption()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "GeneralOption Destructor Called" << endl;
 	#endif
 	if (instanceLocation != NULL) delete instanceLocation;
@@ -144,14 +144,14 @@ MinDiskSpace::MinDiskSpace():
 	unit ("byte"),
 	value (0.0)
 {
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside MinDiskSpace Constructor" << endl;
 	#endif
 }// end MinDiskSpace constructor
 
 MinDiskSpace::~MinDiskSpace()
 {
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "MinDiskSpace Destructor Called" << endl;
 	#endif
 }// end MinDiskSpace constructor
@@ -161,14 +161,14 @@ MinMemorySize::MinMemorySize():
 	unit ("byte"),
 	value (0.0)
 {
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside MinMemorySize Constructor" << endl;
 	#endif
 }// end MinMemorySize constructor
 
 MinMemorySize::~MinMemorySize()
 {
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "MinMemorySize Destructor Called" << endl;
 	#endif
 }// end MinMemorySize constructor
@@ -178,14 +178,14 @@ MinCPUSpeed::MinCPUSpeed():
 	unit ("hertz"),
 	value (0.0)
 {
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside MinCPUSpeed Constructor" << endl;
 	#endif
 }// end MinCPUSpeed constructor
 
 MinCPUSpeed::~MinCPUSpeed()
 {
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "MinCPUSpeed Destructor Called" << endl;
 	#endif
 }// end MinCPUSpeed constructor
@@ -194,7 +194,7 @@ MinCPUSpeed::~MinCPUSpeed()
 SystemOption::SystemOption(): 
 	minCPUNumber (1)
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside SystemOption Constructor" << endl;
 	#endif
 	minDiskSpace = NULL;
@@ -205,7 +205,7 @@ SystemOption::SystemOption():
 
 SystemOption::~SystemOption()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "SystemOption Destructor Called" << endl;
 	#endif
 	if (minDiskSpace != NULL) delete minDiskSpace;
@@ -222,7 +222,7 @@ SystemOption::~SystemOption()
 ServiceOption::ServiceOption(): 
 	type ("solver")
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside ServiceOption Constructor" << endl;
 	#endif
 	otherOptions = NULL;
@@ -230,7 +230,7 @@ ServiceOption::ServiceOption():
 
 ServiceOption::~ServiceOption()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "ServiceOption Destructor Called" << endl;
 	#endif
 	if (otherOptions != NULL) delete otherOptions;
@@ -242,14 +242,14 @@ MaxTime::MaxTime():
 	unit ("second"),
 	value (OSDBL_MAX)
 {
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside MaxTime Constructor" << endl;
 	#endif
 }// end MaxTime constructor
 
 MaxTime::~MaxTime()
 {
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "MaxTime Destructor Called" << endl;
 	#endif
 }// end MaxTime constructor
@@ -258,7 +258,7 @@ MaxTime::~MaxTime()
 JobDependencies::JobDependencies():
 	numberOfJobIDs (0)
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside JobDependencies Constructor" << endl;
 	#endif
 	jobID = NULL;
@@ -266,7 +266,7 @@ JobDependencies::JobDependencies():
 
 JobDependencies::~JobDependencies()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "JobDependencies Destructor Called" << endl;
 	#endif
 
@@ -280,7 +280,7 @@ JobDependencies::~JobDependencies()
 DirectoriesAndFiles::DirectoriesAndFiles():
 	numberOfPaths (0)
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside DirectoriesAndFiles Constructor" << endl;
 	#endif
 	path = NULL;
@@ -288,7 +288,7 @@ DirectoriesAndFiles::DirectoriesAndFiles():
 
 DirectoriesAndFiles::~DirectoriesAndFiles()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "DirectoriesAndFiles Destructor Called" << endl;
 	#endif
 	if (path != NULL) 
@@ -303,14 +303,14 @@ PathPair::PathPair():
 	to (""),
 	makeCopy (false)
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside PathPair Constructor" << endl;
 	#endif
 }// end PathPair constructor  
 
 PathPair::~PathPair()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "PathPair Destructor Called" << endl;
 	#endif
 }//end PathPair destructor 
@@ -319,7 +319,7 @@ PathPair::~PathPair()
 PathPairs::PathPairs():
 	numberOfPathPairs(0)
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside PathPairs Constructor" << endl;
 	#endif
 	pathPair = NULL;
@@ -327,7 +327,7 @@ PathPairs::PathPairs():
 
 PathPairs::~PathPairs()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "PathPairs Destructor Called" << endl;
 	#endif
 	int i;
@@ -346,7 +346,7 @@ PathPairs::~PathPairs()
 Processes::Processes():
 	numberOfProcesses(0)
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside Processes Constructor" << endl;
 	#endif
 	process = NULL;
@@ -354,7 +354,7 @@ Processes::Processes():
 
 Processes::~Processes()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Processes Destructor Called" << endl;
 	#endif
 	if (process != NULL) 
@@ -367,7 +367,7 @@ Processes::~Processes()
 JobOption::JobOption():
 	requestedStartTime("")
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside JobOption Constructor" << endl;
 	#endif
 	maxTime = NULL;
@@ -388,7 +388,7 @@ JobOption::JobOption():
 
 JobOption::~JobOption()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "JobOption Destructor Called" << endl;
 	#endif
 	if (maxTime != NULL) delete maxTime;
@@ -426,14 +426,14 @@ InitVarValue::InitVarValue():
 	idx (-1),
 	value (OSNAN)
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside InitVarValue Constructor" << endl;
 	#endif
 }// end InitVarValue constructor  
 
 InitVarValue::~InitVarValue()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "InitVarValue Destructor Called" << endl;
 	#endif
 }//end InitVarValue destructor 
@@ -442,7 +442,7 @@ InitVarValue::~InitVarValue()
 InitVariableValues::InitVariableValues():
 	numberOfVar (0)
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside InitVariableValues Constructor" << endl;
 	#endif
 	var = NULL;
@@ -450,7 +450,7 @@ InitVariableValues::InitVariableValues():
 
 InitVariableValues::~InitVariableValues()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "InitVariableValues Destructor Called" << endl;
 	#endif
 	int i;
@@ -469,14 +469,14 @@ InitVarValueString::InitVarValueString():
 	idx (-1),
 	value ("")
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside InitVarValueString Constructor" << endl;
 	#endif
 }// end InitVarValueString constructor  
 
 InitVarValueString::~InitVarValueString()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "InitVarValueString Destructor Called" << endl;
 	#endif
 }//end InitVarValueString destructor 
@@ -485,7 +485,7 @@ InitVarValueString::~InitVarValueString()
 InitVariableValuesString::InitVariableValuesString():
 	numberOfVar (0)
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside InitVariableValuesString Constructor" << endl;
 	#endif
 	var = NULL;
@@ -493,7 +493,7 @@ InitVariableValuesString::InitVariableValuesString():
 
 InitVariableValuesString::~InitVariableValuesString()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "InitVariableValuesString Destructor Called" << endl;
 	#endif
 	int i;
@@ -511,14 +511,14 @@ InitBasStatus::InitBasStatus():
 	idx (-1),
 	value ("unknown")
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside InitBasStatus Constructor" << endl;
 	#endif
 }// end InitBasStatus constructor  
 
 InitBasStatus::~InitBasStatus()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "InitBasStatus Destructor Called" << endl;
 	#endif
 }//end InitBasStatus destructor 
@@ -527,7 +527,7 @@ InitBasStatus::~InitBasStatus()
 InitialBasisStatus::InitialBasisStatus():
 	numberOfVar (0)
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside InitialBasisStatus Constructor" << endl;
 	#endif
 	var = NULL;
@@ -535,7 +535,7 @@ InitialBasisStatus::InitialBasisStatus():
 
 InitialBasisStatus::~InitialBasisStatus()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "InitialBasisStatus Destructor Called" << endl;
 	#endif
 	if (var != NULL) 
@@ -553,14 +553,14 @@ BranchingWeight::BranchingWeight():
 	idx (-1),
 	value (0.0)
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside BranchingWeight Constructor" << endl;
 	#endif
 }// end BranchingWeight constructor  
 
 BranchingWeight::~BranchingWeight()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "BranchingWeight Destructor Called" << endl;
 	#endif
 }//end BranchingWeight destructor 
@@ -569,7 +569,7 @@ BranchingWeight::~BranchingWeight()
 IntegerVariableBranchingWeights::IntegerVariableBranchingWeights():
 	numberOfVar (0)
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside IntegerVariableBranchingWeights Constructor" << endl;
 	#endif
 	var = NULL;
@@ -577,7 +577,7 @@ IntegerVariableBranchingWeights::IntegerVariableBranchingWeights():
 
 IntegerVariableBranchingWeights::~IntegerVariableBranchingWeights()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "IntegerVariableBranchingWeights Destructor Called; numberOfVar=" << numberOfVar << endl;
 	#endif
 	if (var != NULL) 
@@ -596,7 +596,7 @@ SOSWeights::SOSWeights():
 	groupWeight (1.0),
 	numberOfVar (0)
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside SOSWeights Constructor" << endl;
 	#endif
 	var = NULL;
@@ -604,7 +604,7 @@ SOSWeights::SOSWeights():
 
 SOSWeights::~SOSWeights()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "SOSWeights Destructor Called" << endl;
 	#endif
 	if (var != NULL) 
@@ -621,7 +621,7 @@ SOSWeights::~SOSWeights()
 SOSVariableBranchingWeights::SOSVariableBranchingWeights():
 	numberOfSOS (0)
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside SOSVariableBranchingWeights Constructor" << endl;
 	#endif
 	sos = NULL;
@@ -629,7 +629,7 @@ SOSVariableBranchingWeights::SOSVariableBranchingWeights():
 
 SOSVariableBranchingWeights::~SOSVariableBranchingWeights()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "SOSVariableBranchingWeights Destructor Called" << endl;
 	#endif
 	if (sos != NULL) 
@@ -649,14 +649,14 @@ OtherVarOption::OtherVarOption():
 	lbValue (""),
 	ubValue ("")
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside OtherVarOption Constructor" << endl;
 	#endif
 }// end OtherVarOption constructor  
 
 OtherVarOption::~OtherVarOption()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "OtherVarOption Destructor Called" << endl;
 	#endif
 }//end OtherVarOption destructor 
@@ -671,7 +671,7 @@ OtherVariableOption::OtherVariableOption():
 	type ("string"),
 	description ("")
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside OtherVariableOption Constructor" << endl;
 	#endif
 	var = NULL;
@@ -679,7 +679,7 @@ OtherVariableOption::OtherVariableOption():
 
 OtherVariableOption::~OtherVariableOption()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "OtherVariableOption Destructor Called" << endl;
 	#endif
 	if (var != NULL) 
@@ -697,7 +697,7 @@ OtherVariableOption::~OtherVariableOption()
 VariableOption::VariableOption():
 	numberOfOtherVariableOptions(0)
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside VariableOption Constructor" << endl;
 	#endif
 	initialVariableValues = NULL;
@@ -710,7 +710,7 @@ VariableOption::VariableOption():
 
 VariableOption::~VariableOption()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "VariableOption Destructor Called" << endl;
 	#endif
 	if (initialVariableValues != NULL) delete initialVariableValues;
@@ -741,14 +741,14 @@ InitObjValue::InitObjValue():
 	idx (-1),
 	value (OSNAN)
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside InitObjValue Constructor" << endl;
 	#endif
 }// end InitObjValue constructor  
 
 InitObjValue::~InitObjValue()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "InitObjValue Destructor Called" << endl;
 	#endif
 }//end InitObjValue destructor 
@@ -757,7 +757,7 @@ InitObjValue::~InitObjValue()
 InitObjectiveValues::InitObjectiveValues():
 	numberOfObj (0)
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside InitObjectiveValues Constructor" << endl;
 	#endif
 	obj = NULL;
@@ -765,7 +765,7 @@ InitObjectiveValues::InitObjectiveValues():
 
 InitObjectiveValues::~InitObjectiveValues()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "InitObjectiveValues Destructor Called" << endl;
 	#endif
 	if (obj != NULL) 
@@ -785,14 +785,14 @@ InitObjBound::InitObjBound():
 	lbValue (-OSDBL_MAX),
 	ubValue ( OSDBL_MAX)
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside InitObjBound Constructor" << endl;
 	#endif
 }// end  constructor  template
 
 InitObjBound::~InitObjBound()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "InitObjBound Destructor Called" << endl;
 	#endif
 }//end InitObjBound destructor 
@@ -801,7 +801,7 @@ InitObjBound::~InitObjBound()
 InitObjectiveBounds::InitObjectiveBounds():
 	numberOfObj (0)
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside InitObjectiveBounds Constructor" << endl;
 	#endif
 	obj = NULL;
@@ -809,7 +809,7 @@ InitObjectiveBounds::InitObjectiveBounds():
 
 InitObjectiveBounds::~InitObjectiveBounds()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "InitObjectiveBounds Destructor Called" << endl;
 	#endif
 	if (obj != NULL) 
@@ -830,14 +830,14 @@ OtherObjOption::OtherObjOption():
 	lbValue (""),
 	ubValue ("")
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside OtherObjOption Constructor" << endl;
 	#endif
 }// end OtherObjOption constructor  
 
 OtherObjOption::~OtherObjOption()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "OtherObjOption Destructor Called" << endl;
 	#endif
 }//end OtherObjOption destructor 
@@ -852,7 +852,7 @@ OtherObjectiveOption::OtherObjectiveOption():
 	type ("string"),
 	description ("")
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside OtherObjectiveOption Constructor" << endl;
 	#endif
 	obj = NULL;
@@ -860,7 +860,7 @@ OtherObjectiveOption::OtherObjectiveOption():
 
 OtherObjectiveOption::~OtherObjectiveOption()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "OtherObjectiveOption Destructor Called" << endl;
 	#endif
 	if (obj != NULL) 
@@ -878,7 +878,7 @@ OtherObjectiveOption::~OtherObjectiveOption()
 ObjectiveOption::ObjectiveOption(): 
 	numberOfOtherObjectiveOptions (0)
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside ObjectiveOption Constructor" << endl;
 	#endif
 	initialObjectiveValues = NULL;
@@ -888,7 +888,7 @@ ObjectiveOption::ObjectiveOption():
 
 ObjectiveOption::~ObjectiveOption()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "ObjectiveOption Destructor Called" << endl;
 	#endif
 	if (initialObjectiveValues != NULL) delete initialObjectiveValues;
@@ -911,14 +911,14 @@ InitConValue::InitConValue():
 	idx (0),
 	value (OSNAN)
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside InitConValue Constructor" << endl;
 	#endif
 }// end InitConValue constructor  
 
 InitConValue::~InitConValue()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "InitConValue Destructor Called" << endl;
 	#endif
 }//end InitConValue destructor 
@@ -927,7 +927,7 @@ InitConValue::~InitConValue()
 InitConstraintValues::InitConstraintValues(): 
 	numberOfCon (0)
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside InitConstraintValues Constructor" << endl;
 	#endif
 	con = NULL;
@@ -935,7 +935,7 @@ InitConstraintValues::InitConstraintValues():
 
 InitConstraintValues::~InitConstraintValues()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "InitConstraintValues Destructor Called" << endl;
 	#endif
 	if (con != NULL) 
@@ -955,14 +955,14 @@ InitDualVarValue::InitDualVarValue():
 	lbDualValue (0.0),
 	ubDualValue (0.0)
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside InitDualVarValue Constructor" << endl;
 	#endif
 }// end InitDualVarValue constructor  
 
 InitDualVarValue::~InitDualVarValue()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "InitDualVarValue Destructor Called" << endl;
 	#endif
 }//end InitDualVarValue destructor
@@ -971,7 +971,7 @@ InitDualVarValue::~InitDualVarValue()
 InitDualVariableValues::InitDualVariableValues(): 
 	numberOfCon (0)
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside InitDualVariableValues Constructor" << endl;
 	#endif
 	con = NULL;
@@ -979,7 +979,7 @@ InitDualVariableValues::InitDualVariableValues():
 
 InitDualVariableValues::~InitDualVariableValues()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "InitDualVariableValues Destructor Called" << endl;
 	#endif
 	if (con != NULL) 
@@ -1000,14 +1000,14 @@ OtherConOption::OtherConOption():
 	lbValue (""),
 	ubValue ("")
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside OtherConOption Constructor" << endl;
 	#endif
 }// end OtherConOption constructor  
 
 OtherConOption::~OtherConOption()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "OtherConOption Destructor Called" << endl;
 	#endif
 }//end OtherConOption destructor
@@ -1022,7 +1022,7 @@ OtherConstraintOption::OtherConstraintOption():
 	type ("string"),
 	description ("")
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside OtherConstraintOption Constructor" << endl;
 	#endif
 	con = NULL;
@@ -1030,7 +1030,7 @@ OtherConstraintOption::OtherConstraintOption():
 
 OtherConstraintOption::~OtherConstraintOption()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "OtherConstraintOption Destructor Called" << endl;
 	#endif
 	if (con != NULL) 
@@ -1048,7 +1048,7 @@ OtherConstraintOption::~OtherConstraintOption()
 ConstraintOption::ConstraintOption(): 
 	numberOfOtherConstraintOptions (0)
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside ConstraintOption Constructor" << endl;
 	#endif
 	initialConstraintValues = NULL;
@@ -1058,7 +1058,7 @@ ConstraintOption::ConstraintOption():
 
 ConstraintOption::~ConstraintOption()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "ConstraintOption Destructor Called" << endl;
 	#endif
 	if (initialConstraintValues != NULL) delete initialConstraintValues;
@@ -1085,14 +1085,14 @@ SolverOption::SolverOption():
 	type (""),
 	description ("")
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside SolverOption Constructor" << endl;
 	#endif
 }// end SolverOption constructor  
 
 SolverOption::~SolverOption()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "SolverOption Destructor Called" << endl;
 	#endif
 }//end SolverOption destructor
@@ -1101,7 +1101,7 @@ SolverOption::~SolverOption()
 SolverOptions::SolverOptions(): 
 	numberOfSolverOptions(0)
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside SolverOptions Constructor" << endl;
 	#endif
 	solverOption = NULL;
@@ -1109,7 +1109,7 @@ SolverOptions::SolverOptions():
 
 SolverOptions::~SolverOptions()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "SolverOptions Destructor Called; numberOfSolverOptions=" << numberOfSolverOptions << endl;
 	#endif
 	if (solverOption != NULL)
@@ -1131,7 +1131,7 @@ OptimizationOption::OptimizationOption():
 	numberOfObjectives (1),
 	numberOfConstraints (0)
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside OptimizationOption Constructor" << endl;
 	#endif
 	variables = NULL;
@@ -1142,7 +1142,7 @@ OptimizationOption::OptimizationOption():
 
 OptimizationOption::~OptimizationOption()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "OptimizationOption Destructor Called" << endl;
 	#endif
 	if (variables != NULL) delete variables;
@@ -1159,7 +1159,7 @@ OptimizationOption::~OptimizationOption()
 OSOption::OSOption() 
 //(initializations)
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "Inside OSOption Constructor" << endl;
 	#endif
 
@@ -1182,7 +1182,7 @@ OSOption::OSOption()
 
 OSOption::~OSOption()
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 	cout << "OSOption Destructor Called" << endl;
 	#endif
 	if (general != NULL) delete general;
@@ -6218,7 +6218,7 @@ bool OSOption::setOptionDbl(std::string optionName, double value)
  ***************************************************/
 bool OSOption::IsEqual(OSOption *that)
 {
-	#ifdef DEBUG
+	#ifdef DEBUG_OSOPTION
 		cout << "Start comparing in OSOption" << endl;
 	#endif
 	if (this == NULL)
@@ -6226,7 +6226,7 @@ bool OSOption::IsEqual(OSOption *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6235,7 +6235,7 @@ bool OSOption::IsEqual(OSOption *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6259,7 +6259,7 @@ bool OSOption::IsEqual(OSOption *that)
 
 bool GeneralOption::IsEqual(GeneralOption *that)
 {	
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in GeneralOption" << endl;
 #endif
 	if (this == NULL)
@@ -6267,7 +6267,7 @@ bool GeneralOption::IsEqual(GeneralOption *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6276,7 +6276,7 @@ bool GeneralOption::IsEqual(GeneralOption *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6293,7 +6293,7 @@ bool GeneralOption::IsEqual(GeneralOption *that)
 			same = ((this->password       == that->password )      && same);
 			if (!same) 
 			{
-				#ifdef DEBUG
+				#ifdef DEBUG_OSOPTION
 				cout << "serviceURI:    " << this->serviceURI     << " vs. " << that->serviceURI     << endl;
 				cout << "serviceName:   " << this->serviceName    << " vs. " << that->serviceName    << endl;
 				cout << "instanceName:  " << this->instanceName   << " vs. " << that->instanceName   << endl;
@@ -6319,7 +6319,7 @@ bool GeneralOption::IsEqual(GeneralOption *that)
 
 bool SystemOption::IsEqual(SystemOption *that)
 {	
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in SystemOption" << endl;
 #endif
 	if (this == NULL)
@@ -6327,7 +6327,7 @@ bool SystemOption::IsEqual(SystemOption *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6336,7 +6336,7 @@ bool SystemOption::IsEqual(SystemOption *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6344,7 +6344,7 @@ bool SystemOption::IsEqual(SystemOption *that)
 		else	
 		{	if (this->minCPUNumber != that->minCPUNumber)
 			{
-				#ifdef DEBUG
+				#ifdef DEBUG_OSOPTION
 				cout << "minCPUNumber: " << this->minCPUNumber << " vs. " << that->minCPUNumber << endl;
 				#endif
 				return false;
@@ -6366,7 +6366,7 @@ bool SystemOption::IsEqual(SystemOption *that)
 
 bool ServiceOption::IsEqual(ServiceOption *that)
 {	
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in ServiceOption" << endl;
 #endif
 	if (this == NULL)
@@ -6374,7 +6374,7 @@ bool ServiceOption::IsEqual(ServiceOption *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6383,7 +6383,7 @@ bool ServiceOption::IsEqual(ServiceOption *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6391,7 +6391,7 @@ bool ServiceOption::IsEqual(ServiceOption *that)
 		else
 		{	if (this->type != that->type)
 			{
-				#ifdef DEBUG
+				#ifdef DEBUG_OSOPTION
 				cout << "service type: " << this->type << " vs. " << that->type << endl;
 				#endif
 				return false;
@@ -6407,7 +6407,7 @@ bool ServiceOption::IsEqual(ServiceOption *that)
 
 bool JobOption::IsEqual(JobOption *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in JobOption" << endl;
 #endif
 	if (this == NULL)
@@ -6415,7 +6415,7 @@ bool JobOption::IsEqual(JobOption *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6424,7 +6424,7 @@ bool JobOption::IsEqual(JobOption *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6432,7 +6432,7 @@ bool JobOption::IsEqual(JobOption *that)
 		else	
 		{	if (this->requestedStartTime != that->requestedStartTime)
 			{
-				#ifdef DEBUG
+				#ifdef DEBUG_OSOPTION
 				cout << "requestedStartTime: " << this->requestedStartTime << " vs. " << that->requestedStartTime << endl;
 				#endif
 				return false;
@@ -6475,7 +6475,7 @@ bool JobOption::IsEqual(JobOption *that)
 
 bool OptimizationOption::IsEqual(OptimizationOption *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in OptimizationOption" << endl;
 #endif
 	if (this == NULL)
@@ -6483,7 +6483,7 @@ bool OptimizationOption::IsEqual(OptimizationOption *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6492,7 +6492,7 @@ bool OptimizationOption::IsEqual(OptimizationOption *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6501,7 +6501,7 @@ bool OptimizationOption::IsEqual(OptimizationOption *that)
 		{	if ((this->numberOfVariables != that->numberOfVariables) && 
 				(this->numberOfVariables *  that->numberOfVariables) != 0)
 			{
-				#ifdef DEBUG
+				#ifdef DEBUG_OSOPTION
 				cout << "numberOfVariables: " 
 					 << this->numberOfVariables << " vs. " << that->numberOfVariables << endl;
 				#endif
@@ -6510,7 +6510,7 @@ bool OptimizationOption::IsEqual(OptimizationOption *that)
 			if ((this->numberOfObjectives != that->numberOfObjectives) && 
 				(this->numberOfObjectives *  that->numberOfObjectives) != 0)
 			{
-				#ifdef DEBUG
+				#ifdef DEBUG_OSOPTION
 				cout << "numberOfObjectives: " 
 					 << this->numberOfObjectives << " vs. " << that->numberOfObjectives << endl;
 				#endif
@@ -6519,7 +6519,7 @@ bool OptimizationOption::IsEqual(OptimizationOption *that)
 			if ((this->numberOfConstraints != that->numberOfConstraints) && 
 				(this->numberOfConstraints *  that->numberOfConstraints) != 0)
 			{
-				#ifdef DEBUG
+				#ifdef DEBUG_OSOPTION
 				cout << "numberOfConstraints: " 
 					 << this->numberOfConstraints << " vs. " << that->numberOfConstraints << endl;
 				#endif
@@ -6541,7 +6541,7 @@ bool OptimizationOption::IsEqual(OptimizationOption *that)
 
 bool InstanceLocationOption::IsEqual(InstanceLocationOption *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in InstanceLocationOption" << endl;
 #endif
 	if (this == NULL)
@@ -6549,7 +6549,7 @@ bool InstanceLocationOption::IsEqual(InstanceLocationOption *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6558,7 +6558,7 @@ bool InstanceLocationOption::IsEqual(InstanceLocationOption *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6566,7 +6566,7 @@ bool InstanceLocationOption::IsEqual(InstanceLocationOption *that)
 		else	
 		{	if ((this->locationType != that->locationType) || (this->value != that->value)) 
 			{	
-				#ifdef DEBUG
+				#ifdef DEBUG_OSOPTION
 				cout << "location type: " << this->locationType << " vs. " << that->locationType << endl;
 				cout << "value: "         << this->value        << " vs. " << that->value        << endl;
 				#endif
@@ -6579,7 +6579,7 @@ bool InstanceLocationOption::IsEqual(InstanceLocationOption *that)
 
 bool ContactOption::IsEqual(ContactOption *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in ContactOption" << endl;
 #endif
 	if (this == NULL)
@@ -6587,7 +6587,7 @@ bool ContactOption::IsEqual(ContactOption *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6596,7 +6596,7 @@ bool ContactOption::IsEqual(ContactOption *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6604,7 +6604,7 @@ bool ContactOption::IsEqual(ContactOption *that)
 		else	
 		{	if ((this->transportType != that->transportType) || (this->value != that->value)) 
 			{	
-				#ifdef DEBUG
+				#ifdef DEBUG_OSOPTION
 				cout << "transport type: " << this->transportType << " vs. " << that->transportType << endl;
 				cout << "value: "          << this->value         << " vs. " << that->value         << endl;
 				#endif
@@ -6617,7 +6617,7 @@ bool ContactOption::IsEqual(ContactOption *that)
 
 bool OtherOptions::IsEqual(OtherOptions *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in OtherOptions" << endl;
 #endif
 	if (this == NULL)
@@ -6625,7 +6625,7 @@ bool OtherOptions::IsEqual(OtherOptions *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6634,7 +6634,7 @@ bool OtherOptions::IsEqual(OtherOptions *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6642,7 +6642,7 @@ bool OtherOptions::IsEqual(OtherOptions *that)
 		else	
 		{	if (this->numberOfOtherOptions  != that->numberOfOtherOptions) 
 			{
-				#ifdef DEBUG
+				#ifdef DEBUG_OSOPTION
 				cout << "numberOfOtherOptions: " << this->numberOfOtherOptions << " vs. " << that->numberOfOtherOptions << endl;
 				#endif
 				return false;
@@ -6659,7 +6659,7 @@ bool OtherOptions::IsEqual(OtherOptions *that)
 
 bool OtherOption::IsEqual(OtherOption *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in OtherOption" << endl;
 #endif
 	if (this == NULL)
@@ -6667,7 +6667,7 @@ bool OtherOption::IsEqual(OtherOption *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6676,7 +6676,7 @@ bool OtherOption::IsEqual(OtherOption *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6686,7 +6686,7 @@ bool OtherOption::IsEqual(OtherOption *that)
 				(this->value != that->value) || 
 				(this->description != that->description) ) 
 			{
-				#ifdef DEBUG
+				#ifdef DEBUG_OSOPTION
 				cout << "name: "        << this->name        << " vs. " << that->name        << endl;
 				cout << "value: "       << this->value       << " vs. " << that->value       << endl;
 				cout << "description: " << this->description << " vs. " << that->description << endl;
@@ -6700,7 +6700,7 @@ bool OtherOption::IsEqual(OtherOption *that)
 
 bool MinDiskSpace::IsEqual(MinDiskSpace *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in MinDiskSpace" << endl;
 #endif
 	if (this == NULL)
@@ -6708,7 +6708,7 @@ bool MinDiskSpace::IsEqual(MinDiskSpace *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6717,7 +6717,7 @@ bool MinDiskSpace::IsEqual(MinDiskSpace *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6726,7 +6726,7 @@ bool MinDiskSpace::IsEqual(MinDiskSpace *that)
 		{	if ((this->unit  != that->unit)  || 
 				(this->value != that->value) ) 
 			{	
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "unit: "  << this->unit  << " vs. " << that->unit  << endl;
 				cout << "value: " << this->value << " vs. " << that->value << endl;
 #endif	
@@ -6739,7 +6739,7 @@ bool MinDiskSpace::IsEqual(MinDiskSpace *that)
 
 bool MinMemorySize::IsEqual(MinMemorySize *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in MinMemorySize" << endl;
 #endif
 	if (this == NULL)
@@ -6747,7 +6747,7 @@ bool MinMemorySize::IsEqual(MinMemorySize *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6756,7 +6756,7 @@ bool MinMemorySize::IsEqual(MinMemorySize *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6765,7 +6765,7 @@ bool MinMemorySize::IsEqual(MinMemorySize *that)
 		{	if ((this->unit  != that->unit)  || 
 				(this->value != that->value) ) 
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "unit: "  << this->unit  << " vs. " << that->unit  << endl;
 				cout << "value: " << this->value << " vs. " << that->value << endl;
 #endif	
@@ -6779,7 +6779,7 @@ bool MinMemorySize::IsEqual(MinMemorySize *that)
 
 bool MaxTime::IsEqual(MaxTime *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in MaxTime" << endl;
 #endif
 	if (this == NULL)
@@ -6787,7 +6787,7 @@ bool MaxTime::IsEqual(MaxTime *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6796,7 +6796,7 @@ bool MaxTime::IsEqual(MaxTime *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6805,7 +6805,7 @@ bool MaxTime::IsEqual(MaxTime *that)
 		{	if ((this->unit  != that->unit)  || 
 				(this->value != that->value) ) 
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "unit: "  << this->unit  << " vs. " << that->unit  << endl;
 				cout << "value: " << this->value << " vs. " << that->value << endl;
 #endif	
@@ -6818,7 +6818,7 @@ bool MaxTime::IsEqual(MaxTime *that)
 
 bool MinCPUSpeed::IsEqual(MinCPUSpeed *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in MinCPUSpeed" << endl;
 #endif
 	if (this == NULL)
@@ -6826,7 +6826,7 @@ bool MinCPUSpeed::IsEqual(MinCPUSpeed *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6835,7 +6835,7 @@ bool MinCPUSpeed::IsEqual(MinCPUSpeed *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6844,7 +6844,7 @@ bool MinCPUSpeed::IsEqual(MinCPUSpeed *that)
 		{	if ((this->unit  != that->unit)  || 
 				(this->value != that->value) ) 
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "unit: "  << this->unit  << " vs. " << that->unit  << endl;
 				cout << "value: " << this->value << " vs. " << that->value << endl;
 #endif	
@@ -6858,7 +6858,7 @@ bool MinCPUSpeed::IsEqual(MinCPUSpeed *that)
 
 bool JobDependencies::IsEqual(JobDependencies *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in JobDependencies" << endl;
 #endif
 	if (this == NULL)
@@ -6866,7 +6866,7 @@ bool JobDependencies::IsEqual(JobDependencies *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6875,7 +6875,7 @@ bool JobDependencies::IsEqual(JobDependencies *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6883,7 +6883,7 @@ bool JobDependencies::IsEqual(JobDependencies *that)
 		else	
 		{	if (this->numberOfJobIDs != that->numberOfJobIDs)  
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "numberOfJobIDs: " << this->numberOfJobIDs << " vs. " << that->numberOfJobIDs << endl;
 #endif	
 				return false;
@@ -6892,7 +6892,7 @@ bool JobDependencies::IsEqual(JobDependencies *that)
 			for (i = 0; i < numberOfJobIDs; i++)
 				if (this->jobID[i] != that->jobID[i])
 				{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 					cout << "jobID[" << i << "]: " << this->jobID[i] << " vs. " << that->jobID[i] << endl;
 #endif	
 					return false;
@@ -6904,7 +6904,7 @@ bool JobDependencies::IsEqual(JobDependencies *that)
 
 bool DirectoriesAndFiles::IsEqual(DirectoriesAndFiles *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in DirectoriesAndFiles" << endl;
 #endif
 	if (this == NULL)
@@ -6912,7 +6912,7 @@ bool DirectoriesAndFiles::IsEqual(DirectoriesAndFiles *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6921,7 +6921,7 @@ bool DirectoriesAndFiles::IsEqual(DirectoriesAndFiles *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6929,7 +6929,7 @@ bool DirectoriesAndFiles::IsEqual(DirectoriesAndFiles *that)
 		else	
 		{	if (this->numberOfPaths != that->numberOfPaths)  
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "numberOfPaths: " << this->numberOfPaths << " vs. " << that->numberOfPaths << endl;
 #endif	
 				return false;
@@ -6938,7 +6938,7 @@ bool DirectoriesAndFiles::IsEqual(DirectoriesAndFiles *that)
 			for (i = 0; i < numberOfPaths; i++)
 				if (this->path[i] != that->path[i])
 				{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 					cout << "path[" << i << "]: \'" << this->path[i] << "\' vs. \'" << that->path[i] << "\'" << endl;
 #endif	
 					return false;
@@ -6950,7 +6950,7 @@ bool DirectoriesAndFiles::IsEqual(DirectoriesAndFiles *that)
 
 bool PathPairs::IsEqual(PathPairs *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in PathPairs" << endl;
 #endif
 	if (this == NULL)
@@ -6958,7 +6958,7 @@ bool PathPairs::IsEqual(PathPairs *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6967,7 +6967,7 @@ bool PathPairs::IsEqual(PathPairs *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6975,7 +6975,7 @@ bool PathPairs::IsEqual(PathPairs *that)
 		else	
 		{	if (this->numberOfPathPairs != that->numberOfPathPairs)  
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "numberOfPathPairs: " << this->numberOfPathPairs << " vs. " << that->numberOfPathPairs << endl;
 #endif	
 				return false;
@@ -6992,7 +6992,7 @@ bool PathPairs::IsEqual(PathPairs *that)
 	
 bool PathPair::IsEqual(PathPair *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in PathPair" << endl;
 #endif
 	if (this == NULL)
@@ -7000,7 +7000,7 @@ bool PathPair::IsEqual(PathPair *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -7009,7 +7009,7 @@ bool PathPair::IsEqual(PathPair *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -7018,7 +7018,7 @@ bool PathPair::IsEqual(PathPair *that)
 		{	if ((this->from != that->from) || (this->to != that->to) || 
 				(this->makeCopy != that->makeCopy))  
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "from: "     << this->from     << " vs. " << that->from     << endl;
 				cout << "to: "       << this->to       << " vs. " << that->to       << endl;
 				cout << "makeCopy: " << this->makeCopy << " vs. " << that->makeCopy << endl;
@@ -7032,7 +7032,7 @@ bool PathPair::IsEqual(PathPair *that)
 
 bool Processes::IsEqual(Processes *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in Processes" << endl;
 #endif
 	if (this == NULL)
@@ -7040,7 +7040,7 @@ bool Processes::IsEqual(Processes *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -7049,7 +7049,7 @@ bool Processes::IsEqual(Processes *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -7057,7 +7057,7 @@ bool Processes::IsEqual(Processes *that)
 		else	
 		{	if (this->numberOfProcesses != that->numberOfProcesses)  
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "numberOfProcesses: " << this->numberOfProcesses << " vs. " << that->numberOfProcesses << endl;
 #endif	
 				return false;
@@ -7066,7 +7066,7 @@ bool Processes::IsEqual(Processes *that)
 			for (i = 0; i < numberOfProcesses; i++)
 				if (this->process[i] != that->process[i])
 				{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 					cout << "process[" << i << "]: " << this->process[i] << " vs. " << that->process[i] << endl;
 #endif	
 					return false;
@@ -7079,7 +7079,7 @@ bool Processes::IsEqual(Processes *that)
 
 bool VariableOption::IsEqual(VariableOption *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in VariableOption" << endl;
 #endif
 	if (this == NULL)
@@ -7087,7 +7087,7 @@ bool VariableOption::IsEqual(VariableOption *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -7096,7 +7096,7 @@ bool VariableOption::IsEqual(VariableOption *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -7116,7 +7116,7 @@ bool VariableOption::IsEqual(VariableOption *that)
 
 			if (this->numberOfOtherVariableOptions != that->numberOfOtherVariableOptions)  
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "numberOfOtherVariableOptions: " << this->numberOfOtherVariableOptions << " vs. " << that->numberOfOtherVariableOptions << endl;
 #endif	
 				return false;
@@ -7126,7 +7126,7 @@ bool VariableOption::IsEqual(VariableOption *that)
 			for (i = 0; i < numberOfOtherVariableOptions; i++)
 				if (!this->other[i]->IsEqual(that->other[i]))
 				{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 					cout << "other[" << i << "]: " << this->other[i] << " vs. " << that->other[i] << endl;
 #endif	
 					return false;
@@ -7139,7 +7139,7 @@ bool VariableOption::IsEqual(VariableOption *that)
 
 bool InitVariableValues::IsEqual(InitVariableValues *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in InitVariableValues" << endl;
 #endif
 	if (this == NULL)
@@ -7147,7 +7147,7 @@ bool InitVariableValues::IsEqual(InitVariableValues *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -7156,7 +7156,7 @@ bool InitVariableValues::IsEqual(InitVariableValues *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -7164,7 +7164,7 @@ bool InitVariableValues::IsEqual(InitVariableValues *that)
 		else	
 		{	if (this->numberOfVar != that->numberOfVar)  
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
 #endif	
 				return false;
@@ -7180,7 +7180,7 @@ bool InitVariableValues::IsEqual(InitVariableValues *that)
 
 bool InitVarValue::IsEqual(InitVarValue *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in InitVarValue" << endl;
 #endif
 	if (this == NULL)
@@ -7188,7 +7188,7 @@ bool InitVarValue::IsEqual(InitVarValue *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -7197,7 +7197,7 @@ bool InitVarValue::IsEqual(InitVarValue *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -7205,7 +7205,7 @@ bool InitVarValue::IsEqual(InitVarValue *that)
 		else	
 		{	if ((this->idx != that->idx) || (this->value != that->value))
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "idx: "   << this->idx   << " vs. " << that->idx   << endl;
 				cout << "value: " << this->value << " vs. " << that->value << endl;
 #endif	
@@ -7219,7 +7219,7 @@ bool InitVarValue::IsEqual(InitVarValue *that)
 
 bool InitVariableValuesString::IsEqual(InitVariableValuesString *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in InitVariableValuesString" << endl;
 #endif
 	if (this == NULL)
@@ -7227,7 +7227,7 @@ bool InitVariableValuesString::IsEqual(InitVariableValuesString *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -7236,7 +7236,7 @@ bool InitVariableValuesString::IsEqual(InitVariableValuesString *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -7244,7 +7244,7 @@ bool InitVariableValuesString::IsEqual(InitVariableValuesString *that)
 		else	
 		{	if (this->numberOfVar != that->numberOfVar)  
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
 #endif	
 				return false;
@@ -7260,7 +7260,7 @@ bool InitVariableValuesString::IsEqual(InitVariableValuesString *that)
 
 bool InitVarValueString::IsEqual(InitVarValueString *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in InitVarValueString" << endl;
 #endif
 	if (this == NULL)
@@ -7268,7 +7268,7 @@ bool InitVarValueString::IsEqual(InitVarValueString *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -7277,7 +7277,7 @@ bool InitVarValueString::IsEqual(InitVarValueString *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -7285,7 +7285,7 @@ bool InitVarValueString::IsEqual(InitVarValueString *that)
 		else	
 		{	if ((this->idx != that->idx) || (this->value != that->value))
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "idx: "   << this->idx   << " vs. " << that->idx   << endl;
 				cout << "value: " << this->value << " vs. " << that->value << endl;
 #endif	
@@ -7298,7 +7298,7 @@ bool InitVarValueString::IsEqual(InitVarValueString *that)
 
 bool InitialBasisStatus::IsEqual(InitialBasisStatus *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in InitialBasisStatus" << endl;
 #endif
 	if (this == NULL)
@@ -7306,7 +7306,7 @@ bool InitialBasisStatus::IsEqual(InitialBasisStatus *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -7315,7 +7315,7 @@ bool InitialBasisStatus::IsEqual(InitialBasisStatus *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -7323,7 +7323,7 @@ bool InitialBasisStatus::IsEqual(InitialBasisStatus *that)
 		else	
 		{	if (this->numberOfVar != that->numberOfVar)  
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
 #endif	
 				return false;
@@ -7339,7 +7339,7 @@ bool InitialBasisStatus::IsEqual(InitialBasisStatus *that)
 
 bool InitBasStatus::IsEqual(InitBasStatus *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in InitBasStatus" << endl;
 #endif
 	if (this == NULL)
@@ -7347,7 +7347,7 @@ bool InitBasStatus::IsEqual(InitBasStatus *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -7356,7 +7356,7 @@ bool InitBasStatus::IsEqual(InitBasStatus *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -7366,7 +7366,7 @@ bool InitBasStatus::IsEqual(InitBasStatus *that)
 			if ((this->value != "unknown" && that->value != "") ||
 				(that->value != "unknown" && this->value != "") )
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "idx: "   << this->idx   << " vs. " << that->idx   << endl;
 				cout << "value: " << this->value << " vs. " << that->value << endl;
 #endif	
@@ -7380,7 +7380,7 @@ bool InitBasStatus::IsEqual(InitBasStatus *that)
 
 bool IntegerVariableBranchingWeights::IsEqual(IntegerVariableBranchingWeights *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in IntegerVariableBranchingWeights" << endl;
 #endif
 	if (this == NULL)
@@ -7388,7 +7388,7 @@ bool IntegerVariableBranchingWeights::IsEqual(IntegerVariableBranchingWeights *t
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -7397,7 +7397,7 @@ bool IntegerVariableBranchingWeights::IsEqual(IntegerVariableBranchingWeights *t
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -7405,7 +7405,7 @@ bool IntegerVariableBranchingWeights::IsEqual(IntegerVariableBranchingWeights *t
 		else	
 		{	if (this->numberOfVar != that->numberOfVar)  
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
 #endif	
 				return false;
@@ -7421,7 +7421,7 @@ bool IntegerVariableBranchingWeights::IsEqual(IntegerVariableBranchingWeights *t
 
 bool SOSVariableBranchingWeights::IsEqual(SOSVariableBranchingWeights *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in SOSVariableBranchingWeights" << endl;
 #endif
 	if (this == NULL)
@@ -7429,7 +7429,7 @@ bool SOSVariableBranchingWeights::IsEqual(SOSVariableBranchingWeights *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -7438,7 +7438,7 @@ bool SOSVariableBranchingWeights::IsEqual(SOSVariableBranchingWeights *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -7446,7 +7446,7 @@ bool SOSVariableBranchingWeights::IsEqual(SOSVariableBranchingWeights *that)
 		else	
 		{	if (this->numberOfSOS != that->numberOfSOS)  
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "numberOfSOS: " << this->numberOfSOS << " vs. " << that->numberOfSOS << endl;
 #endif	
 				return false;
@@ -7465,7 +7465,7 @@ bool SOSVariableBranchingWeights::IsEqual(SOSVariableBranchingWeights *that)
 
 bool SOSWeights::IsEqual(SOSWeights *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in SOSWeights" << endl;
 #endif
 	if (this == NULL)
@@ -7473,7 +7473,7 @@ bool SOSWeights::IsEqual(SOSWeights *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -7482,7 +7482,7 @@ bool SOSWeights::IsEqual(SOSWeights *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -7491,7 +7491,7 @@ bool SOSWeights::IsEqual(SOSWeights *that)
 		{	if ((this->sosIdx != that->sosIdx) ||
 				(this->groupWeight != that->groupWeight))  
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "sosIdx: "      << this->sosIdx      << " vs. " << that->sosIdx      << endl;
 				cout << "groupWeight: " << this->groupWeight << " vs. " << that->groupWeight << endl;
 #endif	
@@ -7500,7 +7500,7 @@ bool SOSWeights::IsEqual(SOSWeights *that)
 
 			if (this->numberOfVar != that->numberOfVar)  
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
 #endif	
 				return false;
@@ -7519,7 +7519,7 @@ bool SOSWeights::IsEqual(SOSWeights *that)
 
 bool BranchingWeight::IsEqual(BranchingWeight *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in BranchingWeight" << endl;
 #endif
 	if (this == NULL)
@@ -7527,7 +7527,7 @@ bool BranchingWeight::IsEqual(BranchingWeight *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -7536,7 +7536,7 @@ bool BranchingWeight::IsEqual(BranchingWeight *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -7544,7 +7544,7 @@ bool BranchingWeight::IsEqual(BranchingWeight *that)
 		else	
 		{	if ((this->idx != that->idx) || (this->value != that->value))
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "idx: "   << this->idx   << " vs. " << that->idx   << endl;
 				cout << "value: " << this->value << " vs. " << that->value << endl;
 #endif	
@@ -7557,7 +7557,7 @@ bool BranchingWeight::IsEqual(BranchingWeight *that)
 
 bool OtherVariableOption::IsEqual(OtherVariableOption *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in OtherVariableOption" << endl;
 #endif
 	if (this == NULL)
@@ -7565,7 +7565,7 @@ bool OtherVariableOption::IsEqual(OtherVariableOption *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -7574,7 +7574,7 @@ bool OtherVariableOption::IsEqual(OtherVariableOption *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -7587,7 +7587,7 @@ bool OtherVariableOption::IsEqual(OtherVariableOption *that)
 				(this->type        != that->type)     ||
 				(this->description != that->description))  
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "name: "        << this->name        << " vs. " << that->name        << endl;
 				cout << "value: "       << this->value       << " vs. " << that->value       << endl;
 				cout << "solver: "      << this->solver      << " vs. " << that->solver      << endl;
@@ -7600,7 +7600,7 @@ bool OtherVariableOption::IsEqual(OtherVariableOption *that)
 
 			if (this->numberOfVar != that->numberOfVar)  
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
 #endif	
 				return false;
@@ -7616,7 +7616,7 @@ bool OtherVariableOption::IsEqual(OtherVariableOption *that)
 
 bool OtherVarOption::IsEqual(OtherVarOption *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in OtherVarOption" << endl;
 #endif
 	if (this == NULL)
@@ -7624,7 +7624,7 @@ bool OtherVarOption::IsEqual(OtherVarOption *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -7633,7 +7633,7 @@ bool OtherVarOption::IsEqual(OtherVarOption *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -7642,7 +7642,7 @@ bool OtherVarOption::IsEqual(OtherVarOption *that)
 		{	if ((this->idx     != that->idx)     || (this->value   != that->value) ||
 				(this->lbValue != that->lbValue) || (this->ubValue != that->ubValue))
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "idx: "     << this->idx     << " vs. " << that->idx     << endl;
 				cout << "value: "   << this->value   << " vs. " << that->value   << endl;
 				cout << "lbValue: " << this->lbValue << " vs. " << that->lbValue << endl;
@@ -7657,7 +7657,7 @@ bool OtherVarOption::IsEqual(OtherVarOption *that)
 
 bool ObjectiveOption::IsEqual(ObjectiveOption *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in ObjectiveOption" << endl;
 #endif
 	if (this == NULL)
@@ -7665,7 +7665,7 @@ bool ObjectiveOption::IsEqual(ObjectiveOption *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -7674,7 +7674,7 @@ bool ObjectiveOption::IsEqual(ObjectiveOption *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -7688,7 +7688,7 @@ bool ObjectiveOption::IsEqual(ObjectiveOption *that)
 
 			if (this->numberOfOtherObjectiveOptions != that->numberOfOtherObjectiveOptions)  
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "numberOfOtherObjectiveOptions: " << this->numberOfOtherObjectiveOptions << " vs. " << that->numberOfOtherObjectiveOptions << endl;
 #endif	
 				return false;
@@ -7705,7 +7705,7 @@ bool ObjectiveOption::IsEqual(ObjectiveOption *that)
 
 bool InitObjectiveValues::IsEqual(InitObjectiveValues *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in InitObjectiveValues" << endl;
 #endif
 	if (this == NULL)
@@ -7713,7 +7713,7 @@ bool InitObjectiveValues::IsEqual(InitObjectiveValues *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -7722,7 +7722,7 @@ bool InitObjectiveValues::IsEqual(InitObjectiveValues *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -7730,7 +7730,7 @@ bool InitObjectiveValues::IsEqual(InitObjectiveValues *that)
 		else	
 		{	if (this->numberOfObj != that->numberOfObj)  
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "numberOfObj: " << this->numberOfObj << " vs. " << that->numberOfObj << endl;
 #endif	
 				return false;
@@ -7746,7 +7746,7 @@ bool InitObjectiveValues::IsEqual(InitObjectiveValues *that)
 
 bool InitObjValue::IsEqual(InitObjValue *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in InitObjValue" << endl;
 #endif
 	if (this == NULL)
@@ -7754,7 +7754,7 @@ bool InitObjValue::IsEqual(InitObjValue *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -7763,7 +7763,7 @@ bool InitObjValue::IsEqual(InitObjValue *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -7771,7 +7771,7 @@ bool InitObjValue::IsEqual(InitObjValue *that)
 		else	
 		{	if ((this->idx != that->idx) || (this->value != that->value))
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "idx: "   << this->idx   << " vs. " << that->idx   << endl;
 				cout << "value: " << this->value << " vs. " << that->value << endl;
 #endif	
@@ -7784,7 +7784,7 @@ bool InitObjValue::IsEqual(InitObjValue *that)
 
 bool InitObjectiveBounds::IsEqual(InitObjectiveBounds *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in InitObjectiveBounds" << endl;
 #endif
 	if (this == NULL)
@@ -7792,7 +7792,7 @@ bool InitObjectiveBounds::IsEqual(InitObjectiveBounds *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -7801,7 +7801,7 @@ bool InitObjectiveBounds::IsEqual(InitObjectiveBounds *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -7809,7 +7809,7 @@ bool InitObjectiveBounds::IsEqual(InitObjectiveBounds *that)
 		else	
 		{	if (this->numberOfObj != that->numberOfObj)  
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "numberOfObj: " << this->numberOfObj << " vs. " << that->numberOfObj << endl;
 #endif	
 				return false;
@@ -7825,7 +7825,7 @@ bool InitObjectiveBounds::IsEqual(InitObjectiveBounds *that)
 
 bool InitObjBound::IsEqual(InitObjBound *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in InitObjBound" << endl;
 #endif
 	if (this == NULL)
@@ -7833,7 +7833,7 @@ bool InitObjBound::IsEqual(InitObjBound *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -7842,7 +7842,7 @@ bool InitObjBound::IsEqual(InitObjBound *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -7851,7 +7851,7 @@ bool InitObjBound::IsEqual(InitObjBound *that)
 		{	if ((this->idx     != that->idx)    || (this->lbValue != that->lbValue) || 
 				(this->ubValue != that->ubValue) )
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "idx: "     << this->idx     << " vs. " << that->idx     << endl;
 				cout << "lbValue: " << this->lbValue << " vs. " << that->lbValue << endl;
 				cout << "ubValue: " << this->ubValue << " vs. " << that->ubValue << endl;
@@ -7865,7 +7865,7 @@ bool InitObjBound::IsEqual(InitObjBound *that)
 
 bool OtherObjectiveOption::IsEqual(OtherObjectiveOption *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in OtherObjectiveOption" << endl;
 #endif
 	if (this == NULL)
@@ -7873,7 +7873,7 @@ bool OtherObjectiveOption::IsEqual(OtherObjectiveOption *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -7882,7 +7882,7 @@ bool OtherObjectiveOption::IsEqual(OtherObjectiveOption *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -7895,7 +7895,7 @@ bool OtherObjectiveOption::IsEqual(OtherObjectiveOption *that)
 				(this->type        != that->type)     ||
 				(this->description != that->description))  
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "name: "        << this->name        << " vs. " << that->name        << endl;
 				cout << "value: "       << this->value       << " vs. " << that->value       << endl;
 				cout << "solver: "      << this->solver      << " vs. " << that->solver      << endl;
@@ -7908,7 +7908,7 @@ bool OtherObjectiveOption::IsEqual(OtherObjectiveOption *that)
 
 			if (this->numberOfObj != that->numberOfObj)  
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "numberOfObj: " << this->numberOfObj << " vs. " << that->numberOfObj << endl;
 #endif	
 				return false;
@@ -7924,7 +7924,7 @@ bool OtherObjectiveOption::IsEqual(OtherObjectiveOption *that)
 
 bool OtherObjOption::IsEqual(OtherObjOption *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in OtherObjOption" << endl;
 #endif
 	if (this == NULL)
@@ -7932,7 +7932,7 @@ bool OtherObjOption::IsEqual(OtherObjOption *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -7941,7 +7941,7 @@ bool OtherObjOption::IsEqual(OtherObjOption *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -7950,7 +7950,7 @@ bool OtherObjOption::IsEqual(OtherObjOption *that)
 		{	if ((this->idx     != that->idx)     || (this->value   != that->value) ||
 				(this->lbValue != that->lbValue) || (this->ubValue != that->ubValue))
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "idx: "     << this->idx     << " vs. " << that->idx     << endl;
 				cout << "value: "   << this->value   << " vs. " << that->value   << endl;
 				cout << "lbValue: " << this->lbValue << " vs. " << that->lbValue << endl;
@@ -7965,7 +7965,7 @@ bool OtherObjOption::IsEqual(OtherObjOption *that)
 
 bool ConstraintOption::IsEqual(ConstraintOption *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in ConstraintOption" << endl;
 #endif
 	if (this == NULL)
@@ -7973,7 +7973,7 @@ bool ConstraintOption::IsEqual(ConstraintOption *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -7982,7 +7982,7 @@ bool ConstraintOption::IsEqual(ConstraintOption *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -7996,7 +7996,7 @@ bool ConstraintOption::IsEqual(ConstraintOption *that)
 
 			if (this->numberOfOtherConstraintOptions != that->numberOfOtherConstraintOptions)  
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "numberOfOtherConstraintOptions: " << this->numberOfOtherConstraintOptions << " vs. " << that->numberOfOtherConstraintOptions << endl;
 #endif	
 				return false;
@@ -8013,7 +8013,7 @@ bool ConstraintOption::IsEqual(ConstraintOption *that)
 
 bool InitConstraintValues::IsEqual(InitConstraintValues *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in InitConstraintValues" << endl;
 #endif
 	if (this == NULL)
@@ -8021,7 +8021,7 @@ bool InitConstraintValues::IsEqual(InitConstraintValues *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -8030,7 +8030,7 @@ bool InitConstraintValues::IsEqual(InitConstraintValues *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -8038,7 +8038,7 @@ bool InitConstraintValues::IsEqual(InitConstraintValues *that)
 		else	
 		{	if (this->numberOfCon != that->numberOfCon)  
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "numberOfCon: " << this->numberOfCon << " vs. " << that->numberOfCon << endl;
 #endif	
 				return false;
@@ -8054,7 +8054,7 @@ bool InitConstraintValues::IsEqual(InitConstraintValues *that)
 
 bool InitConValue::IsEqual(InitConValue *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in InitConValue" << endl;
 #endif
 	if (this == NULL)
@@ -8062,7 +8062,7 @@ bool InitConValue::IsEqual(InitConValue *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -8071,7 +8071,7 @@ bool InitConValue::IsEqual(InitConValue *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -8079,7 +8079,7 @@ bool InitConValue::IsEqual(InitConValue *that)
 		else	
 		{	if ((this->idx != that->idx) || (this->value != that->value))
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "idx: "   << this->idx   << " vs. " << that->idx   << endl;
 				cout << "value: " << this->value << " vs. " << that->value << endl;
 #endif	
@@ -8092,7 +8092,7 @@ bool InitConValue::IsEqual(InitConValue *that)
 
 bool InitDualVariableValues::IsEqual(InitDualVariableValues *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in InitDualVariableValues" << endl;
 #endif
 	if (this == NULL)
@@ -8100,7 +8100,7 @@ bool InitDualVariableValues::IsEqual(InitDualVariableValues *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -8109,7 +8109,7 @@ bool InitDualVariableValues::IsEqual(InitDualVariableValues *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -8117,7 +8117,7 @@ bool InitDualVariableValues::IsEqual(InitDualVariableValues *that)
 		else	
 		{	if (this->numberOfCon != that->numberOfCon)  
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "numberOfCon: " << this->numberOfCon << " vs. " << that->numberOfCon << endl;
 #endif	
 				return false;
@@ -8133,7 +8133,7 @@ bool InitDualVariableValues::IsEqual(InitDualVariableValues *that)
 
 bool InitDualVarValue::IsEqual(InitDualVarValue *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in InitDualVarValue" << endl;
 #endif
 	if (this == NULL)
@@ -8141,7 +8141,7 @@ bool InitDualVarValue::IsEqual(InitDualVarValue *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -8150,7 +8150,7 @@ bool InitDualVarValue::IsEqual(InitDualVarValue *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -8159,7 +8159,7 @@ bool InitDualVarValue::IsEqual(InitDualVarValue *that)
 		{	if ((this->idx != that->idx) || (this->lbDualValue != that->lbDualValue) ||
 				(this->ubDualValue != that->ubDualValue))
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "idx: "         << this->idx         << " vs. " << that->idx         << endl;
 				cout << "lbDualValue: " << this->lbDualValue << " vs. " << that->lbDualValue << endl;
 				cout << "ubDualValue: " << this->ubDualValue << " vs. " << that->ubDualValue << endl;
@@ -8173,7 +8173,7 @@ bool InitDualVarValue::IsEqual(InitDualVarValue *that)
 
 bool OtherConstraintOption::IsEqual(OtherConstraintOption *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in OtherConstraintOption" << endl;
 #endif
 	if (this == NULL)
@@ -8181,7 +8181,7 @@ bool OtherConstraintOption::IsEqual(OtherConstraintOption *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -8190,7 +8190,7 @@ bool OtherConstraintOption::IsEqual(OtherConstraintOption *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -8203,7 +8203,7 @@ bool OtherConstraintOption::IsEqual(OtherConstraintOption *that)
 				(this->type        != that->type)     ||
 				(this->description != that->description))  
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "name: "        << this->name        << " vs. " << that->name        << endl;
 				cout << "value: "       << this->value       << " vs. " << that->value       << endl;
 				cout << "solver: "      << this->solver      << " vs. " << that->solver      << endl;
@@ -8216,7 +8216,7 @@ bool OtherConstraintOption::IsEqual(OtherConstraintOption *that)
 
 			if (this->numberOfCon != that->numberOfCon)  
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "numberOfCon: " << this->numberOfCon << " vs. " << that->numberOfCon << endl;
 #endif	
 				return false;
@@ -8232,7 +8232,7 @@ bool OtherConstraintOption::IsEqual(OtherConstraintOption *that)
 
 bool OtherConOption::IsEqual(OtherConOption *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in OtherConOption" << endl;
 #endif
 	if (this == NULL)
@@ -8240,7 +8240,7 @@ bool OtherConOption::IsEqual(OtherConOption *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -8249,7 +8249,7 @@ bool OtherConOption::IsEqual(OtherConOption *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -8258,7 +8258,7 @@ bool OtherConOption::IsEqual(OtherConOption *that)
 		{	if ((this->idx     != that->idx)     || (this->value   != that->value) ||
 				(this->lbValue != that->lbValue) || (this->ubValue != that->ubValue))
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "idx: "     << this->idx     << " vs. " << that->idx     << endl;
 				cout << "value: "   << this->value   << " vs. " << that->value   << endl;
 				cout << "lbValue: " << this->lbValue << " vs. " << that->lbValue << endl;
@@ -8274,7 +8274,7 @@ bool OtherConOption::IsEqual(OtherConOption *that)
 
 bool SolverOptions::IsEqual(SolverOptions *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in SolverOptions" << endl;
 #endif
 	if (this == NULL)
@@ -8282,7 +8282,7 @@ bool SolverOptions::IsEqual(SolverOptions *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -8291,7 +8291,7 @@ bool SolverOptions::IsEqual(SolverOptions *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -8299,7 +8299,7 @@ bool SolverOptions::IsEqual(SolverOptions *that)
 		else	
 		{   if (this->numberOfSolverOptions != that->numberOfSolverOptions)  
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "numberOfSolverOptions: " << this->numberOfSolverOptions << " vs. " << that->numberOfSolverOptions << endl;
 #endif	
 				return false;
@@ -8317,7 +8317,7 @@ bool SolverOptions::IsEqual(SolverOptions *that)
 
 bool SolverOption::IsEqual(SolverOption *that)
 {
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 	cout << "Start comparing in SolverOption" << endl;
 #endif
 	if (this == NULL)
@@ -8325,7 +8325,7 @@ bool SolverOption::IsEqual(SolverOption *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -8334,7 +8334,7 @@ bool SolverOption::IsEqual(SolverOption *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG
+			#ifdef DEBUG_OSOPTION
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -8347,7 +8347,7 @@ bool SolverOption::IsEqual(SolverOption *that)
 				(this->type        != that->type)     ||
 				(this->description != that->description))  
 			{
-#ifdef DEBUG
+#ifdef DEBUG_OSOPTION
 				cout << "name: "        << this->name        << " vs. " << that->name        << endl;
 				cout << "value: "       << this->value       << " vs. " << that->value       << endl;
 				cout << "solver: "      << this->solver      << " vs. " << that->solver      << endl;

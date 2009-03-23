@@ -92,6 +92,9 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 		if (m_OSOption->general->jobID != "")
 		{	outStr << "<jobID>" << m_OSOption->general->jobID << "</jobID>" << endl;
 		};
+		if (m_OSOption->general->solverToInvoke != "")
+		{	outStr << "<solverToInvoke>" << m_OSOption->general->solverToInvoke << "</solverToInvoke>" << endl;
+		};
 		if (m_OSOption->general->license != "")
 		{	outStr << "<license>" << m_OSOption->general->license << "</license>" << endl;
 		};
@@ -126,7 +129,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 			}
 		}
 		outStr << "</general>" << endl;
-		cout << "Done with <general> element" << endl;
+//		cout << "Done with <general> element" << endl;
 	};
 
 /**
@@ -217,21 +220,14 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 		}
 		if (m_OSOption->job->requestedStartTime != "")
 			outStr << "<requestedStartTime>" << m_OSOption->job->requestedStartTime << "</requestedStartTime>" << endl;
-		cout << "Before <dependencies>" << endl;
 		if (m_OSOption->job->dependencies != NULL)
-		{	cout << "Starting <dependencies>" << endl;
-			if (m_OSOption->job->dependencies->numberOfJobIDs > 0)
+		{	if (m_OSOption->job->dependencies->numberOfJobIDs > 0)
 			{	outStr << "<dependencies numberOfJobIDs=\"";
 				outStr << m_OSOption->job->dependencies->numberOfJobIDs << "\">" << endl; 
-				cout << "<dependencies numberOfJobIDs=\"";
-				cout << m_OSOption->job->dependencies->numberOfJobIDs << "\">" << endl; 
-				cout << "Put <dependencies> job list" << endl;
 				for (int i=0; i < m_OSOption->job->dependencies->numberOfJobIDs; i++)
-				{	cout << "job " << i << endl;
-					outStr << "<jobID>" << m_OSOption->job->dependencies->jobID[i] << "</jobID>" << endl;
+				{	outStr << "<jobID>" << m_OSOption->job->dependencies->jobID[i] << "</jobID>" << endl;
 				}
 				outStr << "</dependencies>" << endl;
-		cout << "Done with <dependencies>" << endl;
 			}
 		}
 		if (m_OSOption->job->requiredDirectories != NULL)
