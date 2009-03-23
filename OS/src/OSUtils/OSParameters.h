@@ -73,6 +73,9 @@
 #endif
 
 
+
+
+
 //#include <limits.h>
 //#ifdef INFINITY //This is the definition in the ISO C99 standard.
 //	#define OSINFINITY INFINITY
@@ -84,6 +87,9 @@
 
 #define OS_E_VALUE exp(1.0)
 #define OS_PI_VALUE 2*asin(1.0)
+
+#define OS_SCHEMA_VERSION 1.5
+
 /**
  * we use OS_NEAR_EQUAL in unitTest to see if we 
  * are close to the optimal obj value

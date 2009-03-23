@@ -90,6 +90,7 @@
 
 
 
+using std::ostringstream;
 
 
 
@@ -154,7 +155,7 @@ using std::endl;
 using std::ostringstream;
 using std::string;
 
-    
+
 
 #define MAXCHARS 5000 
 
@@ -440,7 +441,11 @@ void solve(){
 					}
 				}
 				else{// no osol string
-					osoptions->osol = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSoL.xsd\"><other> </other></osol>";	
+					std::ostringstream outStr; 
+					outStr <<  "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/" ;
+					outStr << OS_SCHEMA_VERSION ;
+					outStr <<  "/OSoL.xsd\"><other> </other></osol>";	
+					osoptions->osol = outStr.str();
 					iStringpos = osoptions->osol.find("</osol");
 					osoptions->osol.insert(iStringpos, "<general><solverToInvoke>"
 							+ osoptions->solverName  + "</solverToInvoke></general>");

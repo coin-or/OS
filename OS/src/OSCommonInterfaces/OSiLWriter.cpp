@@ -45,7 +45,10 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 	int i, j;
 	if(m_OSInstance == NULL)  return outStr.str();
 	outStr << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" ;
-	outStr << "<osil xmlns=\"os.optimizationservices.org\"   xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSiL.xsd\" >" ;
+	outStr << "<osil xmlns=\"os.optimizationservices.org\"   xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
+	outStr << "xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/";
+	outStr << OS_SCHEMA_VERSION;
+	outStr << "OSiL.xsd\" >" ;
 	outStr << "<instanceHeader>" ;
 	if( m_bWhiteSpace == true) outStr << endl;
 	if(m_OSInstance->instanceHeader != NULL){
