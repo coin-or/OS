@@ -50,13 +50,14 @@ int main( ){
 	const char dirsep =  CoinFindDirSeparator();
  	// Set directory containing mps data files.
  	std::string dataDir;
-	dataDir = dirsep == '/' ? "../../data/" : "..\\..\\data\\";
+	dataDir = dirsep == '/' ? "../../data/" : ".\\..\\data\\";
+	dataDir = "../../data/";
 	cout << "Start Building the Model" << endl;
 	try{
 		// get the p0033 problem
 		std::string osilFileName;
-		//osilFileName =  dataDir  + "osilFiles" + dirsep +  "p0033.osil";
-		osilFileName =  "p0033.osil";
+		osilFileName =  dataDir  + "osilFiles" + dirsep +  "p0033.osil";
+		//osilFileName =  "p0033.osil";
 		std::cout << "Try to read a sample file" << std::endl;
 		std::cout << "The file is: " ;
 		std::cout <<  osilFileName << std::endl;

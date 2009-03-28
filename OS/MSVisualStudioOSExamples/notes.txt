@@ -1,0 +1,8 @@
+To Create this distribution:
+
+1. Make sure to add the Intel Fortran libs to the lib directory.
+
+2. Inside the lib directroy , create a directory ASL and put amplsolv.lib there.
+
+3. Get the header files in BuildTools/headers and put them in include/Coin
+
