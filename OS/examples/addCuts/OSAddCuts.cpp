@@ -137,7 +137,8 @@ int main( ){
 			int numberOfOtherVariableResult = 1;
 			int otherIdx = 0;
 			// first set the number of Other Variable Results
-			osresult->setNumberOfOtherVariableResult(solIdx, numberOfOtherVariableResult);
+			osresult->setNumberOfOtherVariableResults(solIdx, numberOfOtherVariableResult);
+			
 			ostringstream outStr;
 			int numberOfVar =  solver->osinstance->getVariableNumber();
 			for(i=0; i < numberOfVar; i++){
