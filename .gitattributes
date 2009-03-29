@@ -123,7 +123,13 @@ OS/data/osilFiles/CppADTestLag.osil -text
 OS/data/osilFiles/HS071_NLP.osil -text
 OS/data/osilFiles/HS071_NLPMod.osil -text
 OS/data/osilFiles/HS071_feas.osil -text
+OS/data/osilFiles/IP_infeasible.osil -text
+OS/data/osilFiles/IP_noconstraint.osil -text
 OS/data/osilFiles/LINDO-SOS2.osil -text
+OS/data/osilFiles/LP_infeasible.osil -text
+OS/data/osilFiles/LP_nobasis.osil -text
+OS/data/osilFiles/LP_noconstraint.osil -text
+OS/data/osilFiles/LP_unbounded.osil -text
 OS/data/osilFiles/SOS1.osil -text
 OS/data/osilFiles/SOS2.osil -text
 OS/data/osilFiles/SOS2a.osil -text
