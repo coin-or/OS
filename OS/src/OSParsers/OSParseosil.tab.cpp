@@ -2135,7 +2135,7 @@ yyreduce:
         case 4:
 
     {if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms > parserData->qtermcount ) 
-	osilerror( NULL, osinstance, parserData, "actual number of qterms less than numberOfQuadraticTerms");}
+	osilerror( NULL, osinstance, parserData, "actual number of qterms less than numberOfQuadraticTerms");;}
     break;
 
   case 5:
@@ -2145,13 +2145,13 @@ if ( *(yyvsp[(2) - (5)].sval) != *(yyvsp[(4) - (5)].sval) ) osilerror( NULL, osi
 osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms = (yyvsp[(3) - (5)].ival);  
 if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms > 0 ) 
 osinstance->instanceData->quadraticCoefficients->qTerm = new QuadraticTerm*[ (yyvsp[(3) - (5)].ival) ];
-for(int i = 0; i < (yyvsp[(3) - (5)].ival); i++) osinstance->instanceData->quadraticCoefficients->qTerm[i] = new QuadraticTerm();}
+for(int i = 0; i < (yyvsp[(3) - (5)].ival); i++) osinstance->instanceData->quadraticCoefficients->qTerm[i] = new QuadraticTerm();;}
     break;
 
   case 8:
 
     {if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms <= parserData->qtermcount )
- osilerror( NULL, osinstance, parserData, "too many QuadraticTerms");}
+ osilerror( NULL, osinstance, parserData, "too many QuadraticTerms");;}
     break;
 
   case 9:
@@ -2164,31 +2164,31 @@ parserData->qtermidattON = false;
 parserData->qtermidxattON = false; 
 parserData->qtermidxOneattON = false; 
 parserData->qtermidxTwoattON = false;
-parserData->qtermcoefattON = false;}
+parserData->qtermcoefattON = false;;}
     break;
 
   case 14:
 
     { if(parserData->qtermidxOneattON) osilerror( NULL, osinstance, parserData, "too many qTerm idxOne attributes"); 
-			parserData->qtermidxOneattON = true;  }
+			parserData->qtermidxOneattON = true;  ;}
     break;
 
   case 15:
 
     { if(parserData->qtermidxTwoattON) osilerror( NULL, osinstance, parserData, "too many qTerm idxTwo attributes"); 
-			parserData->qtermidxTwoattON = true;  }
+			parserData->qtermidxTwoattON = true;  ;}
     break;
 
   case 16:
 
     { if(parserData->qtermcoefattON) osilerror( NULL, osinstance, parserData, "too many qTerm coef attributes"); 
-			parserData->qtermcoefattON = true;  }
+			parserData->qtermcoefattON = true;  ;}
     break;
 
   case 17:
 
     { if(parserData->qtermidxattON) osilerror( NULL, osinstance, parserData, "too many qTerm idx attributes"); 
-			parserData->qtermidxattON = true;  }
+			parserData->qtermidxattON = true;  ;}
     break;
 
   case 18:
@@ -2198,7 +2198,7 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
 	if( (yyvsp[(3) - (4)].ival) >= osinstance->instanceData->variables->numberOfVariables){
 	 	osilerror( NULL, osinstance, parserData, "variable index exceeds number of variables");
 	 }
-}
+;}
     break;
 
   case 19:
@@ -2208,30 +2208,30 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
 	if( (yyvsp[(3) - (4)].ival) >= osinstance->instanceData->variables->numberOfVariables){
 	 	osilerror( NULL, osinstance, parserData, "variable index exceeds number of variables");
 	 }
-}
+;}
     break;
 
   case 20:
 
     {if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
-osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->coef = (yyvsp[(3) - (4)].dval);}
+osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->coef = (yyvsp[(3) - (4)].dval);;}
     break;
 
   case 21:
 
     { 
-osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->coef = (yyvsp[(3) - (4)].ival);}
+osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->coef = (yyvsp[(3) - (4)].ival);;}
     break;
 
   case 22:
 
     {  if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
-osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->idx = (yyvsp[(3) - (4)].ival);}
+osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->idx = (yyvsp[(3) - (4)].ival);;}
     break;
 
   case 24:
 
-    {  if(parserData->nlnodecount <  parserData->tmpnlcount)  osilerror( NULL, osinstance, parserData, "actual number of nl terms less than number attribute");   }
+    {  if(parserData->nlnodecount <  parserData->tmpnlcount)  osilerror( NULL, osinstance, parserData, "actual number of nl terms less than number attribute");   ;}
     break;
 
   case 25:
@@ -2240,7 +2240,7 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
 parserData->tmpnlcount = (yyvsp[(3) - (5)].ival);
 osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions = (yyvsp[(3) - (5)].ival);  
 if(osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions > 0 ) osinstance->instanceData->nonlinearExpressions->nl = new Nl*[ (yyvsp[(3) - (5)].ival) ];
-}
+;}
     break;
 
   case 27:
@@ -2250,7 +2250,7 @@ if(osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions 
 	osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->m_treeRoot = 
 	parserData->nlNodeVec[ 0]->createExpressionTreeFromPrefix( parserData->nlNodeVec);
 	parserData->nlnodecount++;
-}
+;}
     break;
 
   case 29:
@@ -2267,7 +2267,7 @@ parserData->sumVec.clear();
 parserData->maxVec.clear();
 parserData->minVec.clear();
 parserData->productVec.clear();
-}
+;}
     break;
 
   case 53:
@@ -2275,7 +2275,7 @@ parserData->productVec.clear();
     {
 	parserData->nlNodePoint = new OSnLNodeTimes();
 	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
-}
+;}
     break;
 
   case 55:
@@ -2283,7 +2283,7 @@ parserData->productVec.clear();
     {
 	parserData->nlNodePoint = new OSnLNodePlus();
 	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
-}
+;}
     break;
 
   case 57:
@@ -2291,7 +2291,7 @@ parserData->productVec.clear();
     {
 	parserData->nlNodePoint = new OSnLNodeMinus();
 	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
-}
+;}
     break;
 
   case 59:
@@ -2299,7 +2299,7 @@ parserData->productVec.clear();
     {
 	parserData->nlNodePoint = new OSnLNodeNegate();
 	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
-}
+;}
     break;
 
   case 61:
@@ -2307,7 +2307,7 @@ parserData->productVec.clear();
     { 
 	parserData->nlNodePoint = new OSnLNodeDivide();
 	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
-}
+;}
     break;
 
   case 63:
@@ -2315,7 +2315,7 @@ parserData->productVec.clear();
     {
 	parserData->nlNodePoint = new OSnLNodePower();
 	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
-}
+;}
     break;
 
   case 65:
@@ -2324,7 +2324,7 @@ parserData->productVec.clear();
 	parserData->nlNodePoint = new OSnLNodeSum();
 	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
 	parserData->sumVec.push_back( parserData->nlNodePoint);
-}
+;}
     break;
 
   case 66:
@@ -2332,17 +2332,17 @@ parserData->productVec.clear();
     {
 	parserData->sumVec.back()->m_mChildren = new OSnLNode*[ parserData->sumVec.back()->inumberOfChildren];
 	parserData->sumVec.pop_back();
-}
+;}
     break;
 
   case 67:
 
-    {	parserData->sumVec.back()->inumberOfChildren++; }
+    {	parserData->sumVec.back()->inumberOfChildren++; ;}
     break;
 
   case 68:
 
-    {	parserData->sumVec.back()->inumberOfChildren++; }
+    {	parserData->sumVec.back()->inumberOfChildren++; ;}
     break;
 
   case 69:
@@ -2351,7 +2351,7 @@ parserData->productVec.clear();
 	parserData->nlNodePoint = new OSnLNodeAllDiff();
 	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
 	parserData->allDiffVec.push_back( parserData->nlNodePoint);
-}
+;}
     break;
 
   case 70:
@@ -2360,17 +2360,17 @@ parserData->productVec.clear();
 	parserData->allDiffVec.back()->m_mChildren = new OSnLNode*[ parserData->allDiffVec.back()->inumberOfChildren];
 	parserData->allDiffVec.pop_back();
 	osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->bCppADMustReTape = true;
-}
+;}
     break;
 
   case 71:
 
-    {	parserData->allDiffVec.back()->inumberOfChildren++; }
+    {	parserData->allDiffVec.back()->inumberOfChildren++; ;}
     break;
 
   case 72:
 
-    {	parserData->allDiffVec.back()->inumberOfChildren++; }
+    {	parserData->allDiffVec.back()->inumberOfChildren++; ;}
     break;
 
   case 73:
@@ -2379,7 +2379,7 @@ parserData->productVec.clear();
 	parserData->nlNodePoint = new OSnLNodeMax();
 	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
 	parserData->maxVec.push_back( parserData->nlNodePoint);
-}
+;}
     break;
 
   case 74:
@@ -2388,17 +2388,17 @@ parserData->productVec.clear();
 	parserData->maxVec.back()->m_mChildren = new OSnLNode*[ parserData->maxVec.back()->inumberOfChildren];
 	parserData->maxVec.pop_back();
 	osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->bCppADMustReTape = true;
-}
+;}
     break;
 
   case 75:
 
-    {	parserData->maxVec.back()->inumberOfChildren++; }
+    {	parserData->maxVec.back()->inumberOfChildren++; ;}
     break;
 
   case 76:
 
-    {	parserData->maxVec.back()->inumberOfChildren++; }
+    {	parserData->maxVec.back()->inumberOfChildren++; ;}
     break;
 
   case 77:
@@ -2407,7 +2407,7 @@ parserData->productVec.clear();
 	parserData->nlNodePoint = new OSnLNodeMin();
 	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
 	parserData->minVec.push_back( parserData->nlNodePoint);
-}
+;}
     break;
 
   case 78:
@@ -2416,17 +2416,17 @@ parserData->productVec.clear();
 	parserData->minVec.back()->m_mChildren = new OSnLNode*[ parserData->minVec.back()->inumberOfChildren];
 	parserData->minVec.pop_back();
 	osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->bCppADMustReTape = true;
-}
+;}
     break;
 
   case 79:
 
-    {	parserData->minVec.back()->inumberOfChildren++; }
+    {	parserData->minVec.back()->inumberOfChildren++; ;}
     break;
 
   case 80:
 
-    {	parserData->minVec.back()->inumberOfChildren++; }
+    {	parserData->minVec.back()->inumberOfChildren++; ;}
     break;
 
   case 81:
@@ -2435,7 +2435,7 @@ parserData->productVec.clear();
 	parserData->nlNodePoint = new OSnLNodeProduct();
 	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
 	parserData->productVec.push_back( parserData->nlNodePoint);
-}
+;}
     break;
 
   case 82:
@@ -2443,17 +2443,17 @@ parserData->productVec.clear();
     {
 	parserData->productVec.back()->m_mChildren = new OSnLNode*[ parserData->productVec.back()->inumberOfChildren];
 	parserData->productVec.pop_back();
-}
+;}
     break;
 
   case 83:
 
-    {	parserData->productVec.back()->inumberOfChildren++; }
+    {	parserData->productVec.back()->inumberOfChildren++; ;}
     break;
 
   case 84:
 
-    {	parserData->productVec.back()->inumberOfChildren++; }
+    {	parserData->productVec.back()->inumberOfChildren++; ;}
     break;
 
   case 85:
@@ -2461,7 +2461,7 @@ parserData->productVec.clear();
     {
 	parserData->nlNodePoint = new OSnLNodeLn();
 	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
-}
+;}
     break;
 
   case 87:
@@ -2469,7 +2469,7 @@ parserData->productVec.clear();
     {
 	parserData->nlNodePoint = new OSnLNodeSqrt();
 	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
-}
+;}
     break;
 
   case 89:
@@ -2477,7 +2477,7 @@ parserData->productVec.clear();
     {
 	parserData->nlNodePoint = new OSnLNodeSquare();
 	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
-}
+;}
     break;
 
   case 91:
@@ -2485,7 +2485,7 @@ parserData->productVec.clear();
     {
 	parserData->nlNodePoint = new OSnLNodeCos();
 	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
-}
+;}
     break;
 
   case 93:
@@ -2493,7 +2493,7 @@ parserData->productVec.clear();
     {
 	parserData->nlNodePoint = new OSnLNodeSin();
 	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
-}
+;}
     break;
 
   case 95:
@@ -2501,7 +2501,7 @@ parserData->productVec.clear();
     {
 	parserData->nlNodePoint = new OSnLNodeExp();
 	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
-}
+;}
     break;
 
   case 97:
@@ -2509,14 +2509,14 @@ parserData->productVec.clear();
     {
 	parserData->nlNodePoint = new OSnLNodeAbs();
 	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
-}
+;}
     break;
 
   case 98:
 
     {
 osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->bCppADMustReTape = true;
-}
+;}
     break;
 
   case 99:
@@ -2524,26 +2524,26 @@ osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->os
     {
 	parserData->nlNodePoint = new OSnLNodeIf();
 	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
-}
+;}
     break;
 
   case 100:
 
     {
 osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->bCppADMustReTape = true;
-}
+;}
     break;
 
   case 101:
 
     {	parserData->nlNodePoint = new OSnLNodeE();
-	parserData->nlNodeVec.push_back( parserData->nlNodePoint);}
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);;}
     break;
 
   case 105:
 
     {	parserData->nlNodePoint = new OSnLNodePI();
-	parserData->nlNodeVec.push_back( parserData->nlNodePoint);}
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);;}
     break;
 
   case 109:
@@ -2551,58 +2551,58 @@ osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->os
     {
 	parserData->nlNodeNumberPoint = new OSnLNodeNumber();
 	parserData->nlNodeVec.push_back( parserData->nlNodeNumberPoint);
-}
+;}
     break;
 
   case 110:
 
-    {parserData->numbervalueattON = false; parserData->numbertypeattON = false; parserData->numberidattON = false;}
+    {parserData->numbervalueattON = false; parserData->numbertypeattON = false; parserData->numberidattON = false;;}
     break;
 
   case 115:
 
     {if(parserData->numbertypeattON) osilerror( NULL, osinstance, parserData, "too many number type attributes"); 
-			parserData->numbertypeattON = true; }
+			parserData->numbertypeattON = true; ;}
     break;
 
   case 116:
 
     {if(parserData->numbervalueattON) osilerror( NULL, osinstance, parserData, "too many number value attributes"); 
-			parserData->numbervalueattON = true; }
+			parserData->numbervalueattON = true; ;}
     break;
 
   case 117:
 
     {if(parserData->numberidattON) osilerror( NULL, osinstance, parserData,"too many number id attributes"); 
-			parserData->numberidattON = true; }
+			parserData->numberidattON = true; ;}
     break;
 
   case 118:
 
     {
 	parserData->nlNodeNumberPoint->type = (yyvsp[(2) - (2)].sval);
-}
+;}
     break;
 
   case 120:
 
     {
 	parserData->nlNodeNumberPoint->id = (yyvsp[(2) - (2)].sval);
-}
+;}
     break;
 
   case 122:
 
     {if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
 	parserData->nlNodeNumberPoint->value = (yyvsp[(3) - (4)].dval);
-}
+;}
     break;
 
   case 123:
 
     {if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
 	parserData->nlNodeNumberPoint->value = (yyvsp[(3) - (4)].ival);
-}
+;}
     break;
 
   case 124:
@@ -2610,12 +2610,12 @@ osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->os
     {
 	parserData->nlNodeVariablePoint = new OSnLNodeVariable();
 	parserData->nlNodeVec.push_back( parserData->nlNodeVariablePoint);
-}
+;}
     break;
 
   case 125:
 
-    {parserData->variablecoefattON = false; parserData->variableidxattON = false;}
+    {parserData->variablecoefattON = false; parserData->variableidxattON = false;;}
     break;
 
   case 127:
@@ -2623,34 +2623,34 @@ osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->os
     {
 	parserData->nlNodeVariablePoint->inumberOfChildren = 1;
 	parserData->nlNodeVariablePoint->m_mChildren = new OSnLNode*[ 1];
-}
+;}
     break;
 
   case 132:
 
     {if(parserData->variablecoefattON) osilerror( NULL, osinstance, parserData, "too many variable coef attributes"); 
-			parserData->variablecoefattON = true; }
+			parserData->variablecoefattON = true; ;}
     break;
 
   case 133:
 
     {if(parserData->variableidxattON) osilerror( NULL, osinstance, parserData, "too many variable idx attributes"); 
 			parserData->variableidxattON = true; 
-			}
+			;}
     break;
 
   case 134:
 
     { if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
 	parserData->nlNodeVariablePoint->coef = (yyvsp[(3) - (4)].dval);
-}
+;}
     break;
 
   case 135:
 
     { if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
 	parserData->nlNodeVariablePoint->coef = (yyvsp[(3) - (4)].ival);		
-}
+;}
     break;
 
   case 136:
@@ -2660,12 +2660,12 @@ osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->os
 	if( (yyvsp[(3) - (4)].ival) >= osinstance->instanceData->variables->numberOfVariables){
 	 	osilerror( NULL, osinstance, parserData, "variable index exceeds number of variables");
 	 }
-}
+;}
     break;
 
   case 139:
 
-    {osinstance->instanceData->timeDomain = new TimeDomain();}
+    {osinstance->instanceData->timeDomain = new TimeDomain();;}
     break;
 
   case 146:
@@ -2718,12 +2718,12 @@ osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->os
 	for (int i = 0; i < osinstance->instanceData->objectives->numberOfObjectives; i++)
 		if (parserData->m_miObjStageInfo[i] == -1)
 			osilerror (NULL, osinstance, parserData, "some objectives not assigned to any stage");
-}
+;}
     break;
 
   case 147:
 
-    {osinstance->instanceData->timeDomain->stages = new TimeDomainStages();}
+    {osinstance->instanceData->timeDomain->stages = new TimeDomainStages();;}
     break;
 
   case 148:
@@ -2740,7 +2740,7 @@ osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->os
 		osinstance->instanceData->timeDomain->stages->stage[i]->constraints = new TimeDomainStageConstraints();
 		osinstance->instanceData->timeDomain->stages->stage[i]->objectives  = new TimeDomainStageObjectives();
 	}
-}
+;}
     break;
 
   case 151:
@@ -2751,7 +2751,7 @@ osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->os
 	osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->numberOfVariables = 0;
 	osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->numberOfConstraints = 0;
 	osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->numberOfObjectives = 0;
-}
+;}
     break;
 
   case 152:
@@ -2771,20 +2771,20 @@ osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->os
 	parserData->stageconcount = 0;
 	parserData->stageobjcount = 0;
 	parserData->stagecount++;
-}
+;}
     break;
 
   case 154:
 
     {
-		  osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->name = (yyvsp[(2) - (3)].sval);}
+		  osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->name = (yyvsp[(2) - (3)].sval);;}
     break;
 
   case 159:
 
     {
         parserData->stageVariablesON = true;
-        }
+        ;}
     break;
 
   case 164:
@@ -2803,7 +2803,7 @@ osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->os
 			osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->var[i]->idx = 0; 
 		}
 	};
-}
+;}
     break;
 
   case 165:
@@ -2814,7 +2814,7 @@ osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->os
 		osilerror (NULL, osinstance, parserData, "variable index out of range");
 	parserData->stageVariablesOrdered = true;
 	parserData->stageVariableStartIdx = (yyvsp[(3) - (4)].ival);
-}
+;}
     break;
 
   case 166:
@@ -2825,7 +2825,7 @@ osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->os
 		  osilerror (NULL, osinstance, parserData, "varlist missing");
 	for (int i = 0; i < osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->numberOfVariables; i++)
 		osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->var[i]->idx = parserData->stageVariableStartIdx + i;
-	}
+	;}
     break;
 
   case 167:
@@ -2833,12 +2833,12 @@ osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->os
     {
 	  if (parserData->stagevarcount < osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->numberOfVariables)
 	      osilerror (NULL, osinstance, parserData, "too few variables supplied");
-	  }
+	  ;}
     break;
 
   case 172:
 
-    {if (parserData->stageVariablesOrdered == true) osilerror (NULL, osinstance, parserData, "no varlist expected");}
+    {if (parserData->stageVariablesOrdered == true) osilerror (NULL, osinstance, parserData, "no varlist expected");;}
     break;
 
   case 174:
@@ -2850,14 +2850,14 @@ osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->os
 	    osilerror (NULL, osinstance, parserData, "too many variables in this stage");
 	osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->variables->var[parserData->stagevarcount]->idx = (yyvsp[(3) - (4)].ival);
 	parserData->stagevarcount++;
-}
+;}
     break;
 
   case 178:
 
     {
         parserData->stageConstraintsON = true;
-	}
+	;}
     break;
 
   case 183:
@@ -2876,7 +2876,7 @@ osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->os
 			osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->con[i]->idx = 0; 
 		}
 	};
-}
+;}
     break;
 
   case 184:
@@ -2887,7 +2887,7 @@ osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->os
 		osilerror (NULL, osinstance, parserData, "constraint index out of range");
 	parserData->stageConstraintsOrdered = true;
 	parserData->stageConstraintStartIdx = (yyvsp[(3) - (4)].ival);
-}
+;}
     break;
 
   case 185:
@@ -2898,7 +2898,7 @@ osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->os
 		  osilerror (NULL, osinstance, parserData, "conlist missing");
 	for (int i = 0; i < osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->numberOfConstraints; i++)
 		osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->con[i]->idx = parserData->stageConstraintStartIdx + i;
-	}
+	;}
     break;
 
   case 186:
@@ -2906,12 +2906,12 @@ osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->os
     {
 	  if (parserData->stageconcount < osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->numberOfConstraints)
 	      osilerror (NULL, osinstance, parserData, "too few constraints supplied");
-	  }
+	  ;}
     break;
 
   case 191:
 
-    {if (parserData->stageConstraintsOrdered == true) osilerror (NULL, osinstance, parserData, "no conlist expected");}
+    {if (parserData->stageConstraintsOrdered == true) osilerror (NULL, osinstance, parserData, "no conlist expected");;}
     break;
 
   case 193:
@@ -2923,7 +2923,7 @@ osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->os
 	    osilerror (NULL, osinstance, parserData, "too many constraints in this stage");
 	osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->constraints->con[parserData->stageconcount]->idx = (yyvsp[(3) - (4)].ival);
 	parserData->stageconcount++;
-}
+;}
     break;
 
   case 196:
@@ -2937,14 +2937,14 @@ osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->os
 			{	osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->obj[i] = new TimeDomainStageObj;
 				osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->obj[i]->idx = -(i+1); 
 			}
-	}
+	;}
     break;
 
   case 197:
 
     {
 	  parserData->stageObjectivesON = true;
-	}
+	;}
     break;
 
   case 202:
@@ -2963,7 +2963,7 @@ osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->os
 			osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->obj[i]->idx = 0; 
 		}
 	};
-}
+;}
     break;
 
   case 203:
@@ -2974,7 +2974,7 @@ osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->os
 		osilerror (NULL, osinstance, parserData, "objective index out of range");
 	parserData->stageObjectivesOrdered = true;
 	parserData->stageObjectiveStartIdx = (yyvsp[(3) - (4)].ival);
-}
+;}
     break;
 
   case 204:
@@ -2985,7 +2985,7 @@ osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->os
 		  osilerror (NULL, osinstance, parserData, "objlist missing");
 	for (int i = 0; i < osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->numberOfObjectives; i++)
 		osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->obj[i]->idx = parserData->stageObjectiveStartIdx - i;
-	}
+	;}
     break;
 
   case 205:
@@ -2993,12 +2993,12 @@ osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->os
     {
 	  if (parserData->stageobjcount < osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->numberOfObjectives)
 	      osilerror (NULL, osinstance, parserData, "too few objectives supplied");
-	}
+	;}
     break;
 
   case 210:
 
-    {if (parserData->stageObjectivesOrdered == true) osilerror (NULL, osinstance, parserData, "no objlist expected");}
+    {if (parserData->stageObjectivesOrdered == true) osilerror (NULL, osinstance, parserData, "no objlist expected");;}
     break;
 
   case 212:
@@ -3010,13 +3010,13 @@ osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->os
 	    osilerror (NULL, osinstance, parserData, "too many objectives in this stage");
 	osinstance->instanceData->timeDomain->stages->stage[parserData->stagecount]->objectives->obj[parserData->stageobjcount]->idx = (yyvsp[(3) - (4)].ival);
 	parserData->stageobjcount++;
-}
+;}
     break;
 
   case 215:
 
     {osinstance->instanceData->timeDomain->interval = new TimeDomainInterval();
-        }
+        ;}
     break;
 
   case 216:
@@ -3025,35 +3025,35 @@ osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->os
 		parserData->intervalhorizonON = false;
 		parserData->intervalstartON = false;
 		printf("Interval not yet supported.\n\n");
-}
+;}
     break;
 
   case 221:
 
     { if(parserData->intervalhorizonON) 
        osilerror( NULL, osinstance, parserData, "too many interval horizon attributes");
-		parserData->intervalhorizonON = true; }
+		parserData->intervalhorizonON = true; ;}
     break;
 
   case 222:
 
     { if(parserData->intervalstartON) 
        osilerror( NULL, osinstance, parserData, "too many interval start attributes");
-		parserData->intervalstartON = true; }
+		parserData->intervalstartON = true; ;}
     break;
 
   case 223:
 
     {
 		if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
-		parserData->intervalhorizon = (yyvsp[(3) - (4)].dval);}
+		parserData->intervalhorizon = (yyvsp[(3) - (4)].dval);;}
     break;
 
   case 224:
 
     {
 		if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
-		parserData->intervalstart = (yyvsp[(3) - (4)].dval);}
+		parserData->intervalstart = (yyvsp[(3) - (4)].dval);;}
     break;
 
 
@@ -3711,6 +3711,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 				GETATTRIBUTETEXT;
 				if( strchr("CBIS", attText[0]) == NULL ) {  osilerror_wrapper( ch,osillineno,"variable type not C,B,I, or S"); return false;}
 				osinstance->instanceData->variables->var[varcount]->type = attText[0];
+				if (strchr("B",    attText[0]) != NULL) osinstance->instanceData->variables->var[varcount]->ub = 1.0;
 				delete [] attText;
 				break;
 			case 'l':
