@@ -30216,9 +30216,44 @@ if test $coin_vpath_config = yes; then
 fi
 
 
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/IP_infeasible.osil"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/IP_noconstraint.osil"
+fi
+
+
+
+
 if test $coin_vpath_config = yes; then
   coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/lindoapiaddins.osil"
 fi
+
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/LP_nobasis.osil"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/LP_noconstraint.osil"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/LP_infeasible.osil"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/LP_unbounded.osil"
+fi
+
 
 
 if test $coin_vpath_config = yes; then
