@@ -463,6 +463,11 @@ OS/stylesheets/OSrL.xslt -text
 OS/test/Makefile.am -text
 OS/test/Makefile.in -text
 OS/test/unitTest.cpp -text
+OS/v2.0/errorExample.osrl -text
+OS/v2.0/osUsersManual_2.0.tex -text
+OS/v2.0/parincLinear.osrl -text
+OS/v2.0/reducedcost.osrl -text
+OS/v2.0/rosenbrockmod.osrl -text
 OS/wsdl/1.0/OScL.wsdl -text
 OS/wsdl/1.0/OSdL.wsdl -text
 OS/wsdl/1.0/OShL.wsdl -text
