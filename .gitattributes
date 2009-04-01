@@ -111,6 +111,8 @@ OS/data/configFiles/testlocalclp.config -text
 OS/data/configFiles/testlocalosol.config -text
 OS/data/configFiles/testmps.config -text
 OS/data/configFiles/testnl.config -text
+OS/data/gamsFiles/IP_infeasible.gms -text
+OS/data/gamsFiles/LP_unbounded.gms -text
 OS/data/gamsFiles/os.opt -text
 OS/data/gamsFiles/rbrockmod.gms -text
 OS/data/gamsFiles/trnsport.gms -text
