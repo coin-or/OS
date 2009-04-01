@@ -993,6 +993,11 @@ OSCommon/src/org/optimizationservices/oscommon/datastructure/osquery/StandardQue
 OSCommon/src/org/optimizationservices/oscommon/datastructure/osregistry/ServiceEntry.java -text
 OSCommon/src/org/optimizationservices/oscommon/datastructure/osrepository/RepositoryInstance.java -text
 OSCommon/src/org/optimizationservices/oscommon/datastructure/osresult.zip -text
+OSCommon/src/org/optimizationservices/oscommon/datastructure/osresult/GeneralResult.java -text
+OSCommon/src/org/optimizationservices/oscommon/datastructure/osresult/JobResult.java -text
+OSCommon/src/org/optimizationservices/oscommon/datastructure/osresult/OptimizationResult.java -text
+OSCommon/src/org/optimizationservices/oscommon/datastructure/osresult/ServiceResult.java -text
+OSCommon/src/org/optimizationservices/oscommon/datastructure/osresult/SystemResult.java -text
 OSCommon/src/org/optimizationservices/oscommon/datastructure/ossimulation/SimulationElement.java -text
 OSCommon/src/org/optimizationservices/oscommon/datastructure/ossimulation/SimulationInput.java -text
 OSCommon/src/org/optimizationservices/oscommon/datastructure/ossimulation/SimulationOutput.java -text
