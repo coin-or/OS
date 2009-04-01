@@ -994,6 +994,8 @@ OSCommon/src/org/optimizationservices/oscommon/datastructure/osregistry/ServiceE
 OSCommon/src/org/optimizationservices/oscommon/datastructure/osrepository/RepositoryInstance.java -text
 OSCommon/src/org/optimizationservices/oscommon/datastructure/osresult.zip -text
 OSCommon/src/org/optimizationservices/oscommon/datastructure/osresult/GeneralResult.java -text
+OSCommon/src/org/optimizationservices/oscommon/datastructure/osresult/GeneralStatus.java -text
+OSCommon/src/org/optimizationservices/oscommon/datastructure/osresult/GeneralSubstatus.java -text
 OSCommon/src/org/optimizationservices/oscommon/datastructure/osresult/JobResult.java -text
 OSCommon/src/org/optimizationservices/oscommon/datastructure/osresult/OptimizationResult.java -text
 OSCommon/src/org/optimizationservices/oscommon/datastructure/osresult/OtherResult.java -text
