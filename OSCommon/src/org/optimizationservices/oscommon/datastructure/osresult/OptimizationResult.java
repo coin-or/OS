@@ -1,20 +1,20 @@
 /**
- * @(#)OptimizationOption 1.0 03/14/2004
+ * @(#)OptimizationOption 1.0 03/14/20090
  *
- * Copyright (c) 2004
+ * Copyright (c) 2009
  */
 package org.optimizationservices.oscommon.datastructure.osresult;
 
 
 
 /**
- *
- * <p>A data structure class that corresponds to an xml element in the OSoL schema.  
- *  
- * </p>
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
- * @version 1.0, 03/14/2004
- * @since OS 1.0
+*
+* <p>A data structure class that corresponds to an xml element in the OSrL schema.  
+*  
+* </p>
+* @author Gus Gassmann, Jun Ma, Kipp Martin
+* @version 1.0, 03/14/2009
+* @since OS 2.0
 */
 public class OptimizationResult{
 
@@ -33,4 +33,4 @@ public class OptimizationResult{
 	
 	public SolverOptions solverOptions = null;
 	
-}//class OptimizationOption
+}//class OptimizationResult

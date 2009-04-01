@@ -1,5 +1,5 @@
 /**
- * @(#)ServiceOption 1.0 03/14/2009
+ * @(#)OtherResult 1.0 03/14/2009
  *
  * Copyright (c) 2009
  */
@@ -15,10 +15,12 @@ package org.optimizationservices.oscommon.datastructure.osresult;
 * @version 1.0, 03/14/2009
 * @since OS 2.0
 */
-public class ServiceResult{
+public class OtherResult{
 	
-	public String type = "solver";
+	public String name = "";
 	
-	public OtherResults otherOptions = null;
+	public String description = "";
 
-}//class ServiceResult
+	public String value = "";
+	
+}//class OtherResult

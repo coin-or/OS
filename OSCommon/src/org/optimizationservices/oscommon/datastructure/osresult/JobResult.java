@@ -1,7 +1,7 @@
 /**
- * @(#)JobOption 1.0 03/14/2004
+ * @(#)JobResult 1.0 03/14/2009
  *
- * Copyright (c) 2004
+ * Copyright (c) 2009
  */
 package org.optimizationservices.oscommon.datastructure.osresult;
 
@@ -13,13 +13,13 @@ import org.optimizationservices.oscommon.datastructure.osgeneral.Processes;
 
 
 /**
- *
- * <p>A data structure class that corresponds to an xml element in the OSoL schema.  
- *  
- * </p>
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
- * @version 1.0, 03/14/2004
- * @since OS 1.0
+*
+* <p>A data structure class that corresponds to an xml element in the OSrL schema.  
+*  
+* </p>
+* @author Gus Gassmann, Jun Ma, Kipp Martin
+* @version 1.0, 03/14/2009
+* @since OS 2.0
 */
 public class JobResult{
 	
@@ -51,6 +51,6 @@ public class JobResult{
 
 	public Processes processesToKill = null;
 
-	public OtherOptions otherOptions = null;
+	public OtherResults otherOptions = null;
 	
-}//class JobOption
+}//class JobResult
