@@ -257,7 +257,7 @@
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="solverResults" type="SolverResults" minOccurs="0">
+			<xs:element name="otherSolverOutput" type="OtherSolverOutput" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
@@ -429,16 +429,16 @@
 		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="TimingInformation">
-		<xs:all>
-			<xs:element name="time" minOccurs="0">
+		<xs:sequence>
+			<xs:element name="time" minOccurs="0" maxOccurs="unbounded">
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="Time"/>
 					</xs:simpleContent>
 				</xs:complexType>
 			</xs:element>
-		</xs:all>
-		<xs:attribute name="numberOfTime" type="xs:nonNegativeInteger" use="required"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfTimes" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="Time">
 		<xs:annotation>
@@ -500,7 +500,7 @@
 			<xs:element name="otherSolutionResults" type="SolutionResults" minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute name="targetObjectiveIdx" type="xs:negativeInteger" use="optional"/>
-		<xs:attribute name="mixedObjectives" type="xs:boolean" use="optional" default="false"/>
+		<xs:attribute name="weightedObjectives" type="xs:boolean" use="optional" default="false"/>
 	</xs:complexType>
 	<xs:complexType name="OptimizationSolutionStatus">
 		<xs:annotation>
@@ -608,7 +608,7 @@
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="values" type="VariableValues" minOccurs="0"/>
-			<xs:element name="valuesString" type="VariableStringValues" minOccurs="0"/>
+			<xs:element name="valuesString" type="VariableValuesString" minOccurs="0"/>
 			<xs:element name="basisStatus" type="BasisStatus" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>Experimental</xs:documentation>
@@ -643,7 +643,7 @@
 		</xs:sequence>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="VarStringValue">
+	<xs:complexType name="VarValueString">
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
@@ -653,12 +653,12 @@
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
-	<xs:complexType name="VariableStringValues">
+	<xs:complexType name="VariableValuesString">
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="var" type="VarStringValue" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="var" type="VarValueString" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -769,31 +769,37 @@
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
-	<xs:complexType name="SolverResult">
+	<xs:complexType name="SolverOutput">
 		<xs:annotation>
 			<xs:documentation>proposal. The category attribute should be separated by : if there are more than 1 categories or extra subcategories</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="name" type="xs:string" use="required"/>
-		<xs:attribute name="value" type="xs:string" use="optional"/>
-		<xs:attribute name="category" type="xs:string" use="optional"/>
-		<xs:attribute name="type" type="xs:string" use="optional"/>
-		<xs:attribute name="description" type="xs:string" use="optional"/>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="name" type="xs:string" use="required"/>
+				<xs:attribute name="category" type="xs:string" use="optional"/>
+				<xs:attribute name="type" type="xs:string" use="optional"/>
+				<xs:attribute name="description" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
 	</xs:complexType>
-	<xs:complexType name="SolverResults">
+	<xs:complexType name="OtherSolverOutput">
 		<xs:sequence>
-			<xs:element name="solverResult" type="SolverResult" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="output" type="SolverOutput" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfSolverResults" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfSolverOutput" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="SolutionResult">
 		<xs:annotation>
 			<xs:documentation>proposal. The category attribute should be separated by : if there are more than 1 categories or extra subcategories</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="name" type="xs:string" use="required"/>
-		<xs:attribute name="value" type="xs:string" use="optional"/>
-		<xs:attribute name="category" type="xs:string" use="optional"/>
-		<xs:attribute name="type" type="xs:string" use="optional"/>
-		<xs:attribute name="description" type="xs:string" use="optional"/>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="name" type="xs:string" use="required"/>
+				<xs:attribute name="category" type="xs:string" use="optional"/>
+				<xs:attribute name="type" type="xs:string" use="optional"/>
+				<xs:attribute name="description" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="SolutionResults">
 		<xs:sequence>
