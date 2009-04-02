@@ -465,6 +465,8 @@ OS/stylesheets/OSrL.xslt -text
 OS/test/Makefile.am -text
 OS/test/Makefile.in -text
 OS/test/unitTest.cpp -text
+OS/v2.0/OSResult.cpp -text
+OS/v2.0/OSResult.h -text
 OS/v2.0/errorExample.osrl -text
 OS/v2.0/osUsersManual_2.0.tex -text
 OS/v2.0/parincLinear.osrl -text
