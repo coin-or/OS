@@ -608,7 +608,9 @@ void CoinSolver::solve() throw (ErrorClass) {
 			if( sSolverName.find( "cbc") != std::string::npos){
 			//if( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0){
 			// just use simple branch and bound for anything but cbc
+				//OsiClpSolverInterface cbcSolver;
 				CbcModel model(  *osiSolver);
+				//CbcModel model(  cbcSolver);
 				CbcMain0(  model);		
 
 				
@@ -665,7 +667,18 @@ void CoinSolver::solve() throw (ErrorClass) {
 				// create a solver 
 				OsiSolverInterface *solver = model.solver();
 				cpuTime = CoinCpuTime() - start;
+				// temp -- get the status
+				
 
+				if (model.isProvenInfeasible()) {
+					//std::cout << "OUCH: MODEL IS INFEASIBLE " <<  std::endl;
+					int solIdx = 0;
+					std::string description = "";
+					osresult->setGeneralStatusType("success");
+					osresult->setSolutionStatus(solIdx, "infeasible", description);
+					osrl = osrlwriter->writeOSrL( osresult);
+					return;
+				}
 				writeResult( solver);
 			}
 			else{ // use other solvers
@@ -826,7 +839,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 			osresult->setSolutionStatus(solIdx, "infeasible", description);
 		else
 			if(solver->isProvenDualInfeasible() == true) 
-				osresult->setSolutionStatus(solIdx, "dualinfeasible", description);
+				osresult->setSolutionStatus(solIdx, "model unbounded", description);
 			else
 				osresult->setSolutionStatus(solIdx, "other", description);
 	}
