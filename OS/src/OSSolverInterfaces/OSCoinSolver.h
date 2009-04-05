@@ -16,11 +16,6 @@
 #ifndef COINSOLVER_H 
 #define COINSOLVER_H
 
-#include <CoinPackedMatrix.hpp>
-#include <OsiSolverInterface.hpp>
-#include <OsiClpSolverInterface.hpp> 
-#include <OsiCbcSolverInterface.hpp> 
-
 #include "OSConfig.h" 
 #include "OSDefaultSolver.h"
 #include "OSrLWriter.h"
@@ -28,31 +23,10 @@
 #include "OSiLReader.h"
 #include "OSoLReader.h"
 
-
-
-#ifdef COIN_HAS_CPX
-#include <OsiCpxSolverInterface.hpp>
-#endif
-
-#ifdef COIN_HAS_GLPK
-#include <OsiGlpkSolverInterface.hpp>
-#endif
-
-#ifdef COIN_HAS_DYLP
-#include <OsiDylpSolverInterface.hpp>
-#endif
-
-#ifdef COIN_HAS_SYMPHONY
-#include <OsiSymSolverInterface.hpp>
-#endif
-
-#ifdef COIN_HAS_VOL
-#include <OsiVolSolverInterface.hpp>
-#endif
-
 #include <string>
 
-
+class OsiSolverInterface;
+class CoinPackedMatrix;
 
 /*! \class CoinSolver class.h "CoinSolver.h"
  *  \brief Implements a solve method for the Coin solvers.

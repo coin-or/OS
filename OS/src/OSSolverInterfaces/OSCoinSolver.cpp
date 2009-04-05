@@ -32,6 +32,32 @@
 #include "CbcModel.hpp"
 #include "CbcBranchActual.hpp" //for CbcSOS
 
+#include <CoinPackedMatrix.hpp>
+#include <OsiSolverInterface.hpp>
+#include <OsiClpSolverInterface.hpp> 
+//#include <OsiCbcSolverInterface.hpp> 
+
+
+
+#ifdef COIN_HAS_CPX
+#include <OsiCpxSolverInterface.hpp>
+#endif
+
+#ifdef COIN_HAS_GLPK
+#include <OsiGlpkSolverInterface.hpp>
+#endif
+
+#ifdef COIN_HAS_DYLP
+#include <OsiDylpSolverInterface.hpp>
+#endif
+
+#ifdef COIN_HAS_SYMPHONY
+#include <OsiSymSolverInterface.hpp>
+#endif
+
+#ifdef COIN_HAS_VOL
+#include <OsiVolSolverInterface.hpp>
+#endif
 
 #include "OSDataStructures.h"
 #include "OSParameters.h" 
