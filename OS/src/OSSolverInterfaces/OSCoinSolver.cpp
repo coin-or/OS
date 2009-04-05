@@ -669,8 +669,8 @@ void CoinSolver::solve() throw (ErrorClass) {
 				cpuTime = CoinCpuTime() - start;
 				// temp -- get the status
 				
-				/*
-				if (model.isProvenInfeasible()) {
+				
+				if (model.isProvenInfeasible()  && (osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0) ) {
 					//std::cout << "OUCH: MODEL IS INFEASIBLE " <<  std::endl;
 					int solIdx = 0;
 					std::string description = "";
@@ -679,7 +679,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 					osrl = osrlwriter->writeOSrL( osresult);
 					return;
 				}
-				*/
+				
 				writeResult( solver);
 			}
 			else{ // use other solvers
