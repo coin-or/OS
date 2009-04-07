@@ -324,7 +324,7 @@ expression* CouenneSolver::createCouenneExpression(OSnLNode* node) {
     			 return createCouenneExpression(node->m_mChildren[0]);
     		 default:
     			 expression** args = new expression*[node->inumberOfChildren];
-           for(int i=1;i<node->inumberOfChildren;i++)
+           for(int i=0;i<node->inumberOfChildren;i++)
           	 args[i] = createCouenneExpression(node->m_mChildren[i]);
            expression* base = new exprSum(args, node->inumberOfChildren);
            delete[] args;
@@ -356,7 +356,7 @@ expression* CouenneSolver::createCouenneExpression(OSnLNode* node) {
     			 return createCouenneExpression(node->m_mChildren[0]);
     		 default:
     			 expression** args = new expression*[node->inumberOfChildren];
-           for(int i=1;i<node->inumberOfChildren;i++)
+           for(int i=0;i<node->inumberOfChildren;i++)
           	 args[i] = createCouenneExpression(node->m_mChildren[i]);
            expression* base = new exprMul(args, node->inumberOfChildren);
            delete[] args;
@@ -384,7 +384,7 @@ expression* CouenneSolver::createCouenneExpression(OSnLNode* node) {
     			 return createCouenneExpression(node->m_mChildren[0]);
     		 default:
     			 expression** args = new expression*[node->inumberOfChildren];
-           for(int i=1;i<node->inumberOfChildren;i++)
+           for(int i=0;i<node->inumberOfChildren;i++)
           	 args[i] = createCouenneExpression(node->m_mChildren[i]);
            expression* base = new exprMin(args, node->inumberOfChildren);
            delete[] args;
@@ -398,7 +398,7 @@ expression* CouenneSolver::createCouenneExpression(OSnLNode* node) {
     			 return createCouenneExpression(node->m_mChildren[0]);
     		 default:
     			 expression** args = new expression*[node->inumberOfChildren];
-           for(int i=1;i<node->inumberOfChildren;i++)
+           for(int i=0;i<node->inumberOfChildren;i++)
           	 args[i] = createCouenneExpression(node->m_mChildren[i]);
            expression* base = new exprMax(args, node->inumberOfChildren);
            delete[] args;
