@@ -36,7 +36,7 @@ using std::ostringstream;
 
 BonminSolver::BonminSolver() {
 	osrlwriter = new OSrLWriter();
-	osresult = new OSResult();
+	osresult = new OSResult();	
 	m_osilreader = NULL;
 	m_osolreader = NULL;
 	bonminErrorMsg = "";
@@ -51,12 +51,14 @@ BonminSolver::~BonminSolver() {
 	m_osilreader = NULL;
 	if(m_osolreader != NULL) delete m_osolreader;
 	m_osolreader = NULL;
-	delete osresult;
-	osresult = NULL;
-	delete osrlwriter;
+
+	if(osrlwriter != NULL )delete osrlwriter;
 	osrlwriter = NULL;
-	//delete osinstance;
-	//osinstance = NULL;
+		if(osresult != NULL ){
+			delete osresult;
+			osresult = NULL;
+			cout << "DELETING OS RESULT" << endl;
+		}
 	#ifdef DEBUG
 	cout << "leaving BonminSolver destructor" << endl;
 	#endif
@@ -543,8 +545,8 @@ void
 BonminProblem::finalize_solution(TMINLP::SolverReturn status,
                             Index n, const Number* x, Number obj_value)
 {
-	OSrLWriter *osrlwriter ;
-	osrlwriter = new OSrLWriter();
+	
+
 	std::cout<<"Problem status: "<<status<<std::endl;
 	std::cout<<"Objective value: "<<obj_value<<std::endl;
 	if(printSol_ && x != NULL){
@@ -555,6 +557,13 @@ BonminProblem::finalize_solution(TMINLP::SolverReturn status,
 		}
 		std::cout<<std::endl;
 	}
+	
+	
+	OSrLWriter *osrlwriter = NULL ;
+	osrlwriter = new OSrLWriter();
+
+	OSResult *osresult = NULL ;
+	osresult = new OSResult();
 	
 	  printf("\n\nObjective value\n");
 	  printf("f(x*) = %e\n", obj_value);
@@ -576,6 +585,7 @@ BonminProblem::finalize_solution(TMINLP::SolverReturn status,
 		//	throw ErrorClass("OSResult error: setJobID");
 
 		// set basic problem parameters
+		
 		if(osresult->setVariableNumber( osinstance->getVariableNumber()) != true)
 			throw ErrorClass("OSResult error: setVariableNumer");
 		if(osresult->setObjectiveNumber( 1) != true)
@@ -588,6 +598,7 @@ BonminProblem::finalize_solution(TMINLP::SolverReturn status,
 
 		if(osresult->setGeneralMessage( message) != true)
 			throw ErrorClass("OSResult error: setGeneralMessage");
+	
 
 		switch( status){
 			case SUCCESS:
@@ -601,7 +612,7 @@ BonminProblem::finalize_solution(TMINLP::SolverReturn status,
 			case MAXITER_EXCEEDED:
 				solutionDescription = "MAXITER_EXCEEDED[BONMIN]: Maximum number of iterations exceeded.";
 				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);
-				osresult->setPrimalVariableValues(solIdx, const_cast<double*>(x));
+				//osresult->setPrimalVariableValues(solIdx, const_cast<double*>(x));
 				//osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda));
 				mdObjValues[0] = obj_value;
 				osresult->setObjectiveValues(solIdx, mdObjValues);
@@ -655,19 +666,27 @@ BonminProblem::finalize_solution(TMINLP::SolverReturn status,
 				osresult->setSolutionStatus(solIdx,  "other", solutionDescription);
 		}
 		osresult->setGeneralStatusType("success");
-		delete osrlwriter;
+		*osrl = osrlwriter->writeOSrL( osresult);	
 		delete[] mdObjValues;
+		delete osrlwriter;
 		osrlwriter = NULL;
-
+		delete osresult;
+		osresult = NULL;
 	}
 	
 	catch(const ErrorClass& eclass){
+		OSrLWriter *osrlwriter = NULL ;
+		osrlwriter = new OSrLWriter();
+		OSResult *osresult = NULL ;
+		osresult = new OSResult();
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
-		std::string osrl = osrlwriter->writeOSrL( osresult);
+		*osrl = osrlwriter->writeOSrL( osresult);
 		delete osrlwriter;
 		osrlwriter = NULL;
-		throw ErrorClass(  osrl) ;
+		delete osresult;
+		osresult = NULL;
+		throw ErrorClass(  *osrl) ;
 		delete[] mdObjValues;
 		mdObjValues = NULL;
 	}
@@ -677,14 +696,15 @@ BonminProblem::finalize_solution(TMINLP::SolverReturn status,
    
 
 void BonminSolver::buildSolverInstance() throw (ErrorClass) {
-	try{		
+	try{	
+		
 		if(osil.length() == 0 && osinstance == NULL) throw ErrorClass("there is no instance");
 		if(osinstance == NULL){
 			m_osilreader = new OSiLReader();
 			osinstance = m_osilreader->readOSiL( osil);
 		}
 		// Create a new instance of your nlp 
-		tminlp = new BonminProblem( osinstance, osoption, osresult);
+		tminlp = new BonminProblem( osinstance, osoption, &osrl);
 		this->bCallbuildSolverInstance = true;
 		//Now initialize from tminlp
 		bonmin.initialize( GetRawPtr(tminlp) );
@@ -818,9 +838,14 @@ void BonminSolver::solve() throw (ErrorClass) {
   		}
 
 		std::cout << "Finish Bonmin Optimize" << std::endl;
-		osrl = osrlwriter->writeOSrL( osresult);
-		std::cout << "Finish writing the osrl" << std::endl;
-
+		//std::cout << "Finish writing the osrl" << std::endl;
+		//std::cout << osrl << std::endl;
+		//OSrLReader *osrlreader;
+		//osrlreader = new OSrLReader();
+		//OSResult *osresult2 = osrlreader->readOSrL( osrl);
+		//*osresult = *osresult2;
+		//delete osrlreader;
+		//osrlreader = NULL;
 
 	}
 	catch(const ErrorClass& eclass){
@@ -893,10 +918,10 @@ void BonminSolver::dataEchoCheck(){
 } // end dataEchoCheck
 
 
-BonminProblem::BonminProblem(OSInstance *osinstance_,  OSOption *osoption_, OSResult *osresult_) {
+BonminProblem::BonminProblem(OSInstance *osinstance_,  OSOption *osoption_,  std::string*  osrl_) {
 	osinstance = osinstance_;
 	osoption = osoption_;
-	osresult = osresult_;
+	osrl = osrl_;
 	printSol_ = false;
 }
 

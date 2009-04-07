@@ -471,7 +471,7 @@ void CouenneSolver::solve() throw (ErrorClass) {
 		cout << "osoption = NULL? " << (osoption == NULL)   << endl;
 		cout << "osol length zero?" << (osol.length() == 0) << endl;
 
-		tminlp_ = new BonminProblem( osinstance, osoption, osresult);
+		tminlp_ = new BonminProblem( osinstance, osoption, &osrl);
 		
 		//app = new BonMinApplication();
 		
@@ -612,7 +612,7 @@ void CouenneSolver::solve() throw (ErrorClass) {
 
 
 	} 
-    osrl = osrlwriter->writeOSrL( osresult); 
+    //osrl = osrlwriter->writeOSrL( osresult); 
     	// temporarily delete
 		//delete ci;
 		//ci = NULL;

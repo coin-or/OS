@@ -23,6 +23,7 @@
 #include "OSParameters.h"
 #include "OSnLNode.h"
 #include "OSiLReader.h"
+#include "OSrLReader.h"
 #include "OSoLReader.h"
 #include "OSInstance.h"
 #include "OSExpressionTree.h"
@@ -88,7 +89,7 @@ class BonminProblem : public TMINLP{
 public:
 	
 	/** the BonminProblemclass constructor */
-	BonminProblem(OSInstance *osinstance_ , OSOption *osoption_, OSResult *osresult_);
+	BonminProblem(OSInstance *osinstance_ , OSOption *osoption_, std::string* osrl_);
 	
 	/** the BonminProblem class destructor */
 	virtual ~BonminProblem();
@@ -99,7 +100,7 @@ public:
 
 	OSOption *osoption;
 	
-	OSResult *osresult;
+	std::string*  osrl;
 
 
 	/** now for some pure Bonmin methods */

@@ -104,7 +104,7 @@
 #define DEBUG       
 #define INSTALLATION_TEST   // minimal functionality test
 //#define THOROUGH            // multiple problems for some solvers
-#define COMPONENT_DEBUG     // program logic, especially parser testing
+//#define COMPONENT_DEBUG     // program logic, especially parser testing
 
 
 #include <cppad/cppad.hpp> 
@@ -1146,10 +1146,10 @@ int main(int argC, char* argV[])
 	
 		cout << "Here is the Couenne solver solution for bonminEx1" << endl;
 
-		tmp_writer = new OSrLWriter();
-		solver->osrl = tmp_writer->writeOSrL(solver->osresult);
-		delete tmp_writer;
-		tmp_writer = NULL;
+		//tmp_writer = new OSrLWriter();
+		//solver->osrl = tmp_writer->writeOSrL(solver->osresult);
+		//delete tmp_writer;
+		//tmp_writer = NULL;
 
 		check = -1.70711;
 		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
