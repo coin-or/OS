@@ -102,10 +102,6 @@
  */ 
 
 #define DEBUG       
-#define INSTALLATION_TEST   // minimal functionality test
-//#define THOROUGH            // multiple problems for some solvers
-//#define COMPONENT_DEBUG     // program logic, especially parser testing
-
 
 #include <cppad/cppad.hpp> 
 //#include "CoinUtilsConfig.h"
@@ -220,6 +216,45 @@ int main(int argC, char* argV[])
 	bool ok;
 	double check;
 	
+	
+	bool INSTALLATION_TEST; // minimal functionality test
+	bool THOROUGH;  // multiple problems for some solvers
+	bool COMPONENT_DEBUG;  // program logic, especially parser testing
+	
+	INSTALLATION_TEST = true;
+	THOROUGH = false;
+	COMPONENT_DEBUG = false;
+	//set level of testing
+	
+      
+	if( argC > 2){
+		std::cout << "Too Many Input Parameters" << std::endl;
+		return 1;
+	}
+	int testLevel = 0;
+	if(argC == 2){
+
+		testLevel = atoi(argV[ 1]);
+		std::cout << "testLevel = " <<  testLevel << std::endl;
+		switch (testLevel){
+		case 1:
+			COMPONENT_DEBUG = true;
+			std::cout << "turn on Component Debug "  << std::endl;
+			break;
+		case 2:
+            THOROUGH = true;
+			std::cout << "turn on Thorough"  << std::endl;
+			break;
+		case 3:
+			COMPONENT_DEBUG = true;
+			THOROUGH = true; 
+			std::cout << "turn on Component Debug AND Thorough"  << std::endl;
+			break;
+		}
+	
+	}
+	// end level of testing	
+	
 	//return 0;
 	cout << "START UNIT TEST" << endl;
 	int nOfTest = 0;
@@ -256,7 +291,7 @@ int main(int argC, char* argV[])
 	// 
 //	unitTestResult << "HERE ARE THE UNIT TEST RESULTS:" << std::endl << std::endl;
 
-#ifdef INSTALLATION_TEST
+if(INSTALLATION_TEST == true){
 
 	//first make sure we can read files
 	try{
@@ -517,7 +552,7 @@ int main(int argC, char* argV[])
 		unitTestResultFailure << "Sorry Unit Test Failed Testing Cbc Solver:"  + eclass.errormsg<< endl;
 	}
 
-#ifdef THOROUGH
+if( THOROUGH == true){
 	// now test p0201.osil
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Cbc solver on p0201.osil" << endl << endl;
@@ -585,7 +620,7 @@ int main(int argC, char* argV[])
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
 
-#endif	
+}
 
 #ifdef COIN_HAS_IPOPT
 	IpoptSolver *ipoptSolver  =  NULL;	
@@ -626,7 +661,7 @@ int main(int argC, char* argV[])
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 #endif
 
-#ifdef THOROUGH
+if(THOROUGH == true){
 		// solve another problem
 		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver with HS071_NLPMod.osil" << endl << endl;
 		cout << "create a new IPOPT Solver for OSiL string solution" << endl;
@@ -914,7 +949,7 @@ int main(int argC, char* argV[])
 		delete osolreader;
 		osolreader = NULL;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
-
+#if 0
 		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on HS071_feas.osil" << endl << endl;
 //		OSiLReader *osilreader = NULL;
 		osilreader = new OSiLReader(); 
@@ -955,17 +990,18 @@ int main(int argC, char* argV[])
 		delete solver;
 		solver = NULL;
 		unitTestResult << "Solved problem HS071_feas with Ipopt" << std::endl;
-	
+
 	
 		delete osilreader;
 		osilreader = NULL;
 		delete osolreader;
 		osolreader = NULL;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+#endif	
 //================================================================
 
 
-#endif
+}
 	}
 	catch(const ErrorClass& eclass){
 		unitTestResultFailure << "Sorry Unit Test Failed Testing the Ipopt Solver:"  + eclass.errormsg<< endl; 
@@ -1047,7 +1083,7 @@ int main(int argC, char* argV[])
 		osolreader = NULL;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
-#ifdef THOROUGH
+if(THOROUGH == true){
 		cout << endl << "TEST " << ++nOfTest << ": Bonmin solver on wayneQuadratic.osil" << endl << endl;
 		ok = true;
 		osilFileName = dataDir  + "osilFiles" + dirsep + "wayneQuadratic.osil";
@@ -1109,7 +1145,7 @@ int main(int argC, char* argV[])
 		osolreader = NULL;	
 		unitTestResult << "Solved problem wayneQuadratic.osil with Bonmin" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
-#endif
+}
 	}
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  solver->osrl <<  endl;
@@ -1167,7 +1203,7 @@ int main(int argC, char* argV[])
 		osolreader = NULL;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
-#ifdef THOROUGH   
+if(THOROUGH == true)   {
 		cout << endl << "TEST " << ++nOfTest << ": Couenne solver on bonminEx1_Nonlinear.osil" << endl << endl;
 //		OSiLReader *osilreader = NULL;
 		osilreader = new OSiLReader(); 
@@ -1265,6 +1301,7 @@ int main(int argC, char* argV[])
 		osolreader = NULL;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
+#if 0
 		cout << endl << "TEST " << ++nOfTest << ": Couenne solver on rosenbrockorig.osil" << endl << endl;
 //		OSiLReader *osilreader = NULL;
 		osilreader = new OSiLReader(); 
@@ -1312,7 +1349,8 @@ int main(int argC, char* argV[])
 		delete osolreader;
 		osolreader = NULL;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
-
+#endif
+#if 0
 		cout << endl << "TEST " << ++nOfTest << ": Couenne solver on HS071_feas.osil" << endl << endl;
 //		OSiLReader *osilreader = NULL;
 		osilreader = new OSiLReader(); 
@@ -1353,15 +1391,15 @@ int main(int argC, char* argV[])
 		delete solver;
 		solver = NULL;
 		unitTestResult << "Solved problem HS071_feas with Couenne" << std::endl;
-	
+
 	
 		delete osilreader;
 		osilreader = NULL;
 		delete osolreader;
 		osolreader = NULL;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
-
-#endif
+#endif	
+}
 
 	}
 	catch(const ErrorClass& eclass){
@@ -1768,10 +1806,10 @@ int main(int argC, char* argV[])
 		unitTestResultFailure   << "Sorry Unit Test Failed Testing Use of Base 64" << endl;
 
 	}  
-#endif      //INSTALLATION_TEST
+}      //INSTALLATION_TEST
 
 
-#ifdef COMPONENT_DEBUG
+if( COMPONENT_DEBUG == true){
 
 	// now test postfix and prefix routines
 	try{
@@ -3057,7 +3095,7 @@ int main(int argC, char* argV[])
 
 
 
-#endif       // COMPONENT_DEBUG
+}       // COMPONENT_DEBUG
 
 		
 		
