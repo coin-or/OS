@@ -115,6 +115,7 @@ OS/data/gamsFiles/IP_infeasible.gms -text
 OS/data/gamsFiles/LP_unbounded.gms -text
 OS/data/gamsFiles/os.opt -text
 OS/data/gamsFiles/rbrockmod.gms -text
+OS/data/gamsFiles/rbrockorig.gms -text
 OS/data/gamsFiles/trnsport.gms -text
 OS/data/matlabFiles/OSCallMatlabSolver.m -text
 OS/data/matlabFiles/markowitz.m -text
