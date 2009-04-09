@@ -10,7 +10,9 @@ Rosenbrock, H H, An Automatic Method for finding the Greatest or least value of 
 $Offtext
 
 
-Variables f, x1, x2;
+Variables f
+
+Integer Variables x1, x2;
 
 
 Equations
@@ -24,7 +26,7 @@ func.. f =e= 100*sqr(x2 - sqr(x1)) + sqr(1 - x1) +9*x2;
 x1.lo = 0;
 x2.lo = 0; 
 
-OPTION  MINLP = CoinCbc;
+OPTION  MINLP = OS;
 
 Model rosenbr / all /;
 Solve rosenbr minimizing f using minlp;
