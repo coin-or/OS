@@ -2,7 +2,7 @@
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSrL.xsd: version - 2.0.0-->
 	<!--include: proposal-->
 	<xs:include schemaLocation="OSgL.xsd"/>
@@ -30,7 +30,7 @@
 			</xs:element>
 			<xs:element name="service" type="ServiceResult" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>proposa. Note: this is mainly the output from the OS service.</xs:documentation>
+					<xs:documentation>proposal. Note: this is mainly the output from the OS service.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="job" type="JobResult" minOccurs="0">
@@ -40,7 +40,7 @@
 			</xs:element>
 			<xs:element name="optimization" type="OptimizationResult" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>proposa. Note: this is mainly the output from the solver.l</xs:documentation>
+					<xs:documentation>proposal. Note: this is mainly the output from the solver.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -414,6 +414,7 @@
 				<xs:attribute name="unit" use="optional" default="second">
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
+							<xs:enumeration value="tick"/>
 							<xs:enumeration value="millisecond"/>
 							<xs:enumeration value="second"/>
 							<xs:enumeration value="minute"/>
@@ -786,7 +787,7 @@
 		<xs:sequence>
 			<xs:element name="output" type="SolverOutput" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfSolverOutput" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfOutputs" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="SolutionResult">
 		<xs:annotation>
