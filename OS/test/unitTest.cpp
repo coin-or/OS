@@ -1301,13 +1301,13 @@ if(THOROUGH == true)   {
 		osolreader = NULL;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
-#if 0
-		cout << endl << "TEST " << ++nOfTest << ": Couenne solver on rosenbrockorig.osil" << endl << endl;
+#if 1
+		cout << endl << "TEST " << ++nOfTest << ": Couenne solver on rosenbrockorigInt.osil" << endl << endl;
 //		OSiLReader *osilreader = NULL;
 		osilreader = new OSiLReader(); 
 		osolreader = new OSoLReader(); 
 		ok = true; 
-		osilFileName = dataDir  + "osilFiles" + dirsep + "rosenbrockorig.osil";
+		osilFileName = dataDir  + "osilFiles" + dirsep + "rosenbrockorigInt.osil";
 //		osolFileName = dataDir  + "osolFiles" + dirsep + "rosenbrockorig_Couenne.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 //		osol = fileUtil->getFileAsString( osolFileName.c_str());
@@ -1318,13 +1318,13 @@ if(THOROUGH == true)   {
 		solver->osol = osol; 
 //		solver->osinstance = osilreader->readOSiL( osil);
 //		solver->osoption   = osolreader->readOSoL( osol);
-		cout << "call the COIN - Couenne Solver for rosenbrockorig" << endl;
+		cout << "call the COIN - Couenne Solver for rosenbrockorigInt" << endl;
 		solver->buildSolverInstance();
 	
 		std::cout << " CALL SOLVE " << std::endl;
 		solver->solve();
 	
-		cout << "Here is the Couenne solver solution for rosenbrockorig" << endl;
+		cout << "Here is the Couenne solver solution for rosenbrockorigInt" << endl;
 
 //		OSrLWriter *tmp_writer;
 		tmp_writer = new OSrLWriter();
@@ -1341,7 +1341,7 @@ if(THOROUGH == true)   {
 
 		delete solver;
 		solver = NULL;
-		unitTestResult << "Solved problem rosenbrockorig.osil with Couenne" << std::endl;
+		unitTestResult << "Solved problem rosenbrockorigInt.osil with Couenne" << std::endl;
 	
 	
 		delete osilreader;
@@ -1829,10 +1829,11 @@ if( COMPONENT_DEBUG == true){
 		postfixVec = osinstance->getNonlinearExpressionTreeInPostfix( -1);
 	
 		unsigned int n = postfixVec.size();
+		unsigned int i;
 		//unsigned int i;
 		std::string *nodeNames1 = new std::string[ n];
 		std::string *nodeNames2 = new std::string[ n];
-		for (int i = 0 ; i < n; i++){
+		for (i = 0 ; i < n; i++){
 			std::cout << postfixVec[i]->snodeName << std::endl;
 			nodeNames1[i] = postfixVec[i]->snodeName;
 		}
@@ -1853,7 +1854,7 @@ if( COMPONENT_DEBUG == true){
 		//postfixVec = osinstance->getNonlinearExpressionTreeInPostfix( -1);
 		if(postfixVec.size() != n) throw ErrorClass(" Problem with creating expression trees");
 		std::cout << std::endl << std::endl;
-		for (int i = 0 ; i < n; i++){
+		for (i = 0 ; i < n; i++){
 			//std::cout << postfixVec[i]->snodeName << std::endl;
 			nodeNames2[i] = postfixVec[i]->snodeName;
 			if( nodeNames1[i] != nodeNames2[ i]) throw ErrorClass(" Problem with creating expression trees");
@@ -2416,7 +2417,8 @@ if( COMPONENT_DEBUG == true){
 		SOS3idx[1] = 6;
 		SOS3val[0] = 1.0;
 		SOS3val[1] = 2.0;
-		int tnvar = osoption->getNumberOfSOS(); //!!!
+		int tnvar;
+		tnvar = osoption->getNumberOfSOS(); //!!!
 		ok = osoption->setAnotherSOSVariableBranchingWeight(3,2,1.0,SOS3idx,SOS3val) && ok;
 		assert (osoption->getNumberOfSOS() == (tnvar + 1));
 		assert (osoption->optimization->variables->sosVariableBranchingWeights->sos[tnvar]->var[0]->idx == 3);

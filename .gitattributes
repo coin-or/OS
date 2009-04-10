@@ -157,6 +157,7 @@ OS/data/osilFiles/parincLinearByRow.osil -text
 OS/data/osilFiles/parincQuadratic.osil -text
 OS/data/osilFiles/rosenbrockmod.osil -text
 OS/data/osilFiles/rosenbrockorig.osil -text
+OS/data/osilFiles/rosenbrockorigInt.osil -text
 OS/data/osilFiles/testOperators.osil -text
 OS/data/osilFiles/volumeTest.osil -text
 OS/data/osilFiles/wayneQuadratic.osil -text

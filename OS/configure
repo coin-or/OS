@@ -30302,6 +30302,11 @@ fi
 
 
 if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/rosenbrockorigInt.osil"
+fi
+
+
+if test $coin_vpath_config = yes; then
   coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/testOperators.osil"
 fi
 
