@@ -6696,6 +6696,56 @@ PS: btw, the way to revert the changes is really simple:
 Once you know it it's really logical.
 
 
+%%%%%%%%%
+
+Pietro -- OSOptions
+
+> First question -- you
+> mention LaTeX documentation on the Couenne Wiki but we cannot find the
+> LaTeX documentation anywhere. Do you have a Couenne User's manual?
+
+No, that's still in the works. The only documentation available is the 
+doxygen one (that's what I mean in the wiki page), which becomes 
+available with make doxygen. I hope to complete the manual after the 
+end of this semester.
+
+> In your src/main/BonCouenne.cpp we see you set, for example,
+>
+> bonmin.setDoubleParameter (...)
+>
+> were bonmin is a CouenneSetup object. Are you setting a Bonmin or a
+> Couenne option here?
+
+That's a Bonmin option.
+
+> Are there separate Bonmin and Couenne options?
+
+Yes. There are Couenne-specific options, defined in the 
+registerOptions() methods of CouenneCutGenerator, CouenneProblem, and 
+others, and that you can set using the Couenne option file or the 
+CouenneSetup. The branch&bound general options (strong branching, max 
+time, and others) are inherited from Bonmin. I believe you can also 
+set the latter ones within a CouenneSetup.
+
+> In our OSCouenneSolver we define
+>
+> Ipopt::SmartPtr<TMINLP> tminlp_;
+>
+> and then
+>
+> tminlp_ = new BonminProblem( osinstance, osoption, osresult);
+>
+> where our BonminProblem inherits from class TMINLP.
+>
+> Should we be setting the Bonmin options in one of the TMNLP methods? Or
+> should we set all options (Couenne and Bonmin) through a CouenneSetup
+> object?
+
+A CouenneSetup object inherits from the analogous BonBabSetupBase 
+object, therefore you can set all options through the CouenneSetup 
+object. I hope Pierre can confirm or further clarify on that -- he 
+wrote most of the BonCouenne*.?pp code.
+
 
 
 
