@@ -101,6 +101,8 @@ public:
 	OSOption *osoption;
 	
 	std::string*  osrl;
+	
+	TMINLP::SolverReturn status;
 
 
 	/** now for some pure Bonmin methods */
@@ -192,7 +194,7 @@ public:
 
 	/** @name Solution Methods */
 	  /** Method called by Ipopt at the end of optimization.*/  
-	  virtual void finalize_solution(TMINLP::SolverReturn status,
+	  virtual void finalize_solution(TMINLP::SolverReturn status_,
 	                                 Index n, const Number* x, Number obj_value);
 	//@}
 
@@ -259,9 +261,6 @@ public:
 	~BonminSolver();
 	
 	
-
-	
-	//SmartPtr<BonminProblem> tminlp = new BonminProblem;
 	
 	SmartPtr<BonminProblem> tminlp;
 	
@@ -307,7 +306,7 @@ public:
 private:
 	OSrLWriter  *osrlwriter;
 
-	BonminSetup bonmin;
+	BonminSetup bonminSetup;
 
 	std::string bonminErrorMsg;
 };

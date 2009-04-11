@@ -542,11 +542,11 @@ bool BonminProblem::get_scaling_parameters(Number& obj_scaling,
 
 
 void
-BonminProblem::finalize_solution(TMINLP::SolverReturn status,
+BonminProblem::finalize_solution(TMINLP::SolverReturn status_,
                             Index n, const Number* x, Number obj_value)
 {
 	
-
+	status = status_;
 	std::cout<<"Problem status: "<<status<<std::endl;
 	std::cout<<"Objective value: "<<obj_value<<std::endl;
 	if(printSol_ && x != NULL){
@@ -557,7 +557,7 @@ BonminProblem::finalize_solution(TMINLP::SolverReturn status,
 		}
 		std::cout<<std::endl;
 	}
-	
+	 
 	
 	OSrLWriter *osrlwriter = NULL ;
 	osrlwriter = new OSrLWriter();
@@ -575,6 +575,7 @@ BonminProblem::finalize_solution(TMINLP::SolverReturn status,
 
 	try{
 		
+		std::cout << "SUCCESS =  " << status << std::endl;
 		// resultHeader information
 		if(osresult->setServiceName( "Bonmin solver service") != true)
 			throw ErrorClass("OSResult error: setServiceName");
@@ -707,7 +708,7 @@ void BonminSolver::buildSolverInstance() throw (ErrorClass) {
 		tminlp = new BonminProblem( osinstance, osoption, &osrl);
 		this->bCallbuildSolverInstance = true;
 		//Now initialize from tminlp
-		bonmin.initialize( GetRawPtr(tminlp) );
+		bonminSetup.initialize( GetRawPtr(tminlp) );
 	}
 	catch(const ErrorClass& eclass){
 		std::cout << "THERE IS AN ERROR" << std::endl;
@@ -724,28 +725,28 @@ void BonminSolver::setSolverOptions() throw (ErrorClass) {
 	try{
 
 		this->bSetSolverOptions = true;
-		bonmin.initializeOptionsAndJournalist();
+		bonminSetup.initializeOptionsAndJournalist();
 		//Register an additional option
-		bonmin.roptions()->AddStringOption2("print_solution","Do we print the solution or not?",
+		bonminSetup.roptions()->AddStringOption2("print_solution","Do we print the solution or not?",
 		                                 "yes",
 		                                 "no", "No, we don't.",
 		                                 "yes", "Yes, we do.",
 		                                 "A longer comment can be put here");
 		  
 		 // Here we can change the default value of some Bonmin or Ipopt option
-		bonmin.options()->SetNumericValue("bonmin.time_limit", 1000); //changes bonmin's time limit
-		bonmin.options()->SetStringValue("mu_oracle","loqo");
+		bonminSetup.options()->SetNumericValue("bonmin.time_limit", 1000); //changes bonmin's time limit
+		bonminSetup.options()->SetStringValue("mu_oracle","loqo");
 		  
 		//Here we read several option files
-		bonmin.readOptionsFile("Mybonmin.opt");
-		bonmin.readOptionsFile();// This reads the default file "bonmin.opt"
+		bonminSetup.readOptionsFile("Mybonmin.opt");
+		bonminSetup.readOptionsFile();// This reads the default file "bonmin.opt"
 		  
 		// Options can also be set by using a string with a format similar to the bonmin.opt file
-		bonmin.readOptionsString("bonmin.algorithm B-BB\n");
+		bonminSetup.readOptionsString("bonmin.algorithm B-BB\n");
 		  
 		// Now we can obtain the value of the new option
 		int printSolution;
-		bonmin.options()->GetEnumValue("print_solution", printSolution,"");
+		bonminSetup.options()->GetEnumValue("print_solution", printSolution,"");
 		if(printSolution == 1){
 			tminlp->printSolutionAtEndOfAlgorithm();
 		}	
@@ -767,14 +768,14 @@ void BonminSolver::setSolverOptions() throw (ErrorClass) {
 				std::cout << "bonmin solver option  "  << optionsVector[ i]->name << std::endl;
 				if(optionsVector[ i]->type == "numeric" ){
 					std::cout << "FOUND A NUMERIC OPTION  "  <<  os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) << std::endl;
-					bonmin.options()->SetNumericValue(optionsVector[ i]->name, os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) );	
+					bonminSetup.options()->SetNumericValue(optionsVector[ i]->name, os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) );	
 				}
 				else if(optionsVector[ i]->type == "integer" ){
 					std::cout << "FOUND AN INTEGER OPTION  "  << atoi( optionsVector[ i]->value.c_str() ) << std::endl;
-					bonmin.options()->SetIntegerValue(optionsVector[ i]->name, atoi( optionsVector[ i]->value.c_str() ) );
+					bonminSetup.options()->SetIntegerValue(optionsVector[ i]->name, atoi( optionsVector[ i]->value.c_str() ) );
 				}
 				else if(optionsVector[ i]->type == "string" ){
-					bonmin.options()->SetStringValue(optionsVector[ i]->name, optionsVector[ i]->value);
+					bonminSetup.options()->SetStringValue(optionsVector[ i]->name, optionsVector[ i]->value);
 				}
 			}	
 		}
@@ -808,7 +809,7 @@ void BonminSolver::solve() throw (ErrorClass) {
 
 		  try {
 		    Bab bb;
-		    bb(  bonmin);  //process parameter file using Ipopt and do branch and bound using Cbc
+		    bb(  bonminSetup);  //process parameter file using Ipopt and do branch and bound using Cbc
 
 
 		  }

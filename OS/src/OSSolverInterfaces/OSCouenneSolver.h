@@ -36,6 +36,7 @@
 //#include "CouenneProblem.hpp"
 class CouenneProblem;
 class expression;
+#include "BonCbc.hpp"
 #include "BonCouenneSetup.hpp"
 
 #ifdef HAVE_CTIME
@@ -119,6 +120,12 @@ public:
    	 */	
 	void dataEchoCheck();
 	
+   	/**
+   	 * use this to write the solution information to an 
+   	 * OSResult  object
+   	 */		
+	void writeResult();
+	
 	/** 
 	 * m_osilreader is an OSiLReader object used to create an osinstance from an
 	 * osil string if needed	 
@@ -136,18 +143,22 @@ public:
 	
 	
 	
-	Ipopt::SmartPtr<TMINLP> tminlp_;
+	//Ipopt::SmartPtr<TMINLP> tminlp_;
+	SmartPtr<BonminProblem> tminlp_;
 	
 	Ipopt::SmartPtr<TNLPSolver> app_ ;
+	
+	// this is a Bonmin BonCbc object;
+	Bab bb;
+	
+	TMINLP::SolverReturn status;
 
 	
 
 private:
 	OSrLWriter  *osrlwriter;
-
-	//CouenneSetup couenne;
 	
-	CouenneSetup bonmin_couenne;
+	CouenneSetup couenneSetup;
 
 	std::string couenneErrorMsg;
 

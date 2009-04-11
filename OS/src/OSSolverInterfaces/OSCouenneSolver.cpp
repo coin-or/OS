@@ -68,7 +68,7 @@
 
 #include "BonCouenneSetup.hpp"
 
-#include "BonCbc.hpp"
+
 #ifdef COIN_HAS_FILTERSQP
 #include "BonFilterSolver.hpp"
 #endif
@@ -110,11 +110,9 @@ CouenneSolver::~CouenneSolver() {
 	#ifdef DEBUG
 	cout << "inside CouenneSolver destructor" << endl;
 	#endif
-	cout << "inside CouenneSolver destructor" << endl;
+
 	if(couenne != NULL){
-		cout << "BEFORE DELETE COUENNE" << endl;
 		//delete couenne;
-		cout << "AFTER DELETE COUENNE" << endl;
 	}
 	if(m_osilreader != NULL) delete m_osilreader;
 	m_osilreader = NULL;
@@ -129,7 +127,6 @@ CouenneSolver::~CouenneSolver() {
 	#ifdef DEBUG
 	cout << "leaving CouenneSolver destructor" << endl;
 	#endif
-	cout << "leaving CouenneSolver destructor" << endl;
 }
 
 
@@ -431,7 +428,7 @@ expression* CouenneSolver::createCouenneExpression(OSnLNode* node) {
 
 void CouenneSolver::setSolverOptions() throw (ErrorClass) {
 	try{
-		
+		//kipp -- fill in
 	}
 	
 	catch(const ErrorClass& eclass){
@@ -450,7 +447,7 @@ using namespace Ipopt;
 void CouenneSolver::solve() throw (ErrorClass) {
 #define PRINTED_PRECISION 1e-5
 	const int infeasible = 1;
-	double time_start = CoinCpuTime();
+	//double time_start = CoinCpuTime();
 	try{
 		
 		
@@ -458,7 +455,6 @@ void CouenneSolver::solve() throw (ErrorClass) {
 		
 		char **argv = NULL;
 
-		Bab bb;
     	bb.setUsingCouenne (true);
 
 		//using namespace Ipopt;
@@ -473,31 +469,10 @@ void CouenneSolver::solve() throw (ErrorClass) {
 
 		tminlp_ = new BonminProblem( osinstance, osoption, &osrl);
 		
-		//app = new BonMinApplication();
-		
-		//nlp = new BonminProblem( osinstance, osoption, osresult);
-		//app = new IpoptApplication();
-
-		//this->bCallbuildSolverInstance = true;
-		//Now initialize from tminlp
-		
-		
-
-		
 		CouenneInterface *ci = NULL;
 		
 		ci = new CouenneInterface();
 		
-		
-/***
- * 
- * 
- * 	OsiTMINLPInterface::initialize(Ipopt::SmartPtr<Bonmin::RegisteredOptions> roptions,
-369 	                               Ipopt::SmartPtr<Ipopt::OptionsList> options,
-370 	                               Ipopt::SmartPtr<Ipopt::Journalist> journalist,
-371 	                               const std::string & prefix,
-372 	                               Ipopt::SmartPtr<TMINLP> tminlp)
- */
  
  		Ipopt::SmartPtr<Bonmin::RegisteredOptions> roptions;
  		Ipopt::SmartPtr<Ipopt::OptionsList> options;
@@ -506,18 +481,18 @@ void CouenneSolver::solve() throw (ErrorClass) {
  		const std::string  prefix="bonmin.";
  		
 		std::cout << "INITIALIZE COUENNE JOURNALIST " << std::endl;
-		bonmin_couenne.initializeOptionsAndJournalist();
+		couenneSetup.initializeOptionsAndJournalist();
 
 		std::cout << "INITIALIZE COUENNE INTERFACE" << std::endl;
-		ci->initialize (bonmin_couenne.roptions(),//GetRawPtr(roptions),  
-				bonmin_couenne.options(),//GetRawPtr( options), 
-				bonmin_couenne.journalist(),//GetRawPtr(jnlst),  
+		ci->initialize (couenneSetup.roptions(),//GetRawPtr(roptions),  
+				couenneSetup.options(),//GetRawPtr( options), 
+				couenneSetup.journalist(),//GetRawPtr(jnlst),  
 				prefix, GetRawPtr( tminlp_));	
 	      	
 		std::cout << "INITIALIZE IPOPT SOLVER " << std::endl;
- 		app_ = new Bonmin::IpoptSolver(bonmin_couenne.roptions(),//GetRawPtr(roptions),  
-					       bonmin_couenne.options(),//GetRawPtr( options), 					       
-					       bonmin_couenne.journalist(),//GetRawPtr(jnlst),  
+ 		app_ = new Bonmin::IpoptSolver(couenneSetup.roptions(),//GetRawPtr(roptions),  
+					       couenneSetup.options(),//GetRawPtr( options), 					       
+					       couenneSetup.journalist(),//GetRawPtr(jnlst),  
 					       prefix); 		
  	
 	      	
@@ -527,91 +502,36 @@ void CouenneSolver::solve() throw (ErrorClass) {
 		ci->setSolver( GetRawPtr( app_) );
 			
 		std::cout << "INITIALIZE COUENNE " << std::endl;
-		bonmin_couenne.InitializeCouenne(argv, couenne, ci);	
-		std::cout << " CALL BB " << std::endl;
+		couenneSetup.InitializeCouenne(argv, couenne, ci);
 		
-   		bb ( bonmin_couenne); // do branch and bound
-   		std::cout << " END BB " << std::endl;
-    	 
-	// Pietro's stuff!
-	
-    //////////////////////////////////
+		
+		std::cout << " CALL bb ( couenneSetup) " << std::endl;
+   		bb ( couenneSetup); // do branch and bound
+   		std::cout << " END bb ( couenneSetup) " << std::endl;
+
 
     std::cout.precision (10);
 
-    //////////////////////////////
     CouenneCutGenerator *cg = NULL;
 
     if (bb.model (). cutGenerators ())
       cg = dynamic_cast <CouenneCutGenerator *> 
 	(bb.model (). cutGenerators () [0] -> generator ());
 
-    ////////////////////////////////
-    int nr=-1, nt=-1;
-    double st=-1;
 
-    if (cg){
-    	 cg -> getStats (nr, nt, st);
-    	 std::cout << "Cut Generator Created for Solution Report "   << std::endl; 
-    }
-    else printf ("Warning, could not get pointer to CouenneCutGenerator\n");
 
-    CouenneProblem *cp = cg ? cg -> Problem () : NULL;
+   // std::cout << "Couenne Global Optimum Value = " << global_opt  << std::endl; 
+    //std::cout << "GET BEST POSSIBLE OBJ VALUE =  " << bb.model (). getBestPossibleObjValue ()  << std::endl;
+    std::cout << "NUMBER OF NODES  =  " << bb.numNodes()  << std::endl;
+    std::cout << "BEST POSSIBLE OBJ VALUE =  " << bb.bestObj()  << std::endl;
+    // note model is a CbcModel, bb is a BonCbc object
 
-    // retrieve test value to check
-    double global_opt;
-    bonmin_couenne.options () -> GetNumericValue ("couenne_check", global_opt, "couenne.");
+    // now put information in OSResult object
     
-    std::cout << "Couenne Global Optimum Value = " << global_opt  << std::endl; 
-    std::cout << "GET BEST POSSIBLE OBJ VALUE =  " << bb.model (). getBestPossibleObjValue ()  << std::endl;
-    std::cout << "GET OBJ VALUE   =  " << bb.model (). getObjValue () << std::endl;
-    std::cout << "Display Stats Value   " <<  bonmin_couenne.displayStats () << std::endl;
- 
-    
+    std::cout << "STATUS =  " << tminlp_->status << std::endl;
+    status = tminlp_->status;
+    writeResult();
 
-    if (global_opt < COUENNE_INFINITY) { // some value found in couenne.opt
-
-      double opt = bb.model (). getBestPossibleObjValue ();
-
-      printf ("Global Optimum Test on %-40s %s\n", 
-	      cp ? cp -> problemName ().c_str () : "unknown", 
-	      (fabs (opt - global_opt) / 
-	       (1. + CoinMax (fabs (opt), fabs (global_opt))) <  PRINTED_PRECISION) ? 
-	      (const char *) "OK" : (const char *) "FAILED");
-	      //opt, global_opt,
-	      //fabs (opt - global_opt));
-
-    } else // good old statistics
-
-    if (bonmin_couenne.displayStats ()) { // print statistics
-
-      // CAUTION: assuming first cut generator is our CouenneCutGenerator
-
-      if (cg && !cp) printf ("Warning, could not get pointer to problem\n");
-      else
-	printf ("Stats: %-15s %4d [var] %4d [int] %4d [con] %4d [aux] "
-		"%6d [root] %8d [tot] %6g [sep] %8g [time] %8g [bb] "
-		"%20e [lower] %20e [upper] %7d [nodes]\n",// %s %s\n",
-		cp ? cp -> problemName ().c_str () : "unknown",
-		(cp) ? cp -> nOrigVars     () : -1, 
-		(cp) ? cp -> nOrigIntVars  () : -1, 
-		(cp) ? cp -> nOrigCons     () : -1,
-		(cp) ? (cp -> nVars     () - 
-			cp -> nOrigVars ()): -1,
-		nr, nt, st, 
-		CoinCpuTime () - time_start,
-		cg ? (CoinCpuTime () - cg -> rootTime ()) : CoinCpuTime (),
-		bb.model (). getBestPossibleObjValue (),
-		bb.model (). getObjValue (),
-		//bb.bestBound (),
-		//bb.bestObj (),
-		bb.numNodes ());
-		//bb.iterationCount ());
-		//status.c_str (), message.c_str ());
-      
-
-
-	} 
     //osrl = osrlwriter->writeOSrL( osresult); 
     	// temporarily delete
 		//delete ci;
@@ -637,16 +557,19 @@ void CouenneSolver::solve() throw (ErrorClass) {
 	    //Now depending on what algorithm has been called (B-BB or other) the failed problem may be at different place.
 	    //    const OsiSolverInterface &si1 = (algo > 0) ? nlpSolver : *model.solver();
 	  }
+	  
 	  catch(OsiTMINLPInterface::SimpleError &E) {
 	    std::cerr<<E.className()<<"::"<<E.methodName()
 		     <<std::endl
 		     <<E.message()<<std::endl;
 	  }
+	  
 	  catch(CoinError &E) {
 	    std::cerr<<E.className()<<"::"<<E.methodName()
 		     <<std::endl
 		     <<E.message()<<std::endl;
 	  }
+	  
 	  catch (Ipopt::OPTION_INVALID &E)
 	  {
 	   std::cerr<<"Ipopt exception : "<<E.Message()<<std::endl;
@@ -656,22 +579,161 @@ void CouenneSolver::solve() throw (ErrorClass) {
 	      printf ("problem infeasible\n");
 	  }
 
-}  //solve
+}//end solve()
 
 
+void CouenneSolver::writeResult(){
+	double *x = NULL;
+	double *z = NULL;
+	int i = 0;
+	int solIdx = 0;
+	std::string solutionDescription = "";
+	std::string message = "Couenne solver finishes to the end.";
+	
+	
+	try{
+		x = new double[osinstance->getVariableNumber() ];
+		z = new double[1];		
+		// resultHeader information
+		if(osresult->setServiceName( "Couenne solver service") != true)
+			throw ErrorClass("OSResult error: setServiceName");
+		if(osresult->setInstanceName(  osinstance->getInstanceName()) != true)
+			throw ErrorClass("OSResult error: setInstanceName");	
+		//if(osresult->setJobID( osoption->jobID) != true)
+		//	throw ErrorClass("OSResult error: setJobID");	
+		// set basic problem parameters
+		
+		if(osresult->setVariableNumber( osinstance->getVariableNumber()) != true)
+			throw ErrorClass("OSResult error: setVariableNumer");
+		if(osresult->setObjectiveNumber( 1) != true)
+			throw ErrorClass("OSResult error: setObjectiveNumber");
+		if(osresult->setConstraintNumber( osinstance->getConstraintNumber()) != true)
+			throw ErrorClass("OSResult error: setConstraintNumber");
+		if(osresult->setSolutionNumber(  1) != true)
+			throw ErrorClass("OSResult error: setSolutionNumer");		
+		if(osresult->setGeneralMessage( message) != true)
+			throw ErrorClass("OSResult error: setGeneralMessage");
+	
+		switch( status){
+			case SUCCESS:
+				solutionDescription = "SUCCESS[COUENNE]: Algorithm terminated successfully at a locally optimal point, satisfying the convergence tolerances.";
+				osresult->setSolutionStatus(solIdx,  "locallyOptimal", solutionDescription);		
+				/* Retrieve the solution */
+				//
+				*(z + 0)  =  bb.model().getObjValue();
+				osresult->setObjectiveValues(solIdx, z);
+				for(i=0; i < osinstance->getVariableNumber(); i++){
+					*(x + i) = bb.model().getColSolution()[i];
+					//std::cout <<  *(x + i)  << std::endl;
+				}
+				osresult->setPrimalVariableValues(solIdx, x);	
+			break;
+			
+			case MAXITER_EXCEEDED:
+				solutionDescription = "MAXITER_EXCEEDED[COUENNE]: Maximum number of iterations exceeded.";
+				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);
+				//osresult->setPrimalVariableValues(solIdx, const_cast<double*>(x));
+				//osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda));	
+				/* Retrieve the solution */
+				//
+				*(z + 0)  =  bb.model().getObjValue();
+				osresult->setObjectiveValues(solIdx, z);
+				for(i=0; i < osinstance->getVariableNumber(); i++){
+					*(x + i) = bb.model().getColSolution()[i];
+					//std::cout <<  *(x + i)  << std::endl;
+				}
+				osresult->setPrimalVariableValues(solIdx, x);						
+			break;
+			
+			case STOP_AT_TINY_STEP:
+				solutionDescription = "STOP_AT_TINY_STEP[COUENNE]: Algorithm proceeds with very little progress.";
+				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);	
+				/* Retrieve the solution */
+				//
+				*(z + 0)  =  bb.model().getObjValue();
+				osresult->setObjectiveValues(solIdx, z);
+				for(i=0; i < osinstance->getVariableNumber(); i++){
+					*(x + i) = bb.model().getColSolution()[i];
+					//std::cout <<  *(x + i)  << std::endl;
+				}
+				osresult->setPrimalVariableValues(solIdx, x);	
+			break;
+			
+			case STOP_AT_ACCEPTABLE_POINT:
+				solutionDescription = "STOP_AT_ACCEPTABLE_POINT[COUENNE]: Algorithm stopped at a point that was converged, not to _desired_ tolerances, but to _acceptable_ tolerances";
+				osresult->setSolutionStatus(solIdx,  "BonminAccetable", solutionDescription);
+				/* Retrieve the solution */
+				//
+				*(z + 0)  =  bb.model().getObjValue();
+				osresult->setObjectiveValues(solIdx, z);
+				for(i=0; i < osinstance->getVariableNumber(); i++){
+					*(x + i) = bb.model().getColSolution()[i];
+					std::cout <<  *(x + i)  << std::endl;
+				}
+				osresult->setPrimalVariableValues(solIdx, x);				
+			break;
+			
+			case LOCAL_INFEASIBILITY:
+				solutionDescription = "LOCAL_INFEASIBILITY[COUENNE]: Algorithm converged to a point of local infeasibility. Problem may be infeasible.";
+				osresult->setSolutionStatus(solIdx,  "infeasible", solutionDescription);
+			break;
+			
+			case USER_REQUESTED_STOP:
+				solutionDescription = "USER_REQUESTED_STOP[COUENNE]: The user call-back function  intermediate_callback returned false, i.e., the user code requested a premature termination of the optimization.";
+				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
+			break;
+			
+			case DIVERGING_ITERATES:
+				solutionDescription = "DIVERGING_ITERATES[COUENNE]: It seems that the iterates diverge.";
+				osresult->setSolutionStatus(solIdx,  "unbounded", solutionDescription);
+			break;
+			
+			case RESTORATION_FAILURE:
+				solutionDescription = "RESTORATION_FAILURE[COUENNE]: Restoration phase failed, algorithm doesn't know how to proceed.";
+				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
+			break;
+			
+			case ERROR_IN_STEP_COMPUTATION:
+				solutionDescription = "ERROR_IN_STEP_COMPUTATION[COUENNE]: An unrecoverable error occurred while IPOPT tried to compute the search direction.";
+				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
+			break;
+			
+			case INVALID_NUMBER_DETECTED:
+				solutionDescription = "INVALID_NUMcatBER_DETECTED[COUENNE]: Algorithm received an invalid number (such as NaN or Inf) from the NLP; see also option check_derivatives_for_naninf.";
+				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
+			break;
+			
+			case INTERNAL_ERROR:
+				solutionDescription = "INTERNAL_ERROR[COUENNE]: An unknown internal error occurred. Please contact the IPOPT authors through the mailing list.";
+				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
+			break;
+			
+			default:
+				solutionDescription = "OTHER[COUENNE]: other unknown solution status from Bonmin solver";
+				osresult->setSolutionStatus(solIdx,  "other", solutionDescription);
+		}//switch end	
+		
+		osrl = osrlwriter->writeOSrL( osresult);
+		delete[] x;
+		x = NULL;
+		delete[] z;	
+		z = NULL;
+	}//end try
+	
+	
+	catch(const ErrorClass& eclass){
+		delete[] x;
+		x = NULL;
+		delete[] z;	
+		z = NULL;
+		osresult->setGeneralMessage( eclass.errormsg);
+		osresult->setGeneralStatusType( "error");
+		osrl = osrlwriter->writeOSrL( osresult);
+		throw ErrorClass( osrl) ;
+	}	
+	
+	
+}// end writeResult()
 
-
-/*
-BonminProblem::BonminProblem(OSInstance *osinstance_,  OSOption *osoption_, OSResult *osresult_) {
-	osinstance = osinstance_;
-	osoption = osoption_;
-	osresult = osresult_;
-	printSol_ = false;
-}
-
-BonminProblem::~BonminProblem() {
-
-}
-*/
 
 
