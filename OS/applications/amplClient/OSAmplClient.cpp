@@ -72,7 +72,7 @@
 # endif
 #endif
 
-
+#include "CoinError.hpp"
 //AMPL includes must be last.
 #include <asl.h>
 using std::cerr;
