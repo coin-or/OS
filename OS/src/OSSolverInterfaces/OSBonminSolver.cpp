@@ -25,7 +25,7 @@
 #include "OSMathUtil.h"
 
 #include "BonOsiTMINLPInterface.hpp"
-#include "BonCbc.hpp"
+
 
 #include "CoinTime.hpp"
 
@@ -167,7 +167,9 @@ bool BonminProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 	cout << "Bonmin number variables  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << n << endl;
 	cout << "Bonmin number constraints  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << m << endl;
 	try{
-		osinstance->initForAlgDiff( );
+		cout << "Call Initialize for Alg Diff" << std::endl;
+		osinstance->initForAlgDiff( ); 
+		cout << "Return from Initialize for Alg Diff" << std::endl;
 	}
 	catch(const ErrorClass& eclass){
 		bonminErrorMsg = eclass.errormsg;
@@ -179,6 +181,7 @@ bool BonminProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 	SparseJacobianMatrix *sparseJacobian = NULL;
 	try{
 		sparseJacobian = osinstance->getJacobianSparsityPattern();
+		cout << "Get sparse Jacobian pattern" << std::endl;
 	}
 	catch(const ErrorClass& eclass){
 		bonminErrorMsg = eclass.errormsg;
@@ -255,6 +258,7 @@ bool BonminProblem::get_starting_point(Index n, bool init_x, Number* x,
   	assert(init_z == false);
   	assert(init_lambda == false);
   	int i, m1, n1;
+  	
 
 #ifdef DEBUG
   	cout << "get initial values !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
@@ -364,7 +368,6 @@ bool BonminProblem::get_starting_point(Index n, bool init_x, Number* x,
  
 
 	delete[] initialed;
-  	
   	return true;
 }//get_starting_point
 
@@ -541,156 +544,12 @@ bool BonminProblem::get_scaling_parameters(Number& obj_scaling,
 
 
 
-void
-BonminProblem::finalize_solution(TMINLP::SolverReturn status_,
+void BonminProblem::finalize_solution(TMINLP::SolverReturn status_,
                             Index n, const Number* x, Number obj_value)
 {
 	
 	status = status_;
-	std::cout<<"Problem status: "<<status<<std::endl;
-	std::cout<<"Objective value: "<<obj_value<<std::endl;
-	if(printSol_ && x != NULL){
-		std::cout<<"Solution:"<<std::endl;
-		for(int i = 0 ; i < n ; i++){
-			std::cout<<"x["<<i<<"] = "<<x[i];
-			if(i < n-1) std::cout<<", ";
-		}
-		std::cout<<std::endl;
-	}
-	 
-	
-	OSrLWriter *osrlwriter = NULL ;
-	osrlwriter = new OSrLWriter();
 
-	OSResult *osresult = NULL ;
-	osresult = new OSResult();
-	
-	  printf("\n\nObjective value\n");
-	  printf("f(x*) = %e\n", obj_value);
-	int solIdx = 0;
-	ostringstream outStr;
-	double* mdObjValues = new double[1];
-	std::string message = "Bonmin solver finishes to the end.";
-	std::string solutionDescription = "";	
-
-	try{
-		
-		std::cout << "SUCCESS =  " << status << std::endl;
-		// resultHeader information
-		if(osresult->setServiceName( "Bonmin solver service") != true)
-			throw ErrorClass("OSResult error: setServiceName");
-		if(osresult->setInstanceName(  osinstance->getInstanceName()) != true)
-			throw ErrorClass("OSResult error: setInstanceName");
-
-		//if(osresult->setJobID( osoption->jobID) != true)
-		//	throw ErrorClass("OSResult error: setJobID");
-
-		// set basic problem parameters
-		
-		if(osresult->setVariableNumber( osinstance->getVariableNumber()) != true)
-			throw ErrorClass("OSResult error: setVariableNumer");
-		if(osresult->setObjectiveNumber( 1) != true)
-			throw ErrorClass("OSResult error: setObjectiveNumber");
-		if(osresult->setConstraintNumber( osinstance->getConstraintNumber()) != true)
-			throw ErrorClass("OSResult error: setConstraintNumber");
-		if(osresult->setSolutionNumber(  1) != true)
-			throw ErrorClass("OSResult error: setSolutionNumer");	
-
-
-		if(osresult->setGeneralMessage( message) != true)
-			throw ErrorClass("OSResult error: setGeneralMessage");
-	
-
-		switch( status){
-			case SUCCESS:
-				solutionDescription = "SUCCESS[BONMIN]: Algorithm terminated successfully at a locally optimal point, satisfying the convergence tolerances.";
-				osresult->setSolutionStatus(solIdx,  "locallyOptimal", solutionDescription);
-				osresult->setPrimalVariableValues(solIdx, const_cast<double*>(x));
-				//osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda));
-				mdObjValues[0] = obj_value;
-				osresult->setObjectiveValues(solIdx, mdObjValues);
-			break;
-			case MAXITER_EXCEEDED:
-				solutionDescription = "MAXITER_EXCEEDED[BONMIN]: Maximum number of iterations exceeded.";
-				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);
-				//osresult->setPrimalVariableValues(solIdx, const_cast<double*>(x));
-				//osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda));
-				mdObjValues[0] = obj_value;
-				osresult->setObjectiveValues(solIdx, mdObjValues);
-			break;
-			case STOP_AT_TINY_STEP:
-				solutionDescription = "STOP_AT_TINY_STEP[BONMIN]: Algorithm proceeds with very little progress.";
-				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);
-				osresult->setPrimalVariableValues(solIdx, const_cast<double*>( x));
-				//osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda));
-				mdObjValues[0] = obj_value;
-				osresult->setObjectiveValues(solIdx, mdObjValues);
-			break;
-			case STOP_AT_ACCEPTABLE_POINT:
-				solutionDescription = "STOP_AT_ACCEPTABLE_POINT[BONMIN]: Algorithm stopped at a point that was converged, not to _desired_ tolerances, but to _acceptable_ tolerances";
-				osresult->setSolutionStatus(solIdx,  "BonminAccetable", solutionDescription);
-				osresult->setPrimalVariableValues(solIdx, const_cast<double*>(x));
-				//osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda));
-				mdObjValues[0] = obj_value;
-				osresult->setObjectiveValues(solIdx, mdObjValues);
-			break;
-			case LOCAL_INFEASIBILITY:
-				solutionDescription = "LOCAL_INFEASIBILITY[BONMIN]: Algorithm converged to a point of local infeasibility. Problem may be infeasible.";
-				osresult->setSolutionStatus(solIdx,  "infeasible", solutionDescription);
-			break;
-			case USER_REQUESTED_STOP:
-				solutionDescription = "USER_REQUESTED_STOP[BONMIN]: The user call-back function  intermediate_callback returned false, i.e., the user code requested a premature termination of the optimization.";
-				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
-			break;
-			case DIVERGING_ITERATES:
-				solutionDescription = "DIVERGING_ITERATES[BONMIN]: It seems that the iterates diverge.";
-				osresult->setSolutionStatus(solIdx,  "unbounded", solutionDescription);
-			break;
-			case RESTORATION_FAILURE:
-				solutionDescription = "RESTORATION_FAILURE[BONMIN]: Restoration phase failed, algorithm doesn't know how to proceed.";
-				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
-			break;
-			case ERROR_IN_STEP_COMPUTATION:
-				solutionDescription = "ERROR_IN_STEP_COMPUTATION[BONMIN]: An unrecoverable error occurred while IPOPT tried to compute the search direction.";
-				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
-			break;
-			case INVALID_NUMBER_DETECTED:
-				solutionDescription = "INVALID_NUMcatBER_DETECTED[BONMIN]: Algorithm received an invalid number (such as NaN or Inf) from the NLP; see also option check_derivatives_for_naninf.";
-				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
-			break;
-			case INTERNAL_ERROR:
-				solutionDescription = "INTERNAL_ERROR[BONMIN]: An unknown internal error occurred. Please contact the IPOPT authors through the mailing list.";
-				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
-			break;
-			default:
-				solutionDescription = "OTHER[BONMIN]: other unknown solution status from Bonmin solver";
-				osresult->setSolutionStatus(solIdx,  "other", solutionDescription);
-		}
-		osresult->setGeneralStatusType("success");
-		*osrl = osrlwriter->writeOSrL( osresult);	
-		delete[] mdObjValues;
-		delete osrlwriter;
-		osrlwriter = NULL;
-		delete osresult;
-		osresult = NULL;
-	}
-	
-	catch(const ErrorClass& eclass){
-		OSrLWriter *osrlwriter = NULL ;
-		osrlwriter = new OSrLWriter();
-		OSResult *osresult = NULL ;
-		osresult = new OSResult();
-		osresult->setGeneralMessage( eclass.errormsg);
-		osresult->setGeneralStatusType( "error");
-		*osrl = osrlwriter->writeOSrL( osresult);
-		delete osrlwriter;
-		osrlwriter = NULL;
-		delete osresult;
-		osresult = NULL;
-		throw ErrorClass(  *osrl) ;
-		delete[] mdObjValues;
-		mdObjValues = NULL;
-	}
 }
 
 
@@ -705,7 +564,7 @@ void BonminSolver::buildSolverInstance() throw (ErrorClass) {
 			osinstance = m_osilreader->readOSiL( osil);
 		}
 		// Create a new instance of your nlp 
-		tminlp = new BonminProblem( osinstance, osoption, &osrl);
+		tminlp = new BonminProblem( osinstance, osoption);
 		this->bCallbuildSolverInstance = true;
 		//Now initialize from tminlp
 		bonminSetup.initialize( GetRawPtr(tminlp) );
@@ -808,7 +667,7 @@ void BonminSolver::solve() throw (ErrorClass) {
 		cout << "Parsing took (seconds): "<< duration << endl;
 
 		  try {
-		    Bab bb;
+		    // bb is a Bonmin BonCbc object;;
 		    bb(  bonminSetup);  //process parameter file using Ipopt and do branch and bound using Cbc
 
 
@@ -847,6 +706,10 @@ void BonminSolver::solve() throw (ErrorClass) {
 		//*osresult = *osresult2;
 		//delete osrlreader;
 		//osrlreader = NULL;
+		
+	    std::cout << "STATUS =  " << tminlp->status << std::endl;
+	    status = tminlp->status;
+	    writeResult();
 
 	}
 	catch(const ErrorClass& eclass){
@@ -856,6 +719,161 @@ void BonminSolver::solve() throw (ErrorClass) {
 		throw ErrorClass( osrl) ;
 	}
 }//solve
+
+
+
+
+void BonminSolver::writeResult(){
+	double *x = NULL;
+	double *z = NULL;
+	int i = 0;
+	int solIdx = 0;
+	std::string solutionDescription = "";
+	std::string message = "Bonmin solver finishes to the end.";
+	
+	
+	try{
+		x = new double[osinstance->getVariableNumber() ];
+		z = new double[1];		
+		// resultHeader information
+		if(osresult->setServiceName( "Bonmin solver service") != true)
+			throw ErrorClass("OSResult error: setServiceName");
+		if(osresult->setInstanceName(  osinstance->getInstanceName()) != true)
+			throw ErrorClass("OSResult error: setInstanceName");	
+		//if(osresult->setJobID( osoption->jobID) != true)
+		//	throw ErrorClass("OSResult error: setJobID");	
+		// set basic problem parameters
+		
+		if(osresult->setVariableNumber( osinstance->getVariableNumber()) != true)
+			throw ErrorClass("OSResult error: setVariableNumer");
+		if(osresult->setObjectiveNumber( 1) != true)
+			throw ErrorClass("OSResult error: setObjectiveNumber");
+		if(osresult->setConstraintNumber( osinstance->getConstraintNumber()) != true)
+			throw ErrorClass("OSResult error: setConstraintNumber");
+		if(osresult->setSolutionNumber(  1) != true)
+			throw ErrorClass("OSResult error: setSolutionNumer");		
+		if(osresult->setGeneralMessage( message) != true)
+			throw ErrorClass("OSResult error: setGeneralMessage");
+	
+		switch( status){
+			case SUCCESS:
+				solutionDescription = "SUCCESS[BONMIN]: Algorithm terminated successfully at a locally optimal point, satisfying the convergence tolerances.";
+				osresult->setSolutionStatus(solIdx,  "locallyOptimal", solutionDescription);		
+				/* Retrieve the solution */
+				*(z + 0)  =  bb.bestObj();
+				osresult->setObjectiveValues(solIdx, z);
+				for(i=0; i < osinstance->getVariableNumber(); i++){
+					*(x + i) = bb.bestSolution()[i];
+					//std::cout <<  *(x + i)  << std::endl;
+				}
+				osresult->setPrimalVariableValues(solIdx, x);	
+			break;
+			
+			case MAXITER_EXCEEDED:
+				solutionDescription = "MAXITER_EXCEEDED[BONMIN]: Maximum number of iterations exceeded.";
+				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);
+				//osresult->setPrimalVariableValues(solIdx, const_cast<double*>(x));
+				//osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda));	
+				/* Retrieve the solution */
+				//
+				*(z + 0)  =  bb.bestObj();
+				osresult->setObjectiveValues(solIdx, z);
+				for(i=0; i < osinstance->getVariableNumber(); i++){
+					*(x + i) = bb.bestSolution()[i];
+					//std::cout <<  *(x + i)  << std::endl;
+				}
+				osresult->setPrimalVariableValues(solIdx, x);						
+			break;
+			
+			case STOP_AT_TINY_STEP:
+				solutionDescription = "STOP_AT_TINY_STEP[BONMIN]: Algorithm proceeds with very little progress.";
+				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);	
+				/* Retrieve the solution */
+				//
+				*(z + 0)  =  bb.bestObj();
+				osresult->setObjectiveValues(solIdx, z);
+				for(i=0; i < osinstance->getVariableNumber(); i++){
+					*(x + i) = bb.bestSolution()[i];
+					//std::cout <<  *(x + i)  << std::endl;
+				}
+				osresult->setPrimalVariableValues(solIdx, x);	
+			break;
+			
+			case STOP_AT_ACCEPTABLE_POINT:
+				solutionDescription = "STOP_AT_ACCEPTABLE_POINT[BONMIN]: Algorithm stopped at a point that was converged, not to _desired_ tolerances, but to _acceptable_ tolerances";
+				osresult->setSolutionStatus(solIdx,  "BonminAccetable", solutionDescription);
+				/* Retrieve the solution */
+				//
+				*(z + 0)  =  bb.bestObj();
+				osresult->setObjectiveValues(solIdx, z);
+				for(i=0; i < osinstance->getVariableNumber(); i++){
+					*(x + i) = bb.bestSolution()[i];
+					//std::cout <<  *(x + i)  << std::endl;
+				}
+				osresult->setPrimalVariableValues(solIdx, x);				
+			break;
+			
+			case LOCAL_INFEASIBILITY:
+				solutionDescription = "LOCAL_INFEASIBILITY[BONMIN]: Algorithm converged to a point of local infeasibility. Problem may be infeasible.";
+				osresult->setSolutionStatus(solIdx,  "infeasible", solutionDescription);
+			break;
+			
+			case USER_REQUESTED_STOP:
+				solutionDescription = "USER_REQUESTED_STOP[BONMIN]: The user call-back function  intermediate_callback returned false, i.e., the user code requested a premature termination of the optimization.";
+				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
+			break;
+			
+			case DIVERGING_ITERATES:
+				solutionDescription = "DIVERGING_ITERATES[BONMIN]: It seems that the iterates diverge.";
+				osresult->setSolutionStatus(solIdx,  "unbounded", solutionDescription);
+			break;
+			
+			case RESTORATION_FAILURE:
+				solutionDescription = "RESTORATION_FAILURE[BONMIN]: Restoration phase failed, algorithm doesn't know how to proceed.";
+				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
+			break;
+			
+			case ERROR_IN_STEP_COMPUTATION:
+				solutionDescription = "ERROR_IN_STEP_COMPUTATION[BONMIN]: An unrecoverable error occurred while IPOPT tried to compute the search direction.";
+				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
+			break;
+			
+			case INVALID_NUMBER_DETECTED:
+				solutionDescription = "INVALID_NUMcatBER_DETECTED[BONMIN]: Algorithm received an invalid number (such as NaN or Inf) from the NLP; see also option check_derivatives_for_naninf.";
+				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
+			break;
+			
+			case INTERNAL_ERROR:
+				solutionDescription = "INTERNAL_ERROR[BONMIN]: An unknown internal error occurred. Please contact the IPOPT authors through the mailing list.";
+				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
+			break;
+			
+			default:
+				solutionDescription = "OTHER[BONMIN]: other unknown solution status from Bonmin solver";
+				osresult->setSolutionStatus(solIdx,  "other", solutionDescription);
+		}//switch end	
+		
+		osrl = osrlwriter->writeOSrL( osresult);
+		delete[] x;
+		x = NULL;
+		delete[] z;	
+		z = NULL;
+	}//end try
+	
+	
+	catch(const ErrorClass& eclass){
+		delete[] x;
+		x = NULL;
+		delete[] z;	
+		z = NULL;
+		osresult->setGeneralMessage( eclass.errormsg);
+		osresult->setGeneralStatusType( "error");
+		osrl = osrlwriter->writeOSrL( osresult);
+		throw ErrorClass( osrl) ;
+	}	
+	
+	
+}// end writeResult()
 
 
 void BonminSolver::dataEchoCheck(){
@@ -919,10 +937,9 @@ void BonminSolver::dataEchoCheck(){
 } // end dataEchoCheck
 
 
-BonminProblem::BonminProblem(OSInstance *osinstance_,  OSOption *osoption_,  std::string*  osrl_) {
+BonminProblem::BonminProblem(OSInstance *osinstance_,  OSOption *osoption_) {
 	osinstance = osinstance_;
 	osoption = osoption_;
-	osrl = osrl_;
 	printSol_ = false;
 }
 

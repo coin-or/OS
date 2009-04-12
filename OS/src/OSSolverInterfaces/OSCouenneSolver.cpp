@@ -144,7 +144,8 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 			osinstance = m_osilreader->readOSiL( osil);
 		}	
 		
-		osinstance->initializeNonLinearStructures( );
+		//osinstance->initializeNonLinearStructures( );
+		osinstance->initForAlgDiff( );
 		Ipopt::Journalist* jnlst = new Ipopt::Journalist();
 		jnlst->AddFileJournal("console", "stdout", J_STRONGWARNING);
 		couenne = new CouenneProblem(NULL, NULL, jnlst);
@@ -220,7 +221,7 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 		
 		if( sm){
 			sm->isColumnMajor = false;
-			 sm->bDeleteArrays = true;
+			// sm->bDeleteArrays = true;
 		}		
 		
 		int nconss = osinstance->getConstraintNumber();		
@@ -467,7 +468,7 @@ void CouenneSolver::solve() throw (ErrorClass) {
 		cout << "osoption = NULL? " << (osoption == NULL)   << endl;
 		cout << "osol length zero?" << (osol.length() == 0) << endl;
 
-		tminlp_ = new BonminProblem( osinstance, osoption, &osrl);
+		tminlp = new BonminProblem( osinstance, osoption);
 		
 		CouenneInterface *ci = NULL;
 		
@@ -487,7 +488,7 @@ void CouenneSolver::solve() throw (ErrorClass) {
 		ci->initialize (couenneSetup.roptions(),//GetRawPtr(roptions),  
 				couenneSetup.options(),//GetRawPtr( options), 
 				couenneSetup.journalist(),//GetRawPtr(jnlst),  
-				prefix, GetRawPtr( tminlp_));	
+				prefix, GetRawPtr( tminlp) );	
 	      	
 		std::cout << "INITIALIZE IPOPT SOLVER " << std::endl;
  		app_ = new Bonmin::IpoptSolver(couenneSetup.roptions(),//GetRawPtr(roptions),  
@@ -497,7 +498,7 @@ void CouenneSolver::solve() throw (ErrorClass) {
  	
 	      	
 		std::cout << "INITIALIZE COUENNE MODEL" << std::endl;
-		ci->setModel( GetRawPtr( tminlp_) );
+		ci->setModel( GetRawPtr( tminlp) );
 		std::cout << "INITIALIZE COUENNE SOLVER" << std::endl;
 		ci->setSolver( GetRawPtr( app_) );
 			
@@ -528,8 +529,8 @@ void CouenneSolver::solve() throw (ErrorClass) {
 
     // now put information in OSResult object
     
-    std::cout << "STATUS =  " << tminlp_->status << std::endl;
-    status = tminlp_->status;
+    std::cout << "STATUS =  " << tminlp->status << std::endl;
+    status = tminlp->status;
     writeResult();
 
     //osrl = osrlwriter->writeOSrL( osresult); 
@@ -620,10 +621,10 @@ void CouenneSolver::writeResult(){
 				osresult->setSolutionStatus(solIdx,  "locallyOptimal", solutionDescription);		
 				/* Retrieve the solution */
 				//
-				*(z + 0)  =  bb.model().getObjValue();
+				*(z + 0)  =  bb.bestObj();
 				osresult->setObjectiveValues(solIdx, z);
 				for(i=0; i < osinstance->getVariableNumber(); i++){
-					*(x + i) = bb.model().getColSolution()[i];
+					*(x + i) = bb.bestSolution()[i];
 					//std::cout <<  *(x + i)  << std::endl;
 				}
 				osresult->setPrimalVariableValues(solIdx, x);	
@@ -636,10 +637,10 @@ void CouenneSolver::writeResult(){
 				//osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda));	
 				/* Retrieve the solution */
 				//
-				*(z + 0)  =  bb.model().getObjValue();
+				*(z + 0)  =  bb.bestObj();
 				osresult->setObjectiveValues(solIdx, z);
 				for(i=0; i < osinstance->getVariableNumber(); i++){
-					*(x + i) = bb.model().getColSolution()[i];
+					*(x + i) = bb.bestSolution()[i];
 					//std::cout <<  *(x + i)  << std::endl;
 				}
 				osresult->setPrimalVariableValues(solIdx, x);						
@@ -650,10 +651,10 @@ void CouenneSolver::writeResult(){
 				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);	
 				/* Retrieve the solution */
 				//
-				*(z + 0)  =  bb.model().getObjValue();
+				*(z + 0)  =  bb.bestObj();
 				osresult->setObjectiveValues(solIdx, z);
 				for(i=0; i < osinstance->getVariableNumber(); i++){
-					*(x + i) = bb.model().getColSolution()[i];
+					*(x + i) = bb.bestSolution()[i];
 					//std::cout <<  *(x + i)  << std::endl;
 				}
 				osresult->setPrimalVariableValues(solIdx, x);	
@@ -664,11 +665,11 @@ void CouenneSolver::writeResult(){
 				osresult->setSolutionStatus(solIdx,  "BonminAccetable", solutionDescription);
 				/* Retrieve the solution */
 				//
-				*(z + 0)  =  bb.model().getObjValue();
+				*(z + 0)  =  bb.bestObj();
 				osresult->setObjectiveValues(solIdx, z);
 				for(i=0; i < osinstance->getVariableNumber(); i++){
-					*(x + i) = bb.model().getColSolution()[i];
-					std::cout <<  *(x + i)  << std::endl;
+					*(x + i) = bb.bestSolution()[i];
+					//std::cout <<  *(x + i)  << std::endl;
 				}
 				osresult->setPrimalVariableValues(solIdx, x);				
 			break;

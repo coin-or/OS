@@ -2380,6 +2380,11 @@ bool OSInstance::initializeNonLinearStructures( ){
 	m_mdObjectiveFunctionValues = new double[ this->instanceData->objectives->numberOfObjectives];
 	//m_mdObjGradient = new double[ this->instanceData->variables->numberOfVariables];
 	m_bNonLinearStructuresInitialized = true;
+	m_bProcessVariables = true;
+	m_bProcessObjectives = true;
+	m_bProcessConstraints = true;
+	m_bProcessExpressionTrees = true;
+	m_bDuplicateExpressionTreesMap = true;
 	return true;
 }
 
@@ -3761,6 +3766,8 @@ bool OSInstance::initForAlgDiff(){
 		m_vdRangeUnitVec.push_back( 0.0 );
 	}
 	m_binitForAlgDiff = true;
+	m_bSparseJacobianCalculated = true;
+	//m_bProcessExpressionTrees = true;
 	return true;
 }//end initForAlgDiff
 

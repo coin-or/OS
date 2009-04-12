@@ -83,19 +83,12 @@ class expression;
 using namespace Bonmin;
 class CouenneSolver : public DefaultSolver{ 	
 public:
-	
-
 
 	/** the CouenneSolver class constructor */
 	CouenneSolver();
 	
 	/** the IpoptSolver class destructor */
 	~CouenneSolver();
-	
-	
-
-
-	
 	
 	/** solve results in an instance being read into the Couenne
 	 * data structrues and optimized */
@@ -137,14 +130,11 @@ public:
 	 * osol string if needed	 
 	 */		
 	OSoLReader *m_osolreader;
-	
-	
+		
 	CouenneProblem *couenne;
-	
-	
-	
-	//Ipopt::SmartPtr<TMINLP> tminlp_;
-	SmartPtr<BonminProblem> tminlp_;
+		
+	//Ipopt::SmartPtr<TMINLP> tminlp;
+	SmartPtr<BonminProblem> tminlp;
 	
 	Ipopt::SmartPtr<TNLPSolver> app_ ;
 	

@@ -70,7 +70,7 @@
 
 
 
-
+#include "BonCbc.hpp"
 #include "BonTMINLP.hpp"
 #include "BonBonminSetup.hpp"
 
@@ -89,19 +89,15 @@ class BonminProblem : public TMINLP{
 public:
 	
 	/** the BonminProblemclass constructor */
-	BonminProblem(OSInstance *osinstance_ , OSOption *osoption_, std::string* osrl_);
+	BonminProblem(OSInstance *osinstance_ , OSOption *osoption_);
 	
 	/** the BonminProblem class destructor */
 	virtual ~BonminProblem();
-	
-	
-	
+		
 	OSInstance *osinstance;
 
 	OSOption *osoption;
-	
-	std::string*  osrl;
-	
+
 	TMINLP::SolverReturn status;
 
 
@@ -263,6 +259,11 @@ public:
 	
 	
 	SmartPtr<BonminProblem> tminlp;
+		
+	// this is a Bonmin BonCbc object;
+	Bab bb;
+	
+	TMINLP::SolverReturn status;
 	
 	//SmartPtr<IpoptApplication> app;
 	
@@ -301,6 +302,14 @@ public:
 	 * osol string if needed	 
 	 */		
 	OSoLReader *m_osolreader;
+	
+	
+	
+   	/**
+   	 * use this to write the solution information to an 
+   	 * OSResult  object
+   	 */		
+	void writeResult();
 
 
 private:
