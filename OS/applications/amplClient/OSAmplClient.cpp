@@ -73,6 +73,7 @@
 #endif
 
 #include "CoinError.hpp"
+#include "CoinHelperFunctions.hpp"
 //AMPL includes must be last.
 #include <asl.h>
 using std::cerr;

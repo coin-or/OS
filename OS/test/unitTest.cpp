@@ -132,7 +132,10 @@
 
 #include <CoinMpsIO.hpp>
 #include <CoinPackedMatrix.hpp>
-    
+
+
+#include "CoinError.hpp"
+#include "CoinHelperFunctions.hpp"
 
 
 
