@@ -1113,7 +1113,7 @@ private:
 	
 	
 	
-	std::map<int, int> m_mapCppADFunRangeIndex ;
+	std::map<int, int> m_mapOSADFunRangeIndex ;
 	
 	/**
 	 * m_LagrangianExpTree is an OSExpressionTree object that is the expression tree
@@ -1162,10 +1162,10 @@ private:
 	std::map<int, OSExpressionTree*> m_mapExpressionTreesMod ;
 	
 	/**
-	 * m_bCppADFunIsCreated is true if we have created the OSInstanc
+	 * m_bOSADFunIsCreated is true if we have created the OSInstanc
 	 * CppAD Function
 	 */	  
-	 bool m_bCppADFunIsCreated;
+	 bool m_bOSADFunIsCreated;
 	
 	/**
 	 * is true if a CppAD Expresion Tree has been built for each row and objective 
@@ -2352,7 +2352,7 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * the size of x should equal instanceData->variables->numberOfVariables
 	 * @return if successfully created
 	 */	
-	bool createCppADFun(std::vector<double> vdX );
+	bool createOSADFun(std::vector<double> vdX );
 	
 	/**
 	 * Perform an AD forward sweep  

@@ -102,7 +102,7 @@ OSInstance::OSInstance():
 	m_bLagrangianSparseHessianCreated( false),
 	m_miNonLinearVarsReverseMap( NULL),
 	m_bAllNonlinearVariablesIndex( false),
-	m_bCppADFunIsCreated( false),
+	m_bOSADFunIsCreated( false),
 	m_bCppADTapesBuilt( false),
 	m_bCppADMustReTape( false),
 	m_bDuplicateExpressionTreesMap( false),
@@ -309,7 +309,7 @@ OSInstance::~OSInstance(){
 		std::cout << "Done Deleting  m_miNonlinearExpressionTreeModIndexes" << std::endl;
 		m_miNonlinearExpressionTreeModIndexes = NULL;
 	}
-	if(m_bCppADFunIsCreated == true){
+	if(m_bOSADFunIsCreated == true){
 		delete Fad;
 		Fad = NULL;
 	}
@@ -2756,8 +2756,8 @@ double *OSInstance::calculateObjectiveFunctionGradient(double* x, double *objLam
 						for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
 							m_vdX.push_back( x[ posVarIndexMap->first]) ;
 						}
-						if( (m_bCppADFunIsCreated == false || m_bCppADMustReTape == true )  && (m_mapExpressionTreesMod.size() > 0) ) {
-							createCppADFun( m_vdX);
+						if( (m_bOSADFunIsCreated == false || m_bCppADMustReTape == true )  && (m_mapExpressionTreesMod.size() > 0) ) {
+							createOSADFun( m_vdX);
 						}						
 					}	
 					
@@ -2802,8 +2802,8 @@ double *OSInstance::calculateObjectiveFunctionGradient(double* x, int objIdx, bo
 					for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
 						m_vdX.push_back( x[ posVarIndexMap->first]) ;
 					}
-					if( (m_bCppADFunIsCreated == false || m_bCppADMustReTape == true )  && (m_mapExpressionTreesMod.size() > 0) ) {
-						createCppADFun( m_vdX);
+					if( (m_bOSADFunIsCreated == false || m_bCppADMustReTape == true )  && (m_mapExpressionTreesMod.size() > 0) ) {
+						createOSADFun( m_vdX);
 					}						
 				}	
 				
@@ -3264,12 +3264,15 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( ){
 	//
 	std::vector<double> vx;
 	std::map<int, int>::iterator posMap1, posMap2;	
-	if( (m_bCppADFunIsCreated == false || m_bCppADMustReTape == true )  && (m_mapExpressionTreesMod.size() > 0) ) {
+	if( (m_bOSADFunIsCreated == false || m_bCppADMustReTape == true )  && (m_mapExpressionTreesMod.size() > 0) ) {
 		for(posMap1 = m_mapAllNonlinearVariablesIndex.begin(); posMap1 != m_mapAllNonlinearVariablesIndex.end(); ++posMap1){
 			vx.push_back( 1.0) ;
 		}
-		createCppADFun( vx);
+		createOSADFun( vx);
 	}
+	
+	
+	
 	//
 	// Use CppAD to do a forward sparsity calculation
 	std::vector<bool> r(m_iNumberOfNonlinearVariables * m_iNumberOfNonlinearVariables);
@@ -3278,7 +3281,7 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( ){
 		for(j = 0; j < m_iNumberOfNonlinearVariables; j++)
 			r[ i * m_iNumberOfNonlinearVariables + j ] = false;
 			r[ i * m_iNumberOfNonlinearVariables + i] = true;
-	}
+	}	
 	// compute sparsity pattern for J(x) = F^{(1)} (x)
 	(*Fad).ForSparseJac(m_iNumberOfNonlinearVariables, r);
 	//
@@ -3298,12 +3301,18 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( ){
 		}
 		//std::cout << std::endl;
 	}
+	
+	
+	
+	
+	
 	//std::cout << "Lagrangian Hessian Nonzeros = " << numNonz << std::endl;
 	i = 0;
 	// now that we have the dimension create SparseHessianMatrix (upper triangular)
 	m_LagrangianSparseHessian = new SparseHessianMatrix();
 	m_LagrangianSparseHessian->bDeleteArrays = true;
 	m_LagrangianSparseHessian->hessDimension = numNonz;
+	//m_LagrangianSparseHessian->hessDimension = m_vbLagHessNonz.size();
 	m_LagrangianSparseHessian->hessRowIdx = new int[m_LagrangianSparseHessian->hessDimension];
 	m_LagrangianSparseHessian->hessColIdx = new int[m_LagrangianSparseHessian->hessDimension];
 	m_LagrangianSparseHessian->hessValues = new double[m_LagrangianSparseHessian->hessDimension];
@@ -3354,8 +3363,8 @@ void OSInstance::duplicateExpressionTreesMap(){
 }//duplicateExpressionTreesMap
 
 
-bool OSInstance::createCppADFun(std::vector<double> vdX){
-	if(m_bCppADFunIsCreated == true) return true;
+bool OSInstance::createOSADFun(std::vector<double> vdX){
+	if(m_bOSADFunIsCreated == true) return true;
 	//if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
 	if(m_binitForAlgDiff == false) initForAlgDiff();
 	
@@ -3381,9 +3390,9 @@ bool OSInstance::createCppADFun(std::vector<double> vdX){
 	for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){	
 		m_vFG.push_back( (posMapExpTree->second)->m_treeRoot->constructCppADTape(&m_mapAllNonlinearVariablesIndex, &vdaX) );
 		//std::cout << "PUSHING BACK EXPRESSION NUMBER " << posMapExpTree->first << std::endl;
-		if( m_mapCppADFunRangeIndex.find( posMapExpTree->first) == m_mapCppADFunRangeIndex.end() ){
+		if( m_mapOSADFunRangeIndex.find( posMapExpTree->first) == m_mapOSADFunRangeIndex.end() ){
 			// count which nonlinear obj/constraint this is
-			m_mapCppADFunRangeIndex[ posMapExpTree->first] = kount;
+			m_mapOSADFunRangeIndex[ posMapExpTree->first] = kount;
 			kount++;
 		}
 	}	
@@ -3393,15 +3402,15 @@ bool OSInstance::createCppADFun(std::vector<double> vdX){
 	std::cout << "range space dimension =  " << m_vFG.size() << std::endl;
 	// no forward sweeps done yet
 	m_iHighestTaylorCoeffOrder = -1;
-	m_bCppADFunIsCreated = true;
+	m_bOSADFunIsCreated = true;
 	return true;
-}//end createCppADFun
+}//end createOSADFun
 
 
 std::vector<double> OSInstance::forwardAD(int p, std::vector<double> vdX){
 	try{
-		// make sure a CppADFun has been created
-		if(m_bCppADFunIsCreated == false) createCppADFun( vdX);
+		// make sure a OSADFun has been created
+		if(m_bOSADFunIsCreated == false) createOSADFun( vdX);
 		if(p > (m_iHighestTaylorCoeffOrder + 1) ) throw 
 			ErrorClass( "trying to calculate a p order forward when p-1 Taylor coefficient not available");
 		// adjust the order of the Taylor coefficient
@@ -3446,8 +3455,8 @@ bool OSInstance::getIterateResults( double *x, double *objLambda, double* conMul
 			for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
 				m_vdX.push_back( x[ posVarIndexMap->first]) ;
 			}
-			if( (m_bCppADFunIsCreated == false || m_bCppADMustReTape == true )  && (m_mapExpressionTreesMod.size() > 0) ) {
-				createCppADFun( m_vdX);
+			if( (m_bOSADFunIsCreated == false || m_bCppADMustReTape == true )  && (m_mapExpressionTreesMod.size() > 0) ) {
+				createOSADFun( m_vdX);
 			}	
 		}
 		else{ // make sure vector not empty -- this could happen if we have linear obj and nonlinear constraints
@@ -3455,8 +3464,8 @@ bool OSInstance::getIterateResults( double *x, double *objLambda, double* conMul
 				for(posVarIndexMap = m_mapAllNonlinearVariablesIndex.begin(); posVarIndexMap != m_mapAllNonlinearVariablesIndex.end(); ++posVarIndexMap){
 					m_vdX.push_back( x[ posVarIndexMap->first]) ;
 				}
-				if( (m_bCppADFunIsCreated == false || m_bCppADMustReTape == true )  && (m_mapExpressionTreesMod.size() > 0) ) {
-					createCppADFun( m_vdX);
+				if( (m_bOSADFunIsCreated == false || m_bCppADMustReTape == true )  && (m_mapExpressionTreesMod.size() > 0) ) {
+					createOSADFun( m_vdX);
 				}	
 			}
 		}
@@ -3507,7 +3516,7 @@ bool OSInstance::getZeroOrderResults(double *x, double *objLambda, double *conMu
 		for(rowNum = 0; rowNum < m_iConstraintNumber; rowNum++){
 			m_mdConstraintFunctionValues[ rowNum] = 0.0;
 			if( m_mapExpressionTreesMod.find( rowNum) != m_mapExpressionTreesMod.end() ){
-				m_mdConstraintFunctionValues[ rowNum] = m_vdYval[  m_mapCppADFunRangeIndex[ rowNum]];
+				m_mdConstraintFunctionValues[ rowNum] = m_vdYval[  m_mapOSADFunRangeIndex[ rowNum]];
 			}
 			// now the linear part
 			// be careful, loop over only the constant terms in sparseJacMatrix
