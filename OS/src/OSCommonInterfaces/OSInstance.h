@@ -1163,7 +1163,7 @@ private:
 	
 	/**
 	 * m_bOSADFunIsCreated is true if we have created the OSInstanc
-	 * CppAD Function
+	 * OSAD Function
 	 */	  
 	 bool m_bOSADFunIsCreated;
 	
@@ -2377,6 +2377,20 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * @return a double vector equal to the n*p 
 	 */	
 	std::vector<double> reverseAD(int p, std::vector<double> vdlambda);
+	 
+	 /**
+	  * end revised AD code
+	  */
+	
+	
+	/**
+	 * Call the AD routine to fill in m_vbLagHessNonz and determine the nonzeros.
+	 * 
+	 * <p>
+	 * 
+	 * @return the number of nonzeros in the Hessian 
+	 */	
+	int  getADSparsityHessian();
 	 
 	 /**
 	  * end revised AD code
