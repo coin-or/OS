@@ -597,8 +597,8 @@ void BonminSolver::setSolverOptions() throw (ErrorClass) {
 		bonminSetup.options()->SetStringValue("mu_oracle","loqo");
 		  
 		//Here we read several option files
-		bonminSetup.readOptionsFile("Mybonmin.opt");
-		bonminSetup.readOptionsFile();// This reads the default file "bonmin.opt"
+		//bonminSetup.readOptionsFile("Mybonmin.opt");
+		//bonminSetup.readOptionsFile();// This reads the default file "bonmin.opt"
 		  
 		// Options can also be set by using a string with a format similar to the bonmin.opt file
 		bonminSetup.readOptionsString("bonmin.algorithm B-BB\n");
@@ -626,6 +626,7 @@ void BonminSolver::setSolverOptions() throw (ErrorClass) {
 			for(i = 0; i < num_bonmin_options; i++){
 				std::cout << "bonmin solver option  "  << optionsVector[ i]->name << std::endl;
 				if(optionsVector[ i]->type == "numeric" ){
+					std::cout << "FOUND A NUMERIC OPTION  "  <<  optionsVector[ i]->name << std::endl;
 					std::cout << "FOUND A NUMERIC OPTION  "  <<  os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) << std::endl;
 					bonminSetup.options()->SetNumericValue(optionsVector[ i]->name, os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) );	
 				}

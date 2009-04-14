@@ -1213,12 +1213,7 @@ private:
 	 */
 	double **m_mmdObjGradient;
 	
-	//define the vectors
-		
-	/**
-	 *  m_vX is a vector of CppAD indpendent variables.
-	 */
-	CppAD::vector< AD<double> > m_vX;	
+	//define the vectors	
 
 	/**
 	 * m_vdX is a vector of primal variables at each iteration

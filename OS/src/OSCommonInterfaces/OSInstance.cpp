@@ -27,7 +27,7 @@
 //#define DEBUG
  
 using namespace std;
-using CppAD::NearEqual;
+
 
 OSInstance::OSInstance(): 
 	m_sInstanceName(""),
@@ -3376,7 +3376,7 @@ bool OSInstance::createCppADFun(std::vector<double> vdX){
 	 *  the range vector m_vFG and it is a vector of CppAD 
 	 * objective and constraint functions.
 	 */
-	CppAD::vector< AD<double> > m_vFG;	
+	CppAD::vector< AD<double> > m_vFG;	  
 	int kount = 0;
 	for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){	
 		m_vFG.push_back( (posMapExpTree->second)->m_treeRoot->constructCppADTape(&m_mapAllNonlinearVariablesIndex, &vdaX) );
@@ -3677,7 +3677,7 @@ bool OSInstance::getSecondOrderResults(double *x, double *objLambda, double *con
 				m_vdLambda.push_back( objLambda[ abs(posMapExpTree->first) - 1] );
 			}
 		}
-		for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
+		for(i = 0; i < m_iNumberOfNonlinearVariables; i++){ 
 			m_vdDomainUnitVec[i] = 1.;     
 			rowNum = 0;
 			if( m_mapExpressionTreesMod.size() > 0){          
