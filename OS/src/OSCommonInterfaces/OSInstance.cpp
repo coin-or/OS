@@ -3682,7 +3682,7 @@ bool OSInstance::initForAlgDiff(){
 	//loop over expression tree and see if one requires it
 	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
 	for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){
-		if(posMapExpTree->second->bCppADMustReTape == true) m_bCppADMustReTape = true;
+		if(posMapExpTree->second->bADMustReTape == true) m_bCppADMustReTape = true;
 	}				
 
 	#ifdef DEBUG

@@ -25,7 +25,7 @@ OSExpressionTree::OSExpressionTree():
 	m_treeRoot( NULL),
 	mapVarIdx( NULL),
 	m_bIndexMapGenerated( false),
-	bCppADMustReTape( false),
+	bADMustReTape( false),
 	bDestroyNlNodes( true){
 }//end OSExpressionTree
 
@@ -56,7 +56,7 @@ std::vector<OSnLNode*> OSExpressionTree::getPrefixFromExpressionTree(){
  
 
 double OSExpressionTree::calculateFunction( double *x, bool new_x){
-	//calculateFunctionCppAD( x, functionEvaluated);
+	//calculateFunctionAD( x, functionEvaluated);
 	if( new_x == false){
 		return m_dTreeRootValue; 
 	}

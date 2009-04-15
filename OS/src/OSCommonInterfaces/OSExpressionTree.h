@@ -89,8 +89,8 @@ public:
 	
 	/**
 	 * m_mvarIdx is a map used by
-	 * constructCppADTape(std::map<int, int> *varIdx, CppAD::vector< AD<double> > *XAD)
-	 * to generate the infix expression for CPPAD -- the key is idx a variable number, the  
+	 * constructADTape(std::map<int, int> *varIdx, AD::vector< AD<double> > *XAD)
+	 * to generate the infix expression for AD -- the key is idx a variable number, the  
 	 * value of the map is the corresponding variable count in sparse representation
 	 */	
 	std::map<int, int> *mapVarIdx;
@@ -110,10 +110,10 @@ public:
 	bool  m_bIndexMapGenerated;
 	
 	/**
-	 * is true if a CppAD Expresion Tree has an expression that can change depending on
+	 * is true if a AD Expresion Tree has an expression that can change depending on
 	 * the value of the input, e.g. an if statement -- false by default
 	 */
-	bool bCppADMustReTape;
+	bool bADMustReTape;
 	
 	/**
 	 * m_bDestroyNlNodes if the destructor deletes the OSnLNodes in the Expression tree
@@ -129,9 +129,9 @@ private:
 	std::map<int, int>::iterator m_mPosVarIdx; 
 	
 	/**
-	 * m_CppADTape stores the espression tree for m_treeRoot as an AD<double>.
+	 * m_ADTape stores the espression tree for m_treeRoot as an AD<double>.
 	 */
-	//CppAD::AD<double> m_CppADTape;
+	//AD::AD<double> m_ADTape;
 	
 	
 	/**
