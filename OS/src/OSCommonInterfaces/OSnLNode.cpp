@@ -426,10 +426,10 @@ double OSnLNodePlus::calculateFunction(double *x){
 }// end OSnLNodePlus::calculate
 
 
-ADdouble OSnLNodePlus::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD){
-	m_CppADTape = m_mChildren[0]->constructCppADTape( cppADIdx,  XAD) + m_mChildren[1]->constructCppADTape( cppADIdx,  XAD);
-	return m_CppADTape;
-}// end OSnLNodePlus::constructCppADTape
+ADdouble OSnLNodePlus::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD){
+	m_ADTape = m_mChildren[0]->constructADTape( ADIdx,  XAD) + m_mChildren[1]->constructADTape( ADIdx,  XAD);
+	return m_ADTape;
+}// end OSnLNodePlus::constructADTape
 
 
 OSnLNode* OSnLNodePlus::cloneOSnLNode(){
@@ -472,14 +472,14 @@ double OSnLNodeSum::calculateFunction(double *x){
 }// end OSnLNodeSum::calculate
 
 
-ADdouble OSnLNodeSum::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD){
-	m_CppADTape = 0.0;
+ADdouble OSnLNodeSum::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD){
+	m_ADTape = 0.0;
 	int i;
 	for(i = 0; i < inumberOfChildren; i++){
-			m_CppADTape = m_CppADTape + m_mChildren[i]->constructCppADTape( cppADIdx, XAD);
+			m_ADTape = m_ADTape + m_mChildren[i]->constructADTape( ADIdx, XAD);
 	}
-	return m_CppADTape;
-}// end OSnLNodeSum::constructCppADTape
+	return m_ADTape;
+}// end OSnLNodeSum::constructADTape
 
 OSnLNode* OSnLNodeSum::cloneOSnLNode(){
 	OSnLNode *nlNodePoint;
@@ -532,16 +532,16 @@ double OSnLNodeAllDiff::calculateFunction(double *x){
 }// end OSnLNodeAllDiff::calculate
 
 
-ADdouble OSnLNodeAllDiff::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD){
+ADdouble OSnLNodeAllDiff::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD){
 	try{
 		throw ErrorClass("AllDifferent operator not supported by current Algorithmic Differentiation implementation");
-		return m_CppADTape;
+		return m_ADTape;
 	}
 	catch(const ErrorClass& eclass){
 		throw ErrorClass( eclass.errormsg);
 	}
-	return m_CppADTape;
-}// end OSnLNodeAllDiff::constructCppADTape
+	return m_ADTape;
+}// end OSnLNodeAllDiff::constructADTape
 
 
 OSnLNode* OSnLNodeAllDiff::cloneOSnLNode(){
@@ -590,16 +590,16 @@ double OSnLNodeMax::calculateFunction(double *x){
 }// end OSnLNodeMax::calculate
 
 
-ADdouble OSnLNodeMax::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD){
-	//if not support in CppAD, throw an exception
+ADdouble OSnLNodeMax::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD){
+	//if not support in AD, throw an exception
 	try{
 		throw ErrorClass("Max operator not supported by current Algorithmic Differentiation implementation");
-		return m_CppADTape;
+		return m_ADTape;
 	}
 	catch(const ErrorClass& eclass){
 		throw ErrorClass( eclass.errormsg);
 	}
-}// end OSnLNodeMax::constructCppADTape
+}// end OSnLNodeMax::constructADTape
 
 
 OSnLNode* OSnLNodeMax::cloneOSnLNode(){
@@ -648,16 +648,16 @@ double OSnLNodeMin::calculateFunction(double *x){
 }// end OSnLNodeMin::calculate
 
 
-ADdouble OSnLNodeMin::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD){
-	//if not support in CppAD, throw an exception
+ADdouble OSnLNodeMin::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD){
+	//if not support in AD, throw an exception
 	try{
 		throw ErrorClass("Min operator not supported by current Algorithmic Differentiation implementation");
-		return m_CppADTape;
+		return m_ADTape;
 	}
 	catch(const ErrorClass& eclass){
 		throw ErrorClass( eclass.errormsg);
 	}
-}// end OSnLNodeMin::constructCppADTape
+}// end OSnLNodeMin::constructADTape
 
 
 OSnLNode* OSnLNodeMin::cloneOSnLNode(){
@@ -701,10 +701,10 @@ double OSnLNodeMinus::calculateFunction(double *x){
 }// end OSnLNodeMinus::calculate
 
 
-ADdouble OSnLNodeMinus::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD){
-	m_CppADTape = m_mChildren[0]->constructCppADTape( cppADIdx, XAD) - m_mChildren[1]->constructCppADTape( cppADIdx, XAD);
-	return m_CppADTape;
-}// end OSnLNodeMinus::constructCppADTape
+ADdouble OSnLNodeMinus::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD){
+	m_ADTape = m_mChildren[0]->constructADTape( ADIdx, XAD) - m_mChildren[1]->constructADTape( ADIdx, XAD);
+	return m_ADTape;
+}// end OSnLNodeMinus::constructADTape
 
 
 OSnLNode* OSnLNodeMinus::cloneOSnLNode(){
@@ -747,10 +747,10 @@ double OSnLNodeNegate::calculateFunction(double *x){
 	return m_dFunctionValue;
 }// end OSnLNodeMinus::calculate
 
-ADdouble OSnLNodeNegate::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD){
-	m_CppADTape = -m_mChildren[0]->constructCppADTape( cppADIdx, XAD);
-	return m_CppADTape;
-}// end OSnLNodeNegate::constructCppADTape
+ADdouble OSnLNodeNegate::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD){
+	m_ADTape = -m_mChildren[0]->constructADTape( ADIdx, XAD);
+	return m_ADTape;
+}// end OSnLNodeNegate::constructADTape
 
 
 OSnLNode* OSnLNodeNegate::cloneOSnLNode(){
@@ -792,10 +792,10 @@ double OSnLNodeTimes::calculateFunction(double *x){
 }// end OSnLNodeTimes::calculate
 
 
-ADdouble OSnLNodeTimes::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD){
-	m_CppADTape = m_mChildren[0]->constructCppADTape( cppADIdx, XAD) * m_mChildren[1]->constructCppADTape( cppADIdx, XAD);
-	return m_CppADTape;
-}// end OSnLNodeTimes::constructCppADTape
+ADdouble OSnLNodeTimes::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD){
+	m_ADTape = m_mChildren[0]->constructADTape( ADIdx, XAD) * m_mChildren[1]->constructADTape( ADIdx, XAD);
+	return m_ADTape;
+}// end OSnLNodeTimes::constructADTape
 
 OSnLNode* OSnLNodeTimes::cloneOSnLNode(){
 	OSnLNode *nlNodePoint;
@@ -837,10 +837,10 @@ double OSnLNodeDivide::calculateFunction(double *x){
 }// end OSnLNodeDivide::calculate
 
 
-ADdouble OSnLNodeDivide::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD){
-	m_CppADTape = m_mChildren[0]->constructCppADTape( cppADIdx, XAD) / m_mChildren[1]->constructCppADTape( cppADIdx, XAD);
-	return m_CppADTape;
-}// end OSnLNodeDivide::constructCppADTape
+ADdouble OSnLNodeDivide::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD){
+	m_ADTape = m_mChildren[0]->constructADTape( ADIdx, XAD) / m_mChildren[1]->constructADTape( ADIdx, XAD);
+	return m_ADTape;
+}// end OSnLNodeDivide::constructADTape
 
 
 OSnLNode* OSnLNodeDivide::cloneOSnLNode(){
@@ -883,28 +883,28 @@ double OSnLNodePower::calculateFunction(double *x){
 }// end OSnLNodePower::calculate
 
 //
-ADdouble OSnLNodePower::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD){
+ADdouble OSnLNodePower::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD){
 	//if( typeid( *m_mChildren[1]) == typeid( OSnLNodeNumber) ) {
 	if( this->m_mChildren[1]->inodeInt == 5001 ) {
 		OSnLNodeNumber *numberNode  =  (OSnLNodeNumber*)m_mChildren[1];
 		// we have a number node see if interger
 		if( (numberNode->value) == int( numberNode->value)){
-			m_CppADTape =  CppAD::pow(m_mChildren[0]->constructCppADTape( cppADIdx, XAD) ,  int( numberNode->value));
+			m_ADTape =  CppAD::pow(m_mChildren[0]->constructADTape( ADIdx, XAD) ,  int( numberNode->value));
 		}	
-		else m_CppADTape = CppAD::pow(m_mChildren[0]->constructCppADTape( cppADIdx, XAD) , m_mChildren[1]->constructCppADTape( cppADIdx, XAD) );	
+		else m_ADTape = CppAD::pow(m_mChildren[0]->constructADTape( ADIdx, XAD) , m_mChildren[1]->constructADTape( ADIdx, XAD) );	
 	}
 	else{
-		m_CppADTape = CppAD::pow(m_mChildren[0]->constructCppADTape( cppADIdx, XAD) , m_mChildren[1]->constructCppADTape( cppADIdx, XAD) );	
+		m_ADTape = CppAD::pow(m_mChildren[0]->constructADTape( ADIdx, XAD) , m_mChildren[1]->constructADTape( ADIdx, XAD) );	
 	}
-	return m_CppADTape;
-}// end OSnLNodePower::constructCppADTape
+	return m_ADTape;
+}// end OSnLNodePower::constructADTape
 
 
 
-//ADdouble OSnLNodePower::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD){	
-//		m_CppADTape = CppAD::pow(m_mChildren[0]->constructCppADTape( cppADIdx, XAD) , m_mChildren[1]->constructCppADTape( cppADIdx, XAD) );	
-//	return m_CppADTape;
-//}// end OSnLNodePower::constructCppADTape
+//ADdouble OSnLNodePower::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD){	
+//		m_ADTape = AD::pow(m_mChildren[0]->constructADTape( ADIdx, XAD) , m_mChildren[1]->constructADTape( ADIdx, XAD) );	
+//	return m_ADTape;
+//}// end OSnLNodePower::constructADTape
 
 
 
@@ -955,14 +955,14 @@ double OSnLNodeProduct::calculateFunction(double *x){
 }// end OSnLNodeProduct::calculate
 
 
-ADdouble OSnLNodeProduct::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD){
-	m_CppADTape = 1.0;
+ADdouble OSnLNodeProduct::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD){
+	m_ADTape = 1.0;
 	int i;
 	for(i = 0; i < inumberOfChildren; i++){
-		m_CppADTape = m_CppADTape*m_mChildren[i]->constructCppADTape( cppADIdx, XAD);
+		m_ADTape = m_ADTape*m_mChildren[i]->constructADTape( ADIdx, XAD);
 	}
-	return m_CppADTape;
-}// end OSnLNodeProduct::constructCppADTape
+	return m_ADTape;
+}// end OSnLNodeProduct::constructADTape
 
 
 OSnLNode* OSnLNodeProduct::cloneOSnLNode(){
@@ -1005,10 +1005,10 @@ double OSnLNodeLn::calculateFunction(double *x){
 }// end OSnLNodeLn::calculate
 
 
-ADdouble OSnLNodeLn::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD){
-	m_CppADTape = CppAD::log( m_mChildren[0]->constructCppADTape( cppADIdx, XAD) );
-	return m_CppADTape;
-}// end OSnLNodeLn::constructCppADTape
+ADdouble OSnLNodeLn::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD){
+	m_ADTape = CppAD::log( m_mChildren[0]->constructADTape( ADIdx, XAD) );
+	return m_ADTape;
+}// end OSnLNodeLn::constructADTape
 
 OSnLNode* OSnLNodeLn::cloneOSnLNode(){
 	OSnLNode *nlNodePoint;
@@ -1051,10 +1051,10 @@ double OSnLNodeSqrt::calculateFunction(double *x){
 }// end OSnLNodeSqrt::calculate
 
 
-ADdouble OSnLNodeSqrt::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD){
-	m_CppADTape = CppAD::sqrt( m_mChildren[0]->constructCppADTape( cppADIdx, XAD) );
-	return m_CppADTape;
-}// end OSnLNodeSqrt::constructCppADTape
+ADdouble OSnLNodeSqrt::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD){
+	m_ADTape = CppAD::sqrt( m_mChildren[0]->constructADTape( ADIdx, XAD) );
+	return m_ADTape;
+}// end OSnLNodeSqrt::constructADTape
 
 OSnLNode* OSnLNodeSqrt::cloneOSnLNode(){
 	OSnLNode *nlNodePoint;
@@ -1096,10 +1096,10 @@ double OSnLNodeSquare::calculateFunction(double *x){
 }// end OSnLNodeSquare::calculate
 
 
-ADdouble OSnLNodeSquare::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD){
-	m_CppADTape = CppAD::pow( m_mChildren[0]->constructCppADTape( cppADIdx, XAD), int( 2) );
-	return m_CppADTape;
-}// end OSnLNodeSquare::constructCppADTape
+ADdouble OSnLNodeSquare::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD){
+	m_ADTape = CppAD::pow( m_mChildren[0]->constructADTape( ADIdx, XAD), int( 2) );
+	return m_ADTape;
+}// end OSnLNodeSquare::constructADTape
 
 OSnLNode* OSnLNodeSquare::cloneOSnLNode(){
 	OSnLNode *nlNodePoint;
@@ -1139,10 +1139,10 @@ double OSnLNodeSin::calculateFunction(double *x){
 }// end OSnLNodeSin::calculate
 
 
-ADdouble OSnLNodeSin::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD){
-	m_CppADTape = CppAD::sin( m_mChildren[0]->constructCppADTape( cppADIdx, XAD) );
-	return m_CppADTape;
-}// end OSnLNodeSin::constructCppADTape
+ADdouble OSnLNodeSin::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD){
+	m_ADTape = CppAD::sin( m_mChildren[0]->constructADTape( ADIdx, XAD) );
+	return m_ADTape;
+}// end OSnLNodeSin::constructADTape
 
 OSnLNode* OSnLNodeSin::cloneOSnLNode(){
 	OSnLNode *nlNodePoint;
@@ -1183,10 +1183,10 @@ double OSnLNodeCos::calculateFunction(double *x){
 }// end OSnLNodeCos::calculate
 
 
-ADdouble OSnLNodeCos::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD){
-	m_CppADTape = CppAD::cos( m_mChildren[0]->constructCppADTape( cppADIdx, XAD) );
-	return m_CppADTape;
-}// end OSnLNodeCos::constructCppADTape
+ADdouble OSnLNodeCos::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD){
+	m_ADTape = CppAD::cos( m_mChildren[0]->constructADTape( ADIdx, XAD) );
+	return m_ADTape;
+}// end OSnLNodeCos::constructADTape
 
 OSnLNode* OSnLNodeCos::cloneOSnLNode(){
 	OSnLNode *nlNodePoint;
@@ -1229,10 +1229,10 @@ double OSnLNodeExp::calculateFunction(double *x){
 }// end OSnLNodeExp::calculate
 
 
-ADdouble OSnLNodeExp::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD){
-	m_CppADTape = CppAD::exp( m_mChildren[0]->constructCppADTape( cppADIdx, XAD) );
-	return m_CppADTape;
-}// end OSnLNodeExp::constructCppADTape
+ADdouble OSnLNodeExp::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD){
+	m_ADTape = CppAD::exp( m_mChildren[0]->constructADTape( ADIdx, XAD) );
+	return m_ADTape;
+}// end OSnLNodeExp::constructADTape
 
 OSnLNode* OSnLNodeExp::cloneOSnLNode(){
 	OSnLNode *nlNodePoint;
@@ -1275,10 +1275,10 @@ double OSnLNodeAbs::calculateFunction(double *x){
 }// end OSnLNodeAbs::calculate
 
 
-ADdouble OSnLNodeAbs::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD){
-	m_CppADTape = CppAD::abs( m_mChildren[0]->constructCppADTape( cppADIdx, XAD) );
-	return m_CppADTape;
-}// end OSnLNodeAbs::constructCppADTape
+ADdouble OSnLNodeAbs::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD){
+	m_ADTape = CppAD::abs( m_mChildren[0]->constructADTape( ADIdx, XAD) );
+	return m_ADTape;
+}// end OSnLNodeAbs::constructADTape
 
 OSnLNode* OSnLNodeAbs::cloneOSnLNode(){
 	OSnLNode *nlNodePoint;
@@ -1322,16 +1322,16 @@ double OSnLNodeIf::calculateFunction(double *x){
 	return m_dFunctionValue;
 }// end OSnLNodeIf::calculate
 
-ADdouble OSnLNodeIf::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD){
-	//if not support in CppAD, throw an exception
+ADdouble OSnLNodeIf::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD){
+	//if not support in AD, throw an exception
 	try{
 		throw ErrorClass("if operator not supported by current Algorithmic Differentiation implementation");
-		return m_CppADTape;
+		return m_ADTape;
 	}
 	catch(const ErrorClass& eclass){
 		throw ErrorClass( eclass.errormsg);
 	}
-}// end OSnLNodeIf::constructCppADTape
+}// end OSnLNodeIf::constructADTape
 
 OSnLNode* OSnLNodeIf::cloneOSnLNode(){
 	OSnLNode *nlNodePoint;
@@ -1423,10 +1423,10 @@ double OSnLNodeNumber::calculateFunction(double *x){
 	return m_dFunctionValue;
 }// end OSnLNodeNumber::calculate
 
-ADdouble OSnLNodeNumber::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD){
-	m_CppADTape =  this->value;
-	return m_CppADTape;
-}// end OSnLNodeNumber::constructCppADTape
+ADdouble OSnLNodeNumber::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD){
+	m_ADTape =  this->value;
+	return m_ADTape;
+}// end OSnLNodeNumber::constructADTape
 
 OSnLNode* OSnLNodeNumber::cloneOSnLNode(){
 	OSnLNode *nlNodePoint;
@@ -1517,10 +1517,10 @@ double OSnLNodeE::calculateFunction(double *x){
 	return m_dFunctionValue;
 }// end OSnLNodeE::calculate
 
-ADdouble OSnLNodeE::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD){
-	m_CppADTape =  OS_E_VALUE;
-	return m_CppADTape;
-}// end OSnLE::constructCppADTape
+ADdouble OSnLNodeE::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD){
+	m_ADTape =  OS_E_VALUE;
+	return m_ADTape;
+}// end OSnLE::constructADTape
 
 OSnLNode* OSnLNodeE::cloneOSnLNode(){
 	OSnLNode *nlNodePoint;
@@ -1611,10 +1611,10 @@ double OSnLNodePI::calculateFunction(double *x){
 	return m_dFunctionValue;
 }// end OSnLNodePI::calculate
 
-ADdouble OSnLNodePI::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD){
-	m_CppADTape =  OS_PI_VALUE;
-	return m_CppADTape;
-}// end OSnLE::constructCppADTape
+ADdouble OSnLNodePI::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD){
+	m_ADTape =  OS_PI_VALUE;
+	return m_ADTape;
+}// end OSnLE::constructADTape
 
 OSnLNode* OSnLNodePI::cloneOSnLNode(){
 	OSnLNode *nlNodePoint;
@@ -1718,15 +1718,15 @@ double OSnLNodeVariable::calculateFunction(double *x){
 	return m_dFunctionValue;
 }// end OSnLNodeVariable::calculate
 
-ADdouble OSnLNodeVariable::constructCppADTape(std::map<int, int> *varIdx, vector< ADdouble > *XAD){
-	m_CppADTape = coef;
+ADdouble OSnLNodeVariable::constructADTape(std::map<int, int> *varIdx, vector< ADdouble > *XAD){
+	m_ADTape = coef;
 	//std::cout << "Inside OSnLNodeVariable "<<  std::endl;
 	//std::cout << "Value of OSiL index = " << idx << std::endl;
-	//std::cout << "Value of CppAD index = " << (*varIdx)[ idx] << std::endl;
-	//std::cout << "Value of CppAD variable = " << (*XAD)[ (*varIdx)[ idx] ] << std::endl;
-	m_CppADTape = coef*(*XAD)[ (*varIdx)[ idx] ];
-	return m_CppADTape;
-}// end OSnLNodeVariable::constructCppADTape
+	//std::cout << "Value of AD index = " << (*varIdx)[ idx] << std::endl;
+	//std::cout << "Value of AD variable = " << (*XAD)[ (*varIdx)[ idx] ] << std::endl;
+	m_ADTape = coef*(*XAD)[ (*varIdx)[ idx] ];
+	return m_ADTape;
+}// end OSnLNodeVariable::constructADTape
 
 
 void OSnLNodeVariable::getVariableIndexMap(std::map<int, int> *varIdx){

@@ -4157,7 +4157,7 @@ bool OSInstance::createOSADFun(std::vector<double> vdX){
 	CppAD::vector< AD<double> > m_vFG;	  
 	int kount = 0;
 	for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){	
-		m_vFG.push_back( (posMapExpTree->second)->m_treeRoot->constructCppADTape(&m_mapAllNonlinearVariablesIndex, &vdaX) );
+		m_vFG.push_back( (posMapExpTree->second)->m_treeRoot->constructADTape(&m_mapAllNonlinearVariablesIndex, &vdaX) );
 		//std::cout << "PUSHING BACK EXPRESSION NUMBER " << posMapExpTree->first << std::endl;
 		if( m_mapOSADFunRangeIndex.find( posMapExpTree->first) == m_mapOSADFunRangeIndex.end() ){
 			// count which nonlinear obj/constraint this is
