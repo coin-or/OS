@@ -21,7 +21,7 @@
 #include<iostream>
 #include<vector>
 #include <map> 
-#include<CppAD/CppAD.hpp>
+#include<cppad/cppad.hpp>
 
 /** \enum OP_CODES we give a name  or op code to each of the values of
  * inodeInt (number identifying the type of node) -- this is
