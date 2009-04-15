@@ -16,6 +16,8 @@
 
 #ifndef OSNLNODE_H
 #define OSNLNODE_H
+
+#include "OSErrorClass.h"
 #include<iostream>
 #include<vector>
 #include <map> 
@@ -53,6 +55,10 @@
 
 using CppAD::AD;
 using CppAD::vector;
+typedef AD<double>  ADdouble;
+
+
+
 
 /*! \class OSnLNode OSnLNode.h "OSnLNode.h"
  *  \brief The OSnLNode Class.
@@ -66,6 +72,7 @@ using CppAD::vector;
  * defined in the OSnL schema
  * 
  */
+
 class OSnLNode{  
 
 public:	
@@ -97,9 +104,9 @@ public:
 	
 
 	/**
-	 * m_CppADTape stores the espression tree for the this OSnLNode as an AD<double>.
+	 * m_CppADTape stores the espression tree for the this OSnLNode as an ADdouble.
 	 */
-	AD<double> m_CppADTape;
+	ADdouble m_CppADTape;
 
 	/**
 	 *
@@ -225,7 +232,7 @@ public:
 	 *
 	 * @return the expression tree.
 	 */	
-	virtual AD<double> constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD) = 0;
+	virtual ADdouble constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD) = 0;
 
 	/**
 	 * <p>
@@ -264,6 +271,7 @@ public:
  * The in-memory representation of the OSnL element <plus>
  * 
  */
+
 class OSnLNodePlus : public OSnLNode{  
 public:
 	/**
@@ -282,11 +290,11 @@ public:
 	 */	
 	virtual double calculateFunction( double *x);
 	
-	/*! \fn double OSnLNodePlus::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD) 
+	/*! \fn double OSnLNodePlus::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD) 
 	 *  \brief The implementation of the virtual functions. 
-	 *  \return a AD<double>.
+	 *  \return a ADdouble.
 	 */	
-	virtual AD<double> constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD);
+	virtual ADdouble constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD);
 	
 	/*! \fn OSnLNode *cloneOSnLNode(double *x) 
 	 *  \brief The implementation of the virtual functions. 
@@ -332,11 +340,11 @@ public:
 	 */	
 	virtual OSnLNode *cloneOSnLNode() ;
 		 
-	/*! \fn double OSnLNodeSum::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD) 
+	/*! \fn double OSnLNodeSum::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD) 
 	 *  \brief The implementation of the virtual functions. 
-	 *  \return a AD<double>.
+	 *  \return a ADdouble.
 	 */	
-	virtual AD<double> constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD);
+	virtual ADdouble constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD);
 	
 	
 
@@ -378,11 +386,11 @@ public:
 	 */	
 	virtual OSnLNode *cloneOSnLNode() ;
 	
-	/*! \fn double OSnLNodeMax::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD) 
+	/*! \fn double OSnLNodeMax::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD) 
 	 *  \brief The implementation of the virtual functions. 
-	 *  \return a AD<double>.
+	 *  \return a ADdouble.
 	 */	
-	virtual AD<double> constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD);
+	virtual ADdouble constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD);
 	
 
 
@@ -423,11 +431,11 @@ public:
 	 */	
 	virtual OSnLNode *cloneOSnLNode() ;
 	
-	/*! \fn double OSnLNodeMin::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD) 
+	/*! \fn double OSnLNodeMin::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD) 
 	 *  \brief The implementation of the virtual functions. 
-	 *  \return a AD<double>.
+	 *  \return a ADdouble.
 	 */	
-	virtual AD<double> constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD);
+	virtual ADdouble constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD);
 	
 
 
@@ -469,11 +477,11 @@ public:
 	 */	
 	virtual OSnLNode *cloneOSnLNode() ;
 		 
-	/*! \fn double OSnLNodeMinus::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD) 
+	/*! \fn double OSnLNodeMinus::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD) 
 	 *  \brief The implementation of the virtual functions. 
-	 *  \return a AD<double>.
+	 *  \return a ADdouble.
 	 */	
-	virtual AD<double> constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD);
+	virtual ADdouble constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD);
 	
 
 
@@ -515,11 +523,11 @@ public:
 	virtual OSnLNode *cloneOSnLNode() ;
 	
 		 
-	/*! \fn double OSnLNodeNegate::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD) 
+	/*! \fn double OSnLNodeNegate::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD) 
 	 *  \brief The implementation of the virtual functions. 
-	 *  \return a AD<double>.
+	 *  \return a ADdouble.
 	 */	
-	virtual AD<double> constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD);
+	virtual ADdouble constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD);
 
 
 };//end OSnLNodeNegate
@@ -560,11 +568,11 @@ public:
 	 */	
 	virtual OSnLNode *cloneOSnLNode() ;
 	 
-	/*! \fn double OSnLNodeNegate::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD) 
+	/*! \fn double OSnLNodeNegate::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD) 
 	 *  \brief The implementation of the virtual functions. 
-	 *  \return a AD<double>.
+	 *  \return a ADdouble.
 	 */	
-	virtual AD<double> constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD);
+	virtual ADdouble constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD);
 	
 
 
@@ -606,11 +614,11 @@ public:
 	 */	
 	virtual OSnLNode *cloneOSnLNode() ;
 		 
-	/*! \fn double OSnLNodeDivide::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD) 
+	/*! \fn double OSnLNodeDivide::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD) 
 	 *  \brief The implementation of the virtual functions. 
-	 *  \return a AD<double>.
+	 *  \return a ADdouble.
 	 */	
-	virtual AD<double> constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD);
+	virtual ADdouble constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD);
 
 };//end OSnLNodeDivide
 
@@ -649,11 +657,11 @@ public:
 	 */	
 	virtual OSnLNode *cloneOSnLNode() ;
 		 
-	/*! \fn double OSnLNodePower::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD) 
+	/*! \fn double OSnLNodePower::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD) 
 	 *  \brief The implementation of the virtual functions. 
-	 *  \return a AD<double>.
+	 *  \return a ADdouble.
 	 */	
-	virtual AD<double> constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD);
+	virtual ADdouble constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD);
 	
 
 
@@ -694,11 +702,11 @@ public:
 	 */	
 	virtual OSnLNode *cloneOSnLNode() ;
 	 
-	/*! \fn double OSnLNodeProduct::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD) 
+	/*! \fn double OSnLNodeProduct::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD) 
 	 *  \brief The implementation of the virtual functions. 
-	 *  \return a AD<double>.
+	 *  \return a ADdouble.
 	 */	
-	virtual AD<double> constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD);
+	virtual ADdouble constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD);
 	
 
 
@@ -740,11 +748,11 @@ public:
 	 */	
 	virtual OSnLNode *cloneOSnLNode() ;
 		 
-	/*! \fn double OSnLNodeLn::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD) 
+	/*! \fn double OSnLNodeLn::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD) 
 	 *  \brief The implementation of the virtual functions. 
-	 *  \return a AD<double>.
+	 *  \return a ADdouble.
 	 */	
-	virtual AD<double> constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD);
+	virtual ADdouble constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD);
 	
 
 	
@@ -785,11 +793,11 @@ public:
 	 *  \return a point to a new OSnLNode of the proper type.
 	 */	
 	virtual OSnLNode *cloneOSnLNode() ;	 
-	/*! \fn double OSnLNodeSqrt::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD) 
+	/*! \fn double OSnLNodeSqrt::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD) 
 	 *  \brief The implementation of the virtual functions. 
-	 *  \return a AD<double>.
+	 *  \return a ADdouble.
 	 */	
-	virtual AD<double> constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD);
+	virtual ADdouble constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD);
 	
 
 	
@@ -831,11 +839,11 @@ public:
 	 */	
 	virtual OSnLNode *cloneOSnLNode() ;
 	 
-	/*! \fn double OSnLNodeSquare::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD) 
+	/*! \fn double OSnLNodeSquare::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD) 
 	 *  \brief The implementation of the virtual functions. 
-	 *  \return a AD<double>.
+	 *  \return a ADdouble.
 	 */	
-	virtual AD<double> constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD);
+	virtual ADdouble constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD);
 
 };//end OSnLNodeSquare
 
@@ -874,11 +882,11 @@ public:
 	 */	
 	virtual OSnLNode *cloneOSnLNode() ;
 	 
-	/*! \fn double OSnLNodeCos::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD) 
+	/*! \fn double OSnLNodeCos::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD) 
 	 *  \brief The implementation of the virtual functions. 
-	 *  \return a AD<double>.
+	 *  \return a ADdouble.
 	 */	
-	virtual AD<double> constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD);
+	virtual ADdouble constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD);
 
 };//end OSnLNodeCos
 
@@ -917,11 +925,11 @@ public:
 	 */	
 	virtual OSnLNode *cloneOSnLNode() ;
 	 
-	/*! \fn double OSnLNodeSin::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD) 
+	/*! \fn double OSnLNodeSin::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD) 
 	 *  \brief The implementation of the virtual functions. 
-	 *  \return a AD<double>.
+	 *  \return a ADdouble.
 	 */	
-	virtual AD<double> constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD);
+	virtual ADdouble constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD);
 
 };//end OSnLNodeSin
 
@@ -954,11 +962,11 @@ public:
 	 */	
 	virtual double calculateFunction( double *x);
 	
-	/*! \fn double OSnLNodeExp::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD) 
+	/*! \fn double OSnLNodeExp::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD) 
 	 *  \brief The implementation of the virtual functions. 
-	 *  \return a AD<double>.
+	 *  \return a ADdouble.
 	 */	
-	virtual AD<double> constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD);
+	virtual ADdouble constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD);
 	
 	/*! \fn OSnLNode *cloneOSnLNode(double *x) 
 	 *  \brief The implementation of the virtual functions. 
@@ -1004,11 +1012,11 @@ public:
 	 */	
 	virtual OSnLNode *cloneOSnLNode() ;
 		 
-	/*! \fn double OSnLNodeAbs::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD) 
+	/*! \fn double OSnLNodeAbs::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD) 
 	 *  \brief The implementation of the virtual functions. 
-	 *  \return a AD<double>.
+	 *  \return a ADdouble.
 	 */	
-	virtual AD<double> constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD);
+	virtual ADdouble constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD);
 	
 
 
@@ -1049,11 +1057,11 @@ public:
 	 */
 	virtual OSnLNode *cloneOSnLNode() ;
 		 
-	/*! \fn double OSnLNodeIf::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD) 
+	/*! \fn double OSnLNodeIf::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD) 
 	 *  \brief The implementation of the virtual functions. 
-	 *  \return a AD<double>.
+	 *  \return a ADdouble.
 	 */	
-	virtual AD<double> constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD);	
+	virtual ADdouble constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD);	
 	
 
 
@@ -1124,11 +1132,11 @@ public:
 	virtual OSnLNode *cloneOSnLNode() ;
 	
 		 
-	/*! \fn double OSnLNodeNumber::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD) 
+	/*! \fn double OSnLNodeNumber::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD) 
 	 *  \brief The implementation of the virtual functions. 
-	 *  \return a AD<double>.
+	 *  \return a ADdouble.
 	 */	
-	virtual AD<double> constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD);
+	virtual ADdouble constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD);
 	
 
 
@@ -1191,11 +1199,11 @@ public:
 	virtual OSnLNode *cloneOSnLNode() ;
 	
 		 
-	/*! \fn double OSnLNodeE::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD) 
+	/*! \fn double OSnLNodeE::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD) 
 	 *  \brief The implementation of the virtual functions. 
-	 *  \return a AD<double>.
+	 *  \return a ADdouble.
 	 */	
-	virtual AD<double> constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD);
+	virtual ADdouble constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD);
 	
 
 
@@ -1257,11 +1265,11 @@ public:
 	virtual OSnLNode *cloneOSnLNode() ;
 	
 		 
-	/*! \fn double OSnLNodePI::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD) 
+	/*! \fn double OSnLNodePI::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD) 
 	 *  \brief The implementation of the virtual functions. 
-	 *  \return a AD<double>.
+	 *  \return a ADdouble.
 	 */	
-	virtual AD<double> constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD);
+	virtual ADdouble constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD);
 	
 
 
@@ -1333,11 +1341,11 @@ public:
 	 */
 	virtual OSnLNode *cloneOSnLNode() ;
 		 
-	/*! \fn double OSnLNodeVariable::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD) 
+	/*! \fn double OSnLNodeVariable::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD) 
 	 *  \brief The implementation of the virtual functions. 
-	 *  \return a AD<double>.
+	 *  \return a ADdouble.
 	 */	
-	virtual AD<double> constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD);	
+	virtual ADdouble constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD);	
 	
 
 
@@ -1354,6 +1362,7 @@ public:
  * The in-memory representation of the OSnL element <alldiff>
  * 
  */
+
 class OSnLNodeAllDiff : public OSnLNode{  
 public:
 	/**
@@ -1378,15 +1387,18 @@ public:
 	 */	
 	virtual OSnLNode *cloneOSnLNode() ;
 		 
-	/*! \fn double OSnLNodeAllDiff::constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD) 
+	/*! \fn double OSnLNodeAllDiff::constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD) 
 	 *  \brief The implementation of the virtual functions. 
-	 *  \return a AD<double>.
+	 *  \return a ADdouble.
 	 */	
-	virtual AD<double> constructCppADTape(std::map<int, int> *cppADIdx, CppAD::vector< AD<double> > *XAD);
-	
+
+	virtual ADdouble constructCppADTape(std::map<int, int> *cppADIdx, vector< ADdouble > *XAD);
+
 
 
 };//end OSnLNodeAllDiff
+
+
 
 /* 
 TO DO:

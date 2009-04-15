@@ -411,7 +411,8 @@ anothersumnlnode: nlnode {	parserData->sumVec.back()->inumberOfChildren++; }
 			
 
 allDiff: ALLDIFFSTART {
-	parserData->nlNodePoint = new OSnLNodeAllDiff();
+	
+	parserData->nlNodePoint =   new OSnLNodeAllDiff ();
 	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
 	parserData->allDiffVec.push_back( parserData->nlNodePoint);
 }
