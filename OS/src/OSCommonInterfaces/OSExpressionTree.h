@@ -20,8 +20,7 @@
 #include "OSnLNode.h"
 #include <vector>
 #include <map>
-#include<cppad/cppad.hpp>
-using CppAD::Parameter;
+
 
 /*! \class OSExpressionTree 
  *  \brief Used to hold the instance in memory.
@@ -132,7 +131,7 @@ private:
 	/**
 	 * m_CppADTape stores the espression tree for m_treeRoot as an AD<double>.
 	 */
-	CppAD::AD<double> m_CppADTape;
+	//CppAD::AD<double> m_CppADTape;
 	
 	
 	/**

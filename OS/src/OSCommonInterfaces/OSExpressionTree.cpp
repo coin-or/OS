@@ -53,7 +53,7 @@ std::vector<OSnLNode*> OSExpressionTree::getPrefixFromExpressionTree(){
 	return m_treeRoot->getPrefixFromExpressionTree();
 }//getPrefixFromExpressionTree
 
-
+ 
 
 double OSExpressionTree::calculateFunction( double *x, bool new_x){
 	//calculateFunctionCppAD( x, functionEvaluated);
