@@ -4133,46 +4133,56 @@ bool OSInstance::setTimeDomainInterval(double start, double horizon)
 
 
 bool OSInstance::createOSADFun(std::vector<double> vdX){
-	if(m_bOSADFunIsCreated == true) return true;
-	//if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
-	if(m_binitForAlgDiff == false) initForAlgDiff();
-	
-	//if( m_bAllNonlinearVariablesIndex == false) getAllNonlinearVariablesIndexMap( );
-	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
-	unsigned int i;
-	size_t n = vdX.size();
-	// declare a CppAD vector and fill it in
-	CppADvector< AD<double> > vdaX( n );
-	for(i = 0; i < n; i++){
-		vdaX[ i] = vdX[ i];
-		//std::cout << "vdX =  " << vdX[ i] << std::endl;
-	}
-	// declare the independent variables and start recording
-	CppAD::Independent( vdaX);
-	/**
-	 * For expression tree, record the operations for CppAD and put into
-	 *  the range vector m_vFG and it is a vector of CppAD 
-	 * objective and constraint functions.
-	 */
-	CppAD::vector< AD<double> > m_vFG;	  
-	int kount = 0;
-	for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){	
-		m_vFG.push_back( (posMapExpTree->second)->m_treeRoot->constructADTape(&m_mapAllNonlinearVariablesIndex, &vdaX) );
-		//std::cout << "PUSHING BACK EXPRESSION NUMBER " << posMapExpTree->first << std::endl;
-		if( m_mapOSADFunRangeIndex.find( posMapExpTree->first) == m_mapOSADFunRangeIndex.end() ){
-			// count which nonlinear obj/constraint this is
-			m_mapOSADFunRangeIndex[ posMapExpTree->first] = kount;
-			kount++;
+	try{
+		if(m_bOSADFunIsCreated == true) return true;
+		//if( m_bNonLinearStructuresInitialized == false) initializeNonLinearStructures( );
+		if(m_binitForAlgDiff == false) initForAlgDiff();
+		
+		//if( m_bAllNonlinearVariablesIndex == false) getAllNonlinearVariablesIndexMap( );
+		std::map<int, OSExpressionTree*>::iterator posMapExpTree;
+		unsigned int i;
+		size_t n = vdX.size();
+#ifdef COIN_HAS_CPPAD
+		// declare a CppAD vector and fill it in
+		CppAD::vector< AD<double> > vdaX( n );
+		for(i = 0; i < n; i++){
+			vdaX[ i] = vdX[ i];
+			//std::cout << "vdX =  " << vdX[ i] << std::endl;
 		}
-	}	
-	//create the function and stop recording
-	std::cout << "create the function and stop recording"  << std::endl;
-	Fad = new CppAD::ADFun<double>(vdaX, m_vFG);
-	std::cout << "range space dimension =  " << m_vFG.size() << std::endl;
-	// no forward sweeps done yet
-	m_iHighestTaylorCoeffOrder = -1;
-	m_bOSADFunIsCreated = true;
-	return true;
+		// declare the independent variables and start recording
+		CppAD::Independent( vdaX);
+		/**
+		 * For expression tree, record the operations for CppAD and put into
+		 *  the range vector m_vFG and it is a vector of CppAD 
+		 * objective and constraint functions.
+		 */
+		CppAD::vector< AD<double> > m_vFG;	  
+		int kount = 0;
+		for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){	
+			m_vFG.push_back( (posMapExpTree->second)->m_treeRoot->constructADTape(&m_mapAllNonlinearVariablesIndex, &vdaX) );
+			//std::cout << "PUSHING BACK EXPRESSION NUMBER " << posMapExpTree->first << std::endl;
+			if( m_mapOSADFunRangeIndex.find( posMapExpTree->first) == m_mapOSADFunRangeIndex.end() ){
+				// count which nonlinear obj/constraint this is
+				m_mapOSADFunRangeIndex[ posMapExpTree->first] = kount;
+				kount++;
+			}
+		}	
+		//create the function and stop recording
+		std::cout << "create the function and stop recording"  << std::endl;
+		Fad = new CppAD::ADFun<double>(vdaX, m_vFG);
+		std::cout << "range space dimension =  " << m_vFG.size() << std::endl;
+		// no forward sweeps done yet
+		m_iHighestTaylorCoeffOrder = -1;
+		m_bOSADFunIsCreated = true;
+#else
+		throw ErrorClass( "Error: An Algorithmic Differentiation Package Not Available");
+#endif
+			
+		return true;
+	}
+	catch(const ErrorClass& eclass){
+		throw ErrorClass( eclass.errormsg);
+	} 
 }//end createOSADFun
 
 
@@ -4188,7 +4198,12 @@ std::vector<double> OSInstance::forwardAD(int p, std::vector<double> vdX){
 		//for(int i  = 0; i < vdX.size(); i++){
 			//std::cout << "ForwardAD Primal Variables " << i   << " " << vdX[ i] << std::endl;
 		//}
+#ifdef COIN_HAS_CPPAD
 		return (*Fad).Forward(p, vdX);
+#else
+		throw ErrorClass( "Error: An Algorithmic Differentiation Package Not Available");
+#endif
+		
 	}
 	catch(const ErrorClass& eclass){
 		throw ErrorClass( eclass.errormsg);
@@ -4198,6 +4213,9 @@ std::vector<double> OSInstance::forwardAD(int p, std::vector<double> vdX){
 
 std::vector<double> OSInstance::reverseAD(int p, std::vector<double> vdlambda){
 	try{
+#ifndef COIN_HAS_CPPAD
+		throw ErrorClass( "Error: An Algorithmic Differentiation Package Not Available");
+#endif
 		if(p == 0) throw 
 			ErrorClass( "reverseAD must have p >= 1");
 		if(p > (m_iHighestTaylorCoeffOrder + 1) ) throw 
@@ -4206,7 +4224,12 @@ std::vector<double> OSInstance::reverseAD(int p, std::vector<double> vdlambda){
 		//	std::cout << "ReverseAD Multiplier " << i   << " " << vdlambda[ i] << std::endl;
 		//}
 		m_iHighestOrderEvaluated = p;
+#ifdef COIN_HAS_CPPAD
 		return (*Fad).Reverse(p, vdlambda);
+#else
+		throw ErrorClass( "Error: An Algorithmic Differentiation Package Not Available");
+#endif
+		
 	}
 	catch(const ErrorClass& eclass){
 		throw ErrorClass( eclass.errormsg);
@@ -4219,35 +4242,48 @@ int  OSInstance::getADSparsityHessian(){
 	unsigned int i;
 	int numNonz;
 	numNonz = 0;
-	
-	// Use CppAD to do a forward sparsity calculation
-	std::vector<bool> r(m_iNumberOfNonlinearVariables * m_iNumberOfNonlinearVariables);
-	unsigned int j;
-	for(i = 0; i < m_iNumberOfNonlinearVariables; i++) { 
-		for(j = 0; j < m_iNumberOfNonlinearVariables; j++)
-			r[ i * m_iNumberOfNonlinearVariables + j ] = false;
-			r[ i * m_iNumberOfNonlinearVariables + i] = true;
-	}	
-	// compute sparsity pattern for J(x) = F^{(1)} (x)
-	(*Fad).ForSparseJac(m_iNumberOfNonlinearVariables, r);
-	//
-	//now the second derivative
-	unsigned int m = m_mapExpressionTreesMod.size();
-	std::vector<bool> e( m);
-	//Vector s(m);
-	for(i = 0; i < m; i++) e[i] = true;
-	std::cout << "Computing Sparse Hessian" << std::endl;
-	//m_vbLagHessNonz holds the sparsity pattern Lagrangian of the Hessian
-	m_vbLagHessNonz = (*Fad).RevSparseHes(m_iNumberOfNonlinearVariables, e);
-	for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
-		//std::cout << "Row " << i << "  of Hessian " << std::endl;
-		for(j = i; j < m_iNumberOfNonlinearVariables; j++){
-			if(m_vbLagHessNonz[ i*m_iNumberOfNonlinearVariables + j]  == true) numNonz++;
-			//std::cout << m_vbLagHessNonz[ i*m_iNumberOfNonlinearVariables + j] <<  "  " ;
-		}
-		//std::cout << std::endl;
-	}	
-	return numNonz;
-}
+	try{	
+		std::vector<bool> r(m_iNumberOfNonlinearVariables * m_iNumberOfNonlinearVariables);
+		unsigned int j;
+		for(i = 0; i < m_iNumberOfNonlinearVariables; i++) { 
+			for(j = 0; j < m_iNumberOfNonlinearVariables; j++)
+				r[ i * m_iNumberOfNonlinearVariables + j ] = false;
+				r[ i * m_iNumberOfNonlinearVariables + i] = true;
+		}	
+		// compute sparsity pattern for J(x) = F^{(1)} (x)
+		//should only be here if we have CppAD
+#ifdef COIN_HAS_CPPAD
+		(*Fad).ForSparseJac(m_iNumberOfNonlinearVariables, r);
+#else
+		throw ErrorClass( "Error: An Algorithmic Differentiation Package Not Available");
+#endif
+		//
+		//now the second derivative
+		unsigned int m = m_mapExpressionTreesMod.size();
+		std::vector<bool> e( m);
+		//Vector s(m);
+		for(i = 0; i < m; i++) e[i] = true;
+		std::cout << "Computing Sparse Hessian" << std::endl;
+		//m_vbLagHessNonz holds the sparsity pattern Lagrangian of the Hessian
+#ifdef COIN_HAS_CPPAD
+		m_vbLagHessNonz = (*Fad).RevSparseHes(m_iNumberOfNonlinearVariables, e);
+#else
+		throw ErrorClass( "Error: An Algorithmic Differentiation Package Not Available");
+#endif
+		
+		for(i = 0; i < m_iNumberOfNonlinearVariables; i++){
+			//std::cout << "Row " << i << "  of Hessian " << std::endl;
+			for(j = i; j < m_iNumberOfNonlinearVariables; j++){
+				if(m_vbLagHessNonz[ i*m_iNumberOfNonlinearVariables + j]  == true) numNonz++;
+				//std::cout << m_vbLagHessNonz[ i*m_iNumberOfNonlinearVariables + j] <<  "  " ;
+			}
+			//std::cout << std::endl;
+		}	
+		return numNonz;
+	}
+	catch(const ErrorClass& eclass){
+		throw ErrorClass( eclass.errormsg);
+	}
+}//end getADSparsityHessian()
 
 

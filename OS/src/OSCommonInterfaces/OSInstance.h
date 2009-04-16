@@ -38,8 +38,6 @@
 #include "OSExpressionTree.h"
 #include <string>
 #include <map>
-#include<cppad/cppad.hpp>
-
 
 
 /*! \class InstanceHeader
@@ -2334,13 +2332,13 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 */	 
 	void duplicateExpressionTreesMap();
 	
-	 
+#ifdef COIN_HAS_CPPAD  	 
 	 /**
 	  * F is a CppAD function the range space is the objective +
 	  * constraints functions, x is the domeain space
 	  */
 	CppAD::ADFun<double> *Fad;
-
+#endif
 	/**
 	 * Create the a CppAD Function object: this is a function where the domain is
 	 * the set of variables for the problem and the range is the objective function 

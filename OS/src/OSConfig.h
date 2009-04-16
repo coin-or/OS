@@ -81,6 +81,9 @@
 
 			/* Define to 1 if the Vol package is used */
 			#define COIN_HAS_VOL 1
+
+			/* Define to 1 if the CppAD package is used */
+			#define COIN_HAS_CPPAD 1
 	
 			/* Needed for OSFileUpload */
 			#ifndef MY_C_FINITE

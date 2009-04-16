@@ -16,12 +16,20 @@
 
 #ifndef OSNLNODE_H
 #define OSNLNODE_H
-
+#include "OSConfig.h"
 #include "OSErrorClass.h"
 #include<iostream>
 #include<vector>
 #include <map> 
+
+#ifdef COIN_HAS_CPPAD  
 #include<cppad/cppad.hpp>
+using CppAD::AD;
+using CppAD::vector;
+typedef AD<double>  ADdouble;
+#else
+typedef double  ADdouble;
+#endif
 
 /** \enum OP_CODES we give a name  or op code to each of the values of
  * inodeInt (number identifying the type of node) -- this is
@@ -52,13 +60,6 @@
 	OS_IF = 7001,
 	OS_ALLDIF = 7016
 };
-
-using CppAD::AD;
-using CppAD::vector;
-typedef AD<double>  ADdouble;
-
-
-
 
 /*! \class OSnLNode OSnLNode.h "OSnLNode.h"
  *  \brief The OSnLNode Class.
