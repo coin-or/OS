@@ -310,8 +310,17 @@ OSInstance::~OSInstance(){
 		m_miNonlinearExpressionTreeModIndexes = NULL;
 	}
 	if(m_bOSADFunIsCreated == true){
-		delete Fad;
-		Fad = NULL;
+		try{
+#ifdef COIN_HAS_CPPAD
+			delete Fad;
+			Fad = NULL;
+#else
+		throw ErrorClass( "Error: An Algorithmic Differentiation Package Not Available");
+#endif
+		}
+		catch(const ErrorClass& eclass){
+			throw ErrorClass( eclass.errormsg);
+		}
 	}
 //	if( (instanceData->timeDomain->stages->stage != NULL) && (m_bProcessTimeStages == true) ){
 //		delete m_Stages;

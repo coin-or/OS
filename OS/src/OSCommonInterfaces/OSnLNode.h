@@ -29,6 +29,7 @@ using CppAD::vector;
 typedef AD<double>  ADdouble;
 #else
 typedef double  ADdouble;
+using std::vector;
 #endif
 
 /** \enum OP_CODES we give a name  or op code to each of the values of
