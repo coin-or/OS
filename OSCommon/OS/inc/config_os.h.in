@@ -3,9 +3,6 @@
 /* If defined, the Ampl Solver Library is available. */
 #undef COIN_HAS_ASL
 
-/* Define to 1 if the cppad package is used */
-#undef COIN_HAS_CPPAD
-
 /* Define to 1 if the Cplex package is available */
 #undef COIN_HAS_CPX
 

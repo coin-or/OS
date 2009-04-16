@@ -115,8 +115,6 @@ COIN_BUILD_GLPK_FALSE = @COIN_BUILD_GLPK_FALSE@
 COIN_BUILD_GLPK_TRUE = @COIN_BUILD_GLPK_TRUE@
 COIN_HAS_ASL_FALSE = @COIN_HAS_ASL_FALSE@
 COIN_HAS_ASL_TRUE = @COIN_HAS_ASL_TRUE@
-COIN_HAS_CPPAD_FALSE = @COIN_HAS_CPPAD_FALSE@
-COIN_HAS_CPPAD_TRUE = @COIN_HAS_CPPAD_TRUE@
 COIN_HAS_CPX_FALSE = @COIN_HAS_CPX_FALSE@
 COIN_HAS_CPX_TRUE = @COIN_HAS_CPX_TRUE@
 COIN_HAS_GLPK_FALSE = @COIN_HAS_GLPK_FALSE@
@@ -128,9 +126,6 @@ COIN_HAS_LINDO_TRUE = @COIN_HAS_LINDO_TRUE@
 COIN_HAS_OS_FALSE = @COIN_HAS_OS_FALSE@
 COIN_HAS_OS_TRUE = @COIN_HAS_OS_TRUE@
 CPP = @CPP@
-CPPADDOCDIR = @CPPADDOCDIR@
-CPPADOBJDIR = @CPPADOBJDIR@
-CPPADSRCDIR = @CPPADSRCDIR@
 CPPFLAGS = @CPPFLAGS@
 CPXINCDIR = @CPXINCDIR@
 CPXLIB = @CPXLIB@
@@ -283,7 +278,6 @@ libOSCommon_la_LDFLAGS = $(LT_LDFLAGS)
 # We want to have all the OS objects in this library
 libOSCommon_la_LIBADD = ./OSUtils/libOSUtils.la \
 		./OSCommonInterfaces/libOSCommonInterfaces.la \
-		./OSAgent/libOSAgent.la \
 		./OSParsers/libOSParsers.la 
 
 # Since automake is not doing this on its own, we need to declare the
@@ -292,7 +286,7 @@ libOSCommon_la_DEPENDENCIES = $(libOSCommon_la_LIBADD)
 
 # Now we check into which directories to recurse, and which subdirectory
 # libraries to include
-SUBDIRS = OSUtils OSAgent OSCommonInterfaces OSParsers
+SUBDIRS = OSUtils OSCommonInterfaces OSParsers
 
 ########################################################################
 #                            Additional flags                          #
@@ -302,7 +296,6 @@ SUBDIRS = OSUtils OSAgent OSCommonInterfaces OSParsers
 # "cygpath" stuff is necessary to compile with native compilers on Windows
 AM_CPPFLAGS = \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src` \
-	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSAgent` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSParsers` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSUtils` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSCommonInterfaces` \

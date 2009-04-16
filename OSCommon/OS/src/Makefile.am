@@ -27,7 +27,6 @@ libOSCommon_la_LDFLAGS = $(LT_LDFLAGS)
 # We want to have all the OS objects in this library
 libOSCommon_la_LIBADD = ./OSUtils/libOSUtils.la \
 		./OSCommonInterfaces/libOSCommonInterfaces.la \
-		./OSAgent/libOSAgent.la \
 		./OSParsers/libOSParsers.la 
 # Since automake is not doing this on its own, we need to declare the
 # dependencies to the subdirectory libraries here
@@ -39,7 +38,6 @@ libOSCommon_la_DEPENDENCIES = $(libOSCommon_la_LIBADD)
 # libraries to include
 SUBDIRS =
   SUBDIRS += OSUtils
-  SUBDIRS += OSAgent
   SUBDIRS += OSCommonInterfaces
   SUBDIRS += OSParsers
 
@@ -56,7 +54,6 @@ SUBDIRS =
 # "cygpath" stuff is necessary to compile with native compilers on Windows
 AM_CPPFLAGS =\
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src` \
-	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSAgent` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSParsers` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSUtils` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSCommonInterfaces` \

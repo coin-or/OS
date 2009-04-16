@@ -85,15 +85,15 @@ AC_CHECK_SIZEOF( long)
 #############################################################################
 
 AC_COIN_HAS_PROJECT(OS)
-AC_COIN_HAS_PROJECT(cppad)
+#AC_COIN_HAS_PROJECT(cppad)
 
 
 
   
-  case $coin_has_cppad in
-     unavailable|skipping)
-         AC_MSG_ERROR([cannot find CppAD which is necessary to build OS]) ;;
-  esac
+#  case $coin_has_cppad in
+#     unavailable|skipping)
+#         AC_MSG_ERROR([cannot find CppAD which is necessary to build OS]) ;;
+#  esac
 
 #############################################################################
 #                             Third party solvers                           #
@@ -391,7 +391,6 @@ AC_SUBST(oscommonlib)
 # configuration header file)
 AC_CONFIG_FILES([Makefile
           src/Makefile
-          src/OSAgent/Makefile
           src/OSUtils/Makefile
           src/OSCommonInterfaces/Makefile
           src/OSParsers/Makefile
