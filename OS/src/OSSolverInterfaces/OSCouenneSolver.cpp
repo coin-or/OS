@@ -203,9 +203,9 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 		if (exptree) {
 			expression** nl = new expression*[1];
 			nl[0] = createCouenneExpression(exptree->m_treeRoot);
-			body = new exprGroup(0., lin, nl, 1);
+			body = new exprGroup(osinstance->getObjectiveConstants()[0], lin, nl,1);
 		} else {
-			body = new exprGroup(0., lin, NULL, 0);			
+			body = new exprGroup(osinstance->getObjectiveConstants()[0], lin, NULL, 0);			
 		}
 	
 		if( osinstance->getObjectiveMaxOrMins()[0] == "min"){
