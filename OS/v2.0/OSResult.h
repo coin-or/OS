@@ -106,7 +106,7 @@ public:
  * 
  * \remarks
  * A class that provides the general information 
- * that is defined the OSrL schema.  
+ * that is defined in the OSrL schema.  
  */
 class GeneralResult{
 public:
@@ -162,7 +162,7 @@ public:
  * 
  * \remarks
  * A class that provides the system information 
- * that is defined the OSrL schema.  
+ * that is defined in the OSrL schema.  
  */
 class SystemResult{
 public:
@@ -189,7 +189,7 @@ public:
  * 
  * \remarks
  * A class that provides the system information 
- * that is defined the OSrL schema.  
+ * that is defined in the OSrL schema.  
  */
 class ServiceResult{
 public:
@@ -207,6 +207,102 @@ public:
 };//class ServiceResult
 
 
+/*! \class Time
+ *  \brief The Time  Class.
+ * 
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class that provides an array of individual time measurements
+ * that are defined in the OSrL schema.  
+ */
+class Time{
+public:
+
+	/** 
+	 *
+	 * The type of timer used (cpuTime/elapsedTime/other)
+	 */
+	std::string type;
+
+	/** 
+	 *
+	 * The category of time (total/input/preprocessing/optimization/postprocessing/output/other)
+	 */
+	std::string category;
+
+	/** 
+	 *
+	 * The unit of time (tick/millisecond/second/minute/hour/day/week/month/year)
+	 */
+	std::string unit;
+
+	/** 
+	 *
+	 * Further description on the timer used
+	 */
+	std::string description;
+
+	/**
+	 *
+	 * The time measurement
+	 */
+	double value;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	Time();
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~Time();
+};//class Time
+
+
+/*! \class TimingInformation
+ *  \brief The TimingInformation  Class.
+ * 
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class that provides the timer information 
+ * that is defined in the OSrL schema.  
+ */
+class TimingInformation{
+public:
+
+	/** 
+	 *
+	 * An array of time measurements
+	 */
+	Time** time;
+
+	/**
+	 *
+	 * The number of elements in the time array
+	 */
+	int numberOfTimes;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	TimingInformation();
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~TimingInformation();
+};//class TimingInformation
+
+
 /*! \class JobResult
  *  \brief The JobResult  Class.
  * 
@@ -216,11 +312,12 @@ public:
  * 
  * \remarks
  * A class that provides the system information 
- * that is defined the OSrL schema.  
+ * that is defined in the OSrL schema.  
  */
 class JobResult{
 public:
 	
+	TimingInformation* timingInformation;
 	/**
 	 *
 	 * Default constructor. 
@@ -1207,29 +1304,29 @@ class OSResult{
 public:
 
 	/**
-	 * generalResult holds the first child of the OSResult specified by the OSrL Schema. 
+	 * general holds the first child of the OSResult specified by the OSrL Schema. 
 	 */
-	GeneralResult *generalResult;
+	GeneralResult *general;
 
 	/**
-	 * systemResult holds the second child of the OSResult specified by the OSrL Schema. 
+	 * system holds the second child of the OSResult specified by the OSrL Schema. 
 	 */
-	SystemResult *systemResult;
+	SystemResult *system;
 
 	/**
-	 * serviceResult holds the third child of the OSResult specified by the OSrL Schema. 
+	 * service holds the third child of the OSResult specified by the OSrL Schema. 
 	 */
-	ServiceResult *serviceResult;
+	ServiceResult *service;
 
 	/**
-	 * jobResult holds the fourth child of the OSResult specified by the OSrL Schema. 
+	 * job holds the fourth child of the OSResult specified by the OSrL Schema. 
 	 */
-	JobResult *jobResult;
+	JobResult *job;
 
 	/**
-	 * optimizationResult holds the fifth child of the OSResult specified by the OSrL Schema. 
+	 * optimization holds the fifth child of the OSResult specified by the OSrL Schema. 
 	 */
-	OptimizationResult *optimizationResult;
+	OptimizationResult *optimization;
 
 	/**
 	 *
@@ -1505,8 +1602,20 @@ public:
 	 * @param time holds the time. 
 	 * @return whether the time is set successfully. 
 	 */
-	bool setTime(double time);
+//	bool setTime(double time);
 		
+   	/**
+	 * Add timing information.
+	 * 
+	 * @param type holds the timer type (cpuTime/elapsedTime/other). 
+	 * @param category holds the timer category (total/input/preprocessing, etc.)
+	 * @param unit holds the timer unit (tick/milliscond/second/minute/etc.) 
+	 * @param description holds further information about the timer. 
+	 * @param value holds the time measurement. 
+	 * @return whether the time is set successfully. 
+	 */
+	bool addTimingInformation(std::string type, std::string category,
+							  std::string unit, std::string description, double value);
 	
 	/**
 	 * Set the variable number. 
@@ -1580,11 +1689,12 @@ public:
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
 	 * @param solIdx holds the solution index to set the primal variable values. 
 	 * @param x holds the a double dense array of variable values to set; it could be null if all variables are 0.
+	 * @param n holds the number of elements in the array x
 	 * 
 	 * @return whether primal variable values are set successfully or not. 
 	 * @see #setSolutionNumber(int)
 	 */
-	bool setPrimalVariableValues(int solIdx, double *x);
+	bool setPrimalVariableValues(int solIdx, double *x, int n);
 		
 	/**
 	 * Set the [i]th optimization solution's other (non-standard/solver specific)variable-related results, 
@@ -1610,16 +1720,18 @@ public:
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
 	 * @param solIdx holds the solution index  
 	 * @param otherIdx holds the index of the new OtherVariableResult object
-	 * @name holds the name of the other element
-	 * @std::string a pointer to the values of the var element
+	 * @param name holds the name of the other element
+	 * @param s holds a pointer to the array of values of the var element
+	 * @param n holds the number of elements of the array
 	 *
 	 * @return whether the other variable results are set successfully or not. 
 	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVariableResult
 	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult
 	 * @see #setSolutionNumber(int)
 	 */
-	bool setAnOtherVariableResult(int solIdx, int otherIdx, std::string name, std::string description, std::string *s);
-		
+	bool setAnOtherVariableResult(int solIdx, int otherIdx, std::string name, std::string description, std::string *s, int n);
+
+
 	
 	/**
 	 * Set the [i]th optimization solution's objective values, where i equals the given solution index.   
@@ -1631,11 +1743,12 @@ public:
 	 * @param objectiveValues holds the a double dense array of objective values to set.
 	 * Possibly only the objective that the solution is based on has the value, and the rest of the objective
 	 * values all get a Double.NaN value, meaning that they are not calculated.   
+	 * @param n holds the dimension of the objectiveValues array 
 	 * 
 	 * @return whether objective values are set successfully or not. 
 	 * @see #setSolutionNumber(int)
 	 */
-	bool setObjectiveValues(int solIdx, double *objectiveValues);
+	bool setObjectiveValues(int solIdx, double *objectiveValues, int n);
 	
 
 	/**
@@ -1645,33 +1758,37 @@ public:
 	 * @param solIdx holds the solution index to set the dual variable values. 
 	 * @param lbValues holds the a double dense array of variable dual values to set at the lower bounds; it could be null if all values are 0.
 	 * @param ubValues holds the a double dense array of variable dual values to set at the upper bounds; it could be null if all values are 0.
+	 * @param n holds the number of values in the lbValues and ubValues arrays
 	 * 
 	 * @return whether dual variable values are set successfully or not. 
 	 * @see #setSolutionNumber(int)
 	 */	
-	bool setDualVariableValues(int solIdx, double* lbValues, double* ubValues);
-	
+	bool setDualVariableValues(int solIdx, double* lbValues, double* ubValues, int n);
+
+
 	/**
 	 * Set the [i]th optimization solution's dual variable values, where i equals the given solution index. 
 	 * The method allows setting dual values at both the constraints' lower and upper bounds.   
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
 	 * @param solIdx holds the solution index to set the dual variable values. 
-	 * @param y holds the a double dense array of variable dual values; it could be null if all values are 0.	 * 
+	 * @param y holds a double dense array of variable dual values; it could be NULL if all values are 0.
+	 * @param n holds the number of elements of the array y.
 	 * @return whether dual variable values are set successfully or not. 
 	 * @see #setSolutionNumber(int)
 	 */	
-	bool setDualVariableValues(int solIdx, double *y);
+	bool setDualVariableValues(int solIdx, double *y, int n);
 	
 	/**
 	 * Set the [i]th optimization solution's constraint values, where i equals the given solution index.   
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
 	 * @param solIdx holds the solution index to set the constraint values. 
 	 * @param constraintValues holds the a double dense array of constraint values to set; it could be null if all constraint values are 0.
+	 * @param n holds the dimension of the array constraintValues.
 	 * 
 	 * @return whether constraint values are set successfully or not. 
 	 * @see #setSolutionNumber(int)
 	 */
-	bool setConstraintValues(int solIdx, double *constraintValues);
+	bool setConstraintValues(int solIdx, double *constraintValues, int n);
 
 
 
