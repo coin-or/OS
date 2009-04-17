@@ -142,34 +142,34 @@ generalStatus: GENERALSTATUSSTART anotherGeneralStatusATT GREATERTHAN GENERALSTA
 anotherGeneralStatusATT: generalstatusatt
 	| anotherGeneralStatusATT generalstatusatt;
 
-generalstatusatt: TYPEATT ATTRIBUTETEXT quote  { osresult->setGeneralStatusType($2);  free($2);  ; parserData->generalStatusTypePresent = true;}   
-		|  DESCRIPTIONATT ATTRIBUTETEXT  quote {  osresult->setGeneralStatusDescription($2);    free($2);}    
+generalstatusatt: TYPEATT ATTRIBUTETEXT quote  { osresult->setGeneralStatusType($2);  /*free($2)*/;  ; parserData->generalStatusTypePresent = true;}   
+		|  DESCRIPTIONATT ATTRIBUTETEXT  quote {  osresult->setGeneralStatusDescription($2);    /*free($2)*/;}    
 
 
 serviceURI: 
 | SERVICEURISTARTANDEND
-| SERVICEURISTART ELEMENTTEXT SERVICEURIEND {osresult->setServiceURI( $2); free($2); parserData->errorText = NULL;}
+| SERVICEURISTART ELEMENTTEXT SERVICEURIEND {osresult->setServiceURI( $2); /*free($2)*/; parserData->errorText = NULL;}
 | SERVICEURISTART SERVICEURIEND ;
 
 
 serviceName: 
 | SERVICENAMESTARTANDEND
-| SERVICENAMESTART ELEMENTTEXT SERVICENAMEEND {osresult->setServiceName( $2);  free($2);   parserData->errorText = NULL;}
+| SERVICENAMESTART ELEMENTTEXT SERVICENAMEEND {osresult->setServiceName( $2);  /*free($2)*/;   parserData->errorText = NULL;}
 | SERVICENAMESTART SERVICENAMEEND ;
 
 instanceName: 
 | INSTANCENAMESTARTANDEND
-| INSTANCENAMESTART ELEMENTTEXT INSTANCENAMEEND {osresult->setInstanceName( $2) ;  free($2);   parserData->errorText = NULL;}
+| INSTANCENAMESTART ELEMENTTEXT INSTANCENAMEEND {osresult->setInstanceName( $2) ;  /*free($2)*/;   parserData->errorText = NULL;}
 | INSTANCENAMESTART INSTANCENAMEEND ;
 
 jobID: 
 | JOBIDSTARTANDEND
-| JOBIDSTART ELEMENTTEXT JOBIDEND {osresult->setJobID( $2);  free($2);  parserData->errorText = NULL;}
+| JOBIDSTART ELEMENTTEXT JOBIDEND {osresult->setJobID( $2); /*free($2)*/;  parserData->errorText = NULL;}
 | JOBIDSTART JOBIDEND ;
 
 headerMessage: 
 | MESSAGESTARTANDEND
-| MESSAGESTART ELEMENTTEXT MESSAGEEND {osresult->setGeneralMessage( $2);  free($2);  parserData->errorText = NULL;}
+| MESSAGESTART ELEMENTTEXT MESSAGEEND {osresult->setGeneralMessage( $2);  /*free($2)*/;  parserData->errorText = NULL;}
 | MESSAGESTART MESSAGEEND ;
 
 systemElement: | SYSTEMSTART SYSTEMEND {printf("processed systemElement");};
@@ -210,9 +210,9 @@ timeValue:
   DOUBLE  {/*osresult->setTime( $2)*/; }
 | INTEGER {/*osresult->setTime( $2)*/; };
 
-optimizationElement: OPTIMIZATIONSTART optimizationContent OPTIMIZATIONEND;
+optimizationElement:  OPTIMIZATIONSTART optimizationContent OPTIMIZATIONEND;
 
-optimizationContent: OPTIMIZATIONSTART anotherOptATT
+optimizationContent:   anotherOptATT
 {
 // we now have the basic problem parameters
 	if(parserData->numberOfSolutions > 0){
@@ -244,22 +244,22 @@ optend:   ENDOFELEMENT
 		| GREATERTHAN  solution ;
 
 anotherOptATT: 
-	| anotherOptATT optatt  ;
+	| anotherOptATT  optatt  ;
 
-optatt:  optnumsolatt  quote
+optatt:   optnumsolatt    quote
 		| optnumvaratt   quote          
 		| optnumconatt  quote
 		| optnumobjatt   quote
 		;
 
 
-optnumsolatt: NUMBEROFSOLUTIONSATT INTEGER   {parserData->numberOfSolutions = $2; osresult->setSolutionNumber($2);}  ;
+optnumsolatt:   NUMBEROFSOLUTIONSATT quote INTEGER   { parserData->numberOfSolutions = $3; osresult->setSolutionNumber($3);} ;
+   	
+optnumvaratt: NUMBEROFVARIABLESATT quote INTEGER  {parserData->numberOfVariables = $3; osresult->setVariableNumber($3); } ; 
 	
-optnumvaratt: NUMBEROFVARIABLESATT INTEGER  {parserData->numberOfVariables = $2; osresult->setVariableNumber($2); } ; 
-	
-optnumconatt: NUMBEROFCONSTRAINTSATT INTEGER   {parserData->numberOfConstraints = $2; osresult->setConstraintNumber($2);}  ;
+optnumconatt: NUMBEROFCONSTRAINTSATT quote INTEGER   {parserData->numberOfConstraints = $3; osresult->setConstraintNumber($3);}  ;
 
-optnumobjatt: NUMBEROFOBJECTIVESATT INTEGER   {parserData->numberOfObjectives = $2; osresult->setObjectiveNumber($2);}  ;
+optnumobjatt: NUMBEROFOBJECTIVESATT quote INTEGER   {parserData->numberOfObjectives = $3; osresult->setObjectiveNumber($3);}  ;
 	
 
 
@@ -275,8 +275,8 @@ anothersolution: SOLUTIONSTART targetObjectiveIDXATT GREATERTHAN status message 
 
 
 targetObjectiveIDXATT: 
-| TARGETOBJECTIVEIDXATT INTEGER quote {if($2 >= 0) osrlerror(NULL, NULL, NULL, "target objective index must be negative");
-*(parserData->objectiveIdx + parserData->solutionIdx) = $2;};
+| TARGETOBJECTIVEIDXATT quote INTEGER quote {if($3 >= 0) osrlerror(NULL, NULL, NULL, "target objective index must be negative");
+*(parserData->objectiveIdx + parserData->solutionIdx) = $3;};
 
 status: STATUSSTART anotherStatusATT GREATERTHAN  STATUSEND {if(parserData->statusTypePresent == false) osrlerror(NULL, NULL, NULL, "a type attribute required for status element");  osresult->setSolutionStatus(parserData->solutionIdx, parserData->statusType, parserData->statusDescription);}
 | STATUSSTART anotherStatusATT ENDOFELEMENT {if(parserData->statusTypePresent == false) osrlerror(NULL, NULL, NULL, "a type attribute required for status element"); parserData->statusTypePresent = false; osresult->setSolutionStatus(parserData->solutionIdx, parserData->statusType, parserData->statusDescription);};

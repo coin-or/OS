@@ -133,8 +133,7 @@ return(DOUBLE);}
 ({xmlwhitespace}+numberOfCon{equality}) {YY_PRINT; return(NUMBEROFCONATT);}
 ({xmlwhitespace}+idx{equality}{quote}{xmlwhitespace}*) {YY_PRINT; return(IDXATT);}
 
-({xmlwhitespace}+targetObjectiveIdx{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(TARGETOBJECTIVEIDXATT);}
-({xmlwhitespace}+targetObjectiveIdx{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(TARGETOBJECTIVEIDXATT);}
+({xmlwhitespace}+targetObjectiveIdx{equality}) {YY_PRINT;  return(TARGETOBJECTIVEIDXATT);}
 ({xmlwhitespace}+name{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(NAMEATT);}
 ({xmlwhitespace}+name{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(NAMEATT);}
 ({xmlwhitespace}+type{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(TYPEATT);}
