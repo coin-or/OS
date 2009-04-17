@@ -305,7 +305,7 @@ if test $coin_has_couenne != unavailable &&
     cl*)
        couennelib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libcouenne.lib';;
      *)
-       couennelib="-L\$(INSTALLIBDIR) -lCouenne -lbonminampl -lamplinterface";;
+       couennelib="-L\$(INSTALLIBDIR) -lBonCouenne -lCouenneReadnl -lCouenne ";;
   esac
   AC_SUBST(couennelib)  
 fi
@@ -317,7 +317,7 @@ if test $coin_has_bonmin != unavailable &&
     cl*)
        bonminlib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libbonmin.lib';;
      *)
-       bonminlib="-L\$(INSTALLIBDIR) -lbonmin";;
+       bonminlib="-L\$(INSTALLIBDIR) -lbonminampl -lbonmin";;
   esac
   AC_SUBST(bonminlib)  
 fi

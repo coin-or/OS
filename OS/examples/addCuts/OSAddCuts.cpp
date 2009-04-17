@@ -37,6 +37,7 @@
 #include "CglSimpleRounding.hpp"
 #include "CglKnapsackCover.hpp"
 #include "OSMathUtil.h"
+#include "CbcModel.hpp"
 
 #include<iostream> 
 using std::cout;   

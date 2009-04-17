@@ -88,14 +88,14 @@ if COIN_HAS_BONMIN
 if COIN_HAS_ASL
 LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la 
 endif
-   LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la \
-    	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la 
+   LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la 
+#    	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la 
 endif
 
 
 if COIN_HAS_IPOPT
 if COIN_HAS_ASL
-      LDADD += $(IPOPTOBJDIR)/src/Apps/AmplSolver/libamplinterface.la 
+#      LDADD += $(IPOPTOBJDIR)/src/Apps/AmplSolver/libamplinterface.la 
 endif
   LDADD += $(IPOPTOBJDIR)/src/Interfaces/libipopt.la \
         $(IPOPTOBJDIR)/src/LinAlg/liblinalg.la

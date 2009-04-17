@@ -42,8 +42,8 @@ OSAmplClient_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la
 if COIN_HAS_ASL 
 OSAmplClient_LDADD +=$(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la   
 #OSAmplClient_LDADD +=$(BONMINOBJDIR)/src/Interfaces/Ampl/libbonamplinterface.la 
-OSAmplClient_LDADD +=	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la 
-OSAmplClient_LDADD += $(IPOPTOBJDIR)/src/Apps/AmplSolver/libamplinterface.la    
+#OSAmplClient_LDADD +=	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la 
+#OSAmplClient_LDADD += $(IPOPTOBJDIR)/src/Apps/AmplSolver/libamplinterface.la    
 endif
 endif
 
