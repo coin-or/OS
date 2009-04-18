@@ -60,6 +60,7 @@
 #include "OSSolverAgent.h"
 #include "OShL.h"
 #include "OSErrorClass.h"
+#include "CoinError.hpp"
 #include <sstream>
 
 #ifdef HAVE_CSTRING

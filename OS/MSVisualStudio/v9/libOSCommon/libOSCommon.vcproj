@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="8.00"
 	Name="libOSCommon"
 	ProjectGUID="{9B52F86F-D29F-4EB4-B2AB-35A894A98FBD}"
 	RootNamespace="libOSCommon"
@@ -275,10 +275,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\src\OSAgent\OShL.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\src\OSParsers\OSiLParserData.cpp"
 				>
 			</File>
@@ -360,14 +356,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\src\OSCommonInterfaces\OSrLWriter.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\OSAgent\OSSolverAgent.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\OSAgent\OSWSUtil.cpp"
 				>
 			</File>
 		</Filter>

@@ -245,10 +245,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wsock32.lib winmm.lib advapi32.lib"
+				AdditionalDependencies="wsock32.lib winmm.lib advapi32.lib amplsolv.lib libCbc_ampl.lib"
 				OutputFile=".\$(ConfigurationName)\OSTestCode.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;;&quot;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;"
+				AdditionalLibraryDirectories="&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;;&quot;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;;..\..\..\..\OS\MSVisualStudio\v8\Release;..\..\..\..\ThirdParty\ASL;..\..\..\..\ThirdParty\ASL\solvers"
 				GenerateDebugInformation="false"
 				ProgramDatabaseFile=".\$(ConfigurationName)\OSExample-osTestCode.pdb"
 				SubSystem="1"

@@ -223,8 +223,8 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="-DWIN_ -D_WIN32 -DMSVISUALSTUDIO -DHAVE_MATH_H -DHAVE_STRING_H -DHAVE_STDIO_H -DHAVE_TIME_H"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\..\..\Ipopt\src\Interfaces;..\..\..\..\Ipopt\src\Common;..\..\..\..\Ipopt\src\LinAlg;..\..\..\..\OS\src\OSUtils;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\ThirdPartyASL;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src;..\..\..\..;..\..\..\..\CppAD\local;..\..\..\..\CppAD;..\..\..\..\Osi\src\OsiCbc;..\..\..\..\Osi\src;..\..\..\..\Osi\src\OsiClp;..\..\..\..\CoinUtils\src;..\..\..\..\BuildTools\headers;..\..\..\..\Osi\src\OsiVol;..\..\..\..\Vol\src;..\..\..\..\Clp\src;..\..\..\..\Cbc\src;..\..\..\..\Osi\src\OsiSym;..\..\..\..\SYMPHONY\\include"
-				PreprocessorDefinitions="NDEBUG;WIN32;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;WIN_;_LINDO_DLL_;OSROOT_DIR;COIN_HAS_ASL;COIN_HAS_IPOPT;COIN_HAS_SYMPHONY"
+				AdditionalIncludeDirectories="..\..\..\..\Ipopt\src\Interfaces;..\..\..\..\Ipopt\src\Common;..\..\..\..\Ipopt\src\LinAlg;..\..\..\..\Cgl\src;..\..\..\..\Cgl\src\CglAllDifferent;..\..\..\..\Cgl\src\CglClique;..\..\..\..\Cgl\src\CglDuplicateRow;..\..\..\..\Cgl\src\CglFlowCover;..\..\..\..\Cgl\src\CglGomory;..\..\..\..\Cgl\src\CglKnapsackCover;..\..\..\..\Cgl\src\CglLandP;..\..\..\..\Cgl\src\CglMixedIntegerRounding;..\..\..\..\Cgl\src\CglMixedIntegerRounding2;..\..\..\..\Cgl\src\CglOddHole;..\..\..\..\Cgl\src\CglPreProcess;..\..\..\..\Cgl\src\CglProbing;..\..\..\..\Cgl\src\CglRedSplit;..\..\..\..\Cgl\src\CglResidualCapacity;..\..\..\..\Cgl\src\CglSimpleRounding;..\..\..\..\Cgl\src\CglTwomir;..\..\..\..\OS\src\OSUtils;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\ThirdPartyASL;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src;..\..\..\..;..\..\..\..\CppAD\local;..\..\..\..\CppAD;..\..\..\..\Osi\src\OsiCbc;..\..\..\..\Osi\src;..\..\..\..\Osi\src\OsiClp;..\..\..\..\CoinUtils\src;..\..\..\..\BuildTools\headers;..\..\..\..\Osi\src\OsiVol;..\..\..\..\Vol\src;..\..\..\..\Clp\src;..\..\..\..\Cbc\src;..\..\..\..\Osi\src\OsiSym;..\..\..\..\SYMPHONY\\include;..\..\..\..\Bonmin\src;..\..\..\..\Bonmin\src\Interfaces;..\..\..\..\Bonmin\src\Interfaces\Ampl;..\..\..\..\Bonmin\src\Interfaces\Ipopt;..\..\..\..\Bonmin\src\CbcBonmin;..\..\..\..\Bonmin\src\CbcBonmin\Heuristics;..\..\..\..\Bonmin\src\Algorithms;..\..\..\..\Bonmin\src\Algorithms\Ampl;..\..\..\..\Bonmin\src\Algorithms\Branching;..\..\..\..\Bonmin\src\Algorithms\OaGenerators;..\..\..\..\Bonmin\src\Algorithms\QuadCuts"
+				PreprocessorDefinitions="NDEBUG;WIN32;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;WIN_;_LINDO_DLL_;OSROOT_DIR;COIN_HAS_ASL;COIN_HAS_IPOPT;COIN_HAS_BONMIN;COIN_HAS_SYMPHONY"
 				StringPooling="true"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
@@ -250,10 +250,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wsock32.lib amplsolv.lib libIpopt.lib libCoinBlas.lib libCoinHSL.lib libCoinLapack.lib vcf2c.lib"
+				AdditionalDependencies="wsock32.lib amplsolv.lib libIpopt.lib libBonmin.lib libCoinBlas.lib libCoinHSL.lib libCoinLapack.lib vcf2c.lib libCbc_ampl.lib"
 				OutputFile=".\$(ConfigurationName)\OSSolverService.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;;&quot;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;;..\..\lib\f2c;..\..\lib\ifort;..\..\lib;..\..\..\..\ThirdParty\ASL;..\..\..\..\Ipopt\MSVisualStudio\v8\libIpopt\Release;..\..\..\..\Ipopt\MSVisualStudio\v8\libCoinBlas\Release;..\..\..\..\Ipopt\MSVisualStudio\v8\libCoinHSL\Release;..\..\..\..\Ipopt\MSVisualStudio\v8\libCoinLapack\Release;..\..\..\..\Ipopt\MSVisualStudio\v8\libf2c"
+				AdditionalLibraryDirectories="&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;;&quot;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;;..\..\lib\f2c;..\..\lib\ifort;..\..\lib;..\..\..\..\ThirdParty\ASL;..\..\..\..\Ipopt\MSVisualStudio\v8\libIpopt\Release;..\..\..\..\Ipopt\MSVisualStudio\v8\libCoinBlas\Release;..\..\..\..\Ipopt\MSVisualStudio\v8\libCoinHSL\Release;..\..\..\..\Ipopt\MSVisualStudio\v8\libCoinLapack\Release;..\..\..\..\Ipopt\MSVisualStudio\v8\libf2c;..\..\..\..\Bonmin\MSVisualStudio\v8\libBonmin\Release;..\..\..\..\OS\MSVisualStudio\v8\Release"
 				GenerateManifest="false"
 				GenerateDebugInformation="false"
 				ProgramDatabaseFile=""

@@ -275,10 +275,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\src\OSAgent\OShL.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\src\OSParsers\OSiLParserData.cpp"
 				>
 			</File>
@@ -360,14 +356,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\src\OSCommonInterfaces\OSrLWriter.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\OSAgent\OSSolverAgent.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\OSAgent\OSWSUtil.cpp"
 				>
 			</File>
 		</Filter>
