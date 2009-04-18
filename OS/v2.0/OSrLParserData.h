@@ -42,6 +42,14 @@ struct OtherVariableResultStruct{
 	 * reduced cost, etc.
 	 */
 	std::string *otherVarText;
+	
+	
+	/** numOfVar holds the number of Variables recorded
+	 * in the structure
+	 */ 
+	int numberOfVar;
+	
+	
 };
 
 

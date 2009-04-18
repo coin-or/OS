@@ -2144,13 +2144,13 @@ case 93:
 /* rule 93 can match eol */
 YY_RULE_SETUP
 #line 243 "/Users/kmartin/coin/oscommon/OS/src/OSParsers/OSParseosrl.l"
-{YY_PRINT;  BEGIN 0; /*yylval->sval = strdup(yytext);*/   yylval->sval = yytext; return(ATTRIBUTETEXT);}
+{YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext);  /* yylval->sval = yytext;*/ return(ATTRIBUTETEXT);}
 	YY_BREAK
 case 94:
 /* rule 94 can match eol */
 YY_RULE_SETUP
 #line 244 "/Users/kmartin/coin/oscommon/OS/src/OSParsers/OSParseosrl.l"
-{YY_PRINT;  BEGIN 0; /*yylval->sval = strdup(yytext);*/   yylval->sval = yytext;  return(ATTRIBUTETEXT);}
+{YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext);   /*yylval->sval = yytext;*/  return(ATTRIBUTETEXT);}
 	YY_BREAK
 case 95:
 /* rule 95 can match eol */

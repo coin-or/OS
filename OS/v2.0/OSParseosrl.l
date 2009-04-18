@@ -240,8 +240,8 @@ return(DOUBLE);}
 
 
 
-<doublequoteattributetext>[^\"]* {YY_PRINT;  BEGIN 0; /*yylval->sval = strdup(yytext);*/   yylval->sval = yytext; return(ATTRIBUTETEXT);}
-<singlequoteattributetext>[^\']* {YY_PRINT;  BEGIN 0; /*yylval->sval = strdup(yytext);*/   yylval->sval = yytext;  return(ATTRIBUTETEXT);}
+<doublequoteattributetext>[^\"]* {YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext);  /* yylval->sval = yytext;*/ return(ATTRIBUTETEXT);}
+<singlequoteattributetext>[^\']* {YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext);   /*yylval->sval = yytext;*/  return(ATTRIBUTETEXT);}
 							
 <osrlattributetext>([^>])* {YY_PRINT;  BEGIN 0; /*yylval->sval = strdup(yytext);*/  yylval->sval = yytext; return(OSRLATTRIBUTETEXT);}
 
