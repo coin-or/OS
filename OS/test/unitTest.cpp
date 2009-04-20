@@ -454,7 +454,6 @@ if(INSTALLATION_TEST == true){
 		cout << "Conclusion: FAILURE" << endl;
 		return 1;
 	}	
-
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Clp solver on parincLinearByRow.osil" << endl << endl;
 		ok = true; 

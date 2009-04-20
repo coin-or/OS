@@ -583,10 +583,9 @@ void BonminSolver::buildSolverInstance() throw (ErrorClass) {
 
 void BonminSolver::setSolverOptions() throw (ErrorClass) {
 	try{
-
 		this->bSetSolverOptions = true;
 		bonminSetup.initializeOptionsAndJournalist();
-		//Register an additional option
+		//Register an additional option -- just an example
 		bonminSetup.roptions()->AddStringOption2("print_solution","Do we print the solution or not?",
 		                                 "yes",
 		                                 "no", "No, we don't.",
@@ -610,7 +609,7 @@ void BonminSolver::setSolverOptions() throw (ErrorClass) {
 		if(printSolution == 1){
 			tminlp->printSolutionAtEndOfAlgorithm();
 		}	
-		
+		//
 		if(osoption == NULL && osol.length() > 0)
 		{
 			m_osolreader = new OSoLReader();
@@ -620,23 +619,56 @@ void BonminSolver::setSolverOptions() throw (ErrorClass) {
 		if(osoption != NULL){
 			char *pEnd;
 			int i;
-
 			std::vector<SolverOption*> optionsVector;
 			optionsVector = osoption->getSolverOptions( "bonmin");
 			int num_bonmin_options = optionsVector.size();
 			for(i = 0; i < num_bonmin_options; i++){
-				std::cout << "bonmin solver option  "  << optionsVector[ i]->name << std::endl;
 				if(optionsVector[ i]->type == "numeric" ){
-					std::cout << "FOUND A BONMIN NUMERIC OPTION  "  <<  os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) << std::endl;
-					bonminSetup.options()->SetNumericValue("bonmin."+optionsVector[ i]->name, os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) );	
-				}
+					std::cout << "FOUND A  NUMERIC OPTION  "  <<  os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) << std::endl;
+					if(optionsVector[ i]->category == "ipopt"){
+						bonminSetup.options()->SetNumericValue(optionsVector[ i]->name, os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) );	
+					}else{
+						if(optionsVector[ i]->category == "cbc" ){
+							bonminSetup.options()->SetNumericValue("milp_solver."+optionsVector[ i]->name, os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) );
+						}
+						else{
+							bonminSetup.options()->SetNumericValue("bonmin."+optionsVector[ i]->name, os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) );	
+						}
+					}
+				}  
 				else if(optionsVector[ i]->type == "integer" ){
-					std::cout << "FOUND A BONMIN INTEGER OPTION  "  <<optionsVector[ i]->name << std::endl;
-					bonminSetup.options()->SetIntegerValue(optionsVector[ i]->name, atoi( optionsVector[ i]->value.c_str() ) );
+					std::cout << "FOUND AN INTEGER OPTION  "  <<optionsVector[ i]->name << std::endl;
+					if(optionsVector[ i]->category == "ipopt"){
+						bonminSetup.options()->SetIntegerValue(optionsVector[ i]->name, atoi( optionsVector[ i]->value.c_str() ) );	
+					}else{
+						if(optionsVector[ i]->category == "cbc" ){
+							std::cout << "SETTING INTEGER CBC OPTION" << std::endl;
+							bonminSetup.options()->SetIntegerValue("milp_solver."+optionsVector[ i]->name, atoi( optionsVector[ i]->value.c_str() ));
+							int optNum;
+							optNum = -27;
+							std::string prefix;
+							bonminSetup.options()->GetEnumValue("milp_solver", optNum,  bonminSetup.prefix() );
+							std::cout << "optNum =  " << optNum << std::endl;
+							std::cout << "PREFIX  =  " << bonminSetup.prefix() << std::endl;
+						}
+						else{
+							bonminSetup.options()->SetIntegerValue("bonmin."+optionsVector[ i]->name, atoi( optionsVector[ i]->value.c_str() )  );	
+						}
+					}					
 				}
 				else if(optionsVector[ i]->type == "string" ){
-					std::cout << "FOUND A BONMIN INTEGER OPTION  "  <<optionsVector[ i]->name << std::endl;
-					bonminSetup.options()->SetStringValue(optionsVector[ i]->name, optionsVector[ i]->value);
+					std::cout << "FOUND A STRING OPTION  "  <<optionsVector[ i]->name << std::endl;
+					if(optionsVector[ i]->category == "ipopt"){
+						bonminSetup.options()->SetStringValue(optionsVector[ i]->name, optionsVector[ i]->value );	
+					}else{
+						if(optionsVector[ i]->category == "cbc" ){
+							bonminSetup.options()->SetStringValue("milp_solver."+optionsVector[ i]->name, optionsVector[ i]->value);
+						}
+						else{
+							bonminSetup.options()->SetStringValue("bonmin."+optionsVector[ i]->name, optionsVector[ i]->value);	
+						}
+					}	
+
 				}
 			}	
 		}
