@@ -32,12 +32,12 @@ OSFileUpload_LDADD =  \
 
 if COIN_HAS_COUENNE
    OSFileUpload_LDADD += $(COUENNEOBJDIR)/src/main/libBonCouenne.la $(COUENNEOBJDIR)/src/readnl/libCouenneReadnl.la $(COUENNEOBJDIR)/src/libCouenne.la
+if COIN_HAS_ASL
+   OSFileUpload_LDADD +=$(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la
+endif
 endif
 
 if COIN_HAS_BONMIN
-if COIN_HAS_ASL
-OSFileUpload_LDADD +=$(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la    
-endif
    OSFileUpload_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la 
 #	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la 
 endif

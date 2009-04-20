@@ -47,7 +47,7 @@ host_triplet = @host@
 bin_PROGRAMS = OSSolverService$(EXEEXT)
 @COIN_HAS_COUENNE_TRUE@am__append_1 = $(COUENNESRCDIR)/src/main/BonCouenneInfo.cpp $(COUENNESRCDIR)/src/main/BonCouenneInfo.hpp
 @COIN_HAS_COUENNE_TRUE@am__append_2 = $(COUENNEOBJDIR)/src/main/libBonCouenne.la $(COUENNEOBJDIR)/src/readnl/libCouenneReadnl.la $(COUENNEOBJDIR)/src/libCouenne.la
-@COIN_HAS_ASL_TRUE@@COIN_HAS_BONMIN_TRUE@am__append_3 = $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la 
+@COIN_HAS_ASL_TRUE@@COIN_HAS_COUENNE_TRUE@am__append_3 = $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la
 @COIN_HAS_BONMIN_TRUE@am__append_4 = $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la 
 #    	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la 
 
@@ -181,7 +181,7 @@ OSSolverService_OBJECTS = $(am_OSSolverService_OBJECTS)
 @COIN_HAS_COUENNE_TRUE@am__DEPENDENCIES_1 = $(COUENNEOBJDIR)/src/main/libBonCouenne.la \
 @COIN_HAS_COUENNE_TRUE@	$(COUENNEOBJDIR)/src/readnl/libCouenneReadnl.la \
 @COIN_HAS_COUENNE_TRUE@	$(COUENNEOBJDIR)/src/libCouenne.la
-@COIN_HAS_ASL_TRUE@@COIN_HAS_BONMIN_TRUE@am__DEPENDENCIES_2 = $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la
+@COIN_HAS_ASL_TRUE@@COIN_HAS_COUENNE_TRUE@am__DEPENDENCIES_2 = $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la
 @COIN_HAS_BONMIN_TRUE@am__DEPENDENCIES_3 = $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la
 @COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_4 = $(IPOPTOBJDIR)/src/Interfaces/libipopt.la \
 @COIN_HAS_IPOPT_TRUE@	$(IPOPTOBJDIR)/src/LinAlg/liblinalg.la

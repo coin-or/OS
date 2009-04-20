@@ -35,16 +35,16 @@ OSAmplClient_LDADD =  \
 	
 if COIN_HAS_COUENNE
    OSAmplClient_LDADD += $(COUENNEOBJDIR)/src/main/libBonCouenne.la $(COUENNEOBJDIR)/src/readnl/libCouenneReadnl.la $(COUENNEOBJDIR)/src/libCouenne.la
+if COIN_HAS_ASL
+OSAmplClient_LDADD +=$(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la
+#OSAmplClient_LDADD +=$(BONMINOBJDIR)/src/Interfaces/Ampl/libbonamplinterface.la
+#OSAmplClient_LDADD +=  $(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la
+#OSAmplClient_LDADD += $(IPOPTOBJDIR)/src/Apps/AmplSolver/libamplinterface.la
+endif
 endif
 
 if COIN_HAS_BONMIN
 OSAmplClient_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la
-if COIN_HAS_ASL 
-OSAmplClient_LDADD +=$(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la   
-#OSAmplClient_LDADD +=$(BONMINOBJDIR)/src/Interfaces/Ampl/libbonamplinterface.la 
-#OSAmplClient_LDADD +=	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la 
-#OSAmplClient_LDADD += $(IPOPTOBJDIR)/src/Apps/AmplSolver/libamplinterface.la    
-endif
 endif
 
 
