@@ -138,28 +138,33 @@ OSInstance::~OSInstance(){
 	#endif
 	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
 	// delete  the temporary arrays
-	delete[] m_msVariableNames;
-	m_msVariableNames = NULL;
-	//delete[] m_mdVariableInitialValues;
-	//m_mdVariableInitialValues = NULL ;
-	//delete[] m_msVariableInitialStringValues;
-	//m_msVariableInitialStringValues = NULL;
-	delete[] m_mcVariableTypes;
-	m_mcVariableTypes = NULL;
-	/**
-	delete[] m_msObjectiveNames;
-	m_msObjectiveNames = NULL;
-	delete[] m_msMaxOrMins;
-	m_msMaxOrMins = NULL;
-	delete[] m_miNumberOfObjCoef;
-	m_miNumberOfObjCoef = NULL;
-	delete[] m_mdObjectiveConstants; 
-	m_mdObjectiveConstants = NULL;
-	delete[] m_mdObjectiveWeights;
-	m_mdObjectiveWeights = NULL;
-	*/
-	delete[] m_miNonLinearVarsReverseMap;
-	m_miNonLinearVarsReverseMap = NULL;
+	
+	if(m_bProcessVariables == true){
+		delete[] m_msVariableNames;
+		m_msVariableNames = NULL;
+		delete[] m_mcVariableTypes;
+		m_mcVariableTypes = NULL;
+		delete[] m_mdVariableLowerBounds;
+		m_mdVariableLowerBounds = NULL;
+		delete[] m_mdVariableUpperBounds;
+		m_mdVariableUpperBounds = NULL;
+	}
+	
+	
+	if(m_bProcessConstraints == true){
+		delete[] m_msConstraintNames;
+		m_msConstraintNames = NULL;
+		delete[] m_mcConstraintTypes;
+		m_mcConstraintTypes = NULL;
+		delete[]  m_mdConstraintConstants;
+		m_mdConstraintConstants = NULL;
+		delete[] m_mdConstraintLowerBounds;
+		m_mdConstraintLowerBounds = NULL;
+		delete[] m_mdConstraintUpperBounds;
+		m_mdConstraintUpperBounds = NULL;
+	}
+	
+	
 	int i;
 	//if(instanceData->objectives->numberOfObjectives > 0 && m_mObjectiveCoefficients != NULL){
 	if(m_bProcessObjectives == true ){
@@ -190,7 +195,8 @@ OSInstance::~OSInstance(){
 		delete[] m_mObjectiveCoefficients;
 		m_mObjectiveCoefficients = NULL;
 	}
-	if(instanceData->objectives->numberOfObjectives > 0 && m_mmdDenseObjectiveCoefficients != NULL){
+	
+	if(m_bGetDenseObjectives == true){
 		for(i = 0; i < instanceData->objectives->numberOfObjectives; i++){
 			//delete m_mmdDenseObjectiveCoefficients[i];
 			#ifdef DEBUG
@@ -202,8 +208,16 @@ OSInstance::~OSInstance(){
 		delete[] m_mmdDenseObjectiveCoefficients;
 		m_mmdDenseObjectiveCoefficients = NULL;
 	}
-
+	
+	
+	
+	if(m_bProcessLinearConstraintCoefficients == true && m_bColumnMajor == true) delete m_linearConstraintCoefficientsInColumnMajor;
+	if(m_bProcessLinearConstraintCoefficients == true && m_bColumnMajor == false) delete m_linearConstraintCoefficientsInRowMajor;
+	
+	
 	if( (m_binitForAlgDiff == true)  ){	
+		delete[] m_miNonLinearVarsReverseMap;
+		m_miNonLinearVarsReverseMap = NULL;
 		if(instanceData->objectives->numberOfObjectives > 0 && m_mmdObjGradient != NULL){
 			
 			#ifdef DEBUG
@@ -222,24 +236,6 @@ OSInstance::~OSInstance(){
 		}
 	}
 
-	if(m_bProcessLinearConstraintCoefficients == true && m_bColumnMajor == true) delete m_linearConstraintCoefficientsInColumnMajor;
-	if(m_bProcessLinearConstraintCoefficients == true && m_bColumnMajor == false) delete m_linearConstraintCoefficientsInRowMajor;
-	//if(m_linearConstraintCoefficientsInRowMajor != NULL) delete m_linearConstraintCoefficientsInRowMajor;
-	//if(m_linearConstraintCoefficientsInColumnMajor != NULL) delete m_linearConstraintCoefficientsInColumnMajor;
-	delete[] m_msConstraintNames;
-	m_msConstraintNames = NULL;
-	delete[] m_mcConstraintTypes;
-	m_mcConstraintTypes = NULL;
-	delete[]  m_mdConstraintConstants;
-	 m_mdConstraintConstants = NULL;
-	delete[] m_mdConstraintLowerBounds;
-	m_mdConstraintLowerBounds = NULL;
-	delete[] m_mdConstraintUpperBounds;
-	m_mdConstraintUpperBounds = NULL;
-	delete[] m_mdVariableLowerBounds;
-	m_mdVariableLowerBounds = NULL;
-	delete[] m_mdVariableUpperBounds;
-	m_mdVariableUpperBounds = NULL;
 	//std::cout << "Do garbage collection for the nonlinear API" << std::endl;
 	// garbage collection for the gradient
 	if(m_bNonLinearStructuresInitialized == true ){
@@ -1274,8 +1270,8 @@ int OSInstance::getLinearConstraintCoefficientNumber(){
 }//getLinearConstraintCoefficientNumber
 
 bool OSInstance::processLinearConstraintCoefficients() {
-	if(m_bProcessLinearConstraintCoefficients) return true;
-	m_bProcessLinearConstraintCoefficients = true;
+	//if(m_bProcessLinearConstraintCoefficients) return true;
+	//m_bProcessLinearConstraintCoefficients = true;
 	try{
 		int n = instanceData->linearConstraintCoefficients->numberOfValues;
 		//value array
@@ -1288,16 +1284,22 @@ bool OSInstance::processLinearConstraintCoefficients() {
 		else{
 			if(instanceData->linearConstraintCoefficients->rowIdx->el != NULL){
 				m_bColumnMajor = true;
-				m_linearConstraintCoefficientsInColumnMajor = new SparseMatrix();
-				m_linearConstraintCoefficientsInColumnMajor->bDeleteArrays = false;
+				if(m_bProcessLinearConstraintCoefficients != true){
+					m_linearConstraintCoefficientsInColumnMajor = new SparseMatrix();
+					m_linearConstraintCoefficientsInColumnMajor->bDeleteArrays = false;
+					m_bProcessLinearConstraintCoefficients = true;
+				}
 				m_linearConstraintCoefficientsInColumnMajor->isColumnMajor = true;
 				m_linearConstraintCoefficientsInColumnMajor->valueSize = n;
 				m_linearConstraintCoefficientsInColumnMajor->startSize = instanceData->variables->numberOfVariables + 1;
 			}
 			else{ 
 				m_bColumnMajor = false;	
-				m_linearConstraintCoefficientsInRowMajor = new SparseMatrix();
-				m_linearConstraintCoefficientsInRowMajor->bDeleteArrays = false;
+				if(m_bProcessLinearConstraintCoefficients != true){
+					m_linearConstraintCoefficientsInRowMajor = new SparseMatrix();
+					m_linearConstraintCoefficientsInRowMajor->bDeleteArrays = false;
+					m_bProcessLinearConstraintCoefficients = true;
+				}
 				m_linearConstraintCoefficientsInRowMajor->isColumnMajor = false;
 				m_linearConstraintCoefficientsInRowMajor->valueSize = n;
 				m_linearConstraintCoefficientsInRowMajor->startSize = instanceData->constraints->numberOfConstraints + 1;
