@@ -976,17 +976,13 @@ int OSInstance::getNumberOfNonlinearExpressions(){
 
 
 bool OSInstance::processVariables() {
-	if(m_bProcessVariables) return true;
-	m_bProcessVariables = true;
+	//if(m_bProcessVariables) return true;
+	//m_bProcessVariables = true;
 	string vartype ="CBIS";
 	int i = 0;
 	int n = instanceData->variables->numberOfVariables;
 	try{
 		if(instanceData->variables->var == NULL) throw ErrorClass("no variables defined");
-		if(instanceData->variables->var[0]->name.length() > 0 || instanceData->variables->var[n-1]->name.length() > 0){
-			m_msVariableNames = new string[n];
-			for(i = 0; i < n; i++) m_msVariableNames[i] = instanceData->variables->var[i]->name;
-		} 
 		/*
 			m_mdVariableInitialValues = new double[n];
 			for(i = 0; i < n; i++){
@@ -1003,9 +999,16 @@ bool OSInstance::processVariables() {
 			for(i = 0; i < n; i++) m_msVariableInitialStringValues[i] = instanceData->variables->var[i]->initString;
 		}
 		*/
-		m_mcVariableTypes = new char[n];
-		m_mdVariableLowerBounds = new double[n];
-		m_mdVariableUpperBounds = new double[n];
+		
+		if(m_bProcessVariables != true ){
+			m_mcVariableTypes = new char[n];
+			m_mdVariableLowerBounds = new double[n];
+			m_mdVariableUpperBounds = new double[n];
+			m_msVariableNames = new string[n];
+			m_bProcessVariables = true;
+		}
+		m_iNumberOfBinaryVariables = 0;
+		m_iNumberOfIntegerVariables = 0;
 		for(i = 0; i < n; i++){
 			if(vartype.find(instanceData->variables->var[i]->type) == string::npos) throw ErrorClass("wrong variable type");
 			m_mcVariableTypes[i] = instanceData->variables->var[i]->type;
@@ -1014,6 +1017,9 @@ bool OSInstance::processVariables() {
 			m_mdVariableLowerBounds[i] = instanceData->variables->var[i]->lb;
 			m_mdVariableUpperBounds[i] = instanceData->variables->var[i]->ub;
 		}
+		if(instanceData->variables->var[0]->name.length() > 0 || instanceData->variables->var[n-1]->name.length() > 0){
+			for(i = 0; i < n; i++) m_msVariableNames[i] = instanceData->variables->var[i]->name;
+		} 
 		return true;
 	} //end try
 	catch(const ErrorClass& eclass){
@@ -1072,22 +1078,22 @@ int OSInstance::getObjectiveNumber(){
 
 
 bool OSInstance::processObjectives() {
-	if(m_bProcessObjectives) return true;
-	m_bProcessObjectives = true;
+	//if(m_bProcessObjectives) return true;
+	//m_bProcessObjectives = true;
 	int i = 0;
 	int j = 0;
 	if(instanceData == NULL || instanceData->objectives == NULL || instanceData->objectives->obj == NULL || instanceData->objectives->numberOfObjectives == 0) return true;
 	int n = instanceData->objectives->numberOfObjectives;
 	try{
-		if(instanceData->objectives->obj[0]->name.length() > 0 || instanceData->objectives->obj[n-1]->name.length() > 0){
+		if(m_bProcessObjectives != true){
+			m_msMaxOrMins = new string[n];
+			m_miNumberOfObjCoef = new int[n];
+			m_mdObjectiveConstants = new double[n];
+			m_mdObjectiveWeights = new double[n];
+			m_mObjectiveCoefficients = new SparseVector*[n];
 			m_msObjectiveNames = new string[n];
-			for(i = 0; i < n; i++) m_msObjectiveNames[i] = instanceData->objectives->obj[i]->name;
+			m_bProcessObjectives = true;
 		}
-		m_msMaxOrMins = new string[n];
-		m_miNumberOfObjCoef = new int[n];
-		m_mdObjectiveConstants = new double[n];
-		m_mdObjectiveWeights = new double[n];
-		m_mObjectiveCoefficients = new SparseVector*[n];
 		for(i = 0; i < n; i++){
 			m_mObjectiveCoefficients[i] = new SparseVector(instanceData->objectives->obj[ j]->numberOfObjCoef);
 			//m_mObjectiveCoefficients[i]->bDeleteArrays=false;
@@ -1112,7 +1118,10 @@ bool OSInstance::processObjectives() {
 					m_mObjectiveCoefficients[i]->values[j] = instanceData->objectives->obj[i]->coef[j]->value;			
 				}
 			}
-		} 		
+		} 	
+		if(instanceData->objectives->obj[0]->name.length() > 0 || instanceData->objectives->obj[n-1]->name.length() > 0){			
+			for(i = 0; i < n; i++) m_msObjectiveNames[i] = instanceData->objectives->obj[i]->name;
+		}	
 		return true;
 	}
 	catch(const ErrorClass& eclass){
@@ -1152,12 +1161,15 @@ SparseVector** OSInstance::getObjectiveCoefficients() {
 
 
 double** OSInstance::getDenseObjectiveCoefficients() {
-	if(m_bGetDenseObjectives) return m_mmdDenseObjectiveCoefficients;
-	m_bGetDenseObjectives = true;
+	//if(m_bGetDenseObjectives) return m_mmdDenseObjectiveCoefficients;
+	//m_bGetDenseObjectives = true;
 	if(instanceData->objectives->obj == NULL || instanceData->objectives->numberOfObjectives == 0) return m_mmdDenseObjectiveCoefficients;
 	int m = instanceData->objectives->numberOfObjectives;
 	int n = instanceData->variables->numberOfVariables;
-	m_mmdDenseObjectiveCoefficients = new double*[m];
+	if(m_bGetDenseObjectives != true){
+		m_mmdDenseObjectiveCoefficients = new double*[m];
+		m_bGetDenseObjectives = true;
+	}
 	int i, j, numobjcoef;
 	SparseVector *sparsevec;
 	for(i = 0; i < m; i++){
@@ -1184,21 +1196,21 @@ int OSInstance::getConstraintNumber(){
 }//getConstraintNumber
 
 bool OSInstance::processConstraints() {
-	if(m_bProcessConstraints) return true;
-	m_bProcessConstraints = true;
+	//if(m_bProcessConstraints) return true;
+	//m_bProcessConstraints = true;
 	int i = 0;
 	ostringstream outStr;
 	if(instanceData == NULL || instanceData->constraints == NULL || instanceData->constraints->con == NULL || instanceData->constraints->numberOfConstraints == 0) return true;
 	int n = instanceData->constraints->numberOfConstraints;
 	try{
-		if(instanceData->constraints->con[0]->name.length() > 0 || instanceData->constraints->con[n-1]->name.length() > 0){
+		if(m_bProcessConstraints != true){
+			m_mdConstraintLowerBounds = new double[n];
+			m_mdConstraintUpperBounds = new double[n];
+			m_mdConstraintConstants = new double[n];
+			m_mcConstraintTypes = new char[n];
 			m_msConstraintNames = new string[n];
-			for(i = 0; i < n; i++) m_msConstraintNames[i] = instanceData->constraints->con[i]->name;
+			m_bProcessConstraints = true;
 		}
-		m_mdConstraintLowerBounds = new double[n];
-		m_mdConstraintUpperBounds = new double[n];
-		m_mdConstraintConstants = new double[n];
-		m_mcConstraintTypes = new char[n];
 		for(i = 0; i < n; i++){
 			m_mdConstraintLowerBounds[i] = instanceData->constraints->con[i]->lb;
 			m_mdConstraintUpperBounds[i] = instanceData->constraints->con[i]->ub;
@@ -1221,6 +1233,9 @@ bool OSInstance::processConstraints() {
 			else if(m_mdConstraintUpperBounds[i] == OSDBL_MAX)
 				m_mcConstraintTypes[i] = 'G';
 			else m_mcConstraintTypes[i] = 'R';
+		}
+		if(instanceData->constraints->con[0]->name.length() > 0 || instanceData->constraints->con[n-1]->name.length() > 0){
+			for(i = 0; i < n; i++) m_msConstraintNames[i] = instanceData->constraints->con[i]->name;
 		}
 		return true;
 	}
