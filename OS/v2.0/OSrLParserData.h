@@ -35,6 +35,11 @@ struct OtherVariableResultStruct{
 	 */ 
 	std::string description;
 	
+	/** value holds the text of the value attribute 
+	 * of the OtherVariableResult element
+	 */ 
+	std::string value;
+
 	/** otherVarText is a pointer to an array with number of 
 	 * elements equal to number of variables, each element of the
 	 * array is the value of the variable corresponding to the

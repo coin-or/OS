@@ -39,14 +39,22 @@
 # endif
 #endif
 
-
-
-
+#ifdef HAVE_CMATH
+# include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# else
+#  error "don't have header file for math"
+# endif
+#endif
+ 
 #include <sstream>  
-#include "OSErrorClass.h"
 #include "OSrLParserData.h"
+#include "OSErrorClass.h"
 #include "OSParseosrl.tab.hpp"
 #include "OSResult.h"
+
 
 #define PARSERDEBUG
 #ifdef PARSERDEBUG
@@ -54,6 +62,7 @@
 #else     
 	#define YY_PRINT ;
 #endif
+
 
 #ifdef WIN_
   #define YY_NO_UNISTD_H
@@ -89,19 +98,18 @@ using std::ostringstream;
 #define YY_EXTRA_TYPE OSrLParserData*
 %}  
 
-xmlwhitespace ([ \t\r\n])
-equality ([ \t\r\n])*=([ \t\r\n])*
+xmlwhitespace ([ \t\n\r])
+equality ([ \t\n\r])*=([ \t\n]\r)*
 quote (\"|\') 
 greater_than (>)
-attname ([a-zA-Z][a-zA-Z0-9.:_]+)
-startelementname (<[a-zA-Z][a-zA-Z0-9.:_]+)
-endelementname (<\/[a-zA-Z][a-zA-Z0-9.:_]+)
 aninteger (-?[0-9]+)
 adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF))
 %% 
 
 
 {xmlwhitespace}* 
+
+ /* General patterns matched in more than one element */
 
 {quote} {YY_PRINT;  yylval->sval = yytext; return(QUOTE);}
 ({xmlwhitespace}*{greater_than}) {YY_PRINT;     return(GREATERTHAN);}
@@ -128,20 +136,30 @@ return(DOUBLE);}
 ({xmlwhitespace}+numberOfVariables{equality}) {YY_PRINT; return(NUMBEROFVARIABLESATT);}
 ({xmlwhitespace}+numberOfObjectives{equality}) {YY_PRINT; return(NUMBEROFOBJECTIVESATT);}
 ({xmlwhitespace}+numberOfConstraints{equality}) {YY_PRINT; return(NUMBEROFCONSTRAINTSATT);}
+({xmlwhitespace}+numberOfOtherVariableResults{equality}) {YY_PRINT; return(NUMBEROFOTHERVARIABLERESULTSATT);}
+({xmlwhitespace}+numberOfOtherObjectiveResults{equality}) {YY_PRINT; return(NUMBEROFOTHEROBJECTIVERESULTSATT);}
+({xmlwhitespace}+numberOfOtherConstraintResults{equality}) {YY_PRINT; return(NUMBEROFOTHERCONSTRAINTRESULTSATT);}
 ({xmlwhitespace}+numberOfVar{equality}) {YY_PRINT; return(NUMBEROFVARATT);}
 ({xmlwhitespace}+numberOfObj{equality}) {YY_PRINT; return(NUMBEROFOBJATT);}
 ({xmlwhitespace}+numberOfCon{equality}) {YY_PRINT; return(NUMBEROFCONATT);}
 ({xmlwhitespace}+idx{equality}{quote}{xmlwhitespace}*) {YY_PRINT; return(IDXATT);}
-
 ({xmlwhitespace}+targetObjectiveIdx{equality}) {YY_PRINT;  return(TARGETOBJECTIVEIDXATT);}
+
 ({xmlwhitespace}+name{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(NAMEATT);}
 ({xmlwhitespace}+name{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(NAMEATT);}
 ({xmlwhitespace}+type{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(TYPEATT);}
 ({xmlwhitespace}+type{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(TYPEATT);}
+({xmlwhitespace}+category{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(CATEGORYATT);}
+({xmlwhitespace}+category{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(CATEGORYATT);}
+({xmlwhitespace}+unit{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(UNITATT);}
+({xmlwhitespace}+unit{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(UNITATT);}
+({xmlwhitespace}+value{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(VALUEATT);}
+({xmlwhitespace}+value{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(VALUEATT);}
 ({xmlwhitespace}+description{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(DESCRIPTIONATT);}
 ({xmlwhitespace}+description{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(DESCRIPTIONATT);}
 
 
+{xmlwhitespace}*\<osrl{xmlwhitespace}*\> {return(OSRLSTARTEMPTY);}
 {xmlwhitespace}*\<osrl{xmlwhitespace}+ {YY_PRINT; BEGIN osrlattributetext;  return(OSRLSTART);}
 {xmlwhitespace}*\<\/osrl{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OSRLEND);}
 {xmlwhitespace}*\<general{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(GENERALSTART);}
@@ -166,10 +184,10 @@ return(DOUBLE);}
 {xmlwhitespace}*\<jobID{xmlwhitespace}*\>\< {YY_PRINT; unput('<'); return(JOBIDSTART);}
 {xmlwhitespace}*\<\/jobID{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(JOBIDEND);}
 
-{xmlwhitespace}*\<timingInformation{xmlwhitespace}* {YY_PRINT; return(TIMINGINFORMATIONSTART);}
+{xmlwhitespace}*\<timingInformation {YY_PRINT; return(TIMINGINFORMATIONSTART);}
 {xmlwhitespace}*\<\/timingInformation{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(TIMINGINFORMATIONEND);}
 
-{xmlwhitespace}*\<time{xmlwhitespace}* {YY_PRINT;  return(TIMESTART);}
+{xmlwhitespace}*\<time {YY_PRINT;  return(TIMESTART);}
 {xmlwhitespace}*\<\/time{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(TIMEEND);}
 
 {xmlwhitespace}*\<message{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MESSAGESTART);}
@@ -195,18 +213,18 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/dualValues{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(DUALVALUESEND);}
 
 {xmlwhitespace}*\<var {YY_PRINT; return(VARSTART);}
-{xmlwhitespace}*\<variables {YY_PRINT; return(VARIABLESSTART);}
 {xmlwhitespace}*\<\/var{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(VAREND);}
+{xmlwhitespace}*\<variables {YY_PRINT; return(VARIABLESSTART);}
 {xmlwhitespace}*\<\/variables{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(VARIABLESEND);}
 
 {xmlwhitespace}*\<obj {YY_PRINT; return(OBJSTART);}
-{xmlwhitespace}*\<objectives {YY_PRINT; return(OBJECTIVESSTART);}
 {xmlwhitespace}*\<\/obj{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OBJEND);}
+{xmlwhitespace}*\<objectives {YY_PRINT; return(OBJECTIVESSTART);}
 {xmlwhitespace}*\<\/objectives{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OBJECTIVESEND);}
 
 {xmlwhitespace}*\<con {YY_PRINT; return(CONSTART);}
-{xmlwhitespace}*\<constraints {YY_PRINT; return(CONSTRAINTSSTART);}
 {xmlwhitespace}*\<\/con{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(CONEND);}
+{xmlwhitespace}*\<constraints {YY_PRINT; return(CONSTRAINTSSTART);}
 {xmlwhitespace}*\<\/constraints{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(CONSTRAINTSEND);}
 
 
@@ -233,16 +251,11 @@ return(DOUBLE);}
 "<?" BEGIN xmldeclaration;
  <xmldeclaration>. |
  <xmldeclaration>\n ;
- 
- <xmldeclaration>"?>" BEGIN 0;
-
-
-
+  <xmldeclaration>"?>" BEGIN 0;
 
 
 <doublequoteattributetext>[^\"]* {YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext);  /* yylval->sval = yytext;*/ return(ATTRIBUTETEXT);}
-<singlequoteattributetext>[^\']* {YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext);   /*yylval->sval = yytext;*/  return(ATTRIBUTETEXT);}
-							
+<singlequoteattributetext>[^\']* {YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext);   /*yylval->sval = yytext;*/ return(ATTRIBUTETEXT);}
 <osrlattributetext>([^>])* {YY_PRINT;  BEGIN 0; /*yylval->sval = strdup(yytext);*/  yylval->sval = yytext; return(OSRLATTRIBUTETEXT);}
 
 

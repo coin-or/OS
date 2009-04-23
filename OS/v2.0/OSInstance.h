@@ -38,8 +38,6 @@
 #include "OSExpressionTree.h"
 #include <string>
 #include <map>
-#include <cppad/cppad.hpp>
-
 
 
 /*! \class InstanceHeader
@@ -1113,7 +1111,7 @@ private:
 	
 	
 	
-	std::map<int, int> m_mapCppADFunRangeIndex ;
+	std::map<int, int> m_mapOSADFunRangeIndex ;
 	
 	/**
 	 * m_LagrangianExpTree is an OSExpressionTree object that is the expression tree
@@ -1162,10 +1160,10 @@ private:
 	std::map<int, OSExpressionTree*> m_mapExpressionTreesMod ;
 	
 	/**
-	 * m_bCppADFunIsCreated is true if we have created the OSInstanc
-	 * CppAD Function
+	 * m_bOSADFunIsCreated is true if we have created the OSInstanc
+	 * OSAD Function
 	 */	  
-	 bool m_bCppADFunIsCreated;
+	 bool m_bOSADFunIsCreated;
 	
 	/**
 	 * is true if a CppAD Expresion Tree has been built for each row and objective 
@@ -1213,12 +1211,7 @@ private:
 	 */
 	double **m_mmdObjGradient;
 	
-	//define the vectors
-		
-	/**
-	 *  m_vX is a vector of CppAD indpendent variables.
-	 */
-	CppAD::vector< AD<double> > m_vX;	
+	//define the vectors	
 
 	/**
 	 * m_vdX is a vector of primal variables at each iteration
@@ -2339,13 +2332,13 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 */	 
 	void duplicateExpressionTreesMap();
 	
-	 
+#ifdef COIN_HAS_CPPAD  	 
 	 /**
 	  * F is a CppAD function the range space is the objective +
 	  * constraints functions, x is the domeain space
 	  */
 	CppAD::ADFun<double> *Fad;
-
+#endif
 	/**
 	 * Create the a CppAD Function object: this is a function where the domain is
 	 * the set of variables for the problem and the range is the objective function 
@@ -2357,7 +2350,7 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * the size of x should equal instanceData->variables->numberOfVariables
 	 * @return if successfully created
 	 */	
-	bool createCppADFun(std::vector<double> vdX );
+	bool createOSADFun(std::vector<double> vdX );
 	
 	/**
 	 * Perform an AD forward sweep  
@@ -2382,6 +2375,20 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 * @return a double vector equal to the n*p 
 	 */	
 	std::vector<double> reverseAD(int p, std::vector<double> vdlambda);
+	 
+	 /**
+	  * end revised AD code
+	  */
+	
+	
+	/**
+	 * Call the AD routine to fill in m_vbLagHessNonz and determine the nonzeros.
+	 * 
+	 * <p>
+	 * 
+	 * @return the number of nonzeros in the Hessian 
+	 */	
+	int  getADSparsityHessian();
 	 
 	 /**
 	  * end revised AD code

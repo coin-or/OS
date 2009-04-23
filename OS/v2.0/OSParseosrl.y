@@ -79,7 +79,7 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 
 
 %token QUOTE GREATERTHAN ENDOFELEMENT 
-%token OSRLSTART OSRLATTRIBUTETEXT OSRLEND
+%token OSRLSTART OSRLSTARTEMPTY OSRLATTRIBUTETEXT OSRLEND
 %token GENERALSTART GENERALEND 
 %token SYSTEMSTART  SYSTEMEND 
 %token SERVICESTART SERVICEEND 
@@ -102,8 +102,10 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 
 %token NUMBEROFTIMESATT
 %token NUMBEROFSOLUTIONSATT NUMBEROFVARIABLESATT NUMBEROFCONSTRAINTSATT NUMBEROFOBJECTIVESATT
+%token NUMBEROFOTHERVARIABLERESULTSATT NUMBEROFOTHEROBJECTIVERESULTSATT NUMBEROFOTHERCONSTRAINTRESULTSATT
+
 %token NUMBEROFVARATT NUMBEROFOBJATT NUMBEROFCONATT
-%token TARGETOBJECTIVEIDXATT IDXATT TYPEATT DESCRIPTIONATT NAMEATT
+%token TARGETOBJECTIVEIDXATT IDXATT TYPEATT DESCRIPTIONATT NAMEATT CATEGORYATT UNITATT VALUEATT
 
 %token DUMMY
 
@@ -171,24 +173,24 @@ numberoftimes: {printf("processing numberOfTimes");} NUMBEROFTIMESATT QUOTE INTE
 
 timingContent: ENDOFELEMENT | GREATERTHAN listOfTimes TIMINGINFORMATIONEND;
 
-listOfTimes: | time listOfTimes
+listOfTimes: | listOfTimes time
 {
 };
 
 time: TIMESTARTANDEND
-    | TIMESTART timeAttList timeValue TIMEEND;
+    | TIMESTART timeAttList GREATERTHAN timeValue TIMEEND;
 
-timeAttList: timeAtt timeAttList;
+timeAttList: | timeAttList timeAtt;
 
-timeAtt: | timeType timeCategory timeUnit timeDescription;
+timeAtt: timeType | timeCategory | timeUnit | timeDescription;
 
-timeType: ;
+timeType: TYPEATT ATTRIBUTETEXT QUOTE;
 
-timeCategory:;
+timeCategory: CATEGORYATT ATTRIBUTETEXT QUOTE;
 
-timeUnit: ;
+timeUnit: UNITATT ATTRIBUTETEXT QUOTE;
 
-timeDescription: ;
+timeDescription: DESCRIPTIONATT ATTRIBUTETEXT QUOTE;
 
 timeValue:
   DOUBLE  {/*osresult->setTime( $2)*/; }
@@ -237,7 +239,7 @@ optatt:   optnumsolatt    quote
 		;
 
 
-optnumsolatt:   NUMBEROFSOLUTIONSATT quote INTEGER   { parserData->numberOfSolutions = $3; osresult->setSolutionNumber($3);} ;
+optnumsolatt: NUMBEROFSOLUTIONSATT quote INTEGER   { parserData->numberOfSolutions = $3; osresult->setSolutionNumber($3);} ;
    	
 optnumvaratt: NUMBEROFVARIABLESATT quote INTEGER  {parserData->numberOfVariables = $3; osresult->setVariableNumber($3); } ; 
 	
@@ -248,8 +250,7 @@ optnumobjatt: NUMBEROFOBJECTIVESATT quote INTEGER   {parserData->numberOfObjecti
 
 
 solution:  
-| anothersolution   
-| solution anothersolution  
+| anothersolution solution;  
 
 
 anothersolution: SOLUTIONSTART targetObjectiveIDXATT GREATERTHAN status message variables objectives  constraints  otherSolution   {parserData->solutionIdx++;};
@@ -274,9 +275,11 @@ message:
 | MESSAGESTART MESSAGEEND;
 
 variables:
-| VARIABLESSTART GREATERTHAN VALUESSTART  numberOfVarATT GREATERTHAN var VALUESEND 
- otherVariables VARIABLESEND;
- 
+| VARIABLESSTART numberOfOtherVariableResults GREATERTHAN VALUESSTART numberOfVarATT 
+  GREATERTHAN var VALUESEND otherVariables VARIABLESEND;
+
+numberOfOtherVariableResults: | NUMBEROFOTHERVARIABLERESULTSATT quote INTEGER quote ;
+
 numberOfVarATT: NUMBEROFVARATT quote INTEGER quote ; 
 
 var: anothervar
@@ -296,17 +299,49 @@ anothervar: VARSTART anIDXATT GREATERTHAN DOUBLE VAREND {
 otherVariables:
 | otherVariables otherVariableResult;
 
-otherVariableResult:  OTHERSTART { 
-   // parserData->numberOfOtherVariableResults++;
-	parserData->otherVarStruct = new OtherVariableResultStruct(); 
-	parserData->otherVarStruct->otherVarText = new std::string[parserData->numberOfVariables];} anotherotherVarATT GREATERTHAN {if(parserData->otherNamePresent == false) osrlerror(NULL, NULL, NULL, "other element requires name attribute"); 
-	parserData->otherNamePresent = false;  
-	}  othervar { if(parserData->otherVarStruct->numberOfVar <= 0) osrlerror(NULL, NULL,  parserData, "must specify the number of varaibles") ;} OTHEREND {parserData->otherVarVec.push_back( parserData->otherVarStruct); parserData->numberOfOtherVariableResults++; };
- 
-othervar: anotherothervar
-| othervar anotherothervar;
+otherVariableResult: otherVariableStart otherVariableATTlist GREATERTHAN othervarlist OTHEREND
+	{	parserData->otherVarVec.push_back( parserData->otherVarStruct); 
+		parserData->numberOfOtherVariableResults++; 
+		parserData->otherNamePresent = false;  
+	};
 
-anotherothervar: VARSTART anIDXATT  GREATERTHAN ELEMENTTEXT  VAREND { 
+otherVariableStart: OTHERSTART 
+	{  // parserData->numberOfOtherVariableResults++;
+		parserData->otherVarStruct = new OtherVariableResultStruct(); 
+		parserData->otherVarStruct->otherVarText = new std::string[parserData->numberOfVariables];
+	}; 
+
+otherVariableATTlist: 
+	{	if(parserData->otherNamePresent == false) 
+			osrlerror(NULL, NULL, NULL, "other element requires name attribute"); 
+	}  
+	| othervariableATT otherVariableATTlist;
+
+othervariableATT: numberOfOtherVarATT | otherVarValueATT | otherVarNameATT | otherVarDescriptionATT;
+  
+numberOfOtherVarATT: NUMBEROFVARATT quote INTEGER quote 
+{parserData->otherVarStruct->numberOfVar = $3;
+}; 
+
+otherVarValueATT: VALUEATT ATTRIBUTETEXT quote
+{   parserData->otherVarStruct->value = $2;  free($2);
+};
+
+otherVarNameATT: NAMEATT ATTRIBUTETEXT quote
+{ parserData->otherNamePresent = true; parserData->otherVarStruct->name = $2;  free($2);
+};
+
+otherVarDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
+{   parserData->otherVarStruct->description = $2;  free($2);
+};
+
+
+
+
+othervarlist: 
+| othervar othervarlist;
+
+othervar: othervarstart anIDXATT  GREATERTHAN ELEMENTTEXT  VAREND { 
 std::ostringstream outStr;
 outStr << $4;
 parserData->otherVarStruct->otherVarText[parserData->kounter] =  outStr.str();
@@ -314,27 +349,26 @@ free($4); parserData->errorText = NULL;
 if(parserData->kounter < 0 || parserData->kounter > parserData->numberOfVariables - 1) osrlerror(NULL, NULL, NULL, "index must be greater than 0 and less than the number of variables");
 }
 |
-VARSTART anIDXATT  GREATERTHAN DOUBLE  VAREND { 
+othervarstart anIDXATT  GREATERTHAN DOUBLE  VAREND { 
 if(parserData->kounter < 0 || parserData->kounter > parserData->numberOfVariables - 1) osrlerror(NULL, NULL, NULL, "index must be greater than 0 and less than the number of variables");
 std::ostringstream outStr;
 outStr << $4;
 parserData->otherVarStruct->otherVarText[parserData->kounter] =  outStr.str();
 }
-|VARSTART anIDXATT  GREATERTHAN INTEGER  VAREND { 
+|
+othervarstart anIDXATT  GREATERTHAN INTEGER  VAREND { 
 if(parserData->kounter < 0 || parserData->kounter > parserData->numberOfVariables - 1) osrlerror(NULL, NULL, NULL, "index must be greater than 0 and less than the number of variables");
 std::ostringstream outStr;
 outStr << $4;
 parserData->otherVarStruct->otherVarText[parserData->kounter] =  outStr.str();
 };
 
- 
-anotherotherVarATT:  
-	|  otheratt
-	|  anotherotherVarATT otheratt  ; 
+othervarstart: VARSTART 
+	{	if(parserData->otherVarStruct->numberOfVar <= 0) 
+			osrlerror(NULL, NULL,  parserData, "must specify the number of variables") ;
+	}; 
 
-otheratt:  NAMEATT ATTRIBUTETEXT quote  { parserData->otherNamePresent = true; parserData->otherVarStruct->name = $2;  free($2);}
-		| DESCRIPTIONATT ATTRIBUTETEXT  quote {   parserData->otherVarStruct->description = $2;  free($2);}   
-		| NUMBEROFVARATT quote INTEGER quote {parserData->otherVarStruct->numberOfVar = $3;};
+
 
 
 objectives:

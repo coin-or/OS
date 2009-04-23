@@ -32,6 +32,9 @@
 #include "CbcModel.hpp"
 #include "CbcBranchActual.hpp" //for CbcSOS
 
+#include "OsiClpSolverInterface.hpp"
+#include "OsiSymSolverInterface.hpp"
+#include "OsiVolSolverInterface.hpp"
 
 #include "OSDataStructures.h"
 #include "OSParameters.h" 
