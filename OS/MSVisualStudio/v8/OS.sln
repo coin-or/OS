@@ -152,8 +152,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libCbc_ampl", "..\..\..\Cbc
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libBonmin", "..\..\..\Bonmin\MSVisualStudio\v8\libBonmin\libBonmin.vcproj", "{6EA2D621-70AD-400E-A181-F42D9DF0A69A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libCouenne", "..\..\..\Couenne\MSVisualStudio\v8\libCouenne\libCouenne.vcproj", "{0204444F-F9BF-4FAC-BC30-0D779CFCFFF0}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -285,9 +283,6 @@ Global
 		{6EA2D621-70AD-400E-A181-F42D9DF0A69A}.Debug|Win32.ActiveCfg = Debug|Win32
 		{6EA2D621-70AD-400E-A181-F42D9DF0A69A}.Release|Win32.ActiveCfg = Release|Win32
 		{6EA2D621-70AD-400E-A181-F42D9DF0A69A}.Release-Plus|Win32.ActiveCfg = Release|Win32
-		{0204444F-F9BF-4FAC-BC30-0D779CFCFFF0}.Debug|Win32.ActiveCfg = Debug|Win32
-		{0204444F-F9BF-4FAC-BC30-0D779CFCFFF0}.Release|Win32.ActiveCfg = Release|Win32
-		{0204444F-F9BF-4FAC-BC30-0D779CFCFFF0}.Release-Plus|Win32.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
