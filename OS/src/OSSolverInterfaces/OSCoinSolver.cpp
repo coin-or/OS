@@ -32,31 +32,14 @@
 #include "CbcModel.hpp"
 #include "CbcBranchActual.hpp" //for CbcSOS
 
-#include <CoinPackedMatrix.hpp>
-#include <OsiSolverInterface.hpp>
-#include <OsiClpSolverInterface.hpp> 
-//#include <OsiCbcSolverInterface.hpp> 
-
-
-
-#ifdef COIN_HAS_CPX
-#include <OsiCpxSolverInterface.hpp>
-#endif
-
-#ifdef COIN_HAS_GLPK
-#include <OsiGlpkSolverInterface.hpp>
-#endif
-
-#ifdef COIN_HAS_DYLP
-#include <OsiDylpSolverInterface.hpp>
-#endif
+#include "OsiClpSolverInterface.hpp"
 
 #ifdef COIN_HAS_SYMPHONY
-#include <OsiSymSolverInterface.hpp>
+#include "OsiSymSolverInterface.hpp"
 #endif
 
 #ifdef COIN_HAS_VOL
-#include <OsiVolSolverInterface.hpp>
+#include "OsiVolSolverInterface.hpp"
 #endif
 
 #include "OSDataStructures.h"
@@ -634,9 +617,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 			if( sSolverName.find( "cbc") != std::string::npos){
 			//if( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0){
 			// just use simple branch and bound for anything but cbc
-				//OsiClpSolverInterface cbcSolver;
 				CbcModel model(  *osiSolver);
-				//CbcModel model(  cbcSolver);
 				CbcMain0(  model);		
 
 				
@@ -693,19 +674,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 				// create a solver 
 				OsiSolverInterface *solver = model.solver();
 				cpuTime = CoinCpuTime() - start;
-				// temp -- get the status
-				
-				
-				if (model.isProvenInfeasible()  && (osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0) ) {
-					//std::cout << "OUCH: MODEL IS INFEASIBLE " <<  std::endl;
-					int solIdx = 0;
-					std::string description = "";
-					osresult->setGeneralStatusType("success");
-					osresult->setSolutionStatus(solIdx, "infeasible", description);
-					osrl = osrlwriter->writeOSrL( osresult);
-					return;
-				}
-				
+
 				writeResult( solver);
 			}
 			else{ // use other solvers
@@ -819,29 +788,33 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 	int i = 0;
 	std::string *rcost = NULL;
 	int solIdx = 0;
+	int n, m;
 	std::string description = "";
-	osresult->setGeneralStatusType("success");
-	osresult->resultHeader->time = os_dtoa_format(  cpuTime);
+	osresult->setGeneralStatusType("normal");
+//	osresult->resultHeader->time = os_dtoa_format(  cpuTime);
+	osresult->addTimingInformation("cpuTime","total","second","",cpuTime);
 	if (solver->isProvenOptimal() == true){
 		osresult->setSolutionStatus(solIdx, "optimal", description);
 		/* Retrieve the solution */
 		x = new double[osinstance->getVariableNumber() ];
 		y = new double[osinstance->getConstraintNumber() ];
 		z = new double[1];
+		n = osinstance->getVariableNumber();
+		m = osinstance->getConstraintNumber();
 		rcost = new std::string[ osinstance->getVariableNumber()];
 		//
 		*(z + 0)  =  solver->getObjValue();
-		osresult->setObjectiveValues(solIdx, z);
+		osresult->setObjectiveValues(solIdx, z, 1);
 		for(i=0; i < osinstance->getVariableNumber(); i++){
 			*(x + i) = solver->getColSolution()[i];
 		}
-		osresult->setPrimalVariableValues(solIdx, x);
+		osresult->setPrimalVariableValues(solIdx, x, n);
 		// Symphony does not get dual prices
 		if( sSolverName.find( "symphony") == std::string::npos && osinstance->getNumberOfIntegerVariables() == 0 && osinstance->getNumberOfBinaryVariables() == 0) {
 			for(i=0; i <  osinstance->getConstraintNumber(); i++){
 				*(y + i) = solver->getRowPrice()[ i];
 			}
-			osresult->setDualVariableValues(solIdx, y);
+			osresult->setDualVariableValues(solIdx, y, osinstance->getConstraintNumber());
 		}
 		//
 		//
@@ -857,7 +830,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 			for(i=0; i < numberOfVar; i++){
 				rcost[ i] = os_dtoa_format( solver->getReducedCost()[ i]);
 			}
-			osresult->setAnOtherVariableResult(solIdx, otherIdx, "reduced costs", "the variable reduced costs", rcost);			
+			osresult->setAnOtherVariableResult(solIdx, otherIdx, "reduced costs", "the variable reduced costs", rcost, osinstance->getVariableNumber());			
 			// end of settiing reduced costs
 		}					
 	}
@@ -866,7 +839,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 			osresult->setSolutionStatus(solIdx, "infeasible", description);
 		else
 			if(solver->isProvenDualInfeasible() == true) 
-				osresult->setSolutionStatus(solIdx, "model unbounded", description);
+				osresult->setSolutionStatus(solIdx, "dualinfeasible", description);
 			else
 				osresult->setSolutionStatus(solIdx, "other", description);
 	}
