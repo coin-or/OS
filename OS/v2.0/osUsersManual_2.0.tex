@@ -1723,6 +1723,7 @@ ThirdParty/Mumps"
 
 In the {\tt inc} subdirectory of the {\tt OS}  directory, there is a header file, {\tt config\_os.h} that defines
 the values of a number of
+\index{COIN_HAS_XXXXX@{\tt COIN_HAS_XXXXX}|(}
 \begin{verbatim}
 COIN_HAS_XXXXX
 \end{verbatim}
@@ -1756,6 +1757,7 @@ and see to it that the
 COIN_HAS_XXXXX
 \end{verbatim}
 variable is defined in  {\tt config\_os.h}.
+\index{COIN_HAS_XXXXX@{\tt COIN_HAS_XXXXX}|)}
 
 \medskip
 Make sure to run {\tt configure} after you have downloaded the required
@@ -6113,10 +6115,11 @@ Kipp Martin wrote:
 > is in the Externals file. Same is true for CoinUtils. OS will not build without CoinUtils, but it is in the 
 > Externals file so I don't check for it.  Why should I treat CppAD different than any other COIN-OR project?
 
-Actually, I'm pretty sure that none of the projects are actually doing this 100% right. What I think should happen 
-is that for required external projects, the configure script should check for their existence and fail if they are 
-not present. For optional projects, your code should use the symbols defined for you by autoconf to make sure that 
-the code compiles properly when the optional module is not present, i.e., there should be blocks like
+Actually, I'm pretty sure that none of the projects are actually doing this 100% right. 
+What I think should happen is that for required external projects, the configure script 
+should check for their existence and fail if they are not present. For optional projects, 
+your code should use the symbols defined for you by autoconf to make sure that the code 
+compiles properly when the optional module is not present, i.e., there should be blocks like
 
 #ifdef COIN_HAS_XXX
 
