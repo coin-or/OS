@@ -42,6 +42,18 @@
 #include "OsiVolSolverInterface.hpp"
 #endif
 
+#ifdef COIN_HAS_DYLP
+#include "OsiDylpSolverInterface.hpp"
+#endif
+
+#ifdef COIN_HAS_GLPK
+#include "OsiGlpkSolverInterface.hpp"
+#endif
+
+#ifdef COIN_HAS_CPX
+#include "OsiCpxSolverInterface.hpp"
+#endif
+
 #include "OSDataStructures.h"
 #include "OSParameters.h" 
 #include "OSCommonUtil.h"
@@ -791,8 +803,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 	int n, m;
 	std::string description = "";
 	osresult->setGeneralStatusType("normal");
-//	osresult->resultHeader->time = os_dtoa_format(  cpuTime);
-	osresult->addTimingInformation("cpuTime","total","second","",cpuTime);
+	osresult->setTime(cpuTime);
 	if (solver->isProvenOptimal() == true){
 		osresult->setSolutionStatus(solIdx, "optimal", description);
 		/* Retrieve the solution */
@@ -804,17 +815,17 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 		rcost = new std::string[ osinstance->getVariableNumber()];
 		//
 		*(z + 0)  =  solver->getObjValue();
-		osresult->setObjectiveValues(solIdx, z, 1);
+		osresult->setObjectiveValues(solIdx, z);
 		for(i=0; i < osinstance->getVariableNumber(); i++){
 			*(x + i) = solver->getColSolution()[i];
 		}
-		osresult->setPrimalVariableValues(solIdx, x, n);
+		osresult->setPrimalVariableValues(solIdx, x);
 		// Symphony does not get dual prices
 		if( sSolverName.find( "symphony") == std::string::npos && osinstance->getNumberOfIntegerVariables() == 0 && osinstance->getNumberOfBinaryVariables() == 0) {
 			for(i=0; i <  osinstance->getConstraintNumber(); i++){
 				*(y + i) = solver->getRowPrice()[ i];
 			}
-			osresult->setDualVariableValues(solIdx, y, osinstance->getConstraintNumber());
+			osresult->setDualVariableValues(solIdx, y);
 		}
 		//
 		//
@@ -830,7 +841,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 			for(i=0; i < numberOfVar; i++){
 				rcost[ i] = os_dtoa_format( solver->getReducedCost()[ i]);
 			}
-			osresult->setAnOtherVariableResult(solIdx, otherIdx, "reduced costs", "the variable reduced costs", rcost, osinstance->getVariableNumber());			
+			osresult->setAnOtherVariableResult(solIdx, otherIdx, "reduced costs", "the variable reduced costs", rcost);			
 			// end of settiing reduced costs
 		}					
 	}
