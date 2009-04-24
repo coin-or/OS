@@ -671,6 +671,15 @@ string OSResult::getGeneralMessage(){
 	return general->message;
 }//getGeneralMessage
 
+
+double OSResult::getTimeValue()
+{	if (job == NULL) return 0.0;
+	if (job->timingInformation == NULL) return 0.0;
+	if (job->timingInformation->numberOfTimes <= 0) return 0.0;
+	return job->timingInformation->time[0]->value;
+}//getTime
+
+
 int OSResult::getVariableNumber(){
 	if(m_iVariableNumber == -1){
 		if(optimization == NULL) return -1;
@@ -879,10 +888,10 @@ bool OSResult::setJobID(string jobID){
 	return true;
 }//setJobID
 
-//bool OSResult::setTime(double time){
+bool OSResult::setTime(double time){
 //	general->time = os_dtoa_format( time);
-//	return true;
-//}//setTime
+    return addTimingInformation("elapsedTime", "total", "second", "", time);
+}//setTime
 
 bool OSResult::setGeneralMessage(string message){
 	general->message = message;

@@ -86,6 +86,10 @@ public:
 	/** the status Description of the solution */
 	std::string statusDescription;
 
+	/** the first (and for the time being only) time measurement 
+	 *  HIG: fix this properly */
+	double timeValue;
+
 	/** scanner is used to store data in a reentrant lexer 
 	 * we use this to pass an OSrLParserData object to the parser*/
 	void* scanner;
@@ -153,9 +157,8 @@ public:
 	/** store a vector of pointers to otherVarVec structures */
 	std::vector<OtherVariableResultStruct*> otherVarVec;
 	
-	
 	/**  if the parser finds invalid text it is held here and we delete
-	 * if the file was not valid
+	 *   if the file was not valid
 	 */
 	char *errorText;
 };

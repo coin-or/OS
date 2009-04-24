@@ -93,6 +93,8 @@ using std::ostringstream;
 %x elementtext
 %x comment
 %x xmldeclaration
+
+
    
 %{
 #define YY_EXTRA_TYPE OSrLParserData*
@@ -101,6 +103,7 @@ using std::ostringstream;
 xmlwhitespace ([ \t\n\r])
 equality ([ \t\n\r])*=([ \t\n]\r)*
 quote (\"|\') 
+twoquotes (\"\"|\'\')
 greater_than (>)
 aninteger (-?[0-9]+)
 adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF))
@@ -112,6 +115,7 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF))
  /* General patterns matched in more than one element */
 
 {quote} {YY_PRINT;  yylval->sval = yytext; return(QUOTE);}
+{twoquotes} {YY_PRINT;  yylval->sval = yytext; return(TWOQUOTES);}
 ({xmlwhitespace}*{greater_than}) {YY_PRINT;     return(GREATERTHAN);}
 {aninteger}  {YY_PRINT; yylval->ival = atoi(yytext); return(INTEGER);}
 
@@ -153,8 +157,12 @@ return(DOUBLE);}
 ({xmlwhitespace}+category{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(CATEGORYATT);}
 ({xmlwhitespace}+unit{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(UNITATT);}
 ({xmlwhitespace}+unit{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(UNITATT);}
+({xmlwhitespace}+value{equality}\"\") {YY_PRINT; return(EMPTYVALUEATT);}
+({xmlwhitespace}+value{equality}\'\') {YY_PRINT; return(EMPTYVALUEATT);}
 ({xmlwhitespace}+value{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(VALUEATT);}
 ({xmlwhitespace}+value{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(VALUEATT);}
+
+
 ({xmlwhitespace}+description{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(DESCRIPTIONATT);}
 ({xmlwhitespace}+description{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(DESCRIPTIONATT);}
 

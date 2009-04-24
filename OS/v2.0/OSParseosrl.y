@@ -78,7 +78,7 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 
 
 
-%token QUOTE GREATERTHAN ENDOFELEMENT 
+%token QUOTE TWOQUOTES GREATERTHAN ENDOFELEMENT 
 %token OSRLSTART OSRLSTARTEMPTY OSRLATTRIBUTETEXT OSRLEND
 %token GENERALSTART GENERALEND 
 %token SYSTEMSTART  SYSTEMEND 
@@ -105,7 +105,7 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token NUMBEROFOTHERVARIABLERESULTSATT NUMBEROFOTHEROBJECTIVERESULTSATT NUMBEROFOTHERCONSTRAINTRESULTSATT
 
 %token NUMBEROFVARATT NUMBEROFOBJATT NUMBEROFCONATT
-%token TARGETOBJECTIVEIDXATT IDXATT TYPEATT DESCRIPTIONATT NAMEATT CATEGORYATT UNITATT VALUEATT
+%token TARGETOBJECTIVEIDXATT IDXATT TYPEATT DESCRIPTIONATT NAMEATT CATEGORYATT UNITATT VALUEATT EMPTYVALUEATT
 
 %token DUMMY
 
@@ -158,16 +158,16 @@ headerMessage:
 | MESSAGESTART ELEMENTTEXT MESSAGEEND {osresult->setGeneralMessage( $2);  free($2);  parserData->errorText = NULL;}
 | MESSAGESTART MESSAGEEND ;
 
-systemElement: | SYSTEMSTART SYSTEMEND {printf("processed systemElement");};
+systemElement: | SYSTEMSTART SYSTEMEND ;
 
-serviceElement: | SERVICESTART SERVICEEND {printf("processed serviceElement");};
+serviceElement: | SERVICESTART SERVICEEND ;
 
-jobElement: | JOBSTART {printf("processed JOBSTART");} timingInformation JOBEND;
+jobElement: | JOBSTART timingInformation JOBEND;
 
 timingInformation:
-| TIMINGINFORMATIONSTART  {printf("processed TIMINGINFORMATIONSTART");} numberoftimes timingContent;
+| TIMINGINFORMATIONSTART numberoftimes timingContent;
 
-numberoftimes: {printf("processing numberOfTimes");} NUMBEROFTIMESATT QUOTE INTEGER QUOTE 
+numberoftimes: NUMBEROFTIMESATT QUOTE INTEGER QUOTE 
 {
 };
 
@@ -193,8 +193,8 @@ timeUnit: UNITATT ATTRIBUTETEXT QUOTE;
 timeDescription: DESCRIPTIONATT ATTRIBUTETEXT QUOTE;
 
 timeValue:
-  DOUBLE  {/*osresult->setTime( $2)*/; }
-| INTEGER {/*osresult->setTime( $2)*/; };
+  DOUBLE  { parserData->timeValue = $1; }
+| INTEGER { parserData->timeValue = $1; };
 
 optimizationElement: | OPTIMIZATIONSTART optimizationContent OPTIMIZATIONEND;
 
@@ -250,7 +250,7 @@ optnumobjatt: NUMBEROFOBJECTIVESATT quote INTEGER   {parserData->numberOfObjecti
 
 
 solution:  
-| anothersolution solution;  
+| solution anothersolution;  
 
 
 anothersolution: SOLUTIONSTART targetObjectiveIDXATT GREATERTHAN status message variables objectives  constraints  otherSolution   {parserData->solutionIdx++;};
@@ -323,9 +323,10 @@ numberOfOtherVarATT: NUMBEROFVARATT quote INTEGER quote
 {parserData->otherVarStruct->numberOfVar = $3;
 }; 
 
-otherVarValueATT: VALUEATT ATTRIBUTETEXT quote
-{   parserData->otherVarStruct->value = $2;  free($2);
-};
+otherVarValueATT: 
+  EMPTYVALUEATT                     {parserData->otherVarStruct->value = "";}
+  |    VALUEATT ATTRIBUTETEXT quote {parserData->otherVarStruct->value = $2;  free($2);}
+;
 
 otherVarNameATT: NAMEATT ATTRIBUTETEXT quote
 { parserData->otherNamePresent = true; parserData->otherVarStruct->name = $2;  free($2);
@@ -377,7 +378,6 @@ objectives:
 numberOfObjATT: NUMBEROFOBJATT quote INTEGER quote;
 
 obj: 
-| anotherobj
 | obj anotherobj;
 
 anotherobj: OBJSTART anIDXATT GREATERTHAN DOUBLE OBJEND { *(parserData->objectiveValues[parserData->solutionIdx] + (parserData->kounter + parserData->numberOfObjectives)) = $4;

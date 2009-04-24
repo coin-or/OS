@@ -1434,6 +1434,14 @@ public:
 	std::string getGeneralMessage();
 
 	/**
+	 *  Get the time measurement. In the first instance, assume that there is only
+	 *  a single measure, which is the total elapsed time in seconds
+	 *
+	 *  @return the time measurement
+	 */
+	double getTimeValue();
+
+	/**
 	 * Get one solution of optimal primal variable values. 
 	 * 
 	 * @param objIdx holds the objective index the optimal value corresponds to. 
@@ -1602,7 +1610,7 @@ public:
 	 * @param time holds the time. 
 	 * @return whether the time is set successfully. 
 	 */
-//	bool setTime(double time);
+	bool setTime(double time);
 		
    	/**
 	 * Add timing information.
