@@ -30,6 +30,10 @@ using namespace std;
 
 
 OSInstance::OSInstance(): 
+	bVariablesModified(false),
+	bObjectivesModified(false),
+	bConstraintsModified(false),
+	bAMatrixModified(false),
 	m_sInstanceName(""),
 	m_sInstanceSource(""),	
 	m_sInstanceDescription(""),
@@ -972,7 +976,7 @@ int OSInstance::getNumberOfNonlinearExpressions(){
 
 
 bool OSInstance::processVariables() {
-	//if(m_bProcessVariables) return true;
+	if(m_bProcessVariables == true && bVariablesModified == false) return true;
 	//m_bProcessVariables = true;
 	string vartype ="CBIS";
 	int i = 0;
@@ -1074,7 +1078,7 @@ int OSInstance::getObjectiveNumber(){
 
 
 bool OSInstance::processObjectives() {
-	//if(m_bProcessObjectives) return true;
+	if(m_bProcessObjectives == true && bObjectivesModified == false) return true;
 	//m_bProcessObjectives = true;
 	int i = 0;
 	int j = 0;
@@ -1157,20 +1161,23 @@ SparseVector** OSInstance::getObjectiveCoefficients() {
 
 
 double** OSInstance::getDenseObjectiveCoefficients() {
-	//if(m_bGetDenseObjectives) return m_mmdDenseObjectiveCoefficients;
+	if(m_bGetDenseObjectives == true && bObjectivesModified == false) return m_mmdDenseObjectiveCoefficients;
 	//m_bGetDenseObjectives = true;
+	int i, j, numobjcoef;
+	SparseVector *sparsevec;
 	if(instanceData->objectives->obj == NULL || instanceData->objectives->numberOfObjectives == 0) return m_mmdDenseObjectiveCoefficients;
 	int m = instanceData->objectives->numberOfObjectives;
 	int n = instanceData->variables->numberOfVariables;
 	if(m_bGetDenseObjectives != true){
 		m_mmdDenseObjectiveCoefficients = new double*[m];
+		for(i = 0; i < m; i++){
+			m_mmdDenseObjectiveCoefficients[ i] = new double[n];
+		}
 		m_bGetDenseObjectives = true;
 	}
-	int i, j, numobjcoef;
-	SparseVector *sparsevec;
+
 	for(i = 0; i < m; i++){
 		sparsevec = this->getObjectiveCoefficients()[i];
-		m_mmdDenseObjectiveCoefficients[ i] = new double[n];
 		for(j = 0; j < n; j++){
 			m_mmdDenseObjectiveCoefficients[ i][j] = 0.0;
 		}
@@ -1192,7 +1199,7 @@ int OSInstance::getConstraintNumber(){
 }//getConstraintNumber
 
 bool OSInstance::processConstraints() {
-	//if(m_bProcessConstraints) return true;
+	if(m_bProcessConstraints == true && bConstraintsModified == false) return true;
 	//m_bProcessConstraints = true;
 	int i = 0;
 	ostringstream outStr;
@@ -1270,7 +1277,7 @@ int OSInstance::getLinearConstraintCoefficientNumber(){
 }//getLinearConstraintCoefficientNumber
 
 bool OSInstance::processLinearConstraintCoefficients() {
-	//if(m_bProcessLinearConstraintCoefficients) return true;
+	if(m_bProcessLinearConstraintCoefficients == true && bAMatrixModified == false) return true;
 	//m_bProcessLinearConstraintCoefficients = true;
 	try{
 		int n = instanceData->linearConstraintCoefficients->numberOfValues;

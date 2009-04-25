@@ -168,6 +168,21 @@ int main( ){
 		//result = solver->osresult;
 		//std::cout << result->resultData->optimization->solution[0]->objectives->values->obj[0]->value << std::endl;
 		// do garbage collection
+		
+		// illustrate changing an objective function coefficient
+		solver->osinstance->bObjectivesModified = true;
+		solver->osinstance->instanceData->objectives->obj[0]->coef[0]->value = 5;
+		solver->buildSolverInstance();
+		solver->solve();
+		std::cout << solver->osrl << std::endl;
+
+		// change objective function coefficient a second time
+		solver->osinstance->instanceData->objectives->obj[0]->coef[0]->value = 0;		
+		solver->buildSolverInstance();
+		solver->solve();
+		std::cout << solver->osrl << std::endl;
+	
+		
 		delete osinstance;
 		osinstance = NULL;
 		delete osilwriter;

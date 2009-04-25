@@ -673,14 +673,16 @@ void CoinSolver::solve() throw (ErrorClass) {
 					std::cout << "Cbc Option: "  << cbc_argv[ i]   <<  std::endl;
 				}
 				CbcMain1( num_cbc_argv, cbc_argv, model);	
-				
 				//do the garbage collection on cbc_argv
 				for(i = 0; i < num_cbc_argv; i++){
 					delete[]  cbc_argv[ i];	
 					cbc_argv[i] = NULL;
 				}
-				delete[] cbc_argv;
-				cbc_argv = NULL;
+				if( num_cbc_argv > 0){
+					delete[] cbc_argv;
+					cbc_argv = NULL;
+					num_cbc_argv = 0;
+				}
 				
 				
 				// create a solver 

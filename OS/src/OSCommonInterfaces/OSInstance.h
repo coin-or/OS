@@ -752,6 +752,28 @@ public:
 	
 	/** A pointer to an InstanceData object */
 	InstanceData *instanceData;
+	
+	/**
+	 * bVariablesModified is true if the variables data has been modified. 
+	 */
+	bool bVariablesModified ;
+	
+	/**
+	 * bObjectivesModified is true if the objective function data has been modified. 
+	 */
+	bool bObjectivesModified ;
+	
+	/**
+	 * bConstraintsModified is true if the constraints data has been modified. 
+	 */
+	bool bConstraintsModified ;
+	
+	/**
+	 * bAMatrixModified is true if the A matrix data has been modified. 
+	 */
+	bool bAMatrixModified ;
+	
+
 
 private:
 	/**
