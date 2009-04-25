@@ -276,8 +276,6 @@ OS/examples/osOptionDemo/Makefile.in -text
 OS/examples/osOptionDemo/OSOptionDemo.cpp -text
 OS/examples/osRemoteTest/Makefile.in -text
 OS/examples/osRemoteTest/OSRemoteTest.cpp -text
-OS/examples/osTestCode/Makefile.in -text
-OS/examples/osTestCode/OSTestCode.cpp -text
 OS/examples/template/Makefile.in -text
 OS/examples/template/template.cpp -text
 OS/inc/config_os.h.in -text
