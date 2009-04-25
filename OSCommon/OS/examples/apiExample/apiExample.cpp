@@ -41,6 +41,9 @@
 #include "OSParameters.h"
 #include "OSnLNode.h"
 #include "OSErrorClass.h"
+#include "OSFileUtil.h"  
+#include "OSrLReader.h"          
+#include "OSrLWriter.h" 
 
 
 #include<iostream>
@@ -57,6 +60,39 @@ int  main(){
 	try{
 		OSInstance *osinstance;
 		osinstance = new OSInstance();
+		
+
+		
+		///
+		OSResult *osresult = NULL;
+		std::string osrlFileName;
+		std::string osrl;
+		FileUtil *fileUtil = NULL; 
+		fileUtil = new FileUtil();
+		osrlFileName = "parincLinear.osrl"; 
+		
+		
+		osrl = fileUtil->getFileAsString( osrlFileName.c_str() );
+		// read some osrl files
+		
+		OSrLReader *osrlreader = NULL;
+		OSrLWriter *osrlwriter = NULL;
+		
+		osrlreader = new OSrLReader();
+		osresult = osrlreader->readOSrL( osrl);
+		
+		std::cout  << osrl << std::endl << std::endl << std::endl;
+		
+		osrlwriter = new OSrLWriter();
+		
+		std::cout << osrlwriter->writeOSrL( osresult) << std::endl;
+		
+		
+		delete fileUtil;
+		delete osrlreader;
+		
+		return 0;
+		
 		//
 		// put in some of the OSInstance <instanceHeader> information
 		osinstance->setInstanceSource("An example from the LINDO API samples directory");
