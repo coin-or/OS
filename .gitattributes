@@ -270,6 +270,10 @@ OS/examples/branchCutPrice/include/OS_var.hpp -text
 OS/examples/instanceGenerator/Makefile.in -text
 OS/examples/instanceGenerator/OSInstanceGenerator.cpp -text
 OS/examples/matlab/OSMatlabSolver.cpp -text
+OS/examples/osModDemo/Makefile.in -text
+OS/examples/osModDemo/OSModDemo.cpp -text
+OS/examples/osOptionDemo/Makefile.in -text
+OS/examples/osOptionDemo/OSOptionDemo.cpp -text
 OS/examples/osRemoteTest/Makefile.in -text
 OS/examples/osRemoteTest/OSRemoteTest.cpp -text
 OS/examples/osTestCode/Makefile.in -text

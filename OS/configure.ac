@@ -805,10 +805,11 @@ AC_CONFIG_FILES([Makefile
           src/OSParsers/Makefile
           test/Makefile
           examples/instanceGenerator/Makefile
-          examples/osTestCode/Makefile
           examples/algorithmicDiff/Makefile
           examples/addCuts/Makefile
+          examples/osModDemo/Makefile
           examples/osRemoteTest/Makefile
+ 	  examples/osOptionDemo/Makefile
           examples/template/Makefile
           examples/CppAD/Makefile
           examples/branchCutPrice/Makefile
