@@ -1114,8 +1114,8 @@ to also download and install the Windows Platform SDK\index{Windows Platform SDK
 \medskip
 \noindent Refer to Section~\ref{section:msvs}.
 
-\item[] {\bf osTestCode --} this provide yet another illustration of how to build an optimization instance using the
-{\tt OSInstance} class.  In addition, this project  shows how to build solver objects and use the solver object to
+\item[] {\bf osModDemo --} this provides yet another illustration of how to build an optimization instance using the
+{\tt OSInstance} class.  In addition, this project illustrates how to modify and in-memory instance.   Finally, this project  shows how to build solver objects and use the solver object to
 optimize the problem. In this particular case, the {\tt Clp} solver is used.
 
 \end{itemize}
@@ -4702,6 +4702,62 @@ The {\tt set} methods can be used to build an in-memory {\tt OSInstance}
 The calculate methods are described in Section~\ref{section:ad}.
 
 
+\subsection{Modifying an   {\tt OSInstance} Object}\label{section:osinstanceMod}
+
+The OSInstance API is designed to be used to either build an in-memory {\tt OSInstance} object or provide information about the in-memory object (e.g. the number of variables).   This interface is not designed for problem modification.  We plan on later providing an {\tt OSModification} object for this task. However, by directly accessing an {\tt OSInstance} object it is possible to modify parameters in the following classes:
+
+\begin{itemize}
+\item Variables
+
+\item Objectives
+
+\item Constraints
+
+\item LinearCostraintCoefficients
+\end{itemize}
+
+For example, to modify the first nonzero objective function coefficient of the first objective  function to 10.7 the user would write,
+
+\begin{verbatim}
+osinstance->instanceData->objectives->obj[0]->coef[0]->value = 10.7;
+\end{verbatim}
+If the user wanted to modify the actual number of nonzero coefficients as declared by 
+\begin{verbatim}
+osinstance->instanceData->objectives->obj[0]->numberOfObjCoef;
+\end{verbatim}
+then the only safe course of action would be to delete the current {\tt OSInstance} object and build a new one  with the modified coefficients. It is strongly recommend that no changes are made involving allocated memory -- i.e. any kind of {\tt numberOf***}.  Modifying an objective function coefficient is illustrated in the OSModDemo example. See Section \ref{section:exampleOSModDemo}.
+
+After modifying an {\tt OSInstance} object, it is necessary to set certain boolean variables to true in order for these changes to get reflected in the OS solver interfaces.
+
+\begin{itemize}
+\item Variables -- if any changes are made to a parameter in this class set
+
+\begin{verbatim}
+osinstance->bVariablesModified = true;
+\end{verbatim}
+
+\item Objectives -- if any changes are made to a parameter in this class set
+
+\begin{verbatim}
+osinstance->bObjectivesModified = true;
+\end{verbatim}
+
+\item Constraints -- if any changes are made to a parameter in this class set
+
+\begin{verbatim}
+osinstance->bConstraintsModified = true;
+\end{verbatim}
+
+\item LinearCostraintCoefficients -- if any changes are made to a parameter in this class set
+
+\begin{verbatim}
+osinstance->bAMatrixModified = true;
+\end{verbatim}
+\end{itemize}
+
+At this point, if the user desires to modify an {\bf OSInstance} object that contains nonlinear terms, the only safe strategy is to delete to the object and build a new object that contains the modifications. 
+
+
 \section{Code samples to illustrate the OS Project}\label{section:examples}
 
 These example executable files are not built by running {\tt configure} and {\tt make}.  In order to build the examples
@@ -4718,10 +4774,10 @@ and all of the libraries required by the examples in the directory
 \begin{verbatim}
 COIN-OS/lib
 \end{verbatim}
-The source code for the examples is in the directory {\tt COIN-OS/OS/examples}.  For instance, the {\tt osTestCode}
+The source code for the examples is in the directory {\tt COIN-OS/OS/examples}.  For instance, the {\tt osModDemo}
 example is in the directory
 \begin{verbatim}
-COIN-OS/OS/examples/osTestCode
+COIN-OS/OS/examples/osModDemo
 \end{verbatim}
 Next, the user should connect to the appropriate example directory and run {\tt make}.
 If the user has done a VPATH\index{VPATH} build, the Makefiles will be in each respective example directory under
@@ -4765,10 +4821,10 @@ if necessary.  The part of the Makefile to be adjusted, if necessary, is
 ##########################################################################
 
 # CHANGEME: This should be the name of your executable
-EXE = OSTestCode
+EXE = OSModDemo
 # CHANGEME: Here is the name of all object files corresponding to the source
 #           code that you wrote in order to define the problem statement
-OBJS =  OSTestCode.o
+OBJS =  OSModDemo.o
 # CHANGEME: Additional libraries
 ADDLIBS =
 # CHANGEME: Additional flags for compilation (e.g., include flags)
@@ -4776,8 +4832,8 @@ ADDINCFLAGS =  -I${prefix}/include
 # CHANGEME: SRCDIR is the path to the source code; VPATH is the path to
 # the executable. It is assumed # that the lib directory is in prefix/lib
 # and the header files are inprefix/include
-SRCDIR = /Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/examples/osTestCode
-VPATH = /Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/examples/osTestCode
+SRCDIR = /Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/examples/osModDemo
+VPATH = /Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/examples/osModDemo
 prefix = /Users/kmartin/Documents/files/code/cpp/OScpp/vpath
 \end{verbatim}
 
@@ -4859,14 +4915,41 @@ nlNodeVec[ 0]->createExpressionTreeFromPostfix( nlNodeVec);
 \end{verbatim}
 \index{Algorithmic differentiation|)}
 
+\subsection{Excel:  Using VBA To Generate OSiL}\label{section:exampleExcel}
 
-\subsection{osTestCode}\label{section:exampleOSTestCode}
+\subsection{Matlab:  Using  MATLAB To Generate OSiL}\label{section:exampleMatlab}
 
-The {\tt osTestCode} folder holds the file {\tt osTestCode.cpp}. This is similar to the {\tt instanceGenerator} example.
-In this case, a simple linear program is generated. This example also illustrates calling a COIN-OR solver,
+\subsection{branchCutPrice:  Using Bcp}\label{section:examplebranchCutPrice}
+
+This example illustrates the use of the Bcp (Branch cut and price) project.
+
+
+\subsection{OSModDemo: Modifying an In-Memory {\tt OSInstance} Object}\label{section:exampleOSModDemo}
+
+The {\tt osModDemo} folder holds the file {\tt OSModDemo.cpp}. This is similar to the {\tt instanceGenerator} example.
+In this case, a simple linear program is generated. However, this example also illustrates how to modify an in-memory OSInstance object. In particular, we illustrate how to modify an objective function coeffient. Note the line of code 
+
+\begin{verbatim}
+solver->osinstance->bObjectivesModified = true;
+\end{verbatim}
+which is critical, otherwise changes made to the OSInstance object will not be fed to the solver. 
+
+This example also illustrates calling a COIN-OR solver,
 in this case {\tt Clp}\index{COIN-OR projects!Clp@{\tt Clp}}.
 
-\subsection{osRemoteTest}\label{section:exampleOSRemoteTest}
+
+
+\subsection{OSOptionDemo: Building an In-Memory {\tt OSOption} Object}\label{section:exampleOSOptionDemo}
+
+The code in the  example file {\tt OSOptionDemo.cpp} in the folder {\tt osOptionDemo}  illustrates  how to build an in-memory {\tt OSOption} object. In this example we set the {\tt log} option (which controls the amount of output) for the {\tt Cbc} solver.
+
+
+
+\subsection{OSAddCuts: Using the OSInstance API to Generate Cutting Planes}\label{section:exampleOSAddCuts}
+
+In this example, we show how to add cuts to tighten an LP using {\tt Cgl} (Cut Generation Library)\index{COIN-OR projects!Cgl@{\tt Cgl}}.
+
+\subsection{OSRemoteTest:  Calling a Remote Server}\label{section:exampleOSRemoteTest}
 
 This example illustrates the API for the six service methods described in Section~\ref{section:servicemethods}.
 The file {\tt osRemoteTest.cpp} in folder {\tt osRemoteTest} first builds a small linear
@@ -4875,9 +4958,6 @@ The asynchronous mode is also tested by submitting the problem to a remote solve
 checking the status and either retrieving the answer or killing the process if it has not
 yet finished.
 
-\subsection{OSAddCuts: Using the OSInstance API to Generate Cutting Planes}\label{section:exampleOSAddCuts}
-
-In this example, we show how to add cuts to tighten an LP using {\tt Cgl} (Cut Generation Library)\index{COIN-OR projects!Cgl@{\tt Cgl}}.
 
 
 \section{The OS Algorithmic Differentiation Implementation}\label{section:ad}
