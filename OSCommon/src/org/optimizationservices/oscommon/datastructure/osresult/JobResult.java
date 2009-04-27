@@ -7,10 +7,6 @@ package org.optimizationservices.oscommon.datastructure.osresult;
 
 import java.util.GregorianCalendar;
 
-import org.optimizationservices.oscommon.datastructure.osgeneral.JobDependencies;
-import org.optimizationservices.oscommon.datastructure.osgeneral.DirectoriesAndFiles;
-import org.optimizationservices.oscommon.datastructure.osgeneral.Processes;
-
 
 /**
 *
