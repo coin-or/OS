@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="osTestCode"
-	ProjectGUID="{F95CE7CC-A842-4862-BBF9-D55B7E1C4ACA}"
+	ProjectGUID="{1DF347BA-8F84-4AD2-9579-54798FEBB3D4}"
 	RootNamespace="osTestCode"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"
@@ -182,7 +182,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\code\OSTestCode.cpp"
+				RelativePath=".\code\OSModDemo.cpp"
 				>
 			</File>
 		</Filter>

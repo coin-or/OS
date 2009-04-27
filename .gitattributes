@@ -63,7 +63,7 @@ OS/MSVisualStudioOSExamples/notes.txt -text
 OS/MSVisualStudioOSExamples/osExamples.sln -text
 OS/MSVisualStudioOSExamples/osRemoteTest/code/OSRemoteTest.cpp -text
 OS/MSVisualStudioOSExamples/osRemoteTest/osRemoteTest.vcproj -text
-OS/MSVisualStudioOSExamples/osTestCode/code/OSTestCode.cpp -text
+OS/MSVisualStudioOSExamples/osTestCode/code/OSModDemo.cpp -text
 OS/MSVisualStudioOSExamples/osTestCode/osTestCode.vcproj -text
 OS/Makefile.am -text
 OS/Makefile.in -text
