@@ -5,6 +5,8 @@
  */
 package org.optimizationservices.oscommon.datastructure.osresult;
 
+import org.optimizationservices.oscommon.localinterface.OSAnalysis;
+
 
 
 /**
@@ -18,19 +20,18 @@ package org.optimizationservices.oscommon.datastructure.osresult;
 */
 public class OptimizationResult{
 
+	public int numberOfSolutions = -1;
 
 	public int numberOfVariables = -1;
 	
 	public int numberOfObjectives = -1;
 
     public int numberOfConstraints = -1;
+		
+	public OptimizationSolution[] solution = null;
 	
-	public VariableOption variables = null;
-	
-	public ObjectiveOption objectives = null;
-	
-	public ConstraintOption constraints = null;
-	
-	public SolverOptions solverOptions = null;
+	public OtherSolverOutput otherSolverOutput = null;
+
+	public OSAnalysis osal = null;
 	
 }//class OptimizationResult

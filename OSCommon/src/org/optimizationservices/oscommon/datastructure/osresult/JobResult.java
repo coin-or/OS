@@ -23,34 +23,26 @@ import org.optimizationservices.oscommon.datastructure.osgeneral.Processes;
 */
 public class JobResult{
 	
-	public MaxTime maxTime = new MaxTime();
+	public String status = "";
+
+	public GregorianCalendar submitTime = new GregorianCalendar(1970, 0, 1, 0, 0, 0);
 	
-	public GregorianCalendar requestedStartTime = new GregorianCalendar(1970, 0, 1, 0, 0, 0);
+	public GregorianCalendar scheduledStartTime = new GregorianCalendar(1970, 0, 1, 0, 0, 0);
+
+	public GregorianCalendar actualStartTime = new GregorianCalendar(1970, 0, 1, 0, 0, 0);
+
+	public GregorianCalendar endTime = new GregorianCalendar(1970, 0, 1, 0, 0, 0);
 	
-	public JobDependencies dependencies = null;
+	public TimingInformation timingInformation =  new TimingInformation();
 	
-	public DirectoriesAndFiles requiredDirectories = null;
-
-	public DirectoriesAndFiles requiredFiles = null;
-
-	public DirectoriesAndFiles directoriesToMake = null;
-
-	public DirectoriesAndFiles filesToMake = null;
-
-	public PathPairs inputDirectoriesToMove = new PathPairs();
-
-	public PathPairs inputFilesToMove = new PathPairs();
-
-	public PathPairs outputDirectoriesToMove = new PathPairs();
-
-	public PathPairs outputFilesToMove = new PathPairs();
-
-	public DirectoriesAndFiles filesToDelete = null;
-
-	public DirectoriesAndFiles directoriesToDelete = null;
-
-	public Processes processesToKill = null;
-
+	public CPUSpeed usedCPUSpeed = new CPUSpeed();
+	
+	public int usedCPUNumber = -1;
+	
+	public DiskSpace usedDiskSpace = new DiskSpace();
+	
+	public MemorySize usedMemory = new MemorySize();
+	
 	public OtherResults otherOptions = null;
 	
 }//class JobResult

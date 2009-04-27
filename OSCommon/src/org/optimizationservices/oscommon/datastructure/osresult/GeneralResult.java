@@ -5,6 +5,8 @@
  */
 package org.optimizationservices.oscommon.datastructure.osresult;
 
+import java.util.GregorianCalendar;
+
 
 /**
  *
@@ -17,25 +19,21 @@ package org.optimizationservices.oscommon.datastructure.osresult;
 */
 public class GeneralResult{
 	
+	public GeneralStatus generalStatus = null;
+	
+	public String message = "";
+
 	public String serviceURI = "";
 
 	public String serviceName = "";
 
 	public String instanceName = "";
 	
-	public InstanceLocationOption instanceLocation = null;
-	
 	public String jobID = "";
 
-	public String solverToInvoke = "";
-	
-	public String license = "";
-	
-	public String userName = "";
-	
-	public String password = "";
-	
-	public ContactOption contact = null;
+	public String solverInvoked = "";
+
+	public GregorianCalendar timeStamp = null;
 	
 	public OtherResults otherOptions = null;
 	

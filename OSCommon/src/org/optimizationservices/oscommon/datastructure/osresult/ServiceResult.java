@@ -5,6 +5,8 @@
  */
 package org.optimizationservices.oscommon.datastructure.osresult;
 
+import java.util.GregorianCalendar;
+
 
 /**
 *
@@ -17,8 +19,16 @@ package org.optimizationservices.oscommon.datastructure.osresult;
 */
 public class ServiceResult{
 	
-	public String type = "solver";
+	public String currentState = "";
+	
+	public int currentJobCount = -1;
+	
+	public int totalJobsSoFar = -1;
+	
+	public GregorianCalendar timeServiceStarted = new GregorianCalendar(1970, 0, 1, 0, 0, 0);
+	
+	public double serviceUtilization = -1.0;
 	
 	public OtherResults otherOptions = null;
-
+	
 }//class ServiceResult

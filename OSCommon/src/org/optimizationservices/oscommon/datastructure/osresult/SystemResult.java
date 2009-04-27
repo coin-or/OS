@@ -17,13 +17,16 @@ package org.optimizationservices.oscommon.datastructure.osresult;
 */
 public class SystemResult{
 	
-	public MinDiskSpace minDiskSpace = new MinDiskSpace();
+	public String systemInformation = "";
 	
-	public MinMemorySize minMemorySize = new MinMemorySize();
+	public DiskSpace availableDiskSpace = new DiskSpace();
 	
-	public MinCPUSpeed minCPUSpeed = new MinCPUSpeed();
+	public MemorySize availableMemorySize = new MemorySize();
 	
-	public int minCPUNumber = 1;
+	public CPUSpeed availableCPUSpeed = new CPUSpeed();
+	
+	public int availableCPUNumber = 1;
 	
 	public OtherResults otherOptions = null;
+	
 }//class SystemResult
