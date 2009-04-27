@@ -65,8 +65,6 @@ OS/MSVisualStudioOSExamples/osModDemo/code/OSModDemo.cpp -text
 OS/MSVisualStudioOSExamples/osModDemo/osModDemo.vcproj -text
 OS/MSVisualStudioOSExamples/osRemoteTest/code/OSRemoteTest.cpp -text
 OS/MSVisualStudioOSExamples/osRemoteTest/osRemoteTest.vcproj -text
-OS/MSVisualStudioOSExamples/osTestCode/code/OSModDemo.cpp -text
-OS/MSVisualStudioOSExamples/osTestCode/osTestCode.vcproj -text
 OS/Makefile.am -text
 OS/Makefile.in -text
 OS/README -text
