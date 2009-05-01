@@ -36,6 +36,10 @@
 #include "OSErrorClass.h"
 #include "OSMathUtil.h"
 
+#include "OsiClpSolverInterface.hpp"
+#include "OsiCbcSolverInterface.hpp"
+#include "CbcModel.hpp"
+
 #include<iostream> 
 using std::cout;   
 using std::endl;
@@ -156,7 +160,7 @@ int main( ){
 		// now solve the model
 		CoinSolver *solver = new CoinSolver();
 		solver->osinstance = osinstance;
-		solver->sSolverName ="cbc"; 
+		solver->sSolverName ="clp"; 
 		solver->buildSolverInstance();		
 		solver->solve();
 		std::cout << solver->osrl << std::endl;
@@ -174,14 +178,12 @@ int main( ){
 		solver->buildSolverInstance();
 		solver->solve();
 		std::cout << solver->osrl << std::endl;
-
 		// change objective function coefficient a second time
 		solver->osinstance->instanceData->objectives->obj[0]->coef[0]->value = 0;		
 		solver->buildSolverInstance();
 		solver->solve();
-		std::cout << solver->osrl << std::endl;
-	
-		
+		std::cout << solver->osrl << std::endl;		
+		std::cout << "Obj value =  " << solver->osresult->resultData->optimization->solution[0]->objectives->values->obj[0]->value << endl; 
 		delete osinstance;
 		osinstance = NULL;
 		delete osilwriter;

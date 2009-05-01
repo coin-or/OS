@@ -303,7 +303,7 @@ int main(int argc, char **argv)
 		// do a local solve
 		if( ( solver_option == NULL) || (strstr(solver_option, "service") == NULL)  ){
 			solverType->osol = osol;
-			//std::cout << osol << std::endl;
+			std::cout << osol << std::endl;
 			solverType->osinstance = osinstance;
 			solverType->buildSolverInstance();
 			solverType->solve();

@@ -12,7 +12,7 @@
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
-#define PARSERDATA_DEBUG
+//#define PARSERDATA_DEBUG
 
 #include "OSrLParserData.h" 
 

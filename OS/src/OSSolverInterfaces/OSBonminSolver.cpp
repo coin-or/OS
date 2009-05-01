@@ -616,7 +616,7 @@ void BonminSolver::setSolverOptions() throw (ErrorClass) {
 			osoption = m_osolreader->readOSoL( osol);
 		}
 
-		if(osoption != NULL){
+		if(osoption != NULL && osoption->getNumberOfSolverOptions() > 0 ){
 			char *pEnd;
 			int i;
 			std::vector<SolverOption*> optionsVector;
@@ -896,7 +896,7 @@ void BonminSolver::writeResult(){
 				std::cout << solutionDescription << std::endl;
 				osresult->setSolutionStatus(solIdx,  "other", solutionDescription);
 		}//switch end	
-		
+		osresult->setGeneralStatusType("success");
 		osrl = osrlwriter->writeOSrL( osresult);
 		delete[] x;
 		x = NULL;
