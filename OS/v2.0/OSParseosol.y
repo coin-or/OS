@@ -471,12 +471,12 @@ QUOTE;
 
 mindiskspacebody: ENDOFELEMENT
 	| GREATERTHAN MINDISKSPACEEND
-        | GREATERTHAN DOUBLE MINDISKSPACEEND
+	| GREATERTHAN DOUBLE MINDISKSPACEEND
 {	if ($2 < 0)
 		osolerror( NULL, osoption, parserData, "minDiskSpace cannot be negative");
 	osoption->system->minDiskSpace->value = $2;
 }
-        | GREATERTHAN INTEGER MINDISKSPACEEND
+	| GREATERTHAN INTEGER MINDISKSPACEEND
 {	if ($2 < 0)
 		osolerror( NULL, osoption, parserData, "minDiskSpace cannot be negative");
 	osoption->system->minDiskSpace->value = $2;

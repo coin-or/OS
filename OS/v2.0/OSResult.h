@@ -1434,6 +1434,13 @@ public:
 	std::string getGeneralMessage();
 
 	/**
+	 *  Get the number of time measurements. 
+	 *
+	 *  @return the number of time measurements
+	 */
+	int getTimeNumber();
+
+	/**
 	 *  Get the time measurement. In the first instance, assume that there is only
 	 *  a single measure, which is the total elapsed time in seconds
 	 *
@@ -1626,6 +1633,14 @@ public:
 							  std::string unit, std::string description, double value);
 	
 	/**
+	 * Set the number of time measurements. 
+	 * 
+	 * @param timeNumber holds the number of measurements
+	 * @return whether the time number is set successfully or not. 
+	 */
+	bool setTimeNumber(int timeNumber);
+	
+	/**
 	 * Set the variable number. 
 	 * 
 	 * @param variableNumber holds the number of variables
@@ -1693,6 +1708,18 @@ public:
 	bool setSolutionObjectiveIndex(int solIdx, int objectiveIdx);
 	
 	/**
+	 * Set the [i]th optimization solution's number of primal variable values, where i equals the given solution index.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the primal variable values. 
+	 * @param n holds the number of elements in the array x
+	 * 
+	 * @return whether primal variable values are set successfully or not. 
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setNumberOfPrimalVariableValues(int solIdx, int n);
+		
+	
+	/**
 	 * Set the [i]th optimization solution's primal variable values, where i equals the given solution index.   
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
 	 * @param solIdx holds the solution index to set the primal variable values. 
@@ -1703,7 +1730,6 @@ public:
 	 * @see #setSolutionNumber(int)
 	 */
 	bool setPrimalVariableValues(int solIdx, double *x, int n);
-		
 	/**
 	 * Set the [i]th optimization solution's other (non-standard/solver specific)variable-related results, 
 	 * where i equals the given solution index.   

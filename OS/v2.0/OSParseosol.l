@@ -56,7 +56,7 @@
 #include "OSOption.h"
 
 
-
+//#define PARSERDEBUG
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", yytext);
 #else     
@@ -103,10 +103,10 @@ using std::ostringstream;
 xmlwhitespace ([ \t\n\r])
 equality ([ \t\n\r])*=([ \t\n\r])*
 quote [\" | \']  
+twoquotes (\"\"|\'\')
 greater_than (>)
 aninteger (-?[0-9]+)
 adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF))
-
 %%
 
  
@@ -114,8 +114,8 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF))
 
  /* General patterns matched in more than one element */
 
-
 {quote} {YY_PRINT;  yylval->sval = yytext; return(QUOTE);}
+{twoquotes} {YY_PRINT;  yylval->sval = yytext; return(TWOQUOTES);}
 ({xmlwhitespace}*{greater_than}) {YY_PRINT; return(GREATERTHAN);}
 {aninteger}  {YY_PRINT; yylval->ival = atoi(yytext); return(INTEGER);}
 
@@ -318,7 +318,6 @@ return(DOUBLE);}
 
 [a-zA-Z0-9.:_*#$@\- \n\t\r\/\\]+ { YY_PRINT; /*yylval->sval = strdup( yytext);*/   yylval->sval = yytext; yyextra->errorText = yylval->sval;  return (ELEMENTTEXT); }
 
-
  "<!--" BEGIN comment;
  <comment>. |
  <comment>\n ;
@@ -334,7 +333,8 @@ return(DOUBLE);}
 <singlequoteattributetext>[^\']* {YY_PRINT;  BEGIN 0; /*yylval->sval = strdup(yytext);*/   yylval->sval = yytext;  return(ATTRIBUTETEXT);}
 <osolattributetext>([^>])* {YY_PRINT;  BEGIN 0;  /*yylval->sval = strdup(yytext);*/   yylval->sval = yytext;   return(OSOLATTRIBUTETEXT);}
 
-. {  
+
+.|\n {  
 	std::string error;
 	std::ostringstream outStr;
 	outStr << "encountered a spurious character in the lexer" << endl;

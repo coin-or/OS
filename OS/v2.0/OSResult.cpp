@@ -26,7 +26,7 @@
 
 #include<iostream>
 #include<sstream>
-//#define DEBUG
+#define DEBUG
 
 using namespace std;
 
@@ -338,6 +338,8 @@ VariableValues::~VariableValues(){
 
 
 OtherVariableResult::OtherVariableResult():
+	numberOfVar(-1),
+	value(""),
 	name(""),
 	description("")
 { 
@@ -353,13 +355,16 @@ OtherVariableResult::~OtherVariableResult(){
 	cout << "Inside the OtherVariableResult Destructor" << endl;
 	#endif
 	int n = var.size();
-	if(n  > 0) {
+	if (n > 0) {
 		for(int i = 0; i < n; i++){
 			delete var[i];
 			var[i] = NULL;
 		}
 	}
 	var.clear(); 
+	#ifdef DEBUG  
+	cout << "Inside the OtherVariableResult Destructor - Done" << endl;
+	#endif
 }// end OtherVariableResult destructor 
 
 
@@ -680,6 +685,13 @@ double OSResult::getTimeValue()
 }//getTime
 
 
+int OSResult::getTimeNumber()
+{	if (job == NULL) return -1;
+	if (job->timingInformation == NULL) return -1;
+	return job->timingInformation->numberOfTimes;
+}//getTime
+
+
 int OSResult::getVariableNumber(){
 	if(m_iVariableNumber == -1){
 		if(optimization == NULL) return -1;
@@ -893,6 +905,14 @@ bool OSResult::setTime(double time){
     return addTimingInformation("elapsedTime", "total", "second", "", time);
 }//setTime
 
+bool OSResult::setTimeNumber(int timeNumber)
+{	if (job == NULL) job = new JobResult();
+	if (job->timingInformation == NULL) job->timingInformation = new TimingInformation();
+    if (timeNumber <= 0) return false;
+	job->timingInformation->numberOfTimes = timeNumber;
+	return true;
+}//setTimeNumber
+
 bool OSResult::setGeneralMessage(string message){
 	general->message = message;
 	return true;
@@ -975,6 +995,29 @@ bool OSResult::setSolutionObjectiveIndex(int solIdx, int objectiveIdx){
 	return true;		
 }//setSolutionObjectiveIndex
 
+bool OSResult::setNumberOfPrimalVariableValues(int solIdx, int numberOfVar){
+	int nSols = this->getSolutionNumber();
+	int nVar  = this->getVariableNumber();
+	if (numberOfVar <= 0 || numberOfVar > nVar) return false;
+	if(optimization == NULL) return false;
+	if(nSols <= 0) return false;
+	if(optimization->solution == NULL || 
+	   solIdx < 0 || solIdx >=  nSols) return false;
+	if(optimization->solution[solIdx] == NULL){
+		optimization->solution[solIdx] = new OptimizationSolution();
+	}
+	if(optimization->solution[solIdx]->variables == NULL){
+		optimization->solution[solIdx]->variables = new VariableSolution();
+	}
+	if(optimization->solution[solIdx]->variables->values == NULL){
+		optimization->solution[solIdx]->variables->values = new VariableValues();
+	}
+	optimization->solution[solIdx]->variables->values->numberOfVar = numberOfVar;
+//	optimization->solution[solIdx]->variables->values->var = new VarValue*[numberOfVar];
+
+	return true;
+}//setNumberOfPrimalVariableValues
+
 bool OSResult::setPrimalVariableValues(int solIdx, double *x, int numberOfVar){
 	int nSols = this->getSolutionNumber();
 	if(optimization == NULL) return false;
@@ -1003,12 +1046,10 @@ bool OSResult::setPrimalVariableValues(int solIdx, double *x, int numberOfVar){
 	return true;
 }//setPrimalVariableValues
 
-
 bool OSResult::setNumberOfOtherVariableResults(int solIdx, int numberOfOtherVariableResults){
 	int iNumberOfVariables = this->getVariableNumber();
 	if(iNumberOfVariables <= 0) return false;
 	int nSols = this->getSolutionNumber();
-	if(optimization == NULL) return false;
 	if(nSols <= 0) return false;
 	if(optimization == NULL) return false;
 	if(optimization->solution == NULL || 

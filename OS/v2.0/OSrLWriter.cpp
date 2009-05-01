@@ -145,9 +145,12 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 				outStr << m_OSResult->job->timingInformation->numberOfTimes << "\">" << endl;
 				for (i=0; i<m_OSResult->job->timingInformation->numberOfTimes; i++)
 				{	outStr << "<time ";
-					outStr << "type=\"" << m_OSResult->job->timingInformation->time[i]->type << "\" ";
-					outStr << "unit=\"" << m_OSResult->job->timingInformation->time[i]->unit << "\" ";
-					outStr << "category=\"" << m_OSResult->job->timingInformation->time[i]->category << "\" ";
+					if (m_OSResult->job->timingInformation->time[i]->type != "")
+						outStr << "type=\"" << m_OSResult->job->timingInformation->time[i]->type << "\" ";
+					if (m_OSResult->job->timingInformation->time[i]->unit != "")
+						outStr << "unit=\"" << m_OSResult->job->timingInformation->time[i]->unit << "\" ";
+					if (m_OSResult->job->timingInformation->time[i]->category != "")
+						outStr << "category=\"" << m_OSResult->job->timingInformation->time[i]->category << "\" ";
 					if (m_OSResult->job->timingInformation->time[i]->description != "")
 						outStr << "description=\"" << m_OSResult->job->timingInformation->time[i]->description << "\" ";
 					outStr << ">" << endl;
@@ -250,15 +253,24 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 								outStr << " numberOfVar=\"";
 								outStr << m_OSResult->optimization->solution[i]->variables->other[k]->numberOfVar;
 								outStr << "\"" ;
-								outStr << " name=\"";
-								outStr << m_OSResult->optimization->solution[i]->variables->other[k]->name;
-								outStr << "\"" ;
-								outStr << " value=\"";
-								outStr << m_OSResult->optimization->solution[i]->variables->other[k]->value;
-								outStr << "\"" ;
-								outStr << " description=\"";
-								outStr << m_OSResult->optimization->solution[i]->variables->other[k]->description;
-								outStr << "\"" ;
+								if (m_OSResult->optimization->solution[i]->variables->other[k]->name != "")
+								{
+									outStr << " name=\"";
+									outStr << m_OSResult->optimization->solution[i]->variables->other[k]->name;
+									outStr << "\"" ;
+								}
+								if (m_OSResult->optimization->solution[i]->variables->other[k]->value != "")
+								{
+									outStr << " value=\"";
+									outStr << m_OSResult->optimization->solution[i]->variables->other[k]->value;
+									outStr << "\"" ;
+								}
+								if (m_OSResult->optimization->solution[i]->variables->other[k]->description != "")
+								{
+									outStr << " description=\"";
+									outStr << m_OSResult->optimization->solution[i]->variables->other[k]->description;
+									outStr << "\"" ;
+								}
 								outStr <<  ">" << endl;
 								if(m_OSResult->optimization->solution[i]->variables->other[k]->var.size() > 0){
 									for(j = 0; j < m_OSResult->optimization->solution[i]->variables->other[k]->numberOfVar; j++){
