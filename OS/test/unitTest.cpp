@@ -1155,8 +1155,8 @@ if(THOROUGH == true){
 		unitTestResultFailure  << "Sorry Unit Test Failed Testing the Bonmin Solver:"  + eclass.errormsg << endl;
 	}	
 #endif
-
-
+//temporarily delete couenn
+#if 0
 #ifdef COIN_HAS_COUENNE
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Couenne solver on bonminEx1.osil" << endl << endl;
@@ -1351,6 +1351,7 @@ if(THOROUGH == true)   {
 		delete osolreader;
 		osolreader = NULL;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+#endif
 #endif
 #if 0
 		cout << endl << "TEST " << ++nOfTest << ": Couenne solver on HS071_feas.osil" << endl << endl;
