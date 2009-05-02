@@ -1405,8 +1405,10 @@ if(THOROUGH == true)   {
 
 	}
 	catch(const ErrorClass& eclass){
-		cout << "OSrL =  " <<  solver->osrl <<  endl;
-		cout << endl << endl << endl;
+		if (solver) {
+			cout << "OSrL =  " <<  solver->osrl <<  endl;
+			cout << endl << endl << endl;
+		}
 		unitTestResultFailure  << "Sorry Unit Test Failed Testing the Couenne Solver:"  + eclass.errormsg << endl;
 	
 	}	
