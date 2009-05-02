@@ -493,6 +493,7 @@ OS/v2.0/OSrLWriter.cpp -text
 OS/v2.0/errorExample.osrl -text
 OS/v2.0/osUsersManual_2.0.tex -text
 OS/v2.0/parincLinear.osrl -text
+OS/v2.0/parserTest.osrl -text
 OS/v2.0/reducedcost.osrl -text
 OS/v2.0/rosenbrockmod.osrl -text
 OS/v2.0/unitTest.cpp -text
