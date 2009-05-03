@@ -591,18 +591,25 @@ OptimizationSolution::~OptimizationSolution(){
 	#ifdef DEBUG  
 	cout << "Inside the OptimzationSolution Destructor" << endl;
 	#endif
-	delete variables;
-	variables = NULL;
-	delete constraints;
-	constraints = NULL;
-	delete objectives;
-	objectives = NULL;
-	delete status;
-	status = NULL;
+	if(variables != NULL){
+		delete variables;
+		variables = NULL;
+	}
+	if(constraints != NULL) {
+		delete constraints;
+		constraints = NULL;
+	}
+	if(objectives != NULL){
+		delete objectives;
+		objectives = NULL;
+	}
+	if(status != NULL){
+		delete status;
+		status = NULL;
+	}
 }// end OptimizationSolution destructor 
  
- 
- 
+
 OptimizationResult::OptimizationResult():
 	numberOfVariables( -1),
 	numberOfObjectives( -1),
@@ -1070,7 +1077,7 @@ bool OSResult::setNumberOfOtherVariableResults(int solIdx, int numberOfOtherVari
 
 
 
-bool OSResult::setAnOtherVariableResult(int solIdx, int otherIdx, string name, string description, string *s, int numberOfVar){
+bool OSResult::setAnOtherVariableResult(int solIdx, int otherIdx, string name, string description, int  *indexes,  string *s, int numberOfVar){
 	int iNumberOfVariables = numberOfVar;
 	if(iNumberOfVariables <= 0) return false;
 	int nSols = this->getSolutionNumber();
@@ -1088,8 +1095,9 @@ bool OSResult::setAnOtherVariableResult(int solIdx, int otherIdx, string name, s
 	optimization->solution[solIdx]->variables->other[ otherIdx]->numberOfVar = numberOfVar;
 	for(int i = 0; i < iNumberOfVariables; i++){
 		optimization->solution[solIdx]->variables->other[ otherIdx]->var.push_back(new OtherVarResult());
-		optimization->solution[solIdx]->variables->other[ otherIdx]->var[i]->idx = i;
+		optimization->solution[solIdx]->variables->other[ otherIdx]->var[i]->idx = indexes[ i];
 		optimization->solution[solIdx]->variables->other[ otherIdx]->var[i]->value = s[i];
+		;
 	}
 	return true;
 }//setAnOtherVariableResult

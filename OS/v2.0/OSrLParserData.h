@@ -17,6 +17,7 @@
 
 #include "OSnLNode.h"
 #include <vector> 
+#include <sstream>
 
 
 

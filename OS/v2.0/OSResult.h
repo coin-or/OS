@@ -1763,7 +1763,7 @@ public:
 	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult
 	 * @see #setSolutionNumber(int)
 	 */
-	bool setAnOtherVariableResult(int solIdx, int otherIdx, std::string name, std::string description, std::string *s, int n);
+	bool setAnOtherVariableResult(int solIdx, int otherIdx, std::string name, std::string description, int *indexes,  std::string *s, int n);
 
 
 	

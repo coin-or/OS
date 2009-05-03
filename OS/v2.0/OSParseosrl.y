@@ -197,16 +197,16 @@ timeAttList: | timeAttList timeAtt;
 
 timeAtt: timeType | timeCategory | timeUnit | timeDescription;
 
-timeType: TYPEATT ATTRIBUTETEXT QUOTE {parserData->timeType = $2;}
+timeType: TYPEATT ATTRIBUTETEXT QUOTE {parserData->timeType = $2;  free($2);}
    | EMPTYTYPEATT ;
 
-timeCategory: CATEGORYATT ATTRIBUTETEXT QUOTE {parserData->timeCategory = $2;}
+timeCategory: CATEGORYATT ATTRIBUTETEXT QUOTE {parserData->timeCategory = $2;  free($2);}
    | EMPTYCATEGORYATT ;
 
-timeUnit: UNITATT ATTRIBUTETEXT QUOTE {parserData->timeUnit = $2;}
+timeUnit: UNITATT ATTRIBUTETEXT QUOTE {parserData->timeUnit = $2;   free($2);}
    | EMPTYUNITATT ;
 
-timeDescription: DESCRIPTIONATT ATTRIBUTETEXT QUOTE {parserData->timeDescription = $2;}
+timeDescription: DESCRIPTIONATT ATTRIBUTETEXT QUOTE {parserData->timeDescription = $2;  free($2);}
    | EMPTYDESCRIPTIONATT;
 
 timeValue:
@@ -306,9 +306,9 @@ variables:
 | VARIABLESSTART numberOfOtherVariableResults GREATERTHAN VALUESSTART numberOfVarATT 
   GREATERTHAN var VALUESEND otherVariables VARIABLESEND;
 
-numberOfOtherVariableResults: {parserData->kounter = 0;}
+numberOfOtherVariableResults: { parserData->kounter = 0;}
 | NUMBEROFOTHERVARIABLERESULTSATT quote INTEGER quote 
-	{osresult->setNumberOfOtherVariableResults(parserData->solutionIdx, $3);
+	{  osresult->setNumberOfOtherVariableResults(parserData->solutionIdx, $3);
 	/*osresult->optimization->solution[parserData->solutionIdx]->variables->numberOfOtherVariableResults = $3*/;
 	 parserData->kounter = 0;
 	 parserData->iOther = 0;
@@ -328,14 +328,20 @@ var:  anothervar
 | var anothervar;
 
 anothervar: VARSTART anIDXATT GREATERTHAN DoubleOrInt VAREND
-{   if (parserData->kounter == osresult->optimization->solution[parserData->solutionIdx]->variables->values->numberOfVar)
+ {
+   if (parserData->kounter == osresult->optimization->solution[parserData->solutionIdx]->variables->values->numberOfVar)
         osrlerror(NULL, NULL, NULL, "too many variables"); 
+        
 	if (parserData->ivar < 0 || parserData->ivar > parserData->numberOfVariables - 1) 
 	    osrlerror(NULL, NULL, NULL, "index must be greater than 0 and less than the number of variables");
+	 
+	    
 	*(parserData->primalSolution[parserData->solutionIdx] + parserData->ivar ) = parserData->tempVal;
 	osresult->optimization->solution[parserData->solutionIdx]->variables->values->var.push_back(new VarValue());
 	osresult->optimization->solution[parserData->solutionIdx]->variables->values->var[parserData->kounter]->idx   = parserData->ivar;
 	osresult->optimization->solution[parserData->solutionIdx]->variables->values->var[parserData->kounter]->value = parserData->tempVal;
+	
+	
     parserData->kounter++;
 }; 
 
@@ -348,42 +354,55 @@ otherVariables:
 | otherVariables otherVariableResult;
 
 otherVariableResult: otherVariableStart otherVariableATTlist GREATERTHAN othervarlist OTHEREND
-	{	parserData->otherVarVec.push_back( parserData->otherVarStruct); 
+	{ 	 
+		
+		parserData->otherVarVec.push_back( parserData->otherVarStruct); 
 		parserData->numberOfOtherVariableResults++; 
-		parserData->otherNamePresent = false;		
+		parserData->otherNamePresent = false;	
+		
+		
+		osresult->setAnOtherVariableResult(parserData->solutionIdx, parserData->iOther,  parserData->otherVarStruct->name,
+			parserData->otherVarStruct->description, parserData->otherVarStruct->otherVarIndex, parserData->otherVarStruct->otherVarText,
+			parserData->otherVarStruct->numberOfVar );
+			
+			
+		std::cout  << "Other Name = " << parserData->otherVarStruct->name << std::endl;
+		std::cout  << "Description  = " << parserData->otherVarStruct->description << std::endl;
+
+		
+		parserData->iOther++;  
+		parserData->tmpOtherName = "";
+		parserData->tmpOtherValue = "";
+		parserData->tmpOtherDescription = "";			
+		
+		/*	
 		if (osresult->optimization == NULL) 
 			osresult->optimization = new OptimizationResult();
+		
 		if (osresult->optimization->solution == NULL) 
 		{	osresult->optimization->solution = new OptimizationSolution*();
 			for (int i = 0; i < parserData->numberOfSolutions; i++)
 				osresult->optimization->solution[i] = new OptimizationSolution();
-		}
-		if (osresult->optimization->solution[parserData->solutionIdx]->variables == NULL)
-		{	osresult->optimization->solution[parserData->solutionIdx]->variables = new VariableSolution();
-			osresult->optimization->solution[parserData->solutionIdx]->variables->other = new OtherVariableResult*[osresult->getNumberOfOtherVariableResults(parserData->solutionIdx)];
 		}	
-		printf("\nstore into other[");
-		printf("%d",parserData->iOther);
-		printf("]: name=");
-		printf("%s",parserData->tmpOtherName);
-		printf(", description=");		
-		printf("%s\n",parserData->tmpOtherDescription);
+		if (osresult->optimization->solution[parserData->solutionIdx]->variables == NULL){
+			osresult->optimization->solution[parserData->solutionIdx]->variables = new VariableSolution();
+			osresult->optimization->solution[parserData->solutionIdx]->variables->other = new OtherVariableResult*[osresult->getNumberOfOtherVariableResults(parserData->solutionIdx)];
+		}
 		osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther] = new OtherVariableResult();
 		osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->name        = parserData->tmpOtherName;
 		osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->value       = parserData->tmpOtherValue;
 		osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->description = parserData->tmpOtherDescription;
 		osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->numberOfVar = parserData->otherVarStruct->numberOfVar;
-		parserData->iOther++;  
-		parserData->tmpOtherName = "";
-		parserData->tmpOtherValue = "";
-		parserData->tmpOtherDescription = "";
+		*/
+		
+		
 	};
 
 otherVariableStart: OTHERSTART 
 	{  // parserData->numberOfOtherVariableResults++;
 		parserData->otherVarStruct = new OtherVariableResultStruct(); 
 		parserData->otherVarStruct->otherVarText  = new std::string[parserData->numberOfVariables];	 
-		parserData->otherVarStruct->otherVarIndex = new         int[parserData->numberOfVariables];	 
+		parserData->otherVarStruct->otherVarIndex = new int[parserData->numberOfVariables];	 
 		parserData->kounter = 0;
 	}; 
 
@@ -408,16 +427,16 @@ otherVarValueATT:
 otherVarNameATT: 
   EMPTYNAMEATT 
 { parserData->tmpOtherName=""; parserData->otherNamePresent = true; parserData->otherVarStruct->name = "";
-  osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->name = "";
+ // osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->name = "";
 };
   | NAMEATT ATTRIBUTETEXT quote
 {printf("\nset tmpOtherName: %s\n",$2);  parserData->tmpOtherName=$2; parserData->otherNamePresent = true; parserData->otherVarStruct->name = $2;  free($2);
-  osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->name = $2;
+ // osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->name = $2;
 };
 
 otherVarDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
 {printf("\nset tmpOtherDescription: %s\n",$2);  parserData->tmpOtherDescription=$2; parserData->otherVarStruct->description = $2;  free($2);
-  osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->description = $2;
+  //osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->description = $2;
 };
 
 
@@ -426,44 +445,47 @@ otherVarDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
 othervarlist: 
 | othervar othervarlist;
 
-othervar: othervarstart anIDXATT  GREATERTHAN ElementValue VAREND { 
+othervar: othervarstart anIDXATT  GREATERTHAN ElementValue VAREND {  
 parserData->otherVarStruct->otherVarText[parserData->kounter] =  parserData->outStr.str();
+//reset the buffer;
+parserData->outStr.str("");
 parserData->otherVarStruct->otherVarIndex[parserData->kounter] =  parserData->ivar;
 parserData->errorText = NULL;
 if (parserData->kounter == osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->numberOfVar)
     osrlerror(NULL, NULL, NULL, "too many variables"); 
 if (parserData->ivar < 0 || parserData->ivar > parserData->numberOfVariables - 1) 
     osrlerror(NULL, NULL, NULL, "index must be greater than 0 and less than the number of variables");
-osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->var.push_back(new OtherVarResult());
-osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->var[parserData->kounter]->idx   = parserData->ivar;
-osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->var[parserData->kounter]->value = parserData->tempVal;
+   
+//osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->var.push_back(new OtherVarResult());
+//osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->var[parserData->kounter]->idx   = parserData->ivar;
+//osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->var[parserData->kounter]->value = parserData->tempVal;
+
+
+
 parserData->kounter++;
 };
 
 ElementValue: 
-    ELEMENTTEXT  {parserData->outStr << $1; /*free($1);*/ }
-  | INTEGER      {parserData->outStr << $1; /*free($1);*/ }
-  | DOUBLE       {parserData->outStr << $1; /*free($1);*/ };
+    ELEMENTTEXT  {/*std::cout << "FOUND OTHER ELEMENT TEXT"  << std::endl;*/  parserData->outStr << $1; /*free($1);*/ }
+  | INTEGER      {/*std::cout << "FOUND OTHER ELEMENT INTEGER"  << std::endl;*/  parserData->outStr << $1; /*free($1);*/ }
+  | DOUBLE       {/*std::cout << "FOUND OTHER ELEMENT DOUBLE"  << std::endl;*/ parserData->outStr << $1; /*free($1);*/ };
   
 othervarstart: VARSTART 
 	{	if(parserData->otherVarStruct->numberOfVar <= 0) 
 			osrlerror(NULL, NULL,  parserData, "must specify the number of variables") ;
 	}; 
 
-
-
-
 objectives:
 | OBJECTIVESSTART GREATERTHAN VALUESSTART  numberOfObjATT GREATERTHAN obj VALUESEND otherObjectives OBJECTIVESEND;
 
-numberOfObjATT: NUMBEROFOBJATT quote INTEGER quote;
+numberOfObjATT: NUMBEROFOBJATT quote INTEGER quote ;
 
 obj: 
 | obj anotherobj;
 
-anotherobj: OBJSTART anIDXATT GREATERTHAN DOUBLE OBJEND { *(parserData->objectiveValues[parserData->solutionIdx] + (parserData->kounter + parserData->numberOfObjectives)) = $4;
+anotherobj: OBJSTART anIDXATT GREATERTHAN DOUBLE OBJEND { /* *( parserData->objectiveValues[parserData->solutionIdx] + (parserData->kounter + parserData->numberOfObjectives)) = $4;*/
 }
-| OBJSTART anIDXATT GREATERTHAN INTEGER OBJEND { *(parserData->objectiveValues[parserData->solutionIdx] + (parserData->kounter + parserData->numberOfObjectives)) = $4;};
+| OBJSTART anIDXATT GREATERTHAN INTEGER OBJEND {/*  *(parserData->objectiveValues[parserData->solutionIdx] +  (parserData->kounter + parserData->numberOfObjectives)) = $4; */};
 
 
 constraints:
