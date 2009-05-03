@@ -43,7 +43,9 @@
 #include "OSErrorClass.h"
 #include "OSFileUtil.h"  
 #include "OSrLReader.h"          
-#include "OSrLWriter.h" 
+#include "OSrLWriter.h"
+#include "OSOption.h" 
+#include "OSoLReader.h"
 
 
 #include<iostream>
@@ -58,40 +60,62 @@ int  main(){
 
 	cout << "Start Building the Model" << endl;
 	try{
-		OSInstance *osinstance;
-		osinstance = new OSInstance();
+		
 		
 
 		
 		///
+
+		FileUtil *fileUtil = NULL; 
+		fileUtil = new FileUtil();
+		
+		
+#if 1
+		OSOption *osoption = NULL;
+		std::string osolFileName;
+		std::string osol;
+		
+		osolFileName = "parsertest.osol"; 	
+		osol = fileUtil->getFileAsString( osolFileName.c_str() );
+		
+		OSoLReader *osolreader = NULL;
+		//OSrLWriter *osrlwriter = NULL;
+		osolreader = new OSoLReader();
+		osoption = osolreader->readOSoL( osol);
+		std::cout << std::endl << std::endl<< std::endl;
+		
+#endif
+		
+#if 0
 		OSResult *osresult = NULL;
 		std::string osrlFileName;
 		std::string osrl;
-		FileUtil *fileUtil = NULL; 
-		fileUtil = new FileUtil();
-		osrlFileName = "parincLinear.osrl"; 
-		
-		
+		osrlFileName = "parserTest.osrl"; 	
 		osrl = fileUtil->getFileAsString( osrlFileName.c_str() );
 		// read some osrl files
-		
 		OSrLReader *osrlreader = NULL;
 		OSrLWriter *osrlwriter = NULL;
-		
 		osrlreader = new OSrLReader();
 		osresult = osrlreader->readOSrL( osrl);
-		
-		std::cout  << osrl << std::endl << std::endl << std::endl;
-		
+		std::cout << std::endl << std::endl<< std::endl;
+		std::cout << "START TESTING " << std::endl;
+		std::cout << "PRIMAL VALUE 1 = " << osresult->optimization->solution[0]->variables->values->var[0]->value << std::endl;
+		std::cout << "PRIMAL VALUE 2 = " << osresult->optimization->solution[0]->variables->values->var[1]->value << std::endl;
+		//osresult->setTime( 77.77);
+		//std::cout  << osrl << std::endl << std::endl << std::endl;
 		osrlwriter = new OSrLWriter();
-		
 		std::cout << osrlwriter->writeOSrL( osresult) << std::endl;
-		
+		delete osrlreader;
+		delete osrlwriter;	
+#endif	
 		
 		delete fileUtil;
-		delete osrlreader;
+
 		
 		return 0;
+
+		OSInstance *osinstance;
+		osinstance = new OSInstance();
 		
 		//
 		// put in some of the OSInstance <instanceHeader> information
