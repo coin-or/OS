@@ -622,12 +622,12 @@ void CouenneSolver::writeResult(){
 				/* Retrieve the solution */
 				//
 				*(z + 0)  =  bb.bestObj();
-				osresult->setObjectiveValues(solIdx, z);
+				osresult->setObjectiveValues(solIdx, z, osinstance->getConstraintNumber());
 				for(i=0; i < osinstance->getVariableNumber(); i++){
 					*(x + i) = bb.bestSolution()[i];
 					//std::cout <<  *(x + i)  << std::endl;
 				}
-				osresult->setPrimalVariableValues(solIdx, x);	
+				osresult->setPrimalVariableValues(solIdx, x, osinstance->getVariableNumber());	
 			break;
 			
 			case MAXITER_EXCEEDED:
@@ -638,12 +638,12 @@ void CouenneSolver::writeResult(){
 				/* Retrieve the solution */
 				//
 				*(z + 0)  =  bb.bestObj();
-				osresult->setObjectiveValues(solIdx, z);
+				osresult->setObjectiveValues(solIdx, z, osinstance->getConstraintNumber());
 				for(i=0; i < osinstance->getVariableNumber(); i++){
 					*(x + i) = bb.model().getColSolution()[i];
 					//std::cout <<  *(x + i)  << std::endl;
 				}
-				osresult->setPrimalVariableValues(solIdx, x);						
+				osresult->setPrimalVariableValues(solIdx, x, osinstance->getVariableNumber());						
 			break;
 			
 			case STOP_AT_TINY_STEP:
@@ -652,12 +652,12 @@ void CouenneSolver::writeResult(){
 				/* Retrieve the solution */
 				//
 				*(z + 0)  =  bb.bestObj();
-				osresult->setObjectiveValues(solIdx, z);
+				osresult->setObjectiveValues(solIdx, z, osinstance->getConstraintNumber());
 				for(i=0; i < osinstance->getVariableNumber(); i++){
 					*(x + i) = bb.model().getColSolution()[i];
 					//std::cout <<  *(x + i)  << std::endl;
 				}
-				osresult->setPrimalVariableValues(solIdx, x);	
+				osresult->setPrimalVariableValues(solIdx, x, osinstance->getVariableNumber());	
 			break;
 			
 			case STOP_AT_ACCEPTABLE_POINT:
@@ -666,12 +666,12 @@ void CouenneSolver::writeResult(){
 				/* Retrieve the solution */
 				//
 				*(z + 0)  =  bb.bestObj();
-				osresult->setObjectiveValues(solIdx, z);
+				osresult->setObjectiveValues(solIdx, z, osinstance->getConstraintNumber());
 				for(i=0; i < osinstance->getVariableNumber(); i++){
 					*(x + i) = bb.model().getColSolution()[i];
 					//std::cout <<  *(x + i)  << std::endl;
 				}
-				osresult->setPrimalVariableValues(solIdx, x);				
+				osresult->setPrimalVariableValues(solIdx, x, osinstance->getVariableNumber());				
 			break;
 			
 			case LOCAL_INFEASIBILITY:

@@ -1,12 +1,12 @@
 /** @file parseosrl.l
  * 
  * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005
+ * @version 2.0, 02/04/2009
  * @since   OS1.0
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Jun Ma, Kipp Martin,
- * Northwestern University, and the University of Chicago.
+ * Copyright (C) 2005-2009, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Northwestern University, Dalhousie University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -14,13 +14,10 @@
  */
 %{
 
+#include <iostream>
 #include "OSDataStructures.h"
 #include "OSMathUtil.h"
 #include "OSConfig.h"
-
-#include <iostream>
-
-
 
 #ifdef HAVE_CSTDIO
 # include <cstdio>
@@ -42,19 +39,30 @@
 # endif
 #endif
 
-
-
-
+#ifdef HAVE_CMATH
+# include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# else
+#  error "don't have header file for math"
+# endif
+#endif
+ 
 #include <sstream>  
-#include "OSErrorClass.h"
 #include "OSrLParserData.h"
+#include "OSErrorClass.h"
+#include "OSParseosrl.tab.hpp"
+#include "OSResult.h"
 
-//#define PARSERDEBUG
+
+#define PARSERDEBUG
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", yytext);
 #else     
 	#define YY_PRINT ;
 #endif
+
 
 #ifdef WIN_
   #define YY_NO_UNISTD_H
@@ -65,64 +73,120 @@
   #endif
 #endif
 
-#include "OSParseosrl.tab.hpp"
-
-
+using std::cout;
+using std::endl;
+using std::ostringstream;
      
 %}
 
+%option prefix="osrl"
+%option noyywrap  
 %option reentrant
 %option bison-bridge
 %option bison-locations
-
-
-%option prefix="osrl"
 %option yylineno   
-%option noyywrap  
-%x attributetext
+
 %x osrlattributetext
+%x doublequoteattributetext
+%x singlequoteattributetext
+%x startelement
+%x elementtext
 %x comment
 %x xmldeclaration
+
+
    
 %{
 #define YY_EXTRA_TYPE OSrLParserData*
 %}  
 
-xmlwhitespace ([ \t\r\n])
-equality ([ \t\r\n])*=([ \t\r\n])*
+xmlwhitespace ([ \t\n\r])
+equality ([ \t\n\r])*=([ \t\n]\r)*
 quote (\"|\') 
+twoquotes (\"\"|\'\')
 greater_than (>)
-attname ([a-zA-Z][a-zA-Z0-9.:_]+)
-startelementname (<[a-zA-Z][a-zA-Z0-9.:_]+)
-endelementname (<\/[a-zA-Z][a-zA-Z0-9.:_]+)
+aninteger (-?[0-9]+)
+adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF))
 %% 
 
 
-{xmlwhitespace}* {printf("HERE IS WHITESPACE\n");}
+{xmlwhitespace}* 
 
+ /* General patterns matched in more than one element */
 
-{quote} {YY_PRINT;  yylval->charval = yytext; return(QUOTE);}
-({xmlwhitespace}*{greater_than}) {YY_PRINT;     return(GREATERTHAN);}
--?[0-9]+  {YY_PRINT; yylval->ival = atoi( yytext); return(INTEGER);}
--?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF) {YY_PRINT; char *yytextEnd;
+{quote} {YY_PRINT;  yylval->sval = yytext; return(QUOTE);}
+{twoquotes} {YY_PRINT;  yylval->sval = yytext; return(TWOQUOTES);}
+({xmlwhitespace}*{greater_than}{xmlwhitespace}*) {YY_PRINT;     return(GREATERTHAN);}
+({xmlwhitespace}*{aninteger})  {YY_PRINT; yylval->ival = atoi(yytext); return(INTEGER);}
+
+({xmlwhitespace}*{adouble}) {YY_PRINT; 
+char *yytextEnd;
 yylval->dval = os_strtod_wrap( yytext, &yytextEnd);
 	if( (unsigned)(yytextEnd - yytext) != strlen( yytext)){
 		std::ostringstream outStr;
-		outStr << "encountered a spurious character in the lexer" << std::endl;
+		outStr << "encountered a spurious character in the lexer" << endl;
 		outStr << "The first character is: ";
 		outStr <<  yytext;
-		outStr << std::endl;
-		outStr << "See line number: " << yylineno << std::endl;  
+		outStr << endl;
+		outStr << "See line number: " << yylineno << endl;  
 		throw ErrorClass( outStr.str());
-	} 
+	}
 return(DOUBLE);}
+
 ({xmlwhitespace}*\/>) {YY_PRINT;  return(ENDOFELEMENT);}
 
+({xmlwhitespace}+numberOfTimes{equality}) {YY_PRINT; return(NUMBEROFTIMESATT);}
+({xmlwhitespace}+numberOfSolutions{equality}) {YY_PRINT; return(NUMBEROFSOLUTIONSATT);}
+({xmlwhitespace}+numberOfVariables{equality}) {YY_PRINT; return(NUMBEROFVARIABLESATT);}
+({xmlwhitespace}+numberOfObjectives{equality}) {YY_PRINT; return(NUMBEROFOBJECTIVESATT);}
+({xmlwhitespace}+numberOfConstraints{equality}) {YY_PRINT; return(NUMBEROFCONSTRAINTSATT);}
+({xmlwhitespace}+numberOfOtherVariableResults{equality}) {YY_PRINT; return(NUMBEROFOTHERVARIABLERESULTSATT);}
+({xmlwhitespace}+numberOfOtherObjectiveResults{equality}) {YY_PRINT; return(NUMBEROFOTHEROBJECTIVERESULTSATT);}
+({xmlwhitespace}+numberOfOtherConstraintResults{equality}) {YY_PRINT; return(NUMBEROFOTHERCONSTRAINTRESULTSATT);}
+({xmlwhitespace}+numberOfVar{equality}) {YY_PRINT; return(NUMBEROFVARATT);}
+({xmlwhitespace}+numberOfObj{equality}) {YY_PRINT; return(NUMBEROFOBJATT);}
+({xmlwhitespace}+numberOfCon{equality}) {YY_PRINT; return(NUMBEROFCONATT);}
+({xmlwhitespace}+idx{equality}{quote}{xmlwhitespace}*) {YY_PRINT; return(IDXATT);}
+({xmlwhitespace}+targetObjectiveIdx{equality}) {YY_PRINT;  return(TARGETOBJECTIVEIDXATT);}
 
+({xmlwhitespace}+name{equality}\"\") {YY_PRINT; return(EMPTYNAMEATT);}
+({xmlwhitespace}+name{equality}\'\') {YY_PRINT; return(EMPTYNAMEATT);}
+({xmlwhitespace}+name{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(NAMEATT);}
+({xmlwhitespace}+name{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(NAMEATT);}
+({xmlwhitespace}+type{equality}\"\") {YY_PRINT; return(EMPTYTYPEATT);}
+({xmlwhitespace}+type{equality}\'\') {YY_PRINT; return(EMPTYTYPEATT);}
+({xmlwhitespace}+type{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(TYPEATT);}
+({xmlwhitespace}+type{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(TYPEATT);}
+({xmlwhitespace}+category{equality}\"\") {YY_PRINT; return(EMPTYCATEGORYATT);}
+({xmlwhitespace}+category{equality}\'\') {YY_PRINT; return(EMPTYCATEGORYATT);}
+({xmlwhitespace}+category{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(CATEGORYATT);}
+({xmlwhitespace}+category{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(CATEGORYATT);}
+({xmlwhitespace}+unit{equality}\"\") {YY_PRINT; return(EMPTYUNITATT);}
+({xmlwhitespace}+unit{equality}\'\') {YY_PRINT; return(EMPTYUNITATT);}
+({xmlwhitespace}+unit{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(UNITATT);}
+({xmlwhitespace}+unit{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(UNITATT);}
+({xmlwhitespace}+value{equality}\"\") {YY_PRINT; return(EMPTYVALUEATT);}
+({xmlwhitespace}+value{equality}\'\') {YY_PRINT; return(EMPTYVALUEATT);}
+({xmlwhitespace}+value{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(VALUEATT);}
+({xmlwhitespace}+value{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(VALUEATT);}
+({xmlwhitespace}+description{equality}\"\") {YY_PRINT; return(EMPTYDESCRIPTIONATT);}
+({xmlwhitespace}+description{equality}\'\') {YY_PRINT; return(EMPTYDESCRIPTIONATT);}
+({xmlwhitespace}+description{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(DESCRIPTIONATT);}
+({xmlwhitespace}+description{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(DESCRIPTIONATT);}
+
+
+{xmlwhitespace}*\<osrl{xmlwhitespace}*\> {return(OSRLSTARTEMPTY);}
 {xmlwhitespace}*\<osrl{xmlwhitespace}+ {YY_PRINT; BEGIN osrlattributetext;  return(OSRLSTART);}
 {xmlwhitespace}*\<\/osrl{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OSRLEND);}
-{xmlwhitespace}*\<resultHeader{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(RESULTHEADERSTART);}
-{xmlwhitespace}*\<\/resultHeader{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(RESULTHEADEREND);}
+{xmlwhitespace}*\<general{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(GENERALSTART);}
+{xmlwhitespace}*\<\/general{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(GENERALEND);}
+{xmlwhitespace}*\<system{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(SYSTEMSTART);}
+{xmlwhitespace}*\<\/system{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(SYSTEMEND);}
+{xmlwhitespace}*\<service{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(SERVICESTART);}
+{xmlwhitespace}*\<\/service{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(SERVICEEND);}
+{xmlwhitespace}*\<job{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(JOBSTART);}
+{xmlwhitespace}*\<\/job{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(JOBEND);}
+
 {xmlwhitespace}*\<serviceURI{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(SERVICEURISTART);}
 {xmlwhitespace}*\<serviceURI{xmlwhitespace}*\>\< {YY_PRINT; unput('<'); return(SERVICEURISTART);}
 {xmlwhitespace}*\<\/serviceURI{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(SERVICEURIEND);}
@@ -136,8 +200,10 @@ return(DOUBLE);}
 {xmlwhitespace}*\<jobID{xmlwhitespace}*\>\< {YY_PRINT; unput('<'); return(JOBIDSTART);}
 {xmlwhitespace}*\<\/jobID{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(JOBIDEND);}
 
-{xmlwhitespace}*\<time{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(TIMESTART);}
-{xmlwhitespace}*\<time{xmlwhitespace}*\>\< {YY_PRINT; unput('<'); return(TIMESTART);}
+{xmlwhitespace}*\<timingInformation {YY_PRINT; return(TIMINGINFORMATIONSTART);}
+{xmlwhitespace}*\<\/timingInformation{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(TIMINGINFORMATIONEND);}
+
+{xmlwhitespace}*\<time {YY_PRINT;  return(TIMESTART);}
 {xmlwhitespace}*\<\/time{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(TIMEEND);}
 
 {xmlwhitespace}*\<message{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MESSAGESTART);}
@@ -146,9 +212,6 @@ return(DOUBLE);}
 
 {xmlwhitespace}*\<generalStatus {YY_PRINT; return(GENERALSTATUSSTART);}
 {xmlwhitespace}*\<\/generalStatus{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(GENERALSTATUSEND);}
-
-{xmlwhitespace}*\<resultData{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(RESULTDATASTART);}
-{xmlwhitespace}*\<\/resultData{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(RESULTDATAEND);}
 
 {xmlwhitespace}*\<optimization {YY_PRINT; return(OPTIMIZATIONSTART);}
 {xmlwhitespace}*\<\/optimization{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OPTIMIZATIONEND);}
@@ -166,33 +229,23 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/dualValues{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(DUALVALUESEND);}
 
 {xmlwhitespace}*\<var {YY_PRINT; return(VARSTART);}
-{xmlwhitespace}*\<variables {YY_PRINT; return(VARIABLESSTART);}
 {xmlwhitespace}*\<\/var{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(VAREND);}
+{xmlwhitespace}*\<variables {YY_PRINT; return(VARIABLESSTART);}
 {xmlwhitespace}*\<\/variables{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(VARIABLESEND);}
 
 {xmlwhitespace}*\<obj {YY_PRINT; return(OBJSTART);}
-{xmlwhitespace}*\<objectives {YY_PRINT; return(OBJECTIVESSTART);}
 {xmlwhitespace}*\<\/obj{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OBJEND);}
+{xmlwhitespace}*\<objectives {YY_PRINT; return(OBJECTIVESSTART);}
 {xmlwhitespace}*\<\/objectives{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OBJECTIVESEND);}
 
 {xmlwhitespace}*\<con {YY_PRINT; return(CONSTART);}
-{xmlwhitespace}*\<constraints {YY_PRINT; return(CONSTRAINTSSTART);}
 {xmlwhitespace}*\<\/con{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(CONEND);}
+{xmlwhitespace}*\<constraints {YY_PRINT; return(CONSTRAINTSSTART);}
 {xmlwhitespace}*\<\/constraints{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(CONSTRAINTSEND);}
 
 
 {xmlwhitespace}*\<other {YY_PRINT; return(OTHERSTART);}
 {xmlwhitespace}*\<\/other{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OTHEREND);}
-
-({xmlwhitespace}+numberOfSolutions{equality}{quote}{xmlwhitespace}*) {YY_PRINT; return(NUMBEROFSOLUTIONSATT);}
-({xmlwhitespace}+numberOfVariables{equality}{quote}{xmlwhitespace}*) {YY_PRINT; return(NUMBEROFVARIABLESATT);}
-({xmlwhitespace}+numberOfConstraints{equality}{quote}{xmlwhitespace}*) {YY_PRINT; return(NUMBEROFCONSTRAINTSATT);}
-({xmlwhitespace}+numberOfObjectives{equality}{quote}{xmlwhitespace}*) {YY_PRINT; return(NUMBEROFOBJECTIVESATT);}
-({xmlwhitespace}+objectiveIdx{equality}{quote}{xmlwhitespace}*) {YY_PRINT; return(OBJECTIVEIDXATT);}
-({xmlwhitespace}+idx{equality}{quote}{xmlwhitespace}*) {YY_PRINT; return(IDXATT);}
-({xmlwhitespace}+type{equality}{quote}{xmlwhitespace}*) {YY_PRINT; BEGIN attributetext; return(TYPEATT);}
-({xmlwhitespace}+description{equality}{quote}{xmlwhitespace}*) {YY_PRINT; BEGIN attributetext; return(DESCRIPTIONATT);}
-({xmlwhitespace}+name{equality}{quote}{xmlwhitespace}*) {YY_PRINT; BEGIN attributetext; return(NAMEATT);}
 
 (\<serviceURI{xmlwhitespace}*\/>) {YY_PRINT;  return(SERVICEURISTARTANDEND);}
 (\<serviceName{xmlwhitespace}*\/>) {YY_PRINT;  return(SERVICENAMESTARTANDEND);}
@@ -200,12 +253,11 @@ return(DOUBLE);}
 (\<jobID{xmlwhitespace}*\/>) {YY_PRINT;  return(JOBIDSTARTANDEND);}
 (\<time{xmlwhitespace}*\/>) {YY_PRINT;  return(TIMESTARTANDEND);}
 (\<message{xmlwhitespace}*\/>) {YY_PRINT;  return(MESSAGESTARTANDEND);}
-(\<resultData{xmlwhitespace}*\/>) {YY_PRINT;  return(RESULTDATASTARTANDEND);}
 
 
 
 
-[a-zA-Z0-9.:_*#$@ \n]+ { YY_PRINT;  yylval->charval = strdup( yytext);   yyextra->errorText = yylval->charval;    /*yylval->charval = yytext;*/  return (ELEMENTTEXT); }
+[a-zA-Z0-9.:_*#$@ \n]+ { YY_PRINT;  yylval->sval = strdup( yytext);   yyextra->errorText = yylval->sval;    /*yylval->sval = yytext;*/  return (ELEMENTTEXT); }
 
 "<!--" BEGIN comment;
  <comment>. |
@@ -215,23 +267,18 @@ return(DOUBLE);}
 "<?" BEGIN xmldeclaration;
  <xmldeclaration>. |
  <xmldeclaration>\n ;
- 
- <xmldeclaration>"?>" BEGIN 0;
+  <xmldeclaration>"?>" BEGIN 0;
 
 
-
-
-
-<attributetext>([^\"\'])+ {YY_PRINT;  BEGIN 0;  /*yylval->charval = strdup(yytext);*/ yylval->charval = strdup( yytext);  
-							  return(ATTRIBUTETEXT);}
-							
-<osrlattributetext>([^>])* {YY_PRINT;  BEGIN 0; /*yylval->charval = strdup(yytext);*/  yylval->charval = yytext; return(OSRLATTRIBUTETEXT);}
+<doublequoteattributetext>[^\"]* {YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext);  /* yylval->sval = yytext;*/ return(ATTRIBUTETEXT);}
+<singlequoteattributetext>[^\']* {YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext);   /*yylval->sval = yytext;*/ return(ATTRIBUTETEXT);}
+<osrlattributetext>([^>])* {YY_PRINT;  BEGIN 0; /*yylval->sval = strdup(yytext);*/  yylval->sval = yytext; return(OSRLATTRIBUTETEXT);}
 
 
 .|\n { 
 	std::string error;
 	std::ostringstream outStr;
-        outStr << "encountered a spurious character in the lexer" << std::endl;
+	outStr << "encountered a spurious character in the lexer" << std::endl;
 	outStr << "The first character is: ";
 	outStr <<  yytext;
 	outStr << std::endl;
@@ -239,9 +286,6 @@ return(DOUBLE);}
 	error = outStr.str();
 	throw ErrorClass( error);
 }
-
-
-
 
 %%
 

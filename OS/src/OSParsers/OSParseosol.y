@@ -1,11 +1,11 @@
 /** @file parseosol.y
  *
  * @author  Horand Gassmann, Jun Ma, Kipp Martin,
- * @version 1.1, 10/07/2008
+ * @version 2.0, 02/04/2009
  * @since   OS1.1
  *
  * \remarks
- * Copyright (C) 2005-2008, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2009, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, Dalhousie University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License.
@@ -74,9 +74,9 @@ int osollex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token <sval> ELEMENTTEXT
 %token <ival> INTEGER
 %token <dval> DOUBLE
-%token <sval> QUOTE
+%token <dval> QUOTE
 
-%token GREATERTHAN ENDOFELEMENT
+%token TWOQUOTES GREATERTHAN ENDOFELEMENT
 %token OSOLSTART OSOLSTARTEMPTY OSOLATTRIBUTETEXT OSOLEND
 
 
@@ -471,12 +471,12 @@ QUOTE;
 
 mindiskspacebody: ENDOFELEMENT
 	| GREATERTHAN MINDISKSPACEEND
-        | GREATERTHAN DOUBLE MINDISKSPACEEND
+	| GREATERTHAN DOUBLE MINDISKSPACEEND
 {	if ($2 < 0)
 		osolerror( NULL, osoption, parserData, "minDiskSpace cannot be negative");
 	osoption->system->minDiskSpace->value = $2;
 }
-        | GREATERTHAN INTEGER MINDISKSPACEEND
+	| GREATERTHAN INTEGER MINDISKSPACEEND
 {	if ($2 < 0)
 		osolerror( NULL, osoption, parserData, "minDiskSpace cannot be negative");
 	osoption->system->minDiskSpace->value = $2;
@@ -2949,4 +2949,3 @@ void  yygetOSOption(const char *parsestring, OSOption *osoption, OSoLParserData 
 		throw ErrorClass(  eclass.errormsg);
 	}
 } //end yygetOSOption
-

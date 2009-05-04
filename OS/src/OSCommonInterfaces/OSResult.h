@@ -24,7 +24,7 @@
 /*! \class GeneralSubstatus
  *  \brief The GeneralSubstatus  Class.
  * 
- * @author Robert Fourer, Hoand Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 11/03/2008
  * @since OS 2.0
  * 
@@ -59,7 +59,7 @@ public:
 /*! \class GeneralStatus
  *  \brief The GeneralStatus  Class.
  * 
- * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
  * @since OS 1.0
  * 
@@ -97,18 +97,18 @@ public:
 };//GeneralStatus
 
 
-/*! \class ResultHeader
- *  \brief The ResultHeader  Class.
+/*! \class GeneralResult
+ *  \brief The GeneralResult  Class.
  * 
- * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
  * @since OS 1.0
  * 
  * \remarks
- * A class that provides the header information 
- * that is defined the OSrL schema.  
+ * A class that provides the general information 
+ * that is defined in the OSrL schema.  
  */
-class ResultHeader{
+class GeneralResult{
 public:
 
 	/** a pointer to the GeneralStatus class */
@@ -144,20 +144,199 @@ public:
 	 *
 	 * Default constructor. 
 	 */
-	ResultHeader();
+	GeneralResult();
 	/**
 	 *
 	 * Class destructor. 
 	 */
-	~ResultHeader();
-};//class ResultHeader
+	~GeneralResult();
+};//class GeneralResult
+
+
+/*! \class SystemResult
+ *  \brief The SystemResult  Class.
+ * 
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class that provides the system information 
+ * that is defined in the OSrL schema.  
+ */
+class SystemResult{
+public:
+	
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	SystemResult();
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~SystemResult();
+};//class SystemResult
+
+
+/*! \class ServiceResult
+ *  \brief The ServiceResult  Class.
+ * 
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class that provides the system information 
+ * that is defined in the OSrL schema.  
+ */
+class ServiceResult{
+public:
+	
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	ServiceResult();
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~ServiceResult();
+};//class ServiceResult
+
+
+/*! \class Time
+ *  \brief The Time  Class.
+ * 
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class that provides an array of individual time measurements
+ * that are defined in the OSrL schema.  
+ */
+class Time{
+public:
+
+	/** 
+	 *
+	 * The type of timer used (cpuTime/elapsedTime/other)
+	 */
+	std::string type;
+
+	/** 
+	 *
+	 * The category of time (total/input/preprocessing/optimization/postprocessing/output/other)
+	 */
+	std::string category;
+
+	/** 
+	 *
+	 * The unit of time (tick/millisecond/second/minute/hour/day/week/month/year)
+	 */
+	std::string unit;
+
+	/** 
+	 *
+	 * Further description on the timer used
+	 */
+	std::string description;
+
+	/**
+	 *
+	 * The time measurement
+	 */
+	double value;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	Time();
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~Time();
+};//class Time
+
+
+/*! \class TimingInformation
+ *  \brief The TimingInformation  Class.
+ * 
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class that provides the timer information 
+ * that is defined in the OSrL schema.  
+ */
+class TimingInformation{
+public:
+
+	/** 
+	 *
+	 * An array of time measurements
+	 */
+	Time** time;
+
+	/**
+	 *
+	 * The number of elements in the time array
+	 */
+	int numberOfTimes;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	TimingInformation();
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~TimingInformation();
+};//class TimingInformation
+
+
+/*! \class JobResult
+ *  \brief The JobResult  Class.
+ * 
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class that provides the system information 
+ * that is defined in the OSrL schema.  
+ */
+class JobResult{
+public:
+	
+	TimingInformation* timingInformation;
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	JobResult();
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~JobResult();
+};//class JobResult
+
 
 
 
 /*! \class OptimizationSolutionSubstatus
  *  \brief The OptimizationSolutionSubstatus Class.
  * 
- * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
  * @since OS 1.0
  * 
@@ -191,7 +370,7 @@ public:
 /*! \class OptimizationSolutionStatus
  *  \brief The OptimizationSolutionStatus Class.
  * 
- * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
  * @since OS 1.0
  * 
@@ -230,7 +409,7 @@ public:
 /*! \class VarValue
  *  \brief VarValue  Class.
  * 
- * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
  * @since OS 1.0
  * 
@@ -266,7 +445,7 @@ public:
 /*! \class VariableValues
  *  \brief The VariableValues Class.
  * 
- * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
  * @since OS 1.0
  * 
@@ -304,7 +483,7 @@ public:
 /*! \class VarStringValue
  *  \brief VarStringValue  Class.
  * 
- * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
  * @since OS 1.0
  * 
@@ -341,7 +520,7 @@ public:
 /*! \class VariableStringValues
  *  \brief The VariableStringValues Class.
  * 
- * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
  * @since OS 1.0
  * 
@@ -379,7 +558,7 @@ public:
 /*! \class OtherVarResult
  *  \brief OtherVarResult Class.
  * 
- * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
  * @since OS 1.0
  * 
@@ -418,7 +597,7 @@ public:
 /*! \class OtherVariableResult
  *  \brief The OtherVariableResult  Class.
  * 
- * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
  * @since OS 1.0
  * 
@@ -469,7 +648,7 @@ public:
 /*! \class VariableSolution
  *  \brief The VariableSolution Class.
  * 
- * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
  * @since OS 1.0
  * 
@@ -515,7 +694,7 @@ public:
 /*! \class ObjValue
  *  \brief The ObjValue  Class.
  * 
- * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
  * @since OS 1.0
  * 
@@ -548,7 +727,7 @@ public:
 /*! \class ObjectiveValues
  *  \brief The ObjectiveValues  Class.
  * 
- * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
  * @since OS 1.0
  * 
@@ -586,7 +765,7 @@ public:
 /*! \class OtherObjResult
  *  \brief The OtherObjResult  Class.
  * 
- * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
  * @since OS 1.0
  * 
@@ -626,7 +805,7 @@ public:
 /*! \class OtherObjectiveResult
  *  \brief The OtherObjectiveResult  Class.
  * 
- * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
  * @since OS 1.0
  * 
@@ -679,7 +858,7 @@ public:
 /*! \class ObjectiveSolution
  *  \brief The ObjectiveSolution Class.
  * 
- * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
  * @since OS 1.0
  * 
@@ -722,7 +901,7 @@ public:
 /*! \class DualVarValue
  *  \brief The DualVarValue  Class.
  * 
- * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
  * @since OS 1.0
  * 
@@ -772,7 +951,7 @@ public:
 /*! \class DualVariableValues
  *  \brief The DualVariableValues Class.
  * 
- * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
  * @since OS 1.0
  * 
@@ -810,7 +989,7 @@ public:
 /*! \class OtherConResult
  *  \brief The OtherConResult  Class.
  * 
- * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
  * @since OS 1.0
  * 
@@ -852,7 +1031,7 @@ public:
 /*! \class OtherConstraintResult
  *  \brief The OtherConstraintResult  Class.
  * 
- * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
  * @since OS 1.0
  * 
@@ -906,7 +1085,7 @@ public:
 /*! \class ConstraintSolution
  *  \brief The ConstraintSolution Class.
  * 
- * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
  * @since OS 1.0
  * 
@@ -951,7 +1130,7 @@ public:
 /*! \class OtherOptimizationResult
  *  \brief The OtherOptimizationResult  Class.
  * 
- * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
  * @since OS 1.0
  * 
@@ -993,7 +1172,7 @@ public:
 /*! \class OptimizationSolution
  *  \brief The OptimizationSolution Class.
  * 
- * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
  * @since OS 1.0
  * 
@@ -1007,7 +1186,7 @@ public:
 	/** the index of the objective function for which we are 
 	 * reporting solution information 
 	 */
-	int objectiveIdx;
+	int targetObjectiveIdx;
 
 	/** the number of other results associated with this solution */
 	int numberOfOtherResults;
@@ -1058,7 +1237,7 @@ public:
 /*! \class OptimizationResult
  *  \brief The OptimizationResult Class.
  * 
- * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
  * @since OS 1.0
  * 
@@ -1108,41 +1287,12 @@ public:
 
 };// class OptimizationResult
 
-/*! \class ResultData
- *  \brief The ResultData Class.
- * 
- * @author Robert Fourer, Jun Ma, Kipp Martin
- * @version 1.0, 03/14/2004
- * @since OS 1.0
- * 
- * \remarks
- * A class for the result data in an optimization.
- */
-class ResultData{
-public:
-
-	/** optimization is a pointer to an OptimizationResult
-	 * object
-	 */
-	OptimizationResult *optimization;
-
-	/**
-	 *
-	 * Default constructor. 
-	 */
-	ResultData();
-	/**
-	 *
-	 * Class destructor. 
-	 */
-	~ResultData();
-};//class ResultData
 
 
 /*! \class OSResult
  *  \brief The Result Class.
  * 
- * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
  * @since OS 1.0
  * 
@@ -1154,14 +1304,29 @@ class OSResult{
 public:
 
 	/**
-	 * resultHeader holds the first child of the OSResult specified by the OSrL Schema. 
+	 * general holds the first child of the OSResult specified by the OSrL Schema. 
 	 */
-	ResultHeader *resultHeader;
+	GeneralResult *general;
 
 	/**
-	 * resultData holds the second child of the OSResult specified by the OSrL Schema. 
+	 * system holds the second child of the OSResult specified by the OSrL Schema. 
 	 */
-	ResultData *resultData;
+	SystemResult *system;
+
+	/**
+	 * service holds the third child of the OSResult specified by the OSrL Schema. 
+	 */
+	ServiceResult *service;
+
+	/**
+	 * job holds the fourth child of the OSResult specified by the OSrL Schema. 
+	 */
+	JobResult *job;
+
+	/**
+	 * optimization holds the fifth child of the OSResult specified by the OSrL Schema. 
+	 */
+	OptimizationResult *optimization;
 
 	/**
 	 *
@@ -1267,15 +1432,21 @@ public:
 	 * @return the general message. 
 	 */
 	std::string getGeneralMessage();
-	
-	
+
 	/**
-	 * Get one solution of optimal primal variable values. 
-	 * 
-	 * @param objIdx holds the objective index the optimal value corresponds to. 
-	 * @return a double with the optimal objective function value. 
+	 *  Get the number of time measurements. 
+	 *
+	 *  @return the number of time measurements
 	 */
-	double getOptimalObjValue(int objIdx);
+	int getTimeNumber();
+
+	/**
+	 *  Get the time measurement. In the first instance, assume that there is only
+	 *  a single measure, which is the total elapsed time in seconds
+	 *
+	 *  @return the time measurement
+	 */
+	double getTimeValue();
 
 	/**
 	 * Get one solution of optimal primal variable values. 
@@ -1284,6 +1455,14 @@ public:
 	 * @return a double dense array of the optimal values, null if no optimal value. 
 	 */
 	double* getOptimalPrimalVariableValues(int objIdx);
+	
+	/**
+	 * Get one solution of optimal primal variable values. 
+	 * 
+	 * @param objIdx holds the objective index the optimal value corresponds to. 
+	 * @return a double with the optimal objective function value. 
+	 */
+	double getOptimalObjValue(int objIdx);
 
 	/**
 	 * Get one solution of optimal dual variable values. 
@@ -1448,6 +1627,26 @@ public:
 	 */
 	bool setTime(double time);
 		
+   	/**
+	 * Add timing information.
+	 * 
+	 * @param type holds the timer type (cpuTime/elapsedTime/other). 
+	 * @param category holds the timer category (total/input/preprocessing, etc.)
+	 * @param unit holds the timer unit (tick/milliscond/second/minute/etc.) 
+	 * @param description holds further information about the timer. 
+	 * @param value holds the time measurement. 
+	 * @return whether the time is set successfully. 
+	 */
+	bool addTimingInformation(std::string type, std::string category,
+							  std::string unit, std::string description, double value);
+	
+	/**
+	 * Set the number of time measurements. 
+	 * 
+	 * @param timeNumber holds the number of measurements
+	 * @return whether the time number is set successfully or not. 
+	 */
+	bool setTimeNumber(int timeNumber);
 	
 	/**
 	 * Set the variable number. 
@@ -1517,16 +1716,28 @@ public:
 	bool setSolutionObjectiveIndex(int solIdx, int objectiveIdx);
 	
 	/**
-	 * Set the [i]th optimization solution's primal variable values, where i equals the given solution index.   
+	 * Set the [i]th optimization solution's number of primal variable values, where i equals the given solution index.   
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
 	 * @param solIdx holds the solution index to set the primal variable values. 
-	 * @param x holds the a double dense array of variable values to set; it could be null if all variables are 0.
+	 * @param n holds the number of elements in the array x
 	 * 
 	 * @return whether primal variable values are set successfully or not. 
 	 * @see #setSolutionNumber(int)
 	 */
-	bool setPrimalVariableValues(int solIdx, double *x);
+	bool setNumberOfPrimalVariableValues(int solIdx, int n);
 		
+	
+	/**
+	 * Set the [i]th optimization solution's primal variable values, where i equals the given solution index.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the primal variable values. 
+	 * @param x holds the a double dense array of variable values to set; it could be null if all variables are 0.
+	 * @param n holds the number of elements in the array x
+	 * 
+	 * @return whether primal variable values are set successfully or not. 
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setPrimalVariableValues(int solIdx, double *x, int n);
 	/**
 	 * Set the [i]th optimization solution's other (non-standard/solver specific)variable-related results, 
 	 * where i equals the given solution index.   
@@ -1551,16 +1762,18 @@ public:
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
 	 * @param solIdx holds the solution index  
 	 * @param otherIdx holds the index of the new OtherVariableResult object
-	 * @name holds the name of the other element
-	 * @std::string a pointer to the values of the var element
+	 * @param name holds the name of the other element
+	 * @param s holds a pointer to the array of values of the var element
+	 * @param n holds the number of elements of the array
 	 *
 	 * @return whether the other variable results are set successfully or not. 
 	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVariableResult
 	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult
 	 * @see #setSolutionNumber(int)
 	 */
-	bool setAnOtherVariableResult(int solIdx, int otherIdx, std::string name, std::string description, std::string *s);
-		
+	bool setAnOtherVariableResult(int solIdx, int otherIdx, std::string name, std::string description, int *indexes,  std::string *s, int n);
+
+
 	
 	/**
 	 * Set the [i]th optimization solution's objective values, where i equals the given solution index.   
@@ -1572,11 +1785,12 @@ public:
 	 * @param objectiveValues holds the a double dense array of objective values to set.
 	 * Possibly only the objective that the solution is based on has the value, and the rest of the objective
 	 * values all get a Double.NaN value, meaning that they are not calculated.   
+	 * @param n holds the dimension of the objectiveValues array 
 	 * 
 	 * @return whether objective values are set successfully or not. 
 	 * @see #setSolutionNumber(int)
 	 */
-	bool setObjectiveValues(int solIdx, double *objectiveValues);
+	bool setObjectiveValues(int solIdx, double *objectiveValues, int n);
 	
 
 	/**
@@ -1586,33 +1800,37 @@ public:
 	 * @param solIdx holds the solution index to set the dual variable values. 
 	 * @param lbValues holds the a double dense array of variable dual values to set at the lower bounds; it could be null if all values are 0.
 	 * @param ubValues holds the a double dense array of variable dual values to set at the upper bounds; it could be null if all values are 0.
+	 * @param n holds the number of values in the lbValues and ubValues arrays
 	 * 
 	 * @return whether dual variable values are set successfully or not. 
 	 * @see #setSolutionNumber(int)
 	 */	
-	bool setDualVariableValues(int solIdx, double* lbValues, double* ubValues);
-	
+	bool setDualVariableValues(int solIdx, double* lbValues, double* ubValues, int n);
+
+
 	/**
 	 * Set the [i]th optimization solution's dual variable values, where i equals the given solution index. 
 	 * The method allows setting dual values at both the constraints' lower and upper bounds.   
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
 	 * @param solIdx holds the solution index to set the dual variable values. 
-	 * @param y holds the a double dense array of variable dual values; it could be null if all values are 0.	 * 
+	 * @param y holds a double dense array of variable dual values; it could be NULL if all values are 0.
+	 * @param n holds the number of elements of the array y.
 	 * @return whether dual variable values are set successfully or not. 
 	 * @see #setSolutionNumber(int)
 	 */	
-	bool setDualVariableValues(int solIdx, double *y);
+	bool setDualVariableValues(int solIdx, double *y, int n);
 	
 	/**
 	 * Set the [i]th optimization solution's constraint values, where i equals the given solution index.   
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
 	 * @param solIdx holds the solution index to set the constraint values. 
 	 * @param constraintValues holds the a double dense array of constraint values to set; it could be null if all constraint values are 0.
+	 * @param n holds the dimension of the array constraintValues.
 	 * 
 	 * @return whether constraint values are set successfully or not. 
 	 * @see #setSolutionNumber(int)
 	 */
-	bool setConstraintValues(int solIdx, double *constraintValues);
+	bool setConstraintValues(int solIdx, double *constraintValues, int n);
 
 
 

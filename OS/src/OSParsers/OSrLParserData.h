@@ -17,6 +17,7 @@
 
 #include "OSnLNode.h"
 #include <vector> 
+#include <sstream>
 
 
 
@@ -35,13 +36,33 @@ struct OtherVariableResultStruct{
 	 */ 
 	std::string description;
 	
+	/** value holds the text of the value attribute 
+	 * of the OtherVariableResult element
+	 */ 
+	std::string value;
+	
+	/** numberOfVar holds the number of variables in the <var> array
+	 * of the OtherVariableResult element
+	 */ 
+	int numberOfVar;
+
 	/** otherVarText is a pointer to an array with number of 
-	 * elements equal to number of variables, each element of the
+	 * elements equal to the number of variables. Each element of the
 	 * array is the value of the variable corresponding to the
 	 * OtherVariableResult, e.g. a variable name or variable
 	 * reduced cost, etc.
 	 */
 	std::string *otherVarText;
+	
+
+	/** otherVarIndex is a pointer to an array with number of 
+	 * elements equal to the number of variables. Each element of the
+	 * array is the index of the variable corresponding to the
+	 * OtherVariableResult, e.g. a variable name or variable
+	 * reduced cost, etc.
+	 */
+	int *otherVarIndex;
+		
 };
 
 
@@ -73,8 +94,25 @@ public:
 	/** the status Description of the solution */
 	std::string statusDescription;
 
+	/** the next few variables store a time measurement and associated 
+	    attribute values */
+	double timeValue;
+	std::string timeType;
+	std::string timeCategory;
+	std::string timeUnit;
+	std::string timeDescription;
+
+	/** There could be more than one time measurement;
+	 *  numberOfTimes stores the number of them */
+	int numberOfTimes;
+
+	/** Provide temporary storage for attribute values associated with an OtherVarResult */
+	std::string tmpOtherValue;
+	std::string tmpOtherName;
+	std::string tmpOtherDescription;
+
 	/** scanner is used to store data in a reentrant lexer 
-	 * we use this to pass an OSrLParserData object to the parser*/
+	 *  we use this to pass an OSrLParserData object to the parser*/
 	void* scanner;
 	
 	/** number of result solutions */
@@ -89,8 +127,20 @@ public:
 	/** number of Objectives in the solution instance */
 	int numberOfObjectives;
 	
-	/** a tempory counter to count variables, number of attributes, etc. */
+	/** a temporary counter to count variables, number of attributes, etc. */
 	int kounter;
+
+	/** a temporary counter to count other variable, objective and constraint results */
+	int iOther;
+
+	/** a temporary variable to hold an integer index value */
+	int ivar;
+
+	/** a temporary variable to hold an integer or double value */
+	double tempVal;
+	
+	/** a temporary variable to hold an output stream value */
+	std::ostringstream outStr;
 	
 	/** the number of types of variable results other
 	 * than the value of the variable
@@ -140,9 +190,8 @@ public:
 	/** store a vector of pointers to otherVarVec structures */
 	std::vector<OtherVariableResultStruct*> otherVarVec;
 	
-	
 	/**  if the parser finds invalid text it is held here and we delete
-	 * if the file was not valid
+	 *   if the file was not valid
 	 */
 	char *errorText;
 };
