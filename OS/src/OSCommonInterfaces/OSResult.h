@@ -1267,6 +1267,15 @@ public:
 	 * @return the general message. 
 	 */
 	std::string getGeneralMessage();
+	
+	
+	/**
+	 * Get one solution of optimal primal variable values. 
+	 * 
+	 * @param objIdx holds the objective index the optimal value corresponds to. 
+	 * @return a double with the optimal objective function value. 
+	 */
+	double getOptimalObjValue(int objIdx);
 
 	/**
 	 * Get one solution of optimal primal variable values. 

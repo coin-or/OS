@@ -684,6 +684,35 @@ double* OSResult::getOptimalPrimalVariableValues(int objIdx){
 	return m_mdPrimalValues;		
 }//getOptimalPrimalVariableValues
 
+double OSResult::getOptimalObjValue(int objIdx){
+
+	try{
+		if(resultData->optimization == NULL || resultData->optimization->solution == NULL) 
+			throw ErrorClass("There is no optimal solution");
+		int iSolutions = this->getSolutionNumber();
+
+
+		for(int i = 0; i < iSolutions; i++){
+			if(resultData->optimization->solution[i]->objectiveIdx != objIdx) continue;
+			if(resultData->optimization->solution[i]->variables == NULL) continue;
+			if(resultData->optimization->solution[i]->variables->values == NULL) continue;
+			if((resultData->optimization->solution[i]->status->type.find("ptimal") != string::npos ) ||
+				resultData->optimization->solution[i]->status->type.compare("globallyOptimal") == 0){	
+				return 	this->resultData->optimization->solution[i]->objectives->values->obj[ abs( objIdx)  -1 ]->value;
+			}	
+			else{
+				throw ErrorClass("There is no optimal solution");
+			}
+		}
+
+		throw ErrorClass("There is no optimal solution");
+	}
+	catch(const ErrorClass& eclass){
+		throw ErrorClass(  eclass.errormsg); 
+	}
+}//getOptimalObjValue
+
+
 
 double* OSResult::getOptimalDualVariableValues(int objIdx){
 	if(resultData->optimization == NULL || resultData->optimization->solution == NULL) return NULL;
