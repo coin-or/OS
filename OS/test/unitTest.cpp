@@ -726,6 +726,7 @@ if(THOROUGH == true){
 		delete ipoptSolver;
 		ipoptSolver = NULL;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+		//return 0;
 
 		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on parincQuadratic.osil" << endl << endl;
 		cout << "create a new IPOPT Solver for OSiL string solution" << endl;
@@ -903,7 +904,7 @@ if(THOROUGH == true){
 		delete osolreader;
 		osolreader = NULL;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
-
+		#if 0
 		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on rosenbrockorig.osil" << endl << endl;
 //		OSiLReader *osilreader = NULL;
 		osilreader = new OSiLReader(); 
@@ -951,6 +952,7 @@ if(THOROUGH == true){
 		delete osolreader;
 		osolreader = NULL;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+		#endif
 #if 0
 		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on HS071_feas.osil" << endl << endl;
 //		OSiLReader *osilreader = NULL;

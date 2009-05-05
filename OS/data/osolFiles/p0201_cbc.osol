@@ -25,7 +25,7 @@
 
 		
 			<solverOption name="maxN" solver="cbc" value="100" />
-			<solverOption name="cuts" solver="cbc" value="off" />
+			<solverOption name="cuts" solver="cbc" value="on" />
 			<solverOption name="solve" solver="cbc"  />
 			<solverOption name="max_active_nodes" solver="symphony"  value="2" />
 

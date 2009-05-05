@@ -321,7 +321,7 @@ typedef union YYSTYPE
 	int ival;
 	char* sval;
 }
-/* Line 193 of yacc.c.  */
+/* Line 187 of yacc.c.  */
 
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -721,12 +721,12 @@ static const yytype_uint16 yyrline[] =
      263,   265,   267,   271,   272,   275,   282,   283,   286,   287,
      290,   291,   293,   294,   295,   296,   298,   299,   301,   305,
      306,   309,   310,   321,   327,   328,   330,   349,   350,   353,
-     354,   356,   401,   410,   413,   415,   415,   415,   415,   417,
-     423,   424,   428,   432,   437,   445,   446,   448,   469,   470,
-     471,   473,   478,   479,   481,   483,   484,   486,   488,   491,
-     493,   492,   504,   506,   507,   509,   512,   519,   525,   526,
-     528,   529,   531,   532,   538,   540,   541,   542,   543,   545,
-     546
+     354,   356,   382,   391,   394,   396,   396,   396,   396,   398,
+     404,   405,   409,   413,   418,   426,   427,   429,   450,   451,
+     452,   454,   459,   460,   462,   464,   465,   467,   469,   472,
+     474,   473,   485,   487,   488,   490,   493,   500,   506,   507,
+     509,   510,   512,   513,   519,   521,   522,   523,   524,   526,
+     527
 };
 #endif
 
@@ -2187,26 +2187,7 @@ yyreduce:
 		parserData->tmpOtherName = "";
 		parserData->tmpOtherValue = "";
 		parserData->tmpOtherDescription = "";			
-		
-		/*	
-		if (osresult->optimization == NULL) 
-			osresult->optimization = new OptimizationResult();
-		
-		if (osresult->optimization->solution == NULL) 
-		{	osresult->optimization->solution = new OptimizationSolution*();
-			for (int i = 0; i < parserData->numberOfSolutions; i++)
-				osresult->optimization->solution[i] = new OptimizationSolution();
-		}	
-		if (osresult->optimization->solution[parserData->solutionIdx]->variables == NULL){
-			osresult->optimization->solution[parserData->solutionIdx]->variables = new VariableSolution();
-			osresult->optimization->solution[parserData->solutionIdx]->variables->other = new OtherVariableResult*[osresult->getNumberOfOtherVariableResults(parserData->solutionIdx)];
-		}
-		osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther] = new OtherVariableResult();
-		osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->name        = parserData->tmpOtherName;
-		osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->value       = parserData->tmpOtherValue;
-		osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->description = parserData->tmpOtherDescription;
-		osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->numberOfVar = parserData->otherVarStruct->numberOfVar;
-		*/
+
 		
 		
 	}
@@ -2292,7 +2273,7 @@ parserData->kounter++;
 
   case 128:
 
-    {/*std::cout << "FOUND OTHER ELEMENT TEXT"  << std::endl;*/  parserData->outStr << (yyvsp[(1) - (1)].sval); /*free($1);*/ }
+    {/*std::cout << "FOUND OTHER ELEMENT TEXT"  << std::endl;*/  parserData->outStr << (yyvsp[(1) - (1)].sval); free((yyvsp[(1) - (1)].sval)); }
     break;
 
   case 129:

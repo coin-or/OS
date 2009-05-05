@@ -509,7 +509,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 				osresult->setPrimalVariableValues(solIdx, const_cast<double*>(x),  osinstance->getVariableNumber() );
 				osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda),  osinstance->getConstraintNumber() );
 				mdObjValues[0] = obj_value;
-				osresult->setObjectiveValues(solIdx, mdObjValues,  osinstance->getConstraintNumber() );
+				osresult->setObjectiveValues(solIdx, mdObjValues,  1 );
 				
 				
 				// set other
@@ -549,7 +549,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 				osresult->setPrimalVariableValues(solIdx, const_cast<double*>(x), osinstance->getVariableNumber() );
 				osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda), osinstance->getConstraintNumber());
 				mdObjValues[0] = obj_value;
-				osresult->setObjectiveValues(solIdx, mdObjValues, osinstance->getObjectiveNumber());
+				osresult->setObjectiveValues(solIdx, mdObjValues, 1);
 			break;
 			case STOP_AT_TINY_STEP:
 				solutionDescription = "STOP_AT_TINY_STEP[IPOPT]: Algorithm proceeds with very little progress.";
@@ -557,7 +557,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 				osresult->setPrimalVariableValues(solIdx, const_cast<double*>( x),  osinstance->getVariableNumber()  );
 				osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda),  osinstance->getConstraintNumber() );
 				mdObjValues[0] = obj_value;
-				osresult->setObjectiveValues(solIdx, mdObjValues,  osinstance->getObjectiveNumber() );
+				osresult->setObjectiveValues(solIdx, mdObjValues,  1 );
 			break;
 			case STOP_AT_ACCEPTABLE_POINT:
 				solutionDescription = "STOP_AT_ACCEPTABLE_POINT[IPOPT]: Algorithm stopped at a point that was converged, not to _desired_ tolerances, but to _acceptable_ tolerances";
@@ -565,7 +565,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 				osresult->setPrimalVariableValues(solIdx, const_cast<double*>(x),  osinstance->getVariableNumber() );
 				osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda),  osinstance->getConstraintNumber() );
 				mdObjValues[0] = obj_value;
-				osresult->setObjectiveValues(solIdx, mdObjValues,  osinstance->getObjectiveNumber() );
+				osresult->setObjectiveValues(solIdx, mdObjValues,  1 );
 			break;
 			case LOCAL_INFEASIBILITY:
 				solutionDescription = "LOCAL_INFEASIBILITY[IPOPT]: Algorithm converged to a point of local infeasibility. Problem may be infeasible.";

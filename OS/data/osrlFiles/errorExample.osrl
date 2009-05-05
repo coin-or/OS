@@ -2,10 +2,8 @@
 <osrl xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
     xsi:schemaLocation="os.optimizationservices.org 
     http://www.optimizationservices.org/schemas/OSrL.xsd" >
-<resultHeader>
+<general>
 <generalStatus type="error"/>
 <message>Cbc cannot do nonlinear or quadratic</message>
-</resultHeader>
-<resultData>
-</resultData>
+</general>
 </osrl>

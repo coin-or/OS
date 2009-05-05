@@ -374,26 +374,7 @@ otherVariableResult: otherVariableStart otherVariableATTlist GREATERTHAN otherva
 		parserData->tmpOtherName = "";
 		parserData->tmpOtherValue = "";
 		parserData->tmpOtherDescription = "";			
-		
-		/*	
-		if (osresult->optimization == NULL) 
-			osresult->optimization = new OptimizationResult();
-		
-		if (osresult->optimization->solution == NULL) 
-		{	osresult->optimization->solution = new OptimizationSolution*();
-			for (int i = 0; i < parserData->numberOfSolutions; i++)
-				osresult->optimization->solution[i] = new OptimizationSolution();
-		}	
-		if (osresult->optimization->solution[parserData->solutionIdx]->variables == NULL){
-			osresult->optimization->solution[parserData->solutionIdx]->variables = new VariableSolution();
-			osresult->optimization->solution[parserData->solutionIdx]->variables->other = new OtherVariableResult*[osresult->getNumberOfOtherVariableResults(parserData->solutionIdx)];
-		}
-		osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther] = new OtherVariableResult();
-		osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->name        = parserData->tmpOtherName;
-		osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->value       = parserData->tmpOtherValue;
-		osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->description = parserData->tmpOtherDescription;
-		osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->numberOfVar = parserData->otherVarStruct->numberOfVar;
-		*/
+
 		
 		
 	};
@@ -466,7 +447,7 @@ parserData->kounter++;
 };
 
 ElementValue: 
-    ELEMENTTEXT  {/*std::cout << "FOUND OTHER ELEMENT TEXT"  << std::endl;*/  parserData->outStr << $1; /*free($1);*/ }
+    ELEMENTTEXT  {/*std::cout << "FOUND OTHER ELEMENT TEXT"  << std::endl;*/  parserData->outStr << $1; free($1); }
   | INTEGER      {/*std::cout << "FOUND OTHER ELEMENT INTEGER"  << std::endl;*/  parserData->outStr << $1; /*free($1);*/ }
   | DOUBLE       {/*std::cout << "FOUND OTHER ELEMENT DOUBLE"  << std::endl;*/ parserData->outStr << $1; /*free($1);*/ };
   
