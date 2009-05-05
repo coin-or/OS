@@ -622,7 +622,7 @@ void CouenneSolver::writeResult(){
 				/* Retrieve the solution */
 				//
 				*(z + 0)  =  bb.bestObj();
-				osresult->setObjectiveValues(solIdx, z, osinstance->getConstraintNumber());
+				osresult->setObjectiveValues(solIdx, z, 1);
 				for(i=0; i < osinstance->getVariableNumber(); i++){
 					*(x + i) = bb.bestSolution()[i];
 					//std::cout <<  *(x + i)  << std::endl;
@@ -638,7 +638,7 @@ void CouenneSolver::writeResult(){
 				/* Retrieve the solution */
 				//
 				*(z + 0)  =  bb.bestObj();
-				osresult->setObjectiveValues(solIdx, z, osinstance->getConstraintNumber());
+				osresult->setObjectiveValues(solIdx, z, 1);
 				for(i=0; i < osinstance->getVariableNumber(); i++){
 					*(x + i) = bb.model().getColSolution()[i];
 					//std::cout <<  *(x + i)  << std::endl;
@@ -652,7 +652,7 @@ void CouenneSolver::writeResult(){
 				/* Retrieve the solution */
 				//
 				*(z + 0)  =  bb.bestObj();
-				osresult->setObjectiveValues(solIdx, z, osinstance->getConstraintNumber());
+				osresult->setObjectiveValues(solIdx, z, 1);
 				for(i=0; i < osinstance->getVariableNumber(); i++){
 					*(x + i) = bb.model().getColSolution()[i];
 					//std::cout <<  *(x + i)  << std::endl;
@@ -666,7 +666,7 @@ void CouenneSolver::writeResult(){
 				/* Retrieve the solution */
 				//
 				*(z + 0)  =  bb.bestObj();
-				osresult->setObjectiveValues(solIdx, z, osinstance->getConstraintNumber());
+				osresult->setObjectiveValues(solIdx, z, 1);
 				for(i=0; i < osinstance->getVariableNumber(); i++){
 					*(x + i) = bb.model().getColSolution()[i];
 					//std::cout <<  *(x + i)  << std::endl;
