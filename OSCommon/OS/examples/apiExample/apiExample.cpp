@@ -60,17 +60,12 @@ int  main(){
 
 	cout << "Start Building the Model" << endl;
 	try{
-		
-		
 
-		
-		///
 
 		FileUtil *fileUtil = NULL; 
 		fileUtil = new FileUtil();
 		
-		
-#if 1
+#if 0
 		OSOption *osoption = NULL;
 		std::string osolFileName;
 		std::string osol;
@@ -86,7 +81,7 @@ int  main(){
 		
 #endif
 		
-#if 0
+#if 1
 		OSResult *osresult = NULL;
 		std::string osrlFileName;
 		std::string osrl;
@@ -96,13 +91,31 @@ int  main(){
 		OSrLReader *osrlreader = NULL;
 		OSrLWriter *osrlwriter = NULL;
 		osrlreader = new OSrLReader();
-		osresult = osrlreader->readOSrL( osrl);
+		osresult = osrlreader->readOSrL( osrl);		
+		std::cout << std::endl << std::endl<< std::endl;
+		
 		std::cout << std::endl << std::endl<< std::endl;
 		std::cout << "START TESTING " << std::endl;
 		std::cout << "PRIMAL VALUE 1 = " << osresult->optimization->solution[0]->variables->values->var[0]->value << std::endl;
 		std::cout << "PRIMAL VALUE 2 = " << osresult->optimization->solution[0]->variables->values->var[1]->value << std::endl;
 		//osresult->setTime( 77.77);
 		//std::cout  << osrl << std::endl << std::endl << std::endl;
+		std::cout << "START TESTING " << std::endl;
+		std::cout << "PRIMAL VALUE 1 = " << osresult->optimization->solution[0]->variables->values->var[0]->value << std::endl;
+		std::cout << "PRIMAL VALUE 2 = " << osresult->optimization->solution[0]->variables->values->var[1]->value << std::endl;
+		
+		
+		
+		std::cout << " OTHER INDEX 1 = " << osresult->optimization->solution[0]->variables->other[0]->var[0]->idx  << std::endl;
+		std::cout << " OTHER VALUE 1 = " << osresult->optimization->solution[0]->variables->other[0]->var[0]->value  << std::endl;
+		std::cout << " OTHER INDEX 2 = " << osresult->optimization->solution[0]->variables->other[0]->var[1]->idx  << std::endl;
+		std::cout << " OTHER VALUE 2 = " << osresult->optimization->solution[0]->variables->other[0]->var[1]->value  << std::endl;
+		
+		
+		//osresult->setTime( 77.77);
+		
+		//std::cout  << osrl << std::endl << std::endl << std::endl;
+		
 		osrlwriter = new OSrLWriter();
 		std::cout << osrlwriter->writeOSrL( osresult) << std::endl;
 		delete osrlreader;
@@ -110,9 +123,9 @@ int  main(){
 #endif	
 		
 		delete fileUtil;
-
 		
 		return 0;
+
 
 		OSInstance *osinstance;
 		osinstance = new OSInstance();
