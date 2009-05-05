@@ -1074,7 +1074,7 @@ if(THOROUGH == true){
 		solver->solve();
 		cout << "Here is the Bonmin solver solution for bonminEx1" << endl;
 		cout << solver->osrl << endl;
-		check = -1.70711;
+		check = -17.07106795327683;
 		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
 		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail unit test with Bonmin on bonminEx1.osil");
@@ -1191,7 +1191,7 @@ if(THOROUGH == true){
 		//delete tmp_writer;
 		//tmp_writer = NULL;
 
-		check = -1.70711;
+		check = -17.07106795327683;
 		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
 		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail unit test with Couenne on bonminEx1.osil");
@@ -1240,7 +1240,7 @@ if(THOROUGH == true)   {
 
 		cout << solver->osrl << endl << endl;
 
-//		check = -1.70711;
+//		check = -17.0711;
 //		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
 //		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 //		if(ok == false) throw ErrorClass(" Fail unit test with Couenne on bonminEx1_Nonlinear.osil");

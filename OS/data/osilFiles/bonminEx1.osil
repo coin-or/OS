@@ -18,9 +18,9 @@
 		</variables>
 		<objectives numberOfObjectives=" 1">
 			<obj maxOrMin="min" name="minCost" numberOfObjCoef="3">
-				<coef idx="0">1</coef>
-				<coef idx="1">-1</coef>
-				<coef idx="2">-1</coef>
+				<coef idx="0">10</coef>
+				<coef idx="1">-10</coef>
+				<coef idx="2">-10</coef>
 			</obj>
 		</objectives>
 		<constraints numberOfConstraints="3">
