@@ -1424,7 +1424,7 @@ public:
 	 * 
 	 * @return the job id. 
 	 */
-	std::string getJobID();
+	std::string getJobID(); 
 	
    	/**
 	 * Get the general message. 
@@ -1460,9 +1460,10 @@ public:
 	 * Get one solution of optimal primal variable values. 
 	 * 
 	 * @param objIdx holds the objective index the optimal value corresponds to. 
+	 * @param solIdx holds the solution index the optimal value corresponds to.
 	 * @return a double with the optimal objective function value. 
 	 */
-	double getOptimalObjValue(int objIdx);
+	double getOptimalObjValue(int objIdx, int solIdx);
 
 	/**
 	 * Get one solution of optimal dual variable values. 

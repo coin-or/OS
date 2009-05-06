@@ -26,7 +26,7 @@
 
 #include<iostream>
 #include<sstream>
-#define DEBUG
+//#define DEBUG
 
 using namespace std;
 
@@ -801,18 +801,15 @@ double* OSResult::getOptimalPrimalVariableValues(int objIdx){
 }//getOptimalPrimalVariableValues
 
 
-double OSResult::getOptimalObjValue(int objIdx){
+double OSResult::getOptimalObjValue(int objIdx, int solIdx){
 
 	try{
 		if(this->optimization == NULL || this->optimization->solution == NULL) 
-			throw ErrorClass("There is no optimal solution");
+			throw ErrorClass("No optimization or solution object defined");
 		int iSolutions = this->getSolutionNumber();
-
-
 		for(int i = 0; i < iSolutions; i++){
+			if(i != solIdx) continue;
 			if(this->optimization->solution[i]->targetObjectiveIdx != objIdx) continue;
-			if(this->optimization->solution[i]->variables == NULL) continue;
-			if(this->optimization->solution[i]->variables->values == NULL) continue;
 			if((this->optimization->solution[i]->status->type.find("ptimal") != string::npos ) ||
 				this->optimization->solution[i]->status->type.compare("globallyOptimal") == 0){	
 				return 	this->optimization->solution[i]->objectives->values->obj[ abs( objIdx)  -1 ]->value;
@@ -821,7 +818,6 @@ double OSResult::getOptimalObjValue(int objIdx){
 				throw ErrorClass("There is no optimal solution");
 			}
 		}
-
 		throw ErrorClass("There is no optimal solution");
 	}
 	catch(const ErrorClass& eclass){

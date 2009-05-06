@@ -94,6 +94,7 @@ int main( ){
 		double *x = NULL;
 		double *y = NULL;
 		double *z = NULL;
+		int *idx = NULL;
 		//int i = 0;
 		std::string *rcost = NULL;
 		// resultHeader infomration
@@ -119,20 +120,21 @@ int main( ){
 			/* Retrieve the solution */
 			x = new double[solver->osinstance->getVariableNumber() ];
 			y = new double[solver->osinstance->getConstraintNumber() ];
+			idx = new int[solver->osinstance->getVariableNumber() ];
 			z = new double[1];
 			rcost = new std::string[ solver->osinstance->getVariableNumber()];
 			//
 			*(z + 0)  =  model->getObjValue();
-			osresult->setObjectiveValues(solIdx, z);
+			osresult->setObjectiveValues(solIdx, z, 1);
 			for(i=0; i < solver->osinstance->getVariableNumber(); i++){
 				*(x + i) = model->getColSolution()[i];
 			}
-			osresult->setPrimalVariableValues(solIdx, x);
+			osresult->setPrimalVariableValues(solIdx, x, osinstance->getVariableNumber() );
 			//if( solver->sSolverName.find( "symphony") == std::string::npos){
 			for(i=0; i <  solver->osinstance->getConstraintNumber(); i++){
 				*(y + i) = model->getRowPrice()[ i];
 			}
-			osresult->setDualVariableValues(solIdx, y);
+			osresult->setDualVariableValues(solIdx, y, osinstance->getConstraintNumber() );
 			//
 			// now put the reduced costs into the osrl
 			int numberOfOtherVariableResult = 1;
@@ -147,7 +149,8 @@ int main( ){
 				rcost[ i] = outStr.str();
 				outStr.str("");
 			}
-			osresult->setAnOtherVariableResult(solIdx, otherIdx, "reduced costs", "the variable reduced costs", rcost);			
+			osresult->setAnOtherVariableResult(solIdx, otherIdx, "reduced costs", "the variable reduced costs", idx,  
+				rcost, solver->osinstance->getVariableNumber());			
 			// end of settiing reduced costs			
 		}
 		else{ 
@@ -161,8 +164,12 @@ int main( ){
 		}
 		OSrLWriter *osrlwriter = new OSrLWriter();
 		std::cout <<  osrlwriter->writeOSrL( osresult) << std::endl;
-		if(solver->osinstance->getVariableNumber() > 0) delete[] x;
-		x = NULL;
+		if(solver->osinstance->getVariableNumber() > 0){
+			delete[] x;
+			x = NULL;
+			delete[] idx;
+			idx = NULL;
+		}
 		if(solver->osinstance->getConstraintNumber()) delete[] y;
 		y = NULL;
 		delete[] z;	

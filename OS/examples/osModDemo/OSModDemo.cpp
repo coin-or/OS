@@ -183,8 +183,8 @@ int main( ){
 		solver->buildSolverInstance();
 		solver->solve();
 		std::cout << solver->osrl << std::endl;		
-		std::cout << "Obj value =  " << solver->osresult->resultData->optimization->solution[0]->objectives->values->obj[0]->value << endl; 
-		std::cout << "Obj value =  " << solver->osresult->getOptimalObjValue( -1) << endl;  // use a get		
+		std::cout << "Obj value =  " << solver->osresult->optimization->solution[0]->objectives->values->obj[0]->value << endl; 
+		std::cout << "Obj value =  " << solver->osresult->getOptimalObjValue( -1, 0) << endl;  // use a get		
 		
 		delete osinstance;
 		osinstance = NULL;
