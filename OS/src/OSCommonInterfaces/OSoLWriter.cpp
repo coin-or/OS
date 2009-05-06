@@ -63,7 +63,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 	xsltDir = "../stylesheets/";
 	if(m_OSOption == NULL)  return outStr.str(); 
 	outStr << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" ; 
-	outStr << "<?xml-stylesheet type = \"text/xsl\" href = \"";
+	outStr << "<?xml-stylesheet type=\"text/xsl\" href=\"";
 	outStr << xsltDir;
 	outStr << "OSoL.xslt\"?>";
 	outStr << "<osol xmlns=\"os.optimizationservices.org\"   xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
