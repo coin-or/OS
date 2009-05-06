@@ -74,7 +74,7 @@ int osollex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token <sval> ELEMENTTEXT
 %token <ival> INTEGER
 %token <dval> DOUBLE
-%token <dval> QUOTE
+%token <sval> QUOTE
 
 %token TWOQUOTES GREATERTHAN ENDOFELEMENT
 %token OSOLSTART OSOLSTARTEMPTY OSOLATTRIBUTETEXT OSOLEND
@@ -2949,3 +2949,4 @@ void  yygetOSOption(const char *parsestring, OSOption *osoption, OSoLParserData 
 		throw ErrorClass(  eclass.errormsg);
 	}
 } //end yygetOSOption
+

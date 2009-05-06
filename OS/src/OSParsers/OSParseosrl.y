@@ -213,8 +213,6 @@ timeValue:
   DOUBLE  { parserData->timeValue = $1; }
 | INTEGER { parserData->timeValue = $1; };
 
-dumbtimeValue: ELEMENTTEXT {parserData->timeValue = os_strtod($1,NULL);}
-
 optimizationElement: | OPTIMIZATIONSTART optimizationContent {printf("\nbefore OPTIMIZATIONEND\n");} OPTIMIZATIONEND;
 
 optimizationContent:   anotherOptATT

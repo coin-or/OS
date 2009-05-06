@@ -100,7 +100,6 @@
 	tmpOtherValue(""),
 	tmpOtherName(""),
 	tmpOtherDescription(""),
-
 	numberOfSolutions(0),
 	numberOfVariables(0),
 	numberOfConstraints(0),

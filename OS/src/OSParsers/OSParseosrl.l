@@ -117,9 +117,9 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF))
 {quote} {YY_PRINT;  yylval->sval = yytext; return(QUOTE);}
 {twoquotes} {YY_PRINT;  yylval->sval = yytext; return(TWOQUOTES);}
 ({xmlwhitespace}*{greater_than}{xmlwhitespace}*) {YY_PRINT;     return(GREATERTHAN);}
-({xmlwhitespace}*{aninteger})  {YY_PRINT; yylval->ival = atoi(yytext); return(INTEGER);}
+({xmlwhitespace}*{aninteger}{xmlwhitespace}*)  {YY_PRINT; yylval->ival = atoi(yytext); return(INTEGER);}
 
-({xmlwhitespace}*{adouble}) {YY_PRINT; 
+({xmlwhitespace}*{adouble}{xmlwhitespace}*) {YY_PRINT; 
 char *yytextEnd;
 yylval->dval = os_strtod_wrap( yytext, &yytextEnd);
 	if( (unsigned)(yytextEnd - yytext) != strlen( yytext)){
