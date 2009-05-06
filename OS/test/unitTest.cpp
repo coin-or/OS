@@ -1508,7 +1508,7 @@ if( THOROUGH == true){
 		osolreader = NULL;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
-} end of if (THOROUGH)
+} //end of if (THOROUGH)
 
 	}
 	catch(const ErrorClass& eclass){
