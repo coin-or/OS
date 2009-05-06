@@ -45,11 +45,13 @@ you should get x1 = 540, x2 = 252
 */
 
 
-
+//#define AMPLDEBUG
 #include <iostream>
 #include "OSiLWriter.h"
 #include "OSnl2osil.h"
 #include "OSErrorClass.h"
+
+#include "CoinHelperFunctions.hpp"
 
 
 #include "nlp.h"
@@ -76,10 +78,13 @@ using std::endl;
    
 
 OSnl2osil::OSnl2osil(std::string nlfilename){	
+	osinstance = NULL;
 	//Initialize the AMPL library
 	asl = ASL_alloc( ASL_read_fg);
     stub = &nlfilename[ 0];
-	//cout << "READING FILE " << stub << endl;
+	#ifdef AMPLDEBUG
+	std::cout << "READING FILE " << stub << std::endl;
+	#endif
 	//Initialize the nl file reading
 	nl = jac0dim(stub, (fint)strlen(stub));
 	//Prepare *columnwise* parsing of nl file
@@ -108,14 +113,19 @@ OSnl2osil::OSnl2osil(std::string nlfilename){
 		fg_read(nl, 0);
 		R_OPS = 0;
 	}
-}
+	#ifdef AMPLDEBUG 
+		std::cout << "Finish f_read()" << std::endl;
+	#endif
+}//end OSnl2osil constructor
 
 OSnl2osil::~OSnl2osil(){
-	osinstance->instanceData->linearConstraintCoefficients->start->bDeleteArrays = false;
-	osinstance->instanceData->linearConstraintCoefficients->rowIdx->bDeleteArrays = false;
-	osinstance->instanceData->linearConstraintCoefficients->value->bDeleteArrays = false;
-	delete osinstance;
-	osinstance = NULL;
+	if(osinstance == NULL){
+		osinstance->instanceData->linearConstraintCoefficients->start->bDeleteArrays = false;
+		osinstance->instanceData->linearConstraintCoefficients->rowIdx->bDeleteArrays = false;
+		osinstance->instanceData->linearConstraintCoefficients->value->bDeleteArrays = false;
+		delete osinstance;
+		osinstance = NULL;
+	}
 	free( X0);
 	free( A_vals);
 	ASL_free(&asl);
@@ -385,18 +395,199 @@ bool OSnl2osil::createOSInstance(){
 	//
 	std::string colName;
 	char vartype = 'C';
+	#ifdef AMPLDEBUG
+	std::cout << "NUMBER BINARY VARIABLES =  " << nbv << std::endl;
+	std::cout << "NUMBER INTEGER VARIABLES =  " << niv << std::endl;
+	std::cout << "INTEGER VARIABLES IN AND OBJECTIVE AND CONSTRAINTS =  " << nlvbi << std::endl;
+	std::cout << "INTEGER VARIABLES JUST IN CONSTRAINTS =  " << nlvci << std::endl;
+	std::cout << "INTEGER VARIABLES JUST IN CONSTRAINTS =  " << nlvoi << std::endl;
+	std::cout << "nlvc =  " << nlvc << std::endl;
+	std::cout << "nlvo =  " << nlvo << std::endl;
+	#endif
 	osinstance->setVariableNumber( n_var);
+	
+	
+	/*
 	int firstBinaryVar = n_var - nbv - niv;
 	int firstIntegerVar = n_var - niv;
+	int integerVarStart = n_var  - nbv - niv -nwv;
 	for(i = 0; i < n_var; i++){
-		if(i >= firstBinaryVar) vartype = 'B';
-		if(i >= firstIntegerVar) vartype = 'I';
+		// important -- we assume that the binary variables have upper bounds of 1
+		//if(i >= firstBinaryVar) vartype = 'B';
+		if(i >= integerVarStart) vartype = 'I';
 		//if(X0 != NULL) init = X0[ i];
 		osinstance->addVariable(i, var_name(i), 
 			LUv[2*i] > -OSDBL_MAX  ? LUv[2*i] : -OSDBL_MAX, 
 			LUv[2*i+1] < OSDBL_MAX ? LUv[2*i+1] : OSDBL_MAX, 
 			vartype);
+	}
+	*/
+	
+	//first the nonlinear variables
+	//welcome to the world of the ASL API
+	
+	int lower;
+	int upper;
+	lower = 0;
+	upper = nlvb - nlvbi;
+	#ifdef AMPLDEBUG
+	std::cout << "LOWER = " << lower << std::endl;
+	std::cout << "UPPER = " << upper << std::endl;
+	#endif
+	for(i = lower; i < upper; i++){ //continuous in an objective and in a constraint
+		vartype = 'C';
+		osinstance->addVariable(i, var_name(i), 
+		LUv[2*i] > -OSDBL_MAX  ? LUv[2*i] : -OSDBL_MAX, 
+		LUv[2*i+1] < OSDBL_MAX ? LUv[2*i+1] : OSDBL_MAX, 
+		vartype);
+	}
+	
+	lower = nlvb - nlvbi;
+	upper = (nlvb - nlvbi) + nlvbi;
+	upper = nlvb; //  
+	#ifdef AMPLDEBUG
+	std::cout << "LOWER = " << lower << std::endl;
+	std::cout << "UPPER = " << upper << std::endl;
+	#endif
+	for(i = lower; i < upper; i++){ //integer in an objective and in a constraint
+		vartype = 'I';
+		osinstance->addVariable(i, var_name(i), 
+		LUv[2*i] > -OSDBL_MAX  ? LUv[2*i] : -OSDBL_MAX, 
+		LUv[2*i+1] < OSDBL_MAX ? LUv[2*i+1] : OSDBL_MAX, 
+		vartype);
+	}
+	
+	lower = nlvb;
+	upper = nlvb + (nlvc - (nlvb + nlvci)) ;
+	upper = nlvc - nlvci;
+	#ifdef AMPLDEBUG
+	std::cout << "LOWER = " << lower << std::endl;
+	std::cout << "UPPER = " << upper << std::endl;
+	#endif
+	for(i = lower; i < upper; i++){ //continuous just in constraints
+		vartype = 'C';
+		osinstance->addVariable(i, var_name(i), 
+		LUv[2*i] > -OSDBL_MAX  ? LUv[2*i] : -OSDBL_MAX, 
+		LUv[2*i+1] < OSDBL_MAX ? LUv[2*i+1] : OSDBL_MAX, 
+		vartype);
+	}
+	
+	
+	lower = nlvc - nlvci;
+	upper = nlvc - nlvci + nlvci;
+	upper = nlvc;
+	#ifdef AMPLDEBUG
+	std::cout << "LOWER = " << lower << std::endl;
+	std::cout << "UPPER = " << upper << std::endl;
+	#endif
+	for(i = lower; i < upper; i++){ //integer just in constraints
+		vartype = 'I';
+		osinstance->addVariable(i, var_name(i), 
+		LUv[2*i] > -OSDBL_MAX  ? LUv[2*i] : -OSDBL_MAX, 
+		LUv[2*i+1] < OSDBL_MAX ? LUv[2*i+1] : OSDBL_MAX, 
+		vartype);
+	}
+	
+	lower = nlvc;
+	upper = nlvc + ( nlvo - (nlvc + nlvoi) );
+	upper = nlvo - nlvoi;
+	#ifdef AMPLDEBUG
+	std::cout << "LOWER = " << lower << std::endl;
+	std::cout << "UPPER = " << upper << std::endl;
+	#endif
+	for(i = lower; i < upper; i++){ //continuous just in objectives
+		vartype = 'C';
+		osinstance->addVariable(i, var_name(i), 
+		LUv[2*i] > -OSDBL_MAX  ? LUv[2*i] : -OSDBL_MAX, 
+		LUv[2*i+1] < OSDBL_MAX ? LUv[2*i+1] : OSDBL_MAX, 
+		vartype);
+	}
+	
+	lower = nlvo - nlvoi;
+	upper = nlvo - nlvoi + nlvoi;
+	upper = nlvo ;
+	#ifdef AMPLDEBUG
+	std::cout << "LOWER = " << lower << std::endl;
+	std::cout << "UPPER = " << upper << std::endl;
+	#endif
+	for(i = lower; i < upper; i++){ //integer just in objectives
+		vartype = 'I';
+		osinstance->addVariable(i, var_name(i), 
+		LUv[2*i] > -OSDBL_MAX  ? LUv[2*i] : -OSDBL_MAX, 
+		LUv[2*i+1] < OSDBL_MAX ? LUv[2*i+1] : OSDBL_MAX, 
+		vartype);
+	}
+	
+	
+	//now the other variables	
+	
+	lower = CoinMax(nlvc, nlvo);
+	upper =  CoinMax(nlvc, nlvo) + nwv;
+	#ifdef AMPLDEBUG
+	std::cout << "LOWER = " << lower << std::endl;
+	std::cout << "UPPER = " << upper << std::endl;
+	#endif
+	for(i = lower; i < upper; i++){ //linear arc variables
+		vartype = 'C';
+		osinstance->addVariable(i, var_name(i), 
+		LUv[2*i] > -OSDBL_MAX  ? LUv[2*i] : -OSDBL_MAX, 
+		LUv[2*i+1] < OSDBL_MAX ? LUv[2*i+1] : OSDBL_MAX, 
+		vartype);
 	}	
+	
+	
+	lower = CoinMax(nlvc, nlvo) + nwv;
+	upper =  CoinMax(nlvc, nlvo) + nwv + (n_var - (CoinMax(nlvc, nlvo) + niv + nbv + nwv) );
+	upper = n_var -  niv - nbv; 
+	#ifdef AMPLDEBUG
+	std::cout << "LOWER = " << lower << std::endl;
+	std::cout << "UPPER = " << upper << std::endl;
+	#endif
+	for(i = lower; i < upper; i++){ //other linear
+		vartype = 'C';
+		osinstance->addVariable(i, var_name(i), 
+		LUv[2*i] > -OSDBL_MAX  ? LUv[2*i] : -OSDBL_MAX, 
+		LUv[2*i+1] < OSDBL_MAX ? LUv[2*i+1] : OSDBL_MAX, 
+		vartype);
+	}	
+	
+	
+	lower = n_var -  niv - nbv;
+	upper = n_var -  niv - nbv + nbv;
+	upper = n_var -  niv ; 
+	#ifdef AMPLDEBUG
+	std::cout << "LOWER = " << lower << std::endl;
+	std::cout << "UPPER = " << upper << std::endl;
+	#endif
+	for(i = lower; i < upper; i++){ //linear binary
+		vartype = 'B';
+		osinstance->addVariable(i, var_name(i), 
+		LUv[2*i] > -OSDBL_MAX  ? LUv[2*i] : -OSDBL_MAX, 
+		LUv[2*i+1] < OSDBL_MAX ? LUv[2*i+1] : OSDBL_MAX, 
+		vartype);
+	}
+	
+		
+			
+	lower = n_var -  niv;
+	upper = n_var -  niv  + niv;
+	upper =   n_var;
+	#ifdef AMPLDEBUG
+	std::cout << "LOWER = " << lower << std::endl;
+	std::cout << "UPPER = " << upper << std::endl;
+	#endif
+	for(i = lower; i < upper; i++){ //linear integer
+		vartype = 'I';
+		osinstance->addVariable(i, var_name(i), 
+		LUv[2*i] > -OSDBL_MAX  ? LUv[2*i] : -OSDBL_MAX, 
+		LUv[2*i+1] < OSDBL_MAX ? LUv[2*i+1] : OSDBL_MAX, 
+		vartype);
+	}	
+	
+	
+	// end of variables -- thank goodness!!!
+	
+	
 	//
 	//
 	//(expr_v *)e;
@@ -506,11 +697,11 @@ bool OSnl2osil::createOSInstance(){
 	//
 	// end loop of nonlinear rows
 	//  
-	/*
+	#ifdef AMPLDEBUG
 	OSiLWriter osilwriter;
 	std::cout << "WRITE THE INSTANCE" << std::endl;
 	std::cout << osilwriter.writeOSiL( osinstance) << std::endl;
 	std::cout << "DONE WRITE THE INSTANCE" << std::endl;
-	*/
+	#endif
 	return true;
 }
