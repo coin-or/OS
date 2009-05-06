@@ -1214,7 +1214,7 @@ if (THOROUGH == true){
 	}	
 #endif   // end of #ifdef COIN_HAS_BONMIN
 
-
+#if 0    // disable Couenne solver for now
 #ifdef COIN_HAS_COUENNE
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Couenne solver on bonminEx1.osil" << endl << endl;
@@ -1517,9 +1517,9 @@ if( THOROUGH == true){
 		unitTestResultFailure  << "Sorry Unit Test Failed Testing the Couenne Solver:"  + eclass.errormsg << endl;
 	
 	}	
-#endif
+#endif // end of #ifdef COIN_HAS_COUENNE
 
-
+#endif // end of #if 0
 
 
 #ifdef COIN_HAS_DYLP
