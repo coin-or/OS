@@ -45,7 +45,7 @@ you should get x1 = 540, x2 = 252
 */
 
 
-//#define AMPLDEBUG
+
 #include <iostream>
 #include "OSiLWriter.h"
 #include "OSnl2osil.h"
@@ -78,13 +78,10 @@ using std::endl;
    
 
 OSnl2osil::OSnl2osil(std::string nlfilename){	
-	osinstance = NULL;
 	//Initialize the AMPL library
 	asl = ASL_alloc( ASL_read_fg);
     stub = &nlfilename[ 0];
-	#ifdef AMPLDEBUG
-	std::cout << "READING FILE " << stub << std::endl;
-	#endif
+	//cout << "READING FILE " << stub << endl;
 	//Initialize the nl file reading
 	nl = jac0dim(stub, (fint)strlen(stub));
 	//Prepare *columnwise* parsing of nl file
@@ -113,19 +110,14 @@ OSnl2osil::OSnl2osil(std::string nlfilename){
 		fg_read(nl, 0);
 		R_OPS = 0;
 	}
-	#ifdef AMPLDEBUG 
-		std::cout << "Finish f_read()" << std::endl;
-	#endif
-}//end OSnl2osil constructor
+}
 
 OSnl2osil::~OSnl2osil(){
-	if(osinstance == NULL){
-		osinstance->instanceData->linearConstraintCoefficients->start->bDeleteArrays = false;
-		osinstance->instanceData->linearConstraintCoefficients->rowIdx->bDeleteArrays = false;
-		osinstance->instanceData->linearConstraintCoefficients->value->bDeleteArrays = false;
-		delete osinstance;
-		osinstance = NULL;
-	}
+	osinstance->instanceData->linearConstraintCoefficients->start->bDeleteArrays = false;
+	osinstance->instanceData->linearConstraintCoefficients->rowIdx->bDeleteArrays = false;
+	osinstance->instanceData->linearConstraintCoefficients->value->bDeleteArrays = false;
+	delete osinstance;
+	osinstance = NULL;
 	free( X0);
 	free( A_vals);
 	ASL_free(&asl);
@@ -395,26 +387,14 @@ bool OSnl2osil::createOSInstance(){
 	//
 	std::string colName;
 	char vartype = 'C';
-	#ifdef AMPLDEBUG
-	std::cout << "NUMBER BINARY VARIABLES =  " << nbv << std::endl;
-	std::cout << "NUMBER INTEGER VARIABLES =  " << niv << std::endl;
-	std::cout << "INTEGER VARIABLES IN AND OBJECTIVE AND CONSTRAINTS =  " << nlvbi << std::endl;
-	std::cout << "INTEGER VARIABLES JUST IN CONSTRAINTS =  " << nlvci << std::endl;
-	std::cout << "INTEGER VARIABLES JUST IN CONSTRAINTS =  " << nlvoi << std::endl;
-	std::cout << "nlvc =  " << nlvc << std::endl;
-	std::cout << "nlvo =  " << nlvo << std::endl;
-	#endif
 	osinstance->setVariableNumber( n_var);
-	
 	
 	/*
 	int firstBinaryVar = n_var - nbv - niv;
 	int firstIntegerVar = n_var - niv;
-	int integerVarStart = n_var  - nbv - niv -nwv;
 	for(i = 0; i < n_var; i++){
-		// important -- we assume that the binary variables have upper bounds of 1
-		//if(i >= firstBinaryVar) vartype = 'B';
-		if(i >= integerVarStart) vartype = 'I';
+		if(i >= firstBinaryVar) vartype = 'B';
+		if(i >= firstIntegerVar) vartype = 'I';
 		//if(X0 != NULL) init = X0[ i];
 		osinstance->addVariable(i, var_name(i), 
 			LUv[2*i] > -OSDBL_MAX  ? LUv[2*i] : -OSDBL_MAX, 
@@ -423,6 +403,9 @@ bool OSnl2osil::createOSInstance(){
 	}
 	*/
 	
+	
+	
+		
 	//first the nonlinear variables
 	//welcome to the world of the ASL API
 	
@@ -588,6 +571,8 @@ bool OSnl2osil::createOSInstance(){
 	// end of variables -- thank goodness!!!
 	
 	
+	
+		
 	//
 	//
 	//(expr_v *)e;
@@ -697,11 +682,11 @@ bool OSnl2osil::createOSInstance(){
 	//
 	// end loop of nonlinear rows
 	//  
-	#ifdef AMPLDEBUG
+	/*
 	OSiLWriter osilwriter;
 	std::cout << "WRITE THE INSTANCE" << std::endl;
 	std::cout << osilwriter.writeOSiL( osinstance) << std::endl;
 	std::cout << "DONE WRITE THE INSTANCE" << std::endl;
-	#endif
+	*/
 	return true;
 }
