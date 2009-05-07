@@ -132,7 +132,6 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass) {
 			finish = clock();
 			duration = (double) (finish - start) / CLOCKS_PER_SEC;
 			cout << "Parsing took (seconds): "<< duration << endl;
-				cout << "Start Solve with a Coin Solver" << endl;
 			// get the type of solver requested from OSoL string
 			bool solverIsDefined = false;
 			std::cout << "SOLVER NAME =  " << sSolverName << std::endl;
