@@ -231,14 +231,14 @@ optimizationContent:   anotherOptATT
 			//		parserData->dualSolution[ i] = new double[ parserData->numberOfConstraints];
 			//	}
 			//}
-			if( parserData->numberOfObjectives > 0){
-				parserData->objectiveValues = new double*[ parserData->numberOfSolutions];
-				parserData->objectiveIdx = new int[ parserData->numberOfSolutions];
-				for(int i = 0; i < parserData->numberOfSolutions; i++){
-					parserData->objectiveValues[ i] = new double[ parserData->numberOfObjectives];
-				}
-			}
-	}
+			//if( parserData->numberOfObjectives > 0){
+			//	parserData->objectiveValues = new double*[ parserData->numberOfSolutions];
+			//	parserData->objectiveIdx = new int[ parserData->numberOfSolutions];
+			//	for(int i = 0; i < parserData->numberOfSolutions; i++){
+			//		parserData->objectiveValues[ i] = new double[ parserData->numberOfObjectives];
+			//	}
+			//}  //kipp here or later
+ 	}
 }
 optend ;
 
@@ -279,7 +279,7 @@ anothersolution: SOLUTIONSTART targetObjectiveIDXATT GREATERTHAN status message 
 
 targetObjectiveIDXATT: 
 | TARGETOBJECTIVEIDXATT quote INTEGER quote {if($3 >= 0) osrlerror(NULL, NULL, NULL, "target objective index must be negative");
-*(parserData->objectiveIdx + parserData->solutionIdx) = $3;};
+/*  kipp -- what is this?  *(parserData->objectiveIdx + parserData->solutionIdx) = $3;*/};
 
 status: STATUSSTART anotherStatusATT GREATERTHAN  STATUSEND {if(parserData->statusTypePresent == false) osrlerror(NULL, NULL, NULL, "a type attribute required for status element");  osresult->setSolutionStatus(parserData->solutionIdx, parserData->statusType, parserData->statusDescription);}
 | STATUSSTART anotherStatusATT ENDOFELEMENT {if(parserData->statusTypePresent == false) osrlerror(NULL, NULL, NULL, "a type attribute required for status element"); parserData->statusTypePresent = false; osresult->setSolutionStatus(parserData->solutionIdx, parserData->statusType, parserData->statusDescription);};
@@ -455,39 +455,86 @@ othervarstart: VARSTART
 	}; 
 
 objectives:
-| OBJECTIVESSTART GREATERTHAN VALUESSTART  numberOfObjATT GREATERTHAN obj VALUESEND otherObjectives OBJECTIVESEND;
+| OBJECTIVESSTART GREATERTHAN VALUESSTART  numberOfObjATT GREATERTHAN obj VALUESEND otherObjectives OBJECTIVESEND{
 
-numberOfObjATT: NUMBEROFOBJATT quote INTEGER quote ;
+osresult->setObjectiveValues(parserData->solutionIdx, parserData->objectiveValues[ parserData->solutionIdx], parserData->numberOfObjectives);
+
+};
+
+numberOfObjATT: NUMBEROFOBJATT quote INTEGER quote{
+
+			parserData->numberOfObjectives = $3;
+			if( parserData->numberOfObjectives > 0){
+				parserData->objectiveValues = new double*[ parserData->numberOfSolutions];
+				parserData->objectiveIdx = new int[ parserData->numberOfSolutions];
+				for(int i = 0; i < parserData->numberOfSolutions; i++){
+					parserData->objectiveValues[ i] = new double[ parserData->numberOfObjectives];
+				}
+			}
+			parserData->kounter = 0;
+} ;
 
 obj: 
 | obj anotherobj;
 
-anotherobj: OBJSTART anIDXATT GREATERTHAN DOUBLE OBJEND { /* *( parserData->objectiveValues[parserData->solutionIdx] + (parserData->kounter + parserData->numberOfObjectives)) = $4;*/
+anotherobj: OBJSTART anIDXATT GREATERTHAN DOUBLE OBJEND { 
+
+ *( parserData->objectiveValues[parserData->solutionIdx] + parserData->kounter ) = $4;
+parserData->kounter++;
+
 }
-| OBJSTART anIDXATT GREATERTHAN INTEGER OBJEND {/*  *(parserData->objectiveValues[parserData->solutionIdx] +  (parserData->kounter + parserData->numberOfObjectives)) = $4; */};
+| OBJSTART anIDXATT GREATERTHAN INTEGER OBJEND {
+
+  *(parserData->objectiveValues[parserData->solutionIdx] +  parserData->kounter ) = $4; 
+ parserData->kounter++; 
+  };
 
 
 constraints:
 | CONSTRAINTSSTART GREATERTHAN DUALVALUESSTART numberOfConATT
 {
+/** massively confusing -- why should parserData->numberOfConstraints not be numberOfConATT
 			if( parserData->numberOfConstraints > 0){
 				parserData->dualSolution = new double*[ parserData->numberOfSolutions];
 				for(int i = 0; i < parserData->numberOfSolutions; i++){
 					parserData->dualSolution[ i] = new double[ parserData->numberOfConstraints];
 				}
 			}
+*/
+			
+			
 }
- GREATERTHAN con DUALVALUESEND otherConstraints CONSTRAINTSEND;
+ GREATERTHAN con DUALVALUESEND otherConstraints CONSTRAINTSEND {
+	osresult->setDualVariableValues(parserData->solutionIdx, parserData->dualSolution[parserData->solutionIdx],  parserData->numberOfConstraints );
+ };
  
  
-numberOfConATT: NUMBEROFCONATT quote INTEGER quote;
+numberOfConATT: NUMBEROFCONATT quote INTEGER quote
+{
+			parserData->numberOfConstraints = $3;
+			if( parserData->numberOfConstraints > 0){
+				parserData->dualSolution = new double*[ parserData->numberOfSolutions];
+				for(int i = 0; i < parserData->numberOfSolutions; i++){
+					parserData->dualSolution[ i] = new double[ parserData->numberOfConstraints];
+				}
+			}
+			//int *indexes = new int[ parserData->numberOfConstraints];
+			parserData->kounter = 0;
+
+};
 
 con: anothercon
 | con anothercon;
 
 anothercon: CONSTART anIDXATT GREATERTHAN DOUBLE CONEND { 
 	if(parserData->kounter < 0 || parserData->kounter > parserData->numberOfConstraints- 1) osrlerror(NULL, NULL, NULL, "index must be greater than 0 and less than the number of constraints");
-	*(parserData->dualSolution[parserData->solutionIdx] + parserData->kounter) = $4;}
+	*(parserData->dualSolution[parserData->solutionIdx] + parserData->kounter) = $4;
+	//*(indexes + parserData->kounter) = parserData->ivar;
+	
+
+	parserData->kounter++;
+	
+	}
 |  CONSTART anIDXATT GREATERTHAN INTEGER CONEND { 
 	if(parserData->kounter < 0 || parserData->kounter > parserData->numberOfConstraints- 1) osrlerror(NULL, NULL, NULL, "index must be greater than 0 and less than the number of constraints");
 	*(parserData->dualSolution[parserData->solutionIdx] + parserData->kounter) = $4;} ;
@@ -496,8 +543,6 @@ anothercon: CONSTART anIDXATT GREATERTHAN DOUBLE CONEND {
 
 
 anIDXATT: IDXATT INTEGER quote {parserData->ivar = $2;};
-
-
 
 
 
