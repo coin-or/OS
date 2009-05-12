@@ -275,6 +275,9 @@ anothersolution: SOLUTIONSTART targetObjectiveIDXATT GREATERTHAN status message 
    if (parserData->solutionIdx == parserData->numberOfSolutions) 
         osrlerror(NULL, NULL, NULL, "too many solutions"); 
     parserData->solutionIdx++;
+    
+
+    
    };
 
 targetObjectiveIDXATT: 
@@ -552,8 +555,48 @@ otherObjectives:
 otherConstraints:
 | DUMMY;
 
-otherSolution: SOLUTIONEND {printf("\nprocessed SOLUTIONEND\n");}
-| DUMMY SOLUTIONEND  {printf("\nprocessed SOLUTIONEND\n");};
+otherSolution: SOLUTIONEND {printf("\nprocessed SOLUTIONEND\n");
+
+    
+    //delete the old vectors
+    
+    int k;
+    int numOtherVarVec = parserData->otherVarVec.size();
+   	std::cout << "parserData->otherVarVec.size() "  << parserData->otherVarVec.size() << std::endl;
+    for( k = 0; k < numOtherVarVec; k++){
+    	if( (parserData->otherVarVec[ k]  != NULL) && (parserData->otherVarVec[ k]->otherVarText != NULL) ) 
+			delete[] parserData->otherVarVec[ k]->otherVarText;
+		if( (parserData->otherVarVec[ k]  != NULL) && (parserData->otherVarVec[ k]->otherVarIndex != NULL) ) 
+			delete[] parserData->otherVarVec[ k]->otherVarIndex;
+			
+		if( parserData->otherVarVec[ k]  != NULL) delete parserData->otherVarVec[ k];
+    }
+  	parserData->otherVarVec.clear();
+		
+}
+| DUMMY SOLUTIONEND  {printf("\nprocessed SOLUTIONEND\n");
+
+
+    
+    //delete the old vectors
+    
+    int k;
+    int numOtherVarVec = parserData->otherVarVec.size();
+   
+    for( k = 0; k < numOtherVarVec; k++){
+    	if( (parserData->otherVarVec[ k]  != NULL) && (parserData->otherVarVec[ k]->otherVarText != NULL) ) 
+			delete[] parserData->otherVarVec[ k]->otherVarText;
+		if( (parserData->otherVarVec[ k]  != NULL) && (parserData->otherVarVec[ k]->otherVarIndex != NULL) ) 
+			delete[] parserData->otherVarVec[ k]->otherVarIndex;
+			
+		if( parserData->otherVarVec[ k]  != NULL) delete parserData->otherVarVec[ k];
+    }
+  	parserData->otherVarVec.clear();  
+    
+    
+
+
+};
 
 
 

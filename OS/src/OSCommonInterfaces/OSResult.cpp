@@ -635,7 +635,6 @@ OptimizationResult::~OptimizationResult(){
 			#ifdef DEBUG  
 			cout << "Delelting Solution: " << i << endl;
 			#endif
-			i++;
 		}
 	}
 	delete[] solution;
@@ -1128,7 +1127,7 @@ bool OSResult::setAnOtherVariableResult(int solIdx, int otherIdx, string name, s
 		optimization->solution[solIdx]->variables->other[ otherIdx]->var.push_back(new OtherVarResult());
 		optimization->solution[solIdx]->variables->other[ otherIdx]->var[i]->idx = idx[i];
 		optimization->solution[solIdx]->variables->other[ otherIdx]->var[i]->value = s[i];
-		;
+		
 	}
 	return true;
 }//setAnOtherVariableResult

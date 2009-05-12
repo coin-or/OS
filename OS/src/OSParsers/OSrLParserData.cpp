@@ -35,17 +35,17 @@
 #ifdef PARSERDATA_DEBUG
 		std::cout << "delete otherVarText" << std::endl;
 #endif
-				if( (otherVarVec[ k]  != NULL) && (otherVarVec[ k]->otherVarText != NULL) ) 
-					delete[] otherVarVec[ k]->otherVarText;
-				if( (otherVarVec[ k]  != NULL) && (otherVarVec[ k]->otherVarIndex != NULL) ) 
-					delete[] otherVarVec[ k]->otherVarIndex;
+				//if( (otherVarVec[ k]  != NULL) && (otherVarVec[ k]->otherVarText != NULL) ) 
+				//	delete[] otherVarVec[ k]->otherVarText;
+				//if( (otherVarVec[ k]  != NULL) && (otherVarVec[ k]->otherVarIndex != NULL) ) 
+				//	delete[] otherVarVec[ k]->otherVarIndex;
 				
 				// the following should delete each of otherVarStruct created
 				// each element of otherVarVec is a pointer to an otherVarStruct
 #ifdef PARSERDATA_DEBUG
 		std::cout << "delete otherVarVec" << std::endl;
 #endif
-				if( otherVarVec[ k]  != NULL) delete otherVarVec[ k];
+				//if( otherVarVec[ k]  != NULL) delete otherVarVec[ k];
 			}
 #ifdef PARSERDATA_DEBUG
 		std::cout << "clear otherVarVec" << std::endl;
