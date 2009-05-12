@@ -277,9 +277,9 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 										if(m_OSResult->optimization->solution[i]->variables->other[k]->var.size() > 0){
 											outStr << "<var";
 											outStr << " idx=\"";
-											outStr << j ;
+											outStr << m_OSResult->optimization->solution[i]->variables->other[k]->var[j]->idx ;
 											outStr <<  "\">";
-											outStr <<    m_OSResult->optimization->solution[i]->variables->other[k]->var[j]->value;
+											outStr << m_OSResult->optimization->solution[i]->variables->other[k]->var[j]->value;
 											outStr << "</var>" << endl;
 										}
 									}
@@ -307,12 +307,13 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 							if(m_OSResult->optimization->solution[i]->objectives->values->obj[j] != NULL){
 								outStr << "<obj";
 								outStr << " idx=\"";
-								outStr << -(1 + j) ;
+								outStr << m_OSResult->optimization->solution[i]->objectives->values->obj[j]->idx; //-(1 + j) ;
 								outStr <<  "\">";
 								outStr <<  os_dtoa_format( m_OSResult->optimization->solution[i]->objectives->values->obj[j]->value);
 								outStr << "</obj>" << endl;
 							}
 						}
+
 						outStr << "</values>" << endl;
 					}
 #ifdef DEBUG

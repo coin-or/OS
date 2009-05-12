@@ -457,7 +457,7 @@ othervarstart: VARSTART
 objectives:
 | OBJECTIVESSTART GREATERTHAN VALUESSTART  numberOfObjATT GREATERTHAN obj VALUESEND otherObjectives OBJECTIVESEND{
 
-osresult->setObjectiveValues(parserData->solutionIdx, parserData->objectiveValues[ parserData->solutionIdx], parserData->numberOfObjectives);
+osresult->setObjectiveValues(parserData->solutionIdx, parserData->objectiveValues[ parserData->solutionIdx]);/*, parserData->numberOfObjectives)*/;
 
 };
 
@@ -505,7 +505,7 @@ constraints:
 			
 }
  GREATERTHAN con DUALVALUESEND otherConstraints CONSTRAINTSEND {
-	osresult->setDualVariableValues(parserData->solutionIdx, parserData->dualSolution[parserData->solutionIdx],  parserData->numberOfConstraints );
+	osresult->setDualVariableValues(parserData->solutionIdx, parserData->dualSolution[parserData->solutionIdx]);/*,  parserData->numberOfConstraints )*/;
  };
  
  

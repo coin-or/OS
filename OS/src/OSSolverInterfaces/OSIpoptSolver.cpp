@@ -75,6 +75,9 @@ bool IpoptProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 		osinstance->initForAlgDiff( );
 	}
 	catch(const ErrorClass& eclass){
+#ifdef DEBUG
+		cout << "error in OSIpoptSolver, line 78:\n" << eclass.errormsg << endl;
+#endif
 		ipoptErrorMsg = eclass.errormsg;
 		throw;  
 	}	
@@ -86,6 +89,9 @@ bool IpoptProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 		sparseJacobian = osinstance->getJacobianSparsityPattern();
 	}
 	catch(const ErrorClass& eclass){
+#ifdef DEBUG
+		cout << "error in OSIpoptSolver, line 91:\n" << eclass.errormsg << endl;
+#endif
 		ipoptErrorMsg = eclass.errormsg;
 		throw;  
 	}
@@ -109,10 +115,15 @@ bool IpoptProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 		nnz_h_lag = sparseHessian->hessDimension;
 	}
 #ifdef DEBUG
+	cout << "print nnz_h_lag (OSIpoptSolver.cpp)" << endl;	
 	cout << "nnz_h_lag  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_h_lag << endl;	
+	cout << "set index_style (OSIpoptSolver.cpp)" << endl;	
 #endif
 	// use the C style indexing (0-based)
 	index_style = TNLP::C_STYLE;
+#ifdef DEBUG
+	cout << "return from get_nlp_info (OSIpoptSolver.cpp)" << nnz_h_lag << endl;	
+#endif
   
   /////
 
@@ -234,7 +245,7 @@ bool IpoptProblem::get_starting_point(Index n, bool init_x, Number* x,
 			}
 		}
 		catch(const ErrorClass& eclass)
-		{	cout << "Error in IpoptProblem::get_starting_point (OSIpoptSolver.cpp)";
+		{	cout << "Error in IpoptProblem::get_starting_point (OSIpoptSolver.cpp, line 247)";
 			cout << endl << endl << endl;
 		}	
 	}  //  end if (m1 > 0)		
@@ -283,6 +294,9 @@ bool IpoptProblem::eval_f(Index n, const Number* x, bool new_x, Number& obj_valu
 		obj_value  = osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(x), NULL, NULL, new_x, 0 )[ 0];
 	}
 	catch(const ErrorClass& eclass){
+#ifdef DEBUG
+		cout << "error in OSIpoptSolver, line 296:\n" << eclass.errormsg << endl;
+#endif
 		ipoptErrorMsg = eclass.errormsg;
 		throw;  
 	}
@@ -298,6 +312,9 @@ bool IpoptProblem::eval_grad_f(Index n, const Number* x, bool new_x, Number* gra
   		objGrad = osinstance->calculateObjectiveFunctionGradient( const_cast<double*>(x), NULL, NULL, -1,  new_x, 1);
 	}
    	catch(const ErrorClass& eclass){
+#ifdef DEBUG
+		cout << "error in OSIpoptSolver, line 314:\n" << eclass.errormsg << endl;
+#endif
 		ipoptErrorMsg = eclass.errormsg;
 		throw;  
 	}
@@ -319,6 +336,9 @@ bool IpoptProblem::eval_g(Index n, const Number* x, bool new_x, Index m, Number*
 		return true;
 	}
 	catch(const ErrorClass& eclass){
+#ifdef DEBUG
+		cout << "error in OSIpoptSolver, line 338:\n" << eclass.errormsg << endl;
+#endif
 		ipoptErrorMsg = eclass.errormsg;
 		throw;  
 	}
@@ -340,6 +360,9 @@ bool IpoptProblem::eval_jac_g(Index n, const Number* x, bool new_x,
 			sparseJacobian = osinstance->getJacobianSparsityPattern();
 		}
 		catch(const ErrorClass& eclass){
+#ifdef DEBUG
+		cout << "error in OSIpoptSolver, line 362:\n" << eclass.errormsg << endl;
+#endif
 			ipoptErrorMsg =  eclass.errormsg; 
 			throw; 
 		}
@@ -361,6 +384,9 @@ bool IpoptProblem::eval_jac_g(Index n, const Number* x, bool new_x,
 			sparseJacobian = osinstance->calculateAllConstraintFunctionGradients( const_cast<double*>(x), NULL, NULL,  new_x, 1);
 		}
 		catch(const ErrorClass& eclass){
+#ifdef DEBUG
+		cout << "error in OSIpoptSolver, line 386:\n" << eclass.errormsg << endl;
+#endif
 			ipoptErrorMsg = eclass.errormsg;
 			throw;  
 		}
@@ -392,6 +418,9 @@ bool IpoptProblem::eval_h(Index n, const Number* x, bool new_x,
 			sparseHessian = osinstance->getLagrangianHessianSparsityPattern( );
 		}
 		catch(const ErrorClass& eclass){
+#ifdef DEBUG
+		cout << "error in OSIpoptSolver, line 420:\n" << eclass.errormsg << endl;
+#endif
 			ipoptErrorMsg = eclass.errormsg;
 			throw;  
 		}
@@ -413,6 +442,9 @@ bool IpoptProblem::eval_h(Index n, const Number* x, bool new_x,
 		delete[]  objMultipliers;
 		}
 		catch(const ErrorClass& eclass){
+#ifdef DEBUG
+		cout << "error in OSIpoptSolver, line 444:\n" << eclass.errormsg << endl;
+#endif
 			ipoptErrorMsg = eclass.errormsg;
 			delete[]  objMultipliers;
 			throw;  
@@ -506,10 +538,10 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 			case SUCCESS:
 				solutionDescription = "SUCCESS[IPOPT]: Algorithm terminated successfully at a locally optimal point, satisfying the convergence tolerances.";
 				osresult->setSolutionStatus(solIdx,  "locallyOptimal", solutionDescription);
-				osresult->setPrimalVariableValues(solIdx, const_cast<double*>(x),  osinstance->getVariableNumber() );
-				osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda),  osinstance->getConstraintNumber() );
+				osresult->setPrimalVariableValues(solIdx, const_cast<double*>(x)); //,  osinstance->getVariableNumber() );
+				osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda)); //,  osinstance->getConstraintNumber() );
 				mdObjValues[0] = obj_value;
-				osresult->setObjectiveValues(solIdx, mdObjValues,  1 );
+				osresult->setObjectiveValues(solIdx, mdObjValues); //, osinstance->getObjectiveNumber());
 				
 				
 				// set other
@@ -546,26 +578,26 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 			case MAXITER_EXCEEDED:
 				solutionDescription = "MAXITER_EXCEEDED[IPOPT]: Maximum number of iterations exceeded.";
 				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);
-				osresult->setPrimalVariableValues(solIdx, const_cast<double*>(x), osinstance->getVariableNumber() );
-				osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda), osinstance->getConstraintNumber());
+				osresult->setPrimalVariableValues(solIdx, const_cast<double*>(x)); //, osinstance->getVariableNumber() );
+				osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda)); //, osinstance->getConstraintNumber());
 				mdObjValues[0] = obj_value;
-				osresult->setObjectiveValues(solIdx, mdObjValues, 1);
+				osresult->setObjectiveValues(solIdx, mdObjValues); //, osinstance->getObjectiveNumber());
 			break;
 			case STOP_AT_TINY_STEP:
 				solutionDescription = "STOP_AT_TINY_STEP[IPOPT]: Algorithm proceeds with very little progress.";
 				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);
-				osresult->setPrimalVariableValues(solIdx, const_cast<double*>( x),  osinstance->getVariableNumber()  );
-				osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda),  osinstance->getConstraintNumber() );
+				osresult->setPrimalVariableValues(solIdx, const_cast<double*>( x)); //, osinstance->getVariableNumber());
+				osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda)); //, osinstance->getConstraintNumber());
 				mdObjValues[0] = obj_value;
-				osresult->setObjectiveValues(solIdx, mdObjValues,  1 );
+				osresult->setObjectiveValues(solIdx, mdObjValues); //, osinstance->getObjectiveNumber());
 			break;
 			case STOP_AT_ACCEPTABLE_POINT:
 				solutionDescription = "STOP_AT_ACCEPTABLE_POINT[IPOPT]: Algorithm stopped at a point that was converged, not to _desired_ tolerances, but to _acceptable_ tolerances";
 				osresult->setSolutionStatus(solIdx,  "IpoptAccetable", solutionDescription);
-				osresult->setPrimalVariableValues(solIdx, const_cast<double*>(x),  osinstance->getVariableNumber() );
-				osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda),  osinstance->getConstraintNumber() );
+				osresult->setPrimalVariableValues(solIdx, const_cast<double*>(x)); //, osinstance->getVariableNumber());
+				osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda)); //, osinstance->getConstraintNumber());
 				mdObjValues[0] = obj_value;
-				osresult->setObjectiveValues(solIdx, mdObjValues,  1 );
+				osresult->setObjectiveValues(solIdx, mdObjValues); //,  osinstance->getObjectiveNumber() );
 			break;
 			case LOCAL_INFEASIBILITY:
 				solutionDescription = "LOCAL_INFEASIBILITY[IPOPT]: Algorithm converged to a point of local infeasibility. Problem may be infeasible.";
@@ -599,13 +631,16 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 				solutionDescription = "OTHER[IPOPT]: other unknown solution status from Ipopt solver";
 				osresult->setSolutionStatus(solIdx,  "other", solutionDescription);
 		}
-		osresult->setGeneralStatusType("success");
+		osresult->setGeneralStatusType("normal");
 		delete osrlwriter;
 		delete[] mdObjValues;
 		osrlwriter = NULL;
 
 	}
 	catch(const ErrorClass& eclass){
+#ifdef DEBUG
+		cout << "error in OSIpoptSolver, line 636:\n" << eclass.errormsg << endl;
+#endif
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
 		std::string osrl = osrlwriter->writeOSrL( osresult);
@@ -662,6 +697,9 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass) {
 		}
 	}
 	catch(const ErrorClass& eclass){
+#ifdef DEBUG
+		cout << "error in OSIpoptSolver, line 695:\n" << eclass.errormsg << endl;
+#endif
 		std::cout << "THERE IS AN ERROR" << std::endl;
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
@@ -686,6 +724,9 @@ void IpoptSolver::buildSolverInstance() throw (ErrorClass) {
 		this->bCallbuildSolverInstance = true;
 	}
 	catch(const ErrorClass& eclass){
+#ifdef DEBUG
+		cout << "error in OSIpoptSolver, line 722:\n" << eclass.errormsg << endl;
+#endif
 		std::cout << "THERE IS AN ERROR" << std::endl;
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
@@ -736,6 +777,9 @@ void IpoptSolver::solve() throw (ErrorClass) {
 		}	
 	}
 	catch(const ErrorClass& eclass){
+#ifdef DEBUG
+		cout << "error in OSIpoptSolver, line 775:\n" << eclass.errormsg << endl;
+#endif
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
 		osrl = osrlwriter->writeOSrL( osresult);

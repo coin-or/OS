@@ -1726,7 +1726,6 @@ public:
 	 * @see #setSolutionNumber(int)
 	 */
 	bool setNumberOfPrimalVariableValues(int solIdx, int n);
-		
 	
 	/**
 	 * Set the [i]th optimization solution's primal variable values, where i equals the given solution index.   
@@ -1738,7 +1737,21 @@ public:
 	 * @return whether primal variable values are set successfully or not. 
 	 * @see #setSolutionNumber(int)
 	 */
-	bool setPrimalVariableValues(int solIdx, double *x, int n);
+	bool setPrimalVariableValues(int solIdx, int *idx, double *x, int n);
+
+	/**
+	 * Set the [i]th optimization solution's primal variable values, where i equals the given solution index.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the primal variable values. 
+	 * @param idx holds an integer array of index values for the 
+	 * @param x holds a double dense array of variable values to set; it could be null if all variables are 0.
+	 * @param n holds the number of elements in the array x
+	 * 
+	 * @return whether primal variable values are set successfully or not. 
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setPrimalVariableValues(int solIdx, double *x);
+
 	/**
 	 * Set the [i]th optimization solution's other (non-standard/solver specific)variable-related results, 
 	 * where i equals the given solution index.   
@@ -1764,6 +1777,7 @@ public:
 	 * @param solIdx holds the solution index  
 	 * @param otherIdx holds the index of the new OtherVariableResult object
 	 * @param name holds the name of the other element
+	 * @param idx holds a pointer to the indexes of the var element
 	 * @param s holds a pointer to the array of values of the var element
 	 * @param n holds the number of elements of the array
 	 *
@@ -1772,8 +1786,34 @@ public:
 	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult
 	 * @see #setSolutionNumber(int)
 	 */
-	bool setAnOtherVariableResult(int solIdx, int otherIdx, std::string name, std::string description, int *indexes,  std::string *s, int n);
+	bool setAnOtherVariableResult(int solIdx, int otherIdx, std::string name, std::string description, int *idx,  std::string *s, int n);
 
+	/**
+	 * Set the [i]th optimization solution's other (non-standard/solver specific)variable-related results, 
+	 * where i equals the given solution index.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index  
+	 * @param otherIdx holds the index of the new OtherVariableResult object
+	 * @param name holds the name of the other element
+	 * @param s holds a pointer to the array of values of the var element
+	 *
+	 * @return whether the other variable results are set successfully or not. 
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVariableResult
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setAnOtherVariableResult(int solIdx, int otherIdx, std::string name, std::string description, std::string *s);
+	
+	/**
+	 * Set the [i]th optimization solution's number of objective values, where i equals the given solution index.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the objective values. 
+	 * @param n holds the number of elements in the array x
+	 * 
+	 * @return whether objective values are set successfully or not. 
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setNumberOfObjectiveValues(int solIdx, int n);
 
 	
 	/**
@@ -1783,7 +1823,8 @@ public:
 	 * values are (optionally) calculated. 
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
 	 * @param solIdx holds the solution index to set the objective values. 
-	 * @param objectiveValues holds the a double dense array of objective values to set.
+	 * @param idx holds the indices of the objective values to be set
+	 * @param objectiveValues holds the double sparse array of objective values to set.
 	 * Possibly only the objective that the solution is based on has the value, and the rest of the objective
 	 * values all get a Double.NaN value, meaning that they are not calculated.   
 	 * @param n holds the dimension of the objectiveValues array 
@@ -1791,22 +1832,49 @@ public:
 	 * @return whether objective values are set successfully or not. 
 	 * @see #setSolutionNumber(int)
 	 */
-	bool setObjectiveValues(int solIdx, double *objectiveValues, int n);
+	bool setObjectiveValues(int solIdx, int *idx, double *objectiveValues, int n);
+
 	
+	/**
+	 * Set the [i]th optimization solution's objective values, where i equals the given solution index.   
+	 * Usually one of the objective is what the solution was solved for (or based on). Its index should be indicated 
+	 * in the solution's objectiveIdx attribute. Based on this objective's solution, the rest of the objective 
+	 * values are (optionally) calculated. 
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the objective values. 
+	 * @param objectiveValues holds the double sparse array of objective values to set.
+	 * Possibly only the objective that the solution is based on has the value, and the rest of the objective
+	 * values all get a Double.NaN value, meaning that they are not calculated.   
+	 * 
+	 * @return whether objective values are set successfully or not. 
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setObjectiveValues(int solIdx, double *objectiveValues);
+
+	/**
+	 * Set the [i]th optimization solution's number of dual variable values, where i equals the given solution index.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the dual variable values. 
+	 * @param n holds the number of elements in the array x
+	 * 
+	 * @return whether dual variable values are set successfully or not. 
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setNumberOfDualVariableValues(int solIdx, int n);
+		
 
 	/**
 	 * Set the [i]th optimization solution's dual variable values, where i equals the given solution index. 
 	 * The method allows setting dual values at both the constraints' lower and upper bounds.   
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
 	 * @param solIdx holds the solution index to set the dual variable values. 
-	 * @param lbValues holds the a double dense array of variable dual values to set at the lower bounds; it could be null if all values are 0.
-	 * @param ubValues holds the a double dense array of variable dual values to set at the upper bounds; it could be null if all values are 0.
-	 * @param n holds the number of values in the lbValues and ubValues arrays
+	 * @param lbValues holds the double dense array of dual variable values to set at the lower bounds; it could be null if all values are 0.
+	 * @param ubValues holds the double dense array of dual variable values to set at the upper bounds; it could be null if all values are 0.
 	 * 
 	 * @return whether dual variable values are set successfully or not. 
 	 * @see #setSolutionNumber(int)
 	 */	
-	bool setDualVariableValues(int solIdx, double* lbValues, double* ubValues, int n);
+	bool setDualVariableValues(int solIdx, double* lbValues, double* ubValues);
 
 
 	/**
@@ -1815,23 +1883,21 @@ public:
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
 	 * @param solIdx holds the solution index to set the dual variable values. 
 	 * @param y holds a double dense array of variable dual values; it could be NULL if all values are 0.
-	 * @param n holds the number of elements of the array y.
 	 * @return whether dual variable values are set successfully or not. 
 	 * @see #setSolutionNumber(int)
 	 */	
-	bool setDualVariableValues(int solIdx, double *y, int n);
+	bool setDualVariableValues(int solIdx, double *y);
 	
 	/**
 	 * Set the [i]th optimization solution's constraint values, where i equals the given solution index.   
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
 	 * @param solIdx holds the solution index to set the constraint values. 
 	 * @param constraintValues holds the a double dense array of constraint values to set; it could be null if all constraint values are 0.
-	 * @param n holds the dimension of the array constraintValues.
 	 * 
 	 * @return whether constraint values are set successfully or not. 
 	 * @see #setSolutionNumber(int)
 	 */
-	bool setConstraintValues(int solIdx, double *constraintValues, int n);
+	bool setConstraintValues(int solIdx, double *constraintValues);
 
 
 

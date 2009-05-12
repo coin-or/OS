@@ -107,6 +107,7 @@
 	kounter( 0),
 	iOther(0),
 	ivar(0),
+	idx(0),
 	tempVal(0.0),
 	outStr(""),
 	numberOfOtherVariableResults( 0),

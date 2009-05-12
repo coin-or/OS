@@ -133,8 +133,11 @@ public:
 	/** a temporary counter to count other variable, objective and constraint results */
 	int iOther;
 
-	/** a temporary variable to hold an integer index value */
+	/** a temporary counter to count second-level objects */
 	int ivar;
+
+	/** a temporary variable to hold an integer index value */
+	int idx;
 
 	/** a temporary variable to hold an integer or double value */
 	double tempVal;

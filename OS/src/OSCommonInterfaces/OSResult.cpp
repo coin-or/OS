@@ -26,7 +26,7 @@
 
 #include<iostream>
 #include<sstream>
-//#define DEBUG
+#define DEBUG
 
 using namespace std;
 
@@ -509,7 +509,7 @@ ObjectiveSolution::ObjectiveSolution():
 
 ObjectiveSolution::~ObjectiveSolution(){
 	#ifdef DEBUG  
-	cout << "Inside the ObjectieSolution Destructor" << endl;
+	cout << "Inside the ObjectiveSolution Destructor" << endl;
 	#endif
 	delete  values;
 	values = NULL;
@@ -801,32 +801,6 @@ double* OSResult::getOptimalPrimalVariableValues(int objIdx){
 }//getOptimalPrimalVariableValues
 
 
-double OSResult::getOptimalObjValue(int objIdx, int solIdx){
-
-	try{
-		if(this->optimization == NULL || this->optimization->solution == NULL) 
-			throw ErrorClass("No optimization or solution object defined");
-		int iSolutions = this->getSolutionNumber();
-		for(int i = 0; i < iSolutions; i++){
-			if(i != solIdx) continue;
-			if(this->optimization->solution[i]->targetObjectiveIdx != objIdx) continue;
-			if((this->optimization->solution[i]->status->type.find("ptimal") != string::npos ) ||
-				this->optimization->solution[i]->status->type.compare("globallyOptimal") == 0){	
-				return 	this->optimization->solution[i]->objectives->values->obj[ abs( objIdx)  -1 ]->value;
-			}	
-			else{
-				throw ErrorClass("There is no optimal solution");
-			}
-		}
-		throw ErrorClass("There is no optimal solution");
-	}
-	catch(const ErrorClass& eclass){
-		throw ErrorClass(  eclass.errormsg); 
-	}
-}//getOptimalObjValue
-
-
-
 double* OSResult::getOptimalDualVariableValues(int objIdx){
 	if(optimization == NULL || optimization->solution == NULL) return NULL;
 	int iNumberOfConstraints = this->getConstraintNumber();
@@ -1051,7 +1025,36 @@ bool OSResult::setNumberOfPrimalVariableValues(int solIdx, int numberOfVar){
 	return true;
 }//setNumberOfPrimalVariableValues
 
-bool OSResult::setPrimalVariableValues(int solIdx, double *x, int numberOfVar){
+bool OSResult::setPrimalVariableValues(int solIdx, int *idx, double *x, int numberOfVar){
+	int nSols = this->getSolutionNumber();
+	if(optimization == NULL) return false;
+	if(nSols <= 0) return false;
+	if(optimization->solution == NULL || 
+	   solIdx < 0 || solIdx >=  nSols) return false;
+	if(optimization->solution[solIdx] == NULL){
+		optimization->solution[solIdx] = new OptimizationSolution();
+	}
+	if(optimization->solution[solIdx]->variables == NULL){
+		optimization->solution[solIdx]->variables = new VariableSolution();
+	}
+	if(optimization->solution[solIdx]->variables->values == NULL){
+		optimization->solution[solIdx]->variables->values = new VariableValues();
+	}
+	optimization->solution[solIdx]->variables->values->numberOfVar = numberOfVar;
+	if(x == NULL){
+		//optimization->solution[solIdx]->variables->values->var = NULL;
+		return true;
+	}
+	for(int i = 0; i < numberOfVar; i++){
+		optimization->solution[solIdx]->variables->values->var.push_back(new VarValue());
+		optimization->solution[solIdx]->variables->values->var[i]->idx = idx[i];
+		optimization->solution[solIdx]->variables->values->var[i]->value = x[i];
+	}
+	return true;
+}//setPrimalVariableValues
+
+bool OSResult::setPrimalVariableValues(int solIdx, double *x){
+	int numberOfVar = this->getVariableNumber();
 	int nSols = this->getSolutionNumber();
 	if(optimization == NULL) return false;
 	if(nSols <= 0) return false;
@@ -1079,6 +1082,8 @@ bool OSResult::setPrimalVariableValues(int solIdx, double *x, int numberOfVar){
 	return true;
 }//setPrimalVariableValues
 
+
+
 bool OSResult::setNumberOfOtherVariableResults(int solIdx, int numberOfOtherVariableResults){
 	int iNumberOfVariables = this->getVariableNumber();
 	if(iNumberOfVariables <= 0) return false;
@@ -1103,7 +1108,7 @@ bool OSResult::setNumberOfOtherVariableResults(int solIdx, int numberOfOtherVari
 
 
 
-bool OSResult::setAnOtherVariableResult(int solIdx, int otherIdx, string name, string description, int  *indexes,  string *s, int numberOfVar){
+bool OSResult::setAnOtherVariableResult(int solIdx, int otherIdx, string name, string description, int  *idx,  string *s, int numberOfVar){
 	int iNumberOfVariables = numberOfVar;
 	if(iNumberOfVariables <= 0) return false;
 	int nSols = this->getSolutionNumber();
@@ -1121,7 +1126,7 @@ bool OSResult::setAnOtherVariableResult(int solIdx, int otherIdx, string name, s
 	optimization->solution[solIdx]->variables->other[ otherIdx]->numberOfVar = numberOfVar;
 	for(int i = 0; i < iNumberOfVariables; i++){
 		optimization->solution[solIdx]->variables->other[ otherIdx]->var.push_back(new OtherVarResult());
-		optimization->solution[solIdx]->variables->other[ otherIdx]->var[i]->idx = indexes[ i];
+		optimization->solution[solIdx]->variables->other[ otherIdx]->var[i]->idx = idx[i];
 		optimization->solution[solIdx]->variables->other[ otherIdx]->var[i]->value = s[i];
 		;
 	}
@@ -1129,8 +1134,89 @@ bool OSResult::setAnOtherVariableResult(int solIdx, int otherIdx, string name, s
 }//setAnOtherVariableResult
 
 
+bool OSResult::setAnOtherVariableResult(int solIdx, int otherIdx, string name, string description, string *s){
+	int numberOfVar = this->getVariableNumber();
+	int iNumberOfVariables = numberOfVar;
+	if(iNumberOfVariables <= 0) return false;
+	int nSols = this->getSolutionNumber();
+	if(optimization == NULL) return false;
+	if(nSols <= 0) return false;
+	if(optimization == NULL) return false;
+	if(optimization->solution == NULL || 
+	   solIdx < 0 || solIdx >=  nSols) return false;
+	if(optimization->solution[solIdx] == NULL) return false;
+	if(optimization->solution[solIdx]->variables == NULL)return false;
+	if(optimization->solution[solIdx]->variables->other == NULL) return false;
+	if(optimization->solution[solIdx]->variables->other[ otherIdx] == NULL) return false;
+	optimization->solution[solIdx]->variables->other[ otherIdx]->name = name;
+	optimization->solution[solIdx]->variables->other[ otherIdx]->description = description;
+	optimization->solution[solIdx]->variables->other[ otherIdx]->numberOfVar = numberOfVar;
+	for(int i = 0; i < iNumberOfVariables; i++){
+		optimization->solution[solIdx]->variables->other[ otherIdx]->var.push_back(new OtherVarResult());
+		optimization->solution[solIdx]->variables->other[ otherIdx]->var[i]->idx = i;
+		optimization->solution[solIdx]->variables->other[ otherIdx]->var[i]->value = s[i];
+		;
+	}
+	return true;
+}//setAnOtherVariableResult
 
-bool OSResult::setObjectiveValues(int solIdx, double *objectiveValues, int numberOfObj){
+bool OSResult::setNumberOfObjectiveValues(int solIdx, int numberOfObj){
+	int nSols = this->getSolutionNumber();
+	int nObj  = this->getObjectiveNumber();
+	if (numberOfObj <= 0 || numberOfObj > nObj) return false;
+	if(optimization == NULL) return false;
+	if(nSols <= 0) return false;
+	if(optimization->solution == NULL || 
+	   solIdx < 0 || solIdx >=  nSols) return false;
+	if(optimization->solution[solIdx] == NULL){
+		optimization->solution[solIdx] = new OptimizationSolution();
+	}
+	if(optimization->solution[solIdx]->objectives == NULL){
+		optimization->solution[solIdx]->objectives = new ObjectiveSolution();
+	}
+	if(optimization->solution[solIdx]->objectives->values == NULL){
+		optimization->solution[solIdx]->objectives->values = new ObjectiveValues();
+	}
+	optimization->solution[solIdx]->objectives->values->numberOfObj = numberOfObj;
+//	optimization->solution[solIdx]->objectives->values->obj = new ObjValue*[numberOfObj];
+
+	return true;
+}//setNumberOfObjectiveValues
+
+
+
+bool OSResult::setObjectiveValues(int solIdx, int *idx, double *objectiveValues, int numberOfObj){
+	int iNumberOfObjectives = numberOfObj;
+	if(iNumberOfObjectives < 0) return false;
+	if(iNumberOfObjectives == 0) return true;
+	if(objectiveValues == NULL) return false;
+	int nSols = this->getSolutionNumber();
+	if(optimization == NULL) return false;
+	if(nSols <= 0) return false;
+	if(optimization == NULL) return false;
+	if(optimization->solution == NULL || 
+	   solIdx < 0 || solIdx >=  nSols) return false;
+	if(optimization->solution[solIdx] == NULL){
+		optimization->solution[solIdx] = new OptimizationSolution();
+	}
+	if(optimization->solution[solIdx]->objectives == NULL){
+		optimization->solution[solIdx]->objectives = new ObjectiveSolution();
+	}
+	if(optimization->solution[solIdx]->objectives->values == NULL){
+		optimization->solution[solIdx]->objectives->values = new ObjectiveValues();
+	}
+	optimization->solution[solIdx]->objectives->values->numberOfObj = iNumberOfObjectives;
+	for(int i = 0; i < iNumberOfObjectives; i++){
+		optimization->solution[solIdx]->objectives->values->obj.push_back( new ObjValue());
+		optimization->solution[solIdx]->objectives->values->obj[i]->idx = idx[i];
+		optimization->solution[solIdx]->objectives->values->obj[i]->value = objectiveValues[i];
+	}
+	return true;
+}//setObjectiveValues
+
+
+bool OSResult::setObjectiveValues(int solIdx, double *objectiveValues){
+	int numberOfObj = this->getObjectiveNumber();
 	int iNumberOfObjectives = numberOfObj;
 	if(iNumberOfObjectives < 0) return false;
 	if(iNumberOfObjectives == 0) return true;
@@ -1159,7 +1245,34 @@ bool OSResult::setObjectiveValues(int solIdx, double *objectiveValues, int numbe
 	return true;
 }//setObjectiveValues
 
-bool OSResult::setDualVariableValues(int solIdx, double *lbValues, double *ubValues, int numberOfCon){
+
+bool OSResult::setNumberOfDualVariableValues(int solIdx, int numberOfCon){
+	int nSols = this->getSolutionNumber();
+	int nCon  = this->getConstraintNumber();
+	if (numberOfCon <= 0 || numberOfCon > nCon) return false;
+	if(optimization == NULL) return false;
+	if(nSols <= 0) return false;
+	if(optimization->solution == NULL || 
+	   solIdx < 0 || solIdx >=  nSols) return false;
+	if(optimization->solution[solIdx] == NULL){
+		optimization->solution[solIdx] = new OptimizationSolution();
+	}
+	if(optimization->solution[solIdx]->constraints == NULL){
+		optimization->solution[solIdx]->constraints = new ConstraintSolution();
+	}
+	if(optimization->solution[solIdx]->constraints->dualValues == NULL){
+		optimization->solution[solIdx]->constraints->dualValues = new DualVariableValues();
+	}
+	optimization->solution[solIdx]->constraints->dualValues->numberOfCon = numberOfCon;
+//	optimization->solution[solIdx]->constraints->dualValues->con = new DualVarValue*[numberOfCon];
+
+	return true;
+}//setNumberOfDualVariableValues
+
+
+
+bool OSResult::setDualVariableValues(int solIdx, double *lbValues, double *ubValues){
+	int numberOfCon = this->getConstraintNumber();
 	int iNumberOfConstraints = numberOfCon;
 	if(iNumberOfConstraints < 0) return false;
 	if(iNumberOfConstraints == 0) return true;
@@ -1207,7 +1320,7 @@ bool OSResult::setDualVariableValues(int solIdx, double *lbValues, double *ubVal
 		for(int i = 0; i < iNumberOfConstraints; i++){
 			if(ubValues[i] != 0){
 				optimization->solution[solIdx]->constraints->dualValues->con[j]->idx = i;
-				optimization->solution[solIdx]->constraints->dualValues->con[j]->ubValue = 0;
+				optimization->solution[solIdx]->constraints->dualValues->con[j]->lbValue = 0;
 				optimization->solution[solIdx]->constraints->dualValues->con[j]->ubValue = ubValues[i];
 				j++;
 			}
@@ -1236,7 +1349,8 @@ bool OSResult::setDualVariableValues(int solIdx, double *lbValues, double *ubVal
 	return true;
 }//setDualVariableValues
 
-bool OSResult::setDualVariableValues(int solIdx, double *y, int numberOfCon){
+bool OSResult::setDualVariableValues(int solIdx, double *y){
+	int numberOfCon = this->getConstraintNumber();
 	int iNumberOfConstraints = numberOfCon;
 	if(iNumberOfConstraints < 0) return false;
 	if(iNumberOfConstraints == 0) return true;
@@ -1268,7 +1382,8 @@ bool OSResult::setDualVariableValues(int solIdx, double *y, int numberOfCon){
 	return true;
 }//setDualVariableValues
 
-bool OSResult::setConstraintValues(int solIdx, double *dualVarValues, int numberOfCon){
+bool OSResult::setConstraintValues(int solIdx, double *dualVarValues){
+	int numberOfCon = this->getConstraintNumber();
 	int iNumberOfConstraints = numberOfCon;
 	if(iNumberOfConstraints <= 0) return false;
 	int nSols = this->getSolutionNumber();
