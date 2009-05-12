@@ -359,6 +359,23 @@ public:
 	double *el;			
 };//class DoubleVector
 
+
+/*! \struct IndexValuePair
+ *  \brief A coomonly used structure holding an index-value pair
+ */
+struct IndexValuePair{
+	/** idx holds the index of an entity (such as a variable, constraint, objective)
+	 *  that is part of a sparse vector
+	 */
+	int idx;
+
+	/** value is a double that holds the value of the entity
+	 */ 
+	double value;
+		
+};
+
+
 #endif
 
 
