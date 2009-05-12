@@ -732,6 +732,7 @@ AC_COIN_VPATH_LINK(data/osplFiles/knock.ospl)
 ##
 ## osrl test files
 ##
+AC_COIN_VPATH_LINK(data/osrlFiles/ipoptResult.osrl)
 AC_COIN_VPATH_LINK(data/osrlFiles/parincLinear.osrl)
 AC_COIN_VPATH_LINK(data/osrlFiles/reducedcost.osrl)
 AC_COIN_VPATH_LINK(data/osrlFiles/rosenbrockmod.osrl)
