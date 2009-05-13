@@ -27,6 +27,7 @@
                 </variables>
                 <objectives>
                     <values numberOfObj="1">
+                        <obj idx="-1">7667.94</obj> 
                         <obj idx="-1">7667.94</obj>
                     </values>
                 </objectives>

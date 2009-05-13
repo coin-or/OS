@@ -1966,7 +1966,7 @@ if (COMPONENT_DEBUG == true)
 		//postfixVec = osinstance->getNonlinearExpressionTreeInPostfix( -1);
 		if(postfixVec.size() != n) throw ErrorClass(" Problem with creating expression trees");
 		std::cout << std::endl << std::endl;
-		for (int i = 0 ; i < n; i++){
+		for ( i = 0 ; i < n; i++){
 			//std::cout << postfixVec[i]->snodeName << std::endl;
 			nodeNames2[i] = postfixVec[i]->snodeName;
 			if( nodeNames1[i] != nodeNames2[ i]) throw ErrorClass(" Problem with creating expression trees");
@@ -3170,7 +3170,7 @@ if (COMPONENT_DEBUG == true)
 		osrlwriter = NULL;
 		delete osrlreader;
 		osrlreader = NULL;
-/*
+
 		// now a second example
 		cout << endl << "TEST PARSING ANOTHER OSrL FILE" << endl;
 		osrlwriter = new OSrLWriter();
@@ -3193,9 +3193,9 @@ if (COMPONENT_DEBUG == true)
 		osrlwriter = NULL;
 		delete osrlreader;
 		osrlreader = NULL;
-*/
+
 		unitTestResult << 
-		     "Successful test of OSrL parser on problems parincLinear.osrl and errorExample.osrl" 
+		     "Successful test of OSrL parser on problems ipoptResult.osrl and errorExample.osrl" 
 		      << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}	
