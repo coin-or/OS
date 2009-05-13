@@ -85,7 +85,7 @@ int  main(){
 		OSResult *osresult = NULL;
 		std::string osrlFileName;
 		std::string osrl;
-		osrlFileName = "parserTest.osrl"; 	
+		osrlFileName = "ipoptResult.osrl"; 	
 		osrl = fileUtil->getFileAsString( osrlFileName.c_str() );
 		// read some osrl files
 		OSrLReader *osrlreader = NULL;
