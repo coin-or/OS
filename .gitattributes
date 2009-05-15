@@ -61,8 +61,7 @@ OS/MSVisualStudioOSExamples/instanceGenerator/code/OSInstanceGenerator.cpp -text
 OS/MSVisualStudioOSExamples/instanceGenerator/instanceGenerator.vcproj -text
 OS/MSVisualStudioOSExamples/notes.txt -text
 OS/MSVisualStudioOSExamples/osExamples.sln -text
-OS/MSVisualStudioOSExamples/osModDemo/code/OSModDemo.cpp -text
-OS/MSVisualStudioOSExamples/osModDemo/osModDemo.vcproj -text
+OS/MSVisualStudioOSExamples/osModificationDemo/osModificationDemo.vcproj -text
 OS/MSVisualStudioOSExamples/osRemoteTest/code/OSRemoteTest.cpp -text
 OS/MSVisualStudioOSExamples/osRemoteTest/osRemoteTest.vcproj -text
 OS/Makefile.am -text

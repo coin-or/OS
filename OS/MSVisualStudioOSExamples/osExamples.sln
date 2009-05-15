@@ -9,7 +9,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "algorithmicDiff", "algorith
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "osRemoteTest", "osRemoteTest\osRemoteTest.vcproj", "{430006C2-FB74-455C-B095-60AC419A8755}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "osModeDemo", "osModDemo\osModDemo.vcproj", "{9FBEA180-F234-45BF-8C34-F6454DEDEA44}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "osModificationDemo", "osModificationDemo\osModificationDemo.vcproj", "{9FBEA180-F234-45BF-8C34-F6454DEDEA44}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

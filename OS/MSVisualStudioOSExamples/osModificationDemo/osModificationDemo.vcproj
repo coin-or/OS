@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="osModDemo"
+	Name="osModificationDemo"
 	ProjectGUID="{9FBEA180-F234-45BF-8C34-F6454DEDEA44}"
 	RootNamespace="osTestCode"
 	Keyword="Win32Proj"
@@ -182,7 +182,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\code\OSModDemo.cpp"
+				RelativePath="..\..\examples\osModificationDemo\OSModificationDemo.cpp"
 				>
 			</File>
 		</Filter>
