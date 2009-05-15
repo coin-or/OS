@@ -538,10 +538,10 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 			case SUCCESS:
 				solutionDescription = "SUCCESS[IPOPT]: Algorithm terminated successfully at a locally optimal point, satisfying the convergence tolerances.";
 				osresult->setSolutionStatus(solIdx,  "locallyOptimal", solutionDescription);
-				osresult->setPrimalVariableValues(solIdx, const_cast<double*>(x)); //,  osinstance->getVariableNumber() );
-				osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda)); //,  osinstance->getConstraintNumber() );
+				osresult->setPrimalVariableValuesDense(solIdx, const_cast<double*>(x)); //,  osinstance->getVariableNumber() );
+				osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda)); //,  osinstance->getConstraintNumber() );
 				mdObjValues[0] = obj_value;
-				osresult->setObjectiveValues(solIdx, mdObjValues); //, osinstance->getObjectiveNumber());
+				osresult->setObjectiveValuesDense(solIdx, mdObjValues); //, osinstance->getObjectiveNumber());
 				
 				
 				// set other
@@ -559,14 +559,14 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 					idx[ i] = i;
 				 }
 				otherIdx = 0;
-				osresult->setAnOtherVariableResult(solIdx, otherIdx, "varL", "Lagrange Multiplier on the Variable Lower Bound",  idx,  rcost,  osinstance->getVariableNumber() );
+				osresult->setAnOtherVariableResultSparse(solIdx, otherIdx, "varL", "", "Lagrange Multiplier on the Variable Lower Bound",  idx,  rcost,  osinstance->getVariableNumber() );
 				
 				
 				for (Index i = 0; i < n; i++) {
 				    rcost[ i] =  os_dtoa_format( z_U[i]); 
 				 }
 				otherIdx = 1;
-				osresult->setAnOtherVariableResult(solIdx, otherIdx, "varU", "Lagrange Multiplier on the Variable Upper Bound", idx,  rcost, osinstance->getVariableNumber() );
+				osresult->setAnOtherVariableResultSparse(solIdx, otherIdx, "varU", "", "Lagrange Multiplier on the Variable Upper Bound", idx,  rcost, osinstance->getVariableNumber() );
 				
 				delete[] rcost;
 				delete[] idx;
@@ -578,26 +578,26 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 			case MAXITER_EXCEEDED:
 				solutionDescription = "MAXITER_EXCEEDED[IPOPT]: Maximum number of iterations exceeded.";
 				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);
-				osresult->setPrimalVariableValues(solIdx, const_cast<double*>(x)); //, osinstance->getVariableNumber() );
-				osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda)); //, osinstance->getConstraintNumber());
+				osresult->setPrimalVariableValuesDense(solIdx, const_cast<double*>(x)); //, osinstance->getVariableNumber() );
+				osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda)); //, osinstance->getConstraintNumber());
 				mdObjValues[0] = obj_value;
-				osresult->setObjectiveValues(solIdx, mdObjValues); //, osinstance->getObjectiveNumber());
+				osresult->setObjectiveValuesDense(solIdx, mdObjValues); //, osinstance->getObjectiveNumber());
 			break;
 			case STOP_AT_TINY_STEP:
 				solutionDescription = "STOP_AT_TINY_STEP[IPOPT]: Algorithm proceeds with very little progress.";
 				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);
-				osresult->setPrimalVariableValues(solIdx, const_cast<double*>( x)); //, osinstance->getVariableNumber());
-				osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda)); //, osinstance->getConstraintNumber());
+				osresult->setPrimalVariableValuesDense(solIdx, const_cast<double*>( x)); //, osinstance->getVariableNumber());
+				osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda)); //, osinstance->getConstraintNumber());
 				mdObjValues[0] = obj_value;
-				osresult->setObjectiveValues(solIdx, mdObjValues); //, osinstance->getObjectiveNumber());
+				osresult->setObjectiveValuesDense(solIdx, mdObjValues); //, osinstance->getObjectiveNumber());
 			break;
 			case STOP_AT_ACCEPTABLE_POINT:
 				solutionDescription = "STOP_AT_ACCEPTABLE_POINT[IPOPT]: Algorithm stopped at a point that was converged, not to _desired_ tolerances, but to _acceptable_ tolerances";
 				osresult->setSolutionStatus(solIdx,  "IpoptAccetable", solutionDescription);
-				osresult->setPrimalVariableValues(solIdx, const_cast<double*>(x)); //, osinstance->getVariableNumber());
-				osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda)); //, osinstance->getConstraintNumber());
+				osresult->setPrimalVariableValuesDense(solIdx, const_cast<double*>(x)); //, osinstance->getVariableNumber());
+				osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda)); //, osinstance->getConstraintNumber());
 				mdObjValues[0] = obj_value;
-				osresult->setObjectiveValues(solIdx, mdObjValues); //,  osinstance->getObjectiveNumber() );
+				osresult->setObjectiveValuesDense(solIdx, mdObjValues); //,  osinstance->getObjectiveNumber() );
 			break;
 			case LOCAL_INFEASIBILITY:
 				solutionDescription = "LOCAL_INFEASIBILITY[IPOPT]: Algorithm converged to a point of local infeasibility. Problem may be infeasible.";

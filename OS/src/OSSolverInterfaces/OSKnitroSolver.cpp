@@ -689,20 +689,20 @@ void KnitroSolver::solve() throw (ErrorClass) {
 					solutionDescription = "LOCALLY OPTIMAL SOLUTION FOUND[KNITRO STATUS 0]: Knitro found a locally optimal point which satisfies the stopping criterion.If the problem is convex (for example, a linear program), then this point corresponds to a globally optimal solution.";
 					osresult->setSolutionStatus(solIdx,  "locallyOptimal", solutionDescription);
 					std::cout << "SET SOLUTION STATUS " << endl;
-					osresult->setPrimalVariableValues(solIdx, daX);
+					osresult->setPrimalVariableValuesDense(solIdx, daX);
 					std::cout << "SET PRIMAL VALUES " << endl;
-					osresult->setDualVariableValues(solIdx, daLambda);
+					osresult->setDualVariableValuesDense(solIdx, daLambda);
 					mdObjValues[0] = dFinalObj;
-					osresult->setObjectiveValues(solIdx, mdObjValues);
+					osresult->setObjectiveValuesDense(solIdx, mdObjValues);
 					std::cout << "SET OBJECTIVE VALUES " << endl;
 				break;
 				case -1:
 					solutionDescription = "Iteration limit reached[KNITRO STATUS -1]: The iteration limit was reached before being able to satisfy the required stopping criteria.";
 					osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);
-					osresult->setPrimalVariableValues(solIdx, daX);
-					osresult->setDualVariableValues(solIdx, daLambda);
+					osresult->setPrimalVariableValuesDense(solIdx, daX);
+					osresult->setDualVariableValuesDense(solIdx, daLambda);
 					mdObjValues[0] = dFinalObj;
-					osresult->setObjectiveValues(solIdx, mdObjValues);
+					osresult->setObjectiveValuesDense(solIdx, mdObjValues);
 				break;
 				case -2:
 					solutionDescription = "Convergence to an infeasible point[KNITRO STATUS -2]: Problem may be locally infeasible.The algorithm has converged to an infeasible point from which it cannot further decrease the infeasibility measure. This happens when the problem is infeasible, but may also occur on occasion for feasible problems with nonlinear constraints or badly scaled problems. It is recommended to try various initial points. If this occurs for a variety of initial points, it is likely the problem is infeasible.";
@@ -715,26 +715,26 @@ void KnitroSolver::solve() throw (ErrorClass) {
 				case -4:
 					solutionDescription = "Relative change in solution estimate < xtol[KNITRO STATUS -4]: The relative change in the solution estimate is less than that specified by the paramater xtol.To try to get more accuracy one may decrease xtol. If xtol is very small already, it is an indication that no more significant progress can be made. If the current point is feasible, it is possible it may be optimal, however the stopping tests cannot be satisfied (perhaps because of degeneracy, ill-conditioning or bad scaling).";
 					osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);
-					osresult->setPrimalVariableValues(solIdx, daX);
-					osresult->setDualVariableValues(solIdx, daLambda);
+					osresult->setPrimalVariableValuesDense(solIdx, daX);
+					osresult->setDualVariableValuesDense(solIdx, daLambda);
 					mdObjValues[0] = dFinalObj;
-					osresult->setObjectiveValues(solIdx, mdObjValues);
+					osresult->setObjectiveValuesDense(solIdx, mdObjValues);
 				break;
 				case -5:
 					solutionDescription = "Current solution estimate cannot be improved. Point appears to be optimal, but desired accuracy could not be achieved.[KNITRO  STATUS -5]: No more progress can be made, but the stopping tests are close to being satisfied (within a factor of 100) and so the current approximate solution is believed to be optimal.";
 					osresult->setSolutionStatus(solIdx,  "locallyOptimal", solutionDescription);
-					osresult->setPrimalVariableValues(solIdx, daX);
-					osresult->setDualVariableValues(solIdx, daLambda);
+					osresult->setPrimalVariableValuesDense(solIdx, daX);
+					osresult->setDualVariableValuesDense(solIdx, daLambda);
 					mdObjValues[0] = dFinalObj;
-					osresult->setObjectiveValues(solIdx, mdObjValues);
+					osresult->setObjectiveValuesDense(solIdx, mdObjValues);
 				break;
 				case -6:
 					solutionDescription = "Time limit reached[KNITRO STATUS -6]: The time limit was reached before being able to satisfy the required stopping criteria.";
 					osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);
-					osresult->setPrimalVariableValues(solIdx, daX);
-					osresult->setDualVariableValues(solIdx, daLambda);
+					osresult->setPrimalVariableValuesDense(solIdx, daX);
+					osresult->setDualVariableValuesDense(solIdx, daLambda);
 					mdObjValues[0] = dFinalObj;
-					osresult->setObjectiveValues(solIdx, mdObjValues);
+					osresult->setObjectiveValuesDense(solIdx, mdObjValues);
 				break;
 				case -50:
 				case -51:

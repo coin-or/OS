@@ -2890,12 +2890,12 @@ solveroptiontype: TYPEATT ATTRIBUTETEXT
 QUOTE;
 
 solveroptiondescription: DESCRIPTIONATT ATTRIBUTETEXT
-{	if (parserData->solverOptionNamePresent)
-	{	osolerror( NULL, osoption, parserData, "only one name attribute allowed");
+{	if (parserData->solverOptionDescriptionPresent)
+	{	osolerror( NULL, osoption, parserData, "only one description attribute allowed");
 	}
 	else
-	{	parserData->solverOptionNamePresent = true;
-		osoption->optimization->solverOptions->solverOption[parserData->numberOfSolverOptions]->name = $2;
+	{	parserData->solverOptionDescriptionPresent = true;
+		osoption->optimization->solverOptions->solverOption[parserData->numberOfSolverOptions]->description = $2;
 	}
 }
 QUOTE;

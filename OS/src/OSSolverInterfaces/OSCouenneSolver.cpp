@@ -622,28 +622,28 @@ void CouenneSolver::writeResult(){
 				/* Retrieve the solution */
 				//
 				*(z + 0)  =  bb.bestObj();
-				osresult->setObjectiveValues(solIdx, z); //, 1);
+				osresult->setObjectiveValuesDense(solIdx, z); //, 1);
 				for(i=0; i < osinstance->getVariableNumber(); i++){
 					*(x + i) = bb.bestSolution()[i];
 					//std::cout <<  *(x + i)  << std::endl;
 				}
-				osresult->setPrimalVariableValues(solIdx, x); //, osinstance->getVariableNumber());	
+				osresult->setPrimalVariableValuesDense(solIdx, x); //, osinstance->getVariableNumber());	
 			break;
 			
 			case MAXITER_EXCEEDED:
 				solutionDescription = "MAXITER_EXCEEDED[COUENNE]: Maximum number of iterations exceeded.";
 				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);
-				//osresult->setPrimalVariableValues(solIdx, const_cast<double*>(x));
-				//osresult->setDualVariableValues(solIdx, const_cast<double*>( lambda));	
+				//osresult->setPrimalVariableValuesDense(solIdx, const_cast<double*>(x));
+				//osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda));	
 				/* Retrieve the solution */
 				//
 				*(z + 0)  =  bb.bestObj();
-				osresult->setObjectiveValues(solIdx, z); //, 1);
+				osresult->setObjectiveValuesDense(solIdx, z); //, 1);
 				for(i=0; i < osinstance->getVariableNumber(); i++){
 					*(x + i) = bb.model().getColSolution()[i];
 					//std::cout <<  *(x + i)  << std::endl;
 				}
-				osresult->setPrimalVariableValues(solIdx, x); //, osinstance->getVariableNumber());						
+				osresult->setPrimalVariableValuesDense(solIdx, x); //, osinstance->getVariableNumber());						
 			break;
 			
 			case STOP_AT_TINY_STEP:
@@ -652,12 +652,12 @@ void CouenneSolver::writeResult(){
 				/* Retrieve the solution */
 				//
 				*(z + 0)  =  bb.bestObj();
-				osresult->setObjectiveValues(solIdx, z); //, 1);
+				osresult->setObjectiveValuesDense(solIdx, z); //, 1);
 				for(i=0; i < osinstance->getVariableNumber(); i++){
 					*(x + i) = bb.model().getColSolution()[i];
 					//std::cout <<  *(x + i)  << std::endl;
 				}
-				osresult->setPrimalVariableValues(solIdx, x); //, osinstance->getVariableNumber());	
+				osresult->setPrimalVariableValuesDense(solIdx, x); //, osinstance->getVariableNumber());	
 			break;
 			
 			case STOP_AT_ACCEPTABLE_POINT:
@@ -666,12 +666,12 @@ void CouenneSolver::writeResult(){
 				/* Retrieve the solution */
 				//
 				*(z + 0)  =  bb.bestObj();
-				osresult->setObjectiveValues(solIdx, z); //, 1);
+				osresult->setObjectiveValuesDense(solIdx, z); //, 1);
 				for(i=0; i < osinstance->getVariableNumber(); i++){
 					*(x + i) = bb.model().getColSolution()[i];
 					//std::cout <<  *(x + i)  << std::endl;
 				}
-				osresult->setPrimalVariableValues(solIdx, x); //, osinstance->getVariableNumber());				
+				osresult->setPrimalVariableValuesDense(solIdx, x); //, osinstance->getVariableNumber());				
 			break;
 			
 			case LOCAL_INFEASIBILITY:

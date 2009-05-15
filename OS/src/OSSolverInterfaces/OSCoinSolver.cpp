@@ -823,19 +823,19 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 		rcost = new std::string[ osinstance->getVariableNumber()];
 		//
 		*(z + 0)  =  solver->getObjValue();
-		osresult->setObjectiveValues(solIdx, z); //, osinstance->getObjectiveNumber());
+		osresult->setObjectiveValuesDense(solIdx, z); //, osinstance->getObjectiveNumber());
 		for(i=0; i < osinstance->getVariableNumber(); i++){
 			*(x + i) = solver->getColSolution()[i];
 			*(idx + i) = i;
 			
 		}
-		osresult->setPrimalVariableValues(solIdx, x); //, osinstance->getVariableNumber());
+		osresult->setPrimalVariableValuesDense(solIdx, x); //, osinstance->getVariableNumber());
 		// Symphony does not get dual prices
 		if( sSolverName.find( "symphony") == std::string::npos && osinstance->getNumberOfIntegerVariables() == 0 && osinstance->getNumberOfBinaryVariables() == 0) {
 			for(i=0; i <  osinstance->getConstraintNumber(); i++){
 				*(y + i) = solver->getRowPrice()[ i];
 			}
-			osresult->setDualVariableValues(solIdx, y); //, osinstance->getConstraintNumber());
+			osresult->setDualVariableValuesDense(solIdx, y); //, osinstance->getConstraintNumber());
 		}
 		//
 		//
@@ -851,7 +851,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 			for(i=0; i < numberOfVar; i++){
 				rcost[ i] = os_dtoa_format( solver->getReducedCost()[ i]);
 			}
-			osresult->setAnOtherVariableResult(solIdx, otherIdx, "reduced costs", "the variable reduced costs", idx,  rcost, osinstance->getVariableNumber());			
+			osresult->setAnOtherVariableResultSparse(solIdx, otherIdx, "reduced costs", "", "the variable reduced costs", idx,  rcost, osinstance->getVariableNumber());			
 			// end of settiing reduced costs
 		}					
 	}

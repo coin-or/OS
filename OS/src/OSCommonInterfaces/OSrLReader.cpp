@@ -27,11 +27,23 @@ void osrlset_extra (OSrLParserData* parserData , void* yyscanner );
 
 
 OSrLReader::OSrLReader( )  {	
+#ifdef OSRLREADER_DEBUG
+	std::cout << "new OSrLParserData()" << std::endl;
+#endif
 	m_parserData = new OSrLParserData();
+#ifdef OSRLREADER_DEBUG
+	std::cout << "new OSResult()" << std::endl;
+#endif
 	m_osresult = new OSResult(); 
 	// initialize the lexer and set yyextra
+#ifdef OSRLREADER_DEBUG
+	std::cout << "initialize the lexer" << std::endl;
+#endif
 	osrllex_init( &(m_parserData->scanner) );
 	osrlset_extra (m_parserData ,   m_parserData->scanner);						
+#ifdef OSRLREADER_DEBUG
+	std::cout << "done" << std::endl;
+#endif
 }
 
 OSrLReader::~OSrLReader(){

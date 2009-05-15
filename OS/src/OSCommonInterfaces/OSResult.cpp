@@ -26,24 +26,9 @@
 
 #include<iostream>
 #include<sstream>
-#define DEBUG
+#define DEBUG_RESULT
 
 using namespace std;
-
-GeneralStatus::GeneralStatus():
-	type( ""),
-	description( "")
-{    
-	#ifdef DEBUG
-	cout << "Inside GeneralStatus Constructor" << endl;
-	#endif
-}// end GeneralStatus constructor  
-
-GeneralStatus::~GeneralStatus(){
-	#ifdef DEBUG
-	cout << "GeneralStatus Destructor Called" << endl;
-	#endif
-}//end GeneralStatus destructor
 
 OSResult::OSResult():
 	m_iVariableNumber( -1),
@@ -54,18 +39,19 @@ OSResult::OSResult():
 	m_mdDualValues( NULL)
 
 {    
-	#ifdef DEBUG
+	#ifdef DEBUG_RESULT
 	cout << "Inside OSResult Constructor" << endl;
 	#endif
 	this->general = new GeneralResult();
 	this->system = new SystemResult();
 	this->service = new ServiceResult();
 	this->job = new JobResult();
+	cout << "returned from JobResult Constructor" << endl;
 	this->optimization = new OptimizationResult();
 }// end OSResult constructor  
 
 OSResult::~OSResult(){
-	#ifdef DEBUG
+	#ifdef DEBUG_RESULT
 	cout << "OSResult Destructor Called" << endl;
 	#endif
 	// delete the children of OSResult
@@ -91,6 +77,21 @@ OSResult::~OSResult(){
 	m_mdDualValues = 0;
 }//end OSResult destructor
 
+GeneralStatus::GeneralStatus():
+	type( ""),
+	description( "")
+{    
+	#ifdef DEBUG_RESULT
+	cout << "Inside GeneralStatus Constructor" << endl;
+	#endif
+}// end GeneralStatus constructor  
+
+GeneralStatus::~GeneralStatus(){
+	#ifdef DEBUG_RESULT
+	cout << "GeneralStatus Destructor Called" << endl;
+	#endif
+}//end GeneralStatus destructor
+
 
 GeneralResult::GeneralResult():
 	serviceURI(""),
@@ -100,7 +101,7 @@ GeneralResult::GeneralResult():
 	time("0.0"),
 	message("")
 { 
-	#ifdef DEBUG
+	#ifdef DEBUG_RESULT
 	cout << "Inside the GeneralResult Constructor" << endl;
 	#endif
 	generalStatus = new GeneralStatus();
@@ -108,7 +109,7 @@ GeneralResult::GeneralResult():
 
 
 GeneralResult::~GeneralResult(){
-	#ifdef DEBUG  
+	#ifdef DEBUG_RESULT  
 	cout << "Inside the GeneralResult Destructor" << endl;
 	#endif
 	delete generalStatus;
@@ -118,14 +119,14 @@ GeneralResult::~GeneralResult(){
 
 SystemResult::SystemResult()  //:
 { 
-	#ifdef DEBUG
+	#ifdef DEBUG_RESULT
 	cout << "Inside the SystemResult Constructor" << endl;
 	#endif
 }//end SystemResult constructor
 
 
 SystemResult::~SystemResult(){
-	#ifdef DEBUG  
+	#ifdef DEBUG_RESULT  
 	cout << "Inside the SystemResult Destructor" << endl;
 	#endif
 }// end SystemResult destructor
@@ -134,14 +135,14 @@ SystemResult::~SystemResult(){
 
 ServiceResult::ServiceResult()  //:
 { 
-	#ifdef DEBUG
+	#ifdef DEBUG_RESULT
 	cout << "Inside the ServiceResult Constructor" << endl;
 	#endif
 }//end ServiceResult constructor
 
 
 ServiceResult::~ServiceResult(){
-	#ifdef DEBUG  
+	#ifdef DEBUG_RESULT  
 	cout << "Inside the ServiceResult Destructor" << endl;
 	#endif
 }// end ServiceResult destructor
@@ -154,14 +155,14 @@ Time::Time():
 	description(""),
 	value(0.0)
 { 
-	#ifdef DEBUG
+	#ifdef DEBUG_RESULT
 	cout << "Inside the Time Constructor" << endl;
 	#endif
 }//end Time constructor
 
 
 Time::~Time(){
-	#ifdef DEBUG  
+	#ifdef DEBUG_RESULT  
 	cout << "Inside the Time Destructor" << endl;
 	#endif
 
@@ -170,7 +171,7 @@ Time::~Time(){
 TimingInformation::TimingInformation():
 	numberOfTimes(0)
 { 
-	#ifdef DEBUG
+	#ifdef DEBUG_RESULT
 	cout << "Inside the TimingInformation Constructor" << endl;
 	#endif
 	time = NULL;
@@ -178,7 +179,7 @@ TimingInformation::TimingInformation():
 
 
 TimingInformation::~TimingInformation(){
-	#ifdef DEBUG  
+	#ifdef DEBUG_RESULT  
 	cout << "Inside the TimingInformation Destructor" << endl;
 	#endif
 	if (time != NULL)
@@ -195,7 +196,7 @@ TimingInformation::~TimingInformation(){
 
 JobResult::JobResult() //:
 { 
-	#ifdef DEBUG
+	#ifdef DEBUG_RESULT
 	cout << "Inside the JobResult Constructor" << endl;
 	#endif
 	timingInformation = NULL;
@@ -203,7 +204,7 @@ JobResult::JobResult() //:
 
 
 JobResult::~JobResult(){
-	#ifdef DEBUG  
+	#ifdef DEBUG_RESULT  
 	cout << "Inside the JobResult Destructor" << endl;
 	#endif
 	if (timingInformation != NULL) delete timingInformation;
@@ -214,14 +215,14 @@ VarValue::VarValue():
 	idx( -1),
 	value( 0)
 { 
-	#ifdef DEBUG
+	#ifdef DEBUG_RESULT
 	cout << "Inside the VarValue Constructor" << endl;
 	#endif
 }//end VarValue constructor
 
 
 VarValue::~VarValue(){
-	#ifdef DEBUG  
+	#ifdef DEBUG_RESULT  
 	cout << "Inside the VarValue Destructor" << endl;
 	#endif
 }// end VarValue destructor 
@@ -231,14 +232,14 @@ OtherVarResult::OtherVarResult():
 	idx( -1),
 	value( "")
 { 
-	#ifdef DEBUG
+	#ifdef DEBUG_RESULT
 	cout << "Inside the OtherVarResult Constructor" << endl;
 	#endif
 }//end OtherVarResult constructor
 
 
 OtherVarResult::~OtherVarResult(){
-	#ifdef DEBUG  
+	#ifdef DEBUG_RESULT  
 	cout << "Inside the OtherVarResult Destructor" << endl;
 	#endif
 }// end OtherVarResult destructor 
@@ -248,14 +249,14 @@ OtherObjResult::OtherObjResult():
 	idx( -1),
 	value( "")
 { 
-	#ifdef DEBUG
+	#ifdef DEBUG_RESULT
 	cout << "Inside the OtherObjResult Constructor" << endl;
 	#endif
 }//end OtherObjResult constructor
 
 
 OtherObjResult::~OtherObjResult(){
-	#ifdef DEBUG  
+	#ifdef DEBUG_RESULT  
 	cout << "Inside the OtherObjResult Destructor" << endl;
 	#endif
 }//end OtherObjResult destructor
@@ -265,14 +266,14 @@ OtherConResult::OtherConResult():
 	idx( -1),
 	value( "")
 { 
-	#ifdef DEBUG
+	#ifdef DEBUG_RESULT
 	cout << "Inside the OtherConResult Constructor" << endl;
 	#endif
 }//end OtherConResult constructor
 
 
 OtherConResult::~OtherConResult(){
-	#ifdef DEBUG  
+	#ifdef DEBUG_RESULT  
 	cout << "Inside the OtherConResult Destructor" << endl;
 	#endif
 }//end OtherConResult destructor
@@ -282,13 +283,13 @@ ObjValue::ObjValue():
 	idx( -1),
 	value( OSNAN)
 { 
-	#ifdef DEBUG
+	#ifdef DEBUG_RESULT
 	cout << "Inside the ObjValue Constructor" << endl;
 	#endif
 }//end ObjValue constructor
 
 ObjValue::~ObjValue(){
-	#ifdef DEBUG  
+	#ifdef DEBUG_RESULT  
 	cout << "Inside the ObjValue Destructor" << endl;
 	#endif
 }// end ObjValue destructor 
@@ -299,14 +300,14 @@ DualVarValue::DualVarValue():
 	ubValue( 0),
 	value( 0)
 { 
-	#ifdef DEBUG
+	#ifdef DEBUG_RESULT
 	cout << "Inside the DualVarValue Constructor" << endl;
 	#endif
 }//end DualVarValue constructor
 
 
 DualVarValue::~DualVarValue(){
-	#ifdef DEBUG  
+	#ifdef DEBUG_RESULT  
 	cout << "Inside the DualVarValue Destructor" << endl;
 	#endif
 }// end DualVarValue destructor
@@ -314,7 +315,7 @@ DualVarValue::~DualVarValue(){
 
 
 VariableValues::VariableValues() { 
-	#ifdef DEBUG
+	#ifdef DEBUG_RESULT
 	cout << "Inside the VariableValues Constructor" << endl;
 	#endif
 
@@ -322,7 +323,7 @@ VariableValues::VariableValues() {
 
 
 VariableValues::~VariableValues(){
-	#ifdef DEBUG  
+	#ifdef DEBUG_RESULT  
 	cout << "Inside the VariableValues Destructor" << endl;
 	#endif
 	int n = var.size();
@@ -343,7 +344,7 @@ OtherVariableResult::OtherVariableResult():
 	name(""),
 	description("")
 { 
-	#ifdef DEBUG
+	#ifdef DEBUG_RESULT
 	cout << "Inside the OtherVariableResult Constructor" << endl;
 	#endif
 
@@ -351,7 +352,7 @@ OtherVariableResult::OtherVariableResult():
 
 
 OtherVariableResult::~OtherVariableResult(){
-	#ifdef DEBUG  
+	#ifdef DEBUG_RESULT  
 	cout << "Inside the OtherVariableResult Destructor" << endl;
 	#endif
 	int n = var.size();
@@ -362,7 +363,7 @@ OtherVariableResult::~OtherVariableResult(){
 		}
 	}
 	var.clear(); 
-	#ifdef DEBUG  
+	#ifdef DEBUG_RESULT  
 	cout << "Inside the OtherVariableResult Destructor - Done" << endl;
 	#endif
 }// end OtherVariableResult destructor 
@@ -372,14 +373,14 @@ OtherObjectiveResult::OtherObjectiveResult():
 	name(""),
 	description("")
 { 
-	#ifdef DEBUG
+	#ifdef DEBUG_RESULT
 	cout << "Inside the OtherObjectiveResult Constructor" << endl;
 	#endif
 }//end OtherObjectiveResult constructor
 
 
 OtherObjectiveResult::~OtherObjectiveResult(){
-	#ifdef DEBUG  
+	#ifdef DEBUG_RESULT  
 	cout << "Inside the OtherObjectiveResult Destructor" << endl;
 	#endif
 	int n = obj.size();
@@ -397,14 +398,14 @@ OtherConstraintResult::OtherConstraintResult():
 	name(""),
 	description("")
 { 
-	#ifdef DEBUG
+	#ifdef DEBUG_RESULT
 	cout << "Inside the OtherConstraintResult Constructor" << endl;
 	#endif
 }//end OtherConstraintResult constructor
 
 
 OtherConstraintResult::~OtherConstraintResult(){
-	#ifdef DEBUG  
+	#ifdef DEBUG_RESULT  
 	cout << "Inside the OtherConstraintResult Destructor" << endl;
 	#endif
 	int n = con.size();
@@ -419,7 +420,7 @@ OtherConstraintResult::~OtherConstraintResult(){
 
 
 ObjectiveValues::ObjectiveValues() { 
-	#ifdef DEBUG
+	#ifdef DEBUG_RESULT
 	cout << "Inside the ObjectiveValues Constructor" << endl;
 	#endif
 
@@ -427,7 +428,7 @@ ObjectiveValues::ObjectiveValues() {
 
 
 ObjectiveValues::~ObjectiveValues(){
-	#ifdef DEBUG  
+	#ifdef DEBUG_RESULT  
 	cout << "Inside the ObjectiveValues Destructor" << endl;
 	#endif
 	int n = obj.size();
@@ -444,7 +445,7 @@ ObjectiveValues::~ObjectiveValues(){
 
 
 DualVariableValues::DualVariableValues() { 
-	#ifdef DEBUG
+	#ifdef DEBUG_RESULT
 	cout << "Inside the DualVariableValues Constructor" << endl;
 	#endif
 
@@ -452,7 +453,7 @@ DualVariableValues::DualVariableValues() {
 
 
 DualVariableValues::~DualVariableValues(){
-	#ifdef DEBUG  
+	#ifdef DEBUG_RESULT  
 	cout << "Inside the DualVariableValues Destructor" << endl;
 	#endif
 	int n = con.size();
@@ -473,14 +474,14 @@ VariableSolution::VariableSolution():
 	other( NULL)
 
 { 
-	#ifdef DEBUG
+	#ifdef DEBUG_RESULT
 	cout << "Inside the VariableSolution Constructor" << endl;
 	#endif
 }//end VariableSolution constructor
 
 
 VariableSolution::~VariableSolution(){
-	#ifdef DEBUG  
+	#ifdef DEBUG_RESULT  
 	cout << "Inside the VariableSolution Destructor" << endl;
 	#endif
 	delete  values;
@@ -501,14 +502,14 @@ ObjectiveSolution::ObjectiveSolution():
 	other( NULL)
 
 { 
-	#ifdef DEBUG
+	#ifdef DEBUG_RESULT
 	cout << "Inside the ObjectiveSolution Constructor" << endl;
 	#endif
 }//end ObjectiveSolution constructor
 
 
 ObjectiveSolution::~ObjectiveSolution(){
-	#ifdef DEBUG  
+	#ifdef DEBUG_RESULT  
 	cout << "Inside the ObjectiveSolution Destructor" << endl;
 	#endif
 	delete  values;
@@ -530,14 +531,14 @@ ConstraintSolution::ConstraintSolution():
 	dualValues( NULL),
 	other( NULL)
 { 
-	#ifdef DEBUG
+	#ifdef DEBUG_RESULT
 	cout << "Inside the ConstraintSolution Constructor" << endl;
 	#endif
 }//end ConstraintSolution constructor
 
 
 ConstraintSolution::~ConstraintSolution(){
-	#ifdef DEBUG  
+	#ifdef DEBUG_RESULT  
 	cout << "Inside the ConstraintSolution Destructor" << endl;
 	#endif
 	delete  dualValues;
@@ -559,14 +560,14 @@ OptimizationSolutionStatus::OptimizationSolutionStatus():
 	description("")
 	//substatus( NULL),
 { 
-	#ifdef DEBUG
+	#ifdef DEBUG_RESULT
 	cout << "Inside the OptimizationSolutionStatus Constructor" << endl;
 	#endif
 }//end OptimizationSolutionStatus constructor
 
 
 OptimizationSolutionStatus::~OptimizationSolutionStatus(){
-	#ifdef DEBUG  
+	#ifdef DEBUG_RESULT  
 	cout << "Inside the OptimzationSolutionStatus Destructor" << endl;
 	#endif
 }// end OptimizationSolutionStatus destructor 
@@ -580,7 +581,7 @@ OptimizationSolution::OptimizationSolution():
 	constraints( NULL)
 	//other(NULL)
 { 
-	#ifdef DEBUG
+	#ifdef DEBUG_RESULT
 	cout << "Inside the OptimizationSolution Constructor" << endl;
 	#endif
 	status = new OptimizationSolutionStatus();
@@ -588,7 +589,7 @@ OptimizationSolution::OptimizationSolution():
 
 
 OptimizationSolution::~OptimizationSolution(){
-	#ifdef DEBUG  
+	#ifdef DEBUG_RESULT  
 	cout << "Inside the OptimzationSolution Destructor" << endl;
 	#endif
 	if(variables != NULL){
@@ -617,23 +618,23 @@ OptimizationResult::OptimizationResult():
 	numberOfSolutions( -1),
 	solution(NULL)
 { 
-	#ifdef DEBUG
+	#ifdef DEBUG_RESULT
 	cout << "Inside the OptimizationResult Constructor" << endl;
 	#endif
 }//end OptimizationResult constructor
 
 
 OptimizationResult::~OptimizationResult(){
-	#ifdef DEBUG  
-	cout << "Inside the OptimzationResult Destructor" << endl;
+	#ifdef DEBUG_RESULT  
+	cout << "Inside the OptimizationResult Destructor" << endl;
 	cout << "Number of solutions = " << this->numberOfSolutions << endl;
 	#endif
 	if( solution != NULL){
 		for(int i = 0; i < this->numberOfSolutions; i++){
 			delete solution[i];
 			solution[i] = NULL;
-			#ifdef DEBUG  
-			cout << "Delelting Solution: " << i << endl;
+			#ifdef DEBUG_RESULT  
+			cout << "Deleting Solution: " << i << endl;
 			#endif
 		}
 	}
@@ -641,7 +642,6 @@ OptimizationResult::~OptimizationResult(){
 	solution = NULL; 
 }// end OptimizationResult destructor 
  
-
 
 //
 // get methods
@@ -800,6 +800,17 @@ double* OSResult::getOptimalPrimalVariableValues(int objIdx){
 }//getOptimalPrimalVariableValues
 
 
+int OSResult::getAnOtherVariableResultNumberOfVar(int solIdx, int iOther){
+	if(optimization == NULL || optimization->solution == NULL) return -1;
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions) return -1;
+	if (optimization->solution[solIdx]->variables == NULL) return -1;
+	if (optimization->solution[solIdx]->variables->other == NULL) return -1;
+	if (iOther < 0 || iOther >= optimization->solution[solIdx]->variables->numberOfOtherVariableResults) return -1;
+	return optimization->solution[solIdx]->variables->other[iOther]->numberOfVar;
+}
+	
+	
 double* OSResult::getOptimalDualVariableValues(int objIdx){
 	if(optimization == NULL || optimization->solution == NULL) return NULL;
 	int iNumberOfConstraints = this->getConstraintNumber();
@@ -823,6 +834,31 @@ double* OSResult::getOptimalDualVariableValues(int objIdx){
 	}
 	return m_mdDualValues;		
 }//getOptimalDualVariableValues
+
+double OSResult::getOptimalObjValue(int objIdx, int solIdx)
+{
+	try{
+		if(this->optimization == NULL || this->optimization->solution == NULL)   
+		throw ErrorClass("No optimization or solution object defined");  
+		int iSolutions = this->getSolutionNumber();  
+		for(int i = 0; i < iSolutions; i++){  
+			if(i != solIdx) continue;  
+			if(this->optimization->solution[i]->targetObjectiveIdx != objIdx) continue;  
+			if((this->optimization->solution[i]->status->type.find("ptimal") != string::npos ) ||  
+					this->optimization->solution[i]->status->type.compare("globallyOptimal") == 0){   
+				return  this->optimization->solution[i]->objectives->values->obj[ abs( objIdx)  -1 ]->value;  
+			}
+			else{  
+				throw ErrorClass("There is no optimal solution");  
+			}
+		}
+		throw ErrorClass("There is no optimal solution");  
+	}
+	catch(const ErrorClass& eclass){  
+		throw ErrorClass(  eclass.errormsg);   
+	}
+}//getOptimalObjValue  
+
 
 // set methods
 
@@ -986,7 +1022,7 @@ bool OSResult::setSolutionStatus(int solIdx, string type, string description){
 	return true;
 }//setSolutionStatus
 
-bool OSResult::setSolutionObjectiveIndex(int solIdx, int objectiveIdx){
+bool OSResult::setSolutionTargetObjectiveIdx(int solIdx, int objectiveIdx){
 	int nSols = this->getSolutionNumber();
 	if(optimization == NULL) return false;
 	if(nSols <= 0) return false;
@@ -999,7 +1035,24 @@ bool OSResult::setSolutionObjectiveIndex(int solIdx, int objectiveIdx){
 	if(objectiveIdx >= 0) return false;
 	optimization->solution[solIdx]->targetObjectiveIdx = objectiveIdx;
 	return true;		
-}//setSolutionObjectiveIndex
+}//setSolutionTargetObjectiveIdx
+
+
+bool OSResult::setSolutionMessage(int solIdx, std::string msg){
+	int nSols = this->getSolutionNumber();
+	if(optimization == NULL) return false;
+	if(nSols <= 0) return false;
+	if(optimization == NULL) return false;
+	if(optimization->solution == NULL || 
+	   solIdx < 0 || solIdx >=  nSols) return false;
+	if(optimization->solution[solIdx] == NULL){
+		optimization->solution[solIdx] = new OptimizationSolution();
+	}
+	optimization->solution[solIdx]->message = msg;
+	return true;		
+}//setSolutionMessage
+
+
 
 bool OSResult::setNumberOfPrimalVariableValues(int solIdx, int numberOfVar){
 	int nSols = this->getSolutionNumber();
@@ -1024,8 +1077,9 @@ bool OSResult::setNumberOfPrimalVariableValues(int solIdx, int numberOfVar){
 	return true;
 }//setNumberOfPrimalVariableValues
 
-bool OSResult::setPrimalVariableValues(int solIdx, int *idx, double *x, int numberOfVar){
+bool OSResult::setPrimalVariableValuesSparse(int solIdx, std::vector<IndexValuePair*> x){
 	int nSols = this->getSolutionNumber();
+	int numberOfVar = x.size();
 	if(optimization == NULL) return false;
 	if(nSols <= 0) return false;
 	if(optimization->solution == NULL || 
@@ -1040,19 +1094,19 @@ bool OSResult::setPrimalVariableValues(int solIdx, int *idx, double *x, int numb
 		optimization->solution[solIdx]->variables->values = new VariableValues();
 	}
 	optimization->solution[solIdx]->variables->values->numberOfVar = numberOfVar;
-	if(x == NULL){
+	if(x.size() == 0){
 		//optimization->solution[solIdx]->variables->values->var = NULL;
 		return true;
 	}
 	for(int i = 0; i < numberOfVar; i++){
 		optimization->solution[solIdx]->variables->values->var.push_back(new VarValue());
-		optimization->solution[solIdx]->variables->values->var[i]->idx = idx[i];
-		optimization->solution[solIdx]->variables->values->var[i]->value = x[i];
+		optimization->solution[solIdx]->variables->values->var[i]->idx = x[i]->idx;
+		optimization->solution[solIdx]->variables->values->var[i]->value = x[i]->value;
 	}
 	return true;
-}//setPrimalVariableValues
+}//setPrimalVariableValuesSparse
 
-bool OSResult::setPrimalVariableValues(int solIdx, double *x){
+bool OSResult::setPrimalVariableValuesDense(int solIdx, double *x){
 	int numberOfVar = this->getVariableNumber();
 	int nSols = this->getSolutionNumber();
 	if(optimization == NULL) return false;
@@ -1079,8 +1133,7 @@ bool OSResult::setPrimalVariableValues(int solIdx, double *x){
 		optimization->solution[solIdx]->variables->values->var[i]->value = x[i];
 	}
 	return true;
-}//setPrimalVariableValues
-
+}//setPrimalVariableValuesDense
 
 
 bool OSResult::setNumberOfOtherVariableResults(int solIdx, int numberOfOtherVariableResults){
@@ -1106,8 +1159,7 @@ bool OSResult::setNumberOfOtherVariableResults(int solIdx, int numberOfOtherVari
 }//setNumberOfOtherVariableResults
 
 
-
-bool OSResult::setAnOtherVariableResult(int solIdx, int otherIdx, string name, string description, int  *idx,  string *s, int numberOfVar){
+bool OSResult::setAnOtherVariableResultSparse(int solIdx, int otherIdx, string name, string value, string description, int  *idx,  string *s, int numberOfVar){
 	int iNumberOfVariables = numberOfVar;
 	if(iNumberOfVariables <= 0) return false;
 	int nSols = this->getSolutionNumber();
@@ -1121,6 +1173,7 @@ bool OSResult::setAnOtherVariableResult(int solIdx, int otherIdx, string name, s
 	if(optimization->solution[solIdx]->variables->other == NULL) return false;
 	if(optimization->solution[solIdx]->variables->other[ otherIdx] == NULL) return false;
 	optimization->solution[solIdx]->variables->other[ otherIdx]->name = name;
+	optimization->solution[solIdx]->variables->other[ otherIdx]->value = value;
 	optimization->solution[solIdx]->variables->other[ otherIdx]->description = description;
 	optimization->solution[solIdx]->variables->other[ otherIdx]->numberOfVar = numberOfVar;
 	for(int i = 0; i < iNumberOfVariables; i++){
@@ -1130,10 +1183,10 @@ bool OSResult::setAnOtherVariableResult(int solIdx, int otherIdx, string name, s
 		
 	}
 	return true;
-}//setAnOtherVariableResult
+}//setAnOtherVariableResultSparse
 
 
-bool OSResult::setAnOtherVariableResult(int solIdx, int otherIdx, string name, string description, string *s){
+bool OSResult::setAnOtherVariableResultDense(int solIdx, int otherIdx, string name, string value, string description, string *s){
 	int numberOfVar = this->getVariableNumber();
 	int iNumberOfVariables = numberOfVar;
 	if(iNumberOfVariables <= 0) return false;
@@ -1148,6 +1201,7 @@ bool OSResult::setAnOtherVariableResult(int solIdx, int otherIdx, string name, s
 	if(optimization->solution[solIdx]->variables->other == NULL) return false;
 	if(optimization->solution[solIdx]->variables->other[ otherIdx] == NULL) return false;
 	optimization->solution[solIdx]->variables->other[ otherIdx]->name = name;
+	optimization->solution[solIdx]->variables->other[ otherIdx]->value = value;
 	optimization->solution[solIdx]->variables->other[ otherIdx]->description = description;
 	optimization->solution[solIdx]->variables->other[ otherIdx]->numberOfVar = numberOfVar;
 	for(int i = 0; i < iNumberOfVariables; i++){
@@ -1157,7 +1211,7 @@ bool OSResult::setAnOtherVariableResult(int solIdx, int otherIdx, string name, s
 		;
 	}
 	return true;
-}//setAnOtherVariableResult
+}//setAnOtherVariableResultDense
 
 bool OSResult::setNumberOfObjectiveValues(int solIdx, int numberOfObj){
 	int nSols = this->getSolutionNumber();
@@ -1184,11 +1238,12 @@ bool OSResult::setNumberOfObjectiveValues(int solIdx, int numberOfObj){
 
 
 
-bool OSResult::setObjectiveValues(int solIdx, int *idx, double *objectiveValues, int numberOfObj){
+bool OSResult::setObjectiveValuesSparse(int solIdx, std::vector<IndexValuePair*> x){
+	int numberOfObj = x.size();
 	int iNumberOfObjectives = numberOfObj;
 	if(iNumberOfObjectives < 0) return false;
 	if(iNumberOfObjectives == 0) return true;
-	if(objectiveValues == NULL) return false;
+	if(x.size() == 0) return false;
 	int nSols = this->getSolutionNumber();
 	if(optimization == NULL) return false;
 	if(nSols <= 0) return false;
@@ -1207,14 +1262,14 @@ bool OSResult::setObjectiveValues(int solIdx, int *idx, double *objectiveValues,
 	optimization->solution[solIdx]->objectives->values->numberOfObj = iNumberOfObjectives;
 	for(int i = 0; i < iNumberOfObjectives; i++){
 		optimization->solution[solIdx]->objectives->values->obj.push_back( new ObjValue());
-		optimization->solution[solIdx]->objectives->values->obj[i]->idx = idx[i];
-		optimization->solution[solIdx]->objectives->values->obj[i]->value = objectiveValues[i];
+		optimization->solution[solIdx]->objectives->values->obj[i]->idx = x[i]->idx;
+		optimization->solution[solIdx]->objectives->values->obj[i]->value = x[i]->value;
 	}
 	return true;
-}//setObjectiveValues
+}//setObjectiveValuesSparse
 
 
-bool OSResult::setObjectiveValues(int solIdx, double *objectiveValues){
+bool OSResult::setObjectiveValuesDense(int solIdx, double *objectiveValues){
 	int numberOfObj = this->getObjectiveNumber();
 	int iNumberOfObjectives = numberOfObj;
 	if(iNumberOfObjectives < 0) return false;
@@ -1242,7 +1297,7 @@ bool OSResult::setObjectiveValues(int solIdx, double *objectiveValues){
 		optimization->solution[solIdx]->objectives->values->obj[i]->value = objectiveValues[i];
 	}
 	return true;
-}//setObjectiveValues
+}//setObjectiveValuesDense
 
 
 bool OSResult::setNumberOfDualVariableValues(int solIdx, int numberOfCon){
@@ -1268,10 +1323,10 @@ bool OSResult::setNumberOfDualVariableValues(int solIdx, int numberOfCon){
 	return true;
 }//setNumberOfDualVariableValues
 
+   
 
-
-bool OSResult::setDualVariableValues(int solIdx, double *lbValues, double *ubValues){
-	int numberOfCon = this->getConstraintNumber();
+bool OSResult::setDualVariableValuesSparse(int solIdx, std::vector<IndexValuePair*> x){
+	int numberOfCon = x.size();
 	int iNumberOfConstraints = numberOfCon;
 	if(iNumberOfConstraints < 0) return false;
 	if(iNumberOfConstraints == 0) return true;
@@ -1290,65 +1345,20 @@ bool OSResult::setDualVariableValues(int solIdx, double *lbValues, double *ubVal
 	if(optimization->solution[solIdx]->constraints->dualValues == NULL){
 		optimization->solution[solIdx]->constraints->dualValues = new DualVariableValues();
 	}
-	if(lbValues == NULL && ubValues == NULL){
-		//optimization->solution[solIdx]->constraints->dualValues->con = NULL;
+	if(x.size() == 0){
+		optimization->solution[solIdx]->constraints->dualValues = NULL;
 		return true;
-	}
-	int iCons = 0;
-	if(lbValues == NULL){
-		for(int i = 0; i < iNumberOfConstraints; i++){
-			if(ubValues[i] != 0) iCons++;
-		}
-	}
-	else if(ubValues == NULL){
-		for(int i = 0; i < iNumberOfConstraints; i++){
-			if(lbValues[i] != 0) iCons++;
-		}
-	}
-	else{
-		for(int i = 0; i < iNumberOfConstraints; i++){
-			if(lbValues[i] != 0 || ubValues[i] != 0) iCons++;
-		}
-	}
-	
-	//optimization->solution[solIdx]->constraints->dualValues->con = new DualVarValue*[iCons];
+	} 
 	optimization->solution[solIdx]->constraints->dualValues->numberOfCon = numberOfCon;
-	for(int i = 0; i < iCons; i++) optimization->solution[solIdx]->constraints->dualValues->con.push_back( new DualVarValue());
-	int j = 0;
-	if(lbValues == NULL){
-		for(int i = 0; i < iNumberOfConstraints; i++){
-			if(ubValues[i] != 0){
-				optimization->solution[solIdx]->constraints->dualValues->con[j]->idx = i;
-				optimization->solution[solIdx]->constraints->dualValues->con[j]->lbValue = 0;
-				optimization->solution[solIdx]->constraints->dualValues->con[j]->ubValue = ubValues[i];
-				j++;
-			}
-		}			
-	}
-	else if(ubValues == NULL){
-		for(int i = 0; i < iNumberOfConstraints; i++){
-			if(lbValues[i] != 0){
-				optimization->solution[solIdx]->constraints->dualValues->con[j]->idx = i;
-				optimization->solution[solIdx]->constraints->dualValues->con[j]->lbValue = lbValues[i];
-				optimization->solution[solIdx]->constraints->dualValues->con[j]->ubValue = 0;
-				j++;
-			}
-		}
-	}
-	else{
-		for(int i = 0; i < iNumberOfConstraints; i++){
-			if(lbValues[i] != 0 || ubValues[i] != 0){
-				optimization->solution[solIdx]->constraints->dualValues->con[j]->idx = i;
-				optimization->solution[solIdx]->constraints->dualValues->con[j]->lbValue = lbValues[i];
-				optimization->solution[solIdx]->constraints->dualValues->con[j]->ubValue = ubValues[i];
-				j++;
-			}
-		}
+	for(int i = 0; i < iNumberOfConstraints; i++){
+		optimization->solution[solIdx]->constraints->dualValues->con.push_back( new DualVarValue());
+		optimization->solution[solIdx]->constraints->dualValues->con[i]->idx = x[i]->idx;
+		optimization->solution[solIdx]->constraints->dualValues->con[i]->value = x[i]->value;
 	}
 	return true;
-}//setDualVariableValues
+}//setDualVariableValuesSparse
 
-bool OSResult::setDualVariableValues(int solIdx, double *y){
+bool OSResult::setDualVariableValuesDense(int solIdx, double *y){
 	int numberOfCon = this->getConstraintNumber();
 	int iNumberOfConstraints = numberOfCon;
 	if(iNumberOfConstraints < 0) return false;
@@ -1379,9 +1389,9 @@ bool OSResult::setDualVariableValues(int solIdx, double *y){
 		optimization->solution[solIdx]->constraints->dualValues->con[i]->value = y[i];
 	}
 	return true;
-}//setDualVariableValues
+}//setDualVariableValuesDense
 
-bool OSResult::setConstraintValues(int solIdx, double *dualVarValues){
+bool OSResult::setConstraintValuesDense(int solIdx, double *dualVarValues){
 	int numberOfCon = this->getConstraintNumber();
 	int iNumberOfConstraints = numberOfCon;
 	if(iNumberOfConstraints <= 0) return false;
@@ -1413,6 +1423,6 @@ bool OSResult::setConstraintValues(int solIdx, double *dualVarValues){
 		optimization->solution[solIdx]->constraints->dualValues->con[i]->value = dualVarValues[i];
 	}
 	return true;
-}//setConstraintValues
+}//setConstraintValuesDense
 
 
