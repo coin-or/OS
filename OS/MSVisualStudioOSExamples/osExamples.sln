@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "osRemoteTest", "osRemoteTes
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "osModificationDemo", "osModificationDemo\osModificationDemo.vcproj", "{9FBEA180-F234-45BF-8C34-F6454DEDEA44}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "osModificationDemo", "osOptionDemo\osOptionDemo.vcproj", "{E9056D5E-F8D6-48F2-B9D5-E8736B742FD5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -37,6 +39,10 @@ Global
 		{9FBEA180-F234-45BF-8C34-F6454DEDEA44}.Debug|Win32.Build.0 = Debug|Win32
 		{9FBEA180-F234-45BF-8C34-F6454DEDEA44}.Release|Win32.ActiveCfg = Release|Win32
 		{9FBEA180-F234-45BF-8C34-F6454DEDEA44}.Release|Win32.Build.0 = Release|Win32
+		{E9056D5E-F8D6-48F2-B9D5-E8736B742FD5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E9056D5E-F8D6-48F2-B9D5-E8736B742FD5}.Debug|Win32.Build.0 = Debug|Win32
+		{E9056D5E-F8D6-48F2-B9D5-E8736B742FD5}.Release|Win32.ActiveCfg = Release|Win32
+		{E9056D5E-F8D6-48F2-B9D5-E8736B742FD5}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
