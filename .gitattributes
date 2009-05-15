@@ -277,7 +277,7 @@ OS/examples/instanceGenerator/Makefile.in -text
 OS/examples/instanceGenerator/OSInstanceGenerator.cpp -text
 OS/examples/matlab/OSMatlabSolver.cpp -text
 OS/examples/osModificationDemo/Makefile.in -text
-OS/examples/osModificationDemo/OSModDemo.cpp -text
+OS/examples/osModificationDemo/OSModificationDemo.cpp -text
 OS/examples/osOptionDemo/Makefile.in -text
 OS/examples/osOptionDemo/OSOptionDemo.cpp -text
 OS/examples/osRemoteTest/Makefile.in -text
