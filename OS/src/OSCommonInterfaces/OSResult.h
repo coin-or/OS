@@ -1557,7 +1557,7 @@ public:
 	 * 
 	 * @return the number of variables in the i'th other variable result, -1 if no information. 
 	 */
-	int OSResult::getAnOtherVariableResultNumberOfVar(int solIdx, int iOther);
+	int getAnOtherVariableResultNumberOfVar(int solIdx, int iOther);
 
 
 	// set() methods
