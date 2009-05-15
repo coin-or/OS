@@ -808,7 +808,7 @@ AC_CONFIG_FILES([Makefile
           examples/instanceGenerator/Makefile
           examples/algorithmicDiff/Makefile
           examples/addCuts/Makefile
-          examples/osModDemo/Makefile
+          examples/osModificationDemo/Makefile
           examples/osRemoteTest/Makefile
  	  examples/osOptionDemo/Makefile
           examples/template/Makefile

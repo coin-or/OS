@@ -73,7 +73,7 @@ DIST_COMMON = README $(am__configure_deps) \
 	$(top_srcdir)/examples/algorithmicDiff/Makefile.in \
 	$(top_srcdir)/examples/branchCutPrice/Makefile.in \
 	$(top_srcdir)/examples/instanceGenerator/Makefile.in \
-	$(top_srcdir)/examples/osModDemo/Makefile.in \
+	$(top_srcdir)/examples/osModificationDemo/Makefile.in \
 	$(top_srcdir)/examples/osOptionDemo/Makefile.in \
 	$(top_srcdir)/examples/osRemoteTest/Makefile.in \
 	$(top_srcdir)/examples/template/Makefile.in \
@@ -92,9 +92,10 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/inc/config_os.h
 CONFIG_CLEAN_FILES = examples/instanceGenerator/Makefile \
 	examples/algorithmicDiff/Makefile examples/addCuts/Makefile \
-	examples/osModDemo/Makefile examples/osRemoteTest/Makefile \
-	examples/osOptionDemo/Makefile examples/template/Makefile \
-	examples/CppAD/Makefile examples/branchCutPrice/Makefile \
+	examples/osModificationDemo/Makefile \
+	examples/osRemoteTest/Makefile examples/osOptionDemo/Makefile \
+	examples/template/Makefile examples/CppAD/Makefile \
+	examples/branchCutPrice/Makefile \
 	CoinAllExamples/instanceGenerator/Makefile \
 	CoinAllExamples/osTestCode/Makefile \
 	CoinAllExamples/addCuts/Makefile \
@@ -468,7 +469,7 @@ examples/algorithmicDiff/Makefile: $(top_builddir)/config.status $(top_srcdir)/e
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 examples/addCuts/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/addCuts/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
-examples/osModDemo/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/osModDemo/Makefile.in
+examples/osModificationDemo/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/osModificationDemo/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 examples/osRemoteTest/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/osRemoteTest/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
@@ -638,7 +639,7 @@ distclean-tags:
 distdir: $(DISTFILES)
 	$(am__remove_distdir)
 	mkdir $(distdir)
-	$(mkdir_p) $(distdir)/. $(distdir)/.. $(distdir)/../BuildTools $(distdir)/CoinAllExamples/CppAD $(distdir)/CoinAllExamples/addCuts $(distdir)/CoinAllExamples/instanceGenerator $(distdir)/CoinAllExamples/osTestCode $(distdir)/CoinAllExamples/template $(distdir)/examples/CppAD $(distdir)/examples/addCuts $(distdir)/examples/algorithmicDiff $(distdir)/examples/branchCutPrice $(distdir)/examples/instanceGenerator $(distdir)/examples/osModDemo $(distdir)/examples/osOptionDemo $(distdir)/examples/osRemoteTest $(distdir)/examples/template $(distdir)/inc $(distdir)/m4
+	$(mkdir_p) $(distdir)/. $(distdir)/.. $(distdir)/../BuildTools $(distdir)/CoinAllExamples/CppAD $(distdir)/CoinAllExamples/addCuts $(distdir)/CoinAllExamples/instanceGenerator $(distdir)/CoinAllExamples/osTestCode $(distdir)/CoinAllExamples/template $(distdir)/examples/CppAD $(distdir)/examples/addCuts $(distdir)/examples/algorithmicDiff $(distdir)/examples/branchCutPrice $(distdir)/examples/instanceGenerator $(distdir)/examples/osModificationDemo $(distdir)/examples/osOptionDemo $(distdir)/examples/osRemoteTest $(distdir)/examples/template $(distdir)/inc $(distdir)/m4
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
