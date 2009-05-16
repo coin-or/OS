@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="../stylesheets/OSrL.xslt"?>
 <osrl xmlns="os.optimizationservices.org"   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSrL.xsd" >
 <general>
-<generalStatus type="success"/>
+<generalStatus type="normal"/>
 <serviceName>Ipopt solver service</serviceName>
 <instanceName>Modified Rosenbrock</instanceName>
 <message>Ipopt solver finishes to the end.</message>
