@@ -1363,12 +1363,12 @@ public:
 	int m_iNumberOfOtherVariableResults;
 	
 	/**
-	 *rimalValues a vector of primal variables. 
+	 * m_mdPrimalValues a vector of primal variables. 
 	 */
 	double *m_mdPrimalValues;
 	
 	/**
-	 * m_mdDualValues a vector of primal variables. 
+	 * m_mdDualValues a vector of dual variables. 
 	 */
 	double *m_mdDualValues;
 	
@@ -1457,13 +1457,13 @@ public:
 	/**
 	 * Get one solution of optimal primal variable values. 
 	 * 
-	 * @param solIdx holds the solution index the optima lsolution corresponds to. 
+	 * @param solIdx holds the solution index the optimal solution corresponds to. 
 	 * @return a vector of variable indexes and values, an empty vector if no optimal value. 
 	 */
 	std::vector<IndexValuePair*>  getOptimalPrimalVariableValues(int solIdx);
 	
 	/**
-	 * Get one solution of optimal primal variable values. 
+	 * Get one solution of optimal objective values. 
 	 * 
 	 * @param objIdx holds the objective index the optimal value corresponds to. 
 	 * @param solIdx holds the solution index the optimal value corresponds to.

@@ -617,7 +617,7 @@ void CouenneSolver::writeResult(){
 	
 		switch( status){
 			case SUCCESS:
-				solutionDescription = "SUCCESS[COUENNE]: Algorithm terminated successfully at a locally optimal point, satisfying the convergence tolerances.";
+				solutionDescription = "SUCCESS[COUENNE]: Algorithm terminated normally at a locally optimal point, satisfying the convergence tolerances.";
 				osresult->setSolutionStatus(solIdx,  "locallyOptimal", solutionDescription);		
 				/* Retrieve the solution */
 				//
@@ -713,7 +713,7 @@ void CouenneSolver::writeResult(){
 				solutionDescription = "OTHER[COUENNE]: other unknown solution status from Bonmin solver";
 				osresult->setSolutionStatus(solIdx,  "other", solutionDescription);
 		}//switch end	
-		osresult->setGeneralStatusType("success");
+		osresult->setGeneralStatusType("normal");
 		osrl = osrlwriter->writeOSrL( osresult);
 		delete[] x;
 		x = NULL;

@@ -792,7 +792,7 @@ void BonminSolver::writeResult(){
 	
 		switch( status){
 			case SUCCESS:
-				solutionDescription = "SUCCESS[BONMIN]: Algorithm terminated successfully at a locally optimal point, satisfying the convergence tolerances.";
+				solutionDescription = "SUCCESS[BONMIN]: Algorithm terminated normally at a locally optimal point, satisfying the convergence tolerances.";
 				std::cout << solutionDescription << std::endl;
 				osresult->setSolutionStatus(solIdx,  "locallyOptimal", solutionDescription);		
 				/* Retrieve the solution */
@@ -896,7 +896,7 @@ void BonminSolver::writeResult(){
 				std::cout << solutionDescription << std::endl;
 				osresult->setSolutionStatus(solIdx,  "other", solutionDescription);
 		}//switch end	
-		osresult->setGeneralStatusType("success");
+		osresult->setGeneralStatusType("normal");
 		osrl = osrlwriter->writeOSrL( osresult);
 		delete[] x;
 		x = NULL;

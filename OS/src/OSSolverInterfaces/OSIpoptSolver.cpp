@@ -536,7 +536,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 
 		switch( status){
 			case SUCCESS:
-				solutionDescription = "SUCCESS[IPOPT]: Algorithm terminated successfully at a locally optimal point, satisfying the convergence tolerances.";
+				solutionDescription = "SUCCESS[IPOPT]: Algorithm terminated normally at a locally optimal point, satisfying the convergence tolerances.";
 				osresult->setSolutionStatus(solIdx,  "locallyOptimal", solutionDescription);
 				osresult->setPrimalVariableValuesDense(solIdx, const_cast<double*>(x)); 
 				osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda)); 

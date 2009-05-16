@@ -528,7 +528,7 @@ bool LindoSolver::optimize(){
 		if(osresult->setSolutionNumber(  1) != true)
 			throw ErrorClass("OSResult error: setSolutionNumer");
 		cout << "Solution Status  = " <<  nSolStatus << endl;
-		osresult->setGeneralStatusType("success");
+		osresult->setGeneralStatusType("normal");
 		osresult->setSolutionStatus(solIdx, "optimal", description);	
 		x = new double[ osinstance->getVariableNumber() + m_iNumberNewSlacks];
 		srcost = new std::string[ osinstance->getVariableNumber() + m_iNumberNewSlacks];

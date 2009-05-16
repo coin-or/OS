@@ -771,7 +771,7 @@ void KnitroSolver::solve() throw (ErrorClass) {
 					osresult->setSolutionStatus(solIdx,  "other", solutionDescription);
 			}
 
-			osresult->setGeneralStatusType("success");
+			osresult->setGeneralStatusType("normal");
 			osrl = osrlwriter->writeOSrL( osresult);
 		}
 		else{
