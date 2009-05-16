@@ -30562,6 +30562,11 @@ fi
 
 
 if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/osrlFiles/parserTest.osrl"
+fi
+
+
+if test $coin_vpath_config = yes; then
   coin_vpath_link_files="$coin_vpath_link_files data/osrlFiles/parincLinear.osrl"
 fi
 

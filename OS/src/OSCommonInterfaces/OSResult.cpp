@@ -1168,7 +1168,7 @@ bool OSResult::setNumberOfOtherVariableResults(int solIdx, int numberOfOtherVari
 
 bool OSResult::setAnOtherVariableResultSparse(int solIdx, int otherIdx, string name, string value, string description, int  *idx,  string *s, int numberOfVar){
 	int iNumberOfVariables = numberOfVar;
-	if(iNumberOfVariables <= 0) return false;
+	if(iNumberOfVariables <= -1) return false;
 	int nSols = this->getSolutionNumber();
 	if(optimization == NULL) return false;
 	if(nSols <= 0) return false;

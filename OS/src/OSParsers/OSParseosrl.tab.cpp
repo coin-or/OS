@@ -2160,7 +2160,7 @@ yyreduce:
 		parserData->numberOfOtherVariableResults++; 
 		parserData->otherNamePresent = false;	
 		
-		
+	
 		osresult->setAnOtherVariableResultSparse(parserData->solutionIdx, parserData->iOther,  parserData->otherVarStruct->name,
 			parserData->otherVarStruct->value, parserData->otherVarStruct->description, parserData->otherVarStruct->otherVarIndex,
 			parserData->otherVarStruct->otherVarText, parserData->otherVarStruct->numberOfVar );
@@ -2245,7 +2245,7 @@ parserData->otherVarStruct->otherVarText[parserData->kounter] =  parserData->out
 parserData->outStr.str("");
 parserData->otherVarStruct->otherVarIndex[parserData->kounter] =  parserData->ivar;
 parserData->errorText = NULL;
-/*if (parserData->kounter == osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->numberOfVar)*/
+//if (parserData->kounter == osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->numberOfVar)
 if (parserData->kounter == osresult->getAnOtherVariableResultNumberOfVar(parserData->solutionIdx, parserData->iOther))
     osrlerror(NULL, NULL, parserData, "too many variables"); 
 if (parserData->ivar < 0 || parserData->ivar > parserData->numberOfVariables - 1) 

@@ -3163,8 +3163,11 @@ if (COMPONENT_DEBUG == true)
 		cout << "PARSE THE OSRL STRING INTO AN OSRESULT OBJECT" << endl;
 		osresult = osrlreader->readOSrL( osrl);
 		cout << "Finished read; write OSResult object to temporary string" << endl;
+
 		tmpOSrL = osrlwriter->writeOSrL( osresult) ;
 		cout << tmpOSrL << endl;
+
+
 		// make sure we can parse without error
 		delete osrlreader;
 		osrlreader = NULL;
@@ -3205,6 +3208,7 @@ if (COMPONENT_DEBUG == true)
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}	
 	catch(const ErrorClass& eclass){
+
 		cout << endl << endl << endl;
 		if(osrlwriter != NULL) delete osrlwriter;
 		if(osrlreader != NULL) delete osrlreader;
