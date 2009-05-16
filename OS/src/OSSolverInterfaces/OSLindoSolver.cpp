@@ -211,7 +211,8 @@ void LindoSolver::solve()  {
 		double start = CoinCpuTime();
 		if( optimize() != true) throw ErrorClass("problem optimizing model");
 		cpuTime = CoinCpuTime() - start;
-		osresult->resultHeader->time = os_dtoa_format(  cpuTime);
+		osresult->setGeneralStatusType("normal");
+		osresult->setTime(cpuTime);
 		osrl = osrlwriter->writeOSrL( osresult);
 	}
 	catch(const ErrorClass& eclass){
@@ -592,7 +593,7 @@ bool LindoSolver::optimize(){
 						srcost[ i] = outStr.str();
 						outStr.str("");
 					}
-					osresult->setAnOtherVariableResult(solIdx, otherIdx, "reduced costs", "the variable reduced costs", srcost);
+					osresult->setAnOtherVariableResultDense(solIdx, otherIdx, "reduced costs", "", "the variable reduced costs", srcost);
 					/* Get the value of the objective */
 					if( ( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0)
 						|| (isNonlinear == false ) ) {
