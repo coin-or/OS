@@ -11,7 +11,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "osRemoteTest", "osRemoteTes
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "osModificationDemo", "osModificationDemo\osModificationDemo.vcproj", "{9FBEA180-F234-45BF-8C34-F6454DEDEA44}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "osModificationDemo", "osOptionDemo\osOptionDemo.vcproj", "{E9056D5E-F8D6-48F2-B9D5-E8736B742FD5}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "osOptionDemo", "osOptionDemo\osOptionDemo.vcproj", "{E9056D5E-F8D6-48F2-B9D5-E8736B742FD5}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "osResultDemo", "osResultDemo\osResultDemo.vcproj", "{01867815-FF04-4A29-9C0C-0DD44DDDC929}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "template", "template\template.vcproj", "{717775BC-D7FC-42BD-95CD-2B24E9354BE5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +47,14 @@ Global
 		{E9056D5E-F8D6-48F2-B9D5-E8736B742FD5}.Debug|Win32.Build.0 = Debug|Win32
 		{E9056D5E-F8D6-48F2-B9D5-E8736B742FD5}.Release|Win32.ActiveCfg = Release|Win32
 		{E9056D5E-F8D6-48F2-B9D5-E8736B742FD5}.Release|Win32.Build.0 = Release|Win32
+		{01867815-FF04-4A29-9C0C-0DD44DDDC929}.Debug|Win32.ActiveCfg = Debug|Win32
+		{01867815-FF04-4A29-9C0C-0DD44DDDC929}.Debug|Win32.Build.0 = Debug|Win32
+		{01867815-FF04-4A29-9C0C-0DD44DDDC929}.Release|Win32.ActiveCfg = Release|Win32
+		{01867815-FF04-4A29-9C0C-0DD44DDDC929}.Release|Win32.Build.0 = Release|Win32
+		{717775BC-D7FC-42BD-95CD-2B24E9354BE5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{717775BC-D7FC-42BD-95CD-2B24E9354BE5}.Debug|Win32.Build.0 = Debug|Win32
+		{717775BC-D7FC-42BD-95CD-2B24E9354BE5}.Release|Win32.ActiveCfg = Release|Win32
+		{717775BC-D7FC-42BD-95CD-2B24E9354BE5}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -55,6 +55,7 @@ OS/MSVisualStudioOSCommon/v9/OSCommon.sln -text
 OS/MSVisualStudioOSCommon/v9/libOSCommon/libOSCommon.vcproj -text
 OS/MSVisualStudioOSExamples/addCuts/addCuts.vcproj -text
 OS/MSVisualStudioOSExamples/algorithmicDiff/algorithmicDiff.vcproj -text
+OS/MSVisualStudioOSExamples/branchCutPrice/branchCutPrice.vcproj -text
 OS/MSVisualStudioOSExamples/instanceGenerator/instanceGenerator.vcproj -text
 OS/MSVisualStudioOSExamples/notes.txt -text
 OS/MSVisualStudioOSExamples/osExamples.sln -text

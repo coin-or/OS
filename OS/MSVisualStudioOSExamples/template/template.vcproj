@@ -2,8 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="osModificationDemo"
-	ProjectGUID="{E9056D5E-F8D6-48F2-B9D5-E8736B742FD5}"
+	Name="template"
+	ProjectGUID="{717775BC-D7FC-42BD-95CD-2B24E9354BE5}"
 	RootNamespace="osTestCode"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"
@@ -182,7 +182,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\examples\osModificationDemo\OSModificationDemo.cpp"
+				RelativePath="..\..\examples\template\template.cpp"
 				>
 			</File>
 		</Filter>
