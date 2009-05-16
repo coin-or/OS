@@ -234,20 +234,6 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 					if(m_OSResult->optimization->solution[i]->variables->other != NULL){
 						if(m_OSResult->optimization->solution[i]->variables->numberOfOtherVariableResults > 0){
 							for(int k = 0; k < m_OSResult->optimization->solution[i]->variables->numberOfOtherVariableResults; k++){
-								cout << "<other" ;
-								cout << " numberOfVar=\"";
-								cout << m_OSResult->optimization->solution[i]->variables->other[k]->numberOfVar;
-								cout << "\"" ;
-								cout << " name=\"";
-								cout << m_OSResult->optimization->solution[i]->variables->other[k]->name;
-								cout << "\"" ;
-								cout << " value=\"";
-								cout << m_OSResult->optimization->solution[i]->variables->other[k]->value;
-								cout << "\"" ;
-								cout << " description=\"";
-								cout << m_OSResult->optimization->solution[i]->variables->other[k]->description;
-								cout << "\"" ;
-								cout <<  ">" << endl;
 
 								outStr << "<other" ;
 								outStr << " numberOfVar=\"";

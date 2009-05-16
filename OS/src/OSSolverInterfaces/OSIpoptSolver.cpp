@@ -16,7 +16,7 @@
  * 
  */
 
-#define DEBUG
+//#define DEBUG
 
 #include "OSIpoptSolver.h"
 #include "OSDataStructures.h"
@@ -538,10 +538,10 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 			case SUCCESS:
 				solutionDescription = "SUCCESS[IPOPT]: Algorithm terminated successfully at a locally optimal point, satisfying the convergence tolerances.";
 				osresult->setSolutionStatus(solIdx,  "locallyOptimal", solutionDescription);
-				osresult->setPrimalVariableValuesDense(solIdx, const_cast<double*>(x)); //,  osinstance->getVariableNumber() );
-				osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda)); //,  osinstance->getConstraintNumber() );
+				osresult->setPrimalVariableValuesDense(solIdx, const_cast<double*>(x)); 
+				osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda)); 
 				mdObjValues[0] = obj_value;
-				osresult->setObjectiveValuesDense(solIdx, mdObjValues); //, osinstance->getObjectiveNumber());
+				osresult->setObjectiveValuesDense(solIdx, mdObjValues); 
 				
 				
 				// set other
@@ -578,26 +578,26 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 			case MAXITER_EXCEEDED:
 				solutionDescription = "MAXITER_EXCEEDED[IPOPT]: Maximum number of iterations exceeded.";
 				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);
-				osresult->setPrimalVariableValuesDense(solIdx, const_cast<double*>(x)); //, osinstance->getVariableNumber() );
-				osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda)); //, osinstance->getConstraintNumber());
+				osresult->setPrimalVariableValuesDense(solIdx, const_cast<double*>(x)); 
+				osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda)); 
 				mdObjValues[0] = obj_value;
-				osresult->setObjectiveValuesDense(solIdx, mdObjValues); //, osinstance->getObjectiveNumber());
+				osresult->setObjectiveValuesDense(solIdx, mdObjValues); 
 			break;
 			case STOP_AT_TINY_STEP:
 				solutionDescription = "STOP_AT_TINY_STEP[IPOPT]: Algorithm proceeds with very little progress.";
 				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);
-				osresult->setPrimalVariableValuesDense(solIdx, const_cast<double*>( x)); //, osinstance->getVariableNumber());
-				osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda)); //, osinstance->getConstraintNumber());
+				osresult->setPrimalVariableValuesDense(solIdx, const_cast<double*>( x)); 
+				osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda)); 
 				mdObjValues[0] = obj_value;
-				osresult->setObjectiveValuesDense(solIdx, mdObjValues); //, osinstance->getObjectiveNumber());
+				osresult->setObjectiveValuesDense(solIdx, mdObjValues); 
 			break;
 			case STOP_AT_ACCEPTABLE_POINT:
 				solutionDescription = "STOP_AT_ACCEPTABLE_POINT[IPOPT]: Algorithm stopped at a point that was converged, not to _desired_ tolerances, but to _acceptable_ tolerances";
 				osresult->setSolutionStatus(solIdx,  "IpoptAccetable", solutionDescription);
-				osresult->setPrimalVariableValuesDense(solIdx, const_cast<double*>(x)); //, osinstance->getVariableNumber());
-				osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda)); //, osinstance->getConstraintNumber());
+				osresult->setPrimalVariableValuesDense(solIdx, const_cast<double*>(x)); 
+				osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda)); 
 				mdObjValues[0] = obj_value;
-				osresult->setObjectiveValuesDense(solIdx, mdObjValues); //,  osinstance->getObjectiveNumber() );
+				osresult->setObjectiveValuesDense(solIdx, mdObjValues); 
 			break;
 			case LOCAL_INFEASIBILITY:
 				solutionDescription = "LOCAL_INFEASIBILITY[IPOPT]: Algorithm converged to a point of local infeasibility. Problem may be infeasible.";

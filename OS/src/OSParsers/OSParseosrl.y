@@ -214,13 +214,13 @@ timeValue:
   DOUBLE  { parserData->timeValue = $1; }
 | INTEGER { parserData->timeValue = $1; };
 
-optimizationElement: | OPTIMIZATIONSTART optimizationContent {printf("\nbefore OPTIMIZATIONEND\n");} OPTIMIZATIONEND;
+optimizationElement: | OPTIMIZATIONSTART optimizationContent OPTIMIZATIONEND;
 
 optimizationContent:   anotherOptATT  optend ;
 
 
 optend:   ENDOFELEMENT 
-		| GREATERTHAN  solution {printf("\nat optend\n");};
+		| GREATERTHAN  solution ;
 
 anotherOptATT: 
 	| anotherOptATT  optatt  ;
@@ -244,7 +244,6 @@ solution:
 
 anothersolution: SOLUTIONSTART {parserData->numberOfVar = 0;  parserData->numberOfCon = 0;  parserData->numberOfObj = 0;} targetObjectiveIDXATT GREATERTHAN status message variables objectives  constraints  otherSolution
    {
-   printf("\ncompleted solution %d out of %d\n",parserData->solutionIdx,parserData->numberOfSolutions);
    if (parserData->solutionIdx == parserData->numberOfSolutions) 
         osrlerror(NULL, NULL, NULL, "too many solutions"); 
     parserData->solutionIdx++;
@@ -347,19 +346,12 @@ otherVariableResult: otherVariableStart otherVariableATTlist GREATERTHAN otherva
 		osresult->setAnOtherVariableResultSparse(parserData->solutionIdx, parserData->iOther,  parserData->otherVarStruct->name,
 			parserData->otherVarStruct->value, parserData->otherVarStruct->description, parserData->otherVarStruct->otherVarIndex,
 			parserData->otherVarStruct->otherVarText, parserData->otherVarStruct->numberOfVar );
-			
-			
-		std::cout  << "Other Name = " << parserData->otherVarStruct->name << std::endl;
-		std::cout  << "Description  = " << parserData->otherVarStruct->description << std::endl;
-
-		
+							
 		parserData->iOther++;  
 		parserData->tmpOtherName = "";
 		parserData->tmpOtherValue = "";
 		parserData->tmpOtherDescription = "";			
-
-		
-		
+				
 	};
 
 otherVariableStart: OTHERSTART 
@@ -388,7 +380,7 @@ otherVarValueATT:
   EMPTYVALUEATT {parserData->tmpOtherValue=""; parserData->otherVarStruct->value = "";  
 /*  osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->value = "";*/
 }
-  |    VALUEATT ATTRIBUTETEXT quote {printf("\nset tmpOtherValue: %s\n",$2); parserData->tmpOtherValue=$2; parserData->otherVarStruct->value = $2;  
+  |    VALUEATT ATTRIBUTETEXT quote {parserData->tmpOtherValue=$2; parserData->otherVarStruct->value = $2;  
 /*  osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->value = $2; */
   free($2);}
 ;
@@ -435,9 +427,9 @@ parserData->kounter++;
 };
 
 ElementValue: 
-    ELEMENTTEXT  {/*std::cout << "FOUND OTHER ELEMENT TEXT"  << std::endl;*/  parserData->outStr << $1; free($1); }
-  | INTEGER      {/*std::cout << "FOUND OTHER ELEMENT INTEGER"  << std::endl;*/  parserData->outStr << $1; /*free($1);*/ }
-  | DOUBLE       {/*std::cout << "FOUND OTHER ELEMENT DOUBLE"  << std::endl;*/ parserData->outStr << $1; /*free($1);*/ };
+    ELEMENTTEXT  { parserData->outStr << $1; free($1); }
+  | INTEGER      { parserData->outStr << $1; /*free($1);*/ }
+  | DOUBLE       { parserData->outStr << $1; /*free($1);*/ };
   
 othervarstart: VARSTART 
 	{	if(parserData->otherVarStruct->numberOfVar <= 0) 
@@ -537,12 +529,8 @@ otherSolution: solutionEnd
     
 solutionEnd: SOLUTIONEND  {
 
-
-	printf("\nprocessed SOLUTIONEND\n");
-
 	//
     //delete the old vectors
-    
 	osrl_empty_vectors( parserData);
     
 };
@@ -562,7 +550,6 @@ xmlWhiteSpace:
 
 void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, const char* errormsg )
 {
-	std::cout << "INSIDE osrlerror" << std::endl;
 	osrl_empty_vectors( parserData);
 	std::ostringstream outStr;
 	std::string error = errormsg;
@@ -610,7 +597,6 @@ void osrl_empty_vectors( OSrLParserData* parserData){
   	parserData->otherVarVec.clear(); 
   	
   	int numDualVals =  parserData->dualVals.size();
-  	std::cout << "DUAL VALUES SIZE =  " << numDualVals << std::endl;
   	for(k = 0; k < numDualVals; k++){
   		if( parserData->dualVals[ k]  != NULL  ) 
 			delete parserData->dualVals[ k];
@@ -619,7 +605,6 @@ void osrl_empty_vectors( OSrLParserData* parserData){
   	
   	
    	int numObjVals =  parserData->objVals.size();
-  	std::cout << "OBJECTIVE VALUES SIZE =  " << numObjVals << std::endl;
   	for(k = 0; k < numObjVals; k++){
   		if( parserData->objVals[ k]  != NULL  ) 
 			delete parserData->objVals[ k];
@@ -628,7 +613,6 @@ void osrl_empty_vectors( OSrLParserData* parserData){
   	
   	
    	int numPrimalVals =  parserData->primalVals.size();
-  	std::cout << "PRIMAL VALUES SIZE =  " << numPrimalVals << std::endl;
   	for(k = 0; k < numPrimalVals; k++){	
   		if( parserData->primalVals[ k]  != NULL  ) 
 			delete parserData->primalVals[ k];

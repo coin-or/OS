@@ -26,7 +26,7 @@
 
 #include<iostream>
 #include<sstream>
-#define DEBUG_RESULT
+//#define DEBUG_RESULT
 
 using namespace std;
 
@@ -46,7 +46,6 @@ OSResult::OSResult():
 	this->system = new SystemResult();
 	this->service = new ServiceResult();
 	this->job = new JobResult();
-	cout << "returned from JobResult Constructor" << endl;
 	this->optimization = new OptimizationResult();
 }// end OSResult constructor  
 
@@ -627,7 +626,6 @@ OptimizationResult::OptimizationResult():
 OptimizationResult::~OptimizationResult(){
 	#ifdef DEBUG_RESULT  
 	cout << "Inside the OptimizationResult Destructor" << endl;
-	cout << "Number of solutions = " << this->numberOfSolutions << endl;
 	#endif
 	if( solution != NULL){
 		for(int i = 0; i < this->numberOfSolutions; i++){
@@ -876,27 +874,17 @@ bool OSResult::setGeneralStatusType(string type){
 bool OSResult::addTimingInformation(std::string type, std::string category,
 									std::string unit, std::string description, double value)
 {	int nt; int i;
-	cout << "add timing information: " << endl;
-	cout << "type " << type << endl;
-	cout << "category " << category << endl;
-	cout << "unit " << unit << endl;
-	cout << "description " << description << endl;
-	cout << "value " << value << endl;
 	if (job == NULL) job = new JobResult();
 	if (job->timingInformation == NULL) job->timingInformation = new TimingInformation();
 
 	nt = job->timingInformation->numberOfTimes;
-	cout << "allocate new pointers" << endl;
 	Time** temp = new Time*[nt+1];  //Allocate the new pointers
-	cout << " copy pointers --- " << nt << endl;
 	for (i = 0; i < nt; i++)
 		temp[i] = job->timingInformation->time[i];  //copy the pointers
 
-	cout << "delete old pointers" << endl;
 	delete[] job->timingInformation->time; //delete old pointers
 	
 //	add in the new element
-	cout << "add new element" << endl;
 	temp[ nt] = new Time();
 
 	temp[ nt]->type = type;
@@ -905,11 +893,9 @@ bool OSResult::addTimingInformation(std::string type, std::string category,
 	temp[ nt]->description = description;
 	temp[ nt]->value = value;
 
-	cout << "hook new pointers into OSResult" << endl;
 	job->timingInformation->time = temp;   //hook the new pointers into the data structure
 	job->timingInformation->numberOfTimes = ++nt;
 
-	cout << "done" << endl;
 	return true;
 }//addTimingInformation
 
@@ -997,9 +983,7 @@ bool OSResult::setSolutionNumber(int number){
 	optimization->numberOfSolutions = number;
 	optimization->solution = new OptimizationSolution*[number];
 	for(int i = 0; i < number; i++){
-		std::cout << "CREATING A NEW OPTIMIZATION SOLUTION" << std::endl;
 		optimization->solution[i] = new OptimizationSolution();
-		std::cout << "DONE CREATING A NEW OPTIMIZATION SOLUTION" << std::endl;
 	}
 	return true;
 }//setSolutionNumber
