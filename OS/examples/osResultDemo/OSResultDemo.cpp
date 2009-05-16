@@ -99,6 +99,8 @@ int main( ){
 		}
 		
 		int i;
+		int j;
+		int k;
 		int vecSize;
 		// now get the primal solution
 		std::vector<IndexValuePair*> primalValPair;
@@ -116,7 +118,26 @@ int main( ){
 			std::cout << "index = " <<  dualValPair[ i]->idx << std::endl;
 			std::cout << "value = " <<  dualValPair[ i]->value << std::endl;
 		}
-				
+		//the OSResult API is currently somewhat limited, but you can get at the
+		//OSResult object directly -- let's get all the otherVar stuff
+		int numSolutions;
+		int numberOfOtherVariableResults;
+		int numberOfOtherVar;
+		numSolutions =osresult-> getSolutionNumber();
+		for(i = 0; i < numSolutions; i++){
+			numberOfOtherVariableResults = osresult->
+			getNumberOfOtherVariableResults( i);
+			for(j = 0; j < numberOfOtherVariableResults; j++){
+				std::cout << "Other Name = " << osresult->optimization->solution[ i]->variables->other[ j]->name << std::endl;
+				std::cout << "Other Description = " << osresult->optimization->solution[ i]->variables->other[ j]->description << std::endl;
+				std::cout << "Other NumberOfVar = " << osresult->optimization->solution[ i]->variables->other[ j]->numberOfVar <<  std::endl;
+				numberOfOtherVar = osresult->optimization->solution[ i]->variables->other[ j]->numberOfVar;
+				for(k = 0; k < numberOfOtherVar; k++){
+					std::cout << "Other Variable index = "   <<  osresult->optimization->solution[ i]->variables->other[ j]->var[ k]->idx << std::endl;
+					std::cout << "Other Variable value = "   <<  osresult->optimization->solution[ i]->variables->other[ j]->var[ k]->value << std::endl;
+				}
+			}
+		}		
 		//garbage collection
 		delete osinstance;
 		osinstance = NULL;

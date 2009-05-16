@@ -1196,7 +1196,7 @@ bool OSResult::setAnOtherVariableResultSparse(int solIdx, int otherIdx, string n
 bool OSResult::setAnOtherVariableResultDense(int solIdx, int otherIdx, string name, string value, string description, string *s){
 	int numberOfVar = this->getVariableNumber();
 	int iNumberOfVariables = numberOfVar;
-	if(iNumberOfVariables <= 0) return false;
+	if(iNumberOfVariables <= -1) return false;
 	int nSols = this->getSolutionNumber();
 	if(optimization == NULL) return false;
 	if(nSols <= 0) return false;
