@@ -919,14 +919,14 @@ public:
 	 * the constraint indexed by idx if the constraint
 	 * is at its lower bound
 	 */		
-	double lbValue;
+	//double lbValue;
 	
 	
 	/** ubValue is the value of dual variable on
 	 * the constraint indexed by idx if the constraint
 	 * is at its upper bound
 	 */	
-	double ubValue;
+	//double ubValue;
 	
 	/** value of dual variable on
 	 * the constraint indexed by idx if the constraint
@@ -1363,7 +1363,7 @@ public:
 	int m_iNumberOfOtherVariableResults;
 	
 	/**
-	 * m_mdPrimalValues a vector of primal variables. 
+	 *rimalValues a vector of primal variables. 
 	 */
 	double *m_mdPrimalValues;
 	
@@ -1371,6 +1371,11 @@ public:
 	 * m_mdDualValues a vector of primal variables. 
 	 */
 	double *m_mdDualValues;
+	
+	
+	std::vector<IndexValuePair*> primalVals;
+	
+	std::vector<IndexValuePair*> dualVals;
 	
 	
 
@@ -1452,10 +1457,10 @@ public:
 	/**
 	 * Get one solution of optimal primal variable values. 
 	 * 
-	 * @param objIdx holds the objective index the optimal value corresponds to. 
-	 * @return a double dense array of the optimal values, null if no optimal value. 
+	 * @param solIdx holds the solution index the optima lsolution corresponds to. 
+	 * @return a vector of variable indexes and values, an empty vector if no optimal value. 
 	 */
-	double* getOptimalPrimalVariableValues(int objIdx);
+	std::vector<IndexValuePair*>  getOptimalPrimalVariableValues(int solIdx);
 	
 	/**
 	 * Get one solution of optimal primal variable values. 
@@ -1469,10 +1474,10 @@ public:
 	/**
 	 * Get one solution of optimal dual variable values. 
 	 * 
-	 * @param objIdx holds the objective index the optimal value corresponds to. 
-	 * @return a double dense array of the optimal dual values, null if no optimal value. 
+	 * @param solIdx holds the solution index the optimal solution corresponds to. 
+	 * @return a vector of variable indexes and values, an empty vector if no optimal value. 
 	 */	
-	double* getOptimalDualVariableValues(int objIdx);
+	std::vector<IndexValuePair*>   getOptimalDualVariableValues(int solIdx);
 	
 	//Solution getSolution(int solIdx);
 

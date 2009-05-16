@@ -722,13 +722,13 @@ static const yytype_uint16 yyrline[] =
      223,   225,   226,   228,   229,   230,   231,   235,   236,   237,
      238,   241,   242,   245,   245,   255,   256,   262,   263,   266,
      267,   269,   270,   271,   272,   274,   275,   279,   285,   286,
-     296,   297,   307,   314,   315,   317,   320,   325,   331,   335,
-     336,   338,   357,   366,   369,   371,   371,   371,   371,   373,
-     380,   383,   389,   395,   401,   410,   411,   413,   430,   431,
-     432,   434,   439,   440,   449,   453,   454,   456,   462,   470,
-     473,   475,   474,   491,   497,   498,   500,   507,   515,   517,
-     521,   522,   524,   525,   527,   528,   530,   538,   540,   541,
-     542,   543,   545,   546
+     297,   298,   308,   315,   316,   318,   321,   326,   332,   336,
+     337,   339,   358,   367,   370,   372,   372,   372,   372,   374,
+     381,   384,   390,   396,   402,   411,   412,   414,   431,   432,
+     433,   435,   440,   441,   450,   454,   455,   457,   463,   471,
+     474,   476,   475,   493,   499,   500,   502,   509,   517,   519,
+     523,   524,   526,   527,   529,   530,   532,   540,   542,   543,
+     544,   545,   547,   548
 };
 #endif
 
@@ -1905,57 +1905,57 @@ yyreduce:
     {
         case 7:
 
-    {if(parserData->generalStatusTypePresent == false) osrlerror(NULL, NULL, NULL, "a type attribute required for generalStatus element");;}
+    {if(parserData->generalStatusTypePresent == false) osrlerror(NULL, NULL, NULL, "a type attribute required for generalStatus element");}
     break;
 
   case 8:
 
-    {if(parserData->generalStatusTypePresent == false) osrlerror(NULL, NULL, NULL, "a type attribute required for generalStatus element"); parserData->generalStatusTypePresent = false;;}
+    {if(parserData->generalStatusTypePresent == false) osrlerror(NULL, NULL, NULL, "a type attribute required for generalStatus element"); parserData->generalStatusTypePresent = false;}
     break;
 
   case 11:
 
-    { osresult->setGeneralStatusType((yyvsp[(2) - (3)].sval));  free((yyvsp[(2) - (3)].sval));  ; parserData->generalStatusTypePresent = true;;}
+    { osresult->setGeneralStatusType((yyvsp[(2) - (3)].sval));  free((yyvsp[(2) - (3)].sval));  ; parserData->generalStatusTypePresent = true;}
     break;
 
   case 12:
 
-    { osresult->setGeneralStatusType("");               parserData->generalStatusTypePresent = true;;}
+    { osresult->setGeneralStatusType("");               parserData->generalStatusTypePresent = true;}
     break;
 
   case 13:
 
-    { osresult->setGeneralStatusDescription((yyvsp[(2) - (3)].sval));    free((yyvsp[(2) - (3)].sval));;}
+    { osresult->setGeneralStatusDescription((yyvsp[(2) - (3)].sval));    free((yyvsp[(2) - (3)].sval));}
     break;
 
   case 14:
 
-    { osresult->setGeneralStatusDescription("");;}
+    { osresult->setGeneralStatusDescription("");}
     break;
 
   case 17:
 
-    {osresult->setServiceURI( (yyvsp[(2) - (3)].sval)); free((yyvsp[(2) - (3)].sval)); parserData->errorText = NULL;;}
+    {osresult->setServiceURI( (yyvsp[(2) - (3)].sval)); free((yyvsp[(2) - (3)].sval)); parserData->errorText = NULL;}
     break;
 
   case 21:
 
-    {osresult->setServiceName( (yyvsp[(2) - (3)].sval));  free((yyvsp[(2) - (3)].sval));   parserData->errorText = NULL;;}
+    {osresult->setServiceName( (yyvsp[(2) - (3)].sval));  free((yyvsp[(2) - (3)].sval));   parserData->errorText = NULL;}
     break;
 
   case 25:
 
-    {osresult->setInstanceName( (yyvsp[(2) - (3)].sval)) ;  free((yyvsp[(2) - (3)].sval));   parserData->errorText = NULL;;}
+    {osresult->setInstanceName( (yyvsp[(2) - (3)].sval)) ;  free((yyvsp[(2) - (3)].sval));   parserData->errorText = NULL;}
     break;
 
   case 29:
 
-    {osresult->setJobID( (yyvsp[(2) - (3)].sval)); free((yyvsp[(2) - (3)].sval));  parserData->errorText = NULL;;}
+    {osresult->setJobID( (yyvsp[(2) - (3)].sval)); free((yyvsp[(2) - (3)].sval));  parserData->errorText = NULL;}
     break;
 
   case 33:
 
-    {osresult->setGeneralMessage( (yyvsp[(2) - (3)].sval));  free((yyvsp[(2) - (3)].sval));  parserData->errorText = NULL;;}
+    {osresult->setGeneralMessage( (yyvsp[(2) - (3)].sval));  free((yyvsp[(2) - (3)].sval));  parserData->errorText = NULL;}
     break;
 
   case 43:
@@ -1963,7 +1963,7 @@ yyreduce:
     {	if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, NULL, "number of time measurements cannot be negative");
 	parserData->numberOfTimes = (yyvsp[(3) - (4)].ival);
 	parserData->ivar = 0;
-;}
+}
     break;
 
   case 49:
@@ -1977,62 +1977,62 @@ yyreduce:
        parserData->timeCategory = "total";
        parserData->timeUnit = "second";
        parserData->timeDescription = "";      
-      ;}
+      }
     break;
 
   case 56:
 
-    {parserData->timeType = (yyvsp[(2) - (3)].sval);  free((yyvsp[(2) - (3)].sval));;}
+    {parserData->timeType = (yyvsp[(2) - (3)].sval);  free((yyvsp[(2) - (3)].sval));}
     break;
 
   case 58:
 
-    {parserData->timeCategory = (yyvsp[(2) - (3)].sval);  free((yyvsp[(2) - (3)].sval));;}
+    {parserData->timeCategory = (yyvsp[(2) - (3)].sval);  free((yyvsp[(2) - (3)].sval));}
     break;
 
   case 60:
 
-    {parserData->timeUnit = (yyvsp[(2) - (3)].sval);   free((yyvsp[(2) - (3)].sval));;}
+    {parserData->timeUnit = (yyvsp[(2) - (3)].sval);   free((yyvsp[(2) - (3)].sval));}
     break;
 
   case 62:
 
-    {parserData->timeDescription = (yyvsp[(2) - (3)].sval);  free((yyvsp[(2) - (3)].sval));;}
+    {parserData->timeDescription = (yyvsp[(2) - (3)].sval);  free((yyvsp[(2) - (3)].sval));}
     break;
 
   case 64:
 
-    { parserData->timeValue = (yyvsp[(1) - (1)].dval); ;}
+    { parserData->timeValue = (yyvsp[(1) - (1)].dval); }
     break;
 
   case 65:
 
-    { parserData->timeValue = (yyvsp[(1) - (1)].ival); ;}
+    { parserData->timeValue = (yyvsp[(1) - (1)].ival); }
     break;
 
   case 77:
 
-    { parserData->numberOfSolutions = (yyvsp[(3) - (3)].ival); osresult->setSolutionNumber((yyvsp[(3) - (3)].ival));;}
+    { parserData->numberOfSolutions = (yyvsp[(3) - (3)].ival); osresult->setSolutionNumber((yyvsp[(3) - (3)].ival));}
     break;
 
   case 78:
 
-    {parserData->numberOfVariables = (yyvsp[(3) - (3)].ival); osresult->setVariableNumber((yyvsp[(3) - (3)].ival)); ;}
+    {parserData->numberOfVariables = (yyvsp[(3) - (3)].ival); osresult->setVariableNumber((yyvsp[(3) - (3)].ival)); }
     break;
 
   case 79:
 
-    {parserData->numberOfConstraints = (yyvsp[(3) - (3)].ival); osresult->setConstraintNumber((yyvsp[(3) - (3)].ival));;}
+    {parserData->numberOfConstraints = (yyvsp[(3) - (3)].ival); osresult->setConstraintNumber((yyvsp[(3) - (3)].ival));}
     break;
 
   case 80:
 
-    {parserData->numberOfObjectives = (yyvsp[(3) - (3)].ival); osresult->setObjectiveNumber((yyvsp[(3) - (3)].ival));;}
+    {parserData->numberOfObjectives = (yyvsp[(3) - (3)].ival); osresult->setObjectiveNumber((yyvsp[(3) - (3)].ival));}
     break;
 
   case 83:
 
-    {parserData->numberOfVar = 0;  parserData->numberOfCon = 0;  parserData->numberOfObj = 0;;}
+    {parserData->numberOfVar = 0;  parserData->numberOfCon = 0;  parserData->numberOfObj = 0;}
     break;
 
   case 84:
@@ -2044,7 +2044,7 @@ yyreduce:
     
 
     
-   ;}
+   }
     break;
 
   case 86:
@@ -2053,51 +2053,51 @@ yyreduce:
 	if((yyvsp[(3) - (4)].ival) >= 0) osrlerror(NULL, NULL, NULL, "target objective index must be negative");
 /*  	osresult->optimization->solution[parserData->solutionIdx]->targetObjectiveIdx = $3;*/
   	osresult->setSolutionTargetObjectiveIdx(parserData->solutionIdx, (yyvsp[(3) - (4)].ival));
- ;}
+ }
     break;
 
   case 87:
 
-    {if(parserData->statusTypePresent == false) osrlerror(NULL, NULL, NULL, "a type attribute required for status element");  osresult->setSolutionStatus(parserData->solutionIdx, parserData->statusType, parserData->statusDescription);;}
+    {if(parserData->statusTypePresent == false) osrlerror(NULL, NULL, NULL, "a type attribute required for status element");  osresult->setSolutionStatus(parserData->solutionIdx, parserData->statusType, parserData->statusDescription);}
     break;
 
   case 88:
 
-    {if(parserData->statusTypePresent == false) osrlerror(NULL, NULL, NULL, "a type attribute required for status element"); parserData->statusTypePresent = false; osresult->setSolutionStatus(parserData->solutionIdx, parserData->statusType, parserData->statusDescription);;}
+    {if(parserData->statusTypePresent == false) osrlerror(NULL, NULL, NULL, "a type attribute required for status element"); parserData->statusTypePresent = false; osresult->setSolutionStatus(parserData->solutionIdx, parserData->statusType, parserData->statusDescription);}
     break;
 
   case 91:
 
-    {parserData->statusType = (yyvsp[(2) - (3)].sval); parserData->statusTypePresent = true; free((yyvsp[(2) - (3)].sval));;}
+    {parserData->statusType = (yyvsp[(2) - (3)].sval); parserData->statusTypePresent = true; free((yyvsp[(2) - (3)].sval));}
     break;
 
   case 92:
 
-    {parserData->statusType = ""; parserData->statusTypePresent = true;;}
+    {parserData->statusType = ""; parserData->statusTypePresent = true;}
     break;
 
   case 93:
 
-    {parserData->statusDescription = (yyvsp[(2) - (3)].sval);  free((yyvsp[(2) - (3)].sval));;}
+    {parserData->statusDescription = (yyvsp[(2) - (3)].sval);  free((yyvsp[(2) - (3)].sval));}
     break;
 
   case 94:
 
-    {parserData->statusDescription = "";;}
+    {parserData->statusDescription = "";}
     break;
 
   case 96:
 
     {/*osresult->optimization->solution[parserData->solutionIdx]->message = $2; */
 		osresult->setSolutionMessage(parserData->solutionIdx, (yyvsp[(2) - (3)].sval)); free((yyvsp[(2) - (3)].sval));
-	;}
+	}
     break;
 
   case 97:
 
     {/*osresult->optimization->solution[parserData->solutionIdx]->message = "";*/
 		osresult->setSolutionMessage(parserData->solutionIdx, "");
-	;}
+	}
     break;
 
   case 99:
@@ -2107,8 +2107,9 @@ yyreduce:
   		osrlerror(NULL, NULL, parserData, "numberOfVar not consistent with the number of primal values");
   	} else{
  		osresult->setPrimalVariableValuesSparse(parserData->solutionIdx, parserData->primalVals); 
+		osresult->optimization->solution[ parserData->solutionIdx]->variables->values->numberOfVar = parserData->numberOfVar;
  	}
-  ;}
+  }
     break;
 
   case 101:
@@ -2119,7 +2120,7 @@ yyreduce:
 	 parserData->tmpOtherValue = "";
 	 parserData->tmpOtherName = "";
 	 parserData->tmpOtherDescription = "";
-	;}
+	}
     break;
 
   case 102:
@@ -2127,7 +2128,7 @@ yyreduce:
     {
 	osresult->setNumberOfPrimalVariableValues(parserData->solutionIdx, (yyvsp[(3) - (4)].ival));
 	parserData->numberOfVar = (yyvsp[(3) - (4)].ival);
-	;}
+	}
     break;
 
   case 106:
@@ -2135,7 +2136,7 @@ yyreduce:
     {parserData->tempVal = (yyvsp[(1) - (1)].ival);  
  	parserData->primalValPair->value = (yyvsp[(1) - (1)].ival);
 	parserData->primalVals.push_back( parserData->primalValPair);  
-   ;}
+   }
     break;
 
   case 107:
@@ -2143,12 +2144,12 @@ yyreduce:
     {parserData->tempVal = (yyvsp[(1) - (1)].dval); 
  	parserData->primalValPair->value = (yyvsp[(1) - (1)].dval);
 	parserData->primalVals.push_back( parserData->primalValPair); 
-  ;}
+  }
     break;
 
   case 108:
 
-    { parserData->primalValPair = new IndexValuePair();   parserData->primalValPair->idx = parserData->ivar;;}
+    { parserData->primalValPair = new IndexValuePair();   parserData->primalValPair->idx = (yyvsp[(2) - (3)].ival);}
     break;
 
   case 111:
@@ -2169,7 +2170,7 @@ yyreduce:
 		parserData->tmpOtherValue = "";
 		parserData->tmpOtherDescription = "";			
 				
-	;}
+	}
     break;
 
   case 112:
@@ -2179,14 +2180,14 @@ yyreduce:
 		parserData->otherVarStruct->otherVarText  = new std::string[parserData->numberOfVariables];	 
 		parserData->otherVarStruct->otherVarIndex = new int[parserData->numberOfVariables];	 
 		parserData->kounter = 0;
-	;}
+	}
     break;
 
   case 113:
 
     {	if(parserData->otherNamePresent == false) 
 			osrlerror(NULL, NULL, parserData, "other element requires name attribute"); 
-	;}
+	}
     break;
 
   case 119:
@@ -2194,21 +2195,21 @@ yyreduce:
     {
 	parserData->otherVarStruct->numberOfVar = (yyvsp[(3) - (4)].ival);
  	/*osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->numberOfVar = $3;*/
-;}
+}
     break;
 
   case 120:
 
     {parserData->tmpOtherValue=""; parserData->otherVarStruct->value = "";  
 /*  osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->value = "";*/
-;}
+}
     break;
 
   case 121:
 
     {parserData->tmpOtherValue=(yyvsp[(2) - (3)].sval); parserData->otherVarStruct->value = (yyvsp[(2) - (3)].sval);  
 /*  osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->value = $2; */
-  free((yyvsp[(2) - (3)].sval));;}
+  free((yyvsp[(2) - (3)].sval));}
     break;
 
   case 122:
@@ -2217,7 +2218,7 @@ yyreduce:
 	parserData->tmpOtherName=""; 
 	parserData->otherNamePresent = true; 
 	parserData->otherVarStruct->name = "";
-;}
+}
     break;
 
   case 123:
@@ -2225,7 +2226,7 @@ yyreduce:
     {
 parserData->tmpOtherName=(yyvsp[(2) - (3)].sval); parserData->otherNamePresent = true; parserData->otherVarStruct->name = (yyvsp[(2) - (3)].sval);  free((yyvsp[(2) - (3)].sval));
  /* osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->name = $2;*/
-;}
+}
     break;
 
   case 124:
@@ -2233,7 +2234,7 @@ parserData->tmpOtherName=(yyvsp[(2) - (3)].sval); parserData->otherNamePresent =
     {
 parserData->tmpOtherDescription=(yyvsp[(2) - (3)].sval); parserData->otherVarStruct->description = (yyvsp[(2) - (3)].sval);  free((yyvsp[(2) - (3)].sval));
   /*osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->description = $2;*/
-;}
+}
     break;
 
   case 127:
@@ -2252,29 +2253,29 @@ if (parserData->ivar < 0 || parserData->ivar > parserData->numberOfVariables - 1
    
 
 parserData->kounter++;
-;}
+}
     break;
 
   case 128:
 
-    { parserData->outStr << (yyvsp[(1) - (1)].sval); free((yyvsp[(1) - (1)].sval)); ;}
+    { parserData->outStr << (yyvsp[(1) - (1)].sval); free((yyvsp[(1) - (1)].sval)); }
     break;
 
   case 129:
 
-    { parserData->outStr << (yyvsp[(1) - (1)].ival); /*free($1);*/ ;}
+    { parserData->outStr << (yyvsp[(1) - (1)].ival); /*free($1);*/ }
     break;
 
   case 130:
 
-    { parserData->outStr << (yyvsp[(1) - (1)].dval); /*free($1);*/ ;}
+    { parserData->outStr << (yyvsp[(1) - (1)].dval); /*free($1);*/ }
     break;
 
   case 131:
 
     {	if(parserData->otherVarStruct->numberOfVar <= 0) 
 			osrlerror(NULL, NULL,  parserData, "must specify the number of variables") ;
-	;}
+	}
     break;
 
   case 133:
@@ -2286,14 +2287,14 @@ parserData->kounter++;
 
 		osresult->setObjectiveValuesSparse(parserData->solutionIdx, parserData->objVals);
 	}
-;}
+}
     break;
 
   case 134:
 
     {
 			parserData->numberOfObj = (yyvsp[(3) - (4)].ival);
-;}
+}
     break;
 
   case 137:
@@ -2303,7 +2304,7 @@ parserData->kounter++;
 	parserData->objValPair->value = (yyvsp[(4) - (5)].dval);
 	parserData->objVals.push_back( parserData->objValPair);
 
-;}
+}
     break;
 
   case 138:
@@ -2313,12 +2314,12 @@ parserData->kounter++;
 
  	parserData->objValPair->value = (yyvsp[(4) - (5)].ival);
 	parserData->objVals.push_back( parserData->objValPair);
-  ;}
+  }
     break;
 
   case 139:
 
-    { parserData->objValPair = new IndexValuePair();   parserData->objValPair->idx = parserData->ivar;   ;}
+    { parserData->objValPair = new IndexValuePair();   parserData->objValPair->idx = (yyvsp[(2) - (3)].ival);   }
     break;
 
   case 141:
@@ -2327,7 +2328,7 @@ parserData->kounter++;
 
 			
 			
-;}
+}
     break;
 
   case 142:
@@ -2339,8 +2340,9 @@ parserData->kounter++;
 	}else{
 
 		osresult->setDualVariableValuesSparse(parserData->solutionIdx, parserData->dualVals);
+		osresult->optimization->solution[ parserData->solutionIdx]->constraints->dualValues->numberOfCon = parserData->numberOfCon;
 	}
- ;}
+ }
     break;
 
   case 143:
@@ -2348,7 +2350,7 @@ parserData->kounter++;
     {
 	parserData->numberOfCon = (yyvsp[(3) - (4)].ival);
 
-;}
+}
     break;
 
   case 146:
@@ -2359,7 +2361,7 @@ parserData->kounter++;
 	parserData->dualVals.push_back( parserData->dualValPair); 
 	
 	
-	;}
+	}
     break;
 
   case 147:
@@ -2369,17 +2371,17 @@ parserData->kounter++;
 	parserData->dualValPair->value = (yyvsp[(4) - (5)].ival);
 	parserData->dualVals.push_back( parserData->dualValPair); 
 	
-	;}
+	}
     break;
 
   case 148:
 
-    { parserData->dualValPair = new IndexValuePair();   parserData->dualValPair->idx = parserData->ivar;   ;}
+    { parserData->dualValPair = new IndexValuePair();   parserData->dualValPair->idx = (yyvsp[(2) - (3)].ival);   }
     break;
 
   case 149:
 
-    {parserData->ivar = (yyvsp[(2) - (3)].ival);    ;}
+    {parserData->ivar = (yyvsp[(2) - (3)].ival);    }
     break;
 
   case 156:
@@ -2390,7 +2392,7 @@ parserData->kounter++;
     //delete the old vectors
 	osrl_empty_vectors( parserData);
     
-;}
+}
     break;
 
 

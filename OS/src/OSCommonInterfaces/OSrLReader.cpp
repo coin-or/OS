@@ -13,7 +13,7 @@
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */ 
-#define OSRLREADER_DEBUG
+//#define OSRLREADER_DEBUG
 
 #include "OSrLReader.h"
 

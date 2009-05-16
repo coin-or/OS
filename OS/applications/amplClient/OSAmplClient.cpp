@@ -381,12 +381,51 @@ int main(int argc, char **argv)
 
 			//
 			sReport = " ";
-			write_sol(  const_cast<char*>(sReport.c_str()), 
-					osresult->getOptimalPrimalVariableValues( -1), 
-					osresult->getOptimalDualVariableValues( -1) , NULL);
+			int i;
+			int vecSize;
+			double *x;
+			double *y;
+			int numVars = osresult->getVariableNumber();
+			int numCons = osresult->getConstraintNumber();
+			x = new double[ numVars];
+			y = new double[ numCons];
+			
+			std::vector<IndexValuePair*> primalValPair;
+			std::vector<IndexValuePair*> dualValPair;
+			dualValPair = osresult->getOptimalDualVariableValues( 0);
+			primalValPair = osresult->getOptimalPrimalVariableValues( 0);
+			
+			for(i = 0; i < numVars; i++){
+				x[ 0] = 0.0;
+			}
+			vecSize = primalValPair.size();
+			for(i = 0; i < vecSize; i++){
+				x[ primalValPair[i]->idx ] = primalValPair[i]->value;
+				//std::cout << "index =  " <<   primalValPair[i]->idx  << std::endl;
+				//std::cout << "value =  " <<   primalValPair[i]->value  << std::endl;
+			}
+			
+			
+			for(i = 0; i < numCons; i++){
+				y[ 0] = 0.0;
+			}
+			vecSize = dualValPair.size();
+			for(i = 0; i < vecSize; i++){
+				y[ dualValPair[i]->idx ] = dualValPair[i]->value;  
+				//std::cout << "index =  " <<   primalValPair[i]->idx  << std::endl;
+				//std::cout << "value =  " <<   primalValPair[i]->value  << std::endl;
+			}
+			
+
+			
+			write_sol(  const_cast<char*>(sReport.c_str()),  x, y , NULL);
 			
 			delete osrlreader;
 			osrlreader = NULL;
+			//delete[] x;
+			//x = NULL;
+			//delete y;
+			//y = NULL;
 		}else{
 			// do the following so output is not written twice
 			// see page 23 of hooking solver to AMPL

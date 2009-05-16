@@ -17,7 +17,7 @@
  */
 
 
-#define DEBUG
+//#define DEBUG
 
 #include "OSCoinSolver.h"
 #include "OSInstance.h"
@@ -114,7 +114,9 @@ CoinSolver::~CoinSolver() {
 		//delete[] cbc_argv;
 		cbc_argv = NULL;
 	}
+	#ifdef DEBUG
 	cout << "leaving CoinSolver destructor" << endl;
+	#endif
 }
 
 

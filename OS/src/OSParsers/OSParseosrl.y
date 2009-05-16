@@ -290,6 +290,7 @@ variables:
   		osrlerror(NULL, NULL, parserData, "numberOfVar not consistent with the number of primal values");
   	} else{
  		osresult->setPrimalVariableValuesSparse(parserData->solutionIdx, parserData->primalVals); 
+		osresult->optimization->solution[ parserData->solutionIdx]->variables->values->numberOfVar = parserData->numberOfVar;
  	}
   };
 
@@ -328,7 +329,7 @@ DoubleOrInt:
   };
   
   
-aVARIDXATT: IDXATT INTEGER quote { parserData->primalValPair = new IndexValuePair();   parserData->primalValPair->idx = parserData->ivar;};
+aVARIDXATT: IDXATT INTEGER quote { parserData->primalValPair = new IndexValuePair();   parserData->primalValPair->idx = $2;};
   
 
 
@@ -467,7 +468,7 @@ anotherobj: OBJSTART anOBJIDXATT GREATERTHAN DOUBLE OBJEND {
   };
 
 
-anOBJIDXATT: IDXATT INTEGER quote { parserData->objValPair = new IndexValuePair();   parserData->objValPair->idx = parserData->ivar;   };
+anOBJIDXATT: IDXATT INTEGER quote { parserData->objValPair = new IndexValuePair();   parserData->objValPair->idx = $2;   };
 
 
 constraints:
@@ -484,6 +485,7 @@ constraints:
 	}else{
 
 		osresult->setDualVariableValuesSparse(parserData->solutionIdx, parserData->dualVals);
+		osresult->optimization->solution[ parserData->solutionIdx]->constraints->dualValues->numberOfCon = parserData->numberOfCon;
 	}
  };
  
@@ -512,7 +514,7 @@ anothercon: CONSTART aCONIDXATT GREATERTHAN DOUBLE CONEND {
 	} ;
 
 
-aCONIDXATT: IDXATT INTEGER quote { parserData->dualValPair = new IndexValuePair();   parserData->dualValPair->idx = parserData->ivar;   };
+aCONIDXATT: IDXATT INTEGER quote { parserData->dualValPair = new IndexValuePair();   parserData->dualValPair->idx = $2;   };
 
 anIDXATT: IDXATT INTEGER quote {parserData->ivar = $2;    };
 

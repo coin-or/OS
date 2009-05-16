@@ -7,6 +7,10 @@
 <message>Ipopt solver finishes to the end.</message>
 </general>
 <job>
+<timingInformation numberOfTimes="1">
+<time type="elapsedTime" unit="second" category="total" >
+5.333000000000004e-3</time>
+</timingInformation>
 </job>
 <optimization numberOfSolutions="1" numberOfVariables="2" numberOfConstraints="2" numberOfObjectives="1">
 <solution targetObjectiveIdx="-1">
@@ -31,8 +35,7 @@
 </values>
 </objectives>
 <constraints >
-<dualValues numberOfCon="2">
-<con idx="0">-1.5884608261704753e-10</con>
+<dualValues numberOfCon="1"> 
 <con idx="1">-.7662938652578929</con>
 </dualValues>
 </constraints>

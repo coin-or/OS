@@ -69,11 +69,28 @@ OSResult::~OSResult(){
 	//delete optimization object
 	if(optimization != NULL)  delete optimization;
 	optimization = NULL;
+	
+	int k;
 
 	if(m_mdPrimalValues != NULL) delete[] m_mdPrimalValues;
 	m_mdPrimalValues = 0;
 	if(m_mdDualValues != NULL) delete[] m_mdDualValues;
 	m_mdDualValues = 0;
+	
+	int numPrimalVals =  this->primalVals.size();
+  	for(k = 0; k < numPrimalVals; k++){	
+  		if( this->primalVals[ k]  != NULL  ) 
+			delete this->primalVals[ k];
+  	}
+  	this->primalVals.clear();
+	
+	
+	int numDualVals =  this->dualVals.size();
+  	for(k = 0; k < numDualVals; k++){
+  		if( this->dualVals[ k]  != NULL  ) 
+			delete this->dualVals[ k];
+  	}
+  	this->dualVals.clear();
 }//end OSResult destructor
 
 GeneralStatus::GeneralStatus():
@@ -295,8 +312,8 @@ ObjValue::~ObjValue(){
 
 DualVarValue::DualVarValue():
 	idx( -1),
-	lbValue( 0),
-	ubValue( 0),
+	//lbValue( 0),
+	//ubValue( 0),
 	value( 0)
 { 
 	#ifdef DEBUG_RESULT
@@ -773,28 +790,31 @@ string OSResult::getSolutionMessage(int solIdx){
 	return optimization->solution[solIdx]->message;
 }//getSolutionMessage
 
-double* OSResult::getOptimalPrimalVariableValues(int objIdx){
-	if(optimization == NULL || optimization->solution == NULL) return NULL;
-	int iNumberOfVariables = this->getVariableNumber();
-	if(iNumberOfVariables <= 0) return NULL;
+std::vector<IndexValuePair*> OSResult::getOptimalPrimalVariableValues(int solIdx){
+	
+	int numberOfVar;
+	struct IndexValuePair *primalValPair;
 	int iSolutions = this->getSolutionNumber();
 	for(int i = 0; i < iSolutions; i++){
+		if( i != solIdx) continue;
 		if(optimization->solution[i] == NULL) continue;
-		if(optimization->solution[i]->targetObjectiveIdx != objIdx) continue;
 		if(optimization->solution[i]->variables == NULL) continue;
 		if(optimization->solution[i]->variables->values == NULL) continue;
 		if((optimization->solution[i]->status->type.find("ptimal") != string::npos && m_mdPrimalValues == NULL) ||
-			optimization->solution[i]->status->type.compare("globallyOptimal") == 0){				
-			m_mdPrimalValues = new double[iNumberOfVariables];
-			for(int j = 0; j < iNumberOfVariables; j++){
-				m_mdPrimalValues[ j] = optimization->solution[i]->variables->values->var[j]->value;
+			optimization->solution[i]->status->type.compare("globallyOptimal") == 0){	
+			numberOfVar = optimization->solution[i]->variables->values->var.size();	
+			for(int j = 0; j < numberOfVar; j++){
+				primalValPair = new IndexValuePair();
+				primalValPair->value = optimization->solution[i]->variables->values->var[j]->value;
+				primalValPair->idx = optimization->solution[i]->variables->values->var[j]->idx;
+				primalVals.push_back( primalValPair);
 			}
 		}	
 		if(optimization->solution[i]->status->type.compare("globallyOptimal") == 0){
-			return m_mdPrimalValues;
+			return primalVals;
 		}
 	}
-	return m_mdPrimalValues;		
+	return primalVals;		
 }//getOptimalPrimalVariableValues
 
 
@@ -809,28 +829,31 @@ int OSResult::getAnOtherVariableResultNumberOfVar(int solIdx, int iOther){
 }
 	
 	
-double* OSResult::getOptimalDualVariableValues(int objIdx){
-	if(optimization == NULL || optimization->solution == NULL) return NULL;
-	int iNumberOfConstraints = this->getConstraintNumber();
-	if(iNumberOfConstraints <= 0) return NULL;
+std::vector<IndexValuePair*>  OSResult::getOptimalDualVariableValues(int solIdx){
+
+	int numberOfCon;
+	struct IndexValuePair *dualValPair;
 	int iSolutions = this->getSolutionNumber();
 	for(int i = 0; i < iSolutions; i++){
+		if(i != solIdx) continue;
 		if(optimization->solution[i] == NULL) continue;
-		if(optimization->solution[i]->targetObjectiveIdx != objIdx) continue;
 		if(optimization->solution[i]->constraints == NULL) continue;
 		if(optimization->solution[i]->constraints->dualValues == NULL) continue;
 		if((optimization->solution[i]->status->type.find("ptimal") != string::npos && m_mdDualValues == NULL) ||
 			optimization->solution[i]->status->type.compare("globallyOptimal") == 0){						
-			m_mdDualValues = new double[iNumberOfConstraints];
-			for(int j = 0; j < iNumberOfConstraints; j++){
-				m_mdDualValues[ j] = optimization->solution[i]->constraints->dualValues->con[j]->value;
+			numberOfCon = optimization->solution[i]->constraints->dualValues->con.size();	
+			for(int j = 0; j < numberOfCon;  j++){
+				dualValPair = new IndexValuePair();
+				dualValPair->idx = optimization->solution[i]->constraints->dualValues->con[j]->idx;
+				dualValPair->value = optimization->solution[i]->constraints->dualValues->con[j]->value;
+				dualVals.push_back( dualValPair);
 			}
 		}	
-		if(optimization->solution[i]->status->type.compare("globallyOptimal")){
-			return m_mdDualValues;
+		if(optimization->solution[i]->status->type.compare("globallyOptimal") == 0){
+			return dualVals;
 		}
 	}
-	return m_mdDualValues;		
+	return dualVals;		
 }//getOptimalDualVariableValues
 
 double OSResult::getOptimalObjValue(int objIdx, int solIdx)
