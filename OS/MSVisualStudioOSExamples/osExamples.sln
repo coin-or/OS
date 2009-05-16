@@ -17,6 +17,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "osResultDemo", "osResultDem
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "template", "template\template.vcproj", "{717775BC-D7FC-42BD-95CD-2B24E9354BE5}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "branchCutPrice", "branchCutPrice\branchCutPrice.vcproj", "{48854FAA-CF02-449B-846F-EC6188406449}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -55,6 +57,10 @@ Global
 		{717775BC-D7FC-42BD-95CD-2B24E9354BE5}.Debug|Win32.Build.0 = Debug|Win32
 		{717775BC-D7FC-42BD-95CD-2B24E9354BE5}.Release|Win32.ActiveCfg = Release|Win32
 		{717775BC-D7FC-42BD-95CD-2B24E9354BE5}.Release|Win32.Build.0 = Release|Win32
+		{48854FAA-CF02-449B-846F-EC6188406449}.Debug|Win32.ActiveCfg = Debug|Win32
+		{48854FAA-CF02-449B-846F-EC6188406449}.Debug|Win32.Build.0 = Debug|Win32
+		{48854FAA-CF02-449B-846F-EC6188406449}.Release|Win32.ActiveCfg = Release|Win32
+		{48854FAA-CF02-449B-846F-EC6188406449}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -2,8 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="osResultDemo"
-	ProjectGUID="{01867815-FF04-4A29-9C0C-0DD44DDDC929}"
+	Name="branchCutPrice"
+	ProjectGUID="{48854FAA-CF02-449B-846F-EC6188406449}"
 	RootNamespace="osTestCode"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"
@@ -115,7 +115,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="../../include;../../include/Coin"
+				AdditionalIncludeDirectories="../../include;../../examples/branchCutPrice/include;../../include/Coin"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -136,7 +136,7 @@
 				Name="VCLinkerTool"
 				LinkLibraryDependencies="false"
 				AdditionalOptions="&#x0D;&#x0A;&#x0D;&#x0A;&#x0D;&#x0A;"
-				AdditionalDependencies="libipopt.lib libOS.lib libOsiCbc.lib libOsiClp.lib libCgl.lib libSym.lib libVol.lib libDylp.lib libCoinUtils.lib libClp.lib libCbc.lib libCbcSolver.lib libOsi.lib libOsiSym.lib libOsiVol.lib libOsiDylp.lib amplsolv.lib"
+				AdditionalDependencies="libipopt.lib libOS.lib libOsiCbc.lib libOsiClp.lib libCgl.lib libSym.lib libVol.lib libDylp.lib libCoinUtils.lib libClp.lib libCbc.lib libCbcSolver.lib libOsi.lib libOsiSym.lib libOsiVol.lib libOsiDylp.lib libBcp.lib amplsolv.lib"
 				OutputFile="$(ProjectName).exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="../../lib/ifort;../../lib;../../lib/ASL"
@@ -182,7 +182,35 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\examples\osResultDemo\OSResultDemo.cpp"
+				RelativePath="..\..\examples\branchCutPrice\Member\OS.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\examples\branchCutPrice\Member\OS_cut.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\examples\branchCutPrice\Member\OS_init.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\examples\branchCutPrice\LP\OS_lp.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\examples\branchCutPrice\Member\OS_packer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\examples\branchCutPrice\TM\OS_tm.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\examples\branchCutPrice\Member\OS_user_data.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\examples\branchCutPrice\Member\OS_var.cpp"
 				>
 			</File>
 		</Filter>
