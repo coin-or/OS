@@ -1092,12 +1092,13 @@ bool OSInstance::processObjectives() {
 			m_mdObjectiveWeights = new double[n];
 			m_mObjectiveCoefficients = new SparseVector*[n];
 			m_msObjectiveNames = new string[n];
+			for(i = 0; i < n; i++){
+				m_mObjectiveCoefficients[i] = new SparseVector(instanceData->objectives->obj[ j]->numberOfObjCoef);
+				//m_mObjectiveCoefficients[i]->bDeleteArrays=false;
+			}
 			m_bProcessObjectives = true;
 		}
-		for(i = 0; i < n; i++){
-			m_mObjectiveCoefficients[i] = new SparseVector(instanceData->objectives->obj[ j]->numberOfObjCoef);
-			//m_mObjectiveCoefficients[i]->bDeleteArrays=false;
-		}
+
 		
 		//for(i = 0; i < n; i++){
 		//	m_mObjectiveCoefficients[i] = new SparseVector();

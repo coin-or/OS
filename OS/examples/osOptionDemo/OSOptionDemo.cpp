@@ -89,12 +89,14 @@ int main( ){
 		std::cout << solver->osrl << std::endl;
 
 		
-		delete osinstance;
-		osinstance = NULL;
+		delete osilreader;
+		osilreader = NULL;
 		delete solver;
 		solver = NULL;
 		delete osoption;
 		osoption = NULL;
+		delete osolwriter;
+		osolwriter = NULL;
 		delete fileUtil;
 		fileUtil = NULL;
 		cout << "Done with garbage collection" << endl;

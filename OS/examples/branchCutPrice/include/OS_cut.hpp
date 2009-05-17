@@ -22,10 +22,12 @@ private:
 public:
 
    static inline void * operator new(size_t size) {
-      return memPool.alloc(size);
+   		std::cout << "GAIL HONDA NEW " << std::endl;
+      return memPool.alloc( size);
    }
 
    static inline void operator delete(void *p, size_t size) {
+   	std::cout << "GAIL HONDA FREE " << std::endl;
       memPool.free(p, size);
    }
 

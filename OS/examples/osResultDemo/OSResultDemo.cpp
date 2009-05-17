@@ -139,14 +139,14 @@ int main( ){
 			}
 		}		
 		//garbage collection
-		delete osinstance;
-		osinstance = NULL;
 		delete solver;
 		solver = NULL;
 		delete fileUtil;
 		fileUtil = NULL;
 		delete osrlreader;
 		osrlreader = NULL;
+		delete osilreader;
+		osilreader = NULL;
 		cout << "Done with garbage collection" << endl;
 		return 0;
 		//

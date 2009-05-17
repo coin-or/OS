@@ -94,7 +94,6 @@ int main( ){
 		double *x = NULL;
 		double *y = NULL;
 		double *z = NULL;
-		int *idx = NULL;
 		//int i = 0;
 		std::string *rcost = NULL;
 		// resultHeader infomration
@@ -186,6 +185,8 @@ int main( ){
 		osilreader = NULL;
 		delete fileUtil;
 		fileUtil  = NULL;
+		delete model;
+		model = NULL;
 		cout << "Done with garbage collection" << endl;
 		return 0;
 	}

@@ -54,8 +54,6 @@ int main( ){
 		std::string osil;
 
 // test OS code samples here
-	FileUtil *fileUtil = NULL; 
-	fileUtil = new FileUtil();
 	cout << "Start Building the Model" << endl;
 	try{
 		OSInstance *osinstance = new OSInstance();
@@ -130,16 +128,20 @@ int main( ){
 		OSiLWriter *osilwriter; 
 		osilwriter = new OSiLWriter();
 		osil = osilwriter->writeOSiL( osinstance);
+		
+
 
 		// now solve the model synchronously
 		OSSolverAgent* osagent = NULL;
 		osagent = new OSSolverAgent("gsbkip.chicagogsb.edu/os/OSSolverService.jws");
 		
+
 		std::string osol = "<osol></osol>";
 		cout << "Solve the model synchronously" << endl;
 		cout << "osil input:" << endl << endl;
 		cout << osil  << endl << endl;
-		std::string osrl = osagent->solve(osil, osol);
+		std::string osrl ="" ;
+		osrl = osagent->solve(osil, osol);
 		cout << "osrl result from osagent:" << endl << endl;
 		cout << osrl  << endl << endl;
 
@@ -149,6 +151,7 @@ int main( ){
 		cout << "get the jobID" << endl;
 		std::string jobID = osagent->getJobID("");
 		cout << jobID << endl << endl;
+
 
 		// build the osol 
 		osol = "<osol><general><jobID>" + jobID + "</jobID></general></osol>";
@@ -211,15 +214,15 @@ int main( ){
 		osinstance = NULL;
 		delete osilwriter;
 		osilwriter = NULL;
-		delete fileUtil;
-		fileUtil = NULL;
+		delete osagent;
+		osagent = NULL;
 
 		cout << "Done with garbage collection" << endl;
 		return 0;
 		//
 	}
 	catch(const ErrorClass& eclass){
-		delete fileUtil;
+
 		std::cout << eclass.errormsg <<  std::endl;
 		return 0;
 	} 

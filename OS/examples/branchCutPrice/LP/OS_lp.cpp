@@ -527,21 +527,23 @@ void OS_lp::process_lp_result(const BCP_lp_result& lpres,
 	    // now convert the generated cuts into rows
 	    
 	    int cutnum = algo_cuts.size();
-	   
+	  
 	    for (i = 0; i < cutnum; ++i) {
 	        
 	        
 	        const OsiRowCut* bcut = dynamic_cast<const OS_cut*>(algo_cuts[i]);
+	       
 	        if (bcut) {
 	        	new_rows.push_back(new BCP_row(bcut->row(), bcut->lb(), bcut->ub()));
-	      
-	        	continue;
+	        	//delete algo_cuts[ i];
 	        }
-	        
-	        throw BCP_fatal_error("Unknown cut type in cuts_to_rows.\n");
+	        else{
+	        	throw BCP_fatal_error("Unknown cut type in cuts_to_rows.\n");
+	        }
 	    }
 	    
 	    
+	    //delete algo_cuts[0];
 	    algo_cuts.clear();  
 	}
     

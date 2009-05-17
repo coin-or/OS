@@ -4,7 +4,7 @@
 #include "BCP_math.hpp"
 #include "BCP_buffer.hpp"
 #include "OS_cut.hpp"
-
+   
 /****************************************************************************/
 void
 OS_cut::pack(BCP_buffer& buf) const

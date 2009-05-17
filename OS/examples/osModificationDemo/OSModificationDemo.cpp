@@ -173,13 +173,22 @@ int main( ){
 		// do garbage collection
 		
 		// illustrate changing an objective function coefficient
-		solver->osinstance->bObjectivesModified = true;
-		solver->osinstance->instanceData->objectives->obj[0]->coef[0]->value = 5;
+		delete solver;
+		osinstance->bObjectivesModified = true;
+		osinstance->instanceData->objectives->obj[0]->coef[0]->value = 5;
+		solver = new CoinSolver();
+		solver->osinstance = osinstance;
+		solver->sSolverName ="clp"; 
 		solver->buildSolverInstance();
 		solver->solve();
 		std::cout << solver->osrl << std::endl;
+		delete solver;
 		// change objective function coefficient a second time
-		solver->osinstance->instanceData->objectives->obj[0]->coef[0]->value = 0;		
+		osinstance->bObjectivesModified = true;
+		osinstance->instanceData->objectives->obj[0]->coef[0]->value = 0;	
+		solver = new CoinSolver();
+		solver->osinstance = osinstance;
+		solver->sSolverName ="clp"; 	
 		solver->buildSolverInstance();
 		solver->solve();
 		std::cout << solver->osrl << std::endl;		
