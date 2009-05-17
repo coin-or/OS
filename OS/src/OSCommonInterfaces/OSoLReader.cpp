@@ -14,7 +14,7 @@
  * 
  */ 
 
-#define OSOL_READER_DEBUG
+//#define OSOL_READER_DEBUG
 #ifdef OSOL_READER_DEBUG
 #include <cstdio>
 #endif

@@ -309,7 +309,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 
 		if(osoption != NULL){
 
-			std::cout << "number of solver options "  <<  osoption->getNumberOfSolverOptions() << std::endl;
+			//std::cout << "number of solver options "  <<  osoption->getNumberOfSolverOptions() << std::endl;
 			if( osoption->getNumberOfSolverOptions() <= 0) return;
 			this->bSetSolverOptions = true;
 			std::vector<SolverOption*> optionsVector;
