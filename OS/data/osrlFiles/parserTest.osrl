@@ -18,12 +18,12 @@
 			<status type="locallyOptimal" description="SUCCESS[IPOPT]: Algorithm terminated normally at a locally optimal point, satisfying the convergence tolerances."/>
 			<variables numberOfOtherVariableResults="3">
 				<values numberOfVar="2">
-					<var idx="0">
-						
-						5  </var>
-					<var idx="1">
+					<var idx="0" >
+						.8724300006558884
+					</var >
+					<var idx="1" >
 						.7414170851045374
-					</var>
+					</var >
 				</values>
 				<other numberOfVar="2" name="varL" description="Lagrange Multiplier on the Variable Lower Bound">
 					<var idx="0">2.532850081993274e-9</var>
