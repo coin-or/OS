@@ -242,11 +242,13 @@ int main(int argC, char* argV[])
 
 	if (testConfig == "install") testLevel = 1;
 	if (testConfig == "parser" ) testLevel = 2;
+	if (testConfig == "parsers") testLevel = 2;
 	if (testConfig == "solver" ) testLevel = 3;
+	if (testConfig == "solvers") testLevel = 3;
+	if (testConfig == "release") testLevel = 4;
 	if (testConfig == "nightlyBuild") testLevel = 4;
 	if (testConfig == "NB") testLevel = 4;
 	if (testConfig == "nb") testLevel = 4;
-	if (testConfig == "release") testLevel = 4;
 
 	switch (testLevel){
 	case 1:
